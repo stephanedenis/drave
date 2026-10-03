@@ -6,13 +6,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
 | Durée | 109.5 h |
-| Tours | 83 |
-| Messages | 6416 |
-| Appels d'outils | 6150 |
+| Tours | 84 |
+| Messages | 6424 |
+| Appels d'outils | 6156 |
 | Fichiers touchés | 118 |
-| Commandes | 5214 |
+| Commandes | 5220 |
 | Sous-agents | 32 |
-| Commits | 409 |
+| Commits | 410 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -209,6 +209,8 @@
 **Tour 82** — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en respectant pour chaque phase ses deux portes : porte de correction (comparaison étage par étage à llama.cpp sur V4-Flash) et porte Drave (flux : événements/paires par jeton, trace rejouée à l'identique, découpage en grappes, flux lisible par un outil d'analyse). Aucune phase ne passe … [661 caractères tronqués]
 
 **Tour 83** — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en respectant pour chaque phase ses deux portes : porte de correction (comparaison étage par étage à llama.cpp sur V4-Flash) et porte Drave (flux : événements/paires par jeton, trace rejouée à l'identique, découpage en grappes, flux lisible par un outil d'analyse). Aucune phase ne passe … [661 caractères tronqués]
+
+**Tour 84** — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en respectant pour chaque phase ses deux portes : porte de correction (comparaison étage par étage à llama.cpp sur V4-Flash) et porte Drave (flux : événements/paires par jeton, trace rejouée à l'identique, découpage en grappes, flux lisible par un outil d'analyse). Aucune phase ne passe … [662 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -4206,6 +4208,38 @@ La dernière ligne vérifie **la règle de visibilité** (`n_visible = (pos+1)/r
 - bash — Read the current trace writer format
 - bash — Record the two failed Drave gates
 
+**Synthèse produite :**
+
+**Ronde 9 — la porte Drave de P6, mesurée : deux points sur quatre ne tiennent pas**
+
+J'ai porté la vérification là où l'objectif l'exige (les deux portes par phase), sur **V4-Flash** — le modèle dont les deux portes sont disponibles :
+
+| point de la porte Drave | état mesuré |
+|---|---|
+| événements/paires par jeton | ✅ le profil imprime `paires : attention · experts · partagé · scores` |
+| découpage en grappes | ✅ dans `tools/portes.sh` (clusters Qwen3-30B = 799,8557) |
+| **flux lisible par un outil d'analyse** | ❌ `tools/analyse_flux.py` lit `<Ih` (**version 1** du format DRVF : indice u32 + valeur i16) alors que le moteur écrit la **v2** (indices par écarts, i16) ou la **v3** (i8) → plantage immédiat : `unpack requires a buffer of 6 bytes` |
+| **trace rejouée à l'identique** | ❌ passe tracée : perplexité **4 221,0901** ; rejouée par `--flux-forcer` : **4 220,6935** (9,4e-05 relatif) — et le moteur **annonce lui-même** « 16 listes servies, **672 manquantes** : la moitié au moins n'a pas servi » |
+
+Deux constats utiles :
+- l'outil d'analyse est resté à la **v1** du format alors que le format est documenté dans `model.rs` (`TraceFlux::nouveau`) — le correctif est petit (relire `<Ih` → v2/v3) mais il est **nécessaire** avant de s'appuyer sur cette porte ;
+- le rejeu portait sur une trace **partielle** (2 couches) : à refaire complète pour distinguer « la couverture » de « la quantification des listes » (le flux est quantifié, la passe ne l'est pas) — et pour **dire ce que « identique » veut dire** pour cette porte, au lieu de le supposer.
+
+C'est écrit dans le plan (P6, en tête) avec cette conséquence : **aucun chantier suivant ne doit s'appuyer sur cette porte avant qu'elle soit tenue.** Les portes vertes par ailleurs (64 tests, V4-Flash 8430,4966, cinq modes de flux) sont inchangées.
+
+**Objectif laissé actif.** Les deux prochaines actions sont petites, vérifiables et dans son périmètre exact : (1) mettre `analyse_flux.py` au format courant et **le brancher dans `portes.sh`** — un outil d'analyse non exécuté est un outil mort ; (2) refaire le rejeu sur une trace complète et **écrire la définition mesurable** de « identique » (bit à bit si la liste est non quantifiée, sinon l'écart plafonné, annoncé).
+
+### Tour 84 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [942 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Read the trace writer layout
+- bash — Read the v2 body and the header
+- bash — Read the analysis tool
+- bash — Fix the reader for v2/v3 and test it
+- bash — Wire the tool into the gates and test
+- bash — Commit the tool fix and gate wiring
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -4408,7 +4442,7 @@ La dernière ligne vérifie **la règle de visibilité** (`n_visible = (pos+1)/r
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5174 autres
+- … et 5180 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4965,4 +4999,5 @@ La dernière ligne vérifie **la règle de visibilité** (`n_visible = (pos+1)/r
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="sprints/21-localiser-le-defaut-v41.md" s=open(p).read() a="""## Portes""" b="""## 3qua
 - Plan P7 : la porte de correction est IMPOSSIBLE en l'état et c'est nommé — llama.cpp refuse l'architecture deepseek41 ; ce qui est vérifiable sans référence exé
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="docs/plan-deepseek41-complet.md" s=open(p).read() a="""### P7 — Adaptation à V4.1, et 
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="docs/plan-deepseek41-complet.md" s=open(p).read() a="""> 1. **Le flux n'est PAS lisibl
 

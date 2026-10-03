@@ -326,11 +326,15 @@ Une phase qui ne passe pas ses deux portes ne passe pas à la suivante.
 > rejouée à l'identique**, découpage en grappes, et **flux lisible par un outil
 > d'analyse**. Deux sur quatre ne tiennent pas :
 >
-> 1. **Le flux n'est PAS lisible par l'outil d'analyse** : `tools/analyse_flux.py`
->    lit `<Ih` (indice u32 + valeur i16 = la version 1 du format DRVF) alors que le
->    moteur écrit la **version 2** (indices par écarts, i16) ou la **3** (i8) —
->    plantage immédiat (`unpack requires a buffer of 6 bytes`). L'outil est resté
->    à la v1 ; le format, lui, est documenté dans `model.rs` (`TraceFlux::nouveau`).
+> 1. ~~Le flux n'est PAS lisible par l'outil d'analyse~~ — **CORRIGÉ le 03/10
+>    (bloc 22)** : `tools/analyse_flux.py` lisait la version 1 du format DRVF
+>    (indice u32 + i16) alors que le moteur écrit la 2 (indices par écarts) et la 3
+>    (échelle f16 par bloc de 32 canaux, valeurs i8). Le lecteur gère les trois
+>    versions, et la porte correspondante est **branchée dans `tools/portes.sh`** :
+>    elle produit une trace avec le petit modèle et la relit avec l'outil — un
+>    contrat de format entre deux programmes, vérifié à chaque passage (384 listes,
+>    densité, persistants, recouvrement). Un outil d'analyse qu'on ne peut pas
+>    exécuter sur une trace du moteur est un outil mort, et il l'était.
 > 2. **Le rejeu n'est pas identique** : passe tracée sur 8 jetons (ctx 32,
 >    perplexité **4 221,0901**), rejouée avec `--flux-forcer` → **4 220,6935**
 >    (écart 9,4e-05 relatif) et le moteur ANNONCE lui-même « 16 listes servies,

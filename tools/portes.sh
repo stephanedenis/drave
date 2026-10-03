@@ -176,6 +176,28 @@ if [ "$RAPIDE" != "rapide" ]; then
     fi
 fi
 
+# 7ter. Le FLUX doit rester LISIBLE par un outil d'analyse : on produit une trace
+#       avec un petit modèle (quelques secondes) et on la relit avec l'outil du
+#       dépôt. C'est un CONTRAT DE FORMAT entre deux programmes — et il était
+#       rompu : `analyse_flux.py` lisait la version 1 (indice u32 + i16) alors que
+#       le moteur écrit la 2 (indices par écarts) depuis des semaines, donc
+#       l'outil plantait sur toute trace réelle. Un outil d'analyse qu'on ne peut
+#       pas exécuter sur une trace du moteur est un outil mort.
+if [ -x tools/analyse_flux.py ]; then
+    TRACE_FLUX=/tmp/porte_trace.drvf
+    $D models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 64 --limit 8 \
+        --threads 8 --trace-flux $TRACE_FLUX >/dev/null 2>&1
+    if python3 tools/analyse_flux.py $TRACE_FLUX >/tmp/porte_trace.txt 2>&1 \
+       && grep -q "couche" /tmp/porte_trace.txt; then
+        n=$(grep -c . /tmp/porte_trace.txt)
+        printf "  %-42s %s  ✅\n" "le flux relu par tools/analyse_flux.py" "${n} lignes"
+    else
+        printf "  %-42s %s  ❌\n" "le flux relu par tools/analyse_flux.py" "échec"
+        tail -2 /tmp/porte_trace.txt | sed 's/^/      /'
+        ECHEC=1
+    fi
+fi
+
 # 8. Le DÉCOUPAGE : deux nœuds, cinq modes de flux, un petit modèle (~20 s).
 #    Elle manquait, et c'est exactement pour cela que la fuite de la `pre` reçue
 #    (sprint 13) a vécu si longtemps : aucun test n'exerçait un COUPLE de nœuds.

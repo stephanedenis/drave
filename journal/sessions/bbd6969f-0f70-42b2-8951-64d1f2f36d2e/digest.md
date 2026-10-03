@@ -102153,3 +102153,178 @@ struct.error: unpack requires a buffer of 6 bytes
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"docs/plan-deepseek41-complet.md\"\ns=open(p).read()\na=\"\"\"### P7 — Adaptation à V4.1, et la question de provenance\"\"\"\nb=\"\"\"### P6 — V4-Flash complet, en listes, et **sur plusieurs grappes** — ⚠️ **port … [3180 caractères tronqués]`
+
+  ```
+ok
+859d2b7 Porte Drave de P6 : DEUX des quatre points ne tiennent pas — flux illisible par l'outil d'analyse, rejeu non identique (mesuré)
+sam 03 oct 2026 04:18:28 EDT
+  ```
+
+### 🤖 Assistant
+
+**Ronde 9 — la porte Drave de P6, mesurée : deux points sur quatre ne tiennent pas**
+
+J'ai porté la vérification là où l'objectif l'exige (les deux portes par phase), sur **V4-Flash** — le modèle dont les deux portes sont disponibles :
+
+| point de la porte Drave | état mesuré |
+|---|---|
+| événements/paires par jeton | ✅ le profil imprime `paires : attention · experts · partagé · scores` |
+| découpage en grappes | ✅ dans `tools/portes.sh` (clusters Qwen3-30B = 799,8557) |
+| **flux lisible par un outil d'analyse** | ❌ `tools/analyse_flux.py` lit `<Ih` (**version 1** du format DRVF : indice u32 + valeur i16) alors que le moteur écrit la **v2** (indices par écarts, i16) ou la **v3** (i8) → plantage immédiat : `unpack requires a buffer of 6 bytes` |
+| **trace rejouée à l'identique** | ❌ passe tracée : perplexité **4 221,0901** ; rejouée par `--flux-forcer` : **4 220,6935** (9,4e-05 relatif) — et le moteur **annonce lui-même** « 16 listes servies, **672 manquantes** : la moitié au moins n'a pas servi » |
+
+Deux constats utiles :
+- l'outil d'analyse est resté à la **v1** du format alors que le format est documenté dans `model.rs` (`TraceFlux::nouveau`) — le correctif est petit (relire `<Ih` → v2/v3) mais il est **nécessaire** avant de s'appuyer sur cette porte ;
+- le rejeu portait sur une trace **partielle** (2 couches) : à refaire complète pour distinguer « la couverture » de « la quantification des listes » (le flux est quantifié, la passe ne l'est pas) — et pour **dire ce que « identique » veut dire** pour cette porte, au lieu de le supposer.
+
+C'est écrit dans le plan (P6, en tête) avec cette conséquence : **aucun chantier suivant ne doit s'appuyer sur cette porte avant qu'elle soit tenue.** Les portes vertes par ailleurs (64 tests, V4-Flash 8430,4966, cinq modes de flux) sont inchangées.
+
+**Objectif laissé actif.** Les deux prochaines actions sont petites, vérifiables et dans son périmètre exact : (1) mettre `analyse_flux.py` au format courant et **le brancher dans `portes.sh`** — un outil d'analyse non exécuté est un outil mort ; (2) refaire le rejeu sur une trace complète et **écrire la définition mesurable** de « identique » (bit à bit si la liste est non quantifiée, sinon l'écart plafonné, annoncé).
+
+
+## Tour 84
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en respectant pour chaque phase ses deux portes : porte de correction (comparaison étage par étage à llama.cpp sur V4-Flash) et porte Drave (flux : événements/paires par jeton, trace rejouée à l'identique, découpage en grappes, flux lisible par un outil d'analyse). Aucune phase ne passe à la suivante sans ses deux portes. Jamais de forward muet, jamais d'optimisation qui change une sortie sans le dire."
+Round: 10/30
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n \"$(grep -n 'pub fn ecrire(&mut self, couche: usize, pos: usize' drave-core/src/model.rs | cut -d: -f1),+52p\" drave-core/src/model.rs", "description": "Read the trace writer layout"}`
+
+  ```
+pub fn ecrire(&mut self, couche: usize, pos: usize, actifs: &[i32], echelle: f32) {
+        use std::io::Write;
+        if !self.couches.is_empty() && !self.couches.contains(&couche) { return; }
+
+        let (n, ech_liste, corps): (u32, f32, Vec<u8>) = if self.version == 3 {
+            // v3 : une échelle f16 par bloc de 32 canaux, valeurs i8. L'échelle
+            // par bloc borne l'erreur RELATIVE (celle par vecteur borne l'absolue,
+            // catastrophique sur les canaux faibles) et permet un octet par valeur.
+            let n_blocs = actifs.len().div_ceil(self.bloc);
+            let mut echelles = vec![0f32; n_blocs];
+            let mut idx: Vec<u32> = Vec::new();
+            let mut val: Vec<i8> = Vec::new();
+            for b in 0..n_blocs {
+                let lo = b * self.bloc;
+                let hi = (lo + self.bloc).min(actifs.len());
+                let mut mb = 0f32;
+                for &q in &actifs[lo..hi] {
+                    let a = (q as f32 * echelle).abs();
+                    if a > mb { mb = a; }
+                }
+                if mb == 0.0 { continue; }
+                let ech = mb / 127.0;
+                echelles[b] = ech;
+                for (
+… [1365 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n \"$(( $(grep -n 'pub fn ecrire(&mut self, couche: usize, pos: usize' drave-core/src/model.rs | cut -d: -f1) + 52 )),+30p\" drave-core/src/model.rs; grep -n \"fn nouveau(chemin: &str\" -A 22 drave-core/src/model.rs | grep -n \" … [90 caractères tronqués]`
+
+  ```
+let mut prev = 0u32;
+            for (i, v) in &liste {
+                if self.version == 1 {
+                    c.extend_from_slice(&i.to_le_bytes());
+                } else {
+                    let ecart = *i - prev;
+                    if ecart < 255 {
+                        c.push(ecart as u8);
+                    } else {
+                        c.push(255);
+                        c.extend_from_slice(&i.to_le_bytes()[..2]);
+                    }
+                    prev = *i;
+                }
+                c.extend_from_slice(&v.to_le_bytes());
+            }
+            (liste.len() as u32, echelle, c)
+        };
+
+        let _ = self.fichier.write_all(&(couche as u16).to_le_bytes());
+        let _ = self.fichier.write_all(&(pos as u32).to_le_bytes());
+        let _ = self.fichier.write_all(&n.to_le_bytes());
+        let _ = self.fichier.write_all(&ech_liste.to_le_bytes());
+        let _ = self.fichier.write_all(&corps);
+        let octets_par_actif = if self.version == 3 { 2 } else if self.version == 1 { 6 } else { 3 };
+        let octets_echelles = if self.version == 3 {
+            4 + actifs.len().div_ceil(self.bloc) * 2
+        } else { 0 };
+        self.octets +=
+… [620 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 1,60p tools/analyse_flux.py", "description": "Read the analysis tool"}`
+
+  ```
+#!/usr/bin/env python3
+"""Analyse PURE d'une trace de flux : ce que la vision appelle « voir le modèle
+neurone par neurone », mais chiffré par couche et sans exécuter le moteur.
+
+Ce que l'outil répond, et pourquoi ces questions-là :
+
+* **quelle couche est creuse** ? C'est la décision push/pull du projet (le
+  croisement mesuré est à ~22 % de densité) — mais elle se prend PAR COUCHE, pas
+  pour le modèle entier ;
+* **quels neurones sont PERSISTANTS** (actifs dans presque tous les jetons) ?
+  Ceux-là ne bénéficient d'aucune sparsité : les compter dit combien de
+  « toujours là » porte le modèle ;
+* **les mêmes neurones dominent-ils d'une couche à l'autre** ? Un recouvrement
+  élevé des top-k voisins voudrait dire qu'une direction unique traverse la pile.
+
+Usage : analyse_flux.py <trace> [<trace2> ...] [--top 100]
+"""
+import struct
+import sys
+
+
+def lire(chemin):
+    with open(chemin, "rb") as f:
+        assert f.read(4) == b"DRVF"
+        struct.unpack("<H", f.read(2))
+        n_layer, hidden = struct.unpack("<II", f.read(8))
+        listes = []
+        while True:
+            b = f.read(2)
+            if len(b) < 2:
+                break
+            couche, = struct.unpack("<H", b)
+ 
+… [1122 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"tools/analyse_flux.py\"\ns=open(p).read()\na='''def lire(chemin):\n    with open(chemin, \"rb\") as f:\n        assert f.read(4) == b\"DRVF\"\n        struct.unpack(\"<H\", f.read(2))\n        n_layer, hidden =  … [3307 caractères tronqués]`
+
+  ```
+ok
+
+=== tf.drvf : 16 listes · 4096 cachés ===
+   couche  densité  persistants   top1%  top10%  recouvrement
+        0   100.0%      100.00%    2.1%   16.9%              
+       20    99.8%       98.63%    6.9%   21.3%    2/100 (2%)
+  les plus creuses : 20 (99.8%) · 0 (100.0%)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"tools/portes.sh\"\ns=open(p).read()\na=\"\"\"# 8. Le DÉCOUPAGE : deux nœuds, cinq modes de flux, un petit modèle (~20 s).\"\"\"\nb=\"\"\"# 7ter. Le FLUX doit rester LISIBLE par un outil d'analyse : on produit un … [1733 caractères tronqués]`
+
+  ```
+ok
+syntaxe OK
+[trace] flux enregistré dans /tmp/porte_trace.drvf
+       7 tokens notés — perplexité cumulée 795.033  (21.9 tok/s)
+[trace] 384 listes · 343492 neurones actifs · 1 Mo
+
+=== porte_trace.drvf : 384 listes · 896 cachés ===
+   couche  densité  persistants   top1%  top10%  recouvrement
+        0    99.2%       94.08%    8.3%   37.9%              
+        1   100.0%      100.00%    6.0%   25.2%  25/100 (25%)
+        2   100.0%       99.78%    6.5%   27.3%  49/100 (49%)
+        3    99.9%       99.11%    7.4%   31.1%  52/100 (52%)
+        4    99.8%       98.21%    8.9%   29.6%  48/100 (48%)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"docs/plan-deepseek41-complet.md\"\ns=open(p).read()\na=\"\"\"> 1. **Le flux n'est PAS lisible par l'outil d'analyse** : `tools/analyse_flux.py`\n>    lit `<Ih` (indice u32 + valeur i16 = la version 1 du format D … [2374 caractères tronqués]`

@@ -19,10 +19,52 @@ import struct
 import sys
 
 
+def _paires(f, n, version, bloc=32):
+    """Lit `n` paires (indice, valeur) du corps, selon la version du format.
+
+    v1 : indice u32 + valeur i16 (6 octets) — c'est ce que cet outil lisait, et
+         c'est ce qui le faisait planter dès que le moteur est passé à la v2.
+    v2 : écart u8 (255 = indice absolu sur DEUX octets) + valeur i16.
+    v3 : comme la v2, mais une échelle f16 par bloc de 32 canaux AVANT les
+         paires, et des valeurs i8 — l'échelle par bloc borne l'erreur relative.
+    """
+    echelles = None
+    if version == 3:
+        n_blocs, = struct.unpack("<I", f.read(4))
+        echelles = [struct.unpack("<e", f.read(2))[0] for _ in range(n_blocs)]
+    paires = []
+    prev = 0
+    for _ in range(n):
+        if version == 1:
+            i, = struct.unpack("<I", f.read(4))
+        else:
+            e, = struct.unpack("<B", f.read(1))
+            if e == 255:
+                i, = struct.unpack("<H", f.read(2))
+            else:
+                i = prev + e
+            prev = i
+        if version == 3:
+            v, = struct.unpack("<b", f.read(1))
+            ech = echelles[i // bloc] if echelles else 1.0
+            paires.append((i, v * ech))
+        else:
+            v, = struct.unpack("<h", f.read(2))
+            paires.append((i, v))
+    return paires
+
+
 def lire(chemin):
+    """Rend (n_layer, hidden, listes) — listes = (couche, pos, echelle, [(indice, valeur)]).
+
+    Les valeurs sont ramenées à l'échelle du vecteur (`valeur · echelle`), comme
+    le fait `TraceFlux::ecrire` côté moteur : la v3 porte en plus son échelle par
+    bloc, appliquée ici.
+    """
     with open(chemin, "rb") as f:
-        assert f.read(4) == b"DRVF"
-        struct.unpack("<H", f.read(2))
+        assert f.read(4) == b"DRVF", "ce n'est pas une trace DRVF"
+        version, = struct.unpack("<H", f.read(2))
+        assert version in (1, 2, 3), f"version de trace {version} inconnue"
         n_layer, hidden = struct.unpack("<II", f.read(8))
         listes = []
         while True:
@@ -33,11 +75,9 @@ def lire(chemin):
             if couche == 0xFFFF:
                 break
             pos, n, echelle = struct.unpack("<IIf", f.read(12))
-            actifs = []
-            for _ in range(n):
-                i, v = struct.unpack("<Ih", f.read(6))
-                actifs.append((i, v * echelle))
-            listes.append((couche, pos, echelle, actifs))
+            paires = _paires(f, n, version)
+            listes.append((couche, pos, echelle,
+                           [(i, v * echelle if version != 3 else v) for i, v in paires]))
     return n_layer, hidden, listes
 
 
