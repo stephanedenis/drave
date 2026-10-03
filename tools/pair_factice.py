@@ -97,6 +97,16 @@ def servir(sock, dimension):
             corps = echelles + lire_tout(sock, longueur)
         else:
             corps = lire_tout(sock, n * 4)
+        # **Protocole v6 : le corps commence par le pré-mix porté** (un octet de
+        # compte, puis `np × hc` f32). Ce pair factice ne calcule rien et ne
+        # connaît pas `hc` : il lit le compte et refuse poliment un pré-mix non
+        # vide, au lieu de désynchroniser le flux en silence.
+        if version >= 6:
+            np_ = lire_tout(sock, 1)[0]
+            if np_:
+                print(f"[factice] pré-mix de {np_} état(s) : ce pair ne le gère pas "
+                      f"(il ne calcule rien) — la session va s'arrêter proprement", flush=True)
+                break
         if magie != MAGIE:
             print(f"[factice] MAGIE INCONNUE {magie:#x}", flush=True)
             break
@@ -112,7 +122,8 @@ def servir(sock, dimension):
         # dans un mode liste ferait lire au pilote un corps tronqué — c'est
         # exactement l'erreur que ce fichier a commise, et le moteur l'a dite.
         n_paires = dimension if mode == 0 else 0
-        reponse = struct.pack("<IBBIIIIfffIBIIIIIIIIII", MAGIE, version, mode, debut, fin, pos,
+        reponse = b"\x00" if version >= 6 else b""
+        reponse += struct.pack("<IBBIIIIfffIBIIIIIIIIII", MAGIE, version, mode, debut, fin, pos,
                               n if mode in (3, 4) else n_paires, 0.0, levels, thresh, topk, renorm,
                               0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
         if mode == 3:

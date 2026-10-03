@@ -7042,10 +7042,24 @@ le dernier raccord FFN n'a pas été exécuté (plage de couches vide ?)"),
                 // reviendrait à normer la seule copie 0 : un état faux, sans un
                 // mot. Refuser est la seule sortie honnête tant que le flux n'a
                 // pas un champ pour cette `pre` (16 octets par jeton).
-                None if self.hc_retarde => panic!("V4.1 : un état en `hc` copies venu \
-d'un autre nœud ne porte pas la `pre` de la dernière FFN, et sa réduction finale n'est \
-pas apprise — le flux DRVF doit transporter ces {} valeurs par jeton",
-                    self.hc.as_ref().map(|v| v[0].0.hc).unwrap_or(0)),
+                // **La `pre` reçue du pair (protocole v6)** : la réduction finale
+                // de V4.1 n'est pas apprise, c'est la `pre` du dernier raccord FFN
+                // exécuté — celui du pair, qui la transporte. Un flux v5 ou un
+                // émetteur qui ne l'envoie pas : refus, pas de repli muet.
+                None if self.hc_retarde => match self.hc_porte_imposee.as_deref() {
+                    Some(pm) => {
+                        let (hc, h) = self.hc.as_ref()
+                            .map(|v| (v[0].0.hc, v[0].0.h)).expect("`hc_retarde` sans HC");
+                        let mut replie = vec![0f32; h];
+                        Hc::melanger(x, pm, hc, h, &mut replie);
+                        reduit = replie;
+                        &reduit[..]
+                    }
+                    None => panic!("V4.1 : un état en `hc` copies venu d'un autre nœud ne \
+porte pas la `pre` de la dernière FFN (protocole < v6 ?), et sa réduction finale n'est \
+pas apprise — le flux doit transporter ces {} valeurs par jeton",
+                        self.hc.as_ref().map(|v| v[0].0.hc).unwrap_or(0)),
+                },
                 None => x,
             }
         } else { x };

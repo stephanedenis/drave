@@ -2040,7 +2040,7 @@ const MAGIE_FLUX: u32 = 0x4452_5631;   // "DRV1"
 /// en version 2 lirait `n × 4` octets d'un corps qui en fait `n × hidden × 4`,
 /// se désynchroniserait, puis dirait « mode inconnu » : un refus exact mais tardif
 /// et muet sur la cause. Ici il est immédiat et nommé.
-const VERSION_FLUX: u8 = 5;
+const VERSION_FLUX: u8 = 6;
 /// Vecteur dense en f32 : 4 octets par canal, toute la dimension.
 const MODE_DENSE: u8 = 0;
 /// LISTE creuse quantifiée : indice u16 + valeur i16, plus une échelle. C'est le
@@ -2129,6 +2129,10 @@ struct Flux {
     /// Octets du corps effectivement lus sur le câble (en-tête exclu) : la
     /// comptabilité du banc doit être la taille RÉELLE, pas une formule par mode.
     octets_corps: usize,
+    /// **La `pre` portée** par le dernier raccord FFN du nœud émetteur (protocole
+    /// v6, V4.1) : `hc` valeurs par jeton, ou vide. C'est le maillon que la chaîne
+    /// retardée ne peut pas recalculer chez le destinataire.
+    premix: Vec<f32>,
 }
 
 /// Plafond d'une allocation pilotée par le RÉSEAU (règle R4 de
@@ -2216,6 +2220,12 @@ de {hidden} canaux, {} blocs d'échelles)", echelles.len());
 
 /// Construit l'en-tête d'un flux (79 octets) : magie, version, mode, plage,
 /// position, `n`, échelle, et le contrat d'activation.
+///
+/// **Version 6** : le corps commence par un octet `np` (nombre de `pre` portées)
+/// suivi de `np × hc` f32. C'est ce qui permet à la chaîne mHC *retardée* de V4.1
+/// de traverser un découpage — 16 octets par jeton sur les 65 615 que coûte déjà
+/// un état en `hc` copies, soit 0,02 %. Sans elle, un nœud qui reprend au milieu
+/// du modèle replierait son premier raccord avec la copie 0 : faux, et muet.
 ///
 /// **Une seule fonction pour les trois émetteurs**, et c'est délibéré : la
 /// duplication de cette construction est exactement ce qui a produit l'en-tête
@@ -2344,6 +2354,21 @@ fn envoyer_flux(s: &mut std::net::TcpStream, debut: u32, fin: u32, pos: u32,
         (actifs.len(), 0f32, c)
     };
     let tete = tete_flux(mode, debut, fin, pos, n, echelle, mdl);
+    // **La `pre` portée** (v6) : un octet de compte, puis `np × hc` f32. Les
+    // modes 0-2 envoient UN jeton, les modes 3-4 un LOT d'états — et un modèle à
+    // hyper-connexions ne prend jamais le chemin des lots (il est refusé), donc
+    // `np` vaut 0 ou 1 en pratique ; l'écrire par état laisse la porte ouverte.
+    let premix: Vec<f32> = mdl.and_then(|m| m.hc_porte_flux.clone()).unwrap_or_default();
+    let hc = mdl.map(|m| m.hc.as_ref().map(|v| v[0].0.hc).unwrap_or(1)).unwrap_or(1);
+    let np: u8 = if premix.is_empty() { 0 } else { 1 };
+    assert!(premix.len() == np as usize * hc,
+            "pré-mix de {} valeurs pour {np} état(s) × {hc} copies", premix.len());
+    let mut corps = corps;
+    let mut prefixe = Vec::with_capacity(1 + premix.len() * 4);
+    prefixe.push(np);
+    for v in &premix { prefixe.extend_from_slice(&v.to_le_bytes()); }
+    prefixe.extend_from_slice(&corps);
+    corps = prefixe;
     s.write_all(&tete)?;
     s.write_all(&corps)?;
     s.flush()?;
@@ -2402,7 +2427,8 @@ fn envoyer_lot_listes(s: &mut std::net::TcpStream, debut: u32, fin: u32, pos0: u
 }
 
 /// Reçoit un flux : `(debut, fin, pos, mode, charge utile)`.
-fn recevoir_flux(s: &mut std::net::TcpStream, hidden: usize) -> std::io::Result<Flux> {
+fn recevoir_flux(s: &mut std::net::TcpStream, hidden: usize, hc_destinataire: usize)
+                -> std::io::Result<Flux> {
     use std::io::Read;
     let mut tete = [0u8; TAILLE_TETE];
     s.read_exact(&mut tete)?;
@@ -2453,6 +2479,32 @@ fn recevoir_flux(s: &mut std::net::TcpStream, hidden: usize) -> std::io::Result<
         autre => return Err(std::io::Error::new(std::io::ErrorKind::InvalidData,
             format!("mode de flux inconnu : {autre} (cette build parle les modes 0 à \
 {MODE_LOT_LISTES}, protocole v{VERSION_FLUX})"))),
+    }
+    // Le plafond du mode LOT se vérifie AVANT de lire quoi que ce soit du corps :
+    // sinon un en-tête forgé faisait lire un octet de pré-mix sur une trame
+    // tronquée et rendait « failed to fill whole buffer » au lieu du refus qui
+    // nomme le plafond (test `un_lot_dement_grand_est_refuse_avant_allocation`).
+    if mode == MODE_LOT {
+        verifier_taille(n.checked_mul(hidden).and_then(|x| x.checked_mul(4))
+                          .unwrap_or(usize::MAX),
+                        &format!("lot de {n} états × {hidden} canaux"))?;
+    }
+    // **La `pre` portée** (v6) ouvre le corps : un octet de compte puis
+    // `np × hc` f32. Le `hc` du DESTINATAIRE fait foi — c'est son modèle qui
+    // décide de la largeur, comme pour les états (`hidden` vient de lui).
+    let hc = hc_destinataire;
+    let mut premix: Vec<f32> = Vec::new();
+    let mut np = [0u8; 1];
+    s.read_exact(&mut np)?;
+    let np = np[0] as usize;
+    if np > 0 {
+        // Plafond AVANT d'allouer : `np` vient du réseau.
+        verifier_taille(np.checked_mul(hc).and_then(|x| x.checked_mul(4)).unwrap_or(usize::MAX),
+                        &format!("pré-mix de {np} état(s) × {hc} copies"))?;
+        let mut octets = vec![0u8; np * hc * 4];
+        s.read_exact(&mut octets)?;
+        premix = octets.chunks_exact(4)
+            .map(|c| f32::from_le_bytes(c.try_into().unwrap())).collect();
     }
     let charge = match mode {
         MODE_LOT_LISTES => {
@@ -2532,7 +2584,7 @@ l'ensemble du lot (flux reçu de {hidden} canaux)");
             // Octets réellement lus SUR LE FIL : c'est ce que le banc doit
             // afficher, pas la taille du vecteur dense reconstruit en mémoire.
             let octets_corps = lus;
-            return Ok(Flux { n, debut, fin, pos, mode, act, octets_corps,
+            return Ok(Flux { n, debut, fin, pos, mode, act, premix: premix.clone(), octets_corps,
                              charge: ChargeFlux::Lot(plat) });
         }
         MODE_LOT => {
@@ -2545,7 +2597,7 @@ l'ensemble du lot (flux reçu de {hidden} canaux)");
             s.read_exact(&mut corps)?;
             let etats = (0..n * hidden).map(|k| f32::from_le_bytes(
                 [corps[k*4], corps[k*4+1], corps[k*4+2], corps[k*4+3]])).collect();
-            return Ok(Flux { n, debut, fin, pos, mode, act, octets_corps: corps.len(),
+            return Ok(Flux { n, debut, fin, pos, mode, act, premix: premix.clone(), octets_corps: corps.len(),
                              charge: ChargeFlux::Lot(etats) });
         }
         MODE_BLOCS => {
@@ -2573,7 +2625,7 @@ l'ensemble du lot (flux reçu de {hidden} canaux)");
                 Err(e) => return Err(std::io::Error::new(std::io::ErrorKind::InvalidData, e)),
             };
             let octets_corps = 4 + n_blocs * 4 + 4 + longueur;
-            return Ok(Flux { n, debut, fin, pos, mode, act, octets_corps, charge:
+            return Ok(Flux { n, debut, fin, pos, mode, act, premix: premix.clone(), octets_corps, charge:
                              ChargeFlux::Blocs { idx, val, echelles } });
         }
         _ => {}
@@ -2596,7 +2648,7 @@ l'ensemble du lot (flux reçu de {hidden} canaux)");
         autre => return Err(std::io::Error::new(std::io::ErrorKind::InvalidData,
             format!("mode de flux inconnu : {autre}"))),
     };
-    Ok(Flux { n, debut, fin, pos, mode, act, octets_corps: octets.len(), charge })
+    Ok(Flux { n, debut, fin, pos, mode, act, premix, octets_corps: octets.len(), charge })
 }
 
 /// Le NŒUD MOTEUR : charge le modèle, écoute, applique SA plage de couches au
@@ -2623,6 +2675,7 @@ nœud rend un flux résiduel BRUT par contrat (la tête appartient au nœud qui 
     appliquer_quantification(&mut mdl, &opt);
     if opt.options_actives { options_actives(&mdl, "nœud moteur du flux", opt.ctx_impose, true, opt.keep); }
     let hidden = mdl.cfg.hidden;
+    let hc_local = mdl.hc.as_ref().map(|v| v[0].0.hc).unwrap_or(1);
     let ecoute = std::net::TcpListener::bind((hote.as_str(), port)).expect("écoute");
     println!("[flux] nœud moteur sur {hote}:{port} · {hidden} cachés · {} couches · contexte {ctx}",
              mdl.cfg.n_layer);
@@ -2636,7 +2689,7 @@ nœud rend un flux résiduel BRUT par contrat (la tête appartient au nœud qui 
     println!("[flux] client connecté : {pair}");
     let mut servis = 0u64;
     loop {
-        match recevoir_flux(&mut sock, hidden) {
+        match recevoir_flux(&mut sock, hidden, hc_local) {
             Ok(f) => {
                 // Un en-tête FORGÉ ne doit pas tuer le nœud : `debut`, `fin` et
                 // `pos` venaient du réseau sans contrôle, et une trame de 83
@@ -2720,6 +2773,11 @@ continue", f.pos, mdl.ctx);
                 // Les confondre donnait un état de 16 362 valeurs au lieu de
                 // 16 384, et `Hc::melanger` sortait de la tranche.
                 mdl.emb_imposee = Some(f.charge.en_dense(largeur_etat));
+                // **La `pre` portée** (v6) : sans elle, la chaîne retardée de V4.1
+                // replierait son premier raccord avec la copie 0 — faux, et muet.
+                // Le moteur REFUSE ce cas (`forward`), donc un pair en v5 ne peut
+                // pas non plus passer par surprise.
+                mdl.hc_porte_imposee = if f.premix.is_empty() { None } else { Some(f.premix.clone()) };
                 let sortie = mdl.forward(0, f.pos as usize);
                 // La RÉPONSE est encodée comme la demande : un pair qui parle en
                 // listes reçoit des listes, sans second réglage à faire tenir
@@ -2767,6 +2825,9 @@ fn run_ppl_reparti(opt: Options, pair: &str) {
     let mut mdl = model::Model::load(&chemin,
                                      ctx, fils(&opt), true, opt.keep, false, 0, 0);
     appliquer_quantification(&mut mdl, &opt);
+    // Le `hc` du PILOTE : c'est SON modèle qui décide de la largeur du pré-mix
+    // qu'il envoie et de celle de celui qu'il reçoit (le pair valide le sien).
+    let hc_pilote = mdl.hc.as_ref().map(|v| v[0].0.hc).unwrap_or(1);
     // `--tete-partielle` n'a pas d'objet ici : la « plage » de ce mode est le
     // découpage entre les DEUX nœuds, et le modèle local est le modèle entier.
     // Le taire serait exactement le défaut que `--options-actives` combat.
@@ -2886,7 +2947,7 @@ de son côté.");
             actifs_envoyes += (t * mdl.cfg.hidden) as u64;
             jetons_envoyes += t as u64;
             flux_envoyes += 1;
-            let rep = match recevoir_flux(&mut sock, mdl.cfg.hidden) {
+            let rep = match recevoir_flux(&mut sock, mdl.cfg.hidden, hc_pilote) {
                 Ok(r) => r,
                 Err(e) => {
                     eprintln!("[flux] le nœud moteur a fermé la connexion ({e}).\
@@ -2954,7 +3015,7 @@ l'envoi du flux ({e}) — il a dit pourquoi de son côté.");
         octets_envoyes += o as u64;
         actifs_envoyes += a as u64;
         flux_envoyes += 1;
-        let rep = match recevoir_flux(&mut sock, mdl.cfg.hidden) {
+        let rep = match recevoir_flux(&mut sock, mdl.cfg.hidden, hc_pilote) {
             Ok(r) => r,
             Err(e) => {
                 eprintln!("[flux] le nœud moteur a fermé la connexion ({e}) — version du \
@@ -2986,6 +3047,10 @@ attendus — pair incohérent. Rien n'a été calculé.", rep.n, mdl.cfg.hidden,
             std::process::exit(1);
         }
         let final_ = rep.charge.en_dense(largeur_etat);
+        // La réponse porte la `pre` de la DERNIÈRE FFN du pair (v6) : c'est elle
+        // que la réduction finale du pilote doit employer — il ne peut pas la
+        // recalculer, il n'a pas exécuté ces couches.
+        mdl.hc_porte_imposee = if rep.premix.is_empty() { None } else { Some(rep.premix.clone()) };
         if pos + 1 < ids.len() {
             nll += nll_logits(&mdl.logits(&mdl.norme_finale(&final_)), ids[pos + 1]);
         }
@@ -4862,9 +4927,11 @@ mod tests_flux {
     fn entete_et_version_sont_ce_que_les_numeros_disent() {
         assert_eq!(TAILLE_TETE, 79, "l'en-tête de flux doit faire 79 octets");
         // La version suit l'en-tête : 4 quand les top-k sont entrés dans le
-        // contrat, 5 quand le mode 4 (lot en listes) est apparu. Ce test a
-        // d'ailleurs échoué au premier coup, exactement pour ça.
-        assert_eq!(VERSION_FLUX, 5, "le mode 4 impose la version 5");
+        // contrat, 5 quand le mode 4 (lot en listes) est apparu, 6 quand le
+        // pré-mix porté de V4.1 a été ajouté en tête de corps. Ce test a
+        // d'ailleurs échoué au premier coup, exactement pour ça — et il a
+        // resservi à la v6.
+        assert_eq!(VERSION_FLUX, 6, "le pré-mix porté impose la version 6");
     }
 
     #[test]
@@ -4899,7 +4966,7 @@ mod tests_flux {
         let attendu = valeurs.clone();
         let serveur = std::thread::spawn(move || {
             let (mut sock, _) = ecoute.accept().unwrap();
-            let f = recevoir_flux(&mut sock, 8).unwrap();
+            let f = recevoir_flux(&mut sock, 8, 1).unwrap();
             assert_eq!(f.mode, MODE_DENSE);
             assert_eq!(f.n, 8);
             assert_eq!(f.octets_corps, 32);
@@ -4909,8 +4976,9 @@ mod tests_flux {
         let (octets, n) = envoyer_flux(&mut client, 12, 24, 0, &valeurs,
                                        MODE_DENSE, None).unwrap();
         assert_eq!(n, 8);
-        assert_eq!(octets, TAILLE_TETE + 32,
-                   "l'octet d'en-tête en trop faisait exactement cette différence");
+        assert_eq!(octets, TAILLE_TETE + 1 + 32,
+                   "l'octet d'en-tête en trop faisait exactement cette différence \
+(+1 depuis la v6 : le compte `np` en tête de corps)");
         serveur.join().unwrap();
     }
 }
@@ -4954,6 +5022,8 @@ mod tests_plafond {
         let serveur = std::thread::spawn(move || {
             let (mut sock, _) = ecoute.accept().unwrap();
             sock.write_all(&entete(mode, n)).unwrap();
+            // Protocole v6 : le corps commence par `np` (aucun pré-mix ici).
+            sock.write_all(&[0u8]).unwrap();
             sock.write_all(&corps).unwrap();
         });
         let mut client = TcpStream::connect(adresse).unwrap();
@@ -4961,7 +5031,7 @@ mod tests_plafond {
         // pas pendre — sans lui il attendrait les 358 Go du corps annoncé
         // (relevé par la relecture : le test ne pouvait pas rater proprement).
         client.set_read_timeout(Some(std::time::Duration::from_secs(5))).unwrap();
-        let r = recevoir_flux(&mut client, hidden);
+        let r = recevoir_flux(&mut client, hidden, 1);
         serveur.join().unwrap();
         r
     }
@@ -5137,7 +5207,7 @@ mod tests_plafond {
         });
         let mut client = TcpStream::connect(adresse).unwrap();
         client.set_read_timeout(Some(std::time::Duration::from_secs(5))).unwrap();
-        let r = recevoir_flux(&mut client, 896);
+        let r = recevoir_flux(&mut client, 896, 1);
         assert!(r.is_err(), "un lot de 100 millions d'états doit être refusé");
         let msg = format!("{}", r.err().unwrap());
         assert!(msg.contains("plafond"), "le refus doit nommer le plafond : {msg}");

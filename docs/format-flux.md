@@ -85,12 +85,13 @@ format sur le disque n'a pas changé ; c'est la sémantique du champ qui est
 maintenant explicite — et c'est exactement le genre de précision qu'une
 spécification doit porter.
 
-## Transport (phase 3, TCP) — protocole v5
+## Transport (phase 3, TCP) — protocole v6
 
 ```
 en-tête (79 octets, identique à l'aller et au retour)
           magie        u32          0x44525631 (« DRV1 »)
-          version      u8           5   (refusée si différente, en le disant)
+          version      u8           6   (refusée si différente, en le disant)
+          corps (tous modes) : np u8, puis np × hc f32 — « la pre portée »
           mode         u8           0 = f32 dense · 1 = liste quantifiée
                                     2 = listes à échelle par bloc · 3 = LOT dense
                                     4 = LOT en listes (mode 2 répété par état)
@@ -107,7 +108,13 @@ en-tête (79 octets, identique à l'aller et au retour)
           attn_top-k   u32          │
           q·k top-k    u32          │
           moe top-k    u32          ┘
-corps     mode 0 : n × f32
+corps     TOUS modes, en tête : np (u8) puis np × hc f32
+          « la pre portée » : les coefficients du dernier raccord FFN du nœud
+          émetteur, pour la chaîne mHC **retardée** de V4.1. Sans elle, un nœud
+          qui reprend au milieu du modèle replierait son premier raccord avec la
+          copie 0 — faux, et muet. `np = 0` pour tout autre modèle : c'est le cas
+          ordinaire, et il coûte un octet.
+          mode 0 : n × f32
           mode 1 : n × ( indice u16 · valeur i16 )
           mode 2 : n_blocs u32 · n_blocs × f32 · longueur u32 · paires
           mode 3 : n × dimension × f32   (n = nombre d'ÉTATS, pas de canaux)
