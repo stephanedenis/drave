@@ -111875,3 +111875,25 @@ cb(g1, "kda_g1", il);
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"dot_q8_source\\|fn quantif\" drave-core/src/model.rs | head -6; python3 - <<'PY'\np='docs/architecture-kimi-k3.md'\ns=open(p).read()\ns=s.replace(\"\"\"## 5. Ce que notre moteur a déjà, et ce qui manque\"\"\",\n\"\"\"## 4te … [1946 caractères tronqués]`
+
+  ```
+notes d'implémentation ajoutées
+89a854a Spec Kimi-K3 : notes d'exécution (poids empruntés, activations quantifiées, tailles d'état, ordre exact de la couche 0)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -1 /tmp/dl_k3.log; du -sh /home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL; ls /home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/*.gguf | wc -l; git status --short | head -3; git log --oneline -6 | … [58 caractères tronqués]`
+
+  ```
+12:03:15    20.7 Go / 49.0 Go (42.2 %, 109 Mo/s)
+705G	/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL
+17
+ M journal/README.md
+89a854a Spec Kimi-K3 : notes d'exécution (poids empruntés, activations quantifiées, tailles d'état, ordre exact de la couche 0)
+6b7b7fa Kimi-K3 : l'inventaire des tenseurs, vérifié sur le fichier (49 couches vues, cadence KDA/MLA confirmée)
+2cd9719 Réutilisation : par couche (18 % à 69 %) et concentration du routage (10 % des experts servent 57 % des lectures)
+506046b Séquence de l'après-téléchargement, automatique et ordonnée (5 étapes qui échouent en disant laquelle)
+45c757f Débits remesurés : RAM 40 Go/s à 8 fils (pas 20), NVMe 3,4 Go/s à 4 flux — le budget de Kimi-K3 refait
+d541216 Protocole de vérification de Kimi-K3 : les 13 points de comparaison de la référence, l'ordre, les tolérances, et le premier jalon (couche 0)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo test --release 2>&1 | grep -E \"^test result\"; cd .. && git add -A && git commit -q -m \"Journal (màj automatique)\" 2>/dev/null; echo \"état propre : $(git status --short | wc -l) fichier(s) modifié(s)\"", "descrip … [57 caractères tronqués]`

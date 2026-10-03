@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 117.3 h |
 | Tours | 93 |
-| Messages | 7030 |
-| Appels d'outils | 6718 |
+| Messages | 7032 |
+| Appels d'outils | 6720 |
 | Fichiers touchés | 145 |
-| Commandes | 5684 |
+| Commandes | 5686 |
 | Sous-agents | 32 |
-| Commits | 465 |
+| Commits | 466 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -4623,7 +4623,7 @@ Et ce qu'un **cache LRU** rendrait, mesuré : **un quart des experts en cache se
 
 ### Tour 93 — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas e … [1246 caractères tronqués]
 
-*11 appels d'outils.* Actions notables :
+*13 appels d'outils.* Actions notables :
 
 - bash — Study the borrowed-weight pattern
 - bash — Inventory the tensors of layers 0, 1 and 3
@@ -4636,6 +4636,8 @@ Et ce qu'un **cache LRU** rendrait, mesuré : **un quart des experts en cache se
 - bash — Find the DenseQ8 matvec API
 - bash — List the DenseQ8 methods
 - bash — Add implementation notes to the spec
+- bash — Check the download and repo state
+- bash — Final test run and cleanup
 
 **Synthèse produite :**
 
@@ -4870,7 +4872,7 @@ Et ce qu'un **cache LRU** rendrait, mesuré : **un quart des experts en cache se
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5644 autres
+- … et 5646 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5483,4 +5485,5 @@ Et ce qu'un **cache LRU** rendrait, mesuré : **un quart des experts en cache se
 - Réutilisation : par couche (18 % à 69 %) et concentration du routage (10 % des experts servent 57 % des lectures)  Le cache se dimensionne PAR COUCHE (les couch
 - Kimi-K3 : l'inventaire des tenseurs, vérifié sur le fichier (49 couches vues, cadence KDA/MLA confirmée)  Le module drave-core/src/kimi_k3.rs vérifie que CHAQUE
 - Spec Kimi-K3 : notes d'exécution (poids empruntés, activations quantifiées, tailles d'état, ordre exact de la couche 0)" && git log --oneline -1
+- Journal (màj automatique)" 2>/dev/null; echo "état propre : $(git status --short | wc -l) fichier(s) modifié(s)"
 
