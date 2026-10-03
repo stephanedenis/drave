@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 115.1 h |
+| Durée | 115.4 h |
 | Tours | 90 |
-| Messages | 6796 |
-| Appels d'outils | 6498 |
-| Fichiers touchés | 132 |
-| Commandes | 5482 |
+| Messages | 6827 |
+| Appels d'outils | 6528 |
+| Fichiers touchés | 133 |
+| Commandes | 5509 |
 | Sous-agents | 32 |
-| Commits | 439 |
+| Commits | 440 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -41,6 +41,8 @@
 … [569 caractères tronqués]
 - **create** — Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en respectant pour chaque phase ses deux portes : porte de correction (comparaison étage par étage à llama.cpp sur V4-Flash) et porte Drave (flux : événements/paires par jeton, trace rejouée à l'identique, découp
 … [193 caractères tronqués]
+- **edit** — Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas en local (classe Kimi-K3 Q4 : 1,5 To de poids, ~35 Go de poids par jeton), et étudier/implémenter ce qui nous distingue sur cette classe : découpage par experts et en grappes (chaque nœud ne lit que ce qu'i
+… [497 caractères tronqués]
 
 ## 1. Ce qui a été demandé
 
@@ -4473,7 +4475,7 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 
 ### Tour 90 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [942 caractères tronqués]
 
-*60 appels d'outils.* Actions notables :
+*90 appels d'outils.* Actions notables :
 
 - bash — Check the gate suite result
 - bash — Wait for the gates
@@ -4489,11 +4491,11 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 - bash — Find the plan's remaining items
 - bash — Extract each phase's gate claims
 - read
-- … et 43 autres
+- … et 73 autres
 
 **Synthèse produite :**
 
-⏵ V4.1 : la structure « permutation » des hyper-connexions tient-elle aussi ?
+⏵ llama.cpp en amont supporte `kimi-k3` : je construis une seconde copie comme référence exécutable
 
 ## 3. Travail accompli
 
@@ -4633,6 +4635,7 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/analyse_hc.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-hc-permutation.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-portes-p0-p9.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-kimi-k3.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -4711,7 +4714,7 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5442 autres
+- … et 5469 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4839,7 +4842,7 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 
 ## 5. Erreurs rencontrées
 
-330 sorties en erreur ou divergentes. Les premières :
+331 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -5298,4 +5301,5 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 - HC : la permutation tient sur V4.1 et à toutes les positions (332/332), et V4.1 est encore plus proche de l'identité  V4-Flash 43/43 couches en permutation à ch
 - HC : ce que coûterait une simplification en permutation — 6,4 % d'erreur L2 moyenne (V4-Flash), 8,2 % (V4.1) sur 332 matrices ; l'ablation qui mesurerait l'effe
 - Audit : préciser ce que « flux » veut dire pour V4 — les paires sont comptées (16,2 G/jeton) mais la part en listes est NULLE, le calcul est dense. Le contrat d
+- Réorientation : plan Kimi-K3 — exécuter en local ce qui ne tient pas en local  Mesuré : le Q4 d'Kimi-K3 fait 1 508,7 Go (32 shards), l'architecture kimi-k3 nous
 

@@ -107984,3 +107984,597 @@ ctx 1024 : 449 / 1023
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-portes-p0-p9.md'\ns=open(p).read()\nold = \"\"\"**Ce qu'il ne dit pas.** Deux réserves, nommées :\"\"\"\nnew = \"\"\"**Une précision qui change la lecture des portes « de flux ».** Pour V4-Flash e … [1396 caractères tronqués]`
+
+  ```
+ok
+ctx 1024 : 463 / 1023
+  ```
+
+- **bash** `{"command": "sleep 900; s=$(stat -c %s /tmp/our_v4f1024.bin); echo \"$(date +%H:%M) ctx 1024 : $(( (s-8)/517120 )) / 1023\"; pgrep -x drave >/dev/null && echo tourne || echo fini", "description": "Wait for the ctx-1024 run", "timeoutMs": 1000000}`
+
+  ```
+(no output)
+[timed out after 600000ms]
+[killed by signal: SIGTERM]
+  ```
+
+### 👤 Utilisateur
+
+retire les modèles périmés comme DeepSeek v4Flash. Bien qu'ils soient éducatif d'étudier comment les autres moteurs d'inférences les supportent, je tiens à ce qu'on travaille sur les modèles de meilleur qualité et particulièrement ceux qui sont typiquement trop gros pour l'exécution locale. Télécharge les meilleurs modèles ouverts afin de les étudier et voir comment on peut s'y prendre pour se distinguer dans leur exécution locale.
+
+### 🤖 Assistant
+
+⏵ Nouvelle directive reçue : je clos d'abord la mesure en cours, puis je bascule sur les modèles les plus gros
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && s=$(stat -c %s /tmp/our_v4f1024.bin 2>/dev/null || echo 0); echo \"ctx 1024 : $(( (s-8)/517120 )) / 1023 positions\"; pgrep -x drave >/dev/null && echo \"tourne\" || echo \"fini\"; grep -E \"sur [0-9]+ tokens|postes\" /tmp/our_v4f102 … [71 caractères tronqués]`
+
+  ```
+ctx 1024 : 685 / 1023 positions
+tourne
+  ```
+
+- **bash** `{"command": "df -h /home/stephane/Data13TB /home/stephane/FastNVMe | tail -2; echo \"=== modèles locaux ===\"; du -sh /home/stephane/Data13TB/stephane/modeles/gguf/* 2>/dev/null | sort -h | tail -12; echo \"--- FastNVMe ---\"; du -sh /home/stephane/FastNVMe/modeles-lourds/* /home/stephane/FastNVMe/m … [101 caractères tronqués]`
+
+  ```
+/dev/mapper/system-root   11T  7,4T  3,5T  69% /home/stephane/Data13TB
+/dev/nvme0n1p2           828G  641G  187G  78% /home/stephane/FastNVMe
+=== modèles locaux ===
+13G	/home/stephane/Data13TB/stephane/modeles/gguf/codestral-22b-v0.1-q4_k_m.gguf
+18G	/home/stephane/Data13TB/stephane/modeles/gguf/Muse-Glimmer-30B-AD-Q4_K_M.gguf
+18G	/home/stephane/Data13TB/stephane/modeles/gguf/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf
+19G	/home/stephane/Data13TB/stephane/modeles/gguf/qwen2.5-coder-32b-instruct-q4_k_m.gguf
+22G	/home/stephane/Data13TB/stephane/modeles/gguf/MiniMax-H3
+60G	/home/stephane/Data13TB/stephane/modeles/gguf/gpt-oss-120b-MXFP4.gguf
+80G	/home/stephane/Data13TB/stephane/modeles/gguf/Qwen3-235B-A22B-Q2_K
+81G	/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M
+87G	/home/stephane/Data13TB/stephane/modeles/gguf/GLM-5.3-Flash-UD-IQ1_S
+202G	/home/stephane/Data13TB/stephane/modeles/gguf/GLM-5.3-UD-IQ1_S
+284G	/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K2.7-Code-UD-IQ1_M
+341G	/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4.1-Flash-Q2
+--- FastNVMe ---
+4,0K	/home/stephane/FastNVMe/modeles-lourds/README.md
+4,0K	/home/stephane/FastNVMe/models/DeepSeek-V4.1
+… [134 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -40 docs/plan-modeles-lourds.md; echo \"=== HF joignable ? ===\"; curl -s -o /dev/null -w \"huggingface.co : HTTP %{http_code} en %{time_total}s\\n\" --max-time 20 https://huggingface.co/ ; which hf huggingface-cli 2>/dev/null;  … [233 caractères tronqués]`
+
+  ```
+# Plan — les modèles lourds : les télécharger, les analyser, découper leurs MoE
+
+**En une ligne** : la bibliothèque brute vit sur le disque mécanique (4,7 To
+libres), le NVMe ne sert plus qu'aux fichiers que NOUS produisons ; une file de
+**1,14 To** de modèles lourds est en téléchargement, et le même protocole de mesure
+que celui du sprint précédent (trace de routage → découpage en clusters) doit
+passer sur eux pour décider du format.
+
+## Pourquoi eux
+
+Notre mode d'opération — listes d'événements, experts allumés un par un, mémoire
+paginée, déport GPU partiel — ne se juge pas sur un modèle de 0,5B. Les décisions
+de format (disposition des experts, manifeste multi-shards, index de routage) n'ont
+de sens que sur les modèles qui ont **beaucoup d'experts** et **1 M de contexte**.
+« Pouvoir rouler du best of breed » veut dire : ouvrir ces fichiers tels qu'ils sont
+publiés, sans les requantifier.
+
+## Ce qui est disponible (relevé sur Hugging Face, 01/10)
+
+| modèle | pourquoi lui | plus petit GGUF | contexte | état |
+|---|---|---|---|---|
+
+> **Où en est ce plan (02/10)** : les 24 fichiers sont arrivés ; le lecteur
+> multi-fichiers, les métadonnées et le tokenizer sont **faits** ;
+> `deeps
+… [1359 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"huggingface.co\" docs/*.md tools/*.sh 2>/dev/null | head -8; ls tools/*.sh | head -20; grep -rln \"huggingface\" tools/ 2>/dev/null | head -5", "description": "Find the repo's download method and URLs"}`
+
+  ```
+docs/glossaire.md:1672:- Hugging Face, Xet — <https://huggingface.co/docs/hub/xet/index>
+docs/plan-deepseek-v4-flash.md:25:| **DeepSeek-V4-Flash** | poids ouverts (base de V4.1) : [unsloth/DeepSeek-V4-Flash-GGUF](https://huggingface.co/unsloth/DeepSeek-V4-Flash-GGUF), [huihui-ai](https://huggingface.co/huihui-ai/Huihui-DeepSeek-V4-Flash-0731-abliterated-GGUF) | oui |
+tools/colab_cote_local.sh
+tools/extraire_tables_ggml.sh
+tools/inventaire_modeles_lourds.sh
+tools/porte-flux.sh
+tools/portes_formats.sh
+tools/portes.sh
+tools/preparer_colab.sh
+tools/sprint.sh
+tools/verifier_table_types.sh
+tools/telecharger_modeles.py
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -45 tools/telecharger_modeles.py; echo \"=== liste des fichiers du plan ===\"; grep -nE \"\\.gguf|https://huggingface\" tools/telecharger_modeles.py | head -20", "description": "Read the download tool"}`
+
+  ```
+#!/usr/bin/env python3
+"""Télécharge les modèles LOURDS, par tranches, avec reprise.
+
+Pourquoi par tranches : le pont Xet de Hugging Face refuse un GET plein sur le
+fichier de 365,7 Go de `antirez/deepseek-v4.1-flash-gguf` (HTTP 400) alors qu'il
+sert très bien une requête `Range` (HTTP 206). Mesuré, pas supposé. La découpe a
+un second mérite : une coupure réseau ne coûte que la tranche en cours.
+
+Le NVMe ne sert plus qu'aux fichiers que NOUS produisons : les modèles bruts vont
+sur le disque mécanique (`/home/stephane/Data13TB/stephane/modeles/gguf`).
+
+Usage :
+    telecharger_modeles.py --manifeste tools/manifeste_modeles_lourds.json
+    telecharger_modeles.py --seulement Kimi-K2.7-Code-UD-IQ1_M
+    telecharger_modeles.py --etat          # où en est chaque fichier
+"""
+import argparse
+import json
+import os
+import shutil
+import subprocess
+import sys
+import time
+
+RACINE = "https://huggingface.co"
+CHUNK = 256 << 20          # 256 Mo
+DEST_DEFAUT = "/home/stephane/Data13TB/stephane/modeles/gguf"
+LIBRE_MINIMUM_GO = 300     # on s'arrête bien avant de remplir le disque
+
+
+def humain(n):
+    return f"{n / 1e9:.1f} Go"
+
+
+def _tranche(url, dest, debut, fin, etat, cle, journal, essais=6):
+    ""
+… [455 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport json\nm=json.load(open('tools/manifeste_modeles_lourds.json'))\nprint(type(m), (list(m.keys())[:6] if isinstance(m,dict) else len(m)))\nprint(json.dumps(m, ensure_ascii=False)[:1500])\"", "description": "Read th … [24 caractères tronqués]`
+
+  ```
+<class 'list'> 24
+[{"nom": "DeepSeek-V4-Flash-UD-IQ1_M", "repo": "unsloth/DeepSeek-V4-Flash-GGUF", "chemin": "UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00002-of-00003.gguf", "octets": 49971881124}, {"nom": "DeepSeek-V4-Flash-UD-IQ1_M", "repo": "unsloth/DeepSeek-V4-Flash-GGUF", "chemin": "UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf", "octets": 5256864}, {"nom": "DeepSeek-V4.1-Flash-Q2", "repo": "antirez/deepseek-v4.1-flash-gguf", "chemin": "DeepSeek-V4.1-Flash-Q2.gguf", "octets": 365713686528}, {"nom": "Kimi-K2.7-Code-UD-IQ1_M", "repo": "unsloth/Kimi-K2.7-Code-GGUF", "chemin": "UD-IQ1_M/Kimi-K2.7-Code-UD-IQ1_M-00001-of-00008.gguf", "octets": 6913184}, {"nom": "Kimi-K2.7-Code-UD-IQ1_M", "repo": "unsloth/Kimi-K2.7-Code-GGUF", "chemin": "UD-IQ1_M/Kimi-K2.7-Code-UD-IQ1_M-00002-of-00008.gguf", "octets": 49638722336}, {"nom": "Kimi-K2.7-Code-UD-IQ1_M", "repo": "unsloth/Kimi-K2.7-Code-GGUF", "chemin": "UD-IQ1_M/Kimi-K2.7-Code-UD-IQ1_M-00003-of-00008.gguf", "octets": 48368994848}, {"nom": "Kimi-K2.7-Code-UD-IQ1_M", "repo": "unsloth/Kimi-K2.7-Code-GGUF", "chemin": "UD-IQ1_M/Kimi-K2.7-Code-UD-IQ1_M-00004-of-00008.gguf", "octets": 48368994848}, {"nom": "Kimi-K2.7-Code-UD-IQ1_M", "repo": 
+… [318 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je clos ctx 1 024, puis j'interroge Hugging Face pour choisir les meilleurs modèles ouverts
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && s=$(stat -c %s /tmp/our_v4f1024.bin 2>/dev/null || echo 0); echo \"ctx 1024 : $(( (s-8)/517120 )) / 1023\"; pgrep -x drave >/dev/null && echo tourne || echo fini; grep -E \"sur [0-9]+ tokens|postes\" /tmp/our_v4f1024_clean.log | tail … [46 caractères tronqués]`
+
+  ```
+ctx 1024 : 708 / 1023
+tourne
+  ```
+
+- **bash** `{"command": "curl -s --max-time 40 \"https://huggingface.co/api/models?sort=downloads&direction=-1&limit=25&filter=text-generation\" | python3 -c \"\nimport json,sys\nfor m in json.load(sys.stdin):\n    print(f\\\"{m.get('downloads',0):>12,} {m['id']:<55} {m.get('lastModified','')[:10]}\\\")\"", "de … [90 caractères tronqués]`
+
+  ```
+29,665,992 Qwen/Qwen3-0.6B                                         
+  15,637,691 openai-community/gpt2                                   
+  10,703,016 Qwen/Qwen3-8B                                           
+   9,712,634 trl-internal-testing/tiny-Qwen2ForCausalLM-2.5          
+   9,558,268 Qwen/Qwen3-Embedding-0.6B                               
+   8,707,241 Qwen/Qwen2.5-0.5B-Instruct                              
+   8,438,098 Qwen/Qwen2.5-7B-Instruct                                
+   8,240,846 unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF               
+   7,770,334 Qwen/Qwen3-4B                                           
+   7,743,934 meta-llama/Llama-3.2-1B-Instruct                        
+   7,419,566 Qwen/Qwen2.5-1.5B-Instruct                              
+   6,917,045 facebook/opt-125m                                       
+   6,574,377 openai/gpt-oss-20b                                      
+   6,442,784 RadixArk/Kimi-K3-DSpark                                 
+   6,213,691 nvidia/Qwen3.6-35B-A3B-NVFP4                            
+   6,183,853 meta-llama/Llama-3.1-8B-Instruct                        
+   5,051,366 ornith-ai/Ornith-1.5-9B-GGUF                            
+   4,729,766
+… [516 caractères tronqués]
+  ```
+
+- **bash** `{"command": "for q in \"Kimi-K3\" \"DeepSeek-V4\" \"Qwen3.6\" \"GLM-5\" \"MiniMax\"; do echo \"=== $q ===\"; curl -s --max-time 30 \"https://huggingface.co/api/models?search=$q&sort=downloads&direction=-1&limit=6\" | python3 -c \"\nimport json,sys\nfor m in json.load(sys.stdin):\n    print(f\\\"  {m … [130 caractères tronqués]`
+
+  ```
+=== Kimi-K3 ===
+   6,442,784 RadixArk/Kimi-K3-DSpark
+   1,223,892 moonshotai/Kimi-K3
+     371,886 unsloth/Kimi-K3-GGUF
+      30,335 m8than/KimiK3-GG
+      20,070 nvidia/Kimi-K3-NVFP4
+      12,452 mradermacher/Qwen3.5-9B-Kimi-k3-Distilled-i1-GGUF
+=== DeepSeek-V4 ===
+   4,481,923 deepseek-ai/DeepSeek-V4-Flash-0731
+   1,430,673 antirez/deepseek-v4-gguf
+   1,357,204 antirez/deepseek-v4.1-flash-gguf
+   1,066,141 deepseek-ai/DeepSeek-V4-Flash
+     915,320 deepseek-ai/DeepSeek-V4-Flash-Vision-Exp
+     787,841 deepseek-ai/DeepSeek-V4.1-Flash
+=== Qwen3.6 ===
+   6,213,691 nvidia/Qwen3.6-35B-A3B-NVFP4
+   5,526,651 Qwen/Qwen3.6-35B-A3B-FP8
+   3,605,650 Qwen/Qwen3.6-27B-FP8
+   3,311,432 Qwen/Qwen3.6-35B-A3B
+   2,451,011 Qwen/Qwen3.6-27B
+   1,291,994 unsloth/Qwen3.6-35B-A3B-GGUF
+=== GLM-5 ===
+   5,428,853 zai-org/GLM-5.3-Flash
+   1,402,948 zai-org/GLM-5.3
+   1,036,417 unsloth/GLM-5.3-Flash-GGUF
+     705,839 zai-org/GLM-5.2
+     560,708 unsloth/GLM-5.3-GGUF
+     526,328 nvidia/GLM-5.2-NVFP4
+=== MiniMax ===
+  22,960,987 Comfy-Org/MiniMax-H3
+   3,564,596 MiniMaxAI/MiniMax-H3
+   1,539,674 lightx2v/Minimax-h3-Turbo
+   1,454,036 unsloth/MiniMax-H3-GGUF
+   1,073,367 MiniMaxAI/MiniMax-M2.7
+     813,633 
+… [44 caractères tronqués]
+  ```
+
+- **bash** `{"command": "curl -s --max-time 40 \"https://huggingface.co/api/models/unsloth/Kimi-K3-GGUF?blobs=true\" | python3 -c \"\nimport json,sys\nd=json.load(sys.stdin)\nprint('repo :', d['id'], '· dernière modif', d.get('lastModified','')[:10])\nfs=[(s['rfilename'], s.get('size') or 0) for s in d.get('sib … [426 caractères tronqués]`
+
+  ```
+repo : unsloth/Kimi-K3-GGUF · dernière modif 2026-08-07
+  .gitattributes                 1 fichiers ·      0.0 Go
+  README.md                      1 fichiers ·      0.0 Go
+  UD-IQ1_M                      15 fichiers ·    648.9 Go
+  UD-IQ1_S                      14 fichiers ·    594.0 Go
+  UD-IQ2_XXS                    16 fichiers ·    711.1 Go
+  UD-Q1_0                       11 fichiers ·    466.4 Go
+  UD-Q2_K_XL                    19 fichiers ·    861.3 Go
+  UD-Q4_K_XL                    32 fichiers ·   1508.7 Go
+  UD-Q8_K_XL                    34 fichiers ·   1561.2 Go
+  UD-TQ1_0                      12 fichiers ·    508.9 Go
+  UD-TQ2_0                      13 fichiers ·    551.5 Go
+  mmproj-BF16.gguf               1 fichiers ·      0.9 Go
+  mmproj-F16.gguf                1 fichiers ·      0.9 Go
+  mmproj-F32.gguf                1 fichiers ·      1.8 Go
+=== ctx 1024 ===
+718 / 1023
+  ```
+
+- **bash** `{"command": "curl -s --max-time 60 \"https://huggingface.co/api/models/unsloth/Kimi-K3-GGUF?blobs=true\" | python3 -c \"\nimport json,sys\nd=json.load(sys.stdin)\nfs=[(s['rfilename'], s.get('size') or 0) for s in d.get('siblings',[]) if s['rfilename'].startswith('UD-Q4_K_XL/')]\nfs.sort()\ntot=sum(t … [257 caractères tronqués]`
+
+  ```
+32 fichiers · 1508.7 Go
+      0.01 Go  UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf
+     47.48 Go  UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00002-of-00032.gguf
+     49.15 Go  UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00003-of-00032.gguf
+     49.02 Go  UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00004-of-00032.gguf
+     49.02 Go  UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00005-of-00032.gguf
+     49.12 Go  UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00006-of-00032.gguf
+  ...
+     49.12 Go  UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00030-of-00032.gguf
+     49.15 Go  UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00031-of-00032.gguf
+     37.77 Go  UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00032-of-00032.gguf
+  ```
+
+- **bash** `{"command": "cd /tmp && time curl -s -L --max-time 90 -r 0-524287999 -o /tmp/test_debit.bin \"https://huggingface.co/unsloth/Kimi-K3-GGUF/resolve/main/UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00002-of-00032.gguf\" && ls -la /tmp/test_debit.bin | awk '{printf \"%.0f Mo en %.1f s -> %.1f Mo/s\\n\", $5/1048576, 0 … [212 caractères tronqués]`
+
+  ```
+500 Mo en 0.0 s -> 0.0 Mo/s
+524 Mo téléchargés
+[stderr]
+
+real	0m12,589s
+user	0m1,211s
+sys	0m1,104s
+  ```
+
+### 🤖 Assistant
+
+⏵ Je lance le téléchargement de Kimi-K3 UD-Q4_K_XL (1,5 To — un modèle qui ne tient pas en local), débit mesuré 42 Mo/s
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, subprocess\nman = json.load(open('tools/manifeste_modeles_lourds.json'))\nnoms = {e['nom'] for e in man}\nprint(\"déjà au manifeste :\", len(man), \"entrées ·\", len(noms), \"modèles\")\n# Récupère la l … [951 caractères tronqués]`
+
+  ```
+déjà au manifeste : 24 entrées · 7 modèles
+Kimi-K3 UD-Q4_K_XL : 32 fichiers · 1508.7 Go
+manifeste : 56 entrées
+/dev/mapper/system-root   11T  7,4T  3,5T  69% /home/stephane/Data13TB
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup python3 tools/telecharger_modeles.py --seulement Kimi-K3-UD-Q4_K_XL > /tmp/dl_k3.log 2>&1 &\nsleep 45; tail -6 /tmp/dl_k3.log; ls -la /home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/ 2>/dev/null | tail -3", "de … [62 caractères tronqués]`
+
+  ```
+10:05:24  Kimi-K3-UD-Q4_K_XL · Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf · 0.0 Go (3802 Go libres)
+10:05:34    0.0 Go / 0.0 Go (100.0 %, 1 Mo/s)
+10:05:34  Kimi-K3-UD-Q4_K_XL · Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf : fait
+10:05:34  Kimi-K3-UD-Q4_K_XL · Kimi-K3-UD-Q4_K_XL-00002-of-00032.gguf · 47.5 Go (3802 Go libres)
+10:05:44    0.5 Go / 47.5 Go (1.1 %, 54 Mo/s)
+-rw-r--r--. 1 stephane stephane   226541568  3 oct 10:06 Kimi-K3-UD-Q4_K_XL-00002-of-00032.gguf.part2
+-rw-r--r--. 1 stephane stephane   185135104  3 oct 10:06 Kimi-K3-UD-Q4_K_XL-00002-of-00032.gguf.part3
+-rw-r--r--. 1 stephane stephane    33804288  3 oct 10:06 Kimi-K3-UD-Q4_K_XL-00002-of-00032.gguf.part4
+  ```
+
+### 🤖 Assistant
+
+⏵ Premier test sur Kimi-K3 : notre moteur reconnaît-il son architecture ? (shard 1 déjà là)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && K=/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf && ls -la $K && ./drave-core/target/release/drave \"$K\" --config 2>&1 | head -25", "description": "Check whether the engine kn … [49 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 6934144  3 oct 10:05 /home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf
+
+thread 'main' (3029579) panicked at src/main.rs:1821:52:
+ouverture du GGUF (en-tête): Custom { kind: NotFound, error: "modèle découpé incomplet dans /home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL : 32 shards annoncés, 2 présents" }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -20 tools/lire_meta_gguf.py | grep -E \"usage|argv\" ; python3 tools/lire_meta_gguf.py /home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf 2>&1 | head -30", "description": "Rea … [54 caractères tronqués]`
+
+  ```
+# /home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf
+# version 3 · 0 tenseurs · 64 paires clé/valeur
+general.architecture = kimi-k3
+general.type = model
+general.name = Kimi-K3
+general.basename = Kimi-K3
+general.quantized_by = Unsloth
+general.size_label = 896x60B
+general.license = other
+general.license.name = kimi-k3
+general.repo_url = https://huggingface.co/unsloth
+general.base_model.count = 1
+general.base_model.0.name = Kimi K3
+general.base_model.0.organization = Moonshotai
+general.base_model.0.repo_url = https://huggingface.co/moonshotai/Kimi-K3
+general.tags = ['compressed-tensors', 'unsloth', 'conversational', 'image-text-to-text']
+kimi-k3.block_count = 93
+kimi-k3.context_length = 1048576
+kimi-k3.embedding_length = 7168
+kimi-k3.feed_forward_length = 33792
+kimi-k3.attention.head_count = 96
+kimi-k3.attention.head_count_kv = [0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, '… (+29)']
+kimi-k3.rope.freq_base = 10000.0
+kimi-k3.attention.layer_norm_rms_epsilon = 9.999999747378752e-06
+kimi-k3.
+… [187 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -2 /tmp/dl_k3.log; ls -la /home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/*.gguf 2>/dev/null | tail -3; echo \"=== octets par jeton (en-tête du shard 2) ===\"; timeout 300 python3 tools/analyse_octets_par_jeton. … [222 caractères tronqués]`
+
+  ```
+10:06:14    4.0 Go / 47.5 Go (8.5 %, 101 Mo/s)
+10:06:44    7.0 Go / 47.5 Go (14.7 %, 100 Mo/s)
+-rw-r--r--. 1 stephane stephane     6934144  3 oct 10:05 /home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf
+-rw-r--r--. 1 stephane stephane 47478326816  3 oct 10:06 /home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00002-of-00032.gguf
+=== octets par jeton (en-tête du shard 2) ===
+/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00002-of-00032.gguf : version 3, 105 tenseurs
+
+3 couches à experts · 896 experts · 6 routés par jeton
+  poids totaux du fichier      :    47.48 Go
+  dont experts (toutes couches):    41.93 Go
+  dont expert partagé          :     0.37 Go
+  formats                      : MXFP4 41.93 Go · Q8_0 5.46 Go · F32 0.09 Go
+
+  ⇒ OCTETS DE POIDS PAR JETON  :    0.655 Go
+     à 6,5 Go/s sur le bus (PCIe x8, chiffre du dépôt) :    101 ms/jeton
+     à 20 Go/s (lecture CPU mesurée)                   :     33 ms/jeton
+     à 200 Mo/s (disque dur, lectures non cachées)     :    3.3 s/jeton
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/analyse_octets_par_jeton.py /home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00002-of-00032.gguf --experts-par-jeton 16 2>&1 | tail -9; echo \"=== part du modèle touchée par jeton ===\ … [590 caractères tronqués]`
+
+  ```
+poids totaux du fichier      :    47.48 Go
+  dont experts (toutes couches):    41.93 Go
+  dont expert partagé          :     0.37 Go
+  formats                      : MXFP4 41.93 Go · Q8_0 5.46 Go · F32 0.09 Go
+
+  ⇒ OCTETS DE POIDS PAR JETON  :    1.123 Go
+     à 6,5 Go/s sur le bus (PCIe x8, chiffre du dépôt) :    173 ms/jeton
+     à 20 Go/s (lecture CPU mesurée)                   :     56 ms/jeton
+     à 200 Mo/s (disque dur, lectures non cachées)     :    5.6 s/jeton
+=== part du modèle touchée par jeton ===
+  34.7 Go de poids par jeton (16 experts routés sur 896, 93 couches)
+  soit 2.30 % du modèle Q4 (1508,7 Go)
+  à 200 Mo/s (disque dur) : 173 s/jeton
+  à 2 Go/s (NVMe)         : 17.3 s/jeton
+  à 20 Go/s (RAM)         : 1.73 s/jeton
+  ```
+
+- **get_goal** `{}`
+
+  ```
+{"goal":{"id":"goal-87d1ebcb-3cbb-43a1-845f-1e93df13d949","revision":1,"objective":"Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en respectant pour chaque phase ses deux portes : porte de correction (comparaison étage par étage à llama.cpp sur V4-Flash) et porte Drave (flux : événements/paires par jeton, trace rejouée à l'identique, découpage en grappes, flux lisible par un outil d'analyse). Aucune phase ne passe à la suivante sans ses deux portes. Jamais de forward muet, jamais d'optimisation qui change une sortie sans le dire.","phase":"active","roundsStarted":16,"maxGoalRounds":30},"activation":"armed"}
+  ```
+
+- **update_goal** `{"goal_id": "goal-87d1ebcb-3cbb-43a1-845f-1e93df13d949", "revision": 1, "action": "edit", "objective": "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas en local (classe Kimi-K3 Q4 : 1,5 To de poids, ~35 Go de poids par jeton), et étudier/implémenter ce q … [603 caractères tronqués]`
+
+> **Objectif** (edit) : Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas en local (classe Kimi-K3 Q4 : 1,5 To de poids, ~35 Go de poids par jeton), et étudier/implémenter ce qui nous distingue sur cette classe : découpage par experts et en grappes (chaque nœud ne lit que ce qu'il sert), réutilisation des experts entre jetons, transport de flux compact (listes DRVF), noyaux rapides (SIMD, déquantification bit-exacte), et mesure systématique (octets par jeton, débits, seuils). Les modèles périmés (DeepSeek-V4-Flash) sortent du chemin critique : leurs acquis sont conservés dans les rapports, leurs portes archivées. Règles inchangées : jamais de forward muet, jamais d'optimisation qui change une sortie sans le dire, une affirmation sans mesure n'est pas une affirmation.
+
+
+  ```
+{"goal":{"id":"goal-87d1ebcb-3cbb-43a1-845f-1e93df13d949","revision":2,"objective":"Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas en local (classe Kimi-K3 Q4 : 1,5 To de poids, ~35 Go de poids par jeton), et étudier/implémenter ce qui nous distingue sur cette classe : découpage par experts et en grappes (chaque nœud ne lit que ce qu'il sert), réutilisation des experts entre jetons, transport de flux compact (listes DRVF), noyaux rapides (SIMD, déquantification bit-exacte), et mesure systématique (octets par jeton, débits, seuils). Les modèles périmés (DeepSeek-V4-Flash) sortent du chemin critique : leurs acquis sont conservés dans les rapports, leurs portes archivées. Règles inchangées : jamais de forward muet, jamais d'optimisation qui change une sortie sans le dire, une affirmation sans mesure n'est pas une affirmation.","phase":"active","roundsStarted":16,"maxGoalRounds":30},"activation":"armed"}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && s=$(stat -c %s /tmp/our_v4f1024.bin 2>/dev/null || echo 0); echo \"ctx 1024 : $(( (s-8)/517120 )) / 1023\"; pgrep -x drave >/dev/null && echo tourne || echo fini; echo \"=== llama.cpp connaît-il kimi-k3 ? ===\"; ls /home/stephane/Dat … [262 caractères tronqués]`
+
+  ```
+ctx 1024 : 783 / 1023
+tourne
+=== llama.cpp connaît-il kimi-k3 ? ===
+deepseek2.cpp
+deepseek2ocr.cpp
+deepseek32.cpp
+deepseek4.cpp
+deepseek.cpp
+kimi-linear.cpp
+  ```
+
+- **bash** `{"command": "grep -rn \"kimi\" /home/stephane/Data13TB/stephane/GitHub/llama.cpp/src/llama-arch.cpp 2>/dev/null | head -8; echo \"=== cartes HF de Kimi-K3 ===\"; curl -s --max-time 40 \"https://huggingface.co/api/models/moonshotai/Kimi-K3\" | python3 -c \"\nimport json,sys\nd=json.load(sys.stdin)\np … [263 caractères tronqués]`
+
+  ```
+144:    { LLM_ARCH_KIMI_LINEAR,      "kimi-linear"      },
+=== cartes HF de Kimi-K3 ===
+dernière modif : 2026-09-02 · tags : transformers,safetensors,kimi_k3,feature-extraction,compressed-tensors,conversational,image-text-to-text,custom_code
+   .eval_results/apex-agents.yaml
+   .eval_results/deep-swe.yaml
+   .eval_results/gpqa.yaml
+   .eval_results/hle.yaml
+   .eval_results/moonshotai__Kimi-K3.yaml
+   .gitattributes
+   LICENSE
+   README.md
+   assets/kimi-logo.png
+   config.json
+   configuration_kimi_k3.py
+   encoding_k3.py
+   generation_config.json
+   kimi_k3_processor.py
+   kimi_k3_vision_processing.py
+   media_utils.py
+   model-00001-of-000096.safetensors
+   model-00002-of-000096.safetensors
+   model-00003-of-000096.safetensors
+   model-00004-of-000096.safetensors
+   model-00005-of-000096.safetensors
+   model-00006-of-000096.safetensors
+   model-00007-of-000096.safetensors
+   model-00008-of-000096.safetensors
+   model-00009-of-000096.safetensors
+  ```
+
+### 🤖 Assistant
+
+⏵ Kimi-K3 livre son code de référence (custom_code) : je le récupère pour l'étudier
+
+- **bash** `{"command": "mkdir -p /tmp/k3ref && cd /tmp/k3ref && for f in config.json configuration_kimi_k3.py encoding_k3.py generation_config.json; do curl -s -L --max-time 60 -o \"$f\" \"https://huggingface.co/moonshotai/Kimi-K3/resolve/main/$f\"; done; ls -la; echo \"=== config.json ===\"; python3 -c \"\nim … [212 caractères tronqués]`
+
+  ```
+total 52
+drwxr-xr-x.   2 stephane stephane    120  3 oct 10:08 .
+drwxrwxrwt. 113 root     root     787580  3 oct 10:08 ..
+-rw-r--r--.   1 stephane stephane   7006  3 oct 10:08 config.json
+-rw-r--r--.   1 stephane stephane  11343  3 oct 10:08 configuration_kimi_k3.py
+-rw-r--r--.   1 stephane stephane  26304  3 oct 10:08 encoding_k3.py
+-rw-r--r--.   1 stephane stephane     53  3 oct 10:08 generation_config.json
+=== config.json ===
+  architectures = ['KimiK3ForConditionalGeneration']
+  auto_map = {'AutoConfig': 'configuration_kimi_k3.KimiK3Config', 'AutoModel': 'modeling_kimi_k3.KimiK3ForConditionalGeneration', 'Au
+  bos_token_id = 163584
+  dtype = bfloat16
+  eos_token_id = 163586
+  ignore_index = -100
+  image_placeholder = <|kimi_image_placeholder|>
+  media_placeholder_token_id = 163605
+  model_type = kimi_k3
+  pad_token_id = 163839
+  text_config = {'_name_or_path': '', 'activation_situ_beta': 4.0, 'activation_situ_linear_beta': 25.0, 'add_cross_attention': False, 'a
+  tie_word_embeddings = False
+  vision_config = {'_attn_implementation': 'flash_attention_2', 'activation_func': 'gelu_pytorch_tanh', 'attn_bias': False, 'init_pos_emb_
+  ```
+
+- **bash** `{"command": "cd /tmp/k3ref && curl -s -L --max-time 90 -o modeling_kimi_k3.py \"https://huggingface.co/moonshotai/Kimi-K3/resolve/main/modeling_kimi_k3.py\" && wc -l modeling_kimi_k3.py && python3 -c \"\nimport json\nc=json.load(open('config.json'))['text_config']\nprint('=== text_config ===')\nfor  … [191 caractères tronqués]`
+
+  ```
+1317 modeling_kimi_k3.py
+=== text_config ===
+  _name_or_path = 
+  activation_situ_beta = 4.0
+  activation_situ_linear_beta = 25.0
+  add_cross_attention = False
+  architectures = ['KimiLinearForCausalLM']
+  attn_res_block_size = 12
+  auto_map = {'AutoConfig': 'configuration_kimi_k3.KimiLinearConfig', 'AutoModel': 'modeling_kimi_linear.KimiLine…
+  bad_words_ids = None
+  begin_suppress_tokens = None
+  bos_token_id = 163584
+  chunk_size_feed_forward = 0
+  cross_attention_hidden_size = None
+  decoder_start_token_id = None
+  diversity_penalty = 0.0
+  do_sample = False
+  dtype = bfloat16
+  early_stopping = False
+  encoder_no_repeat_ngram_size = 0
+  eos_token_id = 163586
+  exponential_decay_length_penalty = None
+  finetuning_task = None
+  first_k_dense_replace = 1
+  forced_bos_token_id = None
+  forced_eos_token_id = None
+  hidden_act = situ
+  hidden_size = 7168
+  id2label = {'0': 'LABEL_0', '1': 'LABEL_1'}
+  initializer_range = 0.02
+  intermediate_size = 33792
+  is_decoder = False
+  is_encoder_decoder = False
+  kv_lora_rank = 512
+  label2id = {'LABEL_0': 0, 'LABEL_1': 1}
+  latent_moe_use_norm = True
+  length_penalty = 1.0
+  linear_attn_config = {'full_attn_layers': [4, 8, 12, 16, 20, 24, 2
+… [257 caractères tronqués]
+  ```
+
+- **bash** `{"command": "curl -s --max-time 45 \"https://raw.githubusercontent.com/ggml-org/llama.cpp/master/src/llama-arch.cpp\" | grep -E \"LLM_ARCH_(KIMI|K3)\" | head -10; echo \"=== README de la quantization unsloth ===\"; curl -s --max-time 45 \"https://huggingface.co/unsloth/Kimi-K3-GGUF/raw/main/README.m … [108 caractères tronqués]`
+
+  ```
+{ LLM_ARCH_KIMI_LINEAR,      "kimi-linear"      },
+    { LLM_ARCH_KIMI_K3,          "kimi-k3"          },
+        case LLM_ARCH_KIMI_LINEAR:
+        case LLM_ARCH_KIMI_K3:
+        case LLM_ARCH_KIMI_K3:
+        case LLM_ARCH_KIMI_LINEAR:
+        case LLM_ARCH_KIMI_K3:
+=== README de la quantization unsloth ===
+---
+base_model:
+- moonshotai/Kimi-K3
+tags:
+- unsloth
+- conversational
+license: other
+license_name: kimi-k3
+library_name: transformers
+pipeline_tag: image-text-to-text
+---
+# Read our How to [Run Kimi K3 Guide!](https://unsloth.ai/docs/models/kimi-k3)
+<div>
+  <p style="margin: 0 0 0px 0; margin-top: 0px;">
+    <em>See <a href="https://unsloth.ai/docs/basics/unsloth-dynamic-v2.0-gguf">Unsloth Dynamic 2.0 GGUFs</a> for our quantization benchmarks.</em>
+  </p>
+  <div style="display: flex; gap: 5px; align-items: center; margin-bottom: 0px;">
+    <a href="https://github.com/unslothai/unsloth/">
+      <img src="https://github.com/unslothai/unsloth/raw/main/images/unsloth%20new%20logo.png" width="133">
+    </a>
+    <a href="https://discord.gg/unsloth">
+      <img src="https://github.com/unslothai/unsloth/raw/main/images/Discord%20button.png" width="173">
+    </a>
+    <a href="https://u
+… [509 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ llama.cpp en amont supporte `kimi-k3` : je construis une seconde copie comme référence exécutable
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub && (t0=$(date +%s); if [ ! -d llama.cpp-k3 ]; then git clone --depth 1 https://github.com/ggml-org/llama.cpp.git llama.cpp-k3 2>&1 | tail -2; fi; cd llama.cpp-k3 && grep -c \"kimi-k3\" src/llama-arch.cpp && cmake -B build -DCMAKE_BUILD_TYPE=Rel … [353 caractères tronqués]`
+
+  ```
+started background job bash-222
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && s=$(stat -c %s /tmp/our_v4f1024.bin 2>/dev/null || echo 0); echo \"ctx 1024 : $(( (s-8)/517120 )) / 1023\"; tail -3 /tmp/dl_k3.log", "description": "Check ctx-1024 and download progress"}`
+
+  ```
+ctx 1024 : 826 / 1023
+10:08:44    20.7 Go / 47.5 Go (43.5 %, 109 Mo/s)
+10:09:14    23.9 Go / 47.5 Go (50.3 %, 109 Mo/s)
+10:09:44    27.1 Go / 47.5 Go (57.1 %, 108 Mo/s)
+  ```
+
+- **write** `{"content": "# Plan — Kimi-K3 : exécuter en local ce qui ne tient pas en local\n\n> Écrit le 03/10 (bloc 27) après une réorientation explicite : **les modèles\n> périmés sortent du chemin critique** (DeepSeek-V4-Flash : acquis conservés,\n> portes archivées) et le travail se porte sur **les meilleur … [6768 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-kimi-k3.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Réorientation : plan Kimi-K3 — exécuter en local ce qui ne tient pas en local\n\nMesuré : le Q4 d'Kimi-K3 fait 1 508,7 Go (32 shards), l'architecture kimi-k3\nnous est inconnue, le texte EST Kimi-Line … [756 caractères tronqués]`

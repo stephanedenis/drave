@@ -142,5 +142,197 @@
   "repo": "unsloth/GLM-5.3-Flash-GGUF",
   "chemin": "UD-IQ1_S/GLM-5.3-Flash-UD-IQ1_S-00003-of-00003.gguf",
   "octets": 43456692608
+ },
+ {
+  "nom": "Kimi-K3-UD-Q4_K_XL",
+  "repo": "unsloth/Kimi-K3-GGUF",
+  "chemin": "UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf",
+  "octets": 6934144
+ },
+ {
+  "nom": "Kimi-K3-UD-Q4_K_XL",
+  "repo": "unsloth/Kimi-K3-GGUF",
+  "chemin": "UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00002-of-00032.gguf",
+  "octets": 47478326816
+ },
+ {
+  "nom": "Kimi-K3-UD-Q4_K_XL",
+  "repo": "unsloth/Kimi-K3-GGUF",
+  "chemin": "UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00003-of-00032.gguf",
+  "octets": 49151700032
+ },
+ {
+  "nom": "Kimi-K3-UD-Q4_K_XL",
+  "repo": "unsloth/Kimi-K3-GGUF",
+  "chemin": "UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00004-of-00032.gguf",
+  "octets": 49024073088
+ },
+ {
+  "nom": "Kimi-K3-UD-Q4_K_XL",
+  "repo": "unsloth/Kimi-K3-GGUF",
+  "chemin": "UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00005-of-00032.gguf",
+  "octets": 49024073152
+ },
+ {
+  "nom": "Kimi-K3-UD-Q4_K_XL",
+  "repo": "unsloth/Kimi-K3-GGUF",
+  "chemin": "UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00006-of-00032.gguf",
+  "octets": 49123697600
+ },
+ {
+  "nom": "Kimi-K3-UD-Q4_K_XL",
+  "repo": "unsloth/Kimi-K3-GGUF",
+  "chemin": "UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00007-of-00032.gguf",
+  "octets": 49151700096
+ },
+ {
+  "nom": "Kimi-K3-UD-Q4_K_XL",
+  "repo": "unsloth/Kimi-K3-GGUF",
+  "chemin": "UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00008-of-00032.gguf",
+  "octets": 49024073184
+ },
+ {
+  "nom": "Kimi-K3-UD-Q4_K_XL",
+  "repo": "unsloth/Kimi-K3-GGUF",
+  "chemin": "UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00009-of-00032.gguf",
+  "octets": 49024073184
+ },
+ {
+  "nom": "Kimi-K3-UD-Q4_K_XL",
+  "repo": "unsloth/Kimi-K3-GGUF",
+  "chemin": "UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00010-of-00032.gguf",
+  "octets": 49123697600
+ },
+ {
+  "nom": "Kimi-K3-UD-Q4_K_XL",
+  "repo": "unsloth/Kimi-K3-GGUF",
+  "chemin": "UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00011-of-00032.gguf",
+  "octets": 49151700096
+ },
+ {
+  "nom": "Kimi-K3-UD-Q4_K_XL",
+  "repo": "unsloth/Kimi-K3-GGUF",
+  "chemin": "UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00012-of-00032.gguf",
+  "octets": 49024073184
+ },
+ {
+  "nom": "Kimi-K3-UD-Q4_K_XL",
+  "repo": "unsloth/Kimi-K3-GGUF",
+  "chemin": "UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00013-of-00032.gguf",
+  "octets": 49024073184
+ },
+ {
+  "nom": "Kimi-K3-UD-Q4_K_XL",
+  "repo": "unsloth/Kimi-K3-GGUF",
+  "chemin": "UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00014-of-00032.gguf",
+  "octets": 49123697600
+ },
+ {
+  "nom": "Kimi-K3-UD-Q4_K_XL",
+  "repo": "unsloth/Kimi-K3-GGUF",
+  "chemin": "UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00015-of-00032.gguf",
+  "octets": 49151700096
+ },
+ {
+  "nom": "Kimi-K3-UD-Q4_K_XL",
+  "repo": "unsloth/Kimi-K3-GGUF",
+  "chemin": "UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00016-of-00032.gguf",
+  "octets": 49024073184
+ },
+ {
+  "nom": "Kimi-K3-UD-Q4_K_XL",
+  "repo": "unsloth/Kimi-K3-GGUF",
+  "chemin": "UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00017-of-00032.gguf",
+  "octets": 49024073184
+ },
+ {
+  "nom": "Kimi-K3-UD-Q4_K_XL",
+  "repo": "unsloth/Kimi-K3-GGUF",
+  "chemin": "UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00018-of-00032.gguf",
+  "octets": 49123697600
+ },
+ {
+  "nom": "Kimi-K3-UD-Q4_K_XL",
+  "repo": "unsloth/Kimi-K3-GGUF",
+  "chemin": "UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00019-of-00032.gguf",
+  "octets": 49151700096
+ },
+ {
+  "nom": "Kimi-K3-UD-Q4_K_XL",
+  "repo": "unsloth/Kimi-K3-GGUF",
+  "chemin": "UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00020-of-00032.gguf",
+  "octets": 49024073184
+ },
+ {
+  "nom": "Kimi-K3-UD-Q4_K_XL",
+  "repo": "unsloth/Kimi-K3-GGUF",
+  "chemin": "UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00021-of-00032.gguf",
+  "octets": 49024073184
+ },
+ {
+  "nom": "Kimi-K3-UD-Q4_K_XL",
+  "repo": "unsloth/Kimi-K3-GGUF",
+  "chemin": "UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00022-of-00032.gguf",
+  "octets": 49123697600
+ },
+ {
+  "nom": "Kimi-K3-UD-Q4_K_XL",
+  "repo": "unsloth/Kimi-K3-GGUF",
+  "chemin": "UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00023-of-00032.gguf",
+  "octets": 49151700096
+ },
+ {
+  "nom": "Kimi-K3-UD-Q4_K_XL",
+  "repo": "unsloth/Kimi-K3-GGUF",
+  "chemin": "UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00024-of-00032.gguf",
+  "octets": 49024073184
+ },
+ {
+  "nom": "Kimi-K3-UD-Q4_K_XL",
+  "repo": "unsloth/Kimi-K3-GGUF",
+  "chemin": "UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00025-of-00032.gguf",
+  "octets": 49024073184
+ },
+ {
+  "nom": "Kimi-K3-UD-Q4_K_XL",
+  "repo": "unsloth/Kimi-K3-GGUF",
+  "chemin": "UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00026-of-00032.gguf",
+  "octets": 49123697600
+ },
+ {
+  "nom": "Kimi-K3-UD-Q4_K_XL",
+  "repo": "unsloth/Kimi-K3-GGUF",
+  "chemin": "UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00027-of-00032.gguf",
+  "octets": 49151700096
+ },
+ {
+  "nom": "Kimi-K3-UD-Q4_K_XL",
+  "repo": "unsloth/Kimi-K3-GGUF",
+  "chemin": "UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00028-of-00032.gguf",
+  "octets": 49024073184
+ },
+ {
+  "nom": "Kimi-K3-UD-Q4_K_XL",
+  "repo": "unsloth/Kimi-K3-GGUF",
+  "chemin": "UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00029-of-00032.gguf",
+  "octets": 49024073184
+ },
+ {
+  "nom": "Kimi-K3-UD-Q4_K_XL",
+  "repo": "unsloth/Kimi-K3-GGUF",
+  "chemin": "UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00030-of-00032.gguf",
+  "octets": 49123697600
+ },
+ {
+  "nom": "Kimi-K3-UD-Q4_K_XL",
+  "repo": "unsloth/Kimi-K3-GGUF",
+  "chemin": "UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00031-of-00032.gguf",
+  "octets": 49151700096
+ },
+ {
+  "nom": "Kimi-K3-UD-Q4_K_XL",
+  "repo": "unsloth/Kimi-K3-GGUF",
+  "chemin": "UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00032-of-00032.gguf",
+  "octets": 37766913792
  }
 ]
