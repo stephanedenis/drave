@@ -116660,3 +116660,142 @@ The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/architecture-kimi-
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"K3 : la cadence des couches a une EXCEPTION, et le moteur ne l'a pas codée en dur\n\nSur les 93 couches : 1 dense, 68 KDA, 24 MLA — la couche 92 est MLA alors que\n92 % 4 != 3. La règle « une sur quat … [366 caractères tronqués]`
+
+  ```
+053426c K3 : la cadence des couches a une EXCEPTION, et le moteur ne l'a pas codée en dur
+  ```
+
+- **bash** `{"command": "sleep 500; P=$(pgrep -x ref_logits_k3 | head -1); if [ -n \"$P\" ]; then ps -o etimes= -p $P; grep -E \"^read_bytes\" /proc/$P/io; else echo TERMINÉ; fi; date \"+%H:%M\"", "description": "Poll reference forward pass", "timeoutMs": 560000}`
+
+  ```
+2790
+read_bytes: 485887299584
+18:14
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && grep -n \"fn run_k3_essai\" -A 45 main.rs | head -60", "description": "Read k3-essai implementation"}`
+
+  ```
+1861:fn run_k3_essai() {
+1862-    let chemin = modele_chemin();
+1863-    let chemin = std::path::Path::new(&chemin);
+1864-    // Les shards PRÉSENTS, dans l'ordre — un transfert en cours en laisse
+1865-    // quelques-uns, et la couche 0 est dans les premiers.
+1866-    let dossier = chemin.parent().unwrap_or_else(|| std::path::Path::new("."));
+1867-    let nom = chemin.file_name().and_then(|n| n.to_str()).unwrap_or("");
+1868-    let tete = nom.rsplit_once("-of-").map(|(t, _)| t.rsplit_once('-').map(|(p, _)| p.to_string()));
+1869-    let mut shards: Vec<std::path::PathBuf> = Vec::new();
+1870-    if let Some(Some(pref)) = tete {
+1871-        if let Ok(rd) = std::fs::read_dir(dossier) {
+1872-            for e in rd.flatten() {
+1873-                let n = e.file_name().to_string_lossy().to_string();
+1874-                if n.starts_with(pref.as_str()) && n.ends_with(".gguf") { shards.push(e.path()); }
+1875-            }
+1876-        }
+1877-        shards.sort();
+1878-    }
+1879-    if shards.is_empty() { eprintln!("aucun shard trouvé"); return; }
+1880-    eprintln!("[k3-essai] {} shard(s) présents", shards.len());
+1881-    // Un shard EN COURS d'écriture a un en-tête incomplet : on l'
+… [1393 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && sed -n '1906,1990p' main.rs", "description": "Read rest of k3-essai"}`
+
+  ```
+println!("  couche {l} : {} écart(s)", e.len());
+            for x in e.iter().take(6) { println!("      {x}"); }
+        }
+    }
+    // Le MoE latent d'une couche (1) : chargement + un jeton, pour vérifier la
+    // chaîne complète (routeur → 16 experts déquantifiés un par un → norme
+    // latente → remontée → partagés).
+    match kimi_k3::MoeK3::charge(&g, 1) {
+        Ok(moe) => {
+            let embd = g.dequant("token_embd.weight");
+            let h = c0.hauteur();
+            let t = 3638usize;
+            let x = &embd[t * h..(t + 1) * h];
+            let t0 = std::time::Instant::now();
+            match moe.avant(x) {
+                Ok(y) => {
+                    let n: f32 = y.iter().map(|v| v * v).sum::<f32>().sqrt();
+                    let finis = y.iter().all(|v| v.is_finite());
+                    println!("  MoE couche 1 : |sortie| = {n:.4} · finis : {finis} · {} ms",
+                             t0.elapsed().as_millis());
+                }
+                Err(e) => println!("  MoE couche 1 : {e}"),
+            }
+        }
+        Err(e) => println!("  MoE couche 1 : chargement impossible ({e})"),
+    }
+    // La couche MLA (3) : trois jetons à la suite, cache com
+… [3121 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && grep -n \"impl PetitesK3\" -A 40 kimi_k3.rs | head -50", "description": "Read PetitesK3 implementation"}`
+
+  ```
+1035:impl PetitesK3 {
+1036-    /// Charge les couches `0..n` (les tenseurs doivent être présents).
+1037-    pub fn charge(g: &Gguf, n: usize) -> Result<PetitesK3, String> {
+1038-        let h = g.tensor("blk.0.attn_norm.weight").map(|t| t.dims[0] as usize)
+1039-            .ok_or_else(|| "blk.0.attn_norm absent".to_string())?;
+1040-        let mut s = PetitesK3 { normes: Vec::new(), kda: Vec::new(), mla: Vec::new(),
+1041-                                ffn_dense: Vec::new(), moe: Vec::new(),
+1042-                                pile: Vec::new(), n_ckpt: 0, h, eps: 1e-5, bloc: 12 };
+1043-        for l in 0..n {
+1044-            s.normes.push(NormesK3::charge(g, l)?);
+1045-            let mla = g.tensor(&format!("blk.{l}.attn_kv_a_mqa.weight")).is_some();
+1046-            if mla {
+1047-                s.kda.push(None);
+1048-                s.mla.push(Some(MlaK3::charge(g, l)?));
+1049-            } else {
+1050-                s.kda.push(Some(KdaK3::charge(g, l)?));
+1051-                s.mla.push(None);
+1052-            }
+1053-            if l == 0 {
+1054-                s.ffn_dense.push(Some(FfnDenseK3::charge(g, l)?));
+1055-                s.moe.push(None);
+1056-            } else {
+… [827 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && sed -n '1075,1140p' kimi_k3.rs", "description": "Read PetitesK3 forward and banking"}`
+
+  ```
+}
+            // 2. banque : on empile l'entrée BRUTE, avant l'attention
+            let banque = l % self.bloc == 0;
+            if banque { self.pile.extend_from_slice(&x); self.n_ckpt += 1; }
+            // 3. norme puis attention (KDA ou MLA)
+            let mut xn = vec![0f32; h];
+            rms_norm_poids(&cur, &n.attn, self.eps, &mut xn);
+            let attn = if let Some(kda) = self.kda[l].as_mut() {
+                kda.avant(&xn)?
+            } else {
+                self.mla[l].as_mut().unwrap().avant(&xn, &xn, pos)?
+            };
+            // 4. le flux reprend : redémarrage si la couche est une banque
+            let mut prefix = if banque { vec![0f32; h] } else { x.clone() };
+            for i in 0..h { prefix[i] += attn[i]; }
+            // 5. attention résiduelle avant la FFN, puis norme
+            let mut cur2 = vec![0f32; h];
+            crate::model::res_mix(&self.pile, self.n_ckpt, h, &prefix, &n.ffn_score, self.eps, &mut cur2);
+            let mut xn2 = vec![0f32; h];
+            rms_norm_poids(&cur2, &n.ffn, self.eps, &mut xn2);
+            // 6. FFN dense (couche 0) ou MoE latent
+            let ffn = if let Some(f) = self.ffn_dense[l].as_ref() { f.avant
+… [340 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && python3 - <<'PY'\np='main.rs'; s=open(p).read()\nold = \"\"\"    match kimi_k3::PetitesK3::charge(&g, 4) {\n        Ok(mut petites) => {\n            let embd = g.dequant(\"token_embd.weight\");\n            let h = pe … [2217 caractères tronqués]`
+
+  ```
+27:    "TRACE_BLOCS", "TUILE_LOT", "K3_COUCHES",
+1964:    // la suivante la 12. `DRAVE_K3_COUCHES=13` est donc le premier essai qui
+1967:    let n_k3: usize = std::env::var("DRAVE_K3_COUCHES").ok()
+test result: ok. 77 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"K3 : composer 13 couches, le premier essai qui franchit une BANQUE\n\nQuatre couches exercent la chaîne (dense, deux MoE, MLA) mais ne franchissent\naucune banque : la première est la couche 0, la sui … [449 caractères tronqués]`

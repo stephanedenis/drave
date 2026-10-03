@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 123.3 h |
+| Durée | 123.5 h |
 | Tours | 100 |
-| Messages | 7323 |
-| Appels d'outils | 6994 |
+| Messages | 7330 |
+| Appels d'outils | 7001 |
 | Fichiers touchés | 150 |
-| Commandes | 5917 |
+| Commandes | 5924 |
 | Sous-agents | 32 |
-| Commits | 484 |
+| Commits | 485 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -4889,7 +4889,7 @@ Et le geste qui rend un modèle de 1,5 To seulement *lisible* : les experts sont
 
 ### Tour 100 — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas e … [1246 caractères tronqués]
 
-*233 appels d'outils.* Actions notables :
+*240 appels d'outils.* Actions notables :
 
 - bash — Extract the KDA into a reusable piece
 - bash — Commit the KDA extraction and check the download
@@ -4905,7 +4905,7 @@ Et le geste qui rend un modèle de 1,5 To seulement *lisible* : les experts sont
 - bash — Find expert loading call sites
 - read
 - bash — Inspect RAM expert cache
-- … et 183 autres
+- … et 189 autres
 
 **Synthèse produite :**
 
@@ -5145,7 +5145,7 @@ Et le geste qui rend un modèle de 1,5 To seulement *lisible* : les experts sont
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5877 autres
+- … et 5884 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5777,4 +5777,5 @@ Et le geste qui rend un modèle de 1,5 To seulement *lisible* : les experts sont
 - REPRISE : le bloc 31 en tête — K3 complet, 86,787 Go par jeton, x1,58 par regroupement" && git log --oneline -3; grep -E "^read_bytes" /proc/1445983/io; date "+
 - Tuile : l'essai repris machine au calme confirme la réfutation (20,02 s contre 20,32 s)  Le premier essai avait tourné pendant que llama.cpp chargeait Kimi-K3, 
 - K3 : la cadence des couches a une EXCEPTION, et le moteur ne l'a pas codée en dur  Sur les 93 couches : 1 dense, 68 KDA, 24 MLA — la couche 92 est MLA alors que
+- K3 : composer 13 couches, le premier essai qui franchit une BANQUE  Quatre couches exercent la chaîne (dense, deux MoE, MLA) mais ne franchissent aucune banque 
 

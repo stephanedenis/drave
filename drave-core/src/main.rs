@@ -24,7 +24,7 @@ const VARS_LUES: &[&str] = &[
     "KV_BITS", "KV_F16", "KV_K_F16", "KV_K_F32", "KV_V_F32", "MMAP",
     "BIAIS_VL", "EXPERTS_RAM", "PRELIRE", "PRELIRE_TOUT", "Q8_BLOCS", "SANS_ENGRAM",
     "SANS_EMPRUNT",
-    "TRACE_BLOCS", "TUILE_LOT",
+    "TRACE_BLOCS", "TUILE_LOT", "K3_COUCHES",
     "SANS_BLOCS", "SANS_COMPRESSION", "SIMD_DOT", "TRACE_EXPERTS", "V41_SANS_RETARD",
     "V41_TETE_COPIE0",
     "VISION_TEXTE",
@@ -1959,7 +1959,17 @@ fn run_k3_essai() {
     // **La composition** : quatre couches enchaînées (0 dense, 1 MoE, 2 MoE,
     // 3 MLA), avec l'attention résiduelle et la banque. C'est ce qui vérifie la
     // CHAÎNE — les pièces étaient déjà vérifiées séparément.
-    match kimi_k3::PetitesK3::charge(&g, 4) {
+    // Combien de couches composer. Quatre exercent la chaîne (dense, deux MoE,
+    // MLA) mais **ne franchissent aucune banque** : la première est la couche 0,
+    // la suivante la 12. `DRAVE_K3_COUCHES=13` est donc le premier essai qui
+    // teste le REDÉMARRAGE du flux résiduel et un `res_mix` à deux points de
+    // contrôle — deux mécanismes que quatre couches ne touchent pas.
+    let n_k3: usize = std::env::var("DRAVE_K3_COUCHES").ok()
+        .and_then(|v| v.parse::<usize>().ok()).filter(|n| *n >= 1).unwrap_or(4);
+    println!("  composition : {n_k3} couche(s) — banques aux couches {}",
+             (0..n_k3).step_by(12).map(|l| l.to_string())
+                 .collect::<Vec<_>>().join(", "));
+    match kimi_k3::PetitesK3::charge(&g, n_k3) {
         Ok(mut petites) => {
             let embd = g.dequant("token_embd.weight");
             let h = petites.h;
@@ -1971,12 +1981,14 @@ fn run_k3_essai() {
                     Ok(y) => {
                         let n: f32 = y.iter().map(|v| v * v).sum::<f32>().sqrt();
                         let finis = y.iter().all(|v| v.is_finite());
-                        println!("  composition 0-3, jeton {i} : |l_out| = {n:.4} · finis : {finis}");
+                        println!("  composition 0-{}, jeton {i} : |l_out| = {n:.4} · finis : {finis}",
+                                 n_k3 - 1);
                         if !finis { ok = false; }
                         if let Ok(prefixe) = std::env::var("DRAVE_DUMP_COUCHES") {
                             if !prefixe.is_empty() {
                                 use std::io::Write;
-                                if let Ok(mut f) = std::fs::File::create(format!("{prefixe}-l_out-3-{i}.bin")) {
+                                if let Ok(mut f) = std::fs::File::create(
+                                        format!("{prefixe}-l_out-{}-{i}.bin", n_k3 - 1)) {
                                     let mut o = Vec::with_capacity(y.len() * 4);
                                     for v in &y { o.extend_from_slice(&v.to_le_bytes()); }
                                     let _ = f.write_all(&o);
