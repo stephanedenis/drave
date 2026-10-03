@@ -104434,3 +104434,673 @@ toutes les portes sont vertes
 background job bash-212 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (t0=$(date +%s); bash tools/portes.sh rapide > /tmp/portes_rapide.log 2>&1; echo "portes exit=$? en $(( $(date +%s) - t0 )) s")) finished [status: completed, exit code: 0]. Read its output with job_output.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/plan-deepseek41-complet.md'\ns=open(p).read()\nold=\"> publier (c'est voulu : un critère qu'on applique hors de son domaine est un\\n> critère qui ment). La passe longue de 1 023 prédictions, plus bas, juge  … [916 caractères tronqués]`
+
+  ```
+ok
+11d80f4 Plan et sprint 23 : le coût du contexte long est attribué à ce qui est MESURÉ (proj+mlp double, l'attention reste plate), l'empreinte des experts reste une hypothèse nommée
+  mode 4 — lot en listes           4.45e-3  ✅  (réf 60.8135 / deux nœuds 60.5427)
+
+toutes les portes sont vertes
+  ```
+
+### 🤖 Assistant
+
+⏵ Bloc 24 : mesurer l'hypothèse « empreinte des experts » (ctx 32 vs 256, I/O comptés)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -2 -- sprints/COURANT; ls -la sprints/COURANT 2>&1 | tail -1; git status --short | head -5; echo \"--- ids 32 ---\"; python3 -c \"\nimport re\nids=[int(x) for x in re.findall(r'\\d+', open('/tmp/ids_v4f1024.txt').re … [163 caractères tronqués]`
+
+  ```
+3252ec7 Sprint 21 : clôture (35 min) — douze hypothèses éliminées, quatre pièces vérifiées, le défaut cerné au chemin des experts
+14c52ae Localisation V4.1 : huit hypothèses éliminées par ablation, et le défaut est cerné au chemin partagé tel que V4.1 l'instancie
+ls: cannot access 'sprints/COURANT': No such file or directory
+ M journal/README.md
+--- ids 32 ---
+ok 32
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && V4=/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf && for L in 32 96; do echo \"=== ctx 32, limit $L ===\"; ./drave-core/target/release/drave \"$V4\" --ppl /tmp/ … [381 caractères tronqués]`
+
+  ```
+=== ctx 32, limit 32 ===
+rchar: 17860994 read_bytes: 357322752 
+=== perplexité 25.6771 sur 31 tokens (0 événements, 91.6 s) ===
+    postes (ms/token) : projets-attn 0.00 | rope 0.00 | attention 968.17 | proj+mlp 1952.07 | somme 2920.25 | reste (tête + échantillonnage) 33.02
+=== ctx 32, limit 96 ===
+rchar: 17860950 read_bytes: 0 
+=== perplexité 47.3809 sur 93 tokens (0 événements, 387.2 s) ===
+    postes (ms/token) : projets-attn 0.00 | rope 0.00 | attention 979.77 | proj+mlp 3152.98 | somme 4132.75 | reste (tête + échantillonnage) 30.83
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"struct CacheExperts\\|impl CacheExperts\\|fn expert\\b\\|fn expert(\\|dequant_cache\\|cache_expert\" drave-core/src/model.rs | head -20", "description": "Locate the expert cache code"}`
+
+  ```
+893:    fn expert(&self, e: usize) -> crate::list::DenseQ4 {
+1000:pub struct CacheExpertsRam {
+1007:impl CacheExpertsRam {
+1238:pub struct CacheExperts {
+1252:impl CacheExperts {
+2309:    pub cache_experts: Option<CacheExperts>,
+3793:        let cache_experts = if std::env::var("DRAVE_GPU_EXPERTS").is_ok()
+3871:            cache_experts,
+7018:                                (crate::gpu::instance(), self.cache_experts.as_mut()) {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '880,900p;1238,1290p' drave-core/src/model.rs", "description": "Read the expert access and cache structures"}`
+
+  ```
+let p = unsafe { self.base.add(e * octets) };
+        crate::gguf::prelire(p, octets);
+    }
+
+    /// Octets bruts de l'expert `e` (tels qu'ils sont dans le fichier) : c'est
+    /// ce qu'il faut copier en VRAM pour que le noyau y travaille.
+    fn blocs_expert(&self, e: usize) -> &[u8] {
+        let octets = self.octets_expert();
+        let p = unsafe { self.base.add(e * octets) };
+        unsafe { std::slice::from_raw_parts(p, octets) }
+    }
+
+    /// Matrice 4 bits de l'expert `e`, **empruntée** au fichier.
+    fn expert(&self, e: usize) -> crate::list::DenseQ4 {
+        let base = unsafe { self.base.add(e * self.octets_expert()) };
+        unsafe {
+            match self.src {
+                crate::list::Source::Q4_K =>
+                    crate::list::DenseQ4::emprunter_q4k(base, self.n_out, self.n_in, self.nb),
+                crate::list::Source::Q6_K =>
+                    crate::list::DenseQ4::emprunter_q6k(base, self.n_out, self.n_in, self.nb),
+pub struct CacheExperts {
+    /// Une entrée par (couche, expert) : ses trois matrices (gate, up, down).
+    cartes: std::collections::HashMap<(usize, usize), (crate::gpu::MatriceGpu,
+                                             
+… [2388 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -E \"tokens notés|fenêtres|profil par profondeur\" -A3 /tmp/prof_l96.log | head -20; echo \"=== limit 32 ===\"; grep -E \"tokens notés\" /tmp/prof_l32.log | head -5", "description": "Look at per-window rates"}`
+
+  ```
+/tmp/ids_v4f1024.txt : 96 tokens, fenêtres de 32
+[config] attention V4 : 43 couches · 1 tête latente de 512 (448 nope + 64 rope) · 64 têtes de requête · sortie groupée 8×1024 · puits par tête
+[config] hyper-connexions : 4 copies · 24 mélanges par couche (pre 4 + post 4 + comb 16) · Sinkhorn 20 itérations · eps 1e-6 · mélange de tête 65536 poids · chaîne directe (V4) : chaque raccord se replie avec ses propres coefficients
+[moe] couche 0 : routage par TABLE tid2eid, 6 experts par jeton (129280 jetons de vocabulaire)
+--
+      31 tokens notés — perplexité cumulée 25.677  (0.4 tok/s)  [fenêtre 1 : 31 notés, PPL 25.677]
+      62 tokens notés — perplexité cumulée 33.514  (0.3 tok/s)  [fenêtre 2 : 31 notés, PPL 43.742]
+      93 tokens notés — perplexité cumulée 47.381  (0.2 tok/s)  [fenêtre 3 : 31 notés, PPL 94.703]
+profil par profondeur (perplexité par tranche de 256 positions) :
+         0-255    :    47.381  (93 jetons notés)
+
+=== perplexité 47.3809 sur 93 tokens (0 événements, 387.2 s) ===
+=== limit 32 ===
+      31 tokens notés — perplexité cumulée 25.677  (0.3 tok/s)
+  ```
+
+### 🤖 Assistant
+
+⏵ Bloc 24 : le mode lot peut-il rendre le contexte long abordable ? (mesure à ctx 64)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n '\"--lot\"' drave-core/src/main.rs && V4=/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf && for L in 1 8 32; do echo \"=== lot $L ===\"; ./drave-core/tar … [308 caractères tronqués]`
+
+  ```
+694:            "--lot" => { o.lot = suivant(i).parse().unwrap(); 2 }
+=== lot 1 ===
+logits exportés : /tmp/lot_1.bin — 31 positions × 129280 valeurs
+=== perplexité 25.6771 sur 31 tokens (0 événements, 78.4 s) ===
+    postes (ms/token) : projets-attn 0.00 | rope 0.00 | attention 940.65 | proj+mlp 1558.37 | somme 2499.02 | reste (tête + échantillonnage) 31.34
+=== lot 8 ===
+=== lot 32 ===
+[timed out after 600000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && V4=/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf && timeout 240 ./drave-core/target/release/drave \"$V4\" --ppl /tmp/ids_v4f1024.txt --ctx 64 --limit 32 --dens … [153 caractères tronqués]`
+
+  ```
+exit=124
+[modele] 43 couches chargées en 11.29680927s — listes 0.00 Go , 16 threads
+[config] 43 couches, hidden 4096 · racine de softpluséchelle 1.50 routage-table moe 
+[config] mélanges d'experts chargés : 43/43 couches · mapping absent (experts en clair dans le fichier)
+[config] puits appris sur 43/43 couches · n_rot 64 · ffn 0 · experts 256
+[config] fenêtre glissante 128 sur 43/43 couches (motif 0, toutes)
+[config] rotation : RoPE simple (contexte 64 ≤ 65536 initial ; YaRN ×16 prendrait le relais au-delà)
+[tête 4 bits] 129280 × 4096 → 4.50 b/poids, 0 Mo, 0.0 s
+
+thread 'main' (843655) panicked at src/model.rs:4698:13:
+chemin par LOTS et hyper-connexions : ce chemin n'est pas porté (le résidu y est additionné au lieu d'être remélangé par `hc_post`) — utilisez `--lot 1`, ou implémentez-le. Le lot n'est pas neutre ici : il change le modèle
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+timeout: the monitored command dumped core
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"enum Source\" -A 20 drave-core/src/list.rs | head -30; echo \"=== usage IQ1M dans le chemin expert ===\"; grep -rn \"Iq1M\\|IQ1_M\\|iq1m\" drave-core/src/model.rs | head -20", "description": "Inspect the expert source enum  … [20 caractères tronqués]`
+
+  ```
+342:pub enum Source8 {
+343-    /// Construite par nous : **une échelle par ligne** (historique).
+344-    Propre,
+345-    /// Construite par nous : **une échelle par bloc de 32**, comme Q8_0. C'est
+346-    /// l'hypothèse à tester — le 6 bits gagne peut-être grâce à ses échelles
+347-    /// fines et non grâce à ses deux bits de plus.
+348-    PropreBloc,
+349-    Q8_0,
+350-}
+351-
+352-pub struct DenseQ8 {
+353-    pub n_in: usize,
+354-    pub n_out: usize,
+355-    pub q: Vec<i8>,        // n_out × n_in — vide si `src == Q8_0`
+356-    pub scale: Vec<f32>,   // une par sortie — vide si `src == Q8_0`
+357-    /// `Q8_0` : les blocs sont lus **en place** dans le fichier (34 octets par
+358-    /// bloc de 32 : une échelle f16 puis trente-deux niveaux signés). Aucune
+359-    /// copie, et l'échelle est celle du fichier — donc plus fidèle que la
+360-    /// nôtre, qui est unique par ligne.
+361-    pub src: Source8,
+362-    /// Échelles par bloc de 32 (une par ligne × n_in/32), pour `PropreBloc`.
+--
+644:pub enum Source {
+645-    Propre, Q4_0, Mxfp4, Q4_K, Q6_K,
+646-    /// Super-bloc de 256 poids **sans noyau dédié** : Q2_K, Q3_K, Q5_K, IQ1_S,
+647-    /// IQ1_M, IQ2_XXS, IQ3_XXS, IQ4_XS. Le prod
+… [450 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '4670,4710p' drave-core/src/model.rs && grep -n \"fn forward_lot\" drave-core/src/model.rs", "description": "Read the lot-path refusal for hyper-connections"}`
+
+  ```
+// rotation d'angle −θ : la matrice inverse de `rope`.
+                t[i] = a * c + b * s;
+                t[i + half] = b * c - a * s;
+            }
+        }
+    }
+
+    /// **Préremplissage par lots** : `t` jetons d'un coup, aux positions
+    /// `pos0..pos0+t`.
+    ///
+    /// Toute la différence avec `forward` est dans les projections : elles
+    /// passent d'un produit matrice-vecteur par jeton à un produit
+    /// matrice-matrice pour le lot, donc chaque ligne de poids n'est lue qu'une
+    /// fois au lieu de `t` fois (mesuré au noyau : ×2,4 à 16 jetons sur une
+    /// matrice 4864 × 896).
+    ///
+    /// L'attention reste par jeton (elle est causale : le jeton i doit voir le
+    /// cache écrit par les jetons < i), mais elle réutilise les Q, K, V calculés
+    /// en lot. Les modèles à experts retombent sur le chemin jeton par jeton :
+    /// leur regroupement par expert est l'étape suivante.
+    pub fn forward_lot(&mut self, toks: &[u32], pos0: usize) -> Vec<Vec<f32>> {
+        // **Le chemin par lots ne porte PAS les hyper-connexions** : son corps
+        // n'a aucune occurrence de `hc_*`, et l'état résiduel y est donc
+        // additionné au lieu d'être remélangé. Un 
+… [1158 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"IQ1_M\\|Iq1M\" drave-core/src/list.rs | head -20; echo \"=== dequant IQ1M avx2 : appelants ===\"; grep -rn \"dequant_iq1m_avx2\\|dequant_iq1m\" drave-core/src/*.rs | head -10", "description": "Check whether the IQ1_M AVX2 k … [35 caractères tronqués]`
+
+  ```
+581:        29 => 56,   // IQ1_M
+619:            // IQ1_M : les experts de V4-Flash. Même détection que Q2_K,
+647:    /// IQ1_M, IQ2_XXS, IQ3_XXS, IQ4_XS. Le produit se fait en déquantifiant le
+1570:        assert_eq!(octets_grille(29), 56);   // IQ1_M
+=== dequant IQ1M avx2 : appelants ===
+drave-core/src/formats.rs:2784:pub unsafe fn dequant_iq1m_avx2(bloc: &[u8], out: &mut [f32]) {
+drave-core/src/formats.rs:2829:pub fn dequant_iq1m_dans(bloc: &[u8], out: &mut [f32]) {
+drave-core/src/formats.rs:2876:pub fn dequant_iq1m(bloc: &[u8]) -> Vec<f32> {
+drave-core/src/formats.rs:2878:    dequant_iq1m_dans(bloc, &mut v);
+drave-core/src/gguf.rs:1429:                    _ => (56, crate::formats::dequant_iq1m),
+drave-core/src/gguf.rs:1854:                    _ => (56, crate::formats::dequant_iq1m),
+drave-core/src/list.rs:626:                    unsafe { crate::formats::dequant_iq1m_avx2(bloc, out) };
+drave-core/src/list.rs:630:            crate::formats::dequant_iq1m_dans(bloc, out)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '600,660p' drave-core/src/list.rs", "description": "Read the super-block product dispatch"}`
+
+  ```
+#[cfg(target_arch = "x86_64")]
+    {
+        static AVX2: std::sync::OnceLock<bool> = std::sync::OnceLock::new();
+        if t == 10 && *AVX2.get_or_init(|| std::is_x86_feature_detected!("avx2")) {
+            // Sûreté : la détection ci-dessus garantit AVX2, et le noyau borne
+            // comme la version scalaire (bloc ≥ 84, sortie ≥ 256).
+            unsafe { crate::gguf::Gguf::dequant_q2k_avx2(bloc, out) };
+            return;
+        }
+    }
+    match t {
+        10 => crate::gguf::Gguf::dequant_q2k_dans(bloc, out),
+        11 => crate::gguf::Gguf::dequant_q3k_dans(bloc, out),
+        13 => crate::gguf::Gguf::dequant_q5k_dans(bloc, out),
+        16 => crate::formats::dequant_iq2xxs_dans(bloc, out),
+        18 => crate::formats::dequant_iq3xxs_dans(bloc, out),
+        19 => crate::formats::dequant_iq1s_dans(bloc, out),
+        23 => crate::formats::dequant_iq4xs_dans(bloc, out),
+        29 => {
+            // IQ1_M : les experts de V4-Flash. Même détection que Q2_K,
+            // choisie une fois.
+            #[cfg(target_arch = "x86_64")]
+            {
+                static AVX2: std::sync::OnceLock<bool> = std::sync::OnceLock::new();
+                if *AVX2.get_or_init(|
+… [1671 caractères tronqués]
+  ```
+
+- **bash** `{"command": "which perf 2>/dev/null || echo \"pas de perf\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"Dequant(t)\" -A 25 drave-core/src/list.rs | grep -n \"fn dot\\|acc +=\\|for j in\" | head -20", "description": "Check perf and the dequant dot loop"}`
+
+  ```
+pas de perf
+11:1283-    pub fn dot(&self, o: usize, x: &[i32]) -> f32 {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fn dot_dequant\\|Dequant(t) =>\\|Source::Dequant\" drave-core/src/list.rs | head; grep -n \"fn dot\" drave-core/src/list.rs | head", "description": "Locate the dequant-based dot implementation"}`
+
+  ```
+1171:            Source::Q4_K | Source::Q6_K | Source::Propre | Source::Dequant(_) => (0, 0),
+1273:            Source::Dequant(t) => self.n_out * self.nb_ligne * octets_grille(t),
+1291:        if matches!(self.src, Source::Dequant(_)) {
+421:    pub fn dot_blocs(&self, o: usize, x: &[i32]) -> f32 {
+448:    pub fn dot_q8_source(&self, o: usize, x: &[i32]) -> f32 {
+485:    pub fn dot_chunked(&self, o: usize, x: &[i32]) -> i64 {
+514:    pub fn dot(&self, o: usize, x: &[i32]) -> i64 {
+849:    unsafe fn dot16_q6_avx2(&self, o: usize, x: &[i16], sx32: &[i32]) -> f32 {
+925:    unsafe fn dot16_q6k_avx2(&self, o: usize, x: &[i16]) -> f32 {
+994:    unsafe fn dot16_q4k_avx2(&self, o: usize, x: &[i16], sx32: &[i32]) -> f32 {
+1082:    fn dot16_q6_scalaire(&self, o: usize, x: &[i16]) -> f32 {
+1105:    fn dot_source_q6k(&self, o: usize, x: &[i32]) -> f32 {
+1137:    fn dot_source_q4k(&self, o: usize, x: &[i32]) -> f32 {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1283,1340p' drave-core/src/list.rs", "description": "Read the dot for the Dequant source"}`
+
+  ```
+pub fn dot(&self, o: usize, x: &[i32]) -> f32 {
+        if self.plan6.is_some() {
+            let x16: Vec<i16> = x.iter().map(|&v| v.clamp(-32767, 32767) as i16).collect();
+            return self.dot16_q6_scalaire(o, &x16);
+        }
+        if self.src == Source::Q4_K { return self.dot_source_q4k(o, x); }
+        if self.src == Source::Q6_K { return self.dot_source_q6k(o, x); }
+        // Un format IQ n'a pas de noyau ici : il passe par `Vue4::matvec_iq`.
+        if matches!(self.src, Source::Dequant(_)) {
+            panic!("format sans noyau : passer par matvec_dequant");
+        }
+        if self.src != Source::Propre { return self.dot_source(o, x); }
+        let half = self.n_in.div_ceil(2);
+        let n_bloc = self.n_in.div_ceil(BLOC_Q4);
+        let row = &self.q[o * half..(o + 1) * half];
+        let mut sum = 0f32;
+        for b in 0..n_bloc {
+            let (lo, hi) = (b * BLOC_Q4, ((b + 1) * BLOC_Q4).min(self.n_in));
+            let mut a = 0i32;
+            let mut i = lo;
+            while i + 1 < hi {
+                let byte = row[i / 2] as usize;
+                a += self.lut[byte & 15] as i32 * x[i];
+                a += self.lut[byte >> 4] as i32 * x[i + 1];
+ 
+… [1519 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fn matvec_iq\" -A 60 drave-core/src/model.rs | head -80", "description": "Read matvec_iq, the expert hot path"}`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"matvec_iq\\|matvec_dequant\" drave-core/src/*.rs | head -10", "description": "Find matvec_iq call sites"}`
+
+  ```
+drave-core/src/list.rs:1290:        // Un format IQ n'a pas de noyau ici : il passe par `Vue4::matvec_iq`.
+drave-core/src/list.rs:1292:            panic!("format sans noyau : passer par matvec_dequant");
+drave-core/src/model.rs:785:            // `matvec_dequant` (`nb = n_in / 256`) pour les grilles.
+drave-core/src/model.rs:810:    fn matvec_dequant(&self, loc: usize, t: u32, x: &[f32], out: &mut [f32], n_fils: usize) {
+drave-core/src/model.rs:4128:            vue.matvec_dequant(loc, t, &xd, &mut out[..vue.n_out], n_fils);
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '800,880p' drave-core/src/model.rs", "description": "Read matvec_dequant"}`
+
+  ```
+Dequant(t) => crate::list::octets_grille(t),
+        }
+    }
+
+    /// Produit matrice-vecteur sur une source **sans noyau** : déquantifie
+    /// chaque super-bloc de 256 poids et accumule en f32.
+    ///
+    /// Le travail est découpé par LIGNES de sortie entre `n_fils` fils : les
+    /// super-blocs d'une ligne sont indépendants, et la déquantification domine
+    /// le coût (recherches dans les grilles), donc le parallélisme paie.
+    fn matvec_dequant(&self, loc: usize, t: u32, x: &[f32], out: &mut [f32], n_fils: usize) {
+        let taille = crate::list::octets_grille(t);
+        assert!(self.n_in % 256 == 0, "largeur {} non multiple de 256", self.n_in);
+        // Le noyau lit `x[j]` jusqu'à `n_in` : une activation plus COURTE
+        // dépasserait en silence. Plus longue est normal — l'appelant passe son
+        // tampon de travail entier (12 288 valeurs pour la descente d'un expert
+        // de 2 048 entrées) et seules les `n_in` premières sont lues.
+        assert!(x.len() >= self.n_in, "expert de type {} : activation de {} valeurs \
+pour une projection de {} entrées × {} sorties", crate::gguf::Gguf::nom_type(t),
+                x.len(), self.n_in, self.n_out);
+        
+… [2794 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Bloc 24 : vectoriser le produit scalaire f32 des experts (le poste dominant), derrière un drapeau qui s'annonce
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"_mm256_hadd_ps\\|fn hsum\\|hsum_ps\\|_mm256_add_ps\" drave-core/src/list.rs | head -8 && sed -n '/unsafe fn dot16_q4k_avx2/,/^    }/p' drave-core/src/list.rs | head -45", "description": "Look at an existing AVX2 kernel for  … [7 caractères tronqués]`
+
+  ```
+unsafe fn dot16_q4k_avx2(&self, o: usize, x: &[i16], sx32: &[i32]) -> f32 {
+        use std::arch::x86_64::*;
+        let xp = x.as_ptr();
+        let mut sum = 0f32;
+        for sup in 0..self.nb_ligne {
+            let p = self.base.add((o * self.nb_ligne + sup) * crate::gguf::TAILLE_Q4K);
+            let d = crate::gguf::Gguf::f16_to_f32(u16::from_le_bytes([*p, *p.add(1)]));
+            let dmin = crate::gguf::Gguf::f16_to_f32(u16::from_le_bytes([*p.add(2), *p.add(3)]));
+            let sc = std::slice::from_raw_parts(p.add(4), 12);
+            let qs = p.add(16);
+            for g in 0..4usize {
+                let (s0, m0) = crate::gguf::echelle_min_q4k(sc, 2 * g);
+                let (s1, m1) = crate::gguf::echelle_min_q4k(sc, 2 * g + 1);
+                let octets = _mm_loadu_si128(qs.add(g * 32) as *const __m128i);
+                let bas = _mm_and_si128(octets, _mm_set1_epi8(0x0f));
+                let haut = _mm_and_si128(_mm_srli_epi16(octets, 4), _mm_set1_epi8(0x0f));
+                let octets2 = _mm_loadu_si128(qs.add(g * 32 + 16) as *const __m128i);
+                let bas2 = _mm_and_si128(octets2, _mm_set1_epi8(0x0f));
+                let haut2 = _mm_and_si128(_mm_s
+… [690 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"DRAVE_SANS_BLOCS\\|SANS_BLOCS\" drave-core/src/*.rs | head -5 && grep -rn \"DRAVE_EXPERTS_RAM\" drave-core/src/model.rs | head -3 && sed -n '/DRAVE_EXPERTS_RAM/,+8p' drave-core/src/model.rs | head -20", "description": "Che … [49 caractères tronqués]`
+
+  ```
+drave-core/src/main.rs:28:    "SANS_BLOCS", "SANS_COMPRESSION", "TRACE_EXPERTS", "V41_SANS_RETARD", "V41_TETE_COPIE0",
+drave-core/src/model.rs:5542:        // `DRAVE_SANS_BLOCS=1` : ablation des BLOCS COMPRESSÉS dans l'attention
+drave-core/src/model.rs:5548:        static SANS_BLOCS: std::sync::OnceLock<bool> = std::sync::OnceLock::new();
+drave-core/src/model.rs:5549:        let sans_blocs = *SANS_BLOCS.get_or_init(|| {
+drave-core/src/model.rs:5550:            let actif = std::env::var("DRAVE_SANS_BLOCS")
+980:/// **Cache RAM des experts** (`DRAVE_EXPERTS_RAM` en Mo).
+2310:    /// Cache RAM des experts (`DRAVE_EXPERTS_RAM`), voir `CacheExpertsRam`.
+3872:            cache_ram: match std::env::var("DRAVE_EXPERTS_RAM").ok()
+/// **Cache RAM des experts** (`DRAVE_EXPERTS_RAM` en Mo).
+///
+/// Les octets d'un expert sont lus une fois depuis le NVMe et gardés en
+/// mémoire. Le noyau en garde déjà une partie en `buff/cache`, mais il les
+/// évince au rythme des ~330 Go lus par passe ; ici la résidence est explicite
+/// et bornée.
+///
+/// **Ce que ça ne fait pas** : aucun octet n'est modifié, aucun ordre de
+/// sommation ne change — un expert lu en RAM rend exactement ce que le mmap
+    /// 
+… [685 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '5542,5562p' drave-core/src/model.rs && sed -n '20,35p' drave-core/src/main.rs", "description": "Read the ablation switch pattern and the var inventory"}`
+
+  ```
+// `DRAVE_SANS_BLOCS=1` : ablation des BLOCS COMPRESSÉS dans l'attention
+        // (la fenêtre brute reste). Les couches 2 à 39 de V4.1 sont toutes
+        // compressées : si les blocs — ou l'aliasing du cache partagé qui les
+        // sert aux couches consommatrices — sont faux, ils empoisonnent le softmax
+        // à CHAQUE position, ce qui ressemble exactement au symptôme observé
+        // (top-1 0/31, perplexité au niveau du hasard dès la première tranche).
+        static SANS_BLOCS: std::sync::OnceLock<bool> = std::sync::OnceLock::new();
+        let sans_blocs = *SANS_BLOCS.get_or_init(|| {
+            let actif = std::env::var("DRAVE_SANS_BLOCS")
+                .map(|v| v != "0" && !v.is_empty()).unwrap_or(false);
+            if actif {
+                eprintln!("[attn] DRAVE_SANS_BLOCS est actif : l'attention NE VOIT PAS les \
+blocs compressés (la fenêtre brute reste) — ablation pour localiser un défaut.");
+            }
+            actif
+        });
+        let n_vis = if sans_blocs || m.ratio == 0 { 0 } else { (pos + 1) / m.ratio };
+        if m.ratio > 0 {
+            // **Deux formes de compresseur, et deux ratios de plus.** V4 (ratios
+            // 4 et 128) : la
+… [730 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "limit": 30, "offset": 830}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs</path>
+<type>file</type>
+<content>
+830:             // fait la différence entre 2,5 µs et 0,3 µs par super-bloc.
+831:             let mut valeurs = vec![0f32; 256];
+832:             for o in o0..o1 {
+833:                 let mut acc = 0f32;
+834:                 for b in 0..nb {
+835:                     let p = unsafe { (base as *const u8).add((o * nb + b) * taille) };
+836:                     let bloc = unsafe { std::slice::from_raw_parts(p, taille) };
+837:                     crate::list::dequant_grille_dans(t, bloc, &mut valeurs);
+838:                     let lo = b * 256;
+839:                     let hi = (lo + 256).min(n_in);
+840:                     let mut s = 0f32;
+841:                     for j in lo..hi { s += valeurs[j - lo] * x[j]; }
+842:                     acc += s;
+843:                 }
+844:                 // `out` est la TRANCHE de ce fil : l'indexer par le numéro de
+845:                 // ligne GLOBAL lève « len is 256 but the index is 256 » dès le
+846:                 // deuxième fil. Le premier fil (o0 = 0) passait, ce qui rendait
+847:                 // le bug dépendant du nombre de 
+… [483 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "new_string": "            let mut valeurs = vec![0f32; 256];\n            for o in o0..o1 {\n                let mut acc = 0f32;\n                for b in 0..nb {\n                    let p = unsafe { (base as  … [1291 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "new_string": "        let n_out = self.n_out;\n        let n_in = self.n_in;\n        let simd = simd_dot();\n        let travail = move |o0: usize, o1: usize, out: &mut [f32]| {", "old_string": "        let n_ … [120 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "new_string": "    /// Produit matrice-vecteur sur une source **sans noyau** : déquantifie\n    /// chaque super-bloc de 256 poids et accumule en f32.", "old_string": "    /// Produit matrice-vecteur sur une sou … [103 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs has been updated successfully.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "limit": 14, "offset": 802}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs</path>
+<type>file</type>
+<content>
+802:     }
+803: 
+804:     /// Produit matrice-vecteur sur une source **sans noyau** : déquantifie
+805:     /// chaque super-bloc de 256 poids et accumule en f32.
+806:     /// Le travail est découpé par LIGNES de sortie entre `n_fils` fils : les
+807:     /// super-blocs d'une ligne sont indépendants, et la déquantification domine
+808:     /// le coût (recherches dans les grilles), donc le parallélisme paie.
+809:     fn matvec_dequant(&self, loc: usize, t: u32, x: &[f32], out: &mut [f32], n_fils: usize) {
+810:         let taille = crate::list::octets_grille(t);
+811:         assert!(self.n_in % 256 == 0, "largeur {} non multiple de 256", self.n_in);
+812:         // Le noyau lit `x[j]` jusqu'à `n_in` : une activation plus COURTE
+813:         // dépasserait en silence. Plus longue est normal — l'appelant passe son
+814:         // tampon de travail entier (12 288 valeurs pour la descente d'un expert
+815:         // de 2 048 entrées) et seules les `n_in` premières sont lues.
+
+(Showing lines 802-815 of 8458. Use offset=816 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "new_string": "    /// Produit matrice-vecteur sur une source **sans noyau** : déquantifie\n    /// chaque super-bloc de 256 poids et accumule en f32.\n    ///\n    /// Le travail est découpé par LIGNES de sorti … [1397 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs has been updated successfully.
+  ```
+
+### 🤖 Assistant
+
+Maintenant les deux fonctions (drapeau + noyau AVX2) :
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "new_string": "/// **`DRAVE_SIMD_DOT=1`** : le produit scalaire des super-blocs déquantifiés passe\n/// en AVX2+FMA. Le drapeau **s'annonce** parce qu'il change une sortie : quatre\n/// accumulateurs vectoriels, … [3408 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n '\"SIMD_DOT\"\\|\"SANS_BLOCS\"' drave-core/src/main.rs | head -3", "description": "Check VARS_LUES for the new variable"}`
+
+  ```
+28:    "SANS_BLOCS", "SANS_COMPRESSION", "TRACE_EXPERTS", "V41_SANS_RETARD", "V41_TETE_COPIE0",
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs", "new_string": "    \"SANS_BLOCS\", \"SANS_COMPRESSION\", \"SIMD_DOT\", \"TRACE_EXPERTS\", \"V41_SANS_RETARD\",\n    \"V41_TETE_COPIE0\",", "old_string": "    \"SANS_BLOCS\", \"SANS_COMPRESSION\", \"TRACE_EXPERTS\ … [46 caractères tronqués]`
+
+  ```
+Error: cannot edit "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs": file changed since it was read — re-read the file, then retry
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs", "limit": 6, "offset": 26}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs</path>
+<type>file</type>
+<content>
+26:     "SANS_EMPRUNT",
+27:     "TRACE_BLOCS",
+28:     "SANS_BLOCS", "SANS_COMPRESSION", "TRACE_EXPERTS", "V41_SANS_RETARD", "V41_TETE_COPIE0",
+29:     "VISION_TEXTE",
+30:     "YARN",
+31:     "YARN_MSCALE", "YARN_NON",
+
+(Showing lines 26-31 of 5445. Use offset=32 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs", "new_string": "    \"SANS_BLOCS\", \"SANS_COMPRESSION\", \"SIMD_DOT\", \"TRACE_EXPERTS\", \"V41_SANS_RETARD\",\n    \"V41_TETE_COPIE0\",", "old_string": "    \"SANS_BLOCS\", \"SANS_COMPRESSION\", \"TRACE_EXPERTS\ … [46 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo build --release 2>&1 | tail -5", "description": "Build with the SIMD dot", "timeoutMs": 900000}`
+
+  ```
+|
+    = note: `#[warn(non_shorthand_field_patterns)]` on by default
+
+warning: `drave-core` (bin "drave") generated 43 warnings (run `cargo fix --bin "drave" -p drave-core` to apply 23 suggestions)
+    Finished `release` profile [optimized] target(s) in 33.93s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && V4=/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf && for m in \"\" \"1\"; do echo \"=== DRAVE_SIMD_DOT='${m:-non}' ===\"; DRAVE_SIMD_DOT=$m ./drave-core/target/ … [308 caractères tronqués]`
+
+  ```
+=== DRAVE_SIMD_DOT='non' ===
+=== perplexité 25.6771 sur 31 tokens (0 événements, 319.5 s) ===
+    postes (ms/token) : projets-attn 0.00 | rope 0.00 | attention 972.40 | proj+mlp 9284.78 | somme 10257.18 | reste (tête + échantillonnage) 47.88
+=== DRAVE_SIMD_DOT='1' ===
+[simd] DRAVE_SIMD_DOT est actif : le produit scalaire des experts est vectorisé (AVX2+FMA, quatre accumulateurs). Les sommes ne sont plus dans l'ordre publié — les logits changent légèrement, et c'est mesurable avec tools/compare_logits.py.
+=== perplexité 25.8688 sur 31 tokens (0 événements, 65.7 s) ===
+    postes (ms/token) : projets-attn 0.00 | rope 0.00 | attention 981.78 | proj+mlp 1104.95 | somme 2086.73 | reste (tête + échantillonnage) 31.72
+  ```
+
+- **bash** `{"command": "pgrep -a -f drave | head; ps -o pid=,etime=,time=,%cpu=,cmd= -C drave | head", "description": "Check for stray engine processes"}`
+
+  ```
+2407101 bash -c pgrep -a -f drave | head; ps -o pid=,etime=,time=,%cpu=,cmd= -C drave | head
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && pkill -x drave 2>/dev/null; sleep 1; V4=/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf && for m in 0 1; do echo \"=== SIMD_DOT=$m ===\"; uptime | sed 's/.*load/ … [344 caractères tronqués]`
+
+  ```
+=== SIMD_DOT=0 ===
+load average: 23,25, 19,86, 14,99
+=== perplexité 15.2520 sur 63 tokens (0 événements, 271.0 s) ===
+    postes (ms/token) : projets-attn 0.00 | rope 0.00 | attention 999.33 | proj+mlp 3270.65 | somme 4269.99 | reste (tête + échantillonnage) 31.19
+=== SIMD_DOT=1 ===
+load average: 25,00, 23,15, 17,70
+=== perplexité 15.2747 sur 63 tokens (0 événements, 131.7 s) ===
+    postes (ms/token) : projets-attn 0.00 | rope 0.00 | attention 989.41 | proj+mlp 1070.52 | somme 2059.94 | reste (tête + échantillonnage) 30.72
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== non-régression : le chemin par défaut, avant/après refactor ===\" && cmp -s /tmp/dot_0.bin /tmp/our_v4f64.bin && echo \"BIT À BIT IDENTIQUE à la mesure d'avant (ctx 256 → ctx 64)\" || echo \"différent — à examiner\"; echo  … [286 caractères tronqués]`
+
+  ```
+=== non-régression : le chemin par défaut, avant/après refactor ===
+BIT À BIT IDENTIQUE à la mesure d'avant (ctx 256 → ctx 64)
+=== ce que le SIMD change (notre SIMD contre notre scalaire) ===
+perplexité nous : 15.2747   référence : 15.2520   (63 positions comparées)
+corrélation des logits par position : min 0.982195 (pos 44) · moyenne 0.998090 · max 1.000000
+  sous 0.95 : 0/63 (0.0 %) · au-dessus : 100.0 % (seuil 99 %) · plancher 0.9 respecté
+  tranche     0-   62 : corrélation moyenne 0.99809 · top-1 60/63 (95.2 %)
+corrélation des logits (position 0) : 1.000000
+(perplexité NON jugée : 63 < 64 prédictions — sur une fenêtre courte l'écart mesure le chaos, pas le moteur)
+✅ porte de correction tenue (100.0 % des positions au-dessus de 0.95, min 0.9822 >= plancher 0.9, top-1 95.2 %)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo test --release 2>&1 | grep -E \"^test result|FAILED|les_vars\" | head -10", "description": "Run the unit tests", "timeoutMs": 900000}`
+
+  ```
+test tests_vars::les_vars_qt_ne_sont_pas_des_notres ... ok
+test tests_vars::les_vars_lues_sont_completes ... ok
+test result: ok. 64 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+  ```
+
+- **write** `{"content": "# Sprint 24 — Le produit scalaire des experts, vectorisé (et ce qu'il change)\n\n- **Début** : 06:30 · **Fin** : 08:20\n- **Objectif** : le bloc 23 a mesuré que le coût par jeton de V4-Flash **croît avec le\n  contexte** (3,2 s à ctx 32, 6,45 s à ctx 256, ≈60 s à ctx 1 024) et que le po … [6082 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/24-le-produit-scalaire-des-experts-vectorise.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"SIMD\\|produit scalaire\" docs/plan-deepseek41-complet.md | head -10", "description": "Find P9 SIMD mentions in the plan"}`
+
+  ```
+809:> la passe complète de 66-68 s à **22,2 s (×3)**. Le SIMD reste sur la table
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md", "limit": 28, "offset": 798}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md</path>
+<type>file</type>
+<content>
+798: > `proj+mlp` et `attention` sont dominés par la lecture des poids (25 ms par
+799: > couche-jeton pour 49,7 M poids lus, soit ≈ 2 Go/s effectifs).
+800: 
+801: > **Fait le 02/10 (bloc 15), et sans écrire un seul noyau natif** : le poste
+802: > `attention` de V4.1 valait **12 369,91 ms par jeton** parce que son
+803: > produit matrice-vecteur f32 (`matvec_f32`, 11 appels par couche, 1,65 G de
+804: > produits par jeton) était une boucle **mono-fil scalaire** — vingt cœurs
+805: > inoccupés. Il est maintenant **parallèle par LIGNES** (`matvec_f32_fils`) :
+806: > chaque ligne reste sommée par un seul fil dans le même ordre, donc le résultat
+807: > est **identique au bit près** (2 544 vides comparés, 0 écart ; perplexité
+808: > 1 743 713,6243 inchangée) et le poste tombe à **1 324,48 ms/token (×9,34)**,
+809: > la passe complète de 66-68 s à **22,2 s (×3)**. Le SIMD reste sur la table
+810: > (~5 Go/s effectifs contre 40-60 Go/s possibles) mais il changerait l'ordre des
+811: > sommes, donc la référence de non-régression : décision reportée, conditions
+812: > écrites (`s
+… [957 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md", "new_string": "> > sommes, donc la référence de non-régression : décision reportée, conditions\n> > écrites (`sprints/15`).\n> >\n> > **Le SIMD est fait, mesuré, et il s'annonce (03/10, bloc 24)** : le p … [1746 caractères tronqués]`
+
+  ```
+Error: old_string was not found in "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md"
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md", "new_string": "> écrites (`sprints/15`).\n>\n> **Le SIMD est fait, mesuré, et il s'annonce (03/10, bloc 24)** : le produit\n> scalaire des super-blocs « sans noyau » (`Vue4::matvec_dequant`, le chemin de … [1650 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md", "new_string": "8. **Un drapeau qui ne fait rien doit être dit.** `--dense` est **inerte pour\n   V4-Flash** : PPL identique au chiffre près, durées identiques, et le compteur\n   « dont en listes » reste à 0,0 M — le modèle  … [1346 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"DRAVE_SIMD_DOT : le produit scalaire des experts vectorisé — ×2,06 sur la passe, et l'écart qu'il introduit est MESURÉ\n\nLe poste dominant de V4-Flash (proj+mlp, 3 271 ms/jeton) était une chaîne de 2 … [791 caractères tronqués]`

@@ -811,6 +811,29 @@ Une phase qui ne passe pas ses deux portes ne passe pas à la suivante.
 > sommes, donc la référence de non-régression : décision reportée, conditions
 > écrites (`sprints/15`).
 >
+> **Le SIMD est fait, mesuré, et il s'annonce (03/10, bloc 24)** : le produit
+> scalaire des super-blocs « sans noyau » (`Vue4::matvec_dequant`, le chemin des
+> experts de V4-Flash et de V4.1) enchaînait 256 additions **dépendantes** de
+> gauche à droite — ~0,25 produit par cycle, quelle que soit la largeur du
+> processeur. `DRAVE_SIMD_DOT=1` passe à quatre accumulateurs AVX2+FMA puis une
+> somme horizontale : sur V4-Flash (63 jetons, ctx 64) la passe tombe de
+> **271,0 s à 131,7 s (×2,06)** et le poste `proj+mlp` de **3 270,65 à
+> 1 070,52 ms/token (×3,05)**, attention inchangée. **Ce que ça change est mesuré,
+> pas supposé** : perplexité **15,2520 → 15,2747 (+0,15 %)**, corrélation par
+> position contre notre propre scalaire min 0,9822 · moyenne 0,9981 · position 0
+> exactement 1,000000 · top-1 identique 60/63. Le désaccord ainsi introduit est
+> **trois fois plus petit** que celui qui existe déjà entre le moteur et llama.cpp
+> (0,985-0,988). Le drapeau reste **opt-in** : l'activer par défaut déplacerait
+> toutes les références publiées, et ce n'est pas une décision à prendre dans une
+> boucle de produit scalaire. Le chemin par défaut est **bit à bit identique** à
+> avant (`cmp` sur 63 × 129 280 f32).
+>
+> Ce qui reste **non expliqué** : le coût par jeton croît avec la position (2,5 s à
+> 31 jetons, 4,3 s à 63, 6,45 s à 255, ≈60 s à 1 024) et ce n'est **ni le disque**
+> (`read_bytes` = 0 sur un run de 93 jetons), **ni l'attention** (plate à ~1 s),
+> **ni l'indexeur CSA** (sans effet avant 512 blocs). Le SIMD baisse le niveau de
+> la courbe, pas sa forme : c'est la mesure à reprendre.
+>
 > **Ce qui a été essayé et REFUSÉ par la mesure (bloc 16)** : un **cache RAM des
 > experts** (`DRAVE_EXPERTS_RAM`), justifié par une trace de routage (50 % des
 > lectures dans 394 experts, 31,9 % de réutilisation entre jetons consécutifs).

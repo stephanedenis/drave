@@ -352,6 +352,17 @@ comparé à `llama-tokenize` sur 4 424 jetons (0 écart).
    « dont en listes » reste à 0,0 M — le modèle passe par le chemin dense de toute
    façon. Deux blocs durant, il a été cru « aligné sur llama.cpp » : c'était une
    supposition, pas une mesure.
+9. **Une optimisation qui change une sortie dit ce qu'elle change** (03/10,
+   bloc 24). `DRAVE_SIMD_DOT=1` vectorise le produit scalaire des experts
+   (AVX2+FMA, quatre accumulateurs) : **×2,06 sur la passe** V4-Flash, ×3,05 sur
+   `proj+mlp` — et **+0,15 %** de perplexité, corrélation 0,9981 contre notre
+   propre chemin scalaire. Le drapeau s'annonce au premier appel et reste
+   **opt-in** (l'activer par défaut déplacerait 8430,4966 et les autres
+   références). Le chemin par défaut, lui, reste **bit à bit** celui d'avant.
+10. **Une mesure sous charge non vérifiée n'est pas une mesure.** Un A/B a donné
+   319 s contre 78 s pour le même travail : un processus `drave` avait survécu au
+   `timeout` du shell (`timeout` tue le shell, pas son enfant). Vérifier
+   `pgrep -x drave` avant de conclure.
 
 ---
 

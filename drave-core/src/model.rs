@@ -767,6 +767,77 @@ pub struct Vue4 {
     pub src: crate::list::Source,
 }
 
+/// **`DRAVE_SIMD_DOT=1`** : le produit scalaire des super-blocs déquantifiés passe
+/// en AVX2+FMA. Le drapeau **s'annonce** parce qu'il change une sortie : quatre
+/// accumulateurs vectoriels, puis une somme horizontale — l'ordre des additions
+/// n'est plus celui qui a produit les chiffres publiés, et le FMA n'arrondit
+/// qu'une fois au lieu de deux. Le chemin par défaut reste le scalaire de gauche
+/// à droite, bit à bit celui des références.
+fn simd_dot() -> bool {
+    static SIMD_DOT: std::sync::OnceLock<bool> = std::sync::OnceLock::new();
+    *SIMD_DOT.get_or_init(|| {
+        let demande = std::env::var("DRAVE_SIMD_DOT")
+            .map(|v| v != "0" && !v.is_empty()).unwrap_or(false);
+        #[cfg(target_arch = "x86_64")]
+        let possible = std::is_x86_feature_detected!("avx2") && std::is_x86_feature_detected!("fma");
+        #[cfg(not(target_arch = "x86_64"))]
+        let possible = false;
+        if demande && !possible {
+            eprintln!("[simd] DRAVE_SIMD_DOT demandé mais AVX2+FMA indisponible sur ce \
+processeur : chemin scalaire conservé (aucun changement de bits).");
+        } else if demande {
+            eprintln!("[simd] DRAVE_SIMD_DOT est actif : le produit scalaire des experts est \
+vectorisé (AVX2+FMA, quatre accumulateurs). Les sommes ne sont plus dans l'ordre publié — \
+les logits changent légèrement, et c'est mesurable avec tools/compare_logits.py.");
+        }
+        demande && possible
+    })
+}
+
+/// Produit scalaire d'un super-bloc déquantifié par les activations du même bloc.
+/// `simd = false` est le chemin historique : une accumulation, de gauche à droite.
+#[inline]
+fn dot_bloc_f32(valeurs: &[f32], x: &[f32], simd: bool) -> f32 {
+    #[cfg(target_arch = "x86_64")]
+    if simd {
+        // Sûreté : `simd` n'est vrai que si AVX2 et FMA ont été détectés.
+        return unsafe { dot_bloc_avx2(valeurs, x) };
+    }
+    let mut s = 0f32;
+    for j in 0..valeurs.len() { s += valeurs[j] * x[j]; }
+    s
+}
+
+/// Quatre accumulateurs vectoriels, puis somme horizontale. Le reste (bloc non
+/// multiple de 32, ce qui n'arrive que sur le DERNIER super-bloc d'une ligne non
+/// multiple de 256) est fini en scalaire.
+#[cfg(target_arch = "x86_64")]
+#[target_feature(enable = "avx2,fma")]
+unsafe fn dot_bloc_avx2(valeurs: &[f32], x: &[f32]) -> f32 {
+    use std::arch::x86_64::*;
+    let n = valeurs.len().min(x.len());
+    let (pv, px) = (valeurs.as_ptr(), x.as_ptr());
+    let (mut a0, mut a1, mut a2, mut a3) = (_mm256_setzero_ps(), _mm256_setzero_ps(),
+                                           _mm256_setzero_ps(), _mm256_setzero_ps());
+    let mut j = 0usize;
+    while j + 32 <= n {
+        a0 = _mm256_fmadd_ps(_mm256_loadu_ps(pv.add(j)), _mm256_loadu_ps(px.add(j)), a0);
+        a1 = _mm256_fmadd_ps(_mm256_loadu_ps(pv.add(j + 8)), _mm256_loadu_ps(px.add(j + 8)), a1);
+        a2 = _mm256_fmadd_ps(_mm256_loadu_ps(pv.add(j + 16)), _mm256_loadu_ps(px.add(j + 16)), a2);
+        a3 = _mm256_fmadd_ps(_mm256_loadu_ps(pv.add(j + 24)), _mm256_loadu_ps(px.add(j + 24)), a3);
+        j += 32;
+    }
+    let s = _mm256_add_ps(_mm256_add_ps(a0, a1), _mm256_add_ps(a2, a3));
+    let bas = _mm256_castps256_ps128(s);
+    let haut = _mm256_extractf128_ps(s, 1);
+    let q = _mm_add_ps(bas, haut);
+    let q = _mm_add_ps(q, _mm_movehl_ps(q, q));
+    let q = _mm_add_ss(q, _mm_shuffle_ps(q, q, 1));
+    let mut total = _mm_cvtss_f32(q);
+    while j < n { total += *pv.add(j) * *px.add(j); j += 1; }
+    total
+}
+
 impl Vue4 {
     /// Octets d'UN expert, **tels que le chemin de lecture les parcourt**.
     ///
@@ -807,6 +878,15 @@ impl Vue4 {
     /// Le travail est découpé par LIGNES de sortie entre `n_fils` fils : les
     /// super-blocs d'une ligne sont indépendants, et la déquantification domine
     /// le coût (recherches dans les grilles), donc le parallélisme paie.
+    ///
+    /// **Ce qui domine vraiment, mesuré** : le produit scalaire du super-bloc, pas
+    /// la déquantification (vectoriser la déquantification d'IQ1_M n'a donné que
+    /// ×1,07). Une seule accumulation de gauche à droite enchaîne 256 additions
+    /// dépendantes : ~4 cycles de latence chacune, soit ~0,25 produit par cycle.
+    /// `DRAVE_SIMD_DOT=1` prend le chemin AVX2+FMA (quatre accumulateurs, puis
+    /// somme horizontale) — **et change donc les bits**, ce qui est dit à
+    /// l'activation et mesuré (`tools/compare_logits.py`) : ce n'est pas le
+    /// défaut, c'est une optimisation qui s'annonce.
     fn matvec_dequant(&self, loc: usize, t: u32, x: &[f32], out: &mut [f32], n_fils: usize) {
         let taille = crate::list::octets_grille(t);
         assert!(self.n_in % 256 == 0, "largeur {} non multiple de 256", self.n_in);
@@ -825,6 +905,7 @@ pour une projection de {} entrées × {} sorties", crate::gguf::Gguf::nom_type(t
         let base = unsafe { self.base.add(loc * self.n_out * nb * taille) } as usize;
         let n_out = self.n_out;
         let n_in = self.n_in;
+        let simd = simd_dot();
         let travail = move |o0: usize, o1: usize, out: &mut [f32]| {
             // Un tampon par FIL, réutilisé pour tous les blocs : c'est ce qui
             // fait la différence entre 2,5 µs et 0,3 µs par super-bloc.
@@ -837,9 +918,10 @@ pour une projection de {} entrées × {} sorties", crate::gguf::Gguf::nom_type(t
                     crate::list::dequant_grille_dans(t, bloc, &mut valeurs);
                     let lo = b * 256;
                     let hi = (lo + 256).min(n_in);
-                    let mut s = 0f32;
-                    for j in lo..hi { s += valeurs[j - lo] * x[j]; }
-                    acc += s;
+                    // Le produit scalaire du super-bloc : c'est LUI le poste,
+                    // pas la déquantification (mesuré : ×1,07 en vectorisant la
+                    // déquantification d'IQ1_M). Voir `dot_bloc_f32`.
+                    acc += dot_bloc_f32(&valeurs[..hi - lo], &x[lo..hi], simd);
                 }
                 // `out` est la TRANCHE de ce fil : l'indexer par le numéro de
                 // ligne GLOBAL lève « len is 256 but the index is 256 » dès le
