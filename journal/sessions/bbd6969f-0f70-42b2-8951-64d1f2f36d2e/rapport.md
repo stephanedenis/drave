@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 116.9 h |
+| Durée | 117.0 h |
 | Tours | 92 |
-| Messages | 6993 |
-| Appels d'outils | 6684 |
-| Fichiers touchés | 141 |
-| Commandes | 5654 |
+| Messages | 6996 |
+| Appels d'outils | 6687 |
+| Fichiers touchés | 142 |
+| Commandes | 5656 |
 | Sous-agents | 32 |
-| Commits | 458 |
+| Commits | 459 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -4574,7 +4574,7 @@ Avec SiTU et l'attention résiduelle, ça fait **10 tests pour Kimi-K3**, et **7
 
 ### Tour 92 — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas e … [1246 caractères tronqués]
 
-*27 appels d'outils.* Actions notables :
+*30 appels d'outils.* Actions notables :
 
 - bash — Find the expert routing trace facility
 - bash — Read the trace format and the existing routing report
@@ -4590,7 +4590,7 @@ Avec SiTU et l'attention résiduelle, ça fait **10 tests pour Kimi-K3**, et **7
 - bash — Tokenize then run the Qwen3-30B trace
 - bash — Check the running engines and trace progress
 - bash — Run the Qwen3-30B trace alone
-- … et 13 autres
+- … et 16 autres
 
 **Synthèse produite :**
 
@@ -4743,6 +4743,7 @@ Avec SiTU et l'attention résiduelle, ça fait **10 tests pour Kimi-K3**, et **7
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/29-87-go-par-jeton-et-la-recurrence-du-kda.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/analyse_reutilisation_experts.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-reutilisation-experts.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/30-la-reutilisation-des-experts-mesuree.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -4821,7 +4822,7 @@ Avec SiTU et l'attention résiduelle, ça fait **10 tests pour Kimi-K3**, et **7
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5614 autres
+- … et 5616 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5427,4 +5428,5 @@ Avec SiTU et l'attention résiduelle, ça fait **10 tests pour Kimi-K3**, et **7
 - KDA : porte bornée et convolution courte implémentées et testées — le test a attrapé une inversion de disposition d'état  kda_porte : g = -5·sigma(exp(A_log)·z)
 - Réutilisation des experts MESURÉE : 46,9 % immédiate, 74,8 % avec le quart le plus chaud en cache  Trace de routage (DRAVE_TRACE_EXPERTS) sur Qwen3-30B-A3B : 48
 - Réutilisation : trois relevés (wikitext 48 et 128 jetons, code 128) — immédiate 47-49 %, un quart de cache sert 75-87 %  La dépendance au texte est faible sur l
+- Sprint 30 : la réutilisation des experts est mesurée — 47-49 % immédiate, un quart de cache sert 80-87 %, plafond 93 %  C'est le levier qui décide si un modèle 
 

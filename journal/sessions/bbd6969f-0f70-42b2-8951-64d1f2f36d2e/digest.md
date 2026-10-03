@@ -111319,3 +111319,28 @@ exit=0 en 228 s · 6144 lignes
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-reutilisation-experts.md'\ns=open(p).read()\ns=s.replace(\"\"\"> Premier relevé le 03/10 (bloc 30), sur **Qwen3-30B-A3B** (48 couches,\n> **128 experts, 8 par jeton**, routage softmax), 48 jetons, … [4397 caractères tronqués]`
+
+  ```
+rapport mis à jour avec les trois relevés
+913fe1c Réutilisation : trois relevés (wikitext 48 et 128 jetons, code 128) — immédiate 47-49 %, un quart de cache sert 75-87 %
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -1 /tmp/dl_k3.log; du -sh /home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL; date +%H:%M", "description": "Check the download progress"}`
+
+  ```
+11:43:35    45.0 Go / 49.1 Go (91.5 %, 112 Mo/s)
+591G	/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL
+11:43
+  ```
+
+- **write** `{"content": "# Sprint 30 — La réutilisation des experts, mesurée (et c'est le levier)\n\n- **Début** : 11:40 · **Fin** : 12:40\n- **Objectif** : le bloc 29 a montré qu'un jeton de Kimi-K3 lit **24,7 Go d'experts**\n  et que **aucun placement** ne rend ça interactif. Restait LA question qui décide\n  … [4859 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/30-la-reutilisation-des-experts-mesuree.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Sprint 30 : la réutilisation des experts est mesurée — 47-49 % immédiate, un quart de cache sert 80-87 %, plafond 93 %\n\nC'est le levier qui décide si un modèle « trop gros pour le local » peut tourn … [625 caractères tronqués]`
