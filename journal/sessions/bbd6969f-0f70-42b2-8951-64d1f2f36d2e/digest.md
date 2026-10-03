@@ -108804,3 +108804,206 @@ Created file
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Sprint 27 : porte P1 fermée (et elle révèle une permutation), portes auditées P0-P9, porte à ctx 1024 tenue sous critère révisé, bascule vers Kimi-K3\n\nRétro : un critère s'écrit en TAUX, pas en extr … [347 caractères tronqués]`
+
+  ```
+bd9b936 Sprint 27 : porte P1 fermée (et elle révèle une permutation), portes auditées P0-P9, porte à ctx 1024 tenue sous critère révisé, bascule vers Kimi-K3
+10:25:44    30.9 Go / 49.0 Go (63.0 %, 110 Mo/s)
+/dev/mapper/system-root   11T  7,5T  3,4T  70% /home/stephane/Data13TB
+  ```
+
+### 🤖 Assistant
+
+⏵ Bloc 28 : étude de l'architecture Kimi-K3 — inventaire des tenseurs puis lecture de la référence
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 python3 - <<'PY'\nimport sys, struct\nsys.path.insert(0,'tools')\nimport analyse_octets_par_jeton as A\nchemin='/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00002-of-00032.gguf'\nv,  … [743 caractères tronqués]`
+
+  ```
+105 tenseurs · version 3
+
+types : MXFP4 41.93 Go · Q8_0 5.46 Go · F32 0.09 Go
+
+principaux tenseurs (Go) :
+   15.722  ffn_down_exps.weight
+   15.722  ffn_gate_exps.weight
+   10.482  ffn_up_exps.weight
+    2.496  weight
+    0.374  attn_output.weight
+    0.281  attn_k.weight
+    0.281  attn_q.weight
+    0.281  attn_v.weight
+    0.281  ssm_g.weight
+    0.257  ffn_down.weight
+    0.257  ffn_gate.weight
+    0.257  ffn_up.weight
+    0.140  ffn_down_shexp.weight
+    0.140  ffn_gate_shexp.weight
+    0.094  ffn_up_shexp.weight
+    0.094  attn_gate.weight
+
+noms complets (12 premiers) :
+  output.weight                                 dims=[7168, 163840] type=8
+  output_norm.weight                            dims=[7168] type=0
+  output_res_score.weight                       dims=[7168] type=0
+  token_embd.weight                             dims=[7168, 163840] type=8
+  blk.0.attn_k.weight                           dims=[7168, 12288] type=8
+  blk.0.attn_norm.weight                        dims=[7168] type=0
+  blk.0.attn_output.weight                      dims=[12288, 7168] type=8
+  blk.0.attn_q.weight                           dims=[7168, 12288] type=8
+  blk.0.attn_res_score.weight                
+… [243 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp-k3 && wc -l src/models/kimi-k3.cpp src/models/kimi-linear.cpp 2>/dev/null; grep -nE \"^\\s*(case|if).*(SSM|ssm|linear|LINEAR)|LLM_TENSOR_|build_\" src/models/kimi-k3.cpp | head -30", "description": "Inspect the reference implementatio … [13 caractères tronqués]`
+
+  ```
+618 src/models/kimi-k3.cpp
+  562 src/models/kimi-linear.cpp
+ 1180 total
+58:    tok_embd = create_tensor(tn(LLM_TENSOR_TOKEN_EMBD, "weight"), {n_embd, n_vocab}, 0);
+60:    output_norm = create_tensor(tn(LLM_TENSOR_OUTPUT_NORM, "weight"), {n_embd}, 0);
+61:    output      = create_tensor(tn(LLM_TENSOR_OUTPUT,      "weight"), {n_embd, n_vocab}, 0);
+64:        output_res_score = create_tensor(tn(LLM_TENSOR_OUTPUT_RES_SCORE, "weight"), {n_embd}, 0);
+70:        layer.attn_norm = create_tensor(tn(LLM_TENSOR_ATTN_NORM, "weight", i), {n_embd}, 0);
+71:        layer.ffn_norm  = create_tensor(tn(LLM_TENSOR_FFN_NORM,  "weight", i), {n_embd}, 0);
+74:            layer.attn_res_score = create_tensor(tn(LLM_TENSOR_ATTN_RES_SCORE, "weight", i), {n_embd}, 0);
+75:            layer.ffn_res_score  = create_tensor(tn(LLM_TENSOR_FFN_RES_SCORE,  "weight", i), {n_embd}, 0);
+88:            layer.ssm_q_conv = conv(LLM_TENSOR_SSM_CONV1D_Q);
+89:            layer.ssm_k_conv = conv(LLM_TENSOR_SSM_CONV1D_K);
+90:            layer.ssm_v_conv = conv(LLM_TENSOR_SSM_CONV1D_V);
+94:            layer.ssm_f_a  = create_tensor(tn(LLM_TENSOR_SSM_F_A,  "weight", i), {n_embd, head_dim}, 0);
+95:            layer.ssm_f_b  = creat
+… [2039 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp-k3 && sed -n '150,260p' src/models/kimi-k3.cpp", "description": "Read the layer-selection logic of the reference"}`
+
+  ```
+layer.ffn_gate_exps = create_tensor(tn(LLM_TENSOR_FFN_GATE_EXPS, "weight", i), {n_embd_latent, n_ff_exp, n_expert}, 0);
+            layer.ffn_down_exps = create_tensor(tn(LLM_TENSOR_FFN_DOWN_EXPS, "weight", i), {n_ff_exp, n_embd_latent, n_expert}, 0);
+            layer.ffn_up_exps   = create_tensor(tn(LLM_TENSOR_FFN_UP_EXPS,   "weight", i), {n_embd_latent, n_ff_exp, n_expert}, 0);
+
+            if (hparams.n_expert_latent > 0) {
+                layer.ffn_routed_down = create_tensor(tn(LLM_TENSOR_FFN_ROUTED_DOWN, "weight", i), {n_embd, n_embd_latent}, 0);
+                layer.ffn_routed_up   = create_tensor(tn(LLM_TENSOR_FFN_ROUTED_UP,   "weight", i), {n_embd_latent, n_embd}, 0);
+                layer.ffn_routed_norm = create_tensor(tn(LLM_TENSOR_FFN_ROUTED_NORM, "weight", i), {n_embd_latent}, TENSOR_NOT_REQUIRED);
+            }
+
+            // shared experts stay at n_embd, width = moe_intermediate_size * n_expert_shared
+            const int64_t n_ff_shexp = n_ff_exp * (hparams.n_expert_shared > 0 ? hparams.n_expert_shared : 1);
+            layer.ffn_gate_shexp = create_tensor(tn(LLM_TENSOR_FFN_GATE_SHEXP, "weight", i), {n_embd, n_ff_shexp}, TENSOR_NOT_REQUIRED);
+            layer
+… [4426 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp-k3 && sed -n '260,330p' src/models/kimi-k3.cpp", "description": "Read the main layer loop of the reference"}`
+
+  ```
+const int64_t n_seq_tokens = ubatch.n_seq_tokens;
+
+    GGML_ASSERT(n_seqs != 0);
+    GGML_ASSERT(ubatch.equal_seqs());
+    GGML_ASSERT(ubatch.n_tokens == n_seq_tokens * n_seqs);
+
+    const int64_t n_embd_head_k_mla   = hparams.n_embd_head_k_mla();
+    const int64_t n_embd_head_v_mla   = hparams.n_embd_head_v_mla();
+    const int64_t kv_lora_rank        = hparams.n_lora_kv;
+    const int64_t n_embd_head_qk_rope = hparams.n_rot();
+    const int64_t n_embd_head_qk_nope = n_embd_head_k_mla - n_embd_head_qk_rope;
+    const float   kq_scale_mla        = 1.0f / sqrtf((float) n_embd_head_k_mla);
+
+    const uint32_t res_bs        = hparams.attn_res_block_size;
+    const bool     use_attn_res  = res_bs > 0;
+    const int64_t  n_embd_latent = hparams.n_expert_latent > 0 ? hparams.n_expert_latent : n_embd;
+
+    for (int il = 0; il < n_layer; ++il) {
+        const auto & layer = model.layers[il];
+
+        // the residual stream, banked on checkpoint layers and then restarted
+        // from the attention output alone
+        ggml_tensor * prefix_sum = inpL;
+
+        cur = use_attn_res ? res_mix(prefix_sum, layer.attn_res_score, n_tokens, il)
+                           : prefix_sum;
+
+        boo
+… [1828 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ J'écris la spécification d'architecture depuis la référence (KDA + MLA + MoE latent + attention résiduelle)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/lire_meta_gguf.py /home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf 2>&1 | grep -E \"^kimi-k3\\.\" | grep -v \"head_count_kv\" | head -40", "description": "Dump all  … [44 caractères tronqués]`
+
+  ```
+kimi-k3.block_count = 93
+kimi-k3.context_length = 1048576
+kimi-k3.embedding_length = 7168
+kimi-k3.feed_forward_length = 33792
+kimi-k3.attention.head_count = 96
+kimi-k3.rope.freq_base = 10000.0
+kimi-k3.attention.layer_norm_rms_epsilon = 9.999999747378752e-06
+kimi-k3.expert_count = 896
+kimi-k3.expert_used_count = 16
+kimi-k3.expert_group_used_count = 1
+kimi-k3.expert_gating_func = 2
+kimi-k3.attention.key_length = 576
+kimi-k3.attention.value_length = 74
+kimi-k3.vocab_size = 163840
+kimi-k3.ssm.conv_kernel = 4
+kimi-k3.kda.head_dim = 128
+kimi-k3.kda.gate_lower_bound = -5.0
+kimi-k3.attention.q_lora_rank = 1536
+kimi-k3.attention.kv_lora_rank = 512
+kimi-k3.rope.dimension_count = 64
+kimi-k3.attention.key_length_mla = 192
+kimi-k3.attention.value_length_mla = 128
+kimi-k3.expert_feed_forward_length = 3072
+kimi-k3.expert_shared_count = 2
+kimi-k3.leading_dense_block_count = 1
+kimi-k3.expert_weights_scale = 1.0
+kimi-k3.expert_weights_norm = True
+kimi-k3.expert_latent_length = 3584
+kimi-k3.activation.situ_beta = 4.0
+kimi-k3.activation.situ_linear_beta = 25.0
+kimi-k3.attn_res.block_size = 12
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp-k3 && grep -n \"build_kda_layer\\|build_mla_layer\\|build_latent_moe\" src/models/kimi-k3.cpp | head; sed -n '/ggml_tensor \\* llama_model_kimi_k3::graph::build_kda_layer/,/^}/p' src/models/kimi-k3.cpp | head -60", "description": "Rea … [32 caractères tronqués]`
+
+  ```
+298:            cur = build_kda_layer(cur, layer, inp_rs, d_conv, head_dim, n_head_kda,
+301:            cur = build_mla_layer(cur, layer, inp_attn_k, inp_attn_kv,
+322:            cur = build_latent_moe(cur, layer, n_embd_latent, il);
+399:ggml_tensor * llama_model_kimi_k3::graph::build_kda_layer(
+485:ggml_tensor * llama_model_kimi_k3::graph::build_mla_layer(
+570:ggml_tensor * llama_model_kimi_k3::graph::build_latent_moe(
+ggml_tensor * llama_model_kimi_k3::graph::build_kda_layer(
+        ggml_tensor * cur, const llama_layer & layer, llm_graph_input_rs * inp_rs,
+        int64_t d_conv, int64_t head_dim, int64_t n_head_kda,
+        int64_t d_inner, int64_t n_seq_tokens, int64_t n_seqs, int il) {
+
+    const auto * mctx_cur = inp_rs->mctx;
+    const auto   kv_head  = mctx_cur->get_head();
+
+    ggml_tensor * conv_states_all = mctx_cur->get_r_l(il);
+    ggml_tensor * conv_state_all  = build_rs(inp_rs, conv_states_all, hparams.n_embd_r(), n_seqs);
+
+    const int64_t mem_size = mctx_cur->get_size();
+    const int64_t K_rs     = (int64_t) cparams.n_rs_seq + 1;
+
+    ggml_tensor * Qcur = kimi_k3_conv1d(gf, ctx0, conv_states_all, conv_state_all, 0, cur, layer.wq, layer.ssm_q_conv, d_conv, head_d
+… [2485 caractères tronqués]
+  ```
+
+- **write** `{"content": "# Architecture Kimi-K3 — spécification tirée de la référence\n\n> Écrite le 03/10 (bloc 28) pour préparer l'exécution locale du premier modèle de\n> la classe « trop gros pour le local » (1 508,7 Go en Q4). **Tout ce qui suit\n> vient de deux sources vérifiables** : les métadonnées du G … [9245 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/architecture-kimi-k3.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Spécification de l'architecture Kimi-K3, tirée de la référence (llama.cpp-k3 + code publié)\n\nMesuré dans le fichier : 93 couches, dont 1 dense ; KDA (delta-net, conv 4, porte\nbornée à -5) sur 3 cou … [664 caractères tronqués]`

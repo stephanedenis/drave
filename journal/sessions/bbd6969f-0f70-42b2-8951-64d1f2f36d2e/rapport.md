@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 115.7 h |
 | Tours | 90 |
-| Messages | 6845 |
-| Appels d'outils | 6544 |
-| Fichiers touchés | 134 |
-| Commandes | 5523 |
+| Messages | 6853 |
+| Appels d'outils | 6552 |
+| Fichiers touchés | 135 |
+| Commandes | 5530 |
 | Sous-agents | 32 |
-| Commits | 443 |
+| Commits | 444 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -4475,7 +4475,7 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 
 ### Tour 90 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [942 caractères tronqués]
 
-*106 appels d'outils.* Actions notables :
+*114 appels d'outils.* Actions notables :
 
 - bash — Check the gate suite result
 - bash — Wait for the gates
@@ -4491,11 +4491,11 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 - bash — Find the plan's remaining items
 - bash — Extract each phase's gate claims
 - read
-- … et 89 autres
+- … et 97 autres
 
 **Synthèse produite :**
 
-⏵ Position 1009 : NLL 0,0000 des deux côtés — Pearson sur une distribution saturée ne mesure rien
+⏵ J'écris la spécification d'architecture depuis la référence (KDA + MLA + MoE latent + attention résiduelle)
 
 ## 3. Travail accompli
 
@@ -4637,6 +4637,7 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-portes-p0-p9.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-kimi-k3.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/27-la-porte-p1-fermee-et-la-bascule-vers-kimi-k3.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/architecture-kimi-k3.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -4715,7 +4716,7 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5483 autres
+- … et 5490 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5306,4 +5307,5 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 - Retrait de V4-Flash : copie NVMe supprimée, porte hc repointée sur V4.1 (testée), section 6bis marquée ARCHIVÉE dans portes.sh  Un modèle périmé ne doit pas por
 - Porte de correction à ctx 1024 (1 023 positions) : accord MEILLEUR (moyenne 0,9914, top-1 93,5 %, PPL +1,7 %), mais elle a d'abord échoué sur une position où la
 - Sprint 27 : porte P1 fermée (et elle révèle une permutation), portes auditées P0-P9, porte à ctx 1024 tenue sous critère révisé, bascule vers Kimi-K3  Rétro : u
+- Spécification de l'architecture Kimi-K3, tirée de la référence (llama.cpp-k3 + code publié)  Mesuré dans le fichier : 93 couches, dont 1 dense ; KDA (delta-net,
 
