@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 109.9 h |
+| Durée | 110.0 h |
 | Tours | 87 |
-| Messages | 6461 |
-| Appels d'outils | 6184 |
+| Messages | 6480 |
+| Appels d'outils | 6202 |
 | Fichiers touchés | 119 |
-| Commandes | 5245 |
+| Commandes | 5257 |
 | Sous-agents | 32 |
-| Commits | 414 |
+| Commits | 415 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -4318,7 +4318,7 @@ C'est un point de méthode qui comptait : sans cette mesure, on aurait pu « cor
 
 ### Tour 87 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [942 caractères tronqués]
 
-*21 appels d'outils.* Actions notables :
+*39 appels d'outils.* Actions notables :
 
 - bash — Launch the long-window correction gate
 - bash — Wait for the long comparison
@@ -4334,11 +4334,11 @@ C'est un point de méthode qui comptait : sans cette mesure, on aurait pu « cor
 - bash — Read the bloc 22 plan in sprint 21
 - bash — Locate engram code and any local vLLM source
 - bash — Inspect correction-gate tools and engine flags
-- … et 7 autres
+- … et 23 autres
 
 **Synthèse produite :**
 
-⏵ Setting up the long-context correction gate (ctx 1024) on V4-Flash
+⏵ Wiring the correction gate into portes.sh (Qwen, 71 predictions, verdict by tool)
 
 ## 3. Travail accompli
 
@@ -4351,7 +4351,7 @@ C'est un point de méthode qui comptait : sans cette mesure, on aurait pu « cor
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/main.rs` | 0 | 43 |
 | `/tmp/mesures_oss.sh` | 2 | 0 |
 | `/tmp/mesures_oss2.sh` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/compare_logits.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/compare_logits.py` | 3 | 1 |
 | `/tmp/mesures_oss3.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/ref_logits.cpp` | 0 | 3 |
 | `/tmp/mesures_oss4.sh` | 2 | 0 |
@@ -4419,7 +4419,7 @@ C'est un point de méthode qui comptait : sans cette mesure, on aurait pu « cor
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/materiel.rs` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-tete-restreinte.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-optimisations-auto.md` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/portes.sh` | 1 | 4 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/portes.sh` | 1 | 5 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/ref_ggml_bloc.c` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/verifier_formats.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/portes_formats.sh` | 1 | 0 |
@@ -4543,7 +4543,7 @@ C'est un point de méthode qui comptait : sans cette mesure, on aurait pu « cor
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5205 autres
+- … et 5217 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4671,7 +4671,7 @@ C'est un point de méthode qui comptait : sans cette mesure, on aurait pu « cor
 
 ## 5. Erreurs rencontrées
 
-326 sorties en erreur ou divergentes. Les premières :
+328 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -5105,4 +5105,5 @@ C'est un point de méthode qui comptait : sans cette mesure, on aurait pu « cor
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="docs/plan-deepseek41-complet.md" s=open(p).read() a="""### P7 — Adaptation à V4.1, et 
 - Porte de correction P6 serrée : 63 positions, corrélation 0,9852, top-1 88,9 %, PPL à 6,4 %  La fenêtre de 4 jetons donnait 25 % d'écart de perplexité ; la même
 - Sprint 22 : la composition de V4.1 est vérifiée pièce par pièce, et les deux portes de P6, exécutées, étaient fausses deux fois sur quatre  Rétrospective du blo
+- La porte de correction devient un OUTIL exécutable, branché dans portes.sh (Qwen, 71 positions)  Les critères écrits au bloc 23 (corrélation par position >= 0,9
 

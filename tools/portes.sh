@@ -225,6 +225,45 @@ if [ -x tools/analyse_flux.py ]; then
     fi
 fi
 
+# 7quinquies. La PORTE DE CORRECTION, exécutée pour de vrai contre llama.cpp.
+#   Elle était écrite dans le plan depuis P6 et jamais lancée ; lancée, elle a
+#   montré que son critère (« même perplexité ») n'était pas mesurable. Les
+#   critères sont maintenant dans l'outil, et l'outil rend le verdict :
+#   corrélation des logits par position (>= 0,95 min, >= 0,98 en moyenne),
+#   top-1 (>= 85 %), perplexité (<= 10 %) — ce dernier SEULEMENT au-delà de
+#   64 prédictions : sur 4 jetons, deux quantifications divergent de 25 %,
+#   sur 63 prédictions de 6,4 % (mesuré). Une fenêtre courte mesure le chaos.
+#   Ici : Qwen2.5-0.5B, 71 prédictions, ~10 s en tout. La même porte sur
+#   V4-Flash (63 et 1 023 positions) se lance à la main, ses chiffres sont
+#   dans docs/plan-deepseek41-complet.md (P6).
+if [ -x tools/compare_logits.py ] && [ -x tools/ref_logits ] \
+   && [ -f models/Qwen2.5-0.5B-Q8_0.gguf ]; then
+    if [ ! -s /tmp/ids_qwen_72.txt ] && [ -s /tmp/ids_qwen.txt ]; then
+        python3 -c "import re;print(','.join(re.findall(r'\d+',open('/tmp/ids_qwen.txt').read())[:72]))" \
+            > /tmp/ids_qwen_72.txt 2>/dev/null
+    fi
+    if [ -s /tmp/ids_qwen_72.txt ]; then
+        LD_LIBRARY_PATH=/home/stephane/Data13TB/stephane/GitHub/llama.cpp/build/bin \
+            timeout 600 ./tools/ref_logits models/Qwen2.5-0.5B-Q8_0.gguf \
+            /tmp/ids_qwen_72.txt /tmp/porte_ref_qwen.bin 72 >/dev/null 2>&1
+        timeout 600 $D models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen_72.txt \
+            --ctx 72 --limit 72 --abits 16 --threads 16 --dense \
+            --logits-bin /tmp/porte_our_qwen.bin >/dev/null 2>&1
+        sortie_corr=$(python3 tools/compare_logits.py /tmp/porte_our_qwen.bin \
+            /tmp/porte_ref_qwen.bin /tmp/ids_qwen_72.txt --porte 2>&1)
+        if [ $? -eq 0 ]; then
+            printf "  %-42s %s  ✅\n" "porte de correction (llama.cpp, 71 positions)" \
+                "$(printf '%s' "$sortie_corr" | tail -1 | sed 's/✅ porte de correction tenue *//')"
+        else
+            printf "  %-42s %s  ❌\n" "porte de correction (llama.cpp, 71 positions)" "non tenue"
+            printf '%s\n' "$sortie_corr" | grep -E "corrélation des logits par position|accord du top-1|perplexité nous|PORTE DE CORRECTION" | sed 's/^/      /'
+            ECHEC=1
+        fi
+    else
+        printf "  %-42s %s\n" "porte de correction (llama.cpp, 71 positions)" "identifiants indisponibles"
+    fi
+fi
+
 # 8. Le DÉCOUPAGE : deux nœuds, cinq modes de flux, un petit modèle (~20 s).
 #    Elle manquait, et c'est exactement pour cela que la fuite de la `pre` reçue
 #    (sprint 13) a vécu si longtemps : aucun test n'exerçait un COUPLE de nœuds.

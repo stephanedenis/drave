@@ -103083,3 +103083,271 @@ Created file
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/ref_v4f1024.log 2>/dev/null | tail -5; ls -la /tmp/ref_v4f1024.bin 2>/dev/null; git add -A && git commit -q -m \"Sprint 22 : la composition de V4.1 est vérifiée pièce par pièce, et les deux portes de P6, exécutées, étaient f … [435 caractères tronqués]`
+
+  ```
+graph_reserve: reserving a graph for ubatch with n_tokens = 1024, n_seqs =  1, n_outputs = 1024
+sched_reserve:        CPU compute buffer size =   979.12 MiB
+sched_reserve: graph nodes  = 9663
+sched_reserve: graph splits = 1
+sched_reserve: reserve took 64.98 ms, sched copies = 1
+e57cd15 Sprint 22 : la composition de V4.1 est vérifiée pièce par pièce, et les deux portes de P6, exécutées, étaient fausses deux fois sur quatre
+  ```
+
+- **bash** `{"command": "sleep 90; tail -3 /tmp/ref_v4f1024.log; ls -la /tmp/ref_v4f1024.bin 2>/dev/null; pgrep -c -x ref_logits 2>/dev/null || echo \"ref_logits terminé\"", "description": "Wait and check reference progress", "timeoutMs": 180000}`
+
+  ```
+NLL moy  = 1.610664
+perplexite = 5.006136
+fichier  = /tmp/ref_v4f1024.bin (1023 x 129280 f32 + 8 octets d'en-tete)
+-rw-r--r--. 1 stephane stephane 529013768  3 oct 04:44 /tmp/ref_v4f1024.bin
+0
+ref_logits terminé
+  ```
+
+### 👤 Utilisateur
+
+background job bash-209 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (t0=$(date +%s); LD_LIBRARY_PATH=/home/stephane/Data13TB/stephane/GitHub/llama.cpp/build/bin ./tools/ref_logits /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf /tmp/ids_v4f1024.txt /tmp/ref_v4f1024.bin 1024 > /tmp/ref_v4f1024.log 2>&1; echo "ref_logits exit=$? en $(( $(date +%s) - t0 )) s") ) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 🤖 Assistant
+
+⏵ Running the engine at ctx 1024 for the long-context gate (llama.cpp: PPL 5,0061)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (t0=$(date +%s); ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf --ppl /tmp/ids_v4f1024.txt --ctx 1024 --limit 1024 --dense --t … [232 caractères tronqués]`
+
+  ```
+started background job bash-210
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"ref_logits\\|correction\" tools/portes.sh | head -20; echo \"--- sections ---\"; grep -n \"^# ---\\|^echo \\\"===\" tools/portes.sh | head -40; wc -l tools/portes.sh", "description": "Check portes.sh for a correction-gate s … [8 caractères tronqués]`
+
+  ```
+--- sections ---
+33:echo "=== Portes ==="
+252 tools/portes.sh
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/portes.sh"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/portes.sh</path>
+<type>file</type>
+<content>
+1: #!/bin/bash
+2: # Les portes du dépôt, en une commande.
+3: #
+4: # Un chiffre de référence qui dérive sans qu'on s'en aperçoive ne vaut rien :
+5: # chaque porte est comparée à la valeur ATTENDUE, et le script sort en erreur si
+6: # l'une diverge. Les valeurs sont celles publiées dans les rapports.
+7: #
+8: #   tools/portes.sh            toutes les portes
+9: #   tools/portes.sh rapide     sans gpt-oss (le seul qui prenne ~20 min)
+10: 
+11: set -u
+12: cd "$(dirname "$0")/.."
+13: D=./drave-core/target/release/drave
+14: RAPIDE=${1:-}
+15: ECHEC=0
+16: 
+17: [ -x "$D" ] || { echo "compiler d'abord : (cd drave-core && cargo build --release)"; exit 2; }
+18: 
+19: compare() {  # nom, attendu, obtenu
+20:     if [ "$2" = "$3" ]; then
+21:         printf "  %-42s %s  ✅\n" "$1" "$3"
+22:     else
+23:         printf "  %-42s %s  ❌ (attendu %s)\n" "$1" "${3:-—}" "$2"
+24:         ECHEC=1
+25:     fi
+26: }
+27: 
+28: # Attention : le moteur affiche AUSSI une perplexité cumulée par fenêtre, avant
+29: # le total. Prendre la première occurrence du motif donnait 17,431 (fenêtre 1) au
+30: # lieu de 19,3885 (t
+… [13450 caractères tronqués]
+  ```
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"compare_logits.py — l'instrument de la PORTE DE CORRECTION.\n\nCompare deux fichiers de logits au format de `tools/ref_logits` (en-tête\n`int32 n_vocab`, `int32 n_pos`, puis `n_pos * n_vocab` float32 petit-boutiste,\nune ligne par position) et rend un verdi … [6173 caractères tronqués]`
+
+  ```
+Error: cannot write "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/compare_logits.py": file changed since it was read — re-read the file, then retry
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la tools/compare_logits.py 2>&1; ls tools/ | wc -l", "description": "Check whether the target file exists"}`
+
+  ```
+-rw-------. 1 stephane stephane 4605 30 sep 23:15 tools/compare_logits.py
+55
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/compare_logits.py"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/compare_logits.py</path>
+<type>file</type>
+<content>
+1: #!/usr/bin/env python3
+2: """Compare deux fichiers de logits au format :
+3:    int32 n_vocab, int32 n_pos, puis n_pos lignes de n_vocab f32 (petit-boutiste).
+4: 
+5: Usage : compare_logits.py <notre.bin> <reference.bin> [ids.txt]
+6: 
+7: Rend : par position, la perte (NLL) de chacun, l'écart de NLL, le rang du jeton
+8: cible dans chacun, et l'accord du top-1. C'est ce qui localise une divergence :
+9: une erreur d'embedding ou de norme se voit dès la position 0 ; une erreur de
+10: position (RoPE) fait croître l'écart avec la position ; une erreur de MoE ou de
+11: tête fait décrocher toutes les positions d'un coup.
+12: """
+13: import struct, sys, math
+14: 
+15: try:
+16:     import numpy as np
+17: except ImportError:
+18:     np = None
+19: 
+20: 
+21: def lire(chemin):
+22:     with open(chemin, 'rb') as f:
+23:         n_vocab, n_pos = struct.unpack('<ii', f.read(8))
+24:         data = f.read(n_pos * n_vocab * 4)
+25:     assert len(data) == n_pos * n_vocab * 4, f"{chemin} tronqué"
+26:     if np is not None:
+27:         a = np.frombuffer(data, dtype='<f4').reshape(n_pos, n_vocab
+… [3944 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"compare_logits\" --include=*.md --include=*.sh . | head; git log --oneline -1 -- tools/compare_logits.py", "description": "Check references to compare_logits.py"}`
+
+  ```
+./reports/rapport-gpt-oss-perplexite.md:68:`tools/compare_logits.py` compare position par position.
+./reports/rapport-logits-gpu-vs-cpu.md:28:`tools/compare_logits.py` les compare position par position.
+./reports/rapport-logits-gpu-vs-cpu.md:50:lecture payé** : `compare_logits.py` n'imprimait qu'un ÉCHANTILLON de positions
+./reports/rapport-logits-gpu-vs-cpu.md:95:python3 tools/compare_logits.py /tmp/logits_cpu.bin /tmp/logits_gpu.bin /tmp/ids_oss_512.txt
+./journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md:3285:- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"Compare deux fichiers de logits au format :\n   int32 n_vocab, int32 n_pos, puis n_pos lignes de n_vocab f32 (petit-boutiste).\n\nUsage : compare_logits.py <notre.bin> <reference.bin> [ids.txt]\n\nRend : par position, la perte (NLL) de chacun, l'écart de NL … [3293 caractères tronqués]`
+./journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md:3288:<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/compare_logits.py</path>
+./journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md:3599:- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && LD_PRELOAD=/usr/lib
+… [941 caractères tronqués]
+  ```
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"Compare deux fichiers de logits au format :\n   int32 n_vocab, int32 n_pos, puis n_pos lignes de n_vocab f32 (petit-boutiste).\n\nUsage : compare_logits.py <notre.bin> <reference.bin> [ids.txt] [--porte]\n\nRend : par position, la perte (NLL) de chacun, l'é … [7456 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/compare_logits.py</path>
+<type>file</type>
+<content>
+Updated file
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/compare_logits.py", "old_string": "def nll_et_rang(ligne, cible):\n    mx = max(ligne)\n    se = sum(math.exp(v - mx) for v in ligne)\n    lse = mx + math.log(se)\n    nll = lse - ligne[cible]\n    rang = 1 + sum(1 for v in ligne i … [1723 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/compare_logits.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && wc -w /tmp/ids_v4flash.txt && time python3 tools/compare_logits.py /tmp/our_v4f64.bin /tmp/ref_v4f64.bin /tmp/ids_v4flash.txt --porte 2>&1 | tail -14; echo \"code retour = ${PIPESTATUS[0]}\"", "description": "Test the gate tool on th … [42 caractères tronqués]`
+
+  ```
+1 /tmp/ids_v4flash.txt
+   19    1166    0.8016    1.1404  -0.3388         1         2      1166       539     NON
+   20     936    3.9794    4.0496  -0.0702         8         8       344       344     oui
+   21     260    0.6526    0.5692  +0.0834         1         1       260       260     oui
+   22   20521    2.4001    2.4403  -0.0401         3         2     54693     54693     oui
+   23    2390   13.7002   13.4354  +0.2648        95        96      3615      3615     oui
+   32     455    1.6799    2.3492  -0.6692         2         4     15761     15761     oui
+
+écart |NLL| : moyenne 0.3450 · médiane 0.1785 · p90 0.9335 · max 2.0918
+accord du top-1 : 56/63  (7 positions divergentes)
+perplexité nous : 15.2520   référence : 16.2931   (63 positions comparées)
+corrélation des logits par position : min 0.954998 (pos 47) · moyenne 0.985210 · max 0.998476
+corrélation des logits (position 0) : 0.987580
+(perplexité NON jugée : 63 < 64 prédictions — sur une fenêtre courte l'écart mesure le chaos, pas le moteur)
+✅ porte de correction tenue (corrélation min 0.9550, top-1 88.9 %)
+code retour = 0
+[stderr]
+
+real	0m0,639s
+user	0m0,396s
+sys	0m0,236s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"--- moteur V4-Flash 1024 ---\" && tail -c 400 /tmp/our_v4f1024.log 2>/dev/null; ls -la /tmp/our_v4f1024.bin 2>/dev/null; pgrep -x drave >/dev/null && echo \"tourne\" || echo \"fini\"; echo \"--- ids qwen ---\"; wc -c /tmp/ids_ … [277 caractères tronqués]`
+
+  ```
+--- moteur V4-Flash 1024 ---
+ d'experts chargés : 43/43 couches · mapping absent (experts en clair dans le fichier)
+[config] puits appris sur 43/43 couches · n_rot 64 · ffn 0 · experts 256
+[config] fenêtre glissante 128 sur 43/43 couches (motif 0, toutes)
+[config] rotation : RoPE simple (contexte 1024 ≤ 65536 initial ; YaRN ×16 prendrait le relais au-delà)
+[tête 4 bits] 129280 × 4096 → 4.50 b/poids, 0 Mo, 0.0 s
+-rw-r--r--. 1 stephane stephane 0  3 oct 04:47 /tmp/our_v4f1024.bin
+tourne
+--- ids qwen ---
+21380 /tmp/ids_qwen.txt
+n = 4592
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && LD_LIBRARY_PATH=/home/stephane/Data13TB/stephane/GitHub/llama.cpp/build/bin timeout 900 ./tools/ref_logits models/Qwen2.5-0.5B-Q8_0.gguf /tmp/ids_qwen_72.txt /tmp/ref_qwen72.bin 72 2>&1 | tail -4 && ./drave-core/target/release/drave  … [394 caractères tronqués]`
+
+  ```
+n_vocab  = 151936
+NLL moy  = 3.038743
+perplexite = 20.878978
+fichier  = /tmp/ref_qwen72.bin (71 x 151936 f32 + 8 octets d'en-tete)
+=== perplexité 20.7914 sur 71 tokens (0 événements, 3.0 s) ===
+   64     220    1.5648    1.5201  +0.0447         1         1       220       220     oui
+
+écart |NLL| : moyenne 0.0391 · médiane 0.0218 · p90 0.0965 · max 0.1805
+accord du top-1 : 67/71  (4 positions divergentes)
+perplexité nous : 20.7914   référence : 20.8790   (71 positions comparées)
+corrélation des logits par position : min 0.995892 (pos 0) · moyenne 0.999440 · max 0.999797
+corrélation des logits (position 0) : 0.995892
+✅ porte de correction tenue (corrélation min 0.9959, top-1 94.4 %)
+  ```
+
+### 🤖 Assistant
+
+⏵ Wiring the correction gate into portes.sh (Qwen, 71 predictions, verdict by tool)
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/portes.sh", "new_string": "# 7quinquies. La PORTE DE CORRECTION, exécutée pour de vrai contre llama.cpp.\n#   Elle était écrite dans le plan depuis P6 et jamais lancée ; lancée, elle a\n#   montré que son critère (« même perplexité … [2482 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/portes.sh has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && { echo 'set -u'; echo 'cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet'; echo 'D=./drave-core/target/release/drave'; echo 'ECHEC=0'; sed -n '/^# 7quinquies/,/^# 8\\. Le DÉCOUPAGE/p' tools/portes.sh | head -n -1; echo 'echo \"ECHEC … [150 caractères tronqués]`
+
+  ```
+ECHEC=0
+[stderr]
+
+real	0m0,002s
+user	0m0,001s
+sys	0m0,001s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -l tools/analyse_flux.py tools/compare_logits.py tools/porte-flux.sh && chmod +x tools/compare_logits.py && bash /tmp/test_section.sh", "description": "Make the tool executable and retest the section", "timeoutMs": 600000}`
+
+  ```
+-rwxr-xr-x. 1 stephane stephane 5449  3 oct 04:19 tools/analyse_flux.py
+-rw-------. 1 stephane stephane 7944  3 oct 04:47 tools/compare_logits.py
+-rwx--x--x. 1 stephane stephane 6201  2 oct 21:28 tools/porte-flux.sh
+  porte de correction (llama.cpp, 71 positions) (corrélation min 0.9959, top-1 94.4 %)  ✅
+ECHEC=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"--- V4-Flash 1024 ---\"; tail -c 200 /tmp/our_v4f1024.log; pgrep -x drave >/dev/null && echo \"tourne\" || echo \"fini\"; echo \"--- test adverse : la porte doit SAVOIR échouer ---\"; ./drave-core/target/release/drave models/Q … [413 caractères tronqués]`
+
+  ```
+--- V4-Flash 1024 ---
+ 43/43 couches (motif 0, toutes)
+[config] rotation : RoPE simple (contexte 1024 ≤ 65536 initial ; YaRN ×16 prendrait le relais au-delà)
+[tête 4 bits] 129280 × 4096 → 4.50 b/poids, 0 Mo, 0.0 s
+tourne
+--- test adverse : la porte doit SAVOIR échouer ---
+perplexité nous : 21.1961   référence : 20.8790   (71 positions comparées)
+corrélation des logits par position : min 0.513359 (pos 0) · moyenne 0.983473 · max 0.996777
+corrélation des logits (position 0) : 0.513359
+❌ PORTE DE CORRECTION NON TENUE : corrélation minimale 0.51336 < 0.95
+code retour = 1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"La porte de correction devient un OUTIL exécutable, branché dans portes.sh (Qwen, 71 positions)\n\nLes critères écrits au bloc 23 (corrélation par position >= 0,95 min, >= 0,98 en\nmoyenne ; top-1 >=  … [690 caractères tronqués]`
