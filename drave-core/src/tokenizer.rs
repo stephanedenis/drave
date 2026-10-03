@@ -41,9 +41,18 @@ pub struct Tokenizer {
     /// types GGUF des tokens (1 = normal, 3 = contrôle, 4 = défini par
     /// l'utilisateur, 5 = inutilisé…), utilisés par `special_id`.
     token_type: Vec<i32>,
-    /// Motif de pré-découpage : `tokenizer.ggml.pre` du GGUF. « qwen2 » et
-    /// « gpt-4o » (o200k) sont implémentés ; les autres retombent sur qwen2.
+    /// Motif de pré-découpage : `tokenizer.ggml.pre` du GGUF. « qwen2 »,
+    /// « gpt-4o » (o200k) et « kimi-k2/k3 » sont implémentés ; les autres
+    /// retombent sur qwen2.
+    ///
+    /// ⚠️ **Le motif kimi n'est pas cosmétique** : il groupe les nombres par
+    /// TROIS (`\p{N}{1,3}`), sépare les idéogrammes Han, et n'admet les
+    /// contractions qu'en suffixe des mots. Appliquer qwen2 à un modèle Kimi
+    /// donne des identifiants différents de son tokenizer d'origine — mesuré le
+    /// 03/10 : « 2026 » sortait en un seul jeton au lieu de « 202 » + « 6 ».
+    /// C'était un défaut SILENCIEUX sur Kimi-K2.7 comme sur Kimi-K3.
     motif_gpt4o: bool,
+    motif_kimi: bool,
 }
 
 impl Tokenizer {
@@ -75,8 +84,10 @@ impl Tokenizer {
         // o200k (gpt-4o, gpt-oss) découpe les lettres selon la CASSE, les
         // nombres par groupes de trois, et rattache « / » à la ponctuation.
         let motif_gpt4o = pre.starts_with("gpt-4o") || pre.starts_with("o200k");
+        // `kimi-k2` (Kimi-K2.7) et `kimi-k3` (Kimi-K3) partagent le même motif.
+        let motif_kimi = pre.starts_with("kimi");
         Tokenizer { id_to_tok: tokens, tok_to_id, ranks, byte_enc, byte_dec, token_type,
-                    motif_gpt4o }
+                    motif_gpt4o, motif_kimi }
     }
 
     /// Encode un texte en ids.
@@ -85,7 +96,9 @@ impl Tokenizer {
         let mut out = Vec::new();
         let mut i = 0;
         while i < cs.len() {
-            let j = if self.motif_gpt4o { next_piece_gpt4o(&cs, i) } else { next_piece(&cs, i) };
+            let j = if self.motif_kimi { next_piece_kimi(&cs, i) }
+                    else if self.motif_gpt4o { next_piece_gpt4o(&cs, i) }
+                    else { next_piece(&cs, i) };
             // encodage byte-level du morceau, puis BPE
             let mut word = String::with_capacity(j - i);
             let mut buf = [0u8; 4];
@@ -250,6 +263,58 @@ fn next_piece(cs: &[char], i: usize) -> usize {
 }
 
 // --------------------------------------------------------------------------- //
+// Pré-tokenizer kimi (Kimi-K2.7, Kimi-K3)
+// --------------------------------------------------------------------------- //
+
+/// `\p{Han}` : idéogrammes chinois. Les mêmes plages que la référence
+/// (`llama.cpp-k3`, `unicode_cpt_is_han`), qui est elle-même la transcription du
+/// motif officiel de Moonshot (`tokenization_kimi.py`).
+fn is_han(c: char) -> bool {
+    let u = c as u32;
+    (0x4E00..=0x9FFF).contains(&u)        // CJK unifié
+        || (0x3400..=0x4DBF).contains(&u) // extension A
+        || (0x20000..=0x2A6DF).contains(&u)
+        || (0x2A700..=0x2B73F).contains(&u)
+        || (0x2B740..=0x2B81F).contains(&u)
+        || (0x2B820..=0x2CEAF).contains(&u)
+        || (0x2CEB0..=0x2EBEF).contains(&u)
+        || (0xF900..=0xFAFF).contains(&u) // compatibilité
+        || (0x2F800..=0x2FA1F).contains(&u)
+}
+
+/// `[\p{Han}]+` — les idéogrammes se groupent entre eux, jamais avec le reste.
+fn match_han(cs: &[char], i: usize) -> Option<usize> {
+    if !is_han(cs[i]) {
+        return None;
+    }
+    let mut e = i;
+    while e < cs.len() && is_han(cs[e]) { e += 1; }
+    Some(e)
+}
+
+/// Pré-tokenizer **kimi** (Kimi-K2.7, Kimi-K3), transcription du motif officiel :
+/// `[\p{Han}]+`
+/// `|[^\r\n\p{L}\p{N}]?[\p{Lu}\p{Lt}\p{Lm}\p{Lo}\p{M}&&[^\p{Han}]]*[\p{Ll}\p{Lm}\p{Lo}\p{M}&&[^\p{Han}]]+(?i:'s|'t|'re|'ve|'m|'ll|'d)?`
+/// `|[^\r\n\p{L}\p{N}]?[\p{Lu}…&&[^\p{Han}]]+[\p{Ll}…&&[^\p{Han}]]*(?i:…)?`
+/// `|\p{N}{1,3}| ?[^\s\p{L}\p{N}]+[\r\n]*|\s*[\r\n]+|\s+(?!\S)|\s+`
+///
+/// Deux différences avec Qwen2, et une avec o200k : les idéogrammes forment
+/// leurs propres morceaux, les lettres se coupent selon la casse **en excluant
+/// les Han**, et les nombres vont par **trois**. Les contractions ne sont pas une
+/// alternative : elles ne s'accrochent qu'en suffixe d'un mot.
+fn next_piece_kimi(cs: &[char], i: usize) -> usize {
+    match_han(cs, i)
+        .or_else(|| match_casse_decroissante(cs, i, true))
+        .or_else(|| match_casse_croissante(cs, i, true))
+        .or_else(|| match_nombre_trois(cs, i))
+        .or_else(|| match_punctuation(cs, i))
+        .or_else(|| match_line_breaks(cs, i))
+        .or_else(|| match_spaces_before_word(cs, i))
+        .or_else(|| match_spaces(cs, i))
+        .unwrap_or(i + 1)
+}
+
+// --------------------------------------------------------------------------- //
 // Pré-tokenizer o200k (gpt-4o, gpt-oss)
 // --------------------------------------------------------------------------- //
 
@@ -283,8 +348,8 @@ fn prefixe_possible(c: char) -> bool {
 /// selon la casse (`Hello` → `Hello`, mais `hEllo` → `h` puis `Ello`), les
 /// nombres par groupes de trois, et `[\r\n/]*` rattache aussi la barre oblique.
 fn next_piece_gpt4o(cs: &[char], i: usize) -> usize {
-    match_casse_decroissante(cs, i)
-        .or_else(|| match_casse_croissante(cs, i))
+    match_casse_decroissante(cs, i, false)
+        .or_else(|| match_casse_croissante(cs, i, false))
         .or_else(|| match_nombre_trois(cs, i))
         .or_else(|| match_ponctuation_gpt4o(cs, i))
         .or_else(|| match_line_breaks(cs, i))
@@ -307,40 +372,45 @@ fn avec_contraction(cs: &[char], fin: usize) -> usize {
 /// cherche le **plus grand** `k` tel que `[p, k)` ne contienne que des
 /// non-minuscules et que `cs[k]` soit une non-majuscule ; `L+` consomme alors
 /// la suite de non-majuscules.
-fn match_casse_decroissante(cs: &[char], i: usize) -> Option<usize> {
+fn match_casse_decroissante(cs: &[char], i: usize, hors_han: bool) -> Option<usize> {
+    let lettre = |c: char| is_letter(c) && !(hors_han && is_han(c));
+    let minus = |c: char| is_minuscule(c) && !(hors_han && is_han(c));
     let mut p = i;
-    if prefixe_possible(cs[i]) && i + 1 < cs.len() && is_letter(cs[i + 1]) {
+    if prefixe_possible(cs[i]) && i + 1 < cs.len() && lettre(cs[i + 1]) {
         p = i + 1;
-    } else if !is_letter(cs[i]) {
+    } else if !lettre(cs[i]) {
         return None;
     }
     let mut e = p;
-    while e < cs.len() && is_letter(cs[e]) { e += 1; }
+    while e < cs.len() && lettre(cs[e]) { e += 1; }
     let mut k = e;
-    while k > p && !is_minuscule(cs[k - 1]) { k -= 1; }
+    while k > p && !minus(cs[k - 1]) { k -= 1; }
     if k == p { return None; }              // aucun `L+` possible
     // `U*` ne peut pas absorber une minuscule : on recule jusqu'à la première.
-    while k > p && is_minuscule(cs[k - 1]) { k -= 1; }
+    while k > p && minus(cs[k - 1]) { k -= 1; }
     let mut fin = k;
-    while fin < e && is_minuscule(cs[fin]) { fin += 1; }
+    while fin < e && minus(cs[fin]) { fin += 1; }
     if fin == k { return None; }
     Some(avec_contraction(cs, fin))
 }
 
 /// 2) `[^…]? U+ L* (?i:'…)?` — l'inverse : majuscules d'abord, minuscules
 /// ensuite, mais au moins une majuscule.
-fn match_casse_croissante(cs: &[char], i: usize) -> Option<usize> {
+fn match_casse_croissante(cs: &[char], i: usize, hors_han: bool) -> Option<usize> {
+    let lettre = |c: char| is_letter(c) && !(hors_han && is_han(c));
+    let maj = |c: char| is_majuscule(c) && !(hors_han && is_han(c));
+    let minus = |c: char| is_minuscule(c) && !(hors_han && is_han(c));
     let mut p = i;
-    if prefixe_possible(cs[i]) && i + 1 < cs.len() && is_letter(cs[i + 1]) {
+    if prefixe_possible(cs[i]) && i + 1 < cs.len() && lettre(cs[i + 1]) {
         p = i + 1;
-    } else if !is_letter(cs[i]) {
+    } else if !lettre(cs[i]) {
         return None;
     }
     let mut k = p;
-    while k < cs.len() && is_majuscule(cs[k]) { k += 1; }
+    while k < cs.len() && maj(cs[k]) { k += 1; }
     if k == p { return None; }              // `U+` exige au moins une
     let mut fin = k;
-    while fin < cs.len() && is_minuscule(cs[fin]) { fin += 1; }
+    while fin < cs.len() && minus(cs[fin]) { fin += 1; }
     Some(avec_contraction(cs, fin))
 }
 

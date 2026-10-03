@@ -109272,3 +109272,505 @@ pas de tiktoken
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"--config et --tokenize répondent sur un modèle EN COURS de téléchargement (et le disent)\n\nSans ce chemin, il fallait attendre la fin d'un transfert de plusieurs heures pour\nsavoir ce que le fichier … [593 caractères tronqués]`
+
+  ```
+note: If you believe this is a mistake, please contact your Python installation or OS distribution provider. You can override this, at the risk of breaking your Python installation or OS, by passing --break-system-packages.
+hint: See PEP 668 for the detailed specification.
+tiktoken indisponible
+  ```
+
+- **bash** `{"command": "cd /tmp/k3ref && curl -s -L --max-time 120 -o tiktoken.model \"https://huggingface.co/moonshotai/Kimi-K3/resolve/main/tiktoken.model\" && ls -la tiktoken.model && head -3 tiktoken.model | cut -c1-200 && echo \"...\" && sed -n '4,6p' tiktoken.model | cut -c1-120 && wc -l tiktoken.model", … [93 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 2795286  3 oct 10:32 tiktoken.model
+IQ== 0
+Ig== 1
+Iw== 2
+...
+JA== 3
+JQ== 4
+Jg== 5
+163584 tiktoken.model
+  ```
+
+- **bash** `{"command": "cd /tmp/k3ref && curl -s -L --max-time 60 -o tokenization_kimi.py \"https://huggingface.co/moonshotai/Kimi-K3/resolve/main/tokenization_kimi.py\" && grep -nE \"pat_str|pattern|regex|special_tokens|def encode|bpe|mergeable\" tokenization_kimi.py | head -15; echo \"---\"; sed -n '1,40p' t … [113 caractères tronqués]`
+
+  ```
+8:from tiktoken.load import load_tiktoken_bpe
+38:            token instead. The second to last item in special_tokens.
+41:        additional_special_tokens (list of `str`, *optional*):
+43:            skipped when decoding if `skip_special_tokens` is set to `True`.
+50:    special_tokens: Dict[str, int]
+52:    num_reserved_special_tokens = 256
+54:    pat_str = "|".join([
+72:        additional_special_tokens: List[str] = None,
+78:        if additional_special_tokens is None:
+79:            additional_special_tokens = [
+91:            special_tokens_mapping = {
+96:            special_tokens_mapping = {}
+99:        mergeable_ranks = load_tiktoken_bpe(vocab_file)
+100:        num_base_tokens = len(mergeable_ranks)
+101:        self.special_tokens = {
+---
+import os
+from logging import getLogger
+from pathlib import Path
+from shutil import copyfile
+from typing import Dict, Iterator, List, Optional, Tuple, Union, cast
+
+import tiktoken
+from tiktoken.load import load_tiktoken_bpe
+from tokenizers import AddedToken
+from transformers.convert_slow_tokenizer import bytes_to_unicode
+from transformers.tokenization_utils import PreTrainedTokenizer
+
+try:
+    from .encoding_k3 import build_chat_segments, 
+… [1584 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/k3ref && sed -n '50,70p' tokenization_kimi.py", "description": "Read the tokenizer's split pattern"}`
+
+  ```
+special_tokens: Dict[str, int]
+
+    num_reserved_special_tokens = 256
+
+    pat_str = "|".join([
+        r"""[\p{Han}]+""",
+        r"""[^\r\n\p{L}\p{N}]?[\p{Lu}\p{Lt}\p{Lm}\p{Lo}\p{M}&&[^\p{Han}]]*[\p{Ll}\p{Lm}\p{Lo}\p{M}&&[^\p{Han}]]+(?i:'s|'t|'re|'ve|'m|'ll|'d)?""",
+        r"""[^\r\n\p{L}\p{N}]?[\p{Lu}\p{Lt}\p{Lm}\p{Lo}\p{M}&&[^\p{Han}]]+[\p{Ll}\p{Lm}\p{Lo}\p{M}&&[^\p{Han}]]*(?i:'s|'t|'re|'ve|'m|'ll|'d)?""",
+        r"""\p{N}{1,3}""",
+        r""" ?[^\s\p{L}\p{N}]+[\r\n]*""",
+        r"""\s*[\r\n]+""",
+        r"""\s+(?!\S)""",
+        r"""\s+""",
+    ])
+
+    def __init__(
+        self,
+        vocab_file,
+        bos_token: Union[str, AddedToken] = "[BOS]",
+        eos_token: Union[str, AddedToken] = "[EOS]",
+        unk_token: Union[str, AddedToken, None] = None,
+  ```
+
+- **bash** `{"command": "python3 -c \"import regex; print('module regex', regex.__version__)\" 2>/dev/null || echo \"pas de module regex\"; python3 -c \"\nimport base64\nr={}\nfor i,l in enumerate(open('/tmp/k3ref/tiktoken.model')):\n    p=l.split()\n    if len(p)==2: r[base64.b64decode(p[0])]=int(p[1])\nprint( … [160 caractères tronqués]`
+
+  ```
+pas de module regex
+ranks chargés : 163584
+exemples : [(b'!', 0), (b'"', 1), (b'#', 2), (b'$', 3)]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\n# Cherche le module regex ailleurs (autre interpréteur, site-packages système)\nimport glob, importlib.util\nprint(\"regex trouvé :\", importlib.util.find_spec(\"regex\") is not None)\nfor p in glob.glob('/usr/lib/python3*/site-packages/regex*') + glob.glob('/usr/lib64 … [244 caractères tronqués]`
+
+  ```
+regex trouvé : False
+   /usr/lib64/python3.14/site-packages/regex-2026.7.19.dist-info
+   /usr/lib64/python3.14/site-packages/regex
+pythons : ['/usr/bin/python3.13', '/usr/bin/python3.13-config', '/usr/bin/python3.14']
+/usr/lib64/python3.13/site-packages:
+aiohttp
+aiohttp-3.14.3.dist-info
+aioquic
+aioquic-1.3.0.dist-info
+_argon2_cffi_bindings
+argon2_cffi_bindings-25.1.0.dist-info
+audit.py
+_audit.so
+auparse.so
+backports
+backports_zstd-1.7.0.dist-info
+  ```
+
+### 🤖 Assistant
+
+⏵ Le module `regex` existe en Python 3.14 : je peux exécuter le VRAI tokenizer officiel et comparer
+
+- **bash** `{"command": "cd /tmp/k3ref && cat > verif_tokenizer.py <<'PY'\n\"\"\"Tokenizer officiel de Kimi-K3 en pur Python (pat_str du dépôt + BPE tiktoken),\npour comparer aux identifiants de notre moteur. Aucune dépendance hors `regex`.\"\"\"\nimport base64, sys, regex\n\nranks = {}\nfor ligne in open('/tmp … [1610 caractères tronqués]`
+
+  ```
+220,220,220,341
+  ```
+
+- **bash** `{"command": "cd /tmp/k3ref && /usr/bin/python3.14 - <<'PY'\nimport sys\nsys.argv=['x']\nexec(open('verif_tokenizer.py').read().split(\"if __name__\")[0])\nt = \"Le ciel est bleu.\"\nprint(\"morceaux :\", [m.group() for m in PAT.finditer(t)])\nfor m in PAT.finditer(t):\n    morceau = m.group().encode … [608 caractères tronqués]`
+
+  ```
+morceaux : [' ', ' ', ' ', '.']
+  ' '          -> [' '] -> [220]
+  ' '          -> [' '] -> [220]
+  ' '          -> [' '] -> [220]
+  '.'          -> ['.'] -> [13]
+  ```
+
+- **bash** `{"command": "cd /tmp/k3ref && sed -i 's/^PAT = regex.compile(\"|\".join(\\[$/PAT = regex.compile(\"|\".join([/' verif_tokenizer.py && python3 - <<'PY'\np='/tmp/k3ref/verif_tokenizer.py'\ns=open(p).read()\ns=s.replace(\"\"\"    r\\\"\\\"\\\"\\\\s+$\\\"\\\"\\\",\n]))\"\"\",\"\"\"    r\\\"\\\"\\\"\\\\s … [398 caractères tronqués]`
+
+  ```
+V1 ajouté : True
+3638,275,1309,3140,18965,84,341
+  ```
+
+### 🤖 Assistant
+
+⏵ Identifiants IDENTIQUES au tokenizer officiel — je passe plusieurs textes pour en faire une porte
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/compare_tk.sh <<'SH'\n#!/bin/bash\n# Compare nos identifiants à ceux du tokenizer OFFICIEL de Kimi-K3 (pur Python).\nK=/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf … [1316 caractères tronqués]`
+
+  ```
+DIVERGENCE sur : Les hyper-connexions retardées de V4.1 sont décrites dans 
+    officiel : 57047,23891,12,16670,471,808,133435,31680,511,932,19,13,16,45506,78648,118327,20937,655,98482,4275,2
+    nous     : 57047,23891,12,16670,471,808,133435,31680,511,932,19,13,16,45506,78648,118327,20937,655,98482,4275,2
+  DIVERGENCE sur : The quick brown fox jumps over the lazy dog. It's 2026, isn'
+    officiel : 1008,5072,16331,69275,60062,1312,276,29292,7751,13,8629,220,2975,21,11,12531,483,30
+    nous     : 1008,5072,16331,69275,60062,1312,276,29292,7751,13,1344,1048,220,17,15,17,21,11,10314,1769,483,30
+  DIVERGENCE sur : def matvec(w, x):\n    return sum(a*b for a, b in zip(w, x))
+    officiel : 1166,3271,8822,6546,11,1288,41536,77,274,745,5547,5372,33566,395,261,11,291,306,17937,6546,11,1288,1
+    nous     : 1166,3271,8822,6546,11,1288,41536,77,274,745,5547,5372,33566,395,261,11,291,306,17937,6546,11,1288,1
+  DIVERGENCE sur : 0123456789 12345 999999 3.14159 -273.15
+    officiel : 16349,18439,22523,24,220,6694,2899,220,11275,11275,220,18,13,18702,6276,635,32534,13,1308
+    nous     : 15,16,17,18,19,20,21,22,23,24,220,16,17,18,19,20,220,24,24,24,24,24,24,220,18,13,16,19,16,20,24,635,
+identiqu
+… [23 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Trouvé une divergence réelle AVANT de faire tourner le modèle : les chiffres ne sont pas groupés par 3 comme l'exige le tokenizer officiel
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/lire_meta_gguf.py /home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf 2>&1 | grep -iE \"tokenizer\" | cut -c1-160; echo \"=== motifs de notre tokenizer ===\"; grep -n  … [174 caractères tronqués]`
+
+  ```
+tokenizer.ggml.model = gpt2
+tokenizer.ggml.pre = kimi-k2
+tokenizer.ggml.tokens = ['!', '"', '#', '$', '%', '&', "'", '(', ')', '*', '+', ',', '-', '.', '/', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ':', ';', 
+tokenizer.ggml.token_type = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+tokenizer.ggml.merges = ['Ġ Ġ', 'ĠĠ ĠĠ', 'Ġ t', 'i n', 'ä ¸', 'Ġ a', 'e r', 'o n', 'r e', 'h e', 'a t', 'ç ļ', 'o r', 'çļ Ħ', 's t', 'e n', 'ã Ģ', 'ä º', 'ĠĠ Ġ'
+tokenizer.ggml.bos_token_id = 163584
+tokenizer.ggml.eos_token_id = 163586
+tokenizer.ggml.padding_token_id = 163839
+tokenizer.chat_template = {#- Kimi-K3 template transcribed from the official parser -#}
+=== motifs de notre tokenizer ===
+6://!   1. découpage du texte par le pré-tokenizer, motif `qwen2` :
+20://! motif ci-dessus, à la seule exception des marques combinantes signalées
+44:    /// Motif de pré-découpage : `tokenizer.ggml.pre` du GGUF. « qwen2 » et
+46:    motif_gpt4o: bool,
+56:               pre: &str) -> Self {
+77:        let motif_gpt4o = pre.starts_with("gpt-4o") || pre.starts_with("o200k");
+79:                    motif_gpt4o }
+88:        
+… [319 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp-k3 && grep -rn \"kimi-k2\\|kimi_k2\" src/ | head -5; echo \"=== motif kimi dans llama.cpp ===\"; grep -n \"kimi\" -A 30 src/llama-vocab.cpp | grep -E \"regex|pattern|kimi|\\\\\\\\p\" | head -20", "description": "Find llama.cpp's kimi- … [18 caractères tronqués]`
+
+  ```
+src/llama-chat.cpp:78:    { "kimi-k2",           LLM_CHAT_TEMPLATE_KIMI_K2           },
+src/llama-vocab.cpp:2029:            const bool is_kimi_k2 = (tokenizer_pre == "kimi-k2");
+src/llama-vocab.cpp:2032:                if (!is_kimi_k2) {
+src/llama-vocab.cpp:2431:                tokenizer_pre == "kimi-k2") {
+src/unicode.cpp:777:static std::vector<size_t> unicode_regex_split_custom_kimi_k2(const std::string & text, const std::vector<size_t> & offsets) {
+=== motif kimi dans llama.cpp ===
+2029:            const bool is_kimi_k2 = (tokenizer_pre == "kimi-k2");
+2032:                if (!is_kimi_k2) {
+2431:                tokenizer_pre == "kimi-k2") {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp-k3 && sed -n '777,860p' src/unicode.cpp", "description": "Read llama.cpp's kimi-k2 pre-tokenizer"}`
+
+  ```
+static std::vector<size_t> unicode_regex_split_custom_kimi_k2(const std::string & text, const std::vector<size_t> & offsets) {
+    std::vector<size_t> bpe_offsets;
+    bpe_offsets.reserve(offsets.size());
+
+    const auto cpts = unicode_cpts_from_utf8(text);
+
+    size_t start = 0;
+    for (auto offset : offsets) {
+        const size_t offset_ini = start;
+        const size_t offset_end = start + offset;
+        assert(offset_end <= cpts.size());
+        start = offset_end;
+
+        static const uint32_t OUT_OF_RANGE = 0xFFFFFFFF;
+        auto _get_cpt = [&] (const size_t pos) -> uint32_t {
+            return (offset_ini <= pos && pos < offset_end) ? cpts[pos] : OUT_OF_RANGE;
+        };
+
+        auto _get_flags = [&] (const size_t pos) -> unicode_cpt_flags {
+            return (offset_ini <= pos && pos < offset_end) ? unicode_cpt_flags_from_cpt(cpts[pos]) : unicode_cpt_flags{};
+        };
+
+        size_t _prev_end = offset_ini;
+        auto _add_token = [&] (const size_t end) -> size_t {
+            assert(_prev_end <= end && end <= offset_end);
+            size_t len = end - _prev_end;
+            if (len > 0) {
+                bpe_offsets.push_back(len);
+            }
+            _
+… [2883 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp-k3 && sed -n '860,935p' src/unicode.cpp", "description": "Read the rest of the kimi-k2 pattern"}`
+
+  ```
+} else if (pos + 2 < offset_end) {
+                            uint32_t cpt_next_next = unicode_tolower(_get_cpt(pos + 2));
+                            if ((cpt_next == 'r' && cpt_next_next == 'e') ||
+                                (cpt_next == 'v' && cpt_next_next == 'e') ||
+                                (cpt_next == 'l' && cpt_next_next == 'l')) {
+                                pos += 3;
+                            }
+                        }
+                    }
+
+                    _add_token(pos);
+                    continue;
+                } else if (has_leading_char) {
+                    // We consumed a leading char but found no letters, backtrack
+                    pos--;
+                }
+            }
+
+            // Pattern 4: \p{N}{1,3} (numbers 1-3 digits)
+            if (flags.is_number) {
+                size_t ini = pos;
+                while (_get_flags(pos).is_number) {
+                    if (++pos - ini >= 3) {
+                        _add_token(pos);
+                        ini = pos;
+                    }
+                }
+                _add_token(pos);
+                continue;
+            }
+
+            // Pattern 5:  ?[^\s\p{L}\p{N}]+[\r\n]* (op
+… [1804 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/lire_meta_gguf.py /home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K2.7-Code-UD-IQ1_M/Kimi-K2.7-Code-UD-IQ1_M-00001-of-00008.gguf 2>&1 | grep -E \"ggml.pre|ggml.model\" ; grep -n \"fn est_lettre\\|fn est_chiffre\\|fn  … [178 caractères tronqués]`
+
+  ```
+tokenizer.ggml.model = gpt2
+tokenizer.ggml.pre = kimi-k2
+238:fn next_piece(cs: &[char], i: usize) -> usize {
+285:fn next_piece_gpt4o(cs: &[char], i: usize) -> usize {
+  ```
+
+### 🤖 Assistant
+
+⏵ Le défaut touche aussi Kimi-K2.7 (`pre = kimi-k2`) : j'implémente le motif officiel dans notre tokenizer
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '195,290p' drave-core/src/tokenizer.rs", "description": "Read our pre-tokenizer implementation"}`
+
+  ```
+bs.push(b);
+            cs.push(256 + n);
+            n += 1;
+        }
+    }
+    let mut table = ['\0'; 256];
+    for (&b, &c) in bs.iter().zip(cs.iter()) {
+        table[b as usize] = char::from_u32(c).expect("point de code valide");
+    }
+    table
+}
+
+/// `\p{L}` du motif.
+///
+/// La std n'expose pas les catégories Unicode, seulement la propriété dérivée
+/// `Alphabetic` (`char::is_alphabetic`), qui contient EN PLUS ~1 700 marques
+/// combinantes (`Mn`/`Mc` de `Other_Alphabetic` : matras indiens, voyelles
+/// thaïes, harakat arabes, points hébreux…). Conséquence : sur du texte qui
+/// contient ces marques (hindi, thaï, arabe vocalisé, accents décomposés), les
+/// morceaux diffèrent du vrai Qwen2 ; sur du texte NFC (latin, grec,
+/// cyrillique, CJK, emoji) les deux coïncident exactement.
+fn is_letter(c: char) -> bool {
+    c.is_alphabetic()
+}
+
+/// `\p{N}` : `char::is_numeric` couvre exactement les catégories Nd, Nl et No.
+fn is_number(c: char) -> bool {
+    c.is_numeric()
+}
+
+/// `\s` : la propriété Unicode White_Space, exactement `char::is_whitespace`.
+fn is_space(c: char) -> bool {
+    c.is_whitespace()
+}
+
+/// Pré-tokenizer Qwen2, appliqué au caractère `i` :
+/// `(?i:'s|'t|'re|'
+… [2922 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/^fn match_casse_decroissante/,/^}/p' drave-core/src/tokenizer.rs; sed -n '/^fn match_casse_croissante/,/^}/p' drave-core/src/tokenizer.rs | head -30; grep -n \"fn match_contraction\" -A 20 drave-core/src/tokenizer.rs | head  … [56 caractères tronqués]`
+
+  ```
+fn match_casse_decroissante(cs: &[char], i: usize) -> Option<usize> {
+    let mut p = i;
+    if prefixe_possible(cs[i]) && i + 1 < cs.len() && is_letter(cs[i + 1]) {
+        p = i + 1;
+    } else if !is_letter(cs[i]) {
+        return None;
+    }
+    let mut e = p;
+    while e < cs.len() && is_letter(cs[e]) { e += 1; }
+    let mut k = e;
+    while k > p && !is_minuscule(cs[k - 1]) { k -= 1; }
+    if k == p { return None; }              // aucun `L+` possible
+    // `U*` ne peut pas absorber une minuscule : on recule jusqu'à la première.
+    while k > p && is_minuscule(cs[k - 1]) { k -= 1; }
+    let mut fin = k;
+    while fin < e && is_minuscule(cs[fin]) { fin += 1; }
+    if fin == k { return None; }
+    Some(avec_contraction(cs, fin))
+}
+fn match_casse_croissante(cs: &[char], i: usize) -> Option<usize> {
+    let mut p = i;
+    if prefixe_possible(cs[i]) && i + 1 < cs.len() && is_letter(cs[i + 1]) {
+        p = i + 1;
+    } else if !is_letter(cs[i]) {
+        return None;
+    }
+    let mut k = p;
+    while k < cs.len() && is_majuscule(cs[k]) { k += 1; }
+    if k == p { return None; }              // `U+` exige au moins une
+    let mut fin = k;
+    while fin < cs.len() && is_minuscule(
+… [780 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp-k3 && grep -n \"unicode_cpt_is_han\" -A 20 src/unicode.cpp | head -28", "description": "Read the Han ranges from the reference"}`
+
+  ```
+815:            if (unicode_cpt_is_han(cpt)) {
+816:                while (unicode_cpt_is_han(_get_cpt(pos))) {
+817-                    pos++;
+818-                }
+819-                _add_token(pos);
+820-                continue;
+821-            }
+822-
+823-            // Pattern 2 & 3: Letter words excluding Han characters with optional contractions
+824-            // [^\r\n\p{L}\p{N}]?[\p{Lu}\p{Lt}\p{Lm}\p{Lo}\p{M}&&[^\p{Han}]]*[\p{Ll}\p{Lm}\p{Lo}\p{M}&&[^\p{Han}]]+(?:'s|'t|'re|'ve|'m|'ll|'d)?
+825-            // [^\r\n\p{L}\p{N}]?[\p{Lu}\p{Lt}\p{Lm}\p{Lo}\p{M}&&[^\p{Han}]]+[\p{Ll}\p{Lm}\p{Lo}\p{M}&&[^\p{Han}]]*(?:'s|'t|'re|'ve|'m|'ll|'d)?
+826-            // Check if current char is a letter OR if current char could be a leading char and next char is a letter
+827:            bool is_letter_pattern = (flags.is_letter && !unicode_cpt_is_han(cpt)) ||
+828-                                     (!(cpt == '\r' || cpt == '\n' || flags.is_letter || flags.is_number) &&
+829:                                      _get_flags(pos + 1).is_letter && !unicode_cpt_is_han(_get_cpt(pos + 1)));
+830-
+831-            if (is_letter_pattern) {
+832-                // Handle optional leading non-letter/non-nu
+… [523 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp-k3 && grep -n \"bool unicode_cpt_is_han\" -A 12 src/unicode.cpp", "description": "Get the exact Han range test"}`
+
+  ```
+1184:bool unicode_cpt_is_han(uint32_t cpt) {
+1185-    // Han character ranges (Chinese/CJK characters)
+1186-    // CJK Unified Ideographs (most common)
+1187-    if (cpt >= 0x4E00 && cpt <= 0x9FFF) return true;
+1188-
+1189-    // CJK Extension A
+1190-    if (cpt >= 0x3400 && cpt <= 0x4DBF) return true;
+1191-
+1192-    // CJK Extension B
+1193-    if (cpt >= 0x20000 && cpt <= 0x2A6DF) return true;
+1194-
+1195-    // CJK Extension C
+1196-    if (cpt >= 0x2A700 && cpt <= 0x2B73F) return true;
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp-k3 && sed -n '1196,1220p' src/unicode.cpp", "description": "Read the remaining Han ranges"}`
+
+  ```
+if (cpt >= 0x2A700 && cpt <= 0x2B73F) return true;
+
+    // CJK Extension D
+    if (cpt >= 0x2B740 && cpt <= 0x2B81F) return true;
+
+    // CJK Extension E
+    if (cpt >= 0x2B820 && cpt <= 0x2CEAF) return true;
+
+    // CJK Extension F
+    if (cpt >= 0x2CEB0 && cpt <= 0x2EBEF) return true;
+
+    // CJK Compatibility Ideographs
+    if (cpt >= 0xF900 && cpt <= 0xFAFF) return true;
+
+    // CJK Compatibility Ideographs Supplement
+    if (cpt >= 0x2F800 && cpt <= 0x2FA1F) return true;
+
+    return false;
+}
+
+std::vector<std::string> unicode_regex_split(const std::string & text, const std::vector<std::string> & regex_exprs, bool byte_encode) {
+    // unicode categories
+    static const std::map<std::string, int> k_ucat_enum = {
+        { "\\p{N}", unicode_cpt_flags::NUMBER },
+        { "\\p{L}", unicode_cpt_flags::LETTER },
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '40,95p' drave-core/src/tokenizer.rs", "description": "Read the tokenizer struct and motif dispatch"}`
+
+  ```
+byte_dec: HashMap<char, u8>,
+    /// types GGUF des tokens (1 = normal, 3 = contrôle, 4 = défini par
+    /// l'utilisateur, 5 = inutilisé…), utilisés par `special_id`.
+    token_type: Vec<i32>,
+    /// Motif de pré-découpage : `tokenizer.ggml.pre` du GGUF. « qwen2 » et
+    /// « gpt-4o » (o200k) sont implémentés ; les autres retombent sur qwen2.
+    motif_gpt4o: bool,
+}
+
+impl Tokenizer {
+    /// `tokens`, `merges` et `token_type` viennent des métadonnées GGUF.
+    ///
+    /// `merges` contient des chaînes « a b » : la coupure se fait au **premier**
+    /// espace (comme `str.partition(" ")` en Python), le reste — espaces
+    /// compris — formant le second symbole.
+    pub fn new(tokens: Vec<String>, merges: Vec<String>, token_type: Vec<i32>,
+               pre: &str) -> Self {
+        let mut tok_to_id = HashMap::with_capacity(tokens.len());
+        for (i, t) in tokens.iter().enumerate() {
+            tok_to_id.insert(t.clone(), i as u32);
+        }
+        let mut ranks = HashMap::with_capacity(merges.len());
+        for (i, m) in merges.iter().enumerate() {
+            let (a, b) = match m.find(' ') {
+                Some(p) => (&m[..p], &m[p + 1..]),
+                None => (m
+… [1375 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cp drave-core/src/tokenizer.rs /tmp/tokenizer.rs.bak && python3 - <<'PY'\np='drave-core/src/tokenizer.rs'\ns=open(p).read()\n\n# 1. champ + construction\ns = s.replace(\"\"\"    /// Motif de pré-découpage : `tokenizer.ggml.pre` du GG … [8303 caractères tronqués]`
+
+  ```
+tokenizer.rs patché
+--- fin build ---
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && printf '%s\\x1e' \\\n \"Le ciel est bleu.\" \\\n \"Les hyper-connexions retardées de V4.1 sont décrites dans le rapport — 42 % d'écart, 3,7e-05 près.\" \\\n \"The quick brown fox jumps over the lazy dog. It's 2026, isn't it?\" \\\n \ … [338 caractères tronqués]`
+
+  ```
+identiques : 7 · divergents : 0
+  ```
+
+### 🤖 Assistant
+
+⏵ Motif kimi implémenté : 7 textes sur 7 identiques au tokenizer officiel (dont le chinois)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo test --release 2>&1 | grep -E \"^test result|FAILED|tokenizer\" | head -8; cd .. && echo \"=== réversibilité Qwen (non-régression du motif qwen2) ===\" && printf 'Le ciel est bleu. 2026 and 汉字.' > /tmp/q.txt && ./dra … [214 caractères tronqués]`
+
+  ```
+test result: ok. 64 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+=== réversibilité Qwen (non-régression du motif qwen2) ===
+18 tokens écrits dans /tmp/q_ids.txt (vocabulaire du modèle : 151936)
+réversibilité : texte reconstruit identique ✅ (34 octets)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Défaut SILENCIEUX corrigé : le motif de pré-découpage kimi manquait (Kimi-K2.7 ET Kimi-K3)\n\nNotre tokenizer retombait sur le motif qwen2 pour tout ce qui n'était ni qwen2 ni\ngpt-4o — donc pour \\`p … [771 caractères tronqués]`

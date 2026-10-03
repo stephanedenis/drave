@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 115.8 h |
+| Durée | 115.9 h |
 | Tours | 90 |
-| Messages | 6869 |
-| Appels d'outils | 6568 |
+| Messages | 6893 |
+| Appels d'outils | 6592 |
 | Fichiers touchés | 135 |
-| Commandes | 5544 |
+| Commandes | 5568 |
 | Sous-agents | 32 |
-| Commits | 445 |
+| Commits | 446 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -4475,7 +4475,7 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 
 ### Tour 90 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [942 caractères tronqués]
 
-*130 appels d'outils.* Actions notables :
+*154 appels d'outils.* Actions notables :
 
 - bash — Check the gate suite result
 - bash — Wait for the gates
@@ -4491,11 +4491,11 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 - bash — Find the plan's remaining items
 - bash — Extract each phase's gate claims
 - read
-- … et 112 autres
+- … et 136 autres
 
 **Synthèse produite :**
 
-⏵ Porte de correction sur le tokenizer Kimi-K3, possible AVANT la fin du téléchargement
+⏵ Motif kimi implémenté : 7 textes sur 7 identiques au tokenizer officiel (dont le chinois)
 
 ## 3. Travail accompli
 
@@ -4716,7 +4716,7 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5504 autres
+- … et 5528 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5309,4 +5309,5 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 - Sprint 27 : porte P1 fermée (et elle révèle une permutation), portes auditées P0-P9, porte à ctx 1024 tenue sous critère révisé, bascule vers Kimi-K3  Rétro : u
 - Spécification de l'architecture Kimi-K3, tirée de la référence (llama.cpp-k3 + code publié)  Mesuré dans le fichier : 93 couches, dont 1 dense ; KDA (delta-net,
 - --config et --tokenize répondent sur un modèle EN COURS de téléchargement (et le disent)  Sans ce chemin, il fallait attendre la fin d'un transfert de plusieurs
+- Défaut SILENCIEUX corrigé : le motif de pré-découpage kimi manquait (Kimi-K2.7 ET Kimi-K3)  Notre tokenizer retombait sur le motif qwen2 pour tout ce qui n'étai
 
