@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 116.4 h |
-| Tours | 91 |
-| Messages | 6961 |
-| Appels d'outils | 6656 |
-| Fichiers touchés | 139 |
-| Commandes | 5628 |
+| Durée | 116.7 h |
+| Tours | 92 |
+| Messages | 6984 |
+| Appels d'outils | 6676 |
+| Fichiers touchés | 141 |
+| Commandes | 5646 |
 | Sous-agents | 32 |
-| Commits | 456 |
+| Commits | 457 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -227,6 +227,8 @@
 **Tour 90** — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en respectant pour chaque phase ses deux portes : porte de correction (comparaison étage par étage à llama.cpp sur V4-Flash) et porte Drave (flux : événements/paires par jeton, trace rejouée à l'identique, découpage en grappes, flux lisible par un outil d'analyse). Aucune phase ne passe … [662 caractères tronqués]
 
 **Tour 91** — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas en local (classe Kimi-K3 Q4 : 1,5 To de poids, ~35 Go de poids par jeton), et étudier/implémenter ce qui nous distingue sur cette classe : découpage par experts et en grappes (chaque nœud ne lit que ce qu'il sert), réutilisation des experts entre jetons, transport de flux compact  … [966 caractères tronqués]
+
+**Tour 92** — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas en local (classe Kimi-K3 Q4 : 1,5 To de poids, ~35 Go de poids par jeton), et étudier/implémenter ce qui nous distingue sur cette classe : découpage par experts et en grappes (chaque nœud ne lit que ce qu'il sert), réutilisation des experts entre jetons, transport de flux compact  … [966 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -4520,7 +4522,7 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 
 ### Tour 91 — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas e … [1246 caractères tronqués]
 
-*19 appels d'outils.* Actions notables :
+*20 appels d'outils.* Actions notables :
 
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/budget_execution_locale.py`
 - bash — Validate the budget tool on V4-Flash
@@ -4536,11 +4538,63 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 - bash — Run all tests and commit the KDA
 - bash — Check the download progress
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/29-87-go-par-jeton-et-la-recurrence-du-kda.md`
+- … et 6 autres
+
+**Synthèse produite :**
+
+⏵ Bloc 29 livré : un chiffre faux corrigé, les outils qui disent leur périmètre, et le KDA vérifié
+
+**Le fait qui change les priorités — mesuré, et il corrige un chiffre que j'avais publié hier :**
+
+| ce qu'un jeton de Kimi-K3 Q4 lit | Go |
+|---|---|
+| **attention** (q/k/v/o, `ssm_*`, compresseur) — **dense** | **48,7** |
+| experts routés (16 sur 896) | 24,7 |
+| experts partagés (2) | 12,4 |
+| tête + scores résiduels | 1,3 |
+| **TOTAL** | **87,0** (5,8 % du modèle) |
+
+J'annonçais **35 Go** : c'était le chiffre des **experts seuls** (l'outil avait été écrit pour la question du MoE, et son nom ne le disait pas). Deux conséquences :
+1. **L'attention pèse plus que les experts** → un dispositif qui ne traite que le MoE laisse **56 % du trafic** de côté ;
+2. **62,3 Go de partie dense** doivent être **résidents** (elle tient dans nos 125 Go — mais pas en même temps que V4.1-Flash, donc ce qui vit en cache devient un arbitrage), et 24,7 Go sont routés.
+
+Et la conclusion qui compte : **aucun placement ne rend 87 Go/jeton interactif** (disque dur 435 s, NVMe 43 s, dense en RAM + experts en streaming 14,8 s, deux nœuds 8,6 s, tout en RAM 4,4 s). **Il faut de la réutilisation** — 16 experts sur 896 = 1,8 % par jeton — et c'est le jalon M6, à faire *avant* d'écrire un cache.
+
+**Outils** : `tools/budget_execution_locale.py` (total + ce que chaque placement implique, avec les débits mesurés de cette machine) ; `analyse_octets_par_jeton.py` **annonce maintenant** qu'il ne compte que les experts ; correction propagée (plan, spec, rapport GPU : V4-Flash passe de 2,669 à **8,56 Go/jeton** au total, cohérent avec le compteur de paires du profileur).
+
+**KDA (delta-net) — la pièce la plus lourde, déjà debout et testée sans poids** :
+- `kda_pas` : `s ← s·exp(g)` ; `sk = sᵀk` ; `s += k ⊗ (β(v − sk))` ; `o = sᵀq` — **contre une référence NumPy en f64** (état *et* sortie, conventions `i`=clé/`j`=valeur verrouillées) ;
+- `kda_porte` : `g = −5·σ(exp(A_log)·z)`, avec le piège documenté (le fichier stocke `−exp(A_log)` ; un signe inversé donne une porte **positive**, donc un état qui *croît*) ;
+- `kda_conv_silu` : noyau 4 causal + SiLU, état **canal-majeur** — et c'est un **test qui a attrapé** l'inversion de disposition (l'état est canal-majeur, les poids ont le noyau contigu).
+
+Avec SiTU et l'attention résiduelle, ça fait **10 tests pour Kimi-K3**, et **77 tests verts** au total.
+
+**En cours** : téléchargement à **379 Go / 1 508** (~105 Mo/s, fin vers 14h10). Dès qu'il est complet : 
+… [427 caractères tronqués]
+
+### Tour 92 — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas e … [1246 caractères tronqués]
+
+*19 appels d'outils.* Actions notables :
+
+- bash — Find the expert routing trace facility
+- bash — Read the trace format and the existing routing report
+- bash — Check the trace format and Qwen3-235B config
+- bash — Budget and tokenization for Qwen3-235B
+- bash — Run Qwen3-235B with the routing trace
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/analyse_reutilisation_experts.py`
+- bash — Check the trace run
+- bash — Run a fast MoE trace on Qwen3-30B
+- bash — Diagnose the Qwen3-30B failure
+- bash — Run the Qwen3-30B trace with the correct path
+- bash — See the Qwen3-30B abort reason
+- bash — Tokenize then run the Qwen3-30B trace
+- bash — Check the running engines and trace progress
+- bash — Run the Qwen3-30B trace alone
 - … et 5 autres
 
 **Synthèse produite :**
 
-⏵ Le KDA (delta-net) : lecture complète du chemin autorégressif avant de l'implémenter
+⏵ Réutilisation mesurée : 46,9 % immédiate, 82,7 % de plafond, 74,8 % avec 32 experts/layer
 
 ## 3. Travail accompli
 
@@ -4687,6 +4741,8 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/budget_execution_locale.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-budget-kimi-k3.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/29-87-go-par-jeton-et-la-recurrence-du-kda.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/analyse_reutilisation_experts.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-reutilisation-experts.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -4765,7 +4821,7 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5588 autres
+- … et 5606 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4893,7 +4949,7 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 
 ## 5. Erreurs rencontrées
 
-337 sorties en erreur ou divergentes. Les premières :
+341 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -5369,4 +5425,5 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 - KDA (delta-net de Kimi-K3) : la récurrence implémentée et vérifiée contre une référence NumPy  kda_pas : s ← s·exp(g) ; sk = sᵀk ; s += k ⊗ (β(v − sk)) ; o = sᵀ
 - Sprint 29 : 87 Go par jeton (l'attention dépasse les experts), outils qui disent leur périmètre, et la récurrence du KDA vérifiée" && git log --oneline -1; echo
 - KDA : porte bornée et convolution courte implémentées et testées — le test a attrapé une inversion de disposition d'état  kda_porte : g = -5·sigma(exp(A_log)·z)
+- Réutilisation des experts MESURÉE : 46,9 % immédiate, 74,8 % avec le quart le plus chaud en cache  Trace de routage (DRAVE_TRACE_EXPERTS) sur Qwen3-30B-A3B : 48
 

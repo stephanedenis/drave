@@ -110883,3 +110883,322 @@ test result: ok. 77 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fin
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/architecture-kimi-k3.md'\ns=open(p).read()\ns=s.replace(\"\"\"Le contrat de la couche, tel que la référence le montre :\"\"\",\n\"\"\"**Ce qui est déjà implémenté et testé (sans poids)** : la **porte de décr … [1267 caractères tronqués]`
+
+  ```
+spec complétée
+b97f929 KDA : porte bornée et convolution courte implémentées et testées — le test a attrapé une inversion de disposition d'état
+11:08:04    10.7 Go / 49.1 Go (21.9 %, 107 Mo/s)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short | head -3; echo \"--- 5 derniers commits ---\"; git log --oneline -5 | cat; echo \"--- téléchargement ---\"; du -sh /home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL; tail -1 /tmp/dl_k3.log; echo \"- … [160 caractères tronqués]`
+
+  ```
+M journal/README.md
+--- 5 derniers commits ---
+b97f929 KDA : porte bornée et convolution courte implémentées et testées — le test a attrapé une inversion de disposition d'état
+69cbff0 Sprint 29 : 87 Go par jeton (l'attention dépasse les experts), outils qui disent leur périmètre, et la récurrence du KDA vérifiée
+984663d KDA (delta-net de Kimi-K3) : la récurrence implémentée et vérifiée contre une référence NumPy
+05a906b CORRECTION : un jeton de Kimi-K3 lit 87 Go de poids (pas 35) — et c'est l'ATTENTION qui domine, pas les experts
+f536b53 Spec Kimi-K3 : le KDA, sa porte bornée à -5, ses trois chemins de référence et les tenseurs qui serviront de points de comparaison
+--- téléchargement ---
+379G	/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL
+11:08:34    13.7 Go / 49.1 Go (27.9 %, 105 Mo/s)
+--- tests ---
+test result: ok. 77 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+  ```
+
+### 🤖 Assistant
+
+⏵ Bloc 29 livré : un chiffre faux corrigé, les outils qui disent leur périmètre, et le KDA vérifié
+
+**Le fait qui change les priorités — mesuré, et il corrige un chiffre que j'avais publié hier :**
+
+| ce qu'un jeton de Kimi-K3 Q4 lit | Go |
+|---|---|
+| **attention** (q/k/v/o, `ssm_*`, compresseur) — **dense** | **48,7** |
+| experts routés (16 sur 896) | 24,7 |
+| experts partagés (2) | 12,4 |
+| tête + scores résiduels | 1,3 |
+| **TOTAL** | **87,0** (5,8 % du modèle) |
+
+J'annonçais **35 Go** : c'était le chiffre des **experts seuls** (l'outil avait été écrit pour la question du MoE, et son nom ne le disait pas). Deux conséquences :
+1. **L'attention pèse plus que les experts** → un dispositif qui ne traite que le MoE laisse **56 % du trafic** de côté ;
+2. **62,3 Go de partie dense** doivent être **résidents** (elle tient dans nos 125 Go — mais pas en même temps que V4.1-Flash, donc ce qui vit en cache devient un arbitrage), et 24,7 Go sont routés.
+
+Et la conclusion qui compte : **aucun placement ne rend 87 Go/jeton interactif** (disque dur 435 s, NVMe 43 s, dense en RAM + experts en streaming 14,8 s, deux nœuds 8,6 s, tout en RAM 4,4 s). **Il faut de la réutilisation** — 16 experts sur 896 = 1,8 % par jeton — et c'est le jalon M6, à faire *avant* d'écrire un cache.
+
+**Outils** : `tools/budget_execution_locale.py` (total + ce que chaque placement implique, avec les débits mesurés de cette machine) ; `analyse_octets_par_jeton.py` **annonce maintenant** qu'il ne compte que les experts ; correction propagée (plan, spec, rapport GPU : V4-Flash passe de 2,669 à **8,56 Go/jeton** au total, cohérent avec le compteur de paires du profileur).
+
+**KDA (delta-net) — la pièce la plus lourde, déjà debout et testée sans poids** :
+- `kda_pas` : `s ← s·exp(g)` ; `sk = sᵀk` ; `s += k ⊗ (β(v − sk))` ; `o = sᵀq` — **contre une référence NumPy en f64** (état *et* sortie, conventions `i`=clé/`j`=valeur verrouillées) ;
+- `kda_porte` : `g = −5·σ(exp(A_log)·z)`, avec le piège documenté (le fichier stocke `−exp(A_log)` ; un signe inversé donne une porte **positive**, donc un état qui *croît*) ;
+- `kda_conv_silu` : noyau 4 causal + SiLU, état **canal-majeur** — et c'est un **test qui a attrapé** l'inversion de disposition (l'état est canal-majeur, les poids ont le noyau contigu).
+
+Avec SiTU et l'attention résiduelle, ça fait **10 tests pour Kimi-K3**, et **77 tests verts** au total.
+
+**En cours** : téléchargement à **379 Go / 1 508** (~105 Mo/s, fin vers 14h10). Dès qu'il est complet : (1) re-mesurer le budget sur le fichier entier — les 87 Go sont une extrapolation de 25 couches sur 93, et ça doit devenir un chiffre mesuré ; (2) baseline de la référence `llama.cpp-k3` (jetons/s, mémoire, logits) ; (3) l'implémentation étage par étage — embarquement, couche dense 0, KDA, MLA, MoE latent, attention résiduelle — chaque étage comparé aux points de contrôle de la référence **avant** de regarder la perplexité.
+
+
+## Tour 92
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas en local (classe Kimi-K3 Q4 : 1,5 To de poids, ~35 Go de poids par jeton), et étudier/implémenter ce qui nous distingue sur cette classe : découpage par experts et en grappes (chaque nœud ne lit que ce qu'il sert), réutilisation des experts entre jetons, transport de flux compact (listes DRVF), noyaux rapides (SIMD, déquantification bit-exacte), et mesure systématique (octets par jeton, débits, seuils). Les modèles périmés (DeepSeek-V4-Flash) sortent du chemin critique : leurs acquis sont conservés dans les rapports, leurs portes archivées. Règles inchangées : jamais de forward muet, jamais d'optimisation qui change une sortie sans le dire, une affirmation sans mesure n'est pas une affirmation."
+Round: 18/30
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Bloc 30 : mesurer la RÉUTILISATION des experts (la question qui décide de tout) sur un gros MoE local
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"TRACE_EXPERTS\" drave-core/src/*.rs | head -5; ls reports/ | grep -iE \"routage|expert\" | head -6; grep -rn \"trace.*expert\\|experts.*trace\" docs/*.md | head -6", "description": "Find the expert routing trace facility"}`
+
+  ```
+drave-core/src/main.rs:28:    "SANS_BLOCS", "SANS_COMPRESSION", "SIMD_DOT", "TRACE_EXPERTS", "V41_SANS_RETARD",
+drave-core/src/model.rs:2390:    /// **Trace de routage** (`DRAVE_TRACE_EXPERTS=chemin`) : une ligne par
+drave-core/src/model.rs:4136:            trace_experts: std::env::var("DRAVE_TRACE_EXPERTS").ok().and_then(|c| {
+rapport-mla-experts.md
+rapport-routage-experts.md
+docs/architecture-kimi-k3.md:225:3. la porte Drave ensuite : trace de routage des 896 experts (réutilisation entre
+docs/format-clusters.md:94:# trace de routage (facultative mais recommandée : elle ordonne les experts)
+docs/plan-deepseek41-complet.md:48:| MoE top-6 parmi 384 | **liste d'experts par jeton** (déjà implémenté, `--trace-experts`) | `(couche, jeton, experts)` | oui, déjà (`clusters`) |
+docs/plan-deepseek41-complet.md:957:> experts** (`DRAVE_EXPERTS_RAM`), justifié par une trace de routage (50 % des
+docs/plan-modeles-lourds.md:108:| 4 | **trace + découpage** sur les trois gros MoE | la question « fréquence ou co-activation ? » tranchée à 256 experts et plus |
+docs/roadmap.md:18:| 0.4 | **Profilage par neurone généralisé** : trace exploitable par couche et par expert, pas seulement des compteurs | ✅
+… [110 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '2388,2400p' drave-core/src/model.rs; echo \"=== rapport existant ===\"; head -25 reports/rapport-routage-experts.md; echo \"=== outils d'analyse ===\"; ls tools/ | grep -iE \"expert|routage|reutil\"", "description": "Read the … [47 caractères tronqués]`
+
+  ```
+pub profil_experts: Option<Vec<u64>>,
+    pub profil_jetons: u64,
+    /// **Trace de routage** (`DRAVE_TRACE_EXPERTS=chemin`) : une ligne par
+    /// (couche, jeton) avec les indices des experts retenus. C'est la matière
+    /// première du découpage en clusters : les compteurs par expert disent
+    /// lesquels sont chauds, la trace dit lesquels sont chauds ENSEMBLE.
+    pub trace_experts: Option<std::io::BufWriter<std::fs::File>>,
+    pub attn_window: usize,
+    /// Période du motif fenêtre/plein : la couche `l` est fenêtrée si
+    /// `l % motif < motif - 1`. gpt-oss déclare 128 de fenêtre sur **une couche
+    /// sur deux** (`layer_types` alterne sliding_attention / full_attention,
+    /// et llama.cpp pose `set_swa_pattern(2)`) : appliquer la fenêtre aux
+    /// 36 couches supprimait toute information au-delà de 128 jetons dans la
+=== rapport existant ===
+# Rapport — le routage des experts était faux pour quatre gros modèles sur cinq
+
+Session du 01/10 au 02/10, en autonomie. Question posée au départ : « pourquoi
+V4-Flash ne se charge-t-il pas ? » La réponse s'est révélée plus large.
+
+## 1. Ce qui a été trouvé
+
+Le moteur routait **tous** les mélanges d'experts avec une seule co
+… [1032 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"trace_experts\" -A 12 drave-core/src/model.rs | grep -E \"write|writeln|format\" | head -8; echo \"=== config Qwen3-235B ===\"; ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/Qwen3-235B-A22B … [219 caractères tronqués]`
+
+  ```
+2400-    /// 36 couches supprimait toute information au-delà de 128 jetons dans la
+5379-                        let _ = writeln!(f, "{} {} {}", l, jeton, liste.join(" "));
+7305-                    let _ = writeln!(f, "{} {} {}", l, pos, liste.join(" "));
+=== config Qwen3-235B ===
+couches       : 94 · cachés 4096
+experts       : 128 par couche, 8 par jeton · FFN expert 1536
+routage       : softmax (source : défaut du moteur) · renormalisation oui · échelle aucune
+calculable    : oui (passe avant implémentée)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && Q=/home/stephane/Data13TB/stephane/modeles/gguf/Qwen3-235B-A22B-Q2_K/Qwen3-235B-A22B-Instruct-2507-Q2_K-00001-of-00002.gguf && timeout 300 python3 tools/budget_execution_locale.py \"$Q\" --experts-par-jeton 8 2>&1 | sed -n '1,12p'; h … [260 caractères tronqués]`
+
+  ```
+Qwen3-235B-A22B-Instruct-2507-Q2_K-00001-of-00002.gguf — 2 shard(s) lus, 94 couches vues
+  poids lus : 85.7 Go sur les shards présents
+  formats   : Q2_K 51.0 Go · Q3_K 33.9 Go · Q6_K 0.5 Go · F32 0.2 Go · Q4_K 0.1 Go
+  routage   : 8 experts sur 128
+  (embarquement NON compté : 0.20 Go — une rangée par jeton ; tête de sortie comptée : 0.51 Go)
+
+  PAR JETON (sur les 94 couches vues) :
+    experts routés          5.138 Go
+    partagé + attention + tête   3.277 Go
+    TOTAL                   8.414 Go
+  ⚠️ Tout ce qui est lu à chaque jeton est compté (attention, tête, experts partagés) ; l'embarquement ne l'est pas. Les chiffres « experts seuls » d'un rapport antérieur ne sont PAS ce total.
+
+745 tokens écrits dans /tmp/ids_q235.txt (vocabulaire du modèle : 151936)
+réversibilité : texte reconstruit identique ✅ (3000 octets)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && Q=/home/stephane/Data13TB/stephane/modeles/gguf/Qwen3-235B-A22B-Q2_K/Qwen3-235B-A22B-Instruct-2507-Q2_K-00001-of-00002.gguf && (t0=$(date +%s); DRAVE_TRACE_EXPERTS=/tmp/trace_q235.txt ./drave-core/target/release/drave \"$Q\" --ppl /t … [277 caractères tronqués]`
+
+  ```
+started background job bash-225
+  ```
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"analyse_reutilisation_experts.py — la réutilisation des experts, mesurée.\n\nLit une trace de routage (`DRAVE_TRACE_EXPERTS=chemin` : une ligne par\n(couche, jeton), `couche jeton e1 e2 …`) et répond à LA question qui décide si un\ncache d'experts peut serv … [4383 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/analyse_reutilisation_experts.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && chmod +x tools/analyse_reutilisation_experts.py && sleep 120; tail -3 /tmp/q235_trace.log 2>/dev/null; wc -l /tmp/trace_q235.txt 2>/dev/null; pgrep -x drave >/dev/null && echo tourne || echo fini", "description": "Check the trace run … [23 caractères tronqués]`
+
+  ```
+/tmp/ids_q235.txt : 16 tokens, fenêtres de 32
+tourne
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=models/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf && ./drave-core/target/release/drave \"$M\" --config 2>&1 | grep -E \"couches|experts|routage\" | head -4 && head -c 6000 data/wikitext2_test.txt > /tmp/txt_q30.txt && ./drave-core/tar … [443 caractères tronqués]`
+
+  ```
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+exit=134 en 0 s
+[stderr]
+bash: line 1: 1288716 Aborted                    (core dumped) DRAVE_TRACE_EXPERTS=/tmp/trace_q30.txt ./drave-core/target/release/drave "$M" --ppl /tmp/ids_q30.txt --ctx 64 --limit 48 --threads 16 --lot 1 > /tmp/q30_trace.log 2>&1
+wc: /tmp/trace_q30.txt: No such file or directory
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la models/ | head -5; M=models/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf; ls -la \"$M\" 2>&1 | head -2; ./drave-core/target/release/drave \"$M\" --config 2>&1 | head -5", "description": "Diagnose the Qwen3-30B failure"}`
+
+  ```
+total 863324
+drwxr-xr-x. 1 stephane stephane        88 25 sep 17:13 .
+drwxr-xr-x. 1 stephane stephane       612  3 oct 08:32 ..
+-rw-r--r--. 1 stephane stephane 352972352 25 sep 17:13 Qwen2.5-0.5B-Q4_0.gguf
+-rw-r--r--. 1 stephane stephane 531068480 25 sep 16:52 Qwen2.5-0.5B-Q8_0.gguf
+ls: cannot access 'models/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf': No such file or directory
+
+thread 'main' (1288781) panicked at src/main.rs:1832:43:
+ouverture du GGUF (en-tête): Os { code: 2, kind: NotFound, message: "No such file or directory" }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=/home/stephane/Data13TB/stephane/modeles/gguf/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf && ./drave-core/target/release/drave \"$M\" --config 2>&1 | grep -E \"couches|experts|routage\" | head -4 && (t0=$(date +%s); DRAVE_TRACE_EXPERTS … [312 caractères tronqués]`
+
+  ```
+couches       : 48 · cachés 2048
+experts       : 128 par couche, 8 par jeton · FFN expert 768
+routage       : softmax (source : défaut du moteur) · renormalisation oui · échelle aucune
+exit=134 en 0 s
+[stderr]
+bash: line 1: 1288856 Aborted                    (core dumped) DRAVE_TRACE_EXPERTS=/tmp/trace_q30.txt ./drave-core/target/release/drave "$M" --ppl /tmp/ids_q30.txt --ctx 64 --limit 48 --threads 16 --lot 1 > /tmp/q30_trace.log 2>&1
+wc: /tmp/trace_q30.txt: No such file or directory
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -6 /tmp/q30_trace.log; ls -la /tmp/ids_q30.txt 2>&1 | head -2; wc -c /tmp/txt_q30.txt 2>/dev/null", "description": "See the Qwen3-30B abort reason"}`
+
+  ```
+thread 'main' (1288856) panicked at src/main.rs:4673:52:
+fichier d'identifiants illisible: Os { code: 2, kind: NotFound, message: "No such file or directory" }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+ls: cannot access '/tmp/ids_q30.txt': No such file or directory
+6000 /tmp/txt_q30.txt
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=/home/stephane/Data13TB/stephane/modeles/gguf/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf && ./drave-core/target/release/drave \"$M\" --tokenize --fichier /tmp/txt_q30.txt --sortie /tmp/ids_q30.txt 2>&1 | tail -1 && (t0=$(date +%s); DR … [321 caractères tronqués]`
+
+  ```
+réversibilité : texte reconstruit identique ✅ (6000 octets)
+[timed out after 600000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && pgrep -x drave | wc -l; ps -o etime=,cmd= -C drave 2>/dev/null | head -3 | cut -c1-120; wc -l /tmp/trace_q235.txt 2>/dev/null; tail -2 /tmp/q235_trace.log 2>/dev/null", "description": "Check the running engines and trace progress"}`
+
+  ```
+1
+      13:33 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/Qwen3-235B-A22B-Q2_K/Qwen3-2
+0 /tmp/trace_q235.txt
+[tête 4 bits] 151936 × 4096 → 6.56 b/poids, 0 Mo, 0.0 s
+[moe] trace de routage des experts → /tmp/trace_q235.txt
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && pkill -x drave; sleep 2; M=/home/stephane/Data13TB/stephane/modeles/gguf/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf && (t0=$(date +%s); DRAVE_TRACE_EXPERTS=/tmp/trace_q30.txt ./drave-core/target/release/drave \"$M\" --ppl /tmp/ids_q30.t … [261 caractères tronqués]`
+
+  ```
+exit=0 en 374 s · lignes de trace : 2304
+  ```
+
+### 👤 Utilisateur
+
+background job bash-225 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && Q=/home/stephane/Data13TB/stephane/modeles/gguf/Qwen3-235B-A22B-Q2_K/Qwen3-235B-A22B-Instruct-2507-Q2_K-00001-of-00002.gguf && (t0=$(date +%s); DRAVE_TRACE_EXPERTS=/tmp/trace_q235.txt ./drave-core/target/release/drave "$Q" --ppl /tmp/ids_q235.txt --ctx 32 --limit 16 --threads 16 --lot 1 > /tmp/q235_trace.log 2>&1; echo "exit=$? en $(( $(date +%s) - t0 )) s"; wc -l /tmp/trace_q235.txt 2>/dev/null)) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 🤖 Assistant
+
+⏵ Analyse de la réutilisation : 48 couches × 48 jetons d'un MoE à 128 experts
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/analyse_reutilisation_experts.py /tmp/trace_q30.txt 2>&1 | head -30", "description": "Analyse the expert reuse on Qwen3-30B", "timeoutMs": 600000}`
+
+  ```
+/tmp/trace_q30.txt : 48 couches · 48 jetons · 8 experts par jeton · indices jusqu'à 127
+
+  experts DISTINCTS touchés (toutes couches) : 128
+  réutilisation IMMÉDIATE (t−1 → t) : 46.9 %
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/analyse_reutilisation_experts.py", line 115, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/analyse_reutilisation_experts.py", line 94, in main
+    bon += len(s & set(historique[-fenetre:]))
+                   ~~~^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: unhashable type: 'list'
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/analyse_reutilisation_experts.py'\ns=open(p).read()\ns=s.replace(\"\"\"                bon += len(s & set(historique[-fenetre:]))\"\"\",\n\"\"\"                vus = {e for lst in historique[-fenetre:] for  … [256 caractères tronqués]`
+
+  ```
+corrigé
+/tmp/trace_q30.txt : 48 couches · 48 jetons · 8 experts par jeton · indices jusqu'à 127
+
+  experts DISTINCTS touchés (toutes couches) : 128
+  réutilisation IMMÉDIATE (t−1 → t) : 46.9 %
+  réutilisation dans une fenêtre de 2 jetons : 54.7 %
+  réutilisation dans une fenêtre de 4 jetons : 63.9 %
+  réutilisation dans une fenêtre de 8 jetons : 72.8 %
+  réutilisation dans une fenêtre de 16 jetons : 78.8 %
+  réutilisation dans une fenêtre de N jetons : 82.7 %
+
+   capacité/couche  taux de succès   octets/jeton
+                 2            0.0 %               
+                 4            0.1 %               
+                 8           33.7 %               
+                16           58.5 %               
+                32           74.8 %               
+                64           82.3 %               
+               128           82.7 %               
+               256           82.7 %               
+               512           82.7 %               
+              1024           82.7 %               
+
+  (les octets/jeton se calculent en multipliant (1 − taux) par les octets d'experts par jeton — voir tools/budget_execution_locale.py)
+  ```
+
+### 🤖 Assistant
+
+⏵ Réutilisation mesurée : 46,9 % immédiate, 82,7 % de plafond, 74,8 % avec 32 experts/layer
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=/home/stephane/Data13TB/stephane/modeles/gguf/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf && (t0=$(date +%s); DRAVE_TRACE_EXPERTS=/tmp/trace_q30_long.txt ./drave-core/target/release/drave \"$M\" --ppl /tmp/ids_q30.txt --ctx 128 --limit … [252 caractères tronqués]`
+
+  ```
+started background job bash-226
+  ```
+
+- **write** `{"content": "# La réutilisation des experts, mesurée\n\n> Question posée par la cible elle-même (`docs/plan-kimi-k3.md`) : un jeton de\n> Kimi-K3 lit **24,7 Go d'experts routés** (16 sur 896). Aucun placement ne rend\n> cette lecture interactive — sauf si **les mêmes experts reviennent**. C'est la\n … [3695 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-reutilisation-experts.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Réutilisation des experts MESURÉE : 46,9 % immédiate, 74,8 % avec le quart le plus chaud en cache\n\nTrace de routage (DRAVE_TRACE_EXPERTS) sur Qwen3-30B-A3B : 48 couches, 128 experts,\n8 par jeton, 4 … [783 caractères tronqués]`
