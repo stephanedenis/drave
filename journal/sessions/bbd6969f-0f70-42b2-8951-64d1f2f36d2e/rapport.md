@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 116.7 h |
+| Durée | 116.9 h |
 | Tours | 92 |
-| Messages | 6984 |
-| Appels d'outils | 6676 |
+| Messages | 6993 |
+| Appels d'outils | 6684 |
 | Fichiers touchés | 141 |
-| Commandes | 5646 |
+| Commandes | 5654 |
 | Sous-agents | 32 |
-| Commits | 457 |
+| Commits | 458 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -4574,7 +4574,7 @@ Avec SiTU et l'attention résiduelle, ça fait **10 tests pour Kimi-K3**, et **7
 
 ### Tour 92 — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas e … [1246 caractères tronqués]
 
-*19 appels d'outils.* Actions notables :
+*27 appels d'outils.* Actions notables :
 
 - bash — Find the expert routing trace facility
 - bash — Read the trace format and the existing routing report
@@ -4590,11 +4590,11 @@ Avec SiTU et l'attention résiduelle, ça fait **10 tests pour Kimi-K3**, et **7
 - bash — Tokenize then run the Qwen3-30B trace
 - bash — Check the running engines and trace progress
 - bash — Run the Qwen3-30B trace alone
-- … et 5 autres
+- … et 13 autres
 
 **Synthèse produite :**
 
-⏵ Réutilisation mesurée : 46,9 % immédiate, 82,7 % de plafond, 74,8 % avec 32 experts/layer
+⏵ 128 jetons : réutilisation immédiate 47,9 %, et le quart des experts en cache sert 80,3 %
 
 ## 3. Travail accompli
 
@@ -4821,7 +4821,7 @@ Avec SiTU et l'attention résiduelle, ça fait **10 tests pour Kimi-K3**, et **7
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5606 autres
+- … et 5614 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5426,4 +5426,5 @@ Avec SiTU et l'attention résiduelle, ça fait **10 tests pour Kimi-K3**, et **7
 - Sprint 29 : 87 Go par jeton (l'attention dépasse les experts), outils qui disent leur périmètre, et la récurrence du KDA vérifiée" && git log --oneline -1; echo
 - KDA : porte bornée et convolution courte implémentées et testées — le test a attrapé une inversion de disposition d'état  kda_porte : g = -5·sigma(exp(A_log)·z)
 - Réutilisation des experts MESURÉE : 46,9 % immédiate, 74,8 % avec le quart le plus chaud en cache  Trace de routage (DRAVE_TRACE_EXPERTS) sur Qwen3-30B-A3B : 48
+- Réutilisation : trois relevés (wikitext 48 et 128 jetons, code 128) — immédiate 47-49 %, un quart de cache sert 75-87 %  La dépendance au texte est faible sur l
 

@@ -111202,3 +111202,120 @@ Created file
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Réutilisation des experts MESURÉE : 46,9 % immédiate, 74,8 % avec le quart le plus chaud en cache\n\nTrace de routage (DRAVE_TRACE_EXPERTS) sur Qwen3-30B-A3B : 48 couches, 128 experts,\n8 par jeton, 4 … [783 caractères tronqués]`
+
+  ```
+5ba0d88 Réutilisation des experts MESURÉE : 46,9 % immédiate, 74,8 % avec le quart le plus chaud en cache
+[moe] trace de routage des experts → /tmp/trace_q30_long.txt
+11:30:35    7.2 Go / 49.0 Go (14.8 %, 104 Mo/s)
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôle croisé gratuit : V4-Flash route par TABLE (tid2eid) — sa réutilisation se lit sans calcul
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys, glob\nsys.path.insert(0,'tools')\nimport analyse_octets_par_jeton as A\nfor f in sorted(glob.glob('/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/*.gguf')):\n    try: _, ts = A. … [281 caractères tronqués]`
+
+  ```
+blk.0.ffn_gate_inp.weight                dims=[4096, 256] type=30  (DeepSeek-V4-Flash-UD-IQ1_M-00002-of-00003.gguf)
+blk.0.ffn_gate_tid2eid.weight            dims=[6, 129280] type=26  (DeepSeek-V4-Flash-UD-IQ1_M-00002-of-00003.gguf)
+blk.1.ffn_gate_inp.weight                dims=[4096, 256] type=30  (DeepSeek-V4-Flash-UD-IQ1_M-00002-of-00003.gguf)
+blk.1.ffn_gate_tid2eid.weight            dims=[6, 129280] type=26  (DeepSeek-V4-Flash-UD-IQ1_M-00002-of-00003.gguf)
+blk.2.ffn_gate_inp.weight                dims=[4096, 256] type=30  (DeepSeek-V4-Flash-UD-IQ1_M-00002-of-00003.gguf)
+blk.2.ffn_gate_tid2eid.weight            dims=[6, 129280] type=26  (DeepSeek-V4-Flash-UD-IQ1_M-00002-of-00003.gguf)
+blk.3.ffn_gate_inp.weight                dims=[4096, 256] type=30  (DeepSeek-V4-Flash-UD-IQ1_M-00002-of-00003.gguf)
+blk.4.ffn_gate_inp.weight                dims=[4096, 256] type=30  (DeepSeek-V4-Flash-UD-IQ1_M-00002-of-00003.gguf)
+blk.5.ffn_gate_inp.weight                dims=[4096, 256] type=30  (DeepSeek-V4-Flash-UD-IQ1_M-00002-of-00003.gguf)
+blk.6.ffn_gate_inp.weight                dims=[4096, 256] type=30  (DeepSeek-V4-Flash-UD-IQ1_M-00002-of-00003.gguf)
+blk.7.ffn_gate_inp.weight               
+… [4135 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys, glob, struct\nsys.path.insert(0,'tools')\nimport analyse_octets_par_jeton as A\n\n# Combien de couches portent une table tid2eid ?\nn = 0\nfor f in sorted(glob.glob('/home/stephane/Data13TB/stephane/mode … [528 caractères tronqués]`
+
+  ```
+DeepSeek-V4-Flash-UD-IQ1_M-00002-of-00003.gguf : couches [0, 1, 2]
+total : 3 couches sur 43 portent une table de routage par jeton
+[moe] trace de routage des experts → /tmp/trace_q30_long.txt
+3208 /tmp/trace_q30_long.txt
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=/home/stephane/Data13TB/stephane/modeles/gguf/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf && cat > /tmp/code_q30.txt <<'EOF'\ndef matvec_f32_fils(w: &[f32], x: &[f32], n_in: usize, n_out: usize, y: &mut [f32],\n                    n_fi … [1115 caractères tronqués]`
+
+  ```
+réversibilité : texte reconstruit identique ✅ (950 octets)
+3474 /tmp/trace_q30_long.txt
+  ```
+
+- **bash** `{"command": "sleep 420; wc -l /tmp/trace_q30_long.txt; pgrep -x drave >/dev/null && echo tourne || echo fini; tail -2 /tmp/q30_long.log", "description": "Wait for the long trace", "timeoutMs": 500000}`
+
+  ```
+12288 /tmp/trace_q30_long.txt
+fini
+    dont tête de sortie 9.25 | notation log-sum-exp 1.39 (le reste du « reste » n'est pas chronométré)
+    dont attention : scores 1.96 | softmax 0.65 | somme pondérée + écriture KV 42.89
+  ```
+
+### 👤 Utilisateur
+
+background job bash-226 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=/home/stephane/Data13TB/stephane/modeles/gguf/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf && (t0=$(date +%s); DRAVE_TRACE_EXPERTS=/tmp/trace_q30_long.txt ./drave-core/target/release/drave "$M" --ppl /tmp/ids_q30.txt --ctx 128 --limit 256 --threads 16 --lot 1 > /tmp/q30_long.log 2>&1; echo "exit=$? en $(( $(date +%s) - t0 )) s · $(wc -l < /tmp/trace_q30_long.txt) lignes")) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/analyse_reutilisation_experts.py /tmp/trace_q30_long.txt 2>&1 | head -26", "description": "Analyse the 256-token reuse statistics", "timeoutMs": 900000}`
+
+  ```
+/tmp/trace_q30_long.txt : 48 couches · 128 jetons · 8 experts par jeton · indices jusqu'à 127
+
+  experts DISTINCTS touchés (toutes couches) : 128
+  réutilisation IMMÉDIATE (t−1 → t) : 47.9 %
+  réutilisation dans une fenêtre de 2 jetons : 57.1 %
+  réutilisation dans une fenêtre de 4 jetons : 68.5 %
+  réutilisation dans une fenêtre de 8 jetons : 78.1 %
+  réutilisation dans une fenêtre de 16 jetons : 84.5 %
+  réutilisation dans une fenêtre de N jetons : 93.1 %
+
+   capacité/couche  taux de succès   octets/jeton
+                 2            0.0 %               
+                 4            0.1 %               
+                 8           35.0 %               
+                16           62.0 %               
+                32           80.3 %               
+                64           92.0 %               
+               128           93.1 %               
+               256           93.1 %               
+               512           93.1 %               
+              1024           93.1 %               
+
+  (les octets/jeton se calculent en multipliant (1 − taux) par les octets d'experts par jeton — voir tools/budget_execution_locale.py)
+  ```
+
+### 🤖 Assistant
+
+⏵ 128 jetons : réutilisation immédiate 47,9 %, et le quart des experts en cache sert 80,3 %
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=/home/stephane/Data13TB/stephane/modeles/gguf/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf && (t0=$(date +%s); DRAVE_TRACE_EXPERTS=/tmp/trace_q30_code.txt ./drave-core/target/release/drave \"$M\" --ppl /tmp/ids_code_q30.txt --ctx 128 -- … [216 caractères tronqués]`
+
+  ```
+exit=0 en 228 s · 6144 lignes
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== CODE (128 jetons) ===\" && python3 tools/analyse_reutilisation_experts.py /tmp/trace_q30_code.txt 2>&1 | sed -n '2,8p;11,18p'", "description": "Analyse the code-text reuse", "timeoutMs": 900000}`
+
+  ```
+=== CODE (128 jetons) ===
+
+  experts DISTINCTS touchés (toutes couches) : 128
+  réutilisation IMMÉDIATE (t−1 → t) : 48.8 %
+  réutilisation dans une fenêtre de 2 jetons : 60.4 %
+  réutilisation dans une fenêtre de 4 jetons : 72.9 %
+  réutilisation dans une fenêtre de 8 jetons : 82.3 %
+  réutilisation dans une fenêtre de 16 jetons : 88.2 %
+   capacité/couche  taux de succès   octets/jeton
+                 2            0.0 %               
+                 4            0.0 %               
+                 8           35.5 %               
+                16           66.4 %               
+                32           86.8 %               
+                64           93.5 %               
+               128           93.9 %
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-reutilisation-experts.md'\ns=open(p).read()\ns=s.replace(\"\"\"> Premier relevé le 03/10 (bloc 30), sur **Qwen3-30B-A3B** (48 couches,\n> **128 experts, 8 par jeton**, routage softmax), 48 jetons, … [4397 caractères tronqués]`
