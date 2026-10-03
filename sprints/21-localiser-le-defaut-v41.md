@@ -105,6 +105,15 @@ la transcription vient de vLLM — la seule pièce non vérifiée contre une sou
 externe *exécutable*, et dont une variante (la convention V4) est dix fois pire
 sans être bonne pour autant.
 
+## Portes
+
+- `tools/portes.sh rapide` : **toutes vertes** après les changements du bloc —
+  **64 tests**, Qwen 19,3885, clusters 799,8557, **V4-Flash 8430,4966** (la
+  référence de non-régression, inchangée : la borne d'`--abits` et les conversions
+  bornées ne touchent pas le chemin normal), engram, et les cinq modes du
+  découpage.
+- `tools/porte-flux.sh` : 5/5 (0,00e0 · 0,00e0 · 3,65e-2 · 0,00e0 · 4,45e-3).
+
 ## Rétrospective — garder / changer / doute
 
 **Garder.**

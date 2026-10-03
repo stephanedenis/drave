@@ -101514,3 +101514,34 @@ ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"sprints/21-localiser-le-defaut-v41.md\"\ns=open(p).read()\na=\"\"\"## Planning du bloc 22 — la composition, vérifiée contre numpy\"\"\"\nb=\"\"\"### 2quinquies. Les vides qui manquaient pour vérifier les experts … [2906 caractères tronqués]`
+
+  ```
+ok
+08fbf23 Deux vides neufs pour rendre le chemin des experts vérifiable : ffn_hn (entrée normée du MoE, vérifiée en numpy à 1e-7) et moe_down (somme des experts routés)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash tools/portes.sh rapide > /tmp/porte21.log 2>&1 & sleep 3; echo \"porte complète lancée (bloc 21)\"; timeout 300 tools/porte-flux.sh 2>&1 | tail -6", "description": "Launch the full gate and run the flux gate", "timeoutMs": … [8 caractères tronqués]`
+
+  ```
+porte complète lancée (bloc 21)
+  mode 0 — f32 dense               0.00e0  ✅  (réf 61.9920 / deux nœuds 61.9920)
+  mode 1 — listes quantifiées     0.00e0  ✅  (réf 61.9920 / deux nœuds 61.9920)
+  mode 2 — listes par blocs        3.65e-2  ✅  (réf 61.9920 / deux nœuds 64.2535)
+  mode 3 — lot dense f32           0.00e0  ✅  (réf 60.8135 / deux nœuds 60.8135)
+  mode 4 — lot en listes           4.45e-3  ✅  (réf 60.8135 / deux nœuds 60.5427)
+  ```
+
+- **bash** `{"command": "sleep 420; grep -E \"tests|cargo test|V4-Flash 43|Qwen2.5|clusters|engram\" /tmp/porte21.log; tail -3 /tmp/porte21.log", "description": "Check the gate result", "timeoutMs": 480000}`
+
+  ```
+cargo test --release                       64 verts  ✅
+  Qwen2.5-0.5B ctx 256                       19.3885  ✅
+  Qwen3-30B en clusters (origine : 799,8557) 799.8557  ✅
+  V4-Flash 43 couches ctx 32                 8430.4966  ✅
+  engram V4.1 : adressage                    rangées DISTINCTES : 479723  ✅
+  mode 4 — lot en listes           4.45e-3  ✅  (réf 60.8135 / deux nœuds 60.5427)
+
+toutes les portes sont vertes
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"sprints/21-localiser-le-defaut-v41.md\"\ns=open(p).read()\na=\"\"\"## Rétrospective — garder / changer / doute\"\"\"\nb=\"\"\"## Portes\n\n- `tools/portes.sh rapide` : **toutes vertes** après les changements du  … [686 caractères tronqués]`

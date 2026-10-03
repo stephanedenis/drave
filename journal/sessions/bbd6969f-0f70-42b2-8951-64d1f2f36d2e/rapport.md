@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 109.0 h |
+| Durée | 109.2 h |
 | Tours | 80 |
-| Messages | 6367 |
-| Appels d'outils | 6107 |
+| Messages | 6370 |
+| Appels d'outils | 6110 |
 | Fichiers touchés | 118 |
-| Commandes | 5172 |
+| Commandes | 5175 |
 | Sous-agents | 32 |
-| Commits | 402 |
+| Commits | 403 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -4082,7 +4082,7 @@ Dis-moi si je poursuis sur le bloc 22 (la composition des experts en numpy, plan
 
 ### Tour 80 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [941 caractères tronqués]
 
-*14 appels d'outils.* Actions notables :
+*17 appels d'outils.* Actions notables :
 
 - bash — Test whether finer activation quantization fixes V4.1
 - bash — Inspect the activation quantization
@@ -4098,6 +4098,7 @@ Dis-moi si je poursuis sur le bloc 22 (la composition des experts en numpy, plan
 - bash — Dump the MoE input and routed output
 - bash — Verify the new dumps and the MoE input norm
 - bash — Commit the new dumps and the updated plan
+- … et 3 autres
 
 ## 3. Travail accompli
 
@@ -4301,7 +4302,7 @@ Dis-moi si je poursuis sur le bloc 22 (la composition des experts en numpy, plan
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5132 autres
+- … et 5135 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4851,4 +4852,5 @@ Dis-moi si je poursuis sur le bloc 22 (la composition des experts en numpy, plan
 - Journal : index de session à jour" && git log --oneline | head -3 && echo "--- commits de la nuit ---" && git log --oneline --since="2026-10-02 19:00" | wc -l &
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="sprints/21-localiser-le-defaut-v41.md" s=open(p).read() a="""### 3. La piste qui reste
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="sprints/21-localiser-le-defaut-v41.md" s=open(p).read() a="""## Planning du bloc 22 — 
+- Sprint 21 : portes toutes vertes après les changements du bloc (64 tests, V4-Flash 8430,4966 inchangée)" && git log --oneline | head -5; date
 
