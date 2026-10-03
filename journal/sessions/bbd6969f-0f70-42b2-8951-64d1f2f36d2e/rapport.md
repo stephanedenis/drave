@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 118.0 h |
-| Tours | 98 |
-| Messages | 7079 |
-| Appels d'outils | 6757 |
+| Durée | 118.1 h |
+| Tours | 99 |
+| Messages | 7085 |
+| Appels d'outils | 6761 |
 | Fichiers touchés | 145 |
-| Commandes | 5723 |
+| Commandes | 5727 |
 | Sous-agents | 32 |
-| Commits | 473 |
+| Commits | 474 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -241,6 +241,8 @@
 **Tour 97** — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas en local (classe Kimi-K3 Q4 : 1,5 To de poids, ~35 Go de poids par jeton), et étudier/implémenter ce qui nous distingue sur cette classe : découpage par experts et en grappes (chaque nœud ne lit que ce qu'il sert), réutilisation des experts entre jetons, transport de flux compact  … [966 caractères tronqués]
 
 **Tour 98** — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas en local (classe Kimi-K3 Q4 : 1,5 To de poids, ~35 Go de poids par jeton), et étudier/implémenter ce qui nous distingue sur cette classe : découpage par experts et en grappes (chaque nœud ne lit que ce qu'il sert), réutilisation des experts entre jetons, transport de flux compact  … [966 caractères tronqués]
+
+**Tour 99** — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas en local (classe Kimi-K3 Q4 : 1,5 To de poids, ~35 Go de poids par jeton), et étudier/implémenter ce qui nous distingue sur cette classe : découpage par experts et en grappes (chaque nœud ne lit que ce qu'il sert), réutilisation des experts entre jetons, transport de flux compact  … [966 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -4830,7 +4832,40 @@ python3 tools/compare_etats.py /tmp/notrek3 /tmp/refk3 l_out 0 0,1,2       # ver
 
 **Synthèse produite :**
 
-⏵ Bloc 34 : j'implémente le MoE latent (92 couches sur 93) avec déquantification par expert
+⏵ Bloc 34 : le MoE latent tourne (92 couches sur 93), et il est passé de 25,7 s à 1,36 s par jeton
+
+**Le MoE latent est implémenté et il calcule** — c'était la pièce qui couvre **92 des 93 couches** :
+
+```
+MoE couche 1 : |sortie| = 0,7316 · finis : true · 1361 ms
+```
+
+Et le chemin pour y arriver vaut d'être raconté, parce que c'est une leçon du dépôt qui se répète : la première version prenait **25 709 ms** — non pas à cause du calcul, mais parce qu'elle appelait le déquantificateur MXFP4 **par bloc de 17 octets**, donc allouait un `Vec` par bloc : **16 experts × 3 matrices × 344 064 blocs = 16,5 millions d'allocations par jeton**. La même déquantification, écrite dans un tampon fourni, donne **1 361 ms (×18,9)** — et `|sortie| = 0,7316`, **le même chiffre** : l'optimisation ne change pas un résultat, elle enlève des allocations.
+
+Ce que le MoE fait, dans l'ordre exact de la référence (et les trois pièges sont consignés dans la spec) :
+- le **routeur note la pleine largeur** (7168) pendant que les experts consomment le **latent** (3584) ;
+- le biais `exp_probs_b` sert à la **sélection**, pas aux poids ;
+- la **norme RMS est dans le latent**, *avant* la remontée `ffn_routed_up` — l'inverse donnerait des valeurs plausibles et fausses ;
+- les **2 experts partagés** (6144 de large) sont ajoutés après.
+
+Et le geste qui rend un modèle de 1,5 To seulement *lisible* : les experts sont **lus un par un** (16 sur 896, ~300 Mo) — jamais la couche entière (15,7 Go en MXFP4) — et les parties denses sont déquantifiées une fois.
+
+**Téléchargement** : ~1 010 Go / 1 509 (**67 %**, ~110 Mo/s) → **fin vers 13h55**. Dès qu'il tombe : inventaire des 93 couches, budget **mesuré**, baseline `llama.cpp-k3`, puis la vérification tenseur par tenseur — couche 0 (déjà calculante, sorties vidées au bon format) puis couche 1 (MoE) puis couche 3 (MLA, la dernière pièce à écrire).
+
+77 tests verts, tout commité.
+
+### Tour 99 — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas e … [1246 caractères tronqués]
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Implement the MLA layer for K3
+- bash — Test the MLA layer on layer 3
+- bash — Fix the absorbed query size and retest
+- bash — Commit the MLA layer
+
+**Synthèse produite :**
+
+⏵ Bloc 35 : j'implémente la dernière pièce d'architecture — la couche MLA de K3 (couches 3, 7, 11…)
 
 ## 3. Travail accompli
 
@@ -5061,7 +5096,7 @@ python3 tools/compare_etats.py /tmp/notrek3 /tmp/refk3 l_out 0 0,1,2       # ver
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5683 autres
+- … et 5687 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5189,7 +5224,7 @@ python3 tools/compare_etats.py /tmp/notrek3 /tmp/refk3 l_out 0 0,1,2       # ver
 
 ## 5. Erreurs rencontrées
 
-344 sorties en erreur ou divergentes. Les premières :
+345 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -5682,4 +5717,5 @@ python3 tools/compare_etats.py /tmp/notrek3 /tmp/refk3 l_out 0 0,1,2       # ver
 - K3 : la couche 0 vide ses sorties au format du moteur — la comparaison tenseur par tenseur n'attend plus que la référence  Trois jetons, trois fichiers de 28 67
 - Spec Kimi-K3 : l'ordre exact du MoE latent (routeur en pleine largeur, norme DANS le latent avant la remontée, biais en sélection)  Trois pièges consignés avec 
 - K3 : le MoE latent fonctionne — et 25,7 s/jeton sont devenus 1,36 s (×18,9) sans changer un chiffre  La première version appelait Gguf::dequant_mxfp4 PAR BLOC, 
+- K3 : la couche MLA calcule (couches 3, 7, 11…) — absorption par tête, nope sans rotation, porte sigmoïde pleine largeur  Mesuré : trois jetons à la suite, cache
 

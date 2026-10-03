@@ -112705,3 +112705,85 @@ déquantification sans allocation par bloc
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cd drave-core && cargo test --release 2>&1 | grep -E \"^test result\"; cd .. && git add -A && git commit -q -m \"K3 : le MoE latent fonctionne — et 25,7 s/jeton sont devenus 1,36 s (×18,9) sans changer un chiffre\n\nLa première versi … [677 caractères tronqués]`
+
+  ```
+test result: ok. 77 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+f0d980b K3 : le MoE latent fonctionne — et 25,7 s/jeton sont devenus 1,36 s (×18,9) sans changer un chiffre
+12:44:06    20.9 Go / 49.1 Go (42.6 %, 110 Mo/s)
+  ```
+
+### 🤖 Assistant
+
+⏵ Bloc 34 : le MoE latent tourne (92 couches sur 93), et il est passé de 25,7 s à 1,36 s par jeton
+
+**Le MoE latent est implémenté et il calcule** — c'était la pièce qui couvre **92 des 93 couches** :
+
+```
+MoE couche 1 : |sortie| = 0,7316 · finis : true · 1361 ms
+```
+
+Et le chemin pour y arriver vaut d'être raconté, parce que c'est une leçon du dépôt qui se répète : la première version prenait **25 709 ms** — non pas à cause du calcul, mais parce qu'elle appelait le déquantificateur MXFP4 **par bloc de 17 octets**, donc allouait un `Vec` par bloc : **16 experts × 3 matrices × 344 064 blocs = 16,5 millions d'allocations par jeton**. La même déquantification, écrite dans un tampon fourni, donne **1 361 ms (×18,9)** — et `|sortie| = 0,7316`, **le même chiffre** : l'optimisation ne change pas un résultat, elle enlève des allocations.
+
+Ce que le MoE fait, dans l'ordre exact de la référence (et les trois pièges sont consignés dans la spec) :
+- le **routeur note la pleine largeur** (7168) pendant que les experts consomment le **latent** (3584) ;
+- le biais `exp_probs_b` sert à la **sélection**, pas aux poids ;
+- la **norme RMS est dans le latent**, *avant* la remontée `ffn_routed_up` — l'inverse donnerait des valeurs plausibles et fausses ;
+- les **2 experts partagés** (6144 de large) sont ajoutés après.
+
+Et le geste qui rend un modèle de 1,5 To seulement *lisible* : les experts sont **lus un par un** (16 sur 896, ~300 Mo) — jamais la couche entière (15,7 Go en MXFP4) — et les parties denses sont déquantifiées une fois.
+
+**Téléchargement** : ~1 010 Go / 1 509 (**67 %**, ~110 Mo/s) → **fin vers 13h55**. Dès qu'il tombe : inventaire des 93 couches, budget **mesuré**, baseline `llama.cpp-k3`, puis la vérification tenseur par tenseur — couche 0 (déjà calculante, sorties vidées au bon format) puis couche 1 (MoE) puis couche 3 (MLA, la dernière pièce à écrire).
+
+77 tests verts, tout commité.
+
+
+## Tour 99
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas en local (classe Kimi-K3 Q4 : 1,5 To de poids, ~35 Go de poids par jeton), et étudier/implémenter ce qui nous distingue sur cette classe : découpage par experts et en grappes (chaque nœud ne lit que ce qu'il sert), réutilisation des experts entre jetons, transport de flux compact (listes DRVF), noyaux rapides (SIMD, déquantification bit-exacte), et mesure systématique (octets par jeton, débits, seuils). Les modèles périmés (DeepSeek-V4-Flash) sortent du chemin critique : leurs acquis sont conservés dans les rapports, leurs portes archivées. Règles inchangées : jamais de forward muet, jamais d'optimisation qui change une sortie sans le dire, une affirmation sans mesure n'est pas une affirmation."
+Round: 25/30
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Bloc 35 : j'implémente la dernière pièce d'architecture — la couche MLA de K3 (couches 3, 7, 11…)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> drave-core/src/kimi_k3.rs <<'RS'\n\n// ===========================================================================\n// La couche MLA de K3 (couches 3, 7, 11, … — une sur quatre).\n//\n// Différences avec l'MLA de V4/V4.1, et e … [7641 caractères tronqués]`
+
+  ```
+--- build ---
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/kimi_k3.rs'\ns=open(p).read()\ns=s.replace(\"\"\"        if dv[0] != nh || dv[1] + nope != hd + 0 && dv[1] != hd - nope {\n            // v_b : [nh, n_embd_head_v, kv_lora] ; on vérifie la première … [2473 caractères tronqués]`
+
+  ```
+contrôle v_b nettoyé
+essai MLA branché
+  couche 3 : dimensions conformes
+  couche 4 : dimensions conformes
+  MoE couche 1 : |sortie| = 0.7316 · finis : true · 1466 ms
+
+thread 'main' (1412616) panicked at src/kimi_k3.rs:807:16:
+range end index 512 out of range for slice of length 192
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+timeout: the monitored command dumped core
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/kimi_k3.rs'\ns=open(p).read()\ns=s.replace(\"\"\"            let mut qa2 = vec![0f32; hd];\n            qa2[..kv_lora].copy_from_slice(&qn);\n            qa2[kv_lora..].copy_from_slice(&q[t * hd +  … [1280 caractères tronqués]`
+
+  ```
+taille de la requête absorbée corrigée
+  MoE couche 1 : |sortie| = 0.7316 · finis : true · 1665 ms
+  MLA couche 3, jeton 0 : |sortie| = 12.8277 · finis : true · 235 ms
+  MLA couche 3, jeton 1 : |sortie| = 10.4341 · finis : true · 236 ms
+  MLA couche 3, jeton 2 : |sortie| = 9.1516 · finis : true · 239 ms
+  jeton 0 (id 3638) : |l_out| = 0.9731 · finis : true · premiers : 0.01036 -0.02001 -0.00186
+  jeton 1 (id 275) : |l_out| = 1.4310 · finis : true · premiers : 0.01729 0.00249 0.00578
+  jeton 2 (id 1309) : |l_out| = 1.4958 · finis : true · premiers : -0.00946 0.01135 -0.00460
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cd drave-core && cargo test --release 2>&1 | grep -E \"^test result\"; cd .. && git add -A && git commit -q -m \"K3 : la couche MLA calcule (couches 3, 7, 11…) — absorption par tête, nope sans rotation, porte sigmoïde pleine largeur\ … [684 caractères tronqués]`

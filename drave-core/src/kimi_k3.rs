@@ -695,3 +695,156 @@ impl MoeK3 {
         Ok(sortie)
     }
 }
+
+// ===========================================================================
+// La couche MLA de K3 (couches 3, 7, 11, … — une sur quatre).
+//
+// Différences avec l'MLA de V4/V4.1, et elles comptent :
+//   - `mla_use_nope` : la partie `pe` est portée et concaténée, mais AUCUNE
+//     rotation n'est appliquée ;
+//   - `k_b` et `v_b` sont PAR TÊTE (tenseurs 3D) : l'absorption se fait tête par
+//     tête, pas par une matrice unique ;
+//   - la porte de sortie est un SIGMOÏDE plein rang (`attn_gate`), appliqué sur
+//     l'entrée de couche NORMALISÉE, avant la projection de sortie.
+// ===========================================================================
+
+pub struct MlaK3 {
+    q_a: Vec<f32>, q_a_norm: Vec<f32>, q_b: Vec<f32>,     // [1536×h], [1536], [18432×1536]
+    kv_a: Vec<f32>, kv_a_norm: Vec<f32>,                  // [(512+64)×h], [512]
+    k_b: Vec<f32>, v_b: Vec<f32>,                         // par tête : [512×128], [128×512]
+    gate: Vec<f32>, wo: Vec<f32>,                         // [12288×h], [h×12288]
+    h: usize, nh: usize, hd: usize, rope: usize, kv_lora: usize,
+    /// Cache des clés/valeurs : une ligne par position déjà vue.
+    cle: Vec<f32>, val: Vec<f32>, n_pos: usize, eps: f32,
+}
+
+impl MlaK3 {
+    pub fn charge(g: &Gguf, l: usize) -> Result<MlaK3, String> {
+        let p = |s: &str| format!("blk.{l}.{s}");
+        let lu = |nom: &str| -> Result<Vec<f32>, String> {
+            if g.tensor(nom).is_none() { return Err(format!("tenseur absent : {nom}")); }
+            Ok(g.dequant(nom))
+        };
+        let dims = |nom: &str| -> Result<Vec<usize>, String> {
+            g.tensor(nom).map(|t| t.dims.iter().map(|d| *d as usize).collect())
+                .ok_or_else(|| format!("tenseur absent : {nom}"))
+        };
+        let dq = dims(&p("attn_q_b.weight"))?;        // moteur : [nh*hd, q_lora]
+        let dk = dims(&p("attn_k_b.weight"))?;        // [nh, kv_lora, nope] ?
+        let dv = dims(&p("attn_v_b.weight"))?;
+        let dkv = dims(&p("attn_kv_a_mqa.weight"))?;  // [kv_lora+rope, h]
+        let lire = |cle: &str, def: usize| g.meta.get(cle).and_then(|m| m.as_u64())
+            .map(|v| v as usize).unwrap_or(def);
+        let nh = dk[0];
+        let kv_lora = dk[1];
+        let nope = dk[2];
+        let h = dkv[1];
+        let rope = dkv[0] - kv_lora;
+        let hd = nope + rope;
+        if dq[0] != nh * hd { return Err(format!("q_b {:?} ≠ {}×{}", dq, nh, hd)); }
+        // `v_b` : [nh, n_embd_head_v, kv_lora] — la tête de valeur peut différer
+        // de la tête de requête (128 ici), on la DÉDUIT au lieu de la supposer.
+        if dv[0] != nh || dv[2] != kv_lora {
+            return Err(format!("v_b {:?} : {nh} têtes et un latent de {kv_lora} attendus", dv));
+        }
+        let _ = lire;
+        Ok(MlaK3 {
+            q_a: lu(&p("attn_q_a.weight"))?, q_a_norm: lu(&p("attn_q_a_norm.weight"))?,
+            q_b: lu(&p("attn_q_b.weight"))?,
+            kv_a: lu(&p("attn_kv_a_mqa.weight"))?, kv_a_norm: lu(&p("attn_kv_a_norm.weight"))?,
+            k_b: lu(&p("attn_k_b.weight"))?, v_b: lu(&p("attn_v_b.weight"))?,
+            gate: lu(&p("attn_gate.weight"))?, wo: lu(&p("attn_output.weight"))?,
+            h, nh, hd, rope, kv_lora,
+            cle: Vec::new(), val: Vec::new(), n_pos: 0, eps: 1e-5,
+        })
+    }
+
+    /// Un jeton, à la position `pos` : la couche MLA complète, cache compris.
+    /// `x_norme` est l'entrée de couche **normalisée** (la porte de sortie la lit).
+    pub fn avant(&mut self, cur: &[f32], x_norme: &[f32], pos: usize) -> Result<Vec<f32>, String> {
+        let (h, nh, hd, rope, kv_lora) = (self.h, self.nh, self.hd, self.rope, self.kv_lora);
+        if cur.len() != h { return Err(format!("entrée de {} au lieu de {h}", cur.len())); }
+        // 1. Q = q_b · rms_norm(q_a · cur)
+        let q_lora = self.q_a.len() / h;
+        let mut qa = vec![0f32; q_lora];
+        mv(&self.q_a, q_lora, h, cur, &mut qa);
+        let mut qan = vec![0f32; q_lora];
+        rms_norm_poids(&qa, &self.q_a_norm, self.eps, &mut qan);
+        let mut q = vec![0f32; nh * hd];
+        mv(&self.q_b, nh * hd, q_lora, &qan, &mut q);
+        // 2. kv = kv_a · cur, puis latent normalisé + partie pe (SANS rotation)
+        let mut kv = vec![0f32; kv_lora + rope];
+        mv(&self.kv_a, kv_lora + rope, h, cur, &mut kv);
+        let mut latent = vec![0f32; kv_lora];
+        rms_norm_poids(&kv[..kv_lora], &self.kv_a_norm, self.eps, &mut latent);
+        let pe = &kv[kv_lora..];
+        // 3. cache : clé = [latent, pe] (576), valeur = latent (512)
+        if self.n_pos <= pos {
+            self.cle.resize((pos + 1) * (kv_lora + rope), 0.0);
+            self.val.resize((pos + 1) * kv_lora, 0.0);
+            self.n_pos = pos + 1;
+        }
+        self.cle[pos * (kv_lora + rope)..pos * (kv_lora + rope) + kv_lora]
+            .copy_from_slice(&latent);
+        self.cle[pos * (kv_lora + rope) + kv_lora..(pos + 1) * (kv_lora + rope)]
+            .copy_from_slice(pe);
+        self.val[pos * kv_lora..(pos + 1) * kv_lora].copy_from_slice(&latent);
+        // 4. attention causale, tête par tête, avec ABSORPTION de k_b
+        let echelle = 1.0 / ((hd as f32).sqrt());
+        let nope = hd - rope;
+        let mut sortie = vec![0f32; nh * (hd - rope)];
+        for t in 0..nh {
+            // q_nope absorbé : [nope] → [kv_lora] par la matrice de tête
+            let base_kb = t * kv_lora * nope;
+            let mut qn = vec![0f32; kv_lora];
+            for o in 0..kv_lora {
+                let lig = &self.k_b[base_kb + o * nope..base_kb + (o + 1) * nope];
+                let mut s = 0f32;
+                for j in 0..nope { s += lig[j] * q[t * hd + j]; }
+                qn[o] = s;
+            }
+            // ⚠️ Après absorption, la requête fait [latent 512, rope 64] = 576 —
+            // la taille de la CLÉ — et non `hd` = 192. Se tromper fait tomber la
+            // copie (« range end 512 out of range for length 192 ») : c'est la
+            // panique qui l'a dit, pas la relecture.
+            let mut qa2 = vec![0f32; kv_lora + rope];
+            qa2[..kv_lora].copy_from_slice(&qn);
+            qa2[kv_lora..].copy_from_slice(&q[t * hd + nope..t * hd + nope + rope]);
+            // scores contre toutes les positions ≤ pos
+            let mut scores = Vec::with_capacity(pos + 1);
+            for p2 in 0..=pos {
+                let c = &self.cle[p2 * (kv_lora + rope)..(p2 + 1) * (kv_lora + rope)];
+                let mut s = 0f32;
+                for j in 0..(kv_lora + rope) { s += qa2[j] * c[j]; }
+                scores.push(s * echelle);
+            }
+            let mx = scores.iter().cloned().fold(f32::NEG_INFINITY, f32::max);
+            let mut somme = 0f32;
+            for v in scores.iter_mut() { *v = (*v - mx).exp(); somme += *v; }
+            // somme pondérée des valeurs (le latent), puis v_b : [kv_lora] → [head_v]
+            let head_v = self.v_b.len() / (nh * kv_lora);
+            let mut acc = vec![0f32; kv_lora];
+            for p2 in 0..=pos {
+                let pds = scores[p2] / somme;
+                let v = &self.val[p2 * kv_lora..(p2 + 1) * kv_lora];
+                for j in 0..kv_lora { acc[j] += pds * v[j]; }
+            }
+            let base_vb = t * head_v * kv_lora;
+            for o in 0..head_v {
+                let lig = &self.v_b[base_vb + o * kv_lora..base_vb + (o + 1) * kv_lora];
+                let mut s = 0f32;
+                for j in 0..kv_lora { s += lig[j] * acc[j]; }
+                sortie[t * head_v + o] = s;
+            }
+        }
+        // 5. porte de sortie (sigmoïde plein rang) sur l'entrée NORMALISÉE
+        let d_inner = sortie.len();
+        let mut g2 = vec![0f32; d_inner];
+        mv(&self.gate, d_inner, h, x_norme, &mut g2);
+        for j in 0..d_inner { sortie[j] *= 1.0 / (1.0 + (-g2[j]).exp()); }
+        // 6. projection de sortie
+        let mut out = vec![0f32; h];
+        mv(&self.wo, h, d_inner, &sortie, &mut out);
+        Ok(out)
+    }
+}

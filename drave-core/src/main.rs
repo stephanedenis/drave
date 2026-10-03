@@ -1914,6 +1914,33 @@ fn run_k3_essai() {
         }
         Err(e) => println!("  MoE couche 1 : chargement impossible ({e})"),
     }
+    // La couche MLA (3) : trois jetons à la suite, cache compris.
+    match kimi_k3::MlaK3::charge(&g, 3) {
+        Ok(mut mla) => {
+            let embd = g.dequant("token_embd.weight");
+            let h = c0.hauteur();
+            for (i, t) in [3638usize, 275, 1309].iter().enumerate() {
+                let x = &embd[t * h..(t + 1) * h];
+                // l'entrée normalisée que lit la porte de sortie
+                let mut xn = vec![0f32; h];
+                let mut carre = 0f64;
+                for v in x { carre += (*v as f64) * (*v as f64); }
+                let inv = 1.0 / ((carre / h as f64 + 1e-5).sqrt() as f32);
+                for j in 0..h { xn[j] = x[j] * inv; }
+                let t0 = std::time::Instant::now();
+                match mla.avant(x, &xn, i) {
+                    Ok(y) => {
+                        let n: f32 = y.iter().map(|v| v * v).sum::<f32>().sqrt();
+                        let finis = y.iter().all(|v| v.is_finite());
+                        println!("  MLA couche 3, jeton {i} : |sortie| = {n:.4} · finis : {finis} · {} ms",
+                                 t0.elapsed().as_millis());
+                    }
+                    Err(e) => { println!("  MLA couche 3 : {e}"); break; }
+                }
+            }
+        }
+        Err(e) => println!("  MLA couche 3 : chargement impossible ({e})"),
+    }
     // L'entrée de la couche 0 est l'embarquement du jeton.
     let ids = vec![3638u32, 275, 1309];      // « Le ciel est… » (tokenizer du modèle)
     let embd = g.dequant("token_embd.weight");
