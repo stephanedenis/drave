@@ -98956,3 +98956,103 @@ ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"sprints/16-les-experts-sur-nvme-la-reutilisation.md\"\ns=open(p).read()\na=\"\"\"## Planning du bloc 17 — grappes d'experts par CHALEUR mesurée\"\"\"\nb=\"\"\"## Planning du bloc 17 — `proj+mlp` : entrées-sortie … [2569 caractères tronqués]`
+
+  ```
+ok
+ven 02 oct 2026 23:15:21 EDT
+sprints/16-les-experts-sur-nvme-la-reutilisation.md
+sprints/17-les-experts-io-ou-calcul.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=/home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf && for i in 1 2; do echo \"=== passe $i ===\"; ./drave-core/target/release/drave $M --ppl /tmp/v41_last4.ids --ctx 8 --limit 4 --abits 8 --threads 20 2>&1 | grep -E … [124 caractères tronqués]`
+
+  ```
+=== passe 1 ===
+=== perplexité 1743713.6243 sur 3 tokens (0 événements, 17.5 s) ===
+    postes (ms/token) : projets-attn 0.00 | rope 0.00 | attention 1257.55 | proj+mlp 4357.29 | somme 5614.84 | reste (tête + échantillonnage) 227.45
+=== passe 2 ===
+=== perplexité 1743713.6243 sur 3 tokens (0 événements, 17.4 s) ===
+    postes (ms/token) : projets-attn 0.00 | rope 0.00 | attention 1268.03 | proj+mlp 4416.31 | somme 5684.33 | reste (tête + échantillonnage) 107.47
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"threads_iq\" drave-core/src/model.rs | head -4; sed -n \"$(grep -n 'let threads_iq' drave-core/src/model.rs | head -1 | cut -d: -f1),+4p\" drave-core/src/model.rs", "description": "Read the threads_iq clamp"}`
+
+  ```
+6041:        let threads_iq = self.pool.threads().clamp(1, 8);
+6918:                                        threads_iq);
+6926:                                        threads_iq);
+6941:                                    threads_iq);
+        let threads_iq = self.pool.threads().clamp(1, 8);
+        // Diagnostic `DRAVE_DEBUG_ETAT=1` : la norme de l'état résiduel à chaque
+        // couche. Un modèle qui prédit le MÊME jeton à toutes les positions a un
+        // état qui ne dépend plus de l'entrée ; cette ligne dit à quelle couche
+        // il cesse d'en dépendre (explosion, effondrement, ou rien du tout).
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"drave-core/src/model.rs\"\ns=open(p).read()\na=\"        let threads_iq = self.pool.threads().clamp(1, 8);\"\nb=\"\"\"        // Fils pour la déquantification des experts **sans noyau** (grilles Q2_K\n        // … [1000 caractères tronqués]`
+
+  ```
+ok
+    Finished `release` profile [optimized] target(s) in 32.40s
+=== perplexité 1743713.6243 sur 3 tokens (0 événements, 13.6 s) ===
+    postes (ms/token) : projets-attn 0.00 | rope 0.00 | attention 1260.90 | proj+mlp 3142.48 | somme 4403.38 | reste (tête + échantillonnage) 120.11
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=/home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf && rm -rf /tmp/dthr && mkdir -p /tmp/dthr && DRAVE_DUMP_COUCHES=/tmp/dthr/l ./drave-core/target/release/drave $M --ppl /tmp/v41_last4.ids --ctx 8 --limit 4 --abits  … [700 caractères tronqués]`
+
+  ```
+threads_iq 8 → 20 : 2544 tenseurs, 0 différents
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=/home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf && (time ./drave-core/target/release/drave $M --ppl /tmp/v41_texte.txt.ids --ctx 32 --limit 32 --abits 8 --threads 20 > /tmp/v41_thr32.log 2>&1) 2>&1 | grep real; g … [135 caractères tronqués]`
+
+  ```
+real	2m4,863s
+=== perplexité 115521.8693 sur 31 tokens (0 événements, 109.8 s) ===
+    postes (ms/token) : projets-attn 0.00 | rope 0.00 | attention 1019.28 | proj+mlp 2431.58 | somme 3450.86 | reste (tête + échantillonnage) 90.45
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash tools/portes.sh rapide > /tmp/porte17.log 2>&1 & sleep 2 && cat > /tmp/box17_revue.md <<'EOF'\n## Revue — ce qui est livré, mesuré\n\n### 1. `proj+mlp` est borné par le CALCUL, pas par le disque (mesuré)\n\nDeux passes ide … [2588 caractères tronqués]`
+
+  ```
+revue ecrite
+ven 02 oct 2026 23:20:54 EDT
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nrevue=open(\"/tmp/box17_revue.md\").read()\np=\"sprints/17-les-experts-io-ou-calcul.md\"\ns=open(p).read()\ns=s.replace(\"- **Engagement de fin** : dépôt vert (tests + portes), machine rendue, tout commité.\\n\",\n  … [270 caractères tronqués]`
+
+  ```
+ok
+| passe, ctx 32 (31 jetons) | 145,1 s | **109,8 s** (×1,32) |
+| perplexité (ctx 8 / ctx 32) | 1 743 713,6243 / 115 521,8693 | **identiques** |
+| vides, 2 544 tenseurs | — | **0 différent** |
+
+Le découpage par lignes garantit l'égalité au bit près (aucune réassociation) :
+elle est vérifiée, pas supposée.
+
+**Cumulé depuis le début de la nuit** (blocs 15 et 17), la passe ctx 32 de V4.1
+passe de **313,1 s à 109,8 s (×2,85)**, sans qu'un seul chiffre change.
+
+### 3. Ce que la mesure dit du levier suivant
+
+Le chemin de déquantification matérialise les poids en f32 puis les multiplie :
+avec 20 fils il tourne à ~4,3 G de poids par seconde. Le levier qui reste est de
+**vectoriser la déquantification seule** (conversion codebook → f32), sans toucher
+au produit scalaire : la conversion est une fonction pure, valeur par valeur,
+donc **SIMD y est bit-exact par construction** — contrairement au SIMD du produit
+scalaire, qui réassocie la somme et changerait la référence de non-régression.
+C'est le chantier du bloc 18.
+  ```
+
+- **bash** `{"command": "sleep 240; tail -5 /tmp/porte17.log; echo \"procs: $(pgrep -x drave | wc -l)\"", "description": "Check the gate for box 17", "timeoutMs": 300000}`
+
+  ```
+mode 2 — listes par blocs        3.65e-2  ✅  (réf 61.9920 / deux nœuds 64.2535)
+  mode 3 — lot dense f32           0.00e0  ✅  (réf 60.8135 / deux nœuds 60.8135)
+  mode 4 — lot en listes           4.45e-3  ✅  (réf 60.8135 / deux nœuds 60.5427)
+
+toutes les portes sont vertes
+procs: 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -E \"V4-Flash 43|tests|Qwen2\" /tmp/porte17.log; cat >> sprints/17-les-experts-io-ou-calcul.md <<'EOF'\n## Rétrospective — garder / changer / doute\n\n**Garder.**\n\n- **Le contrôle « même mesure, cache chaud »** : deux passes i … [5014 caractères tronqués]`

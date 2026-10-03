@@ -6038,7 +6038,14 @@ sur un ensemble plus large que la référence donnerait un autre choix", m.candi
         let largeur_profil = self.cfg.ffn.max(self.cfg.ffn_exp);
         // Fils à donner à la déquantification des experts IQ. Lus avant
         // l'emprunt destructuré, comme le reste.
-        let threads_iq = self.pool.threads().clamp(1, 8);
+        // Fils pour la déquantification des experts **sans noyau** (grilles Q2_K
+        // & co, c'est-à-dire tous les experts de V4.1). Ils étaient BORNÉS à 8
+        // sur une machine qui en a 20 : mesuré au bloc 17, ce chemin de
+        // déquantification est **borné par le calcul** (deux passes identiques,
+        // la seconde trouvant 12 Go d'experts dans le cache de pages, donnent le
+        // même temps à 0,1 s près) — un fil en plus est donc un gain direct, et
+        // le découpage par lignes le rend identique au bit près.
+        let threads_iq = self.pool.threads().clamp(1, 32);
         // Diagnostic `DRAVE_DEBUG_ETAT=1` : la norme de l'état résiduel à chaque
         // couche. Un modèle qui prédit le MÊME jeton à toutes les positions a un
         // état qui ne dépend plus de l'entrée ; cette ligne dit à quelle couche
