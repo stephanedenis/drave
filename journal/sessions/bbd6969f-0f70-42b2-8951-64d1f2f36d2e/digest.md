@@ -102328,3 +102328,59 @@ syntaxe OK
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"docs/plan-deepseek41-complet.md\"\ns=open(p).read()\na=\"\"\"> 1. **Le flux n'est PAS lisible par l'outil d'analyse** : `tools/analyse_flux.py`\n>    lit `<Ih` (indice u32 + valeur i16 = la version 1 du format D … [2374 caractères tronqués]`
+
+  ```
+ok
+314ff84 Porte Drave de P6, point 1 CORRIGÉ : l'outil d'analyse lit les trois versions du format DRVF, et la porte est branchée
+sam 03 oct 2026 04:19:51 EDT
+  ```
+
+### 🤖 Assistant
+
+**Ronde 10 — un point de la porte Drave tenu, et il est désormais vérifié à chaque passage**
+
+**Corrigé** : `tools/analyse_flux.py` lisait la **version 1** du format DRVF (indice u32 + i16) alors que le moteur écrit la **2** (indices par écarts) et la **3** (échelle f16 par bloc de 32 canaux, valeurs i8) — toute trace réelle le faisait planter. Le lecteur gère les trois versions, échelle par bloc comprise.
+
+**Et la porte est branchée dans `tools/portes.sh`** : elle produit une trace avec le petit modèle (quelques secondes) et la relit avec l'outil — un **contrat de format entre deux programmes**, vérifié à chaque passage plutôt que supposé. Mesuré : 384 listes, 896 cachés, densité / persistants / top-1 % / top-10 % / recouvrement par couche.
+
+Raison de fond, écrite dans le commit : **un outil d'analyse qu'on ne peut pas exécuter sur une trace du moteur est un outil mort** — et il l'était depuis le passage à la v2. C'est très exactement le genre de chose que la « porte Drave » existe pour attraper, et elle ne l'avait pas attrapée parce que personne ne lançait l'outil.
+
+**Ce qui reste de cette porte** : le rejeu « à l'identique » (4 221,0901 → 4 220,6935, sur une trace qui ne couvrait que 2 couches et avec l'annonce du moteur lui-même « 672 listes manquantes »). Deux choses à faire au prochain passage, et elles sont petites : refaire le rejeu sur une trace **complète**, puis **écrire la définition mesurable** de « identique » — bit à bit si les listes ne sont pas quantifiées, sinon un écart plafonné et annoncé. Tant que ce n'est pas fait, P6 ne passe pas, et c'est écrit dans le plan.
+
+**Portes** : vertes (64 tests, V4-Flash 8430,4966, cinq modes de flux, plus la nouvelle porte du flux relu). Objectif **actif** — il reste du travail nommé et vérifiable.
+
+
+## Tour 85
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en respectant pour chaque phase ses deux portes : porte de correction (comparaison étage par étage à llama.cpp sur V4-Flash) et porte Drave (flux : événements/paires par jeton, trace rejouée à l'identique, découpage en grappes, flux lisible par un outil d'analyse). Aucune phase ne passe à la suivante sans ses deux portes. Jamais de forward muet, jamais d'optimisation qui change une sortie sans le dire."
+Round: 11/30
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && V=/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf && ./drave-core/target/release/drave $V --ppl /tmp/ids_v4flash.txt --ctx 32 --limit 8 --dense --threads 16 --tr … [382 caractères tronqués]`
+
+  ```
+[trace] flux enregistré dans /tmp/tf_complet.drvf
+       7 tokens notés — perplexité cumulée 4221.090  (0.4 tok/s)
+[trace] 688 listes · 2817230 neurones actifs · 8 Mo
+=== rejeu complet ===
+[flux] rejeu depuis /tmp/tf_complet.drvf : 688 listes enregistrées
+       7 tokens notés — perplexité cumulée 4221.071  (0.4 tok/s)
+  rejeu             : 688 listes servies, 0 manquantes
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"tools/portes.sh\"\ns=open(p).read()\na=\"\"\"# 8. Le DÉCOUPAGE : deux nœuds, cinq modes de flux, un petit modèle (~20 s).\"\"\"\nb=\"\"\"# 7quater. Le REJEU doit rendre la MÊME perplexité que la passe tracée — e … [2502 caractères tronqués]`
+
+  ```
+ok
+syntaxe OK
+référence: perplexité 125.8648
+rejeu    :       11 tokens notés — perplexité cumulée 125.865  (26.2 tok/s)
+  rejeu             : 576 listes servies, 0 manquantes
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"docs/plan-deepseek41-complet.md\"\ns=open(p).read()\na=\"\"\"> 2. **Le rejeu n'est pas identique** : passe tracée sur 8 jetons (ctx 32,\n>    perplexité **4 221,0901**), rejouée avec `--flux-forcer` → **4 220,69 … [3009 caractères tronqués]`

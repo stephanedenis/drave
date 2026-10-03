@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 109.5 h |
-| Tours | 84 |
-| Messages | 6424 |
-| Appels d'outils | 6156 |
+| Durée | 109.6 h |
+| Tours | 85 |
+| Messages | 6429 |
+| Appels d'outils | 6159 |
 | Fichiers touchés | 118 |
-| Commandes | 5220 |
+| Commandes | 5223 |
 | Sous-agents | 32 |
-| Commits | 410 |
+| Commits | 411 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -211,6 +211,8 @@
 **Tour 83** — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en respectant pour chaque phase ses deux portes : porte de correction (comparaison étage par étage à llama.cpp sur V4-Flash) et porte Drave (flux : événements/paires par jeton, trace rejouée à l'identique, découpage en grappes, flux lisible par un outil d'analyse). Aucune phase ne passe … [661 caractères tronqués]
 
 **Tour 84** — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en respectant pour chaque phase ses deux portes : porte de correction (comparaison étage par étage à llama.cpp sur V4-Flash) et porte Drave (flux : événements/paires par jeton, trace rejouée à l'identique, découpage en grappes, flux lisible par un outil d'analyse). Aucune phase ne passe … [662 caractères tronqués]
+
+**Tour 85** — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en respectant pour chaque phase ses deux portes : porte de correction (comparaison étage par étage à llama.cpp sur V4-Flash) et porte Drave (flux : événements/paires par jeton, trace rejouée à l'identique, découpage en grappes, flux lisible par un outil d'analyse). Aucune phase ne passe … [662 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -4240,6 +4242,28 @@ C'est écrit dans le plan (P6, en tête) avec cette conséquence : **aucun chant
 - bash — Wire the tool into the gates and test
 - bash — Commit the tool fix and gate wiring
 
+**Synthèse produite :**
+
+**Ronde 10 — un point de la porte Drave tenu, et il est désormais vérifié à chaque passage**
+
+**Corrigé** : `tools/analyse_flux.py` lisait la **version 1** du format DRVF (indice u32 + i16) alors que le moteur écrit la **2** (indices par écarts) et la **3** (échelle f16 par bloc de 32 canaux, valeurs i8) — toute trace réelle le faisait planter. Le lecteur gère les trois versions, échelle par bloc comprise.
+
+**Et la porte est branchée dans `tools/portes.sh`** : elle produit une trace avec le petit modèle (quelques secondes) et la relit avec l'outil — un **contrat de format entre deux programmes**, vérifié à chaque passage plutôt que supposé. Mesuré : 384 listes, 896 cachés, densité / persistants / top-1 % / top-10 % / recouvrement par couche.
+
+Raison de fond, écrite dans le commit : **un outil d'analyse qu'on ne peut pas exécuter sur une trace du moteur est un outil mort** — et il l'était depuis le passage à la v2. C'est très exactement le genre de chose que la « porte Drave » existe pour attraper, et elle ne l'avait pas attrapée parce que personne ne lançait l'outil.
+
+**Ce qui reste de cette porte** : le rejeu « à l'identique » (4 221,0901 → 4 220,6935, sur une trace qui ne couvrait que 2 couches et avec l'annonce du moteur lui-même « 672 listes manquantes »). Deux choses à faire au prochain passage, et elles sont petites : refaire le rejeu sur une trace **complète**, puis **écrire la définition mesurable** de « identique » — bit à bit si les listes ne sont pas quantifiées, sinon un écart plafonné et annoncé. Tant que ce n'est pas fait, P6 ne passe pas, et c'est écrit dans le plan.
+
+**Portes** : vertes (64 tests, V4-Flash 8430,4966, cinq modes de flux, plus la nouvelle porte du flux relu). Objectif **actif** — il reste du travail nommé et vérifiable.
+
+### Tour 85 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [942 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Complete trace and replay on V4-Flash
+- bash — Wire the replay gate and test it
+- bash — Commit the replay definition and gate
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -4442,7 +4466,7 @@ C'est écrit dans le plan (P6, en tête) avec cette conséquence : **aucun chant
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5180 autres
+- … et 5183 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5000,4 +5024,5 @@ C'est écrit dans le plan (P6, en tête) avec cette conséquence : **aucun chant
 - Plan P7 : la porte de correction est IMPOSSIBLE en l'état et c'est nommé — llama.cpp refuse l'architecture deepseek41 ; ce qui est vérifiable sans référence exé
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="docs/plan-deepseek41-complet.md" s=open(p).read() a="""### P7 — Adaptation à V4.1, et 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="docs/plan-deepseek41-complet.md" s=open(p).read() a="""> 1. **Le flux n'est PAS lisibl
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="docs/plan-deepseek41-complet.md" s=open(p).read() a="""> 2. **Le rejeu n'est pas ident
 

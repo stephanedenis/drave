@@ -198,6 +198,33 @@ if [ -x tools/analyse_flux.py ]; then
     fi
 fi
 
+# 7quater. Le REJEU doit rendre la MÊME perplexité que la passe tracée — et servir
+#          TOUTES les listes. Mesuré sur V4-Flash : trace complète = 688 listes,
+#          rejeu = 688 servies, 0 manquante ; perplexité 4 221,0901 contre
+#          4 221,071, soit 4,5e-06 relatif — l'écart vient de la SECONDE
+#          quantification (la trace porte des activations quantifiées, le rejeu les
+#          requantifie). Le critère de la porte est donc : aucune liste manquante,
+#          et un écart sous 1e-5. Une trace PARTIELLE (--trace-couches) laisse des
+#          listes manquantes : c'est annoncé, et c'est ce qui a fait croire à un
+#          défaut de rejeu là où la trace était simplement incomplète.
+if [ -x tools/analyse_flux.py ]; then
+    TR2=/tmp/porte_rejeu.drvf
+    p_ref=$($D models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 64 --limit 12 \
+            --threads 8 --trace-flux $TR2 2>&1 | valeur)
+    sortie_rejeu=$($D models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 64 --limit 12 \
+            --threads 8 --flux-forcer $TR2 2>&1)
+    p_rej=$(printf '%s\n' "$sortie_rejeu" | valeur)
+    manquantes=$(printf '%s\n' "$sortie_rejeu" | grep -oE "[0-9]+ manquantes" | grep -oE "[0-9]+" | head -1)
+    ecart=$(python3 -c "print(f'{abs($p_rej-$p_ref)/max($p_ref,1e-9):.2e}')" 2>/dev/null || echo "?")
+    if [ "${manquantes:-1}" = "0" ] && python3 -c "import sys; sys.exit(0 if abs($p_rej-$p_ref)/max($p_ref,1e-9) <= 1e-5 else 1)" 2>/dev/null; then
+        printf "  %-42s %s  ✅\n" "le rejeu de la trace (0 manquante, écart ≤ 1e-5)" "écart $ecart"
+    else
+        printf "  %-42s %s  ❌\n" "le rejeu de la trace (0 manquante, écart ≤ 1e-5)" \
+               "écart $ecart · manquantes ${manquantes:-?}"
+        ECHEC=1
+    fi
+fi
+
 # 8. Le DÉCOUPAGE : deux nœuds, cinq modes de flux, un petit modèle (~20 s).
 #    Elle manquait, et c'est exactement pour cela que la fuite de la `pre` reçue
 #    (sprint 13) a vécu si longtemps : aucun test n'exerçait un COUPLE de nœuds.

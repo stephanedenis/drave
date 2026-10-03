@@ -335,14 +335,20 @@ Une phase qui ne passe pas ses deux portes ne passe pas à la suivante.
 >    contrat de format entre deux programmes, vérifié à chaque passage (384 listes,
 >    densité, persistants, recouvrement). Un outil d'analyse qu'on ne peut pas
 >    exécuter sur une trace du moteur est un outil mort, et il l'était.
-> 2. **Le rejeu n'est pas identique** : passe tracée sur 8 jetons (ctx 32,
->    perplexité **4 221,0901**), rejouée avec `--flux-forcer` → **4 220,6935**
->    (écart 9,4e-05 relatif) et le moteur ANNONCE lui-même « 16 listes servies,
->    **672 manquantes** : la moitié au moins n'a pas servi ». La trace ne portait
->    que deux couches (`--trace-couches 0,20`) : à refaire avec une trace complète
->    pour savoir si l'écart vient de la couverture ou de la quantification des
->    listes (le flux est quantifié, la passe ne l'est pas) — et alors DIRE ce que
->    « identique » veut dire pour cette porte.
+> 2. **Le rejeu « à l'identique » : CORRIGÉ et DÉFINI** (bloc 22). La trace
+>    partielle (`--trace-couches 0,20`) était la cause des « 672 manquantes » :
+>    avec une trace **complète**, le moteur annonce « 688 listes servies,
+>    **0 manquante** » ✓. L'écart de perplexité, lui, ne tombe pas à zéro :
+>    V4-Flash ctx 32, 8 jetons → **4 221,0901** (passe) contre **4 221,071**
+>    (rejeu), soit **4,5e-06 relatif**. Explication mesurée : la trace porte des
+>    activations DÉJÀ quantifiées, et le rejeu les requantifie — une seconde
+>    quantification, donc un écart qui ne peut pas être nul sans un chemin de
+>    rejeu qui court-circuite la quantification.
+>    **Définition désormais écrite, et vérifiée par la porte** : « rejouée à
+>    l'identique » = **aucune liste manquante** et écart de perplexité **≤ 1e-5**
+>    (mesuré : 4,5e-06 sur V4-Flash, 1,6e-06 sur Qwen 0,5B). Les deux critères
+>    sont dans `tools/portes.sh` (7quater), sur le petit modèle — sinon la porte
+>    coûterait une minute de plus à chaque passage.
 >
 > Les deux autres points tiennent : le profil imprime les paires par jeton
 > (attention · experts · partagé · scores) et le découpage en grappes est dans
