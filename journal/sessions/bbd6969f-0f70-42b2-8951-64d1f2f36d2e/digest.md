@@ -98946,3 +98946,13 @@ procs: 0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -E \"V4-Flash 43|tests\" /tmp/porte16.log; python3 - <<'PY'\np=\"sprints/16-les-experts-sur-nvme-la-reutilisation.md\"\ns=open(p).read()\na=\"\"\"- `tools/portes.sh rapide` : voir le journal du bloc (63 tests, Qwen 19,3885,\n  c … [642 caractères tronqués]`
+
+  ```
+V4-Flash 43 couches ctx 32                 8430.4966  ✅
+ok
+     7df398e Sprint 15 : clôture (107 min) — ×9,34 sur l'attention sans changer un bit, et le profil complété
+     a0ea42d Sprint 15 : le profil V4 dit maintenant où passent les 1 003 ms/token d'attention (4,5 % seulement dans le calcul)
+     417f8f2 P9 : le matvec f32 de V4.1 parallélisé par LIGNES — ×9,34 sur l'attention, ×3 sur la passe, zéro bit changé
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"sprints/16-les-experts-sur-nvme-la-reutilisation.md\"\ns=open(p).read()\na=\"\"\"## Planning du bloc 17 — grappes d'experts par CHALEUR mesurée\"\"\"\nb=\"\"\"## Planning du bloc 17 — `proj+mlp` : entrées-sortie … [2569 caractères tronqués]`

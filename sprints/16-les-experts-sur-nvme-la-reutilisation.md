@@ -95,7 +95,29 @@ chemins (lecture et prélecture).
   immédiate** : ~1 Go ne copierait que les experts du jeton précédent, et le
   `memcpy` resterait payé à chaque manque.
 
-## Planning du bloc 17 — grappes d'experts par CHALEUR mesurée
+## Planning du bloc 17 — `proj+mlp` : entrées-sorties ou calcul ? (et le fil qui manque)
+
+Le re-tri par chaleur, envisagé d'abord, est **écarté pour deux raisons mesurables** :
+le disque rapide n'a que **253 Go libres** (une copie de V4.1 en demande 365), et
+la copie se ferait sur le disque lent (3,5 To libres sur `Data13TB`) — donc
+l'expérience mesurerait le disque lent, pas le re-tri. Reste la question qui
+commande tout le reste :
+
+1. **Les lectures d'experts sont-elles exposées, ou le calcul ?** Deux passes
+   identiques à la suite : la seconde trouve dans `buff/cache` ce que la première a
+   lu (les experts de 4 jetons ≈ 12 Go tiennent dans les 95 Go de cache). Si la
+   seconde n'est pas plus rapide, le poste est **borné par le calcul**, pas par le
+   disque — et le levier change complètement.
+2. **Le fil qui manque** : la déquantification des experts de V4.1
+   (`Source::Dequant`, « le chemin le plus cher du moteur » d'après son propre
+   commentaire) est découpée par lignes entre `threads_iq` fils, **bornés à 8**
+   (`self.pool.threads().clamp(1, 8)`). La machine en a 20. Mesurer 8 contre 20,
+   puis contre `n_fils` — c'est **bit-exact** (découpage par lignes) et ça peut
+   être le gain le moins cher du bloc.
+3. **Publier** : secondes par jeton à ctx 8 et ctx 32, vides identiques au bit
+   près, et la conclusion I/O contre calcul écrite noir sur blanc.
+
+## (Écarté) grappes d'experts par CHALEUR mesurée
 
 Le vrai levier n'est pas de cacher les octets, c'est d'en lire **moins**, ou de
 les lire **mieux**. P9 l'a déjà démontré sur V4-Flash : le même calcul, mêmes

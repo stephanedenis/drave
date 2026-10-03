@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 104.5 h |
 | Tours | 79 |
-| Messages | 6165 |
-| Appels d'outils | 5908 |
+| Messages | 6166 |
+| Appels d'outils | 5909 |
 | Fichiers touchés | 117 |
-| Commandes | 4977 |
+| Commandes | 4978 |
 | Sous-agents | 32 |
-| Commits | 379 |
+| Commits | 380 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -4037,7 +4037,7 @@ P0-P6 faites, P8 portée et val
 
 ### Tour 79 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [941 caractères tronqués]
 
-*1168 appels d'outils.* Actions notables :
+*1169 appels d'outils.* Actions notables :
 
 - web_search
 - web_fetch
@@ -4053,7 +4053,7 @@ P0-P6 faites, P8 portée et val
 - bash — Locate hc_collapse_triton definition
 - read
 - bash — Read mHC init and pre/post call sites
-- … et 1038 autres
+- … et 1039 autres
 
 **Synthèse produite :**
 
@@ -4260,7 +4260,7 @@ P0-P6 faites, P8 portée et val
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 4937 autres
+- … et 4938 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4787,4 +4787,5 @@ P0-P6 faites, P8 portée et val
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cargo test --release --manifest-path drave-core/Cargo.toml 2>&1 | grep -E "test result|FAILED" | head -2; 
 - Docs : la vitesse V4.1 (×3, zéro bit changé) et le cache d'experts refusé par la mesure entrent dans le plan et dans REPRISE  · plan P9 : le résultat NÉGATIF du
 - Sprint 16 : les portes repassent toutes vertes après le correctif du pas d'expert (V4-Flash 8430,4966)" && tools/sprint.sh status 2>&1 | tail -3
+- Sprint 16 : clôture (33 min) et planning du bloc 17 — proj+mlp est-il borné par les E/S ou par le calcul ? Le re-tri par chaleur est écarté pour une raison mesu
 
