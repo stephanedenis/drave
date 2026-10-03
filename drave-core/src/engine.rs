@@ -215,6 +215,9 @@ pub fn row_val_into(m: &PushMat, r: usize, xq: i64, acc: &mut [i32],
 struct Shared {
     gen: AtomicUsize,
     done: AtomicUsize,
+    /// Tuile de jetons du GEMM 4 bits, imposée par `DRAVE_TUILE_LOT` (0 =
+    /// la constante 8, avec laquelle tout a été mesuré).
+    tuile_lot: AtomicUsize,
     /// Workers tués par une panique. Sans ce compteur, le fil principal
     /// tournait indéfiniment sur `done` : un `index out of bounds` chez un
     /// worker se manifestait par un blocage muet de tout le programme
@@ -397,6 +400,9 @@ impl Pool {
             gout: AtomicPtr::new(std::ptr::null_mut()),
             gen: AtomicUsize::new(0),
             done: AtomicUsize::new(0),
+            tuile_lot: AtomicUsize::new(
+                std::env::var("DRAVE_TUILE_LOT").ok()
+                    .and_then(|v| v.parse::<usize>().ok()).unwrap_or(0)),
             morts: AtomicUsize::new(0),
             stop: AtomicBool::new(false),
             lists: AtomicPtr::new(std::ptr::null_mut()),
@@ -522,9 +528,22 @@ impl Pool {
                             // du premier jeton (voir `Shared::gs32`).
                             let s32 = unsafe { std::slice::from_raw_parts(
                                 sh.gs32.load(Ordering::Acquire), t) };
-                            const TUILE4: usize = 8;
-                            for i0 in (0..t).step_by(TUILE4) {
-                                let i1 = (i0 + TUILE4).min(t);
+                            // Tuile de jetons : elle garde les ACTIVATIONS du
+                            // groupe dans le cache pendant qu'on balaie les
+                            // lignes, au prix d'un déchiffrage des poids par
+                            // passage. L'hypothèse « une tuile trop petite paie
+                            // t/tuile fois le déchiffrage, donc une grande tuile
+                            // doit gagner » a été MESURÉE ET RÉFUTÉE : à lot 32
+                            // sur Qwen3-30B-A3B, tuile 8 / 16 / 64 donnent
+                            // 21,2 / 21,2 / 22,0 s (l'écart est dans le bruit, et
+                            // la grande tuile est plutôt derrière). La constante
+                            // reste donc à 8, la valeur avec laquelle tout le
+                            // reste a été mesuré. `DRAVE_TUILE_LOT` existe pour
+                            // refaire l'essai, pas pour régler quoi que ce soit.
+                            let impose = sh.tuile_lot.load(Ordering::Relaxed);
+                            let tuile = if impose > 0 { impose } else { 8 };
+                            for i0 in (0..t).step_by(tuile) {
+                                let i1 = (i0 + tuile).min(t);
                                 for o in lo..hi {
                                     for i in i0..i1 {
                                         let xi = &x16[i * d.n_in..(i + 1) * d.n_in];

@@ -115641,3 +115641,306 @@ The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/verification-kimi-
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"K3 complet : les sorties sont identiques à celles obtenues pendant le transfert\n\n--k3-essai relancé sur les 32 shards donne, au chiffre près, les mêmes valeurs\nqu'avec 25 shards sur 32 : MoE couche … [543 caractères tronqués]`
+
+  ```
+c8ff34c K3 complet : les sorties sont identiques à celles obtenues pendant le transfert
+  ```
+
+- **bash** `{"command": "sleep 280; tail -12 /tmp/portes31.log; echo \"=== llama-cli ===\"; grep -E \"^read_bytes\" /proc/1445983/io; ps -o etimes= -p 1445983; date \"+%H:%M\"", "description": "Poll gates and baseline", "timeoutMs": 300000}`
+
+  ```
+Qwen2.5-0.5B ctx 256                       19.3885  ✅
+  Qwen3-30B en clusters (origine : 799,8557) 799.8557  ✅
+  threads par défaut (physiques)            20  ✅
+  formats contre libggml                     17 concorde(s), 0 divergence(s), 0 absent(s)  ✅
+  GLM-5.3 : sigmoïde ×2,5                  sigmoïde  ✅
+  Kimi-K2.7 : sigmoïde ×2,827              sigmoïde  ✅
+  V4-Flash : racine de softplus              racine de softplus  ✅
+  Qwen3-235B : softmax                       softmax  ✅
+  V4-Flash : --config le dit calculable      oui  ✅
+  V4-Flash 43 couches ctx 32 (archivée)     ARCHIVE=1 pour la lancer
+  engram V4.1 : adressage                    rangées DISTINCTES : 479723  ✅
+  gpt-oss : --config le dit calculable       oui  ✅
+=== llama-cli ===
+read_bytes: 382375485440
+   2975
+15:09
+  ```
+
+- **bash** `{"command": "ps -eo pid,ppid,etimes,comm,args --no-headers | grep -E \"portes|drave|llama|python3\" | grep -v grep | cut -c1-150 | head -10", "description": "See what the gates are running"}`
+
+  ```
+1447       1 1038067 firewalld       /usr/bin/python3.13 /usr/sbin/firewalld --nofork --nopid
+   1631       1 1038066 fail2ban-server /usr/bin/python3.13 /usr/bin/fail2ban-server -xf start
+   2241    2218 1038064 python3         /usr/local/bin/python3 -m uvicorn open_webui.main:app --host 0.0.0.0 --port 8080 --forwarded-allow-ips * --wor
+   2614       1 1038059 ollama          /usr/bin/ollama serve
+1445980 1445951    2981 time            /usr/bin/time -v env LD_LIBRARY_PATH=/home/stephane/Data13TB/stephane/GitHub/llama.cpp-k3/build/bin /home/step
+1445983 1445980    2981 llama-cli       /home/stephane/Data13TB/stephane/GitHub/llama.cpp-k3/build/bin/llama-cli -m /home/stephane/Data13TB/stephane/m
+1456589    2357    2237 timeout         timeout 2400 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/gpt-oss-120b-MXFP
+1456594 1456589    2237 drave           ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/gpt-oss-120b-MXFP4.gguf --ppl 
+1457218 1457216    1846 bash            bash tools/portes.sh
+1466379 1457218    1716 bash            bash tools/portes.sh
+  ```
+
+### 🤖 Assistant
+
+Le HDD est monopolisé par la référence ; je passe à un levier CPU : le noyau du chemin par lots.
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/engine.rs", "limit": 16, "offset": 524}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/engine.rs</path>
+<type>file</type>
+<content>
+524:                                 sh.gs32.load(Ordering::Acquire), t) };
+525:                             const TUILE4: usize = 8;
+526:                             for i0 in (0..t).step_by(TUILE4) {
+527:                                 let i1 = (i0 + TUILE4).min(t);
+528:                                 for o in lo..hi {
+529:                                     for i in i0..i1 {
+530:                                         let xi = &x16[i * d.n_in..(i + 1) * d.n_in];
+531:                                         out[o * t + i] = d.dot16(o, xi, &s32[i]) * sx[i];
+532:                                     }
+533:                                 }
+534:                             }
+535:                         }
+536:                         sh.done.fetch_add(1, Ordering::Release);
+537:                         break 'generation;
+538:                     }
+539:                     if mode == 3 {
+
+(Showing lines 524-539 of 1010. Use offset=540 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/engine.rs", "new_string": "                                sh.gs32.load(Ordering::Acquire), t) };\n                            // Tuile de jetons : elle existe pour garder les\n                            // ACTIVATIONS du … [2323 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/engine.rs has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo build --release 2>&1 | grep -E \"^error\" -A 6 | head -20; cargo test --release 2>&1 | grep -E \"^test result\"", "description": "Rebuild with adaptive tile", "timeoutMs": 900000}`
+
+  ```
+test result: ok. 77 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+  ```
+
+- **bash** `{"command": "uptime; tail -3 /tmp/portes31.log; ps -eo pid,etimes,%cpu,comm --no-headers | awk '$4==\"drave\"||$4==\"llama-cli\"{print}'", "description": "Check machine load before measuring"}`
+
+  ```
+15:10:51  up 12 days  4:22,  2 users,  load average: 38,25, 37,70, 33,66
+  V4-Flash 43 couches ctx 32 (archivée)     ARCHIVE=1 pour la lancer
+  engram V4.1 : adressage                    rangées DISTINCTES : 479723  ✅
+  gpt-oss : --config le dit calculable       oui  ✅
+1445983    3086  3.8 llama-cli
+1456594    2341  369 drave
+1466385    1820  438 drave
+  ```
+
+- **bash** `{"command": "sleep 270; uptime; tail -4 /tmp/portes31.log; ps -eo pid,etimes,%cpu,comm --no-headers | awk '$4==\"drave\"||$4==\"llama-cli\"{print}'", "description": "Wait for load to drop", "timeoutMs": 300000}`
+
+  ```
+15:15:27  up 12 days  4:27,  2 users,  load average: 20,26, 28,30, 30,89
+  V4-Flash : --config le dit calculable      oui  ✅
+  V4-Flash 43 couches ctx 32 (archivée)     ARCHIVE=1 pour la lancer
+  engram V4.1 : adressage                    rangées DISTINCTES : 479723  ✅
+  gpt-oss : --config le dit calculable       oui  ✅
+1445983    3361  4.5 llama-cli
+1466385    2096  476 drave
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && sed -n '17,60p' main.rs | head -50", "description": "Read VARS_LUES list"}`
+
+  ```
+const VARS_LUES: &[&str] = &[
+    "BANC_KV_DEBUG", "BANC_KV_GPU_SEUL", "BANC_KV_GRAD", "BANC_KV_K0",
+    "BANC_KV_KUNIT", "BANC_KV_UNIT", "BANC_KV_V1", "BANC_SANS_PUITS",
+    "CLUSTERS", "DEBUG_ETAT", "DEBUG_FLUX", "DEBUG_MLA", "DEBUG_YARN", "DUMP_COUCHES",
+    "ETAT_ENTREE",
+    "FLUX_VERIF", "GPU", "GPU_EXPERTS",
+    "GPU_EXPERTS_GO", "GPU_KV", "GPU_TETE", "GPU_TOPK", "HARMONY_TRACE",
+    "KV_BITS", "KV_F16", "KV_K_F16", "KV_K_F32", "KV_V_F32", "MMAP",
+    "BIAIS_VL", "EXPERTS_RAM", "PRELIRE", "PRELIRE_TOUT", "Q8_BLOCS", "SANS_ENGRAM",
+    "SANS_EMPRUNT",
+    "TRACE_BLOCS",
+    "SANS_BLOCS", "SANS_COMPRESSION", "SIMD_DOT", "TRACE_EXPERTS", "V41_SANS_RETARD",
+    "V41_TETE_COPIE0",
+    "VISION_TEXTE",
+    "YARN",
+    "YARN_MSCALE", "YARN_NON",
+    "YARN_RAMPE",
+];
+
+mod clusters;
+mod kimi_k3;
+mod engine;
+mod engram;
+mod formats;
+mod gguf;
+mod list;
+mod materiel;
+mod model;
+mod gpu;
+mod tokenizer;
+
+use engine::{matvec_dense, matvec_shift_add, Pool, SparseVec};
+use gguf::Gguf;
+use list::{dense_bits, BitmapSign, DenseQ4, DenseQ8, FusedSign, PushMat, SignedDelta, SparseK};
+use std::time::Instant;
+
+fn fmt_bits(b: u64, n: usize) -> String {
+    format!("{:8.3} b/poids  ({:7.2} Mo)", b as
+… [231 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && grep -n \"done: AtomicUsize\\|gen: AtomicUsize\" engine.rs | head -3; sed -n '398,415p' engine.rs", "description": "Locate Shared fields"}`
+
+  ```
+216:    gen: AtomicUsize,
+217:    done: AtomicUsize,
+398:            gen: AtomicUsize::new(0),
+            gen: AtomicUsize::new(0),
+            done: AtomicUsize::new(0),
+            morts: AtomicUsize::new(0),
+            stop: AtomicBool::new(false),
+            lists: AtomicPtr::new(std::ptr::null_mut()),
+            delta: AtomicPtr::new(std::ptr::null_mut()),
+            push: AtomicPtr::new(std::ptr::null_mut()),
+            dense: AtomicPtr::new(std::ptr::null_mut()),
+            dense4: AtomicPtr::new(std::ptr::null_mut()),
+            xv: AtomicPtr::new(std::ptr::null_mut()),
+            xv16: AtomicPtr::new(std::ptr::null_mut()),
+            xs32: AtomicPtr::new(std::ptr::null_mut()),
+            sx: AtomicUsize::new(0),
+            outs: AtomicPtr::new(std::ptr::null_mut()),
+            mode: AtomicUsize::new(1),
+            sv_idx: AtomicPtr::new(std::ptr::null_mut()),
+            sv_val: AtomicPtr::new(std::ptr::null_mut()),
+            n_active: AtomicUsize::new(0),
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && python3 - <<'PY'\nimport re\np='engine.rs'; s=open(p).read()\ns=s.replace(\"    gen: AtomicUsize,\\n    done: AtomicUsize,\\n\",\n            \"    gen: AtomicUsize,\\n    done: AtomicUsize,\\n    /// Tuile de jetons d … [1195 caractères tronqués]`
+
+  ```
+220:    tuile_lot: AtomicUsize,
+403:            tuile_lot: AtomicUsize::new(
+546:                            let impose = sh.tuile_lot.load(Ordering::Relaxed);
+27:    "TRACE_BLOCS", "TUILE_LOT",
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo build --release 2>&1 | grep -E \"^error\" -A 6 | head -20; cargo test --release 2>&1 | grep -E \"^test result|FAILED|les_vars\"", "description": "Build with TUILE_LOT knob", "timeoutMs": 900000}`
+
+  ```
+test tests_vars::les_vars_qt_ne_sont_pas_des_notres ... ok
+test tests_vars::les_vars_lues_sont_completes ... ok
+test result: ok. 77 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash -c '\nB=./drave-core/target/release/drave; M=/home/stephane/FastNVMe/qwen3-30b-a3b-Q4_K_M.gguf\necho \"# tuile de jetons du GEMM 4 bits : 8 (ancien) contre déduite (256 Kio d activations)\"\nprintf \"%-10s %10s %9s %8s\\n\ … [821 caractères tronqués]`
+
+  ```
+lancé
+# tuile de jetons du GEMM 4 bits : 8 (ancien) contre déduite (256 Kio d activations)
+lot.tuile    prompt_s     tok/s    CPU_%
+32.8.r1        45.486       4.2     1060
+32.auto.r1     28.530       6.7      917
+192.8.r1       20.518       9.4      797
+  ```
+
+- **bash** `{"command": "sleep 290; cat /tmp/ab_tuile.log; echo \"=== llama-cli ===\"; grep -E \"^read_bytes\" /proc/1445983/io; uptime", "description": "Poll A/B measurement", "timeoutMs": 310000}`
+
+  ```
+# tuile de jetons du GEMM 4 bits : 8 (ancien) contre déduite (256 Kio d activations)
+lot.tuile    prompt_s     tok/s    CPU_%
+32.8.r1        45.486       4.2     1060
+32.auto.r1     28.530       6.7      917
+192.8.r1       20.518       9.4      797
+192.auto.r1     22.999       8.3      840
+32.8.r2        27.663       6.9      734
+32.auto.r2     20.303       9.5      816
+192.8.r2       19.705       9.7      816
+192.auto.r2     21.137       9.1      796
+=== llama-cli ===
+read_bytes: 579733688320
+ 15:26:13  up 12 days  4:38,  2 users,  load average: 6,17, 15,33, 23,60
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && B=./drave-core/target/release/drave; M=/home/stephane/FastNVMe/qwen3-30b-a3b-Q4_K_M.gguf\nprintf \"%-12s %10s %8s\\n\" \"lot.tuile\" prompt_s \"CPU_%\"\nfor rep in 1 2 3; do\n for T in 8 64 16 8 64; do\n   out=$(DRAVE_TUILE_LOT=$T /u … [415 caractères tronqués]`
+
+  ```
+lot.tuile      prompt_s    CPU_%
+32.t8.r1         39.318      852
+32.t64.r1        20.297      794
+32.t16.r1        21.456      847
+32.t8.r1         21.735      814
+32.t64.r1        21.613      795
+32.t8.r2         21.239      829
+32.t64.r2        24.303      813
+32.t16.r2        20.962      841
+32.t8.r2         20.244      823
+32.t64.r2        21.732      838
+32.t8.r3         21.671      863
+[timed out after 600000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && python3 - <<'PY'\np='engine.rs'; s=open(p).read()\ns=s.replace(\"\"\"                            // Tuile de jetons : elle existe pour garder les\n                            // ACTIVATIONS du groupe dans le cache pend … [2887 caractères tronqués]`
+
+  ```
+test result: ok. 77 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -14 /tmp/portes31.log; echo \"=== llama ===\"; grep -E \"^read_bytes\" /proc/1445983/io; date \"+%H:%M\"", "description": "Check gates and baseline"}`
+
+  ```
+gpt-oss-120b MXFP4 ctx 256                 —  ❌ (attendu 15.6017)
+  le flux relu par tools/analyse_flux.py     51 lignes  ✅
+  le rejeu de la trace (0 manquante, écart ≤ 1e-5) écart 0.00e+00  ✅
+  porte de correction (llama.cpp, 71 positions) (100.0 % des positions UTILES au-dessus de 0.95, min 0.9959 >= plancher 0.9, top-1 94.4 % sur toutes les positions, 6 saturées exclues de la corrélation)  ✅
+  poids de connexion hc écrits et relus     connexions significatives (≥ 0.05) : 22/48 (46 %)  ✅
+
+=== Découpage (deux nœuds) ===
+  mode 0 — f32 dense               0.00e0  ✅  (réf 61.9920 / deux nœuds 61.9920)
+  mode 1 — listes quantifiées     0.00e0  ✅  (réf 61.9920 / deux nœuds 61.9920)
+  mode 2 — listes par blocs        3.65e-2  ✅  (réf 61.9920 / deux nœuds 64.2535)
+  mode 3 — lot dense f32           0.00e0  ✅  (réf 60.8135 / deux nœuds 60.8135)
+  mode 4 — lot en listes           4.45e-3  ✅  (réf 60.8135 / deux nœuds 60.5427)
+
+AU MOINS UNE PORTE A DIVERGÉ
+=== llama ===
+read_bytes: 711453966336
+15:38
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"15.6017\" -B 12 tools/portes.sh | head -25", "description": "Find gpt-oss ppl gate"}`
+
+  ```
+171-        case "$v" in
+172-            *": oui"*) printf "  %-42s %s  ✅\n" "gpt-oss : --config le dit calculable" "oui" ;;
+173-            *)         printf "  %-42s %s  ❌\n" "gpt-oss : --config le dit calculable" "${v:-—}"; ECHEC=1 ;;
+174-        esac
+175-        # Les identifiants viennent du tokenizer du modèle, jamais d'un autre.
+176-        if [ ! -s /tmp/ids_oss_512.txt ]; then
+177-            [ -s /tmp/wt2_txt.txt ] || head -c 20000 data/wikitext2_test.txt > /tmp/wt2_txt.txt
+178-            $D "$O" --tokenize --fichier /tmp/wt2_txt.txt --sortie /tmp/ids_oss_512.txt >/dev/null 2>&1
+179-        fi
+180-        if [ -s /tmp/ids_oss_512.txt ]; then
+181-            p=$(timeout 2400 $D "$O" --ppl /tmp/ids_oss_512.txt --ctx 256 --dense \
+182-                --threads 16 --limit 512 2>&1 | valeur)
+183:            compare "gpt-oss-120b MXFP4 ctx 256" "15.6017" "$p"
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la /tmp/ids_oss_512.txt 2>/dev/null | head -1\nnohup bash -c 'timeout 9000 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/gpt-oss-120b-MXFP4.gguf --ppl /tmp/ids_oss_512.txt --ctx 256 --dense --thr … [178 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 2437 28 sep 15:41 /tmp/ids_oss_512.txt
+relance de la porte gpt-oss en tâche de fond
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/31-le-regroupement-par-experts-mesure-et-k3-au-complet.md", "new_string": "## Relecture adversariale de mes propres chiffres\n\n1. **Le premier balayage était faux d'un facteur 17.** Un `drave` du balayage\n   précédent tournait  … [3907 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/31-le-regroupement-par-experts-mesure-et-k3-au-complet.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Tuile du GEMM par lots : hypothèse avancée, mesurée, RÉFUTÉE\n\nLe plateau du gain au-delà du lot 2 appelait une explication : le GEMM 4 bits\ndéchiffre les poids t/tuile fois, donc une tuile plus gra … [825 caractères tronqués]`

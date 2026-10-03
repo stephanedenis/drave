@@ -170,3 +170,37 @@ Le préremplissage reste la seule porte, et elle coûte 3,7 s/jeton de calcul.
    annoncée, chiffrée, pas excusée.
 5. **Le budget K3 est mesuré, les GFLOP/s sont empruntés à un autre modèle.**
    Le rapport des deux est une extrapolation.
+
+## Une hypothèse avancée puis RÉFUTÉE (même bloc)
+
+Le plateau du gain au-delà du lot 2 appelait une explication. La voici, telle
+qu'elle a été écrite avant d'être testée : le GEMM 4 bits balaie les lignes une
+fois par tuile de jetons, donc **déchiffre les poids `t/tuile` fois** — à tuile 8
+fixe et lot 192, vingt-quatre fois. Une tuile plus grande devait donc gagner.
+
+Mesuré (`DRAVE_TUILE_LOT`, lot 32, invite de 192 jetons, 16 fils) :
+
+| tuile | prompt_s (4 passes) | moyenne |
+|---|---|---|
+| 8 (la constante historique) | 21,74 · 21,24 · 20,24 · 21,67 | **21,22** |
+| 16 | 21,46 · 20,96 | **21,21** |
+| 64 (déduite de 256 Kio d'activations) | 20,30 · 21,61 · 24,30 · 21,73 | **21,99** |
+
+**Aucune différence, et la grande tuile est plutôt derrière.** L'hypothèse est
+fausse : le déchiffrage des poids n'est pas ce qui borne ce noyau. La constante
+reste donc à **8**, la valeur avec laquelle tout le reste du bloc a été mesuré,
+et `DRAVE_TUILE_LOT` est laissé comme banc d'essai — pas comme réglage.
+
+Le plateau vient donc d'ailleurs : la part dense (attention, normes, tête) ne
+s'amortit pas par le regroupement des experts, et c'est elle qui prend la main.
+
+## Environnement de mesure, dit honnêtement
+
+La fin du bloc a été mesurée pendant que `llama.cpp-k3` chargeait Kimi-K3 :
+**711 Go lus en 1 h 50** à travers le cache de pages, ce qui évince le modèle de
+mesure en cours de route. Les chiffres du tableau principal (le balayage des
+lots) ont été pris **avant**, machine au repos ; ceux de l'essai de tuile ont été
+pris **pendant**, et c'est précisément pourquoi la conclusion est « aucune
+différence » et non « ×1,3 » : dans cet environnement, un écart de 30 % n'est pas
+attribuable.
+

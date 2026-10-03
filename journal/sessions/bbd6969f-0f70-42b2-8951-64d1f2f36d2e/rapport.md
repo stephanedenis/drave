@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 120.3 h |
+| Durée | 120.9 h |
 | Tours | 100 |
-| Messages | 7252 |
-| Appels d'outils | 6923 |
-| Fichiers touchés | 149 |
-| Commandes | 5854 |
+| Messages | 7272 |
+| Appels d'outils | 6943 |
+| Fichiers touchés | 150 |
+| Commandes | 5871 |
 | Sous-agents | 32 |
-| Commits | 478 |
+| Commits | 479 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -4889,7 +4889,7 @@ Et le geste qui rend un modèle de 1,5 To seulement *lisible* : les experts sont
 
 ### Tour 100 — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas e … [1246 caractères tronqués]
 
-*162 appels d'outils.* Actions notables :
+*182 appels d'outils.* Actions notables :
 
 - bash — Extract the KDA into a reusable piece
 - bash — Commit the KDA extraction and check the download
@@ -4905,11 +4905,11 @@ Et le geste qui rend un modèle de 1,5 To seulement *lisible* : les experts sont
 - bash — Find expert loading call sites
 - read
 - bash — Inspect RAM expert cache
-- … et 127 autres
+- … et 145 autres
 
 **Synthèse produite :**
 
-**Le transfert de Kimi-K3 est terminé** (14:01). Je bascule sur la vérification.
+Le HDD est monopolisé par la référence ; je passe à un levier CPU : le noyau du chemin par lots.
 
 ## 3. Travail accompli
 
@@ -5064,8 +5064,9 @@ Et le geste qui rend un modèle de 1,5 To seulement *lisible* : les experts sont
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/kimi_k3.rs` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mesure-prefill-lot.sh` | 3 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/analyse_union_experts.py` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/31-le-regroupement-par-experts-mesure-et-k3-au-complet.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/31-le-regroupement-par-experts-mesure-et-k3-au-complet.md` | 1 | 1 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-prefill-par-experts.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/engine.rs` | 0 | 1 |
 
 ### Sous-agents lancés
 
@@ -5144,7 +5145,7 @@ Et le geste qui rend un modèle de 1,5 To seulement *lisible* : les experts sont
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5814 autres
+- … et 5831 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5272,7 +5273,7 @@ Et le geste qui rend un modèle de 1,5 To seulement *lisible* : les experts sont
 
 ## 5. Erreurs rencontrées
 
-346 sorties en erreur ou divergentes. Les premières :
+347 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -5770,4 +5771,5 @@ Et le geste qui rend un modèle de 1,5 To seulement *lisible* : les experts sont
 - K3 : les quatre premières couches COMPOSÉES (0 dense, 1-2 MoE, 3 MLA) — la chaîne vérifiée, pas seulement les pièces  Attention résiduelle, banque tous les 12, 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'MSG' Bloc 31 : le regroupement par experts vaut x1,58 — et Kimi-K3 est
 - K3 complet : les sorties sont identiques à celles obtenues pendant le transfert  --k3-essai relancé sur les 32 shards donne, au chiffre près, les mêmes valeurs 
+- Tuile du GEMM par lots : hypothèse avancée, mesurée, RÉFUTÉE  Le plateau du gain au-delà du lot 2 appelait une explication : le GEMM 4 bits déchiffre les poids 
 
