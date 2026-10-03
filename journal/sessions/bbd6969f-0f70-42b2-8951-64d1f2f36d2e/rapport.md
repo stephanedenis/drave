@@ -5,15 +5,15 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 118.2 h |
+| Durée | 119.7 h |
 | Tours | 100 |
-| Messages | 7092 |
-| Appels d'outils | 6766 |
-| Fichiers touchés | 145 |
-| Commandes | 5732 |
+| Messages | 7239 |
+| Appels d'outils | 6910 |
+| Fichiers touchés | 149 |
+| Commandes | 5843 |
 | Sous-agents | 32 |
-| Commits | 476 |
-| Compactages de contexte | 9 |
+| Commits | 477 |
+| Compactages de contexte | 10 |
 
 ## Objectifs déclarés
 
@@ -4889,17 +4889,27 @@ Et le geste qui rend un modèle de 1,5 To seulement *lisible* : les experts sont
 
 ### Tour 100 — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas e … [1246 caractères tronqués]
 
-*5 appels d'outils.* Actions notables :
+*149 appels d'outils.* Actions notables :
 
 - bash — Extract the KDA into a reusable piece
 - bash — Commit the KDA extraction and check the download
 - bash — Implement the layer composition
 - bash — Test the four-layer composition
 - bash — Commit the composition test
+- bash — Check commit message and download progress
+- bash — Locate the model directory
+- bash — Find Kimi-K3 download directory
+- bash — Get download process details
+- bash — Check download directory progress
+- bash — Survey engine source and MoE functions
+- bash — Find expert loading call sites
+- read
+- bash — Inspect RAM expert cache
+- … et 117 autres
 
 **Synthèse produite :**
 
-⏵ Bloc 36 (suite) : les pièces manquantes de la composition (normes par couche, FFN dense)
+**Le transfert de Kimi-K3 est terminé** (14:01). Je bascule sur la vérification.
 
 ## 3. Travail accompli
 
@@ -4949,8 +4959,8 @@ Et le geste qui rend un modèle de 1,5 To seulement *lisible* : les experts sont
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/vision.md` | 1 | 4 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/histoire.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/roadmap.md` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs` | 0 | 109 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs` | 0 | 34 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs` | 0 | 118 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs` | 0 | 35 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/gpu.rs` | 0 | 3 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gpu-topk-selection.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/README.md` | 0 | 3 |
@@ -5039,7 +5049,7 @@ Et le geste qui rend un modèle de 1,5 To seulement *lisible* : les experts sont
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/analyse_hc.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-hc-permutation.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-portes-p0-p9.md` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-kimi-k3.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-kimi-k3.md` | 1 | 1 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/27-la-porte-p1-fermee-et-la-bascule-vers-kimi-k3.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/architecture-kimi-k3.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/28-la-bascule-vers-kimi-k3-et-deux-defauts-de-tokenizer.md` | 1 | 0 |
@@ -5052,6 +5062,10 @@ Et le geste qui rend un modèle de 1,5 To seulement *lisible* : les experts sont
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/verification-kimi-k3.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/apres-telechargement-k3.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/kimi_k3.rs` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mesure-prefill-lot.sh` | 3 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/analyse_union_experts.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/31-le-regroupement-par-experts-mesure-et-k3-au-complet.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-prefill-par-experts.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -5130,7 +5144,7 @@ Et le geste qui rend un modèle de 1,5 To seulement *lisible* : les experts sont
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5692 autres
+- … et 5803 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5258,7 +5272,7 @@ Et le geste qui rend un modèle de 1,5 To seulement *lisible* : les experts sont
 
 ## 5. Erreurs rencontrées
 
-345 sorties en erreur ou divergentes. Les premières :
+346 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -5754,4 +5768,5 @@ Et le geste qui rend un modèle de 1,5 To seulement *lisible* : les experts sont
 - K3 : la couche MLA calcule (couches 3, 7, 11…) — absorption par tête, nope sans rotation, porte sigmoïde pleine largeur  Mesuré : trois jetons à la suite, cache
 - K3 : le KDA extrait en pièce réutilisable (couches 1, 2, 4, 5, 6, 8…), avec sa remise à zéro d'état  La composition (couche 0 -> 1) exige de charger l'attention
 - K3 : les quatre premières couches COMPOSÉES (0 dense, 1-2 MoE, 3 MLA) — la chaîne vérifiée, pas seulement les pièces  Attention résiduelle, banque tous les 12, 
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'MSG' Bloc 31 : le regroupement par experts vaut x1,58 — et Kimi-K3 est
 

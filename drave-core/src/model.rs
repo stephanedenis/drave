@@ -102,16 +102,26 @@ pub fn manques_architecture(g: &Gguf, cfg: &Cfg, ctx: usize, clusters: bool) -> 
     }
     // **Kimi-K3** — la cible de la classe « trop gros pour le local »
     // (`docs/plan-kimi-k3.md`, spécification dans `docs/architecture-kimi-k3.md`).
-    // Le fichier se LIT déjà (métadonnées, 93 couches, Q8_0 dense + MXFP4 pour
-    // les 896 experts), mais cinq mécanismes de la passe avant n'existent pas
-    // encore. On les nomme TOUS : « architecture inconnue » ne dit pas quoi
-    // écrire, et c'est exactement ce que la porte `--config` doit annoncer.
+    //
+    // Les cinq mécanismes qui manquaient le 2/10 existent maintenant, tous les
+    // cinq vérifiés contre l'implémentation publiée : KDA (`kda_pas`,
+    // `kda_porte`, `kda_conv_silu`), attention résiduelle + banque tous les 12
+    // (`res_mix`, `PetitesK3`), MoE latent (`MoeK3`), SiTU (`situ`), et la
+    // composition des premières couches qui les enchaîne (`--k3-essai` : quatre
+    // jetons à travers les couches 0→3, sorties finies et vidées au format du
+    // moteur pour la comparaison avec la référence).
+    //
+    // Ce qui manque n'est donc plus une BRIQUE, c'est le BRANCHEMENT : le chemin
+    // K3 est un instrument de vérification qui déquantifie les experts en f32
+    // (une couche MoE = 1 366 ms/jeton, et 93 couches en f32 demanderaient
+    // ~220 Go de RAM) ; il n'est pas branché sur `forward` pour un modèle
+    // entier. Annoncer « calculable : oui » serait faux dans l'autre sens : le
+    // moteur ne sait pas encore faire tourner K3, il sait en vérifier les
+    // étages. C'est cette phrase-là que la porte doit dire.
     if g.meta.get("general.architecture").and_then(|m| m.as_str()) == Some("kimi-k3") {
-        manques.push("attention delta-net (KDA) : conv1d de 4, porte bornée (−5), récurrence par tête");
-        manques.push("attention résiduelle : pile de points de contrôle tous les 12, softmax sur les scores");
-        manques.push("MoE latent : projections down/up autour des experts (latent 3 584)");
-        manques.push("activation SiTU (beta 4, linear_beta 25)");
-        manques.push("redémarrage du flux résiduel aux couches « banque » (toutes les 12)");
+        manques.push("branchement du chemin K3 sur la passe avant complète (93 couches) : les \
+briques existent et sont vérifiées couche par couche (`--k3-essai`), mais le chemin K3 \
+déquantifie les experts en f32 — il sert à VÉRIFIER, pas encore à faire tourner le modèle");
     }
     // Attention par index (DSA) : l'indexeur choisit les clés gardées. Il ne
     // sert QUE si la séquence dépasse `index_topk` — en deçà, llama.cpp garde
@@ -5334,6 +5344,12 @@ l'attention par lots est DENSE. Utiliser --lot 1 pour l'attention creuse.", self
                 quantifier(&att, &mut ai[..t * n_in_wo], &mut sa, self.act_levels, self.act_thresh);
                 let n_out = {
                     let d8 = self.layers[l].wo.d.as_ref().expect("projection dense requise");
+                    // La sortie d'attention était le SEUL produit du chemin par
+                    // lots à ne pas se compter : « paires attention » valait
+                    // 507,5 M/jeton en lot 8 contre 902,6 M en lot 1 pour le
+                    // MÊME calcul — un écart de 1,78× sans cause dans le modèle,
+                    // qui faisait douter de tous les autres compteurs.
+                    self.paires[0] += (d8.n_in as u64) * (d8.n_out as u64) * t as u64;
                     self.pool.gemm_dense_i8(d8, &ai[..t * n_in_wo], t, &sa, &mut yl[..d8.n_out * t]);
                     d8.n_out
                 };
@@ -5353,6 +5369,18 @@ l'attention par lots est DENSE. Utiliser --lot 1 pour l'attention creuse.", self
             Self::flux_lot(&mut self.trace, &mut self.flux_force, j0,
                            1000, l, t, &mut xi, &mut sx, h);
             if let Some(moe) = lay.moe.as_ref() {
+                // **Les experts PARTAGÉS ne sont pas portés par ce chemin.** Le
+                // corps qui suit ne connaît que `moe.gate/up/down` : aucune
+                // occurrence de `shexp` entre ici et la sortie de la couche. Sur
+                // un modèle qui en a (DeepSeek, Kimi), un `--lot N > 1` calculait
+                // donc un AUTRE modèle sans un mot — même famille de défaut que
+                // les hyper-connexions ci-dessus, et comme elles on refuse au
+                // lieu de rendre un chiffre faux qui a l'air d'un chiffre.
+                if moe.shexp.is_some() && t > 1 {
+                    panic!("chemin par LOTS et experts PARTAGÉS : ce chemin n'est pas porté \
+(`forward_lot` n'applique que les experts routés) — le lot calculerait un autre modèle. \
+Utilisez `--lot 1`, ou implémentez les experts partagés ici");
+                }
                 // ---- MoE PAR LOTS : les jetons qui ont choisi le même expert
                 // sont traités ensemble, donc la matrice de l'expert est lue une
                 // fois pour le groupe au lieu d'une fois par jeton.
@@ -5391,6 +5419,20 @@ l'attention par lots est DENSE. Utiliser --lot 1 pour l'attention creuse.", self
                 let mut ga = vec![0i16; t * nff];
                 let mut s32a: Vec<Vec<i32>> = Vec::with_capacity(t);
                 let mut sxa: Vec<f32> = Vec::with_capacity(t);
+                // `yd` est hissé HORS de la boucle des experts : il était
+                // alloué une fois par expert non vide (jusqu'à ~50 allocations
+                // par couche et par lot). Le GEMM écrit toutes ses lignes et
+                // toutes ses colonnes, donc la réutiliser ne change aucun
+                // résultat — seule l'allocation disparaît.
+                let mut yd = vec![0f32; t * nff.max(h)];
+                // Les paires du chemin par LOTS : `gemm_dense_q4` ne tient pas
+                // de compteur (le pool ne connaît pas le modèle), et le chemin
+                // jeton, lui, passe par `matvec4_ou_iq` qui en tient un. Sans
+                // cette ligne, « paires experts » tombait à ~1 % de sa valeur
+                // dès `--lot 2` : le compteur ne voyait plus que les jetons de
+                // génération, et un chiffre qui chute de 97 % sans raison
+                // visible fait croire à une optimisation qui n'existe pas.
+                let mut paires_lot = 0u64;
                 for e in 0..ne {
                     let g = groupes[e].len();
                     if g == 0 { continue; }
@@ -5405,6 +5447,7 @@ l'attention par lots est DENSE. Utiliser --lot 1 pour l'attention creuse.", self
                     let mg = moe.gate[k].expert(loc);
                     self.pool.gemm_dense_q4(&mg, &xg[..g * h], g, &s32g, &sxg,
                                             &mut yq[..mg.n_out * g]);
+                    paires_lot += (mg.n_in as u64) * (mg.n_out as u64) * g as u64;
                     for j in 0..g {
                         for oo in 0..nff {
                             gate[oo * g + j] = yq[oo * g + j]
@@ -5414,6 +5457,7 @@ l'attention par lots est DENSE. Utiliser --lot 1 pour l'attention creuse.", self
                     let mu = moe.up[k].expert(loc);
                     self.pool.gemm_dense_q4(&mu, &xg[..g * h], g, &s32g, &sxg,
                                             &mut yq[..mu.n_out * g]);
+                    paires_lot += (mu.n_in as u64) * (mu.n_out as u64) * g as u64;
                     for j in 0..g {
                         for oo in 0..nff {
                             up[oo * g + j] = yq[oo * g + j]
@@ -5442,8 +5486,9 @@ l'attention par lots est DENSE. Utiliser --lot 1 pour l'attention creuse.", self
                         sxa.push(ech);
                     }
                     let md = moe.down[k].expert(loc);
-                    let mut yd = vec![0f32; md.n_out * g];
-                    self.pool.gemm_dense_q4(&md, &ga[..g * nff], g, &s32a, &sxa, &mut yd);
+                    self.pool.gemm_dense_q4(&md, &ga[..g * nff], g, &s32a, &sxa,
+                                            &mut yd[..md.n_out * g]);
+                    paires_lot += (md.n_in as u64) * (md.n_out as u64) * g as u64;
                     for (j, &(i, w)) in groupes[e].iter().enumerate() {
                         for oo in 0..h {
                             // Le biais de descente est indexé par la LARGEUR DE
@@ -5453,6 +5498,7 @@ l'attention par lots est DENSE. Utiliser --lot 1 pour l'attention creuse.", self
                         }
                     }
                 }
+                self.paires[1] += paires_lot;
                 for i in 0..t {
                     for oo in 0..h { x[i * h + oo] = o[i * h + oo] + down[i * h + oo]; }
                 }

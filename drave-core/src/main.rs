@@ -444,6 +444,21 @@ fn options_actives(mdl: &model::Model, mode: &str, ctx_impose: bool, dense: bool
     println!("[options] fenêtre {} · motif {} · seuil push {} · lot {} · ffn_gain {:?} · hebb {}",
              mdl.attn_window, mdl.swa_pattern, mdl.seuil_push, mdl.lot,
              mdl.ffn_gain, mdl.hebb.is_some());
+    // `--lot N > 1` n'est PAS une simple affaire de vitesse : le chemin par lots
+    // réordonne les sommes de la même façon sur tous les modèles, mais il
+    // change les derniers bits, et un routeur au voisinage d'une égalité peut
+    // choisir un autre expert. Mesuré (Qwen3-30B-A3B, invite de 192 jetons) :
+    // perplexité 19,143 contre 19,172, argmax identique sur 191/191 positions,
+    // et pourtant une génération gloutonne qui diverge au 3e jeton. Le dire
+    // ici, une fois, plutôt que de laisser croire que le lot est neutre.
+    if mdl.lot > 1 {
+        println!("[options] lot {} : le préremplissage par lots n'est PAS identique bit à bit \
+au chemin jeton par jeton (sommes réordonnées ; un routeur à égalité peut changer d'expert). \
+Mesuré sur Qwen3-30B-A3B : PPL 19,143 contre 19,172, argmax identique sur 191/191 positions \
+d'invite, mais une génération gloutonne peut diverger après quelques jetons. Le débit, lui, \
+change : ×1,58 mesuré de lot 1 à lot 192 (invite de 192 jetons, 16 fils).",
+                 mdl.lot);
+    }
     if let Some(kv) = mdl.kv.first() {
         println!("[options] cache KV : {} bits{} · f16 avant {}",
                  kv.bits,

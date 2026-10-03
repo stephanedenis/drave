@@ -112872,3 +112872,2560 @@ composition branchée
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cd drave-core && cargo test --release 2>&1 | grep -E \"^test result\"; cd .. && git add -A && git commit -q -m \"K3 : les quatre premières couches COMPOSÉES (0 dense, 1-2 MoE, 3 MLA) — la chaîne vérifiée, pas seulement les pièces\n\n … [538 caractères tronqués]`
+
+  ```
+test result: ok. 77 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+b0c14b9 K3 : les quatre premières couches COMPOSÉES (0 dense, 1-2 MoE, 3 MLA) — la chaîne vérifiée, pas seulement les pièces
+12:58
+12:58:46    20.9 Go / 49.0 Go (42.7 %, 110 Mo/s)
+[stderr]
+bash: line 1: l_out-3: command not found
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md</path>
+<type>file</type>
+<content>
+300: > **Grappes faites aussi** : `commun.gguf` + 8 `cluster-XX.gguf` (86,9 Go,
+301: > 11 008 entrées de mapping, aucune requantification) et **perplexité identique
+302: > au chiffre près** (8 430,2968), en **39,9 s contre 111,8** — chaque expert routé
+303: > vit dans un seul fichier, donc le nœud ne lit que ce qu'il sert.
+304: > **Reste** : la comparaison à llama.cpp sur 8 à 64 jetons, dont on sait déjà ce
+305: > qu'elle donne pour 10 (corrélation 0,988-0,998, écart expliqué par la
+306: > quantification des activations de ggml).
+307: 
+308: - 43 couches, 86,9 Go, cache latent, mémoire, débit.
+309: - **Porte de correction** : perplexité de V4-Flash contre llama.cpp sur les mêmes
+310:   8 à 64 jetons (corrélation, top-1, rapport).
+311: - **Portes Drave**, toutes obligatoires :
+312:   1. `--trace-flux` puis `--flux-forcer` : perplexité **identique** ;
+313:   2. `--flux-liste` et `--flux-blocs` : ce que coûte le transport en listes,
+314:      mesuré, pas supposé ;
+315:   3. **découpage en grappes** : V4-Flash en `cluster-XX.gguf`, puis
+316:      `--ppl-reparti` entre
+… [3959 caractères tronqués]
+  ```
+
+
+  ```
+                               @       @     ��      ��                    �       �@      �@     �     �                           B       B      N       N                   �z     �zB     �zB     �      �                   �}     �}B     �}B     @      @                   P      P@     P@     @       @                    �      �@     �@     $       $                     n      nB      nB                            S�td   P      P@     P@     @       @              P�td    ;      ;B      ;B     T      T             Q�td                                                  R�td   �z     �zB     �zB     0      0                0      GNU � �           �   	        �                   GNU �M�E�����ـc܇�GD/lib64/ld-linux-x86-64.so.2        �   8   )   6         ,   �      E       3   �   �           �           �                 ;   %       �   4   �           �   �           R           �           �   �   `   �   �   U   I             �       J   �           �   �         {       e   \   �   G   h   L       q                 �       <     �   P   �   }   �   p   N       l   y           �   � 
+… [3959 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/portes.sh</path>
+<type>file</type>
+<content>
+1: #!/bin/bash
+2: # Les portes du dépôt, en une commande.
+3: #
+4: # Un chiffre de référence qui dérive sans qu'on s'en aperçoive ne vaut rien :
+5: # chaque porte est comparée à la valeur ATTENDUE, et le script sort en erreur si
+6: # l'une diverge. Les valeurs sont celles publiées dans les rapports.
+7: #
+8: #   tools/portes.sh            toutes les portes
+9: #   tools/portes.sh rapide     sans gpt-oss (le seul qui prenne ~20 min)
+10: 
+11: set -u
+12: cd "$(dirname "$0")/.."
+13: D=./drave-core/target/release/drave
+14: RAPIDE=${1:-}
+15: ECHEC=0
+16: 
+17: [ -x "$D" ] || { echo "compiler d'abord : (cd drave-core && cargo build --release)"; exit 2; }
+18: 
+19: compare() {  # nom, attendu, obtenu
+20:     if [ "$2" = "$3" ]; then
+21:         printf "  %-42s %s  ✅\n" "$1" "$3"
+22:     else
+23:         printf "  %-42s %s  ❌ (attendu %s)\n" "$1" "${3:-—}" "$2"
+24:         ECHEC=1
+25:     fi
+26: }
+27: 
+28: # Attention : le moteur affiche AUSSI une perplexité cumulée par fenêtre, avant
+29: # le total. Prendre la première occurrence du motif donnait 17,431 (fenêtre 1) au
+30: # lieu de 19,3885 (t
+… [3959 caractères tronqués]
+  ```
+
+
+> **Compactage de contexte** — résumé conservé :
+
+```
+## Primary Request and Intent
+- Standing mandate (verbatim): "Continue en blocs de 2h jusqu'à demain 8h HAE. pour chacun des blocs/sprints tu dois être en autonomie totale… les rétros seront des introspections, les revues seront en mode adverse autonome."
+- Active goal `goal-87d1ebcb-3cbb-43a1-845f-1e93df13d949` (revision 2, phase `active`, armed, round 26/30): "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas en local (classe Kimi-K3 Q4 : 1,5 To de poids, ~35 Go de poids par jeton), et étudier/implémenter ce qui nous distingue sur cette classe : découpage par experts et en grappes, réutilisation des experts entre jetons, transport de flux compact (listes DRVF), noyaux rapides (SIMD, déquantification bit-exacte), et mesure systématique. Les modèles périmés (DeepSeek-V4-Flash) sortent du chemin critique. Règles inchangées : jamais de forward muet, jamais d'optimisation qui change une sortie sans le dire, une affirmation sans mesure n'est pas une affirmation." (The "~35 Go/jeton" figure in the objective is superseded by the measured **87 Go/jeton**; documented in reports, goal text left unchanged since `edit` needs a direct human request.)
+- Earlier explicit user asks, all answered: docs coherence audit; `docs/glossaire.md` (187 entries); "est-ce que ça vaudrait la peine que j'achète un 2e nvme ?" (answer: no for speed — CPU-bound; report written); "fais-tu bon usage du tandem de gpu en nvlink ?" (answer: GPUs idle for the MoE, report written); "on avait fait des études sur la connectivité… listes plus fines" (measured: granularity routes, doesn't compress); "peut-on étudier https://spacebunnymodel.com/" (closed stealth API reseller; no weights → out of scope); "retire les modèles périmés comme DeepSeek v4Flash… Télécharge les meilleurs modèles ouverts".
+
+## Key Technical Concepts
+- Rust engine (std only), repo `/home/stephane/Data13TB/stephane/GitHub/Qtrinet`, binary `drave-core/target/release/drave`; env vars inventoried by `tests_vars::les_vars_lues_sont_completes` (`VARS_LUES` at `main.rs:17`).
+- Philosophy: Drave ≠ llama.cpp; llama.cpp is a **porte de correction**; the project's thesis = we transfer **lists** (flows, DRVF format) rather than compute densely.
+- Kimi-K3 (target): GGUF `unsloth/Kimi-K3-GGUF` UD-Q4_K_XL, 32 shards, **1 508,7 Go**; arch `kimi-k3`; 93 layers, hidden 7168, ffn 33792, **896 experts / 16 per token**, 1 M context, latent 3584, 2 shared experts, SiTU (beta 4 / linear 25), `attn_res.block_size = 12`, `kda.head_dim 128`, `gate_lower_bound −5`, conv kernel 4, q_lora 1536, kv_lora 512, key_length_mla 192, value_length_mla 128, rope 64. MLA at layers `il % 4 == 3` (file encodes via `attention.head_count_kv = 1`).
+- Measured per-token weights for K3: **87 Go** (attention 48,7 dense · routed experts 24,7 · shared 12,4 · head 1,3) = 5,8 % of model. V4-Flash total = **8,56 Go/jeton** (experts alone 2,669).
+- Measured bandwidths (bloc 30): RAM 9,6 Go/s 1 thread → **40,3 Go/s at 8–16** (numpy sum of 32 Go); NVMe 2,26 Go/s 1 stream → **3,39 Go/s at 4** (`dd iflag=direct`); HDD 12 To ~0,2 Go/s; PCIe x8 6,5 Go/s (repo figure); NVLink 25,8 Go/s.
+- Expert reuse measured (Qwen3-30B-A3B, 128 experts, 8/token, traces of 48/128 wikitext + 128 code): immediate **46,9 / 47,9 / 48,8 %**, window-16 78,8/84,5/88,2 %, ceiling 82,7/93,1/93,9 %; LRU 32/layer → 74,8/80,3/**86,8 %**; per-layer immediate reuse from **18,1 % (layer 0)** to **68,6 % (layer 31)**; 5 % hottest experts serve 38,4 %, 10 % → 56,8 %, 25 % → 83,0 %.
+- Gate tool: `tools/compare_logits.py --porte` (criteria: ≥99 % of **useful** positions ≥ 0,95 correlation, floor 0,90, mean ≥ 0,98, top-1 ≥ 85 % over ALL positions, PPL ≤ 10 % only above 64 predictions; positions with reference NLL < 0,05 are "saturées" and excluded from correlation).
+- Same-model repairs this night: `--dense` inert for V4-Flash; SIMD dot `DRAVE_SIMD_DOT=1` = **×1,18 pass / ×1,37 proj+mlp** (opt-in, +0,15 % PPL, correlation 0,9981); V4-Flash "cost gr
+… [9739 caractères tronqués]
+```
+
+### 👤 Utilisateur
+
+This is an automatically generated checkpoint condensing an earlier span of the conversation to free up context. Treat the captured context as established background and build on it without restating it. Continue the task directly from the messages that follow, without acknowledging this checkpoint.
+
+<compacted-summary>
+## Primary Request and Intent
+- Standing mandate (verbatim): "Continue en blocs de 2h jusqu'à demain 8h HAE. pour chacun des blocs/sprints tu dois être en autonomie totale… les rétros seront des introspections, les revues seront en mode adverse autonome."
+- Active goal `goal-87d1ebcb-3cbb-43a1-845f-1e93df13d949` (revision 2, phase `active`, armed, round 26/30): "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas en local (classe Kimi-K3 Q4 : 1,5 To de poids, ~35 Go de poids par jeton), et étudier/implémenter ce qui nous distingue sur cette classe : découpage par experts et en grappes, réutilisation des experts entre jetons, transport de flux compact (listes DRVF), noyaux rapides (SIMD, déquantification bit-exacte), et mesure systématique. Les modèles périmés (DeepSeek-V4-Flash) sortent du chemin critique. Règles inchangées : jamais de forward muet, jamais d'optimisation qui change une sortie sans le dire, une affirmation sans mesure n'est pas une affirmation." (The "~35 Go/jeton" figure in the objective is superseded by the measured **87 Go/jeton**; documented in reports, goal text left unchanged since `edit` needs a direct human request.)
+- Earlier explicit user asks, all answered: docs coherence audit; `docs/glossaire.md` (187 entries); "est-ce que ça vaudrait la peine que j'achète un 2e nvme ?" (answer: no for speed — CPU-bound; report written); "fais-tu bon usage du tandem de gpu en nvlink ?" (answer: GPUs idle for the MoE, report written); "on avait fait des études sur la connectivité… listes plus fines" (measured: granularity routes, doesn't compress); "peut-on étudier https://spacebunnymodel.com/" (closed stealth API reseller; no weights → out of scope); "retire les modèles périmés comme DeepSeek v4Flash… Télécharge les meilleurs modèles ouverts".
+
+## Key Technical Concepts
+- Rust engine (std only), repo `/home/stephane/Data13TB/stephane/GitHub/Qtrinet`, binary `drave-core/target/release/drave`; env vars inventoried by `tests_vars::les_vars_lues_sont_completes` (`VARS_LUES` at `main.rs:17`).
+- Philosophy: Drave ≠ llama.cpp; llama.cpp is a **porte de correction**; the project's thesis = we transfer **lists** (flows, DRVF format) rather than compute densely.
+- Kimi-K3 (target): GGUF `unsloth/Kimi-K3-GGUF` UD-Q4_K_XL, 32 shards, **1 508,7 Go**; arch `kimi-k3`; 93 layers, hidden 7168, ffn 33792, **896 experts / 16 per token**, 1 M context, latent 3584, 2 shared experts, SiTU (beta 4 / linear 25), `attn_res.block_size = 12`, `kda.head_dim 128`, `gate_lower_bound −5`, conv kernel 4, q_lora 1536, kv_lora 512, key_length_mla 192, value_length_mla 128, rope 64. MLA at layers `il % 4 == 3` (file encodes via `attention.head_count_kv = 1`).
+- Measured per-token weights for K3: **87 Go** (attention 48,7 dense · routed experts 24,7 · shared 12,4 · head 1,3) = 5,8 % of model. V4-Flash total = **8,56 Go/jeton** (experts alone 2,669).
+- Measured bandwidths (bloc 30): RAM 9,6 Go/s 1 thread → **40,3 Go/s at 8–16** (numpy sum of 32 Go); NVMe 2,26 Go/s 1 stream → **3,39 Go/s at 4** (`dd iflag=direct`); HDD 12 To ~0,2 Go/s; PCIe x8 6,5 Go/s (repo figure); NVLink 25,8 Go/s.
+- Expert reuse measured (Qwen3-30B-A3B, 128 experts, 8/token, traces of 48/128 wikitext + 128 code): immediate **46,9 / 47,9 / 48,8 %**, window-16 78,8/84,5/88,2 %, ceiling 82,7/93,1/93,9 %; LRU 32/layer → 74,8/80,3/**86,8 %**; per-layer immediate reuse from **18,1 % (layer 0)** to **68,6 % (layer 31)**; 5 % hottest experts serve 38,4 %, 10 % → 56,8 %, 25 % → 83,0 %.
+- Gate tool: `tools/compare_logits.py --porte` (criteria: ≥99 % of **useful** positions ≥ 0,95 correlation, floor 0,90, mean ≥ 0,98, top-1 ≥ 85 % over ALL positions, PPL ≤ 10 % only above 64 predictions; positions with reference NLL < 0,05 are "saturées" and excluded from correlation).
+- Same-model repairs this night: `--dense` inert for V4-Flash; SIMD dot `DRAVE_SIMD_DOT=1` = **×1,18 pass / ×1,37 proj+mlp** (opt-in, +0,15 % PPL, correlation 0,9981); V4-Flash "cost growth with position" was the **HDD**, NVMe copy gave ×1,81 and flat rate.
+
+## Files and Code
+- `drave-core/src/kimi_k3.rs` (new, central): `TypeCouche/Couche/Inventaire`, `inventorie(chemin)` + `inventorie_avec(g,&noms,n_shards)`, `verifie_dims(g,l)`, `mv`, `rms_norm_poids`, `Couche0` (layer-0 f32 forward: res_mix → push raw input → attn_norm → KDA(conv/L2/gate/delta/norm/gate) → **prefix = attn** (banked restart) → res_mix → ffn_norm → SiTU dense FFN), `MoeK3` (gate_inp on full width, exp_probs_b in selection, routed_down → 16 experts dequantized one-by-one via `expert_mxfp4_dans` → rms_norm **in latent** → routed_up → + shared), `MlaK3` (q_a/q_a_norm/q_b, kv_a_mqa → latent+pe **no RoPE**, per-head k_b absorption → query length **kv_lora+rope = 576** not 192, causal cache, v_b per head, sigmoid full-rank gate on **normalized** layer input, then attn_output), `KdaK3` (reusable KDA + `zero()`), `FfnDenseK3`, `NormesK3`, `PetitesK3` (composition of layers 0..n with shared checkpoint stack + banking).
+- `drave-core/src/model.rs`: `situ(g,u,beta,linear_beta)`, `res_mix(pile,n_ckpt,h,courant,w,eps,out)` (scores on normalized, sum on **raw**), `kda_pas(q,k,v,g,beta,s,hd,out)`, `kda_porte(z,ssm_a,borne) = borne·σ(−ssm_a·z)`, `kda_conv_silu(x,poids,etat,d_conv,d_inner,out)` (state **channel-major** `etat[k+(d_conv-1)*c]`, weights `poids[k+d_conv*c]`), `vider_couche_poids_hc`, plus tests `mod tests_kimi_k3` (10 tests: SiTU, res_mix ×2, KDA vs NumPy, gate, conv).
+- `drave-core/src/main.rs`: `--k3-essai` (smoke test: dims checks for layers 0/1/3/4, layer-0 forward + dumps `{prefix}-l_out-0-{pos}.bin`, MoE layer 1, MLA layer 3, 4-layer composition dumping `l_out-3`), `ouvrir_meta_tolerant` (used by `--config`/`--tokenize` on incomplete splits), `run_config` prints K3 inventory.
+- `drave-core/src/kimi_k3.rs` rotation: `is_han`, `next_piece_kimi` in `drave-core/src/tokenizer.rs` (Han group, case split **excluding Han**, `\p{N}{1,3}`, contractions as suffix), `motif_kimi = pre.starts_with("kimi")`; case matchers rewritten contiguous U* then L+.
+- Tools: `tools/analyse_reutilisation_experts.py` (coverage, immediate/windowed reuse, LRU curve, per-layer, concentration), `tools/budget_execution_locale.py` (per-token totals, placements with measured bandwidths, extrapolation to declared `block_count`), `tools/analyse_octets_par_jeton.py` (experts-only, now labelled), `tools/porte-tokenizer-kimi.sh` + `tools/tokenizer_kimi/{reference_officielle.py,tiktoken.model}`, `tools/apres-telechargement-k3.sh` (5 ordered steps), `tools/ref_logits_k3` (linked vs `llama.cpp-k3`), `tools/compare_etats.py`, `tools/analyse_hc.py`, `tools/granularite_flux.py`.
+- Docs: `docs/plan-kimi-k3.md` (target, measured facts, milestones M1–M8, 4bis what's ready), `docs/architecture-kimi-k3.md` (spec: cadence verified in file, layer loop, res_mix formula, KDA, MLA, latent MoE order, SiTU, cross-check vs published Moonshot code, execution notes), `docs/verification-kimi-k3.md` (13 comparison points, tolerances 1e-7…1e-3, commands, first milestone = layer 0), `reports/rapport-budget-kimi-k3.md`, `reports/rapport-reutilisation-experts.md`, `reports/rapport-portes-p0-p9.md`, `reports/rapport-materiel-disque-ou-cpu.md`, `reports/rapport-gpu-tandem-nvlink.md`, `reports/rapport-granularite-flux.md`, `sprints/22…30`.
+- `tools/portes.sh`: §7quinquies correction gate (Qwen, 71 positions), §7sexies hc gate now on **V4.1**, §6bis V4-Flash PPL behind `ARCHIVE=1`, all green.
+
+## Errors and Fixes
+- `--config`/`--tokenize` refused incomplete splits → `ouvrir_meta_tolerant` + `Gguf::shards_presents`; announces "⚠️ MODÈLE INCOMPLET (n shards sur m)".
+- Tokenizer: `kimi` pre-tokenizer motif missing (fell back to qwen2 → "2026" one token, CJK diverged; **also affected Kimi-K2.7**) → implemented from `llama.cpp-k3`; case matchers spanned uppercase ("HelloWorld" one piece, invisible in ids because no "oW" merge) → fixed both kimi and gpt-4o; verified 11/11 texts identical to official, 512 gpt-oss ids unchanged.
+- SIMD gain overstated (×2,06/×3,05) due to a stray `drave` from a `timeout` → interleaved A/B gives ×1,18/×1,37; corrected in plan/REPRISE/sprint 24.
+- "Cost grows with position" was the **HDD**: same protocol 1 027,7 s (HDD, rate 0,5→0,2 tok/s) vs 567,1 s (NVMe, flat 0,4) → plan corrected; `DRAVE_SANS_BLOCS` "×1,8 win" was cache luck.
+- Correction gate failures at 255 and 1 023 positions (min correlation < 0,95 / < 0,90 floor) → analysis showed saturated-reference artifact (NLL 0,0000 both sides, same token/rank, Pearson 0,8868) → tool excludes saturated positions from correlation, keeps top-1 over all; adversarial `--abits 8` still fails.
+- `pkill -f portes.sh` and `pgrep -f "bash tools/portes"` **self-killed the shell** → use `pkill -x drave` or `portes[.]sh`.
+- K3 dims: engine `TensorInfo::dims[0]` = ne1 = **output** (file order reversed) → `nh = 7168` instead of 96; caught by smoke test.
+- K3 conv called twice on `q` (state advanced 2 steps) → fixed before compiling.
+- K3 MLA absorbed query is `kv_lora+rope = 576`, not `hd = 192` → panic "range end index 512 out of range for slice of length 192"; fixed.
+- MoE 25 709 ms/token due to 16,5 M `Vec` allocations (one per 17-byte MXFP4 block) → `expert_mxfp4_dans` writes into a provided buffer: **1 361 ms**, identical `|sortie| = 0,7316`.
+- `budget_execution_locale.py` counted `token_embd` and had a stale `declare = None` → fixed (no embedding, head counted, block_count extrapolation).
+- `analyse_reutilisation_experts.py` `set(historique[-fenetre:])` on lists → flattened.
+
+## Pending Jobs
+- **Kimi-K3 download**: `tools/telecharger_modeles.py --seulement Kimi-K3-UD-Q4_K_XL`, ~992 Go/1 508,7 (66 %) at ~112 Mo/s, **ETA ~14:10**; 21/32 shards complete, sizes verified against HF.
+- When complete: run `tools/apres-telechargement-k3.sh`; inventory all 93 layers; **measured** per-token budget (88,5 Go currently extrapolated); `llama.cpp-k3` reference baseline (tokens/s, RSS via `/usr/bin/time -v`); tensor-by-tensor verification layer 0 → 1 → 3 → 12.
+- Full 93-layer model path requires the **borrowed** (mmap) weight path — current K3 code dequantizes to f32 and is only a few-layer verification instrument (all layers f32 would need ~220 Go).
+- Cluster/split work for K3 (disk: 1,5 To copy would not fit next to the model), P9 leftovers (IQ2_XXS/IQ3_XXS AVX2 kernels), thread-count sweep.
+
+## Current Work
+- Just ran `--k3-essai` on the partial model after implementing `PetitesK3`: **4-layer composition works** — layers 0→3 (dense KDA, MoE, MoE, MLA) with residual attention + banking: `|l_out| = 8,7757 / 5,2909 / 5,2559 / 5,4735`, all finite, 114 377 ms total (MoE dominates). Individual pieces: layer 0 `|l_out|` 0,9731/1,4310/1,4958; MoE layer 1 `|sortie| = 0,7316`, 1 366 ms; MLA layer 3 235 ms/token.
+- All committed; 77 tests green; working tree clean except harness `journal/README.md`.
+
+## Next Step
+- Commit the `PetitesK3` composition result (dims checks + composition smoke output) and keep polling the download; when 32/32 shards are at exact size, run `tools/apres-telechargement-k3.sh` then the layer-0 comparison `python3 tools/compare_etats.py /tmp/notrek3 /tmp/refk3 l_out 0 0,1,2`.
+
+## Critical Context
+- Mandate rules: measure before concluding **and before launching**; a criterion is written as a rate, not an extremum (two gate revisions in two blocks); a flag/optimization that changes an output must say so (SIMD opt-in, announced); a number must name its perimeter (experts vs dense vs total); the first hypothesis is the instrument; heavy jobs serialized; storage support must be stated for every throughput figure.
+- Gate status (audited in `reports/rapport-portes-p0-p9.md`): P0–P6 and P8 held; P1's Drave gate closed 03/10 (hc weights were computed then **discarded**; now dumped, `tools/analyse_hc.py` verifies Sinkhorn on the axis it normalizes last — `|Σsrc−1| = 1,14e-06` — and found the 16 connections are a **permutation in 332/332 layer-position matrices**, 4 dominant, V4-Flash 9 non-identity layers, V4.1 2); P7 is the only **impossible** gate (llama.cpp refuses `deepseek41`), exit condition named; P9 optional.
+- Correction gate results (V4-Flash, archived): ctx 64 → min 0,9550/mean 0,9852/top-1 88,9 %/PPL +6,4 %; ctx 256 → 99,6 %/91,4 %/+9,0 %; ctx 512 → min 0,952998 (376 useful) / 93,0 % / +4,3 %; ctx 1 024 → 99,8 % useful ≥0,95, min 0,948768, top-1 93,5 %, PPL 5,0921 vs 5,0061 (+1,7 %), 2,98 s/token; slices improve with position (0,98534 → 0,98934 → 0,99248).
+- Kimi-K3 layer facts verified: layer 0 dense (0 `*_exps`), `leading_dense_block_count = 1`; MLA layers 3,7,11,15… (head_count_kv 1); every layer has 2 `res_score`; experts **MXFP4** (41,93 Go per 3 layers); dense Q8_0; tokenizer verified vs official Moonshot implementation (`pat_str` + `tiktoken.model`, `regex` module only in python3.14).
+- Hardware: 2× Xeon E5-2687W v3 (40 threads), 125 Go RAM, one NVMe 828 Go (was holding V4.1 Q2 341 Go), 11 To **HDD** (WDC WD120EFGX, ROTA=1) holding models; 2× Quadro RTX 5000 (16 Go each) + NVLink 25,78 Go/s, both NUMA node 0, PCIe max Gen3 x16 — GPUs idle for MoE because weights cannot be VRAM-resident (2,7–3,9 Go/jeton vs 32 Go VRAM).
+- V4-Flash retired: NVMe copy deleted, portes archived behind `ARCHIVE=1`, hc gate repointed to V4.1; HDD copy kept for archived gates; plan P0→P9 closed as methodological reference.
+- `spacebunnymodel.com`: third-party playground/reseller for stealth model routed via OpenRouter (1 M context claimed, `sb_live_…` API key required); no weights → cannot serve as correction gate; out of scope unless the human asks.
+- Human preference: French prose, terse tables, honest verdicts, corrections stated explicitly (published numbers retracted when refuted).
+</compacted-summary>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format=%B | head -12; echo \"=== progression globale ===\"; ls -la /srv/models/Kimi-K3-UD-Q4_K_XL/ 2>/dev/null | head -3; du -sb /srv/models/Kimi-K3-UD-Q4_K_XL 2>/dev/null; ls /srv/models/Kimi-K3-UD-Q4_K_XL/*.gguf 2>/dev … [76 caractères tronqués]`
+
+  ```
+K3 : les quatre premières couches COMPOSÉES (0 dense, 1-2 MoE, 3 MLA) — la chaîne vérifiée, pas seulement les pièces
+
+Attention résiduelle, banque tous les 12, redémarrage du flux, KDA/MoE/MLA/dense
+enchaînés : quatre jetons sortent finis (|l_out| = 8,78 / 5,29 / 5,26 / 5,47) et
+les sorties sont vidées au format du moteur pour la comparaison avec  de
+la référence.
+
+114 s pour 4 jetons (28 s/jeton) : c'est le chemin f32 de VÉRIFICATION, pas une
+performance — les experts y sont déquantifiés à chaque jeton.
+
+=== progression globale ===
+0
+  ```
+
+### 👤 Utilisateur
+
+Current runtime context. This snapshot supersedes earlier runtime-context snapshots.
+
+Current DSH file policy: danger-full-access. The DSH file sandbox does not restrict file modifications by available operations.
+
+Approval prompts are disabled in this session: actions that require approval are rejected automatically — do not request sandbox escalation (do not set `sandbox_permissions`).
+
+### 👤 Utilisateur
+
+<system-reminder>
+The available skill catalog changed. This complete catalog replaces every earlier available-skills list in this session:
+
+<available_skills>
+- `microsoft-foundry`: Deploy, evaluate, fine-tune, and manage Foundry agents end-to-end with azd: hosted agent scaffold/run/deploy, prompt agent create, batch eval, continuous eval, prompt optimizer, Agent Optimizer scaffold, agent.yaml, dataset curation from traces, model fine-tuning (SFT/DPO/RFT). USE FOR: azd ai agent, azd provision/deploy, deploy agent, hosted agent, create agent, add tool to agent, invoke agent, evaluate agent, continuous eval, continuous monitoring, agent CI/CD, optimize prompt, improve prom...
+</available_skills>
+
+Use only names in this replacement catalog. If the user names a listed skill, or the task clearly matches its description, call the `skill` tool with the exact name before acting.
+A user may also invoke a skill directly; its <skill_content> block then appears in this conversation. Follow it, and do not call the `skill` tool again for that skill.
+</system-reminder>
+
+- **bash** `{"command": "ls -d /srv/models/* 2>/dev/null | head; echo \"---\"; df -h | grep -Ei \"srv|models|home|mnt\" | head", "description": "Locate the model directory"}`
+
+  ```
+---
+/dev/nvme0n1p2           828G  561G  267G  68% /home
+/dev/nvme0n1p2           828G  561G  267G  68% /srv
+/dev/nvme0n1p2           828G  561G  267G  68% /home/stephane/FastNVMe
+/dev/mapper/system-root   11T  8,4T  2,5T  78% /home/stephane/Data13TB
+  ```
+
+- **bash** `{"command": "ls -d /home/stephane/Data13TB/models/*Kimi* 2>/dev/null; echo \"---\"; head -30 /tmp/dl_k3.log 2>/dev/null | head -20; echo \"--- ps ---\"; ps aux | grep -c \"[t]elecharger_modeles\"", "description": "Find Kimi-K3 download directory"}`
+
+  ```
+---
+10:05:24  Kimi-K3-UD-Q4_K_XL · Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf · 0.0 Go (3802 Go libres)
+10:05:34    0.0 Go / 0.0 Go (100.0 %, 1 Mo/s)
+10:05:34  Kimi-K3-UD-Q4_K_XL · Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf : fait
+10:05:34  Kimi-K3-UD-Q4_K_XL · Kimi-K3-UD-Q4_K_XL-00002-of-00032.gguf · 47.5 Go (3802 Go libres)
+10:05:44    0.5 Go / 47.5 Go (1.1 %, 54 Mo/s)
+10:06:14    4.0 Go / 47.5 Go (8.5 %, 101 Mo/s)
+10:06:44    7.0 Go / 47.5 Go (14.7 %, 100 Mo/s)
+10:07:14    10.5 Go / 47.5 Go (22.1 %, 105 Mo/s)
+10:07:44    13.7 Go / 47.5 Go (28.8 %, 105 Mo/s)
+10:08:14    17.4 Go / 47.5 Go (36.8 %, 109 Mo/s)
+10:08:44    20.7 Go / 47.5 Go (43.5 %, 109 Mo/s)
+10:09:14    23.9 Go / 47.5 Go (50.3 %, 109 Mo/s)
+10:09:44    27.1 Go / 47.5 Go (57.1 %, 108 Mo/s)
+10:10:14    30.6 Go / 47.5 Go (64.5 %, 109 Mo/s)
+10:10:44    34.1 Go / 47.5 Go (71.8 %, 110 Mo/s)
+10:11:14    37.6 Go / 47.5 Go (79.2 %, 111 Mo/s)
+10:11:44    41.1 Go / 47.5 Go (86.5 %, 111 Mo/s)
+10:12:14    44.1 Go / 47.5 Go (93.0 %, 110 Mo/s)
+10:12:44    45.6 Go / 47.5 Go (96.1 %, 106 Mo/s)
+10:13:14    47.5 Go / 47.5 Go (100.0 %, 103 Mo/s)
+--- ps ---
+2
+  ```
+
+- **bash** `{"command": "ps aux | grep \"[t]elecharger_modeles\" | head -3; echo \"=== dossier ===\"; find /home/stephane/Data13TB -maxdepth 3 -type d -name \"*Kimi-K3*\" 2>/dev/null", "description": "Get download process details"}`
+
+  ```
+stephane 2549092  0.0  0.0   7692  1392 ?        S    10:05   0:00 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup python3 tools/telecharger_modeles.py --seulement Kimi-K3-UD-Q4_K_XL > /tmp/dl_k3.log 2>&1 & sleep 45; tail -6 /tmp/dl_k3.log; ls -la /home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/ 2>/dev/null | tail -3
+stephane 2549100 10.2  0.0 461988 13208 ?        Sl   10:05  17:59 python3 tools/telecharger_modeles.py --seulement Kimi-K3-UD-Q4_K_XL
+=== dossier ===
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "D=/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL; ls \"$D\"/*.gguf 2>/dev/null | wc -l; du -sb \"$D\" 2>/dev/null; echo \"--- fichiers complets vs partiels ---\"; ls -la \"$D\" 2>/dev/null | grep -c \"\\.gguf$\"; ls \"$D\" 2>/dev/null | grep -c \"part\\|incomplete\" ;  … [89 caractères tronqués]`
+
+  ```
+24
+1127991835307	/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL
+--- fichiers complets vs partiels ---
+24
+6
+13:00:16    31.7 Go / 49.0 Go (64.6 %, 113 Mo/s)
+13:00:46    34.4 Go / 49.0 Go (70.1 %, 111 Mo/s)
+13:01
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && wc -l *.rs | sort -rn | head -20; echo \"=== MoE ===\"; grep -n \"fn .*moe\\|fn .*expert\" *.rs | head -30", "description": "Survey engine source and MoE functions"}`
+
+  ```
+27202 total
+   8975 model.rs
+   5656 main.rs
+   2901 formats.rs
+   2343 gguf.rs
+   1597 list.rs
+   1573 gpu.rs
+   1109 kimi_k3.rs
+   1010 engine.rs
+    646 tokenizer.rs
+    506 clusters.rs
+    478 materiel.rs
+    408 engram.rs
+=== MoE ===
+kimi_k3.rs:576:fn expert_mxfp4_dans(ptr: *const u8, n_out: usize, n_in: usize, e: usize, out: &mut [f32]) {
+main.rs:803:fn stats_experts(mdl: &model::Model) {
+main.rs:2115:            let ffn = g.cfg("expert_feed_forward_length").and_then(|v| v.as_u64()).unwrap_or(0);
+materiel.rs:288:    pub fn plan(&self, ctx: usize, taille_modele_go: f64, n_experts: usize,
+materiel.rs:381:    pub fn cout_par_jeton(&self, plan: &Plan, go_experts_par_jeton: f64,
+model.rs:390:fn router(cfg: &Cfg, moe: &Moe, x: &[f32], tid: u32, k: usize) -> Vec<(usize, f32)> {
+model.rs:569:fn charger_moe(g: &Gguf, l: usize, n_expert: usize, map: Option<&'static crate::clusters::Mapping>)
+model.rs:1057:    fn octets_expert(&self) -> usize {
+model.rs:1166:    fn prelire_expert(&self, e: usize) {
+model.rs:1174:    fn blocs_expert(&self, e: usize) -> &[u8] {
+model.rs:1181:    fn expert(&self, e: usize) -> crate::list::DenseQ4 {
+model.rs:3915:        println!("[config] puits appris sur 
+… [244 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && grep -n \"prelire_expert\\|blocs_expert\\|\\.expert(\" *.rs | head -30; echo \"=== moe_forward ? ===\"; grep -n \"fn .*forward\\|fn passe\\|fn couche\" model.rs | head -20", "description": "Find expert loading call sit … [4 caractères tronqués]`
+
+  ```
+model.rs:1166:    fn prelire_expert(&self, e: usize) {
+model.rs:1174:    fn blocs_expert(&self, e: usize) -> &[u8] {
+model.rs:1573:            let mg = machine.charger_mxfp4(gate.blocs_expert(e), gate.n_out, gate.nb)?;
+model.rs:1574:            let mu = machine.charger_mxfp4(up.blocs_expert(e), up.n_out, up.nb)?;
+model.rs:1575:            let md = machine.charger_mxfp4(down.blocs_expert(e), down.n_out, down.nb)?;
+model.rs:4420:        let d = vue.expert(loc);
+model.rs:5405:                    let mg = moe.gate[k].expert(loc);
+model.rs:5414:                    let mu = moe.up[k].expert(loc);
+model.rs:5444:                    let md = moe.down[k].expert(loc);
+model.rs:7314:                        moe.gate[k].prelire_expert(loc);
+model.rs:7315:                        moe.up[k].prelire_expert(loc);
+model.rs:7316:                        moe.down[k].prelire_expert(loc);
+model.rs:7349:                    let mg = moe.gate[kexp].expert(loc);
+model.rs:7360:                    let mu = moe.up[kexp].expert(loc);
+model.rs:7372:                    let md = moe.down[kexp].expert(loc);
+=== moe_forward ? ===
+4997:    pub fn forward_lot(&mut self, toks: &[u32], pos0: usize) -> Vec<Vec<f32>> {
+6303:
+… [140 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "offset": 7270, "limit": 130}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs</path>
+<type>file</type>
+<content>
+7270:                 let j = self.jeton_trace;
+7271:                 r.appliquer(l + 1000, j as usize, &mut hn);
+7272:             } else if self.trace.is_some() {
+7273:                 let mut tmp = Vec::with_capacity(h);
+7274:                 if let Some((sv, sx)) = Self::quant_scratch(&hn, self.act_levels, self.act_thresh,
+7275:                                                             tk(3), self.act_renorm, &mut tmp) {
+7276:                     let mut actifs = vec![0i32; h];
+7277:                     for (&i, &v) in sv.idx.iter().zip(sv.val.iter()) { actifs[i as usize] = v; }
+7278:                     let j = self.jeton_trace;
+7279:                     self.trace.as_mut().unwrap().ecrire(l + 1000, j as usize, &actifs, sx);
+7280:                 }
+7281:             }
+7282:             // ------------------------------------------------------ MoE
+7283:             // Un routeur linéaire choisit `k` experts parmi `n` ; seuls leurs
+7284:             // poids sont lus. C'est la parcimonie **structurelle** — 8 experts
+7285:             // sur 128, soit 6 % du FFN — et
+… [8653 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && grep -n \"fn resident\\|cache_ram\\|struct CacheRam\\|CacheRam\" *.rs | head -30", "description": "Inspect RAM expert cache"}`
+
+  ```
+model.rs:2599:    pub cache_ram: Option<CacheExpertsRam>,
+model.rs:4160:            cache_ram: match std::env::var("DRAVE_EXPERTS_RAM").ok()
+model.rs:4388:    fn resident(cache: &mut Option<CacheExpertsRam>, quoi: u8, l: usize, e: usize,
+model.rs:7353:                    let (vg, loc_g) = Self::resident(&mut self.cache_ram, 0, l, e as usize,
+model.rs:7361:                    let (vu, loc_u) = Self::resident(&mut self.cache_ram, 1, l, e as usize,
+model.rs:7373:                    let (vd, loc_d) = Self::resident(&mut self.cache_ram, 2, l, e as usize,
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "limit": 60, "offset": 4155}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs</path>
+<type>file</type>
+<content>
+4155:             dump_couches: std::env::var("DRAVE_DUMP_COUCHES").ok(),
+4156:             couche_debut: couches.map(|(a, _)| a).unwrap_or(0),
+4157:             couche_fin: couches.map(|(_, b)| b).unwrap_or(n_layer_total),
+4158:             flux_brut: false, tete_partielle: false,
+4159:             cache_experts,
+4160:             cache_ram: match std::env::var("DRAVE_EXPERTS_RAM").ok()
+4161:                             .and_then(|v| v.parse::<usize>().ok()) {
+4162:                 Some(mo) if mo > 0 => {
+4163:                     println!("[experts] cache RAM des experts : {mo} Mo — ATTENTION, mesuré \
+4164: PLUS LENT que le cache de pages du noyau (ctx 32 : +4 % à 4 Go, +21 % à 32 Go ; voir \
+4165: `CacheExpertsRam`). Aucun octet du calcul ne change, mais le temps, si.");
+4166:                     Some(CacheExpertsRam::nouveau(mo << 20))
+4167:                 }
+4168:                 _ => None,
+4169:             },
+4170:             mla, mla_cache, jeton_trace: 0, trace: None, flux_force: None,
+4171:             emb_imposee: None, emb_imposee_lot: None, lot: 1,
+4172:  
+… [2512 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la /tmp/*trace*expert* /tmp/*experts*.txt 2>/dev/null | head; echo \"=== traces connues ===\"; ls traces/ 2>/dev/null | head; find / -maxdepth 3 -name \"*expert*trace*\" -o -maxdepth 3 -name \"trace_experts*\" 2>/dev/null | head" … [48 caractères tronqués]`
+
+  ```
+=== traces connues ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -40 tools/analyse_reutilisation_experts.py; echo \"=== modèles ===\"; ls /home/stephane/Data13TB/stephane/modeles/gguf/ 2>/dev/null", "description": "Read tool header and list models"}`
+
+  ```
+#!/usr/bin/env python3
+"""analyse_reutilisation_experts.py — la réutilisation des experts, mesurée.
+
+Lit une trace de routage (`DRAVE_TRACE_EXPERTS=chemin` : une ligne par
+(couche, jeton), `couche jeton e1 e2 …`) et répond à LA question qui décide si un
+cache d'experts peut servir un modèle trop gros pour tenir en mémoire :
+
+    les mêmes experts reviennent-ils d'un jeton à l'autre ?
+
+Ce qu'il rend, par couche et globalement :
+
+  - la **couverture** : combien d'experts DISTINCTS sont touchés sur N jetons ;
+  - la **réutilisation immédiate** : part des experts du jeton t déjà vus au
+    jeton t−1 (le chiffre qui compte pour un cache LRU sans réentraînement) ;
+  - la **réutilisation à distance** : part des experts du jeton t déjà vus dans
+    les k jetons précédents (k = 1, 4, 16, tout) ;
+  - la **courbe d'un cache LRU** : pour une capacité donnée (en experts par
+    couche), le taux de succès mesuré — donc les octets économisés par jeton.
+
+Usage :
+    analyse_reutilisation_experts.py <trace> [--experts-par-jeton N] [--couches-totales N]
+"""
+import sys
+from collections import Counter, OrderedDict
+
+
+def lire(chemin):
+    """Rend {couche: {jeton: [experts]}}."""
+    par_couche = {}
+   
+… [954 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "limit": 80, "offset": 4997}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs</path>
+<type>file</type>
+<content>
+4997:     pub fn forward_lot(&mut self, toks: &[u32], pos0: usize) -> Vec<Vec<f32>> {
+4998:         // **Le chemin par lots ne porte PAS les hyper-connexions** : son corps
+4999:         // n'a aucune occurrence de `hc_*`, et l'état résiduel y est donc
+5000:         // additionné au lieu d'être remélangé. Un `--lot 8` sur V4-Flash ou V4.1
+5001:         // calculait donc un AUTRE modèle, sans un mot — le pire cas du dépôt.
+5002:         // On refuse, au lieu de rendre un chiffre faux qui a l'air d'un chiffre.
+5003:         // (Vérifié le 02/10 : `grep -c hc` dans le corps de `forward_lot` = 0.)
+5004:         if self.hc.is_some() && toks.len() > 1 {
+5005:             panic!("chemin par LOTS et hyper-connexions : ce chemin n'est pas porté (le \
+5006: résidu y est additionné au lieu d'être remélangé par `hc_post`) — utilisez `--lot 1`, ou \
+5007: implémentez-le. Le lot n'est pas neutre ici : il change le modèle");
+5008:         }
+5009:         // Modèle MLA : le chemin par lots ne connaît que Q/K/V denses. On
+5010:         // repasse par le jeton seul, qui porte la MLA et le 
+… [4200 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && awk 'NR>=5300 && NR<=5480' model.rs | grep -n \"expert\\|regroup\\|union\\|par_expert\\|pour chaque\" | head -20; echo \"=== recherche section MoE lot ===\"; grep -n \"regroup\\|par expert\\|union\" model.rs | head -20 … [60 caractères tronqués]`
+
+  ```
+57:                // ---- MoE PAR LOTS : les jetons qui ont choisi le même expert
+58:                // sont traités ensemble, donc la matrice de l'expert est lue une
+60:                let ne = self.cfg.n_expert;
+61:                let k = if self.moe_topk > 0 { self.moe_topk } else { self.cfg.n_expert_used };
+68:                let trace_active = self.trace_experts.is_some();
+78:                        let f = self.trace_experts.as_mut().unwrap();
+98:                    // L'expert global `e` peut ne pas être dans ce nœud.
+106:                    let mg = moe.gate[k].expert(loc);
+115:                    let mu = moe.up[k].expert(loc);
+145:                    let md = moe.down[k].expert(loc);
+151:                            // SORTIE (h), pas par la largeur d'expert.
+=== recherche section MoE lot ===
+743:    // Un modèle en clusters peut avoir des biais par expert : ils sont alors
+771:/// Vue sur un tenseur déjà quantifié, découpable **par expert**. Les experts
+1202:    /// Routeur `[n_expert × n_embd]`, rangée par expert, en f32.
+1207:    /// Biais par expert, `[n_expert × n_ff]` : chaque expert a les siens, pour
+1715:/// Les quatre tampons du chemin d'attention V4, regroupés : 
+… [327 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && grep -n '\"--lot\"' main.rs | head; grep -n \"lot\\b\" main.rs | grep -i \"arg\\|parse\\|flag\" | head -10; echo \"=== aide ===\"; cd .. && ./target/release/drave --aide 2>&1 | grep -iA2 \"lot\" | head -20", "descripti … [31 caractères tronqués]`
+
+  ```
+704:            "--lot" => { o.lot = suivant(i).parse().unwrap(); 2 }
+704:            "--lot" => { o.lot = suivant(i).parse().unwrap(); 2 }
+2385:/// contrôle : jusqu'à ~15 To demandés au noyau. 256 Mo couvrent largement un lot
+2418:            ChargeFlux::Lot(_) => panic!("un lot d'états n'est pas un vecteur dense"),
+3027:                    mdl.emb_imposee_lot = Some(f.charge.plat().to_vec());
+=== aide ===
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "limit": 75, "offset": 5340}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs</path>
+<type>file</type>
+<content>
+5340:                 let bias = self.layers[l].wo.bias.clone();
+5341:                 for i in 0..t {
+5342:                     for oo in 0..n_out {
+5343:                         o[i * h + oo] = yl[oo * t + i]
+5344:                             + bias.as_ref().map_or(0.0, |b| b[oo]) + x[i * h + oo];
+5345:                     }
+5346:                 }
+5347:             }
+5348:             for i in 0..t {
+5349:                 let r = &o[i * h..(i + 1) * h];
+5350:                 Self::rmsnorm(r, &lay.ffn_norm, self.cfg.eps, &mut hn[i * h..(i + 1) * h]);
+5351:             }
+5352:             quantifier(&hn, &mut xi, &mut sx, self.act_levels, self.act_thresh);
+5353:             Self::flux_lot(&mut self.trace, &mut self.flux_force, j0,
+5354:                            1000, l, t, &mut xi, &mut sx, h);
+5355:             if let Some(moe) = lay.moe.as_ref() {
+5356:                 // ---- MoE PAR LOTS : les jetons qui ont choisi le même expert
+5357:                 // sont traités ensemble, donc la matrice de l'expert est lue une
+5358:                 // fois pour le groupe au 
+… [3813 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la /home/stephane/Data13TB/stephane/modeles/gguf/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf; df -h /home/stephane/Data13TB/stephane/modeles/gguf/ | tail -1; echo \"=== flags utiles ===\"; ./drave-core/target/release/drave --aide 2>& … [116 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 18556686752 25 sep 08:26 /home/stephane/Data13TB/stephane/modeles/gguf/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf
+/dev/mapper/system-root   11T  8,4T  2,5T  78% /home/stephane/Data13TB
+=== flags utiles ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && sed -n '660,780p' main.rs | grep -n '\"--' | head -40", "description": "List CLI flags"}`
+
+  ```
+1:            "--banc-mla" => { o.banc_mla = Some(suivant(i).clone()); 2 }
+2:            "--tensors" => { o.tensors = true; 1 }
+3:            "--trace-flux" => { o.trace_flux = Some(suivant(i).clone()); 2 }
+4:            "--flux-forcer" => { o.flux_forcer = Some(suivant(i).clone()); 2 }
+5:            "--flux-serveur" => { o.flux_serveur = Some(suivant(i).clone()); 2 }
+6:            "--options-actives" => { o.options_actives = true; 1 }
+7:            "--options-strict" => { o.options_strict = true; 1 }
+8:            "--tete-partielle" => { o.tete_partielle = true; 1 }
+9:            "--ppl-reparti" => { o.ppl_reparti = Some(suivant(i).clone()); 2 }
+10:            "--couches-locales" => { o.couches_locales = suivant(i).parse().unwrap(); 2 }
+11:            "--couches" => {
+14:                    panic!("--couches attend `a:b` (reçu « {v} »)"));
+18:            "--trace-couches" => { o.trace_couches = suivant(i).split(',')
+20:            "--banc-vision" => { o.banc_vision = Some(suivant(i).clone()); 2 }
+21:            "--ids" => { o.ids = suivant(i).split(',')
+23:            "--ids-file" => { o.ids_file = Some(suivant(i).clone()); 2 }
+24:            "--prompt" => { o.prompt = Some(suivan
+… [1790 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && grep -n \"ids-file\\|--n \" main.rs | head -10; echo \"=== usage ===\"; grep -n \"USAGE\\|Usage\\|aide\\b\" main.rs | head -10", "description": "Check ids-file and help"}`
+
+  ```
+61:        eprintln!("       drave <modele> --infer (--ids 1,2,3 | --prompt TEXTE | --ids-file F)");
+62:        eprintln!("             [--n 32] [--temp 0] [--ctx 512] [--threads N]");
+682:            "--ids-file" => { o.ids_file = Some(suivant(i).clone()); 2 }
+=== usage ===
+3://! Usage :
+1235:/// de noyau aide, la mesure par jeton mélangeant tête, attention et
+2100:    // celles de V4.1 par défaut : un plan générique n'aide personne.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && sed -n '55,80p' main.rs", "description": "Read CLI usage lines"}`
+
+  ```
+}
+
+fn main() {
+    let args: Vec<String> = std::env::args().collect();
+    if args.len() < 2 {
+        eprintln!("usage: drave <modele.gguf|dossier-de-clusters> [--matrix NOM] [--threads N]");
+        eprintln!("       drave <modele> --infer (--ids 1,2,3 | --prompt TEXTE | --ids-file F)");
+        eprintln!("             [--n 32] [--temp 0] [--ctx 512] [--threads N]");
+        eprintln!("       drave <modele> --ppl FICHIER-IDS [--ctx N] [--limit N] [--dense]");
+        eprintln!("       drave <modele> --tensors      inventaire par les en-têtes seuls");
+        eprintln!("       drave <modele> --materiel     détection matérielle et plan de");
+        eprintln!("                                     configuration, AVEC la raison de chaque");
+        eprintln!("                                     choix — ne charge pas le modèle");
+        eprintln!("       drave <modele> --sonder-engram N   accès mmappé à une table d'engram");
+        eprintln!("       drave <modele> --tete-restreinte F  génération CONTRAINTE : la tête ne");
+        eprintln!("                                     calcule que les tokens de F. Change la");
+        eprintln!("                                     sortie —
+… [612 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && grep -n \"o\\.n\\b\\|opt\\.n\\b\\|\\.n ==\\|n_max\\|pour n\" main.rs | head -20", "description": "Check generation count semantics"}`
+
+  ```
+692:            "--n" => { o.n = suivant(i).parse().unwrap(); 2 }
+3155:        println!("[flux] il faut au moins DEUX jetons pour noter une perplexité \
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && grep -n \"n:\\s*[0-9]\\|pub n\\|n,\" main.rs | grep -i \"struct\\|n: usize\\|o\\.n\" | head; grep -n \"struct Options\" -A 40 main.rs | grep -n \"n\\b\" | head", "description": "Find Options.n usage"}`
+
+  ```
+813:    // Lu AVANT la déstructuration, qui consomme `opt`.
+2:505-    // --- sélection du mode
+3:506-    infer: bool, ppl: bool, plan: bool, tokenize: bool, gpu_banc: bool, k3_essai: bool,
+4:507-    /// Banc du KV déporté : nombre de clés à faire tenir en VRAM.
+6:509-    /// Banc des SCORES d'attention : nombre de clés à noter (noyau 1 du top-k).
+8:511-    /// Banc MLA : écrit les logits `(n_pos × vocab)` en f32 pour les comparer à
+10:513-    banc_mla: Option<String>,
+11:514-    /// Trace du flux d'activation : fichier de sortie.
+12:515-    trace_flux: Option<String>,
+15:518-    flux_forcer: Option<String>,
+19:522-    /// coûteux du dépôt — huit drapeaux « analysés mais jamais appliqués » en une
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=/home/stephane/Data13TB/stephane/modeles/gguf/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf\nhead -c 1200 docs/architecture-kimi-k3.md > /tmp/prompt_k3.txt\n./drave-core/target/release/drave \"$M\" --tokenize \"$(cat /tmp/prompt_k3.txt)\ … [58 caractères tronqués]`
+
+  ```
+0 tokens
+
+recolle : ""
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n '\"--tokenize\"' -A 4 drave-core/src/main.rs | head -20; grep -n \"fn run_tokenize\" -A 25 drave-core/src/main.rs | head -35", "description": "Inspect tokenize mode"}`
+
+  ```
+108:        (opt.plan, "--plan"), (opt.tokenize, "--tokenize"),
+109-        (opt.ppl, "--ppl"), (opt.infer, "--infer"),
+110-    ].iter().filter(|(v, _)| *v).map(|(_, n)| *n).collect();
+111-    if modes.len() > 1 {
+112-        eprintln!("[modes] {} modes demandés ({}) : c'est {} qui s'exécute — les autres \
+--
+649:            "--tokenize" => { o.tokenize = true; 1 }
+650-            "--gpu-banc" => { o.gpu_banc = true; 1 }
+651-            // Test de fumée de la couche 0 de Kimi-K3, **sur un modèle même
+652-            // incomplet** (les tenseurs de la couche 0 arrivent tôt) : c'est ce
+653-            // qui permet de déboguer la structure avant la fin d'un transfert de
+--
+4487:    let g = ouvrir_meta_tolerant(path, "--tokenize");
+4488-    let tk = build_tokenizer(&g);
+4489-    if !fichier.is_empty() {
+4490-        // Encoder un corpus ENTIER avec le tokenizer du modèle : chaque modèle
+4491-        // a le sien, et nourrir un modèle avec les identifiants d'un autre
+4477:fn run_tokenize(opt: Options) {
+4478-    let path = &modele_chemin();
+4479-    let texte = opt.texte.clone().unwrap_or_default();
+4480-    let fichier = opt.fichier.clone().unwrap_or_default();
+4481-    let sortie = o
+… [1562 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=/home/stephane/Data13TB/stephane/modeles/gguf/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf\n./drave-core/target/release/drave \"$M\" --tokenize --fichier /tmp/prompt_k3.txt --sortie /tmp/prefill.ids 2>&1 | tail -3\npython3 - <<'EOF'\nid … [281 caractères tronqués]`
+
+  ```
+414 tokens écrits dans /tmp/prefill.ids (vocabulaire du modèle : 151936)
+réversibilité : texte reconstruit identique ✅ (1200 octets)
+total ids: 414
+écrit: 192
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && grep -n \"opt.lot\\|o.lot\\|\\.lot =\" main.rs | head -20", "description": "Find how --lot is consumed"}`
+
+  ```
+704:            "--lot" => { o.lot = suivant(i).parse().unwrap(); 2 }
+867:    mdl.lot = lot.max(1);
+3111:    let lot = opt.lot.max(1);
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && sed -n '3095,3160p' main.rs", "description": "Read prefill loop with lot"}`
+
+  ```
+let mut mx = f32::NEG_INFINITY;
+    for &v in lg { if v > mx { mx = v; } }
+    let mut somme = 0f64;
+    for &v in lg { somme += ((v - mx) as f64).exp(); }
+    (mx as f64 + somme.ln()) - lg[cible as usize] as f64
+}
+
+fn run_ppl_reparti(opt: Options, pair: &str) {
+    use std::time::Instant;
+    let chemin = modele_chemin();
+    let ctx = if opt.ctx_impose { opt.ctx } else { 256 };
+    let limite = opt.limit.max(1).min(ctx);
+    let couches_locales = if opt.couches_locales > 0 { opt.couches_locales } else { 12 };
+    // `--lot T` : préremplissage par LOTS sur le fil. La référence locale est
+    // alors calculée avec le MÊME découpage — sinon l'écart mesurerait la
+    // différence entre deux ordres de sommation, pas celle du découpage.
+    let lot = opt.lot.max(1);
+    let mut mdl = model::Model::load(&chemin,
+                                     ctx, fils(&opt), true, opt.keep, false, 0, 0);
+    appliquer_quantification(&mut mdl, &opt);
+    // Le `hc` du PILOTE : c'est SON modèle qui décide de la largeur du pré-mix
+    // qu'il envoie et de celle de celui qu'il reçoit (le pair valide le sien).
+    let hc_pilote = mdl.hc.as_ref().map(|v| v[0].0.hc).unwrap_or(1);
+    // `--tete-parti
+… [2690 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && grep -n \"\\.lot\\b\" main.rs model.rs | grep -v \"opt.lot\\|o.lot\" | head -20", "description": "Find mdl.lot consumers"}`
+
+  ```
+main.rs:445:             mdl.attn_window, mdl.swa_pattern, mdl.seuil_push, mdl.lot,
+main.rs:471:        } else if mdl.lot > 1 {
+main.rs:867:    mdl.lot = lot.max(1);
+model.rs:8044:        // Préremplissage par lots : `forward_lot` sur des tranches de `self.lot`
+model.rs:8047:        let lot = self.lot.max(1);
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "limit": 45, "offset": 8036}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs</path>
+<type>file</type>
+<content>
+8036:             let coupe = ids.len() - place;
+8037:             println!("[contexte] invite de {} jetons > {} (ctx {} − {} de génération) : les {} \
+8038: premiers sont ABANDONNÉS (troncature, pas de fenêtrage)",
+8039:                      ids.len(), place, ctx_modele, n_new, coupe);
+8040:             &ids[coupe..]
+8041:         } else {
+8042:             ids
+8043:         };
+8044:         // Préremplissage par lots : `forward_lot` sur des tranches de `self.lot`
+8045:         // jetons. `lot == 1` reprend exactement l'ancienne boucle (forward_lot
+8046:         // délègue à `forward` pour un jeton), donc rien ne change par défaut.
+8047:         let lot = self.lot.max(1);
+8048:         let mut pos = 0usize;
+8049:         while pos < ids.len() {
+8050:             let t = lot.min(ids.len() - pos);
+8051:             if t == 1 {
+8052:                 last = self.forward(ids[pos], pos);
+8053:             } else {
+8054:                 let hs = self.forward_lot(&ids[pos..pos + t], pos);
+8055:                 last = hs.into_iter().next_back().expect("lot non vide");
+8056:     
+… [1504 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && grep -n \"prompt_s\\|prompt_events\" main.rs model.rs | head; echo \"=== prints ===\"; grep -n \"préremplissage\\|invite de\\|jetons/s\" model.rs | head -20", "description": "Find prefill timing prints"}`
+
+  ```
+main.rs:1086:        let st = model::Stats { events: mdl.events_total(), prompt_s: dt / 2.0, gen_s: dt / 2.0,
+main.rs:1119:             st.n_prompt, st.prompt_s, st.n_prompt as f64 / st.prompt_s,
+main.rs:1120:             st.prompt_s * 1e3 / st.n_prompt.max(1) as f64);
+model.rs:1359:    pub prompt_s: f64,
+model.rs:8059:        let prompt_s = t0.elapsed().as_secs_f64();
+model.rs:8060:        let prompt_events = self.events - events0;
+model.rs:8106:        events0 = self.events - events0 - prompt_events;
+model.rs:8110:            prompt_s, gen_s,
+=== prints ===
+868:/// nécessaire au préremplissage — viendra après, et devra donner **le même**
+2491:    /// C'est le pendant de `emb_imposee` pour le préremplissage réparti : un nœud
+2601:    /// Le préremplissage par lots n'était branché que sur la perplexité : une
+2602:    /// invite de 4 000 jetons se payait donc jeton par jeton en génération.
+2773:        // condition reste vraie. Mesuré : une invite de 4 731 jetons avec
+5011:        // préremplissage par lots perd son intérêt sur ces modèles — c'est dit
+5018:        // Lot IMPOSÉ (préremplissage réparti) : les états arrivent de l'autre
+8037:            println!("[contexte] invite de {
+… [52 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && sed -n '1105,1130p' main.rs", "description": "Read stats print"}`
+
+  ```
+mdl.generate(&ids, n_new, temp, top_p, rep_pen, hist, cb)
+    };
+    if prompt.is_some() {
+        let tk = build_tokenizer(&mdl.g);
+        let mut all: Vec<u32> = ids.clone();
+        all.extend(all_ids_of(&out));
+        println!("--- texte ---");
+        print!("{}", tk.decode(&all));
+        println!("\n--- ids générés : {:?}", &out);
+    } else {
+        println!("tokens générés : {:?}", &out);
+    }
+    println!("\n--- mesure ---");
+    println!("prompt  : {} tokens en {:.3} s  ({:.1} tok/s, TTFT {:.1} ms)",
+             st.n_prompt, st.prompt_s, st.n_prompt as f64 / st.prompt_s,
+             st.prompt_s * 1e3 / st.n_prompt.max(1) as f64);
+    println!("généré  : {} tokens en {:.3} s  ({:.2} tok/s)",
+             st.n_gen, st.gen_s, st.n_gen as f64 / st.gen_s);
+    stats_experts(&mdl);
+    println!("événements : {} au total, {:.1} par token",
+             st.events, st.events as f64 / (st.n_prompt + st.n_gen) as f64);
+    let pa = mdl.paires;
+    let ng = (st.n_prompt + st.n_gen).max(1) as f64;
+    println!("paires (poids × activation) : {} au total, {:.1} M par token — attention {:.1} M · experts {:.1} M · partagé {:.1} M",
+             pa.iter().sum::<u64>(), pa.iter().sum
+… [117 caractères tronqués]
+  ```
+
+- **write** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mesure-prefill-lot.sh", "content": "#!/usr/bin/env bash\n# mesure-prefill-lot.sh — combien coûte un jeton de préremplissage selon la\n# TAILLE DU LOT, sur un modèle à experts dont le regroupement par expert est\n# implémenté (`forw … [1574 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mesure-prefill-lot.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && chmod +x tools/mesure-prefill-lot.sh && M=/home/stephane/Data13TB/stephane/modeles/gguf/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf && df --output=source \"$M\" | tail -1 && lsblk -o NAME,ROTA /dev/mapper/system-root 2>/dev/null | tail - … [52 caractères tronqués]`
+
+  ```
+/dev/mapper/system-root
+NAME        ROTA
+system-root    1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=/home/stephane/Data13TB/stephane/modeles/gguf/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf && nohup bash -c '\ntools/mesure-prefill-lot.sh \"'$M'\" /tmp/prefill192.ids 1 2 4 8 16 32 64 192\necho\necho \"=== traces de routage (le regroup … [744 caractères tronqués]`
+
+  ```
+lancé, pid 1418364
+# modèle : /home/stephane/Data13TB/stephane/modeles/gguf/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf
+# invite : /tmp/prefill192.ids (192 jetons) · threads 16 · ctx 512 · n 2
+# support : /dev/mapper/system-root (vérifier ROTA=1 → disque tournant)
+
+lot      prompt_s      tok/s      TTFT_ms paires_exp_M
+  ```
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"analyse_union_experts.py — ce que le REGROUPEMENT des jetons par expert\néconomise, calculé sur une trace de routage réelle.\n\nLe fait : en préremplissage par lots (`--lot N`), les jetons d'un même lot qui\nont choisi le même expert partagent UNE lecture d … [5000 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/analyse_union_experts.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -12 /tmp/sweep_lot.log; echo \"=== download ===\"; tail -1 /tmp/dl_k3.log; date +%H:%M", "description": "Check sweep and download progress"}`
+
+  ```
+# modèle : /home/stephane/Data13TB/stephane/modeles/gguf/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf
+# invite : /tmp/prefill192.ids (192 jetons) · threads 16 · ctx 512 · n 2
+# support : /dev/mapper/system-root (vérifier ROTA=1 → disque tournant)
+
+lot      prompt_s      tok/s      TTFT_ms paires_exp_M
+=== download ===
+13:04:46    11.0 Go / 49.0 Go (22.4 %, 110 Mo/s)
+13:04
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la tools/ref_logits_k3 2>/dev/null; which llama-cli llama-gguf 2>/dev/null; ls ~/llama.cpp-k3/build/bin/ 2>/dev/null | head; tail -3 /tmp/sweep_lot.log", "description": "Check reference binaries"}`
+
+  ```
+-rwxr-xr-x. 1 stephane stephane 207032  3 oct 10:28 tools/ref_logits_k3
+/home/stephane/.local/bin/llama-cli
+# support : /dev/mapper/system-root (vérifier ROTA=1 → disque tournant)
+
+lot      prompt_s      tok/s      TTFT_ms paires_exp_M
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls ~/llama.cpp-k3/ 2>/dev/null | head; echo \"---\"; find ~ -maxdepth 3 -name \"llama-cli\" -o -maxdepth 3 -name \"llama.cpp-k3\" -type d 2>/dev/null | head; echo \"--- ref_logits ---\"; tools/ref_logits_k3 2>&1 | head -5", "descript … [34 caractères tronqués]`
+
+  ```
+---
+/home/stephane/.local/bin/llama-cli
+--- ref_logits ---
+tools/ref_logits_k3: error while loading shared libraries: libllama.so.0: cannot open shared object file: No such file or directory
+  ```
+
+- **bash** `{"command": "find / -name \"libllama.so*\" 2>/dev/null | head; echo \"--- dossier k3 ---\"; find / -maxdepth 4 -type d -name \"*llama*k3*\" 2>/dev/null | head; ls -la /home/stephane/.local/bin/llama-cli", "description": "Find libllama and llama.cpp-k3"}`
+
+  ```
+(no output)
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "ls -la /home/stephane/.local/bin/llama-cli; echo \"---\"; ls /home/stephane/ | head -20; echo \"--- git repos ---\"; ls -d /home/stephane/*/ 2>/dev/null | head -20", "description": "Check llama-cli and home dirs"}`
+
+  ```
+lrwxrwxrwx. 1 stephane stephane 74 12 aoû 17:24 /home/stephane/.local/bin/llama-cli -> /home/stephane/Data13TB/stephane/GitHub/llama.cpp/build-cuda/bin/llama-cli
+---
+altera_pro
+Applications
+Bureau
+data
+Data13TB
+Desktop
+Documents
+Downloads
+FastNVMe
+flex
+fpga-compat
+GitHub
+gpu-env
+Images
+intelFPGA
+intelFPGA_std
+iverilog
+lib64_shim
+lvm-cache-backup-20251222-131716
+Modèles
+--- git repos ---
+/home/stephane/altera_pro/
+/home/stephane/Applications/
+/home/stephane/Bureau/
+/home/stephane/data/
+/home/stephane/Data13TB/
+/home/stephane/Desktop/
+/home/stephane/Documents/
+/home/stephane/Downloads/
+/home/stephane/FastNVMe/
+/home/stephane/flex/
+/home/stephane/fpga-compat/
+/home/stephane/GitHub/
+/home/stephane/gpu-env/
+/home/stephane/Images/
+/home/stephane/intelFPGA/
+/home/stephane/intelFPGA_std/
+/home/stephane/iverilog/
+/home/stephane/lib64_shim/
+/home/stephane/lvm-cache-backup-20251222-131716/
+/home/stephane/Modèles/
+  ```
+
+- **bash** `{"command": "ls -la /home/stephane/Data13TB/stephane/GitHub/ 2>/dev/null | head -20; echo \"--- llama.cpp builds ---\"; ls -d /home/stephane/Data13TB/stephane/GitHub/llama.cpp* 2>/dev/null", "description": "List GitHub repos"}`
+
+  ```
+total 20
+drwxr-xr-x. 1 stephane stephane  2374  3 oct 10:09 .
+drwxr-xr-x. 1 stephane stephane  2292  1 oct 08:59 ..
+drwxr-xr-x. 1 stephane stephane    80 31 jui 13:15 915-SPO (1).com
+drwxr-xr-x. 1 stephane stephane   228 22 fév  2026 915-SPO.com
+drwxr-xr-x. 1 stephane stephane   260  7 jun  2024 915-SPO.com-2
+drwxr-xr-x. 1 stephane stephane    62  6 jun  2024 Ai_Docs
+drwxr-xr-x. 1 stephane stephane    80  6 jun  2024 arduino-i2c-scanner
+drwxr-xr-x. 1 stephane stephane   994  6 jun  2024 Arduino-IRremote
+drwxr-xr-x. 1 stephane stephane    74  6 jun  2024 ArduinoNunchuk
+drwxr-xr-x. 1 stephane stephane   732 31 jui 13:16 Biblio
+drwxr-xr-x. 1 stephane stephane   404  6 jun  2024 Biblio-2
+drwxr-xr-x. 1 stephane stephane   262  6 jun  2024 blue-pill-quickstart
+drwxr-xr-x. 1 stephane stephane   248 11 mar  2026 bohemian-lab
+drwxr-xr-x. 1 stephane stephane  1200 27 jan  2026 copilotage
+drwxr-xr-x. 1 stephane stephane   248 27 jan  2026 copilotage-shared
+drwxr-xr-x. 1 stephane stephane   408 16 mar  2026 DeDRM_tools
+drwxr-xr-x. 1 stephane stephane  4900 20 jui 12:32 emails
+drwxr-xr-x. 1 stephane stephane    66 16 mar  2026 equipement-kindle
+drwxr-xr-x. 1 stephane stephane   194 27 jan  2026
+… [149 caractères tronqués]
+  ```
+
+- **bash** `{"command": "ls /home/stephane/Data13TB/stephane/GitHub/llama.cpp-k3/build/bin/ 2>/dev/null | head; echo \"--- libs ---\"; find /home/stephane/Data13TB/stephane/GitHub/llama.cpp-k3 -name \"libllama.so*\" 2>/dev/null | head -3; echo \"--- sweep ---\"; tail -4 /tmp/sweep_lot.log", "description": "Chec … [32 caractères tronqués]`
+
+  ```
+libggml-base.so
+libggml-base.so.0
+libggml-base.so.0.25.3
+libggml-cpu.so
+libggml-cpu.so.0
+libggml-cpu.so.0.25.3
+libggml.so
+libggml.so.0
+libggml.so.0.25.3
+libllama-batched-bench-impl.so
+--- libs ---
+/home/stephane/Data13TB/stephane/GitHub/llama.cpp-k3/build/bin/libllama.so.0.5.0
+/home/stephane/Data13TB/stephane/GitHub/llama.cpp-k3/build/bin/libllama.so.0
+/home/stephane/Data13TB/stephane/GitHub/llama.cpp-k3/build/bin/libllama.so
+--- sweep ---
+# invite : /tmp/prefill192.ids (192 jetons) · threads 16 · ctx 512 · n 2
+# support : /dev/mapper/system-root (vérifier ROTA=1 → disque tournant)
+
+lot      prompt_s      tok/s      TTFT_ms paires_exp_M
+  ```
+
+- **bash** `{"command": "ps aux | grep \"[d]rave \" | head -3; echo \"--- io ---\"; cat /proc/$(pgrep -x drave | head -1)/io 2>/dev/null | head -4; echo \"--- charge ---\"; uptime; free -g | head -2", "description": "Check drave process state"}`
+
+  ```
+stephane 1418364  0.0  0.0   7824  2364 ?        S    13:04   0:00 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=/home/stephane/Data13TB/stephane/modeles/gguf/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf && nohup bash -c ' tools/mesure-prefill-lot.sh "'$M'" /tmp/prefill192.ids 1 2 4 8 16 32 64 192 echo echo "=== traces de routage (le regroupement ne doit pas changer QUI est choisi) ===" for L in 1 192; do   DRAVE_TRACE_EXPERTS=/tmp/tr_lot$L.txt ./drave-core/target/release/drave "'$M'" --infer --ids-file /tmp/prefill192.ids --n 2 --ctx 512 --lot $L --threads 16 >/dev/null 2>&1   echo "lot $L : $(wc -l < /tmp/tr_lot$L.txt) lignes (couche jeton experts)" done if diff -q <(sort /tmp/tr_lot1.txt) <(sort /tmp/tr_lot192.txt) >/dev/null; then   echo "routage IDENTIQUE entre lot 1 et lot 192 ✅" else   echo "routage DIFFÉRENT : $(diff <(sort /tmp/tr_lot1.txt) <(sort /tmp/tr_lot192.txt) | grep -c "^<") lignes" fi ' > /tmp/sweep_lot.log 2>&1 & echo "lancé, pid $!"; sleep 20; tail -5 /tmp/sweep_lot.log
+stephane 1418366  0.0  0.0   7692  4036 ?        S    13:04   0:00 bash -c  tools/mesure-prefill-lot.sh "/home/stephane/Data13TB/stephane/modeles/gguf/Qwen3-30B-A3B-Instruct-2507-Q4_
+… [1324 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sleep 90; tail -5 /tmp/sweep_lot.log; echo \"--- cpu du drave ---\"; ps -o etime=,time=,%cpu=,rss= -p $(pgrep -x drave | head -1) 2>/dev/null; grep -E \"^(read_bytes|rchar)\" /proc/$(pgrep -x drave | head -1)/io 2>/dev/null; tail -1 /tmp/dl_k3.log", "description": "Monitor sweep progres … [24 caractères tronqués]`
+
+  ```
+# modèle : /home/stephane/Data13TB/stephane/modeles/gguf/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf
+# invite : /tmp/prefill192.ids (192 jetons) · threads 16 · ctx 512 · n 2
+# support : /dev/mapper/system-root (vérifier ROTA=1 → disque tournant)
+
+lot      prompt_s      tok/s      TTFT_ms paires_exp_M
+--- cpu du drave ---
+      04:58 00:15:55  320 4263168
+rchar: 17334
+read_bytes: 2917150720
+13:08:46    38.4 Go / 49.0 Go (78.3 %, 113 Mo/s)
+  ```
+
+- **bash** `{"command": "pkill -x drave; sleep 1; ps aux | grep -c \"[d]rave-core/target\"; echo \"--- copie vers NVMe (support propre, hors conflit HDD) ---\"; df -h /home/stephane/FastNVMe | tail -1\ntime cp /home/stephane/Data13TB/stephane/modeles/gguf/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf /home/stephane/F … [156 caractères tronqués]`
+
+  ```
+3
+--- copie vers NVMe (support propre, hors conflit HDD) ---
+/dev/nvme0n1p2  828G  551G  276G  67% /home/stephane/FastNVMe
+-rw-r--r--. 1 stephane stephane 18556686752  3 oct 13:17 /home/stephane/FastNVMe/qwen3-30b-a3b-Q4_K_M.gguf
+[stderr]
+
+real	8m10,532s
+user	0m0,072s
+sys	0m8,116s
+  ```
+
+- **bash** `{"command": "pgrep -x drave | wc -l; tail -1 /tmp/dl_k3.log; date +%H:%M; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash -c '\ntools/mesure-prefill-lot.sh /home/stephane/FastNVMe/qwen3-30b-a3b-Q4_K_M.gguf /tmp/prefill192.ids 1 2 4 8 16 32 64 192\necho\necho \"=== routage : le regro … [1096 caractères tronqués]`
+
+  ```
+1
+13:17:46    48.9 Go / 49.1 Go (99.5 %, 114 Mo/s)
+13:17
+lancé pid 1421935
+# modèle : /home/stephane/FastNVMe/qwen3-30b-a3b-Q4_K_M.gguf
+# invite : /tmp/prefill192.ids (192 jetons) · threads 16 · ctx 512 · n 2
+# support : /dev/nvme0n1p2 (vérifier ROTA=1 → disque tournant)
+
+lot      prompt_s      tok/s      TTFT_ms paires_exp_M
+  ```
+
+- **bash** `{"command": "sleep 45; tail -8 /tmp/sweep_lot.log; echo \"=== proc ===\"; ps -o etime=,%cpu= -p $(pgrep -x drave | head -1) 2>/dev/null; date +%H:%M; date -u +%H:%M; TZ=America/New_York date +%H:%M", "description": "Check sweep progress and time zones", "timeoutMs": 90000}`
+
+  ```
+# modèle : /home/stephane/FastNVMe/qwen3-30b-a3b-Q4_K_M.gguf
+# invite : /tmp/prefill192.ids (192 jetons) · threads 16 · ctx 512 · n 2
+# support : /dev/nvme0n1p2 (vérifier ROTA=1 → disque tournant)
+
+lot      prompt_s      tok/s      TTFT_ms paires_exp_M
+1          42.431        4.5        221.0       1811.9
+                                             2         580.329        0.3       3022.5         18.7
+=== proc ===
+      00:46  695
+13:19
+17:19
+13:19
+  ```
+
+- **bash** `{"command": "pkill -x drave; sleep 1; pkill -f \"mesure-prefill\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && grep -n \"fn gemm_dense_q4\" -A 60 model.rs | head -75", "description": "Read gemm_dense_q4 implementation"}`
+
+  ```
+(no output)
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "pgrep -x drave | wc -l; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && grep -n \"fn gemm_dense_q4\" model.rs list.rs engine.rs 2>/dev/null | head", "description": "Find gemm_dense_q4 definition"}`
+
+  ```
+2
+engine.rs:707:    pub fn gemm_dense_q4(&mut self, d: &crate::list::DenseQ4, x16: &[i16], t: usize,
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/engine.rs", "limit": 80, "offset": 690}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/engine.rs</path>
+<type>file</type>
+<content>
+690:         assert!(out.len() >= d.n_out * t, "sortie du lot trop petite");
+691:         let sh = &self.shared;
+692:         sh.mode.store(5, Ordering::Relaxed);
+693:         sh.dense.store(d as *const _ as *mut _, Ordering::Relaxed);
+694:         sh.gx.store(x.as_ptr() as *mut i32, Ordering::Relaxed);
+695:         sh.gsx.store(sx.as_ptr() as *mut f32, Ordering::Relaxed);
+696:         sh.gt.store(t, Ordering::Relaxed);
+697:         sh.gn_out.store(d.n_out, Ordering::Relaxed);
+698:         sh.gout.store(out.as_mut_ptr(), Ordering::Relaxed);
+699:         sh.done.store(0, Ordering::Relaxed);
+700:         sh.gen.fetch_add(1, Ordering::Release);
+701:         self.attendre(sh);
+702:     }
+703: 
+704:     /// Produit matrice-matrice sur une matrice 4 bits (experts MXFP4 de gpt-oss,
+705:     /// poids Q4_K de la famille Qwen). Même exécution sur le pool : les fils
+706:     /// créés à la volée partageaient les cœurs avec des workers qui tournent.
+707:     pub fn gemm_dense_q4(&mut self, d: &crate::list::DenseQ4, x16: &[i16], t: usize,
+708:                          s32: &[Vec<i3
+… [3467 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && grep -n \"6 =>\\|mode 6\\|dense4\" engine.rs | head -20", "description": "Find mode-6 worker dispatch"}`
+
+  ```
+228:    dense4: AtomicPtr<DenseQ4>,
+233:    /// Mêmes activations en i16 et leurs sommes par bloc (mode 6).
+406:            dense4: AtomicPtr::new(std::ptr::null_mut()),
+462:                        let d = unsafe { &*sh.dense4.load(Ordering::Acquire) };
+517:                            let d = unsafe { &*sh.dense4.load(Ordering::Acquire) };
+643:        sh.dense4.store(d as *const _ as *mut _, Ordering::Relaxed);
+720:        sh.dense4.store(d as *const _ as *mut _, Ordering::Relaxed);
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/engine.rs", "limit": 70, "offset": 455}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/engine.rs</path>
+<type>file</type>
+<content>
+455:                     let sh = &*sh2;
+456:                     'generation: {
+457:                     let mode = sh.mode.load(Ordering::Relaxed);
+458:                     if mode == 4 {
+459:                         // Mode 4 bits : même découpage que le mode 3, mais les
+460:                         // poids tiennent sur un demi-octet — c'est le seul
+461:                         // levier qui reste quand le noyau est au mur mémoire.
+462:                         let d = unsafe { &*sh.dense4.load(Ordering::Acquire) };
+463:                         let xv = unsafe { std::slice::from_raw_parts(
+464:                             sh.xv16.load(Ordering::Acquire), d.n_in) };
+465:                         let xs = unsafe { std::slice::from_raw_parts(
+466:                             sh.xs32.load(Ordering::Acquire), d.n_in / BLOC_Q4 + 1) };
+467:                         let sx = f32::from_bits(sh.sx.load(Ordering::Relaxed) as u32);
+468:                         let outs = unsafe { &mut *sh.outs.load(Ordering::Acquire) };
+469:                         let per = (d.n_out + n - 1) / n;
+… [3946 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/engine.rs", "limit": 45, "offset": 524}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/engine.rs</path>
+<type>file</type>
+<content>
+524:                                 sh.gs32.load(Ordering::Acquire), t) };
+525:                             const TUILE4: usize = 8;
+526:                             for i0 in (0..t).step_by(TUILE4) {
+527:                                 let i1 = (i0 + TUILE4).min(t);
+528:                                 for o in lo..hi {
+529:                                     for i in i0..i1 {
+530:                                         let xi = &x16[i * d.n_in..(i + 1) * d.n_in];
+531:                                         out[o * t + i] = d.dot16(o, xi, &s32[i]) * sx[i];
+532:                                     }
+533:                                 }
+534:                             }
+535:                         }
+536:                         sh.done.fetch_add(1, Ordering::Release);
+537:                         break 'generation;
+538:                     }
+539:                     if mode == 3 {
+540:                         // Mode dense : chaque worker calcule une tranche
+541:                         // contiguë de sorties, sans dispersion ni réduction.
+542:                  
+… [2112 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=/home/stephane/Data13TB/stephane/modeles/gguf\nhead -c 400 docs/architecture-kimi-k3.md > /tmp/p.txt\n./drave-core/target/release/drave $D/qwen2.5-1.5b-instruct-q4_k_m.gguf --tokenize --fichier /tmp/p.txt --sortie /tmp/p64.ids >/de … [556 caractères tronqués]`
+
+  ```
+invite: 64 jetons
+=== modèle DENSE (sans experts) : lot 1 vs lot 8 ===
+lot=1 rep=1 prompt  : 64 tokens en 6.043 s  (10.6 tok/s, TTFT 94.4 ms)
+lot=1 rep=2 prompt  : 64 tokens en 5.302 s  (12.1 tok/s, TTFT 82.8 ms)
+lot=8 rep=1 prompt  : 64 tokens en 4.153 s  (15.4 tok/s, TTFT 64.9 ms)
+lot=8 rep=2 prompt  : 64 tokens en 4.564 s  (14.0 tok/s, TTFT 71.3 ms)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nids=open('/tmp/prefill.ids').read().strip().split(',')[:64]\nopen('/tmp/prefill64.ids','w').write(','.join(ids)); print('invite 64 écrite')\"\nnohup bash -c '\n# chauffe : une passe complète pour que le cache de pages  … [875 caractères tronqués]`
+
+  ```
+invite 64 écrite
+lancé
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && grep -n \"fn dot16\\|fn sommes32\\|fn dot_q4\" list.rs | head; echo \"---\"; grep -n \"fn dot16\" -A 45 list.rs | head -55", "description": "Read dot16 implementation"}`
+
+  ```
+849:    unsafe fn dot16_q6_avx2(&self, o: usize, x: &[i16], sx32: &[i32]) -> f32 {
+925:    unsafe fn dot16_q6k_avx2(&self, o: usize, x: &[i16]) -> f32 {
+994:    unsafe fn dot16_q4k_avx2(&self, o: usize, x: &[i16], sx32: &[i32]) -> f32 {
+1082:    fn dot16_q6_scalaire(&self, o: usize, x: &[i16]) -> f32 {
+1221:    unsafe fn dot16_source_avx2(&self, o: usize, x: &[i16]) -> f32 {
+1325:    pub fn dot16(&self, o: usize, x: &[i16], sx32: &[i32]) -> f32 {
+1359:    unsafe fn dot16_avx2(&self, o: usize, x: &[i16]) -> f32 {
+1473:pub fn sommes32(x: &[i16]) -> Vec<i32> {
+---
+849:    unsafe fn dot16_q6_avx2(&self, o: usize, x: &[i16], sx32: &[i32]) -> f32 {
+850-        use std::arch::x86_64::*;
+851-        let half = self.n_in.div_ceil(2);
+852-        let n_bloc = self.n_in.div_ceil(BLOC_Q4);
+853-        let q4 = &self.q[o * half..(o + 1) * half];
+854-        let q2 = self.plan6.as_ref().expect("plan 6 bits absent");
+855-        let xp = x.as_ptr();
+856-        let masque = _mm_set1_epi8(0x0f);
+857-        let haut_bits = _mm_set1_epi8(0x30);
+858-        let mut sum = 0f32;
+859-        let mut deux = [0u8; 32];
+860-        for b in 0..n_bloc {
+861-            let lo = b * BLOC_Q4;
+862-           
+… [2215 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/list.rs", "limit": 50, "offset": 1325}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/list.rs</path>
+<type>file</type>
+<content>
+1325:     pub fn dot16(&self, o: usize, x: &[i16], sx32: &[i32]) -> f32 {
+1326:         #[cfg(target_arch = "x86_64")]
+1327:         {
+1328:             if std::is_x86_feature_detected!("avx2") {
+1329:                 if self.src == Source::Q4_K && sx32.len() * BLOC_Q4 >= self.n_in {
+1330:                     return unsafe { self.dot16_q4k_avx2(o, x, sx32) };
+1331:                 }
+1332:                 if self.src == Source::Q6_K {
+1333:                     return unsafe { self.dot16_q6k_avx2(o, x) };
+1334:                 }
+1335:                 if self.plan6.is_some() && self.n_in % BLOC_Q4 == 0 {
+1336:                     return unsafe { self.dot16_q6_avx2(o, x, sx32) };
+1337:                 }
+1338:                 if self.src != Source::Propre && self.src != Source::Q4_K
+1339:                     && self.src != Source::Q6_K {
+1340:                     return unsafe { self.dot16_source_avx2(o, x) };
+1341:                 }
+1342:                 if self.n_in % BLOC_Q4 == 0 && x.len() >= self.n_in {
+1343:                     return unsafe { self.dot16_avx2(o, x) };
+13
+… [1662 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cat /tmp/lot_moe.log; echo \"=== download ===\"; tail -1 /tmp/dl_k3.log", "description": "Check MoE lot sweep results"}`
+
+  ```
+=== download ===
+13:24:36    45.4 Go / 49.2 Go (92.3 %, 113 Mo/s)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && grep -n \"BLOC_Q4 *:\" list.rs | head -3; sed -n '1473,1500p' list.rs; echo \"=== appelants de sommes32 ===\"; grep -n \"sommes32\" *.rs | head", "description": "Read sommes32 and BLOC_Q4"}`
+
+  ```
+539:pub const BLOC_Q4: usize = 32;
+pub fn sommes32(x: &[i16]) -> Vec<i32> {
+    x.chunks(BLOC_Q4).map(|c| c.iter().map(|&v| v as i32).sum()).collect()
+}
+
+/// Somme des produits de 32 valeurs 8 bits **non signées** par 32 i16.
+/// `a` porte les valeurs 0–15, `b` les 16 suivantes.
+#[cfg(target_arch = "x86_64")]
+#[inline]
+#[target_feature(enable = "avx2")]
+unsafe fn somme_produits(a: std::arch::x86_64::__m128i,
+                         b: std::arch::x86_64::__m128i,
+                         x: *const i16) -> i32 {
+    use std::arch::x86_64::*;
+    let va = _mm256_cvtepu8_epi16(a);
+    let vb = _mm256_cvtepu8_epi16(b);
+    let xa = _mm256_loadu_si256(x as *const __m256i);
+    let xb = _mm256_loadu_si256(x.add(16) as *const __m256i);
+    let p = _mm256_add_epi32(_mm256_madd_epi16(va, xa), _mm256_madd_epi16(vb, xb));
+    let mut t = [0i32; 8];
+    _mm256_storeu_si256(t.as_mut_ptr() as *mut __m256i, p);
+    t[0] + t[1] + t[2] + t[3] + t[4] + t[5] + t[6] + t[7]
+}
+
+#[cfg(test)]
+mod tests_q6k {
+    use super::*;
+
+    /// La disposition Q6_K a coûté une perplexité de 100 000 : ggml écrit les
+=== appelants de sommes32 ===
+engine.rs:647:        let xs = crate::list::sommes32(&xi);
+engine.rs:995
+… [689 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "limit": 50, "offset": 1160}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs</path>
+<type>file</type>
+<content>
+1160:     /// Demande au noyau de lancer la lecture de l'expert `e` **en avance**.
+1161:     ///
+1162:     /// Le routeur choisit ses `k` experts avant tout calcul : on connaît donc
+1163:     /// les plages à lire une couche entière à l'avance. Les demander d'un coup
+1164:     /// laisse le noyau paralléliser ses lectures de pages, au lieu de les subir
+1165:     /// une par une au fil du calcul.
+1166:     fn prelire_expert(&self, e: usize) {
+1167:         let octets = self.octets_expert();
+1168:         let p = unsafe { self.base.add(e * octets) };
+1169:         crate::gguf::prelire(p, octets);
+1170:     }
+1171: 
+1172:     /// Octets bruts de l'expert `e` (tels qu'ils sont dans le fichier) : c'est
+1173:     /// ce qu'il faut copier en VRAM pour que le noyau y travaille.
+1174:     fn blocs_expert(&self, e: usize) -> &[u8] {
+1175:         let octets = self.octets_expert();
+1176:         let p = unsafe { self.base.add(e * octets) };
+1177:         unsafe { std::slice::from_raw_parts(p, octets) }
+1178:     }
+1179: 
+1180:     /// Matrice 4 bits de l'expert `e`, **empruntée** a
+… [1566 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cat /tmp/lot_moe.log; echo \"=== état ===\"; ps -o etime=,time=,%cpu=,rss= -p $(pgrep -x drave | head -1) 2>/dev/null; grep -E \"^(pgmajfault|rchar|read_bytes)\" /proc/$(pgrep -x drave|head -1)/io 2>/dev/null; grep VmRSS /proc/$(pgrep -x drave|head -1)/status 2>/dev/null; free -g|head - … [78 caractères tronqués]`
+
+  ```
+# invite 64 jetons · NVMe · 16 threads · modèle Mixture-of-Experts (128 experts, 8/jeton)
+lot      prompt_s      tok/s
+=== état ===
+      00:15 00:00:15 99.8 2069660
+rchar: 14628
+read_bytes: 0
+VmRSS:	 2057052 kB
+               total        used        free      shared  buff/cache   available
+Mem:             125          16           2           4         112         108
+13:25:26  Kimi-K3-UD-Q4_K_XL · Kimi-K3-UD-Q4_K_XL-00028-of-00032.gguf · 49.0 Go (2529 Go libres)
+  ```
+
+- **bash** `{"command": "sleep 30; cat /tmp/lot_moe.log; ps -o etime=,time=,%cpu= -p $(pgrep -x drave|head -1) 2>/dev/null; grep -E \"^(pgmajfault|read_bytes)\" /proc/$(pgrep -x drave|head -1)/io 2>/dev/null; grep VmRSS /proc/$(pgrep -x drave|head -1)/status 2>/dev/null", "description": "Check CPU usage during  … [25 caractères tronqués]`
+
+  ```
+# invite 64 jetons · NVMe · 16 threads · modèle Mixture-of-Experts (128 experts, 8/jeton)
+lot      prompt_s      tok/s
+1.1        11.423        5.6
+      00:13 00:00:13 99.7
+read_bytes: 335872
+VmRSS:	 1797168 kB
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && grep -n \"Pool::\\|pool:\\|threads\" model.rs | grep -i \"pool\\|thread\" | head -20", "description": "Find thread pool creation"}`
+
+  ```
+2320:    pub pool: Pool,
+3084:    pub fn load(path: &str, ctx: usize, n_threads: usize, dense: bool, keep: f32,
+3086:        Self::load_partiel(path, ctx, n_threads, dense, keep, auto, q4, b6, None)
+3090:    pub fn load_partiel(path: &str, ctx: usize, n_threads: usize, dense: bool, keep: f32,
+3876:        let pool = Pool::new(n_threads, cfg.hidden);
+3877:        eprintln!("[modele] {} couches chargées en {:?} — listes {:.2} Go{} , {} threads",
+3882:                  pool.threads());
+4243:    fn matvec(pool: &mut Pool, p: &Proj, x: &[f32], out: &mut [f32], events: &mut u64,
+4397:    fn matvec4_ou_iq(pool: &mut Pool, vue: &Vue4, loc: usize, x: &[f32], out: &mut [f32],
+4425:    fn matvec_q4(pool: &mut Pool, m: &crate::list::DenseQ4, x: &[f32], out: &mut [f32],
+6306:        let n_fils = self.pool.threads();
+6435:        let threads_iq = self.pool.threads().clamp(1, 32);
+6706:                    matvec_f32_fils(wkv, &rangee, nhc * VALEURS_PAR_RANGEE, kv_dim, &mut kv, pool.threads());
+6830:                              pool.threads());
+7359:                                        threads_iq);
+7367:                                        threads_iq);
+7382:                                 
+… [177 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && sed -n '3870,3890p' model.rs; echo \"=== Pool::new ===\"; grep -n \"pub fn new\\|pub fn threads\" -A 12 engine.rs | head -40", "description": "Read Pool construction"}`
+
+  ```
+let caches_kv: Vec<KvCache> = (0..cfg.n_layer)
+            .map(|_| KvCache::new(kv_bits, cfg.n_kv_head, ctx, cfg.head_dim)).collect();
+        let kv_octets = cfg.n_layer as u64
+            * KvCache::new(kv_bits, cfg.n_kv_head, ctx, cfg.head_dim).octets();
+        println!("[config] cache KV : {} bits, {:.2} Go pour {ctx} jetons",
+                 if kv_bits >= 32 { 32 } else { kv_bits }, kv_octets as f64 / 1e9);
+        let pool = Pool::new(n_threads, cfg.hidden);
+        eprintln!("[modele] {} couches chargées en {:?} — listes {:.2} Go{} , {} threads",
+                  cfg.n_layer, t0.elapsed(), bytes as f64 / 1e9,
+                  if keep < 0.0 { format!(" (poids gardés : {:.0} % structuré)", -keep * 100.0) }
+                  else if keep < 1.0 { format!(" (poids gardés : {:.0} %)", keep * 100.0) }
+                  else { String::new() },
+                  pool.threads());
+        let n_layer = cfg.n_layer;
+        let sinks_vus = layers.iter().filter(|l| l.sinks.is_some()).count();
+        // Combien de couches ont RÉELLEMENT un mélange d'experts chargé. La
+        // configuration dit que le modèle en a ; elle ne dit pas que le
+        // chargeur les a trouvés. Quand le
+… [1772 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && P=$(pgrep -x drave | head -1)\nif [ -n \"$P\" ]; then a=$(awk '{print $14+$15}' /proc/$P/stat); sleep 5; b=$(awk '{print $14+$15}' /proc/$P/stat); echo \"ticks sur 5 s : $((b-a)) → $(( (b-a)/5/100 )).$(( (b-a)/5%100 )) cœurs\"; cat / … [179 caractères tronqués]`
+
+  ```
+ticks sur 5 s : -15504 → -31.0 cœurs
+--- idle du worker ---
+        });
+        let mut handles = Vec::with_capacity(n);
+        let epingle = EPINGLER.load(Ordering::Relaxed);
+        let cibles = if epingle { cibles_locales(n) } else { Vec::new() };
+        for id in 0..n {
+            let sh = Arc::clone(&shared);
+            let cpu = if epingle && !cibles.is_empty() {
+                Some(cibles[id % cibles.len()])
+            } else { None };
+            handles.push(std::thread::spawn(move || {
+                if let Some(c) = cpu { epingler(c); }
+                let mut last = 0usize;
+                loop {
+                    // Attente active d'une nouvelle génération. La barrière
+                    // par *spin* n'est tenable que si le nombre de threads
+                    // tournants reste inférieur au nombre de CPU logiques :
+                    // au-delà, l'ordonnanceur préempte des workers qui tournent
+                    // et le débit s'effondre (mesuré : ×3,3 de perte à 40+1
+                    // threads sur 40 CPU). `Pool::new` borne donc la taille.
+                    loop {
+                        let g = sh.gen.load(Ordering::Acquire);
+                    
+… [1220 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cat /tmp/lot_moe.log; echo \"=== CPU réel par configuration ===\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nfor L in 1 8; do\n  echo \"--- lot $L ---\"\n  /usr/bin/time -v ./drave-core/target/release/drave /home/stephane/FastNVMe/qwen3-30b-a3b-Q4_K_M.gguf --infer --ids-file / … [215 caractères tronqués]`
+
+  ```
+# invite 64 jetons · NVMe · 16 threads · modèle Mixture-of-Experts (128 experts, 8/jeton)
+lot      prompt_s      tok/s
+1.1        11.423        5.6
+1.2        11.668        5.5
+=== CPU réel par configuration ===
+--- lot 1 ---
+prompt  : 64 tokens en 12.777 s  (5.0 tok/s, TTFT 199.6 ms)
+	Percent of CPU this job got: 637%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:39.89
+	Maximum resident set size (kbytes): 14135956
+--- lot 8 ---
+prompt  : 64 tokens en 8.622 s  (7.4 tok/s, TTFT 134.7 ms)
+	Percent of CPU this job got: 525%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:35.47
+	Maximum resident set size (kbytes): 14168816
+  ```
+
+- **bash** `{"command": "pgrep -x drave | wc -l; pgrep -x drave | while read p; do echo \"pid $p : $(ps -o etime=,cmd= -p $p | cut -c1-80)\"; done; cat /tmp/lot_moe.log", "description": "List remaining drave processes"}`
+
+  ```
+1
+pid 1425055 :       00:13 ./drave-core/target/release/drave /home/stephane/FastNVMe/qwen3-30b-
+# invite 64 jetons · NVMe · 16 threads · modèle Mixture-of-Experts (128 experts, 8/jeton)
+lot      prompt_s      tok/s
+1.1        11.423        5.6
+1.2        11.668        5.5
+2.1        10.378        6.2
+2.2         8.719        7.3
+  ```
+
+- **bash** `{"command": "for p in $(pgrep -f \"lot_moe\" 2>/dev/null); do echo \"wrapper $p\"; done; kill 1425055 2>/dev/null; sleep 1; pkill -f \"prefill64.ids\" 2>/dev/null; sleep 1; pgrep -x drave | wc -l; echo \"ok\"", "description": "Kill background sweep cleanly"}`
+
+  ```
+wrapper 1425187
+wrapper 1425188
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "pgrep -x drave | wc -l; pgrep -f lot_moe | wc -l", "description": "Check for surviving processes"}`
+
+  ```
+0
+1
+  ```
+
+- **bash** `{"command": "P=$(pgrep -f lot_moe | head -1); echo \"kill $P\"; kill -9 $P 2>/dev/null; sleep 1; pgrep -f lot_moe | wc -l; pgrep -x drave | wc -l; cat /tmp/lot_moe.log", "description": "Kill remaining wrapper"}`
+
+  ```
+kill 1425226
+[killed by signal: SIGKILL]
+  ```
+
+- **bash** `{"command": "pgrep -f \"lot_[m]oe\" | while read p; do echo \"kill $p\"; kill -9 \"$p\" 2>/dev/null; done; sleep 1; echo \"drave: $(pgrep -x drave | wc -l) · wrappers: $(pgrep -f 'lot_[m]oe' | wc -l)\"; cat /tmp/lot_moe.log", "description": "Kill wrapper avoiding self-match"}`
+
+  ```
+kill 1425235
+kill 1425237
+[killed by signal: SIGKILL]
+  ```
+
+- **bash** `{"command": "ps -eo pid,etimes,comm --no-headers | awk '$3==\"drave\"||$3==\"bash\"{print}' | head -20; echo \"---\"; ls -la /proc/1425235 /proc/1425237 2>&1 | head -3", "description": "Inspect running processes safely"}`
+
+  ```
+11105 1031255 bash
+ 295213  103511 bash
+ 332808  861854 bash
+1425253       0 bash
+2549092   12179 bash
+---
+ls: cannot access '/proc/1425235': No such file or directory
+ls: cannot access '/proc/1425237': No such file or directory
+  ```
+
+- **write** `{"content": "#!/usr/bin/env bash\n# mesure-prefill-lot.sh — ce que le REGROUPEMENT PAR EXPERT fait gagner au\n# préremplissage, mesuré, pas supposé.\n#\n# En préremplissage par lots (`--lot N`, `forward_lot`), les jetons du lot qui\n# ont choisi le même expert partagent UNE lecture de sa matrice : u … [2329 caractères tronqués]`
+
+  ```
+Error: cannot write "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mesure-prefill-lot.sh": file changed since it was read — re-read the file, then retry
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mesure-prefill-lot.sh", "limit": 5}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mesure-prefill-lot.sh</path>
+<type>file</type>
+<content>
+1: #!/usr/bin/env bash
+2: # mesure-prefill-lot.sh — combien coûte un jeton de préremplissage selon la
+3: # TAILLE DU LOT, sur un modèle à experts dont le regroupement par expert est
+4: # implémenté (`forward_lot`).
+5: #
+
+(Showing lines 1-5 of 32. Use offset=6 to continue.)
+</content>
+  ```
+
+- **write** `{"content": "#!/usr/bin/env bash\n# mesure-prefill-lot.sh — ce que le REGROUPEMENT PAR EXPERT fait gagner au\n# préremplissage, mesuré, pas supposé.\n#\n# En préremplissage par lots (`--lot N`, `forward_lot`), les jetons du lot qui\n# ont choisi le même expert partagent UNE lecture de sa matrice : u … [2197 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mesure-prefill-lot.sh</path>
+<type>file</type>
+<content>
+Updated file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && REPS=3 nohup tools/mesure-prefill-lot.sh /home/stephane/FastNVMe/qwen3-30b-a3b-Q4_K_M.gguf /tmp/prefill192.ids 1 2 4 8 16 32 64 192 > /tmp/lot_moe2.log 2>&1 &\necho lancé; sleep 10; cat /tmp/lot_moe2.log", "description": "Launch clea … [20 caractères tronqués]`
+
+  ```
+lancé
+# modèle  : /home/stephane/FastNVMe/qwen3-30b-a3b-Q4_K_M.gguf
+# invite  : /tmp/prefill192.ids (192 jetons) · threads 16 · ctx 512 · n 2 · 3 passes
+# support : /dev/nvme0n1p2
+
+lot        prompt_s     tok/s    CPU_%     mur_s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,60p' tools/apres-telechargement-k3.sh", "description": "Read post-download script"}`
+
+  ```
+#!/bin/bash
+# Après le téléchargement de Kimi-K3 : la séquence, dans l'ordre, automatique.
+#
+# Ce script existe parce que la fin d'un transfert de 1,5 To est le moment où
+# l'on risque de se précipiter : on lance le modèle, il refuse, on ne sait pas
+# si c'est le fichier, l'architecture ou la mémoire. Les cinq étapes ci-dessous
+# sont ordonnées pour que CHAQUE échec dise lequel des trois c'est.
+#
+#   bash tools/apres-telechargement-k3.sh [--sans-baseline]
+#
+# 1. les 32 shards sont-ils tous là, à la bonne taille ?
+# 2. notre moteur lit-il l'en-tête et annonce-t-il SES manques ? (`--config`)
+# 3. le tokenizer est-il toujours identique à l'officiel ? (porte)
+# 4. le budget par jeton est-il celui qu'on a extrapolé ? (mesure, plus d'estimation)
+# 5. la référence llama.cpp-k3 tourne-t-elle, et à quelle vitesse ? (baseline)
+set -u
+cd "$(dirname "$0")/.."
+
+D=./drave-core/target/release/drave
+K3=${K3:-/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf}
+LC=/home/stephane/Data13TB/stephane/GitHub/llama.cpp-k3
+SANS_BASELINE=${1:-}
+
+echo "=== 1. Les 32 shards sont-ils complets ? ==="
+python3 - "$K3" <<'PY'
+import json, os, sys, urllib.request
+… [1387 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sleep 120; cat /tmp/lot_moe2.log; echo \"=== dl ===\"; tail -1 /tmp/dl_k3.log", "description": "Poll sweep results", "timeoutMs": 180000}`
+
+  ```
+# modèle  : /home/stephane/FastNVMe/qwen3-30b-a3b-Q4_K_M.gguf
+# invite  : /tmp/prefill192.ids (192 jetons) · threads 16 · ctx 512 · n 2 · 3 passes
+# support : /dev/nvme0n1p2
+
+lot        prompt_s     tok/s    CPU_%     mur_s
+1.1          33.460       5.7      984     61.57
+1.2          33.229       5.8     1003     60.04
+=== dl ===
+13:31:06    38.1 Go / 49.0 Go (77.8 %, 112 Mo/s)
+  ```
+
+- **bash** `{"command": "sleep 240; cat /tmp/lot_moe2.log; tail -1 /tmp/dl_k3.log", "description": "Poll sweep results", "timeoutMs": 300000}`
+
+  ```
+# modèle  : /home/stephane/FastNVMe/qwen3-30b-a3b-Q4_K_M.gguf
+# invite  : /tmp/prefill192.ids (192 jetons) · threads 16 · ctx 512 · n 2 · 3 passes
+# support : /dev/nvme0n1p2
+
+lot        prompt_s     tok/s    CPU_%     mur_s
+1.1          33.460       5.7      984     61.57
+1.2          33.229       5.8     1003     60.04
+1.3          33.008       5.8      998     60.03
+2.1          23.993       8.0      876     50.79
+2.2          25.028       7.7      897     51.57
+2.3          24.518       7.8      893     50.80
+4.1          23.838       8.1      872     50.86
+13:35:16    14.5 Go / 49.0 Go (29.6 %, 111 Mo/s)
+  ```
+
+- **bash** `{"command": "sleep 270; cat /tmp/lot_moe2.log; tail -1 /tmp/dl_k3.log", "description": "Poll sweep results", "timeoutMs": 300000}`
+
+  ```
+# modèle  : /home/stephane/FastNVMe/qwen3-30b-a3b-Q4_K_M.gguf
+# invite  : /tmp/prefill192.ids (192 jetons) · threads 16 · ctx 512 · n 2 · 3 passes
+# support : /dev/nvme0n1p2
+
+lot        prompt_s     tok/s    CPU_%     mur_s
+1.1          33.460       5.7      984     61.57
+1.2          33.229       5.8     1003     60.04
+1.3          33.008       5.8      998     60.03
+2.1          23.993       8.0      876     50.79
+2.2          25.028       7.7      897     51.57
+2.3          24.518       7.8      893     50.80
+4.1          23.838       8.1      872     50.86
+4.2          23.236       8.3      862     50.30
+4.3          22.794       8.4      859     49.59
+8.1          23.466       8.2      857     51.01
+8.2          22.474       8.5      835     50.34
+8.3          23.576       8.1      871     50.32
+13:39:46    45.5 Go / 49.0 Go (92.8 %, 114 Mo/s)
+  ```
+
+- **bash** `{"command": "sleep 280; cat /tmp/lot_moe2.log; tail -1 /tmp/dl_k3.log", "description": "Poll sweep results", "timeoutMs": 300000}`
+
+  ```
+# modèle  : /home/stephane/FastNVMe/qwen3-30b-a3b-Q4_K_M.gguf
+# invite  : /tmp/prefill192.ids (192 jetons) · threads 16 · ctx 512 · n 2 · 3 passes
+# support : /dev/nvme0n1p2
+
+lot        prompt_s     tok/s    CPU_%     mur_s
+1.1          33.460       5.7      984     61.57
+1.2          33.229       5.8     1003     60.04
+1.3          33.008       5.8      998     60.03
+2.1          23.993       8.0      876     50.79
+2.2          25.028       7.7      897     51.57
+2.3          24.518       7.8      893     50.80
+4.1          23.838       8.1      872     50.86
+4.2          23.236       8.3      862     50.30
+4.3          22.794       8.4      859     49.59
+8.1          23.466       8.2      857     51.01
+8.2          22.474       8.5      835     50.34
+8.3          23.576       8.1      871     50.32
+16.1         22.205       8.6      844     49.21
+16.2         22.553       8.5      863     48.76
+16.3         22.587       8.5      846     49.95
+32.1         21.791       8.8      839     48.65
+32.2         21.108       9.1      823     48.17
+32.3         22.821       8.4      856     49.72
+13:44:36    27.9 Go / 49.1 Go (56.8 %, 112 Mo/s)
+  ```
+
+- **bash** `{"command": "sleep 290; tail -12 /tmp/lot_moe2.log; tail -1 /tmp/dl_k3.log", "description": "Poll final sweep results", "timeoutMs": 310000}`
+
+  ```
+16.1         22.205       8.6      844     49.21
+16.2         22.553       8.5      863     48.76
+16.3         22.587       8.5      846     49.95
+32.1         21.791       8.8      839     48.65
+32.2         21.108       9.1      823     48.17
+32.3         22.821       8.4      856     49.72
+64.1         21.479       8.9      831     48.81
+64.2         20.899       9.2      819     48.04
+64.3         21.427       9.0      842     47.69
+192.1        21.224       9.0      820     48.71
+192.2        20.815       9.2      832     47.03
+192.3        20.962       9.2      829     47.59
+13:49:46    11.3 Go / 49.2 Go (22.9 %, 113 Mo/s)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash -c '\nB=./drave-core/target/release/drave; M=/home/stephane/FastNVMe/qwen3-30b-a3b-Q4_K_M.gguf\nfor L in 1 192; do\n  DRAVE_TRACE_EXPERTS=/tmp/tr_lot$L.txt $B $M --infer --ids-file /tmp/prefill192.ids --n 2 --ctx 512 --lot … [494 caractères tronqués]`
+
+  ```
+lancé
+lot 1 : 9312 lignes de trace
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/analyse_union_experts.py /tmp/tr_lot1.txt --experts-par-jeton 8 --blocs 1,2,4,8,16,32,64,128,192", "description": "Analyze expert union from trace"}`
+
+  ```
+# trace      : /tmp/tr_lot1.txt
+# couches    : 48 · jetons : 194 · experts vus : 128 · experts/jeton observés : 8.00 (annoncé 8)
+
+  bloc  lect_jeton  lect_groupe    gain  exp-éq/jeton
+     1       74496        74496   1.00×         8.000
+     2       74496        56904   1.31×         6.111
+     4       74496        43427   1.72×         4.664
+     8       74496        32847   2.27×         3.527
+    16       74496        23946   3.11×         2.572
+    32       74496        16446   4.53×         1.766
+    64       74496        10526   7.08×         1.130
+   128       74496         7352  10.13×         0.790
+   192       74496         4804  15.51×         0.516
+
+# borne (N → ∞) : 128 experts-équivalents par couche, soit 0.660 par jeton pour cette invite de 194 jetons
+#                contre 8.000 en mode jeton — soit 12.1× moins d'octets d'experts
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/trace_run.log; echo \"=== budget par jeton, Qwen3-30B-A3B ===\"; python3 tools/budget_execution_locale.py --modele /home/stephane/FastNVMe/qwen3-30b-a3b-Q4_K_M.gguf 2>&1 | head -40 || python3 tools/budget_execution_locale.py … [96 caractères tronqués]`
+
+  ```
+lot 1 : 9312 lignes de trace
+lot 192 : 9312 lignes de trace
+--- le regroupement change-t-il QUI est choisi ? ---
+lignes différentes : 7838
+204c204
+< 10 106 21 43 54 55 59 71 82 124
+---
+> 10 106 21 43 55 59 71 82 94 124
+213c213
+< 10 114 13 14 21 30 54 65 107 123
+=== budget par jeton, Qwen3-30B-A3B ===
+  (--modele : [Errno 2] No such file or directory: '--modele')
+aucun tenseur d'experts
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && B=./drave-core/target/release/drave; M=/home/stephane/FastNVMe/qwen3-30b-a3b-Q4_K_M.gguf\nfor L in 1 2 8 32 192; do\n  echo -n \"lot $L : \"\n  $B $M --infer --ids-file /tmp/prefill192.ids --n 8 --ctx 512 --lot $L --threads 16 --temp … [313 caractères tronqués]`
+
+  ```
+lot 1 : lot 2 : lot 8 : lot 32 : lot 192 : === texte ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ./drave-core/target/release/drave /home/stephane/FastNVMe/qwen3-30b-a3b-Q4_K_M.gguf --infer --ids-file /tmp/prefill192.ids --n 4 --ctx 512 --lot 1 --threads 16 --temp 0 2>/dev/null | tail -20", "description": "Inspect infer output fo … [27 caractères tronqués]`
+
+  ```
+[config] cache KV : 32 bits, 0.10 Go pour 512 jetons
+[config] 48 couches, hidden 2048 · softmaxmoe 
+[config] mélanges d'experts chargés : 48/48 couches · mapping absent (experts en clair dans le fichier)
+[config] puits appris sur 0/48 couches · n_rot 128 · ffn 6144 · experts 128
+[config] rotation : RoPE simple (le modèle ne déclare pas YaRN)
+[tête 4 bits] 151936 × 2048 → 6.56 b/poids, 0 Mo, 0.0 s
+Qwen2 · 48 couches · hidden 2048 · 32 têtes / 4 KV · FFN 6144 · vocab 151936
+ids depuis /tmp/prefill192.ids : 192 tokens
+tokens générés : [67554, 512, 82497, 271]
+
+--- mesure ---
+prompt  : 192 tokens en 32.909 s  (5.8 tok/s, TTFT 171.4 ms)
+généré  : 4 tokens en 0.740 s  (5.40 tok/s)
+événements : 49158892 au total, 250810.7 par token
+paires (poids × activation) : 533303532268 au total, 2720.9 M par token — attention 902.6 M · experts 1811.9 M · partagé 6.4 M
+postes (ms/token) : matvec-attn 32.2 | rope 3.5 | attention 44.1 | matvec+mlp 127.1 | total mesuré 206.9
+[tete] densite de l'entree : 87.6 % de coordonnees vivantes sur 4 jetons
+[tete] -> un stockage par COLONNES ne lirait que ces coordonnees : 87.6 % de la matrice au lieu de 100 %
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && B=./drave-core/target/release/drave; M=/home/stephane/FastNVMe/qwen3-30b-a3b-Q4_K_M.gguf\nfor L in 1 2 4 8 32 192; do\n  echo -n \"lot $L : \"\n  $B $M --infer --ids-file /tmp/prefill192.ids --n 8 --ctx 512 --lot $L --threads 16 --te … [126 caractères tronqués]`
+
+  ```
+lot 1 : tokens générés : [67554, 512, 82497, 271, 14374, 220, 16, 13]
+lot 2 : tokens générés : [67554, 512, 56698, 20538, 271, 2304, 44320, 56698]
+lot 4 : tokens générés : [67554, 512, 56698, 20538, 271, 2304, 44320, 56698]
+lot 8 : tokens générés : [67554, 512, 56698, 20538, 271, 2304, 44320, 56698]
+lot 32 : tokens générés : [67554, 512, 56698, 20538, 271, 2304, 44320, 56698]
+lot 192 : tokens générés : [67554, 512, 56698, 20538, 271, 2304, 44320, 56698]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && grep -n \"logits_bin\" main.rs | head -10", "description": "Check logits-bin flag usage"}`
+
+  ```
+571:    logits_bin: Option<String>, ppl_profil: bool,
+688:            "--logits-bin" => { o.logits_bin = Some(suivant(i).clone()); 2 }
+4842:        ffn_gain, logits_bin, keep,
+5025:    let mut journal = match &logits_bin {
+5119:    if let (Some(w), Some(f)) = (journal, &logits_bin) {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && sed -n '5018,5035p' main.rs; echo \"...\"; sed -n '5110,5135p' main.rs", "description": "Read logits-bin implementation"}`
+
+  ```
+};
+    let t0 = Instant::now();
+    let mut nll = 0f64;
+    let mut n = 0usize;
+    let mut perte: Vec<f32> = Vec::new();
+    // Journal de logits : écrit à la volée (une matrice de vocabulaire fait
+    // 800 Mo sur gpt-oss, la garder en mémoire serait absurde).
+    let mut journal = match &logits_bin {
+        Some(f) => {
+            use std::io::Write;
+            let mut w = std::io::BufWriter::new(
+                std::fs::File::create(f).expect("création du fichier de logits"));
+            w.write_all(&(mdl.cfg.vocab as i32).to_le_bytes()).unwrap();
+            w.write_all(&0i32.to_le_bytes()).unwrap();   // n_pos, réécrit à la fin
+            Some(w)
+        }
+        None => None,
+    };
+...
+        } else {
+        println!("  {:6} tokens notés — perplexité cumulée {:.3}  ({:.1} tok/s){}",
+                 n, ppl, n as f64 / t0.elapsed().as_secs_f64(),
+                 if fenetres.len() > 1 {
+                     format!("  [fenêtre {} : {} notés, PPL {:.3}]",
+                             i_f + 1, n_f, (nll_f / n_f.max(1) as f64).exp())
+                 } else { String::new() });
+        }
+    }
+    if let (Some(w), Some(f)) = (journal, &logits_bin) {
+        use std::io
+… [742 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && grep -n \"fn run_ppl\\b\" -A 30 main.rs | grep -n \"lot\\|forward\" | head; echo \"---\"; grep -n \"self.lot\\|mdl.lot\\|\\.lot\\b\" main.rs | sed -n '1,20p'", "description": "Check whether ppl honours --lot"}`
+
+  ```
+19:4843-        ppl_profil, lot, profil_neurones, neurones_sortie, trace_flux, trace_couches, flux_forcer,
+22:4846-    let lot = lot.max(1);
+---
+445:             mdl.attn_window, mdl.swa_pattern, mdl.seuil_push, mdl.lot,
+471:        } else if mdl.lot > 1 {
+704:            "--lot" => { o.lot = suivant(i).parse().unwrap(); 2 }
+867:    mdl.lot = lot.max(1);
+3111:    let lot = opt.lot.max(1);
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && sed -n '4846,4852p' main.rs; awk 'NR>=4850 && NR<=5120 && /lot/' main.rs | head -12", "description": "Check lot usage in run_ppl"}`
+
+  ```
+let lot = lot.max(1);
+    let path = &modele_chemin();
+    // Défauts du mode PERPLEXITÉ : 256 jetons, trois quarts des cœurs, 16 bits
+    // d'activation (la référence de non-régression en dépend).
+    let cpu = engine::coeurs_physiques();
+    let ctx = if ctx_impose { ctx_opt } else { 256 };
+    let n_threads = if threads_impose { threads_opt } else { cpu.max(1) };
+    // « reste » les mélangeait et on ne pouvait pas dire si la tête par lots
+        // Préremplissage par lots : `lot` jetons d'un coup. `lot == 1` emprunte
+            let t = lot.min(chunk.len() - pos);
+            let hs = mdl.forward_lot(&chunk[pos..pos + t], pos);
+            // Tête par lots : la matrice la plus lourde du modèle est lue une
+            let lgs = if t > 1 { Some(mdl.logits_lot(&hs)) } else { None };
+                // Tête au fil du jeton (lot 1) : chronométrée à part, sinon son
+                // comparaison avec la tête par lots n'avait plus de sens.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && B=./drave-core/target/release/drave; M=/home/stephane/FastNVMe/qwen3-30b-a3b-Q4_K_M.gguf\nfor L in 1 8; do\n  echo \"--- lot $L ---\"\n  $B $M --ppl /tmp/prefill192.ids --ctx 512 --limit 192 --lot $L --threads 16 --logits-bin /tmp/lg … [179 caractères tronqués]`
+
+  ```
+--- lot 1 ---
+     191 tokens notés — perplexité cumulée 19.172  (5.6 tok/s)
+logits exportés : /tmp/lg1.bin — 191 positions × 151936 valeurs
+--- lot 8 ---
+     191 tokens notés — perplexité cumulée 19.143  (8.3 tok/s)
+logits exportés : /tmp/lg8.bin — 191 positions × 151936 valeurs
+-rw-r--r--. 1 stephane stephane 116079112  3 oct 14:06 /tmp/lg1.bin
+-rw-r--r--. 1 stephane stephane 116079112  3 oct 14:07 /tmp/lg8.bin
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport struct, math\ndef lire(p):\n    f=open(p,'rb'); v,n=struct.unpack('<ii',f.read(8))\n    import array; a=array.array('f'); a.fromfile(f,n*v); return v,n,a\nv1,n1,a1=lire('/tmp/lg1.bin'); v8,n8,a8=lire('/tmp/l … [1250 caractères tronqués]`
+
+  ```
+vocab 151936 · positions 191
+|Δ| max   : max 1.265e+00 · médian 1.285e-02
+|Δ| moyen : max 4.895e-01 · médian 2.030e-03
+top-1 identique : 191/191 = 100.0 %
+rang du top-1 de lot1 dans lot8 : max 0 · médian 0 · ≤3 : 100.0 %
+corrélation de Pearson : min 0.99719 · médiane 1.00000
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs", "limit": 45, "offset": 440}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs</path>
+<type>file</type>
+<content>
+440:     if mdl.tete_partielle {
+441:         println!("[options] plage : la TÊTE DE SORTIE est appliquée à la fin de la plage \
+442: (`--tete-partielle`) — résultat d'un modèle TRONQUÉ");
+443:     }
+444:     println!("[options] fenêtre {} · motif {} · seuil push {} · lot {} · ffn_gain {:?} · hebb {}",
+445:              mdl.attn_window, mdl.swa_pattern, mdl.seuil_push, mdl.lot,
+446:              mdl.ffn_gain, mdl.hebb.is_some());
+447:     if let Some(kv) = mdl.kv.first() {
+448:         println!("[options] cache KV : {} bits{} · f16 avant {}",
+449:                  kv.bits,
+450:                  if kv.k_f32 { " · CLÉS en f32" }
+451:                  else if kv.k_f16 { " · clés en f16" }
+452:                  else if kv.v_f32 { " · VALEURS en f32" } else { "" },
+453:                  kv.f16_avant);
+454:     }
+455:     // Le top-k déporté est un mode, pas un détail : c'est ici qu'on voit s'il
+456:     // s'applique VRAIMENT à cette configuration, et pourquoi sinon. La ligne
+457:     // existe parce que huit drapeaux « analysés mais jamais appliqués » ont coûté
+458:     // un
+… [1462 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "limit": 80, "offset": 5414}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs</path>
+<type>file</type>
+<content>
+5414:                     let mu = moe.up[k].expert(loc);
+5415:                     self.pool.gemm_dense_q4(&mu, &xg[..g * h], g, &s32g, &sxg,
+5416:                                             &mut yq[..mu.n_out * g]);
+5417:                     for j in 0..g {
+5418:                         for oo in 0..nff {
+5419:                             up[oo * g + j] = yq[oo * g + j]
+5420:                                 + moe.biais_up.as_ref().map_or(0.0, |b| b[e * nff + oo]);
+5421:                         }
+5422:                     }
+5423:                     // Activation jeton par jeton (elle n'est pas linéaire), puis
+5424:                     // descente en lot : la matrice de descente est relue pour tout
+5425:                     // le groupe.
+5426:                     s32a.clear();
+5427:                     sxa.clear();
+5428:                     for j in 0..g {
+5429:                         for oo in 0..nff {
+5430:                             col[oo] = gate[oo * g + j];
+5431:                             colu[oo] = up[oo * g + j];
+5432:                         }
+5433:       
+… [3800 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && awk 'NR>=4997 && NR<=5560 && /paires|shexp|matvec4_ou_iq|gemm_dense_q4|gemm_dense_i8|self\\.pool\\./' model.rs | head -30; echo \"=== compteur dans matvec4_ou_iq ===\"; sed -n '4397,4425p' model.rs", "description": "Ch … [33 caractères tronqués]`
+
+  ```
+self.paires[0] += (d8.n_in as u64) * (d8.n_out as u64) * t as u64;
+                    self.pool.gemm_dense_i8(d8, &xi, t, &sx, &mut yl[..d8.n_out * t]);
+                                     &mut self.events, &mut self.paires[0], self.act_levels,
+                    self.pool.gemm_dense_i8(d8, &ai[..t * n_in_wo], t, &sa, &mut yl[..d8.n_out * t]);
+                    self.pool.gemm_dense_q4(&mg, &xg[..g * h], g, &s32g, &sxg,
+                    self.pool.gemm_dense_q4(&mu, &xg[..g * h], g, &s32g, &sxg,
+                    self.pool.gemm_dense_q4(&md, &ga[..g * nff], g, &s32a, &sxa, &mut yd);
+                        self.pool.gemm_dense_i8(d8, &xi, t, &sx, &mut yl[..d8.n_out * t]);
+                    self.pool.gemm_dense_i8(d8, &gi, t, &sg, &mut yl[..d8.n_out * t]);
+                if let Some((ech, paires)) = r.listes.get(&((base + l) as u16, j0 as u32)).cloned() {
+                    for (idx, q) in paires {
+=== compteur dans matvec4_ou_iq ===
+    fn matvec4_ou_iq(pool: &mut Pool, vue: &Vue4, loc: usize, x: &[f32], out: &mut [f32],
+                     paires: &mut u64,
+                     levels: f32, thresh: f32, topk: usize, renorm: bool,
+                     scratch: &mut Vec
+… [1504 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && sed -n '5495,5545p' model.rs", "description": "Find shared expert handling in batch path"}`
+
+  ```
+}
+        for i in 0..t {
+            let r = x[i * h..(i + 1) * h].to_vec();
+            Self::rmsnorm(&r, &self.out_norm, self.cfg.eps, &mut hn[i * h..(i + 1) * h]);
+        }
+        (0..t).map(|i| hn[i * h..(i + 1) * h].to_vec()).collect()
+    }
+
+    /// Trace OU impose le flux d'un LOT : `xi` porte les entiers quantifiés du
+    /// lot (t × h) et `sx` une échelle par jeton. Sur ce chemin, le rejeu est
+    /// EXACT — on remplace les entiers et l'échelle, sans repasser par une
+    /// déquantification suivie d'une requantification.
+    #[allow(clippy::too_many_arguments)]
+    /// `j0` est la clé du PREMIER jeton du lot (compteur global, 1-based comme
+    /// sur le chemin jeton par jeton) : elle est calculée UNE fois par lot par
+    /// `forward_lot`, et non à chaque appel — `flux_lot` est appelé deux fois par
+    /// couche (famille attention, base 0, et famille FFN, base 1000) et les deux
+    /// doivent écrire les MÊMES clés. Avant, le compteur avançait de `t` à chaque
+    /// appel : une trace écrite avec `--lot N` n'était rejouable qu'avec le même N
+    /// (relecture adversariale, D3).
+    fn flux_lot(trace: &mut Option<TraceFlux>, force: &mut Option<FluxRelecteur>,
+     
+… [1785 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && grep -n \"shexp\" model.rs | head -20; echo \"=== ligne 5455-5470 contexte ===\"; sed -n '5382,5396p' model.rs", "description": "Locate shared expert usage"}`
+
+  ```
+696:    let shexp = match (vue_unique(&p("ffn_gate_shexp.weight")),
+697:                       vue_unique(&p("ffn_up_shexp.weight")),
+698:                       vue_unique(&p("ffn_down_shexp.weight"))) {
+766:        n_ff, gate, up, down, shexp, tid2eid,
+1231:    pub shexp: Option<(Vue4, Vue4, Vue4)>,
+2545:    /// pour les experts, `swiglu_clamp_shexp` pour l'expert partagé (qui
+2548:    pub clamp_shexp: Vec<f32>,
+3331:        // `swiglu_clamp_shexp`) ; V4.1 écrit un SCALAIRE `swiglu_limit`. Sans la
+3354:        let clamp_shexp: Vec<f32> = liste_ou_scalaire("swiglu_clamp_shexp");
+4153:            clamp_exp, clamp_shexp,
+6444:                    attn_gpu_part, emb_imposee, paires, clamp_exp, clamp_shexp, .. } = self;
+6449:            let v = if partage { clamp_shexp.get(l).copied().unwrap_or(0.0) }
+7389:                if let Some((sg, su, sd)) = moe.shexp.as_ref() {
+8664:            shexp: None, tid2eid: tid,
+=== ligne 5455-5470 contexte ===
+                }
+                for i in 0..t { down[i * h..(i + 1) * h].iter_mut().for_each(|v| *v = 0.0); }
+                let nff = self.cfg.ffn_exp;
+                let mut xg = vec![0i16; t * h];
+                let mut s32g: Vec<Vec<i32
+… [540 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && awk 'NR>=4997 && NR<=5502' model.rs | grep -n \"partag\\|shexp\\|sg\\b\\|su\\b\\|sd\\b\" | head; echo \"=== quels modèles ont shexp ? ===\"; grep -n \"shexp\" model.rs | sed -n '1,3p'; sed -n '690,770p' model.rs | grep … [102 caractères tronqués]`
+
+  ```
+110:        let mut sg = vec![0f32; t];
+149:            //    DISTINCTS (un `y` partagé avec un pas par projection mélangeait
+236:                // partagent une tête KV, donc la clé (et la valeur) ne doivent
+481:                quantifier(&gate, &mut gi, &mut sg, self.act_levels, self.act_thresh);
+484:                    self.pool.gemm_dense_i8(d8, &gi, t, &sg, &mut yl[..d8.n_out * t]);
+=== quels modèles ont shexp ? ===
+696:    let shexp = match (vue_unique(&p("ffn_gate_shexp.weight")),
+697:                       vue_unique(&p("ffn_up_shexp.weight")),
+698:                       vue_unique(&p("ffn_down_shexp.weight"))) {
+7:    let shexp = match (vue_unique(&p("ffn_gate_shexp.weight")),
+8:                       vue_unique(&p("ffn_up_shexp.weight")),
+9:                       vue_unique(&p("ffn_down_shexp.weight"))) {
+13:    let n_ff = gate[0].n_out;
+16:        // ne = (n_ff, n_expert) : l'expert est la dimension la plus lente.
+77:        n_ff, gate, up, down, shexp, tid2eid,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=/home/stephane/Data13TB/stephane/modeles/gguf\nfor M in gpt-oss-120b-MXFP4.gguf Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf; do\n  echo -n \"$M : \"\n  timeout 120 ./drave-core/target/release/drave $D/$M --tensors 2>/dev/null | grep -c … [138 caractères tronqués]`
+
+  ```
+gpt-oss-120b-MXFP4.gguf : 0 tenseurs shexp
+Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf : 0 tenseurs shexp
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "old_string": "            if let Some(moe) = lay.moe.as_ref() {\n                // ---- MoE PAR LOTS : les jetons qui ont choisi le même expert\n                // sont traités ensemble, donc la matrice de l'e … [1372 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "new_string": "                    panic!(\"chemin par LOTS et experts PARTAGÉS : ce chemin n'est pas porté \\\n(`forward_lot` n'applique que les experts routés) — le lot calculerait un autre modèle. \\\nUtilise … [330 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs has been updated successfully.
+  ```
+
+### 🤖 Assistant
+
+Maintenant le compteur de paires et l'allocation hissée hors de la boucle :
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "new_string": "                let mut s32a: Vec<Vec<i32>> = Vec::with_capacity(t);\n                let mut sxa: Vec<f32> = Vec::with_capacity(t);\n                // `yd` est hissé HORS de la boucle des expert … [1371 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "new_string": "                    let mg = moe.gate[k].expert(loc);\n                    self.pool.gemm_dense_q4(&mg, &xg[..g * h], g, &s32g, &sxg,\n                                            &mut yq[..mg.n_ou … [316 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "new_string": "                    let mu = moe.up[k].expert(loc);\n                    self.pool.gemm_dense_q4(&mu, &xg[..g * h], g, &s32g, &sxg,\n                                            &mut yq[..mu.n_out  … [312 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "new_string": "                    let md = moe.down[k].expert(loc);\n                    self.pool.gemm_dense_q4(&md, &ga[..g * nff], g, &s32a, &sxa,\n                                            &mut yd[..md.n_ … [1380 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo build --release 2>&1 | grep -E \"^error|^warning: unused|-->\" | head -20; echo \"exit=$?\"", "description": "Rebuild after edits", "timeoutMs": 900000}`
+
+  ```
+--> src/gguf.rs:16:6
+   --> src/list.rs:645:26
+   --> src/list.rs:645:32
+warning: unused imports: `GGML_IQ1_M`, `GGML_IQ1_S`, `GGML_IQ2_XXS`, and `GGML_IQ3_XXS`
+   --> src/model.rs:548:23
+    --> src/main.rs:3218:27
+warning: unused attribute
+    --> src/model.rs:4184:5
+    --> src/model.rs:4181:5
+warning: unused variable: `t`
+   --> src/kimi_k3.rs:269:17
+warning: unused variable: `id`
+   --> src/engram.rs:134:23
+warning: unused variable: `plan`
+   --> src/materiel.rs:381:34
+warning: unused variable: `cfg`
+  --> src/model.rs:88:39
+warning: unused variable: `clusters`
+  --> src/model.rs:88:62
+warning: unused variable: `ctx`
+exit=0
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs", "new_string": "    println!(\"[options] fenêtre {} · motif {} · seuil push {} · lot {} · ffn_gain {:?} · hebb {}\",\n             mdl.attn_window, mdl.swa_pattern, mdl.seuil_push, mdl.lot,\n             mdl.ffn_g … [1343 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && sed -i 's/^utilisez `--lot 1`, ou implémentez les experts partagés ici\");$/Utilisez `--lot 1`, ou implémentez les experts partagés ici\");/' src/model.rs; cargo build --release 2>&1 | grep -E \"^error\" -A 5 | head -20; e … [152 caractères tronqués]`
+
+  ```
+build exit=0
+test result: ok. 77 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && B=./drave-core/target/release/drave; M=/home/stephane/FastNVMe/qwen3-30b-a3b-Q4_K_M.gguf\necho \"=== l'annonce ===\"\n$B $M --infer --ids-file /tmp/prefill192.ids --n 1 --ctx 512 --lot 8 --threads 16 2>&1 | grep -E \"^\\[options\\] l … [353 caractères tronqués]`
+
+  ```
+=== l'annonce ===
+
+=== les compteurs (lot 1 vs lot 8) ===
+lot 1 : 2717.8 M par token — attention 902.6 M · experts 1811.9 M · partagé 3.2 M
+lot 8 : 2322.6 M par token — attention 507.5 M · experts 1811.9 M · partagé 3.2 M
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && grep -n \"paires\\[0\\] +=\\|paires\\[1\\] +=\\|paires\\[2\\] +=\" model.rs; echo \"=== dans le chemin lot (4997-5520) ===\"; awk 'NR>=4997 && NR<=5520 && /paires\\[/' model.rs", "description": "Find pair counter sites … [2 caractères tronqués]`
+
+  ```
+5153:                    self.paires[0] += (d8.n_in as u64) * (d8.n_out as u64) * t as u64;
+5485:                self.paires[1] += paires_lot;
+6743:                    paires[0] += (nhc * VALEURS_PAR_RANGEE * kv_dim
+7839:        self.paires[2] += (h.len() as u64) * (self.cfg.vocab as u64);
+=== dans le chemin lot (4997-5520) ===
+                    self.paires[0] += (d8.n_in as u64) * (d8.n_out as u64) * t as u64;
+                                     &mut self.events, &mut self.paires[0], self.act_levels,
+                self.paires[1] += paires_lot;
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && sed -n '5145,5160p' model.rs; echo \"=== chemin jeton : où paires[0] est compté ===\"; grep -n \"paires\\[0\\]\" model.rs | head; grep -n \"fn matvec\\b\" -A 20 model.rs | grep -n \"paires\" | head", "description": "Co … [40 caractères tronqués]`
+
+  ```
+//    DISTINCTS (un `y` partagé avec un pas par projection mélangeait
+            //    les sorties : mesuré, une perplexité de 1,6 million).
+            let nq = nh * hd;
+            let nk = nkv * hd;
+            for (pj, dst, taille) in [(&lay.wq, &mut qa, nq),
+                                      (&lay.wk, &mut ka, nk),
+                                      (&lay.wv, &mut va, nk)] {
+                if let Some(d8) = pj.d.as_ref() {
+                    self.paires[0] += (d8.n_in as u64) * (d8.n_out as u64) * t as u64;
+                    self.pool.gemm_dense_i8(d8, &xi, t, &sx, &mut yl[..d8.n_out * t]);
+                    for i in 0..t {
+                        for oo in 0..taille {
+                            dst[i * taille + oo] = yl[oo * t + i]
+                                + pj.bias.as_ref().map_or(0.0, |b| b[oo]);
+                        }
+                    }
+=== chemin jeton : où paires[0] est compté ===
+5153:                    self.paires[0] += (d8.n_in as u64) * (d8.n_out as u64) * t as u64;
+5166:                                     &mut self.events, &mut self.paires[0], self.act_levels,
+6743:                    paires[0] += (nhc * VALEURS_PAR_RANGEE * kv_dim
+6859
+… [913 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && awk 'NR>=5290 && NR<=5350 && (/wo/ || /paires/ || /gemm/)' model.rs | head -20", "description": "Check wo handling in batch path"}`
+
+  ```
+let n_in_wo = {
+                    let d8 = self.layers[l].wo.d.as_ref().expect("projection dense requise");
+                quantifier(&att, &mut ai[..t * n_in_wo], &mut sa, self.act_levels, self.act_thresh);
+                    let d8 = self.layers[l].wo.d.as_ref().expect("projection dense requise");
+                    self.pool.gemm_dense_i8(d8, &ai[..t * n_in_wo], t, &sa, &mut yl[..d8.n_out * t]);
+                let bias = self.layers[l].wo.bias.clone();
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "new_string": "                    let d8 = self.layers[l].wo.d.as_ref().expect(\"projection dense requise\");\n                    // La sortie d'attention était le SEUL produit du chemin par\n                  … [711 caractères tronqués]`
+
+  ```
+Error: cannot edit "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs": file changed since it was read — re-read the file, then retry
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && grep -n \"gemm_dense_i8(d8, &ai\\[..t \\* n_in_wo\\]\" model.rs", "description": "Get exact line for wo gemm"}`
+
+  ```
+5337:                    self.pool.gemm_dense_i8(d8, &ai[..t * n_in_wo], t, &sa, &mut yl[..d8.n_out * t]);
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "limit": 6, "offset": 5335}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs</path>
+<type>file</type>
+<content>
+5335:                 let n_out = {
+5336:                     let d8 = self.layers[l].wo.d.as_ref().expect("projection dense requise");
+5337:                     self.pool.gemm_dense_i8(d8, &ai[..t * n_in_wo], t, &sa, &mut yl[..d8.n_out * t]);
+5338:                     d8.n_out
+5339:                 };
+5340:                 let bias = self.layers[l].wo.bias.clone();
+
+(Showing lines 5335-5340 of 9005. Use offset=5341 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "new_string": "                let n_out = {\n                    let d8 = self.layers[l].wo.d.as_ref().expect(\"projection dense requise\");\n                    // La sortie d'attention était le SEUL produit d … [866 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo build --release 2>&1 | grep -E \"^error\" -A 6 | head -20; cargo test --release 2>&1 | grep -E \"^test result\"; cd .. && B=./drave-core/target/release/drave; M=/home/stephane/FastNVMe/qwen3-30b-a3b-Q4_K_M.gguf\nfor  … [255 caractères tronqués]`
+
+  ```
+test result: ok. 77 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+lot 1 : 2717.8 M par token — attention 902.6 M · experts 1811.9 M · partagé 3.2 M
+lot 8 : 2721.1 M par token — attention 906.0 M · experts 1811.9 M · partagé 3.2 M
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && B=./drave-core/target/release/drave; M=/home/stephane/FastNVMe/qwen3-30b-a3b-Q4_K_M.gguf\nfor L in 1 8; do\n  echo -n \"lot $L (après changement) : \"\n  $B $M --ppl /tmp/prefill192.ids --ctx 512 --limit 192 --lot $L --threads 16 2>& … [195 caractères tronqués]`
+
+  ```
+lot 1 (après changement) : 191 tokens notés — perplexité cumulée 19.172  (5.6 tok/s)
+lot 8 (après changement) : 191 tokens notés — perplexité cumulée 19.143  (8.3 tok/s)
+rappel avant changement : lot 1 → 19.172 · lot 8 → 19.143
+  ```
+
+- **bash** `{"command": "date \"+%H:%M %Z\"; TZ=America/New_York date \"+%H:%M HAE\"; tail -2 /tmp/dl_k3.log; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^# §\\|^§\\|7quinquies\" tools/portes.sh | head -20", "description": "Check time, download, gate structure"}`
+
+  ```
+14:19 EDT
+14:19 HAE
+14:01:26  Kimi-K3-UD-Q4_K_XL · Kimi-K3-UD-Q4_K_XL-00032-of-00032.gguf : fait
+14:01:26  === FILE TERMINÉE ===
+241:# 7quinquies. La PORTE DE CORRECTION, exécutée pour de vrai contre llama.cpp.
+  ```
+
+### 🤖 Assistant
+
+**Le transfert de Kimi-K3 est terminé** (14:01). Je bascule sur la vérification.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL\nls \"$D\"/*.gguf | wc -l; du -sb \"$D\" | awk '{printf \"%.1f Go sur disque\\n\", $1/1e9}'; df -h /home/stephane/Data13TB | tail -1\npgrep -f \"telecharger_[m]odeles … [56 caractères tronqués]`
+
+  ```
+32
+1508.7 Go sur disque
+/dev/mapper/system-root   11T  8,8T  2,1T  81% /home/stephane/Data13TB
+0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash tools/apres-telechargement-k3.sh > /tmp/k3_apres.log 2>&1 &\necho \"lancé\"; sleep 90; cat /tmp/k3_apres.log", "description": "Run post-download K3 sequence", "timeoutMs": 150000}`
+
+  ```
+lancé
+=== 1. Les 32 shards sont-ils complets ? ===
+  32/32 shards complets
+
+=== 2. Ce que notre moteur annonce ===
+architecture  : kimi-k3
+couches       : 93 · cachés 7168
+93 couches vues sur 93 déclarées · 1 dense · 68 KDA · 24 MLA · 896 experts (16 par jeton) · latent 3584
+  inventaire : COMPLET (aucun tenseur attendu ne manque)  ⚠️ cadence inattendue (MLA sur il%4==3) aux couches [92]
+experts       : 896 par couche, 16 par jeton · FFN expert 3072
+routage       : sigmoïde (source : expert_gating_func) · renormalisation oui · échelle 1.000
+[mla] attention MLA à rang faible : cache LATENT (c_kv + k_rope), pas de fenêtre glissante ni de YaRN sur ce chemin. Validée contre llama.cpp sur GLM-5.3 à la POSITION 0 : corrélation des logits 0,999024, top-1 3/3 ; l'écart croît ensuite (+0,009 / +0,372 / +0,611 puis +4,070 nat à la position 3 — voir reports/rapport-mla-experts.md §7).
+calculable    : NON — il manque : attention delta-net (KDA) : conv1d de 4, porte bornée (−5), récurrence par tête, attention résiduelle : pile de points de contrôle tous les 12, softmax sur les scores, MoE latent : projections down/up autour des experts (latent 3 584), activation SiTU (beta 4, linear_beta 25), r
+… [955 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sleep 60; tail -30 /tmp/k3_apres.log", "description": "Check baseline progress", "timeoutMs": 120000}`
+
+  ```
+=== 1. Les 32 shards sont-ils complets ? ===
+  32/32 shards complets
+
+=== 2. Ce que notre moteur annonce ===
+architecture  : kimi-k3
+couches       : 93 · cachés 7168
+93 couches vues sur 93 déclarées · 1 dense · 68 KDA · 24 MLA · 896 experts (16 par jeton) · latent 3584
+  inventaire : COMPLET (aucun tenseur attendu ne manque)  ⚠️ cadence inattendue (MLA sur il%4==3) aux couches [92]
+experts       : 896 par couche, 16 par jeton · FFN expert 3072
+routage       : sigmoïde (source : expert_gating_func) · renormalisation oui · échelle 1.000
+[mla] attention MLA à rang faible : cache LATENT (c_kv + k_rope), pas de fenêtre glissante ni de YaRN sur ce chemin. Validée contre llama.cpp sur GLM-5.3 à la POSITION 0 : corrélation des logits 0,999024, top-1 3/3 ; l'écart croît ensuite (+0,009 / +0,372 / +0,611 puis +4,070 nat à la position 3 — voir reports/rapport-mla-experts.md §7).
+calculable    : NON — il manque : attention delta-net (KDA) : conv1d de 4, porte bornée (−5), récurrence par tête, attention résiduelle : pile de points de contrôle tous les 12, softmax sur les scores, MoE latent : projections down/up autour des experts (latent 3 584), activation SiTU (beta 4, linear_beta 25), redémar
+… [949 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '60,120p' tools/apres-telechargement-k3.sh", "description": "Read baseline step of script"}`
+
+  ```
+echo
+echo "=== 4. Budget par jeton, sur le fichier COMPLET ==="
+timeout 1200 python3 tools/budget_execution_locale.py "$K3" --experts-par-jeton 16 2>&1 \
+  | grep -E "shard|PAR JETON|experts routés|partagé|TOTAL|extrapolation|RAM, 8"
+
+if [ "$SANS_BASELINE" = "--sans-baseline" ]; then
+    echo; echo "(baseline de la référence sautée)"; exit 0
+fi
+
+echo
+echo "=== 5. Baseline de la référence (llama.cpp-k3) ==="
+ids=${IDS_K3:-/tmp/ids_k3_demo.txt}
+if [ ! -s "$ids" ]; then
+    echo "  (pas d'identifiants : en produire avec --tokenize sur un texte)"
+    printf 'Le ciel est bleu et le vent tourne.' > /tmp/txt_k3_demo.txt
+    $D "$K3" --tokenize --fichier /tmp/txt_k3_demo.txt --sortie "$ids" >/dev/null 2>&1
+fi
+echo "  ids : $(head -c 60 "$ids" 2>/dev/null)…"
+/usr/bin/time -v env LD_LIBRARY_PATH=$LC/build/bin "$LC"/build/bin/llama-cli \
+    -m "$K3" -f /tmp/txt_k3_demo.txt -n 8 -t 16 --no-warmup 2>&1 \
+    | grep -E "eval time|tokens per second|Maximum resident|load time" | head -8
+echo
+echo "Si la baseline tient et que --config annonce des manques, l'étape suivante"
+echo "est l'implémentation, étage par étage : docs/verification-kimi-k3.md."
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && grep -n \"calculable\" main.rs | head; grep -n \"il manque\" main.rs | head", "description": "Find calculable checklist"}`
+
+  ```
+1838:/// à savoir si l'architecture est calculable — deux choses qui n'étaient
+2067:    // chercher sous `compress_ratios` faisait dire « calculable » à V4-Flash
+2081:    // calculable — c'est un chiffre du modèle, pas une promesse du moteur.
+2104:        println!("calculable    : oui (passe avant implémentée)");
+2106:        println!("calculable    : NON — il manque : {}", manques.join(", "));
+2106:        println!("calculable    : NON — il manque : {}", manques.join(", "));
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && sed -n '2085,2110p' main.rs", "description": "Read calculable decision code"}`
+
+  ```
+"hyper-conn.   : {mult} copies · {} mélanges par couche (pre/post/comb) · \
+                 Sinkhorn {iters} itérations · eps {eps:e}",
+                2 * mult + mult * mult),
+            None => println!("hyper-conn.   : présentes, mais `hc_mult` introuvable"),
+        }
+    }
+    // Ce que le moteur ne sait pas calculer, dit avant la panne — par la MÊME
+    // fonction que le refus à l'ouverture : deux listes divergentes ont déjà
+    // annoncé deux manques là où la passe avant en refusait trois.
+    let c = model::Cfg {
+        n_layer: n_layer as usize, hidden: hidden as usize, n_head: 0, n_kv_head: 0,
+        head_dim: 0, ffn: 0, eps: 1e-6, rope_base: 10000.0, vocab: 0,
+        n_expert: r.n_expert, n_expert_used: r.n_expert_used, ffn_exp: r.ffn_exp,
+        ffn_act_oss: false, gating: r.gating, expert_norm: r.norm, expert_scale: r.echelle,
+        hash_layers: r.hash_layers, n_rot: 0, yarn: None,
+        yarn_declare: None,
+    };
+    let manques = model::manques_architecture(&g, &c, 0, false);
+    if manques.is_empty() {
+        println!("calculable    : oui (passe avant implémentée)");
+    } else {
+        println!("calculable    : NON — il manque : {}", manques.join(", "
+… [45 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && grep -n \"fn manques_architecture\" -A 75 model.rs | head -95", "description": "Read manques_architecture"}`
+
+  ```
+88:pub fn manques_architecture(g: &Gguf, cfg: &Cfg, ctx: usize, clusters: bool) -> Vec<&'static str> {
+89-    // Le test porte sur TOUTES les couches, pas sur la couche 0 : GLM-5.3 a
+90-    // trois couches denses puis des couches MLA, et regarder la première
+91-    // laissait passer le modèle jusqu'au panic « attn_q absent » de la couche 3.
+92-    let quelque_part = |suffixe: &str| g.tensors.iter().any(|t| t.name.ends_with(suffixe));
+93-    let mut manques: Vec<&str> = Vec::new();
+94-    // Les **hyper-connexions** (DeepSeek-V4) ne sont plus un manque : elles sont
+95-    // lues (`Hc`, `hc_params`) et consommées par la passe avant — l'entrée d'une
+96-    // sous-couche est le mélange des `hc` copies, la sortie se route par `comb`
+97-    // (Sinkhorn), et la tête les réduit en un état. Ce qui reste à faire sur ce
+98-    // chemin est nommé ailleurs (sortie à rang faible groupée, attentions
+99-    // compressées).
+100-    if quelque_part("hc_attn_fn.weight") && g.hc_params().is_none() {
+101-        manques.push("hyper-connexions : `hc_mult` absent des métadonnées");
+102-    }
+103-    // **Kimi-K3** — la cible de la classe « trop gros pour le local »
+104-    // (`docs/plan-kimi-k3.m
+… [4236 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "limit": 15, "offset": 103}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs</path>
+<type>file</type>
+<content>
+103:     // **Kimi-K3** — la cible de la classe « trop gros pour le local »
+104:     // (`docs/plan-kimi-k3.md`, spécification dans `docs/architecture-kimi-k3.md`).
+105:     // Le fichier se LIT déjà (métadonnées, 93 couches, Q8_0 dense + MXFP4 pour
+106:     // les 896 experts), mais cinq mécanismes de la passe avant n'existent pas
+107:     // encore. On les nomme TOUS : « architecture inconnue » ne dit pas quoi
+108:     // écrire, et c'est exactement ce que la porte `--config` doit annoncer.
+109:     if g.meta.get("general.architecture").and_then(|m| m.as_str()) == Some("kimi-k3") {
+110:         manques.push("attention delta-net (KDA) : conv1d de 4, porte bornée (−5), récurrence par tête");
+111:         manques.push("attention résiduelle : pile de points de contrôle tous les 12, softmax sur les scores");
+112:         manques.push("MoE latent : projections down/up autour des experts (latent 3 584)");
+113:         manques.push("activation SiTU (beta 4, linear_beta 25)");
+114:         manques.push("redémarrage du flux résiduel aux couches « banque » (toutes les 12)");
+115:
+… [246 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "new_string": "    // **Kimi-K3** — la cible de la classe « trop gros pour le local »\n    // (`docs/plan-kimi-k3.md`, spécification dans `docs/architecture-kimi-k3.md`).\n    //\n    // Les cinq mécanismes qui  … [2497 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo build --release 2>&1 | grep -E \"^error\" -A 6 | head -20; echo \"build ok\"; cd .. && K=/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf; ./drave-core/target/re … [146 caractères tronqués]`
+
+  ```
+build ok
+  inventaire : COMPLET (aucun tenseur attendu ne manque)  ⚠️ cadence inattendue (MLA sur il%4==3) aux couches [92]
+calculable    : NON — il manque : branchement du chemin K3 sur la passe avant complète (93 couches) : les briques existent et sont vérifiées couche par couche (`--k3-essai`), mais le chemin K3 déquantifie les experts en f32 — il sert à VÉRIFIER, pas encore à faire tourner le modèle
+  ```
+
+- **bash** `{"command": "tail -6 /tmp/k3_apres.log; echo \"=== llama-cli tourne ? ===\"; ps -eo pid,etimes,rss,comm --no-headers | awk '$4 ~ /llama/ {print}' | head", "description": "Check baseline run status"}`
+
+  ```
+⚠️ Tout ce qui est lu à chaque jeton est compté (attention, tête, experts partagés) ; l'embarquement ne l'est pas. Les chiffres « experts seuls » d'un rapport antérieur ne sont PAS ce total.
+RAM, 8+ fils (40 Go/s)                 40.0 Go/s      2.17     0.461
+
+=== 5. Baseline de la référence (llama.cpp-k3) ===
+  (pas d'identifiants : en produire avec --tokenize sur un texte)
+  ids : 3638,275,1309,3140,18965,84,3347,655,14472,9280,1419,13…
+=== llama-cli tourne ? ===
+   2614 1035354 17948 ollama
+1445983     276 51273856 llama-cli
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls sprints/ | tail -5; echo \"---\"; head -30 sprints/30-*.md 2>/dev/null", "description": "Check sprint file convention"}`
+
+  ```
+26-la-porte-a-512-et-la-granularite-qui-route.md
+27-la-porte-p1-fermee-et-la-bascule-vers-kimi-k3.md
+28-la-bascule-vers-kimi-k3-et-deux-defauts-de-tokenizer.md
+29-87-go-par-jeton-et-la-recurrence-du-kda.md
+30-la-reutilisation-des-experts-mesuree.md
+---
+# Sprint 30 — La réutilisation des experts, mesurée (et c'est le levier)
+
+- **Début** : 11:40 · **Fin** : 12:40
+- **Objectif** : le bloc 29 a montré qu'un jeton de Kimi-K3 lit **24,7 Go d'experts**
+  et que **aucun placement** ne rend ça interactif. Restait LA question qui décide
+  de tout : *les mêmes experts reviennent-ils ?* Ce bloc la mesure — sur un modèle
+  qu'on peut faire tourner aujourd'hui, avec l'instrument du dépôt, en attendant
+  que le téléchargement de Kimi-K3 se termine.
+- **Engagement de fin** : dépôt vert, machine rendue, tout commité.
+
+## Revue — ce qui est livré, mesuré
+
+### 1. L'instrument
+
+`tools/analyse_reutilisation_experts.py` (neuf) lit une trace de routage
+(`DRAVE_TRACE_EXPERTS`, une ligne par (couche, jeton)) et rend : la couverture,
+la **réutilisation immédiate** (t−1 → t), la réutilisation **fenêtrée**, et la
+**courbe d'un cache LRU** — donc ce qu'un cache rapporterait, sans en écrire un.
+
+### 2. Les chi
+… [465 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && K=/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf\ntimeout 900 ./drave-core/target/release/drave $K --tensors 2>/dev/null > /tmp/k3_tensors.txt; echo \"exit=$?\"; wc -l /tmp/k3_ … [106 caractères tronqués]`
+
+  ```
+exit=0
+2607 /tmp/k3_tensors.txt
+kimi-k3 · 32 fichiers · 2573 tenseurs · 1508.66 Go de poids · en-têtes lus en 121.328019ms
+  fichier 0 :     0 tenseurs · 0.00 Go
+  fichier 1 :   105 tenseurs · 47.48 Go
+  fichier 2 :    77 tenseurs · 49.15 Go
+  fichier 3 :    82 tenseurs · 49.02 Go
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport re, collections\nlignes=open('/tmp/k3_tensors.txt').read().splitlines()\n# format à découvrir\nprint(lignes[1]); print(lignes[40]); print(lignes[500])\nEOF", "description": "Inspect tensor dump format"}`
+
+  ```
+fichier 0 :     0 tenseurs · 0.00 Go
+  Q8_0     blk.0.attn_output.weight               [7168, 12288] · 88.1 M poids · fichier 1
+  Q8_0     blk.16.ssm_f_b.weight                  [12288, 128] · 1.6 M poids · fichier 6
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport re, collections\npat = re.compile(r'^\\s*(\\S+)\\s+(\\S+)\\s+\\[([0-9, ]+)\\]\\s+·\\s+([0-9.]+) M poids')\npar_type=collections.Counter(); par_fam=collections.Counter()\nexpert_bytes=0\nfor l in open('/tmp/k … [598 caractères tronqués]`
+
+  ```
+=== par famille (M poids) ===
+    907.580 G  ffn_down_exps.weight
+    907.580 G  ffn_gate_exps.weight
+    907.580 G  ffn_up_exps.weight
+      8.193 G  attn_output.weight
+      6.079 G  attn_k.weight
+      6.079 G  attn_q.weight
+      6.079 G  attn_v.weight
+      6.079 G  ssm_g.weight
+      4.048 G  ffn_down_shexp.weight
+      4.048 G  ffn_gate_shexp.weight
+      4.048 G  ffn_up_shexp.weight
+      2.364 G  ffn_routed_down.weight
+      2.364 G  ffn_routed_up.weight
+      2.114 G  attn_gate.weight
+      1.174 G  output.weight
+      1.174 G  token_embd.weight
+      0.679 G  attn_q_b.weight
+      0.589 G  ffn_gate_inp.weight
+
+=== par type ===
+   2722.740 G  MXFP4
+     56.088 G  Q8_0
+      0.637 G  F32
+  ```
+
+- **write** `{"content": "# Sprint 31 — Le regroupement par experts mesuré, et Kimi-K3 au complet\n\n- **Début** : ~12:45 · **Fin** : ~14:45\n- **Objectif** : le bloc 30 a mesuré que les experts reviennent (46,9 % de\n  réutilisation immédiate, 86,8 % pour un LRU de 32 par couche) et que le\n  décodage ne peut r … [8462 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/31-le-regroupement-par-experts-mesure-et-k3-au-complet.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "tail -8 /tmp/k3_apres.log; echo \"=== llama-cli ===\"; ps -eo pid,etimes,rss,comm --no-headers | awk '$4 ~ /llama/ {print}'; date \"+%H:%M\"", "description": "Check reference baseline progress"}`
+
+  ```
+partagé + attention + tête  60.958 Go
+    TOTAL                  86.787 Go
+  ⚠️ Tout ce qui est lu à chaque jeton est compté (attention, tête, experts partagés) ; l'embarquement ne l'est pas. Les chiffres « experts seuls » d'un rapport antérieur ne sont PAS ce total.
+RAM, 8+ fils (40 Go/s)                 40.0 Go/s      2.17     0.461
+
+=== 5. Baseline de la référence (llama.cpp-k3) ===
+  (pas d'identifiants : en produire avec --tokenize sur un texte)
+  ids : 3638,275,1309,3140,18965,84,3347,655,14472,9280,1419,13…
+=== llama-cli ===
+   2614 1035425 17948 ollama
+1445983     347 62157104 llama-cli
+14:25
+  ```
+
+- **write** `{"content": "# Rapport — le préremplissage par experts : ce que le regroupement rapporte, mesuré\n\n**Date** : bloc 31 · **Modèle** : Qwen3-30B-A3B-Instruct-2507-Q4_K_M (48 couches,\n128 experts, 8 par jeton) · **Support** : NVMe (copie dédiée, le modèle d'origine\nest sur le disque tournant) · 40 C … [5758 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-prefill-par-experts.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"Téléchargement\\|téléchargement\\|32/32\\|ETA\" docs/plan-kimi-k3.md | head -8; echo \"---\"; grep -n \"^## \\|^# \" docs/plan-kimi-k3.md | head -20", "description": "Find download status in plan doc"}`
+
+  ```
+22:| débit de téléchargement | **108 Mo/s** → ~4 h pour 1,5 To | mesuré sur le transfert en cours |
+---
+1:# Plan — Kimi-K3 : exécuter en local ce qui ne tient pas en local
+10:## 1. Ce qui est mesuré (03/10)
+31:## 2. La référence existe — et c'est nouveau
+52:## 3. Ce qui nous distingue sur cette classe (mesuré, pas supposé)
+81:## 3bis. Le tokenizer est déjà vérifié — et il a trouvé DEUX défauts
+114:## 4. Jalons
+127:## 4bis. Ce qui est prêt pour le jour J
+141:## 5. Ce qui est mis de côté, et pourquoi c'est écrit
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-kimi-k3.md", "limit": 32, "offset": 10}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-kimi-k3.md</path>
+<type>file</type>
+<content>
+10: ## 1. Ce qui est mesuré (03/10)
+11: 
+12: | fait | valeur | source |
+13: |---|---|---|
+14: | GGUF visé | `unsloth/Kimi-K3-GGUF`, **UD-Q4_K_XL**, **32 shards, 1 508,7 Go** | API Hugging Face |
+15: | architecture déclarée | **`kimi-k3`** — notre moteur ne la connaît pas | `general.architecture` du shard 1 |
+16: | structure du texte | **93 couches** · hidden **7 168** · ffn 33 792 · **896 experts, 16 par jeton** · groupe 1 · gating 2 · contexte **1 048 576** | métadonnées `kimi-k3.*` |
+17: | attention | `head_count 96` · `key_length 576` · `value_length 74` · `head_count_kv` **par couche** (1 sur 4) → hybride | idem |
+18: | le texte EST Kimi-Linear | `text_config.architectures = ['KimiLinearForCausalLM']`, `linear_attn_config.full_attn_layers = [4,8,12,…]`, `hidden_act = situ`, `mla_use_nope`, `mla_use_output_gate`, `kv_lora_rank 512`, `first_k_dense_replace 1` | `config.json` du dépôt officiel |
+19: | experts | **MXFP4** dans le Q4 (41,93 Go pour 3 couches) | en-tête du shard 2 |
+20: | **poids lus par jeton** | **≈ 87 Go** : attention **48,7** · experts routés **24,7** · p
+… [1626 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-kimi-k3.md", "new_string": "## 1. Ce qui est mesuré\n\n### 1a. Le fichier est LÀ (bloc 31, 14:01)\n\n**32/32 shards, 1 508,7 Go**, vérifiés à l'octet contre l'API Hugging Face\n(`tools/apres-telechargement-k3.sh`, étape 1). Le  … [5057 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-kimi-k3.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "tail -12 /tmp/k3_apres.log; echo \"=== llama-cli ===\"; ps -eo pid,etimes,rss,comm --no-headers | awk '$4 ~ /llama/{print}'; date \"+%H:%M\"", "description": "Check baseline progress again"}`
+
+  ```
+Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf — 32 shard(s) lus, 93 couches vues
+  poids lus : 1508.7 Go sur les shards présents
+  PAR JETON (sur les 93 couches vues) :
+    experts routés         25.830 Go
+    partagé + attention + tête  60.958 Go
+    TOTAL                  86.787 Go
+  ⚠️ Tout ce qui est lu à chaque jeton est compté (attention, tête, experts partagés) ; l'embarquement ne l'est pas. Les chiffres « experts seuls » d'un rapport antérieur ne sont PAS ce total.
+RAM, 8+ fils (40 Go/s)                 40.0 Go/s      2.17     0.461
+
+=== 5. Baseline de la référence (llama.cpp-k3) ===
+  (pas d'identifiants : en produire avec --tokenize sur un texte)
+  ids : 3638,275,1309,3140,18965,84,3347,655,14472,9280,1419,13…
+=== llama-cli ===
+   2614 1035539 17948 ollama
+1445983     461 78380920 llama-cli
+14:27
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'MSG'\nBloc 31 : le regroupement par experts vaut x1,58 — et Kimi-K3 est arrivé au complet\n\nMESURÉ (Qwen3-30B-A3B, invite de 192 jetons, NVMe, 16 fils, 3 passes par point) :\n  lot 1   -> 33,23 s  … [1740 caractères tronqués]`

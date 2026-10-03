@@ -7,7 +7,31 @@
 > locale ». Kimi-K3 est la cible : le plus récent des gros ouverts, 1 M de
 > contexte, multimodal, et **1,5 To** dans sa quantization Q4.
 
-## 1. Ce qui est mesuré (03/10)
+## 1. Ce qui est mesuré
+
+### 1a. Le fichier est LÀ (bloc 31, 14:01)
+
+**32/32 shards, 1 508,7 Go**, vérifiés à l'octet contre l'API Hugging Face
+(`tools/apres-telechargement-k3.sh`, étape 1). Le transfert a tenu **111 Mo/s**
+de moyenne sur 1,5 To.
+
+### 1b. Le budget par jeton n'est plus une extrapolation (bloc 31)
+
+Mesuré sur le fichier **complet**, 93 couches vues :
+
+| poste | Go par jeton | part |
+|---|---|---|
+| experts routés (16 sur 896) | 25,830 | 29,8 % |
+| partagé + attention + tête | **60,958** | **70,2 %** |
+| **TOTAL** | **86,787** | |
+
+Inventaire des 2 573 tenseurs : **2 722,7 G poids en MXFP4** (les experts) et
+**56,1 G poids en Q8_0** (tout le dense) — d'où les ~59,6 Go du dense par jeton.
+**Le dense pèse 2,3× les experts routés** : aucune technique sur les experts ne
+peut adresser plus de 30 % du trafic d'un jeton. C'est la conclusion qui
+réoriente la suite.
+
+### 1c. Ce qui est mesuré (03/10)
 
 | fait | valeur | source |
 |---|---|---|
@@ -17,16 +41,23 @@
 | attention | `head_count 96` · `key_length 576` · `value_length 74` · `head_count_kv` **par couche** (1 sur 4) → hybride | idem |
 | le texte EST Kimi-Linear | `text_config.architectures = ['KimiLinearForCausalLM']`, `linear_attn_config.full_attn_layers = [4,8,12,…]`, `hidden_act = situ`, `mla_use_nope`, `mla_use_output_gate`, `kv_lora_rank 512`, `first_k_dense_replace 1` | `config.json` du dépôt officiel |
 | experts | **MXFP4** dans le Q4 (41,93 Go pour 3 couches) | en-tête du shard 2 |
-| **poids lus par jeton** | **≈ 87 Go** : attention **48,7** · experts routés **24,7** · partagés **12,4** · tête 1,3 — soit **5,8 % du modèle** | `reports/rapport-budget-kimi-k3.md` (mesuré sur 25 couches, extrapolé) |
-| planchers qui en découlent | disque dur **173 s/jeton** · NVMe (2 Go/s) **17 s** · PCIe x8 (6,5 Go/s) **5,4 s** · RAM (20 Go/s) **1,7 s** | débits mesurés les 02-03/10 |
-| débit de téléchargement | **108 Mo/s** → ~4 h pour 1,5 To | mesuré sur le transfert en cours |
+| **poids lus par jeton** | **86,787 Go** (mesuré, bloc 31 — voir 1b) | `tools/budget_execution_locale.py` sur les 32 shards |
+| planchers qui en découlent | disque dur **173 s/jeton** · NVMe (2 Go/s) **17 s** · PCIe x8 (6,5 Go/s) **5,4 s** · RAM (40 Go/s, mesuré) **2,17 s** | débits mesurés les 02-03/10 et bloc 31 |
+| débit de téléchargement | **111 Mo/s** → 4 h 05 pour 1,5 To | mesuré sur le transfert |
+| cadence des couches | **1 dense, 68 KDA, 24 MLA** · couche 92 MLA alors que 92 % 4 ≠ 3 | `--config` sur le fichier complet |
 
-**Ce que ce tableau dit en une phrase** : un jeton de Kimi-K3 Q4 lit **87 Go de
-poids** — dont **62 Go de partie dense** (attention, experts partagés, tête) qu'il
-faut avoir **résidente**, et 24,7 Go d'experts routés. Le problème n'est donc pas
+**Ce que ce tableau dit en une phrase** : un jeton de Kimi-K3 Q4 lit **86,8 Go de
+poids** — dont **61 Go de partie dense** (attention, experts partagés, tête) qu'il
+faut avoir **résidente**, et 25,8 Go d'experts routés. Le problème n'est donc pas
 « faire tenir le modèle » (1,5 To ne tiendront jamais), ni seulement « ne lire que
 les experts qui servent » : c'est **de garder le dense en RAM et de réutiliser les
-experts** — et c'est exactement le sujet du projet.
+experts** — et c'est exactement le sujet du projet. Mais le dense étant 2,3× les
+experts, **le préremplissage par lots est la seule porte sérieuse** : il amortit
+le dense par la taille du lot (`reports/rapport-prefill-par-experts.md`,
+×1,58 mesuré de lot 1 à lot 192 sur Qwen3-30B-A3B, et 15,5× moins d'octets
+d'experts). Le calcul, lui, ne s'amortit pas : ~210 GFLOP/jeton contre
+56,7 GFLOP/s mesurés, soit **~3,7 s/jeton** — estimation à remplacer par une
+mesure.
 
 ## 2. La référence existe — et c'est nouveau
 
