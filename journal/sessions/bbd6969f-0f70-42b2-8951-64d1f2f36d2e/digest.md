@@ -97055,3 +97055,307 @@ ok REPRISE
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -4 /tmp/porte14.log; git add -A && git commit -q -m \"Sprint 14 : P8 fermée — l'engram est vivant (A/B mesuré), et le masque des jetons d'image reste un no-op DÉCIDÉ\n\nMesure de vivacité, passe complète V4.1, mêmes jetons et mê … [1044 caractères tronqués]`
+
+  ```
+V4-Flash 43 couches ctx 32                 8430.4966  ✅
+  engram V4.1 : adressage                    rangées DISTINCTES : 479723  ✅
+
+=== Découpage (deux nœuds) ===
+2edc343 Sprint 14 : P8 fermée — l'engram est vivant (A/B mesuré), et le masque des jetons d'image reste un no-op DÉCIDÉ
+  ```
+
+### 🤖 Assistant
+
+⏵ Fermeture du dernier trou : un vide pour la réduction finale, et un test `np=1`
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -3 /tmp/porte14.log; grep -n \"norme_finale(\" drave-core/src/main.rs", "description": "Check gate and norme_finale call sites"}`
+
+  ```
+mode 4 — lot en listes           4.45e-3  ✅  (réf 60.8135 / deux nœuds 60.5427)
+
+toutes les portes sont vertes
+3042:                hn.push(mdl.norme_finale(&etats[i * mdl.cfg.hidden..(i + 1) * mdl.cfg.hidden]));
+3117:            let reduit = mdl.norme_finale(&final_);
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs", "limit": 10, "offset": 3038}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs</path>
+<type>file</type>
+<content>
+3038:             // La norme finale reste au nœud qui a la tête, et la tête se fait par
+3039:             // lots : le lot reçu ne redescend pas jeton par jeton.
+3040:             let mut hn: Vec<Vec<f32>> = Vec::with_capacity(t);
+3041:             for i in 0..t {
+3042:                 hn.push(mdl.norme_finale(&etats[i * mdl.cfg.hidden..(i + 1) * mdl.cfg.hidden]));
+3043:             }
+3044:             let lgs = mdl.logits_lot(&hn);
+3045:             for i in 0..t {
+3046:                 if pos + i + 1 < ids.len() {
+3047:                     nll += nll_logits(&lgs[i], ids[pos + i + 1]);
+
+(Showing lines 3038-3047 of 5342. Use offset=3048 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs", "new_string": "            for i in 0..t {\n                hn.push(mdl.norme_finale(&etats[i * mdl.cfg.hidden..(i + 1) * mdl.cfg.hidden],\n                                         pos + i));\n            }", "ol … [154 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs", "new_string": "            let reduit = mdl.norme_finale(&final_, pos);", "old_string": "            let reduit = mdl.norme_finale(&final_);"}`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"drave-core/src/model.rs\"\ns=open(p).read()\na=\"\"\"    pub fn norme_finale(&mut self, x: &[f32]) -> Vec<f32> {\"\"\"\nb=\"\"\"    /// `pos` ne sert QU'AUX VIDES : `hidden_final` (le vide de la passe\n    /// c … [1102 caractères tronqués]`
+
+  ```
+ok
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"mod tests_flux\\|fn entete\\|VERSION_FLUX\" drave-core/src/main.rs | tail -8; sed -n 5090,5130p drave-core/src/main.rs", "description": "Find the flux tests"}`
+
+  ```
+2469:            format!("flux en version {version}, cette build parle la {VERSION_FLUX} \
+2505:{MODE_LOT_LISTES}, protocole v{VERSION_FLUX})"))),
+4982:mod tests_flux {
+4991:    fn entete_et_version_sont_ce_que_les_numeros_disent() {
+4998:        assert_eq!(VERSION_FLUX, 6, "le pré-mix porté impose la version 6");
+5065:    fn entete(mode: u8, n: u32) -> Vec<u8> {
+5068:        t.push(VERSION_FLUX);
+5257:            tete.push(VERSION_FLUX);
+            let (mut sock, _) = ecoute.accept().unwrap();
+            sock.write_all(&entete(mode, n)).unwrap();
+            // Protocole v6 : le corps commence par `np` (aucun pré-mix ici).
+            sock.write_all(&[0u8]).unwrap();
+            sock.write_all(&corps).unwrap();
+        });
+        let mut client = TcpStream::connect(adresse).unwrap();
+        // Délai de lecture : si un garde-fou disparaissait, le test doit ÉCHOUER,
+        // pas pendre — sans lui il attendrait les 358 Go du corps annoncé
+        // (relevé par la relecture : le test ne pouvait pas rater proprement).
+        client.set_read_timeout(Some(std::time::Duration::from_secs(5))).unwrap();
+        let r = recevoir_flux(&mut client, hidden, 1);
+        serveur.join().un
+… [1238 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 5055,5090p drave-core/src/main.rs", "description": "Read the test frame helper"}`
+
+  ```
+//! Le plafond des allocations pilotées par le réseau (règle R4). Sans lui, un
+    //! pair qui annonce `n = 4 milliards` fait demander ~15 To au noyau AVANT tout
+    //! contrôle — la relecture adversariale l'avait relevé comme soupçon, faute de
+    //! pouvoir le tester sans risquer la machine. Le test ne risque rien : le
+    //! refus a lieu avant l'allocation.
+    use super::*;
+    use std::io::Write;
+    use std::net::{TcpListener, TcpStream};
+
+    /// En-tête v4 complet, prêt à compléter par un corps.
+    fn entete(mode: u8, n: u32) -> Vec<u8> {
+        let mut t: Vec<u8> = Vec::new();
+        t.extend_from_slice(&MAGIE_FLUX.to_le_bytes());
+        t.push(VERSION_FLUX);
+        t.push(mode);
+        t.extend_from_slice(&12u32.to_le_bytes());
+        t.extend_from_slice(&24u32.to_le_bytes());
+        t.extend_from_slice(&0u32.to_le_bytes());
+        t.extend_from_slice(&n.to_le_bytes());
+        t.extend_from_slice(&0f32.to_le_bytes());
+        t.extend_from_slice(&127f32.to_le_bytes());
+        t.extend_from_slice(&0f32.to_le_bytes());
+        t.extend_from_slice(&0u32.to_le_bytes());
+        t.push(0);
+        for _ in 0..10 { t.extend_from_slice(&0u32.to_le_bytes()); }
+    
+… [487 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fn une_trame_liste_hors_dimension_ne_tue_pas_le_noeud\" drave-core/src/main.rs", "description": "Locate insertion point for the new test"}`
+
+  ```
+5107:    fn une_trame_liste_hors_dimension_ne_tue_pas_le_noeud() {
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs", "limit": 8, "offset": 5103}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs</path>
+<type>file</type>
+<content>
+5103:         r
+5104:     }
+5105: 
+5106:     #[test]
+5107:     fn une_trame_liste_hors_dimension_ne_tue_pas_le_noeud() {
+5108:         // n = 1 paire, indice 5000 pour 896 canaux : c'était un `index out of
+5109:         // bounds` → SIGABRT (relecture adversariale, trame forgée).
+5110:         let mut corps = Vec::new();
+
+(Showing lines 5103-5110 of 5343. Use offset=5111 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs", "new_string": "    #[test]\n    fn une_trame_a_premix_porte_est_lue_et_comptee() {\n        // `np = 1` n'était exercé par AUCUN test : les trames forgées des tests\n        // écrivaient `np = 0` en dur, la port … [1284 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cargo test --release --manifest-path drave-core/Cargo.toml 2>&1 | grep -E \"^error|test result|FAILED|panicked\" | head -10", "description": "Run tests with the new np=1 test", "timeoutMs": 600000}`
+
+  ```
+test tests_plafond::une_trame_a_premix_porte_est_lue_et_comptee ... FAILED
+thread 'tests_plafond::une_trame_a_premix_porte_est_lue_et_comptee' (3864106) panicked at src/main.rs:5121:9:
+test result: FAILED. 62 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+error: test failed, to rerun pass `--bin drave`
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cargo test --release --manifest-path drave-core/Cargo.toml une_trame_a_premix 2>&1 | grep -A6 \"panicked\" | head -14", "description": "See the assertion failure detail", "timeoutMs": 300000}`
+
+  ```
+thread 'tests_plafond::une_trame_a_premix_porte_est_lue_et_comptee' (3864181) panicked at src/main.rs:5121:9:
+assertion `left == right` failed: le pré-mix porté doit être relu tel quel
+  left: []
+ right: [0.25, 0.5, 0.75, 1.0]
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs", "new_string": "    #[test]\n    fn une_trame_a_premix_porte_est_lue_et_comptee() {\n        // `np = 1` n'était exercé par AUCUN test : les trames forgées des tests\n        // écrivaient `np = 0` en dur (le help … [3000 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cargo test --release --manifest-path drave-core/Cargo.toml 2>&1 | grep -E \"^error|test result|FAILED|panicked|assertion\" | head -8", "description": "Re-run the tests", "timeoutMs": 600000}`
+
+  ```
+test result: ok. 63 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"verts\\|cargo test\" tools/portes.sh | head -6", "description": "Check the gate's test-count expectation"}`
+
+  ```
+39:sortie=$( (cd drave-core && cargo test --release 2>&1) )
+43:    printf "  %-42s %s  ✅\n" "cargo test --release" "${n} verts"
+45:    printf "  %-42s %s  ❌ (échecs : %s)\n" "cargo test --release" "${n:-0} verts" "${ko:-?}"
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cargo build --release --manifest-path drave-core/Cargo.toml 2>&1 | tail -1 && rm -rf /tmp/dp5 /tmp/ds5 && mkdir -p /tmp/dp5 /tmp/ds5 && cat > /tmp/test_v41_reduction.sh <<'EOF'\n#!/bin/bash\nset -u\ncd /home/stephane/Data13TB/stephan … [803 caractères tronqués]`
+
+  ```
+Finished `release` profile [optimized] target(s) in 32.02s
+verification de la reduction lancee
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport re\nfor p in (\"sprints/13-les-deux-enigmes-du-decoupage-v41.md\",\"sprints/14-p8-la-vivacit-de-l-engram-interrupteur-d.md\"):\n    s=open(p).read()\n    n=s.count(\"62 tests\")\n    s=s.replace(\"62 tests\", … [202 caractères tronqués]`
+
+  ```
+sprints/13-les-deux-enigmes-du-decoupage-v41.md → 2 occurrences
+sprints/14-p8-la-vivacit-de-l-engram-interrupteur-d.md → 1 occurrences
+sprints/13-les-deux-enigmes-du-decoupage-v41.md:159:écrivain ou lecteur de `hc_porte_imposee`, les 63 tests, et le `trap` de la porte
+sprints/13-les-deux-enigmes-du-decoupage-v41.md:239:- `tools/portes.sh rapide` : **toutes vertes** — 63 tests, Qwen2.5-0.5B ctx 256 =
+sprints/14-p8-la-vivacit-de-l-engram-interrupteur-d.md:146:- `tools/portes.sh rapide` : voir le journal du bloc (63 tests, Qwen 19,3885,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"sprints/13-les-deux-enigmes-du-decoupage-v41.md\"\ns=open(p).read()\ns=s.replace(\"écrivain ou lecteur de `hc_porte_imposee`, les 63 tests, et le `trap` de la porte\",\n            \"écrivain ou lecteur de `hc_p … [886 caractères tronqués]`
+
+  ```
+ok
+sprints/13-les-deux-enigmes-du-decoupage-v41.md:159:écrivain ou lecteur de `hc_porte_imposee`, les 62 tests de l'époque (63 depuis
+sprints/13-les-deux-enigmes-du-decoupage-v41.md:240:- `tools/portes.sh rapide` : **toutes vertes** — 63 tests, Qwen2.5-0.5B ctx 256 =
+sprints/14-p8-la-vivacit-de-l-engram-interrupteur-d.md:146:- `tools/portes.sh rapide` : voir le journal du bloc (63 tests, Qwen 19,3885,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"sprints/13-les-deux-enigmes-du-decoupage-v41.md\"\ns=open(p).read()\ns=s.replace(\"- `tools/portes.sh rapide` : **toutes vertes** — 63 tests, Qwen2.5-0.5B ctx 256 =\",\n            \"- `tools/portes.sh rapide` : … [746 caractères tronqués]`
+
+  ```
+ok
+sprints/13-les-deux-enigmes-du-decoupage-v41.md:240:- `tools/portes.sh rapide` : **toutes vertes** — 62 tests au moment du bloc (63
+sprints/14-p8-la-vivacit-de-l-engram-interrupteur-d.md:146:- `tools/portes.sh rapide` : **toutes vertes** (62 tests au moment du passage,
+## Portes
+
+- `tools/portes.sh rapide` : **toutes vertes** — 62 tests au moment du bloc (63
+  après le test `np = 1` ajouté au bloc 14), Qwen2.5-0.5B ctx 256 =
+  19,3885, clusters Qwen3-30B = 799,8557, threads 20, les quatre routages,
+  **V4-Flash 43 couches ctx 32 = 8430,4966**, engram V4.1 (rangées distinctes).
+- **Porte NOUVELLE : `tools/porte-flux.sh`**, branchée dans `tools/portes.sh`.
+  ```
+
+- **bash** `{"command": "sleep 60; cat /tmp/reduction_out.log 2>/dev/null; echo \"procs: $(pgrep -x drave | wc -l)\"; ls /tmp/dp5 2>/dev/null | grep -c reduit", "description": "Check the reduction verification run", "timeoutMs": 120000}`
+
+  ```
+procs: 2
+0
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "sleep 150; cat /tmp/reduction_out.log 2>/dev/null; echo \"---\"; ls /tmp/dp5 2>/dev/null | grep -c reduit; echo \"procs: $(pgrep -x drave | wc -l)\"", "description": "Wait for the reduction run", "timeoutMs": 200000}`
+
+  ```
+référence locale  : perplexité 1743713.6243  (66.1 s)
+  deux nœuds        : perplexité 1743713.6243  (48.9 s)
+  écart             : 0.00e0
+  transport         : dense f32 · 82016 octets par flux (aller) · 82016 au retour · 400.0 % d'activité (20480 neurones par flux) · 3 flux
+FIN
+---
+3
+procs: 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport numpy as np, os\ndef lire(p): return np.fromfile(p, dtype=\"<f4\").astype(np.float64)\nprint(\"=== la RÉDUCTION FINALE, tenseur par tenseur (nouveau vide `reduit`) ===\")\nfor p in range(3):\n    a=f\"/tmp/dp … [1095 caractères tronqués]`
+
+  ```
+=== la RÉDUCTION FINALE, tenseur par tenseur (nouveau vide `reduit`) ===
+  pos 0 : réduit (réparti) vs hidden_final (référence locale) : écart max 0.000e+00 · n 5120
+  pos 1 : réduit (réparti) vs hidden_final (référence locale) : écart max 0.000e+00 · n 5120
+  pos 2 : réduit (réparti) vs hidden_final (référence locale) : écart max 0.000e+00 · n 5120
+  (contrôle) passe répartie, 953 tenseurs vs la référence du bloc 13 : 0 différents
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\n# 1) le rapport : la preuve de la réduction finale\np=\"reports/rapport-decoupage-v41.md\"\ns=open(p).read()\na=\"\"\"**Mesure indépendante du transport aller**\"\"\"\nb=\"\"\"**La RÉDUCTION FINALE, tenseur par tens … [2634 caractères tronqués]`
+
+  ```
+ok rapport
+ok sprint 14
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> reports/decoupage-v41-digest.txt <<'EOF'\n\n== la RÉDUCTION FINALE, tenseur par tenseur (bloc 14, vide `reduit`) ==\n`norme_finale` vide son résultat (`reduit`), comparé à `hidden_final` de la passe\ncomplète — la même quantit … [1634 caractères tronqués]`
+
+  ```
+1aaf743 La réduction finale devient vérifiable par tenseur, et np = 1 entre dans les tests
+[stderr]
+bash: line 16: reduit: command not found
+bash: line 16: hidden_final: command not found
+bash: line 16: reduit-0-0: command not found
+bash: line 16: hidden_final-0-0: command not found
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format=%B | head -20", "description": "Inspect the commit message"}`
+
+  ```
+La réduction finale devient vérifiable par tenseur, et np = 1 entre dans les tests
+
+Deux « faibles » de la relecture adverse du bloc 13 sont fermés dans le code, pas
+seulement dans le texte :
+
+· norme_finale vide son résultat () — la même quantité que
+  de la passe complète. Mesuré sur le run à deux nœuds :  du
+  pilote est IDENTIQUE AU BIT PRÈS à  de la référence
+  (0,000e+00 sur 5 120 valeurs, trois positions). « Réduction finale comprise »
+  n'est plus une affirmation plus forte que la mesure : c'est une égalité.
+· un test décode une trame v6 avec np = 1 (4 copies) et vérifie le pré-mix relu et
+  le compte d'octets du corps — 63 tests. Reste assumé : l'ÉMISSION d'un np = 1
+  réel (le pilote V4.1) n'est couverte que par un run manuel de 365 Go.
+
+Le run de contrôle redonne écart 0,00e0 et 82 016 / 82 016 octets, et les 953
+tenseurs de la passe répartie restent identiques à la référence (0 différent).
+Portes : toutes vertes (62 tests au moment du passage, 63 depuis).
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/msg14.txt <<'MSGEOF'\nLa réduction finale devient vérifiable par tenseur, et np = 1 entre dans les tests\n\nDeux « faibles » de la relecture adverse du bloc 13 sont fermés dans le code, pas\nseulement dans le texte :\n\n·  … [1017 caractères tronqués]`

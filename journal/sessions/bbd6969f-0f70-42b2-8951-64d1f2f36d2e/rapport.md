@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 102.8 h |
+| Durée | 103.0 h |
 | Tours | 79 |
-| Messages | 6031 |
-| Appels d'outils | 5774 |
+| Messages | 6057 |
+| Appels d'outils | 5800 |
 | Fichiers touchés | 114 |
-| Commandes | 4862 |
+| Commandes | 4882 |
 | Sous-agents | 32 |
-| Commits | 368 |
+| Commits | 370 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -4037,7 +4037,7 @@ P0-P6 faites, P8 portée et val
 
 ### Tour 79 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [941 caractères tronqués]
 
-*1034 appels d'outils.* Actions notables :
+*1060 appels d'outils.* Actions notables :
 
 - web_search
 - web_fetch
@@ -4053,11 +4053,11 @@ P0-P6 faites, P8 portée et val
 - bash — Locate hc_collapse_triton definition
 - read
 - bash — Read mHC init and pre/post call sites
-- … et 916 autres
+- … et 939 autres
 
 **Synthèse produite :**
 
-⏵ Application des trouvailles de la revue adverse (7 correctifs) et du compteur d'octets
+⏵ Fermeture du dernier trou : un vide pour la réduction finale, et un test `np=1`
 
 ## 3. Travail accompli
 
@@ -4108,7 +4108,7 @@ P0-P6 faites, P8 portée et val
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/histoire.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/roadmap.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs` | 0 | 99 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs` | 0 | 26 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs` | 0 | 30 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/gpu.rs` | 0 | 3 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gpu-topk-selection.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/README.md` | 0 | 3 |
@@ -4257,7 +4257,7 @@ P0-P6 faites, P8 portée et val
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 4822 autres
+- … et 4842 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4385,7 +4385,7 @@ P0-P6 faites, P8 portée et val
 
 ## 5. Erreurs rencontrées
 
-309 sorties en erreur ou divergentes. Les premières :
+312 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -4773,4 +4773,6 @@ P0-P6 faites, P8 portée et val
 - Sprint 13 : la cérémonie (garder / changer / doute) et le planning du bloc 14 — la vivacité de l'engram  La rétro dit ce que le bloc a coûté : trois runs de 365
 - Revue adverse du bloc 13 : trois chiffres publiés corrigés, quatre trous fermés  Relecture adverse en lecture seule du commit ac80e7e : le fond tient (la fuite 
 - Sprint 14 : P8 fermée — l'engram est vivant (A/B mesuré), et le masque des jetons d'image reste un no-op DÉCIDÉ  Mesure de vivacité, passe complète V4.1, mêmes 
+- La réduction finale devient vérifiable par tenseur, et np = 1 entre dans les tests  Deux « faibles » de la relecture adverse du bloc 13 sont fermés dans le code
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/msg14.txt <<'MSGEOF' La réduction finale devient vérifiable par tenseur, et np = 1 entre dans l
 

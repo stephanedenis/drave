@@ -296,3 +296,16 @@ l-q_norm                160        156    1.242e+01
 l-q_rope                160        156    1.253e+01
 l-qr                    160        156    4.579e-01
 l-qr_norm               160        156    7.063e+00
+
+== la RÉDUCTION FINALE, tenseur par tenseur (bloc 14, vide `reduit`) ==
+`norme_finale` vide son résultat (`reduit`), comparé à `hidden_final` de la passe
+complète — la même quantité, l'une après un aller-retour par le pair.
+
+    pos 0 : écart max 0.000e+00 sur 5 120 valeurs
+    pos 1 : écart max 0.000e+00
+    pos 2 : écart max 0.000e+00
+
+Commande : le même run à deux nœuds que ci-dessus (le pilote vide `reduit` pour
+les positions qu'il envoie, la référence locale vide `hidden_final` pour les
+quatre). Contrôle au passage : les 953 tenseurs de la passe répartie restent
+identiques à la référence (0 différent).

@@ -3039,7 +3039,8 @@ un lot de plus d'un état n'a pas UNE `pre`). Rien n'a été calculé.");
             // lots : le lot reçu ne redescend pas jeton par jeton.
             let mut hn: Vec<Vec<f32>> = Vec::with_capacity(t);
             for i in 0..t {
-                hn.push(mdl.norme_finale(&etats[i * mdl.cfg.hidden..(i + 1) * mdl.cfg.hidden]));
+                hn.push(mdl.norme_finale(&etats[i * mdl.cfg.hidden..(i + 1) * mdl.cfg.hidden],
+                                         pos + i));
             }
             let lgs = mdl.logits_lot(&hn);
             for i in 0..t {
@@ -3114,7 +3115,7 @@ attendus — pair incohérent. Rien n'a été calculé.", rep.n, mdl.cfg.hidden,
             // emprunte le modèle en écriture, et la tête le reprend ensuite. Les
             // imbriquer ne compilerait pas — et c'est tant mieux : l'ordre
             // (réduire, puis noter) reste ainsi visible.
-            let reduit = mdl.norme_finale(&final_);
+            let reduit = mdl.norme_finale(&final_, pos);
             nll += nll_logits(&mdl.logits(&reduit), ids[pos + 1]);
         }
     }
@@ -5100,6 +5101,37 @@ mod tests_plafond {
         let r = recevoir_flux(&mut client, hidden, 1);
         serveur.join().unwrap();
         r
+    }
+
+    #[test]
+    fn une_trame_a_premix_porte_est_lue_et_comptee() {
+        // `np = 1` n'était exercé par AUCUN test : les trames forgées des tests
+        // écrivaient `np = 0` en dur (le helper `decoder_une_trame` ajoute cet
+        // octet lui-même), la porte du découpage tourne sur un modèle sans
+        // hyper-connexions (`np = 0` des deux côtés), et le seul chemin qui en
+        // envoie un est V4.1 — 365 Go, quatre minutes (relevé par la relecture
+        // adverse du bloc 13). Ici : 4 copies × 1 pré-mix, trame montée à la
+        // main, et le compte d'octets du corps doit inclure le préfixe.
+        let hc = 4usize;
+        let premix: [f32; 4] = [0.25, 0.5, 0.75, 1.0];
+        let ecoute = TcpListener::bind("127.0.0.1:0").unwrap();
+        let adresse = ecoute.local_addr().unwrap();
+        let serveur = std::thread::spawn(move || {
+            let (mut sock, _) = ecoute.accept().unwrap();
+            sock.write_all(&entete(MODE_DENSE, 1)).unwrap();
+            sock.write_all(&[1u8]).unwrap();                 // np = 1
+            for v in premix { sock.write_all(&v.to_le_bytes()).unwrap(); }
+            sock.write_all(&0f32.to_le_bytes()).unwrap();    // un canal nul
+        });
+        let mut client = TcpStream::connect(adresse).unwrap();
+        client.set_read_timeout(Some(std::time::Duration::from_secs(5))).unwrap();
+        let f = recevoir_flux(&mut client, 8, hc).unwrap();
+        serveur.join().unwrap();
+        assert_eq!(f.premix, premix.to_vec(), "le pré-mix porté doit être relu tel quel");
+        assert_eq!(f.octets_corps, 1 + hc * 4 + 4,
+                   "le compte des octets REÇUS inclut le préfixe de corps (np + pré-mix), \
+comme celui de l'émission — il l'omettait (81 999 annoncés pour 82 016 réels)");
+        assert_eq!(f.charge.en_dense(1), vec![0.0]);
     }
 
     #[test]

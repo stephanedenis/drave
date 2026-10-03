@@ -156,7 +156,8 @@ diagnostic et le correctif tiennent ; ce qui ne tenait pas, c'était la comptabi
 
 **Ce qu'elle n'a pas pu casser** : le diagnostic de la fuite (629 → 0, 7,05e-1 →
 0,00e0), l'encodage v6 des cinq modes (encodeur ↔ décodeur), l'absence d'autre
-écrivain ou lecteur de `hc_porte_imposee`, les 62 tests, et le `trap` de la porte
+écrivain ou lecteur de `hc_porte_imposee`, les 62 tests de l'époque (63 depuis
+l'ajout du test `np = 1` au bloc 14), et le `trap` de la porte
 (son soupçon initial). Elle a aussi produit une mesure que je n'avais pas faite et
 que j'ai revérifiée : l'`etat_impose` du nœud moteur est **identique au bit près**
 au `l_last-19` du pilote — le transport aller est exact octet par octet,
@@ -236,7 +237,8 @@ rms 0,53 à 0,73 sur 20 480 valeurs), mais aucun A/B ne l'établit.
 
 ## Portes
 
-- `tools/portes.sh rapide` : **toutes vertes** — 62 tests, Qwen2.5-0.5B ctx 256 =
+- `tools/portes.sh rapide` : **toutes vertes** — 62 tests au moment du bloc (63
+  après le test `np = 1` ajouté au bloc 14), Qwen2.5-0.5B ctx 256 =
   19,3885, clusters Qwen3-30B = 799,8557, threads 20, les quatre routages,
   **V4-Flash 43 couches ctx 32 = 8430,4966**, engram V4.1 (rangées distinctes).
 - **Porte NOUVELLE : `tools/porte-flux.sh`**, branchée dans `tools/portes.sh`.

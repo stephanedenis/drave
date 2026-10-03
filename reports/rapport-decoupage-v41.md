@@ -42,6 +42,15 @@ La position 0 exacte est la signature : au premier jeton il n'y a encore aucune
 `pre` reçue, donc rien à fuir. À partir du deuxième, le nœud local héritait des
 coefficients du jeton précédent.
 
+**La RÉDUCTION FINALE, tenseur par tenseur** (ferme le dernier « faible » de la
+relecture adverse) : `norme_finale` vide désormais son résultat (`reduit`), et
+c'est exactement la quantité que `hidden_final` porte dans la passe complète. Sur
+le run à deux nœuds, `reduit-0-{0,1,2}` du pilote (l'état reçu, replié avec la
+`pre` du pair puis normé) est **identique au bit près** à `hidden_final-0-{0,1,2}`
+de la référence locale — 0,000e+00 sur 5 120 valeurs, aux trois positions. La
+chaîne complète est donc couverte par des tenseurs, du premier étage du nœud
+distant jusqu'à l'entrée de la tête de sortie.
+
 **Mesure indépendante du transport aller** (relevée par la relecture adverse, et
 revérifiée ici) : dans le nœud moteur, le vide `etat_impose-0-{0,1,2}` — l'état
 reçu, avant toute couche — est **identique au bit près** (20 480 f32) au

@@ -7087,7 +7087,12 @@ le dernier raccord FFN n'a pas été exécuté (plage de couches vide ?)"),
     /// précédent — mesuré, `--ppl-reparti` rendait 514 722,06 au lieu de
     /// 1 743 713,62, la position 0 exacte au bit près et les suivantes fausses,
     /// sans un mot.
-    pub fn norme_finale(&mut self, x: &[f32]) -> Vec<f32> {
+    /// `pos` ne sert QU'AUX VIDES : `hidden_final` (le vide de la passe
+    /// complète) porte déjà cette quantité, et vider ici la même chose sous le
+    /// nom `reduit` rend la réduction finale vérifiable TENSEUR PAR TENSEUR — ce
+    /// qu'aucun vide ne permettait (relevé par la relecture adverse : la
+    /// réduction n'était couverte que par l'égalité de perplexité).
+    pub fn norme_finale(&mut self, x: &[f32], pos: usize) -> Vec<f32> {
         // **La `pre` reçue est prise ICI, avant toute branche** : une réduction
         // finale a lieu une fois par flux, et la `pre` appartient à ce flux-là.
         // La prendre dans la seule branche `hc_retarde` laissait le champ en
@@ -7134,6 +7139,9 @@ pas apprise — le flux doit transporter ces {} valeurs par jeton",
         } else { x };
         let mut hn = vec![0f32; self.cfg.hidden];
         Self::rmsnorm(x, &self.out_norm, self.cfg.eps, &mut hn);
+        // Le même état que `hidden_final` sur un nœud qui a tout calculé : c'est
+        // ce qui rend la RÉDUCTION FINALE comparable d'un côté à l'autre.
+        Self::vider_couche(self.dump_couches.as_deref(), "reduit", 0, pos, &hn);
         hn
     }
 

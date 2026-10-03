@@ -67,6 +67,8 @@ qui a été corrigé **ici** :
 | plafonds de la porte resserrés (6e-2 / 1e-2) + contrôle « mode 4 ≤ mode 2 » | 3,65e-2 et 4,45e-3 mesurés |
 | `mktemp -d` dans la porte : deux exécutions ne se tronquent plus le journal | — |
 | chiffres publiés corrigés : 953 tenseurs (et non 2 544), 82 016 au retour (et non 81 999), « interblocage » (et non « faux et muet ») | digeste régénéré, cinq documents alignés |
+| la **réduction finale** n'était couverte par aucun tenseur (« réduction finale comprise » était plus fort que la mesure) | `norme_finale` vide son résultat (`reduit`) ; mesuré : `reduit-0-{0,1,2}` du pilote **identique au bit près** à `hidden_final-0-{0,1,2}` de la référence — 0,000e+00 sur 5 120 valeurs |
+| `np = 1` n'était exercé par aucun test | test `une_trame_a_premix_porte_est_lue_et_comptee` (trame forgée à 4 copies, pré-mix relu tel quel, compte d'octets vérifié) — 63 tests |
 
 ### 4. La vérification de bout en bout, refaite avec le binaire corrigé
 
@@ -143,7 +145,8 @@ Chantiers du bloc 15 :
 
 ## Portes
 
-- `tools/portes.sh rapide` : voir le journal du bloc (62 tests, Qwen 19,3885,
+- `tools/portes.sh rapide` : **toutes vertes** (62 tests au moment du passage,
+  63 depuis l'ajout du test `np = 1` en fin de bloc), Qwen 19,3885,
   clusters 799,8557, V4-Flash 8430,4966, engram, et les cinq modes du découpage).
 - `tools/porte-flux.sh` : durcie dans ce bloc (code retour, délai, plafonds,
   `mktemp -d`) — 5/5 verts, et son échec précoce est maintenant vu par `portes.sh`.
@@ -151,11 +154,11 @@ Chantiers du bloc 15 :
 
 ## Ce qui reste, nommé
 
-- **`np = 1` sans test automatique** : le pré-mix de la chaîne retardée n'est
-  couvert que par un run V4.1 manuel (365 Go, 4 min). Une porte qui l'exerce
-  demanderait un petit modèle V4.1 synthétique — à écrire, ou à assumer.
-- **La réduction finale n'a pas de vide** : elle n'est établie que par l'égalité de
-  perplexité, pas par un tenseur.
+- **`np = 1` n'est exercé que par un test de DÉCODAGE** (trame forgée, pré-mix relu
+  et compté) : l'ÉMISSION d'un `np = 1` réel — le pilote qui porte la `pre` de son
+  dernier raccord — n'est couverte que par un run V4.1 manuel de 365 Go. Une porte
+  qui l'exerce demanderait un petit modèle V4.1 synthétique : à écrire, ou à
+  assumer.
 - **Le masque des jetons d'image** : décision écrite ci-dessus (sans objet en
   texte, réouverture avec un chemin multimodal V4.1).
 - **L'engram à contexte long** : la question « aide-t-il ou nuit-il ? » reste
