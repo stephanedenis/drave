@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 110.2 h |
+| Durée | 110.3 h |
 | Tours | 87 |
-| Messages | 6495 |
-| Appels d'outils | 6217 |
+| Messages | 6503 |
+| Appels d'outils | 6225 |
 | Fichiers touchés | 119 |
-| Commandes | 5265 |
+| Commandes | 5270 |
 | Sous-agents | 32 |
-| Commits | 417 |
+| Commits | 418 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -4318,7 +4318,7 @@ C'est un point de méthode qui comptait : sans cette mesure, on aurait pu « cor
 
 ### Tour 87 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [942 caractères tronqués]
 
-*54 appels d'outils.* Actions notables :
+*62 appels d'outils.* Actions notables :
 
 - bash — Launch the long-window correction gate
 - bash — Wait for the long comparison
@@ -4334,7 +4334,7 @@ C'est un point de méthode qui comptait : sans cette mesure, on aurait pu « cor
 - bash — Read the bloc 22 plan in sprint 21
 - bash — Locate engram code and any local vLLM source
 - bash — Inspect correction-gate tools and engine flags
-- … et 35 autres
+- … et 42 autres
 
 **Synthèse produite :**
 
@@ -4447,7 +4447,7 @@ C'est un point de méthode qui comptait : sans cette mesure, on aurait pu « cor
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mhc_v41_synthetique.py` | 1 | 3 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/verifier_v41_mhc.py` | 1 | 3 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-v41-mhc.md` | 1 | 6 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/glossaire.md` | 0 | 3 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/glossaire.md` | 0 | 5 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/v41_compresseur_reference.py` | 1 | 1 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/10-v41-la-chaine-retardee-et-le-compresseur.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/verifier_v41_engram.py` | 1 | 1 |
@@ -4543,7 +4543,7 @@ C'est un point de méthode qui comptait : sans cette mesure, on aurait pu « cor
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5225 autres
+- … et 5230 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5108,4 +5108,5 @@ C'est un point de méthode qui comptait : sans cette mesure, on aurait pu « cor
 - La porte de correction devient un OUTIL exécutable, branché dans portes.sh (Qwen, 71 positions)  Les critères écrits au bloc 23 (corrélation par position >= 0,9
 - compare_logits.py : un diagnostic par TRANCHES, pour distinguer une erreur de position d'une erreur de tête  Une erreur de RoPE, de blocs compressés ou de fenêt
 - Plan P6 : la fenêtre de 63 prédictions ne juge pas la perplexité (seuil à 64), et elle le dit" && sleep 300; ps -o etime=,time= -C drave | head -2; tail -c 200 
+- Glossaire : la porte de correction a maintenant des critères mesurés, et le rejeu une définition vérifiée" && sleep 420; ps -o etime=,time= -C drave | head -2; 
 

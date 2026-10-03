@@ -103555,3 +103555,113 @@ The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-co
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Plan P6 : la fenêtre de 63 prédictions ne juge pas la perplexité (seuil à 64), et elle le dit\" && sleep 300; ps -o etime=,time= -C drave | head -2; tail -c 200 /tmp/our_v4f1024.log; ls -la /tmp/our_v … [91 caractères tronqués]`
+
+  ```
+16:54 03:57:13
+ 43/43 couches (motif 0, toutes)
+[config] rotation : RoPE simple (contexte 1024 ≤ 65536 initial ; YaRN ×16 prendrait le relais au-delà)
+[tête 4 bits] 129280 × 4096 → 4.50 b/poids, 0 Mo, 0.0 s
+-rw-r--r--. 1 stephane stephane 0  3 oct 04:47 /tmp/our_v4f1024.bin
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"porte de correction\\|^### \\|^## \" docs/glossaire.md | head -40 && echo \"---\" && grep -c \"^###\" docs/glossaire.md", "description": "Check the glossary for the correction-gate entry"}`
+
+  ```
+11:## Mode d'emploi
+48:## Parcours de lecture conseillé
+93:## 1. Le projet, ses noms, sa méthode
+171:« La conformité à llama.cpp est une porte de correction, pas le but : le but est de
+181:**Porte Drave** — Épreuve propre au projet, opposée à la porte de correction :
+229:## 2. Modèles et architectures
+585:## 3. Formats, quantification, encodage
+774:## 4. Le moteur Drave : exécution, structures, outils
+911:### Les outils de `tools/` et les bancs du binaire
+957:### Drapeaux de ligne de commande et variables d'environnement
+985:## 5. Flux, protocole et transport
+1103:## 6. Répartition, matériel et énergie
+1306:## 7. Mesure, qualité et méthode expérimentale
+1454:## 8. Points relevés, non corrigés
+1601:## 9. Sources externes citées
+---
+2
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/glossaire.md", "limit": 65, "offset": 165}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/glossaire.md</path>
+<type>file</type>
+<content>
+165: clusters = **799,8557** ; le banc réparti dense = **0,00e0**
+166: (`docs/sprints.md:38-41`, `docs/plan-gpu-topk.md:101`). **Où** : `tools/portes.sh`,
+167: `cargo test --release`.
+168: 
+169: **Porte de correction** — Comparaison à une référence **externe** (llama.cpp ou une
+170: implémentation numpy indépendante) qui sert à corriger le moteur, jamais de but.
+171: « La conformité à llama.cpp est une porte de correction, pas le but : le but est de
+172: conduire des flux » (`docs/plan-modeles-lourds.md:83-85`,
+173: `docs/plan-deepseek41-complet.md:9`).
+174: 
+175: **Porte (de décision)** — Un chiffre, mesuré sur cette machine, qui décide de
+176: continuer ou d'abandonner une branche ; « une porte non franchie arrête la
+177: branche — pas de poursuite par inertie » (`docs/programme-recherche.md:134-135`,
+178: `:210`). Exemples : *Porte A* (une variante bat le modèle de base de ≥1 % de
+179: perplexité), *Porte C* (apprendre un fait à l'inférence sans oubli catastrophique).
+180: 
+181: **Porte Drave** — Épreuve propre au projet, opposée à la porte de correction :
+182: nombre d'évé
+… [2980 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"Définition désormais écrite, et vérifiée\\|aucune liste manquante\\|7quater\" docs/plan-deepseek41-complet.md | head; grep -n \"PORTE DE CORRECTION SERRÉE\" docs/plan-deepseek41-complet.md; grep -n \"corrélation des logits  … [114 caractères tronqués]`
+
+  ```
+347:>    **Définition désormais écrite, et vérifiée par la porte** : « rejouée à
+348:>    l'identique » = **aucune liste manquante** et écart de perplexité **≤ 1e-5**
+350:>    sont dans `tools/portes.sh` (7quater), sur le petit modèle — sinon la porte
+412:> 1. **corrélation des logits par position ≥ 0,95** au minimum, ≥ 0,98 en moyenne ;
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/glossaire.md", "new_string": "**Porte de correction** — Comparaison à une référence **externe** (llama.cpp ou une\nimplémentation numpy indépendante) qui sert à corriger le moteur, jamais de but.\n« La conformité à llama.cpp est une … [2558 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/glossaire.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/glossaire.md", "new_string": "**Porte (de décision)** — Un chiffre, mesuré sur cette machine, qui décide de\ncontinuer ou d'abandonner une branche ; « une porte non franchie arrête la\nbranche — pas de poursuite par inertie » (`docs … [376 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/glossaire.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff --stat && grep -n \"Porte (de décision)\\|Porte de correction\\|Porte Drave\" docs/glossaire.md | head -6 && git diff docs/glossaire.md | grep -c \"^-[^-]\" ; ps -o etime=,time= -C drave | head -2", "description": "Verify gl … [35 caractères tronqués]`
+
+  ```
+docs/glossaire.md | 17 +++++++++++++++--
+ journal/README.md |  2 +-
+ 2 files changed, 16 insertions(+), 3 deletions(-)
+169:**Porte de correction** — Comparaison à une référence **externe** (llama.cpp ou une
+184:**Porte (de décision)** — Un chiffre, mesuré sur cette machine, qui décide de
+190:**Porte Drave** — Épreuve propre au projet, opposée à la porte de correction :
+2
+      17:36 04:07:48
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff journal/README.md | head -20", "description": "Inspect the journal README change"}`
+
+  ```
+diff --git a/journal/README.md b/journal/README.md
+index ed8e221..ab08806 100644
+--- a/journal/README.md
++++ b/journal/README.md
+@@ -41,7 +41,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
+ | `8e04c99a` | Tu es VÉRIFICATEUR de documentation | 2026-09-30 18:07 | 0.2 h | 1 | 85 | 0 | 0 | [rapport](sessions/8e04c99a-8ba1-4675-9f80-fa3338449b17/rapport.md) |
+ | `aa5f9fc5` | Tu es vérificateur de documentation | 2026-09-30 15:07 | 0.2 h | 1 | 100 | 1 | 0 | [rapport](sessions/aa5f9fc5-9450-4118-b65f-e8b99a28519d/rapport.md) |
+ | `b13a6032` | Tu travailles dans le dépôt | 2026-10-02 15:03 | 0.1 h | 1 | 43 | 0 | 0 | [rapport](sessions/b13a6032-4f62-4e86-aa1f-03864a455c83/rapport.md) |
+-| `bbd6969f` | Continue avec REPRISE.md | 2026-09-28 14:46 | 110.1 h | 87 | 6213 | 119 | 416 | [rapport](sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/rapport.md) |
++| `bbd6969f` | Continue avec REPRISE.md | 2026-09-28 14:46 | 110.2 h | 87 | 6217 | 119 | 417 | [rapport](sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/rapport.md) |
+ | `bcfe0b97` | Tu es relecteur ADVERSARIAL dans | 2026-09-30 12:20 | 0.3 h | 1 | 110 | 0 | 0 | [rapport](sessions/bcfe0b97-1795-4610-8e8b-b598ca1ba6cb/rapp
+… [333 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Glossaire : la porte de correction a maintenant des critères mesurés, et le rejeu une définition vérifiée\" && sleep 420; ps -o etime=,time= -C drave | head -2; tail -c 300 /tmp/our_v4f1024.log; ls -l … [103 caractères tronqués]`

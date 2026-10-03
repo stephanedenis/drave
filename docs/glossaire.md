@@ -170,7 +170,16 @@ clusters = **799,8557** ; le banc réparti dense = **0,00e0**
 implémentation numpy indépendante) qui sert à corriger le moteur, jamais de but.
 « La conformité à llama.cpp est une porte de correction, pas le but : le but est de
 conduire des flux » (`docs/plan-modeles-lourds.md:83-85`,
-`docs/plan-deepseek41-complet.md:9`).
+`docs/plan-deepseek41-complet.md:9`). **Depuis le 03/10 (bloc 23) elle a des critères
+mesurés**, et un outil qui rend le verdict au lieu d'une impression
+(`tools/compare_logits.py --porte`, branché dans `tools/portes.sh`) : corrélation des
+logits **par position** ≥ 0,95 au minimum et ≥ 0,98 en moyenne, top-1 identique
+≥ 85 %, perplexité à moins de 10 % — ce dernier critère **seulement au-delà de 64
+prédictions**, parce que sur une fenêtre de 4 jetons le même moteur diverge de 25 %
+et sur 63 prédictions de 6,4 % (mesuré sur V4-Flash,
+`docs/plan-deepseek41-complet.md:385-430`). **La perplexité seule n'est pas
+l'instrument** : sur une fenêtre courte elle amplifie le chaos au lieu de mesurer la
+fidélité.
 
 **Porte (de décision)** — Un chiffre, mesuré sur cette machine, qui décide de
 continuer ou d'abandonner une branche ; « une porte non franchie arrête la
@@ -181,7 +190,11 @@ perplexité), *Porte C* (apprendre un fait à l'inférence sans oubli catastroph
 **Porte Drave** — Épreuve propre au projet, opposée à la porte de correction :
 nombre d'événements par jeton non nul, trace écrite puis **rejouée à l'identique**,
 découpage en grappes qui donne la même perplexité, flux nouveau lisible par un
-outil d'analyse (`docs/plan-deepseek41-complet.md:134-141`).
+outil d'analyse (`docs/plan-deepseek41-complet.md:134-141`). Depuis le 03/10
+(bloc 22), « rejouée à l'identique » est **défini et vérifié** : aucune liste
+manquante **et** écart de perplexité ≤ 1e-5 (mesuré : 4,5e-06 sur V4-Flash, 1,6e-06
+sur Qwen ; `docs/plan-deepseek41-complet.md:347-351`). L'écart ne peut pas être nul :
+la trace porte des activations déjà quantifiées, que le rejeu requantifie.
 
 **Qtrinet** — Premier nom du projet, du nom d'un réseau ternaire sur un cluster de
 cartes **Stratix V** ; le cahier des charges d'origine, `Qtrinet-bootstrap.md`, est
