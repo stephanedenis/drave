@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 101.5 h |
+| Durée | 101.8 h |
 | Tours | 79 |
-| Messages | 5721 |
-| Appels d'outils | 5475 |
+| Messages | 5767 |
+| Appels d'outils | 5515 |
 | Fichiers touchés | 108 |
-| Commandes | 4653 |
+| Commandes | 4693 |
 | Sous-agents | 31 |
-| Commits | 362 |
+| Commits | 363 |
 | Compactages de contexte | 7 |
 
 ## Objectifs déclarés
@@ -4037,7 +4037,7 @@ P0-P6 faites, P8 portée et val
 
 ### Tour 79 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [941 caractères tronqués]
 
-*735 appels d'outils.* Actions notables :
+*775 appels d'outils.* Actions notables :
 
 - web_search
 - web_fetch
@@ -4053,11 +4053,11 @@ P0-P6 faites, P8 portée et val
 - bash — Locate hc_collapse_triton definition
 - read
 - bash — Read mHC init and pre/post call sites
-- … et 659 autres
+- … et 698 autres
 
 **Synthèse produite :**
 
-The v6 flux works (16 pre-mix bytes travel), but the two-node PPL diverges 70% — launching a V4-Flash diagnostic to isolate whether that's pre-existing:
+⏵ Localizing the V4.1 split divergence: comparing the pilot's state with the full run
 
 ## 3. Travail accompli
 
@@ -4250,7 +4250,7 @@ The v6 flux works (16 pre-mix bytes travel), but the two-node PPL diverges 70% �
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 4613 autres
+- … et 4653 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4760,4 +4760,5 @@ The v6 flux works (16 pre-mix bytes travel), but the two-node PPL diverges 70% �
 - Sprint 11 : le rétro du bloc, et le vide qui rend le CHOIX de l'indexeur vérifiable  Le sprint 11 consigne le bloc 17h30-19h30 : la passe avant V4.1 complète, l
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' m = """La rotation des couches compressées : le correctif YaRN est validé, et l'instrumen
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' m = """DRVF v6 : la pre portée de V4.1 voyage (le dernier refus d'un découpage tombe)  Le
+- Sprint 12 : le découpage V4.1 en v6, et l'instrument de mesure qui est suspect  Le protocole v6 transporte la pre portée ; mesuré (82 016 octets aller, 81 999 r
 

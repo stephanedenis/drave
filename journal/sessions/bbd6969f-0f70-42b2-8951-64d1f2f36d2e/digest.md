@@ -92103,3 +92103,470 @@ started background job bash-198
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nm = \"\"\"DRVF v6 : la pre portée de V4.1 voyage (le dernier refus d'un découpage tombe)\n\nLe corps de chaque flux commence maintenant par un octet `np` suivi de `np × hc`\nf32 : la `pre` que la chaîne mHC RETARDÉE … [2241 caractères tronqués]`
+
+  ```
+d330d83 DRVF v6 : la pre portée de V4.1 voyage (le dernier refus d'un découpage tombe)
+  ```
+
+- **bash** `{"command": "sleep 90; cat /tmp/v4f_reparti_out.log 2>/dev/null | tail -8", "description": "Check the V4-Flash split diagnostic"}`
+
+  ```
+(no output)
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cat /tmp/v4f_reparti_out.log 2>/dev/null | tail -8; grep -E \"référence locale|deux nœuds|écart\" /tmp/v4f_pilote.log 2>/dev/null | tail -4", "description": "Read the diagnostic result"}`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "sleep 110; cat /tmp/v4f_reparti_out.log 2>/dev/null | tail -10", "description": "Wait for the V4-Flash split"}`
+
+  ```
+(no output)
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cat /tmp/v4f_reparti_out.log; echo \"---- pilote ----\"; tail -4 /tmp/v4f_pilote.log 2>/dev/null; pgrep -c drave 2>/dev/null || echo fini", "description": "Check the diagnostic state"}`
+
+  ```
+---- pilote ----
+[tête 4 bits] 129280 × 4096 → 4.50 b/poids, 0 Mo, 0.0 s
+[flux] quantification : 127 niveaux, seuil 0, top-k 0, renorm false
+[flux] --ids fournit 8 jetons > limite 4 (ctx 32) : troncature aux 4 derniers
+[flux] pilote : 20 couches en local, 23 chez le pair, 4 jetons
+2
+  ```
+
+- **bash** `{"command": "sleep 115; cat /tmp/v4f_reparti_out.log; pgrep -c drave 2>/dev/null || echo fini", "description": "Wait for the diagnostic result"}`
+
+  ```
+(no output)
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cat /tmp/v4f_reparti_out.log; grep -E \"référence locale|deux nœuds|écart|transport\" /tmp/v4f_pilote.log 2>/dev/null | tail -4; pgrep -c drave 2>/dev/null || echo fini", "description": "Read the diagnostic"}`
+
+  ```
+référence locale  : perplexité 259969.3490  (148.1 s)
+2
+  ```
+
+- **bash** `{"command": "sleep 115; grep -E \"référence locale|deux nœuds|écart|transport\" /tmp/v4f_pilote.log 2>/dev/null | tail -5; pgrep -c drave 2>/dev/null || echo fini", "description": "Wait for the two-node V4-Flash number"}`
+
+  ```
+(no output)
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-198 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/test_v4f_reparti.sh <<'EOF'
+#!/bin/bash
+set -u
+cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet
+D=./drave-core/target/release/drave
+M=/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf
+PORT=47121
+$D "$M" --flux-serveur $PORT --ctx 32 --threads 20 > /tmp/v4f_serveur.log 2>&1 &
+SRV=$!
+sleep 45
+$D "$M" --ppl-reparti 127.0.0.1:$PORT --couches-locales 20 --limit 4 \
+   --ctx 32 --ctx-impose --ids "$(head -c 40 /tmp/ids_v4flash.txt)" --dense --threads 20 \
+   > /tmp/v4f_pilote.log 2>&1
+echo "EXIT=$?"
+grep -E "référence locale|deux nœuds|écart|transport" /tmp/v4f_pilote.log
+kill $SRV 2>/dev/null
+EOF
+chmod +x /tmp/test_v4f_reparti.sh && (/tmp/test_v4f_reparti.sh > /tmp/v4f_reparti_out.log 2>&1; echo FIN >> /tmp/v4f_reparti_out.log)) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cat /tmp/v4f_reparti_out.log", "description": "Read the V4-Flash distributed result"}`
+
+  ```
+EXIT=0
+  référence locale  : perplexité 259969.3490  (148.1 s)
+  deux nœuds        : perplexité 259969.3490  (45.1 s)
+  écart             : 0.00e0
+  transport         : dense f32 · 65616 octets par flux (aller) · 65615 au retour · 400.0 % d'activité (16384 neurones par flux) · 3 flux
+FIN
+  ```
+
+- **bash** `{"command": "date; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -3", "description": "Check the clock and recent commits"}`
+
+  ```
+ven 02 oct 2026 20:21:40 EDT
+d330d83 DRVF v6 : la pre portée de V4.1 voyage (le dernier refus d'un découpage tombe)
+a1bb6ea La rotation des couches compressées : le correctif YaRN est validé, et l'instrument mentait
+8444a39 Sprint 11 : le rétro du bloc, et le vide qui rend le CHOIX de l'indexeur vérifiable
+  ```
+
+### 🤖 Assistant
+
+⏵ Localizing the V4.1 split divergence: comparing the pilot's state with the full run
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nids = open('/tmp/v41_texte.txt.ids').read().strip().split(',')\nopen('/tmp/v41_last4.ids','w').write(','.join(ids[-4:]))\nprint('4 derniers identifiants :', ids[-4:])\"", "description": "Extract the last 4 token ids"}`
+
+  ```
+4 derniers identifiants : ['270', '15301', '6605', '223']
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -rf /tmp/dfull /tmp/dp20 && mkdir -p /tmp/dfull /tmp/dp20 && (DRAVE_DUMP_COUCHES=/tmp/dfull/l timeout 1800 ./drave-core/target/release/drave /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf --ppl /tmp/v41_last4.i … [456 caractères tronqués]`
+
+  ```
+started background job bash-199
+  ```
+
+- **bash** `{"command": "sleep 115; grep -E \"EXIT|perplexité cumulée\" /tmp/v41_full4.log /tmp/v41_p20.log 2>/dev/null | tail -3; ls /tmp/dfull/l-l_last-19-*.bin 2>/dev/null | wc -l", "description": "Check the two comparison runs"}`
+
+  ```
+(no output)
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "grep -E \"EXIT|perplexité cumulée\" /tmp/v41_full4.log /tmp/v41_p20.log 2>/dev/null | tail -3; ls /tmp/dfull/l-l_last-19-*.bin 2>/dev/null | wc -l; ls /tmp/dp20/l-l_last-19-*.bin 2>/dev/null | wc -l", "description": "Check the run progress"}`
+
+  ```
+/tmp/v41_full4.log:       3 tokens notés — perplexité cumulée 208411.867  (0.1 tok/s)
+/tmp/v41_full4.log:EXIT=0
+4
+0
+  ```
+
+- **bash** `{"command": "sleep 100; grep -E \"EXIT|perplexité cumulée\" /tmp/v41_p20.log 2>/dev/null | tail -2; ls /tmp/dp20/l-l_last-19-*.bin 2>/dev/null | wc -l; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport numpy as np, glob, os\nprint(\"=== l_last-19 : pleine passe contre pl … [602 caractères tronqués]`
+
+  ```
+(no output)
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-199 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -rf /tmp/dfull /tmp/dp20 && mkdir -p /tmp/dfull /tmp/dp20 && (DRAVE_DUMP_COUCHES=/tmp/dfull/l timeout 1800 ./drave-core/target/release/drave /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf --ppl /tmp/v41_last4.ids --ctx 8 --limit 4 > /tmp/v41_full4.log 2>&1; echo "EXIT=$?" >> /tmp/v41_full4.log; DRAVE_DUMP_COUCHES=/tmp/dp20/l timeout 1800 ./drave-core/target/release/drave /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf --couches 0:20 --ppl /tmp/v41_last4.ids --ctx 8 --limit 4 > /tmp/v41_p20.log 2>&1; echo "EXIT=$?" >> /tmp/v41_p20.log)) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -E \"EXIT|perplexité cumulée\" /tmp/v41_p20.log | tail -2; python3 - <<'PY'\nimport numpy as np, os\nprint(\"=== l_last-19 : pleine passe contre plage 0:20 (= ce que le pilote envoie) ===\")\nfor pos in range(4):\n    a, b = f\" … [500 caractères tronqués]`
+
+  ```
+3 tokens notés — perplexité cumulée 7311936537407159296.000  (0.2 tok/s)
+EXIT=0
+=== l_last-19 : pleine passe contre plage 0:20 (= ce que le pilote envoie) ===
+  pos 0 : écart max 0.000e+00 (dynamique 7.131e+00) — IDENTIQUE
+  pos 1 : écart max 0.000e+00 (dynamique 9.662e+00) — IDENTIQUE
+  pos 2 : écart max 0.000e+00 (dynamique 9.080e+00) — IDENTIQUE
+  pos 3 : écart max 0.000e+00 (dynamique 9.487e+00) — IDENTIQUE
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -rf /tmp/dsrv && mkdir -p /tmp/dsrv && cat > /tmp/test_v41_diag.sh <<'EOF'\n#!/bin/bash\nset -u\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nD=./drave-core/target/release/drave\nM=/home/stephane/FastNVMe/modeles-lourds/Dee … [658 caractères tronqués]`
+
+  ```
+started background job bash-200
+  ```
+
+- **bash** `{"command": "sleep 115; cat /tmp/v41_diag_out.log 2>/dev/null | tail -6; ls /tmp/dsrv/l-l_last-20-*.bin 2>/dev/null | wc -l", "description": "Check the diagnostic run"}`
+
+  ```
+(no output)
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cat /tmp/v41_diag_out.log 2>/dev/null | tail -6; ls /tmp/dsrv/l-l_last-20-*.bin 2>/dev/null | wc -l; tail -2 /tmp/v41_srv_diag.log 2>/dev/null", "description": "Check the server dumps"}`
+
+  ```
+0
+[config] rotation : RoPE simple sur les couches BRUTES (régime retardé : YaRN au-delà de quatre fois la longueur d'origine, seuil mesuré sur gpt-oss) — mais les couches COMPRESSÉES sont en YaRN ×16 à TOUTES les positions, comme llama.cpp (`deepseek4.cpp:872-879`) et vLLM (`rope.py:28-46`) ; `DRAVE_YARN=1`/`--sans-yarn` forcent l'un ou l'autre partout
+[flux] nœud moteur sur 127.0.0.1:47131 · 5120 cachés · 40 couches · contexte 8
+  ```
+
+- **bash** `{"command": "sleep 115; cat /tmp/v41_diag_out.log 2>/dev/null | tail -6; ls /tmp/dsrv/ 2>/dev/null | wc -l", "description": "Wait for the distributed diagnostic"}`
+
+  ```
+(no output)
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cat /tmp/v41_diag_out.log 2>/dev/null | tail -8; ls /tmp/dsrv/ | wc -l; ls /tmp/dsrv/ | sed 's/-[0-9]*-[0-9]*\\.bin//' | sort -u | head", "description": "Read the diagnostic output"}`
+
+  ```
+0
+  ```
+
+- **bash** `{"command": "sleep 110; cat /tmp/v41_diag_out.log 2>/dev/null | tail -6; ls /tmp/dsrv/ | wc -l", "description": "Wait for the server dumps"}`
+
+  ```
+(no output)
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cat /tmp/v41_diag_out.log 2>/dev/null | tail -6; ls /tmp/dsrv/ | wc -l; pgrep -c drave 2>/dev/null || echo fini", "description": "Check the diagnostic state"}`
+
+  ```
+0
+2
+  ```
+
+- **bash** `{"command": "tail -3 /tmp/v41_pil_diag.log 2>/dev/null; echo \"=== serveur ===\"; tail -2 /tmp/v41_srv_diag.log; ps -o pid=,etime=,pcpu= -C drave 2>/dev/null", "description": "Check both sides' progress"}`
+
+  ```
+[flux] --ids fournit 73 jetons > limite 4 (ctx 8) : troncature aux 4 derniers
+[flux] pilote : 20 couches en local, 20 chez le pair, 4 jetons
+  référence locale  : perplexité 1743713.6243  (68.6 s)
+=== serveur ===
+[flux] nœud moteur sur 127.0.0.1:47131 · 5120 cachés · 40 couches · contexte 8
+[flux] client connecté : 127.0.0.1:52394
+3320515       03:53 1832
+3320634       02:53  931
+  ```
+
+- **bash** `{"command": "for p in $(pgrep -x drave); do kill -9 $p 2>/dev/null; done; sleep 2; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (timeout 600 ./drave-core/target/release/drave /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf --ppl /tmp/v41_last4.ids --ctx 8 --ctx-impose --l … [181 caractères tronqués]`
+
+  ```
+started background job bash-201
+  ```
+
+- **bash** `{"command": "sleep 115; cat /tmp/ctx_test.log 2>/dev/null", "description": "Read the ctx test"}`
+
+  ```
+(no output)
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-200 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -rf /tmp/dsrv && mkdir -p /tmp/dsrv && cat > /tmp/test_v41_diag.sh <<'EOF'
+#!/bin/bash
+set -u
+cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet
+D=./drave-core/target/release/drave
+M=/home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf
+PORT=47131
+DRAVE_DUMP_COUCHES=/tmp/dsrv/l $D "$M" --flux-serveur $PORT --ctx 8 --threads 20 > /tmp/v41_srv_diag.log 2>&1 &
+SRV=$!
+sleep 60
+$D "$M" --ppl-reparti 127.0.0.1:$PORT --couches-locales 20 --limit 4 \
+   --ctx 8 --ctx-impose --ids "$(cat /tmp/v41_texte.txt.ids)" --threads 20 > /tmp/v41_pil_diag.log 2>&1
+grep -E "référence locale|deux nœuds|écart" /tmp/v41_pil_diag.log
+kill $SRV 2>/dev/null
+EOF
+chmod +x /tmp/test_v41_diag.sh && (/tmp/test_v41_diag.sh > /tmp/v41_diag_out.log 2>&1; echo FIN >> /tmp/v41_diag_out.log)) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 👤 Utilisateur
+
+background job bash-201 (bash: for p in $(pgrep -x drave); do kill -9 $p 2>/dev/null; done; sleep 2; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (timeout 600 ./drave-core/target/release/drave /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf --ppl /tmp/v41_last4.ids --ctx 8 --ctx-impose --limit 4 2>&1 | grep -E "perplexité cumulée" > /tmp/ctx_test.log; echo FIN >> /tmp/ctx_test.log)) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cat /tmp/ctx_test.log; echo \"=== rappel ===\"; grep -E \"perplexité cumulée\" /tmp/v41_full4.log; grep -E \"référence locale\" /tmp/v41_pil_diag.log", "description": "Compare the two ctx variants"}`
+
+  ```
+3 tokens notés — perplexité cumulée 208411.867  (0.1 tok/s)
+FIN
+=== rappel ===
+       3 tokens notés — perplexité cumulée 208411.867  (0.1 tok/s)
+  référence locale  : perplexité 1743713.6243  (68.6 s)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '2855,2890p' drave-core/src/main.rs", "description": "Read the reparti harness's local reference"}`
+
+  ```
+// fourni la contournait : 300 jetons à ctx 256 faisaient écrire le cache
+    // au-delà du contexte — corruption silencieuse du bloc de la tête KV suivante,
+    // puis panique. On tronque, en le disant.
+    let ids: Vec<u32> = if opt.ids.is_empty() {
+        (1..=limite as u32).collect()
+    } else if opt.ids.len() > limite {
+        println!("[flux] --ids fournit {} jetons > limite {} (ctx {}) : troncature aux {} \
+derniers", opt.ids.len(), limite, ctx, limite);
+        opt.ids[opt.ids.len() - limite..].to_vec()
+    } else { opt.ids.clone() };
+    if ids.len() < 2 {
+        // La perplexité est une moyenne sur `len - 1` jetons notés : avec un seul
+        // jeton elle vaut NaN, et un NaN affiché comme un résultat ne dit rien.
+        println!("[flux] il faut au moins DEUX jetons pour noter une perplexité \
+(le premier ne prédit rien) — reçu {}. Rien n'a été calculé.", ids.len());
+        return;
+    }
+    println!("[flux] pilote : {couches_locales} couches en local, {} chez le pair, {} jetons",
+             n_layer - couches_locales, ids.len());
+
+    // 1. référence locale, tout le modèle (même découpage que le chemin réparti)
+    let t0 = Instant::now();
+    let mut nll_ref = 
+… [443 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '2890,2920p' drave-core/src/main.rs", "description": "Read the rest of the reference"}`
+
+  ```
+}
+    } else {
+        for (pos, &t) in ids.iter().enumerate() {
+            let last = mdl.forward(t, pos);
+            if pos + 1 < ids.len() {
+                nll_ref += nll_logits(&mdl.logits(&last), ids[pos + 1]);
+            }
+        }
+    }
+    let ppl_ref = (nll_ref / (ids.len() - 1) as f64).exp();
+    println!("  référence locale  : perplexité {ppl_ref:.4}  ({:.1} s)", t0.elapsed().as_secs_f64());
+
+    // 2. la même chose, coupée en deux nœuds
+    let mut sock = std::net::TcpStream::connect(pair).expect("connexion au nœud moteur");
+    sock.set_nodelay(true).expect("TCP_NODELAY");   // cf. le nœud moteur : Nagle coûte 6×
+    mdl.couche_fin = couches_locales;
+    let mut octets_envoyes = 0u64;
+    let mut octets_recus = 0u64;
+    let mut actifs_envoyes = 0u64;
+    let mut flux_envoyes = 0u64;
+    let mut jetons_envoyes = 0u64;   // Σt, pas `lot` : le dernier lot est partiel
+    let mut t_local = 0f64;
+    let mut t_pair = 0f64;
+    let t1 = Instant::now();
+    let mut nll = 0f64;
+    if lot > 1 {
+        // PRÉREMPLISSAGE RÉPARTI : un lot par aller-retour au lieu d'un flux par
+        // jeton. C'est ce que la phase 3.4 doit démontrer — le découpage doit
+        // coûter 
+… [175 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && diff <(grep -E \"^\\[config\\]|^\\[modele\\]\" /tmp/v41_full4.log) <(grep -E \"^\\[config\\]|^\\[modele\\]\" /tmp/v41_pil_diag.log) | head -20; echo \"=== quantif ===\"; grep -E \"quantification|niveaux\" /tmp/v41_full4.log | head -3 … [121 caractères tronqués]`
+
+  ```
+7c7
+< [modele] 40 couches chargées en 12.701539279s — listes 0.00 Go , 20 threads
+---
+> [modele] 40 couches chargées en 97.471170241s — listes 0.00 Go , 20 threads
+=== quantif ===
+[flux] quantification : 127 niveaux, seuil 0, top-k 0, renorm false
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (timeout 600 ./drave-core/target/release/drave /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf --ppl /dev/null --ids \"$(cat /tmp/v41_texte.txt.ids)\" --limit 4 --ctx 8 --ctx-impose 2>&1 | grep -E \"perplexité cumu … [170 caractères tronqués]`
+
+  ```
+started background job bash-202
+  ```
+
+- **bash** `{"command": "sleep 115; cat /tmp/ids_test.log 2>/dev/null", "description": "Read the ids test"}`
+
+  ```
+(no output)
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-202 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (timeout 600 ./drave-core/target/release/drave /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf --ppl /dev/null --ids "$(cat /tmp/v41_texte.txt.ids)" --limit 4 --ctx 8 --ctx-impose 2>&1 | grep -E "perplexité cumulée|troncature" > /tmp/ids_test.log; echo FIN >> /tmp/ids_test.log)) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cat /tmp/ids_test.log", "description": "Read the result"}`
+
+  ```
+FIN
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"appliquer_quantification\" drave-core/src/main.rs | head; echo \"=== dans run_ppl (~4490-4600) ===\"; sed -n '4560,4600p' drave-core/src/main.rs | grep -n \"quantif\\|attn_topk\\|seuil\\|dense\" | head", "description": "Che … [47 caractères tronqués]`
+
+  ```
+2010:fn appliquer_quantification(mdl: &mut model::Model, opt: &Options) {
+2675:    appliquer_quantification(&mut mdl, &opt);
+2827:    appliquer_quantification(&mut mdl, &opt);
+=== dans run_ppl (~4490-4600) ===
+11:    let mut mdl = model::Model::load_partiel(path, ctx, n_threads, dense, keep, auto, q4, b6,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '2010,2040p' drave-core/src/main.rs", "description": "Read appliquer_quantification"}`
+
+  ```
+fn appliquer_quantification(mdl: &mut model::Model, opt: &Options) {
+    let abits = if opt.abits_impose { opt.abits } else { 8 };
+    mdl.act_levels = ((1u32 << (abits - 1)) - 1) as f32;
+    mdl.act_thresh = opt.act_thresh;
+    mdl.act_topk = opt.act_topk;
+    mdl.act_renorm = opt.act_renorm;
+    // Les top-k étaient PUREMENT ignorés dans les modes flux (audit
+    // `reports/rapport-drapeaux-ignores.md`, défaut n°1) : ils s'appliquent ici,
+    // et ils voyagent dans l'en-tête pour que les deux nœuds fassent pareil.
+    mdl.act_topk_proj = opt.topk_proj;
+    mdl.attn_topk = opt.attn_topk;
+    mdl.qk_topk = opt.qk_topk;
+    mdl.moe_topk = opt.moe_topk;
+}
+
+/// ---- Phase 3 : le flux passe d'un nœud à l'autre ----------------------------
+///
+/// Cadriciel : `u32` magie, `u32` plage (debut, fin), `u32` position, `u32`
+/// dimension, puis les activations en f32. C'est le même contenu que le format
+/// de trace, réduit à ce qu'un nœud a besoin de recevoir pour continuer.
+const MAGIE_FLUX: u32 = 0x4452_5631;   // "DRV1"
+/// Version du protocole de flux. Elle est dans CHAQUE en-tête : un pair d'une
+/// autre version est refusé avec un message qui dit laquelle il parle, plutôt
+/// que de 
+… [539 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (timeout 600 ./drave-core/target/release/drave /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf --ppl /tmp/v41_last4.ids --ctx 8 --ctx-impose --limit 4 --dense 2>&1 | grep -E \"perplexité cumulée\" > /tmp/dense_test … [111 caractères tronqués]`
+
+  ```
+started background job bash-203
+  ```
+
+- **bash** `{"command": "sleep 115; cat /tmp/dense_test.log 2>/dev/null", "description": "Read the dense test"}`
+
+  ```
+(no output)
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-203 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (timeout 600 ./drave-core/target/release/drave /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf --ppl /tmp/v41_last4.ids --ctx 8 --ctx-impose --limit 4 --dense 2>&1 | grep -E "perplexité cumulée" > /tmp/dense_test.log; echo FIN >> /tmp/dense_test.log)) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cat /tmp/dense_test.log", "description": "Read the dense-mode result"}`
+
+  ```
+3 tokens notés — perplexité cumulée 208411.867  (0.1 tok/s)
+FIN
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"pub fn load(\" -A 8 drave-core/src/model.rs | head -12; grep -n \"fn load_partiel\" -A 10 drave-core/src/model.rs | head -14", "description": "Compare the two load functions"}`
+
+  ```
+2175:    pub fn load(path: &str) -> std::io::Result<Patch> {
+2176-        use std::io::Read;
+2177-        let mut buf = Vec::new();
+2178-        std::fs::File::open(path)?.read_to_end(&mut buf)?;
+2179-        if buf.len() < 16 || &buf[0..4] != b"QPAT" {
+2180-            return Err(std::io::Error::new(std::io::ErrorKind::InvalidData, "magie QPAT absente"));
+2181-        }
+2182-        let g = |o: usize| u32::from_le_bytes(buf[o..o+4].try_into().unwrap()) as usize;
+2183-        let (layer, n) = (g(8), g(12));
+--
+2625:    pub fn load(path: &str, ctx: usize, n_threads: usize, dense: bool, keep: f32,
+2626-                auto: bool, q4: u8, b6: u8) -> Model {
+2631:    pub fn load_partiel(path: &str, ctx: usize, n_threads: usize, dense: bool, keep: f32,
+2632-                        auto: bool, q4: u8, b6: u8, couches: Option<(usize, usize)>) -> Model {
+2633-        let t0 = Instant::now();
+2634-        let g = Gguf::open_auto(path).expect("ouverture du GGUF");
+2635-        let arch = g.meta.get("general.architecture").and_then(|m| m.as_str())
+2636-                       .unwrap_or("").to_string();
+2637-        let r = routage_du_gguf(&g);
+2638-        let (n_expert, n_expert_used, ffn_ex
+… [270 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -rf /tmp/dsrv && mkdir -p /tmp/dsrv && (/tmp/test_v41_diag.sh > /tmp/v41_diag_out.log 2>&1; echo FIN >> /tmp/v41_diag_out.log)", "description": "Re-run the distributed V4.1 with server dumps", "run_in_background": true}`
+
+  ```
+started background job bash-204
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='sprints/12-la-rotation-des-couches-compressees.md'\ns=open(p).read()\ns=s.replace(\"\"\"## Ce qui reste, nommé\"\"\",\n\"\"\"## L'ouverture du bloc suivant : le découpage V4.1\n\nLe protocole DRVF est passé en ** … [3257 caractères tronqués]`

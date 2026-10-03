@@ -67,6 +67,31 @@ qui arrange, c'est de chercher **pourquoi** la mesure contredit la source — ic
 un paramètre lu de travers. Une divergence entre références est une hypothèse à
 creuser, pas une conclusion.
 
+## L'ouverture du bloc suivant : le découpage V4.1
+
+Le protocole DRVF est passé en **v6** : le corps de chaque flux commence par un
+octet `np` suivi de `np × hc` f32 — la `pre` portée de la chaîne mHC retardée.
+Mesuré : le flux aller d'un V4.1 découpé à la couche 20 fait **82 016 octets**
+(79 d'en-tête + 1 de compte + 16 de pré-mix + 20 480 canaux f32), le retour
+81 999, et les trois flux sont servis. Le **V4-Flash** découpé au même endroit
+donne un écart **0,00e0** entre la référence locale et les deux nœuds (son flux ne
+porte pas de pré-mix : `np = 0`) — le transport est donc exact pour ce qu'il
+transporte.
+
+**Ce qui n'est pas expliqué** : le V4.1 découpé donne 514 722,06 contre 1 743
+713,62 de « référence locale », soit 7,05e-1 — mais la référence du harnais
+`--ppl-reparti` n'est **pas comparable** à une passe `--ppl` ordinaire : sur les
+mêmes quatre jetons, le même modèle et le même contexte, elle donne 1 743 713,62
+là où `--ppl` donne **208 411,867** (et `--dense` ne change rien : 208 411,867).
+
+Autrement dit : **l'instrument qui mesure l'écart est suspect, pas (encore) le
+découpage**. Le contrôle qui tranche est par TENSEUR, pas par perplexité :
+comparer le `l_last-20` du nœud moteur (premier étage après la couture, donc
+celui où la `pre` reçue entre en jeu) avec le `l_last-20` de la passe complète sur
+les mêmes jetons — les vides sont déjà pris des deux côtés. Si l'étage 20 est
+identique, la couture est exacte et l'écart de perplexité vient du harnais ; sinon
+il vient de la `pre` reçue.
+
 ## Ce qui reste, nommé
 
 - La **porte V4-Flash** doit être re-mesurée (la rampe corrigée change le
@@ -77,6 +102,10 @@ creuser, pas une conclusion.
   versionné serait la vraie réponse (à trancher : taille contre rejouabilité).
 - La **sélection à deux niveaux** reste non portée, mais refusée au bon seuil
   (`candidate_topk_blocks × candidate_block_size`).
-- Le **pré-mix sur le fil DRVF** (le dernier refus pour un V4.1 découpé) : les
-  deux champs sont posés côté moteur (`hc_porte_flux`, `hc_porte_imposee`), le
-  protocole reste à passer en v6.
+- Le **pré-mix sur le fil DRVF** : **fait** (protocole v6). Reste à établir
+  l'égalité des chiffres d'un V4.1 découpé — l'instrument de mesure est suspect
+  (voir ci-dessus), le contrôle par tenseur est lancé.
+- La **référence locale du harnais `--ppl-reparti`** doit s'expliquer : 1 743
+  713,62 contre 208 411,867 pour la même chose. C'est un défaut d'instrument, et
+  il rend tous les « écarts » publiés par ce mode suspects — y compris ceux des
+  rapports antérieurs.
