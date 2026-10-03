@@ -319,7 +319,36 @@ Une phase qui ne passe pas ses deux portes ne passe pas à la suivante.
      clusters 799,8557, 18 formats lisibles dont 17 vérifiés à la porte,
      4 routages).
 
-### P7 — Adaptation à V4.1, et la question de provenance (≈ ½ journée + action externe) — **mHC, compression, engram et indexeur faits et vérifiés** (02/10)
+### P7 — Adaptation à V4.1, et la question de provenance (≈ ½ journée + action externe) — **composants faits et vérifiés ; ⚠️ LE MODÈLE NE PRÉDIT PAS (03/10)**
+
+> ## ⚠️ Constat du 03/10 (bloc 20) : V4.1 ne prédit pas
+>
+> Test fonctionnel le plus simple qui soit — huit répétitions de « The sky is
+> blue. » (39 jetons) : un modèle qui fonctionne donne une perplexité de 1 à 2.
+>
+> | moteur | modèle | PPL |
+> |---|---|---|
+> | llama.cpp | V4-Flash IQ1_M | **1,844** |
+> | Drave | V4-Flash IQ1_M (mêmes identifiants) | **1,875** |
+> | Drave | **V4.1-Flash Q2** | **3 677** (sans engram) à 7 506 (8 bits) |
+>
+> Et sur les logits enregistrés d'une passe réelle : top-1 exact **0/31**, NLL
+> moyenne **11,657 nats** pour un uniforme à 11,770 — le hasard. Le tokenizer est
+> hors de cause (référence externe `tools/tokenize_llama` : identifiants
+> identiques). **Le chemin V4 partagé est juste** (V4-Flash : 1,875 contre 1,844) ;
+> le défaut est donc dans un mécanisme propre à V4.1 — chaîne mHC **retardée**,
+> compresseur des ratios **1 et 2**, ou engram (il nuit, mais le modèle est déjà
+> cassé sans lui).
+>
+> **Ce que cela ne remet pas en cause** : les vérifications de composants (elles
+> comparent le moteur à une transcription du même document, ce qui est nécessaire
+> et insuffisant), le découpage exact, les performances (×3,54 sur la passe), et
+> l'engram vivant. **Ce que cela corrige** : « V4.1 tourne » voulait dire « le
+> calcul tourne », pas « le modèle prédit » — la distinction n'était écrite nulle
+> part. Tout chiffre V4.1 de ce plan (PPL, perplexité par tranche) est à lire comme
+> une mesure de NON-RÉGRESSION, pas comme une qualité de modèle.
+>
+> Localisation : bloc 21 (`sprints/20-la-passe-longue-instrumentee.md`).
 
 > **Les deux manques annoncés étaient faux tous les deux** (02/10, 17:33 → 18:02).
 > La **référence d'exécution existe** : vLLM porte V4.1 en entier

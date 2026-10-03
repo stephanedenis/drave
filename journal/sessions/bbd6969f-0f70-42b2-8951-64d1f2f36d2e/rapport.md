@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 106.6 h |
+| Durée | 108.1 h |
 | Tours | 79 |
-| Messages | 6244 |
-| Appels d'outils | 5987 |
+| Messages | 6274 |
+| Appels d'outils | 6016 |
 | Fichiers touchés | 118 |
-| Commandes | 5055 |
+| Commandes | 5084 |
 | Sous-agents | 32 |
-| Commits | 393 |
+| Commits | 394 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -4037,7 +4037,7 @@ P0-P6 faites, P8 portée et val
 
 ### Tour 79 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [941 caractères tronqués]
 
-*1247 appels d'outils.* Actions notables :
+*1276 appels d'outils.* Actions notables :
 
 - web_search
 - web_fetch
@@ -4053,7 +4053,7 @@ P0-P6 faites, P8 portée et val
 - bash — Locate hc_collapse_triton definition
 - read
 - bash — Read mHC init and pre/post call sites
-- … et 1115 autres
+- … et 1139 autres
 
 **Synthèse produite :**
 
@@ -4261,7 +4261,7 @@ P0-P6 faites, P8 portée et val
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5015 autres
+- … et 5044 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4389,7 +4389,7 @@ P0-P6 faites, P8 portée et val
 
 ## 5. Erreurs rencontrées
 
-316 sorties en erreur ou divergentes. Les premières :
+318 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -4802,4 +4802,5 @@ P0-P6 faites, P8 portée et val
 - Docs : le drapeau --ppl-profil n'est plus « inexistant » — l'avertissement de docs/vision.md, le glossaire et le rapport d'audit des drapeaux ignorés sont mis à
 - Cohérence : le rapport d'audit des docs est daté (quatre de ses trouvailles sont corrigées depuis) et le mode du champ n est écrit pour les cinq modes  Le rappo
 - Rapport de la nuit : les trois leviers (×3,54 sur la passe V4.1), les preuves d'égalité, et les deux idées refusées par la mesure  Consolide les blocs 15 à 19 e
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' # 1) le plan : l'état V4.1 doit dire la vérité p="docs/plan-deepseek41-complet.md" s=open
 

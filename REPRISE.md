@@ -136,6 +136,24 @@ cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo build --r
 > (`DRAVE_EXPERTS_RAM`) est 4 à 21 % PLUS LENT (le noyau cache déjà) — drapeau
 > éteint, verdict dans son annonce.
 >
+> ## ⚠️ 03/10 (02h50) — V4.1 ne prédit pas (V4-Flash, si)
+>
+> Test fonctionnel : huit répétitions de « The sky is blue. » (39 jetons). Un
+> modèle qui fonctionne donne une perplexité de 1 à 2.
+>
+> | moteur | modèle | PPL |
+> |---|---|---|
+> | llama.cpp | V4-Flash IQ1_M | **1,844** |
+> | Drave | V4-Flash IQ1_M (mêmes identifiants) | **1,875** |
+> | Drave | V4.1-Flash Q2, sans engram | **3 677** |
+>
+> Sur 31 positions : top-1 exact **0/31**, NLL 11,657 nats (uniforme 11,770).
+> Tokenizer hors de cause (référence externe `tools/tokenize_llama`, identifiants
+> identiques). Le chemin V4 partagé est juste ; le défaut est dans un mécanisme
+> propre à V4.1 (chaîne mHC retardée, compresseur des ratios 1 et 2, ou engram).
+> **Conséquence de lecture** : tous les chiffres V4.1 du dépôt sont des références
+> de non-régression, pas des mesures de qualité. Localisation : bloc 21.
+>
 > **Mise à jour du 03/10 (00h) — la nuit des optimisations, et pas un chiffre
 > changé.** Trois leviers, tous prouvés bit-exacts (5 670 tenseurs comparés au
 > total, 0 écart) :

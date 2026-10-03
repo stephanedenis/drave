@@ -99897,3 +99897,320 @@ Created file
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Rapport de la nuit : les trois leviers (×3,54 sur la passe V4.1), les preuves d'égalité, et les deux idées refusées par la mesure\n\nConsolide les blocs 15 à 19 en un document durable : les trois levi … [597 caractères tronqués]`
+
+  ```
+03:26
+sam 03 oct 2026 01:21:18 EDT
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"V4.1\\|engram\\|attention\" docs/roadmap.md | head -12", "description": "Check the roadmap for stale V4.1 claims"}`
+
+  ```
+27:| 1.1 | **Top-k dans le noyau d'attention GPU** — `--attn-topk 256` améliore la perplexité (gpt-oss, 234,88 contre 298,56 à 2 048 — `docs/contexte-long.md` §6 ; valeur absolue non reproduite depuis, cf. `docs/plan-gpu-topk.md`) mais retombe sur le CPU | ⏳ | plus aucun repli CPU dans le chemin long contexte |
+295:l'attention : la connexion résiduelle a besoin du résidu lui-même. Le drapeau a
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 tools/porte-flux.sh; echo \"exit=$?\"; ps -o etime= -p $(pgrep -x drave | head -1) 2>/dev/null", "description": "Re-run the flux gate with the final binary", "timeoutMs": 660000}`
+
+  ```
+mode 0 — f32 dense               0.00e0  ✅  (réf 61.9920 / deux nœuds 61.9920)
+  mode 1 — listes quantifiées     0.00e0  ✅  (réf 61.9920 / deux nœuds 61.9920)
+  mode 2 — listes par blocs        3.65e-2  ✅  (réf 61.9920 / deux nœuds 64.2535)
+  mode 3 — lot dense f32           0.00e0  ✅  (réf 60.8135 / deux nœuds 60.8135)
+  mode 4 — lot en listes           4.45e-3  ✅  (réf 60.8135 / deux nœuds 60.5427)
+exit=0
+      04:12
+  ```
+
+- **bash** `{"command": "sleep 560; ps -o etime= -p $(pgrep -x drave | head -1) 2>/dev/null; date", "description": "Wait for the long pass", "timeoutMs": 580000}`
+
+  ```
+13:41
+sam 03 oct 2026 01:31:33 EDT
+  ```
+
+- **bash** `{"command": "sleep 570; ps -o etime= -p $(pgrep -x drave | head -1) 2>/dev/null; date", "description": "Wait for the long pass", "timeoutMs": 590000}`
+
+  ```
+23:19
+sam 03 oct 2026 01:41:11 EDT
+  ```
+
+- **bash** `{"command": "sleep 570; ps -o etime= -p $(pgrep -x drave | head -1) 2>/dev/null; date", "description": "Wait for the long pass", "timeoutMs": 590000}`
+
+  ```
+32:54
+sam 03 oct 2026 01:50:47 EDT
+  ```
+
+- **bash** `{"command": "sleep 570; ps -o etime= -p $(pgrep -x drave | head -1) 2>/dev/null; date", "description": "Wait for the long pass", "timeoutMs": 590000}`
+
+  ```
+42:32
+sam 03 oct 2026 02:00:24 EDT
+  ```
+
+### 👤 Utilisateur
+
+You are repeating the exact same tool call with identical arguments. Carefully analyze the previous result before calling again: if the task is not complete, try a different approach or different arguments instead of repeating the call.
+
+- **bash** `{"command": "cat > /tmp/analyse_long.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"Analyse de la passe longue instrumentée (bloc 20).\"\"\"\nimport re, os\nimport numpy as np\n\nlog = \"/tmp/v41_1024_instr.log\"\nprint(\"=== profil par profondeur ===\")\ntxt = open(log, encoding=\"utf-8\", errors=\"repla … [1172 caractères tronqués]`
+
+  ```
+script pret
+      42:40
+  ```
+
+- **bash** `{"command": "sleep 570; tail -c 150 /tmp/v41_1024_instr.log 2>/dev/null; ps -o etime= -p $(pgrep -x drave | head -1) 2>/dev/null; date", "description": "Wait for the pass to finish", "timeoutMs": 590000}`
+
+  ```
+TES les positions, comme llama.cpp (`deepseek4.cpp:872-879`) et vLLM (`rope.py:28-46`) ; `DRAVE_YARN=1`/`--sans-yarn` forcent l'un ou l'autre partout
+      52:16
+sam 03 oct 2026 02:10:08 EDT
+  ```
+
+- **bash** `{"command": "sleep 570; ps -o etime= -p $(pgrep -x drave | head -1) 2>/dev/null; grep -c \"FIN (code\" /tmp/v41_1024_instr.log 2>/dev/null; date", "description": "Wait for the pass to finish", "timeoutMs": 590000}`
+
+  ```
+1
+sam 03 oct 2026 02:19:45 EDT
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 /tmp/analyse_long.py 2>&1 | head -40", "description": "Analyze the instrumented long pass", "timeoutMs": 300000}`
+
+  ```
+=== profil par profondeur ===
+  profil par profondeur (perplexité par tranche de 256 positions) :
+  0-255    : 452790.059  (255 jetons notés)
+  256-511    : 933648.453  (256 jetons notés)
+  512-767    : 1074744.877  (256 jetons notés)
+  768-1023   : 6026999.115  (256 jetons notés)
+
+=== tête du log (essentiel) ===
+  1023 tokens notés — perplexité cumulée 1287700.824  (0.3 tok/s)
+  === perplexité 1287700.8239 sur 1023 tokens (0 événements, 3574.2 s) ===
+  postes (ms/token) : projets-attn 0.00 | rope 0.00 | attention 1610.23 | proj+mlp 1773.68 | somme 3383.91 | reste (tête + échantillonnage) 109.88
+  dont attention : scores 0.00 | softmax 0.00 | somme pondérée + écriture KV 1610.23
+  dont attention V4 (attn_v4) : projets q/kv 334.78 | compresseur 5.65 | indexeur 26.62 | scores + softmax + somme 725.42 | dé-rotation + sortie groupée 517.49
+  FIN (code 0)
+
+=== logits ===
+  long : 132253442 valeurs · court : 4007682
+  les 4007682 premières valeurs (les 31 premières prédictions) : écart max 1.390e-42
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport numpy as np\na=np.fromfile('/tmp/lg_long.bin',dtype='<f4'); b=np.fromfile('/tmp/lg32.bin',dtype='<f4')\n# les 8 premiers octets sont l'en-tête (vocab, n_pos) : deux i32 relus en f32\nx=a[2:].astype(np.float64);  … [440 caractères tronqués]`
+
+  ```
+logits (en-tête exclu) : 4007680 valeurs comparées · écart max 0.000e+00
+tranche 768-1023 : 256 jetons écrits dans /tmp/v41_t4.ids
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash -c './drave-core/target/release/drave /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf --ppl /tmp/v41_t4.ids --ctx 256 --limit 256 --abits 8 --threads 16 --ppl-profil > /tmp/v41_t4.log 2>&1; echo FIN >> / … [151 caractères tronqués]`
+
+  ```
+tranche isolee lancee (tokens 768-1023, ctx 256)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 256 --limit 1024 --ppl-profil --threads 8 2>&1 | grep -E \"tranche|perplexité|profil\" | head -10", "description": "Run the Qwen witness on … [37 caractères tronqués]`
+
+  ```
+255 tokens notés — perplexité cumulée 17.431  (17.9 tok/s)  [fenêtre 1 : 255 notés, PPL 17.431]
+     510 tokens notés — perplexité cumulée 19.388  (17.9 tok/s)  [fenêtre 2 : 255 notés, PPL 21.565]
+     765 tokens notés — perplexité cumulée 21.374  (17.9 tok/s)  [fenêtre 3 : 255 notés, PPL 25.977]
+    1020 tokens notés — perplexité cumulée 23.696  (17.7 tok/s)  [fenêtre 4 : 255 notés, PPL 32.289]
+profil par profondeur (perplexité par tranche de 256 positions) :
+=== perplexité 23.6964 sur 1020 tokens (0 événements, 57.6 s) ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport numpy as np\nlg=np.fromfile('/tmp/lg32.bin',dtype='<f4')\nvocab=int(lg[0]); npos=int(lg[1])\nprint(\"vocab\", vocab, \"· positions notées\", npos)\nL=lg[2:].reshape(npos, vocab)\nids=[int(x) for x in open('/t … [757 caractères tronqués]`
+
+  ```
+vocab 0 · positions notées 0
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 5, in <module>
+ValueError: cannot reshape array of size 4007680 into shape (0,0)
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport numpy as np\nh=np.fromfile('/tmp/lg32.bin',dtype='<i4',count=2)\nvocab, npos = int(h[0]), int(h[1])\nlg=np.fromfile('/tmp/lg32.bin',dtype='<f4',offset=8)\nprint(\"vocab\", vocab, \"· positions notées\", npos, … [766 caractères tronqués]`
+
+  ```
+vocab 129280 · positions notées 31 · valeurs 4007680
+jetons : [201, 438, 10498, 102771, 402, 438, 61915, 10498, 102771, 402]
+top-1 exact : 0/31
+NLL moyen : 11.657 nats · uniforme = 11.770 nats
+PPL : 115521.9  (le moteur annonce 115521.8693)
+rangs du jeton correct : [21228, 53522, 93380, 1971, 63678, 111907, 2617, 95380, 40192, 149] ...
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && printf 'The sky is blue. The sky is blue. The sky is blue. The sky is blue. The sky is blue. The sky is blue. The sky is blue. The sky is blue.\\n' > /tmp/repete.txt && M=/home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2. … [393 caractères tronqués]`
+
+  ```
+671,12709,344,8295,16,455,12709,344,8295,16,455,12709,344,8295,16,455,12709,344,8295,16,455,12709,344,8295,16,455,12709,344,8295,16,455,12709,344,8295,16,455,12709,344,8295,603
+      39 tokens notés — perplexité cumulée 7505.866  (0.1 tok/s)
+=== perplexité 7505.8658 sur 39 tokens (0 événements, 319.4 s) ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls tools/ref_logits* 2>/dev/null | head; which llama-cli llama-tokenize llama-gguf 2>/dev/null; ls ~/llama.cpp/build/bin/ 2>/dev/null | head -12; find / -maxdepth 4 -name \"llama-cli\" -type f 2>/dev/null | head -3", "description": " … [28 caractères tronqués]`
+
+  ```
+tools/ref_logits
+tools/ref_logits.cpp
+tools/ref_logits.md
+/home/stephane/.local/bin/llama-cli
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -30 tools/ref_logits.md; echo \"=== bin ===\"; ls ~/.local/bin | head", "description": "Read the llama.cpp harness doc"}`
+
+  ```
+# ref_logits — référence externe llama.cpp pour comparer les logits
+
+Outil autonome (un seul fichier C++) qui évalue une séquence d'identifiants **exacte**
+avec llama.cpp et exporte les distributions de logits en binaire, plus la perplexité.
+Sert de référence pour valider les logits de `drave-core`.
+
+## Compilation (commande exacte qui marche)
+
+```bash
+cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet
+LC=/home/stephane/Data13TB/stephane/GitHub/llama.cpp
+g++ -O2 -std=c++17 tools/ref_logits.cpp -o tools/ref_logits \
+    -I $LC/include -I $LC/ggml/include \
+    -L $LC/build/bin -lllama -lggml -lggml-base
+```
+
+Aucune option supplémentaire n'est nécessaire (pas de `-fopenmp`, pas de `-lggml-cpu` :
+le backend CPU est chargé dynamiquement par `libggml`). Version de llama.cpp utilisée :
+`libllama.so.0.0.11001` (commit `a8f2635f`).
+
+## Utilisation
+
+```bash
+LD_LIBRARY_PATH=/home/stephane/Data13TB/stephane/GitHub/llama.cpp/build/bin \
+  ./tools/ref_logits <modele.gguf> <ids.txt> <sortie.bin> [n_max]
+```
+
+- `ids.txt` : entiers séparés par des virgules et/ou des espaces (les `n_max` premiers).
+- Évaluation : positions `0..N-1`, **aucun BOS ajouté**, une seule séquence,
+  un seul batch (`n_ctx 
+… [175 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/tokenize_llama.cpp <<'EOF'\n// Tokenise un texte avec le tokenizer d'un GGUF, via llama.cpp — référence\n// EXTERNE pour la question « les identifiants que Drave fabrique sont-ils ceux\n// du modèle ? ». Un décalage de to … [2148 caractères tronqués]`
+
+  ```
+tools/tokenize_llama.cpp: In function ‘int main(int, char**)’:
+tools/tokenize_llama.cpp:26:49: warning: ‘llama_model* llama_load_model_from_file(const char*, llama_model_params)’ is deprecated: use llama_model_load_from_file instead [-Wdeprecated-declarations]
+   26 |     llama_model * m = llama_load_model_from_file(argv[1], mp);
+      |                       ~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~
+In file included from tools/tokenize_llama.cpp:14:
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la tools/tokenize_llama && V=/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf && LD_LIBRARY_PATH=/home/stephane/Data13TB/stephane/GitHub/llama.cpp/build/bin t … [184 caractères tronqués]`
+
+  ```
+[stderr]
+ls: cannot access 'tools/tokenize_llama': No such file or directory
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && LC=/home/stephane/Data13TB/stephane/GitHub/llama.cpp && g++ -O2 -std=c++17 tools/tokenize_llama.cpp -o tools/tokenize_llama -I $LC/include -I $LC/ggml/include -L $LC/build/bin -lllama -lggml -lggml-base 2>&1 | grep -E \"error|undefin … [116 caractères tronqués]`
+
+  ```
+-rwxr-xr-x. 1 stephane stephane 21560  3 oct 02:29 tools/tokenize_llama
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && V=/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf && LD_LIBRARY_PATH=/home/stephane/Data13TB/stephane/GitHub/llama.cpp/build/bin timeout 300 ./tools/tokenize_lla … [360 caractères tronqués]`
+
+  ```
+llama_model_load: vocab only - skipping tensors
+671,12709,344,8295,16,455,12709,344,8295,16
+--- le nôtre (V4.1, même famille de tokenizer) ---
+10 tokens
+671 12709 344 8295 16 455 12709 344 8295 16 
+recolle : "The sky is blue. The sky is blue."
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=/home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf && echo \"=== texte répété, 16 bits d'activation ===\" && ./drave-core/target/release/drave $M --ppl /tmp/repete.ids --ctx 64 --limit 64 --abits 16 --threads 16 2>& … [135 caractères tronqués]`
+
+  ```
+=== texte répété, 16 bits d'activation ===
+      39 tokens notés — perplexité cumulée 4799.454  (0.1 tok/s)
+=== perplexité 4799.4542 sur 39 tokens (0 événements, 313.7 s) ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=/home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf && echo \"=== texte répété, SANS engram, 16 bits ===\" && DRAVE_SANS_ENGRAM=1 ./drave-core/target/release/drave $M --ppl /tmp/repete.ids --ctx 64 --limit 64 --abits … [160 caractères tronqués]`
+
+  ```
+=== texte répété, SANS engram, 16 bits ===
+[engram] DRAVE_SANS_ENGRAM est actif : l'injection de l'engram est COUPÉE — le moteur calcule un autre modèle que V4.1, pour mesurer ce que l'engram change (vivacité). Ce chiffre ne vaut pas comme référence.
+      39 tokens notés — perplexité cumulée 3677.153  (0.1 tok/s)
+=== perplexité 3677.1527 sur 39 tokens (0 événements, 309.6 s) ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 30,60p tools/ref_logits.md; ls -la tools/ref_logits 2>/dev/null | head -2", "description": "Read ref_logits usage details"}`
+
+  ```
+un seul batch (`n_ctx = N + 8`, `n_batch = n_ubatch = N`, Flash-Attention désactivé, CPU).
+- Sortie standard : `n_pos`, `n_vocab`, NLL moyenne, perplexité.
+
+## Commande de validation
+
+```bash
+LD_LIBRARY_PATH=/home/stephane/Data13TB/stephane/GitHub/llama.cpp/build/bin \
+  ./tools/ref_logits models/Qwen2.5-0.5B-Q8_0.gguf /tmp/ids_qwen.txt \
+  /tmp/ref_logits_qwen05_q8_64.bin 64
+```
+
+## Nombres obtenus (Qwen2.5-0.5B-Q8_0, 64 premiers ids de /tmp/ids_qwen.txt)
+
+| Mesure | Valeur |
+|---|---|
+| `n_pos` | 63 |
+| `n_vocab` | 151936 |
+| NLL moyenne | 3.316958 |
+| **Perplexité** | **27.576** (Q4_0 : 28.850) |
+| Taille du fichier | 38 287 880 octets = 8 + 63 × 151936 × 4 |
+| Mémoire de pointe | 629 Mio (RSS), durée 0,7 s |
+
+Contrôles de cohérence effectués :
+
+- perplexité calculée de deux façons indépendantes (log-softmax interne C++ et relecture
+  du binaire en Python) : identiques à 1e-5 ;
+- somme des probabilités d'une ligne = 1,000000 ; exactitude argmax = 26/63 (41 %) ;
+- déterminisme : deux exécutions donnent des binaires au MD5 identique ;
+- **cohérence causale** : un run avec `n_max=32` reproduit *bit à bit* les 31 premières
+  lignes du run à 64 → positions et absence de BOS correctes
+… [157 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && V=/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf && LD_LIBRARY_PATH=/home/stephane/Data13TB/stephane/GitHub/llama.cpp/build/bin timeout 900 ./tools/ref_logits \ … [150 caractères tronqués]`
+
+  ```
+~llama_context:        CPU compute buffer size is  20.9773 MiB, matches expectation of  20.9773 MiB
+n_pos    = 39
+n_vocab  = 129280
+NLL moy  = 0.612159
+perplexite = 1.844409
+fichier  = /tmp/ref_v4f_repete.bin (39 x 129280 f32 + 8 octets d'en-tete)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && V=/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf && echo \"=== notre moteur, V4-Flash, mêmes 39 jetons, 16 bits ===\" && ./drave-core/target/release/drave $V -- … [202 caractères tronqués]`
+
+  ```
+=== notre moteur, V4-Flash, mêmes 39 jetons, 16 bits ===
+      39 tokens notés — perplexité cumulée 1.875  (0.2 tok/s)
+=== perplexité 1.8753 sur 39 tokens (0 événements, 171.9 s) ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"sprints/20-la-passe-longue-instrumentee.md\"\ns=open(p).read()\na=\"\"\"## Revue — ce qui est livré, mesuré\n\n_(mesure en cours)_\"\"\"\nb=\"\"\"## Revue — ce qui est livré, mesuré\n\n### 1. Le profil par profo … [7797 caractères tronqués]`
+
+  ```
+ok sprint 20
+── Sprint 20 ─────────────────────────────────────────────
+- **Début** : 01:17 · **Fin prévue** : 03:17 (boxing de 120 min)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\n# 1) le plan : l'état V4.1 doit dire la vérité\np=\"docs/plan-deepseek41-complet.md\"\ns=open(p).read()\na=\"\"\"### P7 — Adaptation à V4.1, et la question de provenance (≈ ½ journée + action externe) — **mHC, compr … [5678 caractères tronqués]`
