@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 114.5 h |
-| Tours | 89 |
-| Messages | 6730 |
-| Appels d'outils | 6436 |
-| Fichiers touchés | 128 |
-| Commandes | 5433 |
+| Durée | 114.7 h |
+| Tours | 90 |
+| Messages | 6742 |
+| Appels d'outils | 6444 |
+| Fichiers touchés | 129 |
+| Commandes | 5439 |
 | Sous-agents | 32 |
-| Commits | 429 |
+| Commits | 430 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -221,6 +221,8 @@
 **Tour 88** — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en respectant pour chaque phase ses deux portes : porte de correction (comparaison étage par étage à llama.cpp sur V4-Flash) et porte Drave (flux : événements/paires par jeton, trace rejouée à l'identique, découpage en grappes, flux lisible par un outil d'analyse). Aucune phase ne passe … [662 caractères tronqués]
 
 **Tour 89** — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en respectant pour chaque phase ses deux portes : porte de correction (comparaison étage par étage à llama.cpp sur V4-Flash) et porte Drave (flux : événements/paires par jeton, trace rejouée à l'identique, découpage en grappes, flux lisible par un outil d'analyse). Aucune phase ne passe … [662 caractères tronqués]
+
+**Tour 90** — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en respectant pour chaque phase ses deux portes : porte de correction (comparaison étage par étage à llama.cpp sur V4-Flash) et porte Drave (flux : événements/paires par jeton, trace rejouée à l'identique, découpage en grappes, flux lisible par un outil d'analyse). Aucune phase ne passe … [662 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -4423,7 +4425,7 @@ Le CPU fait aujourd'hui **2,06 s/jeton** (V4-Flash, SIMD) et **4,3 s** (V4.1) : 
 
 ### Tour 89 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [942 caractères tronqués]
 
-*44 appels d'outils.* Actions notables :
+*46 appels d'outils.* Actions notables :
 
 - job_output
 - bash — Check the NVMe run windows
@@ -4439,11 +4441,50 @@ Le CPU fait aujourd'hui **2,06 s/jeton** (V4-Flash, SIMD) et **4,3 s** (V4.1) : 
 - edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md`
 - bash — Check the ctx-512 run progress
 - bash — Estimate the ctx-512 progress
-- … et 28 autres
+- … et 30 autres
 
 **Synthèse produite :**
 
-⏵ Fil « granularité des listes et volume des flux » : je relis d'abord ce que le dépôt a établi
+**Oui — j'ai retrouvé le fil : c'est l'axe 3 de `docs/vision.md`** (« une liste est une unité de travail autonome… distribuer, c'est router des listes »), avec ses acquis (1 608 octets par flux, 0,25 Mbit/s, le croisement push/pull à ~22 %) et ses points ouverts (granularité, placement, flux de poids). Je viens de le mesurer sur des **activations réelles de V4-Flash** (43 couches × 4 positions via `DRAVE_DUMP_COUCHES`), avec l'encodeur DRVF de référence.
+
+**Le flux de coupure, d'abord** : `l_last` = 4 copies d'hyper-connexion × 4 096 = 16 384 valeurs = **65 536 octets** en f32 — exactement le « 64 Ko par flux » déjà écrit. En liste : **26,7 % du dense à 24 % d'erreur L2**, 43,3 % à 10 %, 55 % à 4 %.
+
+**Puis la granularité, comparée à erreur ÉGALE** (le seul comparatif honnête) :
+
+| G (listes dans le flux) | err ≈ 0,05 | err ≈ 0,10 | err ≈ 0,20 |
+|---|---|---|---|
+| **1** | **55,3 %** | **43,3 %** | **26,7 %** |
+| 4 (= les 4 copies hc) | 66,0 % | 61,8 % | 54,5 % |
+| 16 | 65,7 % | 60,0 % | 52,3 % |
+| 64 | 64,6 % | 58,3 % | 50,6 % |
+| 512 | 73,9 % | 68,1 % | 57,5 % |
+
+**Découper coûte plus cher, pas moins** : l'en-tête fait 14 octets par liste (à 512 listes : 7 168 octets, 11 % du dense, rien qu'en en-têtes) et chaque tranche perd l'**échelle globale** — un seuil relatif au max global filtre plus durement qu'un seuil relatif au max de tranche. J'ai testé le schéma à deux niveaux (jeter les tranches d'énergie négligeable puis élaguer dedans) : à erreur comparable, G = 64 avec ε = 1e-2 donne 28,2 % du dense pour 0,31 d'erreur, là où **une seule liste donne 26,7 % pour 0,24**. La conclusion tient.
+
+**Mais l'idée n'est pas fausse — elle porte sur une autre grandeur.** Ce que la finesse apporte, et qui est mesuré :
+- **le routage** : une unité ne reçoit que les listes qui lui sont adressées ; le débit d'un lien devient proportionnel à ce qu'il sert ;
+- **le coût nul des tranches jetées** : à G = 64, ε = 1e-2, 28,5 tranches sur 64 partent à zéro octet → flux à 28,2 % du dense ;
+- **moins d'erreur à seuil égal** : 0,244 (G = 1) contre 0,030 (G = 512) au seuil 5 % — on peut donc élaguer plus finement.
+
+Autrement dit : **la granularité ne compresse pas, elle route** — et elle achète du *provisionnement par lien* et de la *latence bornée*, pas des octets. Les 11 % d'en-têtes à 512 listes donnent le plafond : la bonne maille est l'**expert** ou la **couche** (peu de grosses listes), pas le bloc de canaux (beaucoup de minuscules).
+
+**Et le fait qui commande tout le place
+… [1396 caractères tronqués]
+
+### Tour 90 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [942 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Check the gate suite result
+- bash — Wait for the gates
+- web_fetch
+- bash — Probe the API reachability and check gates
+- bash — Wait for the gates to finish
+- bash — Commit and run the ctx-1024 reference
+
+**Synthèse produite :**
+
+⏵ Portes toutes vertes ; je lance le palier ctx 1 024 (référence puis moteur)
 
 ## 3. Travail accompli
 
@@ -4579,6 +4620,7 @@ Le CPU fait aujourd'hui **2,06 s/jeton** (V4-Flash, SIMD) et **4,3 s** (V4.1) : 
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/25-le-disque-dur-deguise-en-defaut-moteur.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/granularite_flux.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-granularite-flux.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/26-la-porte-a-512-et-la-granularite-qui-route.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -4657,7 +4699,7 @@ Le CPU fait aujourd'hui **2,06 s/jeton** (V4-Flash, SIMD) et **4,3 s** (V4.1) : 
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5393 autres
+- … et 5399 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5234,4 +5276,5 @@ Le CPU fait aujourd'hui **2,06 s/jeton** (V4-Flash, SIMD) et **4,3 s** (V4.1) : 
 - CORRECTION : le gain du SIMD était annoncé ×2,06 ; l'A/B entrelacé donne ×1,18 (passe) et ×1,37 (proj+mlp)  Le run scalaire de référence tournait pendant qu'un 
 - Granularité des listes : elle ROUTE, elle ne compresse pas — mesuré sur les activations réelles de V4-Flash  Flux de coupure = l_last = 16 384 valeurs (4 copies
 - Plan P6 : porte de correction TENUE à ctx 512 (511 positions, top-1 93,0 %, +4,3 % de PPL) et le coût par jeton ne croît presque pas avec le contexte (2,58 s/je
+- Sprint 26 : porte de correction TENUE à ctx 512, coût par jeton quasi constant, granularité qui route — portes toutes vertes" && V4=/home/stephane/FastNVMe/mode
 
