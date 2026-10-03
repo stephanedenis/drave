@@ -22,7 +22,7 @@ const VARS_LUES: &[&str] = &[
     "FLUX_VERIF", "GPU", "GPU_EXPERTS",
     "GPU_EXPERTS_GO", "GPU_KV", "GPU_TETE", "GPU_TOPK", "HARMONY_TRACE",
     "KV_BITS", "KV_F16", "KV_K_F16", "KV_K_F32", "KV_V_F32", "MMAP",
-    "PRELIRE", "PRELIRE_TOUT", "Q8_BLOCS", "SANS_EMPRUNT", "TRACE_BLOCS",
+    "PRELIRE", "PRELIRE_TOUT", "Q8_BLOCS", "SANS_ENGRAM", "SANS_EMPRUNT", "TRACE_BLOCS",
     "TRACE_EXPERTS", "VISION_TEXTE", "YARN", "YARN_MSCALE", "YARN_NON",
     "YARN_RAMPE",
 ];
@@ -2530,6 +2530,11 @@ fn recevoir_flux(s: &mut std::net::TcpStream, hidden: usize, hc_destinataire: us
         premix = octets.chunks_exact(4)
             .map(|c| f32::from_le_bytes(c.try_into().unwrap())).collect();
     }
+    // Ce préfixe fait partie du CORPS : l'émetteur le compte dans ses octets
+    // envoyés, donc l'omettre ici faisait paraître le retour plus court de
+    // `1 + 4·np·hc` octets — 17 sur un flux V4.1, d'où un « 81 999 au retour »
+    // publié pour 82 016 réels (relevé par la relecture adverse du bloc 13).
+    let octets_prefixe = 1 + np * hc * 4;
     let charge = match mode {
         MODE_LOT_LISTES => {
             // `n` = nombre d'ÉTATS. Chaque état est auto-délimité :
@@ -2607,7 +2612,7 @@ l'ensemble du lot (flux reçu de {hidden} canaux)");
             }
             // Octets réellement lus SUR LE FIL : c'est ce que le banc doit
             // afficher, pas la taille du vecteur dense reconstruit en mémoire.
-            let octets_corps = lus;
+            let octets_corps = octets_prefixe + lus;
             return Ok(Flux { n, debut, fin, pos, mode, act, premix: premix.clone(), octets_corps,
                              charge: ChargeFlux::Lot(plat) });
         }
@@ -2621,7 +2626,7 @@ l'ensemble du lot (flux reçu de {hidden} canaux)");
             s.read_exact(&mut corps)?;
             let etats = (0..n * hidden).map(|k| f32::from_le_bytes(
                 [corps[k*4], corps[k*4+1], corps[k*4+2], corps[k*4+3]])).collect();
-            return Ok(Flux { n, debut, fin, pos, mode, act, premix: premix.clone(), octets_corps: corps.len(),
+            return Ok(Flux { n, debut, fin, pos, mode, act, premix: premix.clone(), octets_corps: octets_prefixe + corps.len(),
                              charge: ChargeFlux::Lot(etats) });
         }
         MODE_BLOCS => {
@@ -2648,7 +2653,7 @@ l'ensemble du lot (flux reçu de {hidden} canaux)");
                 Ok(v) => v,
                 Err(e) => return Err(std::io::Error::new(std::io::ErrorKind::InvalidData, e)),
             };
-            let octets_corps = 4 + n_blocs * 4 + 4 + longueur;
+            let octets_corps = octets_prefixe + 4 + n_blocs * 4 + 4 + longueur;
             return Ok(Flux { n, debut, fin, pos, mode, act, premix: premix.clone(), octets_corps, charge:
                              ChargeFlux::Blocs { idx, val, echelles } });
         }
@@ -2672,7 +2677,7 @@ l'ensemble du lot (flux reçu de {hidden} canaux)");
         autre => return Err(std::io::Error::new(std::io::ErrorKind::InvalidData,
             format!("mode de flux inconnu : {autre}"))),
     };
-    Ok(Flux { n, debut, fin, pos, mode, act, premix, octets_corps: octets.len(), charge })
+    Ok(Flux { n, debut, fin, pos, mode, act, premix, octets_corps: octets_prefixe + octets.len(), charge })
 }
 
 /// Le NŒUD MOTEUR : charge le modèle, écoute, applique SA plage de couches au
@@ -2801,6 +2806,20 @@ continue", f.pos, mdl.ctx);
                 // replierait son premier raccord avec la copie 0 — faux, et muet.
                 // Le moteur REFUSE ce cas (`forward`), donc un pair en v5 ne peut
                 // pas non plus passer par surprise.
+                //
+                // **Elle n'a de sens que si ce nœud REPREND au milieu du modèle.**
+                // Une trame qui demande `debut = 0` fait entrer l'état imposé par
+                // la couche 0 : la chaîne du modèle y commence, la `pre` d'un
+                // raccord précédent n'existe pas, et l'ignorer en silence serait
+                // exactement le défaut qu'on vient de corriger. Une trame pareille
+                // n'est émise par personne (le pilote envoie `couches_locales ≥ 1`),
+                // donc la refuser ne coûte rien et ferme le cas.
+                if !f.premix.is_empty() && f.debut == 0 {
+                    println!("[flux] flux refusé : la trame porte une `pre` (v6) mais demande \
+de reprendre à la couche 0 — la chaîne mHC retardée commence là, cette `pre` n'a pas de \
+raccord précédent où s'appliquer et l'ignorer serait muet. Le nœud continue");
+                    continue;
+                }
                 mdl.hc_porte_imposee = if f.premix.is_empty() { None } else { Some(f.premix.clone()) };
                 let sortie = mdl.forward(0, f.pos as usize);
                 // La RÉPONSE est encodée comme la demande : un pair qui parle en
@@ -2995,6 +3014,21 @@ demande était en mode {mode_lot} — pair incompatible ? Rien n'a été calcul�
             if rep.n != t {
                 eprintln!("[flux] le nœud moteur a répondu {} états pour un lot de {t} \
 — pair incohérent. Rien n'a été calculé.", rep.n);
+                std::process::exit(1);
+            }
+            // **Le chemin des LOTS ne sait pas appliquer la `pre` reçue** : il
+            // réduit chaque état par `norme_finale` sur un état de largeur
+            // `hidden` — où la réduction de V4.1 n'a pas de sens — et n'affecte
+            // jamais `hc_porte_imposee` depuis la réponse. Aujourd'hui
+            // inatteignable (`forward_lot` refuse les modèles à hyper-connexions
+            // au-delà d'un jeton, et eux seuls portent une `pre`), mais un pair
+            // qui en enverrait une serait ignoré en silence : c'est le défaut
+            // qu'on vient de corriger, en voici la porte. Relevé par la relecture
+            // adverse.
+            if !rep.premix.is_empty() {
+                eprintln!("[flux] le nœud moteur a renvoyé une `pre` portée (v6) sur un LOT \
+de {t} états : ce chemin ne sait pas l'appliquer (la réduction finale y est par état, et \
+un lot de plus d'un état n'a pas UNE `pre`). Rien n'a été calculé.");
                 std::process::exit(1);
             }
             let etats = rep.charge.plat().to_vec();
@@ -4998,7 +5032,10 @@ mod tests_flux {
             let f = recevoir_flux(&mut sock, 8, 1).unwrap();
             assert_eq!(f.mode, MODE_DENSE);
             assert_eq!(f.n, 8);
-            assert_eq!(f.octets_corps, 32);
+            // 33 et non 32 : le compte des octets REÇUS inclut désormais le
+            // préfixe de corps de la v6 (`np`, ici 0). Il l'omettait, et un V4.1
+            // découpé annonçait donc 81 999 octets au retour pour 82 016 réels.
+            assert_eq!(f.octets_corps, 33);
             assert_eq!(f.charge.en_dense(8), attendu);
         });
         let mut client = TcpStream::connect(adresse).unwrap();

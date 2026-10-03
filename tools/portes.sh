@@ -181,11 +181,21 @@ fi
 #    (sprint 13) a vécu si longtemps : aucun test n'exerçait un COUPLE de nœuds.
 #    Les modes exacts (0, 1, 3) doivent rendre 0,00e0 ; les modes à codec
 #    quantifié (2, 4) ont une perte assumée, plafonnée à ce qui a été mesuré.
+#
+#    On lit le CODE RETOUR, pas seulement la présence de « ❌ » : la porte sort en
+#    1 sur ses refus précoces (binaire absent, modèle absent, jetons
+#    indisponibles) sans imprimer de croix, et un `timeout` rend une sortie
+#    partielle — trois façons de dire « vert » sur un échec, relevées par la
+#    relecture adverse du bloc 13 (démontré : modèle absent → ECHEC=0).
 if [ -x tools/porte-flux.sh ]; then
     printf "\n=== Découpage (deux nœuds) ===\n"
     sortie_flux=$(timeout 900 tools/porte-flux.sh 2>&1)
+    code_flux=$?
     printf '%s\n' "$sortie_flux"
-    printf '%s\n' "$sortie_flux" | grep -q "❌" && ECHEC=1
+    if [ "$code_flux" != "0" ] || printf '%s\n' "$sortie_flux" | grep -q "❌"; then
+        printf "  %-42s %s  ❌\n" "porte du découpage (code $code_flux)" "échec"
+        ECHEC=1
+    fi
 fi
 
 echo ""

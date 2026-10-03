@@ -1253,3 +1253,794 @@ Self::vider_couche(self.dump_couches.as_deref(), "hc_ffn_in", l, pos, &nx);
 
 background job bash-207 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf && (time timeout 900 tools/porte-flux.sh; echo "EXIT=$?") > /tmp/adv_porte.log 2>&1; echo done) finished [status: completed, exit code: 0]. Read its output with job_output.
 
+### 🤖 Assistant
+
+⏵ Porte terminée : lecture du résultat, puis examen des émetteurs Python
+
+- **bash** `{"command": "cat /tmp/adv_porte.log; echo \"=== srv log ===\"; tail -5 /tmp/porte_flux_srv.log 2>/dev/null; echo \"=== process restants ===\"; pgrep -fa \"flux-serveur\" | head", "description": "Read porte output and check leftovers"}`
+
+  ```
+mode 0 — f32 dense               0.00e0  ✅  (réf 61.9920 / deux nœuds 61.9920)
+  mode 1 — listes quantifiées     0.00e0  ✅  (réf 61.9920 / deux nœuds 61.9920)
+  mode 2 — listes par blocs        3.65e-2  ✅  (réf 61.9920 / deux nœuds 64.2535)
+  mode 3 — lot dense f32           0.00e0  ✅  (réf 60.8135 / deux nœuds 60.8135)
+  mode 4 — lot en listes           4.45e-3  ✅  (réf 60.8135 / deux nœuds 60.5427)
+
+real	0m17,328s
+user	3m31,434s
+sys	0m0,738s
+EXIT=0
+=== srv log ===
+[config] rotation : RoPE simple (le modèle ne déclare pas YaRN)
+[flux] nœud moteur sur 127.0.0.1:48494 · 896 cachés · 24 couches · contexte 64
+[flux] client connecté : 127.0.0.1:51976
+[flux] arrêt : failed to fill whole buffer
+[flux] 6 flux servis
+=== process restants ===
+3750881 bash -c cat /tmp/adv_porte.log; echo "=== srv log ==="; tail -5 /tmp/porte_flux_srv.log 2>/dev/null; echo "=== process restants ==="; pgrep -fa "flux-serveur" | head
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '90,140p' tools/pair_factice.py", "description": "Read pair_factice v6 handling"}`
+
+  ```
+corps = b"".join(morceaux)
+            print(f"[factice]   → {n} états, {len(corps)} octets de corps "
+                  f"(somme des préfixes, échelles et paires)", flush=True)
+        elif mode == 2:
+            nb = struct.unpack("<I", lire_tout(sock, 4))[0]
+            echelles = lire_tout(sock, nb * 4)
+            longueur = struct.unpack("<I", lire_tout(sock, 4))[0]
+            corps = echelles + lire_tout(sock, longueur)
+        else:
+            corps = lire_tout(sock, n * 4)
+        # **Protocole v6 : le corps commence par le pré-mix porté** (un octet de
+        # compte, puis `np × hc` f32). Ce pair factice ne calcule rien et ne
+        # connaît pas `hc` : il lit le compte et refuse poliment un pré-mix non
+        # vide, au lieu de désynchroniser le flux en silence.
+        if version >= 6:
+            np_ = lire_tout(sock, 1)[0]
+            if np_:
+                print(f"[factice] pré-mix de {np_} état(s) : ce pair ne le gère pas "
+                      f"(il ne calcule rien) — la session va s'arrêter proprement", flush=True)
+                break
+        if magie != MAGIE:
+            print(f"[factice] MAGIE INCONNUE {magie:#x}", flush=True)
+            break
+       
+… [1803 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Examen des tests unitaires du codec et des appelants de `tete_flux`
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"tete_flux\\|envoyer_flux\\|envoyer_lot\" drave-core/src/main.rs | head -30; echo \"=== binary ===\"; ls -la --time-style=full-iso drave-core/target/release/drave; git log -1 --format=%ci", "description": "Callers of tete_fl … [20 caractères tronqués]`
+
+  ```
+2234:fn tete_flux(mode: u8, debut: u32, fin: u32, pos: u32, n: usize, echelle: f32,
+2320:fn envoyer_flux(s: &mut std::net::TcpStream, debut: u32, fin: u32, pos: u32,
+2356:    let tete = tete_flux(mode, debut, fin, pos, n, echelle, mdl);
+2401:fn envoyer_lot(s: &mut std::net::TcpStream, debut: u32, fin: u32, pos0: u32,
+2404:    let tete = tete_flux(MODE_LOT, debut, fin, pos0, t, 0.0, Some(mdl));
+2435:fn envoyer_lot_listes(s: &mut std::net::TcpStream, debut: u32, fin: u32, pos0: u32,
+2446:    let tete = tete_flux(MODE_LOT_LISTES, debut, fin, pos0, t, 0.0, Some(mdl));
+2786:                        envoyer_lot_listes(&mut sock, f.debut, f.fin, f.pos, &plat, t, &mdl)
+2788:                        envoyer_lot(&mut sock, f.debut, f.fin, f.pos, &plat, t, &mdl)
+2809:                if envoyer_flux(&mut sock, f.debut, f.fin, f.pos, &sortie, f.mode,
+2956:                envoyer_lot_listes(&mut sock, couches_locales as u32, n_layer as u32,
+2959:                envoyer_lot(&mut sock, couches_locales as u32, n_layer as u32,
+3032:        let (o, a) = envoyer_flux(&mut sock, couches_locales as u32, n_layer as u32,
+5005:        let (octets, n) = envoyer_flux(&mut client, 12, 24, 0, &valeurs,
+=== binar
+… [139 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs", "limit": 130, "offset": 4950}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs</path>
+<type>file</type>
+<content>
+4950:     //! échappement d'indice écrit sur quatre octets et lu sur deux) étaient
+4951:     //! invisibles pour les six tests existants, qui ne couvraient que le cache KV.
+4952:     use super::*;
+4953:     use std::net::{TcpListener, TcpStream};
+4954: 
+4955:     #[test]
+4956:     fn entete_et_version_sont_ce_que_les_numeros_disent() {
+4957:         assert_eq!(TAILLE_TETE, 79, "l'en-tête de flux doit faire 79 octets");
+4958:         // La version suit l'en-tête : 4 quand les top-k sont entrés dans le
+4959:         // contrat, 5 quand le mode 4 (lot en listes) est apparu, 6 quand le
+4960:         // pré-mix porté de V4.1 a été ajouté en tête de corps. Ce test a
+4961:         // d'ailleurs échoué au premier coup, exactement pour ça — et il a
+4962:         // resservi à la v6.
+4963:         assert_eq!(VERSION_FLUX, 6, "le pré-mix porté impose la version 6");
+4964:     }
+4965: 
+4966:     #[test]
+4967:     fn paires_blocs_aller_retour_avec_echappement() {
+4968:         // Écarts successifs : 3 (direct), 297 (échappement), 1 (direct),
+4969:         // 255 (échappement — c'est l
+… [5848 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Écart de perplexité, `octets_corps`, et test empirique du trap sous timeout
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs", "limit": 70, "offset": 3080}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs</path>
+<type>file</type>
+<content>
+3080:             // emprunte le modèle en écriture, et la tête le reprend ensuite. Les
+3081:             // imbriquer ne compilerait pas — et c'est tant mieux : l'ordre
+3082:             // (réduire, puis noter) reste ainsi visible.
+3083:             let reduit = mdl.norme_finale(&final_);
+3084:             nll += nll_logits(&mdl.logits(&reduit), ids[pos + 1]);
+3085:         }
+3086:     }
+3087:     }
+3088:     let ppl = (nll / (ids.len() - 1) as f64).exp();
+3089:     println!("  deux nœuds        : perplexité {ppl:.4}  ({:.1} s)", t1.elapsed().as_secs_f64());
+3090:     println!("  écart             : {:.2e}", (ppl - ppl_ref).abs() / ppl_ref);
+3091:     // Divisor : le nombre de flux RÉELLEMENT envoyés (un par jeton, le dernier
+3092:     // compris) et non le nombre de jetons NOTÉS — l'erreur d'un facteur 40/39
+3093:     // faisait apparaître un flux de « 919 canaux » pour un modèle qui en a 896.
+3094:     let nflux = flux_envoyes.max(1);
+3095:     if lot > 1 {
+3096:         // « par jeton » divise par les jetons RÉELLEMENT envoyés (Σt) : le dernier
+3097:         // lot e
+… [3620 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp && cat > /tmp/adv_trap_inner.sh <<'EOF'\n#!/bin/bash\nset -u\nSRV=\"\"\ndemarrer() { sleep 300 & SRV=$!; echo \"serveur pid $SRV\"; }\narreter() { if [ -n \"$SRV\" ]; then echo \"TRAP: kill $SRV\" >> /tmp/adv_trap.log; kill $SRV 2>/dev/null; wait $SRV 2>/dev/null; SRV=\"\"; fi;  … [423 caractères tronqués]`
+
+  ```
+serveur pid 3751078
+timeout exit=124
+--- log du trap ---
+TRAP: kill 3751078
+--- sleep orphelins restants ---
+3751072 bash -c cd /tmp && cat > /tmp/adv_trap_inner.sh <<'EOF' #!/bin/bash set -u SRV="" demarrer() { sleep 300 & SRV=$!; echo "serveur pid $SRV"; } arreter() { if [ -n "$SRV" ]; then echo "TRAP: kill $SRV" >> /tmp/adv_trap.log; kill $SRV 2>/dev/null; wait $SRV 2>/dev/null; SRV=""; fi; } trap 'arreter' EXIT demarrer sleep 300 EOF chmod +x /tmp/adv_trap_inner.sh; rm -f /tmp/adv_trap.log timeout 3 /tmp/adv_trap_inner.sh; echo "timeout exit=$?"; sleep 0.5 echo "--- log du trap ---"; cat /tmp/adv_trap.log 2>/dev/null || echo "(vide : le trap EXIT n'a PAS tourne)" echo "--- sleep orphelins restants ---"; pgrep -fa "sleep 300" | head
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification de `octets_corps` : incohérence possible du décompte 82 016 / 81 999
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs", "limit": 120, "offset": 2584}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs</path>
+<type>file</type>
+<content>
+2584:                 let base = plat.len();
+2585:                 plat.resize(base + hidden, 0.0);
+2586:                 let mut hors = 0usize;
+2587:                 for (&i, &v) in idx.iter().zip(val.iter()) {
+2588:                     let b = i as usize / 32;
+2589:                     if (i as usize) < hidden && b < echelles.len() {
+2590:                         plat[base + i as usize] = v as f32 * echelles[b];
+2591:                     } else { hors += 1; }
+2592:                 }
+2593:                 hors_total += hors;
+2594:                 lus += 12 + nb * 4 + lg;
+2595:                 // Le plan l'exige et le code ne le faisait pas : chaque état peut
+2596:                 // être légal et le TOTAL ne pas l'être — un pair annonçait
+2597:                 // 268 Mo par état sur 74 898 états. La mémoire reste bornée (on
+2598:                 // décode état par état), le TEMPS non.
+2599:                 verifier_taille(lus, &format!("corps du lot en listes (cumul après \
+2600: l'état {j})"))?;
+2601:             }
+2602:             if hors_total > 0 {
+2603:            
+… [6395 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"octets_corps\" drave-core/src/main.rs", "description": "All octets_corps occurrences"}`
+
+  ```
+2131:    octets_corps: usize,
+2610:            let octets_corps = lus;
+2611:            return Ok(Flux { n, debut, fin, pos, mode, act, premix: premix.clone(), octets_corps,
+2624:            return Ok(Flux { n, debut, fin, pos, mode, act, premix: premix.clone(), octets_corps: corps.len(),
+2651:            let octets_corps = 4 + n_blocs * 4 + 4 + longueur;
+2652:            return Ok(Flux { n, debut, fin, pos, mode, act, premix: premix.clone(), octets_corps, charge:
+2675:    Ok(Flux { n, debut, fin, pos, mode, act, premix, octets_corps: octets.len(), charge })
+2783:                                  f.pos, hs.len(), plat.len(), f.octets_corps);
+2984:            octets_recus += TAILLE_TETE as u64 + rep.octets_corps as u64;
+3053:        octets_recus += TAILLE_TETE as u64 + rep.octets_corps as u64;
+5001:            assert_eq!(f.octets_corps, 32);
+  ```
+
+### 🤖 Assistant
+
+⏵ Mesure de l'asymétrie d'octets aller/retour sur le petit modèle + tests unitaires en fond
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf; P=47311; ($D \"$M\" --flux-serveur $P --ctx 64 --threads 8 > /tmp/adv_srv1.log 2>&1 &) ; for i in $(seq 1 200); do grep -q \"nœud moteur sur\" /tmp/adv_srv1.log 2> … [297 caractères tronqués]`
+
+  ```
+[flux] quantification : 127 niveaux, seuil 0, top-k 0, renorm false
+  référence locale  : perplexité 61.9920  (0.9 s)
+  deux nœuds        : perplexité 61.9920  (0.9 s)
+  écart             : 0.00e0
+  transport         : dense f32 · 3664 octets par flux (aller) · 3663 au retour · 100.0 % d'activité (896 neurones par flux) · 23 flux
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && timeout 900 cargo test --release 2>&1 | tail -40", "description": "Run unit tests", "run_in_background": true}`
+
+  ```
+started background job bash-208
+  ```
+
+### 🤖 Assistant
+
+⏵ Branchement de la porte dans portes.sh et condition `hc_retarde`
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show ac80e7e -- tools/portes.sh && echo \"=== portes.sh autour ===\" && grep -n \"porte-flux\" -B 8 -A 8 tools/portes.sh", "description": "Check portes.sh wiring"}`
+
+  ```
+commit ac80e7e0682685809b9506004a294debe1aed377
+Author: Stéphane <stephane@localhost>
+Date:   Fri Oct 2 21:15:19 2026 -0400
+
+    Découpage V4.1 : la couture est exacte au bit près, l'instrument est innocenté
+    
+    Deux énigmes du sprint 12 sont fermées, et l'une était un vrai défaut du moteur.
+    
+    1. Le V4.1 découpé à la couche 20 donnait 514 722,06 au lieu de 1 743 713,62.
+       Cause : la `pre` reçue du pair pour le jeton p restait posée sur le modèle, et
+       le `forward` du jeton p+1 la reprenait pour amorcer sa chaîne mHC retardée —
+       soit les coefficients de la dernière FFN du pair AU JETON PRÉCÉDENT.
+       Mesuré par tenseur : 629 tenseurs divergents, tous aux positions 1 et 2,
+       AUCUN à la position 0 (la signature d'une fuite d'un jeton sur le suivant).
+       Correctif, deux invariants :
+       · `forward` ne consomme la `pre` reçue que si CE nœud reprend au milieu du
+         modèle (`couche_debut > 0`) : un nœud qui commence à la couche 0 voit un
+         jeton neuf entrer par l'embarquement, sa chaîne repart de la copie 0 ;
+       · `norme_finale` prend `&mut self` et CONSOMME cette `pre` : elle appartient
+         à la réduction de ce flux-là, et 
+… [3746 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '3205,3270p' drave-core/src/model.rs", "description": "Read hc_retarde detection"}`
+
+  ```
+// `hc_eps`). Lire une seule des deux donne `hc = 0` — donc un modèle
+        // silencieusement traité comme s'il n'avait pas d'hyper-connexions.
+        // **V4.1 = mHC RETARDÉ.** L'architecture se lit dans
+        // `general.architecture` (« deepseek41 » contre « deepseek4 » pour
+        // V4-Flash) : c'est elle qui décide QUELLE chaîne de repliement
+        // s'applique, et se tromper donne des nombres plausibles et faux — le
+        // même genre d'erreur que la base RoPE des couches compressées.
+        let hc_retarde = g.meta.get("general.architecture")
+            .and_then(|m| m.as_str()) == Some("deepseek41");
+        let (hc, hc_tete) = if g.tensor("blk.0.hc_attn_fn.weight").is_some() {
+            let (mult, iters, eps) = g.hc_params()
+                .unwrap_or_else(|| panic!("hyper-connexions : `hc_mult` introuvable"));
+            let mut v = Vec::with_capacity(cfg.n_layer);
+            for l in 0..cfg.n_layer {
+                let q = |s: &str| format!("blk.{l}.{s}");
+                let mk = |nom: &str| Hc {
+                    melange: g.dequant(&q(&format!("{nom}_fn.weight"))),
+                    base: g.dequant(&q(&format!("{nom}_base.weight"))),
+           
+… [2698 caractères tronqués]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-208 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && timeout 900 cargo test --release 2>&1 | tail -40) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 🤖 Assistant
+
+⏵ Résultat des tests unitaires et confirmation du trou de propagation dans portes.sh
+
+- **job_output** `{"job_id": "bash-208"}`
+
+  ```
+test list::tests_q6k::quarts_successifs ... ok
+test materiel::tests::liste_cpus_lit_les_plages ... ok
+test model::tests_hc::chaine_retardee_v41 ... ok
+test model::tests_hc::diagnostic_yarn_v4flash ... ok
+test model::tests_hc::hyper_connexions_conforme_a_la_reference ... ok
+test model::tests_hc::hyper_connexions_degenere_egale_le_residu ... ok
+test model::tests_hc::pool_du_compresseur_est_par_canal ... ok
+test model::tests_hc::rotation_reversible_dans_les_deux_conventions ... ok
+test model::tests_hc::sinkhorn_rend_les_connexions_doubles ... ok
+test list::tests_grille::sans_noyau_et_dequant_grille_couvrent_le_meme_ensemble ... ok
+test model::tests_hc::yarn_du_compresseur_conforme_a_ggml ... ok
+test model::tests_kv::aller_retour_kv ... ok
+test model::tests_router::biais_de_selection_hors_des_poids ... ok
+test model::tests_router::facteur_dechelle_apres_renormalisation ... ok
+test engine::tests_gemm_q4::gemm_q4_egale_matvec ... ok
+test tests_flux::entete_et_version_sont_ce_que_les_numeros_disent ... ok
+test model::tests_router::quatre_conventions_sur_les_memes_logits ... ok
+test tests_flux::paires_blocs_aller_retour_avec_echappement ... ok
+test model::tests_router::routage_par_table_de
+… [1315 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"exit 1\" -B 2 tools/porte-flux.sh | head -30; echo \"=== ECHEC dans portes.sh ===\"; grep -n \"^ECHEC\\|ECHEC=\" tools/portes.sh | head", "description": "List early exits without failure marker"}`
+
+  ```
+30-PORT=${PORT:-$((48000 + RANDOM % 1000))}
+31-
+32:[ -x "$D" ] || { echo "  $D absent : construire d'abord (cargo build --release)"; exit 1; }
+33:[ -s "$MODELE" ] || { echo "  $MODELE absent"; exit 1; }
+--
+36-         --sortie /tmp/porte_flux_ids.txt >/dev/null 2>&1
+37-fi
+38:[ -s /tmp/porte_flux_ids.txt ] || { echo "  jetons de test indisponibles"; exit 1; }
+=== ECHEC dans portes.sh ===
+15:ECHEC=0
+24:        ECHEC=1
+47:    ECHEC=1
+68:    || { printf "  %-42s %s  ❌\n" "threads par défaut" "${v:-—}"; ECHEC=1; }
+79:            *)  printf "  %-42s %s  ❌\n" "formats contre libggml" "$r"; ECHEC=1 ;;
+92:        *)      printf "  %-42s %s  ❌ (attendu %s)\n" "$1" "${v:-—}" "$3"; ECHEC=1 ;;
+110:        *)         printf "  %-42s %s  ❌\n" "V4-Flash : --config le dit calculable" "${v:-—}"; ECHEC=1 ;;
+146:        *)  printf "  %-42s %s  ❌\n" "engram V4.1 : adressage" "pas de sortie"; ECHEC=1 ;;
+160:            *)         printf "  %-42s %s  ❌\n" "gpt-oss : --config le dit calculable" "${v:-—}"; ECHEC=1 ;;
+188:    printf '%s\n' "$sortie_flux" | grep -q "❌" && ECHEC=1
+  ```
+
+### 🤖 Assistant
+
+⏵ Démonstration d'un faux vert via portes.sh + lecture des affirmations du sprint et du plan
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"--- simulation du câblage portes.sh (lignes 184-189) avec MODELE absent ---\" && sortie_flux=$(MODELE=/tmp/nexistepas.gguf timeout 900 tools/porte-flux.sh 2>&1); rc=$?; printf '%s\\n' \"$sortie_flux\"; echo \"code retour porte … [205 caractères tronqués]`
+
+  ```
+--- simulation du câblage portes.sh (lignes 184-189) avec MODELE absent ---
+  /tmp/nexistepas.gguf absent
+code retour porte = 1
+ECHEC vu par portes.sh = 0  (0 = vert !)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '60,144p' sprints/13-les-deux-enigmes-du-decoupage-v41.md", "description": "Read rest of sprint 13"}`
+
+  ```
+Sa réduction finale est **apprise** (`output_hc_*`) : il n'a pas de chaîne
+retardée, donc `hc_porte_imposee` n'est jamais posé chez lui (`np = 0` sur le
+fil) et le défaut ne pouvait pas s'exprimer. C'est exactement ce qui a rendu
+l'énigme longue : le même harnais, le même découpage, un écart **0,00e0** sur
+V4-Flash et 7,05e-1 sur V4.1. Le modèle qui échouait était le seul dont la
+réduction finale dépend d'un état porté par le fil.
+
+## Le deuxième correctif : les modes 3 et 4 n'écrivaient pas le préfixe v6
+
+Le protocole v6 a ajouté un octet `np` (compte de pré-mix) en tête de **corps**.
+Le chemin « un jeton » (modes 0-2) l'écrivait ; les deux émetteurs de **lots**
+(modes 3 et 4) non — le décodeur du pair lisait donc le premier octet du premier
+état comme un compte, et tout le reste était décalé de quatre octets. Un mode
+entier, faux et muet.
+
+Un seul encodeur désormais (`prefixe_premix`), utilisé par les trois émetteurs,
+avec l'invariant qui manquait : **une `pre` appartient à UN état**, donc un flux
+de plus d'un état n'en porte pas.
+
+Mesuré, deux nœuds sur Qwen2.5-0.5B Q8_0 (24 jetons, `--lot 4`) :
+
+| mode | écart |
+|---|---|
+| 3 — lot dense f32 | **0,00e0** |
+| 4 — lot en listes |
+… [3517 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification du défaut de quantification par mode (`--ppl` vs flux)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fn appliquer_quantification\" -A 30 drave-core/src/main.rs | head -45; echo \"=== opt.abit ===\"; grep -n \"abit\" drave-core/src/main.rs | head -20", "description": "Check default activation quantization per mode"}`
+
+  ```
+2010:fn appliquer_quantification(mdl: &mut model::Model, opt: &Options) {
+2011-    let abits = if opt.abits_impose { opt.abits } else { 8 };
+2012-    mdl.act_levels = ((1u32 << (abits - 1)) - 1) as f32;
+2013-    mdl.act_thresh = opt.act_thresh;
+2014-    mdl.act_topk = opt.act_topk;
+2015-    mdl.act_renorm = opt.act_renorm;
+2016-    // Les top-k étaient PUREMENT ignorés dans les modes flux (audit
+2017-    // `reports/rapport-drapeaux-ignores.md`, défaut n°1) : ils s'appliquent ici,
+2018-    // et ils voyagent dans l'en-tête pour que les deux nœuds fassent pareil.
+2019-    mdl.act_topk_proj = opt.topk_proj;
+2020-    mdl.attn_topk = opt.attn_topk;
+2021-    mdl.qk_topk = opt.qk_topk;
+2022-    mdl.moe_topk = opt.moe_topk;
+2023-}
+2024-
+2025-/// ---- Phase 3 : le flux passe d'un nœud à l'autre ----------------------------
+2026-///
+2027-/// Cadriciel : `u32` magie, `u32` plage (debut, fin), `u32` position, `u32`
+2028-/// dimension, puis les activations en f32. C'est le même contenu que le format
+2029-/// de trace, réduit à ce qu'un nœud a besoin de recevoir pour continuer.
+2030-const MAGIE_FLUX: u32 = 0x4452_5631;   // "DRV1"
+2031-/// Version du protocole de flux. Elle est dans CHAQUE en-t
+… [1765 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -rl \"1743713\\|208411\\|514722\" /tmp --include=\"*.log\" --include=\"*.txt\" --include=\"*.md\" 2>/dev/null | head; echo \"---\"; ls -la /tmp/*.log 2>/dev/null | head -20", "description": "Search tmp for published ppl values"}`
+
+  ```
+/tmp/exp_abits8.log
+/tmp/v41_pil4.log
+/tmp/v41_fix_out.log
+/tmp/exp_dense.log
+/tmp/exp_ref.log
+/tmp/exp_A.log
+/tmp/v41_pil3.log
+/tmp/v41_diag3_out.log
+/tmp/v41_pil2.log
+/tmp/v41_diag2_out.log
+---
+-rw-r--r--. 1 stephane stephane   5761 24 sep 15:00 /tmp/ab-8075.log
+-rw-r--r--. 1 stephane stephane    320 24 sep 15:00 /tmp/ab-after.log
+-rw-r--r--. 1 stephane stephane    488  2 oct 21:19 /tmp/adv_porte.log
+-rw-r--r--. 1 stephane stephane    499  2 oct 21:20 /tmp/adv_srv1.log
+-rw-r--r--. 1 stephane stephane     19  2 oct 21:20 /tmp/adv_trap.log
+-rw-r--r--. 1 stephane stephane    485  1 oct 21:10 /tmp/affinite.log
+-rw-r--r--. 1 stephane stephane   1657 24 sep 17:08 /tmp/agent-after-fix.log
+-rw-r--r--. 1 stephane stephane   1657 24 sep 16:51 /tmp/agent-final.log
+-rw-r--r--. 1 stephane stephane   3728 24 sep 15:02 /tmp/agentic.log
+-rw-r--r--. 1 stephane stephane    397 25 sep 07:43 /tmp/agentic-test2.log
+-rw-r--r--. 1 stephane stephane    378 25 sep 07:41 /tmp/agentic-test.log
+-rw-r--r--. 1 stephane stephane   1500 24 sep 16:47 /tmp/agent-offline2.log
+-rw-r--r--. 1 stephane stephane   1676 24 sep 16:39 /tmp/agent-offline.log
+-rw-r--r--. 1 stephane stephane   1500 24 sep 16:34 /tmp/agent-te
+… [464 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Les logs de session sont dans /tmp : vérification directe des perplexités publiées
+
+- **bash** `{"command": "cd /tmp && for f in v41_pil3.log v41_pil4.log v41_fix_out.log exp_ref.log exp_A.log exp_abits8.log exp_dense.log; do echo \"=========== $f ($(stat -c %y $f 2>/dev/null | cut -c1-19)) ===========\"; grep -iE \"perplexité|écart|transport|quantification|dump|niveaux\" $f 2>/dev/null | head … [73 caractères tronqués]`
+
+  ```
+=========== v41_pil3.log (2026-10-02 20:47:45) ===========
+[flux] quantification : 127 niveaux, seuil 0, top-k 0, renorm false
+  référence locale  : perplexité 1743713.6243  (65.7 s)
+  deux nœuds        : perplexité 514722.0611  (48.8 s)
+  écart             : 7.05e-1
+  transport         : dense f32 · 82016 octets par flux (aller) · 81999 au retour · 400.0 % d'activité (20480 neurones par flux) · 3 flux
+=========== v41_pil4.log (2026-10-02 21:01:16) ===========
+[flux] quantification : 127 niveaux, seuil 0, top-k 0, renorm false
+  référence locale  : perplexité 1743713.6243  (68.0 s)
+  deux nœuds        : perplexité 1743713.6243  (51.3 s)
+  écart             : 0.00e0
+  transport         : dense f32 · 82016 octets par flux (aller) · 81999 au retour · 400.0 % d'activité (20480 neurones par flux) · 3 flux
+=========== v41_fix_out.log (2026-10-02 21:01:18) ===========
+  référence locale  : perplexité 1743713.6243  (68.0 s)
+  deux nœuds        : perplexité 1743713.6243  (51.3 s)
+  écart             : 0.00e0
+  transport         : dense f32 · 82016 octets par flux (aller) · 81999 au retour · 400.0 % d'activité (20480 neurones par flux) · 3 flux
+=========== exp_ref.log (2026-10-02 20:56:41) =
+… [715 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Dernières vérifications : provenance de dref, portes.sh rapide, et le 0,00e0 V4-Flash du sprint 12
+
+- **bash** `{"command": "cd /tmp && find /tmp -maxdepth 2 -newermt \"2026-10-02 20:49\" ! -newermt \"2026-10-02 20:53\" -type f 2>/dev/null | grep -v \"^/tmp/d\" | head -20; echo \"=== logs 20:50-20:53 ===\"; find /tmp -maxdepth 1 -type f -newermt \"2026-10-02 20:48\" ! -newermt \"2026-10-02 20:54\" 2>/dev/null … [63 caractères tronqués]`
+
+  ```
+/tmp/exp_anomalie.log
+/tmp/exp_ref.sh
+/tmp/exp_A.log
+/tmp/exp_anomalie.sh
+=== logs 20:50-20:53 ===
+/tmp/exp_anomalie.log
+/tmp/exp_ref.sh
+/tmp/exp_A.log
+/tmp/exp_anomalie.sh
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"0,00e0\\|0.00e0\\|8430\" reports/rapport-v4-reparti.md | head -10; echo \"=== portes.sh en-tete ===\"; sed -n '1,50p' tools/portes.sh", "description": "Check V4-Flash claim and portes.sh"}`
+
+  ```
+4:processus et rend **exactement** la même perplexité (écart `0,00e0` en mode
+16:| deux nœuds, dense | **8 311,3347** — écart **0,00e0** | 65 615 | 400 % (16 384 canaux) | 4 873 ms (1,11×) |
+19:Le transport dense est **exact** (c'est le contrat : `0,00e0`), et il l'est
+=== portes.sh en-tete ===
+#!/bin/bash
+# Les portes du dépôt, en une commande.
+#
+# Un chiffre de référence qui dérive sans qu'on s'en aperçoive ne vaut rien :
+# chaque porte est comparée à la valeur ATTENDUE, et le script sort en erreur si
+# l'une diverge. Les valeurs sont celles publiées dans les rapports.
+#
+#   tools/portes.sh            toutes les portes
+#   tools/portes.sh rapide     sans gpt-oss (le seul qui prenne ~20 min)
+
+set -u
+cd "$(dirname "$0")/.."
+D=./drave-core/target/release/drave
+RAPIDE=${1:-}
+ECHEC=0
+
+[ -x "$D" ] || { echo "compiler d'abord : (cd drave-core && cargo build --release)"; exit 2; }
+
+compare() {  # nom, attendu, obtenu
+    if [ "$2" = "$3" ]; then
+        printf "  %-42s %s  ✅\n" "$1" "$3"
+    else
+        printf "  %-42s %s  ❌ (attendu %s)\n" "$1" "${3:-—}" "$2"
+        ECHEC=1
+    fi
+}
+
+# Attention : le moteur affiche AUSSI une perplexité cumulée par fenêtre, avant
+# le total. Prendre la
+… [1094 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Identification de la commande qui a produit `/tmp/dref`
+
+- **bash** `{"command": "cd /tmp && echo \"=== exp_ref.sh ===\"; cat exp_ref.sh; echo \"=== exp_anomalie.sh ===\"; cat exp_anomalie.sh; echo \"=== exp_anomalie.log (tete) ===\"; head -25 exp_anomalie.log", "description": "Read exp scripts and anomaly log"}`
+
+  ```
+=== exp_ref.sh ===
+#!/bin/bash
+set -u
+cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet
+D=./drave-core/target/release/drave
+M=/home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf
+DRAVE_DUMP_COUCHES=/tmp/dref/l $D "$M" --ppl-reparti 127.0.0.1:9 --ids "$(cat /tmp/v41_last4.ids)" --ctx 8 --ctx-impose --limit 4 --threads 20 > /tmp/exp_ref.log 2>&1
+echo "ref fini" >> /tmp/exp_ref.log
+=== exp_anomalie.sh ===
+#!/bin/bash
+set -u
+cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet
+D=./drave-core/target/release/drave
+M=/home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf
+# A : perplexite simple, fichier d'ids, ctx 8 impose
+DRAVE_DUMP_COUCHES=/tmp/dA/l $D "$M" --ppl /tmp/v41_last4.ids --ctx 8 --ctx-impose --limit 4 --threads 20 > /tmp/exp_A.log 2>&1
+echo "A fini" >> /tmp/exp_A.log
+=== exp_anomalie.log (tete) ===
+A:0
+  ```
+
+### 🤖 Assistant
+
+⏵ Lecture de `exp_ref.log` pour confirmer l'origine exacte de dref
+
+- **bash** `{"command": "cd /tmp && cat exp_ref.log | head -30; echo \"=== dernieres lignes ===\"; tail -6 exp_ref.log", "description": "Read exp_ref.log fully"}`
+
+  ```
+[options] 1 drapeau(x) INCONNU(S), donc sans effet : --ctx-impose
+[options] (une faute de frappe suffit — `--options-actives` montre ce que le moteur applique vraiment)
+[rope] YaRN déclaré par le JSON `<arch>.config` (`rope_scaling`), pas par une clef GGUF — lu là, et ANNONCÉ
+[config] cache compressé PARTAGÉ entre couches (`kv_source_layer_ids`) : 2..7 → 2 · 8..13 → 8 · 14..19 → 14 · 20..39 → 20. Les couches SOURCES projettent leur état ; les CONSOMMATRICES lisent les tampons de leur source au lieu d'en calculer d'autres — un compresseur par couche donnerait d'AUTRES clés, donc faux sans rien casser
+[config] indexeurs : couches [2, 8, 14, 20, 24, 28, 32, 36] · les quatre premières possèdent le cache de clés, les autres lisent celui de leur source de KV — une couche qui porte `indexer.proj` sans être dans cette liste serait un fichier contradictoire
+[config] attention V4 : 40 couches · 1 tête latente de 512 (448 nope + 64 rope) · 64 têtes de requête · sortie groupée 8×1024 · puits par tête
+[config] hyper-connexions : 4 copies · 24 mélanges par couche (pre 4 + post 4 + comb 16) · Sinkhorn 20 itérations · eps 1e-6 · pas de mélange de tête (absent du fichier) · chaîne RETARDÉE (V4.1) :
+… [1796 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôle final : nombre de couches locales des runs publiés et étanchéité du champ
+
+- **bash** `{"command": "cd /tmp && head -3 v41_pil4.log; grep -n \"pilote :\" v41_pil4.log v41_pil3.log; echo \"=== dsrv4 log ===\"; ls /tmp/v41_srv*.log /tmp/*srv4* 2>/dev/null | head; echo \"=== grep hc_porte_imposee hors src ===\"; grep -rn \"hc_porte_imposee\" /home/stephane/Data13TB/stephane/GitHub/Qtrine … [105 caractères tronqués]`
+
+  ```
+[rope] YaRN déclaré par le JSON `<arch>.config` (`rope_scaling`), pas par une clef GGUF — lu là, et ANNONCÉ
+[config] cache compressé PARTAGÉ entre couches (`kv_source_layer_ids`) : 2..7 → 2 · 8..13 → 8 · 14..19 → 14 · 20..39 → 20. Les couches SOURCES projettent leur état ; les CONSOMMATRICES lisent les tampons de leur source au lieu d'en calculer d'autres — un compresseur par couche donnerait d'AUTRES clés, donc faux sans rien casser
+[config] indexeurs : couches [2, 8, 14, 20, 24, 28, 32, 36] · les quatre premières possèdent le cache de clés, les autres lisent celui de leur source de KV — une couche qui porte `indexer.proj` sans être dans cette liste serait un fichier contradictoire
+v41_pil4.log:15:[flux] pilote : 20 couches en local, 20 chez le pair, 4 jetons
+v41_pil3.log:17:[flux] pilote : 20 couches en local, 20 chez le pair, 4 jetons
+=== dsrv4 log ===
+/tmp/v41_srv2.log
+/tmp/v41_srv3.log
+/tmp/v41_srv4.log
+/tmp/v41_srv4.log
+/tmp/v41_srv_diag.log
+
+/tmp/dsrv4:
+l-attn_brut-20-0.bin
+l-attn_brut-20-1.bin
+l-attn_brut-20-2.bin
+=== grep hc_porte_imposee hors src ===
+/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs:2804:                mdl.hc_porte_imposee = if f.pre
+… [232 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification que le binaire de la porte correspond bien au commit (arbre propre)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --porcelain | head; echo \"--- mtimes sources ---\"; ls -la --time-style=full-iso drave-core/src/model.rs drave-core/src/main.rs drave-core/target/release/drave; echo \"--- srv4 log ---\"; tail -6 /tmp/v41_srv4.log", "desc … [41 caractères tronqués]`
+
+  ```
+M drave-core/src/main.rs
+ M drave-core/src/model.rs
+ M journal/README.md
+ M sprints/13-les-deux-enigmes-du-decoupage-v41.md
+?? sprints/14-p8-la-vivacit-de-l-engram-interrupteur-d.md
+?? sprints/COURANT
+--- mtimes sources ---
+-rw-r--r--. 1 stephane stephane  274794 2026-10-02 21:22:12.455656590 -0400 drave-core/src/main.rs
+-rw-r--r--. 1 stephane stephane  461607 2026-10-02 21:22:07.672579330 -0400 drave-core/src/model.rs
+-rwxr-xr-x. 2 stephane stephane 2269160 2026-10-02 21:22:48.712242234 -0400 drave-core/target/release/drave
+--- srv4 log ---
+[config] puits appris sur 40/40 couches · n_rot 80 · ffn 2816 · experts 384
+[config] rotation : RoPE simple sur les couches BRUTES (régime retardé : YaRN au-delà de quatre fois la longueur d'origine, seuil mesuré sur gpt-oss) — mais les couches COMPRESSÉES sont en YaRN ×16 à TOUTES les positions, comme llama.cpp (`deepseek4.cpp:872-879`) et vLLM (`rope.py:28-46`) ; `DRAVE_YARN=1`/`--sans-yarn` forcent l'un ou l'autre partout
+[flux] nœud moteur sur 127.0.0.1:47161 · 5120 cachés · 40 couches · contexte 8
+[flux] client connecté : 127.0.0.1:21658
+[flux] arrêt : failed to fill whole buffer
+[flux] 3 flux servis
+  ```
+
+### 🤖 Assistant
+
+⏵ L'arbre de travail a été modifié pendant ma session : j'inspecte le diff non commité
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff --stat && echo \"=== diff model.rs + main.rs ===\" && git diff drave-core/src/model.rs drave-core/src/main.rs | head -120", "description": "Inspect uncommitted changes"}`
+
+  ```
+drave-core/src/main.rs                          |  2 +-
+ drave-core/src/model.rs                         | 27 +++++++++++++++++++++++++
+ journal/README.md                               |  4 ++--
+ sprints/13-les-deux-enigmes-du-decoupage-v41.md |  3 ++-
+ 4 files changed, 32 insertions(+), 4 deletions(-)
+=== diff model.rs + main.rs ===
+diff --git a/drave-core/src/main.rs b/drave-core/src/main.rs
+index 31014d3..fa6c910 100644
+--- a/drave-core/src/main.rs
++++ b/drave-core/src/main.rs
+@@ -22,7 +22,7 @@ const VARS_LUES: &[&str] = &[
+     "FLUX_VERIF", "GPU", "GPU_EXPERTS",
+     "GPU_EXPERTS_GO", "GPU_KV", "GPU_TETE", "GPU_TOPK", "HARMONY_TRACE",
+     "KV_BITS", "KV_F16", "KV_K_F16", "KV_K_F32", "KV_V_F32", "MMAP",
+-    "PRELIRE", "PRELIRE_TOUT", "Q8_BLOCS", "SANS_EMPRUNT", "TRACE_BLOCS",
++    "PRELIRE", "PRELIRE_TOUT", "Q8_BLOCS", "SANS_ENGRAM", "SANS_EMPRUNT", "TRACE_BLOCS",
+     "TRACE_EXPERTS", "VISION_TEXTE", "YARN", "YARN_MSCALE", "YARN_NON",
+     "YARN_RAMPE",
+ ];
+diff --git a/drave-core/src/model.rs b/drave-core/src/model.rs
+index 45215df..cd9d2c1 100644
+--- a/drave-core/src/model.rs
++++ b/drave-core/src/model.rs
+@@ -6017,6 +6017,24 @@ le raccord précédent n'existe pas, le premier
+… [2913 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Test adversarial : reconstruire une trame mode 3 SANS l'octet `np` et observer le serveur
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/adv_sansnp.py <<'EOF'\nimport socket, struct, sys\nMAGIE=0x44525631; VERSION=6; MODE=3\ndef entete(mode,n):\n    t=struct.pack(\"<IBBIIII\",MAGIE,VERSION,mode,12,24,0,n)\n    t+=struct.pack(\"<fff\",0.0,127.0,0.0)+struct.p … [1295 caractères tronqués]`
+
+  ```
+===== variante sans_np =====
+[client sans_np] exception timed out
+--- log serveur ---
+[flux] nœud moteur sur 127.0.0.1:48509 · 896 cachés · 24 couches · contexte 64
+[flux] client connecté : 127.0.0.1:20036
+[flux] arrêt : failed to fill whole buffer
+[flux] 0 flux servis
+===== variante avec_np =====
+[client avec_np] recu 4096 octets : REPONSE
+--- log serveur ---
+[flux] nœud moteur sur 127.0.0.1:48753 · 896 cachés · 24 couches · contexte 64
+[flux] client connecté : 127.0.0.1:17562
+[flux] arrêt : Connection reset by peer (os error 104)
+[flux] 1 flux servis
+  ```
+
+### 🤖 Assistant
+
+⏵ Derniers contrôles : absence de timeout de lecture et couverture du cas `np = 1`
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"set_read_timeout\\|set_write_timeout\" drave-core/src/main.rs; echo \"=== tests avec premix ===\"; grep -n \"premix\" drave-core/src/main.rs | sed -n '1,40p'", "description": "Check read timeouts and premix test coverage"}`
+
+  ```
+5062:        client.set_read_timeout(Some(std::time::Duration::from_secs(5))).unwrap();
+5238:        client.set_read_timeout(Some(std::time::Duration::from_secs(5))).unwrap();
+=== tests avec premix ===
+2135:    premix: Vec<f32>,
+2362:    let mut corps = prefixe_premix(mdl, 1);
+2381:fn prefixe_premix(mdl: Option<&model::Model>, t: usize) -> Vec<u8> {
+2382:    let premix: Vec<f32> = mdl.and_then(|m| m.hc_porte_flux.clone()).unwrap_or_default();
+2384:    assert!(t == 1 || premix.is_empty(),
+2387:    let np: u8 = if premix.is_empty() { 0 } else { 1 };
+2388:    assert!(premix.len() == np as usize * hc,
+2389:            "pré-mix de {} valeurs pour {np} état(s) × {hc} copies", premix.len());
+2390:    let mut p = Vec::with_capacity(1 + premix.len() * 4);
+2392:    for v in &premix { p.extend_from_slice(&v.to_le_bytes()); }
+2407:    let prefixe = prefixe_premix(Some(mdl), t);
+2440:    let prefixe = prefixe_premix(Some(mdl), t);
+2520:    let mut premix: Vec<f32> = Vec::new();
+2530:        premix = octets.chunks_exact(4)
+2611:            return Ok(Flux { n, debut, fin, pos, mode, act, premix: premix.clone(), octets_corps,
+2624:            return Ok(Flux { n, debut, fin, pos, mode, act, premix:
+… [464 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Repérage des lignes exactes des affirmations à citer, puis rédaction
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"2 544\\|2544\\|945\\|81 999\\|81999\\|faux et muet\\|décalé de quatre\" REPRISE.md sprints/13-les-deux-enigmes-du-decoupage-v41.md reports/rapport-decoupage-v41.md docs/format-flux.md reports/decoupage-v41-digest.txt | head … [49 caractères tronqués]`
+
+  ```
+REPRISE.md:83:>    **2 544 tenseurs du pilote + 945 du nœud moteur identiques au bit près** à
+REPRISE.md:90:>    Preuve : `--ppl --abits 8` donne **1 743 713,6243** et **2 544 tenseurs
+REPRISE.md:97:> préfixe v6 `np` que le décodeur lit pour tous les modes — corps décalé de quatre
+sprints/13-les-deux-enigmes-du-decoupage-v41.md:16:la couture, et il rendait le découpage V4.1 **faux et muet** à partir du deuxième
+sprints/13-les-deux-enigmes-du-decoupage-v41.md:22:| Pourquoi la référence du harnais n'était-elle pas celle de `--ppl` ? | les deux modes ne quantifient pas les activations pareil : `--ppl` prend **16 bits** (32 767 niveaux, sa référence de non-régression) et les modes flux **8 bits** (127 niveaux, `appliquer_quantification`). Preuve : `--ppl --abits 8` donne **1 743 713,6243** et ses **2 544 tenseurs sont identiques au bit près** à ceux du harnais |
+sprints/13-les-deux-enigmes-du-decoupage-v41.md:23:| `--dense` était-il en cause ? | **non** : `--ppl --dense` et `--ppl` sont identiques au bit près (2 544 tenseurs, 0 différent) et donnent le même 208 411,8674 |
+sprints/13-les-deux-enigmes-du-decoupage-v41.md:49:| tenseurs du pilote (couches 0-19, positions 0-3) contre la réf
+… [2956 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Rédaction du rapport final et envoi au parent
+
+- **todo_write** `{"todos": [{"content": "Lire le diff complet (model.rs, main.rs, porte-flux.sh, docs)", "status": "completed"}, {"content": "Vérifier 1 : fuite de la `pre` reçue, tous les appelants", "status": "completed"}, {"content": "Vérifier 2 : norme_finale consomme la `pre` dans tous les cas", "status": "comp … [454 caractères tronqués]`
+
+  ```
+Updated todo list: 0 pending, 1 in progress, 7 completed.
+  ```
+
+- **write** `{"file_path": "/tmp/adv_rapport_ac80e7e.md", "content": "# Relecture adverse — ac80e7e (lecture seule, mesures en /tmp)\n\n**Verdict** : le correctif de la `pre` reçue tient (629 → 0 tenseurs divergents sur\nce que la passe répartie produit réellement ; 514 722,0611 → 1 743 713,6243,\nécart 7,05e-1  … [11412 caractères tronqués]`
+
+  ```
+<path>/tmp/adv_rapport_ac80e7e.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **send_message** `{"agent_id": "bbd6969f-0f70-42b2-8951-64d1f2f36d2e", "message": "Relecture adverse de ac80e7e terminée (lecture seule, aucune modif du dépôt ; rapport complet aussi dans /tmp/adv_rapport_ac80e7e.md).\n\nVERDICT : le correctif de la `pre` tient (629 → 0 divergents sur ce que la passe répartie produit … [6706 caractères tronqués]`
+
+  ```
+message delivered to agent bbd6969f-0f70-42b2-8951-64d1f2f36d2e
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification finale : aucun processus résiduel de mes mesures
+
+- **bash** `{"command": "pgrep -fa \"target/release/drave\" | grep -v pgrep | head; echo \"--- jobs ---\"; true", "description": "Check for leftover drave processes"}`
+
+  ```
+--- jobs ---
+  ```
+
+- **todo_write** `{"todos": [{"content": "Lire le diff complet (model.rs, main.rs, porte-flux.sh, docs)", "status": "completed"}, {"content": "Vérifier 1 : fuite de la `pre` reçue, tous les appelants", "status": "completed"}, {"content": "Vérifier 2 : norme_finale consomme la `pre` dans tous les cas", "status": "comp … [452 caractères tronqués]`
+
+  ```
+Updated todo list: 0 pending, 0 in progress, 8 completed.
+  ```
+
+### 🤖 Assistant
+
+⏵ Rapport rendu ; aucun processus résiduel
+
+Rapport envoyé au parent (aussi écrit dans `/tmp/adv_rapport_ac80e7e.md`). Aucun fichier du dépôt n'a été modifié ; aucun run lourd lancé.
+
+## Ce que j'ai trouvé
+
+**FAUX — 3**
+
+1. **« 2 544 tenseurs du pilote (couches 0-19, pos 0-3) : 0 »** — mesure des mtimes : seuls **954** des 2 544 fichiers de `/tmp/dpil4` viennent de la passe répartie ; **1 590** viennent de la passe de référence du pilote, qui écrit dans le même `DRAVE_DUMP_COUCHES` (1 260 couches 20-39, 327 pos 3 = le dernier jeton sauté, 3 `hidden_final`). L'étiquette est impossible avec n=2544 (ce sous-ensemble = 1 284). Le verdict survit sur les 954 + 945, mais 62 % du chiffre publié ne peut pas échouer.
+2. **« mode faux et muet », « décalé de quatre octets »** — j'ai rejoué la trame d'avant correctif (mode 3 sans octet `np`) contre un vrai serveur : il **bloque** dans `read_exact` et ne se plaint qu'à la fermeture du client. Aucun `set_read_timeout` en production ⇒ vrai pilote = **interblocage**, pas un chiffre faux ; décalage = 1+4·np octets.
+3. **« 81 999 au retour »** — le compte des octets reçus n'inclut jamais l'octet `np` (ni le pré-mix) alors que l'émission le compte : le vrai retour = **82 000**. Mesuré sur Qwen 0.5B (np=0 des deux côtés) : **3664 / 3663** pour 896 canaux.
+
+**TROU — 7** : `portes.sh:184-189` ignore le code retour et ne cherche que « ❌ » (démontré : modèle absent → code 1 → `ECHEC=0`, « toutes les portes sont vertes ») ; aucun délai sur le pilote dans la porte (un interblocage ⇒ vert après `timeout 900`) ; **`np = 1` n'est exercé par aucun test** ; `norme_finale` ne `take()` que dans une branche ; le chemin `--lot` n'affecte jamais `hc_porte_imposee` ; `reprend` ignore le cas `flux_brut` + `debut=0` ; chemins `/tmp` partagés sans PID.
+
+**FAIBLE — 4** : plafond du mode 4 à 11× le mesuré (et égal à celui du mode 2) ; « réduction finale comprise » alors que la sortie de `norme_finale` n'est jamais dumpée ; recette du digeste qui omet `--abits 8` (dref vient de `/tmp/exp_ref.sh`, un `--ppl-reparti` vers un port mort) ; `etat_impose` vidé même quand rien n'est imposé.
+
+**SOLIDE** : le diagnostic et le correctif de la fuite (629 → 0, 7,05e-1 → 0,00e0) ; `norme_finale` consomme dans le seul chemin atteignable ; l'encodage v6 cohérent pour les 5 modes, porte exécutée en **17,3 s, code 0**, avec exactement les chiffres publiés ; 62 tests verts ; le `trap` tue bien le serveur sous `timeout` (mon soupçon initial était faux) ; un `nan` ne peut pas passer ; et une mesure inédite — `dsrv4/etat_impose` == `dpil4/l_last-19` au bit près — qui confirme le transport aller octet par octet.
+

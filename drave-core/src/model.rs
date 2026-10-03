@@ -6017,6 +6017,24 @@ le raccord précédent n'existe pas, le premier raccord se replie donc avec la C
         let mut attn_idx: Vec<u32> = Vec::with_capacity(ctx);
         let attn_all: Vec<u32> = (0..ctx as u32).collect();
 
+        // `DRAVE_SANS_ENGRAM=1` : mesure de VIVACITÉ, lue une fois et ANNONCÉE.
+        // Une injection branchée, vérifiée contre la référence numpy et non nulle
+        // peut encore n'entrer dans aucun calcul sans que rien ne le dise ; le
+        // seul moyen de l'établir est de couper et de regarder bouger. Le chiffre
+        // obtenu n'est plus V4.1 (l'engram est 55 % du fichier), et le moteur le
+        // dit au lieu de le laisser croire.
+        static SANS_ENGRAM: std::sync::OnceLock<bool> = std::sync::OnceLock::new();
+        let sans_engram = *SANS_ENGRAM.get_or_init(|| {
+            let actif = std::env::var("DRAVE_SANS_ENGRAM")
+                .map(|v| v != "0" && !v.is_empty()).unwrap_or(false);
+            if actif {
+                eprintln!("[engram] DRAVE_SANS_ENGRAM est actif : l'injection de l'engram \
+est COUPÉE — le moteur calcule un autre modèle que V4.1, pour mesurer ce que l'engram \
+change (vivacité). Ce chiffre ne vaut pas comme référence.");
+            }
+            actif
+        });
+
         // La plage PORTÉE par ce nœud (`couche_debut..couche_fin`), et non
         // `0..n_layer` : un nœud qui reçoit un flux reprend à SA première couche.
         // La boucle partait de zéro — le pilote calculait donc les 24 couches,
@@ -6031,6 +6049,14 @@ le raccord précédent n'existe pas, le premier raccord se replie donc avec la C
             // ENTIER (`hc` copies), chaque copie ayant sa porte. Les 24 rangées
             // (24 × 264 octets) sont lues dans la table de 101 Go : c'est le
             // seul accès aléatoire du modèle, et il est mesuré.
+            //
+            // `DRAVE_SANS_ENGRAM=1` coupe l'injection. Ce n'est PAS un réglage
+            // de production : c'est l'instrument qui manquait pour répondre à
+            // « l'engram est-il vivant ? » — une injection branchée, vérifiée
+            // contre la référence numpy et non nulle peut encore n'entrer dans
+            // aucun calcul sans que rien ne le dise. Le moteur ANNONCE qu'il
+            // calcule un autre modèle, une fois, et le résultat n'est plus V4.1.
+            if !sans_engram {
             if let Some(Some((ti, wkv, qn, kn))) = self.engram_poids.get(l) {
                 if let Some(eng) = self.engram.as_ref() {
                     let nhc = eng.n_hash_cols();
@@ -6078,6 +6104,7 @@ hors de la table ({} rangées)", eng.rangees[*ti]));
                     Self::vider_couche(self.dump_couches.as_deref(), "engram_sortie",
                                        l, pos, &x);
                 }
+            }
             }
             // Fenêtre EFFECTIVE de cette couche : le motif déclaré (gpt-oss :
             // une couche sur deux en attention complète) prime sur le réglage
@@ -7061,6 +7088,15 @@ le dernier raccord FFN n'a pas été exécuté (plage de couches vide ?)"),
     /// 1 743 713,62, la position 0 exacte au bit près et les suivantes fausses,
     /// sans un mot.
     pub fn norme_finale(&mut self, x: &[f32]) -> Vec<f32> {
+        // **La `pre` reçue est prise ICI, avant toute branche** : une réduction
+        // finale a lieu une fois par flux, et la `pre` appartient à ce flux-là.
+        // La prendre dans la seule branche `hc_retarde` laissait le champ en
+        // place pour les autres chemins (état de largeur `hidden`, modèle à
+        // `hc_tete`) — et le `forward` suivant, s'il reprenait au milieu du
+        // modèle, l'aurait consommée (relevé par la relecture adverse : les deux
+        // branches étaient inatteignables aujourd'hui, mais « impossible par
+        // construction » ne se démontre pas avec un `take()` conditionnel).
+        let pre_recue = self.hc_porte_imposee.take();
         // Un état venu d'un autre nœud peut être en `hc` copies (modèle à
         // hyper-connexions) : c'est ICI que la réduction a lieu, une fois, sur
         // le nœud qui possède la tête — comme la norme finale.
@@ -7079,7 +7115,7 @@ le dernier raccord FFN n'a pas été exécuté (plage de couches vide ?)"),
                 // de V4.1 n'est pas apprise, c'est la `pre` du dernier raccord FFN
                 // exécuté — celui du pair, qui la transporte. Un flux v5 ou un
                 // émetteur qui ne l'envoie pas : refus, pas de repli muet.
-                None if self.hc_retarde => match self.hc_porte_imposee.take() {
+                None if self.hc_retarde => match pre_recue {
                     Some(pm) => {
                         let (hc, h) = self.hc.as_ref()
                             .map(|v| (v[0].0.hc, v[0].0.h)).expect("`hc_retarde` sans HC");

@@ -21,15 +21,32 @@ Le harnais `--ppl-reparti` fait deux passes dans le même processus : la référ
 locale (modèle entier), puis la passe coupée. Comparer les vides des deux passes
 est donc légitime — et c'est ce qui a parlé :
 
-| comparaison (2 544 tenseurs, 40 couches × 4 positions) | tenseurs différents |
+| comparaison | tenseurs différents |
 |---|---|
-| passe répartie **avant** correctif, contre la référence | **629**, tous aux positions **1** (319) et **2** (310), **aucun à la position 0** |
-| passe répartie **après** correctif, contre la référence | **0** |
-| nœud moteur (couches 20-39, 945 tenseurs), après correctif | **0** |
+| passe RÉPARTIE du pilote (couches 0-19, positions 0-2, **953** fichiers), **avant** correctif | **629**, tous aux positions **1** (319) et **2** (310), **aucun à la position 0** |
+| passe RÉPARTIE du pilote, **après** correctif | **0 sur 953** |
+| nœud moteur (couches 20-39, positions 0-2, 945 fichiers), après correctif | **0 sur 945** |
+| passe de RÉFÉRENCE du pilote dans un second processus (1 591 fichiers) | **0 sur 1 591** |
+
+**Pourquoi 953 et non 2 544.** `--ppl-reparti` écrit **deux** passes dans le même
+`DRAVE_DUMP_COUCHES` : la référence locale (toutes les couches, toutes les
+positions) puis la passe répartie, qui écrase les mêmes noms pour les couches 0-19
+aux positions 0-2 — le dernier jeton n'est pas envoyé, il n'a rien à prédire. Sur
+les 2 544 fichiers du répertoire, 1 591 sont donc la passe de référence du pilote
+comparée à celle d'un autre processus (un contrôle de déterminisme, pas la
+couture). Ce chiffre a été corrigé après la relecture adverse du bloc 13, qui a
+séparé les deux passes par leurs dates de modification : la version initiale de ce
+rapport annonçait « 0 sur 2 544 », exact quant au verdict, faux quant au nombre.
 
 La position 0 exacte est la signature : au premier jeton il n'y a encore aucune
 `pre` reçue, donc rien à fuir. À partir du deuxième, le nœud local héritait des
 coefficients du jeton précédent.
+
+**Mesure indépendante du transport aller** (relevée par la relecture adverse, et
+revérifiée ici) : dans le nœud moteur, le vide `etat_impose-0-{0,1,2}` — l'état
+reçu, avant toute couche — est **identique au bit près** (20 480 f32) au
+`l_last-19-{0,1,2}` du pilote, c'est-à-dire à ce qu'il a envoyé. Le transport est
+donc exact octet par octet, indépendamment de la perplexité.
 
 ## 3. Le correctif, en deux invariants
 
@@ -41,6 +58,14 @@ coefficients du jeton précédent.
 2. **`Model::norme_finale`** prend `&mut self` et **consomme** cette `pre` : elle
    appartient à la réduction de ce flux-là. La laisser en place, c'était se fier à
    ce que le prochain appel veuille bien ne pas la prendre.
+
+La relecture adverse a montré que le premier jet laissait deux branches ouvertes
+(un état de largeur `hidden`, un modèle à `hc_tete` : le `take()` n'était que dans
+la branche `hc_retarde`) et deux chemins muets (un nœud moteur qui reprend à la
+couche 0 avec une `pre` reçue ; un LOT qui en reçoit une). Le `take()` est
+maintenant en tête de `norme_finale`, la trame `debut = 0` portant une `pre` est
+**refusée** en le disant, et le chemin des lots refuse une `pre` reçue plutôt que
+de l'ignorer.
 
 Après correctif, mesuré deux fois (perplexité **et** tenseurs) :
 

@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 102.5 h |
+| Durée | 102.8 h |
 | Tours | 79 |
-| Messages | 5947 |
-| Appels d'outils | 5692 |
+| Messages | 6019 |
+| Appels d'outils | 5762 |
 | Fichiers touchés | 113 |
-| Commandes | 4823 |
+| Commandes | 4855 |
 | Sous-agents | 32 |
-| Commits | 366 |
+| Commits | 367 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -4037,7 +4037,7 @@ P0-P6 faites, P8 portée et val
 
 ### Tour 79 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [941 caractères tronqués]
 
-*952 appels d'outils.* Actions notables :
+*1022 appels d'outils.* Actions notables :
 
 - web_search
 - web_fetch
@@ -4053,11 +4053,11 @@ P0-P6 faites, P8 portée et val
 - bash — Locate hc_collapse_triton definition
 - read
 - bash — Read mHC init and pre/post call sites
-- … et 853 autres
+- … et 906 autres
 
 **Synthèse produite :**
 
-⏵ Porte complète en fond, puis rédaction du sprint 13
+⏵ Application des trouvailles de la revue adverse (7 correctifs) et du compteur d'octets
 
 ## 3. Travail accompli
 
@@ -4107,8 +4107,8 @@ P0-P6 faites, P8 portée et val
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/vision.md` | 1 | 3 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/histoire.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/roadmap.md` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs` | 0 | 93 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs` | 0 | 20 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs` | 0 | 99 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs` | 0 | 26 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/gpu.rs` | 0 | 3 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gpu-topk-selection.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/README.md` | 0 | 3 |
@@ -4138,7 +4138,7 @@ P0-P6 faites, P8 portée et val
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/materiel.rs` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-tete-restreinte.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-optimisations-auto.md` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/portes.sh` | 1 | 3 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/portes.sh` | 1 | 4 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/ref_ggml_bloc.c` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/verifier_formats.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/portes_formats.sh` | 1 | 0 |
@@ -4173,11 +4173,11 @@ P0-P6 faites, P8 portée et val
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-v4-yarn-compresse.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/11-v41-la-passe-complete.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/12-la-rotation-des-couches-compressees.md` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/13-les-deux-enigmes-du-decoupage-v41.md` | 1 | 4 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/format-flux.md` | 0 | 2 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-decoupage-v41.md` | 1 | 1 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/13-les-deux-enigmes-du-decoupage-v41.md` | 1 | 8 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/format-flux.md` | 0 | 3 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-decoupage-v41.md` | 1 | 2 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-execution-v41.md` | 0 | 1 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-flux.sh` | 1 | 3 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-flux.sh` | 1 | 5 |
 
 ### Sous-agents lancés
 
@@ -4256,7 +4256,7 @@ P0-P6 faites, P8 portée et val
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 4783 autres
+- … et 4815 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4770,4 +4770,5 @@ P0-P6 faites, P8 portée et val
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'EOF' Découpage V4.1 : la couture est exacte au bit près, l'instrument 
 - Portes : la porte du découpage (deux nœuds, cinq modes) branchée dans portes.sh, et la retro du bloc 13  Toutes les portes vertes, y compris la nouvelle section
 - Sprint 13 : la cérémonie (garder / changer / doute) et le planning du bloc 14 — la vivacité de l'engram  La rétro dit ce que le bloc a coûté : trois runs de 365
+- Revue adverse du bloc 13 : trois chiffres publiés corrigés, quatre trous fermés  Relecture adverse en lecture seule du commit ac80e7e : le fond tient (la fuite 
 

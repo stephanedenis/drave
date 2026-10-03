@@ -125,8 +125,12 @@ corps     TOUS modes, en tête : np (u8) puis np × hc f32
 **Corrigé le 02/10 (sprint 13) : les modes 3 et 4 n'écrivaient PAS ce préfixe.**
 Le chemin « un jeton » (modes 0-2) l'écrivait, les deux émetteurs de lots non —
 alors que le décodeur, lui, le lit pour **tous** les modes : le premier octet du
-premier état passait pour le compte `np` et tout le corps était décalé de quatre
-octets. Un mode entier, faux et muet. Un seul encodeur les sert désormais
+premier état passait pour le compte `np`, et le corps se décalait de `1 + 4·np`
+octets. Mesuré (relecture adverse, trame d'avant correctif rejouée contre un vrai
+nœud) : le premier octet d'un état f32 étant presque toujours non nul, le décodeur
+attendait des octets qui ne venaient pas et **restait bloqué dans `read_exact`** —
+aucun délai de lecture en production, donc un interblocage, et le nœud ne le dit
+qu'à la fermeture du client. Un seul encodeur les sert désormais
 (`prefixe_premix`), et le mode 3 vérifie à **0,00e0** sur deux nœuds réels
 (Qwen2.5-0.5B Q8_0, 24 jetons, `--lot 4`) ; le mode 4 donne 4,45e-3, du même ordre
 que la perte de son codec (mode 2 sur le même modèle : 3,65e-2).

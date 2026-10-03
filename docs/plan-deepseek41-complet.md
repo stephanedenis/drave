@@ -399,8 +399,10 @@ Une phase qui ne passe pas ses deux portes ne passe pas à la suivante.
 > Correctif : `forward` ne consomme la `pre` reçue que si le nœud reprend au
 > milieu du modèle (`couche_debut > 0`), et `norme_finale` prend `&mut self` et
 > la consomme. Résultat : V4.1 découpé à la couche 20 = **écart 0,00e0**, et
-> **2 544 tenseurs du pilote + 945 du nœud moteur identiques au bit près** à une
-> passe complète à un seul nœud (transport aller, pré-mix retour et réduction
+> **953 tenseurs de la passe répartie du pilote + 945 du nœud moteur identiques
+> au bit près** à une passe complète à un seul nœud (les 1 591 autres fichiers du
+> répertoire viennent de la passe de référence du pilote : ils ne peuvent pas
+> échouer sur la couture) (transport aller, pré-mix retour et réduction
 > finale compris). Le V4-Flash ne pouvait pas montrer le défaut : sa réduction
 > finale est apprise (`np = 0` sur le fil).
 >

@@ -80,8 +80,11 @@ cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo build --r
 >    la `pre` reçue que si le nœud **reprend au milieu du modèle**
 >    (`couche_debut > 0`), et `norme_finale` prend `&mut self` et la **consomme**
 >    (elle appartient à la réduction de ce flux-là). Après : écart **0,00e0**, et
->    **2 544 tenseurs du pilote + 945 du nœud moteur identiques au bit près** à
->    une passe complète. Le V4-Flash ne pouvait pas le voir : sa réduction finale
+>    **953 tenseurs de la passe répartie du pilote + 945 du nœud moteur
+>    identiques au bit près** à une passe complète (et 1 591 fichiers de la passe
+>    de référence du pilote, dans un second processus, identiques eux aussi —
+>    mais ceux-là ne peuvent pas échouer sur la couture ; voir la revue adverse
+>    du bloc 13). Le V4-Flash ne pouvait pas le voir : sa réduction finale
 >    est apprise, donc `np = 0` chez lui.
 > 2. **La référence du harnais (1 743 713,62) différait de `--ppl`
 >    (208 411,867).** Ce ne sont pas les mêmes réglages : `--ppl` quantifie les
