@@ -138,6 +138,11 @@ et ferait tomber la référence de non-régression (V4-Flash 8430,4966).
 - `tools/portes.sh rapide` : **toutes vertes** — 63 tests, Qwen 19,3885, clusters
   799,8557, **V4-Flash 8430,4966**, engram, cinq modes de flux.
 - V4.1 : perplexités et vides inchangés (mesuré ci-dessus).
+- **Découpage à deux nœuds, refait avec le binaire final** (16 fils des deux
+  côtés) : `écart 0,00e0`, 82 016 octets à l'aller comme au retour, référence
+  locale **25,6 s** (elle en coûtait 68,0 en début de nuit) et deux nœuds
+  **16,4 s**. Le découpage reste donc exact après avoir changé la décomposition
+  parallèle de deux chemins — c'est ce qu'il fallait vérifier, pas supposer.
 
 ## Ce qui reste, nommé
 

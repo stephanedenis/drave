@@ -99104,3 +99104,28 @@ procs: 0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"sprints/17-les-experts-io-ou-calcul.md\"\ns=open(p).read()\na=\"\"\"**Contexte long** (ctx 64, 63 jetons, ~330 Go d'experts lus — bien au-delà des\n95 Go de `buff/cache`), deux passes identiques à la suite :\n\n … [2545 caractères tronqués]`
+
+  ```
+ok
+4430d7d Bloc 17 : à ctx 64 aussi (330 Go relus), la seconde passe ne gagne que 4 % — le disque n'est pas la borne ; et le balayage des fils donne 16 comme optimum
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/test_v41_pair_final.sh <<'EOF'\n#!/bin/bash\nset -u\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nD=./drave-core/target/release/drave\nM=/home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf\n$D \"$M\"  … [581 caractères tronqués]`
+
+  ```
+paire V4.1 (16 fils) lancee
+  ```
+
+- **bash** `{"command": "sleep 240; cat /tmp/pair_final.log 2>/dev/null; echo \"procs: $(pgrep -x drave | wc -l)\"", "description": "Get the pair result", "timeoutMs": 300000}`
+
+  ```
+référence locale  : perplexité 1743713.6243  (25.6 s)
+  deux nœuds        : perplexité 1743713.6243  (16.4 s)
+  écart             : 0.00e0
+  transport         : dense f32 · 82016 octets par flux (aller) · 82016 au retour · 400.0 % d'activité (20480 neurones par flux) · 3 flux
+  temps             : 2729.7 ms par jeton en local · 2711.8 ms à attendre le pair (son calcul + l'aller-retour) · soit 0.99× le calcul local seul
+FIN
+procs: 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"sprints/17-les-experts-io-ou-calcul.md\"\ns=open(p).read()\na=\"\"\"## Portes\n\n- `tools/portes.sh rapide` : **toutes vertes** — 63 tests, Qwen 19,3885, clusters\n  799,8557, **V4-Flash 8430,4966**, engram, cin … [1535 caractères tronqués]`
