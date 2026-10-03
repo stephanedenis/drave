@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 121.3 h |
+| Durée | 121.4 h |
 | Tours | 100 |
-| Messages | 7290 |
-| Appels d'outils | 6961 |
+| Messages | 7298 |
+| Appels d'outils | 6969 |
 | Fichiers touchés | 150 |
-| Commandes | 5889 |
+| Commandes | 5894 |
 | Sous-agents | 32 |
-| Commits | 481 |
+| Commits | 482 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -4889,7 +4889,7 @@ Et le geste qui rend un modèle de 1,5 To seulement *lisible* : les experts sont
 
 ### Tour 100 — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas e … [1246 caractères tronqués]
 
-*200 appels d'outils.* Actions notables :
+*208 appels d'outils.* Actions notables :
 
 - bash — Extract the KDA into a reusable piece
 - bash — Commit the KDA extraction and check the download
@@ -4905,7 +4905,7 @@ Et le geste qui rend un modèle de 1,5 To seulement *lisible* : les experts sont
 - bash — Find expert loading call sites
 - read
 - bash — Inspect RAM expert cache
-- … et 162 autres
+- … et 169 autres
 
 **Synthèse produite :**
 
@@ -4928,7 +4928,7 @@ Le HDD est monopolisé par la référence ; je passe à un levier CPU : le noyau
 | `/tmp/mesures_oss4.sh` | 2 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gpt-oss-perplexite.md` | 1 | 4 |
 | `/tmp/controles_oss.sh` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md` | 0 | 21 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md` | 0 | 23 |
 | `/tmp/controles2_oss.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/harmony_canonique.py` | 1 | 1 |
 | `/tmp/controles3_oss.sh` | 1 | 0 |
@@ -5145,7 +5145,7 @@ Le HDD est monopolisé par la référence ; je passe à un levier CPU : le noyau
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5849 autres
+- … et 5854 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5774,4 +5774,5 @@ Le HDD est monopolisé par la référence ; je passe à un levier CPU : le noyau
 - Tuile du GEMM par lots : hypothèse avancée, mesurée, RÉFUTÉE  Le plateau du gain au-delà du lot 2 appelait une explication : le GEMM 4 bits déchiffre les poids 
 - ref_logits_k3 : la commande de liaison est écrite, le binaire n'a plus de mystère  Le binaire livré dans tools/ n'avait pas de source à côté de lui ; c'est le M
 - Bloc 31 : la porte gpt-oss, son motif réel, et l'arbitrage assumé  Une seule croix dans tools/portes.sh : gpt-oss-120b MXFP4 ctx 256. Le motif est un DÉLAI DÉPA
+- REPRISE : le bloc 31 en tête — K3 complet, 86,787 Go par jeton, x1,58 par regroupement" && git log --oneline -3; grep -E "^read_bytes" /proc/1445983/io; date "+
 

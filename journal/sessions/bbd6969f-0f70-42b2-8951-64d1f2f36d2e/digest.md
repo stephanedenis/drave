@@ -116228,3 +116228,113 @@ read_bytes: 943273586688
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> sprints/31-le-regroupement-par-experts-mesure-et-k3-au-complet.md <<'EOF'\n\n## La porte gpt-oss, et pourquoi elle n'a PAS été rejouée ici\n\n`tools/portes.sh` a rendu **une seule croix** : `gpt-oss-120b MXFP4 ctx 256` —\natte … [2142 caractères tronqués]`
+
+  ```
+f2116f0 Bloc 31 : la porte gpt-oss, son motif réel, et l'arbitrage assumé
+  ```
+
+- **bash** `{"command": "sleep 295; grep -E \"^read_bytes\" /proc/1445983/io; ps -o etimes= -p 1445983; date \"+%H:%M\"; tail -3 /tmp/k3_apres.log", "description": "Poll K3 reference baseline", "timeoutMs": 310000}`
+
+  ```
+read_bytes: 1006640099328
+   6653
+16:10
+=== 5. Baseline de la référence (llama.cpp-k3) ===
+  (pas d'identifiants : en produire avec --tokenize sur un texte)
+  ids : 3638,275,1309,3140,18965,84,3347,655,14472,9280,1419,13…
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls REPRISE.md 2>/dev/null && head -40 REPRISE.md", "description": "Check handover file"}`
+
+  ```
+REPRISE.md
+# Reprise — état du projet et mode d'emploi pour une nouvelle session
+
+> Rédigé à la fin d'une session longue. Tout ce qui suit est **mesuré**, pas
+> déduit. Les valeurs de perplexité sont des **références de non-régression** :
+> si une modification les change, c'est qu'elle a changé le calcul.
+>
+> **Nom** : le projet s'appelle **Drave** (binaire `drave`, paquet `drave-core`,
+> variables `DRAVE_*`, histoire du renommage dans `docs/histoire.md`). Le dossier
+> de travail, lui, s'appelle encore `Qtrinet` — les chemins ci-dessous sont ceux
+> qui existent.
+
+---
+
+## 1. En une phrase
+
+`drave-core` est un moteur d'inférence Rust (~13 758 lignes, `std` seul) qui
+charge les GGUF **en place** (aucune copie, aucune requantification), exécute les
+projections soit en listes d'événements, soit en produit scalaire dense, gère les
+MoE, tient une conversation, et déporte au GPU ce qui y gagne. Il fait tourner du
+0,5 B au 120 B sur le CPU de cette machine.
+
+```bash
+cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo build --release
+./target/release/drave ../models/Qwen2.5-0.5B-Q8_0.gguf \
+    --infer --chat --flux --prompt "Explique le ciel bleu en une phrase." \
+    --n
+… [589 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^## \\|^### \" REPRISE.md | head -25; echo \"...\"; sed -n '40,60p' REPRISE.md", "description": "Survey REPRISE structure"}`
+
+  ```
+14:## 1. En une phrase
+31:## 2. Références de non-régression
+294:## 2bis. La cible a changé (03/10) : Kimi-K3, et le tokenizer kimi
+317:## 3. Ce qui est implémenté et vérifié
+351:## 4. Pièges de l'environnement (tous rencontrés)
+368:## 5. Règles de méthode (chacune a coûté une erreur)
+411:## 6. Les huit chantiers : où ils en sont
+424:### Mesures du tour « huit chantiers » (toutes commitées)
+454:### Ce qu'il faut faire ensuite, dans l'ordre
+502:### Les variables d'environnement, et leurs pièges
+533:## 6bis. Session « Drave » — le calcul réparti tient debout
+588:### Session « autonomie jusqu'à 15h » — ce qui s'ajoute (12h → 15h)
+628:### Créneau 15h07 → 18h00 : le mode 4, et la frontière KV confirmée
+657:### Créneau 17h41 → 19h41 (sprint 1) : le top-k GPU, du banc au moteur
+730:### Sprint 2 (19h49 → 21h49) : la chaîne du top-k fusionnée en UN noyau
+769:### Sprint 7 (05h39 → 07h39) : clôture de la nuit — le livelock du contexte
+792:### Ce que la nuit a établi (sprints 2 à 6)
+804:### La frontière du cache KV, mesurée en entier
+828:### Le mode lot gagne sur les deux tableaux
+834:### Hygiène et garde-fous ajoutés depuis (13h)
+868:### Les prochains chantiers, dans l'ordre
+888:## 7. Carte d
+… [1581 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md", "new_string": "> **Mise à jour du 04/10 (bloc 31) — Kimi-K3 est LÀ, et le levier « experts » est\n> chiffré.** Les 1 508,7 Go sont complets (32/32 shards, vérifiés à l'octet).\n> Budget par jeton **mesuré** : **86,787 Go** — … [1813 caractères tronqués]`
+
+  ```
+Error: cannot edit "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md": file changed since it was read — re-read the file, then retry
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"Mise à jour du 02/10 — c'est ce bloc qui fait foi\" REPRISE.md", "description": "Locate insertion point"}`
+
+  ```
+39:> **Mise à jour du 02/10 — c'est ce bloc qui fait foi** : Qwen2.5-0.5B Q8_0
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md", "limit": 3, "offset": 38}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md</path>
+<type>file</type>
+<content>
+38: >
+39: > **Mise à jour du 02/10 — c'est ce bloc qui fait foi** : Qwen2.5-0.5B Q8_0
+40: > ctx 256 = **19,3885** (inchangée) · clusters Qwen3-30B ctx 64 limit 8 =
+
+(Showing lines 38-40 of 1467. Use offset=41 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md", "new_string": "> **Mise à jour du 04/10 (bloc 31) — Kimi-K3 est LÀ, et le levier « experts » est\n> chiffré.** Les 1 508,7 Go sont complets (32/32 shards, vérifiés à l'octet).\n> Budget par jeton **mesuré** : **86,787 Go** — … [2001 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"REPRISE : le bloc 31 en tête — K3 complet, 86,787 Go par jeton, x1,58 par regroupement\" && git log --oneline -3; grep -E \"^read_bytes\" /proc/1445983/io; date \"+%H:%M\"", "description": "Commit han … [35 caractères tronqués]`

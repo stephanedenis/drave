@@ -36,6 +36,40 @@ cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo build --r
 > gpt-oss était la seule que la relecture adversariale n'avait pas pu faire
 > tourner (bornes de temps) ; elle est verte.
 >
+> **Mise à jour du 04/10 (bloc 31) — Kimi-K3 est LÀ, et le levier « experts » est
+> chiffré.** Les 1 508,7 Go sont complets (32/32 shards, vérifiés à l'octet).
+> Budget par jeton **mesuré** : **86,787 Go** — experts routés 25,830 (29,8 %),
+> dense 60,958 (70,2 %). Le dense pèse 2,3× les experts : aucune technique sur
+> les experts n'adresse plus de 30 % du trafic d'un jeton.
+>
+> Le **regroupement par experts** du préremplissage (`--lot N`), qui existait
+> sans avoir jamais été mesuré, vaut **×1,58** (Qwen3-30B-A3B, invite de
+> 192 jetons, NVMe, 16 fils) et **15,5× moins d'octets d'experts** — mais le
+> temps décroche au-delà du lot 2 : c'est le dense qui prend la main.
+> `reports/rapport-prefill-par-experts.md`.
+>
+> **`--lot N > 1` n'est PAS identique au chemin jeton**, et le moteur l'annonce
+> maintenant : routage différent sur 7 838/9 312 lignes, génération gloutonne
+> divergente au 3e jeton, mais PPL 19,143 contre 19,172, argmax identique
+> 191/191, Pearson min 0,99719. Deux compteurs muets du chemin par lots sont
+> refermés (« paires experts » tombait à 1 % dès le lot 2), et `forward_lot`
+> **refuse** désormais un modèle à experts partagés au lieu d'en calculer un
+> autre en silence.
+>
+> Une hypothèse a été **réfutée** dans le même bloc : la tuile du GEMM 4 bits
+> (8 / 16 / 64 → 21,2 / 21,2 / 22,0 s à lot 32) ne change rien. La constante
+> reste à 8 ; `DRAVE_TUILE_LOT` est un banc d'essai, pas un réglage.
+>
+> `--k3-essai` sur les 32 shards redonne **exactement** les sorties obtenues avec
+> 25 shards (composition 0-3 : 8,7757 / 5,2909 / 5,2559 / 5,4735) : les shards
+> déjà présents portaient les octets définitifs.
+>
+> **En cours au moment d'écrire** : `llama-cli` (llama.cpp-k3) charge Kimi-K3 et
+> génère — la mesure qui dira ce que la référence fait sur cette machine. La
+> porte `gpt-oss-120b MXFP4 ctx 256` (attendue 15,6017) a été **arrêtée
+> volontairement** pour lui laisser le disque, après avoir échoué par **délai
+> dépassé** et non par chiffre faux ; à rejouer.
+>
 > **Mise à jour du 02/10 — c'est ce bloc qui fait foi** : Qwen2.5-0.5B Q8_0
 > ctx 256 = **19,3885** (inchangée) · clusters Qwen3-30B ctx 64 limit 8 =
 > **799,8557** · gpt-oss-120b MXFP4 ctx 256 = **15,6017** (**changée** par le
