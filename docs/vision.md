@@ -71,7 +71,7 @@ Ce qui existe déjà, et qui a servi :
 | `--profil-neurones`, `--neurones-sortie` | quels neurones s'allument, à quelle fréquence, avec quelle magnitude |
 | `--profil-neurones` | quels neurones s'activent, couche par couche (le `--profil-experts` d'origine n'existe pas) |
 | `[config]` sur chaque exécution | quel chemin est **réellement** actif (rotation, cache KV, MLA, experts…) |
-| profil par poste | `--ppl` imprime le temps par poste (projets-attn, rope, attention, proj+mlp, tête). ⚠️ Le drapeau `--ppl-profil` cité ici autrefois **n'existe pas** : le champ est lu par le code mais aucune branche CLI ne le remplit (`drave-core/src/main.rs`) — voir `reports/rapport-drapeaux-ignores.md` |
+| profil par poste | `--ppl` imprime le temps par poste (projets-attn, rope, attention, proj+mlp, tête) et, pour V4, ses cinq sous-postes. `--ppl-profil` imprime en plus la **perte par tranche de 256 positions** — le drapeau manquait (le champ était lu par le code, aucune branche CLI ne le remplissait : `reports/rapport-drapeaux-ignores.md`) ; il a été branché le 03/10 au bloc 19 |
 | journal de session | l'historique de tout ce qui a été mesuré, archivé à chaque commit |
 
 Ce que ces mesures ont appris, et qui n'aurait pas été visible autrement :

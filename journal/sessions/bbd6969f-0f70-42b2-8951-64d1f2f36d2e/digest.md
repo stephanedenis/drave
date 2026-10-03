@@ -99688,3 +99688,83 @@ sam 03 oct 2026 01:17:04 EDT
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cargo test --release --manifest-path drave-core/Cargo.toml 2>&1 | grep -E \"test result\" | head -1; rm -f sprints/COURANT; git add -A; git commit -q -m \"Sprint 19 : clôture (76 min) — la passe longue est passée, le profil par profo … [201 caractères tronqués]`
+
+  ```
+test result: ok. 63 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+sam 03 oct 2026 01:17:46 EDT
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > sprints/20-la-passe-longue-instrumentee.md <<'EOF'\n# Sprint 20 — La passe longue, INSTRUMENTÉE : le profil par profondeur et les logits\n\n- **Début** : 01:17 · **Fin prévue** : 03:17 (boxing de 120 min)\n- **Objectif** : le b … [1416 caractères tronqués]`
+
+  ```
+00:05 99.8
+passe longue instrumentee lancee
+sam 03 oct 2026 01:17:57 EDT
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls docs/ | head -25; grep -rln \"DRAVE_YARN\\|DRAVE_DUMP_COUCHES\" docs/*.md | head -5", "description": "Look for a flags/env inventory doc"}`
+
+  ```
+colab-reparti.md
+comparaison-spiking.md
+contexte-long.md
+convertisseur.md
+format-clusters.md
+format-flux.md
+glossaire.md
+histoire.md
+plan-deepseek41-complet.md
+plan-deepseek-v4-flash.md
+plan-gpu-topk.md
+plan-mla-vision.md
+plan-mode4-lot-listes.md
+plan-modeles-lourds.md
+plan-prefill-reparti.md
+programme-recherche.md
+roadmap.md
+sprints.md
+vision.md
+docs/contexte-long.md
+docs/glossaire.md
+docs/histoire.md
+docs/plan-deepseek41-complet.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"DRAVE_EXPERTS_RAM\\|DRAVE_SANS_ENGRAM\\|ppl-profil\\|profil-ppl\" docs/*.md REPRISE.md | head -10; echo \"---\"; grep -n \"DRAVE_DUMP_COUCHES\" docs/contexte-long.md | head -3", "description": "Check whether the new switche … [18 caractères tronqués]`
+
+  ```
+docs/contexte-long.md:522:   **722,56** chez nous (1,1 %). Le profil par profondeur (`--ppl-profil`) montre
+docs/glossaire.md:1406:**Profilage par neurone · `--ppl-profil`** — Compter quels neurones s'allument, à
+docs/glossaire.md:1408:`--neurones-sortie`), et quel poste consomme le temps (`--ppl-profil`). C'est l'axe 1
+docs/glossaire.md:1576:    servi » : « `--ppl-profil` | le temps par poste (projections, rope, attention,
+docs/plan-deepseek41-complet.md:486:> non nulle peut n'être lue par personne). `DRAVE_SANS_ENGRAM=1` coupe le bloc et
+docs/plan-deepseek41-complet.md:557:> experts** (`DRAVE_EXPERTS_RAM`), justifié par une trace de routage (50 % des
+docs/vision.md:74:| profil par poste | `--ppl` imprime le temps par poste (projets-attn, rope, attention, proj+mlp, tête). ⚠️ Le drapeau `--ppl-profil` cité ici autrefois **n'existe pas** : le champ est lu par le code mais aucune branche CLI ne le remplit (`drave-core/src/main.rs`) — voir `reports/rapport-drapeaux-ignores.md` |
+REPRISE.md:109:> qu'elle ENTRE dans le calcul. `DRAVE_SANS_ENGRAM=1` (déclaré dans `VARS_LUES`,
+REPRISE.md:136:> (`DRAVE_EXPERTS_RAM`) est 4 à 21 % PLUS LENT (le noyau cache déjà) — drapeau
+REPRISE.md:280:| Me
+… [362 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"ppl-profil\" reports/rapport-drapeaux-ignores.md | head -5; sed -n 70,78p docs/vision.md; sed -n 1404,1410p docs/glossaire.md", "description": "Read the stale doc entries"}`
+
+  ```
+97:| `--ppl-profil` `--logits-bin` | P : 2854, 2837 | I : jamais lu | 🟡 |
+|---|---|
+| `--profil-neurones`, `--neurones-sortie` | quels neurones s'allument, à quelle fréquence, avec quelle magnitude |
+| `--profil-neurones` | quels neurones s'activent, couche par couche (le `--profil-experts` d'origine n'existe pas) |
+| `[config]` sur chaque exécution | quel chemin est **réellement** actif (rotation, cache KV, MLA, experts…) |
+| profil par poste | `--ppl` imprime le temps par poste (projets-attn, rope, attention, proj+mlp, tête). ⚠️ Le drapeau `--ppl-profil` cité ici autrefois **n'existe pas** : le champ est lu par le code mais aucune branche CLI ne le remplit (`drave-core/src/main.rs`) — voir `reports/rapport-drapeaux-ignores.md` |
+| journal de session | l'historique de tout ce qui a été mesuré, archivé à chaque commit |
+
+Ce que ces mesures ont appris, et qui n'aurait pas été visible autrement :
+
+`reports/rapport-coherence-vision.md:145-146`).
+
+**Profilage par neurone · `--ppl-profil`** — Compter quels neurones s'allument, à
+quelle fréquence, avec quelle magnitude, couche par couche (`--profil-neurones`,
+`--neurones-sortie`), et quel poste consomme le temps (`--ppl-profil`). C'est l
+… [128 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\n# 1) vision.md : l'avertissement est périmé\np=\"docs/vision.md\"\ns=open(p).read()\na=\"| profil par poste | `--ppl` imprime le temps par poste (projets-attn, rope, attention, proj+mlp, tête). ⚠️ Le drapeau `--ppl- … [2633 caractères tronqués]`

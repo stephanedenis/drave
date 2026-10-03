@@ -94,7 +94,7 @@ nœuds) · 🟠 silencieux, fausse une mesure, un temps ou une trace · 🟡 san
 | Drapeaux | Appliqué dans (fichier:ligne) | Ignoré / inerte (preuve) | Gravité |
 |---|---|---|---|
 | `--trace-flux` `--trace-couches` `--flux-forcer` | P : 2709-2720 | **I** (et partout ailleurs) : jamais lu → `--infer --trace-flux f` ne produit aucun fichier, sans message | 🟠 |
-| `--ppl-profil` `--logits-bin` | P : 2854, 2837 | I : jamais lu | 🟡 |
+| `--ppl-profil` `--logits-bin` | P : 2854, 2837 | I : jamais lu | 🟡 → **corrigé le 03/10 (bloc 19)** : `--ppl-profil` est branché (le champ, les seaux de 256 positions et l'affichage existaient) ; `--logits-bin`, lui, était bien lu |
 | `--profil-neurones` `--neurones-sortie` | P : 2780, 2942-2945 | I : jamais lu (`activer_profil_neurones` et `rapport_neurones` n'apparaissent qu'en P) | 🟡 |
 | `--harmony` `--harmony-assistant` `--harmony-user` `--harmony-suite` `--harmony-contexte` | P : 2647, 2797-2799 | I : jamais lu (I a son propre gabarit via `--chat`, 586-613) → `--harmony-suite --infer` ne fait rien | 🟡 |
 | `--patch` | I (643) · P (2746) | Ailleurs : *sans objet* | — |

@@ -1405,7 +1405,8 @@ porte » (`tools/portes_formats.sh`, `docs/format-clusters.md:148-158`,
 
 **Profilage par neurone · `--ppl-profil`** — Compter quels neurones s'allument, à
 quelle fréquence, avec quelle magnitude, couche par couche (`--profil-neurones`,
-`--neurones-sortie`), et quel poste consomme le temps (`--ppl-profil`). C'est l'axe 1
+`--neurones-sortie`) ; le temps par poste, lui, s'imprime à chaque `--ppl` (pas de
+drapeau), et `--ppl-profil` ajoute la **perte par tranche de 256 positions**. C'est l'axe 1
 de la vision : « un flux de listes est observable par construction »
 (`docs/vision.md:62-89`, `docs/roadmap.md:129-149`).
 
