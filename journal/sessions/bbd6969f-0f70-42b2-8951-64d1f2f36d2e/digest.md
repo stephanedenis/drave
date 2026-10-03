@@ -101697,3 +101697,164 @@ couche 0 pos 12 : experts [61, 201, 202, 209, 319, 345] · écart max 1.897e-05 
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"sprints/21-localiser-le-defaut-v41.md\"\ns=open(p).read()\na=\"\"\"## Portes\"\"\"\nb=\"\"\"## 3bis. Le chemin des experts est VÉRIFIÉ (et ce n'est donc pas lui)\n\n`tools/v41_experts_reference.py` recompose, de … [3073 caractères tronqués]`
+
+  ```
+ok
+82a2f7e Le chemin des experts de V4.1 est VÉRIFIÉ en numpy (écart 4e-5) — il ne reste que la composition de l'attention
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"let scale\" drave-core/src/model.rs | sed -n 1,3p; sed -n \"$(grep -n 'let scale' drave-core/src/model.rs | head -1 | cut -d: -f1),+1p\" drave-core/src/model.rs; grep -n \"fn rope_norm\\b\" drave-core/src/model.rs | head -2 … [63 caractères tronqués]`
+
+  ```
+4807:        let scale = 1.0 / (hd as f32).sqrt();
+5339:        let scale = 1.0 / ((qkn + qkr) as f32).sqrt();
+5890:        let scale = 1.0 / (hd as f32).sqrt();
+        let scale = 1.0 / (hd as f32).sqrt();
+        // Quantification d'un lot : mêmes règles que `quant_scratch`.
+4566:    fn rope_norm(v: &mut [f32], n_head: usize, head_dim: usize, pos: usize, base: f32,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n \"$(grep -n 'fn rope_norm(v: &mut \\[f32\\]' drave-core/src/model.rs | cut -d: -f1),+22p\" drave-core/src/model.rs", "description": "Read the NORM rope implementation"}`
+
+  ```
+fn rope_norm(v: &mut [f32], n_head: usize, head_dim: usize, pos: usize, base: f32,
+                 n_rot: usize, inverse: bool) {
+        let n_rot = if n_rot == 0 || n_rot > head_dim { head_dim } else { n_rot };
+        let half = n_rot / 2;
+        for h in 0..n_head {
+            let t = &mut v[h * head_dim..(h + 1) * head_dim];
+            for i in 0..half {
+                // La fréquence suit le même barème dans les deux conventions :
+                // seul l'appariement change (`ic = i0` contre `ic = i0/2`).
+                let freq = 1.0 / base.powf(2.0 * i as f32 / n_rot as f32);
+                let (s, c) = (pos as f32 * freq).sin_cos();
+                let (s, c) = if inverse { (-s, c) } else { (s, c) };
+                let a = t[2 * i];
+                let b = t[2 * i + 1];
+                t[2 * i] = a * c - b * s;
+                t[2 * i + 1] = b * c + a * s;
+            }
+        }
+    }
+
+    /// **Le RoPE des couches COMPRESSÉES de V4 : convention NORM + YaRN.**
+    ///
+    /// Pourquoi il existe : llama.cpp (`src/models/deepseek4.cpp:872-879`) **et**
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/v41_attention_reference.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"Référence numpy des PROJECTIONS et de la ROTATION de l'attention V4.1.\n\nLe chemin des experts est vérifié (`v41_experts_reference.py`), la tête,\nl'embarq … [5021 caractères tronqués]`
+
+  ```
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/v41_attention_reference.py", line 121, in <module>
+    principale()
+    ~~~~~~~~~~^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/v41_attention_reference.py", line 106, in principale
+    kp = rope_norm(kvn[hd - nrot:].copy(), 1, nrot, pos, BASE, nrot)
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/v41_attention_reference.py", line 74, in rope_norm
+    a, b = t[2 * i], t[2 * i + 1]
+           ~^^^^^^^
+IndexError: index 0 is out of bounds for axis 0 with size 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys\nsys.path.insert(0,\"tools\")\nfrom verifier_v41_mhc import Gguf\ng=Gguf(\"/home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf\")\nfor s in (\"attn_q_a.weight\",\"attn_q_a_norm.weight\",\"a … [312 caractères tronqués]`
+
+  ```
+attn_q_a.weight          dims [5120, 1280] type 8
+  attn_q_a_norm.weight     dims [1280] type 0
+  attn_q_b.weight          dims [1280, 32768] type 8
+  attn_kv.weight           dims [5120, 512] type 8
+  attn_kv_a_norm.weight    dims [512] type 0
+  attn_output_a.weight     dims [4096, 8192] type 8
+  attn_output_b.weight     dims [8192, 5120] type 8
+  attn_sinks.weight        dims [64] type 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"tools/v41_attention_reference.py\"\ns=open(p).read()\na=\"\"\"    hd = g.tenseurs[nom(\"attn_kv.weight\")][0][0]      # 512 : largeur de la tête\n    n_rot = g.tenseurs[nom(\"attn_q_b.weight\")][0][0]  # informa … [702 caractères tronqués]`
+
+  ```
+ok
+couche 0 : head_dim 512 · 64 têtes · attn_q_b [1280, 32768] · kv [5120, 512]
+  pos 5 qr       : écart max 1.726e-01 (dynamique 3.240e-01, 5.3e-01 relatif)
+  pos 5 qr_norm  : écart max 9.922e-01 (dynamique 8.466e+00, 1.2e-01 relatif)
+  pos 5 q_norm   : écart max 2.235e+00 (dynamique 1.313e+01, 1.7e-01 relatif)
+  pos 5 q_rope   : écart max 4.329e+01 (dynamique 1.374e+01, 3.1e+00 relatif)
+  pos 5 kv_norm  : écart max 1.668e+00 (dynamique 2.984e+00, 5.6e-01 relatif)
+  pos 5 kv_rope  : écart max 3.869e-01 (dynamique 2.984e+00, 1.3e-01 relatif)
+  pos 12 qr       : écart max 1.686e-01 (dynamique 2.936e-01, 5.7e-01 relatif)
+  pos 12 qr_norm  : écart max 1.235e+00 (dynamique 8.237e+00, 1.5e-01 relatif)
+  pos 12 q_norm   : écart max 2.417e+00 (dynamique 1.325e+01, 1.8e-01 relatif)
+  pos 12 q_rope   : écart max 4.736e+01 (dynamique 1.539e+01, 3.1e+00 relatif)
+  pos 12 kv_norm  : écart max 2.097e+00 (dynamique 3.031e+00, 6.9e-01 relatif)
+  pos 12 kv_rope  : écart max 4.594e-01 (dynamique 3.031e+00, 1.5e-01 relatif)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"tools/v41_attention_reference.py\"\ns=open(p).read()\na=\"\"\"        x = dump(prefixe, \"hc_attn_pre\", couche, pos)\"\"\"\nb=\"\"\"        # L'entrée de l'attention n'est pas le flux replié : c'est SA NORME\n  … [523 caractères tronqués]`
+
+  ```
+ok
+couche 0 : head_dim 512 · 64 têtes · attn_q_b [1280, 32768] · kv [5120, 512]
+  pos 5 qr       : écart max 1.051e-06 (dynamique 3.240e-01, 3.2e-06 relatif)
+  pos 5 qr_norm  : écart max 1.005e-05 (dynamique 8.466e+00, 1.2e-06 relatif)
+  pos 5 q_norm   : écart max 9.028e-06 (dynamique 1.313e+01, 6.9e-07 relatif)
+  pos 5 q_rope   : écart max 4.985e+01 (dynamique 1.374e+01, 3.6e+00 relatif)
+  pos 5 kv_norm  : écart max 1.798e+00 (dynamique 2.984e+00, 6.0e-01 relatif)
+  pos 5 kv_rope  : écart max 2.044e-06 (dynamique 2.984e+00, 6.9e-07 relatif)
+  pos 12 qr       : écart max 9.082e-07 (dynamique 2.936e-01, 3.1e-06 relatif)
+  pos 12 qr_norm  : écart max 1.107e-05 (dynamique 8.237e+00, 1.3e-06 relatif)
+  pos 12 q_norm   : écart max 1.033e-05 (dynamique 1.325e+01, 7.8e-07 relatif)
+  pos 12 q_rope   : écart max 5.504e+01 (dynamique 1.539e+01, 3.6e+00 relatif)
+  pos 12 kv_norm  : écart max 2.285e+00 (dynamique 3.031e+00, 7.5e-01 relatif)
+  pos 12 kv_rope  : écart max 3.401e-06 (dynamique 3.031e+00, 1.1e-06 relatif)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport numpy as np, sys\nsys.path.insert(0,\"tools\")\nfrom v41_attention_reference import (Gguf, dump, rmsnorm, rope_norm, matvec_q8_0, BASE, EPS)\ng=Gguf(\"/home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flas … [1351 caractères tronqués]`
+
+  ```
+q_norm vs ref: écart 19.153888001591447
+écart max par tête (10 premières) : [ 9.2909  3.9717 10.8133  7.5897  2.401   6.8549  6.1913  8.2799 12.7086
+  4.4575]
+écart max par tranche de 64 dans la tête 0 : [0.     0.     0.     0.     0.     0.     0.     9.2909]
+variante rope sur les 64 PREMIÈRES : écart 19.153888001591447
+variante rope sur toute la tête : écart 19.172683012391275
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport numpy as np, sys\nsys.path.insert(0,\"tools\")\nfrom v41_attention_reference import (Gguf, dump, rmsnorm, matvec_q8_0, BASE)\ng=Gguf(\"/home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf\")\nno … [1066 caractères tronqués]`
+
+  ```
+theta mesuré (32 paires) : [-1.28319 -2.53371  2.81171  2.10848  1.58114  1.18569  0.88914  0.66676]
+  hypothèse n_rot= 64 : 32 paires comparables · écart max sur theta 6.283186
+  hypothèse n_rot= 80 : 32 paires comparables · écart max sur theta 6.505356
+  hypothèse n_rot= 32 : 16 paires comparables · écart max sur theta 6.283186
+  hypothèse n_rot=128 : 32 paires comparables · écart max sur theta 6.863536
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n 'vider_couche(dump, \"q_norm\"\\|vider_couche(dump, \"q_rope\"\\|vider_couche(dump, \"kv_rope\"\\|vider_couche(dump, \"kv_norm\"\\|vider_couche(dump, \"qr\"\\|let mut q = vec!\\|tourner(&mut qp\\|tourner(&mut kp' drave-core/s … [82 caractères tronqués]`
+
+  ```
+4774:        let mut q = vec![0f32; t * nh * hd];
+5492:        Self::vider_couche(dump, "qr", l, pos, &qr);
+5496:        let mut q = vec![0f32; nh * hd];
+5507:        Self::vider_couche(dump, "q_norm", l, pos, &q);
+5515:            tourner(&mut qp, nh, nr, pos, nr, false);
+5528:            tourner(&mut kp, 1, nr, pos, nr, false);
+5531:        Self::vider_couche(dump, "kv_norm", l, pos, &kvn);
+5532:        Self::vider_couche(dump, "q_rope", l, pos, &q);
+5533:        Self::vider_couche(dump, "kv_rope", l, pos, &kvn);
+5698:                    tourner(&mut kp, 1, idr, debut, idr, false);
+5707:                    tourner(&mut kp, 1, nr, debut, nr, false);
+5791:                    tourner(&mut kp, 1, idr, debut, idr, false);
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport numpy as np, sys\nsys.path.insert(0,\"tools\")\nfrom v41_attention_reference import dump, BASE\nhd=512\na5=dump(\"/tmp/drep2/l\",\"q_rope\",0,5); a12=dump(\"/tmp/drep2/l\",\"q_rope\",0,12)\nseg5=a5[hd-64:hd]; … [639 caractères tronqués]`
+
+  ```
+paire  0 : angle mesuré +0.57564 · attendu (7·freq, mod 2π) +0.71681 · |x| 3.6812 |y| 2.1570
+  paire  1 : angle mesuré -0.86870 · attendu (7·freq, mod 2π) -1.03393 · |x| 4.9023 |y| 4.2382
+  paire  2 : angle mesuré -2.18781 · attendu (7·freq, mod 2π) -2.34680 · |x| 5.0437 |y| 4.2708
+  paire  3 : angle mesuré -3.02543 · attendu (7·freq, mod 2π) +2.95188 · |x| 5.4692 |y| 5.3927
+  paire  4 : angle mesuré +2.40362 · attendu (7·freq, mod 2π) +2.21359 · |x| 5.0637 |y| 4.5672
+  paire  5 : angle mesuré +2.01818 · attendu (7·freq, mod 2π) +1.65996 · |x| 4.3919 |y| 4.7649
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"sprints/21-localiser-le-defaut-v41.md\"\ns=open(p).read()\na=\"\"\"## Portes\"\"\"\nb=\"\"\"## 3ter. L'attention : projections et normes vérifiées, un écart sur la rotation du Q\n\n`tools/v41_attention_reference … [3523 caractères tronqués]`

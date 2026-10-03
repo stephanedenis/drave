@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 109.3 h |
+| Durée | 109.4 h |
 | Tours | 81 |
-| Messages | 6383 |
-| Appels d'outils | 6121 |
+| Messages | 6394 |
+| Appels d'outils | 6132 |
 | Fichiers touchés | 118 |
-| Commandes | 5185 |
+| Commandes | 5196 |
 | Sous-agents | 32 |
-| Commits | 404 |
+| Commits | 405 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -4122,7 +4122,7 @@ Dis-moi si je poursuis sur le bloc 22 (la composition des experts en numpy, plan
 
 ### Tour 81 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [941 caractères tronqués]
 
-*10 appels d'outils.* Actions notables :
+*21 appels d'outils.* Actions notables :
 
 - bash — Read the IQ2_XXS dequantizer
 - bash — Write and run the expert-path numpy reference
@@ -4134,6 +4134,11 @@ Dis-moi si je poursuis sur le bloc 22 (la composition des experts en numpy, plan
 - bash — Fix the regex properly and run
 - bash — Fix the matrix-vector products and run
 - bash — Commit the expert-path verification
+- bash — Check the attention scale and rope pairing
+- bash — Read the NORM rope implementation
+- bash — Write and run the attention projection reference
+- bash — List the real attention tensor dims
+- … et 7 autres
 
 ## 3. Travail accompli
 
@@ -4337,7 +4342,7 @@ Dis-moi si je poursuis sur le bloc 22 (la composition des experts en numpy, plan
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5145 autres
+- … et 5156 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4889,4 +4894,5 @@ Dis-moi si je poursuis sur le bloc 22 (la composition des experts en numpy, plan
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="sprints/21-localiser-le-defaut-v41.md" s=open(p).read() a="""## Planning du bloc 22 — 
 - Sprint 21 : portes toutes vertes après les changements du bloc (64 tests, V4-Flash 8430,4966 inchangée)" && git log --oneline | head -5; date
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="sprints/21-localiser-le-defaut-v41.md" s=open(p).read() a="""## Portes""" b="""## 3bis
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="sprints/21-localiser-le-defaut-v41.md" s=open(p).read() a="""## Portes""" b="""## 3ter
 

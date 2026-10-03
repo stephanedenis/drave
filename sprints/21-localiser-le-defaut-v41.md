@@ -130,6 +130,38 @@ ni la tête, ni le mHC (source publiée), ni le tokenizer, ni les formats ne son
 cause. **Il ne reste que la composition de l'ATTENTION** — la seule pièce dont les
 morceaux ont été vérifiés un par un, jamais l'ensemble.
 
+## 3ter. L'attention : projections et normes vérifiées, un écart sur la rotation du Q
+
+`tools/v41_attention_reference.py` recompose les premiers étages de l'attention
+depuis les tenseurs (Q8_0 déquantifié en numpy) et les compare aux vides, ÉTAGE
+PAR ÉTAGE — ce qui localise un désaccord tout seul. Couche 0, positions 5 et 12 :
+
+| étage | écart relatif |
+|---|---|
+| `qr` = W_qa · norme(x) | **3,1e-06** ✓ |
+| `qr_norm` | **1,2e-06** ✓ |
+| `q_norm` (W_qb + norme par tête) | **6,9e-07** ✓ |
+| `kv_rope` (W_kv + norme + rotation) | **6,9e-07** ✓ |
+| `q_rope` | **3,6e+00** ✗ |
+
+Deux enseignements :
+1. **L'entrée de l'attention n'est pas `hc_attn_pre`** mais SA NORME
+   (`rmsnorm(xin, attn_norm)`) — le premier essai donnait 0,53 d'écart sur `qr`
+   pour cette seule raison. Le vide porte bien son nom, mais pas son étage.
+2. Les projections et les normes de Q et de KV sont **justes** (1e-6), et la
+   rotation du KV l'est aussi — donc la fonction de rotation est juste. Le seul
+   écart est sur le Q **après** rotation, dans les 64 dernières composantes de
+   chaque tête : les 448 premières sont identiques AU BIT PRÈS (écart exactement
+   nul par tranche de 64), donc l'ordre des têtes et l'appariement des paires ne
+   sont pas en cause.
+
+Les deux tentatives d'inversion de l'angle appliqué (par paire, puis entre deux
+positions) sont **non concluantes** : la première compare des angles modulo 2π
+sans le dire, la seconde mélange la rotation et le changement d'entrée entre les
+deux positions. Instrument à corriger avant de conclure : vider le `q` **juste
+avant** la rotation (le `q_norm` existe déjà) et **juste après**, dans le même
+gabarit que le KV, puis comparer les deux rotations sur les MÊMES valeurs.
+
 ## Portes
 
 - `tools/portes.sh rapide` : **toutes vertes** après les changements du bloc —
