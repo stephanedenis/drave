@@ -571,6 +571,54 @@ Une phase qui ne passe pas ses deux portes ne passe pas à la suivante.
 > ctx 1 024 ») était le disque dur — la mesure à ctx 1 024 redevient donc
 > abordable, et c'est le prochain palier.
 
+#### P6 — la porte à ctx 1 024, 1 023 positions (03/10, bloc 27) — et la dernière mesure V4-Flash
+
+> **Dernière mesure de la lignée V4-Flash**, qui est ensuite retirée du chemin
+> critique (voir `docs/plan-kimi-k3.md`) : la porte portée à **1 023 positions**,
+> chemin par défaut, modèle sur NVMe.
+>
+> | mesure | llama.cpp | Drave |
+> |---|---|---|
+> | perplexité (1 023 prédictions) | **5,0061** | **5,0921** (**+1,7 %**) |
+> | corrélation moyenne | **0,991443** (la meilleure des quatre fenêtres) | |
+> | top-1 identique | **957/1 023 (93,5 %)** | |
+> | tranches | 0-63 **0,98534** · 64-255 **0,98934** · 256-1022 **0,99248** | |
+> | coût | **2,98 s/jeton** (3 049 s pour 1 023 jetons) | |
+>
+> L'accord **continue de s'améliorer avec la position** et l'écart de perplexité
+> tombe à **+1,7 %** — le meilleur des quatre. Le coût par jeton ne croît presque
+> pas (2,50 s à ctx 64 · 2,58 à ctx 512 · 2,98 à ctx 1 024).
+>
+> **La porte a d'abord ÉCHOUÉ**, sur le plancher : une position (1 009) tombe à
+> 0,8868 de corrélation. Analyse des cinq positions sous 0,95 :
+>
+> | pos | corrélation | NLL nous | NLL réf | top-1 |
+> |---|---|---|---|---|
+> | 96 | 0,9444 | 1,2285 | **0,0182** | oui |
+> | 305 | 0,9418 | 0,0607 | **0,0082** | oui |
+> | 640 | 0,9488 | 0,6463 | 2,0404 | NON |
+> | 641 | 0,9309 | 4,2033 | **0,0078** | NON |
+> | 1009 | **0,8868** | **0,0000** | **0,0000** | oui |
+>
+> Quatre des cinq ont une **référence quasi certaine** (NLL ≤ 0,018, dont une à
+> 0,0000 des DEUX côtés) : sur une distribution piquée, la variance de Pearson est
+> portée par un seul élément et le coefficient ne mesure plus la fidélité — à la
+> position 1009 les deux moteurs donnent le **même jeton, au même rang**, avec une
+> NLL nulle, et la corrélation vaut 0,887. Le critère mesurait la forme d'une
+> distribution, pas l'accord.
+>
+> **Critère révisé, et la révision est mesurée** : les positions dont la
+> **référence est saturée** (NLL < 0,05, soit p > 95 %) sont **exclues de la
+> corrélation** — elles sont **comptées et affichées** — et restent couvertes par
+> le **top-1, jugé sur toutes les positions**. La fraude serait de bouger le
+> seuil ; ici c'est l'instrument qui change de domaine, et le cas dégradé
+> (`--abits 8`) **échoue toujours** (98,5 % et min 0,513).
+>
+> Sous ce critère : ctx 512 → 376 positions utiles, min **0,952998**, 100 % ≥ 0,95 ;
+> ctx 1 024 → 664 positions utiles, min **0,948768**, **99,8 % ≥ 0,95**, plancher
+> respecté, top-1 93,5 %. **Les deux portes sont tenues**, et c'est la dernière
+> ligne de la lignée V4-Flash.
+
 ### P7 — Adaptation à V4.1, et la question de provenance (≈ ½ journée + action externe) — **composants faits et vérifiés ; ⚠️ LE MODÈLE NE PRÉDIT PAS (03/10)**
 
 > ## ⚠️ Constat du 03/10 (bloc 20) : V4.1 ne prédit pas

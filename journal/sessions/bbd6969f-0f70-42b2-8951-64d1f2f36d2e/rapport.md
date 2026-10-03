@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 115.5 h |
+| Durée | 115.6 h |
 | Tours | 90 |
-| Messages | 6831 |
-| Appels d'outils | 6532 |
+| Messages | 6843 |
+| Appels d'outils | 6542 |
 | Fichiers touchés | 133 |
-| Commandes | 5513 |
+| Commandes | 5522 |
 | Sous-agents | 32 |
-| Commits | 441 |
+| Commits | 442 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -4475,7 +4475,7 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 
 ### Tour 90 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [942 caractères tronqués]
 
-*94 appels d'outils.* Actions notables :
+*104 appels d'outils.* Actions notables :
 
 - bash — Check the gate suite result
 - bash — Wait for the gates
@@ -4491,11 +4491,11 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 - bash — Find the plan's remaining items
 - bash — Extract each phase's gate claims
 - read
-- … et 77 autres
+- … et 87 autres
 
 **Synthèse produite :**
 
-⏵ Retrait de V4-Flash (copie NVMe supprimée, portes archivées) et bascule de la porte hc sur V4.1
+⏵ Position 1009 : NLL 0,0000 des deux côtés — Pearson sur une distribution saturée ne mesure rien
 
 ## 3. Travail accompli
 
@@ -4714,7 +4714,7 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5473 autres
+- … et 5482 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5303,4 +5303,5 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 - Audit : préciser ce que « flux » veut dire pour V4 — les paires sont comptées (16,2 G/jeton) mais la part en listes est NULLE, le calcul est dense. Le contrat d
 - Réorientation : plan Kimi-K3 — exécuter en local ce qui ne tient pas en local  Mesuré : le Q4 d'Kimi-K3 fait 1 508,7 Go (32 shards), l'architecture kimi-k3 nous
 - Retrait de V4-Flash : copie NVMe supprimée, porte hc repointée sur V4.1 (testée), section 6bis marquée ARCHIVÉE dans portes.sh  Un modèle périmé ne doit pas por
+- Porte de correction à ctx 1024 (1 023 positions) : accord MEILLEUR (moyenne 0,9914, top-1 93,5 %, PPL +1,7 %), mais elle a d'abord échoué sur une position où la
 

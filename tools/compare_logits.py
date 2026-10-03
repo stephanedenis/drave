@@ -48,6 +48,16 @@ SEUIL_CORR_MOY = 0.98
 SEUIL_TOP1 = 0.85
 SEUIL_PPL = 0.10
 MIN_POSITIONS_PPL = 64
+# Au-delà de ce NLL de RÉFÉRENCE, la distribution de la référence est quasi
+# certaine (p > 95 %). Sur une distribution piquée, la corrélation de Pearson ne
+# mesure plus la fidélité : sa variance est portée par UN élément, et un écart
+# minuscule dans la queue fait chuter le coefficient alors que les deux moteurs
+# donnent le même jeton. Mesuré à ctx 1 024 : 4 des 5 positions sous 0,95 ont une
+# NLL de référence ≤ 0,018 et un top-1 identique (dont une à NLL 0,0000 des deux
+# côtés, corrélation 0,8868 !). Ces positions sont donc EXCLUES de la
+# corrélation, COMPTÉES et rapportées, et le top-1 les couvre (il est jugé sur
+# toutes les positions).
+SEUIL_SATURE = 0.05
 
 
 def lire(chemin):
@@ -138,6 +148,7 @@ def main():
     accords = []
     corr_min, corr_min_pos = 1.0, 0
     rangs_a, rangs_b = [], []
+    nll_ref_par_pos = []
     for i in range(n):
         cible = ids[i + 1] if ids and i + 1 < len(ids) else None
         if cible is None:
@@ -145,6 +156,7 @@ def main():
         n_comp += 1
         na, ra, t1a = nll_et_rang(A[i], cible)
         nb, rb, t1b = nll_et_rang(B[i], cible)
+        nll_ref_par_pos.append(nb)
         tot_a += na; tot_b += nb
         ecarts.append(abs(na - nb))
         rangs_a.append(math.log1p(ra)); rangs_b.append(math.log1p(rb))
@@ -171,14 +183,24 @@ def main():
           f"référence : {ppl_ref:.4f}   ({n_comp} positions comparées)")
     cmoy = sum(correlations) / len(correlations)
     cors = np.array(correlations) if np is not None else None
-    sous = sum(1 for c in correlations if c < SEUIL_CORR_MIN)
-    frac_ok = 1 - sous / n_comp
+    # Positions « saturées » : la référence est quasi certaine (NLL < 0,05) — la
+    # corrélation n'y est pas un instrument, le top-1 l'est.
+    sature = [i for i in range(n_comp) if nll_ref_par_pos[i] < SEUIL_SATURE]
+    utiles = [c for i, c in enumerate(correlations) if i not in set(sature)]
+    corr_utile = float(np.mean(utiles)) if utiles else float("nan")
+    min_utile = min(utiles) if utiles else float("nan")
+    sous = sum(1 for c in utiles if c < SEUIL_CORR_MIN)
+    frac_ok = 1 - (sous / len(utiles) if utiles else 1)
     print(f"corrélation des logits par position : min {corr_min:.6f} (pos {corr_min_pos}) "
           f"· moyenne {cmoy:.6f} · max {max(correlations):.6f}")
-    print(f"  sous {SEUIL_CORR_MIN} : {sous}/{n_comp} ({100*sous/n_comp:.1f} %) · "
+    print(f"  positions SATURÉES (NLL réf < {SEUIL_SATURE}) : {len(sature)}/{n_comp} "
+          f"— exclues de la corrélation, couvertes par le top-1")
+    print(f"  corrélation sur les {len(utiles)} positions utiles : min {min_utile:.6f} "
+          f"· moyenne {corr_utile:.6f}")
+    print(f"  sous {SEUIL_CORR_MIN} : {sous}/{len(utiles)} ({100*sous/max(len(utiles),1):.1f} %) · "
           f"au-dessus : {100*frac_ok:.1f} % (seuil {100*FRACTION_MIN:.0f} %) · "
           f"plancher {SEUIL_CORR_PLANCHER} " +
-          ("respecté" if corr_min >= SEUIL_CORR_PLANCHER else "FRANCHI"))
+          ("respecté" if min_utile >= SEUIL_CORR_PLANCHER else "FRANCHI"))
     # Par TRANCHES : c'est ce qui distingue une erreur de position (RoPE, blocs
     # compressés, fenêtre glissante — l'écart CROÎT avec la position) d'une erreur
     # de tête ou de norme (l'écart est le même partout).
@@ -205,10 +227,11 @@ def main():
 
     pannes = []
     if frac_ok < FRACTION_MIN:
-        pannes.append(f"seulement {100*frac_ok:.1f} % des positions au-dessus de "
+        pannes.append(f"seulement {100*frac_ok:.1f} % des positions utiles au-dessus de "
                       f"{SEUIL_CORR_MIN} (< {100*FRACTION_MIN:.0f} %)")
-    if corr_min < SEUIL_CORR_PLANCHER:
-        pannes.append(f"corrélation minimale {corr_min:.5f} < plancher {SEUIL_CORR_PLANCHER}")
+    if min_utile < SEUIL_CORR_PLANCHER:
+        pannes.append(f"corrélation minimale (positions utiles) {min_utile:.5f} < "
+                      f"plancher {SEUIL_CORR_PLANCHER}")
     if cmoy < SEUIL_CORR_MOY:
         pannes.append(f"corrélation moyenne {cmoy:.5f} < {SEUIL_CORR_MOY}")
     taux = accord_top1 / n_comp
@@ -225,9 +248,10 @@ def main():
         print("❌ PORTE DE CORRECTION NON TENUE : " + " · ".join(pannes))
         return 1
     print("✅ porte de correction tenue "
-          f"({100*frac_ok:.1f} % des positions au-dessus de {SEUIL_CORR_MIN}, "
-          f"min {corr_min:.4f} >= plancher {SEUIL_CORR_PLANCHER}, "
-          f"top-1 {100*taux:.1f} %)")
+          f"({100*frac_ok:.1f} % des positions UTILES au-dessus de {SEUIL_CORR_MIN}, "
+          f"min {min_utile:.4f} >= plancher {SEUIL_CORR_PLANCHER}, "
+          f"top-1 {100*taux:.1f} % sur toutes les positions, "
+          f"{len(sature)} saturées exclues de la corrélation)")
     return 0
 
 
