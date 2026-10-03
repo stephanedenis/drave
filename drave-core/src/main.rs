@@ -1863,11 +1863,35 @@ fn run_k3_essai() {
     }
     if shards.is_empty() { eprintln!("aucun shard trouvé"); return; }
     eprintln!("[k3-essai] {} shard(s) présents", shards.len());
-    let g = Gguf::open_multi(&shards).expect("ouverture des shards présents");
+    // Un shard EN COURS d'écriture a un en-tête incomplet : on l'écarte en le
+    // disant, plutôt que de tomber (même tolérance que `--config`).
+    let mut lisibles: Vec<std::path::PathBuf> = Vec::new();
+    for p in &shards {
+        match Gguf::open_meta(p) {
+            Ok(_) => lisibles.push(p.clone()),
+            Err(_) => eprintln!("[k3-essai] {} : en-tête incomplet (shard en cours), écarté",
+                                p.file_name().unwrap_or_default().to_string_lossy()),
+        }
+    }
+    if lisibles.is_empty() { eprintln!("[k3-essai] aucun shard lisible"); return; }
+    let g = Gguf::open_multi(&lisibles).expect("ouverture des shards lisibles");
     let mut c0 = match kimi_k3::Couche0::charge(&g) {
         Ok(c) => c,
         Err(e) => { eprintln!("[k3-essai] chargement impossible : {e}"); return; }
     };
+    // Contrôle des dimensions sur quatre couches types AVANT tout calcul :
+    // 0 (dense), 1 (MoE+KDA), 3 (MoE+MLA), 4 (KDA). C'est ce qui attrape une
+    // dimension lue du mauvais côté, qui ne se voit ni à la compilation ni à la
+    // relecture.
+    for l in [0usize, 1, 3, 4] {
+        let e = kimi_k3::verifie_dims(&g, l);
+        if e.is_empty() {
+            println!("  couche {l} : dimensions conformes");
+        } else {
+            println!("  couche {l} : {} écart(s)", e.len());
+            for x in e.iter().take(6) { println!("      {x}"); }
+        }
+    }
     // L'entrée de la couche 0 est l'embarquement du jeton.
     let ids = vec![3638u32, 275, 1309];      // « Le ciel est… » (tokenizer du modèle)
     let embd = g.dequant("token_embd.weight");

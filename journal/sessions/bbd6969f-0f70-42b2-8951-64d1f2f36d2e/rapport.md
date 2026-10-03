@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 117.6 h |
-| Tours | 95 |
-| Messages | 7056 |
-| Appels d'outils | 6740 |
+| Durée | 117.7 h |
+| Tours | 96 |
+| Messages | 7063 |
+| Appels d'outils | 6745 |
 | Fichiers touchés | 145 |
-| Commandes | 5706 |
+| Commandes | 5711 |
 | Sous-agents | 32 |
-| Commits | 469 |
+| Commits | 470 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -235,6 +235,8 @@
 **Tour 94** — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas en local (classe Kimi-K3 Q4 : 1,5 To de poids, ~35 Go de poids par jeton), et étudier/implémenter ce qui nous distingue sur cette classe : découpage par experts et en grappes (chaque nœud ne lit que ce qu'il sert), réutilisation des experts entre jetons, transport de flux compact  … [966 caractères tronqués]
 
 **Tour 95** — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas en local (classe Kimi-K3 Q4 : 1,5 To de poids, ~35 Go de poids par jeton), et étudier/implémenter ce qui nous distingue sur cette classe : découpage par experts et en grappes (chaque nœud ne lit que ce qu'il sert), réutilisation des experts entre jetons, transport de flux compact  … [966 caractères tronqués]
+
+**Tour 96** — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas en local (classe Kimi-K3 Q4 : 1,5 To de poids, ~35 Go de poids par jeton), et étudier/implémenter ce qui nous distingue sur cette classe : découpage par experts et en grappes (chaque nœud ne lit que ce qu'il sert), réutilisation des experts entre jetons, transport de flux compact  … [966 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -4721,7 +4723,42 @@ Deux choses valent d'être soulignées :
 
 **Synthèse produite :**
 
-⏵ Test de fumée de ma couche 0 sur le modèle partiel (les tenseurs de la couche 0 sont déjà là)
+⏵ Bloc 31 : la couche 0 de Kimi-K3 CALCULE sur le vrai fichier — deux bugs attrapés au passage
+
+**Le fait du bloc : ma passe avant de la couche 0 tourne sur le modèle réel** (les tenseurs de la couche 0 sont arrivés avec les 19 premiers shards), et le test de fumée a fait exactement son travail :
+
+```
+[k3-essai] 19 shard(s) présents
+[k3] h=7168 nh=96 hd=128 d_inner=12288 d_conv=4 ffn=33792
+  jeton 0 (id 3638) : |l_out| = 0,9731 · finis : true
+  jeton 1 (id 275)  : |l_out| = 1,4310 · finis : true
+  jeton 2 (id 1309) : |l_out| = 1,4958 · finis : true
+```
+
+Les normes **croissent avec la position** — ce qu'un flux résiduel doit faire — et rien n'est NaN. Ce n'est pas encore une *vérification* (la référence ne tourne pas sur un modèle incomplet, et je l'ai écrit dans le code), c'est « ça charge, ça calcule » — mais ça rend l'attente utile **et ça a payé** :
+
+1. **un bug relu avant compilation** : la convolution était appelée deux fois sur `q` (dont une dans un temporaire) → l'état avançait de deux crans par jeton et le résultat partait à la poubelle ;
+2. **un bug attrapé par la mesure** : le moteur **inverse les dimensions** par rapport au fichier (`dims[0]` = `ne1` = la *sortie*, comme le fait `Proj::load`). Lire `dims[1]` donnait `nh = 7168` au lieu de 96 et faisait tomber le produit matriciel. La relecture ne l'aurait pas vu ; le test de fumée l'a dit en une ligne.
+
+**Et le croisement des maths avec le code publié de Moonshot** (bloc précédent, complété ici) : SiTU, attention résiduelle (y compris « scores sur les normalisées, somme sur les brutes »), projections du KDA nom par nom, convolution courte à SiLU, porte « sûre » bornée à −5 — **tout est identique**. Ce que le code publié **ne donne pas** : la récurrence elle-même (noyaux externes non livrés), qui reste transcrite de llama.cpp et vérifiée contre NumPy — c'est écrit dans la spec plutôt que sous le tapis.
+
+**Téléchargement** : ~790 Go / 1 508 (**52 %**, ~100 Mo/s) → fin vers **14h25**. Dès qu'il tombe : la séquence automatique en 5 étapes (complétude → `--config` → tokenizer → budget *mesuré* → baseline `llama.cpp-k3`), puis la **vérification tenseur par tenseur** de la couche 0 avec les 13 points de comparaison déjà écrits — et mon implémentation est prête à être confrontée, pas à être écrite.
+
+77 tests verts, tout commité.
+
+### Tour 96 — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas e … [1246 caractères tronqués]
+
+*5 appels d'outils.* Actions notables :
+
+- bash — Check the MoE/MLA tensor shapes and download state
+- bash — Add and run the dimension checks for MoE and MLA layers
+- bash — Fix the closure and shard tolerance
+- bash — Build and run the dimension checks
+- bash — Commit the dimension checks
+
+**Synthèse produite :**
+
+⏵ Bloc 32 : je vérifie les dimensions des tenseurs MoE et MLA AVANT que le modèle arrive (la classe de bug qui a déjà mordu)
 
 ## 3. Travail accompli
 
@@ -4952,7 +4989,7 @@ Deux choses valent d'être soulignées :
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5666 autres
+- … et 5671 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5080,7 +5117,7 @@ Deux choses valent d'être soulignées :
 
 ## 5. Erreurs rencontrées
 
-343 sorties en erreur ou divergentes. Les premières :
+344 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -5569,4 +5606,5 @@ Deux choses valent d'être soulignées :
 - Croisement des maths K3 avec le code PUBLIÉ de Moonshot : SiTU, attention résiduelle, projections, convolution, porte bornée — identiques  Le code officiel (mod
 - K3 : la passe avant de la couche 0 (f32) — structure d'abord, exactitude ensuite  Déquantifiée en f32 (~1,4 Go pour la couche 0, qui est dense), elle suit l'ord
 - K3 : la couche 0 CALCULE sur le vrai fichier (test de fumée --k3-essai), et il a attrapé une convention de dimensions  Le moteur inverse les dimensions par rapp
+- K3 : les dimensions des quatre types de couches sont CONFORMES au fichier (0 dense, 1 MoE+KDA, 3 MoE+MLA, 4 KDA)  Le contrôle tensor par tensor compare les dime
 

@@ -436,3 +436,103 @@ impl Couche0 {
         Ok(prefix)
     }
 }
+
+
+// ===========================================================================
+// Contrôle des DIMENSIONS, tensor par tensor, avant d'écrire le calcul.
+//
+// C'est la classe de bug qui a déjà mordu : le moteur range `dims[0] = ne1` (la
+// SORTIE) alors que le GGUF range `ne0` en premier. Une dimension lue du mauvais
+// côté ne se voit ni à la compilation ni à la relecture — elle se voit au
+// premier produit matriciel, ou jamais si les deux nombres sont proches.
+// ===========================================================================
+
+/// Dimensions attendues (côté MOTEUR, donc inversées par rapport au fichier)
+/// pour une couche, d'après la configuration déclarée. Rend la liste des écarts.
+pub fn verifie_dims(g: &Gguf, l: usize) -> Vec<String> {
+    let d = |nom: &str| -> Option<Vec<usize>> {
+        g.tensor(nom).map(|t| t.dims.iter().map(|x| *x as usize).collect())
+    };
+    let p = |s: &str| format!("blk.{l}.{s}");
+    let lire = |cle: &str, def: usize| -> usize {
+        g.meta.get(cle).and_then(|m| m.as_u64()).map(|v| v as usize).unwrap_or(def)
+    };
+    let h = lire("kimi-k3.embedding_length", 7168);
+    let n_exp = lire("kimi-k3.expert_count", 896);
+    let n_ff_exp = lire("kimi-k3.expert_feed_forward_length", 3072);
+    let latent = lire("kimi-k3.expert_latent_length", 3584);
+    let n_shared = lire("kimi-k3.expert_shared_count", 2);
+    let nh = lire("kimi-k3.attention.head_count", 96);
+    let kda_hd = lire("kimi-k3.kda.head_dim", 128);
+    let kl_mla = lire("kimi-k3.attention.key_length_mla", 192);
+    let vl_mla = lire("kimi-k3.attention.value_length_mla", 128);
+    let kv_lora = lire("kimi-k3.attention.kv_lora_rank", 512);
+    let q_lora = lire("kimi-k3.attention.q_lora_rank", 1536);
+    let rope = lire("kimi-k3.rope.dimension_count", 64);
+    let mut ecarts = Vec::new();
+    // Le contrôle prend `ecarts` en paramètre : une fermeture qui le
+    // capturerait interdirait les autres écritures (erreur de compilation, pas
+    // de raisonnement).
+    let attendu = |ecarts: &mut Vec<String>, nom: String, dims: Vec<usize>| match d(&nom) {
+        None => ecarts.push(format!("{nom} : ABSENT")),
+        Some(v) if v != dims => ecarts.push(
+            format!("{nom} : moteur {v:?}, attendu {dims:?} (fichier inversé)")),
+        Some(_) => {}
+    };
+    // communes
+    attendu(&mut ecarts, p("attn_norm.weight"), vec![h]);
+    attendu(&mut ecarts, p("ffn_norm.weight"), vec![h]);
+    attendu(&mut ecarts, p("attn_res_score.weight"), vec![h]);
+    let est_mla = d(&p("attn_kv_a_mqa.weight")).is_some();
+    if est_mla {
+        attendu(&mut ecarts, p("attn_q_a.weight"), vec![q_lora, h]);
+        attendu(&mut ecarts, p("attn_q_a_norm.weight"), vec![q_lora]);
+        attendu(&mut ecarts, p("attn_q_b.weight"), vec![nh * kl_mla, q_lora]);
+        attendu(&mut ecarts, p("attn_kv_a_mqa.weight"), vec![kv_lora + rope, h]);
+        attendu(&mut ecarts, p("attn_kv_a_norm.weight"), vec![kv_lora]);
+        attendu(&mut ecarts, p("attn_k_b.weight"), vec![nh, kv_lora, kl_mla - rope]);
+        attendu(&mut ecarts, p("attn_v_b.weight"), vec![nh, vl_mla, kv_lora]);
+        attendu(&mut ecarts, p("attn_gate.weight"), vec![nh * vl_mla, h]);
+        attendu(&mut ecarts, p("attn_output.weight"), vec![h, nh * vl_mla]);
+    } else {
+        attendu(&mut ecarts, p("attn_q.weight"), vec![nh * kda_hd, h]);
+        attendu(&mut ecarts, p("attn_k.weight"), vec![nh * kda_hd, h]);
+        attendu(&mut ecarts, p("attn_v.weight"), vec![nh * kda_hd, h]);
+        attendu(&mut ecarts, p("ssm_g.weight"), vec![nh * kda_hd, h]);
+        attendu(&mut ecarts, p("ssm_f_a.weight"), vec![kda_hd, h]);
+        attendu(&mut ecarts, p("ssm_f_b.weight"), vec![nh * kda_hd, kda_hd]);
+        attendu(&mut ecarts, p("ssm_beta.weight"), vec![nh, h]);
+        attendu(&mut ecarts, p("ssm_dt.bias"), vec![nh * kda_hd]);
+        attendu(&mut ecarts, p("ssm_a"), vec![nh]);
+        attendu(&mut ecarts, p("ssm_norm.weight"), vec![kda_hd]);
+        attendu(&mut ecarts, p("attn_output.weight"), vec![h, nh * kda_hd]);
+        if let Some(v) = d(&p("ssm_conv1d_q.weight")) {
+            if *v.last().unwrap_or(&0) != 4 {
+                ecarts.push(format!("{}.ssm_conv1d_q.weight : noyau {:?} au lieu de 4",
+                                    p(""), v));
+            }
+            if v.iter().product::<usize>() != 4 * nh * kda_hd {
+                ecarts.push(format!("ssm_conv1d_q.weight : {:?} ≠ 4×{}", v, nh * kda_hd));
+            }
+        } else {
+            ecarts.push("ssm_conv1d_q.weight : ABSENT".to_string());
+        }
+    }
+    if l == 0 {
+        attendu(&mut ecarts, p("ffn_gate.weight"), vec![lire("kimi-k3.feed_forward_length", 33792), h]);
+        attendu(&mut ecarts, p("ffn_up.weight"), vec![lire("kimi-k3.feed_forward_length", 33792), h]);
+        attendu(&mut ecarts, p("ffn_down.weight"), vec![h, lire("kimi-k3.feed_forward_length", 33792)]);
+    } else {
+        attendu(&mut ecarts, p("ffn_gate_inp.weight"), vec![n_exp, h]);
+        attendu(&mut ecarts, p("exp_probs_b.bias"), vec![n_exp]);
+        attendu(&mut ecarts, p("ffn_routed_down.weight"), vec![latent, h]);
+        attendu(&mut ecarts, p("ffn_routed_up.weight"), vec![h, latent]);
+        attendu(&mut ecarts, p("ffn_routed_norm.weight"), vec![latent]);
+        attendu(&mut ecarts, p("ffn_gate_exps.weight"), vec![n_exp, n_ff_exp, latent]);
+        attendu(&mut ecarts, p("ffn_up_exps.weight"), vec![n_exp, n_ff_exp, latent]);
+        attendu(&mut ecarts, p("ffn_down_exps.weight"), vec![n_exp, latent, n_ff_exp]);
+        attendu(&mut ecarts, p("ffn_gate_shexp.weight"), vec![n_shared * n_ff_exp, h]);
+        attendu(&mut ecarts, p("ffn_down_shexp.weight"), vec![h, n_shared * n_ff_exp]);
+    }
+    ecarts
+}

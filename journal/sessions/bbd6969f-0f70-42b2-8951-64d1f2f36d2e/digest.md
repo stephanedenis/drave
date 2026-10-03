@@ -112350,3 +112350,128 @@ dims corrigées
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cd drave-core && cargo test --release 2>&1 | grep -E \"^test result\"; cd .. && git add -A && git commit -q -m \"K3 : la couche 0 CALCULE sur le vrai fichier (test de fumée --k3-essai), et il a attrapé une convention de dimensions\n\ … [781 caractères tronqués]`
+
+  ```
+test result: ok. 77 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+ca9125c K3 : la couche 0 CALCULE sur le vrai fichier (test de fumée --k3-essai), et il a attrapé une convention de dimensions
+12:25:46    48.5 Go / 49.2 Go (98.6 %, 93 Mo/s)
+  ```
+
+### 🤖 Assistant
+
+⏵ Bloc 31 : la couche 0 de Kimi-K3 CALCULE sur le vrai fichier — deux bugs attrapés au passage
+
+**Le fait du bloc : ma passe avant de la couche 0 tourne sur le modèle réel** (les tenseurs de la couche 0 sont arrivés avec les 19 premiers shards), et le test de fumée a fait exactement son travail :
+
+```
+[k3-essai] 19 shard(s) présents
+[k3] h=7168 nh=96 hd=128 d_inner=12288 d_conv=4 ffn=33792
+  jeton 0 (id 3638) : |l_out| = 0,9731 · finis : true
+  jeton 1 (id 275)  : |l_out| = 1,4310 · finis : true
+  jeton 2 (id 1309) : |l_out| = 1,4958 · finis : true
+```
+
+Les normes **croissent avec la position** — ce qu'un flux résiduel doit faire — et rien n'est NaN. Ce n'est pas encore une *vérification* (la référence ne tourne pas sur un modèle incomplet, et je l'ai écrit dans le code), c'est « ça charge, ça calcule » — mais ça rend l'attente utile **et ça a payé** :
+
+1. **un bug relu avant compilation** : la convolution était appelée deux fois sur `q` (dont une dans un temporaire) → l'état avançait de deux crans par jeton et le résultat partait à la poubelle ;
+2. **un bug attrapé par la mesure** : le moteur **inverse les dimensions** par rapport au fichier (`dims[0]` = `ne1` = la *sortie*, comme le fait `Proj::load`). Lire `dims[1]` donnait `nh = 7168` au lieu de 96 et faisait tomber le produit matriciel. La relecture ne l'aurait pas vu ; le test de fumée l'a dit en une ligne.
+
+**Et le croisement des maths avec le code publié de Moonshot** (bloc précédent, complété ici) : SiTU, attention résiduelle (y compris « scores sur les normalisées, somme sur les brutes »), projections du KDA nom par nom, convolution courte à SiLU, porte « sûre » bornée à −5 — **tout est identique**. Ce que le code publié **ne donne pas** : la récurrence elle-même (noyaux externes non livrés), qui reste transcrite de llama.cpp et vérifiée contre NumPy — c'est écrit dans la spec plutôt que sous le tapis.
+
+**Téléchargement** : ~790 Go / 1 508 (**52 %**, ~100 Mo/s) → fin vers **14h25**. Dès qu'il tombe : la séquence automatique en 5 étapes (complétude → `--config` → tokenizer → budget *mesuré* → baseline `llama.cpp-k3`), puis la **vérification tenseur par tenseur** de la couche 0 avec les 13 points de comparaison déjà écrits — et mon implémentation est prête à être confrontée, pas à être écrite.
+
+77 tests verts, tout commité.
+
+
+## Tour 96
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas en local (classe Kimi-K3 Q4 : 1,5 To de poids, ~35 Go de poids par jeton), et étudier/implémenter ce qui nous distingue sur cette classe : découpage par experts et en grappes (chaque nœud ne lit que ce qu'il sert), réutilisation des experts entre jetons, transport de flux compact (listes DRVF), noyaux rapides (SIMD, déquantification bit-exacte), et mesure systématique (octets par jeton, débits, seuils). Les modèles périmés (DeepSeek-V4-Flash) sortent du chemin critique : leurs acquis sont conservés dans les rapports, leurs portes archivées. Règles inchangées : jamais de forward muet, jamais d'optimisation qui change une sortie sans le dire, une affirmation sans mesure n'est pas une affirmation."
+Round: 22/30
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Bloc 32 : je vérifie les dimensions des tenseurs MoE et MLA AVANT que le modèle arrive (la classe de bug qui a déjà mordu)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -1 /tmp/dl_k3.log; du -sh /home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL; date +%H:%M; python3 - <<'PY'\nimport sys, glob\nsys.path.insert(0,'tools')\nimport analyse_octets_par_jeton as A\n# dims du fichier pou … [1073 caractères tronqués]`
+
+  ```
+12:25:46    48.5 Go / 49.2 Go (98.6 %, 93 Mo/s)
+822G	/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL
+12:26
+  blk.1.exp_probs_b.bias                 [896]                    F32
+  blk.1.ffn_down_exps.weight             [3072, 3584, 896]        MXFP4
+  blk.1.ffn_gate_exps.weight             [3584, 3072, 896]        MXFP4
+  blk.1.ffn_gate_inp.weight              [7168, 896]              F32
+  blk.1.ffn_gate_shexp.weight            [7168, 6144]             Q8_0
+  blk.1.ffn_routed_down.weight           [7168, 3584]             Q8_0
+  blk.1.ffn_routed_norm.weight           [3584]                   F32
+  blk.1.ffn_routed_up.weight             [3584, 7168]             Q8_0
+  blk.3.attn_gate.weight                 [7168, 12288]            Q8_0
+  blk.3.attn_k_b.weight                  [128, 512, 96]           Q8_0
+  blk.3.attn_kv_a_mqa.weight             [7168, 576]              Q8_0
+  blk.3.attn_kv_a_norm.weight            [512]                    F32
+  blk.3.attn_q_a.weight                  [7168, 1536]             Q8_0
+  blk.3.attn_q_a_norm.weight             [1536]                   F32
+  blk.3.attn_q_b.weight                  [1536, 18432]            Q8_0
+  blk.3.attn_v
+… [56 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/kimi_k3.rs'\ns=open(p).read()\ns += '''\n\n// ===========================================================================\n// Contrôle des DIMENSIONS, tensor par tensor, avant d'écrire le calcul.\n … [6466 caractères tronqués]`
+
+  ```
+verifie_dims ajouté
+branché dans --k3-essai
+error[E0499]: cannot borrow `ecarts` as mutable more than once at a time
+   --> src/kimi_k3.rs:510:17
+    |
+473 |     let mut attendu = |nom: String, dims: Vec<usize>| {
+    |                       ------------------------------- first mutable borrow occurs here
+474 |         match d(&nom) {
+475 |             None => ecarts.push(format!("{nom} : ABSENT")),
+--
+error[E0499]: cannot borrow `ecarts` as mutable more than once at a time
+   --> src/kimi_k3.rs:514:17
+    |
+473 |     let mut attendu = |nom: String, dims: Vec<usize>| {
+    |                       ------------------------------- first mutable borrow occurs here
+474 |         match d(&nom) {
+475 |             None => ecarts.push(format!("{nom} : ABSENT")),
+--
+[k3-essai] 20 shard(s) présents
+
+thread 'main' (1406184) panicked at src/main.rs:1866:39:
+ouverture des shards présents: Custom { kind: UnexpectedEof, error: "en-tête GGUF incomplet : /home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00020-of-00032.gguf" }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+timeout: the monitored command dumped core
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/kimi_k3.rs'\ns=open(p).read()\ns=s.replace(\"\"\"    let mut attendu = |nom: String, dims: Vec<usize>| {\n        match d(&nom) {\n            None => ecarts.push(format!(\"{nom} : ABSENT\")),\n    … [2097 caractères tronqués]`
+
+  ```
+fermeture corrigée
+tolérance des shards en cours ajoutée
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'\ns=open(p).read()\ns=s.replace(\"\"\"    // Un shard EN COURS d'écriture a un en-tête incomplet : on l'écarte en le\n    // disant, plutôt que de tomber (même tolérance que `--config`).\n  … [1551 caractères tronqués]`
+
+  ```
+ok
+[k3-essai] 20 shard(s) présents
+[k3] h=7168 nh=96 hd=128 d_inner=12288 d_conv=4 ffn=33792
+  couche 0 : dimensions conformes
+  couche 1 : dimensions conformes
+  couche 3 : dimensions conformes
+  couche 4 : dimensions conformes
+  jeton 0 (id 3638) : |l_out| = 0.9731 · finis : true · premiers : 0.01036 -0.02001 -0.00186
+  jeton 1 (id 275) : |l_out| = 1.4310 · finis : true · premiers : 0.01729 0.00249 0.00578
+  jeton 2 (id 1309) : |l_out| = 1.4958 · finis : true · premiers : -0.00946 0.01135 -0.00460
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cd drave-core && cargo test --release 2>&1 | grep -E \"^test result\"; cd .. && git add -A && git commit -q -m \"K3 : les dimensions des quatre types de couches sont CONFORMES au fichier (0 dense, 1 MoE+KDA, 3 MoE+MLA, 4 KDA)\n\nLe c … [657 caractères tronqués]`
