@@ -110784,3 +110784,31 @@ test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 69 filtered out; fin
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo test --release 2>&1 | grep -E \"^test result\" | head -3; cd .. && git add -A && git commit -q -m \"KDA (delta-net de Kimi-K3) : la récurrence implémentée et vérifiée contre une référence NumPy\n\nkda_pas : s ← s·exp … [596 caractères tronqués]`
+
+  ```
+test result: ok. 75 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+984663d KDA (delta-net de Kimi-K3) : la récurrence implémentée et vérifiée contre une référence NumPy
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -2 /tmp/dl_k3.log; date +%H:%M; du -sh /home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL; df -h /home/stephane/Data13TB | tail -1; pgrep -f telecharger_modeles >/dev/null && echo \"téléchargement actif\" || echo \ … [57 caractères tronqués]`
+
+  ```
+11:05:24    45.1 Go / 49.0 Go (91.9 %, 113 Mo/s)
+11:05:54    48.1 Go / 49.0 Go (98.1 %, 112 Mo/s)
+11:06
+364G	/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL
+/dev/mapper/system-root   11T  7,8T  3,2T  72% /home/stephane/Data13TB
+téléchargement actif
+  ```
+
+- **write** `{"content": "# Sprint 29 — 87 Go par jeton, et la récurrence du KDA\n\n- **Début** : 10:50 · **Fin** : 11:40\n- **Objectif** : le bloc 28 a installé la cible (Kimi-K3) et sa référence. Ce bloc\n  devait répondre à une question que le plan posait sans la trancher : **ce qu'un\n  jeton lit vraiment**, … [5532 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/29-87-go-par-jeton-et-la-recurrence-du-kda.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Sprint 29 : 87 Go par jeton (l'attention dépasse les experts), outils qui disent leur périmètre, et la récurrence du KDA vérifiée\" && git log --oneline -1; echo \"=== suite : le reste de la couche KD … [216 caractères tronqués]`
