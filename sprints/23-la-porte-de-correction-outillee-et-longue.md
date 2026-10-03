@@ -68,7 +68,8 @@ Ce que cette mesure a appris, et qui n'était écrit nulle part :
 | contexte | coût par jeton | dont attention | dont proj+mlp |
 |---|---|---|---|
 | 32 | **3,2 s** | 1,19 s | 2,04 s |
-| 1 024 | **≈ 60 s** | (croissance) | — |
+| 256 | **6,45 s** (mesuré sur les 255 jetons) | 1,10 s | **5,36 s** |
+| 1 024 | **≈ 60 s** | — | — |
 
 - Le coût du jeton **croît avec le contexte** — l'attention à longue portée n'est
   pas gratuite dans notre moteur, alors que llama.cpp fait la même passe de 1 024

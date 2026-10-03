@@ -421,7 +421,8 @@ Une phase qui ne passe pas ses deux portes ne passe pas à la suivante.
 > position près sur le quatrième : la fenêtre donne **63** prédictions et le seuil
 > est à 64, donc l'outil **refuse de juger la perplexité** et se contente de la
 > publier (c'est voulu : un critère qu'on applique hors de son domaine est un
-> critère qui ment). La passe longue de 1 023 prédictions, plus bas, juge les quatre.
+> critère qui ment). La passe longue (255 positions, ctx 256), plus bas, juge les
+> quatre — la tentative à 1 023 positions a été arrêtée, son coût est mesuré plus bas.
 > La porte de correction de P6 est donc tenue **par un instrument défini**, et non
 > plus par une impression sur quatre jetons. Le chiffre de `portes.sh` (8430,4966)
 > reste ce qu'il était : une référence de non-régression interne.
@@ -445,12 +446,23 @@ Une phase qui ne passe pas ses deux portes ne passe pas à la suivante.
 > | 1 024 | **≈ 60 s** | — | — |
 >
 > llama.cpp fait la même passe de 1 024 jetons en ~4 minutes (**≈ 0,2 s/jeton**) :
-> l'écart est de l'ordre de **300×** et il **croît avec le contexte**. La cause
-> structurelle est nommée dans le code : **l'indexeur des couches CSA n'est pas
-> implémenté** (`attention.indexer.top_k` = 512 pour V4-Flash). En dessous de ce
-> seuil, garder tous les blocs est *exact* — donc la porte de correction reste
-> valide — mais l'attention est payée sur tous les blocs. C'est le poste à
-> instruire pour le contexte long, et il ne se voyait pas à ctx 32.
+> l'écart est de l'ordre de **300×** et il **croît avec le contexte**. Où il croît,
+> précisément : entre ctx 32 et ctx 256, **l'attention reste plate** (1,19 s → 1,10 s
+> par jeton) et c'est **`proj+mlp` qui double** (2,04 s → **5,36 s**). Un poste
+> d'experts ne devrait pas dépendre du contexte : l'hypothèse — **non encore
+> mesurée** — est l'**empreinte des experts** (à 4 jetons quelques experts tiennent
+> en cache, à 255 jetons le jeu de travail dépasse la RAM et les lectures repartent
+> au disque : 255 jetons × 43 couches × 6 experts ≈ 200 Go lus pour un fichier de
+> 82 Go, sans réutilisation). C'est la mesure à faire au bloc suivant, et elle est
+> nommée comme hypothèse, pas comme cause.
+>
+> Ce qui est **structurel et vérifié** : l'indexeur des couches CSA
+> (`attention.indexer.top_k` = 512 pour V4-Flash) **n'est pas implémenté**. Tant que
+> le nombre de blocs reste sous ce seuil, garder tous les blocs est **exact** — la
+> porte de correction ci-dessous est donc valide — mais au-delà le moteur refuse au
+> lieu de choisir faux en silence. À ctx 256 (ratio 4 → 64 blocs) on est loin du
+> seuil : l'indexeur n'est PAS la cause du coût mesuré ici, contrairement à ce
+> qu'une première lecture trop rapide de ce paragraphe avait conclu.
 >
 > **Règle de méthode ajoutée** (et écrite dans `REPRISE.md`) : **mesurer avant de
 > lancer**. Une passe de 4 jetons au contexte visé coûte une minute et donne le

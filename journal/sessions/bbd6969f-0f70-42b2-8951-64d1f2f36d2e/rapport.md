@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 111.3 h |
 | Tours | 87 |
-| Messages | 6545 |
-| Appels d'outils | 6266 |
-| Fichiers touchés | 120 |
-| Commandes | 5298 |
+| Messages | 6557 |
+| Appels d'outils | 6277 |
+| Fichiers touchés | 121 |
+| Commandes | 5305 |
 | Sous-agents | 32 |
-| Commits | 421 |
+| Commits | 422 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -4318,7 +4318,7 @@ C'est un point de méthode qui comptait : sans cette mesure, on aurait pu « cor
 
 ### Tour 87 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [942 caractères tronqués]
 
-*103 appels d'outils.* Actions notables :
+*114 appels d'outils.* Actions notables :
 
 - bash — Launch the long-window correction gate
 - bash — Wait for the long comparison
@@ -4334,11 +4334,11 @@ C'est un point de méthode qui comptait : sans cette mesure, on aurait pu « cor
 - bash — Read the bloc 22 plan in sprint 21
 - bash — Locate engram code and any local vLLM source
 - bash — Inspect correction-gate tools and engine flags
-- … et 82 autres
+- … et 92 autres
 
 **Synthèse produite :**
 
-⏵ Refining the criterion after a real failure: 1 position out of 255, sole artifact of Pearson
+⏵ Validating: the numpy-less fallback, then the full gate suite
 
 ## 3. Travail accompli
 
@@ -4427,7 +4427,7 @@ C'est un point de méthode qui comptait : sans cette mesure, on aurait pu « cor
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/extraire_tables_ggml.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-routage-experts.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-mla-experts.md` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md` | 4 | 14 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md` | 4 | 15 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/colab-reparti.md` | 0 | 1 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/convertisseur.md` | 0 | 3 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-mode4-lot-listes.md` | 0 | 2 |
@@ -4465,7 +4465,8 @@ C'est un point de méthode qui comptait : sans cette mesure, on aurait pu « cor
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/16-les-experts-sur-nvme-la-reutilisation.md` | 2 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-vitesse-v41.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/22-la-composition-verifiee-et-les-deux-portes.md` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/23-la-porte-de-correction-outillee-et-longue.md` | 1 | 2 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/23-la-porte-de-correction-outillee-et-longue.md` | 1 | 3 |
+| `/home/stephane/Data13TB/stephane/github/Qtrinet/sprints/23-la-porte-de-correction-outillee-et-longue.md` | 0 | 1 |
 
 ### Sous-agents lancés
 
@@ -4544,7 +4545,7 @@ C'est un point de méthode qui comptait : sans cette mesure, on aurait pu « cor
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5258 autres
+- … et 5265 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5113,4 +5114,5 @@ C'est un point de méthode qui comptait : sans cette mesure, on aurait pu « cor
 - Sprint 23 : la porte de correction serrée (63 positions, 6,4 % au lieu de 25 %), outillée (verdict + code retour), et le coût du contexte long mesuré  Mesuré en
 - Plan P6 : le coût du contexte long est mesuré (60 s/jeton à ctx 1024), et --dense est inerte pour V4-Flash" && sleep 420; s=$(stat -c %s /tmp/our_v4f256.bin); e
 - Porte de correction à ctx 256 (255 positions) : TENUE, mais elle a d'abord ÉCHOUÉ sur un point, et le critère a été révisé par la mesure  Résultat : corrélation
+- Plan et sprint 23 : le coût du contexte long est attribué à ce qui est MESURÉ (proj+mlp double, l'attention reste plate), l'empreinte des experts reste une hypo
 
