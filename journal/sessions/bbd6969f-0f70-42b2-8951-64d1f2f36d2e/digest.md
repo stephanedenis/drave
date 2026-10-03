@@ -116799,3 +116799,187 @@ test result: ok. 77 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fin
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"K3 : composer 13 couches, le premier essai qui franchit une BANQUE\n\nQuatre couches exercent la chaîne (dense, deux MoE, MLA) mais ne franchissent\naucune banque : la première est la couche 0, la sui … [449 caractères tronqués]`
+
+  ```
+1462aca K3 : composer 13 couches, le premier essai qui franchit une BANQUE
+read_bytes: 520761892864
+18:16
+  ```
+
+- **bash** `{"command": "sleep 520; P=$(pgrep -x ref_logits_k3 | head -1); if [ -n \"$P\" ]; then grep -E \"^read_bytes\" /proc/$P/io; ps -o etimes= -p $P; else echo TERMINÉ; fi; tail -3 /tmp/refk3_run.log; date \"+%H:%M\"", "description": "Poll reference", "timeoutMs": 560000}`
+
+  ```
+read_bytes: 641608015872
+   3469
+create_tensor: loading tensor blk.92.ffn_down_shexp.input_scale
+create_tensor: loading tensor blk.92.ffn_up_shexp.input_scale
+done_getting_tensors: tensor 'token_embd.weight' (q8_0) (and 2296 others) cannot be used with preferred buffer type CPU_REPACK, using CPU instead
+18:25
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && K=/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf\nnohup bash -c \"DRAVE_K3_COUCHES=13 DRAVE_DUMP_COUCHES=/tmp/notrek3_13 timeout 7200 ./drave-core/target/release/drave $K --k3- … [170 caractères tronqués]`
+
+  ```
+13 couches lancées
+[k3-essai] 32 shard(s) présents
+[k3] h=7168 nh=96 hd=128 d_inner=12288 d_conv=4 ffn=33792
+  ```
+
+- **bash** `{"command": "sleep 520; tail -8 /tmp/k3_13.log; echo \"=== référence ===\"; P=$(pgrep -x ref_logits_k3 | head -1); [ -n \"$P\" ] && grep -E \"^read_bytes\" /proc/$P/io; date \"+%H:%M\"", "description": "Poll both K3 jobs", "timeoutMs": 560000}`
+
+  ```
+couche 1 : dimensions conformes
+  couche 3 : dimensions conformes
+  couche 4 : dimensions conformes
+  MoE couche 1 : |sortie| = 0.7316 · finis : true · 59295 ms
+  MLA couche 3, jeton 0 : |sortie| = 12.8277 · finis : true · 229 ms
+  MLA couche 3, jeton 1 : |sortie| = 10.4341 · finis : true · 226 ms
+  MLA couche 3, jeton 2 : |sortie| = 9.1516 · finis : true · 224 ms
+  composition : 13 couche(s) — banques aux couches 0, 12
+=== référence ===
+read_bytes: 736115970048
+18:35
+  ```
+
+- **bash** `{"command": "sleep 520; tail -6 /tmp/k3_13.log; echo \"=== référence ===\"; P=$(pgrep -x ref_logits_k3 | head -1); [ -n \"$P\" ] && grep -E \"^read_bytes\" /proc/$P/io; date \"+%H:%M\"", "description": "Poll both K3 jobs", "timeoutMs": 560000}`
+
+  ```
+couche 4 : dimensions conformes
+  MoE couche 1 : |sortie| = 0.7316 · finis : true · 59295 ms
+  MLA couche 3, jeton 0 : |sortie| = 12.8277 · finis : true · 229 ms
+  MLA couche 3, jeton 1 : |sortie| = 10.4341 · finis : true · 226 ms
+  MLA couche 3, jeton 2 : |sortie| = 9.1516 · finis : true · 224 ms
+  composition : 13 couche(s) — banques aux couches 0, 12
+=== référence ===
+read_bytes: 823122628608
+18:44
+  ```
+
+- **bash** `{"command": "sleep 520; tail -6 /tmp/k3_13.log; echo \"=== référence ===\"; P=$(pgrep -x ref_logits_k3 | head -1); [ -n \"$P\" ] && grep -E \"^read_bytes\" /proc/$P/io; date \"+%H:%M\"", "description": "Poll both K3 jobs", "timeoutMs": 560000}`
+
+  ```
+MoE couche 1 : |sortie| = 0.7316 · finis : true · 59295 ms
+  MLA couche 3, jeton 0 : |sortie| = 12.8277 · finis : true · 229 ms
+  MLA couche 3, jeton 1 : |sortie| = 10.4341 · finis : true · 226 ms
+  MLA couche 3, jeton 2 : |sortie| = 9.1516 · finis : true · 224 ms
+  composition : 13 couche(s) — banques aux couches 0, 12
+  composition 0-12, jeton 0 : |l_out| = 9.6728 · finis : true
+=== référence ===
+read_bytes: 910382698496
+18:52
+  ```
+
+- **bash** `{"command": "sleep 520; tail -6 /tmp/k3_13.log; echo \"=== référence ===\"; P=$(pgrep -x ref_logits_k3 | head -1); [ -n \"$P\" ] && grep -E \"^read_bytes\" /proc/$P/io; ls /tmp/refk3-*.bin 2>/dev/null | head -4; date \"+%H:%M\"", "description": "Poll both K3 jobs", "timeoutMs": 560000}`
+
+  ```
+MoE couche 1 : |sortie| = 0.7316 · finis : true · 59295 ms
+  MLA couche 3, jeton 0 : |sortie| = 12.8277 · finis : true · 229 ms
+  MLA couche 3, jeton 1 : |sortie| = 10.4341 · finis : true · 226 ms
+  MLA couche 3, jeton 2 : |sortie| = 9.1516 · finis : true · 224 ms
+  composition : 13 couche(s) — banques aux couches 0, 12
+  composition 0-12, jeton 0 : |l_out| = 9.6728 · finis : true
+=== référence ===
+read_bytes: 998828142592
+19:01
+  ```
+
+- **bash** `{"command": "sleep 520; tail -4 /tmp/k3_13.log; echo \"=== réf ===\"; P=$(pgrep -x ref_logits_k3 | head -1); [ -n \"$P\" ] && grep -E \"^read_bytes\" /proc/$P/io; date \"+%H:%M\"", "description": "Poll both K3 jobs", "timeoutMs": 560000}`
+
+  ```
+MLA couche 3, jeton 2 : |sortie| = 9.1516 · finis : true · 224 ms
+  composition : 13 couche(s) — banques aux couches 0, 12
+  composition 0-12, jeton 0 : |l_out| = 9.6728 · finis : true
+  composition 0-12, jeton 1 : |l_out| = 9.9734 · finis : true
+=== réf ===
+read_bytes: 1087359221760
+19:10
+  ```
+
+- **bash** `{"command": "sleep 520; tail -5 /tmp/k3_13.log; echo \"=== réf ===\"; P=$(pgrep -x ref_logits_k3 | head -1); [ -n \"$P\" ] && grep -E \"^read_bytes\" /proc/$P/io; ls /tmp/refk3-*.bin 2>/dev/null | wc -l; date \"+%H:%M\"", "description": "Poll both K3 jobs", "timeoutMs": 560000}`
+
+  ```
+MLA couche 3, jeton 1 : |sortie| = 10.4341 · finis : true · 226 ms
+  MLA couche 3, jeton 2 : |sortie| = 9.1516 · finis : true · 224 ms
+  composition : 13 couche(s) — banques aux couches 0, 12
+  composition 0-12, jeton 0 : |l_out| = 9.6728 · finis : true
+  composition 0-12, jeton 1 : |l_out| = 9.9734 · finis : true
+=== réf ===
+read_bytes: 1176024465408
+0
+19:19
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short | head -5; git log --oneline -8; echo \"=== jobs ===\"; pgrep -x ref_logits_k3 | wc -l; pgrep -x drave | wc -l", "description": "Check repo and job state"}`
+
+  ```
+M journal/README.md
+ M journal/sessions/MANIFEST.md
+ M journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md
+ M journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/rapport.md
+1462aca K3 : composer 13 couches, le premier essai qui franchit une BANQUE
+053426c K3 : la cadence des couches a une EXCEPTION, et le moteur ne l'a pas codée en dur
+07bc7d5 Tuile : l'essai repris machine au calme confirme la réfutation (20,02 s contre 20,32 s)
+ff3a25a REPRISE : le bloc 31 en tête — K3 complet, 86,787 Go par jeton, x1,58 par regroupement
+f2116f0 Bloc 31 : la porte gpt-oss, son motif réel, et l'arbitrage assumé
+af1c377 ref_logits_k3 : la commande de liaison est écrite, le binaire n'a plus de mystère
+058ea00 Tuile du GEMM par lots : hypothèse avancée, mesurée, RÉFUTÉE
+c8ff34c K3 complet : les sorties sont identiques à celles obtenues pendant le transfert
+=== jobs ===
+1
+1
+  ```
+
+- **bash** `{"command": "sleep 520; tail -4 /tmp/k3_13.log; echo \"=== réf ===\"; P=$(pgrep -x ref_logits_k3 | head -1); [ -n \"$P\" ] && grep -E \"^read_bytes\" /proc/$P/io; date \"+%H:%M\"", "description": "Poll both K3 jobs", "timeoutMs": 560000}`
+
+  ```
+composition : 13 couche(s) — banques aux couches 0, 12
+  composition 0-12, jeton 0 : |l_out| = 9.6728 · finis : true
+  composition 0-12, jeton 1 : |l_out| = 9.9734 · finis : true
+  composition 0-12, jeton 2 : |l_out| = 9.2453 · finis : true
+=== réf ===
+read_bytes: 1269838049280
+19:29
+[timed out after 560000ms]
+  ```
+
+- **bash** `{"command": "sleep 500; tail -4 /tmp/k3_13.log; echo \"=== réf ===\"; P=$(pgrep -x ref_logits_k3 | head -1); [ -n \"$P\" ] && grep -E \"^read_bytes\" /proc/$P/io; date \"+%H:%M\"", "description": "Poll both K3 jobs", "timeoutMs": 560000}`
+
+  ```
+jeton 1 (id 275) : |l_out| = 1.4310 · finis : true · premiers : 0.01729 0.00249 0.00578
+      vidé : /tmp/notrek3_13-l_out-0-1.bin
+  jeton 2 (id 1309) : |l_out| = 1.4958 · finis : true · premiers : -0.00946 0.01135 -0.00460
+      vidé : /tmp/notrek3_13-l_out-0-2.bin
+=== réf ===
+read_bytes: 1382731284480
+19:40
+  ```
+
+- **bash** `{"command": "sleep 240; tail -14 /tmp/k3_13.log; ls -la /tmp/notrek3_13* 2>/dev/null | head -8; pgrep -x drave | wc -l", "description": "Read 13-layer test results", "timeoutMs": 300000}`
+
+  ```
+MLA couche 3, jeton 1 : |sortie| = 10.4341 · finis : true · 226 ms
+  MLA couche 3, jeton 2 : |sortie| = 9.1516 · finis : true · 224 ms
+  composition : 13 couche(s) — banques aux couches 0, 12
+  composition 0-12, jeton 0 : |l_out| = 9.6728 · finis : true
+  composition 0-12, jeton 1 : |l_out| = 9.9734 · finis : true
+  composition 0-12, jeton 2 : |l_out| = 9.2453 · finis : true
+  composition 0-12, jeton 3 : |l_out| = 8.9678 · finis : true
+  composition : 3356273 ms au total
+  jeton 0 (id 3638) : |l_out| = 0.9731 · finis : true · premiers : 0.01036 -0.02001 -0.00186
+      vidé : /tmp/notrek3_13-l_out-0-0.bin
+  jeton 1 (id 275) : |l_out| = 1.4310 · finis : true · premiers : 0.01729 0.00249 0.00578
+      vidé : /tmp/notrek3_13-l_out-0-1.bin
+  jeton 2 (id 1309) : |l_out| = 1.4958 · finis : true · premiers : -0.00946 0.01135 -0.00460
+      vidé : /tmp/notrek3_13-l_out-0-2.bin
+-rw-r--r--. 1 stephane stephane 28672  3 oct 19:35 /tmp/notrek3_13-l_out-0-0.bin
+-rw-r--r--. 1 stephane stephane 28672  3 oct 19:35 /tmp/notrek3_13-l_out-0-1.bin
+-rw-r--r--. 1 stephane stephane 28672  3 oct 19:35 /tmp/notrek3_13-l_out-0-2.bin
+-rw-r--r--. 1 stephane stephane 28672  3 oct 18:52 /tmp/notrek3_13-l_out-12-
+… [253 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+**La composition à 13 couches franchit la première banque** — je consigne.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/verification-kimi-k3.md'; s=open(p).read()\nanc = \"Le chemin K3 est un instrument de **vérification**, pas d'exécution : il\"\nnew = \"\"\"### Le premier franchissement de BANQUE (bloc 31)\n\n`DRAVE_K3_COUC … [1601 caractères tronqués]`

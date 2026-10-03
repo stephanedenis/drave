@@ -89,6 +89,25 @@ C'est la vérification de l'ouverture tolérante : les shards déjà là portaie
 **les octets définitifs**, et un débogage mené pendant un transfert de 1,5 To
 n'était donc pas un débogage sur des données provisoires.
 
+### Le premier franchissement de BANQUE (bloc 31)
+
+`DRAVE_K3_COUCHES=13` compose les couches **0 à 12**. Ce n'est pas « quatre
+couches en plus » : la première banque est la couche 0, la **suivante est la
+12**, donc quatre couches n'exerçaient ni le redémarrage du flux résiduel ni un
+`res_mix` à **deux** points de contrôle. Mesuré, quatre jetons :
+
+| jeton | \|l_out\| couches 0-12 |
+|---|---|
+| 0 | 9,6728 |
+| 1 | 9,9734 |
+| 2 | 9,2453 |
+| 3 | 8,9678 |
+
+Tous finis, 3 356 273 ms au total (14 min par jeton pour 13 couches — c'est le
+chemin f32 de vérification). Les sorties de la couche 0 redonnent **au chiffre
+près** celles des passes précédentes (0,9731 · 1,4310 · 1,4958), et les sorties
+`l_out-12` sont vidées pour la comparaison avec la référence.
+
 Le chemin K3 est un instrument de **vérification**, pas d'exécution : il
 déquantifie en f32 (une couche MoE = 28,7 s/jeton, la composition des couches 0-3
 = 366 s pour 4 jetons). Les 93 couches en f32 demanderaient ~220 Go de RAM.
