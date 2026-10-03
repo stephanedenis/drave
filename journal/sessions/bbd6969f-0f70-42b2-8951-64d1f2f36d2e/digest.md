@@ -101247,3 +101247,49 @@ ok VARS
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"sprints/21-localiser-le-defaut-v41.md\"\ns=open(p).read()\na=\"\"\"### 3. La piste qui reste, et elle est étroite\"\"\"\nb=\"\"\"### 2bis. Deux vérifications de plus, et deux hypothèses de plus éliminées\n\n- ** … [4362 caractères tronqués]`
+
+  ```
+ok
+98c3401 Localisation V4.1, suite : l'embarquement est exact (0,000e+00), le biais de routeur du texte est le bon, et la règle du retard est CONFORME à la source publiée
+sam 03 oct 2026 03:33:02 EDT
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport numpy as np, sys\nsys.path.insert(0,\"tools\")\nfrom verifier_v41_mhc import Gguf\nM=\"/home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf\"\ng=Gguf(M)\ndims,ttype,off,idx=g.tenseurs[\"output.w … [1524 caractères tronqués]`
+
+  ```
+output.weight : dims [5120, 129280] type 8 (8 = Q8_0)
+  pos 5 jeton  11111 : logit moteur +2.4264 · numpy +2.4263 · écart 1.629e-04
+  pos 5 jeton   8295 : logit moteur +2.6400 · numpy +2.6399 · écart 7.669e-05
+  pos 5 jeton     16 : logit moteur +9.5675 · numpy +9.5674 · écart 8.154e-05
+  pos 11 jeton  11111 : logit moteur +0.3852 · numpy +0.3851 · écart 4.211e-05
+  pos 11 jeton   8295 : logit moteur +2.7474 · numpy +2.7473 · écart 8.548e-05
+  pos 11 jeton     16 : logit moteur +10.7569 · numpy +10.7570 · écart 3.191e-05
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport numpy as np, sys\nsys.path.insert(0,\"tools\")\nfrom verifier_v41_mhc import Gguf, rms_norm\nM=\"/home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf\"\ng=Gguf(M)\nfor n in (\"blk.0.ffn_gate_inp … [1167 caractères tronqués]`
+
+  ```
+blk.0.ffn_gate_inp.weight ([5120, 384], 0) type 0
+blk.0.ffn_norm.weight ([5120], 0) type 0
+blk.0.exp_probs_b.bias ([384], 0) type 0
+sélection numpy : [0, 128, 155, 239, 269, 274]
+poids numpy     : [0.5281, 0.42897, 0.14335, 0.13619, 0.13357, 0.12981]
+sélection moteur: [0, 128, 155, 239, 269, 274]
+logits : min -7.915 max 2.253 écart-type 1.143
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys\nsys.path.insert(0,\"tools\")\nfrom verifier_v41_mhc import Gguf\ng=Gguf(\"/home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf\")\nfor n in (\"token_embd.weight\",\"blk.0.ffn_gate_exps.weig … [547 caractères tronqués]`
+
+  ```
+token_embd.weight                  dims BRUTS [5120, 129280] · type 1
+  blk.0.ffn_gate_exps.weight         dims BRUTS [5120, 2304, 384] · type 16
+  blk.0.ffn_down_exps.weight         dims BRUTS [2304, 5120, 384] · type 10
+  blk.0.ffn_gate_inp.weight          dims BRUTS [5120, 384] · type 0
+  blk.0.attn_q_a.weight              dims BRUTS [5120, 1280] · type 8
+=== ce que --tensors affiche pour les mêmes ===
+  F16      token_embd.weight                      [129280, 5120] · 661.9 M poids · fichier 0
+  IQ2_XXS  blk.0.ffn_gate_exps.weight             [384, 2304, 5120] · 4529.8 M poids · fichier 0
+  Q2_K     blk.0.ffn_down_exps.weight             [384, 5120, 2304] · 4529.8 M poids · fichier 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"sprints/21-localiser-le-defaut-v41.md\"\ns=open(p).read()\na=\"\"\"### 2bis. Deux vérifications de plus, et deux hypothèses de plus éliminées\"\"\"\nb=\"\"\"### 2bis. Quatre pièces de plus vérifiées contre numpy … [2634 caractères tronqués]`

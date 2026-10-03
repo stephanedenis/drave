@@ -57,6 +57,19 @@ et le résultat est sans ambiguïté :
   routeur est par ailleurs sain : 11 à 13 ensembles d'experts distincts sur 13
   jetons, aucun expert commun à tous.
 
+### 2ter. Le routeur et la tête, vérifiés en numpy
+
+- **La tête** : les logits du moteur pour six couples (position, jeton) ont été
+  recalculés en numpy (`output.weight` Q8_0 déquantifié × `hidden_final` du vide) :
+  écart **1e-4 à 1e-5 relatif** (le reste est l'arrondi du produit Q8_0) ✓.
+- **Le routeur** : pour la couche 0, position 5, la sélection numpy
+  (`hn = rmsnorm(hc_mel_ffn, ffn_norm)`, `logits = ffn_gate_inp · hn`,
+  `scores = sqrt(softplus(logits))`, top-6 sur `scores + exp_probs_b`) rend
+  **[0, 128, 155, 239, 269, 274]** — **exactement** la sélection de la trace du
+  moteur ✓. Et les logits ont une dispersion saine (min −7,92, max 2,25, σ 1,14) :
+  le biais, quoique grand (~9,8), est presque CONSTANT (étendue 0,29), donc c'est
+  bien le contenu qui départage les experts ✓.
+
 ### 3. La piste qui reste, et elle est étroite
 
 Le défaut survit à tout ce qui est propre à V4.1 **sauf** ce qui touche à
