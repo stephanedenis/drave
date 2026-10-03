@@ -111344,3 +111344,42 @@ Created file
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Sprint 30 : la réutilisation des experts est mesurée — 47-49 % immédiate, un quart de cache sert 80-87 %, plafond 93 %\n\nC'est le levier qui décide si un modèle « trop gros pour le local » peut tourn … [625 caractères tronqués]`
+
+  ```
+d9dc851 Sprint 30 : la réutilisation des experts est mesurée — 47-49 % immédiate, un quart de cache sert 80-87 %, plafond 93 %
+GGUF : dernière modif 2026-08-07
+  ```
+
+### 🤖 Assistant
+
+⏵ Protocole de vérification étage par étage pour Kimi-K3 : les points de comparaison de la référence
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp-k3 && grep -oE 'cb\\([^,]+, \"[a-z_0-9]+\"' src/models/kimi-k3.cpp | sed 's/.*\"\\(.*\\)\"/\\1/' | sort -u | tr '\\n' ' '; echo; echo \"=== delta-net ===\"; grep -oE 'cb\\([^,]+, \"[a-z_0-9]+\"' src/models/delta-net-base.cpp | sed 's/ … [338 caractères tronqués]`
+
+  ```
+attn_norm ffn_moe_logits ffn_moe_out ffn_norm ffn_out ffn_shexp inp_embd kda_beta kda_g1 kda_g2 kda_k_conv kda_normed kda_out kda_q_conv kda_scan_out kda_v_conv l_out mla_gated mla_out prefix_sum_attn res_probs result_norm result_output 
+=== delta-net ===
+attn attn_inter attn_output attn_pre_solve b_in conv_input conv_state_last conv_states conv_states_reshaped conv_state_update decay_mask dnet_add_ar_state dnet_add_ch_attn_out dnet_add_ch_attn_solved dnet_add_ch_lhs dnet_add_ch_state g_cs g_diff g_in g_last g_last_exp_t k_b k_beta_g_exp k_cumdecay key_gdiff key_gdiff_t k_in kq new_state output_state q_in qkv_mixed_transposed v_attn v_b v_in v_prime v_t_new 
+=== l'outil de comparaison existe-t-il ? ===
+-rw-------. 1 stephane stephane 3323  2 oct 11:49 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/compare_etats.py
+  `<préfixe>-<nom>-<couche>-<position>.bin`, sans en-tête.
+* **llama.cpp** — `REF_DUMP=<préfixe> ./tools/ref_logits …` écrit
+  `<préfixe>-<nom>-<couche>.bin` avec un en-tête `REFD`, `ndim`, `ne[4]`, puis
+  les f32 dans l'ordre ggml (une colonne par position).
+
+La comparaison porte sur les **vecteurs entiers**, pas sur huit valeurs : c'est
+ce qui distingue « ça a l'
+… [153 caractères tronqués]
+  ```
+
+- **write** `{"content": "# Vérifier Kimi-K3, étage par étage — le protocole\n\n> Écrit le 03/10 (bloc 30) **avant** d'écrire l'architecture, pour que chaque\n> morceau de code ait son point de comparaison le jour où il naît. La règle du\n> dépôt est constante : on compare les **tenseurs intermédiaires avant** d … [5066 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/verification-kimi-k3.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Protocole de vérification de Kimi-K3 : les 13 points de comparaison de la référence, l'ordre, les tolérances, et le premier jalon (couche 0)\n\nLes deux outils existent déjà (ref_logits_k3 lié contre  … [232 caractères tronqués]`

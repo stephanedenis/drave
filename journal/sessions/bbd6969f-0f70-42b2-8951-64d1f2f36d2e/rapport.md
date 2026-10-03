@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 117.0 h |
 | Tours | 92 |
-| Messages | 6996 |
-| Appels d'outils | 6687 |
-| Fichiers touchés | 142 |
-| Commandes | 5656 |
+| Messages | 6999 |
+| Appels d'outils | 6690 |
+| Fichiers touchés | 143 |
+| Commandes | 5658 |
 | Sous-agents | 32 |
-| Commits | 459 |
+| Commits | 460 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -4574,7 +4574,7 @@ Avec SiTU et l'attention résiduelle, ça fait **10 tests pour Kimi-K3**, et **7
 
 ### Tour 92 — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas e … [1246 caractères tronqués]
 
-*30 appels d'outils.* Actions notables :
+*33 appels d'outils.* Actions notables :
 
 - bash — Find the expert routing trace facility
 - bash — Read the trace format and the existing routing report
@@ -4590,11 +4590,11 @@ Avec SiTU et l'attention résiduelle, ça fait **10 tests pour Kimi-K3**, et **7
 - bash — Tokenize then run the Qwen3-30B trace
 - bash — Check the running engines and trace progress
 - bash — Run the Qwen3-30B trace alone
-- … et 16 autres
+- … et 19 autres
 
 **Synthèse produite :**
 
-⏵ 128 jetons : réutilisation immédiate 47,9 %, et le quart des experts en cache sert 80,3 %
+⏵ Protocole de vérification étage par étage pour Kimi-K3 : les points de comparaison de la référence
 
 ## 3. Travail accompli
 
@@ -4744,6 +4744,7 @@ Avec SiTU et l'attention résiduelle, ça fait **10 tests pour Kimi-K3**, et **7
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/analyse_reutilisation_experts.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-reutilisation-experts.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/30-la-reutilisation-des-experts-mesuree.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/verification-kimi-k3.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -4822,7 +4823,7 @@ Avec SiTU et l'attention résiduelle, ça fait **10 tests pour Kimi-K3**, et **7
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5616 autres
+- … et 5618 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5429,4 +5430,5 @@ Avec SiTU et l'attention résiduelle, ça fait **10 tests pour Kimi-K3**, et **7
 - Réutilisation des experts MESURÉE : 46,9 % immédiate, 74,8 % avec le quart le plus chaud en cache  Trace de routage (DRAVE_TRACE_EXPERTS) sur Qwen3-30B-A3B : 48
 - Réutilisation : trois relevés (wikitext 48 et 128 jetons, code 128) — immédiate 47-49 %, un quart de cache sert 75-87 %  La dépendance au texte est faible sur l
 - Sprint 30 : la réutilisation des experts est mesurée — 47-49 % immédiate, un quart de cache sert 80-87 %, plafond 93 %  C'est le levier qui décide si un modèle 
+- Protocole de vérification de Kimi-K3 : les 13 points de comparaison de la référence, l'ordre, les tolérances, et le premier jalon (couche 0)  Les deux outils ex
 
