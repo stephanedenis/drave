@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 108.8 h |
 | Tours | 79 |
-| Messages | 6350 |
-| Appels d'outils | 6092 |
+| Messages | 6351 |
+| Appels d'outils | 6093 |
 | Fichiers touchés | 118 |
-| Commandes | 5157 |
+| Commandes | 5158 |
 | Sous-agents | 32 |
-| Commits | 399 |
+| Commits | 400 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -4037,7 +4037,7 @@ P0-P6 faites, P8 portée et val
 
 ### Tour 79 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [941 caractères tronqués]
 
-*1352 appels d'outils.* Actions notables :
+*1353 appels d'outils.* Actions notables :
 
 - web_search
 - web_fetch
@@ -4053,7 +4053,7 @@ P0-P6 faites, P8 portée et val
 - bash — Locate hc_collapse_triton definition
 - read
 - bash — Read mHC init and pre/post call sites
-- … et 1212 autres
+- … et 1213 autres
 
 **Synthèse produite :**
 
@@ -4261,7 +4261,7 @@ P0-P6 faites, P8 portée et val
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5117 autres
+- … et 5118 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4808,4 +4808,5 @@ P0-P6 faites, P8 portée et val
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="sprints/21-localiser-le-defaut-v41.md" s=open(p).read() a="""### 3. La piste qui reste
 - Localisation V4.1 : la tête (1e-4) et le routeur (sélection identique à la trace) sont vérifiés en numpy — il ne reste que la COMPOSITION des experts  La tête :
 - Sprint 21 : clôture (35 min) — douze hypothèses éliminées, quatre pièces vérifiées, le défaut cerné au chemin des experts" && git log --oneline -6 && echo "--- 
+- Journal : index de session à jour" && git log --oneline | head -3 && echo "--- commits de la nuit ---" && git log --oneline --since="2026-10-02 19:00" | wc -l &
 

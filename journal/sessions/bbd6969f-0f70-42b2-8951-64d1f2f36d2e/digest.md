@@ -101311,3 +101311,17 @@ sam 03 oct 2026 03:34:25 EDT
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"sprints/21-localiser-le-defaut-v41.md\"\ns=open(p).read()\na=\"- **Début** : 03:00 · **Fin prévue** : 05:00 (boxing de 120 min)\"\nb=\"\"\"- **Début** : 03:00 · **Fin** : 03:35 (35 min — l'investigation a avancé … [602 caractères tronqués]`
+
+  ```
+ok
+3252ec7 Sprint 21 : clôture (35 min) — douze hypothèses éliminées, quatre pièces vérifiées, le défaut cerné au chemin des experts
+e5ce21c Localisation V4.1 : la tête (1e-4) et le routeur (sélection identique à la trace) sont vérifiés en numpy — il ne reste que la COMPOSITION des experts
+98c3401 Localisation V4.1, suite : l'embarquement est exact (0,000e+00), le biais de routeur du texte est le bon, et la règle du retard est CONFORME à la source publiée
+14c52ae Localisation V4.1 : huit hypothèses éliminées par ablation, et le défaut est cerné au chemin partagé tel que V4.1 l'instancie
+9250879 Sprint 20 : clôture (103 min) — la passe longue a livré son verdict : V4.1 ne prédit pas, V4-Flash est juste
+b5e7d9c ⚠️ V4.1 ne prédit pas : top-1 0/31, NLL 11,657 nats (uniforme 11,770) — V4-Flash, lui, est juste (1,875 contre 1,844 pour llama.cpp)
+--- état du dépôt ---
+ M journal/README.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Journal : index de session à jour\" && git log --oneline | head -3 && echo \"--- commits de la nuit ---\" && git log --oneline --since=\"2026-10-02 19:00\" | wc -l && date", "description": "Commit the … [40 caractères tronqués]`
