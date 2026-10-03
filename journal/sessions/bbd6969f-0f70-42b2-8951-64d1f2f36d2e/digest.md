@@ -98883,3 +98883,66 @@ porte du bloc 16 lancee
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\n# 1) l'heure de clôture réelle du bloc 16\np=\"sprints/16-les-experts-sur-nvme-la-reutilisation.md\"\ns=open(p).read()\na=\"- **Début** : 22:32 · **Fin** : 00:12 · **Objectif**\"\nb=\"- **Début** : 22:32 · **Fin** : … [3295 caractères tronqués]`
+
+  ```
+ok sprint 16
+ok plan
+ok REPRISE
+c64e3aa Docs : la vitesse V4.1 (×3, zéro bit changé) et le cache d'experts refusé par la mesure entrent dans le plan et dans REPRISE
+  ```
+
+- **bash** `{"command": "sleep 240; tail -6 /tmp/porte16.log; echo \"procs: $(pgrep -x drave | wc -l)\"", "description": "Check the gate progress", "timeoutMs": 300000}`
+
+  ```
+(portes de formats : ignorées en mode rapide)
+  GLM-5.3 : sigmoïde ×2,5                  sigmoïde  ✅
+  Kimi-K2.7 : sigmoïde ×2,827              sigmoïde  ✅
+  V4-Flash : racine de softplus              racine de softplus  ✅
+  Qwen3-235B : softmax                       softmax  ✅
+  V4-Flash : --config le dit calculable      oui  ✅
+procs: 1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && df -h | grep -E \"Filesystem|FastNVMe|Data13TB\" ; head -30 tools/clusters_moe.py", "description": "Check disk space and the clustering tool"}`
+
+  ```
+Filesystem               Size  Used Avail Use% Mounted on
+/dev/nvme0n1p2           828G  575G  253G  70% /home/stephane/FastNVMe
+/dev/mapper/system-root   11T  7,4T  3,5T  69% /home/stephane/Data13TB
+#!/usr/bin/env python3
+"""Découpage des MoE en clusters — à partir d'une trace de routage réelle.
+
+Le moteur écrit une ligne par (couche, jeton) avec les experts retenus :
+`DRAVE_TRACE_EXPERTS=/tmp/trace.txt drave <modele> --ppl <ids> --limit N --lot L`
+
+Ce script répond à la question de placement : **quels experts s'allument
+ENSEMBLE ?** Les compteurs d'usage disent quels experts sont chauds ; ils ne
+disent pas lesquels sont chauds en même temps, et c'est pourtant ce qui décide si
+un jeton peut être servi par UN nœud ou doit en interroger quatre.
+
+Trois mesures, et une comparaison qui les rend honnêtes :
+
+* **couverture** : part des k experts d'un jeton qui tiennent dans son meilleur
+  cluster (1,0 = un seul nœud suffit) ;
+* **ventilation** (fan-out) : nombre de clusters nécessaires pour couvrir 90 % des
+  experts d'un jeton (1,0 = le meilleur cas possible) ;
+* **équilibre** : taille des clusters (un cluster géant ne compte pas comme un
+  bon découpage) ;
+* **témoin** : les mêmes mesu
+… [308 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sleep 270; tail -7 /tmp/porte16.log; echo \"procs: $(pgrep -x drave | wc -l)\"", "description": "Keep waiting for the gate", "timeoutMs": 320000}`
+
+  ```
+mode 0 — f32 dense               0.00e0  ✅  (réf 61.9920 / deux nœuds 61.9920)
+  mode 1 — listes quantifiées     0.00e0  ✅  (réf 61.9920 / deux nœuds 61.9920)
+  mode 2 — listes par blocs        3.65e-2  ✅  (réf 61.9920 / deux nœuds 64.2535)
+  mode 3 — lot dense f32           0.00e0  ✅  (réf 60.8135 / deux nœuds 60.8135)
+  mode 4 — lot en listes           4.45e-3  ✅  (réf 60.8135 / deux nœuds 60.5427)
+
+toutes les portes sont vertes
+procs: 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -E \"V4-Flash 43|tests\" /tmp/porte16.log; python3 - <<'PY'\np=\"sprints/16-les-experts-sur-nvme-la-reutilisation.md\"\ns=open(p).read()\na=\"\"\"- `tools/portes.sh rapide` : voir le journal du bloc (63 tests, Qwen 19,3885,\n  c … [642 caractères tronqués]`

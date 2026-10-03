@@ -118,8 +118,9 @@ Chantiers du bloc 17 :
 
 ## Portes
 
-- `tools/portes.sh rapide` : voir le journal du bloc (63 tests, Qwen 19,3885,
-  clusters 799,8557, V4-Flash 8430,4966, engram, cinq modes de flux).
+- `tools/portes.sh rapide` : **toutes vertes** après le correctif du pas d'expert
+  — 63 tests, Qwen 19,3885, clusters 799,8557, **V4-Flash 8430,4966** (la porte
+  qui protège le chemin des experts), engram, et les cinq modes du découpage.
 - V4.1 : perplexité 115 521,8693 (ctx 32) et 1 743 713,6243 (ctx 8) **inchangées**
   dans toutes les variantes mesurées ; 2 544 vides identiques au bit près.
 
