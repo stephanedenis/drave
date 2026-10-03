@@ -103665,3 +103665,465 @@ index ed8e221..ab08806 100644
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Glossaire : la porte de correction a maintenant des critères mesurés, et le rejeu une définition vérifiée\" && sleep 420; ps -o etime=,time= -C drave | head -2; tail -c 300 /tmp/our_v4f1024.log; ls -l … [103 caractères tronqués]`
+
+  ```
+25:07 06:07:35
+its appris sur 43/43 couches · n_rot 64 · ffn 0 · experts 256
+[config] fenêtre glissante 128 sur 43/43 couches (motif 0, toutes)
+[config] rotation : RoPE simple (contexte 1024 ≤ 65536 initial ; YaRN ×16 prendrait le relais au-delà)
+[tête 4 bits] 129280 × 4096 → 4.50 b/poids, 0 Mo, 0.0 s
+-rw-r--r--. 1 stephane stephane 1034248  3 oct 05:08 /tmp/our_v4f1024.bin
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '4030,4090p' drave-core/src/main.rs", "description": "Read the logits writing code path"}`
+
+  ```
+// ne multiplient PAS par l'échelle d'activation (c'est `proj_q8` qui le
+    // fait) : la comparaison doit donc se faire sans `sx`, sinon l'écart
+    // mesuré n'est que le facteur oublié (constaté : 2,5e2).
+    let xi: Vec<i32> = (0..n_in).map(|i| ((i * 2654435761usize) % 255) as i32 - 127).collect();
+
+    // 1. CPU : le chemin de référence.
+    let d = unsafe { DenseQ8::emprunter_q8(blocs.as_ptr(), n_out, n_in, nb) };
+    let t0 = Instant::now();
+    let mut cpu = vec![0f32; n_out];
+    let chunk = n_out.div_ceil(threads);
+    let (dref, xiref) = (&d, &xi);
+    std::thread::scope(|sc| {
+        for (ci, part) in cpu.chunks_mut(chunk).enumerate() {
+            let base = ci * chunk;
+            sc.spawn(move || {
+                for (j, o) in part.iter_mut().enumerate() {
+                    *o = dref.dot_q8_source(base + j, xiref);
+                }
+            });
+        }
+    });
+    let tc = t0.elapsed().as_secs_f64();
+    println!("  CPU  {threads} fils : {:>7.1} ms  ({:>6.1} Go/s)", tc * 1e3, octets as f64 / tc / 1e9);
+
+    // 2 et 3. GPU : ancien noyau (une ligne par fil) puis warp par ligne.
+    let Some(machine) = gpu::instance() else {
+        println!("  GPU absent : 
+… [1745 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"logits_bin\" drave-core/src/main.rs | head -20", "description": "Locate logits-bin usage"}`
+
+  ```
+568:    logits_bin: Option<String>, ppl_profil: bool,
+678:            "--logits-bin" => { o.logits_bin = Some(suivant(i).clone()); 2 }
+4631:        ffn_gain, logits_bin, keep,
+4814:    let mut journal = match &logits_bin {
+4908:    if let (Some(w), Some(f)) = (journal, &logits_bin) {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '4805,4830p;4860,4915p' drave-core/src/main.rs", "description": "Read the logits journal write logic"}`
+
+  ```
+f
+        }
+    };
+    let t0 = Instant::now();
+    let mut nll = 0f64;
+    let mut n = 0usize;
+    let mut perte: Vec<f32> = Vec::new();
+    // Journal de logits : écrit à la volée (une matrice de vocabulaire fait
+    // 800 Mo sur gpt-oss, la garder en mémoire serait absurde).
+    let mut journal = match &logits_bin {
+        Some(f) => {
+            use std::io::Write;
+            let mut w = std::io::BufWriter::new(
+                std::fs::File::create(f).expect("création du fichier de logits"));
+            w.write_all(&(mdl.cfg.vocab as i32).to_le_bytes()).unwrap();
+            w.write_all(&0i32.to_le_bytes()).unwrap();   // n_pos, réécrit à la fin
+            Some(w)
+        }
+        None => None,
+    };
+    let mut n_logits = 0i32;
+    let mut tampon: Vec<u8> = Vec::new();
+    // Profil par profondeur : la perte moyenne par tranche de 256 positions.
+    // Une perplexité qui MONTE avec la position ne dit pas du tout la même
+    // chose qu'une perplexité uniformément mauvaise — et à 4 096 jetons, la
+    // moyenne seule ne permet pas de trancher.
+                        let mt = Instant::now();
+                        let r = mdl.logits(h);
+                        t_tete 
+… [2432 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '4831,4862p' drave-core/src/main.rs", "description": "Read the window/chunk loop"}`
+
+  ```
+let profil = ppl_profil;
+    let mut seaux: Vec<(f64, usize)> = vec![(0.0, 0); ctx.div_ceil(256)];
+    // Deux postes que le profil du moteur ne voit pas : la tête de sortie
+    // (la plus grosse matrice du modèle) et la notation log-sum-exp. Sans eux,
+    // « reste » les mélangeait et on ne pouvait pas dire si la tête par lots
+    // avait servi à quelque chose.
+    let (mut t_tete, mut t_note) = (0f64, 0f64);
+    for (i_f, (chunk, masque)) in fenetres.iter().enumerate() {
+        let (mut nll_f, mut n_f) = (0f64, 0usize);
+        // Préremplissage par lots : `lot` jetons d'un coup. `lot == 1` emprunte
+        // exactement le chemin historique jeton par jeton.
+        let mut pos = 0usize;
+        while pos < chunk.len() {
+            let t = lot.min(chunk.len() - pos);
+            let hs = mdl.forward_lot(&chunk[pos..pos + t], pos);
+            // Tête par lots : la matrice la plus lourde du modèle est lue une
+            // fois pour le groupe au lieu d'une fois par jeton.
+            let marque = Instant::now();
+            let lgs = if t > 1 { Some(mdl.logits_lot(&hs)) } else { None };
+            t_tete += marque.elapsed().as_secs_f64();
+            for (i, h) in hs.iter()
+… [601 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2; do s=$(stat -c %s /tmp/our_v4f1024.bin); echo \"$(date +%H:%M:%S) taille=$s lignes=$(( (s-8)/517120 ))\"; sleep 120; done; tail -c 300 /tmp/our_v4f1024.log", "description": "Measure the logits write rate", "timeoutMs":  … [7 caractères tronqués]`
+
+  ```
+05:11:11 taille=1034248 lignes=2
+05:13:11 taille=2068488 lignes=4
+its appris sur 43/43 couches · n_rot 64 · ffn 0 · experts 256
+[config] fenêtre glissante 128 sur 43/43 couches (motif 0, toutes)
+[config] rotation : RoPE simple (contexte 1024 ≤ 65536 initial ; YaRN ×16 prendrait le relais au-delà)
+[tête 4 bits] 129280 × 4096 → 4.50 b/poids, 0 Mo, 0.0 s
+  ```
+
+### 🤖 Assistant
+
+⏵ Killing the 1024 run: measured 1 row/min, i.e. ~17 h — investigating the real bottleneck
+
+- **job_kill** `{"job_id": "bash-210", "reason": "1 ligne de logits par minute : 17 h pour 1 023 positions, insoutenable"}`
+
+  ```
+requested cancellation of job bash-210
+  ```
+
+- **bash** `{"command": "sleep 3; pgrep -x drave >/dev/null && { pkill -x drave; sleep 2; }; pgrep -x drave >/dev/null && echo \"encore là\" || echo \"arrêté\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"PROF_V4\\|DRAVE_PROF\" drave-core/src/*.rs | head -5; ls -la /tmp/our_v4f1024.bin", "de … [56 caractères tronqués]`
+
+  ```
+arrêté
+drave-core/src/main.rs:5022:        let v: Vec<f64> = model::PROF_V4.iter()
+drave-core/src/model.rs:1683:pub static PROF_V4: [std::sync::atomic::AtomicU64; 5] =
+drave-core/src/model.rs:5534:        PROF_V4[0].fetch_add(t0.elapsed().as_nanos() as u64,
+drave-core/src/model.rs:5715:        PROF_V4[1].fetch_add(t1.elapsed().as_nanos() as u64,
+drave-core/src/model.rs:5879:        PROF_V4[2].fetch_add(t2.elapsed().as_nanos() as u64,
+-rw-r--r--. 1 stephane stephane 3102728  3 oct 05:14 /tmp/our_v4f1024.bin
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '5010,5035p' drave-core/src/main.rs && grep -n \"PROF_V4\\[0\\]\\|PROF_V4\\[1\\]\\|PROF_V4\\[2\\]\\|PROF_V4\\[3\\]\\|PROF_V4\\[4\\]\" drave-core/src/model.rs | head && sed -n '1680,1690p' drave-core/src/model.rs", "description … [41 caractères tronqués]`
+
+  ```
+println!("    dont tête de sortie {:.2} | notation log-sum-exp {:.2} (le reste du « reste » n'est pas chronométré)",
+             t_tete / n as f64 * 1e3, t_note / n as f64 * 1e3);
+    println!("    dont attention : scores {:.2} | softmax {:.2} | somme pondérée + écriture KV {:.2}",
+             p[4] / n as f64 * 1e3, p[5] / n as f64 * 1e3,
+             (p[2] - p[4] - p[5]) / n as f64 * 1e3);
+    // **Attention V4 (`attn_v4`) : le poste ci-dessus la compte EN ENTIER** —
+    // ses sous-compteurs `scores`/`softmax` appartiennent à l'autre chemin (MLA
+    // de V3) et restent donc à zéro ici, ce qui faisait croire que l'attention
+    // de V4.1 ne coûtait rien (relevé au bloc 15 : 12,4 s par jeton). Ces quatre
+    // sous-postes disent où elles passent.
+    {
+        use std::sync::atomic::Ordering;
+        let v: Vec<f64> = model::PROF_V4.iter()
+            .map(|c| c.load(Ordering::Relaxed) as f64 / 1e6 / n as f64).collect();
+        if v.iter().any(|x| *x > 0.0) {
+            println!("    dont attention V4 (attn_v4) : projets q/kv {:.2} | compresseur {:.2} | indexeur {:.2} | scores + softmax + somme {:.2} | dé-rotation + sortie groupée {:.2}",
+                     v[0], v[1], v[2
+… [1218 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && V4=/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf && time ./drave-core/target/release/drave \"$V4\" --ppl /tmp/ids_v4flash.txt --ctx 32 --limit 5 --dense --thre … [107 caractères tronqués]`
+
+  ```
+/tmp/ids_v4flash.txt : 5 tokens, fenêtres de 32
+[config] attention V4 : 43 couches · 1 tête latente de 512 (448 nope + 64 rope) · 64 têtes de requête · sortie groupée 8×1024 · puits par tête
+[config] hyper-connexions : 4 copies · 24 mélanges par couche (pre 4 + post 4 + comb 16) · Sinkhorn 20 itérations · eps 1e-6 · mélange de tête 65536 poids · chaîne directe (V4) : chaque raccord se replie avec ses propres coefficients
+[moe] couche 0 : routage par TABLE tid2eid, 6 experts par jeton (129280 jetons de vocabulaire)
+[moe] couche 1 : routage par TABLE tid2eid, 6 experts par jeton (129280 jetons de vocabulaire)
+[moe] couche 2 : routage par TABLE tid2eid, 6 experts par jeton (129280 jetons de vocabulaire)
+[config] cache KV : 32 bits, 0.01 Go pour 32 jetons
+[modele] 43 couches chargées en 35.206430928s — listes 0.00 Go , 16 threads
+[config] 43 couches, hidden 4096 · racine de softpluséchelle 1.50 routage-table moe 
+[config] mélanges d'experts chargés : 43/43 couches · mapping absent (experts en clair dans le fichier)
+[config] puits appris sur 43/43 couches · n_rot 64 · ffn 0 · experts 256
+[config] fenêtre glissante 128 sur 43/43 couches (motif 0, toutes)
+[config] rotation : RoPE simple (
+… [1343 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Measuring whether V4-Flash's expert path uses the threads at all (1 vs 16 threads)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && V4=/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf && for th in 1 16; do echo \"=== threads $th ===\"; ./drave-core/target/release/drave \"$V4\" --ppl /tmp/ids_v … [212 caractères tronqués]`
+
+  ```
+=== threads 1 ===
+=== perplexité 72793.4696 sur 3 tokens (0 événements, 68.0 s) ===
+    postes (ms/token) : projets-attn 0.00 | rope 0.00 | attention 6525.75 | proj+mlp 16021.28 | somme 22547.03 | reste (tête + échantillonnage) 120.15
+=== threads 16 ===
+=== perplexité 72793.4696 sur 3 tokens (0 événements, 9.8 s) ===
+    postes (ms/token) : projets-attn 0.00 | rope 0.00 | attention 1200.66 | proj+mlp 2015.46 | somme 3216.12 | reste (tête + échantillonnage) 36.84
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"dense\" drave-core/src/main.rs | head -20 && grep -rn \"fn dense\\|dense:\" drave-core/src/model.rs | head -10", "description": "Find what --dense does"}`
+
+  ```
+46:use engine::{matvec_dense, matvec_shift_add, Pool, SparseVec};
+48:use list::{dense_bits, BitmapSign, DenseQ4, DenseQ8, FusedSign, PushMat, SignedDelta, SparseK};
+61:        eprintln!("       drave <modele> --ppl FICHIER-IDS [--ctx N] [--limit N] [--dense]");
+143:    // (`--dense --threads 4` annonçait 30 fils). C'est exactement le bug corrigé
+190:        println!("  dense 8 bits            {}", fmt_bits(dense_bits(n, 8), n));
+223:    // Comparer le ternaire (FusedSign) au dense int8 n'aurait aucun sens : les
+292:        let y4 = pool.matvec_dense_q4(&d4, &xv, 1.0);
+309:        let sv = SparseVec::from_dense(&xa);
+328:            let y_ref = matvec_dense(&tern, &xa, n_cols, n_rows);
+346:        for _ in 0..reps { yd = pool.matvec_dense_i8(&dl, &xa, 1.0); }
+374:    let y_mul = matvec_dense(&levels, &xd, n_cols, n_rows);
+423:fn options_actives(mdl: &model::Model, mode: &str, ctx_impose: bool, dense: bool, keep: f32) {
+425:    println!("[options] mode {mode} · contexte {} ({}) · dense {} · keep {:.3}",
+426:             mdl.ctx, oui(ctx_impose), dense, keep);
+556:    ctx: usize, threads: usize, abits: u32, dense: bool, auto: bool,
+635:        // sautait le drapeau suivant après un bo
+… [596 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"dense\\b\" drave-core/src/model.rs | grep -v \"^.*///\" | head -20", "description": "Find dense usage in the model"}`
+
+  ```
+303:    // pris pour un modèle dense (`n_expert = 0`), donc exécuté sans un seul
+335:    // (Qwen2.5 dense, Qwen3-MoE, gpt-oss) ; les modèles qui déclarent
+1140:    fn load(g: &Gguf, name: &str, bias: Option<&str>, dense: bool, auto: bool, keep: f32,
+1150:        // scalaire dense (pull). Le croisement mesuré est à 22 %
+1181:        } else if dense {
+2796:    pub fn load(path: &str, ctx: usize, n_threads: usize, dense: bool, keep: f32,
+2798:        Self::load_partiel(path, ctx, n_threads, dense, keep, auto, q4, b6, None)
+2802:    pub fn load_partiel(path: &str, ctx: usize, n_threads: usize, dense: bool, keep: f32,
+3506:                // Couche MLA : Q, K et V n'existent pas en dense — ils sont
+3511:                    Proj::load(&g, &p("attn_q.weight"), Some(&p("attn_q.bias")), dense || q4 != 0, auto, keep, q4 & 2 != 0, b6 & 2 != 0) },
+3513:                    Proj::load(&g, &p("attn_k.weight"), Some(&p("attn_k.bias")), dense || q4 != 0, auto, keep, q4 & 2 != 0, b6 & 2 != 0) },
+3515:                    Proj::load(&g, &p("attn_v.weight"), Some(&p("attn_v.bias")), dense || q4 != 0, auto, keep, q4 & 2 != 0, b6 & 2 != 0) },
+3523:                    else { Proj::load(&g, &p("attn_outpu
+… [810 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1140,1200p' drave-core/src/model.rs", "description": "Read what the dense flag changes when loading"}`
+
+  ```
+fn load(g: &Gguf, name: &str, bias: Option<&str>, dense: bool, auto: bool, keep: f32,
+            q4: bool, bits6: bool) -> Self {
+        let t = g.tensor(name).unwrap_or_else(|| panic!("tenseur {name} absent"));
+        let n_out = t.dims[0] as usize;
+        let n_in = t.dims[1] as usize;
+        let mut w = g.dequant(name);
+        if keep < 0.0 { prune_structured(&mut w, n_out, n_in, -keep); }
+        else { prune_rows(&mut w, n_out, n_in, keep); }
+        // `auto` charge les DEUX formes : le moteur choisit ensuite, par mesure
+        // de la densité d'activation, entre dispersion (push) et produit
+        // scalaire dense (pull). Le croisement mesuré est à 22 %
+        // (`seuil_push = 0.22`, `reports/rapport-croisement-push-pull.md`).
+        // Six bits empaquetés : même déquantification que les autres chemins,
+        // mais la quantification vise la grille [-32, 31] au lieu de [-8, 7].
+        if bits6 {
+            let z = DenseQ4::build6(&w, n_out, n_in);
+            let bias = bias.filter(|b| g.tensor(b).is_some()).map(|b| g.dequant(b));
+            return Proj { gpu: None, m: None, d: None, q4: Some(z), bias };
+        }
+        let (m, d, q4v) = if q4 {
+        
+… [2744 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Measuring the non-dense (list) path: `--dense` may be why the long pass was unaffordable
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && V4=/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf && for m in \"--dense\" \"\"; do echo \"=== mode '${m:-auto/listes}' ===\"; ./drave-core/target/release/drave  … [270 caractères tronqués]`
+
+  ```
+=== mode '--dense' ===
+=== perplexité 72793.4696 sur 3 tokens (0 événements, 9.8 s) ===
+    paires (poids × activation) par token : attention 6603.0 M · experts 8657.0 M · partagé 1938.8 M · scores 0 K · total 17198.9 M
+    dont en listes (une paire y est un événement) : 0.0 M — le reste est dense (déquantifié ou f32)
+    postes (ms/token) : projets-attn 0.00 | rope 0.00 | attention 1194.58 | proj+mlp 2035.13 | somme 3229.71 | reste (tête + échantillonnage) 37.18
+=== mode 'auto/listes' ===
+=== perplexité 72793.4696 sur 3 tokens (0 événements, 9.8 s) ===
+    paires (poids × activation) par token : attention 6603.0 M · experts 8657.0 M · partagé 1938.8 M · scores 0 K · total 17198.9 M
+    dont en listes (une paire y est un événement) : 0.0 M — le reste est dense (déquantifié ou f32)
+    postes (ms/token) : projets-attn 0.00 | rope 0.00 | attention 1177.13 | proj+mlp 2044.47 | somme 3221.60 | reste (tête + échantillonnage) 36.87
+  ```
+
+### 🤖 Assistant
+
+⏵ Launching the long-context gate at ctx 256 (llama.cpp then the engine, ~45 min)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && LD_LIBRARY_PATH=/home/stephane/Data13TB/stephane/GitHub/llama.cpp/build/bin timeout 1200 ./tools/ref_logits /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf /tmp/ … [124 caractères tronqués]`
+
+  ```
+NLL moy  = 1.914968
+perplexite = 6.786724
+fichier  = /tmp/ref_v4f256.bin (255 x 129280 f32 + 8 octets d'en-tete)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (t0=$(date +%s); ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf --ppl /tmp/ids_v4f1024.txt --ctx 256 --limit 256 --dense --thr … [240 caractères tronqués]`
+
+  ```
+started background job bash-211
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n '\"--' drave-core/src/main.rs | grep -iE \"index|sparse|creux|topk|top-k\" | head -10; grep -n \"indexeur\" drave-core/src/model.rs | head -8; echo \"--- profil V4-Flash ctx 256 en cours ---\"; sleep 120; tail -c 200 /tmp/our … [138 caractères tronqués]`
+
+  ```
+103:        (opt.banc_kv > 0, "--banc-kv"), (opt.banc_topk > 0, "--banc-topk"),
+649:            "--banc-topk" => { o.banc_topk = suivant(i).parse().unwrap(); 2 }
+685:            "--topk" => { o.topk = suivant(i).parse().unwrap(); 2 }
+696:            "--moe-topk" => { o.moe_topk = suivant(i).parse().unwrap(); 2 }
+700:            "--attn-topk" => { o.attn_topk = suivant(i).parse().unwrap(); 2 }
+701:            "--qk-topk" => { o.qk_topk = suivant(i).parse().unwrap(); 2 }
+706:            "--act-topk" => { o.act_topk = suivant(i).parse().unwrap(); 2 }
+707:            "--topk-q" => { o.topk_proj[0] = suivant(i).parse().unwrap(); 2 }
+708:            "--topk-k" => { o.topk_proj[1] = suivant(i).parse().unwrap(); 2 }
+709:            "--topk-v" => { o.topk_proj[2] = suivant(i).parse().unwrap(); 2 }
+103:    // Attention par index (DSA) : l'indexeur choisit les clés gardées. Il ne
+105:    // toutes les clés et l'indexeur n'est pas appelé. On refuse donc seulement
+156:    // **indexeur** sont implémentés : `attn_v4` construit les blocs (softmax
+158:    // l'indexeur note les blocs puis garde les meilleurs. Validé contre
+176:    // bas (engram, indexeur de V4.1).
+1334:    /// (implémenté), **4**
+… [431 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1325,1370p' drave-core/src/model.rs && sed -n '100,115p' drave-core/src/model.rs", "description": "Read the indexeur limitation comments"}`
+
+  ```
+pub h: usize,
+    pub head_dim: usize,
+    pub rope: usize,
+    pub n_groups: usize,
+    pub o_lora: usize,
+    pub rope_base: f32,
+    pub eps: f32,
+    /// Ratio de compression de la couche (`attention.compress_ratios`) :
+    /// **0** = couche brute (toute la chaîne est celle de P3), **128** = HCA
+    /// (implémenté), **4** = CSA (avec indexeur — P5).
+    pub ratio: usize,
+    /// Base RoPE des couches compressées : `compress_rope_freq_base` (160 000
+    /// pour V4-Flash) au lieu de `rope.freq_base` (10 000). Les deux chemins
+    /// tournent à des bases différentes, et se tromper donne des scores
+    /// plausibles **et faux** dès que la position dépasse 0.
+    pub rope_base_compresse: f32,
+    /// **YaRN des couches compressées** (`facteur, beta_rapide, beta_lent,
+    /// contexte d'origine`) : la déclaration du modèle, appliquée à TOUTES les
+    /// positions dès que `ratio > 0` — c'est ce que font llama.cpp
+    /// (`deepseek4.cpp:872-879`) et vLLM (`rope.py:28-46`). `None` sur une couche
+    /// brute (leur RoPE reste simple, YaRN y étant l'identité) ou quand le modèle
+    /// ne déclare pas YaRN.
+    pub yarn_compresse: Option<(f32, f32, f32, f32)>,
+    /// Fenêtre brute
+… [2478 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date +%H:%M:%S && for i in 1 2; do s=$(stat -c %s /tmp/our_v4f256.bin 2>/dev/null || echo 0); echo \"taille=$s lignes=$(( (s-8)/517120 ))\"; sleep 60; done; tail -c 400 /tmp/our_v4f256.log", "description": "Measure the ctx-256 run ra … [25 caractères tronqués]`
+
+  ```
+05:30:43
+taille=517128 lignes=1
+taille=517128 lignes=1
+s d'experts chargés : 43/43 couches · mapping absent (experts en clair dans le fichier)
+[config] puits appris sur 43/43 couches · n_rot 64 · ffn 0 · experts 256
+[config] fenêtre glissante 128 sur 43/43 couches (motif 0, toutes)
+[config] rotation : RoPE simple (contexte 256 ≤ 65536 initial ; YaRN ×16 prendrait le relais au-delà)
+[tête 4 bits] 129280 × 4096 → 4.50 b/poids, 0 Mo, 0.0 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3; do s=$(stat -c %s /tmp/our_v4f256.bin 2>/dev/null || echo 0); echo \"$(date +%H:%M:%S) lignes=$(( (s-8)/517120 ))\"; sleep 90; done; ps -o etime=,time=,%cpu= -C drave | head -2", "description": "Measure rate over 4.5  … [30 caractères tronqués]`
+
+  ```
+05:32:48 lignes=3
+05:34:18 lignes=12
+05:35:48 lignes=20
+      09:07 02:17:42 1509
+  ```
+
+### 🤖 Assistant
+
+⏵ Writing sprint 23 while the ctx-256 pass runs (~10 s/token measured)
+
+- **write** `{"content": "# Sprint 23 — La porte de correction, serrée, outillée, et poussée au contexte long\n\n- **Début** : 04:30 · **Fin** : en cours (le bloc est dominé par une passe longue)\n- **Objectif** : le bloc 22 a montré que la porte de correction était mesurée sur\n  **quatre** positions — trop peu … [6816 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/23-la-porte-de-correction-outillee-et-longue.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -40 REPRISE.md && echo \"...\" && grep -n \"^#\\|^##\" REPRISE.md | head -20", "description": "Inspect REPRISE.md structure"}`
+
+  ```
+# Reprise — état du projet et mode d'emploi pour une nouvelle session
+
+> Rédigé à la fin d'une session longue. Tout ce qui suit est **mesuré**, pas
+> déduit. Les valeurs de perplexité sont des **références de non-régression** :
+> si une modification les change, c'est qu'elle a changé le calcul.
+>
+> **Nom** : le projet s'appelle **Drave** (binaire `drave`, paquet `drave-core`,
+> variables `DRAVE_*`, histoire du renommage dans `docs/histoire.md`). Le dossier
+> de travail, lui, s'appelle encore `Qtrinet` — les chemins ci-dessous sont ceux
+> qui existent.
+
+---
+
+## 1. En une phrase
+
+`drave-core` est un moteur d'inférence Rust (~13 758 lignes, `std` seul) qui
+charge les GGUF **en place** (aucune copie, aucune requantification), exécute les
+projections soit en listes d'événements, soit en produit scalaire dense, gère les
+MoE, tient une conversation, et déporte au GPU ce qui y gagne. Il fait tourner du
+0,5 B au 120 B sur le CPU de cette machine.
+
+```bash
+cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo build --release
+./target/release/drave ../models/Qwen2.5-0.5B-Q8_0.gguf \
+    --infer --chat --flux --prompt "Explique le ciel bleu en une phrase." \
+    --n 64 --ctx 5
+… [1746 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md", "limit": 22, "offset": 328}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md</path>
+<type>file</type>
+<content>
+328: ## 5. Règles de méthode (chacune a coûté une erreur)
+329: 
+330: 1. **Mesurer avant de conclure.** Le croisement push/pull était annoncé à 10 %,
+331:    il est à 22 %. Dérouler un noyau « évident » n'a rien donné : le chemin était
+332:    au mur mémoire, pas mal écrit.
+333: 2. **La double quantification est le piège le plus cher** : +12 % de perplexité
+334:    sur Q4_0, et une simulation de précision qui annonçait 19,96 là où le format
+335:    réel donne 19,30.
+336: 3. **Une hypothèse se teste, elle ne se défend pas.** Trois ont été réfutées cette
+337:    session : cache KV pour l'attention (c'était la vectorisation), rotary partiel
+338:    pour gpt-oss (185 → 1 095), YaRN (184,9 contre 39,8 sans).
+339: 4. **Vérifier quel chemin est actif** avant de déboguer un chiffre : la trace
+340:    `[config]` au chargement dit quelles particularités ont été reconnues.
+341: 5. **Ne pas conclure sur 255 jetons** : l'écart peut être du bruit ; 510 minimum.
+342: 6. **Ne pas laisser un dépôt cassé** pour finir une refactorisation : revenir au
+343:    dernier état valide est une option honorable.
+… [185 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md", "new_string": "5. **Ne pas conclure sur 255 jetons** : l'écart peut être du bruit ; 510 minimum.\n6. **Ne pas laisser un dépôt cassé** pour finir une refactorisation : revenir au\n   dernier état valide est une option honora … [1093 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && s=$(stat -c %s /tmp/our_v4f256.bin); echo \"$(date +%H:%M:%S) lignes=$(( (s-8)/517120 )) / 255\"; git add -A && git commit -q -m \"Sprint 23 : la porte de correction serrée (63 positions, 6,4 % au lieu de 25 %), outillée (verdict + c … [356 caractères tronqués]`

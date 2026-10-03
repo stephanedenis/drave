@@ -341,6 +341,17 @@ comparé à `llama-tokenize` sur 4 424 jetons (0 écart).
 5. **Ne pas conclure sur 255 jetons** : l'écart peut être du bruit ; 510 minimum.
 6. **Ne pas laisser un dépôt cassé** pour finir une refactorisation : revenir au
    dernier état valide est une option honorable.
+7. **Mesurer avant de LANCER** (03/10, bloc 23). Une passe de 1 024 jetons sur
+   V4-Flash a été lancée sans mesurer le coût au contexte visé : **60 s par jeton**,
+   soit 17 heures — arrêtée après 25 minutes et 6 positions. Une passe de 4 jetons
+   au contexte visé coûte une minute et donne le budget. Coût par jeton mesuré :
+   **3,2 s à ctx 32** (attention 1,19 s, proj+mlp 2,04 s) — et il croît avec le
+   contexte, alors que llama.cpp fait la même passe de 1 024 jetons en 4 minutes.
+8. **Un drapeau qui ne fait rien doit être dit.** `--dense` est **inerte pour
+   V4-Flash** : PPL identique au chiffre près, durées identiques, et le compteur
+   « dont en listes » reste à 0,0 M — le modèle passe par le chemin dense de toute
+   façon. Deux blocs durant, il a été cru « aligné sur llama.cpp » : c'était une
+   supposition, pas une mesure.
 
 ---
 

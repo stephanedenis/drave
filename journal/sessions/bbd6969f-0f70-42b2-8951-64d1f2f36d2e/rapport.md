@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 110.3 h |
+| Durée | 110.9 h |
 | Tours | 87 |
-| Messages | 6503 |
-| Appels d'outils | 6225 |
-| Fichiers touchés | 119 |
-| Commandes | 5270 |
+| Messages | 6528 |
+| Appels d'outils | 6250 |
+| Fichiers touchés | 120 |
+| Commandes | 5291 |
 | Sous-agents | 32 |
-| Commits | 418 |
+| Commits | 419 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -4318,7 +4318,7 @@ C'est un point de méthode qui comptait : sans cette mesure, on aurait pu « cor
 
 ### Tour 87 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [942 caractères tronqués]
 
-*62 appels d'outils.* Actions notables :
+*87 appels d'outils.* Actions notables :
 
 - bash — Launch the long-window correction gate
 - bash — Wait for the long comparison
@@ -4334,11 +4334,11 @@ C'est un point de méthode qui comptait : sans cette mesure, on aurait pu « cor
 - bash — Read the bloc 22 plan in sprint 21
 - bash — Locate engram code and any local vLLM source
 - bash — Inspect correction-gate tools and engine flags
-- … et 42 autres
+- … et 66 autres
 
 **Synthèse produite :**
 
-⏵ Wiring the correction gate into portes.sh (Qwen, 71 predictions, verdict by tool)
+⏵ Writing sprint 23 while the ctx-256 pass runs (~10 s/token measured)
 
 ## 3. Travail accompli
 
@@ -4357,7 +4357,7 @@ C'est un point de méthode qui comptait : sans cette mesure, on aurait pu « cor
 | `/tmp/mesures_oss4.sh` | 2 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gpt-oss-perplexite.md` | 1 | 4 |
 | `/tmp/controles_oss.sh` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md` | 0 | 18 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md` | 0 | 19 |
 | `/tmp/controles2_oss.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/harmony_canonique.py` | 1 | 1 |
 | `/tmp/controles3_oss.sh` | 1 | 0 |
@@ -4465,6 +4465,7 @@ C'est un point de méthode qui comptait : sans cette mesure, on aurait pu « cor
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/16-les-experts-sur-nvme-la-reutilisation.md` | 2 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-vitesse-v41.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/22-la-composition-verifiee-et-les-deux-portes.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/23-la-porte-de-correction-outillee-et-longue.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -4543,7 +4544,7 @@ C'est un point de méthode qui comptait : sans cette mesure, on aurait pu « cor
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5230 autres
+- … et 5251 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5109,4 +5110,5 @@ C'est un point de méthode qui comptait : sans cette mesure, on aurait pu « cor
 - compare_logits.py : un diagnostic par TRANCHES, pour distinguer une erreur de position d'une erreur de tête  Une erreur de RoPE, de blocs compressés ou de fenêt
 - Plan P6 : la fenêtre de 63 prédictions ne juge pas la perplexité (seuil à 64), et elle le dit" && sleep 300; ps -o etime=,time= -C drave | head -2; tail -c 200 
 - Glossaire : la porte de correction a maintenant des critères mesurés, et le rejeu une définition vérifiée" && sleep 420; ps -o etime=,time= -C drave | head -2; 
+- Sprint 23 : la porte de correction serrée (63 positions, 6,4 % au lieu de 25 %), outillée (verdict + code retour), et le coût du contexte long mesuré  Mesuré en
 
