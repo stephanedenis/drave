@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 115.9 h |
 | Tours | 90 |
-| Messages | 6893 |
-| Appels d'outils | 6592 |
+| Messages | 6910 |
+| Appels d'outils | 6609 |
 | Fichiers touchés | 135 |
-| Commandes | 5568 |
+| Commandes | 5585 |
 | Sous-agents | 32 |
-| Commits | 446 |
+| Commits | 447 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -4475,7 +4475,7 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 
 ### Tour 90 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [942 caractères tronqués]
 
-*154 appels d'outils.* Actions notables :
+*171 appels d'outils.* Actions notables :
 
 - bash — Check the gate suite result
 - bash — Wait for the gates
@@ -4491,11 +4491,11 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 - bash — Find the plan's remaining items
 - bash — Extract each phase's gate claims
 - read
-- … et 136 autres
+- … et 153 autres
 
 **Synthèse produite :**
 
-⏵ Motif kimi implémenté : 7 textes sur 7 identiques au tokenizer officiel (dont le chinois)
+⏵ Le test unitaire a trouvé un vrai défaut : notre découpage par casse échoue sur les mots à casse alternée
 
 ## 3. Travail accompli
 
@@ -4716,7 +4716,7 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5528 autres
+- … et 5545 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4844,7 +4844,7 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 
 ## 5. Erreurs rencontrées
 
-334 sorties en erreur ou divergentes. Les premières :
+335 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -5310,4 +5310,5 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 - Spécification de l'architecture Kimi-K3, tirée de la référence (llama.cpp-k3 + code publié)  Mesuré dans le fichier : 93 couches, dont 1 dense ; KDA (delta-net,
 - --config et --tokenize répondent sur un modèle EN COURS de téléchargement (et le disent)  Sans ce chemin, il fallait attendre la fin d'un transfert de plusieurs
 - Défaut SILENCIEUX corrigé : le motif de pré-découpage kimi manquait (Kimi-K2.7 ET Kimi-K3)  Notre tokenizer retombait sur le motif qwen2 pour tout ce qui n'étai
+- Deuxième défaut trouvé par un test unitaire : le découpage par casse enjambait les majuscules  « HelloWorld » sortait d'UN morceau (au lieu de « Hello » puis « 
 

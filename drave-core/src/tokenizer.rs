@@ -374,6 +374,7 @@ fn avec_contraction(cs: &[char], fin: usize) -> usize {
 /// la suite de non-majuscules.
 fn match_casse_decroissante(cs: &[char], i: usize, hors_han: bool) -> Option<usize> {
     let lettre = |c: char| is_letter(c) && !(hors_han && is_han(c));
+    let maj = |c: char| is_majuscule(c) && !(hors_han && is_han(c));
     let minus = |c: char| is_minuscule(c) && !(hors_han && is_han(c));
     let mut p = i;
     if prefixe_possible(cs[i]) && i + 1 < cs.len() && lettre(cs[i + 1]) {
@@ -381,17 +382,20 @@ fn match_casse_decroissante(cs: &[char], i: usize, hors_han: bool) -> Option<usi
     } else if !lettre(cs[i]) {
         return None;
     }
-    let mut e = p;
-    while e < cs.len() && lettre(cs[e]) { e += 1; }
-    let mut k = e;
-    while k > p && !minus(cs[k - 1]) { k -= 1; }
-    if k == p { return None; }              // aucun `L+` possible
-    // `U*` ne peut pas absorber une minuscule : on recule jusqu'à la première.
-    while k > p && minus(cs[k - 1]) { k -= 1; }
-    let mut fin = k;
-    while fin < e && minus(cs[fin]) { fin += 1; }
-    if fin == k { return None; }
-    Some(avec_contraction(cs, fin))
+    // `U*` puis `L+` : chacune des deux classes se prend CONTIGUËMENT depuis le
+    // point courant, et `L+` ne peut pas enjamber une majuscule. L'ancienne
+    // version reculait jusqu'à la dernière minuscule du mot et repartait de là :
+    // elle rendait « HelloWorld » d'un seul morceau (au lieu de « Hello » puis
+    // « World ») et « hEllo » d'un seul morceau (au lieu de « h » puis « Ello »).
+    // Les identifiants tombaient juste par chance (la table de fusions n'a pas
+    // de fusion « oW »), mais le découpage, lui, était faux — trouvé par un test
+    // unitaire, puis confirmé contre le motif officiel.
+    let mut u = p;
+    while u < cs.len() && maj(cs[u]) { u += 1; }
+    let mut l = u;
+    while l < cs.len() && minus(cs[l]) { l += 1; }
+    if l == u { return None; }              // `L+` exige au moins une
+    Some(avec_contraction(cs, l))
 }
 
 /// 2) `[^…]? U+ L* (?i:'…)?` — l'inverse : majuscules d'abord, minuscules
@@ -406,12 +410,13 @@ fn match_casse_croissante(cs: &[char], i: usize, hors_han: bool) -> Option<usize
     } else if !lettre(cs[i]) {
         return None;
     }
-    let mut k = p;
-    while k < cs.len() && maj(cs[k]) { k += 1; }
-    if k == p { return None; }              // `U+` exige au moins une
-    let mut fin = k;
-    while fin < cs.len() && minus(cs[fin]) { fin += 1; }
-    Some(avec_contraction(cs, fin))
+    // `U+` puis `L*` — mêmes règles de contiguïté.
+    let mut u = p;
+    while u < cs.len() && maj(cs[u]) { u += 1; }
+    if u == p { return None; }              // `U+` exige au moins une
+    let mut l = u;
+    while l < cs.len() && minus(cs[l]) { l += 1; }
+    Some(avec_contraction(cs, l))
 }
 
 /// 3) `\p{N}{1,3}` — les nombres par groupes de trois.
@@ -573,5 +578,69 @@ fn match_spaces(cs: &[char], i: usize) -> Option<usize> {
         Some(j)
     } else {
         None
+    }
+}
+
+#[cfg(test)]
+mod tests_kimi {
+    //! Le motif `kimi` (Kimi-K2.7, Kimi-K3) : ce qui le distingue de qwen2.
+    //!
+    //! Ces tests figent les TROIS différences mesurées le 03/10 contre le
+    //! tokenizer officiel de Kimi-K3 (`tools/tokenizer_kimi_reference.py`) :
+    //! les nombres vont par trois, les idéogrammes Han forment leurs propres
+    //! morceaux, et les lettres se coupent selon la casse en excluant les Han.
+    use super::*;
+
+    fn morceaux(texte: &str) -> Vec<String> {
+        let cs: Vec<char> = texte.chars().collect();
+        let mut out = Vec::new();
+        let mut i = 0;
+        while i < cs.len() {
+            let j = next_piece_kimi(&cs, i);
+            out.push(cs[i..j].iter().collect());
+            i = j;
+        }
+        out
+    }
+
+    #[test]
+    fn les_nombres_vont_par_trois() {
+        // qwen2 donnerait « 2026 » d'un bloc : le motif kimi le coupe en 3 + 1.
+        assert_eq!(morceaux("2026"), vec!["202", "6"]);
+        assert_eq!(morceaux("123456789"), vec!["123", "456", "789"]);
+        assert_eq!(morceaux("42"), vec!["42"]);
+    }
+
+    #[test]
+    fn les_ideogrammes_forment_leurs_propres_morceaux() {
+        assert_eq!(morceaux("汉字"), vec!["汉字"]);
+        assert_eq!(morceaux("abc汉字def"), vec!["abc", "汉字", "def"]);
+    }
+
+    #[test]
+    fn les_lettres_se_coupent_par_casse_en_excluant_les_han() {
+        assert_eq!(morceaux("HelloWorld"), vec!["Hello", "World"]);
+        assert_eq!(morceaux("hEllo"), vec!["h", "Ello"]);
+        // Un idéogramme ne se rattache PAS au mot qui le précède.
+        assert_eq!(morceaux("test汉"), vec!["test", "汉"]);
+    }
+
+    #[test]
+    fn les_contractions_ne_sont_qu_un_suffixe() {
+        assert_eq!(morceaux("It's here"), vec!["It's", " here"]);
+        // `'e` n'est PAS une contraction connue : le `'` devient le préfixe
+        // optionnel du mot suivant — le motif officiel donne ['n', "'est"].
+        assert_eq!(morceaux("n'est"), vec!["n", "'est"]);
+        // Un « ' » isolé n'est pas une contraction : c'est de la ponctuation.
+        assert_eq!(morceaux("a ' b"), vec!["a", " '", " b"]);
+        // Casse alternée : U* puis L+, sans enjamber.
+        assert_eq!(morceaux("HelloWorld"), vec!["Hello", "World"]);
+        assert_eq!(morceaux("hEllo"), vec!["h", "Ello"]);
+    }
+
+    #[test]
+    fn les_espaces_suivent_les_trois_dernieres_alternatives() {
+        assert_eq!(morceaux("a  b"), vec!["a", " ", " b"]);
+        assert_eq!(morceaux("a\n\nb"), vec!["a", "\n\n", "b"]);
     }
 }

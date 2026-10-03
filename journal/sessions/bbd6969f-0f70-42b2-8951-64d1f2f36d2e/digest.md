@@ -109774,3 +109774,236 @@ réversibilité : texte reconstruit identique ✅ (34 octets)
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Défaut SILENCIEUX corrigé : le motif de pré-découpage kimi manquait (Kimi-K2.7 ET Kimi-K3)\n\nNotre tokenizer retombait sur le motif qwen2 pour tout ce qui n'était ni qwen2 ni\ngpt-4o — donc pour \\`p … [771 caractères tronqués]`
+
+  ```
+7f330f1 Défaut SILENCIEUX corrigé : le motif de pré-découpage kimi manquait (Kimi-K2.7 ET Kimi-K3)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"mod tests\" drave-core/src/tokenizer.rs | head -3; tail -25 drave-core/src/tokenizer.rs", "description": "Check the tokenizer test module"}`
+
+  ```
+while j < n && is_space(cs[j]) {
+        j += 1;
+    }
+    if j == n {
+        return if j > i { Some(j) } else { None }; // fin de texte : toute la plage
+    }
+    if j > i + 1 {
+        return Some(j - 1); // on détache le dernier caractère d'espace
+    }
+    None // une seule espace : rien à prendre ici, la 7e alternative s'en charge
+}
+
+/// 7) `\s+` — dernière alternative : toute la plage d'espaces.
+fn match_spaces(cs: &[char], i: usize) -> Option<usize> {
+    let n = cs.len();
+    let mut j = i;
+    while j < n && is_space(cs[j]) {
+        j += 1;
+    }
+    if j > i {
+        Some(j)
+    } else {
+        None
+    }
+}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> drave-core/src/tokenizer.rs <<'RS'\n\n#[cfg(test)]\nmod tests_kimi {\n    //! Le motif `kimi` (Kimi-K2.7, Kimi-K3) : ce qui le distingue de qwen2.\n    //!\n    //! Ces tests figent les TROIS différences mesurées le 03/10 cont … [2282 caractères tronqués]`
+
+  ```
+test tokenizer::tests_kimi::les_contractions_ne_sont_qu_un_suffixe ... FAILED
+test tokenizer::tests_kimi::les_espaces_suivent_les_trois_dernieres_alternatives ... ok
+test tokenizer::tests_kimi::les_ideogrammes_forment_leurs_propres_morceaux ... ok
+test tokenizer::tests_kimi::les_nombres_vont_par_trois ... ok
+test tokenizer::tests_kimi::les_lettres_se_coupent_par_casse_en_excluant_les_han ... FAILED
+test result: FAILED. 3 passed; 2 failed; 0 ignored; 0 measured; 64 filtered out; finished in 0.00s
+  ```
+
+- **bash** `{"command": "cd /tmp/k3ref && for t in \"test汉\" \"HelloWorld\" \"hEllo\" \"It's here\" \"n'est\" \"a ' b\"; do echo -n \"$t  ->  \"; echo -n \"$t\" | /usr/bin/python3.14 - <<'PY'\nimport sys\nsys.argv=['x']\nexec(open('/tmp/k3ref/verif_tokenizer.py').read().split(\"if __name__\")[0])\nt=sys.stdin.r … [225 caractères tronqués]`
+
+  ```
+test汉  ->  []
+HelloWorld  ->  []
+hEllo  ->  []
+It's here  ->  []
+n'est  ->  []
+a ' b  ->  []
+  ```
+
+- **bash** `{"command": "cd /tmp/k3ref && cat > morceaux.py <<'PY'\nimport sys\nsrc = open('/tmp/k3ref/verif_tokenizer.py').read().split(\"if __name__\")[0]\nexec(src)\nprint([m.group() for m in PAT.finditer(sys.argv[1])])\nPY\nfor t in \"test汉\" \"HelloWorld\" \"hEllo\" \"It's here\" \"n'est\" \"a ' b\" \"a  b … [157 caractères tronqués]`
+
+  ```
+test汉  ->  ['test', '汉']
+HelloWorld  ->  ['Hello', 'World']
+hEllo  ->  ['h', 'Ello']
+It's here  ->  ["It's", ' here']
+n'est  ->  ['n', "'est"]
+a ' b  ->  ['a', " '", ' b']
+a  b  ->  ['a', ' ', ' b']
+2026  ->  ['202', '6']
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && printf '%s\\x1e' \"test汉\" \"HelloWorld\" \"hEllo\" \"It's here\" \"n'est\" \"a ' b\" \"a  b\" \"2026\" | /tmp/compare_tk.sh 2>&1 | tail -8", "description": "Differential test on the short strings", "timeoutMs": 600000}`
+
+  ```
+identiques : 8 · divergents : 0
+  ```
+
+### 🤖 Assistant
+
+⏵ Le test unitaire a trouvé un vrai défaut : notre découpage par casse échoue sur les mots à casse alternée
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && printf '%s\\x1e' \"HelloWorld\" \"hEllo\" \"iPhone\" \"mRNA\" \"XMLHttpRequest\" \"ABCdef\" \"aB\" | /tmp/compare_tk.sh 2>&1 | tail -14", "description": "Differential test on mixed-case words", "timeoutMs": 600000}`
+
+  ```
+identiques : 7 · divergents : 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cat > /tmp/dbg.rs <<'RS'\nRS\ncargo test --release tests_kimi::les_lettres 2>&1 | grep -A6 \"assertion\" | head -14", "description": "See the actual failing assertion values", "timeoutMs": 300000}`
+
+  ```
+assertion `left == right` failed
+  left: ["HelloWorld"]
+ right: ["Hello", "World"]
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/tokenizer.rs'\ns=open(p).read()\nold_dec = \"\"\"    let mut e = p;\n    while e < cs.len() && lettre(cs[e]) { e += 1; }\n    let mut k = e;\n    while k > p && !minus(cs[k - 1]) { k -= 1; }\n    i … [3397 caractères tronqués]`
+
+  ```
+matchers de casse corrigés
+tests alignés sur le motif officiel
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo test --release 2>&1 | grep -E \"^test result|FAILED\" | head -5; cd .. && printf '%s\\x1e' \"HelloWorld\" \"hEllo\" \"iPhone\" \"mRNA\" \"XMLHttpRequest\" \"ABCdef\" \"aB\" \"test汉\" \"n'est\" \"2026\" \"It's here\"  … [119 caractères tronqués]`
+
+  ```
+identiques : 11 · divergents : 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo test --release 2>&1 | tail -5", "description": "Run the full test suite", "timeoutMs": 900000}`
+
+  ```
+|         ^^^^^^ help: if this is intentional, prefix it with an underscore: `_charge`
+
+For more information about this error, try `rustc --explain E0425`.
+warning: `drave-core` (bin "drave" test) generated 35 warnings
+error: could not compile `drave-core` (bin "drave" test) due to 1 previous error; 35 warnings emitted
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo test --release 2>&1 | grep -B8 \"E0425\" | head -20", "description": "See the full test compile error", "timeoutMs": 600000}`
+
+  ```
+note: attribute also specified here
+    --> src/model.rs:3988:5
+     |
+3988 |     #[inline]
+     |     ^^^^^^^^^
+     = warning: this was previously accepted by the compiler but is being phased out; it will become a hard error in a future release!
+     = note: `#[warn(unused_attributes)]` (part of `#[warn(unused)]`) on by default
+
+error[E0425]: cannot find function `maj` in this scope
+--
+     |             ^^^^^ help: if this is intentional, prefix it with an underscore: `_jeton`
+
+warning: unused variable: `charge`
+    --> src/main.rs:2597:9
+     |
+2597 |     let charge = match mode {
+     |         ^^^^^^ help: if this is intentional, prefix it with an underscore: `_charge`
+
+For more information about this error, try `rustc --explain E0425`.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/^fn match_casse_croissante/,/^}/p' drave-core/src/tokenizer.rs", "description": "Inspect the croissante matcher"}`
+
+  ```
+fn match_casse_croissante(cs: &[char], i: usize, hors_han: bool) -> Option<usize> {
+    let lettre = |c: char| is_letter(c) && !(hors_han && is_han(c));
+    let maj = |c: char| is_majuscule(c) && !(hors_han && is_han(c));
+    let minus = |c: char| is_minuscule(c) && !(hors_han && is_han(c));
+    let mut p = i;
+    if prefixe_possible(cs[i]) && i + 1 < cs.len() && lettre(cs[i + 1]) {
+        p = i + 1;
+    } else if !lettre(cs[i]) {
+        return None;
+    }
+    // `U+` puis `L*` — mêmes règles de contiguïté.
+    let mut u = p;
+    while u < cs.len() && maj(cs[u]) { u += 1; }
+    if u == p { return None; }              // `U+` exige au moins une
+    let mut l = u;
+    while l < cs.len() && minus(cs[l]) { l += 1; }
+    Some(avec_contraction(cs, l))
+}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/tokenizer.rs'\ns=open(p).read()\nold = \"\"\"fn match_casse_decroissante(cs: &[char], i: usize, hors_han: bool) -> Option<usize> {\n    let lettre = |c: char| is_letter(c) && !(hors_han && is_han(c … [661 caractères tronqués]`
+
+  ```
+maj ajouté
+test result: ok. 69 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && O=/home/stephane/Data13TB/stephane/modeles/gguf/gpt-oss-120b-MXFP4.gguf && head -c 20000 data/wikitext2_test.txt > /tmp/wt2_check.txt && ./drave-core/target/release/drave \"$O\" --tokenize --fichier /tmp/wt2_check.txt --sortie /tmp/i … [669 caractères tronqués]`
+
+  ```
+4424 tokens écrits dans /tmp/ids_oss_nouveau.txt (vocabulaire du modèle : 201088)
+réversibilité : texte reconstruit identique ✅ (20000 octets)
+⚠️ identifiants gpt-oss CHANGÉS :
+  anciens 1 · nouveaux 4424
+  positions différentes : 1 sur 1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -c 120 /tmp/ids_oss_512.txt; echo; echo \"---\"; head -c 120 /tmp/ids_oss_nouveau.txt; echo; python3 -c \"\nimport re\na=[int(x) for x in re.findall(r'\\d+', open('/tmp/ids_oss_512.txt').read())]\nb=[int(x) for x in re.findall(r … [460 caractères tronqués]`
+
+  ```
+198
+314
+13169
+418
+9826
+399
+314
+25980
+13169
+418
+9826
+399
+382
+448
+7725
+5586
+1366
+19123
+326
+42149
+19556
+887
+1679
+1458
+261
+1
+---
+198,314,13169,418,9826,399,314,25980,13169,418,9826,399,382,448,7725,5586,1366,19123,326,42149,19556,887,1679,1458,261,1
+anciens 512 · nouveaux 4424
+positions différentes : 0 sur 512 (0.00 %)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && mkdir -p tools/tokenizer_kimi && cp /tmp/k3ref/verif_tokenizer.py tools/tokenizer_kimi/reference_officielle.py && cp /tmp/compare_tk.sh tools/porte-tokenizer-kimi.sh && python3 - <<'PY'\np='tools/porte-tokenizer-kimi.sh'\ns=open(p).r … [1106 caractères tronqués]`
+
+  ```
+harnais copié
+total 2736
+drwxr-xr-x. 1 stephane stephane      74  3 oct 10:42 .
+drwxr-xr-x. 1 stephane stephane    2196  3 oct 10:42 ..
+-rw-r--r--. 1 stephane stephane    1608  3 oct 10:42 reference_officielle.py
+-rw-r--r--. 1 stephane stephane 2795286  3 oct 10:42 tiktoken.model
+identiques : 3 · divergents : 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Deuxième défaut trouvé par un test unitaire : le découpage par casse enjambait les majuscules\n\n« HelloWorld » sortait d'UN morceau (au lieu de « Hello » puis « World ») et\n« hEllo » aussi — la tabl … [680 caractères tronqués]`
