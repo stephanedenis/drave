@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 106.5 h |
+| Durée | 106.6 h |
 | Tours | 79 |
-| Messages | 6236 |
-| Appels d'outils | 5979 |
+| Messages | 6242 |
+| Appels d'outils | 5985 |
 | Fichiers touchés | 117 |
-| Commandes | 5048 |
+| Commandes | 5054 |
 | Sous-agents | 32 |
-| Commits | 391 |
+| Commits | 392 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -4037,7 +4037,7 @@ P0-P6 faites, P8 portée et val
 
 ### Tour 79 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [941 caractères tronqués]
 
-*1239 appels d'outils.* Actions notables :
+*1245 appels d'outils.* Actions notables :
 
 - web_search
 - web_fetch
@@ -4053,7 +4053,7 @@ P0-P6 faites, P8 portée et val
 - bash — Locate hc_collapse_triton definition
 - read
 - bash — Read mHC init and pre/post call sites
-- … et 1107 autres
+- … et 1113 autres
 
 **Synthèse produite :**
 
@@ -4260,7 +4260,7 @@ P0-P6 faites, P8 portée et val
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5008 autres
+- … et 5014 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4799,4 +4799,5 @@ P0-P6 faites, P8 portée et val
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="sprints/19-v41-a-1024-jetons.md" s=open(p).read() a="""## Revue — ce qui est livré, me
 - Sprint 19 : clôture (76 min) — la passe longue est passée, le profil par profondeur est réparé, et 63 tests verts" ; now=$(date +%s); printf "20 %s %s\n" "$now"
 - Docs : le drapeau --ppl-profil n'est plus « inexistant » — l'avertissement de docs/vision.md, le glossaire et le rapport d'audit des drapeaux ignorés sont mis à
+- Cohérence : le rapport d'audit des docs est daté (quatre de ses trouvailles sont corrigées depuis) et le mode du champ n est écrit pour les cinq modes  Le rappo
 

@@ -1,4 +1,26 @@
 # Cohérence des documents avec le code — audit
+> **Relecture du 03/10 (bloc 20) : les trouvailles ci-dessous sont datées.** Ce
+> rapport a été écrit sur un état ANCIEN du code ; plusieurs de ses points sont
+> depuis corrigés, et les laisser tels quels ferait mentir un document durable.
+> Vérifiés et annotés un par un (le reste n'a pas été re-vérifié) :
+>
+> - **n° 17** (le `n` de l'en-tête par mode) : **toujours manquant** dans
+>   `docs/format-flux.md` → corrigé le 03/10 ;
+> - **n° 20** (échappement 255 du mode blocs réseau) : **CORRIGÉ** — l'émetteur
+>   écrit bien `&i.to_le_bytes()[..2]` (`encoder_paires_blocs`) et le récepteur en
+>   lit deux : la désynchronisation annoncée n'existe plus ;
+> - **n° 21** (réglages transportés) : **CORRIGÉ** — la doc liste les 14 champs
+>   (`7 × top-k`, `attn`, `q·k`, `moe`) ;
+> - **n° 22** (plafond R4) : **CORRIGÉ** — `PLAFOND_FLUX = 256 Mo` et
+>   `verifier_taille` gardent chaque allocation pilotée par le réseau, y compris
+>   les 12 octets de taille du mode 4 ;
+> - **n° 24** (le mode 4 n'existe pas) : **CORRIGÉ** — le mode 4 (lot en listes)
+>   existe, est émis par `envoyer_lot_listes` et couvert par
+>   `tools/porte-flux.sh` ;
+> - **n° 23** (règle R1 : un état seul doit partir en mode 0) : **à trancher** —
+>   le pilote envoie un lot même d'un seul état (mode 3), ce que R1 déconseille ;
+>   ce n'est pas une contradiction de format mais une recommandation non suivie.
+
 
 **En une ligne** : **80 affirmations** vérifiées une par une contre le code (et
 contre les traces réelles du disque) ; **38 sont fausses (PÉRIMÉ)**, **15 se

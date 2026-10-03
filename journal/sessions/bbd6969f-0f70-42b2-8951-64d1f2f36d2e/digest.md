@@ -99768,3 +99768,113 @@ quelle fréquence, avec quelle magnitude, couche par couche (`--profil-neurones`
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\n# 1) vision.md : l'avertissement est périmé\np=\"docs/vision.md\"\ns=open(p).read()\na=\"| profil par poste | `--ppl` imprime le temps par poste (projets-attn, rope, attention, proj+mlp, tête). ⚠️ Le drapeau `--ppl- … [2633 caractères tronqués]`
+
+  ```
+ok vision
+ok glossaire
+ok rapport
+be5d2a1 Docs : le drapeau --ppl-profil n'est plus « inexistant » — l'avertissement de docs/vision.md, le glossaire et le rapport d'audit des drapeaux ignorés sont mis à jour
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"14 s/token\\|14 secondes\\|s par jeton\\|s/jeton\\|323,8\\|55 s\" reports/*.md docs/*.md REPRISE.md 2>/dev/null | grep -vi \"sprint\\|journal\" | head -12", "description": "Find stale speed claims"}`
+
+  ```
+reports/rapport-aiguille-topk.md:37:lots est donc actif en inférence, et le chiffre « ~175 ms par jeton de prompt »
+reports/rapport-aiguille-topk.md:265:  62 ms par jeton de prompt, soit ≈20 min par sonde à 16 384.
+reports/rapport-architecture-memoire.md:82:**Cumul : 499 → ~210 ms par jeton** avec les trois premiers, soit **2,4×**. Et
+reports/rapport-architecture-memoire.md:341:| anglais | 5,8 % | 1,155 s | 0,982 s | **+15 %** |
+reports/rapport-coherence-docs.md:71:| 20 | `docs/format-flux.md:30` | échappement 255 → « l'indice ABSOLU sur les **deux octets** suivants » | **faux pour le réseau** : `main.rs:1457` écrit `i.to_le_bytes()` = **4 octets**, alors que le récepteur `main.rs:1618` en lit **2** — toute trame contenant un écart ≥ 255 se désynchronise. Le disque, lui, est correct (model.rs:605,628 : 2 octets) | CONTRADICTOIRE |
+reports/rapport-coherence-docs.md:165:   écart ≥ 255 se désynchronise, et c'est un cas que la doc dit possible.
+reports/rapport-engram-etat.md:115:| **coût de lecture** | **12 665 octets par jeton** (264 octets × 48 rangées) |
+reports/rapport-gpu-topk-selection.md:187:**Le gain n'est pas encore là** : le poste « attention » (ms/jeton, 24 couches,
+reports/
+… [678 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fn encoder_paires_blocs\" -A 30 drave-core/src/main.rs | head -40", "description": "Read the block-pairs encoder"}`
+
+  ```
+2275:fn encoder_paires_blocs(idx: &[u16], val: &[i8]) -> Vec<u8> {
+2276-    let mut paires = Vec::with_capacity(idx.len() * 2);
+2277-    let mut prev = 0u32;
+2278-    for (&i, &v) in idx.iter().zip(val.iter()) {
+2279-        let ecart = i as u32 - prev;
+2280-        if ecart < 255 {
+2281-            paires.push(ecart as u8);
+2282-        } else {
+2283-            paires.push(255);
+2284-            paires.extend_from_slice(&i.to_le_bytes()[..2]);
+2285-        }
+2286-        prev = i as u32;
+2287-        paires.push(v as u8);
+2288-    }
+2289-    paires
+2290-}
+2291-
+2292-/// Décode `n` paires écrites par `encoder_paires_blocs`.
+2293-fn decoder_paires_blocs(corps: &[u8], n: usize) -> Result<(Vec<u16>, Vec<i8>), String> {
+2294-    // `n` vient de l'en-tête : deux `with_capacity(n)` sur 4 milliards de paires
+2295-    // demandaient 12 Gio AVANT de découvrir que le corps était tronqué (mesuré :
+2296-    // VmPeak 12 477 Mio). Le plafond s'applique donc ici aussi.
+2297-    if n.saturating_mul(2) > PLAFOND_FLUX {
+2298-        return Err(format!("{n} paires annoncées : au-delà du plafond de {} Mo",
+2299-                           PLAFOND_FLUX >> 20));
+2300-    }
+2301-    let mut idx = Vec::w
+… [180 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 2310,2345p drave-core/src/main.rs; grep -n \"MODE_LISTE =>\" -A 14 drave-core/src/main.rs | head -30", "description": "Check the mode-1 encoder/decoder consistency"}`
+
+  ```
+let absolu = if d == 255 {
+            if lus + 1 >= corps.len() { return Err("échappement tronqué".into()); }
+            let a = u16::from_le_bytes([corps[lus], corps[lus + 1]]) as u32;
+            lus += 2;
+            a
+        } else { prev + d as u32 };
+        prev = absolu;
+        idx.push(absolu as u16);
+        // La garde doit porter sur CHAQUE lecture, y compris celle de la valeur
+        // juste après un échappement : sans elle, un corps coupé au mauvais octet
+        // paniquait au lieu d'être refusé (attrapé par le test de troncature).
+        if lus >= corps.len() { return Err("valeur manquante en fin de corps".into()); }
+        val.push(corps[lus] as i8); lus += 1;
+    }
+    Ok((idx, val))
+}
+
+/// Envoie un flux et rend le nombre d'octets écrits (en-tête compris) — c'est ce
+/// que la phase 3 doit chiffrer : octets par jeton × latence.
+fn envoyer_flux(s: &mut std::net::TcpStream, debut: u32, fin: u32, pos: u32,
+                actifs: &[f32], mode: u8, mdl: Option<&model::Model>)
+                -> std::io::Result<(usize, usize)> {
+    use std::io::Write;
+    let (n, echelle, corps): (usize, f32, Vec<u8>) = if mode == MODE_BLOCS {
+        let (idx, val, echelles
+… [2446 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 65,75p reports/rapport-coherence-docs.md; sed -n 160,170p reports/rapport-coherence-docs.md", "description": "Read the audit's contradiction item"}`
+
+  ```
+| 14 | `docs/format-flux.md:66` | en-tête « **26 octets** » | `TAILLE_TETE = 79` : 26 (v1) + 13 (niveaux/seuil/top-k/renorm) + 40 (7 top-k de projection + attn + q·k + moe) | PÉRIMÉ |
+| 15 | `reports/rapport-transport-liste.md:9,14,15,196` | en-tête « **39 octets** » | 79 (offsets vérifiés : topk_proj 39..66, attn 67, qk 71, moe 75) | PÉRIMÉ |
+| 16 | `docs/plan-prefill-reparti.md:20,28,78,105,140` | en-tête « **39 octets** », tous les offsets ≤ 38 | 79, avec quatre champs de plus après l'offset 38 | PÉRIMÉ |
+| 17 | `docs/format-flux.md:74` | « `n` : dimension (mode 0) ou **actifs (mode 1)** » | `n` = actifs aussi en mode 2, et **états** en mode 3 (`MODE_LOT`, main.rs:1307-1312) | MANQUANT |
+| 18 | `docs/format-flux.md:86` | mode 2 = `n_blocs u32 · n_blocs × f32 · longueur u32 · paires` | conforme à l'émetteur (main.rs:1446-1466) et au récepteur (1591-1628) | OK |
+| 19 | `docs/format-flux.md:87` | mode 3 = `n × dimension × f32`, `n` = états | conforme (`envoyer_lot`, main.rs:1512-1544) | OK |
+| 20 | `docs/format-flux.md:30` | échappement 255 → « l'indice ABSOLU sur les **deux octets** suivants » | **faux pour le réseau** : `main.rs:1457` écrit `i.to_le_bytes()` = **4 octets**, alors
+… [2055 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"taille du lot\\|Dernier lot\\|mode 3\" drave-core/src/main.rs | sed -n 1,6p; grep -n \"if t > 0 && t < lot\\|\\bn == 1\\b\" drave-core/src/main.rs | head -5; grep -n \"PLAFOND_FLUX\" drave-core/src/main.rs | head -3", "desc … [59 caractères tronqués]`
+
+  ```
+2895:    // listes), tout le reste donne le mode 3 (lot dense f32). Déclaré ici pour
+2152:const PLAFOND_FLUX: usize = 256 << 20;
+2156:    if octets > PLAFOND_FLUX {
+2158:            format!("{quoi} : {octets} octets au-delà du plafond de {} Mo — flux refusé                      (règle R4 de docs/plan-prefill-reparti.md)", PLAFOND_FLUX >> 20)));
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"reports/rapport-coherence-docs.md\"\ns=open(p).read()\n# bandeau daté en tête\na=\"\"\"# \"\"\"\ni=s.index(\"\\n\")\ntitre=s[:i]\nreste=s[i:]\nbanner = \"\"\"\n> **Relecture du 03/10 (bloc 20) : les trouvailles  … [2686 caractères tronqués]`

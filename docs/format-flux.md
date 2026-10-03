@@ -98,7 +98,8 @@ en-tête (79 octets, identique à l'aller et au retour)
           couche_debut u32
           couche_fin   u32
           position     u32
-          n            u32          dimension (mode 0) ou actifs (mode 1)
+          n            u32          dimension (mode 0) · actifs (modes 1 et 2)
+                                     · ÉTATS (modes 3 et 4)
           échelle      f32          mode 1 uniquement
           niveaux      f32          ┐
           seuil        f32          │ le CONTRAT D'ACTIVATION : ces réglages
