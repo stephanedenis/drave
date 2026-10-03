@@ -291,6 +291,29 @@ Un garde-fou le détecte maintenant (identifiant ≥ vocabulaire = erreur franch
 
 ---
 
+## 2bis. La cible a changé (03/10) : Kimi-K3, et le tokenizer kimi
+
+> **Les modèles périmés sortent du chemin critique** (DeepSeek-V4-Flash : acquis
+> conservés, portes archivées) au profit des **meilleurs modèles ouverts**, en
+> particulier ceux qui ne tiennent pas en local. La cible est **Kimi-K3** :
+> 1 508,7 Go en Q4, 93 couches, 896 experts dont **16 par jeton**, 1 M de
+> contexte, attention **hybride** (KDA delta-net 3 couches sur 4 + MLA), MoE
+> **latent**, attention résiduelle inter-couches, SiTU. Détails :
+> `docs/plan-kimi-k3.md` et `docs/architecture-kimi-k3.md`. **Un jeton lit ~35 Go
+> de poids** (2,3 % du modèle) : c'est le sujet.
+>
+> **Deux défauts silencieux corrigés avant même de faire tourner le modèle**
+> (`tools/porte-tokenizer-kimi.sh`, référence officielle en pur Python) :
+> le motif `kimi` n'était pas implémenté (nos identifiants divergeaient sur les
+> chiffres et le chinois — **Kimi-K2.7 était touché aussi**), et le découpage par
+> casse enjambait les majuscules (« HelloWorld » d'un morceau). 11 textes sur 11
+> identiques à l'officiel, 69 tests verts, gpt-oss inchangé.
+>
+> **Référence exécutable** : `llama.cpp` amont connaît `kimi-k3` — une seconde
+> copie est construite (`llama.cpp-k3/`) et `tools/ref_logits_k3` est lié contre
+> elle. La porte de correction est donc **possible** sur cette classe, ce qui
+> n'était pas le cas pour V4.1.
+
 ## 3. Ce qui est implémenté et vérifié
 
 | domaine | état |

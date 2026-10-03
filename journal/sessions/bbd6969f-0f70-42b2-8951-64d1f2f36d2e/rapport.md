@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 115.9 h |
 | Tours | 90 |
-| Messages | 6910 |
-| Appels d'outils | 6609 |
+| Messages | 6912 |
+| Appels d'outils | 6611 |
 | Fichiers touchés | 135 |
-| Commandes | 5585 |
+| Commandes | 5587 |
 | Sous-agents | 32 |
-| Commits | 447 |
+| Commits | 448 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -4475,7 +4475,7 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 
 ### Tour 90 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [942 caractères tronqués]
 
-*171 appels d'outils.* Actions notables :
+*173 appels d'outils.* Actions notables :
 
 - bash — Check the gate suite result
 - bash — Wait for the gates
@@ -4491,7 +4491,7 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 - bash — Find the plan's remaining items
 - bash — Extract each phase's gate claims
 - read
-- … et 153 autres
+- … et 155 autres
 
 **Synthèse produite :**
 
@@ -4716,7 +4716,7 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5545 autres
+- … et 5547 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5311,4 +5311,5 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 - --config et --tokenize répondent sur un modèle EN COURS de téléchargement (et le disent)  Sans ce chemin, il fallait attendre la fin d'un transfert de plusieurs
 - Défaut SILENCIEUX corrigé : le motif de pré-découpage kimi manquait (Kimi-K2.7 ET Kimi-K3)  Notre tokenizer retombait sur le motif qwen2 pour tout ce qui n'étai
 - Deuxième défaut trouvé par un test unitaire : le découpage par casse enjambait les majuscules  « HelloWorld » sortait d'UN morceau (au lieu de « Hello » puis « 
+- Docs : la cible Kimi-K3, les deux défauts de tokenizer corrigés, et la référence llama.cpp-k3" && git log --oneline -1
 

@@ -71,6 +71,39 @@ deux portes disponibles **en même temps**.
    déquantification AVX2 **bit-exacte** (Q2_K ×1,33), produit scalaire vectorisé
    (**×1,18** sur la passe, écart **dit** : +0,15 % de perplexité).
 
+## 3bis. Le tokenizer est déjà vérifié — et il a trouvé DEUX défauts
+
+Le tokenizer vit dans le shard 1 (déjà téléchargé) et la référence officielle est
+en Python : la vérification a donc pu se faire **avant** la fin du transfert.
+
+`tools/tokenizer_kimi/reference_officielle.py` est la réimplémentation du
+tokenizer **officiel** (le `pat_str` de `tokenization_kimi.py` + les rangs
+`tiktoken.model` du dépôt, avec le module `regex` de python3.14) ;
+`tools/porte-tokenizer-kimi.sh` compare ses identifiants aux nôtres.
+
+Deux défauts trouvés, tous les deux **silencieux** :
+
+1. **Le motif de pré-découpage `kimi` n'était pas implémenté.** Notre tokenizer
+   retombait sur le motif qwen2 pour tout ce qui n'était ni qwen2 ni gpt-4o —
+   donc pour `tokenizer.ggml.pre = kimi-k2`, que déclarent **Kimi-K2.7 (déjà dans
+   le dépôt) et Kimi-K3**. Conséquence mesurée : « 2026 » sortait en UN jeton au
+   lieu de « 202 » + « 6 », et le texte chinois divergeait. Le motif a été
+   transcrit de la référence (`llama.cpp-k3`, `unicode_regex_split_custom_kimi_k2`) :
+   idéogrammes Han, lettres coupées par casse **en excluant les Han**, nombres par
+   trois, contractions en suffixe.
+2. **Le découpage par casse enjambait les majuscules** : « HelloWorld » sortait
+   d'un seul morceau au lieu de « Hello » puis « World ». Ce défaut-là **ne se
+   voyait pas dans les identifiants** (la table de fusions n'a pas de fusion
+   « oW », donc le résultat tombait juste par chance) — il a été trouvé par un
+   **test unitaire**, puis confirmé contre le motif officiel. Corrigé pour les
+   deux matchers (kimi **et** gpt-4o).
+
+**État** : 11 textes sur 11 donnent des identifiants identiques à
+l'implémentation officielle (français accentué, anglais, code, chiffres, chinois,
+casse alternée, espaces) ; 69 tests unitaires verts ; et les 512 identifiants
+gpt-oss de la référence publiée (15,6017) sont **inchangés** — la
+non-régression est mesurée, pas espérée.
+
 ## 4. Jalons
 
 | # | jalon | état |

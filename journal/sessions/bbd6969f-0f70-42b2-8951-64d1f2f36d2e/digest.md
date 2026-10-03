@@ -110007,3 +110007,22 @@ identiques : 3 · divergents : 0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Deuxième défaut trouvé par un test unitaire : le découpage par casse enjambait les majuscules\n\n« HelloWorld » sortait d'UN morceau (au lieu de « Hello » puis « World ») et\n« hEllo » aussi — la tabl … [680 caractères tronqués]`
+
+  ```
+8f73c6d Deuxième défaut trouvé par un test unitaire : le découpage par casse enjambait les majuscules
+10:42:34    42.1 Go / 49.1 Go (85.8 %, 114 Mo/s)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -3 /tmp/dl_k3.log; date +%H:%M:%S; ls /home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/*.gguf 2>/dev/null | wc -l; du -sh /home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/ 2>/dev/null; pgrep -f te … [141 caractères tronqués]`
+
+  ```
+10:42:04    38.1 Go / 49.1 Go (77.6 %, 112 Mo/s)
+10:42:34    42.1 Go / 49.1 Go (85.8 %, 114 Mo/s)
+10:43:04    45.2 Go / 49.1 Go (92.1 %, 113 Mo/s)
+10:43:11
+6
+225G	/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/
+téléchargement actif
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/plan-kimi-k3.md'\ns=open(p).read()\nold = \"\"\"## 4. Jalons\"\"\"\nnew = \"\"\"## 3bis. Le tokenizer est déjà vérifié — et il a trouvé DEUX défauts\n\nLe tokenizer vit dans le shard 1 (déjà téléchargé) et l … [3875 caractères tronqués]`
