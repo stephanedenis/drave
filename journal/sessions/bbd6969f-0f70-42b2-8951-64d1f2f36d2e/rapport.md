@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 117.3 h |
-| Tours | 94 |
-| Messages | 7040 |
-| Appels d'outils | 6726 |
+| Durée | 117.4 h |
+| Tours | 95 |
+| Messages | 7047 |
+| Appels d'outils | 6731 |
 | Fichiers touchés | 145 |
-| Commandes | 5692 |
+| Commandes | 5697 |
 | Sous-agents | 32 |
-| Commits | 467 |
+| Commits | 468 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -233,6 +233,8 @@
 **Tour 93** — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas en local (classe Kimi-K3 Q4 : 1,5 To de poids, ~35 Go de poids par jeton), et étudier/implémenter ce qui nous distingue sur cette classe : découpage par experts et en grappes (chaque nœud ne lit que ce qu'il sert), réutilisation des experts entre jetons, transport de flux compact  … [966 caractères tronqués]
 
 **Tour 94** — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas en local (classe Kimi-K3 Q4 : 1,5 To de poids, ~35 Go de poids par jeton), et étudier/implémenter ce qui nous distingue sur cette classe : découpage par experts et en grappes (chaque nœud ne lit que ce qu'il sert), réutilisation des experts entre jetons, transport de flux compact  … [966 caractères tronqués]
+
+**Tour 95** — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas en local (classe Kimi-K3 Q4 : 1,5 To de poids, ~35 Go de poids par jeton), et étudier/implémenter ce qui nous distingue sur cette classe : découpage par experts et en grappes (chaque nœud ne lit que ce qu'il sert), réutilisation des experts entre jetons, transport de flux compact  … [966 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -4680,7 +4682,37 @@ Deux choses valent d'être soulignées :
 
 **Synthèse produite :**
 
-⏵ Contrôle croisé des maths K3 contre le code OFFICIEL de Moonshot (pas ma transcription)
+⏵ Bloc 31 : les maths de K3 recroisées avec le code publié de Moonshot — identiques, détail par détail
+
+**Le contrôle le plus utile de ce bloc, et il ne coûte rien** : mes formules venaient de `llama.cpp-k3` (une transcription). Je les ai recroisées avec le **code de Moonshot** (`modeling_kimi_linear.py`, celui que le dépôt officiel publie) :
+
+| pièce | code publié | le nôtre |
+|---|---|---|
+| **SiTU** | `beta·tanh(gate/beta)·sigmoid(gate) · up`, avec `up = linear_beta·tanh(up/linear_beta)` | **identique** |
+| **attention résiduelle** | `v = cat(block_residual, prefix_sum)` ; `k = v·rsqrt(mean(v²)+eps)` ; `scores = (k·score_weight).sum(-1)` ; `probs = softmax` ; **`sortie = probs @ v`** (les valeurs **brutes**) | **identique** — y compris le piège que j'avais signalé |
+| **projections du KDA** | `q/k_proj → 128×96`, `v_proj → head_dim×num_heads`, `f_a → head_dim`, `f_b`, `dt_bias`, `b_proj → num_heads`, **`g_proj` plein rang**, `o_norm = RMSNormGated(sigmoid)` | **correspondance nom par nom** avec les tenseurs du fichier |
+| **convolution courte** | `ShortConvolution(kernel=4, activation='silu')` sur q, k, v | **identique** |
+| **porte** | `safe_gate=True`, `lower_bound=-5`, `beta sigmoïde` | **identique** |
+
+**Ce que le code publié ne donne pas, et c'est écrit** : la **récurrence** elle-même — elle est dans des noyaux externes (`chunk_kda`, `fused_recurrent_kda`) non livrés avec le modèle. La seule implémentation lisible reste celle de llama.cpp, et c'est celle que j'ai transcrite puis vérifiée contre une référence NumPy en f64 (état *et* sortie). Le croisement porte donc sur les formes et les sémantiques, pas sur l'algèbre — et cette limite est dans la spec plutôt que sous le tapis.
+
+**État du dépôt** : 77 tests verts, tout commité, portes vertes. L'inventaire des tenseurs (bloc précédent) tourne sur le fichier : 49 couches vues, **1 dense · 36 KDA · 12 MLA**, cadence `il % 4 == 3` confirmée sans un seul écart, et les 12 tenseurs manquants sont attribués au shard en cours.
+
+**Téléchargement** : ~750 Go / 1 508 (50 %, 110 Mo/s) → **fin vers 14h40**. Dès qu'il tombe, la séquence est prête : complétude des 32 shards, `--config` (les manques exacts), porte du tokenizer, budget **mesuré** (les 88,5 Go/jeton cesseront d'être une extrapolation), baseline `llama.cpp-k3` — puis la couche 0 comparée tenseur par tenseur, avec les 13 points de comparaison déjà écrits.
+
+### Tour 95 — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas e … [1246 caractères tronqués]
+
+*5 appels d'outils.* Actions notables :
+
+- bash — Find the RMSNorm and activation-quantization helpers
+- bash — Locate the norm and quantization helpers
+- bash — Read the Q8 matvec pattern in the engine
+- bash — Implement the K3 layer-0 forward
+- bash — Fix the conv double-call bug and commit
+
+**Synthèse produite :**
+
+⏵ J'écris la passe avant de la couche 0 de K3 — d'abord les deux helpers du moteur dont elle dépend
 
 ## 3. Travail accompli
 
@@ -4911,7 +4943,7 @@ Deux choses valent d'être soulignées :
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5652 autres
+- … et 5657 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5526,4 +5558,5 @@ Deux choses valent d'être soulignées :
 - Spec Kimi-K3 : notes d'exécution (poids empruntés, activations quantifiées, tailles d'état, ordre exact de la couche 0)" && git log --oneline -1
 - Journal (màj automatique)" 2>/dev/null; echo "état propre : $(git status --short | wc -l) fichier(s) modifié(s)"
 - Croisement des maths K3 avec le code PUBLIÉ de Moonshot : SiTU, attention résiduelle, projections, convolution, porte bornée — identiques  Le code officiel (mod
+- K3 : la passe avant de la couche 0 (f32) — structure d'abord, exactitude ensuite  Déquantifiée en f32 (~1,4 Go pour la couche 0, qui est dense), elle suit l'ord
 

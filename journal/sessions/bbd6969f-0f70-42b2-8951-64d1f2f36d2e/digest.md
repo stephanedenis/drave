@@ -112109,3 +112109,92 @@ class KimiDeltaAttention(nn.Module):
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/architecture-kimi-k3.md'\ns=open(p).read()\ns=s.replace(\"\"\"## 5. Ce que notre moteur a déjà, et ce qui manque\"\"\",\n\"\"\"## 4quater. Croisement avec le code PUBLIÉ (et ce qu'il confirme)\n\nLes maths c … [2668 caractères tronqués]`
+
+  ```
+croisement consigné
+20e4057 Croisement des maths K3 avec le code PUBLIÉ de Moonshot : SiTU, attention résiduelle, projections, convolution, porte bornée — identiques
+12:05:45    38.4 Go / 49.0 Go (78.3 %, 113 Mo/s)
+  ```
+
+### 🤖 Assistant
+
+⏵ Bloc 31 : les maths de K3 recroisées avec le code publié de Moonshot — identiques, détail par détail
+
+**Le contrôle le plus utile de ce bloc, et il ne coûte rien** : mes formules venaient de `llama.cpp-k3` (une transcription). Je les ai recroisées avec le **code de Moonshot** (`modeling_kimi_linear.py`, celui que le dépôt officiel publie) :
+
+| pièce | code publié | le nôtre |
+|---|---|---|
+| **SiTU** | `beta·tanh(gate/beta)·sigmoid(gate) · up`, avec `up = linear_beta·tanh(up/linear_beta)` | **identique** |
+| **attention résiduelle** | `v = cat(block_residual, prefix_sum)` ; `k = v·rsqrt(mean(v²)+eps)` ; `scores = (k·score_weight).sum(-1)` ; `probs = softmax` ; **`sortie = probs @ v`** (les valeurs **brutes**) | **identique** — y compris le piège que j'avais signalé |
+| **projections du KDA** | `q/k_proj → 128×96`, `v_proj → head_dim×num_heads`, `f_a → head_dim`, `f_b`, `dt_bias`, `b_proj → num_heads`, **`g_proj` plein rang**, `o_norm = RMSNormGated(sigmoid)` | **correspondance nom par nom** avec les tenseurs du fichier |
+| **convolution courte** | `ShortConvolution(kernel=4, activation='silu')` sur q, k, v | **identique** |
+| **porte** | `safe_gate=True`, `lower_bound=-5`, `beta sigmoïde` | **identique** |
+
+**Ce que le code publié ne donne pas, et c'est écrit** : la **récurrence** elle-même — elle est dans des noyaux externes (`chunk_kda`, `fused_recurrent_kda`) non livrés avec le modèle. La seule implémentation lisible reste celle de llama.cpp, et c'est celle que j'ai transcrite puis vérifiée contre une référence NumPy en f64 (état *et* sortie). Le croisement porte donc sur les formes et les sémantiques, pas sur l'algèbre — et cette limite est dans la spec plutôt que sous le tapis.
+
+**État du dépôt** : 77 tests verts, tout commité, portes vertes. L'inventaire des tenseurs (bloc précédent) tourne sur le fichier : 49 couches vues, **1 dense · 36 KDA · 12 MLA**, cadence `il % 4 == 3` confirmée sans un seul écart, et les 12 tenseurs manquants sont attribués au shard en cours.
+
+**Téléchargement** : ~750 Go / 1 508 (50 %, 110 Mo/s) → **fin vers 14h40**. Dès qu'il tombe, la séquence est prête : complétude des 32 shards, `--config` (les manques exacts), porte du tokenizer, budget **mesuré** (les 88,5 Go/jeton cesseront d'être une extrapolation), baseline `llama.cpp-k3` — puis la couche 0 comparée tenseur par tenseur, avec les 13 points de comparaison déjà écrits.
+
+
+## Tour 95
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas en local (classe Kimi-K3 Q4 : 1,5 To de poids, ~35 Go de poids par jeton), et étudier/implémenter ce qui nous distingue sur cette classe : découpage par experts et en grappes (chaque nœud ne lit que ce qu'il sert), réutilisation des experts entre jetons, transport de flux compact (listes DRVF), noyaux rapides (SIMD, déquantification bit-exacte), et mesure systématique (octets par jeton, débits, seuils). Les modèles périmés (DeepSeek-V4-Flash) sortent du chemin critique : leurs acquis sont conservés dans les rapports, leurs portes archivées. Règles inchangées : jamais de forward muet, jamais d'optimisation qui change une sortie sans le dire, une affirmation sans mesure n'est pas une affirmation."
+Round: 21/30
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ J'écris la passe avant de la couche 0 de K3 — d'abord les deux helpers du moteur dont elle dépend
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"pub fn rms_norm\\b\" -A 3 drave-core/src/model.rs | head -8; grep -n \"fn quantifier_vers_i8\\|fn q8_act\\|xq: &mut \\[i32\\]\\|fn quantifie\" drave-core/src/model.rs | head -6; grep -n \"dot_q8_source\" drave-core/src/mode … [87 caractères tronqués]`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fn rms_norm\" drave-core/src/model.rs | head -5; grep -n \"fn quantif\" drave-core/src/*.rs | head -8; grep -rn \"dot_q8_source\" drave-core/src/*.rs | head -5", "description": "Locate the norm and quantization helpers"}`
+
+  ```
+1777:fn rms_norm_sans_poids(x: &[f32], eps: f32, out: &mut [f32]) {
+drave-core/src/engine.rs:507:                                            crate::list::Source8::Q8_0 => d.dot_q8_source(o, xi),
+drave-core/src/engine.rs:569:                                crate::list::Source8::Q8_0 => d.dot_q8_source(o, xv) * sx,
+drave-core/src/list.rs:448:    pub fn dot_q8_source(&self, o: usize, x: &[i32]) -> f32 {
+drave-core/src/main.rs:4078:                    *o = dref.dot_q8_source(base + j, xiref);
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '540,575p' drave-core/src/engine.rs", "description": "Read the Q8 matvec pattern in the engine"}`
+
+  ```
+// Mode dense : chaque worker calcule une tranche
+                        // contiguë de sorties, sans dispersion ni réduction.
+                        let d = unsafe { &*sh.dense.load(Ordering::Acquire) };
+                        let xv = unsafe { std::slice::from_raw_parts(
+                            sh.xv.load(Ordering::Acquire), d.n_in) };
+                        let sx = f32::from_bits(sh.sx.load(Ordering::Relaxed) as u32);
+                        let outs = unsafe { &mut *sh.outs.load(Ordering::Acquire) };
+                        let per = (d.n_out + n - 1) / n;
+                        let lo = id * per;
+                        let hi = (lo + per).min(d.n_out);
+                        let dst = &mut outs[id];
+                        if dst.len() < d.n_out { dst.resize(d.n_out, 0.0); }
+                        // Hors de sa tranche, ce worker doit laisser des ZÉROS :
+                        // `matvec_dense_i8` somme les vecteurs de TOUS les
+                        // workers, et une case non écrite garderait la valeur du
+                        // travail précédent (bug mesuré : PPL 4 361 879 au lieu de
+                        // 19,26 — chaque sortie recevait n-1 restes péri
+… [1319 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> drave-core/src/kimi_k3.rs <<'RS'\n\n// ===========================================================================\n// La couche 0 : la passe avant, en f32, pour vérifier la STRUCTURE d'abord.\n//\n// Les poids sont déquantifi … [10343 caractères tronqués]`
+
+  ```
+--- fin ---
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/kimi_k3.rs'\ns=open(p).read()\nold = \"\"\"        crate::model::kda_conv_silu(&q, &self.conv_q, &mut self.etat_conv_q, self.d_conv, d_inner, &mut q.clone());\n        // (le clone évite un emprunt … [3500 caractères tronqués]`
