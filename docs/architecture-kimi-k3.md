@@ -50,6 +50,23 @@
 | `blk.N.attn_res_score` / `ffn_res_score` | [7168] | F32 | **score de l'attention résiduelle** |
 | `output_res_score.weight` | [7168] | F32 | idem, au niveau de la tête |
 
+### La cadence hybride, vérifiée SUR LE FICHIER
+
+Les 16 premières couches (7 shards déjà téléchargés) le confirment :
+
+| couches | type | tenseurs |
+|---|---|---|
+| **3, 7, 11, 15** (`il % 4 == 3`) | **MLA** | 9 tenseurs `attn_*`, **aucun** `ssm_*` |
+| toutes les autres | **KDA** | 10 tenseurs `ssm_*` + 4 `attn_*` |
+| **toutes** | — | **2** `res_score` (`attn_res_score`, `ffn_res_score`) |
+| couche 0 | **dense** | **0** tenseur `*_exps` (`leading_dense_block_count = 1`) |
+
+Le fichier encode la règle dans `attention.head_count_kv`, qui vaut **1 sur les
+couches 3, 7, 11…** et **0 ailleurs** : une couche « récurrente » n'a pas de tête
+KV. (Le `config.json` publie la même liste en **base 1** : `full_attn_layers =
+[4, 8, 12, …]` — le décalage d'un cran est une source d'erreur classique.)
+La règle d'implémentation est donc : `est_mla(il) = head_count_kv[il] > 0`.
+
 ## 2. La boucle d'une couche (d'après la référence)
 
 ```
@@ -115,11 +132,37 @@ porte `ssm_g` et la normalisation `ssm_o_norm` en sortie.
 porte de sortie `attn_gate`. C'est la même famille que les MLA de V4/V4.1, dont
 nous avons déjà les briques.
 
+**MLA (détail des projections, pour l'implémentation)** — lu dans la référence,
+c'est du MLA à absorption, très proche du nôtre (V4/V4.1) :
+
+```
+Q  = wq_b( rms_norm( wq_a(x), attn_q_a_norm ) )        # 7168 → 1536 → 96×192
+kv = wkv_a_mqa(x)                                      # 7168 → 512 + 64
+kv_cmpr = rms_norm( kv[:512], attn_kv_a_norm )         # le latent
+k_pe    = kv[512:576]                                  # 64 canaux… SANS RoPE
+q_nope  = wk_b( q[:128] )  (absorbé dans le latent)    # 128 → 512 par tête
+Q = concat(q_nope_absorbé, q_pe)   # 576 par tête  ✓ key_length 576
+K = concat(kv_cmpr, k_pe)          # 576
+V = kv_cmpr                        # 512 latent
+sortie = attn_gate(x_normé) ⊗ wv_b(attn) puis wo       # value_length_mla 128
+```
+
+`mla_use_nope` est **vérifié à la conversion** : la partie `pe` est portée et
+concaténée, mais **aucune rotation n'est appliquée**. La porte de sortie lit
+l'entrée de couche **normalisée** (`inp_gate = cur` avant la première projection).
+
 **MoE latent** — les experts travaillent dans un **latent de 3 584** (et non
 7 168) : `ffn_routed_down` (7168→3584), les 896 experts (`gate/up/down`, 3 072 de
 largeur, **MXFP4**), `ffn_routed_up` (3584→7168), normalisation `ffn_routed_norm`,
 plus 2 experts partagés en 7 168. Routage : 896 experts, **16 par jeton**, un seul
-groupe, gating fonction 2, poids normalisés.
+groupe, gating fonction 2, poids normalisés. **Le routeur note l'entrée PLEINE
+largeur** (`cur`) pendant que les experts consomment le latent — un détail qui
+change le résultat si on le rate.
+
+**Et un dernier `res_mix` après la couche 92** (`output_res_score`) : la pile de
+points de contrôle est mélangée **une fois de plus** avant la normalisation
+finale et la tête. La pile ne sert donc pas qu'aux couches : elle alimente la
+sortie.
 
 **SiTU (activation)** : `situ(g,u) = 4·tanh(g/4)·sigmoid(g) · 25·tanh(u/25)`.
 

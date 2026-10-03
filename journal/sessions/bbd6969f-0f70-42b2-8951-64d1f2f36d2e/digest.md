@@ -110026,3 +110026,116 @@ téléchargement actif
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/plan-kimi-k3.md'\ns=open(p).read()\nold = \"\"\"## 4. Jalons\"\"\"\nnew = \"\"\"## 3bis. Le tokenizer est déjà vérifié — et il a trouvé DEUX défauts\n\nLe tokenizer vit dans le shard 1 (déjà téléchargé) et l … [3875 caractères tronqués]`
+
+  ```
+plan-kimi-k3 : section tokenizer ajoutée
+REPRISE : cible + tokenizer
+0d8cb93 Docs : la cible Kimi-K3, les deux défauts de tokenizer corrigés, et la référence llama.cpp-k3
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification de la cadence hybride sur le fichier lui-même (KDA vs MLA par couche)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 python3 - <<'PY'\nimport sys, glob\nsys.path.insert(0,'tools')\nimport analyse_octets_par_jeton as A\nfichiers = sorted(glob.glob('/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/*.gguf'))\ncouches = {}\n … [1014 caractères tronqués]`
+
+  ```
+(Kimi-K3-UD-Q4_K_XL-00007-of-00032.gguf : /home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00007-of-00032.gguf : ce n'est pas un GGUF (b'\x00\x00\x00\x00'))
+16 couches vues dans 7 shards
+
+ couche       type  ssm  mla  res  exps
+      0        KDA   10    4    2     0
+      1        KDA   10    4    2     3
+      2        KDA   10    4    2     3
+      3        MLA    0    9    2     3
+      4        KDA   10    4    2     3
+      5        KDA   10    4    2     3
+      6        KDA   10    4    2     3
+      7        MLA    0    9    2     3
+      8        KDA   10    4    2     3
+      9        KDA   10    4    2     3
+     10        KDA   10    4    2     3
+     11        MLA    0    9    2     3
+     12        KDA   10    4    2     3
+     13        KDA   10    4    2     3
+     14        KDA   10    4    2     3
+     15        MLA    0    9    2     2
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/architecture-kimi-k3.md'\ns=open(p).read()\nold = \"\"\"## 2. La boucle d'une couche (d'après la référence)\"\"\"\nnew = \"\"\"### La cadence hybride, vérifiée SUR LE FICHIER\n\nLes 16 premières couches (7 s … [1194 caractères tronqués]`
+
+  ```
+spec : cadence mesurée ajoutée
+ggml_tensor * llama_model_kimi_k3::graph::build_mla_layer(
+        ggml_tensor * cur, const llama_layer & layer,
+        llm_graph_input_attn_k * inp_attn_k, llm_graph_input_attn_kv * inp_attn_kv,
+        int64_t n_embd_head_k_mla, int64_t n_embd_head_v_mla, int64_t kv_lora_rank,
+        int64_t n_embd_head_qk_rope, int64_t n_embd_head_qk_nope, float kq_scale, int il) {
+
+    ggml_tensor * inp_gate = cur; // the output gate reads the *normed* layer input
+
+    ggml_tensor * Qcur;
+    if (layer.wq_a) {
+        Qcur = ggml_mul_mat(ctx0, layer.wq_a, cur);
+        Qcur = build_norm(Qcur, layer.attn_q_a_norm, nullptr, LLM_NORM_RMS, il);
+        Qcur = ggml_mul_mat(ctx0, layer.wq_b, Qcur);
+    } else {
+        Qcur = ggml_mul_mat(ctx0, layer.wq, cur);
+    }
+
+    ggml_tensor * kv_cmpr_pe = ggml_mul_mat(ctx0, layer.wkv_a_mqa, cur);
+
+    ggml_tensor * kv_cmpr = ggml_view_2d(ctx0, kv_cmpr_pe, kv_lora_rank, n_tokens,
+        ggml_row_size(kv_cmpr_pe->type, kv_lora_rank + n_embd_head_qk_rope), 0);
+    ggml_tensor * k_pe = ggml_view_3d(ctx0, kv_cmpr_pe, n_embd_head_qk_rope, 1, n_tokens,
+        ggml_row_size(kv_cmpr_pe->type, kv_lora_rank + n_embd_head_qk_rope),
+   
+… [1764 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp-k3 && sed -n '/ggml_tensor \\* llama_model_kimi_k3::graph::build_latent_moe/,/^}/p' src/models/kimi_k3.cpp 2>/dev/null | head -10; sed -n '/build_latent_moe/,/^}/p' src/models/kimi-k3.cpp | sed -n '1,40p'", "description": "Read the la … [25 caractères tronqués]`
+
+  ```
+cur = build_latent_moe(cur, layer, n_embd_latent, il);
+        }
+
+        prefix_sum = ggml_add(ctx0, prefix_sum, cur);
+        prefix_sum = build_cvec(prefix_sum, il);
+        cb(prefix_sum, "l_out", il);
+
+        inpL = prefix_sum;
+    }
+
+    cur = inpL;
+
+    // final mix, then narrow to the output tokens
+    if (use_attn_res) {
+        cur = res_mix(cur, model.output_res_score, n_tokens, -1);
+    }
+    if (inp_out_ids) {
+        cur = ggml_get_rows(ctx0, cur, inp_out_ids);
+    }
+
+    cur = build_norm(cur, model.output_norm, NULL, LLM_NORM_RMS, -1);
+    cb(cur, "result_norm", -1);
+    res->t_embd = cur;
+
+    cur = ggml_mul_mat(ctx0, model.output, cur);
+    cb(cur, "result_output", -1);
+    res->t_logits = cur;
+
+    ggml_build_forward_expand(gf, cur);
+}
+ggml_tensor * llama_model_kimi_k3::graph::build_latent_moe(
+        ggml_tensor * cur, const llama_layer & layer, int64_t n_embd_latent, int il) {
+
+    ggml_tensor * identity = cur;
+
+    ggml_tensor * routed_in = layer.ffn_routed_down
+        ? ggml_mul_mat(ctx0, layer.ffn_routed_down, cur)
+        : cur;
+
+    // the router scores the full-width input while the experts take the latent one,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/architecture-kimi-k3.md'\ns=open(p).read()\nold = \"\"\"**MoE latent** — les experts travaillent dans un **latent de 3 584** (et non\n7 168) : `ffn_routed_down` (7168→3584), les 896 experts (`gate/up/down`,  … [2463 caractères tronqués]`

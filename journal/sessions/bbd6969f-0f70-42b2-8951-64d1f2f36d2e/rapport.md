@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 115.9 h |
+| Durée | 116.0 h |
 | Tours | 90 |
-| Messages | 6912 |
-| Appels d'outils | 6611 |
+| Messages | 6916 |
+| Appels d'outils | 6615 |
 | Fichiers touchés | 135 |
-| Commandes | 5587 |
+| Commandes | 5591 |
 | Sous-agents | 32 |
-| Commits | 448 |
+| Commits | 449 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -4475,7 +4475,7 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 
 ### Tour 90 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [942 caractères tronqués]
 
-*173 appels d'outils.* Actions notables :
+*177 appels d'outils.* Actions notables :
 
 - bash — Check the gate suite result
 - bash — Wait for the gates
@@ -4491,11 +4491,11 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 - bash — Find the plan's remaining items
 - bash — Extract each phase's gate claims
 - read
-- … et 155 autres
+- … et 159 autres
 
 **Synthèse produite :**
 
-⏵ Le test unitaire a trouvé un vrai défaut : notre découpage par casse échoue sur les mots à casse alternée
+⏵ Vérification de la cadence hybride sur le fichier lui-même (KDA vs MLA par couche)
 
 ## 3. Travail accompli
 
@@ -4716,7 +4716,7 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5547 autres
+- … et 5551 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5312,4 +5312,5 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 - Défaut SILENCIEUX corrigé : le motif de pré-découpage kimi manquait (Kimi-K2.7 ET Kimi-K3)  Notre tokenizer retombait sur le motif qwen2 pour tout ce qui n'étai
 - Deuxième défaut trouvé par un test unitaire : le découpage par casse enjambait les majuscules  « HelloWorld » sortait d'UN morceau (au lieu de « Hello » puis « 
 - Docs : la cible Kimi-K3, les deux défauts de tokenizer corrigés, et la référence llama.cpp-k3" && git log --oneline -1
+- Spec Kimi-K3 : cadence hybride VÉRIFIÉE sur le fichier (MLA aux couches 3,7,11,15), détail des projections MLA, MoE latent (routeur en pleine largeur) et res_mi
 
