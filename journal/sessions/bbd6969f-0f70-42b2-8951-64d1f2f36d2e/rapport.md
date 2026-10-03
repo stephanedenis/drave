@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 115.0 h |
 | Tours | 90 |
-| Messages | 6783 |
-| Appels d'outils | 6485 |
-| Fichiers touchés | 131 |
-| Commandes | 5470 |
+| Messages | 6786 |
+| Appels d'outils | 6488 |
+| Fichiers touchés | 132 |
+| Commandes | 5472 |
 | Sous-agents | 32 |
-| Commits | 434 |
+| Commits | 435 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -4473,7 +4473,7 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 
 ### Tour 90 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [942 caractères tronqués]
 
-*47 appels d'outils.* Actions notables :
+*50 appels d'outils.* Actions notables :
 
 - bash — Check the gate suite result
 - bash — Wait for the gates
@@ -4489,11 +4489,11 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 - bash — Find the plan's remaining items
 - bash — Extract each phase's gate claims
 - read
-- … et 30 autres
+- … et 33 autres
 
 **Synthèse produite :**
 
-⏵ Porte P1 : mesure réelle des 24 poids de connexion sur V4-Flash
+⏵ Audit des deux portes, phase par phase (P0→P9) — la exigence centrale de l'objectif
 
 ## 3. Travail accompli
 
@@ -4632,6 +4632,7 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/26-la-porte-a-512-et-la-granularite-qui-route.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/analyse_hc.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-hc-permutation.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-portes-p0-p9.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -4710,7 +4711,7 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5430 autres
+- … et 5432 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4838,7 +4839,7 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 
 ## 5. Erreurs rencontrées
 
-329 sorties en erreur ou divergentes. Les premières :
+330 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -5292,4 +5293,5 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 - Porte Drave de P1 enfin outillée : les 24 poids de connexion hc sont écrits, relus et jugés  Ils étaient calculés puis JETÉS — un forward muet, et la porte de P
 - analyse_hc.py : le test synthétique a trouvé une faute d'axe (sommer les positions au lieu des colonnes) — corrigé, et les deux cas sont vérifiés (bistochastiqu
 - Porte Drave de P1 TENUE : mesurée, et elle révèle une structure — les 16 connexions de V4-Flash sont une PERMUTATION  Le Sinkhorn tient sa promesse sur l'axe qu
+- Audit : les deux portes, phase par phase (P0 à P9) — ce qui est tenu, ce qui est impossible et nommé, ce qui reste à la demande  Tableau vérifiable : P0-P6 et P
 
