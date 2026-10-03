@@ -104,6 +104,25 @@ cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo build --r
 >
 > Sprint : [`sprints/13-les-deux-enigmes-du-decoupage-v41.md`](sprints/13-les-deux-enigmes-du-decoupage-v41.md).
 >
+> **Mise à jour du 02/10 (21h35) — l'engram est VIVANT, et P8 est fermée.**
+> L'injection était branchée et vérifiée par tenseur, mais rien n'établissait
+> qu'elle ENTRE dans le calcul. `DRAVE_SANS_ENGRAM=1` (déclaré dans `VARS_LUES`,
+> annoncé quand il est actif) coupe le bloc : sur la passe complète V4.1, mêmes
+> jetons et mêmes réglages, la perplexité passe de **1 743 713,6243** à
+> **1 427 298,2128** (22,2 %), la couche 0 reste **identique au bit près** et les
+> couches 1 à 39 changent toutes. Les vides `engram_kv`/`engram_sortie`
+> disparaissent quand l'interrupteur est actif — le bloc n'a pas tourné. Mesure de
+> VIVACITÉ, pas de qualité (l'effet à contexte long reste à mesurer). Le masque
+> des jetons d'image reste un no-op **décidé** (sans objet en texte, réouverture
+> avec un chemin multimodal V4.1).
+>
+> **Revue adverse du bloc 13** : trois chiffres publiés corrigés (953 tenseurs de
+> la passe répartie et non 2 544 ; 82 016 octets au retour et non 81 999 ; la
+> trame sans préfixe v6 **interbloque** le pair au lieu d'être « fausse et
+> muette ») et quatre trous fermés (compteur des octets reçus, `take()` en tête de
+> `norme_finale`, refus d'une `pre` sur une trame `debut = 0` et sur un LOT, code
+> retour de la porte du découpage). Détail : `sprints/13`.
+>
 > **Mise à jour du 02/10 (22h) — l'ENGRAM de V4.1 est branché, et une passe avant
 > V4.1 COMPLÈTE devient possible.** Le hachage glissant (O(1) par jeton : la
 > fenêtre de `max_ngram − 1` suffit), la lecture des 24 rangées de 264 octets dans

@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 102.8 h |
 | Tours | 79 |
-| Messages | 6019 |
-| Appels d'outils | 5762 |
-| Fichiers touchés | 113 |
-| Commandes | 4855 |
+| Messages | 6031 |
+| Appels d'outils | 5774 |
+| Fichiers touchés | 114 |
+| Commandes | 4862 |
 | Sous-agents | 32 |
-| Commits | 367 |
+| Commits | 368 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -4037,7 +4037,7 @@ P0-P6 faites, P8 portée et val
 
 ### Tour 79 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [941 caractères tronqués]
 
-*1022 appels d'outils.* Actions notables :
+*1034 appels d'outils.* Actions notables :
 
 - web_search
 - web_fetch
@@ -4053,7 +4053,7 @@ P0-P6 faites, P8 portée et val
 - bash — Locate hc_collapse_triton definition
 - read
 - bash — Read mHC init and pre/post call sites
-- … et 906 autres
+- … et 916 autres
 
 **Synthèse produite :**
 
@@ -4146,7 +4146,7 @@ P0-P6 faites, P8 portée et val
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/extraire_tables_ggml.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-routage-experts.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-mla-experts.md` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md` | 4 | 6 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md` | 4 | 7 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/colab-reparti.md` | 0 | 1 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/convertisseur.md` | 0 | 3 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-mode4-lot-listes.md` | 0 | 2 |
@@ -4178,6 +4178,7 @@ P0-P6 faites, P8 portée et val
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-decoupage-v41.md` | 1 | 2 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-execution-v41.md` | 0 | 1 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-flux.sh` | 1 | 5 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/14-p8-la-vivacit-de-l-engram-interrupteur-d.md` | 2 | 0 |
 
 ### Sous-agents lancés
 
@@ -4256,7 +4257,7 @@ P0-P6 faites, P8 portée et val
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 4815 autres
+- … et 4822 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4771,4 +4772,5 @@ P0-P6 faites, P8 portée et val
 - Portes : la porte du découpage (deux nœuds, cinq modes) branchée dans portes.sh, et la retro du bloc 13  Toutes les portes vertes, y compris la nouvelle section
 - Sprint 13 : la cérémonie (garder / changer / doute) et le planning du bloc 14 — la vivacité de l'engram  La rétro dit ce que le bloc a coûté : trois runs de 365
 - Revue adverse du bloc 13 : trois chiffres publiés corrigés, quatre trous fermés  Relecture adverse en lecture seule du commit ac80e7e : le fond tient (la fuite 
+- Sprint 14 : P8 fermée — l'engram est vivant (A/B mesuré), et le masque des jetons d'image reste un no-op DÉCIDÉ  Mesure de vivacité, passe complète V4.1, mêmes 
 

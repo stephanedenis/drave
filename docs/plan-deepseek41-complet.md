@@ -440,7 +440,7 @@ Une phase qui ne passe pas ses deux portes ne passe pas à la suivante.
   de logits viendra quand un runtime saura charger le fichier (llama.cpp n'a
   qu'un patch de conversion).
 
-### P8 — Engram : la liste d'adresses, et sa référence à écrire (≈ 1 à 2 journées) — **référence trouvée, phase rouverte** (02/10)
+### P8 — Engram : la liste d'adresses, et sa référence à écrire (≈ 1 à 2 journées) — **FAITE et VIVANTE** (02/10)
 
 > **Inventorié** : deux tables de **101,38 Go** chacune
 > (`blk.{1,14}.engram_embd` I8 [384 006 168, 264]), soit **202,8 Go = 55 % du
@@ -479,6 +479,25 @@ Une phase qui ne passe pas ses deux portes ne passe pas à la suivante.
 > **Reste** : brancher l'injection dans une passe avant (bloqué — aucun modèle
 > exécutable ne porte d'engram) et relire la liste avec un outil d'analyse
 > (`reports/rapport-engram-etat.md`).
+>
+> **P8 EST FERMÉE (02/10, 21h35) — l'engram est VIVANT, et sa vivacité est
+> mesurée.** L'injection est branchée dans la passe complète depuis le bloc 11 ;
+> ce qui manquait était la preuve qu'elle **entre dans le calcul** (une injection
+> non nulle peut n'être lue par personne). `DRAVE_SANS_ENGRAM=1` coupe le bloc et
+> l'ANNONCE ; l'A/B sur la passe complète V4.1 (mêmes jetons, ctx 8, 8 bits des
+> deux côtés) donne **1 743 713,6243** avec et **1 427 298,2128** sans (22,2 %).
+> Par tenseur : la couche 0 est **identique au bit près** (contrôle : l'engram est
+> aux couches 1 et 14), les couches 1 à 39 sont toutes différentes, et les vides
+> `engram_kv`/`engram_sortie` **n'existent plus** quand l'interrupteur est actif —
+> le bloc n'a pas tourné. C'est une mesure de vivacité, pas de qualité : que
+> l'engram dégrade la perplexité à quatre jetons à froid ne dit rien de son effet à
+> contexte long, qui reste à mesurer.
+>
+> **Masque des jetons d'image : décision écrite, non implémenté.** `dead_mask`
+> (`image_sentinel_mask`) est exact pour du texte seul (aucun jeton sentinelle) ;
+> l'implémenter sans un chemin multimodal V4.1 qui en produise serait deviner la
+> forme d'une entrée. Condition de réouverture : un chemin multimodal
+> (`docs/plan-mla-vision.md`).
 
 - Deux tables de 101,4 Go (couches 1 et 14) : hachage de n-grammes
   (`engram.primes`, `multipliers`, `token_map`), recherche, injection.

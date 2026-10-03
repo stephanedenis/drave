@@ -96915,3 +96915,143 @@ The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/13-les-deux-eni
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"sprints/13-les-deux-enigmes-du-decoupage-v41.md\"\ns=open(p).read()\na=\"\"\"La conjonction des deux rend le défaut impossible par construction, et pas\nseulement absent.\"\"\"\nb=\"\"\"La conjonction des deux r … [2590 caractères tronqués]`
+
+  ```
+ok
+81dbd2d Revue adverse du bloc 13 : trois chiffres publiés corrigés, quatre trous fermés
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash tools/portes.sh rapide > /tmp/porte14.log 2>&1 & sleep 2; cat sprints/14-*.md; date", "description": "Launch the gate and read sprint 14's header"}`
+
+  ```
+# Sprint 14 — P8 — la vivacité de l'engram : interrupteur DRAVE_SANS_ENGRAM, A/B perplexité et vides, et le masque des jetons d'image
+
+- **Début** : 21:20 · **Fin prévue** : 23:20 (boxing de 120 min)
+- **Objectif** : P8 — la vivacité de l'engram : interrupteur DRAVE_SANS_ENGRAM, A/B perplexité et vides, et le masque des jetons d'image
+- **Engagement de fin** : dépôt vert (tests + portes), machine rendue, tout commité.
+
+ven 02 oct 2026 21:35:11 EDT
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"image_sentinel\\|dead_mask\\|jetons d'image\" --include=\"*.rs\" --include=\"*.py\" --include=\"*.md\" drave-core/src tools docs reports | grep -v \"^journal\" | head -15", "description": "Check the image-token mask refere … [6 caractères tronqués]`
+
+  ```
+drave-core/src/engram.rs:243:/// 3. `token_mask` est un **garder** (polarité inverse de `dead_mask` du
+drave-core/src/model.rs:6076:                    // Texte seul : `dead_mask` est le masque des IMAGES
+drave-core/src/model.rs:6077:                    // (`image_sentinel_mask`), vide ici — et le masque d'injection
+tools/engram_reference.py:110:            dead_mask=None, chunk_start=None):
+tools/engram_reference.py:119:    if dead_mask is None:
+tools/engram_reference.py:120:        dead_mask = [0] * len(token_ids)
+tools/engram_reference.py:135:                    source = (K_ENGRAM_DEAD_ID if dead_mask[i]
+docs/plan-mla-vision.md:570:C'est exactement ce qu'il faut injecter à la place des jetons d'image — et le
+docs/plan-deepseek41-complet.md:418:> **Reste, nommé** : le **masque des jetons d'image** de l'engram (sans objet en
+reports/rapport-v41-mhc.md:237:(`dead_mask = image_sentinel_mask`) — un texte seul n'a aucun jeton sentinelle,
+reports/rapport-v41-mhc.md:326:| **engram** | couches 1 et 14 : `engram_embd` (101 Go), `engram_kv` [25600,6144], `engram_q_norm`/`k_norm` [4,5120] | **fait** (§7) : hachage, lecture des rangées, projection et injection branchés et vérifiés ; restent 
+… [170 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -6 /tmp/porte14.log; echo \"procs: $(pgrep -x drave | wc -l)\"", "description": "Check the gate after the fixes"}`
+
+  ```
+=== Portes ===
+  cargo test --release                       62 verts  ✅
+  Qwen2.5-0.5B ctx 256                       19.3885  ✅
+procs: 1
+  ```
+
+- **write** `{"content": "# Sprint 14 — P8 — la vivacité de l'engram : interrupteur DRAVE_SANS_ENGRAM, A/B perplexité et vides, et le masque des jetons d'image\n\n- **Début** : 21:20 · **Fin prévue** : 23:20 (boxing de 120 min)\n- **Objectif** : P8 — la vivacité de l'engram : interrupteur DRAVE_SANS_ENGRAM, A/B  … [9273 caractères tronqués]`
+
+  ```
+Error: cannot overwrite existing "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/14-p8-la-vivacit-de-l-engram-interrupteur-d.md" without reading it first — read the file, then retry
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/14-p8-la-vivacit-de-l-engram-interrupteur-d.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/14-p8-la-vivacit-de-l-engram-interrupteur-d.md</path>
+<type>file</type>
+<content>
+1: # Sprint 14 — P8 — la vivacité de l'engram : interrupteur DRAVE_SANS_ENGRAM, A/B perplexité et vides, et le masque des jetons d'image
+2: 
+3: - **Début** : 21:20 · **Fin prévue** : 23:20 (boxing de 120 min)
+4: - **Objectif** : P8 — la vivacité de l'engram : interrupteur DRAVE_SANS_ENGRAM, A/B perplexité et vides, et le masque des jetons d'image
+5: - **Engagement de fin** : dépôt vert (tests + portes), machine rendue, tout commité.
+6: 
+
+(End of file - total 6 lines)
+</content>
+  ```
+
+- **write** `{"content": "# Sprint 14 — P8 — la vivacité de l'engram : interrupteur DRAVE_SANS_ENGRAM, A/B perplexité et vides, et le masque des jetons d'image\n\n- **Début** : 21:20 · **Fin prévue** : 23:20 (boxing de 120 min)\n- **Objectif** : P8 — la vivacité de l'engram : interrupteur DRAVE_SANS_ENGRAM, A/B  … [9157 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/14-p8-la-vivacit-de-l-engram-interrupteur-d.md</path>
+<type>file</type>
+<content>
+Updated file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -8 /tmp/porte14.log; echo \"procs: $(pgrep -x drave | wc -l)\"", "description": "Check the gate progress"}`
+
+  ```
+Qwen3-30B en clusters (origine : 799,8557) 799.8557  ✅
+  threads par défaut (physiques)            20  ✅
+  (portes de formats : ignorées en mode rapide)
+  GLM-5.3 : sigmoïde ×2,5                  sigmoïde  ✅
+  Kimi-K2.7 : sigmoïde ×2,827              sigmoïde  ✅
+  V4-Flash : racine de softplus              racine de softplus  ✅
+  Qwen3-235B : softmax                       softmax  ✅
+  V4-Flash : --config le dit calculable      oui  ✅
+procs: 1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n \"$(grep -n '^### P8' docs/plan-deepseek41-complet.md | cut -d: -f1),+3p\" docs/plan-deepseek41-complet.md; grep -n \"Ce qui la liste coûte et dit\" docs/plan-deepseek41-complet.md", "description": "Locate P8's section for upd … [7 caractères tronqués]`
+
+  ```
+### P8 — Engram : la liste d'adresses, et sa référence à écrire (≈ 1 à 2 journées) — **référence trouvée, phase rouverte** (02/10)
+
+> **Inventorié** : deux tables de **101,38 Go** chacune
+> (`blk.{1,14}.engram_embd` I8 [384 006 168, 264]), soit **202,8 Go = 55 % du
+474:> **Ce qui la liste coûte et dit** (`--engram-adresses`) : 10 000 jetons en
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md", "limit": 14, "offset": 474}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md</path>
+<type>file</type>
+<content>
+474: > **Ce qui la liste coûte et dit** (`--engram-adresses`) : 10 000 jetons en
+475: > **5,9 ms**, 99,9 % de rangées distinctes, **0,06 %** des 768 022 850 rangées
+476: > adressées, **0 % de recouvrement entre jetons consécutifs**. Porte permanente
+477: > dans `tools/portes.sh`.
+478: >
+479: > **Reste** : brancher l'injection dans une passe avant (bloqué — aucun modèle
+480: > exécutable ne porte d'engram) et relire la liste avec un outil d'analyse
+481: > (`reports/rapport-engram-etat.md`).
+482: 
+483: - Deux tables de 101,4 Go (couches 1 et 14) : hachage de n-grammes
+484:   (`engram.primes`, `multipliers`, `token_map`), recherche, injection.
+485: - **Le problème de méthode** : llama.cpp ne le calcule pas, V4-Flash ne l'a pas :
+486:   **aucune référence n'existe**. Livrer sans référence violerait la règle 6.
+487: - **Issue acceptable (a)** : écrire une référence indépendante en Python — comme
+
+(Showing lines 474-487 of 583. Use offset=488 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md", "new_string": "> **Reste** : brancher l'injection dans une passe avant (bloqué — aucun modèle\n> exécutable ne porte d'engram) et relire la liste avec un outil d'analyse\n> (`reports/rapport-engram-etat. … [1515 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"docs/plan-deepseek41-complet.md\"\ns=open(p).read()\na=\"### P8 — Engram : la liste d'adresses, et sa référence à écrire (≈ 1 à 2 journées) — **référence trouvée, phase rouverte** (02/10)\"\nb=\"### P8 — Engram  … [2126 caractères tronqués]`
+
+  ```
+ok
+ok REPRISE
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -4 /tmp/porte14.log; git add -A && git commit -q -m \"Sprint 14 : P8 fermée — l'engram est vivant (A/B mesuré), et le masque des jetons d'image reste un no-op DÉCIDÉ\n\nMesure de vivacité, passe complète V4.1, mêmes jetons et mê … [1044 caractères tronqués]`
