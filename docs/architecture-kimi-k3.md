@@ -65,6 +65,16 @@ Le fichier encode la règle dans `attention.head_count_kv`, qui vaut **1 sur les
 couches 3, 7, 11…** et **0 ailleurs** : une couche « récurrente » n'a pas de tête
 KV. (Le `config.json` publie la même liste en **base 1** : `full_attn_layers =
 [4, 8, 12, …]` — le décalage d'un cran est une source d'erreur classique.)
+
+> **Le fichier COMPLET corrige la règle sur un point (bloc 31).** Sur les 93
+> couches, `--config` compte **1 dense, 68 KDA, 24 MLA** — et signale une
+> cadence inattendue : la **couche 92 est MLA alors que 92 % 4 ≠ 3**. La règle
+> « une sur quatre » donnerait 23 couches MLA (3, 7, …, 91) ; la dernière fait
+> exception, comme souvent dans les modèles où l'on veut une attention pleine
+> juste avant la tête. **Le moteur ne décide donc pas du type d'une couche par
+> l'arithmétique sur son indice** : il le lit dans `attention.head_count_kv` du
+> fichier, ce qui rend l'exception gratuite. Toute implémentation qui coderait
+> `il % 4 == 3` en dur se tromperait d'une couche sur 93.
 La règle d'implémentation est donc : `est_mla(il) = head_count_kv[il] > 0`.
 
 ## 2. La boucle d'une couche (d'après la référence)

@@ -116379,3 +116379,284 @@ lot.tuile      prompt_s    CPU_%
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='sprints/31-le-regroupement-par-experts-mesure-et-k3-au-complet.md'; s=open(p).read()\ns=s.replace(\"\"\"| 8 (la constante historique) | 21,74 · 21,24 · 20,24 · 21,67 | **21,22** |\n| 16 | 21,46 · 20,96 | **21,21* … [1335 caractères tronqués]`
+
+  ```
+07bc7d5 Tuile : l'essai repris machine au calme confirme la réfutation (20,02 s contre 20,32 s)
+  ```
+
+- **bash** `{"command": "sleep 295; grep -E \"^read_bytes\" /proc/1445983/io; ps -o etimes= -p 1445983; date \"+%H:%M\"", "description": "Poll reference baseline", "timeoutMs": 310000}`
+
+  ```
+read_bytes: 1259572195328
+   8066
+16:33
+  ```
+
+- **bash** `{"command": "sleep 520; grep -E \"^read_bytes\" /proc/1445983/io; ps -o etimes= -p 1445983 2>/dev/null || echo \"llama-cli TERMINÉ\"; date \"+%H:%M\"", "description": "Long poll of reference baseline", "timeoutMs": 560000}`
+
+  ```
+read_bytes: 1353235660800
+   8591
+16:42
+  ```
+
+- **bash** `{"command": "sleep 520; grep -E \"^read_bytes\" /proc/1445983/io; ps -o etimes= -p 1445983 2>/dev/null || echo \"TERMINÉ\"; tail -3 /tmp/k3_apres.log; date \"+%H:%M\"", "description": "Long poll of reference baseline", "timeoutMs": 560000}`
+
+  ```
+read_bytes: 1444185964544
+   9116
+=== 5. Baseline de la référence (llama.cpp-k3) ===
+  (pas d'identifiants : en produire avec --tokenize sur un texte)
+  ids : 3638,275,1309,3140,18965,84,3347,655,14472,9280,1419,13…
+16:51
+  ```
+
+- **bash** `{"command": "sleep 520; grep -E \"^read_bytes\" /proc/1445983/io; ps -o etimes= -p 1445983 2>/dev/null || echo \"TERMINÉ\"; date \"+%H:%M\"", "description": "Long poll of reference baseline", "timeoutMs": 560000}`
+
+  ```
+read_bytes: 1538356809728
+   9643
+17:00
+  ```
+
+- **bash** `{"command": "sleep 520; grep -E \"^read_bytes\" /proc/1445983/io; ps -o etimes= -p 1445983 2>/dev/null || echo \"TERMINÉ\"; tail -4 /tmp/k3_apres.log; date \"+%H:%M\"", "description": "Long poll of reference baseline", "timeoutMs": 560000}`
+
+  ```
+read_bytes: 1618424983552
+  10168
+
+=== 5. Baseline de la référence (llama.cpp-k3) ===
+  (pas d'identifiants : en produire avec --tokenize sur un texte)
+  ids : 3638,275,1309,3140,18965,84,3347,655,14472,9280,1419,13…
+17:08
+  ```
+
+- **bash** `{"command": "sleep 520; grep -E \"^read_bytes\" /proc/1445983/io; ps -o etimes= -p 1445983 2>/dev/null || echo \"TERMINÉ\"; date \"+%H:%M\"", "description": "Long poll of reference baseline", "timeoutMs": 560000}`
+
+  ```
+read_bytes: 1660471123968
+  10697
+17:17
+  ```
+
+- **bash** `{"command": "sleep 520; grep -E \"^read_bytes\" /proc/1445983/io; ps -o etimes=,%cpu= -p 1445983 2>/dev/null || echo \"TERMINÉ\"; date \"+%H:%M\"", "description": "Long poll of reference baseline", "timeoutMs": 560000}`
+
+  ```
+TERMINÉ
+17:27
+[stderr]
+grep: /proc/1445983/io: No such file or directory
+  ```
+
+### 🤖 Assistant
+
+**La référence a terminé.** Je récupère le verdict.
+
+- **bash** `{"command": "tail -20 /tmp/k3_apres.log; echo \"=== processus ===\"; ps -eo pid,comm --no-headers | awk '$2 ~ /llama|drave/{print}'", "description": "Read the reference baseline result"}`
+
+  ```
+=== 3. Porte du tokenizer (identifiants contre l'implémentation officielle) ===
+identiques : 3 · divergents : 0
+
+=== 4. Budget par jeton, sur le fichier COMPLET ===
+Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf — 32 shard(s) lus, 93 couches vues
+  poids lus : 1508.7 Go sur les shards présents
+  PAR JETON (sur les 93 couches vues) :
+    experts routés         25.830 Go
+    partagé + attention + tête  60.958 Go
+    TOTAL                  86.787 Go
+  ⚠️ Tout ce qui est lu à chaque jeton est compté (attention, tête, experts partagés) ; l'embarquement ne l'est pas. Les chiffres « experts seuls » d'un rapport antérieur ne sont PAS ce total.
+RAM, 8+ fils (40 Go/s)                 40.0 Go/s      2.17     0.461
+
+=== 5. Baseline de la référence (llama.cpp-k3) ===
+  (pas d'identifiants : en produire avec --tokenize sur un texte)
+  ids : 3638,275,1309,3140,18965,84,3347,655,14472,9280,1419,13…
+	Maximum resident set size (kbytes): 111267324
+
+Si la baseline tient et que --config annonce des manques, l'étape suivante
+est l'implémentation, étage par étage : docs/verification-kimi-k3.md.
+=== processus ===
+   2614 ollama
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '150,200p' tools/ref_logits.cpp", "description": "Check which tensors ref_logits dumps"}`
+
+  ```
+if (v > 0) { n_threads = v; }
+    }
+    cparams.n_threads       = n_threads;
+    cparams.n_threads_batch = n_threads;
+
+    // `--tensors REGEX` : imprime les premières valeurs des tenseurs dont le nom
+    // correspond, PENDANT l'évaluation. C'est ce qui localise une divergence :
+    // comparer les logits dit QU'il y a un écart, pas à quelle couche il naît.
+    // Les noms sont ceux des `cb(...)` du graphe (« qr-0 », « kv_cmpr-0 »,
+    // « k_pe-0 », « ffn_moe_out-3 »…).
+    static const char * filtre_tensors = nullptr;
+    for (int i = 1; i < argc; ++i) {
+        if (std::strcmp(argv[i], "--tensors") == 0 && i + 1 < argc) { filtre_tensors = argv[i + 1]; }
+    }
+    if (const char * e = std::getenv("REF_TENSORS")) { filtre_tensors = e; }
+    if (filtre_tensors != nullptr) {
+        std::fprintf(stderr, "ref_logits: tenseurs filtrés par « %s »\n", filtre_tensors);
+    }
+
+    // Le filtre est capturé par la lambda : une variable statique de fichier
+    // suffit, le programme est mono-modèle.
+    if (filtre_tensors != nullptr) {
+        cparams.cb_eval = [](ggml_tensor * t, bool ask, void * /*user*/) -> bool {
+            const char * motif = filtre_tensors;
+            if (t == nul
+… [1684 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/ids_k3_demo.txt 2>/dev/null | head -c 100; echo; K=/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf\nnohup bash -c \"cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet & … [395 caractères tronqués]`
+
+  ```
+3638,275,1309,3140,18965,84,3347,655,14472,9280,1419,13
+référence lancée (une passe, 4 jetons)
+create_tensor: loading tensor blk.92.ffn_gate_exps.scale
+create_tensor: loading tensor blk.92.ffn_down_exps.scale
+create_tensor: loading tensor blk.92.ffn_up_exps.scale
+create_tensor: loading tensor blk.92.attn_output.input_scale
+create_tensor: loading tensor blk.92.attn_gate.input_scale
+create_tensor: loading tensor blk.92.ffn_gate_exps.input_scale
+create_tensor: loading tensor blk.92.ffn_down_exps.input_scale
+create_tensor: loading tensor blk.92.ffn_up_exps.input_scale
+create_tensor: loading tensor blk.92.ffn_gate_shexp.input_scale
+create_tensor: loading tensor blk.92.ffn_down_shexp.input_scale
+create_tensor: loading tensor blk.92.ffn_up_shexp.input_scale
+done_getting_tensors: tensor 'token_embd.weight' (q8_0) (and 2296 others) cannot be used with preferred buffer type CPU_REPACK, using CPU instead
+  ```
+
+- **bash** `{"command": "sleep 500; tail -6 /tmp/refk3_run.log; ls -la /tmp/refk3-*.bin 2>/dev/null | head; date \"+%H:%M\"", "description": "Poll reference forward pass", "timeoutMs": 560000}`
+
+  ```
+create_tensor: loading tensor blk.92.ffn_down_exps.input_scale
+create_tensor: loading tensor blk.92.ffn_up_exps.input_scale
+create_tensor: loading tensor blk.92.ffn_gate_shexp.input_scale
+create_tensor: loading tensor blk.92.ffn_down_shexp.input_scale
+create_tensor: loading tensor blk.92.ffn_up_shexp.input_scale
+done_getting_tensors: tensor 'token_embd.weight' (q8_0) (and 2296 others) cannot be used with preferred buffer type CPU_REPACK, using CPU instead
+17:37
+  ```
+
+- **bash** `{"command": "P=$(pgrep -f \"ref_logits_[k]3\" | head -1); echo \"pid $P\"; ps -o etimes=,%cpu=,rss= -p $P 2>/dev/null; grep -E \"^read_bytes\" /proc/$P/io 2>/dev/null; date \"+%H:%M\"", "description": "Check reference process progress"}`
+
+  ```
+pid 1522249
+    578  0.0  3128
+read_bytes: 73728
+17:37
+  ```
+
+- **bash** `{"command": "P=1522249; awk '{print \"état:\",$3}' /proc/$P/stat; cat /proc/$P/wchan 2>/dev/null; echo; grep -E \"Threads|VmRSS\" /proc/$P/status; ls -la /proc/$P/task | wc -l; ps -o pid,ppid,stat,comm --no-headers -p $P; ps -o pid,stat,comm --no-headers --ppid $P | head", "description": "Diagnose s … [18 caractères tronqués]`
+
+  ```
+état: S
+do_wait
+VmRSS:	    3128 kB
+Threads:	1
+4
+1522249    2357 S    bash
+1522251 S    time
+  ```
+
+- **bash** `{"command": "P=$(pgrep -x ref_logits_k3 | head -1); echo \"pid $P\"; if [ -n \"$P\" ]; then ps -o etimes=,%cpu=,rss= -p $P; grep -E \"^read_bytes\" /proc/$P/io; awk '{print \"état:\",$3}' /proc/$P/stat; fi; date \"+%H:%M\"", "description": "Find the real reference process"}`
+
+  ```
+pid 1522252
+    593  1.0 87814416
+read_bytes: 112950562816
+état: D
+17:37
+  ```
+
+- **bash** `{"command": "sleep 500; P=$(pgrep -x ref_logits_k3 | head -1); if [ -n \"$P\" ]; then ps -o etimes=,%cpu= -p $P; grep -E \"^read_bytes\" /proc/$P/io; else echo TERMINÉ; fi; tail -12 /tmp/refk3_run.log; date \"+%H:%M\"", "description": "Poll reference forward pass", "timeoutMs": 560000}`
+
+  ```
+1100  2.7
+read_bytes: 196443754496
+create_tensor: loading tensor blk.92.ffn_gate_exps.scale
+create_tensor: loading tensor blk.92.ffn_down_exps.scale
+create_tensor: loading tensor blk.92.ffn_up_exps.scale
+create_tensor: loading tensor blk.92.attn_output.input_scale
+create_tensor: loading tensor blk.92.attn_gate.input_scale
+create_tensor: loading tensor blk.92.ffn_gate_exps.input_scale
+create_tensor: loading tensor blk.92.ffn_down_exps.input_scale
+create_tensor: loading tensor blk.92.ffn_up_exps.input_scale
+create_tensor: loading tensor blk.92.ffn_gate_shexp.input_scale
+create_tensor: loading tensor blk.92.ffn_down_shexp.input_scale
+create_tensor: loading tensor blk.92.ffn_up_shexp.input_scale
+done_getting_tensors: tensor 'token_embd.weight' (q8_0) (and 2296 others) cannot be used with preferred buffer type CPU_REPACK, using CPU instead
+17:46
+  ```
+
+- **bash** `{"command": "sleep 520; P=$(pgrep -x ref_logits_k3 | head -1); if [ -n \"$P\" ]; then ps -o etimes= -p $P; grep -E \"^read_bytes\" /proc/$P/io; else echo TERMINÉ; fi; ls -la /tmp/refk3-*.bin 2>/dev/null | head -4; date \"+%H:%M\"", "description": "Poll reference forward pass", "timeoutMs": 560000}`
+
+  ```
+1625
+read_bytes: 264428466176
+17:54
+[timed out after 560000ms]
+  ```
+
+- **bash** `{"command": "sleep 500; P=$(pgrep -x ref_logits_k3 | head -1); if [ -n \"$P\" ]; then ps -o etimes= -p $P; grep -E \"^read_bytes\" /proc/$P/io; else echo TERMINÉ; fi; tail -6 /tmp/refk3_run.log; date \"+%H:%M\"", "description": "Poll reference forward pass", "timeoutMs": 560000}`
+
+  ```
+2215
+read_bytes: 351106682880
+create_tensor: loading tensor blk.92.ffn_down_exps.input_scale
+create_tensor: loading tensor blk.92.ffn_up_exps.input_scale
+create_tensor: loading tensor blk.92.ffn_gate_shexp.input_scale
+create_tensor: loading tensor blk.92.ffn_down_shexp.input_scale
+create_tensor: loading tensor blk.92.ffn_up_shexp.input_scale
+done_getting_tensors: tensor 'token_embd.weight' (q8_0) (and 2296 others) cannot be used with preferred buffer type CPU_REPACK, using CPU instead
+18:04
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"il % 4\\|% 4 == 3\\|MLA\" docs/architecture-kimi-k3.md | head -8", "description": "Check K3 layer rule in doc"}`
+
+  ```
+22:| `attention.key_length_mla` / `value_length_mla` | 192 / 128 | forme MLA |
+23:| `attention.q_lora_rank` / `kv_lora_rank` | 1 536 / 512 | MLA à rang faible |
+48:| `blk.N.attn_gate.weight` | — | — | porte de sortie de l'attention (MLA) |
+59:| **3, 7, 11, 15** (`il % 4 == 3`) | **MLA** | 9 tenseurs `attn_*`, **aucun** `ssm_*` |
+79:    = MLA(cur)   sinon                         # 1 couche sur 4 (indices 4, 8, 12, …)
+130:**MLA (1 couche sur 4)** — attention latente **sans RoPE appris** (`mla_use_nope`) :
+132:porte de sortie `attn_gate`. C'est la même famille que les MLA de V4/V4.1, dont
+135:**MLA (détail des projections, pour l'implémentation)** — lu dans la référence,
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/architecture-kimi-k3.md", "limit": 14, "offset": 54}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/architecture-kimi-k3.md</path>
+<type>file</type>
+<content>
+54: 
+55: Les 16 premières couches (7 shards déjà téléchargés) le confirment :
+56: 
+57: | couches | type | tenseurs |
+58: |---|---|---|
+59: | **3, 7, 11, 15** (`il % 4 == 3`) | **MLA** | 9 tenseurs `attn_*`, **aucun** `ssm_*` |
+60: | toutes les autres | **KDA** | 10 tenseurs `ssm_*` + 4 `attn_*` |
+61: | **toutes** | — | **2** `res_score` (`attn_res_score`, `ffn_res_score`) |
+62: | couche 0 | **dense** | **0** tenseur `*_exps` (`leading_dense_block_count = 1`) |
+63: 
+64: Le fichier encode la règle dans `attention.head_count_kv`, qui vaut **1 sur les
+65: couches 3, 7, 11…** et **0 ailleurs** : une couche « récurrente » n'a pas de tête
+66: KV. (Le `config.json` publie la même liste en **base 1** : `full_attn_layers =
+67: [4, 8, 12, …]` — le décalage d'un cran est une source d'erreur classique.)
+
+(Showing lines 54-67 of 313. Use offset=68 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/architecture-kimi-k3.md", "new_string": "Le fichier encode la règle dans `attention.head_count_kv`, qui vaut **1 sur les\ncouches 3, 7, 11…** et **0 ailleurs** : une couche « récurrente » n'a pas de tête\nKV. (Le `config.json` publi … [1159 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/architecture-kimi-k3.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"K3 : la cadence des couches a une EXCEPTION, et le moteur ne l'a pas codée en dur\n\nSur les 93 couches : 1 dense, 68 KDA, 24 MLA — la couche 92 est MLA alors que\n92 % 4 != 3. La règle « une sur quat … [366 caractères tronqués]`
