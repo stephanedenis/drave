@@ -6930,6 +6930,10 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
                                            l, pos, &mel);
                     }
                     Self::rmsnorm(&mel, &lay.ffn_norm, cfg.eps, &mut hn);
+                    // L'entrée NORMÉE du MoE : sans elle, un vérificateur
+                    // indépendant ne peut pas rejouer le routeur et les experts
+                    // depuis les vides (`hc_mel_ffn` est AVANT la norme).
+                    Self::vider_couche(self.dump_couches.as_deref(), "ffn_hn", l, pos, &hn);
                     if self.hc_retarde {
                         // Ce que la chaîne retarde : la `pre` de CE raccord FFN
                         // part au raccord suivant. La vider permet de vérifier la
@@ -7063,6 +7067,10 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
                                     threads_iq);
                     for i in 0..h { down[i] += w_exp * exp_out[i]; }
                 }
+                // La somme des experts ROUTÉS, avant l'expert partagé : c'est le
+                // seul vide qui manquait pour vérifier la composition du chemin
+                // des experts (routeur ✓ vérifié, mais experts jamais comparés).
+                Self::vider_couche(self.dump_couches.as_deref(), "moe_down", l, pos, &down);
                 if let Some((sg, su, sd)) = moe.shexp.as_ref() {
                     Self::matvec4_ou_iq(pool, sg, 0, &hn, &mut gate, &mut paires[2], self.act_levels,
                                     self.act_thresh, tk(4), self.act_renorm, &mut scratch, None,

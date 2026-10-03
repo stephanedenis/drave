@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 109.0 h |
 | Tours | 80 |
-| Messages | 6363 |
-| Appels d'outils | 6103 |
+| Messages | 6367 |
+| Appels d'outils | 6107 |
 | Fichiers touchés | 118 |
-| Commandes | 5168 |
+| Commandes | 5172 |
 | Sous-agents | 32 |
-| Commits | 401 |
+| Commits | 402 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -4082,7 +4082,7 @@ Dis-moi si je poursuis sur le bloc 22 (la composition des experts en numpy, plan
 
 ### Tour 80 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [941 caractères tronqués]
 
-*10 appels d'outils.* Actions notables :
+*14 appels d'outils.* Actions notables :
 
 - bash — Test whether finer activation quantization fixes V4.1
 - bash — Inspect the activation quantization
@@ -4094,6 +4094,10 @@ Dis-moi si je poursuis sur le bloc 22 (la composition des experts en numpy, plan
 - bash — Bound the perplexity path too and verify
 - bash — Add a test for the levels bound
 - bash — Commit the silent abits defect fix
+- bash — Locate the MoE dump insertion points
+- bash — Dump the MoE input and routed output
+- bash — Verify the new dumps and the MoE input norm
+- bash — Commit the new dumps and the updated plan
 
 ## 3. Travail accompli
 
@@ -4297,7 +4301,7 @@ Dis-moi si je poursuis sur le bloc 22 (la composition des experts en numpy, plan
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5128 autres
+- … et 5132 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4846,4 +4850,5 @@ Dis-moi si je poursuis sur le bloc 22 (la composition des experts en numpy, plan
 - Sprint 21 : clôture (35 min) — douze hypothèses éliminées, quatre pièces vérifiées, le défaut cerné au chemin des experts" && git log --oneline -6 && echo "--- 
 - Journal : index de session à jour" && git log --oneline | head -3 && echo "--- commits de la nuit ---" && git log --oneline --since="2026-10-02 19:00" | wc -l &
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="sprints/21-localiser-le-defaut-v41.md" s=open(p).read() a="""### 3. La piste qui reste
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="sprints/21-localiser-le-defaut-v41.md" s=open(p).read() a="""## Planning du bloc 22 — 
 

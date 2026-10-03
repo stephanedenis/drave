@@ -101481,3 +101481,36 @@ test result: ok. 64 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fin
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"sprints/21-localiser-le-defaut-v41.md\"\ns=open(p).read()\na=\"\"\"### 3. La piste qui reste, et elle est étroite\"\"\"\nb=\"\"\"### 2quater. Un défaut SILENCIEUX trouvé en chemin : `--abits` au-delà de 16\n\nEn … [2889 caractères tronqués]`
+
+  ```
+ok
+3f096a1 Défaut silencieux corrigé : --abits au-delà de 16 saturait (et parfois enroulait) les activations i16 — facteur 256 muet
+sam 03 oct 2026 03:47:15 EDT
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"Self::rmsnorm(&mel, &lay.ffn_norm\" drave-core/src/model.rs; grep -n \"if let Some((sg, su, sd)) = moe.shexp.as_ref()\" drave-core/src/model.rs", "description": "Locate the MoE dump insertion points"}`
+
+  ```
+6932:                    Self::rmsnorm(&mel, &lay.ffn_norm, cfg.eps, &mut hn);
+7066:                if let Some((sg, su, sd)) = moe.shexp.as_ref() {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"drave-core/src/model.rs\"\ns=open(p).read()\na=\"\"\"                    Self::rmsnorm(&mel, &lay.ffn_norm, cfg.eps, &mut hn);\n                    if self.hc_retarde {\"\"\"\nb=\"\"\"                    Self::r … [1315 caractères tronqués]`
+
+  ```
+ok
+7088:                if let Some((gl, gg)) = self.ffn_gain {
+    Finished `release` profile [optimized] target(s) in 31.93s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=/home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf && rm -rf /tmp/drep2 && mkdir -p /tmp/drep2 && DRAVE_DUMP_COUCHES=/tmp/drep2/l ./drave-core/target/release/drave $M --ppl /tmp/repete.ids --ctx 16 --limit 13 --abit … [844 caractères tronqués]`
+
+  ```
+1040
+  couche  0 pos  5 : ffn_hn (rmsnorm de hc_mel_ffn) écart max 5.478e-07
+  couche  0 pos 12 : ffn_hn (rmsnorm de hc_mel_ffn) écart max 1.355e-07
+  couche 20 pos  5 : ffn_hn (rmsnorm de hc_mel_ffn) écart max 1.154e-06
+  couche 20 pos 12 : ffn_hn (rmsnorm de hc_mel_ffn) écart max 7.172e-07
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"sprints/21-localiser-le-defaut-v41.md\"\ns=open(p).read()\na=\"\"\"## Planning du bloc 22 — la composition, vérifiée contre numpy\"\"\"\nb=\"\"\"### 2quinquies. Les vides qui manquaient pour vérifier les experts … [2906 caractères tronqués]`

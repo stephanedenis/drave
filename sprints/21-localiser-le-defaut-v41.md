@@ -143,16 +143,33 @@ sans être bonne pour autant.
   sain — et llama.cpp ne sait pas le charger, donc il n'existe aucune référence
   exécutable pour trancher.
 
+### 2quinquies. Les vides qui manquaient pour vérifier les experts
+
+Il n'existait aucun vide entre le routeur et la sortie de la couche : impossible de
+comparer le chemin des experts à quoi que ce soit. Deux vides ajoutés :
+
+- **`ffn_hn`** — l'entrée NORMÉE du MoE (`hc_mel_ffn` est AVANT la norme). Vérifié
+  en numpy : `rmsnorm(hc_mel_ffn, ffn_norm, 1e-20)` donne le même vecteur à
+  **1e-7 à 1e-6** (arrondi f32) sur deux couches et deux positions ✓ ;
+- **`moe_down`** — la somme des experts ROUTÉS, avant l'expert partagé. C'est le
+  vide qui rend le chemin des experts vérifiable : le routeur est déjà vérifié en
+  numpy (sélection identique ✓), il ne reste qu'à recomposer
+  `Σ_e w_e · W_d[e] · act(W_g[e]·hn, W_u[e]·hn)` avec les déquantificateurs IQ2_XXS
+  et Q2_K — les deux sont validés contre libggml par `tools/portes_formats.sh`.
+
 ## Planning du bloc 22 — la composition, vérifiée contre numpy
 
 Dix hypothèses sont éliminées et le défaut survit. Ce qui n'a JAMAIS été vérifié
 pour V4.1, c'est la **composition** d'une couche : chaque pièce a été comparée à
 une transcription, jamais l'ensemble. La suite, dans l'ordre :
 
-1. **Une couche complète en numpy** (couche 0 : attention + MoE + mHC, sans
-   compresseur) recalculée depuis les tenseurs du fichier, comparée aux vides du
-   moteur (`hc_attn_pre`, `q_rope`, `kv_rope`, `attn_out`, `hc_ffn_in`,
-   `hc_mel_ffn`, `l_last`). C'est la seule vérification qui peut encore trouver
+1. **Le chemin des experts en numpy** : `moe_down` (vide neuf, bloc 21) contre
+   `Σ_e w_e · W_d[e] · act(W_g[e]·hn, W_u[e]·hn)`, avec `hn` = `ffn_hn` (vérifié) et
+   la sélection du routeur (vérifiée) — les déquantificateurs IQ2_XXS et Q2_K sont
+   déjà validés contre libggml. C'est la dernière pièce jamais comparée pour V4.1.
+2. **Puis l'attention en numpy** (couche 0, ratio 0) : `hc_attn_pre` → `q_rope`,
+   `kv_rope`, `attn_brut`, `attn_out`, avec la rotation NORM et la sortie groupée
+   `wo_a`/`wo_b`. C'est la seule vérification qui peut encore trouver
    une erreur de *composition* — celle que dix ablations ont manquée.
 2. **Relire la règle du retard dans la source publiée** — FAIT au bloc 21 (vLLM
    `nvidia/model.py`, lignes 600-620 et 1015-1018) : notre chaîne et notre tête y
