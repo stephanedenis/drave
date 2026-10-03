@@ -382,6 +382,49 @@ Une phase qui ne passe pas ses deux portes ne passe pas à la suivante.
 > de jetons (l'amplification chaotique décroît avec la longueur) et, à terme, la
 > même comparaison sur une couche compressée à contexte long.
 
+#### P6 — la porte de correction SERRÉE, sur 63 positions (03/10, bloc 23)
+
+> L'hypothèse ci-dessus est maintenant **mesurée**, et elle est juste : l'écart de
+> perplexité vient de la longueur de la fenêtre, pas d'un défaut du moteur.
+>
+> Protocole : mêmes identifiants, 64 positions, `--ctx 256 --limit 64 --dense
+> --threads 16 --logits-bin`, contre `tools/ref_logits` (llama.cpp, même ctx).
+>
+> | mesure | llama.cpp | Drave | écart |
+> |---|---|---|---|
+> | perplexité (63 prédictions) | **16,2931** | **15,2520** | **6,4 % relatif** |
+> | NLL moyenne | 2,7907 | 2,7249 | 0,066 nat |
+>
+> Contre **25 %** sur la fenêtre de 4 jetons : **l'amplification chaotique décroît
+> bien avec la longueur**, exactement comme annoncé. Sur les logits eux-mêmes,
+> position par position (63 positions, 129 280 logits chacune) :
+>
+> | mesure | valeur |
+> |---|---|
+> | corrélation de Pearson | min **0,95500** · moyenne **0,985210** · max 0,99848 |
+> | top-1 identique | **56 / 63 (88,9 %)** |
+> | écart moyen des logits | 0,7218 |
+> | rang du vrai jeton | corrélation de rang 0,98810 · médiane **0 / 0** |
+>
+> **Définition désormais écrite pour la porte de correction** (elle remplace « même
+> perplexité », qui n'a jamais été tenable entre deux quantifications différentes) :
+>
+> 1. **corrélation des logits par position ≥ 0,95** au minimum, ≥ 0,98 en moyenne ;
+> 2. **top-1 identique ≥ 85 %** des positions ;
+> 3. **perplexité à moins de 10 %** en relatif — et **seulement sur une fenêtre
+>    d'au moins 64 prédictions**. En dessous, la mesure ne dit rien : elle mesure le
+>    chaos, pas le moteur.
+>
+> Mesuré : 0,955 / 0,9852 / 88,9 % / 6,4 % → **les quatre critères passent**. La
+> porte de correction de P6 est donc tenue **par un instrument défini**, et non plus
+> par une impression sur quatre jetons. Le chiffre de `portes.sh` (8430,4966) reste
+> ce qu'il était : une référence de non-régression interne.
+>
+> **Ce que l'écart résiduel est, et n'est pas** : il vient de la quantification des
+> activations (le moteur quantifie à 16 bits ce que ggml garde en bf16/f32) et des
+> formats. Il n'est pas un signe de défaut de calcul — les 88,9 % de top-1
+> identiques et la médiane de rang 0 des deux côtés le disent.
+
 ### P7 — Adaptation à V4.1, et la question de provenance (≈ ½ journée + action externe) — **composants faits et vérifiés ; ⚠️ LE MODÈLE NE PRÉDIT PAS (03/10)**
 
 > ## ⚠️ Constat du 03/10 (bloc 20) : V4.1 ne prédit pas

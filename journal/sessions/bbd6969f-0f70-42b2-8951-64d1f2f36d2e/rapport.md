@@ -5,15 +5,15 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 109.7 h |
-| Tours | 86 |
-| Messages | 6435 |
-| Appels d'outils | 6163 |
+| Durée | 109.9 h |
+| Tours | 87 |
+| Messages | 6447 |
+| Appels d'outils | 6170 |
 | Fichiers touchés | 118 |
-| Commandes | 5227 |
+| Commandes | 5232 |
 | Sous-agents | 32 |
-| Commits | 412 |
-| Compactages de contexte | 8 |
+| Commits | 413 |
+| Compactages de contexte | 9 |
 
 ## Objectifs déclarés
 
@@ -215,6 +215,8 @@
 **Tour 85** — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en respectant pour chaque phase ses deux portes : porte de correction (comparaison étage par étage à llama.cpp sur V4-Flash) et porte Drave (flux : événements/paires par jeton, trace rejouée à l'identique, découpage en grappes, flux lisible par un outil d'analyse). Aucune phase ne passe … [662 caractères tronqués]
 
 **Tour 86** — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en respectant pour chaque phase ses deux portes : porte de correction (comparaison étage par étage à llama.cpp sur V4-Flash) et porte Drave (flux : événements/paires par jeton, trace rejouée à l'identique, découpage en grappes, flux lisible par un outil d'analyse). Aucune phase ne passe … [662 caractères tronqués]
+
+**Tour 87** — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en respectant pour chaque phase ses deux portes : porte de correction (comparaison étage par étage à llama.cpp sur V4-Flash) et porte Drave (flux : événements/paires par jeton, trace rejouée à l'identique, découpage en grappes, flux lisible par un outil d'analyse). Aucune phase ne passe … [662 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -4295,6 +4297,41 @@ Les deux derniers points étaient **mesurés non tenus** il y a deux rondes ; le
 - bash — Compare the logits against llama.cpp
 - bash — Record the correction gate measurement
 
+**Synthèse produite :**
+
+**Ronde 12 — la porte de correction de P6, mesurée avec des protocoles alignés**
+
+Comparaison à **llama.cpp**, position par position (5 identifiants, 4 prédictions, `tools/ref_logits` contre `--logits-bin`) :
+
+| position | écart max | corrélation | top-1 identique | rang du vrai jeton (llama.cpp / nous) |
+|---|---|---|---|---|
+| 0 | 2,85 | **0,9876** | non | 130 / 173 |
+| 1 | 1,23 | **0,9984** | **oui** | 14 346 / 14 677 |
+| 2 | 2,04 | **0,9981** | **oui** | 2 032 / 1 789 |
+| 3 | 1,75 | **0,9979** | **oui** | 2 / 3 |
+
+**La porte est tenue — mais pas par la perplexité.** Sur les mêmes jetons : llama.cpp **6 719,61**, notre moteur **8 430,4966** → **25 % d'écart** ✗. Ce n'est pas une divergence du moteur : une fenêtre **froide de quatre jetons amplifie chaotiquement** des écarts de logits de 1 % (exactement le phénomène que j'avais documenté sur V4.1, où 1,8e-3 sur un état devenait ×8 de perplexité). **Le bon instrument est la comparaison des logits et des rangs**, et c'est écrit dans le plan — avec la précision que le chiffre de `portes.sh` (8430,4966) est une **référence de non-régression interne**, pas une mesure d'accord avec llama.cpp (les deux ne comptent d'ailleurs pas le même nombre de prédictions, 4 contre 5, selon la fenêtre).
+
+C'est un point de méthode qui comptait : sans cette mesure, on aurait pu « corriger » un moteur juste en chassant un écart de perplexité qui n'est qu'une amplification de 1 %.
+
+**Objectif actif.** Restent nommés : P7 (porte de correction **impossible** — llama.cpp refuse `deepseek41` — et composition sur 40 couches sans oracle), P8/P9 dont les portes sont disponibles, et le resserrage de cette porte (fenêtre de plusieurs centaines de jetons, puis une couche compressée à contexte long).
+
+### Tour 87 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [942 caractères tronqués]
+
+*7 appels d'outils.* Actions notables :
+
+- bash — Launch the long-window correction gate
+- bash — Wait for the long comparison
+- bash — Compare the logits over 63 positions
+- bash — Locate PPL mentions in the plan
+- read
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md`
+- bash — Verify numbers and commit the plan update
+
+**Synthèse produite :**
+
+⏵ Writing the tightened correction-gate verdict into the plan
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -4382,7 +4419,7 @@ Les deux derniers points étaient **mesurés non tenus** il y a deux rondes ; le
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/extraire_tables_ggml.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-routage-experts.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-mla-experts.md` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md` | 4 | 8 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md` | 4 | 9 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/colab-reparti.md` | 0 | 1 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/convertisseur.md` | 0 | 3 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-mode4-lot-listes.md` | 0 | 2 |
@@ -4497,7 +4534,7 @@ Les deux derniers points étaient **mesurés non tenus** il y a deux rondes ; le
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5187 autres
+- … et 5192 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5057,4 +5094,5 @@ Les deux derniers points étaient **mesurés non tenus** il y a deux rondes ; le
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="docs/plan-deepseek41-complet.md" s=open(p).read() a="""> 1. **Le flux n'est PAS lisibl
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="docs/plan-deepseek41-complet.md" s=open(p).read() a="""> 2. **Le rejeu n'est pas ident
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="docs/plan-deepseek41-complet.md" s=open(p).read() a="""### P7 — Adaptation à V4.1, et 
+- Porte de correction P6 serrée : 63 positions, corrélation 0,9852, top-1 88,9 %, PPL à 6,4 %  La fenêtre de 4 jetons donnait 25 % d'écart de perplexité ; la même
 
