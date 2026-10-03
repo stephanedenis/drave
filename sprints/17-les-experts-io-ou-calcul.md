@@ -84,11 +84,38 @@ C'est le chantier du bloc 18.
 
 - Le contrôle « cache chaud » est fait à **ctx 8, 4 jetons** (12 Go d'experts, qui
   tiennent dans les 95 Go de `buff/cache`). À 1 024 jetons, le flux d'experts
-  (330 Go) dépasse le cache et le disque redevient peut-être la borne : le poste
-  `proj+mlp` mesuré à ctx 32 (2 432 ms/token) ne le dit pas encore.
-- `threads_iq` monte maintenant à 32 : sur une machine à 8 cœurs, le `clamp` haut
-  ne mord pas (le pool dit 8), mais rien ne prouve que 20 soit l'optimum — il
-  faudrait balayer 8, 12, 16, 20.
+  (330 Go) dépasse le cache et le disque redevient peut-être la borne. Le contrôle
+  refait à **ctx 64 (63 jetons, ~330 Go lus)** répond en partie : voir les deux
+  passes ci-dessous.
+
+### 4. Le balayage des fils, et la borne qui revient avec le contexte
+
+**Balayage** (ctx 8, 4 jetons, 8 bits), la question laissée en doute :
+
+| `--threads` | 8 | 12 | **16** | 20 | 24 |
+|---|---|---|---|---|---|
+| durée de la passe | 14,1 s | 13,3 s | **11,4 s** | 13,1 s | 16,1 s |
+
+**16 fils est l'optimum** sur cette machine (20 cœurs physiques, 40 logiques) ;
+au-delà, la sur-souscription coûte. Toutes les mesures publiées de cette nuit sont
+à 20 fils : elles sous-estiment donc légèrement le gain possible (11,4 s contre
+13,1 s à ctx 8, soit encore 13 %). Le `clamp` du code reste le nombre de fils
+demandé (il ne code pas 16 en dur) : c'est un réglage de machine, et la mesure
+est publiée pour qui veut le poser.
+
+**Contexte long** (ctx 64, 63 jetons, ~330 Go d'experts lus — bien au-delà des
+95 Go de `buff/cache`), deux passes identiques à la suite :
+
+| passe | durée | poste `proj+mlp` | perplexité |
+|---|---|---|---|
+| 1 | 194,1 s | 1 961,16 ms/token | 44 774,3783 |
+| 2 | 185,7 s | 1 890,06 ms/token | 44 774,3783 |
+
+**+4,3 % pour la seconde**, alors qu'elle relit 330 Go que le cache de pages ne
+peut pas tenir : le disque n'est pas la borne non plus à ce contexte. Le poste
+dominant est le calcul de déquantification, à toute échelle mesurée — et la
+perplexité identique au chiffre près est une quatrième preuve d'égalité (après
+ctx 8, ctx 32 et les vides).
 
 ## Planning du bloc 18 — vectoriser la DÉQUANTIFICATION seule (bit-exact par construction)
 

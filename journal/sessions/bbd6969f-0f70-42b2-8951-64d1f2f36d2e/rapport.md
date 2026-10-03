@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 104.6 h |
+| Durée | 104.8 h |
 | Tours | 79 |
-| Messages | 6175 |
-| Appels d'outils | 5918 |
+| Messages | 6180 |
+| Appels d'outils | 5923 |
 | Fichiers touchés | 117 |
-| Commandes | 4987 |
+| Commandes | 4992 |
 | Sous-agents | 32 |
-| Commits | 381 |
+| Commits | 382 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -4037,7 +4037,7 @@ P0-P6 faites, P8 portée et val
 
 ### Tour 79 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [941 caractères tronqués]
 
-*1178 appels d'outils.* Actions notables :
+*1183 appels d'outils.* Actions notables :
 
 - web_search
 - web_fetch
@@ -4053,7 +4053,7 @@ P0-P6 faites, P8 portée et val
 - bash — Locate hc_collapse_triton definition
 - read
 - bash — Read mHC init and pre/post call sites
-- … et 1048 autres
+- … et 1053 autres
 
 **Synthèse produite :**
 
@@ -4260,7 +4260,7 @@ P0-P6 faites, P8 portée et val
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 4947 autres
+- … et 4952 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4789,4 +4789,5 @@ P0-P6 faites, P8 portée et val
 - Sprint 16 : les portes repassent toutes vertes après le correctif du pas d'expert (V4-Flash 8430,4966)" && tools/sprint.sh status 2>&1 | tail -3
 - Sprint 16 : clôture (33 min) et planning du bloc 17 — proj+mlp est-il borné par les E/S ou par le calcul ? Le re-tri par chaleur est écarté pour une raison mesu
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -E "V4-Flash 43|tests|Qwen2" /tmp/porte17.log; cat >> sprints/17-les-experts-io-ou-calcul.md <<'EOF' 
+- Bloc 17 : à ctx 64 aussi (330 Go relus), la seconde passe ne gagne que 4 % — le disque n'est pas la borne ; et le balayage des fils donne 16 comme optimum  Deux
 

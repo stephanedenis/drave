@@ -99056,3 +99056,51 @@ procs: 0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -E \"V4-Flash 43|tests|Qwen2\" /tmp/porte17.log; cat >> sprints/17-les-experts-io-ou-calcul.md <<'EOF'\n## Rétrospective — garder / changer / doute\n\n**Garder.**\n\n- **Le contrôle « même mesure, cache chaud »** : deux passes i … [5014 caractères tronqués]`
+
+  ```
+Qwen2.5-0.5B ctx 256                       19.3885  ✅
+  V4-Flash 43 couches ctx 32                 8430.4966  ✅
+fc50478 Bloc 17 : proj+mlp est borné par le CALCUL (mesuré), et le fil manquant vaut ×1,32 sur la passe
+ven 02 oct 2026 23:25:37 EDT
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=/home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf && for t in 8 12 16 20 24; do printf \"threads %2d : \" $t; ./drave-core/target/release/drave $M --ppl /tmp/v41_last4.ids --ctx 8 --limit 4 --abits 8 --threads $t 2 … [166 caractères tronqués]`
+
+  ```
+threads  8 : 14.1 s
+threads 12 : 13.3 s
+threads 16 : 11.4 s
+threads 20 : 13.1 s
+threads 24 : 16.1 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/ctx64_pair.sh <<'EOF'\n#!/bin/bash\nset -u\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nM=/home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf\nfor i in 1 2; do\n  echo \"=== passe $i (ctx 64, 63 jeto … [384 caractères tronqués]`
+
+  ```
+paire ctx 64 lancee (~8 min)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"sprints/17-les-experts-io-ou-calcul.md\"\ns=open(p).read()\na=\"\"\"**Doute.**\n\n- Le contrôle « cache chaud » est fait à **ctx 8, 4 jetons** (12 Go d'experts, qui\n  tiennent dans les 95 Go de `buff/cache`). À … [2001 caractères tronqués]`
+
+  ```
+ok
+=== passe 1 (ctx 64, 63 jetons) ===
+=== perplexité 44774.3783 sur 63 tokens (0 événements, 194.1 s) ===
+    postes (ms/token) : projets-attn 0.00 | rope 0.00 | attention 968.07 | proj+mlp 1961.16 | somme 2929.24 | reste (tête + échantillonnage) 151.65
+=== passe 2 (ctx 64, 63 jetons) ===
+  ```
+
+- **bash** `{"command": "sleep 210; cat /tmp/ctx64_pair.log; echo \"procs: $(pgrep -x drave | wc -l)\"", "description": "Get the ctx-64 warm pass result", "timeoutMs": 260000}`
+
+  ```
+=== passe 1 (ctx 64, 63 jetons) ===
+=== perplexité 44774.3783 sur 63 tokens (0 événements, 194.1 s) ===
+    postes (ms/token) : projets-attn 0.00 | rope 0.00 | attention 968.07 | proj+mlp 1961.16 | somme 2929.24 | reste (tête + échantillonnage) 151.65
+=== passe 2 (ctx 64, 63 jetons) ===
+=== perplexité 44774.3783 sur 63 tokens (0 événements, 185.7 s) ===
+    postes (ms/token) : projets-attn 0.00 | rope 0.00 | attention 964.90 | proj+mlp 1890.06 | somme 2854.96 | reste (tête + échantillonnage) 92.42
+FIN
+procs: 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"sprints/17-les-experts-io-ou-calcul.md\"\ns=open(p).read()\na=\"\"\"**Contexte long** (ctx 64, 63 jetons, ~330 Go d'experts lus — bien au-delà des\n95 Go de `buff/cache`), deux passes identiques à la suite :\n\n … [2545 caractères tronqués]`
