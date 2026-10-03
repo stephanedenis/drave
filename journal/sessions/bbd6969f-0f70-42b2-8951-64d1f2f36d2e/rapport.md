@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 114.7 h |
 | Tours | 90 |
-| Messages | 6742 |
-| Appels d'outils | 6444 |
+| Messages | 6746 |
+| Appels d'outils | 6448 |
 | Fichiers touchés | 129 |
-| Commandes | 5439 |
+| Commandes | 5443 |
 | Sous-agents | 32 |
-| Commits | 430 |
+| Commits | 431 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -4473,7 +4473,7 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 
 ### Tour 90 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [942 caractères tronqués]
 
-*6 appels d'outils.* Actions notables :
+*10 appels d'outils.* Actions notables :
 
 - bash — Check the gate suite result
 - bash — Wait for the gates
@@ -4481,6 +4481,10 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 - bash — Probe the API reachability and check gates
 - bash — Wait for the gates to finish
 - bash — Commit and run the ctx-1024 reference
+- bash — Engine at ctx 1024 on NVMe, default path
+- bash — Read the reference-values section of REPRISE
+- bash — Find the end of section 2
+- bash — Update REPRISE and check the ctx-1024 progress
 
 **Synthèse produite :**
 
@@ -4699,7 +4703,7 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5399 autres
+- … et 5403 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5277,4 +5281,5 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 - Granularité des listes : elle ROUTE, elle ne compresse pas — mesuré sur les activations réelles de V4-Flash  Flux de coupure = l_last = 16 384 valeurs (4 copies
 - Plan P6 : porte de correction TENUE à ctx 512 (511 positions, top-1 93,0 %, +4,3 % de PPL) et le coût par jeton ne croît presque pas avec le contexte (2,58 s/je
 - Sprint 26 : porte de correction TENUE à ctx 512, coût par jeton quasi constant, granularité qui route — portes toutes vertes" && V4=/home/stephane/FastNVMe/mode
+- REPRISE : état du 03/10 (porte à ctx 512, coût plat, SIMD corrigé, granularité)"; grep -E "positions|sur [0-9]+ tokens" /tmp/our_v4f1024_clean.log 2>/dev/null |
 

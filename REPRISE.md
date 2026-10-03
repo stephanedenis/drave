@@ -230,6 +230,21 @@ cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo build --r
 > (`n_expert` relu en GGUF-seul, `rms_norm_eps` ignoré, YaRN déclaré dans le JSON
 > et non lu).
 
+> **Mise à jour du 03/10 — la porte de correction tient à ctx 512, et le stockage
+> explique deux fausses pistes.** (1) À ctx 512 (511 prédictions, chemin par
+> défaut, référence llama.cpp sur la même fenêtre) : corrélation moyenne
+> **0,989879**, min 0,941811, top-1 **475/511 (93,0 %)**, PPL 6,2612 contre
+> 6,0030 (+4,3 %). **L'accord s'améliore avec la position** (0,98534 → 0,98934 →
+> 0,99142) : aucune dérive de rotation, de blocs ni de fenêtre. (2) Le coût par
+> jeton passe de 2,50 s (ctx 64) à **2,58 s (ctx 512)** : ce que les blocs 23-24
+> prenaient pour une croissance (jusqu'à « 60 s/jeton à ctx 1 024 ») était le
+> **disque dur** qui portait le modèle. (3) **Chiffre corrigé** : le gain de
+> `DRAVE_SIMD_DOT` est **×1,18 sur la passe, ×1,37 sur `proj+mlp`** (A/B
+> entrelacé) et non ×2,06/×3,05 comme publié d'abord — le run de référence
+> tournait pendant qu'un processus survivant d'un `timeout` occupait les cœurs.
+> (4) Granularité des listes : **elle route, elle ne compresse pas**
+> (`reports/rapport-granularite-flux.md`).
+
 Corpus : `/tmp/wt2_txt.txt` = 20 000 premiers octets de `data/wikitext2_test.txt`.
 **Régénérable** (à refaire si `/tmp` a été vidé) :
 

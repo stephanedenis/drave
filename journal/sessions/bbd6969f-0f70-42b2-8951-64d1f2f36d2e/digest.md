@@ -107155,3 +107155,73 @@ background job bash-220 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrine
 ⏵ Portes toutes vertes ; je lance le palier ctx 1 024 (référence puis moteur)
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Sprint 26 : porte de correction TENUE à ctx 512, coût par jeton quasi constant, granularité qui route — portes toutes vertes\" && V4=/home/stephane/FastNVMe/modeles-lourds/v4flash-iq1m/DeepSeek-V4-Fla … [360 caractères tronqués]`
+
+  ```
+NLL moy  = 1.610664
+perplexite = 5.006136
+fichier  = /tmp/ref_v4f1024b.bin (1023 x 129280 f32 + 8 octets d'en-tete)
+référence en 126 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && V4=/home/stephane/FastNVMe/modeles-lourds/v4flash-iq1m/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf && (t0=$(date +%s); ./drave-core/target/release/drave \"$V4\" --ppl /tmp/ids_v4f1024.txt --ctx 1024 --limit 1024 --dense --threads  … [257 caractères tronqués]`
+
+  ```
+started background job bash-221
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '55,80p' REPRISE.md", "description": "Read the reference-values section of REPRISE"}`
+
+  ```
+> à TOUTES les positions dès que `compress_ratio > 0` ; le moteur y appliquait son
+> régime retardé (RoPE simple). Correctif fait et **validé par la mesure** contre
+> llama.cpp, tenseur par tenseur, à la position 127 : 4,515e-03 d'écart contre
+> 5,376e-03 en RoPE simple (corrélation 0,999996 contre 0,999993).
+>
+> Le premier essai disait l'inverse — parce que la rampe du moteur était calculée
+> avec un contexte d'origine de **4 096** au lieu de 65 536 : `Meta::as_f64()` ne
+> lit que les flottants et `rope.scaling.original_context_length` est un **u32**
+> dans le GGUF. Le défaut prenait la place de la valeur, sans un mot. C'est en
+> remontant des écarts aux ANGLES appliqués (rampe mesurée (8, 18) au lieu de
+> (15, 25)) que le bug est apparu. Porte V4-Flash : **8430,2968 → 8430,4966**
+> (le chiffre bouge à peine à ctx 32, où les deux régimes coïncident presque :
+> c'est la comparaison par tenseur qui tranche). Les chiffres V4-Flash antérieurs
+> sont à revérifier.
+>
+> **Mise à jour du 02/10 (23h) — le découpage V4.1 est exact au bit près, et
+> « l'instrument qui mentait » ne mentait pas.** Deux énigmes du sprint 12 sont
+> fermées.
+>
+> 1. **Le V4.1 découpé à la couche 20 donnait 514 722
+… [487 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '225,250p' REPRISE.md", "description": "Find the end of section 2"}`
+
+  ```
+> en numpy hors du moteur (`tools/verifier_v41_mhc.py`,
+> `reports/rapport-v41-mhc.md`). `cargo test --release` = **59**. Deux manques
+> annoncés pour V4.1 étaient **faux** (la référence d'exécution existe : vLLM) et
+> sont remplacés par la liste réelle des manques. Nouveau drapeau :
+> `--tete-partielle`. Trois bugs de configuration corrigés au passage
+> (`n_expert` relu en GGUF-seul, `rms_norm_eps` ignoré, YaRN déclaré dans le JSON
+> et non lu).
+
+Corpus : `/tmp/wt2_txt.txt` = 20 000 premiers octets de `data/wikitext2_test.txt`.
+**Régénérable** (à refaire si `/tmp` a été vidé) :
+
+```bash
+cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet
+head -c 20000 data/wikitext2_test.txt > /tmp/wt2_txt.txt
+# les identifiants DOIVENT venir du tokenizer du modèle — jamais croisés
+drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf \
+    --tokenize --fichier /tmp/wt2_txt.txt --sortie /tmp/ids_qwen.txt
+drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/gpt-oss-120b-MXFP4.gguf \
+    --tokenize --fichier /tmp/wt2_txt.txt --sortie /tmp/ids_oss.txt
+```
+
+Le mode `--tokenize --fichier` **vérifie la réversibilité** (texte reconstruit
+identique à la source) — les deux t
+… [104 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'\ns=open(p).read()\nancre = \"Corpus : `/tmp/wt2_txt.txt` = 20 000 premiers octets de `data/wikitext2_test.txt`.\"\najout = \"\"\"> **Mise à jour du 03/10 — la porte de correction tient à ctx 512, et l … [1479 caractères tronqués]`
