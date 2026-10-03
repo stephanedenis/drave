@@ -66,6 +66,27 @@ matvec f32 a accéléré son attention comme celle de V4.1. Mais ses experts son
 **IQ1_M**, un format à codebook qui **n'a pas de noyau vectorisé** : c'est le même
 levier qui reste ouvert, sur l'autre modèle lourd du dépôt.
 
+### 4. Le même noyau pour IQ1_M, et ce qu'il rapporte (peu, et c'est dit)
+
+V4-Flash tire ses experts d'un format à **codebook** (`IQ1S_GRID`, 2048 lignes de
+8 valeurs) : la ligne se lit en scalaire (un `gather` coûterait plus cher), mais
+l'élargissement i8 → f32, l'ajout du décalage et la multiplication par l'échelle
+sont vectoriels — huit valeurs d'un coup, sans réassociation.
+
+| V4-Flash, ctx 32, 5 jetons, 16 fils | scalaire | AVX2 IQ1_M |
+|---|---|---|
+| poste `proj+mlp` | 2 054,97 ms/token | **1 916,57** (×1,07) |
+| passe complète (chargement compris) | 23,9 s | 23,4 s |
+| perplexité | 8430,4966 | **8430,4966** |
+| vides, 3 126 tenseurs (43 couches) | — | **0 différent** |
+
+**×1,07 seulement**, et la raison est instructive : le coût d'IQ1_M n'est pas
+l'arithmétique que le noyau vectorise, c'est la **lecture du codebook** (une ligne
+de 8 octets tirée au hasard dans une table de 16 Ko, donc des défauts de cache par
+groupe de huit valeurs). Le noyau reste — il est exact, mesuré et gratuit — mais
+il ne faut pas en attendre ce qu'il ne peut pas donner : la leçon du bloc, c'est
+que **le plafond d'un noyau se mesure avant de l'écrire**, et qu'ici il était bas.
+
 ## Portes
 
 - `tools/portes.sh rapide` : voir le journal du bloc — la porte **V4-Flash
@@ -103,23 +124,33 @@ levier qui reste ouvert, sur l'autre modèle lourd du dépôt.
 - **Les lectures compressées** n'ont pas été mesurées séparément du produit : le
   plafond du noyau (×1,13 à ctx 8) dit qu'il reste beaucoup, mais pas quoi.
 
-## Planning du bloc 19 — le même noyau pour IQ1_M (l'autre modèle lourd)
+## Planning du bloc 19 — V4.1 à 1 024 jetons : la première passe LONGUE
 
-V4.1 est servi (Q2_K vectorisé, ×3,54 sur la nuit) ; **V4-Flash non** : ses
-experts sont en IQ1_M, un format à codebook qui passe encore par
-`formats::dequant_iq1m_dans` (mesuré : `proj+mlp` 2 024,50 ms/token, du même ordre
-que V4.1 avant son noyau).
+Ce qui bloquait la vérification à contexte long n'existe plus : la passe de
+31 jetons est passée de 313,1 s à 88,5 s cette nuit (×3,54). Une passe de
+**1 024 jetons** coûte donc ~45-55 min — c'est enfin abordable, et elle exerce
+trois mécanismes qui n'ont **jamais** tourné à cette échelle :
 
-1. **Lire le décodage IQ1_M** et dire ce qui est vectorisable : la table de
-   codebook se lit **par valeur** (un `gather` serait plus lent qu'un scalaire),
-   mais l'application du **signe**, de l'**échelle** et le **produit** sont
-   vectorisables sans réassocier — et le pas par groupe peut être hoisté comme
-   pour Q2_K.
-2. **Mesurer la part exacte** de la conversion dans IQ1_M (même ablation qu'au
-   bloc 17) avant d'écrire quoi que ce soit : le plafond du noyau doit être connu
-   d'avance, c'est la leçon du bloc 18.
-3. **Prouver** : `cargo test`, porte V4-Flash **8430,4966** inchangée, vides
-   identiques au bit près, puis publier le gain.
+1. **La sélection de l'indexeur** (`indexer.top_k` = 512) : elle ne mord qu'au-delà
+   de 512 blocs compressés, c'est-à-dire ~1 025 jetons en ratio 2. Une passe de
+   1 024 jetons est exactement le régime où elle CHOISIT — et le seuil a été
+   vérifié à la position 512 sur une seule couche, jamais en passe complète.
+2. **Le YaRN des couches compressées aux positions longues** : la question
+   ouverte du bloc 12 (`reports/rapport-v4-yarn-compresse.md`) est de savoir si le
+   régime YaRN ×16 tient au-delà de ~1 024 positions — précisément là où les deux
+   lectures divergent.
+3. **Le compresseur et le cache partagé à l'échelle** : 512 blocs par couche au
+   lieu de 16, et la mémoire que ça demande (à mesurer, pas à supposer).
+
+Chantiers :
+
+1. **Construire 1 024 jetons réels** (wikitext, tokenizer du modèle) et lancer la
+   passe avec le profil.
+2. **Vérifier qu'elle est saine** : perplexité par position (le profil existe :
+   `--ppl-profil`), aucune position NaN, mémoire résidente, et le compteur de
+   blocs gardés (« 513 → 512 ») sur les couches d'indexeur.
+3. **Publier** : temps, perplexité, sélection observée, mémoire — et ce que le
+   contexte long change (ou ne change pas) dans les couches compressées.
 
 ## Ce qui reste, nommé
 

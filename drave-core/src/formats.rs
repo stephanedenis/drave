@@ -2772,6 +2772,60 @@ const IQ1S_DELTA: f32 = 0.125;
 /// Trois bits d'échelle par sous-bloc de 16, un bit de signe du décalage.
 ///
 /// `x = d·(2·e+1)·(grille + ±0,125)`
+/// Déquantification IQ1_M **vectorisée**, identique AU BIT PRÈS à la version
+/// scalaire : chaque valeur reçoit `dl · (grille[j] + delta)`, la même
+/// expression dans le même ordre. Les huit valeurs d'une ligne de codebook sont
+/// traitées ensemble — le codebook lui-même reste lu **en scalaire** (un `gather`
+/// coûterait plus cher que la lecture), mais l'élargissement i8 → f32, l'ajout du
+/// décalage et la multiplication par l'échelle sont vectoriels. Pas de FMA :
+/// `fma(a, b, c)` n'a pas le même arrondi que `a · b + c`.
+#[cfg(target_arch = "x86_64")]
+#[target_feature(enable = "avx2")]
+pub unsafe fn dequant_iq1m_avx2(bloc: &[u8], out: &mut [f32]) {
+    use std::arch::x86_64::*;
+    assert!(bloc.len() >= 56, "bloc IQ1_M trop court : {}", bloc.len());
+    let sc: [u16; 4] = [
+        u16::from_le_bytes([bloc[48], bloc[49]]),
+        u16::from_le_bytes([bloc[50], bloc[51]]),
+        u16::from_le_bytes([bloc[52], bloc[53]]),
+        u16::from_le_bytes([bloc[54], bloc[55]]),
+    ];
+    let brut = (sc[0] >> 12) | ((sc[1] >> 8) & 0x00f0) | ((sc[2] >> 4) & 0x0f00)
+             | (sc[3] & 0xf000);
+    let d = crate::gguf::Gguf::f16_to_f32(brut);
+    let qs = &bloc[0..32];
+    let qh = &bloc[32..48];
+    for ib in 0..8usize {
+        let dl1 = d * (2 * ((sc[ib / 2] >> (6 * (ib % 2))) & 0x7) + 1) as f32;
+        let dl2 = d * (2 * ((sc[ib / 2] >> (6 * (ib % 2) + 3)) & 0x7) + 1) as f32;
+        let q = &qs[4 * ib..4 * ib + 4];
+        let (h0, h1) = (qh[2 * ib], qh[2 * ib + 1]);
+        let idx = [
+            q[0] as u16 | ((h0 as u16) << 8 & 0x700),
+            q[1] as u16 | ((h0 as u16) << 4 & 0x700),
+            q[2] as u16 | ((h1 as u16) << 8 & 0x700),
+            q[3] as u16 | ((h1 as u16) << 4 & 0x700),
+        ];
+        let delta = [
+            if h0 & 0x08 != 0 { -IQ1S_DELTA } else { IQ1S_DELTA },
+            if h0 & 0x80 != 0 { -IQ1S_DELTA } else { IQ1S_DELTA },
+            if h1 & 0x08 != 0 { -IQ1S_DELTA } else { IQ1S_DELTA },
+            if h1 & 0x80 != 0 { -IQ1S_DELTA } else { IQ1S_DELTA },
+        ];
+        for l in 0..4usize {
+            let grille = &IQ1S_GRID[idx[l] as usize];
+            let dl = if l < 2 { dl1 } else { dl2 };
+            // huit i8 → huit i32 → huit f32, puis (grille + delta) · dl
+            let huit = _mm_loadl_epi64(grille.as_ptr() as *const __m128i);
+            let i32s = _mm256_cvtepi8_epi32(huit);
+            let gf = _mm256_cvtepi32_ps(i32s);
+            let somme = _mm256_add_ps(gf, _mm256_set1_ps(delta[l]));
+            let r = _mm256_mul_ps(_mm256_set1_ps(dl), somme);
+            _mm256_storeu_ps(out.as_mut_ptr().add(ib * 32 + l * 8), r);
+        }
+    }
+}
+
 pub fn dequant_iq1m_dans(bloc: &[u8], out: &mut [f32]) {
     assert!(bloc.len() >= 56, "bloc IQ1_M trop court : {}", bloc.len());
     // L'ORDRE des champs est `qs[32]`, `qh[16]`, `scales[8]` — les échelles sont

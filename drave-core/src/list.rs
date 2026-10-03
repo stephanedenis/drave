@@ -615,7 +615,20 @@ pub fn dequant_grille_dans(t: u32, bloc: &[u8], out: &mut [f32]) {
         18 => crate::formats::dequant_iq3xxs_dans(bloc, out),
         19 => crate::formats::dequant_iq1s_dans(bloc, out),
         23 => crate::formats::dequant_iq4xs_dans(bloc, out),
-        29 => crate::formats::dequant_iq1m_dans(bloc, out),
+        29 => {
+            // IQ1_M : les experts de V4-Flash. Même détection que Q2_K,
+            // choisie une fois.
+            #[cfg(target_arch = "x86_64")]
+            {
+                static AVX2: std::sync::OnceLock<bool> = std::sync::OnceLock::new();
+                if *AVX2.get_or_init(|| std::is_x86_feature_detected!("avx2")) {
+                    // Sûreté : AVX2 détecté, et le noyau borne comme le scalaire.
+                    unsafe { crate::formats::dequant_iq1m_avx2(bloc, out) };
+                    return;
+                }
+            }
+            crate::formats::dequant_iq1m_dans(bloc, out)
+        }
         _ => panic!("type {t} n'est pas un format à grille"),
     }
 }

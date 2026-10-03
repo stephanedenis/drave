@@ -99385,3 +99385,82 @@ real	0m23,984s
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"sprints/18-vectoriser-la-dequantification-des-experts.md\"\ns=open(p).read()\na=\"\"\"## Portes\n\n- `tools/portes.sh rapide` : voir le journal du bloc\"\"\"\nb=\"\"\"### 3bis. Et l'autre modèle lourd ? (mesuré, … [4581 caractères tronqués]`
+
+  ```
+ok
+191362f Noyau AVX2 pour la déquantification Q2_K des experts : ×1,33 sur le poste, zéro bit changé
+ven 02 oct 2026 23:55:26 EDT
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n \"$(grep -n 'pub fn dequant_iq1m_dans' drave-core/src/formats.rs | cut -d: -f1),+45p\" drave-core/src/formats.rs", "description": "Read the IQ1_M dequantizer"}`
+
+  ```
+pub fn dequant_iq1m_dans(bloc: &[u8], out: &mut [f32]) {
+    assert!(bloc.len() >= 56, "bloc IQ1_M trop court : {}", bloc.len());
+    // L'ORDRE des champs est `qs[32]`, `qh[16]`, `scales[8]` — les échelles sont
+    // EN DERNIER. Les lire en premier donnait une échelle absurde et un écart de
+    // 2,4e5 : c'est la comparaison avec ggml qui l'a montré.
+    let sc: [u16; 4] = [
+        u16::from_le_bytes([bloc[48], bloc[49]]),
+        u16::from_le_bytes([bloc[50], bloc[51]]),
+        u16::from_le_bytes([bloc[52], bloc[53]]),
+        u16::from_le_bytes([bloc[54], bloc[55]]),
+    ];
+    // L'échelle f16 est répartie dans les quatre mots : 4 bits de chacun.
+    let brut = (sc[0] >> 12) | ((sc[1] >> 8) & 0x00f0) | ((sc[2] >> 4) & 0x0f00)
+             | (sc[3] & 0xf000);
+    let d = crate::gguf::Gguf::f16_to_f32(brut);
+    let qs = &bloc[0..32];
+    let qh = &bloc[32..48];
+    assert!(out.len() >= 256, "tampon de sortie trop court : {}", out.len());
+    for ib in 0..8usize {
+        let dl1 = d * (2 * ((sc[ib / 2] >> (6 * (ib % 2))) & 0x7) + 1) as f32;
+        let dl2 = d * (2 * ((sc[ib / 2] >> (6 * (ib % 2) + 3)) & 0x7) + 1) as f32;
+        let q = &qs[4 * ib..4 * ib + 4];
+        let 
+… [871 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"IQ1S_GRID\\|IQ1S_DELTA\" drave-core/src/formats.rs | head -5; grep -n \"static IQ1S_GRID\" -A 3 drave-core/src/formats.rs | head -6; cp drave-core/target/release/drave /tmp/drave_avant_iq1m && echo \"binaire de reference co … [74 caractères tronqués]`
+
+  ```
+342:        let delta = if qh & 0x8000 != 0 { -IQ1S_DELTA } else { IQ1S_DELTA };
+345:            let grille = IQ1S_GRID[index];
+447:pub static IQ1S_GRID: [[i8; 8]; 2048] = [
+2765:/// `IQ1S_DELTA` de ggml : le décalage appliqué à chaque niveau de la grille.
+2766:const IQ1S_DELTA: f32 = 0.125;
+447:pub static IQ1S_GRID: [[i8; 8]; 2048] = [
+448-    [-1,-1,-1,-1,-1,-1,-1,-1,],
+449-    [1,-1,-1,-1,-1,-1,-1,-1,],
+450-    [0,0,-1,-1,-1,-1,-1,-1,],
+binaire de reference copie
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"drave-core/src/formats.rs\"\ns=open(p).read()\na=\"\"\"pub fn dequant_iq1m_dans(bloc: &[u8], out: &mut [f32]) {\"\"\"\nb=\"\"\"/// Déquantification IQ1_M **vectorisée**, identique AU BIT PRÈS à la version\n/// s … [3840 caractères tronqués]`
+
+  ```
+ok formats
+ok list
+    Finished `release` profile [optimized] target(s) in 35.46s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && V=/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf && rm -rf /tmp/v4f_av /tmp/v4f_sc && mkdir -p /tmp/v4f_av /tmp/v4f_sc && echo \"=== scalaire (binaire d'avant)  … [587 caractères tronqués]`
+
+  ```
+=== scalaire (binaire d'avant) ===
+real	0m23,887s
+=== perplexité 8430.4966 sur 4 tokens (0 événements, 13.0 s) ===
+    postes (ms/token) : projets-attn 0.00 | rope 0.00 | attention 1157.09 | proj+mlp 2054.97 | somme 3212.06 | reste (tête + échantillonnage) 37.66
+=== AVX2 IQ1_M ===
+real	0m23,404s
+=== perplexité 8430.4966 sur 4 tokens (0 événements, 12.5 s) ===
+    postes (ms/token) : projets-attn 0.00 | rope 0.00 | attention 1160.92 | proj+mlp 1916.57 | somme 3077.49 | reste (tête + échantillonnage) 37.57
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport numpy as np, os\ndef lire(p): return np.fromfile(p, dtype=\"<f4\").astype(np.float64)\ntot=0; diff=[]\nfor f in sorted(os.listdir(\"/tmp/v4f_av\")):\n    if not f.endswith(\".bin\"): continue\n    p2=os.path. … [520 caractères tronqués]`
+
+  ```
+V4-Flash : noyau AVX2 IQ1_M vs scalaire : 3126 tenseurs, 0 différents
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash tools/portes.sh rapide > /tmp/porte18b.log 2>&1 & sleep 2; python3 - <<'PY'\np=\"sprints/18-vectoriser-la-dequantification-des-experts.md\"\ns=open(p).read()\na=\"\"\"## Portes\n\n- `tools/portes.sh rapide` : voir le journ … [5577 caractères tronqués]`
