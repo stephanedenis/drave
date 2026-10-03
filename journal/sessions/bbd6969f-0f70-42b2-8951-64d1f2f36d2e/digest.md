@@ -99680,3 +99680,11 @@ logits ctx 32 vs ctx 1024 (mêmes 32 jetons) : écart max 0.000e+00
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"sprints/19-v41-a-1024-jetons.md\"\ns=open(p).read()\na=\"\"\"## Revue — ce qui est livré, mesuré\n\n_(mesure en cours)_\"\"\"\nb=\"\"\"## Revue — ce qui est livré, mesuré\n\n### 1. La première passe longue de V4 … [8791 caractères tronqués]`
+
+  ```
+ok
+20de26e Bloc 19 : première passe V4.1 de 1 024 jetons (1 023 notés, PPL 1 287 700,8239, 60,6 min, aucun incident) — et le profil par profondeur n'avait aucun drapeau
+sam 03 oct 2026 01:17:04 EDT
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cargo test --release --manifest-path drave-core/Cargo.toml 2>&1 | grep -E \"test result\" | head -1; rm -f sprints/COURANT; git add -A; git commit -q -m \"Sprint 19 : clôture (76 min) — la passe longue est passée, le profil par profo … [201 caractères tronqués]`

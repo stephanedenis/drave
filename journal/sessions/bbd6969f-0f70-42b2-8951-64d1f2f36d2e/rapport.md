@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 106.5 h |
 | Tours | 79 |
-| Messages | 6230 |
-| Appels d'outils | 5973 |
+| Messages | 6231 |
+| Appels d'outils | 5974 |
 | Fichiers touchés | 117 |
-| Commandes | 5042 |
+| Commandes | 5043 |
 | Sous-agents | 32 |
-| Commits | 389 |
+| Commits | 390 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -4037,7 +4037,7 @@ P0-P6 faites, P8 portée et val
 
 ### Tour 79 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [941 caractères tronqués]
 
-*1233 appels d'outils.* Actions notables :
+*1234 appels d'outils.* Actions notables :
 
 - web_search
 - web_fetch
@@ -4053,7 +4053,7 @@ P0-P6 faites, P8 portée et val
 - bash — Locate hc_collapse_triton definition
 - read
 - bash — Read mHC init and pre/post call sites
-- … et 1101 autres
+- … et 1102 autres
 
 **Synthèse produite :**
 
@@ -4260,7 +4260,7 @@ P0-P6 faites, P8 portée et val
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5002 autres
+- … et 5003 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4797,4 +4797,5 @@ P0-P6 faites, P8 portée et val
 - Sprint 18 : clôture (28 min) — deux noyaux AVX2 bit-exacts (Q2_K et IQ1_M), portes toutes vertes" && now=$(date +%s) && printf "19 %s %s\n" "$now" "$((now+7200)
 - REPRISE : la nuit des optimisations (×3,54 sur la passe V4.1, 5 670 tenseurs prouvés identiques) et les deux pistes refusées par la mesure" && ps -o etime=,pcpu
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="sprints/19-v41-a-1024-jetons.md" s=open(p).read() a="""## Revue — ce qui est livré, me
+- Sprint 19 : clôture (76 min) — la passe longue est passée, le profil par profondeur est réparé, et 63 tests verts" ; now=$(date +%s); printf "20 %s %s\n" "$now"
 
