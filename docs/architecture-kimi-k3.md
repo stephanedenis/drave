@@ -197,6 +197,32 @@ et confondre les deux donne des scores plausibles et faux), puis la récurrence
 delta avec un état **par tête** (`head_dim × head_dim`), et enfin la porte `ssm_g`
 et la norme `ssm_o_norm` en sortie.
 
+## 4ter. Comment l'implémenter dans le moteur (notes d'exécution)
+
+- **Poids empruntés, jamais recopiés** : les projections Q8_0 passent par
+  `DenseQ8::emprunter_q8(ptr, n_out, n_in, nb)` (`g.data_ptr(nom)`), les F32 par
+  une tranche. Recopier les 1,5 To en f32 est hors de question (et inutile : le
+  moteur emprunte déjà les blocs de V4/V4.1).
+- **Activations** : `dot_q8_source(o, x: &[i32])` attend une activation
+  **quantifiée** — c'est le motif du moteur (quantifier une fois, puis sommer).
+- **État du KDA** par couche : convolution `3 × 12288` f32 (147 Ko) et delta
+  `96 × 128 × 128` f32 (**6,3 Mo**) — pour 93 couches, ~590 Mo : acceptable.
+- **Ordre de la couche 0**, tel que la référence le déroule :
+  1. `x = embd[token]` ; `cur = rms_norm(x, attn_norm)` ;
+  2. KDA : `q/k/v = W·cur` → convolution 4 + SiLU → L2-norm par tête →
+     `g = kda_porte(f_b(f_a(cur)) + dt_bias, ssm_a, −5)` ; `beta = σ(W_beta·cur)` ;
+     récurrence (`kda_pas`) ; `normed = rms_norm(o, ssm_norm)` ;
+     `gated = normed · σ(W_g·cur)` ; `out = attn_output · gated` ;
+  3. **le flux REDÉMARRE** (`il % 12 == 0`) : `prefix = out` (et non `x + out`) ;
+  4. `cur = res_mix(prefix, ffn_res_score)` (la pile contient déjà `x`, empilé
+     AVANT l'attention) ;
+  5. `cur = rms_norm(cur, ffn_norm)` ; FFN dense : `situ(W_gate·cur, W_up·cur)`
+     puis `W_down · h` ;
+  6. `prefix += cur` → `l_out`.
+- **La pile de points de contrôle** se transporte : c'est le nouveau flux de
+  coupure (≤ 8 × 7 168 f32 = 229 Ko par jeton), à mesurer comme les copies `hc`
+  de V4 l'ont été.
+
 ## 5. Ce que notre moteur a déjà, et ce qui manque
 
 | brique | chez nous | état |

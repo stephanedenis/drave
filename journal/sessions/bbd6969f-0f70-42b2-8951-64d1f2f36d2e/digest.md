@@ -111812,3 +111812,66 @@ calculable    : NON — il manque : attention delta-net (KDA) : conv1d de 4, por
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Kimi-K3 : l'inventaire des tenseurs, vérifié sur le fichier (49 couches vues, cadence KDA/MLA confirmée)\n\nLe module drave-core/src/kimi_k3.rs vérifie que CHAQUE couche porte les tenseurs\nattendus d … [689 caractères tronqués]`
+
+  ```
+6b7b7fa Kimi-K3 : l'inventaire des tenseurs, vérifié sur le fichier (49 couches vues, cadence KDA/MLA confirmée)
+12:01:45    10.5 Go / 49.0 Go (21.4 %, 105 Mo/s)
+696G	/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp-k3 && sed -n '440,485p' src/models/kimi-k3.cpp", "description": "Read the tail of the KDA layer"}`
+
+  ```
+cb(g1, "kda_g1", il);
+
+    g1 = ggml_reshape_4d(ctx0, g1, head_dim, n_head_kda, n_seq_tokens, n_seqs);
+
+    ggml_tensor * beta = ggml_mul_mat(ctx0, layer.ssm_beta, cur);
+    beta = ggml_reshape_4d(ctx0, beta, 1, n_head_kda, n_seq_tokens, n_seqs);
+    beta = ggml_sigmoid(ctx0, beta);
+    cb(beta, "kda_beta", il);
+
+    ggml_tensor * cur_3d = ggml_reshape_3d(ctx0, cur, cur->ne[0], n_seq_tokens, n_seqs);
+
+    ggml_tensor * ssm_states_all = mctx_cur->get_s_l(il);
+    ggml_tensor * state = build_rs(inp_rs, ssm_states_all, hparams.n_embd_s(), n_seqs);
+    state = ggml_reshape_4d(ctx0, state, head_dim, head_dim, n_head_kda, n_seqs);
+
+    const float eps_norm = hparams.f_norm_rms_eps;
+    Qcur = build_gdn_l2_norm(ctx0, Qcur, eps_norm);
+    Kcur = build_gdn_l2_norm(ctx0, Kcur, eps_norm);
+
+    ggml_tensor * output = build_recurrent_attn(inp_rs, ssm_states_all, Qcur, Kcur, Vcur, g1, beta, state, il);
+    output = ggml_cont(ctx0, output);
+    cb(output, "kda_scan_out", il);
+
+    // K3: single full-rank gate (kimi-linear factors this as g_b(g_a(x)))
+    ggml_tensor * cur_2d = ggml_reshape_2d(ctx0, cur_3d, cur_3d->ne[0], n_seq_tokens * n_seqs);
+    ggml_tensor * g2     = ggml_mul_mat(ctx0, layer.
+… [700 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"impl DenseQ8\" -A 200 drave-core/src/list.rs | grep -nE \"pub fn [a-z_]+\\(&self\" | head -14; echo \"=== comment le moteur fait un matvec Q8 (MLA) ===\"; grep -n \"matvec_q8\\|fn matvec\\b\" drave-core/src/model.rs | head  … [50 caractères tronqués]`
+
+  ```
+51:421-    pub fn dot_blocs(&self, o: usize, x: &[i32]) -> f32 {
+115:485-    pub fn dot_chunked(&self, o: usize, x: &[i32]) -> i64 {
+144:514-    pub fn dot(&self, o: usize, x: &[i32]) -> i64 {
+=== comment le moteur fait un matvec Q8 (MLA) ===
+4243:    fn matvec(pool: &mut Pool, p: &Proj, x: &[f32], out: &mut [f32], events: &mut u64,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"impl DenseQ8\" drave-core/src/list.rs; sed -n '/impl DenseQ8 {/,/^}/p' drave-core/src/list.rs | grep -nE \"pub fn|fn \" | head -20", "description": "List the DenseQ8 methods"}`
+
+  ```
+371:impl DenseQ8 {
+2:    pub fn build(w: &[f32], n_out: usize, n_in: usize) -> Self {
+24:    pub fn build_blocs(w: &[f32], n_out: usize, n_in: usize) -> Self {
+51:    pub fn dot_blocs(&self, o: usize, x: &[i32]) -> f32 {
+70:    pub unsafe fn emprunter_q8(base: *const u8, n_out: usize, n_in: usize,
+78:    pub fn dot_q8_source(&self, o: usize, x: &[i32]) -> f32 {
+115:    pub fn dot_chunked(&self, o: usize, x: &[i32]) -> i64 {
+144:    pub fn dot(&self, o: usize, x: &[i32]) -> i64 {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"dot_q8_source\\|fn quantif\" drave-core/src/model.rs | head -6; python3 - <<'PY'\np='docs/architecture-kimi-k3.md'\ns=open(p).read()\ns=s.replace(\"\"\"## 5. Ce que notre moteur a déjà, et ce qui manque\"\"\",\n\"\"\"## 4te … [1946 caractères tronqués]`
