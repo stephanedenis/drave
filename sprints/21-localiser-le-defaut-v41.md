@@ -1,6 +1,9 @@
 # Sprint 21 — Localiser le défaut V4.1
 
-- **Début** : 03:00 · **Fin prévue** : 05:00 (boxing de 120 min)
+- **Début** : 03:00 · **Fin** : 03:35 (35 min — l'investigation a avancé vite parce que
+  chaque hypothèse avait son drapeau et sa mesure ; elle s'arrête ici, le défaut
+  n'est pas trouvé mais il est cerné au chemin des experts, et le bloc suivant a
+  son plan)
 - **Objectif** : le bloc 20 a établi que **V4-Flash est juste** (PPL 1,875 sur huit
   répétitions, contre 1,844 pour llama.cpp) et que **V4.1 ne prédit pas** (3 677
   sans engram, 7 506 à 8 bits, top-1 0/31). Le défaut est dans un mécanisme propre

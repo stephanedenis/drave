@@ -101293,3 +101293,21 @@ token_embd.weight                  dims BRUTS [5120, 129280] · type 1
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"sprints/21-localiser-le-defaut-v41.md\"\ns=open(p).read()\na=\"\"\"### 2bis. Deux vérifications de plus, et deux hypothèses de plus éliminées\"\"\"\nb=\"\"\"### 2bis. Quatre pièces de plus vérifiées contre numpy … [2634 caractères tronqués]`
+
+  ```
+ok
+e5ce21c Localisation V4.1 : la tête (1e-4) et le routeur (sélection identique à la trace) sont vérifiés en numpy — il ne reste que la COMPOSITION des experts
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^## \\|^- \\*\\*Début\" sprints/21-localiser-le-defaut-v41.md; date", "description": "Check box 21's sprint structure"}`
+
+  ```
+3:- **Début** : 03:00 · **Fin prévue** : 05:00 (boxing de 120 min)
+11:## Revue — ce qui est livré, mesuré
+84:## Rétrospective — garder / changer / doute
+122:## Planning du bloc 22 — la composition, vérifiée contre numpy
+140:## (Ancien) planning — la règle du retard, relue à la source
+sam 03 oct 2026 03:34:25 EDT
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"sprints/21-localiser-le-defaut-v41.md\"\ns=open(p).read()\na=\"- **Début** : 03:00 · **Fin prévue** : 05:00 (boxing de 120 min)\"\nb=\"\"\"- **Début** : 03:00 · **Fin** : 03:35 (35 min — l'investigation a avancé … [602 caractères tronqués]`
