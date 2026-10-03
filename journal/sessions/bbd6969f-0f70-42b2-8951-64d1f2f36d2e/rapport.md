@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 113.1 h |
+| Durée | 113.5 h |
 | Tours | 88 |
-| Messages | 6651 |
-| Appels d'outils | 6365 |
-| Fichiers touchés | 123 |
-| Commandes | 5377 |
+| Messages | 6681 |
+| Appels d'outils | 6392 |
+| Fichiers touchés | 125 |
+| Commandes | 5400 |
 | Sous-agents | 32 |
-| Commits | 424 |
+| Commits | 425 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -4365,15 +4365,27 @@ Si tu veux, je quantifie le scénario « deux nœuds, chacun son disque » sur V
 
 ### Tour 88 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [942 caractères tronqués]
 
-*3 appels d'outils.* Actions notables :
+*30 appels d'outils.* Actions notables :
 
 - bash — Four windows of identical tokens, with I/O sampling
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-materiel-disque-ou-cpu.md`
 - bash — Commit the hardware report and check the run
+- bash — Check the repeated-content run
+- bash — Inspect GPUs and NVLink topology
+- bash — Inspect the GPU backend and reports
+- bash — Check PCIe link width and repo GPU figures
+- bash — Find how to run the GPU bench
+- job_output
+- bash — Wait for the repeated-content windows
+- bash — Inspect the repeated-content log
+- bash — Copy V4-Flash to the NVMe to remove the HDD confound
+- bash — Check copy progress
+- bash — Look for an existing GGUF metadata tool
+- … et 15 autres
 
 **Synthèse produite :**
 
-⏵ Bloc 25 : trancher entre accumulation et contenu (4 fenêtres, mêmes jetons) avec suivi d'I/O
+⏵ Mesure propre sur la copie NVMe : le « coût qui croît » était-il le cache du disque dur ?
 
 ## 3. Travail accompli
 
@@ -4504,6 +4516,8 @@ Si tu veux, je quantifie le scénario « deux nœuds, chacun son disque » sur V
 | `/home/stephane/Data13TB/stephane/github/Qtrinet/sprints/23-la-porte-de-correction-outillee-et-longue.md` | 0 | 1 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/24-le-produit-scalaire-des-experts-vectorise.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-materiel-disque-ou-cpu.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/analyse_octets_par_jeton.py` | 1 | 1 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gpu-tandem-nvlink.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -4582,7 +4596,7 @@ Si tu veux, je quantifie le scénario « deux nœuds, chacun son disque » sur V
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5337 autres
+- … et 5360 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5154,4 +5168,5 @@ Si tu veux, je quantifie le scénario « deux nœuds, chacun son disque » sur V
 - Plan et sprint 23 : le coût du contexte long est attribué à ce qui est MESURÉ (proj+mlp double, l'attention reste plate), l'empreinte des experts reste une hypo
 - DRAVE_SIMD_DOT : le produit scalaire des experts vectorisé — ×2,06 sur la passe, et l'écart qu'il introduit est MESURÉ  Le poste dominant de V4-Flash (proj+mlp,
 - Rapport : disque ou CPU ? — la mesure dit que le deuxième NVMe n'accélérerait pas les passes actuelles  Mesuré : NVMe à 2,0 Go/s (dd direct), moteur V4.1 à ~30 
+- GPU : le tandem NVLink est au repos sur la charge principale, et les chiffres disent pourquoi  Nouvel outil (tools/analyse_octets_par_jeton.py, en-têtes GGUF se
 
