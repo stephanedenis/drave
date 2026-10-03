@@ -109,34 +109,60 @@ quantification, `--ppl` imprime la sienne quand `--options-actives` est demandé
 et le chiffre de 16 bits n'apparaît nulle part sans lui. La prochaine fois, la
 comparaison portera le réglage à côté du chiffre.
 
-## Retro — ce que ce bloc m'apprend sur ma propre méthode
+## Retro — introspection (garder / changer / doute)
 
-**J'ai chassé un faux lièvre pendant quarante minutes.** Le bloc a commencé par
-« la divergence commence à la couche 0 » — une conclusion héritée du bloc
-précédent. Elle venait d'une comparaison entre deux passes **réglées
-différemment** (`--ppl` à 16 bits contre le harnais à 8), pas d'un défaut de
-couture. J'ai dépensé trois runs lourds (365 Go, 4 min chacun) à traquer un état
-résiduel imaginaire avant de vérifier le seul point qui coûte dix secondes :
-*les deux choses que je compare ont-elles les mêmes options ?* La bonne question
-était la moins chère, et c'est celle que j'ai posée en dernier.
+**Garder.**
 
-**Ce qui a tranché, à chaque fois, c'est le tenseur, pas la perplexité.** Une
-perplexité est un scalaire sur trois prédictions à froid : elle amplifie
-chaotiquement (1,8e-3 sur `l_last-0` devient 8,4× de perplexité). Comparer 2 544
-fichiers en numpy a donné une réponse nette en un coup — position 0 exacte,
-positions 1 et 2 fausses — là où la perplexité ne disait que « c'est faux ».
+- **Le tenseur plutôt que la perplexité.** Une perplexité sur trois prédictions à
+  froid amplifie chaotiquement (1,8e-3 sur `l_last-0` devient 8,4× de
+  perplexité) : comparer 2 544 fichiers en numpy a donné la réponse nette —
+  position 0 exacte, positions 1 et 2 fausses — là où le scalaire ne disait que
+  « c'est faux ».
+- **La porte écrite dans le même bloc que le correctif.** Le défaut a vécu parce
+  qu'aucun test n'exerçait un couple de nœuds ; la porte existe maintenant, et
+  elle a coûté vingt minutes.
 
-**Le commentaire qui expliquait le bug.** Le code du bloc précédent portait :
-« elle est lue par `norme_finale`, qui ne la consomme pas ». C'était écrit comme
-une intention, et c'était la description exacte du défaut. Un commentaire qui
-justifie un état le protège de la relecture. La réponse n'est pas d'écrire un
-meilleur commentaire mais de rendre l'invariant **structurel** (`&mut self` +
-`take()`) : ce que le type interdit n'a pas besoin d'être commenté.
+**Changer.**
 
-**Ce que j'ai bien fait** : ne pas publier l'explication du 514 722 avant la
-preuve par tenseur ; écrire la porte qui manquait au lieu de seulement corriger
-le bug ; et vérifier l'hypothèse `--dense` par la mesure (elle était fausse) au
-lieu de la retenir parce qu'elle était plausible.
+- **Vérifier les réglages des deux choses comparées AVANT de chercher une
+  divergence numérique.** J'ai dépensé trois runs de 4 minutes (365 Go) à traquer
+  un état résiduel imaginaire, alors que `--ppl --abits 8` (2 min) tranchait. La
+  question la moins chère était posée en dernier. Action du bloc suivant : quand
+  deux passes donnent deux chiffres, la première ligne du protocole est « quels
+  réglages ? » — et je le consigne dans le rapport avant de courir.
+- **Un commentaire ne doit pas justifier un état.** Le bloc précédent portait
+  « elle est lue par `norme_finale`, qui ne la consomme pas » : écrit comme une
+  intention, c'était la description exacte du défaut, et cela l'a protégé de la
+  relecture. Là où `take()` et `&mut self` suffisent, le commentaire est de trop.
+
+**Doute.**
+
+- Les **2 544 tenseurs identiques** prouvent la couture sur *ce* découpage (couche
+  20), *ce* modèle et *quatre* jetons. Rien ne dit qu'un découpage à la couche 8
+  ou 32, ou un contexte long, tiendrait : la porte rapide attrape la classe de
+  défaut, pas le cas.
+- Le `--ppl-reparti` compare **deux passes dans le même processus**, et la passe
+  répartie **saute le dernier jeton** (par construction : il n'a rien à prédire).
+  C'est correct, mais c'est une asymétrie que seule la lecture du code montre —
+  un futur mode « deux processus » ne l'aurait pas.
+
+## Planning du bloc suivant (14) — l'engram est-il vivant ?
+
+Le plan P8 n'a plus qu'une question ouverte qui se mesure : l'**injection de
+l'engram entre-t-elle vraiment dans le calcul** d'une passe complète ? On sait
+qu'elle est branchée, vérifiée contre la référence numpy et **non nulle** dans la
+passe complète (mesuré : `engram_sortie` couche 1 rms 0,058 à 0,235 ; couche 14
+rms 0,53 à 0,73 sur 20 480 valeurs), mais aucun A/B ne l'établit.
+
+1. `DRAVE_SANS_ENGRAM=1` — interrupteur de comparaison, déclaré dans `VARS_LUES`,
+   **annoncé** quand il est actif (« le moteur calcule SANS l'engram : ce n'est
+   pas V4.1 »).
+2. A/B sur la perplexité V4.1 (ctx 8, ~55 s par passe) : le chiffre doit bouger ;
+   et sur les vides : `engram_sortie` doit être exactement nul avec l'interrupteur,
+   `l_last-1` et `l_last-14` doivent différer.
+3. Décider du **masque des jetons d'image** (`dead_mask = image_sentinel_mask`) :
+   le porter ou l'écrire comme sans objet en texte seul, avec sa condition de
+   réouverture (un modèle multimodal).
 
 ## Portes
 

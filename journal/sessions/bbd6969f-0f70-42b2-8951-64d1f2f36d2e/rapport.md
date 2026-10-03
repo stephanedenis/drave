@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 102.5 h |
 | Tours | 79 |
-| Messages | 5938 |
-| Appels d'outils | 5683 |
+| Messages | 5947 |
+| Appels d'outils | 5692 |
 | Fichiers touchés | 113 |
-| Commandes | 4816 |
+| Commandes | 4823 |
 | Sous-agents | 32 |
-| Commits | 365 |
+| Commits | 366 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -4037,7 +4037,7 @@ P0-P6 faites, P8 portée et val
 
 ### Tour 79 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [941 caractères tronqués]
 
-*943 appels d'outils.* Actions notables :
+*952 appels d'outils.* Actions notables :
 
 - web_search
 - web_fetch
@@ -4053,7 +4053,7 @@ P0-P6 faites, P8 portée et val
 - bash — Locate hc_collapse_triton definition
 - read
 - bash — Read mHC init and pre/post call sites
-- … et 844 autres
+- … et 853 autres
 
 **Synthèse produite :**
 
@@ -4173,7 +4173,7 @@ P0-P6 faites, P8 portée et val
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-v4-yarn-compresse.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/11-v41-la-passe-complete.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/12-la-rotation-des-couches-compressees.md` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/13-les-deux-enigmes-du-decoupage-v41.md` | 1 | 3 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/13-les-deux-enigmes-du-decoupage-v41.md` | 1 | 4 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/format-flux.md` | 0 | 2 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-decoupage-v41.md` | 1 | 1 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-execution-v41.md` | 0 | 1 |
@@ -4256,7 +4256,7 @@ P0-P6 faites, P8 portée et val
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 4776 autres
+- … et 4783 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4769,4 +4769,5 @@ P0-P6 faites, P8 portée et val
 - Sprint 12 : le découpage V4.1 en v6, et l'instrument de mesure qui est suspect  Le protocole v6 transporte la pre portée ; mesuré (82 016 octets aller, 81 999 r
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'EOF' Découpage V4.1 : la couture est exacte au bit près, l'instrument 
 - Portes : la porte du découpage (deux nœuds, cinq modes) branchée dans portes.sh, et la retro du bloc 13  Toutes les portes vertes, y compris la nouvelle section
+- Sprint 13 : la cérémonie (garder / changer / doute) et le planning du bloc 14 — la vivacité de l'engram  La rétro dit ce que le bloc a coûté : trois runs de 365
 

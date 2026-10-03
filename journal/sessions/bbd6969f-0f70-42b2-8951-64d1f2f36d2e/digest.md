@@ -95620,3 +95620,181 @@ toutes les portes sont vertes
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Portes : la porte du découpage (deux nœuds, cinq modes) branchée dans portes.sh, et la retro du bloc 13\n\nToutes les portes vertes, y compris la nouvelle section : 62 tests, Qwen\n19,3885, clusters 7 … [575 caractères tronqués]`
+
+  ```
+318982b Portes : la porte du découpage (deux nœuds, cinq modes) branchée dans portes.sh, et la retro du bloc 13
+ac80e7e Découpage V4.1 : la couture est exacte au bit près, l'instrument est innocenté
+27d174d Sprint 12 : le découpage V4.1 en v6, et l'instrument de mesure qui est suspect
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n \"$(grep -n '^### P8' docs/plan-deepseek41-complet.md | cut -d: -f1),+55p\" docs/plan-deepseek41-complet.md", "description": "Read plan phase P8"}`
+
+  ```
+### P8 — Engram : la liste d'adresses, et sa référence à écrire (≈ 1 à 2 journées) — **référence trouvée, phase rouverte** (02/10)
+
+> **Inventorié** : deux tables de **101,38 Go** chacune
+> (`blk.{1,14}.engram_embd` I8 [384 006 168, 264]), soit **202,8 Go = 55 % du
+> fichier**. Le format de rangée est **entièrement déterminé** par les
+> métadonnées : `e4m3_e8m0_32_row264` = 8 blocs de 32 valeurs e4m3 + 8 échelles
+> e8m0 = **264 octets**. La sonde (`--sonder-engram 10000`) touche 2,6 Mo par
+> table en 219-524 ms, à 120 Mo de RSS.
+> **Ce qui manque n'est pas le code, c'est la RECETTE** : les métadonnées donnent
+> 48 nombres premiers et 8 multiplicateurs, mais pas la formule d'adressage ; et
+> il n'existe **aucune référence** — llama.cpp ignore l'engram, V4-Flash ne l'a
+> pas, et le code d'entraînement n'est pas dans ce dépôt. Plusieurs formules
+> plausibles donnent des rangées différentes : en choisir une serait deviner, ce
+> que la règle 6 interdit.
+> **Correction (02/10) : la référence EXISTE.** Un portage 1:1 de
+> `vllm/models/deepseek_v4_1/common/engram.py` est publié
+> ([`mudler/vllm.cpp`](https://github.com/mudler/vllm.cpp/blob/main/src/vllm/model_executor/models/deepseek_v4_1_
+… [2399 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"engram\" drave-core/src/main.rs | grep -i \"sans\\|env\\|var\\|off\\|desactiv\\|drapeau\\|flag\" | head -20; echo \"=== variables d'env ===\"; grep -n \"DRAVE_[A-Z_]*\" drave-core/src/model.rs | grep -o \"DRAVE_[A-Z_]*\" |  … [71 caractères tronqués]`
+
+  ```
+1624:/// (`tools/engram_reference.py`) sur un fichier de 365 Go sans lire un poids.
+=== variables d'env ===
+DRAVE_DEBUG_ETAT
+DRAVE_DEBUG_MLA
+DRAVE_DEBUG_YARN
+DRAVE_DUMP_COUCHES
+DRAVE_ETAT_ENTREE
+DRAVE_FLUX_VERIF
+DRAVE_GPU_EXPERTS
+DRAVE_GPU_EXPERTS_GO
+DRAVE_GPU_KV
+DRAVE_GPU_TETE
+DRAVE_GPU_TOPK
+DRAVE_KV_BITS
+DRAVE_KV_F
+DRAVE_KV_K_F
+DRAVE_KV_V_F
+DRAVE_Q
+DRAVE_SANS_EMPRUNT
+DRAVE_TRACE_BLOCS
+DRAVE_TRACE_EXPERTS
+DRAVE_YARN
+  ```
+
+- **list_agents** `{}`
+
+  ```
+e7dfe34f-d596-4f98-93c2-cad5a92d3b1e [ready] — Harness logits llama.cpp
+c25f97d1-9a4d-41da-b983-004f793afe43 [ready] — Audit ignored CLI flags
+7d0d2578-0048-4998-8494-7d2daef56769 [ready] — Spec batched prefill protocol
+15fd322f-7e9e-48c0-a970-f36335eb622a [ready] — Trace format compaction study
+bcfe0b97-1795-4610-8e8b-b598ca1ba6cb [ready] — Adversarial review of recent commits
+42059fde-f06f-4e2c-9a23-8292d887fb6e [ready] — Docs vs measurements consistency audit
+7c876089-605c-4836-930e-925a66028509 [ready] — Review the afternoon fixes
+da69b1fa-91b0-4c69-bb2b-58bf00e92e28 [ready] — Spec for lot-in-lists mode 4
+aa5f9fc5-9450-4118-b65f-e8b99a28519d [ready] — Docs audit after today's changes
+5ce3f080-2d3d-467a-8ee1-df697f3f3e68 [ready] — Adversarial review of mode 4
+5185ccb1-be24-4716-89df-62621e790444 [ready] — Review the last-hour fixes
+564fbe3a-a859-4b3b-bd17-4da73a2f4e22 [ready] — Adversarial review GPU topk
+8e04c99a-8ba1-4675-9f80-fa3338449b17 [ready] — Vérifier chiffres et cohérence docs
+c776b71f-525a-4bad-b83c-eff1c2d204ff [ready] — Revue adversariale du branchement top-k
+6d0c1d28-76e1-42f8-9e8c-7f88395f9e55 [ready] — Revue adverse du noyau fusionné
+4d7a793b-74d1-4c46-bb53-21953
+… [1276 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport numpy as np, os\ndef lire(p): return np.fromfile(p, dtype=\"<f4\").astype(np.float64)\nprint(\"=== engram : les vides de la passe complète (/tmp/dref) ===\")\nfor couche in (1, 14):\n    for pos in range(4):\n        for nom in (\"engram_kv\", \"engram_sortie\") … [377 caractères tronqués]`
+
+  ```
+=== engram : les vides de la passe complète (/tmp/dref) ===
+  engram_kv     couche  1 pos 0 : |x|max 7.7592e+01  |x|rms 1.0502e+00  n 25600
+  engram_sortie couche  1 pos 0 : |x|max 5.4008e-01  |x|rms 5.7790e-02  n 20480
+  engram_kv     couche  1 pos 1 : |x|max 7.9555e+01  |x|rms 1.0812e+00  n 25600
+  engram_sortie couche  1 pos 1 : |x|max 1.1235e+00  |x|rms 2.1268e-01  n 20480
+  engram_kv     couche  1 pos 2 : |x|max 7.0070e+01  |x|rms 1.0731e+00  n 25600
+  engram_sortie couche  1 pos 2 : |x|max 1.2738e+00  |x|rms 2.3247e-01  n 20480
+  engram_kv     couche  1 pos 3 : |x|max 7.1549e+01  |x|rms 9.7672e-01  n 25600
+  engram_sortie couche  1 pos 3 : |x|max 4.4507e-01  |x|rms 6.5522e-02  n 20480
+  engram_kv     couche 14 pos 0 : |x|max 1.5092e+02  |x|rms 1.2583e+00  n 25600
+  engram_sortie couche 14 pos 0 : |x|max 4.3924e+00  |x|rms 5.8602e-01  n 20480
+  engram_kv     couche 14 pos 1 : |x|max 1.8143e+02  |x|rms 1.4288e+00  n 25600
+  engram_sortie couche 14 pos 1 : |x|max 4.7172e+00  |x|rms 6.4502e-01  n 20480
+  engram_kv     couche 14 pos 2 : |x|max 1.4384e+02  |x|rms 1.2409e+00  n 25600
+  engram_sortie couche 14 pos 2 : |x|max 4.8673e+00  |x|rms 7.3287e-01  n 20480
+  engram_kv     couc
+… [139 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n \"$(grep -n 'nœud moteur' reports/decoupage-v41-digest.txt | head -1 | cut -d: -f1),+40p\" reports/decoupage-v41-digest.txt", "description": "Check the server section of the digest"}`
+
+  ```
+== nœud moteur (couches 20-39) vs passe complète — APRÈS correctif ==
+tenseurs comparés : 945 · somme des écarts max : 0.000e+00
+famille                   n différents    écart max
+l-attn_brut              60          0    0.000e+00
+l-attn_derope            60          0    0.000e+00
+l-attn_out               60          0    0.000e+00
+l-comp_bloc0              1          0    0.000e+00
+l-comp_bloc1              1          0    0.000e+00
+l-comp_bloc2              1          0    0.000e+00
+l-comp_brut0              1          0    0.000e+00
+l-comp_brut1              1          0    0.000e+00
+l-comp_brut2              1          0    0.000e+00
+l-comp_state_gate         3          0    0.000e+00
+l-comp_state_kv           3          0    0.000e+00
+l-hc_attn_pre            60          0    0.000e+00
+l-hc_ffn_in              60          0    0.000e+00
+l-hc_ffn_pre             60          0    0.000e+00
+l-hc_mel_ffn             60          0    0.000e+00
+l-hc_pre_attn            60          0    0.000e+00
+l-idx_bloc0               1          0    0.000e+00
+l-idx_bloc1               1          0    0.000e+00
+l-idx_bloc2               1          0    0.000e+00
+l-idx_gardes             15    
+… [904 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -30 docs/sprints.md && grep -n \"12\\|13\" docs/sprints.md | head", "description": "Check the sprint index doc"}`
+
+  ```
+# Les sprints de 2 h — charte
+
+Ce document dit **comment on travaille**, pas ce qu'on fait (ça, c'est
+`docs/roadmap.md` et les sprints eux-mêmes, dans `sprints/`).
+
+## Le boxing
+
+Un sprint dure **2 h**, chronométrées (`tools/sprint.sh`, qui lit l'heure du
+système — pas une estimation). Le temps est réel : quand la boîte est pleine, on
+s'arrête, même si la dernière chose est presque finie. Ce qui reste va au planning
+du sprint suivant, écrit noir sur blanc.
+
+```bash
+tools/sprint.sh start "l'objectif, en une phrase mesurable"
+tools/sprint.sh status     # à chaque itération : temps restant, commits du sprint
+tools/sprint.sh close      # écrit la trame de cérémonie dans sprints/NN-*.md
+```
+
+## La cérémonie, APRÈS la boîte
+
+Trois parties, dans cet ordre, écrites dans le fichier du sprint :
+
+1. **Revue** — ce qui est livré, avec les chiffres mesurés. Pas d'intention : des
+   résultats, et pour chacun le rapport ou la commande qui le porte. Ce qui n'est
+   pas fini est dit comme tel (un demi-chantier annoncé vaut mieux qu'un chantier
+   maquillé).
+2. **Rétrospective** — *garder* / *changer* / *doute*. Une rétro qui ne change rien
+   n'est pas une rétro : chaque « changer » doit devenir un
+… [109 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tools/sprint.sh status 2>&1 | head -20; ls -la /tmp/sprint* 2>/dev/null | head; cat .sprint 2>/dev/null | head", "description": "Check the sprint box state"}`
+
+  ```
+aucun sprint en cours (sprint.sh start "<objectif>")
+-rw-r--r--. 1 stephane stephane 1363  1 oct 00:20 /tmp/sprint4_note.md
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/13-les-deux-enigmes-du-decoupage-v41.md", "new_string": "## Retro — introspection (garder / changer / doute)\n\n**Garder.**\n\n- **Le tenseur plutôt que la perplexité.** Une perplexité sur trois prédictions à\n  froid amplifie ch … [4747 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/13-les-deux-enigmes-du-decoupage-v41.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Sprint 13 : la cérémonie (garder / changer / doute) et le planning du bloc 14 — la vivacité de l'engram\n\nLa rétro dit ce que le bloc a coûté : trois runs de 365 Go pour un faux lièvre\n(une comparai … [862 caractères tronqués]`
