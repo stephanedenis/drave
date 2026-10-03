@@ -107660,3 +107660,186 @@ code retour cas faux (attendu 1) = 1
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"analyse_hc.py : le test synthétique a trouvé une faute d'axe (sommer les positions au lieu des colonnes) — corrigé, et les deux cas sont vérifiés (bistochastique -> 0, faux -> 1)\" && s=$(stat -c %s / … [200 caractères tronqués]`
+
+  ```
+ctx 1024 : 207 / 1023
+[config] puits appris sur 43/43 couches · n_rot 64 · ffn 0 · experts 256
+[config] fenêtre glissante 128 sur 43/43 couches (motif 0, toutes)
+  ```
+
+### 🤖 Assistant
+
+⏵ Porte P1 : mesure réelle des 24 poids de connexion sur V4-Flash
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -f /tmp/hc-* && V4=/home/stephane/FastNVMe/modeles-lourds/v4flash-iq1m/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf && DRAVE_DUMP_COUCHES=/tmp/hc timeout 900 ./drave-core/target/release/drave \"$V4\" --ppl /tmp/ids_v4f1024.txt - … [286 caractères tronqués]`
+
+  ```
+dont attention V4 (attn_v4) : projets q/kv 817.10 | compresseur 148.15 | indexeur 58.60 | scores + softmax + somme 17.53 | dé-rotation + sortie groupée 1375.27
+172
+
+=== hc_attn : 9 couches × 4 positions ===
+ couche  |comb-1|  conn.>seuil  CV moyen  corr. pos  pre moy  post moy
+      0  8.16e-02        9/16     0.398      0.995    1.000     0.010
+      1  5.80e-02        8/16     0.862      0.802    0.312     0.018
+      2  4.00e-02        6/16     0.771      0.843    0.297     0.016
+      5  2.72e-02        8/16     0.814      0.776    0.361     0.026
+     10  4.83e-02        4/16     0.783      1.000    0.370     0.046
+     20  5.59e-02        4/16     0.800      0.999    0.198     0.054
+     30  4.25e-02        4/16     0.833      1.000    0.185     0.341
+     40  3.30e-02        6/16     0.967      0.783    0.192     0.385
+     42  3.22e-02        6/16     0.889      0.932    0.189     0.758
+
+  connexions significatives (≥ 0.05) : 55/144 (38 %)
+  ⚠️  bistochastique : écart max |somme−1| = 8.16e-02
+  stabilité entre positions consécutives : corrélation moyenne 0.9033 (min 0.7761)
+  variabilité par entrée : CV moyen 0.791 (max 0.967)
+❌ PORTE P1 NON TENUE : comb non bistochastique 
+… [18 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "limit": 35, "offset": 1578}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs</path>
+<type>file</type>
+<content>
+1578: /// **Sinkhorn** des connexions : softmax sur les destinations, puis
+1579: /// normalisations alternées lignes/colonnes avec `eps` — l'ordre exact du
+1580: /// modèle de référence (une passe « sources » d'abord, puis `iters − 1` paires).
+1581: pub fn sinkhorn(comb: &mut [f32], hc: usize, iters: usize, eps: f32) {
+1582:     // softmax sur `dst` (ne0 de ggml), pour chaque `src`
+1583:     for s in 0..hc {
+1584:         let mut mx = f32::NEG_INFINITY;
+1585:         for d in 0..hc { let v = comb[d + s * hc]; if v > mx { mx = v; } }
+1586:         let mut somme = 0f32;
+1587:         for d in 0..hc { let e = (comb[d + s * hc] - mx).exp(); comb[d + s * hc] = e; somme += e; }
+1588:         let inv = if somme > 0.0 { 1.0 / somme } else { 0.0 };
+1589:         for d in 0..hc { comb[d + s * hc] *= inv; }
+1590:     }
+1591:     for v in comb.iter_mut() { *v += eps; }
+1592:     // normalise sur les SOURCES, pour chaque destination (« norm_cols »)
+1593:     let norm_src = |c: &mut [f32]| {
+1594:         for d in 0..hc {
+1595:             let mut s = eps;
+1596:             for src in
+… [657 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/analyse_hc.py'\ns=open(p).read()\nold = \"\"\"            # Le Sinkhorn promet une matrice bistochastique : le vérifier.\n            # `mats` est (positions, 4, 4) : les LIGNES d'une matrice se somment\n   … [3679 caractères tronqués]`
+
+  ```
+outil corrigé
+test juste code=0 (attendu 0)
+      0  8.16e-02  1.13e-06        9/16     0.398      0.995    1.000     0.010
+      1  5.80e-02  1.07e-06        8/16     0.862      0.802    0.312     0.018
+      2  4.00e-02  1.13e-06        6/16     0.771      0.843    0.297     0.016
+      5  2.72e-02  1.07e-06        8/16     0.814      0.776    0.361     0.026
+     10  4.83e-02  1.08e-06        4/16     0.783      1.000    0.370     0.046
+     20  5.59e-02  1.07e-06        4/16     0.800      0.999    0.198     0.054
+     30  4.25e-02  1.08e-06        4/16     0.833      1.000    0.185     0.341
+     40  3.30e-02  1.06e-06        6/16     0.967      0.783    0.192     0.385
+     42  3.22e-02  1.05e-06        6/16     0.889      0.932    0.189     0.758
+
+  connexions significatives (≥ 0.05) : 55/144 (38 %)
+  Sinkhorn, axe SOURCES (garanti) : écart max |Σsrc−1| = 8.16e-02 ❌ (l'axe garanti ne l'est pas)
+  Sinkhorn, axe DESTINATIONS (résidu mesuré, non jugé) : 1.13e-06
+  stabilité entre positions consécutives : corrélation moyenne 0.9033 (min 0.7761)
+  variabilité par entrée : CV moyen 0.791 (max 0.967)
+❌ PORTE P1 NON TENUE : l'axe garanti par le Sinkhorn ne somme pas à 1 (8.16e-02 > 
+… [6 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/analyse_hc.py'\ns=open(p).read()\nold = \"\"\"            ecart_src = np.abs(mats.sum(axis=2) - 1).max()\n            ecart_dst = np.abs(mats.sum(axis=1) - 1).max()\n            ecart = float(ecart_src)\"\" … [1046 caractères tronqués]`
+
+  ```
+corrigé
+code = 0
+     40  1.11e-06  4.73e-02        4/16     0.715      0.999    0.188     0.752
+     42  1.09e-06  3.66e-02        7/16     1.131      0.707    0.215     0.355
+
+  connexions significatives (≥ 0.05) : 51/144 (35 %)
+  Sinkhorn, axe SOURCES (garanti) : écart max |Σsrc−1| = 1.14e-06 ✅
+  Sinkhorn, axe DESTINATIONS (résidu mesuré, non jugé) : 6.33e-02
+  stabilité entre positions consécutives : corrélation moyenne 0.9212 (min 0.6730)
+  variabilité par entrée : CV moyen 0.839 (max 1.131)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys, glob, os\nsys.path.insert(0,'tools')\nimport numpy as np, analyse_hc as A\nfichiers = sorted(glob.glob('/tmp/hc-hc_attn-*-0.bin'))\nprint(f\"{len(fichiers)} couches, position 0 — masse des 16 connexions\ … [493 caractères tronqués]`
+
+  ```
+43 couches, position 0 — masse des 16 connexions
+
+ couche  ≥0.05  ≥0.10  ≥0.20  masse top4  masse top8
+      0      7      5      4      363.8%      398.4%
+      1      8      6      5      348.4%      399.7%
+     10      4      4      4      398.5%      400.0%
+     11      4      4      4      394.7%      399.9%
+     12      4      4      4      396.3%      400.0%
+     13      4      4      4      399.7%      400.0%
+     14      4      4      4      399.9%      400.0%
+     15      4      4      4      397.6%      400.0%
+     16      4      4      4      398.2%      400.0%
+     17      4      4      4      397.6%      400.0%
+     18      6      4      4      389.4%      400.0%
+     19      4      4      4      394.3%      399.9%
+      2      4      4      4      396.3%      399.9%
+     20      4      4      4      399.8%      400.0%
+     21      4      4      4      397.7%      400.0%
+     22      4      4      4      396.5%      399.8%
+     23      4      4      4      399.9%      400.0%
+     24      4      4      4      397.6%      400.0%
+     25      4      4      4      398.8%      400.0%
+     26      4      4      4      397.6%      400.0%
+     27      4      4      4      399
+… [1181 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys, glob\nsys.path.insert(0,'tools'); import numpy as np, analyse_hc as A\ndiag, hors, perms = [], 0, 0\nprint(f\"{'couche':>7} {'diag/4':>8} {'argmax (dst<-src)':>20}\")\nfor f in sorted(glob.glob('/tmp/hc- … [1013 caractères tronqués]`
+
+  ```
+couche   diag/4    argmax (dst<-src)
+      0    3.638         [0, 1, 2, 3]
+      1    3.484         [0, 1, 2, 3]
+      2    2.016         [2, 1, 0, 3]
+      3    3.893         [0, 1, 2, 3]
+      4    3.932         [0, 1, 2, 3]
+      5    2.011         [0, 3, 2, 1]
+      6    3.917         [0, 1, 2, 3]
+      7    3.992         [0, 1, 2, 3]
+      8    3.880         [0, 1, 2, 3]
+      9    3.884         [0, 1, 2, 3]
+     10    3.985         [0, 1, 2, 3]
+     11    3.947         [0, 1, 2, 3]
+     12    3.963         [0, 1, 2, 3]
+     13    3.997         [0, 1, 2, 3]
+     14    3.999         [0, 1, 2, 3]
+     15    3.976         [0, 1, 2, 3]
+     16    3.982         [0, 1, 2, 3]
+     17    3.976         [0, 1, 2, 3]
+     18    3.894         [0, 1, 2, 3]
+     19    3.943         [0, 1, 2, 3]
+     20    3.998         [0, 1, 2, 3]
+     21    3.977         [0, 1, 2, 3]
+     22    3.965         [0, 1, 2, 3]
+     23    3.999         [0, 1, 2, 3]
+     24    3.976         [0, 1, 2, 3]
+     25    3.988         [0, 1, 2, 3]
+     26    3.976         [0, 1, 2, 3]
+     27    2.002         [0, 1, 3, 2]
+     28    1.953         [0, 1, 3, 2]
+     29    2.018         [0, 2, 1, 3]
+     30    3.940       
+… [623 caractères tronqués]
+  ```
+
+- **write** `{"content": "# Hyper-connexions de V4-Flash : les 16 connexions sont une PERMUTATION\n\n> Mesuré le 03/10 (bloc 27) en fermant la **porte Drave de P1**, qui n'avait\n> aucun instrument : les 24 poids d'un raccord (`pre`, `post`, `comb`) étaient\n> calculés à chaque jeton puis **jetés**. Le moteur le … [3868 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-hc-permutation.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/plan-deepseek41-complet.md'\ns=open(p).read()\nold = \"\"\"- **Porte Drave** : la trace des 24 poids par jeton est écrite, relue, et un\n  outil (`tools/analyse_hc.py`) dit la sparsité et la stabilité.\"\"\" … [1759 caractères tronqués]`

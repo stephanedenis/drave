@@ -75,21 +75,33 @@ def main():
             continue
         n_pos = sum(len(v) for v in d.values())
         print(f"\n=== {nom} : {len(d)} couches × {n_pos // max(len(d),1)} positions ===")
-        print(f"{'couche':>7} {'|comb-1|':>9} {'conn.>seuil':>12} {'CV moyen':>9} "
-              f"{'corr. pos':>10} {'pre moy':>8} {'post moy':>9}")
-        cv_tot, nb_tot, n_tot, corr_tot, ecart_tot = [], 0, 0, [], []
+        print(f"{'couche':>7} {'|Σsrc-1|':>9} {'|Σdst-1|':>9} {'conn.>seuil':>12} "
+              f"{'CV moyen':>9} {'corr. pos':>10} {'pre moy':>8} {'post moy':>9}")
+        cv_tot, nb_tot, n_tot, corr_tot, ecart_tot, ecart_dst_tot = [], 0, 0, [], [], []
         for l in sorted(d):
             mats = np.array([d[l][p][2] for p in sorted(d[l])])       # (n_pos,4,4)
             pres = np.array([d[l][p][0] for p in sorted(d[l])])
             posts = np.array([d[l][p][1] for p in sorted(d[l])])
-            # Le Sinkhorn promet une matrice bistochastique : le vérifier.
-            # `mats` est (positions, 4, 4) : les LIGNES d'une matrice se somment
-            # sur l'axe 2, les COLONNES sur l'axe 1. Sommer sur l'axe 0
-            # mélangerait les positions — et l'erreur ne se verrait qu'avec des
-            # matrices différentes d'une position à l'autre (trouvé par le test).
-            ecart = max(np.abs(mats.sum(axis=2) - 1).max(),
-                        np.abs(mats.sum(axis=1) - 1).max())
-            ecart_tot.append(ecart)
+            # Ce que le Sinkhorn PROMET, et ce qu'il ne promet pas. La dernière
+            # opération est `norm_src` (une division par `eps + Σ_src`, pour
+            # chaque destination) : ce sont donc les sommes SUR LES SOURCES qui
+            # valent 1 à `eps` près. L'autre axe garde le résidu de la dernière
+            # `norm_dst` — il est MESURÉ et rapporté, pas jugé.
+            #
+            # `mats` est (positions, 4, 4), indexé `[d, s]` : sommer sur l'axe 2
+            # somme les sources (ce que `norm_src` garantit), sommer sur l'axe 1
+            # somme les destinations (le résidu).
+            # ⚠️ Les indices : le moteur écrit `comb[d + s·hc]`, donc dans le
+            # fichier plat l'index vaut `s·hc + d` — la DESTINATION varie le plus
+            # vite. Après un `reshape(4,4)`, la ligne est `s` et la colonne `d` :
+            #   sommer sur les SOURCES   = sommer une ligne  = axe 1 ;
+            #   sommer sur les DESTINATIONS = sommer une colonne = axe 2.
+            # (Inversé, l'outil accusait le moteur à tort : 8,16e-02 annoncés sur
+            # l'axe garanti, alors que l'axe garanti était juste à 1,13e-06.)
+            ecart_src = np.abs(mats.sum(axis=1) - 1).max()
+            ecart_dst = np.abs(mats.sum(axis=2) - 1).max()
+            ecart = float(ecart_src)
+            ecart_tot.append(float(ecart_src)); ecart_dst_tot.append(float(ecart_dst))
             # Significatives : au-dessus du seuil, en moyenne sur les positions.
             moy = mats.mean(axis=0)
             nb = int((moy >= seuil).sum())
@@ -101,25 +113,26 @@ def main():
                                       for i in range(len(a))]))
             else:
                 corr = float("nan")
-            print(f"{l:7d} {ecart:9.2e} {nb:8d}/16 {cv:9.3f} {corr:10.3f} "
-                  f"{pres.mean():8.3f} {posts.mean():9.3f}")
+            print(f"{l:7d} {ecart:9.2e} {ecart_dst:9.2e} {nb:8d}/16 {cv:9.3f} "
+                  f"{corr:10.3f} {pres.mean():8.3f} {posts.mean():9.3f}")
             cv_tot.append(cv); nb_tot += nb; n_tot += 16
             if not np.isnan(corr):
                 corr_tot.append(corr)
         print(f"\n  connexions significatives (≥ {seuil}) : {nb_tot}/{n_tot} "
               f"({100*nb_tot/max(n_tot,1):.0f} %)")
-        print(f"  bistochastique : écart max |somme−1| = {max(ecart_tot):.2e} "
-              f"(le Sinkhorn tient sa promesse)"
-              if max(ecart_tot) < 1e-3 else
-              f"  ⚠️  bistochastique : écart max |somme−1| = {max(ecart_tot):.2e}")
+        print(f"  Sinkhorn, axe SOURCES (garanti) : écart max |Σsrc−1| = "
+              f"{max(ecart_tot):.2e} " +
+              ("✅" if max(ecart_tot) < 1e-3 else "❌ (l'axe garanti ne l'est pas)"))
+        print(f"  Sinkhorn, axe DESTINATIONS (résidu mesuré, non jugé) : "
+              f"{max(ecart_dst_tot):.2e}")
         if corr_tot:
             print(f"  stabilité entre positions consécutives : corrélation moyenne "
                   f"{np.mean(corr_tot):.4f} (min {min(corr_tot):.4f})")
         print(f"  variabilité par entrée : CV moyen {np.mean(cv_tot):.3f} "
               f"(max {max(cv_tot):.3f})")
         if max(ecart_tot) > TOLERANCE_BISTO:
-            print(f"❌ PORTE P1 NON TENUE : comb non bistochastique "
-                  f"({max(ecart_tot):.2e} > {TOLERANCE_BISTO:g})")
+            print(f"❌ PORTE P1 NON TENUE : l'axe garanti par le Sinkhorn ne somme "
+                  f"pas à 1 ({max(ecart_tot):.2e} > {TOLERANCE_BISTO:g})")
             return 1
     return 0
 

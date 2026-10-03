@@ -187,6 +187,14 @@ Une phase qui ne passe pas ses deux portes ne passe pas à la suivante.
 - **Porte de correction** : `hc_attn_pre-0` puis `hc_attn_post-0` concordent.
 - **Porte Drave** : la trace des 24 poids par jeton est écrite, relue, et un
   outil (`tools/analyse_hc.py`) dit la sparsité et la stabilité.
+  **TENUE le 03/10 (bloc 27)** — elle ne l'était pas : ni le canal ni l'outil
+  n'existaient, les poids étaient calculés puis jetés (un forward muet). Mesuré
+  sur V4-Flash : le Sinkhorn tient sa promesse sur l'axe qu'il normalise en
+  dernier (`|Σsrc − 1| = 1,14e-06`), **35 % des 16 connexions sont
+  significatives**, la stabilité entre positions est de **0,92**, et surtout
+  **les 4 connexions dominantes forment une PERMUTATION dans les 43 couches**
+  (99 % de la masse ; 9 couches permutent réellement, dont la 34, presque un
+  4-cycle) — `reports/rapport-hc-permutation.md`.
 - **Interdit** : « les 4 copies sans le Sinkhorn ». Une HC approximative ne se
   voit pas — les quatre copies restent plausibles.
 

@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 114.9 h |
+| Durée | 115.0 h |
 | Tours | 90 |
-| Messages | 6775 |
-| Appels d'outils | 6477 |
-| Fichiers touchés | 130 |
-| Commandes | 5464 |
+| Messages | 6783 |
+| Appels d'outils | 6485 |
+| Fichiers touchés | 131 |
+| Commandes | 5470 |
 | Sous-agents | 32 |
-| Commits | 433 |
+| Commits | 434 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -4473,7 +4473,7 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 
 ### Tour 90 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [942 caractères tronqués]
 
-*39 appels d'outils.* Actions notables :
+*47 appels d'outils.* Actions notables :
 
 - bash — Check the gate suite result
 - bash — Wait for the gates
@@ -4489,11 +4489,11 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 - bash — Find the plan's remaining items
 - bash — Extract each phase's gate claims
 - read
-- … et 23 autres
+- … et 30 autres
 
 **Synthèse produite :**
 
-⏵ Lacune trouvée : la porte Drave de P1 (trace des poids de connexion + outil) n'existe pas dans le dépôt
+⏵ Porte P1 : mesure réelle des 24 poids de connexion sur V4-Flash
 
 ## 3. Travail accompli
 
@@ -4631,6 +4631,7 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-granularite-flux.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/26-la-porte-a-512-et-la-granularite-qui-route.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/analyse_hc.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-hc-permutation.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -4709,7 +4710,7 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5424 autres
+- … et 5430 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5290,4 +5291,5 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 - REPRISE : état du 03/10 (porte à ctx 512, coût plat, SIMD corrigé, granularité)"; grep -E "positions|sur [0-9]+ tokens" /tmp/our_v4f1024_clean.log 2>/dev/null |
 - Porte Drave de P1 enfin outillée : les 24 poids de connexion hc sont écrits, relus et jugés  Ils étaient calculés puis JETÉS — un forward muet, et la porte de P
 - analyse_hc.py : le test synthétique a trouvé une faute d'axe (sommer les positions au lieu des colonnes) — corrigé, et les deux cas sont vérifiés (bistochastiqu
+- Porte Drave de P1 TENUE : mesurée, et elle révèle une structure — les 16 connexions de V4-Flash sont une PERMUTATION  Le Sinkhorn tient sa promesse sur l'axe qu
 
