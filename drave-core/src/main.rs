@@ -34,6 +34,7 @@ const VARS_LUES: &[&str] = &[
 ];
 
 mod clusters;
+mod kimi_k3;
 mod engine;
 mod engram;
 mod formats;
@@ -1849,6 +1850,14 @@ fn run_config() {
     let hidden = model::dim_gguf(&g, &["embedding_length", "hidden_size"], "hidden_size")
                      .unwrap_or(0);
     println!("couches       : {n_layer} · cachés {hidden}");
+    if arch == "kimi-k3" {
+        // L'inventaire des tenseurs, vérifié contre le fichier : c'est ce qui
+        // empêche un tenseur attendu d'être chargé VIDE (défaut silencieux).
+        match kimi_k3::inventorie(std::path::Path::new(&chemin)) {
+            Ok(inv) => println!("{}", inv.rapport()),
+            Err(e) => println!("inventaire    : illisible ({e})"),
+        }
+    }
     let r = model::routage_du_gguf(&g);
     println!("experts       : {} par couche, {} par jeton · FFN expert {}",
              r.n_expert, r.n_expert_used, r.ffn_exp);

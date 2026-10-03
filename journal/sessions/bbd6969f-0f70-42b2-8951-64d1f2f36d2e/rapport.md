@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 117.1 h |
-| Tours | 92 |
-| Messages | 7014 |
-| Appels d'outils | 6705 |
-| Fichiers touchés | 144 |
-| Commandes | 5672 |
+| Durée | 117.3 h |
+| Tours | 93 |
+| Messages | 7026 |
+| Appels d'outils | 6714 |
+| Fichiers touchés | 145 |
+| Commandes | 5680 |
 | Sous-agents | 32 |
-| Commits | 463 |
+| Commits | 464 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -229,6 +229,8 @@
 **Tour 91** — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas en local (classe Kimi-K3 Q4 : 1,5 To de poids, ~35 Go de poids par jeton), et étudier/implémenter ce qui nous distingue sur cette classe : découpage par experts et en grappes (chaque nœud ne lit que ce qu'il sert), réutilisation des experts entre jetons, transport de flux compact  … [966 caractères tronqués]
 
 **Tour 92** — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas en local (classe Kimi-K3 Q4 : 1,5 To de poids, ~35 Go de poids par jeton), et étudier/implémenter ce qui nous distingue sur cette classe : découpage par experts et en grappes (chaque nœud ne lit que ce qu'il sert), réutilisation des experts entre jetons, transport de flux compact  … [966 caractères tronqués]
+
+**Tour 93** — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas en local (classe Kimi-K3 Q4 : 1,5 To de poids, ~35 Go de poids par jeton), et étudier/implémenter ce qui nous distingue sur cette classe : découpage par experts et en grappes (chaque nœud ne lit que ce qu'il sert), réutilisation des experts entre jetons, transport de flux compact  … [966 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -4574,7 +4576,7 @@ Avec SiTU et l'attention résiduelle, ça fait **10 tests pour Kimi-K3**, et **7
 
 ### Tour 92 — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas e … [1246 caractères tronqués]
 
-*48 appels d'outils.* Actions notables :
+*50 appels d'outils.* Actions notables :
 
 - bash — Find the expert routing trace facility
 - bash — Read the trace format and the existing routing report
@@ -4590,11 +4592,50 @@ Avec SiTU et l'attention résiduelle, ça fait **10 tests pour Kimi-K3**, et **7
 - bash — Tokenize then run the Qwen3-30B trace
 - bash — Check the running engines and trace progress
 - bash — Run the Qwen3-30B trace alone
-- … et 34 autres
+- … et 36 autres
 
 **Synthèse produite :**
 
-⏵ Analyse plus fine : réutilisation par couche et quels experts sont chauds (pour le découpage en grappes)
+⏵ Bloc 30 livré : la réutilisation est mesurée, et c'est bien le levier
+
+**La question qui décidait de tout — « les mêmes experts reviennent-ils ? » — a une réponse chiffrée**, mesurée avec l'instrument du dépôt (`DRAVE_TRACE_EXPERTS` + un outil neuf) sur un MoE à 128 experts (Qwen3-30B, 8 par jeton), **trois relevés** :
+
+| mesure | wikitext 48 j | wikitext 128 j | code 128 j |
+|---|---|---|---|
+| **réutilisation immédiate** (t−1 → t) | 46,9 % | 47,9 % | **48,8 %** |
+| fenêtre de 16 jetons | 78,8 % | 84,5 % | 88,2 % |
+| plafond (tout l'historique) | 82,7 % | 93,1 % | 93,9 % |
+
+Et ce qu'un **cache LRU** rendrait, mesuré : **un quart des experts en cache sert 80 à 87 % des lectures** (16 experts/couche : 62-66 % ; 64 : 92-93,5 %).
+
+**Deux résultats de plus, qui changent le dessin** :
+- **toutes les couches ne se ressemblent pas** : réutilisation immédiate de **18,1 % (couche 0)** à **68,6 % (couche 31)**, avec 108 experts distincts touchés d'un côté et 53 de l'autre → **le cache se dimensionne par couche** (ou par grappe), pas en moyenne ;
+- **le routage est très concentré** : **10 % des experts servent 56,8 % des lectures**, 25 % en servent 83 % → c'est la matière première du découpage en grappes (les experts chauds se placent ensemble).
+
+**Transposition à Kimi-K3** (réserves nommées — 896 experts, routage sigmoïde, à vérifier au jalon M6) : dense résident (62 Go) + cache d'experts à 80 % → **≈ 3,1 s/jeton au lieu de 9 s**. Sans autre changement qu'un cache.
+
+**Et deux débits remesurés au passage** : le « 20 Go/s » de RAM du dépôt n'avait pas de méthode — la mesure donne **9,6 Go/s à un fil et 40,3 Go/s à huit** ; le NVMe passe de 2,26 à **3,39 Go/s** selon le nombre de flux. Le budget de Kimi-K3 est refait avec ces chiffres et l'outil porte désormais **sa méthode** (et extrapole des couches vues aux couches **déclarées**, sinon 43 sur 93 se lisaient comme un total).
+
+**Prêt pour la suite** : le protocole de vérification de l'implémentation (13 points de comparaison contre `llama.cpp-k3`, l'ordre, les tolérances, premier jalon = la couche 0) et une **séquence d'après-téléchargement** automatique en 5 étapes qui **échoue en disant laquelle** (testée sur l'état partiel : elle détecte 15/32 shards et s'arrête au lieu de lancer un modèle incomplet). Portes toutes vertes.
+
+**Téléchargement** : 640 Go / 1 508 (42 %, ~110 Mo/s) → fin vers 14h00. Dès qu'il tombe : vérification, `--config` (les manques exacts), budget **mesuré** sur le fichier complet, puis baseline
+… [55 caractères tronqués]
+
+### Tour 93 — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas e … [1246 caractères tronqués]
+
+*7 appels d'outils.* Actions notables :
+
+- bash — Study the borrowed-weight pattern
+- bash — Inventory the tensors of layers 0, 1 and 3
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/kimi_k3.rs`
+- bash — Wire the K3 inventory into --config
+- bash — Test the K3 inventory on the partial file
+- bash — Make the inventory read all shards and test
+- bash — Commit the K3 inventory check
+
+**Synthèse produite :**
+
+⏵ L'inventaire mesuré est complet ; j'implémente sa vérification dans le moteur (testable dès maintenant)
 
 ## 3. Travail accompli
 
@@ -4746,6 +4787,7 @@ Avec SiTU et l'attention résiduelle, ça fait **10 tests pour Kimi-K3**, et **7
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/30-la-reutilisation-des-experts-mesuree.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/verification-kimi-k3.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/apres-telechargement-k3.sh` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/kimi_k3.rs` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -4824,7 +4866,7 @@ Avec SiTU et l'attention résiduelle, ça fait **10 tests pour Kimi-K3**, et **7
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5632 autres
+- … et 5640 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5435,4 +5477,5 @@ Avec SiTU et l'attention résiduelle, ça fait **10 tests pour Kimi-K3**, et **7
 - Débits remesurés : RAM 40 Go/s à 8 fils (pas 20), NVMe 3,4 Go/s à 4 flux — le budget de Kimi-K3 refait  Le « 20 Go/s » du dépôt n'avait pas de méthode : 9,6 Go/
 - Séquence de l'après-téléchargement, automatique et ordonnée (5 étapes qui échouent en disant laquelle)  Testée sur l'état partiel : elle détecte 15/32 shards et
 - Réutilisation : par couche (18 % à 69 %) et concentration du routage (10 % des experts servent 57 % des lectures)  Le cache se dimensionne PAR COUCHE (les couch
+- Kimi-K3 : l'inventaire des tenseurs, vérifié sur le fichier (49 couches vues, cadence KDA/MLA confirmée)  Le module drave-core/src/kimi_k3.rs vérifie que CHAQUE
 

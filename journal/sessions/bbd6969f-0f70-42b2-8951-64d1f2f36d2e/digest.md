@@ -111625,3 +111625,190 @@ analyse par couche + concentration ajoutées
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-reutilisation-experts.md'\ns=open(p).read()\ns=s.replace(\"\"\"## 4. Réserves, nommées\"\"\",\n\"\"\"## 3bis. Deux résultats qui changent le DESSIN du cache et des grappes\n\n**(a) Toutes les couc … [1738 caractères tronqués]`
+
+  ```
+rapport complété
+2cd9719 Réutilisation : par couche (18 % à 69 %) et concentration du routage (10 % des experts servent 57 % des lectures)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (t0=$(date +%s); bash tools/portes.sh rapide > /tmp/portes7.log 2>&1; echo \"exit=$? en $(( $(date +%s) - t0 )) s\")", "description": "Run the gate suite for bloc 30", "run_in_background": true, "timeoutMs": 3600000}`
+
+  ```
+started background job bash-227
+  ```
+
+- **bash** `{"command": "sleep 420; tail -18 /tmp/portes7.log; pgrep -f \"portes[.]sh\" >/dev/null && echo tournent || echo finies", "description": "Wait for the gates", "timeoutMs": 500000}`
+
+  ```
+V4-Flash : racine de softplus              racine de softplus  ✅
+  Qwen3-235B : softmax                       softmax  ✅
+  V4-Flash : --config le dit calculable      oui  ✅
+  V4-Flash 43 couches ctx 32 (archivée)     ARCHIVE=1 pour la lancer
+  engram V4.1 : adressage                    rangées DISTINCTES : 479723  ✅
+  le flux relu par tools/analyse_flux.py     51 lignes  ✅
+  le rejeu de la trace (0 manquante, écart ≤ 1e-5) écart 0.00e+00  ✅
+  porte de correction (llama.cpp, 71 positions) (100.0 % des positions UTILES au-dessus de 0.95, min 0.9959 >= plancher 0.9, top-1 94.4 % sur toutes les positions, 6 saturées exclues de la corrélation)  ✅
+  poids de connexion hc écrits et relus     connexions significatives (≥ 0.05) : 22/48 (46 %)  ✅
+
+=== Découpage (deux nœuds) ===
+  mode 0 — f32 dense               0.00e0  ✅  (réf 61.9920 / deux nœuds 61.9920)
+  mode 1 — listes quantifiées     0.00e0  ✅  (réf 61.9920 / deux nœuds 61.9920)
+  mode 2 — listes par blocs        3.65e-2  ✅  (réf 61.9920 / deux nœuds 64.2535)
+  mode 3 — lot dense f32           0.00e0  ✅  (réf 60.8135 / deux nœuds 60.8135)
+  mode 4 — lot en listes           4.45e-3  ✅  (réf 60.8135 / deux nœuds 60.5427)
+
+toutes les por
+… [22 caractères tronqués]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-227 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (t0=$(date +%s); bash tools/portes.sh rapide > /tmp/portes7.log 2>&1; echo "exit=$? en $(( $(date +%s) - t0 )) s")) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 🤖 Assistant
+
+⏵ Bloc 30 livré : la réutilisation est mesurée, et c'est bien le levier
+
+**La question qui décidait de tout — « les mêmes experts reviennent-ils ? » — a une réponse chiffrée**, mesurée avec l'instrument du dépôt (`DRAVE_TRACE_EXPERTS` + un outil neuf) sur un MoE à 128 experts (Qwen3-30B, 8 par jeton), **trois relevés** :
+
+| mesure | wikitext 48 j | wikitext 128 j | code 128 j |
+|---|---|---|---|
+| **réutilisation immédiate** (t−1 → t) | 46,9 % | 47,9 % | **48,8 %** |
+| fenêtre de 16 jetons | 78,8 % | 84,5 % | 88,2 % |
+| plafond (tout l'historique) | 82,7 % | 93,1 % | 93,9 % |
+
+Et ce qu'un **cache LRU** rendrait, mesuré : **un quart des experts en cache sert 80 à 87 % des lectures** (16 experts/couche : 62-66 % ; 64 : 92-93,5 %).
+
+**Deux résultats de plus, qui changent le dessin** :
+- **toutes les couches ne se ressemblent pas** : réutilisation immédiate de **18,1 % (couche 0)** à **68,6 % (couche 31)**, avec 108 experts distincts touchés d'un côté et 53 de l'autre → **le cache se dimensionne par couche** (ou par grappe), pas en moyenne ;
+- **le routage est très concentré** : **10 % des experts servent 56,8 % des lectures**, 25 % en servent 83 % → c'est la matière première du découpage en grappes (les experts chauds se placent ensemble).
+
+**Transposition à Kimi-K3** (réserves nommées — 896 experts, routage sigmoïde, à vérifier au jalon M6) : dense résident (62 Go) + cache d'experts à 80 % → **≈ 3,1 s/jeton au lieu de 9 s**. Sans autre changement qu'un cache.
+
+**Et deux débits remesurés au passage** : le « 20 Go/s » de RAM du dépôt n'avait pas de méthode — la mesure donne **9,6 Go/s à un fil et 40,3 Go/s à huit** ; le NVMe passe de 2,26 à **3,39 Go/s** selon le nombre de flux. Le budget de Kimi-K3 est refait avec ces chiffres et l'outil porte désormais **sa méthode** (et extrapole des couches vues aux couches **déclarées**, sinon 43 sur 93 se lisaient comme un total).
+
+**Prêt pour la suite** : le protocole de vérification de l'implémentation (13 points de comparaison contre `llama.cpp-k3`, l'ordre, les tolérances, premier jalon = la couche 0) et une **séquence d'après-téléchargement** automatique en 5 étapes qui **échoue en disant laquelle** (testée sur l'état partiel : elle détecte 15/32 shards et s'arrête au lieu de lancer un modèle incomplet). Portes toutes vertes.
+
+**Téléchargement** : 640 Go / 1 508 (42 %, ~110 Mo/s) → fin vers 14h00. Dès qu'il tombe : vérification, `--config` (les manques exacts), budget **mesuré** sur le fichier complet, puis baseline de la référence — et l'implémentation étage par étage.
+
+
+## Tour 93
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas en local (classe Kimi-K3 Q4 : 1,5 To de poids, ~35 Go de poids par jeton), et étudier/implémenter ce qui nous distingue sur cette classe : découpage par experts et en grappes (chaque nœud ne lit que ce qu'il sert), réutilisation des experts entre jetons, transport de flux compact (listes DRVF), noyaux rapides (SIMD, déquantification bit-exacte), et mesure systématique (octets par jeton, débits, seuils). Les modèles périmés (DeepSeek-V4-Flash) sortent du chemin critique : leurs acquis sont conservés dans les rapports, leurs portes archivées. Règles inchangées : jamais de forward muet, jamais d'optimisation qui change une sortie sans le dire, une affirmation sans mesure n'est pas une affirmation."
+Round: 19/30
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Bloc 31 : j'implémente la couche 0 de Kimi-K3 (le premier jalon du protocole) — d'abord le motif d'emprunt des poids
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"impl Vue4\" -A 30 drave-core/src/model.rs | grep -E \"pub fn|base|src|n_out|n_in|nb\" | head -20; echo \"=== comment V4 charge ses experts ===\"; grep -n \"Vue4 {\" -B 5 -A 12 drave-core/src/model.rs | head -30", "descripti … [41 caractères tronqués]`
+
+  ```
+1050-    /// `nb`/`pas()` ne suffisent pas : `nb` compte des blocs de 32 pour tous les
+1052-    /// taille d'un **super-bloc de 256**. Le produit `n_out × nb × pas()`
+1059-        match self.src {
+1062-            // `matvec_dequant` (`nb = n_in / 256`) pour les grilles.
+1063-            Q4_K | Q6_K | Dequant(_) => self.n_out * (self.n_in / 256) * self.pas(),
+1065-            Mxfp4 | Q4_0 => self.n_out * (self.n_in / 32) * self.pas(),
+1071-        match self.src {
+=== comment V4 charge ses experts ===
+638-            }
+639-            let Some(ptr) = g.data_ptr(nom) else {
+640-                eprintln!("[moe] couche {l} : données de « {nom} » introuvables");
+641-                return None;
+642-            };
+643:            out.push(Vue4 { base: ptr, n_out, n_in, nb: n_in / bloc, src });
+644-        }
+645-        Some((numeros, out))
+646-    };
+647-    // Vue d'un tenseur 3D NON découpé (l'expert partagé, qui reste dans le
+648-    // fichier commun) : aucune traduction d'index n'est nécessaire.
+649-    // Vue d'un tenseur NON découpé : l'expert partagé, qui reste dans le
+650-    // fichier commun. Il est en 2D (`[n_ff, hidden]`) — exiger 3 dimensions le
+651-    // refusait en sile
+… [931 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys, glob\nsys.path.insert(0,'tools')\nimport analyse_octets_par_jeton as A\ncouches = {}\nfor f in sorted(glob.glob('/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/*.gguf')):\n    try: _, t … [567 caractères tronqués]`
+
+  ```
+--- couche 0 (dense) ---
+   blk.0.attn_k.weight                        [7168, 12288]          Q8_0
+   blk.0.attn_norm.weight                     [7168]                 F32
+   blk.0.attn_output.weight                   [12288, 7168]          Q8_0
+   blk.0.attn_q.weight                        [7168, 12288]          Q8_0
+   blk.0.attn_res_score.weight                [7168]                 F32
+   blk.0.attn_v.weight                        [7168, 12288]          Q8_0
+   blk.0.ffn_down.weight                      [33792, 7168]          Q8_0
+   blk.0.ffn_gate.weight                      [7168, 33792]          Q8_0
+   blk.0.ffn_norm.weight                      [7168]                 F32
+   blk.0.ffn_res_score.weight                 [7168]                 F32
+   blk.0.ffn_up.weight                        [7168, 33792]          Q8_0
+   blk.0.ssm_a                                [96]                   F32
+   blk.0.ssm_beta.weight                      [7168, 96]             F32
+   blk.0.ssm_conv1d_k.weight                  [4, 1, 12288]          F32
+   blk.0.ssm_conv1d_q.weight                  [4, 1, 12288]          F32
+   blk.0.ssm_conv1d_v.weight                  [4, 1, 12288]          F32
+
+… [4318 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ L'inventaire mesuré est complet ; j'implémente sa vérification dans le moteur (testable dès maintenant)
+
+- **write** `{"content": "//! **Kimi-K3** — l'inventaire des tenseurs, vérifié contre le fichier.\n//!\n//! Pourquoi ce module existe avant l'architecture : la couche 0 de Kimi-K3 est\n//! **dense** (KDA + SiTU), les couches 3, 7, 11… sont **MLA**, les autres sont\n//! **KDA + MoE latent**, et chaque type a sa l … [8105 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/kimi_k3.rs</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\n# 1. déclarer le module\np='drave-core/src/main.rs'\ns=open(p).read()\nif 'mod kimi_k3;' not in s:\n    s=s.replace(\"mod clusters;\", \"mod clusters;\\nmod kimi_k3;\")\n    open(p,'w').write(s)\n    print(\"module  … [992 caractères tronqués]`
+
+  ```
+module déclaré
+--config : inventaire K3 branché
+--- fin ---
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && K3=/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf && ./drave-core/target/release/drave \"$K3\" --config 2>&1 | head -14", "description": "Test the K3 inventory on the partial f … [26 caractères tronqués]`
+
+  ```
+⚠️  --config : modèle INCOMPLET (17 shards sur 32) — lecture de l'en-tête du premier shard présent ; tout « manque » peut n'être qu'un shard non téléchargé.
+modèle        : /home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf
+architecture  : kimi-k3
+couches       : 93 · cachés 7168
+0 couches vues sur 93 déclarées · 0 dense · 0 KDA · 0 MLA · 896 experts (16 par jeton) · latent 3584
+  inventaire : COMPLET (aucun tenseur attendu ne manque)
+experts       : 896 par couche, 16 par jeton · FFN expert 3072
+routage       : sigmoïde (source : expert_gating_func) · renormalisation oui · échelle 1.000
+calculable    : NON — il manque : attention delta-net (KDA) : conv1d de 4, porte bornée (−5), récurrence par tête, attention résiduelle : pile de points de contrôle tous les 12, softmax sur les scores, MoE latent : projections down/up autour des experts (latent 3 584), activation SiTU (beta 4, linear_beta 25), redémarrage du flux résiduel aux couches « banque » (toutes les 12)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/kimi_k3.rs'\ns=open(p).read()\ns=s.replace(\"\"\"/// **Vérifie l'inventaire** d'un fichier Kimi-K3 contre la liste attendue.\n///\n/// Ne lit que les en-têtes : un modèle en cours de téléchargement … [4826 caractères tronqués]`
+
+  ```
+inventorie : multi-shards
+ok
+architecture  : kimi-k3
+couches       : 93 · cachés 7168
+49 couches vues sur 93 déclarées · 1 dense · 36 KDA · 12 MLA · 896 experts (16 par jeton) · latent 3584
+  inventaire : 12 tenseur(s) attendu(s) manquant(s)
+    couche 48 (Kda) : ssm_conv1d_q.weight, ssm_conv1d_k.weight, ssm_conv1d_v.weight, ssm_f_a.weight, ssm_f_b.weight, ssm_beta.weight, ssm_a, ssm_dt.bias, ssm_g.weight, ssm_norm.weight, ffn_up_exps.weight, ffn_up_shexp.weight
+
+experts       : 896 par couche, 16 par jeton · FFN expert 3072
+routage       : sigmoïde (source : expert_gating_func) · renormalisation oui · échelle 1.000
+calculable    : NON — il manque : attention delta-net (KDA) : conv1d de 4, porte bornée (−5), récurrence par tête, attention résiduelle : pile de points de contrôle tous les 12, softmax sur les scores, MoE latent : projections down/up autour des experts (latent 3 584), activation SiTU (beta 4, linear_beta 25), redémarrage du flux résiduel aux couches « banque » (toutes les 12)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Kimi-K3 : l'inventaire des tenseurs, vérifié sur le fichier (49 couches vues, cadence KDA/MLA confirmée)\n\nLe module drave-core/src/kimi_k3.rs vérifie que CHAQUE couche porte les tenseurs\nattendus d … [689 caractères tronqués]`
