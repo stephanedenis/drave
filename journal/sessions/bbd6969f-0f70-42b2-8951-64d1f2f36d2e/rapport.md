@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 104.9 h |
+| Durée | 105.0 h |
 | Tours | 79 |
-| Messages | 6183 |
-| Appels d'outils | 5926 |
+| Messages | 6188 |
+| Appels d'outils | 5931 |
 | Fichiers touchés | 117 |
-| Commandes | 4995 |
+| Commandes | 5000 |
 | Sous-agents | 32 |
-| Commits | 383 |
+| Commits | 384 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -4037,7 +4037,7 @@ P0-P6 faites, P8 portée et val
 
 ### Tour 79 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [941 caractères tronqués]
 
-*1186 appels d'outils.* Actions notables :
+*1191 appels d'outils.* Actions notables :
 
 - web_search
 - web_fetch
@@ -4053,7 +4053,7 @@ P0-P6 faites, P8 portée et val
 - bash — Locate hc_collapse_triton definition
 - read
 - bash — Read mHC init and pre/post call sites
-- … et 1056 autres
+- … et 1061 autres
 
 **Synthèse produite :**
 
@@ -4260,7 +4260,7 @@ P0-P6 faites, P8 portée et val
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 4955 autres
+- … et 4960 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4791,4 +4791,5 @@ P0-P6 faites, P8 portée et val
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -E "V4-Flash 43|tests|Qwen2" /tmp/porte17.log; cat >> sprints/17-les-experts-io-ou-calcul.md <<'EOF' 
 - Bloc 17 : à ctx 64 aussi (330 Go relus), la seconde passe ne gagne que 4 % — le disque n'est pas la borne ; et le balayage des fils donne 16 comme optimum  Deux
 - Bloc 17 : le découpage à deux nœuds reste exact avec le binaire final (écart 0,00e0, 82 016 octets dans les deux sens) et la référence locale passe de 68,0 s à 
+- Bloc 17 : la déquantification pèse 25 % de la passe et 45 % du poste d'experts (mesuré par ablation), et clôture du bloc  Deux builds temporaires (jamais commit
 

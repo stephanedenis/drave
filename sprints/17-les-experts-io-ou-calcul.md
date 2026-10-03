@@ -117,6 +117,23 @@ dominant est le calcul de déquantification, à toute échelle mesurée — et l
 perplexité identique au chiffre près est une quatrième preuve d'égalité (après
 ctx 8, ctx 32 et les vides).
 
+### 5. La part exacte de la déquantification, mesurée par ablation
+
+Pour ne pas vectoriser ce qui ne pèse pas, deux builds temporaires (jamais
+commités, aucun chiffre de perplexité n'en est publié) à ctx 8, 4 jetons, 16 fils :
+
+| variante | durée de la passe | poste `proj+mlp` |
+|---|---|---|
+| complète (référence) | **11,3 s** | ~2 900 ms/token |
+| déquantification remplacée par un remplissage, **produit gardé** | **8,6 s** | 1 592,50 |
+| produit remplacé par un `black_box`, **déquantification gardée** | 14,2 s | 3 468,76 |
+
+La **déquantification** (la conversion codebook → f32, plus les lectures
+compressées qu'elle porte) vaut donc **~25 % de la passe et ~45 % du poste
+d'experts**. Le second essai ne dit rien : `black_box` coûte plus cher que le
+produit qu'il remplace — une ablation ne vaut que si ce qu'on met à la place est
+moins cher que ce qu'on retire, et ça se vérifie.
+
 ## Planning du bloc 18 — vectoriser la DÉQUANTIFICATION seule (bit-exact par construction)
 
 La conversion d'un super-bloc de grille (codebook + signes → f32) est une fonction
@@ -124,9 +141,9 @@ La conversion d'un super-bloc de grille (codebook + signes → f32) est une fonc
 change pas un bit — contrairement au SIMD du produit scalaire, qui réassocierait
 et ferait tomber la référence de non-régression (V4-Flash 8430,4966).
 
-1. **Mesurer d'abord la part exacte** de la conversion dans `matvec_dequant`
-   (chronométrer la boucle de déquantification seule contre la boucle de produit),
-   pour ne pas vectoriser ce qui ne pèse pas.
+1. ~~Mesurer la part exacte de la conversion~~ — **fait au bloc 17** : ~25 % de la
+   passe, ~45 % du poste d'experts (ablation, ci-dessus). C'est assez pour
+   justifier le noyau, et c'est la borne du gain attendu.
 2. **Vectoriser `dequant_grille_dans`** pour le format de V4.1 (Q2_K, type 10) avec
    AVX2, en gardant l'ordre valeur par valeur — même s'il n'y a pas de somme, la
    conversion doit rester identique (arrondis, clamps).

@@ -99129,3 +99129,65 @@ procs: 0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"sprints/17-les-experts-io-ou-calcul.md\"\ns=open(p).read()\na=\"\"\"## Portes\n\n- `tools/portes.sh rapide` : **toutes vertes** — 63 tests, Qwen 19,3885, clusters\n  799,8557, **V4-Flash 8430,4966**, engram, cin … [1535 caractères tronqués]`
+
+  ```
+ok
+e46b488 Bloc 17 : le découpage à deux nœuds reste exact avec le binaire final (écart 0,00e0, 82 016 octets dans les deux sens) et la référence locale passe de 68,0 s à 25,6 s
+ven 02 oct 2026 23:40:48 EDT
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n \"$(grep -n 'fn matvec_dequant' drave-core/src/model.rs | cut -d: -f1),+40p\" drave-core/src/model.rs | tail -22", "description": "Read the dequant+dot inner loop"}`
+
+  ```
+// Un tampon par FIL, réutilisé pour tous les blocs : c'est ce qui
+            // fait la différence entre 2,5 µs et 0,3 µs par super-bloc.
+            let mut valeurs = vec![0f32; 256];
+            for o in o0..o1 {
+                let mut acc = 0f32;
+                for b in 0..nb {
+                    let p = unsafe { (base as *const u8).add((o * nb + b) * taille) };
+                    let bloc = unsafe { std::slice::from_raw_parts(p, taille) };
+                    crate::list::dequant_grille_dans(t, bloc, &mut valeurs);
+                    let lo = b * 256;
+                    let hi = (lo + 256).min(n_in);
+                    let mut s = 0f32;
+                    for j in lo..hi { s += valeurs[j - lo] * x[j]; }
+                    acc += s;
+                }
+                // `out` est la TRANCHE de ce fil : l'indexer par le numéro de
+                // ligne GLOBAL lève « len is 256 but the index is 256 » dès le
+                // deuxième fil. Le premier fil (o0 = 0) passait, ce qui rendait
+                // le bug dépendant du nombre de fils.
+                out[o - o0] = acc;
+            }
+        };
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cp drave-core/src/model.rs /tmp/model.rs.bak && python3 - <<'PY'\np=\"drave-core/src/model.rs\"\ns=open(p).read()\na=\"\"\"                    let mut s = 0f32;\n                    for j in lo..hi { s += valeurs[j - lo] * x[j]; }\n  … [1072 caractères tronqués]`
+
+  ```
+ablation posee
+    Finished `release` profile [optimized] target(s) in 33.01s
+=== perplexité 141350884.4375 sur 3 tokens (0 événements, 14.2 s) ===
+    postes (ms/token) : projets-attn 0.00 | rope 0.00 | attention 1159.33 | proj+mlp 3468.76 | somme 4628.09 | reste (tête + échantillonnage) 113.44
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cp /tmp/model.rs.bak drave-core/src/model.rs && python3 - <<'PY'\np=\"drave-core/src/model.rs\"\ns=open(p).read()\na=\"\"\"                    crate::list::dequant_grille_dans(t, bloc, &mut valeurs);\"\"\"\nb=\"\"\"                   … [1042 caractères tronqués]`
+
+  ```
+ablation 2 posee
+    Finished `release` profile [optimized] target(s) in 31.55s
+=== perplexité 91745645.0939 sur 3 tokens (0 événements, 8.6 s) ===
+    postes (ms/token) : projets-attn 0.00 | rope 0.00 | attention 1173.48 | proj+mlp 1592.50 | somme 2765.98 | reste (tête + échantillonnage) 112.62
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cp /tmp/model.rs.bak drave-core/src/model.rs && cargo build --release --manifest-path drave-core/Cargo.toml 2>&1 | grep -E \"^error|Finished\" | head -2 && M=/home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf && ./dra … [246 caractères tronqués]`
+
+  ```
+Finished `release` profile [optimized] target(s) in 32.82s
+=== perplexité 1743713.6243 sur 3 tokens (0 événements, 11.3 s) ===
+ M journal/README.md
+ M sprints/COURANT
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"sprints/17-les-experts-io-ou-calcul.md\"\ns=open(p).read()\na=\"\"\"## Planning du bloc 18 — vectoriser la DÉQUANTIFICATION seule (bit-exact par construction)\"\"\"\nb=\"\"\"### 5. La part exacte de la déquantif … [2564 caractères tronqués]`
