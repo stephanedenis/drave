@@ -68,6 +68,36 @@ Autrement dit : **la réutilisation est le levier**, et le chiffre à vérifier 
 premier sur Kimi-K3 est le même que celui-ci — pas la peine d'écrire un cache
 avant de l'avoir.
 
+## 3bis. Deux résultats qui changent le DESSIN du cache et des grappes
+
+**(a) Toutes les couches ne se ressemblent pas.** La réutilisation immédiate va de
+**18,1 % (couche 0)** à **68,6 % (couche 31)**, et le nombre d'experts distincts
+touchés en 128 jetons va de **108/128** (couche 0) à **53/128** (couche 31) :
+
+| | couches les plus froides | couches les plus chaudes |
+|---|---|---|
+| réutilisation immédiate | 18,1 % (0) · 29,8 % (47) · 31,8 % (3) | 60,8 % (18) · 61,7 % (30) · **68,6 % (31)** |
+| experts distincts sur 128 jetons | 87 à 108 | 53 à 63 |
+
+Conséquence : **un cache se dimensionne par couche** (ou par grappe), pas en
+moyenne. Mettre la même taille partout gaspille là où la couche est chaude et
+sous-sert là où elle est froide.
+
+**(b) Le routage est très concentré.** Part des lectures servie par les k experts
+les plus chauds, moyenne sur les couches :
+
+| k experts | part des lectures |
+|---|---|
+| 5 % (6 experts) | **38,4 %** |
+| 10 % (13) | **56,8 %** |
+| 25 % (32) | **83,0 %** |
+| 50 % (64) | 97,1 % |
+
+C'est la matière première du **découpage en grappes** : les experts chauds se
+placent ensemble (ils seront lus par presque tous les jetons), les froids se
+répartissent. Un découpage qui ignorerait cette concentration paierait des
+lectures distantes pour les experts que tout le monde appelle.
+
 ## 4. Réserves, nommées
 
 1. **Un seul modèle, deux textes, 48 et 128 jetons.** Les deux textes donnent la

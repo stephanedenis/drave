@@ -111588,3 +111588,40 @@ syntaxe ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-budget-kimi-k3.md'\ns=open(p).read()\ns=s.replace(\"\"\"**Les débits ont été remesurés le 03/10 (bloc 30)** : le « 20 Go/s » de RAM venait\ndu dépôt, sans méthode.\"\"\",\n\"\"\"**Les débits ont é … [1916 caractères tronqués]`
+
+  ```
+docs mises à jour
+506046b Séquence de l'après-téléchargement, automatique et ordonnée (5 étapes qui échouent en disant laquelle)
+11:50:35    37.0 Go / 49.2 Go (75.4 %, 109 Mo/s)
+630G	/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL
+  ```
+
+### 🤖 Assistant
+
+⏵ Analyse plus fine : réutilisation par couche et quels experts sont chauds (pour le découpage en grappes)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/analyse_reutilisation_experts.py'\ns=open(p).read()\ns=s.replace(\"\"\"    print(\"\\\\n  (les octets/jeton se calculent en multipliant (1 − taux) par les \"\n          \"octets d'experts par jeton — voir t … [2086 caractères tronqués]`
+
+  ```
+analyse par couche + concentration ajoutées
+
+  --- réutilisation immédiate, par couche (les 5 plus froides et les 5 plus chaudes) ---
+    couche    0 :  18.1 % ·  108 experts distincts
+    couche   47 :  29.8 % ·   68 experts distincts
+    couche    3 :  31.8 % ·   99 experts distincts
+    couche    1 :  34.3 % ·  105 experts distincts
+    couche    2 :  35.4 % ·   87 experts distincts
+    couche   18 :  60.8 % ·   63 experts distincts
+    couche   30 :  61.7 % ·   61 experts distincts
+    couche    7 :  62.9 % ·   57 experts distincts
+    couche   19 :  67.3 % ·   53 experts distincts
+    couche   31 :  68.6 % ·   53 experts distincts
+
+  --- concentration : part des lectures servie par les k experts les plus chauds (par couche, moyenne) ---
+      5 % des experts (  5) servent  38.4 % des lectures
+     10 % des experts ( 10) servent  56.8 % des lectures
+     25 % des experts ( 27) servent  83.0 % des lectures
+     50 % des experts ( 54) servent  97.1 % des lectures
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-reutilisation-experts.md'\ns=open(p).read()\ns=s.replace(\"\"\"## 4. Réserves, nommées\"\"\",\n\"\"\"## 3bis. Deux résultats qui changent le DESSIN du cache et des grappes\n\n**(a) Toutes les couc … [1738 caractères tronqués]`

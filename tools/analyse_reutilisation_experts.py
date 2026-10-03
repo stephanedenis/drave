@@ -109,6 +109,40 @@ def main():
         print(f"  {cap:16d} {100 * m:14.1f} % {'':>14}")
     print("\n  (les octets/jeton se calculent en multipliant (1 − taux) par les "
           "octets d'experts par jeton — voir tools/budget_execution_locale.py)")
+
+    # --- par couche : toutes les couches ne se ressemblent pas, et un cache se
+    #     dimensionne par couche (ou par grappe), pas en moyenne.
+    print("\n  --- réutilisation immédiate, par couche (les 5 plus froides et "
+          "les 5 plus chaudes) ---")
+    par_l = []
+    for l, v in par_couche.items():
+        js = sorted(v)
+        bon = tot = 0
+        for a, b in zip(js, js[1:]):
+            sa, sb = set(v[a]), set(v[b])
+            bon += len(sa & sb); tot += len(sb)
+        par_l.append((bon / max(tot, 1), l, len({e for lst in v.values() for e in lst})))
+    par_l.sort()
+    for taux, l, d in par_l[:5] + par_l[-5:]:
+        print(f"    couche {l:4d} : {100*taux:5.1f} % · {d:4d} experts distincts")
+
+    # --- quels experts sont chauds : la matière du découpage en grappes
+    print("\n  --- concentration : part des lectures servie par les k experts "
+          "les plus chauds (par couche, moyenne) ---")
+    freq_l = []
+    for l, v in par_couche.items():
+        c = Counter(e for lst in v.values() for e in lst)
+        tot = sum(c.values())
+        freq_l.append(sorted(c.values(), reverse=True))
+    n_exp = max(len(f) for f in freq_l)
+    for part in (0.05, 0.1, 0.25, 0.5):
+        k = max(1, int(n_exp * part))
+        parts = []
+        for f in freq_l:
+            tot = sum(f)
+            parts.append(sum(f[:k]) / tot if tot else 0.0)
+        print(f"    {int(100*part):3d} % des experts ({k:3d}) servent "
+              f"{100*sum(parts)/len(parts):5.1f} % des lectures")
     return 0
 
 
