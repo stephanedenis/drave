@@ -429,6 +429,36 @@ Une phase qui ne passe pas ses deux portes ne passe pas à la suivante.
 > formats. Il n'est pas un signe de défaut de calcul — les 88,9 % de top-1
 > identiques et la médiane de rang 0 des deux côtés le disent.
 
+#### P6 — le coût du contexte long, mesuré (03/10, bloc 23)
+
+> La porte de correction doit à terme porter sur une couche compressée à contexte
+> long. Première tentative à **ctx 1 024** : **arrêtée après 25 minutes et 6
+> positions** — le moteur écrivait une ligne de logits par minute, soit **≈ 60 s
+> par jeton**, **17 heures** pour les 1 023 prédictions. Mesures :
+>
+> | contexte | coût par jeton | dont attention | dont proj+mlp |
+> |---|---|---|---|
+> | 32 | **3,2 s** | 1,19 s | 2,04 s |
+> | 256 | **≈ 10-12 s** | (croissance) | — |
+> | 1 024 | **≈ 60 s** | — | — |
+>
+> llama.cpp fait la même passe de 1 024 jetons en ~4 minutes (**≈ 0,2 s/jeton**) :
+> l'écart est de l'ordre de **300×** et il **croît avec le contexte**. La cause
+> structurelle est nommée dans le code : **l'indexeur des couches CSA n'est pas
+> implémenté** (`attention.indexer.top_k` = 512 pour V4-Flash). En dessous de ce
+> seuil, garder tous les blocs est *exact* — donc la porte de correction reste
+> valide — mais l'attention est payée sur tous les blocs. C'est le poste à
+> instruire pour le contexte long, et il ne se voyait pas à ctx 32.
+>
+> **Règle de méthode ajoutée** (et écrite dans `REPRISE.md`) : **mesurer avant de
+> lancer**. Une passe de 4 jetons au contexte visé coûte une minute et donne le
+> budget ; lancer 1 023 positions sans ce chiffre a coûté 25 minutes pour rien.
+>
+> Corollaire mesuré : **`--dense` est inerte pour V4-Flash** (PPL identique au
+> chiffre près, 72 793,4696, durées identiques, compteur « dont en listes »
+> à 0,0 M). Deux blocs durant il a été cru « aligné sur llama.cpp » : c'était une
+> supposition. Un drapeau sans effet doit être dit.
+
 ### P7 — Adaptation à V4.1, et la question de provenance (≈ ½ journée + action externe) — **composants faits et vérifiés ; ⚠️ LE MODÈLE NE PRÉDIT PAS (03/10)**
 
 > ## ⚠️ Constat du 03/10 (bloc 20) : V4.1 ne prédit pas

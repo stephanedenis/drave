@@ -104127,3 +104127,16 @@ The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md has been upd
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && s=$(stat -c %s /tmp/our_v4f256.bin); echo \"$(date +%H:%M:%S) lignes=$(( (s-8)/517120 )) / 255\"; git add -A && git commit -q -m \"Sprint 23 : la porte de correction serrée (63 positions, 6,4 % au lieu de 25 %), outillée (verdict + c … [356 caractères tronqués]`
+
+  ```
+05:37:59 lignes=31 / 255
+1b52c5b Sprint 23 : la porte de correction serrée (63 positions, 6,4 % au lieu de 25 %), outillée (verdict + code retour), et le coût du contexte long mesuré
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md", "new_string": "> **Ce que l'écart résiduel est, et n'est pas** : il vient de la quantification des\n> activations (le moteur quantifie à 16 bits ce que ggml garde en bf16/f32) et des\n> formats. Il n'est … [2132 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Plan P6 : le coût du contexte long est mesuré (60 s/jeton à ctx 1024), et --dense est inerte pour V4-Flash\" && sleep 420; s=$(stat -c %s /tmp/our_v4f256.bin); echo \"$(date +%H:%M:%S) lignes=$(( (s-8 … [118 caractères tronqués]`
