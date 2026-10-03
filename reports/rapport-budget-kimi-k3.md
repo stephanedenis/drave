@@ -31,7 +31,9 @@ Deux surprises, et les deux comptent :
 ## 2. Les planchers, avec les débits mesurés
 
 **Les débits ont été remesurés le 03/10 (bloc 30)** : le « 20 Go/s » de RAM venait
-du dépôt, sans méthode. Mesuré : **9,6 Go/s à un fil, 40,3 Go/s à huit fils** (la
+du dépôt, sans méthode. ⚠️ La mesure de RAM est une **somme contiguë** (numpy) :
+c'est une **borne supérieure** pour un moteur qui lit des lignes de matrices —
+utile pour dimensionner, à ne pas lire comme un débit garanti. Mesuré : **9,6 Go/s à un fil, 40,3 Go/s à huit fils** (la
 somme d'un tableau de 32 Go) ; et le NVMe passe de **2,26 Go/s à un flux à 3,39
 Go/s à quatre**. C'est le débit agrégé qui compte pour un moteur à 16 fils.
 

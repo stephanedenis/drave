@@ -124,6 +124,20 @@ non-régression est mesurée, pas espérée.
 | M7 | **Exécution locale mesurée** : 1 nœud, 2 nœuds, avec et sans grappes ; jetons/s, octets lus par jeton, et comparaison à llama.cpp | à faire |
 | M8 | **Le verdict « trop gros »** : ce qu'il faut (RAM, disques, nœuds) pour un débit utile, et où le projet gagne ou perd | à faire |
 
+## 4bis. Ce qui est prêt pour le jour J
+
+Quand le transfert se termine (`tools/apres-telechargement-k3.sh`), la séquence est
+**automatique et ordonnée** : (1) les 32 shards sont-ils complets, à la bonne
+taille ? (2) que dit notre `--config` — et **quels** manques annonce-t-il ?
+(3) la porte du tokenizer tient-elle toujours ? (4) le budget par jeton est-il
+celui qu'on a extrapolé (88,5 Go) ? (5) la référence `llama.cpp-k3` tourne-t-elle,
+et à quelle vitesse ? Chaque étape échoue **en disant laquelle** : un transfert
+incomplet, une architecture non reconnue et un manque de mémoire ne se
+ressemblent pas, et il ne faut pas les confondre à 14 h du matin.
+
+La vérification de l'implémentation, elle, est écrite d'avance :
+`docs/verification-kimi-k3.md` (13 points de comparaison, l'ordre, les tolérances).
+
 ## 5. Ce qui est mis de côté, et pourquoi c'est écrit
 
 - **DeepSeek-V4-Flash** : périmé comme cible (acquis conservés dans les rapports

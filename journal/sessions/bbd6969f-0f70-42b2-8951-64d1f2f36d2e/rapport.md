@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 117.0 h |
+| Durée | 117.1 h |
 | Tours | 92 |
-| Messages | 7009 |
-| Appels d'outils | 6700 |
-| Fichiers touchés | 143 |
-| Commandes | 5668 |
+| Messages | 7012 |
+| Appels d'outils | 6703 |
+| Fichiers touchés | 144 |
+| Commandes | 5670 |
 | Sous-agents | 32 |
-| Commits | 461 |
+| Commits | 462 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -4574,7 +4574,7 @@ Avec SiTU et l'attention résiduelle, ça fait **10 tests pour Kimi-K3**, et **7
 
 ### Tour 92 — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas e … [1246 caractères tronqués]
 
-*43 appels d'outils.* Actions notables :
+*46 appels d'outils.* Actions notables :
 
 - bash — Find the expert routing trace facility
 - bash — Read the trace format and the existing routing report
@@ -4590,11 +4590,11 @@ Avec SiTU et l'attention résiduelle, ça fait **10 tests pour Kimi-K3**, et **7
 - bash — Tokenize then run the Qwen3-30B trace
 - bash — Check the running engines and trace progress
 - bash — Run the Qwen3-30B trace alone
-- … et 29 autres
+- … et 32 autres
 
 **Synthèse produite :**
 
-⏵ La RAM fait 40 Go/s à 8 fils (pas 20) — je mesure aussi le NVMe en parallèle avant de corriger le budget
+⏵ Je prépare la séquence automatique de l'après-téléchargement (vérification, config, budget, baseline)
 
 ## 3. Travail accompli
 
@@ -4745,6 +4745,7 @@ Avec SiTU et l'attention résiduelle, ça fait **10 tests pour Kimi-K3**, et **7
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-reutilisation-experts.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/30-la-reutilisation-des-experts-mesuree.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/verification-kimi-k3.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/apres-telechargement-k3.sh` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -4823,7 +4824,7 @@ Avec SiTU et l'attention résiduelle, ça fait **10 tests pour Kimi-K3**, et **7
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5628 autres
+- … et 5630 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5432,4 +5433,5 @@ Avec SiTU et l'attention résiduelle, ça fait **10 tests pour Kimi-K3**, et **7
 - Sprint 30 : la réutilisation des experts est mesurée — 47-49 % immédiate, un quart de cache sert 80-87 %, plafond 93 %  C'est le levier qui décide si un modèle 
 - Protocole de vérification de Kimi-K3 : les 13 points de comparaison de la référence, l'ordre, les tolérances, et le premier jalon (couche 0)  Les deux outils ex
 - Débits remesurés : RAM 40 Go/s à 8 fils (pas 20), NVMe 3,4 Go/s à 4 flux — le budget de Kimi-K3 refait  Le « 20 Go/s » du dépôt n'avait pas de méthode : 9,6 Go/
+- Séquence de l'après-téléchargement, automatique et ordonnée (5 étapes qui échouent en disant laquelle)  Testée sur l'état partiel : elle détecte 15/32 shards et
 

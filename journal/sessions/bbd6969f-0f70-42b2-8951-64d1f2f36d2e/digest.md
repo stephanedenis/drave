@@ -111555,3 +111555,36 @@ bus PCIe x8 (6,5 Go/s)                  6.5 Go/s     13.63     0.073
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-budget-kimi-k3.md'\ns=open(p).read()\ns=s.replace(\"\"\"| placement | débit | s/jeton | commentaire |\n|---|---|---|---|\n| tout sur disque dur (200 Mo/s) | 0,2 Go/s | **435 s** | hors de question … [4488 caractères tronqués]`
+
+  ```
+rapports et sprint mis à jour
+45c757f Débits remesurés : RAM 40 Go/s à 8 fils (pas 20), NVMe 3,4 Go/s à 4 flux — le budget de Kimi-K3 refait
+  ```
+
+### 🤖 Assistant
+
+⏵ Je prépare la séquence automatique de l'après-téléchargement (vérification, config, budget, baseline)
+
+- **write** `{"content": "#!/bin/bash\n# Après le téléchargement de Kimi-K3 : la séquence, dans l'ordre, automatique.\n#\n# Ce script existe parce que la fin d'un transfert de 1,5 To est le moment où\n# l'on risque de se précipiter : on lance le modèle, il refuse, on ne sait pas\n# si c'est le fichier, l'archite … [3708 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/apres-telechargement-k3.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && chmod +x tools/apres-telechargement-k3.sh && bash -n tools/apres-telechargement-k3.sh && echo \"syntaxe ok\" && bash tools/apres-telechargement-k3.sh --sans-baseline 2>&1 | head -22", "description": "Test the post-download sequence ( … [37 caractères tronqués]`
+
+  ```
+syntaxe ok
+=== 1. Les 32 shards sont-ils complets ? ===
+  15/32 shards complets
+  MANQUANT  Kimi-K3-UD-Q4_K_XL-00016-of-00032.gguf
+  MANQUANT  Kimi-K3-UD-Q4_K_XL-00017-of-00032.gguf
+  MANQUANT  Kimi-K3-UD-Q4_K_XL-00018-of-00032.gguf
+  → transfert incomplet : on s'arrête là.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-budget-kimi-k3.md'\ns=open(p).read()\ns=s.replace(\"\"\"**Les débits ont été remesurés le 03/10 (bloc 30)** : le « 20 Go/s » de RAM venait\ndu dépôt, sans méthode.\"\"\",\n\"\"\"**Les débits ont é … [1916 caractères tronqués]`
