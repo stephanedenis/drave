@@ -136,6 +136,28 @@ cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo build --r
 > (`DRAVE_EXPERTS_RAM`) est 4 à 21 % PLUS LENT (le noyau cache déjà) — drapeau
 > éteint, verdict dans son annonce.
 >
+> **Mise à jour du 03/10 (00h) — la nuit des optimisations, et pas un chiffre
+> changé.** Trois leviers, tous prouvés bit-exacts (5 670 tenseurs comparés au
+> total, 0 écart) :
+>
+> | levier | effet |
+> |---|---|
+> | matvec f32 parallèle **par lignes** | attention 12 369,91 → 1 324,48 ms/token (×9,34) |
+> | `threads_iq` déborné (8 → 20 fils) | `proj+mlp` ctx 32 : 3 530 → 2 432 ms/token |
+> | noyau **AVX2** de déquantification Q2_K | `proj+mlp` ctx 32 : 2 432 → 1 834 ms/token |
+>
+> **Passe V4.1 à ctx 32 : 313,1 s → 88,5 s (×3,54)** ; à ctx 8 : 66-68 s → 10,7 s ;
+> découpage à deux nœuds : 0,00e0 en 16,4 s (référence locale 25,6 s, contre 68,0
+> en début de nuit). Le profil de V4.1 a maintenant une ligne « dont attention V4 »
+> (le calcul d'attention proprement dit ne fait que 4,5 % du poste) et la porte
+> V4-Flash reste à **8430,4966**.
+>
+> **Deux choses essayées et REFUSÉES par la mesure** : un cache RAM des experts
+> (+4 % à 4 Go, +21 % à 32 Go — le noyau cache déjà) et le SIMD du produit
+> scalaire (il réassocie la somme, donc changerait la référence). Le noyau IQ1_M
+> (V4-Flash) ne rend que ×1,07 : son coût est la LECTURE du codebook, pas
+> l'arithmétique.
+>
 > **Revue adverse du bloc 13** : trois chiffres publiés corrigés (953 tenseurs de
 > la passe répartie et non 2 544 ; 82 016 octets au retour et non 81 999 ; la
 > trame sans préfixe v6 **interbloque** le pair au lieu d'être « fausse et

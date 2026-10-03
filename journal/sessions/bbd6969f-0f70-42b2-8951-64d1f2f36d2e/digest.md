@@ -99483,3 +99483,28 @@ procs: 0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"sprints/18-vectoriser-la-dequantification-des-experts.md\"\ns=open(p).read()\na=\"\"\"- `tools/portes.sh rapide` : voir le journal du bloc — la porte **V4-Flash\n  8430,4966** est celle qui compte ici\"\"\"\nb=\ … [772 caractères tronqués]`
+
+  ```
+ok
+sam 03 oct 2026 00:01:55 EDT
+/tmp/v41_texte.txt.ids
+359041 data/wikitext2_test.txt
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cp sprints/18-vectoriser-la-dequantification-des-experts.md sprints/19-v41-a-1024-jetons.md && python3 - <<'PY'\np=\"sprints/19-v41-a-1024-jetons.md\"\nopen(p,\"w\").write(\"\"\"# Sprint 19 — V4.1 à 1 024 jetons : la première passe l … [1216 caractères tronqués]`
+
+  ```
+sprint 19 ecrit
+398564 /tmp/v41_1024.ids
+201,438,10498,102771,402,438,61915,10498,102771,402,344,411,3947,5485,1537,15758,305,31085,22491,1204,1166,936,260,20521
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\ns=open('/tmp/v41_1024.ids').read().split(',')\nprint('jetons tokenises :', len(s))\n\" && cat > /tmp/passe1024.sh <<'EOF'\n#!/bin/bash\nset -u\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nM=/home/stephane/FastN … [489 caractères tronqués]`
+
+  ```
+jetons tokenises : 85223
+passe 1024 jetons lancee
+      00:05
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"REPRISE.md\"\ns=open(p).read()\na=\"\"\"> **Revue adverse du bloc 13**\"\"\"\nb=\"\"\"> **Mise à jour du 03/10 (00h) — la nuit des optimisations, et pas un chiffre\n> changé.** Trois leviers, tous prouvés bit-ex … [1508 caractères tronqués]`
