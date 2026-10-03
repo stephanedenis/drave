@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 109.9 h |
 | Tours | 87 |
-| Messages | 6447 |
-| Appels d'outils | 6170 |
-| Fichiers touchés | 118 |
-| Commandes | 5232 |
+| Messages | 6461 |
+| Appels d'outils | 6184 |
+| Fichiers touchés | 119 |
+| Commandes | 5245 |
 | Sous-agents | 32 |
-| Commits | 413 |
+| Commits | 414 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -4318,7 +4318,7 @@ C'est un point de méthode qui comptait : sans cette mesure, on aurait pu « cor
 
 ### Tour 87 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [942 caractères tronqués]
 
-*7 appels d'outils.* Actions notables :
+*21 appels d'outils.* Actions notables :
 
 - bash — Launch the long-window correction gate
 - bash — Wait for the long comparison
@@ -4327,10 +4327,18 @@ C'est un point de méthode qui comptait : sans cette mesure, on aurait pu « cor
 - read
 - edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md`
 - bash — Verify numbers and commit the plan update
+- bash — Check time, sprint state, model sizes
+- bash — Inspect sprints dir, model sizes, last sprint
+- bash — Check recent commits and sprint files
+- bash — Check commit times and block references
+- bash — Read the bloc 22 plan in sprint 21
+- bash — Locate engram code and any local vLLM source
+- bash — Inspect correction-gate tools and engine flags
+- … et 7 autres
 
 **Synthèse produite :**
 
-⏵ Writing the tightened correction-gate verdict into the plan
+⏵ Setting up the long-context correction gate (ctx 1024) on V4-Flash
 
 ## 3. Travail accompli
 
@@ -4456,6 +4464,7 @@ C'est un point de méthode qui comptait : sans cette mesure, on aurait pu « cor
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-matvec-f32-parallele.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/16-les-experts-sur-nvme-la-reutilisation.md` | 2 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-vitesse-v41.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/22-la-composition-verifiee-et-les-deux-portes.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -4534,7 +4543,7 @@ C'est un point de méthode qui comptait : sans cette mesure, on aurait pu « cor
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5192 autres
+- … et 5205 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4662,7 +4671,7 @@ C'est un point de méthode qui comptait : sans cette mesure, on aurait pu « cor
 
 ## 5. Erreurs rencontrées
 
-325 sorties en erreur ou divergentes. Les premières :
+326 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -5095,4 +5104,5 @@ C'est un point de méthode qui comptait : sans cette mesure, on aurait pu « cor
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="docs/plan-deepseek41-complet.md" s=open(p).read() a="""> 2. **Le rejeu n'est pas ident
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="docs/plan-deepseek41-complet.md" s=open(p).read() a="""### P7 — Adaptation à V4.1, et 
 - Porte de correction P6 serrée : 63 positions, corrélation 0,9852, top-1 88,9 %, PPL à 6,4 %  La fenêtre de 4 jetons donnait 25 % d'écart de perplexité ; la même
+- Sprint 22 : la composition de V4.1 est vérifiée pièce par pièce, et les deux portes de P6, exécutées, étaient fausses deux fois sur quatre  Rétrospective du blo
 

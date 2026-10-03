@@ -102855,3 +102855,231 @@ The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-co
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport numpy as np\nfor p in ['/tmp/ref_v4f64.bin','/tmp/our_v4f64.bin']:\n    h=np.fromfile(p,dtype='<i4',count=2); print(p, 'n=%d V=%d'%(h[0],h[1]))\nimport math; print('ln(16.293103)=%.4f  ln(15.2520)=%.4f'%(math.lo … [676 caractères tronqués]`
+
+  ```
+/tmp/ref_v4f64.bin n=129280 V=63
+/tmp/our_v4f64.bin n=129280 V=63
+ln(16.293103)=2.7907  ln(15.2520)=2.7247
+38fb678 Porte de correction P6 serrée : 63 positions, corrélation 0,9852, top-1 88,9 %, PPL à 6,4 %
+  ```
+
+### 🤖 Assistant
+
+⏵ Checking the clock, the current sprint and the remaining plan items
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date && TZ=America/Toronto date && ls sprints/ | tail -5 && cat sprints/COURANT 2>/dev/null && ls -la /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/ && ls -la /home/stephane/FastNVMe/modeles-lourds/DeepSeek … [77 caractères tronqués]`
+
+  ```
+sam 03 oct 2026 04:40:11 EDT
+sam 03 oct 2026 04:40:11 EDT
+17-les-experts-io-ou-calcul.md
+18-vectoriser-la-dequantification-des-experts.md
+19-v41-a-1024-jetons.md
+20-la-passe-longue-instrumentee.md
+21-localiser-le-defaut-v41.md
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls sprints/ && echo \"--- tailles modèles ---\" && du -sh /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/*.gguf /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf 2>/dev/null && echo \"--- 21 … [122 caractères tronqués]`
+
+  ```
+01-premier-des-trois-noyaux-gpu-du-top-k-le.md
+02-fusionner-la-cha-ne-du-top-k-d-port-desc.md
+03-qualit-de-l-attention-creuse-long-contex.md
+04-le-k-de-l-attention-creuse-l-chec-au-mil.md
+05-refaire-la-grille-avec-de-vraies-fenetres.md
+06-le-taux-de-recuperation.md
+07-cloture-de-la-nuit.md
+08-un-modele-eclate-se-lit-comme-un-seul.md
+09-empreinte-memoire-ce-qui-reduit-vraiment.md
+10-v41-la-chaine-retardee-et-le-compresseur.md
+11-v41-la-passe-complete.md
+12-la-rotation-des-couches-compressees.md
+13-les-deux-enigmes-du-decoupage-v41.md
+14-p8-la-vivacit-de-l-engram-interrupteur-d.md
+15-p9-le-poste-d-attention-v4-1-profiler-le.md
+16-les-experts-sur-nvme-la-reutilisation.md
+17-les-experts-io-ou-calcul.md
+18-vectoriser-la-dequantification-des-experts.md
+19-v41-a-1024-jetons.md
+20-la-passe-longue-instrumentee.md
+21-localiser-le-defaut-v41.md
+--- tailles modèles ---
+5,1M	/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf
+47G	/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00002-of-00003.gguf
+35G	/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/Deep
+… [3251 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -15 && echo \"--- fichiers sprint dans git ---\" && git log --diff-filter=A --name-only --oneline -8 -- sprints/ | head -30", "description": "Check recent commits and sprint files"}`
+
+  ```
+38fb678 Porte de correction P6 serrée : 63 positions, corrélation 0,9852, top-1 88,9 %, PPL à 6,4 %
+293051a Porte de correction de P6, mesurée sur V4-Flash avec des protocoles ALIGNÉS : logits à 1-2 %, corrélations ≥ 0,9979 — mais la perplexité n'est pas le bon instrument
+6faea8f Porte Drave de P6, point 2 : le rejeu est DÉFINI et VÉRIFIÉ — 0 liste manquante, écart ≤ 1e-5, et la cause de l'écart est mesurée
+314ff84 Porte Drave de P6, point 1 CORRIGÉ : l'outil d'analyse lit les trois versions du format DRVF, et la porte est branchée
+859d2b7 Porte Drave de P6 : DEUX des quatre points ne tiennent pas — flux illisible par l'outil d'analyse, rejeu non identique (mesuré)
+e79cb2d Plan P7 : la porte de correction est IMPOSSIBLE en l'état et c'est nommé — llama.cpp refuse l'architecture deepseek41 ; ce qui est vérifiable sans référence exécutable l'est (tableau des douze vérifications)
+7401db8 Le cœur de l'attention V4.1 est vérifié — blocs compressés et règle de visibilité compris (7e-07)
+3dfa69e Attention V4.1, premiers étages TOUS vérifiés à 1e-6 — l'écart sur q_rope était une faute de MON script
+2a96b14 Attention V4.1 : projections et normes VÉRIFIÉES (1e-6), un écart isolé sur la rotat
+… [2270 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --format='%h %ad %s' --date=format:'%d/%m %H:%M' -12 && echo \"--- index/journal ---\" && ls *.md docs/*.md 2>/dev/null | head -20 && grep -rn \"bloc 22\\|bloc 23\\|Bloc 22\" --include=*.md . | head -10", "description": "Chec … [37 caractères tronqués]`
+
+  ```
+38fb678 03/10 04:39 Porte de correction P6 serrée : 63 positions, corrélation 0,9852, top-1 88,9 %, PPL à 6,4 %
+293051a 03/10 04:30 Porte de correction de P6, mesurée sur V4-Flash avec des protocoles ALIGNÉS : logits à 1-2 %, corrélations ≥ 0,9979 — mais la perplexité n'est pas le bon instrument
+6faea8f 03/10 04:21 Porte Drave de P6, point 2 : le rejeu est DÉFINI et VÉRIFIÉ — 0 liste manquante, écart ≤ 1e-5, et la cause de l'écart est mesurée
+314ff84 03/10 04:19 Porte Drave de P6, point 1 CORRIGÉ : l'outil d'analyse lit les trois versions du format DRVF, et la porte est branchée
+859d2b7 03/10 04:18 Porte Drave de P6 : DEUX des quatre points ne tiennent pas — flux illisible par l'outil d'analyse, rejeu non identique (mesuré)
+e79cb2d 03/10 04:14 Plan P7 : la porte de correction est IMPOSSIBLE en l'état et c'est nommé — llama.cpp refuse l'architecture deepseek41 ; ce qui est vérifiable sans référence exécutable l'est (tableau des douze vérifications)
+7401db8 03/10 04:14 Le cœur de l'attention V4.1 est vérifié — blocs compressés et règle de visibilité compris (7e-07)
+3dfa69e 03/10 04:11 Attention V4.1, premiers étages TOUS vérifiés à 1e-6 — l'écart sur q_rope était une faute de MON scr
+… [2313 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Reading bloc 22's planned work in sprint 21 to pick up the thread
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '270,400p' sprints/21-localiser-le-defaut-v41.md", "description": "Read the bloc 22 plan in sprint 21"}`
+
+  ```
+en numpy : `rmsnorm(hc_mel_ffn, ffn_norm, 1e-20)` donne le même vecteur à
+  **1e-7 à 1e-6** (arrondi f32) sur deux couches et deux positions ✓ ;
+- **`moe_down`** — la somme des experts ROUTÉS, avant l'expert partagé. C'est le
+  vide qui rend le chemin des experts vérifiable : le routeur est déjà vérifié en
+  numpy (sélection identique ✓), il ne reste qu'à recomposer
+  `Σ_e w_e · W_d[e] · act(W_g[e]·hn, W_u[e]·hn)` avec les déquantificateurs IQ2_XXS
+  et Q2_K — les deux sont validés contre libggml par `tools/portes_formats.sh`.
+
+## Planning du bloc 22 — la composition, vérifiée contre numpy
+
+Dix hypothèses sont éliminées et le défaut survit. Ce qui n'a JAMAIS été vérifié
+pour V4.1, c'est la **composition** d'une couche : chaque pièce a été comparée à
+une transcription, jamais l'ensemble. La suite, dans l'ordre :
+
+1. **Le chemin des experts en numpy** : `moe_down` (vide neuf, bloc 21) contre
+   `Σ_e w_e · W_d[e] · act(W_g[e]·hn, W_u[e]·hn)`, avec `hn` = `ffn_hn` (vérifié) et
+   la sélection du routeur (vérifiée) — les déquantificateurs IQ2_XXS et Q2_K sont
+   déjà validés contre libggml. C'est la dernière pièce jamais comparée pour V4.1.
+2. **Puis l'attention en numpy** (couche 0, ra
+… [1711 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"engram\" --include=*.rs drave-core/src/ | head -30 && echo \"--- source vLLM locale ? ---\" && ls /home/stephane/Data13TB/stephane/ 2>/dev/null | head && find / -maxdepth 6 -type d -name \"deepseek_v41\" 2>/dev/null | head … [65 caractères tronqués]`
+
+  ```
+drave-core/src/gguf.rs:871:    /// pour les lecteurs qui ne déquantifient pas (l'engram lit ses rangées de
+drave-core/src/engram.rs:1://! L'**engram** de DeepSeek-V4.1 : deux tables de n-grammes adressées par hachage.
+drave-core/src/engram.rs:8://! La référence est un portage 1:1 de `vllm/models/deepseek_v4_1/common/engram.py`
+drave-core/src/engram.rs:9://! (`mudler/vllm.cpp`, `deepseek_v4_1_engram.cpp`) ; `tools/engram_reference.py`
+drave-core/src/engram.rs:23://! (ils *sont* dans les métadonnées, et `tools/engram_reference.py` les
+drave-core/src/engram.rs:35:/// décoratifs : `tools/engram_reference.py` les RECALCULE (Miller-Rabin
+drave-core/src/engram.rs:36:/// (2, 7, 61) puis premier suivant non déjà vu, depuis `engram_vocab_size - 1`)
+drave-core/src/engram.rs:51:    /// `engram.layer_ids` : les couches qui portent une table (1 et 14).
+drave-core/src/engram.rs:53:    /// `engram.rows` : le nombre de rangées de chaque table.
+drave-core/src/engram.rs:67:    /// Le pad **compressé** (`token_map[engram.pad_id]`) : c'est lui que le
+drave-core/src/engram.rs:73:    /// Lit l'engram des métadonnées, ou `None` si le modèle n'en a pas.
+drave-core/src/engram.rs:75:        let couches: Vec<
+… [2142 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Setting up the long-context correction gate (ctx 1024) on V4-Flash
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls tools/ | head -40 && echo \"--- ref_logits ---\" && head -40 tools/ref_logits* 2>/dev/null && echo \"--- usage moteur ---\" && grep -n \"logits-bin\\|limit\\b\" drave-core/src/main.rs | head -20", "description": "Inspect correctio … [31 caractères tronqués]`
+
+  ```
+                               @       @     ��      ��                    �       �@      �@     �     �                           B       B      N       N                   �z     �zB     �zB     �      �                   �}     �}B     �}B     @      @                   P      P@     P@     @       @                    �      �@     �@     $       $                     n      nB      nB                            S�td   P      P@     P@     @       @              P�td    ;      ;B      ;B     T      T             Q�td                                                  R�td   �z     �zB     �zB     0      0                0      GNU � �           �   	        �                   GNU �M�E�����ـc܇�GD/lib64/ld-linux-x86-64.so.2        �   8   )   6         ,   �      E       3   �   �           �           �                 ;   %       �   4   �           �   �           R           �           �   �   `   �   �   U   I             �       J   �           �   �         {       e   \   �   G   h   L       q                 �       <     �   P   �   }   �   p   N       l   y           �   � 
+… [37898 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -o \"drave [^\\\"]*--logits-bin[^\\\"]*\" journal/sessions/*/rapport.md 2>/dev/null | tail -5; echo \"--- disque /tmp ---\"; df -h /tmp | tail -1; echo \"--- texts/ids dispo ---\"; ls -la /tmp/*.ids /tmp/*texte* 2>/dev/null | he … [145 caractères tronqués]`
+
+  ```
+--- disque /tmp ---
+tmpfs            63G   21G   43G  33% /tmp
+--- texts/ids dispo ---
+-rwxr-xr-x. 1 stephane stephane    664 30 sep 11:09 /tmp/banc_texte.sh
+-rw-r--r--. 1 stephane stephane   1853 29 sep 07:29 /tmp/contexte_ou_contenu.log
+-rw-r--r--. 1 stephane stephane   1900 29 sep 07:29 /tmp/contexte_ou_contenu.out
+-rwxr-xr-x. 1 stephane stephane    780 29 sep 06:59 /tmp/contexte_ou_contenu.sh
+-rw-r--r--. 1 stephane stephane  18985  1 oct 04:21 /tmp/fen_0.txt.ids
+-rw-r--r--. 1 stephane stephane  18874  1 oct 04:21 /tmp/fen_1.txt.ids
+-rw-r--r--. 1 stephane stephane  21184  1 oct 04:21 /tmp/fen_2.txt.ids
+-rw-r--r--. 1 stephane stephane  21215  1 oct 04:21 /tmp/fen_3.txt.ids
+-rw-r--r--. 1 stephane stephane  18884  1 oct 04:21 /tmp/fen_4.txt.ids
+-rw-r--r--. 1 stephane stephane  18962  1 oct 04:21 /tmp/fen_5.txt.ids
+--- ref_logits binaire ---
+-rwxr-xr-x. 1 stephane stephane 207032  2 oct 15:30 tools/ref_logits
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"logits-bin\" --include=*.md --include=*.sh . | head -10; echo \"--- gros textes /tmp ---\"; ls -laS /tmp/*.txt 2>/dev/null | head -8; echo \"--- ids 1024 ---\"; wc -c /tmp/v41_1024.ids /tmp/v41_texte.txt.ids 2>/dev/null; l … [90 caractères tronqués]`
+
+  ```
+./reports/rapport-drapeaux-ignores.md:97:| `--ppl-profil` `--logits-bin` | P : 2854, 2837 | I : jamais lu | 🟡 → **corrigé le 03/10 (bloc 19)** : `--ppl-profil` est branché (le champ, les seaux de 256 positions et l'affichage existaient) ; `--logits-bin`, lui, était bien lu |
+./reports/rapport-logits-gpu-vs-cpu.md:27:`--logits-bin` exporte les logits des deux chemins sur **les mêmes jetons**, et
+./reports/rapport-logits-gpu-vs-cpu.md:92:    --limit 512 --logits-bin /tmp/logits_cpu.bin
+./reports/rapport-logits-gpu-vs-cpu.md:94:    --dense --limit 512 --logits-bin /tmp/logits_gpu.bin
+./journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md:2834:- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/main.rs", "new_string": "            \"--harmony\" => { harmony = Some(\"alterne\".into()); i -= 1; }\n            \"--logits-bin\" => logits_bin = Some(args[i + 1].clone()),", "old_string": "            \"--harmony\" => … [50 caractères tronqués]`
+./journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md:3575:- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && env QT_YARN=1 ./qtrinet-core/target/release/qtrine
+… [3131 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -c 300 /tmp/v41_1024.ids && echo && python3 -c \"\nimport re\ns=open('/tmp/v41_1024.ids').read()\nids=[int(x) for x in re.findall(r'\\d+', s)]\nprint('n ids =', len(ids), 'max =', max(ids))\nopen('/tmp/ids_v4f1024.txt','w').writ … [188 caractères tronqués]`
+
+  ```
+201,438,10498,102771,402,438,61915,10498,102771,402,344,411,3947,5485,1537,15758,305,31085,22491,1204,1166,936,260,20521,2390,15,34,71132,3615,377,270,15758,4923,455,10987,295,223,20,18,18,18,1204,1162,515,7128,513,260,71132,3615,295,270,1946,5334,1054,4866,513,20923,89127,1537,778,515,7451,295,223,
+n ids = 85223 max = 127976
+1024 premiers écrits, dernier = 30650
+1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (t0=$(date +%s); LD_LIBRARY_PATH=/home/stephane/Data13TB/stephane/GitHub/llama.cpp/build/bin ./tools/ref_logits /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf / … [252 caractères tronqués]`
+
+  ```
+started background job bash-209
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^#\\|^##\" sprints/21-localiser-le-defaut-v41.md && echo \"=== fin ===\" && tail -25 sprints/21-localiser-le-defaut-v41.md && echo \"=== portes ===\" && grep -n \"^##\" sprints/20-la-passe-longue-instrumentee.md", "descript … [38 caractères tronqués]`
+
+  ```
+1:# Sprint 21 — Localiser le défaut V4.1
+14:## Revue — ce qui est livré, mesuré
+16:### 1. L'instrument de bisection, et huit hypothèses éliminées
+36:### 2. Ce que la mesure a établi, et qui restera
+49:### 2bis. Deux vérifications de plus, et deux hypothèses de plus éliminées
+63:### 2ter. Le routeur et la tête, vérifiés en numpy
+76:### 2quater. Un défaut SILENCIEUX trouvé en chemin : `--abits` au-delà de 16
+97:### 3. La piste qui reste, et elle est étroite
+108:## 3bis. Le chemin des experts est VÉRIFIÉ (et ce n'est donc pas lui)
+133:## 3ter. L'attention : projections et normes vérifiées, un écart sur la rotation du Q
+176:## 3quater. Le CŒUR de l'attention est vérifié — avec les blocs compressés
+192:## Bilan : tout ce qui est vérifiable sans référence exécutable l'est
+217:## Portes
+226:## Rétrospective — garder / changer / doute
+264:### 2quinquies. Les vides qui manquaient pour vérifier les experts
+278:## Planning du bloc 22 — la composition, vérifiée contre numpy
+299:## (Ancien) planning — la règle du retard, relue à la source
+=== fin ===
+   `wo_a`/`wo_b`. C'est la seule vérification qui peut encore trouver
+   une erreur de *composition* — celle que dix ablations ont manquée.
+2. **R
+… [1886 caractères tronqués]
+  ```
+
+- **write** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/22-la-composition-verifiee-et-les-deux-portes.md", "content": "# Sprint 22 — La composition vérifiée, et les deux portes de P6 auditées\n\n- **Début** : 03:35 · **Fin** : 04:30 (55 min)\n- **Objectif** : le bloc 21 a éliminé dix  … [7119 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/22-la-composition-verifiee-et-les-deux-portes.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/ref_v4f1024.log 2>/dev/null | tail -5; ls -la /tmp/ref_v4f1024.bin 2>/dev/null; git add -A && git commit -q -m \"Sprint 22 : la composition de V4.1 est vérifiée pièce par pièce, et les deux portes de P6, exécutées, étaient f … [435 caractères tronqués]`
