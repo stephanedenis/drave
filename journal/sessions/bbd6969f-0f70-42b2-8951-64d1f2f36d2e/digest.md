@@ -100214,3 +100214,105 @@ ok sprint 20
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\n# 1) le plan : l'état V4.1 doit dire la vérité\np=\"docs/plan-deepseek41-complet.md\"\ns=open(p).read()\na=\"\"\"### P7 — Adaptation à V4.1, et la question de provenance (≈ ½ journée + action externe) — **mHC, compr … [5678 caractères tronqués]`
+
+  ```
+ok plan
+ok REPRISE
+b5e7d9c ⚠️ V4.1 ne prédit pas : top-1 0/31, NLL 11,657 nats (uniforme 11,770) — V4-Flash, lui, est juste (1,875 contre 1,844 pour llama.cpp)
+sam 03 oct 2026 02:55:14 EDT
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=/home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf && ./drave-core/target/release/drave $M --config 2>&1 | grep -iE \"fenêtre|window|glissant|ratio|compress\" | head -10; echo \"=== V4-Flash ===\"; V=/home/stephane/ … [319 caractères tronqués]`
+
+  ```
+attn compress.: 40 couches · 0 CSA (ratio 4) · 0 HCA (ratio 128) · brutes aux couches [0, 1]
+hyper-conn.   : 4 copies · 24 mélanges par couche (pre/post/comb) · Sinkhorn 20 itérations · eps 1e-6
+=== V4-Flash ===
+attn compress.: 44 couches · 21 CSA (ratio 4) · 20 HCA (ratio 128) · brutes aux couches [0, 1, 43]
+hyper-conn.   : 4 copies · 24 mélanges par couche (pre/post/comb) · Sinkhorn 20 itérations · eps 1e-6
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=/home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf && python3 tools/lire_meta_gguf.py \"$M\" 2>/dev/null | grep -iE \"window|slid|n_swa|attention\\.\" | head -12; echo \"=== V4-Flash ===\"; V=/home/stephane/Data13TB … [284 caractères tronqués]`
+
+  ```
+deepseek41.config = {"architectures":["DeepseekV41ForCausalLM"],"bos_token_id":0,"dtype":"bfloat16","eos_token_id":1,"image_token_id":129264,"model_type":"deepseek_v41","pad_token_id":2,"quantization_config":{"activation_scheme":"dynamic","expert_dtype":"fp4","quant_method":"fp8","scale_fmt":"ue8m0","weight_block_size":[32,32]},"text_config":{"attention_bias":false,"attention_dropout":0.0,"candidate_block_size":8,"candidate_source_layer_id":20,"candidate_topk_blocks":2048,"compress_ratios":[0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0],"compress_rope_theta":160000,"dspark_block_size":5,"dspark_markov_rank":256,"dspark_n_routed_experts":128,"dspark_noise_token_id":128799,"dspark_num_experts_per_tok":3,"dspark_target_layer_ids":[37,38,39],"engram_compressed_vocab_size":99092,"engram_head_dim":256,"engram_layer_ids":[1,14],"engram_max_ngram_size":4,"engram_n_heads":8,"engram_num_embeddings":[384006168,384016682],"engram_pad_token_id":2,"engram_vocab_size":16000000,"hc_eps":1e-06,"hc_mult":4,"hc_sinkhorn_iters":20,"head_dim":512,"hidden_act":"silu","hidden_size":5120,"index_head_dim":128,"index_n_heads":32,"index_source_layer_ids":[2,8,14,20,24,
+… [1652 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"sliding_window\" drave-core/src/model.rs | head -10", "description": "Check how the sliding window is read"}`
+
+  ```
+1319:    /// Fenêtre brute des couches compressées (`attention.sliding_window`) : ce
+3105:            let fenetre = g.cfg_ou(&["attention.sliding_window", "sliding_window"])
+3107:                .or_else(|| g.json_nombre("sliding_window").map(|v| v as usize))
+3571:        let fenetre = g.cfg("attention.sliding_window").and_then(|m| m.as_u64()).unwrap_or(0) as usize;
+3577:        let motif_declare = g.cfg("attention.sliding_window_pattern")
+5792:        // (`attention.sliding_window`), le reste étant résumé en blocs.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 3100,3115p drave-core/src/model.rs; echo \"=== 3565,3580 ===\"; sed -n 3565,3582p drave-core/src/model.rs; echo \"=== cfg_ou ===\"; grep -n \"fn cfg_ou\" -A 12 drave-core/src/gguf.rs | head -16", "description": "Read the two w … [19 caractères tronqués]`
+
+  ```
+let ratios = g.couches_ratios();
+            let base_comp = g.cfg_ou(&["attention.compress_rope_freq_base", "compress_rope_freq_base"])
+                .and_then(|m| m.as_f64()).map(|v| v as f32)
+                .or_else(|| g.json_nombre("compress_rope_theta").map(|v| v as f32))
+                .unwrap_or(base);
+            let fenetre = g.cfg_ou(&["attention.sliding_window", "sliding_window"])
+                .and_then(|m| m.as_u64()).map(|v| v as usize)
+                .or_else(|| g.json_nombre("sliding_window").map(|v| v as usize))
+                .unwrap_or(0);
+            // **Sources du cache compressé** (`kv_source_layer_ids`, V4.1).
+            // V4 ne déclare pas la clé : chaque couche compressée est sa propre
+            // source, ce qui est le comportement d'origine.
+            let sources: Vec<usize> = g.cfg_ou(&["kv_source_layer_ids"])
+                .and_then(|m| m.as_liste_i64())
+                .unwrap_or_default()
+                .into_iter().filter(|s| *s >= 0).map(|s| s as usize).collect();
+=== 3565,3580 ===
+                 cfg.ffn, cfg.n_expert,
+                 cfg.yarn.map(|y| format!(" · yarn ×{}", y.0)).unwrap_or_default());
+        let tete = if g.ten
+… [1763 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=/home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf && python3 tools/lire_meta_gguf.py \"$M\" 2>/dev/null | grep -iE \"sliding|window\" | head -5; echo \"=== ce que --config dit de la fenêtre ===\"; ./drave-core/targ … [382 caractères tronqués]`
+
+  ```
+deepseek41.config = {"architectures":["DeepseekV41ForCausalLM"],"bos_token_id":0,"dtype":"bfloat16","eos_token_id":1,"image_token_id":129264,"model_type":"deepseek_v41","pad_token_id":2,"quantization_config":{"activation_scheme":"dynamic","expert_dtype":"fp4","quant_method":"fp8","scale_fmt":"ue8m0","weight_block_size":[32,32]},"text_config":{"attention_bias":false,"attention_dropout":0.0,"candidate_block_size":8,"candidate_source_layer_id":20,"candidate_topk_blocks":2048,"compress_ratios":[0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0],"compress_rope_theta":160000,"dspark_block_size":5,"dspark_markov_rank":256,"dspark_n_routed_experts":128,"dspark_noise_token_id":128799,"dspark_num_experts_per_tok":3,"dspark_target_layer_ids":[37,38,39],"engram_compressed_vocab_size":99092,"engram_head_dim":256,"engram_layer_ids":[1,14],"engram_max_ngram_size":4,"engram_n_heads":8,"engram_num_embeddings":[384006168,384016682],"engram_pad_token_id":2,"engram_vocab_size":16000000,"hc_eps":1e-06,"hc_mult":4,"hc_sinkhorn_iters":20,"head_dim":512,"hidden_act":"silu","hidden_size":5120,"index_head_dim":128,"index_n_heads":32,"index_source_layer_ids":[2,8,14,20,24,
+… [1181 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"debut_fenetre\\|fenetre\" drave-core/src/model.rs | sed -n 1,25p", "description": "Trace which window feeds attn_v4"}`
+
+  ```
+1321:    pub fenetre: usize,
+3105:            let fenetre = g.cfg_ou(&["attention.sliding_window", "sliding_window"])
+3289:                    ratio, rope_base_compresse: base_comp, fenetre,
+3571:        let fenetre = g.cfg("attention.sliding_window").and_then(|m| m.as_u64()).unwrap_or(0) as usize;
+3580:                          else if fenetre > 0 && arch == "gpt-oss" { 2 }
+3585:        if fenetre > 0 {
+3589:            println!("[config] fenêtre glissante {fenetre} sur {n_fen}/{} couches (motif {swa_pattern}{})",
+3791:            attn_window: fenetre,
+3793:            attn_sinks: if fenetre > 0 { 0 } else { 4 },
+5533:                let n_fenetre = (pos as isize - t0 + 1) as usize;
+5551:                            coff_hd, n_fenetre, t0 as usize * coff_hd, c);
+5560:                    for k in 0..n_fenetre {
+5578:                    for k in 0..n_fenetre {
+5589:                    for k in 0..n_fenetre {
+5793:        let debut_fenetre = if m.fenetre > 0 && n > m.fenetre { n - m.fenetre } else { 0 };
+5811:        let n_clair = n - debut_fenetre;
+5823:            for t in debut_fenetre..n {
+5827:                sc[t - debut_fenetre] = s * scale;
+5852:            for t in debut_fene
+… [66 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash -c './drave-core/target/release/drave /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf --ppl /tmp/repete.ids --ctx 64 --limit 64 --abits 16 --threads 16 --logits-bin /tmp/lg_rep.bin > /tmp/v41_rep_lg.log  … [257 caractères tronqués]`
+
+  ```
+mesure par position lancee
+sam 03 oct 2026 02:56:18 EDT
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"sprints/20-la-passe-longue-instrumentee.md\"\ns=open(p).read()\na=\"- **Début** : 01:17 · **Fin prévue** : 03:17 (boxing de 120 min)\"\nb=\"- **Début** : 01:17 · **Fin** : 03:00 (103 min)\"\nassert a in s\nopen( … [1505 caractères tronqués]`

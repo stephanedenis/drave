@@ -1,6 +1,6 @@
 # Sprint 20 — La passe longue, INSTRUMENTÉE : le profil par profondeur et les logits
 
-- **Début** : 01:17 · **Fin prévue** : 03:17 (boxing de 120 min)
+- **Début** : 01:17 · **Fin** : 03:00 (103 min)
 - **Objectif** : le bloc 19 a montré que la passe de 1 024 jetons **tourne** ; il
   n'a pas montré qu'elle est **juste**. Relancer la même passe (~60 min) avec
   `--ppl-profil` (perplexité par tranche de 256 positions) et `--logits-bin` : la
