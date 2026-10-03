@@ -81,3 +81,30 @@ distribution qui prédit le jeton d'indice `i+1` (cible = `ids[i+1]`). Avec `N` 
 - `n_batch = n_ubatch = N` : au-delà de quelques milliers de jetons, la mémoire des
   logits de llama.cpp croît en `N × n_vocab × 4` (un avertissement est émis au-delà de
   2 Gio) ; utiliser `n_max` pour borner.
+
+## La variante `ref_logits_k3` (Kimi-K3)
+
+`tools/ref_logits_k3` est **le même source** (`tools/ref_logits.cpp`) lié contre la
+seconde copie de llama.cpp, celle qui connaît `kimi-k3` :
+
+```bash
+LC=/home/stephane/Data13TB/stephane/GitHub/llama.cpp-k3
+g++ -O2 -std=c++17 tools/ref_logits.cpp -o tools/ref_logits_k3 \
+    -I $LC/include -I $LC/ggml/include \
+    -L $LC/build/bin -lllama -lggml -lggml-base
+```
+
+Il porte en plus `--sans-yarn` (le source le connaît déjà). Comme le binaire est
+livré **sans son propre fichier source**, la commande ci-dessus est ce qui permet
+de le refaire — et c'est la seule différence entre les deux binaires.
+
+À l'exécution, les bibliothèques de la seconde copie doivent être trouvables :
+
+```bash
+LD_LIBRARY_PATH=/home/stephane/Data13TB/stephane/GitHub/llama.cpp-k3/build/bin \
+  tools/ref_logits_k3 <K3.gguf> <ids.txt> <sortie.bin> [n_max]
+```
+
+`REF_DUMP=<préfixe>` y fonctionne (les chaînes `REF_DUMP` et `REFD` sont dans le
+binaire) : c'est ce qui rend la comparaison **étage par étage** possible sur K3,
+et pas seulement la comparaison des logits.

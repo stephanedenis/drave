@@ -115944,3 +115944,259 @@ The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/31-le-regroupem
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Tuile du GEMM par lots : hypothèse avancée, mesurée, RÉFUTÉE\n\nLe plateau du gain au-delà du lot 2 appelait une explication : le GEMM 4 bits\ndéchiffre les poids t/tuile fois, donc une tuile plus gra … [825 caractères tronqués]`
+
+  ```
+058ea00 Tuile du GEMM par lots : hypothèse avancée, mesurée, RÉFUTÉE
+  ```
+
+- **bash** `{"command": "sleep 270; cat /tmp/porte_oss.log; echo \"=== llama ===\"; grep -E \"^read_bytes\" /proc/1445983/io; date \"+%H:%M\"; uptime", "description": "Poll gpt-oss gate and baseline", "timeoutMs": 300000}`
+
+  ```
+=== llama ===
+read_bytes: 767339732992
+15:44
+ 15:44:16  up 12 days  4:56,  2 users,  load average: 20,26, 14,26, 15,89
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && LD_LIBRARY_PATH=/home/stephane/Data13TB/stephane/GitHub/llama.cpp-k3/build/bin tools/ref_logits_k3 2>&1 | head -8", "description": "Test reference binary links"}`
+
+  ```
+usage: tools/ref_logits_k3 <modele.gguf> <ids.txt> <sortie.bin> [n_max] [--sans-yarn]
+  ```
+
+- **bash** `{"command": "sleep 295; cat /tmp/porte_oss.log; grep -E \"^read_bytes\" /proc/1445983/io; date \"+%H:%M\"", "description": "Poll progress", "timeoutMs": 310000}`
+
+  ```
+read_bytes: 814163034112
+15:49
+  ```
+
+- **bash** `{"command": "sleep 295; cat /tmp/porte_oss.log; grep -E \"^read_bytes\" /proc/1445983/io; ps -eo pid,etimes,%cpu,comm --no-headers | awk '$4==\"drave\"{print}'; date \"+%H:%M\"", "description": "Poll gpt-oss gate", "timeoutMs": 310000}`
+
+  ```
+read_bytes: 859029798912
+1508328     984  315 drave
+15:54
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && printf '0,1,2\\n' > /tmp/id3.txt && python3 tools/compare_etats.py /tmp/notrek3 /tmp/notrek3 l_out 0 0,1,2 2>&1 | head -12", "description": "Sanity check the comparison tool"}`
+
+  ```
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/compare_etats.py", line 84, in <module>
+    main()
+    ~~~~^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/compare_etats.py", line 49, in main
+    ne, ref = lire_ref(f"{pr}-{nom}-{couche}.bin")
+              ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/compare_etats.py", line 32, in lire_ref
+    with open(chemin, "rb") as f:
+         ~~~~^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/notrek3-l_out-0.bin'
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '20,60p' tools/compare_etats.py; echo \"=== fichiers produits ===\"; ls -la /tmp/notrek3* 2>/dev/null | head", "description": "Read comparison tool expectations"}`
+
+  ```
+"""
+import struct
+import sys
+
+
+def lire_drave(chemin):
+    with open(chemin, "rb") as f:
+        b = f.read()
+    return list(struct.unpack(f"<{len(b) // 4}f", b))
+
+
+def lire_ref(chemin):
+    with open(chemin, "rb") as f:
+        b = f.read()
+    if b[:4] != b"REFD":
+        raise SystemExit(f"{chemin} : magie REFD absente")
+    ndim = struct.unpack("<i", b[4:8])[0]
+    ne = struct.unpack("<4i", b[8:24])[0:ndim]
+    n = 1
+    for d in ne:
+        n *= d
+    vals = struct.unpack(f"<{n}f", b[24:24 + 4 * n])
+    return ne, list(vals)
+
+
+def main():
+    if len(sys.argv) != 6:
+        raise SystemExit(__doc__)
+    pd, pr, nom, couche, positions = sys.argv[1:6]
+    ne, ref = lire_ref(f"{pr}-{nom}-{couche}.bin")
+    n_embd = ne[0]
+    # Deux dispositions selon le tenseur : `l_last` est [embd, hc, position],
+    # `hc_attn_pre` est [embd, position] (le mélange est déjà fait). Confondre
+    # les deux compare des copies à des jetons — et « longueurs différentes »
+    # est alors le seul avertissement.
+    par_position = (ne[1] * (ne[2] if len(ne) > 2 else 1)) == 1 or ne[1] == 1 \
+        or (len(ne) > 2 and ne[2] == 1)
+    hc = 1 if par_position else ne[1]
+    print(f"# {nom}-{couche} : réfé
+… [735 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '60,90p' tools/compare_etats.py; echo \"=== REF_DUMP ===\"; grep -rn \"REF_DUMP\" tools/*.py tools/*.sh 2>/dev/null | head -5; grep -rn \"REF_DUMP\" /home/stephane/Data13TB/stephane/GitHub/llama.cpp-k3/tools/ 2>/dev/null | hea … [53 caractères tronqués]`
+
+  ```
+for p in (int(x) for x in positions.split(",")):
+        d = lire_drave(f"{pd}-{nom}-{couche}-{p}.bin")
+        # llama.cpp : ne0 = embd (rapide), puis les copies, puis la position.
+        base = p * n_embd * hc
+        r = ref[base:base + n_embd * hc]
+        if len(d) != len(r):
+            print(f"  pos {p} : LONGUEURS DIFFÉRENTES — Drave {len(d)}, référence {len(r)}")
+            continue
+        ecarts = [abs(a - b) for a, b in zip(d, r)]
+        mx = max(ecarts)
+        imax = ecarts.index(mx)
+        dyn = max(abs(x) for x in r) or 1.0
+        # corrélation : le seul chiffre qui distingue « décalé » de « faux »
+        md = sum(d) / len(d)
+        mr = sum(r) / len(r)
+        num = sum((a - md) * (b - mr) for a, b in zip(d, r))
+        den = (sum((a - md) ** 2 for a in d) * sum((b - mr) ** 2 for b in r)) ** 0.5
+        corr = num / den if den > 0 else float("nan")
+        verdict = "✅" if mx <= 1e-4 * dyn else ("~" if corr > 0.999 else "❌")
+        print(f"  pos {p} : écart max {mx:.3e} (indice {imax}, dynamique {dyn:.3e}) · "
+              f"corrélation {corr:.6f} {verdict}")
+
+
+if __name__ == "__main__":
+    main()
+=== REF_DUMP ===
+tools/compare_etats.py:8:* **llama.cpp** 
+… [49 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls tools/ref_logits*; echo \"---\"; find /home/stephane/Data13TB/stephane/GitHub -maxdepth 3 -name \"ref_logits*\" 2>/dev/null | head; echo \"--- REF_DUMP dans les sources ---\"; grep -rln \"REF_DUMP\" /home/stephane/Data13TB/stephan … [89 caractères tronqués]`
+
+  ```
+tools/ref_logits
+tools/ref_logits.cpp
+tools/ref_logits_k3
+tools/ref_logits.md
+---
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"REF_DUMP\\|l_out\\|REFD\" tools/ref_logits.cpp | head -20; echo \"=== doc ===\"; head -30 tools/ref_logits.md", "description": "Check REF_DUMP support in ref_logits"}`
+
+  ```
+204:                // REF_DUMP=<préfixe> : écrit le tenseur ENTIER en binaire, pour
+206:                // « REFD » + int32 ndim + int32 ne[4] + f32 data (ordre ggml).
+207:                const char * dump = std::getenv("REF_DUMP");
+218:                        std::fwrite("REFD", 1, 4, f);
+=== doc ===
+# ref_logits — référence externe llama.cpp pour comparer les logits
+
+Outil autonome (un seul fichier C++) qui évalue une séquence d'identifiants **exacte**
+avec llama.cpp et exporte les distributions de logits en binaire, plus la perplexité.
+Sert de référence pour valider les logits de `drave-core`.
+
+## Compilation (commande exacte qui marche)
+
+```bash
+cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet
+LC=/home/stephane/Data13TB/stephane/GitHub/llama.cpp
+g++ -O2 -std=c++17 tools/ref_logits.cpp -o tools/ref_logits \
+    -I $LC/include -I $LC/ggml/include \
+    -L $LC/build/bin -lllama -lggml -lggml-base
+```
+
+Aucune option supplémentaire n'est nécessaire (pas de `-fopenmp`, pas de `-lggml-cpu` :
+le backend CPU est chargé dynamiquement par `libggml`). Version de llama.cpp utilisée :
+`libllama.so.0.0.11001` (commit `a8f2635f`).
+
+## Utilisation
+
+```bash
+LD_LIBRARY_PATH=/home/stephane/Data
+… [372 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '195,235p' tools/ref_logits.cpp; echo \"=== ce que ref_logits_k3 a de plus ===\"; ls -la tools/ref_logits.cpp tools/ref_logits_k3.c* 2>/dev/null", "description": "Read REF_DUMP implementation"}`
+
+  ```
+} else {
+                        std::vector<ggml_fp16_t> h(8);
+                        ggml_backend_tensor_get(t, h.data(), base, 8 * sizeof(ggml_fp16_t));
+                        for (int i = 0; i < 8; ++i) { v[i] = ggml_fp16_to_fp32(h[i]); }
+                    }
+                    std::fprintf(stderr, "          pos %lld =", pos);
+                    for (int i = 0; i < 8; ++i) { std::fprintf(stderr, " %.6e", v[i]); }
+                    std::fprintf(stderr, "\n");
+                }
+                // REF_DUMP=<préfixe> : écrit le tenseur ENTIER en binaire, pour
+                // une comparaison exacte et non sur huit valeurs. Format :
+                // « REFD » + int32 ndim + int32 ne[4] + f32 data (ordre ggml).
+                const char * dump = std::getenv("REF_DUMP");
+                if (dump != nullptr) {
+                    std::string nom(t->name);
+                    for (char & c : nom) { if (c == '/' || c == ' ') { c = '_'; } }
+                    char chemin[1024];
+                    std::snprintf(chemin, sizeof(chemin), "%s-%s.bin", dump, nom.c_str());
+                    FILE * f = std::fopen(chemin, "wb");
+                    if (f != nullptr) {
+             
+… [1501 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && strings tools/ref_logits_k3 | grep -E \"^REF_DUMP$|REFD|sans-yarn|^l_out\" | head; echo \"=== git : d'où vient-il ? ===\"; git log --oneline --diff-filter=A -- tools/ref_logits_k3 2>/dev/null | head -3; git log --oneline -3 -- tools/ … [67 caractères tronqués]`
+
+  ```
+--sans-yarn
+REF_DUMP
+REFD
+usage: %s <modele.gguf> <ids.txt> <sortie.bin> [n_max] [--sans-yarn]
+=== git : d'où vient-il ? ===
+d96952d --config et --tokenize répondent sur un modèle EN COURS de téléchargement (et le disent)
+4c15570 V4-Flash tourne en ENTIER · glossaire de référence · trois points doc corrigés
+ae2e9ac P2/P3 : le harnais de comparaison étage par étage, et le bug qu'il a trouvé
+118445c Outils de comparaison : les POSITIONS, pas seulement la position 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -c \"sans-yarn\" tools/ref_logits.cpp; git show --stat d96952d -- tools/ref_logits_k3 | head -5; grep -rn \"ref_logits_k3\" tools/*.md docs/*.md 2>/dev/null | head -8", "description": "Check ref_logits_k3 provenance"}`
+
+  ```
+3
+commit d96952d7891819b1470a23300a690d1bf76f1012
+Author: Stéphane <stephane@localhost>
+Date:   Sat Oct 3 10:32:26 2026 -0400
+
+    --config et --tokenize répondent sur un modèle EN COURS de téléchargement (et le disent)
+docs/verification-kimi-k3.md:15:| **référence** (llama.cpp `kimi-k3`) | `REF_DUMP=/tmp/refk3 ./tools/ref_logits_k3 <K3.gguf> <ids> <sortie> <n>` | `<préfixe>-<nom>-<couche>.bin`, en-tête `REFD` + `ndim` + `ne[4]`, f32 dans l'ordre ggml (une colonne par position) |
+docs/verification-kimi-k3.md:19:Les deux outils existent déjà : `ref_logits_k3` a été lié contre `llama.cpp-k3`
+docs/verification-kimi-k3.md:100:    tools/ref_logits_k3 <K3.gguf> <ids> /tmp/refk3.bin 4
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"k3\\|K3\" tools/ref_logits.md | head; tail -20 tools/ref_logits.md", "description": "Check ref_logits doc for k3 build"}`
+
+  ```
+## Format du fichier binaire (petit-boutiste)
+
+```
+offset 0   : int32  n_vocab
+offset 4   : int32  n_pos
+offset 8   : n_pos × n_vocab × float32
+```
+
+Les lignes sont dans l'ordre des positions : la ligne `i` (0-indexée) contient la
+distribution qui prédit le jeton d'indice `i+1` (cible = `ids[i+1]`). Avec `N` jetons
+évalués, `n_pos = N - 1` (la dernière position n'a pas de cible) ; la ligne `i` commence
+à l'octet `8 + i * n_vocab * 4`.
+
+## Limites
+
+- Le dernier jeton n'a pas de distribution exportée (`n_pos = N - 1`).
+- `n_batch = n_ubatch = N` : au-delà de quelques milliers de jetons, la mémoire des
+  logits de llama.cpp croît en `N × n_vocab × 4` (un avertissement est émis au-delà de
+  2 Gio) ; utiliser `n_max` pour borner.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> tools/ref_logits.md <<'EOF'\n\n## La variante `ref_logits_k3` (Kimi-K3)\n\n`tools/ref_logits_k3` est **le même source** (`tools/ref_logits.cpp`) lié contre la\nseconde copie de llama.cpp, celle qui connaît `kimi-k3` :\n\n```ba … [1523 caractères tronqués]`

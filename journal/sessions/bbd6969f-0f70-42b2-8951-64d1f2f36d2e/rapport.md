@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 120.9 h |
+| Durée | 121.2 h |
 | Tours | 100 |
-| Messages | 7272 |
-| Appels d'outils | 6943 |
+| Messages | 7286 |
+| Appels d'outils | 6957 |
 | Fichiers touchés | 150 |
-| Commandes | 5871 |
+| Commandes | 5885 |
 | Sous-agents | 32 |
-| Commits | 479 |
+| Commits | 480 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -4889,7 +4889,7 @@ Et le geste qui rend un modèle de 1,5 To seulement *lisible* : les experts sont
 
 ### Tour 100 — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas e … [1246 caractères tronqués]
 
-*182 appels d'outils.* Actions notables :
+*196 appels d'outils.* Actions notables :
 
 - bash — Extract the KDA into a reusable piece
 - bash — Commit the KDA extraction and check the download
@@ -4905,7 +4905,7 @@ Et le geste qui rend un modèle de 1,5 To seulement *lisible* : les experts sont
 - bash — Find expert loading call sites
 - read
 - bash — Inspect RAM expert cache
-- … et 145 autres
+- … et 159 autres
 
 **Synthèse produite :**
 
@@ -5145,7 +5145,7 @@ Le HDD est monopolisé par la référence ; je passe à un levier CPU : le noyau
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5831 autres
+- … et 5845 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5273,7 +5273,7 @@ Le HDD est monopolisé par la référence ; je passe à un levier CPU : le noyau
 
 ## 5. Erreurs rencontrées
 
-347 sorties en erreur ou divergentes. Les premières :
+348 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -5772,4 +5772,5 @@ Le HDD est monopolisé par la référence ; je passe à un levier CPU : le noyau
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'MSG' Bloc 31 : le regroupement par experts vaut x1,58 — et Kimi-K3 est
 - K3 complet : les sorties sont identiques à celles obtenues pendant le transfert  --k3-essai relancé sur les 32 shards donne, au chiffre près, les mêmes valeurs 
 - Tuile du GEMM par lots : hypothèse avancée, mesurée, RÉFUTÉE  Le plateau du gain au-delà du lot 2 appelait une explication : le GEMM 4 bits déchiffre les poids 
+- ref_logits_k3 : la commande de liaison est écrite, le binaire n'a plus de mystère  Le binaire livré dans tools/ n'avait pas de source à côté de lui ; c'est le M
 
