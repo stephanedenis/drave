@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 106.6 h |
 | Tours | 79 |
-| Messages | 6242 |
-| Appels d'outils | 5985 |
-| Fichiers touchés | 117 |
-| Commandes | 5054 |
+| Messages | 6244 |
+| Appels d'outils | 5987 |
+| Fichiers touchés | 118 |
+| Commandes | 5055 |
 | Sous-agents | 32 |
-| Commits | 392 |
+| Commits | 393 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -4037,7 +4037,7 @@ P0-P6 faites, P8 portée et val
 
 ### Tour 79 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [941 caractères tronqués]
 
-*1245 appels d'outils.* Actions notables :
+*1247 appels d'outils.* Actions notables :
 
 - web_search
 - web_fetch
@@ -4053,7 +4053,7 @@ P0-P6 faites, P8 portée et val
 - bash — Locate hc_collapse_triton definition
 - read
 - bash — Read mHC init and pre/post call sites
-- … et 1113 autres
+- … et 1115 autres
 
 **Synthèse produite :**
 
@@ -4182,6 +4182,7 @@ P0-P6 faites, P8 portée et val
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/15-p9-le-poste-d-attention-v4-1-profiler-le.md` | 2 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-matvec-f32-parallele.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/16-les-experts-sur-nvme-la-reutilisation.md` | 2 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-vitesse-v41.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -4260,7 +4261,7 @@ P0-P6 faites, P8 portée et val
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5014 autres
+- … et 5015 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4800,4 +4801,5 @@ P0-P6 faites, P8 portée et val
 - Sprint 19 : clôture (76 min) — la passe longue est passée, le profil par profondeur est réparé, et 63 tests verts" ; now=$(date +%s); printf "20 %s %s\n" "$now"
 - Docs : le drapeau --ppl-profil n'est plus « inexistant » — l'avertissement de docs/vision.md, le glossaire et le rapport d'audit des drapeaux ignorés sont mis à
 - Cohérence : le rapport d'audit des docs est daté (quatre de ses trouvailles sont corrigées depuis) et le mode du champ n est écrit pour les cinq modes  Le rappo
+- Rapport de la nuit : les trois leviers (×3,54 sur la passe V4.1), les preuves d'égalité, et les deux idées refusées par la mesure  Consolide les blocs 15 à 19 e
 

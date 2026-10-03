@@ -99878,3 +99878,22 @@ fn envoyer_flux(s: &mut std::net::TcpStream, debut: u32, fin: u32, pos: u32,
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"reports/rapport-coherence-docs.md\"\ns=open(p).read()\n# bandeau daté en tête\na=\"\"\"# \"\"\"\ni=s.index(\"\\n\")\ntitre=s[:i]\nreste=s[i:]\nbanner = \"\"\"\n> **Relecture du 03/10 (bloc 20) : les trouvailles  … [2686 caractères tronqués]`
+
+  ```
+banner ok
+ok format-flux
+      02:35
+sam 03 oct 2026 01:20:27 EDT
+  ```
+
+- **write** `{"content": "# Rapport — La nuit des optimisations V4.1 : ×3,54 sur la passe, et pas un chiffre changé\n\n03/10 (blocs 15 à 19), `/home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf`\n(365,71 Go, 40 couches, 384 experts dont 6 par jeton), 16 à 20 fils selon la mesure.\n\n**Verdict en  … [5746 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-vitesse-v41.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Rapport de la nuit : les trois leviers (×3,54 sur la passe V4.1), les preuves d'égalité, et les deux idées refusées par la mesure\n\nConsolide les blocs 15 à 19 en un document durable : les trois levi … [597 caractères tronqués]`
