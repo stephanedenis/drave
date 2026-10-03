@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 119.7 h |
+| Durée | 120.3 h |
 | Tours | 100 |
-| Messages | 7239 |
-| Appels d'outils | 6910 |
+| Messages | 7252 |
+| Appels d'outils | 6923 |
 | Fichiers touchés | 149 |
-| Commandes | 5843 |
+| Commandes | 5854 |
 | Sous-agents | 32 |
-| Commits | 477 |
+| Commits | 478 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -4889,7 +4889,7 @@ Et le geste qui rend un modèle de 1,5 To seulement *lisible* : les experts sont
 
 ### Tour 100 — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas e … [1246 caractères tronqués]
 
-*149 appels d'outils.* Actions notables :
+*162 appels d'outils.* Actions notables :
 
 - bash — Extract the KDA into a reusable piece
 - bash — Commit the KDA extraction and check the download
@@ -4905,7 +4905,7 @@ Et le geste qui rend un modèle de 1,5 To seulement *lisible* : les experts sont
 - bash — Find expert loading call sites
 - read
 - bash — Inspect RAM expert cache
-- … et 117 autres
+- … et 127 autres
 
 **Synthèse produite :**
 
@@ -5059,7 +5059,7 @@ Et le geste qui rend un modèle de 1,5 To seulement *lisible* : les experts sont
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/analyse_reutilisation_experts.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-reutilisation-experts.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/30-la-reutilisation-des-experts-mesuree.md` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/verification-kimi-k3.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/verification-kimi-k3.md` | 1 | 1 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/apres-telechargement-k3.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/kimi_k3.rs` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mesure-prefill-lot.sh` | 3 | 0 |
@@ -5144,7 +5144,7 @@ Et le geste qui rend un modèle de 1,5 To seulement *lisible* : les experts sont
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5803 autres
+- … et 5814 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5769,4 +5769,5 @@ Et le geste qui rend un modèle de 1,5 To seulement *lisible* : les experts sont
 - K3 : le KDA extrait en pièce réutilisable (couches 1, 2, 4, 5, 6, 8…), avec sa remise à zéro d'état  La composition (couche 0 -> 1) exige de charger l'attention
 - K3 : les quatre premières couches COMPOSÉES (0 dense, 1-2 MoE, 3 MLA) — la chaîne vérifiée, pas seulement les pièces  Attention résiduelle, banque tous les 12, 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'MSG' Bloc 31 : le regroupement par experts vaut x1,58 — et Kimi-K3 est
+- K3 complet : les sorties sont identiques à celles obtenues pendant le transfert  --k3-essai relancé sur les 32 shards donne, au chiffre près, les mêmes valeurs 
 

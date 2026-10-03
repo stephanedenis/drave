@@ -73,6 +73,26 @@ couches (0 dense, 1 MoE+KDA, 3 MoE+MLA, 4 KDA) contre ce que la configuration
 déclare — c'est ce qui attrape une dimension lue du mauvais côté (le moteur range
 `dims[0] = ne1` = la sortie, l'inverse du fichier).
 
+### 4ter. Le modèle est COMPLET, et les chiffres n'ont pas bougé (bloc 31)
+
+Le 04/10 à 14:01, le 32e shard est arrivé. `--k3-essai` relancé sur les **32
+shards** donne, au chiffre près, les **mêmes** valeurs que les passes faites
+pendant le transfert (25 shards sur 32) :
+
+| sortie | 25/32 shards | 32/32 shards |
+|---|---|---|
+| MoE couche 1, \|sortie\| | 0,7316 | **0,7316** |
+| composition 0-3, \|l_out\| (4 jetons) | 8,7757 · 5,2909 · 5,2559 · 5,4735 | **identiques** |
+| couche 0, \|l_out\| (3 jetons) | 0,9731 · 1,4310 · 1,4958 | **identiques** |
+
+C'est la vérification de l'ouverture tolérante : les shards déjà là portaient
+**les octets définitifs**, et un débogage mené pendant un transfert de 1,5 To
+n'était donc pas un débogage sur des données provisoires.
+
+Le chemin K3 est un instrument de **vérification**, pas d'exécution : il
+déquantifie en f32 (une couche MoE = 28,7 s/jeton, la composition des couches 0-3
+= 366 s pour 4 jetons). Les 93 couches en f32 demanderaient ~220 Go de RAM.
+
 La comparaison, dès que la référence tournera sur le modèle complet :
 
 ```bash

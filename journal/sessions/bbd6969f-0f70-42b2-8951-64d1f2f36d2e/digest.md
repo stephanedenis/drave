@@ -115429,3 +115429,215 @@ RAM, 8+ fils (40 Go/s)                 40.0 Go/s      2.17     0.461
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'MSG'\nBloc 31 : le regroupement par experts vaut x1,58 — et Kimi-K3 est arrivé au complet\n\nMESURÉ (Qwen3-30B-A3B, invite de 192 jetons, NVMe, 16 fils, 3 passes par point) :\n  lot 1   -> 33,23 s  … [1740 caractères tronqués]`
+
+  ```
+3bf4ef3 Bloc 31 : le regroupement par experts vaut x1,58 — et Kimi-K3 est arrivé au complet
+ M journal/README.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '241,262p' tools/portes.sh", "description": "Read correction gate section"}`
+
+  ```
+# 7quinquies. La PORTE DE CORRECTION, exécutée pour de vrai contre llama.cpp.
+#   Elle était écrite dans le plan depuis P6 et jamais lancée ; lancée, elle a
+#   montré que son critère (« même perplexité ») n'était pas mesurable. Les
+#   critères sont maintenant dans l'outil, et l'outil rend le verdict :
+#   corrélation des logits par position (>= 0,95 min, >= 0,98 en moyenne),
+#   top-1 (>= 85 %), perplexité (<= 10 %) — ce dernier SEULEMENT au-delà de
+#   64 prédictions : sur 4 jetons, deux quantifications divergent de 25 %,
+#   sur 63 prédictions de 6,4 % (mesuré). Une fenêtre courte mesure le chaos.
+#   Ici : Qwen2.5-0.5B, 71 prédictions, ~10 s en tout. La même porte sur
+#   V4-Flash (63 et 1 023 positions) se lance à la main, ses chiffres sont
+#   dans docs/plan-deepseek41-complet.md (P6).
+if [ -x tools/compare_logits.py ] && [ -x tools/ref_logits ] \
+   && [ -f models/Qwen2.5-0.5B-Q8_0.gguf ]; then
+    if [ ! -s /tmp/ids_qwen_72.txt ] && [ -s /tmp/ids_qwen.txt ]; then
+        python3 -c "import re;print(','.join(re.findall(r'\d+',open('/tmp/ids_qwen.txt').read())[:72]))" \
+            > /tmp/ids_qwen_72.txt 2>/dev/null
+    fi
+    if [ -s /tmp/ids_qwen_72.txt ]; then
+        LD_
+… [307 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash tools/portes.sh 2>&1 | tail -45", "description": "Run full gate suite", "timeoutMs": 1800000}`
+
+  ```
+(no output)
+[timed out after 600000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash tools/portes.sh > /tmp/portes31.log 2>&1 &\necho lancé; sleep 30; ps -eo pid,etimes,rss,comm --no-headers | awk '$4 ~ /llama/{print}'; grep -c . /tmp/portes31.log", "description": "Run gates in background", "timeoutMs": 12 … [5 caractères tronqués]`
+
+  ```
+lancé
+   2614 1036243 17940 ollama
+1445983    1165 87656924 llama-cli
+2
+  ```
+
+- **bash** `{"command": "P=1445983; if [ -d /proc/$P ]; then awk '{print \"utime+stime:\", $14+$15, \"état:\", $3}' /proc/$P/stat; grep -E \"^(read_bytes|rchar)\" /proc/$P/io; grep VmRSS /proc/$P/status; fi; echo \"--- portes ---\"; cat /tmp/portes31.log | head -20", "description": "Inspect llama-cli progress"}`
+
+  ```
+utime+stime: 8282 état: S
+rchar: 14760786
+read_bytes: 198504587264
+VmRSS:	87248036 kB
+--- portes ---
+=== Portes ===
+  cargo test --release                       77 verts  ✅
+  ```
+
+- **bash** `{"command": "sleep 270; cat /tmp/portes31.log; echo \"=== llama-cli ===\"; grep -E \"^read_bytes\" /proc/1445983/io 2>/dev/null; ps -o etimes= -p 1445983 2>/dev/null", "description": "Poll gates and baseline", "timeoutMs": 300000}`
+
+  ```
+=== Portes ===
+  cargo test --release                       77 verts  ✅
+  Qwen2.5-0.5B ctx 256                       19.3885  ✅
+  Qwen3-30B en clusters (origine : 799,8557) 799.8557  ✅
+  threads par défaut (physiques)            20  ✅
+  formats contre libggml                     17 concorde(s), 0 divergence(s), 0 absent(s)  ✅
+  GLM-5.3 : sigmoïde ×2,5                  sigmoïde  ✅
+  Kimi-K2.7 : sigmoïde ×2,827              sigmoïde  ✅
+  V4-Flash : racine de softplus              racine de softplus  ✅
+  Qwen3-235B : softmax                       softmax  ✅
+  V4-Flash : --config le dit calculable      oui  ✅
+  V4-Flash 43 couches ctx 32 (archivée)     ARCHIVE=1 pour la lancer
+  engram V4.1 : adressage                    rangées DISTINCTES : 479723  ✅
+  gpt-oss : --config le dit calculable       oui  ✅
+=== llama-cli ===
+read_bytes: 228162461696
+   1461
+  ```
+
+- **bash** `{"command": "sleep 290; tail -25 /tmp/portes31.log; echo \"=== llama-cli ===\"; grep -E \"^read_bytes\" /proc/1445983/io 2>/dev/null; ps -o etimes= -p 1445983 2>/dev/null", "description": "Poll gates and baseline", "timeoutMs": 310000}`
+
+  ```
+=== Portes ===
+  cargo test --release                       77 verts  ✅
+  Qwen2.5-0.5B ctx 256                       19.3885  ✅
+  Qwen3-30B en clusters (origine : 799,8557) 799.8557  ✅
+  threads par défaut (physiques)            20  ✅
+  formats contre libggml                     17 concorde(s), 0 divergence(s), 0 absent(s)  ✅
+  GLM-5.3 : sigmoïde ×2,5                  sigmoïde  ✅
+  Kimi-K2.7 : sigmoïde ×2,827              sigmoïde  ✅
+  V4-Flash : racine de softplus              racine de softplus  ✅
+  Qwen3-235B : softmax                       softmax  ✅
+  V4-Flash : --config le dit calculable      oui  ✅
+  V4-Flash 43 couches ctx 32 (archivée)     ARCHIVE=1 pour la lancer
+  engram V4.1 : adressage                    rangées DISTINCTES : 479723  ✅
+  gpt-oss : --config le dit calculable       oui  ✅
+=== llama-cli ===
+read_bytes: 260700729344
+   1757
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && K=/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf\nnohup bash -c \"DRAVE_DUMP_COUCHES=/tmp/notrek3 timeout 3000 ./drave-core/target/release/drave $K --k3-essai 2>&1 | tail -40\" … [166 caractères tronqués]`
+
+  ```
+lancé
+  ```
+
+- **bash** `{"command": "sleep 280; cat /tmp/k3_essai_complet.log; echo \"=== io du drave ===\"; for p in $(pgrep -x drave); do grep -E \"^read_bytes\" /proc/$p/io 2>/dev/null; done; tail -3 /tmp/portes31.log", "description": "Poll K3 smoke test", "timeoutMs": 300000}`
+
+  ```
+=== io du drave ===
+read_bytes: 17063157760
+read_bytes: 10115219456
+read_bytes: 9049964544
+  V4-Flash 43 couches ctx 32 (archivée)     ARCHIVE=1 pour la lancer
+  engram V4.1 : adressage                    rangées DISTINCTES : 479723  ✅
+  gpt-oss : --config le dit calculable       oui  ✅
+  ```
+
+- **bash** `{"command": "sleep 290; cat /tmp/k3_essai_complet.log; echo \"---\"; ps -eo pid,etimes,comm --no-headers | awk '$3==\"drave\"{print}'; grep -E \"^read_bytes\" /proc/1445983/io", "description": "Poll K3 smoke test", "timeoutMs": 310000}`
+
+  ```
+[k3-essai] 32 shard(s) présents
+[k3] h=7168 nh=96 hd=128 d_inner=12288 d_conv=4 ffn=33792
+  couche 0 : dimensions conformes
+  couche 1 : dimensions conformes
+  couche 3 : dimensions conformes
+  couche 4 : dimensions conformes
+  MoE couche 1 : |sortie| = 0.7316 · finis : true · 28679 ms
+  MLA couche 3, jeton 0 : |sortie| = 12.8277 · finis : true · 241 ms
+  MLA couche 3, jeton 1 : |sortie| = 10.4341 · finis : true · 241 ms
+  MLA couche 3, jeton 2 : |sortie| = 9.1516 · finis : true · 241 ms
+  composition 0-3, jeton 0 : |l_out| = 8.7757 · finis : true
+  composition 0-3, jeton 1 : |l_out| = 5.2909 · finis : true
+  composition 0-3, jeton 2 : |l_out| = 5.2559 · finis : true
+  composition 0-3, jeton 3 : |l_out| = 5.4735 · finis : true
+  composition : 365871 ms au total
+  jeton 0 (id 3638) : |l_out| = 0.9731 · finis : true · premiers : 0.01036 -0.02001 -0.00186
+      vidé : /tmp/notrek3-l_out-0-0.bin
+  jeton 1 (id 275) : |l_out| = 1.4310 · finis : true · premiers : 0.01729 0.00249 0.00578
+      vidé : /tmp/notrek3-l_out-0-1.bin
+  jeton 2 (id 1309) : |l_out| = 1.4958 · finis : true · premiers : -0.00946 0.01135 -0.00460
+      vidé : /tmp/notrek3-l_out-0-2.bin
+---
+1456594    1844 drave
+146638
+… [40 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -8 /tmp/portes31.log; echo \"=== doc vérif ===\"; grep -n \"^## \\|^# \" docs/verification-kimi-k3.md | head -12", "description": "Check gates and verification doc"}`
+
+  ```
+GLM-5.3 : sigmoïde ×2,5                  sigmoïde  ✅
+  Kimi-K2.7 : sigmoïde ×2,827              sigmoïde  ✅
+  V4-Flash : racine de softplus              racine de softplus  ✅
+  Qwen3-235B : softmax                       softmax  ✅
+  V4-Flash : --config le dit calculable      oui  ✅
+  V4-Flash 43 couches ctx 32 (archivée)     ARCHIVE=1 pour la lancer
+  engram V4.1 : adressage                    rangées DISTINCTES : 479723  ✅
+  gpt-oss : --config le dit calculable       oui  ✅
+=== doc vérif ===
+1:# Vérifier Kimi-K3, étage par étage — le protocole
+11:## 1. Les deux côtés de la comparaison
+22:## 2. Les points de comparaison, dans l'ordre où il faut les atteindre
+43:## 3. Le premier jalon qui compte : la couche 0
+54:## 4. Les tolérances, et ce qu'elles veulent dire
+63:## 4bis. Le côté moteur est déjà branché (03/10)
+85:## 5. Ce qui est déjà vérifié sans poids (et le restera)
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/verification-kimi-k3.md", "limit": 24, "offset": 63}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/verification-kimi-k3.md</path>
+<type>file</type>
+<content>
+63: ## 4bis. Le côté moteur est déjà branché (03/10)
+64: 
+65: `--k3-essai` charge la couche 0, la calcule sur les jetons donnés, et **vide ses
+66: sorties au format du moteur** (`DRAVE_DUMP_COUCHES=<préfixe>` →
+67: `<préfixe>-l_out-0-<position>.bin`, f32 brut). Mesuré : trois jetons, trois
+68: fichiers de 28 672 octets (7 168 × 4), valeurs finies et croissantes en norme
+69: (0,97 · 1,43 · 1,50).
+70: 
+71: Il contrôle aussi, **avant tout calcul**, les dimensions des quatre types de
+72: couches (0 dense, 1 MoE+KDA, 3 MoE+MLA, 4 KDA) contre ce que la configuration
+73: déclare — c'est ce qui attrape une dimension lue du mauvais côté (le moteur range
+74: `dims[0] = ne1` = la sortie, l'inverse du fichier).
+75: 
+76: La comparaison, dès que la référence tournera sur le modèle complet :
+77: 
+78: ```bash
+79: REF_DUMP=/tmp/refk3 LD_LIBRARY_PATH=…/llama.cpp-k3/build/bin \
+80:     tools/ref_logits_k3 <K3.gguf> <ids> /tmp/refk3.bin 4
+81: DRAVE_DUMP_COUCHES=/tmp/notrek3 drave <K3.gguf> --k3-essai
+82: python3 tools/compare_etats.py /tmp/notrek3 /tmp/refk3 l_out 0 0,1,2
+83: ```
+84: 
+
+… [133 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/verification-kimi-k3.md", "new_string": "## 4bis. Le côté moteur est déjà branché (03/10)\n\n`--k3-essai` charge la couche 0, la calcule sur les jetons donnés, et **vide ses\nsorties au format du moteur** (`DRAVE_DUMP_COUCHES=<préfi … [2344 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/verification-kimi-k3.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"K3 complet : les sorties sont identiques à celles obtenues pendant le transfert\n\n--k3-essai relancé sur les 32 shards donne, au chiffre près, les mêmes valeurs\nqu'avec 25 shards sur 32 : MoE couche … [543 caractères tronqués]`
