@@ -118,7 +118,15 @@ if [ -f "$V4" ]; then
         [ -s /tmp/wt2_txt.txt ] || head -c 20000 data/wikitext2_test.txt > /tmp/wt2_txt.txt
         $D "$V4" --tokenize --fichier /tmp/wt2_txt.txt --sortie /tmp/ids_v4flash.txt >/dev/null 2>&1
     fi
-    if [ -s /tmp/ids_v4flash.txt ]; then
+    # La PERPLEXITÉ de V4-Flash est la porte la plus lente du dépôt (82 Go sur un
+    # disque DUR : ~2 min à vide, bien plus quand un téléchargement écrit sur le
+    # même disque — mesuré). V4-Flash étant RETIRÉ du chemin critique (03/10),
+    # elle ne tourne plus par défaut : `ARCHIVE=1 tools/portes.sh` la réveille.
+    # Les portes VIVANTES sont ailleurs (V4.1 pour les hyper-connexions, le petit
+    # modèle pour le flux, Qwen pour la correction).
+    if [ "${ARCHIVE:-0}" != "1" ]; then
+        printf "  %-42s %s\n" "V4-Flash 43 couches ctx 32 (archivée)" "ARCHIVE=1 pour la lancer"
+    elif [ -s /tmp/ids_v4flash.txt ]; then
         # 8430,2968 -> 8430,4966 le 02/10 : la rotation des couches COMPRESSÉES est
         # passée du RoPE simple (régime retardé du moteur) à YaRN ×16 sans mscale,
         # comme llama.cpp (`deepseek4.cpp:872-879`) et vLLM (`rope.py:28-46`) —

@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 116.0 h |
+| Durée | 116.1 h |
 | Tours | 90 |
-| Messages | 6916 |
-| Appels d'outils | 6615 |
-| Fichiers touchés | 135 |
-| Commandes | 5591 |
+| Messages | 6932 |
+| Appels d'outils | 6630 |
+| Fichiers touchés | 136 |
+| Commandes | 5605 |
 | Sous-agents | 32 |
-| Commits | 449 |
+| Commits | 450 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -4475,7 +4475,7 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 
 ### Tour 90 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [942 caractères tronqués]
 
-*177 appels d'outils.* Actions notables :
+*192 appels d'outils.* Actions notables :
 
 - bash — Check the gate suite result
 - bash — Wait for the gates
@@ -4491,11 +4491,11 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 - bash — Find the plan's remaining items
 - bash — Extract each phase's gate claims
 - read
-- … et 159 autres
+- … et 173 autres
 
 **Synthèse produite :**
 
-⏵ Vérification de la cadence hybride sur le fichier lui-même (KDA vs MLA par couche)
+⏵ Pendant le téléchargement : j'implémente et teste les deux mathématiques neuves de K3 (SiTU, attention résiduelle)
 
 ## 3. Travail accompli
 
@@ -4638,6 +4638,7 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-kimi-k3.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/27-la-porte-p1-fermee-et-la-bascule-vers-kimi-k3.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/architecture-kimi-k3.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/28-la-bascule-vers-kimi-k3-et-deux-defauts-de-tokenizer.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -4716,7 +4717,7 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5551 autres
+- … et 5565 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4844,7 +4845,7 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 
 ## 5. Erreurs rencontrées
 
-335 sorties en erreur ou divergentes. Les premières :
+337 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -5313,4 +5314,5 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 - Deuxième défaut trouvé par un test unitaire : le découpage par casse enjambait les majuscules  « HelloWorld » sortait d'UN morceau (au lieu de « Hello » puis « 
 - Docs : la cible Kimi-K3, les deux défauts de tokenizer corrigés, et la référence llama.cpp-k3" && git log --oneline -1
 - Spec Kimi-K3 : cadence hybride VÉRIFIÉE sur le fichier (MLA aux couches 3,7,11,15), détail des projections MLA, MoE latent (routeur en pleine largeur) et res_mi
+- KimI-K3 : les deux mathématiques neuves implémentées et testées SANS poids (SiTU, attention résiduelle)  situ(g,u) = beta·tanh(g/beta)·sigmoïde(g) × linear_beta
 

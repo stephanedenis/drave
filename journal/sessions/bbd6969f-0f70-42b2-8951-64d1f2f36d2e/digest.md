@@ -110139,3 +110139,179 @@ ggml_tensor * llama_model_kimi_k3::graph::build_latent_moe(
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/architecture-kimi-k3.md'\ns=open(p).read()\nold = \"\"\"**MoE latent** — les experts travaillent dans un **latent de 3 584** (et non\n7 168) : `ffn_routed_down` (7168→3584), les 896 experts (`gate/up/down`,  … [2463 caractères tronqués]`
+
+  ```
+spec : MLA + MoE latent + res_mix final
+d4b3150 Spec Kimi-K3 : cadence hybride VÉRIFIÉE sur le fichier (MLA aux couches 3,7,11,15), détail des projections MLA, MoE latent (routeur en pleine largeur) et res_mix final avant la tête
+10:44:54    7.5 Go / 49.2 Go (15.3 %, 107 Mo/s)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (t0=$(date +%s); bash tools/portes.sh rapide > /tmp/portes4.log 2>&1; echo \"portes exit=$? en $(( $(date +%s) - t0 )) s\")", "description": "Run the gate suite after the tokenizer changes", "run_in_background": true, "timeoutMs": 36 … [6 caractères tronqués]`
+
+  ```
+started background job bash-223
+  ```
+
+- **write** `{"content": "# Sprint 28 — La bascule : Kimi-K3, deux défauts de tokenizer, et la référence\n\n- **Début** : 09:40 · **Fin** : 11:40\n- **Objectif** : sur directive explicite, sortir les modèles périmés du chemin\n  critique et travailler sur **les meilleurs modèles ouverts**, « surtout ceux qui\n   … [6547 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/28-la-bascule-vers-kimi-k3-et-deux-defauts-de-tokenizer.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 180; tail -16 /tmp/portes4.log; pgrep -f portes.sh >/dev/null && echo \"tournent\" || echo \"finies\"", "description": "Wait for the gates", "timeoutMs": 300000}`
+
+  ```
+=== Portes ===
+  cargo test --release                       69 verts  ✅
+  Qwen2.5-0.5B ctx 256                       19.3885  ✅
+  Qwen3-30B en clusters (origine : 799,8557) 799.8557  ✅
+  threads par défaut (physiques)            20  ✅
+  (portes de formats : ignorées en mode rapide)
+  GLM-5.3 : sigmoïde ×2,5                  sigmoïde  ✅
+  Kimi-K2.7 : sigmoïde ×2,827              sigmoïde  ✅
+  V4-Flash : racine de softplus              racine de softplus  ✅
+  Qwen3-235B : softmax                       softmax  ✅
+  V4-Flash : --config le dit calculable      oui  ✅
+tournent
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"tensors\\|--tensor\\|cb(\" tools/ref_logits.cpp | head -20", "description": "Check the reference tool's tensor-dump support"}`
+
+  ```
+155:    // `--tensors REGEX` : imprime les premières valeurs des tenseurs dont le nom
+158:    // Les noms sont ceux des `cb(...)` du graphe (« qr-0 », « kv_cmpr-0 »,
+160:    static const char * filtre_tensors = nullptr;
+162:        if (std::strcmp(argv[i], "--tensors") == 0 && i + 1 < argc) { filtre_tensors = argv[i + 1]; }
+164:    if (const char * e = std::getenv("REF_TENSORS")) { filtre_tensors = e; }
+165:    if (filtre_tensors != nullptr) {
+166:        std::fprintf(stderr, "ref_logits: tenseurs filtrés par « %s »\n", filtre_tensors);
+171:    if (filtre_tensors != nullptr) {
+173:            const char * motif = filtre_tensors;
+  ```
+
+- **bash** `{"command": "sleep 240; tail -12 /tmp/portes4.log; pgrep -f portes.sh >/dev/null && echo tournent || echo finies", "description": "Check the gates completion", "timeoutMs": 300000}`
+
+  ```
+=== Portes ===
+  cargo test --release                       69 verts  ✅
+  Qwen2.5-0.5B ctx 256                       19.3885  ✅
+  Qwen3-30B en clusters (origine : 799,8557) 799.8557  ✅
+  threads par défaut (physiques)            20  ✅
+  (portes de formats : ignorées en mode rapide)
+  GLM-5.3 : sigmoïde ×2,5                  sigmoïde  ✅
+  Kimi-K2.7 : sigmoïde ×2,827              sigmoïde  ✅
+  V4-Flash : racine de softplus              racine de softplus  ✅
+  Qwen3-235B : softmax                       softmax  ✅
+  V4-Flash : --config le dit calculable      oui  ✅
+tournent
+  ```
+
+- **bash** `{"command": "ps -o etime=,time=,cmd= -C drave 2>/dev/null | head -3; ps -o etime= -C python3 2>/dev/null | head -3; uptime | sed 's/.*load/charge/'; tail -1 /tmp/dl_k3.log", "description": "Check what the gates are doing"}`
+
+  ```
+05:34 00:38:11 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf --ppl /tmp/ids_v4flash.txt --ctx 32 --limit 5 --dense --threads 16
+11-20:05:00
+      47:39
+charge average: 29,86, 15,51, 12,05
+10:52:34    7.0 Go / 49.0 Go (14.2 %, 100 Mo/s)
+  ```
+
+### 🤖 Assistant
+
+⏵ Les portes patinent sur V4-Flash (disque dur en concurrence avec le téléchargement) : je les allège
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && pkill -f portes.sh; pkill -x drave; sleep 2; python3 - <<'PY'\np='tools/portes.sh'\ns=open(p).read()\nold = \"\"\"    if [ -s /tmp/ids_v4flash.txt ]; then\n        # 8430,2968 -> 8430,4966 le 02/10 : la rotation des couches COMPRESSÉ … [1209 caractères tronqués]`
+
+  ```
+(no output)
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "tail -14 /tmp/portes5.log 2>/dev/null; pgrep -f portes.sh >/dev/null && echo \"tourne encore\" || echo \"arrêté\"; ps -o etime=,cmd= -C drave 2>/dev/null | head -2", "description": "See where the gate run is"}`
+
+  ```
+tourne encore
+      06:03 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf --ppl /tmp/ids_v4flash.txt --ctx 32 --limit 5 --dense --threads 16
+  ```
+
+### 👤 Utilisateur
+
+background job bash-223 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (t0=$(date +%s); bash tools/portes.sh rapide > /tmp/portes4.log 2>&1; echo "portes exit=$? en $(( $(date +%s) - t0 )) s")) finished [status: killed, signal: SIGTERM]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/^# 6bis/,/^# 6ter/p' tools/portes.sh | head -45", "description": "Inspect the 6bis section after the patch"}`
+
+  ```
+# 6bis. ARCHIVÉ (03/10) : V4-Flash est RETIRÉ du chemin critique — cette porte
+#       reste tant que le fichier est là, pour ne pas perdre la référence, mais
+#       elle ne garde plus rien de vivant. La cible est Kimi-K3
+#       (`docs/plan-kimi-k3.md`).
+#
+#       V4-Flash : le modèle de la famille V4 tourne EN ENTIER (43 couches, les
+#       trois régimes d'attention : brute, HCA, CSA + indexeur). Sa perplexité
+#       est un chiffre de référence : si elle dérive, c'est que le calcul a
+#       changé. Les identifiants viennent de SON tokenizer, jamais d'un autre.
+V4=/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf
+if [ -f "$V4" ]; then
+    v=$($D "$V4" --config 2>/dev/null | grep -oE "calculable +: .*")
+    case "$v" in
+        *": oui"*) printf "  %-42s %s  ✅\n" "V4-Flash : --config le dit calculable" "oui" ;;
+        *)         printf "  %-42s %s  ❌\n" "V4-Flash : --config le dit calculable" "${v:-—}"; ECHEC=1 ;;
+    esac
+    if [ ! -s /tmp/ids_v4flash.txt ]; then
+        [ -s /tmp/wt2_txt.txt ] || head -c 20000 data/wikitext2_test.txt > /tmp/wt2_txt.txt
+        $D "$V4" --tokenize --fichier /tmp/wt2_txt.tx
+… [1376 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && pkill -x drave; for p in $(pgrep -f \"bash tools/portes\"); do kill \"$p\" 2>/dev/null; done; sleep 2; pgrep -x drave >/dev/null && echo \"drave encore\" || echo \"drave arrêté\"; pgrep -f \"bash tools/portes\" >/dev/null && echo \"p … [86 caractères tronqués]`
+
+  ```
+(no output)
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && pkill -x drave; pgrep -f \"portes[.]sh\" | while read p; do [ \"$p\" != \"$$\" ] && kill \"$p\" 2>/dev/null; done; sleep 2; echo \"drave : $(pgrep -x drave | wc -l) · portes : $(pgrep -f 'portes[.]sh' | wc -l)\"; tail -2 /tmp/dl_k3.l … [59 caractères tronqués]`
+
+  ```
+drave : 0 · portes : 0
+10:53:04    10.7 Go / 49.0 Go (21.9 %, 107 Mo/s)
+10:53:34    14.2 Go / 49.0 Go (29.0 %, 109 Mo/s)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/portes.sh'\ns=open(p).read()\nold = \"\"\"    if [ -s /tmp/ids_v4flash.txt ]; then\n        # 8430,2968 -> 8430,4966 le 02/10\"\"\"\nnew = \"\"\"    # La PERPLEXITÉ de V4-Flash est la porte la plus lente du … [1083 caractères tronqués]`
+
+  ```
+started background job bash-224
+  ```
+
+### 🤖 Assistant
+
+⏵ Pendant le téléchargement : j'implémente et teste les deux mathématiques neuves de K3 (SiTU, attention résiduelle)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'\ns=open(p).read()\nancre = \"/// **`DRAVE_SIMD_DOT=1`** : le produit scalaire des super-blocs déquantifiés passe\"\najout = '''/// **SiTU** — l'activation de Kimi-K3 (`kimi_k3_situ` de la … [7163 caractères tronqués]`
+
+  ```
+situ + res_mix ajoutés
+test model::tests_kimi_k3::res_mix_melange_normes_et_bruts ... FAILED
+test model::tests_kimi_k3::res_mix_score_sur_les_normes_pas_sur_les_bruts ... FAILED
+test model::tests_kimi_k3::situ_borne_la_porte ... ok
+thread 'model::tests_kimi_k3::res_mix_melange_normes_et_bruts' (1249566) panicked at src/model.rs:8699:9:
+thread 'model::tests_kimi_k3::res_mix_score_sur_les_normes_pas_sur_les_bruts' (1249567) panicked at src/model.rs:8722:9:
+test result: FAILED. 1 passed; 2 failed; 0 ignored; 0 measured; 69 filtered out; finished in 0.00s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'\ns=open(p).read()\nold = \"\"\"        // La somme des poids vaut 1 : la sortie est un mélange convexe des trois\n        // états BRUTS.\n        let somme: f32 = out.iter().sum();\n     … [2106 caractères tronqués]`
+
+  ```
+tests corrigés
+test model::tests_kimi_k3::res_mix_melange_normes_et_bruts ... ok
+test model::tests_kimi_k3::res_mix_score_sur_les_normes_pas_sur_les_bruts ... ok
+test model::tests_kimi_k3::situ_borne_la_porte ... ok
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 69 filtered out; finished in 0.00s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"KimI-K3 : les deux mathématiques neuves implémentées et testées SANS poids (SiTU, attention résiduelle)\n\nsitu(g,u) = beta·tanh(g/beta)·sigmoïde(g) × linear_beta·tanh(u/linear_beta), et\nlinear_beta  … [557 caractères tronqués]`

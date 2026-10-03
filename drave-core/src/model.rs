@@ -780,6 +780,81 @@ pub struct Vue4 {
     pub src: crate::list::Source,
 }
 
+/// **SiTU** — l'activation de Kimi-K3 (`kimi_k3_situ` de la référence) :
+///
+/// ```text
+/// situ(g, u) = beta · tanh(g/beta) · sigmoïde(g)  ×  linear_beta · tanh(u/linear_beta)
+/// ```
+/// `linear_beta <= 0` **désactive** la transformation de la branche `up` (la
+/// référence le dit : « linear_beta <= 0 disables the transform on the up
+/// branch »). Elle remplace le SwiGLU : la porte est bornée par `beta` au lieu
+/// d'être multipliée telle quelle, ce qui borne l'activation.
+///
+/// Écrite ici avant d'être branchée : c'est la seule pièce de K3 qui se vérifie
+/// **sans poids** (une fonction, quelques points de contrôle), et la vérifier
+/// d'abord est la règle du dépôt.
+#[allow(dead_code)]
+#[inline]
+pub fn situ(g: f32, u: f32, beta: f32, linear_beta: f32) -> f32 {
+    let a = beta * (g / beta).tanh() * (1.0 / (1.0 + (-g).exp()));
+    let up = if linear_beta > 0.0 { linear_beta * (u / linear_beta).tanh() } else { u };
+    a * up
+}
+
+/// **Attention résiduelle** de Kimi-K3 (`res_mix` de la référence) : à chaque
+/// sous-couche, le flux est un MÉLANGE par softmax de la pile des points de
+/// contrôle et du flux courant.
+///
+/// ```text
+/// score(ckpt) = Σ_c rms_norm(ckpt)[c] · w[c]      ← les scores sont calculés
+/// score(cur)  = Σ_c rms_norm(cur)[c]  · w[c]         sur les valeurs NORMÉES
+/// p           = softmax([score(ckpt_1..k), score(cur)])
+/// sortie      = Σ_i p_i · ckpt_i + p_cur · cur     ← la somme utilise les BRUTES
+/// ```
+///
+/// `pile` est le tableau des points de contrôle (append-only, `n_ckpt × h`),
+/// `courant` le flux courant (`h`), `w` le vecteur de score de la sous-couche.
+/// `eps` est l'epsilon de la RMSNorm.
+///
+/// Deux détails décident de la fidélité, et les deux sont dans la référence :
+/// **les scores voient les valeurs normalisées, la somme voit les brutes**, et
+/// la pile ne se replie jamais (elle grandit, puis le flux **redémarre** aux
+/// couches « banque »).
+#[allow(dead_code)]
+pub fn res_mix(pile: &[f32], n_ckpt: usize, h: usize, courant: &[f32], w: &[f32],
+               eps: f32, out: &mut [f32]) {
+    debug_assert_eq!(pile.len(), n_ckpt * h);
+    debug_assert_eq!(courant.len(), h);
+    debug_assert_eq!(w.len(), h);
+    debug_assert_eq!(out.len(), h);
+    let mut scores = vec![0f32; n_ckpt + 1];
+    let mut norm = vec![0f32; h];
+    for k in 0..n_ckpt {
+        rms_norm_sans_poids(&pile[k * h..(k + 1) * h], eps, &mut norm);
+        let mut s = 0f32;
+        for c in 0..h { s += norm[c] * w[c]; }
+        scores[k] = s;
+    }
+    rms_norm_sans_poids(&courant[..h], eps, &mut norm);
+    let mut s = 0f32;
+    for c in 0..h { s += norm[c] * w[c]; }
+    scores[n_ckpt] = s;
+    // softmax sur les points de contrôle ET le flux courant
+    let mx = scores.iter().cloned().fold(f32::NEG_INFINITY, f32::max);
+    let mut somme = 0f32;
+    for v in scores.iter_mut() { *v = (*v - mx).exp(); somme += *v; }
+    let inv = if somme > 0.0 { 1.0 / somme } else { 0.0 };
+    for v in scores.iter_mut() { *v *= inv; }
+    // la somme, elle, porte sur les valeurs BRUTES
+    out.fill(0.0);
+    for k in 0..n_ckpt {
+        let p = scores[k];
+        for c in 0..h { out[c] += p * pile[k * h + c]; }
+    }
+    let pc = scores[n_ckpt];
+    for c in 0..h { out[c] += pc * courant[c]; }
+}
+
 /// **`DRAVE_SIMD_DOT=1`** : le produit scalaire des super-blocs déquantifiés passe
 /// en AVX2+FMA. Le drapeau **s'annonce** parce qu'il change une sortie : quatre
 /// accumulateurs vectoriels, puis une somme horizontale — l'ordre des additions
@@ -8575,5 +8650,84 @@ mod tests_router {
         let m2 = moe_synthetique(logits, None, None);
         let sans = router(&cfg_synthetique(Gating::SqrtSoftplus, true, 0.0, 0), &m2, &vec![1.0], 0, 2);
         assert_eq!(sans.iter().map(|(e, _)| *e).collect::<Vec<_>>(), vec![2, 1]);
+    }
+}
+
+#[cfg(test)]
+mod tests_kimi_k3 {
+    //! Les deux mathématiques neuves de Kimi-K3, vérifiées **sans poids** :
+    //! l'activation SiTU et l'attention résiduelle (`res_mix`).
+    //!
+    //! Les valeurs attendues sont recalculées à la main depuis la référence
+    //! (`llama.cpp-k3/src/models/kimi-k3.cpp`), pas recopiées de notre code.
+    use super::*;
+
+    #[test]
+    fn situ_borne_la_porte() {
+        let (beta, lin) = (4.0f32, 25.0f32);
+        // g = 0 : tanh(0) = 0 → l'activation est nulle quelle que soit u.
+        assert!((situ(0.0, 1.0, beta, lin)).abs() < 1e-7);
+        // u = 0 : idem.
+        assert!((situ(1.0, 0.0, beta, lin)).abs() < 1e-7);
+        // Point de contrôle calculé à la main :
+        //   tanh(2/4) = 0,46211716 · sigmoïde(2) = 0,88079708
+        //   a = 4 × 0,46211716 × 0,88079708 = 1,62809172
+        //   up = 25 × tanh(3/25) = 25 × 0,11942766 = 2,98569157
+        let attendu = 4.0f32 * (2.0f32 / 4.0).tanh() * (1.0 / (1.0 + (-2.0f32).exp()))
+            * (25.0f32 * (3.0f32 / 25.0).tanh());
+        assert!((situ(2.0, 3.0, beta, lin) - attendu).abs() < 1e-6);
+        assert!((attendu - 4.8612).abs() < 1e-3, "valeur de contrôle : {attendu}");
+        // `linear_beta <= 0` DÉSACTIVE la transformation de la branche up.
+        let sans = situ(2.0, 3.0, beta, 0.0);
+        let a = 4.0f32 * (0.5f32).tanh() * (1.0 / (1.0 + (-2.0f32).exp()));
+        assert!((sans - a * 3.0).abs() < 1e-6);
+    }
+
+    #[test]
+    fn res_mix_melange_normes_et_bruts() {
+        let h = 3usize;
+        // Deux points de contrôle + le courant, tous distincts.
+        let pile = vec![1.0f32, 0.0, 0.0,   0.0, 2.0, 0.0];
+        let courant = vec![0.0f32, 0.0, 3.0];
+        let w = vec![1.0f32, 1.0, 1.0];
+        let mut out = vec![0.0f32; h];
+        res_mix(&pile, 2, h, &courant, &w, 1e-6, &mut out);
+        // Les trois scores sont ÉGAUX (chaque état a une seule composante non
+        // nulle de même norme RMS) : le mélange est donc la MOYENNE des trois
+        // états bruts, soit ([1,0,0] + [0,2,0] + [0,0,3]) / 3.
+        let attendu = [1.0f32 / 3.0, 2.0 / 3.0, 1.0];
+        for c in 0..h {
+            assert!((out[c] - attendu[c]).abs() < 1e-5, "composante {c} : {} vs {}",
+                    out[c], attendu[c]);
+        }
+        // Sans point de contrôle, la sortie EST le courant (poids 1).
+        let mut out2 = vec![0.0f32; h];
+        res_mix(&[], 0, h, &courant, &w, 1e-6, &mut out2);
+        for c in 0..h { assert!((out2[c] - courant[c]).abs() < 1e-6); }
+    }
+
+    #[test]
+    fn res_mix_score_sur_les_normes_pas_sur_les_bruts() {
+        // Deux états colinéaires mais d'ÉCHELLE très différente : normalisés, ils
+        // donnent le MÊME score (donc un mélange à égalité), alors que leurs
+        // valeurs brutes diffèrent d'un facteur 100. Si le score portait sur les
+        // bruts, le second écraserait le premier.
+        let h = 2usize;
+        let pile = vec![1.0f32, 1.0,   100.0, 100.0];
+        let courant = vec![1.0f32, -1.0];
+        let w = vec![1.0f32, 1.0];
+        let mut out = vec![0.0f32; h];
+        res_mix(&pile, 2, h, &courant, &w, 1e-12, &mut out);
+        // Scores, calculés à la main : les deux points de contrôle se normalisent
+        // en [1,1] (score 2 chacun, quelle que soit leur ÉCHELLE), le courant en
+        // [1,-1] (score 0). Le softmax donne donc p = e²/(2e²+1) pour chaque
+        // point et 1/(2e²+1) pour le courant — puis la somme porte sur les BRUTS.
+        let e2 = (2.0f32).exp();
+        let p = e2 / (2.0 * e2 + 1.0);
+        let pc = 1.0 / (2.0 * e2 + 1.0);
+        let attendu0 = p * 1.0 + p * 100.0 + pc * 1.0;
+        let attendu1 = p * 1.0 + p * 100.0 + pc * (-1.0);
+        assert!((out[0] - attendu0).abs() < 1e-3, "{} vs {}", out[0], attendu0);
+        assert!((out[1] - attendu1).abs() < 1e-3, "{} vs {}", out[1], attendu1);
     }
 }
