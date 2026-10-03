@@ -493,6 +493,19 @@ Une phase qui ne passe pas ses deux portes ne passe pas à la suivante.
 > l'engram dégrade la perplexité à quatre jetons à froid ne dit rien de son effet à
 > contexte long, qui reste à mesurer.
 >
+> **L'ablation grandit avec le contexte** : mêmes réglages, mêmes jetons, ctx 8 →
+> 1 743 713,6243 (avec) contre 1 427 298,2128 (sans), soit **+22,2 %** ; ctx 32 →
+> **115 521,8693** contre **74 328,5818**, soit **+55,4 %**. Plus de contexte =
+> plus d'n-grammes touchés = plus d'injection : c'est la signature d'une mémoire,
+> et cela renforce la vivacité. **Mais retirer l'engram AMÉLIORE la perplexité sur
+> ces deux fenêtres**, ce qu'une mémoire entraînée avec le modèle ne devrait pas
+> faire. Ce qui est exclu : une erreur de formule — l'adressage (règle collante
+> comprise), la lecture, la projection et la porte sont vérifiés contre la
+> transcription numpy, et le portage publié (`mudler/vllm.cpp`,
+> `deepseek_v4_1_engram.cpp`) relu le 02/10 confirme les quatre règles. Ce qui
+> reste possible : que la table, le `token_map` ou les poids d'injection du
+> fichier Q2 ne soient pas ceux de l'entraînement. Question OUVERTE, chiffrée.
+>
 > **Masque des jetons d'image : décision écrite, non implémenté.** `dead_mask`
 > (`image_sentinel_mask`) est exact pour du texte seul (aucun jeton sentinelle) ;
 > l'implémenter sans un chemin multimodal V4.1 qui en produise serait deviner la

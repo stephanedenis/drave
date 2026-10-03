@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 103.0 h |
+| Durée | 103.2 h |
 | Tours | 79 |
-| Messages | 6057 |
-| Appels d'outils | 5800 |
+| Messages | 6070 |
+| Appels d'outils | 5813 |
 | Fichiers touchés | 114 |
-| Commandes | 4882 |
+| Commandes | 4894 |
 | Sous-agents | 32 |
-| Commits | 370 |
+| Commits | 371 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -4037,7 +4037,7 @@ P0-P6 faites, P8 portée et val
 
 ### Tour 79 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [941 caractères tronqués]
 
-*1060 appels d'outils.* Actions notables :
+*1073 appels d'outils.* Actions notables :
 
 - web_search
 - web_fetch
@@ -4053,7 +4053,7 @@ P0-P6 faites, P8 portée et val
 - bash — Locate hc_collapse_triton definition
 - read
 - bash — Read mHC init and pre/post call sites
-- … et 939 autres
+- … et 951 autres
 
 **Synthèse produite :**
 
@@ -4257,7 +4257,7 @@ P0-P6 faites, P8 portée et val
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 4842 autres
+- … et 4854 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4775,4 +4775,5 @@ P0-P6 faites, P8 portée et val
 - Sprint 14 : P8 fermée — l'engram est vivant (A/B mesuré), et le masque des jetons d'image reste un no-op DÉCIDÉ  Mesure de vivacité, passe complète V4.1, mêmes 
 - La réduction finale devient vérifiable par tenseur, et np = 1 entre dans les tests  Deux « faibles » de la relecture adverse du bloc 13 sont fermés dans le code
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/msg14.txt <<'MSGEOF' La réduction finale devient vérifiable par tenseur, et np = 1 entre dans l
+- Engram : l'ablation grandit avec le contexte (22 % → 55 %), et la formule est exclue comme cause  Deux mesures de plus, mêmes réglages, mêmes jetons, deux fenêt
 

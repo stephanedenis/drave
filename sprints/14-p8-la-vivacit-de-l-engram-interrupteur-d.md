@@ -29,6 +29,20 @@ d'activation des deux côtés :
 (`hidden_final`, étiqueté `-0-` par le dumping, écart 1,63 = la conséquence sur la
 sortie du modèle), la couche 0 est identique au bit près.
 
+**Et l'ablation grandit avec le contexte** (mêmes réglages, mêmes jetons, deux
+fenêtres) :
+
+| contexte | avec engram | sans engram | écart |
+|---|---|---|---|
+| ctx 8 (3 jetons notés) | 1 743 713,6243 | 1 427 298,2128 | **+22,2 %** |
+| ctx 32 (31 jetons notés) | 115 521,8693 | 74 328,5818 | **+55,4 %** |
+
+L'écart DOUBLE quand la fenêtre passe de 4 à 32 jetons : c'est le comportement
+d'une mémoire d'n-grammes (plus de contexte = plus de n-grammes touchés, donc plus
+d'injection), et cela renforce la preuve de vivacité. Cela laisse aussi une
+question ouverte, écrite plus bas : **retirer l'engram AMÉLIORE la perplexité sur
+ces fenêtres**, ce qu'une mémoire entraînée avec le modèle ne devrait pas faire.
+
 **Ce que ça prouve, et ce que ça ne prouve pas.** L'injection entre bien dans le
 calcul (elle change l'état dès la couche 1 et la sortie du modèle) et elle a un
 effet matériel. Cela ne prouve pas qu'elle est *correcte* — cette preuve-là reste
@@ -161,6 +175,24 @@ Chantiers du bloc 15 :
   assumer.
 - **Le masque des jetons d'image** : décision écrite ci-dessus (sans objet en
   texte, réouverture avec un chemin multimodal V4.1).
-- **L'engram à contexte long** : la question « aide-t-il ou nuit-il ? » reste
-  ouverte ; elle se mesure sur 1 024 jetons, ce que le poste d'attention à 12,4 s
-  par jeton rend inabordable avant le bloc 15.
+- **L'engram nuit-il, ou est-ce notre lecture ?** Mesuré : le retirer AMÉLIORE la
+  perplexité (+22,2 % à ctx 8, +55,4 % à ctx 32). Une mémoire entraînée avec le
+  modèle ne devrait pas dégrader ses prédictions. Ce qui est établi : la formule
+  est fidèle — l'adressage (règle collante comprise), la lecture des rangées, la
+  projection et la porte ont été vérifiés contre la transcription numpy (0 écart
+  sur 480 000 adresses, rangées au bit près, projection ~1e-5, injection ~1e-6), et
+  la relecture du portage publié
+  ([`mudler/vllm.cpp`](https://github.com/mudler/vllm.cpp/blob/main/src/vllm/model_executor/models/deepseek_v4_1_engram.cpp),
+  relu ce bloc) confirme les quatre règles : `rolling ^= valeur × multiplicateur`,
+  `rangée = rolling % premier + décalage`, la règle **collante** du blocage
+  (un n-gramme à cheval sur un trou vaut le pad) et la porte
+  `sigmoid(±√max(|dot|, 1e-6))` avec `hidden + porte × valeur`. Ce qui n'est PAS
+  établi : que la table, le `token_map` et les poids d'injection du fichier Q2
+  soient ceux avec lesquels ce modèle a été entraîné — et c'est la seule
+  explication qui reste si la formule est juste. À creuser au bloc suivant si le
+  temps le permet : comparer les mêmes jetons à la référence d'exécution (vLLM)
+  quand elle saura charger ce fichier, ou vérifier la cohérence
+  `engram_vocab_size`/`compressed_vocab_size`/`token_map` contre les métadonnées
+  (fait : table dense de 99 092 entrées ✓).
+- **L'engram à contexte long** reste à mesurer : 1 024 jetons coûtent 3 h avec le
+  poste d'attention actuel (12,4 s par jeton) — c'est le chantier du bloc 15.

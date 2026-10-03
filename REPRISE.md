@@ -112,7 +112,13 @@ cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo build --r
 > **1 427 298,2128** (22,2 %), la couche 0 reste **identique au bit près** et les
 > couches 1 à 39 changent toutes. Les vides `engram_kv`/`engram_sortie`
 > disparaissent quand l'interrupteur est actif — le bloc n'a pas tourné. Mesure de
-> VIVACITÉ, pas de qualité (l'effet à contexte long reste à mesurer). Le masque
+> VIVACITÉ, pas de qualité — et l'ablation GRANDIT avec le contexte (+22,2 % à
+> ctx 8, +55,4 % à ctx 32 : 115 521,8693 contre 74 328,5818), ce qui est la
+> signature d'une mémoire. **Question ouverte, chiffrée : retirer l'engram AMÉLIORE
+> la perplexité sur ces deux fenêtres.** La formule est exclue comme cause (les
+> quatre règles sont vérifiées contre la transcription numpy et contre le portage
+> publié `mudler/vllm.cpp`, relu le 02/10) ; reste la provenance de la table, du
+> `token_map` ou des poids d'injection du fichier Q2. Le masque
 > des jetons d'image reste un no-op **décidé** (sans objet en texte, réouverture
 > avec un chemin multimodal V4.1).
 >
