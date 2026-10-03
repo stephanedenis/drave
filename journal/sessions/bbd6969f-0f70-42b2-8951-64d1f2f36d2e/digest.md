@@ -108787,3 +108787,20 @@ code=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/plan-deepseek41-complet.md'\ns=open(p).read()\nold = \"### P7 — Adaptation à V4.1, et la question de provenance\"\nnew = \"\"\"#### P6 — la porte à ctx 1 024, 1 023 positions (03/10, bloc 27) — et la dernièr … [3644 caractères tronqués]`
+
+  ```
+plan : section ctx 1024 écrite
+ce409dd Porte de correction à ctx 1024 (1 023 positions) : accord MEILLEUR (moyenne 0,9914, top-1 93,5 %, PPL +1,7 %), mais elle a d'abord échoué sur une position où la référence est certaine
+  ```
+
+- **write** `{"content": "# Sprint 27 — La porte P1 fermée, les portes auditées, et la bascule vers Kimi-K3\n\n- **Début** : 09:40 · **Fin** : 11:00\n- **Objectif** : le bloc partait pour fermer la porte Drave de P1 (les 24 poids de\n  connexion, calculés puis jetés — un forward muet) et pour finir la porte de\n … [6412 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/27-la-porte-p1-fermee-et-la-bascule-vers-kimi-k3.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Sprint 27 : porte P1 fermée (et elle révèle une permutation), portes auditées P0-P9, porte à ctx 1024 tenue sous critère révisé, bascule vers Kimi-K3\n\nRétro : un critère s'écrit en TAUX, pas en extr … [347 caractères tronqués]`
