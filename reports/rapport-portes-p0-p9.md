@@ -43,6 +43,19 @@ c'est écrit, avec sa condition de sortie (qu'un runtime sache charger
 **P9** est optionnel et son dernier ajout est une optimisation qui **dit** ce
 qu'elle change, conformément au mandat.
 
+**Une précision qui change la lecture des portes « de flux ».** Pour V4-Flash et
+V4.1, le moteur **compte** les paires par jeton et par provenance (mesuré :
+**16,2 G paires/jeton** — attention 6,2 G · experts 8,1 G · partagé 1,9 G), mais
+la part **« en listes » est nulle** : le chemin V4 calcule **dense**, sur les poids
+quantifiés empruntés au fichier (« dont en listes : 0,0 M — le reste est dense »,
+profil de chaque passe). Autrement dit : *le flux est mesuré, et il est
+transportable* (les cinq modes du découpage, exacts à 0,00e0 pour les modes 0, 1
+et 3), *mais il n'est pas encore l'unité de calcul interne pour V4*. Les portes
+Drave de P2 et P3 sont tenues au sens du **contrat d'échange** ; elles ne disent
+pas que la couche calcule par listes. C'est l'écart entre « router des listes »
+(la vision, axe 3) et « transporter des listes » (l'état actuel), et il mérite
+d'être écrit noir sur blanc plutôt que découvert plus tard.
+
 **Ce qu'il ne dit pas.** Deux réserves, nommées :
 
 1. **Les fenêtres de la porte de correction restent froides au début.** Le

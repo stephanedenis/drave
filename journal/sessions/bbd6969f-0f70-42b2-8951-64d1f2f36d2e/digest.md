@@ -107976,3 +107976,11 @@ V4.1 : erreur L2 moyenne 0.0816 · médiane 0.0516 · p90 0.1487 · max 0.8154  
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-hc-permutation.md'\ns=open(p).read()\nold = \"\"\"- **Conséquence exploitable** : un raccord pourrait se calculer comme une\n  **permutation apprise** (4 coefficients) au lieu de 16, ce qui simpli … [1640 caractères tronqués]`
+
+  ```
+ok
+ctx 1024 : 449 / 1023
+09:51
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-portes-p0-p9.md'\ns=open(p).read()\nold = \"\"\"**Ce qu'il ne dit pas.** Deux réserves, nommées :\"\"\"\nnew = \"\"\"**Une précision qui change la lecture des portes « de flux ».** Pour V4-Flash e … [1396 caractères tronqués]`
