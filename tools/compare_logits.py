@@ -121,6 +121,7 @@ def main():
     accord_top1 = 0
     n_comp = 0
     correlations = []
+    accords = []
     corr_min, corr_min_pos = 1.0, 0
     rangs_a, rangs_b = [], []
     for i in range(n):
@@ -135,6 +136,7 @@ def main():
         rangs_a.append(math.log1p(ra)); rangs_b.append(math.log1p(rb))
         c = correlation(A[i], B[i])
         correlations.append(c)
+        accords.append(t1a == t1b)
         if c < corr_min:
             corr_min, corr_min_pos = c, i
         if t1a == t1b:
@@ -156,6 +158,21 @@ def main():
     cmoy = sum(correlations) / len(correlations)
     print(f"corrélation des logits par position : min {corr_min:.6f} (pos {corr_min_pos}) "
           f"· moyenne {cmoy:.6f} · max {max(correlations):.6f}")
+    # Par TRANCHES : c'est ce qui distingue une erreur de position (RoPE, blocs
+    # compressés, fenêtre glissante — l'écart CROÎT avec la position) d'une erreur
+    # de tête ou de norme (l'écart est le même partout).
+    if n_comp > 32:
+        bornes = [b for b in (64, 256, 1024) if b < n_comp] + [n_comp]
+        debut = 0
+        for fin in bornes:
+            if fin <= debut:
+                continue
+            tr = slice(debut, fin)
+            cm = sum(correlations[tr]) / (fin - debut)
+            ta = sum(1 for x in accords[tr] if x)
+            print(f"  tranche {debut:5d}-{fin-1:5d} : corrélation moyenne {cm:.5f} · "
+                  f"top-1 {ta}/{fin-debut} ({100*ta/(fin-debut):.1f} %)")
+            debut = fin
     if np is not None:
         a0 = np.asarray(A[0], dtype='f8'); b0 = np.asarray(B[0], dtype='f8')
         a0 -= a0.mean(); b0 -= b0.mean()

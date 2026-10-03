@@ -103351,3 +103351,152 @@ code retour = 1
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"La porte de correction devient un OUTIL exécutable, branché dans portes.sh (Qwen, 71 positions)\n\nLes critères écrits au bloc 23 (corrélation par position >= 0,95 min, >= 0,98 en\nmoyenne ; top-1 >=  … [690 caractères tronqués]`
+
+  ```
+02ff0ba La porte de correction devient un OUTIL exécutable, branché dans portes.sh (Qwen, 71 positions)
+  ```
+
+- **bash** `{"command": "ps -o etime=,time=,%cpu=,cmd= -C drave | head -3; ls -la /tmp/our_v4f1024.bin; wc -c /tmp/our_v4f1024.log", "description": "Check engine run progress"}`
+
+  ```
+04:16 00:39:44  930 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf --ppl /tmp/ids_v4f1024.txt --ctx 1024 --limit 1024 --dense --threads 16 --logits-bin /tmp/our_v4f1024.bin
+-rw-r--r--. 1 stephane stephane 0  3 oct 04:47 /tmp/our_v4f1024.bin
+1375 /tmp/our_v4f1024.log
+  ```
+
+- **bash** `{"command": "free -g | head -2; nproc", "description": "Check RAM and cores"}`
+
+  ```
+total        used        free      shared  buff/cache   available
+Mem:             125          34           2           4          94          91
+40
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/compare_logits.py", "new_string": "def lire(chemin):\n    \"\"\"Rend la matrice en float32 : elle est convertie ligne par ligne dans les\n    calculs. Upcaster les 1 023 × 129 280 logits d'une passe longue coûterait\n    1 Go par f … [984 caractères tronqués]`
+
+  ```
+Error: cannot edit "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/compare_logits.py": file changed since it was read — re-read the file, then retry
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/compare_logits.py", "offset": 36, "limit": 30}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/compare_logits.py</path>
+<type>file</type>
+<content>
+36: MIN_POSITIONS_PPL = 64
+37: 
+38: 
+39: def lire(chemin):
+40:     with open(chemin, 'rb') as f:
+41:         n_vocab, n_pos = struct.unpack('<ii', f.read(8))
+42:         data = f.read(n_pos * n_vocab * 4)
+43:     assert len(data) == n_pos * n_vocab * 4, f"{chemin} tronqué"
+44:     if np is not None:
+45:         a = np.frombuffer(data, dtype='<f4').reshape(n_pos, n_vocab)
+46:     else:
+47:         a = [list(struct.unpack(f'<{n_vocab}f', data[i*n_vocab*4:(i+1)*n_vocab*4]))
+48:              for i in range(n_pos)]
+49:     return n_vocab, n_pos, a
+50: 
+51: 
+52: def nll_et_rang(ligne, cible):
+53:     if np is not None:
+54:         l = np.asarray(ligne, dtype='f8')
+55:         z = l - l.max()
+56:         nll = float(np.log(np.exp(z).sum()) - z[cible])
+57:         rang = int((l > l[cible]).sum()) + 1
+58:         return nll, rang, int(l.argmax())
+59:     mx = max(ligne)
+60:     se = sum(math.exp(v - mx) for v in ligne)
+61:     lse = mx + math.log(se)
+62:     nll = lse - ligne[cible]
+63:     rang = 1 + sum(1 for v in ligne if v > ligne[cible])
+64:     return nll, rang, max(range(l
+… [109 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md", "new_string": "> Mesuré : 0,955 / 0,9852 / 88,9 % / 6,4 % → **les quatre critères passent** — à une\n> position près sur le quatrième : la fenêtre donne **63** prédictions et le seuil\n> est à 64, donc l … [793 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"1 023 prédictions, plus bas\" docs/plan-deepseek41-complet.md && ps -o etime=,time=,%cpu= -C drave | head -2 && tail -c 150 /tmp/our_v4f1024.log", "description": "Check edit and engine progress"}`
+
+  ```
+422:> qui mentira). La passe longue de 1 023 prédictions, plus bas, juge les quatre.
+      04:55 00:49:46 1010
+ : RoPE simple (contexte 1024 ≤ 65536 initial ; YaRN ×16 prendrait le relais au-delà)
+[tête 4 bits] 129280 × 4096 → 4.50 b/poids, 0 Mo, 0.0 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -o \"real[^\\\\\\\\]*\" journal/sessions/*/digest.md 2>/dev/null | tail -3; grep -o \"sur [0-9]* tokens ([0-9]* événements, [0-9.]* s)\" /tmp/*.log 2>/dev/null | tail -5; grep -rn \"our_v4f\\|ref_v4f64\" journal/sessions/*/diges … [102 caractères tronqués]`
+
+  ```
+journal/sessions/c776b71f-525a-4bad-b83c-eff1c2d204ff/digest.md:real bug)
+journal/sessions/c776b71f-525a-4bad-b83c-eff1c2d204ff/digest.md:real atomic
+journal/sessions/e14c26ae-6d52-41f9-a72f-6ebdcef172d5/digest.md:real	0m17,328s
+/tmp/v4f_av.log:sur 4 tokens (0 événements, 12.5 s)
+/tmp/v4f_avx.log:sur 4 tokens (0 événements, 12.8 s)
+/tmp/v4f_sc.log:sur 4 tokens (0 événements, 13.0 s)
+/tmp/yarn_non.log:sur 7 tokens (0 événements, 5.1 s)
+/tmp/yarn_sans.log:sur 7 tokens (0 événements, 4.7 s)
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/compare_logits.py", "offset": 120, "limit": 75}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/compare_logits.py</path>
+<type>file</type>
+<content>
+120:     # global est donc compté ici, sur toutes les positions.
+121:     accord_top1 = 0
+122:     n_comp = 0
+123:     correlations = []
+124:     corr_min, corr_min_pos = 1.0, 0
+125:     rangs_a, rangs_b = [], []
+126:     for i in range(n):
+127:         cible = ids[i + 1] if ids and i + 1 < len(ids) else None
+128:         if cible is None:
+129:             break
+130:         n_comp += 1
+131:         na, ra, t1a = nll_et_rang(A[i], cible)
+132:         nb, rb, t1b = nll_et_rang(B[i], cible)
+133:         tot_a += na; tot_b += nb
+134:         ecarts.append(abs(na - nb))
+135:         rangs_a.append(math.log1p(ra)); rangs_b.append(math.log1p(rb))
+136:         c = correlation(A[i], B[i])
+137:         correlations.append(c)
+138:         if c < corr_min:
+139:             corr_min, corr_min_pos = c, i
+140:         if t1a == t1b:
+141:             accord_top1 += 1
+142:         if i < 24 or i % 32 == 0:
+143:             print(f"{i:5d} {cible:7d} {na:9.4f} {nb:9.4f} {na-nb:+8.4f} "
+144:                   f"{ra:9d} {rb:9d} {t1a:9d} {t1b:9d} {'oui' if t1a == t1b else 'NON':>7}")
+145:   
+… [2416 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/compare_logits.py", "new_string": "    accord_top1 = 0\n    n_comp = 0\n    correlations = []\n    accords = []\n    corr_min, corr_min_pos = 1.0, 0\n    rangs_a, rangs_b = [], []\n    for i in range(n):\n        cible = ids[i + 1] … [4120 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/compare_logits.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/compare_logits.py /tmp/our_v4f64.bin /tmp/ref_v4f64.bin /tmp/ids_v4flash.txt --porte 2>&1 | tail -6 && echo \"=== progression moteur ===\" && ps -o etime=,time= -C drave | head -2 && echo \"=== la tranche sert-elle à qu … [119 caractères tronqués]`
+
+  ```
+perplexité nous : 15.2520   référence : 16.2931   (63 positions comparées)
+corrélation des logits par position : min 0.954998 (pos 47) · moyenne 0.985210 · max 0.998476
+  tranche     0-   62 : corrélation moyenne 0.98521 · top-1 56/63 (88.9 %)
+corrélation des logits (position 0) : 0.987580
+(perplexité NON jugée : 63 < 64 prédictions — sur une fenêtre courte l'écart mesure le chaos, pas le moteur)
+✅ porte de correction tenue (corrélation min 0.9550, top-1 88.9 %)
+=== progression moteur ===
+      06:26 01:13:30
+=== la tranche sert-elle à quelque chose ? (attendu : plat) ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"compare_logits.py : un diagnostic par TRANCHES, pour distinguer une erreur de position d'une erreur de tête\n\nUne erreur de RoPE, de blocs compressés ou de fenêtre glissante fait CROÎTRE\nl'écart ave … [329 caractères tronqués]`

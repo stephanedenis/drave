@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 110.0 h |
+| Durée | 110.1 h |
 | Tours | 87 |
-| Messages | 6480 |
-| Appels d'outils | 6202 |
+| Messages | 6491 |
+| Appels d'outils | 6213 |
 | Fichiers touchés | 119 |
-| Commandes | 5257 |
+| Commandes | 5263 |
 | Sous-agents | 32 |
-| Commits | 415 |
+| Commits | 416 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -4318,7 +4318,7 @@ C'est un point de méthode qui comptait : sans cette mesure, on aurait pu « cor
 
 ### Tour 87 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [942 caractères tronqués]
 
-*39 appels d'outils.* Actions notables :
+*50 appels d'outils.* Actions notables :
 
 - bash — Launch the long-window correction gate
 - bash — Wait for the long comparison
@@ -4334,7 +4334,7 @@ C'est un point de méthode qui comptait : sans cette mesure, on aurait pu « cor
 - bash — Read the bloc 22 plan in sprint 21
 - bash — Locate engram code and any local vLLM source
 - bash — Inspect correction-gate tools and engine flags
-- … et 23 autres
+- … et 32 autres
 
 **Synthèse produite :**
 
@@ -4351,7 +4351,7 @@ C'est un point de méthode qui comptait : sans cette mesure, on aurait pu « cor
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/main.rs` | 0 | 43 |
 | `/tmp/mesures_oss.sh` | 2 | 0 |
 | `/tmp/mesures_oss2.sh` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/compare_logits.py` | 3 | 1 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/compare_logits.py` | 3 | 3 |
 | `/tmp/mesures_oss3.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/ref_logits.cpp` | 0 | 3 |
 | `/tmp/mesures_oss4.sh` | 2 | 0 |
@@ -4427,7 +4427,7 @@ C'est un point de méthode qui comptait : sans cette mesure, on aurait pu « cor
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/extraire_tables_ggml.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-routage-experts.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-mla-experts.md` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md` | 4 | 9 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md` | 4 | 10 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/colab-reparti.md` | 0 | 1 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/convertisseur.md` | 0 | 3 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-mode4-lot-listes.md` | 0 | 2 |
@@ -4543,7 +4543,7 @@ C'est un point de méthode qui comptait : sans cette mesure, on aurait pu « cor
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5217 autres
+- … et 5223 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5106,4 +5106,5 @@ C'est un point de méthode qui comptait : sans cette mesure, on aurait pu « cor
 - Porte de correction P6 serrée : 63 positions, corrélation 0,9852, top-1 88,9 %, PPL à 6,4 %  La fenêtre de 4 jetons donnait 25 % d'écart de perplexité ; la même
 - Sprint 22 : la composition de V4.1 est vérifiée pièce par pièce, et les deux portes de P6, exécutées, étaient fausses deux fois sur quatre  Rétrospective du blo
 - La porte de correction devient un OUTIL exécutable, branché dans portes.sh (Qwen, 71 positions)  Les critères écrits au bloc 23 (corrélation par position >= 0,9
+- compare_logits.py : un diagnostic par TRANCHES, pour distinguer une erreur de position d'une erreur de tête  Une erreur de RoPE, de blocs compressés ou de fenêt
 
