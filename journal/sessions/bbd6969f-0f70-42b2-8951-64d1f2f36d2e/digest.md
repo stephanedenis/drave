@@ -107546,3 +107546,117 @@ syntaxe bash ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Porte Drave de P1 enfin outillée : les 24 poids de connexion hc sont écrits, relus et jugés\n\nIls étaient calculés puis JETÉS — un forward muet, et la porte de P1 n'avait\naucun instrument dans le dé … [482 caractères tronqués]`
+
+  ```
+ctx 1024 : 172 / 1023
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport numpy as np, os\nos.makedirs('/tmp/testhc', exist_ok=True)\nfor p in range(3):\n    comb = np.full((4,4), 0.25, dtype='<f4')\n    if p == 2: comb = np.array([[0.7,0.1,0.1,0.1],[0.1,0.7,0.1,0.1],[0.1,0.1,0.7,0 … [830 caractères tronqués]`
+
+  ```
+vidages de test écrits
+=== cas juste ===
+      0  4.00e-01       16/16     0.398        nan    0.500     1.000
+      1  4.00e-01       16/16     0.398        nan    0.500     1.000
+      2  4.00e-01       16/16     0.398        nan    0.500     1.000
+
+  connexions significatives (≥ 0.05) : 48/48 (100 %)
+  ⚠️  bistochastique : écart max |somme−1| = 4.00e-01
+  variabilité par entrée : CV moyen 0.398 (max 0.398)
+❌ PORTE P1 NON TENUE : comb non bistochastique (4.00e-01 > 0.001)
+code=0
+=== cas faux ===
+  ⚠️  bistochastique : écart max |somme−1| = 1.00e+00
+  variabilité par entrée : CV moyen 0.000 (max 0.000)
+❌ PORTE P1 NON TENUE : comb non bistochastique (1.00e+00 > 0.001)
+code=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport numpy as np\nv=np.fromfile('/tmp/testhc-hc_attn-0-0.bin',dtype='<f4')\nprint('valeurs lues :',len(v)); print('pre',v[:4]); print('post',v[4:8]); print('comb',v[8:].reshape(4,4))\nprint('somme lignes',v[8:].resha … [261 caractères tronqués]`
+
+  ```
+valeurs lues : 24
+pre [0.5 0.5 0.5 0.5]
+post [1. 1. 1. 1.]
+comb [[0.25 0.25 0.25 0.25]
+ [0.25 0.25 0.25 0.25]
+ [0.25 0.25 0.25 0.25]
+ [0.25 0.25 0.25 0.25]]
+somme lignes [1. 1. 1. 1.] colonnes [1. 1. 1. 1.]
+code retour = 1
+/usr/lib64/python3.13/site-packages/numpy/lib/_function_base_impl.py:3036: RuntimeWarning: invalid value encountered in divide
+  c /= stddev[:, None]
+/usr/lib64/python3.13/site-packages/numpy/lib/_function_base_impl.py:3037: RuntimeWarning: invalid value encountered in divide
+  c /= stddev[None, :]
+
+=== hc_attn : 1 couches × 3 positions ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport sys; sys.path.insert(0,'tools')\nimport numpy as np, analyse_hc as A\nd=A.charge('/tmp/testhc','hc_attn',[0],[0,1,2])\nmats=np.array([d[0][p][2] for p in sorted(d[0])])\nprint('forme',mats.shape)\nfor i,m in enu … [232 caractères tronqués]`
+
+  ```
+forme (3, 4, 4)
+pos 0
+[[0.25 0.25 0.25 0.25]
+ [0.25 0.25 0.25 0.25]
+ [0.25 0.25 0.25 0.25]
+ [0.25 0.25 0.25 0.25]]
+ lignes [1. 1. 1. 1.] colonnes [1. 1. 1. 1.]
+pos 1
+[[0.25 0.25 0.25 0.25]
+ [0.25 0.25 0.25 0.25]
+ [0.25 0.25 0.25 0.25]
+ [0.25 0.25 0.25 0.25]]
+ lignes [1. 1. 1. 1.] colonnes [1. 1. 1. 1.]
+pos 2
+[[0.69999999 0.1        0.1        0.1       ]
+ [0.1        0.69999999 0.1        0.1       ]
+ [0.1        0.1        0.69999999 0.1       ]
+ [0.1        0.1        0.1        0.69999999]]
+ lignes [0.99999999 0.99999999 0.99999999 0.99999999] colonnes [0.99999999 0.99999999 0.99999999 0.99999999]
+ecart 0.3999999985098839
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport numpy as np\nm=np.full((4,4),0.25); m2=np.array([[0.7,0.1,0.1,0.1]]*4)\nmats=np.array([m,m,m2])\nprint('somme axe1 :', mats.sum(axis=1))\nprint('ecart axe1 :', np.abs(mats.sum(axis=1)-1).max())\nprint('somme axe … [243 caractères tronqués]`
+
+  ```
+somme axe1 : [[1.  1.  1.  1. ]
+ [1.  1.  1.  1. ]
+ [2.8 0.4 0.4 0.4]]
+ecart axe1 : 1.7999999999999998
+somme axe0 : [[1.2 0.6 0.6 0.6]
+ [1.2 0.6 0.6 0.6]
+ [1.2 0.6 0.6 0.6]
+ [1.2 0.6 0.6 0.6]]
+ecart axe0 : 0.4
+max des deux : 1.7999999999999998
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport numpy as np, glob, os\nfor f in glob.glob('/tmp/testhc3-*'): os.remove(f)\n# matrice BISTOCHASTIQUE (0,25 partout) sur toutes les positions + une variante\nfor p in range(3):\n    comb = np.full((4,4), 0.25,  … [570 caractères tronqués]`
+
+  ```
+ok
+code retour = 1
+      2  3.00e-01       16/16     0.135        nan    0.500     1.000
+
+  connexions significatives (≥ 0.05) : 48/48 (100 %)
+  ⚠️  bistochastique : écart max |somme−1| = 3.00e-01
+  variabilité par entrée : CV moyen 0.135 (max 0.135)
+❌ PORTE P1 NON TENUE : comb non bistochastique (3.00e-01 > 0.001)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/analyse_hc.py'\ns=open(p).read()\nold=\"\"\"            # Le Sinkhorn promet une matrice bistochastique : le vérifier.\n            ecart = max(np.abs(mats.sum(axis=1) - 1).max(),\n                        n … [1032 caractères tronqués]`
+
+  ```
+corrigé
+code retour (attendu 0) = 0
+
+  connexions significatives (≥ 0.05) : 48/48 (100 %)
+  bistochastique : écart max |somme−1| = 1.49e-08 (le Sinkhorn tient sa promesse)
+  variabilité par entrée : CV moyen 0.135 (max 0.135)
+code retour cas faux (attendu 1) = 1
+  variabilité par entrée : CV moyen 0.000 (max 0.000)
+❌ PORTE P1 NON TENUE : comb non bistochastique (1.00e+00 > 0.001)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"analyse_hc.py : le test synthétique a trouvé une faute d'axe (sommer les positions au lieu des colonnes) — corrigé, et les deux cas sont vérifiés (bistochastique -> 0, faux -> 1)\" && s=$(stat -c %s / … [200 caractères tronqués]`

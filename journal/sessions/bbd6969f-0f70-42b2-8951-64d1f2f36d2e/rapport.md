@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 114.9 h |
 | Tours | 90 |
-| Messages | 6768 |
-| Appels d'outils | 6470 |
+| Messages | 6775 |
+| Appels d'outils | 6477 |
 | Fichiers touchés | 130 |
-| Commandes | 5457 |
+| Commandes | 5464 |
 | Sous-agents | 32 |
-| Commits | 432 |
+| Commits | 433 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -4473,7 +4473,7 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 
 ### Tour 90 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [942 caractères tronqués]
 
-*32 appels d'outils.* Actions notables :
+*39 appels d'outils.* Actions notables :
 
 - bash — Check the gate suite result
 - bash — Wait for the gates
@@ -4489,7 +4489,7 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 - bash — Find the plan's remaining items
 - bash — Extract each phase's gate claims
 - read
-- … et 16 autres
+- … et 23 autres
 
 **Synthèse produite :**
 
@@ -4709,7 +4709,7 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5417 autres
+- … et 5424 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5289,4 +5289,5 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 - Sprint 26 : porte de correction TENUE à ctx 512, coût par jeton quasi constant, granularité qui route — portes toutes vertes" && V4=/home/stephane/FastNVMe/mode
 - REPRISE : état du 03/10 (porte à ctx 512, coût plat, SIMD corrigé, granularité)"; grep -E "positions|sur [0-9]+ tokens" /tmp/our_v4f1024_clean.log 2>/dev/null |
 - Porte Drave de P1 enfin outillée : les 24 poids de connexion hc sont écrits, relus et jugés  Ils étaient calculés puis JETÉS — un forward muet, et la porte de P
+- analyse_hc.py : le test synthétique a trouvé une faute d'axe (sommer les positions au lieu des colonnes) — corrigé, et les deux cas sont vérifiés (bistochastiqu
 

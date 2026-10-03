@@ -83,8 +83,12 @@ def main():
             pres = np.array([d[l][p][0] for p in sorted(d[l])])
             posts = np.array([d[l][p][1] for p in sorted(d[l])])
             # Le Sinkhorn promet une matrice bistochastique : le vérifier.
-            ecart = max(np.abs(mats.sum(axis=1) - 1).max(),
-                        np.abs(mats.sum(axis=0) - 1).max())
+            # `mats` est (positions, 4, 4) : les LIGNES d'une matrice se somment
+            # sur l'axe 2, les COLONNES sur l'axe 1. Sommer sur l'axe 0
+            # mélangerait les positions — et l'erreur ne se verrait qu'avec des
+            # matrices différentes d'une position à l'autre (trouvé par le test).
+            ecart = max(np.abs(mats.sum(axis=2) - 1).max(),
+                        np.abs(mats.sum(axis=1) - 1).max())
             ecart_tot.append(ecart)
             # Significatives : au-dessus du seuil, en moyenne sur les positions.
             moy = mats.mean(axis=0)
