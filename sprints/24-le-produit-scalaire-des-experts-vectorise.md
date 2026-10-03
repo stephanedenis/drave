@@ -46,10 +46,20 @@ A/B sur la même fenêtre (63 jetons, ctx 64, 16 fils, charge machine identique)
 
 | | scalaire (défaut) | `DRAVE_SIMD_DOT=1` |
 |---|---|---|
-| passe complète | 271,0 s (**4,27 s/jeton**) | 131,7 s (**2,06 s/jeton**) |
-| dont `proj+mlp` | 3 270,65 ms | **1 070,52 ms** (**×3,05**) |
-| dont attention | 999,33 ms | 989,41 ms (inchangée) |
+| passe complète | 157,8 s (**2,50 s/jeton**) | 133,9 s (**2,13 s/jeton**) (**×1,18**) |
+| dont `proj+mlp` | 1 472 ms | **1 078 ms** (**×1,37**) |
+| dont attention | ~1 013 ms | ~1 015 ms (inchangée) |
 | perplexité | **15,2520** | **15,2747** (**+0,15 %**) |
+
+> **CORRECTION (bloc 26).** Ce tableau portait d'abord **271,0 s / 3 270,65 ms**
+> pour le scalaire, d'où des gains annoncés de ×2,06 et ×3,05. Ces chiffres étaient
+> **faux** : un processus `drave` avait survécu au `timeout` du shell et occupait
+> les cœurs pendant le run de référence (le même travail a mis 319,5 s, puis
+> 157,8 s une fois la machine rendue). L'A/B ci-dessus est **entrelacé**
+> (scalaire · SIMD · scalaire · SIMD · scalaire, trois mesures contre deux) et
+> donne **×1,18 sur la passe, ×1,37 sur `proj+mlp`**. Le gain est réel, plus petit,
+> et le rapport d'écart de logits (+0,15 % de perplexité, corrélation 0,9981) est
+> inchangé.
 
 **Ce que le SIMD change, mesuré contre notre propre scalaire** (l'instrument du
 bloc 23, `tools/compare_logits.py`) : corrélation par position min **0,9822**,

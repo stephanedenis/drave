@@ -106477,3 +106477,181 @@ Created file
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Sprint 25 : le « coût qui croît avec la position » était le DISQUE DUR, pas le moteur — protocole rejoué à l'identique sur NVMe\n\nMême binaire, mêmes jetons, mêmes drapeaux ; seule change la copie du … [677 caractères tronqués]`
+
+  ```
+1aa234c Sprint 25 : le « coût qui croît avec la position » était le DISQUE DUR, pas le moteur — protocole rejoué à l'identique sur NVMe
+  ```
+
+### 🤖 Assistant
+
+⏵ Bloc 26 : étendre la porte de correction à ctx 512 (impossible sur HDD, abordable sur NVMe)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && V4=/home/stephane/FastNVMe/modeles-lourds/v4flash-iq1m/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf && (t0=$(date +%s); LD_LIBRARY_PATH=/home/stephane/Data13TB/stephane/GitHub/llama.cpp/build/bin timeout 1800 ./tools/ref_logits \"$ … [187 caractères tronqués]`
+
+  ```
+NLL moy  = 1.792266
+perplexite = 6.003040
+fichier  = /tmp/ref_v4f512.bin (511 x 129280 f32 + 8 octets d'en-tete)
+référence en 68 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && V4=/home/stephane/FastNVMe/modeles-lourds/v4flash-iq1m/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf && (t0=$(date +%s); ./drave-core/target/release/drave \"$V4\" --ppl /tmp/ids_v4f1024.txt --ctx 512 --limit 512 --dense --threads 16 … [259 caractères tronqués]`
+
+  ```
+started background job bash-219
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md", "limit": 22, "offset": 313}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md</path>
+<type>file</type>
+<content>
+313: ## 4. Pièges de l'environnement (tous rencontrés)
+314: 
+315: | piège | solution |
+316: |---|---|
+317: | **CUDA 13 : les symboles non versionnés du pilote échouent** (`cuMemAlloc` → erreur 201 alors que le contexte est courant) | utiliser partout les `_v2` |
+318: | `nvcc` refuse gcc 15/16 (conflit d'en-têtes glibc) | compiler en **PTX avec clang**, le pilote compile à la volée |
+319: | Python/numpy lent | `LD_PRELOAD=/usr/lib64/libopenblas.so.0` |
+320: | 16 fils **battent** 32 sur ce moteur | ne pas sursouscrire la barrière tournante ; `--threads 16` |
+321: | Épinglage NUMA | **perd** (23,2 → 25,5 s sur le 30 B) ; `--pin` déconseillé |
+322: | Déport GPU | rentable seulement au-delà de **8 Mo** par matrice ; la tête n'est **pas** déportée (noyau non coalescé, 23 → 159 ms) |
+323: | Charge de fond de la machine | fait varier les durées du simple au double : entrelacer les A/B, préférer les métriques déterministes |
+324: | Les boucles d'analyse CLI sont **triplées** | un drapeau en **dernière** position était ignoré ; `--pin` et `--moe-topk` absents d'un des modes. Vérifier le mode v
+… [543 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md", "new_string": "| Charge de fond de la machine | fait varier les durées du simple au double : entrelacer les A/B, préférer les métriques déterministes |\n| **Le support du modèle change tout** (03/10) : V4-Flash vivait sur `W … [1094 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -E \"tokens notés|sur [0-9]+\" /tmp/our_v4f512.log 2>/dev/null | tail -3; pgrep -x drave >/dev/null && echo tourne || echo fini; free -g | head -2", "description": "Check the ctx-512 run progress"}`
+
+  ```
+tourne
+               total        used        free      shared  buff/cache   available
+Mem:             125          30           0           3          99          95
+  ```
+
+- **bash** `{"command": "sleep 120; s=$(stat -c %s /tmp/our_v4f512.bin 2>/dev/null || echo 0); echo \"$(date +%H:%M:%S) positions écrites = $(( (s-8)/517120 )) / 511\"; c=$(awk -F'[ )]+' '{print $14+$15}' /proc/$(pgrep -x drave | head -1)/stat 2>/dev/null); echo \"cpu cumulé = $(( ${c:-0}/100 )) s\"", "descript … [59 caractères tronqués]`
+
+  ```
+08:34:39 positions écrites = 50 / 511
+cpu cumulé = 2824 s
+  ```
+
+- **bash** `{"command": "pid=$(pgrep -x drave | head -1); grep -E \"^(read_bytes|rchar)\" /proc/$pid/io; echo \"---\"; sleep 60; grep -E \"^read_bytes\" /proc/$pid/io; s=$(stat -c %s /tmp/our_v4f512.bin); echo \"positions = $(( (s-8)/517120 ))\"; free -g | head -2", "description": "Check I/O during the ctx-512  … [26 caractères tronqués]`
+
+  ```
+rchar: 17860999
+read_bytes: 2310144
+---
+read_bytes: 2310144
+positions = 78
+               total        used        free      shared  buff/cache   available
+Mem:             125          34           1           3          95          91
+  ```
+
+- **bash** `{"command": "pid=$(pgrep -x drave | head -1); c1=$(awk '{print $14+$15}' /proc/$pid/stat); s1=$(stat -c %s /tmp/our_v4f512.bin); t1=$(date +%s); sleep 90; c2=$(awk '{print $14+$15}' /proc/$pid/stat); s2=$(stat -c %s /tmp/our_v4f512.bin); t2=$(date +%s); python3 -c \"\nw=$((t2-t1)); dc=$((c2-c1)); dp … [260 caractères tronqués]`
+
+  ```
+36 positions en 90 s -> 2.50 s/position
+CPU : 2061 s en 90 s -> parallélisme 22.9x
+  ```
+
+- **bash** `{"command": "sleep 540; s=$(stat -c %s /tmp/our_v4f512.bin 2>/dev/null || echo 0); echo \"$(date +%H:%M:%S) positions = $(( (s-8)/517120 )) / 511\"; grep -E \"tokens notés|sur [0-9]+|postes\" /tmp/our_v4f512.log | tail -3; pgrep -x drave >/dev/null && echo tourne || echo fini", "description": "Check … [39 caractères tronqués]`
+
+  ```
+08:46:37 positions = 329 / 511
+[config] puits appris sur 43/43 couches · n_rot 64 · ffn 0 · experts 256
+[config] fenêtre glissante 128 sur 43/43 couches (motif 0, toutes)
+tourne
+  ```
+
+- **bash** `{"command": "sleep 480; grep -E \"sur [0-9]+ tokens|postes|attention V4\" /tmp/our_v4f512.log | tail -4; pgrep -x drave >/dev/null && echo tourne || echo fini", "description": "Wait for the ctx-512 run to finish", "timeoutMs": 560000}`
+
+  ```
+[config] attention V4 : 43 couches · 1 tête latente de 512 (448 nope + 64 rope) · 64 têtes de requête · sortie groupée 8×1024 · puits par tête
+=== perplexité 6.2612 sur 511 tokens (0 événements, 1319.9 s) ===
+    postes (ms/token) : projets-attn 0.00 | rope 0.00 | attention 1137.72 | proj+mlp 1414.10 | somme 2551.82 | reste (tête + échantillonnage) 31.18
+    dont attention V4 (attn_v4) : projets q/kv 278.70 | compresseur 59.31 | indexeur 79.51 | scores + softmax + somme 240.89 | dé-rotation + sortie groupée 479.04
+fini
+  ```
+
+### 👤 Utilisateur
+
+background job bash-219 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && V4=/home/stephane/FastNVMe/modeles-lourds/v4flash-iq1m/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf && (t0=$(date +%s); ./drave-core/target/release/drave "$V4" --ppl /tmp/ids_v4f1024.txt --ctx 512 --limit 512 --dense --threads 16 --lot 1 --ppl-profil --logits-bin /tmp/our_v4f512.bin > /tmp/our_v4f512.log 2>&1; echo "moteur exit=$? en $(( $(date +%s) - t0 )) s")) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/compare_logits.py /tmp/our_v4f512.bin /tmp/ref_v4f512.bin /tmp/ids_v4f1024.txt --porte 2>&1 | tail -9; echo \"code=${PIPESTATUS[0]}\"", "description": "Compare ctx-512 logits against llama.cpp", "timeoutMs": 900000}`
+
+  ```
+accord du top-1 : 475/511  (36 positions divergentes)
+perplexité nous : 6.2612   référence : 6.0030   (511 positions comparées)
+corrélation des logits par position : min 0.941811 (pos 305) · moyenne 0.989879 · max 0.998848
+  sous 0.95 : 2/511 (0.4 %) · au-dessus : 99.6 % (seuil 99 %) · plancher 0.9 respecté
+  tranche     0-   63 : corrélation moyenne 0.98534 · top-1 57/64 (89.1 %)
+  tranche    64-  255 : corrélation moyenne 0.98934 · top-1 177/192 (92.2 %)
+  tranche   256-  510 : corrélation moyenne 0.99142 · top-1 241/255 (94.5 %)
+corrélation des logits (position 0) : 0.987580
+✅ porte de correction tenue (99.6 % des positions au-dessus de 0.95, min 0.9418 >= plancher 0.9, top-1 93.0 %)
+code=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -c \"simd\" /tmp/our_v4f512.log; pgrep -x drave >/dev/null && echo \"drave tourne\" || echo \"machine libre\"; uptime | sed 's/.*load/charge/'", "description": "Verify the ctx-512 run used the scalar path"}`
+
+  ```
+0
+machine libre
+charge average: 18,61, 26,15, 24,91
+  ```
+
+### 🤖 Assistant
+
+⏵ La mesure SIMD doit être refaite : le scalaire à ctx 512 donne 1 414 ms là où l'A/B d'hier disait 3 271
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && V4=/home/stephane/FastNVMe/modeles-lourds/v4flash-iq1m/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf && for tour in 1 2; do for m in 0 1; do t0=$(date +%s); out=$(DRAVE_SIMD_DOT=$m ./drave-core/target/release/drave \"$V4\" --ppl /tm … [360 caractères tronqués]`
+
+  ```
+=== tour 1 · SIMD=0 · 184 s de mur ===
+=== perplexité 15.2520 sur 63 tokens (0 événements, 158.2 s) ===
+    postes (ms/token) : projets-attn 0.00 | rope 0.00 | attention 972.03 | proj+mlp 1508.62 | somme 2480.65 | reste (tête + échantillonnage) 31.09
+=== tour 1 · SIMD=1 · 152 s de mur ===
+=== perplexité 15.2747 sur 63 tokens (0 événements, 133.8 s) ===
+    postes (ms/token) : projets-attn 0.00 | rope 0.00 | attention 1010.10 | proj+mlp 1081.39 | somme 2091.49 | reste (tête + échantillonnage) 31.55
+=== tour 2 · SIMD=0 · 176 s de mur ===
+=== perplexité 15.2520 sur 63 tokens (0 événements, 158.1 s) ===
+    postes (ms/token) : projets-attn 0.00 | rope 0.00 | attention 1018.85 | proj+mlp 1459.93 | somme 2478.78 | reste (tête + échantillonnage) 31.00
+[timed out after 600000ms]
+[killed by signal: SIGTERM]
+  ```
+
+### 👤 Utilisateur
+
+on avait fait des études sur la connectivité et possibilité de séparer les grappes et couche en listes plus fines pour qu'elles puissent être sur des unités de traitement différentes et surtout réduire le volume des flux d'activation potentiels entre unités. L'idée reste de favoriser une meilleure granularité des traitements. Plus de petits lots d'événements = plus de flexibilité pour l'optimisation en temps réel.
+
+### 🤖 Assistant
+
+⏵ D'abord corriger un chiffre : l'A/B propre du SIMD donne ×1,2, pas ×2,06 (la mesure d'hier était polluée)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && pkill -x drave 2>/dev/null; sleep 1; V4=/home/stephane/FastNVMe/modeles-lourds/v4flash-iq1m/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf && for m in 1 0; do t0=$(date +%s); out=$(DRAVE_SIMD_DOT=$m ./drave-core/target/release/drave  … [302 caractères tronqués]`
+
+  ```
+=== SIMD=1 · 153 s de mur ===
+=== perplexité 15.2747 sur 63 tokens (0 événements, 134.0 s) ===
+    postes (ms/token) : projets-attn 0.00 | rope 0.00 | attention 1019.78 | proj+mlp 1075.44 | somme 2095.22 | reste (tête + échantillonnage) 31.26
+=== SIMD=0 · 175 s de mur ===
+=== perplexité 15.2520 sur 63 tokens (0 événements, 157.2 s) ===
+    postes (ms/token) : projets-attn 0.00 | rope 0.00 | attention 1016.54 | proj+mlp 1447.55 | somme 2464.09 | reste (tête + échantillonnage) 30.97
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport io\n# 1. Plan\np='docs/plan-deepseek41-complet.md'\ns=open(p).read()\nold = \"\"\"> somme horizontale : sur V4-Flash (63 jetons, ctx 64) la passe tombe de\n> **271,0 s à 131,7 s (×2,06)** et le poste `proj+ml … [2319 caractères tronqués]`
+
+  ```
+plan corrigé
+REPRISE corrigé
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='sprints/24-le-produit-scalaire-des-experts-vectorise.md'\ns=open(p).read()\nold=\"\"\"| | scalaire (défaut) | `DRAVE_SIMD_DOT=1` |\n|---|---|---|\n| passe complète | 271,0 s (**4,27 s/jeton**) | 131,7 s (**2,06 s … [2121 caractères tronqués]`

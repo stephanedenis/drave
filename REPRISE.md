@@ -321,6 +321,8 @@ comparé à `llama-tokenize` sur 4 424 jetons (0 écart).
 | Épinglage NUMA | **perd** (23,2 → 25,5 s sur le 30 B) ; `--pin` déconseillé |
 | Déport GPU | rentable seulement au-delà de **8 Mo** par matrice ; la tête n'est **pas** déportée (noyau non coalescé, 23 → 159 ms) |
 | Charge de fond de la machine | fait varier les durées du simple au double : entrelacer les A/B, préférer les métriques déterministes |
+| **Le support du modèle change tout** (03/10) : V4-Flash vivait sur `WDC WD120EFGX`, un **disque ROTATIONNEL** (`/home/stephane/Data13TB`), et le cache de pages est partagé. Un jeton lit **2,669 Go de poids** → **13,3 s/jeton** à 200 Mo/s. Rejoué sur NVMe, le même protocole passe de 1 027,7 s à **567,1 s** (×1,81) et le débit devient **plat** | mesurer sur une copie NVMe (`/home/stephane/FastNVMe/modeles-lourds/v4flash-iq1m/`, 86,9 Go, vérifiée) ; dire sur quel support chaque chiffre a été obtenu |
+| Un `read_bytes` lu **une fois** ne prouve rien (instantané ≠ intervalle) | échantillonner `/proc/<pid>/io` **pendant toute la passe** et rapporter au temps |
 | Les boucles d'analyse CLI sont **triplées** | un drapeau en **dernière** position était ignoré ; `--pin` et `--moe-topk` absents d'un des modes. Vérifier le mode visé |
 
 ---
@@ -353,10 +355,12 @@ comparé à `llama-tokenize` sur 4 424 jetons (0 écart).
    façon. Deux blocs durant, il a été cru « aligné sur llama.cpp » : c'était une
    supposition, pas une mesure.
 9. **Une optimisation qui change une sortie dit ce qu'elle change** (03/10,
-   bloc 24). `DRAVE_SIMD_DOT=1` vectorise le produit scalaire des experts
-   (AVX2+FMA, quatre accumulateurs) : **×2,06 sur la passe** V4-Flash, ×3,05 sur
-   `proj+mlp` — et **+0,15 %** de perplexité, corrélation 0,9981 contre notre
-   propre chemin scalaire. Le drapeau s'annonce au premier appel et reste
+   bloc 24, chiffres CORRIGÉS au bloc 26). `DRAVE_SIMD_DOT=1` vectorise le produit
+   scalaire des experts (AVX2+FMA, quatre accumulateurs) : **×1,18 sur la passe**
+   V4-Flash et **×1,37 sur `proj+mlp`** (mesure entrelacée : 157,8 → 133,9 s ;
+   1 472 → 1 078 ms/token) — et **+0,15 %** de perplexité, corrélation 0,9981
+   contre notre propre chemin scalaire. Les premiers chiffres publiés (×2,06 et
+   ×3,05) venaient d'un run de référence pollué par un processus survivant. Le drapeau s'annonce au premier appel et reste
    **opt-in** (l'activer par défaut déplacerait 8430,4966 et les autres
    références). Le chemin par défaut, lui, reste **bit à bit** celui d'avant.
 10. **Une mesure sous charge non vérifiée n'est pas une mesure.** Un A/B a donné

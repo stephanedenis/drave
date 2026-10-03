@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 113.7 h |
+| Durée | 114.4 h |
 | Tours | 89 |
-| Messages | 6693 |
-| Appels d'outils | 6401 |
+| Messages | 6711 |
+| Appels d'outils | 6417 |
 | Fichiers touchés | 126 |
-| Commandes | 5405 |
+| Commandes | 5419 |
 | Sous-agents | 32 |
-| Commits | 426 |
+| Commits | 427 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -4423,7 +4423,7 @@ Le CPU fait aujourd'hui **2,06 s/jeton** (V4-Flash, SIMD) et **4,3 s** (V4.1) : 
 
 ### Tour 89 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [942 caractères tronqués]
 
-*9 appels d'outils.* Actions notables :
+*25 appels d'outils.* Actions notables :
 
 - job_output
 - bash — Check the NVMe run windows
@@ -4434,10 +4434,16 @@ Le CPU fait aujourd'hui **2,06 s/jeton** (V4-Flash, SIMD) et **4,3 s** (V4.1) : 
 - edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md`
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/25-le-disque-dur-deguise-en-defaut-moteur.md`
 - bash — Commit sprint 25
+- bash — llama.cpp reference at ctx 512
+- bash — Engine at ctx 512, default scalar path, in background
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md`
+- bash — Check the ctx-512 run progress
+- bash — Estimate the ctx-512 progress
+- … et 10 autres
 
 **Synthèse produite :**
 
-⏵ Résultat net : ×1,81 et surtout un débit PLAT — le « coût croissant » était le disque dur, pas le moteur
+⏵ D'abord corriger un chiffre : l'A/B propre du SIMD donne ×1,2, pas ×2,06 (la mesure d'hier était polluée)
 
 ## 3. Travail accompli
 
@@ -4456,7 +4462,7 @@ Le CPU fait aujourd'hui **2,06 s/jeton** (V4-Flash, SIMD) et **4,3 s** (V4.1) : 
 | `/tmp/mesures_oss4.sh` | 2 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gpt-oss-perplexite.md` | 1 | 4 |
 | `/tmp/controles_oss.sh` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md` | 0 | 20 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md` | 0 | 21 |
 | `/tmp/controles2_oss.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/harmony_canonique.py` | 1 | 1 |
 | `/tmp/controles3_oss.sh` | 1 | 0 |
@@ -4649,7 +4655,7 @@ Le CPU fait aujourd'hui **2,06 s/jeton** (V4-Flash, SIMD) et **4,3 s** (V4.1) : 
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5365 autres
+- … et 5379 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5223,4 +5229,5 @@ Le CPU fait aujourd'hui **2,06 s/jeton** (V4-Flash, SIMD) et **4,3 s** (V4.1) : 
 - Rapport : disque ou CPU ? — la mesure dit que le deuxième NVMe n'accélérerait pas les passes actuelles  Mesuré : NVMe à 2,0 Go/s (dd direct), moteur V4.1 à ~30 
 - GPU : le tandem NVLink est au repos sur la charge principale, et les chiffres disent pourquoi  Nouvel outil (tools/analyse_octets_par_jeton.py, en-têtes GGUF se
 - Sprint 25 : le « coût qui croît avec la position » était le DISQUE DUR, pas le moteur — protocole rejoué à l'identique sur NVMe  Même binaire, mêmes jetons, mêm
+- CORRECTION : le gain du SIMD était annoncé ×2,06 ; l'A/B entrelacé donne ×1,18 (passe) et ×1,37 (proj+mlp)  Le run scalaire de référence tournait pendant qu'un 
 

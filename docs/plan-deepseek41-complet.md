@@ -816,9 +816,14 @@ Une phase qui ne passe pas ses deux portes ne passe pas à la suivante.
 > experts de V4-Flash et de V4.1) enchaînait 256 additions **dépendantes** de
 > gauche à droite — ~0,25 produit par cycle, quelle que soit la largeur du
 > processeur. `DRAVE_SIMD_DOT=1` passe à quatre accumulateurs AVX2+FMA puis une
-> somme horizontale : sur V4-Flash (63 jetons, ctx 64) la passe tombe de
-> **271,0 s à 131,7 s (×2,06)** et le poste `proj+mlp` de **3 270,65 à
-> 1 070,52 ms/token (×3,05)**, attention inchangée. **Ce que ça change est mesuré,
+> somme horizontale : sur V4-Flash (63 jetons, ctx 64) le poste `proj+mlp` tombe
+> de **1 472 à 1 078 ms/token (×1,37)** et la passe de **157,8 à 133,9 s (×1,18)**,
+> attention inchangée (~1 010 ms). **Les chiffres publiés d'abord (×2,06 et ×3,05)
+> étaient FAUX** : le run scalaire de référence tournait pendant qu'un processus
+> `drave` survivant d'un `timeout` occupait les cœurs (mesuré : 271,0 s puis 319,5 s
+> pour le même travail, contre 157,8 s une fois la machine rendue). L'A/B a été
+> refait **entrelacé** (scalaire, SIMD, scalaire, SIMD, scalaire) — c'est la seule
+> forme qui protège d'une charge de fond variable. **Ce que ça change est mesuré,
 > pas supposé** : perplexité **15,2520 → 15,2747 (+0,15 %)**, corrélation par
 > position contre notre propre scalaire min 0,9822 · moyenne 0,9981 · position 0
 > exactement 1,000000 · top-1 identique 60/63. Le désaccord ainsi introduit est
