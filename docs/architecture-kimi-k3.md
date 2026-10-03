@@ -220,9 +220,12 @@ correction est donc possible, étage par étage, et elle se mène comme pour V4 
 
 ## 7. Le coût, et pourquoi c'est LE sujet
 
-Mesuré : **≈ 35 Go de poids par jeton** (16 experts sur 896 × 93 couches, MXFP4),
-soit **2,3 % du modèle**. Planchers : disque dur **173 s/jeton**, NVMe **17 s**,
-PCIe x8 **5,4 s**, RAM **1,7 s**. Aucune de ces valeurs n'est « locale » au sens
+Mesuré : **≈ 87 Go de poids par jeton** — attention **48,7** (dense, lue en
+entier), experts routés **24,7** (16 sur 896), partagés **12,4**, tête 1,3 — soit
+**5,8 % du modèle** (`reports/rapport-budget-kimi-k3.md`). Planchers : disque dur
+**435 s/jeton**, NVMe **43 s**, PCIe x8 **13 s**, RAM **4,4 s**. La partie
+**dense (62 Go)** doit être résidente ; le reste est du routage et de la
+réutilisation. Aucune de ces valeurs n'est « locale » au sens
 ordinaire : le modèle ne tient pas, il ne se cache pas, et **il faut donc ne lire
 que ce qui sert**. Les trois leviers mesurables, dans l'ordre :
 

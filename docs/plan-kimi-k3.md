@@ -17,14 +17,16 @@
 | attention | `head_count 96` · `key_length 576` · `value_length 74` · `head_count_kv` **par couche** (1 sur 4) → hybride | idem |
 | le texte EST Kimi-Linear | `text_config.architectures = ['KimiLinearForCausalLM']`, `linear_attn_config.full_attn_layers = [4,8,12,…]`, `hidden_act = situ`, `mla_use_nope`, `mla_use_output_gate`, `kv_lora_rank 512`, `first_k_dense_replace 1` | `config.json` du dépôt officiel |
 | experts | **MXFP4** dans le Q4 (41,93 Go pour 3 couches) | en-tête du shard 2 |
-| **poids lus par jeton** | **≈ 35 Go** (16/896 experts × 93 couches) = **2,3 % du modèle** | `tools/analyse_octets_par_jeton.py` |
+| **poids lus par jeton** | **≈ 87 Go** : attention **48,7** · experts routés **24,7** · partagés **12,4** · tête 1,3 — soit **5,8 % du modèle** | `reports/rapport-budget-kimi-k3.md` (mesuré sur 25 couches, extrapolé) |
 | planchers qui en découlent | disque dur **173 s/jeton** · NVMe (2 Go/s) **17 s** · PCIe x8 (6,5 Go/s) **5,4 s** · RAM (20 Go/s) **1,7 s** | débits mesurés les 02-03/10 |
 | débit de téléchargement | **108 Mo/s** → ~4 h pour 1,5 To | mesuré sur le transfert en cours |
 
-**Ce que ce tableau dit en une phrase** : un jeton de Kimi-K3 Q4 a besoin de
-**35 Go de poids**, soit 12 fois notre RAM (125 Go) pour *huit* jetons. Le
-problème n'est donc pas « faire tenir le modèle » (1,5 To ne tiendront jamais),
-c'est **de ne lire que ce qui sert** — et c'est exactement le sujet du projet.
+**Ce que ce tableau dit en une phrase** : un jeton de Kimi-K3 Q4 lit **87 Go de
+poids** — dont **62 Go de partie dense** (attention, experts partagés, tête) qu'il
+faut avoir **résidente**, et 24,7 Go d'experts routés. Le problème n'est donc pas
+« faire tenir le modèle » (1,5 To ne tiendront jamais), ni seulement « ne lire que
+les experts qui servent » : c'est **de garder le dense en RAM et de réutiliser les
+experts** — et c'est exactement le sujet du projet.
 
 ## 2. La référence existe — et c'est nouveau
 
@@ -52,21 +54,26 @@ deux portes disponibles **en même temps**.
 1. **Le placement du stockage décide** : le même protocole rejoué sur disque dur
    et sur NVMe donne **1 027,7 s contre 567,1 s (×1,81)** — et un débit *plat*
    sur NVMe contre *décroissant* sur disque dur (`sprints/25`).
-2. **Le découpage en grappes** : `commun.gguf` + `cluster-XX.gguf`, 11 008
+2. **Le dense d'abord** (fait mesuré le 03/10, bloc 29) : **62 Go de partie dense
+   par jeton** (attention, experts partagés, tête) contre 24,7 Go d'experts
+   routés. Un dispositif qui ne traite que le MoE laisse **56 % du trafic** de
+   côté ; la partie dense doit être **résidente** (elle tient dans nos 125 Go,
+   mais pas en même temps que V4.1-Flash) ;
+3. **Le découpage en grappes** : `commun.gguf` + `cluster-XX.gguf`, 11 008
    entrées de mapping, **aucune requantification**, perplexité identique au
    chiffre près, et perplexité répartie **exacte** (0,00e0 sur les modes 0, 1, 3).
    Sur un modèle dont **chaque jeton ne touche que 16 experts sur 896**, chaque
    nœud ne lit que ce qu'il sert : c'est le levier principal.
-3. **La réutilisation entre jetons** : mesurée sur un autre modèle (50 % des
+4. **La réutilisation entre jetons** : mesurée sur un autre modèle (50 % des
    lectures dans 394 experts, **31,9 % de réutilisation entre jetons
    consécutifs**) — avec 896 experts et un top-16, elle est à remesurer *ici*, et
    c'est elle qui décide si un cache paie (le cache RAM d'experts a été mesuré
    **plus lent** sur V4.1 : +4 % à 4 Go, +21 % à 32 Go — le noyau fait déjà le
    travail ; il faut donc une raison plus forte, comme le découpage).
-4. **Le transport compact** : cinq modes de flux, listes DRVF, perte mesurée et
+5. **Le transport compact** : cinq modes de flux, listes DRVF, perte mesurée et
    plafonnée (3,65e-2 · 4,45e-3) ; la granularité **route** plus qu'elle ne
    compresse (`reports/rapport-granularite-flux.md`).
-5. **Les noyaux** : le CPU est 5 à 7× au-dessus du plancher PCIe → le calcul est
+6. **Les noyaux** : le CPU est 5 à 7× au-dessus du plancher PCIe → le calcul est
    le mur ; matvec parallèle par lignes (**×9,34**, bit à bit identique),
    déquantification AVX2 **bit-exacte** (Q2_K ×1,33), produit scalaire vectorisé
    (**×1,18** sur la passe, écart **dit** : +0,15 % de perplexité).

@@ -110486,3 +110486,233 @@ std::pair<ggml_tensor *, ggml_tensor *> llm_build_delta_net_base::build_delta_ne
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/architecture-kimi-k3.md'\ns=open(p).read()\nold = \"\"\"## 5. Ce que notre moteur a déjà, et ce qui manque\"\"\"\nnew = \"\"\"## 4bis. Le KDA : la pièce la plus lourde, et comment on la vérifiera\n\n`build_k … [1761 caractères tronqués]`
+
+  ```
+spec : section KDA ajoutée
+f536b53 Spec Kimi-K3 : le KDA, sa porte bornée à -5, ses trois chemins de référence et les tenseurs qui serviront de points de comparaison
+11:01:24    17.2 Go / 49.0 Go (35.0 %, 107 Mo/s)
+  ```
+
+### 🤖 Assistant
+
+⏵ Bilan du bloc : la bascule est faite ; je vérifie l'état du dépôt avant de le dire
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short | head -5; git log --oneline -8 | cat; echo \"---\"; du -sh /home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL; df -h /home/stephane/Data13TB | tail -1; echo \"--- portes (dernier passage) ---\"; tail … [79 caractères tronqués]`
+
+  ```
+M journal/README.md
+f536b53 Spec Kimi-K3 : le KDA, sa porte bornée à -5, ses trois chemins de référence et les tenseurs qui serviront de points de comparaison
+556739d Sprint 28 : portes toutes vertes (69 tests), perplexité V4-Flash derrière ARCHIVE=1, et la leçon des pkill qui se tuent eux-mêmes
+a648f9e KimI-K3 : les deux mathématiques neuves implémentées et testées SANS poids (SiTU, attention résiduelle)
+d4b3150 Spec Kimi-K3 : cadence hybride VÉRIFIÉE sur le fichier (MLA aux couches 3,7,11,15), détail des projections MLA, MoE latent (routeur en pleine largeur) et res_mix final avant la tête
+0d8cb93 Docs : la cible Kimi-K3, les deux défauts de tokenizer corrigés, et la référence llama.cpp-k3
+8f73c6d Deuxième défaut trouvé par un test unitaire : le découpage par casse enjambait les majuscules
+7f330f1 Défaut SILENCIEUX corrigé : le motif de pré-découpage kimi manquait (Kimi-K2.7 ET Kimi-K3)
+d96952d --config et --tokenize répondent sur un modèle EN COURS de téléchargement (et le disent)
+---
+339G	/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL
+/dev/mapper/system-root   11T  7,8T  3,2T  72% /home/stephane/Data13TB
+--- portes (dernier passage) ---
+  mode 4 — lot en liste
+… [89 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Bloc 28 livré : la bascule est faite, le téléchargement tourne, les portes sont vertes
+
+**Ce qui a changé depuis ton message :**
+
+1. **V4-Flash est retiré du chemin critique** — copie NVMe supprimée, porte de perplexité passée derrière `ARCHIVE=1` (elle était la plus lente du dépôt : 82 Go sur disque *dur*), porte des hyper-connexions repointée sur V4.1 et testée. Les acquis restent : l'audit `reports/rapport-portes-p0-p9.md` dit, phase par phase, où sont les deux portes, ce qui est tenu, et la seule qui soit **impossible** (P7, llama.cpp refuse `deepseek41`).
+
+2. **Kimi-K3 est la nouvelle cible** (`docs/plan-kimi-k3.md`) : son Q4 pèse **1 508,7 Go** et chaque jeton lit **≈ 35 Go de poids** (2,3 % du modèle) — 17 s/jeton sur NVMe, 173 s sur disque dur. *C'est* la classe « trop gros pour le local ». Téléchargement en cours : **339 Go / 1 508** à ~105 Mo/s, fin vers 14h10.
+
+3. **La référence exécutable existe** : llama.cpp amont connaît `kimi-k3` (là où il refuse `deepseek41`). Une seconde copie est construite (`llama.cpp-k3`, 6 min) et `tools/ref_logits_k3` est lié contre elle — **la porte de correction est possible sur cette classe**, ce qui n'a jamais été le cas pour V4.1.
+
+4. **Deux défauts silencieux de tokenizer trouvés et corrigés**, sans une once de poids (la référence officielle est du code, le vocabulaire vit dans le shard 1) :
+   - le motif de pré-découpage **`kimi` n'était pas implémenté** → repli muet sur qwen2 : « 2026 » sortait en un jeton au lieu de « 202 » + « 6 », le chinois divergeait. **Kimi-K2.7, déjà dans le dépôt, était touché aussi** ;
+   - le **découpage par casse enjambait les majuscules** (« HelloWorld » d'un seul morceau) — invisible dans les identifiants (pas de fusion « oW »), trouvé par un **test unitaire**.
+   
+   État : **11 textes sur 11 identiques au tokenizer officiel**, 69 tests verts, les 512 identifiants gpt-oss de la référence publiée **inchangés**. La porte est dans le dépôt (`tools/porte-tokenizer-kimi.sh`).
+
+5. **La spec d'architecture est écrite** (`docs/architecture-kimi-k3.md`) et deux pièces neuves sont déjà **implémentées et testées sans poids** : l'activation **SiTU** et l'**attention résiduelle** (scores sur les valeurs normalisées, somme sur les brutes — le détail qui change tout est testé explicitement). La cadence hybride a été **vérifiée sur le fichier** : MLA aux couches 3, 7, 11, 15, KDA ailleurs, 2 `res_score` partout, couche 0 dense.
+
+6. **Portes toutes vertes** (69 tests, Qwen 19,3885, clusters 799,8557, engram, flux, rejeu 0,00e0, correction 100 % des positions utiles, découpage 5 modes).
+
+**Ensuite** : dès la fin du transfert, référence llama.cpp-k3 sur le modèle complet (jetons/s, mémoire, logits), puis implémentation **porte par porte** — KDA (delta-net à porte bornée −5), MLA (absorption, `nope`, porte de sortie), MoE latent, attention résiduelle — chaque étage comparé aux points de contrôle de la référence *avant* de regarder la perplexité.
+
+
+## Tour 91
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas en local (classe Kimi-K3 Q4 : 1,5 To de poids, ~35 Go de poids par jeton), et étudier/implémenter ce qui nous distingue sur cette classe : découpage par experts et en grappes (chaque nœud ne lit que ce qu'il sert), réutilisation des experts entre jetons, transport de flux compact (listes DRVF), noyaux rapides (SIMD, déquantification bit-exacte), et mesure systématique (octets par jeton, débits, seuils). Les modèles périmés (DeepSeek-V4-Flash) sortent du chemin critique : leurs acquis sont conservés dans les rapports, leurs portes archivées. Règles inchangées : jamais de forward muet, jamais d'optimisation qui change une sortie sans le dire, une affirmation sans mesure n'est pas une affirmation."
+Round: 17/30
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Bloc 29 : un outil de budget d'exécution locale (ce que chaque placement implique), calibré sur V4-Flash
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"budget_execution_locale.py — ce qu'un placement implique, en jetons/s.\n\nPour un GGUF (découpé ou non, **complet ou en cours de téléchargement**), calcule\nles octets de poids lus par jeton, puis ce que chaque placement permet :\n\n    tout sur disque dur  … [5012 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/budget_execution_locale.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && chmod +x tools/budget_execution_locale.py && echo \"=== VALIDATION sur V4-Flash (mesuré : 2,669 Go/jeton, 6 experts) ===\" && timeout 300 python3 tools/budget_execution_locale.py /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek … [181 caractères tronqués]`
+
+  ```
+=== VALIDATION sur V4-Flash (mesuré : 2,669 Go/jeton, 6 experts) ===
+DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf — 3 shard(s) lus, 43 couches vues
+  poids lus : 86.9 Go sur les shards présents
+  formats   : IQ3_XXS 33.7 Go · IQ2_XXS 23.3 Go · IQ1_M 20.7 Go · Q8_0 5.2 Go · MXFP4 2.3 Go
+  routage   : 6 experts sur 256
+
+  PAR JETON : experts  1.873 Go · partagé+dense  6.390 Go · TOTAL  8.263 Go
+  (extrapolé aux 43 couches vues ; un modèle complet se lit en entier)
+
+placement                               débit   s/jeton  jetons/s
+disque dur 12 To (200 Mo/s)             0.2 Go/s     41.31     0.024
+NVMe local (2,0 Go/s)                   2.0 Go/s      4.13     0.242
+RAM / page cache (20 Go/s)             20.0 Go/s      0.41     2.420
+bus PCIe x8 (6,5 Go/s)                  6.5 Go/s      1.27     0.787
+NVLink entre GPU (25,8 Go/s)           25.8 Go/s      0.32     3.122
+deux nœuds, disque dur 12 To (200 Mo/s)      0.4 Go/s     20.66     0.048
+deux nœuds, NVMe local (2,0 Go/s)       4.0 Go/s      2.07     0.484
+
+  un expert pèse  312.15 Mo · un jeton en lit 6 par couche (258 au total, 26471342642 experts-équivalents)
+      32 Go de RAM portent 2/256 experts par couche
+      64 Go de R
+… [140 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/budget_execution_locale.py'\ns=open(p).read()\n# 1. ne pas compter l'embarquement (on ne lit QUE la rangée du jeton) ; compter la tête (lue en entier)\ns = s.replace(\"\"\"                else:\n            … [3617 caractères tronqués]`
+
+  ```
+outil corrigé
+DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf — 3 shard(s) lus, 43 couches vues
+  poids lus : 86.9 Go sur les shards présents
+  formats   : IQ3_XXS 33.7 Go · IQ2_XXS 23.3 Go · IQ1_M 20.7 Go · Q8_0 5.2 Go · MXFP4 2.3 Go
+  routage   : 6 experts sur 256
+  (embarquement NON compté : 0.30 Go — une rangée par jeton ; tête de sortie comptée : 0.30 Go)
+
+  PAR JETON : experts  1.873 Go · partagé+dense  6.688 Go · TOTAL  8.561 Go
+  (extrapolé aux 43 couches vues ; un modèle complet se lit en entier)
+
+placement                               débit   s/jeton  jetons/s
+disque dur 12 To (200 Mo/s)             0.2 Go/s     42.81     0.023
+NVMe local (2,0 Go/s)                   2.0 Go/s      4.28     0.234
+RAM / page cache (20 Go/s)             20.0 Go/s      0.43     2.336
+bus PCIe x8 (6,5 Go/s)                  6.5 Go/s      1.32     0.759
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys, glob\nsys.path.insert(0,'tools')\nimport analyse_octets_par_jeton as A\ntot = {}\nfor f in sorted(glob.glob('/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/*.gguf')):\n    try:  … [589 caractères tronqués]`
+
+  ```
+tenseurs hors experts, par nom (Go) :
+    1.533  attn_output_a.weight
+    1.533  attn_output_b.weight
+    1.533  attn_q_b.weight
+    0.298  ffn_down_shexp.weight
+    0.298  output.weight
+    0.249  ffn_gate_shexp.weight
+    0.249  ffn_up_shexp.weight
+    0.187  indexer.attn_q_b.weight
+    0.138  attn_compressor_gate.weight
+    0.138  attn_compressor_kv.weight
+    0.125  attn_q_a.weight
+    0.096  attn_kv.weight
+  total 6.69 Go
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/budget_execution_locale.py'\ns=open(p).read()\ns=s.replace(\"\"\"    n_experts = n_experts or 896\n    n_couches = max(max(exps), max(denses or {0: 0})) + 1\"\"\",\n\"\"\"    n_experts = n_experts or 896\n  … [1572 caractères tronqués]`
+
+  ```
+ok
+Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf — 9 shard(s) lus, 25 couches vues
+  poids lus : 391.0 Go sur les shards présents
+  formats   : MXFP4 372.1 Go · Q8_0 18.2 Go · F32 0.7 Go
+  routage   : 16 experts sur 896
+  (embarquement NON compté : 1.25 Go — une rangée par jeton ; tête de sortie comptée : 1.25 Go)
+
+  PAR JETON (sur les 25 couches vues) :
+    experts routés          6.645 Go
+    partagé + attention + tête  17.658 Go
+    TOTAL                  24.303 Go
+  ⚠️ Tout ce qui est lu à chaque jeton est compté (attention, tête, experts partagés) ; l'embarquement ne l'est pas. Les chiffres « experts seuls » d'un rapport antérieur ne sont PAS ce total.
+
+placement                               débit   s/jeton  jetons/s
+disque dur 12 To (200 Mo/s)             0.2 Go/s    121.51     0.008
+NVMe local (2,0 Go/s)                   2.0 Go/s     12.15     0.082
+RAM / page cache (20 Go/s)             20.0 Go/s      1.22     0.823
+bus PCIe x8 (6,5 Go/s)                  6.5 Go/s      3.74     0.267
+NVLink entre GPU (25,8 Go/s)           25.8 Go/s      0.94     1.062
+deux nœuds, disque dur 12 To (200 Mo/s)      0.4 Go/s     60.76     0.016
+deux nœuds, NVMe local (2,0 Go/s)       4.0 Go/s      6
+… [217 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Correction importante : le budget d'un jeton n'est pas 35 Go mais ~88 Go — et l'attention domine les experts
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 python3 - <<'PY'\nimport sys, glob\nsys.path.insert(0,'tools')\nimport analyse_octets_par_jeton as A\nfichiers = sorted(glob.glob('/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/*.gguf'))\nkda = mla = 0; … [2955 caractères tronqués]`
+
+  ```
+25 couches · 896 experts · hors couche (tête) 1.25 Go
+
+couche type  ssm+attn (Mo)  exps (Mo)  shexp (Mo)  res (Mo)  total (Mo)
+     0  KDA         1246.1        0.0         0.0      0.06      1246.2
+     1  KDA          554.3    15722.3       140.4      0.06     16417.1
+     2  KDA          554.3    15722.3       140.4      0.06     16417.1
+     3  MLA          327.1    15722.3       140.4      0.06     16189.9
+     4  KDA          554.3    15722.3       140.4      0.06     16417.1
+     5  KDA          554.3    15722.3       140.4      0.06     16417.1
+     6  KDA          554.3    15722.3       140.4      0.06     16417.1
+     7  MLA          327.1    15722.3       140.4      0.06     16189.9
+    11  MLA          327.1    15722.3       140.4      0.06     16189.9
+    15  MLA          327.1    15722.3       140.4      0.06     16189.9
+    19  MLA          327.1    15722.3       140.4      0.06     16189.9
+    23  MLA          327.1    15722.3       140.4      0.06     16189.9
+
+moyenne d'une couche vue : 15540.2 Mo  (KDA 15574 Mo · MLA 15453 Mo)
+
+PAR JETON (extrapolé à 93 couches, x3.72) :
+  attention (q/k/v/o, ssm, compresseur) :   48.7 Go
+  experts PARTAGÉS (2)                  : 
+… [387 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je corrige la traçabilité (35 → 87 Go/jeton) et j'écris la stratégie de placement chiffrée
+
+- **write** `{"content": "# Kimi-K3 Q4 : ce qu'un jeton lit vraiment, et ce que ça impose\n\n> Écrit le 03/10 (bloc 29) parce qu'un chiffre publié la veille était **faux par\n> omission** : « un jeton lit ~35 Go de poids » ne comptait que les **experts**\n> (`tools/analyse_octets_par_jeton.py`, écrit pour la que … [4314 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-budget-kimi-k3.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport re\n# 1. plan-kimi-k3 : corriger le chiffre et la ligne de planchers\np='docs/plan-kimi-k3.md'\ns=open(p).read()\ns=s.replace(\"\"\"| **poids lus par jeton** | **≈ 35 Go** (16/896 experts × 93 couches) = **2, … [3432 caractères tronqués]`
+
+  ```
+corrections appliquées
+docs/plan-kimi-k3.md:20:| **poids lus par jeton** | **≈ 87 Go** : attention **48,7** · experts routés **24,7** · partagés **12,4** · tête 1,3 — soit **5,8 % du modèle** | `reports/rapport-budget-kimi-k3.md` (mesuré sur 25 couches, extrapolé) |
+docs/plan-kimi-k3.md:24:**Ce que ce tableau dit en une phrase** : un jeton de Kimi-K3 Q4 lit **87 Go de
+docs/architecture-kimi-k3.md:223:Mesuré : **≈ 87 Go de poids par jeton** — attention **48,7** (dense, lue en
+reports/rapport-gpu-tandem-nvlink.md:57:> **8,56 Go** pour V4-Flash et **87 Go** pour Kimi-K3 Q4
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/plan-kimi-k3.md'\ns=open(p).read()\n# la section 3 « ce qui nous distingue » doit porter le fait nouveau : le dense domine\ns=s.replace(\"\"\"2. **Le découpage en grappes**\"\"\",\n\"\"\"2. **Le dense d'abor … [1746 caractères tronqués]`

@@ -48,8 +48,16 @@ seulement) — **octets de POIDS lus par jeton** :
 
 | modèle | couches | experts | routés | **poids/jeton** | formats |
 |---|---|---|---|---|---|
-| V4-Flash IQ1_M | 43 | 256 | 6 | **2,669 Go** | IQ3_XXS 33,7 · IQ1_M 20,7 · IQ2_XXS 23,3 · MXFP4 … |
-| V4.1 Q2 | 40 | 384 | 6 | **3,893 Go** | I8 202,8 · IQ2_XXS 93,4 · Q2_K 59,5 |
+| V4-Flash IQ1_M | 43 | 256 | 6 | **2,669 Go** (experts seuls) | IQ3_XXS 33,7 · IQ1_M 20,7 · IQ2_XXS 23,3 · MXFP4 … |
+| V4.1 Q2 | 40 | 384 | 6 | **3,893 Go** (experts seuls) | I8 202,8 · IQ2_XXS 93,4 · Q2_K 59,5 |
+
+> ⚠️ **Ces deux chiffres ne comptent que les experts** (l'outil
+> `analyse_octets_par_jeton.py` a été écrit pour la question du MoE). Le trafic
+> **total** d'un jeton ajoute l'attention, les experts partagés et la tête :
+> **8,56 Go** pour V4-Flash et **87 Go** pour Kimi-K3 Q4
+> (`reports/rapport-budget-kimi-k3.md`, `tools/budget_execution_locale.py`). Le
+> rapport sur les planchers de bus ci-dessous doit donc être lu avec le total :
+> l'écart entre les deux chiffres est ce qui a fait sous-estimer le problème.
 
 Or la VRAM disponible est de **32 Go** : un cache d'experts ne peut donc tenir, au
 mieux, qu'une fraction du modèle — et un jeton a besoin de 2,7 à 3,9 Go de poids

@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 116.2 h |
-| Tours | 90 |
-| Messages | 6939 |
-| Appels d'outils | 6636 |
-| Fichiers touchés | 136 |
-| Commandes | 5611 |
+| Durée | 116.3 h |
+| Tours | 91 |
+| Messages | 6951 |
+| Appels d'outils | 6646 |
+| Fichiers touchés | 138 |
+| Commandes | 5619 |
 | Sous-agents | 32 |
-| Commits | 452 |
+| Commits | 453 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -225,6 +225,8 @@
 **Tour 89** — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en respectant pour chaque phase ses deux portes : porte de correction (comparaison étage par étage à llama.cpp sur V4-Flash) et porte Drave (flux : événements/paires par jeton, trace rejouée à l'identique, découpage en grappes, flux lisible par un outil d'analyse). Aucune phase ne passe … [662 caractères tronqués]
 
 **Tour 90** — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en respectant pour chaque phase ses deux portes : porte de correction (comparaison étage par étage à llama.cpp sur V4-Flash) et porte Drave (flux : événements/paires par jeton, trace rejouée à l'identique, découpage en grappes, flux lisible par un outil d'analyse). Aucune phase ne passe … [662 caractères tronqués]
+
+**Tour 91** — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas en local (classe Kimi-K3 Q4 : 1,5 To de poids, ~35 Go de poids par jeton), et étudier/implémenter ce qui nous distingue sur cette classe : découpage par experts et en grappes (chaque nœud ne lit que ce qu'il sert), réutilisation des experts entre jetons, transport de flux compact  … [966 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -4475,7 +4477,7 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 
 ### Tour 90 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [942 caractères tronqués]
 
-*198 appels d'outils.* Actions notables :
+*199 appels d'outils.* Actions notables :
 
 - bash — Check the gate suite result
 - bash — Wait for the gates
@@ -4491,11 +4493,48 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 - bash — Find the plan's remaining items
 - bash — Extract each phase's gate claims
 - read
-- … et 179 autres
+- … et 180 autres
 
 **Synthèse produite :**
 
-⏵ Pendant le téléchargement : j'implémente et teste les deux mathématiques neuves de K3 (SiTU, attention résiduelle)
+⏵ Bloc 28 livré : la bascule est faite, le téléchargement tourne, les portes sont vertes
+
+**Ce qui a changé depuis ton message :**
+
+1. **V4-Flash est retiré du chemin critique** — copie NVMe supprimée, porte de perplexité passée derrière `ARCHIVE=1` (elle était la plus lente du dépôt : 82 Go sur disque *dur*), porte des hyper-connexions repointée sur V4.1 et testée. Les acquis restent : l'audit `reports/rapport-portes-p0-p9.md` dit, phase par phase, où sont les deux portes, ce qui est tenu, et la seule qui soit **impossible** (P7, llama.cpp refuse `deepseek41`).
+
+2. **Kimi-K3 est la nouvelle cible** (`docs/plan-kimi-k3.md`) : son Q4 pèse **1 508,7 Go** et chaque jeton lit **≈ 35 Go de poids** (2,3 % du modèle) — 17 s/jeton sur NVMe, 173 s sur disque dur. *C'est* la classe « trop gros pour le local ». Téléchargement en cours : **339 Go / 1 508** à ~105 Mo/s, fin vers 14h10.
+
+3. **La référence exécutable existe** : llama.cpp amont connaît `kimi-k3` (là où il refuse `deepseek41`). Une seconde copie est construite (`llama.cpp-k3`, 6 min) et `tools/ref_logits_k3` est lié contre elle — **la porte de correction est possible sur cette classe**, ce qui n'a jamais été le cas pour V4.1.
+
+4. **Deux défauts silencieux de tokenizer trouvés et corrigés**, sans une once de poids (la référence officielle est du code, le vocabulaire vit dans le shard 1) :
+   - le motif de pré-découpage **`kimi` n'était pas implémenté** → repli muet sur qwen2 : « 2026 » sortait en un jeton au lieu de « 202 » + « 6 », le chinois divergeait. **Kimi-K2.7, déjà dans le dépôt, était touché aussi** ;
+   - le **découpage par casse enjambait les majuscules** (« HelloWorld » d'un seul morceau) — invisible dans les identifiants (pas de fusion « oW »), trouvé par un **test unitaire**.
+   
+   État : **11 textes sur 11 identiques au tokenizer officiel**, 69 tests verts, les 512 identifiants gpt-oss de la référence publiée **inchangés**. La porte est dans le dépôt (`tools/porte-tokenizer-kimi.sh`).
+
+5. **La spec d'architecture est écrite** (`docs/architecture-kimi-k3.md`) et deux pièces neuves sont déjà **implémentées et testées sans poids** : l'activation **SiTU** et l'**attention résiduelle** (scores sur les valeurs normalisées, somme sur les brutes — le détail qui change tout est testé explicitement). La cadence hybride a été **vérifiée sur le fichier** : MLA aux couches 3, 7, 11, 15, KDA ailleurs, 2 `res_score` partout, couche 0 dense.
+
+6. **Portes toutes vertes** (69 tests, Qwen 19,3885, clusters 799
+… [457 caractères tronqués]
+
+### Tour 91 — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas e … [1246 caractères tronqués]
+
+*9 appels d'outils.* Actions notables :
+
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/budget_execution_locale.py`
+- bash — Validate the budget tool on V4-Flash
+- bash — Fix the budget tool and re-validate
+- bash — Find what inflates the dense budget
+- bash — Compute Kimi-K3's full per-token budget
+- bash — Break down Kimi-K3's per-token budget by part
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-budget-kimi-k3.md`
+- bash — Correct the per-token figures everywhere
+- bash — Commit the corrected budget and strategy
+
+**Synthèse produite :**
+
+⏵ Je corrige la traçabilité (35 → 87 Go/jeton) et j'écris la stratégie de placement chiffrée
 
 ## 3. Travail accompli
 
@@ -4639,6 +4678,8 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/27-la-porte-p1-fermee-et-la-bascule-vers-kimi-k3.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/architecture-kimi-k3.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/28-la-bascule-vers-kimi-k3-et-deux-defauts-de-tokenizer.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/budget_execution_locale.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-budget-kimi-k3.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -4717,7 +4758,7 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5571 autres
+- … et 5579 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5317,4 +5358,5 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 - KimI-K3 : les deux mathématiques neuves implémentées et testées SANS poids (SiTU, attention résiduelle)  situ(g,u) = beta·tanh(g/beta)·sigmoïde(g) × linear_beta
 - Sprint 28 : portes toutes vertes (69 tests), perplexité V4-Flash derrière ARCHIVE=1, et la leçon des pkill qui se tuent eux-mêmes"; git log --oneline -1
 - Spec Kimi-K3 : le KDA, sa porte bornée à -5, ses trois chemins de référence et les tenseurs qui serviront de points de comparaison" && git log --oneline -1; tai
+- CORRECTION : un jeton de Kimi-K3 lit 87 Go de poids (pas 35) — et c'est l'ATTENTION qui domine, pas les experts  Mesuré sur 25 couches (de 93) avec l'outil neuf
 
