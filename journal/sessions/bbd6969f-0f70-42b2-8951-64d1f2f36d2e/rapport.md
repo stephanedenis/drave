@@ -6,13 +6,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
 | Durée | 118.1 h |
-| Tours | 99 |
-| Messages | 7085 |
-| Appels d'outils | 6761 |
+| Tours | 100 |
+| Messages | 7089 |
+| Appels d'outils | 6763 |
 | Fichiers touchés | 145 |
-| Commandes | 5727 |
+| Commandes | 5729 |
 | Sous-agents | 32 |
-| Commits | 474 |
+| Commits | 475 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -243,6 +243,8 @@
 **Tour 98** — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas en local (classe Kimi-K3 Q4 : 1,5 To de poids, ~35 Go de poids par jeton), et étudier/implémenter ce qui nous distingue sur cette classe : découpage par experts et en grappes (chaque nœud ne lit que ce qu'il sert), réutilisation des experts entre jetons, transport de flux compact  … [966 caractères tronqués]
 
 **Tour 99** — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas en local (classe Kimi-K3 Q4 : 1,5 To de poids, ~35 Go de poids par jeton), et étudier/implémenter ce qui nous distingue sur cette classe : découpage par experts et en grappes (chaque nœud ne lit que ce qu'il sert), réutilisation des experts entre jetons, transport de flux compact  … [966 caractères tronqués]
+
+**Tour 100** — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas en local (classe Kimi-K3 Q4 : 1,5 To de poids, ~35 Go de poids par jeton), et étudier/implémenter ce qui nous distingue sur cette classe : découpage par experts et en grappes (chaque nœud ne lit que ce qu'il sert), réutilisation des experts entre jetons, transport de flux compact  … [966 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -4865,7 +4867,36 @@ Et le geste qui rend un modèle de 1,5 To seulement *lisible* : les experts sont
 
 **Synthèse produite :**
 
-⏵ Bloc 35 : j'implémente la dernière pièce d'architecture — la couche MLA de K3 (couches 3, 7, 11…)
+⏵ Bloc 35 : la dernière pièce d'architecture est debout — les trois types de couches de K3 calculent
+
+**Le compte, à cette heure** : les trois pièces d'architecture de Kimi-K3 sont **écrites et calculantes** sur le vrai fichier, chacune avec son test de fumée :
+
+| pièce | couvre | état mesuré |
+|---|---|---|
+| **couche 0** (KDA + dense + SiTU + redémarrage du flux) | la couche 1/93 | |l_out| = 0,9731 · finis ✓ |
+| **MoE latent** (routeur pleine largeur, 16 experts, norme dans le latent, 2 partagés) | **92 couches sur 93** | 1,37 s/jeton · finis ✓ |
+| **MLA** (absorption par tête, `nope` sans rotation, porte sigmoïde pleine largeur) | **24 couches** | 235 ms/jeton · finis ✓ |
+
+**Deux bugs attrapés par les tests — et pas par la relecture**, ce qui est exactement leur raison d'être :
+1. **la requête absorbée fait 576, pas 192** : après absorption, la requête d'une tête MLA devient `[latent 512, rope 64]` — la taille de la *clé* — et non `head_dim`. La copie tombait avec « range end 512 out of range for length 192 » ;
+2. (bloc précédent) **16,5 millions d'allocations par jeton** dans la déquantification des experts : 25,7 s → **1,36 s** en écrivant dans un tampon fourni, *sans changer un chiffre* (|sortie| identique).
+
+**Et le geste qui rend 1,5 To seulement lisibles** : les experts sont lus **un par un** (16 sur 896, ~300 Mo par jeton), jamais la couche entière (15,7 Go en MXFP4) — c'est aussi ce qui rendra la réutilisation *mesurable* sur ce modèle.
+
+**Téléchargement** : ~1 030 Go / 1 509 (**68 %**, ~112 Mo/s) → **fin vers 13h55**. Il reste la boucle (attention résiduelle inter-couches, banque tous les 12, tête) — et dès que le fichier est complet : inventaire des 93 couches, budget **mesuré**, baseline `llama.cpp-k3`, puis la vérification tenseur par tenseur, du premier jalon (couche 0) aux 93.
+
+77 tests verts, tout commité.
+
+### Tour 100 — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas e … [1246 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Extract the KDA into a reusable piece
+- bash — Commit the KDA extraction and check the download
+
+**Synthèse produite :**
+
+⏵ Bloc 36 : j'extrais le KDA en pièce réutilisable, puis je compose les couches 0 → 1 (le premier test de composition)
 
 ## 3. Travail accompli
 
@@ -5096,7 +5127,7 @@ Et le geste qui rend un modèle de 1,5 To seulement *lisible* : les experts sont
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5687 autres
+- … et 5689 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5718,4 +5749,5 @@ Et le geste qui rend un modèle de 1,5 To seulement *lisible* : les experts sont
 - Spec Kimi-K3 : l'ordre exact du MoE latent (routeur en pleine largeur, norme DANS le latent avant la remontée, biais en sélection)  Trois pièges consignés avec 
 - K3 : le MoE latent fonctionne — et 25,7 s/jeton sont devenus 1,36 s (×18,9) sans changer un chiffre  La première version appelait Gguf::dequant_mxfp4 PAR BLOC, 
 - K3 : la couche MLA calcule (couches 3, 7, 11…) — absorption par tête, nope sans rotation, porte sigmoïde pleine largeur  Mesuré : trois jetons à la suite, cache
+- K3 : le KDA extrait en pièce réutilisable (couches 1, 2, 4, 5, 6, 8…), avec sa remise à zéro d'état  La composition (couche 0 -> 1) exige de charger l'attention
 

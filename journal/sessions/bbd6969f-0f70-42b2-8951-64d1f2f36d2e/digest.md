@@ -112787,3 +112787,55 @@ taille de la requête absorbée corrigée
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cd drave-core && cargo test --release 2>&1 | grep -E \"^test result\"; cd .. && git add -A && git commit -q -m \"K3 : la couche MLA calcule (couches 3, 7, 11…) — absorption par tête, nope sans rotation, porte sigmoïde pleine largeur\ … [684 caractères tronqués]`
+
+  ```
+test result: ok. 77 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+dd4f057 K3 : la couche MLA calcule (couches 3, 7, 11…) — absorption par tête, nope sans rotation, porte sigmoïde pleine largeur
+12:51:26    21.2 Go / 49.2 Go (43.1 %, 112 Mo/s)
+  ```
+
+### 🤖 Assistant
+
+⏵ Bloc 35 : la dernière pièce d'architecture est debout — les trois types de couches de K3 calculent
+
+**Le compte, à cette heure** : les trois pièces d'architecture de Kimi-K3 sont **écrites et calculantes** sur le vrai fichier, chacune avec son test de fumée :
+
+| pièce | couvre | état mesuré |
+|---|---|---|
+| **couche 0** (KDA + dense + SiTU + redémarrage du flux) | la couche 1/93 | |l_out| = 0,9731 · finis ✓ |
+| **MoE latent** (routeur pleine largeur, 16 experts, norme dans le latent, 2 partagés) | **92 couches sur 93** | 1,37 s/jeton · finis ✓ |
+| **MLA** (absorption par tête, `nope` sans rotation, porte sigmoïde pleine largeur) | **24 couches** | 235 ms/jeton · finis ✓ |
+
+**Deux bugs attrapés par les tests — et pas par la relecture**, ce qui est exactement leur raison d'être :
+1. **la requête absorbée fait 576, pas 192** : après absorption, la requête d'une tête MLA devient `[latent 512, rope 64]` — la taille de la *clé* — et non `head_dim`. La copie tombait avec « range end 512 out of range for length 192 » ;
+2. (bloc précédent) **16,5 millions d'allocations par jeton** dans la déquantification des experts : 25,7 s → **1,36 s** en écrivant dans un tampon fourni, *sans changer un chiffre* (|sortie| identique).
+
+**Et le geste qui rend 1,5 To seulement lisibles** : les experts sont lus **un par un** (16 sur 896, ~300 Mo par jeton), jamais la couche entière (15,7 Go en MXFP4) — c'est aussi ce qui rendra la réutilisation *mesurable* sur ce modèle.
+
+**Téléchargement** : ~1 030 Go / 1 509 (**68 %**, ~112 Mo/s) → **fin vers 13h55**. Il reste la boucle (attention résiduelle inter-couches, banque tous les 12, tête) — et dès que le fichier est complet : inventaire des 93 couches, budget **mesuré**, baseline `llama.cpp-k3`, puis la vérification tenseur par tenseur, du premier jalon (couche 0) aux 93.
+
+77 tests verts, tout commité.
+
+
+## Tour 100
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas en local (classe Kimi-K3 Q4 : 1,5 To de poids, ~35 Go de poids par jeton), et étudier/implémenter ce qui nous distingue sur cette classe : découpage par experts et en grappes (chaque nœud ne lit que ce qu'il sert), réutilisation des experts entre jetons, transport de flux compact (listes DRVF), noyaux rapides (SIMD, déquantification bit-exacte), et mesure systématique (octets par jeton, débits, seuils). Les modèles périmés (DeepSeek-V4-Flash) sortent du chemin critique : leurs acquis sont conservés dans les rapports, leurs portes archivées. Règles inchangées : jamais de forward muet, jamais d'optimisation qui change une sortie sans le dire, une affirmation sans mesure n'est pas une affirmation."
+Round: 26/30
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Bloc 36 : j'extrais le KDA en pièce réutilisable, puis je compose les couches 0 → 1 (le premier test de composition)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> drave-core/src/kimi_k3.rs <<'RS'\n\n// ===========================================================================\n// Le KDA, extrait en pièce RÉUTILISABLE (couches 1, 2, 4, 5, 6, 8, …).\n//\n// La couche 0 l'embarquait avec  … [5436 caractères tronqués]`
+
+  ```
+--- build ---
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"K3 : le KDA extrait en pièce réutilisable (couches 1, 2, 4, 5, 6, 8…), avec sa remise à zéro d'état\n\nLa composition (couche 0 -> 1) exige de charger l'attention KDA SEULE, pour\nn'importe quelle cou … [255 caractères tronqués]`

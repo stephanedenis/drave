@@ -848,3 +848,111 @@ impl MlaK3 {
         Ok(out)
     }
 }
+
+// ===========================================================================
+// Le KDA, extrait en pièce RÉUTILISABLE (couches 1, 2, 4, 5, 6, 8, …).
+//
+// La couche 0 l'embarquait avec son FFN dense ; la composition (couche 0 → 1)
+// exige de pouvoir le charger SEUL, pour n'importe quelle couche.
+// ===========================================================================
+
+pub struct KdaK3 {
+    q: Vec<f32>, k: Vec<f32>, v: Vec<f32>, wo: Vec<f32>,
+    f_a: Vec<f32>, f_b: Vec<f32>, g_proj: Vec<f32>,
+    conv_q: Vec<f32>, conv_k: Vec<f32>, conv_v: Vec<f32>,
+    beta_w: Vec<f32>, ssm_a: Vec<f32>, dt_bias: Vec<f32>, o_norm: Vec<f32>,
+    etat_conv_q: Vec<f32>, etat_conv_k: Vec<f32>, etat_conv_v: Vec<f32>,
+    etat_delta: Vec<f32>,
+    h: usize, nh: usize, hd: usize, d_inner: usize, d_conv: usize, eps: f32,
+}
+
+impl KdaK3 {
+    pub fn charge(g: &Gguf, l: usize) -> Result<KdaK3, String> {
+        let p = |s: &str| format!("blk.{l}.{s}");
+        let lu = |nom: &str| -> Result<Vec<f32>, String> {
+            if g.tensor(nom).is_none() { return Err(format!("tenseur absent : {nom}")); }
+            Ok(g.dequant(nom))
+        };
+        let dims = |nom: &str| -> Result<Vec<usize>, String> {
+            g.tensor(nom).map(|t| t.dims.iter().map(|d| *d as usize).collect())
+                .ok_or_else(|| format!("tenseur absent : {nom}"))
+        };
+        let h = dims(&p("attn_norm.weight"))?[0];
+        let nh = dims(&p("ssm_beta.weight"))?[0];
+        let hd = dims(&p("ssm_norm.weight"))?[0];
+        let d_inner = nh * hd;
+        let d_conv = *dims(&p("ssm_conv1d_q.weight"))?.last().unwrap_or(&4);
+        let etat = vec![0f32; (d_conv - 1) * d_inner];
+        Ok(KdaK3 {
+            q: lu(&p("attn_q.weight"))?, k: lu(&p("attn_k.weight"))?, v: lu(&p("attn_v.weight"))?,
+            wo: lu(&p("attn_output.weight"))?,
+            f_a: lu(&p("ssm_f_a.weight"))?, f_b: lu(&p("ssm_f_b.weight"))?,
+            g_proj: lu(&p("ssm_g.weight"))?,
+            conv_q: lu(&p("ssm_conv1d_q.weight"))?, conv_k: lu(&p("ssm_conv1d_k.weight"))?,
+            conv_v: lu(&p("ssm_conv1d_v.weight"))?,
+            beta_w: lu(&p("ssm_beta.weight"))?, ssm_a: lu(&p("ssm_a"))?,
+            dt_bias: lu(&p("ssm_dt.bias"))?, o_norm: lu(&p("ssm_norm.weight"))?,
+            etat_conv_q: etat.clone(), etat_conv_k: etat.clone(), etat_conv_v: etat,
+            etat_delta: vec![0f32; nh * hd * hd],
+            h, nh, hd, d_inner, d_conv, eps: 1e-5,
+        })
+    }
+
+    /// L'attention KDA seule, sur une entrée **déjà normalisée** (`attn_norm`).
+    pub fn avant(&mut self, cur: &[f32]) -> Result<Vec<f32>, String> {
+        let (h, nh, hd, d_inner) = (self.h, self.nh, self.hd, self.d_inner);
+        if cur.len() != h { return Err(format!("entrée de {} au lieu de {h}", cur.len())); }
+        let mut q = vec![0f32; d_inner];
+        let mut k = vec![0f32; d_inner];
+        let mut v = vec![0f32; d_inner];
+        mv(&self.q, d_inner, h, cur, &mut q);
+        mv(&self.k, d_inner, h, cur, &mut k);
+        mv(&self.v, d_inner, h, cur, &mut v);
+        let mut qc = vec![0f32; d_inner];
+        let mut kc = vec![0f32; d_inner];
+        let mut vc = vec![0f32; d_inner];
+        crate::model::kda_conv_silu(&q, &self.conv_q, &mut self.etat_conv_q, self.d_conv, d_inner, &mut qc);
+        crate::model::kda_conv_silu(&k, &self.conv_k, &mut self.etat_conv_k, self.d_conv, d_inner, &mut kc);
+        crate::model::kda_conv_silu(&v, &self.conv_v, &mut self.etat_conv_v, self.d_conv, d_inner, &mut vc);
+        let mut fa = vec![0f32; hd];
+        mv(&self.f_a, hd, h, cur, &mut fa);
+        let mut g1 = vec![0f32; d_inner];
+        mv(&self.f_b, d_inner, hd, &fa, &mut g1);
+        let mut beta = vec![0f32; nh];
+        mv(&self.beta_w, nh, h, cur, &mut beta);
+        let mut o = vec![0f32; d_inner];
+        let mut tampon = vec![0f32; hd];
+        for t in 0..nh {
+            let mut g = vec![0f32; hd];
+            for i in 0..hd {
+                g[i] = crate::model::kda_porte(g1[t * hd + i] + self.dt_bias[t * hd + i],
+                                               self.ssm_a[t], -5.0);
+            }
+            let b = 1.0 / (1.0 + (-beta[t]).exp());
+            let mut ot = vec![0f32; hd];
+            crate::model::kda_pas(&qc[t * hd..(t + 1) * hd], &kc[t * hd..(t + 1) * hd],
+                                  &vc[t * hd..(t + 1) * hd], &g, b,
+                                  &mut self.etat_delta[t * hd * hd..(t + 1) * hd * hd], hd, &mut ot);
+            o[t * hd..(t + 1) * hd].copy_from_slice(&ot);
+        }
+        let mut g2 = vec![0f32; d_inner];
+        mv(&self.g_proj, d_inner, h, cur, &mut g2);
+        for t in 0..nh {
+            rms_norm_poids(&o[t * hd..(t + 1) * hd], &self.o_norm, self.eps, &mut tampon[..hd]);
+            for i in 0..hd {
+                let s = 1.0 / (1.0 + (-g2[t * hd + i]).exp());
+                o[t * hd + i] = tampon[i] * s;
+            }
+        }
+        let mut out = vec![0f32; h];
+        mv(&self.wo, h, d_inner, &o, &mut out);
+        Ok(out)
+    }
+
+    pub fn zero(&mut self) {
+        self.etat_conv_q.iter_mut().for_each(|v| *v = 0.0);
+        self.etat_conv_k.iter_mut().for_each(|v| *v = 0.0);
+        self.etat_conv_v.iter_mut().for_each(|v| *v = 0.0);
+        self.etat_delta.iter_mut().for_each(|v| *v = 0.0);
+    }
+}
