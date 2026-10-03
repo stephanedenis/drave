@@ -108578,3 +108578,63 @@ Created file
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Réorientation : plan Kimi-K3 — exécuter en local ce qui ne tient pas en local\n\nMesuré : le Q4 d'Kimi-K3 fait 1 508,7 Go (32 shards), l'architecture kimi-k3\nnous est inconnue, le texte EST Kimi-Line … [756 caractères tronqués]`
+
+  ```
+7d5a8fd Réorientation : plan Kimi-K3 — exécuter en local ce qui ne tient pas en local
+ctx 1024 : 852 / 1023
+10:10:44    34.1 Go / 47.5 Go (71.8 %, 110 Mo/s)
+-- UI: HF download succeeded, stamp updated (ggml-org/llama-ui|b1, resolved: latest)
+-- UI: gzip compression applied (/home/stephane/Data13TB/stephane/GitHub/llama.cpp-k3/build/tools/ui/ui-gzip/_gzip)
+  ```
+
+### 🤖 Assistant
+
+⏵ Retrait de V4-Flash (copie NVMe supprimée, portes archivées) et bascule de la porte hc sur V4.1
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && du -sh /home/stephane/FastNVMe/modeles-lourds/v4flash-iq1m && rm -rf /home/stephane/FastNVMe/modeles-lourds/v4flash-iq1m && df -h /home/stephane/FastNVMe | tail -1 && python3 - <<'PY'\np='tools/portes.sh'\ns=open(p).read()\n# 1. la p … [1769 caractères tronqués]`
+
+  ```
+81G	/home/stephane/FastNVMe/modeles-lourds/v4flash-iq1m
+/dev/nvme0n1p2  828G  632G  195G  77% /home/stephane/FastNVMe
+portes.sh : hc -> V4.1, V4-Flash marqué archivé
+syntaxe ok
+-rw-r--r--. 1 stephane stephane 40  3 oct 07:51 /tmp/ids_v41_8.txt
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/^# 7sexies/,/^# 8\\./p' tools/portes.sh | head -22", "description": "Review the updated hc gate section"}`
+
+  ```
+# 7sexies. Porte Drave de P1 : les 24 poids de connexion d'un raccord à
+#   hyper-connexions (4 pre + 4 post + 16 comb) doivent être ÉCRITS et RELUS par
+#   l'outil. Ils étaient calculés puis JETÉS — un forward muet, exactement ce que
+#   le mandat interdit — et la porte de P1 n'avait donc pas d'instrument. Le
+#   contrôle coûte un chargement de V4-Flash (~40 s) : il est fait une fois, avec
+#   3 jetons sur 3 couches, et l'outil vérifie en plus que le Sinkhorn tient sa
+#   promesse (lignes et colonnes de `comb` somment à 1).
+#    Le modèle porteur est **V4.1** et non V4-Flash : V4-Flash est RETIRÉ du chemin
+#    critique (03/10) — un modèle périmé ne doit pas porter une porte vivante.
+V41_HC=/home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf
+if [ -x tools/analyse_hc.py ] && [ -f "$V41_HC" ] && [ -s /tmp/ids_v41_8.txt ]; then
+    rm -f /tmp/porte_hc-*
+    DRAVE_DUMP_COUCHES=/tmp/porte_hc timeout 900 $D "$V41_HC" --ppl /tmp/ids_v41_8.txt \
+        --ctx 16 --limit 3 --dense --threads 8 --lot 1 >/dev/null 2>&1
+    if ls /tmp/porte_hc-hc_attn-*-*.bin >/dev/null 2>&1; then
+        sortie_hc=$(python3 tools/analyse_hc.py /tmp/porte_hc --couches 0,1,2 \
+            --posit
+… [278 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/portes.sh'\ns=open(p).read()\ns=s.replace(\"\"\"#   l'outil. Ils étaient calculés puis JETÉS — un forward muet, exactement ce que\n#   le mandat interdit — et la porte de P1 n'avait donc pas d'instrument. L … [1038 caractères tronqués]`
+
+  ```
+ok
+  poids de connexion hc écrits et relus     connexions significatives (≥ 0.05) : 22/48 (46 %)  ✅
+ECHEC=0
+[stderr]
+
+real	1m47,217s
+user	5m12,552s
+sys	0m49,741s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Retrait de V4-Flash : copie NVMe supprimée, porte hc repointée sur V4.1 (testée), section 6bis marquée ARCHIVÉE dans portes.sh\n\nUn modèle périmé ne doit pas porter une porte vivante.\" && s=$(stat - … [274 caractères tronqués]`

@@ -98,7 +98,12 @@ route "Kimi-K2.7 : sigmoïde ×2,827" "$M/Kimi-K2.7-Code-UD-IQ1_M/Kimi-K2.7-Code
 route "V4-Flash : racine de softplus" "$M/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf" "racine de softplus"
 route "Qwen3-235B : softmax" "$M/Qwen3-235B-A22B-Q2_K/Qwen3-235B-A22B-Instruct-2507-Q2_K-00001-of-00002.gguf" "softmax"
 
-# 6bis. V4-Flash : le modèle de la famille V4 tourne EN ENTIER (43 couches, les
+# 6bis. ARCHIVÉ (03/10) : V4-Flash est RETIRÉ du chemin critique — cette porte
+#       reste tant que le fichier est là, pour ne pas perdre la référence, mais
+#       elle ne garde plus rien de vivant. La cible est Kimi-K3
+#       (`docs/plan-kimi-k3.md`).
+#
+#       V4-Flash : le modèle de la famille V4 tourne EN ENTIER (43 couches, les
 #       trois régimes d'attention : brute, HCA, CSA + indexeur). Sa perplexité
 #       est un chiffre de référence : si elle dérive, c'est que le calcul a
 #       changé. Les identifiants viennent de SON tokenizer, jamais d'un autre.
@@ -268,12 +273,15 @@ fi
 #   hyper-connexions (4 pre + 4 post + 16 comb) doivent être ÉCRITS et RELUS par
 #   l'outil. Ils étaient calculés puis JETÉS — un forward muet, exactement ce que
 #   le mandat interdit — et la porte de P1 n'avait donc pas d'instrument. Le
-#   contrôle coûte un chargement de V4-Flash (~40 s) : il est fait une fois, avec
+#   contrôle coûte un chargement de V4.1 (~60 s) : il est fait une fois, avec
 #   3 jetons sur 3 couches, et l'outil vérifie en plus que le Sinkhorn tient sa
-#   promesse (lignes et colonnes de `comb` somment à 1).
-if [ -x tools/analyse_hc.py ] && [ -f "$V4" ]; then
+#   promesse sur l'axe qu'il normalise en dernier (|Σsrc − 1| ≤ 1e-3).
+#    Le modèle porteur est **V4.1** et non V4-Flash : V4-Flash est RETIRÉ du chemin
+#    critique (03/10) — un modèle périmé ne doit pas porter une porte vivante.
+V41_HC=/home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf
+if [ -x tools/analyse_hc.py ] && [ -f "$V41_HC" ] && [ -s /tmp/ids_v41_8.txt ]; then
     rm -f /tmp/porte_hc-*
-    DRAVE_DUMP_COUCHES=/tmp/porte_hc timeout 600 $D "$V4" --ppl /tmp/ids_v4flash.txt \
+    DRAVE_DUMP_COUCHES=/tmp/porte_hc timeout 900 $D "$V41_HC" --ppl /tmp/ids_v41_8.txt \
         --ctx 16 --limit 3 --dense --threads 8 --lot 1 >/dev/null 2>&1
     if ls /tmp/porte_hc-hc_attn-*-*.bin >/dev/null 2>&1; then
         sortie_hc=$(python3 tools/analyse_hc.py /tmp/porte_hc --couches 0,1,2 \
