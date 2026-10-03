@@ -101545,3 +101545,155 @@ toutes les portes sont vertes
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"sprints/21-localiser-le-defaut-v41.md\"\ns=open(p).read()\na=\"\"\"## Rétrospective — garder / changer / doute\"\"\"\nb=\"\"\"## Portes\n\n- `tools/portes.sh rapide` : **toutes vertes** après les changements du  … [686 caractères tronqués]`
+
+  ```
+ok
+50db150 Sprint 21 : portes toutes vertes après les changements du bloc (64 tests, V4-Flash 8430,4966 inchangée)
+08fbf23 Deux vides neufs pour rendre le chemin des experts vérifiable : ffn_hn (entrée normée du MoE, vérifiée en numpy à 1e-7) et moe_down (somme des experts routés)
+3f096a1 Défaut silencieux corrigé : --abits au-delà de 16 saturait (et parfois enroulait) les activations i16 — facteur 256 muet
+05c2416 Journal : index de session à jour
+3252ec7 Sprint 21 : clôture (35 min) — douze hypothèses éliminées, quatre pièces vérifiées, le défaut cerné au chemin des experts
+sam 03 oct 2026 03:57:38 EDT
+  ```
+
+- **get_goal** `{}`
+
+  ```
+{"goal":{"id":"goal-87d1ebcb-3cbb-43a1-845f-1e93df13d949","revision":1,"objective":"Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en respectant pour chaque phase ses deux portes : porte de correction (comparaison étage par étage à llama.cpp sur V4-Flash) et porte Drave (flux : événements/paires par jeton, trace rejouée à l'identique, découpage en grappes, flux lisible par un outil d'analyse). Aucune phase ne passe à la suivante sans ses deux portes. Jamais de forward muet, jamais d'optimisation qui change une sortie sans le dire.","phase":"active","roundsStarted":6,"maxGoalRounds":30},"activation":"armed"}
+  ```
+
+### 🤖 Assistant
+
+**Ronde 6 — état, mesuré, et ce qui reste**
+
+**Le verdict qui commande tout : V4.1 ne prédit pas** (top-1 **0/31**, NLL 11,657 pour un uniforme à 11,770), alors que **V4-Flash, dans le même moteur, est juste** (1,875 contre **1,844 pour llama.cpp** sur huit répétitions d'une phrase). Le tokenizer est hors de cause (outil neuf compilé contre llama.cpp : identifiants identiques).
+
+**Quatorze hypothèses éliminées par la mesure** (chaque ablation a son drapeau, chacun annonce ce qu'il fait) : chaîne mHC retardée — relue **mot pour mot dans la source vLLM publiée**, notre implémentation y est conforme ; tête (13 705 vs 12 889) ; engram ; blocs compressés (les retirer = 250× pire) ; compression entière (150× pire) ; clamp SwiGLU (lu seulement en liste — **corrigé**) ; explosion du résidu (V4-Flash a le même profil) ; biais de routeur VL (41× pire — le biais du texte est le bon) ; emprunt Q8_0 ; chemin partagé (V4-Flash prédit).
+
+**Quatre pièces vérifiées positivement contre numpy ou le fichier** : l'embarquement (**0,000e+00**), la tête (**1e-4** sur six couples position/jeton), le routeur (**sélection identique** à la trace), et l'entrée normée du MoE (**1e-7**, vide neuf `ffn_hn`).
+
+**Un défaut silencieux corrigé au passage** : `--abits` au-delà de 16 saturait les activations `i16` (et deux conversions *enroulaient*) — facteur 256 muet, mesuré (127 496 vs 12 889). Borné, **annoncé**, testé (64 tests) : les deux valeurs rendent maintenant exactement 12 889,4182.
+
+**Instrument neuf** : `moe_down` (somme des experts routés) — le vide qui manquait pour rendre le chemin des experts vérifiable, dernière pièce jamais comparée pour V4.1.
+
+**Portes (bloc 21)** : `portes.sh rapide` **toutes vertes** — 64 tests, Qwen 19,3885, clusters 799,8557, **V4-Flash 8430,4966 inchangée**, engram, cinq modes de flux (5/5). La nuit a par ailleurs livré ×3,54 sur la passe V4.1 (313,1 s → 88,5 s) avec 5 670 tenseurs à 0 écart.
+
+**Prochaine étape (plan écrit, outillage prêt)** : recomposer `Σ_e w_e · W_d[e] · act(W_g[e]·hn, W_u[e]·hn)` en numpy depuis `ffn_hn`/`moe_down` (routeur déjà vérifié, déquantificateurs IQ2_XXS/Q2_K validés contre libggml), puis l'attention de la couche 0. Objectif **laissé actif** : le défaut n'est pas trouvé, et tant qu'il ne l'est pas, P7 ne peut pas passer ses portes.
+
+
+## Tour 81
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en respectant pour chaque phase ses deux portes : porte de correction (comparaison étage par étage à llama.cpp sur V4-Flash) et porte Drave (flux : événements/paires par jeton, trace rejouée à l'identique, découpage en grappes, flux lisible par un outil d'analyse). Aucune phase ne passe à la suivante sans ses deux portes. Jamais de forward muet, jamais d'optimisation qui change une sortie sans le dire."
+Round: 7/30
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n \"$(grep -n 'pub fn dequant_iq2xxs_dans' drave-core/src/formats.rs | cut -d: -f1),+42p\" drave-core/src/formats.rs; grep -n \"16 =>\\|=> 66\\|66,\" drave-core/src/list.rs | head -5", "description": "Read the IQ2_XXS dequantize … [3 caractères tronqués]`
+
+  ```
+pub fn dequant_iq2xxs_dans(bloc: &[u8], out: &mut [f32]) {
+    assert!(bloc.len() >= 66, "bloc IQ2_XXS trop court : {}", bloc.len());
+    let d = crate::gguf::Gguf::f16_to_f32(u16::from_le_bytes([bloc[0], bloc[1]]));
+    assert!(out.len() >= 256, "tampon de sortie trop court : {}", out.len());
+    for ib32 in 0..8usize {
+        // ATTENTION : dans ggml, `qs` est un `uint16_t[32]`, donc `qs + 4*ib32`
+        // avance de 4 × 2 = 8 OCTETS. Écrire `2 + 4*ib32` octets laissait le
+        // premier sous-bloc juste et tous les suivants faux — c'est la
+        // comparaison avec ggml qui l'a montré, pas la lecture.
+        let aux = &bloc[2 + 8 * ib32..2 + 8 * ib32 + 8];
+        let bas = u32::from_le_bytes([aux[0], aux[1], aux[2], aux[3]]);
+        let haut = u32::from_le_bytes([aux[4], aux[5], aux[6], aux[7]]);
+        let db = d * (0.5 + ((haut >> 28) as f32)) * 0.25;
+        let index = bas.to_le_bytes();
+        for l in 0..4usize {
+            let grille = IQ2XXS_GRID[index[l] as usize];
+            let signes = KSIGNS_IQ2XS[((haut >> (7 * l)) & 127) as usize];
+            for j in 0..8usize {
+                // `kmask_iq2xs[j]` vaut `1 << j` : le bit de signe du niveau j.
+      
+… [996 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/v41_experts_reference.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"Référence numpy du **chemin des experts** de V4.1 — la dernière pièce jamais\ncomparée, et celle qui reste suspecte quand V4.1 ne prédit pas.\n\nLe moteur vid … [7144 caractères tronqués]`
+
+  ```
+script écrit
+tableau IQ2XXS_GRID introuvable dans formats.rs
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"static.*GRID\\|static.*SIGNS\" drave-core/src/*.rs | head -8", "description": "Find the grid and sign table names"}`
+
+  ```
+drave-core/src/formats.rs:19:pub static IQ2XXS_GRID: [[u8; 8]; 256] = [
+drave-core/src/formats.rs:278:pub static KSIGNS_IQ2XS: [u8; 128] = [
+drave-core/src/formats.rs:447:pub static IQ1S_GRID: [[i8; 8]; 2048] = [
+drave-core/src/formats.rs:2504:pub static IQ3XXS_GRID: [[u8; 4]; 256] = [
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport re\np=\"drave-core/src/formats.rs\"\ns=open(p, encoding=\"utf-8\").read()\nfor nom in (\"IQ2XXS_GRID\",\"KSIGNS_IQ2XS\"):\n    m=re.search(rf\"{nom}\\s*:\\s*\\[[^\\]]*\\]\\s*=\\s*\\[(.*?)\\n\\];\", s, re.S)\n … [231 caractères tronqués]`
+
+  ```
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 6, in <module>
+AttributeError: 'NoneType' object has no attribute 'group'
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 19,22p drave-core/src/formats.rs; sed -n 278,281p drave-core/src/formats.rs; sed -n 300,306p drave-core/src/formats.rs | head -6", "description": "See the exact table syntax"}`
+
+  ```
+pub static IQ2XXS_GRID: [[u8; 8]; 256] = [
+    [8,8,8,8,8,8,8,8,],
+    [43,8,8,8,8,8,8,8,],
+    [25,25,8,8,8,8,8,8,],
+pub static KSIGNS_IQ2XS: [u8; 128] = [
+    0,129,130,3,132,5,6,135,136,9,10,139,12,141,142,15,
+    144,17,18,147,20,149,150,23,24,153,154,27,156,29,30,159,
+    160,33,34,163,36,165,166,39,40,169,170,43,172,45,46,175,
+    assert!(bloc.len() >= 136, "bloc IQ4_XS trop court : {}", bloc.len());
+    let d = crate::gguf::Gguf::f16_to_f32(u16::from_le_bytes([bloc[0], bloc[1]]));
+    let scales_h = u16::from_le_bytes([bloc[2], bloc[3]]);
+    let scales_l = &bloc[4..8];
+    let qs = &bloc[8..136];
+    assert!(out.len() >= 256, "tampon de sortie trop court : {}", out.len());
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"tools/v41_experts_reference.py\"\ns=open(p).read()\na=\"\"\"    m = re.search(rf\"static {nom}\\\\s*:\\\\s*\\\\[([^\\\\]]+)\\\\]\\\\s*=\\\\s*\\\\[(.*?)\\\\n\\\\];\", src, re.S)\"\"\"\nb=\"\"\"    m = re.search(r … [758 caractères tronqués]`
+
+  ```
+ok
+tableau IQ2XXS_GRID introuvable dans formats.rs
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport re\nsrc=open(\"drave-core/src/formats.rs\",encoding=\"utf-8\").read()\n# le tableau se termine-t-il par \"\\n];\" ?\ni=src.index(\"pub static IQ2XXS_GRID\")\nprint(repr(src[i:i+120]))\nj=src.index(\"\\n];\",  … [293 caractères tronqués]`
+
+  ```
+'pub static IQ2XXS_GRID: [[u8; 8]; 256] = [\n    [8,8,8,8,8,8,8,8,],\n    [43,8,8,8,8,8,8,8,],\n    [25,25,8,8,8,8,8,8,],\n  '
+...fin : '],\n    [8,8,25,25,8,43,43,43,],\n    [8,25,8,8,25,43,43,43,],\n];\n\n'
+motif trouve : False
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"tools/v41_experts_reference.py\"\ns=open(p).read()\na=\"\"\"    m = re.search(rf\"(?:pub )?static {nom}\\\\s*:\\\\s*\\\\[([^\\\\]]+)\\\\]\\\\s*=\\\\s*\\\\[(.*?)\\\\n\\\\];\", src, re.S)\"\"\"\nb=\"\"\"    # le T … [545 caractères tronqués]`
+
+  ```
+ok
+    ~~~~~~~~~~^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/v41_experts_reference.py", line 147, in principale
+    total += w * (down @ act)
+ValueError: non-broadcastable output operand with shape (5120,) doesn't match the broadcast shape (5120,5120)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"tools/v41_experts_reference.py\"\ns=open(p).read()\na=\"\"\"            gate = np.array([ligne_matrice(g, nom(\"ffn_gate_exps.weight\"), int(e), o, 5120,\n                                           TAILLE_IQ2XXS … [1886 caractères tronqués]`
+
+  ```
+ok
+couche 0 pos 5 : experts [0, 128, 155, 239, 269, 274] · écart max 3.381e-05 sur une dynamique de 8.599e-01 (3.93e-05 relatif) · normes 4.6519 / 4.6519
+couche 0 pos 12 : experts [61, 201, 202, 209, 319, 345] · écart max 1.897e-05 sur une dynamique de 3.647e-01 (5.20e-05 relatif) · normes 3.8804 / 3.8804
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"sprints/21-localiser-le-defaut-v41.md\"\ns=open(p).read()\na=\"\"\"## Portes\"\"\"\nb=\"\"\"## 3bis. Le chemin des experts est VÉRIFIÉ (et ce n'est donc pas lui)\n\n`tools/v41_experts_reference.py` recompose, de … [3073 caractères tronqués]`

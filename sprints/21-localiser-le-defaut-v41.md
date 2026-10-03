@@ -105,6 +105,31 @@ la transcription vient de vLLM — la seule pièce non vérifiée contre une sou
 externe *exécutable*, et dont une variante (la convention V4) est dix fois pire
 sans être bonne pour autant.
 
+## 3bis. Le chemin des experts est VÉRIFIÉ (et ce n'est donc pas lui)
+
+`tools/v41_experts_reference.py` recompose, depuis les tenseurs du fichier, tout
+le chemin des experts routés : routeur (`ffn_gate_inp · hn` + `exp_probs_b`,
+top-6, `scores/Σ × 1,5`), six experts déquantifiés en numpy (IQ2_XXS pour
+`gate`/`up`, Q2_K pour `down`, recopiés de `formats.rs`/`gguf.rs` — donc l'accord
+ne prouve pas le déquantificateur, validé à part contre libggml sur CE fichier),
+l'activation (`silu(min(g,10)) · clamp(u,±10)`) et la somme pondérée ; puis compare
+à `moe_down` :
+
+| couche | position | experts choisis | écart max | relatif |
+|---|---|---|---|---|
+| 0 | 5 | [0, 128, 155, 239, 269, 274] | 3,381e-05 | **3,9e-05** |
+| 0 | 12 | [61, 201, 202, 209, 319, 345] | 1,897e-05 | **5,2e-05** |
+
+L'écart est celui d'une accumulation f32 contre f64 sur 2304 × 6 termes ; les
+normes concordent à quatre décimales. **Le chemin des experts est donc juste** —
+et il l'est même avec la quantification d'activation à 16 bits, puisque le numpy
+emploie `hn` brut : la quantification à 16 bits est quasi sans perte ici ✓.
+
+Conséquence : ni le MoE, ni la quantification, ni le routeur, ni l'embarquement,
+ni la tête, ni le mHC (source publiée), ni le tokenizer, ni les formats ne sont en
+cause. **Il ne reste que la composition de l'ATTENTION** — la seule pièce dont les
+morceaux ont été vérifiés un par un, jamais l'ensemble.
+
 ## Portes
 
 - `tools/portes.sh rapide` : **toutes vertes** après les changements du bloc —

@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 109.2 h |
-| Tours | 80 |
-| Messages | 6370 |
-| Appels d'outils | 6110 |
+| Durée | 109.3 h |
+| Tours | 81 |
+| Messages | 6383 |
+| Appels d'outils | 6121 |
 | Fichiers touchés | 118 |
-| Commandes | 5175 |
+| Commandes | 5185 |
 | Sous-agents | 32 |
-| Commits | 403 |
+| Commits | 404 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -203,6 +203,8 @@
 **Tour 79** — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en respectant pour chaque phase ses deux portes : porte de correction (comparaison étage par étage à llama.cpp sur V4-Flash) et porte Drave (flux : événements/paires par jeton, trace rejouée à l'identique, découpage en grappes, flux lisible par un outil d'analyse). Aucune phase ne passe … [661 caractères tronqués]
 
 **Tour 80** — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en respectant pour chaque phase ses deux portes : porte de correction (comparaison étage par étage à llama.cpp sur V4-Flash) et porte Drave (flux : événements/paires par jeton, trace rejouée à l'identique, découpage en grappes, flux lisible par un outil d'analyse). Aucune phase ne passe … [661 caractères tronqués]
+
+**Tour 81** — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en respectant pour chaque phase ses deux portes : porte de correction (comparaison étage par étage à llama.cpp sur V4-Flash) et porte Drave (flux : événements/paires par jeton, trace rejouée à l'identique, découpage en grappes, flux lisible par un outil d'analyse). Aucune phase ne passe … [661 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -4082,7 +4084,7 @@ Dis-moi si je poursuis sur le bloc 22 (la composition des experts en numpy, plan
 
 ### Tour 80 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [941 caractères tronqués]
 
-*17 appels d'outils.* Actions notables :
+*18 appels d'outils.* Actions notables :
 
 - bash — Test whether finer activation quantization fixes V4.1
 - bash — Inspect the activation quantization
@@ -4098,7 +4100,40 @@ Dis-moi si je poursuis sur le bloc 22 (la composition des experts en numpy, plan
 - bash — Dump the MoE input and routed output
 - bash — Verify the new dumps and the MoE input norm
 - bash — Commit the new dumps and the updated plan
-- … et 3 autres
+- … et 4 autres
+
+**Synthèse produite :**
+
+**Ronde 6 — état, mesuré, et ce qui reste**
+
+**Le verdict qui commande tout : V4.1 ne prédit pas** (top-1 **0/31**, NLL 11,657 pour un uniforme à 11,770), alors que **V4-Flash, dans le même moteur, est juste** (1,875 contre **1,844 pour llama.cpp** sur huit répétitions d'une phrase). Le tokenizer est hors de cause (outil neuf compilé contre llama.cpp : identifiants identiques).
+
+**Quatorze hypothèses éliminées par la mesure** (chaque ablation a son drapeau, chacun annonce ce qu'il fait) : chaîne mHC retardée — relue **mot pour mot dans la source vLLM publiée**, notre implémentation y est conforme ; tête (13 705 vs 12 889) ; engram ; blocs compressés (les retirer = 250× pire) ; compression entière (150× pire) ; clamp SwiGLU (lu seulement en liste — **corrigé**) ; explosion du résidu (V4-Flash a le même profil) ; biais de routeur VL (41× pire — le biais du texte est le bon) ; emprunt Q8_0 ; chemin partagé (V4-Flash prédit).
+
+**Quatre pièces vérifiées positivement contre numpy ou le fichier** : l'embarquement (**0,000e+00**), la tête (**1e-4** sur six couples position/jeton), le routeur (**sélection identique** à la trace), et l'entrée normée du MoE (**1e-7**, vide neuf `ffn_hn`).
+
+**Un défaut silencieux corrigé au passage** : `--abits` au-delà de 16 saturait les activations `i16` (et deux conversions *enroulaient*) — facteur 256 muet, mesuré (127 496 vs 12 889). Borné, **annoncé**, testé (64 tests) : les deux valeurs rendent maintenant exactement 12 889,4182.
+
+**Instrument neuf** : `moe_down` (somme des experts routés) — le vide qui manquait pour rendre le chemin des experts vérifiable, dernière pièce jamais comparée pour V4.1.
+
+**Portes (bloc 21)** : `portes.sh rapide` **toutes vertes** — 64 tests, Qwen 19,3885, clusters 799,8557, **V4-Flash 8430,4966 inchangée**, engram, cinq modes de flux (5/5). La nuit a par ailleurs livré ×3,54 sur la passe V4.1 (313,1 s → 88,5 s) avec 5 670 tenseurs à 0 écart.
+
+**Prochaine étape (plan écrit, outillage prêt)** : recomposer `Σ_e w_e · W_d[e] · act(W_g[e]·hn, W_u[e]·hn)` en numpy depuis `ffn_hn`/`moe_down` (routeur déjà vérifié, déquantificateurs IQ2_XXS/Q2_K validés contre libggml), puis l'attention de la couche 0. Objectif **laissé actif** : le défaut n'est pas trouvé, et tant qu'il ne l'est pas, P7 ne peut pas passer ses portes.
+
+### Tour 81 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [941 caractères tronqués]
+
+*10 appels d'outils.* Actions notables :
+
+- bash — Read the IQ2_XXS dequantizer
+- bash — Write and run the expert-path numpy reference
+- bash — Find the grid and sign table names
+- bash — Inspect the table formats
+- bash — See the exact table syntax
+- bash — Fix the table parser and run the reference
+- bash — Debug the regex against the real text
+- bash — Fix the regex properly and run
+- bash — Fix the matrix-vector products and run
+- bash — Commit the expert-path verification
 
 ## 3. Travail accompli
 
@@ -4302,7 +4337,7 @@ Dis-moi si je poursuis sur le bloc 22 (la composition des experts en numpy, plan
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5135 autres
+- … et 5145 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4430,7 +4465,7 @@ Dis-moi si je poursuis sur le bloc 22 (la composition des experts en numpy, plan
 
 ## 5. Erreurs rencontrées
 
-324 sorties en erreur ou divergentes. Les premières :
+325 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -4853,4 +4888,5 @@ Dis-moi si je poursuis sur le bloc 22 (la composition des experts en numpy, plan
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="sprints/21-localiser-le-defaut-v41.md" s=open(p).read() a="""### 3. La piste qui reste
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="sprints/21-localiser-le-defaut-v41.md" s=open(p).read() a="""## Planning du bloc 22 — 
 - Sprint 21 : portes toutes vertes après les changements du bloc (64 tests, V4-Flash 8430,4966 inchangée)" && git log --oneline | head -5; date
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="sprints/21-localiser-le-defaut-v41.md" s=open(p).read() a="""## Portes""" b="""## 3bis
 
