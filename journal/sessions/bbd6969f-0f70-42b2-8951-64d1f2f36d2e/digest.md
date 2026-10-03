@@ -97569,3 +97569,550 @@ ok REPRISE
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"sprints/14-p8-la-vivacit-de-l-engram-interrupteur-d.md\"\ns=open(p).read()\na=\"- **Début** : 21:20 · **Fin prévue** : 23:20 (boxing de 120 min)\"\nb=\"\"\"- **Début** : 21:20 · **Fin** : 22:10 (50 min utiles —  … [640 caractères tronqués]`
+
+  ```
+ok
+Sprint 15 démarré à 22:01 → 00:01  ·  sprints/15-p9-le-poste-d-attention-v4-1-profiler-le.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"somme pondérée + écriture KV\\|scores\\b.*softmax\" drave-core/src/main.rs | head -5; grep -n \"prof\\[\" drave-core/src/model.rs | head -20; which perf; cat /proc/sys/kernel/perf_event_paranoid 2>/dev/null", "description" … [57 caractères tronqués]`
+
+  ```
+4976:    println!("    dont attention : scores {:.2} | softmax {:.2} | somme pondérée + écriture KV {:.2}",
+4640:            self.prof[0] += t_proj.elapsed().as_secs_f64();
+4787:            self.prof[2] += t_att.elapsed().as_secs_f64();
+4953:            self.prof[3] += t_ffn.elapsed().as_secs_f64();
+6223:                self.prof[0] += tm.elapsed().as_secs_f64();
+6257:                self.prof[1] += tr.elapsed().as_secs_f64();
+6316:                    self.prof[4] += t_scores.elapsed().as_secs_f64();
+6334:                    self.prof[5] += t_soft.elapsed().as_secs_f64();
+6575:            self.prof[2] += ta.elapsed().as_secs_f64();
+6784:                self.prof[3] += tf.elapsed().as_secs_f64();
+6837:            self.prof[3] += tf.elapsed().as_secs_f64();
+2
+[stderr]
+which: no perf in (/usr/local/cuda-13/bin:/home/stephane/.lmstudio/bin:/usr/local/cuda-13/bin:/home/stephane/.lmstudio/bin:/home/stephane/.local/share/../bin:/home/stephane/.cargo/bin:/usr/local/cuda-13/bin:/home/stephane/.lmstudio/bin:/home/stephane/.local/bin:/usr/local/bin:/usr/bin:/bin:/home/stephane/.dotnet/tools:/home/stephane/.lmstudio/bin:/home/stephane/.lmstudio/bin:/home/stephane/.lmstudio/bin:/home/stephane/.
+… [13 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 4968,4982p drave-core/src/main.rs; echo \"=== V4 : timers ===\"; sed -n 6300,6345p drave-core/src/model.rs", "description": "Read the profiler print and the V4 timers"}`
+
+  ```
+let p = mdl.prof;
+    let tot = p[0] + p[1] + p[2] + p[3];
+    println!("    postes (ms/token) : projets-attn {:.2} | rope {:.2} | attention {:.2} | proj+mlp {:.2} | somme {:.2} | reste (tête + échantillonnage) {:.2}",
+             p[0] / n as f64 * 1e3, p[1] / n as f64 * 1e3, p[2] / n as f64 * 1e3,
+             p[3] / n as f64 * 1e3, tot / n as f64 * 1e3,
+             (sec - tot) / n as f64 * 1e3);
+    println!("    dont tête de sortie {:.2} | notation log-sum-exp {:.2} (le reste du « reste » n'est pas chronométré)",
+             t_tete / n as f64 * 1e3, t_note / n as f64 * 1e3);
+    println!("    dont attention : scores {:.2} | softmax {:.2} | somme pondérée + écriture KV {:.2}",
+             p[4] / n as f64 * 1e3, p[5] / n as f64 * 1e3,
+             (p[2] - p[4] - p[5]) / n as f64 * 1e3);
+}
+
+#[cfg(test)]
+mod tests_flux {
+=== V4 : timers ===
+                        }
+                    }
+                }
+                if groupe && !fait_en_gpu {
+                    let t_scores = Instant::now();
+                    for kvh in 0..nkv {
+                        let h0 = kvh * rep;
+                        let h1 = (h0 + rep).min(nh);
+                        for t in 0..n {
+      
+… [1979 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 5455,5560p drave-core/src/model.rs", "description": "Read the indexer/attention sections of attn_v4"}`
+
+  ```
+{
+                    let mut kp = vec![0f32; nr];
+                    kp.copy_from_slice(&norm[nope..]);
+                    tourner(&mut kp, 1, nr, debut, nr, false);
+                    norm[nope..].copy_from_slice(&kp);
+                }
+                cles[bloc * hd..(bloc + 1) * hd].copy_from_slice(&norm);
+                Self::vider_couche(dump, &format!("comp_bloc{bloc}"), l, pos, &norm);
+                *paires += (hd as u64) * (m.ratio as u64) * 2;
+            }
+        }
+        // ---- indexeur : il NOTE chaque bloc compressé et n'en garde que les
+        // `indexer.top_k` meilleurs. Ses blocs sont plus étroits (128 valeurs)
+        // mais suivent exactement la même règle de chevauchement que le CSA.
+        let mut blocs_gardes: Option<Vec<u32>> = None;
+        // **L'indexeur de V4.1 n'a pas de compresseur propre.** Ses clés viennent
+        // du latent du compresseur PRINCIPAL (`indexer.attn_k` + `indexer.k_norm`,
+        // construites dans le bloc ci-dessus) et les indexeurs qui n'possèdent pas
+        // le cache (24, 28, 32, 36) lisent celui de leur source de KV — le site
+        // d'appel alias `idx_cles` sur `comp_source` pour tout le monde. Il ne
+        
+… [4631 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fn matvec_f32\" drave-core/src/model.rs && sed -n \"$(grep -n 'fn matvec_f32' drave-core/src/model.rs | cut -d: -f1),+35p\" drave-core/src/model.rs", "description": "Read matvec_f32"}`
+
+  ```
+1541:fn matvec_f32(w: &[f32], x: &[f32], n_in: usize, n_out: usize, y: &mut [f32]) {
+fn matvec_f32(w: &[f32], x: &[f32], n_in: usize, n_out: usize, y: &mut [f32]) {
+    for o in 0..n_out {
+        let ligne = &w[o * n_in..(o + 1) * n_in];
+        let mut acc = 0f32;
+        for i in 0..n_in { acc += ligne[i] * x[i]; }
+        y[o] = acc;
+    }
+}
+
+/// f32 → f16 (IEEE 754 binary16), pour les échelles par bloc de la trace v3.
+/// Arrondi au plus proche ; les dénormalisés deviennent 0 (des échelles nulles le
+/// sont déjà). Aucune dépendance : le moteur est en `std` seul.
+pub fn f16_depuis_f32(x: f32) -> u16 {
+    let b = x.to_bits();
+    let s = ((b >> 16) & 0x8000) as u16;
+    let mut e = ((b >> 23) & 0xff) as i32 - 127 + 15;
+    let mut m = b & 0x007f_ffff;
+    if e <= 0 { return s; }
+    if e >= 31 { return s | 0x7c00; }
+    m += 0x1000;                                   // arrondi au bit 13
+    if m & 0x0080_0000 != 0 { m = 0; e += 1; if e >= 31 { return s | 0x7c00; } }
+    s | ((e as u16) << 10) | ((m >> 13) as u16)
+}
+
+/// f16 → f32, l'inverse exact de la fonction ci-dessus (dénormalisés compris).
+pub fn f32_depuis_f16(h: u16) -> f32 {
+    let s = ((h >> 15) & 1) as u32;
+    let 
+… [379 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"thread::scope\\|available_parallelism\\|fn en_parallele\\|n_threads\" drave-core/src/model.rs | head -15; grep -n \"fn matvec4_ou_iq\" drave-core/src/model.rs", "description": "Find the repo's threading helper"}`
+
+  ```
+782:        // est transmis comme entier pour traverser `thread::scope` sans
+816:        std::thread::scope(|sc| {
+2625:    pub fn load(path: &str, ctx: usize, n_threads: usize, dense: bool, keep: f32,
+2627:        Self::load_partiel(path, ctx, n_threads, dense, keep, auto, q4, b6, None)
+2631:    pub fn load_partiel(path: &str, ctx: usize, n_threads: usize, dense: bool, keep: f32,
+3382:        let pool = Pool::new(n_threads, cfg.hidden);
+6955:            std::thread::scope(|sc| {
+6980:            std::thread::scope(|sc| {
+7204:            std::thread::scope(|sc| {
+7235:        std::thread::scope(|s| {
+7271:        std::thread::scope(|s| {
+3880:    fn matvec4_ou_iq(pool: &mut Pool, vue: &Vue4, loc: usize, x: &[f32], out: &mut [f32],
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 770,850p drave-core/src/model.rs", "description": "Read the parallel helper around line 816"}`
+
+  ```
+let taille = crate::list::octets_grille(t);
+        assert!(self.n_in % 256 == 0, "largeur {} non multiple de 256", self.n_in);
+        // Le noyau lit `x[j]` jusqu'à `n_in` : une activation plus COURTE
+        // dépasserait en silence. Plus longue est normal — l'appelant passe son
+        // tampon de travail entier (12 288 valeurs pour la descente d'un expert
+        // de 2 048 entrées) et seules les `n_in` premières sont lues.
+        assert!(x.len() >= self.n_in, "expert de type {} : activation de {} valeurs \
+pour une projection de {} entrées × {} sorties", crate::gguf::Gguf::nom_type(t),
+                x.len(), self.n_in, self.n_out);
+        let x = &x[..self.n_in];
+        let nb = self.n_in / 256;
+        // Le pointeur vient d'un mmap qui vit plus longtemps que l'appel ; il
+        // est transmis comme entier pour traverser `thread::scope` sans
+        // `unsafe impl Send`.
+        let base = unsafe { self.base.add(loc * self.n_out * nb * taille) } as usize;
+        let n_out = self.n_out;
+        let n_in = self.n_in;
+        let travail = move |o0: usize, o1: usize, out: &mut [f32]| {
+            // Un tampon par FIL, réutilisé pour tous les blocs : c'est ce qui
+  
+… [2684 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup ./drave-core/target/release/drave /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf --ppl /tmp/v41_last4.ids --ctx 8 --limit 4 --abits 8 --moe-topk 1 --threads 20 > /tmp/v41_topk1.log 2>&1 & sleep 2; grep -n \" … [165 caractères tronqués]`
+
+  ```
+5225:    fn attn_v4(m: &Mla4, etat: &mut EtatV4, x: &[f32], pos: usize, att: &mut [f32],
+6210:                Self::attn_v4(m4, &mut etat, &hn, pos, &mut att,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"pub struct Pool\" drave-core/src/*.rs && sed -n \"$(grep -n 'pub struct Pool' drave-core/src/list.rs | cut -d: -f1),+16p\" drave-core/src/list.rs; sed -n 6205,6215p drave-core/src/model.rs", "description": "Find Pool's thr … [37 caractères tronqués]`
+
+  ```
+drave-core/src/engine.rs:362:pub struct Pool {
+                    // SOURCE (`owns_k` côté vLLM) : une couche qui note les blocs
+                    // le fait avec SA requête, mais sur les mêmes clés.
+                    idx_cles: &mut self.mla4_idx_cles[src],
+                    idx_scores: &mut self.mla4_idx_scores[l],
+                };
+                Self::attn_v4(m4, &mut etat, &hn, pos, &mut att,
+                              &mut paires[0], self.dump_couches.as_deref(), l);
+            } else if let Some(m) = self.mla.as_ref().map(|v| &v[l]) {
+                Self::attn_mla(m, &mut self.mla_cache[l], &hn, pos, cfg.rope_base, &mut att,
+                               &mut paires[0], attn_events);
+                if debug_mla && l == 0 {
+[stderr]
+sed: -e expression #1, char 1: unknown command: ','
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 362,385p drave-core/src/engine.rs", "description": "Read the Pool struct"}`
+
+  ```
+pub struct Pool {
+    shared: Arc<Shared>,
+    handles: Vec<std::thread::JoinHandle<()>>,
+    n: usize,
+    n_out: usize,
+    accs: Vec<Vec<i32>>,
+    accs64: Vec<Vec<i64>>,
+    /// étendue EXACTE des destinations écrites par chaque worker au dernier
+    /// appel : la réduction ne balaie que l'union de ces fenêtres.
+    spans: Vec<(usize, usize)>,
+    /// Borne haute CUMULATIVE des écritures depuis le dernier effacement
+    /// complet, par worker. Remettre à zéro la seule fenêtre du travail
+    /// précédent ne suffit pas : si elle rétrécit, des valeurs plus anciennes
+    /// survivent au-delà (bug trouvé par le banc : divergence au rang 895).
+    dirty: Vec<usize>,
+    outs: Vec<Vec<f32>>,
+    /// Mode du dernier appel : la réduction doit lire l'accumulateur qui a
+    /// réellement servi (i32 pour le mode push, i64 pour fusion et 2-listes).
+    last_mode: usize,
+}
+
+impl Pool {
+    /// Crée un pool de `n` workers. `n` est **borné** à `CPU logiques − 1` :
+    /// le thread appelant participe à l'attente active, et une machine
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"threads_iq\\|pub n_threads\\|n_threads:\" drave-core/src/model.rs | head -10; echo \"=== run topk1 ===\"; tail -4 /tmp/v41_topk1.log 2>/dev/null", "description": "Find the model's thread count field"}`
+
+  ```
+2625:    pub fn load(path: &str, ctx: usize, n_threads: usize, dense: bool, keep: f32,
+2631:    pub fn load_partiel(path: &str, ctx: usize, n_threads: usize, dense: bool, keep: f32,
+5858:        let threads_iq = self.pool.threads().clamp(1, 8);
+6729:                                        threads_iq);
+6735:                                        threads_iq);
+6748:                                    threads_iq);
+6754:                                    threads_iq);
+6757:                                    threads_iq);
+6762:                                    threads_iq);
+=== run topk1 ===
+[config] 40 couches, hidden 5120 · racine de softpluséchelle 1.50 moe 
+[config] mélanges d'experts chargés : 40/40 couches · mapping absent (experts en clair dans le fichier)
+[config] puits appris sur 40/40 couches · n_rot 80 · ffn 2816 · experts 384
+[config] rotation : RoPE simple sur les couches BRUTES (régime retardé : YaRN au-delà de quatre fois la longueur d'origine, seuil mesuré sur gpt-oss) — mais les couches COMPRESSÉES sont en YaRN ×16 à TOUTES les positions, comme llama.cpp (`deepseek4.cpp:872-879`) et vLLM (`rope.py:28-46`) ; `DRAVE_YARN=1`/`--sans-yarn` forcent l'un ou l'autre partout
+  ```
+
+- **bash** `{"command": "sleep 45; grep -E \"postes|dont attention|perplexité\" /tmp/v41_topk1.log | head -5", "description": "Read the isolation run profile", "timeoutMs": 120000}`
+
+  ```
+3 tokens notés — perplexité cumulée 9739425.017  (0.1 tok/s)
+=== perplexité 9739425.0174 sur 3 tokens (0 événements, 26.6 s) ===
+    postes (ms/token) : projets-attn 0.00 | rope 0.00 | attention 7283.42 | proj+mlp 1039.64 | somme 8323.06 | reste (tête + échantillonnage) 555.73
+    dont attention : scores 0.00 | softmax 0.00 | somme pondérée + écriture KV 7283.42
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && awk 'NR>=5225 && NR<=5720 && /matvec_f32\\(/ {print NR\": \"$0}' drave-core/src/model.rs", "description": "List matvec_f32 calls inside attn_v4"}`
+
+  ```
+5261:         matvec_f32(&m.q_a, x, h, qr.len(), &mut qr);
+5267:         matvec_f32(&m.q_b, &qrn, qr.len(), nh * hd, &mut q);
+5292:         matvec_f32(&m.kv, x, h, hd, &mut kv);
+5334:                 matvec_f32(&m.comp_kv, x, h, coff_hd, &mut etat.comp_kv[pos * coff_hd..(pos + 1) * coff_hd]);
+5337:                     matvec_f32(&m.comp_gate, x, h, coff_hd, &mut etat.comp_gate[pos * coff_hd..(pos + 1) * coff_hd]);
+5442:                     matvec_f32(&m.idx_k, &norm, hd, idh, &mut k);
+5488:                 matvec_f32(&m.idx_comp_kv, x, h, iw, &mut etat.idx_kv[pos * iw..(pos + 1) * iw]);
+5489:                 matvec_f32(&m.idx_comp_gate, x, h, iw, &mut etat.idx_gate[pos * iw..(pos + 1) * iw]);
+5550:                 matvec_f32(&m.idx_q_b, &qrn, qr.len(), nq, &mut q);
+5567:                     matvec_f32(&m.idx_proj, x, h, m.idx_nh, &mut p);
+5717:             matvec_f32(bloc, entree, gdim, m.o_lora, &mut oa[g * m.o_lora..(g + 1) * m.o_lora]);
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"drave-core/src/model.rs\"\ns=open(p).read()\n# 1) le helper, juste après matvec_f32\na = \"\"\"fn matvec_f32(w: &[f32], x: &[f32], n_in: usize, n_out: usize, y: &mut [f32]) {\n    for o in 0..n_out {\n        le … [3479 caractères tronqués]`
+
+  ```
+appels convertis dans attn_v4 : 22
+1562:fn matvec_f32_fils(w: &[f32], x: &[f32], n_in: usize, n_out: usize, y: &mut [f32],
+5305:        matvec_f32_fils(&m.q_a, x, h, qr.len(), &mut qr, n_fils);
+5311:        matvec_f32_fils(&m.q_b, &qrn, qr.len(), nh * hd, &mut q, n_fils);
+5336:        matvec_f32_fils(&m.kv, x, h, hd, &mut kv, n_fils);
+5378:                matvec_f32_fils(&m.comp_kv, x, h, coff_hd, &mut etat.comp_kv[pos * coff_hd..(pos + 1) * coff_hd], n_fils);
+5381:                    matvec_f32_fils(&m.comp_gate, x, h, coff_hd, &mut etat.comp_gate[pos * coff_hd..(pos + 1) * coff_hd], n_fils);
+5486:                    matvec_f32_fils(&m.idx_k, &norm, hd, idh, &mut k, n_fils);
+5532:                matvec_f32_fils(&m.idx_comp_kv, x, h, iw, &mut etat.idx_kv[pos * iw..(pos + 1) * iw], n_fils);
+5533:                matvec_f32_fils(&m.idx_comp_gate, x, h, iw, &mut etat.idx_gate[pos * iw..(pos + 1) * iw], n_fils);
+5594:                matvec_f32_fils(&m.idx_q_b, &qrn, qr.len(), nq, &mut q, n_fils);
+5611:                    matvec_f32_fils(&m.idx_proj, x, h, m.idx_nh, &mut p, n_fils);
+5761:            matvec_f32_fils(bloc, entree, gdim, m.o_lora, &mut oa[g * m.o_lora..(g + 1) * m.o_lora], 
+… [168 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport re\ns=open(\"drave-core/src/model.rs\").read().split(\"\\n\")\n# trouver les bornes des fonctions\nfns=[]\nfor i,l in enumerate(s):\n    m=re.match(r\"    (?:pub )?fn (\\w+)\", l)\n    if m: fns.append((i+1,  … [360 caractères tronqués]`
+
+  ```
+5305 attn_v4              matvec_f32_fils(&m.q_a, x, h, qr.len(), &mut qr, n_fils);
+ 5311 attn_v4              matvec_f32_fils(&m.q_b, &qrn, qr.len(), nh * hd, &mut q, n_fils);
+ 5336 attn_v4              matvec_f32_fils(&m.kv, x, h, hd, &mut kv, n_fils);
+ 5378 attn_v4              matvec_f32_fils(&m.comp_kv, x, h, coff_hd, &mut etat.comp_kv[pos * coff_hd..(pos
+ 5381 attn_v4              matvec_f32_fils(&m.comp_gate, x, h, coff_hd, &mut etat.comp_gate[pos * coff_hd..
+ 5486 attn_v4              matvec_f32_fils(&m.idx_k, &norm, hd, idh, &mut k, n_fils);
+ 5532 attn_v4              matvec_f32_fils(&m.idx_comp_kv, x, h, iw, &mut etat.idx_kv[pos * iw..(pos + 1) *
+ 5533 attn_v4              matvec_f32_fils(&m.idx_comp_gate, x, h, iw, &mut etat.idx_gate[pos * iw..(pos + 
+ 5594 attn_v4              matvec_f32_fils(&m.idx_q_b, &qrn, qr.len(), nq, &mut q, n_fils);
+ 5611 attn_v4              matvec_f32_fils(&m.idx_proj, x, h, m.idx_nh, &mut p, n_fils);
+ 5761 attn_v4              matvec_f32_fils(bloc, entree, gdim, m.o_lora, &mut oa[g * m.o_lora..(g + 1) * m.
+ 5765 attn_v4              matvec_f32_fils(&m.wo_b, &oa, m.n_groups * m.o_lora, h, att, n_fils);
+ 5795 forward_mla          matvec_f32_fil
+… [891 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"pub fn threads\" drave-core/src/engine.rs; grep -n \"let Model { g, cfg, layers, out_norm, pool\" drave-core/src/model.rs | head -3; grep -n \"pub fn forward_mla\" drave-core/src/model.rs", "description": "Check Pool::threa … [23 caractères tronqués]`
+
+  ```
+635:    pub fn threads(&self) -> usize { self.n }
+5910:        let Model { g, cfg, layers, out_norm, pool, kv, events, attn_events, kv_gpu,
+5780:    pub fn forward_mla(&mut self, tok: u32, pos: usize) -> Vec<f32> {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"drave-core/src/model.rs\"\ns=open(p).read()\n\n# 1) attn_v4 : paramètre n_fils\na = \"\"\"    fn attn_v4(m: &Mla4, etat: &mut EtatV4, x: &[f32], pos: usize, att: &mut [f32],\n               paires: &mut u64, dum … [1724 caractères tronqués]`
+
+  ```
+ok
+    Finished `release` profile [optimized] target(s) in 32.13s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -rf /tmp/dnew && mkdir -p /tmp/dnew && (DRAVE_DUMP_COUCHES=/tmp/dnew/l ./drave-core/target/release/drave /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf --ppl /tmp/v41_last4.ids --ctx 8 --limit 4 --abits 8 --thr … [143 caractères tronqués]`
+
+  ```
+lance
+  ```
+
+- **bash** `{"command": "sleep 90; grep -E \"perplexité|postes|dont attention\" /tmp/v41_par.log | head -4; echo \"procs: $(pgrep -x drave | wc -l)\"", "description": "Read the parallel run profile", "timeoutMs": 150000}`
+
+  ```
+3 tokens notés — perplexité cumulée 1743713.624  (0.1 tok/s)
+=== perplexité 1743713.6243 sur 3 tokens (0 événements, 22.2 s) ===
+    postes (ms/token) : projets-attn 0.00 | rope 0.00 | attention 1324.48 | proj+mlp 5945.70 | somme 7270.18 | reste (tête + échantillonnage) 113.79
+    dont attention : scores 0.00 | softmax 0.00 | somme pondérée + écriture KV 1324.48
+procs: 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport numpy as np, os\ndef lire(p): return np.fromfile(p, dtype=\"<f4\").astype(np.float64)\ntot=0; diff=[]\nfor f in sorted(os.listdir(\"/tmp/dnew\")):\n    if not f.endswith(\".bin\"): continue\n    p2=os.path.jo … [598 caractères tronqués]`
+
+  ```
+AVANT/APRÈS parallélisation du matvec f32 : 2544 tenseurs comparés, 0 différents
+porte lancee
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"keep\" drave-core/src/model.rs | head -20; grep -n '\"--keep\"' drave-core/src/main.rs", "description": "Check the keep parameter semantics"}`
+
+  ```
+966:/// Élague chaque ligne de sortie en ne gardant que la fraction `keep` des poids
+969:/// valeurs. `keep = 1.0` ne touche à rien.
+970:fn prune_rows(w: &mut [f32], n_out: usize, n_in: usize, keep: f32) {
+971:    if keep >= 1.0 { return; }
+972:    let k = ((n_in as f32 * keep) as usize).max(1);
+987:fn prune_structured(w: &mut [f32], n_out: usize, n_in: usize, keep: f32) {
+988:    if keep >= 1.0 { return; }
+989:    let win = ((n_out as f32 * keep) as usize).max(1);
+1025:    fn load(g: &Gguf, name: &str, bias: Option<&str>, dense: bool, auto: bool, keep: f32,
+1031:        if keep < 0.0 { prune_structured(&mut w, n_out, n_in, -keep); }
+1032:        else { prune_rows(&mut w, n_out, n_in, keep); }
+1072:            let emprunt = keep >= 1.0 && std::env::var("DRAVE_SANS_EMPRUNT").is_err();
+1079:            let emprunt = keep >= 1.0 && std::env::var("DRAVE_SANS_EMPRUNT").is_err();
+1103:                if d8.src == crate::list::Source8::Q8_0 && keep >= 1.0
+2669:    pub fn load(path: &str, ctx: usize, n_threads: usize, dense: bool, keep: f32,
+2671:        Self::load_partiel(path, ctx, n_threads, dense, keep, auto, q4, b6, None)
+2675:    pub fn load_partiel(path: &str, ctx: usize, n_threads:
+… [538 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -4 /tmp/porte15.log; echo \"=== dumps ctx 8 : poste attention ===\"; grep -E \"postes\" /tmp/v41_par.log", "description": "Check the gate progress"}`
+
+  ```
+=== Portes ===
+  cargo test --release                       63 verts  ✅
+=== dumps ctx 8 : poste attention ===
+    postes (ms/token) : projets-attn 0.00 | rope 0.00 | attention 1324.48 | proj+mlp 5945.70 | somme 7270.18 | reste (tête + échantillonnage) 113.79
+  ```
+
+- **write** `{"content": "# Sprint 15 — P9 — le poste d'attention V4.1 : profiler les 12,4 s par jeton, puis accélérer SANS changer un chiffre (preuve d'égalité au bit près sur les vides)\n\n- **Début** : 22:01 · **Fin prévue** : 00:01 (boxing de 120 min)\n- **Objectif** : P9 — le poste d'attention V4.1 : profil … [6098 caractères tronqués]`
+
+  ```
+Error: cannot overwrite existing "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/15-p9-le-poste-d-attention-v4-1-profiler-le.md" without reading it first — read the file, then retry
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/15-p9-le-poste-d-attention-v4-1-profiler-le.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/15-p9-le-poste-d-attention-v4-1-profiler-le.md</path>
+<type>file</type>
+<content>
+1: # Sprint 15 — P9 — le poste d'attention V4.1 : profiler les 12,4 s par jeton, puis accélérer SANS changer un chiffre (preuve d'égalité au bit près sur les vides)
+2: 
+3: - **Début** : 22:01 · **Fin prévue** : 00:01 (boxing de 120 min)
+4: - **Objectif** : P9 — le poste d'attention V4.1 : profiler les 12,4 s par jeton, puis accélérer SANS changer un chiffre (preuve d'égalité au bit près sur les vides)
+5: - **Engagement de fin** : dépôt vert (tests + portes), machine rendue, tout commité.
+6: 
+
+(End of file - total 6 lines)
+</content>
+  ```
+
+- **write** `{"content": "# Sprint 15 — P9 — le poste d'attention V4.1 : profiler les 12,4 s par jeton, puis accélérer SANS changer un chiffre (preuve d'égalité au bit près sur les vides)\n\n- **Début** : 22:01 · **Fin prévue** : 00:01 (boxing de 120 min)\n- **Objectif** : P9 — le poste d'attention V4.1 : profil … [6103 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/15-p9-le-poste-d-attention-v4-1-profiler-le.md</path>
+<type>file</type>
+<content>
+Updated file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -5 /tmp/porte15.log; echo \"procs: $(pgrep -x drave | wc -l)\"", "description": "Check the gate"}`
+
+  ```
+=== Portes ===
+  cargo test --release                       63 verts  ✅
+  Qwen2.5-0.5B ctx 256                       19.3885  ✅
+procs: 1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"14 s/token\\|14 secondes\\|12,4 s\\|323,8 s\\|55 s (3 jetons)\\|99 973,93\" docs/ REPRISE.md reports/*.md 2>/dev/null | grep -v \"^journal\" | head -12", "description": "Find published V4.1 speed figures"}`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"par jeton\\|s par jeton\\|ms/token\" reports/rapport-execution-v41.md reports/rapport-v41-mhc.md docs/plan-deepseek41-complet.md 2>/dev/null | head -8; grep -n \"P9\" docs/plan-deepseek41-complet.md | head -5", "descriptio … [41 caractères tronqués]`
+
+  ```
+reports/rapport-execution-v41.md:4:(365,71 Go, 1 046 tenseurs, 40 couches, 384 experts dont 6 par jeton).
+reports/rapport-v41-mhc.md:130:512 par jeton, une **porte** de 512 seulement si `ratio > 1` (`has_gate =
+reports/rapport-v41-mhc.md:142:| 20 (ratio 1) | 0..3, un par jeton | 3,47e-07 | 5,59e-06 | 2,561 |
+reports/rapport-v41-mhc.md:157:position du RoPE de bloc, et l'instant d'émission du bloc (un par jeton en ratio 1,
+reports/rapport-v41-mhc.md:209:| hachage glissant | `Engram::adresses` | 24 colonnes = 3 reculs × 8 têtes ; la FENÊTRE suffit (`max_ngram − 1` jetons), donc O(1) par jeton — le vérificateur recalcule, lui, sur tout le préfixe, ce qui contrôle l'équivalence |
+reports/rapport-v41-mhc.md:232:Ce que ça coûte, annoncé au chargement : **6 336 octets par jeton et par table**
+reports/rapport-v41-mhc.md:240:(l'implémentation est O(1) par jeton, le vérificateur O(préfixe)).
+reports/rapport-v41-mhc.md:327:| **pré-mix sur le fil** | — | la chaîne retardée a besoin de `hc` valeurs par jeton que le protocole DRVF ne transporte pas (16 octets/jeton) : un découpage de V4.1 est refusé |
+527:### P9 — Noyaux natifs et encodage des poids : après la mesure (≈ 1 journée, optionnel) — **
+… [198 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md", "limit": 28, "offset": 527}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md</path>
+<type>file</type>
+<content>
+527: ### P9 — Noyaux natifs et encodage des poids : après la mesure (≈ 1 journée, optionnel) — **mesure faite, pas justifié** (02/10)
+528: 
+529: > La mesure que P9 attendait existe, et elle tranche : **le goulot est la
+530: > LECTURE, pas le déquant**. Preuve directe — le même modèle, le même calcul,
+531: > seuls les octets lus changent : original 86,9 Go en 3 tranches = **111,8 s** ;
+532: > éclaté en 8 grappes (chaque expert dans un seul fichier, donc moins d'octets
+533: > lus par jeton) = **39,9 s** pour la MÊME perplexité, au chiffre près. Un noyau
+534: > IQ natif économiserait de l'arithmétique sur un chemin déjà borné par les
+535: > entrées-sorties : ×2,8 sans toucher au calcul est un signal plus fort que
+536: > n'importe quelle optimisation de noyau.
+537: > **Décision : ne pas l'écrire maintenant.** Ce qui le justifierait : un modèle
+538: > dont les poids tiennent en RAM (là, la bande passante cesse d'être la borne),
+539: > ou une mesure montrant le déquant dans le palmarès des postes — aujourd'hui
+540: > `proj+mlp` et `attention` sont dominés par la lectur
+… [772 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md", "new_string": "> **Fait le 02/10 (bloc 15), et sans écrire un seul noyau natif** : le poste\n> `attention` de V4.1 valait **12 369,91 ms par jeton** parce que son\n> produit matrice-vecteur f32 (`matvec_ … [814 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -5 /tmp/porte15.log; echo \"procs: $(pgrep -x drave | wc -l)\"", "description": "Check the gate again"}`
+
+  ```
+GLM-5.3 : sigmoïde ×2,5                  sigmoïde  ✅
+  Kimi-K2.7 : sigmoïde ×2,827              sigmoïde  ✅
+  V4-Flash : racine de softplus              racine de softplus  ✅
+  Qwen3-235B : softmax                       softmax  ✅
+  V4-Flash : --config le dit calculable      oui  ✅
+procs: 1
+  ```
+
+- **write** `{"content": "# Rapport — Le produit matrice-vecteur f32 de V4.1 : ×9,34 sur l'attention, sans changer un bit\n\n02/10 (bloc 15), pas complet V4.1 sur `/home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf`\n(365,71 Go, 40 couches), 20 fils, 4 jetons, ctx 8, 8 bits d'activation.\n\n**Ver … [4720 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-matvec-f32-parallele.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "sleep 200; tail -4 /tmp/porte15.log; echo \"procs: $(pgrep -x drave | wc -l)\"", "description": "Wait for the V4-Flash gate", "timeoutMs": 250000}`
+
+  ```
+Kimi-K2.7 : sigmoïde ×2,827              sigmoïde  ✅
+  V4-Flash : racine de softplus              racine de softplus  ✅
+  Qwen3-235B : softmax                       softmax  ✅
+  V4-Flash : --config le dit calculable      oui  ✅
+procs: 1
+  ```
+
+- **bash** `{"command": "sleep 240; tail -6 /tmp/porte15.log; echo \"procs: $(pgrep -x drave | wc -l)\"", "description": "Wait for the gate to finish", "timeoutMs": 300000}`
+
+  ```
+(portes de formats : ignorées en mode rapide)
+  GLM-5.3 : sigmoïde ×2,5                  sigmoïde  ✅
+  Kimi-K2.7 : sigmoïde ×2,827              sigmoïde  ✅
+  V4-Flash : racine de softplus              racine de softplus  ✅
+  Qwen3-235B : softmax                       softmax  ✅
+  V4-Flash : --config le dit calculable      oui  ✅
+procs: 1
+  ```
+
+- **bash** `{"command": "ps -o pid,etime,pcpu,args -p $(pgrep -x drave | head -1) 2>/dev/null | cut -c1-140; echo \"---\"; ps -eLf | grep -c \"[d]rave\"", "description": "Check the running process"}`
+
+  ```
+PID     ELAPSED %CPU COMMAND
+ 162875       08:11 1438 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek
+---
+26
+  ```
+
+- **bash** `{"command": "sleep 280; tail -8 /tmp/porte15.log; ps -o etime= -p $(pgrep -x drave | head -1) 2>/dev/null", "description": "Keep waiting for the gate", "timeoutMs": 320000}`
+
+  ```
+=== Découpage (deux nœuds) ===
+  mode 0 — f32 dense               0.00e0  ✅  (réf 61.9920 / deux nœuds 61.9920)
+  mode 1 — listes quantifiées     0.00e0  ✅  (réf 61.9920 / deux nœuds 61.9920)
+  mode 2 — listes par blocs        3.65e-2  ✅  (réf 61.9920 / deux nœuds 64.2535)
+  mode 3 — lot dense f32           0.00e0  ✅  (réf 60.8135 / deux nœuds 60.8135)
+  mode 4 — lot en listes           4.45e-3  ✅  (réf 60.8135 / deux nœuds 60.5427)
+
+toutes les portes sont vertes
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -E \"V4-Flash 43|Qwen2.5|tests|engram\" /tmp/porte15.log", "description": "Confirm the V4-Flash gate value"}`
+
+  ```
+Qwen2.5-0.5B ctx 256                       19.3885  ✅
+  V4-Flash 43 couches ctx 32                 8430.4966  ✅
+  engram V4.1 : adressage                    rangées DISTINCTES : 479723  ✅
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (time ./drave-core/target/release/drave /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf --ppl /tmp/v41_texte.txt.ids --ctx 32 --limit 32 --abits 8 --threads 20 > /tmp/v41_ctx32_apres.log 2>&1) 2>&1 | tail -3; grep  … [142 caractères tronqués]`
+
+  ```
+real	2m52,021s
+user	66m33,281s
+sys	1m4,102s
+=== perplexité 115521.8693 sur 31 tokens (0 événements, 152.9 s) ===
+    postes (ms/token) : projets-attn 0.00 | rope 0.00 | attention 1004.36 | proj+mlp 3707.07 | somme 4711.44 | reste (tête + échantillonnage) 220.54
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"sprints/15-p9-le-poste-d-attention-v4-1-profiler-le.md\"\ns=open(p).read()\na=\"\"\"### 3. Ce que la mesure laisse sur la table, et pourquoi on s'arrête là\"\"\"\nb=\"\"\"### 3. Le gain à contexte plus long, et  … [4686 caractères tronqués]`

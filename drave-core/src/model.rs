@@ -1547,6 +1547,50 @@ fn matvec_f32(w: &[f32], x: &[f32], n_in: usize, n_out: usize, y: &mut [f32]) {
     }
 }
 
+/// `matvec_f32` **en parallèle par LIGNES** : chaque ligne est sommée par un seul
+/// fil, dans le même ordre que la version séquentielle.
+///
+/// C'est la seule forme d'accélération qui n'a pas à être annoncée comme un
+/// changement de calcul : le résultat est **identique au bit près** (aucune
+/// réassociation — un produit scalaire par ligne, séquentiel). Mesuré sur V4.1 :
+/// le poste d'attention valait **7 283 ms par jeton** avec un seul fil alors que
+/// la machine en a vingt ; les noyaux d'experts, eux, étaient déjà parallèles.
+///
+/// Le découpage est celui du noyau d'experts (`crate::list`) : tranches
+/// contiguës, `o - o0` pour indexer la tranche du fil (indexer par le numéro de
+/// ligne GLOBAL levait « len is 256 but the index is 256 » dès le deuxième fil).
+fn matvec_f32_fils(w: &[f32], x: &[f32], n_in: usize, n_out: usize, y: &mut [f32],
+                   n_fils: usize) {
+    if n_fils <= 1 || n_out < 2 * n_fils || n_out * n_in < 1 << 16 {
+        // Trop petit pour payer un `spawn` (mesuré : ~30 µs) : en dessous de
+        // 65 536 produits, un fil coûte plus qu'il ne rapporte.
+        return matvec_f32(w, x, n_in, n_out, y);
+    }
+    let par = n_out.div_ceil(n_fils);
+    std::thread::scope(|sc| {
+        let mut reste: &mut [f32] = &mut y[..n_out];
+        let mut o0 = 0usize;
+        let mut poignees = Vec::new();
+        while o0 < n_out {
+            let o1 = (o0 + par).min(n_out);
+            let (tranche, reste2) = reste.split_at_mut(o1 - o0);
+            reste = reste2;
+            let w: &[f32] = w;
+            let x: &[f32] = x;
+            poignees.push(sc.spawn(move || {
+                for (k, o) in (o0..o1).enumerate() {
+                    let ligne = &w[o * n_in..(o + 1) * n_in];
+                    let mut acc = 0f32;
+                    for i in 0..n_in { acc += ligne[i] * x[i]; }
+                    tranche[k] = acc;
+                }
+            }));
+            o0 = o1;
+        }
+        for p in poignees { let _ = p.join(); }
+    });
+}
+
 /// f32 → f16 (IEEE 754 binary16), pour les échelles par bloc de la trace v3.
 /// Arrondi au plus proche ; les dénormalisés deviennent 0 (des échelles nulles le
 /// sont déjà). Aucune dépendance : le moteur est en `std` seul.
@@ -5223,7 +5267,7 @@ s'applique pas — utilisez --lot 1, ou réenregistrez sans DRAVE_TRACE_BLOCS");
 
     #[allow(clippy::too_many_arguments)]
     fn attn_v4(m: &Mla4, etat: &mut EtatV4, x: &[f32], pos: usize, att: &mut [f32],
-               paires: &mut u64, dump: Option<&str>, l: usize) {
+               paires: &mut u64, dump: Option<&str>, l: usize, n_fils: usize) {
         let (nh, hd, nr) = (m.nh, m.head_dim, m.rope);
         let nope = hd - nr;
         let h = m.h;
@@ -5258,13 +5302,13 @@ s'applique pas — utilisez --lot 1, ou réenregistrez sans DRAVE_TRACE_BLOCS");
 
         // --- requête : descente, norme, remontée, norme PAR TÊTE sans poids
         let mut qr = vec![0f32; m.q_a.len() / h];
-        matvec_f32(&m.q_a, x, h, qr.len(), &mut qr);
+        matvec_f32_fils(&m.q_a, x, h, qr.len(), &mut qr, n_fils);
         Self::vider_couche(dump, "qr", l, pos, &qr);
         let mut qrn = vec![0f32; qr.len()];
         Self::rmsnorm(&qr, &m.q_a_norm, m.eps, &mut qrn);
         Self::vider_couche(dump, "qr_norm", l, pos, &qrn);
         let mut q = vec![0f32; nh * hd];
-        matvec_f32(&m.q_b, &qrn, qr.len(), nh * hd, &mut q);
+        matvec_f32_fils(&m.q_b, &qrn, qr.len(), nh * hd, &mut q, n_fils);
         // `ggml_rms_norm` SEUL, sur chaque tête : la seconde norme de la
         // référence, sans échelle apprise.
         {
@@ -5289,7 +5333,7 @@ s'applique pas — utilisez --lot 1, ou réenregistrez sans DRAVE_TRACE_BLOCS");
         }
         // --- clé/valeur : une seule tête latente, normée EN ENTIER
         let mut kv = vec![0f32; hd];
-        matvec_f32(&m.kv, x, h, hd, &mut kv);
+        matvec_f32_fils(&m.kv, x, h, hd, &mut kv, n_fils);
         let mut kvn = vec![0f32; hd];
         Self::rmsnorm(&kv, &m.kv_norm, m.eps, &mut kvn);
         {
@@ -5331,10 +5375,10 @@ et 4, 128 (V4)", m.ratio);
             // les mêmes nombres avec SES poids, qui n'existent pas.
             let coff_hd = if m.comp_largeur > 0 { m.comp_largeur } else { hd };
             if m.a_compresseur {
-                matvec_f32(&m.comp_kv, x, h, coff_hd, &mut etat.comp_kv[pos * coff_hd..(pos + 1) * coff_hd]);
+                matvec_f32_fils(&m.comp_kv, x, h, coff_hd, &mut etat.comp_kv[pos * coff_hd..(pos + 1) * coff_hd], n_fils);
                 let sp = pos % m.ratio;
                 if m.a_porte {
-                    matvec_f32(&m.comp_gate, x, h, coff_hd, &mut etat.comp_gate[pos * coff_hd..(pos + 1) * coff_hd]);
+                    matvec_f32_fils(&m.comp_gate, x, h, coff_hd, &mut etat.comp_gate[pos * coff_hd..(pos + 1) * coff_hd], n_fils);
                     // L'`ape` est FACULTATIF : V4.1 n'en a aucun (son compresseur n'a
                     // que `kv`, `gate` et `norm`), V4 en a un par rang dans le bloc.
                     if !m.comp_ape.is_empty() {
@@ -5439,7 +5483,7 @@ et 4, 128 (V4)", m.ratio);
                 if m.a_idx_k && !m.idx_k.is_empty() {
                     let idh = m.idx_hd;
                     let mut k = vec![0f32; idh];
-                    matvec_f32(&m.idx_k, &norm, hd, idh, &mut k);
+                    matvec_f32_fils(&m.idx_k, &norm, hd, idh, &mut k, n_fils);
                     let mut kn = vec![0f32; idh];
                     Self::rmsnorm(&k, &m.idx_k_norm, m.eps, &mut kn);
                     let idr = nr.min(idh);
@@ -5485,8 +5529,8 @@ d'indexeur — ni la couche ni sa source de KV n'a `indexer.attn_k`");
             // haut) : il n'y a ici ni projection d'état ni bloc à écrire.
             let iw = if indexeur_v41 { 0 } else { m.idx_comp_kv.len() / h.max(1) };
             if !indexeur_v41 {
-                matvec_f32(&m.idx_comp_kv, x, h, iw, &mut etat.idx_kv[pos * iw..(pos + 1) * iw]);
-                matvec_f32(&m.idx_comp_gate, x, h, iw, &mut etat.idx_gate[pos * iw..(pos + 1) * iw]);
+                matvec_f32_fils(&m.idx_comp_kv, x, h, iw, &mut etat.idx_kv[pos * iw..(pos + 1) * iw], n_fils);
+                matvec_f32_fils(&m.idx_comp_gate, x, h, iw, &mut etat.idx_gate[pos * iw..(pos + 1) * iw], n_fils);
                 let sp = pos % m.ratio;
                 for c in 0..iw {
                     etat.idx_gate[pos * iw + c] += m.idx_comp_ape[sp * iw + c];
@@ -5547,7 +5591,7 @@ d'indexeur — ni la couche ni sa source de KV n'a `indexer.attn_k`");
             if n_vis > 0 {
                 let nq = m.idx_nh * idh;
                 let mut q = vec![0f32; nq];
-                matvec_f32(&m.idx_q_b, &qrn, qr.len(), nq, &mut q);
+                matvec_f32_fils(&m.idx_q_b, &qrn, qr.len(), nq, &mut q, n_fils);
                 let idr = nr.min(idh);
                 let idn = idh - idr;
                 {
@@ -5564,7 +5608,7 @@ d'indexeur — ni la couche ni sa source de KV n'a `indexer.attn_k`");
                 }
                 let poids = {
                     let mut p = vec![0f32; m.idx_nh];
-                    matvec_f32(&m.idx_proj, x, h, m.idx_nh, &mut p);
+                    matvec_f32_fils(&m.idx_proj, x, h, m.idx_nh, &mut p, n_fils);
                     let inv = 1.0 / (((idh * m.idx_nh) as f32).sqrt());
                     for v in p.iter_mut() { *v *= inv; }
                     p
@@ -5714,11 +5758,11 @@ sur un ensemble plus large que la référence donnerait un autre choix", m.candi
         for g in 0..m.n_groups {
             let bloc = &m.wo_a[g * m.o_lora * gdim..(g + 1) * m.o_lora * gdim];
             let entree = &sortie[g * gdim..(g + 1) * gdim];
-            matvec_f32(bloc, entree, gdim, m.o_lora, &mut oa[g * m.o_lora..(g + 1) * m.o_lora]);
+            matvec_f32_fils(bloc, entree, gdim, m.o_lora, &mut oa[g * m.o_lora..(g + 1) * m.o_lora], n_fils);
         }
         Self::vider_couche(dump, "attn_derope", l, pos, &sortie);
         *paires += (m.wo_a.len() + m.wo_b.len()) as u64;
-        matvec_f32(&m.wo_b, &oa, m.n_groups * m.o_lora, h, att);
+        matvec_f32_fils(&m.wo_b, &oa, m.n_groups * m.o_lora, h, att, n_fils);
         // Seulement `h` valeurs : `att` est dimensionné `nh × head_dim` pour le
         // chemin dense, et vider le tampon entier noierait la sortie dans des
         // valeurs périmées (la comparaison a signalé « longueurs différentes »).
@@ -5734,6 +5778,9 @@ sur un ensemble plus large que la référence donnerait un autre choix", m.candi
     /// (`tools/mla_synthetique.py`) n'a ni tenseurs Q8_0 ni fenêtre glissante, et
     /// mélanger les deux chemins rendrait la validation illisible.
     pub fn forward_mla(&mut self, tok: u32, pos: usize) -> Vec<f32> {
+        // Les projections f32 de ce chemin étaient mono-fil : la parallélisation
+        // par LIGNES ne change pas un bit (chaque ligne garde son ordre de sommation).
+        let n_fils = self.pool.threads();
         assert!(pos < self.ctx, "contexte dépassé");
         let h = self.cfg.hidden;
         let eps = self.cfg.eps;
@@ -5748,15 +5795,15 @@ sur un ensemble plus large que la référence donnerait un autre choix", m.candi
             Self::rmsnorm(&x, &m.attn_norm, eps, &mut hn);
             // --- requête : descente, norme, remontée, découpage nope / rope
             let mut qa = vec![0f32; m.q_lora];
-            matvec_f32(&m.q_a, &hn, h, m.q_lora, &mut qa);
+            matvec_f32_fils(&m.q_a, &hn, h, m.q_lora, &mut qa, n_fils);
             let mut qan = vec![0f32; m.q_lora];
             Self::rmsnorm(&qa, &m.q_a_norm, eps, &mut qan);
             let nq = nh * (qkn + qkr);
             let mut qb = vec![0f32; nq];
-            matvec_f32(&m.q_b, &qan, m.q_lora, nq, &mut qb);
+            matvec_f32_fils(&m.q_b, &qan, m.q_lora, nq, &mut qb, n_fils);
             // --- KV : descente MQA, norme sur la partie latente, remontée
             let mut kva = vec![0f32; kvl + qkr];
-            matvec_f32(&m.kv_a, &hn, h, kvl + qkr, &mut kva);
+            matvec_f32_fils(&m.kv_a, &hn, h, kvl + qkr, &mut kva, n_fils);
             let mut c_n = vec![0f32; kvl];
             Self::rmsnorm(&kva[..kvl], &m.kv_a_norm, eps, &mut c_n);
             let mut k_rope = kva[kvl..].to_vec();
@@ -5784,7 +5831,7 @@ sur un ensemble plus large que la référence donnerait un autre choix", m.candi
                 let q_nope = &qb[hh * (qkn + qkr)..hh * (qkn + qkr) + qkn];
                 let qr = &q_rope[hh * qkr..(hh + 1) * qkr];
                 for t in 0..n {
-                    matvec_f32(&m.kv_b, &ckv[t * kvl..(t + 1) * kvl], kvl, nh * (qkn + vd), &mut kvt);
+                    matvec_f32_fils(&m.kv_b, &ckv[t * kvl..(t + 1) * kvl], kvl, nh * (qkn + vd), &mut kvt, n_fils);
                     let kt = &kvt[hh * (qkn + vd)..hh * (qkn + vd) + qkn];
                     let mut s = 0f32;
                     for i in 0..qkn { s += q_nope[i] * kt[i]; }
@@ -5797,7 +5844,7 @@ sur un ensemble plus large que la référence donnerait un autre choix", m.candi
                 for v in sc.iter_mut() { let e = (*v - mx).exp(); *v = e; somme += e; }
                 let inv = 1.0 / somme;
                 for t in 0..n {
-                    matvec_f32(&m.kv_b, &ckv[t * kvl..(t + 1) * kvl], kvl, nh * (qkn + vd), &mut kvt);
+                    matvec_f32_fils(&m.kv_b, &ckv[t * kvl..(t + 1) * kvl], kvl, nh * (qkn + vd), &mut kvt, n_fils);
                     let vt = &kvt[hh * (qkn + vd) + qkn..(hh + 1) * (qkn + vd)];
                     let w = sc[t] * inv;
                     for i in 0..vd { sortie[hh * vd + i] += w * vt[i]; }
@@ -5805,19 +5852,19 @@ sur un ensemble plus large que la référence donnerait un autre choix", m.candi
             }
             // --- projection de sortie et résidu
             let mut o = vec![0f32; h];
-            matvec_f32(&m.wo, &sortie, nh * vd, h, &mut o);
+            matvec_f32_fils(&m.wo, &sortie, nh * vd, h, &mut o, n_fils);
             for i in 0..h { x[i] += o[i]; }
             // --- FFN (les poids du harnais sont en f32, donc lus ici)
             Self::rmsnorm(&x, &m.ffn_norm, eps, &mut hn);
             let mut g_t = vec![0f32; m.ffn];
             let mut u_t = vec![0f32; m.ffn];
-            matvec_f32(&m.gate, &hn, h, m.ffn, &mut g_t);
-            matvec_f32(&m.up, &hn, h, m.ffn, &mut u_t);
+            matvec_f32_fils(&m.gate, &hn, h, m.ffn, &mut g_t, n_fils);
+            matvec_f32_fils(&m.up, &hn, h, m.ffn, &mut u_t, n_fils);
             let mut act = vec![0f32; m.ffn];
             Self::activation(&mut g_t, &u_t, m.ffn, false, 0.0);
             for i in 0..m.ffn { act[i] = g_t[i]; }
             let mut d = vec![0f32; h];
-            matvec_f32(&m.down, &act, m.ffn, h, &mut d);
+            matvec_f32_fils(&m.down, &act, m.ffn, h, &mut d, n_fils);
             for i in 0..h { x[i] += d[i]; }
         }
         if (self.couche_fin >= self.cfg.n_layer || self.tete_partielle) && !self.flux_brut {
@@ -6091,7 +6138,7 @@ hors de la table ({} rangées)", eng.rangees[*ti]));
                     }
                     let kv_dim = (hcc + 1) * dim;
                     let mut kv = vec![0f32; kv_dim];
-                    matvec_f32(wkv, &rangee, nhc * VALEURS_PAR_RANGEE, kv_dim, &mut kv);
+                    matvec_f32_fils(wkv, &rangee, nhc * VALEURS_PAR_RANGEE, kv_dim, &mut kv, pool.threads());
                     let porte = PorteEngram { hc: hcc, dim, eps: cfg.eps, clamp: 1e-6 };
                     let mut injecte = vec![0f32; hcc * dim];
                     porte.injecter(&x, &kv, qn, kn, None, &mut injecte);
@@ -6208,7 +6255,8 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
                     idx_scores: &mut self.mla4_idx_scores[l],
                 };
                 Self::attn_v4(m4, &mut etat, &hn, pos, &mut att,
-                              &mut paires[0], self.dump_couches.as_deref(), l);
+                              &mut paires[0], self.dump_couches.as_deref(), l,
+                              pool.threads());
             } else if let Some(m) = self.mla.as_ref().map(|v| &v[l]) {
                 Self::attn_mla(m, &mut self.mla_cache[l], &hn, pos, cfg.rope_base, &mut att,
                                &mut paires[0], attn_events);

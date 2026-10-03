@@ -540,7 +540,20 @@ Une phase qui ne passe pas ses deux portes ne passe pas à la suivante.
 > `proj+mlp` et `attention` sont dominés par la lecture des poids (25 ms par
 > couche-jeton pour 49,7 M poids lus, soit ≈ 2 Go/s effectifs).
 
-- Deux sujets distincts, à ne pas confondre :
+> **Fait le 02/10 (bloc 15), et sans écrire un seul noyau natif** : le poste
+> `attention` de V4.1 valait **12 369,91 ms par jeton** parce que son
+> produit matrice-vecteur f32 (`matvec_f32`, 11 appels par couche, 1,65 G de
+> produits par jeton) était une boucle **mono-fil scalaire** — vingt cœurs
+> inoccupés. Il est maintenant **parallèle par LIGNES** (`matvec_f32_fils`) :
+> chaque ligne reste sommée par un seul fil dans le même ordre, donc le résultat
+> est **identique au bit près** (2 544 vides comparés, 0 écart ; perplexité
+> 1 743 713,6243 inchangée) et le poste tombe à **1 324,48 ms/token (×9,34)**,
+> la passe complète de 66-68 s à **22,2 s (×3)**. Le SIMD reste sur la table
+> (~5 Go/s effectifs contre 40-60 Go/s possibles) mais il changerait l'ordre des
+> sommes, donc la référence de non-régression : décision reportée, conditions
+> écrites (`sprints/15`).
+>
+> - Deux sujets distincts, à ne pas confondre :
   - **noyaux IQ natifs** : aujourd'hui les experts passent par déquantification
     + produit f32 (juste, lent). Un noyau se justifie si le débit mesuré en P6
     le demande ;
