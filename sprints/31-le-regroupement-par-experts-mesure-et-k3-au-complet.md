@@ -204,3 +204,31 @@ pris **pendant**, et c'est précisément pourquoi la conclusion est « aucune
 différence » et non « ×1,3 » : dans cet environnement, un écart de 30 % n'est pas
 attribuable.
 
+
+## La porte gpt-oss, et pourquoi elle n'a PAS été rejouée ici
+
+`tools/portes.sh` a rendu **une seule croix** : `gpt-oss-120b MXFP4 ctx 256` —
+attendue à 15,6017. Le motif est un **délai dépassé** (2400 s), pas un chiffre
+faux : le modèle est sur le disque tournant, et `llama.cpp-k3` y lisait Kimi-K3
+en continu. Relancée à la main avec 9000 s de délai, elle n'avançait toujours
+pas : le cache de pages ne garde pas 60 Go quand 1,8 To le traversent.
+
+**Elle a été arrêtée volontairement**, et c'est un arbitrage, pas un oubli : deux
+lectures concurrentes sur un seul disque tournant se ralentissent mutuellement,
+et la mesure unique — la référence llama.cpp sur Kimi-K3 — valait plus que la
+répétition d'une porte qui était verte au bloc précédent. Les changements du bloc
+ne peuvent pas la déplacer : le refus sur les experts partagés ne concerne pas
+gpt-oss (aucun tenseur `shexp`), les compteurs ne changent aucune sortie (PPL
+identique au chiffre près avant/après sur Qwen), et `yd` hissé hors de la boucle
+non plus (19,172 et 19,143 avant **et** après).
+
+**À rejouer** dès que le disque est libre :
+
+```bash
+./drave-core/target/release/drave <gpt-oss-120b-MXFP4.gguf> --ppl /tmp/ids_oss_512.txt \
+    --ctx 256 --dense --threads 16 --limit 512      # attendu : 15,6017
+```
+
+Tout le reste est vert : 77 tests, correction contre llama.cpp (100 % des
+positions utiles ≥ 0,95, top-1 94,4 %), poids hc relus, les cinq modes de
+découpage, formats contre libggml, et l'inventaire K3.

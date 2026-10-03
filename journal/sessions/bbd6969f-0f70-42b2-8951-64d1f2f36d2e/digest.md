@@ -116200,3 +116200,31 @@ distribution qui prédit le jeton d'indice `i+1` (cible = `ids[i+1]`). Avec `N` 
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> tools/ref_logits.md <<'EOF'\n\n## La variante `ref_logits_k3` (Kimi-K3)\n\n`tools/ref_logits_k3` est **le même source** (`tools/ref_logits.cpp`) lié contre la\nseconde copie de llama.cpp, celle qui connaît `kimi-k3` :\n\n```ba … [1523 caractères tronqués]`
+
+  ```
+af1c377 ref_logits_k3 : la commande de liaison est écrite, le binaire n'a plus de mystère
+  ```
+
+- **bash** `{"command": "sleep 295; cat /tmp/porte_oss.log; grep -E \"^read_bytes\" /proc/1445983/io; date \"+%H:%M\"", "description": "Poll gpt-oss gate", "timeoutMs": 310000}`
+
+  ```
+read_bytes: 939142115328
+16:04
+  ```
+
+- **bash** `{"command": "P=$(pgrep -f \"gpt-oss-120b-MXFP4.gguf --ppl\" | head -1); echo \"porte gpt-oss pid $P\"; kill $P 2>/dev/null; sleep 3; ps -eo pid,etimes,%cpu,comm --no-headers | awk '$4==\"drave\"||$4==\"llama-cli\"{print}'; cat /tmp/porte_oss.log", "description": "Stop the contending gate"}`
+
+  ```
+porte gpt-oss pid 1508325
+1445983    6302  5.0 llama-cli
+1508328    1569  399 drave
+  ```
+
+- **bash** `{"command": "kill 1508328 2>/dev/null; sleep 3; ps -eo pid,etimes,%cpu,comm --no-headers | awk '$4==\"drave\"||$4==\"llama-cli\"{print}'; grep -E \"^read_bytes\" /proc/1445983/io", "description": "Kill the gate drave"}`
+
+  ```
+1445983    6310  5.0 llama-cli
+read_bytes: 943273586688
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> sprints/31-le-regroupement-par-experts-mesure-et-k3-au-complet.md <<'EOF'\n\n## La porte gpt-oss, et pourquoi elle n'a PAS été rejouée ici\n\n`tools/portes.sh` a rendu **une seule croix** : `gpt-oss-120b MXFP4 ctx 256` —\natte … [2142 caractères tronqués]`
