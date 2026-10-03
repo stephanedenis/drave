@@ -106318,3 +106318,162 @@ Created file
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"GPU : le tandem NVLink est au repos sur la charge principale, et les chiffres disent pourquoi\n\nNouvel outil (tools/analyse_octets_par_jeton.py, en-têtes GGUF seulement) : un\njeton lit 2,669 Go de p … [759 caractères tronqués]`
+
+  ```
+1d45961 GPU : le tandem NVLink est au repos sur la charge principale, et les chiffres disent pourquoi
+[config] puits appris sur 43/43 couches · n_rot 64 · ffn 0 · experts 256
+[config] fenêtre glissante 128 sur 43/43 couches (motif 0, toutes)
+  ```
+
+### 🤖 Assistant
+
+**Réponse courte : non — sur la charge principale (le MoE de V4-Flash/V4.1), les deux GPU sont au repos.** Ce n'est pas un oubli, c'est la condition même du chemin GPU du moteur qui l'exclut. Je viens de le chiffrer.
+
+**Le matériel, vérifié à l'instant**
+- 2 × Quadro RTX 5000, **16 Go chacune (32 Go au total)**, reliées en **NVLink : 25,78 Go/s par sens** (mesuré `nvidia-smi nvlink -s`), toutes deux sur le NUMA node 0.
+- PCIe : maximum Gen3 x16 (l'état courant oscillait Gen1/Gen2 au repos — abaissement de veille classique, à revérifier sous charge).
+
+**Ce que le moteur en fait aujourd'hui**
+`gpu.rs` pose le principe : *« les poids restent sur le GPU »* — ne traversent le bus que les activations. Sont implémentés et mesurés : le noyau de **tête**, la chaîne du **top-k**, le miroir VRAM du KV, et un **cache d'experts VRAM** (`DRAVE_GPU_EXPERTS`) mesuré à **+6 % seulement** sur gpt-oss (consigné « à ne pas activer par défaut »). Sur nos passes V4-Flash/V4.1 : **aucun de ces chemins n'est actif** (le journal l'annonce lui-même : « `0 Mo` » de VRAM).
+
+**Pourquoi la charge principale ne peut pas y aller telle quelle** — j'ai écrit un outil ce soir (`tools/analyse_octets_par_jeton.py`, en-têtes GGUF seuls) :
+
+| modèle | poids lus **par jeton** | formats dominants |
+|---|---|---|
+| V4-Flash IQ1_M | **2,669 Go** | IQ3_XXS 33,7 · IQ2_XXS 23,3 · IQ1_M 20,7 |
+| V4.1 Q2 | **3,893 Go** | I8 202,8 · IQ2_XXS 93,4 · Q2_K 59,5 |
+
+Un jeton a besoin de ~2,7-3,9 Go de poids par pas, et la VRAM totale est de 32 Go : le cache ne peut tenir qu'une fraction du modèle, alors que le chemin GPU exige la résidence.
+
+**Les planchers, à partir des débits mesurés**
+
+| chemin | débit | V4-Flash | V4.1 |
+|---|---|---|---|
+| VRAM locale (poids résidents) | 380 Go/s | 7 ms/jeton | 10 ms/jeton |
+| lecture CPU (RAM) | 20 Go/s | 133 ms | 195 ms |
+| **bus PCIe (x8, chiffre du dépôt)** | 6,5 Go/s | **411 ms** | **599 ms** |
+| disque dur 12 To (non caché) | ~200 Mo/s | 13,3 s | 19,5 s |
+
+Le CPU fait aujourd'hui **2,06 s/jeton** (V4-Flash, SIMD) et **4,3 s** (V4.1) : il est **5 à 7× au-dessus du plancher PCIe**, donc borné par le *calcul* (déquantification + produit scalaire), pas par la mémoire.
+
+**Ce qu'un bon usage voudrait dire, et ce que ça coûte**
+- **Modèles qui tiennent en VRAM** (≤16 Go, ou 32 Go à deux) : le tandem est déjà bon là, et NVLink sert alors à partager les 32 Go (25,78 Go/s au lieu de 6,5).
+- **Gros MoE** : seule la voie *streaming* mettrait le tandem sur la charge principale — poids sur le bus, noyaux PTX de déquantification, regroupement par expert, double-tampon. Potentiel **×5 à ×7**, mais ce chemin **n'existe pas** : c'est un chantier, pas un drapeau.
+
+**Avant d'écrire du CUDA, trois mesures (1 h 30 en tout)** : débit réel hôte→device sur mémoire *pinned* sous charge (et si le lien monte bien en x16), un noyau PTX de déquant+matvec comparé au CPU, et le débit utile d'une boucle double-tamponnée. Sans ces trois chiffres, « distribuer sur le tandem » reste une intuition de topologie — et le dépôt en a déjà trois de réfutées par la mesure (cache VRAM +6 %, cache RAM plus lent, épinglage NUMA perdant).
+
+*Note de méthode en passant* : ce soir, la plus grosse surprise de stockage n'est pas la bande passante mais que **V4-Flash vit sur le disque dur 12 To** — non caché, ça coûte 13,3 s/jeton et ça explique un run pathologique (14 min sans finir une fenêtre). Je l'ai copié sur le NVMe (86,9 Go, vérifié bit à bit) et je re-mesure : ça pourrait aussi corriger le « coût qui croît avec la position » du bloc 25, qui sentait le cache éventré plus que le défaut moteur.
+
+
+## Tour 89
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en respectant pour chaque phase ses deux portes : porte de correction (comparaison étage par étage à llama.cpp sur V4-Flash) et porte Drave (flux : événements/paires par jeton, trace rejouée à l'identique, découpage en grappes, flux lisible par un outil d'analyse). Aucune phase ne passe à la suivante sans ses deux portes. Jamais de forward muet, jamais d'optimisation qui change une sortie sans le dire."
+Round: 15/30
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Résultat de la mesure propre sur NVMe : le « coût croissant » tenait-il au disque ?
+
+- **job_output** `{"job_id": "bash-218"}`
+
+  ```
+0s read=1Mo cpu=0s
+10s read=1987Mo cpu=9s
+20s read=3388Mo cpu=19s
+30s read=4567Mo cpu=29s
+40s read=7971Mo cpu=88s
+50s read=18498Mo cpu=350s
+60s read=26495Mo cpu=605s
+[status: running]
+  ```
+
+- **bash** `{"command": "grep -E \"tokens notés|sur [0-9]+ tokens|postes\" /tmp/nvme4.log; pgrep -x drave >/dev/null && echo tourne || echo fini; date +%H:%M:%S", "description": "Check the NVMe run windows"}`
+
+  ```
+tourne
+08:18:24
+  ```
+
+- **bash** `{"command": "sleep 420; grep -E \"tokens notés|sur [0-9]+ tokens|postes\" /tmp/nvme4.log; pgrep -x drave >/dev/null && echo tourne || echo fini", "description": "Wait for NVMe run windows", "timeoutMs": 500000}`
+
+  ```
+63 tokens notés — perplexité cumulée 15.275  (0.4 tok/s)  [fenêtre 1 : 63 notés, PPL 15.275]
+     126 tokens notés — perplexité cumulée 21.763  (0.4 tok/s)  [fenêtre 2 : 63 notés, PPL 31.007]
+     189 tokens notés — perplexité cumulée 23.493  (0.4 tok/s)  [fenêtre 3 : 63 notés, PPL 27.376]
+tourne
+  ```
+
+- **bash** `{"command": "sleep 240; grep -E \"tokens notés|sur [0-9]+ tokens|postes\" /tmp/nvme4.log; pgrep -x drave >/dev/null && echo tourne || echo fini", "description": "Get the final NVMe figures", "timeoutMs": 300000}`
+
+  ```
+63 tokens notés — perplexité cumulée 15.275  (0.4 tok/s)  [fenêtre 1 : 63 notés, PPL 15.275]
+     126 tokens notés — perplexité cumulée 21.763  (0.4 tok/s)  [fenêtre 2 : 63 notés, PPL 31.007]
+     189 tokens notés — perplexité cumulée 23.493  (0.4 tok/s)  [fenêtre 3 : 63 notés, PPL 27.376]
+     252 tokens notés — perplexité cumulée 29.725  (0.4 tok/s)  [fenêtre 4 : 63 notés, PPL 60.217]
+=== perplexité 29.7255 sur 252 tokens (0 événements, 567.1 s) ===
+    postes (ms/token) : projets-attn 0.00 | rope 0.00 | attention 902.66 | proj+mlp 1315.43 | somme 2218.10 | reste (tête + échantillonnage) 32.39
+fini
+  ```
+
+### 👤 Utilisateur
+
+background job bash-218 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && V4=/home/stephane/FastNVMe/modeles-lourds/v4flash-iq1m/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf && (DRAVE_SIMD_DOT=1 ./drave-core/target/release/drave "$V4" --ppl /tmp/ids_v4f1024.txt --ctx 64 --limit 256 --dense --threads 16 --lot 1 > /tmp/nvme4.log 2>&1 & pid=$!; t0=$(date +%s); while kill -0 $pid 2>/dev/null; do r=$(awk '/^read_bytes/{print $2}' /proc/$pid/io 2>/dev/null); c=$(awk '{print $14+$15}' /proc/$pid/stat 2>/dev/null); echo "$(( $(date +%s) - t0 ))s read=$(( ${r:-0}/1048576 ))Mo cpu=$(( ${c:-0}/100 ))s"; sleep 10; done; wait $pid; echo "--- fin ---"; grep -E "tokens notés|sur [0-9]+ tokens|postes" /tmp/nvme4.log)) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 🤖 Assistant
+
+⏵ Résultat net : ×1,81 et surtout un débit PLAT — le « coût croissant » était le disque dur, pas le moteur
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"non expliqué\\|croît avec la position\" docs/plan-deepseek41-complet.md | head -5", "description": "Locate the text to correct"}`
+
+  ```
+831:> Ce qui reste **non expliqué** : le coût par jeton croît avec la position (2,5 s à
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md", "limit": 14, "offset": 828}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md</path>
+<type>file</type>
+<content>
+828: > boucle de produit scalaire. Le chemin par défaut est **bit à bit identique** à
+829: > avant (`cmp` sur 63 × 129 280 f32).
+830: >
+831: > Ce qui reste **non expliqué** : le coût par jeton croît avec la position (2,5 s à
+832: > 31 jetons, 4,3 s à 63, 6,45 s à 255, ≈60 s à 1 024) et ce n'est **ni le disque**
+833: > (`read_bytes` = 0 sur un run de 93 jetons), **ni l'attention** (plate à ~1 s),
+834: > **ni l'indexeur CSA** (sans effet avant 512 blocs). Le SIMD baisse le niveau de
+835: > la courbe, pas sa forme : c'est la mesure à reprendre.
+836: >
+837: > **Ce qui a été essayé et REFUSÉ par la mesure (bloc 16)** : un **cache RAM des
+838: > experts** (`DRAVE_EXPERTS_RAM`), justifié par une trace de routage (50 % des
+839: > lectures dans 394 experts, 31,9 % de réutilisation entre jetons consécutifs).
+840: > Il est **plus lent** : passe ctx 32 = 145,1 s sans, 151,2 s à 4 Go (+4 %),
+841: > 175,5 s à 32 Go (+21 %), perplexité identique. Le noyau fait déjà ce travail
+
+(Showing lines 828-841 of 920. Use offset=842 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md", "new_string": "> ~~Ce qui reste non expliqué : le coût par jeton croît avec la position~~ —\n> **CORRIGÉ le 03/10 (bloc 25), et c'était le disque.** Le protocole qui montrait\n> cette croissance (ctx 64, … [1984 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md has been updated successfully.
+  ```
+
+- **write** `{"content": "# Sprint 25 — Le disque dur déguisé en défaut moteur (et le tandem GPU chiffré)\n\n- **Début** : 08:20 · **Fin** : 09:40\n- **Objectif** : le bloc 24 a laissé une courbe gênante — « le coût par jeton croît\n  avec la position » (2,5 s à 31 jetons, 6,45 s à 255, ≈60 s à 1 024) — et une\n … [5472 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/25-le-disque-dur-deguise-en-defaut-moteur.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Sprint 25 : le « coût qui croît avec la position » était le DISQUE DUR, pas le moteur — protocole rejoué à l'identique sur NVMe\n\nMême binaire, mêmes jetons, mêmes drapeaux ; seule change la copie du … [677 caractères tronqués]`

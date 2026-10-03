@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 113.5 h |
-| Tours | 88 |
-| Messages | 6681 |
-| Appels d'outils | 6392 |
-| Fichiers touchés | 125 |
-| Commandes | 5400 |
+| Durée | 113.7 h |
+| Tours | 89 |
+| Messages | 6693 |
+| Appels d'outils | 6401 |
+| Fichiers touchés | 126 |
+| Commandes | 5405 |
 | Sous-agents | 32 |
-| Commits | 425 |
+| Commits | 426 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -219,6 +219,8 @@
 **Tour 87** — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en respectant pour chaque phase ses deux portes : porte de correction (comparaison étage par étage à llama.cpp sur V4-Flash) et porte Drave (flux : événements/paires par jeton, trace rejouée à l'identique, découpage en grappes, flux lisible par un outil d'analyse). Aucune phase ne passe … [662 caractères tronqués]
 
 **Tour 88** — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en respectant pour chaque phase ses deux portes : porte de correction (comparaison étage par étage à llama.cpp sur V4-Flash) et porte Drave (flux : événements/paires par jeton, trace rejouée à l'identique, découpage en grappes, flux lisible par un outil d'analyse). Aucune phase ne passe … [662 caractères tronqués]
+
+**Tour 89** — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en respectant pour chaque phase ses deux portes : porte de correction (comparaison étage par étage à llama.cpp sur V4-Flash) et porte Drave (flux : événements/paires par jeton, trace rejouée à l'identique, découpage en grappes, flux lisible par un outil d'analyse). Aucune phase ne passe … [662 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -4385,7 +4387,57 @@ Si tu veux, je quantifie le scénario « deux nœuds, chacun son disque » sur V
 
 **Synthèse produite :**
 
-⏵ Mesure propre sur la copie NVMe : le « coût qui croît » était-il le cache du disque dur ?
+**Réponse courte : non — sur la charge principale (le MoE de V4-Flash/V4.1), les deux GPU sont au repos.** Ce n'est pas un oubli, c'est la condition même du chemin GPU du moteur qui l'exclut. Je viens de le chiffrer.
+
+**Le matériel, vérifié à l'instant**
+- 2 × Quadro RTX 5000, **16 Go chacune (32 Go au total)**, reliées en **NVLink : 25,78 Go/s par sens** (mesuré `nvidia-smi nvlink -s`), toutes deux sur le NUMA node 0.
+- PCIe : maximum Gen3 x16 (l'état courant oscillait Gen1/Gen2 au repos — abaissement de veille classique, à revérifier sous charge).
+
+**Ce que le moteur en fait aujourd'hui**
+`gpu.rs` pose le principe : *« les poids restent sur le GPU »* — ne traversent le bus que les activations. Sont implémentés et mesurés : le noyau de **tête**, la chaîne du **top-k**, le miroir VRAM du KV, et un **cache d'experts VRAM** (`DRAVE_GPU_EXPERTS`) mesuré à **+6 % seulement** sur gpt-oss (consigné « à ne pas activer par défaut »). Sur nos passes V4-Flash/V4.1 : **aucun de ces chemins n'est actif** (le journal l'annonce lui-même : « `0 Mo` » de VRAM).
+
+**Pourquoi la charge principale ne peut pas y aller telle quelle** — j'ai écrit un outil ce soir (`tools/analyse_octets_par_jeton.py`, en-têtes GGUF seuls) :
+
+| modèle | poids lus **par jeton** | formats dominants |
+|---|---|---|
+| V4-Flash IQ1_M | **2,669 Go** | IQ3_XXS 33,7 · IQ2_XXS 23,3 · IQ1_M 20,7 |
+| V4.1 Q2 | **3,893 Go** | I8 202,8 · IQ2_XXS 93,4 · Q2_K 59,5 |
+
+Un jeton a besoin de ~2,7-3,9 Go de poids par pas, et la VRAM totale est de 32 Go : le cache ne peut tenir qu'une fraction du modèle, alors que le chemin GPU exige la résidence.
+
+**Les planchers, à partir des débits mesurés**
+
+| chemin | débit | V4-Flash | V4.1 |
+|---|---|---|---|
+| VRAM locale (poids résidents) | 380 Go/s | 7 ms/jeton | 10 ms/jeton |
+| lecture CPU (RAM) | 20 Go/s | 133 ms | 195 ms |
+| **bus PCIe (x8, chiffre du dépôt)** | 6,5 Go/s | **411 ms** | **599 ms** |
+| disque dur 12 To (non caché) | ~200 Mo/s | 13,3 s | 19,5 s |
+
+Le CPU fait aujourd'hui **2,06 s/jeton** (V4-Flash, SIMD) et **4,3 s** (V4.1) : il est **5 à 7× au-dessus du plancher PCIe**, donc borné par le *calcul* (déquantification + produit scalaire), pas par la mémoire.
+
+**Ce qu'un bon usage voudrait dire, et ce que ça coûte**
+- **Modèles qui tiennent en VRAM** (≤16 Go, ou 32 Go à deux) : le tandem est déjà bon là, et NVLink sert alors à partager les 32 Go (25,78 Go/s au lieu de 6,5).
+- **Gros MoE** : seule la voie *streaming* mettrait le tandem sur la charge principale —
+… [1103 caractères tronqués]
+
+### Tour 89 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [942 caractères tronqués]
+
+*9 appels d'outils.* Actions notables :
+
+- job_output
+- bash — Check the NVMe run windows
+- bash — Wait for NVMe run windows
+- bash — Get the final NVMe figures
+- bash — Locate the text to correct
+- read
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md`
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/25-le-disque-dur-deguise-en-defaut-moteur.md`
+- bash — Commit sprint 25
+
+**Synthèse produite :**
+
+⏵ Résultat net : ×1,81 et surtout un débit PLAT — le « coût croissant » était le disque dur, pas le moteur
 
 ## 3. Travail accompli
 
@@ -4474,7 +4526,7 @@ Si tu veux, je quantifie le scénario « deux nœuds, chacun son disque » sur V
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/extraire_tables_ggml.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-routage-experts.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-mla-experts.md` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md` | 4 | 17 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md` | 4 | 18 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/colab-reparti.md` | 0 | 1 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/convertisseur.md` | 0 | 3 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-mode4-lot-listes.md` | 0 | 2 |
@@ -4518,6 +4570,7 @@ Si tu veux, je quantifie le scénario « deux nœuds, chacun son disque » sur V
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-materiel-disque-ou-cpu.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/analyse_octets_par_jeton.py` | 1 | 1 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gpu-tandem-nvlink.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/25-le-disque-dur-deguise-en-defaut-moteur.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -4596,7 +4649,7 @@ Si tu veux, je quantifie le scénario « deux nœuds, chacun son disque » sur V
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5360 autres
+- … et 5365 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5169,4 +5222,5 @@ Si tu veux, je quantifie le scénario « deux nœuds, chacun son disque » sur V
 - DRAVE_SIMD_DOT : le produit scalaire des experts vectorisé — ×2,06 sur la passe, et l'écart qu'il introduit est MESURÉ  Le poste dominant de V4-Flash (proj+mlp,
 - Rapport : disque ou CPU ? — la mesure dit que le deuxième NVMe n'accélérerait pas les passes actuelles  Mesuré : NVMe à 2,0 Go/s (dd direct), moteur V4.1 à ~30 
 - GPU : le tandem NVLink est au repos sur la charge principale, et les chiffres disent pourquoi  Nouvel outil (tools/analyse_octets_par_jeton.py, en-têtes GGUF se
+- Sprint 25 : le « coût qui croît avec la position » était le DISQUE DUR, pas le moteur — protocole rejoué à l'identique sur NVMe  Même binaire, mêmes jetons, mêm
 

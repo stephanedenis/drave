@@ -828,11 +828,32 @@ Une phase qui ne passe pas ses deux portes ne passe pas à la suivante.
 > boucle de produit scalaire. Le chemin par défaut est **bit à bit identique** à
 > avant (`cmp` sur 63 × 129 280 f32).
 >
-> Ce qui reste **non expliqué** : le coût par jeton croît avec la position (2,5 s à
-> 31 jetons, 4,3 s à 63, 6,45 s à 255, ≈60 s à 1 024) et ce n'est **ni le disque**
-> (`read_bytes` = 0 sur un run de 93 jetons), **ni l'attention** (plate à ~1 s),
-> **ni l'indexeur CSA** (sans effet avant 512 blocs). Le SIMD baisse le niveau de
-> la courbe, pas sa forme : c'est la mesure à reprendre.
+> ~~Ce qui reste non expliqué : le coût par jeton croît avec la position~~ —
+> **CORRIGÉ le 03/10 (bloc 25), et c'était le disque.** Le protocole qui montrait
+> cette croissance (ctx 64, 252 jetons, quatre fenêtres) a été rejoué **à
+> l'identique, sur la même machine, avec le même binaire**, après avoir copié le
+> modèle sur le NVMe au lieu du disque dur 12 To (`WDC WD120EFGX`, ROTATEUR) :
+>
+> | protocole ctx 64, 252 jetons, `DRAVE_SIMD_DOT=1` | disque dur | **NVMe** |
+> |---|---|---|
+> | total | 1 027,7 s | **567,1 s** (**×1,81**) |
+> | débit par fenêtre | 0,5 → 0,3 → 0,2 → 0,2 tok/s (**décroît**) | **0,4 · 0,4 · 0,4 · 0,4 (plat)** |
+> | `proj+mlp` | 3 046,73 ms/token | **1 315,43 ms/token** |
+> | `attention` | 1 000,01 ms/token | 902,66 ms/token |
+>
+> **La croissance n'existe pas quand le stockage suit** : le coût par jeton est
+> plat sur 252 jetons et quatre fenêtres. Ce qui la produisait, c'est la famine de
+> pages : un jeton lit **2,669 Go de poids** (mesuré, `tools/analyse_octets_par_jeton.py`),
+> et à 200 Mo/s de disque dur cela vaut **13,3 s/jeton** dès que les pages ne sont
+> plus en cache. Le même piège a fait croire que le chemin des blocs compressés
+> coûtait ×1,8 (l'ablation `DRAVE_SANS_BLOCS` « gagnait » parce qu'elle tournait
+> avec un cache plus chaud : sur NVMe, 561,4 s contre 567,1 s — **aucune
+> différence**). Deux conclusions opposées tirées de la même erreur d'instrument.
+>
+> **Ce qui reste vrai et non expliqué** : la croissance du coût **avec la longueur
+> du contexte** (2,5 s/jeton à ctx 64, 6,45 s à ctx 256, ≈60 s à ctx 1 024 sur
+> disque dur) — celle-là est dans l'attention et les blocs, pas dans le stockage,
+> et c'est la mesure à reprendre sur NVMe, où elle est désormais abordable.
 >
 > **Ce qui a été essayé et REFUSÉ par la mesure (bloc 16)** : un **cache RAM des
 > experts** (`DRAVE_EXPERTS_RAM`), justifié par une trace de routage (50 % des
