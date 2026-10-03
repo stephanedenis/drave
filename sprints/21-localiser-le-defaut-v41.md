@@ -1,0 +1,110 @@
+# Sprint 21 — Localiser le défaut V4.1
+
+- **Début** : 03:00 · **Fin prévue** : 05:00 (boxing de 120 min)
+- **Objectif** : le bloc 20 a établi que **V4-Flash est juste** (PPL 1,875 sur huit
+  répétitions, contre 1,844 pour llama.cpp) et que **V4.1 ne prédit pas** (3 677
+  sans engram, 7 506 à 8 bits, top-1 0/31). Le défaut est dans un mécanisme propre
+  à V4.1 : chaîne mHC retardée, compresseur des ratios 1 et 2, engram (partiellement
+  innocenté). Le localiser, puis le corriger ou l'écrire.
+- **Engagement de fin** : dépôt vert (tests + portes), machine rendue, tout commité.
+
+## Revue — ce qui est livré, mesuré
+
+### 1. L'instrument de bisection, et huit hypothèses éliminées
+
+Le test des répétitions (huit fois « The sky is blue. », ctx 64 ou 16) est
+**fonctionnel** : V4-Flash y donne 1,875 (ctx 64) / 4,118 (ctx 16) et V4.1 y est à
+3 677 (ctx 64) / 12 889 (ctx 16) — le hasard. Chaque ablation coûte 1 à 3 minutes,
+et le résultat est sans ambiguïté :
+
+| hypothèse | ablation | résultat | verdict |
+|---|---|---|---|
+| tokenizer | `tools/tokenize_llama` (llama.cpp) sur le même texte | identifiants **identiques** (`671,12709,344,8295,16,455,…`) | **éliminée** |
+| chaîne mHC **retardée** | `DRAVE_V41_SANS_RETARD=1` (convention V4) | **41 544** contre 3 677 : dix fois PIRE | **éliminée** (le retard est la bonne règle) |
+| **tête** (repliement final par la `pre`) | `DRAVE_V41_TETE_COPIE0=1` (copie 0) | 13 705 contre 12 889 | **éliminée** |
+| **engram** | `DRAVE_SANS_ENGRAM=1` | 3 677 contre 4 799 : il nuit, mais le modèle est déjà cassé sans lui | **éliminée comme cause principale** |
+| **blocs compressés** | `DRAVE_SANS_BLOCS=1` | **3 246 479** : 250 fois pire — les blocs portent l'essentiel du signal | **éliminée** |
+| **compression** en entier | `DRAVE_SANS_COMPRESSION=1` (ratio 0 partout) | **1 948 572** : 150 fois pire | **éliminée** |
+| **clamp SwiGLU** (`swiglu_limit` scalaire de V4.1, non lu) | lecture ajoutée | 12 889,408 → 12 889,418 : **aucun effet** (les portes ne dépassent pas 10 ici) | **éliminée** — mais la lecture est gardée : le fichier déclare ce clamp |
+| **normes / explosion du résidu** | `DRAVE_DEBUG_ETAT=1` sur les deux modèles | V4.1 : 5 → 18 → 116 → 480 · V4-Flash : 9 → 10 → 97 → 421 — **même profil** | **éliminée** |
+| le **chemin partagé** (attn_v4, compresseur, indexeur, hyper-connexions) | V4-Flash, mêmes conditions | **1,875 / 4,118** — il prédit | **éliminée** |
+| enchaînement des trois ablations (ni compression, ni retard, ni engram) | les trois drapeaux ensemble | **2 521 650** : toujours le hasard | ⇒ le défaut est dans le chemin **partagé tel que V4.1 l'instancie** |
+
+### 2. Ce que la mesure a établi, et qui restera
+
+- Les **états portent l'information** : aux positions 2, 7 et 12 (le même contexte
+  « … is »), les `l_last` ont des cosinus de 0,59 à 0,99 selon la couche — les
+  états se ressemblent quand le contexte se ressemble. Le modèle n'est donc pas
+  « débranché » : c'est la **prédiction** qui est au hasard.
+- Les **blocs compressés sont la seule source de signal** : les retirer ou les
+  désactiver rend le modèle 150 à 250 fois pire. Autrement dit, la **fenêtre
+  brute** (les latents des 128 derniers jetons) ne sert à rien — ce qui, pour un
+  modèle entraîné, est anormal (à ctx 16, elle couvre TOUT le contexte).
+- Le **SwiGLU n'était pas borné** pour V4.1 (`swiglu_limit` scalaire ignoré) :
+  défaut réel, corrigé, sans effet mesurable ici.
+
+### 3. La piste qui reste, et elle est étroite
+
+Le défaut survit à tout ce qui est propre à V4.1 **sauf** ce qui touche à
+l'instanciation de V4.1 dans le code partagé : les **noms et formes des tenseurs**
+(les 24 noms de la couche 0 diffèrent de ceux de V4-Flash par deux biais de
+routeur, et le diff ne montre AUCUN tenseur manquant), les **valeurs de
+configuration** (ratios, o_groups, q_lora ✓), et la **règle du retard mHC** dont
+la transcription vient de vLLM — la seule pièce non vérifiée contre une source
+externe *exécutable*, et dont une variante (la convention V4) est dix fois pire
+sans être bonne pour autant.
+
+## Rétrospective — garder / changer / doute
+
+**Garder.**
+
+- **Le test fonctionnel avant tout le reste** : « huit répétitions d'une phrase »
+  coûte trois minutes et dit « ce modèle prédit ou non ». C'est lui qui a ouvert
+  le bloc 20, et c'est lui qui a permis d'éliminer huit hypothèses en deux heures.
+- **L'ablation par drapeau** : chaque hypothèse a son interrupteur
+  (`DRAVE_V41_SANS_RETARD`, `DRAVE_V41_TETE_COPIE0`, `DRAVE_SANS_BLOCS`,
+  `DRAVE_SANS_COMPRESSION`), et chacun ANNONCE ce qu'il fait. Le prochain
+  défaut de ce genre se traquera de la même façon.
+- **Le témoin systématique** : V4-Flash sur le même texte, dans le même moteur, à
+  chaque étape. C'est lui qui a transformé « V4.1 est bizarre » en « V4.1 est
+  cassé » puis en « le défaut est dans ce que V4.1 instancie ».
+
+**Changer.**
+
+- **Un test fonctionnel doit exister AVANT qu'un modèle soit déclaré exécutable.**
+  Le dépôt a publié « V4.1 tourne » pendant des blocs sans jamais vérifier qu'il
+  *prédit* — parce que toutes les vérifications étaient des égalités de composants
+  (moteur contre SA transcription). La porte manquante est écrite ici : elle prend
+  trois minutes, et elle aurait évité deux jours de chiffres non interprétables.
+- **Un drapeau d'ablation qui ne rend pas le modèle MEILLEUR ne prouve rien.**
+  Deux fois dans ce bloc, une ablation a empiré les choses (retard, blocs) : cela
+  élimine l'hypothèse « c'est cette pièce qui est fausse » mais pas « cette pièce
+  est fausse *autrement* ». Il faut les deux lectures.
+
+**Doute.**
+
+- Le défaut n'est pas trouvé, seulement cerné. Les suspects restants sont peu
+  nombreux mais profonds : la règle du retard mHC (transcrite d'une source que je
+  n'ai jamais exécutée) et deux ou trois valeurs de configuration.
+- Le fichier V4.1 est un Q2 d'un modèle de 365 Go, avec des experts **IQ2_XXS ET
+  Q2_K** : les deux déquantificateurs sont validés contre libggml
+  (`tools/portes_formats.sh`), mais rien ne prouve que le fichier lui-même soit
+  sain — et llama.cpp ne sait pas le charger, donc il n'existe aucune référence
+  exécutable pour trancher.
+
+## Planning du bloc 22 — la règle du retard, relue à la source
+
+1. **Relire la règle mHC retardée dans la source publiée** (vLLM
+   `deepseek_v4_1/nvidia/model.py`, et le portage `mudler/vllm.cpp` pour
+   `deepseek_v41`) plutôt que dans notre transcription : c'est la seule pièce du
+   chemin V4.1 qui n'a jamais été vérifiée contre une source *externe*. Points à
+   contrôler un par un : quel `pre` replie l'attention, quel `pre` replie la FFN,
+   ce que fait la tête, et si `post`/`comb` viennent du raccord courant ou du
+   précédent.
+2. **Vérifier les noms de tenseurs `hc_*`** pour V4.1 (les 24 noms de la couche 0
+   ne les montrent pas tous) : un tenseur `hc_*` manquant serait chargé VIDE et le
+   mélange serait faux **en silence**.
+3. **Ablater le biais de routeur** (`exp_probs_b`) : V4.1 est le seul modèle du
+   dépôt à en avoir deux (`exp_probs_b` et `exp_probs_b_vl`), et la question
+   « biais dans la SÉLECTION ou dans les POIDS ? » a déjà coûté un défaut sur
+   gpt-oss. Un drapeau d'ablation (sélection sans biais) trancherait en 3 minutes.

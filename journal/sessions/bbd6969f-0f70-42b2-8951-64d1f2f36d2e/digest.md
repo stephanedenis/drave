@@ -100316,3 +100316,599 @@ sam 03 oct 2026 02:56:18 EDT
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"sprints/20-la-passe-longue-instrumentee.md\"\ns=open(p).read()\na=\"- **Début** : 01:17 · **Fin prévue** : 03:17 (boxing de 120 min)\"\nb=\"- **Début** : 01:17 · **Fin** : 03:00 (103 min)\"\nassert a in s\nopen( … [1505 caractères tronqués]`
+
+  ```
+ok
+sprint 21 ouvert
+sam 03 oct 2026 02:56:48 EDT
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"attn_sinks\" drave-core/src/model.rs | head -12; echo \"=== dans attn_v4 : puits ===\"; grep -n \"puits\" drave-core/src/model.rs | sed -n 1,12p", "description": "Check the attention-sink usage"}`
+
+  ```
+143:    // Les puits par tête (`attn_sinks.weight`), eux, SONT implémentés : gpt-oss
+1285:/// * les puits appris (`attn_sinks`, un par tête) entrent dans le **softmax**.
+2057:    /// clés, plus `attn_sinks` jetons puits au début de la séquence.
+2086:    pub attn_sinks: usize,
+3286:                    sinks: g.dequant_optionnel(&p("attn_sinks.weight")).unwrap_or_default(),
+3471:                sinks: if g.tensor(&p("attn_sinks.weight")).is_some() {
+3472:                    Some(g.dequant(&p("attn_sinks.weight"))) } else { None },
+3793:            attn_sinks: if fenetre > 0 { 0 } else { 4 },
+6659:                    let ns = if lo > 0 { self.attn_sinks.min(lo) } else { 0 };
+6677:                        let ns = if lo > 0 { self.attn_sinks.min(lo) } else { 0 };
+=== dans attn_v4 : puits ===
+143:    // Les puits par tête (`attn_sinks.weight`), eux, SONT implémentés : gpt-oss
+145:    // chargement, lui, affiche « puits appris sur 36/36 »). Les ranger dans le
+150:    // parc ne combine le chemin MLA (`attn_kv_a_mqa`) et des puits ; le jour où
+1285:/// * les puits appris (`attn_sinks`, un par tête) entrent dans le **softmax**.
+2057:    /// clés, plus `attn_sinks` jetons puits au début de l
+… [621 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -c \"FIN\" /tmp/v41_rep_lg.log 2>/dev/null; grep -E \"perplexité\" /tmp/v41_rep_lg.log | head -2; python3 - <<'PY'\nimport numpy as np, os\np=\"/tmp/lg_rep.bin\"\nif not os.path.exists(p): print(\"pas encore de logits\"); raise  … [854 caractères tronqués]`
+
+  ```
+0
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 5, in <module>
+ValueError: cannot reshape array of size 1034240 into shape (0,129280)
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "sleep 150; grep -c \"FIN\" /tmp/v41_rep_lg.log 2>/dev/null; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport numpy as np, os\np=\"/tmp/lg_rep.bin\"\nh=np.fromfile(p,dtype='<i4',count=2); vocab,npos=int(h[0]),int(h[1])\nprint(\"vocab\",vocab,\"npos\",npos)\n … [657 caractères tronqués]`
+
+  ```
+1
+vocab 129280 npos 39
+NLL par position :
+   15.00 11.65 14.44 2.48 5.51 15.91 7.27 13.87 6.36 5.62 7.83 7.63 13.65 4.44 6.62 11.77 6.54 13.94 4.94 5.27 10.74 5.46 11.03 5.80 6.96 8.62 5.56 11.18 4.11 6.02 8.23 5.42 10.63 7.11 7.86 6.55 7.48 12.35 8.74
+  moyenne 8.476 · min 2.484 · max 15.914
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=/home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf && DRAVE_DEBUG_ETAT=1 ./drave-core/target/release/drave $M --ppl /tmp/repete.ids --ctx 16 --limit 6 --abits 16 --threads 16 2>&1 | grep -E \"^\\[etat\\] couche +(0| … [114 caractères tronqués]`
+
+  ```
+[etat] couche   0 pos 5 : |x| 5.0040e0 · |att| 4.1951e1 · |ffn| 4.6519e0
+[etat] couche   1 pos 5 : |x| 7.7576e0 · |att| 3.0876e1 · |ffn| 2.2232e0
+[etat] couche   2 pos 5 : |x| 8.9873e0 · |att| 4.1626e1 · |ffn| 2.6666e0
+[etat] couche   3 pos 5 : |x| 1.0573e1 · |att| 3.1612e1 · |ffn| 3.8662e0
+[etat] couche   5 pos 5 : |x| 1.3347e1 · |att| 3.5319e1 · |ffn| 4.0214e0
+[etat] couche  19 pos 5 : |x| 9.3777e1 · |att| 4.9726e1 · |ffn| 1.2036e1
+[etat] couche  20 pos 5 : |x| 9.6463e1 · |att| 5.5261e1 · |ffn| 8.9000e0
+[etat] couche  21 pos 5 : |x| 1.4008e2 · |att| 5.1769e1 · |ffn| 8.7466e0
+[etat] couche  39 pos 5 : |x| 5.2588e2 · |att| 9.7414e1 · |ffn| 2.4639e1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=/home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf && LC=/home/stephane/Data13TB/stephane/GitHub/llama.cpp && LD_LIBRARY_PATH=$LC/build/bin timeout 600 ./tools/tokenize_llama \"$M\" \"The sky is blue.\" 2>&1 | tail  … [80 caractères tronqués]`
+
+  ```
+print_info: file size   = 340.59 GiB (3.88 BPW) 
+llama_model_load: error loading model: unknown model architecture: 'deepseek41'
+llama_model_load_from_file_impl: failed to load model
+chargement impossible
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 6145,6170p drave-core/src/model.rs", "description": "Read the attention collapse code"}`
+
+  ```
+let recue = reprend && self.hc_porte_imposee.is_some();
+        let mut hc_porte: Option<Vec<f32>> =
+            if reprend { self.hc_porte_imposee.take() } else { None };
+        // Un nœud qui REPREND à la couche k reçoit un flux brut : s'il ne porte
+        // pas ces coefficients (protocole < v6), V4.1 replierait avec la copie 0
+        // — faux, et muet. Depuis la v6 le flux les transporte (16 octets par
+        // jeton), et le refus ne tombe plus que sur un flux qui ne les a pas.
+        assert!(!(self.hc_retarde && self.flux_brut && self.couche_debut > 0 && !recue),
+                "V4.1 découpé : la chaîne mHC retardée a besoin de la `pre` portée par \
+le raccord précédent — un nœud qui reprend à la couche {} sans l'avoir reçue replierait \
+avec la copie 0 (faux, et muet)", self.couche_debut);
+        // SONDE LOCALE (`--couches a:b`, pas de flux) : la plage commence au
+        // milieu du modèle, donc la `pre` du raccord précédent n'existe pas. On
+        // replie le premier raccord avec la copie 0 — la convention de la
+        // référence au PREMIER raccord du modèle — et on le DIT : ce n'est plus
+        // la chaîne du modèle, c'est une convention de sonde.
+       
+… [637 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"hc_retarde {\" drave-core/src/model.rs | head -8; sed -n 6260,6285p drave-core/src/model.rs", "description": "Find the two coefficient-choice sites"}`
+
+  ```
+3404:                     if hc_retarde {
+6320:                    let poids: &[f32] = if self.hc_retarde {
+6802:                    let poids: &[f32] = if self.hc_retarde { &sa.pre } else { &sf.pre };
+6804:                    if self.hc_retarde {
+6818:                    if self.hc_retarde {
+7050:            if self.hc_retarde { self.hc_porte_flux = hc_porte.clone(); }
+7057:        } else if self.hc_retarde {
+                    // O(position) par jeton et par couche — quadratique sur une
+                    // séquence, pour un résultat identique (le vérificateur compare
+                    // justement les deux : il recalcule, lui, sur tout le préfixe).
+                    let lo = pos.saturating_sub(eng.max_ngram - 1);
+                    let ids: Vec<u32> = self.historique[lo..=pos].to_vec();
+                    let positions: Vec<usize> = (lo..=pos).collect();
+                    // Texte seul : `dead_mask` est le masque des IMAGES
+                    // (`image_sentinel_mask`), vide ici — et le masque d'injection
+                    // est son complément, donc « garder partout ».
+                    let morts = vec![false; ids.len()];
+                    let adr = eng.adress
+… [1011 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 6314,6330p drave-core/src/model.rs", "description": "Read the attention pre-mix choice"}`
+
+  ```
+let s = ha.sortie(&x);
+                    // **Quels coefficients replient l'entrée ?** V4 : ceux du
+                    // raccord lui-même. V4.1 (mHC retardé) : ceux PORTÉS par le
+                    // raccord précédent, et la copie 0 au tout premier — la
+                    // référence fait `layer_input = residual[:, 0] if pre_mix is
+                    // None else (pre_mix · residual).sum(1)`.
+                    let poids: &[f32] = if self.hc_retarde {
+                        hc_porte.as_deref().unwrap_or(&[])
+                    } else { &s.pre };
+                    if poids.is_empty() { xin.copy_from_slice(&x[..h]); }
+                    else { Hc::melanger(&x, poids, ha.hc, h, &mut xin); }
+                    hc_attn = Some(s);
+                }
+                None => xin.copy_from_slice(&x),
+            }
+            Self::vider_couche(self.dump_couches.as_deref(), "hc_attn_pre", l, pos, &xin);
+            let tm = Instant::now();
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"drave-core/src/model.rs\"\ns=open(p).read()\n# 1) le drapeau, lu une fois, annoncé\na=\"\"\"        static SANS_ENGRAM: std::sync::OnceLock<bool> = std::sync::OnceLock::new();\"\"\"\nb=\"\"\"        // `DRAVE_V4 … [2571 caractères tronqués]`
+
+  ```
+ok model
+ok VARS
+    Finished `release` profile [optimized] target(s) in 33.62s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=/home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf && echo \"=== V4.1, chaîne NON retardée (convention V4), 16 bits, texte répété ===\" && DRAVE_V41_SANS_RETARD=1 ./drave-core/target/release/drave $M --ppl /tmp/repe … [205 caractères tronqués]`
+
+  ```
+=== V4.1, chaîne NON retardée (convention V4), 16 bits, texte répété ===
+[mhc] DRAVE_V41_SANS_RETARD est actif : la chaîne retardée est remplacée par la convention V4 (chaque raccord se replie avec SES coefficients). Ce n'est plus V4.1 — c'est une ablation pour localiser un défaut.
+      39 tokens notés — perplexité cumulée 41544.393  (0.3 tok/s)
+=== perplexité 41544.3928 sur 39 tokens (0 événements, 112.2 s) ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"drave-core/src/model.rs\"\ns=open(p).read()\n# la même lecture de drapeau, pour la tête\na=\"\"\"        static SANS_ENGRAM: std::sync::OnceLock<bool> = std::sync::OnceLock::new();\"\"\"\nb=\"\"\"        static  … [3066 caractères tronqués]`
+
+  ```
+ok model
+ok VARS
+    Finished `release` profile [optimized] target(s) in 33.28s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=/home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf && echo \"=== référence (limite 13, ctx 16, 16 bits) ===\" && ./drave-core/target/release/drave $M --ppl /tmp/repete.ids --ctx 16 --limit 13 --abits 16 --threads 16 … [353 caractères tronqués]`
+
+  ```
+=== référence (limite 13, ctx 16, 16 bits) ===
+perplexité 12889.4084 sur 12
+=== tête = copie 0 ===
+perplexité 13705.0623 sur 12
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"drave-core/src/model.rs\"\ns=open(p).read()\na=\"\"\"        let n_vis = if m.ratio > 0 { (pos + 1) / m.ratio } else { 0 };\"\"\"\nb=\"\"\"        // `DRAVE_SANS_BLOCS=1` : ablation des BLOCS COMPRESSÉS dans l'a … [2062 caractères tronqués]`
+
+  ```
+ok
+ok VARS
+    Finished `release` profile [optimized] target(s) in 31.97s
+=== sans les blocs compressés ===
+perplexité 3246479.2283 sur 12
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ./drave-core/target/release/drave /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf --tensors 2>/dev/null | grep -E \"ffn_gate_exps|ffn_down_exps\" | head -4; echo \"=== portes_formats : quels types sont comparés à g … [153 caractères tronqués]`
+
+  ```
+IQ2_XXS  blk.0.ffn_gate_exps.weight             [384, 2304, 5120] · 4529.8 M poids · fichier 0
+  Q2_K     blk.0.ffn_down_exps.weight             [384, 5120, 2304] · 4529.8 M poids · fichier 0
+  IQ2_XXS  blk.1.ffn_gate_exps.weight             [384, 2304, 5120] · 4529.8 M poids · fichier 0
+  Q2_K     blk.1.ffn_down_exps.weight             [384, 5120, 2304] · 4529.8 M poids · fichier 0
+=== portes_formats : quels types sont comparés à ggml ? ===
+8:# IQ1_M : échelles lues en premier alors qu'elles sont en DERNIER ; Q2_K : indice
+33:  "Q2_K       | $MODELES/Qwen3-235B-A22B-Q2_K/Qwen3-235B-A22B-Instruct-2507-Q2_K-00001-of-00002.gguf | token_embd.weight                 | 10"
+34:  "Q3_K       | $MODELES/Qwen3-235B-A22B-Q2_K/Qwen3-235B-A22B-Instruct-2507-Q2_K-00001-of-00002.gguf | blk.0.attn_output.weight            | 11"
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 1,60p tools/portes_formats.sh", "description": "Read the formats gate"}`
+
+  ```
+#!/usr/bin/env bash
+# Portes des FORMATS : chaque déquantificateur comparé à libggml, bloc par bloc.
+#
+#   tools/portes_formats.sh [type ...]
+#
+# Pourquoi : nos déquantificateurs sont écrits d'après le C de ggml, et les cinq
+# premiers essais se sont tous trompés (IQ2_XXS : pas de 8 octets sur `qs` ;
+# IQ1_M : échelles lues en premier alors qu'elles sont en DERNIER ; Q2_K : indice
+# d'échelle ; Q5_K : bits hauts relus au lieu d'avancés ; Q6_K : quants
+# entrelacés au lieu de groupés). Aucun n'a été trouvé par relecture : tous l'ont
+# été par comparaison à la bibliothèque. Cette porte rend la comparaison
+# reproductible, et refuse de « passer » si le témoin a disparu du disque — un
+# test qui saute est un test qui ne dit rien.
+#
+# La référence est liée à libggml (voir tools/ref_ggml_bloc.c).
+set -u
+cd "$(dirname "$0")/.."
+RACINE=$PWD
+MODELES=${DRAVE_MODELES:-/home/stephane/Data13TB/stephane/modeles/gguf}
+LLAMA=${DRAVE_LLAMA:-/home/stephane/Data13TB/stephane/GitHub/llama.cpp}
+REF=${REF_GGML_BLOC:-/tmp/ref_ggml_bloc}
+VERIF=tools/verifier_formats.py
+IFS=$'\n'
+
+ok=0; ko=0; abs=0
+# libellé | fichier | tenseur | type ggml
+BATTERIE=(
+  "F32        | $MODELES/codestral-22b-v0.1-q4_k_m.gguf 
+… [2834 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ./drave-core/target/release/drave /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf --tensors 2>/dev/null | grep -E \"blk\\.(2|36|37|38|39)\\.ffn_(gate_exps|down_exps)\" ; echo \"=== et les dspark ===\"; ./drave-core … [227 caractères tronqués]`
+
+  ```
+IQ2_XXS  blk.2.ffn_gate_exps.weight             [384, 2304, 5120] · 4529.8 M poids · fichier 0
+  Q2_K     blk.2.ffn_down_exps.weight             [384, 5120, 2304] · 4529.8 M poids · fichier 0
+  IQ2_XXS  blk.36.ffn_gate_exps.weight            [384, 2304, 5120] · 4529.8 M poids · fichier 0
+  Q2_K     blk.36.ffn_down_exps.weight            [384, 5120, 2304] · 4529.8 M poids · fichier 0
+  IQ2_XXS  blk.37.ffn_gate_exps.weight            [384, 2304, 5120] · 4529.8 M poids · fichier 0
+  Q2_K     blk.37.ffn_down_exps.weight            [384, 5120, 2304] · 4529.8 M poids · fichier 0
+  IQ2_XXS  blk.38.ffn_gate_exps.weight            [384, 2304, 5120] · 4529.8 M poids · fichier 0
+  Q2_K     blk.38.ffn_down_exps.weight            [384, 5120, 2304] · 4529.8 M poids · fichier 0
+  IQ2_XXS  blk.39.ffn_gate_exps.weight            [384, 2304, 5120] · 4529.8 M poids · fichier 0
+  Q2_K     blk.39.ffn_down_exps.weight            [384, 5120, 2304] · 4529.8 M poids · fichier 0
+=== et les dspark ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=/home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf && echo \"=== V4.1, RoPE simple (--sans-yarn), texte répété, ctx 16 ===\" && ./drave-core/target/release/drave $M --ppl /tmp/repete.ids --ctx 16 --limit 13 --abits  … [216 caractères tronqués]`
+
+  ```
+=== V4.1, RoPE simple (--sans-yarn), texte répété, ctx 16 ===
+perplexité 12901.1412 sur 12
+=== référence du même ctx 16 : 12889,4084 ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n \"$(grep -n 'Self::attn_v4(m4' drave-core/src/model.rs | cut -d: -f1),+3p\" drave-core/src/model.rs; echo \"=== la construction de etat ===\"; grep -n \"let mut etat = EtatV4\\|EtatV4 {\" drave-core/src/model.rs | head -5; sed … [176 caractères tronqués]`
+
+  ```
+Self::attn_v4(m4, &mut etat, &hn, pos, &mut att,
+                              &mut paires[0], self.dump_couches.as_deref(), l,
+                              pool.threads());
+            } else if let Some(m) = self.mla.as_ref().map(|v| &v[l]) {
+=== la construction de etat ===
+6438:                let mut etat = EtatV4 {
+                let mut etat = EtatV4 {
+                    cles: &mut self.mla4_cache[l],
+                    comp_kv: &mut self.mla4_comp_kv[src],
+                    comp_gate: &mut self.mla4_comp_gate[src],
+                    cles_comp: &mut self.mla4_cles_comp[src],
+                    idx_kv: &mut self.mla4_idx_kv[l],
+                    idx_gate: &mut self.mla4_idx_gate[l],
+                    // Les clés de l'indexeur sont, elles aussi, celles de la
+                    // SOURCE (`owns_k` côté vLLM) : une couche qui note les blocs
+                    // le fait avec SA requête, mais sur les mêmes clés.
+                    idx_cles: &mut self.mla4_idx_cles[src],
+                    idx_scores: &mut self.mla4_idx_scores[l],
+                };
+                Self::attn_v4(m4, &mut etat, &hn, pos, &mut att,
+                              &mut paires[0], self.d
+… [575 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"n_rot\" drave-core/src/model.rs | head -8; grep -n \"rope:\" drave-core/src/model.rs | head -6; sed -n \"$(grep -n 'n_rot {}' drave-core/src/model.rs | head -1 | cut -d: -f1),+2p\" drave-core/src/model.rs", "description": " … [39 caractères tronqués]`
+
+  ```
+504:    pub n_rot: usize,
+2825:            n_rot: {
+3563:        println!("[config] puits appris sur {sinks_vus}/{n_layer} couches · n_rot {} · ffn {} · experts {}{}",
+3564:                 if cfg.n_rot == 0 { cfg.head_dim } else { cfg.n_rot },
+4379:                 mscale_actif: bool, n_rot: usize) {
+4380:        let n_rot = if n_rot == 0 || n_rot > head_dim { head_dim } else { n_rot };
+4381:        let half = n_rot / 2;
+4394:                let freq = 1.0 / base.powf(2.0 * i as f32 / n_rot as f32);
+1298:    pub rope: usize,
+3287:                    nh: cfg.n_head, h: cfg.hidden, head_dim: hd, rope: nr,
+        println!("[config] puits appris sur {sinks_vus}/{n_layer} couches · n_rot {} · ffn {} · experts {}{}",
+                 if cfg.n_rot == 0 { cfg.head_dim } else { cfg.n_rot },
+                 cfg.ffn, cfg.n_expert,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 3278,3295p drave-core/src/model.rs; echo \"=== n_rot du cfg ===\"; sed -n 2820,2835p drave-core/src/model.rs", "description": "Read the Mla4 and cfg n_rot construction"}`
+
+  ```
+},
+                    q_a: g.dequant(&p("attn_q_a.weight")),
+                    q_a_norm: g.dequant(&p("attn_q_a_norm.weight")),
+                    q_b: g.dequant(&p("attn_q_b.weight")),
+                    kv: g.dequant(&p("attn_kv.weight")),
+                    kv_norm: g.dequant(&p("attn_kv_a_norm.weight")),
+                    wo_a: g.dequant(&p("attn_output_a.weight")),
+                    wo_b: g.dequant(&p("attn_output_b.weight")),
+                    sinks: g.dequant_optionnel(&p("attn_sinks.weight")).unwrap_or_default(),
+                    nh: cfg.n_head, h: cfg.hidden, head_dim: hd, rope: nr,
+                    n_groups, o_lora, rope_base: base, eps: cfg.eps,
+                    ratio, rope_base_compresse: base_comp, fenetre,
+                    // `DRAVE_YARN_NON` (et `--sans-yarn`) veut dire « JAMAIS de YaRN » : il
+                    // doit donc aussi couper celui des couches compressées, sinon le
+                    // drapeau ne ferait plus ce qu'il annonce. C'est ce qui permet de
+                    // MESURER les deux régimes contre llama.cpp.
+                    yarn_compresse: if ratio != 0
+                        && std::env::var("DRAVE_YARN_NON").is_err()
+… [1035 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"let nr = \\|let nr=\" drave-core/src/model.rs | head -5; sed -n \"$(grep -n 'let nr = ' drave-core/src/model.rs | head -1 | cut -d: -f1),+3p\" drave-core/src/model.rs; echo \"=== rope.dimension_count des deux modeles ===\"; … [457 caractères tronqués]`
+
+  ```
+3087:            let nr = dim(&["rope.dimension_count"], "qk_rope_head_dim").unwrap_or(64);
+            let nr = dim(&["rope.dimension_count"], "qk_rope_head_dim").unwrap_or(64);
+            let q_lora = dim(&["attention.q_lora_rank"], "q_lora_rank")
+                .unwrap_or_else(|| g.dequant("blk.0.attn_q_a.weight").len() / cfg.hidden);
+            let n_groups = dim(&["attention.output_group_count"], "o_groups").unwrap_or(1);
+=== rope.dimension_count des deux modeles ===
+deepseek41.config = {"architectures":["DeepseekV41ForCausalLM"],"bos_token_id":0,"dtype":"bfloat16","eos_token_id":1,"image_token_id":129264,"model_type":"deepseek_v41","pad_token_id":2,"quantization_config":{"activation_scheme":"dynamic","expert_dtype":"fp4","quant_method":"fp8","scale_fmt":"ue8m0","weight_block_size":[32,32]},"text_config":{"attention_bias":false,"attention_dropout":0.0,"candidate_block_size":8,"candidate_source_layer_id":20,"candidate_topk_blocks":2048,"compress_ratios":[0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0],"compress_rope_theta":160000,"dspark_block_size":5,"dspark_markov_rank":256,"dspark_n_routed_experts":128,"dspark_noise_token_id":128799,
+… [1927 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for f in /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf; do echo \"=== $(basename $f) ===\";  … [216 caractères tronqués]`
+
+  ```
+=== DeepSeek-V4.1-Flash-Q2.gguf ===
+deepseek41.config = {"architectures":["DeepseekV41ForCausalLM"],"bos_token_id":0,"dtype":"bfloat16","eos_token_id":1,"image_token_id":129264,"model_type":"deepseek_v41","pad_token_id":2,"quantization_config":{"activation_scheme":"dynamic","expert_dtype":"fp4","quant_method":"fp8","scale_fmt":"ue8m0","weight_block_size":[32,32]},"text_config":{"attention_bias":false,"attention_dropout":0.0,"candidate_block_size":8,"candidate_source_layer_id":20,"candidate_topk_blocks":2048,"compress_ratios":[0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0],"compress_rope_theta":160000,"dspark_block_size":5,"dspark_markov_rank":256,"dspark_n_routed_experts":128,"dspark_noise_token_id":128799,"dspark_num_experts_per_tok":3,"dspark_target_layer_ids":[37,38,39],"engram_compressed_vocab_size":99092,"engram_head_dim":256,"engram_layer_ids":[1,14],"engram_max_ngram_size":4,"engram_n_heads":8,"engram_num_embeddings":[384006168,384016682],"engram_pad_token_id":2,"engram_vocab_size":16000000,"hc_eps":1e-06,"hc_mult":4,"hc_sinkhorn_iters":20,"head_dim":512,"hidden_act":"silu","hidden_size":5120,"index_head_dim":128,"index_n_heads":32,"in
+… [1308 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/lire_meta_gguf.py /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf 2>/dev/null | grep -c \"\" ; python3 tools/lire_meta_gguf.py /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf 2>/dev … [120 caractères tronqués]`
+
+  ```
+69
+8:deepseek41.config = {"architectures":["DeepseekV41ForCausalLM"],"bos_token_id":0,"dtype":"bfloat16","eos_token_id":1,"image_token_id":129264,"model_type":"deepseek_v41","pad_token_id":2,"quantization_config":{"activation_scheme":"dynamic","expert_dtype":"fp4","quant_method":"fp8","scale_fmt":"ue8m0","weight_block_size":[32,32]},"text_config":{"attention_bias":false,"attention_dropout":0.0,"candidate_block_size":8,"candidate_source_layer_id":20,"candidate_topk_blocks":2048,"compress_ratios":[0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0],"compress_rope_theta":160000,"dspark_block_size":5,"dspark_markov_rank":256,"dspark_n_routed_experts":128,"dspark_noise_token_id":128799,"dspark_num_experts_per_tok":3,"dspark_target_layer_ids":[37,38,39],"engram_compressed_vocab_size":99092,"engram_head_dim":256,"engram_layer_ids":[1,14],"engram_max_ngram_size":4,"engram_n_heads":8,"engram_num_embeddings":[384006168,384016682],"engram_pad_token_id":2,"engram_vocab_size":16000000,"hc_eps":1e-06,"hc_mult":4,"hc_sinkhorn_iters":20,"head_dim":512,"hidden_act":"silu","hidden_size":5120,"index_head_dim":128,"index_n_heads":32,"index_source_layer_ids":[2,8,14,2
+… [1405 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ./drave-core/target/release/drave /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf --config 2>&1 | grep -iE \"n_rot|rotation|rope\" | head -5; echo \"=== Gguf::cfg ===\"; grep -n \"pub fn cfg\\b\" -A 14 drave-core/s … [102 caractères tronqués]`
+
+  ```
+=== Gguf::cfg ===
+895:    pub fn cfg(&self, key: &str) -> Option<&Meta> {
+896-        let arch = self.meta.get("general.architecture")?.as_str()?;
+897-        self.meta.get(&format!("{arch}.{key}"))
+898-    }
+899-
+900-    /// Première clef PRÉSENTE parmi plusieurs noms possibles.
+901-    ///
+902-    /// Deux conventions de nommage coexistent dans les GGUF de cette machine :
+903-    /// les clefs normalisées de llama.cpp (`expert_count`, `expert_used_count`)
+904-    /// et les noms d'origine de DeepSeek, recopiés tels quels par le
+905-    /// convertisseur (`n_routed_experts`, `num_experts_per_tok`). Lire une seule
+906-    /// convention ne donne pas une erreur : cela donne `n_expert = 0`, donc un
+907-    /// modèle **sans experts** — un V4.1 qui tourne en dense et dont la
+908-    /// perplexité ne veut plus rien dire.
+909-    pub fn cfg_ou(&self, cles: &[&str]) -> Option<&Meta> {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -h \"n_rot\" /tmp/v41_par.log /tmp/v41_avx32.log 2>/dev/null | head -3; echo \"=== toutes les clefs deepseek41 courtes ===\"; python3 tools/lire_meta_gguf.py /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf 2>/ … [128 caractères tronqués]`
+
+  ```
+[config] puits appris sur 40/40 couches · n_rot 80 · ffn 2816 · experts 384
+[config] puits appris sur 40/40 couches · n_rot 80 · ffn 2816 · experts 384
+=== toutes les clefs deepseek41 courtes ===
+deepseek41.engram.encoding = e4m3_e8m0_32_row264
+deepseek41.engram.layer_ids = [1, 14]
+deepseek41.engram.rows = [384006168, 384016682]
+deepseek41.engram.compressed_vocab_size = 99092
+deepseek41.engram.pad_id = 2
+deepseek41.vocab_size = 129280
+deepseek41.hidden_size = 5120
+deepseek41.moe_intermediate_size = 2304
+deepseek41.num_hidden_layers = 40
+deepseek41.num_attention_heads = 64
+deepseek41.num_key_value_heads = 1
+deepseek41.head_dim = 512
+deepseek41.qk_rope_head_dim = 64
+deepseek41.q_lora_rank = 1280
+deepseek41.o_lora_rank = 1024
+deepseek41.o_groups = 8
+deepseek41.n_routed_experts = 384
+deepseek41.n_shared_experts = 1
+deepseek41.num_experts_per_tok = 6
+deepseek41.max_position_embeddings = 1048576
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"drave-core/src/model.rs\"\ns=open(p).read()\na=\"\"\"                    nh: cfg.n_head, h: cfg.hidden, head_dim: hd, rope: nr,\n                    n_groups, o_lora, rope_base: base, eps: cfg.eps,\n             … [2417 caractères tronqués]`
+
+  ```
+ok model
+ok VARS
+error[E0425]: cannot find value `ratio` in this scope
+error: could not compile `drave-core` (bin "drave") due to 1 previous error; 24 warnings emitted
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"let ratio = \\|ratio = \" drave-core/src/model.rs | sed -n 1,10p", "description": "Find where ratio is computed in the mla4 block"}`
+
+  ```
+3170:                let ratio = ratios.get(l).copied().unwrap_or(0) as usize;
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 3165,3175p drave-core/src/model.rs; grep -n \"let nr = dim\" drave-core/src/model.rs", "description": "Check the ratio scope"}`
+
+  ```
+idx_sources);
+            }
+            let mut v = Vec::with_capacity(cfg.n_layer);
+            for l in 0..cfg.n_layer {
+                let p = |s: &str| format!("blk.{l}.{s}");
+                let ratio = ratios.get(l).copied().unwrap_or(0) as usize;
+                let src = if ratio != 0 { source_de(l) } else { l };
+                // **Cohérence de la source.** Une couche consommatrice lit l'état
+                // publié par sa source : si les deux ratios diffèrent, le nombre
+                // de jetons par bloc diffère aussi et le cache lu n'est pas le
+                // sien. Le fichier de V4.1 est cohérent (2..7 en ratio 2 autour de
+3087:            let nr = dim(&["rope.dimension_count"], "qk_rope_head_dim").unwrap_or(64);
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"drave-core/src/model.rs\"\ns=open(p).read()\n# retirer la ligne mal placée\na=\"\"\"            let ratio_exercice = if sans_compression { 0 } else { ratio };\"\"\"\nassert a in s\ns=s.replace(a,\"\",1)\n# la re … [3405 caractères tronqués]`
+
+  ```
+ok
+error[E0308]: mismatched types
+error: could not compile `drave-core` (bin "drave") due to 1 previous error; 24 warnings emitted
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cargo build --release --manifest-path drave-core/Cargo.toml 2>&1 | grep -B3 -A8 \"E0308\" | head -25", "description": "See the type error", "timeoutMs": 600000}`
+
+  ```
+= warning: this was previously accepted by the compiler but is being phased out; it will become a hard error in a future release!
+     = note: `#[warn(unused_attributes)]` (part of `#[warn(unused)]`) on by default
+
+error[E0308]: mismatched types
+    --> src/model.rs:3164:41
+     |
+3164 |                   let ratio_exercice = if SANS_COMPRESSION_EXERCICE
+     |  _________________________________________^
+3165 | |                     .get_or_init(|| {
+3166 | |                         let actif = std::env::var("DRAVE_SANS_COMPRESSION")
+3167 | |                             .map(|v| v != "0" && !v.is_empty()).unwrap_or(false);
+...    |
+--
+2550 |     let charge = match mode {
+     |         ^^^^^^ help: if this is intentional, prefix it with an underscore: `_charge`
+
+For more information about this error, try `rustc --explain E0308`.
+warning: `drave-core` (bin "drave") generated 24 warnings
+error: could not compile `drave-core` (bin "drave") due to 1 previous error; 24 warnings emitted
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"drave-core/src/model.rs\"\ns=open(p).read()\na=\"\"\"                let ratio_exercice = if SANS_COMPRESSION_EXERCICE\n                    .get_or_init(|| {\n                        let actif = std::env::var(\" … [1750 caractères tronqués]`
+
+  ```
+ok
+    Finished `release` profile [optimized] target(s) in 32.87s
+=== V4.1 sans compression (fenêtre seule), texte répété, ctx 16 ===
+perplexité 1948571.6210 sur 12
+=== référence : 12889,4084 ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=/home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf && echo \"=== V4.1 : ni compression, ni retard, ni engram (chemin V4 nu) ===\" && DRAVE_SANS_COMPRESSION=1 DRAVE_V41_SANS_RETARD=1 DRAVE_SANS_ENGRAM=1 ./drave-core/ … [220 caractères tronqués]`
+
+  ```
+=== V4.1 : ni compression, ni retard, ni engram (chemin V4 nu) ===
+perplexité 2521650.7919 sur 12
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ./drave-core/target/release/drave /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf --tensors 2>/dev/null | awk '{print $2}' | grep \"^blk\\.0\\.\" | sed 's/^blk\\.0\\.//' | sort > /tmp/noms41.txt; ./drave-core/targe … [469 caractères tronqués]`
+
+  ```
+9a10,11
+> exp_probs_b.bias
+> exp_probs_b_vl.bias
+15d16
+< ffn_gate_tid2eid.weight
+--- nb noms : V4F 24 · V4.1 25
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/lire_meta_gguf.py /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf 2>/dev/null | grep -i \"swiglu\\|clamp\" | head -5; echo \"=== V4-Flash ===\"; python3 tools/lire_meta_gguf.py /home/stephane/Data13TB … [342 caractères tronqués]`
+
+  ```
+deepseek41.config = {"architectures":["DeepseekV41ForCausalLM"],"bos_token_id":0,"dtype":"bfloat16","eos_token_id":1,"image_token_id":129264,"model_type":"deepseek_v41","pad_token_id":2,"quantization_config":{"activation_scheme":"dynamic","expert_dtype":"fp4","quant_method":"fp8","scale_fmt":"ue8m0","weight_block_size":[32,32]},"text_config":{"attention_bias":false,"attention_dropout":0.0,"candidate_block_size":8,"candidate_source_layer_id":20,"candidate_topk_blocks":2048,"compress_ratios":[0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0],"compress_rope_theta":160000,"dspark_block_size":5,"dspark_markov_rank":256,"dspark_n_routed_experts":128,"dspark_noise_token_id":128799,"dspark_num_experts_per_tok":3,"dspark_target_layer_ids":[37,38,39],"engram_compressed_vocab_size":99092,"engram_head_dim":256,"engram_layer_ids":[1,14],"engram_max_ngram_size":4,"engram_n_heads":8,"engram_num_embeddings":[384006168,384016682],"engram_pad_token_id":2,"engram_vocab_size":16000000,"hc_eps":1e-06,"hc_mult":4,"hc_sinkhorn_iters":20,"head_dim":512,"hidden_act":"silu","hidden_size":5120,"index_head_dim":128,"index_n_heads":32,"index_source_layer_ids":[2,8,14,20,24,
+… [2166 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 3015,3030p drave-core/src/model.rs; echo \"=== activation et limite ===\"; sed -n \"$(grep -n 'fn activation' drave-core/src/model.rs | head -1 | cut -d: -f1),+18p\" drave-core/src/model.rs", "description": "Read the clamp loa … [24 caractères tronqués]`
+
+  ```
+assert!(cfg.head_dim * cfg.n_head >= cfg.hidden,
+                "n_head × head_dim doit couvrir hidden");
+        // Capturé avant que `cfg` ne soit déplacé dans la structure.
+        let n_layer_total = cfg.n_layer;
+        // Le clamp SwiGLU de V4, par couche — lu AVANT que `g` ne soit déplacé.
+        let clamp_exp: Vec<f32> = g.cfg_ou(&["swiglu_clamp_exp"])
+            .and_then(|m| m.as_liste_f32()).unwrap_or_default();
+        let clamp_shexp: Vec<f32> = g.cfg_ou(&["swiglu_clamp_shexp"])
+            .and_then(|m| m.as_liste_f32()).unwrap_or_default();
+        // Le mapping est lu UNE fois et passé aux couches : un état global lu
+        // par couche rendait ce chemin intestable (les tests s'exécutent en
+        // parallèle, un `OnceLock` ne se pose qu'une fois).
+        let mla = if g.tensor("blk.0.attn_kv_a_mqa.weight").is_some() {
+            let mut v = Vec::with_capacity(cfg.n_layer);
+            for l in 0..cfg.n_layer {
+                let p = |s: &str| format!("blk.{l}.{s}");
+=== activation et limite ===
+    fn activation(gate: &mut [f32], up: &[f32], n: usize, oss: bool, clamp_v4: f32) {
+        if oss {
+            const LIMITE: f32 = 7.0;
+            const ALPHA:
+… [584 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"drave-core/src/model.rs\"\ns=open(p).read()\na=\"\"\"        // Le clamp SwiGLU de V4, par couche — lu AVANT que `g` ne soit déplacé.\n        let clamp_exp: Vec<f32> = g.cfg_ou(&[\"swiglu_clamp_exp\"])\n        … [2223 caractères tronqués]`
+
+  ```
+ok
+    Finished `release` profile [optimized] target(s) in 32.57s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=/home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf && echo \"=== V4.1 AVEC le clamp SwiGLU (swiglu_limit=10), texte répété, ctx 16 ===\" && ./drave-core/target/release/drave $M --ppl /tmp/repete.ids --ctx 16 --limit … [153 caractères tronqués]`
+
+  ```
+=== V4.1 AVEC le clamp SwiGLU (swiglu_limit=10), texte répété, ctx 16 ===
+[config] clamp SwiGLU : `swiglu_clamp_exp` absent, `swiglu_limit` = 10 appliqué aux 40 couches (V4.1 déclare un scalaire, V4 une liste)
+[config] clamp SwiGLU : `swiglu_clamp_shexp` absent, `swiglu_limit` = 10 appliqué aux 40 couches (V4.1 déclare un scalaire, V4 une liste)
+      12 tokens notés — perplexité cumulée 12889.418  (0.3 tok/s)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ./drave-core/target/release/drave /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf --tensors 2>/dev/null | grep -iE \"output|token_embd\" | head -5; echo \"=== V4-Flash ===\"; ./drave-core/target/release/drave /home … [266 caractères tronqués]`
+
+  ```
+F16      token_embd.weight                      [129280, 5120] · 661.9 M poids · fichier 0
+  F32      output_norm.weight                     [5120] · 0.0 M poids · fichier 0
+  Q8_0     output.weight                          [129280, 5120] · 661.9 M poids · fichier 0
+  Q8_0     blk.0.attn_output_a.weight             [8192, 4096] · 33.6 M poids · fichier 0
+  Q8_0     blk.0.attn_output_b.weight             [5120, 8192] · 41.9 M poids · fichier 0
+=== V4-Flash ===
+  Q4_K     output.weight                          [129280, 4096] · 529.5 M poids · fichier 1
+  Q4_K     token_embd.weight                      [129280, 4096] · 529.5 M poids · fichier 1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=/home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf && rm -rf /tmp/drep && mkdir -p /tmp/drep && DRAVE_DUMP_COUCHES=/tmp/drep/l ./drave-core/target/release/drave $M --ppl /tmp/repete.ids --ctx 16 --limit 13 --abits 1 … [1509 caractères tronqués]`
+
+  ```
+jetons : [671, 12709, 344, 8295, 16, 455, 12709, 344, 8295, 16, 455, 12709, 344, 8295]
+positions de « The » : [0] · de « blue » : [3, 8]
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 25, in <module>
+ValueError: min() iterable argument is empty
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport numpy as np, os\ndef lire(p): return np.fromfile(p, dtype=\"<f4\").astype(np.float64)\n# positions 2, 7, 12 = juste après « is » : le contexte est IDENTIQUE, l'état doit se ressembler\npos=[2,7,12]\nfor couch … [720 caractères tronqués]`
+
+  ```
+hidden_final couche  0 : cos(2,7) +0.600 · cos(2,12) +0.503 · cos(7,12) +0.757  (normes 19.2/19.1/19.2)
+  l_last       couche  0 : cos(2,7) +0.958 · cos(2,12) +0.938 · cos(7,12) +0.995  (normes 5.3/5.1/5.1)
+  hidden_final couche  5 : cos(2,7) +0.600 · cos(2,12) +0.503 · cos(7,12) +0.757  (normes 19.2/19.1/19.2)
+  l_last       couche  5 : cos(2,7) +0.680 · cos(2,12) +0.585 · cos(7,12) +0.921  (normes 18.2/17.6/18.5)
+  hidden_final couche 19 : cos(2,7) +0.600 · cos(2,12) +0.503 · cos(7,12) +0.757  (normes 19.2/19.1/19.2)
+  l_last       couche 19 : cos(2,7) +0.590 · cos(2,12) +0.536 · cos(7,12) +0.784  (normes 115.6/107.8/119.6)
+  hidden_final couche 39 : cos(2,7) +0.600 · cos(2,12) +0.503 · cos(7,12) +0.757  (normes 19.2/19.1/19.2)
+  l_last       couche 39 : cos(2,7) +0.662 · cos(2,12) +0.576 · cos(7,12) +0.819  (normes 480.5/580.5/576.8)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && V=/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf && DRAVE_DEBUG_ETAT=1 ./drave-core/target/release/drave $V --ppl /tmp/repete.ids --ctx 16 --limit 13 --abits 16 … [384 caractères tronqués]`
+
+  ```
+[etat] couche   0 pos 12 : |x| 9.1136e0 · |att| 1.3214e2 · |ffn| 1.6507e1
+[etat] couche   5 pos 12 : |x| 1.0195e1 · |att| 6.4000e1 · |ffn| 8.3311e0
+[etat] couche  19 pos 12 : |x| 9.7444e1 · |att| 6.8550e1 · |ffn| 1.6854e1
+[etat] couche  39 pos 12 : |x| 4.2146e2 · |att| 1.6225e2 · |ffn| 4.0259e1
+=== perplexité V4-Flash (mêmes conditions) ===
+perplexité 4.1183 sur 12
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"sprints/21-localiser-le-defaut-v41.md\"\ns=open(p).read()\na=\"\"\"## Revue — ce qui est livré, mesuré\n\n_(mesure en cours — première piste : la NLL par position sur le texte répété, avec\nles logits enregistré … [9818 caractères tronqués]`

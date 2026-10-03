@@ -948,6 +948,15 @@ impl Moe {
     }
 }
 
+/// `DRAVE_SANS_COMPRESSION=1` : le RATIO de toutes les couches est forcé à 0.
+///
+/// L'attention ne voit plus que sa fenêtre brute (128 jetons) et le chemin
+/// compressé (compresseur, blocs, cache partagé des consommatrices) n'est plus
+/// exercé. Ce n'est PLUS V4.1 : c'est l'ablation qui dit si le défaut du modèle
+/// vient de là. La rotation (YaRN des couches compressées) reste celle du
+/// fichier, pour ne changer QU'UNE chose.
+static SANS_COMPRESSION_EXERCICE: std::sync::OnceLock<bool> = std::sync::OnceLock::new();
+
 /// **Cache RAM des experts** (`DRAVE_EXPERTS_RAM` en Mo).
 ///
 /// Les octets d'un expert sont lus une fois depuis le NVMe et gardés en
@@ -3008,10 +3017,33 @@ le moteur garde tous les blocs, ce qui est exact sous `indexer.top_k` et refusé
         // Capturé avant que `cfg` ne soit déplacé dans la structure.
         let n_layer_total = cfg.n_layer;
         // Le clamp SwiGLU de V4, par couche — lu AVANT que `g` ne soit déplacé.
-        let clamp_exp: Vec<f32> = g.cfg_ou(&["swiglu_clamp_exp"])
-            .and_then(|m| m.as_liste_f32()).unwrap_or_default();
-        let clamp_shexp: Vec<f32> = g.cfg_ou(&["swiglu_clamp_shexp"])
-            .and_then(|m| m.as_liste_f32()).unwrap_or_default();
+        //
+        // **Deux façons de le déclarer, et n'en lire qu'une coûtait le modèle.**
+        // V4 (V4-Flash) écrit une LISTE par couche (`swiglu_clamp_exp` /
+        // `swiglu_clamp_shexp`) ; V4.1 écrit un SCALAIRE `swiglu_limit`. Sans la
+        // seconde lecture, `clamp_exp` restait vide, `limite()` rendait 0 et
+        // `activation()` prenait la branche SANS clamp : le SwiGLU n'était pas
+        // borné, les experts rendaient d'autres valeurs que celles avec
+        // lesquelles le modèle a été entraîné, et V4.1 prédisait au niveau du
+        // hasard (top-1 0/31, perplexité 3 677 sur huit répétitions d'une phrase
+        // là où un modèle qui fonctionne donne 1,8 — mesuré au bloc 20, localisé
+        // au bloc 21). V4-Flash, qui déclare la liste, n'était pas touché.
+        let scalaire = g.cfg_ou(&["swiglu_limit"]).and_then(|m| m.as_f64()).map(|v| v as f32);
+        let liste_ou_scalaire = |cle: &str| -> Vec<f32> {
+            match g.cfg_ou(&[cle]).and_then(|m| m.as_liste_f32()) {
+                Some(v) if !v.is_empty() => v,
+                _ => match scalaire {
+                    Some(v) if v > 0.0 => {
+                        eprintln!("[config] clamp SwiGLU : `{cle}` absent, `swiglu_limit` = {v} \
+appliqué aux {} couches (V4.1 déclare un scalaire, V4 une liste)", cfg.n_layer);
+                        vec![v; cfg.n_layer]
+                    }
+                    _ => Vec::new(),
+                },
+            }
+        };
+        let clamp_exp: Vec<f32> = liste_ou_scalaire("swiglu_clamp_exp");
+        let clamp_shexp: Vec<f32> = liste_ou_scalaire("swiglu_clamp_shexp");
         // Le mapping est lu UNE fois et passé aux couches : un état global lu
         // par couche rendait ce chemin intestable (les tests s'exécutent en
         // parallèle, un `OnceLock` ne se pose qu'une fois).
@@ -3085,6 +3117,7 @@ le moteur garde tous les blocs, ce qui est exact sous `indexer.top_k` et refusé
             let hd = dim(&["attention.key_length"], "head_dim")
                 .unwrap_or_else(|| panic!("attention V4 : `head_dim` introuvable"));
             let nr = dim(&["rope.dimension_count"], "qk_rope_head_dim").unwrap_or(64);
+
             let q_lora = dim(&["attention.q_lora_rank"], "q_lora_rank")
                 .unwrap_or_else(|| g.dequant("blk.0.attn_q_a.weight").len() / cfg.hidden);
             let n_groups = dim(&["attention.output_group_count"], "o_groups").unwrap_or(1);
@@ -3150,6 +3183,17 @@ qui porte `indexer.proj` sans être dans cette liste serait un fichier contradic
             for l in 0..cfg.n_layer {
                 let p = |s: &str| format!("blk.{l}.{s}");
                 let ratio = ratios.get(l).copied().unwrap_or(0) as usize;
+                // `DRAVE_SANS_COMPRESSION=1` (voir plus haut) : ratio forcé à 0.
+                let sans_compression = *SANS_COMPRESSION_EXERCICE.get_or_init(|| {
+                    let actif = std::env::var("DRAVE_SANS_COMPRESSION")
+                        .map(|v| v != "0" && !v.is_empty()).unwrap_or(false);
+                    if actif {
+                        eprintln!("[attn] DRAVE_SANS_COMPRESSION est actif : toutes les couches \
+sont traitées en ratio 0 (fenêtre brute seule) — ablation pour localiser un défaut, pas V4.1.");
+                    }
+                    actif
+                });
+                let ratio_exercice = if sans_compression { 0 } else { ratio };
                 let src = if ratio != 0 { source_de(l) } else { l };
                 // **Cohérence de la source.** Une couche consommatrice lit l'état
                 // publié par sa source : si les deux ratios diffèrent, le nombre
@@ -3286,7 +3330,7 @@ fichier se contredit");
                     sinks: g.dequant_optionnel(&p("attn_sinks.weight")).unwrap_or_default(),
                     nh: cfg.n_head, h: cfg.hidden, head_dim: hd, rope: nr,
                     n_groups, o_lora, rope_base: base, eps: cfg.eps,
-                    ratio, rope_base_compresse: base_comp, fenetre,
+                    ratio: ratio_exercice, rope_base_compresse: base_comp, fenetre,
                     // `DRAVE_YARN_NON` (et `--sans-yarn`) veut dire « JAMAIS de YaRN » : il
                     // doit donc aussi couper celui des couches compressées, sinon le
                     // drapeau ne ferait plus ce qu'il annonce. C'est ce qui permet de
@@ -5475,7 +5519,23 @@ s'applique pas — utilisez --lot 1, ou réenregistrez sans DRAVE_TRACE_BLOCS");
         // un softmax **par canal** sur les portes (avec l'`ape` du rang dans le
         // bloc), suivi de la norme et d'une rotation à la position du PREMIER
         // jeton du bloc.
-        let n_vis = if m.ratio > 0 { (pos + 1) / m.ratio } else { 0 };
+        // `DRAVE_SANS_BLOCS=1` : ablation des BLOCS COMPRESSÉS dans l'attention
+        // (la fenêtre brute reste). Les couches 2 à 39 de V4.1 sont toutes
+        // compressées : si les blocs — ou l'aliasing du cache partagé qui les
+        // sert aux couches consommatrices — sont faux, ils empoisonnent le softmax
+        // à CHAQUE position, ce qui ressemble exactement au symptôme observé
+        // (top-1 0/31, perplexité au niveau du hasard dès la première tranche).
+        static SANS_BLOCS: std::sync::OnceLock<bool> = std::sync::OnceLock::new();
+        let sans_blocs = *SANS_BLOCS.get_or_init(|| {
+            let actif = std::env::var("DRAVE_SANS_BLOCS")
+                .map(|v| v != "0" && !v.is_empty()).unwrap_or(false);
+            if actif {
+                eprintln!("[attn] DRAVE_SANS_BLOCS est actif : l'attention NE VOIT PAS les \
+blocs compressés (la fenêtre brute reste) — ablation pour localiser un défaut.");
+            }
+            actif
+        });
+        let n_vis = if sans_blocs || m.ratio == 0 { 0 } else { (pos + 1) / m.ratio };
         if m.ratio > 0 {
             // **Deux formes de compresseur, et deux ratios de plus.** V4 (ratios
             // 4 et 128) : la couche projette sa valeur ET sa porte, chacune en
@@ -6213,6 +6273,41 @@ le raccord précédent n'existe pas, le premier raccord se replie donc avec la C
         // seul moyen de l'établir est de couper et de regarder bouger. Le chiffre
         // obtenu n'est plus V4.1 (l'engram est 55 % du fichier), et le moteur le
         // dit au lieu de le laisser croire.
+        // `DRAVE_V41_SANS_RETARD=1` : ablation de la règle RETARDÉE de V4.1 (les
+        // coefficients d'un raccord servent au raccord SUIVANT). Diagnostic pur,
+        // né du constat du bloc 20 — V4.1 ne prédit pas (top-1 0/31) alors que
+        // V4-Flash, qui partage tout le reste du chemin, prédit (1,875 contre
+        // 1,844 pour llama.cpp). Avec ce drapeau, V4.1 se replie comme V4 (chaque
+        // raccord avec SES coefficients) : si la perplexité s'effondre vers 2,
+        // c'est la règle du retard qui est fausse — pas le reste.
+        static SANS_RETARD: std::sync::OnceLock<bool> = std::sync::OnceLock::new();
+        let sans_retard = *SANS_RETARD.get_or_init(|| {
+            let actif = std::env::var("DRAVE_V41_SANS_RETARD")
+                .map(|v| v != "0" && !v.is_empty()).unwrap_or(false);
+            if actif {
+                eprintln!("[mhc] DRAVE_V41_SANS_RETARD est actif : la chaîne retardée est \
+remplacée par la convention V4 (chaque raccord se replie avec SES coefficients). Ce n'est \
+plus V4.1 — c'est une ablation pour localiser un défaut.");
+            }
+            actif
+        });
+        let retarde = self.hc_retarde && !sans_retard;
+        // `DRAVE_V41_TETE_COPIE0=1` : la TÊTE de V4.1 (repliement final par la
+        // `pre` de la dernière FFN) est remplacée par la copie 0 — l'alternative
+        // la plus simple, et la seule autre convention que le fichier permet.
+        // La tête est le seul endroit entre l'état et les logits : une erreur y
+        // produit exactement ce qu'on observe (logits au niveau du hasard).
+        static TETE_COPIE0: std::sync::OnceLock<bool> = std::sync::OnceLock::new();
+        let tete_copie0 = *TETE_COPIE0.get_or_init(|| {
+            let actif = std::env::var("DRAVE_V41_TETE_COPIE0")
+                .map(|v| v != "0" && !v.is_empty()).unwrap_or(false);
+            if actif {
+                eprintln!("[mhc] DRAVE_V41_TETE_COPIE0 est actif : la réduction finale \
+replie la COPIE 0 au lieu de la `pre` de la dernière FFN — ablation de diagnostic.");
+            }
+            actif
+        });
+
         static SANS_ENGRAM: std::sync::OnceLock<bool> = std::sync::OnceLock::new();
         let sans_engram = *SANS_ENGRAM.get_or_init(|| {
             let actif = std::env::var("DRAVE_SANS_ENGRAM")
@@ -6317,7 +6412,7 @@ hors de la table ({} rangées)", eng.rangees[*ti]));
                     // raccord précédent, et la copie 0 au tout premier — la
                     // référence fait `layer_input = residual[:, 0] if pre_mix is
                     // None else (pre_mix · residual).sum(1)`.
-                    let poids: &[f32] = if self.hc_retarde {
+                    let poids: &[f32] = if retarde {
                         hc_porte.as_deref().unwrap_or(&[])
                     } else { &s.pre };
                     if poids.is_empty() { xin.copy_from_slice(&x[..h]); }
@@ -6799,7 +6894,7 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
                     // Idem pour la FFN : V4.1 la replie avec la `pre` de
                     // l'ATTENTION courante (« the FFN uses this layer's attention
                     // pre-mix »), et sa propre `pre` part au raccord suivant.
-                    let poids: &[f32] = if self.hc_retarde { &sa.pre } else { &sf.pre };
+                    let poids: &[f32] = if retarde { &sa.pre } else { &sf.pre };
                     Hc::melanger(&nx, poids, hf.hc, h, &mut mel);
                     if self.hc_retarde {
                         // **Le maillon central de la chaîne retardée** : l'entrée de
@@ -7061,8 +7156,18 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
             // `hc_collapse_triton(hidden_states, pre_mix)` puis `self.norm`.
             // La calculer ici n'est pas une convention du moteur : c'est la
             // seule chaîne que le fichier permet (pas de `output_hc_*`).
-            match hc_porte.as_deref() {
-                Some(pm) => {
+            match (hc_porte.as_deref(), tete_copie0) {
+                (_, true) => {
+                    let (hc, hh) = self.hc.as_ref()
+                        .map(|v| (v[0].0.hc, v[0].0.h)).expect("`hc_retarde` sans hyper-connexions");
+                    let mut replie = vec![0f32; h];
+                    Hc::melanger(&x, &{
+                        let mut p = vec![0f32; hc]; p[0] = 1.0; p
+                    }, hc, hh, &mut replie);
+                    x = replie;
+                    let _ = hh;
+                }
+                (Some(pm), false) => {
                     let (hc, hh) = self.hc.as_ref()
                         .map(|v| (v[0].0.hc, v[0].0.h))
                         .expect("`hc_retarde` sans hyper-connexions chargées");
@@ -7070,7 +7175,7 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
                     Hc::melanger(&x, pm, hc, hh, &mut replie);
                     x = replie;
                 }
-                None => panic!("V4.1 : flux final en `hc` copies sans `pre` portée — \
+                (None, false) => panic!("V4.1 : flux final en `hc` copies sans `pre` portée — \
 le dernier raccord FFN n'a pas été exécuté (plage de couches vide ?)"),
             }
         }
