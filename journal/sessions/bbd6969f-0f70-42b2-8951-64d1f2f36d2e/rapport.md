@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 109.4 h |
 | Tours | 81 |
-| Messages | 6394 |
-| Appels d'outils | 6132 |
+| Messages | 6397 |
+| Appels d'outils | 6135 |
 | Fichiers touchés | 118 |
-| Commandes | 5196 |
+| Commandes | 5199 |
 | Sous-agents | 32 |
-| Commits | 405 |
+| Commits | 406 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -4122,7 +4122,7 @@ Dis-moi si je poursuis sur le bloc 22 (la composition des experts en numpy, plan
 
 ### Tour 81 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [941 caractères tronqués]
 
-*21 appels d'outils.* Actions notables :
+*24 appels d'outils.* Actions notables :
 
 - bash — Read the IQ2_XXS dequantizer
 - bash — Write and run the expert-path numpy reference
@@ -4138,7 +4138,7 @@ Dis-moi si je poursuis sur le bloc 22 (la composition des experts en numpy, plan
 - bash — Read the NORM rope implementation
 - bash — Write and run the attention projection reference
 - bash — List the real attention tensor dims
-- … et 7 autres
+- … et 10 autres
 
 ## 3. Travail accompli
 
@@ -4342,7 +4342,7 @@ Dis-moi si je poursuis sur le bloc 22 (la composition des experts en numpy, plan
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5156 autres
+- … et 5159 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4895,4 +4895,5 @@ Dis-moi si je poursuis sur le bloc 22 (la composition des experts en numpy, plan
 - Sprint 21 : portes toutes vertes après les changements du bloc (64 tests, V4-Flash 8430,4966 inchangée)" && git log --oneline | head -5; date
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="sprints/21-localiser-le-defaut-v41.md" s=open(p).read() a="""## Portes""" b="""## 3bis
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="sprints/21-localiser-le-defaut-v41.md" s=open(p).read() a="""## Portes""" b="""## 3ter
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="sprints/21-localiser-le-defaut-v41.md" s=open(p).read() a="""Les deux tentatives d'inv
 

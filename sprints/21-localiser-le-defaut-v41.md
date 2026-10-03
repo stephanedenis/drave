@@ -155,12 +155,23 @@ Deux enseignements :
    nul par tranche de 64), donc l'ordre des têtes et l'appariement des paires ne
    sont pas en cause.
 
-Les deux tentatives d'inversion de l'angle appliqué (par paire, puis entre deux
-positions) sont **non concluantes** : la première compare des angles modulo 2π
-sans le dire, la seconde mélange la rotation et le changement d'entrée entre les
-deux positions. Instrument à corriger avant de conclure : vider le `q` **juste
-avant** la rotation (le `q_norm` existe déjà) et **juste après**, dans le même
-gabarit que le KV, puis comparer les deux rotations sur les MÊMES valeurs.
+**L'écart sur `q_rope` était MON erreur, pas celle du moteur** — et la façon de
+le prouver vaut d'être notée : en appliquant ma rotation NORM au `q_norm` **DU
+MOTEUR** (le vide existe déjà), on retrouve son `q_rope` à **1,0e-06** (et la
+variante « interleaved » à 11 ✗, donc l'appariement est bien NORM). Mon script
+gathernait la tranche de rotation depuis `q` (la sortie BRUTE de `wq_b`) au lieu de
+`qn` (le q NORMÉ) : un seul mot, 3,6 d'écart ✗. Corrigé, l'étage rend 6,4e-07 ✓.
+Les deux inversions d'angle tentées avant cela étaient non concluantes (angles
+modulo 2π comparés sans le dire ; mélange de la rotation et du changement
+d'entrée) — consignées comme telles plutôt que publiées.
+
+**État de l'attention après ce bloc** : `qr`, `qr_norm`, `q_norm`, `q_rope`,
+`kv_rope` tous à **1e-6** ✓ — projections, normes et rotations sont justes. Reste
+le cœur : scores, softmax (avec les puits), somme pondérée, dé-rotation et sortie
+groupée `wo_a`/`wo_b` — pour lesquels les vides `attn_brut` et `attn_out` existent
+déjà. Noter aussi que le vide nommé `kv_norm` contient en fait le KV **APRÈS**
+rotation (les trois vides sont écrits au même endroit) : le nom trompe, à corriger
+ou à documenter.
 
 ## Portes
 

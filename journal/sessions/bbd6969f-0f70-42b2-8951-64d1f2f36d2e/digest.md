@@ -101858,3 +101858,39 @@ paire  0 : angle mesuré +0.57564 · attendu (7·freq, mod 2π) +0.71681 · |x| 
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"sprints/21-localiser-le-defaut-v41.md\"\ns=open(p).read()\na=\"\"\"## Portes\"\"\"\nb=\"\"\"## 3ter. L'attention : projections et normes vérifiées, un écart sur la rotation du Q\n\n`tools/v41_attention_reference … [3523 caractères tronqués]`
+
+  ```
+ok
+2a96b14 Attention V4.1 : projections et normes VÉRIFIÉES (1e-6), un écart isolé sur la rotation du Q — instrument fourni, conclusion suspendue
+sam 03 oct 2026 04:10:58 EDT
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport numpy as np, sys\nsys.path.insert(0,\"tools\")\nfrom v41_attention_reference import dump, rope_norm, BASE\nhd, nh, nrot = 512, 64, 64\nfor pos in (5, 12):\n    pre = dump(\"/tmp/drep2/l\",\"q_norm\",0,pos)    … [1376 caractères tronqués]`
+
+  ```
+pos 5 : rotation NORM appliquée au q_norm du MOTEUR vs son q_rope → écart max 1.035e-06
+         variante INTERLEAVED (i, i+n/2)                      → écart max 1.119e+01
+pos 12 : rotation NORM appliquée au q_norm du MOTEUR vs son q_rope → écart max 1.203e-06
+         variante INTERLEAVED (i, i+n/2)                      → écart max 1.347e+01
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"tools/v41_attention_reference.py\"\ns=open(p).read()\na=\"\"\"        qp = np.concatenate([q[h * hd + hd - nrot:h * hd + hd] for h in range(nh)])\"\"\"\nb=\"\"\"        # ATTENTION : la rotation porte sur le q N … [702 caractères tronqués]`
+
+  ```
+ok
+couche 0 : head_dim 512 · 64 têtes · attn_q_b [1280, 32768] · kv [5120, 512]
+  pos 5 qr       : écart max 1.051e-06 (dynamique 3.240e-01, 3.2e-06 relatif)
+  pos 5 qr_norm  : écart max 1.005e-05 (dynamique 8.466e+00, 1.2e-06 relatif)
+  pos 5 q_norm   : écart max 9.028e-06 (dynamique 1.313e+01, 6.9e-07 relatif)
+  pos 5 q_rope   : écart max 8.861e-06 (dynamique 1.374e+01, 6.4e-07 relatif)
+  pos 5 kv_norm  : écart max 1.798e+00 (dynamique 2.984e+00, 6.0e-01 relatif)
+  pos 5 kv_rope  : écart max 2.044e-06 (dynamique 2.984e+00, 6.9e-07 relatif)
+  pos 12 qr       : écart max 9.082e-07 (dynamique 2.936e-01, 3.1e-06 relatif)
+  pos 12 qr_norm  : écart max 1.107e-05 (dynamique 8.237e+00, 1.3e-06 relatif)
+  pos 12 q_norm   : écart max 1.033e-05 (dynamique 1.325e+01, 7.8e-07 relatif)
+  pos 12 q_rope   : écart max 7.780e-06 (dynamique 1.539e+01, 5.1e-07 relatif)
+  pos 12 kv_norm  : écart max 2.285e+00 (dynamique 3.031e+00, 7.5e-01 relatif)
+  pos 12 kv_rope  : écart max 3.401e-06 (dynamique 3.031e+00, 1.1e-06 relatif)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"sprints/21-localiser-le-defaut-v41.md\"\ns=open(p).read()\na=\"\"\"Les deux tentatives d'inversion de l'angle appliqué (par paire, puis entre deux\npositions) sont **non concluantes** : la première compare des a … [2885 caractères tronqués]`

@@ -99,7 +99,12 @@ def principale():
         qrn = rmsnorm(qr, qa_norm)
         q = matvec_q8_0(g, nom("attn_q_b.weight"), qrn)
         qn = np.concatenate([rmsnorm(q[h * hd:(h + 1) * hd]) for h in range(nh)])
-        qp = np.concatenate([q[h * hd + hd - nrot:h * hd + hd] for h in range(nh)])
+        # ATTENTION : la rotation porte sur le q NORMÉ (`qn`), pas sur la sortie
+        # brute de `wq_b` — prendre `q` ici mélangeait la tranche NON NORMÉE dans
+        # le vecteur normé et donnait 3,6 d'écart sur `q_rope` alors que la
+        # rotation du moteur est juste à 1e-06 (vérifié en appliquant la rotation
+        # au `q_norm` DU MOTEUR).
+        qp = np.concatenate([qn[h * hd + hd - nrot:h * hd + hd] for h in range(nh)])
         qp = rope_norm(qp, nh, nrot, pos, BASE, nrot)
         q_rope = qn.copy()
         for h in range(nh):
