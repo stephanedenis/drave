@@ -112544,3 +112544,101 @@ vidage branché
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"REF_DUMP\" tools/ref_logits.cpp | head -3; python3 - <<'PY'\np='docs/verification-kimi-k3.md'\ns=open(p).read()\ns=s.replace(\"\"\"## 5. Ce qui est déjà vérifié sans poids (et le restera)\"\"\",\n\"\"\"## 4bis. Le côté mote … [1578 caractères tronqués]`
+
+  ```
+204:                // REF_DUMP=<préfixe> : écrit le tenseur ENTIER en binaire, pour
+207:                const char * dump = std::getenv("REF_DUMP");
+doc mise à jour
+c29cbc2 K3 : la couche 0 vide ses sorties au format du moteur — la comparaison tenseur par tenseur n'attend plus que la référence
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, os, urllib.request\ndossier='/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL'\nd=json.load(urllib.request.urlopen(\"https://huggingface.co/api/models/unsloth/Kimi-K3-GGUF?blobs=true\",  … [902 caractères tronqués]`
+
+  ```
+20/32 shards COMPLETS · 0 en cours · 12 pas commencés
+total écrit : 931.0 Go / 1508.7 Go
+  ```
+
+### 🤖 Assistant
+
+⏵ Bloc 33 : le pipeline de comparaison est branché des deux côtés — il n'attend plus que la référence
+
+**Notre côté est prêt, et il est mesuré** : `--k3-essai` charge la couche 0, la calcule, et **vide ses sorties au format du moteur** — trois jetons, trois fichiers de **28 672 octets** (7 168 × 4), valeurs finies et de norme croissante (0,97 · 1,43 · 1,50), ce qu'un flux résiduel doit faire. Les deux commandes de la comparaison sont écrites dans `docs/verification-kimi-k3.md` :
+
+```bash
+REF_DUMP=/tmp/refk3 tools/ref_logits_k3 <K3.gguf> <ids> /tmp/refk3.bin 4   # référence
+DRAVE_DUMP_COUCHES=/tmp/notrek3 drave <K3.gguf> --k3-essai                 # moteur
+python3 tools/compare_etats.py /tmp/notrek3 /tmp/refk3 l_out 0 0,1,2       # verdict
+```
+
+**Et le garde-fou des dimensions tourne à chaque essai** : couches 0 (dense), 1 (MoE+KDA), 3 (MoE+MLA) et 4 (KDA) — **toutes conformes** au fichier, y compris les conventions jamais testées jusqu'ici (experts 3D `[896, 3072, 3584]`, `k_b`/`v_b` **par tête** `[96, 512, 128]`, projections latentes). C'est la classe de bug qui m'a déjà coûté un `nh = 7168` au lieu de 96 : elle se voit maintenant en une ligne, avant le premier produit matriciel.
+
+**Téléchargement** : **20 shards sur 32 complets** (931 Go / 1 509, **62 %**), 12 restants → à ~107 Mo/s, **fin vers 14h05**. Vérifié à l'instant : les 20 shards sont à la **taille exacte** annoncée par Hugging Face (aucun tronqué, aucun partiel compté comme complet).
+
+**Ce qui tombe dès la fin du transfert** : les 93 couches en inventaire (`--config`), le budget **mesuré** (les 88,5 Go/jeton cesseront d'être une extrapolation), la baseline `llama.cpp-k3` (jetons/s, mémoire), puis la **vérification tenseur par tenseur de la couche 0** — le premier des 13 points de comparaison, celui qui exerce l'embarquement, la RMSNorm, le **KDA complet**, l'attention résiduelle (pile vide), **SiTU** et le redémarrage du flux.
+
+77 tests verts, tout commité.
+
+
+## Tour 98
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas en local (classe Kimi-K3 Q4 : 1,5 To de poids, ~35 Go de poids par jeton), et étudier/implémenter ce qui nous distingue sur cette classe : découpage par experts et en grappes (chaque nœud ne lit que ce qu'il sert), réutilisation des experts entre jetons, transport de flux compact (listes DRVF), noyaux rapides (SIMD, déquantification bit-exacte), et mesure systématique (octets par jeton, débits, seuils). Les modèles périmés (DeepSeek-V4-Flash) sortent du chemin critique : leurs acquis sont conservés dans les rapports, leurs portes archivées. Règles inchangées : jamais de forward muet, jamais d'optimisation qui change une sortie sans le dire, une affirmation sans mesure n'est pas une affirmation."
+Round: 24/30
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Point sur le téléchargement avant de décider du prochain travail
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date +%H:%M; tail -1 /tmp/dl_k3.log; du -sh /home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL; pgrep -f telecharger_modeles >/dev/null && echo \"téléchargement actif\" || echo \"ARRÊTÉ\"", "description": "Check downloa … [9 caractères tronqués]`
+
+  ```
+12:30
+12:30:26    28.2 Go / 49.0 Go (57.5 %, 113 Mo/s)
+851G	/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL
+téléchargement actif
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp-k3 && sed -n '/ggml_tensor \\* llama_model_kimi_k3::graph::build_latent_moe/,/^}/p' src/models/kimi-k3.cpp | sed -n '1,45p'", "description": "Read the latent MoE reference"}`
+
+  ```
+ggml_tensor * llama_model_kimi_k3::graph::build_latent_moe(
+        ggml_tensor * cur, const llama_layer & layer, int64_t n_embd_latent, int il) {
+
+    ggml_tensor * identity = cur;
+
+    ggml_tensor * routed_in = layer.ffn_routed_down
+        ? ggml_mul_mat(ctx0, layer.ffn_routed_down, cur)
+        : cur;
+
+    // the router scores the full-width input while the experts take the latent one,
+    // so the logits are computed here and passed to build_moe_ffn
+    ggml_tensor * logits = ggml_mul_mat(ctx0, layer.ffn_gate_inp, identity);
+    cb(logits, "ffn_moe_logits", il);
+
+    ggml_tensor * moe_out = build_moe_ffn(routed_in,
+        nullptr, // gate_inp unused: the logits above are passed instead
+        layer.ffn_up_exps,
+        layer.ffn_gate_exps,
+        layer.ffn_down_exps,
+        layer.ffn_exp_probs_b,
+        hparams.n_expert,
+        hparams.n_expert_used(),
+        LLM_FFN_SITU, hparams.expert_weights_norm,
+        hparams.expert_weights_scale,
+        (llama_expert_gating_func_type) hparams.expert_gating_func,
+        il,
+        logits);
+    cb(moe_out, "ffn_moe_out", il);
+
+    if (layer.ffn_routed_norm) {
+        moe_out = build_norm(moe_out, layer.ffn_routed_norm, NULL, 
+… [593 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/architecture-kimi-k3.md'\ns=open(p).read()\ns=s.replace(\"\"\"**MoE latent** — les experts travaillent dans un **latent de 3 584**\"\"\",\n\"\"\"**MoE latent — l'ORDRE exact** (lu dans `build_latent_moe`, et … [1475 caractères tronqués]`

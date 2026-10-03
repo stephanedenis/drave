@@ -151,6 +151,25 @@ sortie = attn_gate(x_normé) ⊗ wv_b(attn) puis wo       # value_length_mla 128
 concaténée, mais **aucune rotation n'est appliquée**. La porte de sortie lit
 l'entrée de couche **normalisée** (`inp_gate = cur` avant la première projection).
 
+**MoE latent — l'ORDRE exact** (lu dans `build_latent_moe`, et l'ordre est ce qui
+se rate) :
+
+```
+routed_in = ffn_routed_down · cur          # 7168 → 3584
+logits    = ffn_gate_inp · cur             # 896, sur la PLEINE largeur (identity)
+moe_out   = Σ_{16 experts} w_e · ffn_down_exps[e] · situ(gate_exps[e]·routed_in,
+                                                          up_exps[e]·routed_in)
+moe_out   = rms_norm(moe_out, ffn_routed_norm)   # ← dans le LATENT, avant la remontée
+moe_out   = ffn_routed_up · moe_out              # 3584 → 7168
+partagé   = ffn_down_shexp · situ(gate_shexp·cur, up_shexp·cur)   # 6144 de large
+sortie    = moe_out + partagé
+```
+
+Trois pièges : le routeur note la **pleine largeur** pendant que les experts
+consomment le latent ; la **norme est dans le latent**, *avant* la remontée
+(l'inverse donnerait des valeurs plausibles) ; la porte `exp_probs_b` sert à la
+**sélection**, pas aux poids (la question a déjà coûté un défaut sur gpt-oss).
+
 **MoE latent** — les experts travaillent dans un **latent de 3 584** (et non
 7 168) : `ffn_routed_down` (7168→3584), les 896 experts (`gate/up/down`, 3 072 de
 largeur, **MXFP4**), `ffn_routed_up` (3584→7168), normalisation `ffn_routed_norm`,

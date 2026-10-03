@@ -6,13 +6,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
 | Durée | 117.7 h |
-| Tours | 97 |
-| Messages | 7067 |
-| Appels d'outils | 6747 |
+| Tours | 98 |
+| Messages | 7073 |
+| Appels d'outils | 6751 |
 | Fichiers touchés | 145 |
-| Commandes | 5713 |
+| Commandes | 5717 |
 | Sous-agents | 32 |
-| Commits | 471 |
+| Commits | 472 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -239,6 +239,8 @@
 **Tour 96** — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas en local (classe Kimi-K3 Q4 : 1,5 To de poids, ~35 Go de poids par jeton), et étudier/implémenter ce qui nous distingue sur cette classe : découpage par experts et en grappes (chaque nœud ne lit que ce qu'il sert), réutilisation des experts entre jetons, transport de flux compact  … [966 caractères tronqués]
 
 **Tour 97** — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas en local (classe Kimi-K3 Q4 : 1,5 To de poids, ~35 Go de poids par jeton), et étudier/implémenter ce qui nous distingue sur cette classe : découpage par experts et en grappes (chaque nœud ne lit que ce qu'il sert), réutilisation des experts entre jetons, transport de flux compact  … [966 caractères tronqués]
+
+**Tour 98** — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas en local (classe Kimi-K3 Q4 : 1,5 To de poids, ~35 Go de poids par jeton), et étudier/implémenter ce qui nous distingue sur cette classe : découpage par experts et en grappes (chaque nœud ne lit que ce qu'il sert), réutilisation des experts entre jetons, transport de flux compact  … [966 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -4786,14 +4788,43 @@ Ce qui est vérifié tensor par tensor : le **routeur** (`[896, 7168]`), les **p
 
 ### Tour 97 — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas e … [1246 caractères tronqués]
 
-*2 appels d'outils.* Actions notables :
+*3 appels d'outils.* Actions notables :
 
 - bash — Add dumping of layer-0 outputs
 - bash — Commit the dump wiring and document the comparison commands
+- bash — Check the download integrity mid-flight
 
 **Synthèse produite :**
 
-⏵ Bloc 33 : je branche le vidage des sorties de la couche 0 (pour la comparaison tenseur par tenseur)
+⏵ Bloc 33 : le pipeline de comparaison est branché des deux côtés — il n'attend plus que la référence
+
+**Notre côté est prêt, et il est mesuré** : `--k3-essai` charge la couche 0, la calcule, et **vide ses sorties au format du moteur** — trois jetons, trois fichiers de **28 672 octets** (7 168 × 4), valeurs finies et de norme croissante (0,97 · 1,43 · 1,50), ce qu'un flux résiduel doit faire. Les deux commandes de la comparaison sont écrites dans `docs/verification-kimi-k3.md` :
+
+```bash
+REF_DUMP=/tmp/refk3 tools/ref_logits_k3 <K3.gguf> <ids> /tmp/refk3.bin 4   # référence
+DRAVE_DUMP_COUCHES=/tmp/notrek3 drave <K3.gguf> --k3-essai                 # moteur
+python3 tools/compare_etats.py /tmp/notrek3 /tmp/refk3 l_out 0 0,1,2       # verdict
+```
+
+**Et le garde-fou des dimensions tourne à chaque essai** : couches 0 (dense), 1 (MoE+KDA), 3 (MoE+MLA) et 4 (KDA) — **toutes conformes** au fichier, y compris les conventions jamais testées jusqu'ici (experts 3D `[896, 3072, 3584]`, `k_b`/`v_b` **par tête** `[96, 512, 128]`, projections latentes). C'est la classe de bug qui m'a déjà coûté un `nh = 7168` au lieu de 96 : elle se voit maintenant en une ligne, avant le premier produit matriciel.
+
+**Téléchargement** : **20 shards sur 32 complets** (931 Go / 1 509, **62 %**), 12 restants → à ~107 Mo/s, **fin vers 14h05**. Vérifié à l'instant : les 20 shards sont à la **taille exacte** annoncée par Hugging Face (aucun tronqué, aucun partiel compté comme complet).
+
+**Ce qui tombe dès la fin du transfert** : les 93 couches en inventaire (`--config`), le budget **mesuré** (les 88,5 Go/jeton cesseront d'être une extrapolation), la baseline `llama.cpp-k3` (jetons/s, mémoire), puis la **vérification tenseur par tenseur de la couche 0** — le premier des 13 points de comparaison, celui qui exerce l'embarquement, la RMSNorm, le **KDA complet**, l'attention résiduelle (pile vide), **SiTU** et le redémarrage du flux.
+
+77 tests verts, tout commité.
+
+### Tour 98 — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas e … [1246 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Check download state
+- bash — Read the latent MoE reference
+- bash — Document the exact MoE order
+
+**Synthèse produite :**
+
+⏵ Point sur le téléchargement avant de décider du prochain travail
 
 ## 3. Travail accompli
 
@@ -5024,7 +5055,7 @@ Ce qui est vérifié tensor par tensor : le **routeur** (`[896, 7168]`), les **p
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5673 autres
+- … et 5677 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5643,4 +5674,5 @@ Ce qui est vérifié tensor par tensor : le **routeur** (`[896, 7168]`), les **p
 - K3 : la couche 0 CALCULE sur le vrai fichier (test de fumée --k3-essai), et il a attrapé une convention de dimensions  Le moteur inverse les dimensions par rapp
 - K3 : les dimensions des quatre types de couches sont CONFORMES au fichier (0 dense, 1 MoE+KDA, 3 MoE+MLA, 4 KDA)  Le contrôle tensor par tensor compare les dime
 - K3 : la couche 0 vide ses sorties au format du moteur — la comparaison tenseur par tenseur n'attend plus que la référence  Trois jetons, trois fichiers de 28 67
+- Spec Kimi-K3 : l'ordre exact du MoE latent (routeur en pleine largeur, norme DANS le latent avant la remontée, biais en sélection)  Trois pièges consignés avec 
 
