@@ -60,6 +60,28 @@ Ensuite : la couche 1 (MoE latent), la couche 3 (MLA), la couche 12 (premier
 - **> 1e-2, ou une croissance avec la position** : une erreur de structure, pas
   d'arrondi. On ne passe pas à l'étage suivant.
 
+## 4bis. Le côté moteur est déjà branché (03/10)
+
+`--k3-essai` charge la couche 0, la calcule sur les jetons donnés, et **vide ses
+sorties au format du moteur** (`DRAVE_DUMP_COUCHES=<préfixe>` →
+`<préfixe>-l_out-0-<position>.bin`, f32 brut). Mesuré : trois jetons, trois
+fichiers de 28 672 octets (7 168 × 4), valeurs finies et croissantes en norme
+(0,97 · 1,43 · 1,50).
+
+Il contrôle aussi, **avant tout calcul**, les dimensions des quatre types de
+couches (0 dense, 1 MoE+KDA, 3 MoE+MLA, 4 KDA) contre ce que la configuration
+déclare — c'est ce qui attrape une dimension lue du mauvais côté (le moteur range
+`dims[0] = ne1` = la sortie, l'inverse du fichier).
+
+La comparaison, dès que la référence tournera sur le modèle complet :
+
+```bash
+REF_DUMP=/tmp/refk3 LD_LIBRARY_PATH=…/llama.cpp-k3/build/bin \
+    tools/ref_logits_k3 <K3.gguf> <ids> /tmp/refk3.bin 4
+DRAVE_DUMP_COUCHES=/tmp/notrek3 drave <K3.gguf> --k3-essai
+python3 tools/compare_etats.py /tmp/notrek3 /tmp/refk3 l_out 0 0,1,2
+```
+
 ## 5. Ce qui est déjà vérifié sans poids (et le restera)
 
 | pièce | état |

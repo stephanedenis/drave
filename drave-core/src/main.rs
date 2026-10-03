@@ -1905,6 +1905,21 @@ fn run_k3_essai() {
                 let finis = y.iter().all(|v| v.is_finite());
                 println!("  jeton {i} (id {t}) : |l_out| = {n:.4} · finis : {finis} · \
 premiers : {:.5} {:.5} {:.5}", y[0], y[1], y[2]);
+                // Vidage au format du moteur (`<préfixe>-<nom>-<couche>-<position>.bin`),
+                // pour que `tools/compare_etats.py` puisse comparer à `l_out-0` de
+                // la référence dès qu'elle tournera sur le modèle complet.
+                if let Ok(prefixe) = std::env::var("DRAVE_DUMP_COUCHES") {
+                    if !prefixe.is_empty() {
+                        use std::io::Write;
+                        let chemin = format!("{prefixe}-l_out-0-{i}.bin");
+                        if let Ok(mut f) = std::fs::File::create(&chemin) {
+                            let mut o = Vec::with_capacity(y.len() * 4);
+                            for v in &y { o.extend_from_slice(&v.to_le_bytes()); }
+                            let _ = f.write_all(&o);
+                            println!("      vidé : {chemin}");
+                        }
+                    }
+                }
             }
             Err(e) => { eprintln!("[k3-essai] jeton {i} : {e}"); return; }
         }

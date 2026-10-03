@@ -6,13 +6,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
 | Durée | 117.7 h |
-| Tours | 96 |
-| Messages | 7063 |
-| Appels d'outils | 6745 |
+| Tours | 97 |
+| Messages | 7067 |
+| Appels d'outils | 6747 |
 | Fichiers touchés | 145 |
-| Commandes | 5711 |
+| Commandes | 5713 |
 | Sous-agents | 32 |
-| Commits | 470 |
+| Commits | 471 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -237,6 +237,8 @@
 **Tour 95** — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas en local (classe Kimi-K3 Q4 : 1,5 To de poids, ~35 Go de poids par jeton), et étudier/implémenter ce qui nous distingue sur cette classe : découpage par experts et en grappes (chaque nœud ne lit que ce qu'il sert), réutilisation des experts entre jetons, transport de flux compact  … [966 caractères tronqués]
 
 **Tour 96** — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas en local (classe Kimi-K3 Q4 : 1,5 To de poids, ~35 Go de poids par jeton), et étudier/implémenter ce qui nous distingue sur cette classe : découpage par experts et en grappes (chaque nœud ne lit que ce qu'il sert), réutilisation des experts entre jetons, transport de flux compact  … [966 caractères tronqués]
+
+**Tour 97** — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas en local (classe Kimi-K3 Q4 : 1,5 To de poids, ~35 Go de poids par jeton), et étudier/implémenter ce qui nous distingue sur cette classe : découpage par experts et en grappes (chaque nœud ne lit que ce qu'il sert), réutilisation des experts entre jetons, transport de flux compact  … [966 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -4758,7 +4760,40 @@ Les normes **croissent avec la position** — ce qu'un flux résiduel doit faire
 
 **Synthèse produite :**
 
-⏵ Bloc 32 : je vérifie les dimensions des tenseurs MoE et MLA AVANT que le modèle arrive (la classe de bug qui a déjà mordu)
+⏵ Bloc 32 : les quatre types de couches de K3 sont vérifiés côté dimensions — avant d'écrire le calcul
+
+**Le contrôle qui a payé deux fois.** La classe de bug qui m'a mordu la dernière fois (le moteur **inverse** les dimensions par rapport au fichier : `dims[0]` = la *sortie*) se voit maintenant en une ligne, et la vérification couvre les quatre types de couches :
+
+```
+[k3-essai] 20 shard(s) présents
+[k3] h=7168 nh=96 hd=128 d_inner=12288 d_conv=4 ffn=33792
+  couche 0 : dimensions conformes   (dense : KDA + SiTU)
+  couche 1 : dimensions conformes   (MoE latent + KDA)
+  couche 3 : dimensions conformes   (MoE latent + MLA)
+  couche 4 : dimensions conformes   (KDA)
+  jeton 0 : |l_out| = 0,9731 · finis : true
+  jeton 1 : |l_out| = 1,4310 · finis : true
+  jeton 2 : |l_out| = 1,4958 · finis : true
+```
+
+Ce qui est vérifié tensor par tensor : le **routeur** (`[896, 7168]`), les **projections latentes** (3584), les **experts 3D** (`[896, 3072, 3584]` — la convention des tenseurs à trois dimensions, jamais testée jusqu'ici), les **partagés**, et pour MLA `q_a/q_b`, `kv_a_mqa` (512+64), **`k_b`/`v_b` par tête** (`[96, 512, 128]`), la porte de sortie. Chaque écart serait nommé avec les deux jeux de dimensions.
+
+**Et la passe avant de la couche 0 continue de tourner** sur le vrai fichier : normes finies, croissantes avec la position (0,97 → 1,43 → 1,50), ce qu'un flux résiduel doit faire. Le test tolère maintenant un **shard en cours d'écriture** (en-tête incomplet) : il l'écarte en le disant au lieu de tomber — même discipline que `--config`.
+
+**Téléchargement** : ~836 Go / 1 508 (**55 %**, ~107 Mo/s) → fin vers **14h15**. Quand il tombe, dans l'ordre : complétude des 32 shards → `--config` (les manques exacts, plus l'inventaire des 93 couches) → porte du tokenizer → budget **mesuré** (88,5 Go/jeton cessera d'être une extrapolation) → baseline `llama.cpp-k3` → puis la **vérification tenseur par tenseur** de la couche 0 (les 13 points de comparaison sont écrits, `compare_etats.py` sait lire les deux formats).
+
+77 tests verts, tout commité.
+
+### Tour 97 — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas e … [1246 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Add dumping of layer-0 outputs
+- bash — Commit the dump wiring and document the comparison commands
+
+**Synthèse produite :**
+
+⏵ Bloc 33 : je branche le vidage des sorties de la couche 0 (pour la comparaison tenseur par tenseur)
 
 ## 3. Travail accompli
 
@@ -4989,7 +5024,7 @@ Les normes **croissent avec la position** — ce qu'un flux résiduel doit faire
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5671 autres
+- … et 5673 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5607,4 +5642,5 @@ Les normes **croissent avec la position** — ce qu'un flux résiduel doit faire
 - K3 : la passe avant de la couche 0 (f32) — structure d'abord, exactitude ensuite  Déquantifiée en f32 (~1,4 Go pour la couche 0, qui est dense), elle suit l'ord
 - K3 : la couche 0 CALCULE sur le vrai fichier (test de fumée --k3-essai), et il a attrapé une convention de dimensions  Le moteur inverse les dimensions par rapp
 - K3 : les dimensions des quatre types de couches sont CONFORMES au fichier (0 dense, 1 MoE+KDA, 3 MoE+MLA, 4 KDA)  Le contrôle tensor par tensor compare les dime
+- K3 : la couche 0 vide ses sorties au format du moteur — la comparaison tenseur par tenseur n'attend plus que la référence  Trois jetons, trois fichiers de 28 67
 

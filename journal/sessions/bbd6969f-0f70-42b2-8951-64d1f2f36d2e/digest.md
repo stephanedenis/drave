@@ -112475,3 +112475,72 @@ ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cd drave-core && cargo test --release 2>&1 | grep -E \"^test result\"; cd .. && git add -A && git commit -q -m \"K3 : les dimensions des quatre types de couches sont CONFORMES au fichier (0 dense, 1 MoE+KDA, 3 MoE+MLA, 4 KDA)\n\nLe c … [657 caractères tronqués]`
+
+  ```
+test result: ok. 77 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+1cdc767 K3 : les dimensions des quatre types de couches sont CONFORMES au fichier (0 dense, 1 MoE+KDA, 3 MoE+MLA, 4 KDA)
+12:28:26    14.0 Go / 49.0 Go (28.5 %, 107 Mo/s)
+  ```
+
+### 🤖 Assistant
+
+⏵ Bloc 32 : les quatre types de couches de K3 sont vérifiés côté dimensions — avant d'écrire le calcul
+
+**Le contrôle qui a payé deux fois.** La classe de bug qui m'a mordu la dernière fois (le moteur **inverse** les dimensions par rapport au fichier : `dims[0]` = la *sortie*) se voit maintenant en une ligne, et la vérification couvre les quatre types de couches :
+
+```
+[k3-essai] 20 shard(s) présents
+[k3] h=7168 nh=96 hd=128 d_inner=12288 d_conv=4 ffn=33792
+  couche 0 : dimensions conformes   (dense : KDA + SiTU)
+  couche 1 : dimensions conformes   (MoE latent + KDA)
+  couche 3 : dimensions conformes   (MoE latent + MLA)
+  couche 4 : dimensions conformes   (KDA)
+  jeton 0 : |l_out| = 0,9731 · finis : true
+  jeton 1 : |l_out| = 1,4310 · finis : true
+  jeton 2 : |l_out| = 1,4958 · finis : true
+```
+
+Ce qui est vérifié tensor par tensor : le **routeur** (`[896, 7168]`), les **projections latentes** (3584), les **experts 3D** (`[896, 3072, 3584]` — la convention des tenseurs à trois dimensions, jamais testée jusqu'ici), les **partagés**, et pour MLA `q_a/q_b`, `kv_a_mqa` (512+64), **`k_b`/`v_b` par tête** (`[96, 512, 128]`), la porte de sortie. Chaque écart serait nommé avec les deux jeux de dimensions.
+
+**Et la passe avant de la couche 0 continue de tourner** sur le vrai fichier : normes finies, croissantes avec la position (0,97 → 1,43 → 1,50), ce qu'un flux résiduel doit faire. Le test tolère maintenant un **shard en cours d'écriture** (en-tête incomplet) : il l'écarte en le disant au lieu de tomber — même discipline que `--config`.
+
+**Téléchargement** : ~836 Go / 1 508 (**55 %**, ~107 Mo/s) → fin vers **14h15**. Quand il tombe, dans l'ordre : complétude des 32 shards → `--config` (les manques exacts, plus l'inventaire des 93 couches) → porte du tokenizer → budget **mesuré** (88,5 Go/jeton cessera d'être une extrapolation) → baseline `llama.cpp-k3` → puis la **vérification tenseur par tenseur** de la couche 0 (les 13 points de comparaison sont écrits, `compare_etats.py` sait lire les deux formats).
+
+77 tests verts, tout commité.
+
+
+## Tour 97
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas en local (classe Kimi-K3 Q4 : 1,5 To de poids, ~35 Go de poids par jeton), et étudier/implémenter ce qui nous distingue sur cette classe : découpage par experts et en grappes (chaque nœud ne lit que ce qu'il sert), réutilisation des experts entre jetons, transport de flux compact (listes DRVF), noyaux rapides (SIMD, déquantification bit-exacte), et mesure systématique (octets par jeton, débits, seuils). Les modèles périmés (DeepSeek-V4-Flash) sortent du chemin critique : leurs acquis sont conservés dans les rapports, leurs portes archivées. Règles inchangées : jamais de forward muet, jamais d'optimisation qui change une sortie sans le dire, une affirmation sans mesure n'est pas une affirmation."
+Round: 23/30
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Bloc 33 : je branche le vidage des sorties de la couche 0 (pour la comparaison tenseur par tenseur)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -1 /tmp/dl_k3.log; date +%H:%M; python3 - <<'PY'\np='drave-core/src/main.rs'\ns=open(p).read()\ns=s.replace(\"\"\"        match c0.avant(x) {\n            Ok(y) => {\n                let n: f32 = y.iter().map(|v| v * v).sum::<f3 … [2011 caractères tronqués]`
+
+  ```
+12:28:26    14.0 Go / 49.0 Go (28.5 %, 107 Mo/s)
+12:28
+vidage branché
+  couche 3 : dimensions conformes
+  couche 4 : dimensions conformes
+  jeton 0 (id 3638) : |l_out| = 0.9731 · finis : true · premiers : 0.01036 -0.02001 -0.00186
+      vidé : /tmp/k3n-l_out-0-0.bin
+  jeton 1 (id 275) : |l_out| = 1.4310 · finis : true · premiers : 0.01729 0.00249 0.00578
+      vidé : /tmp/k3n-l_out-0-1.bin
+  jeton 2 (id 1309) : |l_out| = 1.4958 · finis : true · premiers : -0.00946 0.01135 -0.00460
+      vidé : /tmp/k3n-l_out-0-2.bin
+-rw-r--r--. 1 stephane stephane 28672  3 oct 12:29 /tmp/k3n-l_out-0-0.bin
+-rw-r--r--. 1 stephane stephane 28672  3 oct 12:29 /tmp/k3n-l_out-0-1.bin
+-rw-r--r--. 1 stephane stephane 28672  3 oct 12:29 /tmp/k3n-l_out-0-2.bin
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"REF_DUMP\" tools/ref_logits.cpp | head -3; python3 - <<'PY'\np='docs/verification-kimi-k3.md'\ns=open(p).read()\ns=s.replace(\"\"\"## 5. Ce qui est déjà vérifié sans poids (et le restera)\"\"\",\n\"\"\"## 4bis. Le côté mote … [1578 caractères tronqués]`
