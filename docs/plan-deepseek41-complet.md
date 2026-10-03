@@ -349,6 +349,28 @@ Une phase qui ne passe pas ses deux portes ne passe pas à la suivante.
 > une mesure de NON-RÉGRESSION, pas comme une qualité de modèle.
 >
 > Localisation : bloc 21 (`sprints/20-la-passe-longue-instrumentee.md`).
+>
+> **Ce qui a été vérifié depuis (blocs 21-22), et ce qui reste hors d'atteinte.**
+> Chaque pièce et chaque composition testable SANS référence exécutable l'est :
+> tokenizer (llama.cpp : identifiants identiques), embarquement (**0,000e+00**
+> contre le fichier), attention complète — projections, normes, rotations, scores,
+> puits, somme pondérée, dé-rotation, sortie groupée **avec les blocs compressés
+> et la règle de visibilité** (1e-06 à 7e-07, numpy), compresseur (référence du
+> noyau vLLM publié), indexeur, chemin des experts (4e-05, numpy), routeur
+> (sélection identique), chaîne mHC retardée et tête (source vLLM, mot pour mot),
+> formats (libggml). V4-Flash, lui, est validé **de bout en bout par llama.cpp**
+> (1,875 contre 1,844).
+>
+> **La « porte de correction » de P7 (comparaison étage par étage à llama.cpp)
+> est donc IMPOSSIBLE en l'état, et c'est nommé** : llama.cpp refuse
+> l'architecture — « unknown model architecture: 'deepseek41' ». Il n'existe
+> aucune référence exécutable pour V4.1 dans ce dépôt ni ailleurs sur cette
+> machine. Les deux points que le dépôt ne peut pas trancher seul : la composition
+> sur 40 couches (chaque pièce est juste, la chaîne n'a pas d'oracle) et **le
+> fichier Q2 lui-même** (sa référence est fp8/MXFP4 ; une conversion fausse serait
+> indiscernable pièce par pièce). Condition de sortie : qu'un runtime sache charger
+> `deepseek41`, ou qu'on produise nous-mêmes une conversion et qu'on la compare au
+> fichier — les deux sont des chantiers, pas des vérifications.
 
 > **Les deux manques annoncés étaient faux tous les deux** (02/10, 17:33 → 18:02).
 > La **référence d'exécution existe** : vLLM porte V4.1 en entier

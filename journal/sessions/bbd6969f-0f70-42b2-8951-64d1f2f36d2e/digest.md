@@ -102036,3 +102036,11 @@ couche 2 pos 5 (ratio 2) : 9 clés (6 fenêtre + 3 blocs) · écart max 7.113e-0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"sprints/21-localiser-le-defaut-v41.md\"\ns=open(p).read()\na=\"\"\"## Portes\"\"\"\nb=\"\"\"## 3quater. Le CŒUR de l'attention est vérifié — avec les blocs compressés\n\n`tools/v41_attention_coeur.py` (couche 0, … [4217 caractères tronqués]`
+
+  ```
+ok
+7401db8 Le cœur de l'attention V4.1 est vérifié — blocs compressés et règle de visibilité compris (7e-07)
+sam 03 oct 2026 04:14:34 EDT
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"docs/plan-deepseek41-complet.md\"\ns=open(p).read()\na=\"\"\"> Localisation : bloc 21 (`sprints/20-la-passe-longue-instrumentee.md`).\"\"\"\nb=\"\"\"> Localisation : bloc 21 (`sprints/20-la-passe-longue-instrume … [2607 caractères tronqués]`

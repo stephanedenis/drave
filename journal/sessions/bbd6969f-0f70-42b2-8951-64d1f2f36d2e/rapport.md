@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 109.5 h |
 | Tours | 82 |
-| Messages | 6407 |
-| Appels d'outils | 6143 |
+| Messages | 6408 |
+| Appels d'outils | 6144 |
 | Fichiers touchés | 118 |
-| Commandes | 5207 |
+| Commandes | 5208 |
 | Sous-agents | 32 |
-| Commits | 407 |
+| Commits | 408 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -4158,7 +4158,7 @@ Dis-moi si je poursuis sur le bloc 22 (la composition des experts en numpy, plan
 
 ### Tour 82 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [941 caractères tronqués]
 
-*8 appels d'outils.* Actions notables :
+*9 appels d'outils.* Actions notables :
 
 - bash — Locate the attention scale and sink use
 - bash — Read the scores, softmax and weighted sum
@@ -4168,6 +4168,7 @@ Dis-moi si je poursuis sur le bloc 22 (la composition des experts en numpy, plan
 - bash — Read the latent cache write
 - bash — Verify the compressed attention with blocks
 - bash — Commit the attention core verification and the balance
+- bash — Record the named blocker in the plan
 
 ## 3. Travail accompli
 
@@ -4371,7 +4372,7 @@ Dis-moi si je poursuis sur le bloc 22 (la composition des experts en numpy, plan
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5167 autres
+- … et 5168 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4926,4 +4927,5 @@ Dis-moi si je poursuis sur le bloc 22 (la composition des experts en numpy, plan
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="sprints/21-localiser-le-defaut-v41.md" s=open(p).read() a="""## Portes""" b="""## 3ter
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="sprints/21-localiser-le-defaut-v41.md" s=open(p).read() a="""Les deux tentatives d'inv
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="sprints/21-localiser-le-defaut-v41.md" s=open(p).read() a="""## Portes""" b="""## 3qua
+- Plan P7 : la porte de correction est IMPOSSIBLE en l'état et c'est nommé — llama.cpp refuse l'architecture deepseek41 ; ce qui est vérifiable sans référence exé
 
