@@ -106655,3 +106655,257 @@ REPRISE corrigé
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='sprints/24-le-produit-scalaire-des-experts-vectorise.md'\ns=open(p).read()\nold=\"\"\"| | scalaire (défaut) | `DRAVE_SIMD_DOT=1` |\n|---|---|---|\n| passe complète | 271,0 s (**4,27 s/jeton**) | 131,7 s (**2,06 s … [2121 caractères tronqués]`
+
+  ```
+sprint 24 corrigé
+78460b4 CORRECTION : le gain du SIMD était annoncé ×2,06 ; l'A/B entrelacé donne ×1,18 (passe) et ×1,37 (proj+mlp)
+  ```
+
+### 🤖 Assistant
+
+⏵ Fil « granularité des listes et volume des flux » : je relis d'abord ce que le dépôt a établi
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rln \"granularité\\|granularite\" docs/*.md reports/*.md 2>/dev/null | head -8; echo \"=== extraits ===\"; grep -rn \"granularité\" docs/vision.md docs/programme-recherche.md docs/format-clusters.md docs/colab-reparti.md 2>/dev … [70 caractères tronqués]`
+
+  ```
+docs/vision.md
+reports/rapport-coherence-docs.md
+reports/rapport-empreinte-memoire.md
+reports/rapport-localite-activation.md
+=== extraits ===
+docs/vision.md:142:granularité par bloc. La
+docs/vision.md:153:2. **la granularité** : par couche ? par bloc de canaux ? par expert ? La mesure
+docs/vision.md:165:   (`docs/roadmap.md`) ; restent la granularité par bloc et le point où le réseau
+docs/vision.md:178:**hypothèse de travail** (placement, granularité). Elle est écrite
+docs/vision.md:263:| **3. Répartir sur machines** | **transport en place et fidèle** (`0,00e0`, protocole v5, cinq modes) ; mesuré : 1 608 octets/flux, 0,25 Mbit/s, latence ≤ 20 ms | ordonnanceur de placement ; granularité par bloc ; démonstration distante |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '130,180p' docs/vision.md", "description": "Read the vision section on granularity"}`
+
+  ```
+noyau d'attention — le dernier chemin qui retombe sur le CPU.
+
+---
+
+## 4. Axe 3 — Répartir sur plusieurs machines
+
+**Le transport existe, et c'est l'axe où le projet a le plus avancé depuis.**
+Deux processus se passent des flux (protocole **v5** : version, modes dense /
+listes / blocs / **lot dense** / **lot en listes**, contrat d'activation complet),
+le découpage est fidèle au bit près (`0,00e0`), le préremplissage par lots tient en un aller-retour par lot, et
+`colab/` contient de quoi faire la démonstration sur un runtime distant. Ce qui
+reste : l'ordonnanceur de placement, le flux de poids depuis le NVMe, et la
+granularité par bloc. La
+raison est dans la nature de la représentation : si le calcul est un flux de
+listes adressées, alors **une liste est une unité de travail autonome**, avec ses
+entrées (les activations), sa sortie (les activations produites) et sa
+dépendance (les poids d'une couche). Distribuer, c'est router des listes.
+
+Ce qu'il faut définir, dans l'ordre :
+
+1. **le contrat d'échange** : une tranche de liste = un en-tête (couche, source,
+   échelle, bits) + des paires (destination, valeur). Compact, vérifiable,
+   versionné ;
+2. **la granularité** : par couche ? p
+… [1841 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"DUMP_COUCHES\\|dump_couches\" drave-core/src/main.rs | head -5; grep -rn \"fn vider_couche\" -A 12 drave-core/src/model.rs | head -20", "description": "Find the activation dump mechanism"}`
+
+  ```
+20:    "CLUSTERS", "DEBUG_ETAT", "DEBUG_FLUX", "DEBUG_MLA", "DEBUG_YARN", "DUMP_COUCHES",
+4622:    fn vider_couche(prefixe: Option<&str>, nom: &str, l: usize, pos: usize, x: &[f32]) {
+4623-        use std::io::Write;
+4624-        let Some(p) = prefixe else { return };
+4625-        // Le nom porte le tenseur, la couche ET la position : sans la position,
+4626-        // un fichier par couche ne garderait que le dernier jeton évalué — et
+4627-        // c'est justement au-delà de la position 0 que les écarts apparaissent.
+4628-        let chemin = format!("{p}-{nom}-{l}-{pos}.bin");
+4629-        match std::fs::File::create(&chemin) {
+4630-            Ok(mut f) => {
+4631-                let mut octets = Vec::with_capacity(x.len() * 4);
+4632-                for v in x { octets.extend_from_slice(&v.to_le_bytes()); }
+4633-                if let Err(e) = f.write_all(&octets) {
+4634-                    eprintln!("[dump] {chemin} : {e}");
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"dump_couches\" drave-core/src/main.rs | head -8; grep -rn \"DRAVE_DUMP\" docs/*.md | head -4", "description": "Find the dump flag name"}`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"DUMP_COUCHES\" drave-core/src/*.rs | head -6; grep -rn \"dump\" drave-core/src/main.rs | grep -iE \"env|flag|--\" | head -8", "description": "Search for the dump environment variable"}`
+
+  ```
+drave-core/src/main.rs:20:    "CLUSTERS", "DEBUG_ETAT", "DEBUG_FLUX", "DEBUG_MLA", "DEBUG_YARN", "DUMP_COUCHES",
+drave-core/src/model.rs:2319:    /// Préfixe de vidage des états de couche (`DRAVE_DUMP_COUCHES`) : après
+drave-core/src/model.rs:3949:            dump_couches: std::env::var("DRAVE_DUMP_COUCHES").ok(),
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -f /tmp/fluxcut-* && V4=/home/stephane/FastNVMe/modeles-lourds/v4flash-iq1m/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf && DRAVE_DUMP_COUCHES=/tmp/fluxcut timeout 600 ./drave-core/target/release/drave \"$V4\" --ppl /tmp/ids_v4f … [345 caractères tronqués]`
+
+  ```
+dont attention : scores 0.00 | softmax 0.00 | somme pondérée + écriture KV 1252.17
+    dont attention V4 (attn_v4) : projets q/kv 419.53 | compresseur 82.99 | indexeur 46.74 | scores + softmax + somme 15.52 | dé-rotation + sortie groupée 687.05
+/tmp/fluxcut-attn_brut-0-0.bin
+/tmp/fluxcut-attn_brut-0-1.bin
+/tmp/fluxcut-attn_brut-0-2.bin
+/tmp/fluxcut-attn_brut-0-3.bin
+/tmp/fluxcut-attn_brut-10-0.bin
+2828
+    172 attn_brut
+    172 attn_derope
+    172 attn_out
+     21 comp_bloc0
+     21 comp_brut0
+    164 comp_state_gate
+    164 comp_state_kv
+      4 etat_impose
+    172 ffn_hn
+    172 hc_attn_pre
+    172 hc_ffn_in
+      4 hidden_final
+     21 idx_gardes
+     21 idx_scores
+    172 kv_norm
+    172 kv_rope
+    172 l_last
+    172 moe_down
+    172 q_norm
+    172 qr
+    172 qr_norm
+    172 q_rope
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -40 tools/flux_codec.py && grep -n \"^def \\|^class \" tools/flux_codec.py", "description": "Inspect the flux codec tool"}`
+
+  ```
+#!/usr/bin/env python3
+"""Encodeur/décodeur de RÉFÉRENCE du flux d'activation (format DRVF v1 et v2).
+
+Le format de trace et le contrat d'échange de la phase 3 sont le MÊME format :
+une liste d'activation est ce qu'un nœud distant doit recevoir pour continuer le
+calcul. Ce fichier est la deuxième implémentation de ce format — la première est
+en Rust (`--trace-flux`) — et c'est ce qui permet de dire qu'il est sans
+ambiguïté : deux implémentations indépendantes, un aller-retour identique.
+
+Structure :
+    en-tête   "DRVF" · u16 version · u32 n_layer · u32 hidden
+    liste     u16 couche · u32 position · u32 n_actifs · f32 echelle
+              puis n_actifs × ( u32 indice · i16 valeur )          [v1]
+              puis n_actifs × ( u8 écart · i16 valeur )            [v2]
+                   l'écart de 255 annonce l'indice ABSOLU sur u16
+    fin       u16 0xFFFF
+
+v2 : les indices sont écrits par ÉCARTS (la liste est triée). Mesuré sur une trace
+réelle de 512 jetons : 132 396 736 octets en v1, **66 370 408** en v2 (−49,87 %),
+à contenu identique — le rejeu redonne la même perplexité au chiffre près.
+
+Usage :
+    flux_codec.py <trace>            # vérifie l'aller-retour et mesure le débi
+… [616 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for n in hc_attn_pre hc_ffn_in l_last ffn_hn attn_out moe_down hidden_final; do f=$(ls /tmp/fluxcut-$n-0-0.bin 2>/dev/null); [ -n \"$f\" ] && echo \"$n : $(stat -c %s $f) octets = $(( $(stat -c %s $f) / 4 )) valeurs\"; done", "descri … [45 caractères tronqués]`
+
+  ```
+hc_attn_pre : 16384 octets = 4096 valeurs
+hc_ffn_in : 65536 octets = 16384 valeurs
+l_last : 65536 octets = 16384 valeurs
+ffn_hn : 16384 octets = 4096 valeurs
+attn_out : 16384 octets = 4096 valeurs
+moe_down : 16384 octets = 4096 valeurs
+hidden_final : 16384 octets = 4096 valeurs
+  ```
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"granularite_flux.py — le volume d'un flux de coupure selon sa GRANULARITÉ.\n\nUn flux entre deux unités de traitement, c'est un ou plusieurs LISTES d'activation\n(les événements). Ce script mesure, sur des activations RÉELLES vidées par le\nmoteur (`DRAVE_D … [6154 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/granularite_flux.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && chmod +x tools/granularite_flux.py && LD_PRELOAD=/usr/lib64/libopenblas.so.0 python3 tools/granularite_flux.py /tmp/fluxcut --tensor l_last --couches 0,10,20,30,42 --positions 0,1,2,3 2>&1 | tail -30", "description": "Measure the flo … [46 caractères tronqués]`
+
+  ```
+tenseur `l_last` · 16384 valeurs · 20 vidages (couches [0, 10, 20, 30, 42] × positions [0, 1, 2, 3])
+  dense f32 : 65536 octets · dense f16 : 32768 octets  (par flux)
+
+--- granularité 1 : une liste pour tout le flux ---
+   seuil  événements  octets v2  % dense  octets v3  % dense  erreur L2
+    0.01       12071      36227    55.3 %      25180    38.4 %    0.04100
+    0.02        9448      28360    43.3 %      19935    30.4 %    0.09969
+    0.05        5829      17502    26.7 %      12697    19.4 %    0.24424
+    0.10        3193       9593    14.6 %       7424    11.3 %    0.44131
+
+--- seuil 0.05 · ce que coûte la finesse (en-tête de 14 octets par liste) ---
+  listes  valeurs/liste  octets v2  % dense f32  événements  erreur L2
+       1          16384      17502        26.7 %        5829    0.24424
+       4           4096      35711        54.5 %       11885    0.14577
+      16           1024      39305        60.0 %       13027    0.09402
+      64            256      42352        64.6 %       13819    0.06132
+     512             32      51315        78.3 %       14716    0.03043
+
+--- rappel du découpage V4 : le flux de coupure porte les `hc` copies ---
+  (vision.md : 4 × 4 096 = 
+… [37 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && LD_PRELOAD=/usr/lib64/libopenblas.so.0 python3 - <<'PY'\nimport sys, numpy as np\nsys.path.insert(0, 'tools')\nimport granularite_flux as G\n\nech = []\nfor l in (0,10,20,30,42):\n    for p in (0,1,2,3):\n        ech.append(G.lire(f\ … [1140 caractères tronqués]`
+
+  ```
+flux de coupure V4-Flash : 16384 valeurs = 4 copies hc × 4096
+dense f32 65536 o · f16 32768 o
+
+FRONTIÈRE octets/erreur : pour chaque granularité G, le seuil qui donne
+l'erreur la plus proche de 0,05 puis 0,10 puis 0,20 (comparaison à erreur ÉGALE)
+
+    G  liste=octets | err≈0.05 | err≈0.1  | err≈0.2  |
+    1         16384 |  55.3% (e=0.041) |  43.3% (e=0.100) |  26.7% (e=0.244) |
+    4          4096 |  66.0% (e=0.041) |  61.8% (e=0.074) |  54.5% (e=0.146) |
+   16          1024 |  65.7% (e=0.047) |  60.0% (e=0.094) |  52.3% (e=0.169) |
+   64           256 |  64.6% (e=0.061) |  58.3% (e=0.113) |  50.6% (e=0.185) |
+  512            32 |  73.9% (e=0.057) |  68.1% (e=0.100) |  57.5% (e=0.191) |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && LD_PRELOAD=/usr/lib64/libopenblas.so.0 python3 - <<'PY'\nimport sys, numpy as np\nsys.path.insert(0,'tools')\nimport granularite_flux as G\nech=[G.lire(f\"/tmp/fluxcut-l_last-{l}-{p}.bin\") for l in (0,10,20,30,42) for p in (0,1,2,3) … [1491 caractères tronqués]`
+
+  ```
+flux 16384 valeurs · dense f32 65536 o
+
+SCHÉMA À DEUX NIVEAUX : on JETTE les tranches d'énergie négligeable (0 octet),
+puis on garde les événements >= 5 % du max de chaque tranche gardée.
+
+    G     eps  tranches gardées   octets  % dense  erreur L2
+    4   1e-04               4.0    35192    53.7%     0.1458
+    4   1e-03               3.8    33636    51.3%     0.1462
+    4   1e-02               3.5    30536    46.6%     0.1550
+   16   1e-04              15.4    37708    57.5%     0.0942
+   16   1e-03              14.7    35870    54.7%     0.0976
+   16   1e-02              11.6    27716    42.3%     0.1433
+   64   1e-04              60.8    40160    61.3%     0.0621
+   64   1e-03              53.0    34816    53.1%     0.0830
+   64   1e-02              28.5    18494    28.2%     0.3093
+  512   1e-04             430.0    43039    65.7%     0.0521
+  512   1e-03             235.5    23437    35.8%     0.2821
+  512   1e-02               5.5      471     0.7%     0.9584
+
+Rappel, comparaison à erreur égale : une SEULE liste fait 43,3 % du dense à
+10 % d'erreur, 26,7 % à 24 % d'erreur. Le seuil ci-dessus est FIXE (5 %).
+  ```
+
+- **write** `{"content": "# Granularité des listes et volume des flux entre unités — mesuré\n\n> Fil repris le 03/10 (bloc 26) : « séparer les grappes et les couches en listes\n> plus fines pour qu'elles puissent être sur des unités de traitement différentes,\n> et surtout réduire le volume des flux d'activation … [5467 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-granularite-flux.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Granularité des listes : elle ROUTE, elle ne compresse pas — mesuré sur les activations réelles de V4-Flash\n\nFlux de coupure = l_last = 16 384 valeurs (4 copies hc) = 65 536 o en f32.\nÀ erreur ÉGAL … [699 caractères tronqués]`

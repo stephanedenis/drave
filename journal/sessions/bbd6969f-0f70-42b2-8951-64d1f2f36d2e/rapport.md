@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 114.4 h |
+| Durée | 114.5 h |
 | Tours | 89 |
-| Messages | 6711 |
-| Appels d'outils | 6417 |
-| Fichiers touchés | 126 |
-| Commandes | 5419 |
+| Messages | 6725 |
+| Appels d'outils | 6431 |
+| Fichiers touchés | 128 |
+| Commandes | 5431 |
 | Sous-agents | 32 |
-| Commits | 427 |
+| Commits | 428 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -4423,7 +4423,7 @@ Le CPU fait aujourd'hui **2,06 s/jeton** (V4-Flash, SIMD) et **4,3 s** (V4.1) : 
 
 ### Tour 89 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [942 caractères tronqués]
 
-*25 appels d'outils.* Actions notables :
+*39 appels d'outils.* Actions notables :
 
 - job_output
 - bash — Check the NVMe run windows
@@ -4439,11 +4439,11 @@ Le CPU fait aujourd'hui **2,06 s/jeton** (V4-Flash, SIMD) et **4,3 s** (V4.1) : 
 - edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md`
 - bash — Check the ctx-512 run progress
 - bash — Estimate the ctx-512 progress
-- … et 10 autres
+- … et 24 autres
 
 **Synthèse produite :**
 
-⏵ D'abord corriger un chiffre : l'A/B propre du SIMD donne ×1,2, pas ×2,06 (la mesure d'hier était polluée)
+⏵ Fil « granularité des listes et volume des flux » : je relis d'abord ce que le dépôt a établi
 
 ## 3. Travail accompli
 
@@ -4577,6 +4577,8 @@ Le CPU fait aujourd'hui **2,06 s/jeton** (V4-Flash, SIMD) et **4,3 s** (V4.1) : 
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/analyse_octets_par_jeton.py` | 1 | 1 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gpu-tandem-nvlink.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/25-le-disque-dur-deguise-en-defaut-moteur.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/granularite_flux.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-granularite-flux.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -4655,7 +4657,7 @@ Le CPU fait aujourd'hui **2,06 s/jeton** (V4-Flash, SIMD) et **4,3 s** (V4.1) : 
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5379 autres
+- … et 5391 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5230,4 +5232,5 @@ Le CPU fait aujourd'hui **2,06 s/jeton** (V4-Flash, SIMD) et **4,3 s** (V4.1) : 
 - GPU : le tandem NVLink est au repos sur la charge principale, et les chiffres disent pourquoi  Nouvel outil (tools/analyse_octets_par_jeton.py, en-têtes GGUF se
 - Sprint 25 : le « coût qui croît avec la position » était le DISQUE DUR, pas le moteur — protocole rejoué à l'identique sur NVMe  Même binaire, mêmes jetons, mêm
 - CORRECTION : le gain du SIMD était annoncé ×2,06 ; l'A/B entrelacé donne ×1,18 (passe) et ×1,37 (proj+mlp)  Le run scalaire de référence tournait pendant qu'un 
+- Granularité des listes : elle ROUTE, elle ne compresse pas — mesuré sur les activations réelles de V4-Flash  Flux de coupure = l_last = 16 384 valeurs (4 copies
 
