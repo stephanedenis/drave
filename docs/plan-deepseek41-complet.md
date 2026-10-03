@@ -526,6 +526,35 @@ Une phase qui ne passe pas ses deux portes ne passe pas à la suivante.
 > `tools/portes.sh`). Ce qui reste hors d'atteinte est nommé au paragraphe
 > précédent : ctx 1 024 coûte 17 h dans l'état actuel de l'indexeur CSA.
 
+#### P6 — la porte de correction à ctx 512, 511 positions (03/10, bloc 26)
+
+> La même porte, portée à **511 prédictions** — le double de la précédente, et
+> c'était impossible tant que le modèle vivait sur le disque dur (bloc 25). Modèle
+> sur NVMe, chemin par **défaut** (scalaire, bit à bit celui des références) :
+>
+> | mesure | llama.cpp | Drave |
+> |---|---|---|
+> | perplexité (511 prédictions) | **6,0030** | **6,2612** (**+4,3 %**) |
+> | corrélation par position | min **0,941811** (pos 305) · moyenne **0,989879** · max 0,998848 | |
+> | top-1 identique | **475/511 (93,0 %)** | |
+> | sous 0,95 | **2/511 (0,4 %)** · plancher 0,90 respecté | |
+>
+> **Le diagnostic par tranches est le résultat à retenir** : 0-63 → **0,98534**,
+> 64-255 → **0,98934**, 256-510 → **0,99142**. L'accord **s'améliore avec la
+> position** : ni la rotation, ni les blocs compressés (64 blocs à ratio 4… 128
+> blocs ici, toujours sous le seuil de l'indexeur), ni la fenêtre glissante ne
+> dérivent sur 511 positions. La porte est **tenue**, et l'écart de perplexité
+> (+4,3 %) est plus faible qu'à 255 positions (+9,0 %) : la fenêtre plus longue
+> n'aggrave rien.
+>
+> **Coût mesuré de cette passe** (NVMe, 16 fils, chemin scalaire) : **1 319,9 s
+> pour 511 jetons = 2,58 s/jeton**, dont attention 1 137,72 ms et `proj+mlp`
+> 1 414,10 ms. À ctx 64, la même machine donne 2,50 s/jeton : **le coût par jeton
+> ne croît presque pas avec la longueur du contexte** (×1,03 de ctx 64 à ctx 512).
+> Ce que les blocs 23-24 prenaient pour une croissance (jusqu'à « 60 s/jeton à
+> ctx 1 024 ») était le disque dur — la mesure à ctx 1 024 redevient donc
+> abordable, et c'est le prochain palier.
+
 ### P7 — Adaptation à V4.1, et la question de provenance (≈ ½ journée + action externe) — **composants faits et vérifiés ; ⚠️ LE MODÈLE NE PRÉDIT PAS (03/10)**
 
 > ## ⚠️ Constat du 03/10 (bloc 20) : V4.1 ne prédit pas

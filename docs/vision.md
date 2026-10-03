@@ -153,7 +153,17 @@ Ce qu'il faut définir, dans l'ordre :
 2. **la granularité** : par couche ? par bloc de canaux ? par expert ? La mesure
    dira où le coût de sérialisation rattrape le gain de parallélisme — le
    croisement push/pull à ~22 % donne déjà l'ordre de grandeur de ce qu'on
-   transporte ;
+   transporte. **Mesuré le 03/10 (`reports/rapport-granularite-flux.md`)** : à
+   erreur ÉGALE, une seule liste par flux est **la plus compacte** (43,3 % du dense
+   f32 à 10 % d'erreur, contre 58-68 % dès qu'on découpe en 4, 16, 64 ou 512
+   listes) — l'en-tête (14 o par liste) et la perte de l'échelle globale coûtent
+   plus que ce que la finesse rapporte en octets. **La granularité ne compresse
+   pas, elle ROUTE** : une unité ne reçoit que ses listes, une tranche d'énergie
+   négligeable coûte 0 octet, et à seuil égal une tranche fine a une erreur plus
+   faible (0,244 à G = 1 contre 0,030 à G = 512). Et le fait qui commande le
+   placement est ailleurs : **2,669 Go de poids par jeton** (V4-Flash) contre
+   **65 536 octets** d'activation à une coupure — quatre ordres de grandeur, donc
+   **le placement suit les poids**, pas les flux d'activation ;
 3. **le placement** : la même règle qu'à l'axe 2, appliquée entre machines — un
    opérateur va là où son entrée est déjà, ou là où elle coûte le moins à
    amener ;

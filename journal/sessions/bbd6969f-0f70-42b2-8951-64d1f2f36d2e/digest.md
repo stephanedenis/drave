@@ -106909,3 +106909,50 @@ Created file
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Granularité des listes : elle ROUTE, elle ne compresse pas — mesuré sur les activations réelles de V4-Flash\n\nFlux de coupure = l_last = 16 384 valeurs (4 copies hc) = 65 536 o en f32.\nÀ erreur ÉGAL … [699 caractères tronqués]`
+
+  ```
+d13e353 Granularité des listes : elle ROUTE, elle ne compresse pas — mesuré sur les activations réelles de V4-Flash
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"la porte de correction à ctx 256, 255 positions\" docs/plan-deepseek41-complet.md", "description": "Locate the ctx-256 gate section"}`
+
+  ```
+476:#### P6 — la porte de correction à ctx 256, 255 positions (03/10, bloc 23)
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md", "limit": 12, "offset": 528}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md</path>
+<type>file</type>
+<content>
+528: 
+529: ### P7 — Adaptation à V4.1, et la question de provenance (≈ ½ journée + action externe) — **composants faits et vérifiés ; ⚠️ LE MODÈLE NE PRÉDIT PAS (03/10)**
+530: 
+531: > ## ⚠️ Constat du 03/10 (bloc 20) : V4.1 ne prédit pas
+532: >
+533: > Test fonctionnel le plus simple qui soit — huit répétitions de « The sky is
+534: > blue. » (39 jetons) : un modèle qui fonctionne donne une perplexité de 1 à 2.
+535: >
+536: > | moteur | modèle | PPL |
+537: > |---|---|---|
+538: > | llama.cpp | V4-Flash IQ1_M | **1,844** |
+539: > | Drave | V4-Flash IQ1_M (mêmes identifiants) | **1,875** |
+
+(Showing lines 528-539 of 946. Use offset=540 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md", "new_string": "#### P6 — la porte de correction à ctx 512, 511 positions (03/10, bloc 26)\n\n> La même porte, portée à **511 prédictions** — le double de la précédente, et\n> c'était impossible tant que  … [1847 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/vision.md", "new_string": "2. **la granularité** : par couche ? par bloc de canaux ? par expert ? La mesure\n   dira où le coût de sérialisation rattrape le gain de parallélisme — le\n   croisement push/pull à ~22 % donne déjà l'ord … [1151 caractères tronqués]`
+
+  ```
+Error: cannot edit "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/vision.md": file changed since it was read — re-read the file, then retry
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/vision.md'\ns=open(p).read()\nold=\"\"\"2. **la granularité** : par couche ? par bloc de canaux ? par expert ? La mesure\n   dira où le coût de sérialisation rattrape le gain de parallélisme — le\n   croisem … [1820 caractères tronqués]`

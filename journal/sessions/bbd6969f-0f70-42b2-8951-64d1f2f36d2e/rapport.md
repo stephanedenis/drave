@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 114.5 h |
 | Tours | 89 |
-| Messages | 6725 |
-| Appels d'outils | 6431 |
+| Messages | 6730 |
+| Appels d'outils | 6436 |
 | Fichiers touchés | 128 |
-| Commandes | 5431 |
+| Commandes | 5433 |
 | Sous-agents | 32 |
-| Commits | 428 |
+| Commits | 429 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -4423,7 +4423,7 @@ Le CPU fait aujourd'hui **2,06 s/jeton** (V4-Flash, SIMD) et **4,3 s** (V4.1) : 
 
 ### Tour 89 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [942 caractères tronqués]
 
-*39 appels d'outils.* Actions notables :
+*44 appels d'outils.* Actions notables :
 
 - job_output
 - bash — Check the NVMe run windows
@@ -4439,7 +4439,7 @@ Le CPU fait aujourd'hui **2,06 s/jeton** (V4-Flash, SIMD) et **4,3 s** (V4.1) : 
 - edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md`
 - bash — Check the ctx-512 run progress
 - bash — Estimate the ctx-512 progress
-- … et 24 autres
+- … et 28 autres
 
 **Synthèse produite :**
 
@@ -4490,7 +4490,7 @@ Le CPU fait aujourd'hui **2,06 s/jeton** (V4-Flash, SIMD) et **4,3 s** (V4.1) : 
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-mla-vision.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mla_synthetique.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/vision_mtmd.py` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/vision.md` | 1 | 3 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/vision.md` | 1 | 4 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/histoire.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/roadmap.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs` | 0 | 104 |
@@ -4532,7 +4532,7 @@ Le CPU fait aujourd'hui **2,06 s/jeton** (V4-Flash, SIMD) et **4,3 s** (V4.1) : 
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/extraire_tables_ggml.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-routage-experts.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-mla-experts.md` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md` | 4 | 18 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md` | 4 | 19 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/colab-reparti.md` | 0 | 1 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/convertisseur.md` | 0 | 3 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-mode4-lot-listes.md` | 0 | 2 |
@@ -4657,7 +4657,7 @@ Le CPU fait aujourd'hui **2,06 s/jeton** (V4-Flash, SIMD) et **4,3 s** (V4.1) : 
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5391 autres
+- … et 5393 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5233,4 +5233,5 @@ Le CPU fait aujourd'hui **2,06 s/jeton** (V4-Flash, SIMD) et **4,3 s** (V4.1) : 
 - Sprint 25 : le « coût qui croît avec la position » était le DISQUE DUR, pas le moteur — protocole rejoué à l'identique sur NVMe  Même binaire, mêmes jetons, mêm
 - CORRECTION : le gain du SIMD était annoncé ×2,06 ; l'A/B entrelacé donne ×1,18 (passe) et ×1,37 (proj+mlp)  Le run scalaire de référence tournait pendant qu'un 
 - Granularité des listes : elle ROUTE, elle ne compresse pas — mesuré sur les activations réelles de V4-Flash  Flux de coupure = l_last = 16 384 valeurs (4 copies
+- Plan P6 : porte de correction TENUE à ctx 512 (511 positions, top-1 93,0 %, +4,3 % de PPL) et le coût par jeton ne croît presque pas avec le contexte (2,58 s/je
 
