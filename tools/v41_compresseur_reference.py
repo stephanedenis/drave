@@ -44,13 +44,33 @@ def rms_norm(x, poids, eps=EPS):
     return x / np.sqrt(np.mean(x * x) + eps) * poids
 
 
-def rope_norm(vecteur, pos, base, n_rot):
+def rope_norm(vecteur, pos, base, n_rot, ya_rn=True,
+              facteur=16.0, beta_rapide=32.0, beta_lent=1.0, ctx_origine=65536.0):
     """RoPE « NORM » (paires 2i, 2i+1) sur `n_rot` composantes — celui du
-    compresseur (`_rope_quant_insert_kernel`, `tl.split(reshape(., (256,2)))`)."""
+    compresseur (`_rope_quant_insert_kernel`, `tl.split(reshape(., (256,2)))`).
+
+    **YaRN par défaut, dès que `compress_ratio > 0`** : c'est ce que font llama.cpp
+    (`deepseek4.cpp:872-879`, `use_compress_rope`) et vLLM (`rope.py:28-46`), et
+    c'est ce que fait le moteur depuis le 02/10. La rampe est celle de ggml
+    (`rope_yarn_ramp`, `ggml-cpu/ops.cpp:5959`) : extrapolation pour les paires
+    RAPIDES, interpolation `theta/facteur` pour les LENTES, mélange linéaire
+    entre `corr0` et `corr1` — comptées sur les dimensions TOURNÉES et bornées
+    comme dans les deux références.
+    """
     v = vecteur.copy()
     demi = n_rot // 2
+    corr0 = max(0.0, np.floor(n_rot * np.log(ctx_origine / (beta_rapide * 2 * np.pi))
+                              / (2 * np.log(base))))
+    corr1 = min(n_rot - 1.0, np.ceil(n_rot * np.log(ctx_origine / (beta_lent * 2 * np.pi))
+                                      / (2 * np.log(base))))
     for i in range(demi):
-        theta = pos / (base ** (2.0 * i / n_rot))
+        theta_extrap = pos / (base ** (2.0 * i / n_rot))
+        if ya_rn:
+            theta_interp = theta_extrap / facteur
+            rampe = 1.0 - min(1.0, max(0.0, (i - corr0) / max(0.001, corr1 - corr0)))
+            theta = theta_interp * (1.0 - rampe) + theta_extrap * rampe
+        else:
+            theta = theta_extrap
         c, s = np.cos(theta), np.sin(theta)
         a, b = v[2 * i], v[2 * i + 1]
         v[2 * i] = a * c - b * s

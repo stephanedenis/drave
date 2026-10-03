@@ -26,11 +26,12 @@ lettres (`vllm/models/deepseek_v41/common/rope.py:28-46`) : « YaRN applies to a
 compressed-KV layers (compress_ratio > 0); only pure sliding-window layers use
 plain RoPE », et il désactive `mscale` (`mscale = 0`, `mscale_all_dim = 0`).
 
-Côté llama.cpp, `mscale` est calculé puis **annulé**
-(`src/llama-context.cpp:492-494` : « when YARN is applied with yarn_ext_factor
-!= 0.0f, we need to cancel this factor »), et `rope_attn_factor` vaut 1 faute de
-clef dans le fichier — les deux références concordent donc : **YaRN ×16, sans
-mscale**.
+Côté llama.cpp, `mscale` est **annulé pour V4** par un mécanisme propre au modèle :
+`dsv4_rope_attn_factor` (`src/models/deepseek4.cpp:11-17`) renvoie l'**inverse** de
+`1 + 0,1·ln(1/freq_scale)`, que le noyau `rope_yarn` remultiplie — produit **1,0
+exactement** (vérifié numériquement). `cparams.yarn_attn_factor`, celui que
+`llama-context.cpp:492-494` annule, n'est même pas utilisé par le graphe
+`deepseek4`. Les deux références concordent donc : **YaRN ×16, sans mscale**.
 
 ## 2. Pourquoi aucune vérification ne l'avait vu
 
@@ -70,10 +71,55 @@ ctx 32 — exactement ce que la théorie du §2 prédit. La valeur attendue de
 | `rope_norm_yarn` | `Model` | convention **NORM** (paires 2i, 2i+1) + interpolation YaRN, sans mscale ; les dimensions de correction se comptent sur les dimensions **tournées** (64), pas sur la tête (512) |
 | `tourner` | `attn_v4` | **une seule porte pour les six rotations** de la fonction (requête, clé, clé de bloc, clé et requête d'indexeur, dé-rotation) : llama.cpp utilise les mêmes paramètres pour toutes |
 | `DRAVE_YARN_NON` | env | « jamais de YaRN » coupe **aussi** celui des couches compressées, sinon le drapeau ne ferait plus ce qu'il annonce — et c'est ce qui permet de mesurer les deux régimes |
+| `--sans-yarn` | flags | **corrigé** : il ne coupait RIEN sur V4 (`cfg_yarn_off` ne touchait que `cfg.yarn`, lu par les seuls chemins denses, alors que `Mla4::yarn_compresse` est figé à la construction). Mesuré par la relecture adverse : `--sans-yarn` → 64 730 738,578 contre `DRAVE_YARN_NON=1` → 65 819 810,336 (+1,7 %) ⇒ le drapeau n'avait rien basculé |
+| `as_u64` dans la lecture | `Cfg` | **la vraie cause du premier échec** : `original_context_length` est un **u32** et `as_f64` ne lit que les flottants — le défaut 4 096 prenait la place de 65 536, et la rampe interpolait des paires que la référence n'interpole pas |
+| `corr0`/`corr1` **bornées** | `rope_norm_yarn` | `MAX(0,·)` et `MIN(n_dims − 1,·)`, comme ggml (`ggml.c:4471-4480`) et vLLM (`yarn_find_correction_range`, `truncate=True`) : sans elles, base 100 et contexte 2e6 donnent (63, 89) au lieu de (63, 63) et la rampe ne se termine jamais |
 
-## 5. La comparaison décisive : protocole écrit, mesure PAS encore faite
+## 5. La comparaison décisive : FAITE, et elle valide le correctif
 
-**Tentative faite, et elle ne prouve rien** — il faut le dire avant de la citer :
+`l_last-2` de la couche 2 (CSA, ratio 4), 128 positions, état de la couche 1
+**injecté** depuis llama.cpp (`DRAVE_ETAT_ENTREE=/tmp/ref_yr-l_last-1.bin`, le
+harnais des rapports P3/P5), deux variantes du moteur contre le même dump :
+
+| position | YaRN (corr / écart) | RoPE simple (corr / écart) | gagnant |
+|---|---|---|---|
+| 4 | 0,999919 / 1,342e-02 | 0,999919 / 1,344e-02 | (indiscernables) |
+| 8 | 0,999940 / 1,624e-02 | 0,999940 / 1,623e-02 | — |
+| 16 | 0,999995 / 1,325e-03 | 0,999995 / 1,321e-03 | — |
+| 32 | 0,999995 / 1,943e-03 | 0,999995 / 1,919e-03 | — |
+| 64 | 0,999998 / 1,005e-03 | 0,999998 / 9,905e-04 | — |
+| 96 | **0,999998 / 1,052e-03** | 0,999997 / 1,107e-03 | YaRN |
+| 120 | **0,999996 / 3,680e-03** | 0,999995 / 4,214e-03 | YaRN |
+| 127 | **0,999996 / 4,515e-03** | 0,999993 / 5,376e-03 | YaRN |
+
+**llama.cpp applique donc bien YaRN sur ses couches compressées** (son code le
+disait, la mesure le confirme), et le correctif rapproche le moteur de sa
+référence — l'écart se réduit de 15 % à la position 127 et la corrélation monte.
+Aux positions courtes les deux régimes coïncident, comme le §2 l'annonçait.
+
+### L'instrument était faux, et c'est la mesure qui l'a dit
+
+La **première** comparaison donnait l'inverse (le RoPE simple gagnait partout, et
+le YaRN perdait de plus en plus avec la position). En remontant des écarts aux
+*angles* réellement appliqués — `θ = atan2(b'·a − a'·b, a·a' + b·b')` par paire —
+la rampe du moteur s'est révélée être **(8, 18)** au lieu de **(15, 25)** : les
+dimensions de correction étaient calculées avec un contexte d'origine de **4 096**
+au lieu de 65 536, c'est-à-dire avec le **défaut** de la fonction de lecture.
+
+La cause : `Meta::as_f64()` ne lit **que** les flottants, et
+`rope.scaling.original_context_length` est un **u32** dans le GGUF
+(`llama_model_loader` l'affiche « u32 »). La lecture renvoyait `None`, le défaut
+prenait sa place, et la rampe interpolait des paires que la référence
+n'interpole pas. Le facteur (16) et les bêtas (32/1), eux, sont des f32 : ils
+étaient lus. **Le bug était invisible** : la rotation restait plausible, aucune
+erreur ne sortait, et seule la comparaison de tenseurs pouvait le montrer.
+
+Corrigé (`as_f64().or_else(|| as_u64()…)`), remesuré : le tableau ci-dessus.
+
+## 6. Le protocole, pour rejouer
+
+Une première tentative (sans injection d'état) ne prouvait rien et est conservée
+ici comme avertissement :
 
 | | ce que j'ai lancé | ce que ça compare |
 |---|---|---|
@@ -123,7 +169,7 @@ magnitudes (PPL ~600 pour un texte coupé au milieu d'un paragraphe), l'écart d
 c'est la conclusion du rapport P5 — et une seule unité de NLL sur un jeton déplace
 la moyenne de 6 %. La comparaison qui tranche est celle du §5, par TENSEUR.
 
-## 6. Ce que ce correctif ne règle pas
+## 7. Ce que ce correctif ne règle pas
 
 - **Rien n'est prouvé sur V4.1** par cette mesure : llama.cpp ne charge pas le
   fichier `deepseek41`. La source (vLLM) dit la même chose que pour V4-Flash, et

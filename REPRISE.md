@@ -50,6 +50,23 @@ cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo build --r
 > du pilote, et `--gpu-banc` retrouve l'exactitude des noyaux — 1,6 ms par ligne
 > en warp-par-ligne contre 7,2 ms sur 30 fils CPU, **écart max 1,99e-7**.
 >
+> **Mise à jour du 02/10 (20h30) — la rotation des couches compressées, et
+> l'instrument qui mentait.** llama.cpp ET vLLM appliquent YaRN ×16 (sans mscale)
+> à TOUTES les positions dès que `compress_ratio > 0` ; le moteur y appliquait son
+> régime retardé (RoPE simple). Correctif fait et **validé par la mesure** contre
+> llama.cpp, tenseur par tenseur, à la position 127 : 4,515e-03 d'écart contre
+> 5,376e-03 en RoPE simple (corrélation 0,999996 contre 0,999993).
+>
+> Le premier essai disait l'inverse — parce que la rampe du moteur était calculée
+> avec un contexte d'origine de **4 096** au lieu de 65 536 : `Meta::as_f64()` ne
+> lit que les flottants et `rope.scaling.original_context_length` est un **u32**
+> dans le GGUF. Le défaut prenait la place de la valeur, sans un mot. C'est en
+> remontant des écarts aux ANGLES appliqués (rampe mesurée (8, 18) au lieu de
+> (15, 25)) que le bug est apparu. Porte V4-Flash : **8430,2968 → 8430,4966**
+> (le chiffre bouge à peine à ctx 32, où les deux régimes coïncident presque :
+> c'est la comparaison par tenseur qui tranche). Les chiffres V4-Flash antérieurs
+> sont à revérifier.
+>
 > **Mise à jour du 02/10 (22h) — l'ENGRAM de V4.1 est branché, et une passe avant
 > V4.1 COMPLÈTE devient possible.** Le hachage glissant (O(1) par jeton : la
 > fenêtre de `max_ngram − 1` suffit), la lecture des 24 rangées de 264 octets dans

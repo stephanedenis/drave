@@ -114,16 +114,20 @@ if [ -f "$V4" ]; then
         $D "$V4" --tokenize --fichier /tmp/wt2_txt.txt --sortie /tmp/ids_v4flash.txt >/dev/null 2>&1
     fi
     if [ -s /tmp/ids_v4flash.txt ]; then
-        # 8430,2968 -> 8405,9477 le 02/10 : la rotation des couches COMPRESSÉES
-        # est passée du RoPE simple (régime retardé du moteur) à YaRN ×16 sans
-        # mscale, comme llama.cpp (`deepseek4.cpp:872-879`) et vLLM
-        # (`rope.py:28-46`) — voir reports/rapport-v4-yarn-compresse.md. Le
-        # chiffre change PARCE QUE le calcul change, et il change peu à ctx 32 :
-        # YaRN n'interpole que les basses fréquences, dont les angles sont
-        # minuscules aux positions courtes.
+        # 8430,2968 -> 8430,4966 le 02/10 : la rotation des couches COMPRESSÉES est
+        # passée du RoPE simple (régime retardé du moteur) à YaRN ×16 sans mscale,
+        # comme llama.cpp (`deepseek4.cpp:872-879`) et vLLM (`rope.py:28-46`) —
+        # `reports/rapport-v4-yarn-compresse.md`. Le chiffre bouge à peine parce
+        # qu'à ctx 32 les deux régimes coïncident presque (YaRN n'interpole que les
+        # basses fréquences) : c'est la comparaison par TENSEUR à la position 127
+        # qui a validé le correctif (4,515e-03 contre 5,376e-03 d'écart à
+        # llama.cpp), pas cette porte. Une valeur intermédiaire — 8405,9477 — a été
+        # mesurée avec une rampe fausse (`original_context_length` est un u32, lu
+        # par `as_f64` qui ne lit que les flottants : défaut 4 096 au lieu de
+        # 65 536). Toute valeur V4-Flash antérieure au 03/10 est à revérifier.
         p=$(timeout 2400 $D "$V4" --ppl /tmp/ids_v4flash.txt --ctx 32 --limit 5 \
             --dense --threads 16 2>&1 | valeur)
-        compare "V4-Flash 43 couches ctx 32" "8405.9477" "$p"
+        compare "V4-Flash 43 couches ctx 32" "8430.4966" "$p"
     fi
 elif [ "$RAPIDE" != "rapide" ]; then
     printf "  %-42s %s\n" "V4-Flash 43 couches ctx 32" "modèle absent"

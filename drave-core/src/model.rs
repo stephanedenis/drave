@@ -1246,6 +1246,18 @@ pub struct Mla4 {
     /// (`kv_source_layer_ids` = [2,8,14,20]) — les autres n'ont même pas
     /// `attn_compressor_kv` et lisent l'état publié par leur source.
     pub a_compresseur: bool,
+    /// **Le filtre à DEUX NIVEAUX de V4.1** (`candidate_source_layer_id`,
+    /// `candidate_topk_blocks`, `candidate_block_size`) : le nombre de positions
+    /// compressées au-delà duquel il écarte des blocs AVANT l'indexeur, soit
+    /// `candidate_topk_blocks × candidate_block_size` (2 048 × 8 = 16 384 pour ce
+    /// fichier). En dessous, il ne mord pas : ignorer le filtre est alors exact.
+    /// Au-delà, le moteur refuse au lieu de choisir sur un ensemble plus large que
+    /// la référence. 0 = le fichier ne déclare pas de filtres.
+    pub candidats_max: usize,
+    /// La couche qui PUBLIE les blocs candidats (`candidate_source_layer_id`) :
+    /// seuls les indexeurs AU-DESSUS masquent leurs scores, donc seuls ceux-là
+    /// butent sur le filtre à deux niveaux.
+    pub candidat_source: usize,
     /// **Y a-t-il une porte ?** Celle de la SOURCE : une couche consommatrice de
     /// V4.1 n'a pas de tenseur de porte, mais le pool qu'elle lit en a une (c'est
     /// le compresseur de sa source qui l'a remplie). Lire la présence sur la
@@ -2113,6 +2125,15 @@ pub struct Model {
     /// lit les `max_ngram − 1` jetons précédents. Rempli par `forward` (un jeton
     /// par appel), remis à zéro en tête de séquence.
     pub historique: Vec<u32>,
+    /// **La `pre` portée par le dernier raccord FFN exécuté**, exposée pour le
+    /// FLUX : la chaîne mHC retardée de V4.1 en a besoin d'un nœud à l'autre
+    /// (`hc` valeurs f32 par jeton, 16 octets), et sans elle un nœud qui reprend
+    /// au milieu du modèle replierait avec la copie 0 — faux, et muet. Remplie en
+    /// fin de `forward` quand la plage s'arrête avant la dernière couche.
+    pub hc_porte_flux: Option<Vec<f32>>,
+    /// La `pre` REÇUE d'un autre nœud (protocole v6) : elle amorce la chaîne du
+    /// premier raccord au lieu de la copie 0.
+    pub hc_porte_imposee: Option<Vec<f32>>,
     /// Cache LATENT par couche : `c_kv` (kv_lora) et `k_rope` (qkr) par position.
     pub mla_cache: Vec<(Vec<f32>, Vec<f32>)>,
     /// Cache VRAM des experts MoE (`DRAVE_GPU_EXPERTS=1`).
@@ -2590,6 +2611,10 @@ static LOT_TOPK_IGNORE: std::sync::atomic::AtomicBool = std::sync::atomic::Atomi
 /// exact tant que le nombre de blocs reste sous `indexer.top_k`.
 static INDEXEUR_V41_DIT: std::sync::atomic::AtomicBool = std::sync::atomic::AtomicBool::new(false);
 
+/// La « convention de sonde » d'une plage V4.1 se dit UNE fois : répétée à chaque
+/// jeton, elle noyait 520 lignes de journal pour une seule information.
+static PLAGE_V41_DITE: std::sync::atomic::AtomicBool = std::sync::atomic::AtomicBool::new(false);
+
 impl Model {
     /// `couches` : exécution **bornée** `[a, b)` — le harnais qui permet
     /// d'exécuter et de COMPARER les couches qui n'ont pas besoin de ce qui
@@ -2708,8 +2733,17 @@ impl Model {
                         }),
                         _ => None,
                     });
+                // **`as_f64` ne lit QUE les flottants.** `original_context_length`
+                // est un u32 dans le GGUF (`llama_model_loader` l'affiche « u32 ») :
+                // le lire avec `as_f64` donnait `None`, donc le DÉFAUT 4096 au lieu
+                // de 65 536 — et une rampe de correction deux fois trop large, qui
+                // interpolait des paires que la référence n'interpole pas. Le
+                // défaut était invisible : la rotation restait plausible, et c'est
+                // la comparaison par tenseur qui l'a montré (rampe mesurée (8, 18)
+                // au lieu de (15, 25)). Mesuré sur le fichier réel avant/après.
                 let nombre = |cle_gguf: &str, cle_json: &str, def: f64| -> f64 {
-                    g.cfg(cle_gguf).and_then(|m| m.as_f64())
+                    g.cfg(cle_gguf)
+                        .and_then(|m| m.as_f64().or_else(|| m.as_u64().map(|v| v as f64)))
                         .or_else(|| g.json_nombre(cle_json))
                         .unwrap_or(def)
                 };
@@ -2992,6 +3026,21 @@ le cache lu n'est pas le sien");
                 let q_src = |s: &str| format!("blk.{src}.{s}");
                 let a_porte = ratio > 1
                     && g.tensor(&q_src("attn_compressor_gate.weight")).is_some();
+                let candidat_source = g.cfg_ou(&["candidate_source_layer_id"])
+                    .and_then(|m| m.as_u64())
+                    .or_else(|| g.json_nombre("candidate_source_layer_id").map(|v| v as u64))
+                    .map(|v| v as usize).unwrap_or(usize::MAX);
+                let candidats_max = {
+                    let blocs = g.cfg_ou(&["candidate_topk_blocks"])
+                        .and_then(|m| m.as_u64())
+                        .or_else(|| g.json_nombre("candidate_topk_blocks").map(|v| v as u64))
+                        .unwrap_or(0) as usize;
+                    let taille = g.cfg_ou(&["candidate_block_size"])
+                        .and_then(|m| m.as_u64())
+                        .or_else(|| g.json_nombre("candidate_block_size").map(|v| v as u64))
+                        .unwrap_or(1).max(1) as usize;
+                    blocs * taille
+                };
                 let comp_largeur = if ratio != 0 {
                     let t = g.tensor(&q_src("attn_compressor_kv.weight"))
                         .unwrap_or_else(|| panic!("couche {l} : ratio {ratio} mais ni elle ni \
@@ -3057,6 +3106,8 @@ n'est pas dans `index_source_layer_ids` {idx_sources:?} — le fichier se contre
                     },
                     a_compresseur: !comp_kv.is_empty(),
                     a_porte,
+                    candidats_max,
+                    candidat_source,
                     comp_largeur,
                     comp_source: if ratio != 0 { src } else { l },
                     idx_q_b: g.dequant_optionnel(&p("indexer.attn_q_b.weight")).unwrap_or_default(),
@@ -3069,7 +3120,20 @@ n'est pas dans `index_source_layer_ids` {idx_sources:?} — le fichier se contre
                     idx_hd: dim(&["attention.indexer.key_length"], "index_head_dim").unwrap_or(0),
                     idx_k: g.dequant_optionnel(&p("indexer.attn_k.weight")).unwrap_or_default(),
                     idx_k_norm: g.dequant_optionnel(&p("indexer.k_norm.weight")).unwrap_or_default(),
-                    a_idx_k: g.tensor(&p("indexer.attn_k.weight")).is_some(),
+                    a_idx_k: {
+                        let possede = g.tensor(&p("indexer.attn_k.weight")).is_some();
+                        // **Posséder le cache d'indexeur, c'est être une SOURCE de
+                        // KV** (vLLM : « Index K cache: owned only by kv-source
+                        // layers »). Un `attn_k` sur une consommatrice écrirait
+                        // dans le tampon ALIASÉ de sa source et corromprait les
+                        // clés de tout le groupe — refusé.
+                        if possede && src != l {
+                            panic!("couche {l} : elle porte `indexer.attn_k` (elle possède \
+le cache de clés d'indexeur) mais sa source de cache compressé est la couche {src} — le \
+fichier se contredit");
+                        }
+                        possede
+                    },
                     q_a: g.dequant(&p("attn_q_a.weight")),
                     q_a_norm: g.dequant(&p("attn_q_a_norm.weight")),
                     q_b: g.dequant(&p("attn_q_b.weight")),
@@ -3402,13 +3466,15 @@ mapping {}",
             // Le dire au lieu de « le modèle ne déclare pas YaRN » : la rotation
             // est fausse dès la position 1, et `DRAVE_YARN=1` l'applique à
             // toutes les positions, comme la référence.
-            (None, _, _) if g.json_texte("rope_type").as_deref() == Some("yarn") =>
-                println!("[config] rotation : RoPE simple — le modèle DÉCLARE YaRN \
-(JSON `rope_scaling`, facteur {}) mais le moteur ne l'applique qu'au-delà de QUATRE FOIS la \
-longueur d'origine (soit {} jetons ici), seuil mesuré sur gpt-oss ; `DRAVE_YARN=1` \
-l'applique partout, comme la référence",
-                         g.json_nombre("factor").unwrap_or(1.0),
-                         4.0 * g.json_nombre("original_max_position_embeddings").unwrap_or(0.0)),
+            (None, _, _) if g.cfg("rope.scaling.type").and_then(|m| m.as_str()) == Some("yarn")
+                || g.json_texte("rope_type").as_deref() == Some("yarn") =>
+                println!("[config] rotation : RoPE simple sur les couches BRUTES (régime \
+retardé : YaRN au-delà de quatre fois la longueur d'origine, seuil mesuré sur gpt-oss) — \
+mais les couches COMPRESSÉES sont en YaRN ×{} à TOUTES les positions, comme llama.cpp \
+(`deepseek4.cpp:872-879`) et vLLM (`rope.py:28-46`) ; `DRAVE_YARN=1`/`--sans-yarn` \
+forcent l'un ou l'autre partout",
+                         g.cfg("rope.scaling.factor").and_then(|m| m.as_f64())
+                          .or_else(|| g.json_nombre("factor")).unwrap_or(1.0)),
             _ => println!("[config] rotation : RoPE simple (le modèle ne déclare pas YaRN)"),
         }
         // Tête en 4 bits : la plus grosse matrice du modèle, donc le plus gros
@@ -3562,6 +3628,7 @@ l'applique partout, comme la référence",
             mla4_idx_kv, mla4_idx_gate, mla4_idx_cles, mla4_idx_scores,
             hc, hc_tete, hc_retarde,
             engram, engram_poids, historique: Vec::new(),
+            hc_porte_flux: None, hc_porte_imposee: None,
             kv: caches_kv,
             ctx, events: 0, paires: [0; 3], act_levels: 127.0, act_thresh: 0.0, act_topk: 0, act_renorm: false,
             act_topk_proj: [0; 7], attn_topk: 0, attn_events: 0, qk_topk: 0,
@@ -3858,7 +3925,17 @@ l'applique partout, comme la référence",
     }
 
     /// Désactive l'étirement YaRN (pour éprouver l'hypothèse).
-    pub fn cfg_yarn_off(&mut self) { self.cfg.yarn = None; }
+    pub fn cfg_yarn_off(&mut self) {
+        // `--sans-yarn` veut dire JAMAIS de YaRN : il coupe le régime retardé des
+        // couches brutes ET celui des couches compressées, sinon le drapeau ne
+        // ferait pas ce qu'il annonce (relevé par la relecture adverse du 02/10 :
+        // `yarn_compresse` était figé à la construction du modèle).
+        self.cfg.yarn = None;
+        self.cfg.yarn_declare = None;
+        if let Some(v) = self.mla4.as_mut() {
+            for m in v.iter_mut() { m.yarn_compresse = None; }
+        }
+    }
 
     /// Active le profilage des neurones et alloue les compteurs.
     pub fn activer_profil_neurones(&mut self) {
@@ -4313,10 +4390,17 @@ l'applique partout, comme la référence",
         // Les dimensions de correction se comptent sur les dimensions TOURNÉES
         // (`rope_yarn_corr_dims(n_dims = rot_dim, …)`), pas sur la tête entière :
         // pour V4 elles font 64, pas 512.
+        // **Bornées comme dans les DEUX références** : ggml écrit
+        // `dims[0] = MAX(0, start)` et `dims[1] = MIN(n_dims - 1, end)`
+        // (`ggml.c:4471-4480`), vLLM `max(low, 0)` / `min(high, dim - 1)`
+        // (`rotary_embedding/common.py`, `yarn_find_correction_range`,
+        // `truncate=True`). Sans ces bornes, une base petite et un contexte long
+        // font sortir la rampe du barème : base 100, ctx 2e6 → (63, 89) au lieu de
+        // (63, 63) — la rampe ne se terminerait jamais.
         let corr0 = (n_rot as f32 * (ctx_origine / (beta_rapide * 2.0 * std::f32::consts::PI)).ln()
-                     / (2.0 * ln_base)).floor();
+                     / (2.0 * ln_base)).floor().max(0.0);
         let corr1 = (n_rot as f32 * (ctx_origine / (beta_lent * 2.0 * std::f32::consts::PI)).ln()
-                     / (2.0 * ln_base)).ceil();
+                     / (2.0 * ln_base)).ceil().min((n_rot - 1) as f32);
         for h in 0..n_head {
             let t = &mut v[h * head_dim..(h + 1) * head_dim];
             for i in 0..half {
@@ -5155,6 +5239,10 @@ s'applique pas — utilisez --lot 1, ou réenregistrez sans DRAVE_TRACE_BLOCS");
         // `freq_scale_l`, `ext_factor_l`, `n_ctx_orig_l` — `deepseek4.cpp:900`,
         // `:919`, `:1124`), et le moteur doit faire pareil, sinon deux rotations
         // d'une même couche divergeraient.
+        if std::env::var("DRAVE_DEBUG_YARN").is_ok() {
+            eprintln!("[yarn] couche {l} : ratio {} · yarn_compresse={:?} · base {base_rope}",
+                      m.ratio, m.yarn_compresse);
+        }
         let tourner = |v: &mut [f32], nh: usize, hd: usize, p: usize, nr: usize, inv: bool| {
             match m.yarn_compresse {
                 Some((f, bf, bl, o)) => Self::rope_norm_yarn(v, nh, hd, p, base_rope, f, bf, bl, o, nr, inv),
@@ -5497,6 +5585,20 @@ d'indexeur — ni la couche ni sa source de KV n'a `indexer.attn_k`");
                 for (b, s) in scores.iter().enumerate() { etat.idx_scores[b] = *s; }
                 // top-k des blocs : au-delà de `indexer_top_k` il faut CHOISIR,
                 // et c'est ce choix qui décide ce que l'attention voit.
+                // **Le filtre à deux niveaux** n'est pas porté : au-delà de
+                // `candidate_topk_blocks × candidate_block_size` positions
+                // compressées, la référence écarte des blocs avant l'indexeur, et
+                // choisir sur un ensemble plus large donnerait un autre choix. En
+                // dessous, il ne mord pas — le moteur refuse donc au-delà.
+                // Seuls les indexeurs APRÈS la source de candidats masquent leurs
+                // scores (vLLM, `DeepseekV4Indexer` : les quatre premières ne
+                // reçoivent même pas le tampon) — refuser pour toutes serait un
+                // sur-refus, c'est-à-dire un refus faux.
+                if m.candidats_max > 0 && l > m.candidat_source && n_vis > m.candidats_max {
+                    panic!("indexeur de V4.1 (couche {l}) : {n_vis} blocs compressés > \
+{} (le filtre à DEUX NIVEAUX de `candidate_*`), qui n'est pas porté — au-delà, choisir \
+sur un ensemble plus large que la référence donnerait un autre choix", m.candidats_max);
+                }
                 let k = n_vis.min(m.indexer_top_k);
                 let mut ordre: Vec<u32> = (0..n_vis as u32).collect();
                 ordre.sort_by(|&a, &b| scores[b as usize]
@@ -5822,21 +5924,26 @@ n'est pas `deepseek41`, donc la chaîne retardée de V4.1 ne s'applique pas)",
         // **Chaîne retardée** : le repliement d'un raccord se fait avec les
         // coefficients PORTÉS depuis le raccord précédent — `None` au premier,
         // où la référence sélectionne la copie 0 (`residual[:, 0]`).
-        let mut hc_porte: Option<Vec<f32>> = None;
-        // Un nœud qui REPREND à la couche k reçoit un flux brut, mais pas ces
-        // coefficients : V4.1 replierait alors avec la copie 0, c'est-à-dire
-        // faux, et sans le dire. Tant que le flux DRVF ne les transporte pas,
-        // un découpage de V4.1 à une frontière de couche est refusé.
-        assert!(!(self.hc_retarde && self.flux_brut && self.couche_debut > 0),
+        // La chaîne retardée s'amorce sur la `pre` REÇUE si le flux en portait
+        // une (protocole v6), sinon sur rien — c'est-à-dire la copie 0, la
+        // convention du tout premier raccord du modèle.
+        let recue = self.hc_porte_imposee.is_some();
+        let mut hc_porte: Option<Vec<f32>> = self.hc_porte_imposee.take();
+        // Un nœud qui REPREND à la couche k reçoit un flux brut : s'il ne porte
+        // pas ces coefficients (protocole < v6), V4.1 replierait avec la copie 0
+        // — faux, et muet. Depuis la v6 le flux les transporte (16 octets par
+        // jeton), et le refus ne tombe plus que sur un flux qui ne les a pas.
+        assert!(!(self.hc_retarde && self.flux_brut && self.couche_debut > 0 && !recue),
                 "V4.1 découpé : la chaîne mHC retardée a besoin de la `pre` portée par \
-le raccord précédent, que le flux ne transporte pas — un nœud qui reprend à la couche {} \
-replierait avec la copie 0 (faux, et muet)", self.couche_debut);
+le raccord précédent — un nœud qui reprend à la couche {} sans l'avoir reçue replierait \
+avec la copie 0 (faux, et muet)", self.couche_debut);
         // SONDE LOCALE (`--couches a:b`, pas de flux) : la plage commence au
         // milieu du modèle, donc la `pre` du raccord précédent n'existe pas. On
         // replie le premier raccord avec la copie 0 — la convention de la
         // référence au PREMIER raccord du modèle — et on le DIT : ce n'est plus
         // la chaîne du modèle, c'est une convention de sonde.
-        if self.hc_retarde && self.couche_debut > 0 && !self.flux_brut {
+        if self.hc_retarde && self.couche_debut > 0 && !self.flux_brut
+            && !PLAGE_V41_DITE.swap(true, std::sync::atomic::Ordering::Relaxed) {
             eprintln!("[plage] V4.1 : la plage commence à la couche {} — la `pre` portée par \
 le raccord précédent n'existe pas, le premier raccord se replie donc avec la COPIE 0 \
 (convention de sonde, comme au tout premier raccord du modèle)", self.couche_debut);
@@ -5904,9 +6011,10 @@ le raccord précédent n'existe pas, le premier raccord se replie donc avec la C
                     let dim = cfg.hidden;
                     let hcc = self.hc.as_ref().map(|v| v[0].0.hc).unwrap_or(1);
                     // Les adresses se calculent sur la FENÊTRE du hachage, pas sur
-                    // tout le préfixe : un n-gramme ne regarde que `max_ngram − 1`
-                    // jetons en arrière, donc la dernière ligne de `adresses` ne
-                    // dépend que d'eux. Recalculer le préfixe entier coûtait
+                    // tout le préfixe : un n-gramme de taille `max_ngram` ne regarde
+                    // que `max_ngram − 1` jetons en arrière, donc il faut et il
+                    // suffit des `max_ngram` derniers jetons (le courant compris) —
+                    // c'est ce que découpe `lo = pos − (max_ngram − 1)`. Recalculer le préfixe entier coûtait
                     // O(position) par jeton et par couche — quadratique sur une
                     // séquence, pour un résultat identique (le vérificateur compare
                     // justement les deux : il recalcule, lui, sur tout le préfixe).
@@ -6682,6 +6790,11 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
         // (écart 3,11) alors que le transport dense est exact. Le flux d'un
         // modèle à hyper-connexions coûte donc `hc` fois plus cher sur le fil.
         if self.flux_brut || (self.couche_fin < cfg.n_layer && !self.tete_partielle) {
+            // **La `pre` portée part avec le flux** (protocole v6) : c'est ce qui
+            // permet au nœud suivant d'amorcer sa chaîne retardée sur la bonne
+            // valeur au lieu de la copie 0. 16 octets par jeton, sur les 65 615
+            // que coûte déjà un état en `hc` copies — 0,02 %.
+            if self.hc_retarde { self.hc_porte_flux = hc_porte.clone(); }
             return x;                       // nœud intermédiaire : flux brut
         }
         // Mélange de TÊTE : les `hc` copies redeviennent un seul état, qui voit
@@ -7651,6 +7764,31 @@ mod tests_hc {
         }
     }
 
+    /// **`rope_norm_yarn` contre la transcription de ggml** (témoin calculé par
+    /// `tools/rope_yarn_temoin.py`) : mêmes corr_dims, même rampe, même
+    /// appariement NORM. Sans ce témoin, une erreur d'orientation de rampe ou de
+    /// dimensions de correction ne se voit que sur un modèle de 284 Go.
+    /// Diagnostic : imprime la sortie pour les paramètres RÉELS de V4-Flash
+    /// (n_rot = 64, position 4), à comparer avec la même chose en Python.
+    #[test]
+    fn diagnostic_yarn_v4flash() {
+        let mut v = [1.0f32; 64];
+        for (i, x) in v.iter_mut().enumerate() { *x = (i as f32) * 0.1 - 3.0; }
+        Model::rope_norm_yarn(&mut v, 1, 64, 4, 160_000.0, 16.0, 32.0, 1.0, 65536.0, 64, false);
+        eprintln!("RUST {:?}", &v[..8]);
+    }
+
+    #[test]
+    fn yarn_du_compresseur_conforme_a_ggml() {
+        let mut v = [0.5f32, -1.25, 2.0, 0.75, -0.5, 1.5, -2.0, 0.25];
+        Model::rope_norm_yarn(&mut v, 1, 8, 124, 160_000.0, 16.0, 32.0, 1.0, 65536.0, 8, false);
+        let attendu = [-1.290996836e+00f32, -3.818732377e-01, 2.055401246e+00, 5.812277671e-01,
+                       -8.059601869e-01, 1.360304443e+00, -2.001419332e+00, 2.383708423e-01];
+        for (i, (a, b)) in v.iter().zip(attendu.iter()).enumerate() {
+            assert!((a - b).abs() < 1e-6, "valeur {i} : {a:e} contre {b:e}");
+        }
+    }
+
     /// **Le softmax du compresseur est PAR CANAL, pas par jeton.** C'est la
     /// seule chose que la vérification sur le vrai modèle ne pouvait pas prouver
     /// (l'état injecté y était identique à toutes les positions, donc le pool
@@ -7794,7 +7932,7 @@ mod tests_router {
             eps: 1e-6, rope_base: 10000.0, vocab: 1,
             n_expert: 4, n_expert_used: 2, ffn_exp: 1,
             ffn_act_oss: false, gating, expert_norm: norm, expert_scale: echelle,
-            hash_layers: hash, n_rot: 0, yarn: None,
+            hash_layers: hash, n_rot: 0, yarn: None, yarn_declare: None,
         }
     }
 

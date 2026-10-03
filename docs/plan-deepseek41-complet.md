@@ -374,11 +374,25 @@ Une phase qui ne passe pas ses deux portes ne passe pas à la suivante.
 > de 512 blocs — plus de 1 024 jetons en ratio 2 — et le moteur ne refuse plus :
 > il choisit, comme V4-Flash.
 >
-> **Reste, nommé** : la **sélection à deux niveaux** (`candidate_*`, un filtre de
-> candidats qui ne change le résultat qu'au-delà de `indexer.top_k`), le **masque
-> des jetons d'image** de l'engram (sans objet en texte seul), le **pré-mix sur le
-> fil** du protocole DRVF (16 octets/jeton, sans quoi un découpage de V4.1 est
-> refusé), et **YaRN sur les couches compressées** —
+> **Sélection exercée (02/10, 19h45)** : le top-k de l'indexeur CHOISIT pour la
+> première fois sur V4.1 — 513 blocs à la position 512 d'une couche de ratio 1,
+> 512 gardés, séparation des scores vérifiée (rapport §8). Et le filtre à deux
+> niveaux (`candidate_*`) est **chiffré** : il ne mord qu'au-delà de
+> `2 048 × 8 = 16 384` positions compressées, et le moteur refuse au-delà.
+>
+> **YaRN sur les couches compressées : FAIT et MESURÉ** (02/10, 20h30). llama.cpp
+> et vLLM appliquent YaRN ×16 sans mscale à toutes les positions dès que
+> `compress_ratio > 0` ; le moteur appliquait son régime retardé. Correctif validé
+> contre llama.cpp tenseur par tenseur (position 127 : 4,515e-03 contre 5,376e-03
+> d'écart en RoPE simple). Le premier essai disait l'inverse : la rampe était
+> calculée avec un contexte d'origine de 4 096 parce que `as_f64` ne lit pas les
+> clefs **u32** (`rope.scaling.original_context_length`) — le défaut prenait la
+> place de la valeur. Porte V4-Flash 8430,2968 → 8430,4966 ; chiffres antérieurs à
+> revérifier (`reports/rapport-v4-yarn-compresse.md`).
+>
+> **Reste, nommé** : le **masque des jetons d'image** de l'engram (sans objet en
+> texte seul), le **pré-mix sur le fil** du protocole DRVF (16 octets/jeton, sans
+> quoi un découpage de V4.1 est refusé), et —
 > une question OUVERTE et chiffrée (`reports/rapport-v41-mhc.md`, §9) : vLLM
 > applique YaRN ×16 à toutes les positions des couches de ratio > 0 (mscale
 > désactivé), le moteur applique son régime retardé (RoPE simple sous 4 × la

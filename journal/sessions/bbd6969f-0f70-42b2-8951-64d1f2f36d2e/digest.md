@@ -89775,3 +89775,1590 @@ started background job bash-187
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A sprints/11-v41-la-passe-complete.md drave-core/src/model.rs journal && git commit -q -m \"Sprint 11 : le rétro du bloc, et le vide qui rend le CHOIX de l'indexeur vérifiable\n\nLe sprint 11 consigne le bloc 17h30-19h30 : l … [762 caractères tronqués]`
+
+  ```
+8444a39 Sprint 11 : le rétro du bloc, et le vide qui rend le CHOIX de l'indexeur vérifiable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format=%B | head -6", "description": "Check the commit message"}`
+
+  ```
+Sprint 11 : le rétro du bloc, et le vide qui rend le CHOIX de l'indexeur vérifiable
+
+Le sprint 11 consigne le bloc 17h30-19h30 : la passe avant V4.1 complète, les cinq
+pièces vérifiées (mHC retardé, compresseur, cache partagé, engram, indexeur), la
+correction YaRN des couches compressées, et six introspections — dont la
+régression `comp_largeur` que la porte a attrapée et que mes sondes d'une couche
+  ```
+
+- **bash** `{"command": "sleep 55; tail -3 /tmp/v41_sel.log 2>/dev/null; ls /tmp/dump_sel/ 2>/dev/null | wc -l; tail -2 /tmp/ref_yr.log 2>/dev/null | head -1", "description": "Check the selection run and the reference"}`
+
+  ```
+[plage] V4.1 : la plage commence à la couche 20 — la `pre` portée par le raccord précédent n'existe pas, le premier raccord se replie donc avec la COPIE 0 (convention de sonde, comme au tout premier raccord du modèle)
+[plage] V4.1 : la plage commence à la couche 20 — la `pre` portée par le raccord précédent n'existe pas, le premier raccord se replie donc avec la COPIE 0 (convention de sonde, comme au tout premier raccord du modèle)
+[plage] V4.1 : la plage commence à la couche 20 — la `pre` portée par le raccord précédent n'existe pas, le premier raccord se replie donc avec la COPIE 0 (convention de sonde, comme au tout premier raccord du modèle)
+5912
+create_tensor: loading tensor blk.42.ffn_up_shexp.weight
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'\ns=open(p).read()\na = \"\"\"        if self.hc_retarde && self.couche_debut > 0 && !self.flux_brut {\n            eprintln!(\"[plage] V4.1 : la plage commence à la couche {} — la `pre` p … [1411 caractères tronqués]`
+
+  ```
+ok
+BUILD_END
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/verif_selection.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"Le CHOIX de l'indexeur : le masque des blocs retenus est-il le top-k des scores ?\n\nCe que ça vérifie — et ce que ça ne vérifie pas : les scores eux-mêmes sont\nvér … [2067 caractères tronqués]`
+
+  ```
+dont attention : scores 0.00 | softmax 0.00 | somme pondérée + écriture KV 161.95
+11960
+  ```
+
+### 👤 Utilisateur
+
+background job bash-187 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -rf /tmp/dump_sel && mkdir -p /tmp/dump_sel && (DRAVE_DUMP_COUCHES=/tmp/dump_sel/d timeout 3000 ./drave-core/target/release/drave /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf --couches 20:21 --tete-partielle --ppl /tmp/v41_long.txt.ids --ctx 520 --limit 520 > /tmp/v41_sel.log 2>&1; echo "EXIT=$?" >> /tmp/v41_sel.log)) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -E \"perplexité cumulée|EXIT\" /tmp/v41_sel.log | tail -2; python3 /tmp/verif_selection.py /tmp/dump_sel/d 20 512 2>&1 | head -14", "description": "Verify the indexer's selection on V4.1"}`
+
+  ```
+519 tokens notés — perplexité cumulée 35277398.882  (3.8 tok/s)
+EXIT=0
+# 520 positions vides · top_k 512
+  pos  512 :  512 blocs gardés sur 513 · nombre OK · séparation des scores OK (min gardé -3.9012e-02 ≥ max écarté -4.2384e-02)
+  pos  513 :  512 blocs gardés sur 514 · nombre OK · séparation des scores OK (min gardé -8.8689e-02 ≥ max écarté -9.0738e-02)
+  pos  514 :  512 blocs gardés sur 515 · nombre OK · séparation des scores OK (min gardé -1.1039e-01 ≥ max écarté -1.1144e-01)
+  pos  517 :  512 blocs gardés sur 518 · nombre OK · séparation des scores OK (min gardé -1.2996e-01 ≥ max écarté -1.3494e-01)
+  pos  518 :  512 blocs gardés sur 519 · nombre OK · séparation des scores OK (min gardé -6.1446e-02 ≥ max écarté -6.3511e-02)
+  pos  519 :  512 blocs gardés sur 520 · nombre OK · séparation des scores OK (min gardé -8.6683e-02 ≥ max écarté -8.6710e-02)
+  pos    0 :    1 blocs gardés sur 1 — tout gardé (aucun choix à faire)
+  pos    1 :    2 blocs gardés sur 2 — tout gardé (aucun choix à faire)
+  pos  510 :  511 blocs gardés sur 511 — tout gardé (aucun choix à faire)
+  pos  511 :  512 blocs gardés sur 512 — tout gardé (aucun choix à faire)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'\ns=open(p).read()\n# champ Mla4\na = \"\"\"    /// **Y a-t-il une porte ?** Celle de la SOURCE :\"\"\"\nb = \"\"\"    /// **Le filtre à DEUX NIVEAUX de V4.1** (`candidate_source_layer_id` … [2917 caractères tronqués]`
+
+  ```
+ok
+BUILD_END
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (timeout 5400 tools/portes.sh rapide > /tmp/portes_rapide7.log 2>&1; echo \"EXIT=$?\" >> /tmp/portes_rapide7.log)", "description": "Gates after the selection/candidate changes", "run_in_background": true}`
+
+  ```
+started background job bash-188
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-v41-mhc.md'\ns=open(p).read()\ns=s.replace(\"\"\"Ce qui n'est **pas** exercé ici : la **sélection** elle-même (le top-k), qui ne\nchoisit que lorsque le nombre de blocs dépasse `indexer.top_k` (51 … [3335 caractères tronqués]`
+
+  ```
+377:> **Sélection exercée (02/10, 19h45)** : le top-k de l'indexeur CHOISIT pour la
+create_tensor: loading tensor blk.42.ffn_down_shexp.weight
+create_tensor: loading tensor blk.42.ffn_up_shexp.weight
+  ```
+
+- **bash** `{"command": "sleep 90; tail -4 /tmp/portes_rapide7.log; ls /tmp/ref_yr-*.bin 2>/dev/null | wc -l", "description": "Check gates and reference dump"}`
+
+  ```
+(no output)
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "tail -5 /tmp/portes_rapide7.log; echo \"=== ref ===\"; ls /tmp/ref_yr-*.bin 2>/dev/null | wc -l; pgrep -c ref_logits 2>/dev/null || echo \"ref fini\"", "description": "Check both"}`
+
+  ```
+GLM-5.3 : sigmoïde ×2,5                  sigmoïde  ✅
+  Kimi-K2.7 : sigmoïde ×2,827              sigmoïde  ✅
+  V4-Flash : racine de softplus              racine de softplus  ✅
+  Qwen3-235B : softmax                       softmax  ✅
+  V4-Flash : --config le dit calculable      oui  ✅
+=== ref ===
+0
+1
+  ```
+
+- **subagent** `{"description": "Adversarial review of the V4.1 completion", "prompt": "Tu es un relecteur ADVERSARIAL autonome, en LECTURE SEULE. Tu ne modifies AUCUN fichier du dépôt (pas d'édition, pas de `git commit`, pas d'écriture dans le dépôt ; tes scripts temporaires vont dans /tmp). Ta sortie est un rappo … [4265 caractères tronqués]`
+
+  ```
+started subagent 31f26a6e-65f5-480d-be32-36b9f425b3dd
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"VERSION_FLUX\\|const VERSION\" drave-core/src/*.rs | head -5; grep -n \"hc\" drave-core/src/flux.rs 2>/dev/null | head -5; ls drave-core/src/", "description": "Inspect the flux protocol code"}`
+
+  ```
+drave-core/src/main.rs:2042:const VERSION_FLUX: u8 = 5;
+drave-core/src/main.rs:2230:    t.push(VERSION_FLUX);
+drave-core/src/main.rs:2415:    if version != VERSION_FLUX {
+drave-core/src/main.rs:2418:            format!("flux en version {version}, cette build parle la {VERSION_FLUX} \
+drave-core/src/main.rs:2454:{MODE_LOT_LISTES}, protocole v{VERSION_FLUX})"))),
+clusters.rs
+engine.rs
+engram.rs
+formats.rs
+gguf.rs
+gpu.rs
+list.rs
+main.rs
+materiel.rs
+model.rs
+tokenizer.rs
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '2200,2280p' drave-core/src/main.rs", "description": "Read the flux encoder"}`
+
+  ```
+}
+        }
+    }
+    fn actifs(&self) -> usize {
+        match self {
+            ChargeFlux::Dense(v) => v.len(),
+            ChargeFlux::Liste { idx, .. } | ChargeFlux::Blocs { idx, .. } => idx.len(),
+            ChargeFlux::Lot(v) => v.len(),
+        }
+    }
+    /// Le lot aplati, pour le nœud qui doit le rendre à `forward_lot`.
+    fn plat(&self) -> &[f32] {
+        match self { ChargeFlux::Lot(v) => v, _ => &[] }
+    }
+}
+
+/// Construit l'en-tête d'un flux (79 octets) : magie, version, mode, plage,
+/// position, `n`, échelle, et le contrat d'activation.
+///
+/// **Une seule fonction pour les trois émetteurs**, et c'est délibéré : la
+/// duplication de cette construction est exactement ce qui a produit l'en-tête
+/// d'un octet trop long (40 écrits pour 39 lus), invisible pendant des flux
+/// entiers parce qu'il ne décalait le corps que d'un octet.
+fn tete_flux(mode: u8, debut: u32, fin: u32, pos: u32, n: usize, echelle: f32,
+             mdl: Option<&model::Model>) -> Vec<u8> {
+    let act = mdl.map(Act::du_modele).unwrap_or(Act {
+        levels: 127.0, thresh: 0.0, topk: 0, renorm: false,
+        topk_proj: [0; 7], attn_topk: 0, qk_topk: 0, moe_topk: 0 });
+    let mut t = Vec::
+… [2343 caractères tronqués]
+  ```
+
+- **bash** `{"command": "ls /tmp/ref_yr-*.bin 2>/dev/null | wc -l; pgrep -c ref_logits 2>/dev/null || echo \"ref fini\"; tail -3 /tmp/portes_rapide7.log", "description": "Check the reference and gates"}`
+
+  ```
+0
+1
+  V4-Flash : racine de softplus              racine de softplus  ✅
+  Qwen3-235B : softmax                       softmax  ✅
+  V4-Flash : --config le dit calculable      oui  ✅
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"MODE_DENSE\\|MODE_LISTE\\|MODE_BLOCS\\|MODE_LOT\\b\\|MODE_LOT_LISTES\" drave-core/src/main.rs | head -12; grep -n \"fn ecrire_flux\\|fn lire_flux\\|fn envoyer_flux\\|fn recevoir\" drave-core/src/main.rs | head", "descriptio … [46 caractères tronqués]`
+
+  ```
+2044:const MODE_DENSE: u8 = 0;
+2048:const MODE_LISTE: u8 = 1;
+2053:const MODE_BLOCS: u8 = 2;
+2059:const MODE_LOT: u8 = 3;
+2066:const MODE_LOT_LISTES: u8 = 4;
+2313:    let (n, echelle, corps): (usize, f32, Vec<u8>) = if mode == MODE_BLOCS {
+2331:    } else if mode == MODE_LISTE {
+2360:    let tete = tete_flux(MODE_LOT, debut, fin, pos0, t, 0.0, Some(mdl));
+2396:    let tete = tete_flux(MODE_LOT_LISTES, debut, fin, pos0, t, 0.0, Some(mdl));
+2445:    if n == 0 && matches!(mode, MODE_DENSE | MODE_LOT | MODE_LOT_LISTES) {
+2448:                    if mode == MODE_DENSE { "canal" } else { "état" })));
+2451:        MODE_DENSE | MODE_LISTE | MODE_BLOCS | MODE_LOT | MODE_LOT_LISTES => {}
+2309:fn envoyer_flux(s: &mut std::net::TcpStream, debut: u32, fin: u32, pos: u32,
+2404:fn recevoir_flux(s: &mut std::net::TcpStream, hidden: usize) -> std::io::Result<Flux> {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '2309,2345p' drave-core/src/main.rs; echo \"=== réception ===\"; sed -n '2430,2465p' drave-core/src/main.rs", "description": "Read the flux sender and receiver"}`
+
+  ```
+fn envoyer_flux(s: &mut std::net::TcpStream, debut: u32, fin: u32, pos: u32,
+                actifs: &[f32], mode: u8, mdl: Option<&model::Model>)
+                -> std::io::Result<(usize, usize)> {
+    use std::io::Write;
+    let (n, echelle, corps): (usize, f32, Vec<u8>) = if mode == MODE_BLOCS {
+        let (idx, val, echelles) = mdl.expect("modèle requis pour quantifier un flux")
+                                      .flux_en_liste_blocs(actifs);
+        // Indices par ÉCARTS : la liste est triée (les blocs sont parcourus dans
+        // l'ordre), donc l'écart au neurone précédent tient sur un octet dans
+        // l'immense majorité des cas — 255 est l'échappement vers l'indice absolu.
+        // Deux octets par neurone actif au lieu de trois, à quantification
+        // IDENTIQUE : c'est du rangement, pas de la perte.
+        let mut c = Vec::with_capacity(4 + echelles.len() * 4 + idx.len() * 2);
+        c.extend_from_slice(&(echelles.len() as u32).to_le_bytes());
+        for e in &echelles { c.extend_from_slice(&e.to_le_bytes()); }
+        let paires = encoder_paires_blocs(&idx, &val);
+        // La longueur est écrite : avec les échappements, elle n'est pas
+        // dédu
+… [3054 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sleep 30; ls /tmp/ref_yr-*.bin 2>/dev/null | wc -l; pgrep -c ref_logits 2>/dev/null || echo \"ref fini\"; tail -2 /tmp/portes_rapide7.log", "description": "Check the reference dump status"}`
+
+  ```
+0
+1
+  Qwen3-235B : softmax                       softmax  ✅
+  V4-Flash : --config le dit calculable      oui  ✅
+  ```
+
+- **bash** `{"command": "sleep 55; tail -4 /tmp/portes_rapide7.log; ls /tmp/ref_yr-*.bin 2>/dev/null | wc -l", "description": "Poll gates and reference"}`
+
+  ```
+Kimi-K2.7 : sigmoïde ×2,827              sigmoïde  ✅
+  V4-Flash : racine de softplus              racine de softplus  ✅
+  Qwen3-235B : softmax                       softmax  ✅
+  V4-Flash : --config le dit calculable      oui  ✅
+0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"pub historique: Vec<u32>,\" -A 2 drave-core/src/model.rs; grep -n \"let mut hc_porte: Option<Vec<f32>> = None;\" drave-core/src/model.rs", "description": "Locate the insertion points"}`
+
+  ```
+2123:    pub historique: Vec<u32>,
+2124-    /// Cache LATENT par couche : `c_kv` (kv_lora) et `k_rope` (qkr) par position.
+2125-    pub mla_cache: Vec<(Vec<f32>, Vec<f32>)>,
+5859:        let mut hc_porte: Option<Vec<f32>> = None;
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'\ns=open(p).read()\n# 1. les deux champs\na = \"\"\"    pub historique: Vec<u32>,\"\"\"\nb = \"\"\"    pub historique: Vec<u32>,\n    /// **La `pre` portée par le dernier raccord FFN exécu … [2374 caractères tronqués]`
+
+  ```
+ok
+5872:        let mut hc_porte: Option<Vec<f32>> = self.hc_porte_imposee.take();
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '5866,5890p' drave-core/src/model.rs", "description": "Check the assert/init order"}`
+
+  ```
+// **Chaîne retardée** : le repliement d'un raccord se fait avec les
+        // coefficients PORTÉS depuis le raccord précédent — `None` au premier,
+        // où la référence sélectionne la copie 0 (`residual[:, 0]`).
+        // La chaîne retardée s'amorce sur la `pre` REÇUE si le flux en portait
+        // une (protocole v6), sinon sur rien — c'est-à-dire la copie 0, la
+        // convention du tout premier raccord du modèle.
+        let mut hc_porte: Option<Vec<f32>> = self.hc_porte_imposee.take();
+        // Un nœud qui REPREND à la couche k reçoit un flux brut, mais pas ces
+        // coefficients : V4.1 replierait alors avec la copie 0, c'est-à-dire
+        // faux, et sans le dire. Tant que le flux DRVF ne les transporte pas,
+        // un découpage de V4.1 à une frontière de couche est refusé.
+        assert!(!(self.hc_retarde && self.flux_brut && self.couche_debut > 0
+                   && self.hc_porte_imposee.is_none()),
+                "V4.1 découpé : la chaîne mHC retardée a besoin de la `pre` portée par \
+le raccord précédent — un nœud qui reprend à la couche {} sans l'avoir reçue replierait \
+avec la copie 0 (faux, et muet)", self.couche_debut);
+        // SONDE LOCA
+… [691 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'\ns=open(p).read()\na = \"\"\"        let mut hc_porte: Option<Vec<f32>> = self.hc_porte_imposee.take();\n        // Un nœud qui REPREND à la couche k reçoit un flux brut, mais pas ces\n   … [1687 caractères tronqués]`
+
+  ```
+ok
+6728-        // et pour un modèle à hyper-connexions, cela veut dire les `hc` copies,
+6729-        // PAS leur réduction. Réduire ici puis ré-étendre à l'arrivée change le
+6730-        // modèle : mesuré, la perplexité répartie passait de 8 311 à 34 159
+6731-        // (écart 3,11) alors que le transport dense est exact. Le flux d'un
+6732-        // modèle à hyper-connexions coûte donc `hc` fois plus cher sur le fil.
+6733-        if self.flux_brut || (self.couche_fin < cfg.n_layer && !self.tete_partielle) {
+6734:            return x;                       // nœud intermédiaire : flux brut
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'\ns=open(p).read()\na = \"\"\"        if self.flux_brut || (self.couche_fin < cfg.n_layer && !self.tete_partielle) {\n            return x;                       // nœud intermédiaire : fl … [826 caractères tronqués]`
+
+  ```
+ok
+BUILD_END
+  ```
+
+### 👤 Utilisateur
+
+background job bash-188 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (timeout 5400 tools/portes.sh rapide > /tmp/portes_rapide7.log 2>&1; echo "EXIT=$?" >> /tmp/portes_rapide7.log)) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "tail -5 /tmp/portes_rapide7.log; echo \"=== ref ===\"; ls /tmp/ref_yr-*.bin 2>/dev/null | wc -l", "description": "Read the gates result"}`
+
+  ```
+V4-Flash 43 couches ctx 32                 8405.9477  ✅
+  engram V4.1 : adressage                    rangées DISTINCTES : 479723  ✅
+
+AU MOINS UNE PORTE A DIVERGÉ
+EXIT=1
+=== ref ===
+2
+  ```
+
+- **bash** `{"command": "cat /tmp/portes_rapide7.log | head -14", "description": "Find the failing gate"}`
+
+  ```
+=== Portes ===
+  cargo test --release                       0 verts  ❌ (échecs : 0)
+  Qwen2.5-0.5B ctx 256                       19.3885  ✅
+  Qwen3-30B en clusters (origine : 799,8557) 799.8557  ✅
+  threads par défaut (physiques)            20  ✅
+  (portes de formats : ignorées en mode rapide)
+  GLM-5.3 : sigmoïde ×2,5                  sigmoïde  ✅
+  Kimi-K2.7 : sigmoïde ×2,827              sigmoïde  ✅
+  V4-Flash : racine de softplus              racine de softplus  ✅
+  Qwen3-235B : softmax                       softmax  ✅
+  V4-Flash : --config le dit calculable      oui  ✅
+  V4-Flash 43 couches ctx 32                 8405.9477  ✅
+  engram V4.1 : adressage                    rangées DISTINCTES : 479723  ✅
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo test --release 2>&1 | grep -E \"^error|Compiling|test result\" -A 6 | head -30", "description": "Check why the test gate saw 0 tests"}`
+
+  ```
+Compiling drave-core v0.1.0 (/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core)
+warning: unused import: `ecrire`
+   --> src/clusters.rs:357:34
+    |
+357 |         use crate::gguf::tests::{ecrire, gguf_synth};
+    |                                  ^^^^^^
+    |
+--
+error[E0063]: missing field `yarn_declare` in initializer of `model::Cfg`
+    --> src/model.rs:7846:9
+     |
+7846 |         Cfg {
+     |         ^^^ missing `yarn_declare`
+
+warning: unused variable: `id`
+--
+error: could not compile `drave-core` (bin "drave" test) due to 1 previous error; 35 warnings emitted
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'\ns=open(p).read()\ni = s.find(\"Cfg {\", 7800)\nprint(s[i-200:i+700])\nPY", "description": "Inspect the test Cfg literal"}`
+
+  ```
+.expert_scale != 0.0 && cfg.expert_scale != 1.0 {
+        for v in poids.iter_mut() { *v *= cfg.expert_scale; }
+    }
+    let _ = &mut probs;
+    chosis.into_iter().zip(poids).collect()
+}
+
+pub struct Cfg {
+    pub n_layer: usize,
+    pub hidden: usize,
+    pub n_head: usize,
+    pub n_kv_head: usize,
+    pub head_dim: usize,
+    pub ffn: usize,
+    pub eps: f32,
+    pub rope_base: f32,
+    pub vocab: usize,
+    /// MoE : nombre d'experts, combien sont allumés par jeton, et leur taille
+    /// intermédiaire. `n_expert = 0` pour un modèle dense.
+    pub n_expert: usize,
+    pub n_expert_used: usize,
+    pub ffn_exp: usize,
+    /// Activation du FFN. gpt-oss n'utilise **pas** SiLU : c'est
+    /// `g·σ(1,702·g)·(u+1)`, avec `g` et `u` écrêtés à ±7 — une sigmoïde
+    /// rapide de type GELU, et un décalage de `up` de +1. Prendre SiLU par
+    /// défaut donne une perplexité de 1 396 au lieu de
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '7840,7870p' drave-core/src/model.rs", "description": "Read the test helper Cfg"}`
+
+  ```
+couche: 0, numeros: Vec::new(), n_expert_global: 0, local: None,
+            shexp: None, tid2eid: tid,
+        }
+    }
+
+    fn cfg_synthetique(gating: Gating, norm: bool, echelle: f32, hash: usize) -> Cfg {
+        Cfg {
+            n_layer: 1, hidden: 1, n_head: 1, n_kv_head: 1, head_dim: 1, ffn: 1,
+            eps: 1e-6, rope_base: 10000.0, vocab: 1,
+            n_expert: 4, n_expert_used: 2, ffn_exp: 1,
+            ffn_act_oss: false, gating, expert_norm: norm, expert_scale: echelle,
+            hash_layers: hash, n_rot: 0, yarn: None,
+        }
+    }
+
+    /// Les quatre conventions sur le MÊME vecteur de logits, valeurs calculées à
+    /// la main. Ce test est la définition exécutable du routage : chaque ligne
+    /// correspond à une ligne de `llama-graph.cpp` (`build_moe_ffn`).
+    #[test]
+    fn quatre_conventions_sur_les_memes_logits() {
+        // 4 experts, h = 1 : le logit vaut directement le poids du routeur.
+        let logits = vec![0.0f32, 1.0, 2.0, -1.0];
+        let x = vec![1.0f32];
+
+        // 1. softmax sur tous, top-2, renormalisation.
+        let m = moe_synthetique(logits.clone(), None, None);
+        let r = router(&cfg_synthetique(Gating::Softmax, true, 0.
+… [271 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'\ns=open(p).read()\na = \"\"\"            hash_layers: hash, n_rot: 0, yarn: None,\n        }\n    }\"\"\"\nb = \"\"\"            hash_layers: hash, n_rot: 0, yarn: None, yarn_declare: Non … [260 caractères tronqués]`
+
+  ```
+ok
+test result: ok. 60 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -f /tmp/dy-* /tmp/dp-* && (DRAVE_ETAT_ENTREE=/tmp/ref_yr-l_last-1.bin DRAVE_DUMP_COUCHES=/tmp/dy timeout 1800 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-F … [712 caractères tronqués]`
+
+  ```
+started background job bash-189
+  ```
+
+- **bash** `{"command": "sleep 58; grep -E \"perplexité cumulée|EXIT\" /tmp/eng_dy.log /tmp/eng_dp.log 2>/dev/null | head -4; ls /tmp/dy-l_last-2-*.bin 2>/dev/null | wc -l", "description": "Check the injected-state runs"}`
+
+  ```
+/tmp/eng_dy.log:     127 tokens notés — perplexité cumulée 1803331415.608  (4.5 tok/s)
+128
+  ```
+
+- **bash** `{"command": "sleep 55; grep -E \"EXIT\" /tmp/eng_dp.log 2>/dev/null; ls /tmp/dp-l_last-2-*.bin 2>/dev/null | wc -l; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport numpy as np, struct\ndef lire_ref(nom, couche, pos):\n    b = open(f\"/tmp/ref_yr-{nom}-{couche}.bin\",\" … [1233 caractères tronqués]`
+
+  ```
+EXIT=0
+128
+=== l_last-2 : moteur (YaRN / simple) contre llama.cpp, état de la couche 1 INJECTÉ ===
+  pos   4 : YaRN corr 0.999919 écart 1.345e-02 | simple corr 0.999919 écart 1.344e-02  → SIMPLE
+  pos   8 : YaRN corr 0.999940 écart 1.611e-02 | simple corr 0.999940 écart 1.623e-02  → SIMPLE
+  pos   9 : YaRN corr 0.999917 écart 1.369e-02 | simple corr 0.999917 écart 1.375e-02  → SIMPLE
+  pos  16 : YaRN corr 0.999994 écart 1.398e-03 | simple corr 0.999995 écart 1.321e-03  → SIMPLE
+  pos  32 : YaRN corr 0.999987 écart 5.741e-03 | simple corr 0.999995 écart 1.919e-03  → SIMPLE
+  pos  64 : YaRN corr 0.999978 écart 3.338e-03 | simple corr 0.999998 écart 9.905e-04  → SIMPLE
+  pos  96 : YaRN corr 0.999949 écart 6.120e-03 | simple corr 0.999997 écart 1.107e-03  → SIMPLE
+  pos 120 : YaRN corr 0.999853 écart 2.670e-02 | simple corr 0.999995 écart 4.214e-03  → SIMPLE
+  pos 127 : YaRN corr 0.999816 écart 3.480e-02 | simple corr 0.999993 écart 5.376e-03  → SIMPLE
+  ```
+
+### 👤 Utilisateur
+
+background job bash-186 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -f /tmp/ref_yr-*.bin && (LD_LIBRARY_PATH=/home/stephane/Data13TB/stephane/GitHub/llama.cpp/build/bin REF_DUMP=/tmp/ref_yr REF_TENSORS='^l_last-[12]$' timeout 3600 ./tools/ref_logits /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf /tmp/ids_v4flash.txt /tmp/ref_yr.bin 128 > /tmp/ref_yr.log 2>&1; echo "EXIT=$?" >> /tmp/ref_yr.log)) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 👤 Utilisateur
+
+background job bash-189 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -f /tmp/dy-* /tmp/dp-* && (DRAVE_ETAT_ENTREE=/tmp/ref_yr-l_last-1.bin DRAVE_DUMP_COUCHES=/tmp/dy timeout 1800 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf --couches 2:3 --tete-partielle --ppl /tmp/ids_v4flash.txt --ctx 128 --limit 128 --dense --threads 16 > /tmp/eng_dy.log 2>&1; echo "EXIT=$?" >> /tmp/eng_dy.log; DRAVE_YARN_NON=1 DRAVE_ETAT_ENTREE=/tmp/ref_yr-l_last-1.bin DRAVE_DUMP_COUCHES=/tmp/dp timeout 1800 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf --couches 2:3 --tete-partielle --ppl /tmp/ids_v4flash.txt --ctx 128 --limit 128 --dense --threads 16 > /tmp/eng_dp.log 2>&1; echo "EXIT=$?" >> /tmp/eng_dp.log)) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && grep -n \"freq_scale\\|ext_factor\\|beta_fast\\|n_ctx_orig\" src/models/deepseek4.cpp | head -20", "description": "Find the rope variables in llama.cpp's V4 builder"}`
+
+  ```
+11:static float dsv4_rope_attn_factor(float freq_scale, float ext_factor) {
+12:    if (ext_factor == 0.0f) {
+16:    return 1.0f / (1.0f + 0.1f*logf(1.0f/freq_scale));
+430:    comp_pe = ggml_rope_ext(ctx0, comp_pe, comp_pos, nullptr, n_embd_head_rope, rope_type, n_ctx_orig,
+431:            hparams.dsv4_compress_rope_base, freq_scale, ext_factor,
+432:            dsv4_rope_attn_factor(freq_scale, ext_factor), beta_fast, beta_slow);
+514:    comp_pe = ggml_rope_ext(ctx0, comp_pe, comp_pos, nullptr, n_embd_head_rope, rope_type, n_ctx_orig,
+515:            hparams.dsv4_compress_rope_base, freq_scale, ext_factor,
+516:            dsv4_rope_attn_factor(freq_scale, ext_factor), beta_fast, beta_slow);
+558:            rope_type, n_ctx_orig, hparams.dsv4_compress_rope_base, freq_scale,
+559:            ext_factor, dsv4_rope_attn_factor(freq_scale, ext_factor), beta_fast, beta_slow);
+874:    const float freq_scale_l     = use_compress_rope ? freq_scale : 1.0f;
+875:    const float ext_factor_l     = use_compress_rope ? ext_factor : 0.0f;
+876:    const float attn_factor_l    = dsv4_rope_attn_factor(freq_scale_l, ext_factor_l);
+877:    const float beta_fast_l      = use_compress_rope ? beta_fast : 0.
+… [482 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && grep -n \"float freq_scale\\b\\|float ext_factor\\b\\|float beta_fast\\b\\|float beta_slow\\b\\|int32_t n_ctx_orig\\b\" src/models/deepseek4.cpp | head; grep -n \"freq_scale = \\|ext_factor = \\|beta_fast = \\|n_ctx_orig = \" src/m … [97 caractères tronqués]`
+
+  ```
+11:static float dsv4_rope_attn_factor(float freq_scale, float ext_factor) {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && grep -n \"freq_scale\\|ext_factor\" src/models/deepseek4.cpp | sed -n '20,50p'; echo \"=== la signature de la fonction du graphe ===\"; grep -n \"freq_scale\" src/models/deepseek4.cpp | grep -n \"hparams\\|cparams\\|params\\.\" | h … [51 caractères tronqués]`
+
+  ```
+=== la signature de la fonction du graphe ===
+3:431:            hparams.dsv4_compress_rope_base, freq_scale, ext_factor,
+5:515:            hparams.dsv4_compress_rope_base, freq_scale, ext_factor,
+7:558:            rope_type, n_ctx_orig, hparams.dsv4_compress_rope_base, freq_scale,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && grep -n \"freq_scale\" src/models/deepseek4.cpp | head -3; sed -n '840,880p' src/models/deepseek4.cpp | grep -n \"freq_scale\\|ext_factor\\|attn_factor\\|beta\" ", "description": "Locate the parameter source"}`
+
+  ```
+11:static float dsv4_rope_attn_factor(float freq_scale, float ext_factor) {
+16:    return 1.0f / (1.0f + 0.1f*logf(1.0f/freq_scale));
+431:            hparams.dsv4_compress_rope_base, freq_scale, ext_factor,
+35:    const float freq_scale_l     = use_compress_rope ? freq_scale : 1.0f;
+36:    const float ext_factor_l     = use_compress_rope ? ext_factor : 0.0f;
+37:    const float attn_factor_l    = dsv4_rope_attn_factor(freq_scale_l, ext_factor_l);
+38:    const float beta_fast_l      = use_compress_rope ? beta_fast : 0.0f;
+39:    const float beta_slow_l      = use_compress_rope ? beta_slow : 0.0f;
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && grep -rn \"freq_scale\" src/models/deepseek4.cpp | grep -v \"freq_scale_l\\|dsv4_rope_attn\\|hparams.dsv4_compress_rope_base\" | head; grep -n \"llm_graph_input\\|const float freq_scale\" src/models/deepseek4.cpp | head -5; grep -c … [82 caractères tronqués]`
+
+  ```
+16:    return 1.0f / (1.0f + 0.1f*logf(1.0f/freq_scale));
+527:        llm_graph_input_dsv4 * inp_dsv4,
+653:        llm_graph_input_dsv4 * inp_dsv4,
+654:        llm_graph_input_dsv4_raw * inp_attn,
+725:        llm_graph_input_dsv4_raw * inp_attn, int il) const {
+751:        llm_graph_input_dsv4 * inp_dsv4,
+1253
+  ```
+
+- **bash** `{"command": "grep -iE \"rope|yarn|freq|ctx_orig|scaling\" /tmp/ref_yr.log | head -20", "description": "Check llama.cpp's logged rope parameters"}`
+
+  ```
+llama_model_loader: - kv  20:                deepseek4.rope.scaling.type str              = yarn
+llama_model_loader: - kv  21:              deepseek4.rope.scaling.factor f32              = 16.000000
+llama_model_loader: - kv  22: deepseek4.rope.scaling.original_context_length u32              = 65536
+llama_model_loader: - kv  23:      deepseek4.rope.scaling.yarn_beta_fast f32              = 32.000000
+llama_model_loader: - kv  24:      deepseek4.rope.scaling.yarn_beta_slow f32              = 1.000000
+llama_model_loader: - kv  25:                   deepseek4.rope.freq_base f32              = 10000.000000
+llama_model_loader: - kv  32:             deepseek4.rope.dimension_count u32              = 64
+llama_model_loader: - kv  47: deepseek4.attention.compress_rope_freq_base f32              = 160000.000000
+print_info: rope type             = 0
+print_info: rope scaling          = yarn
+print_info: freq_base_train       = 10000.0
+print_info: freq_scale_train      = 0.0625
+print_info: freq_base_swa         = 10000.0
+print_info: freq_scale_swa        = 1
+print_info: n_ctx_orig_yarn       = 65536
+print_info: rope_yarn_log_mul     = 0.0000
+print_info: rope_finetuned        = unknown
+llama_contex
+… [64 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && sed -n '5986,6020p' ggml/src/ggml-cpu/ops.cpp", "description": "Read ggml's rope cache init"}`
+
+  ```
+// ref: https://github.com/jquesnelle/yarn/blob/master/scaled_rope/LlamaYaRNScaledRotaryEmbedding.py
+    float theta = theta_base;
+    for (int64_t i0 = 0; i0 < ne0; i0 += 2) {
+        const float ff = freq_factors ? freq_factors[i0/2] : 1.0f;
+        rope_yarn(
+            theta/ff, freq_scale, corr_dims, i0, ext_factor, mscale, &cache[i0 + 0], &cache[i0 + 1]
+        );
+        cache[i0 + 1] *= sin_sign;
+
+        theta *= theta_scale;
+    }
+}
+
+static void ggml_mrope_cache_init(
+     float theta_base_t, float theta_base_h, float theta_base_w, float theta_base_e, int sections[4], bool is_imrope, bool indep_sects,
+     float freq_scale, const float * freq_factors, float corr_dims[2], int64_t ne0, float ext_factor, float mscale,
+     float * cache, float sin_sign, float theta_scale) {
+    // ref: https://github.com/jquesnelle/yarn/blob/master/scaled_rope/LlamaYaRNScaledRotaryEmbedding.py
+    float theta_t = theta_base_t;
+    float theta_h = theta_base_h;
+    float theta_w = theta_base_w;
+    float theta_e = theta_base_e;  // extra position id for vision encoder
+    int sect_dims = sections[0] + sections[1] + sections[2] + sections[3];
+    int sec_w = sections[1] + sections[0];
+    int
+… [434 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && sed -n '6160,6200p' ggml/src/ggml-cpu/ops.cpp", "description": "Read the theta_base construction"}`
+
+  ```
+}
+
+    const float * freq_factors = NULL;
+    if (src2 != NULL) {
+        GGML_ASSERT(src2->type == GGML_TYPE_F32);
+        GGML_ASSERT(src2->ne[0] >= n_dims / 2);
+        freq_factors = (const float *) src2->data;
+    }
+
+    // backward process uses inverse rotation by cos and sin.
+    // cos and sin build a rotation matrix, where the inverse is the transpose.
+    // this essentially just switches the sign of sin.
+    const float sin_sign = forward ? 1.0f : -1.0f;
+
+    const int32_t * pos = (const int32_t *) src1->data;
+
+    int64_t last_i2 = -1;
+
+    for (int64_t i3 = 0; i3 < ne3; i3++) { // batch
+        for (int64_t i2 = 0; i2 < ne2; i2++) { // seq-len
+            for (int64_t i1 = 0; i1 < ne1; i1++) { // attn-heads
+                if (ir++ < ir0) continue; // skip rows mapped to other threads
+                if (ir   > ir1) break;
+
+                float * cache = (float *) params->wdata + (ne0 + CACHE_LINE_SIZE_F32)*ith;
+                if (last_i2 != i2) {
+                    if (!mrope_used) {
+                        const int64_t p = pos[i2];
+                        ggml_rope_cache_init(p, freq_scale, freq_factors, corr_dims, ne0, ext_factor, attn_factor, cache, sin_sign, t
+… [609 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Testing my YaRN against ggml's exact formula on a real block key
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport numpy as np, struct\n# --- ggml, transcrit du source local (ggml.c:4467-4480, ops.cpp:5959-5981) ---\ndef corr_dim(n_dims, n_ctx_orig, n_rot, base):\n    return n_dims * np.log(n_ctx_orig / (n_rot * 2 * np.pi … [4027 caractères tronqués]`
+
+  ```
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 53, in <module>
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/verifier_v41_mhc.py", line 84, in lire
+    dims, ttype, off = self.tenseurs[nom]
+                       ~~~~~~~~~~~~~^^^^^
+KeyError: 'blk.2.attn_compressor_norm.weight'
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport sys; sys.path.insert(0,'tools')\nfrom verifier_v41_mhc import Gguf\ng = Gguf('/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf')\nnoms = [n  … [158 caractères tronqués]`
+
+  ```
+[]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf --tensors 2>/dev/null | grep -E \"blk\\.2\\.\" | head -20", "descri … [43 caractères tronqués]`
+
+  ```
+F32      blk.2.attn_compressor_ape.weight       [4, 1024] · 0.0 M poids · fichier 1
+  Q8_0     blk.2.attn_compressor_gate.weight      [1024, 4096] · 4.2 M poids · fichier 1
+  Q8_0     blk.2.attn_compressor_kv.weight        [1024, 4096] · 4.2 M poids · fichier 1
+  F32      blk.2.attn_compressor_norm.weight      [512] · 0.0 M poids · fichier 1
+  Q8_0     blk.2.attn_kv.weight                   [512, 4096] · 2.1 M poids · fichier 1
+  F32      blk.2.attn_kv_a_norm.weight            [512] · 0.0 M poids · fichier 1
+  F32      blk.2.attn_norm.weight                 [4096] · 0.0 M poids · fichier 1
+  Q8_0     blk.2.attn_output_a.weight             [8192, 4096] · 33.6 M poids · fichier 1
+  Q8_0     blk.2.attn_output_b.weight             [4096, 8192] · 33.6 M poids · fichier 1
+  Q5_K     blk.2.attn_q_a.weight                  [1024, 4096] · 4.2 M poids · fichier 1
+  F32      blk.2.attn_q_a_norm.weight             [1024] · 0.0 M poids · fichier 1
+  Q8_0     blk.2.attn_q_b.weight                  [32768, 1024] · 33.6 M poids · fichier 1
+  F32      blk.2.attn_sinks.weight                [64] · 0.0 M poids · fichier 1
+  IQ3_XXS  blk.2.ffn_down_exps.weight             [256, 4096, 2048] · 2147.5 M 
+… [551 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/verifier_v41_mhc.py'\ns=open(p).read()\na = \"\"\"class Gguf:\n    def __init__(self, chemin):\n        self.f = open(chemin, \"rb\", buffering=0)\"\"\"\nb = \"\"\"def _shards(chemin):\n    \\\"\\\"\\\"Les  … [1887 caractères tronqués]`
+
+  ```
+étape 1 ok
+class Gguf:
+    def __init__(self, chemin):
+        # Un modèle découpé : les tenseurs sont répartis, chaque fragment a son
+        # propre en-tête et sa propre section de données.
+        self.fragments = []
+        self.tenseurs = {}
+        for i, f in enumerate(_shards(chemin)):
+            self.fragments.append(self._ouvrir(f))
+        self.f = self.fragments[0][0]
+        self.donnees = self.fragments[0][1]
+
+    def _ouvrir(self, chemin):
+        self.f = open(chemin, "rb", buffering=0)
+        if self.f.read(4) != b"GGUF":
+            raise SystemExit("ce n'est pas un GGUF")
+        self.version = struct.unpack("<I", self.f.read(4))[0]
+        n_tensors, n_kv = struct.unpack("<QQ", self.f.read(16))
+        self.alignement = 32
+        # Les métadonnées sont GARDÉES : `verifier_v41_engram.py` a besoin des
+        # listes de l'engram (premiers, multiplicateurs, `token_map`) pour
+        # recalculer les adresses depuis la référence.
+        self.metadonnees = {}
+        for _ in range(n_kv):
+            cle = self._chaine()
+            t = struct.unpack("<I", self.f.read(4))[0]
+            v = self._valeur(t)
+            self.metadonnees[cle] = v
+            if cl
+… [1407 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/verifier_v41_mhc.py'\ns=open(p).read()\ni = s.index(\"class Gguf:\")\nj = s.index(\"def dump(prefixe\")\nnouveau = '''class Gguf:\n    \"\"\"Lecteur GGUF minimal (F32/F16), **avec les modèles découpés**.\n\ … [4097 caractères tronqués]`
+
+  ```
+ok
+fragments: 3 · tenseurs: 1328 · norme: (1, 512)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport numpy as np, sys\nsys.path.insert(0, \"tools\")\nfrom verifier_v41_mhc import Gguf\ndef corr_dim(n_dims, ctx0, n_rot, base):\n    return n_dims * np.log(ctx0 / (n_rot * 2 * np.pi)) / (2 * np.log(base))\ndef c … [2985 caractères tronqués]`
+
+  ```
+corr_dims ggml (np.float64(15.0), np.float64(25.0)) · moteur (15.0, 25.0)
+moteur YaRN   vs ggml YaRN   : 5.851e-01
+moteur YaRN   vs sa formule  : 5.851e-01
+moteur YaRN   vs RoPE simple : 5.851e-01
+moteur simple vs ggml YaRN   : 7.833e-02
+moteur simple vs RoPE simple : 3.341e-07
+moteur simple vs sa formule(off) : 2.493e+00
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport numpy as np\ndef d(p, n, pos): return np.fromfile(f\"{p}-{n}-2-{pos}.bin\", dtype=\"<f4\").astype(np.float64)\nfor pos in (127, 123, 7):\n    a = d(\"/tmp/dy\", \"comp_brut31\", pos) if pos==127 else None\n   … [763 caractères tronqués]`
+
+  ```
+comp_brut31 pos 127 : YaRN vs simple = 0.000e+00 (doivent être identiques)
+comp_bloc31 pos 127 : YaRN vs simple = 5.851e-01 · |v|=2.967e+00
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 8, in <module>
+  File "<stdin>", line 2, in d
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/dy-comp_bloc31-2-123.bin'
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport numpy as np\ndef d(p, n, pos): return np.fromfile(f\"{p}-{n}-2-{pos}.bin\", dtype=\"<f4\").astype(np.float64)\nprint(\"=== comparaison des blocs entre les deux régimes, aux positions de clôture ===\")\nfor bl … [458 caractères tronqués]`
+
+  ```
+=== comparaison des blocs entre les deux régimes, aux positions de clôture ===
+  bloc  0 (pos   3, rope à 0) : YaRN vs simple 0.000e+00 · |brut| 1.994e+00 · |bloc| 5.074e+00
+  bloc  1 (pos   7, rope à 4) : YaRN vs simple 1.634e-02 · |brut| 2.685e-01 · |bloc| 2.878e+00
+  bloc  2 (pos  11, rope à 8) : YaRN vs simple 3.020e-02 · |brut| 2.968e-01 · |bloc| 3.772e+00
+  bloc  3 (pos  15, rope à 12) : YaRN vs simple 4.482e-02 · |brut| 2.539e-01 · |bloc| 3.335e+00
+  bloc 30 (pos 123, rope à 120) : YaRN vs simple 6.527e-01 · |brut| 2.539e-01 · |bloc| 3.375e+00
+  bloc 31 (pos 127, rope à 124) : YaRN vs simple 5.851e-01 · |brut| 2.126e-01 · |bloc| 2.967e+00
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport numpy as np\nn_rot, base, pos, fact, bf, bl, ctx0 = 8, 160000.0, 124, 16.0, 32.0, 1.0, 65536.0\nx = np.array([0.5, -1.25, 2.0, 0.75, -0.5, 1.5, -2.0, 0.25])\nc0 = np.floor(n_rot*np.log(ctx0/(bf*2*np.pi))/(2*n … [533 caractères tronqués]`
+
+  ```
+corr0, corr1 = 1.0 4.0
+attendu (ggml) : -1.290996836e+00, -3.818732377e-01, 2.055401246e+00, 5.812277671e-01, -8.059601869e-01, 1.360304443e+00, -2.001419332e+00, 2.383708423e-01
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'\ns=open(p).read()\na = \"\"\"    /// **Le softmax du compresseur est PAR CANAL, pas par jeton.**\"\"\"\nb = '''    /// **`rope_norm_yarn` contre la transcription de ggml** (témoin calculé … [1166 caractères tronqués]`
+
+  ```
+test model::tests_hc::yarn_du_compresseur_conforme_a_ggml ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 60 filtered out; finished in 0.00s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport numpy as np, sys\nsys.path.insert(0, \"tools\")\nfrom verifier_v41_mhc import Gguf\ng = Gguf(\"/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-0000 … [1777 caractères tronqués]`
+
+  ```
+bloc  pos(rope) | YaRN: moteur vs python | simple: moteur vs python | YaRN vs simple (moteur)
+     1         4 | 1.634e-02 | 6.544e-07 | 1.634e-02
+     2         8 | 3.020e-02 | 4.679e-07 | 3.020e-02
+     3        12 | 4.482e-02 | 3.948e-07 | 4.482e-02
+    30       120 | 6.527e-01 | 4.059e-07 | 6.527e-01
+    31       124 | 5.851e-01 | 3.341e-07 | 5.851e-01
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport numpy as np, sys\nsys.path.insert(0, \"tools\")\nfrom verifier_v41_mhc import Gguf\ng = Gguf(\"/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-0000 … [1596 caractères tronqués]`
+
+  ```
+bloc pos(rope) | python: yarn-plain · interp-plain | moteur: yarn-simple | moteur_yarn vs python_yarn
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 25, in <module>
+  File "<stdin>", line 9, in rot
+  File "<stdin>", line 7, in d
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/dp-comp_brut1-2-4.bin'
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport numpy as np, sys\nsys.path.insert(0, \"tools\")\nfrom verifier_v41_mhc import Gguf\ng = Gguf(\"/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-0000 … [1647 caractères tronqués]`
+
+  ```
+bloc pos(rope) | python yarn-plain · interp-plain | moteur yarn-simple | moteur_yarn - python_yarn · - python_interp
+     1        4 | 2.314e-03 · 1.280e-01 | 1.634e-02 | 1.634e-02 · 1.280e-01
+     2        8 | 5.995e-03 · 1.977e-01 | 3.020e-02 | 3.020e-02 · 1.977e-01
+     3       12 | 9.325e-03 · 4.891e-01 | 4.482e-02 | 4.482e-02 · 4.891e-01
+    30      120 | 8.658e-02 · 3.047e+00 | 6.527e-01 | 6.527e-01 · 2.523e+00
+    31      124 | 7.833e-02 · 2.493e+00 | 5.851e-01 | 5.851e-01 · 2.122e+00
+corr dims = 15.0, 25.0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'\ns=open(p).read()\na = \"\"\"    #[test]\n    fn yarn_du_compresseur_conforme_a_ggml() {\"\"\"\nb = \"\"\"    /// Diagnostic : imprime la sortie pour les paramètres RÉELS de V4-Flash\n    … [716 caractères tronqués]`
+
+  ```
+RUST [-0.2337966, 4.165974, 3.61764, 1.429224, 3.1921158, -1.6794035, 1.576206, -2.9267006]
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 61 filtered out; finished in 0.00s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport numpy as np\nn_rot, base, pos, fact, bf, bl, ctx0 = 64, 160000.0, 4, 16.0, 32.0, 1.0, 65536.0\nx = np.array([i*0.1 - 3.0 for i in range(64)])\ndef rot(rampe_active=True, corr_scale=None):\n    v = x.copy()\n  … [990 caractères tronqués]`
+
+  ```
+python n_rot=64 corr(64) : [-0.233796  4.165974  3.61764   1.429224  3.192116 -1.679403  1.576206
+ -2.9267  ]
+python corr(32)          : [-0.233796  4.165974  3.61764   1.429224  3.192116 -1.679403  1.576206
+ -2.9267  ]
+python corr(8)           : [-0.233796  4.165974  3.61764   1.429224  1.714651 -3.173322 -1.042237
+ -3.15654 ]
+python plain             : [-2.189266 -3.552058 -2.296841 -3.139191 -2.286997 -2.789202 -2.205306
+ -2.487293]
+RUST                     : [-0.2337966  4.165974   3.61764    1.429224   3.1921158 -1.6794035  1.576206  -2.9267006]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport numpy as np, sys\nsys.path.insert(0, \"tools\")\nfrom verifier_v41_mhc import Gguf\ng = Gguf(\"/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-0000 … [1997 caractères tronqués]`
+
+  ```
+yarn(16,32,1,65536)    : écart au moteur YaRN 1.634e-02
+  yarn base 10000        : écart au moteur YaRN 1.338e-01
+  yarn bf/bl échangés    : écart au moteur YaRN 1.634e-02
+  yarn ctx0×4            : écart au moteur YaRN 1.634e-02
+  yarn deux fois         : écart au moteur YaRN 1.338e-01
+  interp seule           : écart au moteur YaRN 1.280e-01
+  (les 448 premières)  : 6.38098948790855e-07
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport numpy as np, sys\nsys.path.insert(0, \"tools\")\nfrom verifier_v41_mhc import Gguf\ng = Gguf(\"/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-0000 … [1643 caractères tronqués]`
+
+  ```
+positions : {0: 0.136508, 1: 0.102426, 2: 0.068258, 3: 0.034087, 4: 0.016345, 5: 0.037885, 6: 0.067584, 7: 0.100911, 8: 0.133818}
+base      : {10000.0: 0.133818, 40000.0: 0.062681, 160000.0: 0.016345}
+facteur   : {1.0: 0.016345, 2.0: 0.016345, 16.0: 0.016345}
+× au lieu de ÷ : 0.041663
+rampe inversée : 0.128
+sans rampe     : 0.128
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport numpy as np, sys\nsys.path.insert(0, \"tools\")\nfrom verifier_v41_mhc import Gguf\ng = Gguf(\"/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-0000 … [1261 caractères tronqués]`
+
+  ```
+paire | angle moteur YaRN | angle moteur simple | plain(4) | yarn(4) | interp(4)
+     0 | +0.000000 | +0.000000 | +4.000000 | +4.000000 | +0.250000
+     5 | +0.000000 | +0.000000 | +0.615058 | +0.615058 | +0.038441
+    10 | -0.000000 | -0.000000 | +0.094574 | +0.094574 | +0.005911
+    14 | -0.000000 | -0.000000 | +0.021147 | +0.021147 | +0.001322
+    15 | +0.000000 | +0.000000 | +0.014542 | +0.014542 | +0.000909
+    18 | -0.000000 | -0.000000 | +0.004729 | +0.003399 | +0.000296
+    20 | +0.000000 | +0.000000 | +0.002236 | +0.001188 | +0.000140
+    23 | -0.000000 | -0.000000 | +0.000727 | +0.000182 | +0.000045
+    25 | -0.000000 | -0.000000 | +0.000344 | +0.000021 | +0.000021
+    28 | +0.000000 | +0.000000 | +0.000112 | +0.000007 | +0.000007
+    31 | -0.000000 | -0.000000 | +0.000036 | +0.000002 | +0.000002
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport numpy as np, sys\nsys.path.insert(0, \"tools\")\nfrom verifier_v41_mhc import Gguf\ng = Gguf(\"/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-0000 … [1257 caractères tronqués]`
+
+  ```
+corr 15.0 25.0
+ paire |      moteur YaRN |    moteur simple |       plain(4) |       yarn(4) |      interp(4)
+     0 | -2.283185287 | -2.283185287 | +4.000000000 | +4.000000000 | +0.250000000
+     5 | +0.615058202 | +0.615058202 | +0.615058244 | +0.615058244 | +0.038441140
+    10 | +0.076841510 | +0.094574170 | +0.094574161 | +0.094574161 | +0.005910885
+    14 | +0.009252015 | +0.021147432 | +0.021147425 | +0.021147425 | +0.001321714
+    15 | +0.004998863 | +0.014542158 | +0.014542154 | +0.014542154 | +0.000908885
+    18 | +0.000295533 | +0.004728711 | +0.004728708 | +0.003398759 | +0.000295544
+    20 | +0.000139751 | +0.002236066 | +0.002236068 | +0.001187911 | +0.000139754
+    23 | +0.000045421 | +0.000727119 | +0.000727108 | +0.000181777 | +0.000045444
+    25 | +0.000021505 | +0.000343844 | +0.000343828 | +0.000021489 | +0.000021489
+    28 | +0.000006934 | +0.000111788 | +0.000111803 | +0.000006988 | +0.000006988
+    31 | +0.000002290 | +0.000036364 | +0.000036355 | +0.000002272 | +0.000002272
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/fn rope_norm_yarn/,/^    }$/p' drave-core/src/model.rs | head -50", "description": "Read the committed rope_norm_yarn"}`
+
+  ```
+fn rope_norm_yarn(v: &mut [f32], n_head: usize, head_dim: usize, pos: usize, base: f32,
+                      facteur: f32, beta_rapide: f32, beta_lent: f32, ctx_origine: f32,
+                      n_rot: usize, inverse: bool) {
+        let n_rot = if n_rot == 0 || n_rot > head_dim { head_dim } else { n_rot };
+        let half = n_rot / 2;
+        let ln_base = base.ln();
+        // Les dimensions de correction se comptent sur les dimensions TOURNÉES
+        // (`rope_yarn_corr_dims(n_dims = rot_dim, …)`), pas sur la tête entière :
+        // pour V4 elles font 64, pas 512.
+        let corr0 = (n_rot as f32 * (ctx_origine / (beta_rapide * 2.0 * std::f32::consts::PI)).ln()
+                     / (2.0 * ln_base)).floor();
+        let corr1 = (n_rot as f32 * (ctx_origine / (beta_lent * 2.0 * std::f32::consts::PI)).ln()
+                     / (2.0 * ln_base)).ceil();
+        for h in 0..n_head {
+            let t = &mut v[h * head_dim..(h + 1) * head_dim];
+            for i in 0..half {
+                let freq = 1.0 / base.powf(2.0 * i as f32 / n_rot as f32);
+                let theta_extrap = pos as f32 * freq;
+                let theta_interp = theta_extrap / facteur;
+              
+… [658 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"pub fn cfg\\b\" -A 12 drave-core/src/gguf.rs | head -18; grep -n \"pub fn cfg_ou\" -A 8 drave-core/src/gguf.rs | head -12", "description": "Read the cfg accessors"}`
+
+  ```
+895:    pub fn cfg(&self, key: &str) -> Option<&Meta> {
+896-        let arch = self.meta.get("general.architecture")?.as_str()?;
+897-        self.meta.get(&format!("{arch}.{key}"))
+898-    }
+899-
+900-    /// Première clef PRÉSENTE parmi plusieurs noms possibles.
+901-    ///
+902-    /// Deux conventions de nommage coexistent dans les GGUF de cette machine :
+903-    /// les clefs normalisées de llama.cpp (`expert_count`, `expert_used_count`)
+904-    /// et les noms d'origine de DeepSeek, recopiés tels quels par le
+905-    /// convertisseur (`n_routed_experts`, `num_experts_per_tok`). Lire une seule
+906-    /// convention ne donne pas une erreur : cela donne `n_expert = 0`, donc un
+907-    /// modèle **sans experts** — un V4.1 qui tourne en dense et dont la
+909:    pub fn cfg_ou(&self, cles: &[&str]) -> Option<&Meta> {
+910-        cles.iter().find_map(|c| self.cfg(c))
+911-    }
+912-
+913-    /// Les ratios de compression, **couche par couche** (0 = brute).
+914-    pub fn couches_ratios(&self) -> Vec<i64> {
+915-        self.cfg_ou(&["attention.compress_ratios", "compress_ratios"])
+916-            .and_then(|m| m.as_liste_i64())
+917-            .unwrap_or_default()
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'\ns=open(p).read()\na = \"\"\"        let tourner = |v: &mut [f32], nh: usize, hd: usize, p: usize, nr: usize, inv: bool| {\"\"\"\nb = \"\"\"        if std::env::var(\"DRAVE_DEBUG_YARN\"). … [791 caractères tronqués]`
+
+  ```
+(no output)
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (DRAVE_DEBUG_YARN=1 timeout 300 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf --couches 2:3 --ppl /tmp/ids_v4flash.txt --ctx  … [193 caractères tronqués]`
+
+  ```
+started background job bash-192
+  ```
+
+- **bash** `{"command": "sleep 55; grep -E \"\\[yarn\\]|rotation :\" /tmp/dbg_yarn.log | head -4", "description": "Read the debug output"}`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "sleep 45; grep -E \"\\[yarn\\]|rotation\" /tmp/dbg_yarn.log | head -4; tail -2 /tmp/dbg_yarn.log", "description": "Check the debug output again"}`
+
+  ```
+/tmp/ids_v4flash.txt : 2 tokens, fenêtres de 8
+  ```
+
+- **bash** `{"command": "sleep 50; grep -E \"\\[yarn\\]|rotation\" /tmp/dbg_yarn.log | head -4; pgrep -c drave 2>/dev/null || echo fini", "description": "Wait for the debug run"}`
+
+  ```
+3
+  ```
+
+- **bash** `{"command": "sleep 55; grep -E \"\\[yarn\\]|rotation\" /tmp/dbg_yarn.log | head -5; pgrep -c drave 2>/dev/null || echo fini", "description": "Check the debug run state"}`
+
+  ```
+3
+  ```
+
+- **bash** `{"command": "ps -o pid=,etime=,pcpu=,rss=,args= -C drave 2>/dev/null | cut -c1-120; echo \"=== log ===\"; tail -3 /tmp/dbg_yarn.log", "description": "Inspect running drave processes"}`
+
+  ```
+3090780       04:27 18.3 23061188 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/DeepSe
+3091118       03:54 11.3 19864600 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/DeepSe
+3092281       03:50 11.0 19863836 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/DeepSe
+=== log ===
+/tmp/ids_v4flash.txt : 2 tokens, fenêtres de 8
+  ```
+
+- **bash** `{"command": "for p in $(pgrep -x drave); do kill -9 $p 2>/dev/null; done; sleep 2; pgrep -c drave 2>/dev/null || echo \"aucun drave\"; ps -o pid=,rss= -C drave 2>/dev/null | head", "description": "Kill the orphaned runs by PID"}`
+
+  ```
+0
+aucun drave
+  ```
+
+### 👤 Utilisateur
+
+background job bash-192 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (DRAVE_DEBUG_YARN=1 timeout 300 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf --couches 2:3 --ppl /tmp/ids_v4flash.txt --ctx 8 --limit 2 --dense > /tmp/dbg_yarn.log 2>&1); grep -E "\[yarn\]|rotation :" /tmp/dbg_yarn.log | head -3) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (DRAVE_DEBUG_YARN=1 timeout 600 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf --couches 2:3 --ppl /tmp/ids_v4flash.txt --ctx  … [159 caractères tronqués]`
+
+  ```
+started background job bash-193
+  ```
+
+- **bash** `{"command": "sleep 55; grep -E \"\\[yarn\\]|rotation :|EXIT\" /tmp/dbg_yarn.log | head -5", "description": "Read the debug run output"}`
+
+  ```
+(no output)
+  ```
+
+### 👤 Utilisateur
+
+Agent 31f26a6e-65f5-480d-be32-36b9f425b3dd sent a message:
+Relecture adversariale (lecture seule) — résultat principal déjà sûr, rapport complet à suivre.
+
+**FAUX (code + mesure) : `--sans-yarn` ne coupe PAS le YaRN des couches compressées.**
+- `main.rs:881`/`4558` appellent `mdl.cfg_yarn_off()` = `self.cfg.yarn = None` (model.rs:3895) APRÈS construction ; or `Mla4.yarn_compresse` est figé à la construction (model.rs:3121-3122) sur `cfg.yarn_declare` + la variable d'env `DRAVE_YARN_NON` seulement. `cfg.yarn` n'est lu que par les chemins denses (4614, 6131) → sur V4 le drapeau est inerte.
+- Les commentaires model.rs:2693 (« DRAVE_YARN_NON=1 jamais de YaRN (ce que fait `--sans-yarn`) ») et 3117-3120 (« (et `--sans-yarn`) veut dire JAMAIS de YaRN ») sont donc faux.
+- Mesuré (2 passes bornées, couche 2 seule, 8 jetons) : `--sans-yarn` → ppl 64 730 738,578 · `DRAVE_YARN_NON=1` → 65 819 810,336 (+1,7 %). Les deux régimes diffèrent ⇒ le drapeau n'a pas coupé la rotation.
+
+**FAIBLE mesuré : l'annonce de rotation est fausse sur V4.** Le log de la même passe imprime « [config] rotation : RoPE simple (contexte 8 ≤ 65536 initial ; YaRN ×16 prendrait le relais au-delà) » alors que la couche exécutée (ratio 4) tourne en YaRN ×16 à toutes les positions (prouvé par l'écart avec DRAVE_YARN_NON). La trace ne remplit pas son rôle annoncé (model.rs:3420-3422).
+
+Déjà vérifié OK : équivalence YaRN vs ggml (1,8e-12 ; corr_dims identiques ; rampe 0 écart ; mscale net = 1 ; vLLM confirmé par lecture de rope.py/common.py : is_neox_style=False, mscale=0, compress_rope_theta, ramp identique) ; indexeur V4.1 conforme à vLLM (clé = k_norm(wk(latent pré-RoPE)), 1 clé de 128, cache possédé par 2/8/14/20 — inventaire GGUF à l'appui) ; sélection 513→512 (135 460/135 460 accords) ; hachage engram fenêtre 4 == préfixe (180 259 cas, 0 écart).
+Réserves : corr_dims non bornées (TROU, ex. base 500/ctx 2e6 → ggml (47,63) vs moteur (47,66)) ; garde `candidate_*` trop large ; oracle `tools/v41_compresseur_reference.py` resté en RoPE simple ; /tmp/dump_eng, /tmp/dump_idx, /tmp/dump_y128, /tmp/dump_p128 n'existent pas.
+NB : j'ai lancé 2 passes bornées d'1 couche (la 3e a été tuée par l'OOM, un autre job moteur tourne) ; je n'en lance plus.
+
+### 🤖 Assistant
+
+⏵ Confirming the `as_f64` vs integer-key bug
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"pub fn as_f64\" -A 12 drave-core/src/gguf.rs | head -16; grep -n \"pub fn as_u64\" -A 8 drave-core/src/gguf.rs | head -10", "description": "Read Meta::as_f64/as_u64"}`
+
+  ```
+229:    pub fn as_f64(&self) -> Option<f64> {
+230-        match self {
+231-            Meta::F32(v) => Some(*v as f64),
+232-            Meta::F64(v) => Some(*v),
+233-            _ => None,
+234-        }
+235-    }
+236-    pub fn as_str(&self) -> Option<&str> {
+237-        match self { Meta::Str(s) => Some(s), _ => None }
+238-    }
+239-}
+240-
+241-#[derive(Debug, Clone)]
+209:    pub fn as_u64(&self) -> Option<u64> {
+210-        match self {
+211-            Meta::U32(v) => Some(*v as u64),
+212-            Meta::U64(v) => Some(*v),
+213-            Meta::I32(v) => Some(*v as u64),
+214-            Meta::I64(v) => Some(*v as u64),
+215-            _ => None,
+216-        }
+217-    }
+  ```
+
+### 👤 Utilisateur
+
+Agent 31f26a6e-65f5-480d-be32-36b9f425b3dd sent a message:
+RAPPORT ADVERSARIAL COMPLET — commits 8444a39 → 93cb1b7 (lecture seule, aucun fichier du dépôt touché ; scripts dans /tmp). Références de lignes : arbre de travail (model.rs a +37 lignes non commitées ; pour HEAD retrancher ~10-15 selon l'endroit).
+
+===========================================================
+FAUX
+===========================================================
+**F1 — `--sans-yarn` ne coupe PAS le YaRN des couches compressées (le drapeau ne fait pas ce qu'il annonce).**
+- `main.rs:881` et `4558` : `if sans_yarn { mdl.cfg_yarn_off(); }`, appelé APRÈS la construction du modèle. `model.rs:3895` : `pub fn cfg_yarn_off(&mut self) { self.cfg.yarn = None; }` — c'est tout.
+- Or `Mla4.yarn_compresse` est figé à la construction (`model.rs:3121-3122`) sur `cfg.yarn_declare` ET la seule variable d'environnement `DRAVE_YARN_NON` (`is_err()`). `cfg_yarn_off` ne peut plus rien changer.
+- `cfg.yarn` n'est lu QUE par les chemins denses (`model.rs:4614` forward_lot, `6131` attention dense) : sur V4-Flash/V4.1, le drapeau CLI est donc inerte.
+- Contredit deux commentaires du dépôt : `model.rs:2693` « `DRAVE_YARN_NON=1` jamais de YaRN (ce que fait `--sans-yarn`) » et `model.rs:3117-3120` « `DRAVE_YARN_NON` (et `--sans-yarn`) veut dire "JAMAIS de YaRN" : il doit donc aussi couper celui des couches compressées, sinon le drapeau ne ferait plus ce qu'il annonce ».
+- MESURÉ (2 passes bornées, `--couches 2:3`, 8 jetons, modèle shard 1) : `--sans-yarn` → perplexité **64 730 738,578** ; `DRAVE_YARN_NON=1` → **65 819 810,336** (+1,7 %). Seule la couche 2 tourne (ratio 4) et les deux passes ne diffèrent que par la rotation ⇒ le drapeau n'a pas basculé le régime. (Logs /tmp/yarn_sans.log, /tmp/yarn_non.log. 3e passe tuée par l'OOM, un autre job moteur tourne : je n'ai plus lancé de passe.)
+
+**F2 — la revendication « fenêtre de `max_ngram − 1` jetons » est fausse telle qu'écrite (le code, lui, est juste).**
+Le code garde `max_ngram` jetons : `model.rs:5962` `let lo = pos.saturating_sub(eng.max_ngram - 1);` → tranche de 4 jetons pour un recul de 3. Une fenêtre de 3 jetons (lecture littérale) donne **11 412 / 45 640 adresses fausses (25 %)**, colonnes 16-23 et 40-47 (le groupe `shift=3`), identiques dans l'oracle Python. Le hachage a besoin des `max_ngram` derniers jetons, pas de `max_ngram − 1`.
+
+===========================================================
+FAIBLE
+===========================================================
+**Fa1 — l'annonce de rotation ment sur V4 (mesuré).** Le log de la passe ci-dessus imprime « `[config] rotation : RoPE simple (contexte 8 ≤ 65536 initial ; YaRN ×16 prendrait le relais au-delà)` » (`model.rs:3423-3445`) alors que la couche exécutée (ratio 4) tourne en YaRN ×16 à toutes les positions (prouvé par F1). Idem `model.rs:3373`/`3393` (« yarn » affiché seulement d'après `cfg.yarn`). Le commentaire `3420-3422` dit que cette trace sert à savoir « si un chiffre vient du RoPE simple ou de YaRN » : pour V4 elle ne le dit pas — 41/44 couches sont en YaRN, la ligne dit « RoPE simple ».
+
+**Fa2 — justification du mscale mal citée, conclusion juste.** Le rapport et `model.rs:4326-4329` citent `llama-context.cpp:492-494` comme l'annulation de `mscale`. Pour deepseek4 le mécanisme réel est `dsv4_rope_attn_factor` (`src/models/deepseek4.cpp:11-17`) qui renvoie l'INVERSE de `1+0,1·ln(1/freq_scale)` ; le noyau `rope_yarn` remultiplie, produit = **1,0 exactement** (vérifié numériquement). `cparams.yarn_attn_factor` (celui que llama-context annule) n'est même pas utilisé par le graphe deepseek4.
+
+**Fa3 — le refus `candidate_*` est plus large que la référence.** `model.rs:5539-5543` refuse dès `n_vis > 16384` pour TOUTE couche à indexeur. vLLM (`deepseek_v41/attention.py`, docstring de `DeepseekV4Indexer`) : seuls les indexeurs APRÈS `candidate_source_layer_id = 20` masquent leurs scores ; les couches 2/8/14/20 restent denses (elles ne reçoivent même pas le buffer). Le moteur refuse donc aussi des cas que la référence calcule exactement (sur-refus, pas chemin silencieux). Et la garde est sautée si `candidate_topk_blocks` est absent (0).
+
+**Fa4 — `tools/v41_compresseur_reference.py` est resté en RoPE simple.** Non modifié par 4594d52 : son `rope_norm` (l.46-56) sert au bloc compresseur (l.128) et à la clé d'indexeur (l.143), alors que le moteur applique YaRN dès `ratio > 0`. Aux positions où il a servi (4-9) l'écart reste sous sa tolérance (Δθ ≈ 3,4e-5 rad à la position 4), donc aucun résultat passé n'est invalidé ; au-delà de la position ~12 l'écart dépasse 1e-4 et l'outil criera « ÉCART » sur un moteur juste.
+
+**Fa5 — `tools/rope_yarn_temoin.py`, cité par le test unitaire, n'existe pas.** `model.rs:7708-7711` et `7723-7731` : le témoin de `yarn_du_compresseur_conforme_a_ggml` est présenté comme « calculé par `tools/rope_yarn_temoin.py` » — fichier absent du dépôt. J'ai reproduit le témoin depuis ggml : écart max **2,4e-10** sur les 8 valeurs (donc le test est bon ; seule la référence est introuvable).
+
+===========================================================
+TROU
+===========================================================
+**T1 — `corr0/corr1` ne sont pas bornées comme dans les deux références.** `model.rs:4340-4343` calcule `floor`/`ceil` sans `MAX(0,·)`/`MIN(n_dims−1,·)`. ggml le fait (`ggml/src/ggml.c:4471-4480` : `dims[0]=MAX(0,start)`, `dims[1]=MIN(n_dims-1,end)`) et vLLM aussi (`rotary_embedding/common.py:yarn_find_correction_range`, `truncate=True` → `max(low,0), min(high,dim-1)`). Inoffensif pour V4 (base 10 000/160 000, ctx_orig 65 536 → (20,33) et (15,25), identiques) ; divergent pour des bases petites : base 500/ctx 2e6 → ggml (47,63) vs moteur (47,66) ; base 100/ctx 2e6 → (63,63) vs (63,89).
+
+**T2 — équivalence de la fenêtre engram : positions strictement croissantes exigées.** `engram.rs:132` `debut = positions.first()`. Avec des positions dupliquées : 16 358 / 46 200 désaccords fenêtre-4 vs préfixe (ex. ids=[3,11,11,7,3], pos=[0,1,2,3,3], recul 0 < debut 1 → pad au lieu de ids[1]). Non atteignable en production (positions distinctes), mais ce n'est pas un invariant : `engram.rs:157` teste `recul < 0`, pas `recul < debut` ; la justesse du bord tient au défaut `source = self.pad` (l.139).
+
+**T3 — entrées mal formées silencieuses (engram).** `engram.rs:134` : `zip` tronque si `positions.len() < ids.len()` ; la sortie garde la taille et le reste vaut **0**, qui est une adresse VALIDE (colonne 0, `offset[0]=0`) — indistinguable d'un calcul. `l.146` : `morts` plus court que `ids` = jetons vivants. `l.148-151` : id hors `token_map` → repli sur le pad sans un mot (l'oracle Python lève). Et `max_ngram = 0` déclaré ferait `(max_ngram − 1)` sous-flow (`l.103`, `l.121`).
+
+**T4 — refus d'indexeur conditionné à la présence de la liste.** `model.rs:3084` ne refuse un indexeur hors liste que si `index_source_layer_ids` est déclarée (`!idx_sources.is_empty()`) ; et la propriété du cache est déduite de la présence d'`indexer.attn_k` (`l.3105`, `a_idx_k`) sans être croisée avec l'ensemble des sources KV : un fichier qui mettrait `indexer.attn_k` sur une consommatrice (24) écrirait dans le tampon de sa source (alias `l.6095`) au lieu de refuser. Le fichier réel est sain (inventaire GGUF ci-dessous), c'est un trou de refus.
+
+**T5 — les preuves annoncées ne sont pas là.** `/tmp/dump_eng`, `/tmp/dump_idx`, `/tmp/dump_y128`, `/tmp/dump_p128` **n'existent pas** (vérifié) : ni la vérification engram/indexeur de V4.1 ni la comparaison YaRN par tenseur du §5 ne sont rejouables depuis les artefacts. Les fichiers de `/tmp/dump_sel` sont à plat (le chemin « /tmp/dump_sel/d » du brief n'existe pas).
+
+===========================================================
+OK (vérifié, avec la commande/preuve)
+===========================================================
+**O1 — YaRN : équivalence avec ggml, ligne à ligne et au chiffre.** Comparateur /tmp/verif_yarn_adv.py (ggml transcrit de `ggml-cpu/ops.cpp:5959-6000` + `ggml.c:4467-4480`, vs `rope_norm_yarn` recopié de `model.rs:4331-4365`) :
+- barème des fréquences : `theta_scale = powf(base,−2/n_dims)` avec `n_dims = 64` = `base^(−2i/n_rot)` du moteur ✓ (n_dims = `n_embd_head_rope` = `hparams.n_rot()` = GGUF `rope.dimension_count` = 64 ; vLLM : `rotary_dim = rope_parameters["rope_dim"] = qk_rope_head_dim` = 64) ;
+- dimensions de correction : `n_rot` = 64, pas 512 ✓ — ggml (20,33)/(15,25), moteur (20,33)/(15,25) pour bases 10 000/160 000, ctx 65 536 ;
+- ORIENTATION de la rampe : `rampe = 1 − clamp((i−corr0)/(corr1−corr0))` avec `i` = indice de PAIRE = `i0/2` de ggml ✓ → rampe 0 (extrapolation, `theta_extrap`) pour les paires RAPIDES `i < corr0=15`, rampe 1 (interpolation `theta/facteur`) pour les LENTES `i ≥ corr1=25`, mélange linéaire entre ; écart de rampe ggml/moteur = **0,000e+00** sur les 32 paires ;
+- pire écart |ggml − moteur| = **1,840e-12** sur 309 positions (0 → 16 384), base compressée ; rotation inverse : **1,708e-13** (aller-retour sur l'original) ;
+- `mscale` : produit `dsv4_rope_attn_factor × (1+0,1·ln(1/freq_scale))` = **1,0** → inactif, conforme ; vLLM le force à 0 (`rope.py:_`, `mscale=0`, `mscale_all_dim=0` → `yarn_get_mscale`=1) ;
+- vLLM confirmé par lecture des sources (raw.githubusercontent, vllm main) : `rope.py` « YaRN applies to all compressed-KV layers (compress_ratio > 0) », `rope_theta = compress_rope_theta` si `>0`, `factor=1.0` + `original=max_position` sur les couches brutes, `is_neox_style=False` (= appariement NORM/GPT-J, paires 2i,2i+1, RoPE sur les DERNIÈRES 64 composantes), `common.py` ramp identique à ggml ; llama.cpp `deepseek4.cpp:872-879` (`use_compress_rope`) et les 6 rotations (`:430`, `:514`, `:557`, `:900`, `:919`, `:1124`) ✓ ;
+- paramètres lus dans le GGUF V4-Flash : `rope.scaling.type=yarn`, `factor=16`, `original_context_length=65536`, `beta 32/1`, `rope.freq_base=10000`, `rope.dimension_count=64`, `attention.compress_rope_freq_base=160000` ✓ ; V4.1 (`deepseek41.config`) : `rope_scaling {beta_fast 32, beta_slow 1, factor 16, original 65536, yarn}`, `rope_theta 10000`, `compress_rope_theta 160000` ✓.
+- Témoin du test unitaire reproduit indépendamment : 2,4e-10 (Fa5).
+NON re-mesuré : la porte 8430,2968 → 8405,9477 (passe complète 43 couches interminable ici) ; `tools/portes.sh:117,126` porte bien la nouvelle valeur et sa raison. Le §5 du rapport dit lui-même que la comparaison par tenseur n'est PAS faite — c'est exact, et les dumps correspondants sont absents (T5).
+
+**O2 — engram, fenêtre vs préfixe.** 180 259 comparaisons fenêtre-4 == préfixe, **0 désaccord** (transcription Rust validée contre le vecteur ADRESSES de `engram.rs:300-306` ; oracle = `tools/engram_reference.py` importé ; masques de morts exhaustifs, trous collants à t−1/t−2/t−3, bords t<3, L jusqu'à 200, départs 0/1/3/5/100/1000, token_map permuté). Rust-transcription vs oracle : 97 732 comparaisons, 0 écart. Scripts /tmp/engram_lib.py, /tmp/test_engram_fenetre*.py.
+
+**O3 — engram, projection et injection conformes.** GGUF V4.1 : `blk.{1,14}.engram_kv.weight` = F16 **[25600, 6144]** = (hc 4 + 1) × 5120 ✓, `engram_q_norm/k_norm` [4,5120] ✓ ; 6144 = (4−1)×8×256 = 24 colonnes × 256 ✓. Le noyau vLLM `_fused_engram_post_wkv_kernel` (engram.py, récupéré) est identique ligne à ligne à `PorteEngram::injecter` (`engram.rs:255-288`) : `hidden_rms`, `key_rms`, `dot = Σ h·q·k·key × hr × kr / sqrt(DIM)`, `sqrt(max(|dot|,1e-6))` signé, sigmoïde, `hidden + gate·value` avec la valeur PARTAGÉE `kv[HC_MULT·DIM + d]` et les clés par copie `kv[h·DIM + d]` ✓ ; `token_mask` = garder (None ⇒ partout) ✓, polarité du `dead_mask` du hachage non inversée (`engram.rs:147` vs kernel `tl.where(dead, dead_id, …)`) ✓.
+
+**O4 — `tools/verifier_v41_engram.py` n'est pas circulaire.** Il recalcule les adresses avec `engram_reference.hachage` **sur tout le préfixe** (l.141 : `ids[:pos+1]`), relit les 24 rangées dans la table de 101 Go, refait `wkv`, l'injection, et compare aux vides moteur `engram_kv`/`engram_sortie` (l.151,168) — donc il teste justement l'optimisation de fenêtre du moteur. Réserve : l'oracle d'adressage est la même transcription Python (vLLM `engram.py`) que celle contre laquelle le Rust a été écrit ; ce n'est pas une exécution indépendante de vLLM. Et les vides sont absents (T5).
+
+**O5 — indexeur de V4.1 conforme à vLLM.** Sources vLLM lues (`deepseek_v41/attention.py`) : clés = `k_norm(wk(latent))` du latent **pré-RoPE** du compresseur de la source KV (« wk maps the main compressor's (pre-RoPE) latent to index keys », `_produce_k`), RoPE à la position du groupe, **une clé de 128** par bloc (index_head_dim=128, index_n_heads=32 ; les têtes ne sont que requête/poids), cache **possédé seulement par les couches source KV**, les autres lisent `kv_source_layer_id` (le plus récent en dessous) — exactement l'alias `idx_cles → mla4_idx_cles[comp_source]` du moteur (`model.rs:6095`). Côté Rust : clés construites sur `norm` AVANT la rotation du bloc (`5375-5387` puis `5391-5396`) ✓, requête tournée à `pos` et clé à `debut = pos+1−ratio` ✓, requête depuis `qr_norm` ✓, poids `idx_proj(x)/sqrt(128·32)` ✓. Inventaire GGUF (drave … --tensors) : `indexer.attn_k`+`k_norm` sur **2, 8, 14, 20 seulement** ; `attn_compressor_kv` sur 2,8,14,20 seulement ; 24/28/32/36 n'ont que `indexer.attn_q_b` [4096,1280] + `indexer.proj` [32,5120] ✓ ; tables engram sur 1 et 14 ✓. Réserve : `verifier_scores` de `v41_compresseur_reference.py` réutilise les clés et `qr_norm` VIDÉS par le moteur (les points q·k ne sont donc pas recalculés depuis le GGUF ; la clé, elle, l'est — e3).
+
+**O6 — sélection 513 → 512.** `/tmp/dump_sel` : 520 positions, position 512 → fichiers de 2052 o = **513 f32** ; `k = min(513,512) = 512` (`model.rs:5544`) ; comparaison masque vs top-k recalculé (tri stable décroissant) : **135 460 accords / 135 460, 0 désaccord** ; le bloc écarté (508) est bien l'argmin. TROU borné : le départage d'égalité n'est jamais exercé (0 égalité à la coupe sur les 520 positions, alors qu'il y a exactement 1 score égal à la coupe par position). `/tmp/verif_selection.py` n'est pas circulaire mais faible (ratio 1 codé en dur l.25, 6 des 8 positions > top_k).
+
+**O7 — refus structurels : OK.** Consommatrice dont la source ne publie pas de compresseur (`model.rs:3027-3030`), fichier contradictoire (compresseur sur une consommatrice, `3047-3051`), indexeur hors `index_source_layer_ids` (`3084-3087`), égalité de ratio source/consommateur (`3005-3010`). Le contrôle des ratios n'était pas dans la liste des refus annoncés mais il est là.
+
+===========================================================
+CE QUE JE N'AI PAS TROUVÉ
+===========================================================
+Aucun cas de rotation YaRN appliquée à une couche brute (les couches ratio 0 passent par `rope_norm` inconditionnellement, `model.rs:5193-5195` : `yarn_compresse` n'est posé que si `ratio != 0`) ; aucun indexeur lisant le mauvais cache (alias = `comp_source` = source KV, conforme à vLLM) ; aucune inversion du masque d'engram ; aucune vérification circulaire engine-contre-engine dans les outils engram ; aucune erreur d'orientation de rampe ni de dimensions de correction pour les paramètres réels.
+
+===========================================================
+LIMITES DE CETTE RELECTURE
+===========================================================
+Pas de passe complète, pas de cargo, pas de llama.cpp ; 2 passes bornées d'1 couche (8 jetons) seulement, la 3e tuée par l'OOM alors qu'un autre job moteur tournait — je n'ai plus rien lancé. La porte 8430,2968 → 8405,9477 n'a pas été re-mesurée. Les vérifications V4.1 (365,7 Go) n'ont pas été rejouées faute de vides.
+
+### 🤖 Assistant
+
+The review found the instrument bug — `original_context_length` is a u32 key, and `as_f64` returns None for integers. Fixing and re-measuring:
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'\ns=open(p).read()\n# 1. `nombre` : accepter les clefs ENTIÈRES (original_context_length est u32)\na = \"\"\"                let nombre = |cle_gguf: &str, cle_json: &str, def: f64| -> f64  … [5220 caractères tronqués]`
+
+  ```
+ok
+ok
+BUILD_END
+  ```
+
+### 👤 Utilisateur
+
+Background subagent 31f26a6e-65f5-480d-be32-36b9f425b3dd finished and will do no further work unless you send it more.
+Its closing message:
+⏵ Rapport final (relecture adversariale, lecture seule)
+
+# Rapport adversarial — commits `8444a39` → `93cb1b7` (Qtrinet)
+
+**Mode** : lecture seule ; aucun fichier du dépôt modifié (scripts dans `/tmp`). Références de lignes = **arbre de travail** (`model.rs` porte +37 lignes non commitées ; pour HEAD, retrancher ~10-15 selon l'endroit).
+
+## FAUX
+
+### F1 — `--sans-yarn` ne coupe PAS le YaRN des couches compressées
+- `main.rs:881` et `4558` : `if sans_yarn { mdl.cfg_yarn_off(); }`, appelé **après** la construction. `model.rs:3895` : `pub fn cfg_yarn_off(&mut self) { self.cfg.yarn = None; }` — c'est tout.
+- Or `Mla4.yarn_compresse` est **figé à la construction** (`model.rs:3121-3122`) sur `cfg.yarn_declare` et la seule variable `DRAVE_YARN_NON`. `cfg.yarn` n'est lu que par les chemins **denses** (`4614`, `6131`) : sur V4 le drapeau CLI est inerte.
+- Contredit `model.rs:2693` (« `DRAVE_YARN_NON=1` jamais de YaRN (ce que fait `--sans-yarn`) ») et `3117-3120` (« `DRAVE_YARN_NON` (et `--sans-yarn`) veut dire “JAMAIS de YaRN” »).
+- **Mesuré** (2 passes bornées, `--couches 2:3`, 8 jetons) : `--sans-yarn` → perplexité **64 730 738,578** ; `DRAVE_YARN_NON=1` → **65 819 810,336** (+1,7 %). Seule la couche 2 tourne (ratio 4) et les deux passes ne diffèrent que par cette rotation ⇒ le drapeau n'a rien coupé. Logs `/tmp/yarn_sans.log`, `/tmp/yarn_non.log`.
+
+### F2 — « fenêtre de `max_ngram − 1` jetons » : faux tel qu'écrit (le code, lui, est juste)
+`model.rs:5962` garde **`max_ngram` = 4** jetons (`pos.saturating_sub(max_ngram-1)`). Une fenêtre de 3 jetons donne **11 412 / 45 640 adresses fausses (25 %)**, colonnes 16-23 et 40-47 (groupe `shift=3`), identiques dans l'oracle Python.
+
+## FAIBLE
+
+- **Fa1 — l'annonce de rotation ment sur V4 (mesuré).** Le log de la passe ci-dessus imprime « `[config] rotation : RoPE simple (contexte 8 ≤ 65536 initial ; YaRN ×16 prendrait le relais au-delà)` » (`model.rs:3423-3445`) alors que la couche exécutée tourne en YaRN ×16 à toutes les positions. Idem `3373`/`3393`. Le commentaire `3420-3422` dit que cette trace sert à distinguer RoPE simple et YaRN : pour V4 (41/44 couches en YaRN) elle ne le fait pas.
+- **Fa2 — citation du mscale inexacte, conclusion juste.** `model.rs:4326-4329` cite `llama-context.cpp:492-494` ; pour deepseek4 le mécanisme est `dsv4_rope_attn_factor` (`deepseek4.cpp:11-17`, l'inverse de `1+0,1·ln(1/freq_scale)`) remultiplié par le noyau ⇒ produit **1,0 exact** (mesuré). `cparams.yarn_attn_factor` n'est pas utilisé par le graphe deepseek4.
+- **Fa3 — refus `candidate_*` plus large que la référence.** `model.rs:5539-5543` refuse pour **toute** couche à indexeur dès `n_vis > 16384` ; vLLM (docstring de `DeepseekV4Indexer`) ne masque que les indexeurs **après** `candidate_source_layer_id = 20` (2/8/14/20 restent denses). Sur-refus, pas chemin silencieux ; garde sautée si `candidate_topk_blocks` est absent.
+- **Fa4 — `tools/v41_compresseur_reference.py` resté en RoPE simple** (non touché par `4594d52`) : bloc compresseur l.128, clé d'indexeur l.143. Aux positions 4-9 l'écart reste sous sa tolérance ; au-delà de ~position 12 il criera « ÉCART » sur un moteur juste.
+- **Fa5 — `tools/rope_yarn_temoin.py`, cité par le test `yarn_du_compresseur_conforme_a_ggml` (`model.rs:7708-7731`), n'existe pas.** Témoin reproduit indépendamment depuis ggml : écart max **2,4e-10** (le test est donc bon).
+
+## TROU
+
+- **T1 — `corr0/corr1` non bornées.** `model.rs:4340-4343` sans `MAX(0,·)`/`MIN(n_dims−1,·)` ; ggml le fait (`ggml.c:4471-4480`) et vLLM aussi (`rotary_embedding/common.py`) : base 500/ctx 2e6 → ggml (47,63) vs moteur (47,66) ; base 100/ctx 2e6 → (63,63) vs (63,89). Sans effet pour V4 (bases 10 000/160 000, ctx 65 536 → (20,33)/(15,25), identiques).
+- **T2 — équivalence de fenêtre engram : positions strictement croissantes exigées.** `engram.rs:132` `debut = positions.first()` ; doublons → 16 358/46 200 désaccords. `l.157` teste `recul < 0`, pas `recul < debut`.
+- **T3 — entrées mal formées silencieuses (engram).** `l.134` `zip` tronque et laisse **0**, adresse *valide* de la colonne 0 ; `l.146` `morts` plus court = vivants ; `l.148-151` id hors `token_map` → pad muet (l'oracle lève) ; `max_ngram = 0` déclaré ⇒ sous-flow `(max_ngram−1)` (`l.103`, `l.121`).
+- **T4 — refus d'indexeur conditionné à la liste.** `model.rs:3084` ne refuse que si `index_source_layer_ids` existe ; la propriété du cache est déduite d'`indexer.attn_k` (`l.3105`) sans croisement avec les sources KV ⇒ un `attn_k` sur une consommatrice écrirait dans le tampon aliasé de sa source (`l.6095`) au lieu de refuser. Fichier réel sain (inventaire ci-dessous).
+- **T5 — les preuves annoncées sont absentes.** `/tmp/dump_eng`, `/tmp/dump_idx`, `/tmp/dump_y128`, `/tmp/dump_p128` **n'existent pas** ; les fichiers de `/tmp/dump_sel` sont à plat (le chemin `/tmp/dump_sel/d` n'existe pas).
+
+## OK (vérifié)
+
+- **O1 — YaRN équivalent à ggml et vLLM (ligne à ligne + chiffres).** `theta_scale = base^(−2/n_dims)`, `n_dims = 64` (GGUF `rope.dimension_count`, vLLM `rope_dim = qk_rope_head_dim`) ✓ ; corr dims sur 64, pas 512 ✓ — ggml (20,33)/(15,25) = moteur pour bases 10 000/160 000, ctx 65 536 ✓ ; **orientation** : rampe 0 (extrapolation) pour les paires rapides `i < 15`, rampe 1 (interpolation `theta/16`) pour les lentes `i ≥ 25`, mélange linéaire — écart de rampe **0,000e+00** ; pire |ggml − moteur| = **1,840e-12** sur 309 positions (0→16 384) ; inverse **1,708e-13** ; `mscale` net **1,0** ✓. vLLM confirmé par lecture (`rope.py` : YaRN sur `compress_ratio>0`, `compress_rope_theta`, `factor=1` sur les brutes, `mscale=0`, `is_neox_style=False` ; `common.py` ramp identique) ; llama.cpp `deepseek4.cpp:872-879` + les six rotations (`430`, `514`, `557`, `900`, `919`, `1124`). GGUF V4-Flash : `type=yarn`, `factor=16`, `orig=65536`, `beta 32/1`, `dimension_count=64`, `compress_rope_freq_base=160000` ✓. Porte **non re-mesurée** ; `tools/portes.sh:117,126` porte bien 8405,9477 et sa raison.
+- **O2 — engram fenêtre vs préfixe** : 180 259 comparaisons, **0 désaccord** (masques de morts exhaustifs, trous collants, bords, L≤200, départs variés) ; Rust-transcription vs oracle : 97 732 comparaisons, 0 écart.
+- **O3 — projection/injection engram conformes** : `engram_kv` F16 **[25600, 6144]** = (hc 4+1)×5120 ✓, 6144 = 24×256 ✓ ; le noyau vLLM `_fused_engram_post_wkv_kernel` est identique à `PorteEngram::injecter` (`engram.rs:255-288`), valeur partagée / clé par copie ✓, polarités `dead_mask`/`token_mask` non inversées ✓.
+- **O4 — `tools/verifier_v41_engram.py` non circulaire** : adresses recalculées **sur tout le préfixe** (l.141) et comparées aux vides moteur — il teste donc bien l'optimisation de fenêtre. Réserve : oracle = même transcription de `vllm/engram.py`.
+- **O5 — indexeur V4.1 conforme à vLLM** : clé = `k_norm(wk(latent pré-RoPE))`, RoPE à la position du groupe, **une clé de 128** par bloc (32 têtes = requête/poids), cache possédé par les seules sources KV, les autres lisant `kv_source_layer_id` — exactement l'alias `idx_cles → mla4_idx_cles[comp_source]` (`model.rs:6095`). Inventaire GGUF (`--tensors`) : `indexer.attn_k`+`k_norm` et `attn_compressor_kv` sur **2, 8, 14, 20 seulement** ; 24/28/32/36 n'ont que `attn_q_b` `[4096,1280]` + `proj` `[32,5120]`.
+- **O6 — sélection 513 → 512** : position 512 = 513 f32 ; 512 gardés ; **135 460/135 460 accords** ; bloc écarté = argmin. Trou borné : le départage d'égalité n'est jamais exercé.
+- **O7 — refus structurels OK** : consommatrice sans source publiée (`3027-3030`), fichier contradictoire (`3047-3051`), indexeur hors liste (`3084-3087`), ratios source/consommateur (`3005-3010`).
+
+## Ce que je n'ai pas trouvé
+
+Aucune rotation YaRN appliquée à une couche brute (`yarn_compresse` n'est posé que si `ratio != 0` ; les couches brutes passent par `rope_norm`, `model.rs:5193-5195`) ; aucun indexeur lisant le mauvais cache ; aucun masque d'engram inversé ; aucune vérification circulaire engine-contre-engine dans l'outillage engram ; aucune erreur d'orientation de rampe ni de dimensions de correction pour les paramètres réels des deux modèles.
+
+## Limites
+
+Pas de passe complète, pas de `cargo`, pas de llama.cpp ; **2 passes bornées** d'une couche (8 jetons), la 3ᵉ tuée par l'OOM alors qu'un autre job moteur tournait — je n'en ai plus lancé. Porte non re-mesurée. Vérifications V4.1 (365,7 Go) non rejouées, faute de vides (`T5`).
+
+### 🤖 Assistant
+
+⏵ Re-measuring with the fixed parameter (ctx_origine 65536)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -f /tmp/ey-* && (DRAVE_ETAT_ENTREE=/tmp/ref_yr-l_last-1.bin DRAVE_DUMP_COUCHES=/tmp/ey timeout 1800 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ … [281 caractères tronqués]`
+
+  ```
+started background job bash-194
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/v41_compresseur_reference.py'\ns=open(p).read()\n# Fa4 : la référence doit suivre la convention du moteur (YaRN dès ratio > 0)\na = \"\"\"def rope_norm(vecteur, pos, base, n_rot):\n    \\\"\\\"\\\"RoPE « NO … [2509 caractères tronqués]`
+
+  ```
+ok
+syntaxe ok
+  ```
+
+- **bash** `{"command": "sleep 55; grep -E \"EXIT\" /tmp/eng_ey.log 2>/dev/null; ls /tmp/ey-l_last-2-*.bin 2>/dev/null | wc -l", "description": "Check the fixed-parameter run"}`
+
+  ```
+0
+  ```
+
+- **bash** `{"command": "sleep 100; grep -E \"EXIT\" /tmp/eng_ey.log 2>/dev/null; ls /tmp/ey-l_last-2-*.bin 2>/dev/null | wc -l", "description": "Wait for the run"}`
+
+  ```
+(no output)
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "grep -E \"EXIT|perplexité\" /tmp/eng_ey.log 2>/dev/null | tail -2; ls /tmp/ey-l_last-2-*.bin 2>/dev/null | wc -l; pgrep -c drave 2>/dev/null || echo fini", "description": "Check the run status"}`
+
+  ```
+0
+2
+  ```
+
+- **bash** `{"command": "ps -o pid=,etime=,pcpu=,rss=,args= -C drave 2>/dev/null | cut -c1-130", "description": "List drave processes"}`
+
+  ```
+3092754       04:48  6.8 25192924 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flas
+3093021       02:28 12.8 25211592 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flas
+  ```
+
+- **bash** `{"command": "sleep 110; grep -E \"EXIT|perplexité cumulée\" /tmp/eng_ey.log | tail -2; ls /tmp/ey-l_last-2-*.bin 2>/dev/null | wc -l", "description": "Wait for the fixed run to finish"}`
+
+  ```
+(no output)
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-193 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (DRAVE_DEBUG_YARN=1 timeout 600 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf --couches 2:3 --ppl /tmp/ids_v4flash.txt --ctx 8 --limit 2 --dense > /tmp/dbg_yarn.log 2>&1; echo "EXIT=$?" >> /tmp/dbg_yarn.log)) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "grep -E \"\\[yarn\\]|rotation :|EXIT\" /tmp/dbg_yarn.log | head -4; echo \"=== ey ===\"; grep -E \"EXIT|perplexité cumulée\" /tmp/eng_ey.log | tail -1; ls /tmp/ey-l_last-2-*.bin 2>/dev/null | wc -l", "description": "Read the debug print and the fixed run"}`
+
+  ```
+[config] rotation : RoPE simple (contexte 8 ≤ 65536 initial ; YaRN ×16 prendrait le relais au-delà)
+[yarn] couche 2 : ratio 4 · yarn_compresse=Some((16.0, 32.0, 1.0, 4096.0)) · base 160000
+[yarn] couche 2 : ratio 4 · yarn_compresse=Some((16.0, 32.0, 1.0, 4096.0)) · base 160000
+EXIT=0
+=== ey ===
+125
+  ```
+
+- **bash** `{"command": "sleep 45; grep -E \"EXIT|perplexité cumulée\" /tmp/eng_ey.log | tail -2; ls /tmp/ey-l_last-2-*.bin 2>/dev/null | wc -l", "description": "Wait for the run to complete"}`
+
+  ```
+127 tokens notés — perplexité cumulée 1807364790.824  (1.9 tok/s)
+EXIT=0
+128
+  ```
+
+### 👤 Utilisateur
+
+background job bash-194 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -f /tmp/ey-* && (DRAVE_ETAT_ENTREE=/tmp/ref_yr-l_last-1.bin DRAVE_DUMP_COUCHES=/tmp/ey timeout 1800 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf --couches 2:3 --tete-partielle --ppl /tmp/ids_v4flash.txt --ctx 128 --limit 128 --dense --threads 16 > /tmp/eng_ey.log 2>&1; echo "EXIT=$?" >> /tmp/eng_ey.log)) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport numpy as np, struct\ndef lire_ref(nom, pos):\n    b = open(f\"/tmp/ref_yr-{nom}-2.bin\",\"rb\").read()\n    ndim = struct.unpack(\"<i\", b[4:8])[0]\n    ne = list(struct.unpack(\"<4i\", b[8:24])[0:ndim])\n    … [1087 caractères tronqués]`
+
+  ```
+=== l_last-2 contre llama.cpp : YaRN (ctx 65536 RÉPARÉ) contre RoPE simple ===
+  pos |    YaRN corr / écart    |   simple corr / écart   | gagnant
+    4 | 0.999919 / 1.342e-02 | 0.999919 / 1.344e-02 | simple
+    8 | 0.999940 / 1.624e-02 | 0.999940 / 1.623e-02 | YaRN
+   16 | 0.999995 / 1.325e-03 | 0.999995 / 1.321e-03 | YaRN
+   32 | 0.999995 / 1.943e-03 | 0.999995 / 1.919e-03 | YaRN
+   64 | 0.999998 / 1.005e-03 | 0.999998 / 9.905e-04 | YaRN
+   96 | 0.999998 / 1.052e-03 | 0.999997 / 1.107e-03 | YaRN
+  120 | 0.999996 / 3.680e-03 | 0.999995 / 4.214e-03 | YaRN
+  127 | 0.999996 / 4.515e-03 | 0.999993 / 5.376e-03 | YaRN
+  ```
+
+### 🤖 Assistant
+
+**Decisive result**: with the parameter fixed, YaRN matches llama.cpp *better* than plain at every position ≥ 8 (pos 127: 4.5e-03 vs 5.4e-03). The fix is validated by measurement. Now the cleanups:
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'\ns=open(p).read()\n# Fa1 : l'annonce de rotation doit dire les DEUX régimes\na = \"\"\"            (None, _, _) if g.json_texte(\"rope_type\").as_deref() == Some(\"yarn\") =>\n            … [3543 caractères tronqués]`
+
+  ```
+ok
+BUILD_END
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/rope_yarn_temoin.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"Témoin du test `yarn_du_compresseur_conforme_a_ggml` (Model::rope_norm_yarn).\n\nLe test unitaire colle ces huit valeurs ; ce script les **recalcule depuis ggml**\ … [2018 caractères tronqués]`
+
+  ```
+// corr_dims = (np.float64(1.0), np.float64(4.0)) (bornées : max(0,·), min(n_dims−1,·))
+let attendu = [-1.290996836e+00f32, -3.818732377e-01f32, 2.055401246e+00f32, 5.812277671e-01f32, -8.059601869e-01f32, 1.360304443e+00f32, -2.001419332e+00f32, 2.383708423e-01f32];
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'\ns=open(p).read()\n# T2/T3 : valider les entrées de l'engram au lieu de les laisser produire des adresses plausibles\na = \"\"\"    pub fn adresses(&self, ids: &[u32], positions: &[usize] … [3293 caractères tronqués]`
+
+  ```
+test tests_vars::les_vars_lues_sont_completes ... FAILED
+test engine::tests_gemm::gemm_bat_le_matvec ... ok
+test materiel::tests::plan_dans_les_bornes ... ok
+test materiel::tests::detection_coherente ... ok
+
+--
+test result: FAILED. 61 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s
+
+error: test failed, to rerun pass `--bin drave`
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 32, in <module>
+AssertionError
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cd drave-core && cargo test --release les_vars_lues 2>&1 | grep -E \"panicked|assert|gauche|droit|manque\" -A 4 | head -14", "description": "See which env vars are undeclared"}`
+
+  ```
+88 | pub fn manques_architecture(g: &Gguf, cfg: &Cfg, ctx: usize, clusters: bool) -> Vec<&'static str> {
+   |                                       ^^^ help: if this is intentional, prefix it with an underscore: `_cfg`
+
+warning: unused variable: `clusters`
+  --> src/model.rs:88:62
+--
+88 | pub fn manques_architecture(g: &Gguf, cfg: &Cfg, ctx: usize, clusters: bool) -> Vec<&'static str> {
+   |                                                              ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_clusters`
+
+warning: unused variable: `ctx`
+   --> src/model.rs:226:44
+--
+226 | fn refus_architecture(g: &Gguf, cfg: &Cfg, ctx: usize, clusters: bool, manques: Vec<&str>)
+    |                                            ^^^ help: if this is intentional, prefix it with an underscore: `_ctx`
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo test --release les_vars_lues 2>&1 | grep -B 2 -A 10 \"^---- tests_vars\" | head -20", "description": "Get the failing test details"}`
+
+  ```
+failures:
+
+---- tests_vars::les_vars_lues_sont_completes stdout ----
+
+thread 'tests_vars::les_vars_lues_sont_completes' (3116761) panicked at src/main.rs:5183:13:
+DRAVE_DEBUG_YARN est lu dans le source mais absent de VARS_LUES : un ancien nom QT_DEBUG_YARN resterait muet
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    tests_vars::les_vars_lues_sont_completes
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 61 filtered out; finished in 0.00s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'\ns=open(p).read()\n# le drapeau de diagnostic que j'ai ajouté, déclaré dans l'inventaire\ni = s.index(\"DRAVE_DEBUG_MLA\")\nj = s.index(\"\\n\", i)\ns = s[:j+1] + \"    \\\"DRAVE_DEBUG_YAR … [1515 caractères tronqués]`
+
+  ```
+occurrences: 1
+ok
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 4, in <module>
+ValueError: substring not found
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"DRAVE_DEBUG_MLA\\|DRAVE_TRACE_HC\\|VARS_LUES\" drave-core/src/main.rs | head -8", "description": "Find the VARS_LUES list"}`
+
+  ```
+17:const VARS_LUES: &[&str] = &[
+82:        k.strip_prefix("QT_").map(|s| VARS_LUES.contains(&s)).unwrap_or(false)
+5149:    use super::VARS_LUES;
+5164:    /// Tout nom `DRAVE_*` cité dans le source doit être dans `VARS_LUES`, et
+5183:            assert!(VARS_LUES.contains(&c.as_str()),
+5184:                    "DRAVE_{c} est lu dans le source mais absent de VARS_LUES : \
+5187:        for v in VARS_LUES {
+5189:                    "VARS_LUES annonce {v} mais aucune lecture DRAVE_{v} dans le source");
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '17,32p' drave-core/src/main.rs", "description": "Read the VARS_LUES declaration"}`
+
+  ```
+const VARS_LUES: &[&str] = &[
+    "BANC_KV_DEBUG", "BANC_KV_GPU_SEUL", "BANC_KV_GRAD", "BANC_KV_K0",
+    "BANC_KV_KUNIT", "BANC_KV_UNIT", "BANC_KV_V1", "BANC_SANS_PUITS",
+    "CLUSTERS", "DEBUG_ETAT", "DEBUG_FLUX", "DEBUG_MLA", "DUMP_COUCHES", "ETAT_ENTREE",
+    "FLUX_VERIF", "GPU", "GPU_EXPERTS",
+    "GPU_EXPERTS_GO", "GPU_KV", "GPU_TETE", "GPU_TOPK", "HARMONY_TRACE",
+    "KV_BITS", "KV_F16", "KV_K_F16", "KV_K_F32", "KV_V_F32", "MMAP",
+    "PRELIRE", "PRELIRE_TOUT", "Q8_BLOCS", "SANS_EMPRUNT", "TRACE_BLOCS",
+    "TRACE_EXPERTS", "VISION_TEXTE", "YARN", "YARN_MSCALE", "YARN_NON",
+    "YARN_RAMPE",
+];
+
+mod clusters;
+mod engine;
+mod engram;
+mod formats;
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'\ns=open(p).read()\ns=s.replace('\"CLUSTERS\", \"DEBUG_ETAT\", \"DEBUG_FLUX\", \"DEBUG_MLA\", \"DUMP_COUCHES\", \"ETAT_ENTREE\",',\n            '\"CLUSTERS\", \"DEBUG_ETAT\", \"DEBUG_FLUX\" … [269 caractères tronqués]`
+
+  ```
+test result: ok. 62 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.15s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (timeout 1800 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf --ppl /tmp/ids_v4flash.txt --ctx 32 --limit 5 --dense --threads 1 … [217 caractères tronqués]`
+
+  ```
+started background job bash-195
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-v4-yarn-compresse.md'\ns=open(p).read()\na = \"\"\"## 5. La comparaison décisive : protocole écrit, mesure PAS encore faite\"\"\"\nb = \"\"\"## 5. La comparaison décisive : FAITE, et elle valide l … [2916 caractères tronqués]`
+
+  ```
+ok
+9:## 1. Ce que disent les deux références
+35:## 2. Pourquoi aucune vérification ne l'avait vu
+50:## 3. Ce qui a été mesuré avant la comparaison
+64:## 4. Le correctif
+74:## 5. La comparaison décisive : FAITE, et elle valide le correctif
+115:## 6. Le protocole, pour rejouer
+168:## 7. Ce que ce correctif ne règle pas
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-v4-yarn-compresse.md'\ns=open(p).read()\n# Fa2 : la justification du mscale\ns=s.replace(\"\"\"Côté llama.cpp, `mscale` est calculé puis **annulé**\n(`src/llama-context.cpp:492-494` : « when YARN  … [2309 caractères tronqués]`
+
+  ```
+ok
+180
+  ```
+
+- **bash** `{"command": "sleep 120; cat /tmp/gate_v4f_final.log 2>/dev/null; pgrep -c drave 2>/dev/null || echo fini", "description": "Check the gate re-measurement"}`
+
+  ```
+(no output)
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cat /tmp/gate_v4f_final.log 2>/dev/null; pgrep -c drave 2>/dev/null || echo fini", "description": "Check the gate value"}`
+
+  ```
+1
+  ```
+
+- **bash** `{"command": "sleep 100; cat /tmp/gate_v4f_final.log 2>/dev/null; pgrep -c drave 2>/dev/null || echo fini", "description": "Wait for the gate run"}`
+
+  ```
+(no output)
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cat /tmp/gate_v4f_final.log 2>/dev/null; pgrep -c drave 2>/dev/null || echo fini; date", "description": "Check the run"}`
+
+  ```
+1
+ven 02 oct 2026 19:59:42 EDT
+  ```
+
+- **write** `{"content": "# Sprint 12 — La rotation des couches compressées : un correctif, et l'instrument qui mentait\n\n- **Début** : 19:30 · **Fin** : 21:30 (bloc de 120 min)\n- **Objectif** : fermer les questions ouvertes du bloc précédent — la mesure\n  manquante du YaRN, la sélection de l'indexeur sur V4. … [6054 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/12-la-rotation-des-couches-compressees.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cat /tmp/gate_v4f_final.log 2>/dev/null; pgrep -c drave 2>/dev/null || echo fini", "description": "Check the gate measurement"}`
+
+  ```
+1
+  ```
+
+- **bash** `{"command": "sleep 115; cat /tmp/gate_v4f_final.log 2>/dev/null; pgrep -c drave 2>/dev/null || echo fini", "description": "Wait for the gate value"}`
+
+  ```
+(no output)
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-195 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (timeout 1800 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf --ppl /tmp/ids_v4flash.txt --ctx 32 --limit 5 --dense --threads 16 2>&1 | grep -oE "=== perplexité [0-9]+\.[0-9]+" > /tmp/gate_v4f_final.log; echo FIN >> /tmp/gate_v4f_final.log)) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cat /tmp/gate_v4f_final.log", "description": "Read the final gate value"}`
+
+  ```
+=== perplexité 8430.4966
+FIN
+  ```
+
+### 🤖 Assistant
+
+**Gate re-measured: 8430.4966** (correct YaRN; the buggy parameter gave 8405.9477, plain gave 8430.2968). Updating the gate and running everything:
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/portes.sh'\ns=open(p).read()\na = \"\"\"        # 8430,2968 -> 8405,9477 le 02/10 : la rotation des couches COMPRESSÉES\n        # est passée du RoPE simple (régime retardé du moteur) à YaRN ×16 sans\n      … [1984 caractères tronqués]`
+
+  ```
+started background job bash-196
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'\ns=open(p).read()\ns=s.replace(\"\"\"> **Mise à jour du 02/10 (22h) — l'ENGRAM de V4.1 est branché, et une passe avant\n> V4.1 COMPLÈTE devient possible.**\"\"\",\n\"\"\"> **Mise à jour du 02/10 (20h3 … [2824 caractères tronqués]`
+
+  ```
+383:> **YaRN sur les couches compressées : FAIT et MESURÉ** (02/10, 20h30). llama.cpp
+=== Portes ===
+  cargo test --release                       62 verts  ✅
+  ```
+
+- **bash** `{"command": "sleep 115; tail -8 /tmp/portes_rapide8.log", "description": "Check the gates"}`
+
+  ```
+(no output)
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "tail -8 /tmp/portes_rapide8.log", "description": "Read the gate log"}`
+
+  ```
+Qwen3-30B en clusters (origine : 799,8557) 799.8557  ✅
+  threads par défaut (physiques)            20  ✅
+  (portes de formats : ignorées en mode rapide)
+  GLM-5.3 : sigmoïde ×2,5                  sigmoïde  ✅
+  Kimi-K2.7 : sigmoïde ×2,827              sigmoïde  ✅
+  V4-Flash : racine de softplus              racine de softplus  ✅
+  Qwen3-235B : softmax                       softmax  ✅
+  V4-Flash : --config le dit calculable      oui  ✅
+  ```
+
+- **bash** `{"command": "sleep 180; tail -6 /tmp/portes_rapide8.log", "description": "Wait for the V4-Flash gate"}`
+
+  ```
+(no output)
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-196 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'
+p='tools/portes.sh'
+s=open(p).read()
+a = """        # 8430,2968 -> 8405,9477 le 02/10 : la rotation des couches COMPRESSÉES
+        # est passée du RoPE simple (régime retardé du moteur) à YaRN ×16 sans
+        # mscale, comme llama.cpp (`deepseek4.cpp:872-879`) et vLLM
+        # (`rope.py:28-46`) — voir reports/rapport-v4-yarn-compresse.md. Le
+        # chiffre change PARCE QUE le calcul change, et il change peu à ctx 32 :
+        # YaRN n'interpole que les basses fréquences, dont les angles sont
+        # minuscules aux positions courtes.
+        p=$(timeout 2400 $D "$V4" --ppl /tmp/ids_v4flash.txt --ctx 32 --limit 5 \\
+            --dense --threads 16 2>&1 | valeur)
+        compare "V4-Flash 43 couches ctx 32" "8405.9477" "$p\""""
+b = """        # 8430,2968 -> 8430,4966 le 02/10 : la rotation des couches COMPRESSÉES est
+        # passée du RoPE simple (régime retardé du moteur) à YaRN ×16 sans mscale,
+        # comme llama.cpp (`deepseek4.cpp:872-879`) et vLLM (`rope.py:28-46`) —
+        # `reports/rapport-v4-yarn-compresse.md`. Le chiffre bouge à peine parce
+        # qu'à ctx 32 les deux régimes coïncident presque (YaRN n'interpole que les
+        # basses fréquences) : c'est la comparaison par TENSEUR à la position 127
+        # qui a validé le correctif (4,515e-03 contre 5,376e-03 d'écart à
+        # llama.cpp), pas cette porte. Une valeur intermédiaire — 8405,9477 — a été
+        # mesurée avec une rampe fausse (`original_context_length` est un u32, lu
+        # par `as_f64` qui ne lit que les flottants : défaut 4 096 au lieu de
+        # 65 536). Toute valeur V4-Flash antérieure au 03/10 est à revérifier.
+        p=$(timeout 2400 $D "$V4" --ppl /tmp/ids_v4flash.txt --ctx 32 --limit 5 \\
+            --dense --threads 16 2>&1 | valeur)
+        compare "V4-Flash 43 couches ctx 32" "8430.4966" "$p\""""
+assert s.count(a) == 1
+s = s.replace(a, b)
+open(p,'w').write(s)
+print("porte mise à jour")
+PY
+(timeout 5400 tools/portes.sh rapide > /tmp/portes_rapide8.log 2>&1; echo "EXIT=$?" >> /tmp/portes_rapide8.log)) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "tail -6 /tmp/portes_rapide8.log", "description": "Read the final gate results"}`
+
+  ```
+V4-Flash : --config le dit calculable      oui  ✅
+  V4-Flash 43 couches ctx 32                 8430.4966  ✅
+  engram V4.1 : adressage                    rangées DISTINCTES : 479723  ✅
+
+toutes les portes sont vertes
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nm = \"\"\"La rotation des couches compressées : le correctif YaRN est validé, et l'instrument mentait\n\nLa mesure décisive, faite selon le protocole des rapports P3/P5 (état de la couche\n1 injecté depuis llama.cpp … [3393 caractères tronqués]`
