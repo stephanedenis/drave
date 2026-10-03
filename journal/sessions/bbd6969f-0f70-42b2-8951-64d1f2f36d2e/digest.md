@@ -97561,3 +97561,11 @@ ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"docs/plan-deepseek41-complet.md\"\ns=open(p).read()\na=\"\"\"> **Masque des jetons d'image : décision écrite, non implémenté.**\"\"\"\nb=\"\"\"> **L'ablation grandit avec le contexte** : mêmes réglages, mêmes je … [3184 caractères tronqués]`
+
+  ```
+ok plan
+ok REPRISE
+1294992 Engram : l'ablation grandit avec le contexte (22 % → 55 %), et la formule est exclue comme cause
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"sprints/14-p8-la-vivacit-de-l-engram-interrupteur-d.md\"\ns=open(p).read()\na=\"- **Début** : 21:20 · **Fin prévue** : 23:20 (boxing de 120 min)\"\nb=\"\"\"- **Début** : 21:20 · **Fin** : 22:10 (50 min utiles —  … [640 caractères tronqués]`

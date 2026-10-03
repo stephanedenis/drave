@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 103.2 h |
 | Tours | 79 |
-| Messages | 6070 |
-| Appels d'outils | 5813 |
+| Messages | 6071 |
+| Appels d'outils | 5814 |
 | Fichiers touchés | 114 |
-| Commandes | 4894 |
+| Commandes | 4895 |
 | Sous-agents | 32 |
-| Commits | 371 |
+| Commits | 372 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -4037,7 +4037,7 @@ P0-P6 faites, P8 portée et val
 
 ### Tour 79 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [941 caractères tronqués]
 
-*1073 appels d'outils.* Actions notables :
+*1074 appels d'outils.* Actions notables :
 
 - web_search
 - web_fetch
@@ -4053,7 +4053,7 @@ P0-P6 faites, P8 portée et val
 - bash — Locate hc_collapse_triton definition
 - read
 - bash — Read mHC init and pre/post call sites
-- … et 951 autres
+- … et 952 autres
 
 **Synthèse produite :**
 
@@ -4257,7 +4257,7 @@ P0-P6 faites, P8 portée et val
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 4854 autres
+- … et 4855 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4776,4 +4776,5 @@ P0-P6 faites, P8 portée et val
 - La réduction finale devient vérifiable par tenseur, et np = 1 entre dans les tests  Deux « faibles » de la relecture adverse du bloc 13 sont fermés dans le code
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/msg14.txt <<'MSGEOF' La réduction finale devient vérifiable par tenseur, et np = 1 entre dans l
 - Engram : l'ablation grandit avec le contexte (22 % → 55 %), et la formule est exclue comme cause  Deux mesures de plus, mêmes réglages, mêmes jetons, deux fenêt
+- Sprint 14 : clôture (50 min utiles) — les trois chantiers sont livrés et mesurés" && tools/sprint.sh start "P9 — le poste d'attention V4.1 : profiler les 12,4 s
 
