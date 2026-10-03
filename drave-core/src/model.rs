@@ -7544,7 +7544,7 @@ pas apprise — le flux doit transporter ces {} valeurs par jeton",
         // 32767 niveaux (le corps du modèle, lui, n'est pas concerné : il
         // transporte des i32 dans le vecteur creux).
         let mut qx = vec![0i16; h.len()];
-        for (&i, &v) in sv.idx.iter().zip(sv.val.iter()) { qx[i as usize] = v as i16; }
+        for (&i, &v) in sv.idx.iter().zip(sv.val.iter()) { qx[i as usize] = v.clamp(-32767, 32767) as i16; }
         let vocab = self.cfg.vocab;
         let view = self.g.q8_view(&self.tete);
         let nt = self.pool.threads().max(1);
@@ -7643,7 +7643,7 @@ lignes ne sont pas calculées, la restriction garantie est indisponible", self.t
             None => return (vec![0f32; vocab], 0, 0.0),
         };
         let mut qx = vec![0i16; h.len()];
-        for (&i, &v) in sv.idx.iter().zip(sv.val.iter()) { qx[i as usize] = v as i16; }
+        for (&i, &v) in sv.idx.iter().zip(sv.val.iter()) { qx[i as usize] = v.clamp(-32767, 32767) as i16; }
         // ||h|| dans la MÊME unité que les poids : `logits = Σ d·q·x·sx`, donc la
         // borne porte sur `||w|| · ||x·sx||`.
         let norme_h = (qx.iter().map(|&v| (v as f32) * (v as f32)).sum::<f32>()).sqrt() * sx;

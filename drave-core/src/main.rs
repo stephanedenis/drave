@@ -850,7 +850,7 @@ IDENTIQUE, seule la lecture change", mdl.tete_garantie.as_ref().unwrap().len(),
                      / mdl.cfg.vocab as f64);
         }
     }
-    mdl.act_levels = ((1u32 << (abits - 1)) - 1) as f32;
+    poser_niveaux(&mut mdl, abits, "inférence");
     mdl.moe_topk = moe_topk;
     mdl.act_thresh = act_thresh;
     mdl.act_topk = act_topk;
@@ -2020,9 +2020,32 @@ fn run_tensors() {
 /// `--ppl-reparti` : un `--act-thresh 0,05` n'y changeait rien, et le mode
 /// « listes » transportait donc une liste PLEINE au lieu d'une liste creuse —
 /// le défaut « le drapeau est analysé mais jamais appliqué », déjà vu cinq fois.
+/// Niveaux d'activation pour `--abits N`, **bornés à ce que le stockage accepte**.
+///
+/// Les activations quantifiées circulent en `i16` (les noyaux d'experts prennent
+/// `&[i16]`) et les conversions saturent à ±32 767. Au-delà de 16 bits, les
+/// valeurs quantifiées dépassent cette borne : elles étaient SILENCIEUSEMENT
+/// ramenées à 32 767, ce qui revient à diviser l'activation par 2^(abits−16) —
+/// mesuré sur V4.1 : `--abits 16` donne 12 889 de perplexité, `--abits 24` en
+/// donne 127 496 (10× pire), sans un mot. On borne donc, et on le DIT.
+fn niveaux_activation(abits: u32) -> f32 {
+    let abits = abits.clamp(1, 16);
+    ((1u32 << (abits - 1)) - 1) as f32
+}
+
+/// Applique `--abits` en le bornant, en ANNONÇANT la borne.
+fn poser_niveaux(mdl: &mut model::Model, abits: u32, source: &str) {
+    if abits > 16 {
+        eprintln!("[activation] --abits {abits} demandé ({source}) : borné à 16 (32 767 \
+niveaux), la borne du stockage i16 des activations quantifiées. Au-delà, les valeurs \
+étaient silencieusement saturées et le calcul faux d'un facteur 2^(abits-16).");
+    }
+    mdl.act_levels = niveaux_activation(abits);
+}
+
 fn appliquer_quantification(mdl: &mut model::Model, opt: &Options) {
     let abits = if opt.abits_impose { opt.abits } else { 8 };
-    mdl.act_levels = ((1u32 << (abits - 1)) - 1) as f32;
+    poser_niveaux(mdl, abits, "modes flux");
     mdl.act_thresh = opt.act_thresh;
     mdl.act_topk = opt.act_topk;
     mdl.act_renorm = opt.act_renorm;
@@ -4680,7 +4703,7 @@ calculee sur un vocabulaire restreint n'est comparable a rien. Utilisez --infer.
                   les mêmes jetons sont donc comparables à contexte 512, 1 024, 4 096…");
     }
     mdl.moe_topk = moe_topk;
-    mdl.act_levels = ((1u32 << (abits - 1)) - 1) as f32;
+    poser_niveaux(&mut mdl, abits, "perplexité");
     if let Some(f) = &patch_file {
         let pt = model::Patch::load(f).expect("chargement du greffon");
         let norme = |v: &[f32]| v.iter().map(|x| x * x).sum::<f32>().sqrt();
@@ -5002,6 +5025,27 @@ prédit rien) — la perplexité cumulée n'a pas de sens ici");
             println!("    dont attention V4 (attn_v4) : projets q/kv {:.2} | compresseur {:.2} | indexeur {:.2} | scores + softmax + somme {:.2} | dé-rotation + sortie groupée {:.2}",
                      v[0], v[1], v[2], v[3], v[4]);
         }
+    }
+}
+
+#[cfg(test)]
+mod tests_niveaux {
+    //! `--abits` : la borne du stockage i16. Au-delà de 16 bits, les valeurs
+    //! quantifiées étaient ramenées à 32 767 par les conversions (et *enroulées*
+    //! là où la conversion n'était pas bornée) : mesuré sur V4.1, `--abits 24`
+    //! donnait 127 496 de perplexité au lieu de 12 889, sans un mot.
+    use super::*;
+
+    #[test]
+    fn les_niveaux_sont_bornes_par_le_stockage() {
+        assert_eq!(niveaux_activation(8), 127.0);
+        assert_eq!(niveaux_activation(16), 32767.0);
+        // au-delà de 16 bits, on borne (et `poser_niveaux` le DIT)
+        assert_eq!(niveaux_activation(24), 32767.0);
+        assert_eq!(niveaux_activation(32), 32767.0);
+        // et jamais zéro ni négatif : `1 << (abits-1)` avec abits = 0 paniquait
+        assert_eq!(niveaux_activation(0), 0.0);
+        assert_eq!(niveaux_activation(1), 0.0);
     }
 }
 

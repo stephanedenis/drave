@@ -73,6 +73,27 @@ et le résultat est sans ambiguïté :
   le biais, quoique grand (~9,8), est presque CONSTANT (étendue 0,29), donc c'est
   bien le contenu qui départage les experts ✓.
 
+### 2quater. Un défaut SILENCIEUX trouvé en chemin : `--abits` au-delà de 16
+
+En cherchant si la quantification d'activation était la cause, `--abits 24` a
+donné **127 496** de perplexité contre 12 889 à 16 bits — *dix fois pire avec une
+quantification plus fine*, ce qui n'a aucun sens. Cause : les activations
+quantifiées circulent en `i16` (les noyaux d'experts prennent `&[i16]`) et les
+conversions bornaient à ±32 767 — au-delà de 16 bits les valeurs étaient donc
+SILENCIEUSEMENT ramenées à 32 767, soit une activation divisée par 2^(abits−16) —
+et deux conversions n'étaient même pas bornées : elles **enroulaient** (modulo
+65 536), ce qui donnait un résultat différent encore (116 415).
+
+Corrigé : une seule fonction `niveaux_activation` borne à 16 bits, `poser_niveaux`
+l'ANNONCE (« --abits 24 demandé : borné à 16 (32 767 niveaux), la borne du stockage
+i16 »), les deux conversions non bornées le sont, et un test unitaire fixe la
+borne (64 tests). Vérifié : `--abits 16` et `--abits 24` rendent maintenant
+**exactement** 12 889,4182.
+
+Ce n'est pas le défaut de V4.1 (16 bits est dans les bornes, et le résultat à
+16 bits est inchangé), mais c'est un défaut bien réel : un drapeau qui changeait
+le calcul d'un facteur 256 sans un mot.
+
 ### 3. La piste qui reste, et elle est étroite
 
 Le défaut survit à tout ce qui est propre à V4.1 **sauf** ce qui touche à

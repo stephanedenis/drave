@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 108.8 h |
-| Tours | 79 |
-| Messages | 6351 |
-| Appels d'outils | 6093 |
+| Durée | 109.0 h |
+| Tours | 80 |
+| Messages | 6363 |
+| Appels d'outils | 6103 |
 | Fichiers touchés | 118 |
-| Commandes | 5158 |
+| Commandes | 5168 |
 | Sous-agents | 32 |
-| Commits | 400 |
+| Commits | 401 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -201,6 +201,8 @@
 **Tour 78** — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en respectant pour chaque phase ses deux portes : porte de correction (comparaison étage par étage à llama.cpp sur V4-Flash) et porte Drave (flux : événements/paires par jeton, trace rejouée à l'identique, découpage en grappes, flux lisible par un outil d'analyse). Aucune phase ne passe … [661 caractères tronqués]
 
 **Tour 79** — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en respectant pour chaque phase ses deux portes : porte de correction (comparaison étage par étage à llama.cpp sur V4-Flash) et porte Drave (flux : événements/paires par jeton, trace rejouée à l'identique, découpage en grappes, flux lisible par un outil d'analyse). Aucune phase ne passe … [661 caractères tronqués]
+
+**Tour 80** — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en respectant pour chaque phase ses deux portes : porte de correction (comparaison étage par étage à llama.cpp sur V4-Flash) et porte Drave (flux : événements/paires par jeton, trace rejouée à l'identique, découpage en grappes, flux lisible par un outil d'analyse). Aucune phase ne passe … [661 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -4057,7 +4059,41 @@ P0-P6 faites, P8 portée et val
 
 **Synthèse produite :**
 
-⏵ Fermeture du dernier trou : un vide pour la réduction finale, et un test `np=1`
+⏵ Bilan de la nuit : trois blocs livrés, un verdict dur sur V4.1, tout commité
+
+**Blocs 20 et 21 (02/10 22h → 03/10 03h35) — le verdict, et ce qu'il change**
+
+**V4.1 ne prédit pas.** Mesuré, pas déduit :
+| moteur | modèle | PPL sur 8 répétitions d'une phrase |
+|---|---|---|
+| **llama.cpp** (référence externe) | V4-Flash IQ1_M | **1,844** |
+| **Drave** | V4-Flash IQ1_M, mêmes identifiants | **1,875** |
+| Drave | **V4.1-Flash Q2** | **3 677** (sans engram) à 7 506 |
+- Sur 31 positions réelles : **top-1 0/31**, NLL **11,657 nats** pour un uniforme à 11,770 — le hasard. La tête : les logits sont confiants (entropie 3,5 nats) mais **faux**.
+- Le tokenizer est hors de cause (outil neuf `tools/tokenize_llama` compilé contre llama.cpp : identifiants **identiques**).
+- **Le chemin V4 partagé est juste** (V4-Flash prédit) → le défaut est dans ce que V4.1 instancie, et **douze hypothèses ont été éliminées par la mesure** : chaîne retardée (relue mot pour mot dans la source vLLM publiée : conforme ✓), tête, engram, blocs, compression entière, clamp SwiGLU (lu seulement en liste — **corrigé**, V4.1 déclare un scalaire), explosion du résidu (V4-Flash a le même profil), biais VL (41× pire), emprunt Q8_0, embarquement (**0,000e+00** vs le fichier), routeur (**sélection identique** à numpy), noms de tenseurs (identiques à V4-Flash).
+- Ce qui reste : **la composition du chemin des experts** — ses formats IQ2_XXS/Q2_K sont validés bloc par bloc contre libggml, jamais leur assemblage.
+
+**Effets sur le dépôt** : `docs/plan-deepseek41-complet.md` (P7) et `REPRISE.md` portent l'avertissement en tête ; tout chiffre V4.1 devient une **référence de non-régression**, pas une qualité ; dix drapeaux d'ablation sont en place (chacun annonce ce qu'il fait) ; `--ppl-profil` (documenté mais **sans drapeau** depuis des semaines) est branché ; l'audit de docs périmé est daté.
+
+**Les performances de la nuit restent valides** (elles calculent juste un modèle cassé) : passe ctx 32 de V4.1 **313,1 s → 88,5 s (×3,54)**, ctx 8 **66-68 s → 10,7 s**, et **5 670 tenseurs comparés à 0 écart** ; porte V4-Flash **8430,4966** inchangée ; deux idées **refusées par la mesure** (cache RAM d'experts, SIMD du produit scalaire). 41 commits, toutes les portes vertes.
+
+Dis-moi si je poursuis sur le bloc 22 (la composition des experts en numpy, plan écrit dans `sprints/21`) ou si je reprends un autre axe.
+
+### Tour 80 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [941 caractères tronqués]
+
+*10 appels d'outils.* Actions notables :
+
+- bash — Test whether finer activation quantization fixes V4.1
+- bash — Inspect the activation quantization
+- bash — Find the i16 casts of quantized activations
+- bash — Bound --abits and the i16 casts
+- bash — Verify the bound and the tests
+- bash — Debug the abits handling
+- bash — Locate the remaining unclamped sites
+- bash — Bound the perplexity path too and verify
+- bash — Add a test for the levels bound
+- bash — Commit the silent abits defect fix
 
 ## 3. Travail accompli
 
@@ -4261,7 +4297,7 @@ P0-P6 faites, P8 portée et val
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5118 autres
+- … et 5128 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4809,4 +4845,5 @@ P0-P6 faites, P8 portée et val
 - Localisation V4.1 : la tête (1e-4) et le routeur (sélection identique à la trace) sont vérifiés en numpy — il ne reste que la COMPOSITION des experts  La tête :
 - Sprint 21 : clôture (35 min) — douze hypothèses éliminées, quatre pièces vérifiées, le défaut cerné au chemin des experts" && git log --oneline -6 && echo "--- 
 - Journal : index de session à jour" && git log --oneline | head -3 && echo "--- commits de la nuit ---" && git log --oneline --since="2026-10-02 19:00" | wc -l &
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="sprints/21-localiser-le-defaut-v41.md" s=open(p).read() a="""### 3. La piste qui reste
 

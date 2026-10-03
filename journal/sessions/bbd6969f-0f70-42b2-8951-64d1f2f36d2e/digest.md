@@ -101325,3 +101325,159 @@ b5e7d9c ⚠️ V4.1 ne prédit pas : top-1 0/31, NLL 11,657 nats (uniforme 11,77
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Journal : index de session à jour\" && git log --oneline | head -3 && echo \"--- commits de la nuit ---\" && git log --oneline --since=\"2026-10-02 19:00\" | wc -l && date", "description": "Commit the … [40 caractères tronqués]`
+
+  ```
+05c2416 Journal : index de session à jour
+3252ec7 Sprint 21 : clôture (35 min) — douze hypothèses éliminées, quatre pièces vérifiées, le défaut cerné au chemin des experts
+e5ce21c Localisation V4.1 : la tête (1e-4) et le routeur (sélection identique à la trace) sont vérifiés en numpy — il ne reste que la COMPOSITION des experts
+--- commits de la nuit ---
+41
+sam 03 oct 2026 03:35:15 EDT
+  ```
+
+### 🤖 Assistant
+
+⏵ Bilan de la nuit : trois blocs livrés, un verdict dur sur V4.1, tout commité
+
+**Blocs 20 et 21 (02/10 22h → 03/10 03h35) — le verdict, et ce qu'il change**
+
+**V4.1 ne prédit pas.** Mesuré, pas déduit :
+| moteur | modèle | PPL sur 8 répétitions d'une phrase |
+|---|---|---|
+| **llama.cpp** (référence externe) | V4-Flash IQ1_M | **1,844** |
+| **Drave** | V4-Flash IQ1_M, mêmes identifiants | **1,875** |
+| Drave | **V4.1-Flash Q2** | **3 677** (sans engram) à 7 506 |
+- Sur 31 positions réelles : **top-1 0/31**, NLL **11,657 nats** pour un uniforme à 11,770 — le hasard. La tête : les logits sont confiants (entropie 3,5 nats) mais **faux**.
+- Le tokenizer est hors de cause (outil neuf `tools/tokenize_llama` compilé contre llama.cpp : identifiants **identiques**).
+- **Le chemin V4 partagé est juste** (V4-Flash prédit) → le défaut est dans ce que V4.1 instancie, et **douze hypothèses ont été éliminées par la mesure** : chaîne retardée (relue mot pour mot dans la source vLLM publiée : conforme ✓), tête, engram, blocs, compression entière, clamp SwiGLU (lu seulement en liste — **corrigé**, V4.1 déclare un scalaire), explosion du résidu (V4-Flash a le même profil), biais VL (41× pire), emprunt Q8_0, embarquement (**0,000e+00** vs le fichier), routeur (**sélection identique** à numpy), noms de tenseurs (identiques à V4-Flash).
+- Ce qui reste : **la composition du chemin des experts** — ses formats IQ2_XXS/Q2_K sont validés bloc par bloc contre libggml, jamais leur assemblage.
+
+**Effets sur le dépôt** : `docs/plan-deepseek41-complet.md` (P7) et `REPRISE.md` portent l'avertissement en tête ; tout chiffre V4.1 devient une **référence de non-régression**, pas une qualité ; dix drapeaux d'ablation sont en place (chacun annonce ce qu'il fait) ; `--ppl-profil` (documenté mais **sans drapeau** depuis des semaines) est branché ; l'audit de docs périmé est daté.
+
+**Les performances de la nuit restent valides** (elles calculent juste un modèle cassé) : passe ctx 32 de V4.1 **313,1 s → 88,5 s (×3,54)**, ctx 8 **66-68 s → 10,7 s**, et **5 670 tenseurs comparés à 0 écart** ; porte V4-Flash **8430,4966** inchangée ; deux idées **refusées par la mesure** (cache RAM d'experts, SIMD du produit scalaire). 41 commits, toutes les portes vertes.
+
+Dis-moi si je poursuis sur le bloc 22 (la composition des experts en numpy, plan écrit dans `sprints/21`) ou si je reprends un autre axe.
+
+
+## Tour 80
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en respectant pour chaque phase ses deux portes : porte de correction (comparaison étage par étage à llama.cpp sur V4-Flash) et porte Drave (flux : événements/paires par jeton, trace rejouée à l'identique, découpage en grappes, flux lisible par un outil d'analyse). Aucune phase ne passe à la suivante sans ses deux portes. Jamais de forward muet, jamais d'optimisation qui change une sortie sans le dire."
+Round: 6/30
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=/home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf && for a in 16 24; do printf \"abits %s : \" $a; ./drave-core/target/release/drave $M --ppl /tmp/repete.ids --ctx 16 --limit 13 --abits $a --threads 16 2>&1 | grep  … [148 caractères tronqués]`
+
+  ```
+abits 16 : perplexité 12889.4182 sur 12
+abits 24 : perplexité 127496.2927 sur 12
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n \"$(grep -n 'fn quant_scratch' drave-core/src/model.rs | cut -d: -f1),+30p\" drave-core/src/model.rs | head -36", "description": "Inspect the activation quantization"}`
+
+  ```
+fn quant_scratch(x: &[f32], levels: f32, thresh: f32, topk: usize, renorm: bool,
+                     scratch: &mut Vec<f32>) -> Option<(SparseVec, f32)> {
+        let mut mx = 0f32;
+        for &v in x { let a = v.abs(); if a > mx { mx = a; } }
+        if mx == 0.0 { return None; }
+        let s = mx / levels;
+        let inv = 1.0 / s;
+        // seuil absolu correspondant à la fraction demandée du maximum
+        let seuil = (thresh * levels) as i32;
+        let mut sv = SparseVec { idx: Vec::with_capacity(x.len()), val: Vec::with_capacity(x.len()) };
+        if topk > 0 {
+            // k-WTA : ne garder que les k plus grandes magnitudes (inhibition
+            // latérale). `topk` est une FRACTION de la dimension : sans cela la
+            // même valeur de k ne veut pas dire la même chose pour un vecteur de
+            // 896 et un de 4 864.
+            scratch.clear();
+            scratch.extend(x.iter().map(|v| v.abs()));
+            let mag = &mut *scratch;
+            let k = (((topk as f32) / 1000.0) * x.len() as f32).round() as usize;
+            let k = k.clamp(1, x.len());
+            // l'élément d'indice (n - k) est le k-ième PLUS GRAND : c'est le
+            // seu
+… [579 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"as i16\" drave-core/src/model.rs | head -12", "description": "Find the i16 casts of quantized activations"}`
+
+  ```
+1845:                .map(|(i, &v)| (i as u32, v.clamp(-32767, 32767) as i16))
+5056:                for (j, &v) in xi.iter().enumerate() { x16[j] = v.clamp(-32767, 32767) as i16; }
+5132:                                .clamp(-32767.0, 32767.0) as i16;
+7234:                qx[i * h + j as usize] = val.clamp(-32767, 32767) as i16;
+7358:                                                              i16::MAX as i32) as i16).collect(),
+7509:                    a[i as usize] = v.clamp(-32767, 32767) as i16; a
+7547:        for (&i, &v) in sv.idx.iter().zip(sv.val.iter()) { qx[i as usize] = v as i16; }
+7646:        for (&i, &v) in sv.idx.iter().zip(sv.val.iter()) { qx[i as usize] = v as i16; }
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"drave-core/src/main.rs\"\ns=open(p).read()\n# 1) le helper + la déclaration, avant `fn appliquer_quantification`\na=\"\"\"fn appliquer_quantification(mdl: &mut model::Model, opt: &Options) {\n    let abits = if  … [2428 caractères tronqués]`
+
+  ```
+ok main
+casts bornés : 2
+    Finished `release` profile [optimized] target(s) in 32.75s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=/home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf && echo \"=== --abits 24 après le correctif (doit annoncer la borne et rendre 12 889) ===\" && ./drave-core/target/release/drave $M --ppl /tmp/repete.ids --ctx 16 - … [260 caractères tronqués]`
+
+  ```
+=== --abits 24 après le correctif (doit annoncer la borne et rendre 12 889) ===
+      12 tokens notés — perplexité cumulée 116415.106  (0.3 tok/s)
+=== perplexité 116415.1063 sur 12 tokens (0 événements, 34.6 s) ===
+test result: ok. 63 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ./drave-core/target/release/drave /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf --ppl /tmp/repete.ids --ctx 16 --limit 13 --abits 24 --threads 16 2>&1 | head -6; grep -n \"abits\" drave-core/src/main.rs | sed -n  … [71 caractères tronqués]`
+
+  ```
+/tmp/repete.ids : 13 tokens, fenêtres de 16
+[rope] YaRN déclaré par le JSON `<arch>.config` (`rope_scaling`), pas par une clef GGUF — lu là, et ANNONCÉ
+[config] clamp SwiGLU : `swiglu_clamp_exp` absent, `swiglu_limit` = 10 appliqué aux 40 couches (V4.1 déclare un scalaire, V4 une liste)
+[config] clamp SwiGLU : `swiglu_clamp_shexp` absent, `swiglu_limit` = 10 appliqué aux 40 couches (V4.1 déclare un scalaire, V4 une liste)
+[config] cache compressé PARTAGÉ entre couches (`kv_source_layer_ids`) : 2..7 → 2 · 8..13 → 8 · 14..19 → 14 · 20..39 → 20. Les couches SOURCES projettent leur état ; les CONSOMMATRICES lisent les tampons de leur source au lieu d'en calculer d'autres — un compresseur par couche donnerait d'AUTRES clés, donc faux sans rien casser
+[config] indexeurs : couches [2, 8, 14, 20, 24, 28, 32, 36] · les quatre premières possèdent le cache de clés, les autres lisent celui de leur source de KV — une couche qui porte `indexer.proj` sans être dans cette liste serait un fichier contradictoire
+556:    ctx: usize, threads: usize, abits: u32, dense: bool, auto: bool,
+557:    /// Vrai si `--ctx`, `--threads` ou `--abits` ont été donnés : leurs défauts
+560:    ctx_impose: bool, thread
+… [737 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"(1u32 << (abits - 1)) - 1\" drave-core/src/main.rs; sed -n 850,856p drave-core/src/main.rs", "description": "Locate the remaining unclamped sites"}`
+
+  ```
+2033:    ((1u32 << (abits - 1)) - 1) as f32
+4706:    mdl.act_levels = ((1u32 << (abits - 1)) - 1) as f32;
+                     / mdl.cfg.vocab as f64);
+        }
+    }
+    poser_niveaux(&mut mdl, abits, "perplexité");
+    mdl.moe_topk = moe_topk;
+    mdl.act_thresh = act_thresh;
+    mdl.act_topk = act_topk;
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"drave-core/src/main.rs\"\ns=open(p).read()\n# 1) run_infer : le libellé doit dire « inférence »\na=\"\"\"    poser_niveaux(&mut mdl, abits, \"perplexité\");\n    mdl.moe_topk = moe_topk;\"\"\"\nb=\"\"\"    poser … [869 caractères tronqués]`
+
+  ```
+ok
+    Finished `release` profile [optimized] target(s) in 32.76s
+abits 16 :       12 tokens notés — perplexité cumulée 12889.418  (0.3 tok/s) === perplexité 12889.4182 sur 12 tokens (0 événements, 36.6 s) === 
+abits 24 : [activation] --abits 24 demandé (perplexité) : borné à 16 (32 767 niveaux), la borne du stockage i16 des activations quantifiées. Au-delà, les valeurs étaient silencieusement saturées et le calcul faux d'un facteur 2^(abits-16).       12 tokens notés — perplexité cumulée 12889.418  (0.3 tok/s) === perplexité 12889.4182 sur 12 tokens (0 événements, 34.4 s) ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"drave-core/src/main.rs\"\ns=open(p).read()\na=\"\"\"#[cfg(test)]\nmod tests_flux {\"\"\"\nb=\"\"\"#[cfg(test)]\nmod tests_niveaux {\n    //! `--abits` : la borne du stockage i16. Au-delà de 16 bits, les valeurs\ … [1095 caractères tronqués]`
+
+  ```
+ok
+test result: ok. 64 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"sprints/21-localiser-le-defaut-v41.md\"\ns=open(p).read()\na=\"\"\"### 3. La piste qui reste, et elle est étroite\"\"\"\nb=\"\"\"### 2quater. Un défaut SILENCIEUX trouvé en chemin : `--abits` au-delà de 16\n\nEn … [2889 caractères tronqués]`
