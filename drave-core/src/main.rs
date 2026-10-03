@@ -736,6 +736,14 @@ fn analyser(args: &[String]) -> Options {
             "--tete-restreinte" if i + 1 < args.len() => {
                 o.tete_restreinte = Some(suivant(i).clone()); 2 }
             "--profil-neurones" => { o.profil_neurones = true; 1 }
+            // Le profil de perplexité PAR PROFONDEUR (tranches de 256 positions)
+            // existait dans le code — seaux, affichage, commentaires — mais
+            // AUCUN drapeau ne l'activait : `ppl_profil` restait faux, et la
+            // ligne « une perplexité qui MONTE avec la position ne dit pas la
+            // même chose qu'une perplexité uniformément mauvaise » ne pouvait
+            // jamais s'imprimer. Relevé au bloc 19, en cherchant à lire le profil
+            // d'une passe de 1 024 jetons (`--ppl-profil` était inconnu).
+            "--ppl-profil" => { o.ppl_profil = true; 1 }
             "--harmony" => { o.harmony = Some("alterne".into()); 1 }
             "--harmony-assistant" => { o.harmony = Some("assistant".into()); 1 }
             "--harmony-user" => { o.harmony = Some("user".into()); 1 }

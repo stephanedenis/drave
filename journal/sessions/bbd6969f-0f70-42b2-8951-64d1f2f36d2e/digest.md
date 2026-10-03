@@ -99508,3 +99508,175 @@ passe 1024 jetons lancee
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"REPRISE.md\"\ns=open(p).read()\na=\"\"\"> **Revue adverse du bloc 13**\"\"\"\nb=\"\"\"> **Mise à jour du 03/10 (00h) — la nuit des optimisations, et pas un chiffre\n> changé.** Trois leviers, tous prouvés bit-ex … [1508 caractères tronqués]`
+
+  ```
+ok REPRISE
+      00:42 1832
+sam 03 oct 2026 00:02:50 EDT
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n \"$(grep -n '^### P5' docs/plan-deepseek41-complet.md | cut -d: -f1),+35p\" docs/plan-deepseek41-complet.md | tail -20", "description": "Read P5's indexer claims"}`
+
+  ```
+> **0,999920-0,999994** : la sélection est juste, pas seulement les scores.
+
+
+- `indexer.proj`, `indexer.attn_q_b`, `indexer.attn_k`, `indexer.k_norm`, les
+  compresseurs d'indexeur, la sélection (`candidate_topk_blocks = 2048`,
+  `candidate_block_size = 8`, `candidate_source_layer_id = 20`), puis l'attention
+  sur les seuls candidats.
+- **Flux nouveau** : la **liste des candidats par jeton** — 2 048 blocs sur
+  l'ensemble des clés. C'est le flux le plus intéressant du modèle : il décide de
+  ce que l'attention *voit*.
+- **Porte de correction** : `l_out-2`, puis les logits complets — corrélation
+  ≥ 0,99 et top-1 identique sur 4 positions, **contre llama.cpp sur V4-Flash**.
+- **Porte Drave** : la liste des candidats est tracée, sa **stabilité** mesurée
+  (recouvrement entre jetons consécutifs, périodicité), et une variante
+  « candidats de la liste précédente + vérification » est **mesurée** — c'est ici
+  que la philosophie des flux peut faire gagner quelque chose que llama.cpp ne
+  cherche même pas.
+- **Interdit** : « en deçà de `index_topk`, l'indexeur ne sert à rien ». Vrai pour
+  un banc d'essai, faux pour un moteur. Si ce raccourci est retenu pour le
+  premier jet, il est **éc
+… [43 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sleep 600; ps -o etime=,pcpu=,rss= -p $(pgrep -x drave | head -1) 2>/dev/null; echo \"---\"; ls -la /tmp/v41_1024.log 2>/dev/null; date", "description": "Monitor the long pass", "timeoutMs": 660000}`
+
+  ```
+(no output)
+[timed out after 600000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "pgrep -x drave | head -2; ps -o etime=,pcpu= -p $(pgrep -x drave | head -1) 2>/dev/null; ls -la /tmp/v41_1024.log 2>/dev/null; date", "description": "Check the pass status"}`
+
+  ```
+1229401
+      11:07 2371
+-rw-r--r--. 1 stephane stephane 2380  3 oct 00:02 /tmp/v41_1024.log
+sam 03 oct 2026 00:13:16 EDT
+  ```
+
+- **bash** `{"command": "sleep 540; ps -o etime=,pcpu= -p $(pgrep -x drave | head -1) 2>/dev/null; tail -c 300 /tmp/v41_1024.log; date", "description": "Wait for the long pass", "timeoutMs": 560000}`
+
+  ```
+20:15 2362
+e retardé : YaRN au-delà de quatre fois la longueur d'origine, seuil mesuré sur gpt-oss) — mais les couches COMPRESSÉES sont en YaRN ×16 à TOUTES les positions, comme llama.cpp (`deepseek4.cpp:872-879`) et vLLM (`rope.py:28-46`) ; `DRAVE_YARN=1`/`--sans-yarn` forcent l'un ou l'autre partout
+sam 03 oct 2026 00:22:23 EDT
+  ```
+
+- **bash** `{"command": "sleep 540; ps -o etime=,pcpu= -p $(pgrep -x drave | head -1) 2>/dev/null; date", "description": "Continue waiting", "timeoutMs": 560000}`
+
+  ```
+29:20 2350
+sam 03 oct 2026 00:31:28 EDT
+  ```
+
+- **bash** `{"command": "sleep 560; ps -o etime=,pcpu= -p $(pgrep -x drave | head -1) 2>/dev/null; date", "description": "Keep waiting for the pass", "timeoutMs": 580000}`
+
+  ```
+38:48 2337
+sam 03 oct 2026 00:40:57 EDT
+  ```
+
+- **bash** `{"command": "sleep 560; ps -o etime=,pcpu= -p $(pgrep -x drave | head -1) 2>/dev/null; date", "description": "Keep waiting", "timeoutMs": 580000}`
+
+  ```
+48:16 2324
+sam 03 oct 2026 00:50:24 EDT
+  ```
+
+- **bash** `{"command": "sleep 560; ps -o etime=,pcpu= -p $(pgrep -x drave | head -1) 2>/dev/null; date", "description": "Keep waiting", "timeoutMs": 580000}`
+
+  ```
+57:42 2313
+sam 03 oct 2026 00:59:51 EDT
+  ```
+
+- **bash** `{"command": "sleep 560; ps -o etime=,pcpu= -p $(pgrep -x drave | head -1) 2>/dev/null; tail -c 200 /tmp/v41_1024.log; date", "description": "Keep waiting", "timeoutMs": 580000}`
+
+  ```
+8433
+	Swaps: 0
+	File system inputs: 284645856
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
+FIN (code 0)
+sam 03 oct 2026 01:09:17 EDT
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -E \"^=== perplexité|tokens notés|postes|dont attention|profil|Maximum resident|Elapsed|User time|Sys time|File system inputs\" /tmp/v41_1024.log | head -30", "description": "Read the 1024-token pass results"}`
+
+  ```
+[options] 1 drapeau(x) INCONNU(S), donc sans effet : --ppl-profil
+    1023 tokens notés — perplexité cumulée 1287700.824  (0.3 tok/s)
+=== perplexité 1287700.8239 sur 1023 tokens (0 événements, 3635.0 s) ===
+    postes (ms/token) : projets-attn 0.00 | rope 0.00 | attention 1631.02 | proj+mlp 1759.37 | somme 3390.39 | reste (tête + échantillonnage) 162.86
+    dont attention : scores 0.00 | softmax 0.00 | somme pondérée + écriture KV 1631.02
+    dont attention V4 (attn_v4) : projets q/kv 341.25 | compresseur 5.88 | indexeur 27.87 | scores + softmax + somme 730.56 | dé-rotation + sortie groupée 525.20
+	Command being timed: "./drave-core/target/release/drave /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf --ppl /tmp/v41_1024.ids --ctx 1024 --limit 1024 --abits 8 --threads 16 --ppl-profil"
+	User time (seconds): 82950.57
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 1:00:49
+	Maximum resident set size (kbytes): 76874064
+	File system inputs: 284645856
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=/home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf && grep -n \"ppl_profil\\|profil-ppl\\|--profil\" drave-core/src/main.rs | head -5; echo \"=== RSS à ctx 8 ===\"; /usr/bin/time -v ./drave-core/target/release/drave … [217 caractères tronqués]`
+
+  ```
+564:    logits_bin: Option<String>, ppl_profil: bool,
+738:            "--profil-neurones" => { o.profil_neurones = true; 1 }
+4597:        ppl_profil, lot, profil_neurones, neurones_sortie, trace_flux, trace_couches, flux_forcer,
+4796:    let profil = ppl_profil;
+=== RSS à ctx 8 ===
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:31.61
+	Maximum resident set size (kbytes): 34319144
+	File system inputs: 21213552
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"ppl_profil = true\\|ppl_profil:\" drave-core/src/main.rs | head -3; grep -n '\"--profil' drave-core/src/main.rs | head -4", "description": "Find the real profile flag name"}`
+
+  ```
+564:    logits_bin: Option<String>, ppl_profil: bool,
+738:            "--profil-neurones" => { o.profil_neurones = true; 1 }
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n '\"--profil-neurones\"' drave-core/src/main.rs; sed -n 736,742p drave-core/src/main.rs", "description": "Find the parser insertion point"}`
+
+  ```
+738:            "--profil-neurones" => { o.profil_neurones = true; 1 }
+            "--tete-restreinte" if i + 1 < args.len() => {
+                o.tete_restreinte = Some(suivant(i).clone()); 2 }
+            "--profil-neurones" => { o.profil_neurones = true; 1 }
+            "--harmony" => { o.harmony = Some("alterne".into()); 1 }
+            "--harmony-assistant" => { o.harmony = Some("assistant".into()); 1 }
+            "--harmony-user" => { o.harmony = Some("user".into()); 1 }
+            "--harmony-suite" => { o.harmony = Some("suite".into()); 1 }
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"drave-core/src/main.rs\"\ns=open(p).read()\na=\"\"\"            \"--profil-neurones\" => { o.profil_neurones = true; 1 }\"\"\"\nb=\"\"\"            \"--profil-neurones\" => { o.profil_neurones = true; 1 }\n      … [1149 caractères tronqués]`
+
+  ```
+ok
+    Finished `release` profile [optimized] target(s) in 33.60s
+[config] rotation : RoPE simple sur les couches BRUTES (régime retardé : YaRN au-delà de quatre fois la longueur d'origine, seuil mesuré sur gpt-oss) — mais les couches COMPRESSÉES sont en YaRN ×16 à TOUTES les positions, comme llama.cpp (`deepseek4.cpp:872-879`) et vLLM (`rope.py:28-46`) ; `DRAVE_YARN=1`/`--sans-yarn` forcent l'un ou l'autre partout
+      31 tokens notés — perplexité cumulée 115521.869  (0.3 tok/s)
+profil par profondeur (perplexité par tranche de 256 positions) :
+=== perplexité 115521.8693 sur 31 tokens (0 événements, 95.4 s) ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=/home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf && ./drave-core/target/release/drave $M --ppl /tmp/v41_texte.txt.ids --ctx 32 --limit 32 --abits 8 --threads 16 --logits-bin /tmp/lg32.bin > /tmp/lg32.log 2>&1; ./d … [661 caractères tronqués]`
+
+  ```
+/tmp/lg32.log:=== perplexité 115521.8693 sur 31 tokens (0 événements, 87.6 s) ===
+/tmp/lg1024.log:=== perplexité 115521.8693 sur 31 tokens (0 événements, 87.3 s) ===
+formes : (4007682,) (4007682,)
+logits ctx 32 vs ctx 1024 (mêmes 32 jetons) : écart max 0.000e+00
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"sprints/19-v41-a-1024-jetons.md\"\ns=open(p).read()\na=\"\"\"## Revue — ce qui est livré, mesuré\n\n_(mesure en cours)_\"\"\"\nb=\"\"\"## Revue — ce qui est livré, mesuré\n\n### 1. La première passe longue de V4 … [8791 caractères tronqués]`
