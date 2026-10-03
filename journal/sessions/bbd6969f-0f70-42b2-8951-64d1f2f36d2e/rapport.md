@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 115.7 h |
+| Durée | 115.8 h |
 | Tours | 90 |
-| Messages | 6853 |
-| Appels d'outils | 6552 |
+| Messages | 6869 |
+| Appels d'outils | 6568 |
 | Fichiers touchés | 135 |
-| Commandes | 5530 |
+| Commandes | 5544 |
 | Sous-agents | 32 |
-| Commits | 444 |
+| Commits | 445 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -4475,7 +4475,7 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 
 ### Tour 90 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [942 caractères tronqués]
 
-*114 appels d'outils.* Actions notables :
+*130 appels d'outils.* Actions notables :
 
 - bash — Check the gate suite result
 - bash — Wait for the gates
@@ -4491,11 +4491,11 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 - bash — Find the plan's remaining items
 - bash — Extract each phase's gate claims
 - read
-- … et 97 autres
+- … et 112 autres
 
 **Synthèse produite :**
 
-⏵ J'écris la spécification d'architecture depuis la référence (KDA + MLA + MoE latent + attention résiduelle)
+⏵ Porte de correction sur le tokenizer Kimi-K3, possible AVANT la fin du téléchargement
 
 ## 3. Travail accompli
 
@@ -4545,7 +4545,7 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/vision.md` | 1 | 4 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/histoire.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/roadmap.md` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs` | 0 | 108 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs` | 0 | 109 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs` | 0 | 34 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/gpu.rs` | 0 | 3 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gpu-topk-selection.md` | 1 | 0 |
@@ -4716,7 +4716,7 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5490 autres
+- … et 5504 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4844,7 +4844,7 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 
 ## 5. Erreurs rencontrées
 
-332 sorties en erreur ou divergentes. Les premières :
+334 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -5308,4 +5308,5 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 - Porte de correction à ctx 1024 (1 023 positions) : accord MEILLEUR (moyenne 0,9914, top-1 93,5 %, PPL +1,7 %), mais elle a d'abord échoué sur une position où la
 - Sprint 27 : porte P1 fermée (et elle révèle une permutation), portes auditées P0-P9, porte à ctx 1024 tenue sous critère révisé, bascule vers Kimi-K3  Rétro : u
 - Spécification de l'architecture Kimi-K3, tirée de la référence (llama.cpp-k3 + code publié)  Mesuré dans le fichier : 93 couches, dont 1 dense ; KDA (delta-net,
+- --config et --tokenize répondent sur un modèle EN COURS de téléchargement (et le disent)  Sans ce chemin, il fallait attendre la fin d'un transfert de plusieurs
 

@@ -109007,3 +109007,268 @@ Created file
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Spécification de l'architecture Kimi-K3, tirée de la référence (llama.cpp-k3 + code publié)\n\nMesuré dans le fichier : 93 couches, dont 1 dense ; KDA (delta-net, conv 4, porte\nbornée à -5) sur 3 cou … [664 caractères tronqués]`
+
+  ```
+3e2d701 Spécification de l'architecture Kimi-K3, tirée de la référence (llama.cpp-k3 + code publié)
+10:27:44    44.4 Go / 49.0 Go (90.6 %, 111 Mo/s)
+  ```
+
+### 🤖 Assistant
+
+⏵ Reconstruction de l'outil de référence contre llama.cpp-k3 (l'instrument de la porte)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && LC=/home/stephane/Data13TB/stephane/GitHub/llama.cpp-k3 && g++ -O2 -std=c++17 tools/ref_logits.cpp -o tools/ref_logits_k3 -I $LC/include -I $LC/ggml/include -L $LC/build/bin -lllama -lggml -lggml-base 2>&1 | tail -5; ls -la tools/ref … [171 caractères tronqués]`
+
+  ```
+-rwxr-xr-x. 1 stephane stephane 207032  3 oct 10:28 tools/ref_logits_k3
+usage: ./tools/ref_logits_k3 <modele.gguf> <ids.txt> <sortie.bin> [n_max] [--sans-yarn]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '80,100p' drave-core/src/model.rs; grep -n \"arch\\b\\|architecture\" drave-core/src/model.rs | head -12", "description": "Find the architecture dispatch and missing-pieces logic"}`
+
+  ```
+/// (`hc_*`), attention par index (`indexer`), routage par table (`tid2eid`) et
+/// engram. Aucun n'a jamais été exécuté par ce moteur ; leurs chiffres publiés
+/// viennent d'analyses STATIQUES des tenseurs, pas d'une passe avant.
+/// Ce que le moteur ne sait pas calculer de ce modèle, nommé.
+///
+/// **Une seule liste**, utilisée par le refus à l'ouverture ET par `--config`.
+/// Deux copies de ce contrôle avaient déjà divergé : `--config` annonçait deux
+/// manques quand la passe avant en refusait trois.
+pub fn manques_architecture(g: &Gguf, cfg: &Cfg, ctx: usize, clusters: bool) -> Vec<&'static str> {
+    // Le test porte sur TOUTES les couches, pas sur la couche 0 : GLM-5.3 a
+    // trois couches denses puis des couches MLA, et regarder la première
+    // laissait passer le modèle jusqu'au panic « attn_q absent » de la couche 3.
+    let quelque_part = |suffixe: &str| g.tensors.iter().any(|t| t.name.ends_with(suffixe));
+    let mut manques: Vec<&str> = Vec::new();
+    // Les **hyper-connexions** (DeepSeek-V4) ne sont plus un manque : elles sont
+    // lues (`Hc`, `hc_params`) et consommées par la passe avant — l'entrée d'une
+    // sous-couche est le mélange des `hc` copies, la so
+… [1290 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "limit": 30, "offset": 100}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs</path>
+<type>file</type>
+<content>
+100:     if quelque_part("hc_attn_fn.weight") && g.hc_params().is_none() {
+101:         manques.push("hyper-connexions : `hc_mult` absent des métadonnées");
+102:     }
+103:     // Attention par index (DSA) : l'indexeur choisit les clés gardées. Il ne
+104:     // sert QUE si la séquence dépasse `index_topk` — en deçà, llama.cpp garde
+105:     // toutes les clés et l'indexeur n'est pas appelé. On refuse donc seulement
+106:     // les contextes où il changerait le résultat.
+107:     if quelque_part("indexer.") {
+108:         // La clé s'appelle `attention.indexer.top_k` dans les GGUF de V4
+109:         // (`index_topk` dans le `config.json`). Lire le mauvais nom donnait
+110:         // `topk = 0`, donc un refus — pas un silence, mais un refus dont le
+111:         // motif était faux.
+112:         let topk = g.cfg_ou(&["attention.indexer.top_k", "index_topk", "indexer.top_k"])
+113:             .and_then(|m| m.as_u64())
+114:             .or_else(|| g.json_nombre("index_topk").map(|v| v as u64))
+115:             .unwrap_or(0) as usize;
+116:         if topk == 0 || ctx > topk {
+… [942 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "new_string": "    if quelque_part(\"hc_attn_fn.weight\") && g.hc_params().is_none() {\n        manques.push(\"hyper-connexions : `hc_mult` absent des métadonnées\");\n    }\n    // **Kimi-K3** — la cible de la  … [1196 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo build --release 2>&1 | grep -E \"^error\" | head -5; echo \"build ok (aucune erreur)\"; cd .. && tail -1 /tmp/dl_k3.log; ls /home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/*.gguf 2>/dev/null | wc -l" … [83 caractères tronqués]`
+
+  ```
+build ok (aucune erreur)
+10:29:24    3.8 Go / 49.0 Go (7.7 %, 94 Mo/s)
+5
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"shards annoncés\" drave-core/src/*.rs | head -3; grep -n \"fn ouvrir\\|fn open\\|shards\" drave-core/src/gguf.rs | head -12", "description": "Find the split-model refusal"}`
+
+  ```
+drave-core/src/gguf.rs:588:                "modèle découpé incomplet dans {} : {total} shards annoncés, {} présents",
+103:    fn ouvrir(f: &File, len: usize) -> std::io::Result<Mappe> {
+163:fn ouvrir_tampon(chemin: &Path) -> std::io::Result<Tampon> {
+247:    /// Index du fichier qui porte ce tenseur. Un modèle « éclaté » (shards
+405:    pub fn open<P: AsRef<Path>>(path: P) -> std::io::Result<Self> {
+428:    pub fn open_meta<P: AsRef<Path>>(path: P) -> std::io::Result<Self> {
+453:    /// Ouvre un modèle **éclaté en plusieurs fichiers** : soit les shards d'un
+470:    pub fn open_multi<P: AsRef<Path>>(chemins: &[P]) -> std::io::Result<Self> {
+478:    pub fn open_avec_prefixes<P: AsRef<Path>>(chemins: &[P], prefixes: &[&str])
+559:    /// Liste des fichiers d'un modèle : un seul, ou tous les shards dans l'ordre.
+588:                "modèle découpé incomplet dans {} : {total} shards annoncés, {} présents",
+605:    pub fn open_auto<P: AsRef<Path>>(path: P) -> std::io::Result<Self> {
+619:    pub fn open_meta_auto<P: AsRef<Path>>(path: P) -> std::io::Result<Self> {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '555,605p' drave-core/src/gguf.rs", "description": "Read the shard listing and refusal logic"}`
+
+  ```
+if n == 0 || total == 0 { return None; }
+        Some((prefixe.to_string(), n, total))
+    }
+
+    /// Liste des fichiers d'un modèle : un seul, ou tous les shards dans l'ordre.
+    ///
+    /// C'est ce qui permet de désigner un modèle découpé par **n'importe lequel**
+    /// de ses morceaux — on écrit le chemin du shard 1 comme avant, et le moteur
+    /// va chercher les autres. Un shard manquant est une **erreur**, pas un
+    /// silence : sans lui, des tenseurs seraient absents et le moteur
+    /// paniquerait bien plus loin, sur un message qui ne dirait pas pourquoi.
+    pub fn chemins_du_modele(path: &Path) -> std::io::Result<Vec<std::path::PathBuf>> {
+        let nom = path.file_name().and_then(|n| n.to_str()).unwrap_or("");
+        let Some((prefixe, _, total)) = Self::shard_de(nom) else {
+            return Ok(vec![path.to_path_buf()]);
+        };
+        // `parent()` d'un nom nu rend `Some("")`, et `read_dir("")` échoue : le
+        // fichier existe pourtant, dans le dossier courant.
+        let dir = match path.parent() {
+            Some(d) if !d.as_os_str().is_empty() => d,
+            _ => Path::new("."),
+        };
+        let mut trouves: Vec<(usize, std::path::Path
+… [1414 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fn run_config\" -A 20 drave-core/src/main.rs | head -30; grep -n \"open_meta_auto\\|open_auto\" drave-core/src/main.rs | head -8", "description": "Inspect the --config path"}`
+
+  ```
+1820:fn run_config() {
+1821-    let g = Gguf::open_meta_auto(&modele_chemin()).expect("ouverture du GGUF (en-tête)");
+1822-    let arch = g.meta.get("general.architecture").and_then(|m| m.as_str()).unwrap_or("?");
+1823-    println!("modèle        : {}", modele_chemin());
+1824-    println!("architecture  : {arch}");
+1825-    let n_layer = model::dim_gguf(&g, &["block_count", "num_hidden_layers"], "num_hidden_layers")
+1826-                      .unwrap_or(0);
+1827-    let hidden = model::dim_gguf(&g, &["embedding_length", "hidden_size"], "hidden_size")
+1828-                     .unwrap_or(0);
+1829-    println!("couches       : {n_layer} · cachés {hidden}");
+1830-    let r = model::routage_du_gguf(&g);
+1831-    println!("experts       : {} par couche, {} par jeton · FFN expert {}",
+1832-             r.n_expert, r.n_expert_used, r.ffn_exp);
+1833-    if r.n_expert > 0 {
+1834-        println!("routage       : {} (source : {}) · renormalisation {} · échelle {}",
+1835-                 r.gating.nom(), r.source,
+1836-                 if r.norm { "oui" } else { "non" },
+1837-                 if r.echelle == 0.0 { "aucune".to_string() } else { format!("{:.3}", r.echelle) });
+1838-        if r.
+… [785 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '419,455p;605,640p' drave-core/src/gguf.rs", "description": "Read open_meta and open_meta_auto"}`
+
+  ```
+/// Ouvre un GGUF en ne lisant QUE l'en-tête (métadonnées et descripteurs de
+    /// tenseurs) : `open` lit tout le fichier, soit **62 Go de lecture et de
+    /// mémoire** pour gpt-oss. Le décodage du vocabulaire (`--tokenize`) et le
+    /// garde-fou de vocabulaire de `--ppl` n'ont besoin que de l'en-tête.
+    ///
+    /// Les données de tenseurs ne sont PAS chargées : tout accès aux poids
+    /// paniquera (bruyamment, c'est voulu) — ce constructeur ne sert qu'aux
+    /// métadonnées.
+    pub fn open_meta<P: AsRef<Path>>(path: P) -> std::io::Result<Self> {
+        let mut f = File::open(&path)?;
+        let mut taille = 4usize << 20;              // 4 Mo : l'en-tête usuel tient
+        loop {
+            f.seek(SeekFrom::Start(0))?;
+            let mut buf = vec![0u8; taille];
+            let mut lu = 0usize;
+            while lu < taille {
+                let n = f.read(&mut buf[lu..])?;
+                if n == 0 { break; }
+                lu += n;
+            }
+            buf.truncate(lu);
+            if let Some((meta, tensors, fin)) = Self::entete(&buf) {
+                let data_start = Self::debut_donnees(&meta, fin);
+                return Ok(Gguf { meta, tensors, bufs: V
+… [2207 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/gguf.rs'\ns=open(p).read()\nancre = \"\"\"    /// Ouvre un modèle, découpé ou non : la même commande marche pour les deux.\"\"\"\najout = '''    /// Combien de shards d'un modèle découpé sont **pré … [2872 caractères tronqués]`
+
+  ```
+gguf.rs : shards_presents ajouté
+main.rs : run_config tolère un modèle partiel, en le disant
+error[E0308]: mismatched types
+    --> src/main.rs:1827:41
+     |
+1827 |     let partiel = Gguf::shards_presents(&chemin).filter(|(p, t)| p < t);
+--
+error: could not compile `drave-core` (bin "drave") due to 1 previous error; 28 warnings emitted
+--- build terminé ---
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'\ns=open(p).read()\ns=s.replace(\"\"\"    let partiel = Gguf::shards_presents(&chemin).filter(|(p, t)| p < t);\"\"\",\n\"\"\"    let partiel = match Gguf::shards_presents(std::path::Path::n … [519 caractères tronqués]`
+
+  ```
+ok
+--- fin ---
+⚠️  MODÈLE INCOMPLET : 5 shards sur 32 présents — cet inventaire ne porte que sur ceux-là, et tout « manque » peut n'être qu'un shard non téléchargé.
+modèle        : /home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf
+architecture  : kimi-k3
+couches       : 93 · cachés 7168
+experts       : 896 par couche, 16 par jeton · FFN expert 3072
+routage       : sigmoïde (source : expert_gating_func) · renormalisation oui · échelle 1.000
+calculable    : NON — il manque : attention delta-net (KDA) : conv1d de 4, porte bornée (−5), récurrence par tête, attention résiduelle : pile de points de contrôle tous les 12, softmax sur les scores, MoE latent : projections down/up autour des experts (latent 3 584), activation SiTU (beta 4, linear_beta 25), redémarrage du flux résiduel aux couches « banque » (toutes les 12)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"Le ciel est bleu.\" > /tmp/k3_texte.txt && K=/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf && ./drave-core/target/release/drave \"$K\" --tokenize --fichier /tmp/k3_text … [167 caractères tronqués]`
+
+  ```
+thread 'main' (1213907) panicked at src/main.rs:4295:40:
+ouverture du GGUF: Custom { kind: NotFound, error: "modèle découpé incomplet dans /home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL : 32 shards annoncés, 5 présents" }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '4290,4300p' drave-core/src/main.rs", "description": "Read the tokenize open site"}`
+
+  ```
+let texte = opt.texte.clone().unwrap_or_default();
+    let fichier = opt.fichier.clone().unwrap_or_default();
+    let sortie = opt.sortie.clone().unwrap_or_default();
+    // En-tête seul : le décodage du vocabulaire n'a pas besoin des poids, et
+    // `open` lisait le fichier entier (62 Go pour gpt-oss) à chaque appel.
+    let g = Gguf::open_meta_auto(path).expect("ouverture du GGUF");
+    let tk = build_tokenizer(&g);
+    if !fichier.is_empty() {
+        // Encoder un corpus ENTIER avec le tokenizer du modèle : chaque modèle
+        // a le sien, et nourrir un modèle avec les identifiants d'un autre
+        // donne une perplexité qui ne mesure que l'absurdité de l'entrée.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'\ns=open(p).read()\n# 1. helper unique\nold_cfg_start = \"\"\"fn run_config() {\"\"\"\nhelper = '''/// Ouvre un GGUF **en-tête seul**, en tolérant un modèle **en cours de\n/// téléchargemen … [3137 caractères tronqués]`
+
+  ```
+main.rs : helper unique pour --config et --tokenize
+⚠️  --tokenize : modèle INCOMPLET (5 shards sur 32) — lecture de l'en-tête du premier shard présent ; tout « manque » peut n'être qu'un shard non téléchargé.
+7 tokens écrits dans /tmp/k3_ids.txt (vocabulaire du modèle : 163840)
+réversibilité : texte reconstruit identique ✅ (18 octets)
+--- ids ---
+3638,275,1309,3140,18965,84,341
+  ```
+
+### 🤖 Assistant
+
+⏵ Porte de correction sur le tokenizer Kimi-K3, possible AVANT la fin du téléchargement
+
+- **bash** `{"command": "cd /tmp/k3ref && curl -s --max-time 60 \"https://huggingface.co/api/models/moonshotai/Kimi-K3\" | python3 -c \"\nimport json,sys\nd=json.load(sys.stdin)\nfor s in d.get('siblings',[]):\n    n=s['rfilename']\n    if 'token' in n.lower() or n.endswith('.json') or 'encoding' in n.lower():  … [369 caractères tronqués]`
+
+  ```
+config.json None
+  encoding_k3.py None
+  generation_config.json None
+  model.safetensors.index.json None
+  preprocessor_config.json None
+  tiktoken.model None
+  tokenization_kimi.py None
+  tokenizer_config.json None
+pas de lib tokenizers
+pas de tiktoken
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"--config et --tokenize répondent sur un modèle EN COURS de téléchargement (et le disent)\n\nSans ce chemin, il fallait attendre la fin d'un transfert de plusieurs heures pour\nsavoir ce que le fichier … [593 caractères tronqués]`

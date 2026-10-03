@@ -100,6 +100,19 @@ pub fn manques_architecture(g: &Gguf, cfg: &Cfg, ctx: usize, clusters: bool) -> 
     if quelque_part("hc_attn_fn.weight") && g.hc_params().is_none() {
         manques.push("hyper-connexions : `hc_mult` absent des métadonnées");
     }
+    // **Kimi-K3** — la cible de la classe « trop gros pour le local »
+    // (`docs/plan-kimi-k3.md`, spécification dans `docs/architecture-kimi-k3.md`).
+    // Le fichier se LIT déjà (métadonnées, 93 couches, Q8_0 dense + MXFP4 pour
+    // les 896 experts), mais cinq mécanismes de la passe avant n'existent pas
+    // encore. On les nomme TOUS : « architecture inconnue » ne dit pas quoi
+    // écrire, et c'est exactement ce que la porte `--config` doit annoncer.
+    if g.meta.get("general.architecture").and_then(|m| m.as_str()) == Some("kimi-k3") {
+        manques.push("attention delta-net (KDA) : conv1d de 4, porte bornée (−5), récurrence par tête");
+        manques.push("attention résiduelle : pile de points de contrôle tous les 12, softmax sur les scores");
+        manques.push("MoE latent : projections down/up autour des experts (latent 3 584)");
+        manques.push("activation SiTU (beta 4, linear_beta 25)");
+        manques.push("redémarrage du flux résiduel aux couches « banque » (toutes les 12)");
+    }
     // Attention par index (DSA) : l'indexeur choisit les clés gardées. Il ne
     // sert QUE si la séquence dépasse `index_topk` — en deçà, llama.cpp garde
     // toutes les clés et l'indexeur n'est pas appelé. On refuse donc seulement

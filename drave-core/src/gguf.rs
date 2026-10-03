@@ -597,6 +597,31 @@ impl Gguf {
         Ok(trouves.into_iter().map(|(_, p)| p).collect())
     }
 
+    /// Combien de shards d'un modèle découpé sont **présents** : `(présents, total)`.
+    /// `None` si le chemin n'est pas un shard numéroté.
+    ///
+    /// Sert à `--config` : un modèle **en cours de téléchargement** doit pouvoir
+    /// être interrogé — sinon il faut attendre la fin du transfert (des heures
+    /// pour 1,5 To) pour savoir seulement ce que le fichier contient. La liste
+    /// rendue est alors PARTIELLE, et l'appelant doit le dire.
+    pub fn shards_presents(path: &Path) -> Option<(usize, usize)> {
+        let nom = path.file_name().and_then(|n| n.to_str())?;
+        let (prefixe, _, total) = Self::shard_de(nom)?;
+        let dir = match path.parent() {
+            Some(d) if !d.as_os_str().is_empty() => d,
+            _ => Path::new("."),
+        };
+        let mut presents = 0usize;
+        for e in std::fs::read_dir(dir).ok()? {
+            let p = e.ok()?.path();
+            let n = p.file_name().and_then(|n| n.to_str()).unwrap_or("").to_string();
+            if let Some((pref, _, tot)) = Self::shard_de(&n) {
+                if pref == prefixe && tot == total { presents += 1; }
+            }
+        }
+        Some((presents, total))
+    }
+
     /// Ouvre un modèle, découpé ou non : la même commande marche pour les deux.
     ///
     /// Un **dossier** qui contient `commun.gguf` est un modèle au format

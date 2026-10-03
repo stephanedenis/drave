@@ -1817,8 +1817,30 @@ fn run_sonder_engram(n: usize) {
 ///
 /// Il est né d'un constat : trois des cinq plus gros modèles de cette machine
 /// n'avaient jamais été exécutés, et rien ne le disait avant la panne.
+/// Ouvre un GGUF **en-tête seul**, en tolérant un modèle **en cours de
+/// téléchargement** : l'inventaire est alors partiel, et c'est DIT — sur la
+/// sortie d'erreur, avant tout le reste. Sans ce chemin, il fallait attendre la
+/// fin d'un transfert de plusieurs heures pour seulement savoir ce que le
+/// fichier contient (métadonnées, vocabulaire, architecture, manques).
+fn ouvrir_meta_tolerant(chemin: &str, qui: &str) -> Gguf {
+    match Gguf::shards_presents(std::path::Path::new(chemin)) {
+        Some((p, t)) if p < t => {
+            eprintln!("⚠️  {qui} : modèle INCOMPLET ({p} shards sur {t}) — lecture de \
+l'en-tête du premier shard présent ; tout « manque » peut n'être qu'un shard non téléchargé.");
+            Gguf::open_meta(chemin).expect("ouverture de l'en-tête du premier shard présent")
+        }
+        _ => Gguf::open_meta_auto(chemin).expect("ouverture du GGUF (en-tête)"),
+    }
+}
+
 fn run_config() {
-    let g = Gguf::open_meta_auto(&modele_chemin()).expect("ouverture du GGUF (en-tête)");
+    // Un modèle **en cours de téléchargement** doit pouvoir être interrogé : sans
+    // ce chemin, l'ouverture refusait le fichier (« 32 shards annoncés, 5
+    // présents ») et il fallait attendre la fin du transfert pour savoir ce que
+    // le modèle contient. L'inventaire est alors PARTIEL — et il le dit, en
+    // haut, avant tout le reste.
+    let chemin = modele_chemin();
+    let g = ouvrir_meta_tolerant(&chemin, "--config");
     let arch = g.meta.get("general.architecture").and_then(|m| m.as_str()).unwrap_or("?");
     println!("modèle        : {}", modele_chemin());
     println!("architecture  : {arch}");
@@ -4274,7 +4296,10 @@ fn run_tokenize(opt: Options) {
     let sortie = opt.sortie.clone().unwrap_or_default();
     // En-tête seul : le décodage du vocabulaire n'a pas besoin des poids, et
     // `open` lisait le fichier entier (62 Go pour gpt-oss) à chaque appel.
-    let g = Gguf::open_meta_auto(path).expect("ouverture du GGUF");
+    // Tolérant au modèle en cours de téléchargement (le vocabulaire vit dans le
+    // shard 1) : c'est ce qui permet de vérifier le tokenizer AVANT la fin du
+    // transfert — et de comparer à llama.cpp ensuite.
+    let g = ouvrir_meta_tolerant(path, "--tokenize");
     let tk = build_tokenizer(&g);
     if !fichier.is_empty() {
         // Encoder un corpus ENTIER avec le tokenizer du modèle : chaque modèle
