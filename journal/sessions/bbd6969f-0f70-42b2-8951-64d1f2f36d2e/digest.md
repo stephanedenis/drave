@@ -95546,3 +95546,77 @@ MANIFEST.md
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'EOF'\nDécoupage V4.1 : la couture est exacte au bit près, l'instrument est innocenté\n\nDeux énigmes du sprint 12 sont fermées, et l'une était un vrai défaut du moteur.\n\n1. Le V4.1 découpé à la c … [2800 caractères tronqués]`
+
+  ```
+ac80e7e Découpage V4.1 : la couture est exacte au bit près, l'instrument est innocenté
+ M journal/README.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff journal/README.md | head -20; tail -5 /tmp/porte13b.log", "description": "Check journal diff and gate"}`
+
+  ```
+diff --git a/journal/README.md b/journal/README.md
+index 8066f26..75cbd00 100644
+--- a/journal/README.md
++++ b/journal/README.md
+@@ -41,7 +41,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
+ | `8e04c99a` | Tu es VÉRIFICATEUR de documentation | 2026-09-30 18:07 | 0.2 h | 1 | 85 | 0 | 0 | [rapport](sessions/8e04c99a-8ba1-4675-9f80-fa3338449b17/rapport.md) |
+ | `aa5f9fc5` | Tu es vérificateur de documentation | 2026-09-30 15:07 | 0.2 h | 1 | 100 | 1 | 0 | [rapport](sessions/aa5f9fc5-9450-4118-b65f-e8b99a28519d/rapport.md) |
+ | `b13a6032` | Tu travailles dans le dépôt | 2026-10-02 15:03 | 0.1 h | 1 | 43 | 0 | 0 | [rapport](sessions/b13a6032-4f62-4e86-aa1f-03864a455c83/rapport.md) |
+-| `bbd6969f` | Continue avec REPRISE.md | 2026-09-28 14:46 | 101.8 h | 79 | 5515 | 108 | 363 | [rapport](sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/rapport.md) |
++| `bbd6969f` | Continue avec REPRISE.md | 2026-09-28 14:46 | 102.5 h | 79 | 5677 | 113 | 364 | [rapport](sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/rapport.md) |
+ | `bcfe0b97` | Tu es relecteur ADVERSARIAL dans | 2026-09-30 12:20 | 0.3 h | 1 | 110 | 0 | 0 | [rapport](sessions/bcfe0b97-1795-4610-8e8b-b598ca1ba6cb/rapp
+… [618 caractères tronqués]
+  ```
+
+- **subagent** `{"description": "Revue adverse du bloc 13", "prompt": "Tu es relecteur ADVERSARIAL, en lecture seule. Dépôt : /home/stephane/Data13TB/stephane/GitHub/Qtrinet (moteur d'inférence Rust « Drave », `drave-core`, std seul). Tu ne modifies AUCUN fichier du dépôt : tu lis, tu mesures, tu rapportes. Tu peux … [4766 caractères tronqués]`
+
+  ```
+started subagent e14c26ae-6d52-41f9-a72f-6ebdcef172d5
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/13-les-deux-enigmes-du-decoupage-v41.md", "new_string": "## Retro — ce que ce bloc m'apprend sur ma propre méthode\n\n**J'ai chassé un faux lièvre pendant quarante minutes.** Le bloc a commencé par\n« la divergence commence à la  … [1698 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/13-les-deux-enigmes-du-decoupage-v41.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "sleep 100; tail -5 /tmp/porte13b.log; echo \"procs: $(pgrep -x drave | wc -l)\"", "description": "Poll the full gate", "timeoutMs": 150000}`
+
+  ```
+mode 2 — listes par blocs        3.65e-2  ✅  (réf 61.9920 / deux nœuds 64.2535)
+  mode 3 — lot dense f32           0.00e0  ✅  (réf 60.8135 / deux nœuds 60.8135)
+  mode 4 — lot en listes           4.45e-3  ✅  (réf 60.8135 / deux nœuds 60.5427)
+
+toutes les portes sont vertes
+procs: 0
+  ```
+
+- **bash** `{"command": "cat /tmp/porte13b.log", "description": "Show the complete gate output"}`
+
+  ```
+=== Portes ===
+  cargo test --release                       62 verts  ✅
+  Qwen2.5-0.5B ctx 256                       19.3885  ✅
+  Qwen3-30B en clusters (origine : 799,8557) 799.8557  ✅
+  threads par défaut (physiques)            20  ✅
+  (portes de formats : ignorées en mode rapide)
+  GLM-5.3 : sigmoïde ×2,5                  sigmoïde  ✅
+  Kimi-K2.7 : sigmoïde ×2,827              sigmoïde  ✅
+  V4-Flash : racine de softplus              racine de softplus  ✅
+  Qwen3-235B : softmax                       softmax  ✅
+  V4-Flash : --config le dit calculable      oui  ✅
+  V4-Flash 43 couches ctx 32                 8430.4966  ✅
+  engram V4.1 : adressage                    rangées DISTINCTES : 479723  ✅
+
+=== Découpage (deux nœuds) ===
+  mode 0 — f32 dense               0.00e0  ✅  (réf 61.9920 / deux nœuds 61.9920)
+  mode 1 — listes quantifiées     0.00e0  ✅  (réf 61.9920 / deux nœuds 61.9920)
+  mode 2 — listes par blocs        3.65e-2  ✅  (réf 61.9920 / deux nœuds 64.2535)
+  mode 3 — lot dense f32           0.00e0  ✅  (réf 60.8135 / deux nœuds 60.8135)
+  mode 4 — lot en listes           4.45e-3  ✅  (réf 60.8135 / deux nœuds 60.5427)
+
+toutes les portes sont vertes
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Portes : la porte du découpage (deux nœuds, cinq modes) branchée dans portes.sh, et la retro du bloc 13\n\nToutes les portes vertes, y compris la nouvelle section : 62 tests, Qwen\n19,3885, clusters 7 … [575 caractères tronqués]`

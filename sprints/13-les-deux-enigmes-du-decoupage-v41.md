@@ -109,6 +109,35 @@ quantification, `--ppl` imprime la sienne quand `--options-actives` est demandé
 et le chiffre de 16 bits n'apparaît nulle part sans lui. La prochaine fois, la
 comparaison portera le réglage à côté du chiffre.
 
+## Retro — ce que ce bloc m'apprend sur ma propre méthode
+
+**J'ai chassé un faux lièvre pendant quarante minutes.** Le bloc a commencé par
+« la divergence commence à la couche 0 » — une conclusion héritée du bloc
+précédent. Elle venait d'une comparaison entre deux passes **réglées
+différemment** (`--ppl` à 16 bits contre le harnais à 8), pas d'un défaut de
+couture. J'ai dépensé trois runs lourds (365 Go, 4 min chacun) à traquer un état
+résiduel imaginaire avant de vérifier le seul point qui coûte dix secondes :
+*les deux choses que je compare ont-elles les mêmes options ?* La bonne question
+était la moins chère, et c'est celle que j'ai posée en dernier.
+
+**Ce qui a tranché, à chaque fois, c'est le tenseur, pas la perplexité.** Une
+perplexité est un scalaire sur trois prédictions à froid : elle amplifie
+chaotiquement (1,8e-3 sur `l_last-0` devient 8,4× de perplexité). Comparer 2 544
+fichiers en numpy a donné une réponse nette en un coup — position 0 exacte,
+positions 1 et 2 fausses — là où la perplexité ne disait que « c'est faux ».
+
+**Le commentaire qui expliquait le bug.** Le code du bloc précédent portait :
+« elle est lue par `norme_finale`, qui ne la consomme pas ». C'était écrit comme
+une intention, et c'était la description exacte du défaut. Un commentaire qui
+justifie un état le protège de la relecture. La réponse n'est pas d'écrire un
+meilleur commentaire mais de rendre l'invariant **structurel** (`&mut self` +
+`take()`) : ce que le type interdit n'a pas besoin d'être commenté.
+
+**Ce que j'ai bien fait** : ne pas publier l'explication du 514 722 avant la
+preuve par tenseur ; écrire la porte qui manquait au lieu de seulement corriger
+le bug ; et vérifier l'hypothèse `--dense` par la mesure (elle était fausse) au
+lieu de la retenir parce qu'elle était plausible.
+
 ## Portes
 
 - `tools/portes.sh rapide` : **toutes vertes** — 62 tests, Qwen2.5-0.5B ctx 256 =

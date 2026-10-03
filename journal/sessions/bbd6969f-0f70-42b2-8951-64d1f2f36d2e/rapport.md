@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 102.5 h |
 | Tours | 79 |
-| Messages | 5932 |
-| Appels d'outils | 5677 |
+| Messages | 5938 |
+| Appels d'outils | 5683 |
 | Fichiers touchés | 113 |
-| Commandes | 4812 |
-| Sous-agents | 31 |
-| Commits | 364 |
+| Commandes | 4816 |
+| Sous-agents | 32 |
+| Commits | 365 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -4037,7 +4037,7 @@ P0-P6 faites, P8 portée et val
 
 ### Tour 79 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [941 caractères tronqués]
 
-*937 appels d'outils.* Actions notables :
+*943 appels d'outils.* Actions notables :
 
 - web_search
 - web_fetch
@@ -4053,7 +4053,7 @@ P0-P6 faites, P8 portée et val
 - bash — Locate hc_collapse_triton definition
 - read
 - bash — Read mHC init and pre/post call sites
-- … et 838 autres
+- … et 844 autres
 
 **Synthèse produite :**
 
@@ -4173,7 +4173,7 @@ P0-P6 faites, P8 portée et val
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-v4-yarn-compresse.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/11-v41-la-passe-complete.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/12-la-rotation-des-couches-compressees.md` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/13-les-deux-enigmes-du-decoupage-v41.md` | 1 | 2 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/13-les-deux-enigmes-du-decoupage-v41.md` | 1 | 3 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/format-flux.md` | 0 | 2 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-decoupage-v41.md` | 1 | 1 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-execution-v41.md` | 0 | 1 |
@@ -4212,6 +4212,7 @@ P0-P6 faites, P8 portée et val
 - tour 76 — Glossaire de référence du dépôt
 - tour 79 — Adversarial review of V4.1 mHC work
 - tour 79 — Adversarial review of the V4.1 completion
+- tour 79 — Revue adverse du bloc 13
 
 ### Commandes exécutées (échantillon)
 
@@ -4255,7 +4256,7 @@ P0-P6 faites, P8 portée et val
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 4772 autres
+- … et 4776 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4767,4 +4768,5 @@ P0-P6 faites, P8 portée et val
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' m = """DRVF v6 : la pre portée de V4.1 voyage (le dernier refus d'un découpage tombe)  Le
 - Sprint 12 : le découpage V4.1 en v6, et l'instrument de mesure qui est suspect  Le protocole v6 transporte la pre portée ; mesuré (82 016 octets aller, 81 999 r
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'EOF' Découpage V4.1 : la couture est exacte au bit près, l'instrument 
+- Portes : la porte du découpage (deux nœuds, cinq modes) branchée dans portes.sh, et la retro du bloc 13  Toutes les portes vertes, y compris la nouvelle section
 
