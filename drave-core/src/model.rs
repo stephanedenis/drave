@@ -1559,6 +1559,16 @@ fn matvec_f32(w: &[f32], x: &[f32], n_in: usize, n_out: usize, y: &mut [f32]) {
 /// Le découpage est celui du noyau d'experts (`crate::list`) : tranches
 /// contiguës, `o - o0` pour indexer la tranche du fil (indexer par le numéro de
 /// ligne GLOBAL levait « len is 256 but the index is 256 » dès le deuxième fil).
+/// Sous-postes d'`attn_v4`, en nanosecondes : (0) projets q/kv + rotations,
+/// (1) compresseur + indexeur, (2) scores + softmax + somme pondérée, (3) sortie
+/// groupée. Le profil publiait « somme pondérée + écriture KV » pour TOUT
+/// `attn_v4` — une étiquette qui ne décrit que sa dernière partie et qui a fait
+/// croire que l'attention de V4.1 ne coûtait rien alors qu'elle coûtait 12,4 s
+/// par jeton (relevé au bloc 15).
+pub static PROF_V4: [std::sync::atomic::AtomicU64; 5] =
+    [const { std::sync::atomic::AtomicU64::new(0) };
+     5];
+
 fn matvec_f32_fils(w: &[f32], x: &[f32], n_in: usize, n_out: usize, y: &mut [f32],
                    n_fils: usize) {
     if n_fils <= 1 || n_out < 2 * n_fils || n_out * n_in < 1 << 16 {
@@ -5300,6 +5310,7 @@ s'applique pas — utilisez --lot 1, ou réenregistrez sans DRAVE_TRACE_BLOCS");
         // L'indexeur est implémenté : il n'y a plus à refuser au-delà de son
         // top-k, il CHOISIT les blocs. Le nombre gardé reste borné par lui.
 
+        let t0 = Instant::now();
         // --- requête : descente, norme, remontée, norme PAR TÊTE sans poids
         let mut qr = vec![0f32; m.q_a.len() / h];
         matvec_f32_fils(&m.q_a, x, h, qr.len(), &mut qr, n_fils);
@@ -5345,6 +5356,9 @@ s'applique pas — utilisez --lot 1, ou réenregistrez sans DRAVE_TRACE_BLOCS");
         Self::vider_couche(dump, "kv_norm", l, pos, &kvn);
         Self::vider_couche(dump, "q_rope", l, pos, &q);
         Self::vider_couche(dump, "kv_rope", l, pos, &kvn);
+        PROF_V4[0].fetch_add(t0.elapsed().as_nanos() as u64,
+                             std::sync::atomic::Ordering::Relaxed);
+        let t1 = Instant::now();
         // ---- compresseur : la valeur et la porte de CE jeton, puis un bloc
         // s'il est complet. Un bloc = un résumé de `ratio` jetons, obtenu par
         // un softmax **par canal** sur les portes (avec l'`ape` du rang dans le
@@ -5507,6 +5521,9 @@ et 4, 128 (V4)", m.ratio);
                 *paires += (hd as u64) * (m.ratio as u64) * 2;
             }
         }
+        PROF_V4[1].fetch_add(t1.elapsed().as_nanos() as u64,
+                             std::sync::atomic::Ordering::Relaxed);
+        let t2 = Instant::now();
         // ---- indexeur : il NOTE chaque bloc compressé et n'en garde que les
         // `indexer.top_k` meilleurs. Ses blocs sont plus étroits (128 valeurs)
         // mais suivent exactement la même règle de chevauchement que le CSA.
@@ -5668,6 +5685,9 @@ sur un ensemble plus large que la référence donnerait un autre choix", m.candi
             let cache = &mut etat.cles;
             cache[pos * hd..(pos + 1) * hd].copy_from_slice(&kvn);
         }
+        PROF_V4[2].fetch_add(t2.elapsed().as_nanos() as u64,
+                             std::sync::atomic::Ordering::Relaxed);
+        let t3 = Instant::now();
         // --- scores : `1/sqrt(head_dim)`, puits appris dans le dénominateur.
         //
         // Les clés sont de DEUX sortes, dans cet ordre : la fenêtre brute (les
@@ -5732,6 +5752,9 @@ sur un ensemble plus large que la référence donnerait un autre choix", m.candi
             }
         }
         Self::vider_couche(dump, "attn_brut", l, pos, &sortie);
+        PROF_V4[3].fetch_add(t3.elapsed().as_nanos() as u64,
+                             std::sync::atomic::Ordering::Relaxed);
+        let t4 = Instant::now();
         // --- dé-rotation de la partie rope, par tête
         {
             let mut op = vec![0f32; nh * nr];
@@ -5767,6 +5790,8 @@ sur un ensemble plus large que la référence donnerait un autre choix", m.candi
         // chemin dense, et vider le tampon entier noierait la sortie dans des
         // valeurs périmées (la comparaison a signalé « longueurs différentes »).
         Self::vider_couche(dump, "attn_out", l, pos, &att[..h]);
+        PROF_V4[4].fetch_add(t4.elapsed().as_nanos() as u64,
+                             std::sync::atomic::Ordering::Relaxed);
     }
 
     /// Passe avant d'un modèle **MLA**, un jeton à la fois, avec le cache

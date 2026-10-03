@@ -4976,6 +4976,20 @@ prédit rien) — la perplexité cumulée n'a pas de sens ici");
     println!("    dont attention : scores {:.2} | softmax {:.2} | somme pondérée + écriture KV {:.2}",
              p[4] / n as f64 * 1e3, p[5] / n as f64 * 1e3,
              (p[2] - p[4] - p[5]) / n as f64 * 1e3);
+    // **Attention V4 (`attn_v4`) : le poste ci-dessus la compte EN ENTIER** —
+    // ses sous-compteurs `scores`/`softmax` appartiennent à l'autre chemin (MLA
+    // de V3) et restent donc à zéro ici, ce qui faisait croire que l'attention
+    // de V4.1 ne coûtait rien (relevé au bloc 15 : 12,4 s par jeton). Ces quatre
+    // sous-postes disent où elles passent.
+    {
+        use std::sync::atomic::Ordering;
+        let v: Vec<f64> = model::PROF_V4.iter()
+            .map(|c| c.load(Ordering::Relaxed) as f64 / 1e6 / n as f64).collect();
+        if v.iter().any(|x| *x > 0.0) {
+            println!("    dont attention V4 (attn_v4) : projets q/kv {:.2} | compresseur {:.2} | indexeur {:.2} | scores + softmax + somme {:.2} | dé-rotation + sortie groupée {:.2}",
+                     v[0], v[1], v[2], v[3], v[4]);
+        }
+    }
 }
 
 #[cfg(test)]

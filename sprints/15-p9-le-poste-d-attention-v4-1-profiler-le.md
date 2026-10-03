@@ -64,7 +64,25 @@ main quand le cache ne suffit plus, exactement ce que la rétrospective mettait 
 doute. Et la perplexité identique **au dernier chiffre** est une troisième preuve
 d'égalité — à un autre contexte, sur un autre nombre de jetons.
 
-### 4. Ce que la mesure laisse sur la table, et pourquoi on s'arrête là
+### 4. Le profil dit maintenant ce qu'il mesure
+
+L'étiquette « somme pondérée + écriture KV » recouvrait tout `attn_v4` : cinq
+sous-compteurs la remplacent (statiques `PROF_V4`, une ligne de plus au profil),
+et la répartition est sans ambiguïté — mesuré, ctx 32, 31 jetons, 145,1 s :
+
+```
+attention 1002,74 ms/token
+  dont attn_v4 : projets q/kv 372,34 | compresseur 6,73 | indexeur 11,66
+                 scores + softmax + somme 45,02 | dé-rotation + sortie groupée 566,75
+```
+
+Le **calcul d'attention proprement dit** (scores, softmax, somme pondérée) vaut
+**45,02 ms/token, soit 4,5 %** du poste ; le reste est de la projection — dont
+**566,75 ms pour la dé-rotation et la sortie groupée** (`wo_a`/`wo_b`), le premier
+poste d'`attn_v4` désormais. Et la perplexité est encore **115 521,8693**, la même
+qu'avant l'optimisation : les compteurs ne changent rien.
+
+### 5. Ce que la mesure laisse sur la table, et pourquoi on s'arrête là
 
 Le poste d'attention lit ~6,6 Go de poids par jeton (41 M de poids f32 × 40
 couches) en 1,32 s, soit **≈ 5 Go/s** — loin des ~40-60 Go/s que la DDR4 de cette
@@ -114,6 +132,27 @@ lecture, pas par des noyaux.
   8430,4966** (c'est la porte qui protège `forward_mla`, touché ici), 63 tests,
   Qwen 19,3885, clusters 799,8557, engram, et les cinq modes du découpage.
 - V4.1 : perplexité et vides **inchangés** (mesuré ci-dessus).
+
+## Planning du bloc 16 — le poste dominant : les experts sur NVMe
+
+`proj+mlp` vaut maintenant **3 530 ms/token à ctx 32** (contre 1 003 pour
+l'attention) et c'est de la lecture d'experts : ~6 experts par couche sur 384,
+pris au hasard dans ~330 Go, 40 couches par jeton. P9 a déjà établi que le goulot
+est la LECTURE (même calcul, mêmes chiffres : 86,9 Go en 3 tranches = 111,8 s
+contre 8 grappes = 39,9 s).
+
+Chantiers du bloc 16 :
+
+1. **Mesurer la réutilisation** : `--trace-experts` (qui existe) sur 64 jetons de
+   wiki réel, puis la distribution (quels experts, combien de fois) — c'est la
+   seule façon de savoir si un cache en RAM peut mordre, et `--profil-experts`
+   donne déjà le compte par couche.
+2. **Garder en RAM ce qui se répète** (132 Go disponibles, 330 Go d'experts) : une
+   politique de résidence explicite, **sans changer un chiffre** — un expert lu
+   depuis la RAM rend les mêmes octets que depuis le NVMe, donc l'égalité au bit
+   près est de nouveau la preuve attendue (vides avant/après).
+3. **Publier** : secondes par jeton avant/après, à ctx 8 et ctx 32, plus le taux
+   de réutilisation qui justifie (ou non) la politique.
 
 ## Ce qui reste, nommé
 

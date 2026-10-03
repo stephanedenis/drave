@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 103.6 h |
+| Durée | 103.8 h |
 | Tours | 79 |
-| Messages | 6109 |
-| Appels d'outils | 5852 |
+| Messages | 6125 |
+| Appels d'outils | 5868 |
 | Fichiers touchés | 116 |
-| Commandes | 4927 |
+| Commandes | 4940 |
 | Sous-agents | 32 |
-| Commits | 373 |
+| Commits | 374 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -4037,7 +4037,7 @@ P0-P6 faites, P8 portée et val
 
 ### Tour 79 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [941 caractères tronqués]
 
-*1112 appels d'outils.* Actions notables :
+*1128 appels d'outils.* Actions notables :
 
 - web_search
 - web_fetch
@@ -4053,7 +4053,7 @@ P0-P6 faites, P8 portée et val
 - bash — Locate hc_collapse_triton definition
 - read
 - bash — Read mHC init and pre/post call sites
-- … et 986 autres
+- … et 1001 autres
 
 **Synthèse produite :**
 
@@ -4108,7 +4108,7 @@ P0-P6 faites, P8 portée et val
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/histoire.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/roadmap.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs` | 0 | 99 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs` | 0 | 30 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs` | 0 | 32 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/gpu.rs` | 0 | 3 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gpu-topk-selection.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/README.md` | 0 | 3 |
@@ -4259,7 +4259,7 @@ P0-P6 faites, P8 portée et val
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 4887 autres
+- … et 4900 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4387,7 +4387,7 @@ P0-P6 faites, P8 portée et val
 
 ## 5. Erreurs rencontrées
 
-313 sorties en erreur ou divergentes. Les premières :
+314 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -4780,4 +4780,5 @@ P0-P6 faites, P8 portée et val
 - Engram : l'ablation grandit avec le contexte (22 % → 55 %), et la formule est exclue comme cause  Deux mesures de plus, mêmes réglages, mêmes jetons, deux fenêt
 - Sprint 14 : clôture (50 min utiles) — les trois chantiers sont livrés et mesurés" && tools/sprint.sh start "P9 — le poste d'attention V4.1 : profiler les 12,4 s
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="sprints/15-p9-le-poste-d-attention-v4-1-profiler-le.md" s=open(p).read() a="""### 3. C
+- Sprint 15 : le profil V4 dit maintenant où passent les 1 003 ms/token d'attention (4,5 % seulement dans le calcul)  Cinq sous-compteurs (statiques PROF_V4) remp
 

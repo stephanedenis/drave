@@ -98116,3 +98116,205 @@ sys	1m4,102s
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"sprints/15-p9-le-poste-d-attention-v4-1-profiler-le.md\"\ns=open(p).read()\na=\"\"\"### 3. Ce que la mesure laisse sur la table, et pourquoi on s'arrête là\"\"\"\nb=\"\"\"### 3. Le gain à contexte plus long, et  … [4686 caractères tronqués]`
+
+  ```
+ok sprint
+ok rapport
+417f8f2 P9 : le matvec f32 de V4.1 parallélisé par LIGNES — ×9,34 sur l'attention, ×3 sur la passe, zéro bit changé
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && awk 'NR>=5620 && NR<=5780 && (/^        \\/\\/ ----/ || /let t_/ || /n_vis/ || /sc[0-9]?\\[/ || /blocs_gardes/)' drave-core/src/model.rs | head -20; echo \"=== bornes ===\"; awk 'NR>=5610 && NR<=5780 && /^        \\/\\// {print NR\": … [111 caractères tronqués]`
+
+  ```
+if m.candidats_max > 0 && l > m.candidat_source && n_vis > m.candidats_max {
+                    panic!("indexeur de V4.1 (couche {l}) : {n_vis} blocs compressés > \
+                let k = n_vis.min(m.indexer_top_k);
+                let mut ordre: Vec<u32> = (0..n_vis as u32).collect();
+                    let mut masque = vec![0f32; n_vis];
+                blocs_gardes = Some(ordre);
+        // fenêtre et tous les blocs entièrement révolus — `n_visible =
+        let gardes: Vec<u32> = blocs_gardes.clone()
+            .unwrap_or_else(|| (0..n_vis as u32).collect());
+                sc[t - debut_fenetre] = s * scale;
+                sc[n_clair + j] = s * scale;
+            sc[n_clair + n_gardes] = puits;
+                let w = sc[t - debut_fenetre] * inv;
+                let w = sc[n_clair + j] * inv;
+=== bornes ===
+5663:         // Ce que l'attention voit en clair : la fenêtre des derniers jetons
+5664:         // (`attention.sliding_window`), le reste étant résumé en blocs.
+5671:         // --- scores : `1/sqrt(head_dim)`, puits appris dans le dénominateur.
+5672:         //
+5673:         // Les clés sont de DEUX sortes, dans cet ordre : la fenêtre brute (les
+5674:         // dern
+… [515 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"drave-core/src/model.rs\"\ns=open(p).read()\n\n# 1) les compteurs (statiques : attn_v4 est une fonction associée sans `self`)\na = \"\"\"fn matvec_f32_fils(w: &[f32], x: &[f32], n_in: usize, n_out: usize, y: &mu … [2923 caractères tronqués]`
+
+  ```
+marqueurs posés
+5359:        PROF_V4[0].fetch_add(t0.elapsed().as_nanos() as u64,
+5524:        PROF_V4[1].fetch_add(t1.elapsed().as_nanos() as u64,
+5687:        PROF_V4[1].fetch_add(t1.elapsed().as_nanos() as u64,
+5754:        PROF_V4[2].fetch_add(t2.elapsed().as_nanos() as u64,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"drave-core/src/model.rs\"\ns=open(p).read()\n# a2 : après le marqueur « indexeur » (PROF_V4[1] = temps du compresseur), ouvrir t2\na = \"\"\"        PROF_V4[1].fetch_add(t1.elapsed().as_nanos() as u64,\n         … [1792 caractères tronqués]`
+
+  ```
+ok
+2687:        let t0 = Instant::now();
+3660:            let t0 = Instant::now();
+5313:        let t0 = Instant::now();
+5359:        PROF_V4[0].fetch_add(t0.elapsed().as_nanos() as u64,
+5361:        let t1 = Instant::now();
+5524:        PROF_V4[1].fetch_add(t1.elapsed().as_nanos() as u64,
+5526:        let t2 = Instant::now();
+5688:        PROF_V4[2].fetch_add(t2.elapsed().as_nanos() as u64,
+5690:        let t3 = Instant::now();
+5755:        PROF_V4[3].fetch_add(t3.elapsed().as_nanos() as u64,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"drave-core/src/main.rs\"\ns=open(p).read()\na = \"\"\"    println!(\"    dont attention : scores {:.2} | softmax {:.2} | somme pondérée + écriture KV {:.2}\",\n             p[4] / n as f64 * 1e3, p[5] / n as f64 … [1388 caractères tronqués]`
+
+  ```
+ok
+    Finished `release` profile [optimized] target(s) in 31.55s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ./drave-core/target/release/drave /home/stephane/FastNVMe/modeles/lourds/DeepSeek-V4.1-Flash-Q2.gguf --ppl /tmp/v41_last4.ids --ctx 8 --limit 4 --abits 8 --threads 20 2>&1 | grep -E \"postes|dont attention|perplexité\"", "description … [52 caractères tronqués]`
+
+  ```
+(no output)
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ./drave-core/target/release/drave /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf --ppl /tmp/v41_last4.ids --ctx 8 --limit 4 --abits 8 --threads 20 2>&1 | grep -E \"postes|dont attention|perplexité\"", "description … [67 caractères tronqués]`
+
+  ```
+3 tokens notés — perplexité cumulée 1743713.624  (0.1 tok/s)
+=== perplexité 1743713.6243 sur 3 tokens (0 événements, 21.2 s) ===
+    postes (ms/token) : projets-attn 0.00 | rope 0.00 | attention 1225.95 | proj+mlp 5713.53 | somme 6939.48 | reste (tête + échantillonnage) 123.77
+    dont attention : scores 0.00 | softmax 0.00 | somme pondérée + écriture KV 1225.95
+    dont attention V4 (attn_v4) : projets q/kv 474.49 | compresseur 8.68 | indexeur 13.37 | scores + softmax + somme 9.80
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && awk 'NR>5755 && /^    (pub )?fn /{print NR\": \"$0; exit}' drave-core/src/model.rs; sed -n 5740,5760p drave-core/src/model.rs", "description": "Find the end of attn_v4"}`
+
+  ```
+5802:     pub fn forward_mla(&mut self, tok: u32, pos: usize) -> Vec<f32> {
+            let out = &mut sortie[hh * hd..(hh + 1) * hd];
+            for t in debut_fenetre..n {
+                let w = sc[t - debut_fenetre] * inv;
+                if w == 0.0 { continue; }
+                let kt = &etat.cles[t * hd..(t + 1) * hd];
+                for i in 0..hd { out[i] += w * kt[i]; }
+            }
+            for (j, &b) in gardes.iter().enumerate() {
+                let w = sc[n_clair + j] * inv;
+                if w == 0.0 { continue; }
+                let kt = &cles_comp[b as usize * hd..(b as usize + 1) * hd];
+                for i in 0..hd { out[i] += w * kt[i]; }
+            }
+        }
+        Self::vider_couche(dump, "attn_brut", l, pos, &sortie);
+        PROF_V4[3].fetch_add(t3.elapsed().as_nanos() as u64,
+                             std::sync::atomic::Ordering::Relaxed);
+        // --- dé-rotation de la partie rope, par tête
+        {
+            let mut op = vec![0f32; nh * nr];
+            for hh in 0..nh {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 5786,5800p drave-core/src/model.rs", "description": "Read the end of attn_v4"}`
+
+  ```
+*paires += (m.wo_a.len() + m.wo_b.len()) as u64;
+        matvec_f32_fils(&m.wo_b, &oa, m.n_groups * m.o_lora, h, att, n_fils);
+        // Seulement `h` valeurs : `att` est dimensionné `nh × head_dim` pour le
+        // chemin dense, et vider le tampon entier noierait la sortie dans des
+        // valeurs périmées (la comparaison a signalé « longueurs différentes »).
+        Self::vider_couche(dump, "attn_out", l, pos, &att[..h]);
+    }
+
+    /// Passe avant d'un modèle **MLA**, un jeton à la fois, avec le cache
+    /// LATENT : `c_kv` (la seule tête latente) et `k_rope` (les composantes
+    /// tournées) sont écrites une fois par position, et `k_nope`/`v` sont
+    /// reconstruits à la lecture par `W_kv_b` — c'est le contrat de MLA.
+    ///
+    /// Chemin séparé de `forward` à dessein : le modèle jouet du harnais
+    /// (`tools/mla_synthetique.py`) n'a ni tenseurs Q8_0 ni fenêtre glissante, et
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"drave-core/src/model.rs\"\ns=open(p).read()\n# 5e compteur\na = \"\"\"pub static PROF_V4: [std::sync::atomic::AtomicU64; 4] =\n    [const { std::sync::atomic::AtomicU64::new(0) };\n     4];\"\"\"\nb = \"\"\"pub  … [2054 caractères tronqués]`
+
+  ```
+Finished `release` profile [optimized] target(s) in 31.77s
+       3 tokens notés — perplexité cumulée 1743713.624  (0.2 tok/s)
+=== perplexité 1743713.6243 sur 3 tokens (0 événements, 17.0 s) ===
+    postes (ms/token) : projets-attn 0.00 | rope 0.00 | attention 1265.58 | proj+mlp 4277.04 | somme 5542.61 | reste (tête + échantillonnage) 117.32
+    dont attention : scores 0.00 | softmax 0.00 | somme pondérée + écriture KV 1265.58
+    dont attention V4 (attn_v4) : projets q/kv 492.28 | compresseur 9.21 | indexeur 13.73 | scores + softmax + somme 10.18
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 36, in <module>
+AssertionError
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"dont attention V4\" -A 3 drave-core/src/main.rs", "description": "Read the actual V4 print statement"}`
+
+  ```
+4989:            println!("    dont attention V4 (attn_v4) : projets q/kv {:.2} | compresseur {:.2} | indexeur {:.2} | scores + softmax + somme {:.2}",
+4990-                     v[0], v[1], v[2], v[3]);
+4991-        }
+4992-    }
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs", "new_string": "            println!(\"    dont attention V4 (attn_v4) : projets q/kv {:.2} | compresseur {:.2} | indexeur {:.2} | scores + softmax + somme {:.2} | dé-rotation + sortie groupée {:.2}\",\n           … [256 caractères tronqués]`
+
+  ```
+Error: cannot edit "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs": file changed since it was read — re-read the file, then retry
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs", "limit": 6, "offset": 4988}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs</path>
+<type>file</type>
+<content>
+4988:         if v.iter().any(|x| *x > 0.0) {
+4989:             println!("    dont attention V4 (attn_v4) : projets q/kv {:.2} | compresseur {:.2} | indexeur {:.2} | scores + softmax + somme {:.2}",
+4990:                      v[0], v[1], v[2], v[3]);
+4991:         }
+4992:     }
+4993: }
+
+(Showing lines 4988-4993 of 5388. Use offset=4994 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs", "new_string": "            println!(\"    dont attention V4 (attn_v4) : projets q/kv {:.2} | compresseur {:.2} | indexeur {:.2} | scores + softmax + somme {:.2} | dé-rotation + sortie groupée {:.2}\",\n           … [256 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cargo build --release --manifest-path drave-core/Cargo.toml 2>&1 | grep -E \"^error|Finished\" | head -3 && ./drave-core/target/release/drave /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf --ppl /tmp/v41_texte.txt … [190 caractères tronqués]`
+
+  ```
+Finished `release` profile [optimized] target(s) in 32.65s
+      31 tokens notés — perplexité cumulée 115521.869  (0.2 tok/s)
+=== perplexité 115521.8693 sur 31 tokens (0 événements, 145.1 s) ===
+    postes (ms/token) : projets-attn 0.00 | rope 0.00 | attention 1002.74 | proj+mlp 3530.27 | somme 4533.01 | reste (tête + échantillonnage) 148.20
+    dont attention : scores 0.00 | softmax 0.00 | somme pondérée + écriture KV 1002.74
+    dont attention V4 (attn_v4) : projets q/kv 372.34 | compresseur 6.73 | indexeur 11.66 | scores + softmax + somme 45.02 | dé-rotation + sortie groupée 566.75
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cargo test --release --manifest-path drave-core/Cargo.toml 2>&1 | grep -E \"test result|FAILED\" | head -3", "description": "Run the tests after the timer changes", "timeoutMs": 600000}`
+
+  ```
+test result: ok. 63 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"sprints/15-p9-le-poste-d-attention-v4-1-profiler-le.md\"\ns=open(p).read()\na=\"\"\"### 4. Ce que la mesure laisse sur la table, et pourquoi on s'arrête là\"\"\"\nb=\"\"\"### 4. Le profil dit maintenant ce qu'il … [3639 caractères tronqués]`
