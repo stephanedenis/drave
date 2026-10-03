@@ -553,6 +553,17 @@ Une phase qui ne passe pas ses deux portes ne passe pas à la suivante.
 > sommes, donc la référence de non-régression : décision reportée, conditions
 > écrites (`sprints/15`).
 >
+> **Ce qui a été essayé et REFUSÉ par la mesure (bloc 16)** : un **cache RAM des
+> experts** (`DRAVE_EXPERTS_RAM`), justifié par une trace de routage (50 % des
+> lectures dans 394 experts, 31,9 % de réutilisation entre jetons consécutifs).
+> Il est **plus lent** : passe ctx 32 = 145,1 s sans, 151,2 s à 4 Go (+4 %),
+> 175,5 s à 32 Go (+21 %), perplexité identique. Le noyau fait déjà ce travail
+> (`buff/cache`, ~95 Go de pages), donc la copie ajoute un second exemplaire et du
+> `memcpy` sans retirer les lectures NVMe. Le drapeau reste, éteint, avec son
+> verdict dans son annonce. Le poste dominant reste `proj+mlp` (3 530 ms/token à
+> ctx 32) : de la lecture d'experts, à traiter par la structure (grappes,
+> découpage entre nœuds), pas par un cache.
+>
 > - Deux sujets distincts, à ne pas confondre :
   - **noyaux IQ natifs** : aujourd'hui les experts passent par déquantification
     + produit f32 (juste, lent). Un noyau se justifie si le débit mesuré en P6

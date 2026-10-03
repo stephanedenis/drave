@@ -122,6 +122,20 @@ cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo build --r
 > des jetons d'image reste un no-op **décidé** (sans objet en texte, réouverture
 > avec un chemin multimodal V4.1).
 >
+> **Mise à jour du 02/10 (23h) — V4.1 trois fois plus rapide, sans changer un
+> bit.** Le poste d'attention valait 12 369,91 ms par jeton parce que son produit
+> matrice-vecteur f32 était **mono-fil** ; il est maintenant parallèle **par
+> lignes** (chaque ligne garde son ordre de sommation) : **1 324,48 ms/token**,
+> et la passe complète de 66-68 s à **22,2 s** — perplexité et 2 544 vides
+> **identiques au bit près**, porte V4-Flash 8430,4966 inchangée. De bout en bout
+> à ctx 32 : 313,1 s → 152,9 s (×2,05). Nouveau profil : `postes` + une ligne
+> « dont attention V4 » (projets q/kv, compresseur, indexeur, scores+somme,
+> dé-rotation+sortie groupée) — le calcul d'attention proprement dit ne fait que
+> **4,5 %** du poste ; le poste dominant est maintenant `proj+mlp` (lecture
+> d'experts). Essayé et **refusé par la mesure** : un cache RAM des experts
+> (`DRAVE_EXPERTS_RAM`) est 4 à 21 % PLUS LENT (le noyau cache déjà) — drapeau
+> éteint, verdict dans son annonce.
+>
 > **Revue adverse du bloc 13** : trois chiffres publiés corrigés (953 tenseurs de
 > la passe répartie et non 2 544 ; 82 016 octets au retour et non 81 999 ; la
 > trame sans préfixe v6 **interbloque** le pair au lieu d'être « fausse et

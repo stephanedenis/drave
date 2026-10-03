@@ -1,6 +1,7 @@
 # Sprint 16 — Le poste dominant de V4.1 : les experts sur NVMe — mesurer la réutilisation, garder en RAM ce qui se répète, publier le gain
 
-- **Début** : 22:32 · **Fin** : 00:12 · **Objectif** : le poste `proj+mlp`
+- **Début** : 22:32 · **Fin** : 23:05 (33 min — les mesures étaient courtes :
+  la passe V4.1 est à 22 s depuis le bloc 15) · **Objectif** : le poste `proj+mlp`
   (3 530 ms/token à ctx 32) est de la lecture d'experts — mesurer la réutilisation,
   garder en RAM ce qui se répète **sans changer un chiffre**, publier le gain.
 - **Engagement de fin** : dépôt vert (tests + portes), machine rendue, tout commité.

@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 104.3 h |
 | Tours | 79 |
-| Messages | 6159 |
-| Appels d'outils | 5902 |
+| Messages | 6161 |
+| Appels d'outils | 5904 |
 | Fichiers touchés | 117 |
-| Commandes | 4971 |
+| Commandes | 4973 |
 | Sous-agents | 32 |
-| Commits | 377 |
+| Commits | 378 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -4037,7 +4037,7 @@ P0-P6 faites, P8 portée et val
 
 ### Tour 79 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [941 caractères tronqués]
 
-*1162 appels d'outils.* Actions notables :
+*1164 appels d'outils.* Actions notables :
 
 - web_search
 - web_fetch
@@ -4053,7 +4053,7 @@ P0-P6 faites, P8 portée et val
 - bash — Locate hc_collapse_triton definition
 - read
 - bash — Read mHC init and pre/post call sites
-- … et 1034 autres
+- … et 1036 autres
 
 **Synthèse produite :**
 
@@ -4260,7 +4260,7 @@ P0-P6 faites, P8 portée et val
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 4931 autres
+- … et 4933 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4785,4 +4785,5 @@ P0-P6 faites, P8 portée et val
 - Sprint 15 : clôture (107 min) — ×9,34 sur l'attention sans changer un bit, et le profil complété" && git log --oneline -1 && date
 - Sprint 15 : l'heure de clôture réelle (31 min, pas 107 — mesurée sur l'horloge)" && grep -n '"--trace-experts"' drave-core/src/main.rs | head -3; free -g | head
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cargo test --release --manifest-path drave-core/Cargo.toml 2>&1 | grep -E "test result|FAILED" | head -2; 
+- Docs : la vitesse V4.1 (×3, zéro bit changé) et le cache d'experts refusé par la mesure entrent dans le plan et dans REPRISE  · plan P9 : le résultat NÉGATIF du
 

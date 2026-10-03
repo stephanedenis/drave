@@ -98869,3 +98869,17 @@ Updated file
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cargo test --release --manifest-path drave-core/Cargo.toml 2>&1 | grep -E \"test result|FAILED\" | head -2; now=$(date +%s); printf \"16 %s %s\\n\" \"$((now-3600))\" \"$now\" > sprints/COURANT; git add -A && git commit -q -F - <<'MSG … [2043 caractères tronqués]`
+
+  ```
+test result: ok. 63 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+61566b3 Le cache RAM d'experts de V4.1 est MESURÉ PLUS LENT (+4 % à 4 Go, +21 % à 32 Go) — et un pas d'expert faux d'un facteur 8 est corrigé
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash tools/portes.sh rapide > /tmp/porte16.log 2>&1 & sleep 2; date; echo \"porte du bloc 16 lancee\"", "description": "Launch the gate for box 16"}`
+
+  ```
+ven 02 oct 2026 23:05:11 EDT
+porte du bloc 16 lancee
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\n# 1) l'heure de clôture réelle du bloc 16\np=\"sprints/16-les-experts-sur-nvme-la-reutilisation.md\"\ns=open(p).read()\na=\"- **Début** : 22:32 · **Fin** : 00:12 · **Objectif**\"\nb=\"- **Début** : 22:32 · **Fin** : … [3295 caractères tronqués]`
