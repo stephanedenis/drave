@@ -116338,3 +116338,44 @@ The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md has been upd
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"REPRISE : le bloc 31 en tête — K3 complet, 86,787 Go par jeton, x1,58 par regroupement\" && git log --oneline -3; grep -E \"^read_bytes\" /proc/1445983/io; date \"+%H:%M\"", "description": "Commit han … [35 caractères tronqués]`
+
+  ```
+ff3a25a REPRISE : le bloc 31 en tête — K3 complet, 86,787 Go par jeton, x1,58 par regroupement
+f2116f0 Bloc 31 : la porte gpt-oss, son motif réel, et l'arbitrage assumé
+af1c377 ref_logits_k3 : la commande de liaison est écrite, le binaire n'a plus de mystère
+read_bytes: 1027070480384
+16:12
+  ```
+
+- **bash** `{"command": "sleep 295; grep -E \"^read_bytes\" /proc/1445983/io; ps -o etimes= -p 1445983; date \"+%H:%M\"", "description": "Poll reference baseline", "timeoutMs": 310000}`
+
+  ```
+read_bytes: 1081705738240
+   7075
+16:17
+  ```
+
+- **bash** `{"command": "sleep 295; grep -E \"^read_bytes\" /proc/1445983/io; ps -o etimes= -p 1445983; date \"+%H:%M\"; tail -2 /tmp/k3_apres.log", "description": "Poll reference baseline", "timeoutMs": 310000}`
+
+  ```
+read_bytes: 1136077496320
+   7376
+16:22
+  (pas d'identifiants : en produire avec --tokenize sur un texte)
+  ids : 3638,275,1309,3140,18965,84,3347,655,14472,9280,1419,13…
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && B=./drave-core/target/release/drave; M=/home/stephane/FastNVMe/qwen3-30b-a3b-Q4_K_M.gguf\nprintf \"%-12s %10s %8s\\n\" \"lot.tuile\" prompt_s \"CPU_%\"\nfor rep in 1 2 3; do\n for T in 8 64; do\n   out=$(DRAVE_TUILE_LOT=$T /usr/bin/t … [422 caractères tronqués]`
+
+  ```
+lot.tuile      prompt_s    CPU_%
+32.t8.r1         40.424      976
+32.t64.r1        26.038      897
+32.t8.r2         19.984      787
+32.t64.r2        20.000      820
+32.t8.r3         20.052      802
+32.t64.r3        20.647      821
+ 16:27:41  up 12 days  5:39,  2 users,  load average: 12,28, 8,79, 9,07
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='sprints/31-le-regroupement-par-experts-mesure-et-k3-au-complet.md'; s=open(p).read()\ns=s.replace(\"\"\"| 8 (la constante historique) | 21,74 · 21,24 · 20,24 · 21,67 | **21,22** |\n| 16 | 21,46 · 20,96 | **21,21* … [1335 caractères tronqués]`

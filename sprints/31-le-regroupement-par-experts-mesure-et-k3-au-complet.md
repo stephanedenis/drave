@@ -186,7 +186,15 @@ Mesuré (`DRAVE_TUILE_LOT`, lot 32, invite de 192 jetons, 16 fils) :
 | 16 | 21,46 · 20,96 | **21,21** |
 | 64 (déduite de 256 Kio d'activations) | 20,30 · 21,61 · 24,30 · 21,73 | **21,99** |
 
-**Aucune différence, et la grande tuile est plutôt derrière.** L'hypothèse est
+Repris **machine au calme** une fois la porte gpt-oss arrêtée (le premier point
+de chaque série est froid et se reconnaît — 40,4 s et 26,0 s — il est écarté) :
+
+| tuile | prompt_s (lot 32) | moyenne |
+|---|---|---|
+| 8 | 19,98 · 20,05 | **20,02** |
+| 64 | 20,00 · 20,65 | **20,32** |
+
+**Aucune différence, et la grande tuile est plutôt derrière (1,5 %).** L'hypothèse est
 fausse : le déchiffrage des poids n'est pas ce qui borne ce noyau. La constante
 reste donc à **8**, la valeur avec laquelle tout le reste du bloc a été mesuré,
 et `DRAVE_TUILE_LOT` est laissé comme banc d'essai — pas comme réglage.
