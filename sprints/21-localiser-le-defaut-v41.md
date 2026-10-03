@@ -173,6 +173,47 @@ déjà. Noter aussi que le vide nommé `kv_norm` contient en fait le KV **APRÈS
 rotation (les trois vides sont écrits au même endroit) : le nom trompe, à corriger
 ou à documenter.
 
+## 3quater. Le CŒUR de l'attention est vérifié — avec les blocs compressés
+
+`tools/v41_attention_coeur.py` (couche 0, ratio 0) et `tools/v41_attention_blocs.py`
+(couche 2, ratio 2, **avec blocs**) recomposent scores, softmax (puits appris BRUT),
+somme pondérée, dé-rotation et sortie groupée `wo_a`/`wo_b` :
+
+| vérification | écart max | dynamique |
+|---|---|---|
+| `attn_brut` couche 0 pos 5 (fenêtre seule) | **8,5e-07** | 2,9 |
+| `attn_out` couche 0 pos 5 (dé-rotation + wo_a + wo_b) | **5,7e-06** | 3,7 |
+| `attn_brut` couche 2 pos 5 (**9 clés = 6 fenêtre + 3 blocs**) | **7,1e-07** | 1,9 |
+
+La dernière ligne vérifie **la règle de visibilité** (`n_visible = (pos+1)/ratio`,
+bloc publié à `(b+1)·ratio − 1`) et le **chemin des blocs compressés** — la dernière
+pièce de l'attention qui n'avait jamais été comparée.
+
+## Bilan : tout ce qui est vérifiable sans référence exécutable l'est
+
+| pièce | vérification | écart |
+|---|---|---|
+| tokenizer | llama.cpp (`tools/tokenize_llama`) | identifiants identiques |
+| embarquement | fichier (F16) vs vide | **0,000e+00** |
+| attention (projections, normes, rotations) | numpy étage par étage | 1e-06 |
+| attention (scores, puits, somme, dé-rotation, wo_a/wo_b) | numpy | 1e-06 |
+| attention avec BLOCS + visibilité | numpy | 7e-07 |
+| compresseur (ratios 1 et 2) | référence du noyau publié (vLLM) | 5e-07 · 5e-06 |
+| indexeur (clés, scores, sélection) | référence numpy | 1,7e-06 · 2,9e-07 |
+| chemin des experts (routeur + 6 experts + activation) | numpy | **4e-05** |
+| routeur (sélection) | numpy vs trace | sélection identique |
+| chaîne mHC retardée + tête | source vLLM publiée, mot pour mot | conforme |
+| clamp SwiGLU | fichier (`swiglu_limit`) | corrigé (liste vs scalaire) |
+| formats (IQ2_XXS, Q2_K…) | libggml (`portes_formats.sh`) | bloc par bloc |
+| V4-Flash, de bout en bout | **llama.cpp** | 1,875 contre 1,844 |
+
+Et pourtant V4.1 ne prédit pas. **Ce qui reste hors d'atteinte sans référence
+exécutable** : (a) la composition sur 40 couches (chaque pièce est juste, la
+chaîne complète n'a pas d'oracle) ; (b) **le fichier lui-même** — un Q2 d'un modèle
+dont la référence est fp8/MXFP4, conversion que personne d'autre ne peut relire
+(llama.cpp refuse `deepseek41` : « unknown model architecture »). C'est le seul
+point que le dépôt ne peut pas trancher seul, et c'est désormais écrit.
+
 ## Portes
 
 - `tools/portes.sh rapide` : **toutes vertes** après les changements du bloc —

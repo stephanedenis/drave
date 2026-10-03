@@ -101894,3 +101894,145 @@ couche 0 : head_dim 512 · 64 têtes · attn_q_b [1280, 32768] · kv [5120, 512]
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"sprints/21-localiser-le-defaut-v41.md\"\ns=open(p).read()\na=\"\"\"Les deux tentatives d'inversion de l'angle appliqué (par paire, puis entre deux\npositions) sont **non concluantes** : la première compare des a … [2885 caractères tronqués]`
+
+  ```
+ok
+3dfa69e Attention V4.1, premiers étages TOUS vérifiés à 1e-6 — l'écart sur q_rope était une faute de MON script
+sam 03 oct 2026 04:12:08 EDT
+  ```
+
+### 🤖 Assistant
+
+**Ronde 7 — ce qui a été établi, et où en est le plan**
+
+**Le chemin des experts est VÉRIFIÉ** (`tools/v41_experts_reference.py`) : routeur + six experts déquantifiés en numpy (IQ2_XXS, Q2_K) + activation + pondération, comparés au vide neuf `moe_down` → **écart 3,9e-05 / 5,2e-05 relatifs** sur deux positions, normes concordantes à quatre décimales. C'est l'écart attendu d'une accumulation f32 contre f64 — et le numpy emploie `hn` brut, donc **la quantification d'activation à 16 bits est quasi sans perte**. Ni le MoE, ni la quantification, ni le routeur ne sont en cause.
+
+**L'attention : projections, normes et rotations vérifiées à 1e-6** (`tools/v41_attention_reference.py`, étage par étage) : `qr` 3,1e-06 · `qr_norm` 1,2e-06 · `q_norm` 6,9e-07 · `q_rope` 6,4e-07 · `kv_rope` 6,9e-07. Deux artefacts de ma part, trouvés et corrigés — l'entrée de l'attention est la **norme** du flux replié (pas le flux), et mon gather de rotation prenait `q` au lieu de `qn` (3,6 d'écart ✗ → 6,4e-07 ✓, prouvé en appliquant la rotation au `q_norm` **du moteur**).
+
+**Il reste exactement une chose à vérifier pour clore le verdict** : le **cœur de l'attention** — scores, softmax (puits appris compris), somme pondérée, dé-rotation et sortie groupée `wo_a`/`wo_b`. Les vides `attn_brut` (somme pondérée) et `attn_out` (final) existent déjà, et les tenseurs `attn_output_a/b` sont en Q8_0 (déquantificateur numpy déjà écrit) : c'est un script du même gabarit que les deux précédents.
+
+**Portes** : toutes vertes (64 tests, Qwen 19,3885, clusters 799,8557, **V4-Flash 8430,4966**, engram, cinq modes de flux).
+
+**Bilan de la traque** (14 → 17 hypothèses éliminées, 6 pièces vérifiées positivement) : tokenizer, embarquement, tête, routeur, mHC (source vLLM publiée), formats, experts, quantification, clamp SwiGLU (corrigé), `--abits` > 16 (défaut silencieux **corrigé** : saturation et enroulement i16, facteur 256 muet). Le but reste **actif** : si le cœur de l'attention est juste lui aussi, alors V4.1 est fidèle pièce par pièce sans prédire — et la question deviendra celle du **fichier** (Q2 d'un modèle déclaré fp8/MXFP4), la seule chose que je n'ai aucun moyen de trancher sans référence exécutable.
+
+
+## Tour 82
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en respectant pour chaque phase ses deux portes : porte de correction (comparaison étage par étage à llama.cpp sur V4-Flash) et porte Drave (flux : événements/paires par jeton, trace rejouée à l'identique, découpage en grappes, flux lisible par un outil d'analyse). Aucune phase ne passe à la suivante sans ses deux portes. Jamais de forward muet, jamais d'optimisation qui change une sortie sans le dire."
+Round: 8/30
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 5860,5900p drave-core/src/model.rs | grep -n \"scale\\|sink\\|puits\\|sc\\[\" ; grep -n \"let scale = 1.0 / (hd\" drave-core/src/model.rs", "description": "Locate the attention scale and sink use"}`
+
+  ```
+23:        // --- scores : `1/sqrt(head_dim)`, puits appris dans le dénominateur.
+31:        let scale = 1.0 / (hd as f32).sqrt();
+4807:        let scale = 1.0 / (hd as f32).sqrt();
+5890:        let scale = 1.0 / (hd as f32).sqrt();
+6573:                let scale = 1.0 / (hd as f32).sqrt();
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 5900,5975p drave-core/src/model.rs", "description": "Read the scores, softmax and weighted sum"}`
+
+  ```
+let cles_comp = &etat.cles_comp;
+        for hh in 0..nh {
+            let qh = &q[hh * hd..(hh + 1) * hd];
+            for t in debut_fenetre..n {
+                let kt = &etat.cles[t * hd..(t + 1) * hd];
+                let mut s = 0f32;
+                for i in 0..hd { s += qh[i] * kt[i]; }
+                sc[t - debut_fenetre] = s * scale;
+            }
+            for (j, &b) in gardes.iter().enumerate() {
+                let kt = &cles_comp[b as usize * hd..(b as usize + 1) * hd];
+                let mut s = 0f32;
+                for i in 0..hd { s += qh[i] * kt[i]; }
+                sc[n_clair + j] = s * scale;
+            }
+            // le puits : un logit appris, présent dans la somme du softmax mais
+            // sans valeur associée — c'est ce qui « draine » l'attention.
+            //
+            // Il entre BRUT : la référence appelle `ggml_soft_max_ext(kq, mask,
+            // kq_scale, …)` (l'échelle s'applique aux scores) PUIS
+            // `ggml_soft_max_add_sinks(kq, sinks)` — le puits n'est pas mis à
+            // l'échelle. Le multiplier par `1/sqrt(head_dim)` faisait diverger la
+            // sortie dès la position 0 (où l'attention est triviale), ce qui
+… [2849 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/v41_attention_coeur.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"Référence numpy du CŒUR de l'attention V4.1 : scores, softmax (puits), somme\npondérée, dé-rotation et sortie groupée.\n\nSuite de `v41_attention_reference.py`  … [4651 caractères tronqués]`
+
+  ```
+~~~~~~~~~~^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/v41_attention_coeur.py", line 82, in principale
+    oa[gg * o_lora:(gg + 1) * o_lora] = M @ sortie2[gg * gdim:(gg + 1) * gdim]
+                                        ~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ValueError: matmul: Input operand 1 has a mismatch in its core dimension 0, with gufunc signature (n?,k),(k,m?)->(n?,m?) (size 32768 is different from 4096)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"tools/v41_attention_coeur.py\"\ns=open(p).read()\na=\"\"\"    n_groups = g.tenseurs[nom(\"attn_output_a.weight\")][0][1] // \\\\\n               g.tenseurs[nom(\"attn_output_b.weight\")][0][0]  # 8\n    o_lora = … [899 caractères tronqués]`
+
+  ```
+ok
+couche 0 pos 5 : hd 512 · 64 têtes · 8 groupes × 1024 (gdim 4096) · puits (64,)
+  attn_brut (scores + puits + somme) : écart max 8.481e-07 (dynamique 2.914e+00)
+  attn_out (dé-rotation + wo_a + wo_b) : écart max 5.749e-06 (dynamique 3.719e+00) · normes 41.9509 / 41.9509
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"cles\\[pos\\|cles\\[.*\\.\\.\\|etat.cles\" drave-core/src/model.rs | head -12", "description": "Find where the raw latent cache is written"}`
+
+  ```
+5604:                let (portes, valeurs, cles) = (&etat.comp_gate, &etat.comp_kv, &mut etat.cles_comp);
+5680:                                   &cles[bloc * hd..(bloc + 1) * hd]);
+5683:                Self::rmsnorm(&cles[bloc * hd..(bloc + 1) * hd], &m.comp_norm, m.eps, &mut norm);
+5700:                    etat.idx_cles[bloc * idh..(bloc + 1) * idh].copy_from_slice(&kn);
+5710:                cles[bloc * hd..(bloc + 1) * hd].copy_from_slice(&norm);
+5794:                etat.idx_cles[bloc * idh..(bloc + 1) * idh].copy_from_slice(&norm);
+5827:                    let kb = &etat.idx_cles[b * idh..(b + 1) * idh];
+5876:            let cache = &mut etat.cles;
+5900:        let cles_comp = &etat.cles_comp;
+5904:                let kt = &etat.cles[t * hd..(t + 1) * hd];
+5935:                let kt = &etat.cles[t * hd..(t + 1) * hd];
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 5870,5900p drave-core/src/model.rs", "description": "Read the latent cache write"}`
+
+  ```
+}
+        // Ce que l'attention voit en clair : la fenêtre des derniers jetons
+        // (`attention.sliding_window`), le reste étant résumé en blocs.
+        let debut_fenetre = if m.fenetre > 0 && n > m.fenetre { n - m.fenetre } else { 0 };
+        *paires += (m.q_a.len() + m.q_b.len() + m.kv.len()) as u64;
+        {
+            let cache = &mut etat.cles;
+            cache[pos * hd..(pos + 1) * hd].copy_from_slice(&kvn);
+        }
+        PROF_V4[2].fetch_add(t2.elapsed().as_nanos() as u64,
+                             std::sync::atomic::Ordering::Relaxed);
+        let t3 = Instant::now();
+        // --- scores : `1/sqrt(head_dim)`, puits appris dans le dénominateur.
+        //
+        // Les clés sont de DEUX sortes, dans cet ordre : la fenêtre brute (les
+        // derniers jetons en clair) puis les **blocs compressés** complets. Le
+        // masque est celui de la référence : un jeton voit les jetons de sa
+        // fenêtre et tous les blocs entièrement révolus — `n_visible =
+        // (pos + 1) / ratio`, ce qui est exactement « un bloc n'est visible
+        // qu'une fois complet » (`llama-kv-cache-dsv4.cpp`).
+        let scale = 1.0 / (hd as f32).sqrt();
+        let n_c
+… [498 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/v41_attention_blocs.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"Le CŒUR de l'attention d'une couche COMPRESSÉE : fenêtre brute + blocs.\n\nC'est la dernière pièce de l'attention jamais vérifiée : `v41_attention_coeur.py`\nco … [3118 caractères tronqués]`
+
+  ```
+couche 2 pos 5 (ratio 2) : 9 clés (6 fenêtre + 3 blocs) · écart max 7.113e-07 (dynamique 1.913e+00) · normes 33.0251 / 33.0251
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"sprints/21-localiser-le-defaut-v41.md\"\ns=open(p).read()\na=\"\"\"## Portes\"\"\"\nb=\"\"\"## 3quater. Le CŒUR de l'attention est vérifié — avec les blocs compressés\n\n`tools/v41_attention_coeur.py` (couche 0, … [4217 caractères tronqués]`

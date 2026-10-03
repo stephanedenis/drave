@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 109.4 h |
-| Tours | 81 |
-| Messages | 6397 |
-| Appels d'outils | 6135 |
+| Durée | 109.5 h |
+| Tours | 82 |
+| Messages | 6407 |
+| Appels d'outils | 6143 |
 | Fichiers touchés | 118 |
-| Commandes | 5199 |
+| Commandes | 5207 |
 | Sous-agents | 32 |
-| Commits | 406 |
+| Commits | 407 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -205,6 +205,8 @@
 **Tour 80** — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en respectant pour chaque phase ses deux portes : porte de correction (comparaison étage par étage à llama.cpp sur V4-Flash) et porte Drave (flux : événements/paires par jeton, trace rejouée à l'identique, découpage en grappes, flux lisible par un outil d'analyse). Aucune phase ne passe … [661 caractères tronqués]
 
 **Tour 81** — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en respectant pour chaque phase ses deux portes : porte de correction (comparaison étage par étage à llama.cpp sur V4-Flash) et porte Drave (flux : événements/paires par jeton, trace rejouée à l'identique, découpage en grappes, flux lisible par un outil d'analyse). Aucune phase ne passe … [661 caractères tronqués]
+
+**Tour 82** — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en respectant pour chaque phase ses deux portes : porte de correction (comparaison étage par étage à llama.cpp sur V4-Flash) et porte Drave (flux : événements/paires par jeton, trace rejouée à l'identique, découpage en grappes, flux lisible par un outil d'analyse). Aucune phase ne passe … [661 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -4140,6 +4142,33 @@ Dis-moi si je poursuis sur le bloc 22 (la composition des experts en numpy, plan
 - bash — List the real attention tensor dims
 - … et 10 autres
 
+**Synthèse produite :**
+
+**Ronde 7 — ce qui a été établi, et où en est le plan**
+
+**Le chemin des experts est VÉRIFIÉ** (`tools/v41_experts_reference.py`) : routeur + six experts déquantifiés en numpy (IQ2_XXS, Q2_K) + activation + pondération, comparés au vide neuf `moe_down` → **écart 3,9e-05 / 5,2e-05 relatifs** sur deux positions, normes concordantes à quatre décimales. C'est l'écart attendu d'une accumulation f32 contre f64 — et le numpy emploie `hn` brut, donc **la quantification d'activation à 16 bits est quasi sans perte**. Ni le MoE, ni la quantification, ni le routeur ne sont en cause.
+
+**L'attention : projections, normes et rotations vérifiées à 1e-6** (`tools/v41_attention_reference.py`, étage par étage) : `qr` 3,1e-06 · `qr_norm` 1,2e-06 · `q_norm` 6,9e-07 · `q_rope` 6,4e-07 · `kv_rope` 6,9e-07. Deux artefacts de ma part, trouvés et corrigés — l'entrée de l'attention est la **norme** du flux replié (pas le flux), et mon gather de rotation prenait `q` au lieu de `qn` (3,6 d'écart ✗ → 6,4e-07 ✓, prouvé en appliquant la rotation au `q_norm` **du moteur**).
+
+**Il reste exactement une chose à vérifier pour clore le verdict** : le **cœur de l'attention** — scores, softmax (puits appris compris), somme pondérée, dé-rotation et sortie groupée `wo_a`/`wo_b`. Les vides `attn_brut` (somme pondérée) et `attn_out` (final) existent déjà, et les tenseurs `attn_output_a/b` sont en Q8_0 (déquantificateur numpy déjà écrit) : c'est un script du même gabarit que les deux précédents.
+
+**Portes** : toutes vertes (64 tests, Qwen 19,3885, clusters 799,8557, **V4-Flash 8430,4966**, engram, cinq modes de flux).
+
+**Bilan de la traque** (14 → 17 hypothèses éliminées, 6 pièces vérifiées positivement) : tokenizer, embarquement, tête, routeur, mHC (source vLLM publiée), formats, experts, quantification, clamp SwiGLU (corrigé), `--abits` > 16 (défaut silencieux **corrigé** : saturation et enroulement i16, facteur 256 muet). Le but reste **actif** : si le cœur de l'attention est juste lui aussi, alors V4.1 est fidèle pièce par pièce sans prédire — et la question deviendra celle du **fichier** (Q2 d'un modèle déclaré fp8/MXFP4), la seule chose que je n'ai aucun moyen de trancher sans référence exécutable.
+
+### Tour 82 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [941 caractères tronqués]
+
+*8 appels d'outils.* Actions notables :
+
+- bash — Locate the attention scale and sink use
+- bash — Read the scores, softmax and weighted sum
+- bash — Write and run the attention core reference
+- bash — Fix the group derivation and run
+- bash — Find where the raw latent cache is written
+- bash — Read the latent cache write
+- bash — Verify the compressed attention with blocks
+- bash — Commit the attention core verification and the balance
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -4342,7 +4371,7 @@ Dis-moi si je poursuis sur le bloc 22 (la composition des experts en numpy, plan
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5159 autres
+- … et 5167 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4896,4 +4925,5 @@ Dis-moi si je poursuis sur le bloc 22 (la composition des experts en numpy, plan
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="sprints/21-localiser-le-defaut-v41.md" s=open(p).read() a="""## Portes""" b="""## 3bis
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="sprints/21-localiser-le-defaut-v41.md" s=open(p).read() a="""## Portes""" b="""## 3ter
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="sprints/21-localiser-le-defaut-v41.md" s=open(p).read() a="""Les deux tentatives d'inv
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="sprints/21-localiser-le-defaut-v41.md" s=open(p).read() a="""## Portes""" b="""## 3qua
 
