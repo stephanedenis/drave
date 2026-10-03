@@ -98327,3 +98327,11 @@ a0ea42d Sprint 15 : le profil V4 dit maintenant où passent les 1 003 ms/token d
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"sprints/15-p9-le-poste-d-attention-v4-1-profiler-le.md\"\ns=open(p).read()\na=\"- **Début** : 22:01 · **Fin prévue** : 00:01 (boxing de 120 min)\"\nb=\"\"\"- **Début** : 22:01 · **Fin** : 23:48 (107 min utiles — … [383 caractères tronqués]`
+
+  ```
+ok
+7df398e Sprint 15 : clôture (107 min) — ×9,34 sur l'attention sans changer un bit, et le profil complété
+ven 02 oct 2026 22:32:19 EDT
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"sprints/15-p9-le-poste-d-attention-v4-1-profiler-le.md\"\ns=open(p).read()\na=\"\"\"- **Début** : 22:01 · **Fin** : 23:48 (107 min utiles — la boîte s'arrête quand les\n  trois chantiers sont livrés, mesurés et  … [792 caractères tronqués]`

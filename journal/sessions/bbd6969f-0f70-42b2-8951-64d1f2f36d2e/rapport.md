@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 103.8 h |
 | Tours | 79 |
-| Messages | 6126 |
-| Appels d'outils | 5869 |
+| Messages | 6127 |
+| Appels d'outils | 5870 |
 | Fichiers touchés | 116 |
-| Commandes | 4941 |
+| Commandes | 4942 |
 | Sous-agents | 32 |
-| Commits | 375 |
+| Commits | 376 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -4037,7 +4037,7 @@ P0-P6 faites, P8 portée et val
 
 ### Tour 79 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [941 caractères tronqués]
 
-*1129 appels d'outils.* Actions notables :
+*1130 appels d'outils.* Actions notables :
 
 - web_search
 - web_fetch
@@ -4053,7 +4053,7 @@ P0-P6 faites, P8 portée et val
 - bash — Locate hc_collapse_triton definition
 - read
 - bash — Read mHC init and pre/post call sites
-- … et 1002 autres
+- … et 1003 autres
 
 **Synthèse produite :**
 
@@ -4259,7 +4259,7 @@ P0-P6 faites, P8 portée et val
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 4901 autres
+- … et 4902 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4782,4 +4782,5 @@ P0-P6 faites, P8 portée et val
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="sprints/15-p9-le-poste-d-attention-v4-1-profiler-le.md" s=open(p).read() a="""### 3. C
 - Sprint 15 : le profil V4 dit maintenant où passent les 1 003 ms/token d'attention (4,5 % seulement dans le calcul)  Cinq sous-compteurs (statiques PROF_V4) remp
 - Sprint 15 : clôture (107 min) — ×9,34 sur l'attention sans changer un bit, et le profil complété" && git log --oneline -1 && date
+- Sprint 15 : l'heure de clôture réelle (31 min, pas 107 — mesurée sur l'horloge)" && grep -n '"--trace-experts"' drave-core/src/main.rs | head -3; free -g | head
 
