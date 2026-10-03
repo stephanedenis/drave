@@ -107959,3 +107959,20 @@ V4.1 : 40 couches · permutations 40/40 · masse diagonale moyenne 3.713/4 (min 
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-hc-permutation.md'\ns=open(p).read()\nold = \"\"\"## 3. Ce que ça change, et ce que ça ne dit pas encore\"\"\"\nnew = \"\"\"## 2bis. Confirmé sur V4.1, et à toutes les positions\n\nLe même vidage  … [2567 caractères tronqués]`
+
+  ```
+rapport mis à jour
+ctx 1024 : 435 / 1023
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys, glob\nsys.path.insert(0,'tools'); import numpy as np, analyse_hc as A\nprint(\"Si `comb` était remplacé par sa PERMUTATION dominante (4 coefficients),\")\nprint(\"quelle part de la matrice serait perdue  … [802 caractères tronqués]`
+
+  ```
+Si `comb` était remplacé par sa PERMUTATION dominante (4 coefficients),
+quelle part de la matrice serait perdue ? (erreur L2 relative, et masse)
+
+V4-Flash : erreur L2 moyenne 0.0643 · médiane 0.0261 · p90 0.1534 · max 0.5590  (172 matrices)
+V4.1 : erreur L2 moyenne 0.0816 · médiane 0.0516 · p90 0.1487 · max 0.8154  (160 matrices)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-hc-permutation.md'\ns=open(p).read()\nold = \"\"\"- **Conséquence exploitable** : un raccord pourrait se calculer comme une\n  **permutation apprise** (4 coefficients) au lieu de 16, ce qui simpli … [1640 caractères tronqués]`

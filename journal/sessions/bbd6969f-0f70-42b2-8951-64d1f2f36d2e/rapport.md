@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 115.1 h |
 | Tours | 90 |
-| Messages | 6793 |
-| Appels d'outils | 6495 |
+| Messages | 6795 |
+| Appels d'outils | 6497 |
 | Fichiers touchés | 132 |
-| Commandes | 5479 |
+| Commandes | 5481 |
 | Sous-agents | 32 |
-| Commits | 437 |
+| Commits | 438 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -4473,7 +4473,7 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 
 ### Tour 90 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [942 caractères tronqués]
 
-*57 appels d'outils.* Actions notables :
+*59 appels d'outils.* Actions notables :
 
 - bash — Check the gate suite result
 - bash — Wait for the gates
@@ -4489,7 +4489,7 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 - bash — Find the plan's remaining items
 - bash — Extract each phase's gate claims
 - read
-- … et 40 autres
+- … et 42 autres
 
 **Synthèse produite :**
 
@@ -4711,7 +4711,7 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5439 autres
+- … et 5441 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5296,4 +5296,5 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 - Audit : les deux portes, phase par phase (P0 à P9) — ce qui est tenu, ce qui est impossible et nommé, ce qui reste à la demande  Tableau vérifiable : P0-P6 et P
 - Plan : renvoi vers l'audit des deux portes, phase par phase"; s=$(stat -c %s /tmp/our_v4f1024.bin); echo "ctx 1024 : $(( (s-8)/517120 )) / 1023"
 - HC : la permutation tient sur V4.1 et à toutes les positions (332/332), et V4.1 est encore plus proche de l'identité  V4-Flash 43/43 couches en permutation à ch
+- HC : ce que coûterait une simplification en permutation — 6,4 % d'erreur L2 moyenne (V4-Flash), 8,2 % (V4.1) sur 332 matrices ; l'ablation qui mesurerait l'effe
 

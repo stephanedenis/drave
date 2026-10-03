@@ -90,9 +90,16 @@ contexte, et cela se voit jusque dans les coefficients de connexion.
   structure est **stable à 0,92** entre positions consécutives sans être figée.
 - **Conséquence exploitable** : un raccord pourrait se calculer comme une
   **permutation apprise** (4 coefficients) au lieu de 16, ce qui simplifie le
-  flux (`comb` passe de 16 à 4 valeurs par raccord, soit 24 → 12 par couche) —
-  **à condition** que la mesure tienne sur d'autres positions et sur V4.1. C'est
-  une hypothèse, pas encore une simplification.
+  flux (`comb` passe de 16 à 4 valeurs par raccord, soit 24 → 12 par couche).
+  **Ce que coûterait la simplification, mesuré sur les 332 matrices** : remplacer
+  `comb` par sa permutation dominante (0/1) donne une erreur L2 relative de
+  **6,4 % en moyenne** (médiane 2,6 %, p90 15,3 %, max 55,9 %) sur V4-Flash et
+  **8,2 %** (médiane 5,2 %, p90 14,9 %) sur V4.1. Ce n'est donc pas gratuit — et
+  ce n'est pas la même chose que l'effet sur le modèle : la manière de le
+  mesurer est une **ablation** (`DRAVE_HC_PERMUTATION`, à écrire) qui force
+  `comb` à sa permutation dominante ; la perte de perplexité se lit alors contre
+  la référence publiée, comme pour `DRAVE_SANS_BLOCS`. Tant que ce n'est pas
+  fait, la simplification reste une **hypothèse chiffrée**, pas une conclusion.
 - **Ce que ça ne dit pas** : la mesure porte sur **quatre positions** (332
   couches-position, toutes en permutation) ; la variance entre positions
   (CV 0,84 sur V4-Flash, 0,52 sur V4.1) montre que le `comb` bouge, même si sa
