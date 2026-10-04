@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 130.8 h |
-| Tours | 101 |
-| Messages | 7465 |
-| Appels d'outils | 7133 |
+| Durée | 131.7 h |
+| Tours | 102 |
+| Messages | 7488 |
+| Appels d'outils | 7154 |
 | Fichiers touchés | 150 |
-| Commandes | 6050 |
+| Commandes | 6071 |
 | Sous-agents | 32 |
-| Commits | 496 |
+| Commits | 497 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -247,6 +247,8 @@
 **Tour 100** — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas en local (classe Kimi-K3 Q4 : 1,5 To de poids, ~35 Go de poids par jeton), et étudier/implémenter ce qui nous distingue sur cette classe : découpage par experts et en grappes (chaque nœud ne lit que ce qu'il sert), réutilisation des experts entre jetons, transport de flux compact  … [966 caractères tronqués]
 
 **Tour 101** — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas en local (classe Kimi-K3 Q4 : 1,5 To de poids, ~35 Go de poids par jeton), et étudier/implémenter ce qui nous distingue sur cette classe : découpage par experts et en grappes (chaque nœud ne lit que ce qu'il sert), réutilisation des experts entre jetons, transport de flux compact  … [966 caractères tronqués]
+
+**Tour 102** — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas en local (classe Kimi-K3 Q4 : 1,5 To de poids, ~35 Go de poids par jeton), et étudier/implémenter ce qui nous distingue sur cette classe : découpage par experts et en grappes (chaque nœud ne lit que ce qu'il sert), réutilisation des experts entre jetons, transport de flux compact  … [966 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -4952,7 +4954,7 @@ Au lot 2 le temps **suit** les octets (1,36 contre 1,31) ; au-delà il décroche
 
 ### Tour 101 — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas e … [1246 caractères tronqués]
 
-*78 appels d'outils.* Actions notables :
+*86 appels d'outils.* Actions notables :
 
 - bash — Locate K3 reference implementation
 - bash — List graph node names in K3 reference
@@ -4968,11 +4970,58 @@ Au lot 2 le temps **suit** les octets (1,36 contre 1,31) ; au-delà il décroche
 - bash — Find L2 norm definition
 - bash — Locate L2 norm definition
 - bash — Search l2 norm in graph builder
-- … et 55 autres
+- … et 63 autres
 
 **Synthèse produite :**
 
-⏵ Le signe de `ssm_a` décide : invisible au jeton 0, décisif au jeton 1
+Bilan du round 27 — deux vrais bugs trouvés, un reste.
+
+\## Ce que la comparaison à la référence a sorti
+
+**1. La norme L2 par tête sur `q` et `k` n'existait nulle part dans mon code.**
+`build_gdn_l2_norm` de la référence : `x/√(Σx²+eps)`, plus `1/√(head_dim)` sur `q` seul. Sa signature était déjà dans les chiffres que j'avais sous les yeux : au jeton 0 l'état delta est nul, donc `o = β·(kᵀq)·v` — proportionnel à `v` quelle que soit l'échelle de `q` et `k` — et la norme par tête qui suit **efface cette échelle**. D'où 0,983 de corrélation au jeton 0 **avec un rapport de norme de 0,937**, puis 0,79 et 0,64 : dès le jeton 1, l'accumulation `s += k ⊗ β(v − sᵀk)` dépend de l'échelle de `k`.
+
+| couche 0 | avant | après |
+|---|---|---|
+| jeton 0, corrélation | 0,983164 | **0,999979** |
+| jeton 0, écart max | 1,19e-02 | **3,74e-04** |
+
+**2. La banque résiduelle s'accumulait entre les jetons.** Dans la référence, `resi_stack` est locale au graphe — vide à chaque passe. Ici les jetons sont traités un par un : la couche 0 empile l'entrée du jeton courant, et rien d'autre.
+
+**Ce qui reste faux** : jetons 1 et 2 à 0,819 et 0,708. C'est un défaut d'**état**, et un essai de discrimination l'a circonscrit — remettre convolution et delta à zéro avant chaque jeton donne **pire** (0,606 et 0,414), donc la référence enchaîne bien les jetons et le sens de mon état est le bon.
+
+\## Ce qui est vérifié sans supposition
+
+Métadonnées **lues dans le GGUF** : `layer_norm_rms_epsilon = 1e-05`, `kda.head_dim = 128`, `kda.gate_lower_bound = -5.0`. `ssm_a` est **négatif** (−11,78 à −0,47, donc bien `−exp(A_log)`) ; `ssm_dt.bias` est négatif lui aussi (−7,89 à +0,18), ce qui met la porte de décroissance vers −0,01 : `exp(g) ≈ 0,99`.
+
+**Point de méthode, qui change la lecture de l'écart** : pour un lot de plusieurs jetons, la référence n'emprunte **pas** `build_delta_net_autoregressive` (qui assert `n_tokens == 1`) mais `build_delta_net_chunking` — blocs de 16 rembourrés, `cumsum` du log de la décroissance, `solve_tri`. C'est un **chemin de code différent** de celui que j'ai transcrit.
+
+\## La leçon, et elle est chère
+
+Mon test « KDA contre NumPy » passait au vert depuis le début : il comparait mon code à **ma** transcription, et les deux avaient le même trou. Un test qui partage l'erreur de l'implémentation ne teste rien. C'est la comparaison à un tiers qui a trouvé les deux bugs, en deux heures, après deux jours de transcription — et c'est exactement ce que la porte de correction existe po
+… [513 caractères tronqués]
+
+### Tour 102 — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas e … [1246 caractères tronqués]
+
+*13 appels d'outils.* Actions notables :
+
+- bash — Check instrumented reference run
+- bash — Check the tensor filter that was applied
+- bash — Validate the regex before relaunching
+- bash — Relaunch with the filter correctly expanded
+- bash — Confirm the filter is applied
+- bash — Verify the filter line
+- bash — Find the filter announcement
+- bash — Check the process arguments directly
+- bash — Confirm the stale n_ckpt ordering
+- bash — Reset the bank before the residual attention
+- bash — Verify the bank-ordering fix
+- bash — Compare after the bank-ordering fix
+- bash — Commit the layer-0 milestone
+
+**Synthèse produite :**
+
+**Le jalon de la couche 0 est passé.** Les quatre jetons matchent.
 
 ## 3. Travail accompli
 
@@ -5208,7 +5257,7 @@ Au lot 2 le temps **suit** les octets (1,36 contre 1,31) ; au-delà il décroche
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6010 autres
+- … et 6031 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5852,4 +5901,5 @@ Au lot 2 le temps **suit** les octets (1,36 contre 1,31) ; au-delà il décroche
 - K3 : ce qui est vérifié sans supposition, et le point de méthode sur le chemin de la référence  Métadonnées lues dans le GGUF, plus supposées : layer_norm_rms_e
 - ref_logits : REF_UBATCH, pour forcer le chemin AUTORÉGRESSIF de la référence  build_delta_net aiguille selon n_seq_tokens : == 1 → build_delta_net_autoregressiv
 - Sprint 31 : la suite — deux bugs trouvés par la comparaison, et la leçon de méthode  Le test « KDA contre NumPy » passait au vert depuis le début : il comparait
+- K3 : LA COUCHE 0 PASSE — le troisième bug était l'ORDRE de remise à zéro de la banque  La banque résiduelle doit être repartie AVANT l'attention résiduelle, pas
 

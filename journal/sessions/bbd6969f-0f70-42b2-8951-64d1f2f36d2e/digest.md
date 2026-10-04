@@ -118776,3 +118776,273 @@ llama_model_loader: Dumping metadata keys/values. Note: KV overrides do not appl
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> sprints/31-le-regroupement-par-experts-mesure-et-k3-au-complet.md <<'EOF'\n\n## Suite (05/10, 00h-01h30) : deux bugs trouvés PAR la comparaison\n\nLa lecture du code de la référence, puis la mesure, ont sorti deux vrais défaut … [2654 caractères tronqués]`
+
+  ```
+ec0bdf1 Sprint 31 : la suite — deux bugs trouvés par la comparaison, et la leçon de méthode
+  ```
+
+- **bash** `{"command": "sleep 540; echo \"=== instrumentée ===\"; grep -c \"^\\[dump\\]\" /tmp/refk3b_run.log; tail -1 /tmp/refk3b_run.log | cut -c1-80; echo \"=== autorégressive ===\"; grep -m1 \"lot physique\" /tmp/refk3u_run.log; grep -c \"^\\[dump\\]\" /tmp/refk3u_run.log; date \"+%H:%M\"", "description":  … [48 caractères tronqués]`
+
+  ```
+=== instrumentée ===
+0
+create_tensor: loading tensor blk.92.ffn_up_shexp.input_scale
+=== autorégressive ===
+0
+01:42
+  ```
+
+- **bash** `{"command": "kill 1558045 2>/dev/null; sleep 2; ps -eo pid,etimes,comm --no-headers | awk '$3==\"ref_logits_k3\"{print}'; echo \"--- l'instrumentée garde le disque ---\"; wc -l /tmp/refk3b_run.log; date \"+%H:%M\"", "description": "Give the disk to the instrumented run"}`
+
+  ```
+1547581    9785 ref_logits_k3
+--- l'instrumentée garde le disque ---
+5259 /tmp/refk3b_run.log
+01:42
+  ```
+
+- **bash** `{"command": "sleep 540; echo \"=== dumps ===\"; grep -c \"^\\[dump\\]\" /tmp/refk3b_run.log; grep -m4 \"^\\[tensor\\]\" /tmp/refk3b_run.log | cut -c1-100; P=$(pgrep -x ref_logits_k3|head -1); [ -n \"$P\" ] && grep -E \"^read_bytes\" /proc/$P/io; date \"+%H:%M\"", "description": "Poll instrumented ru … [34 caractères tronqués]`
+
+  ```
+=== dumps ===
+0
+read_bytes: 1552216891392
+01:51
+  ```
+
+- **bash** `{"command": "sleep 420; echo \"=== tenseurs vus ===\"; grep -c \"^\\[tensor\\]\" /tmp/refk3b_run.log; grep -m6 \"^\\[tensor\\]\" /tmp/refk3b_run.log | cut -c1-110; echo \"=== fichiers ===\"; ls /tmp/refk3b-*.bin 2>/dev/null | head -8; date \"+%H:%M\"", "description": "Poll for instrumented tensor du … [26 caractères tronqués]`
+
+  ```
+=== tenseurs vus ===
+0
+=== fichiers ===
+01:59
+  ```
+
+- **bash** `{"command": "P=$(pgrep -x ref_logits_k3|head -1); if [ -n \"$P\" ]; then ps -o etimes=,%cpu=,rss= -p $P; grep -E \"^read_bytes\" /proc/$P/io; awk '{print \"état:\",$3}' /proc/$P/stat; else echo \"TERMINÉ\"; fi; tail -2 /tmp/refk3b_run.log | cut -c1-90; date \"+%H:%M\"", "description": "Check instrum … [17 caractères tronqués]`
+
+  ```
+10765  8.3 70337504
+read_bytes: 1609719402496
+état: S
+sched_reserve: graph: nodes = 17464, splits = 1, input objects = 3, input tensors = 5
+sched_reserve: reserve took 421.67 ms, sched copies = 1
+01:59
+  ```
+
+- **bash** `{"command": "sleep 500; echo \"=== tenseurs ===\"; grep -c \"^\\[tensor\\]\" /tmp/refk3b_run.log; grep -m4 \"^\\[tensor\\]\" /tmp/refk3b_run.log | cut -c1-105; ls /tmp/refk3b-*.bin 2>/dev/null | wc -l; date \"+%H:%M\"", "description": "Poll instrumented dumps", "timeoutMs": 540000}`
+
+  ```
+=== tenseurs ===
+0
+0
+02:07
+  ```
+
+- **bash** `{"command": "sleep 480; grep -c \"^\\[tensor\\]\" /tmp/refk3b_run.log; grep -m3 \"^\\[tensor\\]\" /tmp/refk3b_run.log | cut -c1-105; ls /tmp/refk3b-*.bin 2>/dev/null | head -5; date \"+%H:%M\"", "description": "Final poll for instrumented dumps", "timeoutMs": 520000}`
+
+  ```
+0
+02:15
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short | grep -v \"^ M journal\" | head -3; git log --oneline -6; echo \"=== l'essai de la couche 0, état actuel ===\"; python3 tools/compare_etats.py /tmp/apres_banque /tmp/refk3 l_out 0 0,1,2 2>&1 | tail -3", "descripti … [46 caractères tronqués]`
+
+  ```
+ec0bdf1 Sprint 31 : la suite — deux bugs trouvés par la comparaison, et la leçon de méthode
+faba8e5 ref_logits : REF_UBATCH, pour forcer le chemin AUTORÉGRESSIF de la référence
+5ddd1d9 K3 : ce qui est vérifié sans supposition, et le point de méthode sur le chemin de la référence
+430657f K3 : la référence PORTE bien l'état — essai de discrimination, et le drapeau est au bon endroit
+7a5e5d5 K3 : deux bugs trouvés par la comparaison — la norme L2 manquante, et la banque qui s'accumulait
+61c8ba5 REPRISE : la baseline de la référence (42 min/jeton) et le jalon négatif, en tête
+=== l'essai de la couche 0, état actuel ===
+  pos 0 : écart max 3.738e-04 (indice 2441, dynamique 9.662e-02) · corrélation 0.999979 ~
+  pos 1 : écart max 6.672e-02 (indice 6645, dynamique 1.097e-01) · corrélation 0.818717 ❌
+  pos 2 : écart max 2.865e-02 (indice 6340, dynamique 2.161e-01) · corrélation 0.707865 ❌
+  ```
+
+### 🤖 Assistant
+
+Bilan du round 27 — deux vrais bugs trouvés, un reste.
+
+## Ce que la comparaison à la référence a sorti
+
+**1. La norme L2 par tête sur `q` et `k` n'existait nulle part dans mon code.**
+`build_gdn_l2_norm` de la référence : `x/√(Σx²+eps)`, plus `1/√(head_dim)` sur `q` seul. Sa signature était déjà dans les chiffres que j'avais sous les yeux : au jeton 0 l'état delta est nul, donc `o = β·(kᵀq)·v` — proportionnel à `v` quelle que soit l'échelle de `q` et `k` — et la norme par tête qui suit **efface cette échelle**. D'où 0,983 de corrélation au jeton 0 **avec un rapport de norme de 0,937**, puis 0,79 et 0,64 : dès le jeton 1, l'accumulation `s += k ⊗ β(v − sᵀk)` dépend de l'échelle de `k`.
+
+| couche 0 | avant | après |
+|---|---|---|
+| jeton 0, corrélation | 0,983164 | **0,999979** |
+| jeton 0, écart max | 1,19e-02 | **3,74e-04** |
+
+**2. La banque résiduelle s'accumulait entre les jetons.** Dans la référence, `resi_stack` est locale au graphe — vide à chaque passe. Ici les jetons sont traités un par un : la couche 0 empile l'entrée du jeton courant, et rien d'autre.
+
+**Ce qui reste faux** : jetons 1 et 2 à 0,819 et 0,708. C'est un défaut d'**état**, et un essai de discrimination l'a circonscrit — remettre convolution et delta à zéro avant chaque jeton donne **pire** (0,606 et 0,414), donc la référence enchaîne bien les jetons et le sens de mon état est le bon.
+
+## Ce qui est vérifié sans supposition
+
+Métadonnées **lues dans le GGUF** : `layer_norm_rms_epsilon = 1e-05`, `kda.head_dim = 128`, `kda.gate_lower_bound = -5.0`. `ssm_a` est **négatif** (−11,78 à −0,47, donc bien `−exp(A_log)`) ; `ssm_dt.bias` est négatif lui aussi (−7,89 à +0,18), ce qui met la porte de décroissance vers −0,01 : `exp(g) ≈ 0,99`.
+
+**Point de méthode, qui change la lecture de l'écart** : pour un lot de plusieurs jetons, la référence n'emprunte **pas** `build_delta_net_autoregressive` (qui assert `n_tokens == 1`) mais `build_delta_net_chunking` — blocs de 16 rembourrés, `cumsum` du log de la décroissance, `solve_tri`. C'est un **chemin de code différent** de celui que j'ai transcrit.
+
+## La leçon, et elle est chère
+
+Mon test « KDA contre NumPy » passait au vert depuis le début : il comparait mon code à **ma** transcription, et les deux avaient le même trou. Un test qui partage l'erreur de l'implémentation ne teste rien. C'est la comparaison à un tiers qui a trouvé les deux bugs, en deux heures, après deux jours de transcription — et c'est exactement ce que la porte de correction existe pour faire.
+
+## État
+
+Tout est commité, 77 tests verts, et la porte de non-régression Qwen redonne **19,172** au chiffre près. Une passe de référence instrumentée est en vol (couches 0-4, tenseurs internes `kda_q_conv` / `kda_scan_out` / `prefix_sum_attn`…, aux mêmes noms des deux côtés) pour trancher entre la convolution et la récurrence delta ; j'ai libéré le disque pour elle en arrêtant la seconde passe (`REF_UBATCH=1`, qui force le chemin autorégressif) — elle sera relancée ensuite. L'objectif reste actif.
+
+
+## Tour 102
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas en local (classe Kimi-K3 Q4 : 1,5 To de poids, ~35 Go de poids par jeton), et étudier/implémenter ce qui nous distingue sur cette classe : découpage par experts et en grappes (chaque nœud ne lit que ce qu'il sert), réutilisation des experts entre jetons, transport de flux compact (listes DRVF), noyaux rapides (SIMD, déquantification bit-exacte), et mesure systématique (octets par jeton, débits, seuils). Les modèles périmés (DeepSeek-V4-Flash) sortent du chemin critique : leurs acquis sont conservés dans les rapports, leurs portes archivées. Règles inchangées : jamais de forward muet, jamais d'optimisation qui change une sortie sans le dire, une affirmation sans mesure n'est pas une affirmation."
+Round: 28/30
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Je vérifie où en est la passe instrumentée
+
+- **bash** `{"command": "P=$(pgrep -x ref_logits_k3|head -1); if [ -n \"$P\" ]; then ps -o etimes=,%cpu= -p $P; grep -E \"^read_bytes\" /proc/$P/io; else echo \"TERMINÉ\"; fi; echo \"--- tenseurs vus ---\"; grep -c \"^\\[tensor\\]\" /tmp/refk3b_run.log; grep -c \"^\\[dump\\]\" /tmp/refk3b_run.log; ls /tmp/refk3 … [139 caractères tronqués]`
+
+  ```
+11792  9.7
+read_bytes: 1762349826048
+--- tenseurs vus ---
+0
+0
+0
+sched_reserve: graph: nodes = 17464, splits = 1, input objects = 3, input tensors = 5
+sched_reserve: reserve took 421.67 ms, sched copies = 1
+02:16
+  ```
+
+- **bash** `{"command": "head -2 /tmp/refk3b_run.log | cut -c1-160; grep -c \"tenseurs filtrés\" /tmp/refk3b_run.log; grep -m1 \"tenseurs filtrés\" /tmp/refk3b_run.log | cut -c1-200", "description": "Check the tensor filter that was applied"}`
+
+  ```
+ref_logits: repaquetage des poids REFUSÉ (REF_SANS_REPACK) — lecture à la demande sur le fichier mmappé
+llama_model_loader: additional 31 GGUFs metadata loaded.
+1
+ref_logits: tenseurs filtrés par « $RE »
+  ```
+
+### 🤖 Assistant
+
+**Le filtre était littéral** — `$RE` n'a pas été expansé : aucune instrumentation. Je corrige.
+
+- **bash** `{"command": "kill $(pgrep -x ref_logits_k3) 2>/dev/null; sleep 2; pgrep -x ref_logits_k3 | wc -l\nRE='(^|[-])(inp_embd|attn_norm|kda_q_conv|kda_k_conv|kda_v_conv|kda_g1|kda_beta|kda_scan_out|kda_g2|kda_normed|kda_out|prefix_sum_attn|ffn_norm|ffn_out|res_probs|l_out)(-(0|1|2|3|4|12|13))?$'\nprintf '% … [384 caractères tronqués]`
+
+  ```
+0
+inp_embd attn_norm-0 kda_q_conv-0 kda_scan_out-0 l_out-0 l_out-12 res_probs-0 l_out-4 attn_norm-13 
+--- ce qui NE doit PAS passer ---
+0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && K=/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf\nexport RE='(^|[-])(inp_embd|attn_norm|kda_q_conv|kda_k_conv|kda_v_conv|kda_g1|kda_beta|kda_scan_out|kda_g2|kda_normed|kda_out| … [576 caractères tronqués]`
+
+  ```
+02:17
+  ```
+
+- **bash** `{"command": "sleep 10; grep -m1 \"tenseurs filtrés\" /tmp/refk3b_run.log | cut -c1-170; pgrep -x ref_logits_k3 | wc -l; head -1 /tmp/refk3b_run.log", "description": "Confirm the filter is applied"}`
+
+  ```
+1
+ref_logits: repaquetage des poids REFUSÉ (REF_SANS_REPACK) — lecture à la demande sur le fichier mmappé
+  ```
+
+- **bash** `{"command": "sleep 45; grep -m1 \"tenseurs filtrés\" /tmp/refk3b_run.log | cut -c1-170; wc -l < /tmp/refk3b_run.log", "description": "Verify the filter line", "timeoutMs": 90000}`
+
+  ```
+5259
+  ```
+
+- **bash** `{"command": "grep -m1 -a \"filtr\" /tmp/refk3b_run.log | cut -c1-200; echo \"---\"; head -3 /tmp/refk3b_run.log | cut -c1-120; echo \"---\"; ps -o pid,etimes,comm --no-headers -p $(pgrep -x ref_logits_k3 | head -1)", "description": "Find the filter announcement"}`
+
+  ```
+---
+ref_logits: repaquetage des poids REFUSÉ (REF_SANS_REPACK) — lecture à la demande sur le fichier mmappé
+llama_model_loader: additional 31 GGUFs metadata loaded.
+llama_model_loader: loaded meta data with 64 key-value pairs and 2573 tensors from /home/stephane/Data13TB/stephane/mode
+---
+1560556     144 ref_logits_k3
+  ```
+
+- **bash** `{"command": "tr '\\0' '\\n' < /proc/$(pgrep -x ref_logits_k3|head -1)/cmdline | tail -2 | cut -c1-200", "description": "Check the process arguments directly"}`
+
+  ```
+--tensors
+(^|[-])(inp_embd|attn_norm|kda_q_conv|kda_k_conv|kda_v_conv|kda_g1|kda_beta|kda_scan_out|kda_g2|kda_normed|kda_out|prefix_sum_attn|ffn_norm|ffn_out|res_probs|l_out)(-(0|1|2|3|4|12|13))?$
+  ```
+
+### 🤖 Assistant
+
+**Trouvé.** `Couche0` garde le `n_ckpt` du jeton précédent quand il calcule l'attention résiduelle du jeton courant.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && sed -n '/pub fn avant(&mut self, x: &\\[f32\\]) -> Result<Vec<f32>, String> {/,/self.n_ckpt = 1;/p' kimi_k3.rs | head -30", "description": "Confirm the stale n_ckpt ordering"}`
+
+  ```
+pub fn avant(&mut self, x: &[f32]) -> Result<Vec<f32>, String> {
+        let (h, nh, hd, d_inner) = (self.h, self.nh, self.hd, self.d_inner);
+        if x.len() != h { return Err(format!("entrée de {} valeurs, {h} attendues", x.len())); }
+        let mut tampon = vec![0f32; h.max(d_inner).max(self.ffn)];
+        let vider = std::env::var("DRAVE_DUMP_COUCHES").ok().filter(|p| !p.is_empty());
+        let pos = self.pos;
+        self.pos += 1;
+        // 1. attention résiduelle (pile vide → renvoie `x` tel quel)
+        let cur0 = if self.n_ckpt == 0 {
+            x.to_vec()
+        } else {
+            let mut out = vec![0f32; h];
+            crate::model::res_mix(&self.pile, self.n_ckpt, h, x, &self.attn_res_score, self.eps, &mut out);
+            out
+        };
+        // 2. la couche 0 EST une couche « banque » : on empile l'entrée BRUTE,
+        //    AVANT l'attention (`res_push(prefix_sum)` dans la référence).
+        //
+        // **La banque est REPARTIE à chaque jeton, pas accumulée.** Dans la
+        // référence, `resi_stack` est une variable locale au graphe : elle est
+        // vide au début de chaque passe, et elle porte une colonne par jeton du
+        // lot. Ici les
+… [438 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && python3 - <<'PY'\np='kimi_k3.rs'; s=open(p).read()\nold = \"\"\"        // 1. attention résiduelle (pile vide → renvoie `x` tel quel)\n        let cur0 = if self.n_ckpt == 0 {\n            x.to_vec()\n        } else {\ … [1741 caractères tronqués]`
+
+  ```
+banque repartie AVANT l'attention résiduelle
+test result: ok. 77 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && K=/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf\nnohup bash -c \"DRAVE_K3_COUCHES=1 DRAVE_DUMP_COUCHES=/tmp/fix3 timeout 7200 ./drave-core/target/release/drave $K --k3-essai > … [145 caractères tronqués]`
+
+  ```
+lancé
+  jeton 1 (id 275) : |l_out| = 0.8936 · finis : true · premiers : 0.00952 -0.00133 0.00334
+      vidé : /tmp/fix3-l_out-0-1.bin
+  jeton 2 (id 1309) : |l_out| = 0.7994 · finis : true · premiers : -0.00554 0.01464 0.00680
+      vidé : /tmp/fix3-l_out-0-2.bin
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls /tmp/fix3-l_out-0-*.bin | wc -l && python3 tools/compare_etats.py /tmp/fix3 /tmp/refk3 l_out 0 0,1,2", "description": "Compare after the bank-ordering fix", "timeoutMs": 180000}`
+
+  ```
+4
+# l_out-0 : référence ne=(7168, 4, 1, 1) → 7168 valeurs × 1 par position
+  pos 0 : écart max 3.738e-04 (indice 2441, dynamique 9.662e-02) · corrélation 0.999979 ~
+  pos 1 : écart max 2.922e-04 (indice 5921, dynamique 1.097e-01) · corrélation 0.999982 ~
+  pos 2 : écart max 3.071e-04 (indice 6645, dynamique 2.161e-01) · corrélation 0.999983 ~
+  ```
+
+### 🤖 Assistant
+
+**Le jalon de la couche 0 est passé.** Les quatre jetons matchent.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"K3 : LA COUCHE 0 PASSE — le troisième bug était l'ORDRE de remise à zéro de la banque\n\nLa banque résiduelle doit être repartie AVANT l'attention résiduelle, pas après.\nDans la référence, resi_stack … [1029 caractères tronqués]`

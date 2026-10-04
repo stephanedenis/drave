@@ -353,6 +353,15 @@ impl Couche0 {
         let vider = std::env::var("DRAVE_DUMP_COUCHES").ok().filter(|p| !p.is_empty());
         let pos = self.pos;
         self.pos += 1;
+        // 0. **La banque appartient à la PASSE du jeton.** Il faut la repartir
+        //    AVANT l'étape 1, pas après : l'attention résiduelle du jeton 0 est
+        //    appelée avec une pile VIDE (`resi_stack == nullptr` → la référence
+        //    renvoie `cur` tel quel), et c'est vrai à CHAQUE jeton puisque le
+        //    graphe est reconstruit à chaque passe. Laisser le `n_ckpt` du jeton
+        //    précédent faisait donc appliquer un `res_mix` là où la référence
+        //    n'en applique pas — invisible au jeton 0, faux dès le jeton 1.
+        self.pile.clear();
+        self.n_ckpt = 0;
         // 1. attention résiduelle (pile vide → renvoie `x` tel quel)
         let cur0 = if self.n_ckpt == 0 {
             x.to_vec()
@@ -372,7 +381,6 @@ impl Couche0 {
         // faisait mélanger le jeton 1 avec l'entrée du jeton 0 — et c'est
         // exactement ce que la comparaison montrait : jeton 0 juste à 4e-04,
         // jetons 1 et 2 faux à 0,82 et 0,64 de corrélation.
-        self.pile.clear();
         self.pile.extend_from_slice(x);
         self.n_ckpt = 1;
         // 3. RMSNorm d'entrée
