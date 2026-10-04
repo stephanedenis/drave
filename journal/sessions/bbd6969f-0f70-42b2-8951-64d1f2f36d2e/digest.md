@@ -119489,3 +119489,9 @@ couche 90 :   24110 ms · banque 8
 **Les 93 couches matchent.** C'est la vérification complète de l'architecture.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/verification-kimi-k3.md'; s=open(p).read()\nanc = \"### 4quater-quinquies. VINGT-CINQ COUCHES, TROIS BANQUES (05/10, 03h37)\"\nnew = \"\"\"### 4quater-sexies. **LA PASSE COMPLÈTE DE 93 COUCHES PASSE** (05/10 … [2829 caractères tronqués]`
+
+  ```
+1de57c9 K3 : LA PASSE COMPLÈTE DE 93 COUCHES PASSE — le modèle entier, vérifié contre llama.cpp
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\nanc = \"> **VINGT-CINQ COUCHES, TROIS BANQUES (03h37)**\"\nnew = \"\"\"> ## **LA PASSE COMPLÈTE DE KIMI-K3 PASSE (04h28)** — 93 couches, vérifiées\n>\n> `DRAVE_K3_PASSE=93` calcule  … [1412 caractères tronqués]`

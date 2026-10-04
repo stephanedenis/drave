@@ -78,6 +78,27 @@ cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo build --r
 > `res_mix` s'applique là où la référence n'en applique pas. Les trois étaient
 > invisibles au jeton 0 seul.
 >
+> ## **LA PASSE COMPLÈTE DE KIMI-K3 PASSE (04h28)** — 93 couches, vérifiées
+>
+> `DRAVE_K3_PASSE=93` calcule **tout le modèle**, une seule couche en mémoire à
+> la fois (~2,2 Go au lieu de ~220 Go). `l_out-92` comparé à llama.cpp-k3 :
+> corrélations **0,999857 / 0,999900 / 0,999919** sur trois jetons, écarts
+> relatifs 1,4 % / 0,5 % / 0,7 % — **et l'écart ne dérive pas avec la
+> profondeur**.
+>
+> **Quatre des treize points du protocole sont verts** (couches 0, 12, 24, 92),
+> et le dernier est le modèle entier : 8 points de contrôle dans la banque,
+> 68 couches KDA avec convolution et récurrence, 24 MLA à cache latent, 896
+> experts dont 16 par jeton, SiTU.
+>
+> **Coût mesuré : 7,2 minutes par jeton.** La référence met **42 minutes par
+> jeton** sur la même machine (bornée par le disque, 1,80 To lus pour 4 jetons) :
+> cette passe ne lit que les 16 experts choisis sur 896 et ne repaquette rien —
+> **six fois plus rapide que la référence, et vérifiée contre elle.**
+>
+> `DRAVE_K3_PASSE=N` est le nouvel outil ; `DRAVE_K3_COUCHES=N` reste pour
+> vérifier l'enchaînement couche par couche.
+>
 > **VINGT-CINQ COUCHES, TROIS BANQUES (03h37)** — `DRAVE_K3_COUCHES=25`, banques
 > aux couches 0, 12 et 24. Contre `l_out-24` : jetons 0/1/2 à **0,999984 /
 > 0,999893 / 0,999866**. **Trois des treize points du protocole sont verts**

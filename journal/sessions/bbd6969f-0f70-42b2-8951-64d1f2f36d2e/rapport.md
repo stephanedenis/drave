@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 133.7 h |
 | Tours | 103 |
-| Messages | 7530 |
-| Appels d'outils | 7194 |
+| Messages | 7531 |
+| Appels d'outils | 7195 |
 | Fichiers touchés | 150 |
-| Commandes | 6111 |
+| Commandes | 6112 |
 | Sous-agents | 32 |
-| Commits | 505 |
+| Commits | 506 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -5058,7 +5058,7 @@ C'est finalement la **lecture du code de la référence** qui a donné le troisi
 
 ### Tour 103 — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas e … [1246 caractères tronqués]
 
-*20 appels d'outils.* Actions notables :
+*21 appels d'outils.* Actions notables :
 
 - bash — Read PetitesK3 layer body
 - bash — Implement the layer-streaming full pass
@@ -5074,7 +5074,7 @@ C'est finalement la **lecture du code de la référence** qui a donné le troisi
 - bash — Compare streaming pass vs layer-resident composition
 - bash — Launch the full 93-layer K3 forward
 - bash — Commit the streaming pass
-- … et 5 autres
+- … et 6 autres
 
 **Synthèse produite :**
 
@@ -5314,7 +5314,7 @@ C'est finalement la **lecture du code de la référence** qui a donné le troisi
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6071 autres
+- … et 6072 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5967,4 +5967,5 @@ C'est finalement la **lecture du code de la référence** qui a donné le troisi
 - REPRISE : vingt-cinq couches de K3, trois banques, trois points verts" && git log --oneline -1; git status --short | grep -v "^ M journal" | wc -l
 - K3 : la passe complète, une couche en mémoire à la fois — les 93 couches deviennent calculables  PetitesK3::charge garde les n couches en mémoire, tout le dense
 - K3 : LA PASSE COMPLÈTE DE 93 COUCHES PASSE — le modèle entier, vérifié contre llama.cpp  DRAVE_K3_PASSE=93, une seule couche en mémoire à la fois, l_out-92 comp
+- REPRISE : la passe complète de Kimi-K3 passe — 93 couches, 7,2 min/jeton" && git log --oneline -1; git status --short | grep -v "^ M journal" | wc -l
 
