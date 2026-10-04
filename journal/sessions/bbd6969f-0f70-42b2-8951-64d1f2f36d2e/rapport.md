@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 125.3 h |
+| Durée | 127.3 h |
 | Tours | 100 |
-| Messages | 7355 |
-| Appels d'outils | 7026 |
+| Messages | 7369 |
+| Appels d'outils | 7040 |
 | Fichiers touchés | 150 |
-| Commandes | 5947 |
+| Commandes | 5961 |
 | Sous-agents | 32 |
-| Commits | 487 |
+| Commits | 488 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -4889,7 +4889,7 @@ Et le geste qui rend un modèle de 1,5 To seulement *lisible* : les experts sont
 
 ### Tour 100 — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas e … [1246 caractères tronqués]
 
-*265 appels d'outils.* Actions notables :
+*279 appels d'outils.* Actions notables :
 
 - bash — Extract the KDA into a reusable piece
 - bash — Commit the KDA extraction and check the download
@@ -4905,7 +4905,7 @@ Et le geste qui rend un modèle de 1,5 To seulement *lisible* : les experts sont
 - bash — Find expert loading call sites
 - read
 - bash — Inspect RAM expert cache
-- … et 204 autres
+- … et 207 autres
 
 **Synthèse produite :**
 
@@ -5145,7 +5145,7 @@ C'est un résultat en soi : la référence veut repaver les 1,5 To en RAM (104 G
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5907 autres
+- … et 5921 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5780,4 +5780,5 @@ C'est un résultat en soi : la référence veut repaver les 1,5 To en RAM (104 G
 - K3 : composer 13 couches, le premier essai qui franchit une BANQUE  Quatre couches exercent la chaîne (dense, deux MoE, MLA) mais ne franchissent aucune banque 
 - K3 : les 13 premières couches, dont la BANQUE de la couche 12 — sorties finies  DRAVE_K3_COUCHES=13 : quatre jetons à travers 0→12, |l_out| = 9,6728 / 9,9734 / 
 - ref_logits : REF_SANS_REPACK, la porte qui rend la référence K3 exécutable ici  Mesuré sur Kimi-K3 : le repaquetage par défaut de llama.cpp lit chaque tenseur e
+- Bloc 31 : la référence sur K3 — l'architecture passe, la politique mémoire non  llama.cpp connaît kimi-k3 : 2 573 tenseurs chargés, exactement notre compte. Mai
 

@@ -117130,3 +117130,153 @@ read_bytes: 17124999168
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -3 /tmp/refk3_run2.log; grep -c \"repack tensor\" /tmp/refk3_run2.log; git add -A && git commit -q -m \"ref_logits : REF_SANS_REPACK, la porte qui rend la référence K3 exécutable ici\n\nMesuré sur Kimi-K3 : le repaquetage par dé … [643 caractères tronqués]`
+
+  ```
+ref_logits: repaquetage des poids REFUSÉ (REF_SANS_REPACK) — lecture à la demande sur le fichier mmappé
+llama_model_loader: additional 31 GGUFs metadata loaded.
+llama_model_loader: loaded meta data with 64 key-value pairs and 2573 tensors from /home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf (version GGUF V3 (latest))
+0
+36f1243 ref_logits : REF_SANS_REPACK, la porte qui rend la référence K3 exécutable ici
+  ```
+
+- **bash** `{"command": "sleep 500; P=$(pgrep -x ref_logits_k3 | head -1); if [ -n \"$P\" ]; then grep VmRSS /proc/$P/status; grep -E \"^read_bytes\" /proc/$P/io; else echo TERMINÉ; fi; tail -4 /tmp/refk3_run2.log; ls /tmp/refk3-*.bin 2>/dev/null | wc -l; date \"+%H:%M\"", "description": "Poll reference without … [30 caractères tronqués]`
+
+  ```
+VmRSS:	86652400 kB
+read_bytes: 124574584832
+create_tensor: loading tensor blk.92.ffn_up_exps.input_scale
+create_tensor: loading tensor blk.92.ffn_gate_shexp.input_scale
+create_tensor: loading tensor blk.92.ffn_down_shexp.input_scale
+create_tensor: loading tensor blk.92.ffn_up_shexp.input_scale
+0
+20:15
+  ```
+
+- **bash** `{"command": "sleep 520; P=$(pgrep -x ref_logits_k3 | head -1); if [ -n \"$P\" ]; then grep -E \"^read_bytes\" /proc/$P/io; ps -o etimes= -p $P; else echo TERMINÉ; fi; tail -3 /tmp/refk3_run2.log; ls /tmp/refk3-*.bin 2>/dev/null | wc -l; date \"+%H:%M\"", "description": "Poll reference", "timeoutMs": … [8 caractères tronqués]`
+
+  ```
+read_bytes: 209479516160
+   1175
+create_tensor: loading tensor blk.92.ffn_gate_shexp.input_scale
+create_tensor: loading tensor blk.92.ffn_down_shexp.input_scale
+create_tensor: loading tensor blk.92.ffn_up_shexp.input_scale
+0
+20:24
+  ```
+
+- **bash** `{"command": "sleep 520; P=$(pgrep -x ref_logits_k3 | head -1); if [ -n \"$P\" ]; then grep -E \"^read_bytes\" /proc/$P/io; grep VmRSS /proc/$P/status; ps -o etimes= -p $P; else echo TERMINÉ; fi; tail -3 /tmp/refk3_run2.log; ls /tmp/refk3-*.bin 2>/dev/null | wc -l; date \"+%H:%M\"", "description": "P … [36 caractères tronqués]`
+
+  ```
+read_bytes: 280393723904
+VmRSS:	99777336 kB
+   1701
+create_tensor: loading tensor blk.92.ffn_gate_shexp.input_scale
+create_tensor: loading tensor blk.92.ffn_down_shexp.input_scale
+create_tensor: loading tensor blk.92.ffn_up_shexp.input_scale
+0
+20:33
+  ```
+
+- **bash** `{"command": "free -g | head -2; P=$(pgrep -x ref_logits_k3 | head -1); grep -E \"VmRSS|VmSwap\" /proc/$P/status; sleep 480; P=$(pgrep -x ref_logits_k3 | head -1); if [ -n \"$P\" ]; then grep -E \"^read_bytes\" /proc/$P/io; grep -E \"VmRSS|VmSwap\" /proc/$P/status; else echo TERMINÉ; fi; ls /tmp/refk … [118 caractères tronqués]`
+
+  ```
+total        used        free      shared  buff/cache   available
+Mem:             125          13           2           3         114         112
+VmRSS:	99604536 kB
+VmSwap:	       0 kB
+read_bytes: 358473662464
+VmRSS:	99971436 kB
+VmSwap:	       0 kB
+0
+20:41
+  ```
+
+- **bash** `{"command": "sleep 520; P=$(pgrep -x ref_logits_k3 | head -1); if [ -n \"$P\" ]; then grep -E \"^read_bytes\" /proc/$P/io; else echo TERMINÉ; fi; tail -3 /tmp/refk3_run2.log; ls /tmp/refk3-*.bin 2>/dev/null | wc -l; date \"+%H:%M\"", "description": "Poll reference", "timeoutMs": 560000}`
+
+  ```
+read_bytes: 483490775040
+create_tensor: loading tensor blk.92.ffn_gate_shexp.input_scale
+create_tensor: loading tensor blk.92.ffn_down_shexp.input_scale
+create_tensor: loading tensor blk.92.ffn_up_shexp.input_scale
+0
+20:50
+  ```
+
+- **bash** `{"command": "sleep 520; P=$(pgrep -x ref_logits_k3 | head -1); if [ -n \"$P\" ]; then grep -E \"^read_bytes\" /proc/$P/io; else echo TERMINÉ; fi; tail -3 /tmp/refk3_run2.log; ls /tmp/refk3-*.bin 2>/dev/null | wc -l; date \"+%H:%M\"", "description": "Poll reference", "timeoutMs": 560000}`
+
+  ```
+read_bytes: 605950074880
+create_tensor: loading tensor blk.92.ffn_gate_shexp.input_scale
+create_tensor: loading tensor blk.92.ffn_down_shexp.input_scale
+create_tensor: loading tensor blk.92.ffn_up_shexp.input_scale
+0
+20:58
+  ```
+
+- **bash** `{"command": "sleep 520; P=$(pgrep -x ref_logits_k3 | head -1); if [ -n \"$P\" ]; then grep -E \"^read_bytes\" /proc/$P/io; else echo TERMINÉ; fi; ls /tmp/refk3-*.bin 2>/dev/null | wc -l; date \"+%H:%M\"", "description": "Poll reference", "timeoutMs": 560000}`
+
+  ```
+read_bytes: 714724429824
+0
+21:07
+  ```
+
+- **bash** `{"command": "sleep 520; P=$(pgrep -x ref_logits_k3 | head -1); if [ -n \"$P\" ]; then grep -E \"^read_bytes\" /proc/$P/io; else echo TERMINÉ; fi; ls /tmp/refk3-*.bin 2>/dev/null | wc -l; date \"+%H:%M\"", "description": "Poll reference", "timeoutMs": 560000}`
+
+  ```
+read_bytes: 814544965632
+0
+21:16
+  ```
+
+- **bash** `{"command": "sleep 520; P=$(pgrep -x ref_logits_k3 | head -1); if [ -n \"$P\" ]; then grep -E \"^read_bytes\" /proc/$P/io; else echo TERMINÉ; fi; tail -2 /tmp/refk3_run2.log; ls /tmp/refk3-*.bin 2>/dev/null | wc -l; date \"+%H:%M\"", "description": "Poll reference", "timeoutMs": 560000}`
+
+  ```
+read_bytes: 912901783552
+create_tensor: loading tensor blk.92.ffn_down_shexp.input_scale
+create_tensor: loading tensor blk.92.ffn_up_shexp.input_scale
+0
+21:25
+  ```
+
+- **bash** `{"command": "sleep 520; P=$(pgrep -x ref_logits_k3 | head -1); if [ -n \"$P\" ]; then grep -E \"^read_bytes\" /proc/$P/io; else echo TERMINÉ; fi; ls /tmp/refk3-*.bin 2>/dev/null | wc -l; date \"+%H:%M\"", "description": "Poll reference", "timeoutMs": 560000}`
+
+  ```
+read_bytes: 1011279052800
+0
+21:33
+  ```
+
+- **bash** `{"command": "sleep 520; P=$(pgrep -x ref_logits_k3 | head -1); if [ -n \"$P\" ]; then grep -E \"^read_bytes\" /proc/$P/io; else echo TERMINÉ; fi; tail -3 /tmp/refk3_run2.log; ls /tmp/refk3-*.bin 2>/dev/null | wc -l; date \"+%H:%M\"", "description": "Poll reference", "timeoutMs": 560000}`
+
+  ```
+read_bytes: 1108334686208
+create_tensor: loading tensor blk.92.ffn_gate_shexp.input_scale
+create_tensor: loading tensor blk.92.ffn_down_shexp.input_scale
+create_tensor: loading tensor blk.92.ffn_up_shexp.input_scale
+0
+21:42
+  ```
+
+- **bash** `{"command": "sleep 540; P=$(pgrep -x ref_logits_k3 | head -1); if [ -n \"$P\" ]; then grep -E \"^read_bytes\" /proc/$P/io; else echo TERMINÉ; fi; ls /tmp/refk3-*.bin 2>/dev/null | wc -l; date \"+%H:%M\"", "description": "Poll reference", "timeoutMs": 570000}`
+
+  ```
+read_bytes: 1207709818880
+0
+21:51
+  ```
+
+- **bash** `{"command": "sleep 540; P=$(pgrep -x ref_logits_k3 | head -1); if [ -n \"$P\" ]; then grep -E \"^read_bytes\" /proc/$P/io; else echo TERMINÉ; fi; tail -5 /tmp/refk3_run2.log; ls /tmp/refk3-*.bin 2>/dev/null | wc -l; date \"+%H:%M\"", "description": "Poll reference", "timeoutMs": 570000}`
+
+  ```
+read_bytes: 1323709759488
+create_tensor: loading tensor blk.92.ffn_down_exps.input_scale
+create_tensor: loading tensor blk.92.ffn_up_exps.input_scale
+create_tensor: loading tensor blk.92.ffn_gate_shexp.input_scale
+create_tensor: loading tensor blk.92.ffn_down_shexp.input_scale
+create_tensor: loading tensor blk.92.ffn_up_shexp.input_scale
+0
+22:02
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> sprints/31-le-regroupement-par-experts-mesure-et-k3-au-complet.md <<'EOF'\n\n## La référence sur K3 : ce qui a été appris, et ce qui reste en vol\n\n**llama.cpp connaît `kimi-k3`.** Chargé sans broncher : 32 shards, **2 573\nt … [2781 caractères tronqués]`

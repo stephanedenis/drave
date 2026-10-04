@@ -240,3 +240,36 @@ non plus (19,172 et 19,143 avant **et** après).
 Tout le reste est vert : 77 tests, correction contre llama.cpp (100 % des
 positions utiles ≥ 0,95, top-1 94,4 %), poids hc relus, les cinq modes de
 découpage, formats contre libggml, et l'inventaire K3.
+
+## La référence sur K3 : ce qui a été appris, et ce qui reste en vol
+
+**llama.cpp connaît `kimi-k3`.** Chargé sans broncher : 32 shards, **2 573
+tenseurs** — exactement le compte de notre propre `--tensors` — dont
+`blk.92.ffn_*_shexp` et `blk.92.attn_output`. La porte de correction existe donc,
+contrairement à V4.1 où llama.cpp refuse l'architecture (P7).
+
+**Mais il ne peut pas l'exécuter ici par défaut.** Le repaquetage des poids
+(`use_extra_bufts`, actif par défaut) lit chaque tenseur et le **recopie en
+RAM**. Mesuré : après **16 tenseurs** — la couche 6 sur 93 — `ref_logits_k3`
+tenait **104 Go résidents et 6,9 Go de swap** sur une machine de 125 Go. Il ne
+pouvait pas finir, et il rendait le disque inutilisable pour tout le reste. Un
+`llama-cli` lancé en parallèle a mis **2 h 50** à lire 1,66 To sans jamais
+atteindre la phase de génération (aucune ligne « eval time ») : même obstacle.
+
+**La porte de sortie est écrite** : `REF_SANS_REPACK=1` (nouveau) met
+`use_extra_bufts = false`, donc llama.cpp travaille sur le fichier mmappé et lit
+à la demande. Effet immédiat et mesuré : **RSS 16,7 Go au lieu de 104 Go**
+pendant le chargement, `swap 0`, et aucune ligne « repack tensor ». C'est la
+seule façon dont une référence peut tourner sur une machine dont la RAM fait
+**8 %** du modèle.
+
+Au moment d'écrire, cette passe est **en vol** (1,3 To lus, RSS 100 Go stable,
+swap 0) : elle rendra les logits de référence *et* les états cachés par couche
+(`REF_DUMP`), donc la comparaison `tools/compare_etats.py` contre les sorties
+`l_out-0` et `l_out-12` déjà vidées par le moteur.
+
+**Ce que la référence dit déjà, sans avoir fini** : sur cette classe de modèle,
+la première barrière n'est pas l'architecture, ni le format, ni le tokenizer —
+c'est **la politique de mémoire du moteur de référence lui-même**. Un moteur qui
+veut les poids en RAM ne fait pas tourner un modèle de 1,5 To sur 125 Go, quel
+que soit le nombre d'experts qu'il sait sauter.
