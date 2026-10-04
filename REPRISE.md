@@ -64,6 +64,31 @@ cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo build --r
 > 25 shards (composition 0-3 : 8,7757 / 5,2909 / 5,2559 / 5,4735) : les shards
 > déjà présents portaient les octets définitifs.
 >
+> **LA RÉFÉRENCE A TOURNÉ (22h57)** : `REF_SANS_REPACK=1 tools/ref_logits_k3` sur
+> le modèle complet, 4 jetons → **2 h 48 min 21 s, soit ~42 min par jeton**, à
+> **11 % de CPU** (borné par le disque : 1,80 To lus, 451 Go/jeton, 5,2 balayages
+> du modèle), RSS 102 Go, **swap 0**. Les **93 couches** `l_out-0`…`l_out-92` sont
+> vidées dans `/tmp/refk3-l_out-N.bin`, plus les logits.
+>
+> **Et le premier jalon de vérification est NÉGATIF** : couche 0, corrélation
+> 0,9832 (pos 0) → 0,7904 (pos 1) → 0,6418 (pos 2) ; couche 12, 0,9909 → 0,4588 →
+> 0,4488. Le motif est le message : la position 0 est presque juste et tout se
+> défait à la position 1, donc le défaut est dans ce qui TRANSPORTE un état — la
+> convolution KDA (`d_conv = 4`) ou la récurrence delta-net. Au jeton 0 la
+> convolution ne voit que son remplissage, ce qui explique qu'il y soit invisible.
+> Second défaut, plus petit : la position 0 est à ~1 % (norme 0,937 fois la
+> référence).
+>
+> **Prochaine action, dans l'ordre** : (1) bissecter couche par couche avec les
+> 93 vidages de la référence pour trouver la PREMIÈRE qui décroche ; (2) comparer
+> les tenseurs INTERMÉDIAIRES de la couche 0 (entrée et sortie de la convolution,
+> au jeton 1) — `ref_logits --tensors` sait filtrer n'importe quel nœud du graphe.
+>
+> `REF_SANS_REPACK` est né de là : le repaquetage par défaut de llama.cpp
+> recopiait les poids en RAM (104 Go résidents + 6,9 Go de swap après **16**
+> tenseurs sur 2 573). C'est la première barrière de cette classe — ni
+> l'architecture, ni le format : la politique de mémoire du moteur de référence.
+>
 > **En cours au moment d'écrire** : `llama-cli` (llama.cpp-k3) charge Kimi-K3 et
 > génère — la mesure qui dira ce que la référence fait sur cette machine. La
 > porte `gpt-oss-120b MXFP4 ctx 256` (attendue 15,6017) a été **arrêtée

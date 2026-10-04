@@ -117455,3 +117455,11 @@ fichier  = /tmp/refk3_logits.bin (3 x 163840 f32 + 8 octets d'en-tete)
 **La référence a terminé** : 2 h 48 pour quatre passes, 93 couches vidées. Je consigne le jalon.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/verification-kimi-k3.md'; s=open(p).read()\nanc = \"### 4quater. LE PREMIER JALON EST RENDU — ET IL EST NÉGATIF (04/10, 22h40)\"\nnew = \"\"\"### 4ter-bis. La référence A TOURNÉ — les chiffres de la baseline … [3115 caractères tronqués]`
+
+  ```
+e2bd009 K3 : la référence a tourné — 42 min/jeton, 11 % de CPU, 1,80 To lus pour 4 passes
+75c7236 K3 : le premier jalon de vérification est NÉGATIF — et il désigne l'état, pas la forme
+94d5194 Bloc 31 : la référence sur K3 — l'architecture passe, la politique mémoire non
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\nanc = \"> **En cours au moment d'écrire** : `llama-cli` (llama.cpp-k3) charge Kimi-K3 et\"\nnew = \"\"\"> **LA RÉFÉRENCE A TOURNÉ (22h57)** : `REF_SANS_REPACK=1 tools/ref_logits_k3` … [1907 caractères tronqués]`
