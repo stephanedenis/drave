@@ -119147,3 +119147,18 @@ pos 0 : 0,990927 · pos 1 : 0,458801 · pos 2 : 0,448762
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\nanc = \"> | couche 0 | jeton 0 | jeton 1 | jeton 2 |\"\nnew = \"\"\"> **ET LES TREIZE COUCHES PASSENT (03h17)** — `DRAVE_K3_COUCHES=13`, couches 0\n> à 12, donc le **franchissement  … [947 caractères tronqués]`
+
+  ```
+6413190 REPRISE : les treize couches de K3 passent, banque comprise
+--- état ---
+0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && K=/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf\nnohup bash -c \"DRAVE_K3_COUCHES=25 DRAVE_DUMP_COUCHES=/tmp/fix25 timeout 21600 ./drave-core/target/release/drave $K --k3-essa … [199 caractères tronqués]`
+
+  ```
+25 couches lancé — trois banques (0, 12, 24), donc un res_mix à TROIS points de contrôle
+03:18
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> sprints/31-le-regroupement-par-experts-mesure-et-k3-au-complet.md <<'EOF'\n\n## Fin de bloc (05/10, 03h20) : Kimi-K3 vérifié sur treize couches\n\nTrois bugs, tous trouvés par la comparaison à llama.cpp-k3, aucun par relecture … [2467 caractères tronqués]`

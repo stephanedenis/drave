@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 132.5 h |
 | Tours | 102 |
-| Messages | 7500 |
-| Appels d'outils | 7166 |
+| Messages | 7502 |
+| Appels d'outils | 7168 |
 | Fichiers touchés | 150 |
-| Commandes | 6083 |
+| Commandes | 6085 |
 | Sous-agents | 32 |
-| Commits | 500 |
+| Commits | 501 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -5003,7 +5003,7 @@ Mon test « KDA contre NumPy » passait au vert depuis le début : il comparait 
 
 ### Tour 102 — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas e … [1246 caractères tronqués]
 
-*25 appels d'outils.* Actions notables :
+*27 appels d'outils.* Actions notables :
 
 - bash — Check instrumented reference run
 - bash — Check the tensor filter that was applied
@@ -5019,7 +5019,7 @@ Mon test « KDA contre NumPy » passait au vert depuis le début : il comparait 
 - bash — Compare after the bank-ordering fix
 - bash — Commit the layer-0 milestone
 - bash — Launch 13-layer verification
-- … et 11 autres
+- … et 13 autres
 
 **Synthèse produite :**
 
@@ -5259,7 +5259,7 @@ Mon test « KDA contre NumPy » passait au vert depuis le début : il comparait 
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6043 autres
+- … et 6045 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5907,4 +5907,5 @@ Mon test « KDA contre NumPy » passait au vert depuis le début : il comparait 
 - Docs : la couche 0 de Kimi-K3 passe, et la leçon du test qui partageait l'erreur" && git log --oneline -1
 - K3 : LES TREIZE COUCHES PASSENT, banque franchie comprise  DRAVE_K3_COUCHES=13 enchaîne les couches 0 à 12 — couche dense, MoE latents, MLA de la couche 3, récu
 - REPRISE : les treize couches de K3 passent, banque comprise" && git log --oneline -1; echo "--- état ---"; git status --short | grep -v "^ M journal" | wc -l
+- Sprint 31, fin de bloc : Kimi-K3 vérifié sur treize couches  Trois bugs trouvés par la comparaison, aucun par relecture ni par le test « KDA contre NumPy » qui 
 

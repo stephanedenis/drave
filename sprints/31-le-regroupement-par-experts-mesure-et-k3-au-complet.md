@@ -355,3 +355,43 @@ au vert depuis le début. Il comparait mon code à MA transcription — les deux
 avaient le même trou. Un test qui partage l'erreur de l'implémentation ne teste
 rien ; c'est la comparaison à un tiers qui a trouvé les deux bugs, en deux
 heures, après deux jours de transcription.
+
+## Fin de bloc (05/10, 03h20) : Kimi-K3 vérifié sur treize couches
+
+Trois bugs, tous trouvés par la comparaison à llama.cpp-k3, aucun par relecture,
+aucun par le test « KDA contre NumPy » qui passait au vert depuis le début :
+
+1. **la norme L2 par tête sur `q` et `k`** (`build_gdn_l2_norm`) était absente
+   partout — dans le code ET dans le test qui était censé le couvrir ;
+2. **la banque résiduelle s'accumulait entre les jetons** au lieu d'être propre
+   à la passe du jeton courant ;
+3. **son ORDRE de remise à zéro** : elle doit être repartie AVANT l'attention
+   résiduelle. Garder le `n_ckpt` du jeton précédent faisait appliquer un
+   `res_mix` là où la référence n'en applique pas.
+
+Les trois étaient **invisibles au jeton 0**, et c'est précisément pour ça qu'ils
+ont survécu deux jours : au jeton 0 l'état delta est nul (donc l'échelle de `q`
+et `k` disparaît dans la norme qui suit) et la banque n'a qu'un point de
+contrôle. La comparaison à un tiers les a sortis en deux heures.
+
+**Résultat, contre `l_out-0` et `l_out-12` de la référence :**
+
+| | jeton 0 | jeton 1 | jeton 2 |
+|---|---|---|---|
+| couche 0 | 0,983164 → **0,999979** | 0,790361 → **0,999982** | 0,641780 → **0,999983** |
+| couche 12 | 0,990927 → **0,999945** | 0,458801 → **0,999943** | 0,448762 → **0,999102** |
+
+**Deux des treize points de comparaison du protocole sont verts.** La couche 12
+est le point qui compte le plus : elle est atteinte après **une banque franchie**
+et un `res_mix` à DEUX points de contrôle, donc elle valide l'enchaînement que
+quatre couches ne touchaient pas.
+
+**En vol** : 25 couches (banques 0, 12, 24 → `res_mix` à TROIS points de
+contrôle). Le chemin complet des 93 couches n'est pas à portée de l'instrument :
+il déquantifie les experts en f32, et 93 couches en f32 demanderaient ~220 Go de
+RAM pour 125 Go disponibles.
+
+**Ce que ce bloc laisse, en une phrase** : le moteur calcule maintenant les
+treize premières couches de Kimi-K3 comme llama.cpp les calcule, et la méthode
+qui l'a rendu possible — comparer à un tiers plutôt qu'à soi-même — est écrite
+noir sur blanc dans `docs/verification-kimi-k3.md`.
