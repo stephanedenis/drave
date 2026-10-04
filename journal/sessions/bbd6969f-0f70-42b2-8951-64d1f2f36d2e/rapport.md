@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 134.9 h |
+| Durée | 135.3 h |
 | Tours | 104 |
-| Messages | 7560 |
-| Appels d'outils | 7222 |
+| Messages | 7567 |
+| Appels d'outils | 7229 |
 | Fichiers touchés | 150 |
-| Commandes | 6139 |
+| Commandes | 6146 |
 | Sous-agents | 32 |
-| Commits | 512 |
+| Commits | 513 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -5119,7 +5119,7 @@ Dire « c'est de l'accumulation f32 » était une affirmation. La mesure : régr
 
 ### Tour 104 — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas e … [1246 caractères tronqués]
 
-*11 appels d'outils.* Actions notables :
+*18 appels d'outils.* Actions notables :
 
 - bash — Inspect KDA and MLA state fields
 - bash — Read MlaK3 fields
@@ -5131,10 +5131,15 @@ Dire « c'est de l'accumulation f32 » était une affirmation. La mesure : régr
 - bash — Fix the expectation and add the impose knob
 - bash — Test state persistence across calls
 - bash — Commit state persistence and generation
+- bash — Poll the persistence test
+- bash — Find the crash cause
+- bash — Read the failing restore code
+- bash — Fix the MLA cache restore
+- … et 1 autres
 
 **Synthèse produite :**
 
-Le « ❌ » était une erreur de **mon** tableau d'attente : la référence donne 1103 à cette position, et mon moteur a bien donné 1103. Je corrige et je teste la persistance d'état.
+**`pas 0` est vérifié ✅** — puis un `copy_from_slice` sur un cache MLA vide. Je corrige.
 
 ## 3. Travail accompli
 
@@ -5370,7 +5375,7 @@ Le « ❌ » était une erreur de **mon** tableau d'attente : la référence don
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6099 autres
+- … et 6106 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5498,7 +5503,7 @@ Le « ❌ » était une erreur de **mon** tableau d'attente : la référence don
 
 ## 5. Erreurs rencontrées
 
-354 sorties en erreur ou divergentes. Les premières :
+355 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -6030,4 +6035,5 @@ Le « ❌ » était une erreur de **mon** tableau d'attente : la référence don
 - REPRISE : les logits du modèle entier, top-1 identique 3/3" && git log --oneline -1; echo "--- tests ---"; cd drave-core && cargo test --release 2>&1 | grep "^t
 - K3 : l'écart résiduel est caractérisé, pas supposé — pente nulle, 0,25 % de la dynamique  « C'est de l'accumulation f32 » était une affirmation. Mesure : sur l_
 - K3 : l'état récurrent survit à la libération de sa couche, et la génération gloutonne est branchée  DRAVE_K3_GEN=N fait un préfill puis N jetons engendrés en gl
+- K3 : le cache MLA se RESTAURE par affectation — la génération tombait après le 1er pas  copy_from_slice sur un cache de longueur nulle : le cache MLA d'une couc
 

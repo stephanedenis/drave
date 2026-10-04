@@ -1282,8 +1282,16 @@ impl CoucheK3 {
             }
             EtatCouche::Mla { cle, val, n_pos } => {
                 if let Some(m) = mla.as_mut() {
-                    m.cle.copy_from_slice(cle);
-                    m.val.copy_from_slice(val);
+                    // AFFECTATION, pas `copy_from_slice` : le cache MLA d'une
+                    // couche fraîchement chargée est VIDE (sa taille définitive
+                    // n'est connue qu'après le premier jeton), alors que l'état
+                    // sauvegardé en porte déjà `n_pos` lignes. Copier dans un
+                    // tampon de longueur nulle paniquait — « source slice
+                    // length (1728) does not match destination slice length
+                    // (0) » — et faisait tomber la génération APRÈS le premier
+                    // pas, celui qui était justement vérifié.
+                    m.cle = cle.clone();
+                    m.val = val.clone();
                     m.n_pos = *n_pos;
                 }
             }

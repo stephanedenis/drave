@@ -119841,3 +119841,72 @@ build ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"K3 : l'état récurrent survit à la libération de sa couche, et la génération gloutonne est branchée\n\nDRAVE_K3_GEN=N fait un préfill puis N jetons engendrés en glouton, l'état\n(convolution, delta, ca … [804 caractères tronqués]`
+
+  ```
+3f55d71 K3 : l'état récurrent survit à la libération de sa couche, et la génération gloutonne est branchée
+  ```
+
+- **bash** `{"command": "sleep 540; grep -E \"pas [0-9]\" /tmp/k3_gen2.log; tail -1 /tmp/k3_gen2.log; date \"+%H:%M\"", "description": "Poll the persistence test", "timeoutMs": 570000}`
+
+  ```
+couche 46 :   13972 ms · banque 4
+05:47
+  ```
+
+- **bash** `{"command": "sleep 540; grep -E \"pas [0-9]\" /tmp/k3_gen2.log; tail -1 /tmp/k3_gen2.log; date \"+%H:%M\"", "description": "Poll the persistence test", "timeoutMs": 570000}`
+
+  ```
+couche 86 :   15070 ms · banque 8
+05:56
+  ```
+
+- **bash** `{"command": "sleep 480; grep -E \"pas [0-9]\" /tmp/k3_gen2.log; tail -1 /tmp/k3_gen2.log; date \"+%H:%M\"", "description": "Poll the persistence test", "timeoutMs": 520000}`
+
+  ```
+pas 0 : 2 jeton(s) en entrée (1141 s) → argmax 1103 ✅ (référence)
+timeout: the monitored command dumped core
+06:04
+  ```
+
+- **bash** `{"command": "tail -6 /tmp/k3_gen2.log; echo \"=== core ? ===\"; ls -la core* /tmp/core* 2>/dev/null | head -2; dmesg 2>/dev/null | tail -3", "description": "Find the crash cause"}`
+
+  ```
+pas 0 : 2 jeton(s) en entrée (1141 s) → argmax 1103 ✅ (référence)
+
+thread 'main' (1576111) panicked at src/kimi_k3.rs:1285:27:
+copy_from_slice: source slice length (1728) does not match destination slice length (0)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+timeout: the monitored command dumped core
+=== core ? ===
+  ```
+
+### 🤖 Assistant
+
+**`pas 0` est vérifié ✅** — puis un `copy_from_slice` sur un cache MLA vide. Je corrige.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1278,1290p' drave-core/src/kimi_k3.rs", "description": "Read the failing restore code"}`
+
+  ```
+k.etat_conv_k.copy_from_slice(ck);
+                    k.etat_conv_v.copy_from_slice(cv);
+                    k.etat_delta.copy_from_slice(delta);
+                }
+            }
+            EtatCouche::Mla { cle, val, n_pos } => {
+                if let Some(m) = mla.as_mut() {
+                    m.cle.copy_from_slice(cle);
+                    m.val.copy_from_slice(val);
+                    m.n_pos = *n_pos;
+                }
+            }
+            EtatCouche::Aucun => {}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/kimi_k3.rs'; s=open(p).read()\nold = \"\"\"            EtatCouche::Mla { cle, val, n_pos } => {\n                if let Some(m) = mla.as_mut() {\n                    m.cle.copy_from_slice(cle);\n   … [1307 caractères tronqués]`
+
+  ```
+ok
+test result: ok. 77 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && K=/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf\nnohup bash -c \"DRAVE_K3_PASSE=93 DRAVE_K3_GEN=2 DRAVE_K3_IMPOSE=1309 timeout 21600 ./drave-core/target/release/drave $K --k3- … [666 caractères tronqués]`
