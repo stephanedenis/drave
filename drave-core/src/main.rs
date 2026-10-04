@@ -24,7 +24,7 @@ const VARS_LUES: &[&str] = &[
     "KV_BITS", "KV_F16", "KV_K_F16", "KV_K_F32", "KV_V_F32", "MMAP",
     "BIAIS_VL", "EXPERTS_RAM", "PRELIRE", "PRELIRE_TOUT", "Q8_BLOCS", "SANS_ENGRAM",
     "SANS_EMPRUNT",
-    "TRACE_BLOCS", "TUILE_LOT", "K3_COUCHES",
+    "TRACE_BLOCS", "TUILE_LOT", "K3_COUCHES", "K3_SANS_ETAT",
     "SANS_BLOCS", "SANS_COMPRESSION", "SIMD_DOT", "TRACE_EXPERTS", "V41_SANS_RETARD",
     "V41_TETE_COPIE0",
     "VISION_TEXTE",
@@ -2007,9 +2007,21 @@ fn run_k3_essai() {
     let ids = vec![3638u32, 275, 1309];      // « Le ciel est… » (tokenizer du modèle)
     let embd = g.dequant("token_embd.weight");
     let h = c0.hauteur();
+    // `DRAVE_K3_SANS_ETAT=1` remet l'état (convolution + delta) à zéro AVANT
+    // chaque jeton. C'est un essai de DISCRIMINATION, pas un mode : si les
+    // positions 1 et 2 se rapprochent de la référence avec un état neuf, c'est
+    // que la référence traite ces jetons indépendamment ; si rien ne bouge, le
+    // défaut est ailleurs. Le drapeau change la sortie, donc il le DIT.
+    let sans_etat = std::env::var("DRAVE_K3_SANS_ETAT")
+        .map(|v| v != "0" && !v.is_empty()).unwrap_or(false);
+    if sans_etat {
+        eprintln!("[k3-essai] DRAVE_K3_SANS_ETAT : état remis à zéro avant CHAQUE jeton \
+(essai de discrimination — la sortie change)");
+    }
     for (i, &t) in ids.iter().enumerate() {
         let d = t as usize * h;
         let x = &embd[d..d + h];
+        if sans_etat { c0.remise_a_zero(); }
         match c0.avant(x) {
             Ok(y) => {
                 let n: f32 = y.iter().map(|v| v * v).sum::<f32>().sqrt();

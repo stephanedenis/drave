@@ -118247,3 +118247,239 @@ test result: ok. 77 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fin
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"K3 : deux bugs trouvés par la comparaison — la norme L2 manquante, et la banque qui s'accumulait\n\n1. **La norme L2 par tête sur q et k n'existait nulle part** (build_gdn_l2_norm\n   de la référence  … [1388 caractères tronqués]`
+
+  ```
+7a5e5d5 K3 : deux bugs trouvés par la comparaison — la norme L2 manquante, et la banque qui s'accumulait
+read_bytes: 453143212032
+0
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && K=/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf\n./drave-core/target/release/drave $K --config 2>/dev/null | grep -iE \"kda|head_dim|ssm|conv\" | head -8\npython3 - <<'PY'\nim … [215 caractères tronqués]`
+
+  ```
+93 couches vues sur 93 déclarées · 1 dense · 68 KDA · 24 MLA · 896 experts (16 par jeton) · latent 3584
+kimi-k3.attention.head_count
+kimi-k3.attention.head_count_kv
+kimi-k3.attention.key_length_mla
+kimi-k3.attention.kv_lora_rank
+kimi-k3.attention.layer_norm_rms_epsilon
+kimi-k3.attention.q_lora_rank
+kimi-k3.attention.value_length_mla
+kimi-k3.block_count
+kimi-k3.embedding_length
+kimi-k3.expert_count
+kimi-k3.expert_feed_forward_length
+kimi-k3.expert_latent_length
+kimi-k3.expert_shared_count
+kimi-k3.expert_used_count
+kimi-k3.feed_forward_length
+kimi-k3.kda.head_dim
+kimi-k3.rope.dimension_count
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp-k3 && sed -n '415,447p' src/models/delta-net-base.cpp", "description": "Read the delta-net dispatch"}`
+
+  ```
+ggml_tensor * new_state = ggml_view_4d(ctx0, result,
+            S_v, S_v, H_v, n_seqs,
+            ggml_row_size(result->type, S_v),
+            ggml_row_size(result->type, S_v * S_v),
+            ggml_row_size(result->type, S_v * S_v * H_v),
+            ggml_row_size(result->type, S_v * H_v * n_tokens * n_seqs));
+
+    return {output, new_state};
+}
+
+std::pair<ggml_tensor *, ggml_tensor *> llm_build_delta_net_base::build_delta_net(
+        ggml_tensor * q,
+        ggml_tensor * k,
+        ggml_tensor * v,
+        ggml_tensor * g,
+        ggml_tensor * b,
+        ggml_tensor * s,
+        int           il) {
+    const int64_t n_seq_tokens = q->ne[2];
+
+    if (n_seq_tokens == 1) {
+        if (cparams.fused_gdn_ar) {
+            return build_delta_net_fused(q, k, v, g, b, s, il);
+        }
+        return build_delta_net_autoregressive(q, k, v, g, b, s, il);
+    }
+
+    if (cparams.fused_gdn_ch) {
+        return build_delta_net_fused(q, k, v, g, b, s, il);
+    }
+
+    return build_delta_net_chunking(q, k, v, g, b, s, il);
+}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp-k3 && grep -n \"build_delta_net_chunking\" -A 75 src/models/delta-net-base.cpp | sed -n '1,80p' | grep -n \"scale\\|l2\\|exp\\|cumsum\\|sqrt\\|//\" | head -25", "description": "Inspect chunked delta-net"}`
+
+  ```
+30:45-    const float scale = 1.0f / sqrtf(S_k);
+32:47-    q = ggml_scale(ctx0, q, scale);
+40:55-    q = ggml_permute(ctx0, q, 0, 2, 1, 3); // [S_k, n_tokens, H_k, n_seqs]
+41:56-    k = ggml_permute(ctx0, k, 0, 2, 1, 3); // [S_k, n_tokens, H_k, n_seqs]
+42:57-    v = ggml_permute(ctx0, v, 0, 2, 1, 3); // [S_v, n_tokens, H_v, n_seqs]
+43:58-    g = ggml_permute(ctx0, g, 0, 2, 1, 3); // [g_0, n_tokens, H_v, n_seqs]
+44:59-    b = ggml_permute(ctx0, b, 0, 2, 1, 3); // [  1, n_tokens, H_v, n_seqs]
+46:61-    const int CS = kda ? 16 : 64; // chunk size
+72:87-    // [CS, g_0, n_chunks, H_v * n_seqs]
+73:88-    // TODO: extend ggml_cumsum with axis parameter to avoid transpose
+74:89-    ggml_tensor * g_cs = ggml_cumsum(ctx0, ggml_cont(ctx0, ggml_transpose(ctx0, g)));
+  ```
+
+- **bash** `{"command": "P=$(pgrep -x ref_logits_k3|head -1); if [ -n \"$P\" ]; then grep -E \"^read_bytes\" /proc/$P/io; ps -o etimes= -p $P; fi; date \"+%H:%M\"", "description": "Check instrumented reference progress"}`
+
+  ```
+read_bytes: 475280076800
+   2850
+23:47
+  ```
+
+### 🤖 Assistant
+
+⏵ Test décisif et pas cher : la référence traite-t-elle les 4 jetons avec un état neuf ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && python3 - <<'PY'\np='main.rs'; s=open(p).read()\nold = \"\"\"    for (i, t) in [3638usize, 275, 1309].iter().enumerate() {\n        let x = &embd[t * h..(t + 1) * h];\n        // l'entrée normalisée que lit la porte de … [1320 caractères tronqués]`
+
+  ```
+test result: ok. 77 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 20, in <module>
+AssertionError
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && grep -n \"l'entrée normalisée que lit la porte de sortie\" -B 4 main.rs | head -10", "description": "Find exact text to patch"}`
+
+  ```
+1935-            let embd = g.dequant("token_embd.weight");
+1936-            let h = c0.hauteur();
+1937-            for (i, t) in [3638usize, 275, 1309].iter().enumerate() {
+1938-                let x = &embd[t * h..(t + 1) * h];
+1939:                // l'entrée normalisée que lit la porte de sortie
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && python3 - <<'PY'\np='main.rs'; s=open(p).read()\nold = \"\"\"            let h = c0.hauteur();\n            for (i, t) in [3638usize, 275, 1309].iter().enumerate() {\n                let x = &embd[t * h..(t + 1) * h];\ … [1532 caractères tronqués]`
+
+  ```
+ok
+test result: ok. 77 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && K=/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf\nnohup bash -c \"DRAVE_K3_COUCHES=1 DRAVE_K3_SANS_ETAT=1 DRAVE_DUMP_COUCHES=/tmp/sans_etat timeout 7200 ./drave-core/target/rel … [242 caractères tronqués]`
+
+  ```
+lancé
+0
+  MLA couche 3, jeton 2 : |sortie| = 9.1516 · finis : true · 226 ms
+  composition : 1 couche(s) — banques aux couches 0
+  ```
+
+- **bash** `{"command": "sleep 400; ls /tmp/sans_etat-l_out-0-*.bin 2>/dev/null | wc -l; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/compare_etats.py /tmp/sans_etat /tmp/refk3 l_out 0 0,1,2 2>&1 | head -6", "description": "Compare no-state variant", "timeoutMs": 460000}`
+
+  ```
+4
+# l_out-0 : référence ne=(7168, 4, 1, 1) → 7168 valeurs × 1 par position
+  pos 0 : écart max 3.738e-04 (indice 2441, dynamique 9.662e-02) · corrélation 0.999979 ~
+  pos 1 : écart max 6.672e-02 (indice 6645, dynamique 1.097e-01) · corrélation 0.818717 ❌
+  pos 2 : écart max 2.865e-02 (indice 6340, dynamique 2.161e-01) · corrélation 0.707865 ❌
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && grep -n \"l_out-0-\" -B 12 main.rs | head -20", "description": "Find the layer-0 dump loop"}`
+
+  ```
+2024-        match c0.avant(x) {
+2025-            Ok(y) => {
+2026-                let n: f32 = y.iter().map(|v| v * v).sum::<f32>().sqrt();
+2027-                let finis = y.iter().all(|v| v.is_finite());
+2028-                println!("  jeton {i} (id {t}) : |l_out| = {n:.4} · finis : {finis} · \
+2029-premiers : {:.5} {:.5} {:.5}", y[0], y[1], y[2]);
+2030-                // Vidage au format du moteur (`<préfixe>-<nom>-<couche>-<position>.bin`),
+2031-                // pour que `tools/compare_etats.py` puisse comparer à `l_out-0` de
+2032-                // la référence dès qu'elle tournera sur le modèle complet.
+2033-                if let Ok(prefixe) = std::env::var("DRAVE_DUMP_COUCHES") {
+2034-                    if !prefixe.is_empty() {
+2035-                        use std::io::Write;
+2036:                        let chemin = format!("{prefixe}-l_out-0-{i}.bin");
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && sed -n '2016,2026p' main.rs", "description": "Read layer-0 loop head"}`
+
+  ```
+}
+    // L'entrée de la couche 0 est l'embarquement du jeton.
+    let ids = vec![3638u32, 275, 1309];      // « Le ciel est… » (tokenizer du modèle)
+    let embd = g.dequant("token_embd.weight");
+    let h = c0.hauteur();
+    for (i, &t) in ids.iter().enumerate() {
+        let d = t as usize * h;
+        let x = &embd[d..d + h];
+        match c0.avant(x) {
+            Ok(y) => {
+                let n: f32 = y.iter().map(|v| v * v).sum::<f32>().sqrt();
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && python3 - <<'PY'\np='main.rs'; s=open(p).read()\n# 1. on retire le drapeau de la section MLA (il n'y a pas d'état KDA là)\ns = s.replace(\"\"\"            // `DRAVE_K3_SANS_ETAT=1` remet l'état à zéro AVANT chaque jeto … [2718 caractères tronqués]`
+
+  ```
+drapeau déplacé sur la couche 0
+test result: ok. 77 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && K=/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf\nnohup bash -c \"DRAVE_K3_COUCHES=1 DRAVE_K3_SANS_ETAT=1 DRAVE_DUMP_COUCHES=/tmp/sans_etat2 timeout 7200 ./drave-core/target/re … [261 caractères tronqués]`
+
+  ```
+lancé
+0
+0
+[timed out after 520000ms]
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "sleep 500; ls /tmp/sans_etat2-l_out-0-*.bin 2>/dev/null | wc -l; tail -4 /tmp/k3_sans_etat2.log", "description": "Poll discrimination test", "timeoutMs": 560000}`
+
+  ```
+4
+  jeton 1 (id 275) : |l_out| = 0.8253 · finis : true · premiers : 0.01137 -0.00805 0.00248
+      vidé : /tmp/sans_etat2-l_out-0-1.bin
+  jeton 2 (id 1309) : |l_out| = 0.8730 · finis : true · premiers : 0.01661 -0.00513 0.00444
+      vidé : /tmp/sans_etat2-l_out-0-2.bin
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/compare_etats.py /tmp/sans_etat2 /tmp/refk3 l_out 0 0,1,2 2>&1 | head -6; echo \"--- drapeau vu ? ---\"; grep -c \"SANS_ETAT\" /tmp/k3_sans_etat2.log", "description": "Compare the no-state variant", "timeoutMs": 180000}`
+
+  ```
+# l_out-0 : référence ne=(7168, 4, 1, 1) → 7168 valeurs × 1 par position
+  pos 0 : écart max 3.738e-04 (indice 2441, dynamique 9.662e-02) · corrélation 0.999979 ~
+  pos 1 : écart max 4.721e-02 (indice 6645, dynamique 1.097e-01) · corrélation 0.605757 ❌
+  pos 2 : écart max 1.074e-01 (indice 6645, dynamique 2.161e-01) · corrélation 0.414036 ❌
+--- drapeau vu ? ---
+1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -E \"blk\\.0\\.ssm_|blk\\.0\\.attn_norm|blk\\.1\\.ssm_\" /tmp/k3_tensors.txt | head -20", "description": "Check KDA tensor shapes for layer 0"}`
+
+  ```
+F32      blk.0.attn_norm.weight                 [7168] · 0.0 M poids · fichier 1
+  F32      blk.0.ssm_a                            [96] · 0.0 M poids · fichier 1
+  F32      blk.0.ssm_beta.weight                  [96, 7168] · 0.7 M poids · fichier 1
+  F32      blk.0.ssm_conv1d_k.weight              [12288, 1, 4] · 0.0 M poids · fichier 1
+  F32      blk.0.ssm_conv1d_q.weight              [12288, 1, 4] · 0.0 M poids · fichier 1
+  F32      blk.0.ssm_conv1d_v.weight              [12288, 1, 4] · 0.0 M poids · fichier 1
+  F32      blk.0.ssm_dt.bias                      [12288] · 0.0 M poids · fichier 1
+  Q8_0     blk.0.ssm_f_a.weight                   [128, 7168] · 0.9 M poids · fichier 1
+  Q8_0     blk.0.ssm_f_b.weight                   [12288, 128] · 1.6 M poids · fichier 1
+  Q8_0     blk.0.ssm_g.weight                     [12288, 7168] · 88.1 M poids · fichier 1
+  F32      blk.0.ssm_norm.weight                  [128] · 0.0 M poids · fichier 1
+  F32      blk.1.ssm_a                            [96] · 0.0 M poids · fichier 1
+  F32      blk.1.ssm_beta.weight                  [96, 7168] · 0.7 M poids · fichier 1
+  F32      blk.1.ssm_conv1d_k.weight              [12288, 1, 4] · 0.0 M poids ·
+… [542 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"K3 : la référence PORTE bien l'état — essai de discrimination, et le drapeau est au bon endroit\n\nDRAVE_K3_SANS_ETAT=1 remet convolution et delta à zéro avant chaque jeton.\nRésultat : c'est PIRE (0, … [699 caractères tronqués]`
