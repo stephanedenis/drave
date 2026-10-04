@@ -120337,3 +120337,60 @@ pos 1 : écart max 1.268e-05 · écart-type/dynamique 6.40e-06 · pente +1.02e-0
 **Écart ramené à 1e-5** (contre 2,3e-3 pour le f32 contre la référence), et le gain tient : ×1,83 sur la passe. Je lance la vérification complète.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && K=/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf\nnohup bash -c \"DRAVE_K3_PASSE=93 DRAVE_K3_TETE=1 DRAVE_K3_MXFP4=1 DRAVE_K3_LOGITS=/tmp/k3_logits_mx.bin timeout 21600 ./drave … [1394 caractères tronqués]`
+
+  ```
+71bc6e2 K3 : le noyau MXFP4 du moteur sur les experts — x3,6 sur le FFN, et l'échelle d'activation qui manquait
+  ```
+
+- **bash** `{"command": "sleep 540; tail -3 /tmp/k3_mx.log; date \"+%H:%M\"", "description": "Poll the MXFP4 verification run", "timeoutMs": 570000}`
+
+  ```
+couche 26 :   3785 ms de chargement +  10452 ms de calcul · banque 3
+  couche 27 :   2299 ms de chargement +  10677 ms de calcul · banque 3
+  couche 28 :   3779 ms de chargement +  11485 ms de calcul · banque 3
+08:32
+  ```
+
+- **bash** `{"command": "sleep 540; tail -2 /tmp/k3_mx.log; date \"+%H:%M\"", "description": "Poll the verification run", "timeoutMs": 570000}`
+
+  ```
+couche 59 :   2736 ms de chargement +  13296 ms de calcul · banque 5
+  couche 60 :   5083 ms de chargement +  14410 ms de calcul · banque 6 (empilée)
+08:41
+  ```
+
+- **bash** `{"command": "sleep 540; tail -6 /tmp/k3_mx.log; ls -la /tmp/k3_logits_mx.bin 2>/dev/null; date \"+%H:%M\"", "description": "Poll for the logits", "timeoutMs": 570000}`
+
+  ```
+couche 84 :   4830 ms de chargement +  14305 ms de calcul · banque 8 (empilée)
+  couche 85 :   4619 ms de chargement +  15521 ms de calcul · banque 8
+  couche 86 :   4309 ms de chargement +  14462 ms de calcul · banque 8
+  couche 87 :   3013 ms de chargement +  14011 ms de calcul · banque 8
+  couche 88 :   5204 ms de chargement +  16127 ms de calcul · banque 8
+  couche 89 :   4699 ms de chargement +  15699 ms de calcul · banque 8
+08:50
+  ```
+
+- **bash** `{"command": "sleep 420; tail -4 /tmp/k3_mx.log; ls -la /tmp/k3_logits_mx.bin 2>/dev/null; date \"+%H:%M\"", "description": "Wait for completion", "timeoutMs": 450000}`
+
+  ```
+couche 92 :   2845 ms de chargement +  15430 ms de calcul · banque 8
+  ---- chargement 373.2 s (22 %) · calcul 1305.2 s (78 %) [attention 142.0 s · FFN 1163.0 s]
+  logits : /tmp/k3_logits_mx.bin — 3 positions × 163840 valeurs
+  passe complète : 1695148 ms au total
+-rw-r--r--. 1 stephane stephane 1966088  4 oct 08:51 /tmp/k3_logits_mx.bin
+08:57
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport struct, math\ndef lire(p):\n    f=open(p,'rb'); v,n=struct.unpack('<ii',f.read(8))\n    import array; a=array.array('f'); a.fromfile(f,n*v); return v,n,a\nv1,n1,A=lire('/tmp/refk3_logits.bin')\nfor etiq,chemi … [685 caractères tronqués]`
+
+  ```
+f32    pos0 r=0.999802 top1 84==84 ✅ · pos1 r=0.999900 top1 1103==1103 ✅ · pos2 r=0.999924 top1 3140==3140 ✅
+MXFP4  pos0 r=0.999802 top1 84==84 ✅ · pos1 r=0.999900 top1 1103==1103 ✅ · pos2 r=0.999924 top1 3140==3140 ✅
+  ```
+
+### 🤖 Assistant
+
+**Verdict mesuré** : la sortie est identique (mêmes corrélations à 6 décimales, mêmes top-1), mais le gain s'effondre sur la passe complète. Je documente.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/verification-kimi-k3.md'; s=open(p).read()\nanc = \"### 4quater-octies. **LE MOTEUR ENGENDRE AVEC KIMI-K3, ET CHAQUE PAS EST CELUI DE LA RÉFÉRENCE** (05/10, 06h56)\"\nnew = \"\"\"### 4quater-nonies. Le noyau … [3537 caractères tronqués]`

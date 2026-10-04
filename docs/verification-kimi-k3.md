@@ -135,6 +135,48 @@ Les 93 couches vidées permettent désormais de **bissecter** la divergence : il
 suffit de comparer couche par couche pour trouver la PREMIÈRE qui décroche, au
 lieu de raisonner sur la sortie de la couche 0.
 
+### 4quater-nonies. Le noyau MXFP4 : ×3,6 sur le FFN, ×1,05 sur la passe — et pourquoi (05/10, 08h57)
+
+`expert_mxfp4_dans` écrit **132 Mo** de f32 par expert (3 × 11 M valeurs) que le
+matvec relit aussitôt. Le noyau du moteur (`DenseQ4::dot16`, AVX2, table de
+décodage MXFP4) lit les blocs de 17 octets **directement**.
+
+| | f32 | noyau MXFP4 | gain |
+|---|---|---|---|
+| FFN, 4 couches × 4 jetons | 21,1 s | 5,9 s | **×3,6** |
+| calcul total | 27,4 s | 12,0 s | ×2,3 |
+| passe, 4 couches (poids en cache) | 36,3 s | 19,8 s | **×1,8** |
+| **passe complète, 93 couches** | 1 780,5 s | 1 695,1 s | **×1,05** |
+
+**Le gain disparaît sur la passe complète, et c'est le résultat intéressant.** Le
+FFN y coûte 1 163 s pour 372 couples (couche, jeton), soit **3,1 s par couple**
+contre 0,37 s dans l'essai sur 4 couches : la passe de 93 couches **streame
+1,5 To depuis un disque tournant**, et elle est limitée par le disque, pas par la
+RAM. Le noyau divise par quatre les octets qui passent **en mémoire**, pas ceux
+qui sortent du disque. L'optimisation est réelle ; elle n'est pas là où le mur
+est.
+
+**Et elle ne change rien à la sortie**, vérifié sur le modèle entier :
+
+| | pos 0 | pos 1 | pos 2 |
+|---|---|---|---|
+| f32 | r = 0,999802 · top-1 84 | r = 0,999900 · top-1 1103 | r = 0,999924 · top-1 3140 |
+| noyau MXFP4 | **r = 0,999802 · top-1 84** | **r = 0,999900 · top-1 1103** | **r = 0,999924 · top-1 3140** |
+
+Mêmes corrélations à la sixième décimale, mêmes argmax. La perturbation mesurée
+du noyau (9,7e-6 de la dynamique, pente nulle) est **deux cents fois plus petite**
+que l'écart du chemin f32 contre la référence (2,3e-3) : elle ne se voit pas.
+
+**Reste OPT-IN** (`DRAVE_K3_MXFP4=1`) : dans le régime réel — la passe complète —
+il ne rapporte rien, et il change la sortie au niveau 1e-5. Le promouvoir serait
+changer un calcul pour zéro.
+
+**Un échec instructif au passage.** La première version clampait l'activation en
+i16 sans échelle : écart relatif **4,5 %** et **pente −0,44** sur la sortie — un
+biais d'échelle, pas un arrondi. Les valeurs après SiTU sont de l'ordre de
+l'unité, donc l'arrondi entier les détruisait. Le moteur quantifie toujours avec
+une échelle par vecteur et la remet à la fin ; ajoutée, l'écart tombe à 9,7e-6.
+
 ### 4quater-octies. **LE MOTEUR ENGENDRE AVEC KIMI-K3, ET CHAQUE PAS EST CELUI DE LA RÉFÉRENCE** (05/10, 06h56)
 
 `DRAVE_K3_GEN=2` : préfill puis jetons engendrés en glouton, l'état récurrent

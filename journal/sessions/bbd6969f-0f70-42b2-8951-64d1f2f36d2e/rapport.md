@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 137.6 h |
+| Durée | 138.2 h |
 | Tours | 105 |
-| Messages | 7599 |
-| Appels d'outils | 7258 |
+| Messages | 7605 |
+| Appels d'outils | 7264 |
 | Fichiers touchés | 150 |
-| Commandes | 6173 |
+| Commandes | 6179 |
 | Sous-agents | 32 |
-| Commits | 516 |
+| Commits | 517 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -5185,7 +5185,7 @@ Les trois étaient **invisibles au jeton 0** — c'est pour ça qu'ils ont surv�
 
 ### Tour 105 — continue
 
-*15 appels d'outils.* Actions notables :
+*21 appels d'outils.* Actions notables :
 
 - bash — Instrument charge vs compute time
 - bash — Measure the charge/compute split
@@ -5201,10 +5201,11 @@ Les trois étaient **invisibles au jeton 0** — c'est pour ça qu'ils ont surv�
 - bash — Measure the output change of the kernel
 - bash — Re-measure with the activation scale
 - bash — Launch full verification with the kernel
+- … et 6 autres
 
 **Synthèse produite :**
 
-**Écart ramené à 1e-5** (contre 2,3e-3 pour le f32 contre la référence), et le gain tient : ×1,83 sur la passe. Je lance la vérification complète.
+**Verdict mesuré** : la sortie est identique (mêmes corrélations à 6 décimales, mêmes top-1), mais le gain s'effondre sur la passe complète. Je documente.
 
 ## 3. Travail accompli
 
@@ -5440,7 +5441,7 @@ Les trois étaient **invisibles au jeton 0** — c'est pour ça qu'ils ont surv�
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6133 autres
+- … et 6139 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -6104,4 +6105,5 @@ Les trois étaient **invisibles au jeton 0** — c'est pour ça qu'ils ont surv�
 - K3 : LE MOTEUR ENGENDRE, ET CHAQUE PAS EST CELUI DE LA RÉFÉRENCE  Deux appels successifs, le second ne voyant qu'un jeton nouveau (l'état récurrent restauré vie
 - Docs : le moteur engendre avec Kimi-K3, et un attendu mal écrit fabrique un échec qui n'existe pas" && git log --oneline -1; git status --short | grep -v "^ M j
 - K3 : le noyau MXFP4 du moteur sur les experts — x3,6 sur le FFN, et l'échelle d'activation qui manquait  expert_mxfp4_dans écrit 3 × 11 M valeurs f32 (132 Mo pa
+- K3 : le noyau MXFP4 est vérifié sur le modèle entier — et son gain s'effondre là où il faudrait  Verdict sur les logits du modèle entier, noyau contre f32 :   p
 
