@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 134.4 h |
 | Tours | 103 |
-| Messages | 7544 |
-| Appels d'outils | 7208 |
+| Messages | 7546 |
+| Appels d'outils | 7210 |
 | Fichiers touchés | 150 |
-| Commandes | 6125 |
+| Commandes | 6127 |
 | Sous-agents | 32 |
-| Commits | 510 |
+| Commits | 511 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -5058,7 +5058,7 @@ C'est finalement la **lecture du code de la référence** qui a donné le troisi
 
 ### Tour 103 — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas e … [1246 caractères tronqués]
 
-*34 appels d'outils.* Actions notables :
+*36 appels d'outils.* Actions notables :
 
 - bash — Read PetitesK3 layer body
 - bash — Implement the layer-streaming full pass
@@ -5074,7 +5074,7 @@ C'est finalement la **lecture du code de la référence** qui a donné le troisi
 - bash — Compare streaming pass vs layer-resident composition
 - bash — Launch the full 93-layer K3 forward
 - bash — Commit the streaming pass
-- … et 18 autres
+- … et 20 autres
 
 **Synthèse produite :**
 
@@ -5314,7 +5314,7 @@ C'est finalement la **lecture du code de la référence** qui a donné le troisi
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6085 autres
+- … et 6087 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5972,4 +5972,5 @@ C'est finalement la **lecture du code de la référence** qui a donné le troisi
 - K3 : LES LOGITS DU MODÈLE ENTIER — top-1 identique 3/3, et c'est le bon jeton  Passe complète (93 couches) avec la tête, comparée aux logits de llama.cpp-k3 :  
 - Sprint 31 : Kimi-K3 entier, logits vérifiés, 7,4 min/jeton" && git log --oneline -1; git status --short | grep -v "^ M journal" | wc -l
 - REPRISE : les logits du modèle entier, top-1 identique 3/3" && git log --oneline -1; echo "--- tests ---"; cd drave-core && cargo test --release 2>&1 | grep "^t
+- K3 : l'écart résiduel est caractérisé, pas supposé — pente nulle, 0,25 % de la dynamique  « C'est de l'accumulation f32 » était une affirmation. Mesure : sur l_
 

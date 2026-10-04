@@ -348,3 +348,19 @@ python3 tools/compare_etats.py /tmp/notrek3 /tmp/refk3 l_out 0 0,1,2
 | KDA : porte bornée | implémenté, testé (toujours dans (−5, 0) → l'état décroît) |
 | KDA : convolution courte | implémenté, testé (état canal-majeur, noyau contigu) |
 | **le reste** | à écrire, chaque étage avec son point de comparaison ci-dessus |
+
+### L'écart résiduel, caractérisé (05/10, 05h20)
+
+Dire « c'est de l'accumulation f32 » est une affirmation, pas une mesure. La
+mesure : sur `l_out-92`, régression de l'écart sur la valeur (une erreur
+**systématique** — biais d'échelle — donnerait une pente non nulle) :
+
+| position | pente | écart-type | écart-type / dynamique |
+|---|---|---|---|
+| 0 | −1,80e-03 | 1,68e-02 | **2,3e-03** |
+| 1 | +4,00e-04 | 1,12e-02 | **6,8e-04** |
+| 2 | −2,18e-04 | 1,19e-02 | **4,0e-04** |
+
+**Pente nulle, écart-type sous 0,25 % de la dynamique** : l'écart est un arrondi
+réparti, pas un biais qui se cumulerait avec la profondeur. C'est ce qui explique
+qu'il ne dérive pas — et c'est mesuré, pas supposé.

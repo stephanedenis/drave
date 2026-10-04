@@ -119625,3 +119625,19 @@ ecb01d4 Sprint 31 : Kimi-K3 entier, logits vérifiés, 7,4 min/jeton
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\nanc = \"> **Coût mesuré : 7,2 minutes par jeton.**\"\nnew = \"\"\"> **ET SES LOGITS SONT CEUX DE LA RÉFÉRENCE (05h06)** — passe complète avec la\n> tête, comparée aux logits de llam … [974 caractères tronqués]`
+
+  ```
+291469e REPRISE : les logits du modèle entier, top-1 identique 3/3
+--- tests ---
+test result: ok. 77 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport struct, math\ndef rf(p):\n    b=open(p,'rb').read(); ne=struct.unpack('<4i',b[8:24]); n=1\n    for d in ne: n*=d\n    return list(struct.unpack(f'<{n}f', b[24:24+4*n]))\nref=rf('/tmp/refk3-l_out-92.bin')\nh=7 … [822 caractères tronqués]`
+
+  ```
+pos 0 : pente -1.80e-03 · écart-type 1.675e-02 · dynamique 7.417e+00 · écart-type/dynamique 2.26e-03
+pos 1 : pente +4.00e-04 · écart-type 1.122e-02 · dynamique 1.652e+01 · écart-type/dynamique 6.79e-04
+pos 2 : pente -2.18e-04 · écart-type 1.185e-02 · dynamique 2.938e+01 · écart-type/dynamique 4.03e-04
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> docs/verification-kimi-k3.md <<'EOF'\n\n### L'écart résiduel, caractérisé (05/10, 05h20)\n\nDire « c'est de l'accumulation f32 » est une affirmation, pas une mesure. La\nmesure : sur `l_out-92`, régression de l'écart sur la va … [1124 caractères tronqués]`
