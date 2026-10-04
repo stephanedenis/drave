@@ -119059,3 +119059,85 @@ lancé
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/verification-kimi-k3.md'; s=open(p).read()\nanc = \"### 4quater-bis. DEUX BUGS TROUVÉS PAR LA COMPARAISON (05/10, 00h25)\"\nnew = \"\"\"### 4quater-ter. LA COUCHE 0 PASSE (05/10, 02h25)\n\nTrois défauts, tou … [3299 caractères tronqués]`
+
+  ```
+fc97db5 Docs : la couche 0 de Kimi-K3 passe, et la leçon du test qui partageait l'erreur
+  ```
+
+- **bash** `{"command": "sleep 540; tail -3 /tmp/k3_fix13.log; echo \"=== référence instrumentée ===\"; P=$(pgrep -x ref_logits_k3|head -1); [ -n \"$P\" ] && grep -E \"^read_bytes\" /proc/$P/io; grep -c \"^\\[tensor\\]\" /tmp/refk3b_run.log; date \"+%H:%M\"", "description": "Poll both runs", "timeoutMs": 570000 … [1 caractères tronqués]`
+
+  ```
+MLA couche 3, jeton 1 : |sortie| = 10.4341 · finis : true · 226 ms
+  MLA couche 3, jeton 2 : |sortie| = 9.1516 · finis : true · 228 ms
+  composition : 13 couche(s) — banques aux couches 0, 12
+=== référence instrumentée ===
+read_bytes: 227968040960
+0
+02:40
+  ```
+
+- **bash** `{"command": "sleep 540; tail -3 /tmp/k3_fix13.log; ls /tmp/fix13-l_out-12-*.bin 2>/dev/null | wc -l; echo \"=== réf ===\"; grep -c \"^\\[tensor\\]\" /tmp/refk3b_run.log; date \"+%H:%M\"", "description": "Poll 13-layer verification", "timeoutMs": 570000}`
+
+  ```
+MLA couche 3, jeton 1 : |sortie| = 10.4341 · finis : true · 226 ms
+  MLA couche 3, jeton 2 : |sortie| = 9.1516 · finis : true · 228 ms
+  composition : 13 couche(s) — banques aux couches 0, 12
+0
+=== réf ===
+0
+02:49
+  ```
+
+- **bash** `{"command": "sleep 540; grep -E \"composition 0-12\" /tmp/k3_fix13.log | head -4; ls /tmp/fix13-l_out-12-*.bin 2>/dev/null | wc -l; date \"+%H:%M\"", "description": "Poll 13-layer progress", "timeoutMs": 570000}`
+
+  ```
+composition 0-12, jeton 0 : |l_out| = 9.6993 · finis : true
+1
+02:58
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/compare_etats.py /tmp/fix13 /tmp/refk3 l_out 12 0", "description": "Compare layer 12 position 0", "timeoutMs": 180000}`
+
+  ```
+# l_out-12 : référence ne=(7168, 4, 1, 1) → 7168 valeurs × 1 par position
+  pos 0 : écart max 5.473e-03 (indice 7081, dynamique 2.086e+00) · corrélation 0.999945 ~
+  ```
+
+- **bash** `{"command": "sleep 540; grep -E \"composition 0-12\" /tmp/k3_fix13.log; ls /tmp/fix13-l_out-12-*.bin 2>/dev/null | wc -l; date \"+%H:%M\"", "description": "Poll 13-layer tokens", "timeoutMs": 570000}`
+
+  ```
+composition 0-12, jeton 0 : |l_out| = 9.6993 · finis : true
+  composition 0-12, jeton 1 : |l_out| = 3.5989 · finis : true
+2
+03:08
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/compare_etats.py /tmp/fix13 /tmp/refk3 l_out 12 1", "description": "Compare layer 12 position 1", "timeoutMs": 180000}`
+
+  ```
+# l_out-12 : référence ne=(7168, 4, 1, 1) → 7168 valeurs × 1 par position
+  pos 1 : écart max 1.623e-03 (indice 4127, dynamique 2.063e+00) · corrélation 0.999943 ~
+  ```
+
+- **bash** `{"command": "sleep 540; grep -E \"composition 0-12\" /tmp/k3_fix13.log | tail -2; date \"+%H:%M\"", "description": "Poll token 2", "timeoutMs": 570000}`
+
+  ```
+composition 0-12, jeton 1 : |l_out| = 3.5989 · finis : true
+  composition 0-12, jeton 2 : |l_out| = 3.8363 · finis : true
+03:17
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/compare_etats.py /tmp/fix13 /tmp/refk3 l_out 12 2 2>&1; echo \"=== rappel avant corrections ===\"; echo \"pos 0 : 0,990927 · pos 1 : 0,458801 · pos 2 : 0,448762\"", "description": "Compare layer 12 position 2", "timeout … [12 caractères tronqués]`
+
+  ```
+# l_out-12 : référence ne=(7168, 4, 1, 1) → 7168 valeurs × 1 par position
+  pos 2 : écart max 7.754e-03 (indice 742, dynamique 2.230e+00) · corrélation 0.999102 ~
+=== rappel avant corrections ===
+pos 0 : 0,990927 · pos 1 : 0,458801 · pos 2 : 0,448762
+  ```
+
+### 🤖 Assistant
+
+**La couche 12 passe aussi** — les treize couches sont vérifiées, banque franchie comprise.
+
+- **bash** `{"command": "kill $(pgrep -x ref_logits_k3) 2>/dev/null; sleep 1; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/verification-kimi-k3.md'; s=open(p).read()\nanc = \"### 4quater-ter. LA COUCHE 0 PASSE (05/10, 02h25)\"\nnew = \"\"\"### 4quater-quater. LES TREIZE COUCHE … [2139 caractères tronqués]`

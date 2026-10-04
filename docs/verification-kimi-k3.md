@@ -135,6 +135,25 @@ Les 93 couches vidées permettent désormais de **bissecter** la divergence : il
 suffit de comparer couche par couche pour trouver la PREMIÈRE qui décroche, au
 lieu de raisonner sur la sortie de la couche 0.
 
+### 4quater-quater. LES TREIZE COUCHES PASSENT, BANQUE COMPRISE (05/10, 03h17)
+
+`DRAVE_K3_COUCHES=13` enchaîne les couches 0 à 12 : la couche dense, les MoE
+latents, la MLA de la couche 3, la récurrence KDA, l'état de convolution, **et le
+franchissement de la banque de la couche 12 avec un `res_mix` à deux points de
+contrôle**. Comparé à `l_out-12` de llama.cpp-k3 :
+
+| couche 12 | corrélation | écart max | dynamique |
+|---|---|---|---|
+| jeton 0 | 0,990927 → **0,999945** | 1,11e-01 → **5,47e-03** | 2,09e+00 |
+| jeton 1 | 0,458801 → **0,999943** | 1,02e+00 → **1,62e-03** | 2,06e+00 |
+| jeton 2 | 0,448762 → **0,999102** | 4,06e-01 → **7,75e-03** | 2,23e+00 |
+
+**Deux des treize points de comparaison du protocole sont donc verts** : la
+couche 0 et la couche 12. Ce que ça vérifie d'un coup, et qui n'était vérifié que
+par relecture : l'enchaînement résiduel, la banque et son REDÉMARRAGE, un
+`res_mix` à deux points de contrôle, l'état de convolution et la récurrence delta
+transportés d'un jeton au suivant, le MoE latent, la MLA à cache latent et SiTU.
+
 ### 4quater-ter. LA COUCHE 0 PASSE (05/10, 02h25)
 
 Trois défauts, tous trouvés par la comparaison et aucun par relecture :
