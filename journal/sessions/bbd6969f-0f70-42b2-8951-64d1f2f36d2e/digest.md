@@ -119162,3 +119162,49 @@ pos 0 : 0,990927 · pos 1 : 0,458801 · pos 2 : 0,448762
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> sprints/31-le-regroupement-par-experts-mesure-et-k3-au-complet.md <<'EOF'\n\n## Fin de bloc (05/10, 03h20) : Kimi-K3 vérifié sur treize couches\n\nTrois bugs, tous trouvés par la comparaison à llama.cpp-k3, aucun par relecture … [2467 caractères tronqués]`
+
+  ```
+a0ebc98 Sprint 31, fin de bloc : Kimi-K3 vérifié sur treize couches
+  ```
+
+- **bash** `{"command": "sleep 540; tail -3 /tmp/k3_fix25.log; date \"+%H:%M\"", "description": "Poll the 25-layer run", "timeoutMs": 570000}`
+
+  ```
+MLA couche 3, jeton 2 : |sortie| = 9.1516 · finis : true · 222 ms
+  composition : 25 couche(s) — banques aux couches 0, 12, 24
+  composition 0-24, jeton 0 : |l_out| = 0.9773 · finis : true
+03:28
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la /tmp/refk3-l_out-24.bin 2>/dev/null | head -1; python3 tools/compare_etats.py /tmp/fix25 /tmp/refk3 l_out 24 0", "description": "Compare layer 24 position 0", "timeoutMs": 180000}`
+
+  ```
+-rw-r--r--. 1 stephane stephane 114712  3 oct 22:30 /tmp/refk3-l_out-24.bin
+# l_out-24 : référence ne=(7168, 4, 1, 1) → 7168 valeurs × 1 par position
+  pos 0 : écart max 2.505e-04 (indice 6174, dynamique 1.267e-01) · corrélation 0.999984 ~
+  ```
+
+- **bash** `{"command": "sleep 540; grep -E \"composition 0-24\" /tmp/k3_fix25.log; date \"+%H:%M\"", "description": "Poll 25-layer tokens", "timeoutMs": 570000}`
+
+  ```
+composition 0-24, jeton 0 : |l_out| = 0.9773 · finis : true
+  composition 0-24, jeton 1 : |l_out| = 0.4822 · finis : true
+  composition 0-24, jeton 2 : |l_out| = 0.4874 · finis : true
+  composition 0-24, jeton 3 : |l_out| = 0.4455 · finis : true
+03:37
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/compare_etats.py /tmp/fix25 /tmp/refk3 l_out 24 0,1,2", "description": "Compare layer 24 across positions", "timeoutMs": 180000}`
+
+  ```
+# l_out-24 : référence ne=(7168, 4, 1, 1) → 7168 valeurs × 1 par position
+  pos 0 : écart max 2.505e-04 (indice 6174, dynamique 1.267e-01) · corrélation 0.999984 ~
+  pos 1 : écart max 3.175e-04 (indice 173, dynamique 6.362e-02) · corrélation 0.999893 ~
+  pos 2 : écart max 3.736e-04 (indice 6911, dynamique 7.152e-02) · corrélation 0.999866 ~
+  ```
+
+### 🤖 Assistant
+
+**Troisième point vert : la couche 24, avec trois points de contrôle dans la banque.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/verification-kimi-k3.md'; s=open(p).read()\nanc = \"### 4quater-quater. LES TREIZE COUCHES PASSENT, BANQUE COMPRISE (05/10, 03h17)\"\nnew = \"\"\"### 4quater-quinquies. VINGT-CINQ COUCHES, TROIS BANQUES (05/ … [1660 caractères tronqués]`

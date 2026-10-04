@@ -135,6 +135,22 @@ Les 93 couches vidées permettent désormais de **bissecter** la divergence : il
 suffit de comparer couche par couche pour trouver la PREMIÈRE qui décroche, au
 lieu de raisonner sur la sortie de la couche 0.
 
+### 4quater-quinquies. VINGT-CINQ COUCHES, TROIS BANQUES (05/10, 03h37)
+
+`DRAVE_K3_COUCHES=25` : banques aux couches 0, 12 et 24, donc un `res_mix` à
+**TROIS** points de contrôle. Comparé à `l_out-24` de la référence :
+
+| couche 24 | corrélation | écart max | dynamique |
+|---|---|---|---|
+| jeton 0 | **0,999984** | 2,51e-04 | 1,27e-01 |
+| jeton 1 | **0,999893** | 3,18e-04 | 6,36e-02 |
+| jeton 2 | **0,999866** | 3,74e-04 | 7,15e-02 |
+
+**Trois des treize points de comparaison sont verts** : 0, 12, 24. Et l'écart
+**ne croît pas avec la profondeur** (3,7e-04 à la couche 24 contre 3,1e-04 à la
+couche 0 pour une dynamique comparable) : l'accumulation f32 sur des poids Q8_0
+reste sous le pour-mille, elle ne dérive pas.
+
 ### 4quater-quater. LES TREIZE COUCHES PASSENT, BANQUE COMPRISE (05/10, 03h17)
 
 `DRAVE_K3_COUCHES=13` enchaîne les couches 0 à 12 : la couche dense, les MoE

@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 132.5 h |
+| Durée | 132.9 h |
 | Tours | 102 |
-| Messages | 7502 |
-| Appels d'outils | 7168 |
+| Messages | 7507 |
+| Appels d'outils | 7173 |
 | Fichiers touchés | 150 |
-| Commandes | 6085 |
+| Commandes | 6090 |
 | Sous-agents | 32 |
-| Commits | 501 |
+| Commits | 502 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -5003,7 +5003,7 @@ Mon test « KDA contre NumPy » passait au vert depuis le début : il comparait 
 
 ### Tour 102 — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas e … [1246 caractères tronqués]
 
-*27 appels d'outils.* Actions notables :
+*32 appels d'outils.* Actions notables :
 
 - bash — Check instrumented reference run
 - bash — Check the tensor filter that was applied
@@ -5019,11 +5019,11 @@ Mon test « KDA contre NumPy » passait au vert depuis le début : il comparait 
 - bash — Compare after the bank-ordering fix
 - bash — Commit the layer-0 milestone
 - bash — Launch 13-layer verification
-- … et 13 autres
+- … et 18 autres
 
 **Synthèse produite :**
 
-**La couche 12 passe aussi** — les treize couches sont vérifiées, banque franchie comprise.
+**Troisième point vert : la couche 24, avec trois points de contrôle dans la banque.**
 
 ## 3. Travail accompli
 
@@ -5259,7 +5259,7 @@ Mon test « KDA contre NumPy » passait au vert depuis le début : il comparait 
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6045 autres
+- … et 6050 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5908,4 +5908,5 @@ Mon test « KDA contre NumPy » passait au vert depuis le début : il comparait 
 - K3 : LES TREIZE COUCHES PASSENT, banque franchie comprise  DRAVE_K3_COUCHES=13 enchaîne les couches 0 à 12 — couche dense, MoE latents, MLA de la couche 3, récu
 - REPRISE : les treize couches de K3 passent, banque comprise" && git log --oneline -1; echo "--- état ---"; git status --short | grep -v "^ M journal" | wc -l
 - Sprint 31, fin de bloc : Kimi-K3 vérifié sur treize couches  Trois bugs trouvés par la comparaison, aucun par relecture ni par le test « KDA contre NumPy » qui 
+- K3 : VINGT-CINQ COUCHES, TROIS BANQUES — trois des treize points sont verts  DRAVE_K3_COUCHES=25, banques aux couches 0, 12 et 24 (res_mix à TROIS points de con
 
