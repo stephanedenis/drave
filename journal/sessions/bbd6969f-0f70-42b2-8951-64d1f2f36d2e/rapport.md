@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 134.3 h |
+| Durée | 134.4 h |
 | Tours | 103 |
-| Messages | 7543 |
-| Appels d'outils | 7207 |
+| Messages | 7544 |
+| Appels d'outils | 7208 |
 | Fichiers touchés | 150 |
-| Commandes | 6124 |
+| Commandes | 6125 |
 | Sous-agents | 32 |
-| Commits | 509 |
+| Commits | 510 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -5058,7 +5058,7 @@ C'est finalement la **lecture du code de la référence** qui a donné le troisi
 
 ### Tour 103 — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas e … [1246 caractères tronqués]
 
-*33 appels d'outils.* Actions notables :
+*34 appels d'outils.* Actions notables :
 
 - bash — Read PetitesK3 layer body
 - bash — Implement the layer-streaming full pass
@@ -5074,7 +5074,7 @@ C'est finalement la **lecture du code de la référence** qui a donné le troisi
 - bash — Compare streaming pass vs layer-resident composition
 - bash — Launch the full 93-layer K3 forward
 - bash — Commit the streaming pass
-- … et 17 autres
+- … et 18 autres
 
 **Synthèse produite :**
 
@@ -5314,7 +5314,7 @@ C'est finalement la **lecture du code de la référence** qui a donné le troisi
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6084 autres
+- … et 6085 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5971,4 +5971,5 @@ C'est finalement la **lecture du code de la référence** qui a donné le troisi
 - K3 : la TÊTE sur la passe complète — les logits, critère de la porte de correction  DRAVE_K3_TETE=1 rend les logits (mélange résiduel final avec output_res_scor
 - K3 : LES LOGITS DU MODÈLE ENTIER — top-1 identique 3/3, et c'est le bon jeton  Passe complète (93 couches) avec la tête, comparée aux logits de llama.cpp-k3 :  
 - Sprint 31 : Kimi-K3 entier, logits vérifiés, 7,4 min/jeton" && git log --oneline -1; git status --short | grep -v "^ M journal" | wc -l
+- REPRISE : les logits du modèle entier, top-1 identique 3/3" && git log --oneline -1; echo "--- tests ---"; cd drave-core && cargo test --release 2>&1 | grep "^t
 

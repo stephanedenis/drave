@@ -91,7 +91,15 @@ cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo build --r
 > 68 couches KDA avec convolution et récurrence, 24 MLA à cache latent, 896
 > experts dont 16 par jeton, SiTU.
 >
-> **Coût mesuré : 7,2 minutes par jeton.** La référence met **42 minutes par
+> **ET SES LOGITS SONT CEUX DE LA RÉFÉRENCE (05h06)** — passe complète avec la
+> tête, comparée aux logits de llama.cpp-k3 : corrélations **0,999802 / 0,999900
+> / 0,999924**, **top-1 identique 3/3**, et l'argmax est **le bon jeton** à chaque
+> position (275, 1309, 3140 — les cibles). Le critère de la porte de correction
+> du dépôt (≥ 0,95 de corrélation, top-1 ≥ 85 %) passe à **100 %** sur le plus
+> gros modèle du parc. `DRAVE_K3_TETE=1` rend les logits au format
+> `--logits-bin`.
+>
+> **Coût mesuré : 7,4 minutes par jeton (tête comprise).** La référence met **42 minutes par
 > jeton** sur la même machine (bornée par le disque, 1,80 To lus pour 4 jetons) :
 > cette passe ne lit que les 16 experts choisis sur 896 et ne repaquette rien —
 > **six fois plus rapide que la référence, et vérifiée contre elle.**

@@ -119618,3 +119618,10 @@ e15dc6b K3 : LES LOGITS DU MODÈLE ENTIER — top-1 identique 3/3, et c'est le b
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> sprints/31-le-regroupement-par-experts-mesure-et-k3-au-complet.md <<'EOF'\n\n## Kimi-K3 : le modèle entier passe, et ses logits sont ceux de la référence\n\n**La passe complète** (`DRAVE_K3_PASSE=93`) calcule les 93 couches en … [2304 caractères tronqués]`
+
+  ```
+ecb01d4 Sprint 31 : Kimi-K3 entier, logits vérifiés, 7,4 min/jeton
+0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\nanc = \"> **Coût mesuré : 7,2 minutes par jeton.**\"\nnew = \"\"\"> **ET SES LOGITS SONT CEUX DE LA RÉFÉRENCE (05h06)** — passe complète avec la\n> tête, comparée aux logits de llam … [974 caractères tronqués]`
