@@ -119141,3 +119141,9 @@ pos 0 : 0,990927 · pos 1 : 0,458801 · pos 2 : 0,448762
 **La couche 12 passe aussi** — les treize couches sont vérifiées, banque franchie comprise.
 
 - **bash** `{"command": "kill $(pgrep -x ref_logits_k3) 2>/dev/null; sleep 1; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/verification-kimi-k3.md'; s=open(p).read()\nanc = \"### 4quater-ter. LA COUCHE 0 PASSE (05/10, 02h25)\"\nnew = \"\"\"### 4quater-quater. LES TREIZE COUCHE … [2139 caractères tronqués]`
+
+  ```
+416ec43 K3 : LES TREIZE COUCHES PASSENT, banque franchie comprise
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\nanc = \"> | couche 0 | jeton 0 | jeton 1 | jeton 2 |\"\nnew = \"\"\"> **ET LES TREIZE COUCHES PASSENT (03h17)** — `DRAVE_K3_COUCHES=13`, couches 0\n> à 12, donc le **franchissement  … [947 caractères tronqués]`

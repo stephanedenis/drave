@@ -78,6 +78,19 @@ cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo build --r
 > `res_mix` s'applique là où la référence n'en applique pas. Les trois étaient
 > invisibles au jeton 0 seul.
 >
+> **ET LES TREIZE COUCHES PASSENT (03h17)** — `DRAVE_K3_COUCHES=13`, couches 0
+> à 12, donc le **franchissement de la banque de la couche 12** avec un `res_mix`
+> à deux points de contrôle :
+>
+> | couche 12 | jeton 0 | jeton 1 | jeton 2 |
+> |---|---|---|---|
+> | corrélation | 0,990927 → **0,999945** | 0,458801 → **0,999943** | 0,448762 → **0,999102** |
+>
+> **Deux des treize points de comparaison du protocole sont verts.** Ce qui est
+> vérifié d'un coup : enchaînement résiduel, banque et son redémarrage, `res_mix`
+> à deux points, état de convolution et récurrence delta transportés entre
+> jetons, MoE latent, MLA à cache latent, SiTU.
+>
 > | couche 0 | jeton 0 | jeton 1 | jeton 2 |
 > |---|---|---|---|
 > | corrélation | 0,983164 → **0,999979** | 0,790361 → **0,999982** | 0,641780 → **0,999983** |
