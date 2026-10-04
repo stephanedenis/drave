@@ -999,7 +999,7 @@ impl MlaK3 {
         // 5. porte de sortie (sigmoïde plein rang) sur l'entrée NORMALISÉE
         let d_inner = sortie.len();
         let mut g2 = vec![0f32; d_inner];
-        mv(&self.gate, d_inner, h, x_norme, &mut g2);
+        mv(&self.gate, d_inner, h, x_norme, &mut g2);   // porte : reste en f32
         for j in 0..d_inner { sortie[j] *= 1.0 / (1.0 + (-g2[j]).exp()); }
         // 6. projection de sortie
         let mut out = vec![0f32; h];
@@ -1015,9 +1015,50 @@ impl MlaK3 {
 // exige de pouvoir le charger SEUL, pour n'importe quelle couche.
 // ===========================================================================
 
+
+/// **Une projection Q8_0 EMPRUNTÉE au fichier.** `g.dequant(nom)` copie la
+/// matrice en f32 — 4 octets par poids au lieu de 1,06, et cette copie est
+/// allouée puis libérée à CHAQUE chargement de couche. Sur la passe complète,
+/// cela fait ~224 Go de tampons f32 par appel, ce qui **évince le cache de
+/// pages** : les blocs Q8_0 du dense ne peuvent pas y rester, donc ils sont
+/// relus au disque à chaque jeton. C'est le mur mesuré (voir
+/// `docs/verification-kimi-k3.md`, « le mur est le disque »).
+///
+/// Emprunter les blocs supprime la copie ET laisse le cache de pages faire son
+/// travail : le dense fait 59,6 Go, la machine a 125 Go de RAM.
+struct Q8 {
+    d: crate::list::DenseQ8,
+}
+
+impl Q8 {
+    /// `None` si le tenseur n'est pas du Q8_0 (on retombe alors sur le f32).
+    fn emprunter(g: &Gguf, nom: &str) -> Option<Q8> {
+        let t = g.tensor(nom)?;
+        let n_out = t.dims[0] as usize;
+        let n_in = t.dims[1] as usize;
+        let (buf, nb) = g.q8_blocks(nom)?;
+        Some(Q8 { d: unsafe { crate::list::DenseQ8::emprunter_q8(buf.as_ptr(), n_out, n_in, nb) } })
+    }
+
+    /// `x ≈ xd · sx`, le noyau rend `Σ w·xd`, on remultiplie par `sx`. Même
+    /// schéma que partout ailleurs dans le moteur : sans l'échelle, les
+    /// activations de l'ordre de l'unité seraient détruites par l'arrondi
+    /// entier (mesuré : 4,5 % d'écart et une pente de −0,44 sur la sortie).
+    fn mv(&self, x: &[f32], out: &mut [f32], xd: &mut Vec<i32>) {
+        let n_in = self.d.n_in;
+        let mut mx = 0f32;
+        for &v in x[..n_in].iter() { let a = v.abs(); if a > mx { mx = a; } }
+        let sx = if mx > 0.0 { mx / 127.0 } else { 1.0 };
+        xd.clear();
+        for j in 0..n_in { xd.push((x[j] / sx).round().clamp(-127.0, 127.0) as i32); }
+        for o in 0..self.d.n_out { out[o] = self.d.dot_q8_source(o, xd) * sx; }
+    }
+}
+
 pub struct KdaK3 {
-    q: Vec<f32>, k: Vec<f32>, v: Vec<f32>, wo: Vec<f32>,
-    f_a: Vec<f32>, f_b: Vec<f32>, g_proj: Vec<f32>,
+    /// Les cinq grosses projections, **empruntées** au fichier (Q8_0).
+    q: Q8, k: Q8, v: Q8, wo: Q8, g_proj: Q8,
+    f_a: Vec<f32>, f_b: Vec<f32>,
     conv_q: Vec<f32>, conv_k: Vec<f32>, conv_v: Vec<f32>,
     beta_w: Vec<f32>, ssm_a: Vec<f32>, dt_bias: Vec<f32>, o_norm: Vec<f32>,
     etat_conv_q: Vec<f32>, etat_conv_k: Vec<f32>, etat_conv_v: Vec<f32>,
@@ -1042,11 +1083,15 @@ impl KdaK3 {
         let d_inner = nh * hd;
         let d_conv = *dims(&p("ssm_conv1d_q.weight"))?.last().unwrap_or(&4);
         let etat = vec![0f32; (d_conv - 1) * d_inner];
+        let emp = |n: &str| -> Result<Q8, String> {
+            Q8::emprunter(g, n).ok_or_else(|| format!("{n} : pas du Q8_0 empruntable"))
+        };
         Ok(KdaK3 {
-            q: lu(&p("attn_q.weight"))?, k: lu(&p("attn_k.weight"))?, v: lu(&p("attn_v.weight"))?,
-            wo: lu(&p("attn_output.weight"))?,
+            q: emp(&p("attn_q.weight"))?, k: emp(&p("attn_k.weight"))?,
+            v: emp(&p("attn_v.weight"))?,
+            wo: emp(&p("attn_output.weight"))?,
             f_a: lu(&p("ssm_f_a.weight"))?, f_b: lu(&p("ssm_f_b.weight"))?,
-            g_proj: lu(&p("ssm_g.weight"))?,
+            g_proj: emp(&p("ssm_g.weight"))?,
             conv_q: lu(&p("ssm_conv1d_q.weight"))?, conv_k: lu(&p("ssm_conv1d_k.weight"))?,
             conv_v: lu(&p("ssm_conv1d_v.weight"))?,
             beta_w: lu(&p("ssm_beta.weight"))?, ssm_a: lu(&p("ssm_a"))?,
@@ -1064,9 +1109,10 @@ impl KdaK3 {
         let mut q = vec![0f32; d_inner];
         let mut k = vec![0f32; d_inner];
         let mut v = vec![0f32; d_inner];
-        mv(&self.q, d_inner, h, cur, &mut q);
-        mv(&self.k, d_inner, h, cur, &mut k);
-        mv(&self.v, d_inner, h, cur, &mut v);
+        let mut xd: Vec<i32> = Vec::new();
+        self.q.mv(cur, &mut q, &mut xd);
+        self.k.mv(cur, &mut k, &mut xd);
+        self.v.mv(cur, &mut v, &mut xd);
         let mut qc = vec![0f32; d_inner];
         let mut kc = vec![0f32; d_inner];
         let mut vc = vec![0f32; d_inner];
@@ -1097,7 +1143,7 @@ impl KdaK3 {
             o[t * hd..(t + 1) * hd].copy_from_slice(&ot);
         }
         let mut g2 = vec![0f32; d_inner];
-        mv(&self.g_proj, d_inner, h, cur, &mut g2);
+        self.g_proj.mv(cur, &mut g2, &mut xd);
         for t in 0..nh {
             rms_norm_poids(&o[t * hd..(t + 1) * hd], &self.o_norm, self.eps, &mut tampon[..hd]);
             for i in 0..hd {
@@ -1106,7 +1152,7 @@ impl KdaK3 {
             }
         }
         let mut out = vec![0f32; h];
-        mv(&self.wo, h, d_inner, &o, &mut out);
+        self.wo.mv(&o, &mut out, &mut xd);
         Ok(out)
     }
 

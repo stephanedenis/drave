@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 139.9 h |
+| Durée | 140.9 h |
 | Tours | 107 |
-| Messages | 7637 |
-| Appels d'outils | 7299 |
+| Messages | 7652 |
+| Appels d'outils | 7314 |
 | Fichiers touchés | 150 |
-| Commandes | 6198 |
+| Commandes | 6213 |
 | Sous-agents | 32 |
-| Commits | 520 |
+| Commits | 521 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -5293,7 +5293,7 @@ Plus : **spéculation par la couche MTP du modèle** (2,4-3,2 jetons par passe),
 
 ### Tour 107 — oui
 
-*11 appels d'outils.* Actions notables :
+*26 appels d'outils.* Actions notables :
 
 - bash — Compute the VRAM cache ceiling from measured bytes
 - bash — Add the K3 routing trace
@@ -5303,10 +5303,17 @@ Plus : **spéculation par la couche MTP du modèle** (2,4-3,2 jetons par passe),
 - bash — Poll the routing trace
 - bash — Analyze the K3 routing
 - bash — Write and commit the VRAM cache measurement
+- bash — Check DenseQ8 Send and the API
+- bash — Read dot_q8_source and emprunter_q8
+- bash — Make KdaK3 borrow Q8_0 blocks
+- bash — Locate the remaining g_proj call
+- bash — Fix the g_proj call and build
+- bash — Fix the remaining call sites
+- … et 6 autres
 
 **Synthèse produite :**
 
-**Mesuré sur le routage réel de K3.** Le verdict est net.
+**Deux résultats, dont un qui réfute mon hypothèse.**
 
 ## 3. Travail accompli
 
@@ -5542,7 +5549,7 @@ Plus : **spéculation par la couche MTP du modèle** (2,4-3,2 jetons par passe),
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6158 autres
+- … et 6173 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5670,7 +5677,7 @@ Plus : **spéculation par la couche MTP du modèle** (2,4-3,2 jetons par passe),
 
 ## 5. Erreurs rencontrées
 
-356 sorties en erreur ou divergentes. Les premières :
+357 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -6210,4 +6217,5 @@ Plus : **spéculation par la couche MTP du modèle** (2,4-3,2 jetons par passe),
 - K3 : le mur est le disque, et le prochain chantier est nommé précisément  Le chiffre qui commande tout : le FFN coûte 3,1 s par couple (couche, jeton) dans la p
 - REPRISE : le mur est le disque, prochain chantier nommé (emprunter le dense Q8_0)" && git log --oneline -6; git status --short | grep -v "^ M journal" | wc -l
 - Cache d'experts en VRAM pour K3 : mesuré, plafond x1,41, verdict x1,09 — non  Trace de routage RÉELLE de Kimi-K3 (nouveau DRAVE_K3_TRACE_EXPERTS + K3_IDS), 23 c
+- K3 : le dense emprunté donne x1,12 et des logits conformes — et le cache de pages NE le garde pas  Gguf::q8_blocks + DenseQ8::emprunter_q8 + dot_q8_source sur l
 

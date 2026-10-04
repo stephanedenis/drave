@@ -135,6 +135,53 @@ Les 93 couches vidées permettent désormais de **bissecter** la divergence : il
 suffit de comparer couche par couche pour trouver la PREMIÈRE qui décroche, au
 lieu de raisonner sur la sortie de la couche 0.
 
+### 4quater-undecies. Le dense emprunté : ×1,17, logits conformes — et le cache de pages **ne le garde pas** (05/10, 11h35)
+
+Les cinq grosses projections du KDA (`attn_q/k/v`, `ssm_g`, `attn_output`) sont
+désormais **empruntées** au fichier au lieu d'être déquantifiées en f32 :
+`Gguf::q8_blocks` + `DenseQ8::emprunter_q8` + `dot_q8_source`. Plus de copie de
+4 octets par poids, plus 224 Go de tampons alloués et libérés par passe.
+
+| | f32 dense | dense emprunté |
+|---|---:|---:|
+| chargement (93 couches) | 373 s | **190 s** |
+| attention | 142 s | 222 s |
+| passe complète | 1 695 s | **1 516 s** |
+
+**×1,12** sur la passe complète, ×1,17 depuis le chemin f32 d'origine — et
+**top-1 identique 3/3** contre la référence (84, 1103, 3140), avec des
+corrélations un peu plus basses (0,998059 / 0,998563 / 0,999059 contre 0,999802
+/ 0,999900 / 0,999924) : le chemin entier Q8_0 est légèrement moins précis que le
+f32, mais il ne déplace pas un seul argmax.
+
+**L'attention ralentit** (142 → 222 s) : `dot_q8_source` est un noyau **scalaire**
+là où le matvec f32 vectorise bien. Le gain vient du chargement, pas du calcul.
+Le noyau AVX2 du pool (`matvec_dense_i8`) est le pas suivant, et il est déjà
+écrit.
+
+### Et l'hypothèse du cache de pages est RÉFUTÉE
+
+La thèse était : « ne plus déquantifier, et le cache de pages gardera les 59,6 Go
+du dense entre deux passes ». **Deux passes complètes enchaînées, même
+processus :**
+
+| | passe 1 | passe 2 |
+|---|---:|---:|
+| chargement | 189,6 s | 193,5 s |
+| calcul | 1 310,7 s | 1 313,2 s |
+| **total** | **1 516 430 ms** | **1 522 584 ms** |
+
+**Aucun gain.** La seconde passe est même marginalement plus lente. Le cache de
+pages (`buff/cache` = 106 Go) ne retient pas le dense, parce que **chaque passe
+fait passer 77 Go d'experts** en plus des 59,6 Go de dense : 137 Go de données
+distinctes pour 106 Go de cache, et le noyau évince.
+
+**Le mécanisme correct est donc de l'ÉPINGLER, pas de l'espérer.** Un tampon
+résident de 59,6 Go (la RAM en a 125) protégé de l'éviction — c'est exactement ce
+que fait Strata avec `--resident-experts`, et c'est ce que le plan appelle
+« garder le dense résident ». La page cache, seule, ne le fait pas : c'est
+mesuré.
+
 ### 4quater-decies. **Le mur est le DISQUE, et le prochain chantier est nommé** (05/10, 09h10)
 
 Le chiffre qui commande tout : le FFN coûte **3,1 s par couple (couche, jeton)**

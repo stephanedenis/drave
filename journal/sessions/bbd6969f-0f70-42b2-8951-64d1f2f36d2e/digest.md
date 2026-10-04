@@ -121168,3 +121168,229 @@ réutilisation IMMÉDIATE (t-1 → t) : 30.2 % sur 529 transitions
 **Mesuré sur le routage réel de K3.** Le verdict est net.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-cache-experts-vram.md <<'EOF'\n# Rapport — un cache d'experts en VRAM pour Kimi-K3 : mesuré, et pourquoi c'est non\n\n**Question** (venue de Strata, `github.com/architectds/Strata`, via la vidéo\n« Local AI Is N … [4850 caractères tronqués]`
+
+  ```
+baff04a Cache d'experts en VRAM pour K3 : mesuré, plafond x1,41, verdict x1,09 — non
+  ```
+
+### 🤖 Assistant
+
+**Le calcul tranche : ×1,09 pour le cache, ×3,1 pour le dense.** Je vais donc au dense.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && grep -n \"unsafe impl Send\" list.rs | head -5; echo \"=== q8_blocks ===\"; grep -n \"pub fn q8_blocks\" -A 8 gguf.rs | head -12; echo \"=== dot_q8_source attend ===\"; sed -n '448,452p' list.rs", "description": "Check … [27 caractères tronqués]`
+
+  ```
+368:unsafe impl Send for DenseQ8 {}
+706:unsafe impl Send for DenseQ4 {}
+=== q8_blocks ===
+1568:    pub fn q8_blocks(&self, name: &str) -> Option<(&[u8], usize)> {
+1569-        let t = self.tensor(name)?;
+1570-        if t.ttype != GGML_Q8_0 { return None; }
+1571-        Some((self.tbuf(t), t.dims[1] as usize / 32))
+1572-    }
+1573-
+1574-    /// Super-blocs **Q4_K** bruts : `(octets, nb de super-blocs de 256 poids par
+1575-    /// ligne)`. C'est le format de toute la famille Qwen/Llama en `Q4_K_M`.
+1576-    pub fn q4k_blocks(&self, name: &str) -> Option<(&[u8], usize)> {
+=== dot_q8_source attend ===
+    pub fn dot_q8_source(&self, o: usize, x: &[i32]) -> f32 {
+        let mut acc = 0f32;
+        for b in 0..self.nb_ligne {
+            let p = unsafe { self.base.add((o * self.nb_ligne + b) * 34) };
+            let octets = unsafe { std::slice::from_raw_parts(p, 34) };
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && sed -n '448,466p' list.rs; echo \"=== emprunter_q8 signature ===\"; sed -n '440,447p' list.rs", "description": "Read dot_q8_source and emprunter_q8"}`
+
+  ```
+pub fn dot_q8_source(&self, o: usize, x: &[i32]) -> f32 {
+        let mut acc = 0f32;
+        for b in 0..self.nb_ligne {
+            let p = unsafe { self.base.add((o * self.nb_ligne + b) * 34) };
+            let octets = unsafe { std::slice::from_raw_parts(p, 34) };
+            let d = crate::gguf::Gguf::f16_to_f32(u16::from_le_bytes([octets[0], octets[1]]));
+            let xb = &x[b * BLOC_Q4..b * BLOC_Q4 + BLOC_Q4];
+            let mut s = 0i32;
+            let bits = BITS_POIDS.load(std::sync::atomic::Ordering::Relaxed);
+            if bits >= 8 || bits == 0 {
+                for j in 0..BLOC_Q4 { s += (octets[2 + j] as i8 as i32) * xb[j]; }
+            } else {
+                // Arrondi au niveau le plus proche de la grille réduite, puis
+                // remise à l'échelle : c'est exactement ce qu'un empaquetage sur
+                // `bits` bits produirait.
+                let dec = 8 - bits;
+                let demi = 1i32 << (dec - 1);
+                for j in 0..BLOC_Q4 {
+                    let q = octets[2 + j] as i8 as i32;
+=== emprunter_q8 signature ===
+    pub unsafe fn emprunter_q8(base: *const u8, n_out: usize, n_in: usize,
+                               nb_lig
+… [317 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && python3 - <<'PY'\np='kimi_k3.rs'; s=open(p).read()\n\n# 1. le helper d'emprunt Q8_0 + le matvec qui va avec\nhelper = '''\n/// **Une projection Q8_0 EMPRUNTÉE au fichier.** `g.dequant(nom)` copie la\n/// matrice en f32 … [4171 caractères tronqués]`
+
+  ```
+KdaK3 emprunte
+248:    f_a: Vec<f32>, f_b: Vec<f32>, g_proj: Vec<f32>,
+311:            g_proj: lu(&p("ssm_g.weight"))?,
+440:        mv(&self.g_proj, d_inner, h, &cur, &mut g2);
+1060:    q: Q8, k: Q8, v: Q8, wo: Q8, g_proj: Q8,
+1094:            g_proj: emp(&p("ssm_g.weight"))?,
+1146:        mv(&self.g_proj, d_inner, h, cur, &mut g2);
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && sed -n '1140,1150p' kimi_k3.rs; echo \"--- 244-250 (autre struct) ---\"; sed -n '244,250p' kimi_k3.rs", "description": "Locate the remaining g_proj call"}`
+
+  ```
+crate::model::kda_pas(&qc[t * hd..(t + 1) * hd], &kc[t * hd..(t + 1) * hd],
+                                  &vc[t * hd..(t + 1) * hd], &g, b,
+                                  &mut self.etat_delta[t * hd * hd..(t + 1) * hd * hd], hd, &mut ot);
+            o[t * hd..(t + 1) * hd].copy_from_slice(&ot);
+        }
+        let mut g2 = vec![0f32; d_inner];
+        mv(&self.g_proj, d_inner, h, cur, &mut g2);
+        for t in 0..nh {
+            rms_norm_poids(&o[t * hd..(t + 1) * hd], &self.o_norm, self.eps, &mut tampon[..hd]);
+            for i in 0..hd {
+                let s = 1.0 / (1.0 + (-g2[t * hd + i]).exp());
+--- 244-250 (autre struct) ---
+
+/// Les tenseurs de la couche 0 (dense : KDA + SiTU), et ses états.
+pub struct Couche0 {
+    q: Vec<f32>, k: Vec<f32>, v: Vec<f32>, wo: Vec<f32>,
+    f_a: Vec<f32>, f_b: Vec<f32>, g_proj: Vec<f32>,
+    ffn_gate: Vec<f32>, ffn_up: Vec<f32>, ffn_down: Vec<f32>,
+    attn_norm: Vec<f32>, attn_res_score: Vec<f32>,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && python3 - <<'PY'\np='kimi_k3.rs'; s=open(p).read()\nold = \"\"\"        let mut g2 = vec![0f32; d_inner];\n        mv(&self.g_proj, d_inner, h, cur, &mut g2);\n        for t in 0..nh {\n            rms_norm_poids(&o[t  … [558 caractères tronqués]`
+
+  ```
+ok
+error[E0425]: cannot find value `xd` in this scope
+    --> src/kimi_k3.rs:1006:44
+     |
+1006 |         self.wo.mv(&sortie, &mut out, &mut xd);
+     |                                            ^^
+     |
+help: a local variable with a similar name exists
+     |
+1006 -         self.wo.mv(&sortie, &mut out, &mut xd);
+--
+error[E0599]: no method named `mv` found for struct `Vec<f32>` in the current scope
+    --> src/kimi_k3.rs:1006:17
+     |
+1006 |         self.wo.mv(&sortie, &mut out, &mut xd);
+     |                 ^^ method not found in `Vec<f32>`
+
+error[E0308]: mismatched types
+    --> src/kimi_k3.rs:1155:12
+     |
+1155 |         mv(&self.wo, h, d_inner, &o, &mut out);
+     |         -- ^^^^^^^^ expected `&[f32]`, found `&Q8`
+     |         |
+     |         arguments to this function are incorrect
+     |
+     = note: expected reference `&[f32]`
+=== build ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && python3 - <<'PY'\np='kimi_k3.rs'; s=open(p).read()\n# MLA : son `wo` reste en f32 (on n'y touche pas dans ce pas)\ns = s.replace(\"\"\"        let mut out = vec![0f32; h];\n        self.wo.mv(&sortie, &mut out, &mut xd … [647 caractères tronqués]`
+
+  ```
+ok
+=== build fini ===
+test result: ok. 77 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && K=/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf\necho \"=== 4 couches, dense emprunté ===\"; DRAVE_K3_PASSE=4 timeout 900 ./drave-core/target/release/drave $K --k3-essai 2>&1  … [204 caractères tronqués]`
+
+  ```
+=== 4 couches, dense emprunté ===
+  ---- chargement 2.8 s (12 %) · calcul 21.7 s (88 %) [attention 3.3 s · FFN 18.3 s]
+  passe complète : 26498 ms au total
+=== rappel : f32 = 6,5 s chargement / 27,4 s calcul / 36,3 s ===
+  ```
+
+### 🤖 Assistant
+
+**×1,37 sur 4 couches** (chargement ×2,3, attention ×1,9). Le vrai test est la passe complète, deux fois de suite.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && K=/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf\nnohup bash -c \"cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nfor i in 1 2; do\n  echo \\\"########## PASSE \\$i ####### … [414 caractères tronqués]`
+
+  ```
+deux passes complètes enchaînées : la 2e dit si le dense reste en cache
+10:47
+  ```
+
+- **bash** `{"command": "sleep 540; cat /tmp/k3_q8.log | tail -5; date \"+%H:%M\"", "description": "Poll the two-pass run", "timeoutMs": 570000}`
+
+  ```
+########## PASSE 1 ##########
+10:56
+  ```
+
+- **bash** `{"command": "sleep 540; tail -4 /tmp/k3_q8.log; date \"+%H:%M\"", "description": "Poll the two-pass run", "timeoutMs": 570000}`
+
+  ```
+couche 51 :   3296 ms de chargement +  14029 ms de calcul · banque 5
+  couche 52 :   1665 ms de chargement +  14855 ms de calcul · banque 5
+  couche 53 :   1697 ms de chargement +  15646 ms de calcul · banque 5
+  couche 54 :   1803 ms de chargement +  16295 ms de calcul · banqu11:05
+  ```
+
+- **bash** `{"command": "sleep 540; grep -E \"PASSE|chargement [0-9]|logits|passe complète\" /tmp/k3_q8.log | tail -6; date \"+%H:%M\"", "description": "Poll the two-pass run", "timeoutMs": 570000}`
+
+  ```
+########## PASSE 1 ##########
+  passe complète : 93 couche(s), une seule en mémoire à la fois · TÊTE (logits)
+  ---- chargement 189.6 s (13 %) · calcul 1310.7 s (87 %) [attention 222.1 s · FFN 1088.4 s]
+  logits : /tmp/k3_logits_q8_1.bin — 3 positions × 163840 valeurs
+  passe complète : 1516430 ms au total
+########## PASSE 2 ##########
+11:14
+  ```
+
+- **bash** `{"command": "sleep 540; grep -E \"PASSE|chargement [0-9]|logits|passe complète\" /tmp/k3_q8.log | tail -5; date \"+%H:%M\"", "description": "Poll pass 2", "timeoutMs": 570000}`
+
+  ```
+passe complète : 93 couche(s), une seule en mémoire à la fois · TÊTE (logits)
+  ---- chargement 189.6 s (13 %) · calcul 1310.7 s (87 %) [attention 222.1 s · FFN 1088.4 s]
+  logits : /tmp/k3_logits_q8_1.bin — 3 positions × 163840 valeurs
+  passe complète : 1516430 ms au total
+########## PASSE 2 ##########
+11:23
+  ```
+
+- **bash** `{"command": "sleep 540; grep -E \"PASSE|chargement [0-9]|passe complète : [0-9]\" /tmp/k3_q8.log | tail -5; free -g | head -2; date \"+%H:%M\"", "description": "Poll pass 2", "timeoutMs": 570000}`
+
+  ```
+passe complète : 93 couche(s), une seule en mémoire à la fois · TÊTE (logits)
+  ---- chargement 189.6 s (13 %) · calcul 1310.7 s (87 %) [attention 222.1 s · FFN 1088.4 s]
+  passe complète : 1516430 ms au total
+########## PASSE 2 ##########
+  passe complète : 93 couche(s), une seule en mémoire à la fois · TÊTE (logits)
+               total        used        free      shared  buff/cache   available
+Mem:             125          22           0           2         106         103
+11:33
+  ```
+
+- **bash** `{"command": "sleep 480; grep -E \"passe complète : [0-9]|chargement [0-9]|logits\" /tmp/k3_q8.log | tail -4; echo \"=== comparaison des logits ===\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport struct, math\ndef lire(p):\n    f=open(p,'rb'); v,n=struct.unpack('<ii' … [843 caractères tronqués]`
+
+  ```
+passe complète : 93 couche(s), une seule en mémoire à la fois · TÊTE (logits)
+  ---- chargement 193.5 s (13 %) · calcul 1313.2 s (87 %) [attention 222.4 s · FFN 1090.7 s]
+  logits : /tmp/k3_logits_q8_2.bin — 3 positions × 163840 valeurs
+  passe complète : 1522584 ms au total
+=== comparaison des logits ===
+emprunté pos0 : corrélation 0.998059 · top-1 réf 84 / moteur 84 ✅
+emprunté pos1 : corrélation 0.998563 · top-1 réf 1103 / moteur 1103 ✅
+emprunté pos2 : corrélation 0.999059 · top-1 réf 3140 / moteur 3140 ✅
+  ```
+
+### 🤖 Assistant
+
+**Deux résultats, dont un qui réfute mon hypothèse.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/verification-kimi-k3.md'; s=open(p).read()\nanc = \"### 4quater-decies. **Le mur est le DISQUE, et le prochain chantier est nommé** (05/10, 09h10)\"\nnew = \"\"\"### 4quater-undecies. Le dense emprunté : ×1, … [3406 caractères tronqués]`
