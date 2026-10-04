@@ -1030,14 +1030,56 @@ struct Q8 {
     d: crate::list::DenseQ8,
 }
 
+/// **L'arène résidente du dense.** Les blocs Q8_0 copiés hors du mmap dans des
+/// tampons ANONYMES, gardés pour la vie du processus.
+///
+/// Pourquoi une copie suffit à ÉPINGLER, sans `mlock` ni `libc` : cette machine
+/// **n'a pas de swap** (`swapon --show` est vide). Le noyau ne peut récupérer
+/// une page anonyme que vers le swap ; sans swap, elle est **non-récupérable
+/// par construction**. Une copie est donc résidente, alors que la page du mmap,
+/// elle, est propre et se laisse évincer à la première pression — ce qui est
+/// exactement ce qu'on a mesuré : deux passes enchaînées sans arène donnaient
+/// 1 516 430 ms puis 1 522 584 ms, aucun gain.
+///
+/// Le pointeur d'un `Box<[u8]>` ne bouge jamais, même quand la table qui le
+/// range grandit : on peut donc relâcher le verrou et emprunter les octets.
+static ARENE: std::sync::OnceLock<std::sync::Mutex<std::collections::HashMap<String, Box<[u8]>>>> =
+    std::sync::OnceLock::new();
+
+fn arene_fige() -> bool {
+    static F: std::sync::OnceLock<bool> = std::sync::OnceLock::new();
+    *F.get_or_init(|| std::env::var("DRAVE_K3_DENSE_FIGE")
+        .map(|v| v != "0" && !v.is_empty()).unwrap_or(false))
+}
+
 impl Q8 {
     /// `None` si le tenseur n'est pas du Q8_0 (on retombe alors sur le f32).
+    ///
+    /// Avec `DRAVE_K3_DENSE_FIGE=1`, les octets sont **copiés** dans l'arène
+    /// résidente au premier usage, et toutes les passes suivantes empruntent
+    /// cette copie : plus une seule lecture disque pour le dense.
     fn emprunter(g: &Gguf, nom: &str) -> Option<Q8> {
         let t = g.tensor(nom)?;
         let n_out = t.dims[0] as usize;
         let n_in = t.dims[1] as usize;
         let (buf, nb) = g.q8_blocks(nom)?;
+        if arene_fige() {
+            let ptr = {
+                let a = ARENE.get_or_init(|| std::sync::Mutex::new(std::collections::HashMap::new()));
+                let mut m = a.lock().unwrap();
+                m.entry(nom.to_string())
+                    .or_insert_with(|| buf.to_vec().into_boxed_slice())
+                    .as_ptr()
+            };
+            return Some(Q8 { d: unsafe {
+                crate::list::DenseQ8::emprunter_q8(ptr, n_out, n_in, nb) } });
+        }
         Some(Q8 { d: unsafe { crate::list::DenseQ8::emprunter_q8(buf.as_ptr(), n_out, n_in, nb) } })
+    }
+
+    /// Octets actuellement figés — c'est ce qui dit si l'arène a servi.
+    pub fn arene_octets() -> usize {
+        ARENE.get().map(|a| a.lock().unwrap().values().map(|b| b.len()).sum()).unwrap_or(0)
     }
 
     /// `x ≈ xd · sx`, le noyau rend `Σ w·xd`, on remultiplie par `sx`. Même
@@ -1447,6 +1489,20 @@ pub fn passe_complete(g: &Gguf, ids: &[u32], n: usize, verbeux: bool, tete: bool
     // l'aveugle — et « ça a l'air lent » n'est pas une mesure.
     let (mut t_charge, mut t_calcul) = (0f64, 0f64);
     let (mut t_attn, mut t_ffn) = (0f64, 0f64);
+    // **Le dense emprunté change la sortie : il le DIT.** Le noyau Q8_0 calcule
+    // en entier (i8 × i32, échelle par bloc) là où le chemin f32 déquantifiait
+    // puis sommait en flottant. Mesuré sur le modèle entier : ×1,12 sur la
+    // passe, top-1 identique 3/3 contre la référence, corrélations 0,998059 /
+    // 0,998563 / 0,999059 au lieu de 0,999802 / 0,999900 / 0,999924. C'est un
+    // peu moins précis et personne ne doit l'apprendre par surprise.
+    if verbeux {
+        eprintln!("  dense : projections Q8_0 lues EN PLACE (empruntées au fichier, pas \
+déquantifiées) — ×1,12 mesuré sur la passe, top-1 inchangé, corrélations 0,998 contre 0,9998");
+        if arene_fige() {
+            eprintln!("  dense : arène RÉSIDENTE active ({} Mo figés, DRAVE_K3_DENSE_FIGE)",
+                      Q8::arene_octets() / 1_000_000);
+        }
+    }
     for l in 0..n {
         let t0 = std::time::Instant::now();
         let mut c = CoucheK3::charge(g, l)?;

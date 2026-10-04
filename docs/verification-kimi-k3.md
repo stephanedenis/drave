@@ -159,6 +159,40 @@ là où le matvec f32 vectorise bien. Le gain vient du chargement, pas du calcul
 Le noyau AVX2 du pool (`matvec_dense_i8`) est le pas suivant, et il est déjà
 écrit.
 
+### Deuxième réfutation : la copie anonyme SWAPE (05/10, 18h20)
+
+Le mécanisme suivant essayé était : copier les blocs Q8_0 du dense (31,8 Go pour
+les cinq projections du KDA) dans des tampons **anonymes** gardés pour la vie du
+processus. La page anonyme n'étant récupérable que vers le swap, une copie
+suffirait à épingler — **sans `mlock`, sans `libc`, en `std` seul**.
+
+**La prémisse était fausse, et la façon dont elle l'était compte.** J'avais
+vérifié avec `swapon --show`, qui n'a rien affiché ; j'ai lu ce silence comme
+« pas de swap ». `swapon` **n'existe pas sur cette machine** (`command not
+found`) : c'est un instrument absent, pas une mesure négative. `/proc/swaps`
+dit la vérité :
+
+```
+Filename        Type      Size        Used       Priority
+/dev/dm-0       partition 65 798 140  56 019 556  -1
+```
+
+**62,8 Go de swap, dont 53 Go utilisés.** La mémoire anonyme est donc
+récupérable, et l'arène s'est mise à swaper : `VmSwap` du processus = **28,5 Go**,
+mémoire disponible tombée à 7 Go. La passe aurait été plus lente, pas plus
+rapide. Arrêtée avant la fin.
+
+**Ce que ça laisse** : sur cette machine, le dense ne peut pas être rendu
+résident à bon compte. La page cache ne le garde pas (mesuré), la copie anonyme
+swape (mesuré), et `mlock` de 32 Go demande `CAP_IPC_LOCK` — les limites
+habituelles sont de quelques mégaoctets. Le mécanisme reste **opt-in**
+(`DRAVE_K3_DENSE_FIGE=1`), documenté, et **déconseillé** ici.
+
+**Leçon de méthode, et elle est la même que celle du bloc 31** : un instrument
+qui n'existe pas ne renvoie pas « non ». `swapon --show` vide, `grep` sans
+résultat, un fichier absent — le silence n'est une mesure que si l'on a vérifié
+que l'outil était là. La bonne source est `/proc/swaps`, qui est un fichier.
+
 ### Et l'hypothèse du cache de pages est RÉFUTÉE
 
 La thèse était : « ne plus déquantifier, et le cache de pages gardera les 59,6 Go

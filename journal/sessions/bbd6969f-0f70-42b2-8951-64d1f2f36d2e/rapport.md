@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 140.9 h |
-| Tours | 107 |
-| Messages | 7652 |
-| Appels d'outils | 7314 |
+| Durée | 147.6 h |
+| Tours | 108 |
+| Messages | 7665 |
+| Appels d'outils | 7325 |
 | Fichiers touchés | 150 |
-| Commandes | 6213 |
+| Commandes | 6224 |
 | Sous-agents | 32 |
-| Commits | 521 |
+| Commits | 522 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -261,6 +261,8 @@
 **Tour 106** — étudie https://www.youtube.com/watch?v=bH36gWAgPwA
 
 **Tour 107** — oui
+
+**Tour 108** — oui
 
 ## 2. Déroulé, étape par étape
 
@@ -5313,7 +5315,72 @@ Plus : **spéculation par la couche MTP du modèle** (2,4-3,2 jetons par passe),
 
 **Synthèse produite :**
 
-**Deux résultats, dont un qui réfute mon hypothèse.**
+Deux mesures, dont une qui réfute ma propre hypothèse.
+
+\## 1. Le cache d'experts en VRAM : **non**, et c'est calculé avant d'être écrit
+
+**Le plafond d'abord.** Sur les 88,09 Go qu'un jeton de K3 lit, le cache ne peut retirer que les experts **routés** :
+
+| poste | Go/jeton | part |
+|---|---:|---:|
+| **experts routés** (16 sur 896) | 25,83 | 29,3 % |
+| experts partagés | 12,40 | 14,1 % |
+| **dense Q8_0** | 48,56 | **55,1 %** |
+| tête | 1,30 | 1,5 % |
+
+Donc **×1,41 même avec un cache parfait**. Et 32 Go de VRAM ne tiennent que 1 828 matrices d'experts (17,5 Mo chacune) = **19,7 par couche**, quand un jeton en choisit **16** — le cache fait 1,2 jeton.
+
+**Puis le taux réel**, sur une trace de routage **de K3 lui-même** (23 couches MoE × 24 jetons de vrai texte, 552 relevés) :
+
+| | **K3** (896 experts/couche, 16/jeton) | Qwen3-30B-A3B (128, 8/jeton) |
+|---|---:|---:|
+| réutilisation immédiate | **30,2 %** | 46,9 % |
+| LRU 20 experts/couche | **28,7 %** | — |
+| LRU 128 | 49,8 % | — |
+
+**Verdict : ×1,09.** Neuf pour cent pour un cache à écrire, peupler, adapter à la conversation et déboguer — ce n'est pas une optimisation, c'est un arrondi. K3 disperse bien plus que Qwen parce qu'il choisit 16 experts sur 896 au lieu de 8 sur 128.
+
+\## 2. Le dense, lui : ×1,12 maintenant, et **mon hypothèse était fausse**
+
+J'ai emprunté les blocs Q8_0 des cinq grosses projections du KDA au lieu de les déquantifier (`q8_blocks` + `emprunter_q8` + `dot_q8_source` — tout existait).
+
+| | f32 | emprunté |
+|---|---:|---:|
+| chargement | 373 s | **190 s** |
+| attention | 142 s | **222 s** ❌ |
+| **passe complète** | 1 695 s | **1 516 s** |
+
+**Top-1 identique 3/3** contre la référence (84, 1103, 3140) ✓ — mais l'attention *ralentit* : `dot_q8_source` est un noyau scalaire là où le matvec f32 vectorise. Le gain vient du chargement, pas du calcul.
+
+**Et la thèse du cache de pages est réfutée.** J'avais écrit ce matin : « ne plus déquantifier, et le cache de pages gardera les 59,6 Go du dense ». Deux passes complètes enchaînées :
+
+| | passe 1 | passe 2 |
+|---|---:|---:|
+| total | **1 516 430 ms** | **1 522 584 ms** |
+
+**Aucun gain**, la seconde est même plus lente. 106 Go de cache pour **137 Go de données distinctes par passe** (59,6 de dense + 77 d'experts) : le noyau évince.
+
+**Le mécanisme correct est donc d'épingler le dense, pas de l'espérer.** Un tampon résident de 59,6 Go sur 125 — exactement ce que Strata appelle `--resident-experts`, et ce que le plan appelle « garder le dense résid
+… [595 caractères tronqués]
+
+### Tour 108 — oui
+
+*11 appels d'outils.* Actions notables :
+
+- bash — Check swap and the dense size to pin
+- bash — Implement the resident dense arena
+- bash — Run three passes with the pinned dense
+- bash — Poll the pinned-dense run
+- bash — Check memory pressure
+- bash — Stop the run and check swap properly
+- bash — Find what holds memory and swap
+- bash — Announce the borrowed dense at runtime
+- bash — Verify the announcement appears
+- bash — Record both the fix and the refutation
+
+**Synthèse produite :**
+
+Après arrêt, plus personne ne tient cette mémoire : c'était bien le processus. Je corrige d'abord une faute que j'ai commise.
 
 ## 3. Travail accompli
 
@@ -5549,7 +5616,7 @@ Plus : **spéculation par la couche MTP du modèle** (2,4-3,2 jetons par passe),
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6173 autres
+- … et 6184 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -6218,4 +6285,5 @@ Plus : **spéculation par la couche MTP du modèle** (2,4-3,2 jetons par passe),
 - REPRISE : le mur est le disque, prochain chantier nommé (emprunter le dense Q8_0)" && git log --oneline -6; git status --short | grep -v "^ M journal" | wc -l
 - Cache d'experts en VRAM pour K3 : mesuré, plafond x1,41, verdict x1,09 — non  Trace de routage RÉELLE de Kimi-K3 (nouveau DRAVE_K3_TRACE_EXPERTS + K3_IDS), 23 c
 - K3 : le dense emprunté donne x1,12 et des logits conformes — et le cache de pages NE le garde pas  Gguf::q8_blocks + DenseQ8::emprunter_q8 + dot_q8_source sur l
+- K3 : le dense emprunté s'ANNONCE, et l'arène résidente est réfutée (elle swape)  1. FAUTE CORRIGÉE : j'avais mis le dense emprunté en défaut SILENCIEUX alors   
 

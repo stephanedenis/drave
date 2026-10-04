@@ -121394,3 +121394,195 @@ emprunté pos2 : corrélation 0.999059 · top-1 réf 3140 / moteur 3140 ✅
 **Deux résultats, dont un qui réfute mon hypothèse.**
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/verification-kimi-k3.md'; s=open(p).read()\nanc = \"### 4quater-decies. **Le mur est le DISQUE, et le prochain chantier est nommé** (05/10, 09h10)\"\nnew = \"\"\"### 4quater-undecies. Le dense emprunté : ×1, … [3406 caractères tronqués]`
+
+  ```
+9aff2cd K3 : le dense emprunté donne x1,12 et des logits conformes — et le cache de pages NE le garde pas
+  ```
+
+### 🤖 Assistant
+
+Deux mesures, dont une qui réfute ma propre hypothèse.
+
+## 1. Le cache d'experts en VRAM : **non**, et c'est calculé avant d'être écrit
+
+**Le plafond d'abord.** Sur les 88,09 Go qu'un jeton de K3 lit, le cache ne peut retirer que les experts **routés** :
+
+| poste | Go/jeton | part |
+|---|---:|---:|
+| **experts routés** (16 sur 896) | 25,83 | 29,3 % |
+| experts partagés | 12,40 | 14,1 % |
+| **dense Q8_0** | 48,56 | **55,1 %** |
+| tête | 1,30 | 1,5 % |
+
+Donc **×1,41 même avec un cache parfait**. Et 32 Go de VRAM ne tiennent que 1 828 matrices d'experts (17,5 Mo chacune) = **19,7 par couche**, quand un jeton en choisit **16** — le cache fait 1,2 jeton.
+
+**Puis le taux réel**, sur une trace de routage **de K3 lui-même** (23 couches MoE × 24 jetons de vrai texte, 552 relevés) :
+
+| | **K3** (896 experts/couche, 16/jeton) | Qwen3-30B-A3B (128, 8/jeton) |
+|---|---:|---:|
+| réutilisation immédiate | **30,2 %** | 46,9 % |
+| LRU 20 experts/couche | **28,7 %** | — |
+| LRU 128 | 49,8 % | — |
+
+**Verdict : ×1,09.** Neuf pour cent pour un cache à écrire, peupler, adapter à la conversation et déboguer — ce n'est pas une optimisation, c'est un arrondi. K3 disperse bien plus que Qwen parce qu'il choisit 16 experts sur 896 au lieu de 8 sur 128.
+
+## 2. Le dense, lui : ×1,12 maintenant, et **mon hypothèse était fausse**
+
+J'ai emprunté les blocs Q8_0 des cinq grosses projections du KDA au lieu de les déquantifier (`q8_blocks` + `emprunter_q8` + `dot_q8_source` — tout existait).
+
+| | f32 | emprunté |
+|---|---:|---:|
+| chargement | 373 s | **190 s** |
+| attention | 142 s | **222 s** ❌ |
+| **passe complète** | 1 695 s | **1 516 s** |
+
+**Top-1 identique 3/3** contre la référence (84, 1103, 3140) ✓ — mais l'attention *ralentit* : `dot_q8_source` est un noyau scalaire là où le matvec f32 vectorise. Le gain vient du chargement, pas du calcul.
+
+**Et la thèse du cache de pages est réfutée.** J'avais écrit ce matin : « ne plus déquantifier, et le cache de pages gardera les 59,6 Go du dense ». Deux passes complètes enchaînées :
+
+| | passe 1 | passe 2 |
+|---|---:|---:|
+| total | **1 516 430 ms** | **1 522 584 ms** |
+
+**Aucun gain**, la seconde est même plus lente. 106 Go de cache pour **137 Go de données distinctes par passe** (59,6 de dense + 77 d'experts) : le noyau évince.
+
+**Le mécanisme correct est donc d'épingler le dense, pas de l'espérer.** Un tampon résident de 59,6 Go sur 125 — exactement ce que Strata appelle `--resident-experts`, et ce que le plan appelle « garder le dense résident ». La page cache seule ne le fait pas : c'est mesuré, plus supposé.
+
+## Où on en est
+
+Tout est commité, 77 tests verts, arbre propre. Le rapport du cache est dans `reports/rapport-cache-experts-vram.md`, les deux mesures dans `docs/verification-kimi-k3.md`.
+
+**Les deux pas suivants, dans l'ordre :**
+1. **Épingler le dense** (59,6 Go, `mlock`/`MADV_WILLNEED` sur la région empruntée) — c'est le seul moyen de faire ce que la page cache ne fait pas ;
+2. **Le noyau AVX2 du pool** (`matvec_dense_i8`) à la place du scalaire — c'est ce qui a coûté 80 s sur l'attention.
+
+Je continue sur le 1 ?
+
+
+## Tour 108
+
+### 👤 Utilisateur
+
+oui
+
+### 🤖 Assistant
+
+⏵ J'épingle le dense du KDA dans un tampon anonyme, que le noyau ne peut pas évincer
+
+- **bash** `{"command": "free -g | head -2; swapon --show 2>/dev/null | head -3; echo \"--- taille du dense KDA à épingler ---\"; python3 -c \"\n# 68 couches KDA x (attn_q + attn_k + attn_v + ssm_g + attn_output) en Q8_0\np = 12288*7168*4 + 7168*12288   # q,k,v,g = 4 x (12288x7168) ; wo = 7168x12288\nprint(f'   … [124 caractères tronqués]`
+
+  ```
+total        used        free      shared  buff/cache   available
+Mem:             125          12          11           2         105         113
+--- taille du dense KDA à épingler ---
+  68 couches x 0.468 Go = 31.8 Go
+  ```
+
+### 🤖 Assistant
+
+**Pas de swap sur cette machine** — la mémoire anonyme est donc non-récupérable par construction : une copie suffit à épingler, sans `mlock` ni libc.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && python3 - <<'PY'\np='kimi_k3.rs'; s=open(p).read()\nanc = \"struct Q8 {\\n    d: crate::list::DenseQ8,\\n}\"\nnew = '''struct Q8 {\n    d: crate::list::DenseQ8,\n}\n\n/// **L'arène résidente du dense.** Les blocs Q8_0  … [3386 caractères tronqués]`
+
+  ```
+arène écrite
+test result: ok. 77 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && K=/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf\nnohup bash -c \"cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nfor i in 1 2 3; do\n  echo \\\"########## PASSE \\$i ##### … [474 caractères tronqués]`
+
+  ```
+TROIS passes avec le dense épinglé : la 1re paie la copie, les suivantes ne doivent plus rien lire
+17:58
+  ```
+
+- **bash** `{"command": "sleep 540; grep -E \"PASSE|chargement [0-9]|passe complète : [0-9]\" /tmp/k3_fige.log | tail -4; date \"+%H:%M\"", "description": "Poll the pinned-dense run", "timeoutMs": 570000}`
+
+  ```
+########## PASSE 1 ##########
+18:08
+  ```
+
+- **bash** `{"command": "sleep 540; grep -E \"PASSE|chargement [0-9]|passe complète : [0-9]\" /tmp/k3_fige.log | tail -4; free -g | head -2; date \"+%H:%M\"", "description": "Poll the pinned-dense run", "timeoutMs": 570000}`
+
+  ```
+########## PASSE 1 ##########
+               total        used        free      shared  buff/cache   available
+Mem:             125         118           0           2           9           7
+18:17
+  ```
+
+- **bash** `{"command": "P=$(pgrep -x drave | head -1); if [ -n \"$P\" ]; then ps -o etimes=,%cpu=,rss= -p $P; grep -E \"VmRSS|VmSwap\" /proc/$P/status; fi; free -g | head -2; grep -c \"couche\" /tmp/k3_fige.log 2>/dev/null; tail -1 /tmp/k3_fige.log; date \"+%H:%M\"", "description": "Check memory pressure"}`
+
+  ```
+1102 29.4 113172700
+VmRSS:	113172700 kB
+VmSwap:	28492052 kB
+               total        used        free      shared  buff/cache   available
+Mem:             125         118           0           2           9           6
+0
+########## PASSE 1 ##########
+18:17
+  ```
+
+### 🤖 Assistant
+
+**Alerte mémoire** : le processus swap 28,5 Go. Ma prémisse « pas de swap » était fausse. J'arrête.
+
+- **bash** `{"command": "pkill -x drave; sleep 3; pgrep -x drave | wc -l; echo \"=== le swap, réellement ===\"; cat /proc/swaps; echo \"---\"; free -g | head -2; echo \"--- ce que swapon disait ---\"; swapon --show; echo \"(code $?)\"", "description": "Stop the run and check swap properly"}`
+
+  ```
+1
+=== le swap, réellement ===
+Filename				Type		Size		Used		Priority
+/dev/dm-0                               partition	65798140	56019556	-1
+---
+               total        used        free      shared  buff/cache   available
+Mem:             125          71          49           2           8          54
+--- ce que swapon disait ---
+(code 127)
+[stderr]
+bash: line 1: swapon: command not found
+  ```
+
+### 🤖 Assistant
+
+**`swapon` n'existe pas sur cette machine** — j'ai lu son silence comme « pas de swap ». Il y a 62,8 Go de swap, dont 53 Go utilisés.
+
+- **bash** `{"command": "ps -eo rss,comm --sort=-rss --no-headers | head -8 | awk '{printf \"%8.1f Go  %s\\n\", $1/1048576, $2}'; echo \"--- swap par processus (top 5) ---\"; for p in $(ls /proc | grep -E '^[0-9]+$'); do s=$(grep VmSwap /proc/$p/status 2>/dev/null | awk '{print $2}'); [ -n \"$s\" ] && [ \"$s\"  … [192 caractères tronqués]`
+
+  ```
+5.8 Go  drave
+     3.6 Go  node-MainThread
+     0.5 Go  node-MainThread
+     0.4 Go  plasmashell
+     0.3 Go  python3
+     0.2 Go  esbuild
+     0.2 Go  chrome
+     0.2 Go  chrome
+--- swap par processus (top 5) ---
+     0.5 Go  xdg-desktop-por
+     0.5 Go  node-MainThread
+     0.4 Go  plasma-discover
+     0.3 Go  python3
+     0.3 Go  plasmashell
+  ```
+
+### 🤖 Assistant
+
+Après arrêt, plus personne ne tient cette mémoire : c'était bien le processus. Je corrige d'abord une faute que j'ai commise.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && python3 - <<'PY'\np='kimi_k3.rs'; s=open(p).read()\nold = \"\"\"    let (mut t_charge, mut t_calcul) = (0f64, 0f64);\n    let (mut t_attn, mut t_ffn) = (0f64, 0f64);\"\"\"\nnew = \"\"\"    let (mut t_charge, mut t_calc … [1257 caractères tronqués]`
+
+  ```
+annonce ajoutée
+test result: ok. 77 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && K=/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf\nDRAVE_K3_PASSE=2 timeout 600 ./drave-core/target/release/drave $K --k3-essai 2>&1 | grep -E \"dense :\" | head -4", "descripti … [60 caractères tronqués]`
+
+  ```
+dense : projections Q8_0 lues EN PLACE (empruntées au fichier, pas déquantifiées) — ×1,12 mesuré sur la passe, top-1 inchangé, corrélations 0,998 contre 0,9998
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/verification-kimi-k3.md'; s=open(p).read()\nanc = \"### Et l'hypothèse du cache de pages est RÉFUTÉE\"\nnew = \"\"\"### Deuxième réfutation : la copie anonyme SWAPE (05/10, 18h20)\n\nLe mécanisme suivant ess … [2966 caractères tronqués]`
