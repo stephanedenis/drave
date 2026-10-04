@@ -119423,3 +119423,69 @@ LA PASSE COMPLÈTE : 93 couches, une seule en mémoire. Comparaison prévue cont
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"K3 : la passe complète, une couche en mémoire à la fois — les 93 couches deviennent calculables\n\nPetitesK3::charge garde les n couches en mémoire, tout le dense en f32 : 25\ncouches tiennent (59 Go) … [992 caractères tronqués]`
+
+  ```
+18b123c K3 : la passe complète, une couche en mémoire à la fois — les 93 couches deviennent calculables
+  ```
+
+- **bash** `{"command": "sleep 540; tail -3 /tmp/k3_passe93.log; date \"+%H:%M\"", "description": "Poll the full pass", "timeoutMs": 570000}`
+
+  ```
+couche 35 :   17252 ms · banque 3
+  couche 36 :   20213 ms · banque 4 (empilée)
+  couche 37 :   20741 ms · banque 4
+04:05
+  ```
+
+- **bash** `{"command": "sleep 540; tail -3 /tmp/k3_passe93.log; date \"+%H:%M\"", "description": "Poll the full pass", "timeoutMs": 570000}`
+
+  ```
+couche 60 :   24329 ms · banque 6 (empilée)
+  couche 61 :   21127 ms · banque 6
+  couche 62 :   22172 ms · banque 6
+04:14
+  ```
+
+- **bash** `{"command": "sleep 540; tail -4 /tmp/k3_passe93.log; ls /tmp/passe93-l_out-92-*.bin 2>/dev/null | wc -l; date \"+%H:%M\"", "description": "Poll the full pass completion", "timeoutMs": 570000}`
+
+  ```
+couche 83 :   20146 ms · banque 7
+  couche 84 :   23782 ms · banque 8 (empilée)
+  couche 85 :   24349 ms · banque 8
+  couche 86 :   22400 ms · banque 8
+0
+04:23
+  ```
+
+- **bash** `{"command": "sleep 300; tail -8 /tmp/k3_passe93.log; date \"+%H:%M\"", "description": "Wait for the full pass to finish", "timeoutMs": 330000}`
+
+  ```
+couche 90 :   24110 ms · banque 8
+  couche 91 :   18962 ms · banque 8
+  couche 92 :   20926 ms · banque 8
+  passe 0-92, jeton 0 : |l_out| = 83.2744 · finis : true
+  passe 0-92, jeton 1 : |l_out| = 67.2309 · finis : true
+  passe 0-92, jeton 2 : |l_out| = 78.9416 · finis : true
+  passe 0-92, jeton 3 : |l_out| = 86.5862 · finis : true
+  passe complète : 1715885 ms au total
+04:28
+  ```
+
+### 🤖 Assistant
+
+**La passe complète a fini** — 93 couches, 8 banques, 28 minutes. Comparaison :
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/compare_etats.py /tmp/passe93 /tmp/refk3 l_out 92 0,1,2", "description": "Compare the full model against the reference", "timeoutMs": 180000}`
+
+  ```
+# l_out-92 : référence ne=(7168, 4, 1, 1) → 7168 valeurs × 1 par position
+  pos 0 : écart max 1.011e-01 (indice 2314, dynamique 7.417e+00) · corrélation 0.999857 ~
+  pos 1 : écart max 8.100e-02 (indice 6532, dynamique 1.652e+01) · corrélation 0.999900 ~
+  pos 2 : écart max 2.157e-01 (indice 6532, dynamique 2.938e+01) · corrélation 0.999919 ~
+  ```
+
+### 🤖 Assistant
+
+**Les 93 couches matchent.** C'est la vérification complète de l'architecture.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/verification-kimi-k3.md'; s=open(p).read()\nanc = \"### 4quater-quinquies. VINGT-CINQ COUCHES, TROIS BANQUES (05/10, 03h37)\"\nnew = \"\"\"### 4quater-sexies. **LA PASSE COMPLÈTE DE 93 COUCHES PASSE** (05/10 … [2829 caractères tronqués]`

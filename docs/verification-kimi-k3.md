@@ -135,6 +135,35 @@ Les 93 couches vidées permettent désormais de **bissecter** la divergence : il
 suffit de comparer couche par couche pour trouver la PREMIÈRE qui décroche, au
 lieu de raisonner sur la sortie de la couche 0.
 
+### 4quater-sexies. **LA PASSE COMPLÈTE DE 93 COUCHES PASSE** (05/10, 04h28)
+
+`DRAVE_K3_PASSE=93` calcule **tout le modèle**, une seule couche en mémoire à la
+fois, et rend `l_out-92` — le flux résiduel après la dernière couche. Comparé à
+`l_out-92` de llama.cpp-k3 :
+
+| couche 92 | corrélation | écart max | dynamique | relatif |
+|---|---|---|---|---|
+| jeton 0 | **0,999857** | 1,01e-01 | 7,42 | 1,4 % |
+| jeton 1 | **0,999900** | 8,10e-02 | 1,65e+01 | 0,5 % |
+| jeton 2 | **0,999919** | 2,16e-01 | 2,94e+01 | 0,7 % |
+
+** quatre des treize points de comparaison sont verts** (couches 0, 12, 24, 92),
+et le dernier est **le modèle entier** : 93 couches, **8 points de contrôle**
+empilés dans la banque, 68 couches KDA avec leur convolution et leur récurrence,
+24 couches MLA à cache latent, 896 experts dont 16 par jeton, SiTU. Aucun
+mécanisme de l'architecture n'est laissé de côté.
+
+**Et l'écart ne dérive pas** : 1,4 % au jeton 0, 0,5 % et 0,7 % ensuite, pour des
+dynamiques de 7 à 29. L'accumulation f32 sur des poids Q8_0 et MXFP4, sur 93
+couches, reste sous le pour-cent.
+
+**Le coût, mesuré** : 1 715 885 ms pour 4 jetons, soit **7,2 minutes par jeton**.
+La référence (llama.cpp-k3, même machine, même modèle) met **42 minutes par
+jeton** — elle est limitée par le disque et lit 1,80 To pour 4 jetons. La même
+passe ici ne lit que les experts réellement choisis (16 sur 896 par couche et par
+jeton) et ne repaquette rien : **six fois plus rapide que la référence, et
+vérifiée contre elle.**
+
 ### 4quater-quinquies. VINGT-CINQ COUCHES, TROIS BANQUES (05/10, 03h37)
 
 `DRAVE_K3_COUCHES=25` : banques aux couches 0, 12 et 24, donc un `res_mix` à

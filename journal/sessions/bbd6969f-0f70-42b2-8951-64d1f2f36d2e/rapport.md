@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 133.2 h |
+| Durée | 133.7 h |
 | Tours | 103 |
-| Messages | 7524 |
-| Appels d'outils | 7188 |
+| Messages | 7530 |
+| Appels d'outils | 7194 |
 | Fichiers touchés | 150 |
-| Commandes | 6105 |
+| Commandes | 6111 |
 | Sous-agents | 32 |
-| Commits | 504 |
+| Commits | 505 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -5058,7 +5058,7 @@ C'est finalement la **lecture du code de la référence** qui a donné le troisi
 
 ### Tour 103 — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas e … [1246 caractères tronqués]
 
-*14 appels d'outils.* Actions notables :
+*20 appels d'outils.* Actions notables :
 
 - bash — Read PetitesK3 layer body
 - bash — Implement the layer-streaming full pass
@@ -5074,10 +5074,11 @@ C'est finalement la **lecture du code de la référence** qui a donné le troisi
 - bash — Compare streaming pass vs layer-resident composition
 - bash — Launch the full 93-layer K3 forward
 - bash — Commit the streaming pass
+- … et 5 autres
 
 **Synthèse produite :**
 
-**Identique au bit près.** La passe streaming est validée — je lance les 93 couches.
+**Les 93 couches matchent.** C'est la vérification complète de l'architecture.
 
 ## 3. Travail accompli
 
@@ -5313,7 +5314,7 @@ C'est finalement la **lecture du code de la référence** qui a donné le troisi
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6065 autres
+- … et 6071 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5965,4 +5966,5 @@ C'est finalement la **lecture du code de la référence** qui a donné le troisi
 - K3 : VINGT-CINQ COUCHES, TROIS BANQUES — trois des treize points sont verts  DRAVE_K3_COUCHES=25, banques aux couches 0, 12 et 24 (res_mix à TROIS points de con
 - REPRISE : vingt-cinq couches de K3, trois banques, trois points verts" && git log --oneline -1; git status --short | grep -v "^ M journal" | wc -l
 - K3 : la passe complète, une couche en mémoire à la fois — les 93 couches deviennent calculables  PetitesK3::charge garde les n couches en mémoire, tout le dense
+- K3 : LA PASSE COMPLÈTE DE 93 COUCHES PASSE — le modèle entier, vérifié contre llama.cpp  DRAVE_K3_PASSE=93, une seule couche en mémoire à la fois, l_out-92 comp
 
