@@ -119208,3 +119208,13 @@ composition 0-24, jeton 0 : |l_out| = 0.9773 · finis : true
 **Troisième point vert : la couche 24, avec trois points de contrôle dans la banque.**
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/verification-kimi-k3.md'; s=open(p).read()\nanc = \"### 4quater-quater. LES TREIZE COUCHES PASSENT, BANQUE COMPRISE (05/10, 03h17)\"\nnew = \"\"\"### 4quater-quinquies. VINGT-CINQ COUCHES, TROIS BANQUES (05/ … [1660 caractères tronqués]`
+
+  ```
+70c62ba K3 : VINGT-CINQ COUCHES, TROIS BANQUES — trois des treize points sont verts
+a0ebc98 Sprint 31, fin de bloc : Kimi-K3 vérifié sur treize couches
+6413190 REPRISE : les treize couches de K3 passent, banque comprise
+--- tests ---
+test result: ok. 77 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\nanc = \"> **ET LES TREIZE COUCHES PASSENT (03h17)**\"\nnew = \"\"\"> **VINGT-CINQ COUCHES, TROIS BANQUES (03h37)** — `DRAVE_K3_COUCHES=25`, banques\n> aux couches 0, 12 et 24. Contr … [654 caractères tronqués]`

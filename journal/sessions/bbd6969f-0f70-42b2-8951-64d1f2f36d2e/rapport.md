@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 132.9 h |
 | Tours | 102 |
-| Messages | 7507 |
-| Appels d'outils | 7173 |
+| Messages | 7508 |
+| Appels d'outils | 7174 |
 | Fichiers touchés | 150 |
-| Commandes | 6090 |
+| Commandes | 6091 |
 | Sous-agents | 32 |
-| Commits | 502 |
+| Commits | 503 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -5003,7 +5003,7 @@ Mon test « KDA contre NumPy » passait au vert depuis le début : il comparait 
 
 ### Tour 102 — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas e … [1246 caractères tronqués]
 
-*32 appels d'outils.* Actions notables :
+*33 appels d'outils.* Actions notables :
 
 - bash — Check instrumented reference run
 - bash — Check the tensor filter that was applied
@@ -5019,7 +5019,7 @@ Mon test « KDA contre NumPy » passait au vert depuis le début : il comparait 
 - bash — Compare after the bank-ordering fix
 - bash — Commit the layer-0 milestone
 - bash — Launch 13-layer verification
-- … et 18 autres
+- … et 19 autres
 
 **Synthèse produite :**
 
@@ -5259,7 +5259,7 @@ Mon test « KDA contre NumPy » passait au vert depuis le début : il comparait 
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6050 autres
+- … et 6051 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5909,4 +5909,5 @@ Mon test « KDA contre NumPy » passait au vert depuis le début : il comparait 
 - REPRISE : les treize couches de K3 passent, banque comprise" && git log --oneline -1; echo "--- état ---"; git status --short | grep -v "^ M journal" | wc -l
 - Sprint 31, fin de bloc : Kimi-K3 vérifié sur treize couches  Trois bugs trouvés par la comparaison, aucun par relecture ni par le test « KDA contre NumPy » qui 
 - K3 : VINGT-CINQ COUCHES, TROIS BANQUES — trois des treize points sont verts  DRAVE_K3_COUCHES=25, banques aux couches 0, 12 et 24 (res_mix à TROIS points de con
+- REPRISE : vingt-cinq couches de K3, trois banques, trois points verts" && git log --oneline -1; git status --short | grep -v "^ M journal" | wc -l
 
