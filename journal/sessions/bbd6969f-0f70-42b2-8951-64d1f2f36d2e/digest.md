@@ -120394,3 +120394,154 @@ MXFP4  pos0 r=0.999802 top1 84==84 ✅ · pos1 r=0.999900 top1 1103==1103 ✅ ·
 **Verdict mesuré** : la sortie est identique (mêmes corrélations à 6 décimales, mêmes top-1), mais le gain s'effondre sur la passe complète. Je documente.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/verification-kimi-k3.md'; s=open(p).read()\nanc = \"### 4quater-octies. **LE MOTEUR ENGENDRE AVEC KIMI-K3, ET CHAQUE PAS EST CELUI DE LA RÉFÉRENCE** (05/10, 06h56)\"\nnew = \"\"\"### 4quater-nonies. Le noyau … [3537 caractères tronqués]`
+
+  ```
+da8ebb2 K3 : le noyau MXFP4 est vérifié sur le modèle entier — et son gain s'effondre là où il faudrait
+  ```
+
+### 🤖 Assistant
+
+**Le vrai mur est le disque** — et la parade est celle du plan : ne pas déquantifier le dense, le laisser dans le cache de pages. Je regarde l'API Q8_0 du moteur.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && grep -n \"pub struct DenseQ8\" -A 14 list.rs | head -18; echo \"=== API ===\"; grep -n \"impl DenseQ8\" -A 40 list.rs | grep -E \"pub fn|pub unsafe fn\" | head -12", "description": "Inspect the DenseQ8 API"}`
+
+  ```
+352:pub struct DenseQ8 {
+353-    pub n_in: usize,
+354-    pub n_out: usize,
+355-    pub q: Vec<i8>,        // n_out × n_in — vide si `src == Q8_0`
+356-    pub scale: Vec<f32>,   // une par sortie — vide si `src == Q8_0`
+357-    /// `Q8_0` : les blocs sont lus **en place** dans le fichier (34 octets par
+358-    /// bloc de 32 : une échelle f16 puis trente-deux niveaux signés). Aucune
+359-    /// copie, et l'échelle est celle du fichier — donc plus fidèle que la
+360-    /// nôtre, qui est unique par ligne.
+361-    pub src: Source8,
+362-    /// Échelles par bloc de 32 (une par ligne × n_in/32), pour `PropreBloc`.
+363-    pub scb: Vec<f32>,
+364-    pub base: *const u8,
+365-    pub nb_ligne: usize,
+366-}
+=== API ===
+372-    pub fn build(w: &[f32], n_out: usize, n_in: usize) -> Self {
+394-    pub fn build_blocs(w: &[f32], n_out: usize, n_in: usize) -> Self {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && grep -n \"Source8::Q8_0 =>\" -B 3 -A 4 engine.rs | head -20; echo \"=== emprunt Q8_0 ===\"; grep -n \"fn emprunter_q8\\|Source8::Q8_0\" list.rs | head -6; grep -n \"pub fn dot_q8_source\" -A 4 list.rs | head -6", "desc … [42 caractères tronqués]`
+
+  ```
+510-                                    for i in i0..i1 {
+511-                                        let xi = &x[i * d.n_in..(i + 1) * d.n_in];
+512-                                        let v = match d.src {
+513:                                            crate::list::Source8::Q8_0 => d.dot_q8_source(o, xi),
+514-                                            crate::list::Source8::PropreBloc => d.dot_blocs(o, xi),
+515-                                            crate::list::Source8::Propre =>
+516-                                                d.dot_chunked(o, xi) as f32 * d.scale[o],
+517-                                        };
+--
+585-                            dst[o] = match d.src {
+586-                                // Blocs du fichier : l'échelle est déjà celle du
+587-                                // bloc, il ne reste que celle de l'activation.
+588:                                crate::list::Source8::Q8_0 => d.dot_q8_source(o, xv) * sx,
+589-                                // Échelles par bloc construites par nous.
+590-                                crate::list::Source8::PropreBloc => d.dot_blocs(o, xv) * sx,
+591-                                crate::list::Source8::Propr
+… [545 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && grep -n \"pub fn ptr\\|pub fn pointeur\\|pub fn base\\|pub fn blocs\\|pub fn donnees\" gguf.rs | head -8; grep -n \"emprunter_q8\" model.rs | head -3", "description": "Find a raw pointer accessor on Gguf"}`
+
+  ```
+1488:                    (None, Some(unsafe { DenseQ8::emprunter_q8(buf.as_ptr(), n_out, n_in, nb) }), None),
+1495:                    unsafe { DenseQ8::emprunter_q8(buf.as_ptr(), n_out, n_in, nb) },
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && sed -n '1478,1500p' model.rs", "description": "See how Proj borrows Q8_0 blocks"}`
+
+  ```
+}
+        } else if dense {
+            // Source déjà en Q8_0 et aucun élagage : on EMPRUNTE les blocs au
+            // lieu de les reconstruire depuis les f32 (copie == taille du
+            // modèle, plus un transitoire f32 de quatre fois cette taille).
+            // `DRAVE_SANS_EMPRUNT=1` force la reconstruction : c'est ce qui permet
+            // de comparer nos deux schémas d'échelle à la référence empruntée.
+            let emprunt = keep >= 1.0 && std::env::var("DRAVE_SANS_EMPRUNT").is_err();
+            match (emprunt, g.q8_blocks(name)) {
+                (true, Some((buf, nb))) =>
+                    (None, Some(unsafe { DenseQ8::emprunter_q8(buf.as_ptr(), n_out, n_in, nb) }), None),
+                _ => (None, Some(construire_q8(&w, n_out, n_in)), None),
+            }
+        } else if auto {
+            let emprunt = keep >= 1.0 && std::env::var("DRAVE_SANS_EMPRUNT").is_err();
+            let dense8 = match (emprunt, g.q8_blocks(name)) {
+                (true, Some((buf, nb))) =>
+                    unsafe { DenseQ8::emprunter_q8(buf.as_ptr(), n_out, n_in, nb) },
+                _ => construire_q8(&w, n_out, n_in),
+            };
+            (Some(PushMat::build(&w,
+… [116 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && sed -n '946,1000p' kimi_k3.rs", "description": "Read KdaK3 struct and charge"}`
+
+  ```
+// ⚠️ Après absorption, la requête fait [latent 512, rope 64] = 576 —
+            // la taille de la CLÉ — et non `hd` = 192. Se tromper fait tomber la
+            // copie (« range end 512 out of range for length 192 ») : c'est la
+            // panique qui l'a dit, pas la relecture.
+            let mut qa2 = vec![0f32; kv_lora + rope];
+            qa2[..kv_lora].copy_from_slice(&qn);
+            qa2[kv_lora..].copy_from_slice(&q[t * hd + nope..t * hd + nope + rope]);
+            // scores contre toutes les positions ≤ pos
+            let mut scores = Vec::with_capacity(pos + 1);
+            for p2 in 0..=pos {
+                let c = &self.cle[p2 * (kv_lora + rope)..(p2 + 1) * (kv_lora + rope)];
+                let mut s = 0f32;
+                for j in 0..(kv_lora + rope) { s += qa2[j] * c[j]; }
+                scores.push(s * echelle);
+            }
+            let mx = scores.iter().cloned().fold(f32::NEG_INFINITY, f32::max);
+            let mut somme = 0f32;
+            for v in scores.iter_mut() { *v = (*v - mx).exp(); somme += *v; }
+            // somme pondérée des valeurs (le latent), puis v_b : [kv_lora] → [head_v]
+            let head_v = self.v_b.len() / (nh * kv_lora)
+… [1494 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && sed -n '999,1050p' kimi_k3.rs", "description": "Read KdaK3 fields and charge"}`
+
+  ```
+pub struct KdaK3 {
+    q: Vec<f32>, k: Vec<f32>, v: Vec<f32>, wo: Vec<f32>,
+    f_a: Vec<f32>, f_b: Vec<f32>, g_proj: Vec<f32>,
+    conv_q: Vec<f32>, conv_k: Vec<f32>, conv_v: Vec<f32>,
+    beta_w: Vec<f32>, ssm_a: Vec<f32>, dt_bias: Vec<f32>, o_norm: Vec<f32>,
+    etat_conv_q: Vec<f32>, etat_conv_k: Vec<f32>, etat_conv_v: Vec<f32>,
+    etat_delta: Vec<f32>,
+    h: usize, nh: usize, hd: usize, d_inner: usize, d_conv: usize, eps: f32,
+}
+
+impl KdaK3 {
+    pub fn charge(g: &Gguf, l: usize) -> Result<KdaK3, String> {
+        let p = |s: &str| format!("blk.{l}.{s}");
+        let lu = |nom: &str| -> Result<Vec<f32>, String> {
+            if g.tensor(nom).is_none() { return Err(format!("tenseur absent : {nom}")); }
+            Ok(g.dequant(nom))
+        };
+        let dims = |nom: &str| -> Result<Vec<usize>, String> {
+            g.tensor(nom).map(|t| t.dims.iter().map(|d| *d as usize).collect())
+                .ok_or_else(|| format!("tenseur absent : {nom}"))
+        };
+        let h = dims(&p("attn_norm.weight"))?[0];
+        let nh = dims(&p("ssm_beta.weight"))?[0];
+        let hd = dims(&p("ssm_norm.weight"))?[0];
+        let d_inner = nh * hd;
+        let d_conv = *dims(&p("ssm_conv
+… [1463 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+Le refactor du dense emprunté est trop gros pour ce qui me reste de contexte. J'enregistre la conclusion mesurée et je laisse l'arbre propre.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/verification-kimi-k3.md'; s=open(p).read()\nanc = \"### 4quater-nonies. Le noyau MXFP4 : ×3,6 sur le FFN, ×1,05 sur la passe — et pourquoi (05/10, 08h57)\"\nnew = \"\"\"### 4quater-decies. **Le mur est le DI … [3318 caractères tronqués]`

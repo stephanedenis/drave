@@ -135,6 +135,40 @@ Les 93 couches vidées permettent désormais de **bissecter** la divergence : il
 suffit de comparer couche par couche pour trouver la PREMIÈRE qui décroche, au
 lieu de raisonner sur la sortie de la couche 0.
 
+### 4quater-decies. **Le mur est le DISQUE, et le prochain chantier est nommé** (05/10, 09h10)
+
+Le chiffre qui commande tout : le FFN coûte **3,1 s par couple (couche, jeton)**
+dans la passe complète, contre **0,37 s** dans l'essai sur 4 couches. Même code,
+même noyau — **huit fois plus lent** parce que la passe de 93 couches streame
+1,5 To depuis un disque tournant.
+
+D'où la conclusion, qui est celle du plan depuis le début mais maintenant
+**mesurée** :
+
+1. **Ce qui domine les lectures, ce n'est pas les experts.** Par appel, la passe
+   relit **~59,6 Go de dense Q8_0** (56,088 G poids × 1,06 o) **plus 12,4 Go
+   d'experts partagés** — soit ~72 Go **à chaque appel**, contre 25,9 Go
+   d'experts routés par jeton. Pour engendrer N jetons, le dense est relu N fois.
+2. **Le dense tient en RAM** : 59,6 Go sur 125. C'est exactement la thèse du
+   plan — « garder le dense résident, ne lire que les experts qui servent » — et
+   elle est à portée.
+3. **Ce qui l'empêche aujourd'hui, c'est la déquantification en f32.** Chaque
+   appel alloue et libère ~224 Go de tampons f32 (56,088 G poids × 4 o), ce qui
+   **évince le cache de pages** : les blocs Q8_0 du dense ne peuvent pas y
+   rester, donc ils sont relus au disque à chaque jeton.
+
+**Le prochain chantier, précisément** : emprunter les blocs Q8_0 au fichier au
+lieu de les déquantifier — `Gguf::q8_blocks` existe, `DenseQ8::emprunter_q8`
+aussi, et `dot_q8_source` est le noyau qu'utilise déjà tout le reste du moteur.
+Il faut le faire pour les cinq grosses projections du KDA (`attn_q/k/v`,
+`ssm_g`, `attn_output` : 440 M poids par couche, 1,88 Go en f32 contre 0,47 Go
+en Q8_0), puis pour la MLA et la FFN dense de la couche 0.
+
+**Ce qui est déjà fait et qui sert de modèle** : le noyau MXFP4 sur les experts
+(×3,6 sur le FFN quand les poids sont en cache, sortie identique au niveau des
+logits sur le modèle entier — voir 4quater-nonies). Le même geste, appliqué au
+dense, attaque cette fois le DISQUE et non la RAM.
+
 ### 4quater-nonies. Le noyau MXFP4 : ×3,6 sur le FFN, ×1,05 sur la passe — et pourquoi (05/10, 08h57)
 
 `expert_mxfp4_dans` écrit **132 Mo** de f32 par expert (3 × 11 M valeurs) que le
