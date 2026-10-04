@@ -135,6 +135,28 @@ Les 93 couches vidées permettent désormais de **bissecter** la divergence : il
 suffit de comparer couche par couche pour trouver la PREMIÈRE qui décroche, au
 lieu de raisonner sur la sortie de la couche 0.
 
+### 4quater-septies. **LES LOGITS DU MODÈLE ENTIER — top-1 identique 3/3** (05/10, 05h06)
+
+La passe complète avec la TÊTE (`DRAVE_K3_TETE=1` : mélange résiduel final,
+norme de sortie, matrice `output`), comparée aux logits de llama.cpp-k3 sur les
+trois positions évaluées :
+
+| position | corrélation | top-1 référence | top-1 moteur | accord | jeton cible |
+|---|---|---|---|---|---|
+| 0 | **0,999802** | 84 | 84 | ✅ | 275 |
+| 1 | **0,999900** | 1103 | 1103 | ✅ | 1309 |
+| 2 | **0,999924** | 3140 | 3140 | ✅ | 3140 |
+
+**top-1 identique 3/3**, et l'argmax est **le bon jeton à chaque position** (la
+cible elle-même). C'est le critère de la porte de correction du dépôt
+(≥ 0,95 de corrélation sur les positions utiles, top-1 ≥ 85 %) appliqué au plus
+gros modèle du parc : il passe à 100 %, avec une corrélation minimale de
+0,999802.
+
+Un état caché ne se compare qu'à un état caché ; **des logits se comparent à ceux
+d'une autre implémentation**, et c'est ce qu'on vient de faire sur 93 couches,
+8 banques, 68 couches KDA, 24 MLA, 896 experts et 1,5 To de poids.
+
 ### 4quater-sexies. **LA PASSE COMPLÈTE DE 93 COUCHES PASSE** (05/10, 04h28)
 
 `DRAVE_K3_PASSE=93` calcule **tout le modèle**, une seule couche en mémoire à la

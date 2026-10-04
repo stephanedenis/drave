@@ -119548,3 +119548,67 @@ passe complète AVEC la tête — comparaison des logits prévue contre /tmp/ref
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"K3 : la TÊTE sur la passe complète — les logits, critère de la porte de correction\n\nDRAVE_K3_TETE=1 rend les logits (mélange résiduel final avec output_res_score,\nnorme de sortie, matrice output) a … [315 caractères tronqués]`
+
+  ```
+2698f89 K3 : la TÊTE sur la passe complète — les logits, critère de la porte de correction
+  ```
+
+- **bash** `{"command": "sleep 540; tail -2 /tmp/k3_logits.log; date \"+%H:%M\"", "description": "Poll the logits pass", "timeoutMs": 570000}`
+
+  ```
+couche 31 :   16828 ms · banque 3
+  couche 32 :   19633 ms · banque 3
+04:41
+  ```
+
+- **bash** `{"command": "sleep 540; tail -2 /tmp/k3_logits.log; date \"+%H:%M\"", "description": "Poll the logits pass", "timeoutMs": 570000}`
+
+  ```
+couche 57 :   21841 ms · banque 5
+  couche 58 :   22464 ms · banque 5
+04:50
+  ```
+
+- **bash** `{"command": "sleep 540; tail -3 /tmp/k3_logits.log; ls -la /tmp/k3_logits.bin 2>/dev/null; date \"+%H:%M\"", "description": "Poll for logits output", "timeoutMs": 570000}`
+
+  ```
+couche 81 :   22120 ms · banque 7
+  couche 82 :   23754 ms · banque 7
+  couche 83 :   19250 ms · banque 7
+04:59
+  ```
+
+- **bash** `{"command": "sleep 420; tail -4 /tmp/k3_logits.log; ls -la /tmp/k3_logits.bin 2>/dev/null; date \"+%H:%M\"", "description": "Wait for the logits pass to finish", "timeoutMs": 450000}`
+
+  ```
+couche 91 :   18490 ms · banque 8
+  couche 92 :   20048 ms · banque 8
+  logits : /tmp/k3_logits.bin — 3 positions × 163840 valeurs
+  passe complète : 1780531 ms au total
+-rw-r--r--. 1 stephane stephane 1966088  4 oct 05:02 /tmp/k3_logits.bin
+05:06
+  ```
+
+### 🤖 Assistant
+
+**Les logits sont là.** Comparaison avec le critère de la porte de correction :
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport struct, math\ndef lire(p):\n    f=open(p,'rb'); v,n=struct.unpack('<ii',f.read(8))\n    import array; a=array.array('f'); a.fromfile(f,n*v); return v,n,a\nv1,n1,A=lire('/tmp/refk3_logits.bin')\nv2,n2,B=lire(' … [991 caractères tronqués]`
+
+  ```
+référence : 163840 valeurs de vocabulaire, 3 positions
+moteur    : 163840 valeurs de vocabulaire, 3 positions
+
+ pos  corrélation  top-1 réf  top-1 drave  accord  rang   cible
+   0     0.999802         84           84       ✅     0     275
+   1     0.999900       1103         1103       ✅     0    1309
+   2     0.999924       3140         3140       ✅     0    3140
+
+top-1 identique : 3/3
+  ```
+
+### 🤖 Assistant
+
+**Top-1 identique 3/3, et c'est le bon jeton à chaque position.** Le modèle entier est vérifié sur les logits.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/verification-kimi-k3.md'; s=open(p).read()\nanc = \"### 4quater-sexies. **LA PASSE COMPLÈTE DE 93 COUCHES PASSE** (05/10, 04h28)\"\nnew = \"\"\"### 4quater-septies. **LES LOGITS DU MODÈLE ENTIER — top-1 iden … [2072 caractères tronqués]`

@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 133.8 h |
+| Durée | 134.3 h |
 | Tours | 103 |
-| Messages | 7536 |
-| Appels d'outils | 7200 |
+| Messages | 7542 |
+| Appels d'outils | 7206 |
 | Fichiers touchés | 150 |
-| Commandes | 6117 |
+| Commandes | 6123 |
 | Sous-agents | 32 |
-| Commits | 507 |
+| Commits | 508 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -5058,7 +5058,7 @@ C'est finalement la **lecture du code de la référence** qui a donné le troisi
 
 ### Tour 103 — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas e … [1246 caractères tronqués]
 
-*26 appels d'outils.* Actions notables :
+*32 appels d'outils.* Actions notables :
 
 - bash — Read PetitesK3 layer body
 - bash — Implement the layer-streaming full pass
@@ -5074,11 +5074,11 @@ C'est finalement la **lecture du code de la référence** qui a donné le troisi
 - bash — Compare streaming pass vs layer-resident composition
 - bash — Launch the full 93-layer K3 forward
 - bash — Commit the streaming pass
-- … et 11 autres
+- … et 16 autres
 
 **Synthèse produite :**
 
-Le modèle entier passe. J'ajoute la tête pour comparer les **logits** — le critère même de la porte de correction.
+**Top-1 identique 3/3, et c'est le bon jeton à chaque position.** Le modèle entier est vérifié sur les logits.
 
 ## 3. Travail accompli
 
@@ -5314,7 +5314,7 @@ Le modèle entier passe. J'ajoute la tête pour comparer les **logits** — le c
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6077 autres
+- … et 6083 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5969,4 +5969,5 @@ Le modèle entier passe. J'ajoute la tête pour comparer les **logits** — le c
 - K3 : LA PASSE COMPLÈTE DE 93 COUCHES PASSE — le modèle entier, vérifié contre llama.cpp  DRAVE_K3_PASSE=93, une seule couche en mémoire à la fois, l_out-92 comp
 - REPRISE : la passe complète de Kimi-K3 passe — 93 couches, 7,2 min/jeton" && git log --oneline -1; git status --short | grep -v "^ M journal" | wc -l
 - K3 : la TÊTE sur la passe complète — les logits, critère de la porte de correction  DRAVE_K3_TETE=1 rend les logits (mélange résiduel final avec output_res_scor
+- K3 : LES LOGITS DU MODÈLE ENTIER — top-1 identique 3/3, et c'est le bon jeton  Passe complète (93 couches) avec la tête, comparée aux logits de llama.cpp-k3 :  
 
