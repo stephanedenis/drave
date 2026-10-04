@@ -24,7 +24,7 @@ const VARS_LUES: &[&str] = &[
     "KV_BITS", "KV_F16", "KV_K_F16", "KV_K_F32", "KV_V_F32", "MMAP",
     "BIAIS_VL", "EXPERTS_RAM", "PRELIRE", "PRELIRE_TOUT", "Q8_BLOCS", "SANS_ENGRAM",
     "SANS_EMPRUNT",
-    "TRACE_BLOCS", "TUILE_LOT", "K3_COUCHES", "K3_SANS_ETAT", "K3_PASSE", "K3_TETE", "K3_LOGITS",
+    "TRACE_BLOCS", "TUILE_LOT", "K3_COUCHES", "K3_SANS_ETAT", "K3_PASSE", "K3_TETE", "K3_LOGITS", "K3_GEN", "K3_IMPOSE",
     "SANS_BLOCS", "SANS_COMPRESSION", "SIMD_DOT", "TRACE_EXPERTS", "V41_SANS_RETARD",
     "V41_TETE_COPIE0",
     "VISION_TEXTE",
@@ -2022,7 +2022,59 @@ fn run_k3_essai() {
                 println!("  passe complète : {n} couche(s), une seule en mémoire à la fois{}",
                          if tete { " · TÊTE (logits)" } else { "" });
                 let t0 = std::time::Instant::now();
-                match kimi_k3::passe_complete(&g, &ids4, n, true, tete) {
+                // `DRAVE_K3_GEN=N` : PREFILL puis N jetons engendrés en
+                // glouton, l'état récurrent persistant d'un jeton au suivant.
+                // C'est « faire tourner le modèle » au sens plein, et la
+                // référence donne déjà de quoi vérifier : ses logits sur la
+                // séquence [3638, 275, 1309, 3140] disent que la position 1 doit
+                // choisir 1309 et la position 2, 3140.
+                let gen = std::env::var("DRAVE_K3_GEN").ok()
+                    .and_then(|v| v.parse::<usize>().ok()).unwrap_or(0);
+                if gen > 0 {
+                    let mut etats: Vec<kimi_k3::EtatCouche> = Vec::new();
+                    let mut suite: Vec<u32> = vec![3638, 275];
+                    for pas in 0..=gen {
+                        let t0 = std::time::Instant::now();
+                        let lgs = match kimi_k3::passe_complete(
+                                &g, &suite, n, pas == 0, true,
+                                suite.len() - 1,
+                                Some(&mut etats)) {
+                            Ok(v) => v,
+                            Err(e) => { println!("  génération : {e}"); return; }
+                        };
+                        let dernier = lgs.last().unwrap();
+                        let (mut imax, mut vmax) = (0usize, f32::NEG_INFINITY);
+                        for (i, &v) in dernier.iter().enumerate() {
+                            if v > vmax { vmax = v; imax = i; }
+                        }
+                        // L'attendu est le top-1 de la RÉFÉRENCE à la même
+                        // position, pas le jeton cible : llama.cpp choisit 1103
+                        // après [3638, 275], et 3140 après [3638, 275, 1309].
+                        // Confondre les deux m'a fait imprimer un ❌ sur un pas
+                        // qui était juste — le tableau d'attente était faux, pas
+                        // le moteur.
+                        let attendu = [1103u32, 3140, 0][pas.min(2)];
+                        println!("  pas {pas} : {} jeton(s) en entrée ({} s) → argmax {imax}{}",
+                                 suite.len(), t0.elapsed().as_secs(),
+                                 if attendu != 0 {
+                                     if imax as u32 == attendu { " ✅ (référence)".to_string() }
+                                     else { format!(" ❌ (référence : {attendu})") }
+                                 } else { String::new() });
+                        if pas == gen { break; }
+                        // `DRAVE_K3_IMPOSE=1309,3140` force la suite du texte
+                        // au lieu de laisser le moteur choisir : c'est ce qui
+                        // permet de vérifier un pas d'APRÈS que la référence ait
+                        // publié ses logits, et de tester la PERSISTANCE de
+                        // l'état entre deux appels (le 2e appel ne voit qu'un
+                        // jeton nouveau, l'état vient du 1er).
+                        let impose: Vec<u32> = std::env::var("DRAVE_K3_IMPOSE").ok()
+                            .map(|v| v.split(',').filter_map(|x| x.trim().parse().ok()).collect())
+                            .unwrap_or_default();
+                        suite.push(impose.get(pas).copied().unwrap_or(imax as u32));
+                    }
+                    return;
+                }
+                match kimi_k3::passe_complete(&g, &ids4, n, true, tete, 0, None) {
                     Ok(flux) => {
                         if tete {
                             // Les logits vont dans un fichier binaire au format de

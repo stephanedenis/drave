@@ -1241,6 +1241,57 @@ impl CoucheK3 {
     }
 }
 
+/// L'état récurrent d'une couche, sorti de son objet pour survivre à sa
+/// libération. C'est ce qui permet de GÉNÉRER : la passe streaming recharge
+/// chaque couche à chaque jeton, donc l'état doit vivre ailleurs que dans la
+/// couche. Sa taille est modeste — 6,3 Mo de delta et 0,4 Mo de convolution par
+/// couche KDA, soit ~0,6 Go pour les 93 couches — et c'est le prix à payer pour
+/// ne garder qu'UNE couche de POIDS en mémoire.
+pub enum EtatCouche {
+    Kda { cq: Vec<f32>, ck: Vec<f32>, cv: Vec<f32>, delta: Vec<f32> },
+    Mla { cle: Vec<f32>, val: Vec<f32>, n_pos: usize },
+    Aucun,
+}
+
+impl CoucheK3 {
+    fn sauver(&self) -> EtatCouche {
+        match self {
+            CoucheK3::Dense { kda, mla, .. } | CoucheK3::Moe { kda, mla, .. } => {
+                if let Some(k) = kda {
+                    EtatCouche::Kda { cq: k.etat_conv_q.clone(), ck: k.etat_conv_k.clone(),
+                                      cv: k.etat_conv_v.clone(), delta: k.etat_delta.clone() }
+                } else if let Some(m) = mla {
+                    EtatCouche::Mla { cle: m.cle.clone(), val: m.val.clone(), n_pos: m.n_pos }
+                } else { EtatCouche::Aucun }
+            }
+        }
+    }
+    fn restaurer(&mut self, e: &EtatCouche) {
+        let (kda, mla) = match self {
+            CoucheK3::Dense { kda, mla, .. } => (kda, mla),
+            CoucheK3::Moe { kda, mla, .. } => (kda, mla),
+        };
+        match e {
+            EtatCouche::Kda { cq, ck, cv, delta } => {
+                if let Some(k) = kda.as_mut() {
+                    k.etat_conv_q.copy_from_slice(cq);
+                    k.etat_conv_k.copy_from_slice(ck);
+                    k.etat_conv_v.copy_from_slice(cv);
+                    k.etat_delta.copy_from_slice(delta);
+                }
+            }
+            EtatCouche::Mla { cle, val, n_pos } => {
+                if let Some(m) = mla.as_mut() {
+                    m.cle.copy_from_slice(cle);
+                    m.val.copy_from_slice(val);
+                    m.n_pos = *n_pos;
+                }
+            }
+            EtatCouche::Aucun => {}
+        }
+    }
+}
+
 /// **La passe complète** : `ids` traversés de la couche 0 à la couche `n-1`,
 /// **La passe complète** : `ids` traversés de la couche 0 à la couche `n-1`,
 /// une couche chargée à la fois. Rend le flux résiduel de chaque jeton après la
@@ -1251,7 +1302,8 @@ impl CoucheK3 {
 /// porte UNE COLONNE PAR JETON du lot. L'aplatir en poussant une entrée par
 /// jeton et par couche donnerait un `n_ckpt` quatre fois trop grand et un
 /// mélange entre jetons.
-pub fn passe_complete(g: &Gguf, ids: &[u32], n: usize, verbeux: bool, tete: bool)
+pub fn passe_complete(g: &Gguf, ids: &[u32], n: usize, verbeux: bool, tete: bool,
+                      pos0: usize, mut etats: Option<&mut Vec<EtatCouche>>)
                       -> Result<Vec<Vec<f32>>, String> {
     let h = g.tensor("blk.0.attn_norm.weight").map(|t| t.dims[0] as usize)
         .ok_or_else(|| "blk.0.attn_norm absent".to_string())?;
@@ -1267,6 +1319,9 @@ pub fn passe_complete(g: &Gguf, ids: &[u32], n: usize, verbeux: bool, tete: bool
     for l in 0..n {
         let t0 = std::time::Instant::now();
         let mut c = CoucheK3::charge(g, l)?;
+        if let Some(e) = etats.as_deref_mut() {
+            if let Some(ec) = e.get(l) { c.restaurer(ec); }
+        }
         let banque = l % bloc == 0;
         // ---- phase 1 : l'attention résiduelle voit la banque d'AVANT la
         //      couche courante (`res_mix` est appelé avant `res_push`).
@@ -1300,7 +1355,7 @@ pub fn passe_complete(g: &Gguf, ids: &[u32], n: usize, verbeux: bool, tete: bool
                 let mut xn = vec![0f32; h];
                 rms_norm_poids(&curs[i], &normes.attn, eps, &mut xn);
                 let attn = if let Some(k) = kda.as_mut() { k.avant(&xn)? }
-                           else { mla.as_mut().unwrap().avant(&xn, &xn, i)? };
+                           else { mla.as_mut().unwrap().avant(&xn, &xn, pos0 + i)? };
                 prefix = if banque { vec![0f32; h] } else { x.clone() };
                 for j in 0..h { prefix[j] += attn[j]; }
                 let mut plat = Vec::with_capacity(pile.len() * h);
@@ -1328,7 +1383,13 @@ pub fn passe_complete(g: &Gguf, ids: &[u32], n: usize, verbeux: bool, tete: bool
                       t0.elapsed().as_millis(), pile.len(),
                       if banque { " (empilée)" } else { "" });
         }
-        // `c` tombe ici : c'est tout l'intérêt.
+        // On sort l'état avant que `c` ne tombe : c'est lui qui survit.
+        if let Some(e) = etats.as_deref_mut() {
+            let sauve = c.sauver();
+            if e.len() <= l { e.resize_with(l + 1, || EtatCouche::Aucun); }
+            e[l] = sauve;
+        }
+        // `c` tombe ici : c'est tout l'intérêt (ses POIDS, pas son état).
     }
     // ---- LA TÊTE : mélange résiduel final, norme, puis la matrice de sortie.
     // C'est ce que la référence fait APRÈS la boucle (`res_mix(cur, output_res_score, -1)`,
