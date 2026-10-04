@@ -118639,3 +118639,41 @@ read_bytes: 845585563648
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/verification-kimi-k3.md'; s=open(p).read()\nanc = \"### 4quater. LE PREMIER JALON EST RENDU — ET IL EST NÉGATIF (04/10, 22h40)\"\nnew = \"\"\"### 4quater-bis. DEUX BUGS TROUVÉS PAR LA COMPARAISON (05/10, 00h … [3427 caractères tronqués]`
+
+  ```
+5ddd1d9 K3 : ce qui est vérifié sans supposition, et le point de méthode sur le chemin de la référence
+  ```
+
+- **bash** `{"command": "sleep 520; P=$(pgrep -x ref_logits_k3|head -1); if [ -n \"$P\" ]; then grep -E \"^read_bytes\" /proc/$P/io; else echo TERMINÉ; fi; grep -c \"^\\[dump\\]\" /tmp/refk3b_run.log 2>/dev/null; date \"+%H:%M\"", "description": "Poll instrumented reference", "timeoutMs": 560000}`
+
+  ```
+read_bytes: 939330666496
+0
+00:32
+  ```
+
+- **bash** `{"command": "sleep 540; P=$(pgrep -x ref_logits_k3|head -1); if [ -n \"$P\" ]; then grep -E \"^read_bytes\" /proc/$P/io; else echo TERMINÉ; fi; grep -c \"^\\[dump\\]\" /tmp/refk3b_run.log 2>/dev/null; date \"+%H:%M\"", "description": "Poll instrumented reference", "timeoutMs": 570000}`
+
+  ```
+read_bytes: 1033264996352
+0
+00:41
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"n_ubatch\\|n_batch\" tools/ref_logits.cpp | head -6", "description": "Find batch config in ref_logits"}`
+
+  ```
+7://     séquence, un seul batch (n_ctx = N + marge, n_batch = n_ubatch = N)
+154:    cparams.n_batch       = (uint32_t) N;
+155:    cparams.n_ubatch      = (uint32_t) N;       // un seul batch physique
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/ref_logits.cpp'; s=open(p).read()\nold = \"\"\"    cparams.n_batch       = (uint32_t) N;\n    cparams.n_ubatch      = (uint32_t) N;       // un seul batch physique\"\"\"\nnew = \"\"\"    // REF_UBATCH=n : t … [1494 caractères tronqués]`
+
+  ```
+ok
+exit=0
+-rwxr-xr-x. 1 stephane stephane 207032  4 oct 00:42 tools/ref_logits_k3
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && LC2=/home/stephane/Data13TB/stephane/GitHub/llama.cpp; g++ -O2 -std=c++17 tools/ref_logits.cpp -o tools/ref_logits -I $LC2/include -I $LC2/ggml/include -L $LC2/build/bin -lllama -lggml -lggml-base 2>&1 | head -3; echo \"exit=$?\"; gi … [693 caractères tronqués]`

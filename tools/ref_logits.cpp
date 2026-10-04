@@ -151,8 +151,24 @@ int main(int argc, char ** argv) {
     if (std::getenv("REF_SANS_YARN") != nullptr) {
         cparams.rope_scaling_type = LLAMA_ROPE_SCALING_TYPE_NONE;
     }
+    // REF_UBATCH=n : taille du lot PHYSIQUE. Par défaut tout tient dans un seul
+    // lot (comportement historique, et c'est ce que comparent les portes).
+    //
+    // Mis à 1, llama.cpp traite les jetons un par un, ce qui change de CHEMIN DE
+    // CODE sur les couches récurrentes : `build_delta_net` aiguille vers
+    // `build_delta_net_autoregressive` quand `n_seq_tokens == 1`, et vers la
+    // forme par BLOCS (cumsum de la décroissance + solve_tri) sinon. Les deux
+    // sont mathématiquement équivalentes, donc un écart entre elles mesure la
+    // sensibilité numérique de la référence — et un écart entre l'une et un
+    // moteur qui implémente l'autre ne dit PAS lequel des deux a tort.
+    uint32_t ub = (uint32_t) N;
+    if (const char * e = std::getenv("REF_UBATCH")) {
+        long v = std::strtol(e, nullptr, 10);
+        if (v > 0) { ub = (uint32_t) v; }
+    }
     cparams.n_batch       = (uint32_t) N;
-    cparams.n_ubatch      = (uint32_t) N;       // un seul batch physique
+    cparams.n_ubatch      = ub;
+    std::fprintf(stderr, "ref_logits: lot physique n_ubatch = %u sur %d jeton(s)\n", ub, N);
     cparams.n_outputs_max = (uint32_t) N;
     cparams.n_seq_max     = 1;
     cparams.embeddings    = false;

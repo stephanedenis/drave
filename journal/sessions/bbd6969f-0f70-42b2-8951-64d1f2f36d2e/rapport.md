@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 129.6 h |
+| Durée | 129.9 h |
 | Tours | 101 |
-| Messages | 7449 |
-| Appels d'outils | 7118 |
+| Messages | 7454 |
+| Appels d'outils | 7123 |
 | Fichiers touchés | 150 |
-| Commandes | 6035 |
+| Commandes | 6040 |
 | Sous-agents | 32 |
-| Commits | 494 |
+| Commits | 495 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -4952,7 +4952,7 @@ Au lot 2 le temps **suit** les octets (1,36 contre 1,31) ; au-delà il décroche
 
 ### Tour 101 — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas e … [1246 caractères tronqués]
 
-*63 appels d'outils.* Actions notables :
+*68 appels d'outils.* Actions notables :
 
 - bash — Locate K3 reference implementation
 - bash — List graph node names in K3 reference
@@ -4968,7 +4968,7 @@ Au lot 2 le temps **suit** les octets (1,36 contre 1,31) ; au-delà il décroche
 - bash — Find L2 norm definition
 - bash — Locate L2 norm definition
 - bash — Search l2 norm in graph builder
-- … et 44 autres
+- … et 48 autres
 
 **Synthèse produite :**
 
@@ -5208,7 +5208,7 @@ Au lot 2 le temps **suit** les octets (1,36 contre 1,31) ; au-delà il décroche
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5995 autres
+- … et 6000 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5850,4 +5850,5 @@ Au lot 2 le temps **suit** les octets (1,36 contre 1,31) ; au-delà il décroche
 - K3 : deux bugs trouvés par la comparaison — la norme L2 manquante, et la banque qui s'accumulait  1. **La norme L2 par tête sur q et k n'existait nulle part** (
 - K3 : la référence PORTE bien l'état — essai de discrimination, et le drapeau est au bon endroit  DRAVE_K3_SANS_ETAT=1 remet convolution et delta à zéro avant ch
 - K3 : ce qui est vérifié sans supposition, et le point de méthode sur le chemin de la référence  Métadonnées lues dans le GGUF, plus supposées : layer_norm_rms_e
+- ref_logits : REF_UBATCH, pour forcer le chemin AUTORÉGRESSIF de la référence  build_delta_net aiguille selon n_seq_tokens : == 1 → build_delta_net_autoregressiv
 
