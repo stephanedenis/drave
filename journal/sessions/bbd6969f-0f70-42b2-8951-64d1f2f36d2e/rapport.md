@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 129.9 h |
+| Durée | 130.8 h |
 | Tours | 101 |
-| Messages | 7454 |
-| Appels d'outils | 7123 |
+| Messages | 7465 |
+| Appels d'outils | 7133 |
 | Fichiers touchés | 150 |
-| Commandes | 6040 |
+| Commandes | 6050 |
 | Sous-agents | 32 |
-| Commits | 495 |
+| Commits | 496 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -4952,7 +4952,7 @@ Au lot 2 le temps **suit** les octets (1,36 contre 1,31) ; au-delà il décroche
 
 ### Tour 101 — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas e … [1246 caractères tronqués]
 
-*68 appels d'outils.* Actions notables :
+*78 appels d'outils.* Actions notables :
 
 - bash — Locate K3 reference implementation
 - bash — List graph node names in K3 reference
@@ -4968,7 +4968,7 @@ Au lot 2 le temps **suit** les octets (1,36 contre 1,31) ; au-delà il décroche
 - bash — Find L2 norm definition
 - bash — Locate L2 norm definition
 - bash — Search l2 norm in graph builder
-- … et 48 autres
+- … et 55 autres
 
 **Synthèse produite :**
 
@@ -5208,7 +5208,7 @@ Au lot 2 le temps **suit** les octets (1,36 contre 1,31) ; au-delà il décroche
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6000 autres
+- … et 6010 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5336,7 +5336,7 @@ Au lot 2 le temps **suit** les octets (1,36 contre 1,31) ; au-delà il décroche
 
 ## 5. Erreurs rencontrées
 
-351 sorties en erreur ou divergentes. Les premières :
+352 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -5851,4 +5851,5 @@ Au lot 2 le temps **suit** les octets (1,36 contre 1,31) ; au-delà il décroche
 - K3 : la référence PORTE bien l'état — essai de discrimination, et le drapeau est au bon endroit  DRAVE_K3_SANS_ETAT=1 remet convolution et delta à zéro avant ch
 - K3 : ce qui est vérifié sans supposition, et le point de méthode sur le chemin de la référence  Métadonnées lues dans le GGUF, plus supposées : layer_norm_rms_e
 - ref_logits : REF_UBATCH, pour forcer le chemin AUTORÉGRESSIF de la référence  build_delta_net aiguille selon n_seq_tokens : == 1 → build_delta_net_autoregressiv
+- Sprint 31 : la suite — deux bugs trouvés par la comparaison, et la leçon de méthode  Le test « KDA contre NumPy » passait au vert depuis le début : il comparait
 

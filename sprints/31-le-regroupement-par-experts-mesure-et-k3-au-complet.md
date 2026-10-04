@@ -317,3 +317,41 @@ en lisant 5 fois le modèle par jeton. Le disque est le mur, pas le CPU.
 Les 93 couches vidées permettent de **bissecter** : la prochaine session compare
 couche par couche et trouve la PREMIÈRE qui décroche, au lieu de raisonner sur
 la sortie de la couche 0.
+
+## Suite (05/10, 00h-01h30) : deux bugs trouvés PAR la comparaison
+
+La lecture du code de la référence, puis la mesure, ont sorti deux vrais défauts.
+
+**1. La norme L2 par tête sur `q` et `k` n'existait nulle part** dans mon code.
+`build_gdn_l2_norm` : `x/sqrt(Σx²+eps)`, plus `1/sqrt(head_dim)` sur `q` seul.
+Sa signature était déjà dans les chiffres, et je ne l'avais pas lue : au jeton 0
+l'état delta est nul, donc `o = β·(kᵀq)·v` — proportionnel à `v` quelle que soit
+l'échelle de `q` et `k` — et la norme par tête qui suit efface cette échelle.
+D'où 0,983 au jeton 0 **avec un rapport de norme de 0,937**. Dès le jeton 1,
+l'accumulation `s += k ⊗ β(v − sᵀk)` dépend de l'échelle de `k`, et tout part.
+
+| couche 0 | avant | après |
+|---|---|---|
+| jeton 0, corrélation | 0,983164 | **0,999979** |
+| jeton 0, écart max | 1,19e-02 | **3,74e-04** |
+
+**2. La banque résiduelle s'accumulait entre les jetons.** `resi_stack` est
+locale au graphe dans la référence : vide à chaque passe. Ici les jetons sont
+traités un par un, donc la couche 0 empile l'entrée du jeton COURANT.
+
+**Ce qui reste** : jetons 1 et 2 à 0,819 et 0,708. C'est un défaut d'ÉTAT, et un
+essai de discrimination l'a circonscrit — remettre convolution et delta à zéro
+avant chaque jeton donne **pire** (0,606 et 0,414), donc la référence enchaîne
+bien les jetons et le sens de mon état est le bon.
+
+**Deux passes de référence sont en vol** pour trancher entre les suspects :
+l'une instrumentée sur les tenseurs internes des couches 0-4 (`kda_q_conv`,
+`kda_scan_out`, `prefix_sum_attn`…), l'autre avec `REF_UBATCH=1`, qui force le
+chemin **autorégressif** — celui que ce moteur a transcrit — au lieu de la forme
+par blocs que la référence emprunte pour un lot de plusieurs jetons.
+
+**Leçon de méthode, et elle est chère** : mon test « KDA contre NumPy » passait
+au vert depuis le début. Il comparait mon code à MA transcription — les deux
+avaient le même trou. Un test qui partage l'erreur de l'implémentation ne teste
+rien ; c'est la comparaison à un tiers qui a trouvé les deux bugs, en deux
+heures, après deux jours de transcription.
