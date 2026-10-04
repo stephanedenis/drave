@@ -119495,3 +119495,56 @@ couche 90 :   24110 ms · banque 8
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\nanc = \"> **VINGT-CINQ COUCHES, TROIS BANQUES (03h37)**\"\nnew = \"\"\"> ## **LA PASSE COMPLÈTE DE KIMI-K3 PASSE (04h28)** — 93 couches, vérifiées\n>\n> `DRAVE_K3_PASSE=93` calcule  … [1412 caractères tronqués]`
+
+  ```
+53da159 REPRISE : la passe complète de Kimi-K3 passe — 93 couches, 7,2 min/jeton
+0
+  ```
+
+### 🤖 Assistant
+
+Le modèle entier passe. J'ajoute la tête pour comparer les **logits** — le critère même de la porte de correction.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -E \"output\" /tmp/k3_tensors.txt | head -5", "description": "Check the output head tensors"}`
+
+  ```
+Q8_0     output.weight                          [163840, 7168] · 1174.4 M poids · fichier 1
+  F32      output_norm.weight                     [7168] · 0.0 M poids · fichier 1
+  F32      output_res_score.weight                [7168] · 0.0 M poids · fichier 1
+  Q8_0     blk.0.attn_output.weight               [7168, 12288] · 88.1 M poids · fichier 1
+  Q8_0     blk.1.attn_output.weight               [7168, 12288] · 88.1 M poids · fichier 1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && python3 - <<'PY'\np='kimi_k3.rs'; s=open(p).read()\n# 1. la fonction prend un drapeau `tete`\ns = s.replace(\"\"\"pub fn passe_complete(g: &Gguf, ids: &[u32], n: usize, verbeux: bool)\n                      -> Result<V … [2070 caractères tronqués]`
+
+  ```
+tête écrite
+error[E0061]: this function takes 5 arguments but 4 arguments were supplied
+    --> src/main.rs:2017:23
+     |
+2017 |                 match kimi_k3::passe_complete(&g, &ids4, n, true) {
+     |                       ^^^^^^^^^^^^^^^^^^^^^^^-------------------- argument #5 of type `bool` is missing
+     |
+note: function defined here
+    --> src/kimi_k3.rs:1254:8
+     |
+--
+error: could not compile `drave-core` (bin "drave") due to 1 previous error; 29 warnings emitted
+build fini
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && python3 - <<'PY'\np='main.rs'; s=open(p).read()\nold = \"\"\"                let ids4 = vec![3638u32, 275, 1309, 3140];\n                println!(\"  passe complète : {n} couche(s), une seule en mémoire à la fois\");\n … [3551 caractères tronqués]`
+
+  ```
+ok
+test result: ok. 77 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && K=/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf\nnohup bash -c \"DRAVE_K3_PASSE=93 DRAVE_K3_TETE=1 DRAVE_K3_LOGITS=/tmp/k3_logits.bin timeout 21600 ./drave-core/target/release … [225 caractères tronqués]`
+
+  ```
+passe complète AVEC la tête — comparaison des logits prévue contre /tmp/refk3_logits.bin
+04:31
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"K3 : la TÊTE sur la passe complète — les logits, critère de la porte de correction\n\nDRAVE_K3_TETE=1 rend les logits (mélange résiduel final avec output_res_score,\nnorme de sortie, matrice output) a … [315 caractères tronqués]`

@@ -24,7 +24,7 @@ const VARS_LUES: &[&str] = &[
     "KV_BITS", "KV_F16", "KV_K_F16", "KV_K_F32", "KV_V_F32", "MMAP",
     "BIAIS_VL", "EXPERTS_RAM", "PRELIRE", "PRELIRE_TOUT", "Q8_BLOCS", "SANS_ENGRAM",
     "SANS_EMPRUNT",
-    "TRACE_BLOCS", "TUILE_LOT", "K3_COUCHES", "K3_SANS_ETAT", "K3_PASSE",
+    "TRACE_BLOCS", "TUILE_LOT", "K3_COUCHES", "K3_SANS_ETAT", "K3_PASSE", "K3_TETE", "K3_LOGITS",
     "SANS_BLOCS", "SANS_COMPRESSION", "SIMD_DOT", "TRACE_EXPERTS", "V41_SANS_RETARD",
     "V41_TETE_COPIE0",
     "VISION_TEXTE",
@@ -2012,10 +2012,39 @@ fn run_k3_essai() {
         if let Ok(n) = v.parse::<usize>() {
             if n >= 1 {
                 let ids4 = vec![3638u32, 275, 1309, 3140];
-                println!("  passe complète : {n} couche(s), une seule en mémoire à la fois");
+                // `DRAVE_K3_TETE=1` : on rend les LOGITS au lieu de `l_out`.
+                // C'est le critère de la porte de correction du dépôt
+                // (corrélation par position, top-1), appliqué au plus gros
+                // modèle du parc — un état caché ne se compare qu'à un état
+                // caché, des logits se comparent à ceux de llama.cpp.
+                let tete = std::env::var("DRAVE_K3_TETE")
+                    .map(|v| v != "0" && !v.is_empty()).unwrap_or(false);
+                println!("  passe complète : {n} couche(s), une seule en mémoire à la fois{}",
+                         if tete { " · TÊTE (logits)" } else { "" });
                 let t0 = std::time::Instant::now();
-                match kimi_k3::passe_complete(&g, &ids4, n, true) {
+                match kimi_k3::passe_complete(&g, &ids4, n, true, tete) {
                     Ok(flux) => {
+                        if tete {
+                            // Les logits vont dans un fichier binaire au format de
+                            // `--logits-bin` : int32 vocab, int32 n_pos, puis
+                            // n_pos × vocab f32.
+                            let vocab = flux.first().map(|v| v.len()).unwrap_or(0);
+                            let chemin = std::env::var("DRAVE_K3_LOGITS")
+                                .unwrap_or_else(|_| "/tmp/k3_logits.bin".to_string());
+                            use std::io::Write;
+                            if let Ok(mut f) = std::fs::File::create(&chemin) {
+                                let npos = (flux.len().saturating_sub(1)) as i32;
+                                let _ = f.write_all(&(vocab as i32).to_le_bytes());
+                                let _ = f.write_all(&npos.to_le_bytes());
+                                // position p prédit le jeton p+1, comme `--logits-bin`
+                                for p in 0..npos as usize {
+                                    let mut o = Vec::with_capacity(vocab * 4);
+                                    for v in &flux[p] { o.extend_from_slice(&v.to_le_bytes()); }
+                                    let _ = f.write_all(&o);
+                                }
+                                println!("  logits : {chemin} — {npos} positions × {vocab} valeurs");
+                            }
+                        } else {
                         for (i, y) in flux.iter().enumerate() {
                             let nor: f32 = y.iter().map(|v| v * v).sum::<f32>().sqrt();
                             let finis = y.iter().all(|v| v.is_finite());
@@ -2032,6 +2061,7 @@ fn run_k3_essai() {
                                     }
                                 }
                             }
+                        }
                         }
                         println!("  passe complète : {} ms au total", t0.elapsed().as_millis());
                     }

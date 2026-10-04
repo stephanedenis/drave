@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 133.7 h |
+| Durée | 133.8 h |
 | Tours | 103 |
-| Messages | 7531 |
-| Appels d'outils | 7195 |
+| Messages | 7536 |
+| Appels d'outils | 7200 |
 | Fichiers touchés | 150 |
-| Commandes | 6112 |
+| Commandes | 6117 |
 | Sous-agents | 32 |
-| Commits | 506 |
+| Commits | 507 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -5058,7 +5058,7 @@ C'est finalement la **lecture du code de la référence** qui a donné le troisi
 
 ### Tour 103 — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas e … [1246 caractères tronqués]
 
-*21 appels d'outils.* Actions notables :
+*26 appels d'outils.* Actions notables :
 
 - bash — Read PetitesK3 layer body
 - bash — Implement the layer-streaming full pass
@@ -5074,11 +5074,11 @@ C'est finalement la **lecture du code de la référence** qui a donné le troisi
 - bash — Compare streaming pass vs layer-resident composition
 - bash — Launch the full 93-layer K3 forward
 - bash — Commit the streaming pass
-- … et 6 autres
+- … et 11 autres
 
 **Synthèse produite :**
 
-**Les 93 couches matchent.** C'est la vérification complète de l'architecture.
+Le modèle entier passe. J'ajoute la tête pour comparer les **logits** — le critère même de la porte de correction.
 
 ## 3. Travail accompli
 
@@ -5314,7 +5314,7 @@ C'est finalement la **lecture du code de la référence** qui a donné le troisi
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6072 autres
+- … et 6077 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5442,7 +5442,7 @@ C'est finalement la **lecture du code de la référence** qui a donné le troisi
 
 ## 5. Erreurs rencontrées
 
-352 sorties en erreur ou divergentes. Les premières :
+353 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -5968,4 +5968,5 @@ C'est finalement la **lecture du code de la référence** qui a donné le troisi
 - K3 : la passe complète, une couche en mémoire à la fois — les 93 couches deviennent calculables  PetitesK3::charge garde les n couches en mémoire, tout le dense
 - K3 : LA PASSE COMPLÈTE DE 93 COUCHES PASSE — le modèle entier, vérifié contre llama.cpp  DRAVE_K3_PASSE=93, une seule couche en mémoire à la fois, l_out-92 comp
 - REPRISE : la passe complète de Kimi-K3 passe — 93 couches, 7,2 min/jeton" && git log --oneline -1; git status --short | grep -v "^ M journal" | wc -l
+- K3 : la TÊTE sur la passe complète — les logits, critère de la porte de correction  DRAVE_K3_TETE=1 rend les logits (mélange résiduel final avec output_res_scor
 

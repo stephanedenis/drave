@@ -1251,7 +1251,7 @@ impl CoucheK3 {
 /// porte UNE COLONNE PAR JETON du lot. L'aplatir en poussant une entrée par
 /// jeton et par couche donnerait un `n_ckpt` quatre fois trop grand et un
 /// mélange entre jetons.
-pub fn passe_complete(g: &Gguf, ids: &[u32], n: usize, verbeux: bool)
+pub fn passe_complete(g: &Gguf, ids: &[u32], n: usize, verbeux: bool, tete: bool)
                       -> Result<Vec<Vec<f32>>, String> {
     let h = g.tensor("blk.0.attn_norm.weight").map(|t| t.dims[0] as usize)
         .ok_or_else(|| "blk.0.attn_norm absent".to_string())?;
@@ -1329,6 +1329,34 @@ pub fn passe_complete(g: &Gguf, ids: &[u32], n: usize, verbeux: bool)
                       if banque { " (empilée)" } else { "" });
         }
         // `c` tombe ici : c'est tout l'intérêt.
+    }
+    // ---- LA TÊTE : mélange résiduel final, norme, puis la matrice de sortie.
+    // C'est ce que la référence fait APRÈS la boucle (`res_mix(cur, output_res_score, -1)`,
+    // `build_norm(output_norm)`, `output`), et c'est ce qui rend la comparaison
+    // possible sur les LOGITS — le critère de la porte de correction du dépôt —
+    // et non seulement sur un état caché.
+    if tete {
+        let w = g.dequant("output_res_score.weight");
+        let norme = g.dequant("output_norm.weight");
+        let sortie = g.dequant("output.weight");
+        let vocab = g.tensor("output.weight").map(|t| t.dims[0] as usize)
+            .ok_or_else(|| "output.weight absent".to_string())?;
+        let mut lgs = Vec::with_capacity(ntok);
+        for i in 0..ntok {
+            let mut cur = vec![0f32; h];
+            if pile.is_empty() { cur.copy_from_slice(&flux[i]); }
+            else {
+                let mut plat = Vec::with_capacity(pile.len() * h);
+                for ck in pile.iter() { plat.extend_from_slice(&ck[i]); }
+                crate::model::res_mix(&plat, pile.len(), h, &flux[i], &w, eps, &mut cur);
+            }
+            let mut xn = vec![0f32; h];
+            rms_norm_poids(&cur, &norme, eps, &mut xn);
+            let mut lg = vec![0f32; vocab];
+            mv(&sortie, vocab, h, &xn, &mut lg);
+            lgs.push(lg);
+        }
+        return Ok(lgs);
     }
     Ok(flux)
 }
