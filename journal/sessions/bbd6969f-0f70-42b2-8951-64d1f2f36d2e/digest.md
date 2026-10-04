@@ -119218,3 +119218,208 @@ test result: ok. 77 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fin
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\nanc = \"> **ET LES TREIZE COUCHES PASSENT (03h17)**\"\nnew = \"\"\"> **VINGT-CINQ COUCHES, TROIS BANQUES (03h37)** — `DRAVE_K3_COUCHES=25`, banques\n> aux couches 0, 12 et 24. Contr … [654 caractères tronqués]`
+
+  ```
+b26bf56 REPRISE : vingt-cinq couches de K3, trois banques, trois points verts
+0
+  ```
+
+### 🤖 Assistant
+
+Bilan du round 28 — **les trois bugs sont tombés, et Kimi-K3 est vérifié sur 25 couches.**
+
+## Les trois défauts, tous trouvés par la comparaison
+
+Aucun par relecture, aucun par le test « KDA contre NumPy » qui passait au vert depuis le début :
+
+1. **La norme L2 par tête sur `q` et `k`** (`build_gdn_l2_norm`) était absente **partout** — du code *et* du test censé la couvrir.
+2. **La banque résiduelle s'accumulait entre les jetons** au lieu d'être propre à la passe du jeton courant.
+3. **Son ORDRE de remise à zéro** : elle doit être repartie **avant** l'attention résiduelle. Garder le `n_ckpt` du jeton précédent faisait appliquer un `res_mix` là où la référence n'en applique pas.
+
+Les trois étaient **invisibles au jeton 0** — au jeton 0 l'état delta est nul (donc l'échelle de `q` et `k` disparaît dans la norme qui suit) et la banque n'a qu'un point de contrôle. C'est pour ça qu'ils ont survécu deux jours.
+
+## Le résultat, contre llama.cpp-k3
+
+| | jeton 0 | jeton 1 | jeton 2 |
+|---|---|---|---|
+| **couche 0** | 0,983164 → **0,999979** | 0,790361 → **0,999982** | 0,641780 → **0,999983** |
+| **couche 12** | 0,990927 → **0,999945** | 0,458801 → **0,999943** | 0,448762 → **0,999102** |
+| **couche 24** | — → **0,999984** | — → **0,999893** | — → **0,999866** |
+
+**Trois des treize points de comparaison du protocole sont verts** — et ils montent : la couche 12 se franchit après **une banque**, la couche 24 après **deux**, donc un `res_mix` à **trois** points de contrôle. Ce que ça valide d'un coup et qui n'était vérifié que par relecture : l'enchaînement résiduel, la banque et son redémarrage, l'état de convolution et la récurrence delta **transportés d'un jeton au suivant**, le MoE latent, la MLA à cache latent, SiTU.
+
+Et l'écart **ne croît pas avec la profondeur** : 3,7e-04 à la couche 24 contre 3,1e-04 à la couche 0, pour des dynamiques comparables. L'accumulation f32 sur des poids Q8_0 reste sous le pour-mille, elle ne dérive pas.
+
+## Le déblocage, et ce qu'il a coûté
+
+La passe instrumentée que j'avais lancée tournait pour rien : mon `--tensors '$RE'` était **littéral** — le `$` était échappé, donc le filtre s'appelait `$RE` et ne matchait rien. Trois heures de disque perdues ; j'ai maintenant vérifié l'expansion dans `/proc/PID/cmdline` **avant** de lancer, ce qui est la bonne façon de vérifier un argument.
+
+C'est finalement la **lecture du code de la référence** qui a donné le troisième bug, en comparant l'ordre exact des étapes du graphe (`res_mix` → `res_push` → `norm` → attention → `prefix_sum` → `res_mix` → `norm` → FFN) avec le mien, ligne par ligne.
+
+## État
+
+Tout est commité, 77 tests verts, arbre propre. Le chemin complet des 93 couches reste hors de portée de l'instrument de vérification : il déquantifie les experts en f32, et 93 couches demanderaient ~220 Go pour 125 Go de RAM — c'est le prochain vrai chantier. L'objectif reste actif.
+
+
+## Tour 103
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas en local (classe Kimi-K3 Q4 : 1,5 To de poids, ~35 Go de poids par jeton), et étudier/implémenter ce qui nous distingue sur cette classe : découpage par experts et en grappes (chaque nœud ne lit que ce qu'il sert), réutilisation des experts entre jetons, transport de flux compact (listes DRVF), noyaux rapides (SIMD, déquantification bit-exacte), et mesure systématique (octets par jeton, débits, seuils). Les modèles périmés (DeepSeek-V4-Flash) sortent du chemin critique : leurs acquis sont conservés dans les rapports, leurs portes archivées. Règles inchangées : jamais de forward muet, jamais d'optimisation qui change une sortie sans le dire, une affirmation sans mesure n'est pas une affirmation."
+Round: 29/30
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Je construis la passe complète : une couche à la fois, donc les 93 couches tiennent en RAM
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && sed -n '/pub fn avant(&mut self, x0: &\\[f32\\], pos: usize)/,/^    }/p' kimi_k3.rs | head -60", "description": "Read PetitesK3 layer body"}`
+
+  ```
+pub fn avant(&mut self, x0: &[f32], pos: usize) -> Result<Vec<f32>, String> {
+        let h = self.h;
+        // La banque appartient à la PASSE d'un jeton (voir `Couche0::avant`) :
+        // la repartir ici est ce qui rend l'appel par jeton équivalent au lot.
+        self.pile.clear();
+        self.n_ckpt = 0;
+        let mut x = x0.to_vec();
+        for l in 0..self.normes.len() {
+            let n = &self.normes[l];
+            // 1. attention résiduelle sur le flux courant
+            let mut cur = vec![0f32; h];
+            if self.n_ckpt == 0 { cur.copy_from_slice(&x); }
+            else {
+                crate::model::res_mix(&self.pile, self.n_ckpt, h, &x, &n.attn_score, self.eps, &mut cur);
+            }
+            // 2. banque : on empile l'entrée BRUTE, avant l'attention
+            let banque = l % self.bloc == 0;
+            if banque { self.pile.extend_from_slice(&x); self.n_ckpt += 1; }
+            // 3. norme puis attention (KDA ou MLA)
+            let mut xn = vec![0f32; h];
+            rms_norm_poids(&cur, &n.attn, self.eps, &mut xn);
+            let attn = if let Some(kda) = self.kda[l].as_mut() {
+                kda.avant(&xn)?
+            } else {
+           
+… [911 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && cat >> kimi_k3.rs <<'RUST'\n\n// ===========================================================================\n// LA PASSE COMPLÈTE, COUCHE PAR COUCHE\n//\n// `PetitesK3::charge(g, n)` garde les n couches EN MÉMOIRE, to … [5559 caractères tronqués]`
+
+  ```
+build fini
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && python3 - <<'PY'\nimport re\np='kimi_k3.rs'; s=open(p).read()\ndebut = s.index(\"/// **La passe complète**\")\nfin = s.index(\"        Ok(flux)\\n}\\n\", debut) + len(\"        Ok(flux)\\n}\\n\")\nneuf = '''/// **La pa … [5165 caractères tronqués]`
+
+  ```
+---
+50
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 4, in <module>
+ValueError: substring not found
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && grep -n \"passe_complete\\|^pub fn passe\\|Ok(flux)\" kimi_k3.rs | head", "description": "Locate the function to rewrite"}`
+
+  ```
+1247:pub fn passe_complete(g: &Gguf, ids: &[u32], n: usize, verbeux: bool)
+1311:    Ok(flux)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && sed -n '1240,1248p' kimi_k3.rs; echo \"=== fin ===\"; sed -n '1311,1314p' kimi_k3.rs", "description": "Confirm function boundaries"}`
+
+  ```
+}
+    }
+}
+
+/// **La passe complète** : `ids` traversés de la couche 0 à la couche `n-1`,
+/// une couche chargée à la fois. Rend le flux résiduel de chaque jeton après la
+/// dernière couche — ce que la référence vide sous le nom `l_out-<n-1>`.
+pub fn passe_complete(g: &Gguf, ids: &[u32], n: usize, verbeux: bool)
+                      -> Result<Vec<Vec<f32>>, String> {
+=== fin ===
+    Ok(flux)
+}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && python3 - <<'PY'\np='kimi_k3.rs'\nlignes=open(p).read().split('\\n')\n# on remplace les lignes 1245..1312 (1-based) = index 1244..1312\nneuf = '''/// **La passe complète** : `ids` traversés de la couche 0 à la couche ` … [4650 caractères tronqués]`
+
+  ```
+ok, lignes 1335
+build terminé
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && grep -n \"if ok { println!(\\\"  composition\" -A 6 main.rs | head -10", "description": "Find the end of k3-essai"}`
+
+  ```
+2002:            if ok { println!("  composition : {} ms au total", t0.elapsed().as_millis()); }
+2003-        }
+2004-        Err(e) => println!("  composition 0-3 : chargement impossible ({e})"),
+2005-    }
+2006-    // L'entrée de la couche 0 est l'embarquement du jeton.
+2007-    let ids = vec![3638u32, 275, 1309];      // « Le ciel est… » (tokenizer du modèle)
+2008-    let embd = g.dequant("token_embd.weight");
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && python3 - <<'PY'\np='main.rs'; s=open(p).read()\nanc = \"\"\"    // L'entrée de la couche 0 est l'embarquement du jeton.\n    let ids = vec![3638u32, 275, 1309];      // « Le ciel est… » (tokenizer du modèle)\"\"\"\nne … [2803 caractères tronqués]`
+
+  ```
+ok
+test result: ok. 77 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && K=/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf\nnohup bash -c \"DRAVE_K3_PASSE=25 DRAVE_DUMP_COUCHES=/tmp/passe25 timeout 14400 ./drave-core/target/release/drave $K --k3-essa … [210 caractères tronqués]`
+
+  ```
+validation de la passe sur 25 couches (doit redonner /tmp/fix25, qui matche la référence)
+03:42
+  ```
+
+- **bash** `{"command": "sleep 540; grep -E \"passe 0-24\" /tmp/k3_passe25.log; tail -2 /tmp/k3_passe25.log; date \"+%H:%M\"", "description": "Poll the streaming-pass validation", "timeoutMs": 570000}`
+
+  ```
+couche 22 :   16000 ms · banque 2
+  couche 23 :   13948 ms · banque 2
+03:51
+  ```
+
+- **bash** `{"command": "sleep 240; grep -E \"passe 0-24|passe complète\" /tmp/k3_passe25.log; ls /tmp/passe25-l_out-24-*.bin 2>/dev/null | wc -l; date \"+%H:%M\"", "description": "Poll validation completion", "timeoutMs": 300000}`
+
+  ```
+passe complète : 25 couche(s), une seule en mémoire à la fois
+  passe 0-24, jeton 0 : |l_out| = 0.9773 · finis : true
+  passe 0-24, jeton 1 : |l_out| = 0.4822 · finis : true
+  passe 0-24, jeton 2 : |l_out| = 0.4874 · finis : true
+  passe 0-24, jeton 3 : |l_out| = 0.4455 · finis : true
+  passe complète : 471482 ms au total
+4
+03:55
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for p in 0 1 2 3; do python3 -c \"\nimport struct\na=open('/tmp/fix25-l_out-24-$p.bin','rb').read(); b=open('/tmp/passe25-l_out-24-$p.bin','rb').read()\nva=struct.unpack(f'<{len(a)//4}f',a); vb=struct.unpack(f'<{len(b)//4}f',b)\nprin … [193 caractères tronqués]`
+
+  ```
+pos 0 : écart max 0.000e+00 (identique : True)
+pos 1 : écart max 0.000e+00 (identique : True)
+pos 2 : écart max 0.000e+00 (identique : True)
+pos 3 : écart max 0.000e+00 (identique : True)
+  ```
+
+### 🤖 Assistant
+
+**Identique au bit près.** La passe streaming est validée — je lance les 93 couches.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && K=/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf\nnohup bash -c \"DRAVE_K3_PASSE=93 DRAVE_DUMP_COUCHES=/tmp/passe93 timeout 21600 ./drave-core/target/release/drave $K --k3-essa … [221 caractères tronqués]`
+
+  ```
+LA PASSE COMPLÈTE : 93 couches, une seule en mémoire. Comparaison prévue contre l_out-92 de la référence.
+03:56
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"K3 : la passe complète, une couche en mémoire à la fois — les 93 couches deviennent calculables\n\nPetitesK3::charge garde les n couches en mémoire, tout le dense en f32 : 25\ncouches tiennent (59 Go) … [992 caractères tronqués]`

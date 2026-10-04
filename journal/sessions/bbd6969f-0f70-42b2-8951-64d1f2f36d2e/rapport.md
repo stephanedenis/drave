@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 132.9 h |
-| Tours | 102 |
-| Messages | 7508 |
-| Appels d'outils | 7174 |
+| Durée | 133.2 h |
+| Tours | 103 |
+| Messages | 7524 |
+| Appels d'outils | 7188 |
 | Fichiers touchés | 150 |
-| Commandes | 6091 |
+| Commandes | 6105 |
 | Sous-agents | 32 |
-| Commits | 503 |
+| Commits | 504 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -249,6 +249,8 @@
 **Tour 101** — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas en local (classe Kimi-K3 Q4 : 1,5 To de poids, ~35 Go de poids par jeton), et étudier/implémenter ce qui nous distingue sur cette classe : découpage par experts et en grappes (chaque nœud ne lit que ce qu'il sert), réutilisation des experts entre jetons, transport de flux compact  … [966 caractères tronqués]
 
 **Tour 102** — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas en local (classe Kimi-K3 Q4 : 1,5 To de poids, ~35 Go de poids par jeton), et étudier/implémenter ce qui nous distingue sur cette classe : découpage par experts et en grappes (chaque nœud ne lit que ce qu'il sert), réutilisation des experts entre jetons, transport de flux compact  … [966 caractères tronqués]
+
+**Tour 103** — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas en local (classe Kimi-K3 Q4 : 1,5 To de poids, ~35 Go de poids par jeton), et étudier/implémenter ce qui nous distingue sur cette classe : découpage par experts et en grappes (chaque nœud ne lit que ce qu'il sert), réutilisation des experts entre jetons, transport de flux compact  … [966 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -5023,7 +5025,59 @@ Mon test « KDA contre NumPy » passait au vert depuis le début : il comparait 
 
 **Synthèse produite :**
 
-**Troisième point vert : la couche 24, avec trois points de contrôle dans la banque.**
+Bilan du round 28 — **les trois bugs sont tombés, et Kimi-K3 est vérifié sur 25 couches.**
+
+\## Les trois défauts, tous trouvés par la comparaison
+
+Aucun par relecture, aucun par le test « KDA contre NumPy » qui passait au vert depuis le début :
+
+1. **La norme L2 par tête sur `q` et `k`** (`build_gdn_l2_norm`) était absente **partout** — du code *et* du test censé la couvrir.
+2. **La banque résiduelle s'accumulait entre les jetons** au lieu d'être propre à la passe du jeton courant.
+3. **Son ORDRE de remise à zéro** : elle doit être repartie **avant** l'attention résiduelle. Garder le `n_ckpt` du jeton précédent faisait appliquer un `res_mix` là où la référence n'en applique pas.
+
+Les trois étaient **invisibles au jeton 0** — au jeton 0 l'état delta est nul (donc l'échelle de `q` et `k` disparaît dans la norme qui suit) et la banque n'a qu'un point de contrôle. C'est pour ça qu'ils ont survécu deux jours.
+
+\## Le résultat, contre llama.cpp-k3
+
+| | jeton 0 | jeton 1 | jeton 2 |
+|---|---|---|---|
+| **couche 0** | 0,983164 → **0,999979** | 0,790361 → **0,999982** | 0,641780 → **0,999983** |
+| **couche 12** | 0,990927 → **0,999945** | 0,458801 → **0,999943** | 0,448762 → **0,999102** |
+| **couche 24** | — → **0,999984** | — → **0,999893** | — → **0,999866** |
+
+**Trois des treize points de comparaison du protocole sont verts** — et ils montent : la couche 12 se franchit après **une banque**, la couche 24 après **deux**, donc un `res_mix` à **trois** points de contrôle. Ce que ça valide d'un coup et qui n'était vérifié que par relecture : l'enchaînement résiduel, la banque et son redémarrage, l'état de convolution et la récurrence delta **transportés d'un jeton au suivant**, le MoE latent, la MLA à cache latent, SiTU.
+
+Et l'écart **ne croît pas avec la profondeur** : 3,7e-04 à la couche 24 contre 3,1e-04 à la couche 0, pour des dynamiques comparables. L'accumulation f32 sur des poids Q8_0 reste sous le pour-mille, elle ne dérive pas.
+
+\## Le déblocage, et ce qu'il a coûté
+
+La passe instrumentée que j'avais lancée tournait pour rien : mon `--tensors '$RE'` était **littéral** — le `$` était échappé, donc le filtre s'appelait `$RE` et ne matchait rien. Trois heures de disque perdues ; j'ai maintenant vérifié l'expansion dans `/proc/PID/cmdline` **avant** de lancer, ce qui est la bonne façon de vérifier un argument.
+
+C'est finalement la **lecture du code de la référence** qui a donné le troisième bug, en comparant l'ordre exact des étapes du graphe (`res_mix` → `res_pu
+… [393 caractères tronqués]
+
+### Tour 103 — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas e … [1246 caractères tronqués]
+
+*14 appels d'outils.* Actions notables :
+
+- bash — Read PetitesK3 layer body
+- bash — Implement the layer-streaming full pass
+- bash — Rewrite the pass with a proper bank layout
+- bash — Locate the function to rewrite
+- bash — Confirm function boundaries
+- bash — Replace the function with the corrected version
+- bash — Find the end of k3-essai
+- bash — Wire the full pass to a CLI knob
+- bash — Validate the streaming pass on 25 layers
+- bash — Poll the streaming-pass validation
+- bash — Poll validation completion
+- bash — Compare streaming pass vs layer-resident composition
+- bash — Launch the full 93-layer K3 forward
+- bash — Commit the streaming pass
+
+**Synthèse produite :**
+
+**Identique au bit près.** La passe streaming est validée — je lance les 93 couches.
 
 ## 3. Travail accompli
 
@@ -5259,7 +5313,7 @@ Mon test « KDA contre NumPy » passait au vert depuis le début : il comparait 
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6051 autres
+- … et 6065 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5910,4 +5964,5 @@ Mon test « KDA contre NumPy » passait au vert depuis le début : il comparait 
 - Sprint 31, fin de bloc : Kimi-K3 vérifié sur treize couches  Trois bugs trouvés par la comparaison, aucun par relecture ni par le test « KDA contre NumPy » qui 
 - K3 : VINGT-CINQ COUCHES, TROIS BANQUES — trois des treize points sont verts  DRAVE_K3_COUCHES=25, banques aux couches 0, 12 et 24 (res_mix à TROIS points de con
 - REPRISE : vingt-cinq couches de K3, trois banques, trois points verts" && git log --oneline -1; git status --short | grep -v "^ M journal" | wc -l
+- K3 : la passe complète, une couche en mémoire à la fois — les 93 couches deviennent calculables  PetitesK3::charge garde les n couches en mémoire, tout le dense
 

@@ -1200,3 +1200,135 @@ impl PetitesK3 {
         for k in self.kda.iter_mut().flatten() { k.zero(); }
     }
 }
+
+// ===========================================================================
+// LA PASSE COMPLÈTE, COUCHE PAR COUCHE
+//
+// `PetitesK3::charge(g, n)` garde les n couches EN MÉMOIRE, tout le dense en
+// f32 : 25 couches tiennent (59 Go), 93 n'y tiennent pas (~220 Go pour 125 Go de
+// RAM). Or rien n'oblige à les garder : l'état récurrent d'une couche ne sert
+// QUE pendant la passe de cette couche sur les jetons. En traitant les couches
+// dans l'ordre et les jetons à l'intérieur de chaque couche — ce que fait déjà
+// llama.cpp, dont le graphe est évalué couche par couche — une seule couche est
+// vivante à la fois.
+//
+// Ce que ça change : le pic mémoire passe de « toutes les couches » à « une
+// couche » (~2,2 Go), plus les états (~0,6 Go) et la pile résiduelle (quelques
+// kilo-octets). Les 93 couches deviennent donc calculables sur cette machine.
+//
+// Ce que ça ne change PAS : le coût. Une couche MoE déquantifie ses 16 experts
+// en f32, soit ~28 s par jeton ; 93 couches × 4 jetons font ~3 h. C'est un
+// instrument de VÉRIFICATION, et il le reste.
+// ===========================================================================
+
+/// Une couche chargée, prête à traiter les jetons du lot.
+enum CoucheK3 {
+    Dense { normes: NormesK3, kda: Option<KdaK3>, mla: Option<MlaK3>, ffn: FfnDenseK3 },
+    Moe  { normes: NormesK3, kda: Option<KdaK3>, mla: Option<MlaK3>, moe: MoeK3 },
+}
+
+impl CoucheK3 {
+    fn charge(g: &Gguf, l: usize) -> Result<CoucheK3, String> {
+        let normes = NormesK3::charge(g, l)?;
+        let mla = g.tensor(&format!("blk.{l}.attn_kv_a_mqa.weight")).is_some();
+        let kda = if mla { None } else { Some(KdaK3::charge(g, l)?) };
+        let mlao = if mla { Some(MlaK3::charge(g, l)?) } else { None };
+        if l == 0 {
+            Ok(CoucheK3::Dense { normes, kda, mla: mlao, ffn: FfnDenseK3::charge(g, l)? })
+        } else {
+            Ok(CoucheK3::Moe { normes, kda, mla: mlao, moe: MoeK3::charge(g, l)? })
+        }
+    }
+}
+
+/// **La passe complète** : `ids` traversés de la couche 0 à la couche `n-1`,
+/// **La passe complète** : `ids` traversés de la couche 0 à la couche `n-1`,
+/// une couche chargée à la fois. Rend le flux résiduel de chaque jeton après la
+/// dernière couche — ce que la référence vide sous le nom `l_out-<n-1>`.
+///
+/// La banque est `[point de contrôle][jeton][canal]` : dans la référence,
+/// `resi_stack` est `[n_embd, n_ckpt, n_tokens]`, donc un point de contrôle
+/// porte UNE COLONNE PAR JETON du lot. L'aplatir en poussant une entrée par
+/// jeton et par couche donnerait un `n_ckpt` quatre fois trop grand et un
+/// mélange entre jetons.
+pub fn passe_complete(g: &Gguf, ids: &[u32], n: usize, verbeux: bool)
+                      -> Result<Vec<Vec<f32>>, String> {
+    let h = g.tensor("blk.0.attn_norm.weight").map(|t| t.dims[0] as usize)
+        .ok_or_else(|| "blk.0.attn_norm absent".to_string())?;
+    let eps = 1e-5f32;
+    let bloc = 12usize;
+    let ntok = ids.len();
+    let embd = g.dequant("token_embd.weight");
+    let mut flux: Vec<Vec<f32>> = ids.iter()
+        .map(|&t| embd[t as usize * h..(t as usize + 1) * h].to_vec()).collect();
+    // pile[k][i] = entrée BRUTE du jeton i à la couche banque k.
+    let mut pile: Vec<Vec<Vec<f32>>> = Vec::new();
+
+    for l in 0..n {
+        let t0 = std::time::Instant::now();
+        let mut c = CoucheK3::charge(g, l)?;
+        let banque = l % bloc == 0;
+        // ---- phase 1 : l'attention résiduelle voit la banque d'AVANT la
+        //      couche courante (`res_mix` est appelé avant `res_push`).
+        let n_avant = pile.len();
+        let mut curs: Vec<Vec<f32>> = Vec::with_capacity(ntok);
+        for i in 0..ntok {
+            if n_avant == 0 { curs.push(flux[i].clone()); continue; }
+            let mut plat = Vec::with_capacity(n_avant * h);
+            for ck in pile.iter() { plat.extend_from_slice(&ck[i]); }
+            let w = match &c {
+                CoucheK3::Dense { normes, .. } => &normes.attn_score,
+                CoucheK3::Moe { normes, .. } => &normes.attn_score,
+            };
+            let mut out = vec![0f32; h];
+            crate::model::res_mix(&plat, n_avant, h, &flux[i], w, eps, &mut out);
+            curs.push(out);
+        }
+        // ---- la couche est une banque : on empile son entrée BRUTE, toutes
+        //      les colonnes du lot d'un coup.
+        if banque { pile.push(flux.clone()); }
+
+        for i in 0..ntok {
+            let x = flux[i].clone();
+            let mut prefix;
+            let mut cur2 = vec![0f32; h];
+            {
+                let (normes, kda, mla) = match &mut c {
+                    CoucheK3::Dense { normes, kda, mla, .. } => (normes, kda, mla),
+                    CoucheK3::Moe { normes, kda, mla, .. } => (normes, kda, mla),
+                };
+                let mut xn = vec![0f32; h];
+                rms_norm_poids(&curs[i], &normes.attn, eps, &mut xn);
+                let attn = if let Some(k) = kda.as_mut() { k.avant(&xn)? }
+                           else { mla.as_mut().unwrap().avant(&xn, &xn, i)? };
+                prefix = if banque { vec![0f32; h] } else { x.clone() };
+                for j in 0..h { prefix[j] += attn[j]; }
+                let mut plat = Vec::with_capacity(pile.len() * h);
+                for ck in pile.iter() { plat.extend_from_slice(&ck[i]); }
+                crate::model::res_mix(&plat, pile.len(), h, &prefix,
+                                      &normes.ffn_score, eps, &mut cur2);
+            }
+            let mut xn2 = vec![0f32; h];
+            {
+                let n2 = match &c {
+                    CoucheK3::Dense { normes, .. } => &normes.ffn,
+                    CoucheK3::Moe { normes, .. } => &normes.ffn,
+                };
+                rms_norm_poids(&cur2, n2, eps, &mut xn2);
+            }
+            let ffn = match &mut c {
+                CoucheK3::Dense { ffn, .. } => ffn.avant(&xn2)?,
+                CoucheK3::Moe { moe, .. } => moe.avant(&xn2)?,
+            };
+            for j in 0..h { prefix[j] += ffn[j]; }
+            flux[i] = prefix;
+        }
+        if verbeux {
+            eprintln!("  couche {l:>2} : {:>7} ms · banque {}{}",
+                      t0.elapsed().as_millis(), pile.len(),
+                      if banque { " (empilée)" } else { "" });
+        }
+        // `c` tombe ici : c'est tout l'intérêt.
+    }
+    Ok(flux)
+}

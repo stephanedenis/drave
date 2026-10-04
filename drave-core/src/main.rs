@@ -24,7 +24,7 @@ const VARS_LUES: &[&str] = &[
     "KV_BITS", "KV_F16", "KV_K_F16", "KV_K_F32", "KV_V_F32", "MMAP",
     "BIAIS_VL", "EXPERTS_RAM", "PRELIRE", "PRELIRE_TOUT", "Q8_BLOCS", "SANS_ENGRAM",
     "SANS_EMPRUNT",
-    "TRACE_BLOCS", "TUILE_LOT", "K3_COUCHES", "K3_SANS_ETAT",
+    "TRACE_BLOCS", "TUILE_LOT", "K3_COUCHES", "K3_SANS_ETAT", "K3_PASSE",
     "SANS_BLOCS", "SANS_COMPRESSION", "SIMD_DOT", "TRACE_EXPERTS", "V41_SANS_RETARD",
     "V41_TETE_COPIE0",
     "VISION_TEXTE",
@@ -2002,6 +2002,44 @@ fn run_k3_essai() {
             if ok { println!("  composition : {} ms au total", t0.elapsed().as_millis()); }
         }
         Err(e) => println!("  composition 0-3 : chargement impossible ({e})"),
+    }
+    // **LA PASSE COMPLÈTE, UNE COUCHE À LA FOIS.** `DRAVE_K3_PASSE=N` calcule
+    // les N premières couches en ne gardant QU'UNE couche en mémoire : c'est ce
+    // qui rend les 93 couches possibles (une couche ≈ 2,2 Go au lieu de ~220 Go
+    // pour toutes). Quand il est posé, on saute la composition `PetitesK3`, qui
+    // garde tout — elle sert à vérifier l'enchaînement, pas à aller loin.
+    if let Ok(v) = std::env::var("DRAVE_K3_PASSE") {
+        if let Ok(n) = v.parse::<usize>() {
+            if n >= 1 {
+                let ids4 = vec![3638u32, 275, 1309, 3140];
+                println!("  passe complète : {n} couche(s), une seule en mémoire à la fois");
+                let t0 = std::time::Instant::now();
+                match kimi_k3::passe_complete(&g, &ids4, n, true) {
+                    Ok(flux) => {
+                        for (i, y) in flux.iter().enumerate() {
+                            let nor: f32 = y.iter().map(|v| v * v).sum::<f32>().sqrt();
+                            let finis = y.iter().all(|v| v.is_finite());
+                            println!("  passe 0-{}, jeton {i} : |l_out| = {nor:.4} · finis : {finis}",
+                                     n - 1);
+                            if let Ok(prefixe) = std::env::var("DRAVE_DUMP_COUCHES") {
+                                if !prefixe.is_empty() {
+                                    use std::io::Write;
+                                    if let Ok(mut f) = std::fs::File::create(
+                                            format!("{prefixe}-l_out-{}-{i}.bin", n - 1)) {
+                                        let mut o = Vec::with_capacity(y.len() * 4);
+                                        for v in y { o.extend_from_slice(&v.to_le_bytes()); }
+                                        let _ = f.write_all(&o);
+                                    }
+                                }
+                            }
+                        }
+                        println!("  passe complète : {} ms au total", t0.elapsed().as_millis());
+                    }
+                    Err(e) => println!("  passe complète : {e}"),
+                }
+                return;
+            }
+        }
     }
     // L'entrée de la couche 0 est l'embarquement du jeton.
     let ids = vec![3638u32, 275, 1309];      // « Le ciel est… » (tokenizer du modèle)
