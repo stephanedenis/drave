@@ -649,6 +649,9 @@ pub struct MoeK3 {
     n_exp: usize, k: usize,
     h: usize, latent: usize, moe_ff: usize,
     situ_beta: f32, situ_lin: f32, eps: f32,
+    /// `DRAVE_K3_MXFP4=1` : les experts passent par le noyau MXFP4 du moteur au
+    /// lieu d'être déquantifiés en f32. CHANGE LA SORTIE — voir `mv_mxfp4`.
+    noyau_mxfp4: bool,
 }
 
 /// Déquantifie **un** expert d'un tenseur MXFP4 emprunté : `n_out × n_in` poids,
@@ -676,6 +679,39 @@ fn expert_mxfp4_dans(ptr: *const u8, n_out: usize, n_in: usize, e: usize, out: &
             }
         }
     }
+}
+
+
+/// **Le même produit, sans déquantifier l'expert.** `expert_mxfp4_dans` écrit
+/// 3 × 11 M valeurs f32 (132 Mo par expert) que `mv` relit aussitôt. Le noyau
+/// MXFP4 du moteur (`DenseQ4::dot16`, AVX2, table de décodage) lit les blocs
+/// 17 octets **directement** : plus de tampon intermédiaire, plus quatre fois
+/// plus d'octets à faire passer.
+///
+/// **Ce chemin change la sortie, et il le dit.** Le noyau calcule en entier
+/// (LUT × activation i16, échelle e8m0 par bloc) là où le chemin f32 déquantifie
+/// puis somme en flottant : mêmes poids, ordre et arithmétique différents. Il est
+/// donc OPT-IN (`DRAVE_K3_MXFP4=1`) et se mesure — pas un défaut qu'on glisse.
+fn mv_mxfp4(ptr: *const u8, n_out: usize, n_in: usize, e: usize,
+            x: &[f32], out: &mut [f32], x16: &mut Vec<i16>, s32: &mut Vec<i32>) {
+    let nb = n_in / 32;
+    let base = unsafe { ptr.add(e * n_out * nb * 17) };
+    let d = unsafe { crate::list::DenseQ4::emprunter(base, n_out, n_in, nb, true) };
+    // **L'échelle d'activation n'est pas optionnelle.** Une première version
+    // clampait simplement en i16 : les valeurs après SiTU sont de l'ordre de
+    // l'unité, donc l'arrondi entier les DÉTRUISAIT — écart relatif mesuré
+    // 4,5 % et pente -0,44 (un biais d'échelle, pas un arrondi). Le moteur,
+    // lui, quantifie toujours avec une échelle par vecteur et la remet à la
+    // fin : `x ≈ x16 · sx`, le noyau rend `Σ w·x16`, on multiplie par `sx`.
+    let mut mx = 0f32;
+    for &v in x.iter() { let a = v.abs(); if a > mx { mx = a; } }
+    let sx = if mx > 0.0 { mx / 32767.0 } else { 1.0 };
+    x16.clear();
+    for j in 0..n_in {
+        x16.push((x[j] / sx).round().clamp(-32767.0, 32767.0) as i16);
+    }
+    *s32 = crate::list::sommes32(x16);
+    for o in 0..n_out { out[o] = d.dot16(o, x16, s32) * sx; }
 }
 
 impl MoeK3 {
@@ -722,6 +758,8 @@ impl MoeK3 {
             n_exp, k: lire("kimi-k3.expert_used_count", 16),
             h, latent, moe_ff: n_shared_ff,
             situ_beta: 4.0, situ_lin: 25.0, eps: 1e-5,
+            noyau_mxfp4: std::env::var("DRAVE_K3_MXFP4")
+                .map(|v| v != "0" && !v.is_empty()).unwrap_or(false),
         })
     }
 
@@ -747,7 +785,25 @@ impl MoeK3 {
         mv(&self.rout_down, latent, h, cur, &mut rin);
         // 4. les k experts, déquantifiés UN PAR UN
         let mut acc = vec![0f32; latent];
+        let mut ge = vec![0f32; self.n_out_gate];
+        let mut ue = vec![0f32; self.n_out_up];
+        let mut de = vec![0f32; self.n_out_down];
+        let (mut x16, mut s32) = (Vec::new(), Vec::new());
         for (i, &e) in choisis.iter().enumerate() {
+            if self.noyau_mxfp4 {
+                // Le noyau du moteur, sur les blocs empruntés au fichier.
+                mv_mxfp4(self.ptr_gate, self.n_out_gate, self.n_in_gate, e, &rin, &mut ge,
+                         &mut x16, &mut s32);
+                mv_mxfp4(self.ptr_up, self.n_out_up, self.n_in_up, e, &rin, &mut ue,
+                         &mut x16, &mut s32);
+                for j in 0..ge.len() {
+                    ge[j] = crate::model::situ(ge[j], ue[j], self.situ_beta, self.situ_lin);
+                }
+                mv_mxfp4(self.ptr_down, self.n_out_down, self.n_in_down, e, &ge, &mut de,
+                         &mut x16, &mut s32);
+                for j in 0..latent { acc[j] += poids[i] * de[j]; }
+                continue;
+            }
             // trois tampons réutilisés d'un expert à l'autre : une allocation
             // par matrice, pas une par bloc.
             let mut g_e = vec![0f32; self.n_out_gate * self.n_in_gate];
@@ -756,12 +812,9 @@ impl MoeK3 {
             expert_mxfp4_dans(self.ptr_gate, self.n_out_gate, self.n_in_gate, e, &mut g_e);
             expert_mxfp4_dans(self.ptr_up, self.n_out_up, self.n_in_up, e, &mut u_e);
             expert_mxfp4_dans(self.ptr_down, self.n_out_down, self.n_in_down, e, &mut d_e);
-            let mut ge = vec![0f32; self.n_out_gate];
-            let mut ue = vec![0f32; self.n_out_up];
             mv(&g_e, self.n_out_gate, self.n_in_gate, &rin, &mut ge);
             mv(&u_e, self.n_out_up, self.n_in_up, &rin, &mut ue);
             for j in 0..ge.len() { ge[j] = crate::model::situ(ge[j], ue[j], self.situ_beta, self.situ_lin); }
-            let mut de = vec![0f32; self.n_out_down];
             mv(&d_e, self.n_out_down, self.n_in_down, &ge, &mut de);
             for j in 0..latent { acc[j] += poids[i] * de[j]; }
         }
@@ -1324,12 +1377,18 @@ pub fn passe_complete(g: &Gguf, ids: &[u32], n: usize, verbeux: bool, tete: bool
     // pile[k][i] = entrée BRUTE du jeton i à la couche banque k.
     let mut pile: Vec<Vec<Vec<f32>>> = Vec::new();
 
+    // Le temps se sépare en deux : CHARGER (lire les poids, les déquantifier en
+    // f32, restaurer l'état) et CALCULER. Sans cette séparation, on optimise à
+    // l'aveugle — et « ça a l'air lent » n'est pas une mesure.
+    let (mut t_charge, mut t_calcul) = (0f64, 0f64);
+    let (mut t_attn, mut t_ffn) = (0f64, 0f64);
     for l in 0..n {
         let t0 = std::time::Instant::now();
         let mut c = CoucheK3::charge(g, l)?;
         if let Some(e) = etats.as_deref_mut() {
             if let Some(ec) = e.get(l) { c.restaurer(ec); }
         }
+        let t1 = std::time::Instant::now();
         let banque = l % bloc == 0;
         // ---- phase 1 : l'attention résiduelle voit la banque d'AVANT la
         //      couche courante (`res_mix` est appelé avant `res_push`).
@@ -1360,10 +1419,12 @@ pub fn passe_complete(g: &Gguf, ids: &[u32], n: usize, verbeux: bool, tete: bool
                     CoucheK3::Dense { normes, kda, mla, .. } => (normes, kda, mla),
                     CoucheK3::Moe { normes, kda, mla, .. } => (normes, kda, mla),
                 };
+                let ta = std::time::Instant::now();
                 let mut xn = vec![0f32; h];
                 rms_norm_poids(&curs[i], &normes.attn, eps, &mut xn);
                 let attn = if let Some(k) = kda.as_mut() { k.avant(&xn)? }
                            else { mla.as_mut().unwrap().avant(&xn, &xn, pos0 + i)? };
+                t_attn += ta.elapsed().as_secs_f64();
                 prefix = if banque { vec![0f32; h] } else { x.clone() };
                 for j in 0..h { prefix[j] += attn[j]; }
                 let mut plat = Vec::with_capacity(pile.len() * h);
@@ -1379,17 +1440,21 @@ pub fn passe_complete(g: &Gguf, ids: &[u32], n: usize, verbeux: bool, tete: bool
                 };
                 rms_norm_poids(&cur2, n2, eps, &mut xn2);
             }
+            let tf = std::time::Instant::now();
             let ffn = match &mut c {
                 CoucheK3::Dense { ffn, .. } => ffn.avant(&xn2)?,
                 CoucheK3::Moe { moe, .. } => moe.avant(&xn2)?,
             };
+            t_ffn += tf.elapsed().as_secs_f64();
             for j in 0..h { prefix[j] += ffn[j]; }
             flux[i] = prefix;
         }
+        t_charge += (t1 - t0).as_secs_f64();
+        t_calcul += (std::time::Instant::now() - t1).as_secs_f64();
         if verbeux {
-            eprintln!("  couche {l:>2} : {:>7} ms · banque {}{}",
-                      t0.elapsed().as_millis(), pile.len(),
-                      if banque { " (empilée)" } else { "" });
+            eprintln!("  couche {l:>2} : {:>6} ms de chargement + {:>6} ms de calcul · banque {}{}",
+                      (t1 - t0).as_millis(), (std::time::Instant::now() - t1).as_millis(),
+                      pile.len(), if banque { " (empilée)" } else { "" });
         }
         // On sort l'état avant que `c` ne tombe : c'est lui qui survit.
         if let Some(e) = etats.as_deref_mut() {
@@ -1398,6 +1463,13 @@ pub fn passe_complete(g: &Gguf, ids: &[u32], n: usize, verbeux: bool, tete: bool
             e[l] = sauve;
         }
         // `c` tombe ici : c'est tout l'intérêt (ses POIDS, pas son état).
+    }
+    if verbeux {
+        let tot = t_charge + t_calcul;
+        eprintln!("  ---- chargement {:.1} s ({:.0} %) · calcul {:.1} s ({:.0} %) \
+[attention {:.1} s · FFN {:.1} s]",
+                  t_charge, 100.0 * t_charge / tot.max(1e-9),
+                  t_calcul, 100.0 * t_calcul / tot.max(1e-9), t_attn, t_ffn);
     }
     // ---- LA TÊTE : mélange résiduel final, norme, puis la matrice de sortie.
     // C'est ce que la référence fait APRÈS la boucle (`res_mix(cur, output_res_score, -1)`,

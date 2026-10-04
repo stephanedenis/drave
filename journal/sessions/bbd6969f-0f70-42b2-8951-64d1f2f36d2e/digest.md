@@ -120002,3 +120002,338 @@ pas 0 : 2 jeton(s) en entrée (1080 s) → argmax 1103 ✅ (référence)
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\nanc = \"> ## **LA PASSE COMPLÈTE DE KIMI-K3 PASSE (04h28)**\"\nnew = \"\"\"> ## **LE MOTEUR ENGENDRE AVEC KIMI-K3 (06h56)** — et chaque pas est celui de la référence\n>\n> `DRAVE_K3 … [3268 caractères tronqués]`
+
+  ```
+0a96bb3 Docs : le moteur engendre avec Kimi-K3, et un attendu mal écrit fabrique un échec qui n'existe pas
+0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== 1. le modèle est là, complet ===\"; ls /home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/*.gguf | wc -l; du -sb /home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL | awk '{printf \"  %.1f Go\\n\ … [600 caractères tronqués]`
+
+  ```
+=== 1. le modèle est là, complet ===
+32
+  1508.7 Go
+=== 2. il tourne en entier ===
+  passe 0-92, jeton 0 : |l_out| = 83.2744 · finis : true
+  passe 0-92, jeton 1 : |l_out| = 67.2309 · finis : true
+  passe 0-92, jeton 2 : |l_out| = 78.9416 · finis : true
+  passe 0-92, jeton 3 : |l_out| = 86.5862 · finis : true
+=== 3. ses logits sont ceux de la référence ===
+  3 positions × 163840 valeurs de vocabulaire
+=== 4. il engendre, et chaque pas est celui de la référence ===
+  pas 0 : 2 jeton(s) en entrée (1080 s) → argmax 1103 ✅ (référence)
+  pas 1 : 3 jeton(s) en entrée (1578 s) → argmax 3140 ✅ (référence)
+=== 5. tests ===
+test result: ok. 77 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.75s
+  ```
+
+- **get_goal** `{}`
+
+  ```
+{"goal":{"id":"goal-87d1ebcb-3cbb-43a1-845f-1e93df13d949","revision":2,"objective":"Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas en local (classe Kimi-K3 Q4 : 1,5 To de poids, ~35 Go de poids par jeton), et étudier/implémenter ce qui nous distingue sur cette classe : découpage par experts et en grappes (chaque nœud ne lit que ce qu'il sert), réutilisation des experts entre jetons, transport de flux compact (listes DRVF), noyaux rapides (SIMD, déquantification bit-exacte), et mesure systématique (octets par jeton, débits, seuils). Les modèles périmés (DeepSeek-V4-Flash) sortent du chemin critique : leurs acquis sont conservés dans les rapports, leurs portes archivées. Règles inchangées : jamais de forward muet, jamais d'optimisation qui change une sortie sans le dire, une affirmation sans mesure n'est pas une affirmation.","phase":"active","roundsStarted":30,"maxGoalRounds":30},"activation":"armed"}
+  ```
+
+### 🤖 Assistant
+
+Preuves rassemblées. L'objectif est atteint, et vérifié contre une implémentation tierce.
+
+- **update_goal** `{"goal_id": "goal-87d1ebcb-3cbb-43a1-845f-1e93df13d949", "revision": 2, "action": "complete"}`
+
+> **Objectif** (complete) : Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas en local (classe Kimi-K3 Q4 : 1,5 To de poids, ~35 Go de poids par jeton), et étudier/implémenter ce qui nous distingue sur cette classe : découpage par experts et en grappes (chaque nœud ne lit que ce qu'il sert), réutilisation des experts entre jetons, transport de flux compact (listes DRVF), noyaux rapides (SIMD, déquantification bit-exacte), et mesure systématique (octets par jeton, débits, seuils). Les modèles périmés (DeepSeek-V4-Flash) sortent du chemin critique : leurs acquis sont conservés dans les rapports, leurs portes archivées. Règles inchangées : jamais de forward muet, jamais d'optimisation qui change une sortie sans le dire, une affirmation sans mesure n'est pas une affirmation.
+
+
+  ```
+{"goal":{"id":"goal-87d1ebcb-3cbb-43a1-845f-1e93df13d949","revision":3,"objective":"Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas en local (classe Kimi-K3 Q4 : 1,5 To de poids, ~35 Go de poids par jeton), et étudier/implémenter ce qui nous distingue sur cette classe : découpage par experts et en grappes (chaque nœud ne lit que ce qu'il sert), réutilisation des experts entre jetons, transport de flux compact (listes DRVF), noyaux rapides (SIMD, déquantification bit-exacte), et mesure systématique (octets par jeton, débits, seuils). Les modèles périmés (DeepSeek-V4-Flash) sortent du chemin critique : leurs acquis sont conservés dans les rapports, leurs portes archivées. Règles inchangées : jamais de forward muet, jamais d'optimisation qui change une sortie sans le dire, une affirmation sans mesure n'est pas une affirmation.","phase":"complete","roundsStarted":30,"maxGoalRounds":30},"activation":"disarmed"}
+  ```
+
+### 👤 Utilisateur
+
+<goal_complete>
+Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas en local (classe Kimi-K3 Q4 : 1,5 To de poids, ~35 Go de poids par jeton), et étudier/implémenter ce qui nous distingue sur cette classe : découpage par experts et en grappes (chaque nœud ne lit que ce qu'il sert), réutilisation des experts entre jetons, transport de flux compact (listes DRVF), noyaux rapides (SIMD, déquantification bit-exacte), et mesure systématique (octets par jeton, débits, seuils). Les modèles périmés (DeepSeek-V4-Flash) sortent du chemin critique : leurs acquis sont conservés dans les rapports, leurs portes archivées. Règles inchangées : jamais de forward muet, jamais d'optimisation qui change une sortie sans le dire, une affirmation sans mesure n'est pas une affirmation."
+The goal is marked complete and this autonomous run is ending. Write the closing message to the user now: state the outcome, summarize what was done and how it was verified, and point to the concrete results (files, commits, or other artifacts). Report only what earlier rounds and tool results in this session actually establish; when a detail is not in the session, say so instead of inventing it. Note anything the user should review or do next. Address the user directly. Do not call any more tools in this run; further work waits for the user's next instruction.
+</goal_complete>
+
+### 🤖 Assistant
+
+Objectif atteint : **Kimi-K3 tourne en local sur cette machine, et chaque sortie est vérifiée contre llama.cpp.**
+
+## Le résultat
+
+Un modèle de **1 508,7 Go** — 93 couches, 896 experts, 1,5 To de poids — calcule et **engendre des jetons** sur une machine de **125 Go de RAM**, en gardant **une seule couche de poids en mémoire** (~2,2 Go) plus ~0,6 Go d'états récurrents.
+
+**Vérifié contre la référence, sur trois niveaux :**
+
+| ce qui est comparé | résultat |
+|---|---|
+| `l_out-92` (93 couches, 8 banques) | corrélations **0,999857 / 0,999900 / 0,999919** |
+| **logits** du modèle entier | **0,999802 / 0,999900 / 0,999924** · **top-1 identique 3/3** |
+| **génération gloutonne** | `pas 0 → 1103 ✅` · `pas 1 → 3140 ✅` (les top-1 de llama.cpp) |
+
+Le 2ᵉ pas de génération ne voit **qu'un jeton nouveau** : son résultat vient d'un état **restauré**, pas recalculé.
+
+**Vitesse** : 7,4 min/jeton pour les logits, ~18 min par jeton engendré — contre **42 min/jeton** pour llama.cpp-k3 sur la même machine, bornée par le disque. Six fois plus rapide, parce que la passe ne lit que les 16 experts choisis sur 896 et ne repaquette rien.
+
+## Les trois bugs que la comparaison a sortis
+
+Aucun n'était visible par relecture, aucun par le test « KDA contre NumPy » — qui passait au vert depuis le début parce qu'il comparait le code à **sa propre transcription** :
+
+1. **la norme L2 par tête sur `q` et `k`** (`build_gdn_l2_norm`) était absente partout — du code *et* du test censé la couvrir ;
+2. **la banque résiduelle s'accumulait entre les jetons** au lieu d'être propre à la passe ;
+3. **son ordre de remise à zéro** : avant l'attention résiduelle, pas après.
+
+Les trois étaient **invisibles au jeton 0** — c'est pour ça qu'ils ont survécu deux jours.
+
+## Deux erreurs sur mes propres instruments, corrigées
+
+- Le filtre `--tensors '$RE'` passé à la référence était **littéral** (le `$` échappé) : trois heures de disque pour rien. Je vérifie maintenant l'expansion dans `/proc/PID/cmdline` **avant** de lancer.
+- Le premier essai de génération a affiché « argmax 1103 ❌ ». C'était **mon tableau d'attente** qui était faux — le jeton *cible* au lieu du *top-1 de la référence*. Un attendu mal écrit fabrique un échec qui n'existe pas.
+
+## Où regarder
+
+- `docs/verification-kimi-k3.md` — le protocole et les résultats, point par point
+- `REPRISE.md` — l'état complet en tête de fichier
+- `sprints/31-*.md` + `reports/rapport-prefill-par-experts.md` — le regroupement par experts mesuré (×1,58, 15,5× moins d'octets)
+- commits `7a5e5d5`, `34989f9`, `18b123c`, `7817407`
+
+## Ce qui reste, nommé
+
+La passe **déquantifie le dense en f32** au lieu d'utiliser les noyaux quantifiés du moteur ; elle n'échantillonne qu'en glouton ; et le découpage en grappes et le transport DRVF — qui existent et sont sous porte pour le reste du parc — **ne sont pas encore exercés sur K3**. Une porte reste à rejouer : `gpt-oss-120b MXFP4 ctx 256` (attendue 15,6017), échouée par délai dépassé, commande exacte dans le sprint 31.
+
+Sur le fond, la mesure qui réoriente la suite : **le dense pèse 2,3× les experts routés** (60,958 Go contre 25,830 sur 86,787 Go par jeton). Aucune technique sur les experts ne peut adresser plus de 30 % du trafic d'un jeton — le préremplissage par lots reste la seule porte sérieuse, et le calcul (~210 GFLOP/jeton) en est le vrai plafond.
+
+
+## Tour 105
+
+### 👤 Utilisateur
+
+continue
+
+### 🤖 Assistant
+
+⏵ Je mesure d'abord où passe le temps : chargement des poids ou calcul
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && python3 - <<'PY'\np='kimi_k3.rs'; s=open(p).read()\nold = \"\"\"    for l in 0..n {\n        let t0 = std::time::Instant::now();\n        let mut c = CoucheK3::charge(g, l)?;\n        if let Some(e) = etats.as_deref_mu … [2266 caractères tronqués]`
+
+  ```
+instrumenté
+build ok
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && K=/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf\nDRAVE_K3_PASSE=4 timeout 1800 ./drave-core/target/release/drave $K --k3-essai 2>&1 | grep -E \"couche|chargement\" | head -8", … [72 caractères tronqués]`
+
+  ```
+couche 0 : dimensions conformes
+  couche 1 : dimensions conformes
+  couche 3 : dimensions conformes
+  couche 4 : dimensions conformes
+  MoE couche 1 : |sortie| = 0.7316 · finis : true · 5248 ms
+  MLA couche 3, jeton 0 : |sortie| = 12.8277 · finis : true · 222 ms
+  MLA couche 3, jeton 1 : |sortie| = 10.4341 · finis : true · 222 ms
+  MLA couche 3, jeton 2 : |sortie| = 9.1516 · finis : true · 223 ms
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && K=/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf\nDRAVE_K3_PASSE=4 timeout 1800 ./drave-core/target/release/drave $K --k3-essai 2>&1 | grep -E \"^  couche [0-9]+ :.*chargement| … [117 caractères tronqués]`
+
+  ```
+passe complète : 4 couche(s), une seule en mémoire à la fois
+  couche  0 :   2533 ms de chargement +   4682 ms de calcul · banque 1 (empilée)
+  couche  1 :   1344 ms de chargement +   7844 ms de calcul · banque 1
+  couche  2 :   1337 ms de chargement +   7922 ms de calcul · banque 1
+  couche  3 :    879 ms de chargement +   6994 ms de calcul · banque 1
+  ---- chargement 6.1 s (18 %) · calcul 27.4 s (82 %)
+  passe complète : 35727 ms au total
+  ```
+
+### 🤖 Assistant
+
+Chargement 18 %, calcul 82 %. Je descends d'un étage : attention contre FFN.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && python3 - <<'PY'\np='kimi_k3.rs'; s=open(p).read()\ns = s.replace(\"\"\"    let (mut t_charge, mut t_calcul) = (0f64, 0f64);\"\"\",\n              \"\"\"    let (mut t_charge, mut t_calcul) = (0f64, 0f64);\n    let (mu … [2241 caractères tronqués]`
+
+  ```
+ok
+  ---- chargement 6.5 s (19 %) · calcul 27.2 s (81 %) [attention 6.2 s · FFN 21.0 s]
+  ```
+
+### 🤖 Assistant
+
+**Le FFN pèse 77 % du calcul** (21,0 s contre 6,2 s). C'est là qu'est le levier.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && grep -n \"fn expert_mxfp4_dans\" -A 8 model.rs | head -12; echo \"=== boucle experts de MoeK3 ===\"; grep -n \"expert_mxfp4_dans\\|fn avant\" kimi_k3.rs | head; grep -n \"fn mv\" -A 14 kimi_k3.rs | head -18", "descript … [39 caractères tronqués]`
+
+  ```
+=== boucle experts de MoeK3 ===
+349:    pub fn avant(&mut self, x: &[f32]) -> Result<Vec<f32>, String> {
+663:fn expert_mxfp4_dans(ptr: *const u8, n_out: usize, n_in: usize, e: usize, out: &mut [f32]) {
+729:    pub fn avant(&self, cur: &[f32]) -> Result<Vec<f32>, String> {
+756:            expert_mxfp4_dans(self.ptr_gate, self.n_out_gate, self.n_in_gate, e, &mut g_e);
+757:            expert_mxfp4_dans(self.ptr_up, self.n_out_up, self.n_in_up, e, &mut u_e);
+758:            expert_mxfp4_dans(self.ptr_down, self.n_out_down, self.n_in_down, e, &mut d_e);
+851:    pub fn avant(&mut self, cur: &[f32], x_norme: &[f32], pos: usize) -> Result<Vec<f32>, String> {
+989:    pub fn avant(&mut self, cur: &[f32]) -> Result<Vec<f32>, String> {
+1098:    pub fn avant(&self, x: &[f32]) -> Result<Vec<f32>, String> {
+1154:    pub fn avant(&mut self, x0: &[f32], pos: usize) -> Result<Vec<f32>, String> {
+225:fn mv(w: &[f32], n_out: usize, n_in: usize, x: &[f32], out: &mut [f32]) {
+226-    assert_eq!(w.len(), n_out * n_in, "matrice {n_out}×{n_in} de {} valeurs", w.len());
+227-    assert!(x.len() >= n_in && out.len() >= n_out, "dimensions d'activation");
+228-    for o in 0..n_out {
+229-        let ligne = &w[o
+… [364 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && sed -n '663,700p' kimi_k3.rs; echo \"=== la boucle ===\"; sed -n '745,790p' kimi_k3.rs", "description": "Read the expert dequant and matvec"}`
+
+  ```
+fn expert_mxfp4_dans(ptr: *const u8, n_out: usize, n_in: usize, e: usize, out: &mut [f32]) {
+    const KV: [f32; 16] = [0.0, 0.5, 1.0, 1.5, 2.0, 3.0, 4.0, 6.0,
+                           0.0, -0.5, -1.0, -1.5, -2.0, -3.0, -4.0, -6.0];
+    let nb = n_in / 32;
+    let base = unsafe { ptr.add(e * n_out * nb * 17) };
+    for o in 0..n_out {
+        for b in 0..nb {
+            let bloc = unsafe { std::slice::from_raw_parts(base.add((o * nb + b) * 17), 17) };
+            let d = crate::gguf::Gguf::echelle_e8m0(bloc[0]);
+            let dst = &mut out[o * n_in + b * 32..o * n_in + b * 32 + 32];
+            for j in 0..16 {
+                dst[j] = KV[(bloc[1 + j] & 0x0F) as usize] * d;
+                dst[j + 16] = KV[(bloc[1 + j] >> 4) as usize] * d;
+            }
+        }
+    }
+}
+
+impl MoeK3 {
+    pub fn charge(g: &Gguf, l: usize) -> Result<MoeK3, String> {
+        let p = |s: &str| format!("blk.{l}.{s}");
+        let lu = |nom: &str| -> Result<Vec<f32>, String> {
+            if g.tensor(nom).is_none() { return Err(format!("tenseur absent : {nom}")); }
+            Ok(g.dequant(nom))
+        };
+        let dims = |nom: &str| -> Result<Vec<usize>, String> {
+            g.tensor(nom).map
+… [3221 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+**Le vrai coût est là** : chaque expert est déquantifié en f32 (132 Mo) avant un matvec scalaire. Le noyau MXFP4 AVX2 du moteur lit les blocs directement.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && grep -n \"fn matvec_q4\" -A 28 model.rs | head -34; echo \"=== emprunter ===\"; grep -n \"pub unsafe fn emprunter\\b\" -A 12 list.rs | head -16", "description": "Read the quantized matvec path"}`
+
+  ```
+4435:    fn matvec_q4(pool: &mut Pool, m: &crate::list::DenseQ4, x: &[f32], out: &mut [f32],
+4436-                 paires: &mut u64,
+4437-                 levels: f32, thresh: f32, topk: usize, renorm: bool,
+4438-                 scratch: &mut Vec<f32>, biais: Option<&[f32]>) {
+4439-        let x = &x[..m.n_in.min(x.len())];
+4440-        let Some((sv, sx)) = Self::quant_scratch(x, levels, thresh, topk, renorm, scratch) else {
+4441-            for v in out[..m.n_out].iter_mut() { *v = 0.0; }
+4442-            return;
+4443-        };
+4444-        let mut xd = vec![0i32; x.len()];
+4445-        for (&i, &v) in sv.idx.iter().zip(sv.val.iter()) { xd[i as usize] = v; }
+4446-        let y = pool.matvec_dense_q4(m, &xd, sx);
+4447-        *paires += (m.n_in as u64) * (m.n_out as u64);
+4448-        match biais {
+4449-            Some(b) => for o in 0..m.n_out { out[o] = y[o] + b[o]; },
+4450-            None => out[..m.n_out].copy_from_slice(&y[..m.n_out]),
+4451-        }
+4452-    }
+4453-
+4454-    /// Désactive l'étirement YaRN (pour éprouver l'hypothèse).
+4455-    pub fn cfg_yarn_off(&mut self) {
+4456-        // `--sans-yarn` veut dire JAMAIS de YaRN : il coupe le régime retardé des
+4457-     
+… [1078 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && python3 - <<'PY'\np='kimi_k3.rs'; s=open(p).read()\nhelper = '''\n/// **Le même produit, sans déquantifier l'expert.** `expert_mxfp4_dans` écrit\n/// 3 × 11 M valeurs f32 (132 Mo par expert) que `mv` relit aussitôt. Le … [4634 caractères tronqués]`
+
+  ```
+boucle réécrite
+777:            if self.noyau_mxfp4 {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && python3 - <<'PY'\np='kimi_k3.rs'; s=open(p).read()\n# champ du struct MoeK3\nimport re\nm = re.search(r'pub struct MoeK3 \\{(.*?)\\n\\}', s, re.S)\nassert m, \"struct MoeK3 introuvable\"\ncorps = m.group(1)\n nouveau = … [542 caractères tronqués]`
+
+  ```
+744-            n_exp, k: lire("kimi-k3.expert_used_count", 16),
+745-            h, latent, moe_ff: n_shared_ff,
+746-            situ_beta: 4.0, situ_lin: 25.0, eps: 1e-5,
+747-        })
+748-    }
+749-
+750-    /// La passe avant du MoE, dans l'ordre de la référence.
+751-    pub fn avant(&self, cur: &[f32]) -> Result<Vec<f32>, String> {
+[stderr]
+  File "<stdin>", line 7
+    nouveau = corps + "\n    /// `DRAVE_K3_MXFP4=1` : les experts passent par le noyau MXFP4 du moteur\n    /// au lieu d'être déquantifiés en f32. CHANGE LA SORTIE — voir `mv_mxfp4`.\n    noyau_mxfp4: bool,"
+IndentationError: unexpected indent
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && python3 - <<'PY'\np='kimi_k3.rs'; s=open(p).read()\nchamp = \"\"\"    /// `DRAVE_K3_MXFP4=1` : les experts passent par le noyau MXFP4 du moteur au\n    /// lieu d'être déquantifiés en f32. CHANGE LA SORTIE — voir `mv_m … [953 caractères tronqués]`
+
+  ```
+ok
+test result: ok. 77 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && K=/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf\necho \"=== f32 (référence du bloc) ===\"; DRAVE_K3_PASSE=4 timeout 1800 ./drave-core/target/release/drave $K --k3-essai 2>&1 | … [306 caractères tronqués]`
+
+  ```
+=== f32 (référence du bloc) ===
+=== noyau MXFP4 ===
+[stderr]
+grep: unrecognized option '---- chargement|passe complète : [0-9]'
+Usage: grep [OPTION]... PATTERNS [FILE]...
+Try 'grep --help' for more information.
+grep: unrecognized option '---- chargement|passe complète : [0-9]'
+Usage: grep [OPTION]... PATTERNS [FILE]...
+Try 'grep --help' for more information.
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && K=/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf\necho \"=== f32 (chemin du bloc) ===\"; DRAVE_K3_PASSE=4 timeout 1800 ./drave-core/target/release/drave $K --k3-essai 2>&1 | gr … [307 caractères tronqués]`
+
+  ```
+=== f32 (chemin du bloc) ===
+  couche  3 :    944 ms de chargement +   7071 ms de calcul · banque 1
+  ---- chargement 6.5 s (19 %) · calcul 27.4 s (81 %) [attention 6.3 s · FFN 21.1 s]
+  passe complète : 36347 ms au total
+=== noyau MXFP4 du moteur ===
+  couche  3 :    836 ms de chargement +   1982 ms de calcul · banque 1
+  ---- chargement 6.0 s (32 %) · calcul 12.6 s (68 %) [attention 6.4 s · FFN 6.2 s]
+  passe complète : 20938 ms au total
+  ```
+
+### 🤖 Assistant
+
+**×3,4 sur le FFN, ×1,74 sur la passe.** Mais ça change la sortie — je mesure l'écart.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && K=/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf\nDRAVE_K3_PASSE=4 DRAVE_DUMP_COUCHES=/tmp/t4f32 timeout 900 ./drave-core/target/release/drave $K --k3-essai >/dev/null 2>&1\nDR … [877 caractères tronqués]`
+
+  ```
+pos 0 : écart max 2.343e-01 · écart-type 2.302e-02 · dynamique 5.101e-01 · relatif 4.51e-02 · pente -5.20e-02
+pos 1 : écart max 3.518e-01 · écart-type 3.283e-02 · dynamique 4.791e-01 · relatif 6.85e-02 · pente -4.43e-01
+  ```
+
+### 🤖 Assistant
+
+Le noyau **change vraiment** la sortie (4,5 % d'écart, pente non nulle) : ma quantification i16 était sans échelle. Je corrige.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && python3 - <<'PY'\np='kimi_k3.rs'; s=open(p).read()\nold = \"\"\"fn mv_mxfp4(ptr: *const u8, n_out: usize, n_in: usize, e: usize,\n            x: &[f32], out: &mut [f32], x16: &mut Vec<i16>, s32: &mut Vec<i32>) {\n    l … [2720 caractères tronqués]`
+
+  ```
+échelle ajoutée
+  ---- chargement 5.5 s (31 %) · calcul 12.0 s (69 %) [attention 6.2 s · FFN 5.9 s]
+  passe complète : 19844 ms au total
+pos 0 : écart max 1.872e-05 · écart-type/dynamique 9.68e-06 · pente +2.78e-06
+pos 1 : écart max 1.268e-05 · écart-type/dynamique 6.40e-06 · pente +1.02e-06
+  ```
+
+### 🤖 Assistant
+
+**Écart ramené à 1e-5** (contre 2,3e-3 pour le f32 contre la référence), et le gain tient : ×1,83 sur la passe. Je lance la vérification complète.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && K=/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf\nnohup bash -c \"DRAVE_K3_PASSE=93 DRAVE_K3_TETE=1 DRAVE_K3_MXFP4=1 DRAVE_K3_LOGITS=/tmp/k3_logits_mx.bin timeout 21600 ./drave … [1394 caractères tronqués]`

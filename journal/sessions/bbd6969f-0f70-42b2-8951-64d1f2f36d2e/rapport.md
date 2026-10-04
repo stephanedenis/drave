@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 136.2 h |
-| Tours | 104 |
-| Messages | 7578 |
-| Appels d'outils | 7240 |
+| Durée | 137.6 h |
+| Tours | 105 |
+| Messages | 7599 |
+| Appels d'outils | 7258 |
 | Fichiers touchés | 150 |
-| Commandes | 6157 |
+| Commandes | 6173 |
 | Sous-agents | 32 |
-| Commits | 515 |
+| Commits | 516 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -42,6 +42,8 @@
 - **create** — Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en respectant pour chaque phase ses deux portes : porte de correction (comparaison étage par étage à llama.cpp sur V4-Flash) et porte Drave (flux : événements/paires par jeton, trace rejouée à l'identique, découp
 … [193 caractères tronqués]
 - **edit** — Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas en local (classe Kimi-K3 Q4 : 1,5 To de poids, ~35 Go de poids par jeton), et étudier/implémenter ce qui nous distingue sur cette classe : découpage par experts et en grappes (chaque nœud ne lit que ce qu'i
+… [497 caractères tronqués]
+- **complete** — Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas en local (classe Kimi-K3 Q4 : 1,5 To de poids, ~35 Go de poids par jeton), et étudier/implémenter ce qui nous distingue sur cette classe : découpage par experts et en grappes (chaque nœud ne lit que ce qu'i
 … [497 caractères tronqués]
 
 ## 1. Ce qui a été demandé
@@ -253,6 +255,8 @@
 **Tour 103** — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas en local (classe Kimi-K3 Q4 : 1,5 To de poids, ~35 Go de poids par jeton), et étudier/implémenter ce qui nous distingue sur cette classe : découpage par experts et en grappes (chaque nœud ne lit que ce qu'il sert), réutilisation des experts entre jetons, transport de flux compact  … [966 caractères tronqués]
 
 **Tour 104** — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas en local (classe Kimi-K3 Q4 : 1,5 To de poids, ~35 Go de poids par jeton), et étudier/implémenter ce qui nous distingue sur cette classe : découpage par experts et en grappes (chaque nœud ne lit que ce qu'il sert), réutilisation des experts entre jetons, transport de flux compact  … [966 caractères tronqués]
+
+**Tour 105** — continue
 
 ## 2. Déroulé, étape par étape
 
@@ -5119,7 +5123,7 @@ Dire « c'est de l'accumulation f32 » était une affirmation. La mesure : régr
 
 ### Tour 104 — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas e … [1246 caractères tronqués]
 
-*29 appels d'outils.* Actions notables :
+*32 appels d'outils.* Actions notables :
 
 - bash — Inspect KDA and MLA state fields
 - bash — Read MlaK3 fields
@@ -5135,11 +5139,72 @@ Dire « c'est de l'accumulation f32 » était une affirmation. La mesure : régr
 - bash — Find the crash cause
 - bash — Read the failing restore code
 - bash — Fix the MLA cache restore
-- … et 9 autres
+- … et 12 autres
 
 **Synthèse produite :**
 
-**Les deux pas sont vérifiés, avec l'état reporté d'un appel à l'autre.**
+Objectif atteint : **Kimi-K3 tourne en local sur cette machine, et chaque sortie est vérifiée contre llama.cpp.**
+
+\## Le résultat
+
+Un modèle de **1 508,7 Go** — 93 couches, 896 experts, 1,5 To de poids — calcule et **engendre des jetons** sur une machine de **125 Go de RAM**, en gardant **une seule couche de poids en mémoire** (~2,2 Go) plus ~0,6 Go d'états récurrents.
+
+**Vérifié contre la référence, sur trois niveaux :**
+
+| ce qui est comparé | résultat |
+|---|---|
+| `l_out-92` (93 couches, 8 banques) | corrélations **0,999857 / 0,999900 / 0,999919** |
+| **logits** du modèle entier | **0,999802 / 0,999900 / 0,999924** · **top-1 identique 3/3** |
+| **génération gloutonne** | `pas 0 → 1103 ✅` · `pas 1 → 3140 ✅` (les top-1 de llama.cpp) |
+
+Le 2ᵉ pas de génération ne voit **qu'un jeton nouveau** : son résultat vient d'un état **restauré**, pas recalculé.
+
+**Vitesse** : 7,4 min/jeton pour les logits, ~18 min par jeton engendré — contre **42 min/jeton** pour llama.cpp-k3 sur la même machine, bornée par le disque. Six fois plus rapide, parce que la passe ne lit que les 16 experts choisis sur 896 et ne repaquette rien.
+
+\## Les trois bugs que la comparaison a sortis
+
+Aucun n'était visible par relecture, aucun par le test « KDA contre NumPy » — qui passait au vert depuis le début parce qu'il comparait le code à **sa propre transcription** :
+
+1. **la norme L2 par tête sur `q` et `k`** (`build_gdn_l2_norm`) était absente partout — du code *et* du test censé la couvrir ;
+2. **la banque résiduelle s'accumulait entre les jetons** au lieu d'être propre à la passe ;
+3. **son ordre de remise à zéro** : avant l'attention résiduelle, pas après.
+
+Les trois étaient **invisibles au jeton 0** — c'est pour ça qu'ils ont survécu deux jours.
+
+\## Deux erreurs sur mes propres instruments, corrigées
+
+- Le filtre `--tensors '$RE'` passé à la référence était **littéral** (le `$` échappé) : trois heures de disque pour rien. Je vérifie maintenant l'expansion dans `/proc/PID/cmdline` **avant** de lancer.
+- Le premier essai de génération a affiché « argmax 1103 ❌ ». C'était **mon tableau d'attente** qui était faux — le jeton *cible* au lieu du *top-1 de la référence*. Un attendu mal écrit fabrique un échec qui n'existe pas.
+
+\## Où regarder
+
+- `docs/verification-kimi-k3.md` — le protocole et les résultats, point par point
+- `REPRISE.md` — l'état complet en tête de fichier
+- `sprints/31-*.md` + `reports/rapport-prefill-par-experts.md` — le regroupement par experts mesuré (×1,58, 15,5× moins d
+… [843 caractères tronqués]
+
+### Tour 105 — continue
+
+*15 appels d'outils.* Actions notables :
+
+- bash — Instrument charge vs compute time
+- bash — Measure the charge/compute split
+- bash — Read the per-layer breakdown
+- bash — Split attention vs FFN
+- bash — Inspect the expert matvec path
+- bash — Read the expert dequant and matvec
+- bash — Read the quantized matvec path
+- bash — Add the MXFP4 kernel path
+- bash — Add the struct field
+- bash — Wire the MXFP4 kernel flag
+- bash — Measure the MXFP4 kernel gain
+- bash — Measure the output change of the kernel
+- bash — Re-measure with the activation scale
+- bash — Launch full verification with the kernel
+
+**Synthèse produite :**
+
+**Écart ramené à 1e-5** (contre 2,3e-3 pour le f32 contre la référence), et le gain tient : ×1,83 sur la passe. Je lance la vérification complète.
 
 ## 3. Travail accompli
 
@@ -5375,7 +5440,7 @@ Dire « c'est de l'accumulation f32 » était une affirmation. La mesure : régr
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6117 autres
+- … et 6133 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5503,7 +5568,7 @@ Dire « c'est de l'accumulation f32 » était une affirmation. La mesure : régr
 
 ## 5. Erreurs rencontrées
 
-355 sorties en erreur ou divergentes. Les premières :
+356 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -6038,4 +6103,5 @@ Dire « c'est de l'accumulation f32 » était une affirmation. La mesure : régr
 - K3 : le cache MLA se RESTAURE par affectation — la génération tombait après le 1er pas  copy_from_slice sur un cache de longueur nulle : le cache MLA d'une couc
 - K3 : LE MOTEUR ENGENDRE, ET CHAQUE PAS EST CELUI DE LA RÉFÉRENCE  Deux appels successifs, le second ne voyant qu'un jeton nouveau (l'état récurrent restauré vie
 - Docs : le moteur engendre avec Kimi-K3, et un attendu mal écrit fabrique un échec qui n'existe pas" && git log --oneline -1; git status --short | grep -v "^ M j
+- K3 : le noyau MXFP4 du moteur sur les experts — x3,6 sur le FFN, et l'échelle d'activation qui manquait  expert_mxfp4_dans écrit 3 × 11 M valeurs f32 (132 Mo pa
 
