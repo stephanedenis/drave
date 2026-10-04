@@ -135,6 +135,33 @@ Les 93 couches vidées permettent désormais de **bissecter** la divergence : il
 suffit de comparer couche par couche pour trouver la PREMIÈRE qui décroche, au
 lieu de raisonner sur la sortie de la couche 0.
 
+### 4quater-octies. **LE MOTEUR ENGENDRE AVEC KIMI-K3, ET CHAQUE PAS EST CELUI DE LA RÉFÉRENCE** (05/10, 06h56)
+
+`DRAVE_K3_GEN=2` : préfill puis jetons engendrés en glouton, l'état récurrent
+(convolution, delta, cache MLA) sorti de chaque couche avant qu'elle ne tombe et
+**restauré au rechargement**. Deux appels successifs, le second ne voyant qu'un
+jeton nouveau :
+
+```
+pas 0 : 2 jeton(s) en entrée (1080 s) → argmax 1103 ✅ (référence)
+pas 1 : 3 jeton(s) en entrée (1578 s) → argmax 3140 ✅ (référence)
+```
+
+Les deux valeurs attendues sont les **top-1 de llama.cpp-k3** aux mêmes positions
+(1103 après `[3638, 275]`, 3140 après `[3638, 275, 1309]`). Le second pas est
+donc une vérification à deux titres : le choix est le bon, **et** il a été
+calculé à partir d'un état restauré et non recalculé.
+
+C'est « faire tourner le modèle en local » au sens plein : 93 couches, 1,5 To de
+poids, sur une machine de 125 Go de RAM, une seule couche de poids en mémoire à
+la fois (~2,2 Go) plus ~0,6 Go d'états pour les 93 couches.
+
+**Une correction, parce qu'elle a failli passer pour un échec** : le premier essai
+a affiché « argmax 1103 ❌ (référence 1309) ». C'était **mon tableau d'attente**
+qui était faux — j'y avais mis le jeton *cible* au lieu du *top-1 de la
+référence*. Le moteur avait raison. Un attendu mal écrit fabrique un échec qui
+n'existe pas ; c'est l'autre face de « une affirmation sans mesure ».
+
 ### 4quater-septies. **LES LOGITS DU MODÈLE ENTIER — top-1 identique 3/3** (05/10, 05h06)
 
 La passe complète avec la TÊTE (`DRAVE_K3_TETE=1` : mélange résiduel final,

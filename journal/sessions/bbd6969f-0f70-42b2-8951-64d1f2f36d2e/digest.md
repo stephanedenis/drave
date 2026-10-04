@@ -119910,3 +119910,89 @@ test result: ok. 77 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fin
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && K=/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf\nnohup bash -c \"DRAVE_K3_PASSE=93 DRAVE_K3_GEN=2 DRAVE_K3_IMPOSE=1309 timeout 21600 ./drave-core/target/release/drave $K --k3- … [666 caractères tronqués]`
+
+  ```
+190f523 K3 : le cache MLA se RESTAURE par affectation — la génération tombait après le 1er pas
+06:06
+  ```
+
+- **bash** `{"command": "sleep 540; grep -E \"pas [0-9]\" /tmp/k3_gen3.log; tail -1 /tmp/k3_gen3.log; date \"+%H:%M\"", "description": "Poll the corrected persistence test", "timeoutMs": 570000}`
+
+  ```
+couche 45 :   13620 ms · banque 4
+06:15
+  ```
+
+- **bash** `{"command": "sleep 540; grep -E \"pas [0-9]\" /tmp/k3_gen3.log; tail -1 /tmp/k3_gen3.log; date \"+%H:%M\"", "description": "Poll the persistence test", "timeoutMs": 570000}`
+
+  ```
+couche 89 :   15078 ms · banque 8
+06:24
+  ```
+
+- **bash** `{"command": "sleep 300; grep -E \"pas [0-9]\" /tmp/k3_gen3.log; tail -2 /tmp/k3_gen3.log; date \"+%H:%M\"", "description": "Poll for step 0 result", "timeoutMs": 330000}`
+
+  ```
+pas 0 : 2 jeton(s) en entrée (1080 s) → argmax 1103 ✅ (référence)
+  couche 92 :   12970 ms · banque 8
+  pas 0 : 2 jeton(s) en entrée (1080 s) → argmax 1103 ✅ (référence)
+06:29
+  ```
+
+- **bash** `{"command": "sleep 120; grep -E \"pas [0-9]\" /tmp/k3_gen3.log; tail -2 /tmp/k3_gen3.log; date \"+%H:%M\"", "description": "Read the step 1 result", "timeoutMs": 150000}`
+
+  ```
+pas 0 : 2 jeton(s) en entrée (1080 s) → argmax 1103 ✅ (référence)
+  couche 92 :   12970 ms · banque 8
+  pas 0 : 2 jeton(s) en entrée (1080 s) → argmax 1103 ✅ (référence)
+06:32
+  ```
+
+- **bash** `{"command": "sleep 200; grep -E \"pas [0-9]\" /tmp/k3_gen3.log; pgrep -x drave | wc -l; date \"+%H:%M\"", "description": "Wait for the final step", "timeoutMs": 240000}`
+
+  ```
+pas 0 : 2 jeton(s) en entrée (1080 s) → argmax 1103 ✅ (référence)
+1
+06:35
+  ```
+
+- **bash** `{"command": "sleep 300; grep -E \"pas [0-9]\" /tmp/k3_gen3.log; pgrep -x drave | wc -l; date \"+%H:%M\"", "description": "Wait for the final step", "timeoutMs": 330000}`
+
+  ```
+pas 0 : 2 jeton(s) en entrée (1080 s) → argmax 1103 ✅ (référence)
+1
+06:40
+  ```
+
+- **bash** `{"command": "P=$(pgrep -x drave|head -1); ps -o etimes=,%cpu=,rss= -p $P; grep -E \"^read_bytes\" /proc/$P/io; free -g | head -2", "description": "Check the running process state"}`
+
+  ```
+2067 52.3 91163976
+read_bytes: 174451769344
+               total        used        free      shared  buff/cache   available
+Mem:             125          20           4           2         103         105
+  ```
+
+- **bash** `{"command": "sleep 420; grep -E \"pas [0-9]\" /tmp/k3_gen3.log; pgrep -x drave | wc -l; date \"+%H:%M\"", "description": "Wait for step 1", "timeoutMs": 460000}`
+
+  ```
+pas 0 : 2 jeton(s) en entrée (1080 s) → argmax 1103 ✅ (référence)
+1
+06:47
+  ```
+
+- **bash** `{"command": "sleep 480; grep -E \"pas [0-9]\" /tmp/k3_gen3.log; pgrep -x drave | wc -l; tail -1 /tmp/k3_gen3.log; date \"+%H:%M\"", "description": "Wait for step 1", "timeoutMs": 520000}`
+
+  ```
+pas 0 : 2 jeton(s) en entrée (1080 s) → argmax 1103 ✅ (référence)
+  pas 1 : 3 jeton(s) en entrée (1578 s) → argmax 3140 ✅ (référence)
+1
+  pas 1 : 3 jeton(s) en entrée (1578 s) → argmax 3140 ✅ (référence)
+06:56
+  ```
+
+### 🤖 Assistant
+
+**Les deux pas sont vérifiés, avec l'état reporté d'un appel à l'autre.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/verification-kimi-k3.md'; s=open(p).read()\nanc = \"### 4quater-septies. **LES LOGITS DU MODÈLE ENTIER — top-1 identique 3/3** (05/10, 05h06)\"\nnew = \"\"\"### 4quater-octies. **LE MOTEUR ENGENDRE AVEC KIMI … [2605 caractères tronqués]`

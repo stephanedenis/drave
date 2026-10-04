@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 135.3 h |
+| Durée | 136.2 h |
 | Tours | 104 |
-| Messages | 7567 |
-| Appels d'outils | 7229 |
+| Messages | 7577 |
+| Appels d'outils | 7239 |
 | Fichiers touchés | 150 |
-| Commandes | 6146 |
+| Commandes | 6156 |
 | Sous-agents | 32 |
-| Commits | 513 |
+| Commits | 514 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -5119,7 +5119,7 @@ Dire « c'est de l'accumulation f32 » était une affirmation. La mesure : régr
 
 ### Tour 104 — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas e … [1246 caractères tronqués]
 
-*18 appels d'outils.* Actions notables :
+*28 appels d'outils.* Actions notables :
 
 - bash — Inspect KDA and MLA state fields
 - bash — Read MlaK3 fields
@@ -5135,11 +5135,11 @@ Dire « c'est de l'accumulation f32 » était une affirmation. La mesure : régr
 - bash — Find the crash cause
 - bash — Read the failing restore code
 - bash — Fix the MLA cache restore
-- … et 1 autres
+- … et 8 autres
 
 **Synthèse produite :**
 
-**`pas 0` est vérifié ✅** — puis un `copy_from_slice` sur un cache MLA vide. Je corrige.
+**Les deux pas sont vérifiés, avec l'état reporté d'un appel à l'autre.**
 
 ## 3. Travail accompli
 
@@ -5375,7 +5375,7 @@ Dire « c'est de l'accumulation f32 » était une affirmation. La mesure : régr
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6106 autres
+- … et 6116 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -6036,4 +6036,5 @@ Dire « c'est de l'accumulation f32 » était une affirmation. La mesure : régr
 - K3 : l'écart résiduel est caractérisé, pas supposé — pente nulle, 0,25 % de la dynamique  « C'est de l'accumulation f32 » était une affirmation. Mesure : sur l_
 - K3 : l'état récurrent survit à la libération de sa couche, et la génération gloutonne est branchée  DRAVE_K3_GEN=N fait un préfill puis N jetons engendrés en gl
 - K3 : le cache MLA se RESTAURE par affectation — la génération tombait après le 1er pas  copy_from_slice sur un cache de longueur nulle : le cache MLA d'une couc
+- K3 : LE MOTEUR ENGENDRE, ET CHAQUE PAS EST CELUI DE LA RÉFÉRENCE  Deux appels successifs, le second ne voyant qu'un jeton nouveau (l'état récurrent restauré vie
 
