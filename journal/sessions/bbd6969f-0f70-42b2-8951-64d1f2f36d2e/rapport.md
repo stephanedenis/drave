@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 127.8 h |
+| Durée | 128.2 h |
 | Tours | 100 |
-| Messages | 7377 |
-| Appels d'outils | 7048 |
+| Messages | 7382 |
+| Appels d'outils | 7053 |
 | Fichiers touchés | 150 |
-| Commandes | 5969 |
+| Commandes | 5974 |
 | Sous-agents | 32 |
-| Commits | 489 |
+| Commits | 490 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -4889,7 +4889,7 @@ Et le geste qui rend un modèle de 1,5 To seulement *lisible* : les experts sont
 
 ### Tour 100 — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas e … [1246 caractères tronqués]
 
-*287 appels d'outils.* Actions notables :
+*292 appels d'outils.* Actions notables :
 
 - bash — Extract the KDA into a reusable piece
 - bash — Commit the KDA extraction and check the download
@@ -4905,11 +4905,11 @@ Et le geste qui rend un modèle de 1,5 To seulement *lisible* : les experts sont
 - bash — Find expert loading call sites
 - read
 - bash — Inspect RAM expert cache
-- … et 213 autres
+- … et 215 autres
 
 **Synthèse produite :**
 
-**Le premier jalon de vérification K3 rend son verdict — et il est négatif.** Je consigne.
+**La référence a terminé** : 2 h 48 pour quatre passes, 93 couches vidées. Je consigne le jalon.
 
 ## 3. Travail accompli
 
@@ -5145,7 +5145,7 @@ Et le geste qui rend un modèle de 1,5 To seulement *lisible* : les experts sont
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5929 autres
+- … et 5934 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5782,4 +5782,5 @@ Et le geste qui rend un modèle de 1,5 To seulement *lisible* : les experts sont
 - ref_logits : REF_SANS_REPACK, la porte qui rend la référence K3 exécutable ici  Mesuré sur Kimi-K3 : le repaquetage par défaut de llama.cpp lit chaque tenseur e
 - Bloc 31 : la référence sur K3 — l'architecture passe, la politique mémoire non  llama.cpp connaît kimi-k3 : 2 573 tenseurs chargés, exactement notre compte. Mai
 - K3 : le premier jalon de vérification est NÉGATIF — et il désigne l'état, pas la forme  compare_etats.py, couche 0, quatre jetons :   pos 0 : corrélation 0,9832
+- K3 : la référence a tourné — 42 min/jeton, 11 % de CPU, 1,80 To lus pour 4 passes  REF_SANS_REPACK=1, modèle complet, quatre jetons :   2 h 48 min 21 s → ~42 mi
 

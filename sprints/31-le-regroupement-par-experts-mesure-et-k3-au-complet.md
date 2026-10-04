@@ -297,3 +297,23 @@ Reste un second défaut, plus petit : la position 0 elle-même est à ~1 % (norm
 Un jalon négatif, chiffré, avec un suspect nommé, vaut mieux qu'un « ça a l'air
 de marcher » : c'est exactement ce que la porte de correction existe pour
 produire.
+
+## La baseline de la référence, mesurée
+
+`REF_SANS_REPACK=1 tools/ref_logits_k3 <K3> <ids> <sortie> 4 --tensors l_out` :
+
+| | valeur |
+|---|---|
+| temps mural | **2 h 48 min 21 s** pour 4 passes → **~42 min/jeton** |
+| CPU | **11 %** — borné par le disque, pas par le calcul |
+| lectures | 1,80 To → **451 Go par jeton** (soit 5,2 balayages du modèle) |
+| RSS max · swap | 102 Go · **0** |
+| sorties | les **93 couches** `l_out-0`…`l_out-92` + variantes |
+
+C'est le chiffre auquel tout le reste se compare, et il dit une chose simple :
+**sur cette machine, la référence fait tourner Kimi-K3 à 42 minutes par jeton**,
+en lisant 5 fois le modèle par jeton. Le disque est le mur, pas le CPU.
+
+Les 93 couches vidées permettent de **bissecter** : la prochaine session compare
+couche par couche et trouve la PREMIÈRE qui décroche, au lieu de raisonner sur
+la sortie de la couche 0.

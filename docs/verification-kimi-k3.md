@@ -112,6 +112,29 @@ Le chemin K3 est un instrument de **vérification**, pas d'exécution : il
 déquantifie en f32 (une couche MoE = 28,7 s/jeton, la composition des couches 0-3
 = 366 s pour 4 jetons). Les 93 couches en f32 demanderaient ~220 Go de RAM.
 
+### 4ter-bis. La référence A TOURNÉ — les chiffres de la baseline (04/10, 22h57)
+
+`REF_SANS_REPACK=1 tools/ref_logits_k3 <K3> <ids> <sortie> 4 --tensors l_out`,
+sur le modèle complet, quatre jetons :
+
+| mesure | valeur |
+|---|---|
+| temps mural | **2 h 48 min 21 s** pour 4 passes → **~42 min par jeton** |
+| occupation CPU | **11 %** (le reste est de l'attente disque) |
+| lectures | 1,80 To (blocs de 512 o comptés par le noyau) → **451 Go par jeton** |
+| RSS maximal | 102 Go · **swap 0** (grâce à `REF_SANS_REPACK`) |
+| sorties | **100 vidages** : les 93 couches `l_out-0` … `l_out-92` + variantes |
+| logits | `refk3_logits.bin`, 3 × 163 840 f32 · « perplexité » 43,598 sur 3 positions (non interprétable en deçà de 64 prédictions — c'est la règle du dépôt) |
+
+**Ce que ça établit** : llama.cpp-k3 fait tourner Kimi-K3 sur cette machine, à
+**42 minutes par jeton**, borné par le disque et non par le calcul (11 % de CPU).
+C'est la première mesure de la référence sur cette classe, et c'est le chiffre
+auquel comparer tout ce que le projet proposera.
+
+Les 93 couches vidées permettent désormais de **bissecter** la divergence : il
+suffit de comparer couche par couche pour trouver la PREMIÈRE qui décroche, au
+lieu de raisonner sur la sortie de la couche 0.
+
 ### 4quater. LE PREMIER JALON EST RENDU — ET IL EST NÉGATIF (04/10, 22h40)
 
 La référence a tourné (`REF_SANS_REPACK=1`, voir plus bas), elle a vidé ses

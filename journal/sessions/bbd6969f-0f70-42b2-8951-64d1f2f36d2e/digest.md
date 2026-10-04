@@ -117378,3 +117378,80 @@ pos 1: |ref| RMS 0.0106 max 0.1097 | drave RMS 0.0169 max 0.2652 · rapport RMS 
 **Le premier jalon de vérification K3 rend son verdict — et il est négatif.** Je consigne.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/verification-kimi-k3.md'; s=open(p).read()\nanc = \"La comparaison, dès que la référence tournera sur le modèle complet :\"\nnew = \"\"\"### 4quater. LE PREMIER JALON EST RENDU — ET IL EST NÉGATIF (04/10, 22 … [4417 caractères tronqués]`
+
+  ```
+75c7236 K3 : le premier jalon de vérification est NÉGATIF — et il désigne l'état, pas la forme
+47
+  ```
+
+- **bash** `{"command": "sleep 420; P=$(pgrep -x ref_logits_k3 | head -1); if [ -n \"$P\" ]; then echo \"en cours\"; else echo TERMINÉ; fi; grep -c \"^\\[dump\\]\" /tmp/refk3_run2.log; tail -3 /tmp/refk3_run2.log; date \"+%H:%M\"", "description": "Poll reference completion", "timeoutMs": 450000}`
+
+  ```
+en cours
+70
+          pos 2 = 9.389648e-01 6.097155e-01 -2.990494e-01 4.170802e-01 1.876892e-01 2.269026e-01 -2.176009e-01 2.922190e-01
+          pos 3 = 4.811130e-01 2.378725e-01 -1.777153e-01 -2.025180e-02 -3.459765e-01 7.567590e-02 -2.752756e-01 4.513976e-01
+[dump] /tmp/refk3-l_out-64.bin (28672 valeurs, type 0)
+22:43
+  ```
+
+- **bash** `{"command": "sleep 420; P=$(pgrep -x ref_logits_k3 | head -1); if [ -n \"$P\" ]; then echo \"en cours\"; else echo TERMINÉ; fi; grep -c \"^\\[dump\\]\" /tmp/refk3_run2.log; tail -8 /tmp/refk3_run2.log; date \"+%H:%M\"", "description": "Poll reference completion", "timeoutMs": 450000}`
+
+  ```
+en cours
+91
+          pos 0 = 5.371255e-01 -3.008652e-01 -2.580382e-01 -5.039736e-01 7.017678e-02 6.053150e-04 -1.405882e+00 1.069224e+00
+          pos 1 = 1.263200e+00 -9.112018e-01 -6.897545e-01 6.185710e-01 2.720959e-01 -7.123783e-01 -2.237008e-01 -5.154675e-01
+          pos 2 = 1.864814e+00 -6.717031e-01 -6.427308e-01 4.386287e-01 6.619399e-01 6.973001e-01 2.404410e-01 7.422661e-01
+          pos 3 = 7.111828e-01 -7.088586e-01 -7.868762e-01 8.835341e-01 -8.048540e-01 1.606321e+00 4.152461e-01 5.417758e-01
+[dump] /tmp/refk3-l_out-83.bin (28672 valeurs, type 0)
+[tensor] l_out-83 (reshaped) : type 0 · ne = [7168, 1, 4, 1]
+          pos 0 = 5.371255e-01 -3.008652e-01 -2.580382e-01 -5.039736e-01 7.017678e-02 6.053150e-04 -1.405882e+00 1.069224e+00
+[dump] /tmp/refk3-l_out-83_(reshaped).bin (28672 valeurs, type 0)
+22:50
+  ```
+
+- **bash** `{"command": "sleep 400; P=$(pgrep -x ref_logits_k3 | head -1); if [ -n \"$P\" ]; then echo \"en cours\"; else echo TERMINÉ; fi; tail -12 /tmp/refk3_run2.log; date \"+%H:%M\"", "description": "Poll reference completion", "timeoutMs": 430000}`
+
+  ```
+TERMINÉ
+	Major (requiring I/O) page faults: 142171
+	Minor (reclaiming a frame) page faults: 8513697
+	Voluntary context switches: 904949
+	Involuntary context switches: 39997
+	Swaps: 0
+	File system inputs: 3522060784
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
+22:57
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -E \"Elapsed \\(wall|Percent of CPU|Maximum resident|Swaps\" /tmp/refk3_run2.log; echo \"=== ce que la référence a rendu ===\"; grep -c \"^\\[dump\\]\" /tmp/refk3_run2.log; grep -E \"^\\[dump\\]\" /tmp/refk3_run2.log | tail -3;  … [159 caractères tronqués]`
+
+  ```
+Percent of CPU this job got: 11%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 2:48:21
+	Maximum resident set size (kbytes): 102136264
+	Swaps: 0
+=== ce que la référence a rendu ===
+100
+[dump] /tmp/refk3-l_out-90.bin (28672 valeurs, type 0)
+[dump] /tmp/refk3-l_out-91.bin (28672 valeurs, type 0)
+[dump] /tmp/refk3-l_out-92.bin (28672 valeurs, type 0)
+-rw-r--r--. 1 stephane stephane 1966088  3 oct 22:53 /tmp/refk3_logits.bin
+ref_logits: repaquetage des poids REFUSÉ (REF_SANS_REPACK) — lecture à la demande sur le fichier mmappé
+ref_logits: tenseurs filtrés par « l_out »
+perplexite = 43.598287
+fichier  = /tmp/refk3_logits.bin (3 x 163840 f32 + 8 octets d'en-tete)
+	Command being timed: "tools/ref_logits_k3 /home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf /tmp/ids_k3_demo.txt /tmp/refk3_logits.bin 4 --tensors l_out"
+  ```
+
+### 🤖 Assistant
+
+**La référence a terminé** : 2 h 48 pour quatre passes, 93 couches vidées. Je consigne le jalon.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/verification-kimi-k3.md'; s=open(p).read()\nanc = \"### 4quater. LE PREMIER JALON EST RENDU — ET IL EST NÉGATIF (04/10, 22h40)\"\nnew = \"\"\"### 4ter-bis. La référence A TOURNÉ — les chiffres de la baseline … [3115 caractères tronqués]`
