@@ -118483,3 +118483,159 @@ F32      blk.0.attn_norm.weight                 [7168] · 0.0 M poids · fichier
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"K3 : la référence PORTE bien l'état — essai de discrimination, et le drapeau est au bon endroit\n\nDRAVE_K3_SANS_ETAT=1 remet convolution et delta à zéro avant chaque jeton.\nRésultat : c'est PIRE (0, … [699 caractères tronqués]`
+
+  ```
+430657f K3 : la référence PORTE bien l'état — essai de discrimination, et le drapeau est au bon endroit
+read_bytes: 822140207104
+0
+00:20
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp-k3 && sed -n '30,50p' src/models/delta-net-base.cpp; echo \"......\"; sed -n '60,140p' src/models/delta-net-base.cpp", "description": "Read chunked delta-net body"}`
+
+  ```
+const int64_t H_v = v->ne[1];
+    const bool kda = (g->ne[0] == S_k && g->ne[1] == H_k);
+
+    GGML_ASSERT(S_k == S_v);
+    GGML_ASSERT(H_v % H_k == 0);
+
+    GGML_ASSERT(q->ne[0] == S_k && q->ne[1] == H_k && q->ne[2] == n_tokens && q->ne[3] == n_seqs);
+    GGML_ASSERT(k->ne[0] == S_k && k->ne[1] == H_k && k->ne[2] == n_tokens && k->ne[3] == n_seqs);
+    GGML_ASSERT(v->ne[0] == S_v && v->ne[1] == H_v && v->ne[2] == n_tokens && v->ne[3] == n_seqs);
+
+    GGML_ASSERT(g->ne[0] == 1   || g->ne[0] == S_v);
+    GGML_ASSERT(                   g->ne[1] == H_v && g->ne[2] == n_tokens && g->ne[3] == n_seqs);
+    GGML_ASSERT(b->ne[0] == 1   && b->ne[1] == H_v && b->ne[2] == n_tokens && b->ne[3] == n_seqs);
+    GGML_ASSERT(s->ne[0] == S_v && s->ne[1] == S_v && s->ne[2] == H_v      && s->ne[3] == n_seqs);
+
+    const float scale = 1.0f / sqrtf(S_k);
+
+    q = ggml_scale(ctx0, q, scale);
+
+    cb(q, "q_in", il);
+    cb(k, "k_in", il);
+......
+
+    const int CS = kda ? 16 : 64; // chunk size
+
+    const int pad = (CS - n_tokens % CS) % CS;
+    const int n_chunks = (n_tokens + pad) / CS;
+
+    q = ggml_pad(ctx0, q, 0, pad, 0, 0);
+    k = ggml_pad(ctx0, k, 0, pad, 0, 0);
+    v = ggml_pad(ctx0, v, 0, pad, 0,
+… [3366 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp-k3 && sed -n '140,200p' src/models/delta-net-base.cpp", "description": "Read chunked solve step"}`
+
+  ```
+kb = ggml_mul    (ctx0, kb, decay_mask);
+
+        // [CS, CS, n_chunks, H_k * n_seqs]
+        kq = ggml_mul_mat(ctx0, k, q);
+        kq = ggml_mul(ctx0, kq, decay_mask);
+    }
+
+    kq = ggml_tri(ctx0, kq, GGML_TRI_TYPE_LOWER_DIAG);
+    cb(kq, "kq", il);
+
+    // [CS, CS, n_chunks, H_k * n_seqs]
+    ggml_tensor * attn;
+    attn = ggml_tri(ctx0, kb, GGML_TRI_TYPE_LOWER);
+    cb(attn, "attn", il);
+
+    ggml_tensor * identity;
+    identity = ggml_view_1d(ctx0, attn, CS, 0);
+    identity = ggml_fill   (ctx0, identity, 1.0f);
+    identity = ggml_diag   (ctx0, identity);
+
+    ggml_tensor * lhs = ggml_add(ctx0, attn, identity);
+    cb(lhs, "dnet_add_ch_lhs", il);
+
+    attn = ggml_neg(ctx0, attn);
+    cb(attn, "attn_pre_solve", il);
+
+    ggml_tensor * lin_solve = ggml_solve_tri(ctx0, lhs, attn, true, true, false);
+    attn = ggml_add(ctx0, lin_solve, identity);
+    cb(attn, "dnet_add_ch_attn_solved", il); // [CS, CS, n_chunks, H_k * n_seqs]
+
+    // [S_v, CS, n_chunks, H_v * n_seqs]
+    v = ggml_mul_mat(ctx0, ggml_cont(ctx0, ggml_transpose(ctx0, v_b)), attn);
+
+    // [CS, 1, n_chunks, H_v * n_seqs] KDA: [CS, S_k, n_chunks, H_v * n_seqs]
+    ggml_tensor * g_exp = ggml_exp(ctx0, g_cs);
+
+    k_b
+… [1143 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le signe de `ssm_a` décide : invisible au jeton 0, décisif au jeton 1
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && K=/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf\ntimeout 600 ./drave-core/target/release/drave \"$K\" --matrix blk.0.ssm_a 2>&1 | head -25", "description": "Dump ssm_a values" … [22 caractères tronqués]`
+
+  ```
+GGUF ouvert en 27.04547313s — 2573 tenseurs
+architecture : kimi-k3 · 93 couches · hidden 7168 · intermédiaire 33792
+threads : 20
+
+=== 1. Taille exacte des encodages (mesurée sur les niveaux réels) ===
+
+blk.0.ffn_gate.weight  [33792 × 7168]  densité 99.3 %
+  dense 8 bits               8.000 b/poids  ( 242.22 Mo)
+  bitmap + signe             1.993 b/poids  (  60.33 Mo)
+  creux k=1 (signe seul)     1.993 b/poids  (  60.33 Mo)
+  creux k=4                  4.970 b/poids  ( 150.48 Mo)
+  creux k=8                  8.940 b/poids  ( 270.69 Mo)
+  listes signées + écarts    7.945 b/poids  ( 240.55 Mo)
+  (varint : 240412174 événements, 1.0 écart moyen)
+
+blk.0.ffn_down.weight  [7168 × 33792]  densité 89.7 %
+  dense 8 bits               8.000 b/poids  ( 242.22 Mo)
+  bitmap + signe             1.897 b/poids  (  57.43 Mo)
+  creux k=1 (signe seul)     1.897 b/poids  (  57.43 Mo)
+  creux k=4                  4.587 b/poids  ( 138.88 Mo)
+  creux k=8                  8.174 b/poids  ( 247.47 Mo)
+  listes signées + écarts    7.174 b/poids  ( 217.23 Mo)
+  (varint : 217196730 événements, 1.1 écart moyen)
+
+blk.0.attn_q.weight  [12288 × 7168]  densité 99.2 %
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport struct, sys\np='/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf'\nf=open(p,'rb')\nmagic=f.read(4); ver=struct.unpack('<I',f.read(4))[0]\nnt=struct.unpac … [2037 caractères tronqués]`
+
+  ```
+kimi-k3.attention.layer_norm_rms_epsilon = 9.999999747378752e-06
+kimi-k3.kda.head_dim = 128
+kimi-k3.kda.gate_lower_bound = -5.0
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 39, in <module>
+KeyError: 'blk.0.ssm_a'
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport struct, glob, os\nD='/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL'\ndef lire(p, noms):\n    f=open(p,'rb')\n    f.read(4); struct.unpack('<I',f.read(4))[0]\n    nt=struct.unpack('<Q',f.rea … [1724 caractères tronqués]`
+
+  ```
+Kimi-K3-UD-Q4_K_XL-00002-of-00032.gguf blk.0.ssm_a dims (96,)
+   premiers : -0.59191 -1.18134 -0.63101 -0.95170 -1.07630 -0.87264 -2.28405 -0.54444
+   min -11.77643 · max -0.47093 · signe NÉGATIF
+Kimi-K3-UD-Q4_K_XL-00002-of-00032.gguf blk.0.ssm_dt.bias dims (12288,)
+   premiers : -5.86700 -6.31171 -5.20531 -2.62608 -5.43078 -5.78287 -5.78838 -4.42608
+   min -7.89381 · max 0.17923 · signe MIXTE
+  ```
+
+- **bash** `{"command": "P=$(pgrep -x ref_logits_k3|head -1); if [ -n \"$P\" ]; then grep -E \"^read_bytes\" /proc/$P/io; ps -o etimes= -p $P; else echo TERMINÉ; fi; grep -c \"^\\[dump\\]\" /tmp/refk3b_run.log 2>/dev/null; date \"+%H:%M\"", "description": "Check instrumented reference progress"}`
+
+  ```
+read_bytes: 845585563648
+   5021
+0
+00:23
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/verification-kimi-k3.md'; s=open(p).read()\nanc = \"### 4quater. LE PREMIER JALON EST RENDU — ET IL EST NÉGATIF (04/10, 22h40)\"\nnew = \"\"\"### 4quater-bis. DEUX BUGS TROUVÉS PAR LA COMPARAISON (05/10, 00h … [3427 caractères tronqués]`

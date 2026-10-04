@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 129.6 h |
 | Tours | 101 |
-| Messages | 7442 |
-| Appels d'outils | 7111 |
+| Messages | 7449 |
+| Appels d'outils | 7118 |
 | Fichiers touchés | 150 |
-| Commandes | 6028 |
+| Commandes | 6035 |
 | Sous-agents | 32 |
-| Commits | 493 |
+| Commits | 494 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -4952,7 +4952,7 @@ Au lot 2 le temps **suit** les octets (1,36 contre 1,31) ; au-delà il décroche
 
 ### Tour 101 — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas e … [1246 caractères tronqués]
 
-*56 appels d'outils.* Actions notables :
+*63 appels d'outils.* Actions notables :
 
 - bash — Locate K3 reference implementation
 - bash — List graph node names in K3 reference
@@ -4968,11 +4968,11 @@ Au lot 2 le temps **suit** les octets (1,36 contre 1,31) ; au-delà il décroche
 - bash — Find L2 norm definition
 - bash — Locate L2 norm definition
 - bash — Search l2 norm in graph builder
-- … et 38 autres
+- … et 44 autres
 
 **Synthèse produite :**
 
-⏵ Test décisif et pas cher : la référence traite-t-elle les 4 jetons avec un état neuf ?
+⏵ Le signe de `ssm_a` décide : invisible au jeton 0, décisif au jeton 1
 
 ## 3. Travail accompli
 
@@ -5208,7 +5208,7 @@ Au lot 2 le temps **suit** les octets (1,36 contre 1,31) ; au-delà il décroche
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5988 autres
+- … et 5995 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5336,7 +5336,7 @@ Au lot 2 le temps **suit** les octets (1,36 contre 1,31) ; au-delà il décroche
 
 ## 5. Erreurs rencontrées
 
-350 sorties en erreur ou divergentes. Les premières :
+351 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -5849,4 +5849,5 @@ Au lot 2 le temps **suit** les octets (1,36 contre 1,31) ; au-delà il décroche
 - REPRISE : la baseline de la référence (42 min/jeton) et le jalon négatif, en tête" && git log --oneline -1
 - K3 : deux bugs trouvés par la comparaison — la norme L2 manquante, et la banque qui s'accumulait  1. **La norme L2 par tête sur q et k n'existait nulle part** (
 - K3 : la référence PORTE bien l'état — essai de discrimination, et le drapeau est au bon endroit  DRAVE_K3_SANS_ETAT=1 remet convolution et delta à zéro avant ch
+- K3 : ce qui est vérifié sans supposition, et le point de méthode sur le chemin de la référence  Métadonnées lues dans le GGUF, plus supposées : layer_norm_rms_e
 

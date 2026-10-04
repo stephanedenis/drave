@@ -135,6 +135,47 @@ Les 93 couches vidées permettent désormais de **bissecter** la divergence : il
 suffit de comparer couche par couche pour trouver la PREMIÈRE qui décroche, au
 lieu de raisonner sur la sortie de la couche 0.
 
+### 4quater-bis. DEUX BUGS TROUVÉS PAR LA COMPARAISON (05/10, 00h25)
+
+**1. La norme L2 par tête sur `q` et `k` n'existait nulle part.**
+`build_gdn_l2_norm` (référence) : `x / sqrt(Σx² + eps)`, plus `1/sqrt(head_dim)`
+sur `q` seul. Sa signature était dans les chiffres : au jeton 0 l'état delta est
+nul, donc `o[j] = β·(Σ_i k[i]q[i])·v[j]` — proportionnel à `v` quelle que soit
+l'échelle de `q` et `k` — et la norme par tête qui suit efface cette échelle.
+D'où 0,983 de corrélation au jeton 0 **avec un rapport de norme de 0,937**, puis
+0,79 et 0,64 : dès le jeton 1, l'accumulation `s += k ⊗ β(v − sᵀk)` dépend, elle,
+de l'échelle de `k`.
+
+| | avant | après |
+|---|---|---|
+| jeton 0, corrélation | 0,983164 | **0,999979** |
+| jeton 0, écart max | 1,19e-02 | **3,74e-04** |
+
+**2. La banque résiduelle s'accumulait entre les jetons.** Dans la référence,
+`resi_stack` est une variable locale au graphe — vide à chaque passe, avec une
+colonne par jeton du lot. Ici les jetons sont traités un par un : la couche 0
+empile l'entrée du jeton COURANT, et rien d'autre.
+
+**Ce qui reste faux** : jetons 1 et 2 à 0,819 et 0,708 de corrélation. C'est un
+défaut d'ÉTAT, et un essai de discrimination l'a circonscrit : remettre
+convolution et delta à zéro avant chaque jeton (`DRAVE_K3_SANS_ETAT=1`) donne
+**pire** (0,606 et 0,414). La référence enchaîne donc bien les jetons, et le sens
+de l'état est le bon — c'est un détail de son évolution qui reste faux.
+
+**Vérifié au passage, sans supposition** : `layer_norm_rms_epsilon = 1e-05`,
+`kda.head_dim = 128`, `kda.gate_lower_bound = -5.0` (lus dans le GGUF) ;
+`ssm_a` est **négatif** (−11,78 à −0,47, donc bien `−exp(A_log)`) ;
+`ssm_dt.bias` est **négatif lui aussi** (−7,89 à +0,18), ce qui met `z` vers
+−5 et la porte de décroissance vers −0,01 : `exp(g) ≈ 0,99`, décroissance faible.
+
+**Point de méthode** : pour un lot de plusieurs jetons, la référence n'emprunte
+PAS `build_delta_net_autoregressive` (qui assert `n_tokens == 1`) mais
+`build_delta_net_chunking` — une formulation par blocs de 16 (donc rembourrée de
+12 zéros ici), avec un `solve_tri` et un `cumsum` du log de la décroissance.
+Mathématiquement équivalente à la forme séquentielle que j'ai transcrite, mais
+c'est un chemin de code DIFFÉRENT, et il faut le savoir avant d'accuser l'un ou
+l'autre sur un écart.
+
 ### 4quater. LE PREMIER JALON EST RENDU — ET IL EST NÉGATIF (04/10, 22h40)
 
 La référence a tourné (`REF_SANS_REPACK=1`, voir plus bas), elle a vidé ses
