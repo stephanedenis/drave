@@ -117280,3 +117280,101 @@ create_tensor: loading tensor blk.92.ffn_up_shexp.input_scale
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> sprints/31-le-regroupement-par-experts-mesure-et-k3-au-complet.md <<'EOF'\n\n## La référence sur K3 : ce qui a été appris, et ce qui reste en vol\n\n**llama.cpp connaît `kimi-k3`.** Chargé sans broncher : 32 shards, **2 573\nt … [2781 caractères tronqués]`
+
+  ```
+94d5194 Bloc 31 : la référence sur K3 — l'architecture passe, la politique mémoire non
+  ```
+
+- **bash** `{"command": "sleep 540; P=$(pgrep -x ref_logits_k3 | head -1); if [ -n \"$P\" ]; then grep -E \"^read_bytes\" /proc/$P/io; else echo TERMINÉ; fi; ls /tmp/refk3-*.bin 2>/dev/null | wc -l; date \"+%H:%M\"", "description": "Poll reference", "timeoutMs": 570000}`
+
+  ```
+read_bytes: 1433171156992
+0
+22:13
+  ```
+
+- **bash** `{"command": "sleep 540; P=$(pgrep -x ref_logits_k3 | head -1); if [ -n \"$P\" ]; then grep -E \"^read_bytes\" /proc/$P/io; else echo TERMINÉ; fi; tail -6 /tmp/refk3_run2.log; ls /tmp/refk3-*.bin 2>/dev/null | wc -l; date \"+%H:%M\"", "description": "Poll reference", "timeoutMs": 570000}`
+
+  ```
+read_bytes: 1526906101760
+[tensor] l_out-4 : type 0 · ne = [7168, 4, 1, 1]
+          pos 0 = 8.686212e-02 -1.219527e-01 -8.829676e-02 -4.486646e-02 7.599086e-03 -3.708609e-02 2.779775e-02 1.479312e-01
+          pos 1 = 3.629453e-02 2.170556e-02 -2.882412e-02 9.746332e-02 1.682479e-01 -5.112809e-02 -5.747891e-02 6.574598e-02
+          pos 2 = -3.671256e-02 5.101749e-02 6.367870e-02 -7.137016e-02 1.212899e-01 4.857621e-02 -5.257919e-02 4.519576e-02
+          pos 3 = -4.087323e-02 -7.834950e-02 4.004931e-02 -1.663062e-01 1.656552e-01 4.678110e-02 2.544409e-03 7.014546e-02
+[dump] /tmp/refk3-l_out-4.bin (28672 valeurs, type 0)
+5
+22:22
+  ```
+
+- **bash** `{"command": "sleep 300; P=$(pgrep -x ref_logits_k3 | head -1); if [ -n \"$P\" ]; then grep -E \"^read_bytes\" /proc/$P/io; else echo TERMINÉ; fi; grep -c \"^\\[dump\\]\" /tmp/refk3_run2.log; ls /tmp/refk3-*.bin 2>/dev/null | head -8; date \"+%H:%M\"", "description": "Poll reference output", "timeout … [12 caractères tronqués]`
+
+  ```
+read_bytes: 1566305955840
+18
+/tmp/refk3-l_out-0.bin
+/tmp/refk3-l_out-10.bin
+/tmp/refk3-l_out-11.bin
+/tmp/refk3-l_out-11_(reshaped).bin
+/tmp/refk3-l_out-12.bin
+/tmp/refk3-l_out-13.bin
+/tmp/refk3-l_out-14.bin
+/tmp/refk3-l_out-15.bin
+22:27
+  ```
+
+- **bash** `{"command": "sleep 420; P=$(pgrep -x ref_logits_k3 | head -1); if [ -n \"$P\" ]; then echo \"en cours\"; else echo TERMINÉ; fi; grep -c \"^\\[dump\\]\" /tmp/refk3_run2.log; tail -4 /tmp/refk3_run2.log; date \"+%H:%M\"", "description": "Poll reference completion", "timeoutMs": 450000}`
+
+  ```
+en cours
+42
+          pos 1 = 2.399753e-02 -5.739884e-02 1.657971e-02 3.970793e-02 -9.831348e-04 -1.523958e-01 -5.445877e-02 7.304203e-02
+          pos 2 = 3.442876e-02 -2.386161e-02 7.927425e-04 3.367513e-02 1.847335e-02 -2.743596e-02 3.743423e-02 4.473109e-02
+          pos 3 = 1.074279e-02 -3.767264e-02 -3.070711e-03 2.031325e-02 6.834639e-03 -2.221572e-02 2.041642e-02 4.508070e-02
+[dump] /tmp/refk3-l_out-38.bin (28672 valeurs, type 0)
+22:34
+  ```
+
+### 🤖 Assistant
+
+**La référence produit ses couches.** Je lance la comparaison du premier jalon.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la /tmp/refk3-l_out-0.bin /tmp/refk3-l_out-12.bin 2>/dev/null; echo \"=== comparaison couche 0 (Drave vs llama.cpp-k3) ===\"; python3 tools/compare_etats.py /tmp/notrek3_13 /tmp/refk3 l_out 0 0,1,2 2>&1 | head -12", "description" … [63 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 114712  3 oct 22:20 /tmp/refk3-l_out-0.bin
+-rw-r--r--. 1 stephane stephane 114712  3 oct 22:25 /tmp/refk3-l_out-12.bin
+=== comparaison couche 0 (Drave vs llama.cpp-k3) ===
+# l_out-0 : référence ne=(7168, 4, 1, 1) → 7168 valeurs × 1 par position
+  pos 0 : écart max 1.189e-02 (indice 6060, dynamique 9.662e-02) · corrélation 0.983164 ❌
+  pos 1 : écart max 1.555e-01 (indice 6645, dynamique 1.097e-01) · corrélation 0.790361 ❌
+  pos 2 : écart max 1.797e-01 (indice 6060, dynamique 2.161e-01) · corrélation 0.641780 ❌
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport struct\ndef lire_ref(p):\n    b=open(p,'rb').read()\n    assert b[:4]==b'REFD'\n    ndim=struct.unpack('<i',b[4:8])[0]\n    ne=struct.unpack('<4i',b[8:24])[0:ndim]\n    n=1\n    for d in ne: n*=d\n    return  … [789 caractères tronqués]`
+
+  ```
+ref ne: (7168, 4, 1, 1)
+pos 0: |ref| RMS 0.0123 max 0.0966 | drave RMS 0.0115 max 0.0909 · rapport RMS 0.9368
+   ref   :  0.01200 -0.02244 -0.00296  0.00321 -0.01202 -0.00547
+   drave :  0.01036 -0.02001 -0.00186  0.00187 -0.01378 -0.00802
+pos 1: |ref| RMS 0.0106 max 0.1097 | drave RMS 0.0169 max 0.2652 · rapport RMS 1.6014
+   ref   :  0.00945 -0.00148  0.00330  0.01587 -0.00097 -0.00756
+   drave :  0.01729  0.00249  0.00578  0.01350 -0.02334 -0.01710
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== couche 12 (après une banque) ===\"; python3 tools/compare_etats.py /tmp/notrek3_13 /tmp/refk3 l_out 12 0,1,2 2>&1 | head -8", "description": "Compare layer 12 against reference", "timeoutMs": 180000}`
+
+  ```
+=== couche 12 (après une banque) ===
+# l_out-12 : référence ne=(7168, 4, 1, 1) → 7168 valeurs × 1 par position
+  pos 0 : écart max 1.113e-01 (indice 3680, dynamique 2.086e+00) · corrélation 0.990927 ❌
+  pos 1 : écart max 1.020e+00 (indice 2441, dynamique 2.063e+00) · corrélation 0.458801 ❌
+  pos 2 : écart max 4.062e-01 (indice 1170, dynamique 2.230e+00) · corrélation 0.448762 ❌
+  ```
+
+### 🤖 Assistant
+
+**Le premier jalon de vérification K3 rend son verdict — et il est négatif.** Je consigne.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/verification-kimi-k3.md'; s=open(p).read()\nanc = \"La comparaison, dès que la référence tournera sur le modèle complet :\"\nnew = \"\"\"### 4quater. LE PREMIER JALON EST RENDU — ET IL EST NÉGATIF (04/10, 22 … [4417 caractères tronqués]`

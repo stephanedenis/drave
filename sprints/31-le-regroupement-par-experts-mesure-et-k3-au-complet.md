@@ -273,3 +273,27 @@ la première barrière n'est pas l'architecture, ni le format, ni le tokenizer �
 c'est **la politique de mémoire du moteur de référence lui-même**. Un moteur qui
 veut les poids en RAM ne fait pas tourner un modèle de 1,5 To sur 125 Go, quel
 que soit le nombre d'experts qu'il sait sauter.
+
+## Le premier jalon de vérification K3 : NÉGATIF, et il dit où chercher
+
+`tools/compare_etats.py` a comparé la sortie de la couche 0 du moteur à celle de
+llama.cpp-k3, sur quatre jetons :
+
+| | position 0 | position 1 | position 2 |
+|---|---|---|---|
+| couche 0, corrélation | **0,9832** | 0,7904 | 0,6418 |
+| couche 12, corrélation | **0,9909** | 0,4588 | 0,4488 |
+
+**Le motif est le message** : la position 0 est presque juste (98-99 %), et tout
+se défait à la position 1. Une erreur de forme donnerait ~0 dès la position 0 ;
+une erreur indépendante de la position donnerait le même écart partout. Ici
+l'écart **naît entre deux jetons** — donc il est dans ce qui transporte un état :
+la convolution KDA (`d_conv = 4`) et la récurrence delta-net. Au jeton 0 la
+convolution ne voit que son remplissage, donc un état mal avancé ne s'y voit pas.
+
+Reste un second défaut, plus petit : la position 0 elle-même est à ~1 % (norme
+0,937 fois celle de la référence). À traiter après, et séparément.
+
+Un jalon négatif, chiffré, avec un suspect nommé, vaut mieux qu'un « ça a l'air
+de marcher » : c'est exactement ce que la porte de correction existe pour
+produire.

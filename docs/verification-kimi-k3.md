@@ -112,6 +112,44 @@ Le chemin K3 est un instrument de **vérification**, pas d'exécution : il
 déquantifie en f32 (une couche MoE = 28,7 s/jeton, la composition des couches 0-3
 = 366 s pour 4 jetons). Les 93 couches en f32 demanderaient ~220 Go de RAM.
 
+### 4quater. LE PREMIER JALON EST RENDU — ET IL EST NÉGATIF (04/10, 22h40)
+
+La référence a tourné (`REF_SANS_REPACK=1`, voir plus bas), elle a vidé ses
+`l_out-N`, et `tools/compare_etats.py` a comparé. **La couche 0 ne passe pas :**
+
+| position | écart max | corrélation | verdict |
+|---|---|---|---|
+| 0 | 1,19e-02 | **0,983164** | ❌ |
+| 1 | 1,55e-01 | 0,790361 | ❌ |
+| 2 | 1,80e-01 | 0,641780 | ❌ |
+
+Et la couche 12, après une banque :
+
+| position | écart max | corrélation | verdict |
+|---|---|---|---|
+| 0 | 1,11e-01 | **0,990927** | ❌ |
+| 1 | 1,02e+00 | 0,458801 | ❌ |
+| 2 | 4,06e-01 | 0,448762 | ❌ |
+
+**Ce que ces chiffres disent, et c'est plus utile qu'un simple « non » :**
+
+1. **La position 0 est presque juste** (0,983 sur la couche 0, 0,991 sur la 12).
+   La structure du calcul — normes, résidu, projections, MoE latent, SiTU — est
+   donc en place : une erreur de forme donnerait une corrélation proche de zéro.
+2. **Tout se défait dès la position 1.** Une erreur qui ne dépend pas de la
+   position aurait le même écart partout ; ici elle **apparaît entre deux
+   jetons**. Les suspects sont donc les mécanismes à ÉTAT : l'état de la
+   convolution KDA (`d_conv = 4`) et la récurrence delta-net, qui sont les seuls
+   du chemin à transporter quelque chose d'un jeton au suivant. Au jeton 0, la
+   convolution ne voit que son remplissage : un état mal avancé ne s'y voit pas.
+3. L'écart résiduel de la position 0 (~1 %, norme 0,937 fois celle de la
+   référence) est un second défaut, plus petit, à traiter après.
+
+**Prochaine action, dans l'ordre** : comparer non pas la SORTIE de la couche 0
+mais les tenseurs intermédiaires déjà instrumentés (`--tensors` de la référence
+sait filtrer n'importe quel nœud du graphe ; `kimi_k3.rs` en vidange déjà
+plusieurs), en commençant par l'entrée de la convolution et sa sortie au jeton 1.
+
 La comparaison, dès que la référence tournera sur le modèle complet :
 
 ```bash
