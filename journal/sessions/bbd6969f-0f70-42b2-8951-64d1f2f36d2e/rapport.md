@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 131.7 h |
 | Tours | 102 |
-| Messages | 7488 |
-| Appels d'outils | 7154 |
+| Messages | 7490 |
+| Appels d'outils | 7156 |
 | Fichiers touchés | 150 |
-| Commandes | 6071 |
+| Commandes | 6073 |
 | Sous-agents | 32 |
-| Commits | 497 |
+| Commits | 498 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -5003,7 +5003,7 @@ Mon test « KDA contre NumPy » passait au vert depuis le début : il comparait 
 
 ### Tour 102 — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas e … [1246 caractères tronqués]
 
-*13 appels d'outils.* Actions notables :
+*15 appels d'outils.* Actions notables :
 
 - bash — Check instrumented reference run
 - bash — Check the tensor filter that was applied
@@ -5018,6 +5018,8 @@ Mon test « KDA contre NumPy » passait au vert depuis le début : il comparait 
 - bash — Verify the bank-ordering fix
 - bash — Compare after the bank-ordering fix
 - bash — Commit the layer-0 milestone
+- bash — Launch 13-layer verification
+- … et 1 autres
 
 **Synthèse produite :**
 
@@ -5257,7 +5259,7 @@ Mon test « KDA contre NumPy » passait au vert depuis le début : il comparait 
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6031 autres
+- … et 6033 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5902,4 +5904,5 @@ Mon test « KDA contre NumPy » passait au vert depuis le début : il comparait 
 - ref_logits : REF_UBATCH, pour forcer le chemin AUTORÉGRESSIF de la référence  build_delta_net aiguille selon n_seq_tokens : == 1 → build_delta_net_autoregressiv
 - Sprint 31 : la suite — deux bugs trouvés par la comparaison, et la leçon de méthode  Le test « KDA contre NumPy » passait au vert depuis le début : il comparait
 - K3 : LA COUCHE 0 PASSE — le troisième bug était l'ORDRE de remise à zéro de la banque  La banque résiduelle doit être repartie AVANT l'attention résiduelle, pas
+- Docs : la couche 0 de Kimi-K3 passe, et la leçon du test qui partageait l'erreur" && git log --oneline -1
 

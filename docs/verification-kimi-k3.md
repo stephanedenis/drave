@@ -135,6 +135,33 @@ Les 93 couches vidées permettent désormais de **bissecter** la divergence : il
 suffit de comparer couche par couche pour trouver la PREMIÈRE qui décroche, au
 lieu de raisonner sur la sortie de la couche 0.
 
+### 4quater-ter. LA COUCHE 0 PASSE (05/10, 02h25)
+
+Trois défauts, tous trouvés par la comparaison et aucun par relecture :
+
+1. **la norme L2 par tête sur `q` et `k`** (`build_gdn_l2_norm`) n'existait nulle
+   part dans le moteur ;
+2. **la banque résiduelle s'accumulait entre les jetons** au lieu d'être propre
+   à la passe du jeton courant ;
+3. **son ORDRE de remise à zéro** : elle doit être repartie **avant** l'attention
+   résiduelle, pas après. Dans la référence, `resi_stack` est vide à cette étape
+   de la couche 0, **à chaque jeton** ; garder le `n_ckpt` du jeton précédent
+   faisait appliquer un `res_mix` là où la référence n'en applique pas.
+
+| couche 0, quatre jetons | corrélation | écart max | dynamique |
+|---|---|---|---|
+| jeton 0 | 0,983164 → **0,999979** | 1,19e-02 → **3,74e-04** | 9,66e-02 |
+| jeton 1 | 0,790361 → **0,999982** | 1,55e-01 → **2,92e-04** | 1,10e-01 |
+| jeton 2 | 0,641780 → **0,999983** | 1,80e-01 → **3,07e-04** | 2,16e-01 |
+
+Les trois étaient **invisibles au jeton 0 seul** — c'est ce qui les a fait
+survivre deux jours de transcription. Et le test « KDA contre NumPy » les
+couvrait tous les trois : il comparait le code à sa propre transcription.
+
+Ce qui reste : la couche 12 (13 couches enchaînées, une banque franchie) et
+l'écart résiduel de 0,4 % — de l'ordre de l'accumulation f32 sur des poids Q8_0,
+à confirmer couche par couche avec les vidages instrumentés.
+
 ### 4quater-bis. DEUX BUGS TROUVÉS PAR LA COMPARAISON (05/10, 00h25)
 
 **1. La norme L2 par tête sur `q` et `k` n'existait nulle part.**

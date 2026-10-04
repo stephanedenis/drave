@@ -70,6 +70,27 @@ cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo build --r
 > du modèle), RSS 102 Go, **swap 0**. Les **93 couches** `l_out-0`…`l_out-92` sont
 > vidées dans `/tmp/refk3-l_out-N.bin`, plus les logits.
 >
+> **LA COUCHE 0 PASSE (05/10, 02h25).** Trois défauts trouvés par la comparaison,
+> aucun par relecture : (1) la **norme L2 par tête sur `q` et `k`**
+> (`build_gdn_l2_norm`) n'existait nulle part ; (2) la **banque résiduelle
+> s'accumulait entre les jetons** au lieu d'être propre à la passe ; (3) son
+> **ORDRE de remise à zéro** — avant l'attention résiduelle, pas après, sinon un
+> `res_mix` s'applique là où la référence n'en applique pas. Les trois étaient
+> invisibles au jeton 0 seul.
+>
+> | couche 0 | jeton 0 | jeton 1 | jeton 2 |
+> |---|---|---|---|
+> | corrélation | 0,983164 → **0,999979** | 0,790361 → **0,999982** | 0,641780 → **0,999983** |
+> | écart max | 1,19e-02 → **3,74e-04** | 1,55e-01 → **2,92e-04** | 1,80e-01 → **3,07e-04** |
+>
+> **Leçon payée cher** : le test « KDA contre NumPy » passait au vert depuis le
+> début — il comparait le code à sa propre transcription. Un test qui partage
+> l'erreur de l'implémentation ne teste rien ; c'est la comparaison à un tiers
+> qui a trouvé les trois bugs, en deux heures.
+>
+> Reste : la couche 12 (13 couches enchaînées, une banque franchie) et l'écart
+> résiduel de 0,4 % (accumulation f32 sur des poids Q8_0, à confirmer).
+>
 > **Et le premier jalon de vérification est NÉGATIF** : couche 0, corrélation
 > 0,9832 (pos 0) → 0,7904 (pos 1) → 0,6418 (pos 2) ; couche 12, 0,9909 → 0,4588 →
 > 0,4488. Le motif est le message : la position 0 est presque juste et tout se

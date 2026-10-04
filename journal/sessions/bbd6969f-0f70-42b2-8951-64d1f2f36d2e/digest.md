@@ -119046,3 +119046,16 @@ lancé
 **Le jalon de la couche 0 est passé.** Les quatre jetons matchent.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"K3 : LA COUCHE 0 PASSE — le troisième bug était l'ORDRE de remise à zéro de la banque\n\nLa banque résiduelle doit être repartie AVANT l'attention résiduelle, pas après.\nDans la référence, resi_stack … [1029 caractères tronqués]`
+
+  ```
+34989f9 K3 : LA COUCHE 0 PASSE — le troisième bug était l'ORDRE de remise à zéro de la banque
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && K=/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf\nnohup bash -c \"DRAVE_K3_COUCHES=13 DRAVE_DUMP_COUCHES=/tmp/fix13 timeout 14400 ./drave-core/target/release/drave $K --k3-essa … [133 caractères tronqués]`
+
+  ```
+13 couches lancé (≈55 min)
+02:30
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/verification-kimi-k3.md'; s=open(p).read()\nanc = \"### 4quater-bis. DEUX BUGS TROUVÉS PAR LA COMPARAISON (05/10, 00h25)\"\nnew = \"\"\"### 4quater-ter. LA COUCHE 0 PASSE (05/10, 02h25)\n\nTrois défauts, tou … [3299 caractères tronqués]`
