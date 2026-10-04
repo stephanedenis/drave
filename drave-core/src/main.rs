@@ -24,7 +24,7 @@ const VARS_LUES: &[&str] = &[
     "KV_BITS", "KV_F16", "KV_K_F16", "KV_K_F32", "KV_V_F32", "MMAP",
     "BIAIS_VL", "EXPERTS_RAM", "PRELIRE", "PRELIRE_TOUT", "Q8_BLOCS", "SANS_ENGRAM",
     "SANS_EMPRUNT",
-    "TRACE_BLOCS", "TUILE_LOT", "K3_COUCHES", "K3_SANS_ETAT", "K3_PASSE", "K3_TETE", "K3_LOGITS", "K3_GEN", "K3_MXFP4", "K3_IMPOSE",
+    "TRACE_BLOCS", "TUILE_LOT", "K3_COUCHES", "K3_SANS_ETAT", "K3_PASSE", "K3_TETE", "K3_LOGITS", "K3_GEN", "K3_MXFP4", "K3_TRACE_EXPERTS", "K3_IDS", "K3_IMPOSE",
     "SANS_BLOCS", "SANS_COMPRESSION", "SIMD_DOT", "TRACE_EXPERTS", "V41_SANS_RETARD",
     "V41_TETE_COPIE0",
     "VISION_TEXTE",
@@ -2011,7 +2011,15 @@ fn run_k3_essai() {
     if let Ok(v) = std::env::var("DRAVE_K3_PASSE") {
         if let Ok(n) = v.parse::<usize>() {
             if n >= 1 {
-                let ids4 = vec![3638u32, 275, 1309, 3140];
+                // `DRAVE_K3_IDS=1,2,3` : la séquence à faire passer. Sert à
+                // tracer le routage sur un VRAI texte plutôt que sur quatre
+                // jetons de démonstration — une trace de quatre jetons ne dit
+                // rien d'un cache.
+                let ids4: Vec<u32> = match std::env::var("DRAVE_K3_IDS").ok() {
+                    Some(v) => v.split(',').filter_map(|x| x.trim().parse().ok()).collect(),
+                    None => vec![3638u32, 275, 1309, 3140],
+                };
+                if ids4.is_empty() { eprintln!("[k3] DRAVE_K3_IDS vide"); return; }
                 // `DRAVE_K3_TETE=1` : on rend les LOGITS au lieu de `l_out`.
                 // C'est le critère de la porte de correction du dépôt
                 // (corrélation par position, top-1), appliqué au plus gros

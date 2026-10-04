@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 138.2 h |
-| Tours | 105 |
-| Messages | 7613 |
-| Appels d'outils | 7272 |
+| Durée | 139.9 h |
+| Tours | 107 |
+| Messages | 7637 |
+| Appels d'outils | 7299 |
 | Fichiers touchés | 150 |
-| Commandes | 6187 |
+| Commandes | 6198 |
 | Sous-agents | 32 |
-| Commits | 519 |
+| Commits | 520 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -257,6 +257,10 @@
 **Tour 104** — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas en local (classe Kimi-K3 Q4 : 1,5 To de poids, ~35 Go de poids par jeton), et étudier/implémenter ce qui nous distingue sur cette classe : découpage par experts et en grappes (chaque nœud ne lit que ce qu'il sert), réutilisation des experts entre jetons, transport de flux compact  … [966 caractères tronqués]
 
 **Tour 105** — continue
+
+**Tour 106** — étudie https://www.youtube.com/watch?v=bH36gWAgPwA
+
+**Tour 107** — oui
 
 ## 2. Déroulé, étape par étape
 
@@ -5205,7 +5209,104 @@ Les trois étaient **invisibles au jeton 0** — c'est pour ça qu'ils ont surv�
 
 **Synthèse produite :**
 
-Le refactor du dense emprunté est trop gros pour ce qui me reste de contexte. J'enregistre la conclusion mesurée et je laisse l'arbre propre.
+Continuation terminée — **une optimisation mesurée, vérifiée, et dont le gain s'effondre là où il faudrait. C'est le résultat le plus utile du round.**
+
+\## D'abord la mesure, avant d'optimiser
+
+| étage | part |
+|---|---|
+| chargement des poids (déquantification f32) | 19-22 % |
+| calcul | 78-81 % |
+| — dont attention | 6,2 s |
+| — dont **FFN** | **21,0 s (77 %)** |
+
+\## Le noyau MXFP4 du moteur sur les experts
+
+`expert_mxfp4_dans` écrivait **132 Mo de f32 par expert** que le matvec relisait aussitôt. Le noyau du moteur (`DenseQ4::dot16`, AVX2, table de décodage MXFP4) lit les blocs de 17 octets directement.
+
+| | f32 | noyau | gain |
+|---|---|---|---|
+| FFN (4 couches) | 21,1 s | 5,9 s | **×3,6** |
+| passe complète (93 couches) | 1 780 s | 1 695 s | **×1,05** |
+
+**Un échec instructif au passage** : ma première version clampait l'activation en i16 sans échelle. Écart relatif **4,5 %**, **pente −0,44** — un biais d'échelle, pas un arrondi : les valeurs après SiTU sont de l'ordre de l'unité, l'arrondi entier les détruisait. Avec l'échelle par vecteur que le moteur applique partout : **9,7e-6 de la dynamique, pente nulle**.
+
+**Vérifié sur le modèle entier** — noyau contre f32 :
+
+| | pos 0 | pos 1 | pos 2 |
+|---|---|---|---|
+| f32 | r = 0,999802 · top-1 84 | r = 0,999900 · top-1 1103 | r = 0,999924 · top-1 3140 |
+| noyau | **identique** | **identique** | **identique** |
+
+Mêmes corrélations à la sixième décimale, mêmes argmax. **Reste opt-in** : dans le régime réel il ne rapporte rien, et il change la sortie au niveau 1e-5 — le promouvoir serait changer un calcul pour zéro.
+
+\## Pourquoi le gain disparaît — et ce que ça apprend
+
+Le FFN coûte **3,1 s par couple (couche, jeton)** dans la passe complète contre **0,37 s** sur 4 couches. Même code, **huit fois plus lent** : la passe streame 1,5 To depuis un disque tournant. Le noyau divise par quatre les octets qui passent **en mémoire**, pas ceux qui sortent du **disque**.
+
+Trois faits mesurés qui en découlent :
+
+1. **Les experts ne dominent pas les lectures.** Par appel, la passe relit **~59,6 Go de dense Q8_0 + 12,4 Go d'experts partagés** contre 25,9 Go d'experts routés par jeton. Pour N jetons, le dense est relu N fois.
+2. **Le dense tient en RAM** : 59,6 Go sur 125. C'est la thèse du plan — « garder le dense résident, ne lire que les experts qui servent ».
+3. **Ce qui l'empêche, c'est la déquantification** : chaque appel alloue et libère ~224 Go de tampons f32, ce qui **évince le cache de pages**.
+
+\## Le prochain 
+… [772 caractères tronqués]
+
+### Tour 106 — étudie https://www.youtube.com/watch?v=bH36gWAgPwA
+
+*16 appels d'outils.* Actions notables :
+
+- web_fetch
+- web_search
+
+**Synthèse produite :**
+
+J'ai lu la vidéo par ce qu'elle donne à lire (la transcription n'était pas disponible) : la description complète, puis **le dépôt lui-même** — c'est là qu'est l'ingénierie.
+
+\## Ce que c'est
+
+**Strata**, moteur MIT écrit pour **un seul modèle** : Qwen3.8-Flash-Next (125 B MoE, 24 576 experts, 10 actifs par jeton). Un PC de jeu, 12 Go de VRAM, Windows ou Linux.
+
+[La vidéo](https://www.youtube.com/watch?v=bH36gWAgPwA) · [le dépôt](https://github.com/architectds/Strata) · [les détails chiffrés](https://raw.githubusercontent.com/architectds/Strata/main/docs/DETAILS.md) · [le fork 5090+4070](https://github.com/ExTV/strata-5090-4070)
+
+**Le « 6× » du titre est lui-même mis en garde par la vidéo** — « the headline hides which version is compared with which ». C'est 94 tok/s en **Q2_0** contre 15 tok/s pour llama.cpp en **IQ3_XXS** : deux quantifications différentes. À version égale : ~4× sur la machine du développeur, **~2× ailleurs**. Le vrai saut est ailleurs — **la lecture des invites : 100 → 1 500 tok/s** (un premier message de 32 000 jetons passe de 320 s à 21 s).
+
+\## L'architecture, et elle est très proche de nos conclusions
+
+| étage | ce qu'il porte |
+|---|---|
+| **VRAM** | attention, DeltaNet, routeurs, experts partagés, tête, couche MTP, cache KV, **et un cache d'experts** qui remplit le reste (il suit la conversation) |
+| **RAM** | **les 24 576 experts, épinglés** — le CPU calcule en place ceux qui ne sont pas sur le GPU, **en même temps** que lui |
+| **SSD** | la table de n-grammes (28,8 Go), quelques lignes par jeton, lue sans passer par le cache |
+
+Plus : **spéculation par la couche MTP du modèle** (2,4-3,2 jetons par passe), **invites par blocs de 8 192** avec les experts qui affluent en PCIe pendant que l'attention tourne, et **prélecture en avance** — un fil applique le **routeur de la couche suivante** à l'entrée de la couche courante pour demander les pages des experts prédits.
+
+\## Ce qui recoupe exactement nos mesures
+
+| leur constat | le nôtre |
+|---|---|
+| « élargir les invites à 8 192 et multiplier les experts par les **noyaux quantifiés** au lieu de les étendre en FP16 » | le noyau MXFP4 sur les experts, aujourd'hui : ×3,6 sur le FFN |
+| les noyaux **multi-jetons arrondissent autrement** que mono-jeton → à température 0 la réponse peut différer (leur issue #152, corrigée par un drapeau opt-in) | notre `--lot N` qui diverge au 3ᵉ jeton, mesuré et annoncé |
+| la part d'experts calculée sur GPU plutôt que CPU fait **différer la première réponse*
+… [2156 caractères tronqués]
+
+### Tour 107 — oui
+
+*11 appels d'outils.* Actions notables :
+
+- bash — Compute the VRAM cache ceiling from measured bytes
+- bash — Add the K3 routing trace
+- bash — Add the ids knob
+- bash — Tokenize a real text for the trace
+- bash — Run the K3 routing trace
+- bash — Poll the routing trace
+- bash — Analyze the K3 routing
+- bash — Write and commit the VRAM cache measurement
+
+**Synthèse produite :**
+
+**Mesuré sur le routage réel de K3.** Le verdict est net.
 
 ## 3. Travail accompli
 
@@ -5441,7 +5542,7 @@ Le refactor du dense emprunté est trop gros pour ce qui me reste de contexte. J
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6147 autres
+- … et 6158 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -6108,4 +6209,5 @@ Le refactor du dense emprunté est trop gros pour ce qui me reste de contexte. J
 - K3 : le noyau MXFP4 est vérifié sur le modèle entier — et son gain s'effondre là où il faudrait  Verdict sur les logits du modèle entier, noyau contre f32 :   p
 - K3 : le mur est le disque, et le prochain chantier est nommé précisément  Le chiffre qui commande tout : le FFN coûte 3,1 s par couple (couche, jeton) dans la p
 - REPRISE : le mur est le disque, prochain chantier nommé (emprunter le dense Q8_0)" && git log --oneline -6; git status --short | grep -v "^ M journal" | wc -l
+- Cache d'experts en VRAM pour K3 : mesuré, plafond x1,41, verdict x1,09 — non  Trace de routage RÉELLE de Kimi-K3 (nouveau DRAVE_K3_TRACE_EXPERTS + K3_IDS), 23 c
 

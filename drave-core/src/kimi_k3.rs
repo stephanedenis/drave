@@ -652,6 +652,10 @@ pub struct MoeK3 {
     /// `DRAVE_K3_MXFP4=1` : les experts passent par le noyau MXFP4 du moteur au
     /// lieu d'être déquantifiés en f32. CHANGE LA SORTIE — voir `mv_mxfp4`.
     noyau_mxfp4: bool,
+    /// Numéro de couche et rang du jeton : servent à la TRACE de routage, qui
+    /// est ce qui permet de prédire un cache d'experts avant d'en écrire un.
+    l: usize,
+    appels: std::cell::Cell<usize>,
 }
 
 /// Déquantifie **un** expert d'un tenseur MXFP4 emprunté : `n_out × n_in` poids,
@@ -760,6 +764,7 @@ impl MoeK3 {
             situ_beta: 4.0, situ_lin: 25.0, eps: 1e-5,
             noyau_mxfp4: std::env::var("DRAVE_K3_MXFP4")
                 .map(|v| v != "0" && !v.is_empty()).unwrap_or(false),
+            l, appels: std::cell::Cell::new(0),
         })
     }
 
@@ -783,6 +788,20 @@ impl MoeK3 {
         // 3. le latent
         let mut rin = vec![0f32; latent];
         mv(&self.rout_down, latent, h, cur, &mut rin);
+        // Trace de routage (`DRAVE_K3_TRACE_EXPERTS`) : une ligne par (couche,
+        // jeton), au même format que le reste du dépôt — c'est ce que lit
+        // `tools/analyse_reutilisation_experts.py`. Sans elle, prédire un cache
+        // d'experts sur K3 demanderait de l'écrire d'abord.
+        if let Ok(chemin) = std::env::var("DRAVE_K3_TRACE_EXPERTS") {
+            use std::io::Write;
+            if let Ok(mut f) = std::fs::OpenOptions::new().create(true).append(true).open(&chemin) {
+                let seq = self.appels.get();
+                let mut ids: Vec<String> = choisis.iter().map(|e| e.to_string()).collect();
+                ids.sort();
+                let _ = writeln!(f, "{} {} {}", self.l, seq, ids.join(" "));
+            }
+        }
+        self.appels.set(self.appels.get() + 1);
         // 4. les k experts, déquantifiés UN PAR UN
         let mut acc = vec![0f32; latent];
         let mut ge = vec![0f32; self.n_out_gate];
