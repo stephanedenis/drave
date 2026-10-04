@@ -395,3 +395,48 @@ RAM pour 125 Go disponibles.
 treize premières couches de Kimi-K3 comme llama.cpp les calcule, et la méthode
 qui l'a rendu possible — comparer à un tiers plutôt qu'à soi-même — est écrite
 noir sur blanc dans `docs/verification-kimi-k3.md`.
+
+## Kimi-K3 : le modèle entier passe, et ses logits sont ceux de la référence
+
+**La passe complète** (`DRAVE_K3_PASSE=93`) calcule les 93 couches en ne gardant
+**qu'une couche en mémoire** — l'état récurrent d'une couche ne sert que pendant
+la passe de cette couche sur les jetons, donc rien n'oblige à les garder toutes.
+Le pic passe de ~220 Go (impossible) à ~2,2 Go (une couche) + 0,6 Go d'états.
+
+Validée **au bit près** contre la composition résidente : écart max 0,000e+00 sur
+les quatre jetons à la couche 24 — laquelle matche la référence.
+
+**Résultat sur le modèle entier :**
+
+| | jeton 0 | jeton 1 | jeton 2 |
+|---|---|---|---|
+| `l_out-92`, corrélation | **0,999857** | **0,999900** | **0,999919** |
+| écart relatif | 1,4 % | 0,5 % | 0,7 % |
+
+et avec la tête, **les logits** :
+
+| position | corrélation | top-1 référence | top-1 moteur | jeton cible |
+|---|---|---|---|---|
+| 0 | **0,999802** | 84 | 84 ✅ | 275 |
+| 1 | **0,999900** | 1103 | 1103 ✅ | 1309 |
+| 2 | **0,999924** | 3140 | 3140 ✅ | 3140 |
+
+**top-1 identique 3/3, et l'argmax est le bon jeton.** Le critère de la porte de
+correction du dépôt passe à 100 % sur le plus gros modèle du parc.
+
+**Le coût, mesuré** : 1 780 531 ms pour 4 jetons avec la tête, soit **7,4 minutes
+par jeton**. La référence met **42 minutes par jeton** sur la même machine, bornée
+par le disque (1,80 To lus pour 4 jetons) : cette passe ne lit que les 16 experts
+choisis sur 896 et ne repaquette rien — **six fois plus rapide, et vérifiée
+contre elle**.
+
+**Quatre des treize points du protocole sont verts** : couches 0, 12, 24 et 92.
+Le dernier est le modèle entier — 8 points de contrôle dans la banque, 68 couches
+KDA avec leur convolution et leur récurrence, 24 couches MLA à cache latent, 896
+experts dont 16 par jeton, SiTU. Aucun mécanisme de l'architecture n'est laissé
+de côté.
+
+**Ce qui reste**, et c'est nommé : la passe déquantifie le dense en f32 (2,2 Go
+par couche chargée) au lieu d'utiliser les noyaux quantifiés du moteur ; elle
+n'échantillonne pas de jetons ; et les mécanismes propres à ce dépôt — découpage
+en grappes, transport de flux en listes — ne sont pas encore exercés SUR K3.

@@ -119612,3 +119612,9 @@ top-1 identique : 3/3
 **Top-1 identique 3/3, et c'est le bon jeton à chaque position.** Le modèle entier est vérifié sur les logits.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/verification-kimi-k3.md'; s=open(p).read()\nanc = \"### 4quater-sexies. **LA PASSE COMPLÈTE DE 93 COUCHES PASSE** (05/10, 04h28)\"\nnew = \"\"\"### 4quater-septies. **LES LOGITS DU MODÈLE ENTIER — top-1 iden … [2072 caractères tronqués]`
+
+  ```
+e15dc6b K3 : LES LOGITS DU MODÈLE ENTIER — top-1 identique 3/3, et c'est le bon jeton
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> sprints/31-le-regroupement-par-experts-mesure-et-k3-au-complet.md <<'EOF'\n\n## Kimi-K3 : le modèle entier passe, et ses logits sont ceux de la référence\n\n**La passe complète** (`DRAVE_K3_PASSE=93`) calcule les 93 couches en … [2304 caractères tronqués]`

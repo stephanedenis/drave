@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 134.3 h |
 | Tours | 103 |
-| Messages | 7542 |
-| Appels d'outils | 7206 |
+| Messages | 7543 |
+| Appels d'outils | 7207 |
 | Fichiers touchés | 150 |
-| Commandes | 6123 |
+| Commandes | 6124 |
 | Sous-agents | 32 |
-| Commits | 508 |
+| Commits | 509 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -5058,7 +5058,7 @@ C'est finalement la **lecture du code de la référence** qui a donné le troisi
 
 ### Tour 103 — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas e … [1246 caractères tronqués]
 
-*32 appels d'outils.* Actions notables :
+*33 appels d'outils.* Actions notables :
 
 - bash — Read PetitesK3 layer body
 - bash — Implement the layer-streaming full pass
@@ -5074,7 +5074,7 @@ C'est finalement la **lecture du code de la référence** qui a donné le troisi
 - bash — Compare streaming pass vs layer-resident composition
 - bash — Launch the full 93-layer K3 forward
 - bash — Commit the streaming pass
-- … et 16 autres
+- … et 17 autres
 
 **Synthèse produite :**
 
@@ -5314,7 +5314,7 @@ C'est finalement la **lecture du code de la référence** qui a donné le troisi
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6083 autres
+- … et 6084 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5970,4 +5970,5 @@ C'est finalement la **lecture du code de la référence** qui a donné le troisi
 - REPRISE : la passe complète de Kimi-K3 passe — 93 couches, 7,2 min/jeton" && git log --oneline -1; git status --short | grep -v "^ M journal" | wc -l
 - K3 : la TÊTE sur la passe complète — les logits, critère de la porte de correction  DRAVE_K3_TETE=1 rend les logits (mélange résiduel final avec output_res_scor
 - K3 : LES LOGITS DU MODÈLE ENTIER — top-1 identique 3/3, et c'est le bon jeton  Passe complète (93 couches) avec la tête, comparée aux logits de llama.cpp-k3 :  
+- Sprint 31 : Kimi-K3 entier, logits vérifiés, 7,4 min/jeton" && git log --oneline -1; git status --short | grep -v "^ M journal" | wc -l
 
