@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 136.2 h |
 | Tours | 104 |
-| Messages | 7577 |
-| Appels d'outils | 7239 |
+| Messages | 7578 |
+| Appels d'outils | 7240 |
 | Fichiers touchés | 150 |
-| Commandes | 6156 |
+| Commandes | 6157 |
 | Sous-agents | 32 |
-| Commits | 514 |
+| Commits | 515 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -5119,7 +5119,7 @@ Dire « c'est de l'accumulation f32 » était une affirmation. La mesure : régr
 
 ### Tour 104 — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas e … [1246 caractères tronqués]
 
-*28 appels d'outils.* Actions notables :
+*29 appels d'outils.* Actions notables :
 
 - bash — Inspect KDA and MLA state fields
 - bash — Read MlaK3 fields
@@ -5135,7 +5135,7 @@ Dire « c'est de l'accumulation f32 » était une affirmation. La mesure : régr
 - bash — Find the crash cause
 - bash — Read the failing restore code
 - bash — Fix the MLA cache restore
-- … et 8 autres
+- … et 9 autres
 
 **Synthèse produite :**
 
@@ -5375,7 +5375,7 @@ Dire « c'est de l'accumulation f32 » était une affirmation. La mesure : régr
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6116 autres
+- … et 6117 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -6037,4 +6037,5 @@ Dire « c'est de l'accumulation f32 » était une affirmation. La mesure : régr
 - K3 : l'état récurrent survit à la libération de sa couche, et la génération gloutonne est branchée  DRAVE_K3_GEN=N fait un préfill puis N jetons engendrés en gl
 - K3 : le cache MLA se RESTAURE par affectation — la génération tombait après le 1er pas  copy_from_slice sur un cache de longueur nulle : le cache MLA d'une couc
 - K3 : LE MOTEUR ENGENDRE, ET CHAQUE PAS EST CELUI DE LA RÉFÉRENCE  Deux appels successifs, le second ne voyant qu'un jeton nouveau (l'état récurrent restauré vie
+- Docs : le moteur engendre avec Kimi-K3, et un attendu mal écrit fabrique un échec qui n'existe pas" && git log --oneline -1; git status --short | grep -v "^ M j
 

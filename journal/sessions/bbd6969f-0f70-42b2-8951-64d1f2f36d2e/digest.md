@@ -119996,3 +119996,9 @@ pas 0 : 2 jeton(s) en entrée (1080 s) → argmax 1103 ✅ (référence)
 **Les deux pas sont vérifiés, avec l'état reporté d'un appel à l'autre.**
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/verification-kimi-k3.md'; s=open(p).read()\nanc = \"### 4quater-septies. **LES LOGITS DU MODÈLE ENTIER — top-1 identique 3/3** (05/10, 05h06)\"\nnew = \"\"\"### 4quater-octies. **LE MOTEUR ENGENDRE AVEC KIMI … [2605 caractères tronqués]`
+
+  ```
+7817407 K3 : LE MOTEUR ENGENDRE, ET CHAQUE PAS EST CELUI DE LA RÉFÉRENCE
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\nanc = \"> ## **LA PASSE COMPLÈTE DE KIMI-K3 PASSE (04h28)**\"\nnew = \"\"\"> ## **LE MOTEUR ENGENDRE AVEC KIMI-K3 (06h56)** — et chaque pas est celui de la référence\n>\n> `DRAVE_K3 … [3268 caractères tronqués]`

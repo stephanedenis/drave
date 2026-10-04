@@ -78,6 +78,30 @@ cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo build --r
 > `res_mix` s'applique là où la référence n'en applique pas. Les trois étaient
 > invisibles au jeton 0 seul.
 >
+> ## **LE MOTEUR ENGENDRE AVEC KIMI-K3 (06h56)** — et chaque pas est celui de la référence
+>
+> `DRAVE_K3_GEN=N` : préfill puis jetons gloutons, l'état récurrent (convolution,
+> delta, cache MLA) **restauré au rechargement de chaque couche**. Deux appels
+> successifs, le second ne voyant qu'un jeton nouveau :
+>
+> ```
+> pas 0 : 2 jeton(s) en entrée (1080 s) → argmax 1103 ✅
+> pas 1 : 3 jeton(s) en entrée (1578 s) → argmax 3140 ✅
+> ```
+>
+> 1103 et 3140 sont les **top-1 de llama.cpp-k3** aux mêmes positions. Le second
+> pas vérifie donc deux choses : le choix est le bon, **et** il vient d'un état
+> restauré, pas recalculé.
+>
+> **« Faire tourner le modèle en local » au sens plein** : 93 couches, 1,5 To de
+> poids, 125 Go de RAM, **une seule couche de poids en mémoire** (~2,2 Go) plus
+> ~0,6 Go d'états pour les 93 couches. ~18 min par jeton engendré.
+>
+> **Piège à connaître** : `DRAVE_K3_IMPOSE` et le tableau d'attente. Le premier
+> essai a affiché « argmax 1103 ❌ (référence 1309) » — c'était **mon attendu**
+> qui était faux (le jeton cible au lieu du top-1 de la référence). Un attendu
+> mal écrit fabrique un échec qui n'existe pas.
+>
 > ## **LA PASSE COMPLÈTE DE KIMI-K3 PASSE (04h28)** — 93 couches, vérifiées
 >
 > `DRAVE_K3_PASSE=93` calcule **tout le modèle**, une seule couche en mémoire à

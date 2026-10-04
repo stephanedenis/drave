@@ -440,3 +440,36 @@ de côté.
 par couche chargée) au lieu d'utiliser les noyaux quantifiés du moteur ; elle
 n'échantillonne pas de jetons ; et les mécanismes propres à ce dépôt — découpage
 en grappes, transport de flux en listes — ne sont pas encore exercés SUR K3.
+
+## Et le moteur ENGENDRE — chaque pas est celui de la référence
+
+L'état récurrent d'une couche (convolution, delta, cache MLA) est sorti de son
+objet avant que celui-ci ne tombe, et restauré au rechargement. C'est ce qui
+permet de générer : la passe streaming recharge chaque couche à chaque jeton,
+donc l'état doit vivre ailleurs. ~0,6 Go pour les 93 couches.
+
+```
+pas 0 : 2 jeton(s) en entrée (1080 s) → argmax 1103 ✅ (référence)
+pas 1 : 3 jeton(s) en entrée (1578 s) → argmax 3140 ✅ (référence)
+```
+
+Le second appel ne voit **qu'un jeton nouveau** : son résultat vient donc d'un
+état **restauré**, pas recalculé. Il vérifie deux choses à la fois.
+
+**Faire tourner Kimi-K3 en local, c'est fait** : 93 couches, 1,5 To de poids,
+125 Go de RAM, une seule couche de poids en mémoire (~2,2 Go) plus ~0,6 Go
+d'états. Environ **18 minutes par jeton engendré** — lent, mais c'est un modèle
+dont un seul jeton coûte 86,8 Go de poids à lire, sur une machine qui a huit
+fois moins de RAM que le modèle n'a de gigaoctets.
+
+**Deux corrections dans ce bloc, toutes les deux sur MES instruments :**
+
+1. le premier essai de génération a affiché « argmax 1103 ❌ (référence 1309) » :
+   c'était mon **tableau d'attente** qui était faux — le jeton *cible* au lieu du
+   *top-1 de la référence*. Le moteur avait raison ;
+2. la génération tombait après le premier pas sur un `copy_from_slice` dans un
+   cache MLA de longueur nulle. Une affectation règle le problème.
+
+Un attendu mal écrit fabrique un échec qui n'existe pas. C'est le pendant exact
+de « une affirmation sans mesure n'est pas une affirmation » : **une mesure
+comparée au mauvais attendu n'est pas une mesure non plus.**
