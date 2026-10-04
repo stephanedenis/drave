@@ -97,6 +97,24 @@ int main(int argc, char ** argv) {
 
     llama_model_params mparams = llama_model_default_params();
     mparams.n_gpu_layers = 0; // CPU uniquement
+    // REF_SANS_REPACK=1 : refuse les types de tampon « extra » (CPU_REPACK), donc
+    // le repaquetage des poids en RAM.
+    //
+    // Mesuré le 04/10 sur Kimi-K3 (1 508,7 Go) : le repaquetage par défaut lit
+    // chaque tenseur et le RECOPIE dans un tampon de RAM. Après **16 tenseurs**
+    // (couche 6 sur 93), le processus tenait 104 Go résidents et **6,9 Go de
+    // swap** sur une machine de 125 Go — il ne pouvait pas finir, et il rendait
+    // le disque inutilisable pour tout le reste. Sans repaquetage, llama.cpp
+    // travaille sur le fichier mmappé et lit à la demande : c'est plus lent par
+    // jeton, mais ça tient dans la mémoire et ça commence.
+    //
+    // Opt-in : aucun autre modèle du parc n'a besoin de ce drapeau, et le
+    // changer par défaut déplacerait les portes existantes.
+    if (const char * e = std::getenv("REF_SANS_REPACK"); e != nullptr && e[0] != '0') {
+        mparams.use_extra_bufts = false;
+        std::fprintf(stderr, "ref_logits: repaquetage des poids REFUSÉ (REF_SANS_REPACK) — "
+                             "lecture à la demande sur le fichier mmappé\n");
+    }
 
     llama_model * modele = llama_model_load_from_file(chemin_modele, mparams);
     if (modele == nullptr) {

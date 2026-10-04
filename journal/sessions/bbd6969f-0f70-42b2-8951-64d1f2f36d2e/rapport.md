@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 125.0 h |
+| Durée | 125.3 h |
 | Tours | 100 |
-| Messages | 7343 |
-| Appels d'outils | 7014 |
+| Messages | 7355 |
+| Appels d'outils | 7026 |
 | Fichiers touchés | 150 |
-| Commandes | 5937 |
+| Commandes | 5947 |
 | Sous-agents | 32 |
-| Commits | 486 |
+| Commits | 487 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -4889,7 +4889,7 @@ Et le geste qui rend un modèle de 1,5 To seulement *lisible* : les experts sont
 
 ### Tour 100 — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas e … [1246 caractères tronqués]
 
-*253 appels d'outils.* Actions notables :
+*265 appels d'outils.* Actions notables :
 
 - bash — Extract the KDA into a reusable piece
 - bash — Commit the KDA extraction and check the download
@@ -4905,11 +4905,11 @@ Et le geste qui rend un modèle de 1,5 To seulement *lisible* : les experts sont
 - bash — Find expert loading call sites
 - read
 - bash — Inspect RAM expert cache
-- … et 195 autres
+- … et 204 autres
 
 **Synthèse produite :**
 
-**La composition à 13 couches franchit la première banque** — je consigne.
+C'est un résultat en soi : la référence veut repaver les 1,5 To en RAM (104 Go après 16 tenseurs, déjà en swap). Je l'arrête et je cherche la porte de sortie.
 
 ## 3. Travail accompli
 
@@ -4924,7 +4924,7 @@ Et le geste qui rend un modèle de 1,5 To seulement *lisible* : les experts sont
 | `/tmp/mesures_oss2.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/compare_logits.py` | 3 | 7 |
 | `/tmp/mesures_oss3.sh` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/ref_logits.cpp` | 0 | 3 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/ref_logits.cpp` | 0 | 4 |
 | `/tmp/mesures_oss4.sh` | 2 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gpt-oss-perplexite.md` | 1 | 4 |
 | `/tmp/controles_oss.sh` | 1 | 0 |
@@ -5145,7 +5145,7 @@ Et le geste qui rend un modèle de 1,5 To seulement *lisible* : les experts sont
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5897 autres
+- … et 5907 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5779,4 +5779,5 @@ Et le geste qui rend un modèle de 1,5 To seulement *lisible* : les experts sont
 - K3 : la cadence des couches a une EXCEPTION, et le moteur ne l'a pas codée en dur  Sur les 93 couches : 1 dense, 68 KDA, 24 MLA — la couche 92 est MLA alors que
 - K3 : composer 13 couches, le premier essai qui franchit une BANQUE  Quatre couches exercent la chaîne (dense, deux MoE, MLA) mais ne franchissent aucune banque 
 - K3 : les 13 premières couches, dont la BANQUE de la couche 12 — sorties finies  DRAVE_K3_COUCHES=13 : quatre jetons à travers 0→12, |l_out| = 9,6728 / 9,9734 / 
+- ref_logits : REF_SANS_REPACK, la porte qui rend la référence K3 exécutable ici  Mesuré sur Kimi-K3 : le repaquetage par défaut de llama.cpp lit chaque tenseur e
 

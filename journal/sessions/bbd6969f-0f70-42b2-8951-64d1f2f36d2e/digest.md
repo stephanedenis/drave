@@ -116983,3 +116983,150 @@ MLA couche 3, jeton 1 : |sortie| = 10.4341 · finis : true · 226 ms
 **La composition à 13 couches franchit la première banque** — je consigne.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/verification-kimi-k3.md'; s=open(p).read()\nanc = \"Le chemin K3 est un instrument de **vérification**, pas d'exécution : il\"\nnew = \"\"\"### Le premier franchissement de BANQUE (bloc 31)\n\n`DRAVE_K3_COUC … [1601 caractères tronqués]`
+
+  ```
+aacb18c K3 : les 13 premières couches, dont la BANQUE de la couche 12 — sorties finies
+  ```
+
+- **bash** `{"command": "sleep 520; P=$(pgrep -x ref_logits_k3 | head -1); if [ -n \"$P\" ]; then grep -E \"^read_bytes\" /proc/$P/io; ps -o etimes= -p $P; else echo TERMINÉ; fi; ls /tmp/refk3-*.bin 2>/dev/null | wc -l; date \"+%H:%M\"", "description": "Poll reference", "timeoutMs": 560000}`
+
+  ```
+read_bytes: 1526622785536
+   8781
+0
+19:54
+  ```
+
+- **bash** `{"command": "sleep 520; P=$(pgrep -x ref_logits_k3 | head -1); if [ -n \"$P\" ]; then grep -E \"^read_bytes\" /proc/$P/io; ps -o etimes= -p $P; else echo TERMINÉ; fi; tail -4 /tmp/refk3_run.log; ls /tmp/refk3-*.bin 2>/dev/null | wc -l; date \"+%H:%M\"", "description": "Poll reference", "timeoutMs":  … [7 caractères tronqués]`
+
+  ```
+read_bytes: 1590682497024
+   9307
+.repack: repack tensor blk.5.ffn_gate_exps.weight with mxfp4_8x8
+repack: repack tensor blk.5.ffn_down_exps.weight with mxfp4_8x8
+repack: repack tensor blk.5.ffn_up_exps.weight with mxfp4_8x8
+.repack: repack tensor blk.6.ffn_gate_exps.weight with mxfp4_8x8
+0
+20:03
+  ```
+
+- **bash** `{"command": "P=$(pgrep -x ref_logits_k3 | head -1); grep -E \"VmRSS|VmSwap\" /proc/$P/status; free -g | head -2; grep -c \"repack tensor\" /tmp/refk3_run.log; grep \"repack tensor\" /tmp/refk3_run.log | tail -1; dmesg 2>/dev/null | tail -3", "description": "Check reference memory pressure"}`
+
+  ```
+VmRSS:	104428584 kB
+VmSwap:	 6860460 kB
+               total        used        free      shared  buff/cache   available
+Mem:             125          85           0           3          44          39
+16
+.repack: repack tensor blk.6.ffn_gate_exps.weight with mxfp4_8x8
+  ```
+
+- **bash** `{"command": "strings /home/stephane/Data13TB/stephane/GitHub/llama.cpp-k3/build/bin/libggml-cpu.so 2>/dev/null | grep -iE \"REPACK|repack\" | head -8; echo \"--- cli ---\"; strings /home/stephane/Data13TB/stephane/GitHub/llama.cpp-k3/build/bin/llama-cli 2>/dev/null | grep -iE \"^no-repack|repack\" | … [55 caractères tronqués]`
+
+  ```
+_Z35ggml_backend_cpu_repack_buffer_typev
+_ZN4ggml3cpu6repack13tensor_traitsI10block_q8_0Ll8ELl4EL9ggml_type8EED1Ev
+_ZN4ggml3cpu6repack13tensor_traitsI10block_q8_0Ll4ELl4EL9ggml_type8EED1Ev
+_ZN4ggml3cpu6repack13tensor_traitsI11block_mxfp4Ll8ELl8EL9ggml_type8EED1Ev
+_ZN4ggml3cpu6repack13tensor_traitsI11block_mxfp4Ll4ELl4EL9ggml_type8EED1Ev
+_ZN4ggml3cpu6repack13tensor_traitsI12block_iq4_nlLl8ELl8EL9ggml_type8EED1Ev
+_ZN4ggml3cpu6repack13tensor_traitsI12block_iq4_nlLl4ELl4EL9ggml_type8EED1Ev
+_ZN4ggml3cpu6repack13tensor_traitsI10block_q2_KLl8ELl8EL9ggml_type15EED1Ev
+--- cli ---
+  ```
+
+- **bash** `{"command": "for f in /home/stephane/Data13TB/stephane/GitHub/llama.cpp-k3/build/bin/*.so* /home/stephane/Data13TB/stephane/GitHub/llama.cpp-k3/build/bin/llama-cli; do strings \"$f\" 2>/dev/null | grep -E \"^[A-Z_]*REPACK[A-Z_]*$|no.repack|repack\" | sort -u | head -6; done | sort -u | head -12", "d … [41 caractères tronqués]`
+
+  ```
+&5EYqN4ggml3cpu6repack18tensor_traits_baseE
+CPU_REPACK
+/home/stephane/Data13TB/stephane/GitHub/llama.cpp-k3/ggml/src/ggml-cpu/repack.cpp
+LLAMA_ARG_REPACK
+N4ggml3cpu6repack13tensor_traitsI10block_q1_0Ll4ELl4EL9ggml_type8EEE
+N4ggml3cpu6repack13tensor_traitsI10block_q1_0Ll8ELl4EL9ggml_type8EEE
+N4ggml3cpu6repack13tensor_traitsI10block_q2_KLl8ELl8EL9ggml_type15EEE
+--no-repack
+--repack
+  --repack <0|1>                                    (default: %s)
+TYPE_IQ4_NL_4_4 REMOVED, use IQ4_NL with runtime repacking
+TYPE_IQ4_NL_4_8 REMOVED, use IQ4_NL with runtime repacking
+  ```
+
+### 🤖 Assistant
+
+C'est un résultat en soi : la référence veut repaver les 1,5 To en RAM (104 Go après 16 tenseurs, déjà en swap). Je l'arrête et je cherche la porte de sortie.
+
+- **bash** `{"command": "pkill -x ref_logits_k3; sleep 2; P=$(pgrep -x ref_logits_k3 | wc -l); echo \"restants: $P\"; free -g | head -2\nLC=/home/stephane/Data13TB/stephane/GitHub/llama.cpp-k3; grep -rn \"use_extra_bufts\" $LC/include/llama.h $LC/src/llama-model.cpp 2>/dev/null | head -5; grep -n \"use_extra_bu … [169 caractères tronqués]`
+
+  ```
+restants: 1
+               total        used        free      shared  buff/cache   available
+Mem:             125          40          46           3          43          85
+/home/stephane/Data13TB/stephane/GitHub/llama.cpp-k3/include/llama.h:352:        bool use_extra_bufts; // use extra buffer types (used for weight repacking)
+/home/stephane/Data13TB/stephane/GitHub/llama.cpp-k3/src/llama-model.cpp:1080:static buft_list_t make_cpu_buft_list(const std::vector<llama_device> & devices, bool use_extra_bufts, bool no_host) {
+/home/stephane/Data13TB/stephane/GitHub/llama.cpp-k3/src/llama-model.cpp:1112:    if (use_extra_bufts) {
+/home/stephane/Data13TB/stephane/GitHub/llama.cpp-k3/src/llama-model.cpp:1545:    pimpl->cpu_buft_list = make_cpu_buft_list(devices, params.use_extra_bufts, params.no_host);
+/home/stephane/Data13TB/stephane/GitHub/llama.cpp-k3/src/llama-model.cpp:2940:        /*.use_extra_bufts             =*/ true,
+  ```
+
+- **bash** `{"command": "pgrep -x ref_logits_k3 | while read p; do kill -9 $p; done; sleep 2; pgrep -x ref_logits_k3 | wc -l\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"llama_model_params\\|mparams\\.\" tools/ref_logits.cpp | head -12", "description": "Clear process and find mparams"}`
+
+  ```
+0
+98:    llama_model_params mparams = llama_model_default_params();
+99:    mparams.n_gpu_layers = 0; // CPU uniquement
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/ref_logits.cpp", "limit": 10, "offset": 96}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/ref_logits.cpp</path>
+<type>file</type>
+<content>
+96:     llama_backend_init();
+97: 
+98:     llama_model_params mparams = llama_model_default_params();
+99:     mparams.n_gpu_layers = 0; // CPU uniquement
+100: 
+101:     llama_model * modele = llama_model_load_from_file(chemin_modele, mparams);
+102:     if (modele == nullptr) {
+103:         std::fprintf(stderr, "ref_logits: echec du chargement de %s\n", chemin_modele);
+104:         return 1;
+105:     }
+
+(Showing lines 96-105 of 338. Use offset=106 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/ref_logits.cpp", "new_string": "    llama_model_params mparams = llama_model_default_params();\n    mparams.n_gpu_layers = 0; // CPU uniquement\n    // REF_SANS_REPACK=1 : refuse les types de tampon « extra » (CPU_REPACK), donc\n   … [1186 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/ref_logits.cpp has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && LC=/home/stephane/Data13TB/stephane/GitHub/llama.cpp-k3\ng++ -O2 -std=c++17 tools/ref_logits.cpp -o tools/ref_logits_k3 -I $LC/include -I $LC/ggml/include -L $LC/build/bin -lllama -lggml -lggml-base 2>&1 | head -10; echo \"build exit … [369 caractères tronqués]`
+
+  ```
+build exit=0
+-rwxr-xr-x. 1 stephane stephane 207032  3 oct 20:04 tools/ref_logits_k3
+build2 exit=0
+-rwxr-xr-x. 1 stephane stephane 207032  3 oct 20:04 tools/ref_logits
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && K=/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf\nnohup bash -c \"cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && REF_SANS_REPACK=1 REF_DUMP=/tmp/refk3 LD_LIBRARY_PATH=/h … [444 caractères tronqués]`
+
+  ```
+lancé
+create_tensor: loading tensor blk.92.attn_output.input_scale
+create_tensor: loading tensor blk.92.attn_gate.input_scale
+create_tensor: loading tensor blk.92.ffn_gate_exps.input_scale
+create_tensor: loading tensor blk.92.ffn_down_exps.input_scale
+create_tensor: loading tensor blk.92.ffn_up_exps.input_scale
+create_tensor: loading tensor blk.92.ffn_gate_shexp.input_scale
+create_tensor: loading tensor blk.92.ffn_down_shexp.input_scale
+create_tensor: loading tensor blk.92.ffn_up_shexp.input_scale
+VmRSS:	16759292 kB
+read_bytes: 17124999168
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -3 /tmp/refk3_run2.log; grep -c \"repack tensor\" /tmp/refk3_run2.log; git add -A && git commit -q -m \"ref_logits : REF_SANS_REPACK, la porte qui rend la référence K3 exécutable ici\n\nMesuré sur Kimi-K3 : le repaquetage par dé … [643 caractères tronqués]`
