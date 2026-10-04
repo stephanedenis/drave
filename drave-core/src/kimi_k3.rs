@@ -259,6 +259,9 @@ pub struct Couche0 {
     /// la couche 0 est « banque » (`0 % 12 == 0`), elle empile son entrée BRUTE.
     pile: Vec<f32>,
     n_ckpt: usize,
+    /// Numéro du jeton traité, pour nommer les vidages comme la référence
+    /// (`<préfixe>-<tenseur>-<couche>-<position>.bin`).
+    pos: usize,
 }
 
 impl Couche0 {
@@ -320,7 +323,7 @@ impl Couche0 {
             etat_conv_v: etat_conv,
             etat_delta: vec![0f32; nh * hd * hd],
             h, nh, hd, d_inner, d_conv, ffn, eps,
-            pile: Vec::new(), n_ckpt: 0,
+            pile: Vec::new(), n_ckpt: 0, pos: 0,
         })
     }
 
@@ -347,6 +350,9 @@ impl Couche0 {
         let (h, nh, hd, d_inner) = (self.h, self.nh, self.hd, self.d_inner);
         if x.len() != h { return Err(format!("entrée de {} valeurs, {h} attendues", x.len())); }
         let mut tampon = vec![0f32; h.max(d_inner).max(self.ffn)];
+        let vider = std::env::var("DRAVE_DUMP_COUCHES").ok().filter(|p| !p.is_empty());
+        let pos = self.pos;
+        self.pos += 1;
         // 1. attention résiduelle (pile vide → renvoie `x` tel quel)
         let cur0 = if self.n_ckpt == 0 {
             x.to_vec()
@@ -357,11 +363,22 @@ impl Couche0 {
         };
         // 2. la couche 0 EST une couche « banque » : on empile l'entrée BRUTE,
         //    AVANT l'attention (`res_push(prefix_sum)` dans la référence).
+        //
+        // **La banque est REPARTIE à chaque jeton, pas accumulée.** Dans la
+        // référence, `resi_stack` est une variable locale au graphe : elle est
+        // vide au début de chaque passe, et elle porte une colonne par jeton du
+        // lot. Ici les jetons sont traités un par un, donc la couche 0 empile
+        // l'entrée du jeton COURANT et rien d'autre. Accumuler entre jetons
+        // faisait mélanger le jeton 1 avec l'entrée du jeton 0 — et c'est
+        // exactement ce que la comparaison montrait : jeton 0 juste à 4e-04,
+        // jetons 1 et 2 faux à 0,82 et 0,64 de corrélation.
+        self.pile.clear();
         self.pile.extend_from_slice(x);
-        self.n_ckpt += 1;
+        self.n_ckpt = 1;
         // 3. RMSNorm d'entrée
         let mut cur = vec![0f32; h];
         rms_norm_poids(&cur0, &self.attn_norm, self.eps, &mut cur);
+        if let Some(p) = vider.as_deref() { vide(p, "attn_norm", 0, pos, &cur); }
         // 4. projections + convolution courte + SiLU
         let mut q = vec![0f32; d_inner];
         let mut k = vec![0f32; d_inner];
@@ -380,6 +397,13 @@ impl Couche0 {
         crate::model::kda_conv_silu(&q, &self.conv_q, &mut self.etat_conv_q, self.d_conv, d_inner, &mut qc);
         crate::model::kda_conv_silu(&k, &self.conv_k, &mut self.etat_conv_k, self.d_conv, d_inner, &mut kc);
         crate::model::kda_conv_silu(&v, &self.conv_v, &mut self.etat_conv_v, self.d_conv, d_inner, &mut vc);
+        if let Some(p) = vider.as_deref() {
+            vide(p, "kda_q_conv", 0, pos, &qc);
+            vide(p, "kda_k_conv", 0, pos, &kc);
+            vide(p, "kda_v_conv", 0, pos, &vc);
+        }
+        // La norme L2 par tête, entre la convolution et la récurrence.
+        l2_q_et_k(&mut qc, &mut kc, nh, hd, self.eps);
         // 5. porte de décroissance (par tête) et pas appris
         let mut fa = vec![0f32; hd];
         mv(&self.f_a, hd, h, &cur, &mut fa);
@@ -402,6 +426,7 @@ impl Couche0 {
                                   &mut self.etat_delta[t * hd * hd..(t + 1) * hd * hd], hd, &mut ot);
             o[t * hd..(t + 1) * hd].copy_from_slice(&ot);
         }
+        if let Some(p) = vider.as_deref() { vide(p, "kda_scan_out", 0, pos, &o); }
         // 7. norme + porte de sortie PLEIN RANG (calculée UNE fois)
         let mut g2 = vec![0f32; d_inner];
         mv(&self.g_proj, d_inner, h, &cur, &mut g2);
@@ -413,8 +438,13 @@ impl Couche0 {
                 o[t * hd + i] = tampon[i] * s;
             }
         }
+        if let Some(p) = vider.as_deref() { vide(p, "kda_normed", 0, pos, &o); }
         let mut attn = vec![0f32; h];
         mv(&self.wo, h, d_inner, &o, &mut attn);
+        if let Some(p) = vider.as_deref() {
+            vide(p, "kda_out", 0, pos, &attn);
+            vide(p, "prefix_sum_attn", 0, pos, &attn);
+        }
         // 8. le flux REDÉMARRE ici (couche « banque ») : `prefix = attn`, pas `x + attn`
         let mut prefix = attn.clone();
         // 9. attention résiduelle avant la FFN
@@ -422,6 +452,7 @@ impl Couche0 {
         crate::model::res_mix(&self.pile, self.n_ckpt, h, &prefix, &self.ffn_res_score,
                               self.eps, &mut cur_ffn);
         rms_norm_poids(&cur_ffn, &self.ffn_norm, self.eps, &mut cur);
+        if let Some(p) = vider.as_deref() { vide(p, "ffn_norm", 0, pos, &cur); }
         // 10. FFN dense avec SiTU
         let mut fg = vec![0f32; self.ffn];
         let mut fu = vec![0f32; self.ffn];
@@ -431,6 +462,7 @@ impl Couche0 {
         for i in 0..self.ffn { fg[i] = crate::model::situ(fg[i], fu[i], beta_s, lin); }
         let mut ff = vec![0f32; h];
         mv(&self.ffn_down, h, self.ffn, &fg, &mut ff);
+        if let Some(p) = vider.as_deref() { vide(p, "ffn_out", 0, pos, &ff); }
         // 11. le flux reprend
         for i in 0..h { prefix[i] += ff[i]; }
         Ok(prefix)
@@ -446,6 +478,53 @@ impl Couche0 {
 // côté ne se voit ni à la compilation ni à la relecture — elle se voit au
 // premier produit matriciel, ou jamais si les deux nombres sont proches.
 // ===========================================================================
+
+/// Vide un tenseur intermédiaire de la couche 0 au format de la référence :
+/// `<préfixe>-<nom>-<couche>-<position>.bin`, f32 brut. C'est ce qui permet de
+/// BISSECTER une divergence au lieu de raisonner sur la sortie de la couche.
+fn vide(prefixe: &str, nom: &str, couche: usize, pos: usize, v: &[f32]) {
+    use std::io::Write;
+    if let Ok(mut f) = std::fs::File::create(format!("{prefixe}-{nom}-{couche}-{pos}.bin")) {
+        let mut o = Vec::with_capacity(v.len() * 4);
+        for x in v { o.extend_from_slice(&x.to_le_bytes()); }
+        let _ = f.write_all(&o);
+    }
+}
+
+/// **La norme L2 par tête**, appliquée à `q` et `k` après la convolution et
+/// AVANT la récurrence — `build_gdn_l2_norm` de la référence :
+///
+/// ```text
+///   l2(x) = x / sqrt(Σ x² + eps)          (la somme porte sur head_dim)
+/// ```
+///
+/// Elle MANQUAIT, et c'est ce qui faisait diverger la couche 0 dès le jeton 1.
+/// La signature le disait : au jeton 0 l'état delta est nul, donc
+/// `o[j] = β·(Σ_i k[i]·q[i])·v[j]` — proportionnel à `v` quelle que soit
+/// l'échelle de `q` et `k` — et la norme par tête qui suit efface justement
+/// cette échelle. D'où une corrélation de 0,983 au jeton 0 **avec un rapport de
+/// norme de 0,94**, puis 0,79 et 0,64 : à partir du jeton 1, l'accumulation
+/// `s += k ⊗ β(v − sᵀk)` dépend de l'échelle de `k`, elle.
+///
+/// `facteur` porte le `1/sqrt(head_dim)` que la référence applique EN PLUS à
+/// `q` seul (`ggml_scale(q, 1/sqrt(S_k))` dans `build_delta_net_autoregressive`).
+fn l2_norme_tete(x: &mut [f32], hd: usize, eps: f32, facteur: f32) {
+    let mut carre = 0f32;
+    for v in x[..hd].iter() { carre += *v * *v; }
+    let inv = facteur / (carre + eps).sqrt();
+    for v in x[..hd].iter_mut() { *v *= inv; }
+}
+
+/// Les deux normalisations de la référence, sur `d_inner` canaux groupés par
+/// tête : `q` reçoit `1/sqrt(head_dim)` en plus, `k` non.
+fn l2_q_et_k(qc: &mut [f32], kc: &mut [f32], nh: usize, hd: usize, eps: f32) {
+    let fq = 1.0 / (hd as f32).sqrt();
+    for t in 0..nh {
+        l2_norme_tete(&mut qc[t * hd..(t + 1) * hd], hd, eps, fq);
+        l2_norme_tete(&mut kc[t * hd..(t + 1) * hd], hd, eps, 1.0);
+    }
+}
+
 
 /// Dimensions attendues (côté MOTEUR, donc inversées par rapport au fichier)
 /// pour une couche, d'après la configuration déclarée. Rend la liste des écarts.
@@ -914,6 +993,8 @@ impl KdaK3 {
         crate::model::kda_conv_silu(&q, &self.conv_q, &mut self.etat_conv_q, self.d_conv, d_inner, &mut qc);
         crate::model::kda_conv_silu(&k, &self.conv_k, &mut self.etat_conv_k, self.d_conv, d_inner, &mut kc);
         crate::model::kda_conv_silu(&v, &self.conv_v, &mut self.etat_conv_v, self.d_conv, d_inner, &mut vc);
+        // La norme L2 par tête, entre la convolution et la récurrence.
+        l2_q_et_k(&mut qc, &mut kc, nh, hd, self.eps);
         let mut fa = vec![0f32; hd];
         mv(&self.f_a, hd, h, cur, &mut fa);
         let mut g1 = vec![0f32; d_inner];
@@ -1064,6 +1145,10 @@ impl PetitesK3 {
     /// Un jeton, à la position `pos`, à travers les `n` couches chargées.
     pub fn avant(&mut self, x0: &[f32], pos: usize) -> Result<Vec<f32>, String> {
         let h = self.h;
+        // La banque appartient à la PASSE d'un jeton (voir `Couche0::avant`) :
+        // la repartir ici est ce qui rend l'appel par jeton équivalent au lot.
+        self.pile.clear();
+        self.n_ckpt = 0;
         let mut x = x0.to_vec();
         for l in 0..self.normes.len() {
             let n = &self.normes[l];

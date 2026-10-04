@@ -117463,3 +117463,787 @@ e2bd009 K3 : la référence a tourné — 42 min/jeton, 11 % de CPU, 1,80 To lus
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\nanc = \"> **En cours au moment d'écrire** : `llama-cli` (llama.cpp-k3) charge Kimi-K3 et\"\nnew = \"\"\"> **LA RÉFÉRENCE A TOURNÉ (22h57)** : `REF_SANS_REPACK=1 tools/ref_logits_k3` … [1907 caractères tronqués]`
+
+  ```
+61c8ba5 REPRISE : la baseline de la référence (42 min/jeton) et le jalon négatif, en tête
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short | grep -v \"^ M journal\" | head; echo \"--- tests ---\"; cd drave-core && cargo test --release 2>&1 | grep \"^test result\"; cd .. ; echo \"--- modèle ---\"; du -sb /home/stephane/Data13TB/stephane/modeles/gguf/Ki … [154 caractères tronqués]`
+
+  ```
+--- tests ---
+test result: ok. 77 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.22s
+--- modèle ---
+K3 : 1508.7 Go
+100
+  ```
+
+### 🤖 Assistant
+
+Bilan du bloc 31 — tout est commité, 77 tests verts.
+
+## Ce qui a été mesuré
+
+**1. Le regroupement par experts du préremplissage valait ×1,58 — personne ne l'avait mesuré**
+
+Qwen3-30B-A3B, invite de 192 jetons, NVMe, 16 fils, 3 passes par point :
+
+| lot | 1 | 2 | 8 | 32 | 192 |
+|---|---|---|---|---|---|
+| prompt_s | 33,23 | 24,51 | 23,17 | 21,91 | **21,00** |
+| gain | 1,00× | 1,36× | 1,43× | 1,52× | **1,58×** |
+| octets d'experts | 1,00× | 1,31× | 2,27× | 4,53× | **15,51×** |
+
+Au lot 2 le temps **suit** les octets (1,36 contre 1,31) ; au-delà il décroche. Le levier « lire moins d'octets » s'épuise vers le lot 8 : le dense prend la main.
+
+**2. Trois défauts trouvés en mesurant, du plus grave au plus petit**
+
+- **`--lot N` changeait la sortie, en silence.** Routage différent sur 7 838/9 312 lignes, génération gloutonne divergente au 3ᵉ jeton. Quantifié : PPL 19,143 contre 19,172, **argmax identique 191/191**, Pearson min 0,99719. Le moteur l'annonce maintenant.
+- **`forward_lot` n'applique QUE les experts routés** : sur un modèle à experts partagés, `--lot > 1` calculait un autre modèle sans un mot. Il refuse.
+- **Deux compteurs muets** : « paires experts » tombait de 1 811,9 M à 18,7 M/jeton dès le lot 2 (le GEMM ne se compte pas), et `wo` était le seul produit du chemin par lots à ne pas se compter. Après correction : 2 717,8 contre 2 721,1 M, perplexité inchangée au chiffre près.
+
+**3. Une hypothèse avancée puis réfutée** — la tuile du GEMM (8/16/64 → 20,02 / — / 20,32 s). La constante reste à 8 ; `DRAVE_TUILE_LOT` est un banc d'essai, pas un réglage.
+
+## Kimi-K3
+
+**Complet** (32/32, 1 508,7 Go) et **budget mesuré, plus extrapolé : 86,787 Go/jeton** — experts routés 25,830 (29,8 %), **dense 60,958 (70,2 %)**. Le dense pèse 2,3× les experts : aucune technique sur les experts n'adresse plus de 30 % du trafic.
+
+`DRAVE_K3_COUCHES=13` franchit la **première banque** (couche 12) : quatre jetons, sorties finies (9,6728 / 9,9734 / 9,2453 / 8,9678).
+
+**La référence a tourné** (2 h 48 min, ~**42 min/jeton**, 11 % de CPU, 1,80 To lus, swap 0), et a vidé ses 93 couches. Mais il a fallu écrire `REF_SANS_REPACK` pour ça : le repaquetage par défaut de llama.cpp recopiait les poids en RAM — **104 Go résidents et 6,9 Go de swap après 16 tenseurs sur 2 573**. La première barrière de cette classe n'est ni l'architecture ni le format.
+
+**Le premier jalon de vérification est négatif**, et c'est ce qui compte :
+
+| | pos 0 | pos 1 | pos 2 |
+|---|---|---|---|
+| couche 0 | **0,9832** | 0,7904 | 0,6418 |
+| couche 12 | **0,9909** | 0,4588 | 0,4488 |
+
+La position 0 est presque juste et tout se défait à la position 1 → le défaut est dans ce qui **transporte un état** : la convolution KDA (`d_conv = 4`) ou la récurrence delta-net. Au jeton 0 la convolution ne voit que son remplissage, ce qui explique qu'il y soit invisible. Reste un second défaut, séparé : ~1 % à la position 0.
+
+La porte `gpt-oss ctx 256` n'a **pas** été rejouée : délai dépassé et non chiffre faux, et je l'ai arrêtée pour laisser le disque à la référence. La commande exacte est écrite dans le sprint 31.
+
+
+## Tour 101
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas en local (classe Kimi-K3 Q4 : 1,5 To de poids, ~35 Go de poids par jeton), et étudier/implémenter ce qui nous distingue sur cette classe : découpage par experts et en grappes (chaque nœud ne lit que ce qu'il sert), réutilisation des experts entre jetons, transport de flux compact (listes DRVF), noyaux rapides (SIMD, déquantification bit-exacte), et mesure systématique (octets par jeton, débits, seuils). Les modèles périmés (DeepSeek-V4-Flash) sortent du chemin critique : leurs acquis sont conservés dans les rapports, leurs portes archivées. Règles inchangées : jamais de forward muet, jamais d'optimisation qui change une sortie sans le dire, une affirmation sans mesure n'est pas une affirmation."
+Round: 27/30
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Je cherche la cause de la divergence K3 dans le code de la référence
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp-k3 && ls src/models/ | grep -i \"kimi\\|linear\" ; echo \"---\"; wc -l src/models/kimi*.cpp 2>/dev/null", "description": "Locate K3 reference implementation"}`
+
+  ```
+kimi-k3.cpp
+kimi-linear.cpp
+---
+  618 src/models/kimi-k3.cpp
+  562 src/models/kimi-linear.cpp
+ 1180 total
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp-k3 && grep -n \"cb(\" src/models/kimi-k3.cpp | head -60", "description": "List graph node names in K3 reference"}`
+
+  ```
+223:    cb(probs, "res_probs", il);
+243:    cb(inpL, "inp_embd", -1);
+294:        cb(cur, "attn_norm", il);
+307:        cb(prefix_sum, "prefix_sum_attn", il);
+313:        cb(cur, "ffn_norm", il);
+320:            cb(cur, "ffn_out", il);
+327:        cb(prefix_sum, "l_out", il);
+343:    cb(cur, "result_norm", -1);
+347:    cb(cur, "result_output", -1);
+416:    cb(Qcur, "kda_q_conv", il);
+417:    cb(Kcur, "kda_k_conv", il);
+418:    cb(Vcur, "kda_v_conv", il);
+440:    cb(g1, "kda_g1", il);
+447:    cb(beta, "kda_beta", il);
+461:    cb(output, "kda_scan_out", il);
+470:    cb(g2, "kda_g2", il);
+471:    cb(normed, "kda_normed", il);
+476:    cb(cur, "kda_out", il);
+556:        cb(out, "mla_gated", il);
+560:    cb(out, "mla_out", il);
+582:    cb(logits, "ffn_moe_logits", il);
+597:    cb(moe_out, "ffn_moe_out", il);
+612:        cb(sh, "ffn_shexp", il);
+616:    cb(moe_out, "ffn_out", il);
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/llama.cpp-k3/src/models/kimi-k3.cpp", "limit": 110, "offset": 240}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/llama.cpp-k3/src/models/kimi-k3.cpp</path>
+<type>file</type>
+<content>
+240:     ggml_tensor * inpL;
+241: 
+242:     inpL = build_inp_embd(model.tok_embd);
+243:     cb(inpL, "inp_embd", -1);
+244: 
+245:     // K3 MLA is nope-only, so there is no position input
+246: 
+247:     auto * inp_kv      = !hparams.is_mla() ? build_inp_mem_hybrid()   : nullptr;
+248:     auto * inp_k       =  hparams.is_mla() ? build_inp_mem_hybrid_k() : nullptr;
+249:     auto * inp_rs      =  hparams.is_mla() ? inp_k->get_recr() : inp_kv->get_recr();
+250:     auto * inp_attn_kv = !hparams.is_mla() ? inp_kv->get_attn() : nullptr;
+251:     auto * inp_attn_k  =  hparams.is_mla() ? inp_k->get_attn()  : nullptr;
+252: 
+253:     ggml_tensor * inp_out_ids = build_inp_out_ids();
+254: 
+255:     const int64_t n_head_kda = hparams.n_head();
+256:     const int64_t head_dim   = hparams.n_embd_head_kda;
+257:     const int64_t d_conv     = hparams.ssm_d_conv;
+258:     const int64_t d_inner    = n_head_kda * head_dim;
+259:     const int64_t n_seqs     = ubatch.n_seqs;
+260:     const int64_t n_seq_tokens = ubatch.n_seq_tokens;
+261: 
+262:     GGML_ASSERT(n_seqs != 0);
+263:     GGML_ASS
+… [3920 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp-k3 && grep -n \"static ggml_tensor \\* res_mix\\|res_mix(\" src/models/kimi-k3.cpp | head -5; sed -n '/^static ggml_tensor \\* res_mix/,/^}/p' src/models/kimi-k3.cpp | head -60", "description": "Read reference res_mix"}`
+
+  ```
+198:ggml_tensor * llama_model_kimi_k3::graph::res_mix(ggml_tensor * cur, ggml_tensor * score_w,
+284:        cur = use_attn_res ? res_mix(prefix_sum, layer.attn_res_score, n_tokens, il)
+309:        cur = use_attn_res ? res_mix(prefix_sum, layer.ffn_res_score, n_tokens, il)
+336:        cur = res_mix(cur, model.output_res_score, n_tokens, -1);
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/llama.cpp-k3/src/models/kimi-k3.cpp", "limit": 42, "offset": 196}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/llama.cpp-k3/src/models/kimi-k3.cpp</path>
+<type>file</type>
+<content>
+196: }
+197: 
+198: ggml_tensor * llama_model_kimi_k3::graph::res_mix(ggml_tensor * cur, ggml_tensor * score_w,
+199:                                                   int64_t n_tokens, int il) {
+200:     if (!resi_stack) {
+201:         return cur; // layer 0: nothing banked yet
+202:     }
+203: 
+204:     const int   n_ckpt = (int) resi_stack->ne[1];
+205:     const float eps    = hparams.f_norm_rms_eps;
+206: 
+207:     ggml_tensor * src = resi_stack;   // [n_embd, n_ckpt, n_tokens]
+208: 
+209:     // one rms_norm scores all checkpoints at once
+210:     // note: the scores use the normalized values, but the sum below uses the raw ones
+211:     ggml_tensor * sc_src = ggml_rms_norm(ctx0, src, eps);
+212:     sc_src = ggml_mul(ctx0, sc_src, score_w);
+213:     sc_src = ggml_sum_rows(ctx0, sc_src);                          // [1, n_ckpt, n_tokens]
+214:     sc_src = ggml_reshape_2d(ctx0, sc_src, n_ckpt, n_tokens);
+215: 
+216:     // the current residual stream is scored apart, so the stack stays append-only
+217:     ggml_tensor * sc_cur = ggml_rms_norm(ctx0, cur, eps);
+218:     sc_
+… [1161 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && grep -n \"pub fn res_mix\" -A 45 model.rs | head -55", "description": "Read my res_mix implementation"}`
+
+  ```
+952:pub fn res_mix(pile: &[f32], n_ckpt: usize, h: usize, courant: &[f32], w: &[f32],
+953-               eps: f32, out: &mut [f32]) {
+954-    debug_assert_eq!(pile.len(), n_ckpt * h);
+955-    debug_assert_eq!(courant.len(), h);
+956-    debug_assert_eq!(w.len(), h);
+957-    debug_assert_eq!(out.len(), h);
+958-    let mut scores = vec![0f32; n_ckpt + 1];
+959-    let mut norm = vec![0f32; h];
+960-    for k in 0..n_ckpt {
+961-        rms_norm_sans_poids(&pile[k * h..(k + 1) * h], eps, &mut norm);
+962-        let mut s = 0f32;
+963-        for c in 0..h { s += norm[c] * w[c]; }
+964-        scores[k] = s;
+965-    }
+966-    rms_norm_sans_poids(&courant[..h], eps, &mut norm);
+967-    let mut s = 0f32;
+968-    for c in 0..h { s += norm[c] * w[c]; }
+969-    scores[n_ckpt] = s;
+970-    // softmax sur les points de contrôle ET le flux courant
+971-    let mx = scores.iter().cloned().fold(f32::NEG_INFINITY, f32::max);
+972-    let mut somme = 0f32;
+973-    for v in scores.iter_mut() { *v = (*v - mx).exp(); somme += *v; }
+974-    let inv = if somme > 0.0 { 1.0 / somme } else { 0.0 };
+975-    for v in scores.iter_mut() { *v *= inv; }
+976-    // la somme, elle, porte sur les valeurs BRUTES
+977-    ou
+… [1031 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/llama.cpp-k3/src/models/kimi-k3.cpp", "limit": 105, "offset": 385}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/llama.cpp-k3/src/models/kimi-k3.cpp</path>
+<type>file</type>
+<content>
+385:                 ggml_view_3d(ctx0, conv_states_all, d_conv - 1, d_inner, n_seqs,
+386:                     (d_conv - 1)   * ggml_element_size(conv_states_all),
+387:                     n_embd_r_total * ggml_element_size(conv_states_all),
+388:                     ((s * mem_size + kv_head) * n_embd_r_total + qkv * conv_state_size) * ggml_element_size(conv_states_all))));
+389:     }
+390: 
+391:     ggml_tensor * conv_weight = ggml_reshape_2d(ctx0, conv_w, d_conv, d_inner);
+392:     ggml_tensor * Xcur = ggml_ssm_conv(ctx0, conv_x, conv_weight);
+393:     Xcur = ggml_reshape_2d(ctx0, Xcur, d_inner, n_tokens);
+394:     Xcur = ggml_silu(ctx0, Xcur);
+395: 
+396:     return ggml_reshape_4d(ctx0, Xcur, head_dim, n_head, n_seq_tokens, n_seqs);
+397: }
+398: 
+399: ggml_tensor * llama_model_kimi_k3::graph::build_kda_layer(
+400:         ggml_tensor * cur, const llama_layer & layer, llm_graph_input_rs * inp_rs,
+401:         int64_t d_conv, int64_t head_dim, int64_t n_head_kda,
+402:         int64_t d_inner, int64_t n_seq_tokens, int64_t n_seqs, int il) {
+403: 
+404:     const auto * m
+… [4888 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je lance une passe de référence instrumentée sur les tenseurs internes des couches 0-4
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && K=/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf\nRE='(^|[-])(inp_embd|attn_norm|kda_q_conv|kda_k_conv|kda_v_conv|kda_g1|kda_beta|kda_scan_out|kda_g2|kda_normed|kda_out|prefix_ … [591 caractères tronqués]`
+
+  ```
+passe instrumentée lancée
+4870
+create_tensor: loading tensor blk.92.ffn_down_shexp.input_scale
+create_tensor: loading tensor blk.92.ffn_up_shexp.input_scale
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/llama.cpp-k3/src/models/kimi-k3.cpp", "limit": 50, "offset": 350}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/llama.cpp-k3/src/models/kimi-k3.cpp</path>
+<type>file</type>
+<content>
+350:     ggml_build_forward_expand(gf, cur);
+351: }
+352: 
+353: //
+354: // KDA layer
+355: //
+356: 
+357: // causal conv1d over one of Q/K/V. `qkv` selects which third of the conv state to use
+358: static ggml_tensor * kimi_k3_conv1d(ggml_cgraph * gf, ggml_context * ctx0,
+359:                                     ggml_tensor * conv_states_all, ggml_tensor * conv_state_all,
+360:                                     int64_t qkv, ggml_tensor * x, ggml_tensor * proj_w, ggml_tensor * conv_w,
+361:                                     int64_t d_conv, int64_t head_dim, int64_t n_head,
+362:                                     int64_t n_seq_tokens, int64_t n_seqs, int64_t n_tokens, int64_t kv_head,
+363:                                     int64_t mem_size, int64_t K_rs) {
+364:     const int64_t d_inner         = head_dim * n_head;
+365:     const int64_t conv_state_size = (d_conv - 1) * d_inner;
+366:     const int64_t n_embd_r_total  = 3 * conv_state_size;
+367: 
+368:     ggml_tensor * conv_state_x = ggml_view_3d(ctx0, conv_state_all, d_conv - 1, d_inner, n_seqs,
+369:         (d_conv 
+… [1856 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && grep -n \"pub fn kda_conv_silu\" -A 40 model.rs", "description": "Read my KDA conv implementation"}`
+
+  ```
+833:pub fn kda_conv_silu(x: &[f32], poids: &[f32], etat: &mut [f32], d_conv: usize,
+834-                     d_inner: usize, out: &mut [f32]) {
+835-    debug_assert_eq!(etat.len(), (d_conv - 1) * d_inner);
+836-    debug_assert!(x.len() >= d_inner && out.len() >= d_inner);
+837-    debug_assert!(poids.len() >= d_conv * d_inner);
+838-    for c in 0..d_inner {
+839-        let mut acc = 0f32;
+840-        for k in 0..d_conv - 1 {
+841-            acc += poids[k + d_conv * c] * etat[k + (d_conv - 1) * c];
+842-        }
+843-        acc += poids[(d_conv - 1) + d_conv * c] * x[c];
+844-        // SiLU : `x · sigmoïde(x)`
+845-        out[c] = acc * (1.0 / (1.0 + (-acc).exp()));
+846-    }
+847-    // décalage de l'état : on jette la plus ancienne, on pousse la nouvelle
+848-    for c in 0..d_inner {
+849-        for k in 0..d_conv.saturating_sub(2) {
+850-            etat[k + (d_conv - 1) * c] = etat[(k + 1) + (d_conv - 1) * c];
+851-        }
+852-    }
+853-    if d_conv >= 2 {
+854-        for c in 0..d_inner { etat[(d_conv - 2) + (d_conv - 1) * c] = x[c]; }
+855-    }
+856-}
+857-
+858-/// **Règle delta à porte** — la récurrence du **KDA** de Kimi-K3, un jeton.
+859-///
+860-/// Transcription de `build_de
+… [765 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp-k3 && ls src/models/ | grep -i delta; grep -n \"build_delta_net_autoregressive\" -A 80 src/models/delta-net-base.cpp | head -110", "description": "Read reference delta-net recurrence"}`
+
+  ```
+delta-net-base.cpp
+289:std::pair<ggml_tensor *, ggml_tensor *> llm_build_delta_net_base::build_delta_net_autoregressive(
+290-        ggml_tensor * q,
+291-        ggml_tensor * k,
+292-        ggml_tensor * v,
+293-        ggml_tensor * g,
+294-        ggml_tensor * b, // beta
+295-        ggml_tensor * s, // state
+296-        int           il) {
+297-    const int64_t S_k      = q->ne[0];
+298-    const int64_t H_k      = q->ne[1];
+299-    const int64_t n_tokens = q->ne[2];
+300-    const int64_t n_seqs   = q->ne[3];
+301-
+302-    const int64_t S_v = v->ne[0];
+303-    const int64_t H_v = v->ne[1];
+304-
+305-    GGML_ASSERT(n_tokens == 1);
+306-
+307-    GGML_ASSERT(S_k == S_v);
+308-    GGML_ASSERT(H_v % H_k == 0);
+309-
+310-    GGML_ASSERT(q->ne[0] == S_k && q->ne[1] == H_k && q->ne[2] == n_tokens && q->ne[3] == n_seqs);
+311-    GGML_ASSERT(k->ne[0] == S_k && k->ne[1] == H_k && k->ne[2] == n_tokens && k->ne[3] == n_seqs);
+312-    GGML_ASSERT(v->ne[0] == S_v && v->ne[1] == H_v && v->ne[2] == n_tokens && v->ne[3] == n_seqs);
+313-
+314-    GGML_ASSERT(g->ne[0] == 1   || g->ne[0] == S_v);
+315-    GGML_ASSERT(                   g->ne[1] == H_v && g->ne[2] == n_tokens && g->ne[3] == n_seqs);
+316-    
+… [2892 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Piste sérieuse : le vidage `l_out-0` vient d'un raccourci mono-couche, pas du graphe complet
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && grep -n \"impl Couche0\" -A 60 kimi_k3.rs | head -70", "description": "Read Couche0 forward"}`
+
+  ```
+264:impl Couche0 {
+265-    /// Charge la couche 0 depuis le fichier. **Refuse bruyamment** si un tenseur
+266-    /// manque ou si une dimension ne colle pas.
+267-    pub fn charge(g: &Gguf) -> Result<Couche0, String> {
+268-        let lu = |nom: &str| -> Result<Vec<f32>, String> {
+269-            let t = g.tensor(nom).ok_or_else(|| format!("tenseur absent : {nom}"))?;
+270-            Ok(g.dequant(nom))
+271-        };
+272-        let dims = |nom: &str| -> Result<Vec<usize>, String> {
+273-            let t = g.tensor(nom).ok_or_else(|| format!("tenseur absent : {nom}"))?;
+274-            Ok(t.dims.iter().map(|d| *d as usize).collect())
+275-        };
+276-        let p = |s: &str| format!("blk.0.{s}");
+277-        // ⚠️ **Les dimensions du moteur sont INVERSÉES par rapport au fichier** :
+278-        // `TensorInfo::dims[0]` est `ne1` du GGUF, c'est-à-dire la dimension de
+279-        // SORTIE (`Proj::load` fait `n_out = dims[0]`, `n_in = dims[1]`). Lire
+280-        // `dims[1]` là où il faut `dims[0]` a donné `nh = 7168` au lieu de 96 et
+281-        // fait tomber le produit matriciel — attrapé par le test de fumée, pas
+282-        // par relecture.
+283-        let h = dims(&p("attn_n
+… [2630 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && sed -n '326,400p' kimi_k3.rs", "description": "Read Couche0 avant"}`
+
+  ```
+/// Hauteur du flux (pour l'appelant : la rangée d'embarquement fait `h`).
+    pub fn hauteur(&self) -> usize { self.h }
+
+    /// L'état (convolution + delta) remis à zéro : entre deux textes, on ne
+    /// garde rien — un état oublié ne se voit pas dans les logits du premier
+    /// jeton, il se voit au dixième.
+    pub fn remise_a_zero(&mut self) {
+        self.etat_conv_q.iter_mut().for_each(|v| *v = 0.0);
+        self.etat_conv_k.iter_mut().for_each(|v| *v = 0.0);
+        self.etat_conv_v.iter_mut().for_each(|v| *v = 0.0);
+        self.etat_delta.iter_mut().for_each(|v| *v = 0.0);
+        self.pile.clear();
+        self.n_ckpt = 0;
+    }
+
+    /// **La passe avant de la couche 0**, dans l'ordre de la référence :
+    /// `res_mix` (pile vide au premier appel) → empile l'entrée BRUTE →
+    /// RMSNorm → KDA → **redémarrage du flux** (`0 % 12 == 0`) → `res_mix` →
+    /// RMSNorm → SiTU → retour.
+    pub fn avant(&mut self, x: &[f32]) -> Result<Vec<f32>, String> {
+        let (h, nh, hd, d_inner) = (self.h, self.nh, self.hd, self.d_inner);
+        if x.len() != h { return Err(format!("entrée de {} valeurs, {h} attendues", x.len())); }
+        let mut tampon = vec![0f32; h.max(d_inne
+… [2713 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp-k3 && grep -rn \"build_gdn_l2_norm\" src/ | head -3; grep -n \"build_gdn_l2_norm\" -A 20 src/models/delta-net-base.cpp | head -28", "description": "Read reference L2 norm"}`
+
+  ```
+src/models/bailingmoe3.cpp:288:            q = build_gdn_l2_norm(ctx0, q, hparams.f_norm_rms_eps);
+src/models/bailingmoe3.cpp:289:            k = build_gdn_l2_norm(ctx0, k, hparams.f_norm_rms_eps);
+src/models/clef.cpp:441:    q_conv = build_gdn_l2_norm(ctx0, q_conv, hparams.f_norm_rms_eps);
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp-k3 && grep -rn \"ggml_tensor \\* build_gdn_l2_norm\\|build_gdn_l2_norm(\" src/llama-graph.cpp src/llama-graph.h 2>/dev/null | head -3; grep -n \"build_gdn_l2_norm\" -A 22 src/llama-graph.cpp | head -30", "description": "Find L2 norm d … [11 caractères tronqués]`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp-k3 && grep -rn \"build_gdn_l2_norm\" --include=*.cpp --include=*.h . 2>/dev/null | grep -v \"models/bailing\\|models/clef\\|models/kimi\" | head -5", "description": "Locate L2 norm definition"}`
+
+  ```
+(no output)
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp-k3/src && grep -rn \"gdn_l2_norm\" llama-graph.h llama-graph.cpp 2>/dev/null | head -4; grep -n \"l2_norm\\|L2 norm\\|ggml_l2_norm\" llama-graph.cpp | head -6", "description": "Search l2 norm in graph builder"}`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp-k3/src && grep -rn \"gdn_l2_norm\" . 2>/dev/null | head -8", "description": "Find gdn_l2_norm definition", "timeoutMs": 120000}`
+
+  ```
+./models/bailingmoe3.cpp:288:            q = build_gdn_l2_norm(ctx0, q, hparams.f_norm_rms_eps);
+./models/bailingmoe3.cpp:289:            k = build_gdn_l2_norm(ctx0, k, hparams.f_norm_rms_eps);
+./models/clef.cpp:441:    q_conv = build_gdn_l2_norm(ctx0, q_conv, hparams.f_norm_rms_eps);
+./models/clef.cpp:442:    k_conv = build_gdn_l2_norm(ctx0, k_conv, hparams.f_norm_rms_eps);
+./models/glm5-next.cpp:739:    Qcur = build_gdn_l2_norm(ctx0, Qcur, l2_eps);
+./models/glm5-next.cpp:740:    Kcur = build_gdn_l2_norm(ctx0, Kcur, l2_eps);
+./models/kimi-k3.cpp:456:    Qcur = build_gdn_l2_norm(ctx0, Qcur, eps_norm);
+./models/kimi-k3.cpp:457:    Kcur = build_gdn_l2_norm(ctx0, Kcur, eps_norm);
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp-k3/src && grep -rn \"gdn_l2_norm\" models/delta-net-base.h llama-graph.h 2>/dev/null; grep -n \"gdn_l2_norm\" -A 18 models/delta-net-base.cpp | head -24", "description": "Find L2 norm body"}`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp-k3 && grep -rln \"build_gdn_l2_norm\" src/ include/ 2>/dev/null; echo \"---\"; grep -rn \"ggml_tensor \\* build_gdn_l2_norm\" src/*.cpp src/*.h src/models/*.h 2>/dev/null | head", "description": "Locate declaration of gdn_l2_norm", "t … [18 caractères tronqués]`
+
+  ```
+src/models/bailingmoe3.cpp
+src/models/clef.cpp
+src/models/glm5-next.cpp
+src/models/kimi-k3.cpp
+src/models/kimi-linear.cpp
+src/models/models.h
+src/models/qwen35.cpp
+src/models/qwen35moe.cpp
+src/models/qwen3next.cpp
+src/models/qwen4exp.cpp
+---
+src/models/models.h:14:static inline ggml_tensor * build_gdn_l2_norm(ggml_context * ctx, ggml_tensor * x, float eps) {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp-k3 && sed -n '10,35p' src/models/models.h", "description": "Read gdn_l2_norm body"}`
+
+  ```
+class llama_memory_hybrid_idx_context;
+
+// ref: https://github.com/ggml-org/llama.cpp/pull/28068
+static inline ggml_tensor * build_gdn_l2_norm(ggml_context * ctx, ggml_tensor * x, float eps) {
+    const float n = x->ne[0];
+
+    return ggml_scale(ctx, ggml_rms_norm(ctx, x, eps/n), 1.0f/sqrtf(n));
+}
+
+//
+// base classes
+//
+
+struct llm_build_mamba_base : public llm_graph_context {
+    llm_build_mamba_base(const llm_graph_params & params);
+
+    virtual ~llm_build_mamba_base() = default;
+
+    ggml_tensor * build_mamba_layer(llm_graph_input_rs * inp, ggml_tensor * cur, const llama_model & model, const llama_ubatch & ubatch, int il);
+    ggml_tensor * build_mamba2_layer(llm_graph_input_rs * inp, ggml_tensor * cur, const llama_model & model, const llama_ubatch & ubatch, int il) const;
+
+};
+
+struct llm_build_delta_net_base : public llm_graph_context {
+    llm_build_delta_net_base(const llm_graph_params & params);
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && sed -n '400,470p' kimi_k3.rs", "description": "Read rest of Couche0 forward"}`
+
+  ```
+crate::model::kda_pas(&qc[t * hd..(t + 1) * hd], &kc[t * hd..(t + 1) * hd],
+                                  &vc[t * hd..(t + 1) * hd], &g, b,
+                                  &mut self.etat_delta[t * hd * hd..(t + 1) * hd * hd], hd, &mut ot);
+            o[t * hd..(t + 1) * hd].copy_from_slice(&ot);
+        }
+        // 7. norme + porte de sortie PLEIN RANG (calculée UNE fois)
+        let mut g2 = vec![0f32; d_inner];
+        mv(&self.g_proj, d_inner, h, &cur, &mut g2);
+        for t in 0..nh {
+            rms_norm_poids(&o[t * hd..(t + 1) * hd], &self.o_norm, self.eps,
+                           &mut tampon[..hd]);
+            for i in 0..hd {
+                let s = 1.0 / (1.0 + (-g2[t * hd + i]).exp());
+                o[t * hd + i] = tampon[i] * s;
+            }
+        }
+        let mut attn = vec![0f32; h];
+        mv(&self.wo, h, d_inner, &o, &mut attn);
+        // 8. le flux REDÉMARRE ici (couche « banque ») : `prefix = attn`, pas `x + attn`
+        let mut prefix = attn.clone();
+        // 9. attention résiduelle avant la FFN
+        let mut cur_ffn = vec![0f32; h];
+        crate::model::res_mix(&self.pile, self.n_ckpt, h, &prefix, &self.ffn_res_score,
+                 
+… [2407 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Piste concrète : la norme L2 sur q et k du KDA — je vérifie si elle est appliquée
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && grep -n \"l2\" kimi_k3.rs model.rs | head -20; echo \"=== kda_pas ===\"; grep -n \"pub fn kda_pas\" -A 30 model.rs | head -36", "description": "Check for L2 norm in my KDA"}`
+
+  ```
+=== kda_pas ===
+881:pub fn kda_pas(q: &[f32], k: &[f32], v: &[f32], g: &[f32], beta: f32,
+882-               s: &mut [f32], hd: usize, out: &mut [f32]) {
+883-    debug_assert_eq!(s.len(), hd * hd);
+884-    debug_assert!(q.len() >= hd && k.len() >= hd && v.len() >= hd && out.len() >= hd);
+885-    // 1. décroissance : `s[i][j] *= exp(g[i])` — la porte est par canal de CLÉ.
+886-    for i in 0..hd {
+887-        let d = g[i].exp();
+888-        for j in 0..hd { s[i * hd + j] *= d; }
+889-    }
+890-    // 2. `sk[j] = Σ_i s[i][j]·k[i]`
+891-    let mut sk = vec![0f32; hd];
+892-    for i in 0..hd {
+893-        let ki = k[i];
+894-        if ki == 0.0 { continue; }
+895-        for j in 0..hd { sk[j] += s[i * hd + j] * ki; }
+896-    }
+897-    // 3. mise à jour delta : produit extérieur `k ⊗ (β(v − sk))`
+898-    for i in 0..hd {
+899-        let ki = k[i];
+900-        if ki == 0.0 { continue; }
+901-        for j in 0..hd { s[i * hd + j] += ki * beta * (v[j] - sk[j]); }
+902-    }
+903-    // 4. sortie : `o[j] = Σ_i s[i][j]·q[i]`
+904-    for j in 0..hd {
+905-        let mut a = 0f32;
+906-        for i in 0..hd { a += s[i * hd + j] * q[i]; }
+907-        out[j] = a;
+908-    }
+909-}
+910-
+911-/// **SiTU*
+… [62 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+**Trouvé.** La norme L2 sur q et k du KDA n'existe nulle part dans mon code.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && grep -n \"impl KdaK3\" -A 55 kimi_k3.rs | sed -n '25,60p'", "description": "Read KdaK3 forward"}`
+
+  ```
+893-            beta_w: lu(&p("ssm_beta.weight"))?, ssm_a: lu(&p("ssm_a"))?,
+894-            dt_bias: lu(&p("ssm_dt.bias"))?, o_norm: lu(&p("ssm_norm.weight"))?,
+895-            etat_conv_q: etat.clone(), etat_conv_k: etat.clone(), etat_conv_v: etat,
+896-            etat_delta: vec![0f32; nh * hd * hd],
+897-            h, nh, hd, d_inner, d_conv, eps: 1e-5,
+898-        })
+899-    }
+900-
+901-    /// L'attention KDA seule, sur une entrée **déjà normalisée** (`attn_norm`).
+902-    pub fn avant(&mut self, cur: &[f32]) -> Result<Vec<f32>, String> {
+903-        let (h, nh, hd, d_inner) = (self.h, self.nh, self.hd, self.d_inner);
+904-        if cur.len() != h { return Err(format!("entrée de {} au lieu de {h}", cur.len())); }
+905-        let mut q = vec![0f32; d_inner];
+906-        let mut k = vec![0f32; d_inner];
+907-        let mut v = vec![0f32; d_inner];
+908-        mv(&self.q, d_inner, h, cur, &mut q);
+909-        mv(&self.k, d_inner, h, cur, &mut k);
+910-        mv(&self.v, d_inner, h, cur, &mut v);
+911-        let mut qc = vec![0f32; d_inner];
+912-        let mut kc = vec![0f32; d_inner];
+913-        let mut vc = vec![0f32; d_inner];
+914-        crate::model::kda_conv_silu(&q, &self
+… [664 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && python3 - <<'PY'\np='kimi_k3.rs'; s=open(p).read()\n\nhelper = '''\n/// **La norme L2 par tête**, appliquée à `q` et `k` après la convolution et\n/// AVANT la récurrence — `build_gdn_l2_norm` de la référence :\n///\n// … [2931 caractères tronqués]`
+
+  ```
+helper inséré, appliqué aux deux chemins
+build ok
+test result: ok. 77 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+  ```
+
+### 🤖 Assistant
+
+⏵ La norme L2 manquante est ajoutée ; je vérifie contre le vidage de la référence
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && K=/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf\nnohup bash -c \"DRAVE_K3_COUCHES=1 DRAVE_DUMP_COUCHES=/tmp/apres_l2 timeout 3600 ./drave-core/target/release/drave $K --k3-ess … [148 caractères tronqués]`
+
+  ```
+lancé
+  composition 0-0, jeton 3 : |l_out| = 0.8999 · finis : true
+  composition : 4657 ms au total
+  jeton 0 (id 3638) : |l_out| = 1.0376 · finis : true · premiers : 0.01205 -0.02231 -0.00304
+      vidé : /tmp/apres_l2-l_out-0-0.bin
+  jeton 1 (id 275) : |l_out| = 0.9833 · finis : true · premiers : 0.01269 -0.00169 0.00635
+      vidé : /tmp/apres_l2-l_out-0-1.bin
+  jeton 2 (id 1309) : |l_out| = 0.9559 · finis : true · premiers : 0.00183 0.01073 0.00219
+      vidé : /tmp/apres_l2-l_out-0-2.bin
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/compare_etats.py /tmp/apres_l2 /tmp/refk3 l_out 0 0,1,2 2>&1 | head -8", "description": "Compare after the L2 fix", "timeoutMs": 180000}`
+
+  ```
+# l_out-0 : référence ne=(7168, 4, 1, 1) → 7168 valeurs × 1 par position
+  pos 0 : écart max 3.738e-04 (indice 2441, dynamique 9.662e-02) · corrélation 0.999979 ~
+  pos 1 : écart max 6.692e-02 (indice 6645, dynamique 1.097e-01) · corrélation 0.818076 ❌
+  pos 2 : écart max 3.644e-02 (indice 1491, dynamique 2.161e-01) · corrélation 0.644376 ❌
+  ```
+
+### 🤖 Assistant
+
+⏵ Deuxième bug trouvé : la banque résiduelle s'accumule entre jetons au lieu d'être repartie
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp-k3 && grep -n \"resi_stack\" src/models/kimi-k3.cpp | head -10; echo \"=== res_push ===\"; grep -n \"res_push\" -A 12 src/models/kimi-k3.cpp | head -18", "description": "Verify bank lifetime in reference"}`
+
+  ```
+195:    resi_stack = resi_stack ? ggml_concat(ctx0, resi_stack, ckpt, 1) : ckpt;
+200:    if (!resi_stack) {
+204:    const int   n_ckpt = (int) resi_stack->ne[1];
+207:    ggml_tensor * src = resi_stack;   // [n_embd, n_ckpt, n_tokens]
+=== res_push ===
+192:void llama_model_kimi_k3::graph::res_push(ggml_tensor * cur, int64_t n_embd, int64_t n_tokens) {
+193-    ggml_tensor * ckpt = ggml_reshape_3d(ctx0, cur, n_embd, 1, n_tokens);
+194-
+195-    resi_stack = resi_stack ? ggml_concat(ctx0, resi_stack, ckpt, 1) : ckpt;
+196-}
+197-
+198-ggml_tensor * llama_model_kimi_k3::graph::res_mix(ggml_tensor * cur, ggml_tensor * score_w,
+199-                                                  int64_t n_tokens, int il) {
+200-    if (!resi_stack) {
+201-        return cur; // layer 0: nothing banked yet
+202-    }
+203-
+204-    const int   n_ckpt = (int) resi_stack->ne[1];
+--
+289:            res_push(prefix_sum, n_embd, n_tokens);  // banks the RAW layer input, not `cur`
+290-            banked = true;
+291-        }
+292-
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && python3 - <<'PY'\np='kimi_k3.rs'; s=open(p).read()\nold1 = \"\"\"        // 2. la couche 0 EST une couche « banque » : on empile l'entrée BRUTE,\n        //    AVANT l'attention (`res_push(prefix_sum)` dans la référenc … [1902 caractères tronqués]`
+
+  ```
+banque repartie par jeton dans les deux chemins
+test result: ok. 77 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.16s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && K=/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf\nDRAVE_K3_COUCHES=1 DRAVE_DUMP_COUCHES=/tmp/apres_banque timeout 1800 ./drave-core/target/release/drave $K --k3-essai 2>&1 | ta … [189 caractères tronqués]`
+
+  ```
+(no output)
+[timed out after 600000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la /tmp/apres_banque-l_out-0-*.bin 2>/dev/null | head -4; pgrep -x drave | wc -l; P=$(pgrep -x ref_logits_k3|head -1); [ -n \"$P\" ] && grep -E \"^read_bytes\" /proc/$P/io", "description": "Check dump state"}`
+
+  ```
+1
+read_bytes: 220185374720
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && K=/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf\nnohup bash -c \"DRAVE_K3_COUCHES=1 DRAVE_DUMP_COUCHES=/tmp/apres_banque timeout 7200 ./drave-core/target/release/drave $K --k3 … [218 caractères tronqués]`
+
+  ```
+lancé
+0
+  couche 1 : dimensions conformes
+  couche 3 : dimensions conformes
+  couche 4 : dimensions conformes
+  ```
+
+- **bash** `{"command": "sleep 520; tail -5 /tmp/k3_banque.log; ls /tmp/apres_banque-l_out-0-*.bin 2>/dev/null | wc -l", "description": "Poll verification run", "timeoutMs": 560000}`
+
+  ```
+MoE couche 1 : |sortie| = 0.7316 · finis : true · 55111 ms
+  MLA couche 3, jeton 0 : |sortie| = 12.8277 · finis : true · 239 ms
+  MLA couche 3, jeton 1 : |sortie| = 10.4341 · finis : true · 241 ms
+  MLA couche 3, jeton 2 : |sortie| = 9.1516 · finis : true · 236 ms
+  composition : 1 couche(s) — banques aux couches 0
+0
+  ```
+
+- **bash** `{"command": "sleep 420; tail -8 /tmp/k3_banque.log; ls /tmp/apres_banque-l_out-0-*.bin 2>/dev/null | wc -l", "description": "Poll verification run", "timeoutMs": 460000}`
+
+  ```
+composition 0-0, jeton 3 : |l_out| = 0.6447 · finis : true
+  composition : 5104 ms au total
+  jeton 0 (id 3638) : |l_out| = 1.0376 · finis : true · premiers : 0.01205 -0.02231 -0.00304
+      vidé : /tmp/apres_banque-l_out-0-0.bin
+  jeton 1 (id 275) : |l_out| = 0.9856 · finis : true · premiers : 0.01260 -0.00111 0.00608
+      vidé : /tmp/apres_banque-l_out-0-1.bin
+  jeton 2 (id 1309) : |l_out| = 0.8534 · finis : true · premiers : 0.00003 0.00915 0.00182
+      vidé : /tmp/apres_banque-l_out-0-2.bin
+4
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/compare_etats.py /tmp/apres_banque /tmp/refk3 l_out 0 0,1,2", "description": "Compare after the bank fix", "timeoutMs": 180000}`
+
+  ```
+# l_out-0 : référence ne=(7168, 4, 1, 1) → 7168 valeurs × 1 par position
+  pos 0 : écart max 3.738e-04 (indice 2441, dynamique 9.662e-02) · corrélation 0.999979 ~
+  pos 1 : écart max 6.672e-02 (indice 6645, dynamique 1.097e-01) · corrélation 0.818717 ❌
+  pos 2 : écart max 2.865e-02 (indice 6340, dynamique 2.161e-01) · corrélation 0.707865 ❌
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport struct\nb=open('/tmp/refk3-l_out-0.bin','rb').read()\nne=struct.unpack('<4i',b[8:24]); n=1\nfor d in ne: n*=d\nref=list(struct.unpack(f'<{n}f', b[24:24+4*n]))\ndef drave(p):\n    x=open(p,'rb').read(); return … [1204 caractères tronqués]`
+
+  ```
+pos 1 : pires tranches de 128 → 51:6.67e-02, 38:2.87e-02, 48:2.62e-02, 53:2.44e-02, 2:2.41e-02, 42:2.39e-02
+          corrélations les plus basses → 44:0.737, 15:0.753, 6:0.770, 4:0.772, 22:0.773, 8:0.779
+pos 2 : pires tranches de 128 → 49:2.86e-02, 33:2.79e-02, 6:2.49e-02, 55:2.46e-02, 30:2.44e-02, 11:2.40e-02
+          corrélations les plus basses → 8:0.545, 2:0.578, 13:0.592, 0:0.593, 26:0.601, 5:0.602
+  ```
+
+### 🤖 Assistant
+
+⏵ J'instrumente le chemin K3 du moteur pour bissecter tenseur par tenseur
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && grep -n \"pub struct Couche0\" -A 30 kimi_k3.rs | grep -n \"pile\\|n_ckpt\\|pub \" | head -12", "description": "Inspect Couche0 struct fields"}`
+
+  ```
+1:246:pub struct Couche0 {
+13:258-    /// Valeurs des points de contrôle (la pile de l'attention résiduelle) :
+14:259-    /// la couche 0 est « banque » (`0 % 12 == 0`), elle empile son entrée BRUTE.
+15:260-    pile: Vec<f32>,
+16:261-    n_ckpt: usize,
+22:267-    pub fn charge(g: &Gguf) -> Result<Couche0, String> {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && python3 - <<'PY'\np='kimi_k3.rs'; s=open(p).read()\n\n# 1. champ de position + utilitaire de vidage\ns = s.replace(\"\"\"    pile: Vec<f32>,\n    n_ckpt: usize,\"\"\",\n\"\"\"    pile: Vec<f32>,\n    n_ckpt: usize,\n   … [3911 caractères tronqués]`
+
+  ```
+vidages ajoutés
+test result: ok. 77 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"K3 : deux bugs trouvés par la comparaison — la norme L2 manquante, et la banque qui s'accumulait\n\n1. **La norme L2 par tête sur q et k n'existait nulle part** (build_gdn_l2_norm\n   de la référence  … [1388 caractères tronqués]`

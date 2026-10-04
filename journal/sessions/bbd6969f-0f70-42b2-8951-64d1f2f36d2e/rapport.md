@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 128.2 h |
-| Tours | 100 |
-| Messages | 7383 |
-| Appels d'outils | 7054 |
+| Durée | 129.0 h |
+| Tours | 101 |
+| Messages | 7425 |
+| Appels d'outils | 7094 |
 | Fichiers touchés | 150 |
-| Commandes | 5975 |
+| Commandes | 6011 |
 | Sous-agents | 32 |
-| Commits | 491 |
+| Commits | 492 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -245,6 +245,8 @@
 **Tour 99** — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas en local (classe Kimi-K3 Q4 : 1,5 To de poids, ~35 Go de poids par jeton), et étudier/implémenter ce qui nous distingue sur cette classe : découpage par experts et en grappes (chaque nœud ne lit que ce qu'il sert), réutilisation des experts entre jetons, transport de flux compact  … [966 caractères tronqués]
 
 **Tour 100** — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas en local (classe Kimi-K3 Q4 : 1,5 To de poids, ~35 Go de poids par jeton), et étudier/implémenter ce qui nous distingue sur cette classe : découpage par experts et en grappes (chaque nœud ne lit que ce qu'il sert), réutilisation des experts entre jetons, transport de flux compact  … [966 caractères tronqués]
+
+**Tour 101** — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas en local (classe Kimi-K3 Q4 : 1,5 To de poids, ~35 Go de poids par jeton), et étudier/implémenter ce qui nous distingue sur cette classe : découpage par experts et en grappes (chaque nœud ne lit que ce qu'il sert), réutilisation des experts entre jetons, transport de flux compact  … [966 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -4889,7 +4891,7 @@ Et le geste qui rend un modèle de 1,5 To seulement *lisible* : les experts sont
 
 ### Tour 100 — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas e … [1246 caractères tronqués]
 
-*293 appels d'outils.* Actions notables :
+*294 appels d'outils.* Actions notables :
 
 - bash — Extract the KDA into a reusable piece
 - bash — Commit the KDA extraction and check the download
@@ -4905,11 +4907,72 @@ Et le geste qui rend un modèle de 1,5 To seulement *lisible* : les experts sont
 - bash — Find expert loading call sites
 - read
 - bash — Inspect RAM expert cache
-- … et 216 autres
+- … et 217 autres
 
 **Synthèse produite :**
 
-**La référence a terminé** : 2 h 48 pour quatre passes, 93 couches vidées. Je consigne le jalon.
+Bilan du bloc 31 — tout est commité, 77 tests verts.
+
+\## Ce qui a été mesuré
+
+**1. Le regroupement par experts du préremplissage valait ×1,58 — personne ne l'avait mesuré**
+
+Qwen3-30B-A3B, invite de 192 jetons, NVMe, 16 fils, 3 passes par point :
+
+| lot | 1 | 2 | 8 | 32 | 192 |
+|---|---|---|---|---|---|
+| prompt_s | 33,23 | 24,51 | 23,17 | 21,91 | **21,00** |
+| gain | 1,00× | 1,36× | 1,43× | 1,52× | **1,58×** |
+| octets d'experts | 1,00× | 1,31× | 2,27× | 4,53× | **15,51×** |
+
+Au lot 2 le temps **suit** les octets (1,36 contre 1,31) ; au-delà il décroche. Le levier « lire moins d'octets » s'épuise vers le lot 8 : le dense prend la main.
+
+**2. Trois défauts trouvés en mesurant, du plus grave au plus petit**
+
+- **`--lot N` changeait la sortie, en silence.** Routage différent sur 7 838/9 312 lignes, génération gloutonne divergente au 3ᵉ jeton. Quantifié : PPL 19,143 contre 19,172, **argmax identique 191/191**, Pearson min 0,99719. Le moteur l'annonce maintenant.
+- **`forward_lot` n'applique QUE les experts routés** : sur un modèle à experts partagés, `--lot > 1` calculait un autre modèle sans un mot. Il refuse.
+- **Deux compteurs muets** : « paires experts » tombait de 1 811,9 M à 18,7 M/jeton dès le lot 2 (le GEMM ne se compte pas), et `wo` était le seul produit du chemin par lots à ne pas se compter. Après correction : 2 717,8 contre 2 721,1 M, perplexité inchangée au chiffre près.
+
+**3. Une hypothèse avancée puis réfutée** — la tuile du GEMM (8/16/64 → 20,02 / — / 20,32 s). La constante reste à 8 ; `DRAVE_TUILE_LOT` est un banc d'essai, pas un réglage.
+
+\## Kimi-K3
+
+**Complet** (32/32, 1 508,7 Go) et **budget mesuré, plus extrapolé : 86,787 Go/jeton** — experts routés 25,830 (29,8 %), **dense 60,958 (70,2 %)**. Le dense pèse 2,3× les experts : aucune technique sur les experts n'adresse plus de 30 % du trafic.
+
+`DRAVE_K3_COUCHES=13` franchit la **première banque** (couche 12) : quatre jetons, sorties finies (9,6728 / 9,9734 / 9,2453 / 8,9678).
+
+**La référence a tourné** (2 h 48 min, ~**42 min/jeton**, 11 % de CPU, 1,80 To lus, swap 0), et a vidé ses 93 couches. Mais il a fallu écrire `REF_SANS_REPACK` pour ça : le repaquetage par défaut de llama.cpp recopiait les poids en RAM — **104 Go résidents et 6,9 Go de swap après 16 tenseurs sur 2 573**. La première barrière de cette classe n'est ni l'architecture ni le format.
+
+**Le premier jalon de vérification est négatif**, et c'est ce qui compte :
+
+| | pos 0 | pos 1 | pos 2 |
+|---|---|---|---|
+| couche 0 | **0,98
+… [597 caractères tronqués]
+
+### Tour 101 — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas e … [1246 caractères tronqués]
+
+*39 appels d'outils.* Actions notables :
+
+- bash — Locate K3 reference implementation
+- bash — List graph node names in K3 reference
+- read
+- bash — Read reference res_mix
+- bash — Read my res_mix implementation
+- bash — Launch instrumented reference pass
+- bash — Read my KDA conv implementation
+- bash — Read reference delta-net recurrence
+- bash — Read Couche0 forward
+- bash — Read Couche0 avant
+- bash — Read reference L2 norm
+- bash — Find L2 norm definition
+- bash — Locate L2 norm definition
+- bash — Search l2 norm in graph builder
+- … et 21 autres
+
+**Synthèse produite :**
+
+⏵ J'instrumente le chemin K3 du moteur pour bissecter tenseur par tenseur
 
 ## 3. Travail accompli
 
@@ -5145,7 +5208,7 @@ Et le geste qui rend un modèle de 1,5 To seulement *lisible* : les experts sont
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5935 autres
+- … et 5971 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5784,4 +5847,5 @@ Et le geste qui rend un modèle de 1,5 To seulement *lisible* : les experts sont
 - K3 : le premier jalon de vérification est NÉGATIF — et il désigne l'état, pas la forme  compare_etats.py, couche 0, quatre jetons :   pos 0 : corrélation 0,9832
 - K3 : la référence a tourné — 42 min/jeton, 11 % de CPU, 1,80 To lus pour 4 passes  REF_SANS_REPACK=1, modèle complet, quatre jetons :   2 h 48 min 21 s → ~42 mi
 - REPRISE : la baseline de la référence (42 min/jeton) et le jalon négatif, en tête" && git log --oneline -1
+- K3 : deux bugs trouvés par la comparaison — la norme L2 manquante, et la banque qui s'accumulait  1. **La norme L2 par tête sur q et k n'existait nulle part** (
 
