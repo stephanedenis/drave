@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 138.2 h |
 | Tours | 105 |
-| Messages | 7612 |
-| Appels d'outils | 7271 |
+| Messages | 7613 |
+| Appels d'outils | 7272 |
 | Fichiers touchés | 150 |
-| Commandes | 6186 |
+| Commandes | 6187 |
 | Sous-agents | 32 |
-| Commits | 518 |
+| Commits | 519 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -5185,7 +5185,7 @@ Les trois étaient **invisibles au jeton 0** — c'est pour ça qu'ils ont surv�
 
 ### Tour 105 — continue
 
-*28 appels d'outils.* Actions notables :
+*29 appels d'outils.* Actions notables :
 
 - bash — Instrument charge vs compute time
 - bash — Measure the charge/compute split
@@ -5201,7 +5201,7 @@ Les trois étaient **invisibles au jeton 0** — c'est pour ça qu'ils ont surv�
 - bash — Measure the output change of the kernel
 - bash — Re-measure with the activation scale
 - bash — Launch full verification with the kernel
-- … et 13 autres
+- … et 14 autres
 
 **Synthèse produite :**
 
@@ -5441,7 +5441,7 @@ Le refactor du dense emprunté est trop gros pour ce qui me reste de contexte. J
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6146 autres
+- … et 6147 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -6107,4 +6107,5 @@ Le refactor du dense emprunté est trop gros pour ce qui me reste de contexte. J
 - K3 : le noyau MXFP4 du moteur sur les experts — x3,6 sur le FFN, et l'échelle d'activation qui manquait  expert_mxfp4_dans écrit 3 × 11 M valeurs f32 (132 Mo pa
 - K3 : le noyau MXFP4 est vérifié sur le modèle entier — et son gain s'effondre là où il faudrait  Verdict sur les logits du modèle entier, noyau contre f32 :   p
 - K3 : le mur est le disque, et le prochain chantier est nommé précisément  Le chiffre qui commande tout : le FFN coûte 3,1 s par couple (couche, jeton) dans la p
+- REPRISE : le mur est le disque, prochain chantier nommé (emprunter le dense Q8_0)" && git log --oneline -6; git status --short | grep -v "^ M journal" | wc -l
 

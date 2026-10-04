@@ -78,6 +78,30 @@ cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo build --r
 > `res_mix` s'applique là où la référence n'en applique pas. Les trois étaient
 > invisibles au jeton 0 seul.
 >
+> ## **LE MUR EST LE DISQUE (09h10)** — et le prochain chantier est nommé
+>
+> Le chiffre qui commande tout : le FFN coûte **3,1 s par couple (couche, jeton)**
+> dans la passe complète contre **0,37 s** sur 4 couches. Même code, **huit fois
+> plus lent** : la passe streame 1,5 To depuis un disque tournant.
+>
+> 1. Par appel, la passe relit **~59,6 Go de dense Q8_0 + 12,4 Go d'experts
+>    partagés**, contre 25,9 Go d'experts routés par jeton. Pour N jetons, le
+>    dense est relu N fois.
+> 2. **Le dense tient en RAM** (59,6 Go sur 125) — c'est la thèse du plan.
+> 3. Ce qui l'empêche : la **déquantification**. Chaque appel alloue et libère
+>    ~224 Go de tampons f32, ce qui **évince le cache de pages**.
+>
+> **Prochain chantier** : emprunter les blocs Q8_0 au lieu de les déquantifier.
+> `Gguf::q8_blocks`, `DenseQ8::emprunter_q8` et `dot_q8_source` existent déjà et
+> servent tout le reste du moteur. À faire pour les cinq grosses projections du
+> KDA (`attn_q/k/v`, `ssm_g`, `attn_output` : 1,88 Go en f32 contre 0,47 Go en
+> Q8_0 par couche), puis la MLA et la FFN dense de la couche 0.
+>
+> **Modèle déjà écrit** : le noyau MXFP4 sur les experts (`DRAVE_K3_MXFP4=1`) —
+> ×3,6 sur le FFN poids en cache, sortie **identique au niveau des logits** sur
+> le modèle entier (mêmes corrélations à la 6ᵉ décimale, mêmes top-1). Le même
+> geste appliqué au dense attaque le DISQUE au lieu de la RAM.
+>
 > ## **LE MOTEUR ENGENDRE AVEC KIMI-K3 (06h56)** — et chaque pas est celui de la référence
 >
 > `DRAVE_K3_GEN=N` : préfill puis jetons gloutons, l'état récurrent (convolution,

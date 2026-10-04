@@ -120545,3 +120545,11 @@ impl KdaK3 {
 Le refactor du dense emprunté est trop gros pour ce qui me reste de contexte. J'enregistre la conclusion mesurée et je laisse l'arbre propre.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/verification-kimi-k3.md'; s=open(p).read()\nanc = \"### 4quater-nonies. Le noyau MXFP4 : ×3,6 sur le FFN, ×1,05 sur la passe — et pourquoi (05/10, 08h57)\"\nnew = \"\"\"### 4quater-decies. **Le mur est le DI … [3318 caractères tronqués]`
+
+  ```
+1aec345 K3 : le mur est le disque, et le prochain chantier est nommé précisément
+0
+test result: ok. 77 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\nanc = \"> ## **LE MOTEUR ENGENDRE AVEC KIMI-K3 (06h56)**\"\nnew = \"\"\"> ## **LE MUR EST LE DISQUE (09h10)** — et le prochain chantier est nommé\n>\n> Le chiffre qui commande tout  … [1723 caractères tronqués]`
