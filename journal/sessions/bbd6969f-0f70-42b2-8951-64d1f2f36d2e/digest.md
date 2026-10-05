@@ -124620,3 +124620,54 @@ e29ba52 Un modèle haut de gamme converge MIEUX : pic 0,693 contre 0,649, et sur
 ~50 min. La règle contrastive demande un alignement au niveau du jeton — c'est un travail de conception de 2-3 h, pas un réglage de fin de session. Je le spécifie précisément pour qu'il soit exécutable.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > docs/note-regle-contrastive.md <<'EOF'\n# Note — la règle contrastive : ce qu'il faut construire, et pourquoi c'est elle\n\n> 06/10. Suite directe des trois négatifs mesurés (`rapport-plateau-semantique.md`\n> et `note-cancella … [6373 caractères tronqués]`
+
+  ```
+b149d79 Note : la règle contrastive — quoi construire, et pourquoi c'est elle
+0
+10:17
+  ```
+
+### 🤖 Assistant
+
+Il est 10:17 — il me reste ~1h40. Assez pour tester **le fondement de l'idée** : le composant « langue » est-il simplement **soustractible** ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/cancellation_langue.py <<'EOF'\n#!/usr/bin/env python3\n\"\"\"cancellation_langue.py — le composant « langue » est-il SOUSTRACTIBLE ?\n\nLe fondement de la règle contrastive : si l'on peut annuler le composant de langue\n … [5813 caractères tronqués]`
+
+  ```
+brute                                  0.6007      0.3862
+δ de langue SOUSTRAIT                  0.6258      0.4381
+TÉMOIN : δ au hasard, même norme       0.5644      0.3526
+
+# δ de langue : gain +0.0251 · témoin -0.0363
+brute                                  0.6363      0.4207
+δ de langue SOUSTRAIT                  0.6522      0.4153
+TÉMOIN : δ au hasard, même norme       0.6092      0.3709
+
+# δ de langue : gain +0.0160 · témoin -0.0271
+brute                                  0.6490      0.2790
+δ de langue SOUSTRAIT                  0.6603      0.3779
+TÉMOIN : δ au hasard, même norme       0.6240      0.2296
+
+# δ de langue : gain +0.0113 · témoin -0.0250
+brute                                  0.6236      0.2838
+δ de langue SOUSTRAIT                  0.6263      0.3725
+TÉMOIN : δ au hasard, même norme       0.5871      0.2339
+
+# δ de langue : gain +0.0027 · témoin -0.0365
+  ```
+
+### 🤖 Assistant
+
+**Résultat POSITIF, et avec son témoin.**
+
+| couche 10 | cos moyen | **pire paire** |
+|---|---:|---:|
+| brute | 0,6490 | 0,2790 |
+| **δ de langue soustrait** | **0,6603** | **0,3779** |
+| **TÉMOIN : δ au hasard, même norme** | 0,6240 | 0,2296 |
+
+**Le témoin est décisif** : soustraire le vrai δ **monte** (+0,0113), soustraire un vecteur aléatoire **de même norme** fait **baisser** (−0,0250). Donc le gain ne vient pas de retirer de la norme — il vient de retirer **la langue**.
+
+Et l'effet est **maximal sur la pire paire : 0,279 → 0,378 (+35 %)**, alors que le témoin l'aggrave (0,230). C'est exactement la cible que j'avais identifiée (le grand modèle fait 0,28 → 0,47).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/note-regle-contrastive.md'; s=open(p).read()\ns = s.replace(\"## 2. La règle qu'il faut : anti-Hebbien sur le différentiel INTER-LANGUE\",\n\"\"\"## 1bis. LE FONDEMENT EST VALIDÉ — la langue est soustractibl … [3269 caractères tronqués]`

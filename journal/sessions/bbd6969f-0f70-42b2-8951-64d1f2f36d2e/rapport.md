@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 163.5 h |
 | Tours | 118 |
-| Messages | 7838 |
-| Appels d'outils | 7478 |
+| Messages | 7840 |
+| Appels d'outils | 7480 |
 | Fichiers touchés | 150 |
-| Commandes | 6376 |
+| Commandes | 6378 |
 | Sous-agents | 32 |
-| Commits | 542 |
+| Commits | 543 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -5936,7 +5936,7 @@ Poser le rapport et la sauvegarde **à un se
 
 ### Tour 118 — Continue de faire évoluer notre modèle et moteur en visant des réponses qui émulent les réponses sémantiques des modèles … [205 caractères tronqués]
 
-*19 appels d'outils.* Actions notables :
+*21 appels d'outils.* Actions notables :
 
 - bash — Check time and locate the two report sites
 - bash — Unify the HebbDiff report in one place
@@ -5952,11 +5952,21 @@ Poser le rapport et la sauvegarde **à un se
 - bash — Write and commit the semantic plateau report
 - bash — Re-measure the plateau with the learned adapter
 - bash — Train on 40 languages, holding out 5
-- … et 5 autres
+- … et 7 autres
 
 **Synthèse produite :**
 
-~50 min. La règle contrastive demande un alignement au niveau du jeton — c'est un travail de conception de 2-3 h, pas un réglage de fin de session. Je le spécifie précisément pour qu'il soit exécutable.
+**Résultat POSITIF, et avec son témoin.**
+
+| couche 10 | cos moyen | **pire paire** |
+|---|---:|---:|
+| brute | 0,6490 | 0,2790 |
+| **δ de langue soustrait** | **0,6603** | **0,3779** |
+| **TÉMOIN : δ au hasard, même norme** | 0,6240 | 0,2296 |
+
+**Le témoin est décisif** : soustraire le vrai δ **monte** (+0,0113), soustraire un vecteur aléatoire **de même norme** fait **baisser** (−0,0250). Donc le gain ne vient pas de retirer de la norme — il vient de retirer **la langue**.
+
+Et l'effet est **maximal sur la pire paire : 0,279 → 0,378 (+35 %)**, alors que le témoin l'aggrave (0,230). C'est exactement la cible que j'avais identifiée (le grand modèle fait 0,28 → 0,47).
 
 ## 3. Travail accompli
 
@@ -6192,7 +6202,7 @@ Poser le rapport et la sauvegarde **à un se
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6336 autres
+- … et 6338 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -6882,4 +6892,5 @@ Poser le rapport et la sauvegarde **à un se
 - VERDICT : la règle hebbienne locale ne transfère PAS — et dégrade les langues non vues  Trois tests, tous négatifs, du plus faible au plus fort :  1. autre text
 - La LECTURE ne rattrape rien : combiner les couches DILUE l'invariance  tools/lecture_plateau.py, 6 langues tenues à l'écart de tout entraînement :   une couche 
 - Note : la règle contrastive — quoi construire, et pourquoi c'est elle  Les trois négatifs mesurés (lecture, transfert de texte, transfert de langue) définissent
+- LE FONDEMENT EST VALIDÉ : la langue est soustractible, et le témoin le prouve  tools/cancellation_langue.py, traces réelles de 10 langues, avec témoin obligatoi
 

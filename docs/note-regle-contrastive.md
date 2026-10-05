@@ -19,6 +19,48 @@ distingue ce qui est **partagé** entre les cas de ce qui est **propre** à chac
 Elle apprend donc le particulier, et sur un cas nouveau elle ajoute une composante
 fausse.
 
+## 1bis. LE FONDEMENT EST VALIDÉ — la langue est soustractible (06/10, 10h30)
+
+Avant de construire la règle, une question plus simple : **le composant de langue
+est-il seulement soustractible ?** Si oui, « rétroactivité négative » est la bonne
+direction et la règle anti-hebbienne n'est que la façon de l'**apprendre**.
+
+`tools/cancellation_langue.py`, sur les traces réelles de 10 langues : on prend le
+« portrait de langue » `x̄_L` (moyenne sur l'article), on calcule le décalage
+`δ_L = x̄_L − moyenne_des_langues`, on le **soustrait**, et on re-mesure.
+
+**Avec son témoin obligatoire** : la même chose avec un `δ` tiré au hasard, de
+**même norme**. Sans lui, on ne saurait pas si le gain vient de la langue ou du
+seul fait de retirer de la norme.
+
+| couche 10 | cos moyen | **pire paire** |
+|---|---:|---:|
+| brute | 0,6490 | 0,2790 |
+| **δ de langue soustrait** | **0,6603** | **0,3779** |
+| TÉMOIN : δ au hasard, même norme | 0,6240 | 0,2296 |
+
+| couche | 4 | 8 | **10** | 12 |
+|---|---:|---:|---:|---:|
+| gain sur la moyenne | **+0,0251** | +0,0160 | +0,0113 | +0,0027 |
+| gain sur la pire paire | +0,0519 | −0,0054 | **+0,0989** | +0,0887 |
+| témoin (moyenne) | −0,0363 | −0,0271 | −0,0250 | −0,0365 |
+
+**Trois choses établies :**
+
+1. **Le gain est réel et il est de la langue** : le vrai δ monte, un δ aléatoire de
+   même norme **baisse**. La soustraction ne retire donc pas de l'énergie, elle
+   retire une **direction**.
+2. **L'effet est maximal sur la PIRE PAIRE, au plateau** : +0,099 à la couche 10,
+   soit 0,279 → 0,378 (**+35 %**). C'est exactement la cible — le grand modèle fait
+   0,280 → 0,471.
+3. **La direction existe donc, et elle est apprenable** : c'est un décalage, et un
+   décalage est ce qu'une règle locale peut accumuler.
+
+**Ce que ce n'est PAS** : `δ` est calculé **sur les langues de test**, donc c'est un
+**oracle**. Le chiffre est une **borne supérieure** de ce qu'un apprentissage
+atteindrait, pas une méthode déployable. Il dit que la direction existe — pas
+qu'on sait la trouver sans les étiquettes.
+
 ## 2. La règle qu'il faut : anti-Hebbien sur le différentiel INTER-LANGUE
 
 ```text
