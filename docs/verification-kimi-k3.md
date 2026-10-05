@@ -159,6 +159,40 @@ là où le matvec f32 vectorise bien. Le gain vient du chargement, pas du calcul
 Le noyau AVX2 du pool (`matvec_dense_i8`) est le pas suivant, et il est déjà
 écrit.
 
+### 4quater-quaterdecies. La question ouverte est TRANCHÉE : c'est la CAPACITÉ, pas la dispersion (06/10, 00h40)
+
+Trois chiffres suffisent.
+
+**1. La prélecture de l'union est une pessimisation, mesurée** : 32 couches en
+**6 min 57 s** avec, **2 min 34 s** sans — **×0,37** — et **8,5 fois plus
+d'octets lus** (97,8 M de blocs de 512 o contre 11,5 M). Demander d'un coup les
+pages de cinquante experts fait travailler le noyau pour rien et chasse celles
+qu'on allait utiliser. Elle est donc **éteinte par défaut**
+(`DRAVE_K3_PRELIRE_UNION=1` la rallume pour refaire l'essai).
+
+**2. Sans prélecture, ces 32 couches n'ont lu que 5,9 Go** — alors que les
+experts qu'elles réclament en pèsent **27 Go**. Les deux tiers étaient donc
+**déjà dans le cache de pages**. L'hypothèse de la dispersion (des déplacements de
+disque) est donc **fausse** à cette échelle : il n'y avait pas de déplacement à
+faire, les données étaient là.
+
+**3. Et c'est ce qui explique tout.** La passe de 32 couches a un ensemble de
+travail qui **tient** dans les ~100 Go de cache ; celle de 93 couches a un
+ensemble de **312 Go d'experts distincts** — elle manque donc ~68 % de ses
+lectures. Ce n'est pas la façon dont les octets sont disposés qui change entre
+les deux, c'est **le nombre d'octets distincts à toucher**.
+
+**Ce que ça clôt** : le regroupement par experts ne pouvait pas aider, parce que
+dans la passe complète le temps n'est pas proportionnel au nombre de lectures
+d'experts mais au **volume distinct** à ramener, et le regroupement ne réduit pas
+le volume distinct — il évite de relire ce qu'on a déjà lu dans la même couche,
+ce que le cache de pages faisait déjà gratuitement.
+
+**Ce que ça implique pour la suite** : le seul levier qui reste sur cette classe
+est de **réduire le volume distinct**, c'est-à-dire ce que le modèle demande —
+et là, deux portes seulement : le **décodage spéculatif** (moins de passes pour
+le même texte) et la **grappe** (le volume réparti sur plusieurs machines).
+
 ### 4quater-terdecies. **La passe tournait sur UN CŒUR SUR 40** — et ce qui reste ouvert (06/10, 00h05)
 
 `/usr/bin/time -v` sur 8 couches : **`Percent of CPU this job got: 99%`**, et

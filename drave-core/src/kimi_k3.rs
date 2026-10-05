@@ -828,6 +828,33 @@ impl MoeK3 {
         // Chaque fil a SES tampons : rien n'est partagé en écriture, seule la
         // lecture de `rin` l'est.
         let mut acc: Vec<Vec<f32>> = vec![vec![0f32; latent]; t];
+        // **PRÉLECTURE DE TOUTE L'UNION, AVANT LE PREMIER CALCUL.** Le routeur a
+        // parlé : on connaît les experts du lot avant d'en calculer un seul. Les
+        // demander d'un coup laisse le noyau lancer ses lectures de pages EN
+        // PARALLÈLE au lieu de les subir une par une — mesuré ailleurs dans ce
+        // dépôt, le NVMe passe de 5,4 à 31 Go/s quand les lectures se
+        // recouvrent. C'est aussi le test direct de l'hypothèse de DISPERSION :
+        // si le temps vient des déplacements du disque, recouvrir les demandes
+        // doit se voir tout de suite. `DRAVE_PRELIRE=0` l'éteint.
+        // **ELLE EST ÉTEINTE PAR DÉFAUT, ET ELLE DOIT L'ÊTRE.** Mesurée sur 32
+        // couches : 6 min 57 s avec, 2 min 34 s sans — **×0,37**, et 8,5 fois
+        // plus d'octets lus (97,8 M de blocs contre 11,5 M). Demander d'un coup
+        // les pages de cinquante experts fait travailler le noyau pour rien et
+        // chasse celles qu'on allait utiliser. `DRAVE_K3_PRELIRE_UNION=1` la
+        // rallume pour qui voudra refaire l'essai.
+        if std::env::var("DRAVE_K3_PRELIRE_UNION").map(|v| v != "0" && !v.is_empty()).unwrap_or(false) {
+            let og = self.n_out_gate * (self.n_in_gate / 32) * 17;
+            let ou = self.n_out_up * (self.n_in_up / 32) * 17;
+            let od = self.n_out_down * (self.n_in_down / 32) * 17;
+            for (e, groupe) in groupes.iter().enumerate() {
+                if groupe.is_empty() { continue; }
+                unsafe {
+                    crate::gguf::prelire(self.ptr_gate.add(e * og), og);
+                    crate::gguf::prelire(self.ptr_up.add(e * ou), ou);
+                    crate::gguf::prelire(self.ptr_down.add(e * od), od);
+                }
+            }
+        }
         // **LE TRAVAIL EST INDÉPENDANT PAR (EXPERT, JETON) — donc il se
         // parallélise.** Mesuré : la passe entière tournait sur **1 cœur sur
         // 40** (`Percent of CPU this job got: 99%`), avec 119 Ko lus en 47 s

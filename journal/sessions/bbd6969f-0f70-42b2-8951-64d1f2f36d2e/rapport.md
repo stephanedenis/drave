@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 153.1 h |
-| Tours | 109 |
-| Messages | 7706 |
-| Appels d'outils | 7364 |
+| Durée | 160.3 h |
+| Tours | 110 |
+| Messages | 7715 |
+| Appels d'outils | 7371 |
 | Fichiers touchés | 150 |
-| Commandes | 6263 |
+| Commandes | 6270 |
 | Sous-agents | 32 |
-| Commits | 527 |
+| Commits | 528 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -265,6 +265,8 @@
 **Tour 108** — oui
 
 **Tour 109** — Quel est le roadmap où Drave serait à son meilleur? as-tu besoin de compacter la session? Continue kusqu'a 8h00 HAE
+
+**Tour 110** — Peut-on optimiser des modèles existants pour que drave peuisse être un outil performant pour travailler en autonomie au quotidien avec les meilleurs modèles?
 
 ## 2. Déroulé, étape par étape
 
@@ -5453,7 +5455,50 @@ Le dense ne peut pas être rendu résident à bon compte ici : la page cache ne 
 
 **Synthèse produite :**
 
-Mon contexte est presque épuisé. Je consigne les faits mesurés et la question ouverte, sans conclure au-delà.
+**Oui, mon contexte est long** — le compactage aidera. J'ai mis l'état durable dans le dépôt pour que rien ne dépende de ma mémoire.
+
+\## Le roadmap
+
+Dans `docs/roadmap-drave.md`. La niche est définie par une mesure, pas une opinion : **451 Go lus par jeton** pour llama.cpp contre **26 Go** pour Drave, sur le même fichier. Ce n'est pas une victoire de vitesse, c'est une victoire d'**existence** — llama.cpp repaquette en RAM et ne finit pas, Strata exige tous les experts en RAM (classe 100-350 Go), vLLM est GPU-résident.
+
+Quatre axes : finir la lecture sélective → le décodage spéculatif → la grappe → la porte de correction comme produit. Et **cinq chantiers à arrêter**, chacun avec sa mesure.
+
+\## Ce que ce tour a produit
+
+**Le regroupement par experts, implémenté et mesuré** : 64 lectures d'experts → 48-51 selon la couche (×1,25-1,33, le compte exact s'affiche). L'ancien chemin par jeton est retiré — deux implémentations du même calcul ont déjà divergé ici. **Mais aucun gain de temps** : 1 531 851 ms contre 1 516 430 ms. Mon modèle « le FFN est limité par le disque » est réfuté.
+
+**Puis la mesure qui compte** : `/usr/bin/time -v` → **`Percent of CPU: 99 %`**, et **119 Ko lus en 47 s**. La passe entière tournait sur **un cœur sur 40**, tout en cache. Quatre fois plus lente à froid (2,95 s par couple couche-jeton) qu'à chaud (0,75 s).
+
+**Parallélisée** par (expert, jeton) — bit à bit identique, accumulation refaite dans l'ordre des experts. Gain **non établi** : ×1,08 à froid, ×0,90 à chaud, dans le bruit.
+
+\## La question que je laisse ouverte, sans conclure
+
+Pourquoi la passe complète coûte 4× plus par couche alors que réduire de 25 % les experts lus ne change rien ? L'hypothèse la plus plausible est la **dispersion** (~144 lectures par couple × ~10 ms de déplacement sur un disque tournant ≈ 1,4 s, l'ordre de grandeur observé) — **mais ce n'est pas mesuré**, et je ne le présenterai pas comme une conclusion. Le pas pour trancher : `majflt` et le temps d'attente disque sur une passe complète.
+
+\## Un piège d'instruments, trois fois
+
+`swapon`, `bc`, `taskset` **ne sont pas installés** sur cette machine. J'ai lu le silence de `swapon --show` comme « pas de swap » et bâti une fausse prémisse dessus — le swap fait 62,8 Go. C'est la troisième fois ce tour (`--tensors '$RE'` non expansé, `swapon`, `bc`) : **un instrument absent ne renvoie pas « non »**.
+
+\## État
+
+Tout est commité, 77 tests verts, arbre propre. `REPRISE.md` porte l'état au 06/10 00h10 : ce qui marche, 
+… [215 caractères tronqués]
+
+### Tour 110 — Peut-on optimiser des modèles existants pour que drave peuisse être un outil performant pour travailler en autonomie au  … [37 caractères tronqués]
+
+*7 appels d'outils.* Actions notables :
+
+- bash — Check what Drave already achieves and the prefetch API
+- bash — Add prefetch of the expert union
+- bash — Find the exact anchor
+- bash — Add the prefetch with the right anchor
+- bash — A/B the prefetch on 32 layers
+- bash — Make the prefetch opt-in
+- bash — Record the resolved question
+
+**Synthèse produite :**
+
+**La prélecture est une pessimisation** : 6:57 contre 2:34, et 8,5× plus de lectures. Mais elle répond à ma question ouverte.
 
 ## 3. Travail accompli
 
@@ -5689,7 +5734,7 @@ Mon contexte est presque épuisé. Je consigne les faits mesurés et la question
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6223 autres
+- … et 6230 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -6364,4 +6409,5 @@ Mon contexte est presque épuisé. Je consigne les faits mesurés et la question
 - K3 : le regroupement par experts MARCHE (64 → 48 lectures) mais ne rapporte pas de temps  Passe complète : 1 531 851 ms avec le regroupement contre 1 516 430 ms
 - K3 : la passe tournait sur UN CŒUR SUR 40 — parallélisée, et une question laissée ouverte  /usr/bin/time -v sur 8 couches : Percent of CPU 99 %, File system inp
 - REPRISE : l'état au 06/10 00h10, pour reprendre après compactage  Ce qui marche, les quatre réfutations mesurées à ne pas refaire, la question ouverte (2,95 s à
+- K3 : la question ouverte est TRANCHÉE — c'est la CAPACITÉ du cache, pas la dispersion  Trois chiffres : 1. La prélecture de l'union est une PESSIMISATION mesuré
 

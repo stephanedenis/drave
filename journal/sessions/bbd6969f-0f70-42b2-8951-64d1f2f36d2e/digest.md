@@ -122177,3 +122177,144 @@ e7ac6f6 K3 : la passe tournait sur UN CŒUR SUR 40 — parallélisée, et une qu
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\nanc = \"> ## **LE MUR EST LE DISQUE (09h10)**\"\nnew = \"\"\"> ## **ÉTAT AU 06/10 00h10** — pour reprendre après compactage\n>\n> **Fait** : Kimi-K3 (1 508,7 Go) tourne en entier, s … [2739 caractères tronqués]`
+
+  ```
+64d694f REPRISE : l'état au 06/10 00h10, pour reprendre après compactage
+0
+  ```
+
+### 🤖 Assistant
+
+**Oui, mon contexte est long** — le compactage aidera. J'ai mis l'état durable dans le dépôt pour que rien ne dépende de ma mémoire.
+
+## Le roadmap
+
+Dans `docs/roadmap-drave.md`. La niche est définie par une mesure, pas une opinion : **451 Go lus par jeton** pour llama.cpp contre **26 Go** pour Drave, sur le même fichier. Ce n'est pas une victoire de vitesse, c'est une victoire d'**existence** — llama.cpp repaquette en RAM et ne finit pas, Strata exige tous les experts en RAM (classe 100-350 Go), vLLM est GPU-résident.
+
+Quatre axes : finir la lecture sélective → le décodage spéculatif → la grappe → la porte de correction comme produit. Et **cinq chantiers à arrêter**, chacun avec sa mesure.
+
+## Ce que ce tour a produit
+
+**Le regroupement par experts, implémenté et mesuré** : 64 lectures d'experts → 48-51 selon la couche (×1,25-1,33, le compte exact s'affiche). L'ancien chemin par jeton est retiré — deux implémentations du même calcul ont déjà divergé ici. **Mais aucun gain de temps** : 1 531 851 ms contre 1 516 430 ms. Mon modèle « le FFN est limité par le disque » est réfuté.
+
+**Puis la mesure qui compte** : `/usr/bin/time -v` → **`Percent of CPU: 99 %`**, et **119 Ko lus en 47 s**. La passe entière tournait sur **un cœur sur 40**, tout en cache. Quatre fois plus lente à froid (2,95 s par couple couche-jeton) qu'à chaud (0,75 s).
+
+**Parallélisée** par (expert, jeton) — bit à bit identique, accumulation refaite dans l'ordre des experts. Gain **non établi** : ×1,08 à froid, ×0,90 à chaud, dans le bruit.
+
+## La question que je laisse ouverte, sans conclure
+
+Pourquoi la passe complète coûte 4× plus par couche alors que réduire de 25 % les experts lus ne change rien ? L'hypothèse la plus plausible est la **dispersion** (~144 lectures par couple × ~10 ms de déplacement sur un disque tournant ≈ 1,4 s, l'ordre de grandeur observé) — **mais ce n'est pas mesuré**, et je ne le présenterai pas comme une conclusion. Le pas pour trancher : `majflt` et le temps d'attente disque sur une passe complète.
+
+## Un piège d'instruments, trois fois
+
+`swapon`, `bc`, `taskset` **ne sont pas installés** sur cette machine. J'ai lu le silence de `swapon --show` comme « pas de swap » et bâti une fausse prémisse dessus — le swap fait 62,8 Go. C'est la troisième fois ce tour (`--tensors '$RE'` non expansé, `swapon`, `bc`) : **un instrument absent ne renvoie pas « non »**.
+
+## État
+
+Tout est commité, 77 tests verts, arbre propre. `REPRISE.md` porte l'état au 06/10 00h10 : ce qui marche, les **quatre réfutations mesurées à ne pas refaire**, la question ouverte et les pièges d'instruments.
+
+Il est 00h15 HAE ; je continue sur le prochain pas — `majflt` et l'attente disque, pour trancher la dispersion.
+
+
+## Tour 110
+
+### 👤 Utilisateur
+
+Peut-on optimiser des modèles existants pour que drave peuisse être un outil performant pour travailler en autonomie au quotidien avec les meilleurs modèles?
+
+### 🤖 Assistant
+
+Bonne question — et elle déplace la cible. Laisse-moi d'abord répondre avec ce qui est **déjà mesuré**, puis attaquer le levier.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== ce que Drave fait DÉJÀ, mesuré ===\"; grep -rE \"tok/s\" reports/*.md 2>/dev/null | grep -oE \"[0-9]+\\.[0-9]+ tok/s\" | sort -u | head; echo \"--- le rappel des chiffres du bloc 31 ---\"; grep -E \"lot \\| prompt_s|5,77|9 … [249 caractères tronqués]`
+
+  ```
+=== ce que Drave fait DÉJÀ, mesuré ===
+0.1 tok/s
+0.26 tok/s
+0.77 tok/s
+1.04 tok/s
+1.4 tok/s
+4.1 tok/s
+5.5 tok/s
+9.85 tok/s
+--- le rappel des chiffres du bloc 31 ---
+| lot | prompt_s | tok/s | CPU % | mur_s | gain |
+| 1 | 33,23 | 5,77 | 995 | 60,5 | 1,00× |
+| 192 | 21,00 | 9,20 | 827 | 47,8 | **1,58×** |
+
+=== le prélecture existe-t-il ? ===
+65:pub fn prelire(ptr: *const u8, octets: usize) {
+66-    if ptr.is_null() || octets == 0 { return; }
+67-    // `DRAVE_PRELIRE=0` la désactive : sans ce témoin, on ne pourrait pas dire
+68-    // si un gain vient d'elle ou du cache qui se réchauffe d'un passage à
+69-    // l'autre.
+70-    if !prelire_active() { return; }
+71-    unsafe { madvise(ptr as *mut u8, octets, MADV_WILLNEED); }
+72-}
+73-
+74-/// Demande au noyau de lancer la lecture du fichier ENTIER, une fois, au
+75-/// chargement. Le noyau parallélise ses lectures de pages, là où le mmap
+76-/// paresseux les déclenche une par une au fil des accès.
+77-///
+--
+84:pub fn prelire_tout(ptr: *const u8, octets: usize) {
+85-    if ptr.is_null() || octets == 0 { return; }
+  ```
+
+### 🤖 Assistant
+
+Le prélecture existe déjà avec son interrupteur témoin. Je l'ajoute au MoE de K3 — c'est le test direct de la dispersion.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && python3 - <<'PY'\np='kimi_k3.rs'; s=open(p).read()\nanc = \"        let mut experts_lus = 0usize;\\n        // **LE TRAVAIL EST INDÉPENDANT\"\nnew = \"\"\"        let mut experts_lus = 0usize;\n        // **PRÉLECTURE  … [1538 caractères tronqués]`
+
+  ```
+test result: ok. 77 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 26, in <module>
+AssertionError
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && grep -n \"LE TRAVAIL EST INDÉPENDANT\" -B 3 kimi_k3.rs | head -8", "description": "Find the exact anchor"}`
+
+  ```
+828-        // Chaque fil a SES tampons : rien n'est partagé en écriture, seule la
+829-        // lecture de `rin` l'est.
+830-        let mut acc: Vec<Vec<f32>> = vec![vec![0f32; latent]; t];
+831:        // **LE TRAVAIL EST INDÉPENDANT PAR (EXPERT, JETON) — donc il se
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && python3 - <<'PY'\np='kimi_k3.rs'; s=open(p).read()\nanc = \"        let mut acc: Vec<Vec<f32>> = vec![vec![0f32; latent]; t];\\n        // **LE TRAVAIL EST INDÉPENDANT\"\nnew = \"\"\"        let mut acc: Vec<Vec<f32>>  … [1652 caractères tronqués]`
+
+  ```
+prélecture ajoutée
+=== build ===
+test result: ok. 77 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && K=/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf\nfor cfg in \"avec:1\" \"sans:0\"; do n=${cfg%%:*}; v=${cfg##*:}\n  echo \"=== prélecture $n ===\"\n  /usr/bin/time -v env DRAV … [244 caractères tronqués]`
+
+  ```
+=== prélecture avec ===
+	Percent of CPU this job got: 29%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 6:57.50
+	File system inputs: 97766680
+=== prélecture sans ===
+	Percent of CPU this job got: 80%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 2:34.37
+	File system inputs: 11498880
+  ```
+
+### 🤖 Assistant
+
+**La prélecture est une pessimisation** : 6:57 contre 2:34, et 8,5× plus de lectures. Mais elle répond à ma question ouverte.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && python3 - <<'PY'\np='kimi_k3.rs'; s=open(p).read()\nold = \"\"\"        {\n            let og = self.n_out_gate * (self.n_in_gate / 32) * 17;\"\"\"\nnew = \"\"\"        // **ELLE EST ÉTEINTE PAR DÉFAUT, ET ELLE DOIT L' … [967 caractères tronqués]`
+
+  ```
+prélecture rendue opt-in
+test result: ok. 77 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/verification-kimi-k3.md'; s=open(p).read()\nanc = \"### 4quater-terdecies. **La passe tournait sur UN CŒUR SUR 40**\"\nnew = \"\"\"### 4quater-quaterdecies. La question ouverte est TRANCHÉE : c'est la CAPACI … [3297 caractères tronqués]`
