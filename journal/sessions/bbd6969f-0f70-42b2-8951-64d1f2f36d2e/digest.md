@@ -132200,3 +132200,34 @@ syntaxe OK
 **Le plafond passe de +0,020 à +0,024** — soit **+18 % sur la contribution propre du pont**, sans coût en invariance. La linéarité du readout était donc bien une part du plafond, mais une petite part.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/recapitulatif.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 9. Le plafond, attaqué : la lecture non linéaire paie +18 %\n\nLe readout était **linéaire** sur les états du réservoir. C'était une hypothèse … [3149 caractères tronqués]`
+
+  ```
+9a66101 Lecture non linéaire : le plafond passe de +0,020 à +0,024 (+18 %)
+  ```
+
+### 🤖 Assistant
+
+⏵ Je vérifie l'état final avant de faire le point de ce tour.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short | head -5; echo \"--- commits du tour ---\"; git log --oneline -6; echo \"--- calculs en cours ---\"; python3 -c \"\nimport os\nn=0\nfor d in os.listdir('/proc'):\n    if d.isdigit():\n        try: cl=open(f'/proc/ … [266 caractères tronqués]`
+
+  ```
+M journal/README.md
+--- commits du tour ---
+9a66101 Lecture non linéaire : le plafond passe de +0,020 à +0,024 (+18 %)
+aeb7f12 CONCLUSION : la fidélité est portée par l'invariance de la cible, pas par le modèle
+f7c7b52 L'INVARIANT : le pont apporte +0,020, quelle que soit la cible
+4ba9022 Sous-ensemble actif : la droite d'échange MONTE (+14 pts de fidélité, +18 % des canaux)
+694efc3 Déclencheur de couche révisé : concepts communs + besoin de poids négatifs
+9c01e9b Couches RÉELLES, naissance libre, et récapitulatif
+--- calculs en cours ---
+2
+--- le rapport ---
+499 reports/recapitulatif.md
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification propre des processus (mon propre motif fausse le compte).
+
+- **bash** `{"command": "python3 -c \"\nimport os\nmoi=os.getpid(); anc=set(); q=moi\nfor _ in range(8):\n    try:\n        st=open(f'/proc/{q}/stat').read().split(') ',1)[1].split(); q=int(st[1]); anc.add(q)\n    except Exception: break\nvraie=[]\nfor d in os.listdir('/proc'):\n    if not d.isdigit(): continue … [517 caractères tronqués]`
