@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 163.3 h |
+| Durée | 163.5 h |
 | Tours | 118 |
-| Messages | 7831 |
-| Appels d'outils | 7471 |
+| Messages | 7835 |
+| Appels d'outils | 7475 |
 | Fichiers touchés | 150 |
-| Commandes | 6369 |
+| Commandes | 6373 |
 | Sous-agents | 32 |
-| Commits | 539 |
+| Commits | 540 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -5936,7 +5936,7 @@ Poser le rapport et la sauvegarde **à un se
 
 ### Tour 118 — Continue de faire évoluer notre modèle et moteur en visant des réponses qui émulent les réponses sémantiques des modèles … [205 caractères tronqués]
 
-*12 appels d'outils.* Actions notables :
+*16 appels d'outils.* Actions notables :
 
 - bash — Check time and locate the two report sites
 - bash — Unify the HebbDiff report in one place
@@ -5950,21 +5950,22 @@ Poser le rapport et la sauvegarde **à un se
 - bash — Trace the same languages on a 30B model
 - bash — Measure the plateau on the 30B model
 - bash — Write and commit the semantic plateau report
+- bash — Re-measure the plateau with the learned adapter
+- bash — Train on 40 languages, holding out 5
+- … et 2 autres
 
 **Synthèse produite :**
 
-**Confirmé et chiffré : un modèle haut de gamme converge mieux.**
+**Le test tenu à l'écart est NÉGATIF, et c'est le résultat qui compte.**
 
-| | Qwen2.5-0.5B (24 c.) | Qwen3-30B-A3B (48 c.) |
+| couche | sans adaptateur | avec |
 |---|---:|---:|
-| pic de convergence | 0,649 (couche 10, **42 %**) | **0,693** (couche 17, **35 %**) |
-| **pire paire au pic** | **0,280** | **0,471** (+68 %) |
-| largeur du plateau | couches 4-16 | couches **4-42** |
-| à la sortie | 0,280 | 0,493 |
+| 8 | 0,5656 | 0,5139 |
+| 10 | 0,5464 | 0,5082 |
+| 12 | 0,5142 | 0,4719 |
+| **pic** | **0,6027** | **0,5461** |
 
-Le grand modèle ne se contente pas d'un meilleur pic : il rapproche surtout **les paires difficiles** — japonais, hindi, devanagari — de 0,28 à 0,47. Et il **re-spécialise moins** vers la sortie.
-
-**C'est la cible mesurable de ton objectif** : amener le plateau du petit modèle vers celui du grand, en priorité sur les pires paires.
+**Le gain de +11,7 % était de la mémorisation.** Sur des langues que l'adaptateur n'a jamais vues, il **dégrade** la convergence de 5 à 10 %.
 
 ## 3. Travail accompli
 
@@ -6200,7 +6201,7 @@ Le grand modèle ne se contente pas d'un meilleur pic : il rapproche surtout **l
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6329 autres
+- … et 6333 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -6887,4 +6888,5 @@ Le grand modèle ne se contente pas d'un meilleur pic : il rapproche surtout **l
 - Hebb différentiel : le test hors échantillon N'A PAS TOURNÉ, et j'explique pourquoi  PPL sur B, modèle intact : 29,151. PPL sur B avec D appris sur A : 29,151 —
 - Plateau multilingue à l'échelle : 10 langues, 4 écritures, pic à 42 % de la profondeur  tools/plateau_multilingue.py étend invariance_semantique.py d'une paire 
 - Un modèle haut de gamme converge MIEUX : pic 0,693 contre 0,649, et surtout pire paire 0,471 contre 0,280  Mêmes 10 langues (4 écritures), même article de l'UDH
+- VERDICT : la règle hebbienne locale ne transfère PAS — et dégrade les langues non vues  Trois tests, tous négatifs, du plus faible au plus fort :  1. autre text
 

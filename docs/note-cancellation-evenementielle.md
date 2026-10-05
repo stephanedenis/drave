@@ -227,3 +227,76 @@ note. Le gain peut donc n'être que de la mémorisation. Le test qui tranche :
 **adapter sur un texte A, noter sur un texte B**. C'est la différence entre
 « apprendre la structure » et « retenir le texte » — et c'est la prochaine
 mesure, pas une conclusion.
+
+## 9. Le verdict hors échantillon : la règle locale NE TRANSFÈRE PAS (06/10, 10h50)
+
+Trois tests, du plus faible au plus fort. **Les trois sont négatifs**, et le
+troisième est le plus instructif.
+
+### Test 1 — un autre texte
+
+`D` appris sur un texte A, noté sur un texte B : **29,151 contre 29,151** —
+identique au chiffre près. Aucun transfert.
+
+### Test 2 — un corpus multilingue
+
+`D` appris sur l'article 1 de l'UDHR en 40 langues (‖D‖ = 3,65), noté sur un
+article 2 en breton, langue absente : **1116,532 contre 1116,532**. Aucun
+transfert non plus.
+
+### Test 3 — l'invariance inter-langue, et l'apparence d'un succès
+
+`D` appris sur l'article 1 en 40 langues, puis **re-mesure du plateau** sur 10
+langues :
+
+| | sans adaptateur | avec |
+|---|---:|---:|
+| pic de convergence | 0,649 | **0,7247** |
+
+**+11,7 %, au-dessus du 30B (0,693).** Un résultat qui avait l'air d'un succès.
+
+**Il n'en était pas un** : les 10 langues de test étaient dans les 40
+d'entraînement. Le test tenu à l'écart — 6 langues **exclues** de
+l'entraînement (jpn, hin, ell, heb, tha, kor) :
+
+| couche | sans adaptateur | avec adaptateur |
+|---|---:|---:|
+| 8 | 0,5656 | 0,5139 |
+| 10 | 0,5464 | 0,5082 |
+| 12 | 0,5142 | 0,4719 |
+| **pic** | **0,6027** (couche 4) | **0,5461** |
+
+**Non seulement le gain disparaît, mais l'adaptateur DÉGRADE les langues qu'il
+n'a pas vues** — de 5 à 10 % à chaque couche.
+
+### Ce que ça établit
+
+1. **La règle AGIT** : les mesures varient avec η de façon monotone, ‖D‖ croît,
+   et l'effet en échantillon est reproductible.
+2. **Elle n'APPREND rien de transférable** : sur un texte nouveau, sur un article
+   nouveau, sur une langue nouvelle, l'effet est nul puis **négatif**.
+3. **La cause est structurelle, pas un réglage.** `D += η·Δy⊗Δx` accumule les
+   statistiques de transition de **ce qu'elle voit**. Rien dans la règle ne
+   distingue ce qui est *partagé* de ce qui est *propre au cas vu*. Sur une langue
+   nouvelle, la matrice apprise ajoute donc une composante **fausse**, qui éloigne
+   la représentation de la direction sémantique commune. C'est du surajustement,
+   et il est amplifié par l'absence de tout terme qui récompenserait l'invariance.
+
+### Ce qu'il faudrait, et ce n'est plus la même règle
+
+Une règle locale qui **généralise** doit être **contrastive** : renforcer ce qui
+est *invariant* entre les langues et supprimer ce qui varie. Concrètement
+`D -= η·(différentiel INTER-LANGUE)` au lieu de `D += η·(différentiel de
+séquence)` — c'est l'anti-Hebbien sur la direction de la langue, et c'est
+exactement la « rétroactivité négative » du §2.
+
+Deux conditions pour que ça marche, et aucune n'est remplie aujourd'hui :
+- **l'alignement** : le différentiel n'a de sens qu'entre positions qui disent la
+  même chose — l'UDHR le donne par article, mais pas au niveau du jeton ;
+- **un terme de partage** : sans lui, la règle n'a aucune raison de préférer
+  l'invariant au spécifique.
+
+**Ce que la soirée laisse** : le moteur sait **appliquer** une règle hebbienne
+différentielle, la mesurer, la sauver, la recharger, et **la réfuter proprement**.
+C'est la partie qui manquait — et un résultat négatif bien mesuré vaut mieux
+qu'un positif qui n'aurait pas résisté au test tenu à l'écart.

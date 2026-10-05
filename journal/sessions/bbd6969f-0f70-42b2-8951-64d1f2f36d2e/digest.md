@@ -124493,3 +124493,84 @@ Le grand modèle ne se contente pas d'un meilleur pic : il rapproche surtout **l
 **C'est la cible mesurable de ton objectif** : amener le plateau du petit modèle vers celui du grand, en priorité sur les pires paires.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-plateau-semantique.md <<'EOF'\n# Rapport — le plateau sémantique, mesuré sur un corpus multilingue réel\n\n**But** (Stéphane) : faire produire au moteur des réponses qui **émulent les\nréponses sémantiques des m … [4390 caractères tronqués]`
+
+  ```
+e29ba52 Un modèle haut de gamme converge MIEUX : pic 0,693 contre 0,649, et surtout pire paire 0,471 contre 0,280
+  ```
+
+### 🤖 Assistant
+
+**J'agis sur la cible.** L'adaptateur est chargé dans `--infer`, donc je peux re-tracer les 10 langues **avec `D` appris sur l'UDHR** et re-mesurer le plateau.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=models/Qwen2.5-0.5B-Q8_0.gguf; U=/home/stephane/Data13TB/stephane/corpus/udhr\nls -la /tmp/D_udhr.bin | awk '{print \"D appris sur 40 langues : \"$5\" octets\"}'\nmkdir -p $U/langues_adapt\nfor f in $U/langues/*.ids; do l=$(basenam … [582 caractères tronqués]`
+
+  ```
+D appris sur 40 langues : 17432592 octets
+10
+=== plateau AVEC l'adaptateur appris sur l'UDHR ===
+# 10 langues : deu eng fra hin ita jpn nld por rus spa
+ couche  cos moyen      min  paires
+      0     0.2587  -0.2914      45
+      3     0.4780   0.2737      45
+      4     0.6708   0.4186      45
+      5     0.6180   0.3917      45
+      6     0.6030   0.3998      45
+      7     0.6293   0.4207      45
+      8     0.7089   0.5314      45
+      9     0.6606   0.4072      45
+     15     0.6820   0.4280      45
+     16     0.6403   0.3883      45
+     17     0.5688   0.3051      45
+     18     0.5328   0.2753      45
+     19     0.5926   0.3509      45
+# maximum : 0.7247 à la couche 10
+  ```
+
+### 🤖 Assistant
+
+**Pic 0,649 → 0,7247 (+11,7 %)**, au-dessus du 30B (0,693). Mais **je dois vérifier avant de le dire** : les 10 langues de test sont probablement dans les 40 d'entraînement. C'est en échantillon. Je fais le test tenu à l'écart.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane && python3 - <<'PY'\nimport json, os\nu=[json.loads(l) for l in open('corpus/udhr/unites.jsonl')]\na1=[x for x in u if x['unite']=='article-1-00'][0]['traductions']\ntenus=['jpn','hin','ell','heb','tha','kor']          # tenus À L'ÉCART\ntenus=[c for  … [1304 caractères tronqués]`
+
+  ```
+entraînement : 40 langues · tenues à l'écart : ['jpn', 'hin', 'ell', 'heb', 'tha', 'kor']
+entraînement : 4043 jetons
+couche 10 : 4042 pas · ‖D‖ = 4.0595e0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=models/Qwen2.5-0.5B-Q8_0.gguf; U=/home/stephane/Data13TB/stephane/corpus/udhr\nmkdir -p $U/tenus_trace $U/tenus_adapt\nfor f in $U/tenus/*.txt; do l=$(basename $f .txt)\n  ./drave-core/target/release/drave \"$M\" --tokenize --fichi … [1003 caractères tronqués]`
+
+  ```
+=== cinq langues TENUES À L'ÉCART, paires entre elles (10 paires) ===
+--- tenus_trace ---
+# 6 langues : ell heb hin jpn kor tha
+ couche  cos moyen      min  paires
+      8     0.5656   0.4207      15
+     10     0.5464   0.2790      15
+     12     0.5142   0.2838      15
+     14     0.5146   0.3153      15
+# maximum : 0.6027 à la couche 4
+--- tenus_adapt ---
+# 6 langues : ell heb hin jpn kor tha
+ couche  cos moyen      min  paires
+      8     0.5139   0.4128      15
+     10     0.5082   0.2790      15
+     12     0.4719   0.2726      15
+     14     0.4688   0.3033      15
+# maximum : 0.5461 à la couche 4
+  ```
+
+### 🤖 Assistant
+
+**Le test tenu à l'écart est NÉGATIF, et c'est le résultat qui compte.**
+
+| couche | sans adaptateur | avec |
+|---|---:|---:|
+| 8 | 0,5656 | 0,5139 |
+| 10 | 0,5464 | 0,5082 |
+| 12 | 0,5142 | 0,4719 |
+| **pic** | **0,6027** | **0,5461** |
+
+**Le gain de +11,7 % était de la mémorisation.** Sur des langues que l'adaptateur n'a jamais vues, il **dégrade** la convergence de 5 à 10 %.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> docs/note-cancellation-evenementielle.md <<'EOF'\n\n## 9. Le verdict hors échantillon : la règle locale NE TRANSFÈRE PAS (06/10, 10h50)\n\nTrois tests, du plus faible au plus fort. **Les trois sont négatifs**, et le\ntroisième … [4560 caractères tronqués]`
