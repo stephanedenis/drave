@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 147.6 h |
-| Tours | 108 |
-| Messages | 7665 |
-| Appels d'outils | 7325 |
+| Durée | 152.2 h |
+| Tours | 109 |
+| Messages | 7670 |
+| Appels d'outils | 7328 |
 | Fichiers touchés | 150 |
-| Commandes | 6224 |
+| Commandes | 6227 |
 | Sous-agents | 32 |
-| Commits | 522 |
+| Commits | 523 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -263,6 +263,8 @@
 **Tour 107** — oui
 
 **Tour 108** — oui
+
+**Tour 109** — Quel est le roadmap où Drave serait à son meilleur? as-tu besoin de compacter la session? Continue kusqu'a 8h00 HAE
 
 ## 2. Déroulé, étape par étape
 
@@ -5365,7 +5367,7 @@ J'ai emprunté les blocs Q8_0 des cinq grosses projections du KDA au lieu de les
 
 ### Tour 108 — oui
 
-*11 appels d'outils.* Actions notables :
+*12 appels d'outils.* Actions notables :
 
 - bash — Check swap and the dense size to pin
 - bash — Implement the resident dense arena
@@ -5377,10 +5379,99 @@ J'ai emprunté les blocs Q8_0 des cinq grosses projections du KDA au lieu de les
 - bash — Announce the borrowed dense at runtime
 - bash — Verify the announcement appears
 - bash — Record both the fix and the refutation
+- bash — Final state check
 
 **Synthèse produite :**
 
-Après arrêt, plus personne ne tient cette mémoire : c'était bien le processus. Je corrige d'abord une faute que j'ai commise.
+Trois mesures ce tour, dont **deux réfutations** — la mienne comprise.
+
+\## 1. Le cache d'experts en VRAM : **non**, calculé avant d'être écrit
+
+| poste | Go/jeton | part |
+|---|---:|---:|
+| **experts routés** (16 sur 896) | 25,83 | **29,3 %** |
+| experts partagés | 12,40 | 14,1 % |
+| **dense Q8_0** | 48,56 | **55,1 %** |
+| tête | 1,30 | 1,5 % |
+
+Un cache ne peut retirer que les experts routés → **plafond ×1,41**. Et 32 Go de VRAM tiennent **19,7 matrices par couche** quand un jeton en choisit **16**.
+
+Sur une trace de routage **de K3 lui-même** (23 couches × 24 jetons de vrai texte) : réutilisation immédiate **30,2 %** (contre 46,9 % pour Qwen), LRU-20 → **28,7 %**. **Verdict : ×1,09.** Non.
+
+\## 2. Le dense emprunté : ×1,12, logits conformes
+
+| | f32 | emprunté |
+|---|---:|---:|
+| chargement | 373 s | **190 s** |
+| attention | 142 s | **222 s** ❌ |
+| total | 1 695 s | **1 516 s** |
+
+**Top-1 identique 3/3** (84, 1103, 3140). L'attention ralentit parce que `dot_q8_source` est scalaire — le noyau AVX2 du pool est le pas suivant, il est déjà écrit.
+
+\## 3. Deux hypothèses à moi, réfutées
+
+**Le cache de pages ne garde pas le dense.** Deux passes enchaînées : **1 516 430 ms puis 1 522 584 ms**. Rien. 106 Go de cache pour 137 Go de données distinctes par passe.
+
+**L'arène anonyme swape.** Je voulais copier les blocs Q8_0 dans des tampons anonymes — sans swap, une page anonyme est non-récupérable, donc la copie épingle. **Prémisse fausse** : j'avais vérifié avec `swapon --show`, qui n'a rien affiché, et j'ai lu ce silence comme « pas de swap ». **`swapon` n'existe pas sur cette machine.** `/proc/swaps` dit :
+
+```
+/dev/dm-0  partition  65 798 140  26 928 772
+```
+
+62,8 Go de swap. L'arène a swappé — `VmSwap` 28,5 Go, disponible tombée à 7 Go. Arrêtée.
+
+**Un instrument qui n'existe pas ne renvoie pas « non ».** Le silence n'est une mesure que si l'on a vérifié que l'outil était là. C'est la même leçon que le `--tensors '$RE'` non expansé hier — et je l'ai reprise.
+
+\## Une faute que j'avais commise, corrigée
+
+J'avais laissé le dense emprunté en **défaut silencieux** alors qu'il change la sortie (corrélations 0,998 au lieu de 0,9998). Il l'annonce maintenant au démarrage, avec ses chiffres. C'est la règle du dépôt et je l'avais enfreinte.
+
+\## Où en est le mur
+
+Le dense ne peut pas être rendu résident à bon compte ici : la page cache ne le garde pas, la copie anonyme swape, et `mlock` de 32 Go demande `CAP_IPC_LOCK`. **Le levier restant n'est pas la mémoire, c'est le cal
+… [516 caractères tronqués]
+
+### Tour 109 — Quel est le roadmap où Drave serait à son meilleur? as-tu besoin de compacter la session? Continue kusqu'a 8h00 HAE
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Check the remaining time
+- bash — Write the strategic roadmap
+
+**Synthèse produite :**
+
+Réponse courte : **oui, mon contexte est long** — continue, l'harnais compacte tout seul, et je travaille déjà en gardant l'état durable dans le dépôt (`REPRISE.md`, `docs/`) plutôt que dans ma tête. Il reste **9 h, ~4 blocs**.
+
+\## Le roadmap : où Drave est à son meilleur
+
+**Le fait mesuré qui définit la niche** — pas une opinion, un écart :
+
+| | lectures par jeton | vitesse |
+|---|---:|---:|
+| llama.cpp-k3 | **451 Go** (5,2 balayages du modèle) | 42 min/jeton |
+| Drave | **26 Go** d'experts (16 sur 896) | **7,4 min/jeton** |
+
+Ce n'est pas une victoire de vitesse, c'est une victoire d'**existence**. Dans ce régime :
+- llama.cpp **repaquette en RAM** → 104 Go après 16 tenseurs sur 2 573, il ne finit pas ;
+- Strata exige **tous** les experts en RAM (34-50 Go) → sa cible est 100-350 Go ;
+- vLLM & co : GPU-résident, hors sujet ; Ollama *est* llama.cpp.
+
+**Personne d'autre ne fonctionne quand la RAM fait 8 % du modèle.** C'est là, et seulement là, que Drave est le meilleur.
+
+**Les quatre axes, dans l'ordre où ils paient**
+
+1. **Finir la lecture sélective** (le socle). Le FFN pèse 1 088 s sur 1 516. Deux prises déjà localisées : le **regroupement des jetons par expert dans la couche** (×1,6 sur les lectures à 4 jetons — pas implémenté) et le **noyau AVX2 Q8_0** au lieu du scalaire (l'attention est passée de 142 à 222 s en empruntant). Critère : la passe complète sous 10 min.
+
+2. **Le décodage spéculatif** (le multiplicateur). C'est le seul moyen de rendre le décodage *par lots* — et j'ai mesuré que le regroupement vaut ×1,58 en préremplissage. Aujourd'hui le décodage est à un jeton : aucune réutilisation possible. Critère : ≥ 2 jetons acceptés par passe.
+
+3. **La grappe** (le seul moyen de descendre sous la minute). Un nœud = une plage de couches, chacun ne lit que son shard. Le découpage tient déjà — 5 modes sous porte, écarts nuls à 4,45e-3. À 3 nœuds : 500 Go chacun.
+
+4. **La porte de correction comme produit** : « prouvez que votre moteur calcule le même modèle ». C'est la méthodologie qui a trouvé les trois bugs de K3 en deux heures.
+
+**Ce qu'il faut arrêter, et c'est mesuré** : courir après les tok/s sur les modèles qui tiennent en RAM ; les noyaux GPU pour le MoE (2,7-3,9 Go/jeton contre 32 Go de VRAM) ; les caches d'experts en VRAM (×1,09) ; rendre le dense résident (la page cache ne le garde pas, la copie anonyme swape).
+
+**En une phrase** : Drave n'est pas un moteur rapide — c'est le seul qui *finit* un modèle de 1,5 To sur 125 Go, et il le prouve cont
+… [108 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -5616,7 +5707,7 @@ Après arrêt, plus personne ne tient cette mémoire : c'était bien le processu
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6184 autres
+- … et 6187 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -6286,4 +6377,5 @@ Après arrêt, plus personne ne tient cette mémoire : c'était bien le processu
 - Cache d'experts en VRAM pour K3 : mesuré, plafond x1,41, verdict x1,09 — non  Trace de routage RÉELLE de Kimi-K3 (nouveau DRAVE_K3_TRACE_EXPERTS + K3_IDS), 23 c
 - K3 : le dense emprunté donne x1,12 et des logits conformes — et le cache de pages NE le garde pas  Gguf::q8_blocks + DenseQ8::emprunter_q8 + dot_q8_source sur l
 - K3 : le dense emprunté s'ANNONCE, et l'arène résidente est réfutée (elle swape)  1. FAUTE CORRIGÉE : j'avais mis le dense emprunté en défaut SILENCIEUX alors   
+- docs : le roadmap — où Drave est à son meilleur, et ce qu'il faut arrêter  La niche est définie par une mesure, pas par une opinion : 451 Go lus par jeton pour 
 
