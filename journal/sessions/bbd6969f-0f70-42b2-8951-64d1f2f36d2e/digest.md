@@ -125118,3 +125118,125 @@ Le premier neurone capte **la direction partagée, indépendante de la langue** 
 **Le pont à UN neurone, validé sur 20 langues jamais vues : 0,9492 moyen, 0,7762 pire paire.** Je consolide et je note honnêtement ce que ma sonde n'a pas prouvé.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-pont-semantique.md'; s=open(p).read()\ns = s.replace(\"## Ce que ça donne à la mission\",\n\"\"\"## Résultat 6 — la sonde n'a RIEN prouvé, et je le dis\n\nPour lever la réserve « plus invariant ≠  … [4029 caractères tronqués]`
+
+  ```
+d876d23 Le pont rang-1 est l'artefact, et la sonde est un échec de protocole — dit tel quel
+0
+11:03
+  ```
+
+### 🤖 Assistant
+
+**Ton intuition était juste, et elle est maintenant chiffrée.**
+
+## Le pont tient en UN neurone
+
+| neurones | fidélité au professeur | **invariance inter-langue** | **pire paire** |
+|---|---:|---:|---:|
+| **1** | 0,668 | **0,9492** | **0,7762** |
+| 2 | 0,717 | 0,9347 | 0,8252 |
+| 4 | 0,748 | 0,9139 | 0,7769 |
+| 16 | 0,726 | 0,8431 | 0,5189 |
+| 64 | 0,682 | 0,7658 | 0,4842 |
+
+**Un seul neurone donne 0,9492 d'invariance** — contre **0,6284 pour le professeur** et **0,471 pour le plateau d'un modèle de 30 B**. Sa pire paire, 0,7762, écrase le 0,3281 du professeur. Validé sur **20 langues jamais vues**, toutes écritures confondues.
+
+**Et la courbe dit exactement ce que tu décrivais** : le premier neurone capte la **direction partagée, indépendante de la langue**. Les suivants ajoutent du **détail propre à chaque langue** — la fidélité au professeur monte (0,668 → 0,748) mais **l'invariance baisse, monotonement**. L'apprentissage est bien hyper-rapide au début, et pour le pont sémantique brut **il n'y a rien à ajouter**.
+
+## L'artefact
+
+```
+abstrait = (plongée_du_jeton · W0) · Pᵀ + moy
+W0 : 896×1     P : 896×1     moy : 896        ≈ 1 800 nombres
+```
+
+`pont_semantique_r1.npz` + `tools/applique_pont.py` — vérifié sur grec, hébreu, japonais, thaï, coréen.
+
+## Deux choses que je dois te dire franchement
+
+**Ma sonde n'a rien prouvé.** J'ai voulu lever la réserve « plus invariant ≠ meilleur » en mesurant si le pont garde l'information prédictive. Résultat : **R² de test négatif pour les trois états, le professeur compris** (−1,74). Une sonde qui ne transfère pas entre langues ne dit rien du pont — c'est un **échec de protocole**, pas un résultat. La réserve reste entière : le pont peut jeter de l'information utile, et personne ne l'a mesuré.
+
+**Le compromis est net et il faut le choisir consciemment** : si tu veux *copier* le professeur, il faut des neurones ; si tu veux le *pont brut*, un seul suffit et **les autres nuisent**.
+
+Tout est commité, 77 tests verts, `REPRISE.md` et `reports/rapport-pont-semantique.md` portent les six résultats et leurs réserves. Il est 11:03 — je continue jusqu'à midi.
+
+
+## Tour 119
+
+### 👤 Utilisateur
+
+ajoute des neuronnes et des couches au besoin. il faut émuler le prof le plus fidèlement possible à moindre coût en misant sur notre architecture légère et facilement distribuable.
+
+### 🤖 Assistant
+
+Compris : **fidélité maximale au professeur**, à moindre coût, en architecture légère et distribuable. Mais d'abord je dois corriger ma propre mesure — à rang croissant je comparais dans des espaces différents, ce qui rend les rangs incomparables.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/pont_fidele.py <<'EOF'\n#!/usr/bin/env python3\n\"\"\"pont_fidele.py — émuler le professeur LE PLUS FIDÈLEMENT POSSIBLE, à moindre coût.\n\nCorrection d'une faute de mesure : `pont_recurrent.py` comparait la fidélité DANS … [5796 caractères tronqués]`
+
+  ```
+# fidélité mesurée DANS L'ESPACE COMPLET (896 canaux), contre la sortie réelle
+
+modèle                              fid. train   fid. TEST     params  invariance
+constante (sortie moyenne)              0.6562      0.6744        896      0.4616
+linéaire, 1 neurone(s)                  0.6867      0.6382       1792      0.7936
+linéaire, 2 neurone(s)                  0.7084      0.6011       2688      0.6725
+linéaire, 4 neurone(s)                  0.7406      0.5944       4480      0.5772
+linéaire, 8 neurone(s)                  0.7841      0.5876       8064      0.4927
+linéaire, 16 neurone(s)                 0.8155      0.5623      15232      0.4263
+linéaire, 32 neurone(s)                 0.8448      0.5444      29568      0.3826
+linéaire, 64 neurone(s)                 0.8683      0.5293      58240      0.3489
+linéaire, 128 neurone(s)                0.8884      0.5165     115584      0.3229
+2 couches, 64 cachés (ELM)              0.7318      0.6993     114688      0.8493
+2 couches, 256 cachés (ELM)             0.7980      0.6893     458752      0.7260
+2 couches, 1024 cachés (ELM)            0.8907      0.6707    1835008      0.6090
+2 couches, 4096 cachés (ELM)            0.9137      0.
+… [27 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+**La mesure corrigée change la conclusion** : les modèles linéaires **surajustent** — la fidélité d'entraînement monte (0,69 → 0,89) tandis que celle de **test s'effondre** (0,64 → 0,52). Le meilleur est le **2-couches à 64 cachés : 0,6993 en test et 0,8493 d'invariance**.
+
+Mais le vrai goulot est la **donnée** : 1 476 pas pour 896 sorties. J'en ai deux fois plus sous la main.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && U=/home/stephane/Data13TB/stephane/corpus/udhr\nmkdir -p $U/appr40 && for f in $U/vaste_train/*.drvf $U/vaste_test/*.drvf; do ln -sf \"$f\" $U/appr40/ 2>/dev/null; done\necho \"40 langues d'entraînement → 6 langues tenues à l'écart ( … [189 caractères tronqués]`
+
+  ```
+40 langues d'entraînement → 6 langues tenues à l'écart (écritures non latines)
+modèle                              fid. train   fid. TEST     params  invariance
+constante (sortie moyenne)              0.6677      0.5582        896      0.3763
+linéaire, 1 neurone(s)                  0.6943      0.4752       1792      0.7461
+linéaire, 2 neurone(s)                  0.7097      0.4586       2688      0.6406
+linéaire, 4 neurone(s)                  0.7372      0.4343       4480      0.5381
+linéaire, 8 neurone(s)                  0.7711      0.4326       8064      0.4346
+linéaire, 16 neurone(s)                 0.7943      0.4096      15232      0.3785
+linéaire, 32 neurone(s)                 0.8144      0.3946      29568      0.3337
+linéaire, 64 neurone(s)                 0.8309      0.3813      58240      0.3039
+linéaire, 128 neurone(s)                0.8444      0.3691     115584      0.2812
+2 couches, 64 cachés (ELM)              0.7278      0.5725     114688      0.8882
+2 couches, 256 cachés (ELM)             0.7753      0.5795     458752      0.7855
+2 couches, 1024 cachés (ELM)            0.8505      0.5564    1835008      0.6374
+2 couches, 4096 cachés (ELM)            0.8947      0.5
+… [26 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+**Le résultat répond directement à ta demande — et il dit l'inverse de l'intuition.**
+
+| modèle | fid. entraînement | **fid. TEST** | params | invariance |
+|---|---:|---:|---:|---:|
+| constante | 0,6677 | 0,5582 | 896 | 0,3763 |
+| linéaire 1 neurone | 0,6943 | 0,4752 | 1 792 | 0,7461 |
+| linéaire 128 neurones | 0,8444 | **0,3691** | 115 584 | 0,2812 |
+| **2 couches, 64 cachés** | 0,7278 | **0,5725** | 114 688 | **0,8882** |
+| 2 couches, 256 cachés | 0,7753 | **0,5795** | 458 752 | 0,7855 |
+| 2 couches, 4 096 cachés | 0,8947 | 0,5557 | 7 340 032 | 0,6048 |
+
+**Ajouter des neurones à un modèle linéaire DÉTRUIT la fidélité** : 0,475 (1 neurone) → 0,369 (128), pendant que l'entraînement monte de 0,69 à 0,84. Surajustement pur.
+
+**Ajouter des couches aide vraiment** : le 2-couches est la **seule** famille qui bat la constante, et il porte **la meilleure invariance (0,8882)** en même temps que la meilleure fidélité à coût égal.
+
+**Et au-delà de 256 cachés, ajouter nuit** (0,5795 → 0,5557). Le goulot n'est pas la capacité : **c'est la donnée** — 2 960 pas pour une cible de 896 dimensions.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-pont-semantique.md'; s=open(p).read()\ns += \"\"\"\n\n## Résultat 7 — « ajouter des neurones et des couches » : mesuré, et c'est l'inverse\n\nDemande de Stéphane : ajouter neurones et couches au b … [3858 caractères tronqués]`

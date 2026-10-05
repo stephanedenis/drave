@@ -178,3 +178,51 @@ l'entraînement.
    récurrentes. La mesure dit que la récurrence linéaire n'apporte rien ici — elle
    ne dit pas qu'une récurrence **non linéaire** (de type DeltaNet, que le moteur
    implémente déjà et qui est vérifiée sur K3) n'apporterait rien.
+
+
+## Résultat 7 — « ajouter des neurones et des couches » : mesuré, et c'est l'inverse
+
+Demande de Stéphane : ajouter neurones et couches au besoin, pour émuler le
+professeur **le plus fidèlement possible à moindre coût**. Mesure dans **l'espace
+complet** (896 canaux) — l'ancienne comparaison se faisait dans le sous-espace du
+rang courant, ce qui rendait les rangs incomparables et faisait croire que la
+fidélité baissait.
+
+40 langues d'entraînement → **6 langues tenues à l'écart**, toutes non latines :
+
+| modèle | fid. entraînement | **fid. TEST** | params | invariance |
+|---|---:|---:|---:|---:|
+| constante (sortie moyenne) | 0,6677 | 0,5582 | 896 | 0,3763 |
+| linéaire, 1 neurone | 0,6943 | 0,4752 | 1 792 | 0,7461 |
+| linéaire, 4 | 0,7372 | 0,4343 | 4 480 | 0,5381 |
+| linéaire, 16 | 0,7943 | 0,4096 | 15 232 | 0,3785 |
+| linéaire, 128 | 0,8444 | **0,3691** | 115 584 | 0,2812 |
+| **2 couches, 64 cachés** | 0,7278 | **0,5725** | 114 688 | **0,8882** |
+| 2 couches, 256 cachés | 0,7753 | **0,5795** | 458 752 | 0,7855 |
+| 2 couches, 1 024 | 0,8505 | 0,5564 | 1 835 008 | 0,6374 |
+| 2 couches, 4 096 | 0,8947 | 0,5557 | 7 340 032 | 0,6048 |
+
+**Trois conclusions, et la première contredit l'intuition :**
+
+1. **Ajouter des neurones à un modèle LINÉAIRE détruit la fidélité** — 0,475 à un
+   neurone, 0,369 à cent vingt-huit, pendant que l'entraînement monte de 0,69 à
+   0,84. C'est du surajustement pur, et il est visible sur la seule colonne qui
+   compte.
+2. **Ajouter une COUCHE aide vraiment** : le deux-couches (projection aléatoire
+   gelée + non-linéarité + lecture par moindres carrés) est la **seule** famille
+   qui bat la constante, et il porte **la meilleure invariance** (0,8882) en même
+   temps que la meilleure fidélité à coût égal.
+3. **Au-delà de 256 cachés, ajouter nuit** (0,5795 → 0,5557). Le goulot n'est pas
+   la capacité : **c'est la donnée** — 2 960 pas pour une cible de 896 dimensions.
+
+**Le meilleur compromis mesuré** : **2 couches, 64 à 256 cachés**, 115 à 459 k
+paramètres, fidélité de test 0,57-0,58 et invariance 0,79-0,89.
+
+**Et il est naturellement distribuable** : la projection `R` (896 × H) est
+**aléatoire et gelée** — elle n'a besoin d'aucune coordination entre nœuds — et
+seule la lecture `W` (H × 896) s'ajuste, par blocs indépendants.
+
+**Ce qu'il faudrait pour aller plus loin, et c'est nommé** : **plus de données**.
+L'UDHR porte **42 unités × 400 langues**, et ce rapport n'utilise que **l'article 1
+dans 46 langues** — soit ~3 % du corpus disponible. Dix fois plus de pas
+changerait la courbe, pas dix fois plus de neurones.
