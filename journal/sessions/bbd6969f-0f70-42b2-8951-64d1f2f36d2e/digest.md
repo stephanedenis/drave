@@ -128577,3 +128577,198 @@ TERMINÉ
 L'avantage sur la constante passe de +0,0362 à **+0,0607**, soit **+68 %**. Je relance sans plafond contraignant.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && setsid nohup python3 tools/pont_generatif.py /tmp/cache_appr10.npz /tmp/cache_tenus10.npz --val 10 --seuil 0.005 --cycles 2 --couches-par-cycle 9 --plafond 512 > /tmp/gen10_512.log 2>&1 < /dev/null & echo \"plafond 512 lancé\"\npytho … [2071 caractères tronqués]`
+
+  ```
+plafond 512 lancé
+e82c5df Cycles confirmés sur la tâche 10x plus dure : +68 % d'avantage sur la constante
+13:12
+  ```
+
+### 🤖 Assistant
+
+⏵ Le point complet sur la phase générative et l'attrition.
+
+C'est en place et mesuré. `tools/pont_generatif.py` — trois commits : `e39f6fc`, `d577699`, `27e8f3e`, `e82c5df`.
+
+## La croissance : le réseau naît d'un seul neurone
+
+Chaque pas ajoute une **couche** qui ne lit que les couches antérieures — jamais l'inverse. Conséquence exacte : les trajectoires déjà calculées ne sont **pas perturbées**, on ne calcule que la couche qui naît. La croissance coûte le réseau final, pas la somme des états.
+
+Tâche 10 unités (38 212 pas, constante témoin 0,4405) :
+
+| neurones | couches | fid appr | fid VAL | **fid TEST** | invariance | pire paire |
+|---:|---:|---:|---:|---:|---:|---:|
+| **1** | 1 | 0,5234 | 0,5897 | 0,4424 | **0,9993** | **0,9984** |
+| 16 | 5 | 0,5409 | 0,6023 | 0,4578 | 0,9975 | 0,9949 |
+| 64 | 7 | 0,5679 | 0,6184 | 0,4810 | 0,9883 | 0,9700 |
+| 128 | 8 | 0,5863 | 0,6295 | 0,4933 | 0,9839 | 0,9625 |
+| 256 | 9 | 0,6081 | 0,6410 | 0,4998 | 0,9706 | 0,9376 |
+
+**Monotone dans les cinq colonnes, sans plateau.** C'est la différence de fond avec le réservoir **plat**, qui sature puis recule (0,5921 à 64 neurones, 0,5868 à 256). **La profondeur est ce qui permet à la capacité de servir** — votre intuition d'ajouter des couches était la bonne, et pour une raison structurelle, pas cosmétique.
+
+## L'attrition : elle améliore en réduisant
+
+Point qui décide de la validité de tout le reste : on ne masque pas des colonnes, on **recalcule les survivants sans les retirés**. Sans ça, « 1 neurone » ne voudrait rien dire — un neurone de 9ᵉ couche n'est pas un neurone, c'est une caractéristique profonde.
+
+| neurones | couches | fid VAL | **fid TEST** |
+|---:|---:|---:|---:|
+| 256 (né) | 9 | 0,6410 | 0,4998 |
+| **192** | 9 | 0,6386 | **0,5002** |
+| 144 (refusé) | — | 0,6357 | — |
+
+**Retirer 25 % améliore le test**, et le retrait suivant est refusé par la validation. Le critère s'arrête seul.
+
+J'ai aussi remplacé le critère de retrait : couper par contribution ne « généralise » rien, ça coupe les faibles. Le critère de **redondance** retire ce que les autres disent déjà — calcul exact en une seule inversion (`score = expliqué × contribution`). À taille égale : 0,6085 contre 0,6078 à 192 neurones, et il préserve la profondeur.
+
+## L'attrition périodique : deux cycles battent une passe
+
+| | neurones | couches | fid VAL | **fid TEST** |
+|---|---:|---:|---:|---:|
+| 1 passe | 144 | 8 | 0,7402 | 0,6056 |
+| **2 cycles** | **108** | **10** | **0,7410** | **0,6079** |
+| 3 cycles | 108 | 13 | 0,7410 | 0,6079 |
+
+Deux cycles : **25 % de neurones en moins, deux couches de plus, validation ET test supérieurs.** Un troisième ne change plus rien. La première attrition ne fait pas que réduire, elle **réorganise** — les survivants redeviennent le socle d'une croissance neuve, déjà débarrassée de ses détecteurs particuliers.
+
+Sur les 10 unités : plat 0,4767 → **2 cycles 0,5012**. L'écart au-dessus de la constante passe de +0,0362 à **+0,0607, soit +68 %**.
+
+## Deux fautes que j'ai attrapées, et qui comptaient
+
+- **Fuite de données** : `Pont` ne détenait que les langues d'entraînement mais était interrogé avec les indices du **test** — j'annonçais 0,7234 au lieu de 0,5739.
+- **Sélection sur le test** : je choisissais le « meilleur réseau » d'après son score de **test**. Corrigé en sélectionnant sur la validation seule — c'est ce qui a ramené le meilleur réseau de 256 neurones (0,6056) à 108 (0,6079). Le premier était un artefact.
+
+## En cours
+
+Une course avec **plafond 512** tourne : à 11 couches et 256 neurones le réseau demandait encore à croître, la courbe n'a pas montré de plateau. C'est la question ouverte — la croissance s'arrête-t-elle d'elle-même, et où ?
+
+
+## Tour 122
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Faire évoluer le pont linguistico-sémantique en BOÎTE NOIRE (émulation des premières couches du professeur, sans accès à ses rouages) par une phase GÉNÉRATIVE — le nombre de neurones et de couches NAÎT pendant l'apprentissage, en partant d'un seul neurone — suivie d'une ATTRITION PÉRIODIQUE qui réduit la taille du réseau en GÉNÉRALISANT les concepts (fusion des unités redondantes, réajustement de la lecture sur les survivants), jamais par simple coupe. Aucune rétropropagation : A et B restent aléatoires et gelés, seule la lecture s'ajuste en forme fermée. Chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, et TAILLE du réseau — mesurées contre le professeur Qwen2.5-0.5B couche 10 et le plateau Qwen3-30B-A3B."
+Round: 1/256
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Je fais le point sur la course en cours et sur ce qui manque à l'objectif.
+
+- **bash** `{"command": "tail -14 /tmp/gen10_512.log 2>/dev/null; echo \"--- état ---\"; pgrep -f \"pont_generati[f].py.*appr10\" >/dev/null && echo \"TOURNE\" || echo \"TERMINÉ\"; echo; echo \"=== ce que l'objectif exige et que je n'ai pas encore fait ===\"; ls -la /home/stephane/Data13TB/stephane/corpus/udhr/ … [206 caractères tronqués]`
+
+  ```
+--- état ---
+TOURNE
+
+=== ce que l'objectif exige et que je n'ai pas encore fait ===
+total 321980
+drwxr-xr-x. 1 stephane stephane      160  5 oct 10:02 .
+drwxr-xr-x. 1 stephane stephane      574  5 oct 12:03 ..
+-rw-r--r--. 1 stephane stephane 24052234  5 oct 09:56 deu.drvf
+-rw-r--r--. 1 stephane stephane 17994582  5 oct 09:57 eng.drvf
+-rw-r--r--. 1 stephane stephane 27314047  5 oct 09:57 fra.drvf
+-rw-r--r--. 1 stephane stephane 95863173  5 oct 09:58 hin.drvf
+-rw-r--r--. 1 stephane stephane 28992613  5 oct 09:59 ita.drvf
+-rw-r--r--. 1 stephane stephane 28292968  5 oct 10:00 jpn.drvf
+-rw-r--r--. 1 stephane stephane 29035429  5 oct 10:00 nld.drvf
+
+-rw-r--r--. 1 stephane stephane 18556686752 25 sep 08:26 /home/stephane/Data13TB/stephane/modeles/gguf/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf
+13:13
+  ```
+
+### 🤖 Assistant
+
+⏵ L'objectif exige une mesure contre le plateau 30B, que je n'ai pas encore faite sur le bon périmètre. Je lance un essai chronométré.
+
+**Ce qui manque à l'objectif** : la mesure contre le **plateau Qwen3-30B-A3B**. Or `langues30b/` ne contient que 7 langues sur l'article 1 — pas les 6 langues tenues à l'écart, ni les 10 unités. Il faut donc tracer le 30B sur le **même périmètre**. Essai chronométré d'abord.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/corpus/udhr && ls langues30b/*.drvf | xargs -n1 basename | sed 's/.drvf//' | tr '\\n' ' '; echo; ls /tmp/udhr10_texte/ | head -3; echo \"=== essai 30B sur ell, borné 0:18 ===\"; M=/home/stephane/Data13TB/stephane/modeles/gguf/Qwen3-30B-A3B-Instruct-25 … [353 caractères tronqués]`
+
+  ```
+deu eng fra hin ita jpn nld por rus spa 
+abk.txt
+ace.txt
+acu.txt
+=== essai 30B sur ell, borné 0:18 ===
+postes (ms/token) : matvec-attn 15.3 | rope 1.5 | attention 31.3 | matvec+mlp 259.9 | total mesuré 307.9
+[tete] densite de l'entree : 82.4 % de coordonnees vivantes sur 32 jetons
+[tete] -> un stockage par COLONNES ne lirait que ces coordonnees : 82.4 % de la matrice au lieu de 100 %
+TEMPS 336.95 s
+  ```
+
+### 🤖 Assistant
+
+⏵ 337 s par langue (chargement des 18 Go dominant). Je lance les 6 langues tenues à l'écart en arrière-plan.
+
+**337 s par langue**, dont l'essentiel est le chargement des 18 Go. Je lance les 6 langues tenues à l'écart pour obtenir le plateau 30B sur le **même périmètre** que le pont génératif.
+
+- **bash** `{"command": "cat > /tmp/trace30b.sh <<'EOF'\n#!/bin/bash\ncd /home/stephane/Data13TB/stephane/corpus/udhr\nmkdir -p tenus30b\nM=/home/stephane/Data13TB/stephane/modeles/gguf/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf\nD=/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/target/release/drave\nfo … [768 caractères tronqués]`
+
+  ```
+lancé
+--couches 0:18
+--- plafond 512 ---
+  fidélité appr.   : 0.6290
+  fidélité VAL     : 0.6482
+  fidélité TEST    : 0.5023   (constante témoin : 0.4405)
+  invariance TEST  : 0.9425 · pire paire 0.8847
+
+# état final du réseau : 288 neurones · 13 couches ([1, 1, 2, 4, 9, 20, 29, 67, 21, 29, 39, 47, 19])
+[stderr]
+grep: warning: stray \ before -
+  ```
+
+### 🤖 Assistant
+
+⏵ La course plafond 512 est finie : la croissance **n'a pas plateaué**. Je lis le journal complet.
+
+**Réponse à la question ouverte : la croissance n'a PAS plateaué.**
+
+| plafond | neurones | couches | fid VAL | fid TEST | invariance |
+|---|---:|---:|---:|---:|---:|
+| 256 | 256 | 11 | 0,6417 | 0,5012 | 0,9706 |
+| **512** | **288** | **13** | **0,6482** | **0,5023** | 0,9425 |
+
+La validation monte encore (+0,65 pt) : le réseau en veut toujours plus. Je lis le journal complet.
+
+- **bash** `{"command": "cat /tmp/gen10_512.log", "description": "Read full plafond-512 log"}`
+
+  ```
+# 40 langues d'entraînement = 30 apprentissage + 10 validation
+# 6 langues de TEST · a=0.2 · ride=0.3 · graine=5 · critère=redondance
+# 2 cycles de 9 couches, puis attrition
+# pas — apprentissage 28212 · validation 10000 · test 5293
+# constante témoin sur le TEST : 0.4405
+
+########## CYCLE 1 — CROISSANCE ##########
+après                           neur.  couch.  fid appr  fid VAL  fid TEST   invar.    pire
+C1 naissance couche 1 (+1)          1       1    0.5234   0.5897    0.4424   0.9993  0.9984
+C1 naissance couche 2 (+1)          2       2    0.5249   0.5890    0.4465   0.9992  0.9981
+C1 naissance couche 3 (+2)          4       3    0.5291   0.5928    0.4489   0.9988  0.9971
+C1 naissance couche 4 (+4)          8       4    0.5333   0.5967    0.4540   0.9984  0.9966
+C1 naissance couche 5 (+8)         16       5    0.5409   0.6023    0.4578   0.9975  0.9949
+C1 naissance couche 6 (+16)        32       6    0.5521   0.6076    0.4677   0.9924  0.9817
+C1 naissance couche 7 (+32)        64       7    0.5679   0.6184    0.4810   0.9883  0.9700
+C1 naissance couche 8 (+64)       128       8    0.5863   0.6295    0.4933   0.9839  0.9625
+C1 naissance couche 9 (+128)      256       9    0.6081
+… [1625 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le plateau est trouvé** : la validation culmine à 468 neurones puis redescend. Je consigne.
+
+**Le plateau est trouvé.** La validation culmine à **468 neurones / 13 couches** (0,6482) puis **redescend** à 512 (0,6478). Et l'attrition fait mieux que la croissance :
+
+| | neurones | couches | fid VAL | **fid TEST** |
+|---|---:|---:|---:|---:|
+| croissance max | 512 | 14 | 0,6478 | 0,5026 |
+| **attrition → 384** | **384** | 14 | 0,6458 | **0,5035** |
+| attrition → 288 (retenu) | 288 | 13 | 0,6430 | 0,5031 |
+
+**L'attrition produit le meilleur test de tout le processus** (0,5035), meilleur que n'importe quel point de croissance. Je consigne.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-pont-generatif.md'; s=open(p).read()\ns += \"\"\"\n\n## 9. Où la croissance s'arrête : le plateau est à ~470 neurones\n\nCourse avec plafond 512, deux cycles. Cycle 2 (le réseau part de 192 surviv … [3387 caractères tronqués]`

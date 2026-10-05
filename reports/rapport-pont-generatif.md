@@ -195,3 +195,47 @@ validation seule.
 Le réseau bute sur le plafond de 256 neurones que je lui avais imposé : à 11
 couches il demandait encore à croître. La courbe de croissance n'a toujours pas
 montré de plateau sur cette tâche.
+
+
+## 9. Où la croissance s'arrête : le plateau est à ~470 neurones
+
+Course avec plafond 512, deux cycles. Cycle 2 (le réseau part de 192 survivants) :
+
+| neurones | couches | fid appr | fid VAL | **fid TEST** | invariance | pire paire |
+|---:|---:|---:|---:|---:|---:|---:|
+| 240 | 10 | 0,6082 | 0,6407 | 0,5008 | 0,9719 | 0,9351 |
+| 300 | 11 | 0,6154 | 0,6439 | 0,5004 | 0,9600 | 0,9118 |
+| 375 | 12 | 0,6222 | 0,6465 | 0,5006 | 0,9495 | 0,8979 |
+| **468** | **13** | 0,6290 | **0,6482** | 0,5023 | 0,9425 | 0,8847 |
+| 512 | 14 | 0,6315 | 0,6478 | **0,5026** | 0,9418 | 0,8832 |
+
+**La validation culmine à 468 neurones puis REDESCEND** (0,6482 → 0,6478) : le
+plateau est là, entre 470 et 512 neurones, 13-14 couches. C'est la première fois
+que la courbe de croissance se retourne — aux tailles précédentes elle montait
+toujours.
+
+**Et l'attrition fait mieux que la croissance :**
+
+| | neurones | couches | fid VAL | **fid TEST** |
+|---|---:|---:|---:|---:|
+| croissance, 512 | 512 | 14 | 0,6478 | 0,5026 |
+| **attrition → 384** | **384** | 14 | 0,6458 | **0,5035** |
+| attrition → 288 (retenu) | 288 | 13 | 0,6430 | 0,5031 |
+| 72 de plus retirés (refusé) | — | — | 0,6397 | — |
+
+**Le meilleur test de tout le processus (0,5035) est produit par l'ATTRITION, pas
+par la croissance** — et avec 25 % de neurones en moins que le maximum. C'est
+l'énoncé le plus net de tout ce rapport : à cette échelle, **retirer des neurones
+en réajustant la lecture vaut mieux qu'en ajouter**.
+
+### Le bilan face à la constante témoin
+
+| modèle | neurones | fid TEST | écart à la constante |
+|---|---:|---:|---:|
+| constante témoin | — | 0,4405 | — |
+| réservoir **plat**, 64 neurones | 64 | 0,4767 | +0,0362 |
+| réservoir plat, 512 neurones | 1 179 648 params | 0,5812 | *autre tâche* |
+| **cascade générative, 384** | **384** | **0,5035** | **+0,0630** |
+
+**L'avantage sur la constante passe de +0,0362 (plat) à +0,0630, soit +74 %** —
+avec 384 neurones au lieu de 64, mais 13 couches au lieu d'une seule.

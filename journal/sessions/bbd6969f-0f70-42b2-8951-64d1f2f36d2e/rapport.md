@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 166.4 h |
-| Tours | 121 |
-| Messages | 8007 |
-| Appels d'outils | 7635 |
+| Durée | 166.6 h |
+| Tours | 122 |
+| Messages | 8014 |
+| Appels d'outils | 7640 |
 | Fichiers touchés | 150 |
-| Commandes | 6521 |
+| Commandes | 6526 |
 | Sous-agents | 32 |
-| Commits | 559 |
+| Commits | 560 |
 | Compactages de contexte | 11 |
 
 ## Objectifs déclarés
@@ -291,6 +291,8 @@
 **Tour 120** — notre nouveau modèle est-il optimisable?
 
 **Tour 121** — continue en boite noire. Les méthodes d'apprentissages et le nombre de neuronnes et de couches générées en apprentissage doit passer par une phase générative, puis attrition périodique pour réduire la taille du réseau en généralisant les concepts.
+
+**Tour 122** — <goal_round> Objective: "Faire évoluer le pont linguistico-sémantique en BOÎTE NOIRE (émulation des premières couches du professeur, sans accès à ses rouages) par une phase GÉNÉRATIVE — le nombre de neurones et de couches NAÎT pendant l'apprentissage, en partant d'un seul neurone — suivie d'une ATTRITION PÉRIODIQUE qui réduit la taille du réseau en GÉNÉRALISANT les concepts (fusion des unités redo … [951 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -6151,18 +6153,72 @@ Oui — et la marge était plus grande que le modèle lui-même. Trois commits :
 
 **Synthèse produite :**
 
-⏵ Confirmé sur les 10 unités. Je relance avec un plafond plus haut et je consigne.
+⏵ Le point complet sur la phase générative et l'attrition.
 
-**Confirmé sur la tâche difficile**, et le réseau bute sur mon plafond — signe qu'il en veut encore :
+C'est en place et mesuré. `tools/pont_generatif.py` — trois commits : `e39f6fc`, `d577699`, `27e8f3e`, `e82c5df`.
 
-| | neurones | couches | fid VAL | fid TEST |
+\## La croissance : le réseau naît d'un seul neurone
+
+Chaque pas ajoute une **couche** qui ne lit que les couches antérieures — jamais l'inverse. Conséquence exacte : les trajectoires déjà calculées ne sont **pas perturbées**, on ne calcule que la couche qui naît. La croissance coûte le réseau final, pas la somme des états.
+
+Tâche 10 unités (38 212 pas, constante témoin 0,4405) :
+
+| neurones | couches | fid appr | fid VAL | **fid TEST** | invariance | pire paire |
+|---:|---:|---:|---:|---:|---:|---:|
+| **1** | 1 | 0,5234 | 0,5897 | 0,4424 | **0,9993** | **0,9984** |
+| 16 | 5 | 0,5409 | 0,6023 | 0,4578 | 0,9975 | 0,9949 |
+| 64 | 7 | 0,5679 | 0,6184 | 0,4810 | 0,9883 | 0,9700 |
+| 128 | 8 | 0,5863 | 0,6295 | 0,4933 | 0,9839 | 0,9625 |
+| 256 | 9 | 0,6081 | 0,6410 | 0,4998 | 0,9706 | 0,9376 |
+
+**Monotone dans les cinq colonnes, sans plateau.** C'est la différence de fond avec le réservoir **plat**, qui sature puis recule (0,5921 à 64 neurones, 0,5868 à 256). **La profondeur est ce qui permet à la capacité de servir** — votre intuition d'ajouter des couches était la bonne, et pour une raison structurelle, pas cosmétique.
+
+\## L'attrition : elle améliore en réduisant
+
+Point qui décide de la validité de tout le reste : on ne masque pas des colonnes, on **recalcule les survivants sans les retirés**. Sans ça, « 1 neurone » ne voudrait rien dire — un neurone de 9ᵉ couche n'est pas un neurone, c'est une caractéristique profonde.
+
+| neurones | couches | fid VAL | **fid TEST** |
+|---:|---:|---:|---:|
+| 256 (né) | 9 | 0,6410 | 0,4998 |
+| **192** | 9 | 0,6386 | **0,5002** |
+| 144 (refusé) | — | 0,6357 | — |
+
+**Retirer 25 % améliore le test**, et le retrait suivant est refusé par la validation. Le critère s'arrête seul.
+
+J'ai aussi remplacé le critère de retrait : couper par contribution ne « généralise » rien, ça coupe les faibles. Le critère de **redondance** retire ce que les autres disent déjà — calcul exact en une seule inversion (`score = expliqué × contribution`). À taille égale : 0,6085 contre 0,6078 à 192 neurones, et il préserve la profondeur.
+
+\## L'attrition périodique : deux cycles battent une passe
+
+| | neurones | couches | fid VAL | **fid TEST** |
 |---|---:|---:|---:|---:|
-| réservoir plat | 64 | 1 | — | 0,4767 |
-| cascade, 1 passe | 192 | 9 | 0,6386 | 0,5002 |
-| **cascade, 2 cycles** | **256** | **11** | **0,6417** | **0,5012** |
-| *constante témoin* | | | | *0,4405* |
+| 1 passe | 144 | 8 | 0,7402 | 0,6056 |
+| **2 cycles** | **108** | **10** | **0,7410** | **0,6079** |
+| 3 cycles | 108
+… [1191 caractères tronqués]
 
-L'avantage sur la constante passe de +0,0362 à **+0,0607**, soit **+68 %**. Je relance sans plafond contraignant.
+### Tour 122 — <goal_round> Objective: "Faire évoluer le pont linguistico-sémantique en BOÎTE NOIRE (émulation des premières couches du … [1231 caractères tronqués]
+
+*5 appels d'outils.* Actions notables :
+
+- bash — Check running job and 30B availability
+- bash — Time 30B trace on one language
+- bash — Launch 30B traces for held-out languages
+- bash — Read full plafond-512 log
+- bash — Commit plateau finding, check 30B progress
+
+**Synthèse produite :**
+
+⏵ **Le plateau est trouvé** : la validation culmine à 468 neurones puis redescend. Je consigne.
+
+**Le plateau est trouvé.** La validation culmine à **468 neurones / 13 couches** (0,6482) puis **redescend** à 512 (0,6478). Et l'attrition fait mieux que la croissance :
+
+| | neurones | couches | fid VAL | **fid TEST** |
+|---|---:|---:|---:|---:|
+| croissance max | 512 | 14 | 0,6478 | 0,5026 |
+| **attrition → 384** | **384** | 14 | 0,6458 | **0,5035** |
+| attrition → 288 (retenu) | 288 | 13 | 0,6430 | 0,5031 |
+
+**L'attrition produit le meilleur test de tout le processus** (0,5035), meilleur que n'importe quel point de croissance. Je consigne.
 
 ## 3. Travail accompli
 
@@ -6398,7 +6454,7 @@ L'avantage sur la constante passe de +0,0362 à **+0,0607**, soit **+68 %**. Je 
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6481 autres
+- … et 6486 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -7105,4 +7161,5 @@ L'avantage sur la constante passe de +0,0362 à **+0,0607**, soit **+68 %**. Je 
 - Le génératif CONFIRMÉ sur 10x plus de données, et les cycles croissance->attrition  Tâche 10 unités (38 212 pas, constante témoin 0,4405) :  CROISSANCE — monoto
 - L'ATTRITION PÉRIODIQUE paie : deux cycles battent une passe  --cycles N alterne croissance et attrition, avec COMPACTION de la généalogie entre les deux (sans e
 - Cycles confirmés sur la tâche 10x plus dure : +68 % d'avantage sur la constante                          neurones  couches  fid VAL   fid TEST   réservoir plat 
+- Le plateau de croissance est trouvé (~470 neurones), et l'ATTRITION fait mieux que la croissance  Course plafond 512, deux cycles, tâche 10 unités (constante té
 
