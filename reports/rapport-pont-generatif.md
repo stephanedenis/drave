@@ -173,3 +173,25 @@ d'après sa fidélité de TEST — regarder la réponse avant de choisir. La sé
 se fait maintenant sur la **validation** seule ; le test ne fait que constater.
 C'est ce qui a fait passer le meilleur réseau de 256 neurones (0,6056) à
 108 neurones (0,6079) : le premier était un artefact de sélection.
+
+
+## 8. Les cycles sur la tâche 10× plus dure
+
+| | neurones | couches | fid VAL | **fid TEST** |
+|---|---:|---:|---:|---:|
+| réservoir **plat**, 64 neurones | 64 | 1 | — | 0,4767 |
+| cascade, croissance seule | 256 | 9 | 0,6410 | 0,4998 |
+| cascade, 1 passe (attrition → 192) | 192 | 9 | 0,6386 | 0,5002 |
+| **cascade, 2 cycles** | **256** | **11** | **0,6417** | **0,5012** |
+| *constante témoin* | — | — | — | *0,4405* |
+
+Deux cycles donnent la meilleure **validation** (0,6417) **et** le meilleur
+**test** (0,5012) — la sélection ne doit rien au hasard, elle s'est faite sur la
+validation seule.
+
+**L'écart qui compte — au-dessus de la constante témoin — passe de +0,0362
+(réservoir plat) à +0,0607, soit +68 %.**
+
+Le réseau bute sur le plafond de 256 neurones que je lui avais imposé : à 11
+couches il demandait encore à croître. La courbe de croissance n'a toujours pas
+montré de plateau sur cette tâche.

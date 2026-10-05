@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 166.3 h |
+| Durée | 166.4 h |
 | Tours | 121 |
-| Messages | 8005 |
-| Appels d'outils | 7633 |
+| Messages | 8007 |
+| Appels d'outils | 7635 |
 | Fichiers touchés | 150 |
-| Commandes | 6519 |
+| Commandes | 6521 |
 | Sous-agents | 32 |
-| Commits | 558 |
+| Commits | 559 |
 | Compactages de contexte | 11 |
 
 ## Objectifs déclarés
@@ -6131,7 +6131,7 @@ Oui — et la marge était plus grande que le modèle lui-même. Trois commits :
 
 ### Tour 121 — continue en boite noire. Les méthodes d'apprentissages et le nombre de neuronnes et de couches générées en apprentissage … [127 caractères tronqués]
 
-*29 appels d'outils.* Actions notables :
+*31 appels d'outils.* Actions notables :
 
 - get_goal
 - create_goal
@@ -6147,13 +6147,22 @@ Oui — et la marge était plus grande que le modèle lui-même. Trois commits :
 - bash — Add per-step test measurement
 - bash — Test stricter attrition criterion
 - bash — Launch generative run on 10-unit data
-- … et 15 autres
+- … et 17 autres
 
 **Synthèse produite :**
 
-⏵ Trois cycles ne font pas mieux que deux : plateau. Je lance la comparaison sur les 10 unités et je consigne.
+⏵ Confirmé sur les 10 unités. Je relance avec un plafond plus haut et je consigne.
 
-**Plateau à deux cycles** (le 3ᵉ donne exactement 0,6079). Je lance la comparaison sur les 10 unités en arrière-plan et je consigne.
+**Confirmé sur la tâche difficile**, et le réseau bute sur mon plafond — signe qu'il en veut encore :
+
+| | neurones | couches | fid VAL | fid TEST |
+|---|---:|---:|---:|---:|
+| réservoir plat | 64 | 1 | — | 0,4767 |
+| cascade, 1 passe | 192 | 9 | 0,6386 | 0,5002 |
+| **cascade, 2 cycles** | **256** | **11** | **0,6417** | **0,5012** |
+| *constante témoin* | | | | *0,4405* |
+
+L'avantage sur la constante passe de +0,0362 à **+0,0607**, soit **+68 %**. Je relance sans plafond contraignant.
 
 ## 3. Travail accompli
 
@@ -6389,7 +6398,7 @@ Oui — et la marge était plus grande que le modèle lui-même. Trois commits :
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6479 autres
+- … et 6481 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -7095,4 +7104,5 @@ Oui — et la marge était plus grande que le modèle lui-même. Trois commits :
 - Critère de REDONDANCE : retirer ce que les autres disent déjà  Le retrait par contribution ne fait que couper les faibles — il n'énonce rien. Le critère de redo
 - Le génératif CONFIRMÉ sur 10x plus de données, et les cycles croissance->attrition  Tâche 10 unités (38 212 pas, constante témoin 0,4405) :  CROISSANCE — monoto
 - L'ATTRITION PÉRIODIQUE paie : deux cycles battent une passe  --cycles N alterne croissance et attrition, avec COMPACTION de la généalogie entre les deux (sans e
+- Cycles confirmés sur la tâche 10x plus dure : +68 % d'avantage sur la constante                          neurones  couches  fid VAL   fid TEST   réservoir plat 
 

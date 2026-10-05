@@ -128533,3 +128533,47 @@ Moins de neurones, plus de profondeur, **meilleure validation ET meilleur test**
 **Plateau à deux cycles** (le 3ᵉ donne exactement 0,6079). Je lance la comparaison sur les 10 unités en arrière-plan et je consigne.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && setsid nohup python3 tools/pont_generatif.py /tmp/cache_appr10.npz /tmp/cache_tenus10.npz --val 10 --seuil 0.005 --cycles 2 --couches-par-cycle 9 > /tmp/gen10_2c.log 2>&1 < /dev/null & echo \"lancé\"; python3 - <<'PY'\np='reports/rap … [3654 caractères tronqués]`
+
+  ```
+lancé
+27e8f3e L'ATTRITION PÉRIODIQUE paie : deux cycles battent une passe
+  ```
+
+### 🤖 Assistant
+
+⏵ J'attends la confirmation sur les 10 unités.
+
+- **bash** `{"command": "sleep 420; tail -12 /tmp/gen10_2c.log 2>/dev/null; pgrep -f \"pont_generati[f].py.*appr10\" >/dev/null && echo \"TOURNE\" || echo \"TERMINÉ\"", "description": "Wait for 10-unit cycles result", "timeoutMs": 480000}`
+
+  ```
+après                           neur.  couch.  fid appr  fid VAL  fid TEST
+retrait de 64 (recalculé)         192      11    0.6035   0.6379    0.4982
+retrait REFUSÉ (48 → VAL 0.6354)    192       —         —   0.6379
+
+=== MEILLEUR RÉSEAU SELON LA VALIDATION (C2 croissance) ===
+  taille           : 256 neurones · 11 couches
+  fidélité appr.   : 0.6100
+  fidélité VAL     : 0.6417
+  fidélité TEST    : 0.5012   (constante témoin : 0.4405)
+  invariance TEST  : 0.9706 · pire paire 0.9345
+
+# état final du réseau : 192 neurones · 11 couches ([1, 1, 1, 3, 4, 10, 23, 33, 80, 25, 11])
+TERMINÉ
+  ```
+
+### 🤖 Assistant
+
+⏵ Confirmé sur les 10 unités. Je relance avec un plafond plus haut et je consigne.
+
+**Confirmé sur la tâche difficile**, et le réseau bute sur mon plafond — signe qu'il en veut encore :
+
+| | neurones | couches | fid VAL | fid TEST |
+|---|---:|---:|---:|---:|
+| réservoir plat | 64 | 1 | — | 0,4767 |
+| cascade, 1 passe | 192 | 9 | 0,6386 | 0,5002 |
+| **cascade, 2 cycles** | **256** | **11** | **0,6417** | **0,5012** |
+| *constante témoin* | | | | *0,4405* |
+
+L'avantage sur la constante passe de +0,0362 à **+0,0607**, soit **+68 %**. Je relance sans plafond contraignant.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && setsid nohup python3 tools/pont_generatif.py /tmp/cache_appr10.npz /tmp/cache_tenus10.npz --val 10 --seuil 0.005 --cycles 2 --couches-par-cycle 9 --plafond 512 > /tmp/gen10_512.log 2>&1 < /dev/null & echo \"plafond 512 lancé\"\npytho … [2071 caractères tronqués]`
