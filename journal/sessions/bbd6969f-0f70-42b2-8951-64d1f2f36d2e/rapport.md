@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 162.1 h |
-| Tours | 115 |
-| Messages | 7770 |
-| Appels d'outils | 7416 |
+| Durée | 162.4 h |
+| Tours | 116 |
+| Messages | 7787 |
+| Appels d'outils | 7431 |
 | Fichiers touchés | 150 |
-| Commandes | 6315 |
+| Commandes | 6329 |
 | Sous-agents | 32 |
-| Commits | 533 |
+| Commits | 534 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -277,6 +277,8 @@
 **Tour 114** — non, coucche 0-9 à distiller en modèle récursif avec isolation en grappes, idem pour 9-29, une fois que 0-9 est performant, ensuite on continue en fonction de nos observation, mais en dehors de 0-9 ça va nécessiter des corpus d'entrainement ou un émulateur stochastique des entrées sémantiques pour arriver à stimuler adéquatement les couches intermédiaires en distillation.
 
 **Tour 115** — Étudie /home/stephane/Data13TB/stephane/GitHub/Panini-Research/ pour les corpus de départ sur différents domaines et langues, tu auras probablement à chercher certains dossiers dans /home/stephane/Data13TB si tu ne trouve pas le contenu car certains répertoires ont été déplacés, mais tout est accessible. Bref, il faut commencer par exercer les couches d'entrées avec des corpus de traduction pour i … [136 caractères tronqués]
+
+**Tour 116** — n'hésites pas à aller récupérer des dichiers sur Internet. Pour ce qui est de Wikipedia, en cherchant les gros fichiers localement, tu devrais tomber dessus, sinon on télécharge. C'est la première source de données à ingérer aprèes la déclaration universelle des droits de l'homme. on enchaine avec la littérature multilingue sur gutenberg, en commencant par les oeuvres ayant le plus grand nombre de … [372 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -5752,15 +5754,85 @@ Tout est commité, 77 tests verts, la note à jour dans `docs/note-cancellation-
 
 **Synthèse produite :**
 
-**Trois paires de traduction réelles**, en trois paires de langues :
+**Trouvé, et le gisement est meilleur que je ne l'espérais.**
+
+\## Ce qu'il y a — et la distinction qui compte
+
+Les `wikipedia_ingestion/backlog_*.db` sont des **files d'URL** (267 376 pour l'anglais, 11 langues), **pas du texte**. C'est un piège : 63 Mo qui ne contiennent aucun mot. Le texte est dans `mass_ingestion`, colonne `raw_text`.
+
+| corpus | documents | mots |
+|---|---:|---:|
+| gutenberg_en | 13 | 2 891 852 |
+| gutenberg_es | 10 | 1 559 905 |
+| gutenberg_de | 10 | 1 197 274 |
+| gutenberg_fr | 11 | 945 494 |
+| wikipedia_en | 20 935 | 2 080 862 |
+| wikipedia_de | 18 740 | 1 449 738 |
+| wikipedia_fr | 15 636 | 1 334 668 |
+| **total** | **55 380** | **11 464 573** |
+
+\## Le gisement : trois œuvres **parallèles**
 
 | œuvre | langue A | langue B |
 |---|---|---|
-| Dumas, *Le comte de Monte-Cristo* | en 460 989 mots | fr 121 597 |
-| Shakespeare, *Romeo and Juliet* | en 25 976 | fr 38 298 |
-| Dostoïevski, *Crime and Punishment* | en 206 549 | es 176 258 |
+| Dumas, *Le comte de Monte-Cristo* | en, 460 989 mots | fr, 121 597 |
+| Shakespeare, *Romeo and Juliet* | en, 25 976 | fr, 38 298 |
+| Dostoïevski, *Crime and Punishment* | en, 206 549 | es, 176 258 |
 
-Plus Wikipedia **en/de/fr** pour les domaines, et les œuvres isolées pour le vocabulaire propre à chaque œuvre.
+**Même sens, autre forme, texte littéraire entier.** C'est précisément ce qui permet de séparer **par mesure** ce qui relève de la langue et ce qui relève du contenu — et donc d'isoler tes grappes linguistiques au lieu de les postuler.
+
+\## Ce que j'en fais, concrètement
+
+**Étape 1 — les grappes linguistiques**, sur *Romeo and Juliet* (le plus court, et un dialogue : l'alignement par scène est naturel) :
+1. aligner des passages EN/FR ;
+2. les faire passer par les couches 0-9 et relever les activations **par unité** (dimension, tête, neurone) ;
+3. pour chaque unité, deux corrélations : *même contenu, autre langue* contre *autre contenu, même langue*.
+
+Une unité invariante porte du **contenu** ; une unité qui bascule avec la langue porte de la **forme**. Le partage **est** la carte des grappes.
+
+**Étape 2 — le vocabulaire d'œuvre et de domaine.** Même méthode, la variable devenant « œuvre » puis « domaine » (Wikipedia en/de/fr).
+
+**Étape 3 — la rétroaction.** La carte dit quelle part des couches 0-9 la distillation doit reproduire : le contenu. Le reste est de la forme — et c'est elle qu'un récurrent peut porter à bas coût.
+
+\## L'état
+
+`docs/note-corpus-panini.md` porte le relevé complet, le schéma des bases, le plan et l'inventaire de l'outillage existant. Tout est commité, 77 tests verts.
+
+**Et un outil à réparer avant de s'en servir** : `profil_flux.py` lit la v1 du format DRVF et plante sur la v3 que le moteur écrit. `analyse_flux.py`, lui, gère les trois versions.
+
+Ce qu'il reste à écrire, dans l'or
+… [248 caractères tronqués]
+
+### Tour 116 — n'hésites pas à aller récupérer des dichiers sur Internet. Pour ce qui est de Wikipedia, en cherchant les gros fichiers  … [652 caractères tronqués]
+
+*15 appels d'outils.* Actions notables :
+
+- bash — Search for large corpus files locally
+- bash — Look for large data files and corpus directories
+- bash — Inspect the local Wikipedia directories
+- bash — Measure the Wikipedia corpus
+- bash — Download the UDHR corpus
+- bash — Find a working UDHR source
+- web_search
+- bash — Test the individual UDHR file pattern
+- bash — Test the HuggingFace UDHR source
+- bash — Find the canonical UDHR source URL
+- bash — Download the UDHR XML assembly
+- bash — Try the Internet Archive for the UDHR
+- bash — Extract and inspect the UDHR
+- bash — Verify the UDHR alignment across languages
+- … et 1 autres
+
+**Synthèse produite :**
+
+**L'UDHR, vérifié : 456 langues, et les 30 articles sont alignés dans TOUTES.**
+
+| structure | langues |
+|---|---:|
+| 30 articles (invariant) | **456 / 456** |
+| 58-67 paragraphes de préambule | variable selon la traduction |
+
+L'unité d'alignement stable est donc **l'article** : 30 par langue, **13 680 unités sémantiques alignées par construction** — pas par un aligneur, donc sans risque de décalage. C'est exactement le « petit contenu symétrique » que tu décris.
 
 ## 3. Travail accompli
 
@@ -5996,7 +6068,7 @@ Plus Wikipedia **en/de/fr** pour les domaines, et les œuvres isolées pour le v
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6275 autres
+- … et 6289 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -6677,4 +6749,5 @@ Plus Wikipedia **en/de/fr** pour les domaines, et les œuvres isolées pour le v
 - Mesure : le plateau sémantique est à la couche 23 sur 48 — la coupe est une FENÊTRE, pas un point  Invariance à la forme de surface, couche par couche : « Le ch
 - Bloc 0-9 : première borne d'approximabilité — 19 % de la variance après dix couches avec DEUX directions  tools/approximabilite_bloc.py, trace DRVF de 192 jeton
 - Note : les corpus de Panini-Research — 11,5 M mots, et TROIS œuvres parallèles  Relevé complet depuis /home/stephane/Data13TB/stephane/GitHub/Panini-Research.  
+- Ingestion : l'UDHR récupérée (456 langues, 30 articles alignés), Wikipedia trouvé en local (81 Go, 6 langues)  UDHR : le chemin unicode.org/udhr/ renvoie 404 au
 
