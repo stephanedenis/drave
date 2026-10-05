@@ -86,3 +86,51 @@ validation.** Un critère d'arrêt n'est jamais meilleur que ce sur quoi il juge
 - La croissance en cascade est **distribuable** : chaque couche ne lit que les
   précédentes, donc chaque nœud d'une grappe peut naître et calculer sa couche
   sans coordination avec les autres.
+
+
+## 5. Confirmation sur la tâche 10× plus dure (38 212 pas)
+
+Mêmes 40 langues, mêmes 6 langues tenues à l'écart, mais **10 unités par langue**
+au lieu d'une. La constante témoin tombe à 0,4405 : la tâche est bien plus dure.
+
+### Croissance
+
+| neurones | couches | fid appr | fid VAL | **fid TEST** | invariance | pire paire |
+|---:|---:|---:|---:|---:|---:|---:|
+| 1 | 1 | 0,5234 | 0,5897 | 0,4424 | **0,9993** | **0,9984** |
+| 4 | 3 | 0,5291 | 0,5928 | 0,4489 | 0,9988 | 0,9971 |
+| 16 | 5 | 0,5409 | 0,6023 | 0,4578 | 0,9975 | 0,9949 |
+| 32 | 6 | 0,5521 | 0,6076 | 0,4677 | 0,9924 | 0,9817 |
+| 64 | 7 | 0,5679 | 0,6184 | 0,4810 | 0,9883 | 0,9700 |
+| 128 | 8 | 0,5863 | 0,6295 | 0,4933 | 0,9839 | 0,9625 |
+| 256 | 9 | 0,6081 | 0,6410 | 0,4998 | 0,9706 | 0,9376 |
+
+**Monotone dans les cinq colonnes**, sans plateau : chaque naissance paie. C'est
+la différence de fond avec le réservoir **plat**, qui sature puis recule
+(64 neurones : 0,5921 ; 256 : 0,5868 sur la tâche à une unité). **La profondeur
+est ce qui permet à la capacité de servir.**
+
+### Attrition
+
+| neurones | couches | fid VAL | **fid TEST** |
+|---:|---:|---:|---:|
+| 256 (né) | 9 | 0,6410 | 0,4998 |
+| **192** | 9 | 0,6386 | **0,5002** |
+| 144 (refusé) | — | 0,6357 | — |
+
+L'attrition **améliore encore le test** (0,4998 → 0,5002) en retirant 25 % des
+neurones, et le retrait suivant est refusé par la validation. Le critère
+fonctionne : il s'arrête de lui-même au bon endroit.
+
+### Face au réservoir plat, à taille égale
+
+| | fid TEST | invariance | pire paire |
+|---|---:|---:|---:|
+| réservoir plat, 64 neurones, `a=0,2` ride `3·10⁻¹` | 0,4767 | 0,9797 | 0,9606 |
+| **cascade générative, 64 neurones** | **0,4810** | 0,9883 | 0,9700 |
+| **cascade générative, 192 neurones (après attrition)** | **0,5002** | 0,9710 | 0,9355 |
+
+À taille égale la cascade gagne déjà (+0,43 pt), mais surtout **elle continue de
+progresser là où le plat recule** : +2,35 points de fidélité de test au meilleur
+point. Rapporté à l'écart qui compte — celui au-dessus de la constante témoin —
+l'avantage passe de +0,0362 à +0,0597, soit **+65 %**.

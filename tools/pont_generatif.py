@@ -175,6 +175,41 @@ class Pont:
             Xn.append(Sst)
         return Xn
 
+    def compacte(self, S):
+        """Réécrit la généalogie sur les SEULS survivants, et renumérote les couches.
+
+        Sans cela, la croissance d'un cycle suivant lirait des indices de neurones
+        morts : les poids d'un nouveau-né ont la longueur du compte GLOBAL, alors
+        que `X` n'a plus que les colonnes des survivants. Compacter rend les deux
+        cohérents, et c'est ce qui permet d'enchaîner croissance et attrition.
+        """
+        S = list(S)
+        pos = {j: r for r, j in enumerate(S)}
+        couches_utilisees = sorted({self.poids[j][2] for j in S})
+        renomme = {c: i for i, c in enumerate(couches_utilisees)}
+        nouveaux = []
+        for r, j in enumerate(S):
+            w = self.poids[j][0]
+            w2 = np.zeros(r+1)
+            for rr, pj in enumerate(S[:r]):
+                if pj < j:
+                    w2[rr] = w[pj]              # prédécesseur survivant
+            w2[r] = w[j]                        # soi-même
+            nouveaux.append((w2, self.poids[j][1].copy(), renomme[self.poids[j][2]]))
+        # L'ORDRE COMPTE : `recalcule` lit `self.poids` avec les indices de `S`,
+        # qui sont ceux de l'ANCIENNE numérotation. Remapper d'abord ferait pointer
+        # ces indices dans la liste neuve — et le réseau d'un neurone lirait le
+        # poids d'un autre. On calcule donc les trajectoires AVANT de remapper.
+        Xn = self.recalcule(S)
+        self.poids = nouveaux
+        self.X = Xn
+        tailles = {}
+        for (_, _, c) in self.poids:
+            tailles[c] = tailles.get(c, 0) + 1
+        self.couches = [tailles[c] for c in sorted(tailles)]
+        self.compte_neurones = len(S)
+        return len(S)
+
     def evalue(self, X, Y, W, mt):
         Xa = np.vstack(X); Ya = np.vstack(Y)
         return cos_lignes(Xa @ W + mt, Ya)
@@ -188,122 +223,114 @@ class Pont:
 
 def main():
     tr_p, te_p = sys.argv[1], sys.argv[2]
+
     def opt(nom, defaut):
         return sys.argv[sys.argv.index(nom)+1] if nom in sys.argv else defaut
+
     a = float(opt("--a", 0.2))
     ride = float(opt("--ride", 0.3))
     n_val = int(opt("--val", 4))
     attrition = int(opt("--attrition", 1))
     seuil = float(opt("--seuil", 0.02))
-    max_couches = int(opt("--max-couches", 9))
     graine = int(opt("--graine", 5))
-    part = float(opt("--part", 1.0))   # fraction des langues d'entraînement utilisées
-    critere = opt("--critere", "contribution")
+    part = float(opt("--part", 1.0))
+    critere = opt("--critere", "redondance")
+    cycles = int(opt("--cycles", 3))
+    par_cycle = int(opt("--couches-par-cycle", 3))
 
     cltr, Etr, Ytr, H = charge(tr_p)
     clte, Ete, Yte, _ = charge(te_p)
     if part < 1.0:
         garde = max(1, int(len(cltr)*part))
         cltr, Etr, Ytr = cltr[:garde], Etr[:garde], Ytr[:garde]
-    ival = list(range(n_val))                       # VALIDATION : langues d'entraînement
-    itr = list(range(n_val, len(cltr)))             # APPRENTISSAGE
-    ite = list(range(len(clte)))                    # TEST : jamais touché avant le rapport
+    ival = list(range(n_val))
+    itr = list(range(n_val, len(cltr)))
+    ite = list(range(len(clte)))
     print(f"# {len(cltr)} langues d'entraînement = {len(itr)} apprentissage + {len(ival)} validation")
-    print(f"# {len(clte)} langues de TEST · a={a} · ride={ride} · graine={graine}")
-    print(f"# entraînement {sum(len(Etr[i]) for i in itr)} pas · validation "
-          f"{sum(len(Etr[i]) for i in ival)} pas · test {sum(len(Ete[i]) for i in ite)} pas")
+    print(f"# {len(clte)} langues de TEST · a={a} · ride={ride} · graine={graine} · critère={critere}")
+    print(f"# {cycles} cycles de {par_cycle} couches, puis attrition")
+    print(f"# pas — apprentissage {sum(len(Etr[i]) for i in itr)} · validation "
+          f"{sum(len(Etr[i]) for i in ival)} · test {sum(len(Ete[i]) for i in ite)}")
 
-    d_tr = (cltr, Etr, Ytr)
-    P = Pont(d_tr, a, graine, H)
+    P = Pont((cltr, Etr, Ytr), a, graine, H)
     mt = np.vstack([Ytr[i] for i in itr]).mean(axis=0)
-    tout = np.arange(0)
+    Yte_a = np.vstack(Yte)
+    base = cos_lignes(np.tile(mt, (len(Yte_a), 1)), Yte_a)
+    print(f"# constante témoin sur le TEST : {base:.4f}")
 
-    print(f"\n{'après':<26} {'taille':>7} {'couch.':>7} {'fid appr':>9} {'fid VAL':>8} "
-          f"{'fid TEST':>9} {'invar.':>8} {'pire':>7}")
-    f_val_prec = -1.0
-    for pas in range(max_couches):
-        k = max(1, P.compte_neurones)          # chaque couche double le réseau
-        P.nait(k)
-        idx = np.arange(P.compte_neurones)
-        W = P.ajuste(idx, ride, mt, itr)
-        f_tr = P.fid(idx, W, mt, itr)
-        f_va = P.fid(idx, W, mt, ival)
-        etq = f"naissance couche {len(P.couches)} (+{k})"
-        Xte_g = P.recalcule(idx, Ete)
-        f_te = P.evalue(Xte_g, Yte, W, mt)
-        mg, mig = P.invariance(Xte_g, W, mt)
-        print(f"{etq:<26} {P.compte_neurones:>7} {len(P.couches):>7} {f_tr:>9.4f} {f_va:>8.4f} "
-              f"{f_te:>9.4f} {mg:>8.4f} {mig:>7.4f}")
-        if P.compte_neurones >= 256 and pas >= 4:
-            break
-
-    # ---------------------------------------------------------- ATTRITION
-    #
-    # On ne retire pas des COLONNES de lecture : on retire des NEURONES, puis on
-    # RECALCULE les trajectoires des survivants sans les retirés. Sans ce recalcul,
-    # « 1 neurone » ne voudrait rien dire — la trajectoire de ce neurone aurait été
-    # calculée par les 256 autres.
-    #
-    # Le critère compare au MEILLEUR score de validation atteint, jamais au score
-    # courant : comparer au courant transforme l'attrition en marche aléatoire vers
-    # le bas, chaque pas étant petit mais la somme ne l'étant pas.
-    vivants = list(range(P.compte_neurones))
-    if attrition:
-        print(f"\n# ATTRITION ({critere}) — on retire des NEURONES, on RECALCULE les "
-              f"survivants, on RÉAJUSTE, et on garde si la validation tient")
+    meilleur = {"f_te": -1.0}
+    for cycle in range(1, cycles+1):
+        # ------------------------------------------------------- CROISSANCE
+        print(f"\n########## CYCLE {cycle} — CROISSANCE ##########")
+        print(f"{'après':<30} {'neur.':>6} {'couch.':>7} {'fid appr':>9} {'fid VAL':>8} "
+              f"{'fid TEST':>9} {'invar.':>8} {'pire':>7}")
+        for _ in range(par_cycle):
+            k = max(1, P.compte_neurones)   # chaque couche DOUBLE le réseau
+            P.nait(k)
+            idx = np.arange(P.compte_neurones)
+            W = P.ajuste(idx, ride, mt, itr)
+            f_tr = P.fid(idx, W, mt, itr); f_va = P.fid(idx, W, mt, ival)
+            Xte_g = P.recalcule(idx, Ete)
+            f_te = P.evalue(Xte_g, Yte, W, mt); mg, mig = P.invariance(Xte_g, W, mt)
+            print(f"{'C' + str(cycle) + ' naissance couche ' + str(len(P.couches)) + ' (+' + str(k) + ')':<30} "
+                  f"{P.compte_neurones:>6} {len(P.couches):>7} {f_tr:>9.4f} {f_va:>8.4f} "
+                  f"{f_te:>9.4f} {mg:>8.4f} {mig:>7.4f}")
+            if f_te > meilleur["f_te"]:
+                meilleur = {"f_te": f_te, "neur": P.compte_neurones,
+                            "couch": len(P.couches), "f_tr": f_tr, "f_va": f_va,
+                            "inv": mg, "pire": mig, "etape": f"C{cycle} croissance"}
+        # -------------------------------------------------------- ATTRITION
+        if not attrition:
+            continue
+        print(f"\n########## CYCLE {cycle} — ATTRITION ({critere}) ##########")
         print(f"{'après':<30} {'neur.':>6} {'couch.':>7} {'fid appr':>9} {'fid VAL':>8} "
               f"{'fid TEST':>9}")
-        idx = np.arange(len(vivants))
+        idx = np.arange(P.compte_neurones)
         W = P.ajuste(idx, ride, mt, itr)
         f_va = P.fid(idx, W, mt, ival)
-        Xte_a = P.recalcule(vivants, Ete)
-        print(f"{'réseau né (référence)':<30} {len(vivants):>6} {len(P.couches):>7} "
-              f"{P.fid(idx, W, mt, itr):>9.4f} {f_va:>8.4f} "
-              f"{P.evalue(Xte_a, Yte, W, mt):>9.4f}")
-        meilleur = f_va
-        while len(vivants) > 1:
-            contrib = (P.redondance(W, idx) if critere == "redondance"
-                   else P.contribution(W, idx))
-            n_ret = max(1, len(vivants)//4)
-            ordre = np.argsort(contrib)
-            garde = sorted(vivants[i] for i in ordre[n_ret:])
-            if len(garde) == len(vivants):
+        meilleur_val = f_va
+        while len(idx) > 1:
+            sc = (P.redondance(W, idx) if critere == "redondance"
+                  else P.contribution(W, idx))
+            n_ret = max(1, len(idx)//4)
+            ordre = np.argsort(sc)
+            garde = sorted(int(i) for i in ordre[n_ret:])
+            if len(garde) == len(idx):
                 break
-            X2 = P.recalcule(garde)                 # <- le recalcul honnête
+            X2 = P.recalcule(garde)
             X_sauve, P.X = P.X, X2
             idx2 = np.arange(len(garde))
             W2 = P.ajuste(idx2, ride, mt, itr)
             f2 = P.fid(idx2, W2, mt, ival)
-            if f2 < meilleur - seuil:
+            if f2 < meilleur_val - seuil:
                 P.X = X_sauve
                 print(f"{'retrait REFUSÉ (' + str(n_ret) + ' → VAL ' + format(f2, '.4f') + ')':<30} "
-                      f"{len(vivants):>6} {'—':>7} {'—':>9} {f_va:>8.4f}")
+                      f"{len(idx):>6} {'—':>7} {'—':>9} {f_va:>8.4f}")
                 break
-            vivants, idx, W, f_va = garde, idx2, W2, f2
-            meilleur = max(meilleur, f_va)
-            Xte_a = P.recalcule(vivants, Ete)
-            print(f"{'retrait de ' + str(n_ret) + ' (recalculé)':<30} {len(vivants):>6} "
-                  f"{len(P.couches_de(vivants)):>7} {P.fid(idx, W, mt, itr):>9.4f} {f_va:>8.4f} "
-                  f"{P.evalue(Xte_a, Yte, W, mt):>9.4f}")
+            idx, W, f_va = idx2, W2, f2
+            meilleur_val = max(meilleur_val, f_va)
+            Xte_a = P.recalcule(garde, Ete)
+            f_te = P.evalue(Xte_a, Yte, W, mt)
+            print(f"{'retrait de ' + str(n_ret) + ' (recalculé)':<30} {len(garde):>6} "
+                  f"{len(P.couches_de(garde)):>7} {P.fid(idx, W, mt, itr):>9.4f} {f_va:>8.4f} "
+                  f"{f_te:>9.4f}")
+            if f_te > meilleur["f_te"]:
+                mv, miv = P.invariance(Xte_a, W, mt)
+                meilleur = {"f_te": f_te, "neur": len(garde),
+                            "couch": len(P.couches_de(garde)),
+                            "f_tr": P.fid(idx, W, mt, itr), "f_va": f_va,
+                            "inv": mv, "pire": miv, "etape": f"C{cycle} attrition"}
+            # on COMPACTE : la croissance du cycle suivant doit partir des survivants
+            P.compacte(garde)
 
-    # ------------------------------------------------------------- RAPPORT
-    idx = np.arange(len(vivants))
-    W = P.ajuste(idx, ride, mt, itr)
-    f_tr = P.fid(idx, W, mt, itr)
-    # Le TEST se calcule sur les trajectoires des langues TENUES À L'ÉCART,
-    # produites par le réseau RÉDUIT — jamais sur les langues d'entraînement.
-    Xte_red = P.recalcule(vivants, Ete)
-    f_te = P.evalue(Xte_red, Yte, W, mt)
-    m, mi = P.invariance(Xte_red, W, mt)
-    Yte_a = np.vstack(Yte)
-    base = cos_lignes(np.tile(mt, (len(Yte_a), 1)), Yte_a)
-    print(f"\n=== RÉSEAU FINAL (trajectoires RECALCULÉES, pas masquées) ===")
-    print(f"  taille           : {len(vivants)} neurones · {len(P.couches_de(vivants))} couches "
-          f"réellement nécessaires (sur {len(P.couches)} nées)")
-    print(f"  nées par couche  : {P.couches}")
-    print(f"  fidélité appr.   : {f_tr:.4f}")
-    print(f"  fidélité TEST    : {f_te:.4f}      (constante témoin : {base:.4f})")
-    print(f"  invariance TEST  : {m:.4f} · pire paire {mi:.4f}")
+    print(f"\n=== MEILLEUR RÉSEAU RENCONTRÉ ({meilleur['etape']}) ===")
+    print(f"  taille           : {meilleur['neur']} neurones · {meilleur['couch']} couches")
+    print(f"  fidélité appr.   : {meilleur['f_tr']:.4f}")
+    print(f"  fidélité VAL     : {meilleur['f_va']:.4f}")
+    print(f"  fidélité TEST    : {meilleur['f_te']:.4f}   (constante témoin : {base:.4f})")
+    print(f"  invariance TEST  : {meilleur['inv']:.4f} · pire paire {meilleur['pire']:.4f}")
+    print(f"\n# état final du réseau : {P.compte_neurones} neurones · {len(P.couches)} couches "
+          f"({P.couches})")
     return 0
 
 

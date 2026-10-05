@@ -128236,3 +128236,199 @@ TOURNE
 Vous avez dit « attrition **périodique** » : cela veut dire des **cycles**, pas une seule passe. J'implémente l'alternance.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Critère de REDONDANCE : retirer ce que les autres disent déjà\n\nLe retrait par contribution ne fait que couper les faibles — il n'énonce rien.\nLe critère de redondance retire les neurones dont la tr … [861 caractères tronqués]`
+
+  ```
+d577699 Critère de REDONDANCE : retirer ce que les autres disent déjà
+        return explique * self.contribution(W, idx)
+
+    def contribution(self, W, idx):
+        """Énergie que chaque neurone apporte à la sortie : ||w_k|| · ||x_k||.
+
+        Calculée sur les SEULS neurones vivants : après un retrait, `W` a la taille
+        des survivants et non celle du réseau né."""
+        X = np.vstack([x[:, idx] for x in self.X]).astype(np.float64)
+        nx = np.sqrt((X**2).sum(0)) / np.sqrt(len(X))
+        return nx * np.linalg.norm(W, axis=1)
+
+    # -- RECALCUL HONNÊTE : on refait les trajectoires des SEULS survivants ---
+    def recalcule(self, S, Ek=None):
+        """Reconstruit le réseau réduit à `S` et rend ses trajectoires.
+
+        Les neurones retirés ne contribuent plus RIEN. C'est la seule façon de
+        savoir si la réduction est réelle ou cosmétique : un neurone de 9e couche
+        dont la trajectoire a été calculée par 256 autres n'est pas « un neurone »,
+        c'est une caractéristique profonde, et l'annoncer comme tel serait mentir.
+
+        La récurrence des survivants est la même que celle qui les a fait naître —
+        `s = (1-a)s + a·tanh(Ps·s + Bs·e)` — où `Ps
+… [1631 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ J'implémente les cycles : il faut d'abord « compacter » la généalogie après une attrition, sinon la croissance suivante lit des indices morts.
+
+Un point technique à régler avant : après attrition, la généalogie référence des neurones morts. Une croissance ultérieure lirait des indices invalides — je **compacter** donc la généalogie sur les survivants.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/pont_generatif.py'; s=open(p).read()\ns=s.replace(\"\"\"    def evalue(self, X, Y, W, mt):\"\"\",\n'''    def compacte(self, S):\n        \"\"\"Réécrit la généalogie sur les SEULS survivants, et renumérote  … [1560 caractères tronqués]`
+
+  ```
+compacte ajouté
+syntaxe OK
+  ```
+
+### 🤖 Assistant
+
+⏵ Je réécris `main` avec les cycles croissance → attrition.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/pont_generatif.py'; s=open(p).read()\ni=s.index(\"def main():\"); j=s.index(\"if __name__ ==\")\nneuf = '''def main():\n    tr_p, te_p = sys.argv[1], sys.argv[2]\n\n    def opt(nom, defaut):\n        return … [6235 caractères tronqués]`
+
+  ```
+main réécrit
+syntaxe OK
+# 40 langues d'entraînement = 30 apprentissage + 10 validation
+# 6 langues de TEST · a=0.2 · ride=0.3 · graine=5 · critère=redondance
+# 3 cycles de 3 couches, puis attrition
+# pas — apprentissage 2374 · validation 880 · test 569
+# constante témoin sur le TEST : 0.5658
+
+########## CYCLE 1 — CROISSANCE ##########
+après                           neur.  couch.  fid appr  fid VAL  fid TEST   invar.    pire
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", line 333, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", line 269, in main
+    f_te = P.evalue(Xte_g, Yte, mt); mg, mig = P.invariance(Xte_g, W, mt)
+TypeError: Pont.evalue() missing 1 required positional argument: 'mt'
+  ```
+
+### 🤖 Assistant
+
+⏵ Argument manquant dans l'appel. Je corrige.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/pont_generatif.py'; s=open(p).read()\ns=s.replace(\"f_te = P.evalue(Xte_g, Yte, mt); mg, mig\",\"f_te = P.evalue(Xte_g, Yte, W, mt); mg, mig\")\nopen(p,'w').write(s); print(\"ok\")\nPY\ntimeout 900 python3  … [204 caractères tronqués]`
+
+  ```
+ok
+# 40 langues d'entraînement = 30 apprentissage + 10 validation
+# 6 langues de TEST · a=0.2 · ride=0.3 · graine=5 · critère=redondance
+# 3 cycles de 3 couches, puis attrition
+# pas — apprentissage 2374 · validation 880 · test 569
+# constante témoin sur le TEST : 0.5658
+
+########## CYCLE 1 — CROISSANCE ##########
+après                           neur.  couch.  fid appr  fid VAL  fid TEST   invar.    pire
+C1 naissance couche 1 (+1)          1       1    0.6547   0.7135    0.5714   0.9958  0.9842
+C1 naissance couche 2 (+1)          2       2    0.6555   0.7118    0.5764   0.9958  0.9841
+C1 naissance couche 3 (+2)          4       3    0.6599   0.7133    0.5802   0.9939  0.9848
+
+########## CYCLE 1 — ATTRITION (redondance) ##########
+après                           neur.  couch.  fid appr  fid VAL  fid TEST
+retrait de 1 (recalculé)            3       3    0.6591   0.7132    0.5786
+retrait de 1 (recalculé)            2       2    0.6555   0.7118    0.5764
+retrait de 1 (recalculé)            1       1    0.6547   0.7135    0.5714
+
+########## CYCLE 2 — CROISSANCE ##########
+après                           neur.  couch.  fid appr  fid VAL  fid TEST   invar.    pire
+C2 naissance couche 2 (+
+… [1178 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Bug trouvé : `compacte` remappe la généalogie **avant** de recalculer, donc les anciens indices ne pointent plus rien. Je corrige l'ordre.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/pont_generatif.py'; s=open(p).read()\ns=s.replace(\"\"\"        self.poids = nouveaux\n        self.X = self.recalcule(S)              # trajectoires des survivants\"\"\",\n\"\"\"        # L'ORDRE COMPTE :  … [686 caractères tronqués]`
+
+  ```
+ordre corrigé
+C2 naissance couche 2 (+1)          2       2    0.6556   0.7130    0.5717   0.9956  0.9842
+C2 naissance couche 3 (+1)          3       3    0.6574   0.7148    0.5720   0.9948  0.9825
+C2 naissance couche 4 (+1)          4       4    0.6587   0.7168    0.5714   0.9946  0.9817
+
+########## CYCLE 2 — ATTRITION (redondance) ##########
+après                           neur.  couch.  fid appr  fid VAL  fid TEST
+retrait de 1 (recalculé)            3       3    0.6578   0.7173    0.5711
+retrait de 1 (recalculé)            2       2    0.6564   0.7159    0.5709
+retrait de 1 (recalculé)            1       1    0.6547   0.7135    0.5714
+
+########## CYCLE 3 — CROISSANCE ##########
+après                           neur.  couch.  fid appr  fid VAL  fid TEST   invar.    pire
+C3 naissance couche 2 (+1)          2       2    0.6566   0.7154    0.5716   0.9945  0.9842
+C3 naissance couche 3 (+1)          3       3    0.6570   0.7140    0.5747   0.9945  0.9841
+C3 naissance couche 4 (+1)          4       4    0.6579   0.7145    0.5747   0.9951  0.9873
+
+########## CYCLE 3 — ATTRITION (redondance) ##########
+après                           neur.  couch.  fid appr  fid VAL  fid TEST
+retrait de 
+… [1287 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Les cycles fonctionnent, mais la croissance est trop timide (k=compte//4). Je la rends doublante et je vérifie la course des 10 unités.
+
+**Les cycles tournent** — mais mon pas de croissance est trop timide (k = compte/4), le réseau rampe à 4 neurones et n'atteint jamais la zone utile (128-256). Je le rends doublant.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/pont_generatif.py'; s=open(p).read()\ns=s.replace(\"            k = max(1, P.compte_neurones) if cycle == 1 else max(1, P.compte_neurones//4)\",\n            \"            k = max(1, P.compte_neurones)   #  … [314 caractères tronqués]`
+
+  ```
+ok
+=== course 10 unités ===
+=== RÉSEAU FINAL (trajectoires RECALCULÉES, pas masquées) ===
+  taille           : 192 neurones · 9 couches réellement nécessaires (sur 9 nées)
+  nées par couche  : [1, 1, 2, 4, 8, 16, 32, 64, 128]
+  fidélité appr.   : 0.6028
+  fidélité TEST    : 0.5002      (constante témoin : 0.4405)
+  invariance TEST  : 0.9710 · pire paire 0.9355
+TOURNE
+13:02
+  ```
+
+### 🤖 Assistant
+
+⏵ La course des 10 unités est terminée : **192 neurones, fid TEST 0,5002** contre 0,4767 pour le réservoir plat. Je lis la trajectoire complète.
+
+La course des 10 unités est **terminée** — et le résultat est fort. Je lis la trajectoire complète.
+
+- **bash** `{"command": "cat /tmp/gen10.log", "description": "Read full 10-unit generative log"}`
+
+  ```
+# 40 langues d'entraînement = 30 apprentissage + 10 validation
+# 6 langues de TEST · a=0.2 · ride=0.3 · graine=5
+# entraînement 28212 pas · validation 10000 pas · test 5293 pas
+
+après                       taille  couch.  fid appr  fid VAL  fid TEST   invar.    pire
+naissance couche 1 (+1)          1       1    0.5234   0.5897    0.4424   0.9993  0.9984
+naissance couche 2 (+1)          2       2    0.5249   0.5890    0.4465   0.9992  0.9981
+naissance couche 3 (+2)          4       3    0.5291   0.5928    0.4489   0.9988  0.9971
+naissance couche 4 (+4)          8       4    0.5333   0.5967    0.4540   0.9984  0.9966
+naissance couche 5 (+8)         16       5    0.5409   0.6023    0.4578   0.9975  0.9949
+naissance couche 6 (+16)        32       6    0.5521   0.6076    0.4677   0.9924  0.9817
+naissance couche 7 (+32)        64       7    0.5679   0.6184    0.4810   0.9883  0.9700
+naissance couche 8 (+64)       128       8    0.5863   0.6295    0.4933   0.9839  0.9625
+naissance couche 9 (+128)      256       9    0.6081   0.6410    0.4998   0.9706  0.9376
+
+# ATTRITION — on retire des NEURONES, on RECALCULE les survivants, on RÉAJUSTE, et on garde si la validation tient
+après           
+… [611 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Confirmation nette sur les 10 unités. Je consigne et je lance la version à cycles.
+
+**La confirmation est nette sur la tâche 10× plus dure.**
+
+| neurones | couches | fid VAL | **fid TEST** | invariance | pire paire |
+|---:|---:|---:|---:|---:|---:|
+| 1 | 1 | 0,5897 | 0,4424 | **0,9993** | **0,9984** |
+| 32 | 6 | 0,6076 | 0,4677 | 0,9924 | 0,9817 |
+| 128 | 8 | 0,6295 | 0,4933 | 0,9839 | 0,9625 |
+| 256 | 9 | 0,6410 | 0,4998 | 0,9706 | 0,9376 |
+| **192 (après attrition)** | 9 | 0,6386 | **0,5002** | 0,9710 | 0,9355 |
+
+Trois faits : **monotone dans toutes les colonnes** ; l'attrition **améliore** le test (0,4998 → **0,5002**) en retirant 25 % ; et face au réservoir plat à taille égale (64 neurones : 0,4810 contre 0,4767), **la profondeur fait payer la capacité** — le plat sature, la cascade non.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && setsid nohup python3 tools/pont_generatif.py /tmp/cache_appr10.npz /tmp/cache_tenus10.npz --val 10 --seuil 0.005 --cycles 4 --couches-par-cycle 3 --critere redondance > /tmp/gen10c.log 2>&1 < /dev/null & echo \"cycles 10 unités lancé … [3819 caractères tronqués]`
