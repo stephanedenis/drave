@@ -129193,3 +129193,47 @@ FileNotFoundError: [Errno 2] No such file or directory: '/home/stephane/Data13TB
 **La contamination est mesurée** : 542 positions pour l'anglais, alors que le texte n'en tokenise que ~510. **Les 32 jetons générés sont dans la trace** — notre pont s'entraînait donc en partie sur ce que le professeur *inventait*, pas sur le corpus.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/note-un-pont-par-professeur.md'; s=open(p).read()\ns=s.replace(\"\"\"**Règle** : tout traçage de professeur se fait avec `--n 0`. Et deux jeux de\ntraces faits avec des `--n` différents ne sont **pas** compa … [1786 caractères tronqués]`
+
+  ```
+187f3eb Contamination mesurée : les 32 jetons générés SONT dans la trace
+
+abk 109s
+ace 111s
+appr30b: 2/40
+  ```
+
+### 🤖 Assistant
+
+⏵ Chaîne à 2/40. Je vérifie rigoureusement ma propre affirmation sur la contamination, avec le tokenizer de drave.
+
+La chaîne avance lentement (2/40, ~110 s par langue). Je profite de l'attente pour **vérifier ma propre affirmation** avec le tokenizer de drave plutôt que de l'estimer.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/corpus/udhr && M=/home/stephane/Data13TB/stephane/modeles/gguf/qwen2.5-0.5b-instruct-q4_k_m.gguf; D=/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/target/release/drave; echo \"=== tokenisation du texte de 10 unités (eng) ===\"; $D $M --tok … [147 caractères tronqués]`
+
+  ```
+=== tokenisation du texte de 10 unités (eng) ===
+0 tokens
+
+recolle : ""
+  ```
+
+### 🤖 Assistant
+
+⏵ `--tokenize` ne rend rien ; je vérifie plus directement en traçant l'anglais en `--n 0`.
+
+`--tokenize` ne rend rien d'utile. Vérification plus directe : je trace l'anglais en `--n 0` et je compare le nombre de positions.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/corpus/udhr && M=/home/stephane/Data13TB/stephane/modeles/gguf/qwen2.5-0.5b-instruct-q4_k_m.gguf; D=/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/target/release/drave; $D $M --infer --ctx 1024 --couches 0:11 --lot 1 --n 0 --prompt \"$(cat … [488 caractères tronqués]`
+
+  ```
+n=32 (défaut)   : 542 positions
+n=0             : 510 positions
+  ```
+
+### 🤖 Assistant
+
+⏵ **Vérifié au jeton près : 542 contre 510 — exactement 32.** Je corrige le chiffre et je chaîne l'analyse du 30B.
+
+**Vérifié exactement : 542 − 510 = 32 jetons.** Ma contamination était bien de 32 positions, au jeton près. Je fixe le chiffre et je chaîne l'analyse du 30B.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/note-un-pont-par-professeur.md'; s=open(p).read()\ns=s.replace(\"\"\"`appr10/eng.drvf` porte **542 positions**, alors que le texte de dix unités n'en\ntokenise que **~510** : les 32 jetons générés sont **dan … [1972 caractères tronqués]`

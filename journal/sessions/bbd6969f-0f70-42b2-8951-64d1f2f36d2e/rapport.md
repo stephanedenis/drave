@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 167.0 h |
+| Durée | 167.1 h |
 | Tours | 122 |
-| Messages | 8036 |
-| Appels d'outils | 7661 |
+| Messages | 8039 |
+| Appels d'outils | 7664 |
 | Fichiers touchés | 150 |
-| Commandes | 6546 |
+| Commandes | 6549 |
 | Sous-agents | 32 |
-| Commits | 563 |
+| Commits | 564 |
 | Compactages de contexte | 11 |
 
 ## Objectifs déclarés
@@ -6198,7 +6198,7 @@ J'ai aussi remplacé le critère de retrait : couper par contribution ne « gén
 
 ### Tour 122 — <goal_round> Objective: "Faire évoluer le pont linguistico-sémantique en BOÎTE NOIRE (émulation des premières couches du … [1231 caractères tronqués]
 
-*26 appels d'outils.* Actions notables :
+*29 appels d'outils.* Actions notables :
 
 - bash — Check running job and 30B availability
 - bash — Time 30B trace on one language
@@ -6214,13 +6214,13 @@ J'ai aussi remplacé le critère de retrait : couper par contribution ne « gén
 - bash — Compute 30B invariance by layer
 - bash — Check if 30B layer 0 is empty
 - bash — Verify layer 0 anomaly
-- … et 12 autres
+- … et 15 autres
 
 **Synthèse produite :**
 
-⏵ Contamination quantifiée : **542 positions pour l'anglais** alors que le texte n'en tokenise que ~510 — les 32 jetons générés sont bien dans la trace. Je consigne.
+⏵ **Vérifié au jeton près : 542 contre 510 — exactement 32.** Je corrige le chiffre et je chaîne l'analyse du 30B.
 
-**La contamination est mesurée** : 542 positions pour l'anglais, alors que le texte n'en tokenise que ~510. **Les 32 jetons générés sont dans la trace** — notre pont s'entraînait donc en partie sur ce que le professeur *inventait*, pas sur le corpus.
+**Vérifié exactement : 542 − 510 = 32 jetons.** Ma contamination était bien de 32 positions, au jeton près. Je fixe le chiffre et je chaîne l'analyse du 30B.
 
 ## 3. Travail accompli
 
@@ -6456,7 +6456,7 @@ J'ai aussi remplacé le critère de retrait : couper par contribution ne « gén
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6506 autres
+- … et 6509 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -7167,4 +7167,5 @@ J'ai aussi remplacé le critère de retrait : couper par contribution ne « gén
 - compare_professeurs.py : les professeurs et notre pont sur le MÊME périmètre  Une comparaison d'invariance n'a de sens que si tout est mesuré sur les mêmes lang
 - RECTIFICATION : un pont par professeur — il n'y a pas de couche sémantique universelle  Correction de cap. Chaque modèle a sa propre représentation sémantique i
 - Contamination mesurée : les 32 jetons générés SONT dans la trace  appr10/eng.drvf porte 542 positions alors que le texte de dix unités n'en tokenise que ~510. L
+- Vérifié au jeton près : --n 32 donne 542 positions, --n 0 en donne 510, différence exactement 32" && git log --oneline -1; tail -1 /tmp/trace30b_train.log; echo
 

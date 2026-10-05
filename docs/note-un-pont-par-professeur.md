@@ -51,8 +51,9 @@ reprendre les six langues de test du 30B pour cette raison.
 
 ### Et la contamination n'est pas théorique, elle est mesurée
 
-`appr10/eng.drvf` porte **542 positions**, alors que le texte de dix unités n'en
-tokenise que **~510** : les 32 jetons générés sont **dans la trace**. Notre pont
+Vérifié au jeton près, en traçant deux fois le même texte : `--n 32` donne
+**542 positions**, `--n 0` en donne **510**. La différence est **exactement 32** —
+les jetons générés sont bien **dans la trace**. Notre pont
 s'entraînait donc pour partie sur ce que le professeur avait *inventé* après le
 corpus — 6 % des positions en anglais, et bien davantage dans les langues dont le
 texte donne moins de jetons. Ces positions n'ont aucun sens linguistique pour
