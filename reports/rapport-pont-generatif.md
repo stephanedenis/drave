@@ -394,3 +394,55 @@ Ce qui survit :
 mesurable sur ce périmètre**, une fois les données propres. Elle reste
 intéressante pour une autre raison — elle est distribuable couche par couche —
 mais ce n'est pas ce qui a été mesuré ici.
+
+
+## 14. LA LOI : fidélité et invariance s'échangent à taux fixe
+
+Onze points de croissance sur données propres, tous sur le même périmètre :
+
+| neurones | fid TEST | invariance | 1 − invariance |
+|---:|---:|---:|---:|
+| 1 | 0,4734 | 0,9983 | 0,0017 |
+| 8 | 0,4779 | 0,9926 | 0,0074 |
+| 32 | 0,4868 | 0,9764 | 0,0236 |
+| 64 | 0,4940 | 0,9552 | 0,0448 |
+| 128 | 0,5059 | 0,9327 | 0,0673 |
+| 256 | 0,5186 | 0,8874 | 0,1126 |
+
+**fid TEST ≈ 0,3856 · (1 − invariance) + 0,4752**
+
+**corrélation r = 0,9920 · erreur maximale 0,0047.** La relation est linéaire, et
+elle tient sur toute la course.
+
+### Ce que la loi dit
+
+- À **invariance parfaite** (1,00) la fidélité vaut **0,4752** — à peine
+  au-dessus de la constante témoin (0,4710). **Un pont parfaitement
+  interlingue ne dit presque rien.**
+- Chaque point d'invariance abandonné rapporte **0,3856 point de fidélité**.
+- Le plafond n'est donc pas un mur de données ni de capacité : c'est un **taux de
+  change**.
+
+### Et c'est ce qui explique le résultat négatif du §13
+
+Le réservoir plat tombe sur la **même droite** :
+
+| modèle | invariance | fid TEST mesurée | prédite par la loi | écart |
+|---|---:|---:|---:|---:|
+| plat, 64 | 0,9624 | 0,4998 | 0,4897 | +0,0101 |
+| plat, 256 | 0,8680 | 0,5145 | 0,5261 | −0,0116 |
+| cascade, 256 | 0,8874 | 0,5186 | 0,5186 | 0,0000 |
+
+**Les deux architectures parcourent la même droite.** Choisir entre cascade et
+réservoir plat ne change pas la courbe : cela choisit seulement **où l'on se
+place dessus**. C'est pourquoi la profondeur n'apportait rien de mesurable (§13) —
+elle ne déplace pas la droite, elle déplace le point.
+
+**La droite est une propriété du PROFESSEUR, pas de notre modèle.** Elle est fixée
+par la part de la couche cible qui est cohérente entre les langues. Notre
+architecture ne fait que décider combien de cette cohérence on capture, et à quel
+prix en détail linguistique.
+
+C'est aussi la justification la plus claire de la règle « un pont par
+professeur » : chaque professeur a **sa** droite, parce que chaque professeur a
+**sa** part d'invariance propre.

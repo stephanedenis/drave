@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 169.6 h |
+| Durée | 169.9 h |
 | Tours | 122 |
-| Messages | 8095 |
-| Appels d'outils | 7720 |
-| Fichiers touchés | 156 |
-| Commandes | 6597 |
+| Messages | 8104 |
+| Appels d'outils | 7729 |
+| Fichiers touchés | 157 |
+| Commandes | 6602 |
 | Sous-agents | 32 |
-| Commits | 569 |
+| Commits | 570 |
 | Compactages de contexte | 11 |
 
 ## Objectifs déclarés
@@ -6198,7 +6198,7 @@ J'ai aussi remplacé le critère de retrait : couper par contribution ne « gén
 
 ### Tour 122 — <goal_round> Objective: "Faire évoluer le pont linguistico-sémantique en BOÎTE NOIRE (émulation des premières couches du … [1231 caractères tronqués]
 
-*85 appels d'outils.* Actions notables :
+*94 appels d'outils.* Actions notables :
 
 - bash — Check running job and 30B availability
 - bash — Time 30B trace on one language
@@ -6214,13 +6214,23 @@ J'ai aussi remplacé le critère de retrait : couper par contribution ne « gén
 - bash — Compute 30B invariance by layer
 - bash — Check if 30B layer 0 is empty
 - bash — Verify layer 0 anomaly
-- … et 70 autres
+- … et 78 autres
 
 **Synthèse produite :**
 
-⏵ La chaîne 30B tourne avec les bons arguments, et l'abkhaze passe de ~400 Mo à 34 Mo. Je chaîne l'analyse.
+⏵ **Loi trouvée.** Une relation linéaire quasi parfaite gouverne tout : `fid TEST ≈ 0,3856·(1 − invariance) + 0,4752`, **r = 0,9920**, erreur max 0,0047 sur 11 points.
 
-**Arguments confirmés**, et le fichier abkhaze passe de ~400 Mo à **34 Mo**. Je chaîne l'analyse du pont 30B.
+**Voilà la loi qui explique tout, y compris le résultat négatif.**
+
+| neurones | fid TEST | invariance | 1 − invariance |
+|---:|---:|---:|---:|
+| 1 | 0,4734 | 0,9983 | 0,0017 |
+| 32 | 0,4868 | 0,9764 | 0,0236 |
+| 64 | 0,4940 | 0,9552 | 0,0448 |
+| 128 | 0,5059 | 0,9327 | 0,0673 |
+| 256 | 0,5186 | 0,8874 | 0,1126 |
+
+**`fid TEST ≈ 0,3856 · (1 − invariance) + 0,4752` — r = 0,9920, erreur max 0,0047** sur 11 points de croissance.
 
 ## 3. Travail accompli
 
@@ -6384,6 +6394,7 @@ J'ai aussi remplacé le critère de retrait : couper par contribution ne « gén
 | `/tmp/stop2.py` | 1 | 0 |
 | `/tmp/chaine30.sh` | 1 | 0 |
 | `/tmp/analyse30.sh` | 1 | 0 |
+| `/tmp/balayage30.sh` | 1 | 2 |
 
 ### Sous-agents lancés
 
@@ -6462,7 +6473,7 @@ J'ai aussi remplacé le critère de retrait : couper par contribution ne « gén
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6557 autres
+- … et 6562 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -7179,4 +7190,5 @@ J'ai aussi remplacé le critère de retrait : couper par contribution ne « gén
 - TRONCATURE : le défaut le plus grave, et ce qu'il fait aux résultats publiés  En vérifiant la contamination, un motif a sauté aux yeux : des dizaines de traces 
 - RÉSULTAT NÉGATIF : sur données propres, l'avantage de la cascade s'efface  Les 32 jetons générés et la troncature (~50 % des langues) sont corrigés (--ctx 2048 
 - REPRISE.md : état 16h20 — pont génératif, résultat négatif sur données propres  Correction de cap (un pont par professeur, pas de couche universelle) + les deux
+- LA LOI : fidélité et invariance s'échangent à taux fixe (r = 0,992)  Onze points de croissance sur données propres :   fid TEST ≈ 0,3856 · (1 − invariance) + 0,
 

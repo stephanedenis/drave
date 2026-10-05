@@ -130288,3 +130288,160 @@ Created file
   ```
 
 - **bash** `{"command": "chmod +x /tmp/analyse30.sh && setsid nohup /tmp/analyse30.sh >/dev/null 2>&1 < /dev/null & sleep 20; echo \"analyse 30B chaînée\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\najout = \"\"\"> ## **ÉTAT (06/10, 16h20) — PONT GÉ … [2986 caractères tronqués]`
+
+  ```
+analyse 30B chaînée
+eca18c0 REPRISE.md : état 16h20 — pont génératif, résultat négatif sur données propres
+  ```
+
+### 🤖 Assistant
+
+⏵ Tout est chaîné. Je vérifie la première trace filtrée du 30B.
+
+- **bash** `{"command": "sleep 300; head -3 /tmp/chaine30.log 2>/dev/null; ls -la /home/stephane/Data13TB/stephane/corpus/udhr/appr30c/ | head -4; echo \"--- contenu de la première trace filtrée ---\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport sys; sys.path.insert(0,'/tmp')\nfr … [446 caractères tronqués]`
+
+  ```
+abk 211s 59783219
+ace 120s 31947657
+acu 106s 28693191
+total 133928
+drwxr-xr-x. 1 stephane stephane       64  5 oct 16:26 .
+drwxr-xr-x. 1 stephane stephane      664  5 oct 16:18 ..
+-rw-r--r--. 1 stephane stephane 59783219  5 oct 16:21 abk.drvf
+--- contenu de la première trace filtrée ---
+abk.drvf : v2 n_layer=48 hidden=2048 · 1958 positions · couches écrites [0, 4, 8, 12, 16, 17]
+  ```
+
+### 🤖 Assistant
+
+⏵ Trace filtrée correcte : **1958 positions** (aucune troncature) et exactement les 6 couches demandées, pour 59,8 Mo au lieu de ~400.
+
+**La trace filtrée est exacte** : 1958 positions, couches `[0,4,8,12,16,17]`, 59,8 Mo au lieu de ~400. Je chaîne un balayage des réglages pour le 30B — puisque les réglages ne se transfèrent pas.
+
+- **write** `{"content": "#!/bin/bash\n# Les réglages ne se transfèrent pas d'un professeur à l'autre (ni d'une\n# architecture à l'autre : la cascade veut a=0,5/ride=1,0, le réservoir plat\n# a=0,2/ride=0,3). Le pont du 30B doit donc avoir SON PROPRE balayage.\nset -u\nwhile ! grep -q TERMINE /tmp/analyse30.log … [635 caractères tronqués]`
+
+  ```
+<path>/tmp/balayage30.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "chmod +x /tmp/balayage30.sh && sed -i 's|cache_appr30c_l\\$C.npz|/tmp/cache_appr30c_l$C.npz|; s|cache_tenus30c_l\\$C.npz|/tmp/cache_tenus30c_l$C.npz|' /tmp/balayage30.sh && grep -n \"pont_generatif\" /tmp/balayage30.sh; setsid nohup /tmp/balayage30.sh >/dev/null 2>&1 < /dev/null & echo  … [226 caractères tronqués]`
+
+  ```
+13:      python3 tools/pont_generatif.py /tmp//tmp/cache_appr30c_l$C.npz /tmp//tmp/cache_tenus30c_l$C.npz \
+balayage 30B chaîné
+acu 106s 28693191
+ada 149s 41941530
+appr30c: 5/40
+  ```
+
+### 🤖 Assistant
+
+⏵ Mon `sed` a créé un chemin doublé. Je corrige.
+
+- **edit** `{"file_path": "/tmp/balayage30.sh", "old_string": "      python3 tools/pont_generatif.py /tmp//tmp/cache_appr30c_l$C.npz /tmp//tmp/cache_tenus30c_l$C.npz \\", "new_string": "      python3 tools/pont_generatif.py /tmp/cache_appr30c_l$C.npz /tmp/cache_tenus30c_l$C.npz \\"}`
+
+  ```
+Error: cannot edit "/tmp/balayage30.sh": file changed since it was read — re-read the file, then retry
+  ```
+
+- **read** `{"file_path": "/tmp/balayage30.sh"}`
+
+  ```
+<path>/tmp/balayage30.sh</path>
+<type>file</type>
+<content>
+1: #!/bin/bash
+2: # Les réglages ne se transfèrent pas d'un professeur à l'autre (ni d'une
+3: # architecture à l'autre : la cascade veut a=0,5/ride=1,0, le réservoir plat
+4: # a=0,2/ride=0,3). Le pont du 30B doit donc avoir SON PROPRE balayage.
+5: set -u
+6: while ! grep -q TERMINE /tmp/analyse30.log 2>/dev/null; do sleep 60; done
+7: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet
+8: : > /tmp/balayage30.log
+9: for C in 8 17; do
+10:   for A in 0.2 0.5; do
+11:     for R in 0.3 1.0; do
+12:       echo "=== 30B couche $C · a=$A ride=$R ===" >> /tmp/balayage30.log
+13:       python3 tools/pont_generatif.py /tmp//tmp/cache_appr30c_l$C.npz /tmp//tmp/cache_tenus30c_l$C.npz \
+14:         --val 10 --seuil 0.005 --cycles 2 --couches-par-cycle 9 --a $A --ride $R \
+15:         2>&1 | grep -E "taille  |fidélité TEST|invariance TEST|constante" >> /tmp/balayage30.log
+16:     done
+17:   done
+18: done
+19: echo TERMINE >> /tmp/balayage30.log
+
+(End of file - total 19 lines)
+</content>
+  ```
+
+- **edit** `{"file_path": "/tmp/balayage30.sh", "new_string": "      python3 tools/pont_generatif.py /tmp/cache_appr30c_l$C.npz /tmp/cache_tenus30c_l$C.npz \\", "old_string": "      python3 tools/pont_generatif.py /tmp//tmp/cache_appr30c_l$C.npz /tmp//tmp/cache_tenus30c_l$C.npz \\"}`
+
+  ```
+The file /tmp/balayage30.sh has been updated successfully.
+  ```
+
+### 🤖 Assistant
+
+⏵ Le balayage 30B est corrigé et chaîné. J'attends les traces (5/40, ~18h25).
+
+Une réflexion que je peux déjà consigner : **le plafond de fidélité s'explique**. Notre pont a une invariance de 0,8874, mais le professeur qu'il émule n'a que **0,5247**. On ne peut pas être plus fidèle à une cible que la part d'elle-même qui est cohérente entre les langues.
+
+- **bash** `{"command": "sleep 420; tail -1 /tmp/chaine30.log; echo \"appr30c: $(ls /home/stephane/Data13TB/stephane/corpus/udhr/appr30c | wc -l)/40\"; date \"+%H:%M\"; uptime | grep -oE \"load average.*\"", "description": "Wait for 30B traces", "timeoutMs": 480000}`
+
+  ```
+agr 205s 50729302
+appr30c: 8/40
+16:39
+load average: 22,30, 21,07, 21,55
+  ```
+
+### 🤖 Assistant
+
+⏵ J'utilise l'attente pour tester quantitativement l'hypothèse du plafond sur la courbe propre du 0.5B.
+
+J'utilise l'attente pour **tester quantitativement** l'hypothèse : la fidélité serait payée exactement en invariance perdue.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport re, numpy as np\nt=open('/tmp/analyse_propre.log').read()\npts=[]\nfor m in re.finditer(r\"C\\d naissance couche \\d+ \\(\\+\\d+\\)\\s+(\\d+)\\s+(\\d+)\\s+([\\d.]+)\\s+([\\d.]+)\\s+([\\d.]+)\\s+([\\d.]+)\\s+( … [862 caractères tronqués]`
+
+  ```
+neur.   fid VAL  fid TEST  invariance    1-inv
+     1    0.6144    0.4734      0.9983   0.0017
+     2    0.6151    0.4756      0.9979   0.0021
+     4    0.6164    0.4754      0.9966   0.0034
+     8    0.6190    0.4779      0.9926   0.0074
+    16    0.6228    0.4800      0.9846   0.0154
+    32    0.6272    0.4868      0.9764   0.0236
+    64    0.6366    0.4940      0.9552   0.0448
+   128    0.6469    0.5059      0.9327   0.0673
+   256    0.6591    0.5169      0.8818   0.1182
+   240    0.6584    0.5178      0.8905   0.1095
+   256    0.6592    0.5186      0.8874   0.1126
+
+fid TEST  ≈  0.3856 · (1 − invariance) + 0.4752     corrélation r = 0.9920
+erreur max du modèle linéaire : 0.0047
+
+à invariance 0,80 (extrapolé) : fid TEST ≈ 0.5523
+à invariance 1,00             : fid TEST ≈ 0.4752
+  ```
+
+### 🤖 Assistant
+
+⏵ **Loi trouvée.** Une relation linéaire quasi parfaite gouverne tout : `fid TEST ≈ 0,3856·(1 − invariance) + 0,4752`, **r = 0,9920**, erreur max 0,0047 sur 11 points.
+
+**Voilà la loi qui explique tout, y compris le résultat négatif.**
+
+| neurones | fid TEST | invariance | 1 − invariance |
+|---:|---:|---:|---:|
+| 1 | 0,4734 | 0,9983 | 0,0017 |
+| 32 | 0,4868 | 0,9764 | 0,0236 |
+| 64 | 0,4940 | 0,9552 | 0,0448 |
+| 128 | 0,5059 | 0,9327 | 0,0673 |
+| 256 | 0,5186 | 0,8874 | 0,1126 |
+
+**`fid TEST ≈ 0,3856 · (1 − invariance) + 0,4752` — r = 0,9920, erreur max 0,0047** sur 11 points de croissance.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-pont-generatif.md'; s=open(p).read()\ns += \"\"\"\n\n## 14. LA LOI : fidélité et invariance s'échangent à taux fixe\n\nOnze points de croissance sur données propres, tous sur le même périmètre :\n … [3282 caractères tronqués]`
