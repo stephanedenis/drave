@@ -78,6 +78,44 @@ cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo build --r
 > `res_mix` s'applique là où la référence n'en applique pas. Les trois étaient
 > invisibles au jeton 0 seul.
 >
+> ## **ÉTAT AU 06/10 00h10** — pour reprendre après compactage
+>
+> **Fait** : Kimi-K3 (1 508,7 Go) tourne en entier, ses logits sont ceux de
+> llama.cpp (**top-1 identique 3/3**), et il **engendre** (pas 0 → 1103, pas 1 →
+> 3140, les top-1 de la référence). 7,4 min/jeton pour les logits, ×6 plus rapide
+> que la référence. Trois des treize points de vérification sont verts.
+>
+> **Le roadmap est dans `docs/roadmap-drave.md`** : la niche est « la RAM fait
+> moins de 15 % du modèle », personne d'autre n'y fonctionne, et cinq chantiers
+> sont à ARRÊTER (mesurés).
+>
+> **Quatre réfutations mesurées, à ne pas refaire** :
+> cache d'experts en VRAM (×1,09 — plafond ×1,41) · cache de pages pour garder le
+> dense (deux passes : 1 516 430 puis 1 522 584 ms) · copie anonyme pour épingler
+> (swape — et `swapon` N'EXISTE PAS ici, lire `/proc/swaps`) · regroupement par
+> experts pour le temps (64 → 48 lectures, **aucun gain**).
+>
+> **Ce qui marche** : le noyau MXFP4 du moteur sur les experts (×3,6 sur le FFN,
+> logits identiques) · le dense emprunté en Q8_0 (×1,12, top-1 identique,
+> corrélations 0,998) · le regroupement par experts (64 → 48 lectures, gardé).
+>
+> **QUESTION OUVERTE, à trancher en premier** : la passe complète coûte **2,95 s
+> par couple (couche, jeton)** contre **0,75 s à chaud** — quatre fois plus — et
+> réduire de 25 % les experts lus ne change rien. Hypothèse non mesurée : la
+> **dispersion** (~144 lectures par couple × ~10 ms de déplacement). Le pas pour
+> trancher : `majflt` (`/proc/PID/stat`) et le temps d'attente disque sur une
+> passe complète.
+>
+> **La passe tournait sur UN CŒUR SUR 40** (`Percent of CPU: 99 %`). Elle est
+> maintenant parallélisée par (expert, jeton), **bit à bit identique** — mais son
+> gain n'est **pas établi** (×1,08 à froid, ×0,90 à chaud, dans le bruit des
+> mesures de ce bloc).
+>
+> **Pièges d'instruments, tous rencontrés** : `swapon`, `bc`, `taskset` **ne
+> sont pas installés** ici. Un instrument absent ne renvoie pas « non » — lire
+> `/proc/swaps`, faire l'arithmétique en `awk`, et vérifier l'expansion d'un
+> argument dans `/proc/PID/cmdline` AVANT de lancer trois heures de calcul.
+>
 > ## **LE MUR EST LE DISQUE (09h10)** — et le prochain chantier est nommé
 >
 > Le chiffre qui commande tout : le FFN coûte **3,1 s par couple (couche, jeton)**

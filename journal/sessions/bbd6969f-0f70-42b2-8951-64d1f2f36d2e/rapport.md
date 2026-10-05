@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 153.1 h |
 | Tours | 109 |
-| Messages | 7705 |
-| Appels d'outils | 7363 |
+| Messages | 7706 |
+| Appels d'outils | 7364 |
 | Fichiers touchés | 150 |
-| Commandes | 6262 |
+| Commandes | 6263 |
 | Sous-agents | 32 |
-| Commits | 526 |
+| Commits | 527 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -5433,7 +5433,7 @@ Le dense ne peut pas être rendu résident à bon compte ici : la page cache ne 
 
 ### Tour 109 — Quel est le roadmap où Drave serait à son meilleur? as-tu besoin de compacter la session? Continue kusqu'a 8h00 HAE
 
-*37 appels d'outils.* Actions notables :
+*38 appels d'outils.* Actions notables :
 
 - bash — Check the remaining time
 - bash — Write the strategic roadmap
@@ -5449,7 +5449,7 @@ Le dense ne peut pas être rendu résident à bon compte ici : la page cache ne 
 - bash — Commit the grouping and run the full pass
 - bash — Poll the grouped full pass
 - bash — Verify correctness of the grouping
-- … et 21 autres
+- … et 22 autres
 
 **Synthèse produite :**
 
@@ -5689,7 +5689,7 @@ Mon contexte est presque épuisé. Je consigne les faits mesurés et la question
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6222 autres
+- … et 6223 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -6363,4 +6363,5 @@ Mon contexte est presque épuisé. Je consigne les faits mesurés et la question
 - K3 : le regroupement par experts dans la couche — 64 lectures deviennent 51  MoeK3::avant_lot : le routeur de chaque jeton, puis des GROUPES par expert, puis un
 - K3 : le regroupement par experts MARCHE (64 → 48 lectures) mais ne rapporte pas de temps  Passe complète : 1 531 851 ms avec le regroupement contre 1 516 430 ms
 - K3 : la passe tournait sur UN CŒUR SUR 40 — parallélisée, et une question laissée ouverte  /usr/bin/time -v sur 8 couches : Percent of CPU 99 %, File system inp
+- REPRISE : l'état au 06/10 00h10, pour reprendre après compactage  Ce qui marche, les quatre réfutations mesurées à ne pas refaire, la question ouverte (2,95 s à
 

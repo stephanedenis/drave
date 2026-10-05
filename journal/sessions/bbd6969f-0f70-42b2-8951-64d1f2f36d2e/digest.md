@@ -122171,3 +122171,9 @@ passe complète : 8 couche(s), une seule en mémoire à la fois
 Mon contexte est presque épuisé. Je consigne les faits mesurés et la question ouverte, sans conclure au-delà.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/verification-kimi-k3.md'; s=open(p).read()\nanc = \"### 4quater-duodecies. Le regroupement par experts\"\nnew = \"\"\"### 4quater-terdecies. **La passe tournait sur UN CŒUR SUR 40** — et ce qui reste ouvert  … [3745 caractères tronqués]`
+
+  ```
+e7ac6f6 K3 : la passe tournait sur UN CŒUR SUR 40 — parallélisée, et une question laissée ouverte
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\nanc = \"> ## **LE MUR EST LE DISQUE (09h10)**\"\nnew = \"\"\"> ## **ÉTAT AU 06/10 00h10** — pour reprendre après compactage\n>\n> **Fait** : Kimi-K3 (1 508,7 Go) tourne en entier, s … [2739 caractères tronqués]`
