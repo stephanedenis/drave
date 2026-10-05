@@ -54,6 +54,25 @@ fn fmt_bits(b: u64, n: usize) -> String {
     format!("{:8.3} b/poids  ({:7.2} Mo)", b as f64 / n as f64, b as f64 / 8.0 / 1e6)
 }
 
+
+/// **Le rapport de l'adaptateur hebbien différentiel, en UN SEUL endroit.**
+///
+/// Il était posé dans `run_infer` seulement : en `--ppl` il ne s'imprimait pas,
+/// donc `D` n'était jamais sauvé, donc le test hors échantillon chargeait un
+/// adaptateur NUL et rendait deux perplexités identiques. Un moteur à deux
+/// chemins qui doivent porter la même chose finit par n'en porter qu'un — et le
+/// défaut est silencieux. Cette fonction est la réponse : les deux modes
+/// l'appellent, et il n'y a plus deux endroits à tenir d'accord.
+fn rapport_hebb_diff(mdl: &model::Model) {
+    let Some(hd) = mdl.hebb_diff.as_ref() else { return };
+    let norme: f64 = hd.d.iter().map(|v| (*v as f64) * (*v as f64)).sum::<f64>().sqrt();
+    let part = 100.0 * hd.n_evenements as f64 / hd.n_canaux.max(1) as f64;
+    println!("[hebb-diff] couche {} : {} pas · ‖D‖ = {:.4e} · somme des ‖ΔD‖ = {:.4e} · \
+{} canaux-événements sur {} vus ({:.2} %)",
+             hd.layer, hd.pas, norme, hd.norme_maj, hd.n_evenements, hd.n_canaux, part);
+    if let Ok(c) = std::env::var("DRAVE_HEBB_SAUVER") { hd.sauver(&c); }
+}
+
 fn main() {
     let args: Vec<String> = std::env::args().collect();
     if args.len() < 2 {
@@ -1161,14 +1180,7 @@ troncature aux {} derniers", ids.len(), garde, ctx, n_new, garde);
     println!("paires (poids × activation) : {} au total, {:.1} M par token — attention {:.1} M · experts {:.1} M · partagé {:.1} M",
              pa.iter().sum::<u64>(), pa.iter().sum::<u64>() as f64 / ng / 1e6,
              pa[0] as f64 / ng / 1e6, pa[1] as f64 / ng / 1e6, pa[2] as f64 / ng / 1e6);
-    if let Some(hd) = mdl.hebb_diff.as_ref() {
-        let norme: f64 = hd.d.iter().map(|v| (*v as f64) * (*v as f64)).sum::<f64>().sqrt();
-        println!("[hebb-diff] couche {} : {} pas · ‖D‖ = {:.4e} · somme des ‖ΔD‖ = {:.4e} · \
-{} canaux-événements sur {} vus ({:.2} %)",
-                 hd.layer, hd.pas, norme, hd.norme_maj, hd.n_evenements, hd.n_canaux,
-                 100.0 * hd.n_evenements as f64 / hd.n_canaux.max(1) as f64);
-        if let Ok(c) = std::env::var("DRAVE_HEBB_SAUVER") { hd.sauver(&c); }
-    }
+    rapport_hebb_diff(&mdl);
     if let Some(hb) = mdl.hebb.as_ref() {
         use std::io::Write;
         let mut f = std::fs::File::create(&hebb_out).expect("création du fichier hebbien");
@@ -5361,6 +5373,7 @@ prédit rien) — la perplexité cumulée n'a pas de sens ici");
         println!("aucun jeton noté (il en faut au moins deux : le premier ne prédit rien)");
         return;
     }
+    rapport_hebb_diff(&mdl);
     if let Some(hb) = mdl.hebb.as_ref() {
         if hb.log_on {
             use std::io::Write;

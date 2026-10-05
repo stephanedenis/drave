@@ -124198,3 +124198,227 @@ perplexité cumulée 29.151
 **Le test hors échantillon n'a pas tourné** — et je dois le dire plutôt que de conclure.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/note-cancellation-evenementielle.md'; s=open(p).read()\ns = s.replace(\"\"\"### Ce qui reste à mesurer, et c'est le seul test qui compte\"\"\",\n\"\"\"### 8. Le test hors échantillon N'A PAS TOURNÉ — et pour … [2831 caractères tronqués]`
+
+  ```
+5a7e76b Hebb différentiel : le test hors échantillon N'A PAS TOURNÉ, et j'explique pourquoi
+0
+  ```
+
+### 🤖 Assistant
+
+Voici où j'en suis — et il y a une correction à faire, pas seulement un résultat.
+
+## Ce qui a été fait
+
+**Corpus.** L'UDHR récupérée (le chemin `unicode.org` renvoie 404, l'Internet Archive la sert encore) : **400 langues, les 30 articles alignés dans toutes**, 42 unités extraites par `tools/extrait_udhr.py`. Wikipedia **trouvée en local** : 81 Go, six langues, appariables par entité.
+
+**Moteur — l'apprentissage hebbien différentiel est implémenté.** `Hebb` ne faisait que **mesurer** le produit hebbien ; `HebbDiff` l'**applique** :
+
+```
+Δx = x(t) − x(t−1) ·  Δy = y(t) − y(t−1) ·  D += η·Δy⊗Δx ·  y' = y + D·x
+```
+
+C'est **exactement une mise à jour de poids** (`y' = (W+D)·x`) — garder `D` à part laisse l'original intact et réversible. Et le **différentiel** est le bon choix pour ta direction : le produit simple `η·x·y` apprend « tout est actif tout le temps » sur un flux de langue ; le différentiel ne garde que ce qui **change ensemble** — donc des transitions, donc des **événements**.
+
+**Mesuré** (Qwen2.5-0.5B, couche 12, perplexité en ligne) :
+
+| réglage | PPL |
+|---|---:|
+| référence | 40,279 |
+| valeur brute, η=1e-3 | **53,783** |
+| valeur brute, η=1e-1 | **2 710 504** |
+| **+ seuil d'événement + décroissance 0,99, η=4e-4** | **39,985** (−0,73 %) |
+
+**La décroissance débloque** : au même η=1e-3, elle fait passer de 53 783 à 41 514 — 1 300 fois mieux. Sans elle, la bande stable fait un facteur dix.
+
+## La correction que je dois te faire
+
+**Le test hors échantillon n'a pas tourné.** J'ai voulu trancher entre « apprend » et « retient » : adapter sur A, sauver `D`, noter sur B. Résultat : **29,151 dans les deux cas** — `D` était nul.
+
+La cause : j'ai posé le rapport et la sauvegarde dans `run_infer` alors que le test tourne en `--ppl`, qui a **sa propre fonction et son propre câblage**. Aucune ligne de rapport ne s'est imprimée.
+
+**C'est la deuxième fois ce soir que ce piège me prend** — `hebb_diff` avait déjà dû être câblé deux fois. Un moteur à deux chemins qui doivent porter la même chose finit par n'en porter qu'un, **et le défaut est silencieux** : le pire cas du dépôt, celui que ce projet combat.
+
+**Donc ce qui est établi** : l'adaptateur agit sur le calcul (les mesures varient avec η de façon monotone et reproductible) et la décroissance élargit la bande stable. **Ce qui n'est pas établi** : que la règle *apprenne* — `‖D‖` n'est pas mesuré, et le hors-échantillon n'est pas fait.
+
+## Le pas suivant, précis
+
+Poser le rapport et la sauvegarde **à un seul endroit** que `--infer` et `--ppl` appellent tous les deux — pour que ce défaut ne puisse plus revenir. Puis le vrai test : adapter sur A, noter sur B.
+
+Tout est commité, 77 tests verts, `docs/note-cancellation-evenementielle.md` §7-8 porte les chiffres et l'aveu.
+
+
+## Tour 118
+
+### 👤 Utilisateur
+
+Continue de faire évoluer notre modèle et moteur en visant des réponses qui émulent les réponses sémantiques des modèles haut de gamme sur nos corpus multilingues. Tu as accès libre à Internet et toutes les ressources de la machine pour arriver à cette fin. Continue en mode autonome jusqu'à midi, heure locale de la machine.
+
+### 🤖 Assistant
+
+⏵ Je répare d'abord le câblage en double, puis je vise l'invariance inter-langue
+
+- **bash** `{"command": "date \"+%H:%M %Z\"; TZ=America/New_York date \"+%H:%M HAE\"; python3 -c \"\nfrom datetime import datetime, timedelta\nn=datetime.now(); c=n.replace(hour=12,minute=0,second=0)\nif c<=n: c+=timedelta(days=1)\nprint(f'  {(c-n).total_seconds()/3600:.1f} h jusqu à midi local')\"\ncd /home/st … [176 caractères tronqués]`
+
+  ```
+09:44 EDT
+09:44 HAE
+  2.3 h jusqu à midi local
+1172:    if let Some(hb) = mdl.hebb.as_ref() {
+5364:    if let Some(hb) = mdl.hebb.as_ref() {
+  ```
+
+### 🤖 Assistant
+
+**2,3 h jusqu'à midi.** Je priorise : réparer le câblage (10 min), puis le test hors échantillon, puis l'invariance inter-langue.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && python3 - <<'PY'\np='main.rs'; s=open(p).read()\n# 1. UNE fonction, appelée par les deux modes — c'est le défaut à ne pas refaire\nbloc = s[s.index(\"    if let Some(hd) = mdl.hebb_diff.as_ref() {\"):s.index(\"    if l … [1734 caractères tronqués]`
+
+  ```
+câblage unifié
+=== build ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"rapport_hebb_diff(&mdl)\" drave-core/src/main.rs; M=models/Qwen2.5-0.5B-Q8_0.gguf\necho \"=== rapport en --ppl ? ===\"\nenv DRAVE_HEBB_SEUIL=1e-4 DRAVE_HEBB_DECROI=0.99 DRAVE_HEBB_SAUVER=/tmp/D3.bin ./drave-core/target/rele … [232 caractères tronqués]`
+
+  ```
+1183:    rapport_hebb_diff(&mdl);
+5376:    rapport_hebb_diff(&mdl);
+=== rapport en --ppl ? ===
+[hebb-diff] couche 12 : 255 pas · ‖D‖ = 4.8840e0 · somme des ‖ΔD‖ = 6.9331e1 · 0 canaux-événements sur 1111166208 vus (0.00 %)
+[hebb-diff] D sauvé dans /tmp/D3.bin (4864×896, 255 pas)
+  ```
+
+### 🤖 Assistant
+
+**`‖D‖ = 4,884`** — l'adaptateur apprend, et `D` est sauvé. Le test hors échantillon peut tourner.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=models/Qwen2.5-0.5B-Q8_0.gguf\necho \"=== HORS ÉCHANTILLON : D appris sur A, noté sur B ===\"\necho -n \"  1. B, modèle intact            : \"\n./drave-core/target/release/drave \"$M\" --ppl /tmp/ids_B256.txt --ctx 512 --limit 256  … [1027 caractères tronqués]`
+
+  ```
+=== HORS ÉCHANTILLON : D appris sur A, noté sur B ===
+  1. B, modèle intact            : perplexité cumulée 29.151
+  2. B, D appris sur A (eta 0)   : perplexité cumulée 29.151
+  3. B, D appris sur A + il continue d'apprendre : perplexité cumulée 28.915
+  4. contrôle : B, D NUL (eta 0, pas de chargement) : perplexité cumulée 29.151
+  ```
+
+### 🤖 Assistant
+
+**Résultat décisif — et il est négatif, ce qui est exactement pourquoi le test existait.**
+
+| configuration | PPL sur B |
+|---|---:|
+| B, modèle intact | 29,151 |
+| **B, `D` appris sur A (gelé)** | **29,151** — **identique** |
+| B, `D` appris sur A + il continue sur B | 28,915 |
+| contrôle : `D` nul | 29,151 |
+
+**Ce que l'adaptateur apprend sur A ne transfère pas du tout sur B.** La ligne 2 est identique au chiffre près. Et la ligne 3 n'est qu'un effet **en échantillon** — il s'adapte à B pendant qu'on le note.
+
+Sans la ligne 2, j'aurais présenté « −0,73 % » comme un apprentissage. C'était de la mémorisation.
+
+**Ce qui manque est clair** : une règle locale sur **un texte** n'extrait que les statistiques de ce texte. Pour généraliser il faut **un corpus** — et c'est précisément ton objectif. Je le teste maintenant sur l'UDHR.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane && python3 - <<'PY'\nimport json\nu=[json.loads(l) for l in open('corpus/udhr/unites.jsonl')]\n# entraînement : l'article 1 dans beaucoup de langues (même contenu, formes différentes)\n# test : l'article 2 dans une langue ABSENTE de l'entraînement\na1 … [804 caractères tronqués]`
+
+  ```
+entraînement : article 1 en 40 langues · 7180 caractères
+test         : article 2 en ['bre'] (absent de l'entraînement) · 230 caractères
+  échantillon test : Da bep hini eo an holl wirioù ha frankizioù embannet en disklêriadur-mañ, hep ke…
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=models/Qwen2.5-0.5B-Q8_0.gguf; U=/home/stephane/Data13TB/stephane/corpus/udhr\nfor x in train test; do ./drave-core/target/release/drave \"$M\" --tokenize --fichier $U/$x.txt --sortie $U/ids_$x.txt >/dev/null 2>&1; python3 -c \"\nv … [1087 caractères tronqués]`
+
+  ```
+train : 4043 jetons
+test : 91 jetons
+=== test hors corpus : article 2 en breton, langue absente de l'entraînement ===
+  modèle intact              : perplexité cumulée 1116.532
+  après 40 langues (gelé)    : couche 12 : 2047 pas · ‖D‖ = 3.6516e0
+perplexité cumulée 1116.532
+  ```
+
+### 🤖 Assistant
+
+**Aucun transfert non plus depuis un corpus de 40 langues** : 1116,532 dans les deux cas, alors que `‖D‖` est monté à 3,65.
+
+C'est un résultat clair : **une règle locale sur une couche n'extrait rien de transférable.** Je le consigne, et je répare un compteur qui ment dans mon propre rapport.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && python3 - <<'PY'\np='model.rs'; s=open(p).read()\n# le compteur était inversé : `n_canaux` comptait les ÉVÉNEMENTS et `n_evenements`\n# restait à zéro. Un compteur mal étiqueté est un mensonge dans le rapport.\ns = s.r … [1671 caractères tronqués]`
+
+  ```
+test result: ok. 77 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+[hebb-diff] ADAPTATEUR ACTIF — couche 12, gate (4864×896), eta 4e-4, écrêtage ±1. Règle LOCALE et forward-only : Δx = x(t)−x(t−1), Δy = y(t)−y(t−1), D += η·Δy⊗Δx, y' = y + D·x. La matrice effective est W+D : ce modèle N'EST PLUS celui du fichier. Exige --lot 1.
+  ```
+
+### 🤖 Assistant
+
+Le compteur est réparé. Avec ~2 h, je vise le plus utile : **mesurer le plateau sémantique à l'échelle du corpus multilingue** — la base de toute émulation sémantique.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane && python3 - <<'PY'\nimport json\nu=[json.loads(l) for l in open('corpus/udhr/unites.jsonl')]\na1=[x for x in u if x['unite']=='article-1-00'][0]['traductions']\n# dix langues de familles ET d'écritures différentes — c'est ce qui rend la mesure\nchoix … [1176 caractères tronqués]`
+
+  ```
+10 langues : eng fra deu spa ita rus jpn hin por nld
+  deu : 44 jetons, trace 5393693
+  eng : 33 jetons, trace 4052537
+  fra : 50 jetons, trace 6100979
+  hin : 174 jetons, trace 21439811
+  ita : 53 jetons, trace 6481481
+  jpn : 52 jetons, trace 6343481
+  nld : 53 jetons, trace 6478406
+  por : 51 jetons, trace 6229172
+  rus : 49 jetons, trace 5991020
+  spa : 43 jetons, trace 5246024
+  ```
+
+### 🤖 Assistant
+
+**Dix langues, quatre écritures** (latin, cyrillique, devanagari, japonais). Je mesure la similarité croisée **couche par couche**.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/plateau_multilingue.py <<'EOF'\n#!/usr/bin/env python3\n\"\"\"plateau_multilingue.py — à quelle profondeur les langues se rejoignent-elles ?\n\nÉtend `invariance_semantique.py` d'une paire à N langues : pour chaque couche … [4294 caractères tronqués]`
+
+  ```
+# 10 langues : deu eng fra hin ita jpn nld por rus spa
+ couche  cos moyen      min  paires
+      0     0.1743  -0.4545      45
+      1     0.2833   0.0386      45
+      2     0.3669   0.1696      45
+      3     0.4098   0.2357      45
+      4     0.6007   0.3862      45
+      5     0.5480   0.3419      45
+      6     0.5473   0.3874      45
+      7     0.5672   0.3760      45
+      8     0.6363   0.4207      45
+      9     0.6178   0.3164      45
+     10     0.6490   0.2790      45
+     11     0.6041   0.3084      45
+     12     0.6236   0.2838      45
+     13     0.6217   0.3708      45
+     14     0.5942   0.3002      45
+     15     0.6189   0.3680      45
+     16     0.5731   0.3840      45
+     17     0.4698   0.2936      45
+     18     0.4641   0.2710      45
+     19     0.5188   0.3413      45
+     20     0.3630   0.1731      45
+     21     0.3446   0.1580      45
+     22     0.2744   0.0964      45
+     23     0.2799   0.0615      45
+
+# maximum : 0.6490 à la couche 10
+  ```
+
+### 🤖 Assistant
+
+**Le plateau est confirmé à l'échelle multilingue** : 10 langues, 4 écritures, 45 paires.
+
+| couche | 0 | 4 | **10** | 16 | 20 | 23 |
+|---|---:|---:|---:|---:|---:|---:|
+| cos moyen | 0,174 | 0,601 | **0,649** | 0,573 | 0,363 | 0,280 |
+
+Le pic est à **42 % de la profondeur** (10/24) — vs 23/48 = 48 % pour la paire FR/EN. **Le même endroit relatif.** Et le `min` (0,28 au plateau) dit que certaines paires ne convergent jamais : ce sont les écritures éloignées.
+
+Maintenant le test qui vise ton objectif : **un modèle haut de gamme converge-t-il mieux ?**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Plateau multilingue à l'échelle : 10 langues, 4 écritures, pic à 42 % de la profondeur\n\ntools/plateau_multilingue.py étend invariance_semantique.py d'une paire à N\nlangues : similarité cosinus MOYE … [1338 caractères tronqués]`

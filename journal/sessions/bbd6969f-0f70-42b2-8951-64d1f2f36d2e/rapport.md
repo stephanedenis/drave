@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 162.8 h |
-| Tours | 117 |
-| Messages | 7817 |
-| Appels d'outils | 7459 |
+| Durée | 163.2 h |
+| Tours | 118 |
+| Messages | 7829 |
+| Appels d'outils | 7469 |
 | Fichiers touchés | 150 |
-| Commandes | 6357 |
+| Commandes | 6367 |
 | Sous-agents | 32 |
-| Commits | 537 |
+| Commits | 538 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -281,6 +281,8 @@
 **Tour 116** — n'hésites pas à aller récupérer des dichiers sur Internet. Pour ce qui est de Wikipedia, en cherchant les gros fichiers localement, tu devrais tomber dessus, sinon on télécharge. C'est la première source de données à ingérer aprèes la déclaration universelle des droits de l'homme. on enchaine avec la littérature multilingue sur gutenberg, en commencant par les oeuvres ayant le plus grand nombre de … [372 caractères tronqués]
 
 **Tour 117** — fais tout le nécessaire, tu as plusieurs heures devant toi. Prête une attention particulière à notre moteur. il doit évoluer pour devenir un champion de l'apprentissage hebbien différentiel.
+
+**Tour 118** — Continue de faire évoluer notre modèle et moteur en visant des réponses qui émulent les réponses sémantiques des modèles haut de gamme sur nos corpus multilingues. Tu as accès libre à Internet et toutes les ressources de la machine pour arriver à cette fin. Continue en mode autonome jusqu'à midi, heure locale de la machine.
 
 ## 2. Déroulé, étape par étape
 
@@ -5892,7 +5894,72 @@ C'est le prolongement direct de ce que `invariance_semantique.py` fait déjà pa
 
 **Synthèse produite :**
 
-**Le test hors échantillon n'a pas tourné** — et je dois le dire plutôt que de conclure.
+Voici où j'en suis — et il y a une correction à faire, pas seulement un résultat.
+
+\## Ce qui a été fait
+
+**Corpus.** L'UDHR récupérée (le chemin `unicode.org` renvoie 404, l'Internet Archive la sert encore) : **400 langues, les 30 articles alignés dans toutes**, 42 unités extraites par `tools/extrait_udhr.py`. Wikipedia **trouvée en local** : 81 Go, six langues, appariables par entité.
+
+**Moteur — l'apprentissage hebbien différentiel est implémenté.** `Hebb` ne faisait que **mesurer** le produit hebbien ; `HebbDiff` l'**applique** :
+
+```
+Δx = x(t) − x(t−1) ·  Δy = y(t) − y(t−1) ·  D += η·Δy⊗Δx ·  y' = y + D·x
+```
+
+C'est **exactement une mise à jour de poids** (`y' = (W+D)·x`) — garder `D` à part laisse l'original intact et réversible. Et le **différentiel** est le bon choix pour ta direction : le produit simple `η·x·y` apprend « tout est actif tout le temps » sur un flux de langue ; le différentiel ne garde que ce qui **change ensemble** — donc des transitions, donc des **événements**.
+
+**Mesuré** (Qwen2.5-0.5B, couche 12, perplexité en ligne) :
+
+| réglage | PPL |
+|---|---:|
+| référence | 40,279 |
+| valeur brute, η=1e-3 | **53,783** |
+| valeur brute, η=1e-1 | **2 710 504** |
+| **+ seuil d'événement + décroissance 0,99, η=4e-4** | **39,985** (−0,73 %) |
+
+**La décroissance débloque** : au même η=1e-3, elle fait passer de 53 783 à 41 514 — 1 300 fois mieux. Sans elle, la bande stable fait un facteur dix.
+
+\## La correction que je dois te faire
+
+**Le test hors échantillon n'a pas tourné.** J'ai voulu trancher entre « apprend » et « retient » : adapter sur A, sauver `D`, noter sur B. Résultat : **29,151 dans les deux cas** — `D` était nul.
+
+La cause : j'ai posé le rapport et la sauvegarde dans `run_infer` alors que le test tourne en `--ppl`, qui a **sa propre fonction et son propre câblage**. Aucune ligne de rapport ne s'est imprimée.
+
+**C'est la deuxième fois ce soir que ce piège me prend** — `hebb_diff` avait déjà dû être câblé deux fois. Un moteur à deux chemins qui doivent porter la même chose finit par n'en porter qu'un, **et le défaut est silencieux** : le pire cas du dépôt, celui que ce projet combat.
+
+**Donc ce qui est établi** : l'adaptateur agit sur le calcul (les mesures varient avec η de façon monotone et reproductible) et la décroissance élargit la bande stable. **Ce qui n'est pas établi** : que la règle *apprenne* — `‖D‖` n'est pas mesuré, et le hors-échantillon n'est pas fait.
+
+\## Le pas suivant, précis
+
+Poser le rapport et la sauvegarde **à un se
+… [267 caractères tronqués]
+
+### Tour 118 — Continue de faire évoluer notre modèle et moteur en visant des réponses qui émulent les réponses sémantiques des modèles … [205 caractères tronqués]
+
+*10 appels d'outils.* Actions notables :
+
+- bash — Check time and locate the two report sites
+- bash — Unify the HebbDiff report in one place
+- bash — Verify the report now prints in ppl mode
+- bash — Run the out-of-sample test
+- bash — Build the UDHR train/test split
+- bash — Test transfer from the UDHR corpus
+- bash — Fix the inverted counter
+- bash — Trace UDHR article 1 in 12 languages
+- bash — Measure the multilingual plateau at scale
+- bash — Trace the same languages on a 30B model
+
+**Synthèse produite :**
+
+**Le plateau est confirmé à l'échelle multilingue** : 10 langues, 4 écritures, 45 paires.
+
+| couche | 0 | 4 | **10** | 16 | 20 | 23 |
+|---|---:|---:|---:|---:|---:|---:|
+| cos moyen | 0,174 | 0,601 | **0,649** | 0,573 | 0,363 | 0,280 |
+
+Le pic est à **42 % de la profondeur** (10/24) — vs 23/48 = 48 % pour la paire FR/EN. **Le même endroit relatif.** Et le `min` (0,28 au plateau) dit que certaines paires ne convergent jamais : ce sont les écritures éloignées.
+
+Maintenant le test qui vise ton objectif : **un modèle haut de gamme converge-t-il mieux ?**
 
 ## 3. Travail accompli
 
@@ -6128,7 +6195,7 @@ C'est le prolongement direct de ce que `invariance_semantique.py` fait déjà pa
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6317 autres
+- … et 6327 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -6813,4 +6880,5 @@ C'est le prolongement direct de ce que `invariance_semantique.py` fait déjà pa
 - UDHR : extracteur d'unités alignées — 400 langues, les 30 articles, 42 unités  tools/extrait_udhr.py rend un JSONL : une unité par ligne (article, paragraphe), 
 - Apprentissage hebbien différentiel : implémenté dans le moteur, et mesuré  Hebb MESURAIT le produit hebbien sans jamais toucher au calcul. HebbDiff l'APPLIQUE :
 - Hebb différentiel : le test hors échantillon N'A PAS TOURNÉ, et j'explique pourquoi  PPL sur B, modèle intact : 29,151. PPL sur B avec D appris sur A : 29,151 —
+- Plateau multilingue à l'échelle : 10 langues, 4 écritures, pic à 42 % de la profondeur  tools/plateau_multilingue.py étend invariance_semantique.py d'une paire 
 

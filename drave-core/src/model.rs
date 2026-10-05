@@ -2771,8 +2771,11 @@ pub struct HebbDiff {
     /// **Décroissance** par pas : `D ← D·decroi + η·…`. Sans elle, l'adaptateur
     /// ne fait que croître, et la bande stable se réduit à un facteur dix.
     pub decroi: f32,
-    /// Ce que le seuil a laissé passer — c'est la mesure de ce que « événement »
-    /// veut dire ici.
+    /// `n_canaux` : tous les canaux parcourus. `n_evenements` : ceux dont le
+    /// différentiel a dépassé le seuil. Le rapport des deux dit ce que
+    /// « événement » veut dire sur ce flux — et les deux étaient INVERSÉS dans
+    /// une première version, ce qui affichait « 0 % d'événements » alors que
+    /// tous l'étaient.
     pub n_evenements: u64,
     pub n_canaux: u64,
 }
@@ -2848,8 +2851,9 @@ impl HebbDiff {
                 let dx = x[i] - self.x_prec[i];
                 // LE SEUIL EST LA PARTIE ÉVÉNEMENTIELLE : sous lui, ce n'est pas
                 // un changement, c'est du bruit de dernier bit.
-                if dx.abs() <= seuil { continue; }
                 self.n_canaux += 1;
+                if dx.abs() <= seuil { continue; }
+                self.n_evenements += 1;
                 let gx = if signe { if dx > 0.0 { 1.0 } else { -1.0 } } else { dx };
                 let dv = self.eta * gy * gx;
                 let nv = (ligne[i] * decroi + dv).clamp(-self.clamp, self.clamp);
