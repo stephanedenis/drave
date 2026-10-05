@@ -124936,3 +124936,90 @@ entraînement : 20 · test : 20
 Et ce **0,4421 approche le 0,471 du modèle de 30 B** — un pont appris sur un modèle de 0,5 B atteint l'invariance d'un modèle 60× plus gros.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-pont-semantique.md'; s=open(p).read()\ns = s.replace(\"## Ce que ça donne à la mission\",\n\"\"\"## Résultat 4 — validé à l'échelle : 20 langues d'entraînement, 20 langues jamais vues\n\nLes 40 la … [1438 caractères tronqués]`
+
+  ```
+7f5630a Le pont validé à l'échelle : 20 langues d'entraînement, 20 JAMAIS vues
+10:43
+  ```
+
+### 🤖 Assistant
+
+~1h15. Le caveat qui décide de l'usage du pont : **garde-t-il ce qui compte en aval ?** Je vérifie si le moteur sait forcer un état à l'entrée d'une couche.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && grep -n \"ETAT_ENTREE\" main.rs model.rs | head -5; echo \"=== ce que fait le rejeu ===\"; grep -n \"fn flux_lot\" -A 6 model.rs | head -10; echo \"=== le forcer remplace-t-il le flux ? ===\"; grep -n \"force.servies\\ … [86 caractères tronqués]`
+
+  ```
+main.rs:21:    "ETAT_ENTREE",
+model.rs:2572:    /// Fichier d'état d'ENTRÉE (`DRAVE_ETAT_ENTREE`) : le résidu du premier
+model.rs:4366:            etat_entree: std::env::var("DRAVE_ETAT_ENTREE").ok(),
+=== ce que fait le rejeu ===
+5763:    fn flux_lot(trace: &mut Option<TraceFlux>, force: &mut Option<FluxRelecteur>,
+5764-                j0: u64, base: usize, l: usize, t: usize,
+5765-                xi: &mut [i32], sx: &mut [f32], h: usize) {
+5766-        if trace.is_none() && force.is_none() { return; }
+5767-        let mut j0 = j0;                 // clé du jeton i du lot : j0 + i
+5768-        for i in 0..t {
+5769-            if let Some(r) = force.as_mut() {
+=== le forcer remplace-t-il le flux ? ===
+426:    let gardes = listes.get(&l)?;
+2357:        match self.listes.get(&cle) {
+5770:                if let Some((ech, paires)) = r.listes.get(&((base + l) as u16, j0 as u32)).cloned() {
+  ```
+
+### 🤖 Assistant
+
+`DRAVE_ETAT_ENTREE` injecte au **début** du modèle, pas à une couche. Plutôt qu'un forçage risqué en fin de session, je rends le pont **utilisable** : je le sauve comme artefact, avec son applicateur, et j'isole sa fidélité par langue tenue à l'écart.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/pont_recurrent.py'; s=open(p).read()\ns = s.replace(\"\"\"    print(f\"\\\\n# fidélité moyenne à la boîte noire : {np.mean(cs):.4f}\")\"\"\",\n\"\"\"    print(f\"\\\\n# fidélité moyenne à la boîte noire : { … [4241 caractères tronqués]`
+
+  ```
+# INVARIANCE INTER-LANGUE à la dernière position, langues tenues à l'écart :
+#   professeur (couche 10) : cos moyen 0.6284 · pire paire 0.3281
+#   ÉTUDIANT (le pont)      : cos moyen 0.2912 · pire paire -0.2745
+  ```
+
+### 🤖 Assistant
+
+Mon propre affichage appelle « le pont » l'**étudiant récurrent** — celui qui a échoué — alors que le pont est l'application **linéaire**. Je corrige l'étiquetage, qui est un mensonge.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/pont_recurrent.py'; s=open(p).read()\ns = s.replace('''    print(f\"\\\\n# INVARIANCE INTER-LANGUE à la dernière position, langues tenues à l'écart :\")''',\n'''    print(f\"\\\\n# INVARIANCE INTER-LANGUE à … [1156 caractères tronqués]`
+
+  ```
+# entraînement : 20 langues (1476 pas) · test : 20 langues JAMAIS vues
+# fidélité en UN PAS (professeur donné) : 0.6600
+# TÉMOIN sans récurrence (linéaire de e_t seul) : 0.7304
+#   professeur (couche 10)            : cos moyen 0.6284 · pire paire 0.3281
+#   pont LINÉAIRE de la plongée seule : cos moyen 0.7343 · pire paire 0.4421
+# artefact écrit : /home/stephane/Data13TB/stephane/corpus/udhr/pont_semantique.npz  (P (896, 128), W0 (896, 128), moy (896,))
+#   usage : python3 tools/applique_pont.py /home/stephane/Data13TB/stephane/corpus/udhr/pont_semantique.npz <trace.drvf>
+#   professeur (couche 10) : cos moyen 0.6284 · pire paire 0.3281
+=== et on l'applique à une langue INCONNUE du pont : le breton ===
+# 177 positions · abstrait (177, 896) (couche 10 du professeur)
+#   cohérence interne (positions entre elles) : 0.4024
+#   dernière position, premiers canaux : +0.8684 +6.9613 +0.2804 +8.8188 -6.4056 -16.0234
+[stderr]
+  File "<stdin>", line 8
+    '''    print(f"#   étudiant RÉCURRENT (écarté, cf. témoin) : cos moyen {me:.4f} · pire paire {mie:.4f}")''', 1)
+                                                                                                            ^
+SyntaxError: unterm
+… [56 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+L'artefact est sauvé et l'applicateur marche (177 positions en grec). Je corrige l'étiquette avec un edit propre, puis je consolide.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/pont_recurrent.py'\nlignes=open(p).read().split('\\n')\nout=[]\nfor l in lignes:\n    if 'ÉTUDIANT (le pont)' in l:\n        out.append('    print(f\"#   étudiant RÉCURRENT (écarté — voir le témoin) : cos m … [718 caractères tronqués]`
+
+  ```
+étiquette corrigée
+206:    print(f"#   étudiant RÉCURRENT (écarté — voir le témoin) : cos moyen {me:.4f} · pire paire {mie:.4f}")
+syntaxe OK
+=== le pont appliqué à des langues TENUES À L'ÉCART (jamais vues) ===
+# 177 positions · abstrait (177, 896) (couche 10 du professeur) #   cohérence interne (positions entre elles) : 0.4024  ← ell
+# 52 positions · abstrait (52, 896) (couche 10 du professeur) #   cohérence interne (positions entre elles) : 0.4029  ← heb
+# 53 positions · abstrait (53, 896) (couche 10 du professeur) #   cohérence interne (positions entre elles) : 0.3204  ← jpn
+# 56 positions · abstrait (56, 896) (couche 10 du professeur) #   cohérence interne (positions entre elles) : 0.3949  ← tha
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\nanc = \"> ## **ÉTAT AU 06/10 11h05**\"\nnew = \"\"\"> ## **LE PONT LINGUISTIQUE-SÉMANTIQUE EXISTE (06/10, 10h50)** — et il tient en une matrice\n>\n> **Mission** : émuler en boîte n … [3035 caractères tronqués]`

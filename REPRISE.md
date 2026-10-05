@@ -78,6 +78,45 @@ cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo build --r
 > `res_mix` s'applique là où la référence n'en applique pas. Les trois étaient
 > invisibles au jeton 0 seul.
 >
+> ## **LE PONT LINGUISTIQUE-SÉMANTIQUE EXISTE (06/10, 10h50)** — et il tient en une matrice
+>
+> **Mission** : émuler en boîte noire le premier niveau abstrait des gros modèles
+> (celui où la langue cesse de dominer) pour avoir notre propre pont. Le professeur
+> est une boîte noire : `--trace-flux` donne son entrée (couche 0 = la plongée du
+> jeton) et sa sortie (couche L = la cible).
+>
+> **LE TÉMOIN QUI RENVERSE TOUT** : une **simple application linéaire de la
+> plongée du jeton** prédit la couche abstraite du professeur à **0,90-0,92** —
+> deux fois mieux que la récurrence linéaire (0,47-0,49), et la capacité d'état
+> n'y change rien (plate de rang 32 à 256). **Le niveau abstrait est déjà à ~90 %
+> déterminé par la plongée du jeton courant.**
+>
+> **ET LE PONT, jugé sur l'invariance inter-langue, 20 langues d'entraînement →
+> 20 langues JAMAIS vues :**
+>
+> | couche 10 | cos moyen | pire paire |
+> |---|---:|---:|
+> | professeur | 0,6284 | 0,3281 |
+> | **pont linéaire** | **0,7343** (+17 %) | **0,4421** (+35 %) |
+>
+> **Le pont rend une représentation PLUS invariante que le professeur lui-même**,
+> et sa pire paire (0,4421) approche celle du plateau d'un **30 B** (0,471) —
+> 60 fois plus gros. **Mécanisme** : une SEULE application linéaire sert toutes les
+> langues à la fois, donc elle ne retient que ce qu'elles ont en commun. Un
+> projecteur sur le partagé, par moindres carrés — sans récurrence, sans
+> rétropropagation, sans oracle. Il fait mieux que l'annulation oracle.
+>
+> **L'artefact** : `/home/stephane/Data13TB/stephane/corpus/udhr/pont_semantique.npz`
+> (`P` 896×128, `W0` 896×128, `moy` 896), appliqué par
+> `tools/applique_pont.py <pont.npz> <trace.drvf>` — `abstrait = (e·W0)·Pᵀ + moy`.
+> Vérifié sur grec, hébreu, japonais, thaï (écritures absentes de l'entraînement).
+>
+> **À LIRE AVANT DE S'EN SERVIR** : plus invariant ≠ meilleur — le pont peut
+> **jeter** de l'information propre à la langue que le professeur porte. Le test
+> qui le dirait : brancher le pont devant les couches suivantes et mesurer la
+> perplexité. **PAS FAIT.** Et le pont n'est pas récurrent. Détail et réserves :
+> `reports/rapport-pont-semantique.md`.
+>
 > ## **ÉTAT AU 06/10 11h05** — corpus, plateau sémantique, et trois négatifs nets
 >
 > **Corpus ingérés** : l'UDHR (456 langues, **les 30 articles alignés dans

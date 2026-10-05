@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 163.9 h |
+| Durée | 164.0 h |
 | Tours | 118 |
-| Messages | 7854 |
-| Appels d'outils | 7493 |
+| Messages | 7859 |
+| Appels d'outils | 7498 |
 | Fichiers touchés | 150 |
-| Commandes | 6391 |
+| Commandes | 6396 |
 | Sous-agents | 32 |
-| Commits | 545 |
+| Commits | 546 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -5936,7 +5936,7 @@ Poser le rapport et la sauvegarde **à un se
 
 ### Tour 118 — Continue de faire évoluer notre modèle et moteur en visant des réponses qui émulent les réponses sémantiques des modèles … [205 caractères tronqués]
 
-*34 appels d'outils.* Actions notables :
+*39 appels d'outils.* Actions notables :
 
 - bash — Check time and locate the two report sites
 - bash — Unify the HebbDiff report in one place
@@ -5952,18 +5952,11 @@ Poser le rapport et la sauvegarde **à un se
 - bash — Write and commit the semantic plateau report
 - bash — Re-measure the plateau with the learned adapter
 - bash — Train on 40 languages, holding out 5
-- … et 20 autres
+- … et 25 autres
 
 **Synthèse produite :**
 
-**Le résultat tient à l'échelle — 20 langues d'entraînement, 20 langues jamais vues :**
-
-| couche 10 | cos moyen | **pire paire** |
-|---|---:|---:|
-| professeur | 0,6284 | 0,3281 |
-| **pont linéaire** | **0,7343 (+17 %)** | **0,4421 (+35 %)** |
-
-Et ce **0,4421 approche le 0,471 du modèle de 30 B** — un pont appris sur un modèle de 0,5 B atteint l'invariance d'un modèle 60× plus gros.
+L'artefact est sauvé et l'applicateur marche (177 positions en grec). Je corrige l'étiquette avec un edit propre, puis je consolide.
 
 ## 3. Travail accompli
 
@@ -6199,7 +6192,7 @@ Et ce **0,4421 approche le 0,471 du modèle de 30 B** — un pont appris sur un 
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6351 autres
+- … et 6356 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -6892,4 +6885,5 @@ Et ce **0,4421 approche le 0,471 du modèle de 30 B** — un pont appris sur un 
 - LE FONDEMENT EST VALIDÉ : la langue est soustractible, et le témoin le prouve  tools/cancellation_langue.py, traces réelles de 10 langues, avec témoin obligatoi
 - LE PONT : une matrice 896x896 rend la langue invisible, mieux que le professeur  Témoin qui renverse tout : une simple application LINÉAIRE de la plongée du jet
 - Le pont validé à l'échelle : 20 langues d'entraînement, 20 JAMAIS vues  40 langues de l'UDHR tracées, réparties 20/20 au hasard (graine fixée) :    couche 10 : 
+- Le pont devient un ARTEFACT utilisable, et l'étiquetage est corrigé  pont_semantique.npz (P 896x128, W0 896x128, moy 896) + tools/applique_pont.py :   abstrait 
 

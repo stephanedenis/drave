@@ -185,6 +185,15 @@ def main():
         print(f"{l:<6} {cc:>26.4f}")
     print(f"\n# fidélité moyenne à la boîte noire : {np.mean(cs):.4f}")
 
+    # --- SAUVEGARDE DE L'ARTEFACT : c'est ce qui fait du pont un OBJET utilisable
+    #     et pas seulement une mesure. `pont_semantique.npz` porte les trois pièces
+    #     (W sous-espace, moy, W0) et `outils_pont.py` sait l'appliquer.
+    chemin = os.environ.get("DRAVE_PONT_SORTIE", "pont_semantique.npz")
+    np.savez(chemin, P=P, moy=moy, W0=W0, couche=c, rang=rang,
+             langues_train=np.array(sorted(tr)), langues_test=np.array(sorted(te)))
+    print(f"# artefact écrit : {chemin}  (P {P.shape}, W0 {W0.shape}, moy {moy.shape})")
+    print(f"#   usage : python3 tools/applique_pont.py {chemin} <trace.drvf>")
+
     # --- LE CHIFFRE QUI COMPTE : le pont est-il aussi invariANT que le professeur ?
     def dernier(dst, cle):
         return np.array([dst[l][cle][-1] for l in sorted(dst)])
@@ -194,7 +203,7 @@ def main():
     me, mie = cos_moyen(etu)
     print(f"\n# INVARIANCE INTER-LANGUE à la dernière position, langues tenues à l'écart :")
     print(f"#   professeur (couche {c}) : cos moyen {mp:.4f} · pire paire {mip:.4f}")
-    print(f"#   ÉTUDIANT (le pont)      : cos moyen {me:.4f} · pire paire {mie:.4f}")
+    print(f"#   étudiant RÉCURRENT (écarté — voir le témoin) : cos moyen {me:.4f} · pire paire {mie:.4f}")
     return 0
 
 
