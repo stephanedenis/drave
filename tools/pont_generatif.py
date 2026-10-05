@@ -359,7 +359,7 @@ class Pont:
         X = np.vstack([self.X[i][:, idx] for i in itr])
         Y = np.vstack([self.Y[i] for i in itr])
         R = Y - (X @ W + mt)                  # ce qui reste à expliquer
-        xj = np.vstack([self.X[i][:, j] for i in itr]).astype(np.float64)
+        xj = np.concatenate([self.X[i][:, j] for i in itr]).astype(np.float64)
         if xj.std() == 0.0:
             return 0.0
         a_ = xj - xj.mean()
@@ -410,6 +410,28 @@ def main():
     ival = list(range(n_val))
     itr = list(range(n_val, len(cltr)))
     ite = list(range(len(clte)))
+
+    # ------------------------------------------------- SOUS-ENSEMBLE ACTIF
+    #
+    # La couche du professeur est CREUSE : 34 canaux sur 896 portent la moitié de
+    # l'énergie, et 218 canaux sont propres à certaines langues. Ajuster les 896
+    # dimensions densément, c'est payer pour du détail quasi nul et NON PARTAGÉ —
+    # donc acheter de la fidélité avec l'invariance qu'on cherche.
+    #
+    # On restreint donc la cible aux canaux qui portent l'énergie. Le masque est
+    # calculé sur l'APPRENTISSAGE SEUL : le lire sur le test serait une fuite.
+    part_canaux = float(opt("--part-canaux", 0.0))
+    if part_canaux > 0.0:
+        E_ref = np.vstack([Ytr[i]**2 for i in itr]).sum(0)
+        ordre = np.argsort(-E_ref)
+        cum = np.cumsum(E_ref[ordre])/E_ref.sum()
+        nk = int(np.searchsorted(cum, part_canaux) + 1)
+        garde = np.sort(ordre[:nk])
+        Ytr = [y[:, garde] for y in Ytr]
+        Yte = [y[:, garde] for y in Yte]
+        print(f"# SOUS-ENSEMBLE ACTIF : {nk}/{H} canaux portent {part_canaux:.0%} de "
+              f"l'énergie ({nk/H:.0%} des canaux), masque lu sur l'apprentissage seul")
+
     print(f"# {len(cltr)} langues d'entraînement = {len(itr)} apprentissage + {len(ival)} validation")
     print(f"# {len(clte)} langues de TEST · a={a} · ride={ride} · graine={graine} · critère={critere}")
     print(f"# {cycles} cycles de {par_cycle} couches, puis attrition")
@@ -493,10 +515,25 @@ def main():
                         meilleur = {"f_te": f_te, "neur": P.compte_neurones,
                                     "couch": len(P.couches), "f_tr": f_tr, "f_va": f_va,
                                     "inv": mg, "pire": mig, "etape": "naissance libre"}
-                    # LES DEUX SIGNES, et ils doivent tenir ENSEMBLE : des concepts
-                    # communs qui existent, et une lecture qui doit les soustraire.
-                    if part_commune > 0.5 and con > seuil_contraste:
-                        print(f"{'  → COUCHE NEUVE (concepts communs + contraste)':<12} "
+                    # LES TROIS CONDITIONS, et elles doivent tenir ENSEMBLE :
+                    #
+                    #  1. la couche courante est ÉPUISÉE — les derniers neurones
+                    #     n'apportent plus rien. Tant qu'un neurone de plus paie,
+                    #     c'est LUI qu'il faut, pas une couche : un neurone sait
+                    #     faire « ET » et « OU », et couvrir une activation
+                    #     manquante est un travail de neurone, pas de couche.
+                    #  2. des CONCEPTS COMMUNS existent — il y a de la structure
+                    #     partagée à composer. Sans elle, une couche de plus n'a
+                    #     rien à composer.
+                    #  3. la lecture doit SOUSTRAIRE — les écarts portent
+                    #     l'essentiel du readout. C'est le « OU exclusif », ce
+                    #     qu'une seule couche ne sait pas séparer.
+                    #
+                    # Sans la condition 1, le critère déclenchait à CHAQUE pas :
+                    # 9 couches pour 72 neurones, mesuré.
+                    epuisee = sans_gain >= patience
+                    if epuisee and part_commune > 0.5 and con > seuil_contraste:
+                        print(f"{'  → COUCHE NEUVE (épuisée + concepts + contraste)':<12} "
                               f"{P.compte_neurones:>6} {len(P.couches):>7}")
                         couche_neuve = True
                         sans_gain = 0

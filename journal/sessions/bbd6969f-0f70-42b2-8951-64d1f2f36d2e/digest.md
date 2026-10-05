@@ -131287,3 +131287,459 @@ n58              58
 Donc : **les concepts communs n'existent pas encore au premier niveau**, et le critère refuse — correctement selon votre règle — d'ouvrir une couche. Le réseau reste à **1 couche, 64 neurones, fidélité 0,5839**.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/recapitulatif.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 5. Le déclencheur de couche, révisé — et ce qu'il mesure\n\n### 5.1 La règle\n\nUne couche ne s'ouvre **pas** à la saturation de la précédente … [4517 caractères tronqués]`
+
+  ```
+694efc3 Déclencheur de couche révisé : concepts communs + besoin de poids négatifs
+  ```
+
+### 🤖 Assistant
+
+⏵ Je vérifie qu'il ne reste aucun calcul en cours avant de faire le point.
+
+- **bash** `{"command": "python3 /tmp/stop2.py 2>/dev/null; python3 -c \"\nimport os\nact=[]\nfor d in os.listdir('/proc'):\n    if d.isdigit():\n        try: cl=open(f'/proc/{d}/cmdline','rb').read().decode(errors='replace')\n        except Exception: continue\n        if ('pont_generatif' in cl or 'release/dr … [466 caractères tronqués]`
+
+  ```
+arrêtés : []
+calculs en cours : 0
+--- place disque ---
+/dev/mapper/system-root   11T  8,8T  2,1T  81% /home/stephane/Data13TB
+--- traces du professeur retenu ---
+2,7G	/home/stephane/Data13TB/stephane/corpus/udhr/appr10c
+398M	/home/stephane/Data13TB/stephane/corpus/udhr/tenus10c
+  ```
+
+### 🤖 Assistant
+
+⏵ Tout est arrêté, rien ne tourne. Voici le récapitulatif.
+
+Récapitulatif complet écrit dans `reports/recapitulatif.md`. Voici l'essentiel.
+
+## Méthode
+
+**Un seul professeur** : Qwen2.5-0.5B, couche 10. On ne lit de lui que cette couche (traces DRVF), jamais son extérieur (`--n 0` : ni tête, ni jetons générés), et on n'écrit aucune trace de nos couches internes.
+
+**Le pont** : `s_t = (1−a)s_{t−1} + a·tanh(P·s_{t−1} + B·e_t)`, `y_t = W·s_t + moy`. **`P` et `B` aléatoires et gelés**, seule `W` s'ajuste en forme fermée. Aucune rétropropagation.
+
+**Couches réelles** : chaque couche ne lit **que la précédente** (couche 0 lit `e_t` et les siens ; couche c lit la couche c−1 entière et les siens).
+
+**Génération** : un neurone à la fois. **Attrition** : on retire des neurones, on **recalcule** les survivants, critère de **redondance** (retirer ce que les autres disent déjà).
+
+## Résultats
+
+**La loi** — onze points de croissance, données propres :
+
+**fid TEST ≈ 0,3856 · (1 − invariance) + 0,4752 · r = 0,9920 · erreur max 0,0047**
+
+Fidélité et invariance sont les deux axes d'**une seule droite**. À invariance parfaite la fidélité vaut 0,4752 — à peine plus que la constante (0,4710). Le réservoir **plat** tombe sur la même droite (écarts ±0,012) : **la droite est une propriété du professeur**, pas de notre architecture.
+
+**Le sous-ensemble actif** — votre point, mesuré :
+
+| | canaux | part |
+|---|---:|---:|
+| **50 % de l'énergie** | **34 / 896** | **4 %** |
+| canaux actifs dans toutes les langues | 678 / 896 | 76 % |
+| **canaux propres à certaines langues** | **218** | **24 %** |
+
+**Le déclencheur de couche, mesuré** : `communs` = **+0,05 à +0,075** (6-10 % des neurones), `contraste` = **0,97-0,98**. Les concepts communs **n'émergent pas au premier niveau** — le plongement est trop propre à chaque langue. Le critère refuse donc d'ouvrir une couche : le réseau reste à **1 couche, 64 neurones, 0,5839**.
+
+## Les corrections, et ce qu'elles ont invalidé
+
+| correction | ce qu'elle a invalidé |
+|---|---|
+| **Un pont par professeur** | la comparaison « notre pont bat le 30B » — classement vide. 30B abandonné. |
+| **`--n 0`** | 32 jetons générés étaient **dans** la trace : 25-60 % des positions à une unité |
+| **`--ctx 2048`** | ~50 % des langues tronquées → l'invariance comparait des **contenus différents** |
+| **Fuite de données** | 0,7234 annoncé au lieu de 0,5739 |
+| **Sélection sur le test** | le « meilleur réseau » était choisi sur le test |
+| **Chiffres ronds** | 1,2,4,…,256 venaient de mon calendrier et de mon plafond |
+| **Couches cosmétiques** | chaque neurone lisait *tous* les précédents : ouvrir une couche = ajouter un neurone, calcul identique (vérifié) |
+
+## Solide / non solide / ouvert
+
+**Solide** : la loi (r = 0,992, deux architectures) ; le sous-ensemble actif ; la génération monotone ; l'attrition qui recalcule vraiment.
+
+**Non solide** : tout ce qui précède `--n 0` et `--ctx 2048` — les résultats à une unité sont les plus fragiles. L'avantage de la profondeur s'est **effacé** au nettoyage (médiane 0,5155 contre 0,5145 pour le plat).
+
+**Ouvert** : viser les **34 canaux** qui portent l'énergie au lieu des 896 densément — cohérent avec le moteur d'événements de Drave. Et affiner la mesure de concepts, qui bloque aujourd'hui toute profondeur.
+
+
+## Tour 123
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Faire évoluer le pont linguistico-sémantique en BOÎTE NOIRE (émulation des premières couches du professeur, sans accès à ses rouages) par une phase GÉNÉRATIVE — le nombre de neurones et de couches NAÎT pendant l'apprentissage, en partant d'un seul neurone — suivie d'une ATTRITION PÉRIODIQUE qui réduit la taille du réseau en GÉNÉRALISANT les concepts (fusion des unités redondantes, réajustement de la lecture sur les survivants), jamais par simple coupe. Aucune rétropropagation : A et B restent aléatoires et gelés, seule la lecture s'ajuste en forme fermée. Chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, et TAILLE du réseau — mesurées contre le professeur Qwen2.5-0.5B couche 10 et le plateau Qwen3-30B-A3B."
+Round: 2/256
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Je reprends la piste la plus prometteuse : n'ajuster que le **sous-ensemble actif** de la couche, au lieu des 896 canaux densément.
+
+Le point de départ : **34 canaux portent 50 % de l'énergie**, et **218 canaux (24 %) sont propres à certaines langues**. Ajuster les 896 densément, c'est payer pour du détail non partagé. Je restreins la cible au sous-ensemble actif — mesuré sur l'**entraînement** seul, jamais sur le test.
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", "limit": 30, "offset": 344}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py</path>
+<type>file</type>
+<content>
+344:             self.X[i][:, j] = v
+345: 
+346:     def renforce(self, j, itr, mt, ride, eta=0.6):
+347:         """RENFORCEMENT / ATROPHIE — la relecture du corpus qui suit la naissance
+348:         d'une couche. **Aucune rétropropagation.**
+349: 
+350:         On relit le corpus pour mesurer ce qui reste à expliquer (le résidu), puis
+351:         on renforce les entrées dont l'activation le capte et on atrophie les
+352:         autres. C'est local : chaque neurone ne regarde que sa propre activation
+353:         et le résidu, jamais le gradient d'une couche lointaine.
+354:         """
+355:         if j == 0 or len(itr) == 0:
+356:             return 0.0
+357:         idx = np.arange(j)
+358:         W = self.ajuste(idx, ride, mt, itr)
+359:         X = np.vstack([self.X[i][:, idx] for i in itr])
+360:         Y = np.vstack([self.Y[i] for i in itr])
+361:         R = Y - (X @ W + mt)                  # ce qui reste à expliquer
+362:         xj = np.vstack([self.X[i][:, j] for i in itr]).astype(np.float64)
+363:         if xj.std() == 0.0:
+364:             return 0.0
+365:         
+… [485 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"cltr, Etr, Ytr, H = charge\\|ival = list\\|ite = list\\|base = cos_lignes\" tools/pont_generatif.py | head -5; sed -n '/^def main/,/constante témoin/p' tools/pont_generatif.py | head -40", "description": "Locate main loadin … [11 caractères tronqués]`
+
+  ```
+405:    cltr, Etr, Ytr, H = charge(tr_p)
+410:    ival = list(range(n_val))
+412:    ite = list(range(len(clte)))
+422:    base = cos_lignes(np.tile(mt, (len(Yte_a), 1)), Yte_a)
+def main():
+    tr_p, te_p = sys.argv[1], sys.argv[2]
+
+    def opt(nom, defaut):
+        return sys.argv[sys.argv.index(nom)+1] if nom in sys.argv else defaut
+
+    a = float(opt("--a", 0.2))
+    ride = float(opt("--ride", 0.3))
+    n_val = int(opt("--val", 4))
+    attrition = int(opt("--attrition", 1))
+    seuil = float(opt("--seuil", 0.02))
+    graine = int(opt("--graine", 5))
+    part = float(opt("--part", 1.0))
+    critere = opt("--critere", "redondance")
+    cycles = int(opt("--cycles", 3))
+    par_cycle = int(opt("--couches-par-cycle", 3))
+    plafond = int(opt("--plafond", 256))
+
+    cltr, Etr, Ytr, H = charge(tr_p)
+    clte, Ete, Yte, _ = charge(te_p)
+    if part < 1.0:
+        garde = max(1, int(len(cltr)*part))
+        cltr, Etr, Ytr = cltr[:garde], Etr[:garde], Ytr[:garde]
+    ival = list(range(n_val))
+    itr = list(range(n_val, len(cltr)))
+    ite = list(range(len(clte)))
+    print(f"# {len(cltr)} langues d'entraînement = {len(itr)} apprentissage + {len(ival)} validation")
+    print(f"# {len(clte)}
+… [561 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", "new_string": "    cltr, Etr, Ytr, H = charge(tr_p)\n    clte, Ete, Yte, _ = charge(te_p)\n    if part < 1.0:\n        garde = max(1, int(len(cltr)*part))\n        cltr, Etr, Ytr = cltr[:garde], Etr[:garde], Ytr … [2620 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"import ast;ast.parse(open('tools/pont_generatif.py').read());print('syntaxe OK')\" && for P in 0 0.9 0.5; do echo \"=== sous-ensemble à $P de l'énergie ===\"; timeout 600 python3 -u tools/pont_generatif.py /tmp/cache_app … [324 caractères tronqués]`
+
+  ```
+syntaxe OK
+=== sous-ensemble à 0 de l'énergie ===
+# constante témoin sur le TEST : 0.4710
+=== sous-ensemble à 0.9 de l'énergie ===
+# SOUS-ENSEMBLE ACTIF : 645/896 canaux portent 90% de l'énergie (72% des canaux), masque lu sur l'apprentissage seul
+# constante témoin sur le TEST : 0.4945
+=== sous-ensemble à 0.5 de l'énergie ===
+# SOUS-ENSEMBLE ACTIF : 157/896 canaux portent 50% de l'énergie (18% des canaux), masque lu sur l'apprentissage seul
+# constante témoin sur le TEST : 0.6140
+  ```
+
+### 🤖 Assistant
+
+⏵ Les runs n'ont pas eu le temps d'aboutir, mais les **constantes témoins** sont déjà parlantes : restreindre aux canaux énergétiques rend la cible **beaucoup plus interlingue** (0,4710 → 0,4945 → **0,6140**). Je relance en arrière-plan.
+
+**Observation immédiate** : la constante témoin passe de **0,4710** (896 canaux) à **0,4945** (90 % de l'énergie) puis **0,6140** (50 %). Les canaux énergétiques sont donc **beaucoup plus interlingues** — c'est exactement ce que votre remarque annonçait. Je relance les trois en fond.
+
+- **write** `{"content": "#!/bin/bash\n# Le sous-ensemble actif paie-t-il ? Même professeur, même périmètre (les canaux\n# gardés), trois restrictions. Le masque est lu sur l'APPRENTISSAGE SEUL : le\n# lire sur le test serait une fuite.\nset -u\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\n: > /tmp/canaux … [443 caractères tronqués]`
+
+  ```
+<path>/tmp/canaux.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "chmod +x /tmp/canaux.sh && setsid nohup /tmp/canaux.sh >/dev/null 2>&1 < /dev/null & sleep 280; grep -E \"^####|SOUS-ENSEMBLE|constante|née :|fidélité TEST|invariance TEST|taille  \" /tmp/canaux.log", "description": "Launch channel restriction comparison", "timeoutMs": 340000}`
+
+  ```
+########## sous-ensemble : 0 de l'énergie ##########
+# constante témoin sur le TEST : 0.4710
+########## CYCLE 1 — CROISSANCE ##########
+########## sous-ensemble : 0.9 de l'énergie ##########
+# SOUS-ENSEMBLE ACTIF : 645/896 canaux portent 90% de l'énergie (72% des canaux), masque lu sur l'apprentissage seul
+# constante témoin sur le TEST : 0.4945
+########## CYCLE 1 — CROISSANCE ##########
+########## sous-ensemble : 0.75 de l'énergie ##########
+# SOUS-ENSEMBLE ACTIF : 424/896 canaux portent 75% de l'énergie (47% des canaux), masque lu sur l'apprentissage seul
+# constante témoin sur le TEST : 0.5319
+########## CYCLE 1 — CROISSANCE ##########
+########## sous-ensemble : 0.5 de l'énergie ##########
+# SOUS-ENSEMBLE ACTIF : 157/896 canaux portent 50% de l'énergie (18% des canaux), masque lu sur l'apprentissage seul
+# constante témoin sur le TEST : 0.6140
+########## CYCLE 1 — CROISSANCE ##########
+  ```
+
+### 🤖 Assistant
+
+⏵ Le motif est très net et il rejoint la mission elle-même. J'attends les résultats du modèle.
+
+| énergie gardée | canaux | constante témoin |
+|---|---:|---:|
+| 100 % | 896 | 0,4710 |
+| 90 % | 645 (72 %) | 0,4945 |
+| 75 % | 424 (47 %) | 0,5319 |
+| **50 %** | **157 (18 %)** | **0,6140** |
+
+**Les canaux à forte énergie sont les canaux interlingues.** C'est exactement « le premier niveau à dominance non-linguistique » de la mission. J'attends les résultats du modèle.
+
+- **bash** `{"command": "sleep 560; grep -E \"^####|SOUS-ENSEMBLE|constante|née :|fidélité TEST|invariance TEST|^  taille\" /tmp/canaux.log; echo \"--- TERMINE ? ---\"; grep -c TERMINE /tmp/canaux.log", "description": "Wait for channel comparison results", "timeoutMs": 620000}`
+
+  ```
+########## sous-ensemble : 0 de l'énergie ##########
+# constante témoin sur le TEST : 0.4710
+########## CYCLE 1 — CROISSANCE ##########
+########## sous-ensemble : 0.9 de l'énergie ##########
+# SOUS-ENSEMBLE ACTIF : 645/896 canaux portent 90% de l'énergie (72% des canaux), masque lu sur l'apprentissage seul
+# constante témoin sur le TEST : 0.4945
+########## CYCLE 1 — CROISSANCE ##########
+########## sous-ensemble : 0.75 de l'énergie ##########
+# SOUS-ENSEMBLE ACTIF : 424/896 canaux portent 75% de l'énergie (47% des canaux), masque lu sur l'apprentissage seul
+# constante témoin sur le TEST : 0.5319
+########## CYCLE 1 — CROISSANCE ##########
+########## sous-ensemble : 0.5 de l'énergie ##########
+# SOUS-ENSEMBLE ACTIF : 157/896 canaux portent 50% de l'énergie (18% des canaux), masque lu sur l'apprentissage seul
+# constante témoin sur le TEST : 0.6140
+########## CYCLE 1 — CROISSANCE ##########
+--- TERMINE ? ---
+1
+  ```
+
+### 🤖 Assistant
+
+⏵ Mon `grep` ne capturait pas les lignes de naissance. Je lis le journal brut.
+
+- **bash** `{"command": "tail -20 /tmp/canaux.log; echo \"=== en cours ? ===\"; python3 -c \"\nimport os\nn=0\nfor d in os.listdir('/proc'):\n    if d.isdigit():\n        try: cl=open(f'/proc/{d}/cmdline','rb').read().decode(errors='replace')\n        except Exception: continue\n        if 'pont_generatif' in c … [62 caractères tronqués]`
+
+  ```
+########## CYCLE 1 — CROISSANCE ##########
+après                           neur.  couch.  fid appr  fid VAL  fid TEST   invar.    pire
+n8                8       1    0.6735   0.7358    0.6202   0.9965  0.9915 | communs +0.451 ( 88 %) · contraste 0.897
+  → COUCHE NEUVE (concepts communs + contraste)      8       1
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", line 627, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", line 491, in main
+    P.renforce(P.compte_neurones-1, itr, mt, ride)
+    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", line 362, in renforce
+    xj = np.vstack([self.X[i][:, j] for i in itr]).astype(np.float64)
+         ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib64/python3.13/site-packages/numpy/_core/shape_base.py", line 290, in vstack
+    return _nx.concatenate(arrs, 0, dtype=dtype, casting=casting)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: all the input array dimensions except for 
+… [168 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Deux résultats d'un coup.**
+
+**1. Le critère de concepts FONCTIONNE sur le sous-ensemble actif :**
+
+| périmètre | `communs` | neurones au-dessus | critère |
+|---|---:|---:|---|
+| 896 canaux | +0,05 à +0,075 | 6-10 % | **jamais** |
+| **sous-ensemble actif** | **+0,451** | **88 %** | **déclenche à n=8** |
+
+**Restreindre aux canaux énergétiques fait émerger les concepts communs** — 88 % des neurones au lieu de 6 %. Votre intuition est vérifiée : le premier niveau à dominance non-linguistique est bien ce sous-ensemble.
+
+**2. Un bug à corriger** dans `renforce` : `np.vstack` sur des colonnes de longueurs différentes.
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", "new_string": "        xj = np.concatenate([self.X[i][:, j] for i in itr]).astype(np.float64)", "old_string": "        xj = np.vstack([self.X[i][:, j] for i in itr]).astype(np.float64)"}`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for p in $(python3 -c \"\nimport os\nmoi=os.getpid(); anc=set(); q=moi\nfor _ in range(6):\n    try:\n        st=open(f'/proc/{q}/stat').read().split(') ',1)[1].split(); q=int(st[1]); anc.add(q)\n    except Exception: break\nfor d in … [656 caractères tronqués]`
+
+  ```
+syntaxe OK
+########## sous-ensemble : 0 de l'énergie ##########
+# constante témoin sur le TEST : 0.4710
+########## CYCLE 1 — CROISSANCE ##########
+n8                8       1    0.5499   0.6180    0.4784   0.9945  0.9863 | communs +0.451 ( 88 %) · contraste 0.892
+  → COUCHE NEUVE (concepts communs + contraste)      8       1
+n16              16       2    0.5555   0.6216    0.4829   0.9869  0.9611 | communs +0.447 ( 94 %) · contraste 0.922
+  → COUCHE NEUVE (concepts communs + contraste)     16       2
+n24              24       3    0.5601   0.6247    0.4857   0.9774  0.9267 | communs +0.452 ( 96 %) · contraste 0.958
+  → COUCHE NEUVE (concepts communs + contraste)     24       3
+n32              32       4    0.5637   0.6271    0.4864   0.9718  0.9153 | communs +0.433 ( 91 %) · contraste 0.961
+  → COUCHE NEUVE (concepts communs + contraste)     32       4
+n40              40       5    0.5674   0.6291    0.4888   0.9675  0.8994 | communs +0.446 ( 92 %) · contraste 0.977
+  → COUCHE NEUVE (concepts communs + contraste)     40       5
+n48              48       6    0.5713   0.6318    0.4887   0.9660  0.8930 | communs +0.459 ( 94 %) · contraste 0.988
+  → COUCHE NEUVE (concepts communs +
+… [566 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Je dois corriger une affirmation que je viens de faire.** Ce run est à **896 canaux** et affiche pourtant `communs +0,451 (88 %)` — comme le sous-ensemble. La différence ne vient donc **pas** de la restriction des canaux, mais du **jeu de données** : j'ai comparé la donnée propre (10 unités) à l'ancienne donnée contaminée (1 unité).
+
+**Correction : ce n'est pas la restriction qui fait émerger les concepts, c'est la donnée propre.** Je m'étais trompé en comparant deux périmètres.
+
+Et un second défaut apparaît : le critère **déclenche à chaque pas** (9 couches pour 72 neurones). Il doit exiger aussi que la couche courante soit **épuisée**.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for p in $(python3 -c \"\nimport os\nmoi=os.getpid(); anc=set(); q=moi\nfor _ in range(6):\n    try:\n        st=open(f'/proc/{q}/stat').read().split(') ',1)[1].split(); q=int(st[1]); anc.add(q)\n    except Exception: break\nfor d in … [419 caractères tronqués]`
+
+  ```
+521:                        print(f"{'  → COUCHE NEUVE (concepts communs + contraste)':<12} "
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", "limit": 30, "offset": 498}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py</path>
+<type>file</type>
+<content>
+498:                     val_max = f_va
+499:                 if gain < gain_min:
+500:                     sans_gain += 1
+501:                 else:
+502:                     sans_gain = 0
+503:                 if P.compte_neurones % 8 == 0 or sans_gain >= patience:
+504:                     com = P.communs_fin(idx, ival)
+505:                     con = P.contraste(W)
+506:                     part_commune = float((com > seuil_commun).mean())
+507:                     Xte_g = P.recalcule(idx, Ete)
+508:                     f_te = P.evalue(Xte_g, Yte, W, mt)
+509:                     mg, mig = P.invariance(Xte_g, W, mt)
+510:                     print(f"{'n' + str(P.compte_neurones):<12} {P.compte_neurones:>6} "
+511:                           f"{len(P.couches):>7} {f_tr:>9.4f} {f_va:>8.4f} {f_te:>9.4f} "
+512:                           f"{mg:>8.4f} {mig:>7.4f} | communs {com.mean():+.3f} "
+513:                           f"({part_commune*100:>3.0f} %) · contraste {con:.3f}")
+514:                     if f_va > meilleur["f_va"]:
+515:                         meilleur = {"f_te": f_te, "n
+… [1009 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", "new_string": "                    # LES TROIS CONDITIONS, et elles doivent tenir ENSEMBLE :\n                    #\n                    #  1. la couche courante est ÉPUISÉE — les derniers neurones\n             … [1811 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py has been updated successfully.
+  ```
+
+### 🤖 Assistant
+
+⏵ Le critère exige maintenant **trois** conditions simultanées : couche épuisée **et** concepts communs **et** besoin de soustraire. Je relance la comparaison.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"import ast;ast.parse(open('tools/pont_generatif.py').read());print('syntaxe OK')\" && setsid nohup /tmp/canaux.sh >/dev/null 2>&1 < /dev/null & sleep 300; grep -E \"^####|SOUS-ENSEMBLE|constante|^n[0-9]+ |COUCHE NEUVE|AR … [114 caractères tronqués]`
+
+  ```
+syntaxe OK
+########## sous-ensemble : 0 de l'énergie ##########
+# constante témoin sur le TEST : 0.4710
+########## CYCLE 1 — CROISSANCE ##########
+n8                8       1    0.5499   0.6180    0.4784   0.9945  0.9863 | communs +0.451 ( 88 %) · contraste 0.892
+n16              16       1    0.5555   0.6216    0.4829   0.9869  0.9609 | communs +0.448 ( 94 %) · contraste 0.923
+n24              24       1    0.5615   0.6258    0.4850   0.9807  0.9403 | communs +0.459 ( 96 %) · contraste 0.966
+n32              32       1    0.5658   0.6285    0.4868   0.9772  0.9221 | communs +0.469 ( 97 %) · contraste 0.972
+n40              40       1    0.5692   0.6311    0.4871   0.9683  0.8986 | communs +0.474 ( 98 %) · contraste 0.974
+n41              41       1    0.5695   0.6312    0.4872   0.9666  0.8924 | communs +0.475 ( 98 %) · contraste 0.975
+  → COUCHE NEUVE (épuisée + concepts + contraste)     41       1
+n48              48       2    0.5718   0.6335    0.4874   0.9629  0.8833 | communs +0.476 ( 94 %) · contraste 0.975
+n56              56       2    0.5746   0.6351    0.4863   0.9598  0.8755 | communs +0.470 ( 95 %) · contraste 0.977
+  → COUCHE NEUVE (épuisée + concepts + contraste)   
+… [857 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le comportement est maintenant exactement celui que vous décrivez.**
+
+| | |
+|---|---|
+| couche 1 | **41 neurones** |
+| couche 2 | 15 |
+| couches 3-5 | 8, 8, 8 |
+| **total** | **80 neurones en 5 couches** |
+| fid TEST | 0,4911 (constante 0,4710) |
+
+**La moitié de la croissance se fait au premier niveau** (41 sur 80) — le travail des « activations manquantes » — et les couches suivantes sont petites : la composition n'apparaît que là où elle est nécessaire. Aucun chiffre rond. J'attends la comparaison avec le sous-ensemble actif.
+
+- **bash** `{"command": "sleep 560; grep -E \"^####|SOUS-ENSEMBLE|constante|née :|fidélité TEST|invariance TEST\" /tmp/canaux.log; echo \"--- TERMINE ? ---\"; grep -c TERMINE /tmp/canaux.log", "description": "Wait for channel comparison", "timeoutMs": 620000}`
+
+  ```
+########## sous-ensemble : 0 de l'énergie ##########
+# constante témoin sur le TEST : 0.4710
+########## CYCLE 1 — CROISSANCE ##########
+# née : 80 neurones en 5 couches [41, 15, 8, 8, 8]
+  fidélité TEST    : 0.4911   (constante témoin : 0.4710)
+  invariance TEST  : 0.9488 · pire paire 0.8328
+########## sous-ensemble : 0.9 de l'énergie ##########
+# SOUS-ENSEMBLE ACTIF : 645/896 canaux portent 90% de l'énergie (72% des canaux), masque lu sur l'apprentissage seul
+# constante témoin sur le TEST : 0.4945
+########## CYCLE 1 — CROISSANCE ##########
+# née : 80 neurones en 5 couches [41, 15, 8, 8, 8]
+  fidélité TEST    : 0.5137   (constante témoin : 0.4945)
+  invariance TEST  : 0.9530 · pire paire 0.8440
+########## sous-ensemble : 0.75 de l'énergie ##########
+# SOUS-ENSEMBLE ACTIF : 424/896 canaux portent 75% de l'énergie (47% des canaux), masque lu sur l'apprentissage seul
+# constante témoin sur le TEST : 0.5319
+########## CYCLE 1 — CROISSANCE ##########
+# née : 80 neurones en 5 couches [41, 15, 8, 8, 8]
+  fidélité TEST    : 0.5505   (constante témoin : 0.5319)
+  invariance TEST  : 0.9575 · pire paire 0.8566
+########## sous-ensemble : 0.5 de l'énergie ##########
+# SOUS-ENSEMBLE ACTIF : 157
+… [356 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **La comparaison est complète, et elle donne le résultat le plus fort de la session.**
+
+| énergie gardée | canaux | constante | **fid TEST** | écart | invariance | pire paire |
+|---|---:|---:|---:|---:|---:|---:|
+| 100 % | 896 | 0,4710 | 0,4911 | +0,0201 | 0,9488 | 0,8328 |
+| 90 % | 645 | 0,4945 | 0,5137 | +0,0192 | 0,9530 | 0,8440 |
+| 75 % | 424 | 0,5319 | 0,5505 | +0,0186 | 0,9575 | 0,8566 |
+| **50 %** | **157 (18 %)** | 0,6140 | **0,6346** | **+0,0206** | **0,9653** | **0,8893** |
+
+Deux lectures, et il faut les séparer :
+
+- **L'avantage du modèle sur la constante est PLAT** (+0,019 à +0,021) : la restriction ne rend pas le modèle meilleur.
+- **Mais la cible elle-même devient meilleure** : fidélité **+14 points**, invariance **+1,7**, pire paire **+5,7** — avec **18 % des canaux de sortie**.
+
+C'est la droite d'échange qui **monte**, parce qu'on a changé la cible, pas le modèle. Et c'est exactement « le premier niveau à dominance non-linguistique » de la mission.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/recapitulatif.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 6. Le sous-ensemble actif : la piste qui monte la droite\n\n### 6.1 Le déclencheur, corrigé une seconde fois\n\nTrois conditions **simultanées … [5198 caractères tronqués]`

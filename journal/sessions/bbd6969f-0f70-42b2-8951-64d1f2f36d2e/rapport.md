@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 171.2 h |
-| Tours | 122 |
-| Messages | 8157 |
-| Appels d'outils | 7778 |
-| Fichiers touchés | 159 |
-| Commandes | 6629 |
+| Durée | 171.8 h |
+| Tours | 123 |
+| Messages | 8176 |
+| Appels d'outils | 7795 |
+| Fichiers touchés | 160 |
+| Commandes | 6640 |
 | Sous-agents | 32 |
-| Commits | 572 |
+| Commits | 573 |
 | Compactages de contexte | 11 |
 
 ## Objectifs déclarés
@@ -293,6 +293,8 @@
 **Tour 121** — continue en boite noire. Les méthodes d'apprentissages et le nombre de neuronnes et de couches générées en apprentissage doit passer par une phase générative, puis attrition périodique pour réduire la taille du réseau en généralisant les concepts.
 
 **Tour 122** — <goal_round> Objective: "Faire évoluer le pont linguistico-sémantique en BOÎTE NOIRE (émulation des premières couches du professeur, sans accès à ses rouages) par une phase GÉNÉRATIVE — le nombre de neurones et de couches NAÎT pendant l'apprentissage, en partant d'un seul neurone — suivie d'une ATTRITION PÉRIODIQUE qui réduit la taille du réseau en GÉNÉRALISANT les concepts (fusion des unités redo … [951 caractères tronqués]
+
+**Tour 123** — <goal_round> Objective: "Faire évoluer le pont linguistico-sémantique en BOÎTE NOIRE (émulation des premières couches du professeur, sans accès à ses rouages) par une phase GÉNÉRATIVE — le nombre de neurones et de couches NAÎT pendant l'apprentissage, en partant d'un seul neurone — suivie d'une ATTRITION PÉRIODIQUE qui réduit la taille du réseau en GÉNÉRALISANT les concepts (fusion des unités redo … [951 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -6198,7 +6200,7 @@ J'ai aussi remplacé le critère de retrait : couper par contribution ne « gén
 
 ### Tour 122 — <goal_round> Objective: "Faire évoluer le pont linguistico-sémantique en BOÎTE NOIRE (émulation des premières couches du … [1231 caractères tronqués]
 
-*143 appels d'outils.* Actions notables :
+*144 appels d'outils.* Actions notables :
 
 - bash — Check running job and 30B availability
 - bash — Time 30B trace on one language
@@ -6214,20 +6216,91 @@ J'ai aussi remplacé le critère de retrait : couper par contribution ne « gén
 - bash — Compute 30B invariance by layer
 - bash — Check if 30B layer 0 is empty
 - bash — Verify layer 0 anomaly
-- … et 114 autres
+- … et 115 autres
 
 **Synthèse produite :**
 
-⏵ Le critère aligné donne **6-10 % de concepts communs** — trop peu pour déclencher. Résultat honnête : **aucune couche ne se justifie**, le réseau reste à 1 couche.
+⏵ Tout est arrêté, rien ne tourne. Voici le récapitulatif.
 
-**Le résultat est clair, et il bloque la profondeur.**
+Récapitulatif complet écrit dans `reports/recapitulatif.md`. Voici l'essentiel.
 
-| mesure | valeur | lecture |
-|---|---:|---|
-| `communs` (aligné sur le contenu) | **+0,05 à +0,075** | 6-10 % des neurones seulement portent du contenu partagé |
-| `contraste` de la lecture | **0,97-0,98** | la lecture ne fait presque que **soustraire** |
+\## Méthode
 
-Donc : **les concepts communs n'existent pas encore au premier niveau**, et le critère refuse — correctement selon votre règle — d'ouvrir une couche. Le réseau reste à **1 couche, 64 neurones, fidélité 0,5839**.
+**Un seul professeur** : Qwen2.5-0.5B, couche 10. On ne lit de lui que cette couche (traces DRVF), jamais son extérieur (`--n 0` : ni tête, ni jetons générés), et on n'écrit aucune trace de nos couches internes.
+
+**Le pont** : `s_t = (1−a)s_{t−1} + a·tanh(P·s_{t−1} + B·e_t)`, `y_t = W·s_t + moy`. **`P` et `B` aléatoires et gelés**, seule `W` s'ajuste en forme fermée. Aucune rétropropagation.
+
+**Couches réelles** : chaque couche ne lit **que la précédente** (couche 0 lit `e_t` et les siens ; couche c lit la couche c−1 entière et les siens).
+
+**Génération** : un neurone à la fois. **Attrition** : on retire des neurones, on **recalcule** les survivants, critère de **redondance** (retirer ce que les autres disent déjà).
+
+\## Résultats
+
+**La loi** — onze points de croissance, données propres :
+
+**fid TEST ≈ 0,3856 · (1 − invariance) + 0,4752 · r = 0,9920 · erreur max 0,0047**
+
+Fidélité et invariance sont les deux axes d'**une seule droite**. À invariance parfaite la fidélité vaut 0,4752 — à peine plus que la constante (0,4710). Le réservoir **plat** tombe sur la même droite (écarts ±0,012) : **la droite est une propriété du professeur**, pas de notre architecture.
+
+**Le sous-ensemble actif** — votre point, mesuré :
+
+| | canaux | part |
+|---|---:|---:|
+| **50 % de l'énergie** | **34 / 896** | **4 %** |
+| canaux actifs dans toutes les langues | 678 / 896 | 76 % |
+| **canaux propres à certaines langues** | **218** | **24 %** |
+
+**Le déclencheur de couche, mesuré** : `communs` = **+0,05 à +0,075** (6-10 % des neurones), `contraste` = **0,97-0,98**. Les concepts communs **n'émergent pas au premier niveau** — le plongement est trop propre à chaque langue. Le critère refuse donc d'ouvrir une couche : le réseau reste à **1 couche, 64 neurones, 0,5839**.
+
+\## Les corrections, et ce qu'elles ont invalidé
+
+| correction | ce qu'elle a invalidé |
+|---|---|
+| **Un pont par professeur** | la comparaison « notre pont bat le 30B » — classement vide. 30B abandonné. |
+| **`--n 0`** | 32 jetons générés étaient **dans** la trace : 25-60 % des positions à une unité |
+| **`--ctx 2048`** | ~50 % des langues tronquées → l'invariance comparait des **contenus différents** |
+| **Fuite de données** | 0,7234 annoncé au lieu de 0,5739 |
+| **Sélection sur le test** | le « meilleur réseau » était choisi sur le test |
+| **Chiffres ronds** | 1,2,4
+… [797 caractères tronqués]
+
+### Tour 123 — <goal_round> Objective: "Faire évoluer le pont linguistico-sémantique en BOÎTE NOIRE (émulation des premières couches du … [1231 caractères tronqués]
+
+*16 appels d'outils.* Actions notables :
+
+- read
+- bash — Locate main loading section
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py`
+- bash — Test active-subset restriction
+- write `/tmp/canaux.sh`
+- bash — Launch channel restriction comparison
+- bash — Wait for channel comparison results
+- bash — Read raw channel log
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py`
+- bash — Fix bug and rerun channel comparison
+- bash — Stop and locate trigger
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py`
+- bash — Rerun with three-condition trigger
+- bash — Wait for channel comparison
+- … et 1 autres
+
+**Synthèse produite :**
+
+⏵ **La comparaison est complète, et elle donne le résultat le plus fort de la session.**
+
+| énergie gardée | canaux | constante | **fid TEST** | écart | invariance | pire paire |
+|---|---:|---:|---:|---:|---:|---:|
+| 100 % | 896 | 0,4710 | 0,4911 | +0,0201 | 0,9488 | 0,8328 |
+| 90 % | 645 | 0,4945 | 0,5137 | +0,0192 | 0,9530 | 0,8440 |
+| 75 % | 424 | 0,5319 | 0,5505 | +0,0186 | 0,9575 | 0,8566 |
+| **50 %** | **157 (18 %)** | 0,6140 | **0,6346** | **+0,0206** | **0,9653** | **0,8893** |
+
+Deux lectures, et il faut les séparer :
+
+- **L'avantage du modèle sur la constante est PLAT** (+0,019 à +0,021) : la restriction ne rend pas le modèle meilleur.
+- **Mais la cible elle-même devient meilleure** : fidélité **+14 points**, invariance **+1,7**, pire paire **+5,7** — avec **18 % des canaux de sortie**.
+
+C'est la droite d'échange qui **monte**, parce qu'on a changé la cible, pas le modèle. Et c'est exactement « le premier niveau à dominance non-linguistique » de la mission.
 
 ## 3. Travail accompli
 
@@ -6385,7 +6458,7 @@ Donc : **les concepts communs n'existent pas encore au premier niveau**, et le c
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/31-le-regroupement-par-experts-mesure-et-k3-au-complet.md` | 1 | 1 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-prefill-par-experts.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/engine.rs` | 0 | 1 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py` | 0 | 14 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py` | 0 | 17 |
 | `/tmp/chaine_propre.sh` | 1 | 0 |
 | `/tmp/analyse_propre.sh` | 1 | 0 |
 | `/tmp/stop2.py` | 1 | 0 |
@@ -6394,6 +6467,7 @@ Donc : **les concepts communs n'existent pas encore au premier niveau**, et le c
 | `/tmp/balayage30.sh` | 1 | 2 |
 | `/tmp/stop30.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/recapitulatif.md` | 1 | 0 |
+| `/tmp/canaux.sh` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -6472,7 +6546,7 @@ Donc : **les concepts communs n'existent pas encore au premier niveau**, et le c
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6589 autres
+- … et 6600 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -7192,4 +7266,5 @@ Donc : **les concepts communs n'existent pas encore au premier niveau**, et le c
 - LA LOI : fidélité et invariance s'échangent à taux fixe (r = 0,992)  Onze points de croissance sur données propres :   fid TEST ≈ 0,3856 · (1 − invariance) + 0,
 - Couches RÉELLES, naissance libre, et récapitulatif  FAUTE STRUCTURELLE TROUVÉE : dans la version antérieure, chaque neurone lisait TOUS les neurones nés avant l
 - Déclencheur de couche révisé : concepts communs + besoin de poids négatifs  Une couche ne s'ouvre PAS à la saturation de la précédente. Elle s'ouvre sur deux si
+- Sous-ensemble actif : la droite d'échange MONTE (+14 pts de fidélité, +18 % des canaux)  TROIS conditions simultanées pour ouvrir une couche — la première manqu
 

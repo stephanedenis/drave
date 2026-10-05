@@ -261,3 +261,73 @@ couche, et le réseau reste à **1 couche, 64 neurones, fidélité de test 0,583
 
 Dans les deux cas, la règle fait son travail : elle **empêche** d'empiler des
 couches sur du non-partagé.
+
+
+---
+
+## 6. Le sous-ensemble actif : la piste qui monte la droite
+
+### 6.1 Le déclencheur, corrigé une seconde fois
+
+Trois conditions **simultanées**, et la première manquait :
+
+1. **la couche courante est ÉPUISÉE** — les derniers neurones n'apportent plus
+   rien. Tant qu'un neurone de plus paie, c'est lui qu'il faut : couvrir une
+   activation manquante est un travail de **neurone**, pas de couche ;
+2. **des concepts communs existent** — il y a de la structure partagée à composer ;
+3. **la lecture doit soustraire** — c'est le « OU exclusif ».
+
+Sans la condition 1, le critère déclenchait à **chaque pas** : 9 couches pour
+72 neurones, mesuré. Avec elle :
+
+**80 neurones en 5 couches [41, 15, 8, 8, 8]** — la moitié de la croissance au
+premier niveau, la composition ensuite, et aucun chiffre rond.
+
+### 6.2 Une erreur que j'ai commise et corrigée
+
+J'ai d'abord annoncé que **la restriction aux canaux actifs faisait émerger les
+concepts communs** (`communs` passant de +0,07 à +0,45). **C'est faux** : je
+comparais deux **jeux de données** différents — la donnée propre (dix unités) et
+l'ancienne, contaminée (une unité). Sur le même jeu, `communs` vaut +0,45 dans les
+deux cas. **Ce n'est pas la restriction qui fait émerger les concepts, c'est la
+donnée propre.**
+
+### 6.3 Le résultat, mesuré sur le même jeu
+
+Même professeur (Qwen2.5-0.5B couche 10), même protocole, masque de canaux lu sur
+l'**apprentissage seul** :
+
+| énergie gardée | canaux | constante | **fid TEST** | écart | invariance | pire paire |
+|---|---:|---:|---:|---:|---:|---:|
+| 100 % | 896 | 0,4710 | 0,4911 | +0,0201 | 0,9488 | 0,8328 |
+| 90 % | 645 (72 %) | 0,4945 | 0,5137 | +0,0192 | 0,9530 | 0,8440 |
+| 75 % | 424 (47 %) | 0,5319 | 0,5505 | +0,0186 | 0,9575 | 0,8566 |
+| **50 %** | **157 (18 %)** | 0,6140 | **0,6346** | **+0,0206** | **0,9653** | **0,8893** |
+
+**Deux lectures, et il faut les séparer :**
+
+- **L'avantage du modèle sur la constante est PLAT** — +0,019 à +0,021 sur les
+  quatre périmètres. La restriction ne rend donc **pas** le modèle meilleur.
+- **Mais la cible elle-même devient meilleure.** En ne gardant que 18 % des canaux
+  de sortie, on gagne **+14 points de fidélité**, **+1,7 point d'invariance** et
+  **+5,7 points sur la pire paire**.
+
+**C'est la droite d'échange qui MONTE.** Et c'est cohérent avec la loi du §2.1 :
+la droite est une propriété du **professeur** — plus précisément de la **cible**
+qu'on choisit en lui. En visant le sous-ensemble actif plutôt que les 896 canaux
+densément, on choisit une cible intrinsèquement plus interlingue, et **toute la
+droite se déplace vers le haut**.
+
+C'est aussi, mot pour mot, l'énoncé de la mission : **« le premier niveau abstrait,
+le premier niveau à dominance non-linguistique »**. Ce niveau existe, il est
+mesurable, il tient en 157 canaux sur 896, et il est nettement plus invariant que
+la couche entière.
+
+### 6.4 Ce que ça laisse ouvert
+
+- La hiérarchie trouvée (**[41, 15, 8, 8, 8]**) n'a pas encore été soumise à
+  l'attrition.
+- Le seuil de restriction (50 %, 75 %…) n'a pas été optimisé : c'est un curseur,
+  et il déplace la droite.
+- Les 218 canaux **propres à certaines langues** n'ont pas été examinés pour
+  eux-mêmes : ils portent peut-être une information utile qu'on jette.
