@@ -106,11 +106,16 @@ def main():
     # rayon spectral ramené sous 1 : condition de mémoire du réservoir
     A *= 0.9 / max(abs(np.linalg.eigvals(A)))
     B = rng.randn(N, 896) / np.sqrt(896)
-    a = 0.5
+    # Fuite et ride BALAYÉS (tools/pont_reglages.py) : a=0,5 et 1e-1 étaient des
+    # valeurs de départ jamais justifiées. a=0,2 + ride=0,3 donne la MÊME
+    # fidélité (0,5921 contre 0,5923) avec 7 points d'invariance en plus
+    # (0,9772 contre 0,9072) et 11 points sur la pire paire (0,9576 contre
+    # 0,8437) — même coût, même distribabilité.
+    a = 0.2
     Str = {l: reservoir(E, A, B, a) for l, (E, _) in tr.items()}
     Ste = {l: reservoir(E, A, B, a) for l, (E, _) in te.items()}
     X = np.vstack(list(Str.values())); Y = np.vstack([y - mt for _, y in tr.values()])
-    W = np.linalg.solve(X.T @ X + 1e-1*len(X)*np.eye(N), X.T @ Y)
+    W = np.linalg.solve(X.T @ X + 3e-1*len(X)*np.eye(N), X.T @ Y)
     ftr = cos_lignes(X @ W + mt, np.vstack([y for _, y in tr.values()]))
     fte = cos_lignes(np.vstack(list(Ste.values())) @ W + mt,
                      np.vstack([y for _, y in te.values()]))

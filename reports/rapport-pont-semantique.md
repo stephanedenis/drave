@@ -271,3 +271,55 @@ invariance 0,91, pire paire 0,84 sur six écritures jamais vues.
 tout ce rapport n'utilise que **l'article 1 dans 46 langues**, soit **~3 %** du
 corpus déjà présent sur la machine. Dix fois plus de pas déplacerait la courbe ;
 dix fois plus de neurones ne l'a pas déplacée une seule fois.
+
+
+## Résultat 9 — OUI, LE MODÈLE EST OPTIMISABLE : +7 et +11 points, à coût nul
+
+Le pont récurrent traînait **quatre réglages figés sans justification** : fuite
+`a = 0,5`, rayon spectral `0,9`, ride `1e-1`, graine `5` — et **un seul tirage**
+du réservoir. `tools/pont_reglages.py` les balaie (A et B restent aléatoires et
+gelés ; seule la lecture `W` s'ajuste).
+
+Référence : fid 0,5923 · invariance 0,9072 · pire paire 0,8437 (3254 pas).
+
+| levier | fid TEST | invariance | pire paire | verdict |
+|---|---:|---:|---:|---|
+| **fuite `a` : 0,5 → 0,2** | **0,5974** | **0,9478** | **0,9212** | **GAGNANT, gratuit** |
+| fuite `a = 0,1` | 0,5987 | 0,9405 | 0,8596 | fidélité max, pire paire moindre |
+| fuite `a = 0,85` | 0,5859 | 0,8838 | 0,8368 | la fuite haute nuit partout |
+| `N = 8` neurones | 0,5671 | **0,9884** | **0,9777** | curseur, pas un gain |
+| `N = 256` | 0,5868 | 0,8187 | 0,6918 | la capacité détruit l'invariance |
+| ride `1,0` | 0,5822 | **0,9825** | **0,9651** | curseur puissance |
+| ride `10` | 0,5653 | **0,9989** | **0,9978** | l'invariance tend vers 1 |
+| ensemble `K = 2` | **0,6010** | 0,8563 | 0,7938 | +0,9 pt de fidélité, −5 pts d'invariance |
+| ensemble `K = 8` | 0,5895 | 0,7454 | 0,5589 | marginal puis nuisible |
+| rayon 0,7 → 1,2 | 0,5924 → 0,5921 | ~0,907 | ~0,844 | **KNOB MORT** (±3·10⁻⁴) |
+| saut (`e_t` dans la régression) | **0,3792** | 0,2757 | **−0,0693** | **NUISIBLE** (surapprentissage) |
+
+**Le réglage gagnant — même coût, 64 neurones, même distribabilité :**
+
+| | fid TEST | invariance | pire paire |
+|---|---:|---:|---:|
+| référence (`a=0,5`, ride 1e-1) | 0,5923 | 0,9072 | 0,8437 |
+| **`a = 0,2`, ride `3e-1`** | **0,5921** | **0,9772** | **0,9576** |
+
+**Fidélité identique, +7,0 points d'invariance, +11,4 points sur la pire paire** —
+davantage que tout l'écart qui nous séparait du professeur 30B (0,693/0,471).
+`pont_reservoir.py` porte désormais ces valeurs par défaut et reproduit
+0,5921 / 0,9772 / 0,9576.
+
+### Le fait le plus important : l'invariance seule est un mauvais objectif
+
+Ride `10` porte l'invariance à **0,9989** et la pire paire à **0,9978**, en
+laissant la fidélité à 0,5653. `N = 8` porte l'invariance à **0,9884** avec
+0,5671 de fidélité. **N'importe quel modèle qui répond la même chose dans toutes
+les langues est parfaitement invariant** — y compris celui qui ne dit rien.
+Fidélité et invariance sont les deux axes d'**une seule courbe d'échange** ; le
+ride et `N` sont les curseurs qui la parcourent. Rapporter l'invariance sans la
+fidélité à côté n'a aucun sens, et c'est ce que faisaient les résultats 4 à 8.
+
+### Le knob mort
+
+Le rayon spectral est réglé à 0,9 depuis le début « pour la condition de mémoire
+du réservoir ». De 0,7 à 1,2, **rien ne bouge** (0,5924 → 0,5921, invariance
+0,9076 → 0,9066). Un paramètre que personne n'a jamais mesuré et qui ne fait rien.

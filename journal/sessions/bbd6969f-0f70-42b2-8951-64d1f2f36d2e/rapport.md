@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 165.0 h |
-| Tours | 119 |
-| Messages | 7943 |
-| Appels d'outils | 7575 |
+| Durée | 166.0 h |
+| Tours | 120 |
+| Messages | 7967 |
+| Appels d'outils | 7597 |
 | Fichiers touchés | 150 |
-| Commandes | 6465 |
+| Commandes | 6486 |
 | Sous-agents | 32 |
-| Commits | 552 |
+| Commits | 553 |
 | Compactages de contexte | 11 |
 
 ## Objectifs déclarés
@@ -285,6 +285,8 @@
 **Tour 118** — Continue de faire évoluer notre modèle et moteur en visant des réponses qui émulent les réponses sémantiques des modèles haut de gamme sur nos corpus multilingues. Tu as accès libre à Internet et toutes les ressources de la machine pour arriver à cette fin. Continue en mode autonome jusqu'à midi, heure locale de la machine.
 
 **Tour 119** — ajoute des neuronnes et des couches au besoin. il faut émuler le prof le plus fidèlement possible à moindre coût en misant sur notre architecture légère et facilement distribuable.
+
+**Tour 120** — notre nouveau modèle est-il optimisable?
 
 ## 2. Déroulé, étape par étape
 
@@ -5993,7 +5995,7 @@ Tout est commité, 77 tests verts, `REPRISE.md` et `reports/rapport-pont-semanti
 
 ### Tour 119 — ajoute des neuronnes et des couches au besoin. il faut émuler le prof le plus fidèlement possible à moindre coût en misa … [60 caractères tronqués]
 
-*72 appels d'outils.* Actions notables :
+*79 appels d'outils.* Actions notables :
 
 - bash — Measure fidelity in full space across models
 - bash — Retrain with double the data
@@ -6009,11 +6011,84 @@ Tout est commité, 77 tests verts, `REPRISE.md` et `reports/rapport-pont-semanti
 - bash — Find the tracing pipeline
 - bash — Find how vaste traces were produced
 - bash — Locate the 0.5B tracing script
-- … et 51 autres
+- … et 57 autres
 
 **Synthèse produite :**
 
-⏵ Traçage lancé (arguments vérifiés). Je consigne le second gaspillage — le chargement — pendant que ça tourne.
+⏵ Le point complet, avec la réponse à votre question.
+
+Vous avez raison — et c'était pire que soupçonné. Mesuré, pas supposé.
+
+\## 1. Ce qui était stocké pour rien
+
+| trace | professeur | profondeur utile | **gaspillé** |
+|---|---|---|---|
+| `vaste/eng.drvf` | Qwen2.5-0.5B (24 c.) | 0..10 | **77,4 %** |
+| `langues30b/deu.drvf` | Qwen3-30B-A3B (48 c.) | 0..17 | **82,6 %** |
+
+\## 2. Ce que `--couches a:b` rattrape
+
+Texte UDHR complet en anglais, `--lot 1` :
+
+| | couches | taille | temps |
+|---|---:|---:|---:|
+| sans | 48 | 60,6 Mo | **25,52 s** |
+| `--couches 0:11` | 22 | 27,7 Mo | **16,63 s** |
+
+**−35 % de temps, −54 % de disque.** Sur le 30B (utile jusqu'à 17/48) : **−62 % de calcul**.
+
+**Piège** : `a:b` **exclut** `b`. `--couches 0:10` rend 0..9 ; il faut `0:11`. Vérifié sur les en-têtes.
+
+\## 3. Mais la coupe n'est pas transparente — et j'ai le témoin
+
+Le moteur **est** déterministe (A vs A : 5 544/5 544 bit-à-bit) et `--couches 0:24` est **exactement** égal à l'absence du drapeau. Donc ce n'est pas le drapeau : **c'est la troncature qui altère les couches conservées**.
+
+| comparaison | identiques | écart max |
+|---|---:|---:|
+| A vs A | 5 544/5 544 | 0 |
+| A vs `0:24` | 5 544/5 544 | 0 |
+| **A vs `0:11`** | **5 192/5 544** | **188** |
+
+Couche 0 exacte, puis cos 0,9956 (c. 5) et 0,9980 (c. 10) — **0,2–0,4 % d'angle**. Cause trouvée : `couche_fin < n_layer` fait rendre le **flux brut sans `out_norm`** (`model.rs:5740`, commentaire « Nœud intermédiaire »). `--couches` est un outil de **répartition**, pas un arrêt anticipé d'inférence.
+
+\## 4. Second gaspillage : le chargement n'est pas borné
+
+Le journal l'a craché tout seul : **`24 couches chargées` pour 11 exécutées**. La construction est un `for l in 0..cfg.n_layer` (`model.rs:4001`) ; la plage n'est lue qu'**après** (`model.rs:4368`). Sur le 0.5B c'est 1 Go — sur le 30B, **lire 18 Go sur disque rotatif pour en calculer 37 %**.
+
+\## 5. En prime : les longues passes sont intenables
+
+42 unités à `--ctx 4096` : après **5 min** l'abkhaze tournait encore, fichier à **156 Mo**. 512 → 4 096 jetons = **64× d'attention**. Job arrêté. Retenu : **10 unités à ctx 1024 = 26 s/langue**.
+
+**Livré** : 46 langues × 10 unités tracées (2,1 Go), soit **10× la donnée** qui était le mur identifié. L'analyse du réservoir tourne encore (2,1 Go à parser en Python pur) — je relèverai le résultat.
+
+Deux commits : `12346ae` (coût du professeur) et `0519702` (chargement non borné). L'ancien résultat reproduit exactement (0,5923 / 0,9072)
+… [26 caractères tronqués]
+
+### Tour 120 — notre nouveau modèle est-il optimisable?
+
+*15 appels d'outils.* Actions notables :
+
+- bash — Check reservoir analysis result
+- bash — Build parse cache in background
+- bash — Verify cache jobs running
+- bash — Sweep reservoir hyperparameters
+- bash — Locate cache files
+- bash — Wait for small cache
+- bash — Run full hyperparameter sweep
+- bash — Fix ensemble bug and extend leak sweep
+- bash — Sweep neuron count and skip connection
+- bash — Sweep ensemble size and ridge
+- bash — Fix ensemble and run
+- bash — Test combined best settings
+- bash — Apply winning settings to pont_reservoir
+- bash — Verify improved reservoir reproduces
+- … et 1 autres
+
+**Synthèse produite :**
+
+⏵ Reproduit exactement (0,5921 / 0,9772 / 0,9576). Je consigne et je commite.
+
+Reproduit au chiffre près. Je consigne.
 
 ## 3. Travail accompli
 
@@ -6249,7 +6324,7 @@ Tout est commité, 77 tests verts, `REPRISE.md` et `reports/rapport-pont-semanti
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6425 autres
+- … et 6446 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -6377,7 +6452,7 @@ Tout est commité, 77 tests verts, `REPRISE.md` et `reports/rapport-pont-semanti
 
 ## 5. Erreurs rencontrées
 
-375 sorties en erreur ou divergentes. Les premières :
+377 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -6949,4 +7024,5 @@ Tout est commité, 77 tests verts, `REPRISE.md` et `reports/rapport-pont-semanti
 - LA COUCHE RÉCURRENTE GAGNE : réservoir 64 neurones, 0,59 fidélité / 0,91 invariance / 0,84 pire paire  s_t = (1-a)s_(t-1) + a·tanh(A·s_(t-1) + B·e_t), A et B AL
 - Coût du professeur : 77-83 % des traces sont des couches jamais lues  Mesuré : les traces stockent TOUTES les couches du professeur (24 pour le 0.5B, 48 pour le
 - Le chargement n'est pas borné par --couches, et l'attention quadratique interdit les longues passes  1. --couches borne l'EXÉCUTION, pas le CHARGEMENT. Mesuré :
+- OUI, le modèle est optimisable : +7 pts d'invariance, +11 pts de pire paire, à coût nul  pont_reglages.py balaie quatre réglages figés sans justification (fuite
 
