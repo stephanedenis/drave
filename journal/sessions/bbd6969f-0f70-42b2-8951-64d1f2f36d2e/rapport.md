@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 166.2 h |
 | Tours | 121 |
-| Messages | 7991 |
-| Appels d'outils | 7619 |
+| Messages | 7994 |
+| Appels d'outils | 7622 |
 | Fichiers touchés | 150 |
-| Commandes | 6505 |
+| Commandes | 6508 |
 | Sous-agents | 32 |
-| Commits | 555 |
+| Commits | 556 |
 | Compactages de contexte | 11 |
 
 ## Objectifs déclarés
@@ -6131,7 +6131,7 @@ Oui — et la marge était plus grande que le modèle lui-même. Trois commits :
 
 ### Tour 121 — continue en boite noire. Les méthodes d'apprentissages et le nombre de neuronnes et de couches générées en apprentissage … [127 caractères tronqués]
 
-*15 appels d'outils.* Actions notables :
+*18 appels d'outils.* Actions notables :
 
 - get_goal
 - create_goal
@@ -6147,11 +6147,13 @@ Oui — et la marge était plus grande que le modèle lui-même. Trois commits :
 - bash — Add per-step test measurement
 - bash — Test stricter attrition criterion
 - bash — Launch generative run on 10-unit data
-- … et 1 autres
+- … et 4 autres
 
 **Synthèse produite :**
 
-⏵ Lancé. Je consigne les résultats sur les 1 unité.
+⏵ La course continue. Je commite la redondance, puis j'implémente l'**attrition périodique** — des cycles croissance→attrition, comme demandé.
+
+Vous avez dit « attrition **périodique** » : cela veut dire des **cycles**, pas une seule passe. J'implémente l'alternance.
 
 ## 3. Travail accompli
 
@@ -6387,7 +6389,7 @@ Oui — et la marge était plus grande que le modèle lui-même. Trois commits :
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6465 autres
+- … et 6468 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -7090,4 +7092,5 @@ Oui — et la marge était plus grande que le modèle lui-même. Trois commits :
 - OUI, le modèle est optimisable : +7 pts d'invariance, +11 pts de pire paire, à coût nul  pont_reglages.py balaie quatre réglages figés sans justification (fuite
 - Le gain d'optimisation RÉPLIQUE sur la tâche 10x plus dure  Réglage trouvé sur 3254 pas, vérifié sur 38 212 pas (10 unités par langue) :                       f
 - Le pont GÉNÉRATIF : naissance par couches, puis attrition qui généralise  tools/pont_generatif.py — deux phases, tailles décidées par l'apprentissage. Aucune ré
+- Critère de REDONDANCE : retirer ce que les autres disent déjà  Le retrait par contribution ne fait que couper les faibles — il n'énonce rien. Le critère de redo
 

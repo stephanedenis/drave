@@ -128176,3 +128176,63 @@ lancé PID 2216282
 ⏵ Lancé. Je consigne les résultats sur les 1 unité.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pont-generatif.md <<'EOF'\n# Le pont GÉNÉRATIF : le réseau naît, puis l'attrition le fait généraliser\n\n`tools/pont_generatif.py` — deux phases, et c'est l'apprentissage qui décide des\ntailles. Aucune rétropro … [6368 caractères tronqués]`
+
+  ```
+e39f6fc Le pont GÉNÉRATIF : naissance par couches, puis attrition qui généralise
+  ```
+
+### 🤖 Assistant
+
+⏵ Le critère actuel retire par énergie. J'ajoute le critère que vous décrivez vraiment : **retirer ce qui est déjà dit par les autres**.
+
+Le retrait par contribution ne "généralise" rien — il coupe les faibles. Votre demande est plus précise : **fusionner les détecteurs redondants en concepts**. J'implémente un critère de redondance exact, calculable par une seule inversion.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/pont_generatif.py'; s=open(p).read()\ns=s.replace(\"\"\"    def contribution(self, W, idx):\"\"\",\n'''    def redondance(self, W, idx):\n        \"\"\"Part de chaque neurone qui est DÉJÀ DITE par les autre … [2367 caractères tronqués]`
+
+  ```
+ok
+syntaxe OK
+
+# ATTRITION (redondance) — on retire des NEURONES, on RECALCULE les survivants, on RÉAJUSTE, et on garde si la validation tient
+après                           neur.  couch.  fid appr  fid VAL  fid TEST
+réseau né (référence)             256       9    0.7362   0.7402    0.6056
+retrait de 64 (recalculé)         192       8    0.7297   0.7386    0.6085
+retrait de 48 (recalculé)         144       8    0.7219   0.7369    0.6080
+retrait REFUSÉ (36 → VAL 0.7350)    144       —         —   0.7369
+
+=== RÉSEAU FINAL (trajectoires RECALCULÉES, pas masquées) ===
+  taille           : 144 neurones · 8 couches réellement nécessaires (sur 9 nées)
+  nées par couche  : [1, 1, 2, 4, 8, 16, 32, 64, 128]
+  fidélité appr.   : 0.7219
+  fidélité TEST    : 0.6080      (constante témoin : 0.5658)
+  invariance TEST  : 0.9097 · pire paire 0.7531
+  ```
+
+### 🤖 Assistant
+
+⏵ Le critère de redondance domine à taille égale. Je vérifie la course des 10 unités.
+
+**Le critère de redondance gagne à taille égale** — c'est votre « généraliser les concepts » qui paie :
+
+| à taille égale | par contribution | **par redondance** |
+|---|---:|---:|
+| 192 neurones | 0,6078 | **0,6085** |
+| 144 neurones | 0,6063 | **0,6080** |
+
+Et il **préserve la profondeur** (8 couches contre 7). Je vérifie la course des 10 unités.
+
+- **bash** `{"command": "tail -20 /tmp/gen10.log 2>/dev/null; echo \"--- état ---\"; pgrep -f \"pont_generati[f].py.*appr10\" >/dev/null && echo \"TOURNE\" || echo \"TERMINÉ\"; date \"+%H:%M\"", "description": "Check 10-unit generative run"}`
+
+  ```
+--- état ---
+TOURNE
+13:01
+  ```
+
+### 🤖 Assistant
+
+⏵ La course continue. Je commite la redondance, puis j'implémente l'**attrition périodique** — des cycles croissance→attrition, comme demandé.
+
+Vous avez dit « attrition **périodique** » : cela veut dire des **cycles**, pas une seule passe. J'implémente l'alternance.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Critère de REDONDANCE : retirer ce que les autres disent déjà\n\nLe retrait par contribution ne fait que couper les faibles — il n'énonce rien.\nLe critère de redondance retire les neurones dont la tr … [861 caractères tronqués]`

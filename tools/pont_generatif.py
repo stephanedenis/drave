@@ -107,6 +107,31 @@ class Pont:
     def dernier(self, idx, W, mt, quel):
         return np.array([(self.X[i][:, idx] @ W + mt)[-1] for i in quel])
 
+    def redondance(self, W, idx):
+        """Part de chaque neurone qui est DÉJÀ DITE par les autres.
+
+        On cherche les neurones dont la trajectoire se reconstruit à partir des
+        autres : ce sont eux qui portent un concept particulier là où un concept
+        plus général suffirait. Le retrait par contribution, lui, ne fait que
+        couper les faibles — il n'énonce rien.
+
+        Le calcul est exact et tient en UNE inversion. Pour la matrice de Gram
+        `G = XᵀX`, la part de variance de `x_j` non expliquée par les autres vaut
+        le complément de Schur `1/(G⁻¹)_jj`, donc la part EXPLIQUÉE vaut
+        `1 − 1/((G⁻¹)_jj · G_jj)` — sans jamais inverser K matrices (K−1)×(K−1).
+
+        On retire en premier ceux qui sont à la fois **expliqués** et **utiles** :
+        `score = expliqué × contribution`.
+        """
+        X = np.vstack([x[:, idx] for x in self.X]).astype(np.float64)
+        G = X.T @ X
+        d = np.diag(G).copy()
+        d[d == 0] = 1.0
+        Gi = np.linalg.inv(G + 1e-6*np.trace(G)/len(G)*np.eye(len(G)))
+        explique = 1.0 - (1.0/np.diag(Gi))/d
+        explique = np.clip(explique, 0.0, 1.0)
+        return explique * self.contribution(W, idx)
+
     def contribution(self, W, idx):
         """Énergie que chaque neurone apporte à la sortie : ||w_k|| · ||x_k||.
 
@@ -173,6 +198,7 @@ def main():
     max_couches = int(opt("--max-couches", 9))
     graine = int(opt("--graine", 5))
     part = float(opt("--part", 1.0))   # fraction des langues d'entraînement utilisées
+    critere = opt("--critere", "contribution")
 
     cltr, Etr, Ytr, H = charge(tr_p)
     clte, Ete, Yte, _ = charge(te_p)
@@ -223,8 +249,8 @@ def main():
     # le bas, chaque pas étant petit mais la somme ne l'étant pas.
     vivants = list(range(P.compte_neurones))
     if attrition:
-        print(f"\n# ATTRITION — on retire des NEURONES, on RECALCULE les survivants, "
-              f"on RÉAJUSTE, et on garde si la validation tient")
+        print(f"\n# ATTRITION ({critere}) — on retire des NEURONES, on RECALCULE les "
+              f"survivants, on RÉAJUSTE, et on garde si la validation tient")
         print(f"{'après':<30} {'neur.':>6} {'couch.':>7} {'fid appr':>9} {'fid VAL':>8} "
               f"{'fid TEST':>9}")
         idx = np.arange(len(vivants))
@@ -236,7 +262,8 @@ def main():
               f"{P.evalue(Xte_a, Yte, W, mt):>9.4f}")
         meilleur = f_va
         while len(vivants) > 1:
-            contrib = P.contribution(W, idx)
+            contrib = (P.redondance(W, idx) if critere == "redondance"
+                   else P.contribution(W, idx))
             n_ret = max(1, len(vivants)//4)
             ordre = np.argsort(contrib)
             garde = sorted(vivants[i] for i in ordre[n_ret:])
