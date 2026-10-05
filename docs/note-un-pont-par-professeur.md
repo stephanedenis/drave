@@ -49,6 +49,17 @@ dernière position diffère d'un écart max de **118** entre les deux modes.
 traces faits avec des `--n` différents ne sont **pas** comparables — il a fallu
 reprendre les six langues de test du 30B pour cette raison.
 
+### Et la contamination n'est pas théorique, elle est mesurée
+
+`appr10/eng.drvf` porte **542 positions**, alors que le texte de dix unités n'en
+tokenise que **~510** : les 32 jetons générés sont **dans la trace**. Notre pont
+s'entraînait donc pour partie sur ce que le professeur avait *inventé* après le
+corpus — 6 % des positions en anglais, et bien davantage dans les langues dont le
+texte donne moins de jetons. Ces positions n'ont aucun sens linguistique pour
+notre usage : elles ne sont pas du corpus.
+
+Toutes les traces ont été reprises en `--n 0`, pour les deux professeurs.
+
 ## 4. Ne pas journaliser les couches internes de NOTRE boîte noire
 
 Notre modèle est une boîte noire linguistico-sémantique : ce qui compte est sa

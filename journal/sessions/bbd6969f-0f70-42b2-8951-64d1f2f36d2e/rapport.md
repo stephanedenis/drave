@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 167.0 h |
 | Tours | 122 |
-| Messages | 8034 |
-| Appels d'outils | 7659 |
+| Messages | 8036 |
+| Appels d'outils | 7661 |
 | Fichiers touchés | 150 |
-| Commandes | 6544 |
+| Commandes | 6546 |
 | Sous-agents | 32 |
-| Commits | 562 |
+| Commits | 563 |
 | Compactages de contexte | 11 |
 
 ## Objectifs déclarés
@@ -6198,7 +6198,7 @@ J'ai aussi remplacé le critère de retrait : couper par contribution ne « gén
 
 ### Tour 122 — <goal_round> Objective: "Faire évoluer le pont linguistico-sémantique en BOÎTE NOIRE (émulation des premières couches du … [1231 caractères tronqués]
 
-*24 appels d'outils.* Actions notables :
+*26 appels d'outils.* Actions notables :
 
 - bash — Check running job and 30B availability
 - bash — Time 30B trace on one language
@@ -6214,13 +6214,13 @@ J'ai aussi remplacé le critère de retrait : couper par contribution ne « gén
 - bash — Compute 30B invariance by layer
 - bash — Check if 30B layer 0 is empty
 - bash — Verify layer 0 anomaly
-- … et 10 autres
+- … et 12 autres
 
 **Synthèse produite :**
 
-⏵ Je consigne la correction méthodologique et je rectifie le rapport.
+⏵ Contamination quantifiée : **542 positions pour l'anglais** alors que le texte n'en tokenise que ~510 — les 32 jetons générés sont bien dans la trace. Je consigne.
 
-Votre correction invalide une comparaison que je venais de faire. Je la consigne explicitement, sans effacer l'erreur.
+**La contamination est mesurée** : 542 positions pour l'anglais, alors que le texte n'en tokenise que ~510. **Les 32 jetons générés sont dans la trace** — notre pont s'entraînait donc en partie sur ce que le professeur *inventait*, pas sur le corpus.
 
 ## 3. Travail accompli
 
@@ -6456,7 +6456,7 @@ Votre correction invalide une comparaison que je venais de faire. Je la consigne
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6504 autres
+- … et 6506 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -7166,4 +7166,5 @@ Votre correction invalide une comparaison que je venais de faire. Je la consigne
 - Le plateau de croissance est trouvé (~470 neurones), et l'ATTRITION fait mieux que la croissance  Course plafond 512, deux cycles, tâche 10 unités (constante té
 - compare_professeurs.py : les professeurs et notre pont sur le MÊME périmètre  Une comparaison d'invariance n'a de sens que si tout est mesuré sur les mêmes lang
 - RECTIFICATION : un pont par professeur — il n'y a pas de couche sémantique universelle  Correction de cap. Chaque modèle a sa propre représentation sémantique i
+- Contamination mesurée : les 32 jetons générés SONT dans la trace  appr10/eng.drvf porte 542 positions alors que le texte de dix unités n'en tokenise que ~510. L
 
