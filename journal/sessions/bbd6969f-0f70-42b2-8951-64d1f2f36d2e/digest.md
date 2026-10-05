@@ -123867,3 +123867,283 @@ Je commence par l'extracteur UDHR, puis j'attaque le moteur.
 **Corpus UDHR : 30 articles, 400 langues, 42 unités alignées.** Maintenant le moteur.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"UDHR : extracteur d'unités alignées — 400 langues, les 30 articles, 42 unités\n\ntools/extrait_udhr.py rend un JSONL : une unité par ligne (article, paragraphe),\navec le texte de CHAQUE langue. L'ali … [410 caractères tronqués]`
+
+  ```
+}
+            Self::matvec(pool, &lay.wgate, &hn, &mut gate, events, &mut paires[2], self.act_levels, self.act_thresh, tk(4), self.act_renorm, &mut scratch, self.seuil_push);
+            // --- capteur hebbien : espionne la co-activation (entrée, sortie)
+            // de la projection gate. Aucun effet sur le calcul.
+            if let Some(hb) = self.hebb.as_mut() {
+                if hb.layer == l {
+                    if hb.log_on { hb.log.extend_from_slice(&hn); }
+                    let (hn2, gate2) = (&hn, &gate);
+                    let mut seuil = std::mem::take(&mut scratch);
+                    hb.observe(hn2, gate2, &mut seuil);
+                    scratch = seuil;
+                }
+            }
+            Self::matvec(pool, &lay.wup, &hn, &mut up, events, &mut paires[2], self.act_levels, self.act_thresh, tk(5), self.act_renorm, &mut scratch, self.seuil_push);
+            Self::activation(&mut gate, &up, cfg.ffn, cfg.ffn_act_oss, 0.0);
+            Self::compter_neurones(&mut self.profil_neurones, largeur_profil,
+  ```
+
+### 🤖 Assistant
+
+Le capteur observe `(hn, gate)` — l'entrée FFN et la sortie de la porte — **sans effet sur le calcul**. J'ajoute l'**adaptateur différentiel** : `y' = W·x + D·x = (W+D)·x`, donc c'est littéralement une mise à jour de poids, mais stockée à part et donc réversible.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && sed -n '1005,1015p' main.rs; echo \"=== flags hebb ===\"; grep -n '\"--hebb' main.rs | head -6", "description": "See how hebb is wired"}`
+
+  ```
+}
+    if let Some(l) = hebb_layer {
+        let n_out = mdl.cfg.ffn;
+        let n_in = mdl.cfg.hidden;
+        mdl.hebb = Some(model::Hebb::new(l, n_out, n_in, hebb_q));
+        println!("capteur hebbien : couche {l}, projection gate ({n_out} x {n_in}), \
+                  quantile {hebb_q} -> {hebb_out}");
+    }
+    if ids.is_empty() && !session {
+        eprintln!("rien à générer : --ids ou --prompt requis");
+        return;
+=== flags hebb ===
+727:            "--hebbian" => { o.hebb_layer = Some(suivant(i).parse().unwrap()); 2 }
+728:            "--hebb-q" => { o.hebb_q = suivant(i).parse().unwrap(); 2 }
+729:            "--hebb-out" => { o.hebb_out = suivant(i).clone(); 2 }
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && python3 - <<'PY'\np='model.rs'; s=open(p).read()\n\n# --- 1. la structure de l'adaptateur différentiel ---\nanc = \"impl Hebb {\"\nnew = '''/// **Apprentissage hebbien DIFFÉRENTIEL** — l'adaptateur `D`, appliqué à la\n … [5512 caractères tronqués]`
+
+  ```
+HebbDiff posé
+error[E0502]: cannot borrow `gate` as mutable because it is also borrowed as immutable
+    --> src/model.rs:7625:48
+     |
+7624 |                     let (hn2, gate2) = (&hn, &gate);
+     |                                              ----- immutable borrow occurs here
+7625 |                     let _ = hd.pas(hn2, gate2, &mut gate);
+     |                                ---             ^^^^^^^^^ mutable borrow occurs here
+     |                                |
+     |                                immutable borrow later used by call
+--
+error: could not compile `drave-core` (bin "drave") due to 1 previous error; 29 warnings emitted
+=== build ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && python3 - <<'PY'\np='model.rs'; s=open(p).read()\nold = \"\"\"                    let brut = std::mem::take(&mut scratch);\n                    let (hn2, gate2) = (&hn, &gate);\n                    let _ = hd.pas(hn2,  … [756 caractères tronqués]`
+
+  ```
+ok
+=== build ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && python3 - <<'PY'\np='main.rs'; s=open(p).read()\n# 1. options\ns = s.replace(\"    hebb_layer: Option<usize>,\", \"    hebb_layer: Option<usize>,\\n    hebb_diff: Option<usize>, hebb_eta: f32, hebb_clamp: f32,\", 1)\ns … [3006 caractères tronqués]`
+
+  ```
+CLI posé
+error[E0425]: cannot find value `hebb_diff` in this scope
+    --> src/main.rs:1017:22
+     |
+1017 |     if let Some(l) = hebb_diff {
+     |                      ^^^^^^^^^ not found in this scope
+
+error[E0425]: cannot find value `hebb_eta` in this scope
+    --> src/main.rs:1019:67
+     |
+1019 |         mdl.hebb_diff = Some(model::HebbDiff::new(l, n_out, n_in, hebb_eta, hebb_clamp));
+     |                                                                   ^^^^^^^^ not found in this scope
+
+error[E0425]: cannot find value `hebb_clamp` in this scope
+    --> src/main.rs:1019:77
+     |
+1019 |         mdl.hebb_diff = Some(model::HebbDiff::new(l, n_out, n_in, hebb_eta, hebb_clamp));
+     |                                                                             ^^^^^^^^^^ not found in this scope
+
+error[E0425]: cannot find value `hebb_eta` in this scope
+    --> src/main.rs:1024:6
+=== build ===
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && grep -n \"hebb_layer,\" main.rs | head -3; grep -n \"hebb_q,\" main.rs | head -3", "description": "Find the destructuring site"}`
+
+  ```
+842:        hebb_layer, hebb_q, hebb_out, sans_yarn, lot, ffn_gain,
+5028:        topk_proj, moe_topk, patch: patch_file, hebb_layer, hebb_q, hebb_out,
+842:        hebb_layer, hebb_q, hebb_out, sans_yarn, lot, ffn_gain,
+5028:        topk_proj, moe_topk, patch: patch_file, hebb_layer, hebb_q, hebb_out,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && sed -i '842s/hebb_layer, hebb_q, hebb_out,/hebb_layer, hebb_q, hebb_out, hebb_diff, hebb_eta, hebb_clamp,/' main.rs && sed -i '5028s/hebb_layer, hebb_q, hebb_out,/hebb_layer, hebb_q, hebb_out, hebb_diff, hebb_eta, hebb … [234 caractères tronqués]`
+
+  ```
+error[E0560]: struct `Options` has no field named `hebb_diff`
+   --> src/main.rs:639:9
+    |
+639 |         hebb_diff: None, hebb_eta: 1e-4, hebb_clamp: 1.0,
+    |         ^^^^^^^^^ `Options` does not have this field
+    |
+    = note: available fields are: `infer`, `ppl`, `plan`, `tokenize`, `gpu_banc` ... and 72 others
+--
+error[E0560]: struct `Options` has no field named `hebb_eta`
+   --> src/main.rs:639:26
+    |
+639 |         hebb_diff: None, hebb_eta: 1e-4, hebb_clamp: 1.0,
+    |                          ^^^^^^^^ `Options` does not have this field
+    |
+    = note: available fields are: `infer`, `ppl`, `plan`, `tokenize`, `gpu_banc` ... and 72 others
+--
+=== build ===
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && grep -n \"hebb_layer: Option<usize>\" main.rs", "description": "Locate the Options field"}`
+
+  ```
+627:    patch: Option<String>, hebb_layer: Option<usize>, hebb_q: f32,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && sed -i '627s/hebb_layer: Option<usize>, hebb_q: f32,/hebb_layer: Option<usize>, hebb_q: f32,\\n    hebb_diff: Option<usize>, hebb_eta: f32, hebb_clamp: f32,/' main.rs && cd .. && cargo build --release 2>&1 | grep -E \" … [167 caractères tronqués]`
+
+  ```
+=== build ===
+test result: ok. 77 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+  ```
+
+### 🤖 Assistant
+
+Le `HebbDiff` est en place. **Test décisif : la perplexité baisse-t-elle quand l'adaptateur apprend ?**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls models/Qwen2.5-0.5B-Q8_0.gguf 2>/dev/null || ls -d models 2>/dev/null; M=models/Qwen2.5-0.5B-Q8_0.gguf\n[ -f \"$M\" ] && head -c 3000 docs/roadmap-drave.md > /tmp/t_hd.txt && ./drave-core/target/release/drave \"$M\" --tokenize --f … [308 caractères tronqués]`
+
+  ```
+models/Qwen2.5-0.5B-Q8_0.gguf
+invite : 256 jetons
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=models/Qwen2.5-0.5B-Q8_0.gguf\necho \"=== référence (sans adaptateur) ===\"\n./drave-core/target/release/drave \"$M\" --ppl /tmp/ids_hd.txt --ctx 512 --limit 256 --lot 1 --threads 16 2>&1 | grep -oE \"perplexité cumulée [0-9.]+\"\n … [404 caractères tronqués]`
+
+  ```
+=== référence (sans adaptateur) ===
+perplexité cumulée 40.279
+=== hebb-diff couche 12, eta 1e-6 : perplexité cumulée 40.279 
+=== hebb-diff couche 12, eta 1e-5 : perplexité cumulée 40.279 
+=== hebb-diff couche 12, eta 1e-4 : perplexité cumulée 40.279
+  ```
+
+### 🤖 Assistant
+
+L'adaptateur **ne tourne pas** : le mode `--ppl` a son propre câblage. Je l'ajoute.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && sed -n '5125,5140p' main.rs", "description": "Find the ppl wiring"}`
+
+  ```
+// explicite) : l'ordre était inversé entre les deux modes.
+    if sans_fenetre { mdl.attn_window = 0; }
+    if attn_window > 0 { mdl.attn_window = attn_window; }
+    if let Some(p) = swa_pattern { mdl.swa_pattern = p; }
+    if sans_fenetre || swa_pattern.is_some() {
+        println!("fenêtre : {} · motif {} (imposé par la ligne de commande)",
+                 if mdl.attn_window == 0 { "aucune".to_string() } else { mdl.attn_window.to_string() },
+                 mdl.swa_pattern);
+    }
+    if attn_sinks > 0 { mdl.attn_sinks = attn_sinks; }
+    if act_thresh > 0.0 || act_topk > 0 {
+        println!("parcimonie imposée : seuil {:.1} % du max{}",
+                 act_thresh * 100.0,
+                 if act_topk > 0 { format!(", k-WTA k={act_topk}") } else { String::new() });
+    }
+    // Le tableau de bord vient EN DERNIER, après la trace, les top-k, les seuils,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && grep -n \"mdl.hebb = Some(hb)\" -B 8 main.rs | head -14", "description": "Find the hebb wiring in ppl"}`
+
+  ```
+5144-    // tableau de bord qui montre l'état d'avant les affectations est pire que pas
+5145-    // de tableau du tout, puisque c'est exactement ce qu'il est censé démasquer.
+5146-    if montre_options {
+5147-        options_actives(&mdl, "perplexité", ctx_impose, dense, keep);
+5148-    }
+5149-    if let Some(l) = hebb_layer {
+5150-        let mut hb = model::Hebb::new(l, mdl.cfg.ffn, mdl.cfg.hidden, hebb_q);
+5151-        hb.log_on = true;
+5152:        mdl.hebb = Some(hb);
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && python3 - <<'PY'\np='main.rs'; s=open(p).read()\nold = \"\"\"    if let Some(l) = hebb_layer {\n        let mut hb = model::Hebb::new(l, mdl.cfg.ffn, mdl.cfg.hidden, hebb_q);\n        hb.log_on = true;\n        mdl.heb … [1180 caractères tronqués]`
+
+  ```
+ok
+[hebb-diff] ADAPTATEUR ACTIF — couche 12, gate (4864×896), eta 1e-5, écrêtage ±1. Règle LOCALE et forward-only : Δx = x(t)−x(t−1), Δy = y(t)−y(t−1), D += η·Δy⊗Δx, y' = y + D·x. La matrice effective est W+D : ce modèle N'EST PLUS celui du fichier. Exige --lot 1.
+     255 tokens notés — perplexité cumulée 40.277  (23.1 tok/s)
+=== perplexité 40.2772 sur 255 tokens (0 événements, 11.0 s) ===
+  ```
+
+### 🤖 Assistant
+
+L'adaptateur tourne : **40,279 → 40,277**. Presque rien — il faut balayer η.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=models/Qwen2.5-0.5B-Q8_0.gguf\necho \"référence : 40,279\"\nfor eta in 1e-4 1e-3 1e-2 1e-1; do\n  echo -n \"  eta $eta : \"\n  ./drave-core/target/release/drave \"$M\" --ppl /tmp/ids_hd.txt --ctx 512 --limit 256 --lot 1 --threads 1 … [222 caractères tronqués]`
+
+  ```
+référence : 40,279
+  eta 1e-4 : perplexité cumulée 40.176 
+  eta 1e-3 : perplexité cumulée 53.783 
+  eta 1e-2 : perplexité cumulée 52247.686 
+  eta 1e-1 : perplexité cumulée 2710504.279
+  ```
+
+### 🤖 Assistant
+
+**Profil classique d'une règle locale** : elle apprend (−0,26 % à η=1e-4) puis **diverge** (×1,3 à 1e-3, ×67 000 à 1e-1). La bande stable est étroite parce que la règle n'est **pas normalisée**. J'ajoute ce qui manque — et c'est exactement ta direction : **événements seuillés et signés**, plus une décroissance.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && python3 - <<'PY'\np='model.rs'; s=open(p).read()\ns = s.replace(\"\"\"    pub norme_maj: f64,\n    /// Bornes de sécurité : sans elles, une dérive rendrait le modèle inutilisable\n    /// en silence — le pire cas du dé … [4327 caractères tronqués]`
+
+  ```
+seuil + signe + décroissance
+=== build ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && sed -i 's/            let _ = &mut 0;//' model.rs && cd .. && cargo build --release 2>&1 | grep -E \"^error\" -A 5 | head -10; cargo test --release 2>&1 | grep \"^test result\"; cd .. && M=models/Qwen2.5-0.5B-Q8_0.gguf … [466 caractères tronqués]`
+
+  ```
+test result: ok. 77 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+=== forme SIGNÉE, seuil 1e-3, décroissance 0,999 ===
+  eta 1e-5 : perplexité cumulée 40.286
+  eta 1e-4 : perplexité cumulée 40.288
+  eta 3e-4 : perplexité cumulée 40.322
+  ```
+
+### 🤖 Assistant
+
+La forme signée perd la magnitude et fait moins bien. J'essaie l'intermédiaire : **valeur + seuil + décroissance** — garder la magnitude, gagner la stabilité.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=models/Qwen2.5-0.5B-Q8_0.gguf\necho \"référence 40,279 · meilleur connu (valeur brute, eta 1e-4) 40,176\"\nfor cfg in \"1e-4:0.999\" \"1e-4:0.99\" \"3e-4:0.999\" \"3e-4:0.99\" \"1e-3:0.99\"; do\n  eta=${cfg%%:*}; dec=${cfg##*:}\n   … [387 caractères tronqués]`
+
+  ```
+référence 40,279 · meilleur connu (valeur brute, eta 1e-4) 40,176
+  seuil 1e-4 · eta 1e-4 · decroi 0.999 : perplexité cumulée 40.186
+  seuil 1e-4 · eta 1e-4 · decroi 0.99 : perplexité cumulée 40.232
+  seuil 1e-4 · eta 3e-4 · decroi 0.999 : perplexité cumulée 40.045
+  seuil 1e-4 · eta 3e-4 · decroi 0.99 : perplexité cumulée 40.028
+  seuil 1e-4 · eta 1e-3 · decroi 0.99 : perplexité cumulée 41.514
+  ```
+
+### 🤖 Assistant
+
+**La décroissance débloque** : elle permet un η **3× plus grand** sans diverger. Meilleur : **40,028** à η=3e-4, décroissance 0,99 (**−0,62 %**).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=models/Qwen2.5-0.5B-Q8_0.gguf\nfor cfg in \"2e-4:0.99\" \"4e-4:0.99\" \"3e-4:0.98\" \"4e-4:0.98\" \"5e-4:0.99\"; do\n  eta=${cfg%%:*}; dec=${cfg##*:}\n  echo -n \"  eta $eta · decroi $dec : \"\n  DRAVE_HEBB_SEUIL=1e-4 DRAVE_HEBB_DE … [280 caractères tronqués]`
+
+  ```
+eta 2e-4 · decroi 0.99 : perplexité cumulée 40.136
+  eta 4e-4 · decroi 0.99 : perplexité cumulée 39.985
+  eta 3e-4 · decroi 0.98 : perplexité cumulée 40.136
+  eta 4e-4 · decroi 0.98 : perplexité cumulée 40.069
+  eta 5e-4 · decroi 0.99 : perplexité cumulée 40.019
+  ```
+
+### 🤖 Assistant
+
+**Plateau stable et meilleur : 39,985** (η=4e-4, décroissance 0,99) — **−0,73 %**.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> docs/note-cancellation-evenementielle.md <<'EOF'\n\n## 7. L'apprentissage hebbien différentiel — implémenté et mesuré (06/10)\n\n### Ce qui existait\n\n`Hebb` **mesurait** le produit hebbien — il accumulait `h` et l'exportait  … [4352 caractères tronqués]`

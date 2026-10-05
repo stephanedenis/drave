@@ -24,7 +24,7 @@ const VARS_LUES: &[&str] = &[
     "KV_BITS", "KV_F16", "KV_K_F16", "KV_K_F32", "KV_V_F32", "MMAP",
     "BIAIS_VL", "EXPERTS_RAM", "PRELIRE", "PRELIRE_TOUT", "Q8_BLOCS", "SANS_ENGRAM",
     "SANS_EMPRUNT",
-    "TRACE_BLOCS", "TUILE_LOT", "K3_COUCHES", "K3_SANS_ETAT", "K3_PASSE", "K3_TETE", "K3_LOGITS", "K3_GEN", "K3_MXFP4", "K3_TRACE_EXPERTS", "K3_IDS", "K3_DENSE_FIGE", "K3_STATS_EXPERTS", "K3_PRELIRE_UNION", "EXPERTS_GARDES", "K3_IMPOSE",
+    "TRACE_BLOCS", "TUILE_LOT", "K3_COUCHES", "K3_SANS_ETAT", "K3_PASSE", "K3_TETE", "K3_LOGITS", "K3_GEN", "K3_MXFP4", "K3_TRACE_EXPERTS", "K3_IDS", "K3_DENSE_FIGE", "K3_STATS_EXPERTS", "HEBB_SEUIL", "HEBB_SIGNE", "HEBB_DECROI", "K3_PRELIRE_UNION", "EXPERTS_GARDES", "K3_IMPOSE",
     "SANS_BLOCS", "SANS_COMPRESSION", "SIMD_DOT", "TRACE_EXPERTS", "V41_SANS_RETARD",
     "V41_TETE_COPIE0",
     "VISION_TEXTE",
@@ -625,6 +625,7 @@ struct Options {
     sans_yarn: bool,
     // --- expériences
     patch: Option<String>, hebb_layer: Option<usize>, hebb_q: f32,
+    hebb_diff: Option<usize>, hebb_eta: f32, hebb_clamp: f32,
     hebb_out: String, ffn_gain: Option<(usize, f32)>, matrix: String,
     // --- tokenize / plan
     texte: Option<String>, fichier: Option<String>, sortie: Option<String>,
@@ -636,6 +637,7 @@ fn analyser(args: &[String]) -> Options {
     let mut o = Options {
         n: 32, temp: 0.0, top_p: 1.0, hist: 64, hebb_q: 0.1,
         hebb_out: String::from("hebb.bin"), keep: 1.0, abits: 8,
+        hebb_diff: None, hebb_eta: 1e-4, hebb_clamp: 1.0,
         auto: true, limit: usize::MAX,
         matrix: String::from("blk.0.ffn_gate.weight"),
         ..Default::default()
@@ -725,6 +727,9 @@ fn analyser(args: &[String]) -> Options {
             "--attn-topk" => { o.attn_topk = suivant(i).parse().unwrap(); 2 }
             "--qk-topk" => { o.qk_topk = suivant(i).parse().unwrap(); 2 }
             "--hebbian" => { o.hebb_layer = Some(suivant(i).parse().unwrap()); 2 }
+            "--hebb-diff" => { o.hebb_diff = Some(suivant(i).parse().unwrap()); 2 }
+            "--hebb-eta" => { o.hebb_eta = suivant(i).parse().unwrap(); 2 }
+            "--hebb-clamp" => { o.hebb_clamp = suivant(i).parse().unwrap(); 2 }
             "--hebb-q" => { o.hebb_q = suivant(i).parse().unwrap(); 2 }
             "--hebb-out" => { o.hebb_out = suivant(i).clone(); 2 }
             "--act-thresh" => { o.act_thresh = suivant(i).parse().unwrap(); 2 }
@@ -835,7 +840,7 @@ fn run_infer(opt: Options) {
         ctx_impose, threads_impose, abits_impose, dense, auto, q4, b6,
         keep, attn_window, swa_pattern, sans_fenetre, attn_sinks, attn_topk, qk_topk,
         act_thresh, act_topk, act_renorm, topk_proj, moe_topk, patch: patch_file,
-        hebb_layer, hebb_q, hebb_out, sans_yarn, lot, ffn_gain,
+        hebb_layer, hebb_q, hebb_out, hebb_diff, hebb_eta, hebb_clamp, sans_yarn, lot, ffn_gain,
         trace_flux, trace_couches, flux_forcer, ..
     } = opt;
     let path = &modele_chemin();
@@ -1010,6 +1015,17 @@ IDENTIQUE, seule la lecture change", mdl.tete_garantie.as_ref().unwrap().len(),
         println!("capteur hebbien : couche {l}, projection gate ({n_out} x {n_in}), \
                   quantile {hebb_q} -> {hebb_out}");
     }
+    if let Some(l) = hebb_diff {
+        let (n_out, n_in) = (mdl.cfg.ffn, mdl.cfg.hidden);
+        mdl.hebb_diff = Some(model::HebbDiff::new(l, n_out, n_in, hebb_eta, hebb_clamp));
+        // **Il CHANGE la sortie : il le dit, et il dit comment.** L'adaptateur
+        // `D` s'ajoute à la projection, donc la matrice effective devient `W + D`
+        // (voir `HebbDiff`). Rien n'est écrit dans le fichier du modèle.
+        println!("[hebb-diff] ADAPTATEUR ACTIF — couche {l}, gate ({n_out}×{n_in}), \
+eta {hebb_eta:e}, écrêtage ±{hebb_clamp}. La règle est LOCALE et forward-only : \
+Δx = x(t)−x(t−1), Δy = y(t)−y(t−1), D += η·Δy⊗Δx, et y' = y + D·x. La matrice \
+effective est W+D : ce modèle N'EST PLUS celui du fichier, et il se mesure comme tel.");
+    }
     if ids.is_empty() && !session {
         eprintln!("rien à générer : --ids ou --prompt requis");
         return;
@@ -1143,6 +1159,11 @@ troncature aux {} derniers", ids.len(), garde, ctx, n_new, garde);
     println!("paires (poids × activation) : {} au total, {:.1} M par token — attention {:.1} M · experts {:.1} M · partagé {:.1} M",
              pa.iter().sum::<u64>(), pa.iter().sum::<u64>() as f64 / ng / 1e6,
              pa[0] as f64 / ng / 1e6, pa[1] as f64 / ng / 1e6, pa[2] as f64 / ng / 1e6);
+    if let Some(hd) = mdl.hebb_diff.as_ref() {
+        let norme: f64 = hd.d.iter().map(|v| (*v as f64) * (*v as f64)).sum::<f64>().sqrt();
+        println!("[hebb-diff] couche {} : {} pas · ‖D‖ = {:.4e} · somme des ‖ΔD‖ = {:.4e}",
+                 hd.layer, hd.pas, norme, hd.norme_maj);
+    }
     if let Some(hb) = mdl.hebb.as_ref() {
         use std::io::Write;
         let mut f = std::fs::File::create(&hebb_out).expect("création du fichier hebbien");
@@ -5005,7 +5026,7 @@ calculee sur un vocabulaire restreint n'est comparable a rien. Utilisez --infer.
         ctx_impose, threads_impose, abits_impose,
         dense, auto, q4, b6, attn_window, swa_pattern,
         sans_fenetre, attn_sinks, attn_topk, qk_topk, act_thresh, act_topk, act_renorm,
-        topk_proj, moe_topk, patch: patch_file, hebb_layer, hebb_q, hebb_out,
+        topk_proj, moe_topk, patch: patch_file, hebb_layer, hebb_q, hebb_out, hebb_diff, hebb_eta, hebb_clamp,
         ffn_gain, logits_bin, keep,
         ppl_profil, lot, profil_neurones, neurones_sortie, trace_flux, trace_couches, flux_forcer,
         harmony, harmony_contexte, sans_yarn, ..
@@ -5124,6 +5145,14 @@ calculee sur un vocabulaire restreint n'est comparable a rien. Utilisez --infer.
     // de tableau du tout, puisque c'est exactement ce qu'il est censé démasquer.
     if montre_options {
         options_actives(&mdl, "perplexité", ctx_impose, dense, keep);
+    }
+    if let Some(l) = hebb_diff {
+        let (n_out, n_in) = (mdl.cfg.ffn, mdl.cfg.hidden);
+        mdl.hebb_diff = Some(model::HebbDiff::new(l, n_out, n_in, hebb_eta, hebb_clamp));
+        println!("[hebb-diff] ADAPTATEUR ACTIF — couche {l}, gate ({n_out}×{n_in}), \
+eta {hebb_eta:e}, écrêtage ±{hebb_clamp}. Règle LOCALE et forward-only : \
+Δx = x(t)−x(t−1), Δy = y(t)−y(t−1), D += η·Δy⊗Δx, y' = y + D·x. La matrice \
+effective est W+D : ce modèle N'EST PLUS celui du fichier. Exige --lot 1.");
     }
     if let Some(l) = hebb_layer {
         let mut hb = model::Hebb::new(l, mdl.cfg.ffn, mdl.cfg.hidden, hebb_q);

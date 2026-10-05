@@ -2665,6 +2665,7 @@ pub struct Model {
     /// pendant l'inférence, sur un cœur séparé en pratique. Il ne modifie
     /// jamais le calcul — c'est un espion, pas un acteur.
     pub hebb: Option<Hebb>,
+    pub hebb_diff: Option<HebbDiff>,
 }
 
 /// Un neurone ajouté à une couche, sans réentraînement du reste du modèle.
@@ -2718,6 +2719,123 @@ pub struct Hebb {
     /// hors ligne. C'est la « journalisation en vue d'une version ultérieure ».
     pub log: Vec<f32>,
     pub log_on: bool,
+}
+
+/// **Apprentissage hebbien DIFFÉRENTIEL** — l'adaptateur `D`, appliqué à la
+/// sortie d'une projection.
+///
+/// La règle est locale et forward-only, sans rétropropagation :
+///
+/// ```text
+///   Δx = x(t) − x(t−1)          différentiel de l'ENTRÉE
+///   Δy = y(t) − y(t−1)          différentiel de la SORTIE
+///   D  += η · Δy ⊗ Δx           produit extérieur des différentiels
+///   y'  = y + D·x               l'adaptateur s'ajoute à la projection
+/// ```
+///
+/// **Pourquoi c'est exactement une mise à jour de poids** : `y = W·x` et
+/// `y' = W·x + D·x = (W + D)·x`. Garder `D` à part ne change donc RIEN au modèle
+/// — c'est de la comptabilité qui laisse l'original intact, exportable et
+/// réversible. La matrice appliquée est `W + D`, et elle se mesure comme telle.
+///
+/// **Pourquoi le DIFFÉRENTIEL, et pas le produit simple** : le produit hebbien
+/// classique `Δw = η·x·y` renforce ce qui est *simultanément actif*, donc il
+/// apprend des co-occurrences — et sur un flux de langue, la co-occurrence
+/// dominante est « tout est actif tout le temps ». Le différentiel annule ce
+/// terme statique et ne garde que ce qui **change ensemble** : ce sont les
+/// transitions, donc les séquences. C'est aussi, littéralement, un
+/// **événement** — ce que ce moteur transporte déjà.
+pub struct HebbDiff {
+    pub layer: usize,
+    pub eta: f32,
+    pub n_out: usize,
+    pub n_in: usize,
+    /// `D`, rangée par sortie : `n_out × n_in`.
+    pub d: Vec<f32>,
+    x_prec: Vec<f32>,
+    y_prec: Vec<f32>,
+    pub pas: u64,
+    pub norme_maj: f64,
+    /// Bornes de sécurité : sans elles, une dérive rendrait le modèle inutilisable
+    /// en silence — le pire cas du dépôt.
+    pub clamp: f32,
+    /// **Seuil d'ÉVÉNEMENT** : un canal ne contribue que si son différentiel
+    /// dépasse ce seuil. Sans lui, la règle accumule du bruit numérique — la
+    /// plupart des `Δx` ne sont que des derniers bits — et c'est ce qui la fait
+    /// diverger. Avec lui, seuls les **changements** comptent, et un changement
+    /// est un événement : exactement ce que ce moteur transporte.
+    pub seuil: f32,
+    /// **Signes plutôt que valeurs** : `signe(Δx)·signe(Δy)`. C'est la forme
+    /// historique du hebbien différentiel, et elle est bornée par construction.
+    pub signe: bool,
+    /// **Décroissance** par pas : `D ← D·decroi + η·…`. Sans elle, l'adaptateur
+    /// ne fait que croître, et la bande stable se réduit à un facteur dix.
+    pub decroi: f32,
+    /// Ce que le seuil a laissé passer — c'est la mesure de ce que « événement »
+    /// veut dire ici.
+    pub n_evenements: u64,
+    pub n_canaux: u64,
+}
+
+impl HebbDiff {
+    pub fn new(layer: usize, n_out: usize, n_in: usize, eta: f32, clamp: f32) -> Self {
+        HebbDiff { layer, eta, n_out, n_in, d: vec![0f32; n_out * n_in],
+                   x_prec: Vec::new(), y_prec: Vec::new(), pas: 0, norme_maj: 0.0, clamp,
+                   seuil: std::env::var("DRAVE_HEBB_SEUIL").ok()
+                       .and_then(|v| v.parse().ok()).unwrap_or(0.0),
+                   signe: std::env::var("DRAVE_HEBB_SIGNE").map(|v| v != "0" && !v.is_empty())
+                       .unwrap_or(false),
+                   decroi: std::env::var("DRAVE_HEBB_DECROI").ok()
+                       .and_then(|v| v.parse().ok()).unwrap_or(1.0),
+                   n_evenements: 0, n_canaux: 0 }
+    }
+
+    /// Un pas : met à jour `D` avec les différentiels, puis applique `D·x`.
+    /// Rend vrai si l'adaptateur a été appliqué (donc si la sortie a changé).
+    fn pas(&mut self, x: &[f32], y: &[f32], sortie: &mut [f32]) -> bool {
+        let (no, ni) = (self.n_out, self.n_in);
+        if self.x_prec.len() != ni || self.y_prec.len() != no {
+            self.x_prec = x[..ni.min(x.len())].to_vec();
+            self.x_prec.resize(ni, 0.0);
+            self.y_prec = y[..no.min(y.len())].to_vec();
+            self.y_prec.resize(no, 0.0);
+            return false;
+        }
+        // 1. les différentiels — c'est là qu'est tout le sens de la règle
+        let mut maj = 0f64;
+        let (seuil, signe, decroi) = (self.seuil, self.signe, self.decroi);
+        for o in 0..no {
+            let dy = y[o] - self.y_prec[o];
+            if dy == 0.0 { continue; }
+            let gy = if signe { if dy > 0.0 { 1.0 } else { -1.0 } } else { dy };
+            let ligne = &mut self.d[o * ni..(o + 1) * ni];
+            for i in 0..ni {
+                let dx = x[i] - self.x_prec[i];
+                // LE SEUIL EST LA PARTIE ÉVÉNEMENTIELLE : sous lui, ce n'est pas
+                // un changement, c'est du bruit de dernier bit.
+                if dx.abs() <= seuil { continue; }
+                self.n_canaux += 1;
+                let gx = if signe { if dx > 0.0 { 1.0 } else { -1.0 } } else { dx };
+                let dv = self.eta * gy * gx;
+                let nv = (ligne[i] * decroi + dv).clamp(-self.clamp, self.clamp);
+                maj += (dv as f64) * (dv as f64);
+                ligne[i] = nv;
+            }
+        }
+        self.norme_maj += maj.sqrt();
+        // 2. l'adaptateur s'ajoute : y' = y + D·x
+        for o in 0..no.min(sortie.len()) {
+            let ligne = &self.d[o * ni..(o + 1) * ni];
+            let mut s = 0f32;
+            for i in 0..ni { s += ligne[i] * x[i]; }
+            sortie[o] += s;
+
+        }
+        self.x_prec.copy_from_slice(&x[..ni]);
+        self.y_prec.copy_from_slice(&y[..no]);
+        self.pas += 1;
+        true
+    }
 }
 
 impl Hebb {
@@ -4224,7 +4342,7 @@ PLUS LENT que le cache de pages du noyau (ctx 32 : +4 % à 4 Go, +21 % à 32 Go 
             },
             mla, mla_cache, jeton_trace: 0, trace: None, flux_force: None,
             emb_imposee: None, emb_imposee_lot: None, lot: 1,
-            patch: None, ffn_gain: None, hebb: None,
+            patch: None, ffn_gain: None, hebb: None, hebb_diff: None,
         }
     }
 
@@ -7523,6 +7641,20 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
                     let mut seuil = std::mem::take(&mut scratch);
                     hb.observe(hn2, gate2, &mut seuil);
                     scratch = seuil;
+                }
+            }
+            // --- ADAPTATEUR HEBB. DIFFÉRENTIEL : il CHANGE la sortie, donc il
+            // l'annonce (voir `HebbDiff`, et `--hebb-diff` au démarrage).
+            if let Some(hd) = self.hebb_diff.as_mut() {
+                if hd.layer == l {
+                    // `gate` porte encore W·x : on garde la sortie BRUTE comme
+                    // référence du différentiel, l'adaptateur s'ajoute par-dessus.
+                    // La sortie brute est copiée : `pas` a besoin de la lire ET
+                    // d'écrire dans `gate`, et l'emprunt ne le permet pas. La
+                    // copie est de la taille de la FFN, une fois par couche et
+                    // par jeton — négligeable devant le matvec qui précède.
+                    let gate_brut = gate.clone();
+                    let _ = hd.pas(&hn, &gate_brut, &mut gate);
                 }
             }
             Self::matvec(pool, &lay.wup, &hn, &mut up, events, &mut paires[2], self.act_levels, self.act_thresh, tk(5), self.act_renorm, &mut scratch, self.seuil_push);

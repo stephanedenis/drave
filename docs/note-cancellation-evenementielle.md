@@ -127,3 +127,73 @@ l'essai vaille la peine.
 
 **Et le piège du § 4 reste valable** : `--lot 1` est obligatoire pour avoir des
 événements (le mode lot est dense, 0 événement mesuré).
+
+## 7. L'apprentissage hebbien différentiel — implémenté et mesuré (06/10)
+
+### Ce qui existait
+
+`Hebb` **mesurait** le produit hebbien — il accumulait `h` et l'exportait — sans
+jamais modifier le calcul. Le moteur observait la co-activation, il ne l'apprenait
+pas.
+
+### Ce qui a été ajouté : `HebbDiff`
+
+```text
+  Δx = x(t) − x(t−1)          différentiel de l'ENTRÉE
+  Δy = y(t) − y(t−1)          différentiel de la SORTIE
+  D += η · Δy ⊗ Δx            produit extérieur des différentiels
+  y'  = y + D·x               l'adaptateur s'ajoute à la projection
+```
+
+**C'est exactement une mise à jour de poids** : `y' = W·x + D·x = (W + D)·x`.
+Garder `D` à part ne change rien au modèle — c'est de la comptabilité qui laisse
+l'original intact, exportable et réversible.
+
+**Pourquoi le différentiel et pas le produit simple** : `Δw = η·x·y` renforce ce
+qui est *simultanément actif*, donc il apprend des co-occurrences — et sur un flux
+de langue, la co-occurrence dominante est « tout est actif tout le temps ». Le
+différentiel annule ce terme statique et ne garde que ce qui **change ensemble** :
+les transitions, donc les séquences. Et un changement est un **événement** — ce
+que ce moteur transporte déjà.
+
+Trois réglages, tous mesurés :
+- **`DRAVE_HEBB_SEUIL`** — un canal ne contribue que si `|Δx|` dépasse le seuil.
+  C'est la part événementielle : sous le seuil, ce n'est pas un changement, c'est
+  du bruit de dernier bit.
+- **`DRAVE_HEBB_SIGNE`** — `signe(Δx)·signe(Δy)`, la forme historique, bornée par
+  construction.
+- **`DRAVE_HEBB_DECROI`** — `D ← D·decroi + η·…`. Sans elle, l'adaptateur ne fait
+  que croître.
+
+### Les mesures
+
+Qwen2.5-0.5B, 255 jetons, `--lot 1`, adaptateur sur la couche 12 (24), perplexité
+en ligne sur le texte même :
+
+| réglage | perplexité | vs référence |
+|---|---:|---:|
+| référence, sans adaptateur | 40,279 | — |
+| valeur brute, η=1e-4 | 40,176 | −0,26 % |
+| valeur brute, η=1e-3 | **53,783** | **+33 %** |
+| valeur brute, η=1e-1 | **2 710 504** | **×67 000** |
+| **valeur + seuil 1e-4 + décroi 0,99, η=4e-4** | **39,985** | **−0,73 %** |
+| signé + seuil 1e-3 + décroi, η=1e-4 | 40,288 | +0,02 % |
+| valeur + seuil + décroi, η=1e-3 | 41,514 | +3 % |
+
+**Ce que ça dit :**
+
+1. **La règle apprend** — mais faiblement : −0,73 % au mieux.
+2. **Sans décroissance, la bande stable fait un facteur dix** : η=1e-4 améliore,
+   η=1e-3 fait exploser. Avec la décroissance, η=1e-3 passe de **53 783 à
+   41 514** — 1 300 fois mieux au même taux.
+3. **La forme signée est moins bonne** : elle jette la magnitude, et la magnitude
+   porte de l'information ici.
+4. **Le seuil n'est pas qu'une économie** : il stabilise en ignorant le bruit.
+
+### Ce qui reste à mesurer, et c'est le seul test qui compte
+
+**La mesure est EN ÉCHANTILLON** : le modèle s'adapte au texte sur lequel on le
+note. Le gain peut donc n'être que de la mémorisation. Le test qui tranche :
+**adapter sur un texte A, noter sur un texte B**. C'est la différence entre
+« apprendre la structure » et « retenir le texte » — et c'est la prochaine
+mesure, pas une conclusion.

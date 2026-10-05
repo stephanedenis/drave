@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 162.5 h |
+| Durée | 162.8 h |
 | Tours | 117 |
-| Messages | 7793 |
-| Appels d'outils | 7435 |
+| Messages | 7812 |
+| Appels d'outils | 7454 |
 | Fichiers touchés | 150 |
-| Commandes | 6333 |
+| Commandes | 6352 |
 | Sous-agents | 32 |
-| Commits | 535 |
+| Commits | 536 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -5872,16 +5872,27 @@ C'est le prolongement direct de ce que `invariance_semantique.py` fait déjà pa
 
 ### Tour 117 — fais tout le nécessaire, tu as plusieurs heures devant toi. Prête une attention particulière à notre moteur. il doit évo … [70 caractères tronqués]
 
-*4 appels d'outils.* Actions notables :
+*23 appels d'outils.* Actions notables :
 
 - bash — Study the existing Hebb implementation
 - bash — Extract the aligned UDHR units
 - bash — Verify the extracted units
 - bash — Commit the extractor and look at the Hebb hook
+- bash — See how hebb is wired
+- bash — Implement the differential Hebbian adapter
+- bash — Fix the borrow
+- bash — Wire the CLI and the announcement
+- bash — Find the destructuring site
+- bash — Add to the destructuring
+- bash — Locate the Options field
+- bash — Declare the Options fields
+- bash — Prepare the test corpus on a small model
+- bash — Measure the differential Hebbian adapter
+- … et 9 autres
 
 **Synthèse produite :**
 
-**Corpus UDHR : 30 articles, 400 langues, 42 unités alignées.** Maintenant le moteur.
+**Plateau stable et meilleur : 39,985** (η=4e-4, décroissance 0,99) — **−0,73 %**.
 
 ## 3. Travail accompli
 
@@ -6117,7 +6128,7 @@ C'est le prolongement direct de ce que `invariance_semantique.py` fait déjà pa
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6293 autres
+- … et 6312 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -6245,7 +6256,7 @@ C'est le prolongement direct de ce que `invariance_semantique.py` fait déjà pa
 
 ## 5. Erreurs rencontrées
 
-369 sorties en erreur ou divergentes. Les premières :
+372 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -6800,4 +6811,5 @@ C'est le prolongement direct de ce que `invariance_semantique.py` fait déjà pa
 - Note : les corpus de Panini-Research — 11,5 M mots, et TROIS œuvres parallèles  Relevé complet depuis /home/stephane/Data13TB/stephane/GitHub/Panini-Research.  
 - Ingestion : l'UDHR récupérée (456 langues, 30 articles alignés), Wikipedia trouvé en local (81 Go, 6 langues)  UDHR : le chemin unicode.org/udhr/ renvoie 404 au
 - UDHR : extracteur d'unités alignées — 400 langues, les 30 articles, 42 unités  tools/extrait_udhr.py rend un JSONL : une unité par ligne (article, paragraphe), 
+- Apprentissage hebbien différentiel : implémenté dans le moteur, et mesuré  Hebb MESURAIT le produit hebbien sans jamais toucher au calcul. HebbDiff l'APPLIQUE :
 
