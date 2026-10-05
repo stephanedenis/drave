@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 164.0 h |
+| Durée | 164.2 h |
 | Tours | 118 |
-| Messages | 7859 |
-| Appels d'outils | 7498 |
+| Messages | 7863 |
+| Appels d'outils | 7501 |
 | Fichiers touchés | 150 |
-| Commandes | 6396 |
+| Commandes | 6399 |
 | Sous-agents | 32 |
-| Commits | 546 |
+| Commits | 547 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -5936,7 +5936,7 @@ Poser le rapport et la sauvegarde **à un se
 
 ### Tour 118 — Continue de faire évoluer notre modèle et moteur en visant des réponses qui émulent les réponses sémantiques des modèles … [205 caractères tronqués]
 
-*39 appels d'outils.* Actions notables :
+*42 appels d'outils.* Actions notables :
 
 - bash — Check time and locate the two report sites
 - bash — Unify the HebbDiff report in one place
@@ -5952,11 +5952,24 @@ Poser le rapport et la sauvegarde **à un se
 - bash — Write and commit the semantic plateau report
 - bash — Re-measure the plateau with the learned adapter
 - bash — Train on 40 languages, holding out 5
-- … et 25 autres
+- … et 28 autres
 
 **Synthèse produite :**
 
-L'artefact est sauvé et l'applicateur marche (177 positions en grec). Je corrige l'étiquette avec un edit propre, puis je consolide.
+**Ton intuition est confirmée, et de façon spectaculaire.**
+
+| neurones | fidélité au professeur | **invariance inter-langue** | **pire paire** |
+|---|---:|---:|---:|
+| **1** | 0,668 | **0,9492** | **0,7762** |
+| 2 | 0,717 | 0,9347 | 0,8252 |
+| 4 | 0,748 | 0,9139 | 0,7769 |
+| 8 | 0,747 | 0,8847 | 0,6739 |
+| 16 | 0,726 | 0,8431 | 0,5189 |
+| 64 | 0,682 | 0,7658 | 0,4842 |
+
+**UN SEUL NEURONE donne 0,9492 d'invariance** — contre 0,6284 pour le professeur, et **0,471 pour le plateau d'un modèle de 30 B**. Et sa pire paire, 0,7762, écrase le 0,3281 du professeur.
+
+Le premier neurone capte **la direction partagée, indépendante de la langue** — le pont brut exactement. Les neurones suivants ajoutent du **détail propre à chaque langue** : la fidélité au professeur monte (0,67 → 0,75) mais **l'invariance baisse, monotonement**.
 
 ## 3. Travail accompli
 
@@ -6192,7 +6205,7 @@ L'artefact est sauvé et l'applicateur marche (177 positions en grec). Je corrig
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6356 autres
+- … et 6359 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -6886,4 +6899,5 @@ L'artefact est sauvé et l'applicateur marche (177 positions en grec). Je corrig
 - LE PONT : une matrice 896x896 rend la langue invisible, mieux que le professeur  Témoin qui renverse tout : une simple application LINÉAIRE de la plongée du jet
 - Le pont validé à l'échelle : 20 langues d'entraînement, 20 JAMAIS vues  40 langues de l'UDHR tracées, réparties 20/20 au hasard (graine fixée) :    couche 10 : 
 - Le pont devient un ARTEFACT utilisable, et l'étiquetage est corrigé  pont_semantique.npz (P 896x128, W0 896x128, moy 896) + tools/applique_pont.py :   abstrait 
+- UN SEUL NEURONE SUFFIT : 0,9492 d'invariance contre 0,6284 pour le professeur  Intuition de Stéphane confirmée et chiffrée — « un neurone par sortie, puis on it
 

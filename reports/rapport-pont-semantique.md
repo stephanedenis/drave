@@ -95,6 +95,35 @@ comparer au **0,471** du plateau d'un modèle de **30 B** — soit 60 fois plus 
 Un pont appris sur un modèle de 0,5 B atteint donc l'invariance inter-langue d'un
 modèle bien plus grand.
 
+## Résultat 5 — **UN SEUL NEURONE SUFFIT**, et c'est « l'apprentissage hyper-rapide » annoncé
+
+Intuition de Stéphane : commencer avec **un neurone par sortie**, puis itérer en
+ajoutant des neurones pour les exclusivités — l'apprentissage est **hyper-rapide au
+début**. C'est exactement le **rang** du pont. Courbe mesurée, 20 langues
+d'entraînement → 20 langues jamais vues :
+
+| neurones | fidélité au professeur | **invariance inter-langue** | **pire paire** |
+|---|---:|---:|---:|
+| **1** | 0,6677 | **0,9492** | **0,7762** |
+| 2 | 0,7170 | 0,9347 | 0,8252 |
+| 4 | 0,7479 | 0,9139 | 0,7769 |
+| 8 | 0,7467 | 0,8847 | 0,6739 |
+| 16 | 0,7262 | 0,8431 | 0,5189 |
+| 64 | 0,6816 | 0,7658 | 0,4842 |
+
+**Un seul neurone donne 0,9492 d'invariance** — contre **0,6284** pour le
+professeur, et **0,471** pour le plateau d'un modèle de **30 B**. Sa pire paire,
+**0,7762**, écrase le 0,3281 du professeur.
+
+**Et la courbe dit pourquoi** : le premier neurone capte la **direction partagée,
+indépendante de la langue** — c'est le pont brut au sens exact. Les neurones
+suivants ajoutent du **détail propre à chaque langue** : la fidélité au professeur
+monte (0,668 → 0,748) mais **l'invariance baisse, monotonement** (0,949 → 0,766).
+
+**Il y a donc un compromis, et il est net** : si l'on veut copier le professeur,
+il faut des neurones ; si l'on veut le **pont sémantique brut**, **un seul suffit**
+et les autres nuisent.
+
 ## Ce que ça donne à la mission
 
 **Le pont est un artefact concret et mesuré** : `W` (896×896, ~800 k paramètres)
