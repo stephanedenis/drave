@@ -265,6 +265,18 @@ def main():
         print(f"\n########## CYCLE {cycle} — CROISSANCE ##########")
         print(f"{'après':<30} {'neur.':>6} {'couch.':>7} {'fid appr':>9} {'fid VAL':>8} "
               f"{'fid TEST':>9} {'invar.':>8} {'pire':>7}")
+        # NAISSANCE COMMANDÉE PAR L'APPRENTISSAGE (`--arret-naissance`), DÉSACTIVÉE
+        # PAR DÉFAUT — et il y a une raison mesurée. Un seuil en gain ABSOLU se
+        # trompe au début : les premières naissances n'apportent presque rien
+        # parce que le réseau est encore dans le régime dominé par l'invariance,
+        # où la fidélité bouge à peine. Essayée à 0,001, la règle arrêtait la
+        # croissance à 5 neurones au lieu de 108, et faisait tomber la fidélité de
+        # test de 0,6079 à 0,5763. Elle reste disponible, mais elle ne remplace
+        # pas un calendrier validé.
+        arret_naissance = opt("--arret-naissance", "")
+        gain_naissance = float(opt("--gain-naissance", 0.001))
+        sans_gain = 0
+        val_prec = None
         for _ in range(par_cycle):
             # Cycle 1 : chaque couche DOUBLE (1,1,2,4,…) pour atteindre vite la
             # zone utile. Cycles suivants : on AJOUTE sans doubler — le réseau a
@@ -290,6 +302,15 @@ def main():
                 meilleur = {"f_te": f_te, "neur": P.compte_neurones,
                             "couch": len(P.couches), "f_tr": f_tr, "f_va": f_va,
                             "inv": mg, "pire": mig, "etape": f"C{cycle} croissance"}
+            if val_prec is not None and f_va - val_prec < gain_naissance:
+                sans_gain += 1
+            else:
+                sans_gain = 0
+            val_prec = max(val_prec, f_va) if val_prec is not None else f_va
+            if arret_naissance and sans_gain >= 3:
+                print(f"{'  → naissance ARRÊTÉE (3 sans gain)':<30} {P.compte_neurones:>6} "
+                      f"{len(P.couches):>7}")
+                break
         # -------------------------------------------------------- ATTRITION
         if not attrition:
             continue

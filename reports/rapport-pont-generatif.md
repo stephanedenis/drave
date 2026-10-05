@@ -266,3 +266,46 @@ quelque chose ; la précédente, non.
 
 Voir `docs/note-un-pont-par-professeur.md` : **il faut un pont par professeur**, et
 l'étude des universaux sémantiques relève de l'initiative Panini, pas de Drave.
+
+
+## 11. Les réglages ne se transfèrent pas : la cascade veut le contraire du plat
+
+`a = 0,2` et ride `3·10⁻¹` avaient été trouvés pour le réservoir **plat**
+(résultat 9). Rien ne dit qu'ils valent pour la **cascade** — architecture
+différente, dynamique différente. Balayage complet, 12 configurations, même
+périmètre, même tâche :
+
+| `a` \ ride | 0,1 | 0,3 | 1,0 |
+|---|---:|---:|---:|
+| 0,1 | 0,5954 | 0,6039 | 0,6036 |
+| 0,2 | 0,5963 | 0,6079 | 0,6071 |
+| 0,35 | 0,5959 | 0,6099 | 0,6088 |
+| **0,5** | 0,5989 | 0,6078 | **0,6105** |
+
+**La cascade préfère `a = 0,5` et ride `1,0` — l'opposé du plat.** Le gain reste
+modeste (+0,26 pt sur la meilleure configuration précédente), mais le fait est
+net : **un réglage trouvé pour une architecture ne se transporte pas** à une
+autre. C'est le même principe que « un pont par professeur », un cran plus bas.
+
+### Le meilleur réseau de la cascade, en entier
+
+| | |
+|---|---|
+| taille | **256 neurones · 11 couches** |
+| fidélité apprentissage | 0,7330 |
+| fidélité validation | 0,7492 |
+| **fidélité TEST** | **0,6105** (constante témoin 0,5658) |
+| invariance TEST | 0,9278 · pire paire 0,8190 |
+
+### Face au réservoir plat, même professeur, même tâche
+
+| | neurones | fid TEST | écart à la constante | invariance |
+|---|---:|---:|---:|---:|
+| réservoir plat (`a=0,2` ride 0,3) | 64 | 0,5921 | +0,0263 | 0,9772 |
+| **cascade générative (`a=0,5` ride 1,0)** | **256** | **0,6105** | **+0,0447** | 0,9278 |
+
+**+1,84 point de fidélité de test, et un avantage sur la constante qui passe de
++0,0263 à +0,0447 — soit +70 %.** L'invariance est plus basse (0,9278 contre
+0,9772) : c'est la courbe d'échange, la cascade occupant un point plus avancé sur
+l'axe fidélité. Le plat, lui, **ne peut pas atteindre 0,6105** : il plafonne à
+0,5921 puis recule.

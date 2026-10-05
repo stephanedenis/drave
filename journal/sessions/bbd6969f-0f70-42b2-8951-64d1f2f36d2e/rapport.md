@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 167.1 h |
+| Durée | 167.5 h |
 | Tours | 122 |
-| Messages | 8039 |
-| Appels d'outils | 7664 |
-| Fichiers touchés | 150 |
-| Commandes | 6549 |
+| Messages | 8057 |
+| Appels d'outils | 7682 |
+| Fichiers touchés | 151 |
+| Commandes | 6564 |
 | Sous-agents | 32 |
-| Commits | 564 |
+| Commits | 565 |
 | Compactages de contexte | 11 |
 
 ## Objectifs déclarés
@@ -6198,7 +6198,7 @@ J'ai aussi remplacé le critère de retrait : couper par contribution ne « gén
 
 ### Tour 122 — <goal_round> Objective: "Faire évoluer le pont linguistico-sémantique en BOÎTE NOIRE (émulation des premières couches du … [1231 caractères tronqués]
 
-*29 appels d'outils.* Actions notables :
+*47 appels d'outils.* Actions notables :
 
 - bash — Check running job and 30B availability
 - bash — Time 30B trace on one language
@@ -6214,13 +6214,13 @@ J'ai aussi remplacé le critère de retrait : couper par contribution ne « gén
 - bash — Compute 30B invariance by layer
 - bash — Check if 30B layer 0 is empty
 - bash — Verify layer 0 anomaly
-- … et 15 autres
+- … et 32 autres
 
 **Synthèse produite :**
 
-⏵ **Vérifié au jeton près : 542 contre 510 — exactement 32.** Je corrige le chiffre et je chaîne l'analyse du 30B.
+⏵ Configuration gagnante capturée. Je consigne le balayage et le gain face au plat.
 
-**Vérifié exactement : 542 − 510 = 32 jetons.** Ma contamination était bien de 32 positions, au jeton près. Je fixe le chiffre et je chaîne l'analyse du 30B.
+**La cascade gagne sur la fidélité** : 0,6105 contre 0,5921 pour le plat — et l'écart au-dessus de la constante passe de +0,0263 à **+0,0447, soit +70 %**.
 
 ## 3. Travail accompli
 
@@ -6378,6 +6378,7 @@ J'ai aussi remplacé le critère de retrait : couper par contribution ne « gén
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/31-le-regroupement-par-experts-mesure-et-k3-au-complet.md` | 1 | 1 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-prefill-par-experts.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/engine.rs` | 0 | 1 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py` | 0 | 2 |
 
 ### Sous-agents lancés
 
@@ -6456,7 +6457,7 @@ J'ai aussi remplacé le critère de retrait : couper par contribution ne « gén
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6509 autres
+- … et 6524 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -7168,4 +7169,5 @@ J'ai aussi remplacé le critère de retrait : couper par contribution ne « gén
 - RECTIFICATION : un pont par professeur — il n'y a pas de couche sémantique universelle  Correction de cap. Chaque modèle a sa propre représentation sémantique i
 - Contamination mesurée : les 32 jetons générés SONT dans la trace  appr10/eng.drvf porte 542 positions alors que le texte de dix unités n'en tokenise que ~510. L
 - Vérifié au jeton près : --n 32 donne 542 positions, --n 0 en donne 510, différence exactement 32" && git log --oneline -1; tail -1 /tmp/trace30b_train.log; echo
+- La cascade préfère les réglages OPPOSÉS au réservoir plat  a=0,2 et ride=3e-1 avaient été trouvés pour le réservoir PLAT. Balayage complet de la cascade, 12 con
 
