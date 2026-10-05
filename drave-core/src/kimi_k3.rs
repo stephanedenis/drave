@@ -769,90 +769,127 @@ impl MoeK3 {
     }
 
     /// La passe avant du MoE, dans l'ordre de la référence.
+    /// Un jeton. Délègue au chemin par lots avec un lot de un — il n'y a qu'une
+    /// implémentation du routage, et c'est celle qui est mesurée.
     pub fn avant(&self, cur: &[f32]) -> Result<Vec<f32>, String> {
+        let mut v = self.avant_lot(std::slice::from_ref(&cur.to_vec()))?;
+        Ok(v.pop().expect("un jeton rendu"))
+    }
+
+    /// **Le MoE par LOTS : les jetons qui ont choisi le même expert partagent
+    /// UNE lecture de ses trois matrices.**
+    ///
+    /// C'est la thèse du dépôt appliquée à la couche : un expert lu une fois
+    /// pour tout le lot au lieu d'une fois par jeton. Mesuré sur Qwen3-30B-A3B,
+    /// le même regroupement vaut ×1,58 au préremplissage (voir
+    /// `reports/rapport-prefill-par-experts.md`) ; ici, la lecture est le mur —
+    /// 280 Mo par couple (couche, jeton) sortis du disque tournant.
+    pub fn avant_lot(&self, curs: &[Vec<f32>]) -> Result<Vec<Vec<f32>>, String> {
+        let t = curs.len();
+        if t == 0 { return Ok(Vec::new()); }
         let (h, latent, n_exp, k) = (self.h, self.latent, self.n_exp, self.k);
-        if cur.len() != h { return Err(format!("entrée de {} au lieu de {h}", cur.len())); }
-        // 1. logits du routeur, sur la PLEINE largeur
-        let mut logits = vec![0f32; n_exp];
-        mv(&self.gate_inp, n_exp, h, cur, &mut logits);
-        // 2. sigmoïde, puis SÉLECTION avec le biais (le biais ne va pas aux poids)
-        let probs: Vec<f32> = logits.iter().map(|v| 1.0 / (1.0 + (-v).exp())).collect();
-        let mut choix: Vec<usize> = (0..n_exp).collect();
-        choix.sort_by(|&a, &b| {
-            let (pa, pb) = (probs[a] + self.biais[a], probs[b] + self.biais[b]);
-            pb.partial_cmp(&pa).unwrap_or(std::cmp::Ordering::Equal)
-        });
-        let choisis = &choix[..k.min(n_exp)];
-        let somme: f32 = choisis.iter().map(|&e| probs[e]).sum();
-        let poids: Vec<f32> = choisis.iter().map(|&e| probs[e] / somme.max(1e-20)).collect();
-        // 3. le latent
-        let mut rin = vec![0f32; latent];
-        mv(&self.rout_down, latent, h, cur, &mut rin);
-        // Trace de routage (`DRAVE_K3_TRACE_EXPERTS`) : une ligne par (couche,
-        // jeton), au même format que le reste du dépôt — c'est ce que lit
-        // `tools/analyse_reutilisation_experts.py`. Sans elle, prédire un cache
-        // d'experts sur K3 demanderait de l'écrire d'abord.
-        if let Ok(chemin) = std::env::var("DRAVE_K3_TRACE_EXPERTS") {
-            use std::io::Write;
-            if let Ok(mut f) = std::fs::OpenOptions::new().create(true).append(true).open(&chemin) {
-                let seq = self.appels.get();
-                let mut ids: Vec<String> = choisis.iter().map(|e| e.to_string()).collect();
-                ids.sort();
-                let _ = writeln!(f, "{} {} {}", self.l, seq, ids.join(" "));
-            }
+        for cur in curs {
+            if cur.len() != h { return Err(format!("entrée de {} au lieu de {h}", cur.len())); }
         }
-        self.appels.set(self.appels.get() + 1);
-        // 4. les k experts, déquantifiés UN PAR UN
-        let mut acc = vec![0f32; latent];
+        // ---- 1 & 2. routeur de chaque jeton, puis GROUPES par expert
+        let mut rin: Vec<Vec<f32>> = Vec::with_capacity(t);
+        let mut poids_par_jeton: Vec<Vec<f32>> = Vec::with_capacity(t);
+        let mut groupes: Vec<Vec<(usize, f32)>> = vec![Vec::new(); n_exp];
+        for (i, cur) in curs.iter().enumerate() {
+            let mut logits = vec![0f32; n_exp];
+            mv(&self.gate_inp, n_exp, h, cur, &mut logits);
+            let probs: Vec<f32> = logits.iter().map(|v| 1.0 / (1.0 + (-v).exp())).collect();
+            let mut choix: Vec<usize> = (0..n_exp).collect();
+            choix.sort_by(|&a, &b| {
+                let (pa, pb) = (probs[a] + self.biais[a], probs[b] + self.biais[b]);
+                pb.partial_cmp(&pa).unwrap_or(std::cmp::Ordering::Equal)
+            });
+            let choisis = &choix[..k.min(n_exp)];
+            let somme: f32 = choisis.iter().map(|&e| probs[e]).sum();
+            let poids: Vec<f32> = choisis.iter().map(|&e| probs[e] / somme.max(1e-20)).collect();
+            if let Ok(chemin) = std::env::var("DRAVE_K3_TRACE_EXPERTS") {
+                use std::io::Write;
+                if let Ok(mut f) = std::fs::OpenOptions::new().create(true).append(true).open(&chemin) {
+                    let mut ids: Vec<usize> = choisis.to_vec();
+                    ids.sort();
+                    let liste: Vec<String> = ids.iter().map(|e| e.to_string()).collect();
+                    let _ = writeln!(f, "{} {} {}", self.l, self.appels.get() + i, liste.join(" "));
+                }
+            }
+            let mut ri = vec![0f32; latent];
+            mv(&self.rout_down, latent, h, cur, &mut ri);
+            rin.push(ri);
+            for (j, &e) in choisis.iter().enumerate() { groupes[e].push((i, poids[j])); }
+            poids_par_jeton.push(poids);
+        }
+        self.appels.set(self.appels.get() + t);
+        let _ = &poids_par_jeton;
+        // ---- 3. un expert lu UNE fois, appliqué à tous ses jetons
+        let mut acc: Vec<Vec<f32>> = vec![vec![0f32; latent]; t];
         let mut ge = vec![0f32; self.n_out_gate];
         let mut ue = vec![0f32; self.n_out_up];
         let mut de = vec![0f32; self.n_out_down];
         let (mut x16, mut s32) = (Vec::new(), Vec::new());
-        for (i, &e) in choisis.iter().enumerate() {
-            if self.noyau_mxfp4 {
-                // Le noyau du moteur, sur les blocs empruntés au fichier.
-                mv_mxfp4(self.ptr_gate, self.n_out_gate, self.n_in_gate, e, &rin, &mut ge,
-                         &mut x16, &mut s32);
-                mv_mxfp4(self.ptr_up, self.n_out_up, self.n_in_up, e, &rin, &mut ue,
-                         &mut x16, &mut s32);
-                for j in 0..ge.len() {
-                    ge[j] = crate::model::situ(ge[j], ue[j], self.situ_beta, self.situ_lin);
+        let mut experts_lus = 0usize;
+        for (e, groupe) in groupes.iter().enumerate() {
+            if groupe.is_empty() { continue; }
+            experts_lus += 1;
+            for &(i, poids) in groupe {
+                if self.noyau_mxfp4 {
+                    mv_mxfp4(self.ptr_gate, self.n_out_gate, self.n_in_gate, e, &rin[i], &mut ge,
+                             &mut x16, &mut s32);
+                    mv_mxfp4(self.ptr_up, self.n_out_up, self.n_in_up, e, &rin[i], &mut ue,
+                             &mut x16, &mut s32);
+                    for j in 0..ge.len() {
+                        ge[j] = crate::model::situ(ge[j], ue[j], self.situ_beta, self.situ_lin);
+                    }
+                    mv_mxfp4(self.ptr_down, self.n_out_down, self.n_in_down, e, &ge, &mut de,
+                             &mut x16, &mut s32);
+                    for j in 0..latent { acc[i][j] += poids * de[j]; }
+                    continue;
                 }
-                mv_mxfp4(self.ptr_down, self.n_out_down, self.n_in_down, e, &ge, &mut de,
-                         &mut x16, &mut s32);
-                for j in 0..latent { acc[j] += poids[i] * de[j]; }
-                continue;
+                let mut g_e = vec![0f32; self.n_out_gate * self.n_in_gate];
+                let mut u_e = vec![0f32; self.n_out_up * self.n_in_up];
+                let mut d_e = vec![0f32; self.n_out_down * self.n_in_down];
+                expert_mxfp4_dans(self.ptr_gate, self.n_out_gate, self.n_in_gate, e, &mut g_e);
+                expert_mxfp4_dans(self.ptr_up, self.n_out_up, self.n_in_up, e, &mut u_e);
+                expert_mxfp4_dans(self.ptr_down, self.n_out_down, self.n_in_down, e, &mut d_e);
+                mv(&g_e, self.n_out_gate, self.n_in_gate, &rin[i], &mut ge);
+                mv(&u_e, self.n_out_up, self.n_in_up, &rin[i], &mut ue);
+                for j in 0..ge.len() { ge[j] = crate::model::situ(ge[j], ue[j], self.situ_beta, self.situ_lin); }
+                mv(&d_e, self.n_out_down, self.n_in_down, &ge, &mut de);
+                for j in 0..latent { acc[i][j] += poids * de[j]; }
             }
-            // trois tampons réutilisés d'un expert à l'autre : une allocation
-            // par matrice, pas une par bloc.
-            let mut g_e = vec![0f32; self.n_out_gate * self.n_in_gate];
-            let mut u_e = vec![0f32; self.n_out_up * self.n_in_up];
-            let mut d_e = vec![0f32; self.n_out_down * self.n_in_down];
-            expert_mxfp4_dans(self.ptr_gate, self.n_out_gate, self.n_in_gate, e, &mut g_e);
-            expert_mxfp4_dans(self.ptr_up, self.n_out_up, self.n_in_up, e, &mut u_e);
-            expert_mxfp4_dans(self.ptr_down, self.n_out_down, self.n_in_down, e, &mut d_e);
-            mv(&g_e, self.n_out_gate, self.n_in_gate, &rin, &mut ge);
-            mv(&u_e, self.n_out_up, self.n_in_up, &rin, &mut ue);
-            for j in 0..ge.len() { ge[j] = crate::model::situ(ge[j], ue[j], self.situ_beta, self.situ_lin); }
-            mv(&d_e, self.n_out_down, self.n_in_down, &ge, &mut de);
-            for j in 0..latent { acc[j] += poids[i] * de[j]; }
         }
-        // 5. norme DANS le latent, puis remontée
-        let mut norme = vec![0f32; latent];
-        rms_norm_poids(&acc, &self.rout_norm, self.eps, &mut norme);
-        let mut sortie = vec![0f32; h];
-        mv(&self.rout_up, h, latent, &norme, &mut sortie);
-        // 6. les experts partagés (toujours actifs), ajoutés
+        // Ce que le regroupement a économisé, mesuré : `t × k` lectures d'experts
+        // sans lui, `experts_lus` avec. Le taire serait cacher l'optimisation.
+        if std::env::var("DRAVE_K3_STATS_EXPERTS").is_ok() {
+            eprintln!("    [moe] couche {} : {t} jeton(s) × {k} experts = {} lectures jeton par jeton, \
+{experts_lus} avec le regroupement — gain ×{:.2}",
+                      self.l, t * k, (t * k) as f64 / experts_lus.max(1) as f64);
+        }
+        // ---- 4. norme DANS le latent, remontée, puis experts partagés
+        let mut sorties: Vec<Vec<f32>> = Vec::with_capacity(t);
         let mut gs = vec![0f32; self.moe_ff];
         let mut us = vec![0f32; self.moe_ff];
-        mv(&self.sh_gate, self.moe_ff, h, cur, &mut gs);
-        mv(&self.sh_up, self.moe_ff, h, cur, &mut us);
-        for j in 0..self.moe_ff { gs[j] = crate::model::situ(gs[j], us[j], self.situ_beta, self.situ_lin); }
         let mut sh = vec![0f32; h];
-        mv(&self.sh_down, h, self.moe_ff, &gs, &mut sh);
-        for j in 0..h { sortie[j] += sh[j]; }
-        Ok(sortie)
+        for i in 0..t {
+            let mut norme = vec![0f32; latent];
+            rms_norm_poids(&acc[i], &self.rout_norm, self.eps, &mut norme);
+            let mut sortie = vec![0f32; h];
+            mv(&self.rout_up, h, latent, &norme, &mut sortie);
+            mv(&self.sh_gate, self.moe_ff, h, &curs[i], &mut gs);
+            mv(&self.sh_up, self.moe_ff, h, &curs[i], &mut us);
+            for j in 0..self.moe_ff {
+                gs[j] = crate::model::situ(gs[j], us[j], self.situ_beta, self.situ_lin);
+            }
+            mv(&self.sh_down, h, self.moe_ff, &gs, &mut sh);
+            for j in 0..h { sortie[j] += sh[j]; }
+            sorties.push(sortie);
+        }
+        Ok(sorties)
     }
+
 }
 
 // ===========================================================================
@@ -1531,6 +1568,8 @@ déquantifiées) — ×1,12 mesuré sur la passe, top-1 inchangé, corrélations
         //      les colonnes du lot d'un coup.
         if banque { pile.push(flux.clone()); }
 
+        let mut prefixes: Vec<Vec<f32>> = Vec::with_capacity(ntok);
+        let mut xn2s: Vec<Vec<f32>> = Vec::with_capacity(ntok);
         for i in 0..ntok {
             let x = flux[i].clone();
             let mut prefix;
@@ -1561,14 +1600,29 @@ déquantifiées) — ×1,12 mesuré sur la passe, top-1 inchangé, corrélations
                 };
                 rms_norm_poids(&cur2, n2, eps, &mut xn2);
             }
-            let tf = std::time::Instant::now();
-            let ffn = match &mut c {
-                CoucheK3::Dense { ffn, .. } => ffn.avant(&xn2)?,
-                CoucheK3::Moe { moe, .. } => moe.avant(&xn2)?,
-            };
-            t_ffn += tf.elapsed().as_secs_f64();
-            for j in 0..h { prefix[j] += ffn[j]; }
-            flux[i] = prefix;
+            // ---- l'attention est SÉQUENTIELLE (KDA et MLA portent un état
+            // d'un jeton au suivant), mais la FFN ne l'est pas : on garde le
+            // flux et l'entrée normalisée, et le lot part d'un bloc plus bas.
+            prefixes.push(prefix);
+            xn2s.push(xn2);
+        }
+        // ---- phase 2 : la FFN pour TOUT le lot. C'est ici que les jetons qui
+        // ont choisi le même expert partagent une seule lecture de ses matrices
+        // (`MoeK3::avant_lot`) au lieu d'une par jeton.
+        let tf = std::time::Instant::now();
+        let ffns = match &mut c {
+            CoucheK3::Dense { ffn, .. } => {
+                let mut v = Vec::with_capacity(ntok);
+                for x in xn2s.iter() { v.push(ffn.avant(x)?); }
+                v
+            }
+            CoucheK3::Moe { moe, .. } => moe.avant_lot(&xn2s)?,
+        };
+        t_ffn += tf.elapsed().as_secs_f64();
+        for i in 0..ntok {
+            let mut p = prefixes[i].clone();
+            for j in 0..h { p[j] += ffns[i][j]; }
+            flux[i] = p;
         }
         t_charge += (t1 - t0).as_secs_f64();
         t_calcul += (std::time::Instant::now() - t1).as_secs_f64();

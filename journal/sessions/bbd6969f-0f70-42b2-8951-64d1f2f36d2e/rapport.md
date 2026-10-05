@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 152.2 h |
+| Durée | 152.3 h |
 | Tours | 109 |
-| Messages | 7670 |
-| Appels d'outils | 7328 |
+| Messages | 7680 |
+| Appels d'outils | 7338 |
 | Fichiers touchés | 150 |
-| Commandes | 6227 |
+| Commandes | 6237 |
 | Sous-agents | 32 |
-| Commits | 523 |
+| Commits | 524 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -5433,45 +5433,24 @@ Le dense ne peut pas être rendu résident à bon compte ici : la page cache ne 
 
 ### Tour 109 — Quel est le roadmap où Drave serait à son meilleur? as-tu besoin de compacter la session? Continue kusqu'a 8h00 HAE
 
-*2 appels d'outils.* Actions notables :
+*12 appels d'outils.* Actions notables :
 
 - bash — Check the remaining time
 - bash — Write the strategic roadmap
+- bash — Read MoeK3::avant in full
+- bash — Lay out the batch MoE
+- bash — Write the batch tail and remove the old path
+- bash — Find the token loop in passe_complete
+- bash — Wire the batch MoE into the pass
+- bash — See which test failed
+- bash — Declare the new env var
+- bash — Measure the expert grouping
+- bash — Check the batch size in the pass
+- bash — Commit the grouping and run the full pass
 
 **Synthèse produite :**
 
-Réponse courte : **oui, mon contexte est long** — continue, l'harnais compacte tout seul, et je travaille déjà en gardant l'état durable dans le dépôt (`REPRISE.md`, `docs/`) plutôt que dans ma tête. Il reste **9 h, ~4 blocs**.
-
-\## Le roadmap : où Drave est à son meilleur
-
-**Le fait mesuré qui définit la niche** — pas une opinion, un écart :
-
-| | lectures par jeton | vitesse |
-|---|---:|---:|
-| llama.cpp-k3 | **451 Go** (5,2 balayages du modèle) | 42 min/jeton |
-| Drave | **26 Go** d'experts (16 sur 896) | **7,4 min/jeton** |
-
-Ce n'est pas une victoire de vitesse, c'est une victoire d'**existence**. Dans ce régime :
-- llama.cpp **repaquette en RAM** → 104 Go après 16 tenseurs sur 2 573, il ne finit pas ;
-- Strata exige **tous** les experts en RAM (34-50 Go) → sa cible est 100-350 Go ;
-- vLLM & co : GPU-résident, hors sujet ; Ollama *est* llama.cpp.
-
-**Personne d'autre ne fonctionne quand la RAM fait 8 % du modèle.** C'est là, et seulement là, que Drave est le meilleur.
-
-**Les quatre axes, dans l'ordre où ils paient**
-
-1. **Finir la lecture sélective** (le socle). Le FFN pèse 1 088 s sur 1 516. Deux prises déjà localisées : le **regroupement des jetons par expert dans la couche** (×1,6 sur les lectures à 4 jetons — pas implémenté) et le **noyau AVX2 Q8_0** au lieu du scalaire (l'attention est passée de 142 à 222 s en empruntant). Critère : la passe complète sous 10 min.
-
-2. **Le décodage spéculatif** (le multiplicateur). C'est le seul moyen de rendre le décodage *par lots* — et j'ai mesuré que le regroupement vaut ×1,58 en préremplissage. Aujourd'hui le décodage est à un jeton : aucune réutilisation possible. Critère : ≥ 2 jetons acceptés par passe.
-
-3. **La grappe** (le seul moyen de descendre sous la minute). Un nœud = une plage de couches, chacun ne lit que son shard. Le découpage tient déjà — 5 modes sous porte, écarts nuls à 4,45e-3. À 3 nœuds : 500 Go chacun.
-
-4. **La porte de correction comme produit** : « prouvez que votre moteur calcule le même modèle ». C'est la méthodologie qui a trouvé les trois bugs de K3 en deux heures.
-
-**Ce qu'il faut arrêter, et c'est mesuré** : courir après les tok/s sur les modèles qui tiennent en RAM ; les noyaux GPU pour le MoE (2,7-3,9 Go/jeton contre 32 Go de VRAM) ; les caches d'experts en VRAM (×1,09) ; rendre le dense résident (la page cache ne le garde pas, la copie anonyme swape).
-
-**En une phrase** : Drave n'est pas un moteur rapide — c'est le seul qui *finit* un modèle de 1,5 To sur 125 Go, et il le prouve cont
-… [108 caractères tronqués]
+**Le regroupement marche** : 64 lectures d'experts → 51-57 selon la couche. Je lance la passe complète.
 
 ## 3. Travail accompli
 
@@ -5707,7 +5686,7 @@ Ce n'est pas une victoire de vitesse, c'est une victoire d'**existence**. Dans c
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6187 autres
+- … et 6197 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5835,7 +5814,7 @@ Ce n'est pas une victoire de vitesse, c'est une victoire d'**existence**. Dans c
 
 ## 5. Erreurs rencontrées
 
-357 sorties en erreur ou divergentes. Les premières :
+358 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -6378,4 +6357,5 @@ Ce n'est pas une victoire de vitesse, c'est une victoire d'**existence**. Dans c
 - K3 : le dense emprunté donne x1,12 et des logits conformes — et le cache de pages NE le garde pas  Gguf::q8_blocks + DenseQ8::emprunter_q8 + dot_q8_source sur l
 - K3 : le dense emprunté s'ANNONCE, et l'arène résidente est réfutée (elle swape)  1. FAUTE CORRIGÉE : j'avais mis le dense emprunté en défaut SILENCIEUX alors   
 - docs : le roadmap — où Drave est à son meilleur, et ce qu'il faut arrêter  La niche est définie par une mesure, pas par une opinion : 451 Go lus par jeton pour 
+- K3 : le regroupement par experts dans la couche — 64 lectures deviennent 51  MoeK3::avant_lot : le routeur de chaque jeton, puis des GROUPES par expert, puis un
 

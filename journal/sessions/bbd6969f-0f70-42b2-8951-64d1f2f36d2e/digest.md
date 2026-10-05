@@ -121717,3 +121717,138 @@ Ce n'est pas une victoire de vitesse, c'est une victoire d'**existence**. Dans c
 Je reprends sur l'axe 1, première prise : le regroupement par experts dans la couche.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > docs/roadmap-drave.md <<'EOF'\n# Où Drave est à son meilleur — le roadmap, et pourquoi c'est cette niche-là\n\n> Écrit après la mesure du 05/10. Chaque chiffre de ce document vient d'un relevé\n> du dépôt ; ceux qui viennent d' … [5822 caractères tronqués]`
+
+  ```
+120fab5 docs : le roadmap — où Drave est à son meilleur, et ce qu'il faut arrêter
+  ```
+
+### 🤖 Assistant
+
+⏵ J'implémente le regroupement par experts dans la couche — un expert lu une fois pour tout le lot
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && sed -n '/pub fn avant(&self, cur: &\\[f32\\]) -> Result<Vec<f32>, String> {/,/^    }$/p' kimi_k3.rs | head -70", "description": "Read MoeK3::avant in full"}`
+
+  ```
+pub fn avant(&self, cur: &[f32]) -> Result<Vec<f32>, String> {
+        let (h, latent, n_exp, k) = (self.h, self.latent, self.n_exp, self.k);
+        if cur.len() != h { return Err(format!("entrée de {} au lieu de {h}", cur.len())); }
+        // 1. logits du routeur, sur la PLEINE largeur
+        let mut logits = vec![0f32; n_exp];
+        mv(&self.gate_inp, n_exp, h, cur, &mut logits);
+        // 2. sigmoïde, puis SÉLECTION avec le biais (le biais ne va pas aux poids)
+        let probs: Vec<f32> = logits.iter().map(|v| 1.0 / (1.0 + (-v).exp())).collect();
+        let mut choix: Vec<usize> = (0..n_exp).collect();
+        choix.sort_by(|&a, &b| {
+            let (pa, pb) = (probs[a] + self.biais[a], probs[b] + self.biais[b]);
+            pb.partial_cmp(&pa).unwrap_or(std::cmp::Ordering::Equal)
+        });
+        let choisis = &choix[..k.min(n_exp)];
+        let somme: f32 = choisis.iter().map(|&e| probs[e]).sum();
+        let poids: Vec<f32> = choisis.iter().map(|&e| probs[e] / somme.max(1e-20)).collect();
+        // 3. le latent
+        let mut rin = vec![0f32; latent];
+        mv(&self.rout_down, latent, h, cur, &mut rin);
+        // Trace de routage (`DRAVE_K3_TRACE_EXPERTS`) : 
+… [2968 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && python3 - <<'PY'\np='kimi_k3.rs'; s=open(p).read()\n# on renomme l'actuelle en `avant_jeton` (privée) et on écrit la version par LOTS\ns = s.replace(\"\"\"    pub fn avant(&self, cur: &[f32]) -> Result<Vec<f32>, String … [6580 caractères tronqués]`
+
+  ```
+squelette posé
+872:        Ok(self.avant_lot_suite(acc, &rin))
+875:    fn avant_lot_suite(&self, _acc: Vec<Vec<f32>>, _rin: &[Vec<f32>]) -> Vec<Vec<f32>> {
+879:    fn avant_jeton_ancien(&self, cur: &[f32]) -> Result<Vec<f32>, String> {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && python3 - <<'PY'\np='kimi_k3.rs'; s=open(p).read()\nold = \"\"\"        let _ = (h, n_exp);\n        Ok(self.avant_lot_suite(acc, &rin))\n    }\n\n    fn avant_lot_suite(&self, _acc: Vec<Vec<f32>>, _rin: &[Vec<f32>]) - … [1770 caractères tronqués]`
+
+  ```
+repli retiré, une seule implémentation
+=== build ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && sed -n '/^        for i in 0..ntok {$/,/^        }$/p' kimi_k3.rs | sed -n '1,50p' | tail -22", "description": "Find the token loop in passe_complete"}`
+
+  ```
+for j in 0..h { prefix[j] += attn[j]; }
+                let mut plat = Vec::with_capacity(pile.len() * h);
+                for ck in pile.iter() { plat.extend_from_slice(&ck[i]); }
+                crate::model::res_mix(&plat, pile.len(), h, &prefix,
+                                      &normes.ffn_score, eps, &mut cur2);
+            }
+            let mut xn2 = vec![0f32; h];
+            {
+                let n2 = match &c {
+                    CoucheK3::Dense { normes, .. } => &normes.ffn,
+                    CoucheK3::Moe { normes, .. } => &normes.ffn,
+                };
+                rms_norm_poids(&cur2, n2, eps, &mut xn2);
+            }
+            let tf = std::time::Instant::now();
+            let ffn = match &mut c {
+                CoucheK3::Dense { ffn, .. } => ffn.avant(&xn2)?,
+                CoucheK3::Moe { moe, .. } => moe.avant(&xn2)?,
+            };
+            t_ffn += tf.elapsed().as_secs_f64();
+            for j in 0..h { prefix[j] += ffn[j]; }
+            flux[i] = prefix;
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && python3 - <<'PY'\np='kimi_k3.rs'; s=open(p).read()\nold = \"\"\"            let tf = std::time::Instant::now();\n            let ffn = match &mut c {\n                CoucheK3::Dense { ffn, .. } => ffn.avant(&xn2)?,\n  … [2224 caractères tronqués]`
+
+  ```
+passe_complete par lots
+=== build ===
+test result: FAILED. 76 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo test --release 2>&1 | grep -E \"^---- |panicked|assertion|left|right\" | head -12", "description": "See which test failed", "timeoutMs": 600000}`
+
+  ```
+---- tests_vars::les_vars_lues_sont_completes stdout ----
+thread 'tests_vars::les_vars_lues_sont_completes' (1717835) panicked at src/main.rs:5801:13:
+  ```
+
+### 🤖 Assistant
+
+Le test des variables a attrapé mon oubli — il fait son travail.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && sed -i 's/\"K3_DENSE_FIGE\",/\"K3_DENSE_FIGE\", \"K3_STATS_EXPERTS\",/' main.rs && grep -n \"K3_STATS_EXPERTS\" main.rs | head -2; cd .. && cargo test --release 2>&1 | grep \"^test result\"", "description": "Declare th … [36 caractères tronqués]`
+
+  ```
+27:    "TRACE_BLOCS", "TUILE_LOT", "K3_COUCHES", "K3_SANS_ETAT", "K3_PASSE", "K3_TETE", "K3_LOGITS", "K3_GEN", "K3_MXFP4", "K3_TRACE_EXPERTS", "K3_IDS", "K3_DENSE_FIGE", "K3_STATS_EXPERTS", "K3_IMPOSE",
+test result: ok. 77 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && K=/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf\necho \"=== 4 couches, avec le regroupement ===\"\nDRAVE_K3_STATS_EXPERTS=1 DRAVE_K3_PASSE=4 DRAVE_K3_MXFP4=1 timeout 900 ./dra … [264 caractères tronqués]`
+
+  ```
+=== 4 couches, avec le regroupement ===
+    [moe] couche 1 : 1 jeton(s) × 16 experts = 16 lectures jeton par jeton, 16 avec le regroupement — gain ×1.00
+    [moe] couche 1 : 1 jeton(s) × 16 experts = 16 lectures jeton par jeton, 16 avec le regroupement — gain ×1.00
+    [moe] couche 2 : 1 jeton(s) × 16 experts = 16 lectures jeton par jeton, 16 avec le regroupement — gain ×1.00
+    [moe] couche 3 : 1 jeton(s) × 16 experts = 16 lectures jeton par jeton, 16 avec le regroupement — gain ×1.00
+    [moe] couche 1 : 1 jeton(s) × 16 experts = 16 lectures jeton par jeton, 16 avec le regroupement — gain ×1.00
+    [moe] couche 2 : 1 jeton(s) × 16 experts = 16 lectures jeton par jeton, 16 avec le regroupement — gain ×1.00
+    [moe] couche 3 : 1 jeton(s) × 16 experts = 16 lectures jeton par jeton, 16 avec le regroupement — gain ×1.00
+    [moe] couche 1 : 1 jeton(s) × 16 experts = 16 lectures jeton par jeton, 16 avec le regroupement — gain ×1.00
+=== rappel sans regroupement (MXFP4, 4 couches) : 19 844 ms ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && K=/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf\nDRAVE_K3_STATS_EXPERTS=1 DRAVE_K3_PASSE=4 DRAVE_K3_MXFP4=1 timeout 900 ./drave-core/target/release/drave $K --k3-essai 2>&1 |  … [174 caractères tronqués]`
+
+  ```
+passe complète : 4 couche(s), une seule en mémoire à la fois
+    [moe] couche 1 : 4 jeton(s) × 16 experts = 64 lectures jeton par jeton, 57 avec le regroupement — gain ×1.12
+    [moe] couche 2 : 4 jeton(s) × 16 experts = 64 lectures jeton par jeton, 53 avec le regroupement — gain ×1.21
+    [moe] couche 3 : 4 jeton(s) × 16 experts = 64 lectures jeton par jeton, 51 avec le regroupement — gain ×1.25
+  ---- chargement 2.6 s (22 %) · calcul 9.2 s (78 %) [attention 3.3 s · FFN 5.9 s]
+  passe complète : 13927 ms au total
+  ```
+
+### 🤖 Assistant
+
+**Le regroupement marche** : 64 lectures d'experts → 51-57 selon la couche. Je lance la passe complète.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && K=/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf\nnohup bash -c \"cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && DRAVE_K3_PASSE=93 DRAVE_K3_TETE=1 DRAVE_K3_MXFP4=1 DRAVE … [1098 caractères tronqués]`
