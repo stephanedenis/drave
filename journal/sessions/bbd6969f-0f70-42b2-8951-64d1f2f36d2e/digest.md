@@ -129586,3 +129586,122 @@ Le balayage tourne correctement à présent. **`a=0.1` donne 0,6036-0,6039**, co
 **La cascade gagne sur la fidélité** : 0,6105 contre 0,5921 pour le plat — et l'écart au-dessus de la constante passe de +0,0263 à **+0,0447, soit +70 %**.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-pont-generatif.md'; s=open(p).read()\ns += \"\"\"\n\n## 11. Les réglages ne se transfèrent pas : la cascade veut le contraire du plat\n\n`a = 0,2` et ride `3·10⁻¹` avaient été trouvés pour le rése … [3492 caractères tronqués]`
+
+  ```
+bb7c3fc La cascade préfère les réglages OPPOSÉS au réservoir plat
+
+arl 110s
+appr30b: 18/40
+  ```
+
+### 🤖 Assistant
+
+⏵ La chaîne 30B est à 18/40 (~110 min restantes). J'utilise l'attente pour un contrôle de robustesse : le gain de la cascade tient-il sur d'autres graines et d'autres découpages de validation ?
+
+La chaîne 30B est à 18/40. J'utilise l'attente pour un **contrôle de robustesse** : le gain de la cascade tient-il sur d'autres graines et d'autres découpages de validation, ou est-ce un coup de chance sur un tirage ?
+
+- **bash** `{"command": "cat > /tmp/robustesse.sh <<'EOF'\n#!/bin/bash\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nT=/tmp/cache_appr40.npz\nV=/tmp/cache_tenus_trace.npz\n: > /tmp/robustesse.log\nfor G in 1 5 11 23; do\n  for VA in 6 10 14; do\n    echo \"=== graine=$G val=$VA ===\" >> /tmp/robustesse.l … [533 caractères tronqués]`
+
+  ```
+contrôle de robustesse lancé (12 tirages)
+=== graine=1 val=6 ===
+=== MEILLEUR RÉSEAU SELON LA VALIDATION (C2 croissance) ===
+  taille           : 256 neurones · 11 couches
+  fidélité TEST    : 0.6044   (constante témoin : 0.5618)
+=== graine=1 val=10 ===
+=== MEILLEUR RÉSEAU SELON LA VALIDATION (C2 croissance) ===
+  taille           : 256 neurones · 11 couches
+  fidélité TEST    : 0.6054   (constante témoin : 0.5658)
+=== graine=1 val=14 ===
+=== MEILLEUR RÉSEAU SELON LA VALIDATION (C2 croissance) ===
+  taille           : 256 neurones · 12 couches
+  fidélité TEST    : 0.6059   (constante témoin : 0.5692)
+  ```
+
+### 🤖 Assistant
+
+⏵ Premier contrôle : la fidélité de test est stable (0,6044-0,6059) sur trois découpages, mais **la graine 5 donnait 0,6105** — il y a donc une variance de tirage d'environ 0,005. Je laisserai le balayage finir pour rapporter la plage, pas le meilleur.
+
+**Point d'honnêteté** : la graine 5 donnait 0,6105, la graine 1 donne 0,6044-0,6059. Il y a une variance de tirage d'environ 0,005 — je rapporterai la **plage**, pas le meilleur coup.
+
+- **bash** `{"command": "sleep 420; grep -E \"^=== |fidélité TEST\" /tmp/robustesse.log | paste - - 2>/dev/null | head -14; echo; echo \"=== 30B ===\"; tail -1 /tmp/trace30b_train.log; echo \"appr30b: $(ls /home/stephane/Data13TB/stephane/corpus/udhr/appr30b | wc -l)/40\"", "description": "Check robustness resu … [26 caractères tronqués]`
+
+  ```
+=== graine=1 val=6 ===	=== MEILLEUR RÉSEAU SELON LA VALIDATION (C2 croissance) ===
+  fidélité TEST    : 0.6044   (constante témoin : 0.5618)	=== graine=1 val=10 ===
+=== MEILLEUR RÉSEAU SELON LA VALIDATION (C2 croissance) ===	  fidélité TEST    : 0.6054   (constante témoin : 0.5658)
+=== graine=1 val=14 ===	=== MEILLEUR RÉSEAU SELON LA VALIDATION (C2 croissance) ===
+  fidélité TEST    : 0.6059   (constante témoin : 0.5692)	=== graine=5 val=6 ===
+=== MEILLEUR RÉSEAU SELON LA VALIDATION (C2 croissance) ===	  fidélité TEST    : 0.6095   (constante témoin : 0.5618)
+=== graine=5 val=10 ===	=== MEILLEUR RÉSEAU SELON LA VALIDATION (C2 croissance) ===
+  fidélité TEST    : 0.6105   (constante témoin : 0.5658)	=== graine=5 val=14 ===
+=== MEILLEUR RÉSEAU SELON LA VALIDATION (C2 croissance) ===	  fidélité TEST    : 0.6101   (constante témoin : 0.5692)
+=== graine=11 val=6 ===	=== MEILLEUR RÉSEAU SELON LA VALIDATION (C2 croissance) ===
+  fidélité TEST    : 0.6025   (constante témoin : 0.5618)	=== graine=11 val=10 ===
+=== MEILLEUR RÉSEAU SELON LA VALIDATION (C2 croissance) ===	  fidélité TEST    : 0.6049   (constante témoin : 0.5658)
+=== graine=11 val=14 ===	=== MEILLEUR RÉSEAU SELON LA VALIDATION 
+… [138 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le contrôle de robustesse est presque complet : l'avantage sur la constante va de **+0,037 à +0,048** sur 9 combinaisons. J'attends la dernière graine puis je consigne la plage.
+
+**L'avantage est robuste** : sur 9 combinaisons (graine × découpage), il va de **+0,037 à +0,048** — toujours positif, toujours substantiel. J'attends la dernière graine.
+
+- **bash** `{"command": "sleep 240; tail -6 /tmp/robustesse.log; echo \"--- TERMINE ? ---\"; grep -c TERMINE /tmp/robustesse.log; echo \"=== 30B ===\"; tail -1 /tmp/trace30b_train.log; ls /home/stephane/Data13TB/stephane/corpus/udhr/appr30b | wc -l", "description": "Wait for last seed", "timeoutMs": 300000}`
+
+  ```
+fidélité VAL     : 0.7133
+  fidélité TEST    : 0.6092   (constante témoin : 0.5692)
+  invariance TEST  : 0.9245 · pire paire 0.7765
+
+# état final du réseau : 61 neurones · 10 couches ([1, 1, 5, 11, 8, 17, 1, 5, 8, 4])
+TERMINE
+--- TERMINE ? ---
+1
+=== 30B ===
+bax 111s
+27
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôle terminé. Je compile le tableau complet.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport re\nt=open('/tmp/robustesse.log').read()\nblocs = re.split(r\"=== graine=(\\d+) val=(\\d+) ===\", t)\nlignes=[]\nfor i in range(1, len(blocs), 3):\n    g, va, corps = blocs[i], blocs[i+1], blocs[i+2]\n    m = … [937 caractères tronqués]`
+
+  ```
+graine  val  fid TEST  constante  avantage  neur.  couch.
+      1    6    0.6044     0.5618   +0.0426    256      11
+      1   10    0.6054     0.5658   +0.0396    256      11
+      1   14    0.6059     0.5692   +0.0367    256      12
+      5    6    0.6095     0.5618   +0.0477    256      11
+      5   10    0.6105     0.5658   +0.0447    256      11
+      5   14    0.6101     0.5692   +0.0409    256      11
+     11    6    0.6025     0.5618   +0.0407    256      10
+     11   10    0.6049     0.5658   +0.0391    256      11
+     11   14    0.6131     0.5692   +0.0439    256      12
+     23    6    0.6058     0.5618   +0.0440    256      10
+     23   10    0.6070     0.5658   +0.0412    256      11
+     23   14    0.6092     0.5692   +0.0400    256      10
+
+fid TEST   : min 0.6025 · max 0.6131 · médiane 0.6070
+AVANTAGE   : min +0.0367 · max +0.0477 · médiane +0.0412
+  ```
+
+### 🤖 Assistant
+
+⏵ Tableau complet et propre. Je consigne la **médiane**, pas le meilleur.
+
+**12 tirages, 12 fois le même verdict :**
+
+| | fid TEST | avantage sur la constante |
+|---|---:|---:|
+| minimum | 0,6025 | +0,0367 |
+| **médiane** | **0,6070** | **+0,0412** |
+| maximum | 0,6131 | +0,0477 |
+
+Et **les 12 runs butent sur mon plafond de 256 neurones** — la taille est limitée par ma borne, pas par l'apprentissage.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-pont-generatif.md'; s=open(p).read()\ns += \"\"\"\n\n## 12. Contrôle de robustesse : douze tirages, douze fois le même verdict\n\nUn seul tirage ne prouve rien. Douze combinaisons (4 graines du ré … [2224 caractères tronqués]`

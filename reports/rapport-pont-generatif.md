@@ -309,3 +309,33 @@ autre. C'est le même principe que « un pont par professeur », un cran plus ba
 0,9772) : c'est la courbe d'échange, la cascade occupant un point plus avancé sur
 l'axe fidélité. Le plat, lui, **ne peut pas atteindre 0,6105** : il plafonne à
 0,5921 puis recule.
+
+
+## 12. Contrôle de robustesse : douze tirages, douze fois le même verdict
+
+Un seul tirage ne prouve rien. Douze combinaisons (4 graines du réservoir gelé ×
+3 découpages de validation), configuration gagnante `a=0,5` ride `1,0` :
+
+| graine | val 6 | val 10 | val 14 |
+|---|---:|---:|---:|
+| 1 | 0,6044 | 0,6054 | 0,6059 |
+| 5 | 0,6095 | 0,6105 | 0,6101 |
+| 11 | 0,6025 | 0,6049 | **0,6131** |
+| 23 | 0,6058 | 0,6070 | 0,6092 |
+
+| | fid TEST | **avantage sur la constante** |
+|---|---:|---:|
+| minimum | 0,6025 | **+0,0367** |
+| **médiane** | **0,6070** | **+0,0412** |
+| maximum | 0,6131 | **+0,0477** |
+
+**La médiane est la seule chose honnête à citer** : +0,0412. Le meilleur tirage
+(0,6131) existe, mais le citer seul serait du choix a posteriori — c'est
+exactement la faute corrigée au §7.
+
+Face au réservoir plat, dont l'avantage mesuré est **+0,0263**, la cascade fait
+donc **1,6 fois mieux**, et cela tient sur douze tirages indépendants.
+
+**Et les douze runs butent sur le plafond de 256 neurones** (10 à 12 couches) :
+la taille atteinte est limitée par MA borne, pas par l'apprentissage. La question
+« jusqu'où la croissance irait seule » reste ouverte.
