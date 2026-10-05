@@ -128772,3 +128772,88 @@ C1 naissance couche 9 (+128)      256       9    0.6081
 **L'attrition produit le meilleur test de tout le processus** (0,5035), meilleur que n'importe quel point de croissance. Je consigne.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-pont-generatif.md'; s=open(p).read()\ns += \"\"\"\n\n## 9. Où la croissance s'arrête : le plateau est à ~470 neurones\n\nCourse avec plafond 512, deux cycles. Cycle 2 (le réseau part de 192 surviv … [3387 caractères tronqués]`
+
+  ```
+ad52e51 Le plateau de croissance est trouvé (~470 neurones), et l'ATTRITION fait mieux que la croissance
+--- 30B ---
+ell.drvf
+  ```
+
+### 🤖 Assistant
+
+⏵ Pendant que le 30B trace, j'écris l'outil de comparaison finale.
+
+Le 30B avance (1/6, ~5,6 min par langue). J'écris l'outil qui produira la comparaison exigée par l'objectif : **professeurs 0.5B et 30B contre le pont génératif, sur le même périmètre**.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/compare_professeurs.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"compare_professeurs.py — les professeurs et notre pont, sur le MÊME périmètre.\n\nUne comparaison d'invariance n'a de sens que si TOUT est mesuré sur les mêmes\ … [3368 caractères tronqués]`
+
+  ```
+professeur 0.5B, couche 10 (cible du pont)       6 langues · couche 10 · invariance 0.4487 · pire paire 0.3188
+syntaxe OK
+  ```
+
+### 🤖 Assistant
+
+⏵ Le professeur 0.5B donne **0,4487** d'invariance sur ce périmètre. Je trace sa courbe complète.
+
+**Le professeur 0.5B, couche 10, sur le périmètre des 10 unités : invariance 0,4487** (pire paire 0,3188). Je trace sa courbe sur les 24 couches pour situer son plateau.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=/home/stephane/Data13TB/stephane/corpus/udhr/tenus10; echo \"=== professeur Qwen2.5-0.5B, invariance par couche (6 langues, 10 unités) ===\"; for c in 0 4 8 10 12 16 20 23; do python3 tools/compare_professeurs.py $D --couche $c --e … [264 caractères tronqués]`
+
+  ```
+=== professeur Qwen2.5-0.5B, invariance par couche (6 langues, 10 unités) ===
+  0.5B couche 0                                  6 langues · couche  0 · invariance 0.5827 · pire paire 0.4251
+  0.5B couche 4                                  6 langues · couche  4 · invariance 0.3388 · pire paire 0.1691
+  0.5B couche 8                                  6 langues · couche  8 · invariance 0.5090 · pire paire 0.3801
+  0.5B couche 10                                 6 langues · couche 10 · invariance 0.4487 · pire paire 0.3188
+  ell.drvf : couche 12 absente
+  heb.drvf : couche 12 absente
+  hin.drvf : couche 12 absente
+  jpn.drvf : couche 12 absente
+  kor.drvf : couche 12 absente
+  tha.drvf : couche 12 absente
+  0.5B couche 12 : 0 langue(s) — invariance non calculable
+[timed out after 300000ms]
+[killed by signal: SIGTERM]
+  ```
+
+### 🤖 Assistant
+
+⏵ La couche 12 est absente (traces bornées à 0:11) et l'outil relit les fichiers à chaque couche. Je le rends multi-couches en une passe.
+
+La couche 12 est absente car les traces sont bornées à `0:11` — cohérent. Mais l'outil relit tout à chaque couche : je le corrige pour lire en **une seule passe**.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/compare_professeurs.py'; s=open(p).read()\ns=s.replace(\"def lire(chemin, couche):\",\"def lire(chemin, couches):\")\ns=s.replace(\"\"\"            pp = paires(f, n, version)\n            if c == couche:\n  … [1020 caractères tronqués]`
+
+  ```
+brouillon
+--- correction propre ---
+  ```
+
+### 🤖 Assistant
+
+⏵ Mon brouillon est cassé (on ne peut pas sauter un corps sans le lire). Je réécris proprement.
+
+`paires` consomme le corps — on ne peut pas sauter sans lire. Je réécris la fonction correctement : on parse toujours, on ne **stocke** que ce qui est demandé.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/compare_professeurs.py'; s=open(p).read()\ni=s.index(\"def lire(\"); j=s.index(\"def inv(\")\nneuf = '''def lire(chemin, couches):\n    \"\"\"Lit UNE fois et rend, pour chaque couche demandée, le vecteur de … [3433 caractères tronqués]`
+
+  ```
+réécrit
+syntaxe OK
+# professeur Qwen2.5-0.5B — 6 langues : ell heb hin jpn kor tha
+  couche  0 : invariance 0.5827 · pire paire 0.4251
+  couche  2 : invariance 0.2974 · pire paire 0.1008
+  couche  4 : invariance 0.3388 · pire paire 0.1691
+  couche  6 : invariance 0.3463 · pire paire 0.1626
+  couche  8 : invariance 0.5090 · pire paire 0.3801
+  couche 10 : invariance 0.4487 · pire paire 0.3188
+  ```
+
+### 🤖 Assistant
+
+⏵ Le lecteur multi-couches fonctionne. Courbe du professeur 0.5B établie ; j'attends le 30B.
+
+**La courbe du professeur 0.5B sur ce périmètre est basse** : 0,58 au maximum (couche 0), 0,30 au minimum (couche 2), 0,45 à la couche 10 qui est la cible du pont. Le pont génératif, à **0,94-0,97**, est donc bien plus invariant que le professeur qu'il émule. J'attends le 30B.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"compare_professeurs.py : les professeurs et notre pont sur le MÊME périmètre\n\nUne comparaison d'invariance n'a de sens que si tout est mesuré sur les mêmes\nlangues, les mêmes unités et la même posi … [840 caractères tronqués]`

@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 166.6 h |
+| Durée | 166.7 h |
 | Tours | 122 |
-| Messages | 8014 |
-| Appels d'outils | 7640 |
+| Messages | 8019 |
+| Appels d'outils | 7645 |
 | Fichiers touchés | 150 |
-| Commandes | 6526 |
+| Commandes | 6531 |
 | Sous-agents | 32 |
-| Commits | 560 |
+| Commits | 561 |
 | Compactages de contexte | 11 |
 
 ## Objectifs déclarés
@@ -6198,27 +6198,24 @@ J'ai aussi remplacé le critère de retrait : couper par contribution ne « gén
 
 ### Tour 122 — <goal_round> Objective: "Faire évoluer le pont linguistico-sémantique en BOÎTE NOIRE (émulation des premières couches du … [1231 caractères tronqués]
 
-*5 appels d'outils.* Actions notables :
+*10 appels d'outils.* Actions notables :
 
 - bash — Check running job and 30B availability
 - bash — Time 30B trace on one language
 - bash — Launch 30B traces for held-out languages
 - bash — Read full plafond-512 log
 - bash — Commit plateau finding, check 30B progress
+- bash — Write professor comparison tool
+- bash — Sweep 0.5B teacher invariance by layer
+- bash — Draft multi-layer reader
+- bash — Rewrite multi-layer reader and test
+- bash — Commit tool and check 30B
 
 **Synthèse produite :**
 
-⏵ **Le plateau est trouvé** : la validation culmine à 468 neurones puis redescend. Je consigne.
+⏵ Le lecteur multi-couches fonctionne. Courbe du professeur 0.5B établie ; j'attends le 30B.
 
-**Le plateau est trouvé.** La validation culmine à **468 neurones / 13 couches** (0,6482) puis **redescend** à 512 (0,6478). Et l'attrition fait mieux que la croissance :
-
-| | neurones | couches | fid VAL | **fid TEST** |
-|---|---:|---:|---:|---:|
-| croissance max | 512 | 14 | 0,6478 | 0,5026 |
-| **attrition → 384** | **384** | 14 | 0,6458 | **0,5035** |
-| attrition → 288 (retenu) | 288 | 13 | 0,6430 | 0,5031 |
-
-**L'attrition produit le meilleur test de tout le processus** (0,5035), meilleur que n'importe quel point de croissance. Je consigne.
+**La courbe du professeur 0.5B sur ce périmètre est basse** : 0,58 au maximum (couche 0), 0,30 au minimum (couche 2), 0,45 à la couche 10 qui est la cible du pont. Le pont génératif, à **0,94-0,97**, est donc bien plus invariant que le professeur qu'il émule. J'attends le 30B.
 
 ## 3. Travail accompli
 
@@ -6454,7 +6451,7 @@ J'ai aussi remplacé le critère de retrait : couper par contribution ne « gén
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6486 autres
+- … et 6491 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -7162,4 +7159,5 @@ J'ai aussi remplacé le critère de retrait : couper par contribution ne « gén
 - L'ATTRITION PÉRIODIQUE paie : deux cycles battent une passe  --cycles N alterne croissance et attrition, avec COMPACTION de la généalogie entre les deux (sans e
 - Cycles confirmés sur la tâche 10x plus dure : +68 % d'avantage sur la constante                          neurones  couches  fid VAL   fid TEST   réservoir plat 
 - Le plateau de croissance est trouvé (~470 neurones), et l'ATTRITION fait mieux que la croissance  Course plafond 512, deux cycles, tâche 10 unités (constante té
+- compare_professeurs.py : les professeurs et notre pont sur le MÊME périmètre  Une comparaison d'invariance n'a de sens que si tout est mesuré sur les mêmes lang
 
