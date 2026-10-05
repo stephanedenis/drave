@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 165.0 h |
 | Tours | 119 |
-| Messages | 7926 |
-| Appels d'outils | 7558 |
+| Messages | 7943 |
+| Appels d'outils | 7575 |
 | Fichiers touchés | 150 |
-| Commandes | 6449 |
+| Commandes | 6465 |
 | Sous-agents | 32 |
-| Commits | 551 |
+| Commits | 552 |
 | Compactages de contexte | 11 |
 
 ## Objectifs déclarés
@@ -5993,7 +5993,7 @@ Tout est commité, 77 tests verts, `REPRISE.md` et `reports/rapport-pont-semanti
 
 ### Tour 119 — ajoute des neuronnes et des couches au besoin. il faut émuler le prof le plus fidèlement possible à moindre coût en misa … [60 caractères tronqués]
 
-*55 appels d'outils.* Actions notables :
+*72 appels d'outils.* Actions notables :
 
 - bash — Measure fidelity in full space across models
 - bash — Retrain with double the data
@@ -6009,13 +6009,11 @@ Tout est commité, 77 tests verts, `REPRISE.md` et `reports/rapport-pont-semanti
 - bash — Find the tracing pipeline
 - bash — Find how vaste traces were produced
 - bash — Locate the 0.5B tracing script
-- … et 35 autres
+- … et 51 autres
 
 **Synthèse produite :**
 
-⏵ Diagnostic final : écart angulaire ~0,3 %, pas un simple facteur d'échelle. Je consigne et je commite.
-
-Voilà le diagnostic complet. Ni proportionnel (donc pas la norme finale seule), ni du bruit de threading (le moteur est déterministe) : c'est une **déviation angulaire de 0,2–0,4 %** qui naît après la couche 0.
+⏵ Traçage lancé (arguments vérifiés). Je consigne le second gaspillage — le chargement — pendant que ça tourne.
 
 ## 3. Travail accompli
 
@@ -6251,7 +6249,7 @@ Voilà le diagnostic complet. Ni proportionnel (donc pas la norme finale seule),
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6409 autres
+- … et 6425 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -6379,7 +6377,7 @@ Voilà le diagnostic complet. Ni proportionnel (donc pas la norme finale seule),
 
 ## 5. Erreurs rencontrées
 
-374 sorties en erreur ou divergentes. Les premières :
+375 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -6950,4 +6948,5 @@ Voilà le diagnostic complet. Ni proportionnel (donc pas la norme finale seule),
 - Ajouter des neurones DÉTRUIT la fidélité ; ajouter une COUCHE la sauve  Mesure corrigée dans l'espace complet (l'ancienne comparait dans le sous-espace du rang 
 - LA COUCHE RÉCURRENTE GAGNE : réservoir 64 neurones, 0,59 fidélité / 0,91 invariance / 0,84 pire paire  s_t = (1-a)s_(t-1) + a·tanh(A·s_(t-1) + B·e_t), A et B AL
 - Coût du professeur : 77-83 % des traces sont des couches jamais lues  Mesuré : les traces stockent TOUTES les couches du professeur (24 pour le 0.5B, 48 pour le
+- Le chargement n'est pas borné par --couches, et l'attention quadratique interdit les longues passes  1. --couches borne l'EXÉCUTION, pas le CHARGEMENT. Mesuré :
 

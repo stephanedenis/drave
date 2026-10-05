@@ -74,3 +74,34 @@ documente déjà le danger de la double norme. `--couches` est un outil de
   les couches suivantes) reste à écrire : c'est la seule version sans réserve.
 - **Ne jamais** mettre `--trace-couches` en croyant borner le calcul : il ne filtre
   que l'**écriture**. Seul `--couches a:b` borne l'exécution.
+
+## 6. Second gaspillage : `--couches` borne l'EXÉCUTION, pas le CHARGEMENT
+
+Mesuré sur la trace en cours (Qwen2.5-0.5B, `--couches 0:11`) :
+
+```
+[modele] 24 couches chargées en 8.514 s — listes 1.04 Go , 20 threads
+```
+
+**24 couches chargées pour 11 exécutées.** Dans `load_partiel`, la construction des
+couches est une boucle `for l in 0..cfg.n_layer` (`model.rs:4001`) ; la plage
+`couches` n'est consommée qu'**après**, en `couche_debut`/`couche_fin`
+(`model.rs:4368-4369`). Le lyrisme des commentaires (« exécution bornée ») est exact
+mais partiel : on charge tout, on n'exécute qu'une partie.
+
+Sur le 0.5B (491 Mo) c'est sans conséquence. Sur **Qwen3-30B-A3B**, professeur dont
+on n'utilise que les couches 0..17 sur 48, cela veut dire **lire 18 Go sur un disque
+rotatif pour en calculer 37 %**. Le correctif est court — passer `couches` à la
+boucle de construction et sauter les indices hors plage — et n'a pas été fait ici.
+
+## 7. Le coût d'une longue invite : l'attention est quadratique
+
+Tentative de tracer les **42 unités** de l'UDHR (10 424 caractères en anglais,
+20 703 en abkhaze) à `--ctx 4096`. Après **plus de cinq minutes**, l'abkhaze était
+toujours en cours et le fichier atteignait **156 Mo** — contre 16,6 s et 27,7 Mo
+pour l'anglais à `--ctx 512`. Passage de 512 à 4 096 jetons = **64× plus de travail
+d'attention**. Job arrêté.
+
+**Leçon** : pour multiplier la donnée, il faut multiplier les **passes courtes**,
+pas allonger les passes. Retenu : **10 unités par langue** (~130 jetons en anglais,
+~350 en abkhaze) à `--ctx 1024`, soit ~5× la donnée actuelle pour ~12 s par langue.

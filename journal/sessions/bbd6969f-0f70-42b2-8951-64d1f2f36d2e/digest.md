@@ -126768,3 +126768,317 @@ couche 10 : cos=0.997972 · rapport de normes |A|/|B| = 1.000356 (écart-type 7.
 Voilà le diagnostic complet. Ni proportionnel (donc pas la norme finale seule), ni du bruit de threading (le moteur est déterministe) : c'est une **déviation angulaire de 0,2–0,4 %** qui naît après la couche 0.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > docs/note-cout-professeur.md <<'EOF'\n# Le coût du professeur : ce qu'on calcule pour rien\n\nConstat de départ : nos traces contiennent **toutes** les couches du professeur.\nLa mission s'arrête au premier niveau abstrait — co … [4793 caractères tronqués]`
+
+  ```
+12346ae Coût du professeur : 77-83 % des traces sont des couches jamais lues
+11:44
+  ```
+
+### 🤖 Assistant
+
+⏵ Il est 11h44 : j'ai 16 minutes. Je lance l'expérience qui attaque le vrai mur — la donnée.
+
+Le diagnostic est consigné. Il me reste ~15 min : je les mets sur **le vrai mur — la donnée**. Les traces actuelles ne contiennent que l'article 1 ; `unites.jsonl` en porte **42**. Je vérifie le format attendu puis je lance.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,50p' tools/pont_reservoir.py; echo \"=== ... ===\"; grep -n \"glob\\|appr40\\|drvf\\|ids\\|couche\\|layer\" tools/pont_reservoir.py | head -25", "description": "Read reservoir input format"}`
+
+  ```
+#!/usr/bin/env python3
+"""pont_reservoir.py — ajouter une COUCHE RÉCURRENTE sans rétropropagation.
+
+Le diagnostic du rapport : sans contexte, le pont plafonne à 0,57 de fidélité,
+parce que la couche 10 du professeur **agrège tout le préfixe** — un seul jeton ne
+peut pas la prédire. Il faut donc du contexte.
+
+La réponse qui respecte la contrainte (« pas de rétropropagation ») est un
+**réservoir** : une couche récurrente **aléatoire et gelée**, dont seule la lecture
+s'ajuste par moindres carrés.
+
+    s_t = (1−a)·s_(t−1) + a·tanh(A·s_(t−1) + B·e_t)      A, B ALÉATOIRES, GELÉS
+    y_t = W·s_t + moy                                     W ajusté, forme fermée
+
+C'est « ajouter des couches et des neurones » au sens exact : la taille du
+réservoir est le nombre de neurones, et la récurrence est la couche ajoutée. Rien
+ne se rétropropage, et le réservoir n'a besoin d'aucune coordination entre nœuds —
+il est **distribuable** par construction.
+
+Usage : pont_reservoir.py <train> <test> [--couche 10] [--n 256]
+"""
+import glob, os, struct, sys
+import numpy as np
+
+
+def lire(chemin):
+    def paires(f, n, version, bloc=32):
+        ech = None
+        if version == 3:
+            nb, = struct.unpack("<
+… [1552 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je lance le traçage des 42 unités pour 46 langues, en arrière-plan.
+
+Le format est clair : un dossier de `.drvf`, cible = couche 10. Je lance le traçage **42 unités × 46 langues** (40 entraînement + 6 tenues à l'écart) avec la coupe, en arrière-plan.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/corpus/udhr && ls vaste_train/ | head -3; echo \"train: $(ls vaste_train/*.drvf 2>/dev/null | wc -l) · test: $(ls vaste_test/*.drvf 2>/dev/null | wc -l)\"; echo \"=== langues ===\"; ls vaste_train/*.ids 2>/dev/null | xargs -n1 basename | sed 's/.ids// … [238 caractères tronqués]`
+
+  ```
+ace.drvf
+acu.drvf
+ada.drvf
+train: 20 · test: 20
+=== langues ===
+
+
+abk.drvf
+ace.drvf
+acu.drvf
+appr40 = 40 fichiers
+[stderr]
+basename: missing operand
+Try 'basename --help' for more information.
+basename: missing operand
+Try 'basename --help' for more information.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/corpus/udhr && for d in appr40 vaste_train vaste_test tenus_trace vaste appr tenus langues_train langues_adapt tenus_adapt; do if [ -d \"$d\" ]; then echo \"$d : $(ls $d/*.drvf 2>/dev/null | wc -l) drvf · $(ls $d/*.ids 2>/dev/null | wc -l) ids\"; fi;  … [287 caractères tronqués]`
+
+  ```
+appr40 : 40 drvf · 0 ids
+vaste_train : 20 drvf · 0 ids
+vaste_test : 20 drvf · 0 ids
+tenus_trace : 6 drvf · 0 ids
+vaste : 40 drvf · 40 ids
+appr : 0 drvf · 0 ids
+tenus : 0 drvf · 6 ids
+langues_train : 8 drvf · 0 ids
+langues_adapt : 10 drvf · 0 ids
+tenus_adapt : 6 drvf · 0 ids
+=== langues de tenus_trace ===
+ell heb hin jpn kor tha 
+=== langues de appr40 ===
+abk ace acu ada ady afr agr aii ajg als alt amc ame amh ami amr arb arl arn ast auc ayr azj bam ban bax bba bci bcl bel bem ben deu eng fra ita nld por rus spa
+  ```
+
+### 🤖 Assistant
+
+⏵ Langues identifiées : `appr40` (40 train) + `tenus_trace` (6 tenues). Un obstacle : le texte complet dépasse le contexte par défaut. Je lance avec `--ctx 4096`.
+
+**Obstacle détecté avant de lancer** : le texte complet fait ~504 jetons en anglais (limite par défaut 512), mais l'abkhaze est ~3× plus dense → il faut `--ctx 4096`, sinon troncature silencieuse.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/corpus/udhr && python3 - <<'PY'\nimport json, os\nu=[json.loads(l) for l in open('unites.jsonl')]\nos.makedirs('/tmp/udhr42_texte',exist_ok=True)\nn=0\nfor lang in set().union(*[set(x['traductions']) for x in u]):\n    parts=[x['traductions'][lang] fo … [374 caractères tronqués]`
+
+  ```
+257 langues avec >=40 unités écrites dans /tmp/udhr42_texte
+257
+10424 /tmp/udhr42_texte/eng.txt
+20703 /tmp/udhr42_texte/abk.txt
+31127 total
+  ```
+
+### 🤖 Assistant
+
+⏵ Je lance le traçage en arrière-plan (46 langues × 42 unités).
+
+- **bash** `{"command": "mkdir -p /home/stephane/Data13TB/stephane/corpus/udhr/appr42 /home/stephane/Data13TB/stephane/corpus/udhr/tenus42 && cat > /tmp/trace42.sh <<'EOF'\n#!/bin/bash\n# Trace 42 unités UDHR par langue, profondeur utile seulement (--couches 0:11).\ncd /home/stephane/Data13TB/stephane/corpus/ud … [906 caractères tronqués]`
+
+  ```
+script prêt
+18
+  ```
+
+- **bash** `{"command": "nohup /tmp/trace42.sh > /tmp/trace42.out 2>&1 &\necho \"PID $!\"; sleep 25; echo \"=== 25 s plus tard ===\"; ls /home/stephane/Data13TB/stephane/corpus/udhr/appr42/ 2>/dev/null | wc -l; tail -3 /tmp/trace42.log 2>/dev/null\nPID=$(pgrep -f \"trace42.sh\" | head -1); echo \"--- vérificati … [169 caractères tronqués]`
+
+  ```
+PID 2168226
+=== 25 s plus tard ===
+1
+[modele] 24 couches chargées en 8.514199879s — listes 1.04 Go , 20 threads
+--- vérification des arguments réels du processus drave ---
+2168225 bash -c nohup /tmp/trace42.sh > /tmp/trace42.out 2>&1 & echo "PID $!"; sleep 25; echo "=== 25 s plus tard ==="; ls /home/stephane/Data13TB/stephane/corpus/udhr/appr42/ 2>/dev/null | wc -l; tail -3 /tmp/trace42.log 2>/dev/null PID=$(pgrep -f "trace42.sh
+2168230 /usr/bin/time -f abk %e s /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/qwen2.5-0.5b-instruct-q4_k_m.gguf --infer --ctx 4096 --couches 0:11 --lot 1 --prompt Дарбанзаалак ау
+  ```
+
+### 🤖 Assistant
+
+⏵ Trace lancée et arguments vérifiés. Je note un second gaspillage : le **chargement** ignore la borne.
+
+**Deuxième gaspillage trouvé** : le journal dit `24 couches chargées` alors que la plage est `0:11`. `couche_debut`/`couche_fin` sont posés **après** la construction des couches — `--couches` borne l'**exécution**, pas le **chargement**.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== où le chargement construit les couches ===\"; awk 'NR>=3990 && NR<=4050 && /for l in|for l in 0|p\\(|fn /{print NR\": \"$0}' drave-core/src/model.rs | head -8; echo \"=== la boucle de construction ===\"; grep -n \"for l in … [149 caractères tronqués]`
+
+  ```
+=== où le chargement construit les couches ===
+3990:                       g.dequant(&p("engram_k_norm.weight"))))
+4001:         for l in 0..cfg.n_layer {
+4005:                 attn_norm: g.dequant(&p("attn_norm.weight")),
+4011:                     Proj::load(&g, &p("attn_q.weight"), Some(&p("attn_q.bias")), dense || q4 != 0, auto, keep, q4 & 2 != 0, b6 & 2 != 0) },
+4013:                     Proj::load(&g, &p("attn_k.weight"), Some(&p("attn_k.bias")), dense || q4 != 0, auto, keep, q4 & 2 != 0, b6 & 2 != 0) },
+4015:                     Proj::load(&g, &p("attn_v.weight"), Some(&p("attn_v.bias")), dense || q4 != 0, auto, keep, q4 & 2 != 0, b6 & 2 != 0) },
+4023:                     else { Proj::load(&g, &p("attn_output.weight"), Some(&p("attn_output.bias")), dense || q4 != 0, auto, keep, q4 & 2 != 0, b6 & 2 != 0) },
+4026:                 ffn_norm: if g.tensor(&p("ffn_norm.weight")).is_some() {
+=== la boucle de construction ===
+3572:            for l in 0..cfg.n_layer {
+3703:            for l in 0..cfg.n_layer {
+3924:            for l in 0..cfg.n_layer {
+4001:        for l in 0..cfg.n_layer {
+  ```
+
+### 🤖 Assistant
+
+⏵ Chargement non borné confirmé (ligne 4001 : `for l in 0..cfg.n_layer`). Je cherche la cause exacte de l'écart de 0,3 %.
+
+**Confirmé** : ligne 4001, `for l in 0..cfg.n_layer` — toutes les couches sont chargées, la borne n'arrive qu'après. Je cherche maintenant la cause exacte des 0,3 %.
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "limit": 22, "offset": 5736}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs</path>
+<type>file</type>
+<content>
+5736:             }
+5737:             self.prof[3] += t_ffn.elapsed().as_secs_f64();
+5738:         }
+5739:         // La tete partielle est une SONDE : elle ne rend pas le flux brut.
+5740:         if self.flux_brut || (self.couche_fin < self.cfg.n_layer && !self.tete_partielle) {
+5741:             // Nœud intermédiaire : on rend le flux résiduel brut, sans norme.
+5742:             return (0..t).map(|i| x[i * h..(i + 1) * h].to_vec()).collect();
+5743:         }
+5744:         for i in 0..t {
+5745:             let r = x[i * h..(i + 1) * h].to_vec();
+5746:             Self::rmsnorm(&r, &self.out_norm, self.cfg.eps, &mut hn[i * h..(i + 1) * h]);
+5747:         }
+5748:         (0..t).map(|i| hn[i * h..(i + 1) * h].to_vec()).collect()
+5749:     }
+5750: 
+5751:     /// Trace OU impose le flux d'un LOT : `xi` porte les entiers quantifiés du
+5752:     /// lot (t × h) et `sx` une échelle par jeton. Sur ce chemin, le rejeu est
+5753:     /// EXACT — on remplace les entiers et l'échelle, sans repasser par une
+5754:     /// déquantification suivie d'une requantification.
+5755:     #[allo
+… [278 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Cause confirmée au niveau du code. Je vérifie la progression du traçage et la qualité du premier fichier.
+
+**Cause confirmée** (lignes 5740-5742) : quand `couche_fin < n_layer`, le moteur **retourne le flux résiduel brut, sans `out_norm`** — c'est explicite dans le commentaire « Nœud intermédiaire ». Une plage bornée change donc bien la sémantique de sortie. Je vérifie la progression.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/corpus/udhr && echo \"appr42: $(ls appr42/*.drvf 2>/dev/null | wc -l)/40 · tenus42: $(ls tenus42/*.drvf 2>/dev/null | wc -l)/6\"; echo \"=== temps par langue ===\"; grep -E \"^[a-z]{3} [0-9.]+ s\" /tmp/trace42.log | tail -5; echo \"=== contrôle : eng  … [999 caractères tronqués]`
+
+  ```
+appr42: 1/40 · tenus42: 0/6
+=== temps par langue ===
+=== contrôle : eng tracé à ctx 4096 vs /tmp/B.drvf (ctx 512) ===
+eng pas encore tracé
+  ```
+
+### 🤖 Assistant
+
+⏵ Rythme trop lent : j'inspecte ce qui tourne réellement.
+
+- **bash** `{"command": "ls -la /home/stephane/Data13TB/stephane/corpus/udhr/appr42/ | head; echo \"=== log ===\"; tail -6 /tmp/trace42.log; echo \"=== processus ===\"; pgrep -af \"release/drave\" | head -2 | grep -oE \"\\-\\-prompt .{0,40}\" ; echo \"=== charge ===\"; uptime", "description": "Inspect trace pro … [14 caractères tronqués]`
+
+  ```
+total 152864
+drwxr-xr-x. 1 stephane stephane        16  5 oct 11:45 .
+drwxr-xr-x. 1 stephane stephane       548  5 oct 11:45 ..
+-rw-r--r--. 1 stephane stephane 156530610  5 oct 11:46 abk.drvf
+=== log ===
+[modele] 24 couches chargées en 8.514199879s — listes 1.04 Go , 20 threads
+=== processus ===
+--prompt Дарбанзаалак ауаҩы дшоуп ихы дақәиҭны. А
+--prompt Дарбанзаалак ауаҩы дшоуп ихы дақәиҭны. А
+=== charge ===
+ 11:46:22  up 14 days  0:58,  2 users,  load average: 17,23, 8,43, 5,32
+[stderr]
+grep: warning: stray \ before -
+  ```
+
+### 🤖 Assistant
+
+⏵ Alerte : le traçage explose (156 Mo pour une seule langue, encore en cours). Je l'arrête et je redimensionne.
+
+**Le traçage dérape** : 156 Mo pour l'abkhaze, et toujours en cours — l'attention à 4 096 jetons coûte 64× plus qu'à 512. Ce job ne rentre pas dans le temps imparti. Je l'arrête.
+
+- **bash** `{"command": "pkill -f \"trace42.sh\" 2>/dev/null; sleep 1; pgrep -f \"release/drave\" | while read p; do kill $p 2>/dev/null; done; sleep 2; echo \"restants: $(pgrep -cf 'release/drave')\"; rm -f /home/stephane/Data13TB/stephane/corpus/udhr/appr42/abk.drvf; df -h /home/stephane/Data13TB | tail -1",  … [36 caractères tronqués]`
+
+  ```
+(no output)
+[killed by signal: SIGTERM]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le `pkill -f` s'est auto-tué à nouveau (motif présent dans ma propre ligne de commande) — je reprends avec un motif entre crochets.
+
+Piège connu, refait : mon propre motif figurait dans la ligne de commande. Je reprends proprement.
+
+- **bash** `{"command": "pgrep -f \"trace4[2].sh\" | while read p; do kill $p 2>/dev/null; done\npgrep -f \"release/drav[e]\" | while read p; do kill $p 2>/dev/null; done\nsleep 3\necho \"drave restants : $(pgrep -f 'release/drav[e]' | wc -l)\"\necho \"trace42 restants : $(pgrep -f 'trace4[2].sh' | wc -l)\"\nrm … [247 caractères tronqués]`
+
+  ```
+drave restants : 0
+trace42 restants : 0
+0
+/dev/mapper/system-root   11T  8,8T  2,1T  81% /home/stephane/Data13TB
+11:46
+  ```
+
+### 🤖 Assistant
+
+⏵ Redimensionné : 10 unités par langue, ctx 1024. Je relance en arrière-plan.
+
+Arrêté proprement, 2,1 To libres. Je relance une version qui **tient dans le temps** : 10 unités par langue (~5× la donnée actuelle) à ctx 1024.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/corpus/udhr && python3 - <<'PY'\nimport json, os\nu=[json.loads(l) for l in open('unites.jsonl')]\nsel=[x for x in u if x['unite'].startswith('article-1-') or x['unite'].startswith('article-1')][:10]\n# prendre les 10 premières unités dans l'ordre du  … [654 caractères tronqués]`
+
+  ```
+unités retenues : ['article-1-00', 'article-10-00', 'article-11', 'article-12-00', 'article-13', 'article-14', 'article-15', 'article-16', 'article-17', 'article-18-00']
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 12, in <module>
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/udhr10_texte/eng.txt'
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/corpus/udhr && python3 -c \"\nimport glob,os\nprint('cwd',os.getcwd())\nprint('appr40 drvf:',len(glob.glob('appr40/*.drvf')))\nprint('tenus:',len(glob.glob('tenus_trace/*.drvf')))\nprint(glob.glob('appr40/*.drvf')[:3])\n\"", "description": "Debug glob … [2 caractères tronqués]`
+
+  ```
+cwd /home/stephane/Data13TB/stephane/corpus/udhr
+appr40 drvf: 40
+tenus: 6
+['appr40/ace.drvf', 'appr40/acu.drvf', 'appr40/ada.drvf']
+  ```
+
+### 🤖 Assistant
+
+⏵ Script réécrit proprement avec chemins absolus.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/corpus/udhr && python3 - <<'PY'\nimport json, os, glob\nU='/home/stephane/Data13TB/stephane/corpus/udhr'\nu=[json.loads(l) for l in open(f'{U}/unites.jsonl')]\nsel=u[:10]\nos.makedirs('/tmp/udhr10_texte', exist_ok=True)\nlangs=sorted(os.path.basename( … [580 caractères tronqués]`
+
+  ```
+46 langues écrites · eng=2658 o · abk=5394 o
+  ```
+
+### 🤖 Assistant
+
+⏵ 46 langues prêtes : je lance le traçage borné (ctx 1024, 10 unités).
+
+- **bash** `{"command": "cat > /tmp/trace10.sh <<'EOF'\n#!/bin/bash\ncd /home/stephane/Data13TB/stephane/corpus/udhr\nM=/home/stephane/Data13TB/stephane/modeles/gguf/qwen2.5-0.5b-instruct-q4_k_m.gguf\nD=/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/target/release/drave\nfor d in appr40:appr10 tenus … [966 caractères tronqués]`
+
+  ```
+=== après 20 s ===
+1
+--ctx 1024 --couches 0:11 --lot 1 \      
+[stderr]
+grep: warning: stray \ before -
+  ```
+
+### 🤖 Assistant
+
+⏵ Traçage lancé (arguments vérifiés). Je consigne le second gaspillage — le chargement — pendant que ça tourne.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/note-cout-professeur.md'; s=open(p).read()\ns += \"\"\"\n## 6. Second gaspillage : `--couches` borne l'EXÉCUTION, pas le CHARGEMENT\n\nMesuré sur la trace en cours (Qwen2.5-0.5B, `--couches 0:11`) :\n\n```\n … [2637 caractères tronqués]`
