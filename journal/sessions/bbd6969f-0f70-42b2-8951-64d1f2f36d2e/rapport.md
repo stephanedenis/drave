@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 166.0 h |
+| Durée | 166.1 h |
 | Tours | 120 |
-| Messages | 7967 |
-| Appels d'outils | 7597 |
+| Messages | 7974 |
+| Appels d'outils | 7604 |
 | Fichiers touchés | 150 |
-| Commandes | 6486 |
+| Commandes | 6493 |
 | Sous-agents | 32 |
-| Commits | 553 |
+| Commits | 554 |
 | Compactages de contexte | 11 |
 
 ## Objectifs déclarés
@@ -6066,7 +6066,7 @@ Deux commits : `12346ae` (coût du professeur) et `0519702` (chargement non born
 
 ### Tour 120 — notre nouveau modèle est-il optimisable?
 
-*15 appels d'outils.* Actions notables :
+*22 appels d'outils.* Actions notables :
 
 - bash — Check reservoir analysis result
 - bash — Build parse cache in background
@@ -6082,13 +6082,22 @@ Deux commits : `12346ae` (coût du professeur) et `0519702` (chargement non born
 - bash — Test combined best settings
 - bash — Apply winning settings to pont_reservoir
 - bash — Verify improved reservoir reproduces
-- … et 1 autres
+- … et 8 autres
 
 **Synthèse produite :**
 
-⏵ Reproduit exactement (0,5921 / 0,9772 / 0,9576). Je consigne et je commite.
+⏵ Le gain se réplique sur la tâche difficile. Je consigne la confirmation.
 
-Reproduit au chiffre près. Je consigne.
+**Le gain se réplique sur la tâche 10× plus dure.**
+
+| | fid TEST | invariance | pire paire |
+|---|---:|---:|---:|
+| référence (1 unité) | 0,5923 | 0,9072 | 0,8437 |
+| gagnant (1 unité) | 0,5921 | **0,9772** | **0,9576** |
+| référence (10 unités) | 0,4772 | 0,9313 | 0,8751 |
+| **gagnant (10 unités)** | **0,4767** | **0,9797** | **0,9606** |
+
+Fidélité inchangée dans les deux cas, invariance **+7,0** puis **+4,8** points. Ce n'est pas un artefact d'un jeu de données.
 
 ## 3. Travail accompli
 
@@ -6324,7 +6333,7 @@ Reproduit au chiffre près. Je consigne.
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6446 autres
+- … et 6453 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -7025,4 +7034,5 @@ Reproduit au chiffre près. Je consigne.
 - Coût du professeur : 77-83 % des traces sont des couches jamais lues  Mesuré : les traces stockent TOUTES les couches du professeur (24 pour le 0.5B, 48 pour le
 - Le chargement n'est pas borné par --couches, et l'attention quadratique interdit les longues passes  1. --couches borne l'EXÉCUTION, pas le CHARGEMENT. Mesuré :
 - OUI, le modèle est optimisable : +7 pts d'invariance, +11 pts de pire paire, à coût nul  pont_reglages.py balaie quatre réglages figés sans justification (fuite
+- Le gain d'optimisation RÉPLIQUE sur la tâche 10x plus dure  Réglage trouvé sur 3254 pas, vérifié sur 38 212 pas (10 unités par langue) :                       f
 

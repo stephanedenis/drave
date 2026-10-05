@@ -323,3 +323,33 @@ fidélité à côté n'a aucun sens, et c'est ce que faisaient les résultats 4 
 Le rayon spectral est réglé à 0,9 depuis le début « pour la condition de mémoire
 du réservoir ». De 0,7 à 1,2, **rien ne bouge** (0,5924 → 0,5921, invariance
 0,9076 → 0,9066). Un paramètre que personne n'a jamais mesuré et qui ne fait rien.
+
+
+## Résultat 10 — Le gain RÉPLIQUE sur la tâche 10× plus dure
+
+Le réglage gagnant a été trouvé sur 3254 pas (article 1). Il fallait vérifier
+qu'il ne tient pas à ce seul jeu. Mêmes 40 langues d'entraînement, mêmes 6
+langues tenues à l'écart, mais **10 unités par langue** — 38 212 pas :
+
+| | fid TEST | invariance | pire paire |
+|---|---:|---:|---:|
+| référence (`a=0,5` ride 1e-1), 1 unité | 0,5923 | 0,9072 | 0,8437 |
+| **gagnant (`a=0,2` ride 3e-1), 1 unité** | **0,5921** | **0,9772** | **0,9576** |
+| référence, 10 unités | 0,4772 | 0,9313 | 0,8751 |
+| **gagnant, 10 unités** | **0,4767** | **0,9797** | **0,9606** |
+
+**Fidélité identique dans les deux régimes** (0,5921 contre 0,5923 ; 0,4767
+contre 0,4772), invariance **+7,0 puis +4,8 points**, pire paire **+11,4 puis
++8,6 points**. Le gain ne dépend ni de la taille du jeu ni de la difficulté de
+la tâche. Et il est **gratuit** : mêmes 64 neurones, mêmes 118 784 paramètres.
+
+### Ce que dix fois plus de données a réellement fait
+
+Le résultat brut est contre-intuitif : passer de 1 à 10 unités **fait baisser**
+la fidélité de 0,5923 à 0,4772. Mais la **constante témoin baisse aussi**, de
+0,5582 à 0,4353 — la tâche est simplement devenue plus dure (dix contenus
+différents au lieu d'un seul, que le réservoir devait suivre avec le même état).
+
+L'écart au témoin, lui, **monte** : **+0,0341 → +0,0419**. Et l'invariance
+progresse (0,9072 → 0,9313, pire paire 0,8437 → 0,8751). **La donnée a donc bien
+aidé — elle a juste déplacé les deux plateaux à la fois.**

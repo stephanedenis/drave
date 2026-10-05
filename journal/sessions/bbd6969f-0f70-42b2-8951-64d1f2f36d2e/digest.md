@@ -127650,3 +127650,130 @@ RÉSERVOIR 64 (1 couche récurrente)          0.7076      0.5921     118784     
 Reproduit au chiffre près. Je consigne.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-pont-semantique.md'; s=open(p).read()\ns += \"\"\"\n\n## Résultat 9 — OUI, LE MODÈLE EST OPTIMISABLE : +7 et +11 points, à coût nul\n\nLe pont récurrent traînait **quatre réglages figés sans justi … [4334 caractères tronqués]`
+
+  ```
+d13aef7 OUI, le modèle est optimisable : +7 pts d'invariance, +11 pts de pire paire, à coût nul
+  ```
+
+### 🤖 Assistant
+
+⏵ Commité. Je vérifie si le cache des 10 unités est prêt pour valider sur la tâche difficile.
+
+- **bash** `{"command": "tail -1 /tmp/cache10.log; ls -la /tmp/cache_appr10.npz 2>/dev/null && echo \"PRÊT\" || { echo \"encore en parse : $(grep -c 'pas$' /tmp/cache10.log)/40 langues\"; pgrep -f \"cache_pon[t].py.*appr10\" >/dev/null && echo TOURNE || echo ARRÊTÉ; }; date \"+%H:%M\"", "description": "Check bi … [16 caractères tronqués]`
+
+  ```
+ban : 1016 pas
+encore en parse : 25/40 langues
+TOURNE
+12:47
+  ```
+
+### 🤖 Assistant
+
+⏵ 25/40 langues. Le cache des 10 unités finit dans ~3 min : je le prends pour valider le réglage gagnant sur la tâche difficile.
+
+25/40, ~3 min. J'attends pour valider le réglage gagnant sur la tâche **difficile** — c'est la confirmation qui compte.
+
+- **bash** `{"command": "for i in $(seq 1 60); do [ -f /tmp/cache_appr10.npz ] && break; sleep 8; done; ls -la /tmp/cache_appr10.npz 2>/dev/null && echo PRÊT; tail -1 /tmp/cache10.log; date \"+%H:%M\"", "description": "Wait for big cache", "timeoutMs": 560000}`
+
+  ```
+-rw-r--r--. 1 stephane stephane 16653420  5 oct 12:50 /tmp/cache_appr10.npz
+PRÊT
+  spa : 718 pas
+12:50
+  ```
+
+### 🤖 Assistant
+
+⏵ Cache prêt. Je valide le réglage gagnant sur la tâche difficile (10 unités, 38 212 pas).
+
+**Cache prêt** (38 212 pas d'entraînement contre 3 254). Le test décisif : le réglage gagnant tient-il quand la tâche est 10× plus dure ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 1500 python3 tools/pont_reglages.py /tmp/cache_appr10.npz /tmp/cache_tenus10.npz --levier combine 2>&1 | tail -12", "description": "Validate settings on 10-unit task", "timeoutMs": 1560000}`
+
+  ```
+max_header_size=max_header_size)
+  File "/usr/lib64/python3.13/site-packages/numpy/lib/_npyio_impl.py", line 197, in __init__
+    _zip = zipfile_factory(fid)
+  File "/usr/lib64/python3.13/site-packages/numpy/lib/_npyio_impl.py", line 112, in zipfile_factory
+    return zipfile.ZipFile(file, *args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib64/python3.13/zipfile/__init__.py", line 1407, in __init__
+    self._RealGetContents()
+    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/lib64/python3.13/zipfile/__init__.py", line 1474, in _RealGetContents
+    raise BadZipFile("File is not a zip file")
+zipfile.BadZipFile: File is not a zip file
+  ```
+
+### 🤖 Assistant
+
+⏵ J'ai lu le fichier pendant son écriture : je vérifie qu'il est maintenant complet.
+
+Lu trop tôt — le fichier s'écrivait encore. Je vérifie.
+
+- **bash** `{"command": "pgrep -f \"cache_pon[t].py.*appr10\" >/dev/null && echo \"TOURNE ENCORE\" || echo \"fini\"; ls -la /tmp/cache_appr10.npz; tail -2 /tmp/cache10.log; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport numpy as np\nz=np.load('/tmp/cache_appr10.npz',allow_pickle=Tru … [164 caractères tronqués]`
+
+  ```
+TOURNE ENCORE
+-rw-r--r--. 1 stephane stephane 43649585  5 oct 12:50 /tmp/cache_appr10.npz
+  rus : 961 pas
+  spa : 718 pas
+    raise BadZipFile("File is not a zip file")
+zipfile.BadZipFile: File is not a zip file
+  ```
+
+### 🤖 Assistant
+
+⏵ Les 40 langues sont parsées ; l'écriture compressée est en cours (43 Mo et croissante). J'attends la fin du processus.
+
+Les 40 langues sont lues ; c'est la **compression** qui est longue (2 Go). J'attends la fin réelle du processus.
+
+- **bash** `{"command": "for i in $(seq 1 90); do pgrep -f \"cache_pon[t].py.*appr10\" >/dev/null || break; sleep 8; done; pgrep -f \"cache_pon[t].py.*appr10\" >/dev/null && echo \"TOURNE ENCORE\" || echo \"TERMINÉ\"; ls -la /tmp/cache_appr10.npz; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c … [279 caractères tronqués]`
+
+  ```
+TERMINÉ
+-rw-r--r--. 1 stephane stephane 81218246  5 oct 12:50 /tmp/cache_appr10.npz
+OK : 40 langues · 38212 pas
+12:50
+  ```
+
+### 🤖 Assistant
+
+⏵ Cache complet (38 212 pas). Je lance la validation.
+
+Cache complet et vérifié. La validation décisive :
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 1700 python3 tools/pont_reglages.py /tmp/cache_appr10.npz /tmp/cache_tenus10.npz --levier combine 2>&1 | tail -12", "description": "Validate settings on harder 10-unit task", "timeoutMs": 1760000}`
+
+  ```
+# entraînement 38212 pas · test 5293 pas
+
+réglage                                   fid train   fid TEST   invar.    pire    dim
+RÉFÉRENCE (a=0,5 rayon=0,9 graine=5)         0.5986     0.4772   0.9313  0.8751     64
+  constante (témoin)                              —     0.4353   0.2319
+a=0,2 ride=0,3                               0.5835     0.4767   0.9797  0.9606     64
+a=0,2 ride=1,0                               0.5672     0.4598   0.9953  0.9910     64
+a=0,2 N=32 ride=1,0                          0.5573     0.4494   0.9986  0.9968     32
+a=0,2 N=16 ride=1,0                          0.5506     0.4447   0.9977  0.9954     16
+a=0,2 K=2 ride=1,0                           0.5804     0.4683   0.9929  0.9855    128
+a=0,35 ride=1,0                              0.5733     0.4622   0.9908  0.9844     64
+a=0,2 N=128 ride=1,0                         0.5821     0.4658   0.9904  0.9750    128
+  ```
+
+### 🤖 Assistant
+
+⏵ Le gain se réplique sur la tâche difficile. Je consigne la confirmation.
+
+**Le gain se réplique sur la tâche 10× plus dure.**
+
+| | fid TEST | invariance | pire paire |
+|---|---:|---:|---:|
+| référence (1 unité) | 0,5923 | 0,9072 | 0,8437 |
+| gagnant (1 unité) | 0,5921 | **0,9772** | **0,9576** |
+| référence (10 unités) | 0,4772 | 0,9313 | 0,8751 |
+| **gagnant (10 unités)** | **0,4767** | **0,9797** | **0,9606** |
+
+Fidélité inchangée dans les deux cas, invariance **+7,0** puis **+4,8** points. Ce n'est pas un artefact d'un jeu de données.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-pont-semantique.md'; s=open(p).read()\ns += \"\"\"\n\n## Résultat 10 — Le gain RÉPLIQUE sur la tâche 10× plus dure\n\nLe réglage gagnant a été trouvé sur 3254 pas (article 1). Il fallait vérifier\ … [2538 caractères tronqués]`
