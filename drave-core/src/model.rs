@@ -2778,6 +2778,41 @@ pub struct HebbDiff {
 }
 
 impl HebbDiff {
+    /// **Sauve `D`** — l'adaptateur est exportable, donc l'apprentissage d'un
+    /// texte peut servir à un autre. C'est ce qui rend possible le seul test qui
+    /// compte : adapter sur A, noter sur B.
+    pub fn sauver(&self, chemin: &str) {
+        use std::io::Write;
+        if let Ok(mut f) = std::fs::File::create(chemin) {
+            let _ = f.write_all(&(self.n_out as u32).to_le_bytes());
+            let _ = f.write_all(&(self.n_in as u32).to_le_bytes());
+            let _ = f.write_all(&(self.pas as u64).to_le_bytes());
+            let mut o = Vec::with_capacity(self.d.len() * 4);
+            for v in &self.d { o.extend_from_slice(&v.to_le_bytes()); }
+            let _ = f.write_all(&o);
+            eprintln!("[hebb-diff] D sauvé dans {chemin} ({}×{}, {} pas)", self.n_out, self.n_in, self.pas);
+        }
+    }
+
+    /// **Recharge `D`** : l'adaptateur reprend où un autre run l'a laissé. La
+    /// sortie change — c'est le but — et le chargement l'annonce.
+    pub fn charger(&mut self, chemin: &str) -> bool {
+        let Ok(b) = std::fs::read(chemin) else { return false };
+        if b.len() < 16 { return false; }
+        let no = u32::from_le_bytes([b[0],b[1],b[2],b[3]]) as usize;
+        let ni = u32::from_le_bytes([b[4],b[5],b[6],b[7]]) as usize;
+        if no != self.n_out || ni != self.n_in { return false; }
+        let n = no * ni;
+        if b.len() < 16 + 4 * n { return false; }
+        for k in 0..n {
+            let o = 16 + 4 * k;
+            self.d[k] = f32::from_le_bytes([b[o],b[o+1],b[o+2],b[o+3]]);
+        }
+        self.pas = u64::from_le_bytes([b[8],b[9],b[10],b[11],b[12],b[13],b[14],b[15]]);
+        eprintln!("[hebb-diff] D rechargé depuis {chemin} ({no}×{ni}, {} pas) — la sortie N'EST PLUS celle du fichier seul", self.pas);
+        true
+    }
+
     pub fn new(layer: usize, n_out: usize, n_in: usize, eta: f32, clamp: f32) -> Self {
         HebbDiff { layer, eta, n_out, n_in, d: vec![0f32; n_out * n_in],
                    x_prec: Vec::new(), y_prec: Vec::new(), pas: 0, norme_maj: 0.0, clamp,

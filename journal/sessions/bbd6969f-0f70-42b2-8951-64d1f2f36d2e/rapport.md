@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 162.8 h |
 | Tours | 117 |
-| Messages | 7812 |
-| Appels d'outils | 7454 |
+| Messages | 7817 |
+| Appels d'outils | 7459 |
 | Fichiers touchés | 150 |
-| Commandes | 6352 |
+| Commandes | 6357 |
 | Sous-agents | 32 |
-| Commits | 536 |
+| Commits | 537 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -5872,7 +5872,7 @@ C'est le prolongement direct de ce que `invariance_semantique.py` fait déjà pa
 
 ### Tour 117 — fais tout le nécessaire, tu as plusieurs heures devant toi. Prête une attention particulière à notre moteur. il doit évo … [70 caractères tronqués]
 
-*23 appels d'outils.* Actions notables :
+*28 appels d'outils.* Actions notables :
 
 - bash — Study the existing Hebb implementation
 - bash — Extract the aligned UDHR units
@@ -5888,11 +5888,11 @@ C'est le prolongement direct de ce que `invariance_semantique.py` fait déjà pa
 - bash — Declare the Options fields
 - bash — Prepare the test corpus on a small model
 - bash — Measure the differential Hebbian adapter
-- … et 9 autres
+- … et 14 autres
 
 **Synthèse produite :**
 
-**Plateau stable et meilleur : 39,985** (η=4e-4, décroissance 0,99) — **−0,73 %**.
+**Le test hors échantillon n'a pas tourné** — et je dois le dire plutôt que de conclure.
 
 ## 3. Travail accompli
 
@@ -6128,7 +6128,7 @@ C'est le prolongement direct de ce que `invariance_semantique.py` fait déjà pa
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6312 autres
+- … et 6317 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -6812,4 +6812,5 @@ C'est le prolongement direct de ce que `invariance_semantique.py` fait déjà pa
 - Ingestion : l'UDHR récupérée (456 langues, 30 articles alignés), Wikipedia trouvé en local (81 Go, 6 langues)  UDHR : le chemin unicode.org/udhr/ renvoie 404 au
 - UDHR : extracteur d'unités alignées — 400 langues, les 30 articles, 42 unités  tools/extrait_udhr.py rend un JSONL : une unité par ligne (article, paragraphe), 
 - Apprentissage hebbien différentiel : implémenté dans le moteur, et mesuré  Hebb MESURAIT le produit hebbien sans jamais toucher au calcul. HebbDiff l'APPLIQUE :
+- Hebb différentiel : le test hors échantillon N'A PAS TOURNÉ, et j'explique pourquoi  PPL sur B, modèle intact : 29,151. PPL sur B avec D appris sur A : 29,151 —
 

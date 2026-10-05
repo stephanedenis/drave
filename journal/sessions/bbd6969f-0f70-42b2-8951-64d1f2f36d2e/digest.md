@@ -124147,3 +124147,54 @@ eta 2e-4 · decroi 0.99 : perplexité cumulée 40.136
 **Plateau stable et meilleur : 39,985** (η=4e-4, décroissance 0,99) — **−0,73 %**.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> docs/note-cancellation-evenementielle.md <<'EOF'\n\n## 7. L'apprentissage hebbien différentiel — implémenté et mesuré (06/10)\n\n### Ce qui existait\n\n`Hebb` **mesurait** le produit hebbien — il accumulait `h` et l'exportait  … [4352 caractères tronqués]`
+
+  ```
+f29b4f5 Apprentissage hebbien différentiel : implémenté dans le moteur, et mesuré
+  ```
+
+### 🤖 Assistant
+
+**Le seul test qui compte** : adapter sur un texte A, noter sur un texte B. Sinon le gain peut n'être que de la mémorisation.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=models/Qwen2.5-0.5B-Q8_0.gguf\nhead -c 3000 docs/note-cancellation-evenementielle.md > /tmp/tA.txt; head -c 3000 docs/note-corpus-panini.md > /tmp/tB.txt\nfor x in A B; do ./drave-core/target/release/drave \"$M\" --tokenize --fichi … [581 caractères tronqués]`
+
+  ```
+séquence : 256 jetons de A puis 256 de B
+=== sans adaptateur ===
+     511 tokens notés — perplexité cumulée 29.510  (32.1 tok/s)
+  ```
+
+### 🤖 Assistant
+
+Il me manque la pièce qui rend le test possible : **sauver et recharger `D`**. Je l'ajoute — c'est aussi ce que j'ai annoncé dans le code (« exportable »).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && python3 - <<'PY'\np='model.rs'; s=open(p).read()\nanc = \"    pub fn new(layer: usize, n_out: usize, n_in: usize, eta: f32, clamp: f32) -> Self {\"\nnew = \"\"\"    /// **Sauve `D`** — l'adaptateur est exportable, donc … [4049 caractères tronqués]`
+
+  ```
+ok
+=== build ===
+test result: ok. 77 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=models/Qwen2.5-0.5B-Q8_0.gguf; E=\"DRAVE_HEBB_SEUIL=1e-4 DRAVE_HEBB_DECROI=0.99\"\npython3 -c \"\nb=open('/tmp/ids_B.txt').read().strip().split(',')[:256]; open('/tmp/ids_B256.txt','w').write(' '.join(b))\"\necho \"=== 1. HORS ÉCHA … [825 caractères tronqués]`
+
+  ```
+=== 1. HORS ÉCHANTILLON : PPL sur B, modèle intact ===
+perplexité cumulée 29.151
+=== 2. on ADAPTE sur A (η=4e-4), on sauve D ===
+[hebb-diff] ADAPTATEUR ACTIF — couche 12, gate (4864×896), eta 4e-4, écrêtage ±1. Règle LOCALE et forward-only : Δx = x(t)−x(t−1), Δy = y(t)−y(t−1), D += η·Δy⊗Δx, y' = y + D·x. La matrice effective est W+D : ce modèle N'EST PLUS celui du fichier. Exige --lot 1.
+=== 3. PPL sur B, avec D appris sur A SEUL ===
+perplexité cumulée 29.151
+  ```
+
+- **bash** `{"command": "ls -la /tmp/D.bin 2>/dev/null | awk '{print \"D.bin : \"$5\" octets\"}'; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=models/Qwen2.5-0.5B-Q8_0.gguf\nenv DRAVE_HEBB_SEUIL=1e-4 DRAVE_HEBB_DECROI=0.99 DRAVE_HEBB_SAUVER=/tmp/D2.bin ./drave-core/target/release/drave \"$M\" --ppl / … [193 caractères tronqués]`
+
+  ```
+[hebb-diff] ADAPTATEUR ACTIF — couche 12, gate (4864×896), eta 4e-4, écrêtage ±1. Règle LOCALE et forward-only : Δx = x(t)−x(t−1), Δy = y(t)−y(t−1), D += η·Δy⊗Δx, y' = y + D·x. La matrice effective est W+D : ce modèle N'EST PLUS celui du fichier. Exige --lot 1.
+  ```
+
+### 🤖 Assistant
+
+**Le test hors échantillon n'a pas tourné** — et je dois le dire plutôt que de conclure.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/note-cancellation-evenementielle.md'; s=open(p).read()\ns = s.replace(\"\"\"### Ce qui reste à mesurer, et c'est le seul test qui compte\"\"\",\n\"\"\"### 8. Le test hors échantillon N'A PAS TOURNÉ — et pour … [2831 caractères tronqués]`

@@ -24,7 +24,7 @@ const VARS_LUES: &[&str] = &[
     "KV_BITS", "KV_F16", "KV_K_F16", "KV_K_F32", "KV_V_F32", "MMAP",
     "BIAIS_VL", "EXPERTS_RAM", "PRELIRE", "PRELIRE_TOUT", "Q8_BLOCS", "SANS_ENGRAM",
     "SANS_EMPRUNT",
-    "TRACE_BLOCS", "TUILE_LOT", "K3_COUCHES", "K3_SANS_ETAT", "K3_PASSE", "K3_TETE", "K3_LOGITS", "K3_GEN", "K3_MXFP4", "K3_TRACE_EXPERTS", "K3_IDS", "K3_DENSE_FIGE", "K3_STATS_EXPERTS", "HEBB_SEUIL", "HEBB_SIGNE", "HEBB_DECROI", "K3_PRELIRE_UNION", "EXPERTS_GARDES", "K3_IMPOSE",
+    "TRACE_BLOCS", "TUILE_LOT", "K3_COUCHES", "K3_SANS_ETAT", "K3_PASSE", "K3_TETE", "K3_LOGITS", "K3_GEN", "K3_MXFP4", "K3_TRACE_EXPERTS", "K3_IDS", "K3_DENSE_FIGE", "K3_STATS_EXPERTS", "HEBB_SEUIL", "HEBB_SIGNE", "HEBB_DECROI", "HEBB_SAUVER", "HEBB_CHARGER", "K3_PRELIRE_UNION", "EXPERTS_GARDES", "K3_IMPOSE",
     "SANS_BLOCS", "SANS_COMPRESSION", "SIMD_DOT", "TRACE_EXPERTS", "V41_SANS_RETARD",
     "V41_TETE_COPIE0",
     "VISION_TEXTE",
@@ -1017,7 +1017,9 @@ IDENTIQUE, seule la lecture change", mdl.tete_garantie.as_ref().unwrap().len(),
     }
     if let Some(l) = hebb_diff {
         let (n_out, n_in) = (mdl.cfg.ffn, mdl.cfg.hidden);
-        mdl.hebb_diff = Some(model::HebbDiff::new(l, n_out, n_in, hebb_eta, hebb_clamp));
+        let mut hd = model::HebbDiff::new(l, n_out, n_in, hebb_eta, hebb_clamp);
+        if let Ok(c) = std::env::var("DRAVE_HEBB_CHARGER") { hd.charger(&c); }
+        mdl.hebb_diff = Some(hd);
         // **Il CHANGE la sortie : il le dit, et il dit comment.** L'adaptateur
         // `D` s'ajoute à la projection, donc la matrice effective devient `W + D`
         // (voir `HebbDiff`). Rien n'est écrit dans le fichier du modèle.
@@ -1161,8 +1163,11 @@ troncature aux {} derniers", ids.len(), garde, ctx, n_new, garde);
              pa[0] as f64 / ng / 1e6, pa[1] as f64 / ng / 1e6, pa[2] as f64 / ng / 1e6);
     if let Some(hd) = mdl.hebb_diff.as_ref() {
         let norme: f64 = hd.d.iter().map(|v| (*v as f64) * (*v as f64)).sum::<f64>().sqrt();
-        println!("[hebb-diff] couche {} : {} pas · ‖D‖ = {:.4e} · somme des ‖ΔD‖ = {:.4e}",
-                 hd.layer, hd.pas, norme, hd.norme_maj);
+        println!("[hebb-diff] couche {} : {} pas · ‖D‖ = {:.4e} · somme des ‖ΔD‖ = {:.4e} · \
+{} canaux-événements sur {} vus ({:.2} %)",
+                 hd.layer, hd.pas, norme, hd.norme_maj, hd.n_evenements, hd.n_canaux,
+                 100.0 * hd.n_evenements as f64 / hd.n_canaux.max(1) as f64);
+        if let Ok(c) = std::env::var("DRAVE_HEBB_SAUVER") { hd.sauver(&c); }
     }
     if let Some(hb) = mdl.hebb.as_ref() {
         use std::io::Write;

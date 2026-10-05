@@ -190,6 +190,36 @@ en ligne sur le texte même :
    porte de l'information ici.
 4. **Le seuil n'est pas qu'une économie** : il stabilise en ignorant le bruit.
 
+### 8. Le test hors échantillon N'A PAS TOURNÉ — et pourquoi
+
+J'ai voulu trancher entre « apprend » et « retient » : adapter sur un texte A,
+sauver `D`, puis noter sur un texte B avec `D` rechargé.
+
+**Le résultat : 29,151 sur B, modèle intact · 29,151 sur B, `D` appris sur A.**
+Identiques au chiffre près — donc `D` était **nul**.
+
+**La cause est un défaut que j'ai déjà rencontré ce soir, et que j'ai refait** :
+le rapport de fin (`‖D‖`, nombre de pas, sauvegarde) a été posé dans `run_infer`
+— le mode `--infer` — alors que le test tourne en `--ppl`, qui a sa **propre**
+fonction et son propre câblage. **Aucune ligne `[hebb-diff] couche …` ne s'est
+imprimée, donc `D` n'a jamais été sauvé, donc rien n'a été rechargé.**
+
+C'est la deuxième fois ce soir que ce piège me prend : `hebb_diff` avait déjà dû
+être câblé deux fois, dans `run_infer` **et** dans `run_ppl`. Un moteur avec deux
+chemins qui doivent porter la même chose finit par n'en porter qu'un — et le
+défaut est silencieux, ce qui est le pire cas du dépôt.
+
+**Ce qui reste vrai malgré ça** : les mesures EN ÉCHANTILLON (§7) ont bien varié
+avec η et avec les réglages, de façon monotone et reproductible — donc
+l'adaptateur **agit** sur le calcul. Mais je n'ai **pas** mesuré `‖D‖`, et je n'ai
+**pas** fait le test hors échantillon. La conclusion « la règle apprend » n'est
+donc pas établie ; ce qui est établi, c'est qu'elle change la perplexité en
+échantillon, et que la décroissance élargit la bande stable.
+
+**Le pas suivant, précis** : poser le rapport et la sauvegarde dans `run_ppl`
+aussi — ou mieux, **à un seul endroit** que les deux modes appellent, pour que ce
+défaut ne puisse plus revenir.
+
 ### Ce qui reste à mesurer, et c'est le seul test qui compte
 
 **La mesure est EN ÉCHANTILLON** : le modèle s'adapte au texte sur lequel on le
