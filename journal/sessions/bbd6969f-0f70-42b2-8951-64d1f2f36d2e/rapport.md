@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 172.1 h |
+| Durée | 172.2 h |
 | Tours | 123 |
-| Messages | 8186 |
-| Appels d'outils | 7805 |
+| Messages | 8189 |
+| Appels d'outils | 7808 |
 | Fichiers touchés | 162 |
-| Commandes | 6645 |
+| Commandes | 6648 |
 | Sous-agents | 32 |
-| Commits | 574 |
+| Commits | 575 |
 | Compactages de contexte | 11 |
 
 ## Objectifs déclarés
@@ -6266,7 +6266,7 @@ Fidélité et invariance sont les deux axes d'**une seule droite**. À invarianc
 
 ### Tour 123 — <goal_round> Objective: "Faire évoluer le pont linguistico-sémantique en BOÎTE NOIRE (émulation des premières couches du … [1231 caractères tronqués]
 
-*26 appels d'outils.* Actions notables :
+*29 appels d'outils.* Actions notables :
 
 - read
 - bash — Locate main loading section
@@ -6282,21 +6282,21 @@ Fidélité et invariance sont les deux axes d'**une seule droite**. À invarianc
 - edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py`
 - bash — Rerun with three-condition trigger
 - bash — Wait for channel comparison
-- … et 11 autres
+- … et 14 autres
 
 **Synthèse produite :**
 
-⏵ **Résultat complet, et il révèle un invariant.**
+⏵ **Le résultat décisif est tombé.** Je consigne.
 
-| critère | canaux | constante | **fid TEST** | **écart** | invariance | pire paire |
-|---|---:|---:|---:|---:|---:|---:|
-| aucun (896) | 896 | 0,4710 | 0,4911 | **+0,0201** | 0,9488 | 0,8328 |
-| consistance 50 % | 448 | 0,4991 | 0,5200 | **+0,0209** | 0,9395 | 0,8189 |
-| consistance 25 % | 224 | 0,5863 | 0,6064 | **+0,0201** | 0,9477 | 0,8378 |
-| **consistance 10 %** | **89** | 0,7181 | **0,7366** | **+0,0185** | 0,9539 | 0,8426 |
-| énergie 50 % | 157 | 0,6140 | 0,6346 | **+0,0206** | **0,9653** | **0,8893** |
+**Trois chiffres qui caractérisent tout le travail :**
 
-**L'écart à la constante est PLAT : +0,018 à +0,021 sur tout.** Quel que soit le sous-ensemble visé et quel que soit le critère, notre pont apporte **environ +2 points de cosinus** — pas plus. Choisir une meilleure cible **monte toute la courbe**, mais ne change pas la contribution du modèle.
+| relation | valeur |
+|---|---|
+| **fid TEST ≈ 1,1150 · (invariance de la cible) − 0,0848** | **r = 0,9570** |
+| **fid / invariance de la cible** | **0,9707 ± 0,0419** |
+| **écart à la constante** | **+0,0197 ± 0,0009** |
+
+Et la constante témoin suit **la même loi** (`1,1192 · invariance − 0,1071`, r = 0,9570 — pente identique à 0,4 % près).
 
 ## 3. Travail accompli
 
@@ -6544,7 +6544,7 @@ Fidélité et invariance sont les deux axes d'**une seule droite**. À invarianc
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6605 autres
+- … et 6608 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -7266,4 +7266,5 @@ Fidélité et invariance sont les deux axes d'**une seule droite**. À invarianc
 - Déclencheur de couche révisé : concepts communs + besoin de poids négatifs  Une couche ne s'ouvre PAS à la saturation de la précédente. Elle s'ouvre sur deux si
 - Sous-ensemble actif : la droite d'échange MONTE (+14 pts de fidélité, +18 % des canaux)  TROIS conditions simultanées pour ouvrir une couche — la première manqu
 - L'INVARIANT : le pont apporte +0,020, quelle que soit la cible  Deux critères de sélection du sous-ensemble actif, plus la référence, même professeur, masque lu
+- CONCLUSION : la fidélité est portée par l'invariance de la cible, pas par le modèle  Sept périmètres, du plus large (896 canaux) au plus étroit (89). Pour chacu
 

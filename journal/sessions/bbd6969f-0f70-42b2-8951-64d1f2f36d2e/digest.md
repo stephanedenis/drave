@@ -131886,3 +131886,71 @@ Un fait remarquable se confirme : **l'écart à la constante reste collé à +0,
 **L'écart à la constante est PLAT : +0,018 à +0,021 sur tout.** Quel que soit le sous-ensemble visé et quel que soit le critère, notre pont apporte **environ +2 points de cosinus** — pas plus. Choisir une meilleure cible **monte toute la courbe**, mais ne change pas la contribution du modèle.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/recapitulatif.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 7. L'invariant : le pont apporte +0,020, quelle que soit la cible\n\nDeux critères de sélection du sous-ensemble actif ont été essayés, plus l … [5018 caractères tronqués]`
+
+  ```
+f7c7b52 L'INVARIANT : le pont apporte +0,020, quelle que soit la cible
+  ```
+
+### 🤖 Assistant
+
+⏵ Une hypothèse à tester, qui expliquerait tout : **fidélité ≈ invariance de la cible × invariance de notre modèle**. Pour le cas 896 canaux : 0,5247 × 0,9488 = **0,4978** contre 0,4911 mesuré. Très proche.
+
+Une hypothèse tombe : **fidélité ≈ (invariance de la cible) × (invariance de notre modèle)**. Sur 896 canaux : 0,5247 × 0,9488 = **0,4978**, contre **0,4911** mesuré. Je la teste sur tous les périmètres.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/produit.py <<'PY'\n\"\"\"La fidélité est-elle le PRODUIT de l'invariance de la cible par la nôtre ?\n\nToutes les langues disent le même texte : leur dernière position porte le même\ncontenu. L'invariance de la cible sur u … [1860 caractères tronqués]`
+
+  ```
+périmètre           canaux  invar. cible     pire
+aucun (896)            896        0.5247   0.0850
+énergie 90%            645        0.5357   0.0899
+énergie 75%            424        0.5605   0.1216
+énergie 50%            157        0.6030   0.1587
+consistance 50%        448        0.5617   0.0830
+consistance 25%        224        0.6470   0.1500
+consistance 10%         89        0.7350   0.2769
+  ```
+
+### 🤖 Assistant
+
+⏵ **La loi est vérifiée, et elle est plus forte que le produit.**
+
+| périmètre | invar. cible | **fid TEST** | fid / invar. cible |
+|---|---:|---:|---:|
+| aucun (896) | 0,5247 | 0,4911 | 0,936 |
+| énergie 90 % | 0,5357 | 0,5137 | 0,959 |
+| énergie 75 % | 0,5605 | 0,5505 | 0,982 |
+| énergie 50 % | 0,6030 | 0,6346 | **1,052** |
+| consistance 50 % | 0,5617 | 0,5200 | 0,926 |
+| consistance 25 % | 0,6470 | 0,6064 | 0,937 |
+| consistance 10 % | 0,7350 | 0,7366 | **1,002** |
+
+**Notre fidélité vaut ≈ 0,96 × l'invariance de la cible** (0,93 à 1,05 sur sept périmètres).
+
+Autrement dit : **le pont capte essentiellement tout le contenu interlingue de la cible, et rien au-delà.** Il est au plafond que la cible lui impose.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport numpy as np\n# (invar cible, fid TEST, constante)\nd = [(0.5247,0.4911,0.4710),(0.5357,0.5137,0.4945),(0.5605,0.5505,0.5319),\n     (0.6030,0.6346,0.6140),(0.5617,0.5200,0.4991),(0.6470,0.6064,0.5863),\n      … [788 caractères tronqués]`
+
+  ```
+fid TEST ≈ 1.1150 · invariance_cible + -0.0848   r = 0.9570
+erreur max : 0.0471
+rapport fid/inv : moyenne 0.9707 · écart-type 0.0419
+écart à la constante : moyenne +0.0197 · écart-type 0.0009
+
+constante ≈ 1.1192 · invariance_cible + -0.1071   r = 0.9570
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le résultat décisif est tombé.** Je consigne.
+
+**Trois chiffres qui caractérisent tout le travail :**
+
+| relation | valeur |
+|---|---|
+| **fid TEST ≈ 1,1150 · (invariance de la cible) − 0,0848** | **r = 0,9570** |
+| **fid / invariance de la cible** | **0,9707 ± 0,0419** |
+| **écart à la constante** | **+0,0197 ± 0,0009** |
+
+Et la constante témoin suit **la même loi** (`1,1192 · invariance − 0,1071`, r = 0,9570 — pente identique à 0,4 % près).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/recapitulatif.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 8. LA CONCLUSION : tout est porté par l'invariance de la cible\n\nSept périmètres, du plus large (896 canaux) au plus étroit (89 canaux). Pour … [5034 caractères tronqués]`

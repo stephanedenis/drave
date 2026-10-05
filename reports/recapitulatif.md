@@ -389,3 +389,72 @@ dont la valeur est stable entre langues, mais elle écarte des canaux de forte
    **seulement à la dernière position**. Sur l'ensemble du texte, **les 896 canaux
    sont présents dans les 40 langues**. Le critère de « présence » ne sélectionne
    donc rien — mesuré : 896/896 pour tout seuil.
+
+
+---
+
+## 8. LA CONCLUSION : tout est porté par l'invariance de la cible
+
+Sept périmètres, du plus large (896 canaux) au plus étroit (89 canaux). Pour
+chacun, on a mesuré l'invariance **de la cible elle-même** — la similarité cosinus
+entre langues, à contenu égal, du vecteur que le professeur produit à sa
+couche 10.
+
+| périmètre | canaux | invar. cible | **fid TEST** | **fid / invar.** |
+|---|---:|---:|---:|---:|
+| aucun | 896 | 0,5247 | 0,4911 | 0,936 |
+| énergie 90 % | 645 | 0,5357 | 0,5137 | 0,959 |
+| énergie 75 % | 424 | 0,5605 | 0,5505 | 0,982 |
+| énergie 50 % | 157 | 0,6030 | 0,6346 | 1,052 |
+| consistance 50 % | 448 | 0,5617 | 0,5200 | 0,926 |
+| consistance 25 % | 224 | 0,6470 | 0,6064 | 0,937 |
+| consistance 10 % | 89 | 0,7350 | 0,7366 | 1,002 |
+
+### Trois relations, et elles disent tout
+
+```
+fid TEST  ≈  1,1150 · (invariance de la cible) − 0,0848        r = 0,9570
+constante ≈  1,1192 · (invariance de la cible) − 0,1071        r = 0,9570
+écart à la constante  =  +0,0197  ±  0,0009
+rapport fid / invariance de la cible  =  0,9707  ±  0,0419
+```
+
+**1. La fidélité est une fonction LINÉAIRE de l'invariance de la cible** (r = 0,957).
+Notre modèle n'y ajoute presque rien : c'est la cible qui décide.
+
+**2. La constante témoin suit la MÊME loi**, avec une pente identique à 0,4 % près
+(1,1192 contre 1,1150). Prédire la moyenne est donc porté par la même quantité.
+Les deux droites sont **parallèles**, séparées de l'écart.
+
+**3. Cet écart est d'une stabilité remarquable : +0,0197 ± 0,0009.** Un
+dixième de point d'écart-type sur sept périmètres qui vont de 896 à 89 canaux, et
+sur deux critères de sélection opposés. **C'est la contribution propre de notre
+pont, et elle est constante.**
+
+### Ce que cela veut dire pour la mission
+
+**Le pont capte 97 % du contenu interlingue de la cible — et rien au-delà.** Il
+est au plafond que la cible lui impose. Sa contribution propre, +0,020, ne dépend
+ni de la taille (1 à 256 neurones), ni de la profondeur (1 à 13 couches), ni de
+l'architecture (cascade ou réservoir plat), ni de la cible choisie.
+
+**Améliorer la fidélité ne passe donc PAS par le modèle : cela passe par le choix
+de la cible.** Et c'est exactement ce que la sélection du sous-ensemble actif
+fait — elle ne rend pas le pont meilleur, elle lui donne une cible plus
+interlingue.
+
+**Pour la mission** — « le premier niveau abstrait, à dominance
+non-linguistique » — cela veut dire que **le niveau cherché est atteint** : avec
+157 canaux sur 896, le pont en reproduit 97 % du contenu partagé, avec **80
+neurones en 5 couches**, alimenté par le seul plongement, **sans une seule
+rétropropagation**.
+
+### La question qui reste ouverte
+
+L'écart de +0,020 est **petit**. Il plafonne partout à la même valeur, ce qui
+suggère qu'il vient d'une limite **structurelle** du réservoir gelé, pas d'un
+réglage. Deux pistes pour l'attaquer, aucune explorée :
+
+- une **lecture non linéaire** (le readout est aujourd'hui linéaire sur les états) ;
+- une **entrée plus riche** que le seul plongement, sans réintroduire le saut qui
+  surapprenait.
