@@ -129881,3 +129881,304 @@ appr10c: 1/40
 **Arguments confirmés**, et l'abkhaze tombe à **47 s**. Je consigne les deux défauts — ils affaiblissent rétroactivement certains de mes résultats.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/note-un-pont-par-professeur.md'; s=open(p).read()\ns += \"\"\"\n\n## 6. Second défaut, plus grave que la contamination : la TRONCATURE\n\nEn vérifiant la contamination, un motif a sauté aux yeux : des dizain … [3346 caractères tronqués]`
+
+  ```
+3acef49 TRONCATURE : le défaut le plus grave, et ce qu'il fait aux résultats publiés
+0.5B abk 47s
+0.5B ace 26s
+  ```
+
+### 🤖 Assistant
+
+⏵ La chaîne 0.5B avance (26-47 s par langue). Je chaîne l'analyse des données propres dès qu'elles seront prêtes.
+
+- **write** `{"content": "#!/bin/bash\n# Analyse des traces PROPRES du professeur 0.5B, dès qu'elles sont prêtes.\n# Question posée : combien la contamination (32 jetons générés) et la troncature\n# (~50 % des langues) ont-elles coûté aux résultats publiés ?\nset -u\nwhile ! grep -q \"0.5B TERMINE\" /tmp/chaine_ … [1780 caractères tronqués]`
+
+  ```
+<path>/tmp/analyse_propre.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "chmod +x /tmp/analyse_propre.sh && setsid nohup /tmp/analyse_propre.sh >/dev/null 2>&1 < /dev/null & sleep 300; echo \"=== chaîne propre ===\"; tail -3 /tmp/chaine_propre.log; echo \"appr10c: $(ls /home/stephane/Data13TB/stephane/corpus/udhr/appr10c | wc -l)/40 · tenus10c: $(ls /home/st … [169 caractères tronqués]`
+
+  ```
+=== chaîne propre ===
+0.5B ajg 40s
+0.5B als 30s
+0.5B alt 39s
+appr10c: 12/40 · tenus10c: 0/6
+15:01
+  ```
+
+### 🤖 Assistant
+
+⏵ 12/40, ~35 s par langue. J'attends la fin des traces propres du 0.5B.
+
+- **bash** `{"command": "sleep 420; tail -2 /tmp/chaine_propre.log; echo \"appr10c: $(ls /home/stephane/Data13TB/stephane/corpus/udhr/appr10c | wc -l)/40 · tenus10c: $(ls /home/stephane/Data13TB/stephane/corpus/udhr/tenus10c 2>/dev/null | wc -l)/6\"; grep -c \"0.5B TERMINE\" /tmp/chaine_propre.log", "descriptio … [54 caractères tronqués]`
+
+  ```
+0.5B azj 33s
+0.5B bam 24s
+appr10c: 25/40 · tenus10c: 0/6
+0
+[exit code: 1]
+  ```
+
+### 🤖 Assistant
+
+⏵ 25/40. J'attends encore.
+
+- **bash** `{"command": "sleep 420; tail -2 /tmp/chaine_propre.log; echo \"appr10c: $(ls /home/stephane/Data13TB/stephane/corpus/udhr/appr10c | wc -l)/40 · tenus10c: $(ls /home/stephane/Data13TB/stephane/corpus/udhr/tenus10c 2>/dev/null | wc -l)/6 · appr30c: $(ls /home/stephane/Data13TB/stephane/corpus/udhr/app … [113 caractères tronqués]`
+
+  ```
+0.5B rus 25s
+0.5B spa 20s
+appr10c: 40/40 · tenus10c: 1/6 · appr30c: 0
+15:15
+  ```
+
+### 🤖 Assistant
+
+⏵ 40/40 pour l'entraînement, 1/6 pour le test. Presque fini.
+
+- **bash** `{"command": "sleep 300; grep -E \"0.5B TERMINE\" /tmp/chaine_propre.log; echo \"tenus10c: $(ls /home/stephane/Data13TB/stephane/corpus/udhr/tenus10c 2>/dev/null | wc -l)/6\"; echo \"--- analyse propre ---\"; tail -5 /tmp/analyse_propre.log 2>/dev/null; echo \"--- 30B ---\"; grep -c \"^30B\" /tmp/cha … [128 caractères tronqués]`
+
+  ```
+0.5B TERMINE
+tenus10c: 6/6
+--- analyse propre ---
+=== caches ===
+  abk : 1958 pas
+  ace : 1050 pas
+  acu : 948 pas
+  ada : 1388 pas
+--- 30B ---
+0
+0.5B TERMINE
+  ```
+
+### 🤖 Assistant
+
+⏵ Traces propres du 0.5B terminées : **l'abkhaze passe de 1016 (tronqué) à 1958 positions**. Les caches se construisent.
+
+**La troncature est corrigée** : l'abkhaze passe de 1016 à **1958 positions**, et les tailles ne sont plus plafonnées (1050, 948, 1388…). Les caches se construisent.
+
+- **bash** `{"command": "sleep 400; tail -4 /tmp/analyse_propre.log 2>/dev/null; echo \"--- 30B ---\"; grep -c \"^30B\" /tmp/chaine_propre.log; tail -1 /tmp/chaine_propre.log; date \"+%H:%M\"", "description": "Check cache build progress", "timeoutMs": 460000}`
+
+  ```
+auc : 897 pas
+  ayr : 1006 pas
+  azj : 1371 pas
+  bam : 925 pas
+--- 30B ---
+3
+30B acu 105s
+15:27
+  ```
+
+### 🤖 Assistant
+
+⏵ Les deux tournent : caches à ~26/40 langues, 30B démarré (105 s). J'attends les premiers résultats propres du 0.5B.
+
+- **bash** `{"command": "sleep 420; grep -A3 \"caches TERMINE\" /tmp/analyse_propre.log 2>/dev/null | head -5; echo \"--- suite ---\"; grep -E \"^  couche|^  taille|^  fidélité|constante|RÉSERVOIR|pont\" /tmp/analyse_propre.log 2>/dev/null | tail -20; echo \"--- 30B ---\"; grep -c \"^30B\" /tmp/chaine_propre.lo … [71 caractères tronqués]`
+
+  ```
+caches TERMINE
+=== professeur 0.5B couche 10, invariance par couche (perimetre propre) ===
+--- suite ---
+--- 30B ---
+6
+  ```
+
+### 🤖 Assistant
+
+⏵ Caches terminés, comparaison en cours. J'attends les chiffres propres.
+
+- **bash** `{"command": "sleep 420; sed -n '/caches TERMINE/,$p' /tmp/analyse_propre.log 2>/dev/null | head -40; echo \"--- 30B ---\"; grep -c \"^30B\" /tmp/chaine_propre.log; tail -1 /tmp/chaine_propre.log", "description": "Read clean analysis results", "timeoutMs": 480000}`
+
+  ```
+caches TERMINE
+=== professeur 0.5B couche 10, invariance par couche (perimetre propre) ===
+# 0.5B propre — 6 langues : ell heb hin jpn kor tha
+  couche  0 : invariance 0.1617 · pire paire -0.7200
+  couche  2 : invariance 0.4339 · pire paire 0.0143
+  couche  4 : invariance 0.4645 · pire paire 0.0891
+  couche  6 : invariance 0.4977 · pire paire 0.0728
+  couche  8 : invariance 0.5471 · pire paire 0.0299
+  couche 10 : invariance 0.5247 · pire paire 0.0850
+=== pont generatif, config gagnante, sur donnees PROPRES ===
+# 40 langues d'entraînement = 30 apprentissage + 10 validation
+# 6 langues de TEST · a=0.5 · ride=1.0 · graine=5 · critère=redondance
+# 2 cycles de 9 couches, puis attrition
+# pas — apprentissage 35066 · validation 14235 · test 7213
+# constante témoin sur le TEST : 0.4710
+
+########## CYCLE 1 — CROISSANCE ##########
+après                           neur.  couch.  fid appr  fid VAL  fid TEST   invar.    pire
+C1 naissance couche 1 (+1)          1       1    0.5444   0.6144    0.4734   0.9983  0.9950
+C1 naissance couche 2 (+1)          2       2    0.5458   0.6151    0.4756   0.9979  0.9931
+C1 naissance couche 3 (+2)          4       3    0.5474   0.6164    0.4754   0.9966  0.990
+… [1304 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Les données propres changent les chiffres** — et dans le bon sens. Je laisse l'attrition finir.
+
+**Les données propres redressent les mesures.** Le professeur 0.5B couche 10 passe de 0,4487 (tronqué/contaminé) à **0,5247**. Et la cascade sur données propres :
+
+| | fid TEST | invariance | pire paire |
+|---|---:|---:|---:|
+| constante témoin | 0,4710 | — | — |
+| 1 neurone | 0,4734 | **0,9983** | 0,9950 |
+| 256 neurones (cycle 1) | 0,5169 | 0,8818 | 0,6624 |
+| **256 neurones (cycle 2)** | **0,5186** | 0,8874 | 0,6738 |
+
+J'attends l'attrition et la robustesse.
+
+- **bash** `{"command": "sleep 420; sed -n '/CYCLE 2 — ATTRITION/,$p' /tmp/analyse_propre.log 2>/dev/null | head -30; echo \"=== 30B ===\"; grep -c \"^30B\" /tmp/chaine_propre.log; tail -1 /tmp/chaine_propre.log", "description": "Check attrition and robustness on clean data", "timeoutMs": 480000}`
+
+  ```
+########## CYCLE 2 — ATTRITION (redondance) ##########
+après                           neur.  couch.  fid appr  fid VAL  fid TEST
+retrait de 64 (recalculé)         192      11    0.6094   0.6553    0.5161
+retrait REFUSÉ (48 → VAL 0.6521)    192       —         —   0.6553
+
+=== MEILLEUR RÉSEAU SELON LA VALIDATION (C2 croissance) ===
+  taille           : 256 neurones · 11 couches
+  fidélité appr.   : 0.6163
+  fidélité VAL     : 0.6592
+  fidélité TEST    : 0.5186   (constante témoin : 0.4710)
+  invariance TEST  : 0.8874 · pire paire 0.6738
+
+# état final du réseau : 192 neurones · 11 couches ([1, 1, 1, 3, 4, 9, 24, 36, 81, 23, 9])
+=== reservoir plat, memes donnees PROPRES, a=0.2 ride=0.3 ===
+=== 30B ===
+11
+30B alt 174s
+  ```
+
+### 🤖 Assistant
+
+⏵ Cascade propre : **256 neurones, 11 couches, fid TEST 0,5186** (constante 0,4710). J'attends la comparaison avec le plat et la robustesse.
+
+**Cascade sur données propres : 256 neurones, 11 couches, fid TEST 0,5186** pour une constante à 0,4710 — soit **+0,0476 d'avantage**. J'attends le plat et la robustesse.
+
+- **bash** `{"command": "sleep 420; sed -n '/reservoir plat, memes donnees/,$p' /tmp/analyse_propre.log 2>/dev/null | head -30; echo \"=== 30B ===\"; grep -c \"^30B\" /tmp/chaine_propre.log; date \"+%H:%M\"", "description": "Check flat reservoir on clean data", "timeoutMs": 480000}`
+
+  ```
+=== reservoir plat, memes donnees PROPRES, a=0.2 ride=0.3 ===
+# réservoir : 64 neurones · A gelé (rayon 0,9) · B gelé · seule W s'ajuste
+# entraînement 49301 pas · test 7213 pas
+
+modèle                                  fid. train   fid. TEST     params  invariance
+constante                                        —      0.4650        896      0.2677
+RÉSERVOIR 64 (1 couche récurrente)          0.6001      0.4998     118784      0.9624
+
+# invariance inter-langue du réservoir : 0.9624 · pire paire 0.9225
+=== robustesse sur donnees propres (4 graines) ===
+--- graine 1 ---
+=== 30B ===
+13
+15:56
+  ```
+
+### 🤖 Assistant
+
+⏵ **Comparaison propre** : la cascade gagne en fidélité, le plat en invariance. Je dois vérifier à taille égale — la cascade ne gagne-t-elle qu'en grandissant ?
+
+**Comparaison sur données propres :**
+
+| modèle | neurones | fid TEST | avantage | invariance | pire paire |
+|---|---:|---:|---:|---:|---:|
+| réservoir plat | 64 | 0,4998 | +0,0348 | **0,9624** | **0,9225** |
+| cascade générative | 256 | **0,5186** | **+0,0476** | 0,8874 | 0,6738 |
+
+Mais un fait me gêne : **à 64 neurones, la cascade donne 0,4940 — le plat fait mieux (0,4998)**. La cascade ne gagnerait-elle qu'en *grandissant* ? Je vérifie le plat à 256.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && U=/home/stephane/Data13TB/stephane/corpus/udhr; setsid nohup python3 tools/pont_reservoir.py $U/appr10c $U/tenus10c --couche 10 --n 256 > /tmp/plat256.log 2>&1 < /dev/null & sleep 200; cat /tmp/plat256.log; echo \"=== robustesse prop … [202 caractères tronqués]`
+
+  ```
+=== robustesse propre ===
+=== robustesse sur donnees propres (4 graines) ===
+--- graine 1 ---
+  taille           : 256 neurones · 9 couches
+  fidélité TEST    : 0.5138   (constante témoin : 0.4710)
+--- graine 5 ---
+  ```
+
+### 🤖 Assistant
+
+⏵ Robustesse à la graine 1 : **+0,0428**. J'attends la suite et le plat à 256.
+
+- **bash** `{"command": "sleep 420; echo \"=== plat 256 sur données propres ===\"; cat /tmp/plat256.log 2>/dev/null; echo; echo \"=== robustesse propre ===\"; sed -n '/robustesse sur donnees propres/,$p' /tmp/analyse_propre.log | grep -E \"graine|fidélité TEST\"; echo \"=== 30B ===\"; grep -c \"^30B\" /tmp/chai … [101 caractères tronqués]`
+
+  ```
+=== plat 256 sur données propres ===
+
+=== robustesse propre ===
+=== robustesse sur donnees propres (4 graines) ===
+--- graine 1 ---
+  fidélité TEST    : 0.5138   (constante témoin : 0.4710)
+--- graine 5 ---
+  fidélité TEST    : 0.5186   (constante témoin : 0.4710)
+--- graine 11 ---
+  fidélité TEST    : 0.5104   (constante témoin : 0.4710)
+--- graine 23 ---
+=== 30B ===
+17
+16:06
+  ```
+
+### 🤖 Assistant
+
+⏵ Robustesse propre : **+0,0428** (graine 1), **+0,0476** (5), **+0,0394** (11) — médiane proche de celle des données contaminées (+0,0412). Le résultat tient donc au changement de données.
+
+**Bonne nouvelle** : la robustesse propre (**+0,0394 à +0,0476**) est très proche de celle des données contaminées (+0,0412 en médiane). **Le résultat de la cascade ne dépendait donc pas des défauts** — contrairement à ce que je craignais.
+
+- **bash** `{"command": "sleep 440; echo \"=== plat 256 ===\"; cat /tmp/plat256.log 2>/dev/null; echo \"=== robustesse ===\"; sed -n '/robustesse sur donnees propres/,$p' /tmp/analyse_propre.log | grep -E \"graine|fidélité TEST\"; grep -c TERMINE /tmp/analyse_propre.log; echo \"=== 30B ===\"; grep -c \"^30B\" / … [101 caractères tronqués]`
+
+  ```
+=== plat 256 ===
+# réservoir : 256 neurones · A gelé (rayon 0,9) · B gelé · seule W s'ajuste
+# entraînement 49301 pas · test 7213 pas
+
+modèle                                  fid. train   fid. TEST     params  invariance
+constante                                        —      0.4650        896      0.2677
+RÉSERVOIR 256 (1 couche récurrente)         0.6342      0.5145     524288      0.8680
+
+# invariance inter-langue du réservoir : 0.8680 · pire paire 0.7043
+=== robustesse ===
+=== robustesse sur donnees propres (4 graines) ===
+--- graine 1 ---
+  fidélité TEST    : 0.5138   (constante témoin : 0.4710)
+--- graine 5 ---
+  fidélité TEST    : 0.5186   (constante témoin : 0.4710)
+--- graine 11 ---
+  fidélité TEST    : 0.5104   (constante témoin : 0.4710)
+--- graine 23 ---
+  fidélité TEST    : 0.5172   (constante témoin : 0.4710)
+2
+=== 30B ===
+21
+  ```
+
+### 🤖 Assistant
+
+⏵ **Résultat négatif important.** À taille égale sur données propres, la cascade ne bat plus le réservoir plat. Je vérifie et je le rapporte franchement.
+
+**Je dois rapporter un résultat négatif.** La comparaison à **taille égale** sur données propres :
+
+| modèle (256 neurones) | fid TEST | invariance | pire paire |
+|---|---:|---:|---:|
+| réservoir **plat** | 0,5145 | 0,8680 | **0,7043** |
+| **cascade générative** | **0,5186** | **0,8874** | 0,6738 |
+
+**+0,41 pt de fidélité seulement** — et la robustesse sur 4 graines donne une médiane de 0,5155, soit **quasi identique** au plat (0,5145). Et sur données propres, **l'attrition n'améliore plus** : le premier retrait fait passer le test de 0,5186 à 0,5161.
+
+**Nettoyer les données a effacé l'essentiel de l'avantage que j'attribuais à l'architecture.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-pont-generatif.md'; s=open(p).read()\ns += \"\"\"\n\n## 13. RÉSULTAT NÉGATIF — sur données PROPRES, l'avantage de la cascade s'efface\n\nTout ce qui précède reposait sur des traces entachées de de … [4218 caractères tronqués]`

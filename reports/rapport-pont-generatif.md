@@ -339,3 +339,58 @@ donc **1,6 fois mieux**, et cela tient sur douze tirages indépendants.
 **Et les douze runs butent sur le plafond de 256 neurones** (10 à 12 couches) :
 la taille atteinte est limitée par MA borne, pas par l'apprentissage. La question
 « jusqu'où la croissance irait seule » reste ouverte.
+
+
+## 13. RÉSULTAT NÉGATIF — sur données PROPRES, l'avantage de la cascade s'efface
+
+Tout ce qui précède reposait sur des traces entachées de deux défauts (§10 et
+`docs/note-un-pont-par-professeur.md`) : **32 jetons générés** dans la trace, et
+une **troncature** qui coupait environ la moitié des langues. Les deux sont
+corrigés (`--ctx 2048 --n 0`) et tout est remesuré.
+
+Périmètre propre : 40 langues d'entraînement, 6 langues tenues à l'écart, dix
+unités entières, professeur Qwen2.5-0.5B couche 10.
+
+### À taille égale, la cascade ne gagne plus
+
+| modèle, **256 neurones** | couches | fid TEST | invariance | pire paire |
+|---|---:|---:|---:|---:|
+| réservoir **plat** | 1 | 0,5145 | 0,8680 | **0,7043** |
+| **cascade générative** | **11** | **0,5186** | **0,8874** | 0,6738 |
+
+**+0,41 point de fidélité.** Et la robustesse sur quatre graines donne
+0,5104 / 0,5138 / 0,5172 / 0,5186, **médiane 0,5155** — contre **0,5145** pour le
+plat. **Quasi identique.**
+
+À 64 neurones c'est pire : plat 0,4998 contre cascade 0,4940 — **le plat gagne**.
+
+### L'attrition n'améliore plus non plus
+
+Sur données contaminées, 256 → 192 faisait *monter* le test (0,4998 → 0,5002).
+Sur données propres, le même retrait le fait **baisser** : 0,5186 → 0,5161. Le
+critère de validation avait accepté l'étape (VAL 0,6591 → 0,6558, dans le seuil
+de 0,005) ; le test, lui, l'a refusée.
+
+### Ce que cela veut dire, sans enrober
+
+**Nettoyer les données a effacé l'essentiel de l'avantage que j'attribuais à
+l'architecture.** Les +37 % à +70 % annoncés aux §11 et §12 étaient pour bonne
+part un effet des défauts de traçage, pas de la récurrence en cascade.
+
+Ce qui survit :
+
+1. **La phase générative fonctionne** : la fidélité monte de façon monotone avec
+   la taille, de 0,4734 (1 neurone) à 0,5186 (256 neurones), et la courbe ne se
+   retourne pas. Sur données propres, **croître paie**.
+2. **La courbe d'échange est réelle et parcourable** : 1 neurone donne invariance
+   0,9983 et fidélité 0,4734 ; 256 neurones donnent 0,8874 et 0,5186. La
+   génération et l'attrition sont les deux façons de s'y déplacer.
+3. **L'attrition est neutre à légèrement négative** ici, et son critère de
+   validation est trop indulgent (seuil 0,005 accepte une perte réelle).
+4. **Le réservoir plat, à taille égale, est aussi bon** — et bien plus simple :
+   une couche, 64 à 256 neurones, contre 11 couches.
+
+**La conclusion honnête est que la profondeur en cascade n'apporte rien de
+mesurable sur ce périmètre**, une fois les données propres. Elle reste
+intéressante pour une autre raison — elle est distribuable couche par couche —
+mais ce n'est pas ce qui a été mesuré ici.
