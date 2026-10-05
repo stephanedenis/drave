@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 163.2 h |
+| Durée | 163.3 h |
 | Tours | 118 |
-| Messages | 7829 |
-| Appels d'outils | 7469 |
+| Messages | 7831 |
+| Appels d'outils | 7471 |
 | Fichiers touchés | 150 |
-| Commandes | 6367 |
+| Commandes | 6369 |
 | Sous-agents | 32 |
-| Commits | 538 |
+| Commits | 539 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -5936,7 +5936,7 @@ Poser le rapport et la sauvegarde **à un se
 
 ### Tour 118 — Continue de faire évoluer notre modèle et moteur en visant des réponses qui émulent les réponses sémantiques des modèles … [205 caractères tronqués]
 
-*10 appels d'outils.* Actions notables :
+*12 appels d'outils.* Actions notables :
 
 - bash — Check time and locate the two report sites
 - bash — Unify the HebbDiff report in one place
@@ -5948,18 +5948,23 @@ Poser le rapport et la sauvegarde **à un se
 - bash — Trace UDHR article 1 in 12 languages
 - bash — Measure the multilingual plateau at scale
 - bash — Trace the same languages on a 30B model
+- bash — Measure the plateau on the 30B model
+- bash — Write and commit the semantic plateau report
 
 **Synthèse produite :**
 
-**Le plateau est confirmé à l'échelle multilingue** : 10 langues, 4 écritures, 45 paires.
+**Confirmé et chiffré : un modèle haut de gamme converge mieux.**
 
-| couche | 0 | 4 | **10** | 16 | 20 | 23 |
-|---|---:|---:|---:|---:|---:|---:|
-| cos moyen | 0,174 | 0,601 | **0,649** | 0,573 | 0,363 | 0,280 |
+| | Qwen2.5-0.5B (24 c.) | Qwen3-30B-A3B (48 c.) |
+|---|---:|---:|
+| pic de convergence | 0,649 (couche 10, **42 %**) | **0,693** (couche 17, **35 %**) |
+| **pire paire au pic** | **0,280** | **0,471** (+68 %) |
+| largeur du plateau | couches 4-16 | couches **4-42** |
+| à la sortie | 0,280 | 0,493 |
 
-Le pic est à **42 % de la profondeur** (10/24) — vs 23/48 = 48 % pour la paire FR/EN. **Le même endroit relatif.** Et le `min` (0,28 au plateau) dit que certaines paires ne convergent jamais : ce sont les écritures éloignées.
+Le grand modèle ne se contente pas d'un meilleur pic : il rapproche surtout **les paires difficiles** — japonais, hindi, devanagari — de 0,28 à 0,47. Et il **re-spécialise moins** vers la sortie.
 
-Maintenant le test qui vise ton objectif : **un modèle haut de gamme converge-t-il mieux ?**
+**C'est la cible mesurable de ton objectif** : amener le plateau du petit modèle vers celui du grand, en priorité sur les pires paires.
 
 ## 3. Travail accompli
 
@@ -6195,7 +6200,7 @@ Maintenant le test qui vise ton objectif : **un modèle haut de gamme converge-t
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6327 autres
+- … et 6329 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -6881,4 +6886,5 @@ Maintenant le test qui vise ton objectif : **un modèle haut de gamme converge-t
 - Apprentissage hebbien différentiel : implémenté dans le moteur, et mesuré  Hebb MESURAIT le produit hebbien sans jamais toucher au calcul. HebbDiff l'APPLIQUE :
 - Hebb différentiel : le test hors échantillon N'A PAS TOURNÉ, et j'explique pourquoi  PPL sur B, modèle intact : 29,151. PPL sur B avec D appris sur A : 29,151 —
 - Plateau multilingue à l'échelle : 10 langues, 4 écritures, pic à 42 % de la profondeur  tools/plateau_multilingue.py étend invariance_semantique.py d'une paire 
+- Un modèle haut de gamme converge MIEUX : pic 0,693 contre 0,649, et surtout pire paire 0,471 contre 0,280  Mêmes 10 langues (4 écritures), même article de l'UDH
 

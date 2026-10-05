@@ -124422,3 +124422,74 @@ Le pic est à **42 % de la profondeur** (10/24) — vs 23/48 = 48 % pour la pair
 Maintenant le test qui vise ton objectif : **un modèle haut de gamme converge-t-il mieux ?**
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Plateau multilingue à l'échelle : 10 langues, 4 écritures, pic à 42 % de la profondeur\n\ntools/plateau_multilingue.py étend invariance_semantique.py d'une paire à N\nlangues : similarité cosinus MOYE … [1338 caractères tronqués]`
+
+  ```
+950dbdb Plateau multilingue à l'échelle : 10 langues, 4 écritures, pic à 42 % de la profondeur
+  deu 24052234
+  eng 17994582
+  fra 27314047
+  hin 95863173
+  ita 28992613
+  jpn 28292968
+  nld 29035429
+  por 27878834
+  rus 26775526
+  spa 23485505
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 python3 tools/plateau_multilingue.py /home/stephane/Data13TB/stephane/corpus/udhr/langues30b --base 0 2>&1 | head -20; echo \"...\"; timeout 900 python3 tools/plateau_multilingue.py /home/stephane/Data13TB/stephane/corpus … [119 caractères tronqués]`
+
+  ```
+# 10 langues : deu eng fra hin ita jpn nld por rus spa
+ couche  cos moyen      min  paires
+      0     0.2678  -0.0444      45
+      1     0.4543   0.2574      45
+      2     0.5495   0.3322      45
+      3     0.5449   0.3060      45
+      4     0.6316   0.4124      45
+      5     0.6078   0.3934      45
+      6     0.5750   0.3753      45
+      7     0.5463   0.3373      45
+      8     0.5814   0.4017      45
+      9     0.6132   0.4426      45
+     10     0.6299   0.4022      45
+     11     0.6462   0.4484      45
+     12     0.6294   0.3868      45
+     13     0.6390   0.4039      45
+     14     0.6372   0.4158      45
+     15     0.6458   0.4155      45
+     16     0.6391   0.4215      45
+     17     0.6931   0.4712      45
+...
+     28     0.6021   0.3697      45
+     29     0.6534   0.4135      45
+     30     0.6015   0.3587      45
+     31     0.5976   0.3304      45
+     32     0.6102   0.3785      45
+     33     0.6329   0.3945      45
+     34     0.6491   0.3945      45
+     35     0.6508   0.4118      45
+     36     0.6381   0.3887      45
+     37     0.6463   0.4091      45
+     38     0.6176   0.3820      45
+     39     0.6197   0.3618      45
+     40     0.6056   0.37
+… [297 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+**Confirmé et chiffré : un modèle haut de gamme converge mieux.**
+
+| | Qwen2.5-0.5B (24 c.) | Qwen3-30B-A3B (48 c.) |
+|---|---:|---:|
+| pic de convergence | 0,649 (couche 10, **42 %**) | **0,693** (couche 17, **35 %**) |
+| **pire paire au pic** | **0,280** | **0,471** (+68 %) |
+| largeur du plateau | couches 4-16 | couches **4-42** |
+| à la sortie | 0,280 | 0,493 |
+
+Le grand modèle ne se contente pas d'un meilleur pic : il rapproche surtout **les paires difficiles** — japonais, hindi, devanagari — de 0,28 à 0,47. Et il **re-spécialise moins** vers la sortie.
+
+**C'est la cible mesurable de ton objectif** : amener le plateau du petit modèle vers celui du grand, en priorité sur les pires paires.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-plateau-semantique.md <<'EOF'\n# Rapport — le plateau sémantique, mesuré sur un corpus multilingue réel\n\n**But** (Stéphane) : faire produire au moteur des réponses qui **émulent les\nréponses sémantiques des m … [4390 caractères tronqués]`
