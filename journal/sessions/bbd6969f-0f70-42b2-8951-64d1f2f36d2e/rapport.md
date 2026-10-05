@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 164.5 h |
+| Durée | 164.7 h |
 | Tours | 119 |
-| Messages | 7870 |
-| Appels d'outils | 7506 |
+| Messages | 7874 |
+| Appels d'outils | 7510 |
 | Fichiers touchés | 150 |
-| Commandes | 6404 |
+| Commandes | 6408 |
 | Sous-agents | 32 |
-| Commits | 549 |
+| Commits | 550 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -5993,30 +5993,31 @@ Tout est commité, 77 tests verts, `REPRISE.md` et `reports/rapport-pont-semanti
 
 ### Tour 119 — ajoute des neuronnes et des couches au besoin. il faut émuler le prof le plus fidèlement possible à moindre coût en misa … [60 caractères tronqués]
 
-*3 appels d'outils.* Actions notables :
+*7 appels d'outils.* Actions notables :
 
 - bash — Measure fidelity in full space across models
 - bash — Retrain with double the data
 - bash — Commit the neurons/layers finding
+- bash — Add a frozen recurrent layer
+- bash — See the reservoir error
+- bash — Fix and run the reservoir
+- bash — Commit the reservoir result
 
 **Synthèse produite :**
 
-**Le résultat répond directement à ta demande — et il dit l'inverse de l'intuition.**
+**La couche récurrente gagne sur les deux tableaux.**
 
-| modèle | fid. entraînement | **fid. TEST** | params | invariance |
+| modèle | fid. TEST | **invariance** | **pire paire** | params |
 |---|---:|---:|---:|---:|
-| constante | 0,6677 | 0,5582 | 896 | 0,3763 |
-| linéaire 1 neurone | 0,6943 | 0,4752 | 1 792 | 0,7461 |
-| linéaire 128 neurones | 0,8444 | **0,3691** | 115 584 | 0,2812 |
-| **2 couches, 64 cachés** | 0,7278 | **0,5725** | 114 688 | **0,8882** |
-| 2 couches, 256 cachés | 0,7753 | **0,5795** | 458 752 | 0,7855 |
-| 2 couches, 4 096 cachés | 0,8947 | 0,5557 | 7 340 032 | 0,6048 |
+| constante | 0,5582 | 0,3763 | — | 896 |
+| 2 couches ELM 64 | 0,5725 | 0,8882 | — | 114 688 |
+| **RÉSERVOIR 64** | **0,5923** | **0,9072** | **0,8437** | 118 784 |
+| RÉSERVOIR 256 | 0,5868 | 0,8187 | 0,6918 | 524 288 |
+| RÉSERVOIR 512 | 0,5812 | 0,8113 | 0,7471 | 1 179 648 |
 
-**Ajouter des neurones à un modèle linéaire DÉTRUIT la fidélité** : 0,475 (1 neurone) → 0,369 (128), pendant que l'entraînement monte de 0,69 à 0,84. Surajustement pur.
+**Ajouter une COUCHE récurrente gagne nettement** — fidélité 0,5725 → **0,5923**, invariance 0,8882 → **0,9072**, pire paire **0,8437**. Et **ajouter des neurones au-delà de 64 n'aide plus** (0,5923 → 0,5868 → 0,5812) : le mur est la donnée, pas la capacité.
 
-**Ajouter des couches aide vraiment** : le 2-couches est la **seule** famille qui bat la constante, et il porte **la meilleure invariance (0,8882)** en même temps que la meilleure fidélité à coût égal.
-
-**Et au-delà de 256 cachés, ajouter nuit** (0,5795 → 0,5557). Le goulot n'est pas la capacité : **c'est la donnée** — 2 960 pas pour une cible de 896 dimensions.
+**Et c'est le plus distribuable de tous** : `A` et `B` sont **aléatoires et gelés** — aucune coordination entre nœuds — seule la lecture `W` (64×896) s'ajuste, par blocs indépendants.
 
 ## 3. Travail accompli
 
@@ -6252,7 +6253,7 @@ Tout est commité, 77 tests verts, `REPRISE.md` et `reports/rapport-pont-semanti
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6364 autres
+- … et 6368 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -6380,7 +6381,7 @@ Tout est commité, 77 tests verts, `REPRISE.md` et `reports/rapport-pont-semanti
 
 ## 5. Erreurs rencontrées
 
-372 sorties en erreur ou divergentes. Les premières :
+373 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -6949,4 +6950,5 @@ Tout est commité, 77 tests verts, `REPRISE.md` et `reports/rapport-pont-semanti
 - UN SEUL NEURONE SUFFIT : 0,9492 d'invariance contre 0,6284 pour le professeur  Intuition de Stéphane confirmée et chiffrée — « un neurone par sortie, puis on it
 - Le pont rang-1 est l'artefact, et la sonde est un échec de protocole — dit tel quel  Artefact : pont_semantique_r1.npz (W0 896x1, P 896x1, moy 896) — ~1800 nomb
 - Ajouter des neurones DÉTRUIT la fidélité ; ajouter une COUCHE la sauve  Mesure corrigée dans l'espace complet (l'ancienne comparait dans le sous-espace du rang 
+- LA COUCHE RÉCURRENTE GAGNE : réservoir 64 neurones, 0,59 fidélité / 0,91 invariance / 0,84 pire paire  s_t = (1-a)s_(t-1) + a·tanh(A·s_(t-1) + B·e_t), A et B AL
 

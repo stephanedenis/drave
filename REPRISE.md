@@ -78,6 +78,27 @@ cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo build --r
 > `res_mix` s'applique là où la référence n'en applique pas. Les trois étaient
 > invisibles au jeton 0 seul.
 >
+> ## **LE MEILLEUR PONT : 1 couche récurrente GELÉE de 64 neurones (06/10, 11h30)**
+>
+> | modèle | fid. TEST | invariance | pire paire | params |
+> |---|---:|---:|---:|---:|
+> | constante | 0,5582 | 0,3763 | — | 896 |
+> | 2 couches, 64 cachés | 0,5725 | 0,8882 | — | 114 688 |
+> | **RÉSERVOIR 64** | **0,5923** | **0,9072** | **0,8437** | 118 784 |
+> | réservoir 512 | 0,5812 | 0,8113 | 0,7471 | 1 179 648 |
+>
+> `s_t = (1−a)s_(t−1) + a·tanh(A·s_(t−1) + B·e_t)`, **A et B aléatoires et GELÉS**,
+> seule la lecture `W` s'ajuste par moindres carrés. Aucune rétropropagation.
+> `tools/pont_reservoir.py`. 40 langues d'entraînement → 6 tenues à l'écart.
+>
+> **Ajouter une COUCHE récurrente gagne sur les deux tableaux. Ajouter des
+> NEURONES au-delà de 64 n'aide plus** — le mur est la DONNÉE : 2 960 pas pour
+> 896 dimensions. L'UDHR porte 42 unités × 400 langues ; tout ce travail n'utilise
+> que l'article 1 en 46 langues, **~3 %**.
+>
+> **Le plus distribuable** : A et B gelés (aucune coordination entre nœuds), seule
+> W s'ajuste, par blocs indépendants.
+>
 > ## **LE PONT LINGUISTIQUE-SÉMANTIQUE EXISTE (06/10, 10h50)** — et il tient en une matrice
 >
 > **Mission** : émuler en boîte noire le premier niveau abstrait des gros modèles

@@ -125240,3 +125240,67 @@ linéaire, 128 neurone(s)                0.8444      0.3691     115584      0.28
 **Et au-delà de 256 cachés, ajouter nuit** (0,5795 → 0,5557). Le goulot n'est pas la capacité : **c'est la donnée** — 2 960 pas pour une cible de 896 dimensions.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-pont-semantique.md'; s=open(p).read()\ns += \"\"\"\n\n## Résultat 7 — « ajouter des neurones et des couches » : mesuré, et c'est l'inverse\n\nDemande de Stéphane : ajouter neurones et couches au b … [3858 caractères tronqués]`
+
+  ```
+99919da Ajouter des neurones DÉTRUIT la fidélité ; ajouter une COUCHE la sauve
+11:18
+  ```
+
+### 🤖 Assistant
+
+~40 min. Le diagnostic est clair : le pont sans **contexte** plafonne à 0,57 parce que la couche 10 agrège tout le préfixe. J'ajoute donc une **couche récurrente gelée** — un réservoir — dont seule la lecture s'ajuste. Sans rétropropagation.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/pont_reservoir.py <<'EOF'\n#!/usr/bin/env python3\n\"\"\"pont_reservoir.py — ajouter une COUCHE RÉCURRENTE sans rétropropagation.\n\nLe diagnostic du rapport : sans contexte, le pont plafonne à 0,57 de fidélité,\nparce qu … [5697 caractères tronqués]`
+
+  ```
+(no output)
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && U=/home/stephane/Data13TB/stephane/corpus/udhr; timeout 600 python3 tools/pont_reservoir.py $U/appr40 $U/tenus_trace --couche 10 --n 64 2>&1 | tail -12", "description": "See the reservoir error", "timeoutMs": 660000}`
+
+  ```
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_reservoir.py", line 131, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_reservoir.py", line 119, in main
+    base = cos_lignes(np.tile(mt, (len(te), 1)), np.vstack([y for _, y in te.values()]))
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_reservoir.py", line 80, in cos_lignes
+    ok = (na > 0) & (nb > 0)
+         ~~~~~~~~~^~~~~~~~~~
+ValueError: operands could not be broadcast together with shapes (6,) (569,)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/pont_reservoir.py'; s=open(p).read()\ns = s.replace(\"    base = cos_lignes(np.tile(mt, (len(te), 1)), np.vstack([y for _, y in te.values()]))\",\n              \"    Yte = np.vstack([y for _, y in te.value … [638 caractères tronqués]`
+
+  ```
+ok
+constante                                        —      0.5582        896      0.3763
+RÉSERVOIR 64 (1 couche récurrente)          0.7285      0.5923     118784      0.9072
+# invariance inter-langue du réservoir : 0.9072 · pire paire 0.8437
+constante                                        —      0.5582        896      0.3763
+RÉSERVOIR 256 (1 couche récurrente)         0.7818      0.5868     524288      0.8187
+# invariance inter-langue du réservoir : 0.8187 · pire paire 0.6918
+constante                                        —      0.5582        896      0.3763
+RÉSERVOIR 512 (1 couche récurrente)         0.8142      0.5812    1179648      0.8113
+# invariance inter-langue du réservoir : 0.8113 · pire paire 0.7471
+  ```
+
+### 🤖 Assistant
+
+**La couche récurrente gagne sur les deux tableaux.**
+
+| modèle | fid. TEST | **invariance** | **pire paire** | params |
+|---|---:|---:|---:|---:|
+| constante | 0,5582 | 0,3763 | — | 896 |
+| 2 couches ELM 64 | 0,5725 | 0,8882 | — | 114 688 |
+| **RÉSERVOIR 64** | **0,5923** | **0,9072** | **0,8437** | 118 784 |
+| RÉSERVOIR 256 | 0,5868 | 0,8187 | 0,6918 | 524 288 |
+| RÉSERVOIR 512 | 0,5812 | 0,8113 | 0,7471 | 1 179 648 |
+
+**Ajouter une COUCHE récurrente gagne nettement** — fidélité 0,5725 → **0,5923**, invariance 0,8882 → **0,9072**, pire paire **0,8437**. Et **ajouter des neurones au-delà de 64 n'aide plus** (0,5923 → 0,5868 → 0,5812) : le mur est la donnée, pas la capacité.
+
+**Et c'est le plus distribuable de tous** : `A` et `B` sont **aléatoires et gelés** — aucune coordination entre nœuds — seule la lecture `W` (64×896) s'ajuste, par blocs indépendants.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-pont-semantique.md'; s=open(p).read()\ns += \"\"\"\n\n## Résultat 8 — LA COUCHE RÉCURRENTE GAGNE, et elle est la plus distribuable\n\nDiagnostic du résultat 7 : sans **contexte**, le pont plafonne … [4663 caractères tronqués]`

@@ -226,3 +226,48 @@ seule la lecture `W` (H × 896) s'ajuste, par blocs indépendants.
 L'UDHR porte **42 unités × 400 langues**, et ce rapport n'utilise que **l'article 1
 dans 46 langues** — soit ~3 % du corpus disponible. Dix fois plus de pas
 changerait la courbe, pas dix fois plus de neurones.
+
+
+## Résultat 8 — LA COUCHE RÉCURRENTE GAGNE, et elle est la plus distribuable
+
+Diagnostic du résultat 7 : sans **contexte**, le pont plafonne, parce que la couche
+10 du professeur **agrège tout le préfixe** et qu'un seul jeton ne peut pas la
+prédire. La réponse qui respecte « pas de rétropropagation » est un **réservoir** :
+une couche récurrente **aléatoire et gelée**, dont seule la lecture s'ajuste.
+
+```
+  s_t = (1−a)·s_(t−1) + a·tanh(A·s_(t−1) + B·e_t)     A, B ALÉATOIRES, GELÉS
+  y_t = W·s_t + moy                                    W ajusté, forme fermée
+```
+
+40 langues d'entraînement → 6 langues tenues à l'écart (non latines) :
+
+| modèle | fid. entraînement | **fid. TEST** | params | **invariance** | pire paire |
+|---|---:|---:|---:|---:|---:|
+| constante | — | 0,5582 | 896 | 0,3763 | — |
+| 2 couches, 64 cachés (ELM) | 0,7278 | 0,5725 | 114 688 | 0,8882 | — |
+| **RÉSERVOIR 64** | 0,7285 | **0,5923** | 118 784 | **0,9072** | **0,8437** |
+| RÉSERVOIR 256 | 0,7818 | 0,5868 | 524 288 | 0,8187 | 0,6918 |
+| RÉSERVOIR 512 | 0,8142 | 0,5812 | 1 179 648 | 0,8113 | 0,7471 |
+
+**Ajouter une COUCHE récurrente gagne sur les DEUX tableaux** : fidélité 0,5725 →
+**0,5923**, invariance 0,8882 → **0,9072**, et la pire paire monte à **0,8437**.
+
+**Ajouter des NEURONES au-delà de 64 n'aide plus** (0,5923 → 0,5868 → 0,5812) : le
+mur est la donnée, pas la capacité — 2 960 pas pour 896 dimensions.
+
+**Et c'est le plus distribué de tous les modèles essayés** : `A` (64×64) et
+`B` (64×896) sont **aléatoires et gelés**, donc identiques sur tous les nœuds sans
+aucune coordination ; seule la lecture `W` (64×896) s'ajuste, et ses blocs sont
+**indépendants** — chaque nœud peut calculer le sien.
+
+**Le meilleur pont mesuré, en une ligne** : `tools/pont_reservoir.py`,
+**1 couche récurrente gelée de 64 neurones**, ~119 k paramètres, fidélité 0,59,
+invariance 0,91, pire paire 0,84 sur six écritures jamais vues.
+
+## Ce qu'il faudrait pour aller plus loin
+
+**Plus de données, et rien d'autre.** L'UDHR porte **42 unités × 400 langues** ;
+tout ce rapport n'utilise que **l'article 1 dans 46 langues**, soit **~3 %** du
+corpus déjà présent sur la machine. Dix fois plus de pas déplacerait la courbe ;
+dix fois plus de neurones ne l'a pas déplacée une seule fois.
