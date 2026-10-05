@@ -76,3 +76,44 @@ se demander s'il émerge des structures communes. **C'est un projet pour l'initi
 Panini (et Nipada), pas pour Drave.** Drave doit rester ce qu'il est : un moteur
 qui construit, pour un professeur donné, le pont le plus fidèle possible vers sa
 couche sémantique, à moindre coût et distribuable.
+
+
+## 6. Second défaut, plus grave que la contamination : la TRONCATURE
+
+En vérifiant la contamination, un motif a sauté aux yeux : des dizaines de traces
+portaient **exactement 1016 positions**. Ce n'est pas une coïncidence, c'est un
+plafond : `ctx 1024` moins la réserve `n + 8` = 40 laissait passer **984 jetons**
+de texte, plus les 32 jetons générés.
+
+Mesuré sur l'abkhaze, dont le texte de dix unités est le plus long :
+
+| contexte | positions obtenues | temps |
+|---|---:|---:|
+| 1 024 | 1 016 (**tronqué**) | 131 s |
+| 2 048 | **1 958** (complet) | 204 s |
+| 4 096 | 1 958 (complet, même coût) | 183 s |
+
+Le texte demande **1 958 jetons** : à `ctx 1024`, près de la moitié était perdue.
+Sur un échantillon de dix langues d'entraînement, **5 sur 10 étaient tronquées**.
+
+**Pourquoi c'est plus grave que la contamination.** Notre invariance se mesure sur
+la **dernière position**. Si le texte est coupé, cette position n'est plus la fin
+du texte : chaque langue s'arrête à son propre 984ᵉ jeton, c'est-à-dire à un
+**contenu différent**. La mesure comparait donc des choses qui ne se comparent
+pas — exactement le genre d'erreur qu'on traque depuis le début.
+
+**Ce que cela fait aux résultats déjà publiés**, et il faut le dire nettement :
+
+| jeu | contamination (32 jetons générés) | langues tronquées | solidité |
+|---|---:|---:|---|
+| 1 unité (article 1) | **25 à 60 %** des positions | oui | **faible** |
+| 10 unités | 3 % | ~50 % | moyenne |
+| **reprise `ctx 2048 --n 0`** | **0 %** | **0 %** | la seule propre |
+
+Les résultats à **une unité** reposent donc sur des données dont **un quart à
+60 %** étaient des jetons que le professeur avait *inventés* — et ils sont les
+plus fragiles de tout ce travail. Les résultats à **dix unités** sont bien
+meilleurs (3 % de contamination) mais souffrent encore de la troncature sur la
+moitié des langues.
+
+**Tout est repris** en `--ctx 2048 --n 0` pour les deux professeurs.

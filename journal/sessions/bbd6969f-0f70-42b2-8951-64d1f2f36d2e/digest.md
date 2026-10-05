@@ -129705,3 +129705,179 @@ AVANTAGE   : min +0.0367 · max +0.0477 · médiane +0.0412
 Et **les 12 runs butent sur mon plafond de 256 neurones** — la taille est limitée par ma borne, pas par l'apprentissage.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-pont-generatif.md'; s=open(p).read()\ns += \"\"\"\n\n## 12. Contrôle de robustesse : douze tirages, douze fois le même verdict\n\nUn seul tirage ne prouve rien. Douze combinaisons (4 graines du ré … [2224 caractères tronqués]`
+
+  ```
+0c3e267 Contrôle de robustesse : 12 tirages, médiane honnête +0,0412
+bba 112s
+27
+  ```
+
+### 🤖 Assistant
+
+⏵ Un point que je dois vérifier d'urgence : sur les données à **une unité**, la contamination de 32 jetons pèserait beaucoup plus lourd que 6 %.
+
+Un point que je dois vérifier avant de me reposer sur ces chiffres : sur la donnée à **une unité** (article 1, ~33 jetons), 32 jetons générés représenteraient une part énorme. Je mesure.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys, glob, os; sys.path.insert(0,'/tmp')\nfrom lire_drvf import lire\ndef compte(d, n=8):\n    out=[]\n    for f in sorted(glob.glob(d+'/*.drvf'))[:n]:\n        v,nl,hid,recs=lire(f)\n        pos={p for c,p,_ … [541 caractères tronqués]`
+
+  ```
+=== 1 unité (article 1) ===
+  abk: 96 positions  -> 33 % seraient générés
+  ace: 55 positions  -> 58 % seraient générés
+  acu: 54 positions  -> 59 % seraient générés
+  ada: 116 positions  -> 28 % seraient générés
+  ady: 128 positions  -> 25 % seraient générés
+  afr: 53 positions  -> 60 % seraient générés
+  agr: 97 positions  -> 33 % seraient générés
+  aii: 118 positions  -> 27 % seraient générés
+=== 10 unités ===
+  abk: 1016 positions  -> 3 % générés
+  ace: 1016 positions  -> 3 % générés
+  acu: 980 positions  -> 3 % générés
+  ada: 1016 positions  -> 3 % générés
+  ```
+
+### 🤖 Assistant
+
+⏵ **Constat sérieux** : sur la donnée à une unité, la contamination atteint **25 à 60 %** des positions. Et je vois un second problème — plusieurs langues affichent exactement 1016 positions, soit la **troncature** au contexte.
+
+**Deux problèmes, pas un.** Sur la donnée à une unité, 25 à 60 % des positions sont des jetons générés. Et les 1016 positions répétées trahissent une **troncature** : `ctx 1024` moins la réserve `n+8` = 40 ne laisse que 984 jetons de texte, plus 32 générés. Je mesure l'ampleur.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys, glob, os; sys.path.insert(0,'/tmp')\nfrom lire_drvf import lire\nimport collections\nU='/home/stephane/Data13TB/stephane/corpus/udhr/'\nfor d,limite in [('appr10',1016),('tenus10',1016)]:\n    c=collecti … [548 caractères tronqués]`
+
+  ```
+(no output)
+[timed out after 300000ms]
+[killed by signal: SIGTERM]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le parse complet est trop lent. J'échantillonne.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 280 python3 - <<'PY'\nimport sys, glob, os; sys.path.insert(0,'/tmp')\nfrom lire_drvf import lire\nU='/home/stephane/Data13TB/stephane/corpus/udhr/'\nfs=sorted(glob.glob(U+'appr10/*.drvf'))\nech=f[::5] if False else fs[::4]   … [491 caractères tronqués]`
+
+  ```
+échantillon : 10 langues sur 40
+   abk:  1016 positions  <-- TRONQUÉE
+   ady:  1016 positions  <-- TRONQUÉE
+   ajg:  1016 positions  <-- TRONQUÉE
+   ame:  1016 positions  <-- TRONQUÉE
+   arb:   712 positions
+   auc:   929 positions
+   ban:  1016 positions  <-- TRONQUÉE
+   bcl:   986 positions
+   deu:   858 positions
+   nld:   980 positions
+
+5/10 tronquées dans l'échantillon -> ~50 %
+  ```
+
+### 🤖 Assistant
+
+⏵ **Environ 50 % des langues sont tronquées.** C'est plus grave que la contamination : si le texte est coupé, la « dernière position » ne correspond plus à la fin du texte, et **la mesure d'invariance compare des contenus différents** selon la langue. Je mesure le contexte nécessaire.
+
+**La troncature est plus grave que la contamination.** Si le texte est coupé, la « dernière position » n'est plus la fin du texte — et mon invariance compare alors des **contenus différents** d'une langue à l'autre. Je mesure le contexte qu'il faudrait.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/corpus/udhr && M=/home/stephane/Data13TB/stephane/modeles/gguf/qwen2.5-0.5b-instruct-q4_k_m.gguf; D=/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/target/release/drave; for C in 1024 2048 4096; do S=$(date +%s); $D $M --infer --ctx $C --co … [447 caractères tronqués]`
+
+  ```
+ctx=1024 : 1016 positions · 131s
+ctx=2048 : 1958 positions · 204s
+ctx=4096 : 1958 positions · 183s
+  ```
+
+### 🤖 Assistant
+
+⏵ **Résultat décisif : l'abkhaze a besoin de 1958 jetons** — donc `ctx 2048` suffit, et coûte +56 % sur le 0.5B. Je dois reprendre les deux traçages. J'arrête la chaîne actuelle.
+
+**Décisif : 1958 jetons nécessaires** pour l'abkhaze. `ctx 2048` suffit ; le 4096 ne coûte pas plus cher (même texte). Je dois reprendre les deux traçages — la chaîne actuelle produit des données tronquées pour la moitié des langues. J'arrête tout proprement.
+
+- **bash** `{"command": "cat > /tmp/stop.py <<'PY'\nimport os, signal\nmoi = os.getpid(); anc = set(); p = moi\nfor _ in range(6):\n    try:\n        st = open(f\"/proc/{p}/stat\").read().split(\") \",1)[1].split(); p = int(st[1]); anc.add(p)\n    except Exception: break\ncibles = []\nfor d in os.listdir(\"/pro … [962 caractères tronqués]`
+
+  ```
+arrêtés : 5
+   2230329 /bin/bash /tmp/trace30b_train.sh 
+   2230604 /bin/bash /tmp/after30b.sh 
+   2230621 /bin/bash /tmp/after30b_test.sh 
+   2231731 /bin/bash /tmp/analyse30b.sh 
+   2248545 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/target/rele
+processus restants : 1
+  ```
+
+### 🤖 Assistant
+
+⏵ Chaîne arrêtée. Je relance tout en `--ctx 2048 --n 0` — le 0.5B d'abord (plus rapide), puis le 30B.
+
+- **bash** `{"command": "for p in $(python3 -c \"\nimport os\nfor d in os.listdir('/proc'):\n    if d.isdigit():\n        try: cl=open(f'/proc/{d}/cmdline','rb').read().decode(errors='replace')\n        except Exception: continue\n        if 'release/drave' in cl: print(d)\n\"); do kill -9 $p 2>/dev/null; done; … [2296 caractères tronqués]`
+
+  ```
+(no output)
+[killed by signal: SIGKILL]
+  ```
+
+### 🤖 Assistant
+
+⏵ Auto-tué encore (le motif `release/drave` figurait dans ma propre commande). Je reprends avec le script externe qui exclut ses ancêtres.
+
+Encore le même piège — le motif figurait dans ma propre ligne de commande. Je reprends avec le script qui exclut ses ancêtres.
+
+- **bash** `{"command": "ls -la /tmp/chaine_propre.sh 2>/dev/null || echo \"script non créé\"; python3 /tmp/stop.py 2>/dev/null | head -2; python3 -c \"\nimport os\nn=[]\nfor d in os.listdir('/proc'):\n    if d.isdigit():\n        try: cl=open(f'/proc/{d}/cmdline','rb').read().decode(errors='replace')\n         … [217 caractères tronqués]`
+
+  ```
+script non créé
+arrêtés : 0
+drave actifs : 1
+   ('2248712', "python3\x00-c\x00\nimport os\nn=[]\nfor d in os.listdir('/proc'):\n   ")
+  ```
+
+### 🤖 Assistant
+
+⏵ Aucun processus actif. Je crée le script de chaîne avec l'outil d'écriture, sans aucune logique d'arrêt.
+
+- **write** `{"file_path": "/tmp/chaine_propre.sh", "content": "#!/bin/bash\n# Traçage PROPRE, pour les deux professeurs.\n#\n#   --ctx 2048 : AUCUNE troncature. Mesuré : le texte de dix unités en abkhaze\n#                demande 1958 jetons, alors que ctx 1024 n'en laissait passer que\n#                984 (et … [2004 caractères tronqués]`
+
+  ```
+<path>/tmp/chaine_propre.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "chmod +x /tmp/chaine_propre.sh && setsid nohup /tmp/chaine_propre.sh >/dev/null 2>&1 < /dev/null & sleep 40; echo \"=== args du processus drave (vérifiés dans /proc) ===\"; python3 -c \"\nimport os\nfor d in os.listdir('/proc'):\n    if d.isdigit():\n        try: cl=open(f'/proc/{d}/cmd … [458 caractères tronqués]`
+
+  ```
+=== args du processus drave (vérifiés dans /proc) ===
+  
+  
+  --infer --ctx --couches --lot --n --prompt --trace-flux
+  
+--- progression ---
+1
+  ```
+
+### 🤖 Assistant
+
+⏵ La chaîne tourne. Je vérifie les **valeurs** des arguments, pas seulement leur présence.
+
+- **bash** `{"command": "python3 -c \"\nimport os\nfor d in os.listdir('/proc'):\n    if d.isdigit():\n        try: cl=open(f'/proc/{d}/cmdline','rb').read().decode(errors='replace')\n        except Exception: continue\n        if '--trace-flux' in cl and 'gguf' in cl:\n            parts=[x for x in cl.split(ch … [390 caractères tronqués]`
+
+  ```
+--ctx 2048
+  --couches 0:11
+  --lot 1
+  --n 0
+--- progression ---
+0.5B abk 47s
+appr10c: 1/40
+14:55
+  ```
+
+### 🤖 Assistant
+
+⏵ Arguments confirmés (`--ctx 2048 --couches 0:11 --lot 1 --n 0`) et l'abkhaze tombe à 47 s. Je consigne les deux défauts trouvés.
+
+**Arguments confirmés**, et l'abkhaze tombe à **47 s**. Je consigne les deux défauts — ils affaiblissent rétroactivement certains de mes résultats.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/note-un-pont-par-professeur.md'; s=open(p).read()\ns += \"\"\"\n\n## 6. Second défaut, plus grave que la contamination : la TRONCATURE\n\nEn vérifiant la contamination, un motif a sauté aux yeux : des dizain … [3346 caractères tronqués]`

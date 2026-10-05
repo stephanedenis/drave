@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 167.8 h |
+| Durée | 168.1 h |
 | Tours | 122 |
-| Messages | 8062 |
-| Appels d'outils | 7687 |
-| Fichiers touchés | 151 |
-| Commandes | 6569 |
+| Messages | 8073 |
+| Appels d'outils | 7698 |
+| Fichiers touchés | 152 |
+| Commandes | 6579 |
 | Sous-agents | 32 |
-| Commits | 566 |
+| Commits | 567 |
 | Compactages de contexte | 11 |
 
 ## Objectifs déclarés
@@ -6198,7 +6198,7 @@ J'ai aussi remplacé le critère de retrait : couper par contribution ne « gén
 
 ### Tour 122 — <goal_round> Objective: "Faire évoluer le pont linguistico-sémantique en BOÎTE NOIRE (émulation des premières couches du … [1231 caractères tronqués]
 
-*52 appels d'outils.* Actions notables :
+*63 appels d'outils.* Actions notables :
 
 - bash — Check running job and 30B availability
 - bash — Time 30B trace on one language
@@ -6214,21 +6214,13 @@ J'ai aussi remplacé le critère de retrait : couper par contribution ne « gén
 - bash — Compute 30B invariance by layer
 - bash — Check if 30B layer 0 is empty
 - bash — Verify layer 0 anomaly
-- … et 37 autres
+- … et 48 autres
 
 **Synthèse produite :**
 
-⏵ Tableau complet et propre. Je consigne la **médiane**, pas le meilleur.
+⏵ Arguments confirmés (`--ctx 2048 --couches 0:11 --lot 1 --n 0`) et l'abkhaze tombe à 47 s. Je consigne les deux défauts trouvés.
 
-**12 tirages, 12 fois le même verdict :**
-
-| | fid TEST | avantage sur la constante |
-|---|---:|---:|
-| minimum | 0,6025 | +0,0367 |
-| **médiane** | **0,6070** | **+0,0412** |
-| maximum | 0,6131 | +0,0477 |
-
-Et **les 12 runs butent sur mon plafond de 256 neurones** — la taille est limitée par ma borne, pas par l'apprentissage.
+**Arguments confirmés**, et l'abkhaze tombe à **47 s**. Je consigne les deux défauts — ils affaiblissent rétroactivement certains de mes résultats.
 
 ## 3. Travail accompli
 
@@ -6387,6 +6379,7 @@ Et **les 12 runs butent sur mon plafond de 256 neurones** — la taille est limi
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-prefill-par-experts.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/engine.rs` | 0 | 1 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py` | 0 | 2 |
+| `/tmp/chaine_propre.sh` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -6465,7 +6458,7 @@ Et **les 12 runs butent sur mon plafond de 256 neurones** — la taille est limi
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6529 autres
+- … et 6539 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -7179,4 +7172,5 @@ Et **les 12 runs butent sur mon plafond de 256 neurones** — la taille est limi
 - Vérifié au jeton près : --n 32 donne 542 positions, --n 0 en donne 510, différence exactement 32" && git log --oneline -1; tail -1 /tmp/trace30b_train.log; echo
 - La cascade préfère les réglages OPPOSÉS au réservoir plat  a=0,2 et ride=3e-1 avaient été trouvés pour le réservoir PLAT. Balayage complet de la cascade, 12 con
 - Contrôle de robustesse : 12 tirages, médiane honnête +0,0412  4 graines du réservoir gelé x 3 découpages de validation, configuration gagnante :    graine   val
+- TRONCATURE : le défaut le plus grave, et ce qu'il fait aux résultats publiés  En vérifiant la contamination, un motif a sauté aux yeux : des dizaines de traces 
 
