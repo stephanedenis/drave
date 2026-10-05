@@ -131743,3 +131743,146 @@ Deux lectures, et il faut les séparer :
 C'est la droite d'échange qui **monte**, parce qu'on a changé la cible, pas le modèle. Et c'est exactement « le premier niveau à dominance non-linguistique » de la mission.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/recapitulatif.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 6. Le sous-ensemble actif : la piste qui monte la droite\n\n### 6.1 Le déclencheur, corrigé une seconde fois\n\nTrois conditions **simultanées … [5198 caractères tronqués]`
+
+  ```
+4ba9022 Sous-ensemble actif : la droite d'échange MONTE (+14 pts de fidélité, +18 % des canaux)
+  ```
+
+### 🤖 Assistant
+
+⏵ Le seuil de restriction était arbitraire (50 %, 75 % de l'énergie). Je le remplace par un critère **principe** : garder les canaux **partagés entre les langues d'apprentissage** — c'est directement « le niveau à dominance non-linguistique ».
+
+Le seuil de restriction était **arbitraire** (50 %, 75 %…). Je le remplace par le critère qui découle de la mission : garder les canaux **vivants dans la plupart des langues d'apprentissage** — les canaux partagés, par opposition aux 218 canaux propres à certaines langues.
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", "new_string": "    part_canaux = float(opt(\"--part-canaux\", 0.0))\n    if part_canaux > 0.0:\n        E_ref = np.vstack([Ytr[i]**2 for i in itr]).sum(0)\n        ordre = np.argsort(-E_ref)\n        cum = np.cu … [2147 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py has been updated successfully.
+  ```
+
+- **write** `{"content": "#!/bin/bash\n# CANAUX PARTAGÉS contre ÉNERGIE : quel critère choisit la meilleure cible ?\n# Même professeur, même protocole, masque lu sur l'APPRENTISSAGE SEUL.\nset -u\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\n: > /tmp/partages.log\nfor L in 0.5 0.8 0.95; do\n  echo \"##### … [409 caractères tronqués]`
+
+  ```
+<path>/tmp/partages.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"import ast;ast.parse(open('tools/pont_generatif.py').read());print('syntaxe OK')\" && chmod +x /tmp/partages.sh && setsid nohup /tmp/partages.sh >/dev/null 2>&1 < /dev/null & sleep 300; grep -E \"^####|CANAUX PARTAGÉS|co … [146 caractères tronqués]`
+
+  ```
+syntaxe OK
+########## canaux vivants dans >= 0.5 des langues ##########
+# CANAUX PARTAGÉS : 896/896 canaux vivants dans au moins 50% des langues d'apprentissage (100% des canaux)
+# constante témoin sur le TEST : 0.4710
+########## CYCLE 1 — CROISSANCE ##########
+  ```
+
+### 🤖 Assistant
+
+⏵ Mon seuil de « vivant » est trop permissif : il garde les 896 canaux. Je le redéfinis sur la présence réelle (non nul), comme dans ma mesure initiale, plutôt que sur une magnitude.
+
+Mon seuil de « vivant » est trop permissif — il garde les 896 canaux. Je le redéfinis sur la **présence réelle** (valeur non nulle), comme dans ma mesure initiale, au lieu d'une magnitude arbitraire.
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", "new_string": "    if part_langues > 0.0:\n        # « Vivant » = PRÉSENT, pas « d'amplitude suffisante » : la trace est\n        # creuse, et un canal non écrit est un canal éteint. Un seuil de magnitude\n      … [1224 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for p in $(python3 -c \"\nimport os\nmoi=os.getpid(); anc=set(); q=moi\nfor _ in range(6):\n    try:\n        st=open(f'/proc/{q}/stat').read().split(') ',1)[1].split(); q=int(st[1]); anc.add(q)\n    except Exception: break\nfor d in … [877 caractères tronqués]`
+
+  ```
+syntaxe OK
+  >= 50% des langues : 896/896 canaux
+  >= 80% des langues : 896/896 canaux
+  >= 95% des langues : 896/896 canaux
+  >= 100% des langues : 896/896 canaux
+  ```
+
+### 🤖 Assistant
+
+⏵ **Découverte qui corrige ma mesure précédente** : avec le critère de présence, **les 896 canaux sont présents dans les 40 langues**. Les « 218 canaux non partagés » ne valaient donc que pour la **dernière position** — un point isolé — pas pour le rôle du canal.
+
+**Correction importante** : les 896 canaux sont tous présents dans toutes les langues d'apprentissage. Les « 218 canaux propres à certaines langues » ne concernaient que la **dernière position** — un point isolé — pas le rôle du canal. Le bon critère n'est donc pas la présence, mais la **consistance inter-langue de la valeur**.
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", "new_string": "    # ------------------------------------------- CANAUX À CONSISTANCE INTER-LANGUE\n    #\n    # Le critère PRINCIPE, celui de la mission. Un canal est « à dominance\n    # non-linguistique » si  … [1541 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py has been updated successfully.
+  ```
+
+- **write** `{"content": "#!/bin/bash\n# Le critère de la MISSION : garder les canaux dont la VALEUR est la même d'une\n# langue à l'autre, à contenu égal. Comparé à la sélection par énergie.\nset -u\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\n: > /tmp/consist.log\nfor C in 0.5 0.25 0.1; do\n  echo \"## … [405 caractères tronqués]`
+
+  ```
+<path>/tmp/consist.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"import ast;ast.parse(open('tools/pont_generatif.py').read());print('syntaxe OK')\" && chmod +x /tmp/consist.sh && setsid nohup /tmp/consist.sh >/dev/null 2>&1 < /dev/null & sleep 280; grep -E \"^####|CANAUX À CONSISTANCE … [146 caractères tronqués]`
+
+  ```
+syntaxe OK
+########## consistance : garder 0.5 des canaux ##########
+# CANAUX À CONSISTANCE : 448/896 canaux les plus interlingues (50%), sur l'apprentissage seul · consistance retenue +0.627 à +1.000 (écartés : +0.068 à +0.627)
+# constante témoin sur le TEST : 0.4991
+########## CYCLE 1 — CROISSANCE ##########
+# née : 80 neurones en 5 couches [46, 10, 14, 8, 2]
+  fidélité TEST    : 0.5200   (constante témoin : 0.4991)
+  invariance TEST  : 0.9395 · pire paire 0.8189
+########## consistance : garder 0.25 des canaux ##########
+# CANAUX À CONSISTANCE : 224/896 canaux les plus interlingues (25%), sur l'apprentissage seul · consistance retenue +0.695 à +1.000 (écartés : +0.068 à +0.694)
+# constante témoin sur le TEST : 0.5863
+########## CYCLE 1 — CROISSANCE ##########
+  ```
+
+### 🤖 Assistant
+
+⏵ Le critère de consistance fonctionne. Première mesure : **448 canaux (50 %), consistance ≥ +0,627**, constante 0,4991, fid TEST **0,5200** — écart +0,0209.
+
+Un fait remarquable se confirme : **l'écart à la constante reste collé à +0,020** sur toutes les restrictions essayées (énergie 100/90/75/50 %, consistance 50 %). C'est un invariant de la méthode. J'attends les autres.
+
+- **bash** `{"command": "sleep 540; grep -E \"^####|CANAUX À CONSISTANCE|constante|née :|fidélité TEST|invariance TEST\" /tmp/consist.log; echo \"--- TERMINE ? ---\"; grep -c TERMINE /tmp/consist.log", "description": "Wait for consistency runs", "timeoutMs": 600000}`
+
+  ```
+########## consistance : garder 0.5 des canaux ##########
+# CANAUX À CONSISTANCE : 448/896 canaux les plus interlingues (50%), sur l'apprentissage seul · consistance retenue +0.627 à +1.000 (écartés : +0.068 à +0.627)
+# constante témoin sur le TEST : 0.4991
+########## CYCLE 1 — CROISSANCE ##########
+# née : 80 neurones en 5 couches [46, 10, 14, 8, 2]
+  fidélité TEST    : 0.5200   (constante témoin : 0.4991)
+  invariance TEST  : 0.9395 · pire paire 0.8189
+########## consistance : garder 0.25 des canaux ##########
+# CANAUX À CONSISTANCE : 224/896 canaux les plus interlingues (25%), sur l'apprentissage seul · consistance retenue +0.695 à +1.000 (écartés : +0.068 à +0.694)
+# constante témoin sur le TEST : 0.5863
+########## CYCLE 1 — CROISSANCE ##########
+# née : 80 neurones en 5 couches [46, 10, 14, 8, 2]
+  fidélité TEST    : 0.6064   (constante témoin : 0.5863)
+  invariance TEST  : 0.9477 · pire paire 0.8378
+########## consistance : garder 0.1 des canaux ##########
+# CANAUX À CONSISTANCE : 89/896 canaux les plus interlingues (10%), sur l'apprentissage seul · consistance retenue +0.752 à +1.000 (écartés : +0.068 à +0.752)
+# constante témoin sur le TEST : 0.7181
+########## CYCLE 1 — CRO
+… [202 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Résultat complet, et il révèle un invariant.**
+
+| critère | canaux | constante | **fid TEST** | **écart** | invariance | pire paire |
+|---|---:|---:|---:|---:|---:|---:|
+| aucun (896) | 896 | 0,4710 | 0,4911 | **+0,0201** | 0,9488 | 0,8328 |
+| consistance 50 % | 448 | 0,4991 | 0,5200 | **+0,0209** | 0,9395 | 0,8189 |
+| consistance 25 % | 224 | 0,5863 | 0,6064 | **+0,0201** | 0,9477 | 0,8378 |
+| **consistance 10 %** | **89** | 0,7181 | **0,7366** | **+0,0185** | 0,9539 | 0,8426 |
+| énergie 50 % | 157 | 0,6140 | 0,6346 | **+0,0206** | **0,9653** | **0,8893** |
+
+**L'écart à la constante est PLAT : +0,018 à +0,021 sur tout.** Quel que soit le sous-ensemble visé et quel que soit le critère, notre pont apporte **environ +2 points de cosinus** — pas plus. Choisir une meilleure cible **monte toute la courbe**, mais ne change pas la contribution du modèle.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/recapitulatif.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 7. L'invariant : le pont apporte +0,020, quelle que soit la cible\n\nDeux critères de sélection du sous-ensemble actif ont été essayés, plus l … [5018 caractères tronqués]`

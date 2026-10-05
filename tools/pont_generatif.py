@@ -432,6 +432,59 @@ def main():
         print(f"# SOUS-ENSEMBLE ACTIF : {nk}/{H} canaux portent {part_canaux:.0%} de "
               f"l'énergie ({nk/H:.0%} des canaux), masque lu sur l'apprentissage seul")
 
+    # ------------------------------------------------ CANAUX PARTAGÉS
+    #
+    # Critère PRINCIPE, là où « 50 % de l'énergie » était un seuil arbitraire : on
+    # ne garde que les canaux VIVANTS DANS LA PLUPART DES LANGUES. La mesure du
+    # §2.2 dit que 218 canaux sur 896 (24 %) ne sont actifs que dans certaines
+    # langues : ce sont eux qui coûtent l'invariance, et ce sont eux qu'on écarte.
+    # Le masque est lu sur l'APPRENTISSAGE SEUL.
+    # ------------------------------------------- CANAUX À CONSISTANCE INTER-LANGUE
+    #
+    # Le critère PRINCIPE, celui de la mission. Un canal est « à dominance
+    # non-linguistique » si sa VALEUR est la même d'une langue à l'autre, à
+    # contenu égal : toutes les langues disent le même texte, donc leur dernière
+    # position porte le même contenu. On compare donc, canal par canal :
+    #   `dis` — la dispersion ENTRE langues, à contenu égal ;
+    #   `dyn` — la dispersion AU FIL DU TEXTE, dans une langue.
+    # Consistance = `1 − dis/dyn`. Élevée : le canal dit le contenu. Basse : il dit
+    # la langue. Masque lu sur l'APPRENTISSAGE SEUL.
+    part_consist = float(opt("--part-consist", 0.0))
+    if part_consist > 0.0:
+        dyn = None; fin = []
+        for i in itr:
+            y = Ytr[i]
+            dyn = y.std(0) if dyn is None else dyn + y.std(0)
+            fin.append(y[-1])
+        dyn /= len(itr)
+        dis = np.std(np.array(fin), axis=0)
+        consist = 1.0 - dis/np.maximum(dyn, 1e-12)
+        nk = max(1, int(part_consist*H))
+        garde = np.sort(np.argsort(-consist)[:nk])
+        Ytr = [y[:, garde] for y in Ytr]
+        Yte = [y[:, garde] for y in Yte]
+        print(f"# CANAUX À CONSISTANCE : {nk}/{H} canaux les plus interlingues "
+              f"({nk/H:.0%}), sur l'apprentissage seul · consistance retenue "
+              f"{consist[garde].min():+.3f} à {consist[garde].max():+.3f} "
+              f"(écartés : {consist.min():+.3f} à "
+              f"{np.sort(consist)[::-1][nk] if nk < H else float('nan'):+.3f})")
+
+    part_langues = float(opt("--part-langues", 0.0))
+    if part_langues > 0.0:
+        # « Vivant » = PRÉSENT, pas « d'amplitude suffisante » : la trace est
+        # creuse, et un canal non écrit est un canal éteint. Un seuil de magnitude
+        # gardait les 896 canaux (mesuré) — il ne mesurait rien.
+        vivant = np.zeros(Ytr[0].shape[1])
+        for i in itr:
+            vivant += ((Ytr[i] != 0).mean(0) >= 0.05).astype(float)
+        vivant /= len(itr)
+        garde = np.where(vivant >= part_langues)[0]
+        Ytr = [y[:, garde] for y in Ytr]
+        Yte = [y[:, garde] for y in Yte]
+        print(f"# CANAUX PARTAGÉS : {len(garde)}/{H} canaux présents dans au moins "
+              f"{part_langues:.0%} des langues d'apprentissage "
+              f"({len(garde)/H:.0%} des canaux)")
+
     print(f"# {len(cltr)} langues d'entraînement = {len(itr)} apprentissage + {len(ival)} validation")
     print(f"# {len(clte)} langues de TEST · a={a} · ride={ride} · graine={graine} · critère={critere}")
     print(f"# {cycles} cycles de {par_cycle} couches, puis attrition")

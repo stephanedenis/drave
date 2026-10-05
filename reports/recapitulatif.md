@@ -331,3 +331,61 @@ la couche entière.
   et il déplace la droite.
 - Les 218 canaux **propres à certaines langues** n'ont pas été examinés pour
   eux-mêmes : ils portent peut-être une information utile qu'on jette.
+
+
+---
+
+## 7. L'invariant : le pont apporte +0,020, quelle que soit la cible
+
+Deux critères de sélection du sous-ensemble actif ont été essayés, plus la
+référence sans restriction. **Même professeur, même protocole, masque lu sur
+l'apprentissage seul.**
+
+| critère | canaux | constante | **fid TEST** | **écart** | invariance | pire paire |
+|---|---:|---:|---:|---:|---:|---:|
+| aucun | 896 | 0,4710 | 0,4911 | **+0,0201** | 0,9488 | 0,8328 |
+| énergie 90 % | 645 | 0,4945 | 0,5137 | **+0,0192** | 0,9530 | 0,8440 |
+| énergie 75 % | 424 | 0,5319 | 0,5505 | **+0,0186** | 0,9575 | 0,8566 |
+| énergie 50 % | 157 | 0,6140 | 0,6346 | **+0,0206** | **0,9653** | **0,8893** |
+| consistance 50 % | 448 | 0,4991 | 0,5200 | **+0,0209** | 0,9395 | 0,8189 |
+| consistance 25 % | 224 | 0,5863 | 0,6064 | **+0,0201** | 0,9477 | 0,8378 |
+| consistance 10 % | 89 | 0,7181 | 0,7366 | **+0,0185** | 0,9539 | 0,8426 |
+
+### Ce que ce tableau dit, et c'est le résultat le plus important du rapport
+
+**L'écart à la constante est PLAT : +0,018 à +0,021 sur les sept périmètres.**
+Quel que soit le sous-ensemble visé, quel que soit le critère, et même en passant
+de 896 à 89 canaux de sortie, **notre pont apporte environ +2 points de cosinus —
+pas plus.**
+
+Autrement dit : **choisir une meilleure cible monte toute la courbe, mais ne
+change pas la contribution du modèle.** La fidélité absolue passe de 0,49 à 0,74
+non pas parce que le pont s'améliore, mais parce que **la cible devient plus
+prévisible**. Le pont, lui, ajoute toujours la même chose.
+
+C'est cohérent avec la loi du §2.1 : la droite d'échange est une propriété de la
+**cible**. Notre architecture ne fixe que **l'ordonnée à l'origine** — et elle vaut
++0,020.
+
+### Le meilleur point trouvé
+
+**Énergie 50 % : 157 canaux sur 896 (18 %)**
+- fidélité TEST **0,6346** (constante 0,6140)
+- invariance **0,9653**, pire paire **0,8893**
+- **80 neurones en 5 couches [41, 15, 8, 8, 8]**
+
+C'est le meilleur compromis mesuré : le critère d'**énergie** bat celui de
+consistance sur l'invariance (0,9653 contre 0,9477 au même ordre de taille), ce
+qui était l'inverse de ce que j'attendais — la consistance sélectionne les canaux
+dont la valeur est stable entre langues, mais elle écarte des canaux de forte
+énergie qui portent la structure partagée.
+
+### Deux erreurs de mesure corrigées dans cette section
+
+1. J'avais annoncé que **la restriction faisait émerger les concepts communs**
+   (`communs` de +0,07 à +0,45). Faux : je comparais deux **jeux de données**
+   différents. Sur le même jeu, `communs` vaut +0,45 dans les deux cas.
+2. J'avais annoncé **218 canaux (24 %) propres à certaines langues**. Vrai, mais
+   **seulement à la dernière position**. Sur l'ensemble du texte, **les 896 canaux
+   sont présents dans les 40 langues**. Le critère de « présence » ne sélectionne
+   donc rien — mesuré : 896/896 pour tout seuil.

@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 171.8 h |
+| Durée | 172.1 h |
 | Tours | 123 |
-| Messages | 8176 |
-| Appels d'outils | 7795 |
-| Fichiers touchés | 160 |
-| Commandes | 6640 |
+| Messages | 8186 |
+| Appels d'outils | 7805 |
+| Fichiers touchés | 162 |
+| Commandes | 6645 |
 | Sous-agents | 32 |
-| Commits | 573 |
+| Commits | 574 |
 | Compactages de contexte | 11 |
 
 ## Objectifs déclarés
@@ -6266,7 +6266,7 @@ Fidélité et invariance sont les deux axes d'**une seule droite**. À invarianc
 
 ### Tour 123 — <goal_round> Objective: "Faire évoluer le pont linguistico-sémantique en BOÎTE NOIRE (émulation des premières couches du … [1231 caractères tronqués]
 
-*16 appels d'outils.* Actions notables :
+*26 appels d'outils.* Actions notables :
 
 - read
 - bash — Locate main loading section
@@ -6282,25 +6282,21 @@ Fidélité et invariance sont les deux axes d'**une seule droite**. À invarianc
 - edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py`
 - bash — Rerun with three-condition trigger
 - bash — Wait for channel comparison
-- … et 1 autres
+- … et 11 autres
 
 **Synthèse produite :**
 
-⏵ **La comparaison est complète, et elle donne le résultat le plus fort de la session.**
+⏵ **Résultat complet, et il révèle un invariant.**
 
-| énergie gardée | canaux | constante | **fid TEST** | écart | invariance | pire paire |
+| critère | canaux | constante | **fid TEST** | **écart** | invariance | pire paire |
 |---|---:|---:|---:|---:|---:|---:|
-| 100 % | 896 | 0,4710 | 0,4911 | +0,0201 | 0,9488 | 0,8328 |
-| 90 % | 645 | 0,4945 | 0,5137 | +0,0192 | 0,9530 | 0,8440 |
-| 75 % | 424 | 0,5319 | 0,5505 | +0,0186 | 0,9575 | 0,8566 |
-| **50 %** | **157 (18 %)** | 0,6140 | **0,6346** | **+0,0206** | **0,9653** | **0,8893** |
+| aucun (896) | 896 | 0,4710 | 0,4911 | **+0,0201** | 0,9488 | 0,8328 |
+| consistance 50 % | 448 | 0,4991 | 0,5200 | **+0,0209** | 0,9395 | 0,8189 |
+| consistance 25 % | 224 | 0,5863 | 0,6064 | **+0,0201** | 0,9477 | 0,8378 |
+| **consistance 10 %** | **89** | 0,7181 | **0,7366** | **+0,0185** | 0,9539 | 0,8426 |
+| énergie 50 % | 157 | 0,6140 | 0,6346 | **+0,0206** | **0,9653** | **0,8893** |
 
-Deux lectures, et il faut les séparer :
-
-- **L'avantage du modèle sur la constante est PLAT** (+0,019 à +0,021) : la restriction ne rend pas le modèle meilleur.
-- **Mais la cible elle-même devient meilleure** : fidélité **+14 points**, invariance **+1,7**, pire paire **+5,7** — avec **18 % des canaux de sortie**.
-
-C'est la droite d'échange qui **monte**, parce qu'on a changé la cible, pas le modèle. Et c'est exactement « le premier niveau à dominance non-linguistique » de la mission.
+**L'écart à la constante est PLAT : +0,018 à +0,021 sur tout.** Quel que soit le sous-ensemble visé et quel que soit le critère, notre pont apporte **environ +2 points de cosinus** — pas plus. Choisir une meilleure cible **monte toute la courbe**, mais ne change pas la contribution du modèle.
 
 ## 3. Travail accompli
 
@@ -6458,7 +6454,7 @@ C'est la droite d'échange qui **monte**, parce qu'on a changé la cible, pas le
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/31-le-regroupement-par-experts-mesure-et-k3-au-complet.md` | 1 | 1 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-prefill-par-experts.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/engine.rs` | 0 | 1 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py` | 0 | 17 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py` | 0 | 20 |
 | `/tmp/chaine_propre.sh` | 1 | 0 |
 | `/tmp/analyse_propre.sh` | 1 | 0 |
 | `/tmp/stop2.py` | 1 | 0 |
@@ -6468,6 +6464,8 @@ C'est la droite d'échange qui **monte**, parce qu'on a changé la cible, pas le
 | `/tmp/stop30.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/recapitulatif.md` | 1 | 0 |
 | `/tmp/canaux.sh` | 1 | 0 |
+| `/tmp/partages.sh` | 1 | 0 |
+| `/tmp/consist.sh` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -6546,7 +6544,7 @@ C'est la droite d'échange qui **monte**, parce qu'on a changé la cible, pas le
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6600 autres
+- … et 6605 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -7267,4 +7265,5 @@ C'est la droite d'échange qui **monte**, parce qu'on a changé la cible, pas le
 - Couches RÉELLES, naissance libre, et récapitulatif  FAUTE STRUCTURELLE TROUVÉE : dans la version antérieure, chaque neurone lisait TOUS les neurones nés avant l
 - Déclencheur de couche révisé : concepts communs + besoin de poids négatifs  Une couche ne s'ouvre PAS à la saturation de la précédente. Elle s'ouvre sur deux si
 - Sous-ensemble actif : la droite d'échange MONTE (+14 pts de fidélité, +18 % des canaux)  TROIS conditions simultanées pour ouvrir une couche — la première manqu
+- L'INVARIANT : le pont apporte +0,020, quelle que soit la cible  Deux critères de sélection du sous-ensemble actif, plus la référence, même professeur, masque lu
 
