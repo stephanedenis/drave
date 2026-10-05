@@ -122649,3 +122649,201 @@ garder 32/128 : perplexité cumulée 18.605
 Et la relation masse → qualité est violemment non linéaire : 99,6 % de masse donne +18 %, 74,2 % donne +94 %. **La fréquence n'est pas l'importance.** C'est exactement pourquoi ISTA-DASLab utilise RCO (allocation sur données de calibration) et pas le comptage, et pourquoi le « Coder » de Strata garde 256 experts sur 512 — pas 32.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-morcellement-experts.md <<'EOF'\n# Rapport — peut-on « morceler » un modèle ? L'élagage par fréquence, mesuré\n\n**Question** (posée par Stéphane) : Drave permet d'optimiser un modèle couche par\ncouche selon le … [5424 caractères tronqués]`
+
+  ```
+e81fa30 Morcellement des experts : l'élagage par fréquence, mesuré — la fréquence n'est pas l'importance
+  ```
+
+### 🤖 Assistant
+
+**Ta prémisse tient sur le fond, mais pas avec ce critère-là.** Et la mesure désigne ce qui manque.
+
+## Ce que l'expérience établit
+
+Le morcellement **n'est pas absurde** : à 50 % d'experts gardés, on paie +30 % de perplexité — c'est l'ordre de grandeur des résultats publiés (le « Coder » d'ISTA-DASLab garde 256/512 et annonce 91,3 % du SWE-bench). La différence entre eux et mon essai n'est pas la quantité, c'est **le critère de choix**.
+
+**La fréquence n'est pas l'importance.** Retirer le quart le moins appelé coûte 18 % de perplexité alors que ces experts portent 0,4 % de la masse de routage. Un expert appelé une fois sur cent peut être le seul à traiter un motif donné — et il coûte précisément sur ces jetons.
+
+## Ce que Drave a, et qui est rare
+
+**Les deux moitiés de ton idée, il les a déjà :**
+
+- `--trace-flux` capture **l'entrée exacte de chaque couche** pour un scénario, et `--flux-forcer` la **rejoue à l'identique** (format DRVF, entiers d'origine). Une couche peut donc être évaluée seule, contre la distribution qui l'intéresse — pas contre un corpus générique. C'est littéralement « à l'entrée d'une couche ».
+- `compare_logits.py --porte` juge : corrélation, top-1, perplexité, positions saturées exclues, critère écrit comme un taux.
+
+**Ce qui manque est donc l'importance, et elle se mesure sans gradient** : par **retrait** (leave-one-out), expert par expert, sur les flux réels du scénario. Coût faible — les flux sont déjà capturés et rejouables. C'est une mesure d'importance **forward-only**, là où RCO demande des passes arrière.
+
+## La limite, franchement
+
+**Drave sélectionne, il ne crée pas.** La distillation qui produirait un nouveau modèle demande des passes arrière, donc un cadre d'entraînement, donc du calcul GPU que cette machine n'a pas — 2 × 16 Go en PCIe. Ce qui est à portée ici : **choisir** les experts avec un bon critère, et **prouver** ce que la version morcelée perd. Le reste est un projet d'entraînement, pas d'inférence.
+
+## Ce que je propose de mesurer ensuite, dans l'ordre
+
+1. **L'importance par retrait contre la fréquence**, à budget égal d'experts, sur le même scénario code — le seul test qui dise si le critère change vraiment le résultat.
+2. **Le même sur K3** : 896 experts par couche au lieu de 128, donc beaucoup plus de marge — et c'est là que le morcellement paierait.
+3. **Un profil par couche** : ta question dit « à l'entrée **d'une** couche », donc le bon sous-ensemble peut différer d'une couche à l'autre. À vérifier, pas à supposer.
+
+Le rapport est dans `reports/rapport-morcellement-experts.md`, tout est commité, 77 tests verts.
+
+Je lance le 1 ? C'est celui qui décide si ton idée a besoin d'un meilleur critère… ou d'autre chose.
+
+
+## Tour 112
+
+### 👤 Utilisateur
+
+il faut arrêter de retomber systématiquement dans les solutions traditionneles à l'entrainement et aux autres problèmes. On doit les approcher avec des approches radicalement orientées vers des flux de données plus légers et surtout en mode événements. ainsi, pas de backprop traditionnel. On préférera laisser le monde des ffn pour permettre une rétroactivité négative sur des grappes d'activation récurrentes et noter les nouveaux patterns qui émergent après cancellation. Je sais qu'on perd probablement toutes les couches du milieu du modèle ffn qui nous sert de référence, mais on allège grandement la taille des couches du milieu tout en permettrant une achitecture distribuée à toutes les couches.
+
+### 🤖 Assistant
+
+Tu as raison, et je me suis laissé ramener au réflexe. Reprenons sur **tes** termes : événements, flux légers, rétroactivité négative. Je regarde ce que le moteur a déjà pour ça.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== les primitives d'événements du moteur ===\"; grep -n \"pub enum Source\\|pub struct SignedDelta\\|pub struct BitmapSign\\|pub struct FusedSign\\|pub struct SparseK\\|pub struct PushMat\" -A 3 drave-core/src/list.rs | grep  … [275 caractères tronqués]`
+
+  ```
+=== les primitives d'événements du moteur ===
+47:pub struct SignedDelta {
+98:pub struct BitmapSign {
+143:pub struct SparseK {
+187:pub struct FusedSign {
+266:pub struct PushMat {
+342:pub enum Source8 {
+343-    /// Construite par nous : **une échelle par ligne** (historique).
+345-    /// Construite par nous : **une échelle par bloc de 32**, comme Q8_0. C'est
+644:pub enum Source {
+646-    /// Super-bloc de 256 poids **sans noyau dédié** : Q2_K, Q3_K, Q5_K, IQ1_S,
+647-    /// IQ1_M, IQ2_XXS, IQ3_XXS, IQ4_XS. Le produit se fait en déquantifiant le
+
+=== hebb et engram ===
+2667:    pub hebb: Option<Hebb>,
+4227:            patch: None, ffn_gain: None, hebb: None,
+50:pub struct Engram {
+51-    /// `engram.layer_ids` : les couches qui portent une table (1 et 14).
+52-    pub couches: Vec<usize>,
+53-    /// `engram.rows` : le nombre de rangées de chaque table.
+54-    pub rangees: Vec<i64>,
+55-    /// Les `n_layers × n_hash_cols` premiers, tels que le fichier les donne.
+56-    pub primes: Vec<i64>,
+  ```
+
+### 🤖 Assistant
+
+Le moteur a déjà les primitives : `SignedDelta`, `BitmapSign`, `FusedSign` (événements **signés** = rétroactivité négative), `Hebb` (adaptation locale, sans passe arrière), `Engram`, et la récurrence KDA qu'on vient de vérifier.
+
+Ta question se ramène donc à **une mesure préalable**, et elle est forward-only : *la sortie d'une couche est-elle prévisible depuis son entrée ?* Si non, l'idée n'a pas de socle ; si oui, on sait combien on peut retirer.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n 'vider_couche(self.dump_couches' drave-core/src/model.rs | head -8; echo \"=== format des vidages ===\"; grep -n \"fn vider_couche\" -A 14 drave-core/src/model.rs | head -18", "description": "Check what the layer dumps contai … [3 caractères tronqués]`
+
+  ```
+6575:        Self::vider_couche(self.dump_couches.as_deref(), "etat_impose", 0, pos, &x);
+6806:                    Self::vider_couche(self.dump_couches.as_deref(), "engram_kv", l, pos, &kv);
+6807:                    Self::vider_couche(self.dump_couches.as_deref(), "engram_sortie",
+6848:            Self::vider_couche(self.dump_couches.as_deref(), "hc_attn_pre", l, pos, &xin);
+7319:                    Self::vider_couche(self.dump_couches.as_deref(), "hc_ffn_in", l, pos, &nx);
+7333:                        Self::vider_couche(self.dump_couches.as_deref(), "hc_pre_attn",
+7335:                        Self::vider_couche(self.dump_couches.as_deref(), "hc_mel_ffn",
+7342:                    Self::vider_couche(self.dump_couches.as_deref(), "ffn_hn", l, pos, &hn);
+=== format des vidages ===
+4883:    fn vider_couche(prefixe: Option<&str>, nom: &str, l: usize, pos: usize, x: &[f32]) {
+4884-        use std::io::Write;
+4885-        let Some(p) = prefixe else { return };
+4886-        // Le nom porte le tenseur, la couche ET la position : sans la position,
+4887-        // un fichier par couche ne garderait que le dernier jeton évalué — et
+4888-        // c'est justement au-delà de la position 0 que l
+… [626 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -30 tools/analyse_flux.py | tail -22", "description": "Read the flux trace format"}`
+
+  ```
+pour le modèle entier ;
+* **quels neurones sont PERSISTANTS** (actifs dans presque tous les jetons) ?
+  Ceux-là ne bénéficient d'aucune sparsité : les compter dit combien de
+  « toujours là » porte le modèle ;
+* **les mêmes neurones dominent-ils d'une couche à l'autre** ? Un recouvrement
+  élevé des top-k voisins voudrait dire qu'une direction unique traverse la pile.
+
+Usage : analyse_flux.py <trace> [<trace2> ...] [--top 100]
+"""
+import struct
+import sys
+
+
+def _paires(f, n, version, bloc=32):
+    """Lit `n` paires (indice, valeur) du corps, selon la version du format.
+
+    v1 : indice u32 + valeur i16 (6 octets) — c'est ce que cet outil lisait, et
+         c'est ce qui le faisait planter dès que le moteur est passé à la v2.
+    v2 : écart u8 (255 = indice absolu sur DEUX octets) + valeur i16.
+    v3 : comme la v2, mais une échelle f16 par bloc de 32 canaux AVANT les
+         paires, et des valeurs i8 — l'échelle par bloc borne l'erreur relative.
+    """
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=/home/stephane/FastNVMe/qwen3-30b-a3b-Q4_K_M.gguf\npython3 -c \"\nids=open('/tmp/ids_code_384.txt').read().strip().split(',')[:64]\nopen('/tmp/ids_code_64.txt','w').write(','.join(ids)); print('invite :',len(ids))\"\npython3 -c \"\ … [454 caractères tronqués]`
+
+  ```
+invite : 64
+      63 tokens notés — perplexité cumulée 61.371  (6.0 tok/s)
+=== perplexité 61.3705 sur 63 tokens (0 événements, 10.6 s) ===
+    part de l'attention dans le flux total : 30.0 %
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=/home/stephane/FastNVMe/qwen3-30b-a3b-Q4_K_M.gguf\nrm -f /tmp/flux_code.drvf\nDRAVE_TRACE_FLUX=/tmp/flux_code.drvf ./drave-core/target/release/drave $M --infer --ids-file /tmp/ids_code_64.txt --n 1 --ctx 128 --lot 8 --threads 16 2> … [199 caractères tronqués]`
+
+  ```
+événements : 0 au total, 0.0 par token
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=/home/stephane/FastNVMe/qwen3-30b-a3b-Q4_K_M.gguf\nrm -f /tmp/flux_code.drvf\nDRAVE_TRACE_FLUX=/tmp/flux_code.drvf timeout 600 ./drave-core/target/release/drave $M --infer --ids-file /tmp/ids_code_64.txt --n 1 --ctx 128 --lot 1 --t … [267 caractères tronqués]`
+
+  ```
+événements : 27265463 au total, 419468.7 par token
+0000000
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"TRACE_FLUX\\|trace_flux\" drave-core/src/main.rs | head -5; grep -n \"fn ouvrir_trace\\|TraceFlux::\" drave-core/src/main.rs drave-core/src/model.rs | head -5", "description": "Find how the flux trace is opened"}`
+
+  ```
+530:    trace_flux: Option<String>,
+677:            "--trace-flux" => { o.trace_flux = Some(suivant(i).clone()); 2 }
+839:        trace_flux, trace_couches, flux_forcer, ..
+892:    if let Some(chemin) = trace_flux.as_deref() {
+4156:    if opt.trace_flux.is_some() || opt.flux_forcer.is_some() {
+drave-core/src/main.rs:893:        match model::TraceFlux::nouveau(chemin, trace_couches.clone(), mdl.cfg.hidden,
+drave-core/src/main.rs:5062:        match model::TraceFlux::nouveau(chemin, trace_couches.clone(), mdl.cfg.hidden,
+  ```
+
+### 🤖 Assistant
+
+`--trace-flux` est un **drapeau**, pas une variable — mon erreur.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=/home/stephane/FastNVMe/qwen3-30b-a3b-Q4_K_M.gguf\nrm -f /tmp/flux_code.drvf\ntimeout 900 ./drave-core/target/release/drave $M --infer --ids-file /tmp/ids_code_64.txt --n 1 --ctx 128 --lot 1 --threads 16 --trace-flux /tmp/flux_code … [212 caractères tronqués]`
+
+  ```
+[trace] flux enregistré dans /tmp/flux_code.drvf
+événements : 27265463 au total, 419468.7 par token
+  trace : 34335939 octets
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 python3 tools/profil_flux.py /tmp/flux_code.drvf 2>&1 | head -28", "description": "Profile the recorded flow", "timeoutMs": 360000}`
+
+  ```
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/profil_flux.py", line 78, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/profil_flux.py", line 44, in main
+    n_layer, hidden, listes = lire(trace)
+                              ~~~~^^^^^^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/profil_flux.py", line 30, in lire
+    i, v = struct.unpack("<Ih", f.read(6))
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+struct.error: unpack requires a buffer of 6 bytes
+  ```
+
+### 🤖 Assistant
+
+`profil_flux.py` **lit la v1 et plante sur la v3** que le moteur écrit — un outil périmé, exactement le défaut que `analyse_flux.py` documente avoir corrigé chez lui.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > docs/note-cancellation-evenementielle.md <<'EOF'\n# Note — la voie événementielle : prédire une couche pour ne transporter que l'imprévu\n\n> Note de conception, 06/10. Elle part d'une objection de Stéphane : arrêter de\n> reto … [5853 caractères tronqués]`

@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 161.3 h |
-| Tours | 111 |
-| Messages | 7735 |
-| Appels d'outils | 7389 |
+| Durée | 161.6 h |
+| Tours | 112 |
+| Messages | 7747 |
+| Appels d'outils | 7399 |
 | Fichiers touchés | 150 |
-| Commandes | 6288 |
+| Commandes | 6298 |
 | Sous-agents | 32 |
-| Commits | 529 |
+| Commits | 530 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -269,6 +269,8 @@
 **Tour 110** — Peut-on optimiser des modèles existants pour que drave peuisse être un outil performant pour travailler en autonomie au quotidien avec les meilleurs modèles?
 
 **Tour 111** — Drave permet d'optimiser un modèle couche par couche en fonction des scénarios d'utilisation à l'entrés d'une couche. On peut donc construire un nouveau modèle en grappes fines par distillation afin d'avoir un moe extrèmement maléable où on retrouve les qualités des meilleurs modèles dans une version morcellée de façon optimale.
+
+**Tour 112** — il faut arrêter de retomber systématiquement dans les solutions traditionneles à l'entrainement et aux autres problèmes. On doit les approcher avec des approches radicalement orientées vers des flux de données plus légers et surtout en mode événements. ainsi, pas de backprop traditionnel. On préférera laisser le monde des ffn pour permettre une rétroactivité négative sur des grappes d'activation r … [304 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -5560,18 +5562,52 @@ Trois leviers, dans l'ordre du rendement mesuré :
 
 **Synthèse produite :**
 
-**Résultat net, et il nuance ta prémisse.**
+**Ta prémisse tient sur le fond, mais pas avec ce critère-là.** Et la mesure désigne ce qui manque.
 
-| experts gardés | masse de routage couverte | perplexité | coût |
-|---|---:|---:|---:|
-| 128 (original) | 100 % | 9,584 | — |
-| 96 (75 %) | 99,6 % | 11,327 | **+18,2 %** |
-| 64 (50 %) | 94,3 % | 12,515 | **+30,6 %** |
-| 32 (25 %) | 74,2 % | 18,605 | **+94,1 %** |
+\## Ce que l'expérience établit
 
-**Le chiffre qui tranche** : retirer 25 % des experts coûte **18 % de perplexité**, alors que ces experts ne portent que **0,4 % de la masse de routage**. Les experts rares **ne sont pas redondants** — ils comptent beaucoup plus que leur fréquence ne le dit.
+Le morcellement **n'est pas absurde** : à 50 % d'experts gardés, on paie +30 % de perplexité — c'est l'ordre de grandeur des résultats publiés (le « Coder » d'ISTA-DASLab garde 256/512 et annonce 91,3 % du SWE-bench). La différence entre eux et mon essai n'est pas la quantité, c'est **le critère de choix**.
 
-Et la relation masse → qualité est violemment non linéaire : 99,6 % de masse donne +18 %, 74,2 % donne +94 %. **La fréquence n'est pas l'importance.** C'est exactement pourquoi ISTA-DASLab utilise RCO (allocation sur données de calibration) et pas le comptage, et pourquoi le « Coder » de Strata garde 256 experts sur 512 — pas 32.
+**La fréquence n'est pas l'importance.** Retirer le quart le moins appelé coûte 18 % de perplexité alors que ces experts portent 0,4 % de la masse de routage. Un expert appelé une fois sur cent peut être le seul à traiter un motif donné — et il coûte précisément sur ces jetons.
+
+\## Ce que Drave a, et qui est rare
+
+**Les deux moitiés de ton idée, il les a déjà :**
+
+- `--trace-flux` capture **l'entrée exacte de chaque couche** pour un scénario, et `--flux-forcer` la **rejoue à l'identique** (format DRVF, entiers d'origine). Une couche peut donc être évaluée seule, contre la distribution qui l'intéresse — pas contre un corpus générique. C'est littéralement « à l'entrée d'une couche ».
+- `compare_logits.py --porte` juge : corrélation, top-1, perplexité, positions saturées exclues, critère écrit comme un taux.
+
+**Ce qui manque est donc l'importance, et elle se mesure sans gradient** : par **retrait** (leave-one-out), expert par expert, sur les flux réels du scénario. Coût faible — les flux sont déjà capturés et rejouables. C'est une mesure d'importance **forward-only**, là où RCO demande des passes arrière.
+
+\## La limite, franchement
+
+**Drave sélectionne, il ne crée pas.** La distillation qui produirait un nouveau modèle demande des passes arrière, donc un cadre d'entraînement, donc du calcul GPU que cette machine n'a pas — 2 × 16 Go en PCIe. Ce qui est à portée ici : **choisir** les experts avec un bon critère, et **prouver** ce que la version morcelée perd. Le reste est un projet d'entraînement, pas d'inférence.
+
+\## Ce que je propose de mesurer ensuite, dans l'ordre
+
+1. **L'importance par retrait contre la fréquence**, à budget égal d'experts, sur le même scénario code — le seul test qui dise si le critère change vraiment le résultat.
+2. **Le même sur K3** : 896 experts par couche au lieu de 128, donc beaucoup plus de marge — et c'est là que le morcellement paierait.
+3. **Un profil par couche** : ta question dit « à l'entrée **d'une** couche », donc le bon sous-ensemble peut différer d'une couche à l'autre. À vérifier, pas à
+… [210 caractères tronqués]
+
+### Tour 112 — il faut arrêter de retomber systématiquement dans les solutions traditionneles à l'entrainement et aux autres problèmes. … [584 caractères tronqués]
+
+*10 appels d'outils.* Actions notables :
+
+- bash — Inventory the event-driven primitives
+- bash — Check what the layer dumps contain
+- bash — Read the flux trace format
+- bash — Record the activation flow on code
+- bash — Record the flow with infer mode
+- bash — Record the flow in event mode
+- bash — Find how the flux trace is opened
+- bash — Record the flow with the right flag
+- bash — Profile the recorded flow
+- bash — Write the event-driven design note
+
+**Synthèse produite :**
+
+`profil_flux.py` **lit la v1 et plante sur la v3** que le moteur écrit — un outil périmé, exactement le défaut que `analyse_flux.py` documente avoir corrigé chez lui.
 
 ## 3. Travail accompli
 
@@ -5807,7 +5843,7 @@ Et la relation masse → qualité est violemment non linéaire : 99,6 % de masse
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6248 autres
+- … et 6258 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -6484,4 +6520,5 @@ Et la relation masse → qualité est violemment non linéaire : 99,6 % de masse
 - REPRISE : l'état au 06/10 00h10, pour reprendre après compactage  Ce qui marche, les quatre réfutations mesurées à ne pas refaire, la question ouverte (2,95 s à
 - K3 : la question ouverte est TRANCHÉE — c'est la CAPACITÉ du cache, pas la dispersion  Trois chiffres : 1. La prélecture de l'union est une PESSIMISATION mesuré
 - Morcellement des experts : l'élagage par fréquence, mesuré — la fréquence n'est pas l'importance  Qwen3-30B-A3B, scénario code (384 jetons du source de ce dépôt
+- Note : la voie événementielle — prédire une couche pour ne transporter que l'imprévu  Part d'une objection juste : arrêter de retomber sur l'entraînement classi
 
