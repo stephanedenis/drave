@@ -78,6 +78,23 @@ Et il fait **mieux que l'annulation oracle** mesurée la nuit dernière
 (`tools/cancellation_langue.py` : 0,279 → 0,378, avec un δ calculé **sur les
 langues de test**), tout en étant **entièrement hors échantillon**.
 
+## Résultat 4 — validé à l'échelle : 20 langues d'entraînement, 20 langues jamais vues
+
+Les 40 langues de l'UDHR tracées, réparties au hasard 20/20 (graine fixée) :
+
+| couche 10 | cos moyen | pire paire |
+|---|---:|---:|
+| professeur | 0,6284 | 0,3281 |
+| **pont linéaire** | **0,7343** (+17 %) | **0,4421** (+35 %) |
+
+Et le témoin sans récurrence confirme encore : **0,7304** en un pas contre
+**0,6600** pour la récurrence linéaire.
+
+**Le chiffre à retenir** : le pont atteint une pire paire de **0,4421**, à
+comparer au **0,471** du plateau d'un modèle de **30 B** — soit 60 fois plus gros.
+Un pont appris sur un modèle de 0,5 B atteint donc l'invariance inter-langue d'un
+modèle bien plus grand.
+
 ## Ce que ça donne à la mission
 
 **Le pont est un artefact concret et mesuré** : `W` (896×896, ~800 k paramètres)

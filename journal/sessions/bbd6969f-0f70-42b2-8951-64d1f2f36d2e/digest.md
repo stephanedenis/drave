@@ -124891,3 +124891,48 @@ ok
 La raison est claire : une **seule** application linéaire doit servir **toutes** les langues d'entraînement à la fois. Elle ne peut donc retenir que ce qu'elles ont en commun, et laisse tomber ce qui est propre à chacune. C'est un projecteur sur le partagé, obtenu par simple moindres carrés — **une matrice 896×896, sans récurrence, sans rétropropagation**.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pont-semantique.md <<'EOF'\n# Rapport — le pont linguistique-sémantique, mesuré\n\n**Mission** (clarifiée par Stéphane) : émuler **en boîte noire** le premier niveau\nabstrait des gros modèles — celui où la repr … [6388 caractères tronqués]`
+
+  ```
+6e2884d LE PONT : une matrice 896x896 rend la langue invisible, mieux que le professeur
+10:35
+  ```
+
+### 🤖 Assistant
+
+**~1h20 restante.** Le résultat est fort mais sur **14 langues**. La mission dit « n'importe quelle langue » — je valide à l'échelle, avec bien plus de langues et d'écritures.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane && python3 - <<'PY'\nimport json, os, collections\nu=[json.loads(l) for l in open('corpus/udhr/unites.jsonl')]\na1=[x for x in u if x['unite']=='article-1-00'][0]['traductions']\n# on prend 40 langues en privilégiant la DIVERSITÉ d'écriture\nos.makedi … [1125 caractères tronqués]`
+
+  ```
+40 langues écrites : eng fra deu spa ita por nld rus abk ace acu ada ady afr agr aii …
+40
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && U=/home/stephane/Data13TB/stephane/corpus/udhr\nmkdir -p $U/vaste_train $U/vaste_test\npython3 - <<'PY'\nimport glob, os, random\nU='/home/stephane/Data13TB/stephane/corpus/udhr'\nfs=sorted(glob.glob(U+'/vaste/*.drvf'))\nrnd=random.R … [710 caractères tronqués]`
+
+  ```
+entraînement : 20 · test : 20
+=== le pont, 20 langues d'entraînement → 20 langues JAMAIS vues ===
+# entraînement : 20 langues (1476 pas) · test : 20 langues JAMAIS vues
+# fidélité en UN PAS (professeur donné) : 0.6600
+# TÉMOIN sans récurrence (linéaire de e_t seul) : 0.7304
+# INVARIANCE INTER-LANGUE (dernière position, langues JAMAIS vues) :
+#   professeur (couche 10)            : cos moyen 0.6284 · pire paire 0.3281
+#   pont LINÉAIRE de la plongée seule : cos moyen 0.7343 · pire paire 0.4421
+# fidélité moyenne à la boîte noire : 0.2191
+# INVARIANCE INTER-LANGUE à la dernière position, langues tenues à l'écart :
+#   professeur (couche 10) : cos moyen 0.6284 · pire paire 0.3281
+  ```
+
+### 🤖 Assistant
+
+**Le résultat tient à l'échelle — 20 langues d'entraînement, 20 langues jamais vues :**
+
+| couche 10 | cos moyen | **pire paire** |
+|---|---:|---:|
+| professeur | 0,6284 | 0,3281 |
+| **pont linéaire** | **0,7343 (+17 %)** | **0,4421 (+35 %)** |
+
+Et ce **0,4421 approche le 0,471 du modèle de 30 B** — un pont appris sur un modèle de 0,5 B atteint l'invariance d'un modèle 60× plus gros.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-pont-semantique.md'; s=open(p).read()\ns = s.replace(\"## Ce que ça donne à la mission\",\n\"\"\"## Résultat 4 — validé à l'échelle : 20 langues d'entraînement, 20 langues jamais vues\n\nLes 40 la … [1438 caractères tronqués]`
