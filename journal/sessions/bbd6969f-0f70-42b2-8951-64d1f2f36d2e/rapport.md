@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 166.1 h |
-| Tours | 120 |
-| Messages | 7974 |
-| Appels d'outils | 7604 |
+| Durée | 166.2 h |
+| Tours | 121 |
+| Messages | 7991 |
+| Appels d'outils | 7619 |
 | Fichiers touchés | 150 |
-| Commandes | 6493 |
+| Commandes | 6505 |
 | Sous-agents | 32 |
-| Commits | 554 |
+| Commits | 555 |
 | Compactages de contexte | 11 |
 
 ## Objectifs déclarés
@@ -45,6 +45,8 @@
 … [497 caractères tronqués]
 - **complete** — Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas en local (classe Kimi-K3 Q4 : 1,5 To de poids, ~35 Go de poids par jeton), et étudier/implémenter ce qui nous distingue sur cette classe : découpage par experts et en grappes (chaque nœud ne lit que ce qu'i
 … [497 caractères tronqués]
+- **create** — Faire évoluer le pont linguistico-sémantique en BOÎTE NOIRE (émulation des premières couches du professeur, sans accès à ses rouages) par une phase GÉNÉRATIVE — le nombre de neurones et de couches NAÎT pendant l'apprentissage, en partant d'un seul neurone — suivie d'une ATTRITION PÉRIODIQUE qui rédu
+… [482 caractères tronqués]
 
 ## 1. Ce qui a été demandé
 
@@ -287,6 +289,8 @@
 **Tour 119** — ajoute des neuronnes et des couches au besoin. il faut émuler le prof le plus fidèlement possible à moindre coût en misant sur notre architecture légère et facilement distribuable.
 
 **Tour 120** — notre nouveau modèle est-il optimisable?
+
+**Tour 121** — continue en boite noire. Les méthodes d'apprentissages et le nombre de neuronnes et de couches générées en apprentissage doit passer par une phase générative, puis attrition périodique pour réduire la taille du réseau en généralisant les concepts.
 
 ## 2. Déroulé, étape par étape
 
@@ -6086,18 +6090,68 @@ Deux commits : `12346ae` (coût du professeur) et `0519702` (chargement non born
 
 **Synthèse produite :**
 
-⏵ Le gain se réplique sur la tâche difficile. Je consigne la confirmation.
+⏵ Le point complet sur les trois commits.
 
-**Le gain se réplique sur la tâche 10× plus dure.**
+Oui — et la marge était plus grande que le modèle lui-même. Trois commits : `d13aef7`, `1dffbcf`, plus l'outillage.
+
+\## Ce qui gagne, gratuitement
+
+`a = 0,2` (fuite) et `ride = 3·10⁻¹` au lieu de `0,5` et `10⁻¹` — des valeurs jamais justifiées depuis le début.
 
 | | fid TEST | invariance | pire paire |
 |---|---:|---:|---:|
-| référence (1 unité) | 0,5923 | 0,9072 | 0,8437 |
-| gagnant (1 unité) | 0,5921 | **0,9772** | **0,9576** |
-| référence (10 unités) | 0,4772 | 0,9313 | 0,8751 |
-| **gagnant (10 unités)** | **0,4767** | **0,9797** | **0,9606** |
+| référence, 1 unité | 0,5923 | 0,9072 | 0,8437 |
+| **gagnant, 1 unité** | **0,5921** | **0,9772** | **0,9576** |
+| référence, 10 unités | 0,4772 | 0,9313 | 0,8751 |
+| **gagnant, 10 unités** | **0,4767** | **0,9797** | **0,9606** |
 
-Fidélité inchangée dans les deux cas, invariance **+7,0** puis **+4,8** points. Ce n'est pas un artefact d'un jeu de données.
+**Fidélité identique dans les deux régimes**, +7 puis +4,8 points d'invariance, +11,4 puis +8,6 de pire paire. Mêmes 64 neurones, mêmes 118 784 paramètres, même distribabilité. Le gain réplique — ce n'est pas un artefact.
+
+\## Ce que le balayage a révélé de plus important
+
+**L'invariance seule était un mauvais objectif.** Ride `10` la porte à **0,9989** en laissant la fidélité à 0,5653 ; `N=8` la porte à **0,9884** avec 0,5671. N'importe quel modèle qui répond la même chose partout est parfaitement invariant — **y compris celui qui ne dit rien**. Fidélité et invariance sont les deux axes d'**une seule courbe d'échange**, et `N` comme `ride` sont les curseurs. Mes résultats 4 à 8 rapportaient l'invariance sans ce cadre : ils étaient incomplets.
+
+\## Trois autres verdicts
+
+- **Knob mort** : le rayon spectral, réglé à 0,9 « pour la condition de mémoire du réservoir », ne fait **rien** de 0,7 à 1,2 (±3·10⁻⁴). Un paramètre jamais mesuré — supprimable.
+- **Nuisible** : le saut (`e_t` dans la régression) — 0,871 en entraînement, **0,379 en test**, pire paire **négative**. Surapprentissage massif.
+- **Marginal** : l'ensemble K=2 (+0,9 pt de fidélité, −5 pts d'invariance) ; au-delà, nuisible.
+
+\## Ce qui reste à explorer, honnêtement
+
+1. **L'entrée est la couche 0 seule.** Nourrir le réservoir avec *plusieurs* couches en entrée (pas dans la lecture, qui a échoué) n'a pas été testé.
+2. **Une seconde couche gelée** (réservoir profond) — non testée.
+3. **Le protocole de lecture** : `charge()` concatène les 10 unités en **une seule séquence**, l'état du réservoir traversant les frontières d'articles. Une remise à zéro par unité serait plus correcte sémantiquement — et n'a pas été essayée.
+4. Le balayage joint `a × ride` est grossier, et `N` n'a pas été rebalayé sous `a=0,2, ride=0,3`.
+
+\## Et l'outillage, qui était le vrai verrou
+
+`tools/cache_pont.py` : les 2,1 Go se parsent **une fo
+… [121 caractères tronqués]
+
+### Tour 121 — continue en boite noire. Les méthodes d'apprentissages et le nombre de neuronnes et de couches générées en apprentissage … [127 caractères tronqués]
+
+*15 appels d'outils.* Actions notables :
+
+- get_goal
+- create_goal
+- bash — Write generative + attrition tool
+- bash — Test generative tool on small data
+- bash — Fix index bug and rerun
+- bash — Add genealogy and honest recompute
+- bash — Rewrite recalcule cleanly
+- read
+- bash — Rewrite attrition with honest recompute
+- bash — Restore methods and run
+- bash — Fix test-set leakage and rerun
+- bash — Add per-step test measurement
+- bash — Test stricter attrition criterion
+- bash — Launch generative run on 10-unit data
+- … et 1 autres
+
+**Synthèse produite :**
+
+⏵ Lancé. Je consigne les résultats sur les 1 unité.
 
 ## 3. Travail accompli
 
@@ -6333,7 +6387,7 @@ Fidélité inchangée dans les deux cas, invariance **+7,0** puis **+4,8** point
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6453 autres
+- … et 6465 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -7035,4 +7089,5 @@ Fidélité inchangée dans les deux cas, invariance **+7,0** puis **+4,8** point
 - Le chargement n'est pas borné par --couches, et l'attention quadratique interdit les longues passes  1. --couches borne l'EXÉCUTION, pas le CHARGEMENT. Mesuré :
 - OUI, le modèle est optimisable : +7 pts d'invariance, +11 pts de pire paire, à coût nul  pont_reglages.py balaie quatre réglages figés sans justification (fuite
 - Le gain d'optimisation RÉPLIQUE sur la tâche 10x plus dure  Réglage trouvé sur 3254 pas, vérifié sur 38 212 pas (10 unités par langue) :                       f
+- Le pont GÉNÉRATIF : naissance par couches, puis attrition qui généralise  tools/pont_generatif.py — deux phases, tailles décidées par l'apprentissage. Aucune ré
 
