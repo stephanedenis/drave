@@ -204,3 +204,60 @@ par exemple **41 neurones en 3 couches [28, 7, 6]**.
   cohérente avec le moteur d'événements de Drave.
 - La naissance libre, à paramètres plus fins.
 - L'attrition sur un réseau né librement (les tailles ne sont plus imposées).
+
+
+---
+
+## 5. Le déclencheur de couche, révisé — et ce qu'il mesure
+
+### 5.1 La règle
+
+Une couche ne s'ouvre **pas** à la saturation de la précédente. Elle s'ouvre sur
+**deux signes simultanés**, et les deux se mesurent :
+
+1. **`communs` — des concepts communs ont émergé.** Un neurone est un concept
+   commun si sa trajectoire suit le **même contenu** d'une langue à l'autre.
+   Mesure alignée : toutes les langues disent le même texte, donc leur dernière
+   position porte le même contenu. On compare la dispersion **entre langues** à
+   contenu égal (`dis`) à la dispersion **au fil du texte** dans une langue
+   (`dyn`), et on rend `1 − dis/dyn`. Un concept varie sur le texte et peu entre
+   les langues ; un trait de langue fait l'inverse.
+
+2. **`contraste` — la lecture a besoin de poids négatifs.** On sépare le mode
+   commun du readout (`mean_j W[j]`) de ses écarts. Si les écarts portent tout, la
+   lecture ne fait que **soustraire** des concepts : c'est le « OU exclusif », ce
+   qu'une seule couche ne sait pas séparer.
+
+### 5.2 Et l'ajout déclenche une RELECTURE du corpus
+
+`Pont.renforce` : à la naissance d'une couche, on relit le corpus, on mesure ce
+qui reste à expliquer (le résidu), et on **renforce** les entrées dont
+l'activation le capte, on **atrophie** les autres (`f = 1 + η(2·cap − 1)`). C'est
+local — chaque neurone ne regarde que sa propre activation et le résidu, jamais le
+gradient d'une couche lointaine. **Aucune rétropropagation.**
+
+### 5.3 Ce que la mesure a donné, et il faut le dire tel quel
+
+Sur 64 neurones de couche 1, professeur 0.5B couche 10 :
+
+| mesure | valeur |
+|---|---:|
+| `communs` moyen | **+0,05 à +0,075** |
+| neurones au-dessus du seuil | **6 à 10 %** |
+| `contraste` de la lecture | **0,97 – 0,98** |
+
+**Les concepts communs n'émergent pas au premier niveau.** Pilotés par le
+plongement — qui est profondément propre à chaque langue — les neurones de couche
+1 sont massivement des traits de langue. Le critère refuse donc d'ouvrir une
+couche, et le réseau reste à **1 couche, 64 neurones, fidélité de test 0,5839**
+(constante 0,5633).
+
+**Deux lectures possibles, et je ne tranche pas :**
+
+- soit c'est un **vrai résultat** — il n'y a rien de partagé à composer à ce
+  niveau, et toute profondeur ajoutée là serait du travail perdu ;
+- soit **ma mesure est encore trop faible** — elle ne regarde que la dernière
+  position et que la dispersion, pas la structure fine des concepts.
+
+Dans les deux cas, la règle fait son travail : elle **empêche** d'empiler des
+couches sur du non-partagé.

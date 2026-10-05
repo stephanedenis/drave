@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 171.1 h |
+| Durée | 171.2 h |
 | Tours | 122 |
-| Messages | 8138 |
-| Appels d'outils | 7760 |
+| Messages | 8157 |
+| Appels d'outils | 7778 |
 | Fichiers touchés | 159 |
-| Commandes | 6624 |
+| Commandes | 6629 |
 | Sous-agents | 32 |
-| Commits | 571 |
+| Commits | 572 |
 | Compactages de contexte | 11 |
 
 ## Objectifs déclarés
@@ -6198,7 +6198,7 @@ J'ai aussi remplacé le critère de retrait : couper par contribution ne « gén
 
 ### Tour 122 — <goal_round> Objective: "Faire évoluer le pont linguistico-sémantique en BOÎTE NOIRE (émulation des premières couches du … [1231 caractères tronqués]
 
-*125 appels d'outils.* Actions notables :
+*143 appels d'outils.* Actions notables :
 
 - bash — Check running job and 30B availability
 - bash — Time 30B trace on one language
@@ -6214,11 +6214,20 @@ J'ai aussi remplacé le critère de retrait : couper par contribution ne « gén
 - bash — Compute 30B invariance by layer
 - bash — Check if 30B layer 0 is empty
 - bash — Verify layer 0 anomaly
-- … et 101 autres
+- … et 114 autres
 
 **Synthèse produite :**
 
-⏵ La naissance libre tourne (24 neurones, toujours dans la couche 1). Je consigne le récapitulatif et la réécriture.
+⏵ Le critère aligné donne **6-10 % de concepts communs** — trop peu pour déclencher. Résultat honnête : **aucune couche ne se justifie**, le réseau reste à 1 couche.
+
+**Le résultat est clair, et il bloque la profondeur.**
+
+| mesure | valeur | lecture |
+|---|---:|---|
+| `communs` (aligné sur le contenu) | **+0,05 à +0,075** | 6-10 % des neurones seulement portent du contenu partagé |
+| `contraste` de la lecture | **0,97-0,98** | la lecture ne fait presque que **soustraire** |
+
+Donc : **les concepts communs n'existent pas encore au premier niveau**, et le critère refuse — correctement selon votre règle — d'ouvrir une couche. Le réseau reste à **1 couche, 64 neurones, fidélité 0,5839**.
 
 ## 3. Travail accompli
 
@@ -6376,7 +6385,7 @@ J'ai aussi remplacé le critère de retrait : couper par contribution ne « gén
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/31-le-regroupement-par-experts-mesure-et-k3-au-complet.md` | 1 | 1 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-prefill-par-experts.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/engine.rs` | 0 | 1 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py` | 0 | 6 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py` | 0 | 14 |
 | `/tmp/chaine_propre.sh` | 1 | 0 |
 | `/tmp/analyse_propre.sh` | 1 | 0 |
 | `/tmp/stop2.py` | 1 | 0 |
@@ -6463,7 +6472,7 @@ J'ai aussi remplacé le critère de retrait : couper par contribution ne « gén
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6584 autres
+- … et 6589 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -7182,4 +7191,5 @@ J'ai aussi remplacé le critère de retrait : couper par contribution ne « gén
 - REPRISE.md : état 16h20 — pont génératif, résultat négatif sur données propres  Correction de cap (un pont par professeur, pas de couche universelle) + les deux
 - LA LOI : fidélité et invariance s'échangent à taux fixe (r = 0,992)  Onze points de croissance sur données propres :   fid TEST ≈ 0,3856 · (1 − invariance) + 0,
 - Couches RÉELLES, naissance libre, et récapitulatif  FAUTE STRUCTURELLE TROUVÉE : dans la version antérieure, chaque neurone lisait TOUS les neurones nés avant l
+- Déclencheur de couche révisé : concepts communs + besoin de poids négatifs  Une couche ne s'ouvre PAS à la saturation de la précédente. Elle s'ouvre sur deux si
 

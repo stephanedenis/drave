@@ -130987,3 +130987,303 @@ n24                                24       1    0.5615   0.6258    0.4850   0.9
 ⏵ La naissance libre tourne (24 neurones, toujours dans la couche 1). Je consigne le récapitulatif et la réécriture.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Couches RÉELLES, naissance libre, et récapitulatif\n\nFAUTE STRUCTURELLE TROUVÉE : dans la version antérieure, chaque neurone lisait\nTOUS les neurones nés avant lui, quelle que soit leur couche. Ouvr … [1569 caractères tronqués]`
+
+  ```
+9c01e9b Couches RÉELLES, naissance libre, et récapitulatif
+
+--- suite ---
+n24                                24       1    0.5615   0.6258    0.4850   0.9807  0.9403
+n32                                32       1    0.5658   0.6285    0.4868   0.9772  0.9221
+n40                                40       1    0.5692   0.6311    0.4871   0.9683  0.8986
+  ```
+
+### 👤 Utilisateur
+
+on ne génère pas une couche à la saturation de la première, mais quand on trouve une émergence de concepts communs et qu'on doit distinguer les sorties avec des poids négatifs provenant de notre abstraction. L'ajout d'une couche suppose donc une une relecture du corpus pour réajuster les poids par renforcement/atrophie (pas de backprop)
+
+### 🤖 Assistant
+
+⏵ Correction reçue : la couche n'est pas déclenchée par la saturation, mais par l'**émergence de concepts communs** exigeant des **poids négatifs**. J'arrête la règle de saturation et j'implémente le nouveau critère.
+
+Votre correction déplace le déclencheur, et elle est plus fine que ce que j'ai codé. Je reformule ce que je comprends, pour être sûr :
+
+- **Pas la saturation** : une couche n'apparaît pas parce que la première n'apprend plus rien.
+- **L'émergence de concepts communs** : des unités qui répondent à une structure *partagée* (pas propre à une langue) doivent d'abord exister.
+- **Le besoin de poids négatifs** : on ouvre une couche quand distinguer les sorties exige de **soustraire** ces concepts — le XOR, exactement.
+- **Et l'ajout déclenche une relecture du corpus**, avec réajustement par **renforcement/atrophie**, jamais par rétropropagation.
+
+Je commence par rendre le premier critère **mesurable** — sinon je ne fais que déplacer un seuil arbitraire.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for p in $(python3 -c \"\nimport os\nmoi=os.getpid(); anc=set(); q=moi\nfor _ in range(6):\n    try:\n        st=open(f'/proc/{q}/stat').read().split(') ',1)[1].split(); q=int(st[1]); anc.add(q)\n    except Exception: break\nfor d in … [376 caractères tronqués]`
+
+  ```
+arrêté
+n32                                32       1    0.5658   0.6285    0.4868   0.9772  0.9221
+n40                                40       1    0.5692   0.6311    0.4871   0.9683  0.8986
+n48                                48       1    0.5719   0.6335    0.4874   0.9627  0.8829
+  ```
+
+### 🤖 Assistant
+
+⏵ J'implémente les deux mesures : **consistance inter-langue** par neurone (le concept commun) et **contrastivité** de la lecture (le besoin de soustraire).
+
+Un neurone « concept commun » est un neurone dont la trajectoire d'activation suit **le même contenu dans toutes les langues**. Et un readout « contrastif » est un readout qui soustrait plus qu'il n'additionne. Je rends les deux mesurables.
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", "new_string": "    def couches_de(self, S):\n        return sorted({self.poids[j][3] for j in S})\n\n    # -- ÉMERGENCE DE CONCEPTS COMMUNS ---------------------------------------\n    def communs(self, idx, que … [2317 caractères tronqués]`
+
+  ```
+Error: cannot edit "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py": file changed since it was read — re-read the file, then retry
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"def couches_de\" tools/pont_generatif.py && sed -n '238,244p' tools/pont_generatif.py", "description": "Locate couches_de"}`
+
+  ```
+240:    def couches_de(self, S):
+        return len(S)
+
+    def couches_de(self, S):
+        return sorted({self.poids[j][3] for j in S})
+
+    def evalue(self, X, Y, W, mt):
+        return cos_lignes(np.vstack(X) @ W + mt, np.vstack(Y))
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", "new_string": "    def couches_de(self, S):\n        return sorted({self.poids[j][3] for j in S})\n\n    # -- ÉMERGENCE DE CONCEPTS COMMUNS ---------------------------------------\n    def communs(self, idx, que … [2317 caractères tronqués]`
+
+  ```
+Error: cannot edit "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py": file changed since it was read — re-read the file, then retry
+  ```
+
+### 🤖 Assistant
+
+⏵ L'outil d'édition exige une lecture préalable. Je la fais.
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", "limit": 10, "offset": 238}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py</path>
+<type>file</type>
+<content>
+238:         return len(S)
+239: 
+240:     def couches_de(self, S):
+241:         return sorted({self.poids[j][3] for j in S})
+242: 
+243:     def evalue(self, X, Y, W, mt):
+244:         return cos_lignes(np.vstack(X) @ W + mt, np.vstack(Y))
+245: 
+246:     def invariance(self, X, W, mt):
+247:         return inv(np.array([(x @ W + mt)[-1] for x in X]))
+
+(Showing lines 238-247 of 453. Use offset=248 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", "new_string": "    def couches_de(self, S):\n        return sorted({self.poids[j][3] for j in S})\n\n    # -- ÉMERGENCE DE CONCEPTS COMMUNS ---------------------------------------\n    def communs(self, idx, que … [2393 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py has been updated successfully.
+  ```
+
+### 🤖 Assistant
+
+⏵ J'implémente le nouveau déclencheur : ouverture d'une couche sur **émergence de concepts communs + besoin de soustraction**, et non plus sur saturation.
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", "limit": 62, "offset": 332}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py</path>
+<type>file</type>
+<content>
+332: 
+333:     P = Pont((cltr, Etr, Ytr), a, graine, H)
+334:     mt = np.vstack([Ytr[i] for i in itr]).mean(axis=0)
+335:     Yte_a = np.vstack(Yte)
+336:     base = cos_lignes(np.tile(mt, (len(Yte_a), 1)), Yte_a)
+337:     print(f"# constante témoin sur le TEST : {base:.4f}")
+338: 
+339:     meilleur = {"f_va": -1.0, "f_te": -1.0}
+340:     for cycle in range(1, cycles+1):
+341:         # ------------------------------------------------------- CROISSANCE
+342:         print(f"\n########## CYCLE {cycle} — CROISSANCE ##########")
+343:         print(f"{'après':<30} {'neur.':>6} {'couch.':>7} {'fid appr':>9} {'fid VAL':>8} "
+344:               f"{'fid TEST':>9} {'invar.':>8} {'pire':>7}")
+345:         # ------------------------------------------------------------ NAISSANCE
+346:         #
+347:         # `--naissance libre` : UN neurone à la fois, et c'est l'apprentissage qui
+348:         # décide. Aucun chiffre rond ne doit sortir d'ici — 1, 2, 4, 8, 16, 32,
+349:         # 64, 128, 256 étaient MON calendrier et MON plafond, pas une découverte.
+350:         # Un compte rond est le s
+… [2621 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", "limit": 22, "offset": 393}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py</path>
+<type>file</type>
+<content>
+393:                     print(f"{'n' + str(P.compte_neurones) + (' COUCHE ' + str(len(P.couches)) if nouvelle else ''):<30} "
+394:                           f"{P.compte_neurones:>6} {len(P.couches):>7} {f_tr:>9.4f} {f_va:>8.4f} "
+395:                           f"{f_te:>9.4f} {mg:>8.4f} {mig:>7.4f}")
+396:                     if f_va > meilleur["f_va"]:
+397:                         meilleur = {"f_te": f_te, "neur": P.compte_neurones,
+398:                                     "couch": len(P.couches), "f_tr": f_tr, "f_va": f_va,
+399:                                     "inv": mg, "pire": mig, "etape": "naissance libre"}
+400:                 # on ne s'arrête que si une COUCHE NEUVE ne paie pas non plus :
+401:                 # tant qu'on est en phase A, une couche saturée n'est pas la fin.
+402:                 if sans_gain >= 2*patience:
+403:                     print(f"{'  → ARRÊT (couche neuve sans gain)':<30} "
+404:                           f"{P.compte_neurones:>6} {len(P.couches):>7}")
+405:                     break
+406:             print(f"# née : {P.compte_neurones} ne
+… [400 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", "new_string": "        # ------------------------------------------------------------ NAISSANCE\n        #\n        # `--naissance libre` : UN neurone à la fois. Aucun chiffre rond ne doit\n        # sortir d'ic … [8424 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py has been updated successfully.
+  ```
+
+### 🤖 Assistant
+
+⏵ J'implémente le **renforcement/atrophie** : à la naissance d'une couche, on relit le corpus et on ajuste les poids entrants selon qu'ils captent ou non le résidu.
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", "new_string": "    def contraste(self, W):\n        \"\"\"Le readout se sert-il de DIFFÉRENCES entre neurones ?\n\n        On sépare le mode commun (`mean_j W[j]`) des écarts. Si le mode commun\n        porte to … [3982 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/pont_generatif.py'; s=open(p).read()\ns=s.replace(\"                    P.renforce(P.compte_neurones-1, itr, gain_min)\",\n            \"                    P.renforce(P.compte_neurones-1, itr, mt, ride)\") … [464 caractères tronqués]`
+
+  ```
+syntaxe OK
+442:                    P.renforce(P.compte_neurones-1, itr, mt, ride)
+n32              32       1    0.6827   0.7265    0.5806   0.9759  0.9367 | communs +0.011 (  0 %) · contraste 0.974
+n40              40       1    0.6854   0.7276    0.5805   0.9735  0.9369 | communs +0.009 (  0 %) · contraste 0.973
+n41              41       1    0.6861   0.7279    0.5802   0.9736  0.9365 | communs +0.008 (  0 %) · contraste 0.972
+n42              42       1    0.6864   0.7282    0.5804   0.9720  0.9333 | communs +0.008 (  0 %) · contraste 0.971
+n43              43       1    0.6868   0.7285    0.5808   0.9696  0.9282 | communs +0.009 (  0 %) · contraste 0.970
+n44              44       1    0.6870   0.7284    0.5814   0.9696  0.9280 | communs +0.009 (  0 %) · contraste 0.971
+n45              45       1    0.6872   0.7286    0.5815   0.9696  0.9286 | communs +0.009 (  0 %) · contraste 0.971
+n46              46       1    0.6877   0.7287    0.5815   0.9688  0.9241 | communs +0.008 (  0 %) · contraste 0.969
+n47              47       1    0.6879   0.7289    0.5811   0.9682  0.9223 | communs +0.008 (  0 %) · contraste 0.969
+n48              48       1    0.6884   0.7298    0.5807   0.9676
+… [1519 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le critère n'a jamais déclenché, et c'est un résultat** : `communs ≈ +0,006` — aucune consistance inter-langue. Le réseau reste à **1 couche / 64 neurones**.
+
+Mais je dois douter de ma propre mesure : corréler des trajectoires rééchantillonnées compare des positions de contenu **différentes** (le japonais a bien moins de jetons que l'abkhaze).
+
+**Le critère n'a jamais déclenché** — `communs ≈ +0,006`, aucune consistance inter-langue. Mais je dois douter de ma propre mesure : corréler des trajectoires rééchantillonnées compare des positions de contenu **différentes** selon la langue. Je la remplace par une mesure alignée sur le contenu.
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", "new_string": "    # -- ÉMERGENCE DE CONCEPTS COMMUNS ---------------------------------------\n    def communs(self, idx, quel, L=64):\n        \"\"\"Pour chaque neurone, à quel point sa trajectoire suit le MÊME … [4373 caractères tronqués]`
+
+  ```
+Error: cannot edit "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py": file changed since it was read — re-read the file, then retry
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", "limit": 36, "offset": 240}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py</path>
+<type>file</type>
+<content>
+240:     def couches_de(self, S):
+241:         return sorted({self.poids[j][3] for j in S})
+242: 
+243:     # -- ÉMERGENCE DE CONCEPTS COMMUNS ---------------------------------------
+244:     def communs(self, idx, quel, L=64):
+245:         """Pour chaque neurone, à quel point sa trajectoire suit le MÊME CONTENU
+246:         d'une langue à l'autre.
+247: 
+248:         C'est la définition opérationnelle d'un « concept commun » : un neurone
+249:         qui répond à la structure partagée, pas à un trait de langue. On
+250:         rééchantillonne la trajectoire de chaque langue sur L points (les textes
+251:         n'ont pas la même longueur en jetons), puis on corrèle les langues deux à
+252:         deux. Rend une valeur dans [−1, 1] par neurone.
+253:         """
+254:         courbes = []
+255:         for i in quel:
+256:             X = self.X[i][:, idx]
+257:             T = len(X)
+258:             if T < 2:
+259:                 continue
+260:             ti = np.linspace(0.0, 1.0, T)
+261:             t = np.linspace(0.0, 1.0, L)
+262:             courbes.append(np.stack([np.i
+… [718 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", "new_string": "    # -- ÉMERGENCE DE CONCEPTS COMMUNS ---------------------------------------\n    def communs(self, idx, quel, L=64):\n        \"\"\"Version FAIBLE — corrèle des trajectoires rééchantillonnées.\ … [951 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py has been updated successfully.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", "limit": 12, "offset": 277}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py</path>
+<type>file</type>
+<content>
+277:         return acc/max(n, 1)
+278: 
+279:     def contraste(self, W):
+280:         """Le readout se sert-il de DIFFÉRENCES entre neurones ?
+281: 
+282:         On sépare le mode commun (`mean_j W[j]`) des écarts. Si le mode commun
+283:         porte tout, la lecture ne distingue rien — elle additionne. Si les écarts
+284:         portent tout, la lecture ne fait que SOUSTRAIRE des concepts : c'est le
+285:         signe qu'il faut une couche pour composer ce que la précédente ne sait
+286:         plus séparer (le « OU exclusif » après le « ET » et le « OU »).
+287:         """
+288:         nm = float(np.linalg.norm(W.mean(0)))
+
+(Showing lines 277-288 of 576. Use offset=289 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", "new_string": "        return acc/max(n, 1)\n\n    def communs_fin(self, idx, quel):\n        \"\"\"Un neurone est-il un CONCEPT COMMUN ? Mesure ALIGNÉE sur le contenu.\n\n        Toutes les langues disent le MÊ … [1042 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/pont_generatif.py'; s=open(p).read()\ns=s.replace(\"\"\"                    com = P.communs(idx, ival)\n                    con = P.contraste(W)\n                    part_commune = float((com > seuil_commun … [602 caractères tronqués]`
+
+  ```
+syntaxe OK
+n41              41       1    0.6861   0.7279    0.5802   0.9736  0.9365 | communs +0.067 (  7 %) · contraste 0.972
+n42              42       1    0.6864   0.7282    0.5804   0.9720  0.9333 | communs +0.075 ( 10 %) · contraste 0.971
+n43              43       1    0.6868   0.7285    0.5808   0.9696  0.9282 | communs +0.073 (  9 %) · contraste 0.970
+n44              44       1    0.6870   0.7284    0.5814   0.9696  0.9280 | communs +0.071 (  9 %) · contraste 0.971
+n45              45       1    0.6872   0.7286    0.5815   0.9696  0.9286 | communs +0.075 (  9 %) · contraste 0.971
+n46              46       1    0.6877   0.7287    0.5815   0.9688  0.9241 | communs +0.073 (  9 %) · contraste 0.969
+n47              47       1    0.6879   0.7289    0.5811   0.9682  0.9223 | communs +0.069 (  9 %) · contraste 0.969
+n48              48       1    0.6884   0.7298    0.5807   0.9676  0.9233 | communs +0.062 (  8 %) · contraste 0.971
+n56              56       1    0.6910   0.7306    0.5800   0.9661  0.9154 | communs +0.061 (  7 %) · contraste 0.978
+n57              57       1    0.6914   0.7311    0.5811   0.9657  0.9188 | communs +0.062 (  7 %) · contraste 0.979
+n58              58
+… [1214 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le critère aligné donne **6-10 % de concepts communs** — trop peu pour déclencher. Résultat honnête : **aucune couche ne se justifie**, le réseau reste à 1 couche.
+
+**Le résultat est clair, et il bloque la profondeur.**
+
+| mesure | valeur | lecture |
+|---|---:|---|
+| `communs` (aligné sur le contenu) | **+0,05 à +0,075** | 6-10 % des neurones seulement portent du contenu partagé |
+| `contraste` de la lecture | **0,97-0,98** | la lecture ne fait presque que **soustraire** |
+
+Donc : **les concepts communs n'existent pas encore au premier niveau**, et le critère refuse — correctement selon votre règle — d'ouvrir une couche. Le réseau reste à **1 couche, 64 neurones, fidélité 0,5839**.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/recapitulatif.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 5. Le déclencheur de couche, révisé — et ce qu'il mesure\n\n### 5.1 La règle\n\nUne couche ne s'ouvre **pas** à la saturation de la précédente … [4517 caractères tronqués]`

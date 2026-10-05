@@ -240,6 +240,143 @@ class Pont:
     def couches_de(self, S):
         return sorted({self.poids[j][3] for j in S})
 
+    # -- ÉMERGENCE DE CONCEPTS COMMUNS ---------------------------------------
+    def communs(self, idx, quel, L=64):
+        """Version FAIBLE — corrèle des trajectoires rééchantillonnées.
+
+        Elle compare des positions de contenu DIFFÉRENTES : le japonais emploie
+        bien moins de jetons que l'abkhaze pour le même texte. Une valeur basse
+        ne prouve donc PAS l'absence de concept commun. Gardée pour mémoire ;
+        c'est `communs_fin` qui décide.
+        """
+        courbes = []
+        for i in quel:
+            X = self.X[i][:, idx]
+            T = len(X)
+            if T < 2:
+                continue
+            ti = np.linspace(0.0, 1.0, T)
+            t = np.linspace(0.0, 1.0, L)
+            courbes.append(np.stack([np.interp(t, ti, X[:, j])
+                                     for j in range(X.shape[1])], axis=1))
+        K = len(idx)
+        if len(courbes) < 2:
+            return np.zeros(K)
+        acc = np.zeros(K); n = 0
+        for a in range(len(courbes)):
+            for b in range(a+1, len(courbes)):
+                A = courbes[a] - courbes[a].mean(0)
+                B = courbes[b] - courbes[b].mean(0)
+                na = np.linalg.norm(A, axis=0); nb = np.linalg.norm(B, axis=0)
+                ok = (na > 0) & (nb > 0)
+                if not ok.any():
+                    continue
+                r = np.zeros(K)
+                r[ok] = (A[:, ok]*B[:, ok]).sum(0)/(na[ok]*nb[ok])
+                acc += r; n += 1
+        return acc/max(n, 1)
+
+    def communs_fin(self, idx, quel):
+        """Un neurone est-il un CONCEPT COMMUN ? Mesure ALIGNÉE sur le contenu.
+
+        Toutes les langues disent le MÊME texte : leur dernière position porte
+        donc le même contenu. Pour chaque neurone on compare deux dispersions :
+
+          - `dyn` : de combien il VARIE au fil du texte, dans une langue ;
+          - `dis` : de combien il DIFFÈRE entre langues, à contenu égal.
+
+        Un concept commun varie beaucoup sur le texte et peu entre les langues :
+        il encode le contenu. Un trait de langue fait l'inverse. On rend
+        `1 − dis/dyn`.
+        """
+        K = len(idx)
+        dyn = np.zeros(K); fin = []
+        for i in quel:
+            X = self.X[i][:, idx]
+            if len(X) < 2:
+                continue
+            dyn += X.std(0)
+            fin.append(X[-1])
+        if not fin:
+            return np.zeros(K)
+        dyn /= len(fin)
+        if len(fin) < 2:
+            return np.zeros(K)
+        dis = np.std(np.array(fin), axis=0)
+        return 1.0 - dis/np.maximum(dyn, 1e-12)
+
+    def contraste(self, W):
+        """Le readout se sert-il de DIFFÉRENCES entre neurones ?
+
+        On sépare le mode commun (`mean_j W[j]`) des écarts. Si le mode commun
+        porte tout, la lecture ne distingue rien — elle additionne. Si les écarts
+        portent tout, la lecture ne fait que SOUSTRAIRE des concepts : c'est le
+        signe qu'il faut une couche pour composer ce que la précédente ne sait
+        plus séparer (le « OU exclusif » après le « ET » et le « OU »).
+        """
+        nm = float(np.linalg.norm(W.mean(0)))
+        nd = float(np.linalg.norm(W - W.mean(0)))
+        return nd/max(nm + nd, 1e-12)
+
+    # -- RELECTURE DU CORPUS : RENFORCEMENT / ATROPHIE -----------------------
+    def _recalcule_un(self, j, Ek=None):
+        """Refait la trajectoire d'UN neurone à partir de ses seuls parents, qui
+        sont gelés. Sert après un réajustement de ses poids."""
+        w_par, w_self, b, c = self.poids[j]
+        n_par = len(w_par)
+        debut_par = self.debut_couche(c-1) if c > 0 else 0
+        debut_c = self.debut_couche(c)
+        r = j - debut_c
+        for i, E in enumerate(self.E if Ek is None else Ek):
+            T = len(E)
+            Xpar = (self.X[i][:, debut_par:debut_par+n_par] if n_par > 0
+                    else np.zeros((T, 0), dtype=np.float32))
+            cam = self.X[i][:, debut_c:j]        # camarades de couche, antérieurs
+            v = np.zeros(T, dtype=np.float32)
+            sv = 0.0
+            for t in range(T):
+                drive = (float(Xpar[t] @ w_par)) if n_par > 0 else 0.0
+                if r > 0:
+                    drive += float(cam[t] @ w_self[:r])
+                drive += float(w_self[r]*sv)
+                sv = (1-self.a)*sv + self.a*np.tanh(drive + float(b @ E[t]))
+                v[t] = sv
+            self.X[i][:, j] = v
+
+    def renforce(self, j, itr, mt, ride, eta=0.6):
+        """RENFORCEMENT / ATROPHIE — la relecture du corpus qui suit la naissance
+        d'une couche. **Aucune rétropropagation.**
+
+        On relit le corpus pour mesurer ce qui reste à expliquer (le résidu), puis
+        on renforce les entrées dont l'activation le capte et on atrophie les
+        autres. C'est local : chaque neurone ne regarde que sa propre activation
+        et le résidu, jamais le gradient d'une couche lointaine.
+        """
+        if j == 0 or len(itr) == 0:
+            return 0.0
+        idx = np.arange(j)
+        W = self.ajuste(idx, ride, mt, itr)
+        X = np.vstack([self.X[i][:, idx] for i in itr])
+        Y = np.vstack([self.Y[i] for i in itr])
+        R = Y - (X @ W + mt)                  # ce qui reste à expliquer
+        xj = np.vstack([self.X[i][:, j] for i in itr]).astype(np.float64)
+        if xj.std() == 0.0:
+            return 0.0
+        a_ = xj - xj.mean()
+        b_ = R - R.mean(0)
+        na = float(np.linalg.norm(a_))
+        nb = np.linalg.norm(b_, axis=0)
+        ok = (nb > 0) & np.isfinite(nb)
+        if na == 0.0 or not ok.any():
+            return 0.0
+        # à quel point l'activation du nouveau-né capte le résidu, dans [0, 1]
+        cap = float(np.abs(a_ @ b_[:, ok]).max()/(na*nb[ok].max()))
+        f = 1.0 + eta*(2.0*cap - 1.0)          # cap>0,5 renforce · cap<0,5 atrophie
+        w_par, w_self, bb, c = self.poids[j]
+        self.poids[j] = (w_par*f, w_self*f, bb*f, c)
+        self._recalcule_un(j)                  # la trajectoire suit les poids
+        return cap
+
     def evalue(self, X, Y, W, mt):
         return cos_lignes(np.vstack(X) @ W + mt, np.vstack(Y))
 
@@ -293,63 +430,78 @@ def main():
               f"{'fid TEST':>9} {'invar.':>8} {'pire':>7}")
         # ------------------------------------------------------------ NAISSANCE
         #
-        # `--naissance libre` : UN neurone à la fois, et c'est l'apprentissage qui
-        # décide. Aucun chiffre rond ne doit sortir d'ici — 1, 2, 4, 8, 16, 32,
-        # 64, 128, 256 étaient MON calendrier et MON plafond, pas une découverte.
-        # Un compte rond est le signe qu'on a choisi la taille au lieu de la
-        # mesurer.
+        # `--naissance libre` : UN neurone à la fois. Aucun chiffre rond ne doit
+        # sortir d'ici — 1, 2, 4, 8, … 256 étaient MON calendrier et MON plafond,
+        # pas une découverte. Un compte rond est le signe qu'on a choisi la taille
+        # au lieu de la mesurer.
         #
-        # ET ON ÉPUISE LA COUCHE AVANT D'EN OUVRIR UNE. Un neurone seul sait faire
-        # « ET » et « OU » ; il faut une SECONDE couche pour un « OU exclusif ».
-        # Ouvrir une couche dèsl que le dernier neurône rapporte moins que la
-        # moyenne de sa couche, c'est vouloir le XOR avant d'avoir fini le ET et
-        # le OU — et c'est mesurablement mauvais : la première version de cette
-        # règle ouvrait 24 couches pour 128 neurones et donnait 0,4937 de fidélité
-        # de test, contre 0,5059 pour la même taille en 8 couches.
+        # UNE COUCHE NE S'OUVRE PAS À LA SATURATION DE LA PRÉCÉDENTE. Elle
+        # s'ouvre sur DEUX signes, et les deux se mesurent :
         #
-        # D'où deux phases, et le passage de l'une à l'autre est une MESURE :
-        #   A. on ajoute des neurones à la couche courante tant qu'ils paient ;
-        #   B. quand elle est SATURÉE, on essaie une couche neuve — et on continue
-        #      seulement si son premier neurone paie.
+        #   `communs`   — des CONCEPTS COMMUNS ont émergé : des neurones dont la
+        #                 trajectoire suit le même contenu d'une langue à l'autre,
+        #                 au lieu d'un trait de langue. Sans structure partagée à
+        #                 composer, une couche de plus n'a rien à composer.
+        #   `contraste` — la lecture a besoin de POIDS NÉGATIFS : elle soustrait
+        #                 les concepts plus qu'elle ne les additionne. C'est le
+        #                 « OU exclusif » : ce que le « ET » et le « OU » d'une
+        #                 seule couche ne savent pas séparer.
+        #
+        # Une couche trop tôt est mesurablement mauvaise : la première règle en
+        # ouvrait 24 pour 128 neurones (0,4937) contre 8 pour la même taille
+        # (0,5059) — elle voulait le XOR avant d'avoir fini le ET et le OU.
+        #
+        # Ajouter la couche déclenche une RELECTURE du corpus : on réajuste par
+        # renforcement/atrophie (voir `renforce`), jamais par rétropropagation.
         if opt("--naissance", "") == "libre":
             gain_min = float(opt("--gain-min", 0.0002))
             patience = int(opt("--patience", 12))
+            seuil_commun = float(opt("--seuil-commun", 0.35))
+            seuil_contraste = float(opt("--seuil-contraste", 0.45))
             val_max = -1.0
             sans_gain = 0
-            saturee = 0
+            couche_neuve = True          # la toute première couche doit naître
             while P.compte_neurones < plafond:
-                # en phase A on remplit la couche ; en phase B on en ouvre une
-                nouvelle = (saturee >= patience) or not P.couches
-                P.nait(1, nouvelle_couche=nouvelle)
+                P.nait(1, nouvelle_couche=couche_neuve)
+                if couche_neuve:
+                    # AJOUTER UNE COUCHE = RELIRE LE CORPUS et réajuster par
+                    # renforcement/atrophie, sans rétropropagation.
+                    P.renforce(P.compte_neurones-1, itr, mt, ride)
+                couche_neuve = False
                 idx = np.arange(P.compte_neurones)
                 W = P.ajuste(idx, ride, mt, itr)
                 f_tr = P.fid(idx, W, mt, itr); f_va = P.fid(idx, W, mt, ival)
                 gain = f_va - val_max if val_max > 0 else 0.0
                 if f_va > val_max:
                     val_max = f_va
-                if nouvelle:
-                    saturee = 0
                 if gain < gain_min:
                     sans_gain += 1
-                    saturee += 1
                 else:
                     sans_gain = 0
-                    saturee = 0
-                if P.compte_neurones % 8 == 0 or nouvelle or sans_gain >= patience:
+                if P.compte_neurones % 8 == 0 or sans_gain >= patience:
+                    com = P.communs_fin(idx, ival)
+                    con = P.contraste(W)
+                    part_commune = float((com > seuil_commun).mean())
                     Xte_g = P.recalcule(idx, Ete)
                     f_te = P.evalue(Xte_g, Yte, W, mt)
                     mg, mig = P.invariance(Xte_g, W, mt)
-                    print(f"{'n' + str(P.compte_neurones) + (' COUCHE ' + str(len(P.couches)) if nouvelle else ''):<30} "
-                          f"{P.compte_neurones:>6} {len(P.couches):>7} {f_tr:>9.4f} {f_va:>8.4f} "
-                          f"{f_te:>9.4f} {mg:>8.4f} {mig:>7.4f}")
+                    print(f"{'n' + str(P.compte_neurones):<12} {P.compte_neurones:>6} "
+                          f"{len(P.couches):>7} {f_tr:>9.4f} {f_va:>8.4f} {f_te:>9.4f} "
+                          f"{mg:>8.4f} {mig:>7.4f} | communs {com.mean():+.3f} "
+                          f"({part_commune*100:>3.0f} %) · contraste {con:.3f}")
                     if f_va > meilleur["f_va"]:
                         meilleur = {"f_te": f_te, "neur": P.compte_neurones,
                                     "couch": len(P.couches), "f_tr": f_tr, "f_va": f_va,
                                     "inv": mg, "pire": mig, "etape": "naissance libre"}
-                # on ne s'arrête que si une COUCHE NEUVE ne paie pas non plus :
-                # tant qu'on est en phase A, une couche saturée n'est pas la fin.
+                    # LES DEUX SIGNES, et ils doivent tenir ENSEMBLE : des concepts
+                    # communs qui existent, et une lecture qui doit les soustraire.
+                    if part_commune > 0.5 and con > seuil_contraste:
+                        print(f"{'  → COUCHE NEUVE (concepts communs + contraste)':<12} "
+                              f"{P.compte_neurones:>6} {len(P.couches):>7}")
+                        couche_neuve = True
+                        sans_gain = 0
                 if sans_gain >= 2*patience:
-                    print(f"{'  → ARRÊT (couche neuve sans gain)':<30} "
+                    print(f"{'  → ARRÊT (couche neuve sans gain)':<12} "
                           f"{P.compte_neurones:>6} {len(P.couches):>7}")
                     break
             print(f"# née : {P.compte_neurones} neurones en {len(P.couches)} couches "
