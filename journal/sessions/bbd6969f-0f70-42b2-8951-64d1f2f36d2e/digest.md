@@ -128857,3 +128857,301 @@ syntaxe OK
 **La courbe du professeur 0.5B sur ce périmètre est basse** : 0,58 au maximum (couche 0), 0,30 au minimum (couche 2), 0,45 à la couche 10 qui est la cible du pont. Le pont génératif, à **0,94-0,97**, est donc bien plus invariant que le professeur qu'il émule. J'attends le 30B.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"compare_professeurs.py : les professeurs et notre pont sur le MÊME périmètre\n\nUne comparaison d'invariance n'a de sens que si tout est mesuré sur les mêmes\nlangues, les mêmes unités et la même posi … [840 caractères tronqués]`
+
+  ```
+--- 30B ---
+ell 113s 208932820
+heb 91s 154268623
+hin 117s 208650925
+jpn 84s 153912631
+kor 86s 155933045
+ell.drvf heb.drvf hin.drvf jpn.drvf kor.drvf tha.drvf 13:28
+  ```
+
+### 🤖 Assistant
+
+⏵ Le 30B a fini (beaucoup plus vite : le modèle est en cache de pages). Je vérifie et je calcule.
+
+**Les 6 traces 30B sont là** (84-117 s chacune une fois le modèle en cache, contre 337 s à froid). Je vérifie leur contenu puis je calcule le plateau.
+
+- **bash** `{"command": "cat /tmp/trace30b.log; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport sys; sys.path.insert(0,'/tmp')\nfrom lire_drvf import lire\nv,nl,hid,recs=lire('/home/stephane/Data13TB/stephane/corpus/udhr/tenus30b/tha.drvf')\ncs=sorted({c for c,_,_,_,_ in recs})\nprin … [158 caractères tronqués]`
+
+  ```
+ell 113s 208932820
+heb 91s 154268623
+hin 117s 208650925
+jpn 84s 153912631
+kor 86s 155933045
+tha : v2 n_layer=48 hidden=2048 · couches réelles [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]
+  ```
+
+### 🤖 Assistant
+
+⏵ Couches 0-17, hidden 2048 : conforme. Je calcule la courbe du 30B.
+
+- **bash** `{"command": "pgrep -f \"trace30[b].sh\" >/dev/null && echo \"trace encore en cours\" || echo \"trace terminée\"; cat /tmp/trace30b.log | tail -2; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 python3 tools/compare_professeurs.py /home/stephane/Data13TB/stephane/corpus/udhr/tenus3 … [141 caractères tronqués]`
+
+  ```
+trace terminée
+tha 110s 197741719
+TERMINE
+# professeur Qwen3-30B-A3B — 6 langues : ell heb hin jpn kor tha
+  couche  0 : invariance 1.0000 · pire paire 1.0000
+  couche  4 : invariance 0.9229 · pire paire 0.8499
+  couche  8 : invariance 0.9318 · pire paire 0.8750
+  couche 12 : invariance 0.8570 · pire paire 0.7301
+  couche 16 : invariance 0.8705 · pire paire 0.7574
+  couche 17 : invariance 0.9014 · pire paire 0.8100
+  ```
+
+### 🤖 Assistant
+
+⏵ **1,0000 à la couche 0 est suspect** : mon `inv()` rend 1,0 pour des vecteurs nuls. Je vérifie avant de rien conclure.
+
+**1,0000 pile à la couche 0 : c'est suspect.** Mon `inv()` normalise les vecteurs nuls à 1 — des vecteurs **vides** donneraient donc une invariance parfaite. Je vérifie.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport glob, os, numpy as np, sys\nsys.path.insert(0,'.')\nfrom tools.compare_professeurs import lire\nfor f in sorted(glob.glob('/home/stephane/Data13TB/stephane/corpus/udhr/tenus30b/*.drvf'))[:3]:\n    nl,hid,s =  … [371 caractères tronqués]`
+
+  ```
+ell couche  0:  978/2048 non nuls · norme 428.96
+ell couche  1: 1484/2048 non nuls · norme 244.00
+ell couche 17: 1803/2048 non nuls · norme 351.89
+heb couche  0:  978/2048 non nuls · norme 428.96
+heb couche  1: 1520/2048 non nuls · norme 251.74
+heb couche 17: 1775/2048 non nuls · norme 354.95
+hin couche  0:  978/2048 non nuls · norme 428.96
+hin couche  1: 1496/2048 non nuls · norme 245.10
+hin couche 17: 1773/2048 non nuls · norme 339.18
+  ```
+
+### 🤖 Assistant
+
+⏵ **Couche 0 identique entre langues (978 non nuls, norme 428,96 exactement)** : ce n'est pas une représentation, c'est un artefact. Je le vérifie et je l'exclus.
+
+**Piège confirmé** : la couche 0 du 30B est **la même pour toutes les langues** (978 non nuls, norme 428,96 à l'identique) — ce n'est pas une représentation linguistique. La couche 17, elle, varie bien (normes 351,9 / 355,0 / 339,2). Le plateau est donc valide, la couche 0 est à exclure.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport numpy as np, sys\nsys.path.insert(0,'.')\nfrom tools.compare_professeurs import lire\nU='/home/stephane/Data13TB/stephane/corpus/udhr/'\na=lire(U+'tenus30b/ell.drvf',{0})[2][0]; b=lire(U+'tenus30b/heb.drvf',{ … [378 caractères tronqués]`
+
+  ```
+30B couche 0 : ell vs heb identiques ? True · écart max 0.0
+0.5B couche 0 : ell vs heb identiques ? False · écart max 75.0
+  ```
+
+### 🤖 Assistant
+
+⏵ Anomalie confirmée et exclue. Je balaie le 30B couche par couche pour trouver son vrai plateau.
+
+**Anomalie confirmée** : au 30B, les couches 0 de `ell` et `heb` sont **bit-à-bit identiques** (écart 0,0) ; au 0.5B elles diffèrent (écart 75). La couche 0 du 30B est un enregistrement constant, pas une représentation. Je balaie proprement les couches 1 à 17.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 python3 tools/compare_professeurs.py /home/stephane/Data13TB/stephane/corpus/udhr/tenus30b --couches 1,2,4,6,8,10,12,14,16,17 --etiquette \"professeur Qwen3-30B-A3B (couche 0 exclue : artefact)\"", "description": "Full 30 … [36 caractères tronqués]`
+
+  ```
+# professeur Qwen3-30B-A3B (couche 0 exclue : artefact) — 6 langues : ell heb hin jpn kor tha
+  couche  1 : invariance 0.9268 · pire paire 0.8367
+  couche  2 : invariance 0.9131 · pire paire 0.8432
+  couche  4 : invariance 0.9229 · pire paire 0.8499
+  couche  6 : invariance 0.9175 · pire paire 0.8447
+  couche  8 : invariance 0.9318 · pire paire 0.8750
+  couche 10 : invariance 0.9067 · pire paire 0.8206
+  couche 12 : invariance 0.8570 · pire paire 0.7301
+  couche 14 : invariance 0.8755 · pire paire 0.7846
+  couche 16 : invariance 0.8705 · pire paire 0.7574
+  couche 17 : invariance 0.9014 · pire paire 0.8100
+  ```
+
+### 👤 Utilisateur
+
+prudence quan tu change de modèle de prof. On travaille sur une couche interne, donc : on a une cible différente pour chaque modèle, donc une version différente de notre modèle adaptée à chaque prof car il n'y a pas de représentation universelle d'une couche sémantique pour l'instant (c'est plus un projet pour mon initiative Panini et nipada que pour Drave). Tu n'a pas à enregistrer les logs des couches internes de notre boite noire, pas plus que calculer l'externe de la boite noire qui ne nous intéresse pas. Bref, les logs sont pour boite noire linguistique-sémantique spécifique à un modèle. chaque modèle à sa représentation sémantique interne propre et on doit avoir notre propre version pour chaque modèle. Une fois qu'on est satisfait, on peut commencer à étudier nos différents modèles pour voir s'il y aurait des universaux sémantiques émergeants... mais c'est pour le projet Panini plus que Drave.
+
+### 🤖 Assistant
+
+⏵ Correction reçue et importante. Je vérifie d'abord un point concret : la tête du professeur est-elle calculée ?
+
+Vous avez raison sur le fond, et cela invalide une comparaison que je viens de faire. Mais votre message pointe aussi un gaspillage précis : **la tête du professeur**. Or mes journaux montrent `[tete] densite de l'entree...` — elle est bien calculée. Je vérifie.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"densite de l'entree\" drave-core/src/*.rs | head -3; echo \"=== où la tête est appelée ===\"; grep -n \"fn tete\\b\\|self.tete(\\|\\.tete(\" drave-core/src/model.rs | head -12; echo \"=== un drapeau pour la sauter ? ===\"; … [161 caractères tronqués]`
+
+  ```
+drave-core/src/main.rs:1208:            println!("[tete] densite de l'entree : {:.1} % de coordonnees vivantes sur {n} jetons", pc);
+=== où la tête est appelée ===
+1919:    pub fn tete(&self, x: &[f32]) -> Vec<f32> {
+7756:            x = ht.tete(&x);
+8021:                Some(ht) => { reduit = ht.tete(x); &reduit[..] }
+=== un drapeau pour la sauter ? ===
+429:fn poser_tete_partielle(mdl: &mut model::Model) {
+430:    mdl.tete_partielle = true;
+454:             mdl.couche_debut, mdl.couche_fin, mdl.flux_brut,
+459:    if mdl.tete_partielle {
+621:    tete_partielle: bool,
+703:            "--tete-partielle" => { o.tete_partielle = true; 1 }
+876:    if opt.tete_partielle {
+877:        poser_tete_partielle(&mut mdl);
+3136:    if opt.tete_partielle {
+3210:                mdl.flux_brut = true;
+3326:    if opt.tete_partielle {
+5088:    if opt.tete_partielle { poser_tete_partielle(&mut mdl); }
+  ```
+
+### 🤖 Assistant
+
+⏵ Je lis le site qui calcule la tête pour voir comment l'éviter.
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs", "limit": 36, "offset": 1188}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs</path>
+<type>file</type>
+<content>
+1188:         f.flush().unwrap();
+1189:         let hb_ms = 0.0;   // le coût est mesuré à part
+1190:         let _ = hb_ms;
+1191:         println!("capteur hebbien : {} activations sur {} tokens, trace écrite dans {} ({:.1} Mo)",
+1192:                  hb.n_fire, hb.n_token,
+1193:                  hebb_out, (hb.h.len() * 4) as f64 / 1e6);
+1194:     }
+1195:     let n_tok = (st.n_prompt + st.n_gen) as f64;
+1196:     let p = mdl.prof;
+1197:     println!("postes (ms/token) : matvec-attn {:.1} | rope {:.1} | attention {:.1} | matvec+mlp {:.1} | total mesuré {:.1}",
+1198:              p[0] / n_tok * 1e3, p[1] / n_tok * 1e3, p[2] / n_tok * 1e3, p[3] / n_tok * 1e3,
+1199:              (p[0] + p[1] + p[2] + p[3]) / n_tok * 1e3);
+1200: 
+1201:     {
+1202:         use std::sync::atomic::Ordering;
+1203:         let a = model::TETE_ACTIFS.load(Ordering::Relaxed);
+1204:         let t = model::TETE_TOTAL.load(Ordering::Relaxed);
+1205:         let n = model::TETE_APPELS.load(Ordering::Relaxed);
+1206:         if n > 0 && t > 0 {
+1207:             let pc = 100.0 * a as f64 / t as f64;
+1208:
+… [778 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ La tête est appelée pendant l'inférence (compteurs non nuls). Je teste si `--n 0` l'évite.
+
+Le `[tete]` vient de compteurs : la tête **est** appelée pour produire au moins un jeton. Je teste comment l'éviter.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n '\"--n\"\\|n_new' drave-core/src/main.rs | head -6; echo \"=== essai sans génération ===\"; cd /home/stephane/Data13TB/stephane/corpus/udhr; M=/home/stephane/Data13TB/stephane/modeles/gguf/qwen2.5-0.5b-instruct-q4_k_m.gguf; D … [410 caractères tronqués]`
+
+  ```
+728:            "--n" => { o.n = suivant(i).parse().unwrap(); 2 }
+857:        ids: mut ids, ids_file, prompt, n: n_new, temp, top_p, topk, rep_pen, hist,
+1079:            let ids = if ids.len() + n_new + 8 > ctx {
+1080:                let garde = ctx.saturating_sub(n_new + 8);
+1098:            let (out, st) = mdl.generate(&ids, n_new, temp, top_p, rep_pen, hist,
+1114:    let ids: Vec<u32> = if ids.len() + n_new + 8 > ctx {
+=== essai sans génération ===
+--- --n 1 ---
+postes (ms/token) : matvec-attn 1.5 | rope 0.3 | attention 2.9 | matvec+mlp 12.1 | total mesuré 16.8
+[tete] densite de l'entree : 89.6 % de coordonnees vivantes sur 1 jetons
+[tete] -> un stockage par COLONNES ne lirait que ces coordonnees : 89.6 % de la matrice au lieu de 100 %
+--- --n 0 ---
+postes (ms/token) : matvec-attn 1.7 | rope 0.3 | attention 3.6 | matvec+mlp 11.7 | total mesuré 17.3
+  temps 16.72 s
+  ```
+
+### 🤖 Assistant
+
+⏵ `--n 0` supprime bien la tête. Je mesure l'économie sur le 30B, là où elle compte.
+
+**`--n 0` supprime la tête** — confirmé, les lignes `[tete]` disparaissent. Mes traces la calculaient donc pour rien. Je mesure l'économie sur le 30B.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/corpus/udhr && M=/home/stephane/Data13TB/stephane/modeles/gguf/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf; D=/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/target/release/drave; P=\"$(cat /tmp/udhr10_texte/ell.txt)\"\nfor N in 1 0; do echo \" … [447 caractères tronqués]`
+
+  ```
+--- --n 1 ---
+[tete] densite de l'entree : 76.8 % de coordonnees vivantes sur 1 jetons
+[tete] -> un stockage par COLONNES ne lirait que ces coordonnees : 76.8 % de la matrice au lieu de 100 %
+  TEMPS 107.75 s
+--- --n 0 ---
+  TEMPS 108.96 s
+  /tmp/t0.drvf : 199 Mo
+  /tmp/t1.drvf : 199 Mo
+/tmp/t1.drvf /tmp/t0.drvf differ: byte 21, line 1
+[exit code: 1]
+  ```
+
+### 🤖 Assistant
+
+⏵ La tête ne coûte **rien en temps** (108 s contre 108 s) mais **pollue la trace d'une position**. Je vérifie et je lance le pont propre au 30B.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/corpus/udhr && python3 -c \"\nimport sys; sys.path.insert(0,'/tmp')\nfrom lire_drvf import lire\nfor f in ['/tmp/t1.drvf','/tmp/t0.drvf']:\n    v,nl,hid,recs=lire(f)\n    pos=sorted({p for c,p,_,_,_ in recs if c==0})\n    print(f'{f}: {len(pos)} posit … [1160 caractères tronqués]`
+
+  ```
+/tmp/t1.drvf: 1016 positions (max 1016)
+/tmp/t0.drvf: 1016 positions (max 1016)
+traçage 30B des 40 langues lancé
+--n 0
+--n 0
+[stderr]
+grep: warning: stray \ before -
+  ```
+
+### 🤖 Assistant
+
+⏵ Positions identiques (1016) mais octets différents. Je vérifie si ça change la couche 17 — sinon la question est close.
+
+Même nombre de positions, mais les octets diffèrent dès le premier enregistrement. Question décisive et bon marché : **la couche 17 change-t-elle ?**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys, numpy as np\nsys.path.insert(0,'.')\nfrom tools.compare_professeurs import lire\na=lire('/tmp/t1.drvf',{0,17})[2]\nb=lire('/tmp/t0.drvf',{0,17})[2]\nfor c in (0,17):\n    if a[c] is None or b[c] is None: … [276 caractères tronqués]`
+
+  ```
+couche  0 (dernière position) : identiques ? False · écart max 127.0
+couche 17 (dernière position) : identiques ? False · écart max 118.0
+  ```
+
+### 🤖 Assistant
+
+⏵ **La couche 17 diffère** (écart 118) : les deux modes ne produisent pas la même trace. Mes 6 traces 30B de test sont donc dans une autre convention que les 40 d'entraînement. Je dois les refaire.
+
+**Problème réel** : la couche 17 **diffère** entre les deux modes (écart 118). Mes 6 traces 30B de test utilisent la convention `--n` par défaut, les 40 d'entraînement `--n 0` : **le périmètre serait incohérent**. Je chaîne la reprise des 6.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"n: [0-9]\\|n: 32\\|n_new\" drave-core/src/main.rs | grep -iE \"defaut|default|n: [0-9]+,\" | head -3; sed -n '540,548p' drave-core/src/main.rs | grep -n \"n\" ; echo \"=== valeur par défaut de n ===\"; grep -n \"n: usize\"  … [1274 caractères tronqués]`
+
+  ```
+657:        n: 32, temp: 0.0, top_p: 1.0, hist: 64, hebb_q: 0.1,
+2286:        head_dim: 0, ffn: 0, eps: 1e-6, rope_base: 10000.0, vocab: 0,
+1:    infer: bool, ppl: bool, plan: bool, tokenize: bool, gpu_banc: bool, k3_essai: bool,
+2:    /// Banc du KV déporté : nombre de clés à faire tenir en VRAM.
+3:    banc_kv: usize,
+4:    /// Banc des SCORES d'attention : nombre de clés à noter (noyau 1 du top-k).
+5:    banc_topk: usize,
+6:    /// Banc MLA : écrit les logits `(n_pos × vocab)` en f32 pour les comparer à
+7:    /// la référence numpy du modèle synthétique.
+8:    banc_mla: Option<String>,
+9:    /// Trace du flux d'activation : fichier de sortie.
+=== valeur par défaut de n ===
+53:fn fmt_bits(b: u64, n: usize) -> String {
+590:    n: usize, temp: f32, top_p: f32, topk: usize, rep_pen: f32, hist: usize,
+1393:        let proj_l = |x: &[f32], w: &[f32], b: &[f32], n_in: usize, n_out: usize| {
+1793:fn run_sonder_engram(n: usize) {
+2571:    n: usize,
+2617:    fn en_dense(&self, hidden: usize) -> Vec<f32> {
+2683:fn tete_flux(mode: u8, debut: u32, fin: u32, pos: u32, n: usize, echelle: f32,
+2733:fn decoder_paires_blocs(corps: &[u8], n: usize) -> Result<(Vec<u16>, Vec<i8>), String> {
+2903:fn r
+… [1486 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le défaut est `n: 32`** : mes traces généraient 32 jetons et calculaient la tête à chaque fois — exactement ce que vous dites de ne pas faire. Je chaîne la reprise du 0.5B aussi.
+
+**Trouvé : le défaut est `n: 32`.** Toutes mes traces généraient **32 jetons** et calculaient la tête — précisément l'« externe » que vous dites de ne pas calculer. Je chaîne la reprise complète en `--n 0`.
+
+- **bash** `{"command": "cat > /tmp/after30b_test.sh <<'EOF'\n#!/bin/bash\n# Après le 30B, on reprend AUSSI le 0.5B en --n 0 : toutes nos traces ont été\n# faites avec le défaut n=32, qui génère 32 jetons et calcule la tête du\n# professeur — son « externe », qui ne nous intéresse pas.\nwhile ! grep -q TERMINE  … [1146 caractères tronqués]`
+
+  ```
+chaîne complète en place : 30B entraînement -> 30B test -> 0.5B (tout en --n 0)
+abk 109s
+1
+  ```
+
+### 🤖 Assistant
+
+⏵ Je consigne la correction méthodologique et je rectifie le rapport.
+
+Votre correction invalide une comparaison que je venais de faire. Je la consigne explicitement, sans effacer l'erreur.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > docs/note-un-pont-par-professeur.md <<'EOF'\n# Un pont par professeur — il n'y a pas de couche sémantique universelle\n\nCorrection de cap, énoncée par Stéphane, et elle invalide une comparaison que\nj'avais commise :\n\n## 1.  … [6738 caractères tronqués]`

@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 166.7 h |
+| Durée | 167.0 h |
 | Tours | 122 |
-| Messages | 8019 |
-| Appels d'outils | 7645 |
+| Messages | 8034 |
+| Appels d'outils | 7659 |
 | Fichiers touchés | 150 |
-| Commandes | 6531 |
+| Commandes | 6544 |
 | Sous-agents | 32 |
-| Commits | 561 |
+| Commits | 562 |
 | Compactages de contexte | 11 |
 
 ## Objectifs déclarés
@@ -6198,7 +6198,7 @@ J'ai aussi remplacé le critère de retrait : couper par contribution ne « gén
 
 ### Tour 122 — <goal_round> Objective: "Faire évoluer le pont linguistico-sémantique en BOÎTE NOIRE (émulation des premières couches du … [1231 caractères tronqués]
 
-*10 appels d'outils.* Actions notables :
+*24 appels d'outils.* Actions notables :
 
 - bash — Check running job and 30B availability
 - bash — Time 30B trace on one language
@@ -6210,12 +6210,17 @@ J'ai aussi remplacé le critère de retrait : couper par contribution ne « gén
 - bash — Draft multi-layer reader
 - bash — Rewrite multi-layer reader and test
 - bash — Commit tool and check 30B
+- bash — Verify 30B trace content
+- bash — Compute 30B invariance by layer
+- bash — Check if 30B layer 0 is empty
+- bash — Verify layer 0 anomaly
+- … et 10 autres
 
 **Synthèse produite :**
 
-⏵ Le lecteur multi-couches fonctionne. Courbe du professeur 0.5B établie ; j'attends le 30B.
+⏵ Je consigne la correction méthodologique et je rectifie le rapport.
 
-**La courbe du professeur 0.5B sur ce périmètre est basse** : 0,58 au maximum (couche 0), 0,30 au minimum (couche 2), 0,45 à la couche 10 qui est la cible du pont. Le pont génératif, à **0,94-0,97**, est donc bien plus invariant que le professeur qu'il émule. J'attends le 30B.
+Votre correction invalide une comparaison que je venais de faire. Je la consigne explicitement, sans effacer l'erreur.
 
 ## 3. Travail accompli
 
@@ -6451,7 +6456,7 @@ J'ai aussi remplacé le critère de retrait : couper par contribution ne « gén
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6491 autres
+- … et 6504 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -6579,7 +6584,7 @@ J'ai aussi remplacé le critère de retrait : couper par contribution ne « gén
 
 ## 5. Erreurs rencontrées
 
-377 sorties en erreur ou divergentes. Les premières :
+379 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -7160,4 +7165,5 @@ J'ai aussi remplacé le critère de retrait : couper par contribution ne « gén
 - Cycles confirmés sur la tâche 10x plus dure : +68 % d'avantage sur la constante                          neurones  couches  fid VAL   fid TEST   réservoir plat 
 - Le plateau de croissance est trouvé (~470 neurones), et l'ATTRITION fait mieux que la croissance  Course plafond 512, deux cycles, tâche 10 unités (constante té
 - compare_professeurs.py : les professeurs et notre pont sur le MÊME périmètre  Une comparaison d'invariance n'a de sens que si tout est mesuré sur les mêmes lang
+- RECTIFICATION : un pont par professeur — il n'y a pas de couche sémantique universelle  Correction de cap. Chaque modèle a sa propre représentation sémantique i
 

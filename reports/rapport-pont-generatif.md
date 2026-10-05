@@ -239,3 +239,30 @@ en réajustant la lecture vaut mieux qu'en ajouter**.
 
 **L'avantage sur la constante passe de +0,0362 (plat) à +0,0630, soit +74 %** —
 avec 384 neurones au lieu de 64, mais 13 couches au lieu d'une seule.
+
+
+## 10. RECTIFICATION — comparer deux professeurs n'a pas de sens
+
+La section 9 ci-dessus compare l'invariance du pont (0,9425, ajusté sur la couche
+10 de **Qwen2.5-0.5B**) à celle de la couche 17 de **Qwen3-30B-A3B** (0,9014) pour
+en conclure que le pont « bat le professeur 30B ». **Ce classement est vide.**
+
+Chaque modèle a sa propre représentation sémantique interne. Une couche interne
+n'existe que dans la base, la métrique et le découpage du modèle qui la produit —
+il n'y a pas de couche sémantique universelle. Les deux nombres sont exacts, mais
+ils appartiennent à deux espaces différents : ils ne se comparent pas.
+
+**Ce qui reste valide** : la comparaison à l'intérieur d'un même professeur. Elle
+donne, sur le périmètre des 6 langues tenues à l'écart et de 10 unités :
+
+| même professeur (Qwen2.5-0.5B) | invariance | pire paire |
+|---|---:|---:|
+| couche 10 du professeur — **la cible** | 0,4487 | 0,3188 |
+| **notre pont génératif** | **0,9425** | **0,8847** |
+
+Notre pont est bien plus invariant que la couche qu'il émule — c'est le prix de la
+fidélité (0,50), et c'est la courbe d'échange déjà établie. Cette phrase-là dit
+quelque chose ; la précédente, non.
+
+Voir `docs/note-un-pont-par-professeur.md` : **il faut un pont par professeur**, et
+l'étude des universaux sémantiques relève de l'initiative Panini, pas de Drave.
