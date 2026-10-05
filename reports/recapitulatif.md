@@ -458,3 +458,42 @@ réglage. Deux pistes pour l'attaquer, aucune explorée :
 - une **lecture non linéaire** (le readout est aujourd'hui linéaire sur les états) ;
 - une **entrée plus riche** que le seul plongement, sans réintroduire le saut qui
   surapprenait.
+
+
+---
+
+## 9. Le plafond, attaqué : la lecture non linéaire paie +18 %
+
+Le readout était **linéaire** sur les états du réservoir. C'était une hypothèse sur
+l'origine du plafond de +0,020. Test : on lui donne `[états, états²]` — ce qui
+reste **en forme fermée** (une seule inversion), donc toujours sans rétropropagation.
+
+| périmètre | lecture | fid TEST | **écart à la constante** | invariance | pire paire |
+|---|---|---:|---:|---:|---:|
+| 896 canaux | linéaire | 0,4911 | +0,0201 | 0,9488 | 0,8328 |
+| 896 canaux | **quadratique** | **0,4945** | **+0,0235** | 0,9469 | 0,8300 |
+| 157 canaux | linéaire | 0,6346 | +0,0206 | 0,9653 | 0,8893 |
+| 157 canaux | **quadratique** | **0,6383** | **+0,0243** | 0,9648 | 0,8821 |
+
+**La contribution propre du pont passe de +0,020 à +0,024 — soit +18 %**, sur les
+deux périmètres, **sans coût en invariance** (0,9488 → 0,9469 et 0,9653 → 0,9648,
+dans le bruit).
+
+**La linéarité de la lecture était donc bien une part du plafond — mais une petite
+part.** Le reste vient d'ailleurs : le réservoir est **gelé et aléatoire**, et ses
+caractéristiques ne portent qu'une fraction de ce qui est prédictible. C'est la
+prochaine piste, et elle n'est pas explorée.
+
+### Le meilleur réseau, à ce stade
+
+| | |
+|---|---|
+| périmètre | **157 canaux sur 896 (18 %)**, les plus énergétiques |
+| lecture | **quadratique** |
+| taille | **80 neurones · 8 couches [30, 8, 8, 8, 8, 8, 8, 2]** |
+| fidélité TEST | **0,6383** (constante 0,6140) |
+| invariance | **0,9648** · pire paire **0,8821** |
+| rétropropagation | **aucune** |
+
+Et la **première couche porte 30 des 80 neurones** : le travail des activations
+manquantes se fait au premier niveau, la composition vient après.

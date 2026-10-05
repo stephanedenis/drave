@@ -131954,3 +131954,249 @@ constante ≈ 1.1192 · invariance_cible + -0.1071   r = 0.9570
 Et la constante témoin suit **la même loi** (`1,1192 · invariance − 0,1071`, r = 0,9570 — pente identique à 0,4 % près).
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/recapitulatif.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 8. LA CONCLUSION : tout est porté par l'invariance de la cible\n\nSept périmètres, du plus large (896 canaux) au plus étroit (89 canaux). Pour … [5034 caractères tronqués]`
+
+  ```
+aeb7f12 CONCLUSION : la fidélité est portée par l'invariance de la cible, pas par le modèle
+  ```
+
+### 🤖 Assistant
+
+⏵ Je teste la première piste ouverte : une **lecture non linéaire**. Le readout est aujourd'hui linéaire sur les états ; j'y ajoute leurs carrés — toujours en forme fermée.
+
+La question ouverte est maintenant précise : **d'où vient le plafond de +0,020 ?** Première piste — le readout est **linéaire** sur les états. Je lui ajoute les carrés, ce qui reste en forme fermée.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/pont_generatif.py'; s=open(p).read()\n# drapeau\ns=s.replace(\"\"\"        self.poids = []            # (w de longueur j+1, b de longueur H, couche)\"\"\",\n\"\"\"        self.poids = []            # (w_par … [2961 caractères tronqués]`
+
+  ```
+syntaxe OK
+1
+  ```
+
+- **write** `{"content": "#!/bin/bash\n# D'où vient le plafond de +0,020 ? Première piste : la lecture est LINÉAIRE sur\n# les états. On lui ajoute leurs carrés — toujours en forme fermée.\nset -u\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\n: > /tmp/lecture.log\nfor L in lineaire quadratique; do\n  for  … [578 caractères tronqués]`
+
+  ```
+<path>/tmp/lecture.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && chmod +x /tmp/lecture.sh && setsid nohup /tmp/lecture.sh >/dev/null 2>&1 < /dev/null & sleep 320; grep -E \"^####|LECTURE|SOUS-ENSEMBLE|constante|née :|fidélité TEST|invariance TEST\" /tmp/lecture.log", "description": "Test linear vs … [41 caractères tronqués]`
+
+  ```
+########## lecture lineaire · périmètre 0 ##########
+# constante témoin sur le TEST : 0.4710
+########## CYCLE 1 — CROISSANCE ##########
+########## lecture lineaire · périmètre 0.5 ##########
+# SOUS-ENSEMBLE ACTIF : 157/896 canaux portent 50% de l'énergie (18% des canaux), masque lu sur l'apprentissage seul
+# constante témoin sur le TEST : 0.6140
+########## CYCLE 1 — CROISSANCE ##########
+########## lecture quadratique · périmètre 0 ##########
+# LECTURE QUADRATIQUE : le readout voit [états, états²]
+# constante témoin sur le TEST : 0.4710
+########## CYCLE 1 — CROISSANCE ##########
+########## lecture quadratique · périmètre 0.5 ##########
+# SOUS-ENSEMBLE ACTIF : 157/896 canaux portent 50% de l'énergie (18% des canaux), masque lu sur l'apprentissage seul
+# LECTURE QUADRATIQUE : le readout voit [états, états²]
+# constante témoin sur le TEST : 0.6140
+########## CYCLE 1 — CROISSANCE ##########
+  ```
+
+### 🤖 Assistant
+
+⏵ Les quatre runs tournent. J'attends les résultats.
+
+- **bash** `{"command": "sleep 560; grep -E \"^####|LECTURE Q|SOUS-ENSEMBLE|constante|née :|fidélité TEST|invariance TEST\" /tmp/lecture.log; echo \"--- TERMINE ? ---\"; grep -c TERMINE /tmp/lecture.log", "description": "Wait for readout comparison", "timeoutMs": 620000}`
+
+  ```
+########## lecture lineaire · périmètre 0 ##########
+# constante témoin sur le TEST : 0.4710
+########## CYCLE 1 — CROISSANCE ##########
+########## lecture lineaire · périmètre 0.5 ##########
+# SOUS-ENSEMBLE ACTIF : 157/896 canaux portent 50% de l'énergie (18% des canaux), masque lu sur l'apprentissage seul
+# constante témoin sur le TEST : 0.6140
+########## CYCLE 1 — CROISSANCE ##########
+########## lecture quadratique · périmètre 0 ##########
+# LECTURE QUADRATIQUE : le readout voit [états, états²]
+# constante témoin sur le TEST : 0.4710
+########## CYCLE 1 — CROISSANCE ##########
+########## lecture quadratique · périmètre 0.5 ##########
+# SOUS-ENSEMBLE ACTIF : 157/896 canaux portent 50% de l'énergie (18% des canaux), masque lu sur l'apprentissage seul
+# LECTURE QUADRATIQUE : le readout voit [états, états²]
+# constante témoin sur le TEST : 0.6140
+########## CYCLE 1 — CROISSANCE ##########
+--- TERMINE ? ---
+1
+  ```
+
+### 🤖 Assistant
+
+⏵ Les runs se sont terminés sans résultats : il y a une erreur. Je lis le journal brut.
+
+- **bash** `{"command": "grep -n \"Error\\|Traceback\\|line [0-9]*, in\" /tmp/lecture.log | head -10; echo \"--- contexte ---\"; sed -n '/lecture quadratique · périmètre 0 /,/lecture quadratique · périmètre 0.5/p' /tmp/lecture.log | tail -12", "description": "Find error in readout runs"}`
+
+  ```
+10:Traceback (most recent call last):
+11:  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", line 705, in <module>
+14:  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", line 557, in main
+16:  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", line 151, in ajuste
+18:  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", line 146, in phi
+21:AttributeError: 'Pont' object has no attribute 'quadratique'
+32:Traceback (most recent call last):
+33:  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", line 705, in <module>
+36:  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", line 557, in main
+38:  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", line 151, in ajuste
+--- contexte ---
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", line 705, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", line 554, in main
+    P.renforce(P.compte_neurone
+… [472 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Deux bugs : `quadratique` n'a pas été initialisé (mon remplacement n'a pas mordu) et `renforce` utilise les états bruts avec un `W` en espace quadratique.
+
+Deux bugs précis : l'attribut `quadratique` n'a jamais été initialisé, et `renforce` multiplie les états **bruts** par un `W` ajusté en espace **quadratique**.
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", "limit": 8, "offset": 69}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py</path>
+<type>file</type>
+<content>
+69:     Conséquence voulue : on peut ÉPUISER une couche — y ajouter les neurones qui
+70:     manquent pour les activations non encore couvertes — sans que cela revienne à
+71:     créer de la profondeur. Une couche neuve ne se justifie que lorsqu'elle
+72:     compose ce que la précédente ne sait plus séparer : le « OU exclusif » après
+73:     le « ET » et le « OU ».
+74:     """
+75: 
+76:     def __init__(self, donnees, a, graine, H, decal=0):
+
+(Showing lines 69-76 of 705. Use offset=77 to continue.)
+</content>
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", "limit": 12, "offset": 76}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py</path>
+<type>file</type>
+<content>
+76:     def __init__(self, donnees, a, graine, H, decal=0):
+77:         self.langues, self.E, self.Y = donnees
+78:         self.a = a
+79:         self.H = H
+80:         self.rng = np.random.RandomState(graine + decal)
+81:         self.X = [np.zeros((len(e), 0), dtype=np.float32) for e in self.E]
+82:         self.couches = []          # taille de chaque couche, dans l'ordre
+83:         self.compte_neurones = 0
+84:         # GÉNÉALOGIE : de quoi RECALCULER un sous-ensemble de survivants sans les
+85:         # retirés. Sans elle, une attrition ne réduit rien — elle masque.
+86:         # Chaque neurone : (w_parents, w_couche, b, couche)
+87:         self.poids = []
+
+(Showing lines 76-87 of 705. Use offset=88 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", "new_string": "        # Chaque neurone : (w_parents, w_couche, b, couche)\n        self.poids = []\n        # LECTURE NON LINÉAIRE : le readout est linéaire sur les états. Y ajouter\n        # leurs carrés ne c … [264 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py has been updated successfully.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", "limit": 10, "offset": 366}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py</path>
+<type>file</type>
+<content>
+366:         if j == 0 or len(itr) == 0:
+367:             return 0.0
+368:         idx = np.arange(j)
+369:         W = self.ajuste(idx, ride, mt, itr)
+370:         X = np.vstack([self.X[i][:, idx] for i in itr])
+371:         Y = np.vstack([self.Y[i] for i in itr])
+372:         R = Y - (X @ W + mt)                  # ce qui reste à expliquer
+373:         xj = np.concatenate([self.X[i][:, j] for i in itr]).astype(np.float64)
+374:         if xj.std() == 0.0:
+375:             return 0.0
+
+(Showing lines 366-375 of 709. Use offset=376 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", "new_string": "        R = Y - (self.phi(X) @ W + mt)        # ce qui reste à expliquer", "old_string": "        R = Y - (X @ W + mt)                  # ce qui reste à expliquer"}`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"import ast;ast.parse(open('tools/pont_generatif.py').read());print('syntaxe OK')\" && setsid nohup /tmp/lecture.sh >/dev/null 2>&1 < /dev/null & sleep 340; grep -E \"^####|LECTURE Q|SOUS-ENSEMBLE|constante|née :|fidélité … [108 caractères tronqués]`
+
+  ```
+syntaxe OK
+########## lecture lineaire · périmètre 0 ##########
+# constante témoin sur le TEST : 0.4710
+########## CYCLE 1 — CROISSANCE ##########
+# née : 80 neurones en 5 couches [41, 15, 8, 8, 8]
+  fidélité TEST    : 0.4911   (constante témoin : 0.4710)
+  invariance TEST  : 0.9488 · pire paire 0.8328
+########## lecture lineaire · périmètre 0.5 ##########
+# SOUS-ENSEMBLE ACTIF : 157/896 canaux portent 50% de l'énergie (18% des canaux), masque lu sur l'apprentissage seul
+# constante témoin sur le TEST : 0.6140
+########## CYCLE 1 — CROISSANCE ##########
+  ```
+
+### 🤖 Assistant
+
+⏵ La référence linéaire reproduit exactement (0,4911). J'attends les deux runs quadratiques.
+
+- **bash** `{"command": "sleep 580; grep -E \"^####|LECTURE Q|SOUS-ENSEMBLE|constante|née :|fidélité TEST|invariance TEST\" /tmp/lecture.log; echo \"--- TERMINE ? ---\"; grep -c TERMINE /tmp/lecture.log", "description": "Wait for quadratic readout results", "timeoutMs": 640000}`
+
+  ```
+########## lecture lineaire · périmètre 0 ##########
+# constante témoin sur le TEST : 0.4710
+########## CYCLE 1 — CROISSANCE ##########
+# née : 80 neurones en 5 couches [41, 15, 8, 8, 8]
+  fidélité TEST    : 0.4911   (constante témoin : 0.4710)
+  invariance TEST  : 0.9488 · pire paire 0.8328
+########## lecture lineaire · périmètre 0.5 ##########
+# SOUS-ENSEMBLE ACTIF : 157/896 canaux portent 50% de l'énergie (18% des canaux), masque lu sur l'apprentissage seul
+# constante témoin sur le TEST : 0.6140
+########## CYCLE 1 — CROISSANCE ##########
+# née : 80 neurones en 7 couches [28, 8, 11, 8, 16, 8, 1]
+  fidélité TEST    : 0.6346   (constante témoin : 0.6140)
+  invariance TEST  : 0.9653 · pire paire 0.8893
+########## lecture quadratique · périmètre 0 ##########
+# LECTURE QUADRATIQUE : le readout voit [états, états²]
+# constante témoin sur le TEST : 0.4710
+########## CYCLE 1 — CROISSANCE ##########
+# née : 80 neurones en 5 couches [41, 15, 8, 8, 8]
+  fidélité TEST    : 0.4945   (constante témoin : 0.4710)
+  invariance TEST  : 0.9469 · pire paire 0.8300
+########## lecture quadratique · périmètre 0.5 ##########
+# SOUS-ENSEMBLE ACTIF : 157/896 canaux portent 50% de l'énergie (18% des canau
+… [362 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **La lecture non linéaire paie, sur les deux périmètres.**
+
+| périmètre | lecture | fid TEST | **écart** | invariance | pire paire |
+|---|---:|---:|---:|---:|---:|
+| 896 | linéaire | 0,4911 | +0,0201 | 0,9488 | 0,8328 |
+| 896 | **quadratique** | **0,4945** | **+0,0235** | 0,9469 | 0,8300 |
+| 157 | linéaire | 0,6346 | +0,0206 | 0,9653 | 0,8893 |
+| 157 | **quadratique** | **0,6383** | **+0,0243** | 0,9648 | 0,8821 |
+
+**Le plafond passe de +0,020 à +0,024** — soit **+18 % sur la contribution propre du pont**, sans coût en invariance. La linéarité du readout était donc bien une part du plafond, mais une petite part.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/recapitulatif.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 9. Le plafond, attaqué : la lecture non linéaire paie +18 %\n\nLe readout était **linéaire** sur les états du réservoir. C'était une hypothèse … [3149 caractères tronqués]`

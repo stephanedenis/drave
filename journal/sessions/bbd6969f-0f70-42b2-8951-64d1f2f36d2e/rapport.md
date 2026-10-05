@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 172.2 h |
+| Durée | 172.7 h |
 | Tours | 123 |
-| Messages | 8189 |
-| Appels d'outils | 7808 |
-| Fichiers touchés | 162 |
-| Commandes | 6648 |
+| Messages | 8202 |
+| Appels d'outils | 7821 |
+| Fichiers touchés | 163 |
+| Commandes | 6655 |
 | Sous-agents | 32 |
-| Commits | 575 |
+| Commits | 576 |
 | Compactages de contexte | 11 |
 
 ## Objectifs déclarés
@@ -6266,7 +6266,7 @@ Fidélité et invariance sont les deux axes d'**une seule droite**. À invarianc
 
 ### Tour 123 — <goal_round> Objective: "Faire évoluer le pont linguistico-sémantique en BOÎTE NOIRE (émulation des premières couches du … [1231 caractères tronqués]
 
-*29 appels d'outils.* Actions notables :
+*42 appels d'outils.* Actions notables :
 
 - read
 - bash — Locate main loading section
@@ -6282,21 +6282,20 @@ Fidélité et invariance sont les deux axes d'**une seule droite**. À invarianc
 - edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py`
 - bash — Rerun with three-condition trigger
 - bash — Wait for channel comparison
-- … et 14 autres
+- … et 24 autres
 
 **Synthèse produite :**
 
-⏵ **Le résultat décisif est tombé.** Je consigne.
+⏵ **La lecture non linéaire paie, sur les deux périmètres.**
 
-**Trois chiffres qui caractérisent tout le travail :**
+| périmètre | lecture | fid TEST | **écart** | invariance | pire paire |
+|---|---:|---:|---:|---:|---:|
+| 896 | linéaire | 0,4911 | +0,0201 | 0,9488 | 0,8328 |
+| 896 | **quadratique** | **0,4945** | **+0,0235** | 0,9469 | 0,8300 |
+| 157 | linéaire | 0,6346 | +0,0206 | 0,9653 | 0,8893 |
+| 157 | **quadratique** | **0,6383** | **+0,0243** | 0,9648 | 0,8821 |
 
-| relation | valeur |
-|---|---|
-| **fid TEST ≈ 1,1150 · (invariance de la cible) − 0,0848** | **r = 0,9570** |
-| **fid / invariance de la cible** | **0,9707 ± 0,0419** |
-| **écart à la constante** | **+0,0197 ± 0,0009** |
-
-Et la constante témoin suit **la même loi** (`1,1192 · invariance − 0,1071`, r = 0,9570 — pente identique à 0,4 % près).
+**Le plafond passe de +0,020 à +0,024** — soit **+18 % sur la contribution propre du pont**, sans coût en invariance. La linéarité du readout était donc bien une part du plafond, mais une petite part.
 
 ## 3. Travail accompli
 
@@ -6454,7 +6453,7 @@ Et la constante témoin suit **la même loi** (`1,1192 · invariance − 0,1071`
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/31-le-regroupement-par-experts-mesure-et-k3-au-complet.md` | 1 | 1 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-prefill-par-experts.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/engine.rs` | 0 | 1 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py` | 0 | 20 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py` | 0 | 22 |
 | `/tmp/chaine_propre.sh` | 1 | 0 |
 | `/tmp/analyse_propre.sh` | 1 | 0 |
 | `/tmp/stop2.py` | 1 | 0 |
@@ -6466,6 +6465,7 @@ Et la constante témoin suit **la même loi** (`1,1192 · invariance − 0,1071`
 | `/tmp/canaux.sh` | 1 | 0 |
 | `/tmp/partages.sh` | 1 | 0 |
 | `/tmp/consist.sh` | 1 | 0 |
+| `/tmp/lecture.sh` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -6544,7 +6544,7 @@ Et la constante témoin suit **la même loi** (`1,1192 · invariance − 0,1071`
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6608 autres
+- … et 6615 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -7267,4 +7267,5 @@ Et la constante témoin suit **la même loi** (`1,1192 · invariance − 0,1071`
 - Sous-ensemble actif : la droite d'échange MONTE (+14 pts de fidélité, +18 % des canaux)  TROIS conditions simultanées pour ouvrir une couche — la première manqu
 - L'INVARIANT : le pont apporte +0,020, quelle que soit la cible  Deux critères de sélection du sous-ensemble actif, plus la référence, même professeur, masque lu
 - CONCLUSION : la fidélité est portée par l'invariance de la cible, pas par le modèle  Sept périmètres, du plus large (896 canaux) au plus étroit (89). Pour chacu
+- Lecture non linéaire : le plafond passe de +0,020 à +0,024 (+18 %)  Le readout était LINÉAIRE sur les états du réservoir. On lui donne [états, états²], ce qui r
 

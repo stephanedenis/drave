@@ -85,6 +85,10 @@ class Pont:
         # retirés. Sans elle, une attrition ne réduit rien — elle masque.
         # Chaque neurone : (w_parents, w_couche, b, couche)
         self.poids = []
+        # LECTURE NON LINÉAIRE : le readout est linéaire sur les états. Y ajouter
+        # leurs carrés ne coûte qu'une inversion, reste en forme fermée, et teste
+        # si le plafond de +0,020 vient de la linéarité de la lecture.
+        self.quadratique = False
 
     # -- indices -------------------------------------------------------------
     def debut_couche(self, c):
@@ -140,19 +144,26 @@ class Pont:
         return self.compte_neurones
 
     # -- lecture -------------------------------------------------------------
+    def phi(self, X):
+        """La base de lecture. Linéaire par défaut ; `[X, X²]` si `--lecture
+        quadratique`, ce qui reste en forme fermée (une seule inversion)."""
+        if not self.quadratique:
+            return X
+        return np.hstack([X, X*X])
+
     def ajuste(self, idx, ride, mt, quel=slice(None)):
-        X = np.vstack([self.X[i][:, idx] for i in quel])
+        X = self.phi(np.vstack([self.X[i][:, idx] for i in quel]))
         Y = np.vstack([self.Y[i] for i in quel])
         n = X.shape[1]
         return np.linalg.solve(X.T @ X + ride*len(X)*np.eye(n), X.T @ (Y - mt))
 
     def fid(self, idx, W, mt, quel):
-        X = np.vstack([self.X[i][:, idx] for i in quel])
+        X = self.phi(np.vstack([self.X[i][:, idx] for i in quel]))
         Y = np.vstack([self.Y[i] for i in quel])
         return cos_lignes(X @ W + mt, Y)
 
     def dernier(self, idx, W, mt, quel):
-        return np.array([(self.X[i][:, idx] @ W + mt)[-1] for i in quel])
+        return np.array([(self.phi(self.X[i][:, idx]) @ W + mt)[-1] for i in quel])
 
     # -- critères d'attrition ------------------------------------------------
     def contribution(self, W, idx):
@@ -358,7 +369,7 @@ class Pont:
         W = self.ajuste(idx, ride, mt, itr)
         X = np.vstack([self.X[i][:, idx] for i in itr])
         Y = np.vstack([self.Y[i] for i in itr])
-        R = Y - (X @ W + mt)                  # ce qui reste à expliquer
+        R = Y - (self.phi(X) @ W + mt)        # ce qui reste à expliquer
         xj = np.concatenate([self.X[i][:, j] for i in itr]).astype(np.float64)
         if xj.std() == 0.0:
             return 0.0
@@ -378,10 +389,10 @@ class Pont:
         return cap
 
     def evalue(self, X, Y, W, mt):
-        return cos_lignes(np.vstack(X) @ W + mt, np.vstack(Y))
+        return cos_lignes(self.phi(np.vstack(X)) @ W + mt, np.vstack(Y))
 
     def invariance(self, X, W, mt):
-        return inv(np.array([(x @ W + mt)[-1] for x in X]))
+        return inv(np.array([(self.phi(x) @ W + mt)[-1] for x in X]))
 
 
 def main():
@@ -492,6 +503,9 @@ def main():
           f"{sum(len(Etr[i]) for i in ival)} · test {sum(len(Ete[i]) for i in ite)}")
 
     P = Pont((cltr, Etr, Ytr), a, graine, H)
+    if opt("--lecture", "") == "quadratique":
+        P.quadratique = True
+        print("# LECTURE QUADRATIQUE : le readout voit [états, états²]")
     mt = np.vstack([Ytr[i] for i in itr]).mean(axis=0)
     Yte_a = np.vstack(Yte)
     base = cos_lignes(np.tile(mt, (len(Yte_a), 1)), Yte_a)
