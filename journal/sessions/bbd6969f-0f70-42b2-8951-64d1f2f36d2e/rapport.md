@@ -5,15 +5,15 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 164.7 h |
+| Durée | 165.0 h |
 | Tours | 119 |
-| Messages | 7874 |
-| Appels d'outils | 7510 |
+| Messages | 7926 |
+| Appels d'outils | 7558 |
 | Fichiers touchés | 150 |
-| Commandes | 6408 |
+| Commandes | 6449 |
 | Sous-agents | 32 |
-| Commits | 550 |
-| Compactages de contexte | 10 |
+| Commits | 551 |
+| Compactages de contexte | 11 |
 
 ## Objectifs déclarés
 
@@ -5993,7 +5993,7 @@ Tout est commité, 77 tests verts, `REPRISE.md` et `reports/rapport-pont-semanti
 
 ### Tour 119 — ajoute des neuronnes et des couches au besoin. il faut émuler le prof le plus fidèlement possible à moindre coût en misa … [60 caractères tronqués]
 
-*7 appels d'outils.* Actions notables :
+*55 appels d'outils.* Actions notables :
 
 - bash — Measure fidelity in full space across models
 - bash — Retrain with double the data
@@ -6002,22 +6002,20 @@ Tout est commité, 77 tests verts, `REPRISE.md` et `reports/rapport-pont-semanti
 - bash — See the reservoir error
 - bash — Fix and run the reservoir
 - bash — Commit the reservoir result
+- bash — Inventory existing UDHR traces
+- bash — Inspect real unites.jsonl structure
+- bash — Check trace coverage per language
+- bash — Count real tokens per trace
+- bash — Find the tracing pipeline
+- bash — Find how vaste traces were produced
+- bash — Locate the 0.5B tracing script
+- … et 35 autres
 
 **Synthèse produite :**
 
-**La couche récurrente gagne sur les deux tableaux.**
+⏵ Diagnostic final : écart angulaire ~0,3 %, pas un simple facteur d'échelle. Je consigne et je commite.
 
-| modèle | fid. TEST | **invariance** | **pire paire** | params |
-|---|---:|---:|---:|---:|
-| constante | 0,5582 | 0,3763 | — | 896 |
-| 2 couches ELM 64 | 0,5725 | 0,8882 | — | 114 688 |
-| **RÉSERVOIR 64** | **0,5923** | **0,9072** | **0,8437** | 118 784 |
-| RÉSERVOIR 256 | 0,5868 | 0,8187 | 0,6918 | 524 288 |
-| RÉSERVOIR 512 | 0,5812 | 0,8113 | 0,7471 | 1 179 648 |
-
-**Ajouter une COUCHE récurrente gagne nettement** — fidélité 0,5725 → **0,5923**, invariance 0,8882 → **0,9072**, pire paire **0,8437**. Et **ajouter des neurones au-delà de 64 n'aide plus** (0,5923 → 0,5868 → 0,5812) : le mur est la donnée, pas la capacité.
-
-**Et c'est le plus distribuable de tous** : `A` et `B` sont **aléatoires et gelés** — aucune coordination entre nœuds — seule la lecture `W` (64×896) s'ajuste, par blocs indépendants.
+Voilà le diagnostic complet. Ni proportionnel (donc pas la norme finale seule), ni du bruit de threading (le moteur est déterministe) : c'est une **déviation angulaire de 0,2–0,4 %** qui naît après la couche 0.
 
 ## 3. Travail accompli
 
@@ -6253,7 +6251,7 @@ Tout est commité, 77 tests verts, `REPRISE.md` et `reports/rapport-pont-semanti
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6368 autres
+- … et 6409 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -6381,7 +6379,7 @@ Tout est commité, 77 tests verts, `REPRISE.md` et `reports/rapport-pont-semanti
 
 ## 5. Erreurs rencontrées
 
-373 sorties en erreur ou divergentes. Les premières :
+374 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -6951,4 +6949,5 @@ Tout est commité, 77 tests verts, `REPRISE.md` et `reports/rapport-pont-semanti
 - Le pont rang-1 est l'artefact, et la sonde est un échec de protocole — dit tel quel  Artefact : pont_semantique_r1.npz (W0 896x1, P 896x1, moy 896) — ~1800 nomb
 - Ajouter des neurones DÉTRUIT la fidélité ; ajouter une COUCHE la sauve  Mesure corrigée dans l'espace complet (l'ancienne comparait dans le sous-espace du rang 
 - LA COUCHE RÉCURRENTE GAGNE : réservoir 64 neurones, 0,59 fidélité / 0,91 invariance / 0,84 pire paire  s_t = (1-a)s_(t-1) + a·tanh(A·s_(t-1) + B·e_t), A et B AL
+- Coût du professeur : 77-83 % des traces sont des couches jamais lues  Mesuré : les traces stockent TOUTES les couches du professeur (24 pour le 0.5B, 48 pour le
 
