@@ -159,6 +159,48 @@ là où le matvec f32 vectorise bien. Le gain vient du chargement, pas du calcul
 Le noyau AVX2 du pool (`matvec_dense_i8`) est le pas suivant, et il est déjà
 écrit.
 
+### 4quater-terdecies. **La passe tournait sur UN CŒUR SUR 40** — et ce qui reste ouvert (06/10, 00h05)
+
+`/usr/bin/time -v` sur 8 couches : **`Percent of CPU this job got: 99%`**, et
+`File system inputs: 232` — **119 Ko lus en 47 s**. Tout était en cache, et tout
+le temps était du calcul **sur un seul fil**, alors que la machine a 40 cœurs.
+
+C'est la mesure la plus utile du bloc, et elle réfute une seconde fois mon modèle
+« c'est le disque » : à chaud, la passe était du calcul pur, monofil.
+
+**Le travail par (expert, jeton) est indépendant, donc il se parallélise.**
+`MoeK3::avant_lot` découpe maintenant les tâches en 16 tranches, chaque fil a ses
+tampons, et l'accumulation se refait **dans l'ordre des experts** — le résultat
+est bit à bit celui du séquentiel, seul le temps change.
+
+**Ce que ça a donné, et il faut le dire tel quel : ×1,08 seulement** sur un essai
+à froid (46,94 s → 43,46 s), avec un taux CPU qui ne monte qu'à 111 %. Puis, une
+fois le cache chaud, la même passe à 8 couches tombe à **24 078 ms** — mais la
+version **f32 séquentielle** donne **21 800 ms**, donc *plus rapide*.
+
+**Ce qui est établi :**
+
+| mesure | valeur |
+|---|---|
+| passe à froid, 8 couches | 43,5 s · CPU 111 % |
+| passe à chaud, 8 couches, noyau MXFP4 parallèle | 24 078 ms (chargement 5,8 · attention 6,8 · FFN 8,7) |
+| passe à chaud, 8 couches, f32 séquentiel | **21 800 ms** (4,6 · 6,7 · 8,4) |
+| passe complète 93 couches | 1 516 430 ms → 2,95 s par couple (couche, jeton) |
+| soit, à chaud, par couple | **0,75 s** — **quatre fois moins** |
+
+**Ce qui reste OUVERT, et que je n'ai pas résolu** : pourquoi la passe complète
+coûte 4× plus par couche que la même passe à chaud, alors que réduire de 25 % le
+nombre d'experts lus (le regroupement) ne change rien. L'hypothèse la plus
+plausible est la **dispersion** : lire les blocs d'un expert éparpillés dans un
+fichier de 1,5 To coûte des **déplacements** (de l'ordre de 10 ms chacun sur ce
+disque), pas de la bande passante — 144 lectures par couple (couche, jeton) ×
+10 ms ≈ 1,4 s, ce qui est l'ordre de grandeur observé. Mais **ce n'est pas
+mesuré**, et une hypothèse non mesurée n'est pas une conclusion.
+
+**Le prochain pas, pour trancher** : compter les défauts de page majeurs
+(`/proc/PID/stat`, champ `majflt`) et le temps d'attente disque, sur une passe
+complète — deux chiffres qui séparent « bande passante » de « dispersion ».
+
 ### 4quater-duodecies. Le regroupement par experts : le mécanisme marche, le temps ne suit pas (05/10, 23h35)
 
 `MoeK3::avant_lot` regroupe les jetons par expert : le routeur de chacun, puis

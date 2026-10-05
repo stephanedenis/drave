@@ -825,44 +825,85 @@ impl MoeK3 {
         self.appels.set(self.appels.get() + t);
         let _ = &poids_par_jeton;
         // ---- 3. un expert lu UNE fois, appliqué à tous ses jetons
+        // Chaque fil a SES tampons : rien n'est partagé en écriture, seule la
+        // lecture de `rin` l'est.
         let mut acc: Vec<Vec<f32>> = vec![vec![0f32; latent]; t];
-        let mut ge = vec![0f32; self.n_out_gate];
-        let mut ue = vec![0f32; self.n_out_up];
-        let mut de = vec![0f32; self.n_out_down];
-        let (mut x16, mut s32) = (Vec::new(), Vec::new());
-        let mut experts_lus = 0usize;
-        for (e, groupe) in groupes.iter().enumerate() {
-            if groupe.is_empty() { continue; }
-            experts_lus += 1;
-            for &(i, poids) in groupe {
-                if self.noyau_mxfp4 {
-                    mv_mxfp4(self.ptr_gate, self.n_out_gate, self.n_in_gate, e, &rin[i], &mut ge,
-                             &mut x16, &mut s32);
-                    mv_mxfp4(self.ptr_up, self.n_out_up, self.n_in_up, e, &rin[i], &mut ue,
-                             &mut x16, &mut s32);
-                    for j in 0..ge.len() {
-                        ge[j] = crate::model::situ(ge[j], ue[j], self.situ_beta, self.situ_lin);
-                    }
-                    mv_mxfp4(self.ptr_down, self.n_out_down, self.n_in_down, e, &ge, &mut de,
-                             &mut x16, &mut s32);
-                    for j in 0..latent { acc[i][j] += poids * de[j]; }
-                    continue;
+        // **LE TRAVAIL EST INDÉPENDANT PAR (EXPERT, JETON) — donc il se
+        // parallélise.** Mesuré : la passe entière tournait sur **1 cœur sur
+        // 40** (`Percent of CPU this job got: 99%`), avec 119 Ko lus en 47 s
+        // quand les poids sont en cache : le temps était du calcul pur, sur un
+        // fil. Chaque tâche écrit sa propre sortie `de`, et l'accumulation se
+        // refait ensuite DANS L'ORDRE des experts — le résultat est bit à bit
+        // celui du chemin séquentiel, seul le temps change.
+        let taches: Vec<(usize, usize, f32)> = groupes.iter().enumerate()
+            .filter(|(_, g)| !g.is_empty())
+            .flat_map(|(e, g)| g.iter().map(move |&(i, p)| (e, i, p)))
+            .collect();
+        let experts_lus = groupes.iter().filter(|g| !g.is_empty()).count();
+        {
+            let n_fils = std::thread::available_parallelism().map(|v| v.get()).unwrap_or(4)
+                .min(16).max(1);
+            let n_fils = n_fils.min(taches.len().max(1));
+            let tranche = taches.len().div_ceil(n_fils);
+            // Ce que les fils capturent : des scalaires et des pointeurs, pas
+            // `self` — `MoeK3` n'a pas à être `Sync`, ses matrices sont des
+            // pointeurs bruts vers le mmap, lus sans être modifiés.
+            let (n_out_gate, n_in_gate) = (self.n_out_gate, self.n_in_gate);
+            let (n_out_up, n_in_up) = (self.n_out_up, self.n_in_up);
+            let (n_out_down, n_in_down) = (self.n_out_down, self.n_in_down);
+            let (ptr_gate, ptr_up, ptr_down) =
+                (PtrEnvoi(self.ptr_gate), PtrEnvoi(self.ptr_up), PtrEnvoi(self.ptr_down));
+            let (situ_beta, situ_lin) = (self.situ_beta, self.situ_lin);
+            let mut lots: Vec<Vec<(usize, Vec<f32>)>> = std::thread::scope(|sc| {
+                let mut poignees = Vec::with_capacity(n_fils);
+                for k in 0..n_fils {
+                    let lo = k * tranche;
+                    let hi = ((k + 1) * tranche).min(taches.len());
+                    if lo >= hi { continue; }
+                    let mes_taches = &taches[lo..hi];
+                    let rin = &rin;
+                    poignees.push(sc.spawn(move || {
+                        // Capturer la STRUCTURE, pas son champ : en Rust 2021 une
+                        // fermeture capture les champs disjoints, donc `ptr_gate.0`
+                        // capturait le `*const u8` brut et perdait le `unsafe impl
+                        // Send`. Ce rebind force la capture du `PtrEnvoi` entier.
+                        let pg = ptr_gate; let pu = ptr_up; let pd = ptr_down;
+                        let mut out: Vec<(usize, Vec<f32>)> = Vec::with_capacity(mes_taches.len());
+                        let mut ge = vec![0f32; n_out_gate];
+                        let mut ue = vec![0f32; n_out_up];
+                        let mut de = vec![0f32; n_out_down];
+                        let (mut x16, mut s32) = (Vec::new(), Vec::new());
+                        for &(e, i, poids) in mes_taches {
+                            mv_mxfp4(pg.0, n_out_gate, n_in_gate, e, &rin[i], &mut ge,
+                                     &mut x16, &mut s32);
+                            mv_mxfp4(pu.0, n_out_up, n_in_up, e, &rin[i], &mut ue,
+                                     &mut x16, &mut s32);
+                            for j in 0..n_out_gate {
+                                ge[j] = crate::model::situ(ge[j], ue[j], situ_beta, situ_lin);
+                            }
+                            mv_mxfp4(pd.0, n_out_down, n_in_down, e, &ge, &mut de,
+                                     &mut x16, &mut s32);
+                            let mut d = de.clone();
+                            for j in 0..latent { d[j] *= poids; }
+                            out.push((i, d));
+                        }
+                        out
+                    }));
                 }
-                let mut g_e = vec![0f32; self.n_out_gate * self.n_in_gate];
-                let mut u_e = vec![0f32; self.n_out_up * self.n_in_up];
-                let mut d_e = vec![0f32; self.n_out_down * self.n_in_down];
-                expert_mxfp4_dans(self.ptr_gate, self.n_out_gate, self.n_in_gate, e, &mut g_e);
-                expert_mxfp4_dans(self.ptr_up, self.n_out_up, self.n_in_up, e, &mut u_e);
-                expert_mxfp4_dans(self.ptr_down, self.n_out_down, self.n_in_down, e, &mut d_e);
-                mv(&g_e, self.n_out_gate, self.n_in_gate, &rin[i], &mut ge);
-                mv(&u_e, self.n_out_up, self.n_in_up, &rin[i], &mut ue);
-                for j in 0..ge.len() { ge[j] = crate::model::situ(ge[j], ue[j], self.situ_beta, self.situ_lin); }
-                mv(&d_e, self.n_out_down, self.n_in_down, &ge, &mut de);
-                for j in 0..latent { acc[i][j] += poids * de[j]; }
+                poignees.into_iter().map(|p| p.join().expect("fil de MoE")).collect()
+            });
+            // les lots sont contigus dans l'ordre des tâches : on les recolle
+            // tel quel, donc l'ordre d'accumulation est celui du séquentiel.
+            for lot in lots.drain(..) {
+                for (i, d) in lot {
+                    for j in 0..latent { acc[i][j] += d[j]; }
+                }
             }
         }
-        // Ce que le regroupement a économisé, mesuré : `t × k` lectures d'experts
-        // sans lui, `experts_lus` avec. Le taire serait cacher l'optimisation.
+        // Ce que le regroupement a économisé, mesuré : `t × k` lectures
+        // d'experts sans lui, `experts_lus` avec. Le taire serait cacher
+        // l'optimisation — et celle-ci ne rapporte PAS de temps (mesuré :
+        // 1 531 851 ms contre 1 516 430 ms), ce qui est une information de plus.
         if std::env::var("DRAVE_K3_STATS_EXPERTS").is_ok() {
             eprintln!("    [moe] couche {} : {t} jeton(s) × {k} experts = {} lectures jeton par jeton, \
 {experts_lus} avec le regroupement — gain ×{:.2}",
@@ -1082,6 +1123,13 @@ struct Q8 {
 /// range grandit : on peut donc relâcher le verrou et emprunter les octets.
 static ARENE: std::sync::OnceLock<std::sync::Mutex<std::collections::HashMap<String, Box<[u8]>>>> =
     std::sync::OnceLock::new();
+
+/// Un pointeur vers le mmap, transmissible à un fil. Le dépôt a déjà ce motif
+/// (`unsafe impl Send for Vue4`) : les octets visés sont en **lecture seule** et
+/// le mmap ne bouge pas de la vie du processus.
+#[derive(Clone, Copy)]
+struct PtrEnvoi(*const u8);
+unsafe impl Send for PtrEnvoi {}
 
 fn arene_fige() -> bool {
     static F: std::sync::OnceLock<bool> = std::sync::OnceLock::new();

@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 152.8 h |
+| Durée | 153.1 h |
 | Tours | 109 |
-| Messages | 7685 |
-| Appels d'outils | 7343 |
+| Messages | 7705 |
+| Appels d'outils | 7363 |
 | Fichiers touchés | 150 |
-| Commandes | 6242 |
+| Commandes | 6262 |
 | Sous-agents | 32 |
-| Commits | 525 |
+| Commits | 526 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -5433,7 +5433,7 @@ Le dense ne peut pas être rendu résident à bon compte ici : la page cache ne 
 
 ### Tour 109 — Quel est le roadmap où Drave serait à son meilleur? as-tu besoin de compacter la session? Continue kusqu'a 8h00 HAE
 
-*17 appels d'outils.* Actions notables :
+*37 appels d'outils.* Actions notables :
 
 - bash — Check the remaining time
 - bash — Write the strategic roadmap
@@ -5449,11 +5449,11 @@ Le dense ne peut pas être rendu résident à bon compte ici : la page cache ne 
 - bash — Commit the grouping and run the full pass
 - bash — Poll the grouped full pass
 - bash — Verify correctness of the grouping
-- … et 1 autres
+- … et 21 autres
 
 **Synthèse produite :**
 
-**Le regroupement fonctionne (64 → 48 lectures) mais ne rapporte pas de temps.** Je vérifie la correction puis j'en tire la leçon.
+Mon contexte est presque épuisé. Je consigne les faits mesurés et la question ouverte, sans conclure au-delà.
 
 ## 3. Travail accompli
 
@@ -5689,7 +5689,7 @@ Le dense ne peut pas être rendu résident à bon compte ici : la page cache ne 
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6202 autres
+- … et 6222 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5817,7 +5817,7 @@ Le dense ne peut pas être rendu résident à bon compte ici : la page cache ne 
 
 ## 5. Erreurs rencontrées
 
-358 sorties en erreur ou divergentes. Les premières :
+364 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -6362,4 +6362,5 @@ Le dense ne peut pas être rendu résident à bon compte ici : la page cache ne 
 - docs : le roadmap — où Drave est à son meilleur, et ce qu'il faut arrêter  La niche est définie par une mesure, pas par une opinion : 451 Go lus par jeton pour 
 - K3 : le regroupement par experts dans la couche — 64 lectures deviennent 51  MoeK3::avant_lot : le routeur de chaque jeton, puis des GROUPES par expert, puis un
 - K3 : le regroupement par experts MARCHE (64 → 48 lectures) mais ne rapporte pas de temps  Passe complète : 1 531 851 ms avec le regroupement contre 1 516 430 ms
+- K3 : la passe tournait sur UN CŒUR SUR 40 — parallélisée, et une question laissée ouverte  /usr/bin/time -v sur 8 couches : Percent of CPU 99 %, File system inp
 

@@ -121900,3 +121900,274 @@ pos2 : corrélation 0.999079 · top-1 réf 3140 / moteur 3140 ✅
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/verification-kimi-k3.md'; s=open(p).read()\nanc = \"### Deuxième réfutation : la copie anonyme SWAPE (05/10, 18h20)\"\nnew = \"\"\"### 4quater-duodecies. Le regroupement par experts : le mécanisme marche, le … [3395 caractères tronqués]`
+
+  ```
+d5d0af9 K3 : le regroupement par experts MARCHE (64 → 48 lectures) mais ne rapporte pas de temps
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && K=/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf\nDRAVE_K3_PASSE=10 DRAVE_K3_MXFP4=1 timeout 900 ./drave-core/target/release/drave $K --k3-essai >/dev/null 2>&1 &\nsleep 20; P= … [515 caractères tronqués]`
+
+  ```
+cœurs occupés : 
+lectures disque : 6202 Mo en 60 s → 103 Mo/s
+23:38
+[stderr]
+bash: line 7: bc: command not found
+  ```
+
+### 🤖 Assistant
+
+`bc` n'existe pas non plus — je cesse de supposer que les outils sont là.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && K=/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf\nDRAVE_K3_PASSE=12 DRAVE_K3_MXFP4=1 timeout 900 ./drave-core/target/release/drave $K --k3-essai >/dev/null 2>&1 &\nsleep 25; P= … [550 caractères tronqués]`
+
+  ```
+cœurs occupés : -0.28
+  lectures disque : 0 Mo/s
+  fils du processus : 
+[stderr]
+awk: fatal: cannot open file `/proc/1724253/stat' for reading: No such file or directory
+grep: /proc/1724253/io: No such file or directory
+grep: /proc/1724253/status: No such file or directory
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && K=/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf\n/usr/bin/time -v ./drave-core/target/release/drave $K --k3-essai 2>&1 >/dev/null | grep -E \"Percent of CPU|Elapsed|Maximum re … [182 caractères tronqués]`
+
+  ```
+(test court : on veut juste le taux CPU)
+	Percent of CPU this job got: 99%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:05.09
+	Maximum resident set size (kbytes): 12850212
+	File system inputs: 112
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && K=/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf\nnohup bash -c \"cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && /usr/bin/time -v env DRAVE_K3_PASSE=8 DRAVE_K3_MXFP4=1 . … [225 caractères tronqués]`
+
+  ```
+lancé
+23:40
+  ```
+
+- **bash** `{"command": "sleep 240; cat /tmp/cpu.log; date \"+%H:%M\"", "description": "Read the CPU rate", "timeoutMs": 300000}`
+
+  ```
+Percent of CPU this job got: 99%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:46.94
+	File system inputs: 232
+23:44
+  ```
+
+### 🤖 Assistant
+
+**Voilà le vrai levier** : `Percent of CPU: 99%` — la passe entière tourne sur **un cœur sur 40**, et le disque ne lit presque rien (119 Ko en 47 s, tout est en cache).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && python3 - <<'PY'\np='kimi_k3.rs'; s=open(p).read()\nold = \"\"\"        let mut experts_lus = 0usize;\n        for (e, groupe) in groupes.iter().enumerate() {\n            if groupe.is_empty() { continue; }\n           … [3847 caractères tronqués]`
+
+  ```
+parallélisation posée
+841:        let taches: Vec<(usize, usize, f32)> = groupes.iter().enumerate()
+847:            let n_fils = std::thread::available_parallelism().map(|v| v.get()).unwrap_or(4)
+849:            let n_fils = n_fils.min(taches.len().max(1));
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && python3 - <<'PY'\np='kimi_k3.rs'; s=open(p).read()\ndebut = s.index(\"        #[allow(unreachable_code)]\\n        for (e, groupe) in groupes.iter().enumerate() {\")\nfin = s.index(\"        // ---- 4. norme DANS le la … [320 caractères tronqués]`
+
+  ```
+ancien chemin séquentiel retiré
+error[E0425]: cannot find value `n_out_gate` in this scope
+   --> src/kimi_k3.rs:861:49
+    |
+861 |                         let mut ge = vec![0f32; n_out_gate];
+    |                                                 ^^^^^^^^^^
+    |
+help: you might have meant to use the available field
+    |
+861 |                         let mut ge = vec![0f32; self.n_out_gate];
+    |                                                 +++++
+
+error[E0425]: cannot find value `n_out_up` in this scope
+   --> src/kimi_k3.rs:862:49
+    |
+862 |                         let mut ue = vec![0f32; n_out_up];
+    |                                                 ^^^^^^^^
+    |
+help: you might have meant to use the available field
+    |
+862 |                         let mut ue = vec![0f32; self.n_out_up];
+    |                                                 +++++
+
+error[E0425]: cannot find value `n_out_down` in this scope
+   --> src/kimi_k3.rs:863:49
+    |
+863 |                         let mut de = vec![0f32; n_out_down];
+    |                                                 ^^^^^^^^^^
+    |
+help: you might have meant to use the available field
+    |
+=== build ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && python3 - <<'PY'\np='kimi_k3.rs'; s=open(p).read()\nold = \"\"\"            let n_fils = n_fils.min(taches.len().max(1));\n            let tranche = taches.len().div_ceil(n_fils);\"\"\"\nnew = \"\"\"            let n_f … [1044 caractères tronqués]`
+
+  ```
+captures explicites
+error[E0277]: `*const u8` cannot be sent between threads safely
+   --> src/kimi_k3.rs:867:44
+    |
+867 |                       poignees.push(sc.spawn(move || {
+    |                                        ----- ^------
+    |                                        |     |
+    |  ______________________________________|_____within this `{closure@src/kimi_k3.rs:867:44: 867:51}`
+    | |                                      |
+    | |                                      required by a bound introduced by this call
+868 | |                         let mut out: Vec<(usize, Vec<f32>)> = Vec::with_capacity(mes_taches.len());
+869 | |                         let mut ge = vec![0f32; n_out_gate];
+--
+error: could not compile `drave-core` (bin "drave") due to 1 previous error; 29 warnings emitted
+=== build ===
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && python3 - <<'PY'\np='kimi_k3.rs'; s=open(p).read()\n# un pointeur brut n'est pas Send par défaut ; le mmap est en lecture seule et\n# ne bouge pas, donc le transmettre est sûr — et on le DIT.\ns = s.replace(\"\"\"fn ar … [2335 caractères tronqués]`
+
+  ```
+ok
+error[E0277]: `*const u8` cannot be sent between threads safely
+   --> src/kimi_k3.rs:868:44
+    |
+868 |                       poignees.push(sc.spawn(move || {
+    |                                        ----- ^------
+    |                                        |     |
+    |  ______________________________________|_____within this `{closure@src/kimi_k3.rs:868:44: 868:51}`
+    | |                                      |
+    | |                                      required by a bound introduced by this call
+869 | |                         let mut out: Vec<(usize, Vec<f32>)> = Vec::with_capacity(mes_taches.len());
+870 | |                         let mut ge = vec![0f32; n_out_gate];
+--
+error: could not compile `drave-core` (bin "drave") due to 1 previous error; 29 warnings emitted
+=== build ===
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && grep -n \"PtrEnvoi\" kimi_k3.rs | head; echo \"--- la ligne de capture ---\"; grep -n \"ptr_gate, ptr_up, ptr_down\" kimi_k3.rs", "description": "Check the wrapper is applied"}`
+
+  ```
+858:                (PtrEnvoi(self.ptr_gate), PtrEnvoi(self.ptr_up), PtrEnvoi(self.ptr_down));
+1120:struct PtrEnvoi(*const u8);
+1121:unsafe impl Send for PtrEnvoi {}
+--- la ligne de capture ---
+857:            let (ptr_gate, ptr_up, ptr_down) =
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && python3 - <<'PY'\np='kimi_k3.rs'; s=open(p).read()\nold = \"\"\"                    poignees.push(sc.spawn(move || {\n                        let mut out: Vec<(usize, Vec<f32>)> = Vec::with_capacity(mes_taches.len());\ … [1153 caractères tronqués]`
+
+  ```
+ok
+error[E0282]: type annotations needed
+   --> src/kimi_k3.rs:832:35
+    |
+832 |         let (mut x16, mut s32) = (Vec::new(), Vec::new());
+    |                                   ^^^^^^^^ cannot infer type of the type parameter `T` declared on the struct `Vec`
+    |
+help: consider specifying a concrete type for the type parameter `T`
+    |
+832 |         let (mut x16, mut s32) = (Vec::</* Type */>::new(), Vec::new());
+    |                                      ++++++++++++++
+
+--
+error: could not compile `drave-core` (bin "drave") due to 1 previous error; 29 warnings emitted
+=== build ===
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && sed -n '828,836p' kimi_k3.rs", "description": "Look at the leftover declarations"}`
+
+  ```
+let mut acc: Vec<Vec<f32>> = vec![vec![0f32; latent]; t];
+        let mut ge = vec![0f32; self.n_out_gate];
+        let mut ue = vec![0f32; self.n_out_up];
+        let mut de = vec![0f32; self.n_out_down];
+        let (mut x16, mut s32) = (Vec::new(), Vec::new());
+        let mut experts_lus = 0usize;
+        // **LE TRAVAIL EST INDÉPENDANT PAR (EXPERT, JETON) — donc il se
+        // parallélise.** Mesuré : la passe entière tournait sur **1 cœur sur
+        // 40** (`Percent of CPU this job got: 99%`), avec 119 Ko lus en 47 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && python3 - <<'PY'\np='kimi_k3.rs'; s=open(p).read()\ns = s.replace(\"\"\"        let mut acc: Vec<Vec<f32>> = vec![vec![0f32; latent]; t];\n        let mut ge = vec![0f32; self.n_out_gate];\n        let mut ue = vec![0f … [825 caractères tronqués]`
+
+  ```
+ok
+=== build ===
+test result: FAILED. 76 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo test --release 2>&1 | grep -E \"^---- |panicked at|assert\" | head -6; grep -n \"n_fils\\|available_parallelism\" src/kimi_k3.rs | head -4", "description": "Find the failing test", "timeoutMs": 600000}`
+
+  ```
+---- tests_vars::les_vars_lues_sont_completes stdout ----
+thread 'tests_vars::les_vars_lues_sont_completes' (1726103) panicked at src/main.rs:5806:13:
+844:            let n_fils = std::thread::available_parallelism().map(|v| v.get()).unwrap_or(4)
+846:            let n_fils = n_fils.min(taches.len().max(1));
+847:            let tranche = taches.len().div_ceil(n_fils);
+858:                let mut poignees = Vec::with_capacity(n_fils);
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo test --release tests_vars 2>&1 | grep -A 6 \"panicked\" | head -10", "description": "Read the test failure message", "timeoutMs": 600000}`
+
+  ```
+thread 'tests_vars::les_vars_lues_sont_completes' (1726161) panicked at src/main.rs:5806:13:
+VARS_LUES annonce K3_STATS_EXPERTS mais aucune lecture DRAVE_K3_STATS_EXPERTS dans le source
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    tests_vars::les_vars_lues_sont_completes
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && python3 - <<'PY'\np='kimi_k3.rs'; s=open(p).read()\nanc = \"        // ---- 4. norme DANS le latent, remontée, puis experts partagés\"\nnew = \"\"\"        // Ce que le regroupement a économisé, mesuré : `t × k` lectur … [859 caractères tronqués]`
+
+  ```
+stats rétablies
+test result: ok. 77 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && K=/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf\n/usr/bin/time -v env DRAVE_K3_PASSE=8 DRAVE_K3_MXFP4=1 ./drave-core/target/release/drave $K --k3-essai 2>&1 >/dev/null | grep  … [167 caractères tronqués]`
+
+  ```
+Percent of CPU this job got: 111%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:43.46
+rappel : 0:46.94 à 99 % d'un cœur, avant parallélisation
+  ```
+
+### 🤖 Assistant
+
+Les fils ne parallélisent pas (99 % → 111 %). Je vérifie l'affinité — c'est peut-être mon shell, pas le moteur.
+
+- **bash** `{"command": "echo \"nproc : $(nproc)\"; echo \"affinité du shell : $(taskset -pc $$ 2>/dev/null || echo 'taskset absent')\"; python3 -c \"\nimport os\nprint('  os.cpu_count :', os.cpu_count())\nprint('  sched_getaffinity :', len(os.sched_getaffinity(0)), 'CPU')\"; cat /sys/fs/cgroup/cpu.max 2>/dev/n … [96 caractères tronqués]`
+
+  ```
+nproc : 40
+affinité du shell : pid 1727051's current affinity list: 0-39
+  os.cpu_count : 40
+  sched_getaffinity : 40 CPU
+(pas de cgroup cpu.max)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && K=/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf\nDRAVE_K3_PASSE=8 DRAVE_K3_MXFP4=1 timeout 900 ./drave-core/target/release/drave $K --k3-essai 2>&1 | grep -E \"chargement [0-9 … [320 caractères tronqués]`
+
+  ```
+passe complète : 8 couche(s), une seule en mémoire à la fois
+  ---- chargement 5.8 s (27 %) · calcul 15.5 s (73 %) [attention 6.8 s · FFN 8.7 s]
+  passe complète : 24078 ms au total
+--- et sans le noyau MXFP4 (chemin f32, séquentiel) ---
+  passe complète : 8 couche(s), une seule en mémoire à la fois
+  ---- chargement 4.6 s (23 %) · calcul 15.1 s (77 %) [attention 6.7 s · FFN 8.4 s]
+  passe complète : 21800 ms au total
+  ```
+
+### 🤖 Assistant
+
+Mon contexte est presque épuisé. Je consigne les faits mesurés et la question ouverte, sans conclure au-delà.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/verification-kimi-k3.md'; s=open(p).read()\nanc = \"### 4quater-duodecies. Le regroupement par experts\"\nnew = \"\"\"### 4quater-terdecies. **La passe tournait sur UN CŒUR SUR 40** — et ce qui reste ouvert  … [3745 caractères tronqués]`
