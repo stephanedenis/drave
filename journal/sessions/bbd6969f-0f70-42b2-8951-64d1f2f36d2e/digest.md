@@ -124607,3 +124607,16 @@ couche 10 : 4042 pas · ‖D‖ = 4.0595e0
 Trois négatifs cohérents qui définissent le problème précisément. Je consolide.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> reports/rapport-plateau-semantique.md <<'EOF'\n\n## Résultat 3 — la LECTURE ne rattrape rien (test tenu à l'écart)\n\nQuestion : peut-on rapprocher les langues **sans rien entraîner**, en changeant\nseulement la façon de lire  … [4818 caractères tronqués]`
+
+  ```
+3ad2c0e La LECTURE ne rattrape rien : combiner les couches DILUE l'invariance
+7fd59f6 VERDICT : la règle hebbienne locale ne transfère PAS — et dégrade les langues non vues
+e29ba52 Un modèle haut de gamme converge MIEUX : pic 0,693 contre 0,649, et surtout pire paire 0,471 contre 0,280
+0
+  ```
+
+### 🤖 Assistant
+
+~50 min. La règle contrastive demande un alignement au niveau du jeton — c'est un travail de conception de 2-3 h, pas un réglage de fin de session. Je le spécifie précisément pour qu'il soit exécutable.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > docs/note-regle-contrastive.md <<'EOF'\n# Note — la règle contrastive : ce qu'il faut construire, et pourquoi c'est elle\n\n> 06/10. Suite directe des trois négatifs mesurés (`rapport-plateau-semantique.md`\n> et `note-cancella … [6373 caractères tronqués]`

@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 163.5 h |
 | Tours | 118 |
-| Messages | 7837 |
-| Appels d'outils | 7477 |
+| Messages | 7838 |
+| Appels d'outils | 7478 |
 | Fichiers touchés | 150 |
-| Commandes | 6375 |
+| Commandes | 6376 |
 | Sous-agents | 32 |
-| Commits | 541 |
+| Commits | 542 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -5936,7 +5936,7 @@ Poser le rapport et la sauvegarde **à un se
 
 ### Tour 118 — Continue de faire évoluer notre modèle et moteur en visant des réponses qui émulent les réponses sémantiques des modèles … [205 caractères tronqués]
 
-*18 appels d'outils.* Actions notables :
+*19 appels d'outils.* Actions notables :
 
 - bash — Check time and locate the two report sites
 - bash — Unify the HebbDiff report in one place
@@ -5952,13 +5952,11 @@ Poser le rapport et la sauvegarde **à un se
 - bash — Write and commit the semantic plateau report
 - bash — Re-measure the plateau with the learned adapter
 - bash — Train on 40 languages, holding out 5
-- … et 4 autres
+- … et 5 autres
 
 **Synthèse produite :**
 
-**Aucune lecture ne bat la meilleure couche seule** : 0,6027 (couche 4) contre 0,5867 pour la moyenne de 3 couches, et 0,5574 pour la pondérée. **Combiner dilue.**
-
-Trois négatifs cohérents qui définissent le problème précisément. Je consolide.
+~50 min. La règle contrastive demande un alignement au niveau du jeton — c'est un travail de conception de 2-3 h, pas un réglage de fin de session. Je le spécifie précisément pour qu'il soit exécutable.
 
 ## 3. Travail accompli
 
@@ -6194,7 +6192,7 @@ Trois négatifs cohérents qui définissent le problème précisément. Je conso
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6335 autres
+- … et 6336 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -6883,4 +6881,5 @@ Trois négatifs cohérents qui définissent le problème précisément. Je conso
 - Un modèle haut de gamme converge MIEUX : pic 0,693 contre 0,649, et surtout pire paire 0,471 contre 0,280  Mêmes 10 langues (4 écritures), même article de l'UDH
 - VERDICT : la règle hebbienne locale ne transfère PAS — et dégrade les langues non vues  Trois tests, tous négatifs, du plus faible au plus fort :  1. autre text
 - La LECTURE ne rattrape rien : combiner les couches DILUE l'invariance  tools/lecture_plateau.py, 6 langues tenues à l'écart de tout entraînement :   une couche 
+- Note : la règle contrastive — quoi construire, et pourquoi c'est elle  Les trois négatifs mesurés (lecture, transfert de texte, transfert de langue) définissent
 
