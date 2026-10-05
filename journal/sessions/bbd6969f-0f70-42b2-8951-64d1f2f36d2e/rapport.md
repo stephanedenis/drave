@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 161.8 h |
-| Tours | 113 |
-| Messages | 7753 |
-| Appels d'outils | 7403 |
+| Durée | 161.9 h |
+| Tours | 114 |
+| Messages | 7758 |
+| Appels d'outils | 7406 |
 | Fichiers touchés | 150 |
-| Commandes | 6302 |
+| Commandes | 6305 |
 | Sous-agents | 32 |
-| Commits | 531 |
+| Commits | 532 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -273,6 +273,8 @@
 **Tour 112** — il faut arrêter de retomber systématiquement dans les solutions traditionneles à l'entrainement et aux autres problèmes. On doit les approcher avec des approches radicalement orientées vers des flux de données plus légers et surtout en mode événements. ainsi, pas de backprop traditionnel. On préférera laisser le monde des ffn pour permettre une rétroactivité négative sur des grappes d'activation r … [304 caractères tronqués]
 
 **Tour 113** — la sortie doit toujours être prévisible depuis son entrée. Malgré le hasard utilisé en base pour l'entrainement classique. une fois un modèle llm entrainé il est déterministe en principe. donc toujours oui. L'idée est ici de récupérer les premières couches d'entrée des grands modèles en supposant qu'il y ait une abstraction linguistique rendu à un certain niveau. c'est la couche d'entrée en sémant … [153 caractères tronqués]
+
+**Tour 114** — non, coucche 0-9 à distiller en modèle récursif avec isolation en grappes, idem pour 9-29, une fois que 0-9 est performant, ensuite on continue en fonction de nos observation, mais en dehors de 0-9 ça va nécessiter des corpus d'entrainement ou un émulateur stochastique des entrées sémantiques pour arriver à stimuler adéquatement les couches intermédiaires en distillation.
 
 ## 2. Déroulé, étape par étape
 
@@ -5659,23 +5661,45 @@ ce que la FFN ajoute      = flux_attn[L+1] − flux_ffn[L]
 
 **Synthèse produite :**
 
-**Ta première étape est mesurée, et elle donne un chiffre net.**
+**Ce que ça change dans ton plan, concrètement :**
 
-Similarité entre **« Le chat noir dort sur le tapis rouge. »** et **« The black cat sleeps on the red carpet. »**, couche par couche :
+Ton architecture devient :
 
-| couche | 0 | 4 | 9 | 17 | **23** | 30 | 42 | 47 |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|
-| similarité | 0,375 | 0,873 | 0,899 | 0,926 | **0,930** | 0,897 | 0,854 | 0,716 |
+```
+couches 0-9   du grand modèle   →  encodage linguistique   (gardé tel quel)
+couches 9-29  du grand modèle   →  PLATEAU SÉMANTIQUE      (à reproduire par ton récurrent)
+couches 30-47 du grand modèle   →  re-spécialisation        (gardé tel quel)
+```
 
-**Trois régimes, nets :**
+**Le bloc du milieu fait 21 couches sur 48 — 44 % de la profondeur**, et c'est là que sont les FFN les plus lourdes. C'est exactement ce que tu veux alléger, et la mesure dit *où*.
 
-- **couches 0-9** : la forme de surface domine — 0,375 → 0,899. C'est l'encodage linguistique.
-- **couches 9-29** : un **plateau sémantique** à 0,89-0,93. La représentation ne dépend plus de la langue. **C'est ton « niveau en sémantique pure ».**
-- **couches 30-47** : re-spécialisation vers la surface — 0,90 → 0,72. Le modèle redescend vers les jetons.
+**Et le point qui rend la distillation forward-only possible** : dans ce plateau, la représentation est **invariante à la langue** (0,93). Si elle est invariante à la langue, elle est probablement invariante à d'autres formes de surface — donc **le bloc du milieu calcule quelque chose d'abstrait**, et c'est *ça* qu'il faut reproduire, pas des paires de phrases. On peut l'apprendre sur les flux réels, sans passe arrière.
 
-**Le sommet est à la couche 23 sur 48** — le milieu exact. Ta supposition « on perd probablement les couches du milieu » tombe juste : c'est là que le traitement est le plus abstrait, donc le plus indépendant du modèle qui l'a produit.
+\## Ce qu'il faut vérifier avant d'aller plus loin, et je le dis
 
-**Et la coupe n'est pas un point, c'est une fenêtre** : le plateau fait ~20 couches de large (9→29). C'est cette fenêtre qui est candidate à être reproduite par ton modèle récurrent — pas « les premières N couches » puis le reste.
+1. **Une seule paire de phrases.** Le plateau doit être confirmé sur plusieurs paires — même sens, formes différentes (langues, voix passive, paraphrase, code/commentaire). C'est trois minutes par paire.
+2. **La similarité est mesurée sur la représentation TRANSPORTÉE** (DRVF v3, i8 avec échelle par bloc), pas sur la représentation exacte. C'est le bon périmètre pour Drave — c'est ce qu'on transporterait — mais ça doit être dit.
+3. **Le plateau peut n'être qu'un artefact** : deux phrases courtes et parallèles partagent beaucoup de structure. Il faut une paire **non parallèle** en contrôle (deux phrases de sens *différent*) pour voir si la similarité y monte aussi. Si oui, la mesure ne mesure rien.
+
+\## Ce que je propose maintenant
+
+**Le contrôle qui valide ou tue la mesure** : la même courbe sur une paire de sens **différent**, et sur deux ou trois paires supplémentaires. Si le plateau tient pour les paires de même sens et **pas** pour les autres, ton niveau sémantique est réel et localisé. Sinon, on a mesuré la ressemblance de forme, pas le sens.
+
+Puis, seulement après : reproduire le bloc 9-29 par un récurrent, en forward-only, sur les flux capturés — et juger avec la porte de correction.
+
+Tout est commité (`tools/invariance_semantique.py` réutilise le lecteur DRVF existant), 77 tests verts. Je lance le contrôle ?
+
+### Tour 114 — non, coucche 0-9 à distiller en modèle récursif avec isolation en grappes, idem pour 9-29, une fois que 0-9 est performa … [254 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Trace the flow for 192 tokens
+- bash — Measure how approximable the 0-9 block is
+- bash — Commit the approximability bound
+
+**Synthèse produite :**
+
+**Mesure faite, avec une borne honnête.**
 
 ## 3. Travail accompli
 
@@ -5911,7 +5935,7 @@ Similarité entre **« Le chat noir dort sur le tapis rouge. »** et **« The bl
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6262 autres
+- … et 6265 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -6590,4 +6614,5 @@ Similarité entre **« Le chat noir dort sur le tapis rouge. »** et **« The bl
 - Morcellement des experts : l'élagage par fréquence, mesuré — la fréquence n'est pas l'importance  Qwen3-30B-A3B, scénario code (384 jetons du source de ce dépôt
 - Note : la voie événementielle — prédire une couche pour ne transporter que l'imprévu  Part d'une objection juste : arrêter de retomber sur l'entraînement classi
 - Mesure : le plateau sémantique est à la couche 23 sur 48 — la coupe est une FENÊTRE, pas un point  Invariance à la forme de surface, couche par couche : « Le ch
+- Bloc 0-9 : première borne d'approximabilité — 19 % de la variance après dix couches avec DEUX directions  tools/approximabilite_bloc.py, trace DRVF de 192 jeton
 

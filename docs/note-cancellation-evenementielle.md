@@ -85,3 +85,45 @@ reconstruire la qualité du modèle de référence : remplacer une FFN par un
 prédicteur change le modèle, et la porte de correction dira ce qui est perdu.
 Mais la question préalable — *y a-t-il quelque chose à annuler ?* — se tranche
 **avant** d'écrire quoi que ce soit, et c'est elle qu'on mesure d'abord.
+
+
+## 6. Le bloc 0-9 est-il approximable ? Première borne (06/10)
+
+Idée précisée par Stéphane : **distiller les couches 0-9 en modèle récurrent avec
+isolation en grappes**, en commençant par elles parce que **leur entrée est du
+texte** — donc échantillonnable sans rien simuler. Au-delà (9-29), l'entrée vit
+dans l'espace sémantique et il faudra un corpus ou un émulateur stochastique.
+
+Mesure : `tools/approximabilite_bloc.py` sur une trace DRVF de 192 jetons de code
+(193 positions), bloc `0 → k`, avec un approximant **délibérément pauvre** — une
+combinaison linéaire de **2 colonnes** de l'entrée sur 2048, trouvée par
+recherche aléatoire, sur les 8 sorties les plus énergétiques :
+
+| sortie | R² |
+|---|---:|
+| couche 1 | **0,580** |
+| couche 2 | 0,299 |
+| couche 4 | 0,313 |
+| couche 10 | **0,192** |
+
+**Ce que ça dit, et ce que ça ne dit pas.** Deux directions suffisent à expliquer
+58 % de la variance dès la première couche et 19 % après dix : le flux est
+**dominé par peu de directions**, ce qui est cohérent avec le plateau sémantique
+du § 5 (la représentation se resserre sur une variété indépendante de la langue).
+
+Mais c'est une **borne inférieure**, pas une performance : l'approximant est
+volontairement pauvre. Elle ne dit donc pas « un récurrent peut porter 0-9 » ;
+elle dit que **la cible n'est pas du bruit**, ce qui est la condition pour que
+l'essai vaille la peine.
+
+**Ce qu'il faut mesurer ensuite** pour transformer cette borne en réponse :
+1. la **régression linéaire complète** (crête, 2048×2048) — le vrai plafond
+   linéaire, celui au-dessus duquel il faut de la non-linéarité ;
+2. un **récurrent minimal** ajusté forward-only sur les flux, jugé par le
+   résidu qu'il laisse — et par la porte de correction sur la sortie du bloc ;
+3. **l'isolation en grappes** : mesurer si le résidu est localisé (peu de
+   coordonnées, peu de têtes) — si oui, les grappes sont naturelles ; si non,
+   elles seront arbitr... à vérifier plutôt qu'à supposer.
+
+**Et le piège du § 4 reste valable** : `--lot 1` est obligatoire pour avoir des
+événements (le mode lot est dense, 0 événement mesuré).

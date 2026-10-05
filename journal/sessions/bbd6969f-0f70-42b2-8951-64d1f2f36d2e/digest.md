@@ -123054,3 +123054,75 @@ Similarité entre **« Le chat noir dort sur le tapis rouge. »** et **« The bl
 **Et la coupe n'est pas un point, c'est une fenêtre** : le plateau fait ~20 couches de large (9→29). C'est cette fenêtre qui est candidate à être reproduite par ton modèle récurrent — pas « les premières N couches » puis le reste.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Mesure : le plateau sémantique est à la couche 23 sur 48 — la coupe est une FENÊTRE, pas un point\n\nInvariance à la forme de surface, couche par couche : « Le chat noir dort sur le\ntapis rouge. » co … [859 caractères tronqués]`
+
+  ```
+b36e46e Mesure : le plateau sémantique est à la couche 23 sur 48 — la coupe est une FENÊTRE, pas un point
+  ```
+
+### 🤖 Assistant
+
+**Ce que ça change dans ton plan, concrètement :**
+
+Ton architecture devient :
+
+```
+couches 0-9   du grand modèle   →  encodage linguistique   (gardé tel quel)
+couches 9-29  du grand modèle   →  PLATEAU SÉMANTIQUE      (à reproduire par ton récurrent)
+couches 30-47 du grand modèle   →  re-spécialisation        (gardé tel quel)
+```
+
+**Le bloc du milieu fait 21 couches sur 48 — 44 % de la profondeur**, et c'est là que sont les FFN les plus lourdes. C'est exactement ce que tu veux alléger, et la mesure dit *où*.
+
+**Et le point qui rend la distillation forward-only possible** : dans ce plateau, la représentation est **invariante à la langue** (0,93). Si elle est invariante à la langue, elle est probablement invariante à d'autres formes de surface — donc **le bloc du milieu calcule quelque chose d'abstrait**, et c'est *ça* qu'il faut reproduire, pas des paires de phrases. On peut l'apprendre sur les flux réels, sans passe arrière.
+
+## Ce qu'il faut vérifier avant d'aller plus loin, et je le dis
+
+1. **Une seule paire de phrases.** Le plateau doit être confirmé sur plusieurs paires — même sens, formes différentes (langues, voix passive, paraphrase, code/commentaire). C'est trois minutes par paire.
+2. **La similarité est mesurée sur la représentation TRANSPORTÉE** (DRVF v3, i8 avec échelle par bloc), pas sur la représentation exacte. C'est le bon périmètre pour Drave — c'est ce qu'on transporterait — mais ça doit être dit.
+3. **Le plateau peut n'être qu'un artefact** : deux phrases courtes et parallèles partagent beaucoup de structure. Il faut une paire **non parallèle** en contrôle (deux phrases de sens *différent*) pour voir si la similarité y monte aussi. Si oui, la mesure ne mesure rien.
+
+## Ce que je propose maintenant
+
+**Le contrôle qui valide ou tue la mesure** : la même courbe sur une paire de sens **différent**, et sur deux ou trois paires supplémentaires. Si le plateau tient pour les paires de même sens et **pas** pour les autres, ton niveau sémantique est réel et localisé. Sinon, on a mesuré la ressemblance de forme, pas le sens.
+
+Puis, seulement après : reproduire le bloc 9-29 par un récurrent, en forward-only, sur les flux capturés — et juger avec la porte de correction.
+
+Tout est commité (`tools/invariance_semantique.py` réutilise le lecteur DRVF existant), 77 tests verts. Je lance le contrôle ?
+
+
+## Tour 114
+
+### 👤 Utilisateur
+
+non, coucche 0-9 à distiller en modèle récursif avec isolation en grappes, idem pour 9-29, une fois que 0-9 est performant, ensuite on continue en fonction de nos observation, mais en dehors de 0-9 ça va nécessiter des corpus d'entrainement ou un émulateur stochastique des entrées sémantiques pour arriver à stimuler adéquatement les couches intermédiaires en distillation.
+
+### 🤖 Assistant
+
+Ta distinction est juste et importante : **la couche 0 a une entrée qu'on sait échantillonner** — du texte, donc des plongements — alors qu'au-delà de 0-9 l'entrée vit dans un espace sémantique qu'on ne sait produire qu'en faisant tourner le modèle. D'où : commencer par 0-9, où les données sont gratuites.
+
+Avant d'écrire un récurrent, la question qui décide : **F = couches 0-9 est-elle seulement approximable ?** Je la mesure.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=/home/stephane/FastNVMe/qwen3-30b-a3b-Q4_K_M.gguf\npython3 -c \"\nids=open('/tmp/ids_code_384.txt').read().strip().split(',')[:192]\nopen('/tmp/ids_192.txt','w').write(' '.join(ids)); print('invite :',len(ids),'jetons')\"\nrm -f /t … [329 caractères tronqués]`
+
+  ```
+invite : 192 jetons
+  trace : 103851840 octets
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/approximabilite_bloc.py <<'EOF'\n#!/usr/bin/env python3\n\"\"\"approximabilite_bloc.py — un bloc de couches est-il approximable par une\napplication BEAUCOUP plus simple ?\n\nQuestion préalable à toute distillation (idée  … [7236 caractères tronqués]`
+
+  ```
+# 48 couches · largeur 2048 · 193 positions
+# entrée : couche 0 · sortie : couche 10 (base 0)
+  R² d'une application linéaire creuse (2 colonnes de X) sur les 8 sorties les plus énergétiques :
+    couche 0 → couche 1   : R² ≈ 0.580
+    couche 0 → couche 2   : R² ≈ 0.299
+    couche 0 → couche 4   : R² ≈ 0.313
+    couche 0 → couche 10  : R² ≈ 0.192
+  ```
+
+### 🤖 Assistant
+
+**Mesure faite, avec une borne honnête.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/approximabilite_bloc.py'; s=open(p).read()\n# retirer la fonction qui PRÉTEND faire des moindres carrés et ne fait rien :\n# laisser un mensonge dans le dépôt coûte plus cher que le retirer.\ni=s.index(\"de … [3526 caractères tronqués]`
