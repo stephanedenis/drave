@@ -122318,3 +122318,334 @@ test result: ok. 77 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fin
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/verification-kimi-k3.md'; s=open(p).read()\nanc = \"### 4quater-terdecies. **La passe tournait sur UN CŒUR SUR 40**\"\nnew = \"\"\"### 4quater-quaterdecies. La question ouverte est TRANCHÉE : c'est la CAPACI … [3297 caractères tronqués]`
+
+  ```
+ea0e8ce K3 : la question ouverte est TRANCHÉE — c'est la CAPACITÉ du cache, pas la dispersion
+  ```
+
+### 🤖 Assistant
+
+**Oui, et la réponse déplace la cible.** Ce que j'ai mesuré cette nuit la dessine assez nettement.
+
+## Drave **est déjà** un outil quotidien — pour les modèles qui tiennent en RAM
+
+Le chiffre qui compte, mesuré au bloc 31 sur Qwen3-30B-A3B (30 B de poids, 3 B actifs) sur NVMe :
+
+| | prompt | débit |
+|---|---:|---:|
+| lot 1 | 33,2 s | 5,77 tok/s |
+| lot 192 | 21,0 s | **9,20 tok/s** |
+
+**9 tok/s, c'est plus vite qu'on ne lit.** Et le regroupement par experts y vaut ×1,58 — pour un modèle qui tient dans les 125 Go, on est dans le régime où Drave est simplement *utilisable*.
+
+**K3 n'est pas le cas quotidien** : c'est le cas extrême qui prouve que le moteur *finit* ce que les autres refusent. Ne pas confondre les deux, c'est le premier pas.
+
+## Ce qu'il faut optimiser pour l'autonomie quotidienne
+
+Trois leviers, dans l'ordre du rendement mesuré :
+
+1. **Choisir le modèle qui tient.** La question n'est pas « le plus gros » mais « le meilleur qui tient dans 125 Go ». C'est là que Drave gagne : il charge **en place**, sans copie ni requantification, donc il accepte des formats que les autres refusent (IQ1_M, IQ2_XXS, MXFP4 mélangés). Le parc a Qwen3-235B-A22B, GLM-5.3, gpt-oss-120b, MiniMax-H3 — tous sous porte.
+
+2. **Le décodage spéculatif.** C'est *le* multiplicateur, et le raisonnement est déjà mesuré : le regroupement par experts vaut ×1,58 **en préremplissage** et **rien en décodage** (un jeton n'a pas de voisins). Un brouillon de k jetons ramène le décodage dans le régime du lot — donc dans le régime où le gain existe. C'est le même levier pour K3 et pour Qwen.
+
+3. **La grappe**, pour la seule classe qui ne tient pas : personne ne découpe un modèle de 1,5 To pour le faire tourner sur des machines ordinaires.
+
+## Ce que cette nuit a ajouté, et qui compte pour la suite
+
+**La question ouverte est tranchée** : ce n'est pas la dispersion du disque, c'est la **capacité du cache**. Trois chiffres :
+
+- la prélecture de l'union est une **pessimisation** mesurée (6 min 57 contre 2 min 34, ×0,37) — éteinte par défaut ;
+- sans elle, 32 couches ne lisent que **5,9 Go** là où leurs experts en pèsent **27** : les deux tiers étaient déjà en cache ;
+- la passe de 93 couches, elle, demande **312 Go distincts** pour ~100 Go de cache.
+
+**Donc le temps suit le volume distinct à ramener, pas le nombre de lectures.** Ça clôt proprement le regroupement par experts — il ne pouvait pas aider, il évite de relire ce que le cache faisait déjà gratuitement.
+
+## Sur « optimiser des modèles existants »
+
+Le seul levier de *modèle* qui reste pour la classe hors-RAM est de **réduire le volume distinct** : un réordonnancement des experts par fréquence d'usage rendrait le jeu chaud contigu sur le disque. Mais ça demande 1,5 To d'écriture — et surtout, ça ne change rien pour un modèle qui tient en RAM, donc **ça ne sert pas le quotidien**.
+
+Pour le quotidien, la transformation utile n'est pas dans le modèle : elle est dans le **décodage spéculatif** et dans le **noyau** (la passe K3 tournait sur un cœur sur 40 — mesuré à `Percent of CPU: 99 %`).
+
+Veux-tu que j'attaque le décodage spéculatif sur un modèle qui tient — Qwen3-30B-A3B, où on a déjà la mesure de référence à 9,2 tok/s ? C'est le seul levier qui sert les deux classes à la fois.
+
+
+## Tour 111
+
+### 👤 Utilisateur
+
+Drave permet d'optimiser un modèle couche par couche en fonction des scénarios d'utilisation à l'entrés d'une couche. On peut donc construire un nouveau modèle en grappes fines par distillation afin d'avoir un moe extrèmement maléable où on retrouve les qualités des meilleurs modèles dans une version morcellée de façon optimale.
+
+### 🤖 Assistant
+
+⏵ Je vérifie ce que Drave a déjà pour ça — la trace de flux et son rejeu
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n '\"--flux-forcer\"\\|\"--trace-flux\"\\|TRACE_FLUX\\|FLUX_VERIF' drave-core/src/main.rs | head -6; echo \"=== ce que le rejeu permet ===\"; grep -n \"FluxRelecteur\" -A 12 drave-core/src/model.rs | grep -E \"///|struct|servie … [175 caractères tronqués]`
+
+  ```
+22:    "FLUX_VERIF", "GPU", "GPU_EXPERTS",
+677:            "--trace-flux" => { o.trace_flux = Some(suivant(i).clone()); 2 }
+678:            "--flux-forcer" => { o.flux_forcer = Some(suivant(i).clone()); 2 }
+=== ce que le rejeu permet ===
+2190:pub struct FluxRelecteur {
+2191-    /// (couche, position) -> (échelle, indices/valeurs)
+2192-    /// (couche, jeton global) → (échelle, paires) pour les versions 1 et 2 : les
+2193-    /// ENTIERS d'origine sont conservés, parce que le rejeu par LOTS les réinjecte
+2194-    /// tels quels (chemin exact, sans déquantifier-requantifier).
+2196-    /// Version 3 : les valeurs sont des f32 (i8 × échelle f16 de bloc), il n'y a
+2197-    /// plus d'entiers d'origine. Le rejeu JETON PAR JETON les accepte ; le rejeu
+2198-    /// par lots, non — et il le dira au lieu de compter des listes manquantes
+2199-    /// sans explication.
+2201-    pub servies: u64,
+2202-    pub manquantes: u64,
+2297:        Ok(FluxRelecteur { listes, listes_blocs, servies: 0, manquantes: 0 })
+=== et l'analyse qui va avec ===
+analyse_flux.py
+diff_flux.py
+flux_codec.py
+granularite_flux.py
+porte-flux.sh
+profil_flux.py
+  ```
+
+### 🤖 Assistant
+
+Drave a bien la brique centrale de ton idée. Je vérifie le routeur pour voir si on peut tester la prémisse ce soir.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/^fn router/,/^}/p' drave-core/src/model.rs | head -45", "description": "Read the router"}`
+
+  ```
+fn router(cfg: &Cfg, moe: &Moe, x: &[f32], tid: u32, k: usize) -> Vec<(usize, f32)> {
+    let ne = moe.routeur.len() / x.len().max(1);
+    let h = x.len();
+    let mut logits = vec![0f32; ne];
+    for e in 0..ne {
+        let r = &moe.routeur[e * h..(e + 1) * h];
+        logits[e] = r.iter().zip(x.iter()).map(|(a, b)| a * b).sum();
+    }
+    // Scores servant à la SÉLECTION, et scores servant aux POIDS : ils
+    // diffèrent pour gpt-oss, dont le biais ne départage que la sélection.
+    let biais = moe.routeur_biais.as_ref();
+    let (mut probs, mut sel): (Vec<f32>, Vec<f32>) = match cfg.gating {
+        Gating::Softmax => {
+            let mx = logits.iter().cloned().fold(f32::NEG_INFINITY, f32::max);
+            let mut somme = 0f32;
+            let mut p: Vec<f32> = logits.iter().map(|v| { let e = (v - mx).exp(); somme += e; e }).collect();
+            if somme > 0.0 { for v in p.iter_mut() { *v /= somme; } }
+            (p.clone(), p)
+        }
+        Gating::Sigmoid => {
+            let p: Vec<f32> = logits.iter().map(|v| 1.0 / (1.0 + (-v).exp())).collect();
+            let s = match biais { Some(b) => p.iter().zip(b).map(|(a, c)| a + c).collect(), None => p.clone() };
+      
+… [946 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+Ton idée a **une moitié que Drave sait déjà faire** et une qu'il ne peut pas faire. Je te dis lesquelles, puis je teste la prémisse.
+
+**Ce que Drave a, et c'est exactement ta brique** : `--trace-flux` enregistre le flux d'activation **à l'entrée de chaque couche**, et `--flux-forcer` le **rejoue à l'identique** (format DRVF, entiers d'origine conservés). Donc oui : on peut figer la distribution d'entrée d'une couche pour un scénario donné et optimiser cette couche **contre cette distribution**, couche par couche, sans faire tourner le reste. Avec `profil_flux.py`, `analyse_flux.py`, `granularite_flux.py` et la porte de correction par-dessus.
+
+**Ce que Drave n'a pas** : l'entraînement. Pas d'autograd, pas de rétropropagation, `std` seul, et 2 GPU de 16 Go en PCIe — pas de distillation possible ici. Un « nouveau modèle construit par distillation » est un projet d'entraînement, pas d'inférence.
+
+**Mais la prémisse est testable sans entraîner** : *« une version morcelée garde les qualités du modèle »*. Si c'est vrai pour un **élagage par fréquence mesurée**, alors ton idée tient debout ; si c'est faux, elle tombe. Et ça, Drave peut le mesurer ce soir.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && grep -n \"pub tid2eid\" -B 2 -A 2 model.rs | head -6; grep -n \"tid2eid,\" model.rs | head -3", "description": "Find the Moe struct fields"}`
+
+  ```
+1244-    /// fonction de l'identifiant du jeton, pas d'un score. `None` partout
+1245-    /// ailleurs.
+1246:    pub tid2eid: Option<Vec<i32>>,
+1247-}
+1248-
+768:            eprintln!("[moe] couche {l} : routage par TABLE tid2eid, {n_k} experts par jeton ({} jetons de vocabulaire)", if n_k > 0 { v.len() / n_k } else { 0 });
+776:        n_ff, gate, up, down, shexp, tid2eid,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && python3 - <<'PY'\np='model.rs'; s=open(p).read()\n# 1. le champ\ns = s.replace(\"\"\"    pub tid2eid: Option<Vec<i32>>,\n}\"\"\",\n\"\"\"    pub tid2eid: Option<Vec<i32>>,\n    /// **ÉLAGAGE** : pénalité additive par e … [1056 caractères tronqués]`
+
+  ```
+masque posé
+434:    // Le masque d'élagage s'applique à la SÉLECTION seule : les poids restent
+437:    if let Some(m) = moe.masque.as_ref() {
+1258:    pub masque: Option<Vec<f32>>,
+1683:    /// seuls les indexeurs AU-DESSUS masquent leurs scores, donc seuls ceux-là
+6210:                // Seuls les indexeurs APRÈS la source de candidats masquent leurs
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && python3 - <<'PY'\np='model.rs'; s=open(p).read()\n# lecture du fichier de listes, une fois, et remplissage dans charger_moe\nanc = \"            n_ff, gate, up, down, shexp, tid2eid,\"\nassert anc in s\ns = s.replace(a … [1966 caractères tronqués]`
+
+  ```
+error[E0063]: missing field `masque` in initializer of `Moe`
+   --> src/model.rs:779:10
+    |
+779 |     Some(Moe {
+    |          ^^^ missing `masque`
+
+warning: unused variable: `t`
+   --> src/kimi_k3.rs:272:17
+    |
+--
+error: could not compile `drave-core` (bin "drave") due to 1 previous error; 29 warnings emitted
+=== build ===
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 4, in <module>
+AssertionError
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && sed -n '776,784p' model.rs", "description": "Look at the Moe initializer"}`
+
+  ```
+}
+        None => None,
+    };
+    Some(Moe {
+        routeur, routeur_biais,
+        biais_gate: bg, biais_up: bu, biais_down: bd,
+        n_ff, gate, up, down, shexp, tid2eid,
+        couche: l, numeros, n_expert_global: n_expert, local: map,
+    })
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && python3 - <<'PY'\np='model.rs'; s=open(p).read()\ns = s.replace(\"\"\"        n_ff, gate, up, down, shexp, tid2eid,\n        couche: l, numeros, n_expert_global: n_expert, local: map,\n    })\"\"\",\n\"\"\"        n_ff … [416 caractères tronqués]`
+
+  ```
+ok
+error[E0425]: cannot find function `masque_elagage` in this scope
+   --> src/model.rs:783:17
+    |
+783 |         masque: masque_elagage(l, n_expert),
+    |                 ^^^^^^^^^^^^^^ not found in this scope
+
+warning: unused variable: `t`
+   --> src/kimi_k3.rs:272:17
+    |
+--
+error: could not compile `drave-core` (bin "drave") due to 1 previous error; 29 warnings emitted
+=== build ===
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && python3 - <<'PY'\np='model.rs'; s=open(p).read()\nanc = \"fn router(cfg: &Cfg, moe: &Moe, x: &[f32], tid: u32, k: usize) -> Vec<(usize, f32)> {\"\nassert anc in s\nnew = \"\"\"/// **Le masque d'élagage, lu une fois pou … [1885 caractères tronqués]`
+
+  ```
+fonction ajoutée
+=== build ===
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo build --release 2>&1 | grep -E \"^error\" -A 8 | head -20; echo \"---\"; cargo test --release 2>&1 | grep -E \"^test result|panicked\" | head -4", "description": "Check the build and tests", "timeoutMs": 900000}`
+
+  ```
+---
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && touch src/main.rs && cargo build --release 2>&1 | tail -5; cargo test --release 2>&1 | grep -E \"^test result|panicked\" | head -4", "description": "Force a rebuild and test", "timeoutMs": 900000}`
+
+  ```
+|
+    = note: `#[warn(non_shorthand_field_patterns)]` on by default
+
+warning: `drave-core` (bin "drave") generated 48 warnings (run `cargo fix --bin "drave" -p drave-core` to apply 24 suggestions)
+    Finished `release` profile [optimized] target(s) in 36.35s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo test --release 2>&1 | grep -E \"^test result|panicked at\" | head -4", "description": "Run the tests", "timeoutMs": 900000}`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo test --release 2>&1 | tail -12", "description": "See the test output", "timeoutMs": 900000}`
+
+  ```
+1729 |         let jeton = k / (e.couches.len() * n_hash_cols);
+     |             ^^^^^ help: if this is intentional, prefix it with an underscore: `_jeton`
+
+warning: unused variable: `charge`
+    --> src/main.rs:2949:9
+     |
+2949 |     let charge = match mode {
+     |         ^^^^^^ help: if this is intentional, prefix it with an underscore: `_charge`
+
+For more information about this error, try `rustc --explain E0063`.
+warning: `drave-core` (bin "drave" test) generated 36 warnings
+error: could not compile `drave-core` (bin "drave" test) due to 1 previous error; 36 warnings emitted
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo test --release 2>&1 | grep -E \"^error\" -A 8 | head -14", "description": "Find the test-build error", "timeoutMs": 900000}`
+
+  ```
+error[E0063]: missing field `masque` in initializer of `model::Moe`
+    --> src/model.rs:8748:9
+     |
+8748 |         Moe {
+     |         ^^^ missing `masque`
+
+warning: unused variable: `t`
+   --> src/kimi_k3.rs:272:17
+    |
+--
+error: could not compile `drave-core` (bin "drave" test) due to 1 previous error; 36 warnings emitted
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && python3 - <<'PY'\np='model.rs'; s=open(p).read()\ns = s.replace(\"\"\"            shexp: None, tid2eid: tid,\"\"\", \"\"\"            shexp: None, tid2eid: tid, masque: None,\"\"\", 1)\nopen(p,'w').write(s)\nprint(\"ok … [149 caractères tronqués]`
+
+  ```
+ok
+test result: ok. 77 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+  ```
+
+### 🤖 Assistant
+
+Le masque d'élagage est en place. Je lance l'expérience : tracer le routage sur un scénario **code**, puis morceler.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=/home/stephane/FastNVMe/qwen3-30b-a3b-Q4_K_M.gguf\ncat drave-core/src/kimi_k3.rs drave-core/src/list.rs drave-core/src/engine.rs > /tmp/corpus_code.txt 2>/dev/null; wc -c /tmp/corpus_code.txt\n./drave-core/target/release/drave $M - … [593 caractères tronqués]`
+
+  ```
+213209 /tmp/corpus_code.txt
+réversibilité : texte reconstruit identique ✅ (213209 octets)
+invite code : 384 jetons
+383 tokens notés — perplexité cumulée 9.584  (4.0 tok/s)
+18432 /tmp/routage_code.txt
+  ```
+
+### 🤖 Assistant
+
+**Référence : PPL 9,584 sur le code.** Je morcelle par fréquence mesurée et je mesure ce que ça coûte.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom collections import Counter\npar={}\nfor l in open('/tmp/routage_code.txt'):\n    p=l.split()\n    if len(p)<3: continue\n    par.setdefault(int(p[0]),Counter()).update(int(x) for x in p[2:])\nprint(\"couches :\ … [708 caractères tronqués]`
+
+  ```
+couches : 48 · experts distincts vus : [84, 88, 89] …
+  garder 96/128 par couche → couvre 99.6 % de la masse de routage
+  garder 64/128 par couche → couvre 94.3 % de la masse de routage
+  garder 32/128 par couche → couvre 74.2 % de la masse de routage
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=/home/stephane/FastNVMe/qwen3-30b-a3b-Q4_K_M.gguf\necho \"=== référence : 9,584 ===\"\nfor K in 96 64 32; do\n  echo -n \"garder $K/128 : \"\n  DRAVE_EXPERTS_GARDES=/tmp/gardes_$K.txt ./drave-core/target/release/drave $M --ppl /tmp … [182 caractères tronqués]`
+
+  ```
+=== référence : 9,584 ===
+garder 96/128 : perplexité cumulée 11.327
+garder 64/128 : perplexité cumulée 12.515
+garder 32/128 : perplexité cumulée 18.605
+  ```
+
+### 🤖 Assistant
+
+**Résultat net, et il nuance ta prémisse.**
+
+| experts gardés | masse de routage couverte | perplexité | coût |
+|---|---:|---:|---:|
+| 128 (original) | 100 % | 9,584 | — |
+| 96 (75 %) | 99,6 % | 11,327 | **+18,2 %** |
+| 64 (50 %) | 94,3 % | 12,515 | **+30,6 %** |
+| 32 (25 %) | 74,2 % | 18,605 | **+94,1 %** |
+
+**Le chiffre qui tranche** : retirer 25 % des experts coûte **18 % de perplexité**, alors que ces experts ne portent que **0,4 % de la masse de routage**. Les experts rares **ne sont pas redondants** — ils comptent beaucoup plus que leur fréquence ne le dit.
+
+Et la relation masse → qualité est violemment non linéaire : 99,6 % de masse donne +18 %, 74,2 % donne +94 %. **La fréquence n'est pas l'importance.** C'est exactement pourquoi ISTA-DASLab utilise RCO (allocation sur données de calibration) et pas le comptage, et pourquoi le « Coder » de Strata garde 256 experts sur 512 — pas 32.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-morcellement-experts.md <<'EOF'\n# Rapport — peut-on « morceler » un modèle ? L'élagage par fréquence, mesuré\n\n**Question** (posée par Stéphane) : Drave permet d'optimiser un modèle couche par\ncouche selon le … [5424 caractères tronqués]`

@@ -397,6 +397,38 @@ fn sqrt_softplus(x: f32) -> f32 {
 ///
 /// Rend `(expert, poids)` dans l'ordre de sélection ; les poids somment à 1
 /// (ou à `expert_scale`) et sont déjà multipliés par le facteur.
+/// **Le masque d'élagage, lu une fois pour toutes.**
+///
+/// `DRAVE_EXPERTS_GARDES=<fichier>` : une ligne par couche, `couche e1 e2 …`,
+/// les experts GARDÉS. Un expert absent reçoit `-inf` de pénalité de sélection,
+/// donc le routeur ne peut plus le choisir — et la renorme des poids se fait
+/// sur les seuls retenus, comme dans un modèle qui n'aurait jamais eu les
+/// autres.
+///
+/// Ce n'est PAS une optimisation : c'est un AUTRE modèle, et il se mesure comme
+/// tel — perplexité, corrélation et top-1 contre l'original. C'est ce qui
+/// permet de tester la prémisse « une version morcelée garde les qualités du
+/// modèle » sans rien entraîner.
+fn masque_elagage(l: usize, ne: usize) -> Option<Vec<f32>> {
+    static LISTES: std::sync::OnceLock<Option<std::collections::HashMap<usize, Vec<usize>>>> =
+        std::sync::OnceLock::new();
+    let listes = LISTES.get_or_init(|| {
+        let chemin = std::env::var("DRAVE_EXPERTS_GARDES").ok()?;
+        let texte = std::fs::read_to_string(&chemin).ok()?;
+        let mut m = std::collections::HashMap::new();
+        for ligne in texte.lines() {
+            let p: Vec<usize> = ligne.split_whitespace().filter_map(|x| x.parse().ok()).collect();
+            if p.len() >= 2 { m.insert(p[0], p[1..].to_vec()); }
+        }
+        Some(m)
+    });
+    let listes = listes.as_ref()?;
+    let gardes = listes.get(&l)?;
+    let mut masque = vec![f32::NEG_INFINITY; ne];
+    for &e in gardes { if e < ne { masque[e] = 0.0; } }
+    Some(masque)
+}
+
 fn router(cfg: &Cfg, moe: &Moe, x: &[f32], tid: u32, k: usize) -> Vec<(usize, f32)> {
     let ne = moe.routeur.len() / x.len().max(1);
     let h = x.len();
@@ -431,6 +463,12 @@ fn router(cfg: &Cfg, moe: &Moe, x: &[f32], tid: u32, k: usize) -> Vec<(usize, f3
             (p, s)
         }
     };
+    // Le masque d'élagage s'applique à la SÉLECTION seule : les poids restent
+    // ceux du modèle (la renorme se fait après, sur les experts retenus).
+    let mut sel = sel;
+    if let Some(m) = moe.masque.as_ref() {
+        for e in 0..ne.min(m.len()) { sel[e] += m[e]; }
+    }
     let k = k.clamp(1, ne);
     let chosis: Vec<usize> = match moe.tid2eid.as_ref() {
         Some(t) => {
@@ -774,6 +812,7 @@ n'est pas implémenté, et les indexer par l'expert global serait faux");
         routeur, routeur_biais,
         biais_gate: bg, biais_up: bu, biais_down: bd,
         n_ff, gate, up, down, shexp, tid2eid,
+        masque: masque_elagage(l, n_expert),
         couche: l, numeros, n_expert_global: n_expert, local: map,
     })
 }
@@ -1244,6 +1283,12 @@ pub struct Moe {
     /// fonction de l'identifiant du jeton, pas d'un score. `None` partout
     /// ailleurs.
     pub tid2eid: Option<Vec<i32>>,
+    /// **ÉLAGAGE** : pénalité additive par expert pour la SÉLECTION (`0.0` gardé,
+    /// `-inf` élagué). Rempli depuis `DRAVE_EXPERTS_GARDES=<fichier>`, une ligne
+    /// par couche : `couche e1 e2 …`. Sert à mesurer ce qu'une version morcelée
+    /// perd — la question qui décide si un modèle peut être « optimisé couche par
+    /// couche » ou si les experts rares comptent.
+    pub masque: Option<Vec<f32>>,
 }
 
 impl Moe {
@@ -8707,7 +8752,7 @@ mod tests_router {
             n_ff: 1,
             gate: Vec::new(), up: Vec::new(), down: Vec::new(),
             couche: 0, numeros: Vec::new(), n_expert_global: 0, local: None,
-            shexp: None, tid2eid: tid,
+            shexp: None, tid2eid: tid, masque: None,
         }
     }
 

@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 160.3 h |
-| Tours | 110 |
-| Messages | 7715 |
-| Appels d'outils | 7371 |
+| Durée | 161.3 h |
+| Tours | 111 |
+| Messages | 7735 |
+| Appels d'outils | 7389 |
 | Fichiers touchés | 150 |
-| Commandes | 6270 |
+| Commandes | 6288 |
 | Sous-agents | 32 |
-| Commits | 528 |
+| Commits | 529 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -267,6 +267,8 @@
 **Tour 109** — Quel est le roadmap où Drave serait à son meilleur? as-tu besoin de compacter la session? Continue kusqu'a 8h00 HAE
 
 **Tour 110** — Peut-on optimiser des modèles existants pour que drave peuisse être un outil performant pour travailler en autonomie au quotidien avec les meilleurs modèles?
+
+**Tour 111** — Drave permet d'optimiser un modèle couche par couche en fonction des scénarios d'utilisation à l'entrés d'une couche. On peut donc construire un nouveau modèle en grappes fines par distillation afin d'avoir un moe extrèmement maléable où on retrouve les qualités des meilleurs modèles dans une version morcellée de façon optimale.
 
 ## 2. Déroulé, étape par étape
 
@@ -5498,7 +5500,78 @@ Tout est commité, 77 tests verts, arbre propre. `REPRISE.md` porte l'état au 0
 
 **Synthèse produite :**
 
-**La prélecture est une pessimisation** : 6:57 contre 2:34, et 8,5× plus de lectures. Mais elle répond à ma question ouverte.
+**Oui, et la réponse déplace la cible.** Ce que j'ai mesuré cette nuit la dessine assez nettement.
+
+\## Drave **est déjà** un outil quotidien — pour les modèles qui tiennent en RAM
+
+Le chiffre qui compte, mesuré au bloc 31 sur Qwen3-30B-A3B (30 B de poids, 3 B actifs) sur NVMe :
+
+| | prompt | débit |
+|---|---:|---:|
+| lot 1 | 33,2 s | 5,77 tok/s |
+| lot 192 | 21,0 s | **9,20 tok/s** |
+
+**9 tok/s, c'est plus vite qu'on ne lit.** Et le regroupement par experts y vaut ×1,58 — pour un modèle qui tient dans les 125 Go, on est dans le régime où Drave est simplement *utilisable*.
+
+**K3 n'est pas le cas quotidien** : c'est le cas extrême qui prouve que le moteur *finit* ce que les autres refusent. Ne pas confondre les deux, c'est le premier pas.
+
+\## Ce qu'il faut optimiser pour l'autonomie quotidienne
+
+Trois leviers, dans l'ordre du rendement mesuré :
+
+1. **Choisir le modèle qui tient.** La question n'est pas « le plus gros » mais « le meilleur qui tient dans 125 Go ». C'est là que Drave gagne : il charge **en place**, sans copie ni requantification, donc il accepte des formats que les autres refusent (IQ1_M, IQ2_XXS, MXFP4 mélangés). Le parc a Qwen3-235B-A22B, GLM-5.3, gpt-oss-120b, MiniMax-H3 — tous sous porte.
+
+2. **Le décodage spéculatif.** C'est *le* multiplicateur, et le raisonnement est déjà mesuré : le regroupement par experts vaut ×1,58 **en préremplissage** et **rien en décodage** (un jeton n'a pas de voisins). Un brouillon de k jetons ramène le décodage dans le régime du lot — donc dans le régime où le gain existe. C'est le même levier pour K3 et pour Qwen.
+
+3. **La grappe**, pour la seule classe qui ne tient pas : personne ne découpe un modèle de 1,5 To pour le faire tourner sur des machines ordinaires.
+
+\## Ce que cette nuit a ajouté, et qui compte pour la suite
+
+**La question ouverte est tranchée** : ce n'est pas la dispersion du disque, c'est la **capacité du cache**. Trois chiffres :
+
+- la prélecture de l'union est une **pessimisation** mesurée (6 min 57 contre 2 min 34, ×0,37) — éteinte par défaut ;
+- sans elle, 32 couches ne lisent que **5,9 Go** là où leurs experts en pèsent **27** : les deux tiers étaient déjà en cache ;
+- la passe de 93 couches, elle, demande **312 Go distincts** pour ~100 Go de cache.
+
+**Donc le temps suit le volume distinct à ramener, pas le nombre de lectures.** Ça clôt proprement le regroupement par experts — il ne pouvait pas aider, il évite de relire ce que le cache faisait déjà gratuitement.
+
+\## Sur « optimiser des modèle
+… [756 caractères tronqués]
+
+### Tour 111 — Drave permet d'optimiser un modèle couche par couche en fonction des scénarios d'utilisation à l'entrés d'une couche. On … [210 caractères tronqués]
+
+*18 appels d'outils.* Actions notables :
+
+- bash — Check the flow trace and replay capability
+- bash — Read the router
+- bash — Find the Moe struct fields
+- bash — Add the pruning mask to the router
+- bash — Wire the kept-experts file
+- bash — Look at the Moe initializer
+- bash — Fix the initializer
+- bash — Add the pruning function
+- bash — Check the build and tests
+- bash — Force a rebuild and test
+- bash — Run the tests
+- bash — See the test output
+- bash — Find the test-build error
+- bash — Fix the test fixture
+- … et 4 autres
+
+**Synthèse produite :**
+
+**Résultat net, et il nuance ta prémisse.**
+
+| experts gardés | masse de routage couverte | perplexité | coût |
+|---|---:|---:|---:|
+| 128 (original) | 100 % | 9,584 | — |
+| 96 (75 %) | 99,6 % | 11,327 | **+18,2 %** |
+| 64 (50 %) | 94,3 % | 12,515 | **+30,6 %** |
+| 32 (25 %) | 74,2 % | 18,605 | **+94,1 %** |
+
+**Le chiffre qui tranche** : retirer 25 % des experts coûte **18 % de perplexité**, alors que ces experts ne portent que **0,4 % de la masse de routage**. Les experts rares **ne sont pas redondants** — ils comptent beaucoup plus que leur fréquence ne le dit.
+
+Et la relation masse → qualité est violemment non linéaire : 99,6 % de masse donne +18 %, 74,2 % donne +94 %. **La fréquence n'est pas l'importance.** C'est exactement pourquoi ISTA-DASLab utilise RCO (allocation sur données de calibration) et pas le comptage, et pourquoi le « Coder » de Strata garde 256 experts sur 512 — pas 32.
 
 ## 3. Travail accompli
 
@@ -5734,7 +5807,7 @@ Tout est commité, 77 tests verts, arbre propre. `REPRISE.md` porte l'état au 0
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6230 autres
+- … et 6248 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5862,7 +5935,7 @@ Tout est commité, 77 tests verts, arbre propre. `REPRISE.md` porte l'état au 0
 
 ## 5. Erreurs rencontrées
 
-364 sorties en erreur ou divergentes. Les premières :
+368 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -6410,4 +6483,5 @@ Tout est commité, 77 tests verts, arbre propre. `REPRISE.md` porte l'état au 0
 - K3 : la passe tournait sur UN CŒUR SUR 40 — parallélisée, et une question laissée ouverte  /usr/bin/time -v sur 8 couches : Percent of CPU 99 %, File system inp
 - REPRISE : l'état au 06/10 00h10, pour reprendre après compactage  Ce qui marche, les quatre réfutations mesurées à ne pas refaire, la question ouverte (2,95 s à
 - K3 : la question ouverte est TRANCHÉE — c'est la CAPACITÉ du cache, pas la dispersion  Trois chiffres : 1. La prélecture de l'union est une PESSIMISATION mesuré
+- Morcellement des experts : l'élagage par fréquence, mesuré — la fréquence n'est pas l'importance  Qwen3-30B-A3B, scénario code (384 jetons du source de ce dépôt
 
