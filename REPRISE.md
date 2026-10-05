@@ -78,6 +78,44 @@ cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo build --r
 > `res_mix` s'applique là où la référence n'en applique pas. Les trois étaient
 > invisibles au jeton 0 seul.
 >
+> ## **ÉTAT (06/10, 16h20) — PONT GÉNÉRATIF : résultat NÉGATIF sur données propres**
+>
+> **Correction de cap reçue** (`docs/note-un-pont-par-professeur.md`) : chaque
+> modèle a sa propre représentation sémantique interne, il n'y a **pas de couche
+> universelle**. Donc **un pont par professeur**, et comparer deux professeurs est
+> vide de sens (la comparaison que j'avais faite au §9 du rapport génératif est
+> annulée). Les universaux sémantiques sont un sujet **Panini/Nipada**, pas Drave.
+>
+> **Deux défauts de traçage trouvés et corrigés**, et ils changeaient tout :
+> - `--n` valait **32** par défaut : chaque traçage **générait 32 jetons** et
+>   calculait la **tête** du professeur. Vérifié au jeton près : `--n 32` donne
+>   542 positions, `--n 0` en donne 510. Les jetons générés étaient **dans la
+>   trace** — 25 à 60 % des positions sur la donnée à une unité, 3 % à dix unités.
+> - **Troncature** : `ctx 1024` ne laissait passer que 984 jetons. L'abkhaze en
+>   demande **1958**. Sur un échantillon, **5 langues sur 10 étaient tronquées** —
+>   et une « dernière position » tronquée ne correspond plus à la fin du texte,
+>   donc l'invariance comparait des **contenus différents**.
+>
+> **Après nettoyage (`--ctx 2048 --n 0`), le résultat s'effondre :**
+>
+> | 256 neurones, données propres | couches | fid TEST | invariance | pire paire |
+> |---|---:|---:|---:|---:|
+> | réservoir **plat** | 1 | 0,5145 | 0,8680 | **0,7043** |
+> | **cascade générative** | 11 | **0,5186** | **0,8874** | 0,6738 |
+>
+> **+0,41 point seulement**, et la médiane sur 4 graines (0,5155) est **quasi
+> identique** au plat. À 64 neurones, le plat **gagne** (0,4998 contre 0,4940).
+> **L'attrition n'améliore plus** : 256 → 192 fait baisser le test.
+>
+> **Nettoyer les données a effacé l'essentiel de l'avantage que j'attribuais à
+> l'architecture.** Ce qui survit : la phase générative fonctionne (fidélité
+> monotone de 0,4734 à 1 neurone jusqu'à 0,5186 à 256), la courbe d'échange est
+> réelle et parcourable, et le réservoir plat reste aussi bon pour bien moins cher.
+>
+> **En cours** : le pont propre du **30B** (sa propre version), tracé avec
+> `--trace-couches` — vérifié **bit-identique** et **11× plus petit**. C'est le
+> volet « mesuré contre le plateau Qwen3-30B-A3B » de l'objectif, encore ouvert.
+>
 > ## **LE MEILLEUR PONT : 1 couche récurrente GELÉE de 64 neurones (06/10, 11h30)**
 >
 > | modèle | fid. TEST | invariance | pire paire | params |

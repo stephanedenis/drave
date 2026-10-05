@@ -130182,3 +130182,109 @@ RÉSERVOIR 256 (1 couche récurrente)         0.6342      0.5145     524288     
 **Nettoyer les données a effacé l'essentiel de l'avantage que j'attribuais à l'architecture.**
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-pont-generatif.md'; s=open(p).read()\ns += \"\"\"\n\n## 13. RÉSULTAT NÉGATIF — sur données PROPRES, l'avantage de la cascade s'efface\n\nTout ce qui précède reposait sur des traces entachées de de … [4218 caractères tronqués]`
+
+  ```
+f2d8314 RÉSULTAT NÉGATIF : sur données propres, l'avantage de la cascade s'efface
+=== 30B ===
+22
+  ```
+
+### 🤖 Assistant
+
+⏵ Découverte utile : `--trace-couches` peut ne **écrire** que les couches utiles. Le fichier 30B ferait 6× moins, et le parsing passerait de ~86 min à ~15. Je vérifie d'abord que ce filtre ne change pas les valeurs.
+
+**Piste d'optimisation majeure** : `--trace-couches` filtre l'**écriture**. Mes fichiers 30B font ~400 Mo pour 36 entrées de couches alors que je n'en lis que deux. Je vérifie d'abord que ce filtre ne change pas les valeurs — leçon apprise.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/corpus/udhr && M=/home/stephane/Data13TB/stephane/modeles/gguf/qwen2.5-0.5b-instruct-q4_k_m.gguf; D=/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/target/release/drave; P=\"$(cat /tmp/udhr10_texte/eng.txt)\"; $D $M --infer --ctx 2048 --cou … [847 caractères tronqués]`
+
+  ```
+couche 0 : identiques ? True · écart max 0.0
+couche 10 : identiques ? True · écart max 0.0
+  /tmp/filt.drvf : 2.5 Mo
+  /tmp/nofilt.drvf : 28.1 Mo
+  ```
+
+### 🤖 Assistant
+
+⏵ **`--trace-couches` est neutre : bit-identique, et 11× plus petit** (2,5 Mo contre 28,1). Je redémarre le 30B avec ce filtre — c'est plus rapide au total.
+
+**Vérifié : bit-identique (écart 0,0) et fichier 11× plus petit.** Redémarrer le 30B est plus rapide au total (97 min de traçage + 15 min de parse, contre 50 + 86). J'arrête et je relance.
+
+- **write** `{"content": "import os, signal\nmoi = os.getpid(); anc = set(); p = moi\nfor _ in range(8):\n    try:\n        st = open(f\"/proc/{p}/stat\").read().split(\") \", 1)[1].split()\n        p = int(st[1]); anc.add(p)\n    except Exception:\n        break\ncibles = []\nfor d in os.listdir(\"/proc\"):\n   … [543 caractères tronqués]`
+
+  ```
+<path>/tmp/stop2.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "python3 /tmp/stop2.py; sleep 3; python3 /tmp/stop2.py; echo \"--- reste-t-il un drave ? ---\"; python3 -c \"\nimport os\nn=0\nfor d in os.listdir('/proc'):\n    if d.isdigit():\n        try: cl=open(f'/proc/{d}/cmdline','rb').read().decode(errors='replace')\n        except Exception: co … [118 caractères tronqués]`
+
+  ```
+arrêtés : [2248739, 2248742, 2265400]
+arrêtés : []
+--- reste-t-il un drave ? ---
+1
+  ```
+
+### 🤖 Assistant
+
+⏵ Faux positif (ma propre commande contenait les motifs). Je nettoie et relance le 30B avec le filtre.
+
+- **write** `{"content": "#!/bin/bash\n# Professeur Qwen3-30B-A3B — traçage PROPRE et FILTRÉ.\n#\n#   --ctx 2048        : aucune troncature (l'abkhaze demande 1958 jetons).\n#   --n 0             : ni tête du professeur, ni 32 jetons générés.\n#   --trace-couches   : on n'ÉCRIT que les couches utiles. Vérifié bi … [1149 caractères tronqués]`
+
+  ```
+<path>/tmp/chaine30.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "chmod +x /tmp/chaine30.sh && setsid nohup /tmp/chaine30.sh >/dev/null 2>&1 < /dev/null & sleep 60; echo \"=== args vérifiés ===\"; python3 -c \"\nimport os\nfor d in os.listdir('/proc'):\n    if d.isdigit():\n        try: cl=open(f'/proc/{d}/cmdline','rb').read().decode(errors='replace' … [485 caractères tronqués]`
+
+  ```
+=== args vérifiés ===
+total 13664
+drwxr-xr-x. 1 stephane stephane       16  5 oct 16:18 .
+drwxr-xr-x. 1 stephane stephane      664  5 oct 16:18 ..
+  ```
+
+### 🤖 Assistant
+
+⏵ Le contrôle d'arguments n'a rien affiché. Je vérifie que la chaîne tourne vraiment.
+
+- **bash** `{"command": "sleep 45; ls -la /home/stephane/Data13TB/stephane/corpus/udhr/appr30c/ | head -4; echo \"--- processus ---\"; python3 -c \"\nimport os\ntrouve=0\nfor d in os.listdir('/proc'):\n    if d.isdigit():\n        try: cl=open(f'/proc/{d}/cmdline','rb').read().decode(errors='replace')\n         … [417 caractères tronqués]`
+
+  ```
+total 33332
+drwxr-xr-x. 1 stephane stephane       16  5 oct 16:18 .
+drwxr-xr-x. 1 stephane stephane      664  5 oct 16:18 ..
+-rw-r--r--. 1 stephane stephane 34131941  5 oct 16:20 abk.drvf
+--- processus ---
+  --ctx 2048
+  --couches 0:18
+  --n 0
+  --trace-couches 0,4,8,12,16,17
+processus 30B : 3
+  ```
+
+### 🤖 Assistant
+
+⏵ La chaîne 30B tourne avec les bons arguments, et l'abkhaze passe de ~400 Mo à 34 Mo. Je chaîne l'analyse.
+
+**Arguments confirmés**, et le fichier abkhaze passe de ~400 Mo à **34 Mo**. Je chaîne l'analyse du pont 30B.
+
+- **write** `{"content": "#!/bin/bash\n# Analyse du professeur Qwen3-30B-A3B, dès que ses traces propres sont prêtes.\n#\n# Point de méthode : on ne compare PAS ce pont à celui du 0.5B. Chaque modèle a\n# sa propre représentation sémantique interne ; il n'y a pas de couche universelle\n# (docs/note-un-pont-par-p … [1435 caractères tronqués]`
+
+  ```
+<path>/tmp/analyse30.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "chmod +x /tmp/analyse30.sh && setsid nohup /tmp/analyse30.sh >/dev/null 2>&1 < /dev/null & sleep 20; echo \"analyse 30B chaînée\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\najout = \"\"\"> ## **ÉTAT (06/10, 16h20) — PONT GÉ … [2986 caractères tronqués]`

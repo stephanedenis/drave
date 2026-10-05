@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 169.5 h |
+| Durée | 169.6 h |
 | Tours | 122 |
-| Messages | 8087 |
-| Appels d'outils | 7712 |
-| Fichiers touchés | 153 |
-| Commandes | 6592 |
+| Messages | 8095 |
+| Appels d'outils | 7720 |
+| Fichiers touchés | 156 |
+| Commandes | 6597 |
 | Sous-agents | 32 |
-| Commits | 568 |
+| Commits | 569 |
 | Compactages de contexte | 11 |
 
 ## Objectifs déclarés
@@ -6198,7 +6198,7 @@ J'ai aussi remplacé le critère de retrait : couper par contribution ne « gén
 
 ### Tour 122 — <goal_round> Objective: "Faire évoluer le pont linguistico-sémantique en BOÎTE NOIRE (émulation des premières couches du … [1231 caractères tronqués]
 
-*77 appels d'outils.* Actions notables :
+*85 appels d'outils.* Actions notables :
 
 - bash — Check running job and 30B availability
 - bash — Time 30B trace on one language
@@ -6214,22 +6214,13 @@ J'ai aussi remplacé le critère de retrait : couper par contribution ne « gén
 - bash — Compute 30B invariance by layer
 - bash — Check if 30B layer 0 is empty
 - bash — Verify layer 0 anomaly
-- … et 62 autres
+- … et 70 autres
 
 **Synthèse produite :**
 
-⏵ **Résultat négatif important.** À taille égale sur données propres, la cascade ne bat plus le réservoir plat. Je vérifie et je le rapporte franchement.
+⏵ La chaîne 30B tourne avec les bons arguments, et l'abkhaze passe de ~400 Mo à 34 Mo. Je chaîne l'analyse.
 
-**Je dois rapporter un résultat négatif.** La comparaison à **taille égale** sur données propres :
-
-| modèle (256 neurones) | fid TEST | invariance | pire paire |
-|---|---:|---:|---:|
-| réservoir **plat** | 0,5145 | 0,8680 | **0,7043** |
-| **cascade générative** | **0,5186** | **0,8874** | 0,6738 |
-
-**+0,41 pt de fidélité seulement** — et la robustesse sur 4 graines donne une médiane de 0,5155, soit **quasi identique** au plat (0,5145). Et sur données propres, **l'attrition n'améliore plus** : le premier retrait fait passer le test de 0,5186 à 0,5161.
-
-**Nettoyer les données a effacé l'essentiel de l'avantage que j'attribuais à l'architecture.**
+**Arguments confirmés**, et le fichier abkhaze passe de ~400 Mo à **34 Mo**. Je chaîne l'analyse du pont 30B.
 
 ## 3. Travail accompli
 
@@ -6390,6 +6381,9 @@ J'ai aussi remplacé le critère de retrait : couper par contribution ne « gén
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py` | 0 | 2 |
 | `/tmp/chaine_propre.sh` | 1 | 0 |
 | `/tmp/analyse_propre.sh` | 1 | 0 |
+| `/tmp/stop2.py` | 1 | 0 |
+| `/tmp/chaine30.sh` | 1 | 0 |
+| `/tmp/analyse30.sh` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -6468,7 +6462,7 @@ J'ai aussi remplacé le critère de retrait : couper par contribution ne « gén
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6552 autres
+- … et 6557 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -7184,4 +7178,5 @@ J'ai aussi remplacé le critère de retrait : couper par contribution ne « gén
 - Contrôle de robustesse : 12 tirages, médiane honnête +0,0412  4 graines du réservoir gelé x 3 découpages de validation, configuration gagnante :    graine   val
 - TRONCATURE : le défaut le plus grave, et ce qu'il fait aux résultats publiés  En vérifiant la contamination, un motif a sauté aux yeux : des dizaines de traces 
 - RÉSULTAT NÉGATIF : sur données propres, l'avantage de la cascade s'efface  Les 32 jetons générés et la troncature (~50 % des langues) sont corrigés (--ctx 2048 
+- REPRISE.md : état 16h20 — pont génératif, résultat négatif sur données propres  Correction de cap (un pont par professeur, pas de couche universelle) + les deux
 
