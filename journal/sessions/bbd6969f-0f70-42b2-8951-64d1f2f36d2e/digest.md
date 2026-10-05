@@ -121852,3 +121852,51 @@ passe complète : 4 couche(s), une seule en mémoire à la fois
 **Le regroupement marche** : 64 lectures d'experts → 51-57 selon la couche. Je lance la passe complète.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && K=/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf\nnohup bash -c \"cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && DRAVE_K3_PASSE=93 DRAVE_K3_TETE=1 DRAVE_K3_MXFP4=1 DRAVE … [1098 caractères tronqués]`
+
+  ```
+8e6945b K3 : le regroupement par experts dans la couche — 64 lectures deviennent 51
+  ```
+
+- **bash** `{"command": "sleep 540; tail -3 /tmp/k3_grp.log; grep -c \"gain\" /tmp/k3_grp.log; date \"+%H:%M\"", "description": "Poll the grouped full pass", "timeoutMs": 570000}`
+
+  ```
+[moe] couche 20 : 4 jeton(s) × 16 experts = 64 lectures jeton par jeton, 51 avec le regroupement — gain ×1.25
+    [moe] couche 21 : 4 jeton(s) × 16 experts = 64 lectures jeton par jeton, 48 avec le regroupement — gain ×1.33
+    [moe] couche 22 :34
+23:16
+  ```
+
+- **bash** `{"command": "sleep 540; grep -E \"chargement [0-9]|passe complète : [0-9]|logits\" /tmp/k3_grp.log; tail -2 /tmp/k3_grp.log; date \"+%H:%M\"", "description": "Poll the grouped full pass", "timeoutMs": 570000}`
+
+  ```
+passe complète : 93 couche(s), une seule en mémoire à la fois · TÊTE (logits)
+    [moe] couche 55 : 4 jeton(s) × 16 experts = 64 lectures jeton par jeton, 48 avec le regroupement — gain ×1.33
+    [moe] couche 56 : 4 jeton(s) × 16 experts = 64 lectures jeton par jeton, 50 avec le regroupement —23:25
+  ```
+
+- **bash** `{"command": "sleep 540; grep -E \"chargement [0-9]|passe complète : [0-9]|logits\" /tmp/k3_grp.log; tail -1 /tmp/k3_grp.log; date \"+%H:%M\"", "description": "Poll the grouped full pass", "timeoutMs": 570000}`
+
+  ```
+passe complète : 93 couche(s), une seule en mémoire à la fois · TÊTE (logits)
+  ---- chargement 188.9 s (12 %) · calcul 1329.3 s (88 %) [attention 230.1 s · FFN 1099.0 s]
+  logits : /tmp/k3_logits_grp.bin — 3 positions × 163840 valeurs
+  passe complète : 1531851 ms au total
+  passe complète : 1531851 ms au total
+23:34
+  ```
+
+### 🤖 Assistant
+
+**Le regroupement fonctionne (64 → 48 lectures) mais ne rapporte pas de temps.** Je vérifie la correction puis j'en tire la leçon.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport struct, math\ndef lire(p):\n    f=open(p,'rb'); v,n=struct.unpack('<ii',f.read(8))\n    import array; a=array.array('f'); a.fromfile(f,n*v); return v,n,a\nv1,n1,A=lire('/tmp/refk3_logits.bin')\nv2,n2,B=lire(' … [786 caractères tronqués]`
+
+  ```
+pos0 : corrélation 0.998523 · top-1 réf 84 / moteur 84 ✅
+pos1 : corrélation 0.998678 · top-1 réf 1103 / moteur 1103 ✅
+pos2 : corrélation 0.999079 · top-1 réf 3140 / moteur 3140 ✅
+=== et le bit à bit, regroupé contre non regroupé ? ===
+  identiques : False · tailles 1966088 1966088
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/verification-kimi-k3.md'; s=open(p).read()\nanc = \"### Deuxième réfutation : la copie anonyme SWAPE (05/10, 18h20)\"\nnew = \"\"\"### 4quater-duodecies. Le regroupement par experts : le mécanisme marche, le … [3395 caractères tronqués]`

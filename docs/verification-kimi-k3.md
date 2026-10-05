@@ -159,6 +159,52 @@ là où le matvec f32 vectorise bien. Le gain vient du chargement, pas du calcul
 Le noyau AVX2 du pool (`matvec_dense_i8`) est le pas suivant, et il est déjà
 écrit.
 
+### 4quater-duodecies. Le regroupement par experts : le mécanisme marche, le temps ne suit pas (05/10, 23h35)
+
+`MoeK3::avant_lot` regroupe les jetons par expert : le routeur de chacun, puis
+les groupes, puis **un expert lu une fois** appliqué à tous ses jetons.
+L'attention reste séquentielle (KDA et MLA portent un état), la FFN non.
+
+**Le mécanisme, mesuré et exact** (`DRAVE_K3_STATS_EXPERTS=1`) :
+
+| couche | lectures jeton par jeton | avec regroupement | gain |
+|---|---:|---:|---:|
+| 1 | 64 | 57 | ×1,12 |
+| 2 | 64 | 53 | ×1,21 |
+| 3 | 64 | 51 | ×1,25 |
+| 21-56 | 64 | 48-51 | **×1,25 à ×1,33** |
+
+**Le temps, non** : passe complète **1 531 851 ms** contre **1 516 430 ms** sans
+regroupement — 1 % de PLUS, dans le bruit.
+
+| | sans regroupement | avec |
+|---|---:|---:|
+| chargement | 189,6 s | 188,9 s |
+| attention | 222,1 s | 230,1 s |
+| **FFN** | **1 088,4 s** | **1 099,0 s** |
+| total | 1 516 430 ms | 1 531 851 ms |
+
+**Ce que ça réfute** : mon modèle « le FFN est limité par le disque ». 23 % de
+lectures d'experts en moins ne donnent rien, donc **les lectures ne sont pas sur
+le chemin critique du FFN**.
+
+**Et ce que ça révèle, par l'arithmétique** : le FFN fait 2,95 s par couple
+(couche, jeton) pour 528 M de MAC → **0,36 GFLOP/s**. C'est dix fois trop lent
+pour de l'AVX2, et l'explication est dans le code : `DenseQ4::dot16` **dispatche
+par ligne** (`is_x86_feature_detected!`, match sur `src`, `sommes32`), soit
+~147 000 appels par couple (couche, jeton). Le coût n'est pas le calcul, c'est
+l'appel.
+
+**Le pas suivant est donc nommé** : le matvec **groupé du pool**
+(`Pool::matvec_dense_q4`, mode 4/6 — un dispatch, puis une boucle sur les lignes,
+réparties sur les fils), au lieu du dispatch par ligne. C'est le même noyau que
+tout le reste du moteur utilise déjà.
+
+**Le regroupement est GARDÉ** : il est correct (top-1 identique 3/3, corrélations
+0,998523 / 0,998678 / 0,999079 — un peu MEILLEURES qu'avant, l'ordre
+d'accumulation étant désormais par identifiant d'expert), il ne coûte rien, et il
+est le mécanisme qui paiera le jour où le calcul cessera d'être le mur.
+
 ### Deuxième réfutation : la copie anonyme SWAPE (05/10, 18h20)
 
 Le mécanisme suivant essayé était : copier les blocs Q8_0 du dense (31,8 Go pour

@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 152.3 h |
+| Durée | 152.8 h |
 | Tours | 109 |
-| Messages | 7680 |
-| Appels d'outils | 7338 |
+| Messages | 7685 |
+| Appels d'outils | 7343 |
 | Fichiers touchés | 150 |
-| Commandes | 6237 |
+| Commandes | 6242 |
 | Sous-agents | 32 |
-| Commits | 524 |
+| Commits | 525 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -5433,7 +5433,7 @@ Le dense ne peut pas être rendu résident à bon compte ici : la page cache ne 
 
 ### Tour 109 — Quel est le roadmap où Drave serait à son meilleur? as-tu besoin de compacter la session? Continue kusqu'a 8h00 HAE
 
-*12 appels d'outils.* Actions notables :
+*17 appels d'outils.* Actions notables :
 
 - bash — Check the remaining time
 - bash — Write the strategic roadmap
@@ -5447,10 +5447,13 @@ Le dense ne peut pas être rendu résident à bon compte ici : la page cache ne 
 - bash — Measure the expert grouping
 - bash — Check the batch size in the pass
 - bash — Commit the grouping and run the full pass
+- bash — Poll the grouped full pass
+- bash — Verify correctness of the grouping
+- … et 1 autres
 
 **Synthèse produite :**
 
-**Le regroupement marche** : 64 lectures d'experts → 51-57 selon la couche. Je lance la passe complète.
+**Le regroupement fonctionne (64 → 48 lectures) mais ne rapporte pas de temps.** Je vérifie la correction puis j'en tire la leçon.
 
 ## 3. Travail accompli
 
@@ -5686,7 +5689,7 @@ Le dense ne peut pas être rendu résident à bon compte ici : la page cache ne 
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6197 autres
+- … et 6202 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -6358,4 +6361,5 @@ Le dense ne peut pas être rendu résident à bon compte ici : la page cache ne 
 - K3 : le dense emprunté s'ANNONCE, et l'arène résidente est réfutée (elle swape)  1. FAUTE CORRIGÉE : j'avais mis le dense emprunté en défaut SILENCIEUX alors   
 - docs : le roadmap — où Drave est à son meilleur, et ce qu'il faut arrêter  La niche est définie par une mesure, pas par une opinion : 451 Go lus par jeton pour 
 - K3 : le regroupement par experts dans la couche — 64 lectures deviennent 51  MoeK3::avant_lot : le routeur de chaque jeton, puis des GROUPES par expert, puis un
+- K3 : le regroupement par experts MARCHE (64 → 48 lectures) mais ne rapporte pas de temps  Passe complète : 1 531 851 ms avec le regroupement contre 1 516 430 ms
 
