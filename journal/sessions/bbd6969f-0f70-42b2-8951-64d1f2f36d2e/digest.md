@@ -124574,3 +124574,36 @@ couche 10 : 4042 pas · ‖D‖ = 4.0595e0
 **Le gain de +11,7 % était de la mémorisation.** Sur des langues que l'adaptateur n'a jamais vues, il **dégrade** la convergence de 5 à 10 %.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> docs/note-cancellation-evenementielle.md <<'EOF'\n\n## 9. Le verdict hors échantillon : la règle locale NE TRANSFÈRE PAS (06/10, 10h50)\n\nTrois tests, du plus faible au plus fort. **Les trois sont négatifs**, et le\ntroisième … [4560 caractères tronqués]`
+
+  ```
+7fd59f6 VERDICT : la règle hebbienne locale ne transfère PAS — et dégrade les langues non vues
+  ```
+
+### 🤖 Assistant
+
+~1 h restante. Plutôt qu'un demi-refactor risqué, je teste un levier **sans entraînement** : la lecture elle-même peut-elle relever le plateau ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/lecture_plateau.py <<'EOF'\n#!/usr/bin/env python3\n\"\"\"lecture_plateau.py — le plateau dépend-il de la LECTURE, ou seulement du modèle ?\n\nQuestion posée : peut-on rapprocher les langues SANS rien entraîner, en change … [5539 caractères tronqués]`
+
+  ```
+### langues TENUES À L'ÉCART (aucun entraînement nulle part) ###
+# 6 langues · 24 couches · base 0
+
+1. COUCHE SEULE — meilleure : couche 4 → 0.6027
+     couche   4 : 0.6027
+     couche   8 : 0.5656
+     couche  10 : 0.5464
+     couche  15 : 0.5442
+
+2. MOYENNE de 3 couches voisines — meilleure : couches [8, 9, 10] → 0.5867
+
+3. MOYENNE PONDÉRÉE par l'inverse de la dispersion inter-langue → 0.5574
+  ```
+
+### 🤖 Assistant
+
+**Aucune lecture ne bat la meilleure couche seule** : 0,6027 (couche 4) contre 0,5867 pour la moyenne de 3 couches, et 0,5574 pour la pondérée. **Combiner dilue.**
+
+Trois négatifs cohérents qui définissent le problème précisément. Je consolide.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> reports/rapport-plateau-semantique.md <<'EOF'\n\n## Résultat 3 — la LECTURE ne rattrape rien (test tenu à l'écart)\n\nQuestion : peut-on rapprocher les langues **sans rien entraîner**, en changeant\nseulement la façon de lire  … [4818 caractères tronqués]`

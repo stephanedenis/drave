@@ -76,3 +76,40 @@ langues ».
 - **L'invariance n'est pas la qualité.** Deux modèles peuvent avoir le même
   plateau et des sorties très différentes. Le plateau dit où la langue cesse
   d'être portée, pas si le sens est juste.
+
+## Résultat 3 — la LECTURE ne rattrape rien (test tenu à l'écart)
+
+Question : peut-on rapprocher les langues **sans rien entraîner**, en changeant
+seulement la façon de lire les couches ? `tools/lecture_plateau.py` compare trois
+lectures sur les mêmes traces, **6 langues tenues à l'écart de tout entraînement**
+(jpn, hin, ell, heb, tha, kor) :
+
+| lecture | cos moyen (meilleur) |
+|---|---:|
+| **une couche seule** — couche 4 | **0,6027** |
+| moyenne de 3 couches voisines — [8,9,10] | 0,5867 |
+| moyenne pondérée par l'inverse de la dispersion | 0,5574 |
+
+**Aucune combinaison ne bat la meilleure couche seule : combiner DILUE.** Les
+couches ne portent pas la même chose, et les moyenner ne fabrique pas
+l'invariance qui manque.
+
+## Ce que les trois résultats disent ensemble
+
+1. Le plateau **existe** et il est au même endroit relatif dans les deux modèles.
+2. **Le grand modèle converge mieux** — pic 0,693 contre 0,649, et surtout pire
+   paire 0,471 contre 0,280.
+3. **La lecture ne rattrape rien** (0,6027 au mieux, la combinaison fait pire).
+4. **Une règle locale non ciblée ne rattrape rien non plus** — elle ne transfère
+   pas, et sur des langues non vues elle **dégrade** de 5 à 10 %
+   (`docs/note-cancellation-evenementielle.md` §9).
+
+**L'écart sémantique entre le petit et le grand modèle est donc DANS LES POIDS.**
+Il n'est ni dans la façon de lire, ni accessible par une règle locale qui n'a
+aucune raison de préférer l'invariant au spécifique.
+
+**Ce qu'il faudrait pour le réduire** — et c'est nommé, pas supposé :
+une règle **contrastive** (anti-Hebbien sur le différentiel inter-langue), avec
+deux conditions non remplies aujourd'hui : un **alignement au niveau du jeton**, et
+un **terme qui récompense l'invariant**. C'est un travail de conception, pas un
+réglage.

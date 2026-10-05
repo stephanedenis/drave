@@ -78,6 +78,39 @@ cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo build --r
 > `res_mix` s'applique là où la référence n'en applique pas. Les trois étaient
 > invisibles au jeton 0 seul.
 >
+> ## **ÉTAT AU 06/10 11h05** — corpus, plateau sémantique, et trois négatifs nets
+>
+> **Corpus ingérés** : l'UDHR (456 langues, **les 30 articles alignés dans
+> toutes**, 13 680 unités — `tools/extrait_udhr.py`), Wikipedia **trouvée en
+> local** (81 Go, 6 langues, appariables par entité — attention,
+> `Panini-Research/data/wikipedia_ingestion/backlog_*.db` porte des **files
+> d'URL**, pas du texte), et Gutenberg parallèle (Dumas, Shakespeare,
+> Dostoïevski). Détail : `docs/note-ingestion-corpus.md`.
+>
+> **Le plateau sémantique est mesuré** sur 10 langues / 4 écritures : la
+> convergence inter-langue culmine à **35-42 % de la profondeur** puis le modèle
+> re-spécialise vers sa sortie. **Un modèle haut de gamme converge mieux** :
+> pic 0,693 contre 0,649, et surtout **pire paire 0,471 contre 0,280**.
+> `reports/rapport-plateau-semantique.md`, `tools/plateau_multilingue.py`.
+>
+> **Trois négatifs, tous mesurés, qui définissent le problème** :
+> 1. une règle hebbienne différentielle **locale et non ciblée ne transfère pas**
+>    — nulle sur un autre texte, nulle sur un autre article, et **négative** sur
+>    une langue non vue (0,6027 → 0,5461) ;
+> 2. **aucune lecture** ne bat la meilleure couche seule : combiner dilue
+>    (0,5867 pour 3 couches, 0,5574 pondéré, contre 0,6027) ;
+> 3. donc **l'écart sémantique est dans les POIDS** — ni dans la lecture, ni
+>    accessible par une règle sans terme qui récompense l'invariant.
+>
+> **Le moteur sait maintenant** : appliquer une règle hebbienne différentielle
+> (`HebbDiff`, seuil d'événement, forme signée, décroissance), la **mesurer**, la
+> **sauver** et la **recharger** (`DRAVE_HEBB_SAUVER` / `DRAVE_HEBB_CHARGER`), et
+> la **réfuter proprement**.
+>
+> **Ce qu'il faudrait pour réduire l'écart** : une règle **contrastive**
+> (anti-Hebbien sur le différentiel inter-langue) avec **alignement au niveau du
+> jeton** et un **terme de partage**. C'est un travail de conception.
+>
 > ## **ÉTAT AU 06/10 00h10** — pour reprendre après compactage
 >
 > **Fait** : Kimi-K3 (1 508,7 Go) tourne en entier, ses logits sont ceux de

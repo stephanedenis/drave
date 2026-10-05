@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 163.5 h |
 | Tours | 118 |
-| Messages | 7835 |
-| Appels d'outils | 7475 |
+| Messages | 7837 |
+| Appels d'outils | 7477 |
 | Fichiers touchés | 150 |
-| Commandes | 6373 |
+| Commandes | 6375 |
 | Sous-agents | 32 |
-| Commits | 540 |
+| Commits | 541 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -5936,7 +5936,7 @@ Poser le rapport et la sauvegarde **à un se
 
 ### Tour 118 — Continue de faire évoluer notre modèle et moteur en visant des réponses qui émulent les réponses sémantiques des modèles … [205 caractères tronqués]
 
-*16 appels d'outils.* Actions notables :
+*18 appels d'outils.* Actions notables :
 
 - bash — Check time and locate the two report sites
 - bash — Unify the HebbDiff report in one place
@@ -5952,20 +5952,13 @@ Poser le rapport et la sauvegarde **à un se
 - bash — Write and commit the semantic plateau report
 - bash — Re-measure the plateau with the learned adapter
 - bash — Train on 40 languages, holding out 5
-- … et 2 autres
+- … et 4 autres
 
 **Synthèse produite :**
 
-**Le test tenu à l'écart est NÉGATIF, et c'est le résultat qui compte.**
+**Aucune lecture ne bat la meilleure couche seule** : 0,6027 (couche 4) contre 0,5867 pour la moyenne de 3 couches, et 0,5574 pour la pondérée. **Combiner dilue.**
 
-| couche | sans adaptateur | avec |
-|---|---:|---:|
-| 8 | 0,5656 | 0,5139 |
-| 10 | 0,5464 | 0,5082 |
-| 12 | 0,5142 | 0,4719 |
-| **pic** | **0,6027** | **0,5461** |
-
-**Le gain de +11,7 % était de la mémorisation.** Sur des langues que l'adaptateur n'a jamais vues, il **dégrade** la convergence de 5 à 10 %.
+Trois négatifs cohérents qui définissent le problème précisément. Je consolide.
 
 ## 3. Travail accompli
 
@@ -6201,7 +6194,7 @@ Poser le rapport et la sauvegarde **à un se
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6333 autres
+- … et 6335 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -6889,4 +6882,5 @@ Poser le rapport et la sauvegarde **à un se
 - Plateau multilingue à l'échelle : 10 langues, 4 écritures, pic à 42 % de la profondeur  tools/plateau_multilingue.py étend invariance_semantique.py d'une paire 
 - Un modèle haut de gamme converge MIEUX : pic 0,693 contre 0,649, et surtout pire paire 0,471 contre 0,280  Mêmes 10 langues (4 écritures), même article de l'UDH
 - VERDICT : la règle hebbienne locale ne transfère PAS — et dégrade les langues non vues  Trois tests, tous négatifs, du plus faible au plus fort :  1. autre text
+- La LECTURE ne rattrape rien : combiner les couches DILUE l'invariance  tools/lecture_plateau.py, 6 langues tenues à l'écart de tout entraînement :   une couche 
 
