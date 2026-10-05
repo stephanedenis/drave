@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 161.9 h |
-| Tours | 114 |
-| Messages | 7758 |
-| Appels d'outils | 7406 |
+| Durée | 162.1 h |
+| Tours | 115 |
+| Messages | 7770 |
+| Appels d'outils | 7416 |
 | Fichiers touchés | 150 |
-| Commandes | 6305 |
+| Commandes | 6315 |
 | Sous-agents | 32 |
-| Commits | 532 |
+| Commits | 533 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -275,6 +275,8 @@
 **Tour 113** — la sortie doit toujours être prévisible depuis son entrée. Malgré le hasard utilisé en base pour l'entrainement classique. une fois un modèle llm entrainé il est déterministe en principe. donc toujours oui. L'idée est ici de récupérer les premières couches d'entrée des grands modèles en supposant qu'il y ait une abstraction linguistique rendu à un certain niveau. c'est la couche d'entrée en sémant … [153 caractères tronqués]
 
 **Tour 114** — non, coucche 0-9 à distiller en modèle récursif avec isolation en grappes, idem pour 9-29, une fois que 0-9 est performant, ensuite on continue en fonction de nos observation, mais en dehors de 0-9 ça va nécessiter des corpus d'entrainement ou un émulateur stochastique des entrées sémantiques pour arriver à stimuler adéquatement les couches intermédiaires en distillation.
+
+**Tour 115** — Étudie /home/stephane/Data13TB/stephane/GitHub/Panini-Research/ pour les corpus de départ sur différents domaines et langues, tu auras probablement à chercher certains dossiers dans /home/stephane/Data13TB si tu ne trouve pas le contenu car certains répertoires ont été déplacés, mais tout est accessible. Bref, il faut commencer par exercer les couches d'entrées avec des corpus de traduction pour i … [136 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -5699,7 +5701,66 @@ Tout est commité (`tools/invariance_semantique.py` réutilise le lecteur DRVF e
 
 **Synthèse produite :**
 
-**Mesure faite, avec une borne honnête.**
+**Ta distinction est la bonne, et elle commande l'ordre des travaux** : la couche 0 a une entrée qu'on sait **échantillonner** (du texte → des plongements), alors qu'au-delà de 0-9 l'entrée vit dans un espace qu'on ne produit qu'en faisant tourner le modèle. D'où : commencer par 0-9, où les données sont gratuites, et n'aborder 9-29 qu'avec un corpus ou un émulateur.
+
+Avant d'écrire un récurrent, j'ai mesuré la question qui décide si ça vaut la peine.
+
+\## Le bloc 0-9 est-il approximable ? Première borne
+
+Trace DRVF de 192 jetons de code, avec un approximant **délibérément pauvre** — une combinaison linéaire de **2 colonnes sur 2048**, trouvée par recherche aléatoire :
+
+| sortie | R² |
+|---|---:|
+| couche 1 | **0,580** |
+| couche 2 | 0,299 |
+| couche 4 | 0,313 |
+| couche 10 | **0,192** |
+
+**Deux directions suffisent à expliquer 58 % de la variance dès la première couche, et encore 19 % après dix.** Le flux est **dominé par peu de directions** — ce qui est cohérent avec le plateau sémantique : la représentation se resserre sur une variété indépendante de la langue.
+
+**Mais c'est une borne inférieure, pas une performance.** Elle ne dit pas « un récurrent peut porter 0-9 » ; elle dit que **la cible n'est pas du bruit** — la condition pour que l'essai vaille la peine. Le dire autrement serait exactement l'affirmation sans mesure que tu m'as demandé d'éviter.
+
+\## Ce qu'il faut mesurer pour transformer la borne en réponse
+
+1. **La régression linéaire complète** (crête, 2048×2048) — le vrai plafond linéaire. Au-dessus, il faut de la non-linéarité ; en dessous, un récurrent suffit.
+2. **Un récurrent minimal** ajusté forward-only sur les flux, jugé par le résidu qu'il laisse **et** par la porte de correction sur la sortie du bloc.
+3. **L'isolation en grappes** — mais mesurée, pas supposée : si le résidu est localisé (peu de coordonnées, peu de têtes), les grappes sont naturelles ; sinon elles seront arbitraires.
+
+\## Un ménage que j'ai fait au passage
+
+J'avais écrit une fonction qui **prétendait** faire des moindres carrés et ne calculait que les biais. Je l'ai retirée plutôt que de la laisser dans le dépôt : un outil qui ment sur ce qu'il fait coûte plus cher que son absence — c'est la même règle que `profil_flux.py`, qui lit la v1 et plante sur la v3.
+
+Tout est commité, 77 tests verts, la note à jour dans `docs/note-cancellation-evenementielle.md` (§ 5 et 6).
+
+**Je lance le plafond linéaire complet ?** C'est le chiffre qui dit si ton bloc 0-9 demande un récurrent ri
+… [87 caractères tronqués]
+
+### Tour 115 — Étudie /home/stephane/Data13TB/stephane/GitHub/Panini-Research/ pour les corpus de départ sur différents domaines et lan … [416 caractères tronqués]
+
+*10 appels d'outils.* Actions notables :
+
+- bash — List Panini-Research
+- bash — List the rest and the data directory
+- bash — Find corpus files
+- bash — Inspect the corpus structures
+- bash — List the ingestion databases
+- bash — Inspect the corpus database schemas
+- bash — Measure the real text volume
+- bash — List the Gutenberg titles per language
+- bash — Find cross-language parallel works
+- bash — Write and commit the corpus note
+
+**Synthèse produite :**
+
+**Trois paires de traduction réelles**, en trois paires de langues :
+
+| œuvre | langue A | langue B |
+|---|---|---|
+| Dumas, *Le comte de Monte-Cristo* | en 460 989 mots | fr 121 597 |
+| Shakespeare, *Romeo and Juliet* | en 25 976 | fr 38 298 |
+| Dostoïevski, *Crime and Punishment* | en 206 549 | es 176 258 |
+
+Plus Wikipedia **en/de/fr** pour les domaines, et les œuvres isolées pour le vocabulaire propre à chaque œuvre.
 
 ## 3. Travail accompli
 
@@ -5935,7 +5996,7 @@ Tout est commité (`tools/invariance_semantique.py` réutilise le lecteur DRVF e
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6265 autres
+- … et 6275 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -6063,7 +6124,7 @@ Tout est commité (`tools/invariance_semantique.py` réutilise le lecteur DRVF e
 
 ## 5. Erreurs rencontrées
 
-368 sorties en erreur ou divergentes. Les premières :
+369 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -6615,4 +6676,5 @@ Tout est commité (`tools/invariance_semantique.py` réutilise le lecteur DRVF e
 - Note : la voie événementielle — prédire une couche pour ne transporter que l'imprévu  Part d'une objection juste : arrêter de retomber sur l'entraînement classi
 - Mesure : le plateau sémantique est à la couche 23 sur 48 — la coupe est une FENÊTRE, pas un point  Invariance à la forme de surface, couche par couche : « Le ch
 - Bloc 0-9 : première borne d'approximabilité — 19 % de la variance après dix couches avec DEUX directions  tools/approximabilite_bloc.py, trace DRVF de 192 jeton
+- Note : les corpus de Panini-Research — 11,5 M mots, et TROIS œuvres parallèles  Relevé complet depuis /home/stephane/Data13TB/stephane/GitHub/Panini-Research.  
 

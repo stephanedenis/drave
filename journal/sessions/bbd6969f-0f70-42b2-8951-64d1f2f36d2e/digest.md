@@ -123126,3 +123126,317 @@ invite : 192 jetons
 **Mesure faite, avec une borne honnête.**
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/approximabilite_bloc.py'; s=open(p).read()\n# retirer la fonction qui PRÉTEND faire des moindres carrés et ne fait rien :\n# laisser un mensonge dans le dépôt coûte plus cher que le retirer.\ni=s.index(\"de … [3526 caractères tronqués]`
+
+  ```
+fonction mensongère retirée
+5e53c74 Bloc 0-9 : première borne d'approximabilité — 19 % de la variance après dix couches avec DEUX directions
+  ```
+
+### 🤖 Assistant
+
+**Ta distinction est la bonne, et elle commande l'ordre des travaux** : la couche 0 a une entrée qu'on sait **échantillonner** (du texte → des plongements), alors qu'au-delà de 0-9 l'entrée vit dans un espace qu'on ne produit qu'en faisant tourner le modèle. D'où : commencer par 0-9, où les données sont gratuites, et n'aborder 9-29 qu'avec un corpus ou un émulateur.
+
+Avant d'écrire un récurrent, j'ai mesuré la question qui décide si ça vaut la peine.
+
+## Le bloc 0-9 est-il approximable ? Première borne
+
+Trace DRVF de 192 jetons de code, avec un approximant **délibérément pauvre** — une combinaison linéaire de **2 colonnes sur 2048**, trouvée par recherche aléatoire :
+
+| sortie | R² |
+|---|---:|
+| couche 1 | **0,580** |
+| couche 2 | 0,299 |
+| couche 4 | 0,313 |
+| couche 10 | **0,192** |
+
+**Deux directions suffisent à expliquer 58 % de la variance dès la première couche, et encore 19 % après dix.** Le flux est **dominé par peu de directions** — ce qui est cohérent avec le plateau sémantique : la représentation se resserre sur une variété indépendante de la langue.
+
+**Mais c'est une borne inférieure, pas une performance.** Elle ne dit pas « un récurrent peut porter 0-9 » ; elle dit que **la cible n'est pas du bruit** — la condition pour que l'essai vaille la peine. Le dire autrement serait exactement l'affirmation sans mesure que tu m'as demandé d'éviter.
+
+## Ce qu'il faut mesurer pour transformer la borne en réponse
+
+1. **La régression linéaire complète** (crête, 2048×2048) — le vrai plafond linéaire. Au-dessus, il faut de la non-linéarité ; en dessous, un récurrent suffit.
+2. **Un récurrent minimal** ajusté forward-only sur les flux, jugé par le résidu qu'il laisse **et** par la porte de correction sur la sortie du bloc.
+3. **L'isolation en grappes** — mais mesurée, pas supposée : si le résidu est localisé (peu de coordonnées, peu de têtes), les grappes sont naturelles ; sinon elles seront arbitraires.
+
+## Un ménage que j'ai fait au passage
+
+J'avais écrit une fonction qui **prétendait** faire des moindres carrés et ne calculait que les biais. Je l'ai retirée plutôt que de la laisser dans le dépôt : un outil qui ment sur ce qu'il fait coûte plus cher que son absence — c'est la même règle que `profil_flux.py`, qui lit la v1 et plante sur la v3.
+
+Tout est commité, 77 tests verts, la note à jour dans `docs/note-cancellation-evenementielle.md` (§ 5 et 6).
+
+**Je lance le plafond linéaire complet ?** C'est le chiffre qui dit si ton bloc 0-9 demande un récurrent riche ou un simple état linéaire — et donc si l'isolation en grappes a un sens mesurable.
+
+
+## Tour 115
+
+### 👤 Utilisateur
+
+Étudie /home/stephane/Data13TB/stephane/GitHub/Panini-Research/ pour les corpus de départ sur différents domaines et langues, tu auras probablement à chercher certains dossiers dans /home/stephane/Data13TB si tu ne trouve pas le contenu car certains répertoires ont été déplacés, mais tout est accessible. Bref, il faut commencer par exercer les couches d'entrées avec des corpus de traduction pour isoler les grappes linguistiques et le vocabulaire de chaque oeuvre/domaine. autant de grappes à isoler, et retravailler en rétroactions.
+
+### 🤖 Assistant
+
+⏵ J'explore Panini-Research et je cartographie les corpus
+
+- **bash** `{"command": "D=/home/stephane/Data13TB/stephane/GitHub/Panini-Research; ls -la \"$D\" 2>&1 | head -25; echo \"=== taille ===\"; du -sh \"$D\" 2>/dev/null", "description": "List Panini-Research"}`
+
+  ```
+total 1432
+drwxr-xr-x. 1 stephane stephane    2016  7 sep 13:32 .
+drwxr-xr-x. 1 stephane stephane    2374  3 oct 10:09 ..
+drwxr-xr-x. 1 stephane stephane     310  7 sep 12:47 archives
+drwxr-xr-x. 1 stephane stephane      20 23 mai 19:31 archives_scripts_v1
+drwxr-xr-x. 1 stephane stephane      38 27 jan  2026 autonomous-agents
+drwxr-xr-x. 1 stephane stephane     572 28 mai 10:34 colab_results
+drwxr-xr-x. 1 stephane stephane      50 27 jan  2026 config
+-rw-r--r--. 1 stephane stephane     721 24 mai 08:29 conftest.py
+drwxr-xr-x. 1 stephane stephane     210 27 jan  2026 copilotage
+drwxr-xr-x. 1 stephane stephane    8048  5 aoû 14:37 data
+drwxr-xr-x. 1 stephane stephane     752 30 jun 20:45 deployments
+drwxr-xr-x. 1 stephane stephane      16 27 jan  2026 diagrams_dhatu_cycles
+drwxr-xr-x. 1 stephane stephane    1066  7 sep 12:47 docs
+-rw-r--r--. 1 stephane stephane    4676 27 jan  2026 E1_REPORT_20251224.md
+-rw-r--r--. 1 stephane stephane   13655 27 jan  2026 FONDAMENTAL_RESEARCH_ROADMAP_Q1_2026.md
+-rw-r--r--. 1 stephane stephane    1971  7 sep 13:33 GATES_G1_G3_REPORT_2026-09-07.md
+drwxr-xr-x. 1 stephane stephane     208  7 sep 13:45 .git
+drwxr-xr-x. 1 stephane stephane     368  7 sep 1
+… [457 caractères tronqués]
+  ```
+
+- **bash** `{"command": "D=/home/stephane/Data13TB/stephane/GitHub/Panini-Research; ls \"$D\" | tail -20; echo \"=== data/ ===\"; ls \"$D/data\" 2>/dev/null | head -40", "description": "List the rest and the data directory", "timeoutMs": 120000}`
+
+  ```
+REPRISE_v0.7.0-alpha.md
+REPRISE_v0.8.0-alpha.md
+REPRISE_v0.9.0-alpha.md
+REPRISE_v1.0.0-alpha.md
+results
+REVISION_JOURNAUX_DE_BORD_2026-08-28.md
+run_e1_analysis.py
+scripts
+SESSION_REPORT_477_478.md
+sessions
+shared
+spec
+src
+state
+tech
+temp
+test_corpus
+tests
+tools
+web-interfaces
+=== data/ ===
+acceleration_config.json
+analyse_20250922_085336_en.json
+analyse_20250922_085336_fr.json
+ANALYSE_DETAILLEE_CONCEPTS_20250922.json
+ANALYSE_FONCTIONS_LEXICALES_DHATU_20250922.json
+analyse_litterature_pertinente.json
+analyse_molecules_semantiques_conte.json
+analyse_onomastique_20250922_090407_en.json
+analyse_onomastique_20250922_090407_fr.json
+archives
+aspect_dhatu_phase2.json
+audit_corpus_planification_extension.json
+author_profiles
+author_v14_profiles.json
+autonomous_loop
+benchmark_combinatorial.json
+benchmark_reconstruction_v1.json
+biographies
+bottleneck_analysis.json
+bottleneck_report.md
+cache_documents_scientifiques.json
+calibrated_weights_e2e.json
+calibrated_weights_v1.json
+collocation
+collocation_index_literary.json
+collocation_index_scientific.json
+collocation_index_trigrams.json
+COMMIT_SUMMARY.md
+configs
+contraintes_operateurs_naires.json
+corpus_complet_unifie.json
+corpus_multilingue_dev.js
+… [226 caractères tronqués]
+  ```
+
+- **bash** `{"command": "D=/home/stephane/Data13TB/stephane/GitHub/Panini-Research; echo \"=== corpus (fichiers) ===\"; find \"$D\" -maxdepth 3 -type f \\( -iname \"*corpus*\" -o -iname \"*.txt\" -o -iname \"*.jsonl\" \\) 2>/dev/null | head -25; echo; echo \"=== test_corpus ===\"; ls -R \"$D/test_corpus\" 2>/de … [76 caractères tronqués]`
+
+  ```
+=== corpus (fichiers) ===
+/home/stephane/Data13TB/stephane/GitHub/Panini-Research/archives/scripts_v2/nipada_corpus_downloader_v2_multisource.py
+/home/stephane/Data13TB/stephane/GitHub/Panini-Research/archives/scripts_v2/build_corpus_v295.py
+/home/stephane/Data13TB/stephane/GitHub/Panini-Research/archives/scripts_v2/nipada_corpus_v347_full.py
+/home/stephane/Data13TB/stephane/GitHub/Panini-Research/colab_results/collector_pid.txt
+/home/stephane/Data13TB/stephane/GitHub/Panini-Research/colab_results/smart_feeder_pid.txt
+/home/stephane/Data13TB/stephane/GitHub/Panini-Research/colab_results/turbo_collector_pid.txt
+/home/stephane/Data13TB/stephane/GitHub/Panini-Research/copilotage/journal/mission_reports.jsonl
+/home/stephane/Data13TB/stephane/GitHub/Panini-Research/copilotage/utilities/generate_corpus_complet.py
+/home/stephane/Data13TB/stephane/GitHub/Panini-Research/copilotage/utilities/generate_corpus_research.py
+/home/stephane/Data13TB/stephane/GitHub/Panini-Research/copilotage/utilities/generate_simple_corpus.py
+/home/stephane/Data13TB/stephane/GitHub/Panini-Research/data/archives/USAGE_INSTRUCTIONS.txt
+/home/stephane/Data13TB/stephane/GitHub/Panini-Research/data/audit_corpus_planif
+… [1687 caractères tronqués]
+  ```
+
+- **bash** `{"command": "D=/home/stephane/Data13TB/stephane/GitHub/Panini-Research\nfor f in data/corpus_multilingue_dev.json data/corpus_complet_unifie.json data/corpus_prescolaire.json data/corpus_scientifique.json; do\n  [ -f \"$D/$f\" ] && printf \"%-42s %8.1f Mo\\n\" \"$f\" \"$(stat -c%s \"$D/$f\" | awk '{ … [332 caractères tronqués]`
+
+  ```
+data/corpus_multilingue_dev.json                0,0 Mo
+data/corpus_complet_unifie.json                 0,0 Mo
+data/corpus_prescolaire.json                    0,0 Mo
+data/corpus_scientifique.json                   0,0 Mo
+=== structure de corpus_multilingue_dev.json ===
+[
+  {
+    "id": "2509.15218v1",
+    "title": "LNE-Blocking: An Efficient Framework for Contamination Mitigation\n  Evaluation on Large Language Models",
+    "abstract": "The problem of data contamination is now almost inevitable during the\ndevelopment of large language models (LLMs), with the training data commonly\nintegrating those evaluation benchmarks even unintentionally. This problem\nsubsequently makes it hard to benchmark LLMs fairly. Instead of constructing\ncontamination-free datasets (quite hard), we propose a novel framework,\n\\textbf{LNE-Blocking}, to restore model performance prior to contamination on\npotentially leaked datasets. Our framework consists of two components:\nco
+=== la base d'ingestion massive ===
+total 103060
+drwxr-xr-x. 1 stephane stephane      772  7 sep 12:47 .
+drwxr-xr-x. 1 stephane stephane     8048  5 aoû 14:37 ..
+-rw-r--r--. 1 stephane stephane    73728  3 jui 16:11 backlog_arxiv_
+… [366 caractères tronqués]
+  ```
+
+- **bash** `{"command": "D=/home/stephane/Data13TB/stephane/GitHub/Panini-Research; ls -la \"$D/data/mass_ingestion/\" | awk '{printf \"%10.1f Mo  %s\\n\", $5/1048576, $9}' | tail -n +4; echo \"=== bases ailleurs dans le projet ===\"; find \"$D\" -name \"*.db\" -size +1M 2>/dev/null | head -12 | while read f; d … [168 caractères tronqués]`
+
+  ```
+0.1 Mo  backlog_arxiv_all.db
+       9.4 Mo  backlog_gutenberg_de.db
+      21.1 Mo  backlog_gutenberg_en.db
+      11.2 Mo  backlog_gutenberg_es.db
+       6.7 Mo  backlog_gutenberg_fr.db
+      16.8 Mo  backlog_wikipedia_de.db
+      20.4 Mo  backlog_wikipedia_en.db
+      13.6 Mo  backlog_wikipedia_fr.db
+       0.0 Mo  corpus_expansion.db
+       0.0 Mo  corpus_expansion.db-shm
+       0.4 Mo  corpus_expansion.db-wal
+       0.1 Mo  full_texts
+       0.4 Mo  gutenberg_meta.db
+       0.0 Mo  gutenberg_meta.db-shm
+       0.0 Mo  gutenberg_meta.db-wal
+       0.5 Mo  ingestion_progress.db
+       0.0 Mo  ingestion_progress.db-shm
+       0.0 Mo  ingestion_progress.db-wal
+=== bases ailleurs dans le projet ===
+     2,0 Mo  data/wikipedia_ingestion/backlog.db
+    63,0 Mo  data/wikipedia_ingestion/backlog_en.db
+    12,0 Mo  data/wikipedia_ingestion/backlog_de.db
+     9,0 Mo  data/wikipedia_ingestion/backlog_it.db
+    21,0 Mo  data/wikipedia_ingestion/backlog_es.db
+    18,0 Mo  data/wikipedia_ingestion/backlog_fr.db
+    20,0 Mo  data/wikipedia_ingestion/backlog_ru.db
+    19,0 Mo  data/wikipedia_ingestion/backlog_ja.db
+    16,0 Mo  data/wikipedia_ingestion/backlog_pt.db
+    23,0 Mo  data/wikipedia_in
+… [695 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+**Voilà le bon gisement** : `data/wikipedia_ingestion/` — **11 langues**, dont en 63 Mo, de, it, es, fr, ru, ja, pt, zh, ar. J'inspecte le schéma et le volume réel.
+
+- **bash** `{"command": "D=/home/stephane/Data13TB/stephane/GitHub/Panini-Research/data\npython3 - <<'PY'\nimport sqlite3, glob, os\nD='/home/stephane/Data13TB/stephane/GitHub/Panini-Research/data'\nfor motif in ('wikipedia_ingestion/backlog_*.db','mass_ingestion/backlog_*.db'):\n    for f in sorted(glob.glob(o … [853 caractères tronqués]`
+
+  ```
+backlog_ar.db                      tables=['backlog'] lignes={'backlog': 88695}
+     colonnes backlog : ['url_hash', 'url', 'source_type', 'attested_by', 'depth', 'status', 'queued_at', 'resolved_at', 'content_hash', 'byte_size', 'error', 'lang']
+backlog_de.db                      tables=['backlog'] lignes={'backlog': 54211}
+     colonnes backlog : ['url_hash', 'url', 'source_type', 'attested_by', 'depth', 'status', 'queued_at', 'resolved_at', 'content_hash', 'byte_size', 'error', 'lang']
+backlog_en.db                      tables=['backlog'] lignes={'backlog': 267376}
+     colonnes backlog : ['url_hash', 'url', 'source_type', 'attested_by', 'depth', 'status', 'queued_at', 'resolved_at', 'content_hash', 'byte_size', 'error', 'lang']
+backlog_es.db                      tables=['backlog'] lignes={'backlog': 90901}
+     colonnes backlog : ['url_hash', 'url', 'source_type', 'attested_by', 'depth', 'status', 'queued_at', 'resolved_at', 'content_hash', 'byte_size', 'error', 'lang']
+backlog_fr.db                      tables=['backlog'] lignes={'backlog': 77492}
+     colonnes backlog : ['url_hash', 'url', 'source_type', 'attested_by', 'depth', 'status', 'queued_at', 'resolved_at', 'content_h
+… [3095 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+**Distinction capitale** : les `wikipedia_ingestion/backlog_*.db` sont des **files d'URL** (267 376 pour l'anglais), pas du texte. Le texte est dans `mass_ingestion` — colonne `raw_text`. Je mesure le volume réel.
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sqlite3, glob, os\nD='/home/stephane/Data13TB/stephane/Data13TB'\nD='/home/stephane/Data13TB/stephane/GitHub/Panini-Research/data/mass_ingestion'\ntot={}\nfor f in sorted(glob.glob(os.path.join(D,'backlog_*.db'))):\n    try:\n        c=sqlite3.connect(f'file:{f} … [737 caractères tronqués]`
+
+  ```
+arxiv_all            25 doc ·      4780 mots ·     0.0 Mo de texte
+  gutenberg_de         10 doc ·   1197274 mots ·     8.0 Mo de texte
+  gutenberg_en         13 doc ·   2891852 mots ·    16.3 Mo de texte
+  gutenberg_es         10 doc ·   1559905 mots ·     9.2 Mo de texte
+  gutenberg_fr         11 doc ·    945494 mots ·     5.8 Mo de texte
+  wikipedia_de      18740 doc ·   1449738 mots ·    10.7 Mo de texte
+  wikipedia_en      20935 doc ·   2080862 mots ·    13.0 Mo de texte
+  wikipedia_fr      15636 doc ·   1334668 mots ·     8.3 Mo de texte
+
+  TOTAL : 55380 documents, 11464573 mots
+  ```
+
+### 🤖 Assistant
+
+**11,5 M mots réels**, dont deux natures très différentes : **Gutenberg = œuvres entières** (2,9 M mots en anglais sur 13 livres) et **Wikipedia = domaines**. Je regarde s'il y a des **œuvres parallèles** entre langues — c'est ça qui isolerait les grappes linguistiques.
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sqlite3, glob, os\nD='/home/stephane/Data13TB/stephane/GitHub/Panini-Research/data/mass_ingestion'\nfor f in sorted(glob.glob(os.path.join(D,'backlog_gutenberg_*.db'))):\n    lang=os.path.basename(f).replace('backlog_gutenberg_','').replace('.db','')\n    c=sqli … [379 caractères tronqués]`
+
+  ```
+--- Gutenberg de ---
+      237626 mots  Buddenbrooks: Verfall einer Familie              Mann, Thomas
+      217622 mots  Die Traumdeutung                                 Freud, Sigmund
+      164270 mots  Der Zauberberg. Zweiter Band                     Mann, Thomas
+      151380 mots  Der Zauberberg. Erster Band                      Mann, Thomas
+--- Gutenberg en ---
+      963478 mots  The Complete Works of William Shakespeare        Shakespeare, William
+      460989 mots  The Count of Monte Cristo                        Dumas, Alexandre
+      319407 mots  Middlemarch                                      Eliot, George
+      231188 mots  The City of God, Volume I                        Augustine, of Hippo,
+--- Gutenberg es ---
+      389719 mots  Don Quijote                                      Cervantes Saavedra, 
+      263882 mots  Los miserables - Tomo 2 (de 2)                   Hugo, Victor
+      207405 mots  Los argonautas                                   Blasco Ibáñez, Vicen
+      176258 mots  El crimen y el castigo                           Dostoyevsky, Fyodor
+--- Gutenberg fr ---
+      225175 mots  Les trois mousquetaires                          Dumas, Alexandre
+      196365 
+… [235 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+**Il y a des œuvres parallèles** — et c'est exactement ce qu'il faut pour isoler les grappes linguistiques : Dumas *The Count of Monte Cristo* (EN, 461 k mots) et *Le comte de Monte-Cristo* (FR). Même œuvre, deux langues, du texte littéraire entier.
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sqlite3, glob, os, re\nfrom collections import defaultdict\nD='/home/stephane/Data13TB/stephane/GitHub/Panini-Research/data/mass_ingestion'\npar_auteur=defaultdict(list)\nfor f in sorted(glob.glob(os.path.join(D,'backlog_gutenberg_*.db'))):\n    lang=os.path.bas … [772 caractères tronqués]`
+
+  ```
+=== auteurs présents dans PLUSIEURS langues ===
+  Dostoyevsky
+      en    206549 mots  Crime and Punishment
+      es    176258 mots  El crimen y el castigo
+  Dumas
+      en    460989 mots  The Count of Monte Cristo
+      fr    121597 mots  Le comte de Monte-Cristo, Tome I
+      fr    225175 mots  Les trois mousquetaires
+  Shakespeare
+      en     25976 mots  Romeo and Juliet
+      en    963478 mots  The Complete Works of William Shakespeare
+      fr     38298 mots  Roméo et Juliette: Tragédie
+
+  3 auteur(s) en plusieurs langues
+  ```
+
+### 🤖 Assistant
+
+**Trois paires de traduction réelles**, en trois paires de langues :
+
+| œuvre | langue A | langue B |
+|---|---|---|
+| Dumas, *Le comte de Monte-Cristo* | en 460 989 mots | fr 121 597 |
+| Shakespeare, *Romeo and Juliet* | en 25 976 | fr 38 298 |
+| Dostoïevski, *Crime and Punishment* | en 206 549 | es 176 258 |
+
+Plus Wikipedia **en/de/fr** pour les domaines, et les œuvres isolées pour le vocabulaire propre à chaque œuvre.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > docs/note-corpus-panini.md <<'EOF'\n# Note — les corpus de Panini-Research, et ce qu'ils permettent de mesurer\n\n> Relevé du 06/10. Source : `/home/stephane/Data13TB/stephane/GitHub/Panini-Research`.\n\n## 1. Où est le TEXTE ( … [4916 caractères tronqués]`
