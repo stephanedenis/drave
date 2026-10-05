@@ -237,6 +237,7 @@ def main():
     critere = opt("--critere", "redondance")
     cycles = int(opt("--cycles", 3))
     par_cycle = int(opt("--couches-par-cycle", 3))
+    plafond = int(opt("--plafond", 256))
 
     cltr, Etr, Ytr, H = charge(tr_p)
     clte, Ete, Yte, _ = charge(te_p)
@@ -258,14 +259,22 @@ def main():
     base = cos_lignes(np.tile(mt, (len(Yte_a), 1)), Yte_a)
     print(f"# constante témoin sur le TEST : {base:.4f}")
 
-    meilleur = {"f_te": -1.0}
+    meilleur = {"f_va": -1.0, "f_te": -1.0}
     for cycle in range(1, cycles+1):
         # ------------------------------------------------------- CROISSANCE
         print(f"\n########## CYCLE {cycle} — CROISSANCE ##########")
         print(f"{'après':<30} {'neur.':>6} {'couch.':>7} {'fid appr':>9} {'fid VAL':>8} "
               f"{'fid TEST':>9} {'invar.':>8} {'pire':>7}")
         for _ in range(par_cycle):
-            k = max(1, P.compte_neurones)   # chaque couche DOUBLE le réseau
+            # Cycle 1 : chaque couche DOUBLE (1,1,2,4,…) pour atteindre vite la
+            # zone utile. Cycles suivants : on AJOUTE sans doubler — le réseau a
+            # déjà une taille qui compte, et doubler le ferait exploser.
+            k = (max(1, P.compte_neurones) if cycle == 1
+                 else max(2, P.compte_neurones//4))
+            if P.compte_neurones + k > plafond:
+                k = plafond - P.compte_neurones
+            if k <= 0:
+                break
             P.nait(k)
             idx = np.arange(P.compte_neurones)
             W = P.ajuste(idx, ride, mt, itr)
@@ -275,7 +284,9 @@ def main():
             print(f"{'C' + str(cycle) + ' naissance couche ' + str(len(P.couches)) + ' (+' + str(k) + ')':<30} "
                   f"{P.compte_neurones:>6} {len(P.couches):>7} {f_tr:>9.4f} {f_va:>8.4f} "
                   f"{f_te:>9.4f} {mg:>8.4f} {mig:>7.4f}")
-            if f_te > meilleur["f_te"]:
+            # SÉLECTION SUR LA VALIDATION, jamais sur le test : choisir le réseau
+            # d'après son score de test serait regarder la réponse avant de choisir.
+            if f_va > meilleur["f_va"]:
                 meilleur = {"f_te": f_te, "neur": P.compte_neurones,
                             "couch": len(P.couches), "f_tr": f_tr, "f_va": f_va,
                             "inv": mg, "pire": mig, "etape": f"C{cycle} croissance"}
@@ -314,7 +325,7 @@ def main():
             print(f"{'retrait de ' + str(n_ret) + ' (recalculé)':<30} {len(garde):>6} "
                   f"{len(P.couches_de(garde)):>7} {P.fid(idx, W, mt, itr):>9.4f} {f_va:>8.4f} "
                   f"{f_te:>9.4f}")
-            if f_te > meilleur["f_te"]:
+            if f_va > meilleur["f_va"]:
                 mv, miv = P.invariance(Xte_a, W, mt)
                 meilleur = {"f_te": f_te, "neur": len(garde),
                             "couch": len(P.couches_de(garde)),
@@ -323,7 +334,7 @@ def main():
             # on COMPACTE : la croissance du cycle suivant doit partir des survivants
             P.compacte(garde)
 
-    print(f"\n=== MEILLEUR RÉSEAU RENCONTRÉ ({meilleur['etape']}) ===")
+    print(f"\n=== MEILLEUR RÉSEAU SELON LA VALIDATION ({meilleur['etape']}) ===")
     print(f"  taille           : {meilleur['neur']} neurones · {meilleur['couch']} couches")
     print(f"  fidélité appr.   : {meilleur['f_tr']:.4f}")
     print(f"  fidélité VAL     : {meilleur['f_va']:.4f}")

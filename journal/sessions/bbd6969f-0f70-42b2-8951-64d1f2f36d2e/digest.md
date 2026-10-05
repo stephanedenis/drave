@@ -128432,3 +128432,104 @@ après
 Trois faits : **monotone dans toutes les colonnes** ; l'attrition **améliore** le test (0,4998 → **0,5002**) en retirant 25 % ; et face au réservoir plat à taille égale (64 neurones : 0,4810 contre 0,4767), **la profondeur fait payer la capacité** — le plat sature, la cascade non.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && setsid nohup python3 tools/pont_generatif.py /tmp/cache_appr10.npz /tmp/cache_tenus10.npz --val 10 --seuil 0.005 --cycles 4 --couches-par-cycle 3 --critere redondance > /tmp/gen10c.log 2>&1 < /dev/null & echo \"cycles 10 unités lancé … [3819 caractères tronqués]`
+
+  ```
+cycles 10 unités lancés
+da8c11f Le génératif CONFIRMÉ sur 10x plus de données, et les cycles croissance->attrition
+  ```
+
+### 🤖 Assistant
+
+⏵ Correction méthodologique : je sélectionnais le « meilleur réseau » sur le TEST. C'est une fuite. Je sélectionne sur la validation.
+
+**Faute méthodologique à corriger** : mon « meilleur réseau rencontré » était choisi sur la **fidélité de test** — je regardais la réponse avant de choisir. La sélection doit se faire sur la validation ; le test ne fait que constater.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/pont_generatif.py'; s=open(p).read()\ns=s.replace(\"\"\"            if f_te > meilleur[\"f_te\"]:\n                meilleur = {\"f_te\": f_te, \"neur\": P.compte_neurones,\"\"\",\n\"\"\"            # SÉLECT … [1229 caractères tronqués]`
+
+  ```
+sélection corrigée
+
+########## CYCLE 3 — ATTRITION (redondance) ##########
+après                           neur.  couch.  fid appr  fid VAL  fid TEST
+retrait de 2 (recalculé)            6       3    0.6595   0.7187    0.5717
+retrait de 1 (recalculé)            5       3    0.6584   0.7174    0.5711
+retrait de 1 (recalculé)            4       3    0.6571   0.7152    0.5708
+retrait de 1 (recalculé)            3       2    0.6566   0.7147    0.5708
+retrait de 1 (recalculé)            2       2    0.6562   0.7158    0.5695
+retrait REFUSÉ (1 → VAL 0.7135)      2       —         —   0.7158
+
+########## CYCLE 4 — CROISSANCE ##########
+après                           neur.  couch.  fid appr  fid VAL  fid TEST   invar.    pire
+C4 naissance couche 3 (+2)          4       3    0.6592   0.7190    0.5646   0.9939  0.9775
+C4 naissance couche 4 (+4)          8       4    0.6638   0.7237    0.5730   0.9917  0.9749
+C4 naissance couche 5 (+8)         16       5    0.6720   0.7230    0.5751   0.9844  0.9590
+
+########## CYCLE 4 — ATTRITION (redondance) ##########
+après                           neur.  couch.  fid appr  fid VAL  fid TEST
+retrait de 4 (recalculé)           12       5    0.6691   0.7196  
+… [483 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Les cycles tournent mais l'attrition ramène le réseau trop petit pour atteindre la zone utile. Je rends la croissance adaptative et je borne.
+
+Les cycles alternent correctement, mais l'attrition ramène chaque fois le réseau sous 16 neurones — il n'atteint jamais la zone utile (128-256). Je rends le pas adaptatif et je borne la taille.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/pont_generatif.py'; s=open(p).read()\ns=s.replace(\"            k = max(1, P.compte_neurones)   # chaque couche DOUBLE le réseau\",\n\"\"\"            # Cycle 1 : chaque couche DOUBLE (1,1,2,4,…) pour attei … [1190 caractères tronqués]`
+
+  ```
+ok
+=== une seule passe (référence) ===
+  fidélité VAL     : 0.7402
+  fidélité TEST    : 0.6056   (constante témoin : 0.5658)
+  invariance TEST  : 0.8869 · pire paire 0.7306
+
+# état final du réseau : 144 neurones · 8 couches ([1, 1, 2, 3, 8, 20, 31, 78])
+=== deux cycles (croissance -> attrition -> croissance -> attrition) ===
+  fidélité VAL     : 0.7410
+  fidélité TEST    : 0.6079   (constante témoin : 0.5658)
+  invariance TEST  : 0.8823 · pire paire 0.7024
+
+# état final du réseau : 108 neurones · 10 couches ([1, 1, 2, 4, 13, 16, 40, 8, 11, 12])
+  ```
+
+### 🤖 Assistant
+
+⏵ **Les cycles gagnent** : deux cycles battent une passe unique avec 25 % de neurones en moins.
+
+**Votre « attrition périodique » est validée.**
+
+| | neurones | couches | fid VAL | **fid TEST** |
+|---|---:|---:|---:|---:|
+| 1 passe | 144 | 8 | 0,7402 | 0,6056 |
+| **2 cycles** | **108** | **10** | **0,7410** | **0,6079** |
+
+Moins de neurones, plus de profondeur, **meilleure validation ET meilleur test**. Je vérifie si un troisième cycle continue.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -8 /tmp/gen10c.log 2>/dev/null; echo \"--- 3 cycles ---\"; timeout 900 python3 tools/pont_generatif.py /tmp/cache_appr40.npz /tmp/cache_tenus_trace.npz --val 10 --seuil 0.005 --cycles 3 --couches-par-cycle 9 2>&1 | tail -5", "de … [69 caractères tronqués]`
+
+  ```
+=== MEILLEUR RÉSEAU RENCONTRÉ (C4 croissance) ===
+  taille           : 96 neurones · 8 couches
+  fidélité appr.   : 0.5839
+  fidélité VAL     : 0.6267
+  fidélité TEST    : 0.4868   (constante témoin : 0.4405)
+  invariance TEST  : 0.9896 · pire paire 0.9778
+
+# état final du réseau : 54 neurones · 8 couches ([1, 1, 1, 1, 4, 3, 13, 30])
+--- 3 cycles ---
+  fidélité VAL     : 0.7410
+  fidélité TEST    : 0.6079   (constante témoin : 0.5658)
+  invariance TEST  : 0.8823 · pire paire 0.7024
+
+# état final du réseau : 108 neurones · 13 couches ([1, 1, 2, 8, 13, 25, 4, 6, 8, 9, 8, 10, 13])
+  ```
+
+### 🤖 Assistant
+
+⏵ Trois cycles ne font pas mieux que deux : plateau. Je lance la comparaison sur les 10 unités et je consigne.
+
+**Plateau à deux cycles** (le 3ᵉ donne exactement 0,6079). Je lance la comparaison sur les 10 unités en arrière-plan et je consigne.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && setsid nohup python3 tools/pont_generatif.py /tmp/cache_appr10.npz /tmp/cache_tenus10.npz --val 10 --seuil 0.005 --cycles 2 --couches-par-cycle 9 > /tmp/gen10_2c.log 2>&1 < /dev/null & echo \"lancé\"; python3 - <<'PY'\np='reports/rap … [3654 caractères tronqués]`

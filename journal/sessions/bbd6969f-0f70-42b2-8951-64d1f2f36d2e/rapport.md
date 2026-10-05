@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 166.3 h |
 | Tours | 121 |
-| Messages | 8001 |
-| Appels d'outils | 7629 |
+| Messages | 8005 |
+| Appels d'outils | 7633 |
 | Fichiers touchés | 150 |
-| Commandes | 6515 |
+| Commandes | 6519 |
 | Sous-agents | 32 |
-| Commits | 557 |
+| Commits | 558 |
 | Compactages de contexte | 11 |
 
 ## Objectifs déclarés
@@ -6131,7 +6131,7 @@ Oui — et la marge était plus grande que le modèle lui-même. Trois commits :
 
 ### Tour 121 — continue en boite noire. Les méthodes d'apprentissages et le nombre de neuronnes et de couches générées en apprentissage … [127 caractères tronqués]
 
-*25 appels d'outils.* Actions notables :
+*29 appels d'outils.* Actions notables :
 
 - get_goal
 - create_goal
@@ -6147,23 +6147,13 @@ Oui — et la marge était plus grande que le modèle lui-même. Trois commits :
 - bash — Add per-step test measurement
 - bash — Test stricter attrition criterion
 - bash — Launch generative run on 10-unit data
-- … et 11 autres
+- … et 15 autres
 
 **Synthèse produite :**
 
-⏵ Confirmation nette sur les 10 unités. Je consigne et je lance la version à cycles.
+⏵ Trois cycles ne font pas mieux que deux : plateau. Je lance la comparaison sur les 10 unités et je consigne.
 
-**La confirmation est nette sur la tâche 10× plus dure.**
-
-| neurones | couches | fid VAL | **fid TEST** | invariance | pire paire |
-|---:|---:|---:|---:|---:|---:|
-| 1 | 1 | 0,5897 | 0,4424 | **0,9993** | **0,9984** |
-| 32 | 6 | 0,6076 | 0,4677 | 0,9924 | 0,9817 |
-| 128 | 8 | 0,6295 | 0,4933 | 0,9839 | 0,9625 |
-| 256 | 9 | 0,6410 | 0,4998 | 0,9706 | 0,9376 |
-| **192 (après attrition)** | 9 | 0,6386 | **0,5002** | 0,9710 | 0,9355 |
-
-Trois faits : **monotone dans toutes les colonnes** ; l'attrition **améliore** le test (0,4998 → **0,5002**) en retirant 25 % ; et face au réservoir plat à taille égale (64 neurones : 0,4810 contre 0,4767), **la profondeur fait payer la capacité** — le plat sature, la cascade non.
+**Plateau à deux cycles** (le 3ᵉ donne exactement 0,6079). Je lance la comparaison sur les 10 unités en arrière-plan et je consigne.
 
 ## 3. Travail accompli
 
@@ -6399,7 +6389,7 @@ Trois faits : **monotone dans toutes les colonnes** ; l'attrition **améliore** 
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6475 autres
+- … et 6479 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -7104,4 +7094,5 @@ Trois faits : **monotone dans toutes les colonnes** ; l'attrition **améliore** 
 - Le pont GÉNÉRATIF : naissance par couches, puis attrition qui généralise  tools/pont_generatif.py — deux phases, tailles décidées par l'apprentissage. Aucune ré
 - Critère de REDONDANCE : retirer ce que les autres disent déjà  Le retrait par contribution ne fait que couper les faibles — il n'énonce rien. Le critère de redo
 - Le génératif CONFIRMÉ sur 10x plus de données, et les cycles croissance->attrition  Tâche 10 unités (38 212 pas, constante témoin 0,4405) :  CROISSANCE — monoto
+- L'ATTRITION PÉRIODIQUE paie : deux cycles battent une passe  --cycles N alterne croissance et attrition, avec COMPACTION de la généalogie entre les deux (sans e
 

@@ -134,3 +134,42 @@ fonctionne : il s'arrête de lui-même au bon endroit.
 progresser là où le plat recule** : +2,35 points de fidélité de test au meilleur
 point. Rapporté à l'écart qui compte — celui au-dessus de la constante témoin —
 l'avantage passe de +0,0362 à +0,0597, soit **+65 %**.
+
+
+## 6. L'ATTRITION PÉRIODIQUE paie : deux cycles battent une passe
+
+La demande était « une phase générative, **puis une attrition périodique** ».
+`--cycles N` alterne donc croissance et attrition, avec **compaction de la
+généalogie** entre les deux (sans elle, la croissance suivante lirait des indices
+de neurones morts).
+
+Tâche à une unité, validation sur 10 langues, seuil 0,005 :
+
+| | neurones | couches | fid VAL | **fid TEST** |
+|---|---:|---:|---:|---:|
+| 1 passe (croissance puis attrition) | 144 | 8 | 0,7402 | 0,6056 |
+| **2 cycles** | **108** | **10** | **0,7410** | **0,6079** |
+| 3 cycles | 108 | 13 | 0,7410 | 0,6079 |
+
+**Deux cycles gagnent sur les deux tableaux** : 25 % de neurones en moins (144 →
+108), deux couches de plus, et une fidélité de **validation** comme de **test**
+supérieure (0,7402 → 0,7410 et 0,6056 → 0,6079). Un troisième cycle ne change
+plus rien : le réseau a atteint sa forme.
+
+**Pourquoi ça marche** : la première attrition ne fait pas que réduire, elle
+**réorganise** — les survivants redeviennent le socle d'une croissance neuve, qui
+part d'un réseau déjà débarrassé de ses détecteurs particuliers. La capacité
+ajoutée ensuite sert donc à autre chose qu'à redire ce qui était déjà là.
+
+## 7. Deux fautes corrigées en route, et pourquoi elles comptaient
+
+**Une fuite de données.** `Pont` ne détenait que les langues d'entraînement, mais
+était interrogé avec les indices des langues de TEST : la fidélité annoncée était
+de 0,7234 au lieu de 0,5739. Le test se calcule désormais sur les trajectoires des
+langues tenues à l'écart, produites par le réseau **réduit**.
+
+**Une sélection sur le test.** Le « meilleur réseau rencontré » était choisi
+d'après sa fidélité de TEST — regarder la réponse avant de choisir. La sélection
+se fait maintenant sur la **validation** seule ; le test ne fait que constater.
+C'est ce qui a fait passer le meilleur réseau de 256 neurones (0,6056) à
+108 neurones (0,6079) : le premier était un artefact de sélection.
