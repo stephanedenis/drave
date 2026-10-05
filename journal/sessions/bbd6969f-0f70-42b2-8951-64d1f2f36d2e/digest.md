@@ -123733,3 +123733,137 @@ exemples :
 L'unité d'alignement stable est donc **l'article** : 30 par langue, **13 680 unités sémantiques alignées par construction** — pas par un aligneur, donc sans risque de décalage. C'est exactement le « petit contenu symétrique » que tu décris.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > docs/note-ingestion-corpus.md <<'EOF'\n# Note — l'ingestion des corpus, dans l'ordre demandé\n\n> 06/10. Ordre fixé par Stéphane : **l'UDHR d'abord**, puis **Wikipedia**, puis\n> **la littérature multilingue de Gutenberg**, en  … [5404 caractères tronqués]`
+
+  ```
+1ba332f Ingestion : l'UDHR récupérée (456 langues, 30 articles alignés), Wikipedia trouvé en local (81 Go, 6 langues)
+  ```
+
+### 🤖 Assistant
+
+**Les trois sources sont en place, dans ton ordre.**
+
+## 1. UDHR — récupérée ✅
+
+Le chemin `unicode.org/udhr/…` du projet « UDHR in Unicode » renvoie **404** aujourd'hui. L'Internet Archive le sert encore — c'est de là qu'elle vient.
+
+**456 langues, et les 30 articles sont alignés dans TOUTES** (vérifié). Les paragraphes de préambule varient de 58 à 67 selon la traduction, mais **l'article est l'unité stable** : **13 680 unités sémantiques alignées par construction**, sans aligneur donc sans décalage possible. C'est le matériau le plus propre qui existe pour ton étape.
+
+## 2. Wikipedia — trouvée en local, rien à télécharger ✅
+
+`nipada/wikipedia_decompressed/` — **81 Go**, six langues :
+
+| en | de | es | fr | it | ru |
+|---:|---:|---:|---:|---:|---:|
+| 28 126 | 11 632 | 7 074 | 9 386 | 1 970 | 7 401 |
+
+Morceaux JSON de 150 articles avec `title` et `page_id` → **appariables entre langues par l'entité**. C'est la source des grappes de **domaine**.
+
+**Et le piège que j'ai failli prendre** : `Panini-Research/data/wikipedia_ingestion/backlog_*.db` porte des **files d'URL** (267 376 pour l'anglais) — 63 Mo qui ne contiennent pas un mot de texte.
+
+## 3. Gutenberg parallèle — repéré ✅
+
+Dumas *Monte-Cristo* (en 461 k / fr 122 k mots), Shakespeare *Romeo and Juliet* (en 26 k / fr 38 k), Dostoïevski *Crime and Punishment* (en 207 k / es 176 k).
+
+## Ta méthode, traduite en étapes mesurables
+
+> « petits lots de paragraphes potentiellement identiques, étiqueter les grappes de connexions en fonction des langues »
+
+1. **Découper en unités alignées** — l'UDHR le fait par construction (l'article et ses paragraphes) ;
+2. **relever les activations par unité de connexion** (dimension, tête, neurone) à travers les couches 0-9 ;
+3. **étiqueter** : pour chaque connexion, deux mesures contradictoires — *invariante entre les 456 langues du même article* (elle porte le contenu) contre *dépendante de la langue* (elle porte la forme) ;
+4. **la grappe est l'ensemble des connexions qui basculent ensemble** avec la langue — et ça se **mesure**, ça ne se postule pas.
+
+C'est le prolongement direct de ce que `invariance_semantique.py` fait déjà par couche : je l'étends **par unité de connexion**.
+
+## Ce qui manque, dans l'ordre
+
+1. l'**extracteur UDHR** → `(langue, article, paragraphe) → texte`, qui rend les 13 680 unités ;
+2. l'**extracteur Wikipedia** depuis les morceaux JSON locaux ;
+3. l'**attribution par unité** — le cœur ;
+4. `profil_flux.py` à réparer ou retirer (il lit la v1, plante sur la v3).
+
+Tout est dans `docs/note-ingestion-corpus.md`, commité, 77 tests verts.
+
+**Je commence par l'extracteur UDHR** — c'est court, et c'est lui qui débloque la mesure des grappes linguistiques.
+
+
+## Tour 117
+
+### 👤 Utilisateur
+
+fais tout le nécessaire, tu as plusieurs heures devant toi. Prête une attention particulière à notre moteur. il doit évoluer pour devenir un champion de l'apprentissage hebbien différentiel.
+
+### 🤖 Assistant
+
+⏵ J'examine ce que le moteur a déjà pour Hebb, avant d'étendre
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && grep -n \"pub struct Hebb\" -A 30 model.rs | head -36; echo \"=== où il est utilisé ===\"; grep -n \"\\.hebb\\b\\|hebb\\.\\|hebb:\" model.rs main.rs | grep -v \"^.*pub hebb\" | head -12", "description": "Study the exis … [26 caractères tronqués]`
+
+  ```
+2709:pub struct Hebb {
+2710-    pub layer: usize,
+2711-    pub quantile: f32,
+2712-    pub n_out: usize,
+2713-    pub n_in: usize,
+2714-    pub h: Vec<f32>,
+2715-    pub n_fire: u64,
+2716-    pub n_token: u64,
+2717-    /// Journal : vecteur d'entrée de la couche à chaque token, pour l'analyse
+2718-    /// hors ligne. C'est la « journalisation en vue d'une version ultérieure ».
+2719-    pub log: Vec<f32>,
+2720-    pub log_on: bool,
+2721-}
+2722-
+2723-impl Hebb {
+2724-    pub fn new(layer: usize, n_out: usize, n_in: usize, quantile: f32) -> Self {
+2725-        Hebb { layer, quantile, n_out, n_in, h: vec![0f32; n_out * n_in],
+2726-               n_fire: 0, n_token: 0, log: Vec::new(), log_on: false }
+2727-    }
+2728-
+2729-    /// Accumule une paire (entrée, sortie). Seules les sorties dont |y| dépasse
+2730-    /// le quantile demandé contribuent : c'est ce qui rend le capteur bon marché.
+2731-    fn observe(&mut self, x: &[f32], y: &[f32], seuil: &mut Vec<f32>) {
+2732-        seuil.clear();
+2733-        seuil.extend_from_slice(y);
+2734-        // k sorties « déchargent » : celles dont |y| dépasse le k-ième plus grand
+2735-        let k = (self.quantile * y.len() as f32) as usize;
+2736-
+… [739 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+Le `Hebb` existant **mesure** le produit hebbien (il accumule `h` et l'exporte) mais ne **modifie rien** : le moteur n'apprend pas encore, il observe. Il faut passer à l'application — et le **différentiel** est précisément ce que le moteur transporte déjà : un événement **est** un delta temporel.
+
+Je commence par l'extracteur UDHR, puis j'attaque le moteur.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/extrait_udhr.py <<'EOF'\n#!/usr/bin/env python3\n\"\"\"extrait_udhr.py — l'UDHR en unités alignées, prêtes à passer dans le moteur.\n\nL'UDHR est le premier corpus parce que l'alignement y est **par construction** :\nles  … [3761 caractères tronqués]`
+
+  ```
+400 langues lues · 112 unités vues · 42 unités gardées (≥ 50 langues)
+  exemple — article-1-00 en 400 langues :
+    cri (Sãotomense) : Tudu nguê di mundu ca nancê livli e igual ni dignidade e ni dirê…
+    pov (Crioulo, Upper Gui) : Tudu pekaduris ta padidu libri i igual na balur suma na diritus.…
+    kmb (Mbundu) : O athu woso avwala abhuluka ni kusokela mu kijingu ni mu itekelu…
+  écrit dans /home/stephane/Data13TB/stephane/corpus/udhr/unites.jsonl
+  ```
+
+### 🤖 Assistant
+
+**400 langues, 42 unités à ≥50 langues.** Je vérifie que les 30 articles y sont, puis je passe au moteur.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane && python3 - <<'PY'\nimport json\nfrom collections import Counter\nu=[json.loads(l) for l in open('corpus/udhr/unites.jsonl')]\nprint(f\"{len(u)} unités\")\nc=Counter('article' if x['unite'].startswith('article') else 'preambule' for x in u)\nprint(\" … [673 caractères tronqués]`
+
+  ```
+42 unités
+   {'article': 31, 'preambule': 11}
+   articles couverts : 30 → ['1', '2', '3', '4', '5', '6', '7', '8'] … ['27', '28', '29', '30']
+   langues totales : 400
+   article 1 : 400 langues · 70162 caractères au total
+  ```
+
+### 🤖 Assistant
+
+**Corpus UDHR : 30 articles, 400 langues, 42 unités alignées.** Maintenant le moteur.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"UDHR : extracteur d'unités alignées — 400 langues, les 30 articles, 42 unités\n\ntools/extrait_udhr.py rend un JSONL : une unité par ligne (article, paragraphe),\navec le texte de CHAQUE langue. L'ali … [410 caractères tronqués]`

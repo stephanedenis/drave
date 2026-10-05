@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 162.4 h |
-| Tours | 116 |
-| Messages | 7787 |
-| Appels d'outils | 7431 |
+| Durée | 162.5 h |
+| Tours | 117 |
+| Messages | 7793 |
+| Appels d'outils | 7435 |
 | Fichiers touchés | 150 |
-| Commandes | 6329 |
+| Commandes | 6333 |
 | Sous-agents | 32 |
-| Commits | 534 |
+| Commits | 535 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -279,6 +279,8 @@
 **Tour 115** — Étudie /home/stephane/Data13TB/stephane/GitHub/Panini-Research/ pour les corpus de départ sur différents domaines et langues, tu auras probablement à chercher certains dossiers dans /home/stephane/Data13TB si tu ne trouve pas le contenu car certains répertoires ont été déplacés, mais tout est accessible. Bref, il faut commencer par exercer les couches d'entrées avec des corpus de traduction pour i … [136 caractères tronqués]
 
 **Tour 116** — n'hésites pas à aller récupérer des dichiers sur Internet. Pour ce qui est de Wikipedia, en cherchant les gros fichiers localement, tu devrais tomber dessus, sinon on télécharge. C'est la première source de données à ingérer aprèes la déclaration universelle des droits de l'homme. on enchaine avec la littérature multilingue sur gutenberg, en commencant par les oeuvres ayant le plus grand nombre de … [372 caractères tronqués]
+
+**Tour 117** — fais tout le nécessaire, tu as plusieurs heures devant toi. Prête une attention particulière à notre moteur. il doit évoluer pour devenir un champion de l'apprentissage hebbien différentiel.
 
 ## 2. Déroulé, étape par étape
 
@@ -5825,14 +5827,61 @@ Ce qu'il reste à écrire, dans l'or
 
 **Synthèse produite :**
 
-**L'UDHR, vérifié : 456 langues, et les 30 articles sont alignés dans TOUTES.**
+**Les trois sources sont en place, dans ton ordre.**
 
-| structure | langues |
-|---|---:|
-| 30 articles (invariant) | **456 / 456** |
-| 58-67 paragraphes de préambule | variable selon la traduction |
+\## 1. UDHR — récupérée ✅
 
-L'unité d'alignement stable est donc **l'article** : 30 par langue, **13 680 unités sémantiques alignées par construction** — pas par un aligneur, donc sans risque de décalage. C'est exactement le « petit contenu symétrique » que tu décris.
+Le chemin `unicode.org/udhr/…` du projet « UDHR in Unicode » renvoie **404** aujourd'hui. L'Internet Archive le sert encore — c'est de là qu'elle vient.
+
+**456 langues, et les 30 articles sont alignés dans TOUTES** (vérifié). Les paragraphes de préambule varient de 58 à 67 selon la traduction, mais **l'article est l'unité stable** : **13 680 unités sémantiques alignées par construction**, sans aligneur donc sans décalage possible. C'est le matériau le plus propre qui existe pour ton étape.
+
+\## 2. Wikipedia — trouvée en local, rien à télécharger ✅
+
+`nipada/wikipedia_decompressed/` — **81 Go**, six langues :
+
+| en | de | es | fr | it | ru |
+|---:|---:|---:|---:|---:|---:|
+| 28 126 | 11 632 | 7 074 | 9 386 | 1 970 | 7 401 |
+
+Morceaux JSON de 150 articles avec `title` et `page_id` → **appariables entre langues par l'entité**. C'est la source des grappes de **domaine**.
+
+**Et le piège que j'ai failli prendre** : `Panini-Research/data/wikipedia_ingestion/backlog_*.db` porte des **files d'URL** (267 376 pour l'anglais) — 63 Mo qui ne contiennent pas un mot de texte.
+
+\## 3. Gutenberg parallèle — repéré ✅
+
+Dumas *Monte-Cristo* (en 461 k / fr 122 k mots), Shakespeare *Romeo and Juliet* (en 26 k / fr 38 k), Dostoïevski *Crime and Punishment* (en 207 k / es 176 k).
+
+\## Ta méthode, traduite en étapes mesurables
+
+> « petits lots de paragraphes potentiellement identiques, étiqueter les grappes de connexions en fonction des langues »
+
+1. **Découper en unités alignées** — l'UDHR le fait par construction (l'article et ses paragraphes) ;
+2. **relever les activations par unité de connexion** (dimension, tête, neurone) à travers les couches 0-9 ;
+3. **étiqueter** : pour chaque connexion, deux mesures contradictoires — *invariante entre les 456 langues du même article* (elle porte le contenu) contre *dépendante de la langue* (elle porte la forme) ;
+4. **la grappe est l'ensemble des connexions qui basculent ensemble** avec la langue — et ça se **mesure**, ça ne se postule pas.
+
+C'est le prolongement direct de ce que `invariance_semantique.py` fait déjà par couche : je l'étends **par unité de connexion**.
+
+\## Ce qui manque, dans l'ordre
+
+1. l'**extracteur UDHR** → `(langue, article, paragraphe) → texte`, qui rend les 13 680 unités ;
+2. l'**extracteur Wikipedia** depuis les morceaux JSON locaux ;
+3. l'**attribution par unité** — le cœur ;
+4. `profil_flux.py` à réparer ou retirer (il lit la v1, plante s
+… [200 caractères tronqués]
+
+### Tour 117 — fais tout le nécessaire, tu as plusieurs heures devant toi. Prête une attention particulière à notre moteur. il doit évo … [70 caractères tronqués]
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Study the existing Hebb implementation
+- bash — Extract the aligned UDHR units
+- bash — Verify the extracted units
+- bash — Commit the extractor and look at the Hebb hook
+
+**Synthèse produite :**
+
+**Corpus UDHR : 30 articles, 400 langues, 42 unités alignées.** Maintenant le moteur.
 
 ## 3. Travail accompli
 
@@ -6068,7 +6117,7 @@ L'unité d'alignement stable est donc **l'article** : 30 par langue, **13 680 un
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6289 autres
+- … et 6293 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -6750,4 +6799,5 @@ L'unité d'alignement stable est donc **l'article** : 30 par langue, **13 680 un
 - Bloc 0-9 : première borne d'approximabilité — 19 % de la variance après dix couches avec DEUX directions  tools/approximabilite_bloc.py, trace DRVF de 192 jeton
 - Note : les corpus de Panini-Research — 11,5 M mots, et TROIS œuvres parallèles  Relevé complet depuis /home/stephane/Data13TB/stephane/GitHub/Panini-Research.  
 - Ingestion : l'UDHR récupérée (456 langues, 30 articles alignés), Wikipedia trouvé en local (81 Go, 6 langues)  UDHR : le chemin unicode.org/udhr/ renvoie 404 au
+- UDHR : extracteur d'unités alignées — 400 langues, les 30 articles, 42 unités  tools/extrait_udhr.py rend un JSONL : une unité par ligne (article, paragraphe), 
 
