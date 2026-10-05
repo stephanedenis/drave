@@ -124,14 +124,44 @@ monte (0,668 → 0,748) mais **l'invariance baisse, monotonement** (0,949 → 0,
 il faut des neurones ; si l'on veut le **pont sémantique brut**, **un seul suffit**
 et les autres nuisent.
 
+## Résultat 6 — la sonde n'a RIEN prouvé, et je le dis
+
+Pour lever la réserve « plus invariant ≠ meilleur », j'ai voulu mesurer si le pont
+garde l'information **prédictive** : une sonde linéaire qui prédit la plongée du
+jeton suivant depuis l'état (`tools/sonde_pont.py`).
+
+| état en entrée de la sonde | R² entraînement | R² test |
+|---|---:|---:|
+| professeur (couche 10) | 0,7088 | **−1,7411** |
+| pont | 0,2599 | 0,0066 |
+| témoin : plongée du jeton courant | 0,6600 | **−3,3080** |
+
+**Le R² de test est négatif pour LES TROIS, professeur compris.** Une sonde qui ne
+transfère pas d'un groupe de langues à l'autre ne dit donc **rien** sur le pont —
+elle dit que le dispositif est mauvais (la cible — la plongée du jeton suivant
+d'une autre langue — n'est pas dans le même repère).
+
+**Ce n'est pas une preuve, c'est un échec de protocole.** Je le laisse écrit plutôt
+que de le passer sous silence, et la réserve du § précédent **reste entière** : le
+pont peut jeter de l'information utile, et personne ne l'a mesuré.
+
 ## Ce que ça donne à la mission
 
-**Le pont est un artefact concret et mesuré** : `W` (896×896, ~800 k paramètres)
-tel que `abstrait = (e_t · W) · Pᵀ + moy`, ajusté sur 8 langues, qui transforme la
-plongée d'un jeton de **n'importe quelle langue** en une représentation
-language-invariante comparable à celle de la couche 10 du gros modèle.
+**Le pont est un artefact concret et mesuré**, et il tient en **UN neurone** :
 
-`tools/pont_recurrent.py` le produit et le mesure.
+```
+  abstrait = (e_t · W0) · Pᵀ + moy
+  W0 : 896 × 1        P : 896 × 1        moy : 896
+```
+
+soit ~1 800 nombres, ajustés par moindres carrés sur 20 langues, qui transforment
+la plongée d'un jeton de **n'importe quelle langue** en une représentation
+inter-langue à **0,9492** (pire paire **0,7762**) sur 20 langues **jamais vues**.
+
+**Artefact** : `/home/stephane/Data13TB/stephane/corpus/udhr/pont_semantique_r1.npz`
+**Applicateur** : `python3 tools/applique_pont.py <pont.npz> <trace.drvf>`
+Vérifié sur grec, hébreu, japonais, thaï, coréen — écritures absentes de
+l'entraînement.
 
 ## Ce que ce rapport ne dit PAS — et il faut le lire avant de s'en servir
 

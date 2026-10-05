@@ -125085,3 +125085,36 @@ neurones   fid_un_pas  invariant_moy     pire_paire      R2_test
 Le premier neurone capte **la direction partagée, indépendante de la langue** — le pont brut exactement. Les neurones suivants ajoutent du **détail propre à chaque langue** : la fidélité au professeur monte (0,67 → 0,75) mais **l'invariance baisse, monotonement**.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-pont-semantique.md'; s=open(p).read()\ns = s.replace(\"## Ce que ça donne à la mission\",\n\"\"\"## Résultat 5 — **UN SEUL NEURONE SUFFIT**, et c'est « l'apprentissage hyper-rapide » annoncé\n\nIn … [2568 caractères tronqués]`
+
+  ```
+0db119d UN SEUL NEURONE SUFFIT : 0,9492 d'invariance contre 0,6284 pour le professeur
+11:00
+  ```
+
+### 🤖 Assistant
+
+~1 h restante. Je consolide : l'artefact doit être **rang 1** (c'est ça, le pont sémantique brut), et je dois noter honnêtement que ma sonde n'a rien prouvé.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && U=/home/stephane/Data13TB/stephane/corpus/udhr\nDRAVE_PONT_SORTIE=$U/pont_semantique_r1.npz timeout 600 python3 tools/pont_recurrent.py $U/vaste_train $U/vaste_test --couche 10 --rang 1 --rho 0.95 2>&1 | grep -E \"artefact|usage|pont … [1508 caractères tronqués]`
+
+  ```
+#   professeur (couche 10)            : cos moyen 0.6284 · pire paire 0.3281
+#   pont LINÉAIRE de la plongée seule : cos moyen 0.9492 · pire paire 0.7762
+# artefact écrit : /home/stephane/Data13TB/stephane/corpus/udhr/pont_semantique_r1.npz  (P (896, 1), W0 (896, 1), moy (896,))
+#   usage : python3 tools/applique_pont.py /home/stephane/Data13TB/stephane/corpus/udhr/pont_semantique_r1.npz <trace.drvf>
+#   professeur (couche 10) : cos moyen 0.6284 · pire paire 0.3281
+=== le pont à UN neurone, appliqué à des écritures jamais vues ===
+# 177 positions · abstrait (177, 896) (couche 10 du professeur)  ← ell
+# 52 positions · abstrait (52, 896) (couche 10 du professeur)  ← heb
+# 53 positions · abstrait (53, 896) (couche 10 du professeur)  ← jpn
+# 56 positions · abstrait (56, 896) (couche 10 du professeur)  ← tha
+# 56 positions · abstrait (56, 896) (couche 10 du professeur)  ← kor
+=== et sur les 20 langues tenues à l'écart : cohérence croisée ===
+  20 langues jamais vues · cos moyen 0.9492 · pire paire 0.7762
+  ```
+
+### 🤖 Assistant
+
+**Le pont à UN neurone, validé sur 20 langues jamais vues : 0,9492 moyen, 0,7762 pire paire.** Je consolide et je note honnêtement ce que ma sonde n'a pas prouvé.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-pont-semantique.md'; s=open(p).read()\ns = s.replace(\"## Ce que ça donne à la mission\",\n\"\"\"## Résultat 6 — la sonde n'a RIEN prouvé, et je le dis\n\nPour lever la réserve « plus invariant ≠  … [4029 caractères tronqués]`

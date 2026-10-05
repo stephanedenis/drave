@@ -106,7 +106,23 @@ cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo build --r
 > projecteur sur le partagé, par moindres carrés — sans récurrence, sans
 > rétropropagation, sans oracle. Il fait mieux que l'annulation oracle.
 >
-> **L'artefact** : `/home/stephane/Data13TB/stephane/corpus/udhr/pont_semantique.npz`
+> **ET IL TIENT EN UN SEUL NEURONE** — intuition de Stéphane (« un neurone par
+> sortie, puis on itère ; l'apprentissage est hyper-rapide au début »), confirmée
+> et chiffrée. Le rang du pont EST le nombre de neurones :
+>
+> | neurones | fidélité au professeur | **invariance** | pire paire |
+> |---|---:|---:|---:|
+> | **1** | 0,668 | **0,9492** | **0,7762** |
+> | 4 | 0,748 | 0,9139 | 0,7769 |
+> | 64 | 0,682 | 0,7658 | 0,4842 |
+>
+> **Un neurone donne 0,9492 d'invariance** contre 0,6284 pour le professeur et
+> 0,471 pour le plateau d'un 30 B. Les neurones suivants montent la fidélité
+> (0,668 → 0,748) mais font **baisser l'invariance monotonement** : ils ajoutent du
+> détail propre à chaque langue. **Compromis net** : copier le professeur demande
+> des neurones, le pont brut n'en demande **qu'un**.
+>
+> **L'artefact rang-1** : `/home/stephane/Data13TB/stephane/corpus/udhr/pont_semantique_r1.npz`
 > (`P` 896×128, `W0` 896×128, `moy` 896), appliqué par
 > `tools/applique_pont.py <pont.npz> <trace.drvf>` — `abstrait = (e·W0)·Pᵀ + moy`.
 > Vérifié sur grec, hébreu, japonais, thaï (écritures absentes de l'entraînement).
