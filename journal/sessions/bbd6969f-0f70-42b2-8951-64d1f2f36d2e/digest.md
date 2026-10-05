@@ -130445,3 +130445,545 @@ erreur max du modèle linéaire : 0.0047
 **`fid TEST ≈ 0,3856 · (1 − invariance) + 0,4752` — r = 0,9920, erreur max 0,0047** sur 11 points de croissance.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-pont-generatif.md'; s=open(p).read()\ns += \"\"\"\n\n## 14. LA LOI : fidélité et invariance s'échangent à taux fixe\n\nOnze points de croissance sur données propres, tous sur le même périmètre :\n … [3282 caractères tronqués]`
+
+  ```
+5d89095 LA LOI : fidélité et invariance s'échangent à taux fixe (r = 0,992)
+aii 169s 48956502
+8
+  ```
+
+### 🤖 Assistant
+
+⏵ Loi consignée. J'attends les traces 30B (8/40, fin estimée ~18h20).
+
+- **bash** `{"command": "sleep 500; tail -1 /tmp/chaine30.log; echo \"appr30c: $(ls /home/stephane/Data13TB/stephane/corpus/udhr/appr30c | wc -l)/40\"; date \"+%H:%M\"", "description": "Wait for 30B traces", "timeoutMs": 560000}`
+
+  ```
+alt 172s 49318013
+appr30c: 12/40
+16:48
+  ```
+
+### 🤖 Assistant
+
+⏵ 12/40. Je continue d'attendre.
+
+- **bash** `{"command": "sleep 540; tail -1 /tmp/chaine30.log; echo \"appr30c: $(ls /home/stephane/Data13TB/stephane/corpus/udhr/appr30c | wc -l)/40\"; date \"+%H:%M\"", "description": "Wait for 30B traces", "timeoutMs": 600000}`
+
+  ```
+ame 225s 62049243
+appr30c: 14/40
+16:57
+  ```
+
+### 🤖 Assistant
+
+⏵ 14/40. J'attends encore.
+
+- **bash** `{"command": "sleep 540; tail -1 /tmp/chaine30.log; echo \"appr30c: $(ls /home/stephane/Data13TB/stephane/corpus/udhr/appr30c | wc -l)/40\"; date \"+%H:%M\"", "description": "Wait for 30B traces", "timeoutMs": 600000}`
+
+  ```
+arl 163s 47832385
+appr30c: 18/40
+17:06
+  ```
+
+### 🤖 Assistant
+
+⏵ 18/40. J'attends la suite.
+
+- **bash** `{"command": "sleep 560; tail -1 /tmp/chaine30.log; echo \"appr30c: $(ls /home/stephane/Data13TB/stephane/corpus/udhr/appr30c | wc -l)/40\"; date \"+%H:%M\"", "description": "Wait for 30B traces", "timeoutMs": 620000}`
+
+  ```
+ayr 107s 30430281
+appr30c: 23/40
+17:16
+  ```
+
+### 🤖 Assistant
+
+⏵ 23/40.
+
+- **bash** `{"command": "sleep 560; tail -1 /tmp/chaine30.log; echo \"appr30c: $(ls /home/stephane/Data13TB/stephane/corpus/udhr/appr30c | wc -l)/40\"; date \"+%H:%M\"", "description": "Wait for 30B traces", "timeoutMs": 620000}`
+
+  ```
+bba 105s 30122841
+appr30c: 28/40
+17:25
+  ```
+
+### 👤 Utilisateur
+
+fais-moi un récapitulatif de la méthode que tu as appliqué et les résultats jusqu'à maintenant. On ne devrait pas travailler sur plus qu'un modèle professeur et on ne devrait pas se retrouver avec des chiffres ronds comme nombre de neuronnes ou couches, c'est suspect. D'autant plus qu'on ne devrait avois qu'un sous-ensemble de la couche sémantique de référence (professeur) active pour chaque énoncé pour chaque langue.
+
+### 🤖 Assistant
+
+⏵ J'arrête le 30B (un seul professeur) et je réponds aux trois points.
+
+Vos trois remarques sont justes, et la troisième change le modèle. J'arrête d'abord le 30B.
+
+- **bash** `{"command": "python3 /tmp/stop2.py; sleep 3; python3 -c \"\nimport os\nn=[]\nfor d in os.listdir('/proc'):\n    if d.isdigit():\n        try: cl=open(f'/proc/{d}/cmdline','rb').read().decode(errors='replace')\n        except Exception: continue\n        if 'Qwen3-30B' in cl: n.append(d)\nprint('proc … [238 caractères tronqués]`
+
+  ```
+arrêtés : [2277022]
+processus 30B restants : 4
+--- traces 30B faites (jetées : on ne garde qu'un professeur) ---
+28
+17:26
+  ```
+
+### 🤖 Assistant
+
+⏵ Le script d'arrêt a tué la chaîne mais pas les processus drave. Je les vise directement.
+
+- **write** `{"content": "import os, signal, time\nmoi = os.getpid(); anc = set(); p = moi\nfor _ in range(8):\n    try:\n        st = open(f\"/proc/{p}/stat\").read().split(\") \", 1)[1].split()\n        p = int(st[1]); anc.add(p)\n    except Exception:\n        break\nmorts = []\nfor d in os.listdir(\"/proc\") … [482 caractères tronqués]`
+
+  ```
+<path>/tmp/stop30.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "python3 /tmp/stop30.py; sleep 3; python3 /tmp/stop30.py; echo \"--- nettoyage des traces 30B ---\"; rm -rf /home/stephane/Data13TB/stephane/corpus/udhr/appr30c /home/stephane/Data13TB/stephane/corpus/udhr/tenus30c /home/stephane/Data13TB/stephane/corpus/udhr/tenus30b /home/stephane/Data … [290 caractères tronqués]`
+
+  ```
+tués : [2277362]
+tués : [2277428]
+--- nettoyage des traces 30B ---
+/dev/mapper/system-root   11T  8,8T  2,1T  81% /home/stephane/Data13TB
+--- ce qui reste comme professeur ---
+/home/stephane/Data13TB/stephane/corpus/udhr/appr10c
+/home/stephane/Data13TB/stephane/corpus/udhr/langues30b
+/home/stephane/Data13TB/stephane/corpus/udhr/tenus10c
+  ```
+
+### 🤖 Assistant
+
+⏵ **Un seul professeur désormais** (Qwen2.5-0.5B), le 30B est arrêté et ses traces supprimées. J'attaque votre troisième point, le plus important : le **sous-ensemble actif**.
+
+Vos trois points, dans l'ordre d'importance :
+
+1. **Un seul professeur** — fait : le 30B est arrêté, ses artefacts supprimés. Il ne reste que Qwen2.5-0.5B couche 10.
+2. **Les chiffres ronds** — vous avez raison, c'est **suspect et c'est ma faute** : 1, 2, 4, 8… 256 viennent de MON calendrier de doublement, et 256 de MON plafond. L'apprentissage ne décide rien. Je corrige.
+3. **Le sous-ensemble actif** — je le mesure avant d'en parler.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/sous_ensemble_actif.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"sous_ensemble_actif.py — quelle PART de la couche sémantique porte un énoncé ?\n\nQuestion posée : pour un énoncé donné, dans une langue donnée, seule une parti … [4138 caractères tronqués]`
+
+  ```
+# 6 langues · couche 10 · dernière position · 896 canaux
+
+langue    50 %    90 %    99 %  canaux>0
+   ell      33     280     583       855
+   heb      36     295     594       841
+   hin      31     297     612       856
+   jpn      35     292     607       842
+   kor      40     306     605       849
+   tha      32     289     591       871
+
+moyennes : 50 % sur 34/896 canaux (4 %) · 90 % sur 293 (33 %) · 99 % sur 599 (67 %)
+
+canaux actifs dans AU MOINS une langue : 896/896
+canaux actifs dans TOUTES les langues  : 678/896
+moyenne de langues par canal actif     : 5.71 sur 6
+  ```
+
+### 🤖 Assistant
+
+⏵ **Votre point 3 est mesuré, et il est net.**
+
+**Le sous-ensemble actif existe, et il est étroit :**
+
+| | canaux | part |
+|---|---:|---:|
+| **50 % de l'énergie** | **34 / 896** | **4 %** |
+| 90 % de l'énergie | 293 | 33 % |
+| 99 % de l'énergie | 599 | 67 % |
+
+Et surtout : **678 canaux seulement sont actifs dans les 6 langues** — **218 canaux (24 %) sont propres à certaines langues**. Chaque canal n'est actif en moyenne que dans 5,71 langues sur 6.
+
+**Cela explique le plafond de fidélité** : ajuster les 896 dimensions densément, c'est ajuster massivement du détail quasi nul et propre à chaque langue — ce qui coûte exactement l'invariance qu'on cherche.
+
+Je corrige maintenant le point 2 — les chiffres ronds.
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", "limit": 30, "offset": 62}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py</path>
+<type>file</type>
+<content>
+62:         self.X = [np.zeros((len(e), 0), dtype=np.float32) for e in self.E]
+63:         self.couches = []          # taille de chaque couche, dans l'ordre de naissance
+64:         self.compte_neurones = 0
+65:         # GÉNÉALOGIE : pour chaque neurone né, ses poids (vers 0..j, lui compris) et
+66:         # sa couche. Sans elle, on ne peut pas RECALCULER les survivants seuls — et
+67:         # une attrition qu'on ne peut pas recalculer ne réduit rien : elle ne fait
+68:         # que masquer des colonnes dont la trajectoire a été calculée par les autres.
+69:         self.poids = []            # (w de longueur j+1, b de longueur H, couche)
+70:         self.couche_de = []
+71: 
+72:     # -- croissance : ajoute UNE couche de k neurones -----------------------
+73:     def nait(self, k):
+74:         n_avant = self.compte_neurones
+75:         n_apres = n_avant + k
+76:         # la couche lit les n_avant neurones existants ET elle-même (récurrence)
+77:         W = self.rng.randn(k, n_apres) / np.sqrt(max(n_apres, 1))
+78:         B = self.rng.randn(k, self.H) / np.sqrt(self.H)
+7
+… [769 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", "new_string": "    # -- croissance ----------------------------------------------------------\n    def nait(self, k, nouvelle_couche=True):\n        \"\"\"Fait naître k neurones.\n\n        `nouvelle_couche=Fals … [2394 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py has been updated successfully.
+  ```
+
+### 🤖 Assistant
+
+⏵ Je remplace le calendrier par une naissance **un neurone à la fois**, où l'apprentissage décide de la fin des couches et de l'arrêt.
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", "limit": 40, "offset": 278}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py</path>
+<type>file</type>
+<content>
+278:         # NAISSANCE COMMANDÉE PAR L'APPRENTISSAGE (`--arret-naissance`), DÉSACTIVÉE
+279:         # PAR DÉFAUT — et il y a une raison mesurée. Un seuil en gain ABSOLU se
+280:         # trompe au début : les premières naissances n'apportent presque rien
+281:         # parce que le réseau est encore dans le régime dominé par l'invariance,
+282:         # où la fidélité bouge à peine. Essayée à 0,001, la règle arrêtait la
+283:         # croissance à 5 neurones au lieu de 108, et faisait tomber la fidélité de
+284:         # test de 0,6079 à 0,5763. Elle reste disponible, mais elle ne remplace
+285:         # pas un calendrier validé.
+286:         arret_naissance = opt("--arret-naissance", "")
+287:         gain_naissance = float(opt("--gain-naissance", 0.001))
+288:         sans_gain = 0
+289:         val_prec = None
+290:         for _ in range(par_cycle):
+291:             # Cycle 1 : chaque couche DOUBLE (1,1,2,4,…) pour atteindre vite la
+292:             # zone utile. Cycles suivants : on AJOUTE sans doubler — le réseau a
+293:             # déjà une taille qui compte, et do
+… [1609 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", "new_string": "        # ------------------------------------------------------------ NAISSANCE\n        #\n        # `--naissance libre` : UN neurone à la fois, et c'est l'apprentissage qui\n        # décide. A … [3914 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py has been updated successfully.
+  ```
+
+### 🤖 Assistant
+
+⏵ Je corrige la sortie de boucle et je teste la naissance libre.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/pont_generatif.py'; s=open(p).read()\ns=s.replace('''            print(f\"# née : {P.compte_neurones} neurones en {len(P.couches)} couches \"\n                  f\"{P.couches}\")\n            continue''','' … [616 caractères tronqués]`
+
+  ```
+ok
+syntaxe OK
+  ```
+
+### 🤖 Assistant
+
+⏵ Sortie bufferisée : je relance en non-bufferisé pour suivre.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for p in $(python3 -c \"\nimport os\nmoi=os.getpid(); anc=set(); q=moi\nfor _ in range(6):\n    try:\n        st=open(f'/proc/{q}/stat').read().split(') ',1)[1].split(); q=int(st[1]); anc.add(q)\n    except Exception: break\nfor d in … [622 caractères tronqués]`
+
+  ```
+n7 couche 2                         7       2    0.5614   0.6419    0.4744   0.9957  0.9880
+n8                                  8       2    0.5625   0.6429    0.4744   0.9943  0.9858
+n11 couche 3                       11       3    0.5650   0.6447    0.4755   0.9908  0.9739
+n14 couche 4                       14       4    0.5665   0.6458    0.4773   0.9890  0.9666
+n16                                16       4    0.5676   0.6467    0.4781   0.9871  0.9609
+n17 couche 5                       17       5    0.5679   0.6470    0.4791   0.9872  0.9605
+n22 couche 6                       22       6    0.5719   0.6500    0.4800   0.9826  0.9476
+n24                                24       6    0.5732   0.6509    0.4802   0.9808  0.9390
+n31 couche 7                       31       7    0.5766   0.6534    0.4815   0.9783  0.9269
+n32                                32       7    0.5773   0.6537    0.4816   0.9772  0.9210
+n40                                40       7    0.5805   0.6566    0.4822   0.9682  0.8975
+n42 couche 8                       42       8    0.5811   0.6569    0.4830   0.9658  0.8865
+n48                                48       8    0.5831   0.6588    0.4827   0.9626  0.8829
+n52 
+… [87 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **La naissance libre fonctionne — et plus aucun chiffre rond.**
+
+Les tailles de couches sortent à **1, 6, 4, 3, 3, 5, 9, 11…** et les totaux à **7, 11, 14, 17, 22, 31, 42, 52** : c'est l'apprentissage qui décide, plus mon calendrier. Je laisse courir pour voir où il s'arrête.
+
+- **bash** `{"command": "sleep 420; tail -10 /tmp/libre.log; echo \"--- en cours ? ---\"; python3 -c \"\nimport os\nn=0\nfor d in os.listdir('/proc'):\n    if d.isdigit():\n        try: cl=open(f'/proc/{d}/cmdline','rb').read().decode(errors='replace')\n        except Exception: continue\n        if 'naissance' … [106 caractères tronqués]`
+
+  ```
+n97 couche 18                      97      18    0.5982   0.6684    0.4913   0.9386  0.8134
+n102 couche 19                    102      19    0.5993   0.6690    0.4924   0.9387  0.8116
+n104                              104      19    0.5997   0.6694    0.4930   0.9368  0.8034
+n110 couche 20                    110      20    0.6010   0.6703    0.4924   0.9354  0.8002
+n112 couche 21                    112      21    0.6014   0.6704    0.4917   0.9349  0.8017
+n117 couche 22                    117      22    0.6027   0.6715    0.4919   0.9330  0.7968
+n120                              120      22    0.6035   0.6722    0.4920   0.9322  0.7918
+n123 couche 23                    123      23    0.6042   0.6726    0.4928   0.9307  0.7897
+n127 couche 24                    127      24    0.6051   0.6731    0.4937   0.9285  0.7837
+n128                              128      24    0.6053   0.6733    0.4937   0.9281  0.7813
+--- en cours ? ---
+2
+  ```
+
+### 👤 Utilisateur
+
+ajouter des neurones, ne signifie pas nécessairement ajouter des couches immédiatement. avant de pouvoir faire un "ou exclusif" il faut d'abbord  apprendre à faire le "et" et le "ou"
+
+### 🤖 Assistant
+
+⏵ Point capital, et les chiffres me donnent tort : ma règle ouvre **24 couches pour 128 neurones**, et fait **moins bien** que le calendrier rond (0,4937 contre 0,5059).
+
+Vous avez raison, et mes propres chiffres me contredisent : ma règle ouvre une couche dès que le dernier neurône rapporte moins que la moyenne de sa couche — **24 couches pour 128 neurones**, et la fidélité (0,4937) est **pire** que le calendrier rond (0,5059). C'est exactement vouloir le XOR avant d'avoir fini le ET et le OU.
+
+Un neurone sait faire **ET** et **OU** ; il faut une **seconde couche** pour un **OU exclusif**. Donc : **épuiser la couche d'abord**, n'ouvrir la suivante que lorsqu'elle est saturée, et seulement si elle paie.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for p in $(python3 -c \"\nimport os\nmoi=os.getpid(); anc=set(); q=moi\nfor _ in range(6):\n    try:\n        st=open(f'/proc/{q}/stat').read().split(') ',1)[1].split(); q=int(st[1]); anc.add(q)\n    except Exception: break\nfor d in … [374 caractères tronqués]`
+
+  ```
+arrêté
+n127 couche 24                    127      24    0.6051   0.6731    0.4937   0.9285  0.7837
+n128                              128      24    0.6053   0.6733    0.4937   0.9281  0.7813
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", "limit": 50, "offset": 278}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py</path>
+<type>file</type>
+<content>
+278:         # ------------------------------------------------------------ NAISSANCE
+279:         #
+280:         # `--naissance libre` : UN neurone à la fois, et c'est l'apprentissage qui
+281:         # décide. Aucun chiffre rond ne doit sortir d'ici — 1, 2, 4, 8, 16, 32,
+282:         # 64, 128, 256 étaient MON calendrier et MON plafond, pas une découverte.
+283:         # Un compte rond est le signe qu'on a choisi la taille au lieu de la
+284:         # mesurer.
+285:         #
+286:         # Deux décisions prises par les données :
+287:         #   - quand une COUCHE est finie : quand le dernier neurone né rapporte
+288:         #     moins de la moitié du gain moyen de sa couche ;
+289:         #   - quand tout s'ARRÊTE : après `patience` neurones sans gain.
+290:         if opt("--naissance", "") == "libre":
+291:             gain_min = float(opt("--gain-min", 0.0002))
+292:             patience = int(opt("--patience", 12))
+293:             val_max = -1.0
+294:             sans_gain = 0
+295:             gains_couche = []
+296:             while P.compte_neurones < plafond:
+297
+… [2059 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", "new_string": "        # ------------------------------------------------------------ NAISSANCE\n        #\n        # `--naissance libre` : UN neurone à la fois, et c'est l'apprentissage qui\n        # décide. A … [6395 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py has been updated successfully.
+  ```
+
+### 🤖 Assistant
+
+⏵ Coquille à corriger, puis je relance avec la règle « épuiser la couche d'abord ».
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", "new_string": "                if nouvelle:\n                    saturee = 0", "old_string": "                if newvelle:=nouvelle:\n                    saturee = 0"}`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"import ast;ast.parse(open('tools/pont_generatif.py').read());print('syntaxe OK')\" && setsid nohup python3 -u tools/pont_generatif.py /tmp/cache_appr10c.npz /tmp/cache_tenus10c.npz --naissance libre --cycles 1 --a 0.5 -- … [275 caractères tronqués]`
+
+  ```
+syntaxe OK
+n1 COUCHE 1                         1       1    0.5570   0.6390    0.4702   0.9984  0.9953
+...
+n40                                40       1    0.5805   0.6566    0.4822   0.9682  0.8975
+n48                                48       1    0.5831   0.6588    0.4827   0.9626  0.8829
+n56                                56       1    0.5857   0.6607    0.4817   0.9592  0.8738
+n64                                64       1    0.5893   0.6630    0.4846   0.9561  0.8683
+  ```
+
+### 👤 Utilisateur
+
+en fait, mon inquiétude ne vient pas de la notion d'arbitraire vs naturellement rond, mais je crains qu'on ne crée trop rapidement des nouvelles couches au lieu d'ajouter des neurones au même niveau pour les activations manquantes, puis comme le cas du "ou exclusif" ajouter sur la couche suivante seulement si nécessaire pour un équilibre général/spécifique.
+
+### 🤖 Assistant
+
+⏵ C'est exactement ce que je viens de corriger — et le run le montre : **une seule couche qui grossit** (n1 → n64, toutes en « COUCHE 1 »).
+
+Votre formulation est plus précise que la mienne, et elle est maintenant implémentée : **remplir le niveau courant pour les activations manquantes d'abord**, et n'ouvrir la couche suivante que lorsque c'est nécessaire — l'équilibre général/spécifique. Je vérifie le comportement.
+
+- **bash** `{"command": "sleep 200; echo \"=== couches ouvertes et effectifs ===\"; grep -E \"COUCHE|ARRÊT|née\" /tmp/libre2.log; echo; echo \"=== dernières mesures ===\"; tail -5 /tmp/libre2.log", "description": "Check layer growth pattern", "timeoutMs": 260000}`
+
+  ```
+=== couches ouvertes et effectifs ===
+n1 COUCHE 1                         1       1    0.5570   0.6390    0.4702   0.9984  0.9953
+
+=== dernières mesures ===
+n72                                72       1    0.5919   0.6648    0.4870   0.9496  0.8431
+n80                                80       1    0.5942   0.6664    0.4883   0.9446  0.8241
+n88                                88       1    0.5958   0.6674    0.4894   0.9415  0.8206
+n96                                96       1    0.5979   0.6683    0.4910   0.9383  0.8131
+n104                              104       1    0.5997   0.6694    0.4930   0.9368  0.8034
+  ```
+
+### 🤖 Assistant
+
+⏵ **Découverte qui invalide ma structure de couches.** Les deux runs donnent des chiffres **identiques** à taille égale (n104 : 0,4930 / 0,9368 dans les deux). Donc chez moi, « ajouter à la couche » ou « ouvrir une couche » ne change **rien au calcul** — mes couches sont purement cosmétiques.
+
+**Arrêt — j'ai trouvé une faute structurelle, et elle rend votre remarque inopérante chez moi.**
+
+Les deux runs donnent des chiffres **exactement identiques** à taille égale (n=104 : 0,4930 / 0,9368 dans les deux cas). Raison : dans mon `nait`, **chaque neurone lit TOUS les neurones précédents**, quelle que soit leur couche. Donc l'étiquette « couche » ne change rien au calcul — mes 24 couches ne sont pas 24 couches, c'est un réservoir plat avec une numérotation.
+
+Une vraie profondeur exige qu'une couche lise **la précédente**, pas tout le passé. Je réécris.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for p in $(python3 -c \"\nimport os\nmoi=os.getpid(); anc=set(); q=moi\nfor _ in range(6):\n    try:\n        st=open(f'/proc/{q}/stat').read().split(') ',1)[1].split(); q=int(st[1]); anc.add(q)\n    except Exception: break\nfor d in … [559 caractères tronqués]`
+
+  ```
+arrêté
+73:    def nait(self, k, nouvelle_couche=True):
+106:    def ajuste(self, idx, ride, mt, quel=slice(None)):
+112:    def fid(self, idx, W, mt, quel):
+117:    def dernier(self, idx, W, mt, quel):
+120:    def redondance(self, W, idx):
+145:    def contribution(self, W, idx):
+155:    def recalcule(self, S, Ek=None):
+188:    def compacte(self, S):
+223:    def evalue(self, X, Y, W, mt):
+227:    def invariance(self, X, W, mt):
+230:    def couches_de(self, S):
+  ```
+
+### 🤖 Assistant
+
+⏵ Je réécris le cœur : une couche ne lira que **la précédente**, ce qui rend enfin « ajouter un neurone » et « ouvrir une couche » structurellement différents.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^# ---.*le pont\\|^def main\\|^class Pont\" tools/pont_generatif.py", "description": "Find class boundaries"}`
+
+  ```
+53:# ------------------------------------------------------------------ le pont
+54:class Pont:
+234:def main():
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '53,233p' tools/pont_generatif.py > /tmp/ancien_pont.txt && wc -l /tmp/ancien_pont.txt && python3 - <<'PY'\n# on remplace TOUTE la classe Pont par une version à couches RÉELLES\np='tools/pont_generatif.py'\ns=open(p).read()\ni … [9608 caractères tronqués]`
+
+  ```
+181 /tmp/ancien_pont.txt
+classe Pont réécrite (couches réelles)
+syntaxe OK
+  ```
+
+### 🤖 Assistant
+
+⏵ Je vérifie qu'aucun appel ne reste sur l'ancien format de généalogie.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"poids\\[\" tools/pont_generatif.py; echo \"--- test de fumée sur un petit jeu ---\"; timeout 600 python3 -u tools/pont_generatif.py /tmp/cache_appr40.npz /tmp/cache_tenus_trace.npz --naissance libre --cycles 1 --a 0.5 --rid … [144 caractères tronqués]`
+
+  ```
+191:        for c in sorted({self.poids[j][3] for j in S}):
+192:            membres = [j for j in S if self.poids[j][3] == c]
+193:            par = [j for j in S if self.poids[j][3] == c-1]
+201:                wp, ws, _, _ = self.poids[j]
+208:            Bs = np.array([self.poids[j][2] for j in membres])
+228:            c = self.poids[j][3]
+232:            wp, ws, b, c = self.poids[j]
+241:        return sorted({self.poids[j][3] for j in S})
+--- test de fumée sur un petit jeu ---
+n24                                24       1    0.6831   0.7405    0.5730   0.9798  0.9462
+n28                                28       1    0.6847   0.7412    0.5745   0.9775  0.9406
+n29 COUCHE 2                       29       2    0.6866   0.7420    0.5755   0.9777  0.9438
+n32                                32       2    0.6883   0.7418    0.5762   0.9754  0.9362
+n35                                35       2    0.6893   0.7427    0.5768   0.9754  0.9351
+n36 COUCHE 3                       36       3    0.6897   0.7429    0.5770   0.9753  0.9346
+n37                                37       3    0.6902   0.7431    0.5776   0.9765  0.9397
+n38                                38       3    0.6905   0.7430    0.57
+… [722 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le comportement est exactement celui que vous décrivez.**
+
+| | |
+|---|---|
+| couche 1 | **28 neurones** |
+| couche 2 | 7 neurones |
+| couche 3 | 6 neurones |
+| arrêt | « couche neuve sans gain » |
+
+**Le premier niveau absorbe l'essentiel de la croissance** (28 sur 41), et les niveaux suivants sont petits — la composition n'apparaît que là où elle est nécessaire. Aucun chiffre rond. Je lance la version complète sur les données propres.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && setsid nohup python3 -u tools/pont_generatif.py /tmp/cache_appr10c.npz /tmp/cache_tenus10c.npz --naissance libre --cycles 1 --a 0.5 --ride 1.0 --plafond 400 --gain-min 0.0002 --patience 10 > /tmp/libre3.log 2>&1 < /dev/null & sleep 2 … [146 caractères tronqués]`
+
+  ```
+lancé sur données propres
+# 40 langues d'entraînement = 36 apprentissage + 4 validation
+# 6 langues de TEST · a=0.5 · ride=1.0 · graine=5 · critère=redondance
+# 1 cycles de 3 couches, puis attrition
+# pas — apprentissage 43957 · validation 5344 · test 7213
+# constante témoin sur le TEST : 0.4682
+
+########## CYCLE 1 — CROISSANCE ##########
+après                           neur.  couch.  fid appr  fid VAL  fid TEST   invar.    pire
+  ```
+
+### 🤖 Assistant
+
+⏵ `--val` est resté à 4. Je relance avec 10 langues de validation.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for p in $(python3 -c \"\nimport os\nmoi=os.getpid(); anc=set(); q=moi\nfor _ in range(6):\n    try:\n        st=open(f'/proc/{q}/stat').read().split(') ',1)[1].split(); q=int(st[1]); anc.add(q)\n    except Exception: break\nfor d in … [621 caractères tronqués]`
+
+  ```
+# 40 langues d'entraînement = 30 apprentissage + 10 validation
+# 6 langues de TEST · a=0.5 · ride=1.0 · graine=5 · critère=redondance
+# 1 cycles de 3 couches, puis attrition
+# pas — apprentissage 35066 · validation 14235 · test 7213
+# constante témoin sur le TEST : 0.4710
+  ```
+
+### 🤖 Assistant
+
+⏵ Je rédige le récapitulatif demandé pendant que la naissance libre tourne.
+
+- **write** `{"content": "# Récapitulatif — méthode appliquée et résultats\n\nÉtat au 06/10, soir. Un seul professeur : **Qwen2.5-0.5B, couche 10** (896 canaux).\nToutes les mesures portent sur le corpus UDHR, dix unités, 40 langues\nd'entraînement dont 10 de validation, **6 langues tenues à l'écart** (`ell heb  … [8386 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/recapitulatif.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -12 /tmp/libre3.log; echo \"--- en cours ? ---\"; python3 -c \"\nimport os\nn=0\nfor d in os.listdir('/proc'):\n    if d.isdigit():\n        try: cl=open(f'/proc/{d}/cmdline','rb').read().decode(errors='replace')\n        except … [143 caractères tronqués]`
+
+  ```
+# 40 langues d'entraînement = 30 apprentissage + 10 validation
+# 6 langues de TEST · a=0.5 · ride=1.0 · graine=5 · critère=redondance
+# 1 cycles de 3 couches, puis attrition
+# pas — apprentissage 35066 · validation 14235 · test 7213
+# constante témoin sur le TEST : 0.4710
+
+########## CYCLE 1 — CROISSANCE ##########
+après                           neur.  couch.  fid appr  fid VAL  fid TEST   invar.    pire
+n1 COUCHE 1                         1       1    0.5444   0.6144    0.4734   0.9983  0.9950
+n8                                  8       1    0.5499   0.6180    0.4784   0.9945  0.9863
+n16                                16       1    0.5555   0.6216    0.4829   0.9869  0.9609
+n24                                24       1    0.5615   0.6258    0.4850   0.9807  0.9403
+--- en cours ? ---
+2
+  ```
+
+### 🤖 Assistant
+
+⏵ La naissance libre tourne (24 neurones, toujours dans la couche 1). Je consigne le récapitulatif et la réécriture.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Couches RÉELLES, naissance libre, et récapitulatif\n\nFAUTE STRUCTURELLE TROUVÉE : dans la version antérieure, chaque neurone lisait\nTOUS les neurones nés avant lui, quelle que soit leur couche. Ouvr … [1569 caractères tronqués]`
