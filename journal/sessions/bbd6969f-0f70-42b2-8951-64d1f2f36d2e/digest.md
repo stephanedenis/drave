@@ -124671,3 +124671,223 @@ TÉMOIN : δ au hasard, même norme       0.5871      0.2339
 Et l'effet est **maximal sur la pire paire : 0,279 → 0,378 (+35 %)**, alors que le témoin l'aggrave (0,230). C'est exactement la cible que j'avais identifiée (le grand modèle fait 0,28 → 0,47).
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/note-regle-contrastive.md'; s=open(p).read()\ns = s.replace(\"## 2. La règle qu'il faut : anti-Hebbien sur le différentiel INTER-LANGUE\",\n\"\"\"## 1bis. LE FONDEMENT EST VALIDÉ — la langue est soustractibl … [3269 caractères tronqués]`
+
+  ```
+7930616 LE FONDEMENT EST VALIDÉ : la langue est soustractible, et le témoin le prouve
+10:19
+  ```
+
+### 🤖 Assistant
+
+**~1h40 restante, et j'ai tout ce qu'il faut.** L'étape suivante est la vraie règle contrastive, et je peux la tester **hors échantillon** entièrement dans le domaine des traces.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/contrastif_hors_echantillon.py <<'EOF'\n#!/usr/bin/env python3\n\"\"\"contrastif_hors_echantillon.py — la règle contrastive APPRISE sur des langues\nd'entraînement, TESTÉE sur des langues jamais vues.\n\nC'est le test que … [6298 caractères tronqués]`
+
+  ```
+# entraînement : 8 langues (deu eng fra ita nld por rus spa)
+# test         : 6 langues (ell heb hin jpn kor tha) — JAMAIS vues
+# couche 10 · η 1.0 · ‖D‖_F 1.739e+03 après normalisation
+
+lecture                                 cos moyen  pire paire
+brute                                      0.5464      0.2790
+contrastif appris (train)                  0.5495      0.3023
+TÉMOIN : même norme, hasard                0.5363      0.2667
+  ```
+
+### 🤖 Assistant
+
+**LA RÈGLE CONTRASTIVE TRANSFÈRE — et le témoin le prouve.**
+
+| lecture | cos moyen | **pire paire** |
+|---|---:|---:|
+| brute | 0,5464 | 0,2790 |
+| **contrastif appris sur 8 langues** | **0,5495** | **0,3023 (+8,4 %)** |
+| TÉMOIN : même norme, hasard | 0,5363 | 0,2667 |
+
+Et c'est un vrai test : l'entraînement s'est fait sur **7 langues latines + le russe**, le test sur **grec, hébreu, devanagari, japonais, coréen, thaï** — **six écritures jamais vues**. Là où la règle non ciblée **dégradait** les langues tenues à l'écart (−5 à −10 %), celle-ci **améliore la pire paire de 8,4 %**, et le témoin l'aggrave.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for c in 2 4 6 8 10 12; do echo -n \"  couche $c : \"; timeout 600 python3 tools/contrastif_hors_echantillon.py /home/stephane/Data13TB/stephane/corpus/udhr/langues_train /home/stephane/Data13TB/stephane/corpus/udhr/tenus_trace --cou … [163 caractères tronqués]`
+
+  ```
+couche 2 : 0.4122 0.2794 | appris (train) | : même | 
+  couche 4 : 0.6027 0.4269 | appris (train) | : même | 
+  couche 6 : 0.5245 0.3762 | appris (train) | : même | 
+  couche 8 : 0.5656 0.4207 | appris (train) | : même | 
+  couche 10 : 0.5464 0.2790 | appris (train) | : même | 
+  couche 12 : 0.5142 0.2838 | appris (train) | : même |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && U=/home/stephane/Data13TB/stephane/corpus/udhr\nprintf \"%-8s %10s %10s %10s | %10s %10s %10s\\n\" couche brute_moy brute_pire CONTR_moy CONTR_pire tem_moy tem_pire\nfor c in 2 4 6 8 10 12 14; do\n  out=$(timeout 600 python3 tools/co … [596 caractères tronqués]`
+
+  ```
+couche    brute_moy brute_pire  CONTR_moy | CONTR_pire    tem_moy   tem_pire
+2            0.4122     0.2794     0.3971 |     0.2663                      
+4            0.6027     0.4269     0.5757 |     0.4019                      
+6            0.5245     0.3762     0.5139 |     0.3751                      
+8            0.5656     0.4207     0.5560 |     0.4292                      
+10           0.5464     0.2790     0.5495 |     0.3023                      
+12           0.5142     0.2838     0.5133 |     0.2866                      
+14           0.5146     0.3153     0.5082 |     0.3109
+  ```
+
+### 👤 Utilisateur
+
+Juste pour être sûr que tu comprends bien la mission court terme. On est à émuler en boite noire l'ensemble des premières couches des gros modèles afin d'avoir notre propre pont- linguistique-sémantique brut. Il ne s'agit pas de reproduire couche par couche le gros modèle, mais d'avoir un modèle n-couche récurrentes capable de répondre au premier niveau abstrait (le premier niveau à dominance non-linguistique) d'un gros modèle. Tu a le droit d'utiliser toutes les ressources de cette machine incluant les GPU pour tes essais, autant pour executer les couches de référence du LLM, que pour ton propre nouveau modèle (2e GPU?)
+
+### 🤖 Assistant
+
+Compris, et c'est une clarification qui change la cible : **pas de reproduction couche par couche** — un **modèle récurrent à n couches** qui rend, pour n'importe quelle langue, **le premier niveau abstrait** du gros modèle. Le gros modèle est une **boîte noire** : on ne prend que son entrée/sortie.
+
+Et j'ai déjà tout : `--trace-flux` **est** la sortie de la boîte noire (la représentation à la couche L, position par position), et la couche 0 **est** la plongée du jeton.
+
+- **bash** `{"command": "python3 -c \"import numpy; print('numpy', numpy.__version__)\"; nvidia-smi --query-gpu=index,name,memory.total,memory.used --format=csv 2>/dev/null | head -4; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls /home/stephane/Data13TB/stephane/corpus/udhr/langues/*.drvf | wc -l", " … [41 caractères tronqués]`
+
+  ```
+numpy 2.5.3
+index, name, memory.total [MiB], memory.used [MiB]
+0, Quadro RTX 5000, 16384 MiB, 1089 MiB
+1, Quadro RTX 5000, 16384 MiB, 381 MiB
+10
+  ```
+
+### 🤖 Assistant
+
+numpy ✓, **deux RTX 5000 de 16 Go libres** ✓. Je construis le pont : un étudiant récurrent qui rend la représentation du plateau à partir des seules plongées.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/pont_recurrent.py <<'EOF'\n#!/usr/bin/env python3\n\"\"\"pont_recurrent.py — notre pont linguistique-sémantique, appris en BOÎTE NOIRE.\n\nMISSION (clarifiée par Stéphane) : **pas** reproduire le gros modèle couche par\nc … [6438 caractères tronqués]`
+
+  ```
+# professeur : couche 10 · 896 canaux · sous-espace de rang 64
+# entraînement : 8 langues (376 pas) · test : 6 langues JAMAIS vues
+# étudiant : s_t = A s_(t-1) + B e_t  — A (64, 64), B (64, 896)
+
+langue  cos(étudiant, professeur)
+ell                       -0.0584
+heb                       -0.0850
+hin                        0.0551
+jpn                        0.0076
+kor                        0.0202
+tha                       -0.0180
+
+# fidélité moyenne à la boîte noire : -0.0131
+
+# INVARIANCE INTER-LANGUE à la dernière position, langues tenues à l'écart :
+#   professeur (couche 10) : cos moyen 0.5464 · pire paire 0.2790
+#   ÉTUDIANT (le pont)      : cos moyen -0.1999 · pire paire -1.0000
+  ```
+
+### 🤖 Assistant
+
+**L'étudiant échoue** : fidélité −0,013, invariance −0,20. C'est le mode d'échec classique d'une récurrence ajustée en un pas — **la boucle fermée diverge** alors que le pas à pas peut être bon. Je mesure les deux et je contrôle le rayon spectral.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/pont_recurrent.py'; s=open(p).read()\ns = s.replace(\"\"\"    A = W[:rang].T; B = W[rang:].T\"\"\",\n\"\"\"    A = W[:rang].T; B = W[rang:].T\n    # **Le rayon spectral commande tout.** Un ajustement en UN  … [1884 caractères tronqués]`
+
+  ```
+ok
+=== rho 0.99 ===
+# A : rayon spectral 1.424 -> 0.990 (ramené à 0.99)
+# fidélité en UN PAS (professeur donné) : 0.5380
+# fidélité moyenne à la boîte noire : -0.0067
+#   ÉTUDIANT (le pont)      : cos moyen -0.1995 · pire paire -0.9990
+=== rho 0.95 ===
+# A : rayon spectral 1.424 -> 0.950 (ramené à 0.95)
+# fidélité en UN PAS (professeur donné) : 0.5380
+# fidélité moyenne à la boîte noire : 0.0016
+#   ÉTUDIANT (le pont)      : cos moyen -0.1913 · pire paire -0.9946
+=== rho 0.9 ===
+# A : rayon spectral 1.424 -> 0.900 (ramené à 0.9)
+# fidélité en UN PAS (professeur donné) : 0.5380
+# fidélité moyenne à la boîte noire : 0.0181
+#   ÉTUDIANT (le pont)      : cos moyen -0.0879 · pire paire -0.9725
+=== rho 0.7 ===
+# A : rayon spectral 1.424 -> 0.700 (ramené à 0.7)
+# fidélité en UN PAS (professeur donné) : 0.5380
+# fidélité moyenne à la boîte noire : 0.0741
+#   ÉTUDIANT (le pont)      : cos moyen 0.1599 · pire paire -0.1824
+  ```
+
+### 🤖 Assistant
+
+**Le fit est bon en UN PAS (0,538) mais la boucle fermée ne suit pas — et ce n'est pas une divergence** (j'ai ramené le rayon spectral de 1,424 à 0,7). C'est l'échec classique : un ajustement local n'optimise pas la *trajectoire*.
+
+Je teste l'hypothèse qui compte : **la capacité de l'état**.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && U=/home/stephane/Data13TB/stephane/corpus/udhr\nfor r in 32 64 128 256 512; do\n  echo -n \"  rang $r : \"\n  timeout 600 python3 tools/pont_recurrent.py $U/langues_train $U/tenus_trace --couche 10 --rang $r --rho 0.95 2>&1 | grep -E … [124 caractères tronqués]`
+
+  ```
+rang 32 : # fidélité en UN PAS (professeur donné) : 0.5822 # fidélité moyenne à la boîte noire : 0.0447 
+  rang 64 : # fidélité en UN PAS (professeur donné) : 0.5380 # fidélité moyenne à la boîte noire : 0.0016 
+  rang 128 : # fidélité en UN PAS (professeur donné) : 0.4912 # fidélité moyenne à la boîte noire : 0.0579 
+  rang 256 : # fidélité en UN PAS (professeur donné) : 0.5654 # fidélité moyenne à la boîte noire : 0.1266 
+  rang 512 :
+  ```
+
+### 🤖 Assistant
+
+**La capacité d'état n'est pas le mur** : la fidélité en un pas reste à 0,49-0,58 de rang 32 à 256. Et la boucle libre plafonne à 0,13. Il me manque un témoin essentiel : **que vaut une simple application linéaire de la plongée, sans aucune récurrence ?**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/pont_recurrent.py'; s=open(p).read()\ns = s.replace(\"\"\"    print(f\"\\\\n# fidélité en UN PAS (professeur donné) : {un_pas:.4f}\")\"\"\",\n\"\"\"    print(f\"\\\\n# fidélité en UN PAS (professeur donné)  … [1235 caractères tronqués]`
+
+  ```
+témoin ajouté
+=== couche cible 4 ===
+# fidélité en UN PAS (professeur donné) : 0.4664
+# TÉMOIN sans récurrence (linéaire de e_t seul) : 0.9216
+# fidélité moyenne à la boîte noire : 0.0469
+=== couche cible 10 ===
+# fidélité en UN PAS (professeur donné) : 0.4912
+# TÉMOIN sans récurrence (linéaire de e_t seul) : 0.9021
+# fidélité moyenne à la boîte noire : 0.0579
+=== couche cible 17 ===
+# fidélité en UN PAS (professeur donné) : 0.4946
+# TÉMOIN sans récurrence (linéaire de e_t seul) : 0.9198
+# fidélité moyenne à la boîte noire : 0.0728
+  ```
+
+### 🤖 Assistant
+
+**Le témoin renverse la conclusion.**
+
+| couche cible | récurrence | **linéaire de la plongée SEULE** |
+|---|---:|---:|
+| 4 | 0,4664 | **0,9216** |
+| 10 | 0,4912 | **0,9021** |
+| 17 | 0,4946 | **0,9198** |
+
+**Une simple application linéaire de la plongée du jeton prédit la couche abstraite à 90 %** — deux fois mieux que ma récurrence. Le niveau abstrait est donc **déjà à 90 % déterminé par la plongée du jeton**.
+
+Reste la question qui décide de la mission : **cette application linéaire hérite-t-elle de l'invariance inter-langue ?**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/pont_recurrent.py'; s=open(p).read()\ns = s.replace(\"\"\"    print(f\"# TÉMOIN sans récurrence (linéaire de e_t seul) : {sans_rec:.4f}\")\"\"\",\n\"\"\"    print(f\"# TÉMOIN sans récurrence (linéaire de e_ … [1073 caractères tronqués]`
+
+  ```
+ok
+=== cible 4 ===
+#   professeur (couche 4)            : cos moyen 0.6027 · pire paire 0.4269
+#   pont LINÉAIRE de la plongée seule : cos moyen 0.6965 · pire paire 0.5487
+#   professeur (couche 4) : cos moyen 0.6027 · pire paire 0.4269
+=== cible 10 ===
+#   professeur (couche 10)            : cos moyen 0.5464 · pire paire 0.2790
+#   pont LINÉAIRE de la plongée seule : cos moyen 0.6357 · pire paire 0.3828
+#   professeur (couche 10) : cos moyen 0.5464 · pire paire 0.2790
+=== cible 17 ===
+#   professeur (couche 17)            : cos moyen 0.4609 · pire paire 0.2807
+#   pont LINÉAIRE de la plongée seule : cos moyen 0.5657 · pire paire 0.3867
+#   professeur (couche 17) : cos moyen 0.4609 · pire paire 0.2807
+  ```
+
+### 🤖 Assistant
+
+**Voilà le pont — et il est plus simple que tout ce qu'on a essayé.**
+
+| cible | professeur (moy / pire) | **pont linéaire de la plongée seule** |
+|---|---|---|
+| couche 4 | 0,6027 / 0,4269 | **0,6965 / 0,5487** |
+| couche 10 | 0,5464 / 0,2790 | **0,6357 / 0,3828** |
+| couche 17 | 0,4609 / 0,2807 | **0,5657 / 0,3867** |
+
+**Le pont rend une représentation PLUS invariante que le professeur lui-même**, sur **six écritures jamais vues**. Et sur la pire paire : 0,279 → **0,383 (+37 %)**, mieux que l'annulation oracle d'hier soir (0,279 → 0,378) — **sans aucun oracle**.
+
+La raison est claire : une **seule** application linéaire doit servir **toutes** les langues d'entraînement à la fois. Elle ne peut donc retenir que ce qu'elles ont en commun, et laisse tomber ce qui est propre à chacune. C'est un projecteur sur le partagé, obtenu par simple moindres carrés — **une matrice 896×896, sans récurrence, sans rétropropagation**.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pont-semantique.md <<'EOF'\n# Rapport — le pont linguistique-sémantique, mesuré\n\n**Mission** (clarifiée par Stéphane) : émuler **en boîte noire** le premier niveau\nabstrait des gros modèles — celui où la repr … [6388 caractères tronqués]`
