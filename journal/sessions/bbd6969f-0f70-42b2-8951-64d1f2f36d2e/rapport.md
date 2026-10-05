@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 161.6 h |
-| Tours | 112 |
-| Messages | 7747 |
-| Appels d'outils | 7399 |
+| Durée | 161.8 h |
+| Tours | 113 |
+| Messages | 7753 |
+| Appels d'outils | 7403 |
 | Fichiers touchés | 150 |
-| Commandes | 6298 |
+| Commandes | 6302 |
 | Sous-agents | 32 |
-| Commits | 530 |
+| Commits | 531 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -271,6 +271,8 @@
 **Tour 111** — Drave permet d'optimiser un modèle couche par couche en fonction des scénarios d'utilisation à l'entrés d'une couche. On peut donc construire un nouveau modèle en grappes fines par distillation afin d'avoir un moe extrèmement maléable où on retrouve les qualités des meilleurs modèles dans une version morcellée de façon optimale.
 
 **Tour 112** — il faut arrêter de retomber systématiquement dans les solutions traditionneles à l'entrainement et aux autres problèmes. On doit les approcher avec des approches radicalement orientées vers des flux de données plus légers et surtout en mode événements. ainsi, pas de backprop traditionnel. On préférera laisser le monde des ffn pour permettre une rétroactivité négative sur des grappes d'activation r … [304 caractères tronqués]
+
+**Tour 113** — la sortie doit toujours être prévisible depuis son entrée. Malgré le hasard utilisé en base pour l'entrainement classique. une fois un modèle llm entrainé il est déterministe en principe. donc toujours oui. L'idée est ici de récupérer les premières couches d'entrée des grands modèles en supposant qu'il y ait une abstraction linguistique rendu à un certain niveau. c'est la couche d'entrée en sémant … [153 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -5607,7 +5609,73 @@ Le morcellement **n'est pas absurde** : à 50 % d'experts gardés, on paie +30 %
 
 **Synthèse produite :**
 
-`profil_flux.py` **lit la v1 et plante sur la v3** que le moteur écrit — un outil périmé, exactement le défaut que `analyse_flux.py` documente avoir corrigé chez lui.
+Tu as raison sur le fond, et je me suis laissé ramener au réflexe. Je reprends **tes** termes.
+
+\## Drave a déjà les pièces — ce n'est pas un détour
+
+| primitive | ce qu'elle fait |
+|---|---|
+| `SignedDelta`, `BitmapSign`, `FusedSign` | transport par listes d'événements, **y compris négatifs** |
+| `quant_scratch` (k-WTA, seuil) | **inhibition latérale** — ne garder que les k plus grandes magnitudes |
+| `kda_pas`, `kda_porte`, `res_mix` | **récurrence** par tête + mélange résiduel, vérifiés contre llama.cpp |
+| `Hebb` | adaptation **locale**, sans passe arrière |
+| `--trace-flux` / `--flux-forcer` | **capture** du flux à l'entrée de chaque couche, et **rejeu à l'identique** |
+
+Aucune ne demande d'entraînement. La « rétroactivité négative » a même déjà son type : un événement peut être **signé**.
+
+\## La question préalable, et elle se tranche avant d'écrire une ligne
+
+**La sortie d'une couche est-elle prévisible depuis son entrée ?**
+
+- Si **non** : il n'y a rien à annuler, donc rien à ne pas transporter — l'idée n'a pas de socle.
+- Si **oui** : l'écart à la prédiction est **l'imprévu**, et c'est lui qu'on met en liste d'événements. C'est littéralement ton « noter les nouveaux patterns qui émergent après cancellation ».
+
+Et c'est mesurable **par couche**, sans changer le modèle. La trace DRVF enregistre le flux à l'entrée de la famille attention (base 0) et FFN (base 1000), donc :
+
+```
+ce que l'attention ajoute = flux_ffn[L]   − flux_attn[L]
+ce que la FFN ajoute      = flux_attn[L+1] − flux_ffn[L]
+```
+
+**Trois chiffres par couche** : l'incrément relatif, la parcimonie de l'incrément, et la part déjà contenue dans l'état récurrent des jetons précédents — cette dernière **forward-only**, par une règle locale sur les flux enregistrés.
+
+**Et je pose la prédiction pour qu'elle soit réfutable** : si ton idée tient, les couches du **milieu** doivent avoir l'incrément le plus faible et la part prévisible la plus forte. Si c'est faux, « on peut perdre les couches du milieu » n'a pas de base mesurée.
+
+\## Ce que j'ai fait ce soir
+
+**La trace est enregistrée** : 64 jetons de code, **34,3 Mo**, **27,3 M événements** (419 469 par jeton). Elle exige `--lot 1` — en mode lot le chemin est dense, donc **zéro événement à tracer** (mesuré). C'est en soi une information sur ton architecture : le mode événementiel et le mode lot sont deux mondes.
+
+**Et un défaut trouvé** : `tools/profil_flux.py` lit la **v1** du format et plante sur la **v3** que le moteur écrit. Un outil qui ne li
+… [605 caractères tronqués]
+
+### Tour 113 — la sortie doit toujours être prévisible depuis son entrée. Malgré le hasard utilisé en base pour l'entrainement classiqu … [433 caractères tronqués]
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Read the v3 trace reader
+- bash — Trace FR and EN representations
+- bash — Measure cross-lingual invariance per layer
+- bash — Commit the semantic plateau measurement
+
+**Synthèse produite :**
+
+**Ta première étape est mesurée, et elle donne un chiffre net.**
+
+Similarité entre **« Le chat noir dort sur le tapis rouge. »** et **« The black cat sleeps on the red carpet. »**, couche par couche :
+
+| couche | 0 | 4 | 9 | 17 | **23** | 30 | 42 | 47 |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| similarité | 0,375 | 0,873 | 0,899 | 0,926 | **0,930** | 0,897 | 0,854 | 0,716 |
+
+**Trois régimes, nets :**
+
+- **couches 0-9** : la forme de surface domine — 0,375 → 0,899. C'est l'encodage linguistique.
+- **couches 9-29** : un **plateau sémantique** à 0,89-0,93. La représentation ne dépend plus de la langue. **C'est ton « niveau en sémantique pure ».**
+- **couches 30-47** : re-spécialisation vers la surface — 0,90 → 0,72. Le modèle redescend vers les jetons.
+
+**Le sommet est à la couche 23 sur 48** — le milieu exact. Ta supposition « on perd probablement les couches du milieu » tombe juste : c'est là que le traitement est le plus abstrait, donc le plus indépendant du modèle qui l'a produit.
+
+**Et la coupe n'est pas un point, c'est une fenêtre** : le plateau fait ~20 couches de large (9→29). C'est cette fenêtre qui est candidate à être reproduite par ton modèle récurrent — pas « les premières N couches » puis le reste.
 
 ## 3. Travail accompli
 
@@ -5843,7 +5911,7 @@ Le morcellement **n'est pas absurde** : à 50 % d'experts gardés, on paie +30 %
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6258 autres
+- … et 6262 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -6521,4 +6589,5 @@ Le morcellement **n'est pas absurde** : à 50 % d'experts gardés, on paie +30 %
 - K3 : la question ouverte est TRANCHÉE — c'est la CAPACITÉ du cache, pas la dispersion  Trois chiffres : 1. La prélecture de l'union est une PESSIMISATION mesuré
 - Morcellement des experts : l'élagage par fréquence, mesuré — la fréquence n'est pas l'importance  Qwen3-30B-A3B, scénario code (384 jetons du source de ce dépôt
 - Note : la voie événementielle — prédire une couche pour ne transporter que l'imprévu  Part d'une objection juste : arrêter de retomber sur l'entraînement classi
+- Mesure : le plateau sémantique est à la couche 23 sur 48 — la coupe est une FENÊTRE, pas un point  Invariance à la forme de surface, couche par couche : « Le ch
 
