@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 180.5 h |
 | Tours | 149 |
-| Messages | 8456 |
-| Appels d'outils | 8022 |
+| Messages | 8458 |
+| Appels d'outils | 8024 |
 | Fichiers touchés | 177 |
-| Commandes | 6826 |
+| Commandes | 6828 |
 | Sous-agents | 32 |
-| Commits | 604 |
+| Commits | 605 |
 | Compactages de contexte | 11 |
 
 ## Objectifs déclarés
@@ -7547,16 +7547,38 @@ Rien à faire de votre côté. J'attends la fin des deux runs.
 
 ### Tour 149 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
 
-*2 appels d'outils.* Actions notables :
+*4 appels d'outils.* Actions notables :
 
 - bash — Check bridge run progress
 - bash — Document the panel effect on shared channels
+- bash — Get the full bridge result on 301 languages
+- bash — Commit the phase 2 deliverable
 
 **Synthèse produite :**
 
-⏵ Le pont progresse (n38). J'utilise l'attente pour documenter un **effet de panel** que je viens de mesurer et qui corrige une de mes mesures antérieures.
+⏵ **Le livrable de la phase 2 est tombé.**
 
-Le pont progresse (n38). J'utilise l'attente pour documenter un **effet de panel** que je viens de mesurer — il corrige une de mes mesures antérieures.
+\## Le pont sur 301 langues d'apprentissage — résultat complet
+
+| | |
+|---|---|
+| apprentissage / validation | **301 / 50 langues** |
+| réseau | **40 neurones · 1 couche** |
+| fidélité apprentissage | 0,7459 |
+| fidélité VALIDATION | 0,7505 |
+| **fidélité TEST** | **0,7430** (constante 0,7207) |
+| **invariance TEST** | **0,9827** · pire paire **0,9165** |
+| oracle TEST | 0,7653 — **écart +0,0223** |
+| oracle VALIDATION | 0,7563 — **écart +0,0058** |
+| **écart à la constante** | **+0,0223** |
+
+**Trois choses tiennent, à pleine échelle :**
+
+1. **L'écart test/validation est de 1,01** (0,7505 / 0,7430) — contre 2,58 sur mon ancien panel. Le diagnostic de typologie est **confirmé sur le panel complet** de 41 langues et 22 écritures.
+2. **L'écart de transfert tombe à +0,0223** (oracle test), contre **+0,0693** sur l'ancien panel — **3,1× plus petit**.
+3. **L'écart à la constante vaut +0,0223** — exactement l'invariant des +0,020 mesuré sur sept périmètres et deux architectures.
+
+Et le **signal précoce était représentatif** : il donnait 0,7438 / 0,7621 / +0,0292 ; le complet donne 0,7430 / 0,7505 / +0,0223.
 
 ## 3. Travail accompli
 
@@ -7819,7 +7841,7 @@ Le pont progresse (n38). J'utilise l'attente pour documenter un **effet de panel
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6786 autres
+- … et 6788 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -8571,4 +8593,5 @@ Le pont progresse (n38). J'utilise l'attente pour documenter un **effet de panel
 - Mon seuil de couche par défaut était TROP STRICT — la profondeur forcée paie  Le critère n'ouvrait jamais de couche sur le panel stratifié (communs 28-38 %, sou
 - Optimum du seuil de couche : 0,25, et c'est un maximum INTÉRIEUR  Balayage complet sur le panel stratifié, tout le reste égal :    seuil-part  réseau           
 - Plateau sur 392 langues : le 'sous-ensemble partagé' s'effondre de 678 à 48 canaux  Mesure sur les 392 langues, dernière position, couche 10 :   50 % de l'énerg
+- LIVRABLE PHASE 2 : le pont sur 301 langues — fid TEST 0,7430, invariance 0,9827    apprentissage / validation : 301 / 50 langues (contre 30 / 10 précédemment)  
 

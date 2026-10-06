@@ -137366,3 +137366,60 @@ n38              38       1    0.7456   0.7504    0.7430   0.9831  0.9172 | comm
 Le pont progresse (n38). J'utilise l'attente pour documenter un **effet de panel** que je viens de mesurer — il corrige une de mes mesures antérieures.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 13. Le plateau sur 392 langues, et un effet de panel qui corrige une mesure antérieure\n\nMesure faite sur les **392 langues**, derni … [3538 caractères tronqués]`
+
+  ```
+e85847a Plateau sur 392 langues : le 'sous-ensemble partagé' s'effondre de 678 à 48 canaux
+
+#   TEST        : nous 0.7430 · oracle 0.7653 · ÉCART +0.0223 · invariance oracle 0.9820
+03:18
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le premier run est terminé et l'oracle est tombé.** Je relève le résultat complet.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/le pont sur 301 langues/,$p' /tmp/analyse392.log | grep -E \"SOUS-ENSEMBLE|découpe|née :|MEILLEUR|taille  |fidélité|invariance|ORACLE|#   TEST|#   VALIDATION|état final\" | head -20", "description": "Get the full bridge resu … [21 caractères tronqués]`
+
+  ```
+# découpe par noms : 301 apprentissage · 50 validation
+# SOUS-ENSEMBLE ACTIF : 133/896 canaux portent 50% de l'énergie (15% des canaux), masque lu sur l'apprentissage seul
+# née : 40 neurones en 1 couches [40]
+# ORACLE (lecture ajustée SUR le jeu évalué — diagnostic seulement)
+#   TEST        : nous 0.7430 · oracle 0.7653 · ÉCART +0.0223 · invariance oracle 0.9820
+#   VALIDATION  : nous 0.7505 · oracle 0.7563 · ÉCART +0.0058   (même vivier que l'apprentissage)
+=== MEILLEUR RÉSEAU SELON LA VALIDATION (naissance libre) ===
+  taille           : 40 neurones · 1 couches
+  fidélité appr.   : 0.7459
+  fidélité VAL     : 0.7505
+  fidélité TEST    : 0.7430   (constante témoin : 0.7207)
+  invariance TEST  : 0.9827 · pire paire 0.9165
+# état final du réseau : 40 neurones · 1 couches ([40])
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le livrable de la phase 2 est tombé.**
+
+## Le pont sur 301 langues d'apprentissage — résultat complet
+
+| | |
+|---|---|
+| apprentissage / validation | **301 / 50 langues** |
+| réseau | **40 neurones · 1 couche** |
+| fidélité apprentissage | 0,7459 |
+| fidélité VALIDATION | 0,7505 |
+| **fidélité TEST** | **0,7430** (constante 0,7207) |
+| **invariance TEST** | **0,9827** · pire paire **0,9165** |
+| oracle TEST | 0,7653 — **écart +0,0223** |
+| oracle VALIDATION | 0,7563 — **écart +0,0058** |
+| **écart à la constante** | **+0,0223** |
+
+**Trois choses tiennent, à pleine échelle :**
+
+1. **L'écart test/validation est de 1,01** (0,7505 / 0,7430) — contre 2,58 sur mon ancien panel. Le diagnostic de typologie est **confirmé sur le panel complet** de 41 langues et 22 écritures.
+2. **L'écart de transfert tombe à +0,0223** (oracle test), contre **+0,0693** sur l'ancien panel — **3,1× plus petit**.
+3. **L'écart à la constante vaut +0,0223** — exactement l'invariant des +0,020 mesuré sur sept périmètres et deux architectures.
+
+Et le **signal précoce était représentatif** : il donnait 0,7438 / 0,7621 / +0,0292 ; le complet donne 0,7430 / 0,7505 / +0,0223.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 14. LE LIVRABLE DE LA PHASE 2 : le pont sur 301 langues\n\n| | |\n|---|---:|\n| apprentissage / validation | **301 / 50 langues** |\n … [3075 caractères tronqués]`
