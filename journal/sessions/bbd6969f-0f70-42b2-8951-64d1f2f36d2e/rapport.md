@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 178.1 h |
-| Tours | 138 |
-| Messages | 8395 |
-| Appels d'outils | 7983 |
-| Fichiers touchés | 176 |
-| Commandes | 6788 |
+| Durée | 178.7 h |
+| Tours | 139 |
+| Messages | 8406 |
+| Appels d'outils | 7992 |
+| Fichiers touchés | 177 |
+| Commandes | 6796 |
 | Sous-agents | 32 |
-| Commits | 600 |
+| Commits | 601 |
 | Compactages de contexte | 11 |
 
 ## Objectifs déclarés
@@ -329,6 +329,8 @@
 **Tour 137** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 **Tour 138** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
+
+**Tour 139** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -7081,16 +7083,61 @@ Rien à faire de votre côté. Commit `a96b553`.
 
 **Synthèse produite :**
 
-⏵ **Résultat important : l'écart de transfert que je mesurais était en grande partie un artefact du panel.**
+⏵ Signal précoce obtenu, et il corrige une conclusion antérieure. Point d'étape.
 
-| | écart oracle TEST | écart oracle VAL | **rapport** | écart à la constante |
-|---|---:|---:|---:|---:|
-| ancien panel (non latin seul) | +0,0693 | +0,0269 | **2,58** | +0,0243 |
-| **nouveau panel stratifié** | **+0,0292** | +0,0198 | **1,47** | **+0,0223** |
+\## Le résultat du tour
 
-**L'écart de transfert tombe de +0,0693 à +0,0292 — 2,4× plus petit — et son rapport test/validation passe de 2,58 à 1,47.** Le « goulot dans le transfert » que j'avais annoncé était donc **pour l'essentiel un artefact de mon panel de test**, exactement comme le diagnostic de typologie le laissait prévoir.
+J'ai pris un signal précoce sur le **panel stratifié** dès que j'ai eu 20 langues de test couvrant 12 des 22 écritures.
 
-Et l'écart à la constante, **+0,0223**, reste dans l'invariant des +0,020 — qui tient donc aussi sur ce panel.
+| | ancien panel | **stratifié** |
+|---|---:|---:|
+| fidélité TEST | 0,6383 | **0,7438** |
+| fidélité VALIDATION | 0,7500 | 0,7621 |
+| écart à la constante | +0,0243 | **+0,0223** |
+| invariance TEST | 0,9488 | 0,9739 |
+| **écart oracle TEST** | +0,0693 | **+0,0292** |
+| écart oracle VALIDATION | +0,0269 | +0,0198 |
+| **rapport des écarts** | **2,58** | **1,47** |
+
+**L'écart de transfert tombe de +0,0693 à +0,0292 — 2,4× plus petit** — et son rapport test/validation passe de **2,58 à 1,47**.
+
+**Le « goulot dans le transfert » que j'avais annoncé était donc, pour l'essentiel, un artefact de mon panel de test**, composé uniquement de langues non latines. C'est exactement ce que le diagnostic de typologie laissait prévoir — et cela veut dire que j'ai passé plusieurs tours à chercher à « combler » un écart qui n'existait largement que dans ma façon de mesurer.
+
+**Et l'invariant tient** : écart à la constante **+0,0223**, contre +0,0243 sur l'ancien panel et +0,020 sur les sept périmètres du rapport précédent. La contribution propre du pont reste **+0,020** quel que soit le panel.
+
+**Réserve explicite** : ce panel est **partiel** — 20 langues de test sur 41, 12 écritures sur 22. Les chiffres définitifs viendront de l'analyse complète. Mais la direction est nette.
+
+\## État
+
+| | |
+|---|---:|
+| phase 1 | **214/392** · 0 échec |
+| restant | ~178 langues, ~1,5 h |
+| fin estimée | ~02h20 |
+
+\## Le coût, de nouveau
+
+Cette expérience a encore compété avec le traçage. C'est le troisième arbitrage de ce type ; je le signale parce qu'il n'est pas gratuit. Mais chaque fois, le signal précoce a **corrigé une conclusion** — ici, une conclusion fausse que j'aurais sinon laissée dans le rapport.
+
+Rien à faire de votre côté. Commit `99a89ec`.
+
+### Tour 139 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
+
+*9 appels d'outils.* Actions notables :
+
+- bash — Check state and cache sizes
+- write `/tmp/seuil.sh`
+- bash — Test layer threshold calibration
+- bash — Check threshold comparison results
+- bash — Inspect the layer trigger code
+- bash — Fix the hardcoded threshold bug
+- bash — Test the fixed decision threshold
+- bash — Run decision-threshold sweep in background
+- bash — Commit bug fix and check threshold test
+
+**Synthèse produite :**
+
+⏵ Je commite la correction du drapeau inopérant et j'attends le test du seuil de décision.
 
 ## 3. Travail accompli
 
@@ -7274,6 +7321,7 @@ Et l'écart à la constante, **+0,0223**, reste dans l'invariant des +0,020 — 
 | `/tmp/trace392b.sh` | 1 | 0 |
 | `/tmp/dose.sh` | 1 | 0 |
 | `/tmp/stratifie.sh` | 1 | 0 |
+| `/tmp/seuil.sh` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -7352,7 +7400,7 @@ Et l'écart à la constante, **+0,0223**, reste dans l'invariant des +0,020 — 
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6748 autres
+- … et 6756 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -8100,4 +8148,5 @@ Et l'écart à la constante, **+0,0223**, reste dans l'invariant des +0,020 — 
 - Courbe de dose complète : elle NE sature PAS — le gain marginal par langue augmente  Troisième point ajouté (60 langues, sous-ensemble strict de la dose 112, mê
 - Dimensionnement de l'analyse finale, mesuré — et décision de ne PAS optimiser  Chiffré avant de laisser tourner, plutôt que découvert à 3 h du matin :   cache a
 - Signal précoce sur le panel STRATIFIÉ : l'écart de transfert était un artefact  Mesure sur les 168 premières langues tracées (133 apprentissage · 15 validation 
+- Bug : --seuil-commun ne pilotait PAS la décision, seulement l'affichage  Trouvé en testant la calibration du seuil de couche : abaisser --seuil-commun de 0,50 à
 

@@ -136084,3 +136084,239 @@ nouveau : stratifié (12 écritures)    0.7438    0.7621     1.02     0.7215  +0
 Et l'écart à la constante, **+0,0223**, reste dans l'invariant des +0,020 — qui tient donc aussi sur ce panel.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 10. Signal précoce sur le panel STRATIFIÉ : l'écart de transfert était un artefact\n\nMesure prise sur les 168 premières langues trac … [3318 caractères tronqués]`
+
+  ```
+99a89ec Signal précoce sur le panel STRATIFIÉ : l'écart de transfert était un artefact
+traçage : 214/392
+00:51
+  ```
+
+### 🤖 Assistant
+
+⏵ Signal précoce obtenu, et il corrige une conclusion antérieure. Point d'étape.
+
+## Le résultat du tour
+
+J'ai pris un signal précoce sur le **panel stratifié** dès que j'ai eu 20 langues de test couvrant 12 des 22 écritures.
+
+| | ancien panel | **stratifié** |
+|---|---:|---:|
+| fidélité TEST | 0,6383 | **0,7438** |
+| fidélité VALIDATION | 0,7500 | 0,7621 |
+| écart à la constante | +0,0243 | **+0,0223** |
+| invariance TEST | 0,9488 | 0,9739 |
+| **écart oracle TEST** | +0,0693 | **+0,0292** |
+| écart oracle VALIDATION | +0,0269 | +0,0198 |
+| **rapport des écarts** | **2,58** | **1,47** |
+
+**L'écart de transfert tombe de +0,0693 à +0,0292 — 2,4× plus petit** — et son rapport test/validation passe de **2,58 à 1,47**.
+
+**Le « goulot dans le transfert » que j'avais annoncé était donc, pour l'essentiel, un artefact de mon panel de test**, composé uniquement de langues non latines. C'est exactement ce que le diagnostic de typologie laissait prévoir — et cela veut dire que j'ai passé plusieurs tours à chercher à « combler » un écart qui n'existait largement que dans ma façon de mesurer.
+
+**Et l'invariant tient** : écart à la constante **+0,0223**, contre +0,0243 sur l'ancien panel et +0,020 sur les sept périmètres du rapport précédent. La contribution propre du pont reste **+0,020** quel que soit le panel.
+
+**Réserve explicite** : ce panel est **partiel** — 20 langues de test sur 41, 12 écritures sur 22. Les chiffres définitifs viendront de l'analyse complète. Mais la direction est nette.
+
+## État
+
+| | |
+|---|---:|
+| phase 1 | **214/392** · 0 échec |
+| restant | ~178 langues, ~1,5 h |
+| fin estimée | ~02h20 |
+
+## Le coût, de nouveau
+
+Cette expérience a encore compété avec le traçage. C'est le troisième arbitrage de ce type ; je le signale parce qu'il n'est pas gratuit. Mais chaque fois, le signal précoce a **corrigé une conclusion** — ici, une conclusion fausse que j'aurais sinon laissée dans le rapport.
+
+Rien à faire de votre côté. Commit `99a89ec`.
+
+
+## Tour 139
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de représentation universelle), boîte noire (on ne lit du professeur que la couche à émuler, jamais sa tête ni ses jetons générés), aucune rétropropagation (A et B aléatoires et gelés, seule la lecture s'ajuste en forme fermée), et chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, TAILLE du réseau, avec le diagnostic oracle sur les deux panneaux (test hors vivier et validation du même vivier)."
+Round: 12/256
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Je relève l'état et je nettoie les caches temporaires de l'expérience.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date \"+%H:%M\"; echo \"phase 1 : $(ls /home/stephane/Data13TB/stephane/corpus/udhr/udhr392 | wc -l)/392\"; tail -1 /tmp/trace392.log; echo \"échecs : $(grep -c ÉCHEC /tmp/trace392.log)\"; echo; echo \"=== place occupée par mes cache … [802 caractères tronqués]`
+
+  ```
+00:52
+phase 1 : 214/392
+mai 54s 11285738
+échecs : 0
+
+=== place occupée par mes caches temporaires ===
+23M	/tmp/cache_dose_test.npz
+69M	/tmp/cache_str_test.npz
+401M	/tmp/cache_str_train.npz
+15M	/tmp/cache_tenus10c.npz
+11M	/tmp/cache_tenus10.npz
+4,0K	/tmp/cache_tenus30c_l17.npz
+4,0K	/tmp/cache_tenus30c_l8.npz
+1008K	/tmp/cache_tenus_trace.npz
+/dev/mapper/system-root   11T  8,8T  2,1T  81% /home/stephane/Data13TB
+
+=== chaîne ===
+analyse392 · analyse_final · rj_apres · trace392 · unites_apres · wiki_apres
+  ```
+
+### 🤖 Assistant
+
+⏵ Un point à examiner : sur le panel stratifié, le critère de couche **ne déclenche jamais** (`communs` 28-38 %, sous le seuil de 50 %) — le réseau reste à **1 couche**. Je teste si ce seuil est bien calibré.
+
+Un point à examiner : sur ce panel, mon critère de couche **ne déclenche jamais** — `communs` plafonne à 28-38 %, sous le seuil de 50 %, et le réseau reste à **1 couche**. Est-ce que le seuil est bien calibré, ou est-ce que je me prive de profondeur utile ? Je teste.
+
+- **write** `{"content": "#!/bin/bash\n# LE SEUIL DE COUCHE EST-IL BIEN CALIBRÉ ?\n#\n# Sur le panel stratifié, part_commune plafonne à 28-38 %, sous le seuil de 50 % :\n# aucune couche ne s'ouvre, le réseau reste à 1 couche. Deux lectures possibles —\n# soit c'est correct (rien de partagé à composer à ce niveau … [914 caractères tronqués]`
+
+  ```
+<path>/tmp/seuil.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "grep -n \"seuil-commun\" /tmp/seuil.sh; chmod +x /tmp/seuil.sh && bash -n /tmp/seuil.sh && echo \"syntaxe OK et exécutable\"; setsid nohup /tmp/seuil.sh >/dev/null 2>&1 < /dev/null & disown; sleep 450; grep -E \"^####|COUCHE NEUVE|ARRÊT|née :|fidélité VAL|fidélité TEST|invariance TEST\" … [197 caractères tronqués]`
+
+  ```
+19:    --part-canaux 0.5 --lecture quadratique --seuil-commun $S \
+syntaxe OK et exécutable
+########## seuil de concepts communs : 0.5 ##########
+  → ARRÊT (couche neuve sans gain)     52       1
+# née : 52 neurones en 1 couches [52]
+  fidélité VAL     : 0.7621
+  fidélité TEST    : 0.7438   (constante témoin : 0.7215)
+  invariance TEST  : 0.9739 · pire paire 0.8929
+########## seuil de concepts communs : 0.25 ##########
+--- traçage ---
+226
+01:00
+  ```
+
+### 🤖 Assistant
+
+⏵ Le seuil 0,5 reproduit exactement (52 neurones, VAL 0,7621, TEST 0,7438). J'attends les seuils abaissés.
+
+Le seuil 0,5 **reproduit exactement** (52 neurones, 1 couche, VAL 0,7621, TEST 0,7438). J'attends les seuils abaissés.
+
+- **bash** `{"command": "sleep 540; grep -E \"^####|COUCHE NEUVE|ARRÊT|née :|fidélité VAL|fidélité TEST|invariance TEST\" /tmp/seuil.log; echo \"--- TERMINE ? ---\"; grep -c TERMINE /tmp/seuil.log; ls /home/stephane/Data13TB/stephane/corpus/udhr/udhr392 | wc -l; date \"+%H:%M\"", "description": "Check threshold … [42 caractères tronqués]`
+
+  ```
+########## seuil de concepts communs : 0.5 ##########
+  → ARRÊT (couche neuve sans gain)     52       1
+# née : 52 neurones en 1 couches [52]
+  fidélité VAL     : 0.7621
+  fidélité TEST    : 0.7438   (constante témoin : 0.7215)
+  invariance TEST  : 0.9739 · pire paire 0.8929
+########## seuil de concepts communs : 0.25 ##########
+  → ARRÊT (couche neuve sans gain)     52       1
+# née : 52 neurones en 1 couches [52]
+  fidélité VAL     : 0.7621
+  fidélité TEST    : 0.7438   (constante témoin : 0.7215)
+  invariance TEST  : 0.9739 · pire paire 0.8929
+########## seuil de concepts communs : 0.10 ##########
+--- TERMINE ? ---
+0
+239
+01:09
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le seuil abaissé donne un résultat bit-à-bit identique** — 52 neurones, mêmes chiffres. Cela veut dire que mon critère de couche ne réagit **pas** au seuil. Je vérifie si l'option est seulement lue.
+
+**Le seuil abaissé donne un résultat identique** — 52 neurones, mêmes chiffres au chiffre près. Mon critère de couche ne réagit donc **pas** au seuil. Je vérifie si l'option est seulement lue.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"seuil-commun\\|seuil_commun\\|part_commune\\|epuisee\" tools/pont_generatif.py; echo \"--- la ligne de déclenchement ---\"; grep -n \"epuisee and part_commune\" tools/pont_generatif.py; sed -n '/epuisee = sans_gain/,/sans_g … [85 caractères tronqués]`
+
+  ```
+616:            seuil_commun = float(opt("--seuil-commun", 0.35))
+641:                    part_commune = float((com > seuil_commun).mean())
+648:                          f"({part_commune*100:>3.0f} %) · contraste {con:.3f}")
+669:                    epuisee = sans_gain >= patience
+670:                    if epuisee and part_commune > 0.5 and con > seuil_contraste:
+--- la ligne de déclenchement ---
+670:                    if epuisee and part_commune > 0.5 and con > seuil_contraste:
+                    epuisee = sans_gain >= patience
+                    if epuisee and part_commune > 0.5 and con > seuil_contraste:
+                        print(f"{'  → COUCHE NEUVE (épuisée + concepts + contraste)':<12} "
+                              f"{P.compte_neurones:>6} {len(P.couches):>7}")
+                        couche_neuve = True
+                        sans_gain = 0
+  ```
+
+### 🤖 Assistant
+
+⏵ **Bug trouvé** : ligne 670, le déclencheur compare `part_commune > 0.5` — une **constante en dur**, pas ma variable `seuil_commun`. Mon option ne pilotait donc que le **comptage**, pas la décision.
+
+**Bug trouvé** : ligne 670, le déclencheur compare `part_commune > 0.5` — une **constante en dur**, pas ma variable `seuil_commun`. Mon option `--seuil-commun` ne pilotait donc que le **comptage** affiché, jamais la décision. C'est exactement le mode d'échec que je m'étais engagé à traquer : un drapeau analysé mais sans effet.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/pont_generatif.py'; s=open(p).read()\nvieux = \"\"\"                    epuisee = sans_gain >= patience\n                    if epuisee and part_commune > 0.5 and con > seuil_contraste:\"\"\"\nneuf = \"\"\" … [1080 caractères tronqués]`
+
+  ```
+syntaxe OK
+618:            seuil_part = float(opt("--seuil-part", 0.5))
+676:                    if epuisee and part_commune > seuil_part and con > seuil_contraste:
+  ```
+
+### 🤖 Assistant
+
+⏵ Corrigé : `--seuil-part` pilote maintenant la **décision** (défaut 0,5, donc comportement inchangé). Je teste enfin un vrai forçage de profondeur.
+
+Corrigé : `--seuil-part` pilote maintenant la **décision** (défaut 0,5 — comportement inchangé). Je peux enfin tester un vrai forçage de profondeur.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -E \"^####|née :|fidélité VAL|fidélité TEST\" /tmp/seuil.log | tail -6; echo \"--- test du seuil de PARTIE (décision) ---\"; for SP in 0.5 0.25; do echo \"########## seuil-part $SP ##########\"; timeout 900 python3 -u tools/pont … [447 caractères tronqués]`
+
+  ```
+fidélité TEST    : 0.7438   (constante témoin : 0.7215)
+########## seuil de concepts communs : 0.25 ##########
+# née : 52 neurones en 1 couches [52]
+  fidélité VAL     : 0.7621
+  fidélité TEST    : 0.7438   (constante témoin : 0.7215)
+########## seuil de concepts communs : 0.10 ##########
+--- test du seuil de PARTIE (décision) ---
+########## seuil-part 0.5 ##########
+# née : 52 neurones en 1 couches [52]
+  fidélité VAL     : 0.7621
+  fidélité TEST    : 0.7438   (constante témoin : 0.7215)
+  invariance TEST  : 0.9739 · pire paire 0.8929
+########## seuil-part 0.25 ##########
+[timed out after 600000ms]
+[killed by signal: SIGTERM]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le plafond de 600 s de l'exécutant me coupe encore. Je relance en arrière-plan.
+
+- **bash** `{"command": "cat > /tmp/seuilpart.sh <<'EOF'\n#!/bin/bash\nset -u\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\n: > /tmp/seuilpart.log\nfor SP in 0.5 0.25 0.10; do\n  echo \"########## seuil-part (décision) : $SP ##########\" >> /tmp/seuilpart.log\n  python3 -u tools/pont_generatif.py /tmp/ca … [817 caractères tronqués]`
+
+  ```
+OK
+########## seuil-part (décision) : 0.5 ##########
+  → ARRÊT (couche neuve sans gain)     52       1
+# née : 52 neurones en 1 couches [52]
+  fidélité VAL     : 0.7621
+  fidélité TEST    : 0.7438   (constante témoin : 0.7215)
+  invariance TEST  : 0.9739 · pire paire 0.8929
+########## seuil-part (décision) : 0.25 ##########
+--- traçage ---
+274
+01:28
+  ```
+
+### 🤖 Assistant
+
+⏵ Je commite la correction du drapeau inopérant et j'attends le test du seuil de décision.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Bug : --seuil-commun ne pilotait PAS la décision, seulement l'affichage\n\nTrouvé en testant la calibration du seuil de couche : abaisser --seuil-commun de\n0,50 à 0,25 donnait un résultat BIT-À-BIT I … [985 caractères tronqués]`

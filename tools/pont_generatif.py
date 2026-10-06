@@ -614,6 +614,8 @@ def main():
             gain_min = float(opt("--gain-min", 0.0002))
             patience = int(opt("--patience", 12))
             seuil_commun = float(opt("--seuil-commun", 0.35))
+            # part de neurones « concepts communs » exigée pour ouvrir une couche
+            seuil_part = float(opt("--seuil-part", 0.5))
             seuil_contraste = float(opt("--seuil-contraste", 0.45))
             val_max = -1.0
             sans_gain = 0
@@ -667,7 +669,11 @@ def main():
                     # Sans la condition 1, le critère déclenchait à CHAQUE pas :
                     # 9 couches pour 72 neurones, mesuré.
                     epuisee = sans_gain >= patience
-                    if epuisee and part_commune > 0.5 and con > seuil_contraste:
+                    # `part_commune` est déjà le pourcentage de neurones AU-DESSUS
+                    # de `seuil_commun`. Comparer ici à une constante en dur (0,5)
+                    # rendait `--seuil-commun` inopérant sur la DÉCISION : le
+                    # drapeau ne changeait que l'affichage, jamais le déclenchement.
+                    if epuisee and part_commune > seuil_part and con > seuil_contraste:
                         print(f"{'  → COUCHE NEUVE (épuisée + concepts + contraste)':<12} "
                               f"{P.compte_neurones:>6} {len(P.couches):>7}")
                         couche_neuve = True
