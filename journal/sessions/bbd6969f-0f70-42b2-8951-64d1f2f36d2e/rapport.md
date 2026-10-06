@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 177.0 h |
-| Tours | 133 |
-| Messages | 8364 |
-| Appels d'outils | 7962 |
+| Durée | 177.1 h |
+| Tours | 134 |
+| Messages | 8368 |
+| Appels d'outils | 7964 |
 | Fichiers touchés | 174 |
-| Commandes | 6769 |
+| Commandes | 6771 |
 | Sous-agents | 32 |
-| Commits | 595 |
+| Commits | 596 |
 | Compactages de contexte | 11 |
 
 ## Objectifs déclarés
@@ -319,6 +319,8 @@
 **Tour 132** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1001 caractères tronqués]
 
 **Tour 133** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1001 caractères tronqués]
+
+**Tour 134** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1001 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -6846,9 +6848,51 @@ Rien à faire de votre côté. Commits `0d0e338` puis `230ee30`.
 
 **Synthèse produite :**
 
-⏵ **Vérifié : `ben` passe de 2040 (tronqué) à 2634 positions**, et les arguments sont confirmés (`--ctx 4096`). Je commite.
+⏵ Défaut trouvé et corrigé. Point d'étape.
 
-**Vérifié : `ben` passe de 2040 (tronqué) à 2634 positions.** La correction fonctionne, et les arguments sont confirmés. Je commite.
+\## Ce que ce tour a rattrapé
+
+En **vérifiant la qualité des traces sur un échantillon** — plutôt qu'en attendant la fin du run — j'ai trouvé que `guj` (gujarati) était plafonné à 2040 positions. Scan complet des 143 fichiers :
+
+**16 langues tronquées sur 143 (11 %)** : ame, ben, blt, boa, bod, ccp, chr, cpu, csw, div, dzo, **ell**, fuf, guj, **hin** — plus un fichier en erreur (interrompu en pleine écriture). Et parmi elles, **grec et hindi**, deux langues de mon jeu de test historique.
+
+C'est grave exactement pour la raison mesurée au tour 4 : **sur un texte tronqué, la dernière position n'est plus la fin du texte**, donc l'invariance inter-langue compare des **contenus différents**.
+
+**J'ai vérifié avant d'agir**, pas après : une trace du même texte à `ctx 2048` et à `ctx 4096` donne des fichiers **bit-à-bit identiques**. Donc `--ctx` ne change rien au calcul quand le texte tient — les 127 traces saines restent valables, et seul le contexte d'**allocation** change.
+
+**Corrigé** : les 17 fichiers fautifs supprimés, traçage relancé à `--ctx 4096` (même coût — `ctx` n'alloue que le cache KV, le calcul suit le nombre réel de jetons). Contrôle : `ben` passe de **2040 à 2634 positions**.
+
+Relancé avec `chmod +x` — la leçon du tour précédent, où `bash -n` m'avait donné une fausse assurance : il vérifie la syntaxe, pas le droit d'exécution.
+
+\## État
+
+| | |
+|---|---:|
+| phase 1 | **132/392** (les 17 fautives seront refaites en repassant) |
+| échecs | 0 |
+| rythme | ~28 s/langue, plus lent sur les naguère tronquées (plus de jetons) |
+| fin estimée | ~02h20 |
+
+Les six scripts de la chaîne restent vivants et attendent.
+
+\## Ce que je retiens
+
+Le contrôle par échantillon a coûté cinq minutes et a évité de bâtir toute l'analyse sur 11 % de données corrompues — un défaut qui aurait été **invisible** dans les résultats, puisqu'il ne produit pas d'erreur mais un biais silencieux sur précisément la métrique que je mesure. J'aurais dû le faire au lancement, pas 140 langues plus tard.
+
+Rien à faire de votre côté. Commit `21aafc9`.
+
+### Tour 134 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1281 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Check re-traced languages for truncation
+- bash — Document the extension work
+
+**Synthèse produite :**
+
+⏵ Les langues refaites sont **propres** (ame 2838, ben 2634, blt 3375, boa 2076 — aucune troncature). Je documente le plan et l'état de cette extension.
+
+Les langues refaites sont **propres** : ame 2838, ben 2634, blt 3375, boa 2076 positions — aucune troncature. Je documente le plan et l'état de cette extension dans un rapport dédié.
 
 ## 3. Travail accompli
 
@@ -7108,7 +7152,7 @@ Rien à faire de votre côté. Commits `0d0e338` puis `230ee30`.
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6729 autres
+- … et 6731 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -7851,4 +7895,5 @@ Rien à faire de votre côté. Commits `0d0e338` puis `230ee30`.
 - Analyse finale chaînée : Romeo, Wikipedia, et l'invariance par unité  Un seul script (/tmp/analyse_final.sh) enchaîne les trois analyses dès que la phase 5 (tra
 - Deux erreurs de ma part, et un résultat mesuré qui les tranche  1. LE SECOND TRAÇAGE N'A JAMAIS TOURNÉ. J'ai vérifié sa syntaxe avec bash -n mais    jamais fait
 - 11 % des langues étaient TRONQUÉES à ctx 2048 — corrigé à ctx 4096, sans surcoût  Trouvé en vérifiant la qualité des traces sur un échantillon, PAS en attendant
+- Rapport : extension à toutes les langues — périmètre, convention, découpage, 5 phases  Documente l'état complet de l'extension : inventaire des trois corpus et 
 

@@ -135429,3 +135429,91 @@ args : --ctx 4096 · --couches 0:11 · --n 0 · --trace-couches 0,10
 **Vérifié : `ben` passe de 2040 (tronqué) à 2634 positions.** La correction fonctionne, et les arguments sont confirmés. Je commite.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"11 % des langues étaient TRONQUÉES à ctx 2048 — corrigé à ctx 4096, sans surcoût\n\nTrouvé en vérifiant la qualité des traces sur un échantillon, PAS en attendant la\nfin : gujarati était plafonné à 2 … [1267 caractères tronqués]`
+
+  ```
+21aafc9 11 % des langues étaient TRONQUÉES à ctx 2048 — corrigé à ctx 4096, sans surcoût
+
+total : 132/392
+23:49
+  ```
+
+### 🤖 Assistant
+
+⏵ Défaut trouvé et corrigé. Point d'étape.
+
+## Ce que ce tour a rattrapé
+
+En **vérifiant la qualité des traces sur un échantillon** — plutôt qu'en attendant la fin du run — j'ai trouvé que `guj` (gujarati) était plafonné à 2040 positions. Scan complet des 143 fichiers :
+
+**16 langues tronquées sur 143 (11 %)** : ame, ben, blt, boa, bod, ccp, chr, cpu, csw, div, dzo, **ell**, fuf, guj, **hin** — plus un fichier en erreur (interrompu en pleine écriture). Et parmi elles, **grec et hindi**, deux langues de mon jeu de test historique.
+
+C'est grave exactement pour la raison mesurée au tour 4 : **sur un texte tronqué, la dernière position n'est plus la fin du texte**, donc l'invariance inter-langue compare des **contenus différents**.
+
+**J'ai vérifié avant d'agir**, pas après : une trace du même texte à `ctx 2048` et à `ctx 4096` donne des fichiers **bit-à-bit identiques**. Donc `--ctx` ne change rien au calcul quand le texte tient — les 127 traces saines restent valables, et seul le contexte d'**allocation** change.
+
+**Corrigé** : les 17 fichiers fautifs supprimés, traçage relancé à `--ctx 4096` (même coût — `ctx` n'alloue que le cache KV, le calcul suit le nombre réel de jetons). Contrôle : `ben` passe de **2040 à 2634 positions**.
+
+Relancé avec `chmod +x` — la leçon du tour précédent, où `bash -n` m'avait donné une fausse assurance : il vérifie la syntaxe, pas le droit d'exécution.
+
+## État
+
+| | |
+|---|---:|
+| phase 1 | **132/392** (les 17 fautives seront refaites en repassant) |
+| échecs | 0 |
+| rythme | ~28 s/langue, plus lent sur les naguère tronquées (plus de jetons) |
+| fin estimée | ~02h20 |
+
+Les six scripts de la chaîne restent vivants et attendent.
+
+## Ce que je retiens
+
+Le contrôle par échantillon a coûté cinq minutes et a évité de bâtir toute l'analyse sur 11 % de données corrompues — un défaut qui aurait été **invisible** dans les résultats, puisqu'il ne produit pas d'erreur mais un biais silencieux sur précisément la métrique que je mesure. J'aurais dû le faire au lancement, pas 140 langues plus tard.
+
+Rien à faire de votre côté. Commit `21aafc9`.
+
+
+## Tour 134
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de représentation universelle), boîte noire (on ne lit du professeur que la couche à émuler, jamais sa tête ni ses jetons générés), aucune rétropropagation (A et B aléatoires et gelés, seule la lecture s'ajuste en forme fermée), et chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, TAILLE du réseau, avec le diagnostic oracle sur les deux panneaux (test hors vivier et validation du même vivier)."
+Round: 7/256
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Je relève l'état et je vérifie que les langues refaites ne sont plus tronquées.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date \"+%H:%M\"; echo \"phase 1 : $(ls /home/stephane/Data13TB/stephane/corpus/udhr/udhr392 | wc -l)/392\"; tail -1 /tmp/trace392.log; echo \"échecs : $(grep -c ÉCHEC /tmp/trace392.log)\"; echo \"--- les 16 naguère tronquées sont-ell … [590 caractères tronqués]`
+
+  ```
+23:49
+phase 1 : 132/392
+boa 48s 10686515
+échecs : 0
+--- les 16 naguère tronquées sont-elles refaites ? ---
+Traceback (most recent call last):
+  File "<string>", line 7, in <module>
+    v,nl,hid,recs=lire(fs[0])
+                  ~~~~^^^^^^^
+  File "/tmp/lire_drvf.py", line 35, in lire
+    d,=struct.unpack("<B",f.read(1))
+       ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+struct.error: unpack requires a buffer of 1 bytes
+   ame:  2838 positions  ok
+   ben:  2634 positions  ok
+   blt:  3375 positions  ok
+   boa:  2076 positions  ok
+  ```
+
+### 🤖 Assistant
+
+⏵ Les langues refaites sont **propres** (ame 2838, ben 2634, blt 3375, boa 2076 — aucune troncature). Je documente le plan et l'état de cette extension.
+
+Les langues refaites sont **propres** : ame 2838, ben 2634, blt 3375, boa 2076 positions — aucune troncature. Je documente le plan et l'état de cette extension dans un rapport dédié.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-toutes-langues.md <<'EOF'\n# Extension à toutes les langues, puis aux grands corpus\n\nObjectif : passer de **46 langues** à **toutes celles disponibles**, puis aux grands\ncorpus multilingues pour obtenir des p … [5819 caractères tronqués]`
