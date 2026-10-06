@@ -133040,3 +133040,119 @@ Les trois échecs du tour 3 restent des **faits** (ces leviers ne déplacent rie
 **Le levier n'est donc pas la méthode, c'est le PANEL.** Un jeu de test uniquement non latin mesure surtout la distance typologique. Il faut des langues tenues à l'écart **des deux sortes** — ce que le découpage validation/test permet désormais de séparer, et que le bloc oracle corrigé rapporte systématiquement.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport os\nmoi=os.getpid(); anc=set(); q=moi\nfor _ in range(8):\n    try:\n        st=open(f'/proc/{q}/stat').read().split(') ',1)[1].split(); q=int(st[1]); anc.add(q)\n    except Exception: break\nn=0\nfor d in os.li … [482 caractères tronqués]`
+
+  ```
+calculs en cours : 0
+5497c34 journal
+5d00797 RECTIFICATION : l'oracle du §10.2 était faux ; le plafond est 0,7076, pas 0,7762
+635d3c4 Le plafond est dans le TRANSFERT, pas dans les caractéristiques ; l'attrition ne généralise pas
+670 reports/recapitulatif.md
+  ```
+
+### 🤖 Assistant
+
+⏵ Tour 4 bouclé, tout commité, rien ne tourne.
+
+## Bilan du tour
+
+Le tour est surtout une **rectification**, et elle valait la peine : la conclusion phare du tour 3 — « le plafond est dans le transfert, +0,138 » — reposait sur un diagnostic faussé par **ma propre fuite de données**, réintroduite dans le bloc oracle alors que je l'avais déjà corrigée dans le chemin du rapport.
+
+| | chiffre du tour 3 | **chiffre corrigé** |
+|---|---:|---:|
+| plafond (oracle) | 0,7762 | **0,7076** |
+| marge à combler | +0,138 | **+0,069** |
+| dont transfert générique | — | **+0,0269** |
+| dont typologie du panel | — | **+0,0424** |
+
+Et trois leviers fermés, chacun par une mesure :
+
+- **centrage de l'entrée** (retirer le jeton moyen par langue) : fidélité 0,6383 → **0,6250**, l'écart empire ;
+- **normalisation des états par langue** : invariance 0,9648 → **0,8823** ;
+- **plus de langues d'apprentissage** (20 → 36) : écart **constant**, 0,132 à 0,141.
+
+## État de l'objectif
+
+Tous les livrables sont en place et mesurés : phase générative ✓ (naissance un neurone à la fois, tailles décidées par l'apprentissage, premier niveau dominant), attrition périodique ✓ (avec son verdict honnête — **elle réduit, elle ne généralise pas**), généralisation par redondance ✓, aucune rétropropagation ✓, les cinq mesures ✓, contre **Qwen2.5-0.5B couche 10** ✓. Le volet 30B reste écarté par votre consigne d'un seul professeur.
+
+**Je laisse l'objectif actif.** Le tour a produit une cible précise et désormais mesurable à chaque essai : les **+0,042 de typologie**, qui sont le vrai sujet si l'on veut que le pont tienne sur des écritures qu'il n'a jamais vues. La piste naturelle — aligner l'entrée entre langues par le corpus parallèle, en forme fermée — se heurte à un manque de données : mes caches ne conservent **pas les frontières des unités**, donc je ne peux pas apparier les jetons entre langues. Il faudrait retracer avec ces frontières, ce qui est un travail de traçage, pas de méthode.
+
+
+## Tour 126
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Faire évoluer le pont linguistico-sémantique en BOÎTE NOIRE (émulation des premières couches du professeur, sans accès à ses rouages) par une phase GÉNÉRATIVE — le nombre de neurones et de couches NAÎT pendant l'apprentissage, en partant d'un seul neurone — suivie d'une ATTRITION PÉRIODIQUE qui réduit la taille du réseau en GÉNÉRALISANT les concepts (fusion des unités redondantes, réajustement de la lecture sur les survivants), jamais par simple coupe. Aucune rétropropagation : A et B restent aléatoires et gelés, seule la lecture s'ajuste en forme fermée. Chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, et TAILLE du réseau — mesurées contre le professeur Qwen2.5-0.5B couche 10 et le plateau Qwen3-30B-A3B."
+Round: 5/256
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Tour 5. Je suis ma propre recommandation : **re-vérifier les résultats clés sur le panneau équitable**, et non plus seulement sur le test non latin.
+
+Je suis ma propre recommandation du tour 4 : mes conclusions ont été tirées sur un test **uniquement non latin**. Je rejoue les comparaisons clés sur les **deux panneaux** pour voir lesquelles tiennent.
+
+- **write** `{"content": "#!/bin/bash\n# DEUX PANNEAUX. Le test (six langues non latines) mesure surtout la distance\n# typologique ; la validation (même vivier que l'apprentissage) mesure la qualité\n# du pont. On rejoue les comparaisons clés sur les DEUX, pour voir ce qui tient.\nset -u\ncd /home/stephane/Data … [538 caractères tronqués]`
+
+  ```
+<path>/tmp/panneaux.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && chmod +x /tmp/panneaux.sh && setsid nohup /tmp/panneaux.sh >/dev/null 2>&1 < /dev/null & sleep 340; grep -E \"^####|SOUS-ENSEMBLE|constante|#   TEST|#   VALIDATION|née :\" /tmp/panneaux.log", "description": "Run two-panel comparison" … [22 caractères tronqués]`
+
+  ```
+########## périmètre énergie 0 ##########
+# constante témoin sur le TEST : 0.4710
+########## CYCLE 1 — CROISSANCE ##########
+  ```
+
+### 🤖 Assistant
+
+⏵ Les runs sont lents. J'attends.
+
+- **bash** `{"command": "sleep 580; grep -E \"^####|SOUS-ENSEMBLE|constante|#   TEST|#   VALIDATION|née :\" /tmp/panneaux.log; echo \"--- TERMINE ? ---\"; grep -c TERMINE /tmp/panneaux.log", "description": "Wait for two-panel results", "timeoutMs": 640000}`
+
+  ```
+########## périmètre énergie 0 ##########
+# constante témoin sur le TEST : 0.4710
+########## CYCLE 1 — CROISSANCE ##########
+# née : 80 neurones en 5 couches [41, 15, 8, 8, 8]
+#   TEST        : nous 0.4945 · oracle 0.5912 · ÉCART +0.0967 · invariance oracle 0.9064
+#   VALIDATION  : nous 0.6397 · oracle 0.6796 · ÉCART +0.0399   (même vivier que l'apprentissage)
+  fidélité TEST    : 0.4945   (constante témoin : 0.4710)
+########## périmètre énergie 0.75 ##########
+# SOUS-ENSEMBLE ACTIF : 424/896 canaux portent 75% de l'énergie (47% des canaux), masque lu sur l'apprentissage seul
+# constante témoin sur le TEST : 0.5319
+########## CYCLE 1 — CROISSANCE ##########
+# née : 80 neurones en 5 couches [41, 15, 8, 8, 8]
+#   TEST        : nous 0.5536 · oracle 0.6366 · ÉCART +0.0830 · invariance oracle 0.9240
+#   VALIDATION  : nous 0.6915 · oracle 0.7239 · ÉCART +0.0324   (même vivier que l'apprentissage)
+  fidélité TEST    : 0.5536   (constante témoin : 0.5319)
+########## périmètre énergie 0.5 ##########
+# SOUS-ENSEMBLE ACTIF : 157/896 canaux portent 50% de l'énergie (18% des canaux), masque lu sur l'apprentissage seul
+# constante témoin sur le TEST : 0.6140
+########## CYCLE 1 — CROISSANCE #####
+… [329 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Découverte utile : la restriction ne fait pas que monter les chiffres — elle réduit l'ÉCART de transfert.**
+
+| périmètre | TEST nous | TEST oracle | **écart TEST** | VAL nous | VAL oracle | **écart VAL** |
+|---|---:|---:|---:|---:|---:|---:|
+| 896 | 0,4945 | 0,5912 | +0,0967 | 0,6397 | 0,6796 | +0,0399 |
+| 424 | 0,5536 | 0,6366 | +0,0830 | 0,6915 | 0,7239 | +0,0324 |
+| **157** | **0,6383** | **0,7076** | **+0,0693** | **0,7500** | **0,7769** | **+0,0269** |
+
+**L'écart diminue de 28 %** en restreignant la cible, **sur les deux panneaux**. Une cible plus interlingue est aussi **plus transférable**. Et le rapport test/validation reste stable à **~2,5×** — la pénalité de typologie est un facteur constant.
+
+**L'écart diminue de 28 %** (0,0967 → 0,0693) en restreignant la cible, **sur les deux panneaux** : une cible plus interlingue est aussi **plus transférable**. Et le rapport test/validation reste stable à **~2,5×** — la pénalité de typologie est un facteur constant, pas un mur qui grandit.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/recapitulatif.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 14. La restriction réduit aussi l'ÉCART, et les deux panneaux le confirment\n\nLes conclusions des tours précédents avaient été tirées sur un  … [4015 caractères tronqués]`

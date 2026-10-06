@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 174.1 h |
-| Tours | 125 |
-| Messages | 8241 |
-| Appels d'outils | 7856 |
-| Fichiers touchés | 165 |
-| Commandes | 6683 |
+| Durée | 174.4 h |
+| Tours | 126 |
+| Messages | 8247 |
+| Appels d'outils | 7860 |
+| Fichiers touchés | 166 |
+| Commandes | 6686 |
 | Sous-agents | 32 |
-| Commits | 580 |
+| Commits | 581 |
 | Compactages de contexte | 11 |
 
 ## Objectifs déclarés
@@ -299,6 +299,8 @@
 **Tour 124** — <goal_round> Objective: "Faire évoluer le pont linguistico-sémantique en BOÎTE NOIRE (émulation des premières couches du professeur, sans accès à ses rouages) par une phase GÉNÉRATIVE — le nombre de neurones et de couches NAÎT pendant l'apprentissage, en partant d'un seul neurone — suivie d'une ATTRITION PÉRIODIQUE qui réduit la taille du réseau en GÉNÉRALISANT les concepts (fusion des unités redo … [951 caractères tronqués]
 
 **Tour 125** — <goal_round> Objective: "Faire évoluer le pont linguistico-sémantique en BOÎTE NOIRE (émulation des premières couches du professeur, sans accès à ses rouages) par une phase GÉNÉRATIVE — le nombre de neurones et de couches NAÎT pendant l'apprentissage, en partant d'un seul neurone — suivie d'une ATTRITION PÉRIODIQUE qui réduit la taille du réseau en GÉNÉRALISANT les concepts (fusion des unités redo … [951 caractères tronqués]
+
+**Tour 126** — <goal_round> Objective: "Faire évoluer le pont linguistico-sémantique en BOÎTE NOIRE (émulation des premières couches du professeur, sans accès à ses rouages) par une phase GÉNÉRATIVE — le nombre de neurones et de couches NAÎT pendant l'apprentissage, en partant d'un seul neurone — suivie d'une ATTRITION PÉRIODIQUE qui réduit la taille du réseau en GÉNÉRALISANT les concepts (fusion des unités redo … [951 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -6437,42 +6439,53 @@ Testée sur la meilleure configuration, avec recalcul des trajectoires à chaque
 
 **Synthèse produite :**
 
-⏵ Le tableau est maintenant précis. Je fais le point du tour.
+⏵ Tour 4 bouclé, tout commité, rien ne tourne.
 
-Le diagnostic corrigé donne une lecture nette : **la qualité réelle du pont se mesure sur la validation (0,7500), et le test non latin (0,6383) mesure surtout la distance typologique**. Les deux panneaux servent, mais à des questions différentes.
+\## Bilan du tour
 
-\## Ce que ce tour a établi
+Le tour est surtout une **rectification**, et elle valait la peine : la conclusion phare du tour 3 — « le plafond est dans le transfert, +0,138 » — reposait sur un diagnostic faussé par **ma propre fuite de données**, réintroduite dans le bloc oracle alors que je l'avais déjà corrigée dans le chemin du rapport.
 
-**1. Trois leviers testés, trois échecs** — et ils ferment des pistes :
+| | chiffre du tour 3 | **chiffre corrigé** |
+|---|---:|---:|
+| plafond (oracle) | 0,7762 | **0,7076** |
+| marge à combler | +0,138 | **+0,069** |
+| dont transfert générique | — | **+0,0269** |
+| dont typologie du panel | — | **+0,0424** |
 
-| levier | effet |
-|---|---|
-| **centrage de l'entrée** (retirer le jeton moyen par langue) | fidélité 0,6383 → **0,6250**, écart **empiré** |
-| normalisation des états par langue (tour 3) | invariance 0,9648 → **0,8823** |
-| plus de langues d'apprentissage (20 → 36) | écart **constant** 0,132-0,141 |
+Et trois leviers fermés, chacun par une mesure :
 
-**2. Une faute dans mon propre diagnostic, corrigée.** L'« oracle 0,7762 » du tour 3 était **faux** : mon code faisait `P.ajuste(..., ite)` puis `P.fid(..., ite)` — or `Pont` ne détient que les langues d'entraînement, donc j'ajustais et j'évaluais **sur le même jeu**. C'était un ajustement **en échantillon**. C'est la fuite que j'avais déjà corrigée une fois, réintroduite dans le diagnostic.
+- **centrage de l'entrée** (retirer le jeton moyen par langue) : fidélité 0,6383 → **0,6250**, l'écart empire ;
+- **normalisation des états par langue** : invariance 0,9648 → **0,8823** ;
+- **plus de langues d'apprentissage** (20 → 36) : écart **constant**, 0,132 à 0,141.
 
-**3. Le plafond réel, et sa décomposition :**
+\## État de l'objectif
 
-| | nous | oracle | **écart** |
-|---|---:|---:|---:|
-| **TEST** (non latines, hors vivier) | 0,6383 | **0,7076** | **+0,0693** |
-| **VALIDATION** (même vivier) | 0,7500 | **0,7769** | **+0,0269** |
+Tous les livrables sont en place et mesurés : phase générative ✓ (naissance un neurone à la fois, tailles décidées par l'apprentissage, premier niveau dominant), attrition périodique ✓ (avec son verdict honnête — **elle réduit, elle ne généralise pas**), généralisation par redondance ✓, aucune rétropropagation ✓, les cinq mesures ✓, contre **Qwen2.5-0.5B couche 10** ✓. Le volet 30B reste écarté par votre consigne d'un seul professeur.
 
-Le plafond est **0,7076 et non 0,7762** : la marge est de **+0,069, pas +0,138**. La moitié du chiffre annoncé était un artefact.
+**Je laisse l'objectif actif.** Le tour a produit une cible précise et désormais mesurable à chaque essai : les **+0,042 de typologie**, qui sont le vrai sujet si l'on veut que le pont tienne sur des écritures qu'il n'a jamais vues. La piste naturelle — aligner l'entrée entre langues par le corpus parallèle, en forme fermée — se heurte à un manque de données : mes caches ne conservent **pas les frontières des unités**, donc je ne peux pas apparier les jetons entre langues. Il faudrait retracer avec ces frontières, ce qui est un travail de traçage, pas de méthode.
 
-Et l'écart se **décompose** :
-- **+0,0269 de transfert générique** — des langues jamais vues, mais du même vivier ;
-- **+0,0424 de typologie** — l'écart supplémentaire dû aux six langues de test, **toutes non latines** (grec, hébreu, hindi, japonais, coréen, thaï) quand l'apprentissage est surtout latin, cyrillique et arabe.
+### Tour 126 — <goal_round> Objective: "Faire évoluer le pont linguistico-sémantique en BOÎTE NOIRE (émulation des premières couches du … [1231 caractères tronqués]
 
-L'écart du test est **2,6×** celui de la validation.
+*4 appels d'outils.* Actions notables :
 
-\## Ce que cela change aux conclusions
+- write `/tmp/panneaux.sh`
+- bash — Run two-panel comparison
+- bash — Wait for two-panel results
+- bash — Commit and push restriction further
 
-Les trois échecs du tour 3 restent des **faits** (ces leviers ne déplacent rien), mais **leur interprétation change** : ils ne disent pas « le plafond est dans le transfert ». Le goulot est **pour moitié du transfert ordinaire, pour moitié de la typologie du panel**.
+**Synthèse produite :**
 
-**Le levier n'est donc pas la méthode, c'est le PANEL.** Un jeu de test uniquement non latin mesure surtout la distance typologique. Il faut des langues tenues à l'écart **des deux sortes** — ce que le découpage validation/test permet désormais de séparer, et que le bloc oracle corrigé rapporte systématiquement.
+⏵ **Découverte utile : la restriction ne fait pas que monter les chiffres — elle réduit l'ÉCART de transfert.**
+
+| périmètre | TEST nous | TEST oracle | **écart TEST** | VAL nous | VAL oracle | **écart VAL** |
+|---|---:|---:|---:|---:|---:|---:|
+| 896 | 0,4945 | 0,5912 | +0,0967 | 0,6397 | 0,6796 | +0,0399 |
+| 424 | 0,5536 | 0,6366 | +0,0830 | 0,6915 | 0,7239 | +0,0324 |
+| **157** | **0,6383** | **0,7076** | **+0,0693** | **0,7500** | **0,7769** | **+0,0269** |
+
+**L'écart diminue de 28 %** en restreignant la cible, **sur les deux panneaux**. Une cible plus interlingue est aussi **plus transférable**. Et le rapport test/validation reste stable à **~2,5×** — la pénalité de typologie est un facteur constant.
+
+**L'écart diminue de 28 %** (0,0967 → 0,0693) en restreignant la cible, **sur les deux panneaux** : une cible plus interlingue est aussi **plus transférable**. Et le rapport test/validation reste stable à **~2,5×** — la pénalité de typologie est un facteur constant, pas un mur qui grandit.
 
 ## 3. Travail accompli
 
@@ -6645,6 +6658,7 @@ Les trois échecs du tour 3 restent des **faits** (ces leviers ne déplacent rie
 | `/tmp/lecture.sh` | 1 | 0 |
 | `/tmp/reservoir.sh` | 1 | 0 |
 | `/tmp/transfert.sh` | 1 | 0 |
+| `/tmp/panneaux.sh` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -6723,7 +6737,7 @@ Les trois échecs du tour 3 restent des **faits** (ces leviers ne déplacent rie
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6643 autres
+- … et 6646 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -7451,4 +7465,5 @@ Les trois échecs du tour 3 restent des **faits** (ces leviers ne déplacent rie
 - Le plafond est dans le TRANSFERT, pas dans les caractéristiques ; l'attrition ne généralise pas  QUATRE EXPÉRIENCES, QUATRE RÉPONSES.  1. LE RÉSERVOIR N'EST PAS
 - RECTIFICATION : l'oracle du §10.2 était faux ; le plafond est 0,7076, pas 0,7762  LA FAUTE. L'ancien diagnostic faisait P.ajuste(..., ite) puis P.fid(..., ite).
 - journal" 2>/dev/null; git log --oneline -3; wc -l reports/recapitulatif.md
+- La restriction réduit aussi l'ÉCART de transfert (−28 %), confirmé sur les deux panneaux  Rejoué sur les deux panneaux — test non latin ET validation du même vi
 

@@ -668,3 +668,42 @@ entièrement attribuable à l'écriture et à la famille linguistique.
   plus de langues ne réduit pas l'écart) — mais **leur interprétation change** :
   ils ne disent pas que « le plafond est dans le transfert », ils disent que ces
   leviers-là n'y touchent pas.
+
+
+---
+
+## 14. La restriction réduit aussi l'ÉCART, et les deux panneaux le confirment
+
+Les conclusions des tours précédents avaient été tirées sur un test **uniquement
+non latin**. Rejouées sur les **deux panneaux** — test non latin et validation du
+même vivier que l'apprentissage :
+
+| périmètre | couches nées | TEST nous | TEST oracle | **écart** | VAL nous | VAL oracle | **écart** |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| 896 (aucun) | [41, 15, 8, 8, 8] | 0,4945 | 0,5912 | **+0,0967** | 0,6397 | 0,6796 | **+0,0399** |
+| 424 (énergie 75 %) | [41, 15, 8, 8, 8] | 0,5536 | 0,6366 | **+0,0830** | 0,6915 | 0,7239 | **+0,0324** |
+| **157 (énergie 50 %)** | **[30, 8, 8, 8, 8, 8, 8, 2]** | **0,6383** | **0,7076** | **+0,0693** | **0,7500** | **0,7769** | **+0,0269** |
+
+### Ce que ce tableau ajoute
+
+**1. La restriction ne fait pas que monter les chiffres : elle RÉDUIT L'ÉCART.**
++0,0967 → +0,0693 sur le test (**−28 %**), +0,0399 → +0,0269 sur la validation
+(**−33 %**). Choisir une cible plus interlingue ne rend donc pas seulement la
+tâche plus facile — **elle rend le pont plus transférable**. C'est cohérent :
+une cible qui dépend moins de la langue est aussi une cible qu'une lecture
+apprise ailleurs atteint mieux.
+
+**2. La pénalité de typologie est un FACTEUR, pas un mur.** Le rapport
+écart(test)/écart(validation) vaut 2,4 · 2,6 · 2,6 sur les trois périmètres. Il
+est **stable**. Le test non latin ne creuse donc pas un écart qui grandirait avec
+la difficulté : il applique un facteur ~2,5 constant.
+
+**3. La restriction change la FORME du réseau.** À 896 et 424 canaux, la naissance
+libre trouve la même hiérarchie [41, 15, 8, 8, 8] — premier niveau dominant. À
+157 canaux elle en trouve une **plus profonde et plus étroite**,
+[30, 8, 8, 8, 8, 8, 8, 2] : quand la cible est plus abstraite, la composition
+prend le relais de la couverture.
+
+**Conclusion pratique : la qualité du pont se juge sur les deux panneaux**, et
+c'est désormais ce que le diagnostic rapporte systématiquement. Un chiffre de test
+non latin seul mélange la qualité du pont et la distance typologique.
