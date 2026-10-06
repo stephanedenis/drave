@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 181.5 h |
-| Tours | 153 |
-| Messages | 8490 |
-| Appels d'outils | 8048 |
-| Fichiers touchés | 178 |
-| Commandes | 6851 |
+| Durée | 181.7 h |
+| Tours | 154 |
+| Messages | 8496 |
+| Appels d'outils | 8052 |
+| Fichiers touchés | 179 |
+| Commandes | 6854 |
 | Sous-agents | 32 |
-| Commits | 609 |
+| Commits | 610 |
 | Compactages de contexte | 11 |
 
 ## Objectifs déclarés
@@ -359,6 +359,8 @@
 **Tour 152** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 **Tour 153** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
+
+**Tour 154** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -7749,22 +7751,74 @@ Rien à faire de votre côté. Commit `644cf5c`.
 
 **Synthèse produite :**
 
-⏵ **Découverte : le plateau du professeur est à la couche 8, pas 10.**
+⏵ Cible erronée identifiée et commitée. Point d'étape.
 
-| couche | invariance moyenne par scène | pire scène |
+\## Le résultat du tour
+
+**Le plateau du professeur est à la couche 8, pas à la couche 10** — et sur les deux corpus :
+
+| | couche 8 | couche 10 |
 |---|---:|---:|
-| 0 (plongement) | 0,1420 | −0,0888 |
-| 4 | 0,4483 | 0,1289 |
-| **8** | **0,5985** | 0,1943 |
-| 10 | 0,5703 | **0,2381** |
+| Romeo (24 scènes appariées) | **0,5985** | 0,5703 |
+| UDHR propre (46 langues) | **0,5471** | 0,5247 |
 
-**Le plateau est à la couche 8, et la couche 10 — ma cible depuis le début — est déjà en re-spécialisation** (0,5703 contre 0,5985).
+**Ma cible était mal choisie depuis le début.** Le pont émule la couche 10 parce que ma toute première mesure — article 1 de l'UDHR, 40 langues — plaçait le pic à 42 % de profondeur. Deux mesures ultérieures, sur des corpus et des panels différents, le placent **deux crans plus haut**.
 
-Et ce n'est pas propre à ce corpus : sur l'UDHR propre je mesurais **0,5471 à la couche 8 contre 0,5247 à la couche 10**. Les deux corpus concordent : **je visais une couche trop profonde de deux crans.**
+Et ce n'est pas neutre : **émuler une couche en re-spécialisation revient à apprendre du détail linguistique qui coûte précisément l'invariance cherchée.**
 
-**Ma cible était mal choisie.** Sur les deux corpus, la couche 8 est plus interlingue que la couche 10 : 0,5985 contre 0,5703 sur Romeo, 0,5471 contre 0,5247 sur l'UDHR. Les deux concordent — **je visais deux crans trop profond**, et la couche 10 était déjà en re-spécialisation vers la sortie.
+**Bonne nouvelle** : le traçage de Romeo contient **déjà** la couche 8 — j'avais tracé `0,4,8,10` par précaution. La comparaison est donc possible **sans retracer**.
 
-Le pont est en train de construire ses caches ; je relèverai son résultat, et je note qu'il faudra **refaire la mesure sur la couche 8** pour comparer.
+\## Un chiffre que je trouve instructif
+
+**À la couche 0, sur du texte littéraire, l'invariance anglaise-française est de 0,1420** — avec des scènes **négatives** (jusqu'à −0,0888). Les plongements des deux langues sont **quasi orthogonaux** sur du Shakespeare. C'est bien plus bas que sur l'UDHR (0,58) : le texte administratif se ressemble d'une langue à l'autre, le théâtre non.
+
+Cela quantifie **quel travail le pont doit fournir** : partir de vecteurs orthogonaux et produire une représentation à 0,98 d'invariance, c'est le saut que le pont réalise.
+
+\## État
+
+| phase | état |
+|---|---|
+| 1, 2, 3 | **FAITS** |
+| 4. Wikipedia | 62/480, ~2,3 h |
+| 5. unités | chaîné |
+| 6. analyse finale | chaîné |
+| *pont Romeo (couche 10)* | caches en cours |
+
+**Ce que je ferai ensuite** : refaire la mesure du pont Romeo avec la **couche 8** pour cible, et comparer. C'est la question laissée ouverte par ce tour, et elle est mesurable immédiatement.
+
+Rien à faire de votre côté. Commit `00b65d4`.
+
+### Tour 154 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Check Romeo bridge result
+- write `/tmp/romeo8.sh`
+- bash — Launch layer 8 comparison and check Romeo results
+- bash — Commit the Romeo transfer result
+
+**Synthèse produite :**
+
+⏵ **Le pont Romeo a donné son résultat, et il est bon.**
+
+\## Le pont entraîné sur l'anglais, transporté sur le français
+
+| | |
+|---|---:|
+| invariance du professeur (segment par segment) | 0,6532 · pire segment 0,2966 |
+| fidélité sur l'anglais (apprise) | **0,6660** |
+| **fidélité sur le français (transférée, sans réapprentissage)** | **0,5802** |
+| **invariance de notre sortie** | **0,9540** · pire segment 0,8738 |
+| oracle sur le français | 0,6207 — écart **+0,0405** |
+| taille | 120 neurones · 1 couche |
+
+**Trois choses :**
+
+1. **Le pont transfère sur du texte littéraire long** : 0,6660 en anglais → **0,5802 en français**, sans réapprentissage. Une perte de 0,086.
+2. **Notre sortie est bien plus interlingue que le professeur** : 0,9540 contre 0,6532 — le pont dépasse largement la couche qu'il émule sur l'invariance, ce qui est cohérent avec tout ce qui précède.
+3. **L'écart oracle est de +0,0405** — du même ordre que sur l'UDHR stratifié (+0,0223 à +0,0327).
+
+À noter : l'invariance du professeur mesurée **sur les canaux restreints** est de 0,6532, contre 0,5703 sur les 896 canaux. Les canaux à forte énergie sont donc bien **plus interlingues** — confirmation directe.
 
 ## 3. Travail accompli
 
@@ -7950,6 +8004,7 @@ Le pont est en train de construire ses caches ; je relèverai son résultat, et 
 | `/tmp/stratifie.sh` | 1 | 0 |
 | `/tmp/seuil.sh` | 1 | 0 |
 | `/tmp/romeo.sh` | 1 | 0 |
+| `/tmp/romeo8.sh` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -8028,7 +8083,7 @@ Le pont est en train de construire ses caches ; je relèverai son résultat, et 
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6811 autres
+- … et 6814 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -8785,4 +8840,5 @@ Le pont est en train de construire ses caches ; je relèverai son résultat, et 
 - Le piège du droit d'exécution, trois fois — corrigé à la racine  Romeo a terminé (48 scènes, 24 en + 24 fr, appariement parfait vérifié). Mais Wikipedia n'a pas
 - Restriction ou pas : comparaison complète, et correction de mon invariant  Deux runs, même professeur, mêmes 301 langues, même panel de test (41 langues) :     
 - Le plateau du professeur est à la couche 8, pas 10 — ma cible était mal choisie  Mesure sur Romeo, invariance SEGMENT par SEGMENT (24 scènes appariées) :   couc
+- Romeo : le pont TRANSFÈRE sur du texte littéraire (0,6660 anglais -> 0,5802 français)  Premier test hors de l'UDHR, sur corpus PARALLÈLE (24 scènes appariées en
 

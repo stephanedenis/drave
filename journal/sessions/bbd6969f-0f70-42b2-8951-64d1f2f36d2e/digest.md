@@ -138202,3 +138202,153 @@ Et ce n'est pas propre à ce corpus : sur l'UDHR propre je mesurais **0,5471 à 
 Le pont est en train de construire ses caches ; je relèverai son résultat, et je note qu'il faudra **refaire la mesure sur la couche 8** pour comparer.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 17. Le plateau du professeur est à la couche 8, PAS à la couche 10\n\nMesure sur le corpus parallèle *Romeo and Juliet*, invariance * … [3543 caractères tronqués]`
+
+  ```
+00b65d4 Le plateau du professeur est à la couche 8, pas 10 — ma cible était mal choisie
+Wikipedia : 62/480
+  ```
+
+### 🤖 Assistant
+
+⏵ Cible erronée identifiée et commitée. Point d'étape.
+
+## Le résultat du tour
+
+**Le plateau du professeur est à la couche 8, pas à la couche 10** — et sur les deux corpus :
+
+| | couche 8 | couche 10 |
+|---|---:|---:|
+| Romeo (24 scènes appariées) | **0,5985** | 0,5703 |
+| UDHR propre (46 langues) | **0,5471** | 0,5247 |
+
+**Ma cible était mal choisie depuis le début.** Le pont émule la couche 10 parce que ma toute première mesure — article 1 de l'UDHR, 40 langues — plaçait le pic à 42 % de profondeur. Deux mesures ultérieures, sur des corpus et des panels différents, le placent **deux crans plus haut**.
+
+Et ce n'est pas neutre : **émuler une couche en re-spécialisation revient à apprendre du détail linguistique qui coûte précisément l'invariance cherchée.**
+
+**Bonne nouvelle** : le traçage de Romeo contient **déjà** la couche 8 — j'avais tracé `0,4,8,10` par précaution. La comparaison est donc possible **sans retracer**.
+
+## Un chiffre que je trouve instructif
+
+**À la couche 0, sur du texte littéraire, l'invariance anglaise-française est de 0,1420** — avec des scènes **négatives** (jusqu'à −0,0888). Les plongements des deux langues sont **quasi orthogonaux** sur du Shakespeare. C'est bien plus bas que sur l'UDHR (0,58) : le texte administratif se ressemble d'une langue à l'autre, le théâtre non.
+
+Cela quantifie **quel travail le pont doit fournir** : partir de vecteurs orthogonaux et produire une représentation à 0,98 d'invariance, c'est le saut que le pont réalise.
+
+## État
+
+| phase | état |
+|---|---|
+| 1, 2, 3 | **FAITS** |
+| 4. Wikipedia | 62/480, ~2,3 h |
+| 5. unités | chaîné |
+| 6. analyse finale | chaîné |
+| *pont Romeo (couche 10)* | caches en cours |
+
+**Ce que je ferai ensuite** : refaire la mesure du pont Romeo avec la **couche 8** pour cible, et comparer. C'est la question laissée ouverte par ce tour, et elle est mesurable immédiatement.
+
+Rien à faire de votre côté. Commit `00b65d4`.
+
+
+## Tour 154
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de représentation universelle), boîte noire (on ne lit du professeur que la couche à émuler, jamais sa tête ni ses jetons générés), aucune rétropropagation (A et B aléatoires et gelés, seule la lecture s'ajuste en forme fermée), et chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, TAILLE du réseau, avec le diagnostic oracle sur les deux panneaux (test hors vivier et validation du même vivier)."
+Round: 27/256
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Je relève le résultat du pont Romeo et je lance la comparaison sur la couche 8.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date \"+%H:%M\"; grep -E \"^===|caches TERMINE|TERMINE\" /tmp/romeo.log; echo \"--- le pont Romeo (couche 10) ---\"; sed -n '/le pont, entraîné/,$p' /tmp/romeo.log | tail -20; echo; echo \"Wikipedia : $(ls /home/stephane/Data13TB/ste … [85 caractères tronqués]`
+
+  ```
+04:18
+=== où est le plateau du professeur SUR CE CORPUS ===
+=== le pont, entraîné sur l'ANGLAIS et transporté sur le FRANÇAIS ===
+--- le pont Romeo (couche 10) ---
+  en_12 : 2580 pas
+  en_13 : 1748 pas
+  en_14 : 2150 pas
+  en_15 : 469 pas
+  en_16 : 3106 pas
+  en_17 : 1513 pas
+  en_18 : 638 pas
+  en_19 : 701 pas
+  en_20 : 453 pas
+  en_21 : 1816 pas
+  en_22 : 1036 pas
+  en_23 : 367 pas
+  en_24 : 3915 pas
+/tmp/cache_rj_en.npz : 24 langues · 37685 pas
+  fr_01 : 5278 pas
+  fr_02 : 1765 pas
+  fr_03 : 2224 pas
+  fr_04 : 2900 pas
+  fr_05 : 3180 pas
+  fr_06 : 1167 pas
+
+Wikipedia : 63/480
+  ```
+
+### 🤖 Assistant
+
+⏵ Cache anglais prêt (24 scènes, 37 685 pas), cache français en cours. Je prépare la **comparaison sur la couche 8** pour qu'elle s'enchaîne.
+
+Cache anglais prêt (24 scènes, 37 685 pas), français en cours. Je chaîne la **comparaison sur la couche 8** — c'est la question laissée ouverte par le tour précédent.
+
+- **write** `{"content": "#!/bin/bash\n# COUCHE 8 CONTRE COUCHE 10 — la question laissée ouverte.\n#\n# Mesuré : le plateau du professeur est à la couche 8 (0,5985) et la couche 10 est\n# déjà en re-spécialisation (0,5703), sur Romeo COMME sur l'UDHR. Or le pont émule\n# la couche 10 depuis le début. Émuler une  … [957 caractères tronqués]`
+
+  ```
+<path>/tmp/romeo8.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && chmod +x /tmp/romeo8.sh && bash -n /tmp/romeo8.sh && echo \"syntaxe OK et exécutable\"; setsid nohup bash /tmp/romeo8.sh >/dev/null 2>&1 < /dev/null & disown; sleep 480; date \"+%H:%M\"; echo \"=== pont Romeo, couche 10 ===\"; grep - … [358 caractères tronqués]`
+
+  ```
+syntaxe OK et exécutable
+04:27
+=== pont Romeo, couche 10 ===
+# invariance du PROFESSEUR (segment par segment) : 0.6532 · pire segment 0.2966
+#   fidélité sur A        : 0.6660
+#   fidélité sur B        : 0.5802   (transférée, sans réapprentissage)
+#   invariance de SORTIE  : 0.9540 · pire segment 0.8738
+#   taille                : 120 neurones · 1 couches [120]
+#   oracle sur B          : 0.6207
+=== caches couche 8 ===
+  en_12 : 2580 pas
+
+Wikipedia : 88/480
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le pont Romeo a donné son résultat, et il est bon.**
+
+## Le pont entraîné sur l'anglais, transporté sur le français
+
+| | |
+|---|---:|
+| invariance du professeur (segment par segment) | 0,6532 · pire segment 0,2966 |
+| fidélité sur l'anglais (apprise) | **0,6660** |
+| **fidélité sur le français (transférée, sans réapprentissage)** | **0,5802** |
+| **invariance de notre sortie** | **0,9540** · pire segment 0,8738 |
+| oracle sur le français | 0,6207 — écart **+0,0405** |
+| taille | 120 neurones · 1 couche |
+
+**Trois choses :**
+
+1. **Le pont transfère sur du texte littéraire long** : 0,6660 en anglais → **0,5802 en français**, sans réapprentissage. Une perte de 0,086.
+2. **Notre sortie est bien plus interlingue que le professeur** : 0,9540 contre 0,6532 — le pont dépasse largement la couche qu'il émule sur l'invariance, ce qui est cohérent avec tout ce qui précède.
+3. **L'écart oracle est de +0,0405** — du même ordre que sur l'UDHR stratifié (+0,0223 à +0,0327).
+
+À noter : l'invariance du professeur mesurée **sur les canaux restreints** est de 0,6532, contre 0,5703 sur les 896 canaux. Les canaux à forte énergie sont donc bien **plus interlingues** — confirmation directe.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 18. Romeo : le pont transfère sur du texte LITTÉRAIRE\n\nPremier test hors de l'UDHR. Corpus **parallèle** — 24 scènes appariées en/f … [3076 caractères tronqués]`
