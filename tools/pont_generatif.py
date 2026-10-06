@@ -690,7 +690,7 @@ def main():
     # de transfert. Calculable à l'inférence sur l'entrée elle-même, sans aucune
     # étiquette. À ne pas confondre avec la normalisation des ÉTATS, qui a échoué
     # (elle effaçait le décalage COMMUN, qui est la part partagée).
-    if opt("--centre-entree", ""):
+    if ("--centre-entree" in sys.argv):
         Etr = [e - e.mean(0, keepdims=True) for e in Etr]
         Ete = [e - e.mean(0, keepdims=True) for e in Ete]
         print("# CENTRAGE DE L'ENTRÉE : le jeton moyen de chaque langue est retiré")
@@ -699,7 +699,7 @@ def main():
     # Chaque neurone tire alors un poids pour elle, donc un seuil propre — ce qui
     # déplace sa non-linéarité. Le passer par la colonne d'entrée évite de toucher
     # à la généalogie : c'est un canal de plus, rien d'autre.
-    if opt("--biais", ""):
+    if ("--biais" in sys.argv):
         col = float(np.sqrt(H))
         Etr = [np.hstack([e, np.full((len(e), 1), col, dtype=np.float32)]) for e in Etr]
         Ete = [np.hstack([e, np.full((len(e), 1), col, dtype=np.float32)]) for e in Ete]
@@ -719,8 +719,16 @@ def main():
     if am > 0 and aM > am:
         P.a_min, P.a_max = am, aM
         print(f"# MULTI-ÉCHELLE : constantes de temps de {am} à {aM}")
+    # PÉNALITÉ D'INVARIANCE INTER-LANGUE dans l'objectif de la lecture.
+    # Mesuré (§48) : à mu = 0,1 on achète +0,042 d'invariance et +0,176 de pire paire
+    # pour 0,008 de fidélité TEST — 5 pour 1, et 21 pour 1 sur la pire paire. Le terme
+    # reste QUADRATIQUE en W, donc la solution reste en forme fermée.
+    P.mu_inv = float(opt("--mu-inv", 0.0))
+    if P.mu_inv > 0.0:
+        print(f"# INVARIANCE CONTRAINTE : pénalité inter-langue mu = {P.mu_inv} "
+              f"(reste en forme fermée, aucune rétropropagation)")
     P.gain_entree = float(opt("--gain-entree", 1.0))
-    if opt("--normalise", ""):
+    if ("--normalise" in sys.argv):
         P.normalise = True
         print("# NORMALISATION PAR LANGUE des états (calculable à l'inférence, "
               "sans aucune étiquette)")
@@ -964,7 +972,7 @@ def main():
     # On ajuste la lecture sur le TEST lui-même et on l'y évalue. Ce n'est PAS un
     # modèle — c'est un diagnostic. S'il plafonne comme nous, nos caractéristiques
     # ne contiennent pas plus ; s'il monte haut, c'est le transfert qui pèche.
-    if opt("--oracle", ""):
+    if ("--oracle" in sys.argv):
         # ATTENTION : `Pont` ne détient QUE les langues d'entraînement. Évaluer
         # avec `P.fid(..., ite)` indexerait donc des langues d'ENTRAÎNEMENT — la
         # fuite déjà corrigée une fois. Les trajectoires du test se calculent

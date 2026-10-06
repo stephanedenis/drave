@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 193.4 h |
-| Tours | 178 |
-| Messages | 8980 |
-| Appels d'outils | 8467 |
+| Durée | 193.9 h |
+| Tours | 179 |
+| Messages | 8993 |
+| Appels d'outils | 8477 |
 | Fichiers touchés | 199 |
-| Commandes | 7176 |
+| Commandes | 7186 |
 | Sous-agents | 32 |
-| Commits | 644 |
+| Commits | 645 |
 | Compactages de contexte | 12 |
 
 ## Objectifs déclarés
@@ -409,6 +409,8 @@
 **Tour 177** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 **Tour 178** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
+
+**Tour 179** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -8968,7 +8970,7 @@ Ce test est le point clé : l'UDHR est **mono-domaine**, donc ses « contenus di
 
 ### Tour 178 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
 
-*17 appels d'outils.* Actions notables :
+*18 appels d'outils.* Actions notables :
 
 - bash — Check all chains
 - bash — Check process load
@@ -8984,19 +8986,71 @@ Ce test est le point clé : l'UDHR est **mono-domaine**, donc ses « contenus di
 - bash — Wait for the invariance sweep
 - job_output
 - bash — Fix penalty scaling and re-run
-- … et 2 autres
+- … et 3 autres
 
 **Synthèse produite :**
 
-⏵ **Prédiction CONFIRMÉE, et le taux d'échange est excellent : +0,094 d'invariance pour −0,040 de fidélité sur toute la plage, et à μ=0,1 c'est +0,042 d'invariance pour −0,008 seulement.**
+⏵ **Round 51 — acquis et état.**
 
-| μ | fid TEST | invariance | pire paire | coût / gain |
-|---:|---:|---:|---:|---|
-| 0 | 0,6646 | 0,8740 | 0,4463 | — |
-| 0,03 | 0,6624 | 0,8909 | 0,5152 | −0,0022 pour +0,0169 |
-| **0,1** | **0,6564** | **0,9157** | **0,6224** | **−0,0082 pour +0,0417** |
-| 0,3 | 0,6429 | 0,9448 | 0,7543 | −0,0217 pour +0,0707 |
-| 1,0 | 0,6242 | 0,9677 | 0,8600 | −0,0404 pour +0,0937 |
+\## Le résultat du round : un levier qui améliore ce que la mission cherche
+
+**D'abord un constat gênant, tiré du journal de croissance :**
+
+| neurones | fidélité TEST | invariance | pire paire |
+|---:|---:|---:|---:|
+| 8 | 0,6151 | **0,9437** | **0,7399** |
+| 179 | **0,6336** | **0,8661** | **0,5594** |
+
+**De 8 à 179 neurones : +0,0185 de fidélité pour −0,0776 d'invariance et −0,1805 de pire paire.** Le coût est quatre fois le gain, et il porte exactement sur l'axe que la mission vise. Ce n'est pas un accident : la lecture copie le professeur, qui garde lui-même beaucoup de marque linguistique (invariance 0,6836). **Le pont devient plus fidèle et moins « pont » à mesure qu'il grandit.**
+
+Contre-intuitif : **à 8 neurones la fidélité vaut déjà 0,6151 contre 0,6336 au mieux** — 2 % de moins — avec 0,9437 d'invariance.
+
+**Ensuite le remède, et il reste en forme fermée.** L'ajustement ordinaire minimise `‖XW − Y‖²` *seul*. On y ajoute la variance **inter-langue** de la sortie, `P(W) = Σᵢ nᵢ‖mᵢ − m̄‖²`, qui est **quadratique en W**. L'objectif total reste quadratique :
+
+```
+(XᵀX + μ·C + ride·I) W = Xᵀ(Y − mt)
+```
+
+On ne change pas d'algorithme, on change d'objectif — « aucune rétropropagation » respecté à la lettre.
+
+| μ | fid TEST | invariance | pire paire |
+|---:|---:|---:|---:|
+| 0 | 0,6646 | 0,8740 | 0,4463 |
+| 0,03 | 0,6624 | 0,8909 | 0,5152 |
+| **0,1** | **0,6564** | **0,9157** | **0,6224** |
+| 0,3 | 0,6429 | 0,9448 | 0,7543 |
+| 1,0 | 0,6242 | 0,9677 | 0,8600 |
+
+**À μ = 0,1 : +0,042 d'invariance et +0,176 de pire paire pour 0,008 de fidélité** — 5 pour 1, et 21 pour 1 sur la pire paire. **μ = 0,1 retenu par défaut.** C'est le premier levier de la session qui améliore l'axe de la mission sans coûter cher, sans un neurone, une couche ni un apprentissage de plus.
+
+\## Une erreur que la mesure a attrapée
+
+Ma première formulation était `μ·len(X)·C`. Résultat : **une falaise, pas un curseur** — l'invariance passait de 0,874 à 0,9998 dès μ = 0,003, et la fidélité tombait à 0,5988, **sous le témoin constant** (0,6049). La sortie devenait la *même* pour toutes les langues, donc ne dépendait plus de l'entrée.
+
+Cause arithmétique : `len(X)·trace(C)` vaut **~80× `trace(XᵀX)`**. Corrigé en normalisant C pour que μ = 1 signifie « pénalité de même échelle que l'ajustement ». **Sans la mesure, j'aurais conclu « la contrainte d'invariance détruit le pont ».**
+
+\## Et ce que ça ne règle pas
+
+À μ = 0,1, notre invariance (0,9157) reste **très a
+… [886 caractères tronqués]
+
+### Tour 179 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
+
+*9 appels d'outils.* Actions notables :
+
+- bash — Check chains status
+- bash — Check load and growth process
+- bash — Add mu-inv CLI option
+- bash — Run invariance constraint on a 179-neuron network
+- bash — Wait for the 179-neuron invariance test
+- bash — Wait for the mu sweep at 179 neurons
+- bash — Read the full growth result
+- bash — Fix flag detection
+- bash — Commit growth result and flag fix
+
+**Synthèse produite :**
+
+⏵ **Corrigé. Je consigne le résultat de croissance, puis je relance sous contrainte d'invariance avec l'oracle fonctionnel.**
 
 ## 3. Travail accompli
 
@@ -9281,7 +9335,7 @@ Ce test est le point clé : l'UDHR est **mono-domaine**, donc ses « contenus di
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 7136 autres
+- … et 7146 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10073,4 +10127,5 @@ Ce test est le point clé : l'UDHR est **mono-domaine**, donc ses « contenus di
 - Deuxième œuvre parallèle (Crime et Châtiment, en-es) et généralisation du test domaine/langue  LE MANQUE : le corpus parallèle ne comptait qu'UNE œuvre (Roméo e
 - Fidélité et invariance tirent en sens opposé quand le réseau grandit  Journal de la croissance (couche 10, ride 0,03, quadratique, multi-échelle, 300 langues d'
 - Ajuster la lecture SOUS CONTRAINTE d'invariance : +0,042 d'invariance pour 0,008 de fidélité  L'ajustement ordinaire minimise ‖XW − Y‖² SEUL et ignore l'invaria
+- Croissance + attrition à 392 langues : 182 neurones, TEST 0,6340, invariance 0,8659  PROTOCOLE ENTIER (couche 10, part-langues 0,5, ride 0,03, quadratique, mult
 

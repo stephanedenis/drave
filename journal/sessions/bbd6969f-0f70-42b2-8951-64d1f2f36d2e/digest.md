@@ -147616,3 +147616,270 @@ syntaxe OK
 | 1,0 | 0,6242 | 0,9677 | 0,8600 | −0,0404 pour +0,0937 |
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 48. Ajuster la lecture SOUS CONTRAINTE d'invariance : le levier existe, et il est bon marché\n\n### 48.1 Le principe, et pourquoi  … [6051 caractères tronqués]`
+
+  ```
+5ad2f09 Ajuster la lecture SOUS CONTRAINTE d'invariance : +0,042 d'invariance pour 0,008 de fidélité
+  ```
+
+### 🤖 Assistant
+
+⏵ **Point sur les chaînes, puis synthèse du round.**
+
+- **bash** `{"command": "sleep 420; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== croissance (attrition) ===\"; tail -8 /tmp/croissance2.log; echo; echo \"wiki : $(grep -c '^ARTICLE' /tmp/trace_wiki_apparie.log) articles · $(ls /home/stephane/Data13TB/stephane/corpus/wiki_apparie/traces | wc  … [216 caractères tronqués]`
+
+  ```
+=== croissance (attrition) ===
+n191            191       1    0.6504   0.6339    0.6339   0.8646  0.5398 | communs -1.378 (  0 %) · contraste 0.991
+  → ARRÊT (couche neuve sans gain)    191       1
+# née : 191 neurones en 1 couches [191]
+
+########## CYCLE 1 — ATTRITION (redondance) ##########
+après                           neur.  couch.  fid appr  fid VAL  fid TEST
+retrait de 47 (recalculé)         144       1    0.6397   0.6328    0.6362
+retrait de 36 (recalculé)         108       1    0.6375   0.6308    0.6336
+
+wiki : 22 articles · 249 traces
+crime : 4 traces
+16:19
+  ```
+
+### 🤖 Assistant
+
+⏵ **Round 51 — acquis et état.**
+
+## Le résultat du round : un levier qui améliore ce que la mission cherche
+
+**D'abord un constat gênant, tiré du journal de croissance :**
+
+| neurones | fidélité TEST | invariance | pire paire |
+|---:|---:|---:|---:|
+| 8 | 0,6151 | **0,9437** | **0,7399** |
+| 179 | **0,6336** | **0,8661** | **0,5594** |
+
+**De 8 à 179 neurones : +0,0185 de fidélité pour −0,0776 d'invariance et −0,1805 de pire paire.** Le coût est quatre fois le gain, et il porte exactement sur l'axe que la mission vise. Ce n'est pas un accident : la lecture copie le professeur, qui garde lui-même beaucoup de marque linguistique (invariance 0,6836). **Le pont devient plus fidèle et moins « pont » à mesure qu'il grandit.**
+
+Contre-intuitif : **à 8 neurones la fidélité vaut déjà 0,6151 contre 0,6336 au mieux** — 2 % de moins — avec 0,9437 d'invariance.
+
+**Ensuite le remède, et il reste en forme fermée.** L'ajustement ordinaire minimise `‖XW − Y‖²` *seul*. On y ajoute la variance **inter-langue** de la sortie, `P(W) = Σᵢ nᵢ‖mᵢ − m̄‖²`, qui est **quadratique en W**. L'objectif total reste quadratique :
+
+```
+(XᵀX + μ·C + ride·I) W = Xᵀ(Y − mt)
+```
+
+On ne change pas d'algorithme, on change d'objectif — « aucune rétropropagation » respecté à la lettre.
+
+| μ | fid TEST | invariance | pire paire |
+|---:|---:|---:|---:|
+| 0 | 0,6646 | 0,8740 | 0,4463 |
+| 0,03 | 0,6624 | 0,8909 | 0,5152 |
+| **0,1** | **0,6564** | **0,9157** | **0,6224** |
+| 0,3 | 0,6429 | 0,9448 | 0,7543 |
+| 1,0 | 0,6242 | 0,9677 | 0,8600 |
+
+**À μ = 0,1 : +0,042 d'invariance et +0,176 de pire paire pour 0,008 de fidélité** — 5 pour 1, et 21 pour 1 sur la pire paire. **μ = 0,1 retenu par défaut.** C'est le premier levier de la session qui améliore l'axe de la mission sans coûter cher, sans un neurone, une couche ni un apprentissage de plus.
+
+## Une erreur que la mesure a attrapée
+
+Ma première formulation était `μ·len(X)·C`. Résultat : **une falaise, pas un curseur** — l'invariance passait de 0,874 à 0,9998 dès μ = 0,003, et la fidélité tombait à 0,5988, **sous le témoin constant** (0,6049). La sortie devenait la *même* pour toutes les langues, donc ne dépendait plus de l'entrée.
+
+Cause arithmétique : `len(X)·trace(C)` vaut **~80× `trace(XᵀX)`**. Corrigé en normalisant C pour que μ = 1 signifie « pénalité de même échelle que l'ajustement ». **Sans la mesure, j'aurais conclu « la contrainte d'invariance détruit le pont ».**
+
+## Et ce que ça ne règle pas
+
+À μ = 0,1, notre invariance (0,9157) reste **très au-dessus de celle du professeur** (0,6836), et notre pire paire (0,6224) très au-dessus de la sienne (0,0104). La question du §41 — *invariance ou appauvrissement ?* — tient toujours. Elle se tranchera sur un corpus **où le contenu diffère d'une langue à l'autre** : exactement ce que l'UDHR interdit et que le corpus Wikipedia apparié permettra.
+
+## État des chaînes
+
+| chaîne | avancement |
+|---|---|
+| **Croissance** | née à **191**, arrêt par patience · attrition : 191 → 144 (TEST **0,6362**) → 108 |
+| **Wikipedia apparié** | 22 articles / 482 · 249 traces |
+| **Crime et Châtiment** | 4 traces / 48 (nice 19, laissé au second plan) |
+| **Analyse Wikipedia** | armée, seuil 60 articles |
+
+J'ai aussi baissé la priorité des traces Crime (`renice +19`) : la machine était à **charge 44 sur 40 threads**, et le corpus Wikipedia (2 892 traces) vaut mieux que Crime (48 traces lentes).
+
+
+## Tour 179
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de représentation universelle), boîte noire (on ne lit du professeur que la couche à émuler, jamais sa tête ni ses jetons générés), aucune rétropropagation (A et B aléatoires et gelés, seule la lecture s'ajuste en forme fermée), et chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, TAILLE du réseau, avec le diagnostic oracle sur les deux panneaux (test hors vivier et validation du même vivier)."
+Round: 52/256
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ **Point d'état sur les quatre chaînes.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== croissance (attrition) ===\"; tail -10 /tmp/croissance2.log; echo; echo \"wiki : $(grep -c '^ARTICLE' /tmp/trace_wiki_apparie.log) articles · $(ls /home/stephane/Data13TB/stephane/corpus/wiki_apparie/traces | wc -l) traces … [171 caractères tronqués]`
+
+  ```
+=== croissance (attrition) ===
+n189            189       1    0.6503   0.6338    0.6340   0.8652  0.5426 | communs -1.383 (  0 %) · contraste 0.992
+n190            190       1    0.6504   0.6339    0.6339   0.8652  0.5471 | communs -1.379 (  0 %) · contraste 0.992
+n191            191       1    0.6504   0.6339    0.6339   0.8646  0.5398 | communs -1.378 (  0 %) · contraste 0.991
+  → ARRÊT (couche neuve sans gain)    191       1
+# née : 191 neurones en 1 couches [191]
+
+########## CYCLE 1 — ATTRITION (redondance) ##########
+après                           neur.  couch.  fid appr  fid VAL  fid TEST
+retrait de 47 (recalculé)         144       1    0.6397   0.6328    0.6362
+retrait de 36 (recalculé)         108       1    0.6375   0.6308    0.6336
+
+wiki : 23 articles · 250 traces
+crime : 5 traces
+16:19
+  ```
+
+- **bash** `{"command": "ps -eo pid,etime,%cpu,rss,cmd --sort=-%cpu | head -6 | cut -c1-100; echo \"---\"; uptime; echo \"--- croissance vivante ? ---\"; pgrep -f \"pont_generatif\" | wc -l; ls -la /tmp/croissance2.log | awk '{print $6, $7, $8}'", "description": "Check load and growth process"}`
+
+  ```
+PID     ELAPSED %CPU   RSS CMD
+2612344       00:47 1507 1365308 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/target/r
+2612348       00:46 1488 1365120 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/target/r
+2589164    01:50:43 89.0 5754224 python3 -u tools/pont_generatif.py /tmp/cache392_train.npz /tmp/cac
+ 710008 11-04:23:54 48.9 4103676 node26 /home/stephane/.local/share/../bin/dsh --profile dsh-tui
+2062778  1-06:23:35 46.4 854824 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui
+---
+ 16:20:12  up 15 days  5:32,  2 users,  load average: 44,47, 44,27, 44,50
+--- croissance vivante ? ---
+4
+6 oct 16:17
+  ```
+
+### 🤖 Assistant
+
+⏵ **Tout tourne (charge 44/40). J'ajoute l'option `--mu-inv` pour pouvoir entraîner sous contrainte d'invariance.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\ns = open('tools/pont_generatif.py').read()\nold = \"\"\"    P.gain_entree = float(opt(\"--gain-entree\", 1.0))\"\"\"\nnew = \"\"\"    # PÉNALITÉ D'INVARIANCE INTER-LANGUE dans l'objectif de la lecture.\n    # Mes … [842 caractères tronqués]`
+
+  ```
+option ajoutée
+syntaxe OK
+726:    P.mu_inv = float(opt("--mu-inv", 0.0))
+  ```
+
+### 🤖 Assistant
+
+⏵ **Test direct : la contrainte récupère-t-elle ce que la croissance coûte ? Sur un réseau de 179 neurones.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && setsid nohup python3 -u tools/lecture_invariante.py /tmp/cache392c8_train.npz /tmp/cache392c8_test.npz --neur 179 --mus 0,0.03,0.1,0.3,1 > /tmp/inv179.log 2>&1 < /dev/null & disown\nsleep 10; echo \"lancé\"; date '+%H:%M'", "descript … [58 caractères tronqués]`
+
+  ```
+lancé
+16:21
+  ```
+
+- **bash** `{"command": "sleep 560; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== inv 179 ===\"; cat /tmp/inv179.log; echo; echo \"=== croissance ===\"; tail -4 /tmp/croissance2.log; date '+%H:%M'", "description": "Wait for the 179-neuron invariance test", "timeoutMs": 600000}`
+
+  ```
+=== inv 179 ===
+# 896 canaux · 300 ajustement · 51 validation · 41 test
+# réseau 179 neurones · 1 couche(s), construit en 116 s
+# INVARIANCE DU PROFESSEUR : 0.6836 · pire paire 0.0104
+
+#      mu   fid VAL  fid TEST  INVARIANCE  pire paire   vs mu=0
+   0.000    0.7251    0.6922      0.7492      0.3719   +0.0000
+
+=== croissance ===
+retrait de 27 (recalculé)          81       1    0.6353   0.6288    0.6326
+retrait de 20 (recalculé)          61       1    0.6330   0.6275    0.6310
+retrait de 15 (recalculé)          46       1    0.6310   0.6255    0.6289
+retrait de 11 (recalculé)          35       1    0.6285   0.6243    0.6271
+16:30
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le compromis se confirme hors croissance : 40 neurones → TEST 0,6646 / invariance 0,8740 ; 179 neurones → TEST 0,6922 / invariance 0,7492.**
+
+- **bash** `{"command": "sleep 540; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== inv 179 ===\"; cat /tmp/inv179.log; echo; echo \"=== croissance ===\"; tail -6 /tmp/croissance2.log; date '+%H:%M'", "description": "Wait for the mu sweep at 179 neurons", "timeoutMs": 580000}`
+
+  ```
+=== inv 179 ===
+# 896 canaux · 300 ajustement · 51 validation · 41 test
+# réseau 179 neurones · 1 couche(s), construit en 116 s
+# INVARIANCE DU PROFESSEUR : 0.6836 · pire paire 0.0104
+
+#      mu   fid VAL  fid TEST  INVARIANCE  pire paire   vs mu=0
+   0.000    0.7251    0.6922      0.7492      0.3719   +0.0000
+   0.030    0.7246    0.6908      0.7701      0.4089   +0.0209
+   0.100    0.7218    0.6852      0.8019      0.4255   +0.0528
+   0.300    0.7131    0.6695      0.8405      0.4575   +0.0913
+
+=== croissance ===
+  fidélité appr.   : 0.6501
+  fidélité VAL     : 0.6339
+  fidélité TEST    : 0.6340   (constante témoin : 0.5762)
+  invariance TEST  : 0.8659 · pire paire 0.5556
+
+# état final du réseau : 191 neurones · 1 couches ([191])
+16:40
+  ```
+
+### 👤 Utilisateur
+
+background job bash-240 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -u tools/pont_generatif.py /tmp/cache392_train.npz /tmp/cache392_test.npz --part-langues 0.5 --lecture quadratique --naissance libre --plafond 300 --patience 20 --ride 0.03 --sous-ech 20 --a-min 0.02 --a-max 0.8 --cycles 1 --attrition 1 --val-part 7 --oracle > /tmp/croissance2.log 2>&1; echo "code $?"; tail -30 /tmp/croissance2.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 🤖 Assistant
+
+⏵ **L'entraînement complet a abouti : 191 neurones, fidélité TEST 0,6340, invariance 0,8659, pire paire 0,5556. Je lis le protocole entier.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -22 /tmp/croissance2.log; echo; echo \"=== meilleur point d'attrition par le TEST ===\"; grep \"^retrait\" /tmp/croissance2.log | awk '{printf \"  %s neur. · VAL %s · TEST %s\\n\", $5, $7, $8}'", "description": "Read the full gr … [13 caractères tronqués]`
+
+  ```
+retrait de 47 (recalculé)         144       1    0.6397   0.6328    0.6362
+retrait de 36 (recalculé)         108       1    0.6375   0.6308    0.6336
+retrait de 27 (recalculé)          81       1    0.6353   0.6288    0.6326
+retrait de 20 (recalculé)          61       1    0.6330   0.6275    0.6310
+retrait de 15 (recalculé)          46       1    0.6310   0.6255    0.6289
+retrait de 11 (recalculé)          35       1    0.6285   0.6243    0.6271
+retrait de 8 (recalculé)           27       1    0.6265   0.6221    0.6264
+retrait de 6 (recalculé)           21       1    0.6242   0.6206    0.6236
+retrait de 5 (recalculé)           16       1    0.6224   0.6202    0.6227
+retrait de 4 (recalculé)           12       1    0.6199   0.6192    0.6168
+retrait de 3 (recalculé)            9       1    0.6176   0.6158    0.6145
+retrait REFUSÉ (2 → VAL 0.6139)      9       —         —   0.6158
+  → retour au MEILLEUR passage    191       1         —   0.6339
+
+=== MEILLEUR RÉSEAU SELON LA VALIDATION (naissance libre) ===
+  taille           : 182 neurones · 1 couches
+  fidélité appr.   : 0.6501
+  fidélité VAL     : 0.6339
+  fidélité TEST    : 0.6340   (constante témoin : 0.5762)
+  invariance TEST  : 
+… [581 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **BUG QUE J'AI INTRODUIT : mon correctif de `opt` fait qu'un drapeau en DERNIÈRE position renvoie `""`, donc `--oracle` ne s'est pas déclenché. L'objectif exige l'oracle sur deux panneaux.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n 'opt(\"--oracle\"\\|opt(\"--centre-entree\"\\|opt(\"--biais\"\\|opt(\"--normalise\"' tools/pont_generatif.py; echo \"=== correction : un DRAPEAU se teste par sa PRÉSENCE, jamais par sa valeur ===\"; python3 - <<'PYEOF'\ns = o … [644 caractères tronqués]`
+
+  ```
+693:    if opt("--centre-entree", ""):
+702:    if opt("--biais", ""):
+731:    if opt("--normalise", ""):
+975:    if opt("--oracle", ""):
+=== correction : un DRAPEAU se teste par sa PRÉSENCE, jamais par sa valeur ===
+  --oracle : 1 occurrence(s) corrigée(s)
+  --centre-entree : 1 occurrence(s) corrigée(s)
+  --biais : 1 occurrence(s) corrigée(s)
+  --normalise : 1 occurrence(s) corrigée(s)
+syntaxe OK
+693:    if ("--centre-entree" in sys.argv):
+702:    if ("--biais" in sys.argv):
+731:    if ("--normalise" in sys.argv):
+975:    if ("--oracle" in sys.argv):
+  ```
+
+### 🤖 Assistant
+
+⏵ **Corrigé. Je consigne le résultat de croissance, puis je relance sous contrainte d'invariance avec l'oracle fonctionnel.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/inv179.log | tail -10; python3 - <<'PYEOF'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 49. Croissance libre + attrition à 392 langues : le résultat complet\n\nProtocole entier, couche 1 … [4744 caractères tronqués]`
