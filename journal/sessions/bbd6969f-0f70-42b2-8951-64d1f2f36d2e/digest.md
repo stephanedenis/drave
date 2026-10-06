@@ -144614,3 +144614,92 @@ lancé
 ⏵ **Deux réponses mesurées. La stabilité est bonne ; l'événementiel, lui, ne paierait que 0,2 % sur cette dynamique.**
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 37. Le ride était dix fois trop fort — et l'écart de transfert n'est pas du sur-apprentissage\n\n### 37.1 Balayage du ride, deux pann … [7693 caractères tronqués]`
+
+  ```
+1404bac Le ride était 10 à 30 fois trop fort, et l'écart de transfert n'est pas du sur-apprentissage
+  ```
+
+### 🤖 Assistant
+
+⏵ **La mesure manquante que j'ai annoncée : quel gain d'entrée ouvre la porte des impulsions, et à quel prix sur la fidélité ?**
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"SATURATION — à quel gain la dynamique devient-elle creuse, et à quel prix ?\n\nMESURÉ AU §38 : à `gain = 1` (la valeur du pont), le `tanh` ne sature que **0,6 %**\ndu temps et 99,8 % des couples (neurone, pas) changent à chaque pas. Une\nimplémentation par  … [4145 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/saturation.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"import ast; ast.parse(open('tools/saturation.py').read()); print('syntaxe OK')\" && setsid nohup timeout 5400 python3 -u tools/saturation.py /tmp/cache392_train.npz /tmp/cache392_test.npz --neur 40 > /tmp/saturation.log  … [198 caractères tronqués]`
+
+  ```
+syntaxe OK
+lancé
+=== c8 ===
+262
+11:59
+  ```
+
+- **bash** `{"command": "sleep 420; echo \"=== saturation ===\"; cat /tmp/saturation.log; echo; echo \"=== c8 ===\"; ls /home/stephane/Data13TB/stephane/corpus/udhr/udhr392_c8 | wc -l; date '+%H:%M'", "description": "Wait for saturation sweep", "timeoutMs": 460000}`
+
+  ```
+=== saturation ===
+# 896 canaux · 40 neurones · ride 0.03
+
+#   gain  saturation   événem. 1e-4  VALID fid  TEST fid  apport TEST
+    1.0       0.6%          99.8%     0.6304    0.6233      +0.0554
+    2.0       0.7%          99.7%     0.6305    0.6234      +0.0555
+    4.0       0.8%          99.7%     0.6306    0.6234      +0.0556
+    8.0       0.8%          99.7%     0.6306    0.6234      +0.0555
+   16.0       0.8%          99.7%     0.6306    0.6233      +0.0554
+
+=== c8 ===
+276
+12:06
+  ```
+
+### 🤖 Assistant
+
+⏵ **Résultat inattendu et important : le gain d'entrée ne change RIEN (0,6 % → 0,8 % de saturation, fidélité identique). Cela sent le régime dégénéré — je mesure l'argument du tanh.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 python3 -u - <<'PY'\nimport sys, numpy as np\nsys.path.insert(0,'tools')\nfrom pont_generatif import Pont, charge\ncltr,Etr,Ytr,H = charge('/tmp/cache392_train.npz')\nvivant=np.zeros(Ytr[0].shape[1])\nfor y in Ytr: vivant … [1690 caractères tronqués]`
+
+  ```
+=== ÉCHELLE DES ENTRÉES ===
+  ||E[t]|| : moyenne 720.4 · médiane 732.8 · max 1045.4
+  |E| moyen par composante : 17.9661 · écart-type 24.4440
+  ||Y[t]|| : moyenne 440.0  (la cible)
+
+=== gain 1.0 ===
+  |B·e_t| : moyenne 16.8747 · max 125.7954 · 99e centile 60.8827
+  |s_t|   : moyenne 0.3471 · max 1.0000
+  |tanh(arg)| = |s| en régime établi : écart-type 0.4223
+  fraction |s| > 0,5 : 26.246% · |s| > 0,9 : 2.058%
+  → régime NON LINÉAIRE
+
+=== gain 16.0 ===
+  |B·e_t| : moyenne 269.9948 · max 2012.7263 · 99e centile 974.1235
+  |s_t|   : moyenne 0.3533 · max 1.0000
+  |tanh(arg)| = |s| en régime établi : écart-type 0.4296
+  fraction |s| > 0,5 : 27.125% · |s| > 0,9 : 2.423%
+  → régime NON LINÉAIRE
+  ```
+
+### 🤖 Assistant
+
+⏵ **J'ai écrit une erreur au §38.2 et la mesure la corrige : le `tanh` est saturé PRESQUE TOUJOURS (argument moyen 16,9), c'est l'état moyenné qui reste petit.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -i 's|--gains\", \"1,2,4,8,16,32|--gains\", \"0.003,0.01,0.03,0.1,0.3,1|' tools/saturation.py && grep -n 'gains' tools/saturation.py | head -3 && python3 - <<'PY'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\nold = \" … [2301 caractères tronqués]`
+
+  ```
+46:    gains = [float(x) for x in opt("--gains", "0.003,0.01,0.03,0.1,0.3,1").split(",")]
+70:    for g in gains:
+§38.2 corrigé
+balayage BAS lancé
+12:08
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Correction du §38.2 : le tanh sature PRESQUE TOUJOURS, c'est l'état moyenné qui reste petit\n\nJ'avais lu '0,6% de saturation' comme 'la dynamique vit dans son régime linéaire'.\nC'est une confusion e … [1414 caractères tronqués]`

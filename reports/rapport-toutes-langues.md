@@ -1805,9 +1805,34 @@ surveiller si l'on augmente le gain d'entrée ou si l'on vient à ajuster `P`.
 **Une implémentation par événements paierait 0,2 % de pas en moins à a = 0,2, et
 2,8 % à a = 0,8.** Autrement dit : **rien.**
 
-La raison est nette et elle est structurelle : **le `tanh` ne sature que 0,6 % du
-temps.** La dynamique vit dans son régime LINÉAIRE, où chaque neurone bouge un peu à
-chaque pas. Il n'y a pas d'événements à sauter parce qu'il n'y a pas de silence.
+**La raison que j'avais écrite ici était FAUSSE, et la mesure la corrige.** J'avais
+lu « 0,6 % de saturation » comme « la dynamique vit dans son régime linéaire ». C'est
+une confusion entre deux choses différentes :
+
+| | mesure |
+|---|---:|
+| argument du `tanh`, `\|B·e_t\|` | **moyenne 16,9 · max 126** |
+| saturation de la SORTIE du `tanh` | quasi totale |
+| état `\|s_t\|` (moyenne glissante) | moyenne **0,347** · > 0,99 seulement 0,6 % du temps |
+
+Le `tanh` **sature donc presque toujours** : son argument vaut 16,9 en moyenne, très
+au-delà de ±1. Ce que le « 0,6 % » mesurait, c'est l'**état**, qui est une moyenne
+glissante `s_t = 0,8·s_{t-1} + 0,2·tanh(...)` de sorties essentiellement **binaires**
+(±1). Une moyenne de ±1 qui se répond au hasard reste près de zéro.
+
+**Le réservoir calcule donc une moyenne glissante de projections aléatoires binaires
+de l'entrée.** C'est pour cela que :
+- les événements sont inutiles — les sorties binaires basculent constamment, 99,8 %
+  des neurones changent à chaque pas ;
+- une lecture linéaire de l'entrée fait presque aussi bien (§29) — une moyenne de
+  projections binaires est proche d'une fonctionnelle linéaire de l'entrée récente ;
+- augmenter le gain ne change RIEN (mesuré de 1 à 16 : saturation 0,6 % → 0,8 %,
+  fidélité identique à 1e-4) — **le `tanh` est déjà saturé à gain 1**, en ajouter ne
+  peut donc rien changer.
+
+**La conséquence est contre-intuitive et c'est une piste : le levier n'est pas
+d'augmenter le gain, c'est de le BAISSER** — pour que le `tanh` cesse de saturer et
+que chaque neurone transmette une information graduée au lieu d'un signe.
 
 ### 38.3 Ce que cela implique pour le passage aux impulsions
 
