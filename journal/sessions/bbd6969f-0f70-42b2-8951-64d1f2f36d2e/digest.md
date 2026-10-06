@@ -145550,3 +145550,81 @@ périmètre : ils sont signalés quand ils portent un chiffre utilisé partout.
 | 0,1 | 1 | 0,5566 | 0,4971 | −0,1261 |
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport re\np='docs/glossaire.md'; s=open(p).read()\nold = \"\"\"> **NLMS** *(normalized least mean squares ; moindres carrés moyens normalisés)* —\n> une règle **locale** et itérative : `W ← W + η·(y − W·x)·xᵀ/‖x … [4065 caractères tronqués]`
+
+  ```
+glossaire mis à jour
+d674633 NLMS à pas fin : à 0,0075 de la ridge, et moins chère au-delà de 900 caractéristiques
+372
+  ```
+
+### 🤖 Assistant
+
+⏵ **Glossaire livré. Je vérifie la fin du NLMS et l'arrivée du traçage couche 8.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== NLMS eta 0.03 ===\"; grep -A7 \"^  0.03\" /tmp/nlms_petit.log | head -8; echo; echo \"=== c8 ===\"; ls /home/stephane/Data13TB/stephane/corpus/udhr/udhr392_c8 | wc -l; tail -2 /tmp/trace392c8.log; date '+%H:%M'", "descript … [46 caractères tronqués]`
+
+  ```
+=== NLMS eta 0.03 ===
+
+=== c8 ===
+372
+vmw 27s 7392248
+war 27s 7952219
+13:05
+  ```
+
+- **bash** `{"command": "sleep 560; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== c8 ===\"; ls /home/stephane/Data13TB/stephane/corpus/udhr/udhr392_c8 | wc -l; tail -2 /tmp/trace392c8.log; echo \"=== c8_analyse ===\"; tail -5 /tmp/c8_analyse.log 2>/dev/null || echo \"pas encore\"; date '+%H:% … [72 caractères tronqués]`
+
+  ```
+=== c8 ===
+391
+zro 23s 6501452
+ztu 31s 10357232
+=== c8_analyse ===
+pas encore
+13:15
+  ```
+
+- **bash** `{"command": "sleep 200; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== c8 ===\"; ls /home/stephane/Data13TB/stephane/corpus/udhr/udhr392_c8 | wc -l; tail -2 /tmp/trace392c8.log; echo \"=== c8_analyse ===\"; tail -8 /tmp/c8_analyse.log 2>/dev/null || echo \"pas encore\"; pgrep -f c8 … [111 caractères tronqués]`
+
+  ```
+=== c8 ===
+392
+zyb 30s 9339875
+TERMINE
+=== c8_analyse ===
+  bul : 1195 pas
+  cab : 933 pas
+  cak : 1584 pas
+  cat : 841 pas
+  cbi : 1976 pas
+  cbr : 1762 pas
+  cbt : 1287 pas
+  cbu : 1428 pas
+3
+13:18
+  ```
+
+### 🤖 Assistant
+
+⏵ **Jalon : 392/392 langues tracées aux couches 8 ET 10. L'analyse couche 8 tourne.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== taille des corpus ===\"; du -sh /home/stephane/Data13TB/stephane/corpus/udhr/udhr392 /home/stephane/Data13TB/stephane/corpus/udhr/udhr392_c8 /home/stephane/Data13TB/stephane/corpus/udhr/unites 2>/dev/null; echo \"=== échec … [333 caractères tronqués]`
+
+  ```
+=== taille des corpus ===
+2,7G	/home/stephane/Data13TB/stephane/corpus/udhr/udhr392
+4,0G	/home/stephane/Data13TB/stephane/corpus/udhr/udhr392_c8
+491M	/home/stephane/Data13TB/stephane/corpus/udhr/unites
+=== échecs ===
+/tmp/trace392c8.log:0
+/tmp/trace392.log:0
+=== temps de la passe couche 8 ===
+  392 langues · total 241 min · moyenne 36.9 s
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le jalon est propre : 392 langues, 0 échec, couches 8 et 10.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 42. Jalon : 392 langues tracées aux DEUX couches, zéro échec\n\n| corpus | contenu | taille | langues | échecs |\n|---|---|---:|---:| … [1892 caractères tronqués]`

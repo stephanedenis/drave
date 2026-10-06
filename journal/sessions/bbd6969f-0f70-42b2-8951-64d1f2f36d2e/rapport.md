@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 190.3 h |
+| Durée | 190.5 h |
 | Tours | 175 |
-| Messages | 8865 |
-| Appels d'outils | 8361 |
+| Messages | 8870 |
+| Appels d'outils | 8366 |
 | Fichiers touchés | 194 |
-| Commandes | 7086 |
+| Commandes | 7091 |
 | Sous-agents | 32 |
-| Commits | 637 |
+| Commits | 638 |
 | Compactages de contexte | 12 |
 
 ## Objectifs déclarés
@@ -8794,7 +8794,7 @@ Rayon spectral du jacobien `J = (1−a)·I + a·D·P` :
 
 ### Tour 175 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
 
-*36 appels d'outils.* Actions notables :
+*41 appels d'outils.* Actions notables :
 
 - bash — Check NLMS experiment and c8 progress
 - read
@@ -8810,17 +8810,11 @@ Rayon spectral du jacobien `J = (1−a)·I + a·D·P` :
 - edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/lecture_locale.py`
 - bash — Move W0 initialization before branch
 - bash — Launch NLMS convergence curve
-- … et 21 autres
+- … et 26 autres
 
 **Synthèse produite :**
 
-⏵ **NLMS à petit pas change tout : 0,6158 contre 0,6233 pour le ridge — à 0,0075 près, et il se dégrade ensuite (sur-apprentissage du vivier).**
-
-| η | passe | VALID | TEST | vs ridge |
-|---:|---:|---:|---:|---:|
-| 0,003 | 1 | 0,6239 | **0,6158** | **−0,0075** |
-| 0,003 | 6 | 0,6237 | 0,6058 | −0,0175 |
-| 0,1 | 1 | 0,5566 | 0,4971 | −0,1261 |
+⏵ **Le jalon est propre : 392 langues, 0 échec, couches 8 et 10.**
 
 ## 3. Travail accompli
 
@@ -9100,7 +9094,7 @@ Rayon spectral du jacobien `J = (1−a)·I + a·D·P` :
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 7046 autres
+- … et 7051 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9885,4 +9879,5 @@ Rayon spectral du jacobien `J = (1−a)·I + a·D·P` :
 - Le profil porte tout le protocole — et il révèle un écart d'invariance majeur  tools/profil_langues.py rapporte désormais en une exécution : TAILLE du réseau, I
 - Glossaire : section 10 complète sur le pont, avec les termes de ses propres définitions  Le glossaire ne contenait AUCUNE occurrence de professeur, réservoir, o
 - NLMS à pas fin : à 0,0075 de la ridge, et moins chère au-delà de 900 caractéristiques  MESURÉ sur les deux panneaux (40 neurones, 80 caractéristiques, 896 canau
+- Jalon : 392 langues tracées aux couches 8 ET 10, zéro échec    udhr392/       couches 0, 10        2,7 Go   392/392 langues   0 échec   udhr392_c8/    couches 0
 
