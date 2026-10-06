@@ -151,6 +151,25 @@ def main():
         print(f"#   TAILLE DU RÉSEAU : {P.compte_neurones} neurones · "
               f"{len(P.couches)} couche(s) {P.couches} · "
               f"{P.phi(np.zeros((1, P.compte_neurones))).shape[1]} caractéristiques")
+        # INVARIANCE INTER-LANGUE ET PIRE PAIRE. Le protocole les exige à chaque
+        # affirmation, et le profil ne les donnait pas. On les mesure sur la
+        # DERNIÈRE position du texte entier — c'est le point de contenu unique que
+        # l'UDHR aligne d'une langue à l'autre, et le périmètre du résultat de tête.
+        # On donne les deux : celle du PROFESSEUR (la cible) et la NÔTRE (la sortie).
+        def inv_last(V):
+            N = V/np.maximum(np.linalg.norm(V, axis=1, keepdims=True), 1e-12)
+            S = N @ N.T
+            iu = np.triu_indices(len(V), 1)
+            return float(S[iu].mean()), float(S[iu].min())
+        nos = np.array([(P.phi(P._norm(Xte[k])) @ W + mt)[-1]
+                        for k in range(len(clte))])
+        pro = np.array([Yte[k][-1] for k in range(len(clte))])
+        inv_n, pire_n = inv_last(nos)
+        inv_p, pire_p = inv_last(pro)
+        print(f"#   INVARIANCE (dernière position, {len(clte)} langues de test) : "
+              f"professeur {inv_p:.4f} · pire paire {pire_p:.4f}")
+        print(f"#   INVARIANCE (notre sortie)                            : "
+              f"{inv_n:.4f} · PIRE PAIRE {pire_n:.4f}")
         print(f"#   TEST       (hors vivier) : fidélité {f.mean():.4f} · "
               f"témoin {t.mean():.4f} · APPORT {g.mean():+.4f} · oracle {o.mean():.4f}")
         ov, nv = oracle_sur(P, W, Ev, Yv)

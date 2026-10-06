@@ -144796,3 +144796,350 @@ syntaxe OK
 | 800 | **0,6421** | **0,6821** | **+0,0457** |
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 39. La courbe : pas de coude, le réservoir continue de payer\n\nLe §34 avait mesuré une pente en deux points et demandé **la courbe** … [5676 caractères tronqués]`
+
+  ```
+d15c870 La courbe ne plafonne pas (800 neurones → 0,6821) et baisser le gain est RÉFUTÉ
+298
+  ```
+
+### 🤖 Assistant
+
+⏵ **Votre proposition mérite une réponse chiffrée. Je lance l'expérience décisive : remplacer le fit global par une règle LOCALE, événementielle par nature.**
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"LECTURE LOCALE — remplacer le fit global par une règle de corrélation.\n\nPOURQUOI CETTE EXPÉRIENCE. Le mode matriciel n'est pas dans la simulation des\nneurones : il est dans la LECTURE. Mesuré (§35) :\n  - construire le réservoir : 24 µs par pas, 0,4 min  … [5978 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/lecture_locale.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le NLMS tel quel ferait 7 millions d'itérations Python. Je le sous-échantillonne et je passe en opérations en place.**
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/lecture_locale.py", "new_string": "    # ---------------------------------------------------------------- NLMS\n    #\n    # SOUS-ÉCHANTILLONNAGE. NLMS est intrinsèquement séquentiel : une ligne à la\n    # fois, donc une itération … [2530 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/lecture_locale.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"import ast; ast.parse(open('tools/lecture_locale.py').read()); print('syntaxe OK')\" && setsid nohup timeout 7200 python3 -u tools/lecture_locale.py /tmp/cache392_train.npz /tmp/cache392_test.npz --neur 40 2>&1 > /tmp/le … [154 caractères tronqués]`
+
+  ```
+syntaxe OK
+lancé
+12:19
+  ```
+
+### 🤖 Assistant
+
+⏵ **Je réponds à vos trois points avec les mesures, pendant que l'expérience tourne.**
+
+- **bash** `{"command": "ls /home/stephane/Data13TB/stephane/corpus/udhr/udhr392_c8 | wc -l; date '+%H:%M'; echo \"--- chaine ---\"; pgrep -f \"trace392c8|c8_analyse|unites8\" | wc -l", "description": "Check chain progress"}`
+
+  ```
+299
+12:19
+--- chaine ---
+5
+  ```
+
+### 🤖 Assistant
+
+Voici mes réponses, mesurées, à vos trois points.
+
+## 1. Événementiel : d'accord sur le principe, mais la mesure dit que ce n'est pas ici qu'il faut le mettre
+
+**Le mode matriciel n'est pas dans la simulation des neurones — il est dans la LECTURE.** Mesuré :
+
+| étape | coût |
+|---|---|
+| construire le réservoir (472 472 pas) | **24 µs/pas → 0,4 min** pour 40 neurones |
+| ajuster la lecture | **régression sur 472 472 lignes → 22 min** (1 296 colonnes), ~80 min (2 496) |
+
+La simulation des neurones est **l'étape la moins chère du pipeline**. C'est la solution en forme fermée — qui satisfait justement votre contrainte « pas de rétropropagation » — qui impose la Gram dense.
+
+**Et la dynamique actuelle n'est pas compressible en événements.** Mesuré sur corpus réel : de gain 0,003 à 1, le taux de couples (neurone, pas) qui changent **ne descend jamais sous 99,4 %**. Aucun réglage ne rend ce calcul creux. La raison : `‖E[t]‖ ≈ 720`, donc l'argument du `tanh` vaut **16,9 en moyenne** — il sature presque toujours, sa sortie est essentiellement binaire, et l'état est une moyenne glissante de ces binaires, qui bascule constamment.
+
+**Donc le passage aux impulsions n'est pas une optimisation de cette dynamique, c'en est un remplacement** — et c'est cohérent : une impulsion est creuse *par construction* (seuil, émission, remise à zéro), pas par réglage.
+
+**Mais le vrai gain est ailleurs, et votre intuition le vise** : c'est la **lecture** qu'il faut rendre locale. Une règle delta / NLMS (`W ← W + η(y − Wx)xᵀ/‖x‖²`) est événementielle par nature, sans rétropropagation, et coûte `O(caractéristiques)` par pas au lieu de `O(caractéristiques²)` — **elle supprime les 22 minutes et la Gram**. C'est exactement ce que `neuronspikes` décrit. **Je viens de lancer la comparaison NLMS contre ridge sur les deux panneaux** ; le résultat dira si on peut jeter le mode matriciel.
+
+À noter : mon `Pont` fait **déjà** naître et mourir les neurones par corrélation (`communs`, `redondance`, `contribution`). C'est la *structure* qui est corrélationnelle — seule la *lecture* est globale.
+
+## 2. Nombre de couches : votre règle est déjà soutenue par la mesure
+
+**D (2 couches de 20) = 0,5979 contre A (1 couche de 40) = 0,5972** — la profondeur n'achète rien à budget constant. Le pont tient dans **une** couche face aux 24 du professeur.
+
+## 3. Oscillation : absente aujourd'hui, mais votre PID devient nécessaire dès qu'on touche à `P`
+
+Rayon spectral du jacobien `J = (1−a)·I + a·D·P` :
+
+| a | 0,05 | **0,20** | 0,40 | 0,80 | 0,95 | 1,20 |
+|---|---:|---:|---:|---:|---:|---:|
+| rayon observé | 0,989 | **0,944** | 0,847 | 0,436 | 0,154 | (1,436 avec D=I) |
+
+**Aucune oscillation**, et le comportement est contre-intuitif mais sain : **un `a` plus grand est plus stable**, parce qu'il sature davantage le `tanh`, ce qui réduit la pente `D` donc le gain de boucle. La marge la plus faible est à `a = 0,2` (0,944) — c'est le point à surveiller. La limite pratique est entre 0,95 et 1,2.
+
+**Votre inquiétude devient réelle dès que `P` cesse d'être gelé** — et le « renforcement/atrophie » y mène. Le régulateur que vous suggérez est alors directement implémentable : **contraindre la croissance pour maintenir le rayon spectral de `(1−a)I + a·D·P` sous 1**, recalculé à chaque naissance. C'est une décomposition propre de 40×40 — quelques microsecondes. C'est le PID, et il est prêt à poser.
+
+## Et la bonne nouvelle du bloc : la courbe ne plafonne pas
+
+| neurones | A seul | A + entrée | apport |
+|---:|---:|---:|---:|
+| 200 | 0,6218 | 0,6693 | +0,0329 |
+| 400 | 0,6333 | 0,6763 | +0,0399 |
+| 800 | 0,6421 | **0,6821** | **+0,0457** |
+
+**Meilleur résultat de la session : 0,6821.** Aucun coude — votre mécanisme de croissance achète du transfert régulièrement. Pour +0,06 il faut ~2 000-3 000 neurones : un budget, pas un obstacle.
+
+À signaler aussi : j'avais écrit au §38.2 que « la dynamique vit dans son régime linéaire ». **C'était faux** — le `tanh` sature presque toujours, c'est l'état moyenné qui reste petit. Corrigé et commité.
+
+
+## Tour 175
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de représentation universelle), boîte noire (on ne lit du professeur que la couche à émuler, jamais sa tête ni ses jetons générés), aucune rétropropagation (A et B aléatoires et gelés, seule la lecture s'ajuste en forme fermée), et chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, TAILLE du réseau, avec le diagnostic oracle sur les deux panneaux (test hors vivier et validation du même vivier)."
+Round: 48/256
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ **Point d'état, puis je récupère le résultat NLMS.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== NLMS vs ridge ===\"; cat /tmp/lecture_locale.log; echo; echo \"=== c8 ===\"; ls /home/stephane/Data13TB/stephane/corpus/udhr/udhr392_c8 | wc -l; date '+%H:%M'", "description": "Check NLMS experiment and c8 progress"}`
+
+  ```
+=== NLMS vs ridge ===
+# 896 canaux · 40 neurones · ride 0.03 · 300 ajustement / 51 validation / 41 test
+# réseau 40 neurones / 1 couche(s), construit en 28 s
+
+=== c8 ===
+299
+12:20
+  ```
+
+### 🤖 Assistant
+
+⏵ **L'objectif exige aussi l'invariance inter-langue et la pire paire. Mon profil ne les calcule pas — j'ajoute avant que la chaîne couche 8 ne l'appelle.**
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/profil_langues.py", "limit": 30, "offset": 125}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/profil_langues.py</path>
+<type>file</type>
+<content>
+125:             A = P.phi(P._norm(Xte[k]))
+126:             lignes.append({
+127:                 "cl": cl,
+128:                 "fid": cos_lignes(A @ W + mt, B),
+129:                 "oracle": cos_lignes(
+130:                     A @ np.linalg.solve(A.T @ A + ride*len(A)*np.eye(A.shape[1]),
+131:                                         A.T @ (B - mt)) + mt, B),
+132:                 "temoin": cos_lignes(np.tile(mt, (len(B), 1)), B),
+133:                 "norme": float(np.linalg.norm(B, axis=1).mean()),
+134:                 "norme_pleine": norme_pleine[cl],
+135:                 "pas": len(B),
+136:                 "frag": tk[cl],
+137:             })
+138:         f = np.array([r["fid"] for r in lignes])
+139:         g = np.array([r["fid"] - r["temoin"] for r in lignes])
+140:         o = np.array([r["oracle"] for r in lignes])
+141:         t = np.array([r["temoin"] for r in lignes])
+142:         n = np.array([r["norme"] for r in lignes])
+143:         fr = np.array([r["frag"] for r in lignes])
+144:         print(f"\n=== {nom} ===")
+145:         if P.a_min is not None:
+146:    
+… [640 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/profil_langues.py", "new_string": "        print(f\"#   TAILLE DU RÉSEAU : {P.compte_neurones} neurones · \"\n              f\"{len(P.couches)} couche(s) {P.couches} · \"\n              f\"{P.phi(np.zeros((1, P.compte_neurones))).s … [1642 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/profil_langues.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -i 's|f\"\\*\\*{inv_n:.4f}\\*\\* · PIRE PAIRE \\*\\*{pire_n:.4f}\\*\\*\")|f\"{inv_n:.4f} · PIRE PAIRE {pire_n:.4f}\")|' tools/profil_langues.py && grep -n \"INVARIANCE\" tools/profil_langues.py && python3 -c \"import ast; ast.par … [119 caractères tronqués]`
+
+  ```
+154:        # INVARIANCE INTER-LANGUE ET PIRE PAIRE. Le protocole les exige à chaque
+169:        print(f"#   INVARIANCE (dernière position, {len(clte)} langues de test) : "
+171:        print(f"#   INVARIANCE (notre sortie)                            : "
+syntaxe OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/lecture_locale.log; echo; echo \"=== c8 ===\"; ls /home/stephane/Data13TB/stephane/corpus/udhr/udhr392_c8 | wc -l; date '+%H:%M'", "description": "Check NLMS progress"}`
+
+  ```
+# 896 canaux · 40 neurones · ride 0.03 · 300 ajustement / 51 validation / 41 test
+# réseau 40 neurones / 1 couche(s), construit en 28 s
+
+=== RIDGE (référence, mode matriciel) ===
+#   Gram 80×80 sur 402091 lignes · 32.7 s
+#   VALID 0.6304 · TEST 0.6233
+
+=== c8 ===
+301
+12:20
+  ```
+
+### 🤖 Assistant
+
+⏵ **Je vérifie le nouveau profil sur la couche 10 pendant que le NLMS tourne — la chaîne couche 8 en dépendra.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && free -g | head -2 && setsid nohup timeout 2400 python3 -u tools/profil_langues.py /tmp/cache392_train.npz /tmp/cache392_test.npz --neur 40 --part 0.5 --csv /tmp/profil_l10.csv > /tmp/profil_l10.log 2>&1 < /dev/null & disown\nsleep 5; … [101 caractères tronqués]`
+
+  ```
+total        used        free      shared  buff/cache   available
+Mem:             125          20          24           7          89         105
+vérification lancée
+12:21
+  ```
+
+- **bash** `{"command": "sleep 540; echo \"=== profil L10 (vérif) ===\"; head -30 /tmp/profil_l10.log; echo; echo \"=== NLMS ===\"; cat /tmp/lecture_locale.log; date '+%H:%M'", "description": "Wait for profile validation and NLMS", "timeoutMs": 580000}`
+
+  ```
+=== profil L10 (vérif) ===
+# 351 langues d'apprentissage · 41 langues de test · H=896
+# canaux partagés : 896/896 (100%)
+# vivier : 300 langues d'ajustement · 51 de validation (même vivier) · 41 de test (hors vivier)
+
+=== MONO-ÉCHELLE (référence, a=0,2) ===
+#   constante de temps unique : 0.2
+#   TAILLE DU RÉSEAU : 40 neurones · 1 couche(s) [40] · 80 caractéristiques
+#   INVARIANCE (dernière position, 41 langues de test) : professeur 0.6529 · pire paire 0.0478
+#   INVARIANCE (notre sortie)                            : 0.9565 · PIRE PAIRE 0.7371
+#   TEST       (hors vivier) : fidélité 0.5960 · témoin 0.5678 · APPORT +0.0282 · oracle 0.6935
+#   VALIDATION (même vivier) : fidélité 0.6206 · témoin 0.5889 · APPORT +0.0317 · oracle 0.6318
+#   écart à l'oracle : TEST (hors vivier) +0.0975 · VALIDATION (même vivier) +0.0112
+#   apport ↔ fragmentation : Pearson +0.7986 (R² 0.6378)
+#   apport ↔ norme         : Pearson -0.5834
+#   oracle ↔ norme         : Pearson -0.8368
+
+=== MULTI-ÉCHELLE (a de 0.02 à 0.8) ===
+#   constantes de temps : 0.020 à 0.800 (médiane 0.127)
+#   TAILLE DU RÉSEAU : 40 neurones · 1 couche(s) [40] · 80 caractéristiques
+#   INVARIANCE (dernière position, 41 langues de tes
+… [1099 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le profil complet fonctionne — et il révèle un écart que je n'avais pas vu : notre sortie est BEAUCOUP plus invariante que le professeur.**
+
+| | professeur | notre sortie |
+|---|---:|---:|
+| invariance (dernière position) | 0,6529 | **0,9565** |
+| pire paire | **0,0478** | 0,7371 |
+
+- **bash** `{"command": "ps -eo pid,etime,%cpu,rss,cmd --sort=-%cpu | grep -E \"lecture_locale|profil_langues\" | grep -v grep | head -3 | cut -c1-100; echo \"---\"; cat /tmp/lecture_locale.log | tail -8; date '+%H:%M'", "description": "Check NLMS process state"}`
+
+  ```
+---
+=== RIDGE (référence, mode matriciel) ===
+#   Gram 80×80 sur 402091 lignes · 32.7 s
+#   VALID 0.6304 · TEST 0.6233
+
+=== NLMS (règle LOCALE, sans Gram, sans inversion) ===
+# W ← W + η·(y − Wx)·xᵀ/||x||²  ·  3 passes · 1 ligne sur 5
+
+#    eta passes  secondes    VALID     TEST  vs ridge TEST
+12:30
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le job NLMS est mort — ma redirection `2>&1 > fichier` a envoyé l'erreur au terminal perdu. Je relance proprement, en test court d'abord.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 python3 -u tools/lecture_locale.py /tmp/cache392_train.npz /tmp/cache392_test.npz --neur 40 --etas 0.5 --passes 1 --sous-ech 40 > /tmp/nlms_test.log 2>&1; echo \"code retour $?\"; cat /tmp/nlms_test.log", "description": " … [62 caractères tronqués]`
+
+  ```
+code retour 1
+# 896 canaux · 40 neurones · ride 0.03 · 300 ajustement / 51 validation / 41 test
+# réseau 40 neurones / 1 couche(s), construit en 26 s
+
+=== RIDGE (référence, mode matriciel) ===
+#   Gram 80×80 sur 402091 lignes · 29.7 s
+#   VALID 0.6304 · TEST 0.6233
+
+=== NLMS (règle LOCALE, sans Gram, sans inversion) ===
+# W ← W + η·(y − Wx)·xᵀ/||x||²  ·  1 passes · 1 ligne sur 40
+
+#    eta passes  secondes    VALID     TEST  vs ridge TEST
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/lecture_locale.py", line 146, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/lecture_locale.py", line 123, in main
+    W += nx*np.outer(e, x)
+ValueError: operands could not be broadcast together with shapes (80,896) (896,80) (80,896)
+  ```
+
+### 🤖 Assistant
+
+⏵ **Bug trouvé : `np.outer` était dans le mauvais sens. Corrigé.**
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/lecture_locale.py", "new_string": "                for k in range(len(A)):\n                    x = A[k]\n                    nx = eta/(float(x @ x) + 1e-9)\n                    e = B[k] - W.T @ x\n                    # W a la form … [478 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/lecture_locale.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 python3 -u tools/lecture_locale.py /tmp/cache392_train.npz /tmp/cache392_test.npz --neur 40 --etas 1.0 --passes 1 --sous-ech 20 > /tmp/nlms_test.log 2>&1; echo \"code retour $?\"; tail -14 /tmp/nlms_test.log", "descriptio … [65 caractères tronqués]`
+
+  ```
+code retour 0
+# W ← W + η·(y − Wx)·xᵀ/||x||²  ·  1 passes · 1 ligne sur 20
+
+#    eta passes  secondes    VALID     TEST  vs ridge TEST
+   1.00      1       5.3   0.3417   0.2587        -0.3645
+
+# témoins : VALID 0.5926 · TEST 0.5781
+# RIDGE   : VALID 0.6304 · TEST 0.6233   (29.5 s)
+# NLMS    : VALID 0.3417 · TEST 0.2587   (5.3 s, η=1.0)
+# COÛT    : ridge 29.5 s contre NLMS 5.3 s → rapport 5.6×
+# QUALITÉ : écart NLMS − ridge sur TEST = -0.3645
+
+# PRÉDICTION : NLMS doit approcher sur l'apprentissage et transférer un
+# peu moins bien. Si l'écart TEST reste sous 0,005, le mode matriciel
+# n'a plus de raison d'être.
+  ```
+
+### 🤖 Assistant
+
+⏵ **1 passe NLMS ne converge pas (0,2587) — c'est un solveur itératif. La bonne question : combien de passes pour atteindre le ridge ?**
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/lecture_locale.py", "new_string": "    se = int(opt(\"--sous-ech\", 5))\n    courbe = \"--courbe\" in sys.argv\n    print(f\"\\n=== NLMS (règle LOCALE, sans Gram, sans inversion) ===\")\n    print(f\"# W ← W + η·(y − Wx)·xᵀ/||x||²  … [1999 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/lecture_locale.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/lecture_locale.py'; s=open(p).read()\n# W0 doit être défini AVANT la branche courbe\ns=s.replace(\"\"\"    se = int(opt(\"--sous-ech\", 5))\n    courbe = \"--courbe\" in sys.argv\"\"\",\"\"\"    se = int(op … [337 caractères tronqués]`
+
+  ```
+107:    W0 = np.zeros((nf, len(garde)))
+syntaxe OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && setsid nohup timeout 5400 python3 -u tools/lecture_locale.py /tmp/cache392_train.npz /tmp/cache392_test.npz --neur 40 --etas 0.5,1.0 --passes 12 --sous-ech 20 --courbe > /tmp/nlms_courbe.log 2>&1 < /dev/null & disown\nsleep 5; echo l … [137 caractères tronqués]`
+
+  ```
+lancé
+325
+12:35
+  ```
+
+### 🤖 Assistant
+
+⏵ **Je consigne l'écart d'invariance — notre pont est bien plus invariant que sa propre cible.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 41. Le profil porte maintenant TOUT le protocole — et il révèle un écart d'invariance\n\n`tools/profil_langues.py` rapporte désormais … [4695 caractères tronqués]`

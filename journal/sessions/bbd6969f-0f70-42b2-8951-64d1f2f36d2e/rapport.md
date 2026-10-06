@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 189.5 h |
-| Tours | 174 |
-| Messages | 8821 |
-| Appels d'outils | 8321 |
-| Fichiers touchés | 193 |
-| Commandes | 7055 |
+| Durée | 189.8 h |
+| Tours | 175 |
+| Messages | 8842 |
+| Appels d'outils | 8340 |
+| Fichiers touchés | 194 |
+| Commandes | 7068 |
 | Sous-agents | 32 |
-| Commits | 634 |
+| Commits | 635 |
 | Compactages de contexte | 12 |
 
 ## Objectifs déclarés
@@ -401,6 +401,8 @@
 **Tour 173** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 **Tour 174** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
+
+**Tour 175** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -8738,7 +8740,7 @@ Une régression sur 472 472 lignes est m
 
 ### Tour 174 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
 
-*32 appels d'outils.* Actions notables :
+*36 appels d'outils.* Actions notables :
 
 - bash — Check current state of jobs
 - read
@@ -8754,17 +8756,65 @@ Une régression sur 472 472 lignes est m
 - bash — Wait for ridge sweep
 - bash — Lower ridge sweep and locate neuronspikes
 - bash — List GitHub repos and search for spike project
-- … et 15 autres
+- … et 19 autres
 
 **Synthèse produite :**
 
-⏵ **La courbe est propre et MONOTONE : pas de coude. Le réservoir continue de payer.**
+Voici mes réponses, mesurées, à vos trois points.
 
-| neurones | A seul | A + entrée | apport sur C_lin |
-|---:|---:|---:|---:|
-| 200 | 0,6218 | 0,6693 | +0,0329 |
-| 400 | 0,6333 | 0,6763 | +0,0399 |
-| 800 | **0,6421** | **0,6821** | **+0,0457** |
+\## 1. Événementiel : d'accord sur le principe, mais la mesure dit que ce n'est pas ici qu'il faut le mettre
+
+**Le mode matriciel n'est pas dans la simulation des neurones — il est dans la LECTURE.** Mesuré :
+
+| étape | coût |
+|---|---|
+| construire le réservoir (472 472 pas) | **24 µs/pas → 0,4 min** pour 40 neurones |
+| ajuster la lecture | **régression sur 472 472 lignes → 22 min** (1 296 colonnes), ~80 min (2 496) |
+
+La simulation des neurones est **l'étape la moins chère du pipeline**. C'est la solution en forme fermée — qui satisfait justement votre contrainte « pas de rétropropagation » — qui impose la Gram dense.
+
+**Et la dynamique actuelle n'est pas compressible en événements.** Mesuré sur corpus réel : de gain 0,003 à 1, le taux de couples (neurone, pas) qui changent **ne descend jamais sous 99,4 %**. Aucun réglage ne rend ce calcul creux. La raison : `‖E[t]‖ ≈ 720`, donc l'argument du `tanh` vaut **16,9 en moyenne** — il sature presque toujours, sa sortie est essentiellement binaire, et l'état est une moyenne glissante de ces binaires, qui bascule constamment.
+
+**Donc le passage aux impulsions n'est pas une optimisation de cette dynamique, c'en est un remplacement** — et c'est cohérent : une impulsion est creuse *par construction* (seuil, émission, remise à zéro), pas par réglage.
+
+**Mais le vrai gain est ailleurs, et votre intuition le vise** : c'est la **lecture** qu'il faut rendre locale. Une règle delta / NLMS (`W ← W + η(y − Wx)xᵀ/‖x‖²`) est événementielle par nature, sans rétropropagation, et coûte `O(caractéristiques)` par pas au lieu de `O(caractéristiques²)` — **elle supprime les 22 minutes et la Gram**. C'est exactement ce que `neuronspikes` décrit. **Je viens de lancer la comparaison NLMS contre ridge sur les deux panneaux** ; le résultat dira si on peut jeter le mode matriciel.
+
+À noter : mon `Pont` fait **déjà** naître et mourir les neurones par corrélation (`communs`, `redondance`, `contribution`). C'est la *structure* qui est corrélationnelle — seule la *lecture* est globale.
+
+\## 2. Nombre de couches : votre règle est déjà soutenue par la mesure
+
+**D (2 couches de 20) = 0,5979 contre A (1 couche de 40) = 0,5972** — la profondeur n'achète rien à budget constant. Le pont tient dans **une** couche face aux 24 du professeur.
+
+\## 3. Oscillation : absente aujourd'hui, mais votre PID devient nécessaire dès qu'on touche à `P`
+
+Rayon spectral du jacobien `J = (1−a)·I + a·D·P` :
+
+| a | 0,05 
+… [1535 caractères tronqués]
+
+### Tour 175 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
+
+*15 appels d'outils.* Actions notables :
+
+- bash — Check NLMS experiment and c8 progress
+- read
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/profil_langues.py`
+- bash — Fix print format and syntax check
+- bash — Check NLMS progress
+- bash — Validate updated profile on layer 10
+- bash — Wait for profile validation and NLMS
+- bash — Check NLMS process state
+- bash — Quick NLMS test with proper redirection
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/lecture_locale.py`
+- bash — Re-test NLMS with fixed outer product
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/lecture_locale.py`
+- bash — Move W0 initialization before branch
+- bash — Launch NLMS convergence curve
+- … et 1 autres
+
+**Synthèse produite :**
+
+⏵ **Je consigne l'écart d'invariance — notre pont est bien plus invariant que sa propre cible.**
 
 ## 3. Travail accompli
 
@@ -8954,7 +9004,7 @@ Une régression sur 472 472 lignes est m
 | `/tmp/trace392c8.sh` | 1 | 0 |
 | `/tmp/unites8.sh` | 1 | 0 |
 | `/tmp/rj_graines.sh` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/profil_langues.py` | 2 | 5 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/profil_langues.py` | 2 | 6 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/leviers_pont.py` | 2 | 1 |
 | `/tmp/c8_analyse.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/controle_capacite.py` | 1 | 0 |
@@ -8965,6 +9015,7 @@ Une régression sur 472 472 lignes est m
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/transfert_ridge.py` | 1 | 1 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/stabilite_evenements.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/saturation.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/lecture_locale.py` | 1 | 3 |
 
 ### Sous-agents lancés
 
@@ -9043,7 +9094,7 @@ Une régression sur 472 472 lignes est m
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 7015 autres
+- … et 7028 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9825,4 +9876,5 @@ Une régression sur 472 472 lignes est m
 - Le ride était 10 à 30 fois trop fort, et l'écart de transfert n'est pas du sur-apprentissage  BALAYAGE DU RIDE, DEUX PANNEAUX (40 neurones, 80 caractéristiques,
 - Correction du §38.2 : le tanh sature PRESQUE TOUJOURS, c'est l'état moyenné qui reste petit  J'avais lu '0,6% de saturation' comme 'la dynamique vit dans son ré
 - La courbe ne plafonne pas (800 neurones → 0,6821) et baisser le gain est RÉFUTÉ  LA COURBE (même vivier, 896 canaux, ride 0,03, fit sur 1/5 des lignes) :    neu
+- Le profil porte tout le protocole — et il révèle un écart d'invariance majeur  tools/profil_langues.py rapporte désormais en une exécution : TAILLE du réseau, I
 
