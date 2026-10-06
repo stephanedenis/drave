@@ -136320,3 +136320,140 @@ OK
 ⏵ Je commite la correction du drapeau inopérant et j'attends le test du seuil de décision.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Bug : --seuil-commun ne pilotait PAS la décision, seulement l'affichage\n\nTrouvé en testant la calibration du seuil de couche : abaisser --seuil-commun de\n0,50 à 0,25 donnait un résultat BIT-À-BIT I … [985 caractères tronqués]`
+
+  ```
+0ce0f3f Bug : --seuil-commun ne pilotait PAS la décision, seulement l'affichage
+
+########## seuil-part (décision) : 0.5 ##########
+  → ARRÊT (couche neuve sans gain)     52       1
+# née : 52 neurones en 1 couches [52]
+  fidélité VAL     : 0.7621
+  fidélité TEST    : 0.7438   (constante témoin : 0.7215)
+  invariance TEST  : 0.9739 · pire paire 0.8929
+########## seuil-part (décision) : 0.25 ##########
+--- traçage ---
+285
+01:33
+  ```
+
+### 🤖 Assistant
+
+⏵ Bug corrigé et commité. Point d'étape.
+
+## Ce que ce tour a trouvé
+
+En examinant pourquoi mon critère de couche ne déclenchait jamais sur ce panel, j'ai testé la calibration du seuil — et **abaisser `--seuil-commun` de 0,50 à 0,25 a donné un résultat bit-à-bit identique**. Un drapeau qui ne change rien est suspect.
+
+**La cause** : le déclencheur comparait `part_commune > 0.5`, une **constante en dur**, au lieu de la variable. Mon option ne pilotait donc que le **pourcentage affiché**, jamais la **décision** d'ouvrir une couche. C'est exactement le mode d'échec que ce dépôt documente ailleurs — « huit drapeaux analysés mais jamais appliqués en une seule session ».
+
+**Corrigé** : le déclencheur utilise maintenant `--seuil-part` (défaut 0,5, donc comportement inchangé), et `--seuil-commun` garde son rôle propre — définir ce qu'est un neurone « concept commun ». Vérifié : le seuil 0,5 reproduit exactement les résultats antérieurs.
+
+## Le test en cours
+
+Je force maintenant de la profondeur en abaissant le seuil de **décision** à 0,25, pour répondre à la question : **le seuil était-il bien calibré, ou est-ce que je me privais de profondeur utile ?**
+
+- si la validation ne s'améliore pas → le seuil avait raison, il n'y a rien de partagé à composer à ce niveau ;
+- si elle s'améliore → je m'appauvrissais depuis plusieurs tours sans le savoir.
+
+Il tourne encore (la profondeur forcée coûte plus cher).
+
+## État
+
+| | |
+|---|---:|
+| phase 1 | **285/392** · 0 échec |
+| restant | ~107 langues, **~1 h** |
+| fin estimée | ~02h30 |
+
+## Ce que je note
+
+Ce bug ne se voyait **pas** dans les résultats : le réseau produit était valide, simplement privé d'un levier. C'est la deuxième fois dans ce parcours qu'un drapeau sans effet me coûte une conclusion — après le `chmod +x` manquant. Le réflexe utile, que j'applique maintenant : **quand un paramètre ne change rien, suspecter le paramètre avant de conclure sur le phénomène**.
+
+Rien à faire de votre côté. Commit `0ce0f3f`.
+
+
+## Tour 140
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de représentation universelle), boîte noire (on ne lit du professeur que la couche à émuler, jamais sa tête ni ses jetons générés), aucune rétropropagation (A et B aléatoires et gelés, seule la lecture s'ajuste en forme fermée), et chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, TAILLE du réseau, avec le diagnostic oracle sur les deux panneaux (test hors vivier et validation du même vivier)."
+Round: 13/256
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Je relève le résultat du test de seuil et l'état du traçage.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date \"+%H:%M\"; echo \"=== test du seuil de DÉCISION ===\"; cat /tmp/seuilpart.log; echo \"=== TERMINE ? ===\"; grep -c TERMINE /tmp/seuilpart.log; echo; echo \"phase 1 : $(ls /home/stephane/Data13TB/stephane/corpus/udhr/udhr392 | w … [95 caractères tronqués]`
+
+  ```
+01:34
+=== test du seuil de DÉCISION ===
+########## seuil-part (décision) : 0.5 ##########
+  → ARRÊT (couche neuve sans gain)     52       1
+# née : 52 neurones en 1 couches [52]
+  fidélité VAL     : 0.7621
+  fidélité TEST    : 0.7438   (constante témoin : 0.7215)
+  invariance TEST  : 0.9739 · pire paire 0.8929
+########## seuil-part (décision) : 0.25 ##########
+=== TERMINE ? ===
+0
+
+phase 1 : 286/392
+qva 37s 7956688
+  ```
+
+### 🤖 Assistant
+
+⏵ Le run à seuil 0,25 est bien plus lent (la profondeur forcée coûte cher). Je vérifie qu'il tourne.
+
+- **bash** `{"command": "python3 -c \"\nimport os\nmoi=os.getpid(); anc=set(); q=moi\nfor _ in range(8):\n    try:\n        st=open(f'/proc/{q}/stat').read().split(') ',1)[1].split(); q=int(st[1]); anc.add(q)\n    except Exception: break\nfor d in os.listdir('/proc'):\n    if not d.isdigit(): continue\n    pid= … [527 caractères tronqués]`
+
+  ```
+pid 2398350 · /bin/bash /tmp/seuilpart.sh 
+  pid 2399781 · python3 -u tools/pont_generatif.py /tmp/cache_str_train.npz /tmp/cache
+--- charge ---
+load average: 19,75, 19,65, 19,80
+--- ce que le run a produit jusqu'ici ---
+335 /tmp/seuilpart.log
+  ```
+
+### 🤖 Assistant
+
+⏵ Le run tourne (charge 19,75). J'attends les deux.
+
+- **bash** `{"command": "sleep 540; echo \"=== seuil de décision ===\"; cat /tmp/seuilpart.log | tail -10; echo \"TERMINE : $(grep -c TERMINE /tmp/seuilpart.log)\"; echo; echo \"phase 1 : $(ls /home/stephane/Data13TB/stephane/corpus/udhr/udhr392 | wc -l)/392\"; date \"+%H:%M\"", "description": "Wait for thresho … [32 caractères tronqués]`
+
+  ```
+=== seuil de décision ===
+########## seuil-part (décision) : 0.25 ##########
+  → COUCHE NEUVE (épuisée + concepts + contraste)     44       1
+  → COUCHE NEUVE (épuisée + concepts + contraste)     54       2
+  → COUCHE NEUVE (épuisée + concepts + contraste)     64       3
+  → COUCHE NEUVE (épuisée + concepts + contraste)     75       4
+# née : 80 neurones en 5 couches [44, 10, 10, 11, 5]
+  fidélité VAL     : 0.7681
+  fidélité TEST    : 0.7487   (constante témoin : 0.7215)
+  invariance TEST  : 0.9649 · pire paire 0.8745
+########## seuil-part (décision) : 0.10 ##########
+TERMINE : 0
+
+phase 1 : 303/392
+01:43
+  ```
+
+### 🤖 Assistant
+
+⏵ **Réponse nette : mon seuil par défaut était trop strict.**
+
+| seuil-part | réseau | fid VAL | fid TEST | **écart à la constante** | invariance | pire paire |
+|---|---|---:|---:|---:|---:|---:|
+| **0,50** (défaut) | 52 neurones · **1 couche** | 0,7621 | 0,7438 | **+0,0223** | **0,9739** | **0,8929** |
+| **0,25** | 80 neurones · **5 couches** [44,10,10,11,5] | **0,7681** | **0,7487** | **+0,0272** | 0,9649 | 0,8745 |
+
+**Forcer la profondeur gagne en fidélité** (+0,0049 au test, et l'écart à la constante monte de **22 %**), **au prix de l'invariance** (−0,0090). Le taux d'échange est de **0,55 point de fidélité par point d'invariance** — légèrement **meilleur** que la loi générale (0,39). Donc la profondeur forcée est un bon moyen d'acheter de la fidélité, mais ce n'est pas gratuit.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 11. Mon seuil de couche par défaut était TROP STRICT\n\nLe critère de couche n'ouvrait **jamais** de couche sur le panel stratifié\n( … [3600 caractères tronqués]`

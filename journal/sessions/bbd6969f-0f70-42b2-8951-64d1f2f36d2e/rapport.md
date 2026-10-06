@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 178.7 h |
-| Tours | 139 |
-| Messages | 8406 |
-| Appels d'outils | 7992 |
+| Durée | 179.0 h |
+| Tours | 140 |
+| Messages | 8412 |
+| Appels d'outils | 7996 |
 | Fichiers touchés | 177 |
-| Commandes | 6796 |
+| Commandes | 6800 |
 | Sous-agents | 32 |
-| Commits | 601 |
+| Commits | 602 |
 | Compactages de contexte | 11 |
 
 ## Objectifs déclarés
@@ -331,6 +331,8 @@
 **Tour 138** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 **Tour 139** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
+
+**Tour 140** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -7137,7 +7139,58 @@ Rien à faire de votre côté. Commit `99a89ec`.
 
 **Synthèse produite :**
 
-⏵ Je commite la correction du drapeau inopérant et j'attends le test du seuil de décision.
+⏵ Bug corrigé et commité. Point d'étape.
+
+\## Ce que ce tour a trouvé
+
+En examinant pourquoi mon critère de couche ne déclenchait jamais sur ce panel, j'ai testé la calibration du seuil — et **abaisser `--seuil-commun` de 0,50 à 0,25 a donné un résultat bit-à-bit identique**. Un drapeau qui ne change rien est suspect.
+
+**La cause** : le déclencheur comparait `part_commune > 0.5`, une **constante en dur**, au lieu de la variable. Mon option ne pilotait donc que le **pourcentage affiché**, jamais la **décision** d'ouvrir une couche. C'est exactement le mode d'échec que ce dépôt documente ailleurs — « huit drapeaux analysés mais jamais appliqués en une seule session ».
+
+**Corrigé** : le déclencheur utilise maintenant `--seuil-part` (défaut 0,5, donc comportement inchangé), et `--seuil-commun` garde son rôle propre — définir ce qu'est un neurone « concept commun ». Vérifié : le seuil 0,5 reproduit exactement les résultats antérieurs.
+
+\## Le test en cours
+
+Je force maintenant de la profondeur en abaissant le seuil de **décision** à 0,25, pour répondre à la question : **le seuil était-il bien calibré, ou est-ce que je me privais de profondeur utile ?**
+
+- si la validation ne s'améliore pas → le seuil avait raison, il n'y a rien de partagé à composer à ce niveau ;
+- si elle s'améliore → je m'appauvrissais depuis plusieurs tours sans le savoir.
+
+Il tourne encore (la profondeur forcée coûte plus cher).
+
+\## État
+
+| | |
+|---|---:|
+| phase 1 | **285/392** · 0 échec |
+| restant | ~107 langues, **~1 h** |
+| fin estimée | ~02h30 |
+
+\## Ce que je note
+
+Ce bug ne se voyait **pas** dans les résultats : le réseau produit était valide, simplement privé d'un levier. C'est la deuxième fois dans ce parcours qu'un drapeau sans effet me coûte une conclusion — après le `chmod +x` manquant. Le réflexe utile, que j'applique maintenant : **quand un paramètre ne change rien, suspecter le paramètre avant de conclure sur le phénomène**.
+
+Rien à faire de votre côté. Commit `0ce0f3f`.
+
+### Tour 140 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Check threshold test and trace state
+- bash — Verify the threshold run is alive
+- bash — Wait for threshold result
+- bash — Commit the threshold calibration finding
+
+**Synthèse produite :**
+
+⏵ **Réponse nette : mon seuil par défaut était trop strict.**
+
+| seuil-part | réseau | fid VAL | fid TEST | **écart à la constante** | invariance | pire paire |
+|---|---|---:|---:|---:|---:|---:|
+| **0,50** (défaut) | 52 neurones · **1 couche** | 0,7621 | 0,7438 | **+0,0223** | **0,9739** | **0,8929** |
+| **0,25** | 80 neurones · **5 couches** [44,10,10,11,5] | **0,7681** | **0,7487** | **+0,0272** | 0,9649 | 0,8745 |
+
+**Forcer la profondeur gagne en fidélité** (+0,0049 au test, et l'écart à la constante monte de **22 %**), **au prix de l'invariance** (−0,0090). Le taux d'échange est de **0,55 point de fidélité par point d'invariance** — légèrement **meilleur** que la loi générale (0,39). Donc la profondeur forcée est un bon moyen d'acheter de la fidélité, mais ce n'est pas gratuit.
 
 ## 3. Travail accompli
 
@@ -7400,7 +7453,7 @@ Rien à faire de votre côté. Commit `99a89ec`.
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6756 autres
+- … et 6760 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -8149,4 +8202,5 @@ Rien à faire de votre côté. Commit `99a89ec`.
 - Dimensionnement de l'analyse finale, mesuré — et décision de ne PAS optimiser  Chiffré avant de laisser tourner, plutôt que découvert à 3 h du matin :   cache a
 - Signal précoce sur le panel STRATIFIÉ : l'écart de transfert était un artefact  Mesure sur les 168 premières langues tracées (133 apprentissage · 15 validation 
 - Bug : --seuil-commun ne pilotait PAS la décision, seulement l'affichage  Trouvé en testant la calibration du seuil de couche : abaisser --seuil-commun de 0,50 à
+- Mon seuil de couche par défaut était TROP STRICT — la profondeur forcée paie  Le critère n'ouvrait jamais de couche sur le panel stratifié (communs 28-38 %, sou
 
