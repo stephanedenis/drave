@@ -36,6 +36,13 @@ résumé de la feuille de route. Il ne corrige aucun autre fichier : les erreurs
 contradictions et chiffres périmés croisés en le rédigeant sont **listés à la fin**,
 avec `fichier:ligne` et citation, sans être modifiés.
 
+**Sections 10 et 11 — ajoutées après coup.** Le glossaire couvrait le moteur, le
+matériel et la mesure ; il ne couvrait pas le **pont linguistico-sémantique**, le
+travail en cours. Le §10 comble ce trou (professeur, réservoir, lecture, oracle,
+invariance, attrition, fragmentation…) et son §10.9 définit les termes employés
+**dans** ces définitions. Le §11 liste les sources externes ajoutées, en distinguant
+celles dont l'adresse a été vérifiée de celles citées par titre.
+
 **Périmètre.** `docs/` (18 documents) et `reports/` (60 rapports) ; les 9 fichiers
 de `sprints/` sont couverts pour leur vocabulaire propre (boxing, cérémonie,
 porte). Le code est cité pour dire *où* un terme est utilisé (`drave-core/src/`,
@@ -1895,9 +1902,23 @@ place les termes qu'elle emploie.
 > **NLMS** *(normalized least mean squares ; moindres carrés moyens normalisés)* —
 > une règle **locale** et itérative : `W ← W + η·(y − W·x)·xᵀ/‖x‖²`. Elle ne
 > construit aucune Gram et n'inverse aucune matrice — elle conviendrait donc à une
-> implémentation par **événements**. **Mesuré** : elle atteint 0,4971 là où la ridge
-> atteint 0,6233, et **six passes ne l'améliorent pas**. Le mode matriciel ne se
-> remplace donc pas gratuitement.
+> implémentation par **événements**. **Mesuré, et le pas décide de tout** :
+>
+> | η | après 1 passe | après 6 passes |
+> |---:|---:|---:|
+> | 0,003 | **0,6158** (−0,0075 sous la ridge) | 0,6058 (−0,0175) |
+> | 0,1 | 0,4971 (−0,1261) | 0,4971 (gelé) |
+>
+> À pas fin, NLMS arrive à **0,0075** de la ridge en **une** passe, puis se dégrade :
+> elle sur-apprend le vivier (la validation reste à 0,624, le test baisse). Il faut
+> donc l'arrêter tôt, sur la validation.
+>
+> **Coût comparé** : la Gram coûte `O(lignes × caractéristiques²)`, NLMS
+> `O(lignes × caractéristiques × sorties)`. Avec 896 sorties, la ridge est ~11× moins
+> chère à 80 caractéristiques, mais **NLMS devient moins chère au-delà d'environ 900
+> caractéristiques** — c'est-à-dire exactement là où le pont se trouve quand il
+> grossit. Le mode matriciel n'est donc pas à jeter : il est à **réserver aux petits
+> réseaux**.
 > Réf. Haykin, *Adaptive Filter Theory* (cité par titre).
 
 > **Règle delta** *(delta rule ; règle de Widrow-Hoff)* — l'ancêtre de NLMS :

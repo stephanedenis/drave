@@ -145495,3 +145495,58 @@ glossaire : 2096 lignes
 ⏵ **Il manque encore valeur propre, complément de Schur, moyenne glissante, parcimonie, impulsion, plongement. Je les ajoute.**
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\ns = open('docs/glossaire.md').read()\nanchor = \"\\n---\\n\\n## 11. Sources externes ajoutées par le §10\"\nadd = \"\"\"\n### 10.9 Termes employés DANS les définitions du §10, et qui n'avaient pas d'entrée\n\nLe  … [6599 caractères tronqués]`
+
+  ```
+glossaire : 2162 lignes
+2162 docs/glossaire.md
+ab91def Glossaire : section 10 complète sur le pont, avec les termes de ses propres définitions
+  ```
+
+### 🤖 Assistant
+
+⏵ **Je mets à jour le mode d'emploi pour qu'il annonce la nouvelle section, puis je regarde le NLMS à petit pas.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '36,48p' docs/glossaire.md; echo \"=== NLMS petit pas ===\"; tail -25 /tmp/nlms_petit.log 2>/dev/null; echo \"=== c8 ===\"; ls /home/stephane/Data13TB/stephane/corpus/udhr/udhr392_c8 | wc -l", "description": "Read mode d'emplo … [18 caractères tronqués]`
+
+  ```
+contradictions et chiffres périmés croisés en le rédigeant sont **listés à la fin**,
+avec `fichier:ligne` et citation, sans être modifiés.
+
+**Périmètre.** `docs/` (18 documents) et `reports/` (60 rapports) ; les 9 fichiers
+de `sprints/` sont couverts pour leur vocabulaire propre (boxing, cérémonie,
+porte). Le code est cité pour dire *où* un terme est utilisé (`drave-core/src/`,
+`tools/`), mais le glossaire ne décrit pas le code ligne à ligne. Les fichiers
+`README.md`, `REPRISE.md` et `Qtrinet-bootstrap.md` sont à la racine, hors
+périmètre : ils sont signalés quand ils portent un chiffre utilisé partout.
+
+---
+
+## Parcours de lecture conseillé
+=== NLMS petit pas ===
+# 896 canaux · 40 neurones · ride 0.03 · 300 ajustement / 51 validation / 41 test
+# réseau 40 neurones / 1 couche(s), construit en 28 s
+
+=== RIDGE (référence, mode matriciel) ===
+#   Gram 80×80 sur 402091 lignes · 29.7 s
+#   VALID 0.6304 · TEST 0.6233
+
+=== NLMS (règle LOCALE, sans Gram, sans inversion) ===
+# W ← W + η·(y − Wx)·xᵀ/||x||²  ·  6 passes · 1 ligne sur 20
+# COURBE DE CONVERGENCE — qualité après chaque passe
+
+#   eta  passe   cumul s    VALID     TEST  vs ridge        ||W|| · somme ||dW||
+  0.00      1      13.0
+… [783 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **NLMS à petit pas change tout : 0,6158 contre 0,6233 pour le ridge — à 0,0075 près, et il se dégrade ensuite (sur-apprentissage du vivier).**
+
+| η | passe | VALID | TEST | vs ridge |
+|---:|---:|---:|---:|---:|
+| 0,003 | 1 | 0,6239 | **0,6158** | **−0,0075** |
+| 0,003 | 6 | 0,6237 | 0,6058 | −0,0175 |
+| 0,1 | 1 | 0,5566 | 0,4971 | −0,1261 |
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport re\np='docs/glossaire.md'; s=open(p).read()\nold = \"\"\"> **NLMS** *(normalized least mean squares ; moindres carrés moyens normalisés)* —\n> une règle **locale** et itérative : `W ← W + η·(y − W·x)·xᵀ/‖x … [4065 caractères tronqués]`

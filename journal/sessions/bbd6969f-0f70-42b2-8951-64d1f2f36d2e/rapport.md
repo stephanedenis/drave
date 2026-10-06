@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 190.3 h |
 | Tours | 175 |
-| Messages | 8863 |
-| Appels d'outils | 8359 |
+| Messages | 8865 |
+| Appels d'outils | 8361 |
 | Fichiers touchés | 194 |
-| Commandes | 7084 |
+| Commandes | 7086 |
 | Sous-agents | 32 |
-| Commits | 636 |
+| Commits | 637 |
 | Compactages de contexte | 12 |
 
 ## Objectifs déclarés
@@ -8794,7 +8794,7 @@ Rayon spectral du jacobien `J = (1−a)·I + a·D·P` :
 
 ### Tour 175 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
 
-*34 appels d'outils.* Actions notables :
+*36 appels d'outils.* Actions notables :
 
 - bash — Check NLMS experiment and c8 progress
 - read
@@ -8810,11 +8810,17 @@ Rayon spectral du jacobien `J = (1−a)·I + a·D·P` :
 - edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/lecture_locale.py`
 - bash — Move W0 initialization before branch
 - bash — Launch NLMS convergence curve
-- … et 19 autres
+- … et 21 autres
 
 **Synthèse produite :**
 
-⏵ **Il manque encore valeur propre, complément de Schur, moyenne glissante, parcimonie, impulsion, plongement. Je les ajoute.**
+⏵ **NLMS à petit pas change tout : 0,6158 contre 0,6233 pour le ridge — à 0,0075 près, et il se dégrade ensuite (sur-apprentissage du vivier).**
+
+| η | passe | VALID | TEST | vs ridge |
+|---:|---:|---:|---:|---:|
+| 0,003 | 1 | 0,6239 | **0,6158** | **−0,0075** |
+| 0,003 | 6 | 0,6237 | 0,6058 | −0,0175 |
+| 0,1 | 1 | 0,5566 | 0,4971 | −0,1261 |
 
 ## 3. Travail accompli
 
@@ -9094,7 +9100,7 @@ Rayon spectral du jacobien `J = (1−a)·I + a·D·P` :
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 7044 autres
+- … et 7046 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9878,4 +9884,5 @@ Rayon spectral du jacobien `J = (1−a)·I + a·D·P` :
 - La courbe ne plafonne pas (800 neurones → 0,6821) et baisser le gain est RÉFUTÉ  LA COURBE (même vivier, 896 canaux, ride 0,03, fit sur 1/5 des lignes) :    neu
 - Le profil porte tout le protocole — et il révèle un écart d'invariance majeur  tools/profil_langues.py rapporte désormais en une exécution : TAILLE du réseau, I
 - Glossaire : section 10 complète sur le pont, avec les termes de ses propres définitions  Le glossaire ne contenait AUCUNE occurrence de professeur, réservoir, o
+- NLMS à pas fin : à 0,0075 de la ridge, et moins chère au-delà de 900 caractéristiques  MESURÉ sur les deux panneaux (40 neurones, 80 caractéristiques, 896 canau
 
