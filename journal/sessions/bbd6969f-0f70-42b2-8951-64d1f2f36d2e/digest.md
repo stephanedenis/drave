@@ -144003,3 +144003,309 @@ chargement 18 s
 ⏵ **Chiffres obtenus. Un remède gratuit : 1/5 des lignes = 5,8× plus rapide pour −0,0045 de fidélité.**
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 35. Où va le temps — profil mesuré, et un remède gratuit\n\nQuestion posée : le professeur ne devrait tourner qu'**une fois**, et l'a … [6951 caractères tronqués]`
+
+  ```
+section 35 écrite
+8374ad4 Où va le temps : profil mesuré, et un remède gratuit à 5,8x
+  ```
+
+### 🤖 Assistant
+
+⏵ **J'applique le remède au code pour la suite, et je vérifie la courbe en cours.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls /home/stephane/Data13TB/stephane/corpus/udhr/udhr392_c8 | wc -l; date '+%H:%M'; echo \"--- courbe ---\"; ps -eo pid,etime,%cpu,rss -p $(pgrep -f grand_et_entree | tail -1) 2>/dev/null || echo \"processus absent\"; echo \"--- taill … [244 caractères tronqués]`
+
+  ```
+208
+11:25
+--- courbe ---
+    PID     ELAPSED %CPU   RSS
+processus absent
+--- taille d'une trace c8 ---
+3971030 /home/stephane/Data13TB/stephane/corpus/udhr/udhr392_c8/eng.drvf
+2634680 /home/stephane/Data13TB/stephane/corpus/udhr/udhr392/eng.drvf
+  ```
+
+- **job_output** `{"job_id": "bash-233"}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "ps -eo pid,etime,%cpu,rss,cmd --sort=-rss | grep -i python3 | grep -v grep | head -5 | cut -c1-110; echo \"--- tous les drave ---\"; pgrep -c drave 2>/dev/null || echo 0; echo \"--- job 233 ---\"; ls -la /proc/$(pgrep -f \"tailles\" | head -1) 2>/dev/null | head -2 || echo \"aucun proce … [57 caractères tronqués]`
+
+  ```
+2546488       44:40 99.9 6812864 python3 -u tools/grand_et_entree.py /tmp/cache392_train.npz /tmp/cache392_tes
+   2241 14-20:38:03  0.4 520060 /usr/local/bin/python3 -m uvicorn open_webui.main:app --host 0.0.0.0 --port 80
+2529717    02:02:25 26.1 33364 python3 /home/stephane/.local/bin/mdserve --port 8770 /home/stephane/Data13TB/s
+   1631 14-20:38:05  0.0 19320 /usr/bin/python3.13 /usr/bin/fail2ban-server -xf start
+2546486       44:40  0.0  4040 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c "impor
+--- tous les drave ---
+1
+--- job 233 ---
+total 0
+dr-xr-xr-x.   9 stephane stephane 0  6 oct 10:41 .
+  ```
+
+### 🤖 Assistant
+
+⏵ **La courbe tourne depuis 45 min pour un fit qui serait 5,8× plus rapide sous-échantillonné. Je l'arrête et j'applique le remède.**
+
+- **job_kill** `{"job_id": "bash-233", "reason": "Remplacé par la même mesure avec sous-échantillonnage 1/5 (5,8x plus rapide, -0,0045 mesuré)"}`
+
+  ```
+requested cancellation of job bash-233
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/grand_et_entree.py", "limit": 22, "offset": 56}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/grand_et_entree.py</path>
+<type>file</type>
+<content>
+56:     mt = np.vstack([Ytr[i] for i in itr]).mean(axis=0)
+57:     quad = lambda X: np.hstack([X, X*X])  # noqa: E731
+58: 
+59:     def evalue(fait, nom):
+60:         G = D = None
+61:         ntot = 0
+62:         for i in itr:
+63:             Ai = fait(i, True)
+64:             G = Ai.T @ Ai if G is None else G + Ai.T @ Ai
+65:             D = Ai.T @ (Ytr[i] - mt) if D is None else D + Ai.T @ (Ytr[i] - mt)
+66:             ntot += len(Ai)
+67:             del Ai
+68:         W = np.linalg.solve(G + ride*ntot*np.eye(G.shape[0]), D)
+69:         res = {cl: cos_lignes(fait(k, False) @ W + mt, Yte[k])
+70:                for k, cl in enumerate(clte)}
+71:         T = {cl: cos_lignes(np.tile(mt, (len(Yte[k]), 1)), Yte[k])
+72:              for k, cl in enumerate(clte)}
+73:         f = np.mean(list(res.values()))
+74:         ap = np.mean([res[c] - T[c] for c in clte])
+75:         print(f"  {nom:<26} {G.shape[0]:>5} caract. · fidélité {f:.4f} · "
+76:               f"apport {ap:+.4f}")
+77:         return res
+
+(Showing lines 56-77 of 124. Use offset=78 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/grand_et_entree.py", "new_string": "    mt = np.vstack([Ytr[i] for i in itr]).mean(axis=0)\n    quad = lambda X: np.hstack([X, X*X])  # noqa: E731\n    # SOUS-ÉCHANTILLONNAGE DU FIT. Le fit est une régression sur 472 472 lignes :\n … [2289 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/grand_et_entree.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"import ast; ast.parse(open('tools/grand_et_entree.py').read()); print('syntaxe OK')\" && python3 -u tools/grand_et_entree.py /tmp/cache392_train.npz /tmp/cache392_test.npz --tailles 200,400,800 --sous-ech 5 2>&1 | tail - … [85 caractères tronqués]`
+
+  ```
+started background job bash-234
+  ```
+
+- **bash** `{"command": "ls /home/stephane/Data13TB/stephane/corpus/udhr/udhr392_c8 | wc -l; date '+%H:%M'", "description": "Check c8 progress"}`
+
+  ```
+210
+11:27
+  ```
+
+### 🤖 Assistant
+
+Vous avez raison sur un point, et il m'a coûté 4 heures. Sur le reste, la mesure dit autre chose que mon intuition — et que la vôtre.
+
+## Le pipeline en quatre étapes, coût mesuré de chacune
+
+| étape | ce qu'elle fait | coût mesuré |
+|---|---|---|
+| **1. Passe professeur** | fait tourner Qwen2.5-0.5B, écrit couche 0 et couche cible à chaque position | **39,3 s par langue** → 392 langues = **4 h 17** |
+| **2. Cache** | lit les `.drvf` en `.npz` | 16 s |
+| **3. Construction du réservoir** | boucle Python sur les 472 472 pas du corpus | 24 µs/pas → **0,4 min pour 40 neurones** |
+| **4. Trajectoires de test** | rejoue le réseau sur le test | ~5 s pour 41 langues |
+| **5. Ajustement de la lecture** | accumule `AᵀA` sur 472 472 lignes | **LE GOULOT** |
+
+**La construction du réservoir — celle qu'on soupçonnait — est l'étape la moins chère du pipeline.** 0,4 minute pour 40 neurones sur 472 472 pas.
+
+## Le vrai goulot : le fit de la lecture
+
+La lecture est ajustée par moindres carrés ridgés sur **472 472 lignes**. Le coût est `O(lignes × caractéristiques²)`, et les caractéristiques valent `2 × neurones + 896` :
+
+| neurones | caractéristiques | temps de fit mesuré |
+|---:|---:|---:|
+| 40 | 80 | quelques secondes |
+| 200 | 1 296 | **~22 min** |
+| 800 | 2 496 | **~80 min** |
+
+Ce n'est pas de la surcharge : c'est ~1,7 TFLOP de calcul dense. **Ce n'est pas le modèle qui est lent, c'est une régression sur un demi-million de lignes.**
+
+## Votre intuition « millisecondes » tient à moitié
+
+**L'évaluation est rapide** : les 41 langues de test, 76 812 pas, en ~5 s — 0,1 s par langue. C'est la récurrence, séquentielle en `t`, à ~50 µs par pas.
+
+**Le fit, lui, ne peut pas être en millisecondes** : 472 472 équations à 1 296 inconnues, c'est 22 minutes au rythme du matériel (1,2 TFLOP/s effectif). Le chiffre est cohérent.
+
+## Vous avez raison sur la passe professeur — et l'erreur est pire que ça
+
+Le professeur a tourné **deux fois** : j'ai d'abord visé la couche 10, découvert que la **couche 8** est le plateau, puis retracé les 392 langues. **4 h 17 perdues par mon choix de cible.**
+
+Et le détail qui agace : `--trace-couches` ne filtre que l'**écriture**. La passe avant exécute les 24 couches de toute façon. Écrire 0, 4, 8, 10, 12, 16 au lieu de 0 et 10 n'aurait **presque rien coûté** et aurait rendu la question du plateau réponseable sans aucune repasse. Ma convention écrivait le minimum et payait le maximum.
+
+## Un remède gratuit, mesuré
+
+Une régression sur 472 472 lignes est massivement sur-déterminée. Mesuré (lecture linéaire sur l'entrée, évaluation sur **tout** le test) :
+
+| sous-échantillonnage | lignes | temps de fit | fidélité TEST |
+|---|---:|---:|---:|
+| 1/1 | 472 472 | 328,0 s | 0,6364 |
+| **1/5** | **94 634** | **56,4 s** | **0,6319** |
+| 1/20 | 23 790 | 14,9 s | 0,6161 |
+
+**Une ligne sur cinq : 5,8× plus rapide pour 0,0045 de fidélité** (0,7 % en relatif). Je viens de l'appliquer et de relancer la courbe 200/400/800 neurones — elle serait passée de ~2 h à ~45 min.
+
+Les autres leviers, par ordre de gain : **tracer toutes les couches utiles en une passe** (4 h 17 économisées, coût nul), Gram en `float32` (~2×), cache des états sur disque, et **vectoriser le réservoir sur les langues** — elles sont indépendantes, or je boucle `pour chaque langue : pour chaque pas` au lieu de `pour chaque pas : toutes les langues`. Cela ferait passer 472 472 itérations Python à ~4 000.
+
+État : trace couche 8 à **210/392** langues (~1 h 50 restantes), courbe relancée.
+
+
+## Tour 174
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de représentation universelle), boîte noire (on ne lit du professeur que la couche à émuler, jamais sa tête ni ses jetons générés), aucune rétropropagation (A et B aléatoires et gelés, seule la lecture s'ajuste en forme fermée), et chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, TAILLE du réseau, avec le diagnostic oracle sur les deux panneaux (test hors vivier et validation du même vivier)."
+Round: 47/256
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ **Point d'étape, puis progression vers l'objectif.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== c8 ===\"; ls /home/stephane/Data13TB/stephane/corpus/udhr/udhr392_c8 | wc -l; echo \"=== courbe (job 234) ===\"; ps -eo pid,etime,%cpu,rss,cmd --sort=-rss | grep grand_et_entree | grep -v grep | head -1 | cut -c1-90; echo  … [101 caractères tronqués]`
+
+  ```
+=== c8 ===
+210
+=== courbe (job 234) ===
+2555649       00:36  100 5902396 python3 -u tools/grand_et_entree.py /tmp/cache392_train.n
+=== mémoire ===
+               total        used        free      shared  buff/cache   available
+Mem:             125          25           8           7          99          99
+11:27
+  ```
+
+### 🤖 Assistant
+
+⏵ **L'objectif exige l'oracle sur DEUX panneaux. Mon profil ne le fait que sur le test — je corrige avant que la chaîne couche 8 ne l'appelle.**
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/profil_langues.py", "limit": 55, "offset": 88}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/profil_langues.py</path>
+<type>file</type>
+<content>
+88:         n = len(open(p, encoding="utf-8", errors="replace").read()) if os.path.exists(p) else 0
+89:         tk[cl] = len(Yte[i])/max(n, 1)
+90: 
+91:     itr = np.arange(len(cltr))
+92:     mt = np.vstack([Ytr[i] for i in itr]).mean(axis=0)
+93: 
+94:     def mesure(a_min, a_max, nom):
+95:         P = Pont((cltr, Etr, Ytr), a, graine, len(garde))
+96:         P.quadratique = True
+97:         P.a_min, P.a_max = a_min, a_max
+98:         P.nait(n_neur, True)
+99:         idx = np.arange(P.compte_neurones)
+100:         W = P.ajuste(idx, ride, mt, itr)
+101:         Xte = P.recalcule(idx, Ete)
+102:         lignes = []
+103:         for k, cl in enumerate(clte):
+104:             B = Yte[k]
+105:             A = P.phi(P._norm(Xte[k]))
+106:             lignes.append({
+107:                 "cl": cl,
+108:                 "fid": cos_lignes(A @ W + mt, B),
+109:                 "oracle": cos_lignes(
+110:                     A @ np.linalg.solve(A.T @ A + ride*len(A)*np.eye(A.shape[1]),
+111:                                         A.T @ (B - mt)) + mt, B),
+112:                 "temoin": cos_
+… [1747 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/profil_langues.py", "new_string": "    itr = np.arange(len(cltr))\n    # DEUX PANNEAUX, comme l'exige le protocole. Le TEST est HORS VIVIER (langues\n    # jamais vues). La VALIDATION est du MÊME VIVIER que l'apprentissage : elle d … [6155 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/profil_langues.py has been updated successfully.
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le protocole change le fit (validation exclue du vivier d'ajustement) : je dois recalculer la couche 10 avec le MÊME code pour que la comparaison tienne.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"import ast; ast.parse(open('tools/profil_langues.py').read()); print('profil_langues : syntaxe OK')\" && python3 - <<'PY'\np='/tmp/c8_analyse.sh'; s=open(p).read()\nold = \"\"\"echo \"\" >> /tmp/c8_analyse.log\necho \"== … [1537 caractères tronqués]`
+
+  ```
+profil_langues : syntaxe OK
+c8_analyse.sh mis à jour
+c8_analyse : syntaxe OK
+45:python3 -u tools/profil_langues.py /tmp/cache392_train.npz /tmp/cache392_test.npz \
+46:   --neur 40 --part 0.5 --csv /tmp/profil_l10.csv >> /tmp/c8_analyse.log 2>&1
+50:python3 -u tools/profil_langues.py /tmp/cache392c8_train.npz /tmp/cache392c8_test.npz \
+51:   --neur 40 --part 0.5 --csv /tmp/profil_c8.csv >> /tmp/c8_analyse.log 2>&1
+64:a, b = lit('/tmp/profil_l10.csv'), lit('/tmp/profil_c8.csv')
+  ```
+
+### 🤖 Assistant
+
+⏵ **Je teste le nouveau profil maintenant pour ne pas laisser la chaîne couche 8 dépendre d'un code non vérifié.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cp /tmp/profil_langues.csv /tmp/profil_langues_coupe10_v1.csv 2>/dev/null; python3 -u tools/profil_langues.py /tmp/cache392_train.npz /tmp/cache392_test.npz --neur 40 --part 0.5 --csv /tmp/profil_l10.csv 2>&1 | head -30", "descriptio … [71 caractères tronqués]`
+
+  ```
+started background job bash-235
+  ```
+
+- **bash** `{"command": "sleep 420; echo \"=== c8 ===\"; ls /home/stephane/Data13TB/stephane/corpus/udhr/udhr392_c8 | wc -l; date '+%H:%M'", "description": "Wait for profile validation", "timeoutMs": 460000}`
+
+  ```
+=== c8 ===
+223
+11:35
+  ```
+
+### 👤 Utilisateur
+
+background job bash-235 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cp /tmp/profil_langues.csv /tmp/profil_langues_coupe10_v1.csv 2>/dev/null; python3 -u tools/profil_langues.py /tmp/cache392_train.npz /tmp/cache392_test.npz --neur 40 --part 0.5 --csv /tmp/profil_l10.csv 2>&1 | head -30) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-235"}`
+
+  ```
+# 351 langues d'apprentissage · 41 langues de test · H=896
+# canaux partagés : 896/896 (100%)
+# vivier : 300 langues d'ajustement · 51 de validation (même vivier) · 41 de test (hors vivier)
+
+=== MONO-ÉCHELLE (référence, a=0,2) ===
+#   constante de temps unique : 0.2
+#   TAILLE DU RÉSEAU : 40 neurones · 1 couche(s) [40] · 80 caractéristiques
+#   TEST       (hors vivier) : fidélité 0.5960 · témoin 0.5678 · APPORT +0.0282 · oracle 0.6935
+#   VALIDATION (même vivier) : fidélité 0.6206 · témoin 0.5889 · APPORT +0.0317 · oracle 0.6318
+#   écart à l'oracle : TEST (hors vivier) +0.0975 · VALIDATION (même vivier) +0.0112
+#   apport ↔ fragmentation : Pearson +0.7986 (R² 0.6378)
+#   apport ↔ norme         : Pearson -0.5834
+#   oracle ↔ norme         : Pearson -0.8368
+
+=== MULTI-ÉCHELLE (a de 0.02 à 0.8) ===
+#   constantes de temps : 0.020 à 0.800 (médiane 0.127)
+#   TAILLE DU RÉSEAU : 40 neurones · 1 couche(s) [40] · 80 caractéristiques
+#   TEST       (hors vivier) : fidélité 0.5985 · témoin 0.5678 · APPORT +0.0307 · oracle 0.6994
+#   VALIDATION (même vivier) : fidélité 0.6238 · témoin 0.5889 · APPORT +0.0349 · oracle 0.6354
+#   écart à l'oracle : TEST (hors vivier) +0.1009 · VALIDATION (même
+… [486 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le protocole deux panneaux isole enfin la cause : l'écart à l'oracle est de +0,0975 hors vivier contre +0,0112 dans le vivier. C'est le TRANSFERT, pas les caractéristiques.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 36. Le protocole à DEUX PANNEAUX tranche : le goulot est le TRANSFERT, pas les caractéristiques\n\nLe protocole exige l'oracle sur de … [5149 caractères tronqués]`

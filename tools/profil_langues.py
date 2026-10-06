@@ -89,7 +89,26 @@ def main():
         tk[cl] = len(Yte[i])/max(n, 1)
 
     itr = np.arange(len(cltr))
+    # DEUX PANNEAUX, comme l'exige le protocole. Le TEST est HORS VIVIER (langues
+    # jamais vues). La VALIDATION est du MÊME VIVIER que l'apprentissage : elle dit
+    # si un écart vient du transfert ou des caractéristiques. Un langage
+    # d'apprentissage sur sept est mis de côté — il sert à la validation ET reste
+    # dans le vivier dont `mt` est tiré.
+    ival = itr[::7]
+    iap = np.array([i for i in itr if i not in set(ival.tolist())])
+    print(f"# vivier : {len(iap)} langues d'ajustement · {len(ival)} de validation "
+          f"(même vivier) · {len(clte)} de test (hors vivier)")
     mt = np.vstack([Ytr[i] for i in itr]).mean(axis=0)
+    Ev = [Etr[i] for i in ival]
+    Yv = [Ytr[i] for i in ival]
+
+    def oracle_sur(P, W, Ek, Yk):
+        """Un ajustement PRIVÉ sur le jeu évalué : diagnostic, pas modèle."""
+        Xk = P.recalcule(np.arange(P.compte_neurones), Ek)
+        A = P.phi(np.vstack(Xk))
+        B = np.vstack(Yk)
+        Wo = np.linalg.solve(A.T @ A + ride*len(A)*np.eye(A.shape[1]), A.T @ (B - mt))
+        return cos_lignes(A @ Wo + mt, B), cos_lignes(A @ W + mt, B)
 
     def mesure(a_min, a_max, nom):
         P = Pont((cltr, Etr, Ytr), a, graine, len(garde))
@@ -97,7 +116,8 @@ def main():
         P.a_min, P.a_max = a_min, a_max
         P.nait(n_neur, True)
         idx = np.arange(P.compte_neurones)
-        W = P.ajuste(idx, ride, mt, itr)
+        # la lecture est ajustée sur le VIVIER D'AJUSTEMENT, pas sur la validation
+        W = P.ajuste(idx, ride, mt, iap)
         Xte = P.recalcule(idx, Ete)
         lignes = []
         for k, cl in enumerate(clte):
@@ -128,8 +148,18 @@ def main():
                   f"(médiane {np.median(av):.3f})")
         else:
             print(f"#   constante de temps unique : {a}")
-        print(f"#   fidélité {f.mean():.4f} · témoin {t.mean():.4f} · "
-              f"APPORT {g.mean():+.4f} · oracle {o.mean():.4f}")
+        print(f"#   TAILLE DU RÉSEAU : {P.compte_neurones} neurones · "
+              f"{len(P.couches)} couche(s) {P.couches} · "
+              f"{P.phi(np.zeros((1, P.compte_neurones))).shape[1]} caractéristiques")
+        print(f"#   TEST       (hors vivier) : fidélité {f.mean():.4f} · "
+              f"témoin {t.mean():.4f} · APPORT {g.mean():+.4f} · oracle {o.mean():.4f}")
+        ov, nv = oracle_sur(P, W, Ev, Yv)
+        tv = np.mean([cos_lignes(np.tile(mt, (len(Yv[i]), 1)), Yv[i])
+                      for i in range(len(Yv))])
+        print(f"#   VALIDATION (même vivier) : fidélité {nv:.4f} · témoin {tv:.4f} · "
+              f"APPORT {nv-tv:+.4f} · oracle {ov:.4f}")
+        print(f"#   écart à l'oracle : TEST (hors vivier) {o.mean()-f.mean():+.4f} · "
+              f"VALIDATION (même vivier) {ov-nv:+.4f}")
         print(f"#   apport ↔ fragmentation : Pearson {corr(fr, g)[0]:+.4f} "
               f"(R² {corr(fr, g)[0]**2:.4f})")
         print(f"#   apport ↔ norme         : Pearson {corr(n, g)[0]:+.4f}")

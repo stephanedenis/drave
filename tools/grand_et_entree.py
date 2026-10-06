@@ -55,14 +55,22 @@ def main():
     itr = np.arange(len(cltr))
     mt = np.vstack([Ytr[i] for i in itr]).mean(axis=0)
     quad = lambda X: np.hstack([X, X*X])  # noqa: E731
+    # SOUS-ÉCHANTILLONNAGE DU FIT. Le fit est une régression sur 472 472 lignes :
+    # massivement sur-déterminée. Mesuré (§35.5, lecture linéaire sur l'entrée,
+    # évaluation sur TOUT le test) : garder une ligne sur cinq rend le fit 5,8×
+    # plus rapide et coûte 0,0045 de fidélité (0,6364 → 0,6319). Le coût du fit est
+    # O(lignes × caractéristiques²), donc c'est le seul levier qui compte quand on
+    # monte à 800 neurones. L'ÉVALUATION, elle, n'est jamais sous-échantillonnée.
+    se = int(opt("--sous-ech", 5))
 
     def evalue(fait, nom):
         G = D = None
         ntot = 0
         for i in itr:
-            Ai = fait(i, True)
+            Ai = fait(i, True)[::se]
+            Yi = Ytr[i][::se] - mt
             G = Ai.T @ Ai if G is None else G + Ai.T @ Ai
-            D = Ai.T @ (Ytr[i] - mt) if D is None else D + Ai.T @ (Ytr[i] - mt)
+            D = Ai.T @ Yi if D is None else D + Ai.T @ Yi
             ntot += len(Ai)
             del Ai
         W = np.linalg.solve(G + ride*ntot*np.eye(G.shape[0]), D)
@@ -72,8 +80,8 @@ def main():
              for k, cl in enumerate(clte)}
         f = np.mean(list(res.values()))
         ap = np.mean([res[c] - T[c] for c in clte])
-        print(f"  {nom:<26} {G.shape[0]:>5} caract. · fidélité {f:.4f} · "
-              f"apport {ap:+.4f}")
+        print(f"  {nom:<26} {G.shape[0]:>5} caract. · {ntot} lignes (1/{se}) · "
+              f"fidélité {f:.4f} · apport {ap:+.4f}")
         return res
 
     # LA COURBE, PAS UN POINT. Le §34 a montré que l'apport marginal du réservoir

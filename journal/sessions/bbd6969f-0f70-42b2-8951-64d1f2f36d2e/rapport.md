@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 188.6 h |
-| Tours | 173 |
-| Messages | 8775 |
-| Appels d'outils | 8281 |
+| Durée | 188.8 h |
+| Tours | 174 |
+| Messages | 8794 |
+| Appels d'outils | 8297 |
 | Fichiers touchés | 190 |
-| Commandes | 7030 |
+| Commandes | 7039 |
 | Sous-agents | 32 |
-| Commits | 630 |
+| Commits | 631 |
 | Compactages de contexte | 12 |
 
 ## Objectifs déclarés
@@ -399,6 +399,8 @@
 **Tour 172** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 **Tour 173** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
+
+**Tour 174** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -8671,7 +8673,7 @@ Rien à faire de votre côté. Commit `0b91cb0`.
 
 ### Tour 173 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
 
-*156 appels d'outils.* Actions notables :
+*164 appels d'outils.* Actions notables :
 
 - bash — Profile Dzongkha representation vs others
 - bash — Profile representations per language
@@ -8687,11 +8689,69 @@ Rien à faire de votre côté. Commit `0b91cb0`.
 - bash — Read results section and defaults
 - bash — Read evalue and end of main
 - bash — Read nait and recalcule signatures
-- … et 121 autres
+- … et 127 autres
 
 **Synthèse produite :**
 
-⏵ **Chiffres obtenus. Un remède gratuit : 1/5 des lignes = 5,8× plus rapide pour −0,0045 de fidélité.**
+Vous avez raison sur un point, et il m'a coûté 4 heures. Sur le reste, la mesure dit autre chose que mon intuition — et que la vôtre.
+
+\## Le pipeline en quatre étapes, coût mesuré de chacune
+
+| étape | ce qu'elle fait | coût mesuré |
+|---|---|---|
+| **1. Passe professeur** | fait tourner Qwen2.5-0.5B, écrit couche 0 et couche cible à chaque position | **39,3 s par langue** → 392 langues = **4 h 17** |
+| **2. Cache** | lit les `.drvf` en `.npz` | 16 s |
+| **3. Construction du réservoir** | boucle Python sur les 472 472 pas du corpus | 24 µs/pas → **0,4 min pour 40 neurones** |
+| **4. Trajectoires de test** | rejoue le réseau sur le test | ~5 s pour 41 langues |
+| **5. Ajustement de la lecture** | accumule `AᵀA` sur 472 472 lignes | **LE GOULOT** |
+
+**La construction du réservoir — celle qu'on soupçonnait — est l'étape la moins chère du pipeline.** 0,4 minute pour 40 neurones sur 472 472 pas.
+
+\## Le vrai goulot : le fit de la lecture
+
+La lecture est ajustée par moindres carrés ridgés sur **472 472 lignes**. Le coût est `O(lignes × caractéristiques²)`, et les caractéristiques valent `2 × neurones + 896` :
+
+| neurones | caractéristiques | temps de fit mesuré |
+|---:|---:|---:|
+| 40 | 80 | quelques secondes |
+| 200 | 1 296 | **~22 min** |
+| 800 | 2 496 | **~80 min** |
+
+Ce n'est pas de la surcharge : c'est ~1,7 TFLOP de calcul dense. **Ce n'est pas le modèle qui est lent, c'est une régression sur un demi-million de lignes.**
+
+\## Votre intuition « millisecondes » tient à moitié
+
+**L'évaluation est rapide** : les 41 langues de test, 76 812 pas, en ~5 s — 0,1 s par langue. C'est la récurrence, séquentielle en `t`, à ~50 µs par pas.
+
+**Le fit, lui, ne peut pas être en millisecondes** : 472 472 équations à 1 296 inconnues, c'est 22 minutes au rythme du matériel (1,2 TFLOP/s effectif). Le chiffre est cohérent.
+
+\## Vous avez raison sur la passe professeur — et l'erreur est pire que ça
+
+Le professeur a tourné **deux fois** : j'ai d'abord visé la couche 10, découvert que la **couche 8** est le plateau, puis retracé les 392 langues. **4 h 17 perdues par mon choix de cible.**
+
+Et le détail qui agace : `--trace-couches` ne filtre que l'**écriture**. La passe avant exécute les 24 couches de toute façon. Écrire 0, 4, 8, 10, 12, 16 au lieu de 0 et 10 n'aurait **presque rien coûté** et aurait rendu la question du plateau réponseable sans aucune repasse. Ma convention écrivait le minimum et payait le maximum.
+
+\## Un remède gratuit, mesuré
+
+Une régression sur 472 472 lignes est m
+… [1000 caractères tronqués]
+
+### Tour 174 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
+
+*8 appels d'outils.* Actions notables :
+
+- bash — Check current state of jobs
+- read
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/profil_langues.py`
+- bash — Update c8 chain to recompute layer 10 with same code
+- bash — Validate new profile code on layer 10
+- bash — Wait for profile validation
+- job_output
+- bash — Report and commit two-panel finding
+
+**Synthèse produite :**
+
+⏵ **Le protocole deux panneaux isole enfin la cause : l'écart à l'oracle est de +0,0975 hors vivier contre +0,0112 dans le vivier. C'est le TRANSFERT, pas les caractéristiques.**
 
 ## 3. Travail accompli
 
@@ -8881,14 +8941,14 @@ Rien à faire de votre côté. Commit `0b91cb0`.
 | `/tmp/trace392c8.sh` | 1 | 0 |
 | `/tmp/unites8.sh` | 1 | 0 |
 | `/tmp/rj_graines.sh` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/profil_langues.py` | 2 | 4 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/profil_langues.py` | 2 | 5 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/leviers_pont.py` | 2 | 1 |
 | `/tmp/c8_analyse.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/controle_capacite.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/corpus_neuf.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_parallele.py` | 0 | 1 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/position_seule.py` | 1 | 2 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/grand_et_entree.py` | 1 | 2 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/grand_et_entree.py` | 1 | 3 |
 
 ### Sous-agents lancés
 
@@ -8967,7 +9027,7 @@ Rien à faire de votre côté. Commit `0b91cb0`.
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6990 autres
+- … et 6999 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9745,4 +9805,5 @@ Rien à faire de votre côté. Commit `0b91cb0`.
 - Introspection du bloc : trois erreurs, dont un chiffre de tête qui ne disait pas ce qu'il semblait  RÉTROSPECTIVE EN MODE INTROSPECTION + REVUE ADVERSE AUTONOME
 - Correction du §29 : le réservoir n'était pas inutile, il était TROP PETIT  La mesure qui manquait — un réservoir large AVEC accès à l'entrée — renverse la concl
 - Où va le temps : profil mesuré, et un remède gratuit à 5,8x  PROFIL PAR ÉTAPE (mesuré) :   1. Passe professeur            39,3 s/langue → 392 langues = 4 h 17  
+- Protocole à deux panneaux : le goulot est le TRANSFERT, pas les caractéristiques  Le protocole exige l'oracle sur le TEST (hors vivier) ET la VALIDATION (même v
 
