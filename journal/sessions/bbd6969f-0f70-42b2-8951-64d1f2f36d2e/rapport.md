@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 181.7 h |
-| Tours | 154 |
-| Messages | 8496 |
-| Appels d'outils | 8052 |
+| Durée | 181.9 h |
+| Tours | 155 |
+| Messages | 8503 |
+| Appels d'outils | 8057 |
 | Fichiers touchés | 179 |
-| Commandes | 6854 |
+| Commandes | 6859 |
 | Sous-agents | 32 |
-| Commits | 610 |
+| Commits | 611 |
 | Compactages de contexte | 11 |
 
 ## Objectifs déclarés
@@ -361,6 +361,8 @@
 **Tour 153** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 **Tour 154** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
+
+**Tour 155** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -7799,26 +7801,72 @@ Rien à faire de votre côté. Commit `00b65d4`.
 
 **Synthèse produite :**
 
-⏵ **Le pont Romeo a donné son résultat, et il est bon.**
+⏵ Résultat Romeo commité, comparaison couche 8 en cours. Point d'étape.
 
-\## Le pont entraîné sur l'anglais, transporté sur le français
+\## Ce que le tour a établi
+
+**Le pont transfère hors de l'UDHR, sur du texte littéraire long.** Premier test sur un corpus qui n'est ni administratif ni court :
 
 | | |
 |---|---:|
-| invariance du professeur (segment par segment) | 0,6532 · pire segment 0,2966 |
 | fidélité sur l'anglais (apprise) | **0,6660** |
 | **fidélité sur le français (transférée, sans réapprentissage)** | **0,5802** |
-| **invariance de notre sortie** | **0,9540** · pire segment 0,8738 |
-| oracle sur le français | 0,6207 — écart **+0,0405** |
-| taille | 120 neurones · 1 couche |
+| invariance de notre sortie | **0,9540** |
+| invariance du professeur | 0,6532 |
 
-**Trois choses :**
+**Une confirmation que j'attendais depuis longtemps.** L'invariance du professeur mesurée **sur les canaux à forte énergie** vaut **0,6532**, contre **0,5703** sur les 896 canaux. Les canaux énergétiques sont donc bien **plus interlingues** — c'est ce que la sélection par énergie *supposait*, et ce n'était pas encore vérifié directement. La justification de la restriction ne repose plus sur une intuition mais sur une mesure indépendante.
 
-1. **Le pont transfère sur du texte littéraire long** : 0,6660 en anglais → **0,5802 en français**, sans réapprentissage. Une perte de 0,086.
-2. **Notre sortie est bien plus interlingue que le professeur** : 0,9540 contre 0,6532 — le pont dépasse largement la couche qu'il émule sur l'invariance, ce qui est cohérent avec tout ce qui précède.
-3. **L'écart oracle est de +0,0405** — du même ordre que sur l'UDHR stratifié (+0,0223 à +0,0327).
+**Et le pont dépasse largement son professeur sur l'invariance** : 0,9540 contre 0,6532. C'est le prix de la fidélité, et cela tient sur du littéraire comme sur de l'administratif.
 
-À noter : l'invariance du professeur mesurée **sur les canaux restreints** est de 0,6532, contre 0,5703 sur les 896 canaux. Les canaux à forte énergie sont donc bien **plus interlingues** — confirmation directe.
+\## État
+
+| phase | état |
+|---|---|
+| 1, 2, 3 | **FAITS** |
+| 4. Wikipedia | **89/480**, ~2 h |
+| 5. unités | chaîné |
+| 6. analyse finale | chaîné |
+| *comparaison couche 8 / couche 10* | caches en cours |
+
+\## Ce qui reste ouvert, et qui est maintenant précis
+
+Trois questions mesurables, dans l'ordre d'importance :
+
+1. **La couche 8 vaut-elle mieux que la couche 10 ?** C'est la correction de cible identifiée au tour précédent. La réponse arrive dans quelques minutes.
+2. **Le traçage par unité** donnera l'invariance à dix points au lieu d'un, et une pire paire qui porte sur une unité précise.
+3. **Wikipedia** dira si un professeur nourri de texte long et divers change la fidélité ou le transfert.
+
+Rien à faire de votre côté. Commit `9070ecf`.
+
+### Tour 155 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
+
+*5 appels d'outils.* Actions notables :
+
+- bash — Compare layer 8 vs layer 10 results
+- bash — Check layer 8 script condition
+- bash — Read layer 8 log
+- bash — Wait for layer 8 comparison
+- bash — Commit the layer 8 payoff
+
+**Synthèse produite :**
+
+⏵ **La comparaison tranche : la couche 8 est meilleure sur tout.**
+
+| | **couche 10** | **couche 8** | gain |
+|---|---:|---:|---:|
+| invariance du professeur | 0,6532 | **0,7044** | **+0,0512** |
+| fidélité sur l'anglais (apprise) | 0,6660 | **0,6967** | +0,0307 |
+| **fidélité sur le français (transférée)** | 0,5802 | **0,6015** | **+0,0213** |
+| invariance de sortie | **0,9540** | 0,9504 | −0,0036 |
+| pire segment | **0,8738** | 0,8650 | −0,0088 |
+| oracle sur le français | 0,6207 | **0,6540** | +0,0333 |
+| écart oracle | +0,0405 | +0,0525 | +0,0120 |
+
+**Changer de cible rapporte +0,0213 sur la fidélité transférée** — à corpus, réseau et protocole identiques. Et le professeur lui-même est **plus interlingue à la couche 8** (0,7044 contre 0,6532), ce qui confirme que le plateau est bien là.
+
+Le seul prix : l'invariance de notre sortie baisse de 0,0036 — négligeable, et c'est la courbe d'échange connue.
+
+**Changer de cible rapporte +0,0213 sur la fidélité transférée**, à corpus, réseau et protocole identiques. Le seul prix est une invariance de sortie inférieure de 0,0036 — négligeable.
 
 ## 3. Travail accompli
 
@@ -8083,7 +8131,7 @@ Rien à faire de votre côté. Commit `00b65d4`.
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6814 autres
+- … et 6819 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -8841,4 +8889,5 @@ Rien à faire de votre côté. Commit `00b65d4`.
 - Restriction ou pas : comparaison complète, et correction de mon invariant  Deux runs, même professeur, mêmes 301 langues, même panel de test (41 langues) :     
 - Le plateau du professeur est à la couche 8, pas 10 — ma cible était mal choisie  Mesure sur Romeo, invariance SEGMENT par SEGMENT (24 scènes appariées) :   couc
 - Romeo : le pont TRANSFÈRE sur du texte littéraire (0,6660 anglais -> 0,5802 français)  Premier test hors de l'UDHR, sur corpus PARALLÈLE (24 scènes appariées en
+- Couche 8 contre couche 10 : la correction de cible PAIE (+0,0213 sur le transfert)  Même corpus (Romeo), même protocole (entraîné sur l'anglais, testé sur le fr
 

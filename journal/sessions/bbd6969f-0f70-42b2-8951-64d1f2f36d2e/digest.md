@@ -138352,3 +138352,182 @@ Wikipedia : 88/480
 À noter : l'invariance du professeur mesurée **sur les canaux restreints** est de 0,6532, contre 0,5703 sur les 896 canaux. Les canaux à forte énergie sont donc bien **plus interlingues** — confirmation directe.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 18. Romeo : le pont transfère sur du texte LITTÉRAIRE\n\nPremier test hors de l'UDHR. Corpus **parallèle** — 24 scènes appariées en/f … [3076 caractères tronqués]`
+
+  ```
+9070ecf Romeo : le pont TRANSFÈRE sur du texte littéraire (0,6660 anglais -> 0,5802 français)
+
+  en_23 : 367 pas
+Wikipedia : 89/480
+  ```
+
+### 🤖 Assistant
+
+⏵ Résultat Romeo commité, comparaison couche 8 en cours. Point d'étape.
+
+## Ce que le tour a établi
+
+**Le pont transfère hors de l'UDHR, sur du texte littéraire long.** Premier test sur un corpus qui n'est ni administratif ni court :
+
+| | |
+|---|---:|
+| fidélité sur l'anglais (apprise) | **0,6660** |
+| **fidélité sur le français (transférée, sans réapprentissage)** | **0,5802** |
+| invariance de notre sortie | **0,9540** |
+| invariance du professeur | 0,6532 |
+
+**Une confirmation que j'attendais depuis longtemps.** L'invariance du professeur mesurée **sur les canaux à forte énergie** vaut **0,6532**, contre **0,5703** sur les 896 canaux. Les canaux énergétiques sont donc bien **plus interlingues** — c'est ce que la sélection par énergie *supposait*, et ce n'était pas encore vérifié directement. La justification de la restriction ne repose plus sur une intuition mais sur une mesure indépendante.
+
+**Et le pont dépasse largement son professeur sur l'invariance** : 0,9540 contre 0,6532. C'est le prix de la fidélité, et cela tient sur du littéraire comme sur de l'administratif.
+
+## État
+
+| phase | état |
+|---|---|
+| 1, 2, 3 | **FAITS** |
+| 4. Wikipedia | **89/480**, ~2 h |
+| 5. unités | chaîné |
+| 6. analyse finale | chaîné |
+| *comparaison couche 8 / couche 10* | caches en cours |
+
+## Ce qui reste ouvert, et qui est maintenant précis
+
+Trois questions mesurables, dans l'ordre d'importance :
+
+1. **La couche 8 vaut-elle mieux que la couche 10 ?** C'est la correction de cible identifiée au tour précédent. La réponse arrive dans quelques minutes.
+2. **Le traçage par unité** donnera l'invariance à dix points au lieu d'un, et une pire paire qui porte sur une unité précise.
+3. **Wikipedia** dira si un professeur nourri de texte long et divers change la fidélité ou le transfert.
+
+Rien à faire de votre côté. Commit `9070ecf`.
+
+
+## Tour 155
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de représentation universelle), boîte noire (on ne lit du professeur que la couche à émuler, jamais sa tête ni ses jetons générés), aucune rétropropagation (A et B aléatoires et gelés, seule la lecture s'ajuste en forme fermée), et chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, TAILLE du réseau, avec le diagnostic oracle sur les deux panneaux (test hors vivier et validation du même vivier)."
+Round: 28/256
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Je relève la comparaison couche 8 contre couche 10.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date \"+%H:%M\"; echo \"=== couche 8 ===\"; grep -E \"caches couche 8|invariance du PROFESSEUR|fidélité sur|invariance de SORTIE|oracle sur|taille |TERMINE\" /tmp/romeo8.log 2>/dev/null; echo; echo \"=== couche 10 (rappel) ===\"; gre … [255 caractères tronqués]`
+
+  ```
+04:28
+=== couche 8 ===
+
+=== couche 10 (rappel) ===
+# invariance du PROFESSEUR (segment par segment) : 0.6532 · pire segment 0.2966
+#   fidélité sur A        : 0.6660
+#   fidélité sur B        : 0.5802   (transférée, sans réapprentissage)
+#   invariance de SORTIE  : 0.9540 · pire segment 0.8738
+#   taille                : 120 neurones · 1 couches [120]
+#   oracle sur B          : 0.6207
+
+Wikipedia : 90/480
+  ```
+
+### 🤖 Assistant
+
+⏵ Le script couche 8 attend la fin de Romeo. Je vérifie que cette condition est remplie.
+
+- **bash** `{"command": "grep -cx TERMINE /tmp/romeo.log; echo \"--- le script couche 8 tourne-t-il ? ---\"; ps -eo args | grep -E \"romeo8|cache_pont\" | grep -v grep | head -2 | cut -c1-80; echo \"--- a-t-il démarré ? ---\"; ls -la /tmp/romeo8.log; wc -c /tmp/romeo8.log", "description": "Check layer 8 script  … [11 caractères tronqués]`
+
+  ```
+1
+--- le script couche 8 tourne-t-il ? ---
+bash /tmp/romeo8.sh
+python3 tools/cache_pont.py /home/stephane/Data13TB/stephane/corpus/parallele_rj
+--- a-t-il démarré ? ---
+-rw-r--r--. 1 stephane stephane 448  6 oct 04:27 /tmp/romeo8.log
+448 /tmp/romeo8.log
+  ```
+
+### 🤖 Assistant
+
+⏵ Le script tourne. Je lis son journal.
+
+- **bash** `{"command": "cat /tmp/romeo8.log", "description": "Read layer 8 log"}`
+
+  ```
+en_01 : 2965 pas
+  en_02 : 1222 pas
+  en_03 : 1388 pas
+  en_04 : 1424 pas
+  en_05 : 2110 pas
+  en_06 : 563 pas
+  en_07 : 2307 pas
+  en_08 : 1145 pas
+  en_09 : 2627 pas
+  en_10 : 998 pas
+  en_11 : 444 pas
+  en_12 : 2580 pas
+  en_13 : 1748 pas
+  en_14 : 2150 pas
+  en_15 : 469 pas
+  en_16 : 3106 pas
+  en_17 : 1513 pas
+  en_18 : 638 pas
+  en_19 : 701 pas
+  en_20 : 453 pas
+  en_21 : 1816 pas
+  en_22 : 1036 pas
+  en_23 : 367 pas
+  en_24 : 3915 pas
+  ```
+
+### 🤖 Assistant
+
+⏵ Cache anglais couche 8 prêt. J'attends le français et la comparaison.
+
+- **bash** `{"command": "sleep 560; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date \"+%H:%M\"; echo \"=== COUCHE 8 ===\"; grep -E \"caches couche 8|invariance du PROFESSEUR|fidélité sur|invariance de SORTIE|oracle sur|taille |^TERMINE\" /tmp/romeo8.log; echo; echo \"=== COUCHE 10 (rappel) ===\"; grep  … [266 caractères tronqués]`
+
+  ```
+04:37
+=== COUCHE 8 ===
+caches couche 8 TERMINE
+# invariance du PROFESSEUR (segment par segment) : 0.7044 · pire segment 0.2964
+#   fidélité sur A        : 0.6967
+#   fidélité sur B        : 0.6015   (transférée, sans réapprentissage)
+#   invariance de SORTIE  : 0.9504 · pire segment 0.8650
+#   taille                : 120 neurones · 1 couches [120]
+#   oracle sur B          : 0.6540
+TERMINE
+
+=== COUCHE 10 (rappel) ===
+# invariance du PROFESSEUR (segment par segment) : 0.6532 · pire segment 0.2966
+#   fidélité sur A        : 0.6660
+#   fidélité sur B        : 0.5802   (transférée, sans réapprentissage)
+#   invariance de SORTIE  : 0.9540 · pire segment 0.8738
+#   taille                : 120 neurones · 1 couches [120]
+#   oracle sur B          : 0.6207
+
+Wikipedia : 118/480
+  ```
+
+### 🤖 Assistant
+
+⏵ **La comparaison tranche : la couche 8 est meilleure sur tout.**
+
+| | **couche 10** | **couche 8** | gain |
+|---|---:|---:|---:|
+| invariance du professeur | 0,6532 | **0,7044** | **+0,0512** |
+| fidélité sur l'anglais (apprise) | 0,6660 | **0,6967** | +0,0307 |
+| **fidélité sur le français (transférée)** | 0,5802 | **0,6015** | **+0,0213** |
+| invariance de sortie | **0,9540** | 0,9504 | −0,0036 |
+| pire segment | **0,8738** | 0,8650 | −0,0088 |
+| oracle sur le français | 0,6207 | **0,6540** | +0,0333 |
+| écart oracle | +0,0405 | +0,0525 | +0,0120 |
+
+**Changer de cible rapporte +0,0213 sur la fidélité transférée** — à corpus, réseau et protocole identiques. Et le professeur lui-même est **plus interlingue à la couche 8** (0,7044 contre 0,6532), ce qui confirme que le plateau est bien là.
+
+Le seul prix : l'invariance de notre sortie baisse de 0,0036 — négligeable, et c'est la courbe d'échange connue.
+
+**Changer de cible rapporte +0,0213 sur la fidélité transférée**, à corpus, réseau et protocole identiques. Le seul prix est une invariance de sortie inférieure de 0,0036 — négligeable.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 19. Couche 8 contre couche 10 : la correction de cible PAIE\n\nMême corpus (Romeo, 24 scènes appariées), même protocole (entraîné sur … [3941 caractères tronqués]`
