@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 194.5 h |
-| Tours | 179 |
-| Messages | 8999 |
-| Appels d'outils | 8483 |
+| Durée | 194.6 h |
+| Tours | 180 |
+| Messages | 9010 |
+| Appels d'outils | 8492 |
 | Fichiers touchés | 199 |
-| Commandes | 7192 |
+| Commandes | 7201 |
 | Sous-agents | 32 |
-| Commits | 647 |
+| Commits | 648 |
 | Compactages de contexte | 12 |
 
 ## Objectifs déclarés
@@ -411,6 +411,8 @@
 **Tour 178** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 **Tour 179** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
+
+**Tour 180** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -9056,7 +9058,54 @@ Cause arithmétique : `len(X)·trace(C)` vaut **~80× `trace(XᵀX)`**. Corrigé
 
 **Synthèse produite :**
 
-⏵ **Troisième point confirmé (n=96) : −0,0013 de fidélité pour +0,0256 d'invariance et +0,0671 de pire paire. Je consigne.**
+⏵ **Round 52 — état et acquis.**
+
+\## Deux résultats de fond ce round
+
+**1. La croissance entraînée sous contrainte d'invariance fonctionne — et c'est nouveau.** Le §48 avait validé la contrainte sur un réseau *déjà construit*. Restait à savoir si elle tient **pendant** la croissance. Deux croissances libres, mêmes réglages, à μ = 0 et μ = 0,1 :
+
+| neurones | μ = 0 · fid · inv · pire | **μ = 0,1 · fid · inv · pire** |
+|---:|---|---|
+| 40 | 0,6294 · 0,9084 · 0,6559 | 0,6278 · **0,9289** · **0,7329** |
+| 64 | 0,6287 · 0,8971 · 0,6625 | 0,6274 · **0,9201** · **0,7364** |
+| 96 | 0,6311 · 0,8819 · 0,6419 | 0,6298 · **0,9075** · **0,7090** |
+
+**À taille égale : −0,0013 de fidélité pour +0,0256 d'invariance et +0,0671 de pire paire.** Taux d'échange de **16 à 20 pour 1** sur l'invariance, **26 à 50 pour 1** sur la pire paire.
+
+**Et cela résout le problème du §47** : à 96 neurones, le réseau contraint a **plus d'invariance (0,9075) que le réseau non contraint en avait à 8 neurones** (0,8819) — avec une **meilleure** fidélité (0,6298 contre 0,6151). **La contrainte permet de grandir sans payer l'invariance**, ce que la croissance seule interdisait.
+
+*Réserve* : une graine par condition. L'écart entre graines mesuré ailleurs vaut 0,0026, du même ordre que le coût de fidélité. « Gratuit » se lit donc comme « indiscernable du bruit ».
+
+**2. La contrainte déplace la courbe, elle ne supprime pas la tension.** À 179 neurones (couche 8), balayage de μ : la contrainte y est même **plus rentable** (+0,0528 d'invariance pour 0,0070, soit 7,5:1). Mais passer de 40 à 179 neurones à μ = 0,1 donne toujours **+0,0288 de fidélité pour −0,1138 d'invariance** — 1 pour 4, même sens qu'avant.
+
+**Ce qui donne, pour la première fois, un choix d'architecture déduit des mesures :**
+- vouloir la **fidélité** → grandir, et accepter de perdre l'invariance ;
+- vouloir le **pont** → **40 neurones + μ = 0,1 : fidélité 0,6564 · invariance 0,9157 · pire paire 0,6224**.
+
+\## Le résultat de croissance non contraint, complet
+
+**191 nés → meilleur réseau 182 neurones** · fidélité apprentissage 0,6501 · VALIDATION 0,6339 · **TEST 0,6340** (témoin 0,5762, apport **+0,0578**) · **invariance 0,8659** · **pire paire 0,5556**.
+
+L'attrition est descendue de 191 à 9 neurones **avec une validation qui baissait à chaque pas** : le meilleur passage est le réseau né. Mais **le TEST préférait 144 neurones** (0,6362 contre 0,6340). Écart faible — mais le critère de sélection et la mesure d'intérêt ne désignent pas l
+… [1063 caractères tronqués]
+
+### Tour 180 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
+
+*9 appels d'outils.* Actions notables :
+
+- bash — Check chains status
+- bash — Measure tracing rates
+- bash — Kill the Crime tracing to free CPU
+- bash — Find CPU consumers
+- bash — Inspect the process tree
+- bash — Kill the orphaned drave process
+- bash — Check for partial trace files
+- bash — Remove the partial trace file
+- bash — Report and commit the orphan process incident
+
+**Synthèse produite :**
+
+⏵ **`en_05.drvf` est PARTIEL (30,8 Mo, tué en pleine écriture). Je le supprime et je consigne la leçon opérationnelle.**
 
 ## 3. Travail accompli
 
@@ -9341,7 +9390,7 @@ Cause arithmétique : `len(X)·trace(C)` vaut **~80× `trace(XᵀX)`**. Corrigé
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 7152 autres
+- … et 7161 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10136,4 +10185,5 @@ Cause arithmétique : `len(X)·trace(C)` vaut **~80× `trace(XᵀX)`**. Corrigé
 - Croissance + attrition à 392 langues : 182 neurones, TEST 0,6340, invariance 0,8659  PROTOCOLE ENTIER (couche 10, part-langues 0,5, ride 0,03, quadratique, mult
 - La contrainte d'invariance déplace la courbe, elle ne supprime pas la tension  Balayage de mu à 179 NEURONES (couche 8, 300/51/41 langues, 896 canaux) :    mu  
 - La contrainte d'invariance fonctionne DANS la croissance, à 16-20 pour 1  Deux croissances libres, mêmes réglages, à mu=0 et mu=0,1, comparées à taille égale : 
+- Un drave ORPHELIN volait 18 cœurs : 60 s par trace au lieu de 16  SYMPTÔME : le traçage Wikipedia tournait 4x trop lentement (60 s/trace au lieu de 16), soit 48
 

@@ -147999,3 +147999,233 @@ n104            104       1    0.6432   0.6288    0.6286   0.9061  0.6703 | comm
 ⏵ **Troisième point confirmé (n=96) : −0,0013 de fidélité pour +0,0256 d'invariance et +0,0671 de pire paire. Je consigne.**
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -E \"^n(40|64|96) \" /tmp/croissance3.log | awk '{printf \"  mu=0,1  %s : fidTEST %s · inv %s · pire %s\\n\", $1, $6, $7, $8}'; python3 - <<'PYEOF'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n … [3767 caractères tronqués]`
+
+  ```
+mu=0,1  n40 : fidTEST 0.6278 · inv 0.9289 · pire 0.7329
+  mu=0,1  n64 : fidTEST 0.6274 · inv 0.9201 · pire 0.7364
+  mu=0,1  n96 : fidTEST 0.6298 · inv 0.9075 · pire 0.7090
+61248eb La contrainte d'invariance fonctionne DANS la croissance, à 16-20 pour 1
+  ```
+
+### 🤖 Assistant
+
+⏵ **Round 52 — état et acquis.**
+
+## Deux résultats de fond ce round
+
+**1. La croissance entraînée sous contrainte d'invariance fonctionne — et c'est nouveau.** Le §48 avait validé la contrainte sur un réseau *déjà construit*. Restait à savoir si elle tient **pendant** la croissance. Deux croissances libres, mêmes réglages, à μ = 0 et μ = 0,1 :
+
+| neurones | μ = 0 · fid · inv · pire | **μ = 0,1 · fid · inv · pire** |
+|---:|---|---|
+| 40 | 0,6294 · 0,9084 · 0,6559 | 0,6278 · **0,9289** · **0,7329** |
+| 64 | 0,6287 · 0,8971 · 0,6625 | 0,6274 · **0,9201** · **0,7364** |
+| 96 | 0,6311 · 0,8819 · 0,6419 | 0,6298 · **0,9075** · **0,7090** |
+
+**À taille égale : −0,0013 de fidélité pour +0,0256 d'invariance et +0,0671 de pire paire.** Taux d'échange de **16 à 20 pour 1** sur l'invariance, **26 à 50 pour 1** sur la pire paire.
+
+**Et cela résout le problème du §47** : à 96 neurones, le réseau contraint a **plus d'invariance (0,9075) que le réseau non contraint en avait à 8 neurones** (0,8819) — avec une **meilleure** fidélité (0,6298 contre 0,6151). **La contrainte permet de grandir sans payer l'invariance**, ce que la croissance seule interdisait.
+
+*Réserve* : une graine par condition. L'écart entre graines mesuré ailleurs vaut 0,0026, du même ordre que le coût de fidélité. « Gratuit » se lit donc comme « indiscernable du bruit ».
+
+**2. La contrainte déplace la courbe, elle ne supprime pas la tension.** À 179 neurones (couche 8), balayage de μ : la contrainte y est même **plus rentable** (+0,0528 d'invariance pour 0,0070, soit 7,5:1). Mais passer de 40 à 179 neurones à μ = 0,1 donne toujours **+0,0288 de fidélité pour −0,1138 d'invariance** — 1 pour 4, même sens qu'avant.
+
+**Ce qui donne, pour la première fois, un choix d'architecture déduit des mesures :**
+- vouloir la **fidélité** → grandir, et accepter de perdre l'invariance ;
+- vouloir le **pont** → **40 neurones + μ = 0,1 : fidélité 0,6564 · invariance 0,9157 · pire paire 0,6224**.
+
+## Le résultat de croissance non contraint, complet
+
+**191 nés → meilleur réseau 182 neurones** · fidélité apprentissage 0,6501 · VALIDATION 0,6339 · **TEST 0,6340** (témoin 0,5762, apport **+0,0578**) · **invariance 0,8659** · **pire paire 0,5556**.
+
+L'attrition est descendue de 191 à 9 neurones **avec une validation qui baissait à chaque pas** : le meilleur passage est le réseau né. Mais **le TEST préférait 144 neurones** (0,6362 contre 0,6340). Écart faible — mais le critère de sélection et la mesure d'intérêt ne désignent pas le même réseau.
+
+## Un bug que j'ai introduit, et corrigé
+
+En réparant l'`IndexError` d'`opt` sur les drapeaux sans valeur, j'ai fait retourner `""` à un drapeau en **dernière position** — donc `if opt("--oracle", "")` devient **faux**. Le drapeau ne plantait plus, **il ne faisait plus rien**. Quatre drapeaux concernés : `--oracle`, `--centre-entree`, `--biais`, `--normalise`. **Un drapeau se teste par sa présence (`in sys.argv`), jamais par sa valeur.** C'est pourquoi le résultat ci-dessus n'a pas l'oracle ; la passe en cours (μ = 0,1, oracle réparé) le fournira.
+
+## État des chaînes
+
+| chaîne | avancement |
+|---|---|
+| **Croissance μ = 0,1** | 104 neurones · TEST 0,6287 · **invariance 0,9061** · pire 0,6703 |
+| **Wikipedia apparié** | 30 articles / 482 · ~290 traces / 2 892 |
+| **Crime et Châtiment** | 8 traces / 48 (nice 19) |
+| **Analyse Wikipedia** | armée, seuil 60 articles |
+
+Charge machine : **44 sur 40 threads**. Le corpus Wikipedia reste le chemin critique — à ce rythme il lui faut encore ~10 h, ce qui tient dans la fenêtre jusqu'à 08h00.
+
+
+## Tour 180
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de représentation universelle), boîte noire (on ne lit du professeur que la couche à émuler, jamais sa tête ni ses jetons générés), aucune rétropropagation (A et B aléatoires et gelés, seule la lecture s'ajuste en forme fermée), et chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, TAILLE du réseau, avec le diagnostic oracle sur les deux panneaux (test hors vivier et validation du même vivier)."
+Round: 53/256
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ **Point d'état, en priorité sur la croissance μ = 0,1 qui porte le protocole complet.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== croissance mu=0.1 ===\"; tail -3 /tmp/croissance3.log; echo; echo \"wiki : $(grep -c '^ARTICLE' /tmp/trace_wiki_apparie.log) articles · $(ls /home/stephane/Data13TB/stephane/corpus/wiki_apparie/traces | wc -l) traces\"; ec … [173 caractères tronqués]`
+
+  ```
+=== croissance mu=0.1 ===
+n96              96       1    0.6424   0.6285    0.6298   0.9075  0.7090 | communs -1.390 (  0 %) · contraste 0.985
+n104            104       1    0.6432   0.6288    0.6286   0.9061  0.6703 | communs -1.402 (  0 %) · contraste 0.986
+n112            112       1    0.6437   0.6291    0.6291   0.9044  0.6552 | communs -1.384 (  0 %) · contraste 0.986
+
+wiki : 31 articles · 293 traces
+crime : 9 traces
+ 17:18:11  up 15 days  6:30,  2 users,  load average: 45,56, 45,23, 44,54
+17:18
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le rythme du corpus Wikipedia est trop lent : 10,4 articles/h → 46 h pour 482. Je mesure et je décide.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && awk '{if($2 ~ /s$/) {gsub(\"s\",\"\",$2); s+=$2; n++}} END {printf \"wiki apparié : %d traces · %.1f s en moyenne · total %.0f min\\n\", n, s/n, s/60}' /tmp/trace_wiki_apparie.log; awk '{if($2 ~ /s$/) {gsub(\"s\",\"\",$2); s+=$2; n++ … [266 caractères tronqués]`
+
+  ```
+wiki apparié : 159 traces · 60.2 s en moyenne · total 159 min
+crime : 8 traces · 773.9 s en moyenne · total 103 min
+--- CPU par processus ---
+    PID %CPU     ELAPSED CMD
+2621201 1825       08:25 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/target
+2622910 1553       01:00 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/target
+2623111  300       00:00 ps -eo pid,%cpu,etime,cmd --sort=-%cpu
+2617053 88.6       32:52 python3 -u tools/pont_generatif.py /tmp/cache392_train.npz /tmp/c
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le traçage Crime coûte 774 s par trace (13 min) pour 48 traces — contre 60 s pour Wikipedia qui en a 2 892. Je l'arrête.**
+
+- **bash** `{"command": "python3 - <<'PY'\nimport os, signal\nmoi=os.getpid(); anc=set(); q=moi\nfor _ in range(10):\n    try:\n        st=open(f'/proc/{q}/stat').read().split(') ',1)[1].split(); q=int(st[1]); anc.add(q)\n    except Exception: break\ntues=[]\nfor d in os.listdir('/proc'):\n    if not d.isdigit( … [667 caractères tronqués]`
+
+  ```
+tués :
+  2601373 · bash -c cat > /tmp/trace_crime.sh <<'EOF'
+#!/bin/bash
+# DEUX
+  2601377 · bash /tmp/trace_crime.sh 
+  2602155 · bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet &
+--- débit Wikipedia sur les 60 dernières secondes ---
+en_AIM_120_AMRAAM 70s
+es_AIM_120_AMRAAM 95s
+fr_AIM_120_AMRAAM 92s
+it_AIM_120_AMRAAM 91s
+ 17:19:54  up 15 days  6:32,  2 users,  load average: 44,98, 45,25, 44,63
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le traçage Crime est arrêté mais les traces Wikipedia prennent encore 70-95 s. Je cherche ce qui occupe la machine.**
+
+- **bash** `{"command": "ps -eo pid,ppid,%cpu,nlwp,etime,cmd --sort=-%cpu | head -10 | cut -c1-110; echo \"--- somme CPU ---\"; ps -eo %cpu --no-headers | awk '{s+=$1} END {print s\"% sur 40 cœurs =\", s/40*100\"% de la machine\"}'", "description": "Find CPU consumers"}`
+
+  ```
+PID    PPID %CPU NLWP     ELAPSED CMD
+2621201    2357 1831   21       10:04 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/target/releas
+2623181 2591189 1593   21       01:08 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/target/releas
+2617053    2357 88.6    1       34:31 python3 -u tools/pont_generatif.py /tmp/cache392_train.npz /tmp/cache392
+ 710008  332808 49.1   11 11-05:23:53 node26 /home/stephane/.local/share/../bin/dsh --profile dsh-tui
+2062778 1843422 46.1   11  1-07:23:35 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui
+2623341  710008 33.3    1       00:00 bash -c ps -eo pid,ppid,%cpu,nlwp,etime,cmd --sort=-%cpu | head -10 | cu
+  11117   11106 32.8   11 15-02:19:23 node26 /home/stephane/Data13TB/stephane/GitHub/gods-eye-view/node_module
+   3770    2357 19.2   58 15-02:31:43 /usr/bin/plasmashell --no-respawn
+2141124 2141092 10.4   16  1-06:43:20 /opt/google/chrome/chrome --type=gpu-process --ozone-platform=x11 --cras
+--- somme CPU ---
+3705.8% sur 40 cœurs = 9264.5% de la machine
+  ```
+
+### 🤖 Assistant
+
+⏵ **Deux processus `drave` tournent en parallèle — un orphelin du premier lancement a survécu. Je vérifie l'arbre.**
+
+- **bash** `{"command": "for p in 2621201 2623181 2357 2591189; do echo \"--- pid $p ---\"; ps -o pid,ppid,etime,cmd -p $p 2>/dev/null | tail -1 | cut -c1-140; done; echo \"--- tous les scripts de traçage ---\"; ps -eo pid,ppid,cmd | grep -E \"trace_wiki|trace_crime\" | grep -v grep | cut -c1-110", "description … [30 caractères tronqués]`
+
+  ```
+--- pid 2621201 ---
+2621201    2357       10:22 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/target/release/drave /home/stephane/Data13TB/stephane
+--- pid 2623181 ---
+2623181 2591189       01:26 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/target/release/drave /home/stephane/Data13TB/stephane
+--- pid 2357 ---
+   2357       1 15-02:32:26 /usr/lib/systemd/systemd --user
+--- pid 2591189 ---
+2591189 2591185    02:42:25 bash /tmp/trace_wiki_apparie.sh
+--- tous les scripts de traçage ---
+2591189 2591185 bash /tmp/trace_wiki_apparie.sh
+  ```
+
+### 🤖 Assistant
+
+⏵ **Trouvé : un `drave` ORPHELIN (PPID = systemd) tourne depuis 10 min et vole 18 cœurs. Mon tueur avait tué le script mais pas son enfant.**
+
+- **bash** `{"command": "echo \"--- fichier écrit par l'orphelin 2621201 ---\"; tr '\\0' '\\n' < /proc/2621201/cmdline | grep -A1 \"trace-flux\"; echo \"--- fichier écrit par le légitime 2623181 ---\"; tr '\\0' '\\n' < /proc/2623181/cmdline | grep -A1 \"trace-flux\"; kill -TERM 2621201 2>/dev/null; sleep 3; ps  … [259 caractères tronqués]`
+
+  ```
+--- fichier écrit par l'orphelin 2621201 ---
+--trace-flux
+traces/en_05.drvf
+--- fichier écrit par le légitime 2623181 ---
+orphelin tué
+en_AIM_54_Phoenix 16s
+es_AIM_54_Phoenix 17s
+fr_AIM_54_Phoenix 17s
+ 17:21:35  up 15 days  6:33,  2 users,  load average: 27,84, 40,85, 43,22
+[stderr]
+bash: line 1: /proc/2623181/cmdline: No such file or directory
+  ```
+
+### 🤖 Assistant
+
+⏵ **Orphelin tué : les traces repassent de 80 s à 16-17 s, charge de 45 à 28. Je vérifie qu'aucun fichier partiel ne traîne.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"--- traces Crime (dont un partiel probable) ---\"; ls -la /home/stephane/Data13TB/stephane/corpus/parallele_crime/traces 2>/dev/null | tail -5; echo \"--- comparaison avec un en_05 complet attendu ? ---\"; tail -3 /tmp/trace_c … [229 caractères tronqués]`
+
+  ```
+--- traces Crime (dont un partiel probable) ---
+-rw-r--r--. 1 stephane stephane 30834262  6 oct 17:20 en_05.drvf
+-rw-r--r--. 1 stephane stephane 28809373  6 oct 15:43 es_01.drvf
+-rw-r--r--. 1 stephane stephane 40982792  6 oct 16:19 es_02.drvf
+-rw-r--r--. 1 stephane stephane 37135821  6 oct 16:43 es_03.drvf
+-rw-r--r--. 1 stephane stephane 42245000  6 oct 17:10 es_04.drvf
+--- comparaison avec un en_05 complet attendu ? ---
+en_04 661s
+es_04 922s
+SEGMENT 04
+
+--- débit Wikipedia maintenant ---
+en_AIM_54_Phoenix 16s
+es_AIM_54_Phoenix 17s
+fr_AIM_54_Phoenix 17s
+it_AIM_54_Phoenix 16s
+articles : 32
+  ```
+
+### 🤖 Assistant
+
+⏵ **`en_05.drvf` est PARTIEL (30,8 Mo, tué en pleine écriture). Je le supprime et je consigne la leçon opérationnelle.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la /home/stephane/Data13TB/stephane/corpus/parallele_crime/traces/en_05.drvf && rm -f /home/stephane/Data13TB/stephane/corpus/parallele_crime/traces/en_05.drvf && echo \"partiel supprimé\" && echo \"traces Crime restantes : $(ls  … [237 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 30834262  6 oct 17:20 /home/stephane/Data13TB/stephane/corpus/parallele_crime/traces/en_05.drvf
+partiel supprimé
+traces Crime restantes : 8 (4 segments complets : en_01-04 et es_01-04)
+en_01.drvf
+en_02.drvf
+en_03.drvf
+en_04.drvf
+es_01.drvf
+es_02.drvf
+es_03.drvf
+es_04.drvf
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 52. Un processus ORPHELIN volait la moitié de la machine — et mon propre outil de nettoyage l'avait laissé passer\n\n### 52.1 Le s … [4333 caractères tronqués]`
