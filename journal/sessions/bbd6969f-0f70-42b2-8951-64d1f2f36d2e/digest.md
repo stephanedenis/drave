@@ -143571,3 +143571,164 @@ TERMINE
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 32. Le §29 est-il un artefact d'alignement ? NON — mesuré\n\n### 32.1 Le soupçon\n\nL'UDHR est **un seul texte** traduit en 392 langu … [4206 caractères tronqués]`
+
+  ```
+4de5b2f Le §29 n'est PAS un artefact d'alignement — mesuré, et Wikipedia transfère mieux
+  ```
+
+### 🤖 Assistant
+
+⏵ **La mesure perdue est la plus informative : un réservoir de 200 neurones AVEC l'entrée fait-il mieux que l'entrée seule ?**
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"A200 + ENTRÉE — la mesure qui manquait, et la plus informative.\n\n§31 a montré que l'entrée seule (C_quad, 1 792 caractéristiques) vaut 0,6536, et\nqu'un réservoir de 40 neurones y ajoute +0,0073 (B = 0,6609). Mais un réservoir de\n200 neurones seul vaut 0 … [4174 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/grand_et_entree.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"import ast; ast.parse(open('tools/grand_et_entree.py').read()); print('syntaxe OK')\" && setsid nohup timeout 7200 python3 -u tools/grand_et_entree.py /tmp/cache392_train.npz /tmp/cache392_test.npz --grand 200 > /tmp/gra … [140 caractères tronqués]`
+
+  ```
+syntaxe OK
+09:42
+  ```
+
+- **bash** `{"command": "sleep 540; echo \"=== grand + entrée ===\"; cat /tmp/grand_entree.log; echo \"=== c8 ===\"; ls /home/stephane/Data13TB/stephane/corpus/udhr/udhr392_c8 2>/dev/null | wc -l; date '+%H:%M'", "description": "Wait for A200+input result", "timeoutMs": 580000}`
+
+  ```
+=== grand + entrée ===
+# 351 langues · 41 de test · 896/896 canaux
+# pont 200 neurones construit en 128 s
+
+=== MESURES ===
+  A200 seul                    400 caract. · fidélité 0.6218 · apport +0.0540
+=== c8 ===
+58
+09:51
+  ```
+
+- **bash** `{"command": "sleep 560; echo \"=== grand + entrée ===\"; cat /tmp/grand_entree.log; echo \"=== c8 ===\"; ls /home/stephane/Data13TB/stephane/corpus/udhr/udhr392_c8 2>/dev/null | wc -l; date '+%H:%M'", "description": "Wait for A200+input completion", "timeoutMs": 600000}`
+
+  ```
+=== grand + entrée ===
+# 351 langues · 41 de test · 896/896 canaux
+# pont 200 neurones construit en 128 s
+
+=== MESURES ===
+  A200 seul                    400 caract. · fidélité 0.6218 · apport +0.0540
+=== c8 ===
+75
+10:01
+  ```
+
+- **bash** `{"command": "sleep 900; echo \"=== grand + entrée ===\"; cat /tmp/grand_entree.log; echo \"=== c8 ===\"; ls /home/stephane/Data13TB/stephane/corpus/udhr/udhr392_c8 2>/dev/null | wc -l; date '+%H:%M'", "description": "Continue waiting for A200+input", "timeoutMs": 940000}`
+
+  ```
+(no output)
+[timed out after 600000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "echo \"=== grand + entrée ===\"; cat /tmp/grand_entree.log; echo \"=== processus ===\"; ps -o pid,etime,%cpu,rss -p $(pgrep -f grand_et_entree | tail -1) 2>/dev/null || echo \"terminé\"; echo \"=== c8 ===\"; ls /home/stephane/Data13TB/stephane/corpus/udhr/udhr392_c8 2>/dev/null | wc -l; … [58 caractères tronqués]`
+
+  ```
+=== grand + entrée ===
+# 351 langues · 41 de test · 896/896 canaux
+# pont 200 neurones construit en 128 s
+
+=== MESURES ===
+  A200 seul                    400 caract. · fidélité 0.6218 · apport +0.0540
+=== processus ===
+    PID     ELAPSED %CPU   RSS
+terminé
+=== c8 ===
+90
+10:11
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le job est mort une 2ᵉ fois. Je réduis la taille des caractéristiques et je passe par les jobs gérés du harnais.**
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/grand_et_entree.py", "new_string": "    print(\"\\n=== MESURES ===\")\n    a_g = evalue(lambda i, tr: quad(P.X[i] if tr else Xte[i]), f\"A{grand} seul\")\n    # L'ENTRÉE EST PRISE LINÉAIRE, PAS QUADRATIQUE. `quad(hstack([X, E]))`\n … [1753 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/grand_et_entree.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"import ast; ast.parse(open('tools/grand_et_entree.py').read()); print('syntaxe OK')\" && python3 -u tools/grand_et_entree.py /tmp/cache392_train.npz /tmp/cache392_test.npz --grand 200 2>&1 | tail -30", "description": "Ru … [65 caractères tronqués]`
+
+  ```
+started background job bash-232
+  ```
+
+- **bash** `{"command": "sleep 600; echo \"=== c8 ===\"; ls /home/stephane/Data13TB/stephane/corpus/udhr/udhr392_c8 2>/dev/null | wc -l; date '+%H:%M'", "description": "Wait and check c8 progress", "timeoutMs": 640000}`
+
+  ```
+=== c8 ===
+108
+10:22
+[timed out after 600000ms]
+  ```
+
+- **job_output** `{"job_id": "bash-232"}`
+
+  ```
+syntaxe OK
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cp /tmp/profil_langues.csv /tmp/profil_l10.csv && head -1 /tmp/profil_l10.csv && python3 - <<'PY'\np='/tmp/c8_analyse.sh'; s=open(p).read()\n# comparer des colonnes COMPARABLES : apport_ref (col 8) des deux côtés\ns=s.replace(\"    g … [1050 caractères tronqués]`
+
+  ```
+langue;frag;norme;norme896;pas;temoin;fid_ref;oracle_ref;apport_ref;fid_multi;apport_multi
+64:    g10, g8 = float(a[c][8]), float(b[c][10])
+68:    print(f"{c:<6}{float(a[c][8]):>+12.4f}{float(b[c][10]):>+11.4f}{e:>+9.4f}"
+72:      f"L8 {np.mean([float(b[c][10]) for c in cl]):+.4f}")
+82:              f"L8 {float(b[nom][10]):+.4f} · oracle {float(a[nom][7]):.4f} → "
+syntaxe OK
+[stderr]
+  File "<stdin>", line 6
+    s=s.replace('print(f"  {nom} : apport L10 {float(a[nom][8]):+.4f} → "\n              f"L8 {float(b[nom][10]):+.4f}','print(f"  {nom} : apport L10 {float(a[nom][8]):+.4f} → "\n              f"L8 {float(b[nom][8]):+.4f}')')
+                                                                                                                                                                                                                               ^
+SyntaxError: unterminated string literal (detected at line 6)
+  ```
+
+- **bash** `{"command": "sed -i 's/b\\[c\\]\\[10\\]/b[c][8]/g; s/b\\[nom\\]\\[10\\]/b[nom][8]/g' /tmp/c8_analyse.sh && grep -n \"b\\[c\\]\\[\\|b\\[nom\\]\\[\" /tmp/c8_analyse.sh && bash -n /tmp/c8_analyse.sh && echo \"syntaxe OK\"", "description": "Fix column indices with sed"}`
+
+  ```
+64:    g10, g8 = float(a[c][8]), float(b[c][8])
+65:    o10, o8 = float(a[c][7]), float(b[c][7])
+68:    print(f"{c:<6}{float(a[c][8]):>+12.4f}{float(b[c][8]):>+11.4f}{e:>+9.4f}"
+69:          f"{float(a[c][7]):>12.4f}{float(b[c][7]):>11.4f}")
+72:      f"L8 {np.mean([float(b[c][8]) for c in cl]):+.4f}")
+74:      f"L8 {np.mean([float(b[c][7]) for c in cl]):.4f}")
+82:              f"L8 {float(b[nom][8]):+.4f} · oracle {float(a[nom][7]):.4f} → "
+83:              f"{float(b[nom][7]):.4f}")
+syntaxe OK
+  ```
+
+- **bash** `{"command": "sleep 420; echo \"=== c8 ===\"; ls /home/stephane/Data13TB/stephane/corpus/udhr/udhr392_c8 2>/dev/null | wc -l; date '+%H:%M'", "description": "Wait and check progress", "timeoutMs": 460000}`
+
+  ```
+=== c8 ===
+122
+10:30
+  ```
+
+- **job_output** `{"job_id": "bash-232"}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 🤖 Assistant
+
+⏵ **J'écris l'introspection du bloc pendant que le calcul tourne.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 33. Introspection du bloc — ce que j'ai cassé, et ce que j'ai appris sur ma propre mesure\n\nLe mandat demande des rétrospectives en  … [7309 caractères tronqués]`

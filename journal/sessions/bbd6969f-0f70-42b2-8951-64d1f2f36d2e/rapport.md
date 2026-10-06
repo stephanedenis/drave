@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 186.9 h |
+| Durée | 187.7 h |
 | Tours | 173 |
-| Messages | 8738 |
-| Appels d'outils | 8246 |
-| Fichiers touchés | 189 |
-| Commandes | 7005 |
+| Messages | 8753 |
+| Appels d'outils | 8261 |
+| Fichiers touchés | 190 |
+| Commandes | 7016 |
 | Sous-agents | 32 |
-| Commits | 627 |
+| Commits | 628 |
 | Compactages de contexte | 12 |
 
 ## Objectifs déclarés
@@ -8671,7 +8671,7 @@ Rien à faire de votre côté. Commit `0b91cb0`.
 
 ### Tour 173 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
 
-*121 appels d'outils.* Actions notables :
+*136 appels d'outils.* Actions notables :
 
 - bash — Profile Dzongkha representation vs others
 - bash — Profile representations per language
@@ -8687,11 +8687,11 @@ Rien à faire de votre côté. Commit `0b91cb0`.
 - bash — Read results section and defaults
 - bash — Read evalue and end of main
 - bash — Read nait and recalcule signatures
-- … et 94 autres
+- … et 107 autres
 
 **Synthèse produite :**
 
-⏵ **Position seule : +0,0145 sur l'UDHR aligné, +0,0101 sur Wikipedia non aligné. Le §29 n'est PAS un artefact d'alignement.**
+⏵ **J'écris l'introspection du bloc pendant que le calcul tourne.**
 
 ## 3. Travail accompli
 
@@ -8888,6 +8888,7 @@ Rien à faire de votre côté. Commit `0b91cb0`.
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/corpus_neuf.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_parallele.py` | 0 | 1 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/position_seule.py` | 1 | 2 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/grand_et_entree.py` | 1 | 1 |
 
 ### Sous-agents lancés
 
@@ -8966,7 +8967,7 @@ Rien à faire de votre côté. Commit `0b91cb0`.
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6965 autres
+- … et 6976 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9741,4 +9742,5 @@ Rien à faire de votre côté. Commit `0b91cb0`.
 - Couche 8 contre couche 10 au niveau des unités : +0,0495 de fidélité  Traçage par unité (17 langues d'apprentissage, 230 unités de test, dix points alignés par 
 - Contrôle de capacité : l'entrée gagne par nature, sans que ce soit tranché  Objection du §29 : C (entrée seule, 1792 caractéristiques) bat A (40 neurones, 80 ca
 - Le §29 n'est PAS un artefact d'alignement — mesuré, et Wikipedia transfère mieux  LE SOUPÇON : l'UDHR est un seul texte en 392 langues, donc à la position t tou
+- Introspection du bloc : trois erreurs, dont un chiffre de tête qui ne disait pas ce qu'il semblait  RÉTROSPECTIVE EN MODE INTROSPECTION + REVUE ADVERSE AUTONOME
 
