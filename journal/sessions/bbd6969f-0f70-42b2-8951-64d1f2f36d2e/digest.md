@@ -135886,3 +135886,201 @@ X  154307 × 120 : X'X + X'Y en    4.5 s  (mémoire 74 Mo)
 Le chronométrage tranche : **22 s par neurone** à l'échelle finale, soit **35 min à 1,7 h** par run. C'est acceptable — la phase 1 finit vers 02h30 de toute façon. Je **n'optimise pas** : je ne touche pas à une chaîne validée quand le temps n'est pas le facteur limitant.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 9. Dimensionnement de l'analyse finale, mesuré\n\nAvant de laisser tourner, j'ai chiffré ce que coûtera l'analyse sur les **351\nlang … [2570 caractères tronqués]`
+
+  ```
+a96b553 Dimensionnement de l'analyse finale, mesuré — et décision de ne PAS optimiser
+traçage : 167/392
+00:24
+  ```
+
+### 🤖 Assistant
+
+⏵ Dimensionnement chiffré et décision consignée. Point d'étape.
+
+## Ce que ce tour a produit
+
+**Le dimensionnement de l'analyse finale, mesuré plutôt que supposé.** Sur les 351 langues d'apprentissage :
+
+| | |
+|---|---:|
+| cache attendu | **~437 000 positions** · ~919 Mo |
+| readout quadratique (120 neurones → 240 colonnes) | 419 Mo |
+| disque libre / RAM disponible | 2,1 To / **108 Go** |
+
+Largement suffisant. Le coût dominant est la régression, chronométrée sur des matrices à l'échelle : **22 s par neurone** (436 788 × 240), soit **35 min à 1,7 h par run** selon que la naissance s'arrête à 40 ou 120 neurones.
+
+## Une décision que je prends et que je justifie
+
+**Je n'optimise pas.** Il serait facile de rendre cette étape **20× plus rapide** en maintenant la Gram `XᵀX` de façon incrémentale — ajouter un neurone ne change qu'une ligne et une colonne. Mais :
+
+- la chaîne est **validée de bout en bout**, et je viens de passer deux tours à réparer des erreurs introduites en touchant à des choses qui marchaient ;
+- **le temps n'est pas le facteur limitant** : la phase 1 ne finit pas avant 02h30 de toute façon.
+
+Toucher à un pipeline vérifié pour gagner une heure qu'on n'attend pas serait un mauvais échange. J'ai consigné le chiffre pour que la décision soit **réexaminable** si le volume change — si l'on passe un jour à 5 000 langues, l'optimisation deviendra nécessaire.
+
+## État
+
+| | |
+|---|---:|
+| phase 1 | **167/392** · 0 échec |
+| restant | ~225 langues, ~2 h |
+| fin estimée | ~02h30 |
+| chaîne | 6 scripts vivants |
+
+## Ce qui vient
+
+Le rythme est régulier et sans incident depuis la correction de troncature. Les cinq phases suivantes se déclencheront seules, et mon travail d'ici là est de **surveiller** — pas de rajouter du mouvement.
+
+Rien à faire de votre côté. Commit `a96b553`.
+
+
+## Tour 138
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de représentation universelle), boîte noire (on ne lit du professeur que la couche à émuler, jamais sa tête ni ses jetons générés), aucune rétropropagation (A et B aléatoires et gelés, seule la lecture s'ajuste en forme fermée), et chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, TAILLE du réseau, avec le diagnostic oracle sur les deux panneaux (test hors vivier et validation du même vivier)."
+Round: 11/256
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Je regarde si j'ai assez de langues du **panel stratifié** pour prendre un signal précoce sur la phase 2.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls /home/stephane/Data13TB/stephane/corpus/udhr/udhr392 | sed 's/.drvf//' > /tmp/tracees.txt; python3 - <<'PY'\nimport json\nd=json.load(open('/tmp/decoupe392.json'))\ntr={l.strip() for l in open('/tmp/tracees.txt') if l.strip()}\ndi … [849 caractères tronqués]`
+
+  ```
+tracées : 168/392
+  TEST        :  20 / 41
+  VALIDATION  :  15 / 50
+  APPRENTISSAGE: 133 / 301
+
+écritures représentées dans le test partiel :
+    latin        9
+    ethiopien    1
+    bengali      1
+    inconnu      1
+    tibetain     1
+    grec         1
+    arabe        1
+    hebreu       1
+    armenien     1
+    japonais     1
+    georgien     1
+    cyrillique   1
+  -> 12 écritures sur les 22 du panel complet
+  ```
+
+### 🤖 Assistant
+
+⏵ **20 langues de test sur 41, couvrant 12 des 22 écritures** — assez pour un signal précoce sur le panel stratifié, qui est le livrable de la phase 2. Je le prends.
+
+**20 langues de test sur 41, couvrant 12 des 22 écritures** — assez pour un signal précoce sur le panel stratifié, qui est le livrable de la phase 2. Je le prends.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('/tmp/decoupe392.json'))\ntr={l.strip() for l in open('/tmp/tracees.txt') if l.strip()}\ndispo=lambda S: sorted(tr & set(S))\nopen('/tmp/str_train.txt','w').write('\\n'.join(dispo(d['tr … [1127 caractères tronqués]`
+
+  ```
+stratifié partiel : 148 apprentissage · 15 validation · 20 test (12 écritures)
+/tmp/cache_str_train.npz : 148 langues · 202429 pas
+[timed out after 600000ms]
+[killed by signal: SIGTERM]
+  ```
+
+### 🤖 Assistant
+
+⏵ L'exécutant plafonne à 600 s : je relance en arrière-plan.
+
+- **write** `{"content": "#!/bin/bash\n# SIGNAL PRÉCOCE sur le panel STRATIFIÉ (12 écritures au test, 20 langues).\n# Répond à la question de la phase 2 avant que les 392 langues soient tracées.\nset -u\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nU=/home/stephane/Data13TB/stephane/corpus/udhr/udhr392\n: … [763 caractères tronqués]`
+
+  ```
+<path>/tmp/stratifie.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "chmod +x /tmp/stratifie.sh && bash -n /tmp/stratifie.sh && echo \"syntaxe OK et exécutable\"; setsid nohup /tmp/stratifie.sh >/dev/null 2>&1 < /dev/null & disown; sleep 400; cat /tmp/stratifie.log 2>/dev/null | tail -12; echo \"--- traçage en parallèle ---\"; ls /home/stephane/Data13TB/ … [138 caractères tronqués]`
+
+  ```
+syntaxe OK et exécutable
+
+########## CYCLE 1 — CROISSANCE ##########
+après                           neur.  couch.  fid appr  fid VAL  fid TEST   invar.    pire
+n8                8       1    0.7298   0.7489    0.7305   0.9963  0.9851 | communs +0.246 ( 38 %) · contraste 0.936
+n16              16       1    0.7329   0.7518    0.7345   0.9925  0.9680 | communs +0.248 ( 38 %) · contraste 0.962
+n24              24       1    0.7372   0.7564    0.7399   0.9864  0.9465 | communs +0.251 ( 33 %) · contraste 0.978
+n32              32       1    0.7403   0.7581    0.7410   0.9831  0.9290 | communs +0.259 ( 38 %) · contraste 0.981
+n40              40       1    0.7422   0.7595    0.7425   0.9793  0.9184 | communs +0.253 ( 32 %) · contraste 0.983
+n44              44       1    0.7429   0.7605    0.7428   0.9767  0.9064 | communs +0.244 ( 30 %) · contraste 0.984
+n45              45       1    0.7430   0.7606    0.7429   0.9762  0.9059 | communs +0.240 ( 29 %) · contraste 0.984
+n46              46       1    0.7432   0.7609    0.7431   0.9758  0.9048 | communs +0.234 ( 28 %) · contraste 0.985
+n47              47       1    0.7433   0.7610    0.7432   0.9754  0.9016 | communs +0.232 ( 28 %) · co
+… [52 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Signal précoce déjà lisible, et il est **instructif** :
+
+| neurones | fid VAL | **fid TEST** | invariance | pire paire |
+|---:|---:|---:|---:|---:|
+| 8 | 0,7489 | 0,7305 | 0,9963 | 0,9851 |
+| 40 | 0,7595 | 0,7425 | 0,9793 | 0,9184 |
+| 47 | 0,7610 | 0,7432 | 0,9754 | 0,9016 |
+
+**L'écart test/validation s'est effondré** : 0,7610 contre 0,7432, soit un rapport de **1,02** — alors qu'il était de **2,6×** sur l'ancien panel uniquement non latin. Mon diagnostic de typologie est donc confirmé : l'écart que je mesurais était un artefact du panel.
+
+**L'écart test/validation s'est effondré** : rapport de **1,02** contre **2,6×** sur l'ancien panel uniquement non latin. Mon diagnostic de typologie est confirmé — l'écart que je mesurais était un artefact du panel, pas une propriété du pont.
+
+- **bash** `{"command": "sleep 500; tail -8 /tmp/stratifie.log; echo \"--- TERMINE ? ---\"; grep -c TERMINE /tmp/stratifie.log; echo \"--- traçage ---\"; ls /home/stephane/Data13TB/stephane/corpus/udhr/udhr392 | wc -l; date \"+%H:%M\"", "description": "Wait for stratified analysis result", "timeoutMs": 600000}`
+
+  ```
+taille           : 52 neurones · 1 couches
+  fidélité appr.   : 0.7444
+  fidélité VAL     : 0.7621
+  fidélité TEST    : 0.7438   (constante témoin : 0.7215)
+  invariance TEST  : 0.9739 · pire paire 0.8929
+
+# état final du réseau : 52 neurones · 1 couches ([52])
+TERMINE
+--- TERMINE ? ---
+2
+--- traçage ---
+213
+00:50
+  ```
+
+### 🤖 Assistant
+
+⏵ Signal précoce complet. Je relève l'oracle.
+
+- **bash** `{"command": "grep -E \"ORACLE|#   TEST|#   VALIDATION|découpe par noms\" /tmp/stratifie.log; echo \"--- comparaison avec l'ancien panel ---\"; python3 - <<'PY'\nprint(f\"{'panel':<34} {'fid TEST':>9} {'fid VAL':>9} {'rapport':>8} {'constante':>10} {'écart':>8}\")\nprint(f\"{'ancien : test non latin  … [310 caractères tronqués]`
+
+  ```
+# découpe par noms : 133 apprentissage · 15 validation
+# ORACLE (lecture ajustée SUR le jeu évalué — diagnostic seulement)
+#   TEST        : nous 0.7438 · oracle 0.7730 · ÉCART +0.0292 · invariance oracle 0.9730
+#   VALIDATION  : nous 0.7621 · oracle 0.7819 · ÉCART +0.0198   (même vivier que l'apprentissage)
+--- comparaison avec l'ancien panel ---
+panel                               fid TEST   fid VAL  rapport  constante    écart
+ancien : test non latin seulement     0.6383    0.7500     1.17     0.6140  +0.0243
+nouveau : stratifié (12 écritures)    0.7438    0.7621     1.02     0.7215  +0.0223
+  ```
+
+### 🤖 Assistant
+
+⏵ **Résultat important : l'écart de transfert que je mesurais était en grande partie un artefact du panel.**
+
+| | écart oracle TEST | écart oracle VAL | **rapport** | écart à la constante |
+|---|---:|---:|---:|---:|
+| ancien panel (non latin seul) | +0,0693 | +0,0269 | **2,58** | +0,0243 |
+| **nouveau panel stratifié** | **+0,0292** | +0,0198 | **1,47** | **+0,0223** |
+
+**L'écart de transfert tombe de +0,0693 à +0,0292 — 2,4× plus petit — et son rapport test/validation passe de 2,58 à 1,47.** Le « goulot dans le transfert » que j'avais annoncé était donc **pour l'essentiel un artefact de mon panel de test**, exactement comme le diagnostic de typologie le laissait prévoir.
+
+Et l'écart à la constante, **+0,0223**, reste dans l'invariant des +0,020 — qui tient donc aussi sur ce panel.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 10. Signal précoce sur le panel STRATIFIÉ : l'écart de transfert était un artefact\n\nMesure prise sur les 168 premières langues trac … [3318 caractères tronqués]`

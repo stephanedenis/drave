@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 177.6 h |
-| Tours | 137 |
-| Messages | 8386 |
-| Appels d'outils | 7976 |
-| Fichiers touchés | 175 |
-| Commandes | 6782 |
+| Durée | 178.1 h |
+| Tours | 138 |
+| Messages | 8395 |
+| Appels d'outils | 7983 |
+| Fichiers touchés | 176 |
+| Commandes | 6788 |
 | Sous-agents | 32 |
-| Commits | 599 |
+| Commits | 600 |
 | Compactages de contexte | 11 |
 
 ## Objectifs déclarés
@@ -327,6 +327,8 @@
 **Tour 136** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1001 caractères tronqués]
 
 **Tour 137** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
+
+**Tour 138** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -7027,9 +7029,68 @@ Rien à faire de votre côté. Commit `0613445`.
 
 **Synthèse produite :**
 
-⏵ Le chronométrage donne la réponse : **22 s par neurone** à l'échelle finale (437K × 240), soit ~35 min à 1,7 h par run d'analyse. C'est acceptable. Je **n'optimise pas** — je préfère ne pas toucher à une chaîne validée quand le temps n'est pas un problème, et je consigne le chiffre.
+⏵ Dimensionnement chiffré et décision consignée. Point d'étape.
 
-Le chronométrage tranche : **22 s par neurone** à l'échelle finale, soit **35 min à 1,7 h** par run. C'est acceptable — la phase 1 finit vers 02h30 de toute façon. Je **n'optimise pas** : je ne touche pas à une chaîne validée quand le temps n'est pas le facteur limitant.
+\## Ce que ce tour a produit
+
+**Le dimensionnement de l'analyse finale, mesuré plutôt que supposé.** Sur les 351 langues d'apprentissage :
+
+| | |
+|---|---:|
+| cache attendu | **~437 000 positions** · ~919 Mo |
+| readout quadratique (120 neurones → 240 colonnes) | 419 Mo |
+| disque libre / RAM disponible | 2,1 To / **108 Go** |
+
+Largement suffisant. Le coût dominant est la régression, chronométrée sur des matrices à l'échelle : **22 s par neurone** (436 788 × 240), soit **35 min à 1,7 h par run** selon que la naissance s'arrête à 40 ou 120 neurones.
+
+\## Une décision que je prends et que je justifie
+
+**Je n'optimise pas.** Il serait facile de rendre cette étape **20× plus rapide** en maintenant la Gram `XᵀX` de façon incrémentale — ajouter un neurone ne change qu'une ligne et une colonne. Mais :
+
+- la chaîne est **validée de bout en bout**, et je viens de passer deux tours à réparer des erreurs introduites en touchant à des choses qui marchaient ;
+- **le temps n'est pas le facteur limitant** : la phase 1 ne finit pas avant 02h30 de toute façon.
+
+Toucher à un pipeline vérifié pour gagner une heure qu'on n'attend pas serait un mauvais échange. J'ai consigné le chiffre pour que la décision soit **réexaminable** si le volume change — si l'on passe un jour à 5 000 langues, l'optimisation deviendra nécessaire.
+
+\## État
+
+| | |
+|---|---:|
+| phase 1 | **167/392** · 0 échec |
+| restant | ~225 langues, ~2 h |
+| fin estimée | ~02h30 |
+| chaîne | 6 scripts vivants |
+
+\## Ce qui vient
+
+Le rythme est régulier et sans incident depuis la correction de troncature. Les cinq phases suivantes se déclencheront seules, et mon travail d'ici là est de **surveiller** — pas de rajouter du mouvement.
+
+Rien à faire de votre côté. Commit `a96b553`.
+
+### Tour 138 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
+
+*7 appels d'outils.* Actions notables :
+
+- bash — Check stratified panel coverage
+- bash — Early read on the stratified panel
+- write `/tmp/stratifie.sh`
+- bash — Run stratified early analysis in background
+- bash — Wait for stratified analysis result
+- bash — Get oracle and compare panels
+- bash — Commit the stratified panel finding
+
+**Synthèse produite :**
+
+⏵ **Résultat important : l'écart de transfert que je mesurais était en grande partie un artefact du panel.**
+
+| | écart oracle TEST | écart oracle VAL | **rapport** | écart à la constante |
+|---|---:|---:|---:|---:|
+| ancien panel (non latin seul) | +0,0693 | +0,0269 | **2,58** | +0,0243 |
+| **nouveau panel stratifié** | **+0,0292** | +0,0198 | **1,47** | **+0,0223** |
+
+**L'écart de transfert tombe de +0,0693 à +0,0292 — 2,4× plus petit — et son rapport test/validation passe de 2,58 à 1,47.** Le « goulot dans le transfert » que j'avais annoncé était donc **pour l'essentiel un artefact de mon panel de test**, exactement comme le diagnostic de typologie le laissait prévoir.
+
+Et l'écart à la constante, **+0,0223**, reste dans l'invariant des +0,020 — qui tient donc aussi sur ce panel.
 
 ## 3. Travail accompli
 
@@ -7212,6 +7273,7 @@ Le chronométrage tranche : **22 s par neurone** à l'échelle finale, soit **35
 | `/tmp/analyse_final.sh` | 1 | 0 |
 | `/tmp/trace392b.sh` | 1 | 0 |
 | `/tmp/dose.sh` | 1 | 0 |
+| `/tmp/stratifie.sh` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -7290,7 +7352,7 @@ Le chronométrage tranche : **22 s par neurone** à l'échelle finale, soit **35
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6742 autres
+- … et 6748 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -8037,4 +8099,5 @@ Le chronométrage tranche : **22 s par neurone** à l'échelle finale, soit **35
 - Signal précoce : plus de langues AIDENT (+23 % d'avantage), contrairement à ma mesure antérieure  Mesure prise sur les 133 premières langues tracées, AVANT la f
 - Courbe de dose complète : elle NE sature PAS — le gain marginal par langue augmente  Troisième point ajouté (60 langues, sous-ensemble strict de la dose 112, mê
 - Dimensionnement de l'analyse finale, mesuré — et décision de ne PAS optimiser  Chiffré avant de laisser tourner, plutôt que découvert à 3 h du matin :   cache a
+- Signal précoce sur le panel STRATIFIÉ : l'écart de transfert était un artefact  Mesure sur les 168 premières langues tracées (133 apprentissage · 15 validation 
 
