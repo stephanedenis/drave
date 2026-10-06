@@ -148538,3 +148538,61 @@ n148            148       1    0.6465   0.6311    0.6302   0.8959  0.6394 | comm
 ⏵ **Le meilleur point μ=0,1 : 149 neurones, TEST 0,6306, invariance 0,8954, pire 0,6433. Je corrige et relance pour obtenir l'oracle.**
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && setsid nohup python3 -u tools/pont_generatif.py /tmp/cache392_train.npz /tmp/cache392_test.npz --part-langues 0.5 --lecture quadratique --naissance libre --plafond 300 --patience 25 --ride 0.03 --sous-ech 20 --a-min 0.02 --a-max 0.8  … [4415 caractères tronqués]`
+
+  ```
+# VALIDATION RÉPARTIE : 51 langues (1 sur 7) · 300 langues d'ajustement
+# CANAUX PARTAGÉS : 896/896 canaux présents dans au moins 50% des langues d'apprentissage (100% des canaux)
+# 351 langues d'entraînement = 300 apprentissage + 51 validation
+# 41 langues de TEST · a=0.2 · ride=0.03 · graine=5 · critère=redondance
+# 1 cycles de 3 couches, puis attrition
+# pas — apprentissage 402091 · validation 70381 · test 76812
+# SOUS-ÉCHANTILLONNAGE DU FIT : 1 ligne sur 20 (l'évaluation reste entière) — mesuré 5,8× plus rapide pour -0,0045 de fidélité
+# MULTI-ÉCHELLE : constantes de temps de 0.02 à 0.8
+# INVARIANCE CONTRAINTE : pénalité inter-langue mu = 0.1 (reste en forme fermée, aucune rétropropagation)
+# LECTURE QUADRATIQUE : le readout voit [états, états²]
+# constante témoin sur le TEST : 0.5762
+
+8be5966 Le garde-fou du §30 a attrapé une SECONDE occurrence du même bug
+  ```
+
+- **bash** `{"command": "sleep 400; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== pont Wikipedia ===\"; grep -E \"^---|fidélité sur|invariance de SORTIE|oracle sur|taille \" /tmp/wiki_pont.log 2>/dev/null | head -24; echo; echo \"articles : $(grep -c '^ARTICLE' /tmp/trace_wiki_apparie.log)\"; … [171 caractères tronqués]`
+
+  ```
+=== pont Wikipedia ===
+--- en <-> fr ---
+#   fidélité sur A        : 0.6083
+#   fidélité sur B        : 0.5444   (transférée, sans réapprentissage)
+#   invariance de SORTIE  : 0.9179 · pire segment 0.6556
+#   taille                : 120 neurones · 1 couches [120]
+#   oracle sur B          : 0.6073
+--- en <-> de ---
+#   fidélité sur A        : 0.6083
+#   fidélité sur B        : 0.5426   (transférée, sans réapprentissage)
+#   invariance de SORTIE  : 0.8981 · pire segment 0.6224
+#   taille                : 120 neurones · 1 couches [120]
+#   oracle sur B          : 0.6160
+--- fr <-> de ---
+#   fidélité sur A        : 0.6169
+#   fidélité sur B        : 0.5851   (transférée, sans réapprentissage)
+#   invariance de SORTIE  : 0.9204 · pire segment 0.7420
+#   taille                : 120 neurones · 1 couches [120]
+#   oracle sur B          : 0.6247
+
+articles : 84
+=== croissance mu=0.1 (relance) ===
+n40              40       1    0.6338   0.6229    0.6278   0.9289  0.7329 | communs -1.357 (  0 %) · contraste 0.966
+n48              48       1    0.6354   0.6230    0.6288   0.9255  0.7195 | communs -1.345 (  0 %) · contraste 0.969
+18:30
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le pont transfère sur le corpus Wikipedia multi-domaine, sur TROIS paires de langues.**
+
+| paire | fid A | **fid B (transférée)** | invariance sortie | pire segment | oracle B | écart à l'oracle |
+|---|---:|---:|---:|---:|---:|---:|
+| en ↔ fr | 0,6083 | **0,5444** | 0,9179 | 0,6556 | 0,6073 | +0,0629 |
+| en ↔ de | 0,6083 | **0,5426** | 0,8981 | 0,6224 | 0,6160 | +0,0734 |
+| fr ↔ de | 0,6169 | **0,5851** | 0,9204 | 0,7420 | 0,6247 | +0,0396 |
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 55. Le pont transfère sur le corpus Wikipedia multi-domaine — et sur TROIS paires de langues\n\nLe corpus Wikipedia apparié (§45)  … [4844 caractères tronqués]`

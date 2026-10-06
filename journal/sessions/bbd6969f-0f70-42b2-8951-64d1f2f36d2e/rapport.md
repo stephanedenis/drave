@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 195.6 h |
+| Durée | 195.7 h |
 | Tours | 180 |
-| Messages | 9028 |
-| Appels d'outils | 8510 |
+| Messages | 9030 |
+| Appels d'outils | 8512 |
 | Fichiers touchés | 199 |
-| Commandes | 7219 |
+| Commandes | 7221 |
 | Sous-agents | 32 |
-| Commits | 650 |
+| Commits | 651 |
 | Compactages de contexte | 12 |
 
 ## Objectifs déclarés
@@ -9091,7 +9091,7 @@ L'attrition est descendue de 191 à 9 neurones **avec une validation qui baissai
 
 ### Tour 180 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
 
-*27 appels d'outils.* Actions notables :
+*29 appels d'outils.* Actions notables :
 
 - bash — Check chains status
 - bash — Measure tracing rates
@@ -9107,11 +9107,17 @@ L'attrition est descendue de 191 à 9 neurones **avec une validation qui baissai
 - bash — Check wiki analysis trigger
 - bash — Wait for wiki analysis trigger
 - bash — Check the wiki analysis
-- … et 13 autres
+- … et 15 autres
 
 **Synthèse produite :**
 
-⏵ **Le meilleur point μ=0,1 : 149 neurones, TEST 0,6306, invariance 0,8954, pire 0,6433. Je corrige et relance pour obtenir l'oracle.**
+⏵ **Le pont transfère sur le corpus Wikipedia multi-domaine, sur TROIS paires de langues.**
+
+| paire | fid A | **fid B (transférée)** | invariance sortie | pire segment | oracle B | écart à l'oracle |
+|---|---:|---:|---:|---:|---:|---:|
+| en ↔ fr | 0,6083 | **0,5444** | 0,9179 | 0,6556 | 0,6073 | +0,0629 |
+| en ↔ de | 0,6083 | **0,5426** | 0,8981 | 0,6224 | 0,6160 | +0,0734 |
+| fr ↔ de | 0,6169 | **0,5851** | 0,9204 | 0,7420 | 0,6247 | +0,0396 |
 
 ## 3. Travail accompli
 
@@ -9396,7 +9402,7 @@ L'attrition est descendue de 191 à 9 neurones **avec une validation qui baissai
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 7179 autres
+- … et 7181 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10194,4 +10200,5 @@ L'attrition est descendue de 191 à 9 neurones **avec une validation qui baissai
 - Un drave ORPHELIN volait 18 cœurs : 60 s par trace au lieu de 16  SYMPTÔME : le traçage Wikipedia tournait 4x trop lentement (60 s/trace au lieu de 16), soit 48
 - Domaine ou langue : enfin testable, et la réponse est 'à égalité'  L'hypothèse était INTESTABLE sur l'UDHR — un seul texte traduit, donc ses 'contenus différent
 - Le garde-fou du §30 a attrapé une SECONDE occurrence du même bug  La croissance mu=0,1 a parcouru TOUTE la naissance et TOUTE l'attrition, puis a planté au diag
+- Le pont transfère sur le corpus Wikipedia multi-domaine, sur TROIS paires de langues  71 articles alignés × 6 langues, couche 8, 120 neurones, 1 couche.    pair
 
