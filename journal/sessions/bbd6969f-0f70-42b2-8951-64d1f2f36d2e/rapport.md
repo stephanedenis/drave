@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 186.6 h |
+| Durée | 186.7 h |
 | Tours | 173 |
-| Messages | 8724 |
-| Appels d'outils | 8232 |
+| Messages | 8728 |
+| Appels d'outils | 8236 |
 | Fichiers touchés | 188 |
-| Commandes | 6995 |
+| Commandes | 6999 |
 | Sous-agents | 32 |
-| Commits | 625 |
+| Commits | 626 |
 | Compactages de contexte | 12 |
 
 ## Objectifs déclarés
@@ -8671,7 +8671,7 @@ Rien à faire de votre côté. Commit `0b91cb0`.
 
 ### Tour 173 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
 
-*107 appels d'outils.* Actions notables :
+*111 appels d'outils.* Actions notables :
 
 - bash — Profile Dzongkha representation vs others
 - bash — Profile representations per language
@@ -8687,11 +8687,11 @@ Rien à faire de votre côté. Commit `0b91cb0`.
 - bash — Read results section and defaults
 - bash — Read evalue and end of main
 - bash — Read nait and recalcule signatures
-- … et 82 autres
+- … et 85 autres
 
 **Synthèse produite :**
 
-⏵ **Couche 8 : +0,0495 de fidélité et +0,0573 d'oracle sur la couche 10, au niveau des unités alignées.**
+⏵ **Le contrôle de capacité a été tué (pas de `setsid`). Je consigne ses acquis partiels et je lance le test d'alignement.**
 
 ## 3. Travail accompli
 
@@ -8965,7 +8965,7 @@ Rien à faire de votre côté. Commit `0b91cb0`.
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6955 autres
+- … et 6959 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9093,7 +9093,7 @@ Rien à faire de votre côté. Commit `0b91cb0`.
 
 ## 5. Erreurs rencontrées
 
-390 sorties en erreur ou divergentes. Les premières :
+391 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -9738,4 +9738,5 @@ Rien à faire de votre côté. Commit `0b91cb0`.
 - Réservoir multi-échelle : +8,8% sur l'apport propre, mais ce n'était pas la cause  La quantité de contenu par jeton varie de 6x selon la langue (1,578 jeton/car
 - Le réservoir ne sert presque à rien : l'entrée SEULE fait mieux, sans un neurone  Le témoin constant n'était pas le bon témoin. Mesuré sur le même vivier (351 l
 - Couche 8 contre couche 10 au niveau des unités : +0,0495 de fidélité  Traçage par unité (17 langues d'apprentissage, 230 unités de test, dix points alignés par 
+- Contrôle de capacité : l'entrée gagne par nature, sans que ce soit tranché  Objection du §29 : C (entrée seule, 1792 caractéristiques) bat A (40 neurones, 80 ca
 

@@ -143350,3 +143350,70 @@ MOYENNE professeur 0.6998
 ⏵ **Couche 8 : +0,0495 de fidélité et +0,0573 d'oracle sur la couche 10, au niveau des unités alignées.**
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 30. Couche 8 contre couche 10, au niveau des DIX unités alignées\n\nLe traçage par unité écrit les couches 0, 8 et 10. On peut donc c … [4910 caractères tronqués]`
+
+  ```
+b2e5631 Couche 8 contre couche 10 au niveau des unités : +0,0495 de fidélité
+  ```
+
+- **bash** `{"command": "sleep 420; echo \"=== controle ===\"; cat /tmp/controle.log; echo \"=== refait_parallele ===\"; tail -6 /tmp/refait_parallele.log 2>/dev/null; echo \"=== c8 ===\"; ls /home/stephane/Data13TB/stephane/corpus/udhr/udhr392_c8 2>/dev/null | wc -l; free -g | head -2; date '+%H:%M'", "descrip … [56 caractères tronqués]`
+
+  ```
+=== controle ===
+# 351 langues d'apprentissage · 41 de test · 896/896 canaux
+
+=== LECTURES SUR L'ENTRÉE SEULE (aucun neurone) ===
+  C_lin (linéaire)         896 caractérisques · fidélité 0.6364
+
+=== RÉSERVOIRS ===
+  [pont 200 neurones construit en 106 s]
+  A200 (quadratique)       400 caractérisques · fidélité 0.6218
+=== refait_parallele ===
+# d'invariance ci-dessous n'a de sens que si le segment i de A et le
+# segment i de B portent le MÊME CONTENU (corpus parallèle). Sur un
+# corpus NON apparié, il ne veut RIEN dire. Relancer avec --apparie
+# pour confirmer qu'on sait ce qu'on mesure.
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# invariance du PROFESSEUR (segment par segment) : 0.3032 · pire segment -0.0370
+=== c8 ===
+22
+               total        used        free      shared  buff/cache   available
+Mem:             125          28           6           7          99          97
+09:28
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -c . /tmp/refait_parallele.log; grep -n \"=== \\|invariance du PROFESSEUR\\|fidélité\\|oracle\\|TERMINE\" /tmp/refait_parallele.log | head -30; echo \"=== controle vivant ? ===\"; ps -o pid,etime,%cpu,rss -p $(pgrep -f controle_ … [93 caractères tronqués]`
+
+  ```
+28
+1:=== ROMEO — pont sur corpus PARALLÈLE, couche 10 ===
+11:# invariance du PROFESSEUR (segment par segment) : 0.6532 · pire segment 0.2966
+14:#   fidélité sur A        : 0.6660
+15:#   fidélité sur B        : 0.5802   (transférée, sans réapprentissage)
+18:#   oracle sur B          : 0.6207
+20:=== WIKIPEDIA — pont sur corpus RICHE (non parallèle) ===
+30:# invariance du PROFESSEUR (segment par segment) : 0.3032 · pire segment -0.0370
+=== controle vivant ? ===
+    PID     ELAPSED %CPU   RSS
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "tail -5 /tmp/controle.log; echo \"=== OOM ? ===\"; dmesg 2>/dev/null | tail -20 | grep -i \"killed\\|oom\" || journalctl --since \"20 min ago\" 2>/dev/null | grep -i \"oom\\|killed process\" | tail -5 || echo \"pas d'accès aux journaux noyau\"; echo \"=== mémoire ===\"; free -g | head - … [113 caractères tronqués]`
+
+  ```
+C_lin (linéaire)         896 caractérisques · fidélité 0.6364
+
+=== RÉSERVOIRS ===
+  [pont 200 neurones construit en 106 s]
+  A200 (quadratique)       400 caractérisques · fidélité 0.6218
+=== OOM ? ===
+=== mémoire ===
+               total        used        free      shared  buff/cache   available
+Mem:             125          29           5           7          99          96
+=== swap ===
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le contrôle de capacité a été tué (pas de `setsid`). Je consigne ses acquis partiels et je lance le test d'alignement.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 31. Contrôle de capacité : l'entrée gagne-t-elle par NATURE ou par TAILLE ?\n\nLe §29 laissait une objection sérieuse : C (entrée seu … [3152 caractères tronqués]`
