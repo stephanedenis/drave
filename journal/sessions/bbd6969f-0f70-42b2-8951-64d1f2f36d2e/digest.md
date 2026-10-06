@@ -134332,3 +134332,70 @@ phase 3 (Wikipedia) chaînée après la phase 2
 ⏵ Wikipedia découpé : 529 morceaux pour l'anglais, 528 pour le français (~355K jetons chacun). Je vérifie la syntaxe des scripts chaînés puis je commit.
 
 - **bash** `{"command": "for f in /tmp/trace392.sh /tmp/trace_rj.sh /tmp/trace_wiki.sh /tmp/rj_apres.sh /tmp/wiki_apres.sh /tmp/analyse392.sh; do bash -n \"$f\" && echo \"  OK  $f\" || echo \"  ERREUR $f\"; done; echo; echo \"=== chaîne en place ===\"; ps -eo pid,args | awk '/trace|apres/ && !/awk/ {print \"  \ … [1346 caractères tronqués]`
+
+  ```
+OK  /tmp/trace392.sh
+  OK  /tmp/trace_rj.sh
+  OK  /tmp/trace_wiki.sh
+  OK  /tmp/rj_apres.sh
+  OK  /tmp/wiki_apres.sh
+  OK  /tmp/analyse392.sh
+
+=== chaîne en place ===
+  bash
+  /bin/bash
+  /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/target/release/drave
+  /opt/google/chrome/chrome
+
+538eea4 Phase 3 chaînée : Wikipedia pour la RICHESSE, pas pour l'invariance
+  ```
+
+### 🤖 Assistant
+
+⏵ Mes scripts d'attente n'apparaissent pas dans la liste : je vérifie qu'ils sont vivants, c'est critique.
+
+- **bash** `{"command": "python3 -c \"\nimport os\nmoi=os.getpid(); anc=set(); q=moi\nfor _ in range(8):\n    try:\n        st=open(f'/proc/{q}/stat').read().split(') ',1)[1].split(); q=int(st[1]); anc.add(q)\n    except Exception: break\nfor d in sorted(os.listdir('/proc')):\n    if not d.isdigit(): continue\n … [497 caractères tronqués]`
+
+  ```
+2350094 : bash -c chmod +x /tmp/trace392.sh && setsid nohup /tmp/trace392.sh >/dev/null 2>&1 < /dev/
+  2350097 : /bin/bash /tmp/trace392.sh
+  2351075 : bash -c chmod +x /tmp/analyse392.sh && setsid nohup /tmp/analyse392.sh >/dev/null 2>&1 < /
+  2351078 : /bin/bash /tmp/analyse392.sh
+  2356105 : /bin/bash /tmp/rj_apres.sh
+  2358143 : /bin/bash /tmp/wiki_apres.sh
+---
+pour vérifier : le script d'attente doit être un bash en boucle sleep
+  ```
+
+### 🤖 Assistant
+
+⏵ **La chaîne complète est vivante** : phase 1 en cours, analyse 392 en attente, phase 2 en attente de la phase 1, phase 3 en attente de la phase 2. Je surveille.
+
+- **bash** `{"command": "sleep 540; ls /home/stephane/Data13TB/stephane/corpus/udhr/udhr392 | wc -l; tail -1 /tmp/trace392.log; du -sh /home/stephane/Data13TB/stephane/corpus/udhr/udhr392; python3 -c \"\nimport re\nt=open('/tmp/trace392.log').read()\nts=[int(x) for x in re.findall(r'(\\d+)s', t)]\nn=len(ts)\npr … [187 caractères tronqués]`
+
+  ```
+59
+chk 29s 5636581
+386M	/home/stephane/Data13TB/stephane/corpus/udhr/udhr392
+58 tracées · moyenne 42 s · reste 3.9 h
+22:53
+  ```
+
+### 🤖 Assistant
+
+⏵ 59/392, ~3,9 h restantes. J'écris l'outil d'analyse des corpus **parallèles** — l'invariance d'un corpus aligné se mesure segment par segment, pas par paires quelconques comme dans le cas multilingue.
+
+59/392, ~3,9 h restantes. J'écris l'outil d'analyse des corpus **parallèles**. Point clé : sur un corpus aligné, l'invariance se mesure **segment par segment** (la même scène dans les deux langues), alors que l'outil multilingue compare toutes les paires — ce qui n'aurait pas de sens ici.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/pont_parallele.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"pont_parallele.py — le pont sur un corpus PARALLÈLE, segment par segment.\n\nDifférence de fond avec `pont_generatif.py` : là-bas les langues ne sont pas\nappariées  … [5533 caractères tronqués]`
+
+  ```
+syntaxe OK
+outil écrit — à éprouver quand les traces Romeo seront prêtes
+  ```
+
+### 🤖 Assistant
+
+⏵ Outil écrit (à éprouver quand les traces seront prêtes). Je commite et je surveille.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"pont_parallele.py : l'invariance sur un corpus apparié se mesure SEGMENT par SEGMENT\n\nDifférence de fond avec pont_generatif.py : là-bas les langues ne sont pas\nappariées et l'invariance se mesure  … [886 caractères tronqués]`

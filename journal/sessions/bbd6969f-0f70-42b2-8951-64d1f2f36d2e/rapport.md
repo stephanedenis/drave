@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 176.0 h |
+| Durée | 176.1 h |
 | Tours | 128 |
-| Messages | 8307 |
-| Appels d'outils | 7915 |
+| Messages | 8311 |
+| Appels d'outils | 7919 |
 | Fichiers touchés | 171 |
-| Commandes | 6725 |
+| Commandes | 6729 |
 | Sous-agents | 32 |
-| Commits | 586 |
+| Commits | 587 |
 | Compactages de contexte | 11 |
 
 ## Objectifs déclarés
@@ -6589,7 +6589,7 @@ Le texte français de Gutenberg emploie des **retours chariot seuls** (`\r`). Py
 
 ### Tour 128 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1281 caractères tronqués]
 
-*6 appels d'outils.* Actions notables :
+*10 appels d'outils.* Actions notables :
 
 - bash — Check trace and analysis state
 - bash — Build and test Wikipedia extraction
@@ -6597,10 +6597,14 @@ Le texte français de Gutenberg emploie des **retours chariot seuls** (`\r`). Py
 - write `/tmp/trace_wiki.sh`
 - bash — Verify chunking and chain Wikipedia phase
 - bash — Verify chained scripts and commit
+- bash — Verify chained waiting scripts are alive
+- bash — Monitor phase 1 progress
+- bash — Write parallel-corpus bridge tool
+- bash — Commit parallel tool and check status
 
 **Synthèse produite :**
 
-⏵ Wikipedia découpé : 529 morceaux pour l'anglais, 528 pour le français (~355K jetons chacun). Je vérifie la syntaxe des scripts chaînés puis je commit.
+⏵ Outil écrit (à éprouver quand les traces seront prêtes). Je commite et je surveille.
 
 ## 3. Travail accompli
 
@@ -6857,7 +6861,7 @@ Le texte français de Gutenberg emploie des **retours chariot seuls** (`\r`). Py
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6685 autres
+- … et 6689 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -7591,4 +7595,5 @@ Le texte français de Gutenberg emploie des **retours chariot seuls** (`\r`). Py
 - Phase 2 : corpus PARALLÈLE riche — Romeo and Juliet, 24 scènes alignées en/fr  Un grand corpus monolingue ne permet PAS de mesurer l'invariance inter-langue : i
 - Phase 1 lancée : 392 langues UDHR · phase 2 chaînée après  PHASE 1 — TOUTES LES LANGUES. 392 langues ont les dix unités (contre 46 utilisées jusqu'ici). Traçage
 - Phase 3 chaînée : Wikipedia pour la RICHESSE, pas pour l'invariance  Wikipedia n'est PAS parallèle, et c'est vérifié : sur 400 articles par langue dans six lang
+- pont_parallele.py : l'invariance sur un corpus apparié se mesure SEGMENT par SEGMENT  Différence de fond avec pont_generatif.py : là-bas les langues ne sont pas
 
