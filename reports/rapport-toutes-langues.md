@@ -1854,3 +1854,85 @@ L'argument « un modèle récursif devrait avoir un nombre de couches inférieur
 à un FFN » est **déjà soutenu par la mesure** : D (2 couches de 20) = 0,5979 contre A
 (1 couche de 40) = 0,5972 — la profondeur n'achète rien à budget constant (§29.4). Le
 pont tient dans **une** couche face aux 24 du professeur.
+
+
+---
+
+## 39. La courbe : pas de coude, le réservoir continue de payer
+
+Le §34 avait mesuré une pente en deux points et demandé **la courbe**. La voici —
+même vivier, 896 canaux, ride 0,03, fit sur 1/5 des lignes (§35.5, coût 0,0045) :
+
+| neurones | A seul | A + entrée linéaire | apport sur `C_lin` | caractéristiques |
+|---:|---:|---:|---:|---:|
+| 40 | 0,5972 | 0,6609 (entrée quad.) | +0,0073 | 1 872 |
+| **200** | 0,6218 | 0,6693 | **+0,0329** | 1 296 |
+| **400** | 0,6333 | 0,6763 | **+0,0399** | 1 696 |
+| **800** | **0,6421** | **0,6821** | **+0,0457** | 2 496 |
+
+**Aucun coude.** L'apport du réservoir par-dessus l'entrée croît de façon monotone :
++0,0329 → +0,0399 → +0,0457 en doublant deux fois. Il est **sub-linéaire** (le
+doublement rapporte de moins en moins : +0,0070 puis +0,0058) mais il ne plafonne
+pas.
+
+Et le point décisif reste vrai à chaque taille : **A800 + entrée (2 496
+caractéristiques) fait 0,6821, contre 0,6536 pour `C_quad` (1 792 caractéristiques,
+entrée seule quadratique)**. Le réservoir n'est pas un substitut à de la capacité
+d'entrée : il porte une information que l'expansion instantanée de l'entrée ne
+contient pas.
+
+**Meilleur résultat de la session : fidélité TEST 0,6821, 800 neurones, 1 couche.**
+
+### 39.1 Ce que cela dit de la croissance
+
+La mission repose sur la **croissance** par corrélation, sans rétropropagation. Cette
+courbe la valide : ajouter des neurones achète du transfert, régulièrement. Si l'on
+veut +0,06, il faut de l'ordre de 2 000 à 3 000 neurones — c'est un budget, pas un
+obstacle de principe.
+
+### 39.2 Le point de méthode
+
+La fidélité de `A200 + entrée` vaut 0,6738 avec **toutes** les lignes et 0,6693 avec
+une sur cinq : le sous-échantillonnage coûte bien les 0,0045 annoncés, ni plus ni
+moins. La prévision du §35.5 se vérifie donc sur un second cas.
+
+---
+
+## 40. Prédiction réfutée : baisser le gain n'ouvre PAS le régime gradué
+
+Le §38.2 terminait sur une piste contre-intuitive : puisque le `tanh` est déjà saturé
+à gain 1, **baisser** le gain devrait le faire sortir de saturation et donner à chaque
+neurone une information graduée au lieu d'un signe. Mesuré :
+
+| gain | saturation | événements 1e-4 | fidélité VALID | fidélité TEST |
+|---:|---:|---:|---:|---:|
+| 0,003 | 0,0 % | 99,4 % | 0,5985 | 0,5868 |
+| 0,01 | 0,0 % | 99,8 % | 0,6112 | 0,6033 |
+| 0,03 | 0,0 % | 99,9 % | 0,6217 | 0,6129 |
+| 0,1 | 0,0 % | 100,0 % | 0,6281 | 0,6207 |
+| 0,3 | 0,3 % | 100,0 % | 0,6301 | 0,6229 |
+| **1,0 (valeur du pont)** | 0,6 % | 99,8 % | **0,6304** | **0,6233** |
+
+**Réfutée, et nettement** : la fidélité **monte** de façon monotone avec le gain. Le
+gain 1 est déjà au sommet de la plage utile, et sortir de saturation ne fait que
+détruire l'information.
+
+Autrement dit : **la saturation n'est pas un défaut, c'est le mécanisme.** Le `tanh`
+saturé transforme l'entrée en signes ; la récurrence en fait une moyenne glissante de
+signes ; c'est cette moyenne qui porte le contenu. Un neurone gradué, lui, ne
+transmet presque rien.
+
+**Troisième prédiction réfutée de la session** — après la pesée `1/norme²` (§27.3) et
+le multi-échelle comme cause principale (§28). C'est le signe que les mesures ne sont
+pas des rituels, et cela vaut d'être dit à égalité avec les résultats positifs.
+
+### 40.1 Conséquence pour le passage aux impulsions
+
+Le tableau ci-dessus est aussi la réponse à la question des événements. De 0,003 à 1,
+le taux d'événements **ne descend jamais sous 99,4 %**. Il n'existe aucun réglage du
+gain, dans cette dynamique, qui rende le calcul creux.
+
+Le passage aux impulsions n'est donc **pas un réglage** : c'est un **changement de
+dynamique** (seuil, émission, remise à zéro), et il faudra le mesurer comme tel — en
+comparant une dynamique impulsionnelle à celle-ci, pas en espérant que celle-ci
+devienne creuse.

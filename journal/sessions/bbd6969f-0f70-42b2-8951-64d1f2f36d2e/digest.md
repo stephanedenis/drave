@@ -144703,3 +144703,96 @@ balayage BAS lancé
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Correction du §38.2 : le tanh sature PRESQUE TOUJOURS, c'est l'état moyenné qui reste petit\n\nJ'avais lu '0,6% de saturation' comme 'la dynamique vit dans son régime linéaire'.\nC'est une confusion e … [1414 caractères tronqués]`
+
+  ```
+0554a72 Correction du §38.2 : le tanh sature PRESQUE TOUJOURS, c'est l'état moyenné qui reste petit
+
+# 896 canaux · 40 neurones · ride 0.03
+
+#   gain  saturation   événem. 1e-4  VALID fid  TEST fid  apport TEST
+    1.0       0.6%          99.8%     0.6304    0.6233      +0.0554
+    2.0       0.7%          99.7%     0.6305    0.6234      +0.0555
+    4.0       0.8%          99.7%     0.6306    0.6234      +0.0556
+    8.0       0.8%          99.7%     0.6306    0.6234      +0.0555
+   16.0       0.8%          99.7%     0.6306    0.6233      +0.0554
+   32.0       0.9%          99.7%     0.6306    0.6232      +0.0554
+
+# témoins : VALID 0.5889 · TEST 0.5678
+# Le gain 1 est la valeur actuelle : 0,6 % de saturation, l'événementiel ne paie rien.
+=== c8 ===
+281
+  ```
+
+- **bash** `{"command": "sleep 480; echo \"=== gains BAS ===\"; cat /tmp/saturation_bas.log; echo; echo \"=== c8 ===\"; ls /home/stephane/Data13TB/stephane/corpus/udhr/udhr392_c8 | wc -l; date '+%H:%M'", "description": "Wait for low-gain sweep", "timeoutMs": 520000}`
+
+  ```
+=== gains BAS ===
+# 896 canaux · 40 neurones · ride 0.03
+
+#   gain  saturation   événem. 1e-4  VALID fid  TEST fid  apport TEST
+    0.0       0.0%          99.4%     0.5985    0.5868      +0.0190
+    0.0       0.0%          99.8%     0.6112    0.6033      +0.0354
+    0.0       0.0%          99.9%     0.6217    0.6129      +0.0450
+    0.1       0.0%         100.0%     0.6281    0.6207      +0.0529
+    0.3       0.3%         100.0%     0.6301    0.6229      +0.0551
+    1.0       0.6%          99.8%     0.6304    0.6233      +0.0554
+
+# témoins : VALID 0.5889 · TEST 0.5678
+# Le gain 1 est la valeur actuelle : 0,6 % de saturation, l'événementiel ne paie rien.
+# PRÉDICTION : la fidélité se dégrade quand la saturation monte. Le genou est le gain
+# qui donne 30-50 % de saturation en gardant la fidélité.
+
+=== c8 ===
+297
+12:17
+  ```
+
+### 👤 Utilisateur
+
+background job bash-234 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c "import ast; ast.parse(open('tools/grand_et_entree.py').read()); print('syntaxe OK')" && python3 -u tools/grand_et_entree.py /tmp/cache392_train.npz /tmp/cache392_test.npz --tailles 200,400,800 --sous-ech 5 2>&1 | tail -40) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 🤖 Assistant
+
+⏵ **Prédiction sur le gain RÉFUTÉE (baisser dégrade), et la courbe 200/400/800 est arrivée.**
+
+- **job_output** `{"job_id": "bash-234"}`
+
+  ```
+syntaxe OK
+# 351 langues · 41 de test · 896/896 canaux
+
+# pont 200 neurones construit en 139 s
+=== MESURES ===
+  A200 seul                    400 caract. · 94634 lignes (1/5) · fidélité 0.6218 · apport +0.0539
+  A200 + entrée LINÉAIRE      1296 caract. · 94634 lignes (1/5) · fidélité 0.6693 · apport +0.1015
+#   C_lin (entrée seule, 896 colonnes) = 0,6364 · A200 + entrée − C_lin = +0.0329
+
+# pont 400 neurones construit en 294 s
+=== MESURES ===
+  A400 seul                    800 caract. · 94634 lignes (1/5) · fidélité 0.6333 · apport +0.0654
+  A400 + entrée LINÉAIRE      1696 caract. · 94634 lignes (1/5) · fidélité 0.6763 · apport +0.1085
+#   C_lin (entrée seule, 896 colonnes) = 0,6364 · A400 + entrée − C_lin = +0.0399
+
+# pont 800 neurones construit en 809 s
+=== MESURES ===
+  A800 seul                   1600 caract. · 94634 lignes (1/5) · fidélité 0.6421 · apport +0.0743
+  A800 + entrée LINÉAIRE      2496 caract. · 94634 lignes (1/5) · fidélité 0.6821 · apport +0.1143
+#   C_lin (entrée seule, 896 colonnes) = 0,6364 · A800 + entrée − C_lin = +0.0457
+
+=== LA COURBE DE L'APPORT MARGINAL ===
+#  neurones  caract.   A seul  A+entrée  apport/C_lin
+#       200     1096   0.6218    0.6693    
+… [208 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **La courbe est propre et MONOTONE : pas de coude. Le réservoir continue de payer.**
+
+| neurones | A seul | A + entrée | apport sur C_lin |
+|---:|---:|---:|---:|
+| 200 | 0,6218 | 0,6693 | +0,0329 |
+| 400 | 0,6333 | 0,6763 | +0,0399 |
+| 800 | **0,6421** | **0,6821** | **+0,0457** |
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 39. La courbe : pas de coude, le réservoir continue de payer\n\nLe §34 avait mesuré une pente en deux points et demandé **la courbe** … [5676 caractères tronqués]`

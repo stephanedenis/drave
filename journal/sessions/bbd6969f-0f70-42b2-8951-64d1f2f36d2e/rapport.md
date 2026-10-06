@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 189.4 h |
+| Durée | 189.5 h |
 | Tours | 174 |
-| Messages | 8817 |
-| Appels d'outils | 8318 |
+| Messages | 8821 |
+| Appels d'outils | 8321 |
 | Fichiers touchés | 193 |
-| Commandes | 7053 |
+| Commandes | 7055 |
 | Sous-agents | 32 |
-| Commits | 633 |
+| Commits | 634 |
 | Compactages de contexte | 12 |
 
 ## Objectifs déclarés
@@ -8738,7 +8738,7 @@ Une régression sur 472 472 lignes est m
 
 ### Tour 174 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
 
-*29 appels d'outils.* Actions notables :
+*32 appels d'outils.* Actions notables :
 
 - bash — Check current state of jobs
 - read
@@ -8754,11 +8754,17 @@ Une régression sur 472 472 lignes est m
 - bash — Wait for ridge sweep
 - bash — Lower ridge sweep and locate neuronspikes
 - bash — List GitHub repos and search for spike project
-- … et 13 autres
+- … et 15 autres
 
 **Synthèse produite :**
 
-⏵ **J'ai écrit une erreur au §38.2 et la mesure la corrige : le `tanh` est saturé PRESQUE TOUJOURS (argument moyen 16,9), c'est l'état moyenné qui reste petit.**
+⏵ **La courbe est propre et MONOTONE : pas de coude. Le réservoir continue de payer.**
+
+| neurones | A seul | A + entrée | apport sur C_lin |
+|---:|---:|---:|---:|
+| 200 | 0,6218 | 0,6693 | +0,0329 |
+| 400 | 0,6333 | 0,6763 | +0,0399 |
+| 800 | **0,6421** | **0,6821** | **+0,0457** |
 
 ## 3. Travail accompli
 
@@ -9037,7 +9043,7 @@ Une régression sur 472 472 lignes est m
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 7013 autres
+- … et 7015 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9818,4 +9824,5 @@ Une régression sur 472 472 lignes est m
 - Protocole à deux panneaux : le goulot est le TRANSFERT, pas les caractéristiques  Le protocole exige l'oracle sur le TEST (hors vivier) ET la VALIDATION (même v
 - Le ride était 10 à 30 fois trop fort, et l'écart de transfert n'est pas du sur-apprentissage  BALAYAGE DU RIDE, DEUX PANNEAUX (40 neurones, 80 caractéristiques,
 - Correction du §38.2 : le tanh sature PRESQUE TOUJOURS, c'est l'état moyenné qui reste petit  J'avais lu '0,6% de saturation' comme 'la dynamique vit dans son ré
+- La courbe ne plafonne pas (800 neurones → 0,6821) et baisser le gain est RÉFUTÉ  LA COURBE (même vivier, 896 canaux, ride 0,03, fit sur 1/5 des lignes) :    neu
 
