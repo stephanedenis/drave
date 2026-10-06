@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 188.8 h |
+| Durée | 189.2 h |
 | Tours | 174 |
-| Messages | 8794 |
-| Appels d'outils | 8297 |
-| Fichiers touchés | 190 |
-| Commandes | 7039 |
+| Messages | 8811 |
+| Appels d'outils | 8312 |
+| Fichiers touchés | 192 |
+| Commandes | 7048 |
 | Sous-agents | 32 |
-| Commits | 631 |
+| Commits | 632 |
 | Compactages de contexte | 12 |
 
 ## Objectifs déclarés
@@ -8738,7 +8738,7 @@ Une régression sur 472 472 lignes est m
 
 ### Tour 174 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
 
-*8 appels d'outils.* Actions notables :
+*23 appels d'outils.* Actions notables :
 
 - bash — Check current state of jobs
 - read
@@ -8748,10 +8748,17 @@ Une régression sur 472 472 lignes est m
 - bash — Wait for profile validation
 - job_output
 - bash — Report and commit two-panel finding
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/transfert_ridge.py`
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/transfert_ridge.py`
+- bash — Run ridge sweep on two panels
+- bash — Wait for ridge sweep
+- bash — Lower ridge sweep and locate neuronspikes
+- bash — List GitHub repos and search for spike project
+- … et 7 autres
 
 **Synthèse produite :**
 
-⏵ **Le protocole deux panneaux isole enfin la cause : l'écart à l'oracle est de +0,0975 hors vivier contre +0,0112 dans le vivier. C'est le TRANSFERT, pas les caractéristiques.**
+⏵ **Deux réponses mesurées. La stabilité est bonne ; l'événementiel, lui, ne paierait que 0,2 % sur cette dynamique.**
 
 ## 3. Travail accompli
 
@@ -8949,6 +8956,8 @@ Une régression sur 472 472 lignes est m
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_parallele.py` | 0 | 1 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/position_seule.py` | 1 | 2 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/grand_et_entree.py` | 1 | 3 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/transfert_ridge.py` | 1 | 1 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/stabilite_evenements.py` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -9027,7 +9036,7 @@ Une régression sur 472 472 lignes est m
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6999 autres
+- … et 7008 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9806,4 +9815,5 @@ Une régression sur 472 472 lignes est m
 - Correction du §29 : le réservoir n'était pas inutile, il était TROP PETIT  La mesure qui manquait — un réservoir large AVEC accès à l'entrée — renverse la concl
 - Où va le temps : profil mesuré, et un remède gratuit à 5,8x  PROFIL PAR ÉTAPE (mesuré) :   1. Passe professeur            39,3 s/langue → 392 langues = 4 h 17  
 - Protocole à deux panneaux : le goulot est le TRANSFERT, pas les caractéristiques  Le protocole exige l'oracle sur le TEST (hors vivier) ET la VALIDATION (même v
+- Le ride était 10 à 30 fois trop fort, et l'écart de transfert n'est pas du sur-apprentissage  BALAYAGE DU RIDE, DEUX PANNEAUX (40 neurones, 80 caractéristiques,
 
