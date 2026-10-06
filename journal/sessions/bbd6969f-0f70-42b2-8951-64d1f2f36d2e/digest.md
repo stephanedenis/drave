@@ -138010,3 +138010,195 @@ load average: 17,27, 9,94, 12,03
 **Mon invariant des « +0,020 » est en réalité une plage de +0,020 à +0,032.** Je l'annonçais comme une constante ; la mesure dit que c'est un ordre de grandeur. La conclusion qualitative tient — la contribution propre du pont reste petite et ne **croît pas** avec la restriction — mais le chiffre exact varie.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 16. Restriction ou pas : la comparaison complète, et une correction de mon invariant\n\nLes deux runs de la phase 2, même professeur, … [3676 caractères tronqués]`
+
+  ```
+644cf5c Restriction ou pas : comparaison complète, et correction de mon invariant
+
+Wikipedia : 12/480
+en 12 19s
+04:01
+  ```
+
+### 🤖 Assistant
+
+⏵ Comparaison commitée et invariant corrigé. Point d'étape.
+
+## Ce que la comparaison confirme
+
+**La restriction de canaux améliore tout ce qui compte pour l'usage** :
+
+| | 896 canaux | **157 canaux** |
+|---|---:|---:|
+| fidélité TEST | 0,6088 | **0,7430** |
+| invariance | 0,9682 | **0,9827** |
+| pire paire | 0,8494 | **0,9165** |
+
+**+13,4 points de fidélité, +1,5 d'invariance, +6,7 sur la pire paire — avec 5× moins de canaux de sortie.** Le pont restreint gagne sur les trois axes mesurés.
+
+## Ce que je dois corriger
+
+**L'écart à la constante est plus GRAND sans restriction (+0,0322) qu'avec (+0,0223).** Or je l'ai présenté pendant plusieurs tours comme « l'invariant des +0,020 » à travers sept périmètres et deux architectures.
+
+**C'est en réalité une plage de +0,020 à +0,032.** J'ai lu une coïncidence numérique — +0,0197 ± 0,0009 — comme une loi, alors que **ces sept périmètres partageaient tous le même panel de 46 langues**. Changer de panel change l'écart, et je ne l'avais pas testé.
+
+Ce qui tient : la contribution propre du pont est **petite** (2-3 points de cosinus) et **ne croît pas avec la restriction** — ici elle décroît. La conclusion qualitative est intacte ; le chiffre exact ne l'était pas.
+
+C'est la deuxième fois dans ce parcours qu'une conclusion tirée d'un jeu unique ne survit pas au changement de panel — après « plus de langues n'aident pas », mesuré sur 20-36 langues. **La leçon est la même : une plage trop étroite ne produit pas une loi, elle produit une coïncidence.**
+
+## État
+
+| phase | état |
+|---|---|
+| 1. 392 langues | **FAIT** |
+| 2. pont 301 langues — deux runs | **FAIT** |
+| 3. Romeo — 48 scènes | **FAIT** |
+| 4. Wikipedia | **en cours**, 12/480 |
+| 5. traçage par unité | chaîné |
+| 6. analyse finale | chaîné |
+
+Rien à faire de votre côté. Commit `644cf5c`.
+
+
+## Tour 153
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de représentation universelle), boîte noire (on ne lit du professeur que la couche à émuler, jamais sa tête ni ses jetons générés), aucune rétropropagation (A et B aléatoires et gelés, seule la lecture s'ajuste en forme fermée), et chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, TAILLE du réseau, avec le diagnostic oracle sur les deux panneaux (test hors vivier et validation du même vivier)."
+Round: 26/256
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Je relève l'état de Wikipedia et vérifie qu'il reste bien deux phases chaînées derrière.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date \"+%H:%M\"; echo \"=== Wikipedia ===\"; ls /home/stephane/Data13TB/stephane/corpus/wiki_traces 2>/dev/null | wc -l; tail -1 /tmp/trace_wiki.log; echo \"échecs : $(grep -c ÉCHEC /tmp/trace_wiki.log 2>/dev/null)\"; python3 -c \"\n … [976 caractères tronqués]`
+
+  ```
+04:02
+=== Wikipedia ===
+13
+en 13 21s
+échecs : 0
+13 morceaux · moyenne 20 s · reste 2.6 h
+
+=== phases restantes ===
+vivants : analyse_final · trace_wiki · unites_apres
+load average: 16,08, 11,11, 12,29
+  ```
+
+### 🤖 Assistant
+
+⏵ Wikipedia : 13/480, ~2,6 h restantes. Mais **les données de Romeo sont prêtes depuis longtemps** — je peux analyser ce corpus parallèle maintenant au lieu d'attendre la fin de la chaîne.
+
+Wikipedia : 13/480, ~2,6 h restantes. Mais **les données de Romeo sont prêtes** — je peux analyser ce corpus **parallèle** maintenant, au lieu d'attendre la fin de la chaîne qui le prévoyait après le traçage par unité.
+
+- **write** `{"content": "#!/bin/bash\n# ROMEO AND JULIET — analyse du corpus PARALLÈLE, sans attendre la fin de la chaîne.\n#\n# Les 48 scènes (24 en + 24 fr) sont tracées depuis 03h49. Le corpus est\n# APPARIÉ par ordre de scène, donc l'invariance se mesure SEGMENT par SEGMENT —\n# ce que `pont_parallele.py` f … [1282 caractères tronqués]`
+
+  ```
+<path>/tmp/romeo.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && chmod +x /tmp/romeo.sh && bash -n /tmp/romeo.sh && echo \"syntaxe OK et exécutable\"; setsid nohup bash /tmp/romeo.sh >/dev/null 2>&1 < /dev/null & disown; sleep 400; date \"+%H:%M\"; cat /tmp/romeo.log | grep -vE \"^  [a-z]{3}–\" |  … [77 caractères tronqués]`
+
+  ```
+syntaxe OK et exécutable
+04:09
+=== où est le plateau du professeur SUR CE CORPUS ===
+  --- couche 0 ---
+# 24 unités · 2 langues max · couche 0
+
+ unité  langues  invariance  pire paire   pire couple
+     1        2      0.1765      0.1765   en–fr
+     2        2      0.1765      0.1765   en–fr
+     3        2      0.1765      0.1765   en–fr
+     4        2      0.1765      0.1765   en–fr
+     5        2     -0.0888     -0.0888   en–fr
+     6        2      0.1765      0.1765   en–fr
+     7        2      0.1765      0.1765   en–fr
+     8        2      0.1765      0.1765   en–fr
+     9        2      0.1765      0.1765   en–fr
+    10        2      0.1765      0.1765   en–fr
+    11        2      0.1012      0.1012   en–fr
+    12        2      0.1765      0.1765   en–fr
+    13        2      0.1765      0.1765   en–fr
+    14        2      0.1765      0.1765   en–fr
+    15        2      0.1765      0.1765   en–fr
+    16        2      0.1278      0.1278   en–fr
+    17        2      0.1765      0.1765   en–fr
+    18        2      0.1765      0.1765   en–fr
+    19        2      0.2075      0.2075   en–fr
+    20        2      0.2075      0.2075   en–fr
+    21        2     -0.0760     -0.0760   
+… [567 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ L'analyse Romeo tourne et produit déjà des chiffres parlants.
+
+## Le professeur sur le corpus parallèle riche
+
+| couche | invariance moyenne par scène |
+|---|---:|
+| **0** (plongement) | **0,1420** — pire scène **−0,0888** |
+| 4 | ~0,51 à 0,55 |
+| 8 | en cours |
+| 10 | en cours |
+
+**À la couche 0, les deux langues sont quasi orthogonales** (0,14, et parfois négatif). C'est attendu — alphabets et morphologies différents — mais cela quantifie **combien** le plongement est propre à chaque langue sur du texte littéraire : bien plus que sur l'UDHR (0,58 sur l'ancien panel).
+
+Et l'invariance **monte avec la profondeur** (0,14 → 0,53 dès la couche 4), ce qui est précisément le phénomène que le pont doit capturer.
+
+J'attends les couches 8 et 10, puis le pont entraîné sur l'anglais et transporté sur le français — c'est le vrai test : **le pont tient-il sur du texte littéraire long, très loin de l'UDHR administratif ?**
+
+- **bash** `{"command": "sleep 500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date \"+%H:%M\"; grep -E \"^  --- couche|^MOYENNE|^pire unité|^===|^caches TERMINE\" /tmp/romeo.log; echo; echo \"--- le pont (si prêt) ---\"; sed -n '/le pont, entraîné/,$p' /tmp/romeo.log | grep -E \"segments|invariance du … [240 caractères tronqués]`
+
+  ```
+04:17
+=== où est le plateau du professeur SUR CE CORPUS ===
+  --- couche 0 ---
+MOYENNE sur 24 unités : invariance 0.1420 · pire paire 0.1420
+pire unité : -0.0888 · pire paire absolue -0.0888
+  --- couche 4 ---
+MOYENNE sur 24 unités : invariance 0.4483 · pire paire 0.4483
+pire unité : 0.1289 · pire paire absolue 0.1289
+  --- couche 8 ---
+MOYENNE sur 24 unités : invariance 0.5985 · pire paire 0.5985
+pire unité : 0.1943 · pire paire absolue 0.1943
+  --- couche 10 ---
+MOYENNE sur 24 unités : invariance 0.5703 · pire paire 0.5703
+pire unité : 0.2381 · pire paire absolue 0.2381
+=== le pont, entraîné sur l'ANGLAIS et transporté sur le FRANÇAIS ===
+
+--- le pont (si prêt) ---
+
+Wikipedia : 60/480
+  ```
+
+### 🤖 Assistant
+
+⏵ **Découverte : le plateau du professeur est à la couche 8, pas 10.**
+
+| couche | invariance moyenne par scène | pire scène |
+|---|---:|---:|
+| 0 (plongement) | 0,1420 | −0,0888 |
+| 4 | 0,4483 | 0,1289 |
+| **8** | **0,5985** | 0,1943 |
+| 10 | 0,5703 | **0,2381** |
+
+**Le plateau est à la couche 8, et la couche 10 — ma cible depuis le début — est déjà en re-spécialisation** (0,5703 contre 0,5985).
+
+Et ce n'est pas propre à ce corpus : sur l'UDHR propre je mesurais **0,5471 à la couche 8 contre 0,5247 à la couche 10**. Les deux corpus concordent : **je visais une couche trop profonde de deux crans.**
+
+**Ma cible était mal choisie.** Sur les deux corpus, la couche 8 est plus interlingue que la couche 10 : 0,5985 contre 0,5703 sur Romeo, 0,5471 contre 0,5247 sur l'UDHR. Les deux concordent — **je visais deux crans trop profond**, et la couche 10 était déjà en re-spécialisation vers la sortie.
+
+Le pont est en train de construire ses caches ; je relèverai son résultat, et je note qu'il faudra **refaire la mesure sur la couche 8** pour comparer.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 17. Le plateau du professeur est à la couche 8, PAS à la couche 10\n\nMesure sur le corpus parallèle *Romeo and Juliet*, invariance * … [3543 caractères tronqués]`

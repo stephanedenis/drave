@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 181.2 h |
-| Tours | 152 |
-| Messages | 8483 |
-| Appels d'outils | 8043 |
-| Fichiers touchés | 177 |
-| Commandes | 6847 |
+| Durée | 181.5 h |
+| Tours | 153 |
+| Messages | 8490 |
+| Appels d'outils | 8048 |
+| Fichiers touchés | 178 |
+| Commandes | 6851 |
 | Sous-agents | 32 |
-| Commits | 608 |
+| Commits | 609 |
 | Compactages de contexte | 11 |
 
 ## Objectifs déclarés
@@ -357,6 +357,8 @@
 **Tour 151** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 **Tour 152** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
+
+**Tour 153** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -7698,22 +7700,71 @@ Rien à faire de votre côté. Commit `43adee1`.
 
 **Synthèse produite :**
 
-⏵ **Le second run est tombé, et il nuance mon invariant.**
+⏵ Comparaison commitée et invariant corrigé. Point d'étape.
 
-| | **896 canaux** (run 2) | **157 canaux** (run 1) |
+\## Ce que la comparaison confirme
+
+**La restriction de canaux améliore tout ce qui compte pour l'usage** :
+
+| | 896 canaux | **157 canaux** |
 |---|---:|---:|
-| réseau | 45 neurones · 1 couche | 40 neurones · 1 couche |
-| fid TEST | 0,6088 | **0,7430** |
-| constante témoin | 0,5766 | 0,7207 |
-| **écart à la constante** | **+0,0322** | **+0,0223** |
-| invariance TEST | 0,9682 | **0,9827** |
+| fidélité TEST | 0,6088 | **0,7430** |
+| invariance | 0,9682 | **0,9827** |
 | pire paire | 0,8494 | **0,9165** |
-| écart oracle TEST | +0,0327 | +0,0223 |
-| écart oracle VALIDATION | +0,0111 | +0,0058 |
 
-**L'écart à la constante est PLUS GRAND sans restriction (+0,0322) qu'avec (+0,0223).** Mon invariant des « +0,020 » est donc en réalité une **plage de +0,020 à +0,032** — il n'est pas aussi serré que je l'annonçais.
+**+13,4 points de fidélité, +1,5 d'invariance, +6,7 sur la pire paire — avec 5× moins de canaux de sortie.** Le pont restreint gagne sur les trois axes mesurés.
 
-**Mon invariant des « +0,020 » est en réalité une plage de +0,020 à +0,032.** Je l'annonçais comme une constante ; la mesure dit que c'est un ordre de grandeur. La conclusion qualitative tient — la contribution propre du pont reste petite et ne **croît pas** avec la restriction — mais le chiffre exact varie.
+\## Ce que je dois corriger
+
+**L'écart à la constante est plus GRAND sans restriction (+0,0322) qu'avec (+0,0223).** Or je l'ai présenté pendant plusieurs tours comme « l'invariant des +0,020 » à travers sept périmètres et deux architectures.
+
+**C'est en réalité une plage de +0,020 à +0,032.** J'ai lu une coïncidence numérique — +0,0197 ± 0,0009 — comme une loi, alors que **ces sept périmètres partageaient tous le même panel de 46 langues**. Changer de panel change l'écart, et je ne l'avais pas testé.
+
+Ce qui tient : la contribution propre du pont est **petite** (2-3 points de cosinus) et **ne croît pas avec la restriction** — ici elle décroît. La conclusion qualitative est intacte ; le chiffre exact ne l'était pas.
+
+C'est la deuxième fois dans ce parcours qu'une conclusion tirée d'un jeu unique ne survit pas au changement de panel — après « plus de langues n'aident pas », mesuré sur 20-36 langues. **La leçon est la même : une plage trop étroite ne produit pas une loi, elle produit une coïncidence.**
+
+\## État
+
+| phase | état |
+|---|---|
+| 1. 392 langues | **FAIT** |
+| 2. pont 301 langues — deux runs | **FAIT** |
+| 3. Romeo — 48 scènes | **FAIT** |
+| 4. Wikipedia | **en cours**, 12/480 |
+| 5. traçage par unité | chaîné |
+| 6. analyse finale | chaîné |
+
+Rien à faire de votre côté. Commit `644cf5c`.
+
+### Tour 153 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
+
+*5 appels d'outils.* Actions notables :
+
+- bash — Check Wikipedia progress and remaining chain
+- write `/tmp/romeo.sh`
+- bash — Run Romeo parallel analysis
+- bash — Wait for Romeo analysis results
+- bash — Commit the plateau layer correction
+
+**Synthèse produite :**
+
+⏵ **Découverte : le plateau du professeur est à la couche 8, pas 10.**
+
+| couche | invariance moyenne par scène | pire scène |
+|---|---:|---:|
+| 0 (plongement) | 0,1420 | −0,0888 |
+| 4 | 0,4483 | 0,1289 |
+| **8** | **0,5985** | 0,1943 |
+| 10 | 0,5703 | **0,2381** |
+
+**Le plateau est à la couche 8, et la couche 10 — ma cible depuis le début — est déjà en re-spécialisation** (0,5703 contre 0,5985).
+
+Et ce n'est pas propre à ce corpus : sur l'UDHR propre je mesurais **0,5471 à la couche 8 contre 0,5247 à la couche 10**. Les deux corpus concordent : **je visais une couche trop profonde de deux crans.**
+
+**Ma cible était mal choisie.** Sur les deux corpus, la couche 8 est plus interlingue que la couche 10 : 0,5985 contre 0,5703 sur Romeo, 0,5471 contre 0,5247 sur l'UDHR. Les deux concordent — **je visais deux crans trop profond**, et la couche 10 était déjà en re-spécialisation vers la sortie.
+
+Le pont est en train de construire ses caches ; je relèverai son résultat, et je note qu'il faudra **refaire la mesure sur la couche 8** pour comparer.
 
 ## 3. Travail accompli
 
@@ -7898,6 +7949,7 @@ Rien à faire de votre côté. Commit `43adee1`.
 | `/tmp/dose.sh` | 1 | 0 |
 | `/tmp/stratifie.sh` | 1 | 0 |
 | `/tmp/seuil.sh` | 1 | 0 |
+| `/tmp/romeo.sh` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -7976,7 +8028,7 @@ Rien à faire de votre côté. Commit `43adee1`.
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6807 autres
+- … et 6811 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -8732,4 +8784,5 @@ Rien à faire de votre côté. Commit `43adee1`.
 - Bug de guetteur : 'TERMINE' matchait la sous-chaîne de 'caches TERMINE'  rj_apres.sh a déclenché Romeo 25 minutes trop tôt : sa condition cherchait 'TERMINE' sa
 - Le piège du droit d'exécution, trois fois — corrigé à la racine  Romeo a terminé (48 scènes, 24 en + 24 fr, appariement parfait vérifié). Mais Wikipedia n'a pas
 - Restriction ou pas : comparaison complète, et correction de mon invariant  Deux runs, même professeur, mêmes 301 langues, même panel de test (41 langues) :     
+- Le plateau du professeur est à la couche 8, pas 10 — ma cible était mal choisie  Mesure sur Romeo, invariance SEGMENT par SEGMENT (24 scènes appariées) :   couc
 
