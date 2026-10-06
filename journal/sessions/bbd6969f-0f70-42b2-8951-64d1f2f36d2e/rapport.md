@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 193.1 h |
+| Durée | 193.4 h |
 | Tours | 178 |
-| Messages | 8967 |
-| Appels d'outils | 8456 |
-| Fichiers touchés | 198 |
-| Commandes | 7170 |
+| Messages | 8980 |
+| Appels d'outils | 8467 |
+| Fichiers touchés | 199 |
+| Commandes | 7176 |
 | Sous-agents | 32 |
-| Commits | 643 |
+| Commits | 644 |
 | Compactages de contexte | 12 |
 
 ## Objectifs déclarés
@@ -8968,7 +8968,7 @@ Ce test est le point clé : l'UDHR est **mono-domaine**, donc ses « contenus di
 
 ### Tour 178 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
 
-*6 appels d'outils.* Actions notables :
+*17 appels d'outils.* Actions notables :
 
 - bash — Check all chains
 - bash — Check process load
@@ -8976,17 +8976,27 @@ Ce test est le point clé : l'UDHR est **mono-domaine**, donc ses « contenus di
 - bash — Lower priority of the slow Crime traces
 - bash — Extract invariance evolution from growth log
 - bash — Report the fidelity/invariance trade-off
+- read
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py`
+- bash — Wire the invariance penalty option
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/lecture_invariante.py`
+- bash — Run the invariance-constrained readout sweep
+- bash — Wait for the invariance sweep
+- job_output
+- bash — Fix penalty scaling and re-run
+- … et 2 autres
 
 **Synthèse produite :**
 
-⏵ **Tension confirmée et monotone : la fidélité monte de +0,0185 pendant que l'invariance perd 0,0776 et la pire paire 0,1805.**
+⏵ **Prédiction CONFIRMÉE, et le taux d'échange est excellent : +0,094 d'invariance pour −0,040 de fidélité sur toute la plage, et à μ=0,1 c'est +0,042 d'invariance pour −0,008 seulement.**
 
-| neurones | fidTEST | invariance | pire paire |
-|---:|---:|---:|---:|
-| 8 | 0,6151 | **0,9437** | **0,7399** |
-| 40 | 0,6294 | 0,9084 | 0,6559 |
-| 96 | 0,6311 | 0,8819 | 0,6419 |
-| 179 | **0,6336** | **0,8661** | **0,5594** |
+| μ | fid TEST | invariance | pire paire | coût / gain |
+|---:|---:|---:|---:|---|
+| 0 | 0,6646 | 0,8740 | 0,4463 | — |
+| 0,03 | 0,6624 | 0,8909 | 0,5152 | −0,0022 pour +0,0169 |
+| **0,1** | **0,6564** | **0,9157** | **0,6224** | **−0,0082 pour +0,0417** |
+| 0,3 | 0,6429 | 0,9448 | 0,7543 | −0,0217 pour +0,0707 |
+| 1,0 | 0,6242 | 0,9677 | 0,8600 | −0,0404 pour +0,0937 |
 
 ## 3. Travail accompli
 
@@ -9144,7 +9154,7 @@ Ce test est le point clé : l'UDHR est **mono-domaine**, donc ses « contenus di
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/31-le-regroupement-par-experts-mesure-et-k3-au-complet.md` | 1 | 1 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-prefill-par-experts.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/engine.rs` | 0 | 1 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py` | 0 | 40 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py` | 0 | 41 |
 | `/tmp/chaine_propre.sh` | 1 | 0 |
 | `/tmp/analyse_propre.sh` | 1 | 0 |
 | `/tmp/stop2.py` | 1 | 0 |
@@ -9192,6 +9202,7 @@ Ce test est le point clé : l'UDHR est **mono-domaine**, donc ses « contenus di
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/domaine_ou_langue.py` | 2 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/extrait_crime.py` | 1 | 0 |
 | `/tmp/wiki_analyse.sh` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/lecture_invariante.py` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -9270,7 +9281,7 @@ Ce test est le point clé : l'UDHR est **mono-domaine**, donc ses « contenus di
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 7130 autres
+- … et 7136 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10061,4 +10072,5 @@ Ce test est le point clé : l'UDHR est **mono-domaine**, donc ses « contenus di
 - Premier corpus MULTI-DOMAINE et ALIGNÉ : 482 articles Wikipedia en 6 langues  CE QUE LA MACHINE CONTENAIT DÉJÀ : dix bases Wikipedia décompressées, 30 Go, dans 
 - Deuxième œuvre parallèle (Crime et Châtiment, en-es) et généralisation du test domaine/langue  LE MANQUE : le corpus parallèle ne comptait qu'UNE œuvre (Roméo e
 - Fidélité et invariance tirent en sens opposé quand le réseau grandit  Journal de la croissance (couche 10, ride 0,03, quadratique, multi-échelle, 300 langues d'
+- Ajuster la lecture SOUS CONTRAINTE d'invariance : +0,042 d'invariance pour 0,008 de fidélité  L'ajustement ordinaire minimise ‖XW − Y‖² SEUL et ignore l'invaria
 

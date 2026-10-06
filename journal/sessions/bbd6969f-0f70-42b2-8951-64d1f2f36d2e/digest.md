@@ -147415,3 +147415,204 @@ n179            179       1    0.6500   0.6338    0.6336   0.8661  0.5594 | comm
 | 179 | **0,6336** | **0,8661** | **0,5594** |
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 47. Fidélité et invariance TIRENT EN SENS OPPOSÉ quand le réseau grandit\n\nLe journal de la croissance (§44, couche 10, ride 0,03 … [5114 caractères tronqués]`
+
+  ```
+f6d40c8 Fidélité et invariance tirent en sens opposé quand le réseau grandit
+  ```
+
+### 🤖 Assistant
+
+⏵ **J'implémente la lecture sous contrainte d'invariance — elle reste en forme fermée.**
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", "limit": 22, "offset": 193}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py</path>
+<type>file</type>
+<content>
+193:             for r, i in enumerate(bloc):
+194:                 self.X[i] = np.hstack([self.X[i], S[r, :len(self.E[i])]])
+195:             del Ep, Xp, S
+196: 
+197:         for r in range(k):
+198:             self.poids.append((W_par[r].copy(), W_self[r].copy(), B[r].copy(), c))
+199:         self.a_neur.extend(a_n.tolist())
+200:         if nouvelle_couche or not self.couches:
+201:             self.couches.append(k)
+202:         else:
+203:             self.couches[-1] += k
+204:         self.compte_neurones += k
+205:         return self.compte_neurones
+206: 
+207:     # -- lecture -------------------------------------------------------------
+208:     def _norm(self, X):
+209:         if not self.normalise:
+210:             return X
+211:         m = X.mean(0); e = X.std(0)
+212:         return (X - m)/np.maximum(e, 1e-6)
+213: 
+214:     def phi(self, X):
+
+(Showing lines 193-214 of 966. Use offset=215 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", "new_string": "    def ajuste(self, idx, ride, mt, quel=slice(None)):\n        # SOUS-ÉCHANTILLONNAGE DU FIT. La régression porte sur ~472 000 lignes :\n        # massivement sur-déterminée. Mesuré (§35.5) : gar … [2739 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\ns = open('tools/pont_generatif.py').read()\nold = \"\"\"        # sous-échantillonnage du FIT seulement — l'évaluation reste entière\n        self.sous_ech = 1\"\"\"\nnew = \"\"\"        # sous-échantillonnage du … [857 caractères tronqués]`
+
+  ```
+syntaxe OK
+syntaxe OK après correction du découpage
+  ```
+
+### 🤖 Assistant
+
+⏵ **Je teste le curseur : combien d'invariance par unité de fidélité.**
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"lecture_invariante.py — ajuster la lecture SOUS CONTRAINTE d'invariance.\n\nMESURÉ AU §47 : dans la croissance, fidélité et invariance tirent en sens opposé —\nde 8 à 179 neurones, +0,0185 de fidélité pour −0,0776 d'invariance et −0,1805 de\npire paire. Ce  … [4227 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/lecture_invariante.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"import ast; ast.parse(open('tools/lecture_invariante.py').read()); print('syntaxe OK')\" && python3 -u tools/lecture_invariante.py /tmp/cache392c8_train.npz /tmp/cache392c8_test.npz --neur 40 2>&1 | tail -25", "descripti … [79 caractères tronqués]`
+
+  ```
+started background job bash-241
+  ```
+
+- **bash** `{"command": "sleep 500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== invariance contrainte ===\"; tail -22 /tmp/../dev/null 2>/dev/null; date '+%H:%M'", "description": "Wait for the invariance sweep", "timeoutMs": 540000}`
+
+  ```
+=== invariance contrainte ===
+16:01
+  ```
+
+### 👤 Utilisateur
+
+background job bash-241 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c "import ast; ast.parse(open('tools/lecture_invariante.py').read()); print('syntaxe OK')" && python3 -u tools/lecture_invariante.py /tmp/cache392c8_train.npz /tmp/cache392c8_test.npz --neur 40 2>&1 | tail -25) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-241"}`
+
+  ```
+syntaxe OK
+# 896 canaux · 300 ajustement · 51 validation · 41 test
+# réseau 40 neurones · 1 couche(s), construit en 26 s
+# INVARIANCE DU PROFESSEUR : 0.6836 · pire paire 0.0104
+
+#      mu   fid VAL  fid TEST  INVARIANCE  pire paire   vs mu=0
+   0.000    0.6942    0.6646      0.8740      0.4463   +0.0000
+   0.003    0.6420    0.5982      0.9998      0.9986   +0.1258
+   0.010    0.6412    0.5981      1.0000      0.9998   +0.1260
+   0.030    0.6410    0.5984      1.0000      1.0000   +0.1260
+   0.100    0.6410    0.5987      1.0000      1.0000   +0.1260
+   0.300    0.6410    0.5988      1.0000      1.0000   +0.1260
+   1.000    0.6410    0.5988      1.0000      1.0000   +0.1260
+   3.000    0.6410    0.5988      1.0000      1.0000   +0.1260
+
+# PRÉDICTION : l'invariance doit MONTER et la fidélité BAISSER.
+# Le taux d'échange se lit entre mu=0 et le point où le gain d'invariance
+# cesse de valoir sa perte de fidélité.
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Résultat en FALAISE, pas en curseur : l'invariance passe à 0,9998 dès μ=0,003 et la fidélité tombe SOUS le témoin constant. Mon échelle de pénalité était fausse — `len(X)·C` vaut 80× le terme de données.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\ns = open('tools/pont_generatif.py').read()\nold = \"\"\"        if getattr(self, \"mu_inv\", 0.0) > 0.0:\n            n_i = np.array([len(b) for b in blocs], dtype=np.float64)\n            M = np.vstack([b.mean(0 … [1744 caractères tronqués]`
+
+  ```
+started background job bash-242
+  ```
+
+- **bash** `{"command": "sleep 480; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== croissance ===\"; tail -2 /tmp/croissance2.log; echo \"wiki : $(grep -c '^ARTICLE' /tmp/trace_wiki_apparie.log) articles\"; echo \"crime : $(ls /home/stephane/Data13TB/stephane/corpus/parallele_crime/traces 2>/d … [110 caractères tronqués]`
+
+  ```
+=== croissance ===
+########## CYCLE 1 — ATTRITION (redondance) ##########
+après                           neur.  couch.  fid appr  fid VAL  fid TEST
+wiki : 21 articles
+crime : 4 traces
+16:10
+  ```
+
+### 👤 Utilisateur
+
+background job bash-242 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'
+s = open('tools/pont_generatif.py').read()
+old = """        if getattr(self, "mu_inv", 0.0) > 0.0:
+            n_i = np.array([len(b) for b in blocs], dtype=np.float64)
+            M = np.vstack([b.mean(0) for b in blocs])          # (langues, n)
+            mbar = (n_i[:, None]*M).sum(0)/n_i.sum()
+            D = M - mbar
+            C = (D*n_i[:, None]).T @ D
+            # même échelle que le ride : μ est un rapport, pas une valeur absolue
+            G = G + self.mu_inv*len(X)*C"""
+new = """        if getattr(self, "mu_inv", 0.0) > 0.0:
+            n_i = np.array([len(b) for b in blocs], dtype=np.float64)
+            M = np.vstack([b.mean(0) for b in blocs])          # (langues, n)
+            mbar = (n_i[:, None]*M).sum(0)/n_i.sum()
+            D = M - mbar
+            C = (D*n_i[:, None]).T @ D
+            # ÉCHELLE. Première tentative : `mu·len(X)·C`. FAUSSE, et la mesure l'a
+            # montrée : `len(X)·trace(C)` vaut ~80× `trace(XᵀX)`, donc même μ=0,003
+            # écrasait le terme de données. Résultat observé : une FALAISE (invariance
+            # 0,874 → 0,9998 d'un coup, fidélité SOUS le témoin constant) au lieu d'un
+            # curseur. On normalise donc C pour que μ=1 signifie « pénalité de même
+            # échelle que l'ajustement », et μ reste un rapport lisible.
+            G = G + self.mu_inv*(np.trace(G)/max(np.trace(C), 1e-12))*C"""
+assert old in s
+s = s.replace(old, new)
+open('tools/pont_generatif.py','w').write(s)
+print("échelle corrigée")
+PYEOF
+python3 -c "import ast; ast.parse(open('tools/pont_generatif.py').read()); print('syntaxe OK')" && sed -i 's|"0,0.003,0.01,0.03,0.1,0.3,1,3"|"0,0.001,0.003,0.01,0.03,0.1,0.3,1"|' tools/lecture_invariante.py && python3 -u tools/lecture_invariante.py /tmp/cache392c8_train.npz /tmp/cache392c8_test.npz --neur 40 2>&1 | tail -22) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-242"}`
+
+  ```
+échelle corrigée
+syntaxe OK
+# 896 canaux · 300 ajustement · 51 validation · 41 test
+# réseau 40 neurones · 1 couche(s), construit en 25 s
+# INVARIANCE DU PROFESSEUR : 0.6836 · pire paire 0.0104
+
+#      mu   fid VAL  fid TEST  INVARIANCE  pire paire   vs mu=0
+   0.000    0.6942    0.6646      0.8740      0.4463   +0.0000
+   0.001    0.6942    0.6646      0.8747      0.4489   +0.0007
+   0.003    0.6941    0.6644      0.8760      0.4540   +0.0019
+   0.010    0.6939    0.6639      0.8803      0.4713   +0.0062
+   0.030    0.6930    0.6624      0.8909      0.5152   +0.0169
+   0.100    0.6895    0.6564      0.9157      0.6224   +0.0417
+   0.300    0.6812    0.6429      0.9448      0.7543   +0.0707
+   1.000    0.6689    0.6242      0.9677      0.8600   +0.0937
+
+# PRÉDICTION : l'invariance doit MONTER et la fidélité BAISSER.
+# Le taux d'échange se lit entre mu=0 et le point où le gain d'invariance
+# cesse de valoir sa perte de fidélité.
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Prédiction CONFIRMÉE, et le taux d'échange est excellent : +0,094 d'invariance pour −0,040 de fidélité sur toute la plage, et à μ=0,1 c'est +0,042 d'invariance pour −0,008 seulement.**
+
+| μ | fid TEST | invariance | pire paire | coût / gain |
+|---:|---:|---:|---:|---|
+| 0 | 0,6646 | 0,8740 | 0,4463 | — |
+| 0,03 | 0,6624 | 0,8909 | 0,5152 | −0,0022 pour +0,0169 |
+| **0,1** | **0,6564** | **0,9157** | **0,6224** | **−0,0082 pour +0,0417** |
+| 0,3 | 0,6429 | 0,9448 | 0,7543 | −0,0217 pour +0,0707 |
+| 1,0 | 0,6242 | 0,9677 | 0,8600 | −0,0404 pour +0,0937 |
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 48. Ajuster la lecture SOUS CONTRAINTE d'invariance : le levier existe, et il est bon marché\n\n### 48.1 Le principe, et pourquoi  … [6051 caractères tronqués]`

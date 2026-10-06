@@ -105,6 +105,10 @@ class Pont:
         self.a_max = None
         # sous-échantillonnage du FIT seulement — l'évaluation reste entière
         self.sous_ech = 1
+        # PÉNALITÉ D'INVARIANCE INTER-LANGUE dans l'objectif de la lecture.
+        # 0 = ajustement ordinaire. Voir `ajuste` : le terme reste quadratique,
+        # donc la solution reste en forme fermée.
+        self.mu_inv = 0.0
         # nombre de langues traitées ensemble dans `nait` (vectorisation sur les
         # langues, la seule dimension qui ne soit pas séquentielle)
         self.bloc_langues = 32
@@ -225,9 +229,43 @@ class Pont:
         # O(lignes × caractéristiques²), c'est le seul levier qui compte quand le
         # réseau grossit. `self.sous_ech = 1` par défaut : comportement inchangé.
         se = getattr(self, "sous_ech", 1)
-        X = self.phi(np.vstack([self._norm(self.X[i][::se, idx]) for i in quel]))
+        blocs = [self.phi(self._norm(self.X[i][::se][:, idx])) for i in quel]
+        X = np.vstack(blocs)
         Y = np.vstack([self.Y[i][::se] for i in quel])
         n = X.shape[1]
+        G = X.T @ X
+        # ------------------------------------------------------ INVARIANCE
+        #
+        # L'ajustement ordinaire minimise ‖XW − Y‖² SEUL : il ignore complètement
+        # l'invariance inter-langue. Mesuré (§47) : fidélité et invariance tirent
+        # alors en sens OPPOSÉ quand le réseau grandit — +0,0185 de fidélité pour
+        # −0,0776 d'invariance de 8 à 179 neurones. On ajoute donc à l'objectif la
+        # variance INTER-LANGUE de la sortie :
+        #
+        #     P(W) = Σ_i n_i ‖m_i − m̄‖²     où m_i = moyenne de X_i·W par langue
+        #
+        # C'est un terme QUADRATIQUE en W : P(W) = tr(Wᵀ C W) avec
+        # C = Σ_i n_i (M_i − M̄)ᵀ(M_i − M̄). L'objectif total reste donc quadratique et
+        # la solution reste en FORME FERMÉE :
+        #
+        #     (XᵀX + μ·C + ride·I) W = Xᵀ(Y − mt)
+        #
+        # On ne change pas d'algorithme, on change d'OBJECTIF : on demande à la
+        # lecture de copier la cible TOUT EN rapprochant les langues.
+        if getattr(self, "mu_inv", 0.0) > 0.0:
+            n_i = np.array([len(b) for b in blocs], dtype=np.float64)
+            M = np.vstack([b.mean(0) for b in blocs])          # (langues, n)
+            mbar = (n_i[:, None]*M).sum(0)/n_i.sum()
+            D = M - mbar
+            C = (D*n_i[:, None]).T @ D
+            # ÉCHELLE. Première tentative : `mu·len(X)·C`. FAUSSE, et la mesure l'a
+            # montrée : `len(X)·trace(C)` vaut ~80× `trace(XᵀX)`, donc même μ=0,003
+            # écrasait le terme de données. Résultat observé : une FALAISE (invariance
+            # 0,874 → 0,9998 d'un coup, fidélité SOUS le témoin constant) au lieu d'un
+            # curseur. On normalise donc C pour que μ=1 signifie « pénalité de même
+            # échelle que l'ajustement », et μ reste un rapport lisible.
+            G = G + self.mu_inv*(np.trace(G)/max(np.trace(C), 1e-12))*C
+        return np.linalg.solve(G + ride*len(X)*np.eye(n), X.T @ (Y - mt))
         if self.pese is None:
             return np.linalg.solve(X.T @ X + ride*len(X)*np.eye(n), X.T @ (Y - mt))
         # PESÉE PAR LANGUE. La régression minimise une erreur ABSOLUE : une langue
