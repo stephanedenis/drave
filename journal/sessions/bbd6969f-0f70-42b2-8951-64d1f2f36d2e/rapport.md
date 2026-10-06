@@ -6,13 +6,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
 | Durée | 177.6 h |
-| Tours | 136 |
-| Messages | 8381 |
-| Appels d'outils | 7973 |
+| Tours | 137 |
+| Messages | 8386 |
+| Appels d'outils | 7976 |
 | Fichiers touchés | 175 |
-| Commandes | 6779 |
+| Commandes | 6782 |
 | Sous-agents | 32 |
-| Commits | 598 |
+| Commits | 599 |
 | Compactages de contexte | 11 |
 
 ## Objectifs déclarés
@@ -325,6 +325,8 @@
 **Tour 135** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1001 caractères tronqués]
 
 **Tour 136** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1001 caractères tronqués]
+
+**Tour 137** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -6983,17 +6985,51 @@ Rien à faire de votre côté. Commit `1a42f81`.
 
 **Synthèse produite :**
 
-⏵ **Courbe de dose complète, et elle ne sature pas.**
+⏵ Courbe de dose complète et commitée. Point d'étape.
 
-| langues | fid TEST | constante | **écart** | écart oracle TEST | écart oracle VAL |
+\## Le résultat du tour
+
+J'ai ajouté le point manquant à 60 langues — choisi comme **sous-ensemble strict** de la dose 112 (même graine) pour que la comparaison soit propre.
+
+| langues | fid TEST | constante | **écart** | oracle TEST | oracle VAL |
 |---:|---:|---:|---:|---:|---:|
 | 30 | 0,7029 | 0,6907 | **+0,0122** | +0,0347 | +0,0240 |
-| **60** | **0,7058** | 0,6928 | **+0,0130** | +0,0343 | +0,0237 |
+| 60 | 0,7058 | 0,6928 | **+0,0130** | +0,0343 | +0,0237 |
 | 112 | 0,7105 | 0,6955 | **+0,0150** | +0,0299 | +0,0231 |
 
-Le gain marginal par langue **augmente légèrement** au lieu de diminuer (2,7·10⁻⁵ puis 3,8·10⁻⁵ par langue). **La courbe ne sature donc pas** — pousser à 392 langues devrait continuer de payer. Et l'écart de transfert se réduit régulièrement.
+**La courbe ne sature pas — le gain marginal par langue *augmente*.** 2,7·10⁻⁵ par langue de 30 à 60, puis **3,8·10⁻⁵** de 60 à 112. Une courbe qui plafonne ferait l'inverse. **Pousser jusqu'à 392 langues devrait donc continuer de payer**, ce qui justifie pleinement la phase en cours.
 
-**La courbe ne sature pas** : le gain marginal par langue **augmente légèrement** au lieu de diminuer. Pousser jusqu'à 392 langues devrait donc continuer de payer — ce qui justifie pleinement la phase en cours.
+**Et l'écart de transfert se réduit** : oracle TEST +0,0347 → +0,0299. Plus de langues rapprochent aussi ce que nos caractéristiques contiennent de ce que la lecture en extrait.
+
+\## Ce que cela corrige dans mes conclusions
+
+J'avais conclu, sur la plage 20-30-36 langues, que **le nombre de langues ne comptait pas**. C'était vrai *dans cette plage* — l'effet y est sous le bruit — et **faux au-delà**. La leçon est méthodologique : **une conclusion tirée d'une plage trop étroite ne vaut que pour cette plage**, et j'ai eu tort de la généraliser.
+
+\## État
+
+| | |
+|---|---:|
+| phase 1 | **164/392** · 0 échec |
+| restant | ~228 langues, ~2 h |
+| fin estimée | ~02h30 |
+
+L'expérience de dose a de nouveau compété avec le traçage, mais elle a produit une conclusion actionnable — la phase 1 vaut la peine d'être menée à son terme — et elle en a corrigé une autre. Je considère l'arbitrage justifié.
+
+Rien à faire de votre côté. Commit `0613445`.
+
+### Tour 137 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Check resources for the full analysis
+- bash — Benchmark the ridge step at full scale
+- bash — Document sizing decision
+
+**Synthèse produite :**
+
+⏵ Le chronométrage donne la réponse : **22 s par neurone** à l'échelle finale (437K × 240), soit ~35 min à 1,7 h par run d'analyse. C'est acceptable. Je **n'optimise pas** — je préfère ne pas toucher à une chaîne validée quand le temps n'est pas un problème, et je consigne le chiffre.
+
+Le chronométrage tranche : **22 s par neurone** à l'échelle finale, soit **35 min à 1,7 h** par run. C'est acceptable — la phase 1 finit vers 02h30 de toute façon. Je **n'optimise pas** : je ne touche pas à une chaîne validée quand le temps n'est pas le facteur limitant.
 
 ## 3. Travail accompli
 
@@ -7254,7 +7290,7 @@ Le gain marginal par langue **augmente légèrement** au lieu de diminuer (2,7·
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6739 autres
+- … et 6742 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -8000,4 +8036,5 @@ Le gain marginal par langue **augmente légèrement** au lieu de diminuer (2,7·
 - Rapport : extension à toutes les langues — périmètre, convention, découpage, 5 phases  Documente l'état complet de l'extension : inventaire des trois corpus et 
 - Signal précoce : plus de langues AIDENT (+23 % d'avantage), contrairement à ma mesure antérieure  Mesure prise sur les 133 premières langues tracées, AVANT la f
 - Courbe de dose complète : elle NE sature PAS — le gain marginal par langue augmente  Troisième point ajouté (60 langues, sous-ensemble strict de la dose 112, mê
+- Dimensionnement de l'analyse finale, mesuré — et décision de ne PAS optimiser  Chiffré avant de laisser tourner, plutôt que découvert à 3 h du matin :   cache a
 

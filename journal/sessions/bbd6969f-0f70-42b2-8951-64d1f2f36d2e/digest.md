@@ -135788,3 +135788,101 @@ Le gain marginal par langue **augmente légèrement** au lieu de diminuer (2,7·
 **La courbe ne sature pas** : le gain marginal par langue **augmente légèrement** au lieu de diminuer. Pousser jusqu'à 392 langues devrait donc continuer de payer — ce qui justifie pleinement la phase en cours.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 8. La courbe de dose complète : elle NE sature PAS\n\nTroisième point ajouté (60 langues, sous-ensemble strict de la dose 112 — même\ … [3019 caractères tronqués]`
+
+  ```
+0613445 Courbe de dose complète : elle NE sature PAS — le gain marginal par langue augmente
+traçage : 164/392
+00:22
+  ```
+
+### 🤖 Assistant
+
+⏵ Courbe de dose complète et commitée. Point d'étape.
+
+## Le résultat du tour
+
+J'ai ajouté le point manquant à 60 langues — choisi comme **sous-ensemble strict** de la dose 112 (même graine) pour que la comparaison soit propre.
+
+| langues | fid TEST | constante | **écart** | oracle TEST | oracle VAL |
+|---:|---:|---:|---:|---:|---:|
+| 30 | 0,7029 | 0,6907 | **+0,0122** | +0,0347 | +0,0240 |
+| 60 | 0,7058 | 0,6928 | **+0,0130** | +0,0343 | +0,0237 |
+| 112 | 0,7105 | 0,6955 | **+0,0150** | +0,0299 | +0,0231 |
+
+**La courbe ne sature pas — le gain marginal par langue *augmente*.** 2,7·10⁻⁵ par langue de 30 à 60, puis **3,8·10⁻⁵** de 60 à 112. Une courbe qui plafonne ferait l'inverse. **Pousser jusqu'à 392 langues devrait donc continuer de payer**, ce qui justifie pleinement la phase en cours.
+
+**Et l'écart de transfert se réduit** : oracle TEST +0,0347 → +0,0299. Plus de langues rapprochent aussi ce que nos caractéristiques contiennent de ce que la lecture en extrait.
+
+## Ce que cela corrige dans mes conclusions
+
+J'avais conclu, sur la plage 20-30-36 langues, que **le nombre de langues ne comptait pas**. C'était vrai *dans cette plage* — l'effet y est sous le bruit — et **faux au-delà**. La leçon est méthodologique : **une conclusion tirée d'une plage trop étroite ne vaut que pour cette plage**, et j'ai eu tort de la généraliser.
+
+## État
+
+| | |
+|---|---:|
+| phase 1 | **164/392** · 0 échec |
+| restant | ~228 langues, ~2 h |
+| fin estimée | ~02h30 |
+
+L'expérience de dose a de nouveau compété avec le traçage, mais elle a produit une conclusion actionnable — la phase 1 vaut la peine d'être menée à son terme — et elle en a corrigé une autre. Je considère l'arbitrage justifié.
+
+Rien à faire de votre côté. Commit `0613445`.
+
+
+## Tour 137
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de représentation universelle), boîte noire (on ne lit du professeur que la couche à émuler, jamais sa tête ni ses jetons générés), aucune rétropropagation (A et B aléatoires et gelés, seule la lecture s'ajuste en forme fermée), et chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, TAILLE du réseau, avec le diagnostic oracle sur les deux panneaux (test hors vivier et validation du même vivier)."
+Round: 10/256
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Je vérifie les ressources nécessaires à l'analyse finale, qui traitera 351 langues d'un coup — bien plus que les 124 de mes tests.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date \"+%H:%M\"; echo \"phase 1 : $(ls /home/stephane/Data13TB/stephane/corpus/udhr/udhr392 | wc -l)/392\"; echo; echo \"=== ressources ===\"; df -h /home/stephane/Data13TB | tail -1; free -g | head -2; echo; echo \"=== extrapolation … [1050 caractères tronqués]`
+
+  ```
+00:23
+phase 1 : 165/392
+
+=== ressources ===
+/dev/mapper/system-root   11T  8,8T  2,1T  81% /home/stephane/Data13TB
+               total        used        free      shared  buff/cache   available
+Mem:             125          17          20           4          94         108
+
+=== extrapolation des caches sur 351 langues ===
+  124 langues : 154,307 pas · 325 Mo -> 351 langues : ~436,788 pas · ~919 Mo
+
+=== ce qui tourne ===
+traçages actifs : 1
+  ```
+
+### 🤖 Assistant
+
+⏵ Ressources vérifiées : 2,1 To de disque, 108 Go de RAM disponibles, un seul traçage actif. Le cache fera ~919 Mo et 437K positions. Je chronomètre le coût réel de l'étape dominante.
+
+Ressources suffisantes (2,1 To de disque, 108 Go de RAM). Le cache fera **~437K positions**. Je chronomètre l'étape dominante de l'entraînement — la régression — pour savoir si l'analyse prendra 10 minutes ou 2 heures.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport numpy as np, time\nrng=np.random.RandomState(0)\nfor T,N in ((154307,120),(436788,120),(436788,240)):\n    X=rng.randn(T, N).astype(np.float32)\n    t0=time.time(); G=X.T@X; C=X.T@rng.randn(T,157).astype(np.f … [367 caractères tronqués]`
+
+  ```
+X  154307 × 120 : X'X + X'Y en    4.5 s  (mémoire 74 Mo)
+  X  436788 × 120 : X'X + X'Y en   11.4 s  (mémoire 210 Mo)
+  X  436788 × 240 : X'X + X'Y en   22.0 s  (mémoire 419 Mo)
+--- rappel : le readout quadratique DOUBLE la largeur (phi = [états, états²]) ---
+--- donc 120 neurones -> 240 colonnes ---
+  ```
+
+### 🤖 Assistant
+
+⏵ Le chronométrage donne la réponse : **22 s par neurone** à l'échelle finale (437K × 240), soit ~35 min à 1,7 h par run d'analyse. C'est acceptable. Je **n'optimise pas** — je préfère ne pas toucher à une chaîne validée quand le temps n'est pas un problème, et je consigne le chiffre.
+
+Le chronométrage tranche : **22 s par neurone** à l'échelle finale, soit **35 min à 1,7 h** par run. C'est acceptable — la phase 1 finit vers 02h30 de toute façon. Je **n'optimise pas** : je ne touche pas à une chaîne validée quand le temps n'est pas le facteur limitant.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 9. Dimensionnement de l'analyse finale, mesuré\n\nAvant de laisser tourner, j'ai chiffré ce que coûtera l'analyse sur les **351\nlang … [2570 caractères tronqués]`
