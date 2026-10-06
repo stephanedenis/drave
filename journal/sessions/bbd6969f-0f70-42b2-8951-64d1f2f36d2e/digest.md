@@ -143807,3 +143807,199 @@ background job bash-232 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrine
 Et l'apport marginal du réservoir **croît avec sa taille** : +0,0073 à 40 neurones, **+0,0374 à 200**.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 34. Correction du §29 : le réservoir n'était pas inutile, il était TROP PETIT\n\nLe §29 concluait que « 40 neurones récurrents valent … [4703 caractères tronqués]`
+
+  ```
+c660fde Correction du §29 : le réservoir n'était pas inutile, il était TROP PETIT
+  ```
+
+### 🤖 Assistant
+
+⏵ **Je lance la COURBE : 400 et 800 neurones avec entrée linéaire, pour trouver le coude.**
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/grand_et_entree.py", "limit": 40, "offset": 62}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/grand_et_entree.py</path>
+<type>file</type>
+<content>
+62:         for i in itr:
+63:             Ai = fait(i, True)
+64:             G = Ai.T @ Ai if G is None else G + Ai.T @ Ai
+65:             D = Ai.T @ (Ytr[i] - mt) if D is None else D + Ai.T @ (Ytr[i] - mt)
+66:             ntot += len(Ai)
+67:             del Ai
+68:         W = np.linalg.solve(G + ride*ntot*np.eye(G.shape[0]), D)
+69:         res = {cl: cos_lignes(fait(k, False) @ W + mt, Yte[k])
+70:                for k, cl in enumerate(clte)}
+71:         T = {cl: cos_lignes(np.tile(mt, (len(Yte[k]), 1)), Yte[k])
+72:              for k, cl in enumerate(clte)}
+73:         f = np.mean(list(res.values()))
+74:         ap = np.mean([res[c] - T[c] for c in clte])
+75:         print(f"  {nom:<26} {G.shape[0]:>5} caract. · fidélité {f:.4f} · "
+76:               f"apport {ap:+.4f}")
+77:         return res
+78: 
+79:     t = time.time()
+80:     P = Pont((cltr, Etr, Ytr), a, graine, len(garde))
+81:     P.quadratique = True
+82:     P.nait(grand, True)
+83:     Xte = P.recalcule(np.arange(P.compte_neurones), Ete)
+84:     print(f"# pont {grand} neurones construit en {time.time()-t:.0f} s"
+… [1165 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/grand_et_entree.py", "new_string": "    # LA COURBE, PAS UN POINT. Le §34 a montré que l'apport marginal du réservoir\n    # passe de +0,0073 (40 neurones) à +0,0374 (200). Une pente mesurée en deux\n    # points n'est pas une pent … [4051 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/grand_et_entree.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"import ast; ast.parse(open('tools/grand_et_entree.py').read()); print('syntaxe OK')\" && python3 -u tools/grand_et_entree.py /tmp/cache392_train.npz /tmp/cache392_test.npz --tailles 400,800 2>&1 | tail -40", "description … [73 caractères tronqués]`
+
+  ```
+started background job bash-233
+  ```
+
+- **bash** `{"command": "sleep 600; echo \"=== c8 ===\"; ls /home/stephane/Data13TB/stephane/corpus/udhr/udhr392_c8 2>/dev/null | wc -l; echo \"=== courbe ===\"; date '+%H:%M'", "description": "Wait and check c8 progress", "timeoutMs": 640000}`
+
+  ```
+=== c8 ===
+156
+=== courbe ===
+10:51
+[timed out after 600000ms]
+  ```
+
+- **bash** `{"command": "sleep 480; ls /home/stephane/Data13TB/stephane/corpus/udhr/udhr392_c8 | wc -l; date '+%H:%M'", "description": "Wait for scaling curve", "timeoutMs": 520000}`
+
+  ```
+166
+10:59
+  ```
+
+- **job_output** `{"job_id": "bash-233"}`
+
+  ```
+syntaxe OK
+[status: running]
+  ```
+
+- **bash** `{"command": "sleep 600; ls /home/stephane/Data13TB/stephane/corpus/udhr/udhr392_c8 | wc -l; date '+%H:%M'", "description": "Wait for curve and c8", "timeoutMs": 640000}`
+
+  ```
+(no output)
+[timed out after 600000ms]
+[killed by signal: SIGTERM]
+  ```
+
+### 👤 Utilisateur
+
+Je vais avoir besoin d'une bonne explicatio0n du fonctionnement de notre moteur et modèle actuel car je suis surpris de la lenteur. Le professeur ne devrait avoir tourné qu'une seule fois pour obtenir les références à atteindres pour chaque stimuli. c'Est une passe peut-être longue, mais simple et finie. Ensuite, l'apprentissage par croissance devrait être hyper rapide sur cette machine. Je ne comprends pas que 400 neurones ne donnent pas des réponses en cycles d'évaluation et apprentissages de l'ordre de la milliseconde. Où va le temps?
+
+### 🤖 Assistant
+
+⏵ **Question juste. Je mesure au lieu de supposer — profil par phase.**
+
+Vous avez raison sur le principe, et je vous dois des chiffres. D'abord l'état des calculs en cours, puis le profil.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== c8 ===\"; ls /home/stephane/Data13TB/stephane/corpus/udhr/udhr392_c8 | wc -l; echo \"=== courbe (job 233) ===\"; ps -o pid,etime,%cpu,rss -p $(pgrep -f \"tailles 400,800\" | tail -1) 2>/dev/null || echo \"terminé\"; echo \ … [356 caractères tronqués]`
+
+  ```
+=== c8 ===
+181
+=== courbe (job 233) ===
+    PID     ELAPSED %CPU   RSS
+terminé
+=== taille du corpus d'apprentissage ===
+test : 41 tranches · 76812 pas
+11:10
+  ```
+
+- **job_output** `{"job_id": "bash-233"}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 python3 -u - <<'PY'\nimport sys, time, numpy as np\nsys.path.insert(0,'tools')\nfrom pont_generatif import Pont, charge, cos_lignes\n\nt0=time.time()\ncltr,Etr,Ytr,H = charge('/tmp/cache392_train.npz')\nt_ch=time.time()-t … [1583 caractères tronqués]`
+
+  ```
+1. CHARGEMENT du cache d'apprentissage : 15.6 s  (351 langues, 472472 pas, H=896)
+   → 33 µs par pas, une seule fois
+
+2. CONSTRUCTION DU RÉSERVOIR — sur 30 langues (40952 pas)
+   nait(  1) :   0.96 s  →   23.6 µs PAR PAS (extrapolé aux 472472 pas :   0.2 min)
+   nait( 10) :   1.45 s  →   35.5 µs PAR PAS (extrapolé aux 472472 pas :   0.3 min)
+   nait( 40) :   2.27 s  →   55.5 µs PAR PAS (extrapolé aux 472472 pas :   0.4 min)
+
+3. CALCUL DES TRAJECTOIRES DE TEST (recalcule)
+   0.33 s pour 10 tranches × 500 pas × 40 neurones
+
+4. AJUSTEMENT DE LA LECTURE (Gram + résolution)
+     400 caractéristiques, 4000 lignes :    2026 ms → ×118 tranches ≈  4.0 min
+    1296 caractéristiques, 4000 lignes :   10974 ms → ×118 tranches ≈ 21.6 min
+
+TOTAL mesuré ci-dessus : 36 s
+  ```
+
+### 🤖 Assistant
+
+⏵ **Profil fait. Le goulot n'est PAS le réservoir — je me trompais aussi. Voici où va le temps.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane && echo \"=== passe professeur, couche 10 (392 langues) ===\"; awk '{if($2 ~ /s$/) {gsub(\"s\",\"\",$2); s+=$2; n++}} END {printf \"  %d langues · total %.0f min · moyenne %.1f s\\n\", n, s/60, s/n}' /tmp/trace392.log\necho \"=== passe professeur, cou … [395 caractères tronqués]`
+
+  ```
+=== passe professeur, couche 10 (392 langues) ===
+  265 langues · total 174 min · moyenne 39.3 s
+=== passe professeur, couche 8 (en cours) ===
+  183 langues faites · total 117 min · moyenne 38.4 s · reste ~134 min
+
+=== ce qui tourne en ce moment ===
+    PID     ELAPSED %CPU   RSS CMD
+2552029       00:17 1106 1369160 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/tar
+2546488       30:22 99.9 6794860 python3 -u tools/grand_et_entree.py /tmp/cache392_train.npz /t
+2552146       00:00 50.0  4116 bash -c cd /home/stephane/Data13TB/stephane && echo "=== passe p
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le vrai coupable est le FIT de la lecture, pas le réservoir. Je le prouve et je chiffre le remède.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && setsid nohup timeout 3600 python3 -u - > /tmp/sous_echantillonnage.log 2>&1 <<'PY' &\nimport sys, time, numpy as np\nsys.path.insert(0,'tools')\nfrom pont_generatif import charge, cos_lignes\n\nt0=time.time()\ncltr,Etr,Ytr,H = charge … [1478 caractères tronqués]`
+
+  ```
+lancé
+11:12
+  ```
+
+- **bash** `{"command": "sleep 300; cat /tmp/sous_echantillonnage.log; date '+%H:%M'", "description": "Read subsampling results", "timeoutMs": 340000}`
+
+  ```
+chargement 18 s
+
+ sous-éch.    lignes   fit (s)  fidélité TEST
+11:17
+  ```
+
+- **bash** `{"command": "sleep 420; cat /tmp/sous_echantillonnage.log; date '+%H:%M'", "description": "Continue reading subsampling results", "timeoutMs": 460000}`
+
+  ```
+chargement 18 s
+
+ sous-éch.    lignes   fit (s)  fidélité TEST
+       1/1    472472     328.0         0.6364
+       1/2    236318     129.4         0.6353
+       1/5     94634      56.4         0.6319
+      1/10     47395      29.5         0.6265
+      1/20     23790      14.9         0.6161
+
+# total écoulé 722 s
+11:24
+  ```
+
+### 🤖 Assistant
+
+⏵ **Chiffres obtenus. Un remède gratuit : 1/5 des lignes = 5,8× plus rapide pour −0,0045 de fidélité.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 35. Où va le temps — profil mesuré, et un remède gratuit\n\nQuestion posée : le professeur ne devrait tourner qu'**une fois**, et l'a … [6951 caractères tronqués]`
