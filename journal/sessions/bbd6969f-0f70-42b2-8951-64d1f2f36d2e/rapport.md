@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 194.0 h |
+| Durée | 194.5 h |
 | Tours | 179 |
-| Messages | 8995 |
-| Appels d'outils | 8479 |
+| Messages | 8999 |
+| Appels d'outils | 8483 |
 | Fichiers touchés | 199 |
-| Commandes | 7188 |
+| Commandes | 7192 |
 | Sous-agents | 32 |
-| Commits | 646 |
+| Commits | 647 |
 | Compactages de contexte | 12 |
 
 ## Objectifs déclarés
@@ -9036,7 +9036,7 @@ Cause arithmétique : `len(X)·trace(C)` vaut **~80× `trace(XᵀX)`**. Corrigé
 
 ### Tour 179 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
 
-*11 appels d'outils.* Actions notables :
+*15 appels d'outils.* Actions notables :
 
 - bash — Check chains status
 - bash — Check load and growth process
@@ -9049,15 +9049,14 @@ Cause arithmétique : `len(X)·trace(C)` vaut **~80× `trace(XᵀX)`**. Corrigé
 - bash — Commit growth result and flag fix
 - bash — Launch definitive growth with invariance constraint
 - bash — Report and commit the 179-neuron replication
+- bash — Monitor the constrained growth run
+- bash — Compare constrained vs unconstrained growth
+- bash — Wait for more constrained growth points
+- … et 1 autres
 
 **Synthèse produite :**
 
-⏵ **Réplication à 179 neurones : la contrainte déplace la courbe mais NE SUPPRIME PAS la tension.**
-
-| | 40 neurones | 179 neurones |
-|---|---:|---:|
-| μ=0 : fid TEST / invariance | 0,6646 / 0,8740 | 0,6922 / 0,7492 |
-| **μ=0,1 : fid TEST / invariance** | **0,6564 / 0,9157** | **0,6852 / 0,8019** |
+⏵ **Troisième point confirmé (n=96) : −0,0013 de fidélité pour +0,0256 d'invariance et +0,0671 de pire paire. Je consigne.**
 
 ## 3. Travail accompli
 
@@ -9342,7 +9341,7 @@ Cause arithmétique : `len(X)·trace(C)` vaut **~80× `trace(XᵀX)`**. Corrigé
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 7148 autres
+- … et 7152 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10136,4 +10135,5 @@ Cause arithmétique : `len(X)·trace(C)` vaut **~80× `trace(XᵀX)`**. Corrigé
 - Ajuster la lecture SOUS CONTRAINTE d'invariance : +0,042 d'invariance pour 0,008 de fidélité  L'ajustement ordinaire minimise ‖XW − Y‖² SEUL et ignore l'invaria
 - Croissance + attrition à 392 langues : 182 neurones, TEST 0,6340, invariance 0,8659  PROTOCOLE ENTIER (couche 10, part-langues 0,5, ride 0,03, quadratique, mult
 - La contrainte d'invariance déplace la courbe, elle ne supprime pas la tension  Balayage de mu à 179 NEURONES (couche 8, 300/51/41 langues, 896 canaux) :    mu  
+- La contrainte d'invariance fonctionne DANS la croissance, à 16-20 pour 1  Deux croissances libres, mêmes réglages, à mu=0 et mu=0,1, comparées à taille égale : 
 

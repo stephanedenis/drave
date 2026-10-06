@@ -147935,3 +147935,67 @@ après                           neur.  couch.  fid appr  fid VAL  fid TEST   in
 | **μ=0,1 : fid TEST / invariance** | **0,6564 / 0,9157** | **0,6852 / 0,8019** |
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 50. La contrainte d'invariance déplace la courbe, elle ne supprime pas la tension\n\nLe §48 avait balayé μ sur **40 neurones**. Re … [4187 caractères tronqués]`
+
+  ```
+d355fec La contrainte d'invariance déplace la courbe, elle ne supprime pas la tension
+
+après                           neur.  couch.  fid appr  fid VAL  fid TEST   invar.    pire
+n8                8       1    0.6172   0.6116    0.6137   0.9562  0.7975 | communs -1.384 (  0 %) · contraste 0.874
+  ```
+
+- **bash** `{"command": "sleep 540; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== croissance mu=0.1 ===\"; tail -4 /tmp/croissance3.log; echo; echo \"wiki : $(grep -c '^ARTICLE' /tmp/trace_wiki_apparie.log) articles · $(ls /home/stephane/Data13TB/stephane/corpus/wiki_apparie/traces | wc -l) t … [212 caractères tronqués]`
+
+  ```
+=== croissance mu=0.1 ===
+n32              32       1    0.6316   0.6213    0.6262   0.9306  0.7216 | communs -1.369 (  0 %) · contraste 0.963
+n40              40       1    0.6338   0.6229    0.6278   0.9289  0.7329 | communs -1.357 (  0 %) · contraste 0.966
+n48              48       1    0.6354   0.6230    0.6288   0.9255  0.7195 | communs -1.345 (  0 %) · contraste 0.969
+n56              56       1    0.6368   0.6239    0.6285   0.9237  0.7491 | communs -1.354 (  0 %) · contraste 0.975
+
+wiki : 28 articles · 278 traces
+crime : 8 traces
+16:56
+  ```
+
+- **bash** `{"command": "sleep 580; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== croissance mu=0.1 ===\"; tail -3 /tmp/croissance3.log; echo \"--- comparaison même taille, sans contrainte ---\"; grep -E \"^n(40|64|96) \" /tmp/croissance2.log | awk '{printf \"  %s : TEST %s · invariance %s ·  … [212 caractères tronqués]`
+
+  ```
+=== croissance mu=0.1 ===
+n64              64       1    0.6382   0.6247    0.6274   0.9201  0.7364 | communs -1.342 (  0 %) · contraste 0.976
+n72              72       1    0.6398   0.6259    0.6279   0.9164  0.7236 | communs -1.331 (  0 %) · contraste 0.979
+n80              80       1    0.6410   0.6269    0.6272   0.9166  0.7281 | communs -1.329 (  0 %) · contraste 0.983
+--- comparaison même taille, sans contrainte ---
+  n40 : TEST 0.6294 · invariance 0.9084 · pire 0.6559
+  n64 : TEST 0.6287 · invariance 0.8971 · pire 0.6625
+  n96 : TEST 0.6311 · invariance 0.8819 · pire 0.6419
+
+wiki : 30 articles
+17:06
+  ```
+
+### 🤖 Assistant
+
+⏵ **La contrainte fonctionne DANS la croissance, pas seulement sur réseau fixe : à n=64, fidélité −0,0013 pour invariance +0,0230 et pire paire +0,0739.**
+
+| n | sans contrainte | avec μ = 0,1 |
+|---:|---|---|
+| 40 | TEST 0,6294 · inv 0,9084 · pire 0,6559 | TEST 0,6278 · inv **0,9289** · pire **0,7329** |
+| 64 | TEST 0,6287 · inv 0,8971 · pire 0,6625 | TEST 0,6274 · inv **0,9201** · pire **0,7364** |
+
+- **bash** `{"command": "sleep 560; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -3 /tmp/croissance3.log; echo \"--- sans contrainte, mêmes tailles ---\"; grep -E \"^n(96|128) \" /tmp/croissance2.log | awk '{printf \"  %s : TEST %s · inv %s · pire %s\\n\", $1, $6, $7, $8}'; date '+%H:%M'", "descri … [71 caractères tronqués]`
+
+  ```
+n88              88       1    0.6418   0.6274    0.6279   0.9113  0.7126 | communs -1.380 (  0 %) · contraste 0.984
+n96              96       1    0.6424   0.6285    0.6298   0.9075  0.7090 | communs -1.390 (  0 %) · contraste 0.985
+n104            104       1    0.6432   0.6288    0.6286   0.9061  0.6703 | communs -1.402 (  0 %) · contraste 0.986
+--- sans contrainte, mêmes tailles ---
+  n96 : TEST 0.6311 · inv 0.8819 · pire 0.6419
+  n128 : TEST 0.6302 · inv 0.8760 · pire 0.5935
+17:16
+  ```
+
+### 🤖 Assistant
+
+⏵ **Troisième point confirmé (n=96) : −0,0013 de fidélité pour +0,0256 d'invariance et +0,0671 de pire paire. Je consigne.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -E \"^n(40|64|96) \" /tmp/croissance3.log | awk '{printf \"  mu=0,1  %s : fidTEST %s · inv %s · pire %s\\n\", $1, $6, $7, $8}'; python3 - <<'PYEOF'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n … [3767 caractères tronqués]`
