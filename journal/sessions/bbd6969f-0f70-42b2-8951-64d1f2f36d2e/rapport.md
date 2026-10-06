@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 179.1 h |
-| Tours | 141 |
-| Messages | 8417 |
-| Appels d'outils | 7999 |
+| Durée | 180.5 h |
+| Tours | 149 |
+| Messages | 8456 |
+| Appels d'outils | 8022 |
 | Fichiers touchés | 177 |
-| Commandes | 6803 |
+| Commandes | 6826 |
 | Sous-agents | 32 |
-| Commits | 603 |
+| Commits | 604 |
 | Compactages de contexte | 11 |
 
 ## Objectifs déclarés
@@ -335,6 +335,22 @@
 **Tour 140** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 **Tour 141** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
+
+**Tour 142** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
+
+**Tour 143** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
+
+**Tour 144** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
+
+**Tour 145** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
+
+**Tour 146** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
+
+**Tour 147** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
+
+**Tour 148** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
+
+**Tour 149** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -7231,17 +7247,316 @@ Rien à faire de votre côté. Commit `cf54f8b`.
 
 **Synthèse produite :**
 
-⏵ **Le balayage est complet, et il y a un optimum intérieur net.**
+⏵ Optimum trouvé et mesuré. Point d'étape.
+
+\## Le résultat du tour
+
+J'ai complété le balayage du seuil de couche. Le résultat est plus net qu'un simple arbitrage :
 
 | seuil-part | réseau | fid VAL | fid TEST | **écart** | invariance | pire paire |
 |---|---|---:|---:|---:|---:|---:|
-| 0,50 | 52 n · 1 couche | 0,7621 | 0,7438 | +0,0223 | **0,9739** | **0,8929** |
+| 0,50 | 52 n · **1 couche** | 0,7621 | 0,7438 | +0,0223 | **0,9739** | **0,8929** |
 | **0,25** | 80 n · 5 couches | **0,7681** | **0,7487** | **+0,0272** | 0,9649 | 0,8745 |
 | 0,10 | 80 n · 5 couches | 0,7662 | 0,7481 | +0,0266 | 0,9634 | 0,8562 |
 
-**0,25 est l'optimum** : au-delà, forcer encore la profondeur **détériore** les trois colonnes à la fois (fidélité −0,0006, écart −0,0006, invariance −0,0015). C'est un maximum intérieur, pas un plateau.
+**0,25 est un maximum intérieur.** Au-delà, forcer encore la profondeur détériore **les trois colonnes à la fois** : fidélité −0,0006, écart −0,0006, invariance −0,0015. On paie plus pour obtenir moins — le signe net d'un réglage dépassé.
 
-**Un optimum intérieur net** : à 0,25 la fidélité et l'écart à la constante sont au maximum ; au-delà, forcer encore la profondeur **détériore les trois colonnes à la fois**. Mon défaut de 0,50 était donc bien trop strict.
+**Et ce n'est pas un simple déplacement sur la courbe d'échange** : entre 0,25 et 0,10, l'invariance baisse **et** la fidélité baisse. La loi d'échange ne suffit donc pas à décrire ce réglage — au-delà de l'optimum on perd sur les deux tableaux.
+
+\## Le réglage que je retiens, et pourquoi
+
+**Le défaut reste 0,50.** Je ne change pas un défaut en silence : cela déplacerait le pont pour tous les usages sans que personne l'ait demandé, et 0,50 maximise l'**invariance** (0,9739) et la **pire paire** (0,8929).
+
+**Mais 0,25 est maintenant mesuré comme l'optimum de fidélité** — +22 % d'écart à la constante — et se règle en une ligne (`--seuil-part 0.25`). Le choix dépend de l'usage : raisonnement → fidélité ; représentation interlingue → invariance.
+
+\## État
+
+| | |
+|---|---:|
+| phase 1 | **314/392** · 0 échec |
+| restant | ~78 langues |
+| fin estimée | ~02h45 |
+
+Le traçage a été ralenti par ces expériences (42 s/langue en moyenne contre 28 s seul). Maintenant qu'elles sont finies, il devrait accélérer.
+
+Rien à faire de votre côté. Commit `dad554e`.
+
+### Tour 142 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Check trace rate now that it is alone
+- bash — Final chain verification
+- bash — Verify TERMINE will be written
+
+**Synthèse produite :**
+
+⏵ Chaîne entièrement vérifiée. Point d'étape.
+
+\## Ce que ce tour a vérifié
+
+La chaîne complète, condition par condition — parce qu'un guetteur qui n'attend pas le bon signal bloque tout silencieusement :
+
+| script | attend | vérifié |
+|---|---|---|
+| `analyse392` | `TERMINE` dans le journal du traçage | ✓ |
+| `rj_apres` | idem | ✓ |
+| `wiki_apres` | `TERMINE` de Romeo | ✓ |
+| `unites_apres` | `TERMINE` de Wikipedia | ✓ |
+| `analyse_final` | `TERMINE` du traçage par unité | ✓ |
+
+**Et le point critique** : les quatre scripts de traçage écrivent bien leur `TERMINE` dans le bon journal. S'il avait manqué — ce qui est facile à perdre en modifiant un script — **les cinq guetteurs auraient attendu indéfiniment**, et le travail de la nuit se serait arrêté sans erreur visible. C'est arrivé une fois dans ce parcours ; je ne le laisse pas se reproduire.
+
+\## État
+
+| | |
+|---|---:|
+| phase 1 | **315/392** · 0 échec |
+| rythme | **30 s/langue**, revenu à la normale |
+| restant | ~77 langues, **~33 min** |
+| fin estimée | ~02h30 |
+
+\## Ce que je fais maintenant
+
+**J'arrête les expériences de côté.** Elles ont été productives — elles ont corrigé deux conclusions et trouvé un optimum — mais elles ont ralenti le traçage de 40 %, et le chemin critique est désormais la fin de la phase 1 puis l'enchaînement automatique des cinq phases suivantes.
+
+Mon travail d'ici là se limite à **surveiller** : vérifier que la phase 1 se termine sans échec, que l'analyse se déclenche, et que Romeo démarre. Je relèverai les résultats quand ils tomberont.
+
+Rien à faire de votre côté.
+
+### Tour 143 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Check phase 1 completion and chain firing
+- bash — Chain Romeo after the analysis to avoid contention
+- bash — Inspect the actual guard content
+- bash — Fix the guard with the exact string
+
+**Synthèse produite :**
+
+⏵ **Chaîne correctement sérialisée.** Point d'étape.
+
+**La chaîne est maintenant entièrement séquentielle** — plus aucune collision :
+
+| étape | attend |
+|---|---|
+| `analyse392` | fin du traçage 392 |
+| `rj_apres` → Romeo | fin du traçage **et** de l'analyse 392 |
+| `wiki_apres` → Wikipedia | fin de Romeo |
+| `unites_apres` → traçage par unité | fin de Wikipedia |
+| `analyse_final` | fin du traçage par unité |
+
+\## Deux erreurs corrigées dans ce tour
+
+**1. Une collision que j'avais créée.** `analyse392` et `rj_apres` guettaient le **même signal** : ils se seraient déclenchés en même temps et auraient lutté pour les mêmes cœurs — exactement le scénario que j'avais mesuré comme défavorable (50 s contre 28 s par langue). Corrigé en chaînant Romeo après l'analyse.
+
+**2. Mon premier correctif a échoué sans que je le remarque tout de suite.** J'ai écrit un motif de remplacement avec `sleep 60`, alors que le fichier contenait `sleep 120` — l'assertion a échoué. Si je n'avais pas mis d'assertion, le script aurait été relancé **inchangé** et j'aurais cru la correction faite. C'est précisément pourquoi j'en mets une.
+
+\## État
+
+| | |
+|---|---:|
+| phase 1 | **327/392** · 0 échec |
+| restant | ~65 langues, **~30 min** |
+| fin estimée | ~02h30 |
+
+Quand le traçage finira, l'analyse se déclenchera seule et donnera la réponse complète de la phase 2 — le pont sur **301 langues d'apprentissage** avec le panel stratifié sur les 22 écritures.
+
+Rien à faire de votre côté.
+
+### Tour 144 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Check trace completion and analysis start
+- bash — Verify the trace is still running
+- bash — Wait for trace completion
+- bash — Continue waiting for trace
+- bash — Wait for phase 1 completion
+- bash — Check phase 1 completion and chain firing
+
+**Synthèse produite :**
+
+⏵ **Phase 1 TERMINÉE : 392/392, zéro échec.** L'analyse s'est déclenchée.
+
+\## Le jalon
+
+**Les 392 langues de l'UDHR sont tracées, sans un seul échec**, en environ 4 h 30. Chacune en convention unique et vérifiée : `--ctx 4096 --n 0 --trace-couches 0,10`, soit aucune troncature, ni tête du professeur ni jetons générés, et seules les couches utiles écrites.
+
+C'est **8,5× le périmètre précédent** (46 langues).
+
+**Et la chaîne s'est déclenchée correctement** : l'analyse 392 construit ses caches (elle est à « cof » dans l'ordre alphabétique). Romeo est en attente, comme prévu — il ne démarrera qu'après, pour ne pas se disputer les cœurs.
+
+\## Ce qui va tomber
+
+L'analyse enchaîne : construction des caches pour **351 langues d'apprentissage**, mesure du plateau du professeur sur le panel stratifié, puis **le pont sur 301 langues** — avec le diagnostic oracle sur les deux panneaux.
+
+C'est la réponse complète à la question de la phase 2, et elle arrivera dans **1 à 2 heures** (les deux runs de pont coûtent ~22 s par neurone à cette échelle, mesuré).
+
+\## Bilan de la phase, en trois chiffres
+
+| | |
+|---|---:|
+| langues tracées | **392 / 392** |
+| échecs | **0** |
+| troncatures | **0** (après correction de `ctx 2048` → `ctx 4096`) |
+
+\## Ce qui a été appris en route, et qui n'était pas prévu
+
+Trois choses que je n'aurais pas devinées :
+
+1. **Plus de langues aident** — +23 % d'avantage à 112 langues, et la courbe **ne sature pas** (le gain marginal par langue augmente). Cela a corrigé une conclusion antérieure tirée d'une plage trop étroite.
+2. **L'écart de transfert était un artefact de panel** — 2,4× plus petit sur le panel stratifié. J'ai passé des tours à chercher à combler un écart qui n'existait largement que dans ma façon de mesurer.
+3. **Un drapeau inopérant** — `--seuil-commun` ne pilotait que l'affichage, la décision comparant une constante en dur. Corrigé, et son optimum est maintenant mesuré à 0,25.
+
+Rien à faire de votre côté. Je relèverai les résultats de l'analyse.
+
+### Tour 145 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check analysis progress
+
+**Synthèse produite :**
+
+⏵ L'analyse construit les caches (74 langues sur 351, à « ddn »). Point d'étape.
+
+\## État
+
+| | |
+|---|---|
+| phase 1 | **392/392, 0 échec** ✓ |
+| analyse 392 | construction des caches, ~74/351 langues |
+| Romeo | en attente (correctement chaîné) |
+
+**Estimation** : caches ~30 min, puis les deux runs de pont (~1 h chacun à cette échelle — 22 s par neurone, mesuré). Résultats vers **05h00**.
+
+\## Ce que je surveille
+
+Le seul risque réel à ce stade est un **échec silencieux** : un cache trop gros pour la mémoire, ou un run de pont qui plante sur un cas limite après 40 minutes de calcul. J'ai vérifié le dimensionnement en amont (919 Mo de cache, 419 Mo de readout, 108 Go de RAM disponible), donc la marge est large — mais je vérifierai que le run démarre bien plutôt que de supposer.
+
+Je n'ajoute plus rien : le chemin critique est lancé, et chaque expérience de côté l'a ralenti de 40 % ces dernières heures. Mon travail est de surveiller et de relever.
+
+Rien à faire de votre côté.
+
+### Tour 146 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Check cache build progress
+- bash — Continue monitoring cache build
+- bash — Check test cache and bridge start
+
+**Synthèse produite :**
+
+⏵ Cache d'apprentissage écrit (**940 Mo**), cache de test en cours. Point d'étape.
+
+\## État de l'analyse
+
+| étape | état |
+|---|---|
+| cache apprentissage (351 langues) | **fait** · 940 Mo |
+| cache test (41 langues) | en cours |
+| plateau du professeur sur 392 traces | à venir |
+| pont sur 301 langues — run 1 | à venir |
+| pont sans restriction — run 2 | à venir |
+
+**Estimation** : le plateau reparse les 392 traces (~35 min), puis les deux runs de pont (~1 h chacun). Résultats vers **05h30**.
+
+\## Le dimensionnement se vérifie
+
+Mon extrapolation était de **919 Mo** pour le cache d'apprentissage ; il fait **940 Mo**. À 2 % près — la marge de 108 Go de RAM rend la suite confortable.
+
+\## Ce que je fais
+
+Je surveille, sans rien ajouter. Le seul point que je vérifierai explicitement est le **démarrage du premier run de pont** : c'est là que se joue le vrai calcul, et un plantage sur un cas limite après 35 minutes de construction de cache serait coûteux à découvrir tard.
+
+Rien à faire de votre côté.
+
+### Tour 147 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Check analysis stage
+- bash — Continue monitoring analysis
+
+**Synthèse produite :**
+
+⏵ **Caches terminés** : apprentissage 351 langues (940 Mo), test **41 langues** (145 Mo, 76 812 positions). La mesure du plateau tourne.
+
+\## État
+
+| étape | état |
+|---|---|
+| cache apprentissage — **351 langues** | **fait** · 940 Mo |
+| cache test — **41 langues** | **fait** · 145 Mo · 76 812 positions |
+| plateau du professeur | **en cours** (8 min) |
+| pont sur 301 langues — run 1 | à venir |
+| pont sans restriction — run 2 | à venir |
+
+Le plateau reparse les 392 traces (2,7 Go), c'est l'étape lente. Ensuite les deux runs de pont.
+
+\## Ce que je note
+
+Le panel de test fait **41 langues pour 76 812 positions**, soit ~1 900 positions par langue. C'est cohérent avec le panel partiel sur lequel j'ai pris le signal précoce (20 langues, 12 écritures) — mais cette fois avec **les 22 écritures** et **41 langues**, donc les chiffres définitifs seront plus solides que le signal précoce.
+
+Et l'écart de transfert, que le signal précoce donnait à **+0,0292** au lieu de +0,0693 sur l'ancien panel, sera mesuré sur le panel complet. C'est le chiffre qui dira si mon diagnostic de typologie tient à pleine échelle.
+
+Rien à faire de votre côté.
+
+### Tour 148 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Check plateau measurement progress
+- bash — Wait for plateau measurement
+
+**Synthèse produite :**
+
+⏵ **Résultats du plateau tombés, et le pont tourne sur 301 langues.**
+
+\## Le plateau du professeur, sur les 392 langues
+
+| | |
+|---|---|
+| **50 % de l'énergie** | **40 / 896 canaux (4 %)** |
+| 90 % de l'énergie | 298 (33 %) |
+| 99 % de l'énergie | 597 (67 %) |
+| canaux actifs dans **au moins** une langue | 896 / 896 |
+| **canaux actifs dans TOUTES les langues** | **48 / 896 (5 %)** |
+
+Le dernier chiffre est frappant : avec **392 langues**, seuls **48 canaux sont actifs dans toutes**. Autrement dit, **95 % des canaux de la couche ne sont pas universellement actifs** — ils dépendent de la langue à la dernière position. Ma mesure précédente, sur 6 langues seulement, donnait 678/896 ; elle était donc **très optimiste** faute de langues.
+
+\## Le pont sur 301 langues (en cours)
+
+| neurones | fid appr | fid VAL | **fid TEST** | invariance | pire paire |
+|---:|---:|---:|---:|---:|---:|
+| 33 | 0,7445 | 0,7494 | 0,7411 | 0,9865 | 0,9320 |
+| 37 | 0,7453 | 0,7502 | **0,7428** | 0,9838 | 0,9192 |
+
+**L'écart test/validation est de 1,01** (0,7428 contre 0,7502) — contre **2,6×** sur mon ancien panel uniquement non latin. Mon diagnostic de typologie se confirme à pleine échelle.
+
+Et `communs` reste à **+0,233** avec 14-15 % des neurones au-dessus du seuil : le critère n'ouvre pas de couche, le réseau reste à **1 couche**.
+
+\## Ce que je note
+
+La mesure « canaux actifs dans toutes les langues » **s'effondre quand on ajoute des langues** — 678/896 sur 6 langues, 48/896 sur 392. C'est un rappel utile : mes mesures de « sous-ensemble partagé » étaient des **bornes supérieures** optimistes, faute de diversité dans le panel. La conclusion qualitative tient (la couche est creuse, 40 canaux portent la moitié de l'énergie), mais l'ampleur du partage était largement surestimée.
+
+Rien à faire de votre côté. J'attends la fin des deux runs.
+
+### Tour 149 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Check bridge run progress
+- bash — Document the panel effect on shared channels
+
+**Synthèse produite :**
+
+⏵ Le pont progresse (n38). J'utilise l'attente pour documenter un **effet de panel** que je viens de mesurer et qui corrige une de mes mesures antérieures.
+
+Le pont progresse (n38). J'utilise l'attente pour documenter un **effet de panel** que je viens de mesurer — il corrige une de mes mesures antérieures.
 
 ## 3. Travail accompli
 
@@ -7504,7 +7819,7 @@ Rien à faire de votre côté. Commit `cf54f8b`.
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6763 autres
+- … et 6786 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -7632,7 +7947,7 @@ Rien à faire de votre côté. Commit `cf54f8b`.
 
 ## 5. Erreurs rencontrées
 
-382 sorties en erreur ou divergentes. Les premières :
+383 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -8255,4 +8570,5 @@ Rien à faire de votre côté. Commit `cf54f8b`.
 - Bug : --seuil-commun ne pilotait PAS la décision, seulement l'affichage  Trouvé en testant la calibration du seuil de couche : abaisser --seuil-commun de 0,50 à
 - Mon seuil de couche par défaut était TROP STRICT — la profondeur forcée paie  Le critère n'ouvrait jamais de couche sur le panel stratifié (communs 28-38 %, sou
 - Optimum du seuil de couche : 0,25, et c'est un maximum INTÉRIEUR  Balayage complet sur le panel stratifié, tout le reste égal :    seuil-part  réseau           
+- Plateau sur 392 langues : le 'sous-ensemble partagé' s'effondre de 678 à 48 canaux  Mesure sur les 392 langues, dernière position, couche 10 :   50 % de l'énerg
 

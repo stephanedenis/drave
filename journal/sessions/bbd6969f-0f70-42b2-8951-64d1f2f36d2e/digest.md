@@ -136576,3 +136576,793 @@ moyenne 42 s · reste 144 min
 **Un optimum intérieur net** : à 0,25 la fidélité et l'écart à la constante sont au maximum ; au-delà, forcer encore la profondeur **détériore les trois colonnes à la fois**. Mon défaut de 0,50 était donc bien trop strict.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 12. L'optimum du seuil de couche : 0,25, et c'est un maximum INTÉRIEUR\n\nBalayage complet, panel stratifié, tout le reste égal :\n\n … [2974 caractères tronqués]`
+
+  ```
+dad554e Optimum du seuil de couche : 0,25, et c'est un maximum INTÉRIEUR
+traçage : 314/392
+01:53
+  ```
+
+### 🤖 Assistant
+
+⏵ Optimum trouvé et mesuré. Point d'étape.
+
+## Le résultat du tour
+
+J'ai complété le balayage du seuil de couche. Le résultat est plus net qu'un simple arbitrage :
+
+| seuil-part | réseau | fid VAL | fid TEST | **écart** | invariance | pire paire |
+|---|---|---:|---:|---:|---:|---:|
+| 0,50 | 52 n · **1 couche** | 0,7621 | 0,7438 | +0,0223 | **0,9739** | **0,8929** |
+| **0,25** | 80 n · 5 couches | **0,7681** | **0,7487** | **+0,0272** | 0,9649 | 0,8745 |
+| 0,10 | 80 n · 5 couches | 0,7662 | 0,7481 | +0,0266 | 0,9634 | 0,8562 |
+
+**0,25 est un maximum intérieur.** Au-delà, forcer encore la profondeur détériore **les trois colonnes à la fois** : fidélité −0,0006, écart −0,0006, invariance −0,0015. On paie plus pour obtenir moins — le signe net d'un réglage dépassé.
+
+**Et ce n'est pas un simple déplacement sur la courbe d'échange** : entre 0,25 et 0,10, l'invariance baisse **et** la fidélité baisse. La loi d'échange ne suffit donc pas à décrire ce réglage — au-delà de l'optimum on perd sur les deux tableaux.
+
+## Le réglage que je retiens, et pourquoi
+
+**Le défaut reste 0,50.** Je ne change pas un défaut en silence : cela déplacerait le pont pour tous les usages sans que personne l'ait demandé, et 0,50 maximise l'**invariance** (0,9739) et la **pire paire** (0,8929).
+
+**Mais 0,25 est maintenant mesuré comme l'optimum de fidélité** — +22 % d'écart à la constante — et se règle en une ligne (`--seuil-part 0.25`). Le choix dépend de l'usage : raisonnement → fidélité ; représentation interlingue → invariance.
+
+## État
+
+| | |
+|---|---:|
+| phase 1 | **314/392** · 0 échec |
+| restant | ~78 langues |
+| fin estimée | ~02h45 |
+
+Le traçage a été ralenti par ces expériences (42 s/langue en moyenne contre 28 s seul). Maintenant qu'elles sont finies, il devrait accélérer.
+
+Rien à faire de votre côté. Commit `dad554e`.
+
+
+## Tour 142
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de représentation universelle), boîte noire (on ne lit du professeur que la couche à émuler, jamais sa tête ni ses jetons générés), aucune rétropropagation (A et B aléatoires et gelés, seule la lecture s'ajuste en forme fermée), et chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, TAILLE du réseau, avec le diagnostic oracle sur les deux panneaux (test hors vivier et validation du même vivier)."
+Round: 15/256
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Je relève l'état du traçage, maintenant qu'il est seul.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date \"+%H:%M\"; echo \"phase 1 : $(ls /home/stephane/Data13TB/stephane/corpus/udhr/udhr392 | wc -l)/392\"; tail -1 /tmp/trace392.log; echo \"échecs : $(grep -c ÉCHEC /tmp/trace392.log)\"; echo \"--- rythme actuel (seul) ---\"; N0=$( … [383 caractères tronqués]`
+
+  ```
+01:53
+phase 1 : 315/392
+smo 35s 7335103
+échecs : 0
+--- rythme actuel (seul) ---
+10 langues en 300 s = 30 s/langue
+load average: 17,87, 18,89, 19,64
+reste ~33 min
+  ```
+
+### 🤖 Assistant
+
+⏵ Rythme revenu à **30 s par langue**, ~33 min restantes. Je vérifie une dernière fois que la chaîne se déclenchera correctement.
+
+Rythme revenu à **30 s par langue** (contre 42 pendant les expériences), ~33 min restantes. Je vérifie une dernière fois que la chaîne se déclenchera correctement.
+
+- **bash** `{"command": "python3 -c \"\nimport os\nmoi=os.getpid(); anc=set(); q=moi\nfor _ in range(8):\n    try:\n        st=open(f'/proc/{q}/stat').read().split(') ',1)[1].split(); q=int(st[1]); anc.add(q)\n    except Exception: break\natt={}\nfor d in sorted(os.listdir('/proc')):\n    if not d.isdigit(): co … [745 caractères tronqués]`
+
+  ```
+scripts de la chaîne :
+   analyse392       pid 2373133
+   analyse_final    pid 2364779
+   rj_apres         pid 2373134
+   trace392         pid 2374997
+   unites_apres     pid 2361698
+   wiki_apres       pid 2358143
+
+=== conditions d'attente, vérifiées ===
+  analyse392.sh            : grep -q TERMINE /tmp/trace392.log 2>/dev/null
+  rj_apres.sh              : grep -q TERMINE /tmp/trace392.log 2>/dev/null
+  wiki_apres.sh            : grep -q TERMINE /tmp/trace_rj.log 2>/dev/null
+  unites_apres.sh          : grep -q TERMINE /tmp/trace_wiki.log 2>/dev/null
+  analyse_final.sh         : grep -q TERMINE /tmp/trace_unites.log 2>/dev/null
+  ```
+
+### 🤖 Assistant
+
+⏵ Je vérifie un point critique : le script de traçage écrira-t-il bien `TERMINE` ? Toute la chaîne en dépend.
+
+Je vérifie un point critique : le script de traçage écrira-t-il bien `TERMINE` ? **Les six scripts d'attente en dépendent** — s'il manque, ils attendraient indéfiniment.
+
+- **bash** `{"command": "tail -3 /tmp/trace392.sh; echo \"--- la ligne TERMINE est-elle présente ? ---\"; grep -c \"TERMINE\" /tmp/trace392.sh; echo \"--- et dans les autres ---\"; for f in /tmp/trace_rj.sh /tmp/trace_wiki.sh /tmp/trace_unites.sh; do printf \"  %-20s : %s\\n\" \"$(basename $f)\" \"$(grep -c TER … [188 caractères tronqués]`
+
+  ```
+n=$((n+1))
+done
+echo TERMINE >> /tmp/trace392.log
+--- la ligne TERMINE est-elle présente ? ---
+1
+--- et dans les autres ---
+  trace_rj.sh          : 1
+  trace_wiki.sh        : 1
+  trace_unites.sh      : 1
+
+--- test à blanc : le script écrirait-il au bon endroit ? ---
+16:: > /tmp/trace392.log
+25:    echo "$L $(( $(date +%s) - S ))s $(stat -c%s udhr392/$L.drvf 2>/dev/null || echo 0)" >> /tmp/trace392.log
+28:    echo "$L ÉCHEC" >> /tmp/trace392.log
+32:echo TERMINE >> /tmp/trace392.log
+  ```
+
+### 🤖 Assistant
+
+⏵ Chaîne entièrement vérifiée. Point d'étape.
+
+## Ce que ce tour a vérifié
+
+La chaîne complète, condition par condition — parce qu'un guetteur qui n'attend pas le bon signal bloque tout silencieusement :
+
+| script | attend | vérifié |
+|---|---|---|
+| `analyse392` | `TERMINE` dans le journal du traçage | ✓ |
+| `rj_apres` | idem | ✓ |
+| `wiki_apres` | `TERMINE` de Romeo | ✓ |
+| `unites_apres` | `TERMINE` de Wikipedia | ✓ |
+| `analyse_final` | `TERMINE` du traçage par unité | ✓ |
+
+**Et le point critique** : les quatre scripts de traçage écrivent bien leur `TERMINE` dans le bon journal. S'il avait manqué — ce qui est facile à perdre en modifiant un script — **les cinq guetteurs auraient attendu indéfiniment**, et le travail de la nuit se serait arrêté sans erreur visible. C'est arrivé une fois dans ce parcours ; je ne le laisse pas se reproduire.
+
+## État
+
+| | |
+|---|---:|
+| phase 1 | **315/392** · 0 échec |
+| rythme | **30 s/langue**, revenu à la normale |
+| restant | ~77 langues, **~33 min** |
+| fin estimée | ~02h30 |
+
+## Ce que je fais maintenant
+
+**J'arrête les expériences de côté.** Elles ont été productives — elles ont corrigé deux conclusions et trouvé un optimum — mais elles ont ralenti le traçage de 40 %, et le chemin critique est désormais la fin de la phase 1 puis l'enchaînement automatique des cinq phases suivantes.
+
+Mon travail d'ici là se limite à **surveiller** : vérifier que la phase 1 se termine sans échec, que l'analyse se déclenche, et que Romeo démarre. Je relèverai les résultats quand ils tomberont.
+
+Rien à faire de votre côté.
+
+
+## Tour 143
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de représentation universelle), boîte noire (on ne lit du professeur que la couche à émuler, jamais sa tête ni ses jetons générés), aucune rétropropagation (A et B aléatoires et gelés, seule la lecture s'ajuste en forme fermée), et chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, TAILLE du réseau, avec le diagnostic oracle sur les deux panneaux (test hors vivier et validation du même vivier)."
+Round: 16/256
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Je relève l'état : la phase 1 devrait approcher de sa fin.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date \"+%H:%M\"; echo \"phase 1 : $(ls /home/stephane/Data13TB/stephane/corpus/udhr/udhr392 | wc -l)/392\"; tail -2 /tmp/trace392.log; echo \"TERMINE : $(grep -c TERMINE /tmp/trace392.log)\"; echo \"échecs : $(grep -c ÉCHEC /tmp/trac … [852 caractères tronqués]`
+
+  ```
+01:59
+phase 1 : 327/392
+suk 25s 4887589
+sun 32s 6219919
+TERMINE : 0
+échecs : 0
+
+=== analyse 392 ===
+(pas encore)
+
+=== chaîne ===
+analyse392 · analyse_final · rj_apres · trace392 · unites_apres · wiki_apres
+  ```
+
+### 🤖 Assistant
+
+⏵ **Un défaut dans ma chaîne que je dois corriger avant qu'il morde** : `analyse392` et `rj_apres` guettent **le même signal** et se déclencheront **en même temps**. Or j'ai mesuré que deux calculs lourds en parallèle se ralentissent mutuellement. Je les chaîne.
+
+**Un défaut dans ma chaîne, à corriger avant qu'il morde** : `analyse392` et `rj_apres` guettent **le même signal** — ils se déclencheront **en même temps** et se disputeront les cœurs. J'ai mesuré que deux calculs lourds en parallèle se ralentissent mutuellement (50 s contre 28). Je les chaîne.
+
+- **bash** `{"command": "cat > /tmp/tue_rjapres.py <<'PY'\nimport os, signal\nmoi = os.getpid(); anc = set(); p = moi\nfor _ in range(8):\n    try:\n        st = open(f\"/proc/{p}/stat\").read().split(\") \", 1)[1].split(); p = int(st[1]); anc.add(p)\n    except Exception: break\nmorts = []\nfor d in os.listdir … [2040 caractères tronqués]`
+
+  ```
+rj_apres arrêté : [2373134]
+syntaxe OK
+chaîne : analyse392 · analyse_final · rj_apres · trace392 · unites_apres · wiki_apres
+grep -q TERMINE /tmp/trace392.log 2>/dev/null
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 8, in <module>
+AssertionError: condition introuvable
+  ```
+
+### 🤖 Assistant
+
+⏵ Mon remplacement a échoué (chaîne introuvable) — le fichier contient autre chose. Je l'inspecte avant de le modifier.
+
+- **bash** `{"command": "head -12 /tmp/rj_apres.sh | cat -A | sed 's/\\$$//' | head -12", "description": "Inspect the actual guard content"}`
+
+  ```
+#!/bin/bash
+# La phase 2 reprend APRM-CM-^HS la phase 1 : mesurM-CM-), les faire ensemble portait la
+# charge M-CM-  44 sur 40 threads et faisait passer le traM-CM-'age UDHR de 36 s M-CM-  150 s
+# par langue. La consigne M-CM-)tait M-BM-+ d'abord toutes les langues, PUIS les grands
+# corpus M-BM-;.
+set -u
+while ! grep -q TERMINE /tmp/trace392.log 2>/dev/null; do sleep 120; done
+sleep 60
+exec /tmp/trace_rj.sh
+  ```
+
+### 🤖 Assistant
+
+⏵ Trouvé : le fichier contient `sleep 120`, pas `sleep 60` — mon motif ne correspondait pas. Je corrige avec la bonne chaîne.
+
+**Trouvé** : le fichier contient `sleep 120`, pas `sleep 60` — mon motif de remplacement ne correspondait pas. Je corrige avec la chaîne exacte.
+
+- **bash** `{"command": "python3 /tmp/tue_rjapres.py; sleep 2; python3 - <<'PY'\np='/tmp/rj_apres.sh'; s=open(p).read()\nvieux = 'while ! grep -q TERMINE /tmp/trace392.log 2>/dev/null; do sleep 120; done'\nneuf = ('# On attend AUSSI la fin de l\\'analyse 392 : elle guette le même signal et se\\n'\n        '# dé … [885 caractères tronqués]`
+
+  ```
+rj_apres arrêté : [2408320]
+rj_apres corrigé : attend l'analyse 392 en plus
+syntaxe OK
+--- conditions finales de la chaîne ---
+  analyse392       : while ! grep -q TERMINE /tmp/trace392.log 2>/dev/null; do sleep
+  rj_apres         : while ! { grep -q TERMINE /tmp/trace392.log 2>/dev/null && grep -q TERMINE /tmp/analyse392.log 2>/dev/nul
+  wiki_apres       : while ! grep -q TERMINE /tmp/trace_rj.log 2>/dev/null; do sleep
+  unites_apres     : while ! grep -q TERMINE /tmp/trace_wiki.log 2>/dev/null; do sleep
+  analyse_final    : while ! grep -q TERMINE /tmp/trace_unites.log 2>/dev/null; do sleep
+  ```
+
+### 🤖 Assistant
+
+⏵ **Chaîne correctement sérialisée.** Point d'étape.
+
+**La chaîne est maintenant entièrement séquentielle** — plus aucune collision :
+
+| étape | attend |
+|---|---|
+| `analyse392` | fin du traçage 392 |
+| `rj_apres` → Romeo | fin du traçage **et** de l'analyse 392 |
+| `wiki_apres` → Wikipedia | fin de Romeo |
+| `unites_apres` → traçage par unité | fin de Wikipedia |
+| `analyse_final` | fin du traçage par unité |
+
+## Deux erreurs corrigées dans ce tour
+
+**1. Une collision que j'avais créée.** `analyse392` et `rj_apres` guettaient le **même signal** : ils se seraient déclenchés en même temps et auraient lutté pour les mêmes cœurs — exactement le scénario que j'avais mesuré comme défavorable (50 s contre 28 s par langue). Corrigé en chaînant Romeo après l'analyse.
+
+**2. Mon premier correctif a échoué sans que je le remarque tout de suite.** J'ai écrit un motif de remplacement avec `sleep 60`, alors que le fichier contenait `sleep 120` — l'assertion a échoué. Si je n'avais pas mis d'assertion, le script aurait été relancé **inchangé** et j'aurais cru la correction faite. C'est précisément pourquoi j'en mets une.
+
+## État
+
+| | |
+|---|---:|
+| phase 1 | **327/392** · 0 échec |
+| restant | ~65 langues, **~30 min** |
+| fin estimée | ~02h30 |
+
+Quand le traçage finira, l'analyse se déclenchera seule et donnera la réponse complète de la phase 2 — le pont sur **301 langues d'apprentissage** avec le panel stratifié sur les 22 écritures.
+
+Rien à faire de votre côté.
+
+
+## Tour 144
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de représentation universelle), boîte noire (on ne lit du professeur que la couche à émuler, jamais sa tête ni ses jetons générés), aucune rétropropagation (A et B aléatoires et gelés, seule la lecture s'ajuste en forme fermée), et chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, TAILLE du réseau, avec le diagnostic oracle sur les deux panneaux (test hors vivier et validation du même vivier)."
+Round: 17/256
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Je relève l'état — le traçage devrait être proche de sa fin.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date \"+%H:%M\"; echo \"phase 1 : $(ls /home/stephane/Data13TB/stephane/corpus/udhr/udhr392 | wc -l)/392\"; tail -2 /tmp/trace392.log; echo \"TERMINE : $(grep -c TERMINE /tmp/trace392.log) · échecs : $(grep -c ÉCHEC /tmp/trace392.log … [865 caractères tronqués]`
+
+  ```
+02:00
+phase 1 : 329/392
+swb 31s 6406833
+swe 22s 4365758
+TERMINE : 0 · échecs : 0
+
+=== analyse 392 ===
+
+=== calculs ===
+actifs : aucun
+  ```
+
+### 🤖 Assistant
+
+⏵ Mon filtre ne cherchait pas `trace392`. Je vérifie qu'il tourne.
+
+- **bash** `{"command": "ps -eo pid,etime,args | grep -E \"trace392|drave\" | grep -v grep | head -3 | cut -c1-90; echo \"--- le journal grossit-il ? ---\"; wc -l /tmp/trace392.log; sleep 120; wc -l /tmp/trace392.log; ls /home/stephane/Data13TB/stephane/corpus/udhr/udhr392 | wc -l; date \"+%H:%M\"", "descriptio … [61 caractères tronqués]`
+
+  ```
+2374997    02:16:39 /bin/bash /tmp/trace392.sh
+2408549       00:11 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/target/rele
+--- le journal grossit-il ? ---
+202 /tmp/trace392.log
+204 /tmp/trace392.log
+332
+02:02
+  ```
+
+### 🤖 Assistant
+
+⏵ Le traçage tourne (202 → 204 lignes, 329 → 332 fichiers). J'attends la fin.
+
+- **bash** `{"command": "sleep 560; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; echo \"phase 1 : $(ls /home/stephane/Data13TB/stephane/corpus/udhr/udhr392 | wc -l)/392\"; tail -1 /tmp/trace392.log; echo \"TERMINE : $(grep -c TERMINE /tmp/trace392.log)\"; echo \"--- analyse ---\"; tail -4 /tmp/analyse392 … [289 caractères tronqués]`
+
+  ```
+phase 1 : 345/392
+tly 35s 7550705
+TERMINE : 0
+--- analyse ---
+(pas encore déclenchée)
+--- calculs actifs ---
+/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/target/rele
+02:12
+  ```
+
+### 🤖 Assistant
+
+⏵ 345/392, ~25 min restantes. J'attends.
+
+- **bash** `{"command": "sleep 570; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; echo \"phase 1 : $(ls /home/stephane/Data13TB/stephane/corpus/udhr/udhr392 | wc -l)/392\"; tail -1 /tmp/trace392.log; echo \"TERMINE : $(grep -c TERMINE /tmp/trace392.log) · échecs : $(grep -c ÉCHEC /tmp/trace392.log)\"; ech … [200 caractères tronqués]`
+
+  ```
+phase 1 : 363/392
+uig 29s 6279696
+TERMINE : 0 · échecs : 0
+--- analyse déclenchée ? ---
+02:21
+  ```
+
+### 🤖 Assistant
+
+⏵ 363/392, ~15 min. J'attends la fin.
+
+- **bash** `{"command": "sleep 570; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; echo \"phase 1 : $(ls /home/stephane/Data13TB/stephane/corpus/udhr/udhr392 | wc -l)/392\"; tail -2 /tmp/trace392.log; echo \"TERMINE : $(grep -c TERMINE /tmp/trace392.log) · échecs : $(grep -c ÉCHEC /tmp/trace392.log)\"; ech … [323 caractères tronqués]`
+
+  ```
+phase 1 : 382/392
+xsm 29s 6161230
+yad 29s 6185200
+TERMINE : 0 · échecs : 0
+
+--- analyse 392 ---
+(pas encore)
+--- calculs ---
+02:31
+  ```
+
+### 🤖 Assistant
+
+⏵ 382/392 — dix langues. J'attends la fin et le déclenchement de l'analyse.
+
+- **bash** `{"command": "sleep 480; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; echo \"phase 1 : $(ls /home/stephane/Data13TB/stephane/corpus/udhr/udhr392 | wc -l)/392\"; tail -2 /tmp/trace392.log; echo \"TERMINE : $(grep -c TERMINE /tmp/trace392.log) · échecs : $(grep -c ÉCHEC /tmp/trace392.log)\"; ech … [297 caractères tronqués]`
+
+  ```
+phase 1 : 392/392
+zlm 25s 5019672
+TERMINE
+TERMINE : 1 · échecs : 0
+
+--- analyse 392 ---
+  cjy : 445 pas
+  ckb : 1004 pas
+  cmn : 501 pas
+  cnh : 1505 pas
+  cni : 1379 pas
+  cof : 899 pas
+--- Romeo a démarré ? ---
+en scène 1 379s 30883969
+en scène 2 147s 12737089
+02:39
+  ```
+
+### 🤖 Assistant
+
+⏵ **Phase 1 TERMINÉE : 392/392, zéro échec.** L'analyse s'est déclenchée.
+
+## Le jalon
+
+**Les 392 langues de l'UDHR sont tracées, sans un seul échec**, en environ 4 h 30. Chacune en convention unique et vérifiée : `--ctx 4096 --n 0 --trace-couches 0,10`, soit aucune troncature, ni tête du professeur ni jetons générés, et seules les couches utiles écrites.
+
+C'est **8,5× le périmètre précédent** (46 langues).
+
+**Et la chaîne s'est déclenchée correctement** : l'analyse 392 construit ses caches (elle est à « cof » dans l'ordre alphabétique). Romeo est en attente, comme prévu — il ne démarrera qu'après, pour ne pas se disputer les cœurs.
+
+## Ce qui va tomber
+
+L'analyse enchaîne : construction des caches pour **351 langues d'apprentissage**, mesure du plateau du professeur sur le panel stratifié, puis **le pont sur 301 langues** — avec le diagnostic oracle sur les deux panneaux.
+
+C'est la réponse complète à la question de la phase 2, et elle arrivera dans **1 à 2 heures** (les deux runs de pont coûtent ~22 s par neurone à cette échelle, mesuré).
+
+## Bilan de la phase, en trois chiffres
+
+| | |
+|---|---:|
+| langues tracées | **392 / 392** |
+| échecs | **0** |
+| troncatures | **0** (après correction de `ctx 2048` → `ctx 4096`) |
+
+## Ce qui a été appris en route, et qui n'était pas prévu
+
+Trois choses que je n'aurais pas devinées :
+
+1. **Plus de langues aident** — +23 % d'avantage à 112 langues, et la courbe **ne sature pas** (le gain marginal par langue augmente). Cela a corrigé une conclusion antérieure tirée d'une plage trop étroite.
+2. **L'écart de transfert était un artefact de panel** — 2,4× plus petit sur le panel stratifié. J'ai passé des tours à chercher à combler un écart qui n'existait largement que dans ma façon de mesurer.
+3. **Un drapeau inopérant** — `--seuil-commun` ne pilotait que l'affichage, la décision comparant une constante en dur. Corrigé, et son optimum est maintenant mesuré à 0,25.
+
+Rien à faire de votre côté. Je relèverai les résultats de l'analyse.
+
+
+## Tour 145
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de représentation universelle), boîte noire (on ne lit du professeur que la couche à émuler, jamais sa tête ni ses jetons générés), aucune rétropropagation (A et B aléatoires et gelés, seule la lecture s'ajuste en forme fermée), et chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, TAILLE du réseau, avec le diagnostic oracle sur les deux panneaux (test hors vivier et validation du même vivier)."
+Round: 18/256
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Je relève l'avancement de l'analyse sur les 392 langues.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date \"+%H:%M\"; echo \"=== analyse 392 ===\"; grep -E \"TERMINE|===|caches\" /tmp/analyse392.log | tail -5; echo \"lignes : $(wc -l < /tmp/analyse392.log)\"; tail -2 /tmp/analyse392.log; echo; echo \"=== calculs actifs ===\"; ps -eo … [288 caractères tronqués]`
+
+  ```
+02:39
+=== analyse 392 ===
+=== caches ===
+lignes : 74
+  dan : 890 pas
+  ddn : 826 pas
+
+=== calculs actifs ===
+python3 tools/cache_pont.py /home/stephane/Data13TB/stephane/corpus/udhr/ud
+
+=== Romeo ===
+en scène 2 147s 12737089
+2
+  ```
+
+### 🤖 Assistant
+
+⏵ L'analyse construit les caches (74 langues sur 351, à « ddn »). Point d'étape.
+
+## État
+
+| | |
+|---|---|
+| phase 1 | **392/392, 0 échec** ✓ |
+| analyse 392 | construction des caches, ~74/351 langues |
+| Romeo | en attente (correctement chaîné) |
+
+**Estimation** : caches ~30 min, puis les deux runs de pont (~1 h chacun à cette échelle — 22 s par neurone, mesuré). Résultats vers **05h00**.
+
+## Ce que je surveille
+
+Le seul risque réel à ce stade est un **échec silencieux** : un cache trop gros pour la mémoire, ou un run de pont qui plante sur un cas limite après 40 minutes de calcul. J'ai vérifié le dimensionnement en amont (919 Mo de cache, 419 Mo de readout, 108 Go de RAM disponible), donc la marge est large — mais je vérifierai que le run démarre bien plutôt que de supposer.
+
+Je n'ajoute plus rien : le chemin critique est lancé, et chaque expérience de côté l'a ralenti de 40 % ces dernières heures. Mon travail est de surveiller et de relever.
+
+Rien à faire de votre côté.
+
+
+## Tour 146
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de représentation universelle), boîte noire (on ne lit du professeur que la couche à émuler, jamais sa tête ni ses jetons générés), aucune rétropropagation (A et B aléatoires et gelés, seule la lecture s'ajuste en forme fermée), et chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, TAILLE du réseau, avec le diagnostic oracle sur les deux panneaux (test hors vivier et validation du même vivier)."
+Round: 19/256
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Je relève l'avancement de l'analyse.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date \"+%H:%M\"; tail -2 /tmp/analyse392.log; echo \"lignes : $(wc -l < /tmp/analyse392.log)\"; grep -E \"^===|caches TERMINE\" /tmp/analyse392.log; echo; echo \"=== calculs actifs ===\"; ps -eo args | grep -E \"cache_pont|pont_gener … [242 caractères tronqués]`
+
+  ```
+02:40
+  epo : 925 pas
+  eus : 1002 pas
+lignes : 85
+=== caches ===
+
+=== calculs actifs ===
+python3 tools/cache_pont.py /home/stephane/Data13TB/stephane/corpus/udhr/udhr392
+
+=== taille des caches ===
+  ```
+
+### 🤖 Assistant
+
+⏵ 85/351 langues dans les caches. J'attends.
+
+- **bash** `{"command": "sleep 580; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; tail -1 /tmp/analyse392.log; echo \"langues en cache : $(grep -c ' pas$' /tmp/analyse392.log)\"; grep -E \"^===|caches TERMINE\" /tmp/analyse392.log; ls -la /tmp/cache392_*.npz 2>/dev/null | awk '{printf \"  %s : %.0f Mo\\n\ … [109 caractères tronqués]`
+
+  ```
+zyb : 1206 pas
+langues en cache : 351
+=== caches ===
+  /tmp/cache392_train.npz : 220 Mo
+02:49
+  ```
+
+### 🤖 Assistant
+
+⏵ Cache d'apprentissage prêt : **351 langues, 220 Mo**. J'attends le cache de test et le lancement du pont.
+
+- **bash** `{"command": "sleep 400; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date \"+%H:%M\"; echo \"=== jalons de l'analyse ===\"; grep -E \"^===|caches TERMINE|SOUS-ENSEMBLE|CANAUX\" /tmp/analyse392.log; echo \"lignes : $(wc -l < /tmp/analyse392.log)\"; ls -la /tmp/cache392_*.npz 2>/dev/null | awk  … [324 caractères tronqués]`
+
+  ```
+02:56
+=== jalons de l'analyse ===
+=== caches ===
+lignes : 380
+  /tmp/cache392_train.npz : 940 Mo
+
+=== calculs ===
+python3 tools/cache_pont.py /home/stephane/Data13TB/stephane/corpus/udhr/udhr392
+--- dernières lignes ---
+  mai : 2193 pas
+  mal : 3444 pas
+  mic : 1259 pas
+  ```
+
+### 🤖 Assistant
+
+⏵ Cache d'apprentissage écrit (**940 Mo**), cache de test en cours. Point d'étape.
+
+## État de l'analyse
+
+| étape | état |
+|---|---|
+| cache apprentissage (351 langues) | **fait** · 940 Mo |
+| cache test (41 langues) | en cours |
+| plateau du professeur sur 392 traces | à venir |
+| pont sur 301 langues — run 1 | à venir |
+| pont sans restriction — run 2 | à venir |
+
+**Estimation** : le plateau reparse les 392 traces (~35 min), puis les deux runs de pont (~1 h chacun). Résultats vers **05h30**.
+
+## Le dimensionnement se vérifie
+
+Mon extrapolation était de **919 Mo** pour le cache d'apprentissage ; il fait **940 Mo**. À 2 % près — la marge de 108 Go de RAM rend la suite confortable.
+
+## Ce que je fais
+
+Je surveille, sans rien ajouter. Le seul point que je vérifierai explicitement est le **démarrage du premier run de pont** : c'est là que se joue le vrai calcul, et un plantage sur un cas limite après 35 minutes de construction de cache serait coûteux à découvrir tard.
+
+Rien à faire de votre côté.
+
+
+## Tour 147
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de représentation universelle), boîte noire (on ne lit du professeur que la couche à émuler, jamais sa tête ni ses jetons générés), aucune rétropropagation (A et B aléatoires et gelés, seule la lecture s'ajuste en forme fermée), et chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, TAILLE du réseau, avec le diagnostic oracle sur les deux panneaux (test hors vivier et validation du même vivier)."
+Round: 20/256
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Je relève l'état de l'analyse.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date \"+%H:%M\"; grep -E \"^===|caches TERMINE\" /tmp/analyse392.log; echo \"lignes : $(wc -l < /tmp/analyse392.log)\"; echo; echo \"=== caches ===\"; ls -la /tmp/cache392_*.npz 2>/dev/null | awk '{printf \"  %s : %.0f Mo\\n\", $9, $ … [237 caractères tronqués]`
+
+  ```
+02:57
+=== caches ===
+lignes : 386
+
+=== caches ===
+  /tmp/cache392_train.npz : 940 Mo
+
+=== calculs actifs ===
+python3 tools/cache_pont.py       01:29
+
+  quy : 1285 pas
+  sah : 1859 pas
+  srp : 949 pas
+  ```
+
+### 🤖 Assistant
+
+⏵ Cache de test à « srp » sur 41 langues. J'attends la suite.
+
+- **bash** `{"command": "sleep 580; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date \"+%H:%M\"; grep -E \"^===|caches TERMINE|CANAUX|SOUS-ENSEMBLE\" /tmp/analyse392.log; ls -la /tmp/cache392_*.npz 2>/dev/null | awk '{printf \"  %s : %.0f Mo\\n\", $9, $5/1048576}'; echo; ps -eo args,etime | grep -E \"ca … [211 caractères tronqués]`
+
+  ```
+03:06
+=== caches ===
+caches TERMINE
+=== où est le plateau du professeur, sur le panel stratifié ===
+  /tmp/cache392_test.npz : 145 Mo
+  /tmp/cache392_train.npz : 940 Mo
+
+python3 tools/sous_ensemble       08:23
+--- dernières lignes ---
+/tmp/cache392_test.npz : 41 langues · 76812 pas
+caches TERMINE
+=== où est le plateau du professeur, sur le panel stratifié ===
+  ```
+
+### 🤖 Assistant
+
+⏵ **Caches terminés** : apprentissage 351 langues (940 Mo), test **41 langues** (145 Mo, 76 812 positions). La mesure du plateau tourne.
+
+## État
+
+| étape | état |
+|---|---|
+| cache apprentissage — **351 langues** | **fait** · 940 Mo |
+| cache test — **41 langues** | **fait** · 145 Mo · 76 812 positions |
+| plateau du professeur | **en cours** (8 min) |
+| pont sur 301 langues — run 1 | à venir |
+| pont sans restriction — run 2 | à venir |
+
+Le plateau reparse les 392 traces (2,7 Go), c'est l'étape lente. Ensuite les deux runs de pont.
+
+## Ce que je note
+
+Le panel de test fait **41 langues pour 76 812 positions**, soit ~1 900 positions par langue. C'est cohérent avec le panel partiel sur lequel j'ai pris le signal précoce (20 langues, 12 écritures) — mais cette fois avec **les 22 écritures** et **41 langues**, donc les chiffres définitifs seront plus solides que le signal précoce.
+
+Et l'écart de transfert, que le signal précoce donnait à **+0,0292** au lieu de +0,0693 sur l'ancien panel, sera mesuré sur le panel complet. C'est le chiffre qui dira si mon diagnostic de typologie tient à pleine échelle.
+
+Rien à faire de votre côté.
+
+
+## Tour 148
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de représentation universelle), boîte noire (on ne lit du professeur que la couche à émuler, jamais sa tête ni ses jetons générés), aucune rétropropagation (A et B aléatoires et gelés, seule la lecture s'ajuste en forme fermée), et chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, TAILLE du réseau, avec le diagnostic oracle sur les deux panneaux (test hors vivier et validation du même vivier)."
+Round: 21/256
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Je relève l'état de l'analyse.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date \"+%H:%M\"; grep -E \"^===|caches TERMINE|invariance|moyennes|COUCHES\" /tmp/analyse392.log | tail -8; echo \"lignes : $(wc -l < /tmp/analyse392.log)\"; echo; ps -eo args,etime | grep -E \"sous_ensemble|pont_generatif\" | grep - … [148 caractères tronqués]`
+
+  ```
+03:07
+=== caches ===
+caches TERMINE
+=== où est le plateau du professeur, sur le panel stratifié ===
+lignes : 397
+
+python3 tools/sous_ensemble       08:45
+--- dernières lignes ---
+  vie : 923 pas
+  xsm : 1199 pas
+  yao : 1190 pas
+/tmp/cache392_test.npz : 41 langues · 76812 pas
+caches TERMINE
+=== où est le plateau du professeur, sur le panel stratifié ===
+  ```
+
+### 🤖 Assistant
+
+⏵ La mesure du plateau tourne depuis 8 min 45 (elle reparse les 392 traces). J'attends.
+
+- **bash** `{"command": "sleep 580; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date \"+%H:%M\"; grep -E \"^===|caches TERMINE|moyennes|MOYENNE|canaux actifs\" /tmp/analyse392.log | tail -6; echo \"--- dernières lignes ---\"; tail -5 /tmp/analyse392.log; echo; ps -eo args,etime | grep -E \"sous_ensemble … [125 caractères tronqués]`
+
+  ```
+03:16
+caches TERMINE
+=== où est le plateau du professeur, sur le panel stratifié ===
+moyennes : 50 % sur 40/896 canaux (4 %) · 90 % sur 298 (33 %) · 99 % sur 597 (67 %)
+canaux actifs dans AU MOINS une langue : 896/896
+canaux actifs dans TOUTES les langues  : 48/896
+=== le pont sur 301 langues d'apprentissage ===
+--- dernières lignes ---
+n33              33       1    0.7445   0.7494    0.7411   0.9865  0.9320 | communs +0.233 ( 15 %) · contraste 0.982
+n34              34       1    0.7446   0.7496    0.7413   0.9862  0.9292 | communs +0.235 ( 15 %) · contraste 0.982
+n35              35       1    0.7447   0.7497    0.7414   0.9857  0.9275 | communs +0.235 ( 14 %) · contraste 0.982
+n36              36       1    0.7451   0.7500    0.7425   0.9848  0.9220 | communs +0.232 ( 14 %) · contraste 0.981
+n37              37       1    0.7453   0.7502    0.7428   0.9838  0.9192 | communs +0.233 ( 14 %) · contraste 0.981
+  ```
+
+### 🤖 Assistant
+
+⏵ **Résultats du plateau tombés, et le pont tourne sur 301 langues.**
+
+## Le plateau du professeur, sur les 392 langues
+
+| | |
+|---|---|
+| **50 % de l'énergie** | **40 / 896 canaux (4 %)** |
+| 90 % de l'énergie | 298 (33 %) |
+| 99 % de l'énergie | 597 (67 %) |
+| canaux actifs dans **au moins** une langue | 896 / 896 |
+| **canaux actifs dans TOUTES les langues** | **48 / 896 (5 %)** |
+
+Le dernier chiffre est frappant : avec **392 langues**, seuls **48 canaux sont actifs dans toutes**. Autrement dit, **95 % des canaux de la couche ne sont pas universellement actifs** — ils dépendent de la langue à la dernière position. Ma mesure précédente, sur 6 langues seulement, donnait 678/896 ; elle était donc **très optimiste** faute de langues.
+
+## Le pont sur 301 langues (en cours)
+
+| neurones | fid appr | fid VAL | **fid TEST** | invariance | pire paire |
+|---:|---:|---:|---:|---:|---:|
+| 33 | 0,7445 | 0,7494 | 0,7411 | 0,9865 | 0,9320 |
+| 37 | 0,7453 | 0,7502 | **0,7428** | 0,9838 | 0,9192 |
+
+**L'écart test/validation est de 1,01** (0,7428 contre 0,7502) — contre **2,6×** sur mon ancien panel uniquement non latin. Mon diagnostic de typologie se confirme à pleine échelle.
+
+Et `communs` reste à **+0,233** avec 14-15 % des neurones au-dessus du seuil : le critère n'ouvre pas de couche, le réseau reste à **1 couche**.
+
+## Ce que je note
+
+La mesure « canaux actifs dans toutes les langues » **s'effondre quand on ajoute des langues** — 678/896 sur 6 langues, 48/896 sur 392. C'est un rappel utile : mes mesures de « sous-ensemble partagé » étaient des **bornes supérieures** optimistes, faute de diversité dans le panel. La conclusion qualitative tient (la couche est creuse, 40 canaux portent la moitié de l'énergie), mais l'ampleur du partage était largement surestimée.
+
+Rien à faire de votre côté. J'attends la fin des deux runs.
+
+
+## Tour 149
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de représentation universelle), boîte noire (on ne lit du professeur que la couche à émuler, jamais sa tête ni ses jetons générés), aucune rétropropagation (A et B aléatoires et gelés, seule la lecture s'ajuste en forme fermée), et chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, TAILLE du réseau, avec le diagnostic oracle sur les deux panneaux (test hors vivier et validation du même vivier)."
+Round: 22/256
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Je relève l'avancement du pont sur 301 langues.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date \"+%H:%M\"; tail -3 /tmp/analyse392.log; echo \"--- jalons ---\"; grep -E \"^===|MEILLEUR|taille  |fidélité TEST|fidélité VAL|invariance TEST|ORACLE|#   TEST|#   VALIDATION\" /tmp/analyse392.log | tail -12; echo; ps -eo args,eti … [116 caractères tronqués]`
+
+  ```
+03:17
+n36              36       1    0.7451   0.7500    0.7425   0.9848  0.9220 | communs +0.232 ( 14 %) · contraste 0.981
+n37              37       1    0.7453   0.7502    0.7428   0.9838  0.9192 | communs +0.233 ( 14 %) · contraste 0.981
+n38              38       1    0.7456   0.7504    0.7430   0.9831  0.9172 | communs +0.233 ( 13 %) · contraste 0.982
+--- jalons ---
+=== caches ===
+=== où est le plateau du professeur, sur le panel stratifié ===
+=== le pont sur 301 langues d'apprentissage ===
+  ```
+
+### 🤖 Assistant
+
+⏵ Le pont progresse (n38). J'utilise l'attente pour documenter un **effet de panel** que je viens de mesurer et qui corrige une de mes mesures antérieures.
+
+Le pont progresse (n38). J'utilise l'attente pour documenter un **effet de panel** que je viens de mesurer — il corrige une de mes mesures antérieures.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 13. Le plateau sur 392 langues, et un effet de panel qui corrige une mesure antérieure\n\nMesure faite sur les **392 langues**, derni … [3538 caractères tronqués]`
