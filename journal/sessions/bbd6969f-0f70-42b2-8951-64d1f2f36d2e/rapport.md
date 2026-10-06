@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 197.0 h |
 | Tours | 181 |
-| Messages | 9056 |
-| Appels d'outils | 8534 |
+| Messages | 9057 |
+| Appels d'outils | 8535 |
 | Fichiers touchés | 200 |
-| Commandes | 7240 |
+| Commandes | 7241 |
 | Sous-agents | 32 |
-| Commits | 652 |
+| Commits | 653 |
 | Compactages de contexte | 12 |
 
 ## Objectifs déclarés
@@ -9149,7 +9149,7 @@ Il écrivait aussi un fichier **partiel** que le script aurait **sauté** en le 
 
 ### Tour 181 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
 
-*22 appels d'outils.* Actions notables :
+*23 appels d'outils.* Actions notables :
 
 - bash — Check chains status
 - bash — Inspect pont_unites tool
@@ -9165,11 +9165,11 @@ Il écrivait aussi un fichier **partiel** que le script aurait **sauté** en le 
 - bash — Wait for the impoverishment test
 - job_output
 - bash — Test both poolings to rule out a position artifact
-- … et 7 autres
+- … et 8 autres
 
 **Synthèse produite :**
 
-⏵ **La croissance contrainte a abouti avec le protocole ENTIER, oracle sur les deux panneaux. Et le test d'appauvrissement qualifie tous les chiffres d'invariance du rapport.**
+⏵ **J'écris le résultat le plus important du round : il qualifie TOUS les chiffres d'invariance du rapport.**
 
 ## 3. Travail accompli
 
@@ -9455,7 +9455,7 @@ Il écrivait aussi un fichier **partiel** que le script aurait **sauté** en le 
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 7200 autres
+- … et 7201 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10255,4 +10255,5 @@ Il écrivait aussi un fichier **partiel** que le script aurait **sauté** en le 
 - Le garde-fou du §30 a attrapé une SECONDE occurrence du même bug  La croissance mu=0,1 a parcouru TOUTE la naissance et TOUTE l'attrition, puis a planté au diag
 - Le pont transfère sur le corpus Wikipedia multi-domaine, sur TROIS paires de langues  71 articles alignés × 6 langues, couche 8, 120 neurones, 1 couche.    pair
 - Croissance sous contrainte, protocole ENTIER : 147 neurones, oracle sur les deux panneaux  Première passe de croissance qui fournit TOUT ce que l'objectif deman
+- LA question du §41 est tranchée : notre sortie ÉCRASE la distinction contenu/langue  Depuis le §41 un même fait revenait : notre sortie est bien plus invariante
 

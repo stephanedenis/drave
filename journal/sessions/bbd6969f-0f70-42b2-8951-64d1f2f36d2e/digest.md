@@ -149085,3 +149085,13 @@ retrait REFUSÉ (1 → VAL 0.6109)      6       —         —   0.6117
 ⏵ **La croissance contrainte a abouti avec le protocole ENTIER, oracle sur les deux panneaux. Et le test d'appauvrissement qualifie tous les chiffres d'invariance du rapport.**
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 56. Croissance sous contrainte, protocole ENTIER : 147 neurones, oracle sur les deux panneaux\n\nPremière passe de croissance qui  … [3175 caractères tronqués]`
+
+  ```
+e266e21 Croissance sous contrainte, protocole ENTIER : 147 neurones, oracle sur les deux panneaux
+  ```
+
+### 🤖 Assistant
+
+⏵ **J'écris le résultat le plus important du round : il qualifie TOUS les chiffres d'invariance du rapport.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 57. LA question ouverte depuis le §41 est tranchée : notre sortie ÉCRASE la distinction contenu / langue\n\n### 57.1 La question,  … [6350 caractères tronqués]`
