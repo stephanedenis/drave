@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 184.9 h |
-| Tours | 172 |
-| Messages | 8608 |
-| Appels d'outils | 8125 |
+| Durée | 185.0 h |
+| Tours | 173 |
+| Messages | 8613 |
+| Appels d'outils | 8128 |
 | Fichiers touchés | 182 |
-| Commandes | 6922 |
+| Commandes | 6925 |
 | Sous-agents | 32 |
-| Commits | 620 |
+| Commits | 621 |
 | Compactages de contexte | 11 |
 
 ## Objectifs déclarés
@@ -397,6 +397,8 @@
 **Tour 171** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 **Tour 172** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
+
+**Tour 173** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -8630,22 +8632,68 @@ Rien à faire de votre côté. Commit `b7fcce9`.
 
 **Synthèse produite :**
 
-⏵ **Mon hypothèse est RÉFUTÉE, et le résultat est plus intéressant que prévu.**
+⏵ Hypothèse testée et réfutée, commitée. Point d'étape.
+
+\## Le résultat du tour
+
+La mesure par unité a nommé la pire paire : **deu–dzo** (couche 10), **ces–dzo** (couche 8). J'ai voulu savoir **pourquoi** — et j'ai testé une hypothèse simple.
+
+**Hypothèse** : le dzongkha manque de contexte, ses unités sont trop courtes.
 
 | langue | jetons par unité |
 |---|---:|
-| **dzo** (dzongkha) | **344** — **2ᵉ plus longue** sur 21 |
 | fuf | 495 |
+| **dzo** | **344** — **2ᵉ sur 21** |
 | csw | 305 |
-| … | … |
 | deu | 83 |
 | heb | 71 |
 
-**Le dzongkha n'est pas court — c'est la deuxième langue la plus longue du panel.** L'hypothèse « moins de contexte » est donc fausse. Sa distance est **réellement représentationnelle**, pas un artefact de données.
+**Hypothèse réfutée.** Le dzongkha est la **deuxième langue la plus longue** du panel. Sa distance au reste n'est donc **pas un artefact de données** — elle est **représentationnelle**.
 
-**Le dzongkha n'est pas court — c'est la 2ᵉ langue la plus longue du panel.** Mon hypothèse « moins de contexte » est **fausse**. Sa distance au reste du panel est donc **réellement représentationnelle**, pas un artefact de données — et c'est ce qu'on veut d'une langue témoin.
+**C'est exactement ce qu'on veut d'une langue témoin** : si la pire paire s'expliquait par un défaut de données, elle ne dirait rien du pont. Elle dit quelque chose.
 
-Détail au passage : l'écriture tibétaine est **fragmentée ~4× plus** par le tokenizer que le latin (344 jetons contre 83 pour le même contenu en allemand), et cela **ne suffit pas** à aligner sa représentation.
+**Observation au passage** : l'écriture tibétaine est fragmentée **~4× plus** par le tokenizer que le latin — 344 jetons pour le contenu que l'allemand dit en 83 — et cela **ne suffit pas** à aligner sa représentation.
+
+\## Ce que cela donne
+
+**Une cible concrète et caractérisée.** Si l'on veut améliorer le pont sur les langues isolées, c'est ce couple qu'il faut regarder — et l'on sait maintenant que le problème n'est **ni la longueur du texte, ni le tokenizer**. Ce qui reste est la représentation elle-même, c'est-à-dire précisément ce que le pont est censé construire.
+
+\## État
+
+| | |
+|---|---|
+| unités | **222/400**, 0 échec |
+| langues complètes | **21** (contre 17 au signal précoce) |
+| reste | ~35 min, puis l'analyse finale et la comparaison à 392 langues |
+| chaîne | intacte |
+
+Rien à faire de votre côté. Commit `0b91cb0`.
+
+### Tour 173 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Profile Dzongkha representation vs others
+- bash — Profile representations per language
+- bash — Commit the norm finding
+
+**Synthèse produite :**
+
+⏵ **Résultat net, et il désigne un mécanisme.**
+
+| couche 10, cosinus au centroïde | | norme |
+|---|---:|---:|
+| **csw** (cri des plaines) | **0,4419** | **479** |
+| **dzo** (dzongkha) | **0,4651** | **468** |
+| amh (amharique) | 0,6090 | **537** |
+| … | | |
+| guc, haw, acu | 0,87-0,88 | ~282-289 |
+
+**Les langues les plus éloignées ont systématiquement une norme plus grande** — csw 479, dzo 468, amh 537 contre ~282-289 pour les plus proches.
+
+**Et les trois plus éloignées ont un point commun** : des écritures **très éloignées du latin** — le **cri syllabique**, le **tibétain**, l'**éthiopien**. Le quatrième (fuf, 0,68) est à écriture latine.
+
+Ce n'est pas une preuve de mécanisme, mais c'est une **corrélation nette sur 22 langues** : plus l'écriture est loin du latin, plus la représentation du professeur est **forte en magnitude et divergente en direction**.
 
 ## 3. Travail accompli
 
@@ -8913,7 +8961,7 @@ Détail au passage : l'écriture tibétaine est **fragmentée ~4× plus** par le
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6882 autres
+- … et 6885 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9041,7 +9089,7 @@ Détail au passage : l'écriture tibétaine est **fragmentée ~4× plus** par le
 
 ## 5. Erreurs rencontrées
 
-384 sorties en erreur ou divergentes. Les premières :
+385 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -9681,4 +9729,5 @@ Détail au passage : l'écriture tibétaine est **fragmentée ~4× plus** par le
 - Domaine ou langue ? testé — et l'expérience est INCOMPLÈTE, je le signale  Hypothèse : « certains mots sont plus communs à leur domaine qu'à leur langue ». Le t
 - Signal précoce : la couche 8 gagne aussi au niveau des UNITÉS (+0,0381)  Mesure sur les 198 premières unités (17 langues complètes × 10 unités), donc AVANT la f
 - La pire paire (dzo) : hypothèse de longueur testée et RÉFUTÉE  La mesure par unité nomme la pire paire : deu-dzo (couche 10), ces-dzo (couche 8). Le dzongkha (B
+- Les langues éloignées partagent une NORME plus grande, pas une densité différente  Profil des 22 langues complètes (couche 10), trié par cosinus au centroïde : 
 
