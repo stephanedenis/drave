@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 176.8 h |
-| Tours | 132 |
-| Messages | 8354 |
-| Appels d'outils | 7954 |
+| Durée | 177.0 h |
+| Tours | 133 |
+| Messages | 8364 |
+| Appels d'outils | 7962 |
 | Fichiers touchés | 174 |
-| Commandes | 6761 |
+| Commandes | 6769 |
 | Sous-agents | 32 |
-| Commits | 594 |
+| Commits | 595 |
 | Compactages de contexte | 11 |
 
 ## Objectifs déclarés
@@ -317,6 +317,8 @@
 **Tour 131** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1001 caractères tronqués]
 
 **Tour 132** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1001 caractères tronqués]
+
+**Tour 133** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1001 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -6798,7 +6800,55 @@ Rien à faire de votre côté.
 
 **Synthèse produite :**
 
-⏵ Corrigé. Je commite cette série d'erreurs honnêtement.
+⏵ Tour fait d'erreurs trouvées et corrigées, plus un résultat mesuré. Point d'étape.
+
+\## Ce que ce tour a établi
+
+**1. Mon « gain de 1,33× » était faux.** J'avais lancé un second traçage en sens inverse pour utiliser la marge de la machine, et mesuré 28,6 s par langue au lieu de 38 — j'ai conclu à un gain. **En réalité ce second traçage n'a jamais tourné** : j'avais vérifié sa syntaxe avec `bash -n` mais **jamais fait `chmod +x`**, et `nohup` échouait immédiatement sur `Permission denied`, sortie redirigée vers `/dev/null` donc invisible. Les langues mesurées étaient celles du premier traçage, dont le rythme était simplement **revenu à la normale** après la fin de la contention avec la phase 2.
+
+**2. Et quand il tourne vraiment, il ralentit tout.** Mesuré après correction des permissions :
+
+| | rythme |
+|---|---|
+| **un seul traçage** | **28 s par langue** |
+| deux traçages en parallèle | **50 s par langue** |
+
+La charge monte à **44 sur 40 threads** : drave occupe déjà les cœurs physiques, et deux processus se disputent les mêmes. Le second a donc été arrêté — **un traçage à la fois est l'optimum sur cette machine**.
+
+**3. J'ai créé un bug critique et je l'ai réparé.** En modifiant les guetteurs pour exiger la fin des **deux** traçages, je les aurais fait **attendre indéfiniment** après avoir arrêté le second. Ils sont revenus à une condition unique, vérifié.
+
+\## État
+
+| | |
+|---|---:|
+| phase 1 (392 langues) | **139/392**, 0 échec |
+| scripts de la chaîne vivants | **6 / 6** |
+| fin estimée | ~01h40 |
+
+\## Ce que je retiens pour la suite
+
+Le rythme réel est de **28 s par langue** quand rien ne compete — c'est le chiffre à utiliser pour toute estimation future, pas les 38-42 s que j'ai traînés, qui incluaient la contention. Et la leçon générale : **une sortie redirigée vers `/dev/null` transforme un échec immédiat en silence**, exactement le mode d'échec que je m'étais engagé à ne jamais laisser passer. J'ai vérifié les processus, mais pas le **code de retour** de `nohup`.
+
+Rien à faire de votre côté. Commits `0d0e338` puis `230ee30`.
+
+### Tour 133 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1281 caractères tronqués]
+
+*8 appels d'outils.* Actions notables :
+
+- bash — Check state and waiter integrity
+- bash — Sample-verify trace quality
+- bash — Test whether ctx changes values when text fits
+- bash — Stop trace and identify truncated files
+- bash — Remove truncated files and switch to ctx 4096
+- bash — Relaunch trace at ctx 4096 and verify
+- bash — Verify ctx and re-traced languages
+- bash — Commit the truncation fix
+
+**Synthèse produite :**
+
+⏵ **Vérifié : `ben` passe de 2040 (tronqué) à 2634 positions**, et les arguments sont confirmés (`--ctx 4096`). Je commite.
+
+**Vérifié : `ben` passe de 2040 (tronqué) à 2634 positions.** La correction fonctionne, et les arguments sont confirmés. Je commite.
 
 ## 3. Travail accompli
 
@@ -7058,7 +7108,7 @@ Rien à faire de votre côté.
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6721 autres
+- … et 6729 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -7800,4 +7850,5 @@ Rien à faire de votre côté.
 - Correction : le correctif annoncé au commit précédent n'avait pas été fait  J'avais écrit dans le message de fbc8b1c que P.invariance n'était plus appelé deux f
 - Analyse finale chaînée : Romeo, Wikipedia, et l'invariance par unité  Un seul script (/tmp/analyse_final.sh) enchaîne les trois analyses dès que la phase 5 (tra
 - Deux erreurs de ma part, et un résultat mesuré qui les tranche  1. LE SECOND TRAÇAGE N'A JAMAIS TOURNÉ. J'ai vérifié sa syntaxe avec bash -n mais    jamais fait
+- 11 % des langues étaient TRONQUÉES à ctx 2048 — corrigé à ctx 4096, sans surcoût  Trouvé en vérifiant la qualité des traces sur un échantillon, PAS en attendant
 

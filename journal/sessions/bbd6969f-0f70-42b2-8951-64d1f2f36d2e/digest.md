@@ -135220,3 +135220,212 @@ syntaxe OK
 ⏵ Corrigé. Je commite cette série d'erreurs honnêtement.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Deux erreurs de ma part, et un résultat mesuré qui les tranche\n\n1. LE SECOND TRAÇAGE N'A JAMAIS TOURNÉ. J'ai vérifié sa syntaxe avec bash -n mais\n   jamais fait chmod +x : nohup échouait sur 'Permi … [1256 caractères tronqués]`
+
+  ```
+230ee30 Deux erreurs de ma part, et un résultat mesuré qui les tranche
+
+total : 139/392
+23:37
+  ```
+
+### 🤖 Assistant
+
+⏵ Tour fait d'erreurs trouvées et corrigées, plus un résultat mesuré. Point d'étape.
+
+## Ce que ce tour a établi
+
+**1. Mon « gain de 1,33× » était faux.** J'avais lancé un second traçage en sens inverse pour utiliser la marge de la machine, et mesuré 28,6 s par langue au lieu de 38 — j'ai conclu à un gain. **En réalité ce second traçage n'a jamais tourné** : j'avais vérifié sa syntaxe avec `bash -n` mais **jamais fait `chmod +x`**, et `nohup` échouait immédiatement sur `Permission denied`, sortie redirigée vers `/dev/null` donc invisible. Les langues mesurées étaient celles du premier traçage, dont le rythme était simplement **revenu à la normale** après la fin de la contention avec la phase 2.
+
+**2. Et quand il tourne vraiment, il ralentit tout.** Mesuré après correction des permissions :
+
+| | rythme |
+|---|---|
+| **un seul traçage** | **28 s par langue** |
+| deux traçages en parallèle | **50 s par langue** |
+
+La charge monte à **44 sur 40 threads** : drave occupe déjà les cœurs physiques, et deux processus se disputent les mêmes. Le second a donc été arrêté — **un traçage à la fois est l'optimum sur cette machine**.
+
+**3. J'ai créé un bug critique et je l'ai réparé.** En modifiant les guetteurs pour exiger la fin des **deux** traçages, je les aurais fait **attendre indéfiniment** après avoir arrêté le second. Ils sont revenus à une condition unique, vérifié.
+
+## État
+
+| | |
+|---|---:|
+| phase 1 (392 langues) | **139/392**, 0 échec |
+| scripts de la chaîne vivants | **6 / 6** |
+| fin estimée | ~01h40 |
+
+## Ce que je retiens pour la suite
+
+Le rythme réel est de **28 s par langue** quand rien ne compete — c'est le chiffre à utiliser pour toute estimation future, pas les 38-42 s que j'ai traînés, qui incluaient la contention. Et la leçon générale : **une sortie redirigée vers `/dev/null` transforme un échec immédiat en silence**, exactement le mode d'échec que je m'étais engagé à ne jamais laisser passer. J'ai vérifié les processus, mais pas le **code de retour** de `nohup`.
+
+Rien à faire de votre côté. Commits `0d0e338` puis `230ee30`.
+
+
+## Tour 133
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de représentation universelle), boîte noire (on ne lit du professeur que la couche à émuler, jamais sa tête ni ses jetons générés), aucune rétropropagation (A et B aléatoires et gelés, seule la lecture s'ajuste en forme fermée), et chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, TAILLE du réseau, avec le diagnostic oracle sur les deux panneaux (test hors vivier et validation du même vivier)."
+Round: 6/256
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Je relève l'état et je vérifie que la correction des guetteurs tient.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date \"+%H:%M\"; echo \"phase 1 : $(ls /home/stephane/Data13TB/stephane/corpus/udhr/udhr392 | wc -l)/392\"; tail -1 /tmp/trace392.log; echo \"échecs : $(grep -c ÉCHEC /tmp/trace392.log)\"; python3 -c \"\nimport re\nt=open('/tmp/trace … [972 caractères tronqués]`
+
+  ```
+23:37
+phase 1 : 140/392
+hna 37s 7934431
+échecs : 0
+moyenne 38 s · reste 2.7 h
+--- guetteurs : condition unique ? ---
+/tmp/analyse392.sh:0
+/tmp/rj_apres.sh:0
+--- vivants ---
+analyse392 · analyse_final · rj_apres · trace392 · unites_apres · wiki_apres
+  ```
+
+### 🤖 Assistant
+
+⏵ Tout est en ordre (140/392, 0 échec, guetteurs corrigés, 6 scripts vivants). Je contrôle la **qualité des traces** sur un échantillon — c'est le genre de vérification qui évite de découvrir un défaut après 3 h.
+
+Tout est en ordre. Je contrôle la **qualité des traces** sur un échantillon : c'est le genre de vérification qui évite de découvrir un défaut après trois heures de traçage.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys, glob, os, random; sys.path.insert(0,'/tmp')\nfrom lire_drvf import lire\nfs=sorted(glob.glob('/home/stephane/Data13TB/stephane/corpus/udhr/udhr392/*.drvf'))\nrng=random.Random(3); ech=rng.sample(fs, 10)\ … [629 caractères tronqués]`
+
+  ```
+échantillon de 10 sur 140
+langue  positions          couches  hidden  taille Mo
+   cjk        804          [0, 10]     896        4.1
+   zyb       1206          [0, 10]     896        6.2
+   bin       1084          [0, 10]     896        5.6
+   eve        861          [0, 10]     896        4.4
+   guj       2040          [0, 10]     896       10.5  <-- TRONQUÉ
+   arb        680          [0, 10]     896        3.5
+   ada       1388          [0, 10]     896        7.1
+   gug       1170          [0, 10]     896        6.0
+   cni       1379          [0, 10]     896        7.1
+   cic        820          [0, 10]     896        4.2
+
+1/10 tronquées à ctx 2048
+  ```
+
+### 🤖 Assistant
+
+⏵ **Défaut trouvé dans la vérification** : `guj` (gujarati) est **tronqué à 2040 positions** malgré `ctx 2048`. Sur 10 langues échantillonnées, **1 est tronquée** — soit ~10 % des 392, et la troncature casse la mesure d'invariance (la dernière position n'est plus la fin du texte).
+
+**Défaut trouvé** : `guj` (gujarati) est **tronqué à 2040 positions** malgré `ctx 2048`. **1 langue sur 10** dans l'échantillon — soit ~40 langues sur 392. Et je sais depuis le tour 4 que la troncature casse la mesure d'invariance. Avant de reprendre quoi que ce soit, je dois vérifier si `--ctx` change les **valeurs** quand le texte tient.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/corpus/udhr && M=/home/stephane/Data13TB/stephane/modeles/gguf/qwen2.5-0.5b-instruct-q4_k_m.gguf; D=/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/target/release/drave; P=\"$(cat /tmp/udhr10_toutes/arb.txt)\"; for C in 2048 4096; do $D $M  … [494 caractères tronqués]`
+
+  ```
+ctx /tmp/ctx_2048.drvf : 3.4 Mo
+  ctx /tmp/ctx_4096.drvf : 3.4 Mo
+  ==> FICHIERS BIT-À-BIT IDENTIQUES : --ctx ne change rien quand le texte tient
+  ```
+
+### 🤖 Assistant
+
+⏵ **`--ctx` ne change rien quand le texte tient : fichiers bit-à-bit identiques.** Donc mes 140 langues déjà tracées sont valides **sauf les tronquées**. J'arrête le traçage, j'identifie les tronquées, et je passe à `ctx 4096` (même coût).
+
+**`--ctx` ne change rien quand le texte tient : fichiers bit-à-bits identiques.** Mes 140 langues déjà tracées sont donc valides, **sauf les tronquées**. J'arrête le traçage et j'identifie lesquelles.
+
+- **bash** `{"command": "cat > /tmp/tue_trace.py <<'PY'\nimport os, signal\nmoi = os.getpid(); anc = set(); p = moi\nfor _ in range(8):\n    try:\n        st = open(f\"/proc/{p}/stat\").read().split(\") \", 1)[1].split(); p = int(st[1]); anc.add(p)\n    except Exception: break\nmorts = []\nfor d in os.listdir(\ … [1446 caractères tronqués]`
+
+  ```
+traçage arrêté : [2350094, 2350097, 2374203]
+traçage arrêté : []
+analyse de 143 fichiers…
+
+TRONQUÉES (16) :
+   ame : 2040
+   ben : 2040
+   blt : 2040
+   boa : 2040
+   bod : 2040
+   ccp : 2040
+   chr : 2040
+   cpu : 2040
+   csw : 2040
+   div : 2040
+   dzo : 2040
+   ell : 2040
+   fuf : 2040
+   guj : 2040
+   hin : 2040
+   hrv : ERREUR error
+
+liste écrite dans /tmp/tronquees.txt
+  ```
+
+### 🤖 Assistant
+
+⏵ **16 tronquées sur 143 (11 %)**, dont **ell (grec)** et **hin (hindi)** qui sont dans mon jeu de test historique. Un fichier en erreur (interrompu en pleine écriture). Je supprime les 17, passe le traçage à `ctx 4096` et relance.
+
+**16 tronquées sur 143 (11 %)** — dont **ell (grec)** et **hin (hindi)**, qui sont dans mon jeu de test historique — plus un fichier en erreur (interrompu en pleine écriture). Je supprime les 17, passe à `ctx 4096` et relance.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/corpus/udhr && while read L; do [ -n \"$L\" ] && rm -f udhr392/$L.drvf && echo \"  supprimée : $L\"; done < /tmp/tronquees.txt; echo \"restant : $(ls udhr392 | wc -l) fichiers\"; sed -i 's/--ctx 2048/--ctx 4096/' /tmp/trace392.sh && grep -n \"ctx\" /t … [247 caractères tronqués]`
+
+  ```
+supprimée : ame
+  supprimée : ben
+  supprimée : blt
+  supprimée : boa
+  supprimée : bod
+  supprimée : ccp
+  supprimée : chr
+  supprimée : cpu
+  supprimée : csw
+  supprimée : div
+  supprimée : dzo
+  supprimée : ell
+  supprimée : fuf
+  supprimée : guj
+  supprimée : hin
+  supprimée : hrv
+restant : 127 fichiers
+6:#   --ctx 4096          aucune troncature (l'abkhaze demande 1958 jetons)
+22:  if $D $M --infer --ctx 4096 --couches 0:11 --lot 1 --n 0 \
+syntaxe OK et exécutable
+-rwx--x--x.
+  ```
+
+- **bash** `{"command": "setsid nohup /tmp/trace392.sh >/tmp/trace392.out 2>&1 < /dev/null & disown; sleep 20; echo \"--- vérification : le traçage tourne ET est exécutable ---\"; head -3 /tmp/trace392.out 2>/dev/null; python3 -c \"\nimport os\nfor d in os.listdir('/proc'):\n    if d.isdigit():\n        try: cl … [584 caractères tronqués]`
+
+  ```
+--- vérification : le traçage tourne ET est exécutable ---
+--- progression ---
+131
+blt 92s 17293568
+23:48
+  ```
+
+### 🤖 Assistant
+
+⏵ Le traçage tourne (4 langues en 260 s — plus lent car les langues naguère tronquées traitent maintenant **plus de jetons**). Je vérifie les arguments et l'absence de troncature.
+
+- **bash** `{"command": "python3 -c \"\nimport os\nfor d in os.listdir('/proc'):\n    if d.isdigit():\n        try: cl=open(f'/proc/{d}/cmdline','rb').read().decode(errors='replace')\n        except Exception: continue\n        if 'udhr392' in cl and 'infer' in cl:\n            p=[x for x in cl.split(chr(0)) if … [837 caractères tronqués]`
+
+  ```
+args : --ctx 4096 · --couches 0:11 · --n 0 · --trace-couches 0,10
+--- une langue naguère tronquée a-t-elle été refaite ? ---
+  ben: 2634 positions  OK, plus de troncature
+  ell: pas encore refaite
+  hin: pas encore refaite
+  guj: pas encore refaite
+  ```
+
+### 🤖 Assistant
+
+⏵ **Vérifié : `ben` passe de 2040 (tronqué) à 2634 positions**, et les arguments sont confirmés (`--ctx 4096`). Je commite.
+
+**Vérifié : `ben` passe de 2040 (tronqué) à 2634 positions.** La correction fonctionne, et les arguments sont confirmés. Je commite.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"11 % des langues étaient TRONQUÉES à ctx 2048 — corrigé à ctx 4096, sans surcoût\n\nTrouvé en vérifiant la qualité des traces sur un échantillon, PAS en attendant la\nfin : gujarati était plafonné à 2 … [1267 caractères tronqués]`
