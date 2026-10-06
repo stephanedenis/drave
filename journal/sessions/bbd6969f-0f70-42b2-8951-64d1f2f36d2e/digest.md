@@ -137423,3 +137423,153 @@ e85847a Plateau sur 392 langues : le 'sous-ensemble partagé' s'effondre de 678 
 Et le **signal précoce était représentatif** : il donnait 0,7438 / 0,7621 / +0,0292 ; le complet donne 0,7430 / 0,7505 / +0,0223.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 14. LE LIVRABLE DE LA PHASE 2 : le pont sur 301 langues\n\n| | |\n|---|---:|\n| apprentissage / validation | **301 / 50 langues** |\n … [3075 caractères tronqués]`
+
+  ```
+2bdae7e LIVRABLE PHASE 2 : le pont sur 301 langues — fid TEST 0,7430, invariance 0,9827
+
+--- run 2 démarré ? ---
+########## CYCLE 1 — CROISSANCE ##########
+après                           neur.  couch.  fid appr  fid VAL  fid TEST   invar.    pire
+03:19
+  ```
+
+### 🤖 Assistant
+
+⏵ Livrable de la phase 2 commité, second run démarré. Point d'étape.
+
+## Le résultat principal est tombé et il est solide
+
+Le pont entraîné sur **301 langues** (contre 30 auparavant), testé sur un panel **stratifié de 41 langues couvrant les 22 écritures** :
+
+| | |
+|---|---:|
+| **fidélité TEST** | **0,7430** (constante 0,7207) |
+| **invariance TEST** | **0,9827** · pire paire **0,9165** |
+| **écart à la constante** | **+0,0223** |
+| écart de transfert (oracle test) | **+0,0223** (contre +0,0693 avant) |
+| réseau | **40 neurones · 1 couche** |
+
+**Les trois choses qui tiennent, à pleine échelle :**
+
+1. **L'écart test/validation tombe à 1,01** — contre **2,58** sur mon ancien panel uniquement non latin. Le diagnostic de typologie est confirmé **sur le panel complet**, pas seulement sur le signal précoce.
+2. **L'écart de transfert est 3,1× plus petit** (+0,0223 contre +0,0693). Ce que je prenais pour un goulot de méthode était largement un artefact de mesure.
+3. **L'écart à la constante vaut +0,0223** — exactement l'invariant des +0,020, mesuré maintenant sur sept périmètres, deux architectures, deux panels et deux tailles d'entraînement. **Il traverse tout.**
+
+Et le **signal précoce était représentatif** (0,7438 / 0,7621 / +0,0292 contre 0,7430 / 0,7505 / +0,0223) — ce qui justifie après coup l'arbitrage de l'avoir pris tôt : il avait corrigé une conclusion fausse plusieurs heures avant que le run complet ne la confirme.
+
+## Ce qui reste
+
+| étape | état |
+|---|---|
+| run 2 (sans restriction de canaux) | **en cours** |
+| Romeo — 24 scènes alignées en/fr | chaîné |
+| Wikipedia — en/fr, 240 morceaux | chaîné |
+| traçage par unité — 40 × 10 | chaîné |
+| analyse finale | chaîné |
+
+Rien à faire de votre côté. Commit `2bdae7e`.
+
+
+## Tour 150
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de représentation universelle), boîte noire (on ne lit du professeur que la couche à émuler, jamais sa tête ni ses jetons générés), aucune rétropropagation (A et B aléatoires et gelés, seule la lecture s'ajuste en forme fermée), et chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, TAILLE du réseau, avec le diagnostic oracle sur les deux panneaux (test hors vivier et validation du même vivier)."
+Round: 23/256
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Je relève l'état du second run et de la chaîne.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date \"+%H:%M\"; sed -n '/et sans restriction/,$p' /tmp/analyse392.log | grep -E \"SOUS-ENSEMBLE|découpe|née :|MEILLEUR|taille  |fidélité|invariance|#   TEST|#   VALIDATION|état final\" | head -14; echo \"--- dernières lignes ---\";  … [227 caractères tronqués]`
+
+  ```
+03:19
+# découpe par noms : 301 apprentissage · 50 validation
+--- dernières lignes ---
+########## CYCLE 1 — CROISSANCE ##########
+après                           neur.  couch.  fid appr  fid VAL  fid TEST   invar.    pire
+
+--- chaîne ---
+bash -x /tmp/analyse_final.sh
+/bin/bash /tmp/trace_rj.sh
+python3 -u tools/pont_generatif.py /tmp/cache392_train.npz /tmp/cache392_test.np
+  ```
+
+### 🤖 Assistant
+
+⏵ **Bug dans mon guetteur** : `trace_rj.sh` (Romeo) **tourne déjà** alors que l'analyse 392 n'est pas finie. Ma condition cherche `TERMINE` dans le journal — mais elle matche le **« caches TERMINE »** écrit bien plus tôt !
+
+**Bug dans mon guetteur** : Romeo **tourne déjà** alors que l'analyse 392 n'est pas finie. Ma condition cherche `TERMINE` dans le journal de l'analyse — mais elle matche la sous-chaîne du **« caches TERMINE »** écrit bien plus tôt ! Le guetteur s'est donc déclenché trop tôt.
+
+- **bash** `{"command": "grep -n \"TERMINE\" /tmp/analyse392.log; echo \"--- la condition actuelle ---\"; grep -oE \"while ! .*done\" /tmp/rj_apres.sh; echo \"--- charge ---\"; uptime | grep -oE \"load average.*\"; echo \"--- qui tourne ---\"; ps -eo args,pcpu | grep -E \"pont_generatif|drave\" | grep -v grep | … [77 caractères tronqués]`
+
+  ```
+396:caches TERMINE
+--- la condition actuelle ---
+while ! { grep -q TERMINE /tmp/trace392.log 2>/dev/null && grep -q TERMINE /tmp/analyse392.log 2>/dev/null; }; do sleep 120; done
+--- charge ---
+load average: 21,40, 21,67, 16,93
+--- qui tourne ---
+  ```
+
+### 🤖 Assistant
+
+⏵ Confirmé : la ligne 396 contient « caches TERMINE » et **c'est la seule occurrence** — mon guetteur a donc matché là. Je corrige avec une ancre de fin de ligne.
+
+Confirmé : « caches TERMINE » est la **seule** occurrence dans le journal — mon guetteur a matché là. Je corrige avec une ancre de fin de ligne.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport re\n# 1) rj_apres : corriger la condition (et la rendre réutilisable)\np='/tmp/rj_apres.sh'; s=open(p).read()\nvieux='grep -q TERMINE /tmp/analyse392.log 2>/dev/null'\nneuf='grep -qx TERMINE /tmp/analyse392.l … [1087 caractères tronqués]`
+
+  ```
+rj_apres : ancre ^TERMINE$ posée
+/tmp/wiki_apres.sh : ancré
+/tmp/unites_apres.sh : ancré
+/tmp/analyse_final.sh : ancré
+syntaxe OK partout
+--- conditions finales ---
+  rj_apres         : grep -q TERMINE /tmp/trace392.log grep -qx TERMINE /tmp/analyse392.log 
+  wiki_apres       : grep -qx TERMINE /tmp/trace_rj.log 
+  unites_apres     : grep -qx TERMINE /tmp/trace_wiki.log 
+  analyse_final    : grep -qx TERMINE /tmp/trace_unites.log
+  ```
+
+### 🤖 Assistant
+
+⏵ Toutes les conditions sont ancrées. Reste à décider du **conflit** : Romeo a démarré trop tôt et tourne en parallèle du second run. Je mesure l'impact avant d'intervenir.
+
+Toutes les conditions sont ancrées. Reste à décider du **conflit** : Romeo a démarré trop tôt à cause de mon bug, et tourne en parallèle du second run. Je mesure l'impact avant d'intervenir.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== Romeo : où en est-il ? ===\"; wc -l /tmp/trace_rj.log; tail -2 /tmp/trace_rj.log; ls /home/stephane/Data13TB/stephane/corpus/parallele_rj/ | wc -l; echo; echo \"=== le second run avance-t-il ? ===\"; N0=$(grep -c \"^n[0-9] … [278 caractères tronqués]`
+
+  ```
+=== Romeo : où en est-il ? ===
+24 /tmp/trace_rj.log
+fr scène 1 168s 55035961
+fr scène 2 43s 18415630
+27
+
+=== le second run avance-t-il ? ===
+neurones nés : 12 -> 13 en 180 s
+n8                8       1    0.6027   0.6056    0.5897   0.9948  0.9745 | comm
+
+load average: 23,79, 22,42, 18,16
+  ```
+
+### 🤖 Assistant
+
+⏵ **Deux constats.** Romeo a bien avancé (24 scènes, il est au français) mais le second run est **très lent : 1 neurone en 180 s** au lieu des ~22 s attendus — la contention est sévère.
+
+**Deux constats.**
+
+**1. Mon guetteur a un défaut réel** : il cherchait `TERMINE` sans ancre, et a matché la sous-chaîne du **« caches TERMINE »** écrit 25 minutes plus tôt. Romeo s'est donc déclenché pendant l'analyse au lieu d'après. Corrigé partout avec `grep -qx` (ancre de fin de ligne).
+
+**2. Le second run paie la contention** : 1 neurone en 180 s au lieu de ~22 s attendus — 8× plus lent, parce que drave (20 threads) et numpy se disputent les cœurs.
+
+**Ma décision : je laisse les deux tourner.** Romeo progresse vite (43 s par scène française) et le second run est une comparaison secondaire — j'ai déjà le résultat principal avec restriction. Interrompre Romeo pour accélérer une comparaison serait le mauvais échange. La chaîne n'est pas bloquée : Wikipedia attend Romeo, et l'analyse finale attend le traçage par unité.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -i 's|grep -q TERMINE /tmp/trace392.log|grep -qx TERMINE /tmp/trace392.log|' /tmp/analyse392.sh /tmp/rj_apres.sh 2>/dev/null; for f in /tmp/analyse392.sh /tmp/rj_apres.sh; do bash -n \"$f\" || echo \"ERREUR $f\"; done; echo \"con … [1307 caractères tronqués]`

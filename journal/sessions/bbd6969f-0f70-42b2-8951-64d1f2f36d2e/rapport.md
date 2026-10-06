@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 180.5 h |
-| Tours | 149 |
-| Messages | 8458 |
-| Appels d'outils | 8024 |
+| Durée | 180.6 h |
+| Tours | 150 |
+| Messages | 8465 |
+| Appels d'outils | 8029 |
 | Fichiers touchés | 177 |
-| Commandes | 6828 |
+| Commandes | 6833 |
 | Sous-agents | 32 |
-| Commits | 605 |
+| Commits | 606 |
 | Compactages de contexte | 11 |
 
 ## Objectifs déclarés
@@ -351,6 +351,8 @@
 **Tour 148** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 **Tour 149** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
+
+**Tour 150** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -7556,29 +7558,61 @@ Rien à faire de votre côté. J'attends la fin des deux runs.
 
 **Synthèse produite :**
 
-⏵ **Le livrable de la phase 2 est tombé.**
+⏵ Livrable de la phase 2 commité, second run démarré. Point d'étape.
 
-\## Le pont sur 301 langues d'apprentissage — résultat complet
+\## Le résultat principal est tombé et il est solide
+
+Le pont entraîné sur **301 langues** (contre 30 auparavant), testé sur un panel **stratifié de 41 langues couvrant les 22 écritures** :
 
 | | |
-|---|---|
-| apprentissage / validation | **301 / 50 langues** |
-| réseau | **40 neurones · 1 couche** |
-| fidélité apprentissage | 0,7459 |
-| fidélité VALIDATION | 0,7505 |
+|---|---:|
 | **fidélité TEST** | **0,7430** (constante 0,7207) |
 | **invariance TEST** | **0,9827** · pire paire **0,9165** |
-| oracle TEST | 0,7653 — **écart +0,0223** |
-| oracle VALIDATION | 0,7563 — **écart +0,0058** |
 | **écart à la constante** | **+0,0223** |
+| écart de transfert (oracle test) | **+0,0223** (contre +0,0693 avant) |
+| réseau | **40 neurones · 1 couche** |
 
-**Trois choses tiennent, à pleine échelle :**
+**Les trois choses qui tiennent, à pleine échelle :**
 
-1. **L'écart test/validation est de 1,01** (0,7505 / 0,7430) — contre 2,58 sur mon ancien panel. Le diagnostic de typologie est **confirmé sur le panel complet** de 41 langues et 22 écritures.
-2. **L'écart de transfert tombe à +0,0223** (oracle test), contre **+0,0693** sur l'ancien panel — **3,1× plus petit**.
-3. **L'écart à la constante vaut +0,0223** — exactement l'invariant des +0,020 mesuré sur sept périmètres et deux architectures.
+1. **L'écart test/validation tombe à 1,01** — contre **2,58** sur mon ancien panel uniquement non latin. Le diagnostic de typologie est confirmé **sur le panel complet**, pas seulement sur le signal précoce.
+2. **L'écart de transfert est 3,1× plus petit** (+0,0223 contre +0,0693). Ce que je prenais pour un goulot de méthode était largement un artefact de mesure.
+3. **L'écart à la constante vaut +0,0223** — exactement l'invariant des +0,020, mesuré maintenant sur sept périmètres, deux architectures, deux panels et deux tailles d'entraînement. **Il traverse tout.**
 
-Et le **signal précoce était représentatif** : il donnait 0,7438 / 0,7621 / +0,0292 ; le complet donne 0,7430 / 0,7505 / +0,0223.
+Et le **signal précoce était représentatif** (0,7438 / 0,7621 / +0,0292 contre 0,7430 / 0,7505 / +0,0223) — ce qui justifie après coup l'arbitrage de l'avoir pris tôt : il avait corrigé une conclusion fausse plusieurs heures avant que le run complet ne la confirme.
+
+\## Ce qui reste
+
+| étape | état |
+|---|---|
+| run 2 (sans restriction de canaux) | **en cours** |
+| Romeo — 24 scènes alignées en/fr | chaîné |
+| Wikipedia — en/fr, 240 morceaux | chaîné |
+| traçage par unité — 40 × 10 | chaîné |
+| analyse finale | chaîné |
+
+Rien à faire de votre côté. Commit `2bdae7e`.
+
+### Tour 150 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
+
+*5 appels d'outils.* Actions notables :
+
+- bash — Check second run progress
+- bash — Diagnose the premature guard firing
+- bash — Fix the guard anchoring everywhere
+- bash — Assess contention impact
+- bash — Fix guards everywhere and commit
+
+**Synthèse produite :**
+
+⏵ **Deux constats.** Romeo a bien avancé (24 scènes, il est au français) mais le second run est **très lent : 1 neurone en 180 s** au lieu des ~22 s attendus — la contention est sévère.
+
+**Deux constats.**
+
+**1. Mon guetteur a un défaut réel** : il cherchait `TERMINE` sans ancre, et a matché la sous-chaîne du **« caches TERMINE »** écrit 25 minutes plus tôt. Romeo s'est donc déclenché pendant l'analyse au lieu d'après. Corrigé partout avec `grep -qx` (ancre de fin de ligne).
+
+**2. Le second run paie la contention** : 1 neurone en 180 s au lieu de ~22 s attendus — 8× plus lent, parce que drave (20 threads) et numpy se disputent les cœurs.
+
+**Ma décision : je laisse les deux tourner.** Romeo progresse vite (43 s par scène française) et le second run est une comparaison secondaire — j'ai déjà le résultat principal avec restriction. Interrompre Romeo pour accélérer une comparaison serait le mauvais échange. La chaîne n'est pas bloquée : Wikipedia attend Romeo, et l'analyse finale attend le traçage par unité.
 
 ## 3. Travail accompli
 
@@ -7841,7 +7875,7 @@ Et le **signal précoce était représentatif** : il donnait 0,7438 / 0,7621 / +
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6788 autres
+- … et 6793 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -8594,4 +8628,5 @@ Et le **signal précoce était représentatif** : il donnait 0,7438 / 0,7621 / +
 - Optimum du seuil de couche : 0,25, et c'est un maximum INTÉRIEUR  Balayage complet sur le panel stratifié, tout le reste égal :    seuil-part  réseau           
 - Plateau sur 392 langues : le 'sous-ensemble partagé' s'effondre de 678 à 48 canaux  Mesure sur les 392 langues, dernière position, couche 10 :   50 % de l'énerg
 - LIVRABLE PHASE 2 : le pont sur 301 langues — fid TEST 0,7430, invariance 0,9827    apprentissage / validation : 301 / 50 langues (contre 30 / 10 précédemment)  
+- Bug de guetteur : 'TERMINE' matchait la sous-chaîne de 'caches TERMINE'  rj_apres.sh a déclenché Romeo 25 minutes trop tôt : sa condition cherchait 'TERMINE' sa
 
