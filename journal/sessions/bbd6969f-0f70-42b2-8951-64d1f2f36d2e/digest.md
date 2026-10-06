@@ -146098,3 +146098,347 @@ quy
 ⏵ **Résultat décisif : 41 langues sur 41 s'améliorent à la couche 8, ZÉRO ne régresse. Je consigne.**
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 44. Couche 8 contre couche 10 à l'échelle des 392 langues : 41 sur 41, zéro régression\n\nLe traçage de la couche 8 est terminé (§ … [7646 caractères tronqués]`
+
+  ```
+817ca1b Couche 8 contre couche 10 à 392 langues : 41 sur 41 s'améliorent, ZÉRO régresse
+=== croissance ===
+après                           neur.  couch.  fid appr  fid VAL  fid TEST   invar.    pire
+n8                8       1    0.6141   0.6535    0.6158   0.9438  0.7600 | communs -0.597 (  0 %) · contraste 0.869
+n16              16       1    0.6186   0.6566    0.6228   0.9321  0.6678 | communs -0.754 (  0 %) · contraste 0.918
+n24              24       1    0.6223   0.6578    0.6274   0.9213  0.6605 | communs -0.639 (  8 %) · contraste 0.951
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le calcul de `f_tr` sur 347 langues à CHAQUE naissance coûte ~35 s pour un chiffre purement indicatif. Je le sous-échantillonne et je relance.**
+
+- **job_kill** `{"job_id": "bash-238", "reason": "Redémarré avec le diagnostic f_tr sous-échantillonné et le fit à 1/20 — 3 h économisées"}`
+
+  ```
+requested cancellation of job bash-238
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"f_tr = P.fid(idx, W, mt, itr)\" tools/pont_generatif.py", "description": "Locate f_tr computation sites"}`
+
+  ```
+729:                f_tr = P.fid(idx, W, mt, itr); f_va = P.fid(idx, W, mt, ival)
+802:                f_tr = P.fid(idx, W, mt, itr); f_va = P.fid(idx, W, mt, ival)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\ns = open('tools/pont_generatif.py').read()\n# le diagnostic f_tr sur TOUT le vivier coûte ~35 s par naissance et ne sert à\n# aucune décision : la décision se prend sur f_va (4 langues). On le sous-échantillonne. … [1225 caractères tronqués]`
+
+  ```
+ok
+syntaxe OK
+679:    itr_diag = itr[::8]
+736:                f_tr = P.fid(idx, W, mt, itr_diag); f_va = P.fid(idx, W, mt, ival)
+814:                f_tr = P.fid(idx, W, mt, itr_diag); f_va = P.fid(idx, W, mt, ival)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -u tools/pont_generatif.py /tmp/cache392_train.npz /tmp/cache392_test.npz --part-langues 0.5 --lecture quadratique --naissance libre --plafond 300 --patience 20 --ride 0.03 --sous-ech 20 --a-min 0.02 --a-max 0.8 --cycles 1 -- … [194 caractères tronqués]`
+
+  ```
+started background job bash-239
+  ```
+
+### 🤖 Assistant
+
+⏵ **Pendant la croissance : l'objectif demande les œuvres parallèles Gutenberg. Je regarde l'outillage existant.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -30 tools/extrait_gutenberg.py 2>/dev/null; echo \"=== données Gutenberg ===\"; find /home/stephane/Data13TB/stephane/corpus -maxdepth 2 -iname \"*gutenberg*\" -o -maxdepth 2 -iname \"*alice*\" 2>/dev/null | head -10; ls /home/s … [100 caractères tronqués]`
+
+  ```
+#!/usr/bin/env python3
+"""extrait_gutenberg.py — sortir des SEGMENTS PARALLÈLES d'œuvres alignables.
+
+Un grand corpus monolingue ne permet pas de mesurer l'invariance inter-langue :
+il faut du contenu APPARIÉ. Les œuvres traduites de Gutenberg en fournissent, à
+condition de trouver un découpage commun. *Romeo and Juliet* en a un : 24 scènes
+dans les deux langues, alignables par l'ORDRE.
+
+Usage : extrait_gutenberg.py <sortie.txt> --db <base.db> --titre <motif> --motif <regex>
+"""
+import re, sqlite3, sys
+
+
+def main():
+    sortie = sys.argv[1]
+    db = sys.argv[sys.argv.index("--db")+1]
+    titre = sys.argv[sys.argv.index("--titre")+1]
+    motif = sys.argv[sys.argv.index("--motif")+1]
+    c = sqlite3.connect(db)
+    r = c.execute("select title, raw_text from backlog where title like ?",
+                  (f"%{titre}%",)).fetchall()
+    if not r:
+        print(f"aucune œuvre pour {titre!r} dans {db}"); return 1
+    t, txt = r[0]
+    pos = [m.start() for m in re.finditer(motif, txt, re.M)]
+    print(f"{db} · {t[:50]!r} · {len(txt):,} caractères · {len(pos)} segments")
+    segs = []
+    for i, p in enumerate(pos):
+        fin = pos[i+1] if i+1 < len(pos) else len(txt)
+        segs.append
+… [76 caractères tronqués]
+  ```
+
+- **bash** `{"command": "find /home/stephane/Data13TB/stephane -maxdepth 4 -name \"*.db\" -size +10M 2>/dev/null | head -10; echo \"=== bases gutenberg ===\"; find /home/stephane/Data13TB/stephane -maxdepth 5 -iname \"*backlog*\" -o -maxdepth 5 -iname \"*gutenberg*\" 2>/dev/null | head -10", "description": "Loc … [28 caractères tronqués]`
+
+  ```
+/home/stephane/Data13TB/stephane/.cache/vscode-cpptools/2ac9bbff73a80bbd15e68d23145c8163/.browse.VC.db
+/home/stephane/Data13TB/stephane/.cache/vscode-cpptools/9a72da4d4a7b6c945986a98a192a3d92/.browse.VC.db
+/home/stephane/Data13TB/stephane/.config/microsoft-edge/Default/load_statistics.db
+/home/stephane/Data13TB/stephane/Documents/My Kindle Content/book_asset.db
+/home/stephane/Data13TB/stephane/data/wikipedia/db/enwiki_v14.db
+/home/stephane/Data13TB/stephane/data/wikipedia/db/frwiki_v14.db
+/home/stephane/Data13TB/stephane/data/wikipedia/db/dewiki_v14.db
+/home/stephane/Data13TB/stephane/data/wikipedia/db/arwiki_v14.db
+/home/stephane/Data13TB/stephane/data/wikipedia/db/zhwiki_v14.db
+/home/stephane/Data13TB/stephane/data/wikipedia/db/eswiki_v14.db
+=== bases gutenberg ===
+/home/stephane/Data13TB/stephane/.cache/pylint/__home_stephane_GitHub_Panini_scripts_nipada_gutenberg_fetcher.py_1.stats
+/home/stephane/Data13TB/stephane/.cache/pylint/__home_stephane_GitHub_nipada-public_scripts_fetch_gutenberg_multilingual.py_1.stats
+/home/stephane/Data13TB/stephane/.cache/pylint/__home_stephane_GitHub_Panini-Research_scripts_nipada_backlog_worker.py_1.stats
+/home/stephane/Data13TB/stephane/.cache/py
+… [903 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Trouvé : les bases Wikipedia décompressées de 6 langues (en, fr, de, ar, zh, es) — dont deux écritures non latines. C'est exactement le corpus riche de l'objectif.**
+
+- **bash** `{"command": "ls -la /home/stephane/Data13TB/stephane/data/wikipedia/db/ | awk '{print $5, $9}'; echo \"=== schéma ===\"; python3 - <<'PY'\nimport sqlite3, os\nd='/home/stephane/Data13TB/stephane/data/wikipedia/db'\nfor f in sorted(os.listdir(d))[:2]:\n    p=os.path.join(d,f)\n    print(f\"--- {f} -- … [266 caractères tronqués]`
+
+  ```
+260 .
+14 ..
+3505520640 arwiki_v14.db
+9424920576 dewiki_v14.db
+19540979712 enwiki_v14.db
+5506088960 eswiki_v14.db
+7248388096 frwiki_v14.db
+4569493504 itwiki_v14.db
+6133825536 jawiki_v14.db
+2773049344 ptwiki_v14.db
+8023691264 ruwiki_v14.db
+3645382656 zhwiki_v14.db
+=== schéma ===
+--- arwiki_v14.db ---
+  table articles : CREATE TABLE articles (
+    page_id     INTEGER PRIMARY KEY,
+    title       TEXT    NOT NULL,
+    title_lower TEXT    NOT NULL,
+    lang        TEXT    NOT NULL,
+    n_chars     INTEGER,
+    n_words 
+--- dewiki_v14.db ---
+  table articles : CREATE TABLE articles (
+    page_id     INTEGER PRIMARY KEY,
+    title       TEXT    NOT NULL,
+    title_lower TEXT    NOT NULL,
+    lang        TEXT    NOT NULL,
+    n_chars     INTEGER,
+    n_words
+  ```
+
+### 🤖 Assistant
+
+⏵ **10 bases Wikipedia (30 Go), dont arabe, chinois, japonais, russe. Je cherche un appariement par titre.**
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sqlite3\np='/home/stephane/Data13TB/stephane/data/wikipedia/db/enwiki_v14.db'\nc=sqlite3.connect(f'file:{p}?mode=ro', uri=True)\nfor r in c.execute(\"select sql from sqlite_master where type='table'\"):\n    print(r[0]); print()\nprint(\"=== compte ===\")\nprint … [410 caractères tronqués]`
+
+  ```
+(no output)
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Requête trop lourde sur 19 Go. Je regarde les index d'abord.**
+
+- **bash** `{"command": "timeout 120 python3 - <<'PY'\nimport sqlite3\np='/home/stephane/Data13TB/stephane/data/wikipedia/db/enwiki_v14.db'\nc=sqlite3.connect(f'file:{p}?mode=ro', uri=True)\nprint(\"=== table ===\")\nfor r in c.execute(\"select sql from sqlite_master where type='table'\"):\n    print(r[0])\npri … [374 caractères tronqués]`
+
+  ```
+=== table ===
+CREATE TABLE articles (
+    page_id     INTEGER PRIMARY KEY,
+    title       TEXT    NOT NULL,
+    title_lower TEXT    NOT NULL,
+    lang        TEXT    NOT NULL,
+    n_chars     INTEGER,
+    n_words     INTEGER,
+    summary     TEXT,
+    v14_json    TEXT,
+    v14_top3    TEXT,
+    dominant    TEXT,
+    molecules   TEXT,
+    signed_at   REAL,
+    sign_version TEXT DEFAULT 'v360'
+)
+=== index ===
+  idx_title_lower : CREATE INDEX idx_title_lower ON articles(title_lower)
+  idx_dominant : CREATE INDEX idx_dominant   ON articles(dominant)
+=== échantillon ===
+  (12, 'Anarchism', 8000, 1154)
+  (39, 'Albedo', 8000, 1260)
+  (290, 'A', 8000, 1217)
+  (303, 'Alabama', 8000, 1273)
+  (305, 'Achilles', 8000, 1337)
+  ```
+
+### 🤖 Assistant
+
+⏵ **Index sur `title_lower` : je peux apparier par titre. Test prototype.**
+
+- **bash** `{"command": "timeout 200 python3 - <<'PY'\nimport sqlite3, os\nd='/home/stephane/Data13TB/stephane/data/wikipedia/db'\nLANGS=['en','fr','de','es','it','pt','ru','ar','zh','ja']\nnoms=[('en','enwiki_v14.db')]+[(l,f'{l}wiki_v14.db') for l in LANGS[1:]]\n# échantillon de titres anglais « probablement i … [774 caractères tronqués]`
+
+  ```
+400 titres anglais pris au hasard : ['Anarchism', 'Albedo', 'A', 'Alabama', 'Achilles', 'Abraham Lincoln', 'Aristotle', 'An American in Paris']
+
+présents (mêmes titres) :
+  en : 400/400
+  fr : 173/400
+  de : 179/400
+  es : 142/400
+  it : 182/400
+  pt : 149/400
+  ru : 39/400
+  ar : 1/400
+  zh : 27/400
+  ja : 22/400
+  ```
+
+### 🤖 Assistant
+
+⏵ **Appariement concluant pour les écritures latines (173-182/400). Je vérifie le contenu et la longueur des articles.**
+
+- **bash** `{"command": "timeout 200 python3 - <<'PY'\nimport sqlite3\nd='/home/stephane/Data13TB/stephane/data/wikipedia/db'\nc=sqlite3.connect(f'file:{d}/enwiki_v14.db?mode=ro', uri=True)\nr=c.execute(\"select title, n_chars, n_words, length(summary), substr(summary,1,600) from articles where title_lower='ein … [377 caractères tronqués]`
+
+  ```
+titre='Albert Einstein' n_chars=8000 n_words=1271 len(summary)=2000
+  Albert Einstein (14 March 187918 April 1955) was a German-born theoretical physicist best known for developing the theory of relativity. Einstein also made important contributions to quantum theory. His mass–energy equivalence formula , which arises from special relativity, has been called "the world's most famous equation". He received the 1921 Nobel Prize in Physics for "his services to theoreti
+
+=== croissance ===
+n8                8       1    0.6098   0.6536    0.6155   0.9436  0.7620 | communs -0.597 (  0 %) · contraste 0.869
+n16              16       1    0.6137   0.6569    0.6225   0.9318  0.6686 | communs -0.754 (  0 %) · contraste 0.919
+n24              24       1    0.6167   0.6580    0.6271   0.9204  0.6604 | communs -0.639 (  8 %) · contraste 0.952
+13:51
+  ```
+
+### 🤖 Assistant
+
+⏵ **`summary` = 2000 caractères d'article aligné. Je construis le corpus Wikipedia APPARIÉ sur 6 langues latines.**
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"wiki_apparie.py — construire un corpus Wikipedia ALIGNÉ sur plusieurs langues.\n\nPOURQUOI. Le pont a été mesuré sur l'UDHR : **un seul texte** traduit en 392 langues.\nC'est idéal pour l'invariance, mais pauvre comme professeur — la Déclaration fait\n~1 30 … [5062 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/wiki_apparie.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"import ast; ast.parse(open('tools/wiki_apparie.py').read()); print('syntaxe OK')\" && setsid nohup timeout 3600 python3 -u tools/wiki_apparie.py /home/stephane/Data13TB/stephane/corpus/wiki_apparie --n 4000 > /tmp/wiki_a … [221 caractères tronqués]`
+
+  ```
+syntaxe OK
+# langues retenues : en, fr, de, es, it, pt
+# 4000 titres anglais candidats (résumé > 900 caractères)
+0
+  ```
+
+- **bash** `{"command": "sleep 420; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== wiki apparié ===\"; cat /tmp/wiki_apparie.log; ls /home/stephane/Data13TB/stephane/corpus/wiki_apparie 2>/dev/null | wc -l; echo \"=== croissance ===\"; tail -2 /tmp/croissance.log; date '+%H:%M'", "description" … [57 caractères tronqués]`
+
+  ```
+=== wiki apparié ===
+# langues retenues : en, fr, de, es, it, pt
+# 4000 titres anglais candidats (résumé > 900 caractères)
+# 483 titres présents dans les 6 langues (12%)
+
+# CORPUS APPARIÉ ÉCRIT DANS /home/stephane/Data13TB/stephane/corpus/wiki_apparie
+# langue    articles   caractères   moyenne
+  en             482      961,174      1994
+  fr             482      942,809      1956
+  de             482      948,858      1969
+  es             482      940,144      1951
+  it             482      944,789      1960
+  pt             482      923,709      1916
+2892
+=== croissance ===
+n72              72       1    0.6267   0.6642    0.6311   0.8928  0.6593 | communs -0.824 (  4 %) · contraste 0.979
+n80              80       1    0.6277   0.6646    0.6307   0.8925  0.6900 | communs -0.843 (  4 %) · contraste 0.983
+13:59
+  ```
+
+### 🤖 Assistant
+
+⏵ **Corpus Wikipedia apparié construit : 482 articles × 6 langues. Avant de tracer, je vérifie qu'on peut n'exécuter que 9 couches au lieu de 24.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=drave-core/target/release/drave && M=/home/stephane/Data13TB/stephane/modeles/gguf/qwen2.5-0.5b-instruct-q4_k_m.gguf && T=/home/stephane/Data13TB/stephane/corpus/wiki_apparie/en_Albert_Einstein.txt && ls -la \"$T\" 2>/dev/null || l … [111 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 2003  6 oct 13:54 /home/stephane/Data13TB/stephane/corpus/wiki_apparie/en_Albert_Einstein.txt
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=drave-core/target/release/drave && M=/home/stephane/Data13TB/stephane/modeles/gguf/qwen2.5-0.5b-instruct-q4_k_m.gguf && T=/home/stephane/Data13TB/stephane/corpus/wiki_apparie/en_Albert_Einstein.txt && for C in \"0:24\" \"0:9\"; do  … [1231 caractères tronqués]`
+
+  ```
+couches 0:24 : 24s · 2277122 octets
+couches 0:9 : 15s · 2277122 octets
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 11, in <module>
+  File "<stdin>", line 9, in lit
+ValueError: buffer is smaller than requested size
+[exit code: 1]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Mêmes tailles de fichier. Je compare octet à octet — le test le plus simple et le plus fort.**
+
+- **bash** `{"command": "cmp /tmp/essai_0_24.drvf /tmp/essai_0_9.drvf && echo \"IDENTIQUES OCTET À OCTET\" || echo \"DIFFÉRENTS\"; md5sum /tmp/essai_0_24.drvf /tmp/essai_0_9.drvf; echo \"=== essai sur une 2e langue ===\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=drave-core/target/release/drave && … [719 caractères tronqués]`
+
+  ```
+IDENTIQUES OCTET À OCTET
+400c4a1ed58700bbc59a6848d02ae757  /tmp/essai_0_24.drvf
+400c4a1ed58700bbc59a6848d02ae757  /tmp/essai_0_9.drvf
+=== essai sur une 2e langue ===
+arabe : DIFFÉRENTS
+[stderr]
+cmp: /tmp/ar_0_24.drvf: No such file or directory
+  ```
+
+### 🤖 Assistant
+
+⏵ **`--couches 0:9` donne une trace IDENTIQUE OCTET À OCTET (même MD5), 1,6× plus rapide. Je confirme sur une 2e langue.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=drave-core/target/release/drave && M=/home/stephane/Data13TB/stephane/modeles/gguf/qwen2.5-0.5b-instruct-q4_k_m.gguf && T=/home/stephane/Data13TB/stephane/corpus/wiki_apparie/de_Albert_Einstein.txt && for C in \"0:24\" \"0:9\"; do  … [429 caractères tronqués]`
+
+  ```
+allemand : IDENTIQUES OCTET À OCTET
+=== croissance ===
+n86              86       1    0.6280   0.6646    0.6308   0.8871  0.6827 | communs -0.872 (  3 %) · contraste 0.984
+n87              87       1    0.6281   0.6646    0.6306   0.8871  0.6823 | communs -0.868 (  3 %) · contraste 0.984
+14:01
+  ```
+
+### 🤖 Assistant
+
+⏵ **Vérifié sur deux langues. Je lance le traçage du corpus Wikipedia apparié.**
+
+- **bash** `{"command": "cat > /tmp/trace_wiki_apparie.sh <<'EOF'\n#!/bin/bash\n# TRAÇAGE DU CORPUS WIKIPEDIA APPARIÉ — 482 articles × 6 langues latines.\n#\n# Premier corpus MULTI-DOMAINE et ALIGNÉ du projet : 482 articles distincts\n# (science, histoire, géographie, personnes) traduits dans les six langues. L … [1792 caractères tronqués]`
+
+  ```
+syntaxe OK
+traces : 2/2892
+de_Aaliyah 16s
+de_Aarhus 17s
+  ```
+
+### 🤖 Assistant
+
+⏵ **Traçage lancé (16 s/trace, ~13 h pour les 2 892). Je consigne la construction du corpus et la vérification.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 45. Premier corpus MULTI-DOMAINE et ALIGNÉ : 482 articles Wikipedia en 6 langues\n\n### 45.1 Ce que la machine contenait et qui n' … [6148 caractères tronqués]`

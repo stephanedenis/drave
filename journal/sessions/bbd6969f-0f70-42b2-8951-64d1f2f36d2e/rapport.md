@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 191.0 h |
+| Durée | 191.3 h |
 | Tours | 176 |
-| Messages | 8896 |
-| Appels d'outils | 8390 |
-| Fichiers touchés | 194 |
-| Commandes | 7111 |
+| Messages | 8916 |
+| Appels d'outils | 8410 |
+| Fichiers touchés | 195 |
+| Commandes | 7129 |
 | Sous-agents | 32 |
-| Commits | 640 |
+| Commits | 641 |
 | Compactages de contexte | 12 |
 
 ## Objectifs déclarés
@@ -8851,7 +8851,7 @@ Exemple, l'entrée qui manquait le plus :
 
 ### Tour 176 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
 
-*23 appels d'outils.* Actions notables :
+*43 appels d'outils.* Actions notables :
 
 - bash — Check layer-8 analysis progress
 - read
@@ -8867,11 +8867,11 @@ Exemple, l'entrée qui manquait le plus :
 - bash — Check layer-8 analysis status
 - edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py`
 - bash — Verify bit-identity of batched nait
-- … et 7 autres
+- … et 27 autres
 
 **Synthèse produite :**
 
-⏵ **Résultat décisif : 41 langues sur 41 s'améliorent à la couche 8, ZÉRO ne régresse. Je consigne.**
+⏵ **Traçage lancé (16 s/trace, ~13 h pour les 2 892). Je consigne la construction du corpus et la vérification.**
 
 ## 3. Travail accompli
 
@@ -9073,6 +9073,7 @@ Exemple, l'entrée qui manquait le plus :
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/stabilite_evenements.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/saturation.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/lecture_locale.py` | 1 | 3 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/wiki_apparie.py` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -9151,7 +9152,7 @@ Exemple, l'entrée qui manquait le plus :
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 7071 autres
+- … et 7089 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9279,7 +9280,7 @@ Exemple, l'entrée qui manquait le plus :
 
 ## 5. Erreurs rencontrées
 
-391 sorties en erreur ou divergentes. Les premières :
+392 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -9939,4 +9940,5 @@ Exemple, l'entrée qui manquait le plus :
 - Jalon : 392 langues tracées aux couches 8 ET 10, zéro échec    udhr392/       couches 0, 10        2,7 Go   392/392 langues   0 échec   udhr392_c8/    couches 0
 - Croissance vectorisée sur les langues : 28 s → 1,76 s par neurone, identité bit à bit  LE GOULOT CACHÉ : nait boucle 'pour chaque langue : pour chaque pas', soi
 - Couche 8 contre couche 10 à 392 langues : 41 sur 41 s'améliorent, ZÉRO régresse  Même code, même périmètre, mêmes quatre mesures, les deux profils recalculés da
+- Premier corpus MULTI-DOMAINE et ALIGNÉ : 482 articles Wikipedia en 6 langues  CE QUE LA MACHINE CONTENAIT DÉJÀ : dix bases Wikipedia décompressées, 30 Go, dans 
 

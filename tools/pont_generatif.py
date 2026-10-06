@@ -675,6 +675,8 @@ def main():
 
     # valeur de repli complète : sans elle, un réseau que l'attrition n'améliore
     # jamais faisait planter le résumé final APRÈS des heures de calcul
+    # sous-ensemble FIXE pour le diagnostic d'apprentissage (voir plus bas)
+    itr_diag = itr[::8]
     meilleur = {"f_va": -1.0, "f_te": -1.0, "neur": 0, "couch": 0,
                 "f_tr": 0.0, "inv": 0.0, "pire": 0.0, "etape": "aucune"}
     for cycle in range(1, cycles+1):
@@ -726,7 +728,12 @@ def main():
                 couche_neuve = False
                 idx = np.arange(P.compte_neurones)
                 W = P.ajuste(idx, ride, mt, itr)
-                f_tr = P.fid(idx, W, mt, itr); f_va = P.fid(idx, W, mt, ival)
+                # `f_tr` est un DIAGNOSTIC affiché, pas un critère : la décision
+                # de naissance se prend sur `f_va`. Le calculer sur les 347 langues
+                # du vivier coûtait ~35 s par naissance, soit 95 % du temps de la
+                # boucle. On le mesure sur un sous-ensemble fixe — le chiffre reste
+                # représentatif, et la dépense disparaît.
+                f_tr = P.fid(idx, W, mt, itr_diag); f_va = P.fid(idx, W, mt, ival)
                 gain = f_va - val_max if val_max > 0 else 0.0
                 if f_va > val_max:
                     val_max = f_va
@@ -799,7 +806,12 @@ def main():
                 P.nait(k)
                 idx = np.arange(P.compte_neurones)
                 W = P.ajuste(idx, ride, mt, itr)
-                f_tr = P.fid(idx, W, mt, itr); f_va = P.fid(idx, W, mt, ival)
+                # `f_tr` est un DIAGNOSTIC affiché, pas un critère : la décision
+                # de naissance se prend sur `f_va`. Le calculer sur les 347 langues
+                # du vivier coûtait ~35 s par naissance, soit 95 % du temps de la
+                # boucle. On le mesure sur un sous-ensemble fixe — le chiffre reste
+                # représentatif, et la dépense disparaît.
+                f_tr = P.fid(idx, W, mt, itr_diag); f_va = P.fid(idx, W, mt, ival)
                 Xte_g = P.recalcule(idx, Ete)
                 f_te = P.evalue(Xte_g, Yte, W, mt); mg, mig = P.invariance(Xte_g, W, mt)
                 print(f"{'C' + str(cycle) + ' naissance couche ' + str(len(P.couches)) + ' (+' + str(k) + ')':<30} "
