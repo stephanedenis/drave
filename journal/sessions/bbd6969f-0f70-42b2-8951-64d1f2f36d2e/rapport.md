@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 175.6 h |
+| Durée | 175.9 h |
 | Tours | 127 |
-| Messages | 8290 |
-| Appels d'outils | 7900 |
-| Fichiers touchés | 168 |
-| Commandes | 6713 |
+| Messages | 8299 |
+| Appels d'outils | 7909 |
+| Fichiers touchés | 170 |
+| Commandes | 6720 |
 | Sous-agents | 32 |
-| Commits | 584 |
+| Commits | 585 |
 | Compactages de contexte | 11 |
 
 ## Objectifs déclarés
@@ -6530,7 +6530,7 @@ Plusieurs de mes propres conclusions antérieures étaient fausses, et je les ai
 
 ### Tour 127 — continue maintenant avec toutes les langues, puis les grands corpus multilingues pour avoir des profs plus riches et éte … [18 caractères tronqués]
 
-*23 appels d'outils.* Actions notables :
+*32 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Inventory UDHR languages with 10 units
@@ -6546,11 +6546,11 @@ Plusieurs de mes propres conclusions antérieures étaient fausses, et je les ai
 - bash — Add name-based split support
 - write `/tmp/analyse392.sh`
 - bash — Chain analysis and monitor trace
-- … et 9 autres
+- … et 18 autres
 
 **Synthèse produite :**
 
-⏵ **Corrigé : 24 lignes de chaque côté, vérifié par `wc`.** Je contrôle la qualité de l'appariement et je commit.
+⏵ Charge revenue à 19, rythme rétabli (28-48 s par langue). 37/392. Je commite et je fais le point.
 
 ## 3. Travail accompli
 
@@ -6726,6 +6726,8 @@ Plusieurs de mes propres conclusions antérieures étaient fausses, et je les ai
 | `/tmp/panneaux.sh` | 1 | 0 |
 | `/tmp/trace392.sh` | 1 | 0 |
 | `/tmp/analyse392.sh` | 1 | 0 |
+| `/tmp/trace_rj.sh` | 1 | 0 |
+| `/tmp/stop_rj.py` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -6804,7 +6806,7 @@ Plusieurs de mes propres conclusions antérieures étaient fausses, et je les ai
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6673 autres
+- … et 6680 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -7536,4 +7538,5 @@ Plusieurs de mes propres conclusions antérieures étaient fausses, et je les ai
 - Ce que la restriction NE fait PAS : la contribution du pont reste +0,020  Poussée plus loin, la restriction donne des chiffres spectaculaires (TEST 0,9038 à 3 c
 - L'attrition corrigée : une décision, plus une démolition  Le §11 disait 'l'attrition réduit, elle ne généralise pas'. Le fait était exact, mais la CAUSE était u
 - Phase 2 : corpus PARALLÈLE riche — Romeo and Juliet, 24 scènes alignées en/fr  Un grand corpus monolingue ne permet PAS de mesurer l'invariance inter-langue : i
+- Phase 1 lancée : 392 langues UDHR · phase 2 chaînée après  PHASE 1 — TOUTES LES LANGUES. 392 langues ont les dix unités (contre 46 utilisées jusqu'ici). Traçage
 

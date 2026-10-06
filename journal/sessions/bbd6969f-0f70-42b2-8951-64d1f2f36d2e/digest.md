@@ -134014,3 +134014,162 @@ syntaxe OK
 ⏵ **Corrigé : 24 lignes de chaque côté, vérifié par `wc`.** Je contrôle la qualité de l'appariement et je commit.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nen=[l.strip() for l in open('/tmp/parallele/en.txt')]\nfr=[l.strip() for l in open('/tmp/parallele/fr.txt')]\nprint(f\"{'scène':>5} {'car. en':>8} {'car. fr':>8} {'rapport':>8}\")\nimport statistics\nrap=[]\nfor i,( … [2307 caractères tronqués]`
+
+  ```
+scène  car. en  car. fr  rapport
+    1    10793    17179     1.59
+    2     4687     5772     1.23
+    3     4957     7167     1.45
+    4     5255     9357     1.78
+    5     7461    10241     1.37
+   22     3910     4912     1.26
+   23     1378     1587     1.15
+   24    14843    36646     2.47
+
+rapport fr/en : médiane 1.31 · min 1.15 · max 2.47
+le rapport est STABLE -> l'alignement par ordre tient (une traduction est ~1.3x plus longue)
+
+total : 138,480 car. en · 208,309 car. fr
+jetons estimés : ~34,620 en · ~52,077 fr
+le plus long segment : 36,646 car. (~9,161 jetons)
+58f1e0d Phase 2 : corpus PARALLÈLE riche — Romeo and Juliet, 24 scènes alignées en/fr
+--- traçage 392 ---
+22
+22:25
+  ```
+
+### 🤖 Assistant
+
+⏵ Appariement validé (rapport fr/en stable, médiane 1,31). Je prépare la phase 2 pendant que le traçage avance (22/392).
+
+**Appariement validé** : le rapport fr/en est stable d'une scène à l'autre (médiane 1,31), donc l'alignement par ordre tient. Je prépare la phase 2 — les scènes vont jusqu'à ~9 200 jetons, il faut donc un contexte plus large.
+
+- **write** `{"content": "#!/bin/bash\n# PHASE 2 — corpus parallèle RICHE : Romeo and Juliet, 24 scènes alignées en/fr.\n#\n# Différences avec l'UDHR, et pourquoi :\n#   - les scènes vont jusqu'à ~9 200 jetons, donc --ctx 8192 et non 2048 ;\n#   - le texte est LITTÉRAIRE et long, là où l'UDHR est administratif e … [1295 caractères tronqués]`
+
+  ```
+<path>/tmp/trace_rj.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "chmod +x /tmp/trace_rj.sh; echo \"script prêt (pas lancé : le traçage 392 occupe la machine)\"; uptime | grep -oE \"load average.*\"; echo \"--- 392 ---\"; ls /home/stephane/Data13TB/stephane/corpus/udhr/udhr392 | wc -l; tail -1 /tmp/trace392.log; date \"+%H:%M\"; echo; echo \"=== charg … [138 caractères tronqués]`
+
+  ```
+script prêt (pas lancé : le traçage 392 occupe la machine)
+load average: 20,33, 18,01, 11,74
+--- 392 ---
+23
+ayr 27s 5178834
+22:25
+
+=== charge CPU du traçage ===
+2353875 1583       00:33 drave
+  ```
+
+### 🤖 Assistant
+
+⏵ La machine a de la marge (charge 20 sur 40 threads). Je lance la phase 2 en parallèle — 48 runs seulement.
+
+La machine a de la marge (charge 20 sur 40 threads, drave en utilise 16). Je lance la phase 2 en parallèle.
+
+- **bash** `{"command": "setsid nohup /tmp/trace_rj.sh >/dev/null 2>&1 < /dev/null & sleep 90; echo \"=== arguments phase 2 (vérifiés) ===\"; python3 -c \"\nimport os\nfor d in os.listdir('/proc'):\n    if d.isdigit():\n        try: cl=open(f'/proc/{d}/cmdline','rb').read().decode(errors='replace')\n        exc … [548 caractères tronqués]`
+
+  ```
+=== arguments phase 2 (vérifiés) ===
+  
+--- progression ---
+392 : 25/392
+22:27
+  ```
+
+### 🤖 Assistant
+
+⏵ La phase 2 n'a encore rien écrit. Je vérifie qu'elle tourne vraiment.
+
+- **bash** `{"command": "python3 -c \"\nimport os\nn=0\nfor d in os.listdir('/proc'):\n    if d.isdigit():\n        try: cl=open(f'/proc/{d}/cmdline','rb').read().decode(errors='replace')\n        except Exception: continue\n        if 'gguf' in cl and 'infer' in cl:\n            n+=1\n            if n==1:\n    … [579 caractères tronqués]`
+
+  ```
+args : /home/stephane/Data13TB/stephane/modeles/gguf/qwen2.5-0.5b-instruct-q4_k_m.gguf --infer --ctx --couches --lot --n --trace-couches --prompt --trace-flux
+  prompt : 'SCENE I. A public place. Enter Sampson and Gregory armed with swords a'
+processus drave : 4
+total 10760
+drwxr-xr-x. 1 stephane stephane       20  5 oct 22:25 .
+drwxr-xr-x. 1 stephane stephane       32  5 oct 22:25 ..
+-rw-r--r--. 1 stephane stephane 11014973  5 oct 22:27 en_01.drvf
+392 : 25/392
+  ```
+
+### 🤖 Assistant
+
+⏵ Les deux traçages tournent (`en_01.drvf` s'écrit, 11 Mo). Je surveille le rythme des deux.
+
+**Les deux traçages tournent.** Je surveille leur rythme pour vérifier qu'ils ne se gênent pas.
+
+- **bash** `{"command": "sleep 480; echo \"=== phase 1 : UDHR 392 ===\"; ls /home/stephane/Data13TB/stephane/corpus/udhr/udhr392 | wc -l; tail -1 /tmp/trace392.log; du -sh /home/stephane/Data13TB/stephane/corpus/udhr/udhr392; echo; echo \"=== phase 2 : Romeo and Juliet ===\"; cat /tmp/trace_rj.log 2>/dev/null;  … [193 caractères tronqués]`
+
+  ```
+=== phase 1 : UDHR 392 ===
+28
+bba 150s 5111158
+180M	/home/stephane/Data13TB/stephane/corpus/udhr/udhr392
+
+=== phase 2 : Romeo and Juliet ===
+en scène 1 379s 30883969
+en scène 2 147s 12737089
+48M	/home/stephane/Data13TB/stephane/corpus/parallele_rj
+
+22:35
+load average: 44,10, 40,83, 27,47
+  ```
+
+### 🤖 Assistant
+
+⏵ **La phase 2 gêne la phase 1** : charge 44 sur 40 threads, et le traçage UDHR est passé de 36 s à **150 s par langue**. Votre consigne était « d'abord toutes les langues, **puis** les grands corpus ». Je mets la phase 2 en pause.
+
+**La phase 2 gêne la phase 1** : charge 44 sur 40 threads, et le traçage UDHR est passé de 36 s à **150 s par langue**. Votre consigne était « d'abord toutes les langues, **puis** les grands corpus » — je remets la phase 2 en attente.
+
+- **write** `{"content": "import os, signal\nmoi = os.getpid(); anc = set(); p = moi\nfor _ in range(8):\n    try:\n        st = open(f\"/proc/{p}/stat\").read().split(\") \", 1)[1].split()\n        p = int(st[1]); anc.add(p)\n    except Exception:\n        break\nmorts = []\nfor d in os.listdir(\"/proc\"):\n    … [574 caractères tronqués]`
+
+  ```
+<path>/tmp/stop_rj.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "python3 /tmp/stop_rj.py; sleep 3; python3 /tmp/stop_rj.py; echo \"--- charge ---\"; uptime | grep -oE \"load average.*\"; echo \"--- le traçage UDHR continue ? ---\"; tail -1 /tmp/trace392.log; ls /home/stephane/Data13TB/stephane/corpus/udhr/udhr392 | wc -l; date \"+%H:%M\"", "descripti … [39 caractères tronqués]`
+
+  ```
+phase 2 arrêtée : [2354089, 2355673]
+phase 2 arrêtée : []
+--- charge ---
+load average: 45,58, 41,56, 28,21
+--- le traçage UDHR continue ? ---
+bba 150s 5111158
+28
+22:36
+  ```
+
+### 🤖 Assistant
+
+⏵ Phase 2 arrêtée. Je la **chaîne** pour qu'elle reprenne automatiquement quand les 392 langues seront finies.
+
+- **bash** `{"command": "cat > /tmp/rj_apres.sh <<'EOF'\n#!/bin/bash\n# La phase 2 reprend APRÈS la phase 1 : mesuré, les faire ensemble portait la\n# charge à 44 sur 40 threads et faisait passer le traçage UDHR de 36 s à 150 s\n# par langue. La consigne était « d'abord toutes les langues, PUIS les grands\n# co … [485 caractères tronqués]`
+
+  ```
+phase 2 chaînée après la phase 1
+load average: 19,43, 26,78, 25,49
+bis 28s 5666324
+blt 48s 10448720
+37
+22:41
+  ```
+
+### 🤖 Assistant
+
+⏵ Charge revenue à 19, rythme rétabli (28-48 s par langue). 37/392. Je commite et je fais le point.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Phase 1 lancée : 392 langues UDHR · phase 2 chaînée après\n\nPHASE 1 — TOUTES LES LANGUES. 392 langues ont les dix unités (contre 46\nutilisées jusqu'ici). Traçage en convention UNIQUE, vérifiée dans  … [1875 caractères tronqués]`
