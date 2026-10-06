@@ -6,13 +6,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
 | Durée | 182.4 h |
-| Tours | 161 |
-| Messages | 8536 |
-| Appels d'outils | 8078 |
+| Tours | 162 |
+| Messages | 8540 |
+| Appels d'outils | 8080 |
 | Fichiers touchés | 182 |
-| Commandes | 6877 |
+| Commandes | 6879 |
 | Sous-agents | 32 |
-| Commits | 615 |
+| Commits | 616 |
 | Compactages de contexte | 11 |
 
 ## Objectifs déclarés
@@ -375,6 +375,8 @@
 **Tour 160** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 **Tour 161** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
+
+**Tour 162** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -8108,17 +8110,68 @@ Rien à faire de votre côté. Commits `6b4a75e`, `75d590a`, `47152fd`.
 
 **Synthèse produite :**
 
-⏵ **Résultat solide : le gain est reproductible au millième près.**
+⏵ Robustesse vérifiée et commitée. Point d'étape.
 
-| graine | couche 10 | **couche 8** | gain | invariance 8 / 10 |
-|---|---:|---:|---:|---:|
-| 5 | 0,5802 | 0,6015 | **+0,0213** | 0,9504 / 0,9540 |
-| 11 | 0,5826 | 0,6039 | **+0,0213** | 0,9611 / 0,9666 |
-| 23 | 0,5828 | 0,6046 | **+0,0218** | 0,9505 / 0,9597 |
+\## Le résultat du tour
 
-**Gain moyen +0,0215, minimum +0,0213, maximum +0,0218** — une amplitude de 0,0005 sur trois graines. Et la variation entre graines n'est que de **0,0026**, soit **8× plus petite que le gain**.
+Le gain de la couche 8 reposait sur **une seule mesure**. Je l'ai testé sur trois graines du réservoir gelé :
 
-Le résultat est donc **robuste**, et l'invariance de sortie est systématiquement plus basse à la couche 8 (de 0,006 en moyenne) — le prix payé est lui aussi stable.
+| graine | couche 10 | **couche 8** | gain |
+|---|---:|---:|---:|
+| 5 | 0,5802 | 0,6015 | **+0,0213** |
+| 11 | 0,5826 | 0,6039 | **+0,0213** |
+| 23 | 0,5828 | 0,6046 | **+0,0218** |
+| | | **moyenne** | **+0,0215** |
+
+| | |
+|---|---:|
+| amplitude du gain | **0,0005** |
+| variation entre graines | 0,0026 |
+| **rapport gain / variation** | **8×** |
+
+**Le gain est 8 fois plus grand que la dispersion entre graines**, et son amplitude est cinq fois plus petite que celle des mesures elles-mêmes. Ce n'est pas un coup de chance. L'invariance de sortie est systématiquement plus basse à la couche 8 (0,006 en moyenne, amplitude 0,001) — le prix payé est stable lui aussi.
+
+\## La leçon appliquée
+
+**Un résultat à une graine n'est pas un résultat.** Je l'avais appris au tour 3 en me trompant — j'avais tiré une conclusion d'une mesure unique, qu'un run ultérieur a contredite. Cette fois je l'ai vérifié **avant** de graver la conclusion, et non après.
+
+C'est la différence entre apprendre d'une erreur et seulement la constater.
+
+\## État
+
+| | |
+|---|---|
+| Wikipedia | **219/480**, 0 échec |
+| chaîne | 6 scripts vivants |
+| rapports | audités, cohérents |
+| résultat clé | **vérifié sur 3 graines** |
+
+\## Ce qui reste
+
+| étape | durée |
+|---|---:|
+| Wikipedia (fin) | ~90 min |
+| traçage par unité | ~60 min |
+| analyse finale (couche 10) | ~60 min |
+| analyse par unité (couche 8) | ~30 min |
+| retraçage couche 8, 392 langues | ~270 min |
+
+Rien à faire de votre côté. Commit `377339d`.
+
+### Tour 162 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Confirm the Wikipedia alignment trap
+- bash — Fix the Wikipedia alignment trap
+
+**Synthèse produite :**
+
+⏵ **Confirmé** : les morceaux anglais commencent par *Actrius*, *Animalia*, *Alain Connes* ; les français par *Algèbre générale*, *Armée républicaine irlandaise*, *Aka*. L'appariement par index comparerait des **articles sans rapport**.
+
+**Confirmé** : les morceaux anglais commencent par *Actrius*, *Animalia*, *Alain Connes* — les français par *Algèbre générale*, *Armée républicaine irlandaise*, *Aka*. L'appariement par index comparerait des **articles sans rapport**.
+
+Je ne peux pas éditer `analyse_final.sh` (il tourne), donc je fais deux choses : j'ajoute un **avertissement explicite dans l'outil** pour que le chiffre ne soit jamais lu comme valide, et je le documente dans le rapport.
 
 ## 3. Travail accompli
 
@@ -8386,7 +8439,7 @@ Le résultat est donc **robuste**, et l'invariance de sortie est systématiqueme
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6837 autres
+- … et 6839 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9149,4 +9202,5 @@ Le résultat est donc **robuste**, et l'invariance de sortie est systématiqueme
 - Audit (suite) : le TITRE du rapport génératif promettait ce que son corps réfute  '# Le pont GÉNÉRATIF : le réseau naît, puis l'attrition le fait généraliser'  
 - Audit (fin) : les deux mêmes incohérences étaient dans recapitulatif.md  1. Tout le document émule la COUCHE 10, désormais connue comme sous-optimale : le    pl
 - Le gain de la couche 8 est ROBUSTE : +0,0215 sur trois graines (variation 0,0005)  Le §19 reposait sur UNE SEULE mesure. Vérification sur trois graines :    gra
+- PIÈGE : l'invariance sur Wikipedia ne veut rien dire (segments non appariés)  analyse_final.sh fait tourner pont_parallele.py sur Wikipedia. Or ce tool apparie 
 

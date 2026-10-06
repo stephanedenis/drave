@@ -63,9 +63,26 @@ def main():
                 cs.append(float(xa @ xb/(na*nb)))
         return (float(np.mean(cs)), float(np.min(cs))) if cs else (0.0, 0.0)
 
+    # AVERTISSEMENT OBLIGATOIRE. Ce tool apparie les segments PAR INDEX. Il n'a de
+    # sens que si le segment i de A et le segment i de B portent le MÊME CONTENU.
+    # Sur un corpus non apparié — Wikipedia, dont les articles anglais et français
+    # n'ont rien en commun — le chiffre ci-dessous ne veut RIEN dire, et le lire
+    # comme une invariance serait une faute. Vérifié : les morceaux en commencent
+    # par « Actrius », les fr par « Algèbre générale ».
+    if "--apparie" not in sys.argv:
+        print("# " + "!" * 74)
+        print("# ATTENTION : ce tool APPARIE LES SEGMENTS PAR INDEX. Le chiffre")
+        print("# d'invariance ci-dessous n'a de sens que si le segment i de A et le")
+        print("# segment i de B portent le MÊME CONTENU (corpus parallèle). Sur un")
+        print("# corpus NON apparié, il ne veut RIEN dire. Relancer avec --apparie")
+        print("# pour confirmer qu'on sait ce qu'on mesure.")
+        print("# " + "!" * 74)
     prof, prof_min = inv_appariee(YA, YB)
     print(f"# invariance du PROFESSEUR (segment par segment) : {prof:.4f} · "
           f"pire segment {prof_min:.4f}")
+    if "--apparie" not in sys.argv and abs(prof) < 0.3:
+        print("#   (valeur basse : cohérente avec un corpus NON apparié. "
+              "NE PAS l'interpréter.)")
 
     # ---- le pont : entraîné sur A, éprouvé sur A et sur B (même lecture)
     P = Pont((clA, EA, YA), a_, graine, H)

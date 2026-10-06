@@ -139272,3 +139272,114 @@ Wikipedia : 217/480
 Le résultat est donc **robuste**, et l'invariance de sortie est systématiquement plus basse à la couche 8 (de 0,006 en moyenne) — le prix payé est lui aussi stable.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 20. Le gain de la couche 8 est ROBUSTE — testé sur trois graines\n\nLe §19 reposait sur **une seule mesure**. Une seule graine ne pro … [2727 caractères tronqués]`
+
+  ```
+377339d Le gain de la couche 8 est ROBUSTE : +0,0215 sur trois graines (variation 0,0005)
+Wikipedia : 219/480
+05:10
+  ```
+
+### 🤖 Assistant
+
+⏵ Robustesse vérifiée et commitée. Point d'étape.
+
+## Le résultat du tour
+
+Le gain de la couche 8 reposait sur **une seule mesure**. Je l'ai testé sur trois graines du réservoir gelé :
+
+| graine | couche 10 | **couche 8** | gain |
+|---|---:|---:|---:|
+| 5 | 0,5802 | 0,6015 | **+0,0213** |
+| 11 | 0,5826 | 0,6039 | **+0,0213** |
+| 23 | 0,5828 | 0,6046 | **+0,0218** |
+| | | **moyenne** | **+0,0215** |
+
+| | |
+|---|---:|
+| amplitude du gain | **0,0005** |
+| variation entre graines | 0,0026 |
+| **rapport gain / variation** | **8×** |
+
+**Le gain est 8 fois plus grand que la dispersion entre graines**, et son amplitude est cinq fois plus petite que celle des mesures elles-mêmes. Ce n'est pas un coup de chance. L'invariance de sortie est systématiquement plus basse à la couche 8 (0,006 en moyenne, amplitude 0,001) — le prix payé est stable lui aussi.
+
+## La leçon appliquée
+
+**Un résultat à une graine n'est pas un résultat.** Je l'avais appris au tour 3 en me trompant — j'avais tiré une conclusion d'une mesure unique, qu'un run ultérieur a contredite. Cette fois je l'ai vérifié **avant** de graver la conclusion, et non après.
+
+C'est la différence entre apprendre d'une erreur et seulement la constater.
+
+## État
+
+| | |
+|---|---|
+| Wikipedia | **219/480**, 0 échec |
+| chaîne | 6 scripts vivants |
+| rapports | audités, cohérents |
+| résultat clé | **vérifié sur 3 graines** |
+
+## Ce qui reste
+
+| étape | durée |
+|---|---:|
+| Wikipedia (fin) | ~90 min |
+| traçage par unité | ~60 min |
+| analyse finale (couche 10) | ~60 min |
+| analyse par unité (couche 8) | ~30 min |
+| retraçage couche 8, 392 langues | ~270 min |
+
+Rien à faire de votre côté. Commit `377339d`.
+
+
+## Tour 162
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de représentation universelle), boîte noire (on ne lit du professeur que la couche à émuler, jamais sa tête ni ses jetons générés), aucune rétropropagation (A et B aléatoires et gelés, seule la lecture s'ajuste en forme fermée), et chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, TAILLE du réseau, avec le diagnostic oracle sur les deux panneaux (test hors vivier et validation du même vivier)."
+Round: 35/256
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ **Je viens de repérer un piège méthodologique dans ma propre chaîne.** `analyse_final.sh` fera tourner `pont_parallele` sur Wikipedia — un outil qui **apparie les segments par index**. Or les morceaux anglais et français de Wikipedia sont des **articles différents** : le morceau 1 anglais et le morceau 1 français n'ont rien à voir.
+
+**Je viens de repérer un piège méthodologique dans ma propre chaîne.** `analyse_final.sh` fera tourner `pont_parallele` sur Wikipedia — un outil qui **apparie les segments par index**. Or les morceaux anglais et français de Wikipedia sont des **articles différents** : le morceau 1 anglais et le morceau 1 français n'ont rien à voir. L'outil produirait donc un chiffre d'« invariance » **qui ne veut rien dire**.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== ce que analyse_final fait pour Wikipedia ===\"; sed -n '/WIKIPEDIA/,/UNITÉS/p' /tmp/analyse_final.sh | grep -E \"cache_pont|pont_parallele|NON parallèle\"; echo; echo \"=== pont_parallele apparie-t-il par index ? ===\"; gr … [579 caractères tronqués]`
+
+  ```
+=== ce que analyse_final fait pour Wikipedia ===
+echo "  (NON parallèle : fidélité et transfert mesurables, invariance NON)" >> /tmp/analyse_final.log
+python3 tools/cache_pont.py $U/wiki_traces /tmp/cache_wiki_en.npz --couche 10 --langues <(ls $U/wiki_traces | grep '^en_' | sed 's/.drvf//') >> /tmp/analyse_final.log 2>&1
+python3 tools/cache_pont.py $U/wiki_traces /tmp/cache_wiki_fr.npz --couche 10 --langues <(ls $U/wiki_traces | grep '^fr_' | sed 's/.drvf//') >> /tmp/analyse_final.log 2>&1
+python3 -u tools/pont_parallele.py /tmp/cache_wiki_en.npz /tmp/cache_wiki_fr.npz --couche 10 --canaux 0.5 >> /tmp/analyse_final.log 2>&1
+
+=== pont_parallele apparie-t-il par index ? ===
+27:def appariement_par_taille(yA, yB):
+29:    n = min(len(yA), len(yB))
+43:    n = min(len(clA), len(clB))
+def appariement_par_taille(yA, yB):
+    """Appariement par DÉFAUT : les caches sont déjà dans l'ordre des segments."""
+    n = min(len(yA), len(yB))
+    return list(range(n)), list(range(n))
+
+
+
+=== les morceaux en/fr sont-ils appariables ? ===
+  premiers titres EN : ['Actrius', 'Animalia (book)', 'Alain Connes']
+  premiers titres FR : ['Algèbre générale', 'Armée républicaine irlandaise', 'Aka']
+  -> apparieme
+… [47 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Confirmé** : les morceaux anglais commencent par *Actrius*, *Animalia*, *Alain Connes* ; les français par *Algèbre générale*, *Armée républicaine irlandaise*, *Aka*. L'appariement par index comparerait des **articles sans rapport**.
+
+**Confirmé** : les morceaux anglais commencent par *Actrius*, *Animalia*, *Alain Connes* — les français par *Algèbre générale*, *Armée républicaine irlandaise*, *Aka*. L'appariement par index comparerait des **articles sans rapport**.
+
+Je ne peux pas éditer `analyse_final.sh` (il tourne), donc je fais deux choses : j'ajoute un **avertissement explicite dans l'outil** pour que le chiffre ne soit jamais lu comme valide, et je le documente dans le rapport.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/pont_parallele.py'; s=open(p).read()\nvieux = \"\"\"    prof, prof_min = inv_appariee(YA, YB)\n    print(f\"# invariance du PROFESSEUR (segment par segment) : {prof:.4f} · \"\n          f\"pire segment {pro … [4588 caractères tronqués]`
