@@ -6,13 +6,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
 | Durée | 181.2 h |
-| Tours | 151 |
-| Messages | 8478 |
-| Appels d'outils | 8040 |
+| Tours | 152 |
+| Messages | 8483 |
+| Appels d'outils | 8043 |
 | Fichiers touchés | 177 |
-| Commandes | 6844 |
+| Commandes | 6847 |
 | Sous-agents | 32 |
-| Commits | 607 |
+| Commits | 608 |
 | Compactages de contexte | 11 |
 
 ## Objectifs déclarés
@@ -355,6 +355,8 @@
 **Tour 150** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 **Tour 151** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
+
+**Tour 152** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -7654,9 +7656,64 @@ Rien à faire de votre côté. Commit `99878fa`.
 
 **Synthèse produite :**
 
-⏵ **Wikipedia tourne** (7 fichiers, ~24 s par morceau). Le correctif a fonctionné.
+⏵ Déblayé et corrigé à la racine. Point d'étape.
 
-**Wikipedia tourne** (7 morceaux, ~24 s chacun). Je consigne ce piège récurrent — c'est la troisième fois qu'il me mord.
+\## Ce qui est acquis
+
+| phase | état |
+|---|---|
+| **1. 392 langues UDHR** | **FAIT** · 0 échec |
+| **2. pont sur 301 langues** | **FAIT** · fid TEST **0,7430** · invariance **0,9827** · écart **+0,0223** |
+| **3. Romeo — 48 scènes** | **FAIT** · 24 anglais + 24 français, appariement vérifié |
+| 4. Wikipedia | **EN COURS** · 9/480 morceaux |
+| 5. traçage par unité | chaîné |
+| 6. analyse finale | chaîné |
+| *second run de pont* | n25, ralenti par la contention |
+
+\## Le piège, pour la troisième fois
+
+**Romeo avait fini mais Wikipedia n'a jamais démarré**, et son guetteur était mort.
+
+**La cause** : trois scripts créés par l'outil d'écriture avaient le mode `-rw-------` — **non exécutables**. Or le guetteur faisait `exec /tmp/trace_wiki.sh`, qui exige ce droit. L'échec est **silencieux** : le guetteur meurt, la phase ne démarre jamais, rien ne le signale.
+
+**Pourquoi je ne l'avais pas vu** : j'avais vérifié leur **syntaxe** avec `bash -n` — qui ne teste **pas** le droit d'exécution. C'est exactement la confusion du tour précédent avec `nohup`.
+
+**C'est la troisième fois** qu'un défaut de plomberie me coûte du temps, et les trois avaient la même signature : *ça a l'air de tourner, donc je crois que ça marche*.
+
+**Corrigé à la racine, pas au cas par cas** : les huit scripts sont exécutables, **et** les `exec /tmp/x.sh` sont devenus `exec bash /tmp/x.sh`. Passer par `bash` rend le droit d'exécution **inutile** — le piège ne peut plus se reproduire même si un script est recréé par l'outil d'écriture. La première correction aurait suffi aujourd'hui ; la seconde protège les prochains.
+
+\## Ce que je retiens
+
+Sur ce parcours, **aucune de mes erreurs n'a été scientifique** — toutes étaient de la plomberie : un `chmod` manquant, un drapeau sans effet, une ancre de motif absente, un script édité pendant qu'il tournait. Les résultats, eux, ont tenu à chaque vérification. La leçon utile est donc moins « être plus prudent » — je le suis — que **vérifier les effets, pas les intentions** : que le fichier soit écrit, que le processus tourne, que la condition matche ce qu'on croit.
+
+Rien à faire de votre côté. Commit `43adee1`.
+
+### Tour 152 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Check Wikipedia and run 2 progress
+- bash — Get run 2 results
+- bash — Commit run 2 comparison and invariant correction
+
+**Synthèse produite :**
+
+⏵ **Le second run est tombé, et il nuance mon invariant.**
+
+| | **896 canaux** (run 2) | **157 canaux** (run 1) |
+|---|---:|---:|
+| réseau | 45 neurones · 1 couche | 40 neurones · 1 couche |
+| fid TEST | 0,6088 | **0,7430** |
+| constante témoin | 0,5766 | 0,7207 |
+| **écart à la constante** | **+0,0322** | **+0,0223** |
+| invariance TEST | 0,9682 | **0,9827** |
+| pire paire | 0,8494 | **0,9165** |
+| écart oracle TEST | +0,0327 | +0,0223 |
+| écart oracle VALIDATION | +0,0111 | +0,0058 |
+
+**L'écart à la constante est PLUS GRAND sans restriction (+0,0322) qu'avec (+0,0223).** Mon invariant des « +0,020 » est donc en réalité une **plage de +0,020 à +0,032** — il n'est pas aussi serré que je l'annonçais.
+
+**Mon invariant des « +0,020 » est en réalité une plage de +0,020 à +0,032.** Je l'annonçais comme une constante ; la mesure dit que c'est un ordre de grandeur. La conclusion qualitative tient — la contribution propre du pont reste petite et ne **croît pas** avec la restriction — mais le chiffre exact varie.
 
 ## 3. Travail accompli
 
@@ -7919,7 +7976,7 @@ Rien à faire de votre côté. Commit `99878fa`.
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6804 autres
+- … et 6807 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -8674,4 +8731,5 @@ Rien à faire de votre côté. Commit `99878fa`.
 - LIVRABLE PHASE 2 : le pont sur 301 langues — fid TEST 0,7430, invariance 0,9827    apprentissage / validation : 301 / 50 langues (contre 30 / 10 précédemment)  
 - Bug de guetteur : 'TERMINE' matchait la sous-chaîne de 'caches TERMINE'  rj_apres.sh a déclenché Romeo 25 minutes trop tôt : sa condition cherchait 'TERMINE' sa
 - Le piège du droit d'exécution, trois fois — corrigé à la racine  Romeo a terminé (48 scènes, 24 en + 24 fr, appariement parfait vérifié). Mais Wikipedia n'a pas
+- Restriction ou pas : comparaison complète, et correction de mon invariant  Deux runs, même professeur, mêmes 301 langues, même panel de test (41 langues) :     
 

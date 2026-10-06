@@ -137889,3 +137889,124 @@ bash /tmp/trace_wiki.sh
 **Wikipedia tourne** (7 morceaux, ~24 s chacun). Je consigne ce piège récurrent — c'est la troisième fois qu'il me mord.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 15. Le piège du droit d'exécution, trois fois de suite\n\n**Ce qui s'est passé.** Romeo a terminé ses 48 scènes (24 anglais + 24 fran … [3314 caractères tronqués]`
+
+  ```
+43adee1 Le piège du droit d'exécution, trois fois — corrigé à la racine
+
+=== chaîne ===
+  phase 1  392 langues      FAIT
+  pont 301 langues          FAIT (fid TEST 0,7430)
+  run 2 sans restriction    25 neurones
+  Romeo     48 scènes       FAIT
+  Wikipedia 9/480 morceaux EN COURS
+04:00
+  ```
+
+### 🤖 Assistant
+
+⏵ Déblayé et corrigé à la racine. Point d'étape.
+
+## Ce qui est acquis
+
+| phase | état |
+|---|---|
+| **1. 392 langues UDHR** | **FAIT** · 0 échec |
+| **2. pont sur 301 langues** | **FAIT** · fid TEST **0,7430** · invariance **0,9827** · écart **+0,0223** |
+| **3. Romeo — 48 scènes** | **FAIT** · 24 anglais + 24 français, appariement vérifié |
+| 4. Wikipedia | **EN COURS** · 9/480 morceaux |
+| 5. traçage par unité | chaîné |
+| 6. analyse finale | chaîné |
+| *second run de pont* | n25, ralenti par la contention |
+
+## Le piège, pour la troisième fois
+
+**Romeo avait fini mais Wikipedia n'a jamais démarré**, et son guetteur était mort.
+
+**La cause** : trois scripts créés par l'outil d'écriture avaient le mode `-rw-------` — **non exécutables**. Or le guetteur faisait `exec /tmp/trace_wiki.sh`, qui exige ce droit. L'échec est **silencieux** : le guetteur meurt, la phase ne démarre jamais, rien ne le signale.
+
+**Pourquoi je ne l'avais pas vu** : j'avais vérifié leur **syntaxe** avec `bash -n` — qui ne teste **pas** le droit d'exécution. C'est exactement la confusion du tour précédent avec `nohup`.
+
+**C'est la troisième fois** qu'un défaut de plomberie me coûte du temps, et les trois avaient la même signature : *ça a l'air de tourner, donc je crois que ça marche*.
+
+**Corrigé à la racine, pas au cas par cas** : les huit scripts sont exécutables, **et** les `exec /tmp/x.sh` sont devenus `exec bash /tmp/x.sh`. Passer par `bash` rend le droit d'exécution **inutile** — le piège ne peut plus se reproduire même si un script est recréé par l'outil d'écriture. La première correction aurait suffi aujourd'hui ; la seconde protège les prochains.
+
+## Ce que je retiens
+
+Sur ce parcours, **aucune de mes erreurs n'a été scientifique** — toutes étaient de la plomberie : un `chmod` manquant, un drapeau sans effet, une ancre de motif absente, un script édité pendant qu'il tournait. Les résultats, eux, ont tenu à chaque vérification. La leçon utile est donc moins « être plus prudent » — je le suis — que **vérifier les effets, pas les intentions** : que le fichier soit écrit, que le processus tourne, que la condition matche ce qu'on croit.
+
+Rien à faire de votre côté. Commit `43adee1`.
+
+
+## Tour 152
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de représentation universelle), boîte noire (on ne lit du professeur que la couche à émuler, jamais sa tête ni ses jetons générés), aucune rétropropagation (A et B aléatoires et gelés, seule la lecture s'ajuste en forme fermée), et chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, TAILLE du réseau, avec le diagnostic oracle sur les deux panneaux (test hors vivier et validation du même vivier)."
+Round: 25/256
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Je relève l'état des trois calculs en cours.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date \"+%H:%M\"; echo \"=== Wikipedia ===\"; ls /home/stephane/Data13TB/stephane/corpus/wiki_traces 2>/dev/null | wc -l; tail -1 /tmp/trace_wiki.log 2>/dev/null; echo; echo \"=== run 2 de pont ===\"; grep -c \"^n[0-9]\" /tmp/analyse3 … [236 caractères tronqués]`
+
+  ```
+04:01
+=== Wikipedia ===
+10
+en 9 21s
+
+=== run 2 de pont ===
+25
+TERMINE
+
+=== TERMINE de l'analyse 392 ? ===
+1
+
+load average: 17,27, 9,94, 12,03
+  ```
+
+### 🤖 Assistant
+
+⏵ **L'analyse 392 est terminée.** Je relève le second run — la comparaison sans restriction de canaux.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/et sans restriction/,$p' /tmp/analyse392.log | grep -E \"SOUS-ENSEMBLE|découpe|née :|MEILLEUR|taille  |fidélité|invariance|#   TEST|#   VALIDATION|état final\"", "description": "Get run 2 results"}`
+
+  ```
+# découpe par noms : 301 apprentissage · 50 validation
+# née : 45 neurones en 1 couches [45]
+#   TEST        : nous 0.6088 · oracle 0.6415 · ÉCART +0.0327 · invariance oracle 0.9631
+#   VALIDATION  : nous 0.6231 · oracle 0.6342 · ÉCART +0.0111   (même vivier que l'apprentissage)
+=== MEILLEUR RÉSEAU SELON LA VALIDATION (naissance libre) ===
+  taille           : 45 neurones · 1 couches
+  fidélité appr.   : 0.6199
+  fidélité VAL     : 0.6231
+  fidélité TEST    : 0.6088   (constante témoin : 0.5766)
+  invariance TEST  : 0.9682 · pire paire 0.8494
+# état final du réseau : 45 neurones · 1 couches ([45])
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le second run est tombé, et il nuance mon invariant.**
+
+| | **896 canaux** (run 2) | **157 canaux** (run 1) |
+|---|---:|---:|
+| réseau | 45 neurones · 1 couche | 40 neurones · 1 couche |
+| fid TEST | 0,6088 | **0,7430** |
+| constante témoin | 0,5766 | 0,7207 |
+| **écart à la constante** | **+0,0322** | **+0,0223** |
+| invariance TEST | 0,9682 | **0,9827** |
+| pire paire | 0,8494 | **0,9165** |
+| écart oracle TEST | +0,0327 | +0,0223 |
+| écart oracle VALIDATION | +0,0111 | +0,0058 |
+
+**L'écart à la constante est PLUS GRAND sans restriction (+0,0322) qu'avec (+0,0223).** Mon invariant des « +0,020 » est donc en réalité une **plage de +0,020 à +0,032** — il n'est pas aussi serré que je l'annonçais.
+
+**Mon invariant des « +0,020 » est en réalité une plage de +0,020 à +0,032.** Je l'annonçais comme une constante ; la mesure dit que c'est un ordre de grandeur. La conclusion qualitative tient — la contribution propre du pont reste petite et ne **croît pas** avec la restriction — mais le chiffre exact varie.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 16. Restriction ou pas : la comparaison complète, et une correction de mon invariant\n\nLes deux runs de la phase 2, même professeur, … [3676 caractères tronqués]`
