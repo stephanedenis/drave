@@ -145976,3 +145976,125 @@ cache chargé en 14 s · 351 langues · 472472 pas
 ⏵ **Gain mesuré : 28 s → 1,76 s par neurone, soit 16×, résultats bit à bit identiques. Je lance l'entraînement complet.**
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -i 's|self.bloc_langues = 16|self.bloc_langues = 32|' tools/pont_generatif.py && python3 -c \"import ast; ast.parse(open('tools/pont_generatif.py').read()); print('syntaxe OK')\" && python3 - <<'PY'\np='reports/rapport-toutes-lan … [3785 caractères tronqués]`
+
+  ```
+syntaxe OK
+f30b14b Croissance vectorisée sur les langues : 28 s → 1,76 s par neurone, identité bit à bit
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la /tmp/cache392c8*.npz 2>/dev/null | awk '{print $5, $9}'; grep -n \"=== \\|PROFIL\\|TAILLE\\|INVARIANCE\\|TEST  \\|VALIDATION\" /tmp/c8_analyse.log | tail -8; pgrep -f c8_analyse | wc -l; date '+%H:%M'", "description": "Check l … [26 caractères tronqués]`
+
+  ```
+970822241 /tmp/cache392c8_train.npz
+1:=== listes d'apprentissage et de test (mêmes que pour la couche 10) ===
+5:=== caches couche 8 ===
+3
+13:40
+  ```
+
+### 🤖 Assistant
+
+⏵ **Je lance l'entraînement complet par croissance libre + attrition, avec le protocole entier.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -u tools/pont_generatif.py /tmp/cache392_train.npz /tmp/cache392_test.npz --part-langues 0.5 --lecture quadratique --naissance libre --plafond 300 --patience 20 --ride 0.03 --sous-ech 5 --a-min 0.02 --a-max 0.8 --cycles 1 --a … [183 caractères tronqués]`
+
+  ```
+started background job bash-238
+  ```
+
+- **bash** `{"command": "sleep 420; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== croissance ===\"; head -12 /tmp/croissance.log; echo \"...\"; tail -6 /tmp/croissance.log; echo; echo \"=== c8_analyse ===\"; ls -la /tmp/cache392c8*.npz 2>/dev/null | awk '{print $5, $9}'; grep -n \"=== \" /tmp … [121 caractères tronqués]`
+
+  ```
+=== croissance ===
+# CANAUX PARTAGÉS : 896/896 canaux présents dans au moins 50% des langues d'apprentissage (100% des canaux)
+# 351 langues d'entraînement = 347 apprentissage + 4 validation
+# 41 langues de TEST · a=0.2 · ride=0.03 · graine=5 · critère=redondance
+# 1 cycles de 3 couches, puis attrition
+# pas — apprentissage 466072 · validation 6400 · test 76812
+# SOUS-ÉCHANTILLONNAGE DU FIT : 1 ligne sur 5 (l'évaluation reste entière) — mesuré 5,8× plus rapide pour -0,0045 de fidélité
+# MULTI-ÉCHELLE : constantes de temps de 0.02 à 0.8
+# LECTURE QUADRATIQUE : le readout voit [états, états²]
+# constante témoin sur le TEST : 0.5781
+
+########## CYCLE 1 — CROISSANCE ##########
+après                           neur.  couch.  fid appr  fid VAL  fid TEST   invar.    pire
+...
+# constante témoin sur le TEST : 0.5781
+
+########## CYCLE 1 — CROISSANCE ##########
+après                           neur.  couch.  fid appr  fid VAL  fid TEST   invar.    pire
+n8                8       1    0.6141   0.6535    0.6158   0.9438  0.7600 | communs -0.597 (  0 %) · contraste 0.869
+n16              16       1    0.6186   0.6566    0.6228   0.9321  0.6678 | communs -0.754 (  0 %) · contraste 0.918
+
+=== c8_anal
+… [240 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **L'analyse couche 8 est arrivée ! Je lis la comparaison L8/L10 à code identique.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '400,480p' /tmp/c8_analyse.log", "description": "Read layer-8 profile results"}`
+
+  ```
+=== PROFIL PAR LANGUE, COUCHE 8 ===
+# 351 langues d'apprentissage · 41 langues de test · H=896
+# canaux partagés : 896/896 (100%)
+# vivier : 300 langues d'ajustement · 51 de validation (même vivier) · 41 de test (hors vivier)
+
+=== MONO-ÉCHELLE (référence, a=0,2) ===
+#   constante de temps unique : 0.2
+#   TAILLE DU RÉSEAU : 40 neurones · 1 couche(s) [40] · 80 caractéristiques
+#   INVARIANCE (dernière position, 41 langues de test) : professeur 0.6836 · pire paire 0.0104
+#   INVARIANCE (notre sortie)                            : 0.9483 · PIRE PAIRE 0.6798
+#   TEST       (hors vivier) : fidélité 0.6424 · témoin 0.6049 · APPORT +0.0375 · oracle 0.7427
+#   VALIDATION (même vivier) : fidélité 0.6768 · témoin 0.6441 · APPORT +0.0328 · oracle 0.6889
+#   écart à l'oracle : TEST (hors vivier) +0.1003 · VALIDATION (même vivier) +0.0121
+#   apport ↔ fragmentation : Pearson +0.8175 (R² 0.6684)
+#   apport ↔ norme         : Pearson -0.5368
+#   oracle ↔ norme         : Pearson -0.8022
+
+=== MULTI-ÉCHELLE (a de 0.02 à 0.8) ===
+#   constantes de temps : 0.020 à 0.800 (médiane 0.127)
+#   TAILLE DU RÉSEAU : 40 neurones · 1 couche(s) [40] · 80 caractéristiques
+#   INVARIANCE (dernière position, 41 langu
+… [3032 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Résultat majeur : la couche 8 gagne sur toutes les mesures de la cible — mais l'écart de transfert est INCHANGÉ.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '480,540p' /tmp/c8_analyse.log", "description": "Read L8 vs L10 per-language comparison"}`
+
+  ```
+=== COUCHE 8 CONTRE COUCHE 10, LANGUE PAR LANGUE ===
+41 langues communes
+
+langue  apport L10  apport L8    effet  oracle L10  oracle L8
+jpn        +0.0216    +0.0218  +0.0002      0.5747     0.5964
+ell        +0.0220    +0.0227  +0.0008      0.6883     0.7179
+deu        +0.0133    +0.0146  +0.0012      0.5388     0.5676
+srp        +0.0128    +0.0140  +0.0012      0.5615     0.6144
+sah        +0.0212    +0.0225  +0.0013      0.7138     0.7646
+kbd        +0.0195    +0.0231  +0.0036      0.7273     0.7792
+hsb        +0.0114    +0.0152  +0.0038      0.6212     0.6766
+kor        +0.0192    +0.0245  +0.0053      0.5766     0.6048
+ilo        +0.0121    +0.0182  +0.0061      0.7088     0.7707
+pam        +0.0146    +0.0207  +0.0061      0.6863     0.7490
+csa        +0.0138    +0.0200  +0.0061      0.6951     0.7638
+mic        +0.0182    +0.0245  +0.0063      0.7147     0.7815
+yao        +0.0154    +0.0225  +0.0071      0.7182     0.7820
+acu        +0.0172    +0.0244  +0.0072      0.7046     0.7675
+kng        +0.0161    +0.0233  +0.0073      0.7009     0.7668
+mal        +0.0553    +0.0626  +0.0073      0.7450     0.7724
+hus        +0.0164    +0.0240  +0.0076      0.6965     0.7635
+quy       
+… [2226 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Résultat décisif : 41 langues sur 41 s'améliorent à la couche 8, ZÉRO ne régresse. Je consigne.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 44. Couche 8 contre couche 10 à l'échelle des 392 langues : 41 sur 41, zéro régression\n\nLe traçage de la couche 8 est terminé (§ … [7646 caractères tronqués]`

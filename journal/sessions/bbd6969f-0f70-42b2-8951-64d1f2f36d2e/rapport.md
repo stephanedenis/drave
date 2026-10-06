@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 190.9 h |
+| Durée | 191.0 h |
 | Tours | 176 |
-| Messages | 8890 |
-| Appels d'outils | 8384 |
+| Messages | 8896 |
+| Appels d'outils | 8390 |
 | Fichiers touchés | 194 |
-| Commandes | 7105 |
+| Commandes | 7111 |
 | Sous-agents | 32 |
-| Commits | 639 |
+| Commits | 640 |
 | Compactages de contexte | 12 |
 
 ## Objectifs déclarés
@@ -8851,7 +8851,7 @@ Exemple, l'entrée qui manquait le plus :
 
 ### Tour 176 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
 
-*17 appels d'outils.* Actions notables :
+*23 appels d'outils.* Actions notables :
 
 - bash — Check layer-8 analysis progress
 - read
@@ -8867,11 +8867,11 @@ Exemple, l'entrée qui manquait le plus :
 - bash — Check layer-8 analysis status
 - edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py`
 - bash — Verify bit-identity of batched nait
-- … et 2 autres
+- … et 7 autres
 
 **Synthèse produite :**
 
-⏵ **Gain mesuré : 28 s → 1,76 s par neurone, soit 16×, résultats bit à bit identiques. Je lance l'entraînement complet.**
+⏵ **Résultat décisif : 41 langues sur 41 s'améliorent à la couche 8, ZÉRO ne régresse. Je consigne.**
 
 ## 3. Travail accompli
 
@@ -9151,7 +9151,7 @@ Exemple, l'entrée qui manquait le plus :
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 7065 autres
+- … et 7071 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9938,4 +9938,5 @@ Exemple, l'entrée qui manquait le plus :
 - NLMS à pas fin : à 0,0075 de la ridge, et moins chère au-delà de 900 caractéristiques  MESURÉ sur les deux panneaux (40 neurones, 80 caractéristiques, 896 canau
 - Jalon : 392 langues tracées aux couches 8 ET 10, zéro échec    udhr392/       couches 0, 10        2,7 Go   392/392 langues   0 échec   udhr392_c8/    couches 0
 - Croissance vectorisée sur les langues : 28 s → 1,76 s par neurone, identité bit à bit  LE GOULOT CACHÉ : nait boucle 'pour chaque langue : pour chaque pas', soi
+- Couche 8 contre couche 10 à 392 langues : 41 sur 41 s'améliorent, ZÉRO régresse  Même code, même périmètre, mêmes quatre mesures, les deux profils recalculés da
 
