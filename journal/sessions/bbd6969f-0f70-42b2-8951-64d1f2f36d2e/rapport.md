@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 174.4 h |
+| Durée | 174.5 h |
 | Tours | 126 |
-| Messages | 8250 |
-| Appels d'outils | 7863 |
+| Messages | 8262 |
+| Appels d'outils | 7875 |
 | Fichiers touchés | 166 |
-| Commandes | 6689 |
+| Commandes | 6692 |
 | Sous-agents | 32 |
-| Commits | 582 |
+| Commits | 583 |
 | Compactages de contexte | 11 |
 
 ## Objectifs déclarés
@@ -6466,7 +6466,7 @@ Tous les livrables sont en place et mesurés : phase générative ✓ (naissance
 
 ### Tour 126 — <goal_round> Objective: "Faire évoluer le pont linguistico-sémantique en BOÎTE NOIRE (émulation des premières couches du … [1231 caractères tronqués]
 
-*7 appels d'outils.* Actions notables :
+*19 appels d'outils.* Actions notables :
 
 - write `/tmp/panneaux.sh`
 - bash — Run two-panel comparison
@@ -6475,25 +6475,27 @@ Tous les livrables sont en place et mesurés : phase générative ✓ (naissance
 - bash — Compute constant baselines for each restriction
 - bash — Compute comparable constants over all positions
 - bash — Commit the correction on restriction limits
+- get_goal
+- bash — Verify periodic attrition with free birth
+- read
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py`
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py`
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py`
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py`
+- … et 4 autres
 
 **Synthèse produite :**
 
-⏵ **Je dois corriger avant d'emballer.** J'ai inversé deux colonnes, mais surtout : **la constante monte avec la restriction**.
+⏵ **L'attrition corrigée se comporte enfin comme prévu : elle refuse de couper.**
 
-| périmètre | canaux | constante | nous | **écart** |
-|---|---:|---:|---:|---:|
-| aucun | 896 | 0,4710 | 0,4945 | **+0,0235** |
-| énergie 75 % | 424 | 0,5319 | 0,5536 | **+0,0217** |
-| énergie 50 % | 157 | 0,6140 | 0,6383 | **+0,0243** |
-| énergie 25 % | 23 | 0,7316 | 0,7519 | **+0,0203** |
-| **énergie 10 %** | **3** | **0,8991** | **0,9038** | **+0,0047** |
+| cycle | réseau né | attrition | résultat |
+|---|---|---|---|
+| 1 | 34 neurones / 1 couche | premier retrait **refusé** (VAL 0,8334 < 0,8353) | **34 conservés** |
+| 2 | 40 neurones / 2 couches [34, 6] | premier retrait **refusé** | **40 conservés** |
 
-**L'invariant du tour 2 tient : l'écart à la constante reste +0,020 à +0,024 sur 896 → 23 canaux.** Il ne s'effondre qu'à **3 canaux**, où il ne reste presque rien à prédire — les chiffres spectaculaires (0,90) sont **la constante**, pas le pont.
+Réseau final : **40 neurones en 2 couches [34, 6]**, fid TEST **0,7383** (constante 0,7197), invariance **0,9795**, pire paire **0,9465**.
 
-**Je corrige donc ce que j'allais annoncer.** La restriction :
-- ✓ **augmente** la fidélité absolue (la cible devient plus facile),
-- ✓ **réduit** l'écart de transfert (la cible devient plus transférable),
-- ✗ **ne change pas** la contribution propre du pont : **+0,020**.
+**L'attrition est devenue une décision, plus une démolition.** Elle tente de réduire, et s'arrête quand ça ne paie pas — au lieu de descendre à un neurone comme avant.
 
 ## 3. Travail accompli
 
@@ -6651,7 +6653,7 @@ Tous les livrables sont en place et mesurés : phase générative ✓ (naissance
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/31-le-regroupement-par-experts-mesure-et-k3-au-complet.md` | 1 | 1 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-prefill-par-experts.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/engine.rs` | 0 | 1 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py` | 0 | 24 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py` | 0 | 30 |
 | `/tmp/chaine_propre.sh` | 1 | 0 |
 | `/tmp/analyse_propre.sh` | 1 | 0 |
 | `/tmp/stop2.py` | 1 | 0 |
@@ -6745,7 +6747,7 @@ Tous les livrables sont en place et mesurés : phase générative ✓ (naissance
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6649 autres
+- … et 6652 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -7475,4 +7477,5 @@ Tous les livrables sont en place et mesurés : phase générative ✓ (naissance
 - journal" 2>/dev/null; git log --oneline -3; wc -l reports/recapitulatif.md
 - La restriction réduit aussi l'ÉCART de transfert (−28 %), confirmé sur les deux panneaux  Rejoué sur les deux panneaux — test non latin ET validation du même vi
 - Ce que la restriction NE fait PAS : la contribution du pont reste +0,020  Poussée plus loin, la restriction donne des chiffres spectaculaires (TEST 0,9038 à 3 c
+- L'attrition corrigée : une décision, plus une démolition  Le §11 disait 'l'attrition réduit, elle ne généralise pas'. Le fait était exact, mais la CAUSE était u
 

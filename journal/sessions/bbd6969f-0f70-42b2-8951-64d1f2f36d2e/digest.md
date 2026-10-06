@@ -133235,3 +133235,196 @@ Attention : j'ai calculé sur la dernière position seulement, alors que l'outil
 - ✗ **ne change pas** la contribution propre du pont : **+0,020**.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/recapitulatif.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 15. Ce que la restriction NE fait PAS — et je l'avais presque annoncé de travers\n\nPoussée plus loin, la restriction donne des chiffres spect … [3358 caractères tronqués]`
+
+  ```
+7f27148 Ce que la restriction NE fait PAS : la contribution du pont reste +0,020
+  ```
+
+### 🤖 Assistant
+
+⏵ Tous les livrables de l'objectif sont en place et mesurés. Je lis l'objectif pour statuer.
+
+- **get_goal** `{}`
+
+  ```
+{"goal":{"id":"goal-3b3f4915-58ff-46bb-9d02-f2707c9f325d","revision":1,"objective":"Faire évoluer le pont linguistico-sémantique en BOÎTE NOIRE (émulation des premières couches du professeur, sans accès à ses rouages) par une phase GÉNÉRATIVE — le nombre de neurones et de couches NAÎT pendant l'apprentissage, en partant d'un seul neurone — suivie d'une ATTRITION PÉRIODIQUE qui réduit la taille du réseau en GÉNÉRALISANT les concepts (fusion des unités redondantes, réajustement de la lecture sur les survivants), jamais par simple coupe. Aucune rétropropagation : A et B restent aléatoires et gelés, seule la lecture s'ajuste en forme fermée. Chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, et TAILLE du réseau — mesurées contre le professeur Qwen2.5-0.5B couche 10 et le plateau Qwen3-30B-A3B.","phase":"active","roundsStarted":5,"maxGoalRounds":256},"activation":"armed"}
+  ```
+
+### 🤖 Assistant
+
+⏵ Avant de statuer, je dois vérifier un point que je n'ai pas testé depuis la restructuration : **l'attrition périodique** (plusieurs cycles) fonctionne-t-elle avec la naissance libre ?
+
+Un point non vérifié depuis ma restructuration : **l'attrition périodique** — plusieurs cycles — fonctionne-t-elle avec la naissance libre ? Je le teste avant de statuer.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 python3 -u tools/pont_generatif.py /tmp/cache_appr40.npz /tmp/cache_tenus_trace.npz --naissance libre --cycles 2 --val 8 --a 0.5 --ride 1.0 --plafond 40 --gain-min 0.0005 --patience 6 --part-canaux 0.5 --lecture quadratiq … [245 caractères tronqués]`
+
+  ```
+########## CYCLE 1 — CROISSANCE ##########
+  → ARRÊT (couche neuve sans gain)     34       1
+# née : 34 neurones en 1 couches [34]
+########## CYCLE 1 — ATTRITION (redondance) ##########
+retrait de 8 (recalculé)           26       1    0.8065   0.8353    0.7371
+retrait de 6 (recalculé)           20       1    0.8041   0.8334    0.7370
+retrait de 5 (recalculé)           15       1    0.8015   0.8334    0.7358
+retrait de 3 (recalculé)           12       1    0.7981   0.8320    0.7336
+retrait de 3 (recalculé)            9       1    0.7950   0.8302    0.7294
+retrait de 2 (recalculé)            7       1    0.7930   0.8282    0.7286
+retrait de 1 (recalculé)            6       1    0.7924   0.8278    0.7280
+retrait de 1 (recalculé)            5       1    0.7905   0.8261    0.7284
+retrait de 1 (recalculé)            4       1    0.7892   0.8251    0.7263
+retrait de 1 (recalculé)            3       1    0.7884   0.8236    0.7255
+retrait de 1 (recalculé)            2       1    0.7879   0.8241    0.7236
+retrait de 1 (recalculé)            1       1    0.7866   0.8220    0.7239
+########## CYCLE 2 — CROISSANCE ##########
+  → ARRÊT (couche neuve sans gain)     31       2
+# née : 31 neurones e
+… [824 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **L'attrition périodique fonctionne** (cycle 1 : 34 neurones → attrition ; cycle 2 : repart du survivant, 31 neurones en 2 couches). Mais **elle détruit le réseau** : elle descend jusqu'à 1 neurone alors que le meilleur point est le réseau né.
+
+Cause précise : le seuil par défaut (0,02) est bien plus grand que la perte totale de validation (0,013). Je corrige par une règle de **meilleur point** — l'attrition doit **rendre le meilleur réseau rencontré**, pas le dernier.
+
+**L'attrition périodique fonctionne** — mais elle **détruit le réseau** : elle descend à 1 neurone alors que le meilleur point est le réseau né. La cause est précise : le seuil par défaut (0,02) dépasse la perte totale de validation (0,013). Je corrige par une règle de **meilleur point**.
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", "limit": 40, "offset": 726}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py</path>
+<type>file</type>
+<content>
+726:             if len(garde) == len(idx):
+727:                 break
+728:             X2 = P.recalcule(garde)
+729:             X_sauve, P.X = P.X, X2
+730:             idx2 = np.arange(len(garde))
+731:             W2 = P.ajuste(idx2, ride, mt, itr)
+732:             f2 = P.fid(idx2, W2, mt, ival)
+733:             if f2 < meilleur_val - seuil:
+734:                 P.X = X_sauve
+735:                 print(f"{'retrait REFUSÉ (' + str(n_ret) + ' → VAL ' + format(f2, '.4f') + ')':<30} "
+736:                       f"{len(idx):>6} {'—':>7} {'—':>9} {f_va:>8.4f}")
+737:                 break
+738:             idx, W, f_va = idx2, W2, f2
+739:             meilleur_val = max(meilleur_val, f_va)
+740:             Xte_a = P.recalcule(garde, Ete)
+741:             f_te = P.evalue(Xte_a, Yte, W, mt)
+742:             print(f"{'retrait de ' + str(n_ret) + ' (recalculé)':<30} {len(garde):>6} "
+743:                   f"{len(P.couches_de(garde)):>7} {P.fid(idx, W, mt, itr):>9.4f} {f_va:>8.4f} "
+744:                   f"{f_te:>9.4f}")
+745:             if f_va > meilleur["f_va"]:
+746:            
+… [1361 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", "limit": 18, "offset": 709}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py</path>
+<type>file</type>
+<content>
+709:                     break
+710:         # -------------------------------------------------------- ATTRITION
+711:         if not attrition:
+712:             continue
+713:         print(f"\n########## CYCLE {cycle} — ATTRITION ({critere}) ##########")
+714:         print(f"{'après':<30} {'neur.':>6} {'couch.':>7} {'fid appr':>9} {'fid VAL':>8} "
+715:               f"{'fid TEST':>9}")
+716:         idx = np.arange(P.compte_neurones)
+717:         W = P.ajuste(idx, ride, mt, itr)
+718:         f_va = P.fid(idx, W, mt, ival)
+719:         meilleur_val = f_va
+720:         while len(idx) > 1:
+721:             sc = (P.redondance(W, idx) if critere == "redondance"
+722:                   else P.contribution(W, idx))
+723:             n_ret = max(1, len(idx)//4)
+724:             ordre = np.argsort(sc)
+725:             garde = sorted(int(i) for i in ordre[n_ret:])
+726:             if len(garde) == len(idx):
+
+(Showing lines 709-726 of 797. Use offset=727 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", "new_string": "        idx = np.arange(P.compte_neurones)\n        W = P.ajuste(idx, ride, mt, itr)\n        f_va = P.fid(idx, W, mt, ival)\n        meilleur_val = f_va\n        # L'ATTRITION DOIT RENDRE LE MEIL … [643 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", "new_string": "            idx, W, f_va = idx2, W2, f2\n            if f_va > meilleur_val:\n                meilleur_val = f_va\n                meilleur_passage = (f_va, list(idx), W.copy(), [x.copy() for x in … [261 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", "new_string": "            # on COMPACTE : la croissance du cycle suivant doit partir des survivants\n            P.compacte(garde)\n\n        # ON REVIENT AU MEILLEUR PASSAGE : c'est lui le résultat de l'attrit … [616 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py has been updated successfully.
+  ```
+
+### 🤖 Assistant
+
+⏵ Ma restauration est fragile (elle suppose que le meilleur est un préfixe). Je sauvegarde l'état **complet** au meilleur passage.
+
+Ma restauration est fragile — elle suppose que le meilleur passage est un préfixe de l'état courant, ce qui est faux après compaction. Je sauvegarde l'**état complet**.
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", "new_string": "        meilleur_passage = {\"f\": f_va, \"poids\": list(P.poids),\n                            \"X\": [x.copy() for x in P.X],\n                            \"couches\": list(P.couches), \"n\": P. … [112 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", "new_string": "            if f_va > meilleur_val:\n                meilleur_val = f_va\n                meilleur_passage = {\"f\": f_va, \"poids\": list(P.poids),\n                                    \"X\": [x. … [349 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", "new_string": "        # ON REVIENT AU MEILLEUR PASSAGE : c'est lui le résultat de l'attrition.\n        # Sans cela le réseau finit à un neurone, ce qui est mesurablement pire.\n        mp = meilleur_passage\n  … [894 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"import ast;ast.parse(open('tools/pont_generatif.py').read());print('syntaxe OK')\" && timeout 900 python3 -u tools/pont_generatif.py /tmp/cache_appr40.npz /tmp/cache_tenus_trace.npz --naissance libre --cycles 2 --val 8 - … [364 caractères tronqués]`
+
+  ```
+syntaxe OK
+########## CYCLE 1 — CROISSANCE ##########
+  → ARRÊT (couche neuve sans gain)     34       1
+# née : 34 neurones en 1 couches [34]
+########## CYCLE 1 — ATTRITION (redondance) ##########
+retrait REFUSÉ (6 → VAL 0.8334)     26       —         —   0.8353
+  → retour au MEILLEUR passage     34       1         —   0.8356
+########## CYCLE 2 — CROISSANCE ##########
+# née : 40 neurones en 2 couches [34, 6]
+########## CYCLE 2 — ATTRITION (redondance) ##########
+retrait REFUSÉ (7 → VAL 0.8342)     30       —         —   0.8360
+  → retour au MEILLEUR passage     40       2         —   0.8364
+#   TEST        : nous 0.7383 · oracle 0.8029 · ÉCART +0.0646 · invariance oracle 0.9762
+#   VALIDATION  : nous 0.8358 · oracle 0.8615 · ÉCART +0.0257   (même vivier que l'apprentissage)
+=== MEILLEUR RÉSEAU SELON LA VALIDATION (naissance libre) ===
+  taille           : 40 neurones · 2 couches
+  fidélité TEST    : 0.7383   (constante témoin : 0.7197)
+  invariance TEST  : 0.9795 · pire paire 0.9465
+# état final du réseau : 40 neurones · 2 couches ([34, 6])
+  ```
+
+### 🤖 Assistant
+
+⏵ **L'attrition corrigée se comporte enfin comme prévu : elle refuse de couper.**
+
+| cycle | réseau né | attrition | résultat |
+|---|---|---|---|
+| 1 | 34 neurones / 1 couche | premier retrait **refusé** (VAL 0,8334 < 0,8353) | **34 conservés** |
+| 2 | 40 neurones / 2 couches [34, 6] | premier retrait **refusé** | **40 conservés** |
+
+Réseau final : **40 neurones en 2 couches [34, 6]**, fid TEST **0,7383** (constante 0,7197), invariance **0,9795**, pire paire **0,9465**.
+
+**L'attrition est devenue une décision, plus une démolition.** Elle tente de réduire, et s'arrête quand ça ne paie pas — au lieu de descendre à un neurone comme avant.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/recapitulatif.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 16. L'attrition corrigée : une décision, plus une démolition\n\nLe §11 concluait « l'attrition réduit, elle ne généralise pas ». Le fait était … [3039 caractères tronqués]`

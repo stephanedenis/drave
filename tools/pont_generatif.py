@@ -717,6 +717,14 @@ def main():
         W = P.ajuste(idx, ride, mt, itr)
         f_va = P.fid(idx, W, mt, ival)
         meilleur_val = f_va
+        # L'ATTRITION DOIT RENDRE LE MEILLEUR RÉSEAU, PAS LE DERNIER. Sans cela,
+        # un seuil de validation plus grand que la perte totale fait descendre
+        # jusqu'à un neurone : mesuré, 34 neurones (VAL 0,8353) jusqu'à 1
+        # (0,8220) alors que le meilleur point était le réseau né. On garde donc
+        # le meilleur passage, et on y revient à la fin.
+        meilleur_passage = {"f": f_va, "poids": list(P.poids),
+                            "X": [x.copy() for x in P.X],
+                            "couches": list(P.couches), "n": P.compte_neurones}
         while len(idx) > 1:
             sc = (P.redondance(W, idx) if critere == "redondance"
                   else P.contribution(W, idx))
@@ -736,7 +744,11 @@ def main():
                       f"{len(idx):>6} {'—':>7} {'—':>9} {f_va:>8.4f}")
                 break
             idx, W, f_va = idx2, W2, f2
-            meilleur_val = max(meilleur_val, f_va)
+            if f_va > meilleur_val:
+                meilleur_val = f_va
+                meilleur_passage = {"f": f_va, "poids": list(P.poids),
+                                    "X": [x.copy() for x in P.X],
+                                    "couches": list(P.couches), "n": P.compte_neurones}
             Xte_a = P.recalcule(garde, Ete)
             f_te = P.evalue(Xte_a, Yte, W, mt)
             print(f"{'retrait de ' + str(n_ret) + ' (recalculé)':<30} {len(garde):>6} "
@@ -750,6 +762,15 @@ def main():
                             "inv": mv, "pire": miv, "etape": f"C{cycle} attrition"}
             # on COMPACTE : la croissance du cycle suivant doit partir des survivants
             P.compacte(garde)
+
+        # ON REVIENT AU MEILLEUR PASSAGE : c'est lui le résultat de l'attrition.
+        # Sans cela le réseau finit à un neurone, ce qui est mesurablement pire.
+        mp = meilleur_passage
+        if mp["n"] != P.compte_neurones:
+            P.poids = mp["poids"]; P.X = mp["X"]
+            P.couches = mp["couches"]; P.compte_neurones = mp["n"]
+            print(f"{'  → retour au MEILLEUR passage':<30} {mp['n']:>6} "
+                  f"{len(mp['couches']):>7} {'—':>9} {mp['f']:>8.4f}")
 
     # ---------------------------------------------------------------- ORACLE
     #

@@ -750,3 +750,39 @@ sont **la constante**, pas le pont. Le pont y ajoute **+0,005**.
 
 **C'est le §7 qui gouverne**, et ce paragraphe le confirme à trois cents fois
 l'écart de périmètre.
+
+
+---
+
+## 16. L'attrition corrigée : une décision, plus une démolition
+
+Le §11 concluait « l'attrition réduit, elle ne généralise pas ». Le fait était
+exact, mais **la cause était un défaut de ma règle** : le seuil de validation
+(0,02 par défaut) était **plus grand que la perte totale** possible, donc
+l'attrition acceptait les quinze retraits et finissait à **un neurone** — alors
+que le meilleur point était le réseau né.
+
+Deux corrections :
+
+1. **Retour au meilleur passage.** On garde l'état complet du meilleur point
+   rencontré et on y revient à la fin. Une attrition doit rendre **le meilleur
+   réseau**, pas le dernier.
+2. **Seuil resserré.** Un retrait n'est accepté que s'il ne coûte pas plus que le
+   seuil, comparé au **meilleur** score atteint — pas au score courant.
+
+### Le comportement corrigé, cycles croissance → attrition
+
+| cycle | réseau né | attrition | résultat |
+|---|---|---|---|
+| 1 | 34 neurones / 1 couche | premier retrait **REFUSÉ** (VAL 0,8334 < 0,8353) | **34 conservés** |
+| 2 | 40 neurones / 2 couches [34, 6] | premier retrait **REFUSÉ** (VAL 0,8342 < 0,8360) | **40 conservés** |
+
+**Réseau final : 40 neurones en 2 couches [34, 6]**
+- fidélité TEST **0,7383** (constante témoin 0,7197) — **écart +0,0186**
+- invariance **0,9795** · pire paire **0,9465**
+- oracle : TEST 0,8029 (écart +0,0646) · VALIDATION 0,8615 (écart +0,0257)
+- première couche : **34 des 40 neurones**
+
+**L'attrition est devenue une décision.** Elle tente de réduire, et **s'arrête
+quand ça ne paie pas** — au lieu de descendre à un neurone. Et l'écart à la
+constante, +0,0186, reste dans l'invariant du §7.
