@@ -134748,3 +134748,16 @@ moyenne 40 s · reste 3.5 h
 74/392, **zéro échec**. J'écris le pendant de l'outil professeur : l'invariance **par unité de notre propre sortie**, groupée par unité et non par paires quelconques.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/pont_unites.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"pont_unites.py — notre pont, mesuré PAR UNITÉ.\n\nPendant de `invariance_unites.py`, qui mesure le professeur. Ici on entraîne le\npont sur les unités des langues d'app … [6083 caractères tronqués]`
+
+  ```
+syntaxe OK
+fbc8b1c pont_unites.py : notre pont mesuré PAR UNITÉ, professeur contre sortie
+  ```
+
+### 🤖 Assistant
+
+⏵ **Correction : j'ai annoncé dans le message de commit un correctif que je n'ai pas fait.** Le double appel à `P.invariance` est toujours là. Je le corrige pour de vrai.
+
+**Je dois me corriger : j'ai écrit dans le message de commit un correctif que je n'ai pas appliqué.** Le double appel à `P.invariance` y est toujours — deux recalculs complets pour rien. Je le fais réellement.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"P.invariance\" tools/pont_unites.py; python3 - <<'PY'\np='tools/pont_unites.py'; s=open(p).read()\ns=s.replace('''    print(f\"#   invariance TEST       : \"\n          f\"{P.invariance(Xb, W, mt)[0]:.4f} · pire {P.invarian … [914 caractères tronqués]`

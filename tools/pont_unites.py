@@ -97,8 +97,8 @@ def main():
     print(f"#   fidélité validation   : {fA:.4f}")
     print(f"#   fidélité TEST         : {fB:.4f}")
     print(f"#   oracle TEST           : {oracle:.4f}   (écart {oracle-fB:+.4f})")
-    print(f"#   invariance TEST       : "
-          f"{P.invariance(Xb, W, mt)[0]:.4f} · pire {P.invariance(Xb, W, mt)[1]:.4f}")
+    inv_m, inv_min = P.invariance(Xb, W, mt)     # UN seul calcul, pas deux
+    print(f"#   invariance TEST       : {inv_m:.4f} · pire {inv_min:.4f}")
 
     print(f"\n# INVARIANCE PAR UNITÉ — professeur contre notre sortie")
     print(f"{'unité':>6} {'langues':>8} {'professeur':>11} {'notre sortie':>13} "
