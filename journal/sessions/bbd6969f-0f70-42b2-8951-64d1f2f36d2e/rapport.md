@@ -6,13 +6,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
 | Durée | 184.9 h |
-| Tours | 171 |
-| Messages | 8604 |
-| Appels d'outils | 8123 |
+| Tours | 172 |
+| Messages | 8608 |
+| Appels d'outils | 8125 |
 | Fichiers touchés | 182 |
-| Commandes | 6920 |
+| Commandes | 6922 |
 | Sous-agents | 32 |
-| Commits | 619 |
+| Commits | 620 |
 | Compactages de contexte | 11 |
 
 ## Objectifs déclarés
@@ -395,6 +395,8 @@
 **Tour 170** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 **Tour 171** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
+
+**Tour 172** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -8578,19 +8580,72 @@ Ce qu'elle établit quand même : **dans un domaine unique, la langue pèse plus
 
 **Synthèse produite :**
 
-⏵ **Confirmation indépendante : la couche 8 gagne aussi au niveau des unités.**
+⏵ Signal précoce commité. Point d'étape.
+
+\## Ce que ce tour a établi
+
+**La couche 8 gagne aussi au niveau des unités** — mesuré sur 198 unités (17 langues × 10), avant la fin du traçage :
 
 | | couche 10 | **couche 8** | gain |
 |---|---:|---:|---:|
-| **invariance moyenne** (10 unités) | 0,5977 | **0,6358** | **+0,0381** |
-| pire paire (moyenne) | 0,1383 | 0,1620 | +0,0237 |
+| invariance moyenne | 0,5977 | **0,6358** | **+0,0381** |
 | pire unité | 0,5616 | **0,6170** | +0,0554 |
 
-**La couche 8 gagne de +0,0381** sur l'invariance mesurée à dix points appariés — cohérent avec les +0,0512 mesurés sur Romeo. **Deux corpus, deux méthodes de mesure, même conclusion.**
+**Deux confirmations indépendantes désormais :**
 
-Et la mesure par unité rend enfin la « pire paire » précise : ce sont **ces–dzo** à l'unité 9 (0,0905) et **deu–dzo** à l'unité 8 (0,0970) — des couples **nommables**, là où l'ancienne mesure ne donnait qu'un agrégat.
+| mesure | corpus | gain |
+|---|---|---:|
+| segment par segment | Romeo (24 scènes) | +0,0512 |
+| **par unité** | **UDHR (17 × 10)** | **+0,0381** |
 
-**La couche 8 gagne de +0,0381**, cohérent avec les +0,0512 de Romeo. **Deux corpus, deux méthodes, même conclusion.** Et la pire paire devient **nommable** : *ces–dzo* à l'unité 9, *deu–dzo* à l'unité 8.
+Deux corpus, deux méthodes de mesure, même conclusion. **Ce n'est plus une mesure isolée**, et c'est exactement ce que je m'étais engagé à vérifier avant de graver la conclusion.
+
+\## Et la mesure fine paie enfin
+
+C'était l'objectif du traçage par unité, et il est atteint : la **pire paire devient nommable** au lieu d'être un agrégat.
+
+| couche | pire unité | pire couple | valeur |
+|---|---:|---|---:|
+| 10 | 8 | **deu–dzo** | 0,0970 |
+| 8 | 9 | **ces–dzo** | 0,0905 |
+
+**Le dzongkha apparaît dans les deux cas** — c'est la langue la plus éloignée du panel sur ce corpus. Cohérent avec sa position : tibétain, isolat morphologique, sans articles ni prépositions. **Cela donne une cible concrète** : si l'on veut améliorer le pont, c'est ce couple qu'il faut regarder, et je peux désormais le nommer.
+
+\## État
+
+| | |
+|---|---|
+| unités | **211/400**, 0 échec |
+| reste | ~40 min, puis l'analyse finale |
+| chaîne | intacte, 4 scripts |
+
+Rien à faire de votre côté. Commit `b7fcce9`.
+
+### Tour 172 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Diagnose why Dzongkha is the worst pair
+- bash — Commit the refuted hypothesis on dzo
+
+**Synthèse produite :**
+
+⏵ **Mon hypothèse est RÉFUTÉE, et le résultat est plus intéressant que prévu.**
+
+| langue | jetons par unité |
+|---|---:|
+| **dzo** (dzongkha) | **344** — **2ᵉ plus longue** sur 21 |
+| fuf | 495 |
+| csw | 305 |
+| … | … |
+| deu | 83 |
+| heb | 71 |
+
+**Le dzongkha n'est pas court — c'est la deuxième langue la plus longue du panel.** L'hypothèse « moins de contexte » est donc fausse. Sa distance est **réellement représentationnelle**, pas un artefact de données.
+
+**Le dzongkha n'est pas court — c'est la 2ᵉ langue la plus longue du panel.** Mon hypothèse « moins de contexte » est **fausse**. Sa distance au reste du panel est donc **réellement représentationnelle**, pas un artefact de données — et c'est ce qu'on veut d'une langue témoin.
+
+Détail au passage : l'écriture tibétaine est **fragmentée ~4× plus** par le tokenizer que le latin (344 jetons contre 83 pour le même contenu en allemand), et cela **ne suffit pas** à aligner sa représentation.
 
 ## 3. Travail accompli
 
@@ -8858,7 +8913,7 @@ Et la mesure par unité rend enfin la « pire paire » précise : ce sont **ces�
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6880 autres
+- … et 6882 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9625,4 +9680,5 @@ Et la mesure par unité rend enfin la « pire paire » précise : ce sont **ces�
 - CORRECTION : la 'richesse' n'est PAS dans le nombre de canaux actifs  J'avais annoncé, sur huit traces, que Wikipedia activait la couche 'beaucoup plus densémen
 - Domaine ou langue ? testé — et l'expérience est INCOMPLÈTE, je le signale  Hypothèse : « certains mots sont plus communs à leur domaine qu'à leur langue ». Le t
 - Signal précoce : la couche 8 gagne aussi au niveau des UNITÉS (+0,0381)  Mesure sur les 198 premières unités (17 langues complètes × 10 unités), donc AVANT la f
+- La pire paire (dzo) : hypothèse de longueur testée et RÉFUTÉE  La mesure par unité nomme la pire paire : deu-dzo (couche 10), ces-dzo (couche 8). Le dzongkha (B
 

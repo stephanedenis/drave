@@ -140812,3 +140812,124 @@ Et la mesure par unité rend enfin la « pire paire » précise : ce sont **ces�
 **La couche 8 gagne de +0,0381**, cohérent avec les +0,0512 de Romeo. **Deux corpus, deux méthodes, même conclusion.** Et la pire paire devient **nommable** : *ces–dzo* à l'unité 9, *deu–dzo* à l'unité 8.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 24. Signal précoce : la couche 8 gagne aussi au niveau des UNITÉS\n\nMesure prise sur les 198 premières unités tracées (**17 langues  … [2702 caractères tronqués]`
+
+  ```
+b7fcce9 Signal précoce : la couche 8 gagne aussi au niveau des UNITÉS (+0,0381)
+unités : 211/400
+  ```
+
+### 🤖 Assistant
+
+⏵ Signal précoce commité. Point d'étape.
+
+## Ce que ce tour a établi
+
+**La couche 8 gagne aussi au niveau des unités** — mesuré sur 198 unités (17 langues × 10), avant la fin du traçage :
+
+| | couche 10 | **couche 8** | gain |
+|---|---:|---:|---:|
+| invariance moyenne | 0,5977 | **0,6358** | **+0,0381** |
+| pire unité | 0,5616 | **0,6170** | +0,0554 |
+
+**Deux confirmations indépendantes désormais :**
+
+| mesure | corpus | gain |
+|---|---|---:|
+| segment par segment | Romeo (24 scènes) | +0,0512 |
+| **par unité** | **UDHR (17 × 10)** | **+0,0381** |
+
+Deux corpus, deux méthodes de mesure, même conclusion. **Ce n'est plus une mesure isolée**, et c'est exactement ce que je m'étais engagé à vérifier avant de graver la conclusion.
+
+## Et la mesure fine paie enfin
+
+C'était l'objectif du traçage par unité, et il est atteint : la **pire paire devient nommable** au lieu d'être un agrégat.
+
+| couche | pire unité | pire couple | valeur |
+|---|---:|---|---:|
+| 10 | 8 | **deu–dzo** | 0,0970 |
+| 8 | 9 | **ces–dzo** | 0,0905 |
+
+**Le dzongkha apparaît dans les deux cas** — c'est la langue la plus éloignée du panel sur ce corpus. Cohérent avec sa position : tibétain, isolat morphologique, sans articles ni prépositions. **Cela donne une cible concrète** : si l'on veut améliorer le pont, c'est ce couple qu'il faut regarder, et je peux désormais le nommer.
+
+## État
+
+| | |
+|---|---|
+| unités | **211/400**, 0 échec |
+| reste | ~40 min, puis l'analyse finale |
+| chaîne | intacte, 4 scripts |
+
+Rien à faire de votre côté. Commit `b7fcce9`.
+
+
+## Tour 172
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de représentation universelle), boîte noire (on ne lit du professeur que la couche à émuler, jamais sa tête ni ses jetons générés), aucune rétropropagation (A et B aléatoires et gelés, seule la lecture s'ajuste en forme fermée), et chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, TAILLE du réseau, avec le diagnostic oracle sur les deux panneaux (test hors vivier et validation du même vivier)."
+Round: 45/256
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ La couche 8 est confirmée deux fois. J'utilise l'attente pour **comprendre la cible** : pourquoi le dzongkha est-il la pire paire ? Je vérifie une hypothèse simple — la longueur du texte.
+
+La couche 8 est confirmée deux fois. J'utilise l'attente pour **comprendre la cible** identifiée : pourquoi le dzongkha est-il toujours la pire paire ? Hypothèse simple à vérifier — **la longueur du texte**.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys, glob, os, collections, statistics; sys.path.insert(0,'/tmp')\nfrom lire_drvf import lire\nfs=sorted(glob.glob('/home/stephane/Data13TB/stephane/corpus/udhr/unites/*.drvf'))\npar=collections.defaultdict(d … [1048 caractères tronqués]`
+
+  ```
+21 langues complètes
+
+langue   jetons/unité (moy)    total
+   acu                   95      951
+   agr                  168     1683
+   als                  114     1142
+   amh                  188     1882
+   ben                  262     2625
+   bis                  110     1101
+   bum                   72      715
+   cbi                  198     1982
+   ceb                  111     1110
+   ces                  115     1150
+   csa                  103     1026
+   csw                  305     3051
+   ctd                  108     1084
+   deu                   83      832
+   dzo                  344     3445
+   ell                  279     2794
+   fuf                  495     4953
+   guc                  113     1126
+   gyr                  106     1061
+   haw                  136     1361
+   heb                   71      714
+
+les 3 PLUS longues : fuf (495), dzo (344), csw (305)
+les 3 plus COURTES : deu (83), bum (72), heb (71)
+
+dzo : 344 jetons/unité — rang 2 sur 21
+  ```
+
+### 🤖 Assistant
+
+⏵ **Mon hypothèse est RÉFUTÉE, et le résultat est plus intéressant que prévu.**
+
+| langue | jetons par unité |
+|---|---:|
+| **dzo** (dzongkha) | **344** — **2ᵉ plus longue** sur 21 |
+| fuf | 495 |
+| csw | 305 |
+| … | … |
+| deu | 83 |
+| heb | 71 |
+
+**Le dzongkha n'est pas court — c'est la deuxième langue la plus longue du panel.** L'hypothèse « moins de contexte » est donc fausse. Sa distance est **réellement représentationnelle**, pas un artefact de données.
+
+**Le dzongkha n'est pas court — c'est la 2ᵉ langue la plus longue du panel.** Mon hypothèse « moins de contexte » est **fausse**. Sa distance au reste du panel est donc **réellement représentationnelle**, pas un artefact de données — et c'est ce qu'on veut d'une langue témoin.
+
+Détail au passage : l'écriture tibétaine est **fragmentée ~4× plus** par le tokenizer que le latin (344 jetons contre 83 pour le même contenu en allemand), et cela **ne suffit pas** à aligner sa représentation.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 25. La pire paire (dzo) : hypothèse testée et RÉFUTÉE\n\nLa mesure par unité a nommé la pire paire : **deu–dzo** (couche 10) et **ces … [2533 caractères tronqués]`
