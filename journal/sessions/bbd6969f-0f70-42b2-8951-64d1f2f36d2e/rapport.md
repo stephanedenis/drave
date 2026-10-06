@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 190.5 h |
-| Tours | 175 |
-| Messages | 8870 |
-| Appels d'outils | 8366 |
+| Durée | 190.9 h |
+| Tours | 176 |
+| Messages | 8890 |
+| Appels d'outils | 8384 |
 | Fichiers touchés | 194 |
-| Commandes | 7091 |
+| Commandes | 7105 |
 | Sous-agents | 32 |
-| Commits | 638 |
+| Commits | 639 |
 | Compactages de contexte | 12 |
 
 ## Objectifs déclarés
@@ -403,6 +403,8 @@
 **Tour 174** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 **Tour 175** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
+
+**Tour 176** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -8794,7 +8796,7 @@ Rayon spectral du jacobien `J = (1−a)·I + a·D·P` :
 
 ### Tour 175 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
 
-*41 appels d'outils.* Actions notables :
+*42 appels d'outils.* Actions notables :
 
 - bash — Check NLMS experiment and c8 progress
 - read
@@ -8810,11 +8812,66 @@ Rayon spectral du jacobien `J = (1−a)·I + a·D·P` :
 - edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/lecture_locale.py`
 - bash — Move W0 initialization before branch
 - bash — Launch NLMS convergence curve
-- … et 26 autres
+- … et 27 autres
 
 **Synthèse produite :**
 
-⏵ **Le jalon est propre : 392 langues, 0 échec, couches 8 et 10.**
+⏵ **Glossaire livré — voici ce qu'il contient et pourquoi.**
+
+\## Le trou était total
+
+Avant ce rafraîchissement, `docs/glossaire.md` (1682 lignes, 3 oct) ne contenait **aucune occurrence** de : *professeur, réservoir, oracle, invariance, attrition, fragmentation, boîte noire, pire paire, NLMS, naissance libre, constante témoin*. C'est-à-dire aucun des mots qui décrivent le travail en cours. Le glossaire couvrait le moteur, le matériel et la mesure — pas le pont.
+
+**1682 → 2162 lignes** (+480).
+
+\## §10 — le vocabulaire du pont, en neuf sous-sections
+
+**10.1 Les acteurs** · professeur, boîte noire, tête, élève, pont, jeton, tokeniseur
+**10.2 Le réservoir** · réservoir, calcul par réservoir, récurrence, état, constante de temps, multi-échelle, gain d'entrée, `tanh`, saturation, jacobien, rayon spectral, oscillation/épilepsie
+**10.3 Structure** · couche (avec la règle de connectivité), neurone, naissance, naissance libre, concept commun, attrition, redondance, contribution, généalogie
+**10.4 La lecture** · lecture, rétropropagation, forme fermée, régression, moindres carrés, ridge, ride, Gram, caractéristiques, lecture quadratique, NLMS, règle delta
+**10.5 La mesure** · fidélité, cosinus, norme, témoin constant, apport propre, invariance, pire paire, oracle, vivier, hors/même vivier, panneau, écart à l'oracle, fragmentation, Pearson, Spearman, corrélation partielle, R², sur-apprentissage
+**10.6 Le professeur** · couche 0, couche cible, trace DRVF, RoPE, Qwen2.5
+**10.7 Les corpus** · UDHR, corpus aligné/non aligné, unité
+**10.8** · les huit résultats structurants **avec leur chiffre**
+**10.9** · les termes employés **dans** les définitions
+
+\## §10.9 répond précisément à votre demande
+
+Tout mot servant à définir un autre a maintenant son entrée : **valeur propre**, **complément de Schur**, **inversion de matrice / résolution de système linéaire**, **moyenne glissante**, **algorithme itératif / convergence / point fixe**, **parcimonie**, **impulsion**, **frame temporelle**, **plongement**, **élagage**, **contexte**.
+
+Exemple, l'entrée qui manquait le plus :
+
+> **Point fixe** — une méthode itérative atteint un point fixe quand les étapes ne changent plus rien. **Attention : un point fixe n'est pas forcément la bonne réponse** — NLMS en atteint un à 0,4971 là où la ridge donne 0,6233.
+
+\## §11 — références externes, en deux listes distinctes
+
+**Vérifiées (HTTP 200)** : [Qwen2.5 Technical Report](https://arxiv.org/abs/2412.15115) · [RoFormer / RoPE](https://arxiv.org
+… [1823 caractères tronqués]
+
+### Tour 176 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
+
+*17 appels d'outils.* Actions notables :
+
+- bash — Check layer-8 analysis progress
+- read
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py`
+- bash — Wire subsampling option into pont_generatif
+- bash — List pont_generatif options
+- bash — Add multi-scale options and safety guard
+- bash — Check layer-8 cache build progress
+- bash — Wait for layer-8 cache completion
+- bash — Check layer-8 progress after timeout
+- bash — Check option semantics
+- bash — Find free birth branch
+- bash — Check layer-8 analysis status
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py`
+- bash — Verify bit-identity of batched nait
+- … et 2 autres
+
+**Synthèse produite :**
+
+⏵ **Gain mesuré : 28 s → 1,76 s par neurone, soit 16×, résultats bit à bit identiques. Je lance l'entraînement complet.**
 
 ## 3. Travail accompli
 
@@ -8972,7 +9029,7 @@ Rayon spectral du jacobien `J = (1−a)·I + a·D·P` :
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/31-le-regroupement-par-experts-mesure-et-k3-au-complet.md` | 1 | 1 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-prefill-par-experts.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/engine.rs` | 0 | 1 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py` | 0 | 38 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py` | 0 | 40 |
 | `/tmp/chaine_propre.sh` | 1 | 0 |
 | `/tmp/analyse_propre.sh` | 1 | 0 |
 | `/tmp/stop2.py` | 1 | 0 |
@@ -9094,7 +9151,7 @@ Rayon spectral du jacobien `J = (1−a)·I + a·D·P` :
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 7051 autres
+- … et 7065 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9880,4 +9937,5 @@ Rayon spectral du jacobien `J = (1−a)·I + a·D·P` :
 - Glossaire : section 10 complète sur le pont, avec les termes de ses propres définitions  Le glossaire ne contenait AUCUNE occurrence de professeur, réservoir, o
 - NLMS à pas fin : à 0,0075 de la ridge, et moins chère au-delà de 900 caractéristiques  MESURÉ sur les deux panneaux (40 neurones, 80 caractéristiques, 896 canau
 - Jalon : 392 langues tracées aux couches 8 ET 10, zéro échec    udhr392/       couches 0, 10        2,7 Go   392/392 langues   0 échec   udhr392_c8/    couches 0
+- Croissance vectorisée sur les langues : 28 s → 1,76 s par neurone, identité bit à bit  LE GOULOT CACHÉ : nait boucle 'pour chaque langue : pour chaque pas', soi
 

@@ -103,6 +103,11 @@ class Pont:
         self.a_neur = []
         self.a_min = None
         self.a_max = None
+        # sous-échantillonnage du FIT seulement — l'évaluation reste entière
+        self.sous_ech = 1
+        # nombre de langues traitées ensemble dans `nait` (vectorisation sur les
+        # langues, la seule dimension qui ne soit pas séquentielle)
+        self.bloc_langues = 32
         # GAIN D'ENTRÉE : en calcul réservoir c'est LE réglage critique, et il
         # valait 1,0 depuis le début sans avoir jamais été balayé. Trop petit, le
         # tanh reste linéaire et le réservoir n'est qu'un filtre ; trop grand, il
@@ -150,21 +155,44 @@ class Pont:
         else:
             a_n = np.exp(np.linspace(np.log(self.a_min), np.log(self.a_max), k))
 
-        for i, (E, X) in enumerate(zip(self.E, self.X)):
-            T = len(E)
-            Xpar = (X[:, debut_par:debut_par+n_par] if n_par > 0
-                    else np.zeros((T, 0), dtype=np.float32))
-            S = np.zeros((T, k), dtype=np.float32)
-            s = np.zeros(deja + k)          # l'état de la couche : anciens + neufs
-            for t in range(T):
-                # la couche PRÉCÉDENTE est lue au même instant t : elle est déjà
-                # entièrement calculée, et elle ne bougera plus.
-                drive = (Xpar[t] @ W_par.T) if n_par > 0 else 0.0
+        # ---------------------------------------------------------------- BLOCS
+        #
+        # POURQUOI DES BLOCS. La boucle ci-dessus est `pour chaque langue : pour
+        # chaque pas`, soit 472 472 itérations d'interpréteur Python — 28 s PAR
+        # NAISSANCE, et une naissance par neurone en mode libre. Or **les langues
+        # sont indépendantes** : seule la récurrence en `t` est séquentielle. On
+        # regroupe donc les langues par longueurs voisines et on boucle sur `t`,
+        # toutes les langues du bloc d'un coup. Les itérations Python passent de
+        # 472 472 à la somme des longueurs maximales de chaque bloc, soit environ
+        # 472 472 / LC. Le CALCUL EST LE MÊME — c'est une vectorisation, pas un
+        # changement d'algorithme.
+        LC = int(getattr(self, "bloc_langues", 16))
+        ordre = sorted(range(len(self.E)), key=lambda i: len(self.E[i]))
+        for d in range(0, len(ordre), LC):
+            bloc = ordre[d:d+LC]
+            Tmax = max(len(self.E[i]) for i in bloc)
+            nb = len(bloc)
+            Ep = np.zeros((nb, Tmax, self.H), dtype=np.float32)
+            Xp = (np.zeros((nb, Tmax, n_par), dtype=np.float32) if n_par > 0
+                  else None)
+            for r, i in enumerate(bloc):
+                T = len(self.E[i])
+                Ep[r, :T] = self.E[i]
+                if n_par > 0:
+                    Xp[r, :T] = self.X[i][:, debut_par:debut_par+n_par]
+            S = np.zeros((nb, Tmax, k), dtype=np.float32)
+            s = np.zeros((nb, deja + k))
+            for t in range(Tmax):
+                drive = (Xp[:, t] @ W_par.T) if n_par > 0 else 0.0
                 drive = drive + s @ W_self.T
-                s = np.concatenate([s[:deja],
-                                    (1-a_n)*s[deja:] + a_n*np.tanh(drive + B @ E[t])])
-                S[t] = s[deja:]
-            self.X[i] = np.hstack([X, S])
+                s = np.concatenate(
+                    [s[:, :deja],
+                     (1-a_n)*s[:, deja:] + a_n*np.tanh(drive + Ep[:, t] @ B.T)],
+                    axis=1)
+                S[:, t] = s[:, deja:]
+            for r, i in enumerate(bloc):
+                self.X[i] = np.hstack([self.X[i], S[r, :len(self.E[i])]])
+            del Ep, Xp, S
 
         for r in range(k):
             self.poids.append((W_par[r].copy(), W_self[r].copy(), B[r].copy(), c))
@@ -191,8 +219,14 @@ class Pont:
         return np.hstack([X, X*X])
 
     def ajuste(self, idx, ride, mt, quel=slice(None)):
-        X = self.phi(np.vstack([self._norm(self.X[i][:, idx]) for i in quel]))
-        Y = np.vstack([self.Y[i] for i in quel])
+        # SOUS-ÉCHANTILLONNAGE DU FIT. La régression porte sur ~472 000 lignes :
+        # massivement sur-déterminée. Mesuré (§35.5) : garder une ligne sur cinq la
+        # rend 5,8× plus rapide pour 0,0045 de fidélité. Le coût du fit étant
+        # O(lignes × caractéristiques²), c'est le seul levier qui compte quand le
+        # réseau grossit. `self.sous_ech = 1` par défaut : comportement inchangé.
+        se = getattr(self, "sous_ech", 1)
+        X = self.phi(np.vstack([self._norm(self.X[i][::se, idx]) for i in quel]))
+        Y = np.vstack([self.Y[i][::se] for i in quel])
         n = X.shape[1]
         if self.pese is None:
             return np.linalg.solve(X.T @ X + ride*len(X)*np.eye(n), X.T @ (Y - mt))
@@ -612,6 +646,18 @@ def main():
         print(f"# SEUIL PAR NEURONE : colonne d'entrée constante de valeur {col:.1f}")
 
     P = Pont((cltr, Etr, Ytr), a, graine, H)
+    P.sous_ech = int(opt("--sous-ech", 1))
+    if P.sous_ech > 1:
+        print(f"# SOUS-ÉCHANTILLONNAGE DU FIT : 1 ligne sur {P.sous_ech} "
+              f"(l'évaluation reste entière) — mesuré 5,8× plus rapide pour "
+              f"-0,0045 de fidélité")
+    # RÉSERVOIR MULTI-ÉCHELLE : une constante de temps par neurone, étalées
+    # logarithmiquement. Mesuré +8,8 % sur l'apport propre, à nombre de neurones
+    # constant (§28). Laisser les deux à zéro garde une constante unique.
+    am, aM = float(opt("--a-min", 0)), float(opt("--a-max", 0))
+    if am > 0 and aM > am:
+        P.a_min, P.a_max = am, aM
+        print(f"# MULTI-ÉCHELLE : constantes de temps de {am} à {aM}")
     P.gain_entree = float(opt("--gain-entree", 1.0))
     if opt("--normalise", ""):
         P.normalise = True
@@ -627,7 +673,10 @@ def main():
     base = cos_lignes(np.tile(mt, (len(Yte_a), 1)), Yte_a)
     print(f"# constante témoin sur le TEST : {base:.4f}")
 
-    meilleur = {"f_va": -1.0, "f_te": -1.0}
+    # valeur de repli complète : sans elle, un réseau que l'attrition n'améliore
+    # jamais faisait planter le résumé final APRÈS des heures de calcul
+    meilleur = {"f_va": -1.0, "f_te": -1.0, "neur": 0, "couch": 0,
+                "f_tr": 0.0, "inv": 0.0, "pire": 0.0, "etape": "aucune"}
     for cycle in range(1, cycles+1):
         # ------------------------------------------------------- CROISSANCE
         print(f"\n########## CYCLE {cycle} — CROISSANCE ##########")

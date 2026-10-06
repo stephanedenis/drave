@@ -145628,3 +145628,351 @@ TERMINE
 ⏵ **Le jalon est propre : 392 langues, 0 échec, couches 8 et 10.**
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 42. Jalon : 392 langues tracées aux DEUX couches, zéro échec\n\n| corpus | contenu | taille | langues | échecs |\n|---|---|---:|---:| … [1892 caractères tronqués]`
+
+  ```
+ce3b05d Jalon : 392 langues tracées aux couches 8 ET 10, zéro échec
+  ```
+
+- **bash** `{"command": "sleep 420; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -3 /tmp/c8_analyse.log; echo \"---\"; grep -c \"pas$\" /tmp/c8_analyse.log; date '+%H:%M'", "description": "Check layer-8 analysis progress", "timeoutMs": 460000}`
+
+  ```
+pes : 1285 pas
+  pis : 760 pas
+  plt : 1122 pas
+---
+238
+13:26
+  ```
+
+### 🤖 Assistant
+
+⏵ **Glossaire livré — voici ce qu'il contient et pourquoi.**
+
+## Le trou était total
+
+Avant ce rafraîchissement, `docs/glossaire.md` (1682 lignes, 3 oct) ne contenait **aucune occurrence** de : *professeur, réservoir, oracle, invariance, attrition, fragmentation, boîte noire, pire paire, NLMS, naissance libre, constante témoin*. C'est-à-dire aucun des mots qui décrivent le travail en cours. Le glossaire couvrait le moteur, le matériel et la mesure — pas le pont.
+
+**1682 → 2162 lignes** (+480).
+
+## §10 — le vocabulaire du pont, en neuf sous-sections
+
+**10.1 Les acteurs** · professeur, boîte noire, tête, élève, pont, jeton, tokeniseur
+**10.2 Le réservoir** · réservoir, calcul par réservoir, récurrence, état, constante de temps, multi-échelle, gain d'entrée, `tanh`, saturation, jacobien, rayon spectral, oscillation/épilepsie
+**10.3 Structure** · couche (avec la règle de connectivité), neurone, naissance, naissance libre, concept commun, attrition, redondance, contribution, généalogie
+**10.4 La lecture** · lecture, rétropropagation, forme fermée, régression, moindres carrés, ridge, ride, Gram, caractéristiques, lecture quadratique, NLMS, règle delta
+**10.5 La mesure** · fidélité, cosinus, norme, témoin constant, apport propre, invariance, pire paire, oracle, vivier, hors/même vivier, panneau, écart à l'oracle, fragmentation, Pearson, Spearman, corrélation partielle, R², sur-apprentissage
+**10.6 Le professeur** · couche 0, couche cible, trace DRVF, RoPE, Qwen2.5
+**10.7 Les corpus** · UDHR, corpus aligné/non aligné, unité
+**10.8** · les huit résultats structurants **avec leur chiffre**
+**10.9** · les termes employés **dans** les définitions
+
+## §10.9 répond précisément à votre demande
+
+Tout mot servant à définir un autre a maintenant son entrée : **valeur propre**, **complément de Schur**, **inversion de matrice / résolution de système linéaire**, **moyenne glissante**, **algorithme itératif / convergence / point fixe**, **parcimonie**, **impulsion**, **frame temporelle**, **plongement**, **élagage**, **contexte**.
+
+Exemple, l'entrée qui manquait le plus :
+
+> **Point fixe** — une méthode itérative atteint un point fixe quand les étapes ne changent plus rien. **Attention : un point fixe n'est pas forcément la bonne réponse** — NLMS en atteint un à 0,4971 là où la ridge donne 0,6233.
+
+## §11 — références externes, en deux listes distinctes
+
+**Vérifiées (HTTP 200)** : [Qwen2.5 Technical Report](https://arxiv.org/abs/2412.15115) · [RoFormer / RoPE](https://arxiv.org/abs/2104.09864) · [SentencePiece](https://arxiv.org/abs/1808.06226) · [Hinton et al., distillation](https://arxiv.org/abs/1503.02531) · [Sennrich et al., sous-mots](https://arxiv.org/abs/1508.07909) · [Déclaration universelle des droits de l'homme](https://www.un.org/fr/about-us/universal-declaration-of-human-rights)
+
+**Cités par titre et auteurs, sans lien** — règle du dépôt, **on n'invente pas d'URL** : Jaeger 2001 (echo state) · Maass, Natschläger & Markram 2002 · Hoerl & Kennard 1970 (ridge) · Tikhonov 1943 · Widrow & Hoff 1960 (delta) · Haykin (*Adaptive Filter Theory*) · Rumelhart, Hinton & Williams 1986 · LeCun et al. 1998 · Lillicrap et al. 2020 (*Backpropagation and the brain*) · Strogatz.
+
+Et **§11.1 dit ce que ce rafraîchissement n'a pas fait** : pas de re-mesure des chiffres cités, et le vocabulaire `neuronspikes` (impulsion, frame, seuil, remise à zéro) n'est couvert qu'au §10.9 — s'il faut y migrer, une section entière lui sera due.
+
+---
+
+**Deux résultats en prime pendant ce temps.**
+
+**NLMS à pas fin change la conclusion du §10.4** : à η = 0,003, la règle locale atteint **0,6158** contre 0,6233 pour la ridge — **à 0,0075 près, en une passe**. Puis elle se dégrade (sur-apprentissage du vivier). Et le coût bascule : la Gram est ~11× moins chère à 80 caractéristiques, **NLMS devient moins chère au-delà de ~900** — exactement là où le pont se trouve à 800 neurones (2 496 caractéristiques, ~80 min de Gram). Le mode matriciel n'est pas à jeter : il est à **réserver aux petits réseaux**. Entrée du glossaire corrigée en conséquence.
+
+**Jalon** : **392/392 langues tracées aux couches 8 ET 10, zéro échec** · 400/400 unités. 241 min pour la passe couche 8, ~4 h 17 pour la couche 10 — dont 4 h 17 évitables, ma leçon la plus chère de la session. L'analyse couche 8 tourne (cache à 238/392).
+
+
+## Tour 176
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de représentation universelle), boîte noire (on ne lit du professeur que la couche à émuler, jamais sa tête ni ses jetons générés), aucune rétropropagation (A et B aléatoires et gelés, seule la lecture s'ajuste en forme fermée), et chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, TAILLE du réseau, avec le diagnostic oracle sur les deux panneaux (test hors vivier et validation du même vivier)."
+Round: 49/256
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ **Point d'état sur l'analyse couche 8.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== c8_analyse ===\"; tail -4 /tmp/c8_analyse.log; echo \"entrées tracées : $(grep -c 'pas$' /tmp/c8_analyse.log)\"; echo \"=== processus ===\"; pgrep -f \"c8_analyse|cache_pont|profil_langues\" | wc -l; echo \"=== caches prés … [141 caractères tronqués]`
+
+  ```
+=== c8_analyse ===
+  pov : 904 pas
+  ppl : 938 pas
+  prs : 1296 pas
+  quc : 1386 pas
+entrées tracées : 246
+=== processus ===
+4
+=== caches présents ===
+13:26
+  ```
+
+### 🤖 Assistant
+
+⏵ **J'ajoute le sous-échantillonnage au fit de croissance — il rendra l'entraînement complet abordable.**
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", "limit": 16, "offset": 181}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py</path>
+<type>file</type>
+<content>
+181:         if not self.normalise:
+182:             return X
+183:         m = X.mean(0); e = X.std(0)
+184:         return (X - m)/np.maximum(e, 1e-6)
+185: 
+186:     def phi(self, X):
+187:         """La base de lecture. Linéaire par défaut ; `[X, X²]` si `--lecture
+188:         quadratique`, ce qui reste en forme fermée (une seule inversion)."""
+189:         if not self.quadratique:
+190:             return X
+191:         return np.hstack([X, X*X])
+192: 
+193:     def ajuste(self, idx, ride, mt, quel=slice(None)):
+194:         X = self.phi(np.vstack([self._norm(self.X[i][:, idx]) for i in quel]))
+195:         Y = np.vstack([self.Y[i] for i in quel])
+196:         n = X.shape[1]
+
+(Showing lines 181-196 of 882. Use offset=197 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", "new_string": "    def ajuste(self, idx, ride, mt, quel=slice(None)):\n        # SOUS-ÉCHANTILLONNAGE DU FIT. La régression porte sur ~472 000 lignes :\n        # massivement sur-déterminée. Mesuré (§35.5) : gar … [706 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\ns = open('tools/pont_generatif.py').read()\nold = \"\"\"        self.a_neur = []\n        self.a_min = None\n        self.a_max = None\"\"\"\nnew = \"\"\"        self.a_neur = []\n        self.a_min = None\n      … [1436 caractères tronqués]`
+
+  ```
+ok
+syntaxe OK
+--- vérif import ---
+sous_ech dans __init__ : True
+sous_ech dans ajuste  : True
+  ```
+
+### 🤖 Assistant
+
+⏵ **Je vérifie les options disponibles avant de lancer l'entraînement complet.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -o 'opt(\"--[a-z-]*\"' tools/pont_generatif.py | sort -u | tr '\\n' ' '; echo; echo \"=== usage ===\"; sed -n '1,30p' tools/pont_generatif.py | grep -A20 \"Usage\"", "description": "List pont_generatif options"}`
+
+  ```
+opt("--a" opt("--arret-naissance" opt("--attrition" opt("--biais" opt("--centre-entree" opt("--couches-par-cycle" opt("--critere" opt("--cycles" opt("--gain-entree" opt("--gain-min" opt("--gain-naissance" opt("--graine" opt("--lecture" opt("--naissance" opt("--normalise" opt("--oracle" opt("--part" opt("--part-canaux" opt("--part-consist" opt("--part-langues" opt("--patience" opt("--plafond" opt("--ride" opt("--seuil" opt("--seuil-commun" opt("--seuil-contraste" opt("--seuil-part" opt("--sous-ech" opt("--val" 
+=== usage ===
+Usage :
+  pont_generatif.py <train.npz> <test.npz> [--a 0.2] [--ride 0.3] [--val 4]
+                    [--attrition 1] [--seuil 0.02] [--max-couches 9] [--graine 5]
+"""
+import sys
+import numpy as np
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\ns = open('tools/pont_generatif.py').read()\nold = \"\"\"    P.gain_entree = float(opt(\"--gain-entree\", 1.0))\"\"\"\nnew = \"\"\"    # RÉSERVOIR MULTI-ÉCHELLE : une constante de temps par neurone, étalées\n    # … [1215 caractères tronqués]`
+
+  ```
+ok
+syntaxe OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -3 /tmp/c8_analyse.log; echo \"--- caches c8 ---\"; ls -la /tmp/cache392c8*.npz 2>/dev/null | awk '{print $5, $9}'; pgrep -f c8_analyse | wc -l", "description": "Check layer-8 cache build progress"}`
+
+  ```
+rup : 1132 pas
+  rus : 929 pas
+  sag : 1508 pas
+--- caches c8 ---
+3
+  ```
+
+- **bash** `{"command": "sleep 600; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -3 /tmp/c8_analyse.log; echo \"entrées : $(grep -c 'pas$' /tmp/c8_analyse.log)\"; ls -la /tmp/cache392c8*.npz 2>/dev/null | awk '{print $5, $9}'; grep -n \"PROFIL\\|=== \" /tmp/c8_analyse.log | tail -4; date '+%H:%M'" … [74 caractères tronqués]`
+
+  ```
+(no output)
+[timed out after 600000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -3 /tmp/c8_analyse.log; echo \"entrées : $(grep -c 'pas$' /tmp/c8_analyse.log)\"; ls -la /tmp/cache392c8*.npz 2>/dev/null | awk '{print $5, $9}'; grep -n \"=== \" /tmp/c8_analyse.log | tail -4; date '+%H:%M'", "description": "Ch … [36 caractères tronqués]`
+
+  ```
+ztu : 1339 pas
+  zul : 1012 pas
+  zyb : 1206 pas
+entrées : 351
+899859889 /tmp/cache392c8_train.npz
+1:=== listes d'apprentissage et de test (mêmes que pour la couche 10) ===
+5:=== caches couche 8 ===
+13:37
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le cache couche 8 est construit (351 langues, 900 Mo). Je vérifie la sémantique des options avant de lancer l'entraînement complet.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n 'opt(\"--val\"\\|opt(\"--plafond\"\\|opt(\"--arret-naissance\"\\|opt(\"--patience\"\\|opt(\"--cycles\"\\|opt(\"--couches-par-cycle\"\\|opt(\"--attrition\"\\|opt(\"--seuil\"' tools/pont_generatif.py | head -12; echo \"=== extr … [118 caractères tronqués]`
+
+  ```
+491:    n_val = int(opt("--val", 4))
+492:    attrition = int(opt("--attrition", 1))
+493:    seuil = float(opt("--seuil", 0.02))
+497:    cycles = int(opt("--cycles", 3))
+498:    par_cycle = int(opt("--couches-par-cycle", 3))
+499:    plafond = int(opt("--plafond", 256))
+686:            patience = int(opt("--patience", 12))
+759:            arret_naissance = opt("--arret-naissance", "")
+=== extrait ===
+            arret_naissance = opt("--arret-naissance", "")
+            gain_naissance = float(opt("--gain-naissance", 0.001))
+            sans_gain = 0
+            val_prec = None
+            for _ in range(par_cycle):
+                # Cycle 1 : chaque couche DOUBLE (1,1,2,4,…) pour atteindre vite la
+                # zone utile. Cycles suivants : on AJOUTE sans doubler — le réseau a
+                # déjà une taille qui compte, et doubler le ferait exploser.
+                k = (max(1, P.compte_neurones) if cycle == 1
+                     else max(2, P.compte_neurones//4))
+                if P.compte_neurones + k > plafond:
+                    k = plafond - P.compte_neurones
+                if k <= 0:
+                    break
+                P.nait(k)
+                idx = np.arange(P
+… [279 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"libre\\|naissance_libre\" tools/pont_generatif.py | head -12; echo \"=== bloc naissance libre ===\"; sed -n '/if opt(\"--naissance\"/,/else:/p' tools/pont_generatif.py | head -50", "description": "Find free birth branch"}`
+
+  ```
+661:        # `--naissance libre` : UN neurone à la fois. Aucun chiffre rond ne doit
+684:        if opt("--naissance", "") == "libre":
+725:                                    "inv": mg, "pire": mig, "etape": "naissance libre"}
+=== bloc naissance libre ===
+        if opt("--naissance", "") == "libre":
+            gain_min = float(opt("--gain-min", 0.0002))
+            patience = int(opt("--patience", 12))
+            seuil_commun = float(opt("--seuil-commun", 0.35))
+            # part de neurones « concepts communs » exigée pour ouvrir une couche
+            seuil_part = float(opt("--seuil-part", 0.5))
+            seuil_contraste = float(opt("--seuil-contraste", 0.45))
+            val_max = -1.0
+            sans_gain = 0
+            couche_neuve = True          # la toute première couche doit naître
+            while P.compte_neurones < plafond:
+                P.nait(1, nouvelle_couche=couche_neuve)
+                if couche_neuve:
+                    # AJOUTER UNE COUCHE = RELIRE LE CORPUS et réajuster par
+                    # renforcement/atrophie, sans rétropropagation.
+                    P.renforce(P.compte_neurones-1, itr, mt, ride)
+                couche_neuve = False
+     
+… [397 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Découverte en lisant le code : chaque neurone coûte une passe complète sur 472 000 pas en Python (28 s). C'est ça qu'il faut vectoriser — 30× sur l'étape centrale.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la /tmp/cache392c8*.npz 2>/dev/null | awk '{print $5, $9}'; grep -n \"=== \\|PROFIL\" /tmp/c8_analyse.log | tail -3; tail -2 /tmp/c8_analyse.log; date '+%H:%M'", "description": "Check layer-8 analysis status"}`
+
+  ```
+968457615 /tmp/cache392c8_train.npz
+1:=== listes d'apprentissage et de test (mêmes que pour la couche 10) ===
+5:=== caches couche 8 ===
+  zul : 1012 pas
+  zyb : 1206 pas
+13:38
+  ```
+
+### 🤖 Assistant
+
+⏵ **J'implémente `nait_rapide` : même calcul, mais les langues d'un bloc au lieu d'une boucle par pas. Je vérifierai l'identité bit à bit.**
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", "limit": 30, "offset": 146}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py</path>
+<type>file</type>
+<content>
+146:                  if n_par > 0 else np.zeros((k, 0)))
+147:         W_self = self.rng.randn(k, deja + k) / np.sqrt(max(deja + k, 1))
+148:         B = self.rng.randn(k, self.H) / np.sqrt(self.H) * self.gain_entree
+149:         # constante de temps de chaque nouveau-né (multi-échelle si `a_min` posé)
+150:         if self.a_min is None:
+151:             a_n = np.full(k, self.a)
+152:         else:
+153:             a_n = np.exp(np.linspace(np.log(self.a_min), np.log(self.a_max), k))
+154: 
+155:         for i, (E, X) in enumerate(zip(self.E, self.X)):
+156:             T = len(E)
+157:             Xpar = (X[:, debut_par:debut_par+n_par] if n_par > 0
+158:                     else np.zeros((T, 0), dtype=np.float32))
+159:             S = np.zeros((T, k), dtype=np.float32)
+160:             s = np.zeros(deja + k)          # l'état de la couche : anciens + neufs
+161:             for t in range(T):
+162:                 # la couche PRÉCÉDENTE est lue au même instant t : elle est déjà
+163:                 # entièrement calculée, et elle ne bougera plus.
+164:                 drive = (Xp
+… [652 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", "new_string": "        # ---------------------------------------------------------------- BLOCS\n        #\n        # POURQUOI DES BLOCS. La boucle ci-dessus est `pour chaque langue : pour\n        # chaque pas` … [2815 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\ns = open('tools/pont_generatif.py').read()\nold = \"\"\"        # sous-échantillonnage du FIT seulement — l'évaluation reste entière\n        self.sous_ech = 1\"\"\"\nnew = \"\"\"        # sous-échantillonnage du … [2189 caractères tronqués]`
+
+  ```
+syntaxe OK
+k=  1 · bloc=  4 · écart max |X_ref - X_bloc| = 0.000e+00
+k=  1 · bloc= 16 · écart max |X_ref - X_bloc| = 0.000e+00
+k=  1 · bloc= 64 · écart max |X_ref - X_bloc| = 0.000e+00
+k=  7 · bloc=  4 · écart max |X_ref - X_bloc| = 0.000e+00
+k=  7 · bloc= 16 · écart max |X_ref - X_bloc| = 0.000e+00
+k=  7 · bloc= 64 · écart max |X_ref - X_bloc| = 0.000e+00
+k= 40 · bloc=  4 · écart max |X_ref - X_bloc| = 0.000e+00
+k= 40 · bloc= 16 · écart max |X_ref - X_bloc| = 0.000e+00
+k= 40 · bloc= 64 · écart max |X_ref - X_bloc| = 0.000e+00
+bloc   16 : nait(1) sur 25 langues (47749 pas) = 0.31 s
+bloc   64 : nait(1) sur 25 langues (47749 pas) = 0.31 s
+bloc 1000 : nait(1) sur 25 langues (47749 pas) = 0.31 s
+  ```
+
+### 🤖 Assistant
+
+⏵ **Identité bit à bit EXACTE (écart 0,000e+00) sur toutes les tailles. Je mesure le gain réel sur le corpus complet.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 python3 -u - <<'PY'\nimport sys, time, numpy as np\nsys.path.insert(0,'tools')\nfrom pont_generatif import Pont, charge\nt=time.time(); cltr,Etr,Ytr,H = charge('/tmp/cache392_train.npz')\nprint(f\"cache chargé en {time.ti … [396 caractères tronqués]`
+
+  ```
+cache chargé en 14 s · 351 langues · 472472 pas
+  bloc   8 : nait(1) =   2.58 s   (l'ancienne boucle : 28 s)
+  bloc  16 : nait(1) =   2.07 s   (l'ancienne boucle : 28 s)
+  bloc  32 : nait(1) =   1.76 s   (l'ancienne boucle : 28 s)
+  bloc  64 : nait(1) =   1.67 s   (l'ancienne boucle : 28 s)
+  ```
+
+### 🤖 Assistant
+
+⏵ **Gain mesuré : 28 s → 1,76 s par neurone, soit 16×, résultats bit à bit identiques. Je lance l'entraînement complet.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -i 's|self.bloc_langues = 16|self.bloc_langues = 32|' tools/pont_generatif.py && python3 -c \"import ast; ast.parse(open('tools/pont_generatif.py').read()); print('syntaxe OK')\" && python3 - <<'PY'\np='reports/rapport-toutes-lan … [3785 caractères tronqués]`
