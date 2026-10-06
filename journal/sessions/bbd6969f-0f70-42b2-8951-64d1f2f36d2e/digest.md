@@ -142733,3 +142733,287 @@ les 4 langues NON SERVIES (deu, srp, jpn, kor) :
 ⏵ **Verdict honnête : gain général réel, prédiction faiblement confirmée, mais les langues non servies ne bougent pas.**
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 28. Réservoir multi-échelle : gain réel, mais ce n'était pas la cause\n\n### 28.1 L'idée\n\nLa quantité de contenu par jeton varie de … [4675 caractères tronqués]`
+
+  ```
+482240c Réservoir multi-échelle : +8,8% sur l'apport propre, mais ce n'était pas la cause
+  ```
+
+### 🤖 Assistant
+
+⏵ **Prochain levier : la profondeur (2 couches à neurones constants) et l'accès direct à l'entrée.**
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"QUATRE LEVIERS POUR LES LANGUES NON SERVIES — mesurés sur le MÊME vivier.\n\nÉTABLI (§27) : l'apport propre du pont (`fidélité − témoin constant`) vaut +0,0885\nsur `dzo` mais +0,0014 sur `heb`. Sur `deu`, `jpn`, `kor`, `heb`, `srp`, ni la\nconstante ni le  … [5917 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/leviers_pont.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+### 🤖 Assistant
+
+⏵ **Les matrices B et C feraient 10 Go. Je passe en accumulation de Gram par langue — jamais de matrice complète.**
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"QUATRE LEVIERS POUR LES LANGUES NON SERVIES — mesurés sur le MÊME vivier.\n\nÉTABLI (§27) : l'apport propre du pont (`fidélité − témoin constant`) vaut +0,0885\nsur `dzo` mais +0,0014 sur `heb`. Sur `deu`, `jpn`, `kor`, `heb`, `srp`, ni la\nconstante ni le  … [6189 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/leviers_pont.py</path>
+<type>file</type>
+<content>
+Updated file
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/leviers_pont.py", "new_string": "    itr = np.arange(len(cltr))\n    mt = np.vstack([Ytr[i] for i in itr]).mean(axis=0)\n\n    # L'entrée est CENTRÉE par langue (son jeton moyen est retiré) pour les\n    # variantes B et C. Sans ce … [516 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/leviers_pont.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -i 's|np.hstack(\\[Xtr1\\[i\\], Etr\\[i\\]\\])|np.hstack([Xtr1[i], Etr_c[i]])|; s|np.hstack(\\[Xte1\\[i-len(cltr)\\], Ete\\[i-len(cltr)\\]\\])|np.hstack([Xte1[i-len(cltr)], Ete_c[i-len(cltr)]])|; s|lambda i: Etr\\[i\\] if i < len … [354 caractères tronqués]`
+
+  ```
+120:    B = evalue(lambda i: (np.hstack([Xtr1[i], Etr_c[i]]) if i < len(cltr)
+121:                          else np.hstack([Xte1[i-len(cltr)], Ete_c[i-len(cltr)]])),
+124:    C = evalue(lambda i: Etr_c[i] if i < len(cltr) else Ete_c[i - len(cltr)],
+syntaxe OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup timeout 5400 python3 -u tools/leviers_pont.py /tmp/cache392_train.npz /tmp/cache392_test.npz --neur 40 > /tmp/leviers.log 2>&1 &\necho \"lancé pid $!\"; date '+%H:%M'; echo \"=== analyse_final ===\"; tail -12 /tmp/analyse_final … [53 caractères tronqués]`
+
+  ```
+lancé pid 2509280
+08:21
+=== analyse_final ===
+=== ROMEO AND JULIET — corpus PARALLÈLE, 24 scènes alignées en/fr ===
+--- où est le plateau du professeur sur ce corpus (invariance par scène) ---
+  couche 0 :
+    24        2     -0.0734     -0.0734   en–fr
+
+MOYENNE sur 24 unités : invariance 0.1420 · pire paire 0.1420
+pire unité : -0.0888 · pire paire absolue -0.0888
+  couche 4 :
+  ```
+
+- **bash** `{"command": "sleep 360; echo \"=== leviers ===\"; cat /tmp/leviers.log; echo \"=== analyse_final ===\"; tail -6 /tmp/analyse_final.log; date '+%H:%M'", "description": "Wait for levers experiment", "timeoutMs": 400000}`
+
+  ```
+=== leviers ===
+# 351 langues d'apprentissage · 41 de test · 896/896 canaux
+# témoin constant moyen : 0.5678
+# A : 40 neurones · 1 couche(s) [40]
+
+=== A · référence — 1 couche de 40 ===
+#   80 caractéristiques · 472472 pas d'apprentissage · fidélité TEST moyenne 0.5972
+=== analyse_final ===
+  couche 8 :
+    24        2      0.2303      0.2303   en–fr
+
+MOYENNE sur 24 unités : invariance 0.5985 · pire paire 0.5985
+pire unité : 0.1943 · pire paire absolue 0.1943
+  couche 10 :
+08:27
+  ```
+
+- **bash** `{"command": "sleep 420; echo \"=== leviers ===\"; cat /tmp/leviers.log; echo; echo \"=== analyse_final ===\"; tail -6 /tmp/analyse_final.log; date '+%H:%M'", "description": "Continue waiting for levers", "timeoutMs": 460000}`
+
+  ```
+=== leviers ===
+# 351 langues d'apprentissage · 41 de test · 896/896 canaux
+# témoin constant moyen : 0.5678
+# A : 40 neurones · 1 couche(s) [40]
+
+=== A · référence — 1 couche de 40 ===
+#   80 caractéristiques · 472472 pas d'apprentissage · fidélité TEST moyenne 0.5972
+
+=== analyse_final ===
+  fr_19 : 1140 pas
+  fr_20 : 740 pas
+  fr_21 : 3051 pas
+  fr_22 : 1520 pas
+  fr_23 : 494 pas
+  fr_24 : 8184 pas
+08:34
+  ```
+
+- **bash** `{"command": "free -g; echo \"---\"; ps -o pid,etime,%cpu,%mem,rss,cmd -p $(pgrep -f leviers_pont | head -1) 2>/dev/null; echo \"--- top mémoire ---\"; ps -eo pid,rss,cmd --sort=-rss | head -5 | cut -c1-120", "description": "Check memory pressure"}`
+
+  ```
+total        used        free      shared  buff/cache   available
+Mem:             125          27           8           6          97          98
+Swap:             62          24          38
+---
+    PID     ELAPSED %CPU %MEM   RSS CMD
+2509280       13:27  0.0  0.0  2228 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup timeout 5400 python3 -u tools/leviers_pont.py /tmp/cache392_train.npz /tmp/cache392_test.npz --neur 40 > /tmp/leviers.log 2>&1 & echo "lancé pid $!"; date '+%H:%M'; echo "=== analyse_final ==="; tail -12 /tmp/analyse_final.log
+--- top mémoire ---
+    PID   RSS CMD
+2509283 6014624 python3 -u tools/leviers_pont.py /tmp/cache392_train.npz /tmp/cache392_test.npz --neur 40
+ 710008 4052652 node26 /home/stephane/.local/share/../bin/dsh --profile dsh-tui
+2510888 3520728 python3 tools/cache_pont.py /home/stephane/Data13TB/stephane/corpus/parallele_rj /tmp/cache_rj_fr.npz --
+2062778 827380 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui
+  ```
+
+- **bash** `{"command": "cat /tmp/trace392c8.sh; echo \"=== espace disque ===\"; df -h /home/stephane/Data13TB | tail -1", "description": "Read layer-8 trace script"}`
+
+  ```
+#!/bin/bash
+# RETRAÇAGE AVEC LA COUCHE 8 — la correction de cible, à grande échelle.
+#
+# Mesuré sur Romeo : viser la couche 8 plutôt que la 10 rapporte +0,0213 sur la
+# fidélité TRANSFÉRÉE, au prix de 0,0036 d'invariance. Sur l'UDHR, la couche 8 est
+# aussi plus interlingue que la 10 (0,5471 contre 0,5247 sur le panel propre).
+#
+# Le traçage des 392 langues n'avait écrit que les couches 0 et 10. On retrace donc
+# avec 0, 8 ET 10 — les trois dans le même fichier, pour que chaque trace soit
+# autoportante et qu'aucune fusion ne soit nécessaire.
+#
+# Convention INCHANGÉE : --ctx 4096 (aucune troncature), --n 0 (ni tête ni jetons
+# générés), --couches 0:11.
+set -u
+while ! grep -qx TERMINE /tmp/analyse_final.log 2>/dev/null; do sleep 120; done
+sleep 60
+cd /home/stephane/Data13TB/stephane/corpus/udhr
+D=/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/target/release/drave
+M=/home/stephane/Data13TB/stephane/modeles/gguf/qwen2.5-0.5b-instruct-q4_k_m.gguf
+mkdir -p udhr392_c8
+: > /tmp/trace392c8.log
+for f in /tmp/udhr10_toutes/*.txt; do
+  L=$(basename "$f" .txt)
+  [ -s udhr392_c8/$L.drvf ] && continue
+  S=$(date +%s)
+  if $D $M --infer --ctx 4096 --couches 0:11 --lot 1 --n 0 \
+      
+… [441 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **J'enchaîne l'analyse couche 8 automatiquement après le traçage, pour rester en autonomie complète.**
+
+- **bash** `{"command": "python3 -c \"\nimport json;d=json.load(open('/tmp/decoupe392.json'))\nprint('clés:', list(d.keys()))\nprint('test:', len(d['test']), d['test'][:6])\nfor k,v in d.items():\n    if isinstance(v,list): print(f'  {k}: {len(v)}')\n    else: print(f'  {k}: {v}')\n\"", "description": "Inspect  … [29 caractères tronqués]`
+
+  ```
+clés: ['test', 'validation', 'train']
+test: 41 ['acu', 'amh', 'ben', 'bum', 'csa', 'csw']
+  test: 41
+  validation: 50
+  train: 301
+  ```
+
+- **write** `{"content": "#!/bin/bash\n# ANALYSE DE LA COUCHE 8 À L'ÉCHELLE DES 392 LANGUES.\n#\n# Enchaîné après trace392c8.sh, qui ne fait que TRACER (il n'écrit pas de cache).\n# Ici : construction des caches couche 8, puis le MÊME profil par langue que\n# celui qui a établi le §27 — pour que la comparaison c … [3872 caractères tronqués]`
+
+  ```
+<path>/tmp/c8_analyse.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "chmod +x /tmp/c8_analyse.sh && bash -n /tmp/c8_analyse.sh && echo \"syntaxe OK\" && setsid nohup bash /tmp/c8_analyse.sh >/dev/null 2>&1 < /dev/null & disown; sleep 3; python3 - <<'PY'\nimport os\nmoi=os.getpid(); anc=set(); q=moi\nfor _ in range(8):\n    try:\n        st=open(f'/proc/{ … [617 caractères tronqués]`
+
+  ```
+syntaxe OK
+chaîne : analyse_final · c8_analyse · c8_apres · leviers_pont · trace_wiki · unites8
+=== leviers ===
+# 351 langues d'apprentissage · 41 de test · 896/896 canaux
+# témoin constant moyen : 0.5678
+# A : 40 neurones · 1 couche(s) [40]
+
+=== A · référence — 1 couche de 40 ===
+#   80 caractéristiques · 472472 pas d'apprentissage · fidélité TEST moyenne 0.5972
+  ```
+
+- **bash** `{"command": "sleep 600; echo \"=== leviers ===\"; cat /tmp/leviers.log; echo; echo \"=== analyse_final ===\"; tail -4 /tmp/analyse_final.log; echo; free -g | head -2; date '+%H:%M'", "description": "Wait longer for levers experiment", "timeoutMs": 640000}`
+
+  ```
+(no output)
+[timed out after 600000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "echo \"=== leviers ===\"; cat /tmp/leviers.log; echo; echo \"=== analyse_final ===\"; tail -4 /tmp/analyse_final.log; echo; free -g | head -2; date '+%H:%M'", "description": "Check levers and chain status"}`
+
+  ```
+=== leviers ===
+# 351 langues d'apprentissage · 41 de test · 896/896 canaux
+# témoin constant moyen : 0.5678
+# A : 40 neurones · 1 couche(s) [40]
+
+=== A · référence — 1 couche de 40 ===
+#   80 caractéristiques · 472472 pas d'apprentissage · fidélité TEST moyenne 0.5972
+
+=== B · + le jeton courant e_t dans la lecture ===
+#   1872 caractéristiques · 472472 pas d'apprentissage · fidélité TEST moyenne 0.6609
+
+=== analyse_final ===
+  fr_027 : 551 pas
+  fr_028 : 946 pas
+  fr_029 : 724 pas
+  fr_030 : 751 pas
+
+               total        used        free      shared  buff/cache   available
+Mem:             125          25          10           6          98         100
+08:46
+  ```
+
+### 🤖 Assistant
+
+⏵ **B (lecture voyant aussi le jeton courant) : 0,6609 contre 0,5972 — +0,064. J'attends le témoin C.**
+
+- **bash** `{"command": "sleep 540; echo \"=== leviers ===\"; cat /tmp/leviers.log; date '+%H:%M'", "description": "Wait for control C", "timeoutMs": 580000}`
+
+  ```
+=== leviers ===
+# 351 langues d'apprentissage · 41 de test · 896/896 canaux
+# témoin constant moyen : 0.5678
+# A : 40 neurones · 1 couche(s) [40]
+
+=== A · référence — 1 couche de 40 ===
+#   80 caractéristiques · 472472 pas d'apprentissage · fidélité TEST moyenne 0.5972
+
+=== B · + le jeton courant e_t dans la lecture ===
+#   1872 caractéristiques · 472472 pas d'apprentissage · fidélité TEST moyenne 0.6609
+
+=== C · l'entrée SEULE, aucun neurone — témoin du réservoir ===
+#   1792 caractéristiques · 472472 pas d'apprentissage · fidélité TEST moyenne 0.6536
+# D : 40 neurones · 2 couches [20, 20]
+
+=== D · 2 couches de 20 (même budget) ===
+#   80 caractéristiques · 472472 pas d'apprentissage · fidélité TEST moyenne 0.5979
+
+=== APPORT PROPRE (fidélité − témoin constant), trié ===
+# langue  témoin    A réf   B +e_t    C e_t     D 2c
+  heb      0.429  +0.0014  +0.0664  +0.0637  -0.0043
+  hsb      0.518  +0.0114  +0.0850  +0.0796  +0.0137
+  ilo      0.639  +0.0121  +0.0989  +0.0944  +0.0129
+  srp      0.418  +0.0128  +0.1076  +0.1005  +0.0134
+  tpi      0.600  +0.0133  +0.1024  +0.0988  +0.0178
+  deu      0.338  +0.0133  +0.1105  +0.1024  +0.0134
+  csa      0.618  +0.0138  +0.1112  +0.1071  +
+… [2636 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Résultat majeur : l'entrée SEULE sans aucun neurone fait 0,6536 contre 0,5972 pour le réservoir. Le réservoir n'apporte que +0,0073.**
+
+**C'est un résultat qui oblige à réviser le cadre d'évaluation.**
+
+| | fidélité | apport vs constante |
+|---|---:|---:|
+| témoin constant | 0,5678 | — |
+| **A · 40 neurones récurrents** | 0,5972 | +0,0294 |
+| **C · l'entrée SEULE, ZÉRO neurone** | **0,6536** | **+0,0857** |
+| B · réservoir **+** entrée | 0,6609 | +0,0931 |
+| D · 2 couches de 20 | 0,5979 | +0,0301 |
+
+**Une lecture linéaire-quadratique sur la couche 0 du professeur, sans un seul neurone, bat le réservoir de 40 neurones de +0,0564.** Et lui ajouter le réservoir ne rapporte que **+0,0073**.
+
+Et les langues « non servies » **le sont par C** : heb +0,0014 → +0,0637 · srp +0,0128 → +0,1005 · deu +0,0133 → +0,1024 · jpn +0,0216 → +0,1224 · kor +0,0192 → +0,0823. **L'information était dans l'entrée depuis le début ; c'est le réservoir qui la détruisait.**
+
+Enfin **D (2 couches de 20) = 0,5979 contre A (1 couche de 40) = 0,5972** : la profondeur n'achète rien à budget constant.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 29. Le réservoir ne sert presque à rien — et le vrai témoin n'était pas celui que je croyais\n\nDepuis le début, l'apport du pont est … [5970 caractères tronqués]`
