@@ -143732,3 +143732,78 @@ syntaxe OK
 ⏵ **J'écris l'introspection du bloc pendant que le calcul tourne.**
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 33. Introspection du bloc — ce que j'ai cassé, et ce que j'ai appris sur ma propre mesure\n\nLe mandat demande des rétrospectives en  … [7309 caractères tronqués]`
+
+  ```
+introspection écrite
+c36bb6b Introspection du bloc : trois erreurs, dont un chiffre de tête qui ne disait pas ce qu'il semblait
+123
+  ```
+
+- **bash** `{"command": "sleep 500; date '+%H:%M'", "description": "Wait for A200+input job", "timeoutMs": 540000}`
+
+  ```
+10:39
+  ```
+
+- **job_output** `{"job_id": "bash-232"}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "ps -eo pid,etime,%cpu,rss,nlwp,cmd --sort=-%cpu | head -4 | cut -c1-100; echo \"---\"; free -g | head -2; date '+%H:%M'", "description": "Check job process state"}`
+
+  ```
+PID     ELAPSED %CPU   RSS NLWP CMD
+2545854       00:10  471 1363728 21 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/targe
+2545887       00:00  400  4340    1 ps -eo pid,etime,%cpu,rss,nlwp,cmd --sort=-%cpu
+2545886       00:00 66.6  4024    1 bash -c ps -eo pid,etime,%cpu,rss,nlwp,cmd --sort=-%cpu | head -
+---
+               total        used        free      shared  buff/cache   available
+Mem:             125          20          13           7         100         105
+10:39
+  ```
+
+### 👤 Utilisateur
+
+background job bash-232 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c "import ast; ast.parse(open('tools/grand_et_entree.py').read()); print('syntaxe OK')" && python3 -u tools/grand_et_entree.py /tmp/cache392_train.npz /tmp/cache392_test.npz --grand 200 2>&1 | tail -30) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-232"}`
+
+  ```
+# 351 langues · 41 de test · 896/896 canaux
+# pont 200 neurones construit en 130 s
+
+=== MESURES ===
+  A200 seul                    400 caract. · fidélité 0.6218 · apport +0.0540
+  A200 + entrée LINÉAIRE      1296 caract. · fidélité 0.6738 · apport +0.1059
+
+# CE QUE LE RÉSERVOIR AJOUTE PAR-DESSUS L'ENTRÉE LINÉAIRE
+#   C_lin (entrée seule, 896 colonnes, §31) = 0,6364
+#   A200 + entrée  −  C_lin = +0.0374
+#   rappel : A40 + entrée quadratique − C_quad = +0,0073
+#   et A200 seul − A40 seul = +0.0246
+# table écrite : /tmp/grand_et_entree.csv
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ **RÉSULTAT MAJEUR qui RÉVISE le §29 : le réservoir n'était pas inutile, il était trop petit.**
+
+| configuration | caractéristiques | fidélité |
+|---|---:|---:|
+| témoin constant | 0 | 0,5678 |
+| A40 · réservoir | 80 | 0,5972 |
+| A200 · réservoir | 400 | 0,6218 |
+| C_lin · entrée seule | 896 | 0,6364 |
+| C_quad · entrée seule | 1 792 | 0,6536 |
+| A40 + entrée quadratique | 1 872 | 0,6609 |
+| **A200 + entrée linéaire** | **1 296** | **0,6738** |
+
+**A200 + entrée bat TOUT, avec MOINS de caractéristiques que C_quad (1 296 contre 1 792) et que A40+entrée (1 872).** Ce n'est donc pas de la capacité : les 400 états récurrents apportent quelque chose que l'expansion quadratique instantanée de l'entrée ne contient pas — une **mémoire** et une non-linéarité **du passé**, pas seulement du jeton courant.
+
+Et l'apport marginal du réservoir **croît avec sa taille** : +0,0073 à 40 neurones, **+0,0374 à 200**.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 34. Correction du §29 : le réservoir n'était pas inutile, il était TROP PETIT\n\nLe §29 concluait que « 40 neurones récurrents valent … [4703 caractères tronqués]`

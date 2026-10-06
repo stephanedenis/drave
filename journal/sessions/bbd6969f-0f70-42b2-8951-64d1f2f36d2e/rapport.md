@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 187.7 h |
+| Durée | 187.9 h |
 | Tours | 173 |
-| Messages | 8753 |
-| Appels d'outils | 8261 |
+| Messages | 8759 |
+| Appels d'outils | 8266 |
 | Fichiers touchés | 190 |
-| Commandes | 7016 |
+| Commandes | 7019 |
 | Sous-agents | 32 |
-| Commits | 628 |
+| Commits | 629 |
 | Compactages de contexte | 12 |
 
 ## Objectifs déclarés
@@ -8671,7 +8671,7 @@ Rien à faire de votre côté. Commit `0b91cb0`.
 
 ### Tour 173 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
 
-*136 appels d'outils.* Actions notables :
+*141 appels d'outils.* Actions notables :
 
 - bash — Profile Dzongkha representation vs others
 - bash — Profile representations per language
@@ -8687,11 +8687,25 @@ Rien à faire de votre côté. Commit `0b91cb0`.
 - bash — Read results section and defaults
 - bash — Read evalue and end of main
 - bash — Read nait and recalcule signatures
-- … et 107 autres
+- … et 110 autres
 
 **Synthèse produite :**
 
-⏵ **J'écris l'introspection du bloc pendant que le calcul tourne.**
+⏵ **RÉSULTAT MAJEUR qui RÉVISE le §29 : le réservoir n'était pas inutile, il était trop petit.**
+
+| configuration | caractéristiques | fidélité |
+|---|---:|---:|
+| témoin constant | 0 | 0,5678 |
+| A40 · réservoir | 80 | 0,5972 |
+| A200 · réservoir | 400 | 0,6218 |
+| C_lin · entrée seule | 896 | 0,6364 |
+| C_quad · entrée seule | 1 792 | 0,6536 |
+| A40 + entrée quadratique | 1 872 | 0,6609 |
+| **A200 + entrée linéaire** | **1 296** | **0,6738** |
+
+**A200 + entrée bat TOUT, avec MOINS de caractéristiques que C_quad (1 296 contre 1 792) et que A40+entrée (1 872).** Ce n'est donc pas de la capacité : les 400 états récurrents apportent quelque chose que l'expansion quadratique instantanée de l'entrée ne contient pas — une **mémoire** et une non-linéarité **du passé**, pas seulement du jeton courant.
+
+Et l'apport marginal du réservoir **croît avec sa taille** : +0,0073 à 40 neurones, **+0,0374 à 200**.
 
 ## 3. Travail accompli
 
@@ -8967,7 +8981,7 @@ Rien à faire de votre côté. Commit `0b91cb0`.
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6976 autres
+- … et 6979 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9743,4 +9757,5 @@ Rien à faire de votre côté. Commit `0b91cb0`.
 - Contrôle de capacité : l'entrée gagne par nature, sans que ce soit tranché  Objection du §29 : C (entrée seule, 1792 caractéristiques) bat A (40 neurones, 80 ca
 - Le §29 n'est PAS un artefact d'alignement — mesuré, et Wikipedia transfère mieux  LE SOUPÇON : l'UDHR est un seul texte en 392 langues, donc à la position t tou
 - Introspection du bloc : trois erreurs, dont un chiffre de tête qui ne disait pas ce qu'il semblait  RÉTROSPECTIVE EN MODE INTROSPECTION + REVUE ADVERSE AUTONOME
+- Correction du §29 : le réservoir n'était pas inutile, il était TROP PETIT  La mesure qui manquait — un réservoir large AVEC accès à l'entrée — renverse la concl
 
