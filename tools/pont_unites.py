@@ -26,7 +26,7 @@ def inv_par_unite(noms, Xs):
     """Pour chaque unité, la similarité entre langues de la DERNIÈRE position."""
     par = {}
     for nom, X in zip(noms, Xs):
-        L, _, k = nom.rpartition("_")
+        L, _, k = nom.partition("_")
         par.setdefault(k, {})[L] = X[-1]
     res = []
     for k in sorted(par):
@@ -60,7 +60,7 @@ def main():
         print(f"# sous-ensemble actif : {len(g)}/{H} canaux, masque lu sur l'apprentissage")
 
     # langues distinctes pour découper apprentissage / validation
-    def langue(n): return n.rpartition("_")[0]
+    def langue(n): return n.partition("_")[0]
     langsA = sorted({langue(n) for n in clA})
     n_val = max(2, len(langsA)//10)
     val = set(langsA[:n_val])

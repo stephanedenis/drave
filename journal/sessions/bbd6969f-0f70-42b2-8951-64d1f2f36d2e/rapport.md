@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 195.7 h |
-| Tours | 180 |
-| Messages | 9030 |
-| Appels d'outils | 8512 |
-| Fichiers touchés | 199 |
-| Commandes | 7221 |
+| Durée | 197.0 h |
+| Tours | 181 |
+| Messages | 9056 |
+| Appels d'outils | 8534 |
+| Fichiers touchés | 200 |
+| Commandes | 7240 |
 | Sous-agents | 32 |
-| Commits | 651 |
+| Commits | 652 |
 | Compactages de contexte | 12 |
 
 ## Objectifs déclarés
@@ -413,6 +413,8 @@
 **Tour 179** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 **Tour 180** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
+
+**Tour 181** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -9111,13 +9113,63 @@ L'attrition est descendue de 191 à 9 neurones **avec une validation qui baissai
 
 **Synthèse produite :**
 
-⏵ **Le pont transfère sur le corpus Wikipedia multi-domaine, sur TROIS paires de langues.**
+⏵ **Round 53 — trois résultats de fond, un incident d'exploitation, et un bug attrapé par mon propre garde-fou.**
 
-| paire | fid A | **fid B (transférée)** | invariance sortie | pire segment | oracle B | écart à l'oracle |
+\## 1. Le test que l'UDHR interdisait : « domaine ou langue » a enfin une réponse
+
+61 articles Wikipedia distincts × 6 langues — 915 paires inter-langues, 10 980 intra-langue :
+
+| couche | S_langue | S_domaine | écart | verdict |
+|---:|---:|---:|---:|---|
+| **0** | 0,0489 | 0,0535 | **−0,0046** | **LANGUE domine** |
+| **8** | **0,2158** | 0,2131 | **+0,0026** | **CONTENU domine** — de justesse |
+
+**À la couche 0 la langue domine. À la couche 8 l'ordre s'inverse, mais de 0,0026** — une égalité à l'épaisseur du trait. L'hypothèse « les mots d'un domaine sont plus communs à leur domaine qu'à leur langue » est **très faiblement soutenue à la couche 8, réfutée à la couche 0**.
+
+**Et cela disqualifie le chiffre de l'UDHR** : le §25 rapportait **+0,19** en faveur du contenu ; ici **+0,0026**, soit **70 fois moins**. L'écart de l'UDHR ne mesurait pas le domaine — il mesurait que ses dix « contenus différents » sont *le même texte*.
+
+\## 2. Le pont transfère sur Wikipedia, sur trois paires
+
+| paire | fid A | **fid B (transférée)** | perte | invariance | oracle B | écart |
 |---|---:|---:|---:|---:|---:|---:|
-| en ↔ fr | 0,6083 | **0,5444** | 0,9179 | 0,6556 | 0,6073 | +0,0629 |
-| en ↔ de | 0,6083 | **0,5426** | 0,8981 | 0,6224 | 0,6160 | +0,0734 |
-| fr ↔ de | 0,6169 | **0,5851** | 0,9204 | 0,7420 | 0,6247 | +0,0396 |
+| en↔fr | 0,6083 | **0,5444** | −0,0639 | 0,9179 | 0,6073 | +0,0629 |
+| en↔de | 0,6083 | **0,5426** | −0,0657 | 0,8981 | 0,6160 | +0,0734 |
+| fr↔de | 0,6169 | **0,5851** | **−0,0318** | 0,9204 | 0,6247 | **+0,0396** |
+
+**La paire la plus proche transfère deux fois mieux** — ce qui confirme que la perte mesure bien la distance entre langues. Et **le corpus riche transfère mieux que Romeo** (−0,0639 contre −0,0858 sur la même paire en–fr).
+
+\## 3. Un orphelin volait la moitié de la machine
+
+Le traçage tournait à **60 s par trace au lieu de 16** — 48 h au lieu de 13. Cause : un processus `drave` **orphelin**, ré-adopté par `systemd` après que j'ai tué son script, consommant **18 cœurs sur 40**. **Mon propre outil de nettoyage ne pouvait pas le voir** : il cherchait `trace_crime` dans la ligne de commande — présente dans celle du *script*, absente de celle de l'*enfant* `drave`.
+
+Il écrivait aussi un fichier **partiel** que le script aurait **sauté** en le croyant complet. Supprimé. Après nettoyage : **16,2 s par trace, 48 articles/h, corpus complet vers 03h30.** Et j'ai arrêté le traçage Crime au passage — **774 s par trace**, rapport de valeur manifestement défavorable face à 2 892 traces à 17 s.
+
+\## 4. Mon garde-fou du §30 a attrapé une SECONDE occurren
+… [1159 caractères tronqués]
+
+### Tour 181 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
+
+*22 appels d'outils.* Actions notables :
+
+- bash — Check chains status
+- bash — Inspect pont_unites tool
+- bash — Build language-split caches for Wikipedia
+- bash — Build test cache and run unit protocol
+- bash — Wait for the Wikipedia unit protocol
+- bash — Fix the label-splitting bug
+- bash — Fix the second occurrence and verify
+- bash — Relaunch the unit protocol with the fix
+- bash — Read the Wikipedia unit protocol
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/invariance_ou_appauvrissement.py`
+- bash — Run the invariance-or-impoverishment test
+- bash — Wait for the impoverishment test
+- job_output
+- bash — Test both poolings to rule out a position artifact
+- … et 7 autres
+
+**Synthèse produite :**
+
+⏵ **La croissance contrainte a abouti avec le protocole ENTIER, oracle sur les deux panneaux. Et le test d'appauvrissement qualifie tous les chiffres d'invariance du rapport.**
 
 ## 3. Travail accompli
 
@@ -9324,6 +9376,7 @@ L'attrition est descendue de 191 à 9 neurones **avec une validation qui baissai
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/extrait_crime.py` | 1 | 0 |
 | `/tmp/wiki_analyse.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/lecture_invariante.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/invariance_ou_appauvrissement.py` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -9402,7 +9455,7 @@ L'attrition est descendue de 191 à 9 neurones **avec une validation qui baissai
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 7181 autres
+- … et 7200 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10201,4 +10254,5 @@ L'attrition est descendue de 191 à 9 neurones **avec une validation qui baissai
 - Domaine ou langue : enfin testable, et la réponse est 'à égalité'  L'hypothèse était INTESTABLE sur l'UDHR — un seul texte traduit, donc ses 'contenus différent
 - Le garde-fou du §30 a attrapé une SECONDE occurrence du même bug  La croissance mu=0,1 a parcouru TOUTE la naissance et TOUTE l'attrition, puis a planté au diag
 - Le pont transfère sur le corpus Wikipedia multi-domaine, sur TROIS paires de langues  71 articles alignés × 6 langues, couche 8, 120 neurones, 1 couche.    pair
+- Croissance sous contrainte, protocole ENTIER : 147 neurones, oracle sur les deux panneaux  Première passe de croissance qui fournit TOUT ce que l'objectif deman
 

@@ -148596,3 +148596,492 @@ n48              48       1    0.6354   0.6230    0.6288   0.9255  0.7195 | comm
 | fr ↔ de | 0,6169 | **0,5851** | 0,9204 | 0,7420 | 0,6247 | +0,0396 |
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 55. Le pont transfère sur le corpus Wikipedia multi-domaine — et sur TROIS paires de langues\n\nLe corpus Wikipedia apparié (§45)  … [4844 caractères tronqués]`
+
+  ```
+44f0c9f Le pont transfère sur le corpus Wikipedia multi-domaine, sur TROIS paires de langues
+  ```
+
+### 🤖 Assistant
+
+⏵ **Round 53 — trois résultats de fond, un incident d'exploitation, et un bug attrapé par mon propre garde-fou.**
+
+## 1. Le test que l'UDHR interdisait : « domaine ou langue » a enfin une réponse
+
+61 articles Wikipedia distincts × 6 langues — 915 paires inter-langues, 10 980 intra-langue :
+
+| couche | S_langue | S_domaine | écart | verdict |
+|---:|---:|---:|---:|---|
+| **0** | 0,0489 | 0,0535 | **−0,0046** | **LANGUE domine** |
+| **8** | **0,2158** | 0,2131 | **+0,0026** | **CONTENU domine** — de justesse |
+
+**À la couche 0 la langue domine. À la couche 8 l'ordre s'inverse, mais de 0,0026** — une égalité à l'épaisseur du trait. L'hypothèse « les mots d'un domaine sont plus communs à leur domaine qu'à leur langue » est **très faiblement soutenue à la couche 8, réfutée à la couche 0**.
+
+**Et cela disqualifie le chiffre de l'UDHR** : le §25 rapportait **+0,19** en faveur du contenu ; ici **+0,0026**, soit **70 fois moins**. L'écart de l'UDHR ne mesurait pas le domaine — il mesurait que ses dix « contenus différents » sont *le même texte*.
+
+## 2. Le pont transfère sur Wikipedia, sur trois paires
+
+| paire | fid A | **fid B (transférée)** | perte | invariance | oracle B | écart |
+|---|---:|---:|---:|---:|---:|---:|
+| en↔fr | 0,6083 | **0,5444** | −0,0639 | 0,9179 | 0,6073 | +0,0629 |
+| en↔de | 0,6083 | **0,5426** | −0,0657 | 0,8981 | 0,6160 | +0,0734 |
+| fr↔de | 0,6169 | **0,5851** | **−0,0318** | 0,9204 | 0,6247 | **+0,0396** |
+
+**La paire la plus proche transfère deux fois mieux** — ce qui confirme que la perte mesure bien la distance entre langues. Et **le corpus riche transfère mieux que Romeo** (−0,0639 contre −0,0858 sur la même paire en–fr).
+
+## 3. Un orphelin volait la moitié de la machine
+
+Le traçage tournait à **60 s par trace au lieu de 16** — 48 h au lieu de 13. Cause : un processus `drave` **orphelin**, ré-adopté par `systemd` après que j'ai tué son script, consommant **18 cœurs sur 40**. **Mon propre outil de nettoyage ne pouvait pas le voir** : il cherchait `trace_crime` dans la ligne de commande — présente dans celle du *script*, absente de celle de l'*enfant* `drave`.
+
+Il écrivait aussi un fichier **partiel** que le script aurait **sauté** en le croyant complet. Supprimé. Après nettoyage : **16,2 s par trace, 48 articles/h, corpus complet vers 03h30.** Et j'ai arrêté le traçage Crime au passage — **774 s par trace**, rapport de valeur manifestement défavorable face à 2 892 traces à 17 s.
+
+## 4. Mon garde-fou du §30 a attrapé une SECONDE occurrence du même bug
+
+La croissance μ = 0,1 a parcouru **toute** la naissance et **toute** l'attrition, puis a planté : `généalogie désynchronisée : 6 constantes de temps pour 149 neurones`.
+
+**Le même oubli, à un troisième endroit** : la sauvegarde/restauration du « meilleur passage » de l'attrition met de côté `poids`, `X`, `couches`, `compte_neurones` — **mais pas `a_neur`**. Sans le garde-fou, `recalcule` aurait calculé **des trajectoires avec la mauvaise dynamique, en silence**. Un contrôle bruyant posé une fois a payé deux fois.
+
+Corrigé aux trois endroits, passe relancée. Et **confirmation de déterminisme au passage** : la relance reproduit *exactement* les points de la passe interrompue (à 40 neurones : 0,6278 · 0,9289 · 0,7329 dans les deux exécutions).
+
+## État
+
+| chaîne | avancement |
+|---|---|
+| **Croissance μ = 0,1** (relancée) | 48 neurones, reproduit la passe précédente à l'identique |
+| **Wikipedia apparié** | **84 articles / 482** · ~500 traces / 2 892 · fin vers 03h30 |
+| **Crime** | arrêté à 4 segments / 24, conservés, à reprendre hors concurrence |
+| **Analyse Wikipedia** | **terminée** — domaine/langue + 3 paires transférées |
+
+
+## Tour 181
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de représentation universelle), boîte noire (on ne lit du professeur que la couche à émuler, jamais sa tête ni ses jetons générés), aucune rétropropagation (A et B aléatoires et gelés, seule la lecture s'ajuste en forme fermée), et chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, TAILLE du réseau, avec le diagnostic oracle sur les deux panneaux (test hors vivier et validation du même vivier)."
+Round: 54/256
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ **Point d'état sur les chaînes.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== croissance mu=0.1 ===\"; tail -3 /tmp/croissance4.log; echo; echo \"wiki : $(grep -c '^ARTICLE' /tmp/trace_wiki_apparie.log) articles · $(ls /home/stephane/Data13TB/stephane/corpus/wiki_apparie/traces | wc -l) traces\"; aw … [196 caractères tronqués]`
+
+  ```
+=== croissance mu=0.1 ===
+n40              40       1    0.6338   0.6229    0.6278   0.9289  0.7329 | communs -1.357 (  0 %) · contraste 0.966
+n48              48       1    0.6354   0.6230    0.6288   0.9255  0.7195 | communs -1.345 (  0 %) · contraste 0.969
+n56              56       1    0.6368   0.6239    0.6285   0.9237  0.7491 | communs -1.354 (  0 %) · contraste 0.975
+
+wiki : 85 articles · 560 traces
+  427 traces · 32.8 s en moyenne
+18:31
+  ```
+
+### 🤖 Assistant
+
+⏵ **Je regarde l'outil qui traite des unités alignées — c'est la structure exacte du corpus Wikipedia (6 langues × N articles).**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -30 tools/pont_unites.py; echo \"=== options ===\"; grep -o 'opt(\"--[a-z-]*\"\\|argv\\[.*\\]' tools/pont_unites.py | sort -u | head -12", "description": "Inspect pont_unites tool"}`
+
+  ```
+#!/usr/bin/env python3
+"""pont_unites.py — notre pont, mesuré PAR UNITÉ.
+
+Pendant de `invariance_unites.py`, qui mesure le professeur. Ici on entraîne le
+pont sur les unités des langues d'apprentissage, on le transporte sur les langues
+tenues à l'écart, et on mesure :
+
+  - la fidélité (le pont contre la couche du professeur) ;
+  - l'invariance PAR UNITÉ de notre sortie : pour chaque unité k, la similarité
+    entre les langues, à contenu égal — dix points de mesure au lieu d'un ;
+  - la même chose pour le professeur, sur le même panel, pour référence ;
+  - le diagnostic oracle, sur les deux panneaux.
+
+Les entrées des caches doivent être nommées `<langue>_<k>` (c'est ce que produit
+le traçage par unité).
+
+Usage : pont_unites.py <train.npz> <test.npz> [--canaux 0.5] [--lecture quadratique]
+"""
+import sys
+import numpy as np
+sys.path.insert(0, "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools")
+from pont_generatif import Pont, charge, cos_lignes  # noqa: E402
+
+
+def inv_par_unite(noms, Xs):
+    """Pour chaque unité, la similarité entre langues de la DERNIÈRE position."""
+    par = {}
+    for nom, X in zip(noms, Xs):
+        L, _, k = nom.rpartition("_")
+        par.setdefault(k, {}
+… [218 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **`pont_unites.py` attend exactement la structure du corpus Wikipedia (`<langue>_<unité>`). Je monte un partage par LANGUE — c'est ce que l'objectif demande.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport os\nB='/home/stephane/Data13TB/stephane/corpus/wiki_apparie/traces'\nLANGS=['de','en','es','fr','it','pt']\ndispo={}\nfor L in LANGS:\n    dispo[L]=sorted(f[:-5] for f in os.listdir(B) if f.startswith(L+'_')  … [959 caractères tronqués]`
+
+  ```
+85 articles communs aux 6 langues
+apprentissage : 3 langues (de,en,fr) × 85 = 255
+test          : 3 langues (es,it,pt) × 85 = 255
+  fr_Alvar_Aalto : 560 pas
+/tmp/cache_wikitrain.npz : 255 langues · 139059 pas
+[timed out after 600000ms]
+[killed by signal: SIGTERM]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Cache d'apprentissage construit (255 entrées). Je construis le test et je lance le protocole complet par unité.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && B=/home/stephane/Data13TB/stephane/corpus/wiki_apparie/traces && setsid nohup bash -c \"cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/cache_pont.py $B /tmp/cache_wikitest.npz --couche 8 --langues /tmp/wiki_test. … [419 caractères tronqués]`
+
+  ```
+es_Airbus_A300 : 573 pas
+  es_Ajaccio : 579 pas
+lancé
+18:42
+  ```
+
+- **bash** `{"command": "sleep 560; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== protocole par unité, Wikipedia ===\"; cat /tmp/wiki_unites.log 2>/dev/null || tail -2 /tmp/wikitest_cache.log; echo; echo \"=== croissance ===\"; tail -2 /tmp/croissance4.log; echo \"articles wiki : $(grep -c '^ … [132 caractères tronqués]`
+
+  ```
+=== protocole par unité, Wikipedia ===
+# sous-ensemble actif : 194/896 canaux, masque lu sur l'apprentissage
+# 138 langues d'apprentissage · 220 unités apprises · 35 en validation · 255 unités de test
+
+=== croissance ===
+n112            112       1    0.6437   0.6291    0.6291   0.9044  0.6552 | communs -1.384 (  0 %) · contraste 0.986
+n120            120       1    0.6446   0.6298    0.6297   0.9026  0.6542 | communs -1.382 (  0 %) · contraste 0.987
+articles wiki : 100
+18:51
+  ```
+
+### 🤖 Assistant
+
+⏵ **Bug : `pont_unites` coupe au DERNIER souligné, donc `de_Alvar_Aalto` devient langue `de_Alvar` / unité `Aalto`. Je corrige et relance.**
+
+- **bash** `{"command": "python3 - <<'PY'\nimport os, signal\nmoi=os.getpid(); anc=set(); q=moi\nfor _ in range(10):\n    try:\n        st=open(f'/proc/{q}/stat').read().split(') ',1)[1].split(); q=int(st[1]); anc.add(q)\n    except Exception: break\ntues=[]\nfor d in os.listdir('/proc'):\n    if not d.isdigit( … [1006 caractères tronqués]`
+
+  ```
+tués : [2643773, 2643774, 2645110]
+tools/pont_unites.py:29:        L, _, k = nom.rpartition("_")
+tools/pont_unites.py:63:    def langue(n): return n.rpartition("_")[0]
+tools/pont_unites.py : 2 occurrence(s) corrigée(s)
+syntaxe OK
+29:        L, _, k = nom.partition("_")
+63:    def langue(n): return n.rpartition("_")[0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -i 's|def langue(n): return n.rpartition(\"_\")\\[0\\]|def langue(n): return n.partition(\"_\")[0]|' tools/pont_unites.py && grep -n \"partition\" tools/pont_unites.py && python3 -c \"import ast; ast.parse(open('tools/pont_unites … [327 caractères tronqués]`
+
+  ```
+29:        L, _, k = nom.partition("_")
+63:    def langue(n): return n.partition("_")[0]
+syntaxe OK
+  agr_00                       -> langue agr  unité 00
+  de_Alvar_Aalto               -> langue de   unité Alvar_Aalto
+  en_Albert_Einstein           -> langue en   unité Albert_Einstein
+  fr_Abbaye_de_Westminster     -> langue fr   unité Abbaye_de_Westminster
+  ```
+
+### 🤖 Assistant
+
+⏵ **Découpage vérifié sur les deux formats. Je relance le protocole complet par unité sur Wikipedia.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la /tmp/cache_wikitrain.npz /tmp/cache_wikitest.npz 2>/dev/null | awk '{print $5, $9}'; tail -1 /tmp/wikitest_cache.log 2>/dev/null; setsid nohup bash -c \"cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && { [ -s /tmp/cache_w … [512 caractères tronqués]`
+
+  ```
+324599131 /tmp/cache_wikitest.npz
+311425623 /tmp/cache_wikitrain.npz
+/tmp/cache_wikitest.npz : 255 langues · 144903 pas
+lancé
+18:52
+  ```
+
+- **bash** `{"command": "sleep 560; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== protocole par unité, Wikipedia (3 langues apprises / 3 test) ===\"; cat /tmp/wiki_unites.log 2>/dev/null; echo; echo \"articles wiki : $(grep -c '^ARTICLE' /tmp/trace_wiki_apparie.log)\"; date '+%H:%M'", "descri … [64 caractères tronqués]`
+
+  ```
+=== protocole par unité, Wikipedia (3 langues apprises / 3 test) ===
+# sous-ensemble actif : 194/896 canaux, masque lu sur l'apprentissage
+# 3 langues d'apprentissage · 85 unités apprises · 170 en validation · 255 unités de test
+
+# PONT : 120 neurones · 1 couches [120]
+#   fidélité validation   : 0.5684
+#   fidélité TEST         : 0.5962
+#   oracle TEST           : 0.6089   (écart +0.0127)
+#   invariance TEST       : 0.9274 · pire 0.5990
+
+# INVARIANCE PAR UNITÉ — professeur contre notre sortie
+ unité  langues  professeur  notre sortie  pire (nous)   pire couple
+     A        3      0.3690        0.9717       0.9686   es–pt
+  ABBA        3      0.3717        0.9611       0.9518   it–pt
+   ABC        3      0.3699        0.9632       0.9575   it–pt
+AGM_65_Maverick        3      0.2491        0.9278       0.8928   es–pt
+AGM_88_HARM        3      0.2583        0.9484       0.9227   it–pt
+AIM_120_AMRAAM        3      0.3576        0.9460       0.9208   it–pt
+AIM_54_Phoenix        3      0.4787        0.9455       0.9110   es–it
+AIM_7_Sparrow        3      0.2599        0.9525       0.9419   es–it
+A_Little_Night_Music        3      0.3582        0.9682       0.9594   es–it
+A_cappella    
+… [5359 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Résultat majeur, et il ouvre LA question non tranchée du rapport : notre invariance de 0,928 face à un professeur à 0,347 — invariance ou appauvrissement ?**
+
+| | professeur | notre sortie |
+|---|---:|---:|
+| invariance inter-langue (même article) | **0,3470** | **0,9281** |
+| fidélité TEST / oracle / écart | — | 0,5962 / 0,6089 / **+0,0127** |
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"invariance_ou_appauvrissement.py — LA question non tranchée du rapport.\n\nDepuis le §41, un même fait revient : **notre sortie est beaucoup plus invariante\nentre langues que la représentation du professeur qu'elle imite.** Sur l'UDHR :\n0,95 contre 0,65.  … [4587 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/invariance_ou_appauvrissement.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"import ast; ast.parse(open('tools/invariance_ou_appauvrissement.py').read()); print('syntaxe OK')\" && python3 -u tools/invariance_ou_appauvrissement.py /tmp/cache_wikitrain.npz /tmp/cache_wikitest.npz --neur 120 2>&1 |  … [97 caractères tronqués]`
+
+  ```
+started background job bash-243
+  ```
+
+- **bash** `{"command": "sleep 480; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== croissance mu=0.1 ===\"; tail -2 /tmp/croissance4.log; echo \"articles wiki : $(grep -c '^ARTICLE' /tmp/trace_wiki_apparie.log)\"; date '+%H:%M'", "description": "Wait for the impoverishment test", "timeoutMs":  … [7 caractères tronqués]`
+
+  ```
+=== croissance mu=0.1 ===
+n144            144       1    0.6462   0.6311    0.6297   0.8969  0.6473 | communs -1.379 (  0 %) · contraste 0.989
+n145            145       1    0.6463   0.6311    0.6297   0.8965  0.6445 | communs -1.381 (  0 %) · contraste 0.989
+articles wiki : 114
+19:11
+  ```
+
+### 👤 Utilisateur
+
+background job bash-243 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c "import ast; ast.parse(open('tools/invariance_ou_appauvrissement.py').read()); print('syntaxe OK')" && python3 -u tools/invariance_ou_appauvrissement.py /tmp/cache_wikitrain.npz /tmp/cache_wikitest.npz --neur 120 2>&1 | tail -14) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-243"}`
+
+  ```
+syntaxe OK
+# 255 entrées d'apprentissage · 255 de test · 896 canaux
+# réseau 120 neurones · 1 couche(s)
+
+#                     S_langue  S_domaine     écart  rapport
+  NOTRE SORTIE          0.7491     0.7495   -0.0005     1.00
+  PROFESSEUR            0.2337     0.2163   +0.0174     1.08
+
+# (255 entrées · S_langue sur les articles vus dans ≥ 2 langues)
+
+# LECTURE : si S_domaine ≈ S_langue, notre sortie ne distingue plus les
+# contenus — elle a aplati. Si S_domaine << S_langue, elle distingue les
+# contenus ET rapproche les langues : c'est ce qu'un pont doit faire.
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Réponse, et elle est dure : notre S_domaine (0,7495) ÉGALE notre S_langue (0,7491) — rapport 1,00. Mais je dois écarter un artefact de dernière position avant de conclure.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\ns = open('tools/invariance_ou_appauvrissement.py').read()\nold = \"\"\"    notre = np.array([(P.phi(P._norm(Xte[k])) @ W + mt)[-1]\n                      for k in range(len(clte))])\n    prof = np.array([Yte[k][- … [2010 caractères tronqués]`
+
+  ```
+started background job bash-244
+  ```
+
+- **bash** `{"command": "sleep 500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== croissance ===\"; tail -2 /tmp/croissance4.log; date '+%H:%M'", "description": "Wait for the pooling test", "timeoutMs": 540000}`
+
+  ```
+=== croissance ===
+retrait de 37 (recalculé)         112       1    0.6360   0.6299    0.6300
+retrait de 28 (recalculé)          84       1    0.6339   0.6279    0.6289
+19:19
+  ```
+
+### 👤 Utilisateur
+
+background job bash-244 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'
+s = open('tools/invariance_ou_appauvrissement.py').read()
+old = """    notre = np.array([(P.phi(P._norm(Xte[k])) @ W + mt)[-1]
+                      for k in range(len(clte))])
+    prof = np.array([Yte[k][-1] for k in range(len(clte))])"""
+new = """    # POOLING. La dernière position d'un résumé d'article est peut-être stéréotypée
+    # (« fin d'article »), ce qui fabriquerait un faux effondrement. On mesure donc
+    # DEUX pooling : la dernière position ET la moyenne sur toutes les positions.
+    # Si les deux donnent le même verdict, ce n'est pas un artefact de position.
+    pool = opt("--pool", "les_deux")
+
+    def sortie(k, mode):
+        A = P.phi(P._norm(Xte[k])) @ W + mt
+        return A[-1] if mode == "derniere" else A.mean(0)
+
+    def cible(k, mode):
+        B = Yte[k]
+        return B[-1] if mode == "derniere" else B.mean(0)
+
+    modes = ["derniere", "moyenne"] if pool == "les_deux" else [pool]
+    for mode in modes:
+        notre = np.array([sortie(k, mode) for k in range(len(clte))])
+        prof = np.array([cible(k, mode) for k in range(len(clte))])
+        print(f"\\n=== POOLING : {mode.upper()} ===")
+        print(f"# {'':<18}{'S_langue':>10}{'S_domaine':>11}{'écart':>10}{'rapport':>9}")
+        for nom, V in (("NOTRE SORTIE", notre), ("PROFESSEUR", prof)):
+            sl, sd = deux_axes(clte, V)
+            ml, md = float(np.mean(sl)), float(np.mean(sd))
+            print(f"  {nom:<18}{ml:>10.4f}{md:>11.4f}{ml-md:>+10.4f}"
+                  f"{ml/max(md,1e-9):>9.2f}")
+    return 0
+
+    notre = np.array([(P.phi(P._norm(Xte[k])) @ W + mt)[-1]
+                      for k in range(len(clte))])
+    prof = np.array([Yte[k][-1] for k in range(len(clte))])"""
+assert old in s
+s = s.replace(old, new, 1)
+open('tools/invariance_ou_appauvrissement.py','w').write(s)
+PYEOF
+python3 -c "import ast; ast.parse(open('tools/invariance_ou_appauvrissement.py').read()); print('syntaxe OK')" && python3 -u tools/invariance_ou_appauvrissement.py /tmp/cache_wikitrain.npz /tmp/cache_wikitest.npz --neur 120 2>&1 | tail -16) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-244"}`
+
+  ```
+syntaxe OK
+# 255 entrées d'apprentissage · 255 de test · 896 canaux
+# réseau 120 neurones · 1 couche(s)
+
+=== POOLING : DERNIERE ===
+#                     S_langue  S_domaine     écart  rapport
+  NOTRE SORTIE          0.7491     0.7495   -0.0005     1.00
+  PROFESSEUR            0.2337     0.2163   +0.0174     1.08
+
+=== POOLING : MOYENNE ===
+#                     S_langue  S_domaine     écart  rapport
+  NOTRE SORTIE          0.9835     0.9866   -0.0031     1.00
+  PROFESSEUR            0.9454     0.8937   +0.0517     1.06
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Verdict confirmé sur DEUX pooling : notre sortie ne sépare plus contenu et langue (rapport 1,00), le professeur si (+0,017 à +0,052). C'est un APPAUVRISSEMENT. Et cela remet en cause le levier μ du §48 — je le teste.**
+
+| pooling | | S_langue | S_domaine | écart | rapport |
+|---|---|---:|---:|---:|---:|
+| dernière | notre | 0,7491 | 0,7495 | −0,0005 | **1,00** |
+| dernière | professeur | 0,2337 | 0,2163 | **+0,0174** | 1,08 |
+| moyenne | notre | 0,9835 | 0,9866 | −0,0031 | **1,00** |
+| moyenne | professeur | 0,9454 | 0,8937 | **+0,0517** | 1,06 |
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\ns = open('tools/invariance_ou_appauvrissement.py').read()\nold = \"\"\"    W = P.ajuste(idx, ride, mt, iap)\"\"\"\nnew = \"\"\"    P.mu_inv = float(opt(\"--mu-inv\", 0.0))\n    if P.mu_inv > 0:\n        print(f\" … [879 caractères tronqués]`
+
+  ```
+syntaxe OK
+lancé
+19:20
+  ```
+
+- **bash** `{"command": "sleep 560; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== mu et appauvrissement ===\"; cat /tmp/mu_appauvissement.log 2>/dev/null; echo; echo \"=== croissance ===\"; tail -3 /tmp/croissance4.log; date '+%H:%M'", "description": "Read the mu impoverishment test", "timeou … [13 caractères tronqués]`
+
+  ```
+=== mu et appauvrissement ===
+########## mu = 0 ##########
+#                     S_langue  S_domaine     écart  rapport
+  NOTRE SORTIE          0.9835     0.9866   -0.0031     1.00
+  PROFESSEUR            0.9454     0.8937   +0.0517     1.06
+########## mu = 0.1 ##########
+# pénalité d'invariance mu = 0.1
+#                     S_langue  S_domaine     écart  rapport
+  NOTRE SORTIE          0.9871     0.9908   -0.0037     1.00
+  PROFESSEUR            0.9454     0.8937   +0.0517     1.06
+TERMINE
+
+=== croissance ===
+retrait de 5 (recalculé)           16       1    0.6200   0.6177    0.6189
+retrait de 4 (recalculé)           12       1    0.6180   0.6171    0.6173
+retrait de 3 (recalculé)            9       1    0.6165   0.6159    0.6154
+19:30
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le μ n'est PAS la cause : l'écrasement est déjà total à μ = 0. Contrôle indispensable — est-ce général, ou propre au vivier de 3 langues de Wikipedia ?**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la /tmp/cache_unites_train.npz /tmp/cache_unites_test.npz 2>/dev/null | awk '{print $5, $9}'; setsid nohup python3 -u tools/invariance_ou_appauvrissement.py /tmp/cache_unites_train.npz /tmp/cache_unites_test.npz --neur 120 --pool … [194 caractères tronqués]`
+
+  ```
+82098232 /tmp/cache_unites_test.npz
+52431452 /tmp/cache_unites_train.npz
+contrôle UDHR lancé
+19:30
+  ```
+
+- **bash** `{"command": "sleep 420; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== contrôle UDHR ===\"; cat /tmp/appauv_udhr.log 2>/dev/null; echo; echo \"=== croissance ===\"; tail -3 /tmp/croissance4.log; date '+%H:%M'", "description": "Read the UDHR control", "timeoutMs": 460000}`
+
+  ```
+=== contrôle UDHR ===
+# 170 entrées d'apprentissage · 230 de test · 896 canaux
+# réseau 120 neurones · 1 couche(s)
+
+=== POOLING : MOYENNE ===
+#                     S_langue  S_domaine     écart  rapport
+  NOTRE SORTIE          0.8824     0.9907   -0.1083     0.89
+  PROFESSEUR            0.6939     0.9421   -0.2482     0.74
+
+=== croissance ===
+  invariance TEST  : 0.8958 · pire paire 0.6392
+
+# état final du réseau : 149 neurones · 1 couches ([149])
+19:37
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le contrôle RENVERSE la conclusion simple. Et la croissance μ = 0,1 a abouti.**
+
+| corpus | | S_langue | S_domaine | écart | rapport |
+|---|---|---:|---:|---:|---:|
+| **UDHR** (300 langues) | notre | 0,8824 | **0,9907** | **−0,1083** | **0,89** |
+| | professeur | 0,6939 | 0,9421 | −0,2482 | 0,74 |
+| **Wikipedia** (3 langues) | notre | 0,9835 | 0,9866 | −0,0031 | 1,00 |
+| | professeur | 0,9454 | 0,8937 | +0,0517 | 1,06 |
+
+- **bash** `{"command": "sleep 400; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== CROISSANCE mu=0,1 — RÉSULTAT FINAL ===\"; tail -30 /tmp/croissance4.log; date '+%H:%M'", "description": "Read the final constrained growth result", "timeoutMs": 440000}`
+
+  ```
+=== CROISSANCE mu=0,1 — RÉSULTAT FINAL ===
+
+########## CYCLE 1 — ATTRITION (redondance) ##########
+après                           neur.  couch.  fid appr  fid VAL  fid TEST
+retrait de 37 (recalculé)         112       1    0.6360   0.6299    0.6300
+retrait de 28 (recalculé)          84       1    0.6339   0.6279    0.6289
+retrait de 21 (recalculé)          63       1    0.6317   0.6261    0.6277
+retrait de 15 (recalculé)          48       1    0.6292   0.6246    0.6270
+retrait de 12 (recalculé)          36       1    0.6272   0.6229    0.6251
+retrait de 9 (recalculé)           27       1    0.6249   0.6219    0.6247
+retrait de 6 (recalculé)           21       1    0.6225   0.6199    0.6234
+retrait de 5 (recalculé)           16       1    0.6200   0.6177    0.6189
+retrait de 4 (recalculé)           12       1    0.6180   0.6171    0.6173
+retrait de 3 (recalculé)            9       1    0.6165   0.6159    0.6154
+retrait de 2 (recalculé)            7       1    0.6139   0.6124    0.6123
+retrait de 1 (recalculé)            6       1    0.6130   0.6117    0.6098
+retrait REFUSÉ (1 → VAL 0.6109)      6       —         —   0.6117
+  → retour au MEILLEUR passage    149       1         —   0.
+… [596 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **La croissance contrainte a abouti avec le protocole ENTIER, oracle sur les deux panneaux. Et le test d'appauvrissement qualifie tous les chiffres d'invariance du rapport.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 56. Croissance sous contrainte, protocole ENTIER : 147 neurones, oracle sur les deux panneaux\n\nPremière passe de croissance qui  … [3175 caractères tronqués]`
