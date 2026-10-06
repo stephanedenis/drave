@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 182.0 h |
-| Tours | 160 |
-| Messages | 8529 |
-| Appels d'outils | 8073 |
-| Fichiers touchés | 181 |
-| Commandes | 6873 |
+| Durée | 182.4 h |
+| Tours | 161 |
+| Messages | 8536 |
+| Appels d'outils | 8078 |
+| Fichiers touchés | 182 |
+| Commandes | 6877 |
 | Sous-agents | 32 |
-| Commits | 614 |
+| Commits | 615 |
 | Compactages de contexte | 11 |
 
 ## Objectifs déclarés
@@ -373,6 +373,8 @@
 **Tour 159** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 **Tour 160** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
+
+**Tour 161** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -8066,9 +8068,57 @@ Rien à faire de votre côté. Commit `75d590a`.
 
 **Synthèse produite :**
 
-⏵ **Les deux mêmes incohérences sont dans `recapitulatif.md`** : le titre du §7 affirme l'invariant des +0,020 « quelle que soit la cible », corrigé au §15 ; et tout le document est bâti autour de la **couche 10**, désormais connue comme sous-optimale.
+⏵ Audit complet : **cinq incohérences corrigées** au total dans mes propres documents.
 
-**Les deux mêmes incohérences sont dans `recapitulatif.md`** : le titre du §7 affirme l'invariant « quelle que soit la cible » — corrigé au §15 — et tout le document est bâti autour de la **couche 10**, désormais connue comme sous-optimale.
+\## Ce que l'audit a trouvé au total
+
+| document | incohérence | correction |
+|---|---|---|
+| `rapport-toutes-langues.md` §14 | affirmait l'invariant sans pointer le §16 qui le corrige | pointeur |
+| `rapport-plateau-semantique.md` | plateau à la couche 10 (périmé) | correction en fin + chiffres |
+| `rapport-pont-generatif.md` | **titre** promettant ce que le corps réfute | titre corrigé |
+| `recapitulatif.md` | bâti sur la couche 10, sous-optimale | encadré en tête |
+| `recapitulatif.md` §7 | « +0,020 **quelle que soit la cible** » | pointeur vers §15 |
+
+**Le motif est le même dans les cinq cas** : une correction faite à un endroit et **pas propagée ailleurs**. C'est le revers de la méthode que j'ai suivie — corriger honnêtement chaque erreur dès qu'elle est trouvée : les corrections s'accumulent localement, et le document finit par se contredire.
+
+**Un rapport qui contient sa propre contradiction est pire qu'un rapport périmé** : il laisse le choix de la conclusion au lecteur, qui prendra celle qu'il lira en premier.
+
+J'ai choisi de **conserver les versions périmées** — elles font partie du travail, et les effacer serait réécrire l'histoire — mais chaque section corrigée porte maintenant un pointeur vers sa correction, et chaque document s'ouvre sur ce qui a changé depuis.
+
+\## État
+
+| | |
+|---|---|
+| Wikipedia | **139/480**, 0 échec |
+| chaîne | 6 scripts vivants |
+| rapports | **audités, cinq incohérences corrigées** |
+
+Rien à faire de votre côté. Commits `6b4a75e`, `75d590a`, `47152fd`.
+
+### Tour 161 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
+
+*5 appels d'outils.* Actions notables :
+
+- write `/tmp/rj_graines.sh`
+- bash — Test robustness of layer 8 gain across seeds
+- bash — Wait for seed robustness results
+- bash — Compile seed robustness results
+- bash — Commit the robustness verification
+
+**Synthèse produite :**
+
+⏵ **Résultat solide : le gain est reproductible au millième près.**
+
+| graine | couche 10 | **couche 8** | gain | invariance 8 / 10 |
+|---|---:|---:|---:|---:|
+| 5 | 0,5802 | 0,6015 | **+0,0213** | 0,9504 / 0,9540 |
+| 11 | 0,5826 | 0,6039 | **+0,0213** | 0,9611 / 0,9666 |
+| 23 | 0,5828 | 0,6046 | **+0,0218** | 0,9505 / 0,9597 |
+
+**Gain moyen +0,0215, minimum +0,0213, maximum +0,0218** — une amplitude de 0,0005 sur trois graines. Et la variation entre graines n'est que de **0,0026**, soit **8× plus petite que le gain**.
+
+Le résultat est donc **robuste**, et l'invariance de sortie est systématiquement plus basse à la couche 8 (de 0,006 en moyenne) — le prix payé est lui aussi stable.
 
 ## 3. Travail accompli
 
@@ -8257,6 +8307,7 @@ Rien à faire de votre côté. Commit `75d590a`.
 | `/tmp/romeo8.sh` | 1 | 0 |
 | `/tmp/trace392c8.sh` | 1 | 0 |
 | `/tmp/unites8.sh` | 1 | 0 |
+| `/tmp/rj_graines.sh` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -8335,7 +8386,7 @@ Rien à faire de votre côté. Commit `75d590a`.
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6833 autres
+- … et 6837 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9097,4 +9148,5 @@ Rien à faire de votre côté. Commit `75d590a`.
 - Audit de cohérence : deux affirmations périmées pointées dans mes propres rapports  J'ai relu les rapports en cherchant les affirmations que j'ai CORRIGÉES en c
 - Audit (suite) : le TITRE du rapport génératif promettait ce que son corps réfute  '# Le pont GÉNÉRATIF : le réseau naît, puis l'attrition le fait généraliser'  
 - Audit (fin) : les deux mêmes incohérences étaient dans recapitulatif.md  1. Tout le document émule la COUCHE 10, désormais connue comme sous-optimale : le    pl
+- Le gain de la couche 8 est ROBUSTE : +0,0215 sur trois graines (variation 0,0005)  Le §19 reposait sur UNE SEULE mesure. Vérification sur trois graines :    gra
 

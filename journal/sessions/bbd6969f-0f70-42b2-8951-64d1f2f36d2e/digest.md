@@ -139089,3 +139089,186 @@ en 136 15s
 **Les deux mêmes incohérences sont dans `recapitulatif.md`** : le titre du §7 affirme l'invariant « quelle que soit la cible » — corrigé au §15 — et tout le document est bâti autour de la **couche 10**, désormais connue comme sous-optimale.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/recapitulatif.md'; s=open(p).read()\n\n# 1) encadré en tête : la cible a changé\nvieux = \"État au 06/10, soir. Un seul professeur : **Qwen2.5-0.5B, couche 10** (896 canaux).\"\nneuf = (\"État au 06/10. U … [2908 caractères tronqués]`
+
+  ```
+recapitulatif.md : encadré en tête + pointeur au §7
+# Récapitulatif — méthode appliquée et résultats
+
+État au 06/10. Un seul professeur : **Qwen2.5-0.5B**.
+
+> **DEUX AVERTISSEMENTS POUR LIRE CE DOCUMENT.**
+>
+> **1. La couche cible a changé.** Tout ce document émule la **couche 10**. Des
+> mesures postérieures (Romeo et UDHR) montrent que le plateau du professeur est à
+> la **couche 8** : 0,5985 contre 0,5703 sur Romeo, 0,5471 contre 0,5247 sur
+> l'UDHR. Viser la couche 8 fait gagner **+0,0213 de fidélité transférée**. Les
+> chiffres ci-dessous restent exacts — ils portent sur la couche 10 — mais ils ne
+> décrivent pas le meilleur pont possible. Voir `rapport-toutes-langues.md` §17-19.
+>
+> **2. Le §7 est corrigé au §15.** Le §7 annonce « l'invariant : le pont apporte
+> +0,020, **quelle que soit la cible** ». Le §15 montre que c'est une **plage de
+> +0,020 à +0,032** : les sept périmètres qui donnaient +0,0197 ± 0,0009
+> partageaient le **même panel de 46 langues**. Les deux sections sont conservées
+> — la correction fait partie du travail — mais ne les lisez pas séparément.
+Toutes les mesures portent sur le corpus UDHR, dix unités, 40 langues
+d'entraînement dont 10 de validation, **
+… [143 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Audit complet : **cinq incohérences corrigées** au total dans mes propres documents.
+
+## Ce que l'audit a trouvé au total
+
+| document | incohérence | correction |
+|---|---|---|
+| `rapport-toutes-langues.md` §14 | affirmait l'invariant sans pointer le §16 qui le corrige | pointeur |
+| `rapport-plateau-semantique.md` | plateau à la couche 10 (périmé) | correction en fin + chiffres |
+| `rapport-pont-generatif.md` | **titre** promettant ce que le corps réfute | titre corrigé |
+| `recapitulatif.md` | bâti sur la couche 10, sous-optimale | encadré en tête |
+| `recapitulatif.md` §7 | « +0,020 **quelle que soit la cible** » | pointeur vers §15 |
+
+**Le motif est le même dans les cinq cas** : une correction faite à un endroit et **pas propagée ailleurs**. C'est le revers de la méthode que j'ai suivie — corriger honnêtement chaque erreur dès qu'elle est trouvée : les corrections s'accumulent localement, et le document finit par se contredire.
+
+**Un rapport qui contient sa propre contradiction est pire qu'un rapport périmé** : il laisse le choix de la conclusion au lecteur, qui prendra celle qu'il lira en premier.
+
+J'ai choisi de **conserver les versions périmées** — elles font partie du travail, et les effacer serait réécrire l'histoire — mais chaque section corrigée porte maintenant un pointeur vers sa correction, et chaque document s'ouvre sur ce qui a changé depuis.
+
+## État
+
+| | |
+|---|---|
+| Wikipedia | **139/480**, 0 échec |
+| chaîne | 6 scripts vivants |
+| rapports | **audités, cinq incohérences corrigées** |
+
+Rien à faire de votre côté. Commits `6b4a75e`, `75d590a`, `47152fd`.
+
+
+## Tour 161
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de représentation universelle), boîte noire (on ne lit du professeur que la couche à émuler, jamais sa tête ni ses jetons générés), aucune rétropropagation (A et B aléatoires et gelés, seule la lecture s'ajuste en forme fermée), et chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, TAILLE du réseau, avec le diagnostic oracle sur les deux panneaux (test hors vivier et validation du même vivier)."
+Round: 34/256
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Les rapports sont audités et la chaîne tourne. J'utilise l'attente pour **vérifier la robustesse du résultat clé** : le gain de +0,0213 de la couche 8 vient d'une **seule mesure**. Je le teste sur d'autres graines.
+
+Les rapports sont audités et la chaîne tourne. J'utilise l'attente pour **vérifier la robustesse du résultat clé** : le gain de +0,0213 de la couche 8 repose sur une **seule mesure**. Je le teste sur d'autres graines.
+
+- **write** `{"content": "#!/bin/bash\n# ROBUSTESSE DU GAIN DE LA COUCHE 8 — le résultat clé ne doit pas être un coup de chance.\n#\n# Mesuré une fois : viser la couche 8 plutôt que la 10 donne +0,0213 de fidélité\n# TRANSFÉRÉE (0,5802 -> 0,6015). Une seule graine ne prouve rien — c'est\n# exactement la leçon du … [738 caractères tronqués]`
+
+  ```
+<path>/tmp/rj_graines.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && chmod +x /tmp/rj_graines.sh && bash -n /tmp/rj_graines.sh && ls -la /tmp/cache_rj8_en.npz /tmp/cache_rj8_fr.npz /tmp/cache_rj_en.npz /tmp/cache_rj_fr.npz 2>&1 | awk '{print \"  \"$5\" \"$9}'; setsid nohup bash /tmp/rj_graines.sh >/de … [250 caractères tronqués]`
+
+  ```
+82894803 /tmp/cache_rj8_en.npz
+  138564219 /tmp/cache_rj8_fr.npz
+  83857467 /tmp/cache_rj_en.npz
+  139662286 /tmp/cache_rj_fr.npz
+########## couche 10 · graine 5 ##########
+# invariance du PROFESSEUR (segment par segment) : 0.6532 · pire segment 0.2966
+#   fidélité sur A        : 0.6660
+#   fidélité sur B        : 0.5802   (transférée, sans réapprentissage)
+#   invariance de SORTIE  : 0.9540 · pire segment 0.8738
+#   taille                : 120 neurones · 1 couches [120]
+########## couche 8 · graine 5 ##########
+# invariance du PROFESSEUR (segment par segment) : 0.7044 · pire segment 0.2964
+#   fidélité sur A        : 0.6967
+#   fidélité sur B        : 0.6015   (transférée, sans réapprentissage)
+#   invariance de SORTIE  : 0.9504 · pire segment 0.8650
+#   taille                : 120 neurones · 1 couches [120]
+########## couche 10 · graine 11 ##########
+--- Wikipedia : 165/480
+  ```
+
+### 🤖 Assistant
+
+⏵ Les deux premières mesures reproduisent exactement. J'attends les six autres.
+
+- **bash** `{"command": "sleep 580; cat /tmp/rj_graines.log; echo \"--- TERMINE ? ---\"; grep -c TERMINE /tmp/rj_graines.log; echo \"Wikipedia : $(ls /home/stephane/Data13TB/stephane/corpus/wiki_traces | wc -l)/480\"", "description": "Wait for seed robustness results", "timeoutMs": 620000}`
+
+  ```
+########## couche 10 · graine 5 ##########
+# invariance du PROFESSEUR (segment par segment) : 0.6532 · pire segment 0.2966
+#   fidélité sur A        : 0.6660
+#   fidélité sur B        : 0.5802   (transférée, sans réapprentissage)
+#   invariance de SORTIE  : 0.9540 · pire segment 0.8738
+#   taille                : 120 neurones · 1 couches [120]
+########## couche 8 · graine 5 ##########
+# invariance du PROFESSEUR (segment par segment) : 0.7044 · pire segment 0.2964
+#   fidélité sur A        : 0.6967
+#   fidélité sur B        : 0.6015   (transférée, sans réapprentissage)
+#   invariance de SORTIE  : 0.9504 · pire segment 0.8650
+#   taille                : 120 neurones · 1 couches [120]
+########## couche 10 · graine 11 ##########
+# invariance du PROFESSEUR (segment par segment) : 0.6532 · pire segment 0.2966
+#   fidélité sur A        : 0.6687
+#   fidélité sur B        : 0.5826   (transférée, sans réapprentissage)
+#   invariance de SORTIE  : 0.9666 · pire segment 0.8874
+#   taille                : 120 neurones · 1 couches [120]
+########## couche 8 · graine 11 ##########
+# invariance du PROFESSEUR (segment par segment) : 0.7044 · pire segment 0.2964
+#   fidélité sur A        : 0.6989
+#   
+… [613 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le gain de la couche 8 est remarquablement stable : +0,0213 sur DEUX graines différentes.**
+
+| graine | couche 10 (fid transférée) | couche 8 | gain |
+|---|---:|---:|---:|
+| 5 | 0,5802 | 0,6015 | **+0,0213** |
+| 11 | 0,5826 | 0,6039 | **+0,0213** |
+| 23 | 0,5828 | en cours | ? |
+
+Et la variation entre graines est de **0,0026** (couche 10 : 0,5802 / 0,5826 / 0,5828) — soit **8× plus petite que le gain**. Le résultat n'est donc pas un coup de chance.
+
+Et la variation entre graines n'est que de **0,0026** (0,5802 / 0,5826 / 0,5828) — soit **8× plus petite que le gain de +0,0213**. Le résultat n'est pas un coup de chance.
+
+- **bash** `{"command": "sleep 400; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport re\nt=open('/tmp/rj_graines.log').read()\nblocs=re.split(r\"########## couche (\\d+) · graine (\\d+) ##########\", t)\nres={}\nfor i in range(1,len(blocs),3):\n    c,g,corps=blocs[i],blocs[i+1],blocs … [1296 caractères tronqués]`
+
+  ```
+graine  couche 10   couche 8      gain   inv.8  inv.10
+      5     0.5802     0.6015   +0.0213  0.9504  0.9540
+     11     0.5826     0.6039   +0.0213  0.9611  0.9666
+     23     0.5828     0.6046   +0.0218  0.9505  0.9597
+
+gain de la couche 8 : moyenne +0.0215 · min +0.0213 · max +0.0218
+variation entre graines (couche 10) : 0.0026
+le gain est 8x plus grand que la variation entre graines
+0
+Wikipedia : 217/480
+  ```
+
+### 🤖 Assistant
+
+⏵ **Résultat solide : le gain est reproductible au millième près.**
+
+| graine | couche 10 | **couche 8** | gain | invariance 8 / 10 |
+|---|---:|---:|---:|---:|
+| 5 | 0,5802 | 0,6015 | **+0,0213** | 0,9504 / 0,9540 |
+| 11 | 0,5826 | 0,6039 | **+0,0213** | 0,9611 / 0,9666 |
+| 23 | 0,5828 | 0,6046 | **+0,0218** | 0,9505 / 0,9597 |
+
+**Gain moyen +0,0215, minimum +0,0213, maximum +0,0218** — une amplitude de 0,0005 sur trois graines. Et la variation entre graines n'est que de **0,0026**, soit **8× plus petite que le gain**.
+
+Le résultat est donc **robuste**, et l'invariance de sortie est systématiquement plus basse à la couche 8 (de 0,006 en moyenne) — le prix payé est lui aussi stable.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 20. Le gain de la couche 8 est ROBUSTE — testé sur trois graines\n\nLe §19 reposait sur **une seule mesure**. Une seule graine ne pro … [2727 caractères tronqués]`
