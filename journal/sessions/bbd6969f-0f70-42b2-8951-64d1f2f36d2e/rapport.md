@@ -5,15 +5,15 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 185.0 h |
+| Durée | 185.4 h |
 | Tours | 173 |
-| Messages | 8613 |
-| Appels d'outils | 8128 |
-| Fichiers touchés | 182 |
-| Commandes | 6925 |
+| Messages | 8675 |
+| Appels d'outils | 8183 |
+| Fichiers touchés | 183 |
+| Commandes | 6964 |
 | Sous-agents | 32 |
-| Commits | 621 |
-| Compactages de contexte | 11 |
+| Commits | 622 |
+| Compactages de contexte | 12 |
 
 ## Objectifs déclarés
 
@@ -8671,29 +8671,27 @@ Rien à faire de votre côté. Commit `0b91cb0`.
 
 ### Tour 173 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
 
-*3 appels d'outils.* Actions notables :
+*58 appels d'outils.* Actions notables :
 
 - bash — Profile Dzongkha representation vs others
 - bash — Profile representations per language
 - bash — Commit the norm finding
+- bash — Check chain status and time
+- bash — Inspect Pont API
+- bash — Read charge and Pont core methods
+- bash — Read _norm and locate caches
+- bash — Find cache output paths
+- bash — Find caches in tmp and read chain scripts
+- bash — Locate fit pipeline in pont_generatif
+- bash — Read option parsing and channel selection
+- bash — Read results section and defaults
+- bash — Read evalue and end of main
+- bash — Read nait and recalcule signatures
+- … et 38 autres
 
 **Synthèse produite :**
 
-⏵ **Résultat net, et il désigne un mécanisme.**
-
-| couche 10, cosinus au centroïde | | norme |
-|---|---:|---:|
-| **csw** (cri des plaines) | **0,4419** | **479** |
-| **dzo** (dzongkha) | **0,4651** | **468** |
-| amh (amharique) | 0,6090 | **537** |
-| … | | |
-| guc, haw, acu | 0,87-0,88 | ~282-289 |
-
-**Les langues les plus éloignées ont systématiquement une norme plus grande** — csw 479, dzo 468, amh 537 contre ~282-289 pour les plus proches.
-
-**Et les trois plus éloignées ont un point commun** : des écritures **très éloignées du latin** — le **cri syllabique**, le **tibétain**, l'**éthiopien**. Le quatrième (fuf, 0,68) est à écriture latine.
-
-Ce n'est pas une preuve de mécanisme, mais c'est une **corrélation nette sur 22 langues** : plus l'écriture est loin du latin, plus la représentation du professeur est **forte en magnitude et divergente en direction**.
+⏵ **Image nette et contrôlée. Je réécris la section 27 — ma première version attribuait à la norme ce qui appartient à la fragmentation.**
 
 ## 3. Travail accompli
 
@@ -8851,7 +8849,7 @@ Ce n'est pas une preuve de mécanisme, mais c'est une **corrélation nette sur 2
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/31-le-regroupement-par-experts-mesure-et-k3-au-complet.md` | 1 | 1 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-prefill-par-experts.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/engine.rs` | 0 | 1 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py` | 0 | 30 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py` | 0 | 33 |
 | `/tmp/chaine_propre.sh` | 1 | 0 |
 | `/tmp/analyse_propre.sh` | 1 | 0 |
 | `/tmp/stop2.py` | 1 | 0 |
@@ -8883,6 +8881,7 @@ Ce n'est pas une preuve de mécanisme, mais c'est une **corrélation nette sur 2
 | `/tmp/trace392c8.sh` | 1 | 0 |
 | `/tmp/unites8.sh` | 1 | 0 |
 | `/tmp/rj_graines.sh` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/profil_langues.py` | 1 | 4 |
 
 ### Sous-agents lancés
 
@@ -8961,7 +8960,7 @@ Ce n'est pas une preuve de mécanisme, mais c'est une **corrélation nette sur 2
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6885 autres
+- … et 6924 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9089,7 +9088,7 @@ Ce n'est pas une preuve de mécanisme, mais c'est une **corrélation nette sur 2
 
 ## 5. Erreurs rencontrées
 
-385 sorties en erreur ou divergentes. Les premières :
+389 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -9730,4 +9729,5 @@ Ce n'est pas une preuve de mécanisme, mais c'est une **corrélation nette sur 2
 - Signal précoce : la couche 8 gagne aussi au niveau des UNITÉS (+0,0381)  Mesure sur les 198 premières unités (17 langues complètes × 10 unités), donc AVANT la f
 - La pire paire (dzo) : hypothèse de longueur testée et RÉFUTÉE  La mesure par unité nomme la pire paire : deu-dzo (couche 10), ces-dzo (couche 8). Le dzongkha (B
 - Les langues éloignées partagent une NORME plus grande, pas une densité différente  Profil des 22 langues complètes (couche 10), trié par cosinus au centroïde : 
+- Le pont ne sert pas toutes les langues également — et la fidélité EST le témoin constant  PROFIL DES 41 LANGUES DE TEST (896 canaux, 40 neurones / 1 couche, qua
 

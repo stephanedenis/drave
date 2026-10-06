@@ -141071,3 +141071,1345 @@ langue   norme  actifs  cos au centroïde
 Ce n'est pas une preuve de mécanisme, mais c'est une **corrélation nette sur 22 langues** : plus l'écriture est loin du latin, plus la représentation du professeur est **forte en magnitude et divergente en direction**.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 26. Ce qui distingue les langues éloignées : une NORME plus grande\n\nAprès avoir réfuté l'hypothèse de longueur (§25), j'ai profilé  … [3632 caractères tronqués]`
+
+  ```
+37429ed Les langues éloignées partagent une NORME plus grande, pas une densité différente
+unités : 239/400
+  ```
+
+
+  ```
+-rwx--x--x. /tmp/ab-after.sh
+  -rwxr-xr-x. /tmp/adv_trap_inner.sh
+  -rwxr-xr-x. /tmp/affinite.sh
+  -rwxr-xr-x. /tmp/after30b.sh
+  -rwxr-xr-x. /tmp/after30b_test.sh
+  -rwx--x--x. /tmp/aig2.sh
+  -rwxr-xr-x. /tmp/aig4.sh
+  -rwx--x--x. /tmp/aig5.sh
+  -rwxr-xr-x. /tmp/aig_s5.sh
+  -rwxr-xr-x. /tmp/aig_s6b.sh
+  -rwxr-xr-x. /tmp/aig_s6.sh
+  -rwxr-xr-x. /tmp/aig_s7.sh
+  -rwxr-xr-x. /tmp/aiguille_1p5b.sh
+  -rwxr-xr-x. /tmp/aiguille30b.sh
+  -rwxr-xr-x. /tmp/aiguille_campagne.sh
+  -rwxr-xr-x. /tmp/aiguille_kv2048.sh
+  -rwxr-xr-x. /tmp/aiguille_kv.sh
+  -rwxr-xr-x. /tmp/aiguille_lance.sh
+  -rwxr-xr-x. /tmp/aiguille_topk.sh
+  -rwxr-xr-x. /tmp/analyse30b.sh
+  -rwx--x--x. /tmp/analyse30.sh
+  -rwx--x--x. /tmp/analyse392.sh
+  -rw-------. /tmp/analyse_final.sh
+  -rwx--x--x. /tmp/analyse_propre.sh
+  -rwxr-xr-x. /tmp/attn512.sh
+  -rwx--x--x. /tmp/audela_4096.sh
+  -rw-r--r--. /tmp/audit.sh
+  -rwx--x--x. /tmp/balayage30.sh
+  -rwxr-xr-x. /tmp/balayage_cascade.sh
+  -rwxr-xr-x. /tmp/balayage.sh
+  -rwxr-xr-x. /tmp/banc_chrono_lot.sh
+  -rwxr-xr-x. /tmp/banc_final.sh
+  -rwxr-xr-x. /tmp/banc_gpu2.sh
+  -rwxr-xr-x. /tmp/banc_gpu.sh
+  -rwxr-xr-x. /tmp/banc_kv2.sh
+  -rwxr-xr-x. /tmp/banc_kv_clés.sh
+  -rwxr-xr-x. /tm
+… [3956 caractères tronqués]
+  ```
+
+
+> **Compactage de contexte** — résumé conservé :
+
+```
+## Primary Request and Intent
+- Standing mandate (verbatim): "Continue en blocs de 2h jusqu'à demain 8h HAE. pour chacun des blocs/sprints tu dois être en autonomie totale… les rétros seront des introspections, les revues seront en mode adverse autonome."
+- Mission (verbatim, earlier): "On est à émuler en boite noire l'ensemble des premières couches des gros modèles afin d'avoir notre propre pont linguistique-sémantique brut. Il ne s'agit pas de reproduire couche par couche le gros modèle, mais d'avoir un modèle n-couche récurrentes capable de répondre au premier niveau abstrait (le premier niveau à dominance non-linguistique) d'un gros modèle. Tu as le droit d'utiliser toutes les ressources de cette machine incluant les GPU."
+- Correction de cap (verbatim): "On ne devrait pas travailler sur plus qu'un modèle professeur et on ne devrait pas se retrouver avec des chiffres ronds comme nombre de neurones ou couches, c'est suspect… on ne devrait avoir qu'un sous-ensemble de la couche sémantique de référence (professeur) active pour chaque énoncé pour chaque langue."
+- Architecture (verbatim): "ajouter des neurones, ne signifie pas nécessairement ajouter des couches immédiatement. avant de pouvoir faire un 'ou exclusif' il faut d'abord apprendre à faire le 'et' et le 'ou'"; then "on ne génère pas une couche à la saturation de la première, mais quand on trouve une émergence de concepts communs et qu'on doit distinguer les sorties avec des poids négatifs provenant de notre abstraction. L'ajout d'une couche suppose donc une relecture du corpus pour réajuster les poids par renforcement/atrophie (pas de backprop)".
+- Current goal `goal-975ab185-c6a1-415f-8dcd-38bf09cf8196` (active, revision 1, roundsStarted 46): extend bridge to ALL UDHR languages, then large multilingual corpora for richer teachers; one teacher at a time; black-box; no backprop; every claim measured.
+- Latest user asks: (a) verify human language-zone layer count vs results, (b) domain-specific vocabulary hypothesis, (c) would child-language training give a more generic model (Panini)?; (d) do I exploit teacher determinism / all hardware; (e) would Colab help; (f) GPU mystery.
+
+## Key Technical Concepts
+- Rust engine `drave-core`, binary `drave-core/target/release/drave`; env vars validated by `tests_vars::les_vars_lues_sont_completes`.
+- DRVF trace format v1/v2/v3 (header 14 bytes: "DRVF" + u16 version + u32 n_layer + u32 hidden; record header 14 bytes: u16 couche + u32 pos + u32 n + f32 scale).
+- Trace flags: `--lot 1` mandatory; `--trace-flux <f>`; `--trace-couches` filters ONLY writing; `--couches a:b` bounds EXECUTION (b EXCLUSIVE) but NOT loading; `--n 0` suppresses head + generated tokens.
+- Bridge: `s_t = (1−a)s_{t−1} + a·tanh(P·s_{t−1} + B·e_t)`, `y_t = W·s_t + moy`; **P and B random and FROZEN**, only W fitted (ridge, closed form). No backprop.
+- REAL layers: layer 0 reads `e_t` + own layer; layer c reads ONLY layer c−1 (entire) + own layer's earlier neurons.
+- Free birth (`--naissance libre`): one neuron at a time; new layer only when (1) current layer exhausted, (2) common concepts exist (`communs_fin`), (3) readout contrastive. `--seuil-part` controls the DECISION (default 0.5); optimum measured at 0.25.
+- Attrition: remove neurons, RECOMPUTE survivors' trajectories (never mask columns), criterion = redundancy (`score = expliqué × contribution`, one Gram inversion); returns BEST passage, not last.
+- Quadratic readout (`--lecture quadratique`): phi = [X, X²], closed form. Lift +0.020 → +0.024.
+- Law: `fid TEST ≈ 1.1150 · (invariance de la cible) − 0.0848`, r = 0.9570 (SAME law for the constant baseline, slope identical to 0.4%).
+- Two-panel diagnostic: TEST (out-of-pool) + VALIDATION (same pool as training); oracle = readout fitted on the evaluated set.
+- Stratified script split from Unicode code points: 22 scripts found, all in the test set.
+
+## Files and Code
+- `drave-core/src/model.rs`: `load_partiel(path, ctx, n_threads, dense, keep, auto, q4, b6, couche
+… [10020 caractères tronqués]
+```
+
+### 👤 Utilisateur
+
+This is an automatically generated checkpoint condensing an earlier span of the conversation to free up context. Treat the captured context as established background and build on it without restating it. Continue the task directly from the messages that follow, without acknowledging this checkpoint.
+
+<compacted-summary>
+## Primary Request and Intent
+- Standing mandate (verbatim): "Continue en blocs de 2h jusqu'à demain 8h HAE. pour chacun des blocs/sprints tu dois être en autonomie totale… les rétros seront des introspections, les revues seront en mode adverse autonome."
+- Mission (verbatim, earlier): "On est à émuler en boite noire l'ensemble des premières couches des gros modèles afin d'avoir notre propre pont linguistique-sémantique brut. Il ne s'agit pas de reproduire couche par couche le gros modèle, mais d'avoir un modèle n-couche récurrentes capable de répondre au premier niveau abstrait (le premier niveau à dominance non-linguistique) d'un gros modèle. Tu as le droit d'utiliser toutes les ressources de cette machine incluant les GPU."
+- Correction de cap (verbatim): "On ne devrait pas travailler sur plus qu'un modèle professeur et on ne devrait pas se retrouver avec des chiffres ronds comme nombre de neurones ou couches, c'est suspect… on ne devrait avoir qu'un sous-ensemble de la couche sémantique de référence (professeur) active pour chaque énoncé pour chaque langue."
+- Architecture (verbatim): "ajouter des neurones, ne signifie pas nécessairement ajouter des couches immédiatement. avant de pouvoir faire un 'ou exclusif' il faut d'abord apprendre à faire le 'et' et le 'ou'"; then "on ne génère pas une couche à la saturation de la première, mais quand on trouve une émergence de concepts communs et qu'on doit distinguer les sorties avec des poids négatifs provenant de notre abstraction. L'ajout d'une couche suppose donc une relecture du corpus pour réajuster les poids par renforcement/atrophie (pas de backprop)".
+- Current goal `goal-975ab185-c6a1-415f-8dcd-38bf09cf8196` (active, revision 1, roundsStarted 46): extend bridge to ALL UDHR languages, then large multilingual corpora for richer teachers; one teacher at a time; black-box; no backprop; every claim measured.
+- Latest user asks: (a) verify human language-zone layer count vs results, (b) domain-specific vocabulary hypothesis, (c) would child-language training give a more generic model (Panini)?; (d) do I exploit teacher determinism / all hardware; (e) would Colab help; (f) GPU mystery.
+
+## Key Technical Concepts
+- Rust engine `drave-core`, binary `drave-core/target/release/drave`; env vars validated by `tests_vars::les_vars_lues_sont_completes`.
+- DRVF trace format v1/v2/v3 (header 14 bytes: "DRVF" + u16 version + u32 n_layer + u32 hidden; record header 14 bytes: u16 couche + u32 pos + u32 n + f32 scale).
+- Trace flags: `--lot 1` mandatory; `--trace-flux <f>`; `--trace-couches` filters ONLY writing; `--couches a:b` bounds EXECUTION (b EXCLUSIVE) but NOT loading; `--n 0` suppresses head + generated tokens.
+- Bridge: `s_t = (1−a)s_{t−1} + a·tanh(P·s_{t−1} + B·e_t)`, `y_t = W·s_t + moy`; **P and B random and FROZEN**, only W fitted (ridge, closed form). No backprop.
+- REAL layers: layer 0 reads `e_t` + own layer; layer c reads ONLY layer c−1 (entire) + own layer's earlier neurons.
+- Free birth (`--naissance libre`): one neuron at a time; new layer only when (1) current layer exhausted, (2) common concepts exist (`communs_fin`), (3) readout contrastive. `--seuil-part` controls the DECISION (default 0.5); optimum measured at 0.25.
+- Attrition: remove neurons, RECOMPUTE survivors' trajectories (never mask columns), criterion = redundancy (`score = expliqué × contribution`, one Gram inversion); returns BEST passage, not last.
+- Quadratic readout (`--lecture quadratique`): phi = [X, X²], closed form. Lift +0.020 → +0.024.
+- Law: `fid TEST ≈ 1.1150 · (invariance de la cible) − 0.0848`, r = 0.9570 (SAME law for the constant baseline, slope identical to 0.4%).
+- Two-panel diagnostic: TEST (out-of-pool) + VALIDATION (same pool as training); oracle = readout fitted on the evaluated set.
+- Stratified script split from Unicode code points: 22 scripts found, all in the test set.
+
+## Files and Code
+- `drave-core/src/model.rs`: `load_partiel(path, ctx, n_threads, dense, keep, auto, q4, b6, couches)` — layer construction loop at line 4001 `for l in 0..cfg.n_layer` ignores `couches`; `couche_debut`/`couche_fin` set at lines 4368-4369 (after construction). `TracedFlux::ecrire` at 2139; `ecrire` body-before-header; `_W_neurones`. Line 5740: `if self.flux_brut || (self.couche_fin < self.cfg.n_layer && !self.tete_partielle)` → returns RAW flux without `out_norm`.
+- `tools/pont_generatif.py` (~41 KB): `Pont` class with real layers, `nait(k, nouvelle_couche)`, `recalcule(S, Ek)`, `compacte(S)`, `renforce(j, itr, mt, ride)` (reinforcement/atrophy), `communs`, `communs_fin`, `contraste`, `redondance`, `contribution`, `_recalc_un`. Options: `--naissance libre|`, `--seuil-commun` (default 0.35), `--seuil-part` (default 0.5), `--part-canaux`, `--part-consist`, `--part-langues`, `--lecture quadratique`, `--oracle`, `--centre-entree`, `--biais`, `--gain-entree`, `--arret-naissance`, `--cycles`, `--couches-par-cycle`, `--plafond`, `--val-liste`, `--normalise`.
+- `tools/pont_parallele.py`: pairs segments BY INDEX; prints a loud warning without `--apparie`; computes teacher invariance, fidelity on A/B, output invariance, oracle.
+- `tools/pont_unites.py`, `tools/invariance_unites.py` (truncation-tolerant reader), `tools/domaine_ou_langue.py`, `tools/cache_pont.py` (`--langues`), `tools/compare_professeurs.py`, `tools/sous_ensemble_actif.py`, `tools/decoupe_langues.py`, `tools/extrait_gutenberg.py`, `tools/extrait_wikipedia.py`.
+- `reports/rapport-toutes-langues.md` (main, §1–25), `reports/recapitulatif.md` (audited), `reports/rapport-pont-generatif.md` (title corrected), `reports/rapport-pont-semantique.md`, `reports/rapport-plateau-semantique.md` (layer-10 claim corrected).
+- Data: `/home/stephane/Data13TB/stephane/corpus/udhr/udhr392/` (392 langs, ctx 4096, layers 0+10), `udhr/udhr392_c8/` (pending, layers 0,8,10), `udhr/unites/` (per-unit, layers 0,8,10), `corpus/parallele_rj/` (48 scenes), `corpus/wiki_traces/` (480 chunks).
+- Chain scripts in `/tmp/`: `analyse_final.sh`, `unites8.sh`, `c8_apres.sh` → `trace392c8.sh`, plus `/tmp/unites_train.txt`, `/tmp/unites_test.txt` (created by analyse_final).
+
+## Errors and Fixes
+- `P.fid(..., ite)` indexes TRAINING languages (Pont holds only training data) → oracle was in-sample (0.7762 vs true 0.7076). Fixed with `recalcule(idx, Ete)`.
+- `--n 32` default: 32 generated tokens were IN the trace (verified 542 vs 510 positions). Fixed with `--n 0`.
+- `ctx 1024` truncated ~50% of languages (16/143 = 11% at ctx 2048). Fixed with `--ctx 4096`; verified `--ctx` is bit-identical when text fits.
+- Cosmetic layers: every neuron read ALL predecessors, so opening a layer ≡ adding a neuron (n=104 gave identical 0.4930/0.9368). Fixed by real layer-wise connectivity.
+- Cosmetic numbers: 1,2,4…256 came from MY doubling schedule + plafond. Fixed with free birth (e.g. 41 neurons in [28,7,6]).
+- `--seuil-commun` only changed the DISPLAYED count; the trigger compared a hardcoded `0.5`. Fixed with `--seuil-part`.
+- `TERMINE` guard matched the substring in "caches TERMINE" → Romeo fired 25 min early (bridge 22 s → 180 s per neuron). Fixed everywhere with `grep -qx`.
+- Three scripts had mode `-rw-------` (non-executable): `trace_wiki.sh`, `trace_unites.sh`, `analyse_final.sh` → `exec` failed silently, Wikipedia never started. Fixed with `chmod +x` AND `exec bash /tmp/x.sh`.
+- `unites8.sh` waited only for the trace but needed lists created by `analyse_final.sh`. Fixed to wait for both.
+- `chmod +x` missing on `trace392b.sh` → nohup "Permission denied", second trace never ran (false "1.33× gain").
+- Editing RUNNING bash scripts killed the Wikipedia guard. Correct method: stop, edit, relaunch.
+- `--attrition 0` restructure: `if not attrition: continue` initially fell inside the `else:` block.
+- `pont_parallele` on Wikipedia: chunks 1 of en/fr are different articles (Actrius vs Algèbre générale) → invariance meaningless; documented + warning added.
+- Density claim corrected: Wikipedia median 871 vs UDHR 862 active channels (1%), min 60 not 5 — I had compared a sampled MIN to a MEAN.
+- Committed a fix message (`fbc8b1c`) claiming a change I had not made; corrected in `0380bf5`.
+- `pkill -f <pattern>` self-kills the shell (repeated, incl. `pgrep -f "release/drave"` in own cmdline); use external Python killers excluding ancestors.
+- Killed the parent guard `unites_apres.sh` (pid 2361698) by accident; trace_unites relaunched manually.
+
+## Pending Jobs
+- `/tmp/trace_unites.sh` running: **224/400** units at 07:41, ~11 s each.
+- Then chained: `analyse_final.sh` (Romeo + Wikipedia + layer-10 units), `unites8.sh` (layer-8 units, waits for analyse_final), `c8_apres.sh` → `trace392c8.sh` (layer-8 re-trace of 392 languages, ~270 min).
+- Bound the model LOADING in `load_partiel` — measured gain only 21–42 min (~7% of chain); DECIDED NOT to do it (invasive `Layer::vide()`, rebuild, bit-identity verification; three plumbing bugs today).
+- Layer-8 target correction at 392-language scale (requires `udhr392_c8`).
+
+## Current Work
+- Profiling per-language representations at layers 10 and 8 to explain why `dzo` is the worst pair. Just obtained (22 complete languages, cosine to the global centroid, layer 10): csw 0.4419 (most distant), **dzo 0.4651**, amh 0.6090, fuf 0.6818, deu 0.7020, hin 0.7118, heb 0.7204, ces 0.7217, ben 0.7516, bum 0.7867, ell 0.8063, ceb 0.8228, gyr 0.8251, als 0.8284, agr 0.8313, bis 0.8357, ctd 0.8391, csa 0.8437, cbi 0.8558, acu 0.8669, haw 0.8703, guc 0.8774 (closest). Layer 8: **dzo 0.4469** (most distant), csw 0.4488, amh 0.5794, … acu 0.9023 (closest). Norms: csw 479 and dzo 468 are the highest at layer 10 (others 281–352); active channels are ~840–868 for all.
+
+## Next Step
+- Interpret the just-obtained profile: `dzo` and `csw` stand out on BOTH axes (lowest cosine to centroid AND highest norm ~470 vs ~285–352), suggesting an amplitude/scale effect, and commit this diagnostic.
+
+## Critical Context
+- **VERIFIED RESULTS**: 392/392 languages traced, 0 failures. Bridge on 301 training languages (test = 41 langs, 22 scripts) at 157 channels, quadratic readout, 40 neurons/1 layer: **fid TEST 0.7430, constante 0.7207, écart +0.0223, invariance 0.9827, pire paire 0.9165; oracle TEST 0.7653 (+0.0223), oracle VALIDATION 0.7563 (+0.0058)**. Unrestricted 896 channels: fid TEST 0.6088, constante 0.5766, **écart +0.0322**, invariance 0.9682, pire 0.8494.
+- **LAYER 8 IS THE PLATEAU, NOT 10** — my target was wrong since the start. Romeo segment-by-segment: L8 0.5985 vs L10 0.5703. UDHR clean 46-lang panel: L8 0.5471 vs L10 0.5247. Unit-level: mean invariance L8 **0.6358** vs L10 0.5977 (+0.0381). Romeo bridge: transferred fidelity L8 **0.6015** vs L10 0.5802 (**+0.0215**, robust across 3 seeds, gain amplitude 0.0005 vs seed spread 0.0026 = 8×).
+- **Romeo (parallel, literary)**: teacher invariance 0.6532; fid A 0.6660; fid B (transferred) 0.5802; output invariance 0.9540; oracle B 0.6207; 120 neurons/1 layer. Layer 0: invariance 0.1420 (negative for some scenes).
+- **Invariant corrected**: the constant lift is a RANGE **+0.020 to +0.032**, not a constant — the seven perimeters giving +0.0197 ± 0.0009 shared the SAME 46-language panel.
+- Dose curve (30/60/112 training languages), edge over constant: +0.0122 / +0.0130 / +0.0150 — **marginal gain per language INCREASES, does not saturate** (2.7e-5 then 3.8e-5 per language).
+- Plateau on 392 languages: 50% of energy on **40/896 channels (4%)**; 90% on 298; **canaux actifs dans TOUTES les langues: 48/896 (5%)** — collapsed from 678/896 measured on 6 languages (optimistic bound).
+- Density: layer 10 is **dense in support (862/896 = 96%)** but **sparse in energy (40 channels = 4%)** — two different questions, not contradictory.
+- **Hardware**: CPU load 11–17 of 40 threads; GPUs **never used and USELESS here** — `DRAVE_GPU=1` gives identical time (12–15 s) with bit-identical traces. GPU processes are display only (Xorg 577 MiB, kwin, plasmashell; total ~1.5 GB; **29 W and 19.5 W of 230 W**; `--query-compute-apps` is EMPTY). 30 GB VRAM free.
+- **Fixed cost dominates**: 1-char prompt = 8.3 s, full unit = 8.9 s. Loading `--couches 0:11` = 8.12 s vs `0:24` = 10.21 s, but "listes 1.04 Go" identical → all 24 layers dequantized regardless. **Parallelizing HURTS**: 1 instance 10 s/unit, 4 instances 33 s, 8 instances (even with `--threads 3`, NLWP=4 respected) 42 s — memory-bandwidth bound.
+- **Colab**: would not help tracing (2 vCPU vs 40 threads) or analysis; would help only for a BIGGER teacher (7–14B). Local 2× RTX 5000 can already attempt a 7B — not attempted. User's rule is one teacher at a time.
+- **Domain-vs-language test**: S_langue (same unit, different langs) 0.6132 vs S_domaine (same lang, different units) 0.8578 at layer 8 → language dominates. **BUT the UDHR is single-domain, so the user's hypothesis is NOT TESTED, not refuted.** Would need parallel multi-domain data (UDHR: paired/mono-domain; Wikipedia: multi-domain/unaligned; Gutenberg: paired/mono-work).
+- **Child language**: `Panini-Research/data/corpus_prescolaire.json` is EMPTY (`documents: []`, metadata "age_range: 2-5"). No CHILDES on disk. Only children's book present: *Alice's Adventures in Wonderland* (en only, 26,543 words). Would need CHILDES access or parallel children's books from Gutenberg (Romeo method applies).
+- **Neuroscience**: literature describes a ventral hierarchy of roughly 3–5 stages (Hickok & Poeppel dual-stream); I could NOT verify an exact number, and transformer layers ≠ cortical stages. Only qualitative convergence: the semantic level is not the deepest.
+- `dzo` (Dzongkha) hypothesis REFUTED: it is the 2nd LONGEST (344 tokens/unit vs fuf 495, csw 305, deu 83, heb 71); Tibetan script is fragmented ~4× more than Latin yet its representation stays unaligned → distance is representational, not a data artifact.
+- User preference: French prose, terse tables, honest verdicts, corrections stated explicitly; every number names its perimeter; a claim without measurement is not a claim; never a silent forward.
+</compacted-summary>
+
+### 🤖 Assistant
+
+⏵ **Le levier est testable sans re-tracer : corréler fidélité et norme.**
+
+- **bash** `{"command": "date '+%H:%M %Z'; echo \"--- chaîne ---\"; for f in /tmp/trace_unites.sh /tmp/analyse_final.sh /tmp/unites8.sh /tmp/c8_apres.sh /tmp/trace392c8.sh; do [ -f \"$f\" ] && echo \"$(basename $f) pid=$(pgrep -f \"bash $f\" | head -1)\"; done\necho \"--- unités ---\"; ls /home/stephane/Data13T … [488 caractères tronqués]`
+
+  ```
+07:45 EDT
+--- chaîne ---
+trace_unites.sh pid=2492337
+analyse_final.sh pid=
+unites8.sh pid=2446246
+c8_apres.sh pid=2445500
+trace392c8.sh pid=2445500
+--- unités ---
+243
+--- sorties ---
+/home/stephane/Data13TB/stephane/corpus/udhr/unites: 243
+/home/stephane/Data13TB/stephane/corpus/udhr/udhr392_c8: 0
+--- logs ---
+hus_00 10s
+hus_01 10s
+hus_02 11s
+--- romeo ---
+48
+--- charge ---
+ 07:45:21  up 14 days 20:57,  2 users,  load average: 6,47, 10,06, 19,80
+  ```
+
+### 👤 Utilisateur
+
+Current runtime context. This snapshot supersedes earlier runtime-context snapshots.
+
+Current DSH file policy: danger-full-access. The DSH file sandbox does not restrict file modifications by available operations.
+
+Approval prompts are disabled in this session: actions that require approval are rejected automatically — do not request sandbox escalation (do not set `sandbox_permissions`).
+
+### 👤 Utilisateur
+
+<system-reminder>
+The available skill catalog changed. This complete catalog replaces every earlier available-skills list in this session:
+
+<available_skills>
+- `microsoft-foundry`: Deploy, evaluate, fine-tune, and manage Foundry agents end-to-end with azd: hosted agent scaffold/run/deploy, prompt agent create, batch eval, continuous eval, prompt optimizer, Agent Optimizer scaffold, agent.yaml, dataset curation from traces, model fine-tuning (SFT/DPO/RFT). USE FOR: azd ai agent, azd provision/deploy, deploy agent, hosted agent, create agent, add tool to agent, invoke agent, evaluate agent, continuous eval, continuous monitoring, agent CI/CD, optimize prompt, improve prom...
+</available_skills>
+
+Use only names in this replacement catalog. If the user names a listed skill, or the task clearly matches its description, call the `skill` tool with the exact name before acting.
+A user may also invoke a skill directly; its <skill_content> block then appears in this conversation. Follow it, and do not call the `skill` tool again for that skill.
+</system-reminder>
+
+### 🤖 Assistant
+
+⏵ **Chaîne en cours (243/400). Je teste l'hypothèse norme→transfert avec les 22 langues.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"def fid\\|def charge\\|def __init__\\|part_langues\\|def construit\\|def ajuste\\|cible\\|def calcule_X\\|def lire\" tools/pont_generatif.py | head -60", "description": "Inspect Pont API"}`
+
+  ```
+32:def charge(p):
+76:    def __init__(self, donnees, a, graine, H, decal=0):
+173:    def ajuste(self, idx, ride, mt, quel=slice(None)):
+179:    def fid(self, idx, W, mt, quel):
+471:    # On restreint donc la cible aux canaux qui portent l'énergie. Le masque est
+522:    part_langues = float(opt("--part-langues", 0.0))
+523:    if part_langues > 0.0:
+531:        garde = np.where(vivant >= part_langues)[0]
+535:              f"{part_langues:.0%} des langues d'apprentissage "
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '32,80p;170,200p' tools/pont_generatif.py", "description": "Read charge and Pont core methods"}`
+
+  ```
+def charge(p):
+    z = np.load(p, allow_pickle=True)
+    cles = [str(c) for c in z["cles"]]
+    E = [z[f"E{i}"].astype(np.float32) for i in range(len(cles))]
+    Y = [z[f"Y{i}"].astype(np.float32) for i in range(len(cles))]
+    return cles, E, Y, int(z["hidden"])
+
+
+def cos_lignes(A, B):
+    na = np.linalg.norm(A, axis=1); nb = np.linalg.norm(B, axis=1)
+    ok = (na > 0) & (nb > 0)
+    return float(np.mean(np.sum(A[ok]*B[ok], axis=1)/(na[ok]*nb[ok])))
+
+
+def inv(V):
+    n = np.linalg.norm(V, axis=1, keepdims=True); n[n == 0] = 1
+    S = (V/n) @ (V/n).T
+    iu = np.triu_indices(len(V), 1)
+    return float(S[iu].mean()), float(S[iu].min())
+
+
+# ------------------------------------------------------------------ le pont
+class Pont:
+    """Réseau récurrent PROFOND : chaque couche ne lit que la PRÉCÉDENTE.
+
+    C'est ce qui donne un sens au mot « couche ». Dans la version précédente,
+    chaque neurone lisait TOUS les neurones nés avant lui, quelle que soit leur
+    couche : ouvrir une couche ou ajouter un neurone y produisaient exactement le
+    même calcul (vérifié — n=104 donnait 0,4930 / 0,9368 dans les deux cas). Les
+    24 « couches » n'étaient qu'une numérotation.
+
+    Ici :
+      - 
+… [2213 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Point clé : la fidélité est un cosinus, donc insensible à l'échelle — la norme n'agit que par la PONDÉRATION du fit partagé. Testable.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"_norm\" tools/pont_generatif.py | head; echo \"--- extrait ---\"; sed -n '/def _norm/,/^    def /p' tools/pont_generatif.py | head -20\necho \"=== caches ===\"; ls -la /home/stephane/Data13TB/stephane/corpus/cache_pont/ 2>/ … [191 caractères tronqués]`
+
+  ```
+160:    def _norm(self, X):
+174:        X = self.phi(np.vstack([self._norm(self.X[i][:, idx]) for i in quel]))
+180:        X = self.phi(np.vstack([self._norm(self.X[i][:, idx]) for i in quel]))
+185:        return np.array([(self.phi(self._norm(self.X[i][:, idx])) @ W + mt)[-1] for i in quel])
+420:        return cos_lignes(self.phi(np.vstack([self._norm(x) for x in X])) @ W + mt,
+424:        return inv(np.array([(self.phi(self._norm(x)) @ W + mt)[-1] for x in X]))
+--- extrait ---
+    def _norm(self, X):
+        if not self.normalise:
+            return X
+        m = X.mean(0); e = X.std(0)
+        return (X - m)/np.maximum(e, 1e-6)
+
+    def phi(self, X):
+=== caches ===
+---
+/home/stephane/Data13TB/stephane/corpus/udhr/pont_semantique.npz
+/home/stephane/Data13TB/stephane/corpus/udhr/pont_semantique_r1.npz
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"npz\\|savez\\|def main\\|sortie\" tools/cache_pont.py | head -20; echo \"=== tous les npz récents ===\"; find /home/stephane/Data13TB/stephane -name \"*.npz\" -newermt \"2026-01-01\" 2>/dev/null | head -40", "description":  … [26 caractères tronqués]`
+
+  ```
+8:Usage : cache_pont.py <dossier> <sortie.npz> [--couche 10] [--hidden 896]
+53:def main():
+54:    d, sortie = sys.argv[1], sys.argv[2]
+79:    np.savez_compressed(sortie, cles=np.array(cles), hidden=hidden,
+82:    print(f"{sortie} : {len(cles)} langues · {sum(len(e) for e in E)} pas")
+=== tous les npz récents ===
+/home/stephane/Data13TB/stephane/.local/share/pipx/venvs/nanovnasaver/lib/python3.13/site-packages/numpy/lib/tests/data/py2-objarr.npz
+/home/stephane/Data13TB/stephane/.local/share/pipx/venvs/nanovnasaver/lib/python3.13/site-packages/numpy/lib/tests/data/py3-objarr.npz
+/home/stephane/Data13TB/stephane/.local/share/pipx/venvs/nanovnasaver/lib/python3.13/site-packages/scipy/fftpack/tests/fftw_double_ref.npz
+/home/stephane/Data13TB/stephane/.local/share/pipx/venvs/nanovnasaver/lib/python3.13/site-packages/scipy/fftpack/tests/fftw_longdouble_ref.npz
+/home/stephane/Data13TB/stephane/.local/share/pipx/venvs/nanovnasaver/lib/python3.13/site-packages/scipy/fftpack/tests/fftw_single_ref.npz
+/home/stephane/Data13TB/stephane/.local/share/pipx/venvs/nanovnasaver/lib/python3.13/site-packages/scipy/fftpack/tests/test.npz
+/home/stephane/Data13TB/stephane/.local/share/pipx/venvs/nanovnasav
+… [4347 caractères tronqués]
+  ```
+
+- **bash** `{"command": "ls -la /tmp/*.npz 2>/dev/null; echo \"--- /tmp dirs ---\"; ls -d /tmp/*/ 2>/dev/null | head -20; echo \"--- scripts chaîne ---\"; for f in /tmp/trace_unites.sh /tmp/analyse_final.sh /tmp/unites8.sh /tmp/c8_apres.sh; do echo \"=== $f ===\"; cat \"$f\" 2>/dev/null; done", "description": " … [43 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 151917192  6 oct 02:58 /tmp/cache392_test.npz
+-rw-r--r--. 1 stephane stephane 985580685  6 oct 02:55 /tmp/cache392_train.npz
+-rw-r--r--. 1 stephane stephane 104866818  5 oct 15:31 /tmp/cache_appr10c.npz
+-rw-r--r--. 1 stephane stephane  81218246  5 oct 12:50 /tmp/cache_appr10.npz
+-rw-r--r--. 1 stephane stephane       389  5 oct 17:57 /tmp/cache_appr30c_l17.npz
+-rw-r--r--. 1 stephane stephane       389  5 oct 17:57 /tmp/cache_appr30c_l8.npz
+-rw-r--r--. 1 stephane stephane   5823787  5 oct 12:43 /tmp/cache_appr40.npz
+-rw-r--r--. 1 stephane stephane 324576526  6 oct 00:00 /tmp/cache_dose_112.npz
+-rw-r--r--. 1 stephane stephane 112183065  5 oct 23:54 /tmp/cache_dose_30.npz
+-rw-r--r--. 1 stephane stephane 185378407  6 oct 00:20 /tmp/cache_dose_60.npz
+-rw-r--r--. 1 stephane stephane  23364712  6 oct 00:01 /tmp/cache_dose_test.npz
+-rw-r--r--. 1 stephane stephane  82894803  6 oct 04:28 /tmp/cache_rj8_en.npz
+-rw-r--r--. 1 stephane stephane 138564219  6 oct 04:32 /tmp/cache_rj8_fr.npz
+-rw-r--r--. 1 stephane stephane  83857467  6 oct 04:17 /tmp/cache_rj_en.npz
+-rw-r--r--. 1 stephane stephane 139662286  6 oct 04:21 /tmp/cache_rj_fr.npz
+-rw-r--r--. 1 stephane step
+… [8655 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Chaîne saine. Le cache 392 existe : je peux tester l'hypothèse à l'échelle 392, pas 22.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"mt = \\|ajuste(\\|\\.fid(\\|W = \\|oracle\\|self.Y\\[i\\]\" tools/pont_generatif.py | head -40; echo \"=== unités ===\"; ls /home/stephane/Data13TB/stephane/corpus/udhr/unites | wc -l", "description": "Locate fit pipeline i … [18 caractères tronqués]`
+
+  ```
+97:        # NORMALISATION PAR LANGUE : l'écart entre l'oracle (0,776) et notre
+173:    def ajuste(self, idx, ride, mt, quel=slice(None)):
+175:        Y = np.vstack([self.Y[i] for i in quel])
+181:        Y = np.vstack([self.Y[i] for i in quel])
+397:        W = self.ajuste(idx, ride, mt, itr)
+399:        Y = np.vstack([self.Y[i] for i in itr])
+577:    mt = np.vstack([Ytr[i] for i in itr]).mean(axis=0)
+631:                W = P.ajuste(idx, ride, mt, itr)
+632:                f_tr = P.fid(idx, W, mt, itr); f_va = P.fid(idx, W, mt, ival)
+704:                W = P.ajuste(idx, ride, mt, itr)
+705:                f_tr = P.fid(idx, W, mt, itr); f_va = P.fid(idx, W, mt, ival)
+733:        W = P.ajuste(idx, ride, mt, itr)
+734:        f_va = P.fid(idx, W, mt, ival)
+755:            W2 = P.ajuste(idx2, ride, mt, itr)
+756:            f2 = P.fid(idx2, W2, mt, ival)
+771:                  f"{len(P.couches_de(garde)):>7} {P.fid(idx, W, mt, itr):>9.4f} {f_va:>8.4f} "
+777:                            "f_tr": P.fid(idx, W, mt, itr), "f_va": f_va,
+797:    if opt("--oracle", ""):
+799:        # avec `P.fid(..., ite)` indexerait donc des langues d'ENTRAÎNEMENT — la
+803:        Wtr = P.ajuste(idx_o, ride, mt, i
+… [402 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Test le moins coûteux d'abord : corréler fidélité par langue et norme sur le fit 392 existant.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '500,600p' tools/pont_generatif.py", "description": "Read option parsing and channel selection"}`
+
+  ```
+# Consistance = `1 − dis/dyn`. Élevée : le canal dit le contenu. Basse : il dit
+    # la langue. Masque lu sur l'APPRENTISSAGE SEUL.
+    part_consist = float(opt("--part-consist", 0.0))
+    if part_consist > 0.0:
+        dyn = None; fin = []
+        for i in itr:
+            y = Ytr[i]
+            dyn = y.std(0) if dyn is None else dyn + y.std(0)
+            fin.append(y[-1])
+        dyn /= len(itr)
+        dis = np.std(np.array(fin), axis=0)
+        consist = 1.0 - dis/np.maximum(dyn, 1e-12)
+        nk = max(1, int(part_consist*H))
+        garde = np.sort(np.argsort(-consist)[:nk])
+        Ytr = [y[:, garde] for y in Ytr]
+        Yte = [y[:, garde] for y in Yte]
+        print(f"# CANAUX À CONSISTANCE : {nk}/{H} canaux les plus interlingues "
+              f"({nk/H:.0%}), sur l'apprentissage seul · consistance retenue "
+              f"{consist[garde].min():+.3f} à {consist[garde].max():+.3f} "
+              f"(écartés : {consist.min():+.3f} à "
+              f"{np.sort(consist)[::-1][nk] if nk < H else float('nan'):+.3f})")
+
+    part_langues = float(opt("--part-langues", 0.0))
+    if part_langues > 0.0:
+        # « Vivant » = PRÉSENT, pas « d'amplitude suffisante » : la trace est
+
+… [4302 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Plus sûr que répliquer le pipeline : ajouter une sortie par langue au script testé.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '720,800p' tools/pont_generatif.py; echo \"=== défauts ===\"; grep -n 'opt(\"--ride\"\\|opt(\"--a\"\\|opt(\"--graine\"\\|opt(\"--canaux\"\\|opt(\"--val-liste\"\\|def opt' tools/pont_generatif.py", "description": "Read results  … [22 caractères tronqués]`
+
+  ```
+sans_gain = 0
+                val_prec = max(val_prec, f_va) if val_prec is not None else f_va
+                if arret_naissance and sans_gain >= 3:
+                    print(f"{'  → naissance ARRÊTÉE (3 sans gain)':<30} {P.compte_neurones:>6} "
+                          f"{len(P.couches):>7}")
+                    break
+        # -------------------------------------------------------- ATTRITION
+        if not attrition:
+            continue
+        print(f"\n########## CYCLE {cycle} — ATTRITION ({critere}) ##########")
+        print(f"{'après':<30} {'neur.':>6} {'couch.':>7} {'fid appr':>9} {'fid VAL':>8} "
+              f"{'fid TEST':>9}")
+        idx = np.arange(P.compte_neurones)
+        W = P.ajuste(idx, ride, mt, itr)
+        f_va = P.fid(idx, W, mt, ival)
+        meilleur_val = f_va
+        # L'ATTRITION DOIT RENDRE LE MEILLEUR RÉSEAU, PAS LE DERNIER. Sans cela,
+        # un seuil de validation plus grand que la perte totale fait descendre
+        # jusqu'à un neurone : mesuré, 34 neurones (VAL 0,8353) jusqu'à 1
+        # (0,8220) alors que le meilleur point était le réseau né. On garde donc
+        # le meilleur passage, et on y revient à la fin.
+        meilleur_passage =
+… [3446 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '405,432p' tools/pont_generatif.py; echo \"=== fin de main ===\"; tail -45 tools/pont_generatif.py; echo \"=== lignes ===\"; wc -l tools/pont_generatif.py", "description": "Read evalue and end of main"}`
+
+  ```
+b_ = R - R.mean(0)
+        na = float(np.linalg.norm(a_))
+        nb = np.linalg.norm(b_, axis=0)
+        ok = (nb > 0) & np.isfinite(nb)
+        if na == 0.0 or not ok.any():
+            return 0.0
+        # à quel point l'activation du nouveau-né capte le résidu, dans [0, 1]
+        cap = float(np.abs(a_ @ b_[:, ok]).max()/(na*nb[ok].max()))
+        f = 1.0 + eta*(2.0*cap - 1.0)          # cap>0,5 renforce · cap<0,5 atrophie
+        w_par, w_self, bb, c = self.poids[j]
+        self.poids[j] = (w_par*f, w_self*f, bb*f, c)
+        self._recalcule_un(j)                  # la trajectoire suit les poids
+        return cap
+
+    def evalue(self, X, Y, W, mt):
+        return cos_lignes(self.phi(np.vstack([self._norm(x) for x in X])) @ W + mt,
+                          np.vstack(Y))
+
+    def invariance(self, X, W, mt):
+        return inv(np.array([(self.phi(self._norm(x)) @ W + mt)[-1] for x in X]))
+
+
+def main():
+    tr_p, te_p = sys.argv[1], sys.argv[2]
+
+    def opt(nom, defaut):
+        return sys.argv[sys.argv.index(nom)+1] if nom in sys.argv else defaut
+
+=== fin de main ===
+
+    # ---------------------------------------------------------------- ORACLE
+    #
+    # Où est le plafond : d
+… [2328 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le diagnostic exige un fit, pas toute la croissance. J'écris un script autonome.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"def nait\\|def recalcule\\|def compacte\\|def couches_de\\|self.X\\b\" tools/pont_generatif.py | head -20; echo \"=== nait + recalcule ===\"; sed -n '/def nait/,/def /p' tools/pont_generatif.py | head -45; echo \"---\"; sed … [120 caractères tronqués]`
+
+  ```
+81:        self.X = [np.zeros((len(e), 0), dtype=np.float32) for e in self.E]
+114:    def nait(self, k, nouvelle_couche=True):
+134:        for i, (E, X) in enumerate(zip(self.E, self.X)):
+148:            self.X[i] = np.hstack([X, S])
+174:        X = self.phi(np.vstack([self._norm(self.X[i][:, idx]) for i in quel]))
+180:        X = self.phi(np.vstack([self._norm(self.X[i][:, idx]) for i in quel]))
+185:        return np.array([(self.phi(self._norm(self.X[i][:, idx])) @ W + mt)[-1] for i in quel])
+199:        X = np.vstack([x[:, idx] for x in self.X]).astype(np.float64)
+211:        X = np.vstack([x[:, idx] for x in self.X]).astype(np.float64)
+219:    def recalcule(self, S, Ek=None):
+258:    def compacte(self, S):
+274:        self.X = Xn
+279:    def couches_de(self, S):
+293:            X = self.X[i][:, idx]
+334:            X = self.X[i][:, idx]
+371:            Xpar = (self.X[i][:, debut_par:debut_par+n_par] if n_par > 0
+373:            cam = self.X[i][:, debut_c:j]        # camarades de couche, antérieurs
+383:            self.X[i][:, j] = v
+398:        X = np.vstack([self.X[i][:, idx] for i in itr])
+401:        xj = np.concatenate([self.X[i][:, j] for i in itr]).astype(np.float64)
+=== 
+… [3604 caractères tronqués]
+  ```
+
+- **write** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/profil_langues.py", "content": "#!/usr/bin/env python3\n\"\"\"PROFIL PAR LANGUE — la norme de la cible explique-t-elle la fidélité ?\n\nLA QUESTION. La fidélité du pont est un COSINUS (mesurée ligne à ligne) : elle\nest donc insens … [5179 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/profil_langues.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 1800 python3 -u tools/profil_langues.py /tmp/cache392_train.npz /tmp/cache392_test.npz --neur 40 --part 0.5 2>&1 | tail -70", "description": "Run per-language fidelity vs norm profile", "run_in_background": true}`
+
+  ```
+started background job bash-228
+  ```
+
+### 🤖 Assistant
+
+⏵ **Diagnostic lancé. J'attends le verdict avant d'écrire le correctif.**
+
+- **bash** `{"command": "sleep 90; echo \"unités: $(ls /home/stephane/Data13TB/stephane/corpus/udhr/unites | wc -l)/400\"; date '+%H:%M'", "description": "Wait and check unit progress", "timeoutMs": 120000}`
+
+  ```
+unités: 264/400
+07:49
+  ```
+
+### 👤 Utilisateur
+
+background job bash-228 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 1800 python3 -u tools/profil_langues.py /tmp/cache392_train.npz /tmp/cache392_test.npz --neur 40 --part 0.5 2>&1 | tail -70) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-228"}`
+
+  ```
+# 351 langues d'apprentissage · 41 langues de test · H=896
+# canaux partagés : 896/896 (100%) — présents dans au moins 50% des langues d'apprentissage
+# réseau : 40 neurones · 1 couche(s) [40] · lecture quadratique
+
+# CORRÉLATION norme → fidélité sur le TEST (41 langues)
+#   Pearson  -0.7540
+#   Spearman -0.3742
+#   moyenne fidélité 0.5972 · écart-type 0.0927
+
+# PAR QUARTILE DE NORME (cible masquée)
+quartile   norme moy. fidélité moy.    n
+Q1 faible       395.7        0.6282   10
+Q2              434.7        0.6430   10
+Q3              455.7        0.6309   10
+Q4 forte        518.3        0.4969   11
+
+# DÉTAIL (trié par norme décroissante)
+langue      fidélité    norme  norme 896   pas
+jpn           0.3298    574.0      574.0   730
+kor           0.3641    559.1      559.1   737
+heb           0.4305    550.9      550.9   726
+deu           0.3517    542.2      542.2   826
+tha           0.4987    539.8      539.8   940
+srp           0.4309    519.0      519.0   949
+vie           0.4968    512.4      512.4   923
+bum           0.6437    482.5      482.5   715
+acu           0.6567    475.6      475.6   948
+amh           0.6500    474.6      474.6  1900
+tpi           0.6130    471.8      
+… [1455 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Verdict : corrélation **−0,75**, et le quartile fort s'effondre. Je teste maintenant si c'est le FIT ou la difficulté intrinsèque.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n 'canaux\"' tools/pont_generatif.py; sed -n '/part_canaux = /,/^$/p' tools/pont_generatif.py | head -25", "description": "Find how 157 channels were selected"}`
+
+  ```
+473:    part_canaux = float(opt("--part-canaux", 0.0))
+    part_canaux = float(opt("--part-canaux", 0.0))
+    if part_canaux > 0.0:
+        E_ref = np.vstack([Ytr[i]**2 for i in itr]).sum(0)
+        ordre = np.argsort(-E_ref)
+        cum = np.cumsum(E_ref[ordre])/E_ref.sum()
+        nk = int(np.searchsorted(cum, part_canaux) + 1)
+        garde = np.sort(ordre[:nk])
+        Ytr = [y[:, garde] for y in Ytr]
+        Yte = [y[:, garde] for y in Yte]
+        print(f"# SOUS-ENSEMBLE ACTIF : {nk}/{H} canaux portent {part_canaux:.0%} de "
+              f"l'énergie ({nk/H:.0%} des canaux), masque lu sur l'apprentissage seul")
+  ```
+
+### 🤖 Assistant
+
+⏵ **J'implémente la pesée par langue dans le fit (moindres carrés pondérés).**
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", "old_string": "    def ajuste(self, idx, ride, mt, quel=slice(None)):\n        X = self.phi(np.vstack([self._norm(self.X[i][:, idx]) for i in quel]))\n        Y = np.vstack([self.Y[i] for i in quel])\n        n  … [1314 caractères tronqués]`
+
+  ```
+Error: cannot edit "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py": file changed since it was read — re-read the file, then retry
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", "offset": 170, "limit": 14}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py</path>
+<type>file</type>
+<content>
+170:             return X
+171:         return np.hstack([X, X*X])
+172: 
+173:     def ajuste(self, idx, ride, mt, quel=slice(None)):
+174:         X = self.phi(np.vstack([self._norm(self.X[i][:, idx]) for i in quel]))
+175:         Y = np.vstack([self.Y[i] for i in quel])
+176:         n = X.shape[1]
+177:         return np.linalg.solve(X.T @ X + ride*len(X)*np.eye(n), X.T @ (Y - mt))
+178: 
+179:     def fid(self, idx, W, mt, quel):
+180:         X = self.phi(np.vstack([self._norm(self.X[i][:, idx]) for i in quel]))
+181:         Y = np.vstack([self.Y[i] for i in quel])
+182:         return cos_lignes(X @ W + mt, Y)
+183: 
+
+(Showing lines 170-183 of 834. Use offset=184 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", "new_string": "    def ajuste(self, idx, ride, mt, quel=slice(None)):\n        X = self.phi(np.vstack([self._norm(self.X[i][:, idx]) for i in quel]))\n        Y = np.vstack([self.Y[i] for i in quel])\n        n  … [1309 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py has been updated successfully.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", "limit": 16, "offset": 76}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py</path>
+<type>file</type>
+<content>
+76:     def __init__(self, donnees, a, graine, H, decal=0):
+77:         self.langues, self.E, self.Y = donnees
+78:         self.a = a
+79:         self.H = H
+80:         self.rng = np.random.RandomState(graine + decal)
+81:         self.X = [np.zeros((len(e), 0), dtype=np.float32) for e in self.E]
+82:         self.couches = []          # taille de chaque couche, dans l'ordre
+83:         self.compte_neurones = 0
+84:         # GÉNÉALOGIE : de quoi RECALCULER un sous-ensemble de survivants sans les
+85:         # retirés. Sans elle, une attrition ne réduit rien — elle masque.
+86:         # Chaque neurone : (w_parents, w_couche, b, couche)
+87:         self.poids = []
+88:         # LECTURE NON LINÉAIRE : le readout est linéaire sur les états. Y ajouter
+89:         # leurs carrés ne coûte qu'une inversion, reste en forme fermée, et teste
+90:         # si le plafond de +0,020 vient de la linéarité de la lecture.
+91:         self.quadratique = False
+
+(Showing lines 76-91 of 848. Use offset=92 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", "new_string": "        self.quadratique = False\n        # PESÉE PAR LANGUE du fit (None = moindres carrés ordinaires). Voir\n        # `ajuste` : sans elle, l'objectif est ABSOLU alors que la métrique est un\n  … [154 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py has been updated successfully.
+  ```
+
+### 🤖 Assistant
+
+⏵ **Je compare maintenant fit ordinaire contre fit pondéré, sur le même réseau.**
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/profil_langues.py", "new_string": "    itr = np.arange(len(cltr))\n    mt = np.vstack([Ytr[i] for i in itr]).mean(axis=0)\n    idx = np.arange(P.compte_neurones)\n\n    # --- trajectoires du TEST\n    Xte = P.recalcule(idx, Ete)\n\ … [4081 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/profil_langues.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"import ast,sys; ast.parse(open('tools/profil_langues.py').read()); ast.parse(open('tools/pont_generatif.py').read()); print('syntaxe OK')\" && timeout 2400 python3 -u tools/profil_langues.py /tmp/cache392_train.npz /tmp/ … [134 caractères tronqués]`
+
+  ```
+started background job bash-229
+  ```
+
+- **bash** `{"command": "sleep 120; echo \"unités: $(ls /home/stephane/Data13TB/stephane/corpus/udhr/unites | wc -l)/400\"; tail -2 /tmp/trace_unites.log; date '+%H:%M'", "description": "Check unit progress", "timeoutMs": 140000}`
+
+  ```
+unités: 282/400
+kat_00 11s
+kat_01 22s
+07:52
+  ```
+
+- **bash** `{"command": "sleep 180; echo \"unités: $(ls /home/stephane/Data13TB/stephane/corpus/udhr/unites | wc -l)/400\"; date '+%H:%M'", "description": "Wait for weighted fit job", "timeoutMs": 200000}`
+
+  ```
+unités: 297/400
+07:55
+  ```
+
+### 👤 Utilisateur
+
+background job bash-229 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c "import ast,sys; ast.parse(open('tools/profil_langues.py').read()); ast.parse(open('tools/pont_generatif.py').read()); print('syntaxe OK')" && timeout 2400 python3 -u tools/profil_langues.py /tmp/cache392_train.npz /tmp/cache392_test.npz --neur 40 --part 0.5 2>&1 | tail -75) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-229"}`
+
+  ```
+syntaxe OK
+# 351 langues d'apprentissage · 41 langues de test · H=896
+# canaux partagés : 896/896 (100%) — présents dans au moins 50% des langues d'apprentissage
+# réseau : 40 neurones · 1 couche(s) [40] · lecture quadratique
+
+=== FIT ORDINAIRE (référence) ===
+#   fidélité TEST moyenne 0.5972 · Pearson norme→fid -0.7540 · Spearman -0.3742
+#   par quartile de norme : Q1 0.6282 · Q2 0.6430 · Q3 0.6309 · Q4 0.4969   (Q4-Q1 -0.1313)
+
+=== FIT PONDÉRÉ PAR LANGUE (1/norme²) ===
+#   fidélité TEST moyenne 0.5969 · Pearson norme→fid -0.7613 · Spearman -0.3956
+#   par quartile de norme : Q1 0.6301 · Q2 0.6435 · Q3 0.6303 · Q4 0.4939   (Q4-Q1 -0.1362)
+
+# DÉTAIL (trié par norme décroissante)
+langue      fidélité    norme  norme 896   pas
+jpn           0.3298    574.0      574.0   730
+kor           0.3641    559.1      559.1   737
+heb           0.4305    550.9      550.9   726
+deu           0.3517    542.2      542.2   826
+tha           0.4987    539.8      539.8   940
+srp           0.4309    519.0      519.0   949
+vie           0.4968    512.4      512.4   923
+bum           0.6437    482.5      482.5   715
+acu           0.6567    475.6      475.6   948
+amh           0.6500    474.6      474.6  
+… [1495 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Hypothèse de la pondération RÉFUTÉE (0,5969 vs 0,5972). Je cherche la vraie variable.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport numpy as np\nD=\"\"\"jpn 0.3298 574.0 730\nkor 0.3641 559.1 737\nheb 0.4305 550.9 726\ndeu 0.3517 542.2 826\ntha 0.4987 539.8 940\nsrp 0.4309 519.0 949\nvie 0.4968 512.4 923\nbum 0.6437 482.5 715\nacu 0.6567  … [2596 caractères tronqués]`
+
+  ```
+n=41
+fid ↔ norme        : Pearson -0.7540  Spearman -0.3742
+fid ↔ log(pas)     : Pearson +0.4503  Spearman +0.3464
+norme ↔ log(pas)   : Pearson -0.8176  Spearman -0.8730
+fid ↔ norme | log(pas) : -0.7506
+fid ↔ log(pas) | norme : -0.4395
+
+les 10 pires :
+   jpn  fid 0.3298  norme  574.0  pas   730
+   deu  fid 0.3517  norme  542.2  pas   826
+   kor  fid 0.3641  norme  559.1  pas   737
+   heb  fid 0.4305  norme  550.9  pas   726
+   srp  fid 0.4309  norme  519.0  pas   949
+   vie  fid 0.4968  norme  512.4  pas   923
+   tha  fid 0.4987  norme  539.8  pas   940
+   hsb  fid 0.5296  norme  453.8  pas  1135
+   ben  fid 0.5555  norme  443.5  pas  2634
+   ell  fid 0.5613  norme  390.7  pas  2803
+les 10 meilleures :
+   sah  fid 0.6557  norme  458.3  pas  1859
+   acu  fid 0.6567  norme  475.6  pas   948
+   ctd  fid 0.6588  norme  450.1  pas  1082
+   quy  fid 0.6610  norme  445.2  pas  1285
+   mic  fid 0.6647  norme  443.6  pas  1259
+   yao  fid 0.6650  norme  451.3  pas  1190
+   kbd  fid 0.6748  norme  419.4  pas  1963
+   xsm  fid 0.6818  norme  442.7  pas  1199
+   csw  fid 0.6868  norme  391.2  pas  3179
+   dzo  fid 0.6982  norme  418.1  pas  3864
+
+norme : min 361.7 max 574.0 · pas : min 715 max
+… [127 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Norme et longueur sont quasi confondues (−0,87). Je teste si la norme n'est qu'un artefact de mélange de positions.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport numpy as np, sys, os\nsys.path.insert(0,'tools')\nfrom pont_generatif import charge\nclte,Ete,Yte,H = charge('/tmp/cache392_test.npz')\nprint(f\"{len(clte)} langues de test · H={H}\\n\")\n# norme par position … [2026 caractères tronqués]`
+
+  ```
+41 langues de test · H=896
+
+texte le plus court : 715 pas
+
+langue   pas  norme 1-200  norme fin  corr(pos)
+jpn      730        591.8      544.0     -0.157
+deu      826        548.1      521.2     -0.095
+heb      726        559.9      542.0     -0.087
+dzo     3864        429.0      431.8      0.015
+fuf     4088        354.5      356.2      0.026
+csw     3179        413.5      388.4     -0.148
+ell     2803        443.9      361.3     -0.098
+ben     2634        497.7      417.7     -0.085
+
+--- FENÊTRE COMMUNE : les 715 premiers pas de CHAQUE langue ---
+  corrélation fid ↔ norme PLEINE          : -0.0419
+  corrélation fid ↔ norme FENÊTRE COMMUNE : -0.0516
+  écart-type des normes : pleine 49.7 · fenêtre 49.3
+
+langue norme pleine  norme fenêtre     fid
+jpn           574.0          575.8  0.6588
+kor           559.1          562.5  0.6164
+heb           550.9          552.6  0.6290
+deu           542.2          548.6  0.6437
+tha           539.8          541.7  0.6097
+srp           519.0          525.3  0.6274
+vie           512.4          515.3  0.5613
+bum           482.5          482.5  0.3517
+  ...
+tel           400.3          390.8  0.6155
+hye           396.0          407.1  0.6045
+csw    
+… [164 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **ERREUR D'INDEXATION de ma part : j'ai transcrit un tableau trié par norme dans l'ordre du cache. Corrélations invalides — je refais proprement.**
+
+Les chiffres du script `profil_langues.py` (corrélations calculées **en interne**) restent valides : `fid ↔ norme = −0,7540`. Ce sont mes corrélations manuelles de suivi qui étaient fausses : j'ai associé une liste triée par norme à l'ordre du cache. Je corrige en calculant tout là où les indices sont cohérents.
+
+En revanche, l'analyse par position est valide et instructive :
+
+| langue | pas | norme 1-200 | norme fin | corr(pos) |
+|---|---:|---:|---:|---:|
+| jpn | 730 | 591,8 | 544,0 | −0,157 |
+| dzo | 3864 | 429,0 | 431,8 | +0,015 |
+| fuf | 4088 | 354,5 | 356,2 | +0,026 |
+
+**La norme ne décroît presque pas avec la position** (−0,09 à −0,16), et sur une **fenêtre commune des 715 premiers pas**, les normes sont pratiquement identiques aux normes pleines (écart-type 49,3 contre 49,7). **La norme est donc une propriété réelle de la langue, pas un artefact de longueur ou de mélange de positions.**
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/profil_langues.py", "limit": 30, "offset": 76}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/profil_langues.py</path>
+<type>file</type>
+<content>
+76:     garde = np.where(vivant >= part)[0]
+77:     Ytr = [y[:, garde] for y in Ytr]
+78:     Yte = [y[:, garde] for y in Yte]
+79:     print(f"# canaux partagés : {len(garde)}/{H} ({len(garde)/H:.0%}) — "
+80:           f"présents dans au moins {part:.0%} des langues d'apprentissage")
+81: 
+82:     # --- un réseau de taille FIXE. On ne cherche pas le meilleur : on mesure
+83:     #     si la lecture partagée sert également toutes les langues.
+84:     P = Pont((cltr, Etr, Ytr), a, graine, len(garde))
+85:     P.quadratique = True
+86:     P.nait(n_neur, True)
+87:     print(f"# réseau : {P.compte_neurones} neurones · {len(P.couches)} couche(s) "
+88:           f"{P.couches} · lecture quadratique")
+89: 
+90:     itr = np.arange(len(cltr))
+91:     mt = np.vstack([Ytr[i] for i in itr]).mean(axis=0)
+92:     idx = np.arange(P.compte_neurones)
+93: 
+94:     # --- trajectoires du TEST
+95:     Xte = P.recalcule(idx, Ete)
+96: 
+97:     def profil(W, nom):
+98:         lignes = []
+99:         for k, cl in enumerate(clte):
+100:             A = P.phi(P._norm(Xte[k])) @ W + mt
+101:             li
+… [297 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/profil_langues.py", "new_string": "        o = np.argsort(n)\n        q = len(o)//4\n        qs = []\n        for sl in (o[:q], o[q:2*q], o[2*q:3*q], o[3*q:]):\n            qs.append(np.mean([f[j] for j in sl]))\n        print(f\"# … [1629 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/profil_langues.py has been updated successfully.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/profil_langues.py", "limit": 32, "offset": 134}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/profil_langues.py</path>
+<type>file</type>
+<content>
+134:             ex = x - np.polyval(np.polyfit(z, x, 1), z)
+135:             ey = y - np.polyval(np.polyfit(z, y, 1), z)
+136:             return float(np.corrcoef(ex, ey)[0, 1])
+137:         print(f"#   fid ↔ norme   | log(pas) : {part(f_, n_, lp):+.4f}")
+138:         print(f"#   fid ↔ log(pas)| norme    : {part(f_, lp, n_):+.4f}")
+139:         return lignes
+140: 
+141:     # --- FIT ORDINAIRE : l'objectif est absolu, la métrique est un cosinus.
+142:     lignes = profil(P.ajuste(idx, ride, mt, itr), "FIT ORDINAIRE (référence)")
+143: 
+144:     # --- FIT PONDÉRÉ : chaque langue pèse selon 1/norme², donc erreur relative.
+145:     #     PRÉDICTION, écrite avant la mesure : si l'effet vient de la PONDÉRATION
+146:     #     du fit, la corrélation doit se rapprocher de zéro et Q4 doit remonter.
+147:     #     S'il vient d'une difficulté INTRINSÈQUE des langues à forte norme, la
+148:     #     pondération ne fera que déplacer le problème (Q4 plat, Q1 qui baisse).
+149:     P.pese = [1.0/max(float(np.linalg.norm(Ytr[i], axis=1).mean()), 1e-9)**2
+150:               for i in range(l
+… [604 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/profil_langues.py", "new_string": "    print(f\"\\n# DÉTAIL (trié par norme décroissante)\")\n    print(f\"{'langue':<10} {'fidélité':>9} {'norme':>8} {'norme 896':>10} {'pas':>5}\")\n    for r in sorted(lignes, key=lambda r: -r[\" … [1075 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/profil_langues.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"import ast; ast.parse(open('tools/profil_langues.py').read()); print('syntaxe OK')\" && timeout 2400 python3 -u tools/profil_langues.py /tmp/cache392_train.npz /tmp/cache392_test.npz --neur 40 --part 0.5 2>&1 | head -30; … [184 caractères tronqués]`
+
+  ```
+started background job bash-230
+  ```
+
+### 🤖 Assistant
+
+⏵ **Pendant le calcul : hypothèse concurrente à tester — si l'oracle par langue est bon partout, c'est un problème de PARTAGE, pas de caractéristiques.**
+
+- **bash** `{"command": "sleep 240; echo \"unités: $(ls /home/stephane/Data13TB/stephane/corpus/udhr/unites | wc -l)/400\"; tail -1 /tmp/trace_unites.log; date '+%H:%M'", "description": "Wait for correlation re-run", "timeoutMs": 260000}`
+
+  ```
+unités: 326/400
+lun_04 10s
+08:01
+  ```
+
+### 👤 Utilisateur
+
+background job bash-230 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c "import ast; ast.parse(open('tools/profil_langues.py').read()); print('syntaxe OK')" && timeout 2400 python3 -u tools/profil_langues.py /tmp/cache392_train.npz /tmp/cache392_test.npz --neur 40 --part 0.5 2>&1 | head -30; echo "=== unités: $(ls /home/stephane/Data13TB/stephane/corpus/udhr/unites | wc -l)/400 ===") finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-230"}`
+
+  ```
+syntaxe OK
+# 351 langues d'apprentissage · 41 langues de test · H=896
+# canaux partagés : 896/896 (100%) — présents dans au moins 50% des langues d'apprentissage
+# réseau : 40 neurones · 1 couche(s) [40] · lecture quadratique
+
+=== FIT ORDINAIRE (référence) ===
+#   fidélité TEST moyenne 0.5972 · Pearson norme→fid -0.7540 · Spearman -0.3742
+#   par quartile de norme : Q1 0.6282 · Q2 0.6430 · Q3 0.6309 · Q4 0.4969   (Q4-Q1 -0.1313)
+#   fid ↔ log(pas)  : Pearson +0.4503 · Spearman +0.3464
+#   norme ↔ log(pas): Pearson -0.8176 · Spearman -0.8730
+#   fid ↔ norme   | log(pas) : -0.7504
+#   fid ↔ log(pas)| norme    : -0.4392
+
+=== FIT PONDÉRÉ PAR LANGUE (1/norme²) ===
+#   fidélité TEST moyenne 0.5969 · Pearson norme→fid -0.7613 · Spearman -0.3956
+#   par quartile de norme : Q1 0.6301 · Q2 0.6435 · Q3 0.6303 · Q4 0.4939   (Q4-Q1 -0.1362)
+#   fid ↔ log(pas)  : Pearson +0.4595 · Spearman +0.3675
+#   norme ↔ log(pas): Pearson -0.8176 · Spearman -0.8730
+#   fid ↔ norme   | log(pas) : -0.7540
+#   fid ↔ log(pas)| norme    : -0.4363
+
+# DÉTAIL (trié par norme décroissante)
+langue      fidélité    norme  norme 896   pas
+jpn           0.3298    574.0      574.0   730
+kor           0.3641    559.1     
+… [352 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Corrélations confirmées. Maintenant le test décisif : oracle par langue et témoin constant par langue.**
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/profil_langues.py", "new_string": "    def profil(W, nom):\n        lignes = []\n        for k, cl in enumerate(clte):\n            A = P.phi(P._norm(Xte[k])) @ W + mt\n            B = Yte[k]\n            # ORACLE PAR LANGUE : une  … [2702 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/profil_langues.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -i 's|fh.write(\"langue;fidelite;norme;norme896;pas\\\\n\")|fh.write(\"langue;fidelite;oracle;temoin;norme;norme896;pas\\\\n\")|; s|fh.write(f\"{r\\[.cl.\\]};{r\\[.fid.\\]:.6f};{r\\[.norme.\\]:.3f};\"|fh.write(f\"{r['\"'\"'cl'\"' … [348 caractères tronqués]`
+
+  ```
+# --- CSV : pour que toute analyse ultérieure parte des NOMS et jamais d'un
+    #     tableau trié recopié à la main (erreur déjà commise, corrélations
+    #     entièrement fausses).
+    csv = opt("--csv", "/tmp/profil_langues.csv")
+    with open(csv, "w") as fh:
+        fh.write("langue;fidelite;oracle;temoin;norme;norme896;pas\n")
+        for r in lignes:
+            fh.write(f"{r['cl']};{r['fid']:.6f};{r['oracle']:.6f};{r['temoin']:.6f};{r['norme']:.3f};"
+                     f"{r['norme_pleine']:.3f};{r['pas']}\n")
+    print(f"# table écrite : {csv}")
+syntaxe OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 2400 python3 -u tools/profil_langues.py /tmp/cache392_train.npz /tmp/cache392_test.npz --neur 40 --part 0.5 2>&1 | head -22", "description": "Run oracle-per-language diagnostic", "run_in_background": true}`
+
+  ```
+started background job bash-231
+  ```
+
+- **bash** `{"command": "sleep 270; echo \"unités: $(ls /home/stephane/Data13TB/stephane/corpus/udhr/unites | wc -l)/400\"; date '+%H:%M'", "description": "Wait for oracle diagnostic", "timeoutMs": 290000}`
+
+  ```
+unités: 351/400
+08:06
+  ```
+
+### 👤 Utilisateur
+
+background job bash-231 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 2400 python3 -u tools/profil_langues.py /tmp/cache392_train.npz /tmp/cache392_test.npz --neur 40 --part 0.5 2>&1 | head -22) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-231"}`
+
+  ```
+# 351 langues d'apprentissage · 41 langues de test · H=896
+# canaux partagés : 896/896 (100%) — présents dans au moins 50% des langues d'apprentissage
+# réseau : 40 neurones · 1 couche(s) [40] · lecture quadratique
+
+=== FIT ORDINAIRE (référence) ===
+#   fidélité TEST moyenne 0.5972 · Pearson norme→fid -0.7540 · Spearman -0.3742
+#   TÉMOIN CONSTANT par langue : moyenne 0.5678 · écart du pont +0.0294
+#   ORACLE par langue          : moyenne 0.6935 · écart au pont +0.0963
+#   oracle ↔ norme : Pearson -0.8368 · Spearman -0.7117
+#   (oracle − pont) ↔ norme : Pearson +0.3634   ← positif = les langues à forte norme sont celles que le PARTAGE pénalise
+#   par quartile de norme : Q1 0.6282 · Q2 0.6430 · Q3 0.6309 · Q4 0.4969   (Q4-Q1 -0.1313)
+#   fid ↔ log(pas)  : Pearson +0.4503 · Spearman +0.3464
+#   norme ↔ log(pas): Pearson -0.8176 · Spearman -0.8730
+#   fid ↔ norme   | log(pas) : -0.7504
+#   fid ↔ log(pas)| norme    : -0.4392
+
+=== FIT PONDÉRÉ PAR LANGUE (1/norme²) ===
+#   fidélité TEST moyenne 0.5969 · Pearson norme→fid -0.7613 · Spearman -0.3956
+#   TÉMOIN CONSTANT par langue : moyenne 0.5678 · écart du pont +0.0290
+#   ORACLE par langue          : moyenne 0.6935 · écart au pont +0.09
+… [214 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Résultat décisif : l'ORACLE est lui aussi mauvais sur les langues à forte norme (−0,84). Le goulot est dans les CARACTÉRISTIQUES, pas dans le partage.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport numpy as np\nrows=[l.strip().split(';') for l in open('/tmp/profil_langues.csv') if l.strip()][1:]\ncl=[r[0] for r in rows]\nfid=np.array([float(r[1]) for r in rows]); orc=np.array([float(r[2]) for r in rows] … [998 caractères tronqués]`
+
+  ```
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 2, in <module>
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/profil_langues.csv'
+[exit code: 1]
+  ```
+
+### 🤖 Assistant
+
+⏵ **`head` a tué le script par SIGPIPE avant l'écriture du CSV. Je relance vers un fichier.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup timeout 2400 python3 -u tools/profil_langues.py /tmp/cache392_train.npz /tmp/cache392_test.npz --neur 40 --part 0.5 > /tmp/profil.log 2>&1 &\necho \"lancé pid $!\"; sleep 5; echo \"unités: $(ls /home/stephane/Data13TB/stephane/ … [82 caractères tronqués]`
+
+  ```
+lancé pid 2504834
+unités: 354/400
+  ```
+
+- **bash** `{"command": "ls /home/stephane/Data13TB/stephane/corpus/udhr/ | head -20; echo \"--- udhr392 contenu ---\"; ls /home/stephane/Data13TB/stephane/corpus/udhr/udhr392 | head -5; echo \"--- textes source ? ---\"; ls /home/stephane/Data13TB/stephane/corpus/udhr/*.json /home/stephane/Data13TB/stephane/cor … [181 caractères tronqués]`
+
+  ```
+appr
+appr10
+appr10c
+appr40
+appr42
+ids_test.txt
+ids_train.txt
+langues
+langues30b
+langues_adapt
+langues_train
+pont_semantique.npz
+pont_semantique_r1.npz
+tenus
+tenus10
+tenus10c
+tenus42
+tenus_adapt
+tenus_trace
+test.txt
+--- udhr392 contenu ---
+abk.drvf
+ace.drvf
+acu.drvf
+ada.drvf
+ady.drvf
+--- textes source ? ---
+/home/stephane/Data13TB/stephane/corpus/udhr/unites.jsonl
+/home/stephane/Data13TB/stephane/corpus/udhr/train.txt
+/home/stephane/Data13TB/stephane/corpus/udhr/test.txt
+/home/stephane/Data13TB/stephane/corpus/udhr/ids_train.txt
+/home/stephane/Data13TB/stephane/corpus/udhr/ids_test.txt
+/home/stephane/Data13TB/stephane/corpus/udhr/langues/eng.txt
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/corpus/udhr && ls langues | wc -l; ls langues | head -3; python3 - <<'PY'\nimport os, csv, numpy as np\nL='/home/stephane/Data13TB/stephane/corpus/udhr/langues'\nrows=[l.strip().split(';') for l in open('/tmp/profil_langues.csv') if l.strip()][1:] if  … [1065 caractères tronqués]`
+
+  ```
+30
+deu.drvf
+deu.ids
+deu.txt
+CSV présent : 0 lignes
+  ```
+
+- **bash** `{"command": "ls /tmp/*.sh 2>/dev/null | head -30; echo \"=== script 392 ===\"; cat /tmp/trace392.sh 2>/dev/null || cat /tmp/trace392b.sh 2>/dev/null || grep -rl \"udhr392\" /tmp/*.sh 2>/dev/null | head", "description": "Find the 392 trace script for source path"}`
+
+  ```
+/tmp/ab-after.sh
+/tmp/adv_trap_inner.sh
+/tmp/affinite.sh
+/tmp/after30b.sh
+/tmp/after30b_test.sh
+/tmp/aig2.sh
+/tmp/aig4.sh
+/tmp/aig5.sh
+/tmp/aig_s5.sh
+/tmp/aig_s6b.sh
+/tmp/aig_s6.sh
+/tmp/aig_s7.sh
+/tmp/aiguille_1p5b.sh
+/tmp/aiguille30b.sh
+/tmp/aiguille_campagne.sh
+/tmp/aiguille_kv2048.sh
+/tmp/aiguille_kv.sh
+/tmp/aiguille_lance.sh
+/tmp/aiguille_topk.sh
+/tmp/analyse30b.sh
+/tmp/analyse30.sh
+/tmp/analyse392.sh
+/tmp/analyse_final.sh
+/tmp/analyse_propre.sh
+/tmp/attn512.sh
+/tmp/audela_4096.sh
+/tmp/audit.sh
+/tmp/balayage30.sh
+/tmp/balayage_cascade.sh
+/tmp/balayage.sh
+=== script 392 ===
+#!/bin/bash
+# TOUTES LES LANGUES — 392 langues de l'UDHR, dix unités chacune.
+#
+# Convention UNIQUE pour toutes (une comparaison n'a de sens qu'à convention
+# égale) :
+#   --ctx 4096          aucune troncature (l'abkhaze demande 1958 jetons)
+#   --n 0               ni tête du professeur, ni jetons générés dans la trace
+#   --trace-couches 0,10 on n'ÉCRIT que l'entrée (couche 0) et la cible
+#                       (couche 10) : vérifié bit-identique, et ~11× plus petit
+#   --couches 0:11      on n'EXÉCUTE que 0..10.
+set -u
+cd /home/stephane/Data13TB/stephane/corpus/udhr
+D=/home/stephane/Data13TB/stephane/GitHu
+… [698 caractères tronqués]
+  ```
+
+- **bash** `{"command": "ls /tmp/udhr10_toutes/*.txt 2>/dev/null | wc -l; ls -la /tmp/profil_langues.csv 2>/dev/null; tail -3 /tmp/profil.log 2>/dev/null | head -3; echo \"unités: $(ls /home/stephane/Data13TB/stephane/corpus/udhr/unites | wc -l)/400\"", "description": "Check source texts and CSV readiness"}`
+
+  ```
+392
+# 351 langues d'apprentissage · 41 langues de test · H=896
+# canaux partagés : 896/896 (100%) — présents dans au moins 50% des langues d'apprentissage
+# réseau : 40 neurones · 1 couche(s) [40] · lecture quadratique
+unités: 358/400
+  ```
+
+### 🤖 Assistant
+
+⏵ **Je calcule la fragmentation (jetons/caractère) — le candidat mécaniste le plus simple.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport numpy as np, sys, os\nsys.path.insert(0,'tools')\nfrom pont_generatif import charge\nclte,Ete,Yte,H = charge('/tmp/cache392_test.npz')\nS='/tmp/udhr10_toutes'\nrows=[]\nfor i,cl in enumerate(clte):\n    p=os. … [894 caractères tronqués]`
+
+  ```
+langue   pas    car  jet/car   norme
+fuf     4088   2591    1.578   361.7
+csw     3179   2109    1.507   391.2
+tel     4088   2832    1.444   400.3
+mal     3444   2530    1.361   406.7
+vie      923    695    1.328   512.4
+dzo     3864   2919    1.324   418.1
+lao     3336   2598    1.284   416.1
+khm     3157   2656    1.189   402.7
+amh     1900   1659    1.145   474.6
+tam     3778   3460    1.092   408.7
+ben     2634   2494    1.056   443.5
+mya     4088   4020    1.017   382.9
+hye     2766   2765    1.000   396.0
+kat     3076   3076    1.000   425.8
+  ...
+quy     1285   3294    0.390   445.2
+srp      949   2435    0.390   519.0
+hns     1221   3153    0.387   471.5
+que      752   1976    0.381   444.4
+ilo     1132   3109    0.364   469.9
+tpi      883   2506    0.352   471.8
+pam     1004   3020    0.332   449.6
+deu      826   3048    0.271   542.2
+
+fragmentation ↔ norme    : Pearson -0.5547
+fragmentation ↔ log(pas) : Pearson +0.8261
+  ```
+
+### 🤖 Assistant
+
+⏵ **Mécanisme identifié : la densité d'information par jeton varie de 6× selon la langue. Je vérifie le CSV.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la /tmp/profil_langues.csv 2>/dev/null && python3 - <<'PY'\nimport numpy as np, os\nrows=[l.strip().split(';') for l in open('/tmp/profil_langues.csv') if l.strip()][1:]\ncl=[r[0] for r in rows]\nfid=np.array([float(r[1]) for r i … [1365 caractères tronqués]`
+
+  ```
+(no output)
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "tail -12 /tmp/profil.log; echo \"=== processus ===\"; pgrep -fa \"profil_langues\" | head -3; echo \"=== unités: $(ls /home/stephane/Data13TB/stephane/corpus/udhr/unites | wc -l)/400 ===\"; date '+%H:%M'", "description": "Check profile log status"}`
+
+  ```
+# 351 langues d'apprentissage · 41 langues de test · H=896
+# canaux partagés : 896/896 (100%) — présents dans au moins 50% des langues d'apprentissage
+# réseau : 40 neurones · 1 couche(s) [40] · lecture quadratique
+=== processus ===
+2504834 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup timeout 2400 python3 -u tools/profil_langues.py /tmp/cache392_train.npz /tmp/cache392_test.npz --neur 40 --part 0.5 > /tmp/profil.log 2>&1 & echo "lancé pid $!"; sleep 5; echo "unités: $(ls /home/stephane/Data13TB/stephane/corpus/udhr/unites | wc -l)/400"
+2504836 timeout 2400 python3 -u tools/profil_langues.py /tmp/cache392_train.npz /tmp/cache392_test.npz --neur 40 --part 0.5
+2504837 python3 -u tools/profil_langues.py /tmp/cache392_train.npz /tmp/cache392_test.npz --neur 40 --part 0.5
+=== unités: 363/400 ===
+08:08
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le profil tourne encore. J'écris pendant ce temps la section sur les acquis déjà solides.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 27. Pourquoi certaines langues transfèrent mal : la NORME, et l'oracle dit que ce n'est pas le partage\n\nLe §26 laissait une piste ( … [6059 caractères tronqués]`
+
+  ```
+rapport : 1046 lignes
+  ```
+
+- **bash** `{"command": "sleep 150; ls -la /tmp/profil_langues.csv 2>/dev/null; tail -4 /tmp/profil.log; echo \"unités: $(ls /home/stephane/Data13TB/stephane/corpus/udhr/unites | wc -l)/400\"; date '+%H:%M'", "description": "Check profile completion", "timeoutMs": 170000}`
+
+  ```
+-rw-r--r--. 1 stephane stephane 2170  6 oct 08:09 /tmp/profil_langues.csv
+ell           0.5613    390.7      390.7  2803
+mya           0.6395    382.9      382.9  4088
+fuf           0.6281    361.7      361.7  4088
+# table écrite : /tmp/profil_langues.csv
+unités: 380/400
+08:11
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport numpy as np, os\nrows=[l.strip().split(';') for l in open('/tmp/profil_langues.csv') if l.strip()][1:]\ncl=[r[0] for r in rows]\nfid=np.array([float(r[1]) for r in rows]); orc=np.array([float(r[2]) for r in r … [1374 caractères tronqués]`
+
+  ```
+n=41 · pont 0.5972 · témoin 0.5678 · oracle 0.6935
+pont PIRE que le témoin constant : 0/41 langues
+oracle − pont : +0.0963
+
+fid  ↔ fragmentation : Pearson +0.1846  Spearman +0.0561
+orac ↔ fragmentation : Pearson +0.5496  Spearman +0.5749
+fid  ↔ norme         : Pearson -0.7540  Spearman -0.3742
+
+langue   frag  norme  témoin   pont   Δtem  oracle
+fuf     1.578  361.7   0.567  0.628 +0.061   0.847
+csw     1.507  391.2   0.623  0.687 +0.064   0.786
+tel     1.444  400.3   0.577  0.634 +0.058   0.743
+mal     1.361  406.7   0.569  0.625 +0.055   0.745
+vie     1.328  512.4   0.481  0.497 +0.016   0.634
+dzo     1.324  418.1   0.610  0.698 +0.088   0.791
+lao     1.284  416.1   0.616  0.654 +0.038   0.745
+khm     1.189  402.7   0.570  0.615 +0.045   0.717
+amh     1.145  474.6   0.597  0.650 +0.053   0.754
+tam     1.092  408.7   0.577  0.627 +0.050   0.720
+ben     1.056  443.5   0.501  0.555 +0.055   0.665
+mya     1.017  382.9   0.563  0.640 +0.077   0.752
+hye     1.000  396.0   0.578  0.610 +0.032   0.719
+kat     1.000  425.8   0.592  0.625 +0.033   0.711
+mai     0.948  424.1   0.558  0.600 +0.042   0.677
+ell     0.919  390.7   0.539  0.561 +0.022   0.688
+kbd     0.721  419.4   0.655  0.675 +
+… [1237 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Découverte importante : la fidélité est dominée par le témoin constant. Je dois vérifier avant de conclure.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport numpy as np, os\nrows=[l.strip().split(';') for l in open('/tmp/profil_langues.csv') if l.strip()][1:]\ncl=[r[0] for r in rows]\nfid=np.array([float(r[1]) for r in rows]); orc=np.array([float(r[2]) for r in r … [1661 caractères tronqués]`
+
+  ```
+=== la fidélité n'est-elle que le témoin ? ===
+corr(fid, témoin)      : +0.9768
+corr(oracle, témoin)   : +0.7638
+corr(oracle, fid)      : +0.8638
+écart fid−témoin : moyenne +0.0294 · min +0.0014 · max +0.0885
+corr((fid−témoin), norme)   : -0.5912
+corr((fid−témoin), frag)    : +0.8207
+corr(témoin, norme)         : -0.6577
+
+=== l'ORACLE : norme ou fragmentation ? ===
+oracle ↔ norme : -0.8368
+oracle ↔ frag  : +0.5496
+oracle ↔ norme | frag  : -0.7653
+oracle ↔ frag  | norme : +0.1876
+
+=== l'apport PROPRE du pont (fid − témoin) ===
+langue  apport   frag  norme  oracle
+dzo    +0.0885  1.324  418.1   0.791
+mya    +0.0769  1.017  382.9   0.752
+csw    +0.0639  1.507  391.2   0.786
+fuf    +0.0610  1.578  361.7   0.847
+tel    +0.0578  1.444  400.3   0.743
+mal    +0.0553  1.361  406.7   0.745
+deu    +0.0133  0.271  542.2   0.539
+tpi    +0.0133  0.352  471.8   0.676
+srp    +0.0128  0.390  519.0   0.561
+ilo    +0.0121  0.364  469.9   0.709
+hsb    +0.0114  0.444  453.8   0.621
+heb    +0.0014  0.407  550.9   0.592
+  ```
+
+### 🤖 Assistant
+
+⏵ **La fidélité est à 97,7 % le témoin constant. Je vérifie que l'apport du pont n'est pas un simple effet de « marge disponible ».**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport numpy as np, os\nrows=[l.strip().split(';') for l in open('/tmp/profil_langues.csv') if l.strip()][1:]\ncl=[r[0] for r in rows]\nfid=np.array([float(r[1]) for r in rows]); orc=np.array([float(r[2]) for r in r … [1796 caractères tronqués]`
+
+  ```
+=== l'apport du pont est-il un effet de MARGE ? ===
+corr(apport, frag)        : +0.8207
+corr(apport, norme)       : -0.5912
+corr(apport, témoin)      : +0.1127
+corr(apport, 1−témoin)    : -0.1127
+corr(apport, frag) | témoin : +0.8250
+corr(apport, frag) | norme  : +0.7342
+corr(apport, frag) | témoin ET norme : +0.4441
+
+=== régression multiple : qu'est-ce qui prédit l'apport ? ===
+  frag seul            R² 0.6735
+  norme seule          R² 0.3495
+  témoin seul          R² 0.0127
+  frag+norme           R² 0.7002
+  frag+norme+témoin    R² 0.7015
+  ```
+
+### 🤖 Assistant
+
+⏵ **Image nette et contrôlée. Je réécris la section 27 — ma première version attribuait à la norme ce qui appartient à la fragmentation.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ni=s.index(\"\\n---\\n\\n## 27.\")\ns=s[:i]\ns += \"\"\"\n\n---\n\n## 27. Le pont ne sert pas également les langues — et le chiffre de tête est surtout la CONS … [9548 caractères tronqués]`

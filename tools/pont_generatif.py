@@ -89,6 +89,10 @@ class Pont:
         # leurs carrés ne coûte qu'une inversion, reste en forme fermée, et teste
         # si le plafond de +0,020 vient de la linéarité de la lecture.
         self.quadratique = False
+        # PESÉE PAR LANGUE du fit (None = moindres carrés ordinaires). Voir
+        # `ajuste` : sans elle, l'objectif est ABSOLU alors que la métrique est un
+        # cosinus, et les langues à forte norme dominent la lecture partagée.
+        self.pese = None
         # GAIN D'ENTRÉE : en calcul réservoir c'est LE réglage critique, et il
         # valait 1,0 depuis le début sans avoir jamais été balayé. Trop petit, le
         # tanh reste linéaire et le réservoir n'est qu'un filtre ; trop grand, il
@@ -174,7 +178,21 @@ class Pont:
         X = self.phi(np.vstack([self._norm(self.X[i][:, idx]) for i in quel]))
         Y = np.vstack([self.Y[i] for i in quel])
         n = X.shape[1]
-        return np.linalg.solve(X.T @ X + ride*len(X)*np.eye(n), X.T @ (Y - mt))
+        if self.pese is None:
+            return np.linalg.solve(X.T @ X + ride*len(X)*np.eye(n), X.T @ (Y - mt))
+        # PESÉE PAR LANGUE. La régression minimise une erreur ABSOLUE : une langue
+        # dont les cibles ont une norme double pèse quatre fois plus dans
+        # l'objectif. Or la métrique finale est un COSINUS, insensible à l'échelle
+        # — les deux sont incohérents, et la lecture partagée se met au service
+        # des langues « fortes ». On rétablit la cohérence en pondérant chaque pas
+        # par 1/norme², ce qui revient à minimiser l'erreur RELATIVE de chaque
+        # langue. Les poids sont normalisés à 1 en moyenne pour que le terme de
+        # ride garde la même échelle.
+        w = np.concatenate([np.full(len(self.Y[i]), self.pese[i], dtype=np.float64)
+                            for i in quel])
+        w = w/w.mean()
+        Xw = X*w[:, None]
+        return np.linalg.solve(X.T @ Xw + ride*len(X)*np.eye(n), Xw.T @ (Y - mt))
 
     def fid(self, idx, W, mt, quel):
         X = self.phi(np.vstack([self._norm(self.X[i][:, idx]) for i in quel]))
