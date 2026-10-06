@@ -606,3 +606,65 @@ dont la lecture est ajustée sur le test explique 0,74, mais n'en transfère que
 3. **L'attrition ne généralise pas** : elle réduit la taille à coût faible et
    monotone. Le critère de validation est trop indulgent pour l'arrêter au bon
    endroit.
+
+
+---
+
+## 13. RECTIFICATION — l'oracle du §10.2 était faux, et le plafond se décompose
+
+### 13.1 La faute
+
+Le diagnostic du §10.2 (oracle 0,7762 contre nous 0,6383, « écart +0,138 ») était
+**faux**. L'ancien code faisait :
+
+```
+Wo = P.ajuste(idx_o, ride, mt, ite)      # <- ite indexe... les langues d'ENTRAÎNEMENT
+f_or = P.fid(idx_o, Wo, mt, ite)         # <- et on évalue sur les mêmes
+```
+
+Or `Pont` ne détient **que** les langues d'entraînement. `ite` y désigne donc les
+six **premières langues d'apprentissage** : l'oracle ajustait et évaluait sur le
+même jeu. Le 0,7762 était un ajustement **en échantillon**, pas un oracle de test.
+C'est la même fuite que celle déjà corrigée une fois dans le chemin du rapport — et
+que j'ai réintroduite dans le diagnostic.
+
+### 13.2 Le diagnostic corrigé
+
+Les trajectoires du jeu évalué se calculent avec `recalcule(..., Ek)`, jamais par
+indexation :
+
+| | nous | oracle | **écart** |
+|---|---:|---:|---:|
+| **TEST** — langues non latines, hors du vivier | 0,6383 | **0,7076** | **+0,0693** |
+| **VALIDATION** — même vivier que l'apprentissage | 0,7500 | **0,7769** | **+0,0269** |
+
+**Le plafond réel est 0,7076, pas 0,7762** : la marge est de **+0,069**, pas
++0,138. La moitié du chiffre annoncé était un artefact.
+
+### 13.3 Et l'écart se DÉCOMPOSE
+
+C'est le résultat utile du tour :
+
+- **+0,0269 de transfert générique** — même vivier, langues pourtant jamais vues.
+  Une lecture apprise sur trente langues ne tombe jamais parfaitement juste sur
+  une autre, même de la même famille.
+- **+0,0424 de TYPOLOGIE** — l'écart supplémentaire quand on passe aux six langues
+  de test, **toutes non latines** (grec, hébreu, hindi, japonais, coréen, thaï),
+  alors que l'apprentissage est surtout latin, cyrillique et arabe.
+
+**L'écart du test est 2,6 fois celui de la validation**, et cette différence est
+entièrement attribuable à l'écriture et à la famille linguistique.
+
+### 13.4 Ce que cela change aux conclusions
+
+- **Le goulot n'est pas « le transfert » en bloc** : il est pour moitié du
+  transfert ordinaire, pour moitié de la typologie des langues de test.
+- **Le levier n'est donc pas la méthode, c'est le PANEL.** Un jeu de test
+  uniquement non latin mesure surtout la distance typologique, pas la qualité du
+  pont. Il faut des langues tenues à l'écart **des deux sortes**, et c'est ce que
+  le découpage validation/test permet désormais de séparer.
+- Les trois échecs du §10 restent valides comme **faits** (le gain d'entrée et le
+  seuil ne déplacent rien ; la normalisation par langue effondre l'invariance ;
+  plus de langues ne réduit pas l'écart) — mais **leur interprétation change** :
+  ils ne disent pas que « le plafond est dans le transfert », ils disent que ces
+  leviers-là n'y touchent pas.

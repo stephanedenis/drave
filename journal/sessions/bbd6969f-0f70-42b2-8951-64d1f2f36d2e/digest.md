@@ -132675,3 +132675,323 @@ en cours : 0
 ⏵ Bilan complet. Je consigne ce tour, qui est fait de résultats surtout **négatifs** — et ils précisent nettement le tableau.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/recapitulatif.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 10. Où est le plafond : dans le TRANSFERT, pas dans les caractéristiques\n\nLe plafond de +0,024 pouvait venir du réservoir (gelé, aléatoire)  … [6519 caractères tronqués]`
+
+  ```
+635d3c4 Le plafond est dans le TRANSFERT, pas dans les caractéristiques ; l'attrition ne généralise pas
+  ```
+
+### 🤖 Assistant
+
+⏵ Je vérifie l'état final du tour.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short | grep -v journal | head -3; echo \"--- commits du tour 3 ---\"; git log --oneline -4; echo; python3 -c \"\nimport os\nmoi=os.getpid(); anc=set(); q=moi\nfor _ in range(8):\n    try:\n        st=open(f'/proc/{q}/st … [542 caractères tronqués]`
+
+  ```
+--- commits du tour 3 ---
+635d3c4 Le plafond est dans le TRANSFERT, pas dans les caractéristiques ; l'attrition ne généralise pas
+314b3cc journal
+9a66101 Lecture non linéaire : le plafond passe de +0,020 à +0,024 (+18 %)
+aeb7f12 CONCLUSION : la fidélité est portée par l'invariance de la cible, pas par le modèle
+
+calculs en cours : 0
+--- rapport ---
+608 reports/recapitulatif.md
+  ```
+
+### 🤖 Assistant
+
+⏵ Tour 3 terminé, tout commité, rien ne tourne. Le tour est fait de résultats **négatifs** — et ils précisent nettement le tableau.
+
+## La question du tour
+
+Le réservoir gelé porte-t-il tout ce qui est prédictible ? Quatre expériences, quatre réponses.
+
+### 1. Le réservoir n'est PAS le goulot
+
+J'ai enfin balayé le **gain d'entrée** — *le* réglage critique du calcul réservoir, resté à 1,0 depuis le début — et ajouté un **seuil par neurone** (représenté comme une colonne d'entrée constante, ce qui ne touche pas la généalogie).
+
+| gain | seuil | fid TEST | invariance | pire paire |
+|---|---:|---:|---:|---:|
+| 0,3 | non | 0,6381 | 0,9672 | 0,8909 |
+| 1,0 | non | **0,6383** | 0,9648 | 0,8821 |
+| 3,0 | non | 0,6355 | **0,9680** | **0,9074** |
+
+**Tout tient dans 0,003 de fidélité.** Le seuil, lui, échange de la fidélité contre la pire paire — la loi d'échange, encore.
+
+### 2. L'expérience décisive : un readout oracle
+
+| | fid TEST | invariance |
+|---|---:|---:|
+| notre lecture (30 langues d'apprentissage) | 0,6383 | 0,9648 |
+| **oracle** (ajustée sur le test — diagnostic) | **0,7762** | 0,9598 |
+
+**Nos caractéristiques contiennent 0,7762 ; nous n'en extrayons que 0,6383.** La marge de **+0,138 est dans le transfert inter-langue**, pas dans les caractéristiques. Et l'oracle n'est pas moins invariant que nous — il ne triche pas, il transfère mieux.
+
+### 3. La normalisation par langue échoue
+
+| | fid TEST | invariance | pire paire |
+|---|---:|---:|---:|
+| sans | **0,6383** | **0,9648** | **0,8821** |
+| avec | 0,6284 | **0,8823** | 0,6464 |
+
+Elle efface le **décalage commun**, qui est précisément la part partagée. L'invariance s'effondre de 0,083.
+
+### 4. Plus de langues ne réduit pas l'écart
+
+| langues d'apprentissage | fid TEST | oracle | **écart** |
+|---|---:|---:|---:|
+| 36 | 0,6380 | 0,7790 | 0,1410 |
+| 30 | 0,6383 | 0,7762 | 0,1379 |
+| 20 | 0,6362 | 0,7684 | 0,1322 |
+
+**Constant sur toute la plage.** C'est votre principe « pas de représentation universelle », **quantifié** : la perte d'une lecture universelle entre langues vaut **~0,14 de cosinus**, quel que soit le nombre de langues vues.
+
+## Verdict sur l'attrition — et il n'est pas favorable
+
+Testée sur la meilleure configuration, avec recalcul des trajectoires à chaque retrait :
+
+| | neurones | fid VAL | **fid TEST** |
+|---|---:|---:|---:|
+| né | 80 | 0,7500 | **0,6383** |
+| | 60 | 0,7484 | 0,6356 |
+| | 20 | 0,7419 | 0,6248 |
+| | **1** | 0,7327 | **0,6169** |
+
+**Décroissance monotone. L'attrition réduit la taille, elle ne généralise rien** — coût faible (−0,003 pour −25 %) mais réel. Et le critère de validation est **trop indulgent** : il accepte les quinze retraits (VAL −0,017) alors que le test en perd 0,021.
+
+Détail qui enfonce le clou : l'oracle du réseau à **1 neurone** vaut encore **0,7388**. Un seul neurone explique 0,74 avec une lecture ajustée sur le test, mais n'en transfère que 0,62.
+
+## État de l'objectif
+
+Tous les livrables sont en place et mesurés : phase générative ✓, attrition périodique ✓ (avec son verdict honnête), généralisation par redondance ✓, aucune rétropropagation ✓, les cinq mesures ✓, contre Qwen2.5-0.5B couche 10 ✓. Le volet 30B reste écarté par votre consigne d'un seul professeur.
+
+**Je laisse l'objectif actif**, parce que le tour a produit une cible concrète et chiffrée : **combler l'écart de transfert de +0,138**. C'est là qu'est tout le gain restant, et c'est désormais mesurable à chaque essai grâce à l'oracle.
+
+
+## Tour 125
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Faire évoluer le pont linguistico-sémantique en BOÎTE NOIRE (émulation des premières couches du professeur, sans accès à ses rouages) par une phase GÉNÉRATIVE — le nombre de neurones et de couches NAÎT pendant l'apprentissage, en partant d'un seul neurone — suivie d'une ATTRITION PÉRIODIQUE qui réduit la taille du réseau en GÉNÉRALISANT les concepts (fusion des unités redondantes, réajustement de la lecture sur les survivants), jamais par simple coupe. Aucune rétropropagation : A et B restent aléatoires et gelés, seule la lecture s'ajuste en forme fermée. Chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, et TAILLE du réseau — mesurées contre le professeur Qwen2.5-0.5B couche 10 et le plateau Qwen3-30B-A3B."
+Round: 4/256
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Tour 4. La cible est chiffrée : **combler l'écart de transfert de +0,138**. Je commence par l'hypothèse la plus directe — le **décalage propre à chaque langue dans l'entrée**.
+
+L'écart vient de ce qu'une même lecture ne vaut pas pour toutes les langues. Or l'entrée `e_t` porte un **décalage propre à chaque langue** — le « jeton moyen » de la langue, qui ne dit aucun contenu. Je l'enlève, à l'entrée et non dans les états.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -1; sed -n '/if opt(\"--biais\", \"\"):/,/P = Pont/p' tools/pont_generatif.py", "description": "Check state and input handling"}`
+
+  ```
+635d3c4 Le plafond est dans le TRANSFERT, pas dans les caractéristiques ; l'attrition ne généralise pas
+    if opt("--biais", ""):
+        col = float(np.sqrt(H))
+        Etr = [np.hstack([e, np.full((len(e), 1), col, dtype=np.float32)]) for e in Etr]
+        Ete = [np.hstack([e, np.full((len(e), 1), col, dtype=np.float32)]) for e in Ete]
+        H = H + 1
+        print(f"# SEUIL PAR NEURONE : colonne d'entrée constante de valeur {col:.1f}")
+
+    P = Pont((cltr, Etr, Ytr), a, graine, H)
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", "new_string": "    # CENTRAGE DE L'ENTRÉE (`--centre-entree`) : on retire à chaque langue son\n    # « jeton moyen ». Ce décalage est massivement propre à la langue (écriture,\n    # morphologie) et ne dit aucun … [618 caractères tronqués]`
+
+  ```
+Error: cannot edit "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py": file changed since it was read — re-read the file, then retry
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", "limit": 8, "offset": 513}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py</path>
+<type>file</type>
+<content>
+513:     if part_langues > 0.0:
+514:         # « Vivant » = PRÉSENT, pas « d'amplitude suffisante » : la trace est
+515:         # creuse, et un canal non écrit est un canal éteint. Un seuil de magnitude
+516:         # gardait les 896 canaux (mesuré) — il ne mesurait rien.
+517:         vivant = np.zeros(Ytr[0].shape[1])
+518:         for i in itr:
+519:             vivant += ((Ytr[i] != 0).mean(0) >= 0.05).astype(float)
+520:         vivant /= len(itr)
+
+(Showing lines 513-520 of 771. Use offset=521 to continue.)
+</content>
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", "limit": 12, "offset": 526}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py</path>
+<type>file</type>
+<content>
+526:               f"({len(garde)/H:.0%} des canaux)")
+527: 
+528:     print(f"# {len(cltr)} langues d'entraînement = {len(itr)} apprentissage + {len(ival)} validation")
+529:     print(f"# {len(clte)} langues de TEST · a={a} · ride={ride} · graine={graine} · critère={critere}")
+530:     print(f"# {cycles} cycles de {par_cycle} couches, puis attrition")
+531:     print(f"# pas — apprentissage {sum(len(Etr[i]) for i in itr)} · validation "
+532:           f"{sum(len(Etr[i]) for i in ival)} · test {sum(len(Ete[i]) for i in ite)}")
+533: 
+534:     # SEUIL PAR NEURONE (`--biais`) : on ajoute une colonne d'entrée CONSTANTE.
+535:     # Chaque neurone tire alors un poids pour elle, donc un seuil propre — ce qui
+536:     # déplace sa non-linéarité. Le passer par la colonne d'entrée évite de toucher
+537:     # à la généalogie : c'est un canal de plus, rien d'autre.
+
+(Showing lines 526-537 of 771. Use offset=538 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", "new_string": "    # CENTRAGE DE L'ENTRÉE (`--centre-entree`) : on retire à chaque langue son\n    # « jeton moyen ». Ce décalage est massivement propre à la langue (écriture,\n    # morphologie) et ne dit aucun … [1168 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"import ast;ast.parse(open('tools/pont_generatif.py').read());print('syntaxe OK')\" && setsid nohup python3 -u tools/pont_generatif.py /tmp/cache_appr10c.npz /tmp/cache_tenus10c.npz --naissance libre --cycles 1 --val 10 - … [341 caractères tronqués]`
+
+  ```
+syntaxe OK
+# CENTRAGE DE L'ENTRÉE : le jeton moyen de chaque langue est retiré
+# née : 80 neurones en 9 couches [12, 16, 10, 8, 8, 8, 8, 8, 2]
+# ORACLE (lecture ajustée SUR le test, diagnostic seulement)
+#   fidélité TEST oracle : 0.7723 · invariance 0.9665 · pire paire 0.8962
+  fidélité TEST    : 0.6250   (constante témoin : 0.6140)
+  invariance TEST  : 0.9662 · pire paire 0.8924
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le centrage de l'entrée échoue aussi** : fidélité 0,6383 → **0,6250**, et l'écart de transfert **empire** (0,138 → 0,147). Ce n'est donc pas le décalage linguistique de l'entrée.
+
+**Échec de plus** : fidélité 0,6383 → **0,6250**, et l'écart de transfert *augmente* (0,138 → 0,147). Le décalage linguistique de l'entrée n'est pas la cause.
+
+Nouvelle hypothèse, plus probable : mes 6 langues de test sont **toutes non latines** (grec, hébreu, hindi, japonais, coréen, thaï) alors que l'entraînement est surtout latin/cyrillique/arabe. **L'écart serait alors de typologie, pas de transfert.** Test : mesurer le même écart sur des langues tenues à l'écart **issues du vivier d'entraînement**.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/pont_generatif.py'; s=open(p).read()\ns=s.replace(\"\"\"    if opt(\"--oracle\", \"\"):\n        idx_o = np.arange(P.compte_neurones)\n        Wo = P.ajuste(idx_o, ride, mt, ite)\n        f_or = P.fid(idx_o … [2116 caractères tronqués]`
+
+  ```
+syntaxe OK
+# 6 langues de TEST · a=0.5 · ride=1.0 · graine=5 · critère=redondance
+# constante témoin sur le TEST : 0.6140
+après                           neur.  couch.  fid appr  fid VAL  fid TEST   invar.    pire
+# née : 80 neurones en 8 couches [30, 8, 8, 8, 8, 8, 8, 2]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le run est encore en cours. J'attends le bloc oracle.
+
+- **bash** `{"command": "sleep 200; grep -E \"ORACLE|#   TEST|#   VALIDATION|fidélité TEST|née :\" /tmp/typo.log; echo \"--- en cours ? ---\"; python3 -c \"\nimport os\nmoi=os.getpid(); anc=set(); q=moi\nfor _ in range(8):\n    try:\n        st=open(f'/proc/{q}/stat').read().split(') ',1)[1].split(); q=int(st[1 … [416 caractères tronqués]`
+
+  ```
+# née : 80 neurones en 8 couches [30, 8, 8, 8, 8, 8, 8, 2]
+# ORACLE (lecture ajustée SUR le jeu évalué — diagnostic seulement)
+#   TEST        : nous 0.7332 · oracle 0.7388 · ÉCART +0.0056 · invariance 0.9987 · pire 0.9961
+#   VALIDATION  : nous 0.7327 · oracle 0.7376 · ÉCART +0.0049   (même vivier que l'apprentissage)
+  fidélité TEST    : 0.6383   (constante témoin : 0.6140)
+--- en cours ? ---
+en cours : 0
+  ```
+
+### 🤖 Assistant
+
+⏵ **Mon bloc oracle est faux, et je dois le corriger.** `Pont` ne détient que les langues d'entraînement : `P.fid(..., ite)` indexe donc des langues d'entraînement, pas le test. Les 0,7332 annoncés sont faux — c'est la même fuite que j'avais déjà corrigée dans le rapport.
+
+**Mon bloc oracle est faux et je dois le corriger.** `Pont` ne détient que les langues d'entraînement : `P.fid(..., ite)` indexe donc des langues **d'entraînement**, pas le test. Le 0,7332 annoncé est faux — c'est exactement la fuite déjà corrigée dans le rapport, que j'ai réintroduite ici.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/pont_generatif.py'; s=open(p).read()\ni=s.index(\"    if opt(\\\"--oracle\\\", \\\"\\\"):\")\nj=s.index(\"    print(f\\\"\\\\n=== MEILLEUR RÉSEAU SELON LA VALIDATION\")\nneuf = '''    if opt(\"--oracle\", \ … [1941 caractères tronqués]`
+
+  ```
+syntaxe OK
+# née : 80 neurones en 8 couches [30, 8, 8, 8, 8, 8, 8, 2]
+# ORACLE (lecture ajustée SUR le jeu évalué — diagnostic seulement)
+#   TEST        : nous 0.6169 · oracle 0.6318 · ÉCART +0.0149 · invariance oracle 0.9970
+#   VALIDATION  : nous 0.7327 · oracle 0.7376 · ÉCART +0.0049   (même vivier que l'apprentissage)
+  fidélité TEST    : 0.6383   (constante témoin : 0.6140)
+  ```
+
+### 🤖 Assistant
+
+⏵ Deux chiffres de test différents dans le même run (0,6169 et 0,6383) : je dois comprendre avant de conclure.
+
+Deux chiffres de test différents dans le **même** run : 0,6169 et 0,6383. Je dois comprendre avant de conclure quoi que ce soit.
+
+- **bash** `{"command": "tail -16 /tmp/typo.log; echo \"=== où sont les deux 0,63 ===\"; grep -n \"0.6383\\|0.6169\\|fidélité TEST\" /tmp/typo.log", "description": "Locate the two test figures"}`
+
+  ```
+retrait de 1 (recalculé)            3       3    0.6708   0.7341    0.6185
+retrait de 1 (recalculé)            2       2    0.6700   0.7331    0.6179
+retrait de 1 (recalculé)            1       1    0.6691   0.7327    0.6169
+
+# ORACLE (lecture ajustée SUR le jeu évalué — diagnostic seulement)
+#   TEST        : nous 0.6169 · oracle 0.6318 · ÉCART +0.0149 · invariance oracle 0.9970
+#   VALIDATION  : nous 0.7327 · oracle 0.7376 · ÉCART +0.0049   (même vivier que l'apprentissage)
+
+=== MEILLEUR RÉSEAU SELON LA VALIDATION (naissance libre) ===
+  taille           : 80 neurones · 8 couches
+  fidélité appr.   : 0.7026
+  fidélité VAL     : 0.7500
+  fidélité TEST    : 0.6383   (constante témoin : 0.6140)
+  invariance TEST  : 0.9648 · pire paire 0.8821
+
+# état final du réseau : 1 neurones · 1 couches ([1])
+=== où sont les deux 0,63 ===
+34:n80              80       8    0.7026   0.7500    0.6383   0.9648  0.8821 | communs +0.462 ( 88 %) · contraste 0.993
+53:retrait de 1 (recalculé)            1       1    0.6691   0.7327    0.6169
+56:#   TEST        : nous 0.6169 · oracle 0.6318 · ÉCART +0.0149 · invariance oracle 0.9970
+63:  fidélité TEST    : 0.6383   (constante témoin : 0.6140)
+  ```
+
+### 🤖 Assistant
+
+⏵ **Deux découvertes, dont une qui invalide une conclusion du tour 3.**
+
+1. **`--attrition 0` ne désactive rien** : ma restructuration a emporté le `if not attrition: continue` dans le bloc `else`, donc l'attrition tourne toujours. Le réseau final est à 1 neurone.
+2. **Le chiffre du tour 3 était faussé** : l'ancien bloc oracle évaluait via `P.fid(..., ite)`, qui indexe des langues d'**entraînement**. Le « oracle 0,7762 » était donc un ajustement **en échantillon**, pas un oracle de test. **La comparaison « plafond dans le transfert » du tour 3 est invalide.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"if not attrition\" tools/pont_generatif.py; sed -n '/if not attrition/,+2p' tools/pont_generatif.py; echo \"=== indentation ===\"; awk 'NR>=660 && NR<=700 && /if not attrition|continue|ATTRITION \\(/ {print NR\": [\"$0\"]\" … [83 caractères tronqués]`
+
+  ```
+711:        if not attrition:
+        if not attrition:
+            continue
+        print(f"\n########## CYCLE {cycle} — ATTRITION ({critere}) ##########")
+=== indentation ===
+  ```
+
+### 🤖 Assistant
+
+⏵ Fausse alerte sur le bug : je n'avais simplement **pas passé `--attrition 0`** dans ce run. L'attrition a donc tourné normalement. Je relance avec l'attrition désactivée pour avoir l'oracle sur le réseau à 80 neurones.
+
+Fausse alerte : je n'avais **pas passé `--attrition 0`**. L'attrition a tourné normalement. Je relance avec elle désactivée, pour obtenir l'oracle sur le réseau à **80 neurones** — et corriger le chiffre du tour 3.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && setsid nohup python3 -u tools/pont_generatif.py /tmp/cache_appr10c.npz /tmp/cache_tenus10c.npz --naissance libre --cycles 1 --val 10 --a 0.5 --ride 1.0 --plafond 80 --gain-min 0.0005 --patience 8 --part-canaux 0.5 --lecture quadratiq … [229 caractères tronqués]`
+
+  ```
+# née : 80 neurones en 8 couches [30, 8, 8, 8, 8, 8, 8, 2]
+# ORACLE (lecture ajustée SUR le jeu évalué — diagnostic seulement)
+#   TEST        : nous 0.6383 · oracle 0.7076 · ÉCART +0.0693 · invariance oracle 0.9329
+#   VALIDATION  : nous 0.7500 · oracle 0.7769 · ÉCART +0.0269   (même vivier que l'apprentissage)
+  fidélité TEST    : 0.6383   (constante témoin : 0.6140)
+  ```
+
+### 🤖 Assistant
+
+⏵ **Correction obtenue, et elle change le tableau.**
+
+| | nous | oracle | **écart** |
+|---|---:|---:|---:|
+| **TEST** (langues non latines, hors vivier) | 0,6383 | 0,7076 | **+0,0693** |
+| **VALIDATION** (même vivier que l'apprentissage) | 0,7500 | 0,7769 | **+0,0269** |
+
+Le chiffre du tour 3 (**+0,138**) était **gonflé par mon bug** : l'ancien oracle ajustait et évaluait sur **les mêmes** 6 langues d'entraînement, donc en échantillon. Le vrai plafond est **0,7076**, pas 0,7762.
+
+Et l'écart se **décompose** : **+0,027 de transfert générique** (même vivier) **+ 0,042 de typologie** (les 6 langues de test sont toutes non latines). L'écart du test est **2,6× celui de la validation**.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/recapitulatif.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 13. RECTIFICATION — l'oracle du §10.2 était faux, et le plafond se décompose\n\n### 13.1 La faute\n\nLe diagnostic du §10.2 (oracle 0,7762 con … [4568 caractères tronqués]`

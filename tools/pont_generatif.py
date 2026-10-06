@@ -531,6 +531,17 @@ def main():
     print(f"# pas — apprentissage {sum(len(Etr[i]) for i in itr)} · validation "
           f"{sum(len(Etr[i]) for i in ival)} · test {sum(len(Ete[i]) for i in ite)}")
 
+    # CENTRAGE DE L'ENTRÉE (`--centre-entree`) : on retire à chaque langue son
+    # « jeton moyen ». Ce décalage est massivement propre à la langue (écriture,
+    # morphologie) et ne dit aucun contenu — c'est le premier suspect de l'écart
+    # de transfert. Calculable à l'inférence sur l'entrée elle-même, sans aucune
+    # étiquette. À ne pas confondre avec la normalisation des ÉTATS, qui a échoué
+    # (elle effaçait le décalage COMMUN, qui est la part partagée).
+    if opt("--centre-entree", ""):
+        Etr = [e - e.mean(0, keepdims=True) for e in Etr]
+        Ete = [e - e.mean(0, keepdims=True) for e in Ete]
+        print("# CENTRAGE DE L'ENTRÉE : le jeton moyen de chaque langue est retiré")
+
     # SEUIL PAR NEURONE (`--biais`) : on ajoute une colonne d'entrée CONSTANTE.
     # Chaque neurone tire alors un poids pour elle, donc un seuil propre — ce qui
     # déplace sa non-linéarité. Le passer par la colonne d'entrée évite de toucher
@@ -747,14 +758,29 @@ def main():
     # modèle — c'est un diagnostic. S'il plafonne comme nous, nos caractéristiques
     # ne contiennent pas plus ; s'il monte haut, c'est le transfert qui pèche.
     if opt("--oracle", ""):
+        # ATTENTION : `Pont` ne détient QUE les langues d'entraînement. Évaluer
+        # avec `P.fid(..., ite)` indexerait donc des langues d'ENTRAÎNEMENT — la
+        # fuite déjà corrigée une fois. Les trajectoires du test se calculent
+        # avec `recalcule(..., Ete)`.
         idx_o = np.arange(P.compte_neurones)
-        Wo = P.ajuste(idx_o, ride, mt, ite)
-        f_or = P.fid(idx_o, Wo, mt, ite)
-        Xo = P.recalcule(idx_o, Ete)
-        mo, mio = P.invariance(Xo, Wo, mt)
-        print(f"\n# ORACLE (lecture ajustée SUR le test, diagnostic seulement)")
-        print(f"#   fidélité TEST oracle : {f_or:.4f} · invariance {mo:.4f} · "
-              f"pire paire {mio:.4f}")
+        Wtr = P.ajuste(idx_o, ride, mt, itr)
+
+        def oracle_sur(Ek, Yk):
+            Xk = P.recalcule(idx_o, Ek)
+            A = P.phi(np.vstack(Xk)); B = np.vstack(Yk)
+            Wo = np.linalg.solve(A.T @ A + ride*len(A)*np.eye(A.shape[1]),
+                                 A.T @ (B - mt))
+            return P.evalue(Xk, Yk, Wtr, mt), cos_lignes(A @ Wo + mt, B), Xk, Wo
+
+        print(f"\n# ORACLE (lecture ajustée SUR le jeu évalué — diagnostic seulement)")
+        nous_t, or_t, Xt, Wt = oracle_sur(Ete, Yte)
+        mo, mio = P.invariance(Xt, Wt, mt)
+        print(f"#   TEST        : nous {nous_t:.4f} · oracle {or_t:.4f} · "
+              f"ÉCART {or_t-nous_t:+.4f} · invariance oracle {mo:.4f}")
+        Ev = [Etr[i] for i in ival]; Yv = [Ytr[i] for i in ival]
+        nous_v, or_v, _, _ = oracle_sur(Ev, Yv)
+        print(f"#   VALIDATION  : nous {nous_v:.4f} · oracle {or_v:.4f} · "
+              f"ÉCART {or_v-nous_v:+.4f}   (même vivier que l'apprentissage)")
 
     print(f"\n=== MEILLEUR RÉSEAU SELON LA VALIDATION ({meilleur['etape']}) ===")
     print(f"  taille           : {meilleur['neur']} neurones · {meilleur['couch']} couches")

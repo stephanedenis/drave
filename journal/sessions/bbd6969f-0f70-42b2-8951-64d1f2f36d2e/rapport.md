@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 173.6 h |
-| Tours | 124 |
-| Messages | 8224 |
-| Appels d'outils | 7841 |
+| Durée | 174.1 h |
+| Tours | 125 |
+| Messages | 8240 |
+| Appels d'outils | 7855 |
 | Fichiers touchés | 165 |
-| Commandes | 6672 |
+| Commandes | 6682 |
 | Sous-agents | 32 |
-| Commits | 578 |
+| Commits | 579 |
 | Compactages de contexte | 11 |
 
 ## Objectifs déclarés
@@ -297,6 +297,8 @@
 **Tour 123** — <goal_round> Objective: "Faire évoluer le pont linguistico-sémantique en BOÎTE NOIRE (émulation des premières couches du professeur, sans accès à ses rouages) par une phase GÉNÉRATIVE — le nombre de neurones et de couches NAÎT pendant l'apprentissage, en partant d'un seul neurone — suivie d'une ATTRITION PÉRIODIQUE qui réduit la taille du réseau en GÉNÉRALISANT les concepts (fusion des unités redo … [951 caractères tronqués]
 
 **Tour 124** — <goal_round> Objective: "Faire évoluer le pont linguistico-sémantique en BOÎTE NOIRE (émulation des premières couches du professeur, sans accès à ses rouages) par une phase GÉNÉRATIVE — le nombre de neurones et de couches NAÎT pendant l'apprentissage, en partant d'un seul neurone — suivie d'une ATTRITION PÉRIODIQUE qui réduit la taille du réseau en GÉNÉRALISANT les concepts (fusion des unités redo … [951 caractères tronqués]
+
+**Tour 125** — <goal_round> Objective: "Faire évoluer le pont linguistico-sémantique en BOÎTE NOIRE (émulation des premières couches du professeur, sans accès à ses rouages) par une phase GÉNÉRATIVE — le nombre de neurones et de couches NAÎT pendant l'apprentissage, en partant d'un seul neurone — suivie d'une ATTRITION PÉRIODIQUE qui réduit la taille du réseau en GÉNÉRALISANT les concepts (fusion des unités redo … [951 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -6335,7 +6337,7 @@ Acquis : pha
 
 ### Tour 124 — <goal_round> Objective: "Faire évoluer le pont linguistico-sémantique en BOÎTE NOIRE (émulation des premières couches du … [1231 caractères tronqués]
 
-*18 appels d'outils.* Actions notables :
+*19 appels d'outils.* Actions notables :
 
 - bash — Check state and find reservoir weight initialization
 - bash — Add input gain and per-neuron bias
@@ -6351,11 +6353,99 @@ Acquis : pha
 - read
 - bash — Restructure so free birth reaches attrition
 - bash — Wait for transfer test completion
-- … et 4 autres
+- … et 5 autres
 
 **Synthèse produite :**
 
-⏵ Bilan complet. Je consigne ce tour, qui est fait de résultats surtout **négatifs** — et ils précisent nettement le tableau.
+⏵ Tour 3 terminé, tout commité, rien ne tourne. Le tour est fait de résultats **négatifs** — et ils précisent nettement le tableau.
+
+\## La question du tour
+
+Le réservoir gelé porte-t-il tout ce qui est prédictible ? Quatre expériences, quatre réponses.
+
+\### 1. Le réservoir n'est PAS le goulot
+
+J'ai enfin balayé le **gain d'entrée** — *le* réglage critique du calcul réservoir, resté à 1,0 depuis le début — et ajouté un **seuil par neurone** (représenté comme une colonne d'entrée constante, ce qui ne touche pas la généalogie).
+
+| gain | seuil | fid TEST | invariance | pire paire |
+|---|---:|---:|---:|---:|
+| 0,3 | non | 0,6381 | 0,9672 | 0,8909 |
+| 1,0 | non | **0,6383** | 0,9648 | 0,8821 |
+| 3,0 | non | 0,6355 | **0,9680** | **0,9074** |
+
+**Tout tient dans 0,003 de fidélité.** Le seuil, lui, échange de la fidélité contre la pire paire — la loi d'échange, encore.
+
+\### 2. L'expérience décisive : un readout oracle
+
+| | fid TEST | invariance |
+|---|---:|---:|
+| notre lecture (30 langues d'apprentissage) | 0,6383 | 0,9648 |
+| **oracle** (ajustée sur le test — diagnostic) | **0,7762** | 0,9598 |
+
+**Nos caractéristiques contiennent 0,7762 ; nous n'en extrayons que 0,6383.** La marge de **+0,138 est dans le transfert inter-langue**, pas dans les caractéristiques. Et l'oracle n'est pas moins invariant que nous — il ne triche pas, il transfère mieux.
+
+\### 3. La normalisation par langue échoue
+
+| | fid TEST | invariance | pire paire |
+|---|---:|---:|---:|
+| sans | **0,6383** | **0,9648** | **0,8821** |
+| avec | 0,6284 | **0,8823** | 0,6464 |
+
+Elle efface le **décalage commun**, qui est précisément la part partagée. L'invariance s'effondre de 0,083.
+
+\### 4. Plus de langues ne réduit pas l'écart
+
+| langues d'apprentissage | fid TEST | oracle | **écart** |
+|---|---:|---:|---:|
+| 36 | 0,6380 | 0,7790 | 0,1410 |
+| 30 | 0,6383 | 0,7762 | 0,1379 |
+| 20 | 0,6362 | 0,7684 | 0,1322 |
+
+**Constant sur toute la plage.** C'est votre principe « pas de représentation universelle », **quantifié** : la perte d'une lecture universelle entre langues vaut **~0,14 de cosinus**, quel que soit le nombre de langues vues.
+
+\## Verdict sur l'attrition — et il n'est pas favorable
+
+Testée sur la meilleure configuration, avec recalcul des trajectoires à chaque retrait :
+
+| | neurones | fid VAL | **fid TEST** |
+|---|---:|---:|---:|
+| né | 80 | 0,7500 | **0,6383** |
+| | 60 | 0,7484 | 0,6356 |
+| | 20 | 0,7419 | 0,6248 |
+| | **1** | 0,7327 | **0,6169** |
+
+**Décroissance monotone. L'attrition réduit la 
+… [954 caractères tronqués]
+
+### Tour 125 — <goal_round> Objective: "Faire évoluer le pont linguistico-sémantique en BOÎTE NOIRE (émulation des premières couches du … [1231 caractères tronqués]
+
+*13 appels d'outils.* Actions notables :
+
+- bash — Check state and input handling
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py`
+- read
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py`
+- bash — Test input centering
+- bash — Compare transfer gap on test vs validation pool
+- bash — Wait for typology diagnostic
+- bash — Fix oracle leakage and rerun
+- bash — Locate the two test figures
+- bash — Locate the misplaced attrition guard
+- bash — Correct oracle on 80-neuron network
+- bash — Commit the oracle correction
+
+**Synthèse produite :**
+
+⏵ **Correction obtenue, et elle change le tableau.**
+
+| | nous | oracle | **écart** |
+|---|---:|---:|---:|
+| **TEST** (langues non latines, hors vivier) | 0,6383 | 0,7076 | **+0,0693** |
+| **VALIDATION** (même vivier que l'apprentissage) | 0,7500 | 0,7769 | **+0,0269** |
+
+Le chiffre du tour 3 (**+0,138**) était **gonflé par mon bug** : l'ancien oracle ajustait et évaluait sur **les mêmes** 6 langues d'entraînement, donc en échantillon. Le vrai plafond est **0,7076**, pas 0,7762.
+
+Et l'écart se **décompose** : **+0,027 de transfert générique** (même vivier) **+ 0,042 de typologie** (les 6 langues de test sont toutes non latines). L'écart du test est **2,6× celui de la validation**.
 
 ## 3. Travail accompli
 
@@ -6513,7 +6603,7 @@ Acquis : pha
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/31-le-regroupement-par-experts-mesure-et-k3-au-complet.md` | 1 | 1 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-prefill-par-experts.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/engine.rs` | 0 | 1 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py` | 0 | 22 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py` | 0 | 24 |
 | `/tmp/chaine_propre.sh` | 1 | 0 |
 | `/tmp/analyse_propre.sh` | 1 | 0 |
 | `/tmp/stop2.py` | 1 | 0 |
@@ -6606,7 +6696,7 @@ Acquis : pha
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6632 autres
+- … et 6642 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -7332,4 +7422,5 @@ Acquis : pha
 - Lecture non linéaire : le plafond passe de +0,020 à +0,024 (+18 %)  Le readout était LINÉAIRE sur les états du réservoir. On lui donne [états, états²], ce qui r
 - journal" 2>/dev/null; git log --oneline -1
 - Le plafond est dans le TRANSFERT, pas dans les caractéristiques ; l'attrition ne généralise pas  QUATRE EXPÉRIENCES, QUATRE RÉPONSES.  1. LE RÉSERVOIR N'EST PAS
+- RECTIFICATION : l'oracle du §10.2 était faux ; le plafond est 0,7076, pas 0,7762  LA FAUTE. L'ancien diagnostic faisait P.ajuste(..., ite) puis P.fid(..., ite).
 
