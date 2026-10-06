@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 192.7 h |
-| Tours | 177 |
-| Messages | 8952 |
-| Appels d'outils | 8443 |
-| Fichiers touchés | 197 |
-| Commandes | 7158 |
+| Durée | 193.1 h |
+| Tours | 178 |
+| Messages | 8967 |
+| Appels d'outils | 8456 |
+| Fichiers touchés | 198 |
+| Commandes | 7170 |
 | Sous-agents | 32 |
-| Commits | 642 |
+| Commits | 643 |
 | Compactages de contexte | 12 |
 
 ## Objectifs déclarés
@@ -407,6 +407,8 @@
 **Tour 176** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 **Tour 177** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
+
+**Tour 178** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -8915,7 +8917,7 @@ Traçage lancé (2 892 × 16 s, ~1
 
 ### Tour 177 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
 
-*25 appels d'outils.* Actions notables :
+*32 appels d'outils.* Actions notables :
 
 - bash — Check both chains
 - bash — Inspect the domain-vs-language tool
@@ -8931,11 +8933,60 @@ Traçage lancé (2 892 × 16 s, ~1
 - bash — Inspect Gutenberg databases
 - bash — List all Gutenberg works
 - bash — Find chapter markers in parallel works
-- … et 11 autres
+- … et 18 autres
 
 **Synthèse produite :**
 
-⏵ **Deuxième corpus parallèle lancé. Je consigne et je note la fausse alerte de déterminisme.**
+⏵ **Round 50 — état et acquis.**
+
+\## Ce qui a été fait dans ce round
+
+**1. L'outil « domaine ou langue » généralisé** — il exigeait des unités *numérotées* et exactement dix par langue, ce qui le limitait à l'UDHR. Il accepte maintenant toute étiquette (`en_Albert_Einstein`) et un nombre d'unités quelconque. Vérifié sans régression sur l'UDHR : couche 8, `S_langue` 0,6505 contre `S_domaine` 0,8406 → **LANGUE domine**. Et testé à blanc sur Wikipedia : le pipeline fonctionne de bout en bout.
+
+Ce test est le point clé : l'UDHR est **mono-domaine**, donc ses « contenus différents » n'en sont pas — l'hypothèse « le vocabulaire dépend du domaine » n'y était *pas testable*. Avec 482 articles × 6 langues, elle le devient.
+
+**2. Deuxième œuvre parallèle Gutenberg — et deuxième couple de langues.** Le corpus parallèle ne comptait qu'une œuvre (Romeo, en–fr). Or **une seule paire ne permet pas de distinguer une propriété du pont d'une propriété du couple de langues.**
+
+| œuvre | paire | état |
+|---|---|---|
+| Roméo et Juliette | en–fr | déjà traité (24 scènes) |
+| Le Comte de Monte-Cristo | en–fr | écarté — tomes 2,6 M / 0,73 M |
+| **Crime et Châtiment** | **en–es** | **retenu : 24 chapitres** |
+
+**Alignement exact par chapitre** (pas par offset, qui ne veut rien dire d'une langue à l'autre), vérifié par les tailles — rapport 0,82 à 1,14 sur 38 chapitres. Et on ne garde que les chapitres qui tiennent dans `ctx 8192` **dans les deux langues** : un chapitre tronqué d'un seul côté romprait l'alignement sans le dire.
+
+24 chapitres × 2 langues, 590 808 + 564 651 caractères. Même ordre de grandeur que Romeo, mais ~20× plus longs par segment.
+
+**3. Une fausse alerte que j'ai levée.** Deux traces du même fichier donnaient des **MD5 différents** — ce qui aurait mis en doute *toutes* les mesures de la session. **C'était faux, et l'erreur est de moi** : les fichiers comparés étaient **partiels**, tronqués par mes propres `timeout`. La comparaison propre (`--couches 0:9` contre `0:24`, sur en et de) donne des empreintes **identiques**. Le moteur est déterministe ; ma façon de mesurer ne l'était pas. Leçon appliquée : traçages longs **sans `timeout`**, avec journal.
+
+**4. Ordre de traçage Wikipedia corrigé.** La première version triait par nom de fichier — donc traçait tout l'allemand, puis tout l'anglais : **aucun article complet avant la fin, aucun résultat partiel exploitable**. On boucle maintenant sur les *articles* et les six langues de chacun.
+
+\## État des quatre chaînes
+
+
+… [755 caractères tronqués]
+
+### Tour 178 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Check all chains
+- bash — Check process load
+- bash — Identify drave processes by context size
+- bash — Lower priority of the slow Crime traces
+- bash — Extract invariance evolution from growth log
+- bash — Report the fidelity/invariance trade-off
+
+**Synthèse produite :**
+
+⏵ **Tension confirmée et monotone : la fidélité monte de +0,0185 pendant que l'invariance perd 0,0776 et la pire paire 0,1805.**
+
+| neurones | fidTEST | invariance | pire paire |
+|---:|---:|---:|---:|
+| 8 | 0,6151 | **0,9437** | **0,7399** |
+| 40 | 0,6294 | 0,9084 | 0,6559 |
+| 96 | 0,6311 | 0,8819 | 0,6419 |
+| 179 | **0,6336** | **0,8661** | **0,5594** |
 
 ## 3. Travail accompli
 
@@ -9140,6 +9191,7 @@ Traçage lancé (2 892 × 16 s, ~1
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/wiki_apparie.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/domaine_ou_langue.py` | 2 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/extrait_crime.py` | 1 | 0 |
+| `/tmp/wiki_analyse.sh` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -9218,7 +9270,7 @@ Traçage lancé (2 892 × 16 s, ~1
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 7118 autres
+- … et 7130 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10008,4 +10060,5 @@ Traçage lancé (2 892 × 16 s, ~1
 - Couche 8 contre couche 10 à 392 langues : 41 sur 41 s'améliorent, ZÉRO régresse  Même code, même périmètre, mêmes quatre mesures, les deux profils recalculés da
 - Premier corpus MULTI-DOMAINE et ALIGNÉ : 482 articles Wikipedia en 6 langues  CE QUE LA MACHINE CONTENAIT DÉJÀ : dix bases Wikipedia décompressées, 30 Go, dans 
 - Deuxième œuvre parallèle (Crime et Châtiment, en-es) et généralisation du test domaine/langue  LE MANQUE : le corpus parallèle ne comptait qu'UNE œuvre (Roméo e
+- Fidélité et invariance tirent en sens opposé quand le réseau grandit  Journal de la croissance (couche 10, ride 0,03, quadratique, multi-échelle, 300 langues d'
 

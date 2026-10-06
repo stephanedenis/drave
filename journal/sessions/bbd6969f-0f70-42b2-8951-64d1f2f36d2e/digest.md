@@ -147141,3 +147141,277 @@ n152            152       1    0.6485   0.6326    0.6321   0.8669  0.5568 | comm
 ⏵ **Deuxième corpus parallèle lancé. Je consigne et je note la fausse alerte de déterminisme.**
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 46. Deuxième œuvre parallèle, et deuxième couple de langues\n\n### 46.1 Le manque\n\nLe corpus parallèle du pont ne comptait qu'** … [5533 caractères tronqués]`
+
+  ```
+6b1cad4 Deuxième œuvre parallèle (Crime et Châtiment, en-es) et généralisation du test domaine/langue
+  ```
+
+### 🤖 Assistant
+
+⏵ **Point d'état sur les trois chaînes.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== croissance ===\"; tail -3 /tmp/croissance2.log; echo; echo \"=== wiki apparié ===\"; echo \"articles complets : $(grep -c '^ARTICLE' /tmp/trace_wiki_apparie.log) · traces : $(ls /home/stephane/Data13TB/stephane/corpus/wiki … [313 caractères tronqués]`
+
+  ```
+=== croissance ===
+n149            149       1    0.6483   0.6322    0.6317   0.8670  0.5674 | communs -1.385 (  0 %) · contraste 0.989
+n150            150       1    0.6483   0.6323    0.6318   0.8669  0.5621 | communs -1.389 (  0 %) · contraste 0.989
+n152            152       1    0.6485   0.6326    0.6321   0.8669  0.5568 | communs -1.391 (  0 %) · contraste 0.989
+
+=== wiki apparié ===
+articles complets : 15 · traces : 213
+=== crime ===
+segments : 0 · traces : 1
+
+               total        used        free      shared  buff/cache   available
+Mem:             125          28          18           8          88          97
+15:28
+  ```
+
+### 🤖 Assistant
+
+⏵ **J'écris la chaîne d'analyse Wikipedia pour qu'elle se déclenche seule dès qu'il y a assez d'articles.**
+
+- **write** `{"content": "#!/bin/bash\n# ANALYSE DU CORPUS WIKIPEDIA APPARIÉ — déclenchée automatiquement.\n#\n# Attend un nombre suffisant d'articles COMPLETS (les six langues tracées), puis :\n#   1. le test DOMAINE OU LANGUE, aux couches 0 et 8 — c'est le test que l'UDHR\n#      interdisait, puisqu'il est mon … [2633 caractères tronqués]`
+
+  ```
+<path>/tmp/wiki_analyse.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash -n /tmp/wiki_analyse.sh && echo \"syntaxe OK\" && grep -n \"apparie\\|canaux\\|couche\" tools/pont_parallele.py | head -8", "description": "Verify chain script and flag names"}`
+
+  ```
+syntaxe OK
+19:Usage : pont_parallele.py <cache_A.npz> <cache_B.npz> [--couche 10] [--canaux 0.5]
+27:def appariement_par_taille(yA, yB):
+35:    couche = int(sys.argv[sys.argv.index("--couche")+1]) if "--couche" in sys.argv else 10
+36:    part = float(sys.argv[sys.argv.index("--canaux")+1]) if "--canaux" in sys.argv else 0.0
+52:        print(f"# sous-ensemble actif : {len(g)}/{H} canaux sur l'apprentissage de A")
+54:    print(f"# {n} segments appariés · A={clA[0]}… · B={clB[0]}… · couche {couche}")
+57:    def inv_appariee(VA, VB, quel="derniere"):
+66:    # AVERTISSEMENT OBLIGATOIRE. Ce tool apparie les segments PAR INDEX. Il n'a de
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '66,80p' tools/pont_parallele.py", "description": "Check the warning logic"}`
+
+  ```
+# AVERTISSEMENT OBLIGATOIRE. Ce tool apparie les segments PAR INDEX. Il n'a de
+    # sens que si le segment i de A et le segment i de B portent le MÊME CONTENU.
+    # Sur un corpus non apparié — Wikipedia, dont les articles anglais et français
+    # n'ont rien en commun — le chiffre ci-dessous ne veut RIEN dire, et le lire
+    # comme une invariance serait une faute. Vérifié : les morceaux en commencent
+    # par « Actrius », les fr par « Algèbre générale ».
+    if "--apparie" not in sys.argv:
+        print("# " + "!" * 74)
+        print("# ATTENTION : ce tool APPARIE LES SEGMENTS PAR INDEX. Le chiffre")
+        print("# d'invariance ci-dessous n'a de sens que si le segment i de A et le")
+        print("# segment i de B portent le MÊME CONTENU (corpus parallèle). Sur un")
+        print("# corpus NON apparié, il ne veut RIEN dire. Relancer avec --apparie")
+        print("# pour confirmer qu'on sait ce qu'on mesure.")
+        print("# " + "!" * 74)
+    prof, prof_min = inv_appariee(YA, YB)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && setsid nohup bash /tmp/wiki_analyse.sh 60 >/dev/null 2>&1 < /dev/null & disown\nsleep 5; echo \"chaîne Wikipedia armée (seuil 60 articles)\"; python3 - <<'PY'\nimport os\nmoi=os.getpid(); anc=set(); q=moi\nfor _ in range(10):\n    tr … [591 caractères tronqués]`
+
+  ```
+chaîne Wikipedia armée (seuil 60 articles)
+chaînes actives : pont_generatif · trace_crime · trace_wiki_apparie · wiki_analyse
+  ```
+
+- **bash** `{"command": "sleep 540; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== croissance ===\"; tail -3 /tmp/croissance2.log; echo \"=== wiki ===\"; echo \"$(grep -c '^ARTICLE' /tmp/trace_wiki_apparie.log) articles · $(ls /home/stephane/Data13TB/stephane/corpus/wiki_apparie/traces | wc -l … [281 caractères tronqués]`
+
+  ```
+=== croissance ===
+n168            168       1    0.6494   0.6331    0.6334   0.8655  0.5680 | communs -1.399 (  0 %) · contraste 0.991
+n171            171       1    0.6496   0.6333    0.6333   0.8654  0.5509 | communs -1.391 (  0 %) · contraste 0.991
+n172            172       1    0.6496   0.6333    0.6331   0.8654  0.5476 | communs -1.389 (  0 %) · contraste 0.991
+=== wiki ===
+17 articles · 222 traces
+=== crime ===
+0 segments · 2 traces
+15:39
+  ```
+
+### 🤖 Assistant
+
+⏵ **Point de fin de round — quatre chaînes actives, voici l'état.**
+
+- **bash** `{"command": "sleep 500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== croissance ===\"; tail -6 /tmp/croissance2.log; echo; echo \"wiki : $(grep -c '^ARTICLE' /tmp/trace_wiki_apparie.log) articles / $(ls /home/stephane/Data13TB/stephane/corpus/wiki_apparie/traces | wc -l) traces\" … [189 caractères tronqués]`
+
+  ```
+=== croissance ===
+n172            172       1    0.6496   0.6333    0.6331   0.8654  0.5476 | communs -1.389 (  0 %) · contraste 0.991
+n173            173       1    0.6496   0.6333    0.6330   0.8652  0.5479 | communs -1.389 (  0 %) · contraste 0.991
+n174            174       1    0.6496   0.6334    0.6332   0.8655  0.5543 | communs -1.389 (  0 %) · contraste 0.991
+n175            175       1    0.6497   0.6334    0.6331   0.8660  0.5548 | communs -1.387 (  0 %) · contraste 0.991
+n176            176       1    0.6498   0.6335    0.6334   0.8663  0.5549 | communs -1.383 (  0 %) · contraste 0.991
+n177            177       1    0.6499   0.6336    0.6333   0.8662  0.5480 | communs -1.380 (  0 %) · contraste 0.991
+
+wiki : 18 articles / 228 traces
+crime : 3 traces
+15:48
+  ```
+
+### 🤖 Assistant
+
+⏵ **Round 50 — état et acquis.**
+
+## Ce qui a été fait dans ce round
+
+**1. L'outil « domaine ou langue » généralisé** — il exigeait des unités *numérotées* et exactement dix par langue, ce qui le limitait à l'UDHR. Il accepte maintenant toute étiquette (`en_Albert_Einstein`) et un nombre d'unités quelconque. Vérifié sans régression sur l'UDHR : couche 8, `S_langue` 0,6505 contre `S_domaine` 0,8406 → **LANGUE domine**. Et testé à blanc sur Wikipedia : le pipeline fonctionne de bout en bout.
+
+Ce test est le point clé : l'UDHR est **mono-domaine**, donc ses « contenus différents » n'en sont pas — l'hypothèse « le vocabulaire dépend du domaine » n'y était *pas testable*. Avec 482 articles × 6 langues, elle le devient.
+
+**2. Deuxième œuvre parallèle Gutenberg — et deuxième couple de langues.** Le corpus parallèle ne comptait qu'une œuvre (Romeo, en–fr). Or **une seule paire ne permet pas de distinguer une propriété du pont d'une propriété du couple de langues.**
+
+| œuvre | paire | état |
+|---|---|---|
+| Roméo et Juliette | en–fr | déjà traité (24 scènes) |
+| Le Comte de Monte-Cristo | en–fr | écarté — tomes 2,6 M / 0,73 M |
+| **Crime et Châtiment** | **en–es** | **retenu : 24 chapitres** |
+
+**Alignement exact par chapitre** (pas par offset, qui ne veut rien dire d'une langue à l'autre), vérifié par les tailles — rapport 0,82 à 1,14 sur 38 chapitres. Et on ne garde que les chapitres qui tiennent dans `ctx 8192` **dans les deux langues** : un chapitre tronqué d'un seul côté romprait l'alignement sans le dire.
+
+24 chapitres × 2 langues, 590 808 + 564 651 caractères. Même ordre de grandeur que Romeo, mais ~20× plus longs par segment.
+
+**3. Une fausse alerte que j'ai levée.** Deux traces du même fichier donnaient des **MD5 différents** — ce qui aurait mis en doute *toutes* les mesures de la session. **C'était faux, et l'erreur est de moi** : les fichiers comparés étaient **partiels**, tronqués par mes propres `timeout`. La comparaison propre (`--couches 0:9` contre `0:24`, sur en et de) donne des empreintes **identiques**. Le moteur est déterministe ; ma façon de mesurer ne l'était pas. Leçon appliquée : traçages longs **sans `timeout`**, avec journal.
+
+**4. Ordre de traçage Wikipedia corrigé.** La première version triait par nom de fichier — donc traçait tout l'allemand, puis tout l'anglais : **aucun article complet avant la fin, aucun résultat partiel exploitable**. On boucle maintenant sur les *articles* et les six langues de chacun.
+
+## État des quatre chaînes
+
+| chaîne | avancement |
+|---|---|
+| **Croissance + attrition** | **177 neurones nés**, VAL 0,6336 · TEST 0,6333 (contre 0,5985 à 40 neurones, §44) |
+| **Wikipedia apparié** | 18 articles complets / 482 · 228 traces / 2 892 |
+| **Crime et Châtiment** | 3 traces / 48 (lent : ~5 min par segment, machine partagée) |
+| **Analyse Wikipedia** | armée, se déclenche à 60 articles |
+
+La croissance plafonne proprement — la validation répartie sur 51 langues (au lieu des 4 premières du cache) tient le réseau bien plus longtemps qu'avant : 177 neurones contre 105 avec l'ancien critère bruité.
+
+**En attente** : le résultat final de la croissance (attrition + protocole complet), le test domaine/langue sur ≥ 60 articles Wikipedia, et le pont sur la paire en–es.
+
+
+## Tour 178
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de représentation universelle), boîte noire (on ne lit du professeur que la couche à émuler, jamais sa tête ni ses jetons générés), aucune rétropropagation (A et B aléatoires et gelés, seule la lecture s'ajuste en forme fermée), et chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, TAILLE du réseau, avec le diagnostic oracle sur les deux panneaux (test hors vivier et validation du même vivier)."
+Round: 51/256
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ **Point d'état sur les quatre chaînes.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== croissance ===\"; tail -4 /tmp/croissance2.log; echo; echo \"wiki : $(grep -c '^ARTICLE' /tmp/trace_wiki_apparie.log) articles · $(ls /home/stephane/Data13TB/stephane/corpus/wiki_apparie/traces | wc -l) traces\"; echo \"cr … [223 caractères tronqués]`
+
+  ```
+=== croissance ===
+n175            175       1    0.6497   0.6334    0.6331   0.8660  0.5548 | communs -1.387 (  0 %) · contraste 0.991
+n176            176       1    0.6498   0.6335    0.6334   0.8663  0.5549 | communs -1.383 (  0 %) · contraste 0.991
+n177            177       1    0.6499   0.6336    0.6333   0.8662  0.5480 | communs -1.380 (  0 %) · contraste 0.991
+n178            178       1    0.6500   0.6337    0.6335   0.8665  0.5588 | communs -1.381 (  0 %) · contraste 0.991
+
+wiki : 18 articles · 228 traces
+crime : 3 traces
+analyse wiki : 4 processus
+15:48
+  ```
+
+- **bash** `{"command": "ps -eo pid,etime,%cpu,rss,cmd --sort=-%cpu | head -8 | cut -c1-115; echo \"---\"; uptime; free -g | head -2", "description": "Check process load"}`
+
+  ```
+PID     ELAPSED %CPU   RSS CMD
+2604445       05:44 1822 1416484 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/target/release/drave /h
+2605775       00:14  788 1361196 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/target/release/drave /h
+2605823       00:00  300  4412 ps -eo pid,etime,%cpu,rss,cmd --sort=-%cpu
+2589164    01:19:27 90.0 5738592 python3 -u tools/pont_generatif.py /tmp/cache392_train.npz /tmp/cache392_test.npz 
+ 710008 11-03:52:37 48.7 4105400 node26 /home/stephane/.local/share/../bin/dsh --profile dsh-tui
+2062778  1-05:52:19 46.6 854824 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui
+  11117 15-00:48:07 32.7 486736 node26 /home/stephane/Data13TB/stephane/GitHub/gods-eye-view/node_modules/.bin/vite
+---
+ 15:48:56  up 15 days  5:01,  2 users,  load average: 44,04, 44,14, 42,96
+               total        used        free      shared  buff/cache   available
+Mem:             125          29          17           8          88          96
+  ```
+
+### 🤖 Assistant
+
+⏵ **Charge 44 sur 40 threads. Je priorise : le corpus Wikipedia (2 892 traces) avant Crime (48 traces lentes).**
+
+- **bash** `{"command": "for p in $(pgrep -f \"drave-core/target/release/drave\"); do echo \"pid $p : $(tr '\\0' ' ' < /proc/$p/cmdline | grep -o '\\-\\-ctx [0-9]*') · $(tr '\\0' ' ' < /proc/$p/cmdline | grep -o 'traces/[a-z_]*\\.drvf')\"; done", "description": "Identify drave processes by context size"}`
+
+  ```
+pid 2591185 : --ctx 1024 · 
+pid 2601373 : --ctx 8192
+--ctx 8192 · 
+pid 2604445 : --ctx 8192 · 
+pid 2605775 : --ctx 1024 · 
+pid 2605905 :  · 
+[stderr]
+grep: warning: stray \ before -
+grep: warning: stray \ before -
+grep: warning: stray \ before -
+grep: warning: stray \ before -
+grep: warning: stray \ before -
+  ```
+
+- **bash** `{"command": "for p in 2601373 2604445; do renice +19 -p $p 2>&1 | head -1; done; echo \"--- priorités après ---\"; for p in $(pgrep -f \"drave-core/target/release/drave\"); do echo \"pid $p nice=$(ps -o ni= -p $p 2>/dev/null) ctx=$(tr '\\0' ' ' < /proc/$p/cmdline | grep -o 'ctx [0-9]*' | head -1)\"; … [124 caractères tronqués]`
+
+  ```
+2601373 (process ID) old priority 0, new priority 19
+2604445 (process ID) old priority 0, new priority 19
+--- priorités après ---
+pid 2591185 nice=  0 ctx=ctx 1024
+pid 2601373 nice= 19 ctx=ctx 8192
+pid 2604445 nice= 19 ctx=ctx 8192
+pid 2605775 nice=  0 ctx=ctx 1024
+pid 2605990 nice=  0 ctx=ctx 
+--- croissance ---
+n179            179       1    0.6500   0.6338    0.6336   0.8661  0.5594 | communs -1.380 (  0 %) · contraste 0.991
+  ```
+
+### 🤖 Assistant
+
+⏵ **Observation immédiate dans le journal de croissance : la fidélité monte mais l'invariance BAISSE. Je vérifie.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== évolution dans la croissance (couche 10) ===\"; grep -E \"^n(8|24|40|64|96|128|160|179) \" /tmp/croissance2.log | awk '{printf \"  %-6s fidVAL %s  fidTEST %s  invariance %s  pire %s\\n\", $1, $5, $6, $7, $8}'; echo; echo \ … [310 caractères tronqués]`
+
+  ```
+=== évolution dans la croissance (couche 10) ===
+  n8     fidVAL 0.6122  fidTEST 0.6151  invariance 0.9437  pire 0.7399
+  n24    fidVAL 0.6201  fidTEST 0.6261  invariance 0.9206  pire 0.6551
+  n40    fidVAL 0.6238  fidTEST 0.6294  invariance 0.9084  pire 0.6559
+  n64    fidVAL 0.6258  fidTEST 0.6287  invariance 0.8971  pire 0.6625
+  n96    fidVAL 0.6297  fidTEST 0.6311  invariance 0.8819  pire 0.6419
+  n128   fidVAL 0.6314  fidTEST 0.6302  invariance 0.8760  pire 0.5935
+  n160   fidVAL 0.6329  fidTEST 0.6327  invariance 0.8662  pire 0.5737
+  n179   fidVAL 0.6338  fidTEST 0.6336  invariance 0.8661  pire 0.5594
+
+=== rappel : profil couche 10, 40 neurones, MÊME ride/config ===
+  fidTEST 0.5985 · invariance 0.9439 · pire 0.6520
+=== rappel : profil couche 8, 40 neurones ===
+  fidTEST 0.6455 · invariance 0.9439 · pire 0.6520
+  ```
+
+### 🤖 Assistant
+
+⏵ **Tension confirmée et monotone : la fidélité monte de +0,0185 pendant que l'invariance perd 0,0776 et la pire paire 0,1805.**
+
+| neurones | fidTEST | invariance | pire paire |
+|---:|---:|---:|---:|
+| 8 | 0,6151 | **0,9437** | **0,7399** |
+| 40 | 0,6294 | 0,9084 | 0,6559 |
+| 96 | 0,6311 | 0,8819 | 0,6419 |
+| 179 | **0,6336** | **0,8661** | **0,5594** |
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 47. Fidélité et invariance TIRENT EN SENS OPPOSÉ quand le réseau grandit\n\nLe journal de la croissance (§44, couche 10, ride 0,03 … [5114 caractères tronqués]`
