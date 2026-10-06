@@ -89,6 +89,19 @@ class Pont:
         # leurs carrés ne coûte qu'une inversion, reste en forme fermée, et teste
         # si le plafond de +0,020 vient de la linéarité de la lecture.
         self.quadratique = False
+        # GAIN D'ENTRÉE : en calcul réservoir c'est LE réglage critique, et il
+        # valait 1,0 depuis le début sans avoir jamais été balayé. Trop petit, le
+        # tanh reste linéaire et le réservoir n'est qu'un filtre ; trop grand, il
+        # sature et toutes les activations se ressemblent.
+        self.gain_entree = 1.0
+        # NORMALISATION PAR LANGUE : l'écart entre l'oracle (0,776) et notre
+        # lecture (0,638) est un écart de TRANSFERT. Les états du réservoir ont
+        # un décalage et une échelle propres à chaque langue — une lecture
+        # ajustée sur trente langues ne tombe pas juste sur une autre. On
+        # standardise donc les états langue par langue. C'est calculable à
+        # l'inférence (on connaît nos propres activations), et cela n'utilise
+        # AUCUNE étiquette : ce n'est pas une fuite.
+        self.normalise = False
 
     # -- indices -------------------------------------------------------------
     def debut_couche(self, c):
@@ -116,7 +129,7 @@ class Pont:
         W_par = (self.rng.randn(k, n_par) / np.sqrt(max(n_par, 1))
                  if n_par > 0 else np.zeros((k, 0)))
         W_self = self.rng.randn(k, deja + k) / np.sqrt(max(deja + k, 1))
-        B = self.rng.randn(k, self.H) / np.sqrt(self.H)
+        B = self.rng.randn(k, self.H) / np.sqrt(self.H) * self.gain_entree
 
         for i, (E, X) in enumerate(zip(self.E, self.X)):
             T = len(E)
@@ -144,6 +157,12 @@ class Pont:
         return self.compte_neurones
 
     # -- lecture -------------------------------------------------------------
+    def _norm(self, X):
+        if not self.normalise:
+            return X
+        m = X.mean(0); e = X.std(0)
+        return (X - m)/np.maximum(e, 1e-6)
+
     def phi(self, X):
         """La base de lecture. Linéaire par défaut ; `[X, X²]` si `--lecture
         quadratique`, ce qui reste en forme fermée (une seule inversion)."""
@@ -152,25 +171,34 @@ class Pont:
         return np.hstack([X, X*X])
 
     def ajuste(self, idx, ride, mt, quel=slice(None)):
-        X = self.phi(np.vstack([self.X[i][:, idx] for i in quel]))
+        X = self.phi(np.vstack([self._norm(self.X[i][:, idx]) for i in quel]))
         Y = np.vstack([self.Y[i] for i in quel])
         n = X.shape[1]
         return np.linalg.solve(X.T @ X + ride*len(X)*np.eye(n), X.T @ (Y - mt))
 
     def fid(self, idx, W, mt, quel):
-        X = self.phi(np.vstack([self.X[i][:, idx] for i in quel]))
+        X = self.phi(np.vstack([self._norm(self.X[i][:, idx]) for i in quel]))
         Y = np.vstack([self.Y[i] for i in quel])
         return cos_lignes(X @ W + mt, Y)
 
     def dernier(self, idx, W, mt, quel):
-        return np.array([(self.phi(self.X[i][:, idx]) @ W + mt)[-1] for i in quel])
+        return np.array([(self.phi(self._norm(self.X[i][:, idx])) @ W + mt)[-1] for i in quel])
 
     # -- critères d'attrition ------------------------------------------------
+    def _W_neurones(self, W, K):
+        """La part de la lecture qui correspond aux NEURONES.
+
+        En lecture quadratique `W` a 2K lignes (`[états, états²]`) : les K
+        premières sont celles des neurones, les autres celles de leurs carrés.
+        Les critères d'attrition portent sur les neurones, donc sur les K
+        premières."""
+        return W[:K] if self.quadratique else W
+
     def contribution(self, W, idx):
         """Énergie que chaque neurone apporte à la sortie : ||w_k|| · ||x_k||."""
         X = np.vstack([x[:, idx] for x in self.X]).astype(np.float64)
         nx = np.sqrt((X**2).sum(0)) / np.sqrt(len(X))
-        return nx * np.linalg.norm(W, axis=1)
+        return nx * np.linalg.norm(self._W_neurones(W, len(idx)), axis=1)
 
     def redondance(self, W, idx):
         """Part de chaque neurone DÉJÀ DITE par les autres.
@@ -389,10 +417,11 @@ class Pont:
         return cap
 
     def evalue(self, X, Y, W, mt):
-        return cos_lignes(self.phi(np.vstack(X)) @ W + mt, np.vstack(Y))
+        return cos_lignes(self.phi(np.vstack([self._norm(x) for x in X])) @ W + mt,
+                          np.vstack(Y))
 
     def invariance(self, X, W, mt):
-        return inv(np.array([(self.phi(x) @ W + mt)[-1] for x in X]))
+        return inv(np.array([(self.phi(self._norm(x)) @ W + mt)[-1] for x in X]))
 
 
 def main():
@@ -502,7 +531,25 @@ def main():
     print(f"# pas — apprentissage {sum(len(Etr[i]) for i in itr)} · validation "
           f"{sum(len(Etr[i]) for i in ival)} · test {sum(len(Ete[i]) for i in ite)}")
 
+    # SEUIL PAR NEURONE (`--biais`) : on ajoute une colonne d'entrée CONSTANTE.
+    # Chaque neurone tire alors un poids pour elle, donc un seuil propre — ce qui
+    # déplace sa non-linéarité. Le passer par la colonne d'entrée évite de toucher
+    # à la généalogie : c'est un canal de plus, rien d'autre.
+    if opt("--biais", ""):
+        col = float(np.sqrt(H))
+        Etr = [np.hstack([e, np.full((len(e), 1), col, dtype=np.float32)]) for e in Etr]
+        Ete = [np.hstack([e, np.full((len(e), 1), col, dtype=np.float32)]) for e in Ete]
+        H = H + 1
+        print(f"# SEUIL PAR NEURONE : colonne d'entrée constante de valeur {col:.1f}")
+
     P = Pont((cltr, Etr, Ytr), a, graine, H)
+    P.gain_entree = float(opt("--gain-entree", 1.0))
+    if opt("--normalise", ""):
+        P.normalise = True
+        print("# NORMALISATION PAR LANGUE des états (calculable à l'inférence, "
+              "sans aucune étiquette)")
+    if P.gain_entree != 1.0:
+        print(f"# GAIN D'ENTRÉE : {P.gain_entree}")
     if opt("--lecture", "") == "quadratique":
         P.quadratique = True
         print("# LECTURE QUADRATIQUE : le readout voit [états, états²]")
@@ -610,46 +657,45 @@ def main():
                     break
             print(f"# née : {P.compte_neurones} neurones en {len(P.couches)} couches "
                   f"{P.couches}")
-            break
-
-        arret_naissance = opt("--arret-naissance", "")
-        gain_naissance = float(opt("--gain-naissance", 0.001))
-        sans_gain = 0
-        val_prec = None
-        for _ in range(par_cycle):
-            # Cycle 1 : chaque couche DOUBLE (1,1,2,4,…) pour atteindre vite la
-            # zone utile. Cycles suivants : on AJOUTE sans doubler — le réseau a
-            # déjà une taille qui compte, et doubler le ferait exploser.
-            k = (max(1, P.compte_neurones) if cycle == 1
-                 else max(2, P.compte_neurones//4))
-            if P.compte_neurones + k > plafond:
-                k = plafond - P.compte_neurones
-            if k <= 0:
-                break
-            P.nait(k)
-            idx = np.arange(P.compte_neurones)
-            W = P.ajuste(idx, ride, mt, itr)
-            f_tr = P.fid(idx, W, mt, itr); f_va = P.fid(idx, W, mt, ival)
-            Xte_g = P.recalcule(idx, Ete)
-            f_te = P.evalue(Xte_g, Yte, W, mt); mg, mig = P.invariance(Xte_g, W, mt)
-            print(f"{'C' + str(cycle) + ' naissance couche ' + str(len(P.couches)) + ' (+' + str(k) + ')':<30} "
-                  f"{P.compte_neurones:>6} {len(P.couches):>7} {f_tr:>9.4f} {f_va:>8.4f} "
-                  f"{f_te:>9.4f} {mg:>8.4f} {mig:>7.4f}")
-            # SÉLECTION SUR LA VALIDATION, jamais sur le test : choisir le réseau
-            # d'après son score de test serait regarder la réponse avant de choisir.
-            if f_va > meilleur["f_va"]:
-                meilleur = {"f_te": f_te, "neur": P.compte_neurones,
-                            "couch": len(P.couches), "f_tr": f_tr, "f_va": f_va,
-                            "inv": mg, "pire": mig, "etape": f"C{cycle} croissance"}
-            if val_prec is not None and f_va - val_prec < gain_naissance:
-                sans_gain += 1
-            else:
-                sans_gain = 0
-            val_prec = max(val_prec, f_va) if val_prec is not None else f_va
-            if arret_naissance and sans_gain >= 3:
-                print(f"{'  → naissance ARRÊTÉE (3 sans gain)':<30} {P.compte_neurones:>6} "
-                      f"{len(P.couches):>7}")
-                break
+        else:
+            arret_naissance = opt("--arret-naissance", "")
+            gain_naissance = float(opt("--gain-naissance", 0.001))
+            sans_gain = 0
+            val_prec = None
+            for _ in range(par_cycle):
+                # Cycle 1 : chaque couche DOUBLE (1,1,2,4,…) pour atteindre vite la
+                # zone utile. Cycles suivants : on AJOUTE sans doubler — le réseau a
+                # déjà une taille qui compte, et doubler le ferait exploser.
+                k = (max(1, P.compte_neurones) if cycle == 1
+                     else max(2, P.compte_neurones//4))
+                if P.compte_neurones + k > plafond:
+                    k = plafond - P.compte_neurones
+                if k <= 0:
+                    break
+                P.nait(k)
+                idx = np.arange(P.compte_neurones)
+                W = P.ajuste(idx, ride, mt, itr)
+                f_tr = P.fid(idx, W, mt, itr); f_va = P.fid(idx, W, mt, ival)
+                Xte_g = P.recalcule(idx, Ete)
+                f_te = P.evalue(Xte_g, Yte, W, mt); mg, mig = P.invariance(Xte_g, W, mt)
+                print(f"{'C' + str(cycle) + ' naissance couche ' + str(len(P.couches)) + ' (+' + str(k) + ')':<30} "
+                      f"{P.compte_neurones:>6} {len(P.couches):>7} {f_tr:>9.4f} {f_va:>8.4f} "
+                      f"{f_te:>9.4f} {mg:>8.4f} {mig:>7.4f}")
+                # SÉLECTION SUR LA VALIDATION, jamais sur le test : choisir le réseau
+                # d'après son score de test serait regarder la réponse avant de choisir.
+                if f_va > meilleur["f_va"]:
+                    meilleur = {"f_te": f_te, "neur": P.compte_neurones,
+                                "couch": len(P.couches), "f_tr": f_tr, "f_va": f_va,
+                                "inv": mg, "pire": mig, "etape": f"C{cycle} croissance"}
+                if val_prec is not None and f_va - val_prec < gain_naissance:
+                    sans_gain += 1
+                else:
+                    sans_gain = 0
+                val_prec = max(val_prec, f_va) if val_prec is not None else f_va
+                if arret_naissance and sans_gain >= 3:
+                    print(f"{'  → naissance ARRÊTÉE (3 sans gain)':<30} {P.compte_neurones:>6} "
+                          f"{len(P.couches):>7}")
+                    break
         # -------------------------------------------------------- ATTRITION
         if not attrition:
             continue
@@ -693,6 +739,22 @@ def main():
                             "inv": mv, "pire": miv, "etape": f"C{cycle} attrition"}
             # on COMPACTE : la croissance du cycle suivant doit partir des survivants
             P.compacte(garde)
+
+    # ---------------------------------------------------------------- ORACLE
+    #
+    # Où est le plafond : dans les CARACTÉRISTIQUES ou dans le TRANSFERT ?
+    # On ajuste la lecture sur le TEST lui-même et on l'y évalue. Ce n'est PAS un
+    # modèle — c'est un diagnostic. S'il plafonne comme nous, nos caractéristiques
+    # ne contiennent pas plus ; s'il monte haut, c'est le transfert qui pèche.
+    if opt("--oracle", ""):
+        idx_o = np.arange(P.compte_neurones)
+        Wo = P.ajuste(idx_o, ride, mt, ite)
+        f_or = P.fid(idx_o, Wo, mt, ite)
+        Xo = P.recalcule(idx_o, Ete)
+        mo, mio = P.invariance(Xo, Wo, mt)
+        print(f"\n# ORACLE (lecture ajustée SUR le test, diagnostic seulement)")
+        print(f"#   fidélité TEST oracle : {f_or:.4f} · invariance {mo:.4f} · "
+              f"pire paire {mio:.4f}")
 
     print(f"\n=== MEILLEUR RÉSEAU SELON LA VALIDATION ({meilleur['etape']}) ===")
     print(f"  taille           : {meilleur['neur']} neurones · {meilleur['couch']} couches")

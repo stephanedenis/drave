@@ -132231,3 +132231,447 @@ f7c7b52 L'INVARIANT : le pont apporte +0,020, quelle que soit la cible
 ⏵ Vérification propre des processus (mon propre motif fausse le compte).
 
 - **bash** `{"command": "python3 -c \"\nimport os\nmoi=os.getpid(); anc=set(); q=moi\nfor _ in range(8):\n    try:\n        st=open(f'/proc/{q}/stat').read().split(') ',1)[1].split(); q=int(st[1]); anc.add(q)\n    except Exception: break\nvraie=[]\nfor d in os.listdir('/proc'):\n    if not d.isdigit(): continue … [517 caractères tronqués]`
+
+  ```
+calculs réellement en cours : 0
+314b3cc journal
+  ```
+
+### 🤖 Assistant
+
+⏵ Tour terminé, tout est commité, rien ne tourne. Voici le point.
+
+## Ce que ce tour a établi
+
+**1. Le déclencheur de couche, enfin correct.** Trois conditions **simultanées** — et la première manquait :
+1. la couche courante est **épuisée** (tant qu'un neurone de plus paie, c'est lui qu'il faut : couvrir une activation manquante est un travail de **neurone**, pas de couche) ;
+2. des **concepts communs** existent ;
+3. la lecture doit **soustraire** — le « OU exclusif ».
+
+Sans la condition 1, il déclenchait **à chaque pas** (9 couches pour 72 neurones). Avec : **80 neurones en 5 couches [41, 15, 8, 8, 8]** — la moitié de la croissance au premier niveau. Aucun chiffre rond.
+
+**2. Deux de mes propres mesures étaient fausses**, et je les ai corrigées :
+- j'avais annoncé que la restriction faisait **émerger les concepts** (+0,07 → +0,45) : non, je comparais **deux jeux de données**. Sur le même jeu, +0,45 dans les deux cas ;
+- j'avais annoncé **218 canaux propres à certaines langues** : vrai **seulement à la dernière position**. Sur tout le texte, les 896 canaux sont présents dans les 40 langues — le critère de présence ne sélectionne rien (896/896 pour tout seuil).
+
+**3. La loi qui gouverne tout :**
+
+```
+fid TEST  ≈  1,1150 · (invariance de la cible) − 0,0848     r = 0,9570
+constante ≈  1,1192 · (invariance de la cible) − 0,1071     r = 0,9570
+écart à la constante = +0,0197 ± 0,0009
+```
+
+**La constante témoin suit la même loi, pente identique à 0,4 % près.** Les deux droites sont **parallèles**, séparées par la contribution propre du pont. Et cette contribution est d'une stabilité frappante : **+0,0197, écart-type 0,0009** sur sept périmètres allant de 896 à 89 canaux.
+
+**Le pont capte 97 % du contenu interlingue de la cible, et rien au-delà.** Améliorer la fidélité ne passe donc **pas par le modèle** — cela passe par le **choix de la cible**.
+
+**4. Le plafond, attaqué :** la lecture était linéaire. En lui donnant `[états, états²]` — toujours en forme fermée, sans rétropropagation — l'écart passe de **+0,020 à +0,024 (+18 %)**, sur les deux périmètres, **sans coût en invariance**.
+
+## Meilleur réseau à ce stade
+
+| | |
+|---|---|
+| périmètre | **157 canaux sur 896 (18 %)**, les plus énergétiques |
+| lecture | **quadratique** |
+| taille | **80 neurones · 8 couches [30, 8, 8, 8, 8, 8, 8, 2]** |
+| fidélité TEST | **0,6383** (constante 0,6140) |
+| invariance | **0,9648** · pire paire **0,8821** |
+| rétropropagation | **aucune** |
+
+## État de l'objectif
+
+Acquis : phase générative ✓, attrition périodique ✓ (mais **neutre à négative** sur données propres — je l'ai rapporté comme tel), généralisation par redondance ✓, aucune rétropropagation ✓, toutes les mesures ✓ contre **Qwen2.5-0.5B couche 10**.
+
+Une réserve à signaler : l'objectif mentionne aussi le **plateau 30B**, mais votre consigne — un seul professeur — l'a explicitement écarté. Je ne l'ai donc pas fait.
+
+**Reste ouvert** : le réservoir est **gelé et aléatoire** ; ses caractéristiques ne portent qu'une fraction de ce qui est prédictible. C'est là que se trouve le reste du plafond, et je ne l'ai pas exploré.
+
+
+## Tour 124
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Faire évoluer le pont linguistico-sémantique en BOÎTE NOIRE (émulation des premières couches du professeur, sans accès à ses rouages) par une phase GÉNÉRATIVE — le nombre de neurones et de couches NAÎT pendant l'apprentissage, en partant d'un seul neurone — suivie d'une ATTRITION PÉRIODIQUE qui réduit la taille du réseau en GÉNÉRALISANT les concepts (fusion des unités redondantes, réajustement de la lecture sur les survivants), jamais par simple coupe. Aucune rétropropagation : A et B restent aléatoires et gelés, seule la lecture s'ajuste en forme fermée. Chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, et TAILLE du réseau — mesurées contre le professeur Qwen2.5-0.5B couche 10 et le plateau Qwen3-30B-A3B."
+Round: 3/256
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Tour 3. La question ouverte est précise : le réservoir gelé porte-t-il tout ce qui est prédictible ? Je vérifie l'état puis j'attaque le levier jamais touché.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -1; python3 -c \"\nimport os\nmoi=os.getpid(); anc=set(); q=moi\nfor _ in range(8):\n    try:\n        st=open(f'/proc/{q}/stat').read().split(') ',1)[1].split(); q=int(st[1]); anc.add(q)\n    except Exception: brea … [556 caractères tronqués]`
+
+  ```
+314b3cc journal
+calculs en cours : 0
+--- les leviers du réservoir ---
+116:        W_par = (self.rng.randn(k, n_par) / np.sqrt(max(n_par, 1))
+118:        W_self = self.rng.randn(k, deja + k) / np.sqrt(max(deja + k, 1))
+119:        B = self.rng.randn(k, self.H) / np.sqrt(self.H)
+  ```
+
+### 🤖 Assistant
+
+⏵ Aucun calcul en cours. J'attaque le levier jamais touché : **le gain d'entrée du réservoir** — en calcul réservoir, c'est LE réglage critique — et j'ajoute un **seuil par neurone**.
+
+Le levier n'a **jamais** été touché : `B = randn/√H`, gain 1,0 depuis le début. En calcul réservoir, le gain d'entrée est *le* réglage critique. J'ajoute aussi un **seuil par neurone** — de la capacité réelle, toujours en forme fermée — en représentant le biais comme une colonne d'entrée constante, ce qui ne touche pas la généalogie.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/pont_generatif.py'; s=open(p).read()\n# 1) gain d'entrée + drapeau de biais\ns=s.replace(\"\"\"        self.quadratique = False\"\"\",\n\"\"\"        self.quadratique = False\n        # GAIN D'ENTRÉE : en c … [1758 caractères tronqués]`
+
+  ```
+syntaxe OK
+96:        self.gain_entree = 1.0
+124:        B = self.rng.randn(k, self.H) / np.sqrt(self.H) * self.gain_entree
+515:        col = float(np.sqrt(H))
+522:    P.gain_entree = float(opt("--gain-entree", 1.0))
+523:    if P.gain_entree != 1.0:
+524:        print(f"# GAIN D'ENTRÉE : {P.gain_entree}")
+  ```
+
+- **write** `{"content": "#!/bin/bash\n# LE RÉSERVOIR GELÉ PORTE-T-IL TOUT CE QUI EST PRÉDICTIBLE ?\n# On balaie les deux leviers jamais touchés : le GAIN D'ENTRÉE (le réglage\n# critique du calcul réservoir) et le SEUIL PAR NEURONE.\nset -u\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\n: > /tmp/reservoir … [552 caractères tronqués]`
+
+  ```
+<path>/tmp/reservoir.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && chmod +x /tmp/reservoir.sh && setsid nohup /tmp/reservoir.sh >/dev/null 2>&1 < /dev/null & sleep 330; grep -E \"^####|GAIN D|SEUIL PAR|SOUS-ENSEMBLE|constante|née :|fidélité TEST|invariance TEST\" /tmp/reservoir.log", "description":  … [49 caractères tronqués]`
+
+  ```
+########## gain=0.3 biais='non' ##########
+# SOUS-ENSEMBLE ACTIF : 157/896 canaux portent 50% de l'énergie (18% des canaux), masque lu sur l'apprentissage seul
+# GAIN D'ENTRÉE : 0.3
+# constante témoin sur le TEST : 0.6140
+########## CYCLE 1 — CROISSANCE ##########
+# née : 80 neurones en 7 couches [30, 8, 8, 8, 8, 8, 10]
+  fidélité TEST    : 0.6381   (constante témoin : 0.6140)
+  invariance TEST  : 0.9672 · pire paire 0.8909
+########## gain=0.3 biais='--biais 1' ##########
+# SOUS-ENSEMBLE ACTIF : 157/896 canaux portent 50% de l'énergie (18% des canaux), masque lu sur l'apprentissage seul
+# SEUIL PAR NEURONE : colonne d'entrée constante de valeur 29.9
+# GAIN D'ENTRÉE : 0.3
+# constante témoin sur le TEST : 0.6140
+########## CYCLE 1 — CROISSANCE ##########
+  ```
+
+### 🤖 Assistant
+
+⏵ Premier point : **gain 0,3** donne 0,6381 (contre 0,6383 à gain 1,0) mais une **meilleure invariance** (0,9672 contre 0,9648) et pire paire (0,8909 contre 0,8821). J'attends la suite.
+
+- **bash** `{"command": "sleep 570; grep -E \"^####|GAIN D|SEUIL PAR|constante|née :|fidélité TEST|invariance TEST\" /tmp/reservoir.log; echo \"--- TERMINE ? ---\"; grep -c TERMINE /tmp/reservoir.log", "description": "Wait for gain and bias sweep", "timeoutMs": 640000}`
+
+  ```
+########## gain=0.3 biais='non' ##########
+# GAIN D'ENTRÉE : 0.3
+# constante témoin sur le TEST : 0.6140
+########## CYCLE 1 — CROISSANCE ##########
+# née : 80 neurones en 7 couches [30, 8, 8, 8, 8, 8, 10]
+  fidélité TEST    : 0.6381   (constante témoin : 0.6140)
+  invariance TEST  : 0.9672 · pire paire 0.8909
+########## gain=0.3 biais='--biais 1' ##########
+# SEUIL PAR NEURONE : colonne d'entrée constante de valeur 29.9
+# GAIN D'ENTRÉE : 0.3
+# constante témoin sur le TEST : 0.6140
+########## CYCLE 1 — CROISSANCE ##########
+# née : 80 neurones en 6 couches [42, 8, 8, 8, 8, 6]
+  fidélité TEST    : 0.6352   (constante témoin : 0.6140)
+  invariance TEST  : 0.9655 · pire paire 0.9063
+########## gain=1.0 biais='non' ##########
+# constante témoin sur le TEST : 0.6140
+########## CYCLE 1 — CROISSANCE ##########
+# née : 80 neurones en 8 couches [30, 8, 8, 8, 8, 8, 8, 2]
+  fidélité TEST    : 0.6383   (constante témoin : 0.6140)
+  invariance TEST  : 0.9648 · pire paire 0.8821
+########## gain=1.0 biais='--biais 1' ##########
+# SEUIL PAR NEURONE : colonne d'entrée constante de valeur 29.9
+# constante témoin sur le TEST : 0.6140
+########## CYCLE 1 — CROISSANCE ##########
+# née : 80 neurones en 6 
+… [700 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le balayage est complet, et c'est un résultat négatif utile : ces deux leviers ne sont PAS le goulot.**
+
+| gain | biais | fid TEST | écart | invariance | pire paire |
+|---|---:|---:|---:|---:|---:|
+| 0,3 | non | 0,6381 | +0,0241 | 0,9672 | 0,8909 |
+| 0,3 | oui | 0,6352 | +0,0212 | 0,9655 | **0,9063** |
+| **1,0** | non | **0,6383** | **+0,0243** | 0,9648 | 0,8821 |
+| 1,0 | oui | 0,6364 | +0,0224 | 0,9625 | 0,9038 |
+| 3,0 | non | 0,6355 | +0,0215 | **0,9680** | **0,9074** |
+
+Tout tient dans **0,003 de fidélité**. Le gain d'entrée et le seuil ne sont donc **pas** le goulot. Le biais échange fidélité contre pire paire — la loi d'échange encore.
+
+Reste à savoir **où** est le plafond. Expérience décisive : un readout **oracle**, ajusté sur le test lui-même. S'il plafonne aussi à 0,64, le plafond est dans les **caractéristiques** ; s'il monte à 0,9, il est dans le **transfert**.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/pont_generatif.py'; s=open(p).read()\ns=s.replace(\"\"\"    print(f\"\\\\n=== MEILLEUR RÉSEAU SELON LA VALIDATION ({meilleur['etape']}) ===\")\"\"\",\n\"\"\"    # ------------------------------------------- … [2048 caractères tronqués]`
+
+  ```
+syntaxe OK
+--- oracle lancé ---
+# née : 80 neurones en 8 couches [30, 8, 8, 8, 8, 8, 8, 2]
+# ORACLE (lecture ajustée SUR le test, diagnostic seulement)
+#   fidélité TEST oracle : 0.7762 · invariance 0.9598 · pire paire 0.8615
+  fidélité TEST    : 0.6383   (constante témoin : 0.6140)
+  invariance TEST  : 0.9648 · pire paire 0.8821
+  ```
+
+### 🤖 Assistant
+
+⏵ **Résultat décisif : le plafond est dans le TRANSFERT, pas dans les caractéristiques.**
+
+| | fid TEST | invariance |
+|---|---:|---:|
+| notre lecture (ajustée sur l'entraînement) | 0,6383 | 0,9648 |
+| **oracle** (lecture ajustée sur le test — diagnostic) | **0,7762** | 0,9598 |
+
+Nos caractéristiques contiennent **0,7762**, mais la lecture ajustée sur 30 langues n'en extrait que **0,6383**. **Il y a +0,138 de marge, et elle est dans le transfert inter-langue.**
+
+Nos caractéristiques contiennent **0,7762** — bien plus que les 0,6383 que nous en extrayons. **La marge de +0,138 est dans le transfert inter-langue de la lecture.** Piste évidente : normaliser les états par langue, ce qui efface décalage et échelle propres à chaque langue.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/pont_generatif.py'; s=open(p).read()\ns=s.replace(\"\"\"        self.gain_entree = 1.0\"\"\",\n\"\"\"        self.gain_entree = 1.0\n        # NORMALISATION PAR LANGUE : l'écart entre l'oracle (0,776) et no … [2105 caractères tronqués]`
+
+  ```
+syntaxe OK
+6
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && setsid nohup python3 -u tools/pont_generatif.py /tmp/cache_appr10c.npz /tmp/cache_tenus10c.npz --naissance libre --cycles 1 --val 10 --a 0.5 --ride 1.0 --plafond 80 --gain-min 0.0005 --patience 8 --part-canaux 0.5 --lecture quadratiq … [236 caractères tronqués]`
+
+  ```
+# NORMALISATION PAR LANGUE des états (calculable à l'inférence, sans aucune étiquette)
+# née : 80 neurones en 7 couches [28, 13, 8, 8, 8, 8, 7]
+# ORACLE (lecture ajustée SUR le test, diagnostic seulement)
+#   fidélité TEST oracle : 0.7880 · invariance 0.8439 · pire paire 0.6253
+  fidélité TEST    : 0.6284   (constante témoin : 0.6140)
+  invariance TEST  : 0.8823 · pire paire 0.6464
+  ```
+
+### 🤖 Assistant
+
+⏵ **La normalisation est un échec net** : invariance 0,9648 → **0,8823**, pire paire 0,8821 → 0,6464. Normaliser par langue efface justement le **décalage commun**, qui est la part partagée. Résultat négatif, consigné.
+
+**Échec net, et instructif** : l'invariance s'effondre (0,9648 → **0,8823**). Normaliser par langue efface le **décalage commun**, qui est précisément la part partagée. Je teste l'autre levier : **plus de langues d'entraînement** réduit-il l'écart de transfert ?
+
+- **write** `{"content": "#!/bin/bash\n# L'écart de TRANSFERT (oracle 0,776 contre nous 0,638) se réduit-il quand on\n# entraîne sur PLUS de langues ? On fait varier le nombre de langues de\n# validation, donc de langues d'apprentissage, à périmètre identique.\nset -u\ncd /home/stephane/Data13TB/stephane/GitHub/ … [538 caractères tronqués]`
+
+  ```
+<path>/tmp/transfert.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && chmod +x /tmp/transfert.sh && setsid nohup /tmp/transfert.sh >/dev/null 2>&1 < /dev/null & sleep 340; grep -E \"^####|ORACLE|oracle|fidélité TEST|invariance TEST|née :\" /tmp/transfert.log", "description": "Measure transfer gap vs tr … [39 caractères tronqués]`
+
+  ```
+########## 36 langues d'apprentissage · 4 de validation ##########
+########## CYCLE 1 — CROISSANCE ##########
+# née : 80 neurones en 8 couches [30, 8, 8, 8, 8, 8, 8, 2]
+# ORACLE (lecture ajustée SUR le test, diagnostic seulement)
+#   fidélité TEST oracle : 0.7790 · invariance 0.9610 · pire paire 0.8647
+  fidélité TEST    : 0.6380   (constante témoin : 0.6150)
+  invariance TEST  : 0.9654 · pire paire 0.8875
+########## 30 langues d'apprentissage · 10 de validation ##########
+########## CYCLE 1 — CROISSANCE ##########
+  ```
+
+### 🤖 Assistant
+
+⏵ 36 langues : écart de transfert **0,141** — identique aux 30 langues (0,138). Plus de langues ne réduit donc pas l'écart. J'attends le troisième point.
+
+Mais je repère un défaut structurel : avec `--naissance libre`, mon `break` **saute l'attrition**. Je vérifie et corrige.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"naissance libre\\|# née :\\|break\\|CADENCE\\|ATTRITION\" tools/pont_generatif.py | sed -n '1,25p'", "description": "Check cycle/attrition structure"}`
+
+  ```
+2:"""pont_generatif.py — le réseau NAÎT, puis subit une ATTRITION qui le fait généraliser.
+13:PHASE D'ATTRITION. Périodiquement, on retire les neurones REDONDANTS — ceux dont
+560:        # `--naissance libre` : UN neurone à la fois. Aucun chiffre rond ne doit
+622:                                    "inv": mg, "pire": mig, "etape": "naissance libre"}
+648:                    break
+649:            print(f"# née : {P.compte_neurones} neurones en {len(P.couches)} couches "
+651:            break
+666:                break
+690:                break
+691:        # -------------------------------------------------------- ATTRITION
+694:        print(f"\n########## CYCLE {cycle} — ATTRITION ({critere}) ##########")
+708:                break
+718:                break
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", "limit": 10, "offset": 646}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py</path>
+<type>file</type>
+<content>
+646:                     print(f"{'  → ARRÊT (couche neuve sans gain)':<12} "
+647:                           f"{P.compte_neurones:>6} {len(P.couches):>7}")
+648:                     break
+649:             print(f"# née : {P.compte_neurones} neurones en {len(P.couches)} couches "
+650:                   f"{P.couches}")
+651:             break
+652: 
+653:         arret_naissance = opt("--arret-naissance", "")
+654:         gain_naissance = float(opt("--gain-naissance", 0.001))
+655:         sans_gain = 0
+
+(Showing lines 646-655 of 763. Use offset=656 to continue.)
+</content>
+  ```
+
+### 🤖 Assistant
+
+⏵ Confirmé : le `break` saute l'attrition. Je restructure pour que la phase générative enchaîne sur l'attrition.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/pont_generatif.py'\nlignes=open(p).read().split('\\n')\n# ligne 651 (index 650) : le break qui saute l'attrition\nassert lignes[650].strip()=='break', lignes[650]\nassert 'arret_naissance = opt' in lignes[6 … [876 caractères tronqués]`
+
+  ```
+bloc de 38 lignes passé sous `else:` — l'attrition s'enchaîne
+syntaxe OK
+122:        else:
+154:        else:
+606:                else:
+649:            print(f"# née : {P.compte_neurones} neurones en {len(P.couches)} couches "
+651:        else:
+  ```
+
+### 🤖 Assistant
+
+⏵ Restructuré : la phase générative enchaîne maintenant sur l'attrition. Je vérifie la fin du test de transfert puis je lance la comparaison d'attrition.
+
+- **bash** `{"command": "sleep 300; grep -E \"^####|oracle|fidélité TEST|invariance TEST|née :\" /tmp/transfert.log; echo \"--- TERMINE ? ---\"; grep -c TERMINE /tmp/transfert.log", "description": "Wait for transfer test completion", "timeoutMs": 360000}`
+
+  ```
+########## 36 langues d'apprentissage · 4 de validation ##########
+########## CYCLE 1 — CROISSANCE ##########
+# née : 80 neurones en 8 couches [30, 8, 8, 8, 8, 8, 8, 2]
+#   fidélité TEST oracle : 0.7790 · invariance 0.9610 · pire paire 0.8647
+  fidélité TEST    : 0.6380   (constante témoin : 0.6150)
+  invariance TEST  : 0.9654 · pire paire 0.8875
+########## 30 langues d'apprentissage · 10 de validation ##########
+########## CYCLE 1 — CROISSANCE ##########
+# née : 80 neurones en 8 couches [30, 8, 8, 8, 8, 8, 8, 2]
+#   fidélité TEST oracle : 0.7762 · invariance 0.9598 · pire paire 0.8615
+  fidélité TEST    : 0.6383   (constante témoin : 0.6140)
+  invariance TEST  : 0.9648 · pire paire 0.8821
+########## 20 langues d'apprentissage · 20 de validation ##########
+########## CYCLE 1 — CROISSANCE ##########
+# née : 74 neurones en 2 couches [40, 34]
+#   fidélité TEST oracle : 0.7684 · invariance 0.9570 · pire paire 0.8511
+  fidélité TEST    : 0.6362   (constante témoin : 0.6149)
+  invariance TEST  : 0.9497 · pire paire 0.8245
+--- TERMINE ? ---
+1
+  ```
+
+### 🤖 Assistant
+
+⏵ **L'écart de transfert est CONSTANT : 0,132 à 0,141 selon la taille de l'apprentissage (20 à 36 langues).**
+
+| langues d'apprentissage | fid TEST | oracle | **écart** |
+|---|---:|---:|---:|
+| 36 | 0,6380 | 0,7790 | 0,1410 |
+| 30 | 0,6383 | 0,7762 | 0,1379 |
+| 20 | 0,6362 | 0,7684 | 0,1322 |
+
+**Plus de langues ne réduit pas l'écart.** C'est votre principe « pas de représentation universelle », quantifié : il n'existe pas de lecture linéaire universelle entre langues, et la perte est de **~0,14 de cosinus**. Je lance maintenant le test d'attrition qui manquait sur la meilleure configuration.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && setsid nohup python3 -u tools/pont_generatif.py /tmp/cache_appr10c.npz /tmp/cache_tenus10c.npz --naissance libre --cycles 1 --val 10 --a 0.5 --ride 1.0 --plafond 80 --gain-min 0.0005 --patience 8 --part-canaux 0.5 --lecture quadratiq … [200 caractères tronqués]`
+
+  ```
+########## CYCLE 1 — ATTRITION (redondance) ##########
+après                           neur.  couch.  fid appr  fid VAL  fid TEST
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", line 762, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", line 701, in main
+    sc = (P.redondance(W, idx) if critere == "redondance"
+          ~~~~~~~~~~~~^^^^^^^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", line 207, in redondance
+    return explique * self.contribution(W, idx)
+                      ~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", line 192, in contribution
+    return nx * np.linalg.norm(W, axis=1)
+           ~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~
+ValueError: operands could not be broadcast together with shapes (80,) (160,)
+  ```
+
+### 🤖 Assistant
+
+⏵ La lecture quadratique casse les critères d'attrition : `W` a 2K lignes, les états K colonnes. Je prends la **partie linéaire** de la lecture, qui est celle qui correspond aux neurones.
+
+La lecture quadratique casse les critères d'attrition : `W` a 2K lignes, les états K colonnes. Je prends la **partie linéaire** de `W` — c'est elle qui correspond aux neurones.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/pont_generatif.py'; s=open(p).read()\ns=s.replace(\"\"\"    def contribution(self, W, idx):\n        \\\"\\\"\\\"Énergie que chaque neurone apporte à la sortie : ||w_k|| · ||x_k||.\\\"\\\"\\\"\n        X =  … [1497 caractères tronqués]`
+
+  ```
+syntaxe OK
+########## CYCLE 1 — ATTRITION (redondance) ##########
+après                           neur.  couch.  fid appr  fid VAL  fid TEST
+retrait de 20 (recalculé)          60       8    0.6986   0.7484    0.6356
+retrait de 15 (recalculé)          45       8    0.6946   0.7469    0.6316
+retrait de 11 (recalculé)          34       8    0.6906   0.7451    0.6296
+retrait de 8 (recalculé)           26       8    0.6873   0.7437    0.6275
+retrait de 6 (recalculé)           20       6    0.6843   0.7419    0.6248
+retrait de 5 (recalculé)           15       6    0.6810   0.7402    0.6247
+retrait de 3 (recalculé)           12       6    0.6787   0.7387    0.6231
+retrait de 3 (recalculé)            9       5    0.6762   0.7380    0.6198
+retrait de 2 (recalculé)            7       5    0.6749   0.7373    0.6189
+retrait de 1 (recalculé)            6       4    0.6742   0.7364    0.6184
+retrait de 1 (recalculé)            5       4    0.6727   0.7357    0.6192
+retrait de 1 (recalculé)            4       3    0.6719   0.7352    0.6189
+retrait de 1 (recalculé)            3       3    0.6708   0.7341    0.6185
+retrait de 1 (recalculé)            2       2    0.6700   0.7331    0.6179
+retrait d
+… [65 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Verdict final sur l'attrition, sur la meilleure configuration : elle ne fait que réduire.**
+
+| | neurones | couches | fid VAL | fid TEST |
+|---|---:|---:|---:|---:|
+| réseau né | 80 | 8 | 0,7484 | **0,6383** |
+| après retrait | 60 | 8 | 0,7484 | 0,6356 |
+| … | 20 | 6 | 0,7419 | 0,6248 |
+| … | 1 | 1 | 0,7327 | **0,6169** |
+
+**La fidélité de test décroît de façon monotone.** L'attrition ne généralise pas — elle **réduit**, avec un coût faible mais réel (−0,003 pour −25 % de neurones). Je relève le bilan complet.
+
+- **bash** `{"command": "sleep 200; tail -12 /tmp/attr.log; echo \"--- TERMINE ? ---\"; python3 -c \"\nimport os\nmoi=os.getpid(); anc=set(); q=moi\nfor _ in range(8):\n    try:\n        st=open(f'/proc/{q}/stat').read().split(') ',1)[1].split(); q=int(st[1]); anc.add(q)\n    except Exception: break\nn=0\nfor d … [359 caractères tronqués]`
+
+  ```
+# ORACLE (lecture ajustée SUR le test, diagnostic seulement)
+#   fidélité TEST oracle : 0.7388 · invariance 0.9987 · pire paire 0.9961
+
+=== MEILLEUR RÉSEAU SELON LA VALIDATION (naissance libre) ===
+  taille           : 80 neurones · 8 couches
+  fidélité appr.   : 0.7026
+  fidélité VAL     : 0.7500
+  fidélité TEST    : 0.6383   (constante témoin : 0.6140)
+  invariance TEST  : 0.9648 · pire paire 0.8821
+
+# état final du réseau : 1 neurones · 1 couches ([1])
+--- TERMINE ? ---
+en cours : 0
+  ```
+
+### 🤖 Assistant
+
+⏵ Bilan complet. Je consigne ce tour, qui est fait de résultats surtout **négatifs** — et ils précisent nettement le tableau.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/recapitulatif.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 10. Où est le plafond : dans le TRANSFERT, pas dans les caractéristiques\n\nLe plafond de +0,024 pouvait venir du réservoir (gelé, aléatoire)  … [6519 caractères tronqués]`

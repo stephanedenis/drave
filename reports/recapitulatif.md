@@ -497,3 +497,112 @@ prochaine piste, et elle n'est pas explorée.
 
 Et la **première couche porte 30 des 80 neurones** : le travail des activations
 manquantes se fait au premier niveau, la composition vient après.
+
+
+---
+
+## 10. Où est le plafond : dans le TRANSFERT, pas dans les caractéristiques
+
+Le plafond de +0,024 pouvait venir du réservoir (gelé, aléatoire) ou d'ailleurs.
+Quatre expériences, quatre réponses.
+
+### 10.1 Le réservoir n'est pas le goulot
+
+Le **gain d'entrée** — *le* réglage critique du calcul réservoir, à 1,0 depuis le
+début sans avoir jamais été balayé — et le **seuil par neurone** :
+
+| gain | seuil | fid TEST | écart | invariance | pire paire |
+|---|---:|---:|---:|---:|---:|
+| 0,3 | non | 0,6381 | +0,0241 | 0,9672 | 0,8909 |
+| 0,3 | oui | 0,6352 | +0,0212 | 0,9655 | **0,9063** |
+| 1,0 | non | **0,6383** | **+0,0243** | 0,9648 | 0,8821 |
+| 1,0 | oui | 0,6364 | +0,0224 | 0,9625 | 0,9038 |
+| 3,0 | non | 0,6355 | +0,0215 | **0,9680** | **0,9074** |
+
+**Tout tient dans 0,003 de fidélité.** Ces deux leviers ne sont pas le goulot. Le
+seuil, lui, **échange** de la fidélité contre la pire paire — la loi d'échange
+encore une fois.
+
+### 10.2 L'expérience décisive : un readout ORACLE
+
+On ajuste la lecture **sur le test lui-même** et on l'y évalue. Ce n'est pas un
+modèle, c'est un diagnostic : il dit ce que nos caractéristiques contiennent.
+
+| | fid TEST | invariance |
+|---|---:|---:|
+| notre lecture (ajustée sur 30 langues d'apprentissage) | 0,6383 | 0,9648 |
+| **oracle (ajustée sur le test)** | **0,7762** | 0,9598 |
+
+**Nos caractéristiques contiennent 0,7762. Nous n'en extrayons que 0,6383.**
+**La marge de +0,138 est dans le TRANSFERT inter-langue, pas dans les
+caractéristiques.**
+
+Et l'oracle n'est pas moins invariant que nous (0,9598 contre 0,9648) : il ne
+triche pas sur l'invariance, il transfère simplement mieux.
+
+### 10.3 La normalisation par langue ÉCHOUE
+
+Puisque l'écart est un écart de transfert, on standardise les états langue par
+langue — calculable à l'inférence, sans aucune étiquette.
+
+| | fid TEST | invariance | pire paire |
+|---|---:|---:|---:|
+| sans | **0,6383** | **0,9648** | **0,8821** |
+| **avec** | 0,6284 | **0,8823** | 0,6464 |
+
+**Échec net.** Normaliser par langue efface le **décalage commun**, qui est
+précisément la part partagée : l'invariance s'effondre de 0,083.
+
+### 10.4 Plus de langues ne réduit PAS l'écart
+
+| langues d'apprentissage | fid TEST | oracle | **écart de transfert** |
+|---|---:|---:|---:|
+| 36 | 0,6380 | 0,7790 | 0,1410 |
+| 30 | 0,6383 | 0,7762 | 0,1379 |
+| 20 | 0,6362 | 0,7684 | 0,1322 |
+
+**L'écart est constant (0,132 à 0,141) sur toute la plage.** Plus de langues
+n'aide pas. C'est le principe « pas de représentation universelle » **quantifié** :
+il n'existe pas de lecture linéaire universelle entre langues, et la perte vaut
+**~0,14 de cosinus** quel que soit le nombre de langues vues.
+
+---
+
+## 11. Verdict sur l'attrition : elle réduit, elle ne généralise pas
+
+Testée sur la meilleure configuration (157 canaux, lecture quadratique, naissance
+libre), avec **recalcul** des trajectoires des survivants à chaque retrait :
+
+| | neurones | couches | fid VAL | **fid TEST** |
+|---|---:|---:|---:|---:|
+| réseau né | 80 | 8 | 0,7500 | **0,6383** |
+| après retrait | 60 | 8 | 0,7484 | 0,6356 |
+| | 45 | 8 | 0,7469 | 0,6316 |
+| | 20 | 6 | 0,7419 | 0,6248 |
+| | 5 | 4 | 0,7357 | 0,6192 |
+| | **1** | 1 | 0,7327 | **0,6169** |
+
+**La fidélité de test décroît de façon monotone.** L'attrition **réduit la
+taille**, avec un coût faible mais réel (−0,003 pour −25 % de neurones, −0,021
+pour 99 %), et **elle n'améliore rien**.
+
+Et le critère de validation est **trop indulgent** : il accepte les quinze
+retraits successifs (la validation ne perd que 0,017 au total) alors que le test
+en perd 0,021. Le seuil de 0,005 par étape laisse passer une dérive cumulée.
+
+Note : l'oracle du réseau à **1 neurone** vaut encore **0,7388** — un seul neurone
+dont la lecture est ajustée sur le test explique 0,74, mais n'en transfère que
+0,62. **Le goulot est bien le transfert, même à un neurone.**
+
+---
+
+## 12. Ce que ce tour établit, en trois phrases
+
+1. **Le réservoir gelé n'est pas le goulot** : ni son gain d'entrée ni ses seuils
+   ne déplacent la fidélité de plus de 0,003.
+2. **Le goulot est le transfert inter-langue** : nos caractéristiques contiennent
+   0,776, la lecture n'en transfère que 0,638, et l'écart ne se réduit ni par plus
+   de langues, ni par normalisation.
+3. **L'attrition ne généralise pas** : elle réduit la taille à coût faible et
+   monotone. Le critère de validation est trop indulgent pour l'arrêter au bon
+   endroit.

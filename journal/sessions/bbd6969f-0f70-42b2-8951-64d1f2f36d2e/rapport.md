@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 172.7 h |
-| Tours | 123 |
-| Messages | 8204 |
-| Appels d'outils | 7823 |
-| Fichiers touchés | 163 |
-| Commandes | 6657 |
+| Durée | 173.6 h |
+| Tours | 124 |
+| Messages | 8224 |
+| Appels d'outils | 7841 |
+| Fichiers touchés | 165 |
+| Commandes | 6672 |
 | Sous-agents | 32 |
-| Commits | 577 |
+| Commits | 578 |
 | Compactages de contexte | 11 |
 
 ## Objectifs déclarés
@@ -295,6 +295,8 @@
 **Tour 122** — <goal_round> Objective: "Faire évoluer le pont linguistico-sémantique en BOÎTE NOIRE (émulation des premières couches du professeur, sans accès à ses rouages) par une phase GÉNÉRATIVE — le nombre de neurones et de couches NAÎT pendant l'apprentissage, en partant d'un seul neurone — suivie d'une ATTRITION PÉRIODIQUE qui réduit la taille du réseau en GÉNÉRALISANT les concepts (fusion des unités redo … [951 caractères tronqués]
 
 **Tour 123** — <goal_round> Objective: "Faire évoluer le pont linguistico-sémantique en BOÎTE NOIRE (émulation des premières couches du professeur, sans accès à ses rouages) par une phase GÉNÉRATIVE — le nombre de neurones et de couches NAÎT pendant l'apprentissage, en partant d'un seul neurone — suivie d'une ATTRITION PÉRIODIQUE qui réduit la taille du réseau en GÉNÉRALISANT les concepts (fusion des unités redo … [951 caractères tronqués]
+
+**Tour 124** — <goal_round> Objective: "Faire évoluer le pont linguistico-sémantique en BOÎTE NOIRE (émulation des premières couches du professeur, sans accès à ses rouages) par une phase GÉNÉRATIVE — le nombre de neurones et de couches NAÎT pendant l'apprentissage, en partant d'un seul neurone — suivie d'une ATTRITION PÉRIODIQUE qui réduit la taille du réseau en GÉNÉRALISANT les concepts (fusion des unités redo … [951 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -6286,7 +6288,74 @@ Fidélité et invariance sont les deux axes d'**une seule droite**. À invarianc
 
 **Synthèse produite :**
 
-⏵ Vérification propre des processus (mon propre motif fausse le compte).
+⏵ Tour terminé, tout est commité, rien ne tourne. Voici le point.
+
+\## Ce que ce tour a établi
+
+**1. Le déclencheur de couche, enfin correct.** Trois conditions **simultanées** — et la première manquait :
+1. la couche courante est **épuisée** (tant qu'un neurone de plus paie, c'est lui qu'il faut : couvrir une activation manquante est un travail de **neurone**, pas de couche) ;
+2. des **concepts communs** existent ;
+3. la lecture doit **soustraire** — le « OU exclusif ».
+
+Sans la condition 1, il déclenchait **à chaque pas** (9 couches pour 72 neurones). Avec : **80 neurones en 5 couches [41, 15, 8, 8, 8]** — la moitié de la croissance au premier niveau. Aucun chiffre rond.
+
+**2. Deux de mes propres mesures étaient fausses**, et je les ai corrigées :
+- j'avais annoncé que la restriction faisait **émerger les concepts** (+0,07 → +0,45) : non, je comparais **deux jeux de données**. Sur le même jeu, +0,45 dans les deux cas ;
+- j'avais annoncé **218 canaux propres à certaines langues** : vrai **seulement à la dernière position**. Sur tout le texte, les 896 canaux sont présents dans les 40 langues — le critère de présence ne sélectionne rien (896/896 pour tout seuil).
+
+**3. La loi qui gouverne tout :**
+
+```
+fid TEST  ≈  1,1150 · (invariance de la cible) − 0,0848     r = 0,9570
+constante ≈  1,1192 · (invariance de la cible) − 0,1071     r = 0,9570
+écart à la constante = +0,0197 ± 0,0009
+```
+
+**La constante témoin suit la même loi, pente identique à 0,4 % près.** Les deux droites sont **parallèles**, séparées par la contribution propre du pont. Et cette contribution est d'une stabilité frappante : **+0,0197, écart-type 0,0009** sur sept périmètres allant de 896 à 89 canaux.
+
+**Le pont capte 97 % du contenu interlingue de la cible, et rien au-delà.** Améliorer la fidélité ne passe donc **pas par le modèle** — cela passe par le **choix de la cible**.
+
+**4. Le plafond, attaqué :** la lecture était linéaire. En lui donnant `[états, états²]` — toujours en forme fermée, sans rétropropagation — l'écart passe de **+0,020 à +0,024 (+18 %)**, sur les deux périmètres, **sans coût en invariance**.
+
+\## Meilleur réseau à ce stade
+
+| | |
+|---|---|
+| périmètre | **157 canaux sur 896 (18 %)**, les plus énergétiques |
+| lecture | **quadratique** |
+| taille | **80 neurones · 8 couches [30, 8, 8, 8, 8, 8, 8, 2]** |
+| fidélité TEST | **0,6383** (constante 0,6140) |
+| invariance | **0,9648** · pire paire **0,8821** |
+| rétropropagation | **aucune** |
+
+\## État de l'objectif
+
+Acquis : pha
+… [609 caractères tronqués]
+
+### Tour 124 — <goal_round> Objective: "Faire évoluer le pont linguistico-sémantique en BOÎTE NOIRE (émulation des premières couches du … [1231 caractères tronqués]
+
+*18 appels d'outils.* Actions notables :
+
+- bash — Check state and find reservoir weight initialization
+- bash — Add input gain and per-neuron bias
+- write `/tmp/reservoir.sh`
+- bash — Sweep input gain and bias
+- bash — Wait for gain and bias sweep
+- bash — Measure oracle headroom
+- bash — Add per-language normalization
+- bash — Test per-language normalization
+- write `/tmp/transfert.sh`
+- bash — Measure transfer gap vs training languages
+- bash — Check cycle/attrition structure
+- read
+- bash — Restructure so free birth reaches attrition
+- bash — Wait for transfer test completion
+- … et 4 autres
+
+**Synthèse produite :**
+
+⏵ Bilan complet. Je consigne ce tour, qui est fait de résultats surtout **négatifs** — et ils précisent nettement le tableau.
 
 ## 3. Travail accompli
 
@@ -6457,6 +6526,8 @@ Fidélité et invariance sont les deux axes d'**une seule droite**. À invarianc
 | `/tmp/partages.sh` | 1 | 0 |
 | `/tmp/consist.sh` | 1 | 0 |
 | `/tmp/lecture.sh` | 1 | 0 |
+| `/tmp/reservoir.sh` | 1 | 0 |
+| `/tmp/transfert.sh` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -6535,7 +6606,7 @@ Fidélité et invariance sont les deux axes d'**une seule droite**. À invarianc
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6617 autres
+- … et 6632 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -6663,7 +6734,7 @@ Fidélité et invariance sont les deux axes d'**une seule droite**. À invarianc
 
 ## 5. Erreurs rencontrées
 
-380 sorties en erreur ou divergentes. Les premières :
+381 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -7260,4 +7331,5 @@ Fidélité et invariance sont les deux axes d'**une seule droite**. À invarianc
 - CONCLUSION : la fidélité est portée par l'invariance de la cible, pas par le modèle  Sept périmètres, du plus large (896 canaux) au plus étroit (89). Pour chacu
 - Lecture non linéaire : le plafond passe de +0,020 à +0,024 (+18 %)  Le readout était LINÉAIRE sur les états du réservoir. On lui donne [états, états²], ce qui r
 - journal" 2>/dev/null; git log --oneline -1
+- Le plafond est dans le TRANSFERT, pas dans les caractéristiques ; l'attrition ne généralise pas  QUATRE EXPÉRIENCES, QUATRE RÉPONSES.  1. LE RÉSERVOIR N'EST PAS
 
