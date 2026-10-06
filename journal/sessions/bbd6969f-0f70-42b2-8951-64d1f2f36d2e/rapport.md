@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 186.2 h |
+| Durée | 186.6 h |
 | Tours | 173 |
-| Messages | 8707 |
-| Appels d'outils | 8215 |
-| Fichiers touchés | 185 |
-| Commandes | 6983 |
+| Messages | 8724 |
+| Appels d'outils | 8232 |
+| Fichiers touchés | 188 |
+| Commandes | 6995 |
 | Sous-agents | 32 |
-| Commits | 624 |
+| Commits | 625 |
 | Compactages de contexte | 12 |
 
 ## Objectifs déclarés
@@ -8671,7 +8671,7 @@ Rien à faire de votre côté. Commit `0b91cb0`.
 
 ### Tour 173 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
 
-*90 appels d'outils.* Actions notables :
+*107 appels d'outils.* Actions notables :
 
 - bash — Profile Dzongkha representation vs others
 - bash — Profile representations per language
@@ -8687,27 +8687,11 @@ Rien à faire de votre côté. Commit `0b91cb0`.
 - bash — Read results section and defaults
 - bash — Read evalue and end of main
 - bash — Read nait and recalcule signatures
-- … et 66 autres
+- … et 82 autres
 
 **Synthèse produite :**
 
-⏵ **Résultat majeur : l'entrée SEULE sans aucun neurone fait 0,6536 contre 0,5972 pour le réservoir. Le réservoir n'apporte que +0,0073.**
-
-**C'est un résultat qui oblige à réviser le cadre d'évaluation.**
-
-| | fidélité | apport vs constante |
-|---|---:|---:|
-| témoin constant | 0,5678 | — |
-| **A · 40 neurones récurrents** | 0,5972 | +0,0294 |
-| **C · l'entrée SEULE, ZÉRO neurone** | **0,6536** | **+0,0857** |
-| B · réservoir **+** entrée | 0,6609 | +0,0931 |
-| D · 2 couches de 20 | 0,5979 | +0,0301 |
-
-**Une lecture linéaire-quadratique sur la couche 0 du professeur, sans un seul neurone, bat le réservoir de 40 neurones de +0,0564.** Et lui ajouter le réservoir ne rapporte que **+0,0073**.
-
-Et les langues « non servies » **le sont par C** : heb +0,0014 → +0,0637 · srp +0,0128 → +0,1005 · deu +0,0133 → +0,1024 · jpn +0,0216 → +0,1224 · kor +0,0192 → +0,0823. **L'information était dans l'entrée depuis le début ; c'est le réservoir qui la détruisait.**
-
-Enfin **D (2 couches de 20) = 0,5979 contre A (1 couche de 40) = 0,5972** : la profondeur n'achète rien à budget constant.
+⏵ **Couche 8 : +0,0495 de fidélité et +0,0573 d'oracle sur la couche 10, au niveau des unités alignées.**
 
 ## 3. Travail accompli
 
@@ -8865,7 +8849,7 @@ Enfin **D (2 couches de 20) = 0,5979 contre A (1 couche de 40) = 0,5972** : la p
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/31-le-regroupement-par-experts-mesure-et-k3-au-complet.md` | 1 | 1 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-prefill-par-experts.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/engine.rs` | 0 | 1 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py` | 0 | 37 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py` | 0 | 38 |
 | `/tmp/chaine_propre.sh` | 1 | 0 |
 | `/tmp/analyse_propre.sh` | 1 | 0 |
 | `/tmp/stop2.py` | 1 | 0 |
@@ -8900,6 +8884,9 @@ Enfin **D (2 couches de 20) = 0,5979 contre A (1 couche de 40) = 0,5972** : la p
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/profil_langues.py` | 2 | 4 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/leviers_pont.py` | 2 | 1 |
 | `/tmp/c8_analyse.sh` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/controle_capacite.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/corpus_neuf.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_parallele.py` | 0 | 1 |
 
 ### Sous-agents lancés
 
@@ -8978,7 +8965,7 @@ Enfin **D (2 couches de 20) = 0,5979 contre A (1 couche de 40) = 0,5972** : la p
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6943 autres
+- … et 6955 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9750,4 +9737,5 @@ Enfin **D (2 couches de 20) = 0,5979 contre A (1 couche de 40) = 0,5972** : la p
 - Le pont ne sert pas toutes les langues également — et la fidélité EST le témoin constant  PROFIL DES 41 LANGUES DE TEST (896 canaux, 40 neurones / 1 couche, qua
 - Réservoir multi-échelle : +8,8% sur l'apport propre, mais ce n'était pas la cause  La quantité de contenu par jeton varie de 6x selon la langue (1,578 jeton/car
 - Le réservoir ne sert presque à rien : l'entrée SEULE fait mieux, sans un neurone  Le témoin constant n'était pas le bon témoin. Mesuré sur le même vivier (351 l
+- Couche 8 contre couche 10 au niveau des unités : +0,0495 de fidélité  Traçage par unité (17 langues d'apprentissage, 230 unités de test, dix points alignés par 
 

@@ -110,6 +110,14 @@ def main():
     # on reconstruit exactement le même réseau sur B en rejouant les naissances
     P2.poids = [tuple(x) for x in P.poids]; P2.couches = list(P.couches)
     P2.compte_neurones = P.compte_neurones
+    # LA CONSTANTE DE TEMPS FAIT PARTIE DE LA GÉNÉALOGIE, au même titre que les
+    # poids. L'oublier ici a fait planter le pont sur Romeo ET sur Wikipedia :
+    # `recalcule` indexait `a_neur[j]` sur une liste vide. Toute recopie de
+    # `poids` doit désormais recopier `a_neur`.
+    P2.a_neur = list(P.a_neur)
+    assert len(P2.a_neur) == len(P2.poids), \
+        f"généalogie désynchronisée : {len(P2.a_neur)} constantes pour " \
+        f"{len(P2.poids)} neurones"
     P2.X = [np.zeros((len(e), 0), dtype=np.float32) for e in P2.E]
     # on recalcule par couche, en réutilisant la généalogie
     P2.X = P2.recalcule(list(range(P2.compte_neurones)), EB)

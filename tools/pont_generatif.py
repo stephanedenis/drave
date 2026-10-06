@@ -260,6 +260,16 @@ class Pont:
         S = list(S)
         pos = {j: r for r, j in enumerate(S)}
         EK = self.E if Ek is None else Ek
+        # GARDE-FOU. `a_neur` est parallèle à `poids` : toute recopie de la
+        # généalogie qui oublierait l'un des deux produirait soit un plantage
+        # obscur (IndexError), soit — bien pire — un calcul SILENCIEUX avec la
+        # mauvaise dynamique. On préfère échouer bruyamment ici. C'est arrivé :
+        # `pont_parallele` recopiait `poids` sans `a_neur`.
+        if len(self.a_neur) != len(self.poids):
+            raise ValueError(
+                f"généalogie désynchronisée : {len(self.a_neur)} constantes de "
+                f"temps pour {len(self.poids)} neurones. Toute recopie de "
+                f"`poids` doit recopier `a_neur`.")
         Xn = [np.zeros((len(E), len(S)), dtype=np.float32) for E in EK]
         for c in sorted({self.poids[j][3] for j in S}):
             membres = [j for j in S if self.poids[j][3] == c]

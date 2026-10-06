@@ -143017,3 +143017,336 @@ Et les langues « non servies » **le sont par C** : heb +0,0014 → +0,0637 · 
 Enfin **D (2 couches de 20) = 0,5979 contre A (1 couche de 40) = 0,5972** : la profondeur n'achète rien à budget constant.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 29. Le réservoir ne sert presque à rien — et le vrai témoin n'était pas celui que je croyais\n\nDepuis le début, l'apport du pont est … [5970 caractères tronqués]`
+
+  ```
+e036749 Le réservoir ne sert presque à rien : l'entrée SEULE fait mieux, sans un neurone
+
+# pour confirmer qu'on sait ce qu'on mesure.
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# invariance du PROFESSEUR (segment par segment) : 0.3032 · pire segment -0.0370
+08:56
+  ```
+
+### 🤖 Assistant
+
+⏵ **Contrôle promis : lecture linéaire seule contre quadratique, et réservoir large contre capacité de l'entrée.**
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"CONTRÔLE DE CAPACITÉ — l'entrée gagne-t-elle par NATURE ou par TAILLE ?\n\n§29 a mesuré : une lecture quadratique sur l'entrée SEULE (1 792 caractéristiques,\naucun neurone) fait 0,6536, contre 0,5972 pour 40 neurones récurrents (80\ncaractéristiques). Mais … [6168 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/controle_capacite.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/controle_capacite.py'; s=open(p).read()\ns=s.replace('SOURCE = \"/tmp/udhr10_toutes\"\\n\\n\\n','')\ns=s.replace('''            fh.write(f\"{c};{T[c]:.6f};{C_lin[c]:.6f};{A_g[c]:.6f};{B_g[c]:.6f};\"\n       … [873 caractères tronqués]`
+
+  ```
+lancé
+syntaxe OK
+08:56
+  ```
+
+- **bash** `{"command": "sleep 60; echo \"=== controle ===\"; cat /tmp/controle.log; echo \"=== processus ===\"; pgrep -fa \"controle_capacite\" | head -2 | cut -c1-100; echo \"=== analyse_final ===\"; tail -3 /tmp/analyse_final.log; date '+%H:%M'", "description": "Verify control experiment started", "timeoutMs … [9 caractères tronqués]`
+
+  ```
+=== controle ===
+# 351 langues d'apprentissage · 41 de test · 896/896 canaux
+
+=== LECTURES SUR L'ENTRÉE SEULE (aucun neurone) ===
+=== processus ===
+2517720 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='tools/cont
+2517723 timeout 7200 python3 -u tools/controle_capacite.py /tmp/cache392_train.npz /tmp/cache392_tes
+=== analyse_final ===
+# pour confirmer qu'on sait ce qu'on mesure.
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# invariance du PROFESSEUR (segment par segment) : 0.3032 · pire segment -0.0370
+08:57
+  ```
+
+- **bash** `{"command": "sleep 540; echo \"=== controle ===\"; cat /tmp/controle.log; echo \"=== caches wiki ===\"; ls -la /tmp/cache_wiki*.npz 2>/dev/null; echo \"=== analyse_final ===\"; tail -3 /tmp/analyse_final.log; date '+%H:%M'", "description": "Wait for capacity control", "timeoutMs": 580000}`
+
+  ```
+=== controle ===
+# 351 langues d'apprentissage · 41 de test · 896/896 canaux
+
+=== LECTURES SUR L'ENTRÉE SEULE (aucun neurone) ===
+  C_lin (linéaire)         896 caractérisques · fidélité 0.6364
+
+=== RÉSERVOIRS ===
+  [pont 200 neurones construit en 106 s]
+  A200 (quadratique)       400 caractérisques · fidélité 0.6218
+=== caches wiki ===
+-rw-r--r--. 1 stephane stephane 352662082  6 oct 08:45 /tmp/cache_wiki_en.npz
+-rw-r--r--. 1 stephane stephane 436925457  6 oct 08:53 /tmp/cache_wiki_fr.npz
+=== analyse_final ===
+# pour confirmer qu'on sait ce qu'on mesure.
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# invariance du PROFESSEUR (segment par segment) : 0.3032 · pire segment -0.0370
+09:07
+  ```
+
+- **bash** `{"command": "ps -eo pid,etime,%cpu,rss,cmd --sort=-%cpu | head -6 | cut -c1-110; echo \"=== analyse_final vivant ? ===\"; pgrep -fa \"analyse_final|pont_parallele|cache_pont|invariance_unites\" | head -4 | cut -c1-110; echo \"=== log modifié ===\"; stat -c '%y %n' /tmp/analyse_final.log; date '+%H:% … [46 caractères tronqués]`
+
+  ```
+PID     ELAPSED %CPU   RSS CMD
+2522622       00:00  100  4036 bash -c ps -eo pid,etime,%cpu,rss,cmd --sort=-%cpu | head -6 | cut -c1-110; ech
+2516417       13:41 99.9 2729968 python3 -u tools/pont_parallele.py /tmp/cache_wiki_en.npz /tmp/cache_wiki_fr.
+2517724       10:51 99.9 6408188 python3 -u tools/controle_capacite.py /tmp/cache392_train.npz /tmp/cache392_t
+ 710008 10-21:11:01 46.8 4119516 node26 /home/stephane/.local/share/../bin/dsh --profile dsh-tui
+2062778    23:10:43 46.1 805488 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui
+=== analyse_final vivant ? ===
+2364779 bash -x /tmp/analyse_final.sh
+2445500 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && chmod +x /tmp/trace392c8.sh && bash -n /
+2511455 bash -c chmod +x /tmp/c8_analyse.sh && bash -n /tmp/c8_analyse.sh && echo "syntaxe OK" && setsid nohup
+2516417 python3 -u tools/pont_parallele.py /tmp/cache_wiki_en.npz /tmp/cache_wiki_fr.npz --couche 10 --canaux 
+=== log modifié ===
+2026-10-06 08:53:51.483632666 -0400 /tmp/analyse_final.log
+09:07:20
+  ```
+
+### 🤖 Assistant
+
+⏵ **Test décisif à écrire : la lecture directe exploite-t-elle l'ALIGNEMENT de l'UDHR (position = même contenu partout) ?**
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"TEXTE NEUF — la lecture directe gagne-t-elle par nature, ou par ALIGNEMENT ?\n\nLE DOUTE, ET IL EST SÉRIEUX. L'UDHR est UN SEUL texte traduit en 392 langues. À la\nposition t, toutes les langues disent LA MÊME CHOSE. Or la couche 0 encode la\nposition (enco … [4752 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/corpus_neuf.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"import ast; ast.parse(open('tools/corpus_neuf.py').read()); print('syntaxe OK')\"; echo \"=== controle ===\"; cat /tmp/controle.log; echo \"=== analyse_final ===\"; tail -2 /tmp/analyse_final.log; free -g | head -2; date … [53 caractères tronqués]`
+
+  ```
+syntaxe OK
+=== controle ===
+# 351 langues d'apprentissage · 41 de test · 896/896 canaux
+
+=== LECTURES SUR L'ENTRÉE SEULE (aucun neurone) ===
+  C_lin (linéaire)         896 caractérisques · fidélité 0.6364
+
+=== RÉSERVOIRS ===
+  [pont 200 neurones construit en 106 s]
+  A200 (quadratique)       400 caractérisques · fidélité 0.6218
+=== analyse_final ===
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# invariance du PROFESSEUR (segment par segment) : 0.3032 · pire segment -0.0370
+               total        used        free      shared  buff/cache   available
+Mem:             125          27           7           7          98          97
+09:07
+  ```
+
+- **bash** `{"command": "sleep 540; echo \"=== controle ===\"; cat /tmp/controle.log; echo \"=== analyse_final ===\"; tail -2 /tmp/analyse_final.log; date '+%H:%M'", "description": "Wait for capacity control completion", "timeoutMs": 580000}`
+
+  ```
+=== controle ===
+# 351 langues d'apprentissage · 41 de test · 896/896 canaux
+
+=== LECTURES SUR L'ENTRÉE SEULE (aucun neurone) ===
+  C_lin (linéaire)         896 caractérisques · fidélité 0.6364
+
+=== RÉSERVOIRS ===
+  [pont 200 neurones construit en 106 s]
+  A200 (quadratique)       400 caractérisques · fidélité 0.6218
+=== analyse_final ===
+MOYENNE professeur 0.6471 · notre sortie 0.9701
+TERMINE
+09:16
+  ```
+
+### 🤖 Assistant
+
+⏵ **`analyse_final` est TERMINÉ — la chaîne enchaîne sur la couche 8. Je lis ses résultats.**
+
+- **bash** `{"command": "cat /tmp/analyse_final.log", "description": "Read full analyse_final results"}`
+
+  ```
+=== ROMEO AND JULIET — corpus PARALLÈLE, 24 scènes alignées en/fr ===
+--- où est le plateau du professeur sur ce corpus (invariance par scène) ---
+  couche 0 :
+    24        2     -0.0734     -0.0734   en–fr
+
+MOYENNE sur 24 unités : invariance 0.1420 · pire paire 0.1420
+pire unité : -0.0888 · pire paire absolue -0.0888
+  couche 4 :
+    24        2      0.2247      0.2247   en–fr
+
+MOYENNE sur 24 unités : invariance 0.4483 · pire paire 0.4483
+pire unité : 0.1289 · pire paire absolue 0.1289
+  couche 8 :
+    24        2      0.2303      0.2303   en–fr
+
+MOYENNE sur 24 unités : invariance 0.5985 · pire paire 0.5985
+pire unité : 0.1943 · pire paire absolue 0.1943
+  couche 10 :
+    24        2      0.2381      0.2381   en–fr
+
+MOYENNE sur 24 unités : invariance 0.5703 · pire paire 0.5703
+pire unité : 0.2381 · pire paire absolue 0.2381
+--- le pont sur le corpus parallèle ---
+  en_01 : 2965 pas
+  en_02 : 1222 pas
+  en_03 : 1388 pas
+  en_04 : 1424 pas
+  en_05 : 2110 pas
+  en_06 : 563 pas
+  en_07 : 2307 pas
+  en_08 : 1145 pas
+  en_09 : 2627 pas
+  en_10 : 998 pas
+  en_11 : 444 pas
+  en_12 : 2580 pas
+  en_13 : 1748 pas
+  en_14 : 2150 pas
+  en_15 : 469 pas
+  en_16 : 3106 pas
+  en_17 : 1513 pas
+  e
+… [21515 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **RÉGRESSION QUE J'AI INTRODUITE : ma modification `a_neur` fait planter `pont_parallele.py`. Deux sections de la chaîne sont mortes.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"poids\\|nait\\|Pont(\\|recalcule\\|a_neur\\|compte_neurones\" tools/pont_parallele.py | head -30", "description": "Find how pont_parallele builds the bridge"}`
+
+  ```
+88:    P = Pont((clA, EA, YA), a_, graine, H)
+94:    while P.compte_neurones < 120:
+95:        P.nait(1, nouvelle_couche=(P.compte_neurones == 0))
+96:        idx = _np.arange(P.compte_neurones)
+109:    P2 = Pont((clB, EB, YB), a_, graine, H)   # MÊMES graine et poids : on rejoue
+111:    P2.poids = [tuple(x) for x in P.poids]; P2.couches = list(P.couches)
+112:    P2.compte_neurones = P.compte_neurones
+114:    # on recalcule par couche, en réutilisant la généalogie
+115:    P2.X = P2.recalcule(list(range(P2.compte_neurones)), EB)
+123:    print(f"#   taille                : {P.compte_neurones} neurones · "
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"\\.poids\\b\\|\\.compte_neurones\\s*=\\|\\.couches\\s*=\\|\\.X\\s*=\" tools/*.py | grep -v \"^tools/pont_generatif.py\" | head -20; echo \"=== dans pont_generatif (hors nait/compacte) ===\"; grep -n \"self.poids\\s*=\\|sel … [101 caractères tronqués]`
+
+  ```
+tools/pont_parallele.py:95:        P.nait(1, nouvelle_couche=(P.compte_neurones == 0))
+tools/pont_parallele.py:111:    P2.poids = [tuple(x) for x in P.poids]; P2.couches = list(P.couches)
+tools/pont_parallele.py:112:    P2.compte_neurones = P.compte_neurones
+tools/pont_parallele.py:113:    P2.X = [np.zeros((len(e), 0), dtype=np.float32) for e in P2.E]
+tools/pont_parallele.py:115:    P2.X = P2.recalcule(list(range(P2.compte_neurones)), EB)
+tools/pont_unites.py:77:        P.nait(1, nouvelle_couche=(P.compte_neurones == 0))
+tools/vision_ref.py:9:Usage : vision_ref.py <sortie.bin> [--poids <sortie.bin.poids>]
+tools/vision_ref.py:29:    poids = sys.argv[2] if len(sys.argv) > 2 else sortie + ".poids"
+=== dans pont_generatif (hors nait/compacte) ===
+83:        self.compte_neurones = 0
+87:        self.poids = []
+308:        self.poids = nouvelles
+314:        self.compte_neurones = len(S)
+  ```
+
+### 🤖 Assistant
+
+⏵ **Cause trouvée : `pont_parallele.py` recopie `poids` sans recopier `a_neur`. Je corrige et je rends la désynchronisation bruyante.**
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_parallele.py", "limit": 14, "offset": 106}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_parallele.py</path>
+<type>file</type>
+<content>
+106:     W = P.ajuste(idx, ride, mtA, toutes)
+107:     fA = P.fid(idx, W, mtA, toutes)
+108: 
+109:     P2 = Pont((clB, EB, YB), a_, graine, H)   # MÊMES graine et poids : on rejoue
+110:     # on reconstruit exactement le même réseau sur B en rejouant les naissances
+111:     P2.poids = [tuple(x) for x in P.poids]; P2.couches = list(P.couches)
+112:     P2.compte_neurones = P.compte_neurones
+113:     P2.X = [np.zeros((len(e), 0), dtype=np.float32) for e in P2.E]
+114:     # on recalcule par couche, en réutilisant la généalogie
+115:     P2.X = P2.recalcule(list(range(P2.compte_neurones)), EB)
+116:     fB = P2.evalue(P2.X, YB, W, mtA)
+117:     mB, mBmin = inv_appariee([P2.phi(x) @ W + mtA for x in P2.X],
+118:                              [P.phi(x) @ W + mtA for x in P.X])
+119:     print(f"\n# le PONT (lecture apprise sur A, même lecture appliquée à B)")
+
+(Showing lines 106-119 of 135. Use offset=120 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_parallele.py", "new_string": "    P2 = Pont((clB, EB, YB), a_, graine, H)   # MÊMES graine et poids : on rejoue\n    # on reconstruit exactement le même réseau sur B en rejouant les naissances\n    P2.poids = [tuple(x) for x i … [869 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_parallele.py has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", "new_string": "        S = list(S)\n        pos = {j: r for r, j in enumerate(S)}\n        EK = self.E if Ek is None else Ek\n        # GARDE-FOU. `a_neur` est parallèle à `poids` : toute recopie de la\n         … [864 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"import ast; [ast.parse(open(f).read()) for f in ('tools/pont_parallele.py','tools/pont_generatif.py')]; print('syntaxe OK')\"; echo \"=== chaîne ===\"; pgrep -fa \"unites8|trace392c8|c8_analyse\" | head -3 | cut -c1-80;  … [326 caractères tronqués]`
+
+  ```
+syntaxe OK
+=== chaîne ===
+2445500 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && chmod +x /
+2445504 bash /tmp/trace392c8.sh
+2511455 bash -c chmod +x /tmp/c8_analyse.sh && bash -n /tmp/c8_analyse.sh && ech
+=== c8 ===
+9
+agr 44s 12990662
+aii 40s 12514925
+=== unites8 ===
+MOYENNE professeur 0.6998 · notre sortie 0.9401
+TERMINE
+=== controle ===
+=== RÉSERVOIRS ===
+  [pont 200 neurones construit en 106 s]
+  A200 (quadratique)       400 caractérisques · fidélité 0.6218
+09:19
+  ```
+
+### 🤖 Assistant
+
+⏵ **Couche 8 : professeur 0,6998 contre 0,6471 (couche 10) au niveau des unités. Je relance les deux sections plantées.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -v \"pas$\" /tmp/unites8.log | head -30; echo \"=== relance des sections plantées ===\"; cat > /tmp/refait_parallele.sh <<'EOF'\n#!/bin/bash\n# RELANCE des deux sections que ma régression `a_neur` avait tuées :\n# le pont sur Ro … [1161 caractères tronqués]`
+
+  ```
+caches couche 8 TERMINE
+# sous-ensemble actif : 121/896 canaux, masque lu sur l'apprentissage
+# 17 langues d'apprentissage · 150 unités apprises · 20 en validation · 230 unités de test
+
+# PONT : 120 neurones · 1 couches [120]
+#   fidélité validation   : 0.8138
+#   fidélité TEST         : 0.7582
+#   oracle TEST           : 0.8012   (écart +0.0429)
+#   invariance TEST       : 0.9423 · pire 0.7778
+
+# INVARIANCE PAR UNITÉ — professeur contre notre sortie
+ unité  langues  professeur  notre sortie  pire (nous)   pire couple
+    00       23      0.7161        0.9379       0.7817   amh–hus
+    01       23      0.7214        0.9413       0.8086   amh–csa
+    02       23      0.7069        0.9441       0.7934   amh–ilo
+    03       23      0.6927        0.9402       0.7801   amh–hsb
+    04       23      0.7062        0.9363       0.7984   amh–ctd
+    05       23      0.6968        0.9411       0.7875   amh–hns
+    06       23      0.6762        0.9401       0.7878   amh–bum
+    07       23      0.7087        0.9359       0.7899   acu–amh
+    08       23      0.6912        0.9471       0.8047   amh–bum
+    09       23      0.6818        0.9374       0.7860   amh–ctd
+
+MOYENNE professeur 0.6998
+… [80 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Couche 8 : +0,0495 de fidélité et +0,0573 d'oracle sur la couche 10, au niveau des unités alignées.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 30. Couche 8 contre couche 10, au niveau des DIX unités alignées\n\nLe traçage par unité écrit les couches 0, 8 et 10. On peut donc c … [4910 caractères tronqués]`
