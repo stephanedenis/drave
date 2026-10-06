@@ -143417,3 +143417,157 @@ Mem:             125          29           5           7          99          96
 ⏵ **Le contrôle de capacité a été tué (pas de `setsid`). Je consigne ses acquis partiels et je lance le test d'alignement.**
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 31. Contrôle de capacité : l'entrée gagne-t-elle par NATURE ou par TAILLE ?\n\nLe §29 laissait une objection sérieuse : C (entrée seu … [3152 caractères tronqués]`
+
+  ```
+b15a604 Contrôle de capacité : l'entrée gagne par nature, sans que ce soit tranché
+
+14:#   fidélité sur A        : 0.6660
+15:#   fidélité sur B        : 0.5802   (transférée, sans réapprentissage)
+18:#   oracle sur B          : 0.6207
+  ```
+
+### 🤖 Assistant
+
+⏵ **Mesure décisive et bon marché : combien la POSITION SEULE prédit-elle, sur l'UDHR aligné contre Wikipedia non aligné ?**
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"LA POSITION SEULE — de combien l'alignement de l'UDHR gonfle-t-il la fidélité ?\n\nLE DOUTE À LEVER. L'UDHR est UN texte traduit en 392 langues : à la position t,\ntoutes les langues disent la même chose. La couche 0 encode la position, donc une\nlecture `e … [2937 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/position_seule.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/position_seule.py'; s=open(p).read()\ns=s.replace('''    fid = [cos_lignes(np.tile(P[t], (1, 1)), Yte[k][t:t+1]).item()\n           for k in range(len(clte)) for t in range(0, Lmin, 17)]\n    # la même chos … [434 caractères tronqués]`
+
+  ```
+syntaxe OK
+lancé
+09:30
+  ```
+
+- **bash** `{"command": "sleep 300; echo \"=== position UDHR ===\"; cat /tmp/position_udhr.log 2>/dev/null; echo \"=== refait_parallele ===\"; tail -4 /tmp/refait_parallele.log; echo \"=== c8 ===\"; ls /home/stephane/Data13TB/stephane/corpus/udhr/udhr392_c8 2>/dev/null | wc -l; date '+%H:%M'", "description": "R … [49 caractères tronqués]`
+
+  ```
+=== position UDHR ===
+# apprentissage 351 tranches · test 41 tranches · H=896
+# tranche la plus courte : 445 pas — moyenne faite sur [0, 445[
+# longueur moyenne — apprentissage 1346 · test 1873
+
+# FIDÉLITÉ DE LA POSITION SEULE
+#   par tranche  : moyenne 0.5690 · médiane 0.5735 · min 0.3015 · max 0.6989
+#   constante (sans position) : moyenne 0.5545
+#   CE QUE LA POSITION AJOUTE : +0.0145
+=== refait_parallele ===
+# corpus NON apparié, il ne veut RIEN dire. Relancer avec --apparie
+# pour confirmer qu'on sait ce qu'on mesure.
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# invariance du PROFESSEUR (segment par segment) : 0.3032 · pire segment -0.0370
+=== c8 ===
+34
+09:35
+  ```
+
+### 🤖 Assistant
+
+⏵ **Position seule sur l'UDHR : +0,0145 seulement. L'alignement n'explique donc PAS le §29. Je vérifie le contraste sur Wikipedia.**
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/position_seule.py", "new_string": "def main():\n    tr_p = sys.argv[1]\n    te_p = sys.argv[2] if len(sys.argv) > 2 and not sys.argv[2].startswith('--') else None\n    if te_p is None:\n        # un seul fichier : on coupe 80/20. C … [788 caractères tronqués]`
+
+  ```
+Error: cannot edit "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/position_seule.py": file changed since it was read — re-read the file, then retry
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/position_seule.py", "limit": 12, "offset": 28}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/position_seule.py</path>
+<type>file</type>
+<content>
+28: 
+29: def opt(nom, defaut):
+30:     return sys.argv[sys.argv.index(nom) + 1] if nom in sys.argv else defaut
+31: 
+32: 
+33: def main():
+34:     tr_p, te_p = sys.argv[1], sys.argv[2]
+35:     cltr, Etr, Ytr, H = charge(tr_p)
+36:     clte, Ete, Yte, _ = charge(te_p)
+37:     print(f"# apprentissage {len(cltr)} tranches · test {len(clte)} tranches · H={H}")
+38: 
+39:     # longueur commune : on ne peut moyenner la ligne t que jusqu'à la plus courte
+
+(Showing lines 28-39 of 71. Use offset=40 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/position_seule.py", "new_string": "def main():\n    tr_p = sys.argv[1]\n    te_p = (sys.argv[2] if len(sys.argv) > 2 and not sys.argv[2].startswith('--')\n            else None)\n    if te_p is None:\n        # un seul fichier : on … [803 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/position_seule.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"import ast; ast.parse(open('tools/position_seule.py').read()); print('syntaxe OK')\" && setsid nohup python3 -u tools/position_seule.py /tmp/cache_wiki_en.npz > /tmp/position_wiki.log 2>&1 < /dev/null & disown\nsleep 3;  … [76 caractères tronqués]`
+
+  ```
+syntaxe OK
+lancé
+09:36
+  ```
+
+- **bash** `{"command": "sleep 280; echo \"=== position WIKI ===\"; cat /tmp/position_wiki.log 2>/dev/null; echo \"=== refait_parallele ===\"; grep -n \"fidélité sur\\|oracle sur\\|TERMINE\\|Traceback\" /tmp/refait_parallele.log | tail -8; echo \"=== c8 ===\"; ls /home/stephane/Data13TB/stephane/corpus/udhr/udh … [116 caractères tronqués]`
+
+  ```
+=== position WIKI ===
+# apprentissage 192 tranches · test 48 tranches · H=896
+# tranche la plus courte : 324 pas — moyenne faite sur [0, 324[
+# longueur moyenne — apprentissage 677 · test 647
+
+# FIDÉLITÉ DE LA POSITION SEULE
+#   par tranche  : moyenne 0.3704 · médiane 0.3717 · min 0.2886 · max 0.4410
+#   constante (sans position) : moyenne 0.3602
+#   CE QUE LA POSITION AJOUTE : +0.0101
+=== refait_parallele ===
+14:#   fidélité sur A        : 0.6660
+15:#   fidélité sur B        : 0.5802   (transférée, sans réapprentissage)
+18:#   oracle sur B          : 0.6207
+33:#   fidélité sur A        : 0.5522
+34:#   fidélité sur B        : 0.5226   (transférée, sans réapprentissage)
+37:#   oracle sur B          : 0.5545
+38:TERMINE
+=== c8 ===
+40
+09:41
+  ```
+
+### 🤖 Assistant
+
+⏵ **Position seule : +0,0145 sur l'UDHR aligné, +0,0101 sur Wikipedia non aligné. Le §29 n'est PAS un artefact d'alignement.**
+
+- **bash** `{"command": "sed -n '20,40p' /tmp/refait_parallele.log", "description": "Read Wikipedia bridge results"}`
+
+  ```
+=== WIKIPEDIA — pont sur corpus RICHE (non parallèle) ===
+# sous-ensemble actif : 211/896 canaux sur l'apprentissage de A
+# 240 segments appariés · A=en_001… · B=fr_001… · couche 10
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# ATTENTION : ce tool APPARIE LES SEGMENTS PAR INDEX. Le chiffre
+# d'invariance ci-dessous n'a de sens que si le segment i de A et le
+# segment i de B portent le MÊME CONTENU (corpus parallèle). Sur un
+# corpus NON apparié, il ne veut RIEN dire. Relancer avec --apparie
+# pour confirmer qu'on sait ce qu'on mesure.
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# invariance du PROFESSEUR (segment par segment) : 0.3032 · pire segment -0.0370
+
+# le PONT (lecture apprise sur A, même lecture appliquée à B)
+#   fidélité sur A        : 0.5522
+#   fidélité sur B        : 0.5226   (transférée, sans réapprentissage)
+#   invariance de SORTIE  : 0.9165 · pire segment 0.6975
+#   taille                : 120 neurones · 1 couches [120]
+#   oracle sur B          : 0.5545
+TERMINE
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 32. Le §29 est-il un artefact d'alignement ? NON — mesuré\n\n### 32.1 Le soupçon\n\nL'UDHR est **un seul texte** traduit en 392 langu … [4206 caractères tronqués]`
