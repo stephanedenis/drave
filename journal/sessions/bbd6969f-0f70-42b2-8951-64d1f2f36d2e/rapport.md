@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 182.5 h |
-| Tours | 164 |
-| Messages | 8549 |
-| Appels d'outils | 8085 |
+| Durée | 184.8 h |
+| Tours | 170 |
+| Messages | 8600 |
+| Appels d'outils | 8121 |
 | Fichiers touchés | 182 |
-| Commandes | 6884 |
+| Commandes | 6918 |
 | Sous-agents | 32 |
-| Commits | 617 |
+| Commits | 618 |
 | Compactages de contexte | 11 |
 
 ## Objectifs déclarés
@@ -381,6 +381,18 @@
 **Tour 163** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 **Tour 164** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
+
+**Tour 165** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
+
+**Tour 166** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
+
+**Tour 167** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
+
+**Tour 168** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
+
+**Tour 169** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
+
+**Tour 170** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -8249,17 +8261,306 @@ Rien à faire de votre côté.
 
 **Synthèse produite :**
 
-⏵ **Je dois corriger ce que j'ai annoncé au tour précédent.**
+⏵ Correction commitée. Point d'étape.
 
-| corpus | min | p10 | médiane | p90 | max |
-|---|---:|---:|---:|---:|---:|
-| UDHR (392 langues) | 60 | 850 | 862 | 873 | 889 |
-| Wikipedia | 63 | 858 | **871** | 880 | 890 |
-| Romeo | 79 | 860 | **872** | 880 | 891 |
+\## Ce que le tour a corrigé
 
-**J'avais annoncé que Wikipedia activait la couche « beaucoup plus densément » (810-864 contre un minimum de 5).** C'est **faux** : la médiane est de 862 à l'UDHR contre 871 à Wikipedia — **1 % d'écart** — et le minimum réel est de 60, pas 5. J'avais comparé un minimum échantillonné à une moyenne.
+J'avais annoncé au tour précédent que Wikipedia activait la couche « beaucoup plus densément » que l'UDHR — sur un échantillon de huit traces. **C'était faux** : je comparais un **minimum** échantillonné à une **moyenne**.
 
-**La vraie caractérisation, et elle est plus intéressante** : la couche 10 du professeur est **dense en support** (862 canaux non nuls sur 896, soit 96 %) mais **creuse en énergie** (50 % de l'énergie sur 40 canaux, soit 4 %). Les deux mesures sont vraies et décrivent des choses différentes — j'avais laissé entendre qu'elles se contredisaient.
+| corpus | min | médiane | p90 | positions |
+|---|---:|---:|---:|---:|
+| UDHR (392 langues) | 60 | 862 | 873 | 20 803 |
+| Wikipedia | 63 | **871** | 880 | 5 732 |
+| Romeo | 79 | **872** | 880 | 19 135 |
+
+**1 % d'écart entre les médianes.** Le minimum réel est de 60, pas 5.
+
+\## La caractérisation juste, et elle est plus utile
+
+**La couche 10 du professeur est dense en support et creuse en énergie :**
+
+| | |
+|---|---|
+| canaux non nuls | **862 sur 896 (96 %)** |
+| énergie portée par 50 % des canaux | **40 canaux (4 %)** |
+
+**Ce ne sont pas deux mesures qui se contredisent, mais deux questions différentes** : *combien de canaux parlent* — presque tous — et *lesquels portent le signal* — une poignée. J'avais laissé entendre qu'elles s'opposaient ; elles se complètent.
+
+**Et cela éclaire un résultat précédent** : garder les 157 canaux énergétiques n'écarte **pas du vide** — 96 % des canaux sont non nuls — mais du **bruit de faible amplitude**. Cela explique pourquoi la restriction fonctionne aussi bien : on ne jette presque que du détail, et c'est précisément le détail qui coûte l'invariance.
+
+\## État
+
+| | |
+|---|---|
+| Wikipedia | **235/480**, 0 échec |
+| restant | ~80 min |
+| chaîne | 6 scripts vivants |
+| corrections ce tour | 1 (une comparaison min/moyenne abusive) |
+
+Rien à faire de votre côté. Commit `4e12ea6`.
+
+### Tour 165 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Monitor chain state
+
+**Synthèse produite :**
+
+⏵ Tout est nominal. Point d'étape.
+
+\## État
+
+| | |
+|---|---|
+| Wikipedia | **236/480**, 0 échec |
+| rythme | 20 s par morceau |
+| restant | ~81 min |
+| chaîne | 6 scripts vivants |
+| disque | 2,1 To libres |
+| charge | 14 sur 40 threads |
+
+Rien d'anormal depuis la correction du droit d'exécution : le traçage tourne seul, sans contention, et la chaîne attend son tour.
+
+\## Ce que j'ai appris en surveillant
+
+Sur les dix derniers tours, **aucune de mes erreurs n'a été scientifique** — toutes étaient des erreurs de **plomberie ou de comparaison** : un `chmod` manquant, un drapeau sans effet, une ancre de motif absente, un script édité en cours d'exécution, une dépendance supposée, un minimum comparé à une moyenne, un oracle évalué sur les mauvaises langues.
+
+C'est une répartition que je ne attendais pas. La partie scientifique — formuler une hypothèse, la mesurer, la corriger — s'est bien passée : les résultats ont tenu à chaque vérification, et les deux vrais retournements (la couche 8, l'écart de transfert) sont venus de mesures correctes qui contredisaient des mesures correctes antérieures.
+
+Ce qui a coûté du temps, c'est **tout ce qui entoure la mesure**. Et le point commun de ces erreurs est qu'elles sont **silencieuses** : ça a l'air de tourner.
+
+D'où la seule discipline qui ait réellement payé dans ce parcours : **vérifier les effets, pas les intentions** — que le fichier soit écrit, que le processus tourne, que la condition matche ce qu'on croit, que le nombre comparé soit de la même nature que celui auquel on le compare.
+
+Je continue à surveiller sans rien ajouter. Rien à faire de votre côté.
+
+### Tour 166 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
+
+*10 appels d'outils.* Actions notables :
+
+- bash — Monitor Wikipedia progress
+- bash — Continue monitoring Wikipedia
+- bash — Monitor Wikipedia toward completion
+- bash — Monitor Wikipedia
+- bash — Monitor toward Wikipedia completion
+- bash — Monitor Wikipedia completion and units start
+- bash — Monitor Wikipedia completion
+- bash — Wait for Wikipedia completion and units start
+- bash — Check Wikipedia completion and units launch
+
+**Synthèse produite :**
+
+⏵ **Phase Wikipedia TERMINÉE : 480/480, zéro échec. La phase 5 a démarré.**
+
+\## Le jalon
+
+| | |
+|---|---|
+| morceaux anglais | **240 / 240** |
+| morceaux français | **240 / 240** |
+| échecs | **0** |
+| durée | ~2 h 40 |
+
+Et **le traçage par unité a démarré immédiatement** : 10 unités déjà faites (`acu_08`, `acu_09`), à ~10 s chacune. La chaîne s'enchaîne correctement.
+
+\## La chaîne, où elle en est
+
+| # | phase | état |
+|---|---|---|
+| 1 | 392 langues UDHR | **FAIT** |
+| 2 | pont sur 301 langues (2 runs) | **FAIT** |
+| 3 | Romeo — 48 scènes, transfert en→fr | **FAIT** |
+| 4 | **Wikipedia — 480 morceaux** | **FAIT** |
+| 5 | traçage par unité (couches 0, 8, 10) | **EN COURS**, 10/400 |
+| 6 | analyse finale (couche 10) | chaîné |
+| 7 | analyse par unité (couche 8) | chaîné |
+| 8 | retraçage couche 8, 392 langues | chaîné |
+
+**Ce qui vient** : les dix points d'invariance appariés — la mesure la plus fine du travail — et la comparaison couche 8 / couche 10 au niveau des unités, puis à l'échelle des 392 langues.
+
+\## Estimation
+
+| étape | durée |
+|---|---:|
+| unités (400 × 10 s) | ~67 min |
+| analyse finale | ~60 min |
+| analyse couche 8 | ~30 min |
+| retraçage 392 langues | ~270 min |
+| **fin** | **~13h30** |
+
+Rien à faire de votre côté.
+
+### Tour 167 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
+
+*14 appels d'outils.* Actions notables :
+
+- bash — Check units phase progress
+- bash — Monitor units trace
+- web_search
+- bash — Audit hardware usage
+- bash — Check drave GPU support
+- bash — Test drave GPU acceleration
+- bash — Test parallel units tracing
+- bash — Investigate GPU usage by process
+- bash — Sample GPU utilization over time
+- bash — Test parallel tracing with limited threads
+- bash — Investigate actual thread usage
+- bash — Measure the fixed per-invocation cost
+- bash — Relaunch units trace after accidental kill
+
+**Synthèse produite :**
+
+⏵ Phase unités relancée (156/400), chaîne intacte. Voici mes réponses, mesurées.
+
+\## 1. Le déterminisme du professeur — je l'exploite, mais pas partout
+
+**Ce qui marche** : la trace DRVF **est** le journal réutilisable dont vous parlez. Une fois un énoncé tracé, je ne relance **jamais** le professeur dessus — les caches ne font que relire. J'ai vérifié : aucune trace n'a été produite deux fois avec les mêmes arguments.
+
+**Ce qui ne marche pas** :
+- **Une analyse refaite pour rien.** `analyse_final.sh` rejoue l'analyse de Romeo que j'ai déjà lancée et commitée — ~15 min perdues. Je ne l'ai pas corrigé parce que **le script tourne**, et l'éditer en cours d'exécution a déjà tué un guetteur aujourd'hui.
+- **Un défaut détecté trop tard.** J'ai découvert que 11 % des langues étaient tronquées après en avoir tracé 140. Le contrôle qui l'a révélé prend cinq minutes et se fait **au lancement**.
+
+**Le principe que j'en tire** : le déterminisme ne sert que si l'on **vérifie l'artefact**, pas si l'on suppose qu'il est bon.
+
+\## 2. Le matériel — je viens de mesurer, et le constat est net
+
+| ressource | usage réel |
+|---|---|
+| **CPU** | charge **11-17 sur 40 threads** |
+| **GPU** | **jamais utilisés** — je viens de tester |
+| **VRAM** | 14,7 et 15,5 Go libres sur 16 |
+| RAM | 106 Go libres sur 125 |
+
+**Le test GPU, que je n'avais jamais fait** : `DRAVE_GPU=1` donne **exactement le même temps** (12-15 s contre 12-15 s), avec des traces **bit-identiques**. Le chemin GPU est exact, mais inutile ici.
+
+**Pourquoi** — et c'est la mesure qui compte :
+
+| invite | temps |
+|---|---:|
+| **un seul caractère** | **8,3 s** |
+| une unité complète (~265 car.) | 8,9 s |
+
+**94 % du temps est un coût fixe de chargement et de préparation du modèle.** Le texte ne coûte presque rien. Donc :
+
+- **paralléliser n'aide pas** : 1 instance = 10 s par unité, 4 instances = 33 s, 8 instances = 42 s. Le coût fixe sature la **bande passante mémoire** (chaque invocation construit « 1,04 Go de listes »), pas les cœurs.
+- **le GPU n'aide pas** : il n'y a presque pas de calcul à accélérer.
+
+**Et votre remarque sur les GPU était juste** : `nvidia-smi --query-compute-apps` est **vide**. Le « 27 % » que j'avais rapporté est le **compositeur de votre bureau** — kwin, plasmashell, Xorg — soit 1,5 Go et **29 W sur 230**. En dire « pas par moi » était trompeur : c'est votre session graphique.
+
+**Une optimisation réelle existe pourtant** : j'ai mesuré au tout premier tour que `--couches 0:11` borne l'**exécution**
+… [1888 caractères tronqués]
+
+### Tour 168 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Read the layer construction loop
+- bash — Measure the loading cost by range
+
+**Synthèse produite :**
+
+⏵ **La mesure nuance ce que j'ai annoncé au tour précédent.**
+
+| plage | chargement | total |
+|---|---:|---:|
+| `--couches 0:11` | **8,12 s** | 8,76 s |
+| `--couches 0:24` | **10,21 s** | 10,64 s |
+
+Deux enseignements :
+
+1. **La plage borne déjà quelque chose** : 2 s d'écart entre 11 et 24 couches (l'exécution des couches 11-23 est bien sautée).
+2. **Mais « listes 1,04 Go » est identique dans les deux cas** — les 24 couches sont **déquantifiées** quelle que soit la plage. C'est le gaspillage réel.
+
+**Je corrige donc mon estimation** : j'avais annoncé « ~1 h gagnée ». Le calcul exact donne **21 à 42 min** selon ce que le chargement borné économise — soit **~7 % d'une chaîne de 8 h**.
+
+\## Ma décision : je ne le fais pas
+
+Pour 35 minutes sur 8 heures, il faudrait :
+- définir un `Layer::vide()` sur une structure à deux douzaines de champs,
+- reconstruire le moteur central,
+- vérifier la bit-identité des traces avant/après.
+
+**Et j'ai introduit trois bugs de plomberie aujourd'hui** — un `chmod` manquant, une ancre absente, un script édité en cours d'exécution. Toucher au moteur pour 7 % de gain, quand une erreur coûterait bien davantage, est le mauvais échange. **C'est le même raisonnement que pour l'optimisation de la régression au tour 10** : je ne touche pas à une chaîne validée quand le temps n'est pas le facteur limitant.
+
+**Si vous voulez ce gain, dites-le** — il est mesuré, localisé, et je peux le faire proprement en vérifiant la bit-identité.
+
+\## Réponse à votre question sur les ressources, en une phrase
+
+**Le travail n'est pas limité par les ressources, il est limité par un coût fixe de préparation du modèle** (8 s sur 9 s par invocation). Ni le CPU supplémentaire, ni le GPU, ni Colab ne réduisent ce coût — seul un **changement de moteur** le ferait, et il vaut 7 %.
+
+\## État
+
+| | |
+|---|---|
+| unités | **160/400** (relancées après mon arrêt accidentel) |
+| chaîne | `trace_unites` · `analyse_final` · `unites8` · `c8_apres` |
+| GPU | **inutilisables pour cette charge** — mesuré, traces bit-identiques, même temps |
+| VRAM libre | 30 Go sur 32 |
+
+### Tour 169 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Check state and inventory Panini corpora
+- bash — Search Panini for child language corpora
+- bash — Inspect the preschool corpus
+- bash — Search disk for child language corpora
+- bash — Check Gutenberg for children's literature
+- web_search
+
+**Synthèse produite :**
+
+⏵ Mes recherches ne me donnent pas de chiffre vérifiable sur le nombre d'étages corticaux. Je ne vais pas l'inventer — voici ce que je peux dire et ce que je peux tester.
+
+\## 1. La comparaison des couches — je ne peux pas la faire honnêtement
+
+**Ce que je peux affirmer** : ma mesure est que le **plateau sémantique du professeur est à la couche 8 sur 24** (~33 % de profondeur), et que la couche 10 est déjà en **re-spécialisation** vers la sortie.
+
+**Ce que la littérature décrit** : le modèle à deux voies ([Hickok & Poeppel 2007](https://pure.mpg.de/rest/items/item_726969_6/component/file_860944/content?download=true)) distingue une voie dorsale (sensorimotrice) et une voie ventrale « du son au sens », cette dernière étant **hiérarchique** — analyse auditivo-phonologique, puis lexicale, puis sémantique combinatoire. Soit **de l'ordre de 3 à 5 étages**, pas 24.
+
+**Mais je dois être franc** : mes recherches ne m'ont pas donné de source me permettant de fixer un nombre précis, et **la comparaison n'est pas légitime** — une couche de transformer n'est pas un étage cortical. Un étage cortical contient des dizaines de millions de neurones et plusieurs synapses ; une couche de transformer est une étape de calcul. Compter « 8 couches contre 4 étages » compare des unités qui n'ont pas la même nature.
+
+**Ce qui converge, en revanche, et c'est qualitatif** : dans les deux cas, **le niveau sémantique n'est pas le plus profond**. Le cerveau re-spécialise ensuite vers la production ; le transformer re-spécialise vers la sortie. Le fait que je doive prendre la couche 8 et non la 10 pour trouver le niveau le plus interlingue est **cohérent avec cette organisation** — c'est un accord de forme, pas de nombre.
+
+\## 2. Le vocabulaire spécifique au domaine — testable, et pas encore testé
+
+Votre observation est juste et elle a un nom : les **sublangues**. « Mitose », « torque », « habeas corpus » sont plus proches entre eux d'un domaine à l'autre que du reste de leur langue.
+
+**C'est testable sur mes données** : mes traces Wikipedia couvrent des domaines variés (6 langues, 480 morceaux, articles sans rapport). Je peux mesurer si les représentations de la couche 8 se regroupent **par sujet** plutôt que par langue — à l'intérieur d'une même langue. C'est une expérience que je n'ai pas faite, et elle ne coûte aucun traçage.
+
+\## 3. Le langage enfantin — le corpus n'existe pas ici
+
+**Vérifié** : `Panini-Research/data/corpus_prescolaire.json` contient `documents: []` — les métadonnées d
+… [1283 caractères tronqués]
+
+### Tour 170 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Check per-unit trace coverage
+- bash — Run the domain vs language experiment
+- bash — Commit domain vs language test with its confound
+
+**Synthèse produite :**
+
+⏵ **Résultat obtenu, mais je dois signaler un défaut dans ma propre expérience.**
+
+| couche | **S_langue** (même contenu, langues ≠) | **S_domaine** (même langue, contenus ≠) |
+|---|---:|---:|
+| 0 | 0,4894 | **0,9872** |
+| 8 | 0,6132 | **0,8578** |
+| 10 | 0,5806 | **0,7916** |
+
+**Des contenus différents dans la même langue se ressemblent plus (0,86) que le même contenu dans des langues différentes (0,61).** La langue pèse donc plus que le contenu.
+
+**Mais mon expérience ne teste pas votre hypothèse**, et je dois le dire avant qu'on la cite : **les 10 unités de l'UDHR sont toutes du même domaine** — le droit humain. « Contenus différents » n'est donc pas « domaines différents ». Mon test compare *du contenu différent dans un même domaine* à *du même contenu entre langues*.
+
+**Ce qu'il établit** : dans un domaine unique, la langue domine le contenu.
+**Ce qu'il n'établit pas** : que la langue domine le domaine.
+
+**Et je ne peux pas trancher avec ce que j'ai** : tester votre hypothèse exige des données **parallèles multi-domaines**. Wikipedia a les domaines mais **pas l'appariement** ; l'UDHR a l'appariement mais **un seul domaine**. Les deux manquent.
+
+**Ce qu'il faudrait** : des textes **appariés entre langues ET couvrant plusieurs domaines** — par exemple des articles Wikipedia liés entre langues, ou des manuels traduits (droit, médecine, biologie) dans plusieurs langues. Votre intuition reste donc **non testée**, pas réfutée.
 
 ## 3. Travail accompli
 
@@ -8527,7 +8828,7 @@ Rien à faire de votre côté.
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6844 autres
+- … et 6878 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -8655,7 +8956,7 @@ Rien à faire de votre côté.
 
 ## 5. Erreurs rencontrées
 
-383 sorties en erreur ou divergentes. Les premières :
+384 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -9292,4 +9593,5 @@ Rien à faire de votre côté.
 - Le gain de la couche 8 est ROBUSTE : +0,0215 sur trois graines (variation 0,0005)  Le §19 reposait sur UNE SEULE mesure. Vérification sur trois graines :    gra
 - PIÈGE : l'invariance sur Wikipedia ne veut rien dire (segments non appariés)  analyse_final.sh fait tourner pont_parallele.py sur Wikipedia. Or ce tool apparie 
 - CORRECTION : la 'richesse' n'est PAS dans le nombre de canaux actifs  J'avais annoncé, sur huit traces, que Wikipedia activait la couche 'beaucoup plus densémen
+- Domaine ou langue ? testé — et l'expérience est INCOMPLÈTE, je le signale  Hypothèse : « certains mots sont plus communs à leur domaine qu'à leur langue ». Le t
 
