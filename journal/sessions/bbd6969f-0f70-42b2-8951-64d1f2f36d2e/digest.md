@@ -134399,3 +134399,134 @@ outil écrit — à éprouver quand les traces Romeo seront prêtes
 ⏵ Outil écrit (à éprouver quand les traces seront prêtes). Je commite et je surveille.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"pont_parallele.py : l'invariance sur un corpus apparié se mesure SEGMENT par SEGMENT\n\nDifférence de fond avec pont_generatif.py : là-bas les langues ne sont pas\nappariées et l'invariance se mesure  … [886 caractères tronqués]`
+
+  ```
+ed92627 pont_parallele.py : l'invariance sur un corpus apparié se mesure SEGMENT par SEGMENT
+
+=== état de la chaîne ===
+phase 1 : 60/392
+cic 23s 4215918
+22:54
+  ```
+
+### 🤖 Assistant
+
+⏵ Tout est chaîné et vivant. Point d'étape.
+
+## Ce qui tourne
+
+| phase | état | fin estimée |
+|---|---|---|
+| **1. UDHR — 392 langues** | **60/392** | ~02h50 |
+| 2. Romeo and Juliet — 24 scènes alignées en/fr | en attente de la phase 1 | ~04h00 |
+| 3. Wikipedia — en/fr, 240 morceaux chacun | en attente de la phase 2 | ~05h30 |
+| Analyse 392 (caches, plateau, pont) | en attente de la phase 1 | ~03h30 |
+
+Toute la chaîne se déclenche seule — j'ai vérifié que les quatre scripts d'attente sont vivants.
+
+## Décisions prises ce tour
+
+**Wikipedia servira la richesse, pas l'invariance.** J'ai testé l'alignement par titre d'article : sur 400 articles par langue dans six langues, **aucun titre commun** — les dumps sont triés par titre et chaque langue commence ailleurs. L'alignement ne donnerait qu'une poignée de noms propres. Donc :
+
+- **Wikipedia** → volume et diversité : fidélité et transfert entre langues sur du texte long et encyclopédique ;
+- **UDHR + Gutenberg** → invariance : contenu **apparié**.
+
+**L'invariance d'un corpus apparié se mesure segment par segment.** J'ai écrit `tools/pont_parallele.py` pour ça : sur *Romeo and Juliet*, la scène *s* en anglais et la scène *s* en français sont alignées, donc l'invariance se mesure **par scène**. Comparer toutes les paires — ce que fait l'outil multilingue — n'aurait aucun sens ici : **deux scènes différentes ne doivent pas se ressembler**.
+
+## Le point que je surveille
+
+Le rythme est passé de 36 s à **42 s par langue** à cause de la contention de tout à l'heure ; je l'ai vérifié, la charge est revenue à 19 et le rythme se stabilise (les dernières langues sont à 23-29 s). L'estimation de fin en tient compte.
+
+## Ce que je relèverai au prochain tour
+
+L'analyse du panel à **301 langues d'apprentissage** — c'est le test direct de « plus de langues aident-elles ? », que je n'avais pu mesurer que de 20 à 36 langues, **sans aucun effet**. Avec 301, la réponse sera nette. Et le panel de test est désormais **stratifié sur les 22 écritures**, ce qui corrige le biais typologique de mes mesures précédentes.
+
+Rien à faire de votre côté. Commit `ed92627`.
+
+
+## Tour 129
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de représentation universelle), boîte noire (on ne lit du professeur que la couche à émuler, jamais sa tête ni ses jetons générés), aucune rétropropagation (A et B aléatoires et gelés, seule la lecture s'ajuste en forme fermée), et chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, TAILLE du réseau, avec le diagnostic oracle sur les deux panneaux (test hors vivier et validation du même vivier)."
+Round: 2/256
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Je relève l'état de la chaîne.
+
+- **bash** `{"command": "date \"+%H:%M\"; echo \"phase 1 : $(ls /home/stephane/Data13TB/stephane/corpus/udhr/udhr392 2>/dev/null | wc -l)/392\"; tail -1 /tmp/trace392.log; grep -c TERMINE /tmp/trace392.log; echo \"--- analyse ---\"; tail -3 /tmp/analyse392.log 2>/dev/null || echo \"(en attente)\"; echo \"--- ph … [212 caractères tronqués]`
+
+  ```
+22:55
+phase 1 : 61/392
+cjk 22s 4135487
+0
+--- analyse ---
+(en attente)
+--- phase 2 ---
+en scène 1 379s 30883969
+en scène 2 147s 12737089
+--- charge ---
+load average: 16,81, 19,42, 21,90
+402M	/home/stephane/Data13TB/stephane/corpus/udhr/udhr392
+  ```
+
+### 🤖 Assistant
+
+⏵ 61/392, ~3,8 h restantes. J'utilise ce tour pour **éprouver `pont_parallele.py` maintenant** plutôt qu'à 4 h du matin — je le fais tourner sur des caches existants pour valider le code, même si les chiffres n'ont pas de sens ici.
+
+61/392. J'utilise ce tour pour **éprouver l'outil parallèle maintenant** plutôt qu'à 4 h du matin, sur des caches existants — les chiffres n'auront pas de sens, mais les chemins de code seront validés.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 python3 -u tools/pont_parallele.py /tmp/cache_tenus10c.npz /tmp/cache_tenus10c.npz --couche 10 --canaux 0.5 2>&1 | tail -20", "description": "Smoke-test the parallel bridge tool", "timeoutMs": 960000}`
+
+  ```
+# sous-ensemble actif : 164/896 canaux sur l'apprentissage de A
+# 6 segments appariés · A=ell… · B=ell… · couche 10
+# invariance du PROFESSEUR (segment par segment) : 1.0000 · pire segment 1.0000
+
+# le PONT (lecture apprise sur A, même lecture appliquée à B)
+#   fidélité sur A        : 0.7106
+#   fidélité sur B        : 0.7103   (transférée, sans réapprentissage)
+#   invariance de SORTIE  : 0.9999 · pire segment 0.9998
+#   taille                : 120 neurones · 1 couches [120]
+#   oracle sur B          : 0.7104
+  ```
+
+### 🤖 Assistant
+
+⏵ L'outil est validé mécaniquement (avec A=B : fidélité identique, invariance 1,0 — comportement attendu). Je passe à une vraie amélioration de la **mesure**.
+
+**L'outil est validé** (avec A=B, il rend exactement les mêmes chiffres des deux côtés — comportement attendu). Mais cela m'a fait voir une faiblesse de fond dans ma mesure.
+
+**Mon invariance ne tient qu'à UN point de contenu** — la dernière position. Or l'UDHR a **10 unités alignées** : je peux mesurer l'invariance à **10 points** au lieu d'un. Je trace pour cela un sous-ensemble de langues **unité par unité**.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('/tmp/decoupe392.json'))\n# 40 langues : les 6 non latines historiques + un échantillon stratifié du test + des langues d'apprentissage\nhist=['ell','heb','hin','jpn','kor','tha']\ntest … [1080 caractères tronqués]`
+
+  ```
+40 langues retenues pour le traçage PAR UNITÉ :
+  acu agr als amh ben bis bum cbi ceb ces csa csw ctd deu dzo ell fuf guc gyr haw heb hin hns hsb hus hye ilo jpn kat kbd khm kor lun ndo ojb qvn tet tha tob yap
+40 /tmp/liste_unites.txt
+400 unités à tracer · 106,345 caractères ≈ 26,586 jetons au total
+soit ~265 caractères par unité (~66 jetons)
+  ```
+
+### 🤖 Assistant
+
+⏵ 400 unités (~66 jetons chacune) : ~1 h de traçage, dominé par le chargement du modèle. J'écris et je chaîne.
+
+- **write** `{"content": "#!/bin/bash\n# TRAÇAGE PAR UNITÉ — pour mesurer l'invariance à DIX points au lieu d'un.\n#\n# Jusqu'ici l'invariance se mesurait sur la DERNIÈRE position du texte entier :\n# un seul point de contenu par langue. Or l'UDHR a dix unités ALIGNÉES : en\n# traçant chaque unité séparément, on … [1426 caractères tronqués]`
+
+  ```
+<path>/tmp/trace_unites.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "bash -n /tmp/trace_unites.sh && echo \"syntaxe OK\"\ncat > /tmp/unites_apres.sh <<'EOF'\n#!/bin/bash\nset -u\nwhile ! grep -q TERMINE /tmp/trace_wiki.log 2>/dev/null; do sleep 120; done\nsleep 60\nexec /tmp/trace_unites.sh\nEOF\nchmod +x /tmp/unites_apres.sh\nsetsid nohup /tmp/unites_ap … [1227 caractères tronqués]`

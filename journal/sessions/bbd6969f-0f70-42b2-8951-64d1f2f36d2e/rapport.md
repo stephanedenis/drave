@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 176.1 h |
-| Tours | 128 |
-| Messages | 8311 |
-| Appels d'outils | 7919 |
-| Fichiers touchés | 171 |
-| Commandes | 6729 |
+| Durée | 176.2 h |
+| Tours | 129 |
+| Messages | 8318 |
+| Appels d'outils | 7924 |
+| Fichiers touchés | 172 |
+| Commandes | 6733 |
 | Sous-agents | 32 |
-| Commits | 587 |
+| Commits | 588 |
 | Compactages de contexte | 11 |
 
 ## Objectifs déclarés
@@ -309,6 +309,8 @@
 **Tour 127** — continue maintenant avec toutes les langues, puis les grands corpus multilingues pour avoir des profs plus riches et étendre notre modèle.
 
 **Tour 128** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1001 caractères tronqués]
+
+**Tour 129** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1001 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -6604,7 +6606,51 @@ Le texte français de Gutenberg emploie des **retours chariot seuls** (`\r`). Py
 
 **Synthèse produite :**
 
-⏵ Outil écrit (à éprouver quand les traces seront prêtes). Je commite et je surveille.
+⏵ Tout est chaîné et vivant. Point d'étape.
+
+\## Ce qui tourne
+
+| phase | état | fin estimée |
+|---|---|---|
+| **1. UDHR — 392 langues** | **60/392** | ~02h50 |
+| 2. Romeo and Juliet — 24 scènes alignées en/fr | en attente de la phase 1 | ~04h00 |
+| 3. Wikipedia — en/fr, 240 morceaux chacun | en attente de la phase 2 | ~05h30 |
+| Analyse 392 (caches, plateau, pont) | en attente de la phase 1 | ~03h30 |
+
+Toute la chaîne se déclenche seule — j'ai vérifié que les quatre scripts d'attente sont vivants.
+
+\## Décisions prises ce tour
+
+**Wikipedia servira la richesse, pas l'invariance.** J'ai testé l'alignement par titre d'article : sur 400 articles par langue dans six langues, **aucun titre commun** — les dumps sont triés par titre et chaque langue commence ailleurs. L'alignement ne donnerait qu'une poignée de noms propres. Donc :
+
+- **Wikipedia** → volume et diversité : fidélité et transfert entre langues sur du texte long et encyclopédique ;
+- **UDHR + Gutenberg** → invariance : contenu **apparié**.
+
+**L'invariance d'un corpus apparié se mesure segment par segment.** J'ai écrit `tools/pont_parallele.py` pour ça : sur *Romeo and Juliet*, la scène *s* en anglais et la scène *s* en français sont alignées, donc l'invariance se mesure **par scène**. Comparer toutes les paires — ce que fait l'outil multilingue — n'aurait aucun sens ici : **deux scènes différentes ne doivent pas se ressembler**.
+
+\## Le point que je surveille
+
+Le rythme est passé de 36 s à **42 s par langue** à cause de la contention de tout à l'heure ; je l'ai vérifié, la charge est revenue à 19 et le rythme se stabilise (les dernières langues sont à 23-29 s). L'estimation de fin en tient compte.
+
+\## Ce que je relèverai au prochain tour
+
+L'analyse du panel à **301 langues d'apprentissage** — c'est le test direct de « plus de langues aident-elles ? », que je n'avais pu mesurer que de 20 à 36 langues, **sans aucun effet**. Avec 301, la réponse sera nette. Et le panel de test est désormais **stratifié sur les 22 écritures**, ce qui corrige le biais typologique de mes mesures précédentes.
+
+Rien à faire de votre côté. Commit `ed92627`.
+
+### Tour 129 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1281 caractères tronqués]
+
+*5 appels d'outils.* Actions notables :
+
+- bash — Check chain state
+- bash — Smoke-test the parallel bridge tool
+- bash — Select languages and size for per-unit tracing
+- write `/tmp/trace_unites.sh`
+- bash — Chain per-unit tracing and commit
+
+**Synthèse produite :**
+
+⏵ 400 unités (~66 jetons chacune) : ~1 h de traçage, dominé par le chargement du modèle. J'écris et je chaîne.
 
 ## 3. Travail accompli
 
@@ -6783,6 +6829,7 @@ Le texte français de Gutenberg emploie des **retours chariot seuls** (`\r`). Py
 | `/tmp/trace_rj.sh` | 1 | 0 |
 | `/tmp/stop_rj.py` | 1 | 0 |
 | `/tmp/trace_wiki.sh` | 1 | 0 |
+| `/tmp/trace_unites.sh` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -6861,7 +6908,7 @@ Le texte français de Gutenberg emploie des **retours chariot seuls** (`\r`). Py
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6689 autres
+- … et 6693 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -7596,4 +7643,5 @@ Le texte français de Gutenberg emploie des **retours chariot seuls** (`\r`). Py
 - Phase 1 lancée : 392 langues UDHR · phase 2 chaînée après  PHASE 1 — TOUTES LES LANGUES. 392 langues ont les dix unités (contre 46 utilisées jusqu'ici). Traçage
 - Phase 3 chaînée : Wikipedia pour la RICHESSE, pas pour l'invariance  Wikipedia n'est PAS parallèle, et c'est vérifié : sur 400 articles par langue dans six lang
 - pont_parallele.py : l'invariance sur un corpus apparié se mesure SEGMENT par SEGMENT  Différence de fond avec pont_generatif.py : là-bas les langues ne sont pas
+- Traçage PAR UNITÉ : l'invariance à dix points au lieu d'un  Faiblesse de fond dans la mesure : l'invariance se mesurait sur la DERNIÈRE position du texte entier
 
