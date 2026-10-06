@@ -6,13 +6,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
 | Durée | 176.2 h |
-| Tours | 129 |
-| Messages | 8323 |
-| Appels d'outils | 7929 |
+| Tours | 130 |
+| Messages | 8328 |
+| Appels d'outils | 7932 |
 | Fichiers touchés | 172 |
-| Commandes | 6738 |
+| Commandes | 6741 |
 | Sous-agents | 32 |
-| Commits | 590 |
+| Commits | 591 |
 | Compactages de contexte | 11 |
 
 ## Objectifs déclarés
@@ -311,6 +311,8 @@
 **Tour 128** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1001 caractères tronqués]
 
 **Tour 129** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1001 caractères tronqués]
+
+**Tour 130** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1001 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -6640,7 +6642,7 @@ Rien à faire de votre côté. Commit `ed92627`.
 
 ### Tour 129 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1281 caractères tronqués]
 
-*10 appels d'outils.* Actions notables :
+*11 appels d'outils.* Actions notables :
 
 - bash — Check chain state
 - bash — Smoke-test the parallel bridge tool
@@ -6652,12 +6654,52 @@ Rien à faire de votre côté. Commit `ed92627`.
 - bash — Check Romeo trace integrity
 - bash — Make reader truncation-tolerant and test
 - bash — Remove truncated file and commit robustness fix
+- bash — Verify the whole chain is alive
 
 **Synthèse produite :**
 
-⏵ L'outil tolère maintenant la troncature. Il ne trouve qu'**une langue** : les traces françaises n'ont jamais tourné (j'avais arrêté la phase 2 après deux scènes anglaises). Je supprime le fichier tronqué pour qu'il soit refait, et je commit.
+⏵ Chaîne complète et vivante (5 scripts). Point d'étape.
 
-L'outil tolère maintenant la troncature. Il ne trouve qu'**une langue** : les traces françaises n'ont jamais tourné. Je supprime le fichier tronqué pour qu'il soit refait automatiquement.
+\## Ce que ce tour a produit
+
+**Une faiblesse de fond dans ma mesure, corrigée.** Mon invariance ne tenait qu'à **un seul point de contenu** par langue — la dernière position. Or l'UDHR a **10 unités alignées** : en traçant chaque unité séparément, j'obtiens **10 points de mesure appariés**. J'ai ajouté une 4ᵉ phase (40 langues × 10 unités = 400 traces, ~1 h) et écrit `tools/invariance_unites.py`, qui mesure l'invariance **groupée par unité** — là où l'outil multilingue compare toutes les paires, ce qui n'a pas de sens sur des unités différentes.
+
+Bénéfice concret : **la « pire paire » cesse d'être un agrégat** et porte enfin sur une unité précise et un couple de langues nommable.
+
+**Un bogue de robustesse trouvé en éprouvant l'outil.** `en_03.drvf` était **tronqué** — c'est le fichier en cours d'écriture quand j'ai arrêté la phase 2. Mon lecteur levait une exception et perdait **tout** le fichier. Un traçage interrompu produit un fichier valide jusqu'à un point et coupé après : c'est un cas qui se reproduit à chaque arrêt. Le lecteur garde désormais ce qui est lisible et le signale. J'ai supprimé le fichier tronqué pour qu'il soit refait.
+
+**`pont_parallele.py` validé** mécaniquement (éprouvé avec A=B : il rend exactement les mêmes chiffres des deux côtés).
+
+\## La chaîne complète, vérifiée vivante
+
+| ordre | phase | état |
+|---|---|---|
+| 1 | **392 langues UDHR** | **en cours, 73/392**, fin ~02h50 |
+| 2 | analyse 392 : caches, plateau, pont sur 301 langues | attend 1 |
+| 3 | **Romeo and Juliet**, 24 scènes alignées en/fr | attend 1 |
+| 4 | **Wikipedia** en/fr, 240 morceaux chacun | attend 3 |
+| 5 | **traçage par unité**, 40 langues × 10 unités | attend 4 |
+
+Les cinq scripts d'attente sont confirmés vivants dans `/proc`.
+
+\## Le point qui compte pour la suite
+
+Le test du panel à **301 langues d'apprentissage** arrivera avec la phase 2 de la chaîne. C'est le test direct de « plus de langues aident-elles ? » — que je n'avais pu mesurer que de 20 à 36 langues, **sans aucun effet**. Et le panel de test est maintenant **stratifié sur les 22 écritures**, ce qui corrige le biais typologique qui faussait mes mesures précédentes.
+
+Rien à faire de votre côté. Commits `9c5ae5a`, `5a82625`, `74577bc`.
+
+### Tour 130 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1281 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Check phase 1 progress
+- bash — Write per-unit bridge analysis tool
+
+**Synthèse produite :**
+
+⏵ 74/392, **zéro échec**, 3,5 h restantes. J'écris l'outil qui mesurera l'invariance **par unité de notre propre sortie** — le pendant de l'outil professeur que j'ai écrit au tour précédent.
+
+74/392, **zéro échec**. J'écris le pendant de l'outil professeur : l'invariance **par unité de notre propre sortie**, groupée par unité et non par paires quelconques.
 
 ## 3. Travail accompli
 
@@ -6915,7 +6957,7 @@ L'outil tolère maintenant la troncature. Il ne trouve qu'**une langue** : les t
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6698 autres
+- … et 6701 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -7653,4 +7695,5 @@ L'outil tolère maintenant la troncature. Il ne trouve qu'**une langue** : les t
 - Traçage PAR UNITÉ : l'invariance à dix points au lieu d'un  Faiblesse de fond dans la mesure : l'invariance se mesurait sur la DERNIÈRE position du texte entier
 - invariance_unites.py : l'invariance par unité, et une pire paire qui porte sur quelque chose  L'outil multilingue mesure l'invariance entre TOUTES les paires d'
 - Lecteur tolérant à la TRONCATURE : une trace interrompue reste exploitable  Trouvé en éprouvant invariance_unites.py sur les traces Romeo : en_03.drvf était TRO
+- pont_unites.py : notre pont mesuré PAR UNITÉ, professeur contre sortie  Pendant de invariance_unites.py (qui mesure le professeur). Entraîne le pont sur les uni
 

@@ -134646,3 +134646,105 @@ syntaxe OK
 L'outil tolère maintenant la troncature. Il ne trouve qu'**une langue** : les traces françaises n'ont jamais tourné. Je supprime le fichier tronqué pour qu'il soit refait automatiquement.
 
 - **bash** `{"command": "rm -f /home/stephane/Data13TB/stephane/corpus/parallele_rj/en_03.drvf && echo \"trace tronquée supprimée (elle sera refaite)\"; ls /home/stephane/Data13TB/stephane/corpus/parallele_rj/\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Lecteur toléra … [914 caractères tronqués]`
+
+  ```
+trace tronquée supprimée (elle sera refaite)
+en_01.drvf
+en_02.drvf
+74577bc Lecteur tolérant à la TRONCATURE : une trace interrompue reste exploitable
+
+phase 1 : 73/392
+23:00
+  ```
+
+### 🤖 Assistant
+
+⏵ 73/392. Je vérifie que toute la chaîne est intacte après mes manipulations.
+
+- **bash** `{"command": "python3 -c \"\nimport os\nmoi=os.getpid(); anc=set(); q=moi\nfor _ in range(8):\n    try:\n        st=open(f'/proc/{q}/stat').read().split(') ',1)[1].split(); q=int(st[1]); anc.add(q)\n    except Exception: break\natt=[]\nfor d in sorted(os.listdir('/proc')):\n    if not d.isdigit(): co … [870 caractères tronqués]`
+
+  ```
+scripts de la chaîne vivants :
+   analyse392       pid 2351075
+   analyse392       pid 2351078
+   rj_apres         pid 2356105
+   trace392         pid 2350094
+   trace392         pid 2350097
+   unites_apres     pid 2361698
+   wiki_apres       pid 2358143
+
+=== ordre de la chaîne ===
+  1. trace392.sh      (en cours, 73/392)
+  2. analyse392.sh    attend 1 -> caches, plateau, pont
+  3. rj_apres.sh      attend 1 -> lance trace_rj.sh (Romeo)
+  4. wiki_apres.sh    attend Romeo -> lance trace_wiki.sh
+  5. unites_apres.sh  attend Wikipedia -> lance trace_unites.sh
+23:00
+  ```
+
+### 🤖 Assistant
+
+⏵ Chaîne complète et vivante (5 scripts). Point d'étape.
+
+## Ce que ce tour a produit
+
+**Une faiblesse de fond dans ma mesure, corrigée.** Mon invariance ne tenait qu'à **un seul point de contenu** par langue — la dernière position. Or l'UDHR a **10 unités alignées** : en traçant chaque unité séparément, j'obtiens **10 points de mesure appariés**. J'ai ajouté une 4ᵉ phase (40 langues × 10 unités = 400 traces, ~1 h) et écrit `tools/invariance_unites.py`, qui mesure l'invariance **groupée par unité** — là où l'outil multilingue compare toutes les paires, ce qui n'a pas de sens sur des unités différentes.
+
+Bénéfice concret : **la « pire paire » cesse d'être un agrégat** et porte enfin sur une unité précise et un couple de langues nommable.
+
+**Un bogue de robustesse trouvé en éprouvant l'outil.** `en_03.drvf` était **tronqué** — c'est le fichier en cours d'écriture quand j'ai arrêté la phase 2. Mon lecteur levait une exception et perdait **tout** le fichier. Un traçage interrompu produit un fichier valide jusqu'à un point et coupé après : c'est un cas qui se reproduit à chaque arrêt. Le lecteur garde désormais ce qui est lisible et le signale. J'ai supprimé le fichier tronqué pour qu'il soit refait.
+
+**`pont_parallele.py` validé** mécaniquement (éprouvé avec A=B : il rend exactement les mêmes chiffres des deux côtés).
+
+## La chaîne complète, vérifiée vivante
+
+| ordre | phase | état |
+|---|---|---|
+| 1 | **392 langues UDHR** | **en cours, 73/392**, fin ~02h50 |
+| 2 | analyse 392 : caches, plateau, pont sur 301 langues | attend 1 |
+| 3 | **Romeo and Juliet**, 24 scènes alignées en/fr | attend 1 |
+| 4 | **Wikipedia** en/fr, 240 morceaux chacun | attend 3 |
+| 5 | **traçage par unité**, 40 langues × 10 unités | attend 4 |
+
+Les cinq scripts d'attente sont confirmés vivants dans `/proc`.
+
+## Le point qui compte pour la suite
+
+Le test du panel à **301 langues d'apprentissage** arrivera avec la phase 2 de la chaîne. C'est le test direct de « plus de langues aident-elles ? » — que je n'avais pu mesurer que de 20 à 36 langues, **sans aucun effet**. Et le panel de test est maintenant **stratifié sur les 22 écritures**, ce qui corrige le biais typologique qui faussait mes mesures précédentes.
+
+Rien à faire de votre côté. Commits `9c5ae5a`, `5a82625`, `74577bc`.
+
+
+## Tour 130
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de représentation universelle), boîte noire (on ne lit du professeur que la couche à émuler, jamais sa tête ni ses jetons générés), aucune rétropropagation (A et B aléatoires et gelés, seule la lecture s'ajuste en forme fermée), et chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, TAILLE du réseau, avec le diagnostic oracle sur les deux panneaux (test hors vivier et validation du même vivier)."
+Round: 3/256
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Je relève l'avancement de la phase 1.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date \"+%H:%M\"; echo \"phase 1 : $(ls /home/stephane/Data13TB/stephane/corpus/udhr/udhr392 | wc -l)/392\"; tail -1 /tmp/trace392.log; python3 -c \"\nimport re\nt=open('/tmp/trace392.log').read()\nts=[int(x) for x in re.findall(r'(\\ … [248 caractères tronqués]`
+
+  ```
+23:01
+phase 1 : 74/392
+crs 25s 4866928
+moyenne 40 s · reste 3.5 h
+0
+472M	/home/stephane/Data13TB/stephane/corpus/udhr/udhr392
+  ```
+
+### 🤖 Assistant
+
+⏵ 74/392, **zéro échec**, 3,5 h restantes. J'écris l'outil qui mesurera l'invariance **par unité de notre propre sortie** — le pendant de l'outil professeur que j'ai écrit au tour précédent.
+
+74/392, **zéro échec**. J'écris le pendant de l'outil professeur : l'invariance **par unité de notre propre sortie**, groupée par unité et non par paires quelconques.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/pont_unites.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"pont_unites.py — notre pont, mesuré PAR UNITÉ.\n\nPendant de `invariance_unites.py`, qui mesure le professeur. Ici on entraîne le\npont sur les unités des langues d'app … [6083 caractères tronqués]`
