@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 184.8 h |
-| Tours | 170 |
-| Messages | 8600 |
-| Appels d'outils | 8121 |
+| Durée | 184.9 h |
+| Tours | 171 |
+| Messages | 8604 |
+| Appels d'outils | 8123 |
 | Fichiers touchés | 182 |
-| Commandes | 6918 |
+| Commandes | 6920 |
 | Sous-agents | 32 |
-| Commits | 618 |
+| Commits | 619 |
 | Compactages de contexte | 11 |
 
 ## Objectifs déclarés
@@ -393,6 +393,8 @@
 **Tour 169** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 **Tour 170** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
+
+**Tour 171** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -8543,24 +8545,52 @@ Votre observation est juste et elle a un nom : les **sublangues**. « Mitose »,
 
 **Synthèse produite :**
 
-⏵ **Résultat obtenu, mais je dois signaler un défaut dans ma propre expérience.**
+⏵ Expérience commitée avec son défaut signalé. Point d'étape.
 
-| couche | **S_langue** (même contenu, langues ≠) | **S_domaine** (même langue, contenus ≠) |
-|---|---:|---:|
-| 0 | 0,4894 | **0,9872** |
-| 8 | 0,6132 | **0,8578** |
-| 10 | 0,5806 | **0,7916** |
+\## Le tour en trois points
 
-**Des contenus différents dans la même langue se ressemblent plus (0,86) que le même contenu dans des langues différentes (0,61).** La langue pèse donc plus que le contenu.
+**1. J'ai testé votre hypothèse « domaine contre langue » — et j'ai trouvé un défaut dans mon propre test.** Les 10 unités de l'UDHR sont toutes du **même domaine** (le droit humain). Mon expérience compare donc *du contenu différent dans un domaine unique* à *du même contenu entre langues* — elle ne dit rien du domaine. **Votre hypothèse reste non testée, pas réfutée.** Je l'ai écrit dans le rapport avant qu'on puisse citer un chiffre qui ne la soutient pas.
 
-**Mais mon expérience ne teste pas votre hypothèse**, et je dois le dire avant qu'on la cite : **les 10 unités de l'UDHR sont toutes du même domaine** — le droit humain. « Contenus différents » n'est donc pas « domaines différents ». Mon test compare *du contenu différent dans un même domaine* à *du même contenu entre langues*.
+Ce qu'elle établit quand même : **dans un domaine unique, la langue pèse plus que le contenu** — des contenus différents dans une même langue se ressemblent à **0,86**, le même contenu entre langues à **0,61**.
 
-**Ce qu'il établit** : dans un domaine unique, la langue domine le contenu.
-**Ce qu'il n'établit pas** : que la langue domine le domaine.
+**2. Les couches du cerveau : je ne peux pas faire la comparaison honnêtement.** La littérature décrit une voie ventrale hiérarchique de l'ordre de **3 à 5 étages** ([Hickok & Poeppel](https://pure.mpg.de/rest/items/item_726969_6/component/file_860944/content?download=true)), mais **une couche de transformer n'est pas un étage cortical** — compter « 8 contre 4 » compare des unités de nature différente. Ce qui converge, et c'est qualitatif : **le niveau sémantique n'est pas le plus profond**, dans les deux cas. Mon plateau à la couche 8 sur 24 en est une illustration, pas une preuve.
 
-**Et je ne peux pas trancher avec ce que j'ai** : tester votre hypothèse exige des données **parallèles multi-domaines**. Wikipedia a les domaines mais **pas l'appariement** ; l'UDHR a l'appariement mais **un seul domaine**. Les deux manquent.
+**3. Le langage enfantin : le corpus n'existe pas ici.** J'ai vérifié — `corpus_prescolaire.json` de Panini contient `documents: []`, les métadonnées déclarent « age_range: 2-5 » mais **les données sont absentes**. Et un seul livre jeunesse sur disque (*Alice*, anglais seul).
 
-**Ce qu'il faudrait** : des textes **appariés entre langues ET couvrant plusieurs domaines** — par exemple des articles Wikipedia liés entre langues, ou des manuels traduits (droit, médecine, biologie) dans plusieurs langues. Votre intuition reste donc **non testée**, pas réfutée.
+**Ce qu'il faudrait pour la tester** : accès à **CHILDES**, ou des **livres jeunesse parallèles** depuis Gutenberg — la méthode que j'ai déjà écrite pour Romeo s'y applique telle quelle.
+
+\## État
+
+| | |
+|---|---|
+| unités | **196/400**, 0 échec |
+| reste | ~50 min puis les analyses |
+| chaîne | intacte |
+
+**Deux décisions vous appartiennent** : (a) accès CHILDES ou téléchargement de livres jeunesse parallèles pour l'expérience « langage enfantin » ; (b) données parallèles multi-domaines pour l'expérience « domaine contre langue ». Les deux sont mesurables, aucune n'est possible avec le disque actuel.
+
+### Tour 171 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Early per-unit layer comparison
+- bash — Commit the early per-unit layer comparison
+
+**Synthèse produite :**
+
+⏵ **Confirmation indépendante : la couche 8 gagne aussi au niveau des unités.**
+
+| | couche 10 | **couche 8** | gain |
+|---|---:|---:|---:|
+| **invariance moyenne** (10 unités) | 0,5977 | **0,6358** | **+0,0381** |
+| pire paire (moyenne) | 0,1383 | 0,1620 | +0,0237 |
+| pire unité | 0,5616 | **0,6170** | +0,0554 |
+
+**La couche 8 gagne de +0,0381** sur l'invariance mesurée à dix points appariés — cohérent avec les +0,0512 mesurés sur Romeo. **Deux corpus, deux méthodes de mesure, même conclusion.**
+
+Et la mesure par unité rend enfin la « pire paire » précise : ce sont **ces–dzo** à l'unité 9 (0,0905) et **deu–dzo** à l'unité 8 (0,0970) — des couples **nommables**, là où l'ancienne mesure ne donnait qu'un agrégat.
+
+**La couche 8 gagne de +0,0381**, cohérent avec les +0,0512 de Romeo. **Deux corpus, deux méthodes, même conclusion.** Et la pire paire devient **nommable** : *ces–dzo* à l'unité 9, *deu–dzo* à l'unité 8.
 
 ## 3. Travail accompli
 
@@ -8828,7 +8858,7 @@ Votre observation est juste et elle a un nom : les **sublangues**. « Mitose »,
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6878 autres
+- … et 6880 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9594,4 +9624,5 @@ Votre observation est juste et elle a un nom : les **sublangues**. « Mitose »,
 - PIÈGE : l'invariance sur Wikipedia ne veut rien dire (segments non appariés)  analyse_final.sh fait tourner pont_parallele.py sur Wikipedia. Or ce tool apparie 
 - CORRECTION : la 'richesse' n'est PAS dans le nombre de canaux actifs  J'avais annoncé, sur huit traces, que Wikipedia activait la couche 'beaucoup plus densémen
 - Domaine ou langue ? testé — et l'expérience est INCOMPLÈTE, je le signale  Hypothèse : « certains mots sont plus communs à leur domaine qu'à leur langue ». Le t
+- Signal précoce : la couche 8 gagne aussi au niveau des UNITÉS (+0,0381)  Mesure sur les 198 premières unités (17 langues complètes × 10 unités), donc AVANT la f
 

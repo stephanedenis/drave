@@ -140723,3 +140723,92 @@ couche 10 : S_langue 0.5806 · S_domaine 0.7916 · écart -0.2110  -> LANGUE dom
 **Ce qu'il faudrait** : des textes **appariés entre langues ET couvrant plusieurs domaines** — par exemple des articles Wikipedia liés entre langues, ou des manuels traduits (droit, médecine, biologie) dans plusieurs langues. Votre intuition reste donc **non testée**, pas réfutée.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 23. Domaine ou langue ? — testé, et le test est INCOMPLET\n\nHypothèse testée : « certains mots et groupes de mots sont spécifiques à … [3199 caractères tronqués]`
+
+  ```
+e8ae5a2 Domaine ou langue ? testé — et l'expérience est INCOMPLÈTE, je le signale
+
+unités : 196/400
+  ```
+
+### 🤖 Assistant
+
+⏵ Expérience commitée avec son défaut signalé. Point d'étape.
+
+## Le tour en trois points
+
+**1. J'ai testé votre hypothèse « domaine contre langue » — et j'ai trouvé un défaut dans mon propre test.** Les 10 unités de l'UDHR sont toutes du **même domaine** (le droit humain). Mon expérience compare donc *du contenu différent dans un domaine unique* à *du même contenu entre langues* — elle ne dit rien du domaine. **Votre hypothèse reste non testée, pas réfutée.** Je l'ai écrit dans le rapport avant qu'on puisse citer un chiffre qui ne la soutient pas.
+
+Ce qu'elle établit quand même : **dans un domaine unique, la langue pèse plus que le contenu** — des contenus différents dans une même langue se ressemblent à **0,86**, le même contenu entre langues à **0,61**.
+
+**2. Les couches du cerveau : je ne peux pas faire la comparaison honnêtement.** La littérature décrit une voie ventrale hiérarchique de l'ordre de **3 à 5 étages** ([Hickok & Poeppel](https://pure.mpg.de/rest/items/item_726969_6/component/file_860944/content?download=true)), mais **une couche de transformer n'est pas un étage cortical** — compter « 8 contre 4 » compare des unités de nature différente. Ce qui converge, et c'est qualitatif : **le niveau sémantique n'est pas le plus profond**, dans les deux cas. Mon plateau à la couche 8 sur 24 en est une illustration, pas une preuve.
+
+**3. Le langage enfantin : le corpus n'existe pas ici.** J'ai vérifié — `corpus_prescolaire.json` de Panini contient `documents: []`, les métadonnées déclarent « age_range: 2-5 » mais **les données sont absentes**. Et un seul livre jeunesse sur disque (*Alice*, anglais seul).
+
+**Ce qu'il faudrait pour la tester** : accès à **CHILDES**, ou des **livres jeunesse parallèles** depuis Gutenberg — la méthode que j'ai déjà écrite pour Romeo s'y applique telle quelle.
+
+## État
+
+| | |
+|---|---|
+| unités | **196/400**, 0 échec |
+| reste | ~50 min puis les analyses |
+| chaîne | intacte |
+
+**Deux décisions vous appartiennent** : (a) accès CHILDES ou téléchargement de livres jeunesse parallèles pour l'expérience « langage enfantin » ; (b) données parallèles multi-domaines pour l'expérience « domaine contre langue ». Les deux sont mesurables, aucune n'est possible avec le disque actuel.
+
+
+## Tour 171
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de représentation universelle), boîte noire (on ne lit du professeur que la couche à émuler, jamais sa tête ni ses jetons générés), aucune rétropropagation (A et B aléatoires et gelés, seule la lecture s'ajuste en forme fermée), et chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, TAILLE du réseau, avec le diagnostic oracle sur les deux panneaux (test hors vivier et validation du même vivier)."
+Round: 44/256
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ J'ai déjà 17 langues complètes en unités. Je peux prendre le **signal précoce sur la comparaison couche 8 / couche 10** au niveau des unités, sans attendre les 400.
+
+J'ai déjà **17 langues complètes** en unités. Je peux prendre le signal précoce sur la **comparaison couche 8 / couche 10** au niveau des unités, sans attendre les 400.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date \"+%H:%M\"; echo \"unités : $(ls /home/stephane/Data13TB/stephane/corpus/udhr/unites | wc -l)/400\"; echo; echo \"=== INVARIANCE PAR UNITÉ : couche 10 ===\"; timeout 400 python3 tools/invariance_unites.py /home/stephane/Data13TB … [310 caractères tronqués]`
+
+  ```
+07:37
+unités : 198/400
+
+=== INVARIANCE PAR UNITÉ : couche 10 ===
+     8       19      0.5616      0.0970   deu–dzo
+     9       19      0.5754      0.1100   deu–dzo
+
+MOYENNE sur 10 unités : invariance 0.5977 · pire paire 0.1383
+pire unité : 0.5616 · pire paire absolue 0.0970
+
+=== INVARIANCE PAR UNITÉ : couche 8 ===
+     8       20      0.6170      0.1418   bis–dzo
+     9       20      0.6203      0.0905   ces–dzo
+
+MOYENNE sur 10 unités : invariance 0.6358 · pire paire 0.1620
+pire unité : 0.6170 · pire paire absolue 0.0905
+  ```
+
+### 🤖 Assistant
+
+⏵ **Confirmation indépendante : la couche 8 gagne aussi au niveau des unités.**
+
+| | couche 10 | **couche 8** | gain |
+|---|---:|---:|---:|
+| **invariance moyenne** (10 unités) | 0,5977 | **0,6358** | **+0,0381** |
+| pire paire (moyenne) | 0,1383 | 0,1620 | +0,0237 |
+| pire unité | 0,5616 | **0,6170** | +0,0554 |
+
+**La couche 8 gagne de +0,0381** sur l'invariance mesurée à dix points appariés — cohérent avec les +0,0512 mesurés sur Romeo. **Deux corpus, deux méthodes de mesure, même conclusion.**
+
+Et la mesure par unité rend enfin la « pire paire » précise : ce sont **ces–dzo** à l'unité 9 (0,0905) et **deu–dzo** à l'unité 8 (0,0970) — des couples **nommables**, là où l'ancienne mesure ne donnait qu'un agrégat.
+
+**La couche 8 gagne de +0,0381**, cohérent avec les +0,0512 de Romeo. **Deux corpus, deux méthodes, même conclusion.** Et la pire paire devient **nommable** : *ces–dzo* à l'unité 9, *deu–dzo* à l'unité 8.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 24. Signal précoce : la couche 8 gagne aussi au niveau des UNITÉS\n\nMesure prise sur les 198 premières unités tracées (**17 langues  … [2702 caractères tronqués]`
