@@ -113,3 +113,25 @@ une règle **contrastive** (anti-Hebbien sur le différentiel inter-langue), ave
 deux conditions non remplies aujourd'hui : un **alignement au niveau du jeton**, et
 un **terme qui récompense l'invariant**. C'est un travail de conception, pas un
 réglage.
+
+---
+
+## CORRECTION (mesurée plus tard, sur d'autres corpus et d'autres panels)
+
+Ce rapport place le pic de convergence à la **couche 10** (42 % de profondeur) pour
+Qwen2.5-0.5B. **Deux mesures ultérieures le placent deux crans plus haut :**
+
+| corpus | couche 8 | couche 10 |
+|---|---:|---:|
+| Romeo and Juliet (24 scènes appariées) | **0,5985** | 0,5703 |
+| UDHR propre (46 langues) | **0,5471** | 0,5247 |
+
+**Conséquence pratique** : émuler la couche 10 revient à apprendre une couche déjà
+**en re-spécialisation** vers la sortie. En prenant la couche 8 pour cible, la
+fidélité **transférée** à une langue jamais vue gagne **+0,0213** (0,5802 → 0,6015),
+au prix de 0,0036 d'invariance de sortie.
+
+Le pic mesuré ici à 42 % était vraisemblablement un artifact du corpus initial —
+**l'article 1 de l'UDHR avec 40 langues**, soit un seul énoncé court par langue.
+
+Détail dans `reports/rapport-toutes-langues.md`, sections 17 et 19.

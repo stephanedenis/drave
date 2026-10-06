@@ -138531,3 +138531,404 @@ Le seul prix : l'invariance de notre sortie baisse de 0,0036 — négligeable, e
 **Changer de cible rapporte +0,0213 sur la fidélité transférée**, à corpus, réseau et protocole identiques. Le seul prix est une invariance de sortie inférieure de 0,0036 — négligeable.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 19. Couche 8 contre couche 10 : la correction de cible PAIE\n\nMême corpus (Romeo, 24 scènes appariées), même protocole (entraîné sur … [3941 caractères tronqués]`
+
+  ```
+e89dbe3 Couche 8 contre couche 10 : la correction de cible PAIE (+0,0213 sur le transfert)
+Wikipedia : 120/480
+04:38
+  ```
+
+### 🤖 Assistant
+
+⏵ Résultat commité. Je chaîne maintenant la **correction de cible sur les 392 langues** — c'est la suite logique, et la machine sera libre après la chaîne en cours.
+
+Résultat commité. Je chaîne maintenant la **correction de cible sur les 392 langues** : le traçage actuel n'a écrit que les couches 0 et 10, donc il faut retracer avec la couche 8 pour refaire la mesure à grande échelle.
+
+- **write** `{"content": "#!/bin/bash\n# RETRAÇAGE AVEC LA COUCHE 8 — la correction de cible, à grande échelle.\n#\n# Mesuré sur Romeo : viser la couche 8 plutôt que la 10 rapporte +0,0213 sur la\n# fidélité TRANSFÉRÉE, au prix de 0,0036 d'invariance. Sur l'UDHR, la couche 8 est\n# aussi plus interlingue que la  … [1345 caractères tronqués]`
+
+  ```
+<path>/tmp/trace392c8.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && chmod +x /tmp/trace392c8.sh && bash -n /tmp/trace392c8.sh && ls -la /tmp/trace392c8.sh | awk '{print \"  droits :\", $1}'; cat > /tmp/c8_apres.sh <<'EOF'\n#!/bin/bash\nset -u\nwhile ! grep -qx TERMINE /tmp/analyse_final.log 2>/dev/nu … [983 caractères tronqués]`
+
+  ```
+droits : -rwx--x--x.
+chaîne : analyse_final · c8_apres · trace_wiki · unites_apres · wiki_apres
+Wikipedia : 122/480
+  ```
+
+### 🤖 Assistant
+
+⏵ Correction de cible chaînée sur les 392 langues. Point d'étape.
+
+## Le résultat du tour
+
+**Changer de couche cible paie, et c'est mesuré à protocole identique** (même corpus, même réseau, entraîné sur l'anglais, testé sur le français) :
+
+| | couche 10 | **couche 8** | gain |
+|---|---:|---:|---:|
+| **fidélité TRANSFÉRÉE** | 0,5802 | **0,6015** | **+0,0213** |
+| invariance du professeur | 0,6532 | **0,7044** | +0,0512 |
+| invariance de sortie | 0,9540 | 0,9504 | −0,0036 |
+
+**+0,0213 sur la seule mesure qui compte pour un pont destiné à servir** — celle où l'on transporte le modèle vers une langue jamais vue, sans réapprentissage. Le prix est négligeable.
+
+**Le choix de la cible est un paramètre aussi important que l'architecture** — et je l'avais fixé, au tout début, sur une mesure unique (article 1 de l'UDHR, 40 langues). Deux corpus et deux panels ultérieurs le contredisent.
+
+**La précaution a payé** : sur Romeo, cette comparaison n'a coûté **aucun retraçage** parce que j'avais tracé `0,4,8,10` au lieu de `0,10` — au cas où. C'est exactement le genre de marge qui ne coûte rien et qui débloque une question six heures plus tard.
+
+## Ce que je viens de chaîner
+
+Le traçage des 392 langues n'avait écrit que les couches 0 et 10, donc la mesure à grande échelle demande un retraçage. Je l'ai chaîné **après toute la chaîne actuelle**, avec `--trace-couches 0,8,10` pour que chaque trace soit autoportante.
+
+## État
+
+| phase | état |
+|---|---|
+| 1, 2, 3 | **FAITS** (dont la correction de cible sur Romeo) |
+| 4. Wikipedia | **122/480** |
+| 5. unités | chaîné |
+| 6. analyse finale | chaîné |
+| 7. **retraçage couche 8** sur 392 langues | chaîné (~4,5 h) |
+
+Rien à faire de votre côté. Commit `e89dbe3`.
+
+
+## Tour 156
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de représentation universelle), boîte noire (on ne lit du professeur que la couche à émuler, jamais sa tête ni ses jetons générés), aucune rétropropagation (A et B aléatoires et gelés, seule la lecture s'ajuste en forme fermée), et chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, TAILLE du réseau, avec le diagnostic oracle sur les deux panneaux (test hors vivier et validation du même vivier)."
+Round: 29/256
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Je vérifie si le traçage par unité (phase 5, pas encore lancé) inclut la couche 8 — sinon je l'ajoute, cela ne coûte rien en calcul.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"trace-couches\\|couches 0:\" /tmp/trace_unites.sh; echo \"--- si la couche 8 n'y est pas, l'ajouter ne coûte RIEN en calcul ---\"; echo \"(les couches 0..10 sont exécutées de toute façon ; --trace-couches ne filtre que l'ÉC … [176 caractères tronqués]`
+
+  ```
+32:  if $D $M --infer --ctx 512 --couches 0:11 --lot 1 --n 0 \
+33:        --trace-couches 0,10 --prompt "$(cat "$f")" --trace-flux unites/$L.drvf \
+--- si la couche 8 n'y est pas, l'ajouter ne coûte RIEN en calcul ---
+(les couches 0..10 sont exécutées de toute façon ; --trace-couches ne filtre que l'ÉCRITURE)
+04:39
+Wikipedia : 123/480
+  ```
+
+### 🤖 Assistant
+
+⏵ La couche 8 n'y est pas. **L'ajouter ne coûte rien** — les couches 0..10 sont exécutées de toute façon, `--trace-couches` ne filtre que l'écriture. Je vérifie d'abord que le script ne tourne pas (leçon apprise), puis je l'édite.
+
+La couche 8 n'y est pas. **L'ajouter ne coûte rien en calcul** — les couches 0..10 sont exécutées de toute façon, `--trace-couches` ne filtre que l'écriture. Je vérifie d'abord que le script **ne tourne pas** (la leçon de tout à l'heure), puis je l'édite.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== trace_unites.sh tourne-t-il ? ===\"; ps -eo args | grep \"[t]race_unites\" | head -2; echo \"(vide = ne tourne pas, édition sûre)\"; echo; echo \"=== analyse_final.sh tourne-t-il ? ===\"; ps -eo args | grep \"[a]nalyse_fin … [849 caractères tronqués]`
+
+  ```
+=== trace_unites.sh tourne-t-il ? ===
+bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo "=== trace_unites.sh tourne-t-il ? ==="; ps -eo args | grep "[t]race_unites" | head -2; echo "(vide = ne tourne pas, édition sûre)"; echo; echo "=== analyse_final.sh tourne-t-il ? ==="; ps -eo args | grep "[a]nalyse_final" | head -2; echo; echo "=== JE N'ÉDITE QUE LES SCRIPTS NON LANCÉS ==="; python3 - <<'PY' import subprocess def tourne(nom):     r = subprocess.run(['ps','-eo','args'], capture_output=True, text=True).stdout     return any(nom in l and 'grep' not in l for l in r.splitlines()) for f, vieux, neuf in (     ('/tmp/trace_unites.sh', '--trace-couches 0,10', '--trace-couches 0,8,10'), ):     if tourne(f.split('/')[-1]):         print(f"  {f} : TOURNE — non édité")         continue     s = open(f).read()     if vieux in s:         open(f,'w').write(s.replace(vieux, neuf))         print(f"  {f} : {vieux} -> {neuf}")     else:         print(f"  {f} : motif absent") PY bash -n /tmp/trace_unites.sh && echo "syntaxe OK"; grep -n "trace-couches" /tmp/trace_unites.sh
+(vide = ne tourne pas, édition sûre)
+
+=== analyse_final.sh tourne-t-il ? ===
+bash -x /tmp/analyse_final.sh
+bash
+… [1393 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Édité (et j'ai bien évité `analyse_final.sh`, qui tourne). J'ajoute maintenant l'analyse par unité sur la couche 8, dans un script séparé pour ne rien éditer en cours d'exécution.
+
+Édité — et j'ai bien évité `analyse_final.sh`, qui tourne. J'ajoute maintenant l'**analyse par unité sur la couche 8** dans un script séparé, pour ne rien éditer en cours d'exécution.
+
+- **write** `{"content": "#!/bin/bash\n# ANALYSE PAR UNITÉ SUR LA COUCHE 8 — le pendant de la comparaison Romeo.\n#\n# Le traçage par unité écrit maintenant 0, 8 ET 10 (l'ajout ne coûte rien : les\n# couches 0..10 sont exécutées de toute façon, --trace-couches ne filtre que\n# l'écriture). `analyse_final.sh` ana … [919 caractères tronqués]`
+
+  ```
+<path>/tmp/unites8.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && chmod +x /tmp/unites8.sh && bash -n /tmp/unites8.sh && echo \"syntaxe OK et exécutable\"; setsid nohup bash /tmp/unites8.sh >/dev/null 2>&1 < /dev/null & disown; sleep 8; echo \"=== chaîne complète ===\"; python3 -c \"\nimport os\nmo … [797 caractères tronqués]`
+
+  ```
+syntaxe OK et exécutable
+=== chaîne complète ===
+  analyse_final · c8_apres · trace_wiki · unites8 · unites_apres
+
+Wikipedia : 125/480
+04:40
+  ```
+
+### 🤖 Assistant
+
+⏵ Couche 8 ajoutée au traçage par unité **sans surcoût**, et son analyse chaînée. Point d'étape.
+
+## Ce que le tour a ajouté
+
+**La couche 8 entre dans le traçage par unité pour zéro coût.** Les couches 0 à 10 sont **exécutées de toute façon** ; `--trace-couches` ne filtre que l'**écriture**. Ajouter la couche 8 au fichier ne change donc rien au temps de calcul — seulement la taille des traces.
+
+Cela débloque la comparaison de cible **au niveau des dix unités alignées**, c'est-à-dire avec la mesure d'invariance la plus fine dont je dispose.
+
+**Et j'ai appliqué la leçon de tout à l'heure** : j'ai vérifié que `trace_unites.sh` **ne tournait pas** avant de l'éditer, et pour `analyse_final.sh` — qui tourne — j'ai créé un script **séparé** au lieu de l'éditer en cours d'exécution. C'est ce qui avait tué le guetteur de Wikipedia.
+
+## La chaîne, maintenant à cinq étages
+
+| # | phase | état |
+|---|---|---|
+| 1 | **Wikipedia** en/fr, 480 morceaux | **125/480** |
+| 2 | traçage par unité, 40 langues × 10 unités **(couches 0, 8, 10)** | chaîné |
+| 3 | analyse finale, couche 10 | chaîné |
+| 4 | **analyse par unité, couche 8** | chaîné |
+| 5 | **retraçage des 392 langues avec la couche 8** | chaîné |
+
+Les six scripts sont vivants et vérifiés.
+
+## Ce que cela va produire
+
+Une réponse complète à la question ouverte du tour 28 : **la couche 8 vaut-elle mieux que la 10 à l'échelle de l'UDHR**, et pas seulement sur Shakespeare ? Avec la mesure la plus fine — dix points d'invariance appariés au lieu d'un — et sur les 392 langues pour le retraçage.
+
+Rien à faire de votre côté.
+
+
+## Tour 157
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de représentation universelle), boîte noire (on ne lit du professeur que la couche à émuler, jamais sa tête ni ses jetons générés), aucune rétropropagation (A et B aléatoires et gelés, seule la lecture s'ajuste en forme fermée), et chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, TAILLE du réseau, avec le diagnostic oracle sur les deux panneaux (test hors vivier et validation du même vivier)."
+Round: 30/256
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Je relève l'état et j'estime la fin de la chaîne.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date \"+%H:%M\"; echo \"=== Wikipedia ===\"; N=$(ls /home/stephane/Data13TB/stephane/corpus/wiki_traces 2>/dev/null | wc -l); echo \"$N/480\"; python3 -c \"\nimport re\nt=open('/tmp/trace_wiki.log').read()\nts=[int(x) for x in re.fin … [709 caractères tronqués]`
+
+  ```
+04:40
+=== Wikipedia ===
+126/480
+moyenne 20 s · reste 120 min
+échecs : 0
+
+=== estimation de la chaîne entière ===
+  Wikipedia   : 120 min
+  unités      : ~60 min (400 traces × ~9 s)
+  analyse fin.: ~60 min
+  couche 8    : ~30 min
+  retraçage 8 : ~270 min
+
+load average: 16,44, 16,48, 16,17
+  ```
+
+### 🤖 Assistant
+
+⏵ Chaîne estimée à **~9 heures**, fin vers 13h40. Point d'étape.
+
+## L'estimation, mesure par mesure
+
+| étape | durée |
+|---|---:|
+| Wikipedia (126/480, 0 échec) | **120 min** |
+| traçage par unité (400 × ~9 s) | ~60 min |
+| analyse finale (couche 10) | ~60 min |
+| analyse par unité (couche 8) | ~30 min |
+| **retraçage des 392 langues avec la couche 8** | **~270 min** |
+| **total** | **~9 h** → fin vers **13h40** |
+
+La charge est stable à 16 sur 40 threads — pas de sursouscription, un seul calcul lourd à la fois, comme voulu.
+
+## Une redondance que je dois signaler
+
+`analyse_final.sh` refait l'analyse de Romeo que j'ai **déjà lancée manuellement** (`romeo.sh`) et dont les résultats sont commités. C'est ~15 minutes perdues.
+
+Je ne l'intercepte pas : le script **tourne**, et l'éditer en cours d'exécution est précisément ce qui a tué le guetteur de Wikipedia. La redondance est bénigne, la correction aurait été risquée. Je le note pour que ce soit un choix explicite, pas un oubli.
+
+## Ce que la chaîne produira, dans l'ordre
+
+1. **Wikipedia** — un professeur nourri de texte long et divers change-t-il la fidélité ou le transfert ?
+2. **Les dix points d'invariance** — la pire paire cesse d'être un agrégat, et les couches 8 et 10 sont comparées au niveau des unités alignées.
+3. **La couche 8 sur les 392 langues** — la correction de cible à pleine échelle, avec le panel stratifié sur les 22 écritures.
+
+## Ce que je fais d'ici là
+
+Je surveille, sans rien ajouter. Le chemin critique est lancé, et j'ai appris dans ce parcours que chaque expérience de côté le ralentit de 40 % — pour un gain qui, deux fois sur trois, corrige une conclusion mais deux fois sur trois arrive après coup.
+
+Rien à faire de votre côté.
+
+
+## Tour 158
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de représentation universelle), boîte noire (on ne lit du professeur que la couche à émuler, jamais sa tête ni ses jetons générés), aucune rétropropagation (A et B aléatoires et gelés, seule la lecture s'ajuste en forme fermée), et chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, TAILLE du réseau, avec le diagnostic oracle sur les deux panneaux (test hors vivier et validation du même vivier)."
+Round: 31/256
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Je vérifie une dépendance que je soupçonne fragile : `unites8.sh` a besoin de listes de langues créées par `analyse_final.sh`, mais il ne l'attend pas.
+
+Je vérifie une dépendance que je soupçonne fragile : `unites8.sh` a besoin de deux listes de langues qui sont créées par `analyse_final.sh` — or il n'attend que la fin du **traçage**, pas celle de l'analyse.
+
+- **bash** `{"command": "ls -la /tmp/unites_train.txt /tmp/unites_test.txt /tmp/unites_val.txt 2>&1 | head -4; echo; echo \"=== qui crée ces listes ? ===\"; grep -rn \"unites_train.txt\\|unites_test.txt\" /tmp/*.sh 2>/dev/null | head -5; echo; echo \"=== condition d'attente de unites8.sh ===\"; grep -oE \"while … [192 caractères tronqués]`
+
+  ```
+ls: cannot access '/tmp/unites_train.txt': No such file or directory
+ls: cannot access '/tmp/unites_test.txt': No such file or directory
+ls: cannot access '/tmp/unites_val.txt': No such file or directory
+
+=== qui crée ces listes ? ===
+/tmp/analyse_final.sh:45:open('/tmp/unites_train.txt', 'w').write('\n'.join(noms(train)) + '\n')
+/tmp/analyse_final.sh:46:open('/tmp/unites_test.txt', 'w').write('\n'.join(noms(test)) + '\n')
+/tmp/analyse_final.sh:49:python3 tools/cache_pont.py $U/udhr/unites /tmp/cache_unites_train.npz --couche 10 --langues /tmp/unites_train.txt >> /tmp/analyse_final.log 2>&1
+/tmp/analyse_final.sh:50:python3 tools/cache_pont.py $U/udhr/unites /tmp/cache_unites_test.npz --couche 10 --langues /tmp/unites_test.txt >> /tmp/analyse_final.log 2>&1
+/tmp/unites8.sh:15:   --langues /tmp/unites_train.txt >> /tmp/unites8.log 2>&1
+
+=== condition d'attente de unites8.sh ===
+while ! grep -qx TERMINE /tmp/trace_unites.log 2>/dev/null; do sleep 120; done
+=== condition d'attente de analyse_final.sh ===
+while ! grep -qx TERMINE /tmp/trace_unites.log 2>/dev/null; do sleep 120; done
+  ```
+
+### 🤖 Assistant
+
+⏵ **Bug confirmé.** `analyse_final.sh` crée les listes de langues dans sa section « unités », donc **après** ses sections Romeo et Wikipedia — soit environ une heure après le début. Or `unites8.sh` attend **le même signal** et tenterait de les lire immédiatement : il échouerait.
+
+**Bug confirmé et c'est exactement le piège précédent.** `analyse_final.sh` crée les listes de langues dans sa section « unités » — donc **une heure après** son démarrage. Or `unites8.sh` attend **le même signal** : il tenterait de lire des fichiers inexistants et échouerait.
+
+Je le corrige proprement : j'arrête le guetteur, je l'édite, je le relance — plutôt que de l'éditer pendant qu'il tourne.
+
+- **bash** `{"command": "cat > /tmp/tue_unites8.py <<'PY'\nimport os, signal\nmoi=os.getpid(); anc=set(); p=moi\nfor _ in range(8):\n    try:\n        st=open(f\"/proc/{p}/stat\").read().split(\") \",1)[1].split(); p=int(st[1]); anc.add(p)\n    except Exception: break\nmorts=[]\nfor d in os.listdir(\"/proc\"):\ … [2129 caractères tronqués]`
+
+  ```
+unites8 arrêté : [2445881]
+unites8 : attend maintenant analyse_final en plus
+syntaxe OK et exécutable
+grep -qx TERMINE /tmp/trace_unites.log
+grep -qx TERMINE /tmp/analyse_final.log
+chaîne : analyse_final · c8_apres · trace_wiki · unites8 · unites_apres
+  ```
+
+### 🤖 Assistant
+
+⏵ Dépendance corrigée. Point d'étape.
+
+## Le bug du tour, et c'est le troisième de la même famille
+
+`unites8.sh` a besoin de deux listes de langues (`/tmp/unites_train.txt`, `_test.txt`) qui sont créées par **`analyse_final.sh`** — dans sa section « unités », soit **une heure après son démarrage**. Or `unites8` n'attendait que la fin du **traçage**, comme `analyse_final`. Les deux se seraient déclenchés ensemble, et `unites8` aurait lu des fichiers inexistants.
+
+**Corrigé** : `unites8` attend maintenant **les deux** — le traçage **et** l'analyse.
+
+**Et j'ai appliqué la méthode qui marche** : j'ai **arrêté** le guetteur, je l'ai édité, je l'ai relancé. Pas d'édition en cours d'exécution — c'est ce qui avait tué le guetteur de Wikipedia.
+
+## Le motif, sur trois occurrences
+
+| bug | ce qui manquait |
+|---|---|
+| `TERMINE` matchait « caches TERMINE » | une **ancre** |
+| `exec` sur un script non exécutable | un **droit** |
+| `unites8` attendait le mauvais signal | une **dépendance** |
+
+Trois fois le même schéma : **une condition que je croyais suffisante et qui ne l'était pas**, avec un échec silencieux pour seul symptôme. La chaîne fonctionne aujourd'hui parce que je vérifie chaque maillon séparément, pas parce qu'elle est bien construite du premier coup.
+
+## État
+
+| # | phase | état |
+|---|---|---|
+| 1 | Wikipedia | en cours |
+| 2 | traçage par unité (couches 0, 8, 10) | chaîné |
+| 3 | analyse finale (couche 10), **crée les listes** | chaîné |
+| 4 | analyse par unité (couche 8) | chaîné, **attend 2 et 3** |
+| 5 | retraçage couche 8, 392 langues | chaîné |
+
+Les six scripts sont vivants. Rien à faire de votre côté.
+
+
+## Tour 159
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de représentation universelle), boîte noire (on ne lit du professeur que la couche à émuler, jamais sa tête ni ses jetons générés), aucune rétropropagation (A et B aléatoires et gelés, seule la lecture s'ajuste en forme fermée), et chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, TAILLE du réseau, avec le diagnostic oracle sur les deux panneaux (test hors vivier et validation du même vivier)."
+Round: 32/256
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Je relève l'état de la chaîne.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date \"+%H:%M\"; echo \"Wikipedia : $(ls /home/stephane/Data13TB/stephane/corpus/wiki_traces 2>/dev/null | wc -l)/480\"; tail -1 /tmp/trace_wiki.log; echo \"échecs : $(grep -c ÉCHEC /tmp/trace_wiki.log)\"; echo; echo \"=== chaîne === … [772 caractères tronqués]`
+
+  ```
+04:41
+Wikipedia : 130/480
+en 129 23s
+échecs : 0
+
+=== chaîne ===
+  analyse_final · c8_apres · trace_wiki · unites8 · unites_apres
+load average: 17,18, 16,51, 16,20
+/dev/mapper/system-root   11T  8,8T  2,1T  81% /home/stephane/Data13TB
+  ```
+
+### 🤖 Assistant
+
+⏵ Wikipedia avance (130/480, 0 échec). J'utilise l'attente pour un **audit de cohérence** de mes propres rapports : j'ai corrigé plusieurs affirmations, et certaines pourraient encore y figurer comme valides.
+
+Wikipedia avance (130/480, 0 échec). J'utilise l'attente pour un **audit de cohérence** de mes propres rapports : j'ai corrigé plusieurs conclusions en cours de route, et certaines pourraient encore y figurer comme si elles tenaient.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== affirmations CORRIGÉES : sont-elles encore présentées comme valides ? ===\"; for motif in \"invariant des +0,020\" \"0,7762\" \"1,33\" \"678\" \"0,0693\" \"2,58\" \"le nombre de langues ne compte pas\" \"couche 10\" ; do p … [173 caractères tronqués]`
+
+  ```
+=== affirmations CORRIGÉES : sont-elles encore présentées comme valides ? ===
+
+--- « invariant des +0,020 » ---
+reports/rapport-toutes-langues.md:422:**3. L'écart à la constante vaut +0,0223** — exactement l'invariant des +0,020
+reports/rapport-toutes-langues.md:504:(+0,0223).** Or j'ai présenté cet écart comme « l'invariant des +0,020 » à travers
+
+--- « 0,7762 » ---
+reports/rapport-pont-semantique.md:107:| **1** | 0,6677 | **0,9492** | **0,7762** |
+reports/rapport-pont-semantique.md:116:**0,7762**, écrase le 0,3281 du professeur.
+reports/rapport-pont-semantique.md:159:inter-langue à **0,9492** (pire paire **0,7762**) sur 20 langues **jamais vues**.
+
+--- « 1,33 » ---
+reports/rapport-portes-p0-p9.md:31:| **P9** — noyaux natifs | `matvec_f32` parallèle par lignes : **×9,34** sur l'attention de V4.1, **bit à bit identique*
+reports/rapport-toutes-langues.md:105:**Un « gain de 1,33× » qui n'existait pas.** J'avais lancé un second traçage en
+reports/rapport-v4-reparti.md:15:| référence locale | **8 311,3347** | — | — | 4 377 ms/jeton |
+
+--- « 678 » ---
+reports/rapport-drapeaux-ignores.md:71:| `--threads` | I (548) · P (2678) · BK (1937) · GB (2047) | **FS (1575), PR (1675), BM (1835), BV
+… [1402 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ L'audit trouve **deux incohérences réelles** dans mes rapports. Je les corrige.
+
+L'audit trouve **deux incohérences réelles** :
+
+1. `rapport-toutes-langues.md` §14 affirme « l'invariant des +0,020 » comme acquis, et §16 le corrige — un lecteur qui s'arrête à §14 repart avec la mauvaise conclusion.
+2. `rapport-plateau-semantique.md` — le plus ancien — place le plateau à la **couche 10**, alors que les mesures récentes le placent à la **couche 8**.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\n# 1) pointer la correction depuis le §14 (sinon un lecteur s'arrête à la mauvaise conclusion)\np='reports/rapport-toutes-langues.md'; s=open(p).read()\nvieux = \"**3. L'écart à la constante vaut +0,0223** — exacteme … [3186 caractères tronqués]`

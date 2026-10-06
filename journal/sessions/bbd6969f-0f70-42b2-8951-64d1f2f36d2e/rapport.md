@@ -6,13 +6,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
 | Durée | 181.9 h |
-| Tours | 155 |
-| Messages | 8503 |
-| Appels d'outils | 8057 |
-| Fichiers touchés | 179 |
-| Commandes | 6859 |
+| Tours | 159 |
+| Messages | 8523 |
+| Appels d'outils | 8069 |
+| Fichiers touchés | 181 |
+| Commandes | 6869 |
 | Sous-agents | 32 |
-| Commits | 611 |
+| Commits | 612 |
 | Compactages de contexte | 11 |
 
 ## Objectifs déclarés
@@ -363,6 +363,14 @@
 **Tour 154** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 **Tour 155** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
+
+**Tour 156** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
+
+**Tour 157** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
+
+**Tour 158** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
+
+**Tour 159** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -7840,33 +7848,189 @@ Rien à faire de votre côté. Commit `9070ecf`.
 
 ### Tour 155 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
 
-*5 appels d'outils.* Actions notables :
+*7 appels d'outils.* Actions notables :
 
 - bash — Compare layer 8 vs layer 10 results
 - bash — Check layer 8 script condition
 - bash — Read layer 8 log
 - bash — Wait for layer 8 comparison
 - bash — Commit the layer 8 payoff
+- write `/tmp/trace392c8.sh`
+- bash — Chain the layer-8 re-trace
 
 **Synthèse produite :**
 
-⏵ **La comparaison tranche : la couche 8 est meilleure sur tout.**
+⏵ Correction de cible chaînée sur les 392 langues. Point d'étape.
 
-| | **couche 10** | **couche 8** | gain |
+\## Le résultat du tour
+
+**Changer de couche cible paie, et c'est mesuré à protocole identique** (même corpus, même réseau, entraîné sur l'anglais, testé sur le français) :
+
+| | couche 10 | **couche 8** | gain |
 |---|---:|---:|---:|
-| invariance du professeur | 0,6532 | **0,7044** | **+0,0512** |
-| fidélité sur l'anglais (apprise) | 0,6660 | **0,6967** | +0,0307 |
-| **fidélité sur le français (transférée)** | 0,5802 | **0,6015** | **+0,0213** |
-| invariance de sortie | **0,9540** | 0,9504 | −0,0036 |
-| pire segment | **0,8738** | 0,8650 | −0,0088 |
-| oracle sur le français | 0,6207 | **0,6540** | +0,0333 |
-| écart oracle | +0,0405 | +0,0525 | +0,0120 |
+| **fidélité TRANSFÉRÉE** | 0,5802 | **0,6015** | **+0,0213** |
+| invariance du professeur | 0,6532 | **0,7044** | +0,0512 |
+| invariance de sortie | 0,9540 | 0,9504 | −0,0036 |
 
-**Changer de cible rapporte +0,0213 sur la fidélité transférée** — à corpus, réseau et protocole identiques. Et le professeur lui-même est **plus interlingue à la couche 8** (0,7044 contre 0,6532), ce qui confirme que le plateau est bien là.
+**+0,0213 sur la seule mesure qui compte pour un pont destiné à servir** — celle où l'on transporte le modèle vers une langue jamais vue, sans réapprentissage. Le prix est négligeable.
 
-Le seul prix : l'invariance de notre sortie baisse de 0,0036 — négligeable, et c'est la courbe d'échange connue.
+**Le choix de la cible est un paramètre aussi important que l'architecture** — et je l'avais fixé, au tout début, sur une mesure unique (article 1 de l'UDHR, 40 langues). Deux corpus et deux panels ultérieurs le contredisent.
 
-**Changer de cible rapporte +0,0213 sur la fidélité transférée**, à corpus, réseau et protocole identiques. Le seul prix est une invariance de sortie inférieure de 0,0036 — négligeable.
+**La précaution a payé** : sur Romeo, cette comparaison n'a coûté **aucun retraçage** parce que j'avais tracé `0,4,8,10` au lieu de `0,10` — au cas où. C'est exactement le genre de marge qui ne coûte rien et qui débloque une question six heures plus tard.
+
+\## Ce que je viens de chaîner
+
+Le traçage des 392 langues n'avait écrit que les couches 0 et 10, donc la mesure à grande échelle demande un retraçage. Je l'ai chaîné **après toute la chaîne actuelle**, avec `--trace-couches 0,8,10` pour que chaque trace soit autoportante.
+
+\## État
+
+| phase | état |
+|---|---|
+| 1, 2, 3 | **FAITS** (dont la correction de cible sur Romeo) |
+| 4. Wikipedia | **122/480** |
+| 5. unités | chaîné |
+| 6. analyse finale | chaîné |
+| 7. **retraçage couche 8** sur 392 langues | chaîné (~4,5 h) |
+
+Rien à faire de votre côté. Commit `e89dbe3`.
+
+### Tour 156 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Check if units trace includes layer 8
+- bash — Add layer 8 to units trace safely
+- write `/tmp/unites8.sh`
+- bash — Chain layer-8 unit analysis
+
+**Synthèse produite :**
+
+⏵ Couche 8 ajoutée au traçage par unité **sans surcoût**, et son analyse chaînée. Point d'étape.
+
+\## Ce que le tour a ajouté
+
+**La couche 8 entre dans le traçage par unité pour zéro coût.** Les couches 0 à 10 sont **exécutées de toute façon** ; `--trace-couches` ne filtre que l'**écriture**. Ajouter la couche 8 au fichier ne change donc rien au temps de calcul — seulement la taille des traces.
+
+Cela débloque la comparaison de cible **au niveau des dix unités alignées**, c'est-à-dire avec la mesure d'invariance la plus fine dont je dispose.
+
+**Et j'ai appliqué la leçon de tout à l'heure** : j'ai vérifié que `trace_unites.sh` **ne tournait pas** avant de l'éditer, et pour `analyse_final.sh` — qui tourne — j'ai créé un script **séparé** au lieu de l'éditer en cours d'exécution. C'est ce qui avait tué le guetteur de Wikipedia.
+
+\## La chaîne, maintenant à cinq étages
+
+| # | phase | état |
+|---|---|---|
+| 1 | **Wikipedia** en/fr, 480 morceaux | **125/480** |
+| 2 | traçage par unité, 40 langues × 10 unités **(couches 0, 8, 10)** | chaîné |
+| 3 | analyse finale, couche 10 | chaîné |
+| 4 | **analyse par unité, couche 8** | chaîné |
+| 5 | **retraçage des 392 langues avec la couche 8** | chaîné |
+
+Les six scripts sont vivants et vérifiés.
+
+\## Ce que cela va produire
+
+Une réponse complète à la question ouverte du tour 28 : **la couche 8 vaut-elle mieux que la 10 à l'échelle de l'UDHR**, et pas seulement sur Shakespeare ? Avec la mesure la plus fine — dix points d'invariance appariés au lieu d'un — et sur les 392 langues pour le retraçage.
+
+Rien à faire de votre côté.
+
+### Tour 157 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Estimate the full chain duration
+
+**Synthèse produite :**
+
+⏵ Chaîne estimée à **~9 heures**, fin vers 13h40. Point d'étape.
+
+\## L'estimation, mesure par mesure
+
+| étape | durée |
+|---|---:|
+| Wikipedia (126/480, 0 échec) | **120 min** |
+| traçage par unité (400 × ~9 s) | ~60 min |
+| analyse finale (couche 10) | ~60 min |
+| analyse par unité (couche 8) | ~30 min |
+| **retraçage des 392 langues avec la couche 8** | **~270 min** |
+| **total** | **~9 h** → fin vers **13h40** |
+
+La charge est stable à 16 sur 40 threads — pas de sursouscription, un seul calcul lourd à la fois, comme voulu.
+
+\## Une redondance que je dois signaler
+
+`analyse_final.sh` refait l'analyse de Romeo que j'ai **déjà lancée manuellement** (`romeo.sh`) et dont les résultats sont commités. C'est ~15 minutes perdues.
+
+Je ne l'intercepte pas : le script **tourne**, et l'éditer en cours d'exécution est précisément ce qui a tué le guetteur de Wikipedia. La redondance est bénigne, la correction aurait été risquée. Je le note pour que ce soit un choix explicite, pas un oubli.
+
+\## Ce que la chaîne produira, dans l'ordre
+
+1. **Wikipedia** — un professeur nourri de texte long et divers change-t-il la fidélité ou le transfert ?
+2. **Les dix points d'invariance** — la pire paire cesse d'être un agrégat, et les couches 8 et 10 sont comparées au niveau des unités alignées.
+3. **La couche 8 sur les 392 langues** — la correction de cible à pleine échelle, avec le panel stratifié sur les 22 écritures.
+
+\## Ce que je fais d'ici là
+
+Je surveille, sans rien ajouter. Le chemin critique est lancé, et j'ai appris dans ce parcours que chaque expérience de côté le ralentit de 40 % — pour un gain qui, deux fois sur trois, corrige une conclusion mais deux fois sur trois arrive après coup.
+
+Rien à faire de votre côté.
+
+### Tour 158 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Check the dependency bug in unites8
+- bash — Fix the unites8 dependency
+
+**Synthèse produite :**
+
+⏵ Dépendance corrigée. Point d'étape.
+
+\## Le bug du tour, et c'est le troisième de la même famille
+
+`unites8.sh` a besoin de deux listes de langues (`/tmp/unites_train.txt`, `_test.txt`) qui sont créées par **`analyse_final.sh`** — dans sa section « unités », soit **une heure après son démarrage**. Or `unites8` n'attendait que la fin du **traçage**, comme `analyse_final`. Les deux se seraient déclenchés ensemble, et `unites8` aurait lu des fichiers inexistants.
+
+**Corrigé** : `unites8` attend maintenant **les deux** — le traçage **et** l'analyse.
+
+**Et j'ai appliqué la méthode qui marche** : j'ai **arrêté** le guetteur, je l'ai édité, je l'ai relancé. Pas d'édition en cours d'exécution — c'est ce qui avait tué le guetteur de Wikipedia.
+
+\## Le motif, sur trois occurrences
+
+| bug | ce qui manquait |
+|---|---|
+| `TERMINE` matchait « caches TERMINE » | une **ancre** |
+| `exec` sur un script non exécutable | un **droit** |
+| `unites8` attendait le mauvais signal | une **dépendance** |
+
+Trois fois le même schéma : **une condition que je croyais suffisante et qui ne l'était pas**, avec un échec silencieux pour seul symptôme. La chaîne fonctionne aujourd'hui parce que je vérifie chaque maillon séparément, pas parce qu'elle est bien construite du premier coup.
+
+\## État
+
+| # | phase | état |
+|---|---|---|
+| 1 | Wikipedia | en cours |
+| 2 | traçage par unité (couches 0, 8, 10) | chaîné |
+| 3 | analyse finale (couche 10), **crée les listes** | chaîné |
+| 4 | analyse par unité (couche 8) | chaîné, **attend 2 et 3** |
+| 5 | retraçage couche 8, 392 langues | chaîné |
+
+Les six scripts sont vivants. Rien à faire de votre côté.
+
+### Tour 159 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Monitor Wikipedia and chain
+- bash — Audit reports for superseded claims
+- bash — Fix report inconsistencies
+
+**Synthèse produite :**
+
+⏵ L'audit trouve **deux incohérences réelles** dans mes rapports. Je les corrige.
+
+L'audit trouve **deux incohérences réelles** :
+
+1. `rapport-toutes-langues.md` §14 affirme « l'invariant des +0,020 » comme acquis, et §16 le corrige — un lecteur qui s'arrête à §14 repart avec la mauvaise conclusion.
+2. `rapport-plateau-semantique.md` — le plus ancien — place le plateau à la **couche 10**, alors que les mesures récentes le placent à la **couche 8**.
 
 ## 3. Travail accompli
 
@@ -8053,6 +8217,8 @@ Le seul prix : l'invariance de notre sortie baisse de 0,0036 — négligeable, e
 | `/tmp/seuil.sh` | 1 | 0 |
 | `/tmp/romeo.sh` | 1 | 0 |
 | `/tmp/romeo8.sh` | 1 | 0 |
+| `/tmp/trace392c8.sh` | 1 | 0 |
+| `/tmp/unites8.sh` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -8131,7 +8297,7 @@ Le seul prix : l'invariance de notre sortie baisse de 0,0036 — négligeable, e
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6819 autres
+- … et 6829 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -8890,4 +9056,5 @@ Le seul prix : l'invariance de notre sortie baisse de 0,0036 — négligeable, e
 - Le plateau du professeur est à la couche 8, pas 10 — ma cible était mal choisie  Mesure sur Romeo, invariance SEGMENT par SEGMENT (24 scènes appariées) :   couc
 - Romeo : le pont TRANSFÈRE sur du texte littéraire (0,6660 anglais -> 0,5802 français)  Premier test hors de l'UDHR, sur corpus PARALLÈLE (24 scènes appariées en
 - Couche 8 contre couche 10 : la correction de cible PAIE (+0,0213 sur le transfert)  Même corpus (Romeo), même protocole (entraîné sur l'anglais, testé sur le fr
+- Audit de cohérence : deux affirmations périmées pointées dans mes propres rapports  J'ai relu les rapports en cherchant les affirmations que j'ai CORRIGÉES en c
 

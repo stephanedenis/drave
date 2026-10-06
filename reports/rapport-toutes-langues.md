@@ -419,7 +419,12 @@ le panel complet**, et pas seulement sur le signal précoce.
 l'ancien panel — **3,1× plus petit**. Là encore, ce que je prenais pour un goulot
 de méthode était largement un artefact de mesure.
 
-**3. L'écart à la constante vaut +0,0223** — exactement l'invariant des +0,020
+**3. L'écart à la constante vaut +0,0223** — dans la plage de l'invariant des +0,020
+
+> **ATTENTION — cette affirmation est CORRIGÉE au §16.** L'écart vaut +0,0223 ici
+> mais **+0,0322** sur les 896 canaux : ce n'est pas une constante mais une
+> **plage de +0,020 à +0,032**. Les sept périmètres qui donnaient +0,0197 ± 0,0009
+> partageaient le **même panel de 46 langues**. Voir §16.
 mesuré sur sept périmètres et deux architectures, puis sur le panel stratifié
 partiel (+0,0223). Il traverse donc : changement de panel, de taille, de corpus.
 
