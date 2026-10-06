@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 176.2 h |
 | Tours | 129 |
-| Messages | 8318 |
-| Appels d'outils | 7924 |
+| Messages | 8319 |
+| Appels d'outils | 7925 |
 | Fichiers touchés | 172 |
-| Commandes | 6733 |
+| Commandes | 6734 |
 | Sous-agents | 32 |
-| Commits | 588 |
+| Commits | 589 |
 | Compactages de contexte | 11 |
 
 ## Objectifs déclarés
@@ -6640,17 +6640,20 @@ Rien à faire de votre côté. Commit `ed92627`.
 
 ### Tour 129 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1281 caractères tronqués]
 
-*5 appels d'outils.* Actions notables :
+*6 appels d'outils.* Actions notables :
 
 - bash — Check chain state
 - bash — Smoke-test the parallel bridge tool
 - bash — Select languages and size for per-unit tracing
 - write `/tmp/trace_unites.sh`
 - bash — Chain per-unit tracing and commit
+- bash — Write per-unit invariance tool
 
 **Synthèse produite :**
 
-⏵ 400 unités (~66 jetons chacune) : ~1 h de traçage, dominé par le chargement du modèle. J'écris et je chaîne.
+⏵ Chaîne complète : 4 phases. J'écris l'outil qui exploitera le traçage par unité.
+
+Chaîne complète en place (4 phases). J'écris l'outil qui exploitera le traçage par unité — l'invariance **groupée par unité**, ce que l'outil multilingue ne sait pas faire.
 
 ## 3. Travail accompli
 
@@ -6908,7 +6911,7 @@ Rien à faire de votre côté. Commit `ed92627`.
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6693 autres
+- … et 6694 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -7644,4 +7647,5 @@ Rien à faire de votre côté. Commit `ed92627`.
 - Phase 3 chaînée : Wikipedia pour la RICHESSE, pas pour l'invariance  Wikipedia n'est PAS parallèle, et c'est vérifié : sur 400 articles par langue dans six lang
 - pont_parallele.py : l'invariance sur un corpus apparié se mesure SEGMENT par SEGMENT  Différence de fond avec pont_generatif.py : là-bas les langues ne sont pas
 - Traçage PAR UNITÉ : l'invariance à dix points au lieu d'un  Faiblesse de fond dans la mesure : l'invariance se mesurait sur la DERNIÈRE position du texte entier
+- invariance_unites.py : l'invariance par unité, et une pire paire qui porte sur quelque chose  L'outil multilingue mesure l'invariance entre TOUTES les paires d'
 

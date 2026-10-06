@@ -134530,3 +134530,19 @@ Created file
   ```
 
 - **bash** `{"command": "bash -n /tmp/trace_unites.sh && echo \"syntaxe OK\"\ncat > /tmp/unites_apres.sh <<'EOF'\n#!/bin/bash\nset -u\nwhile ! grep -q TERMINE /tmp/trace_wiki.log 2>/dev/null; do sleep 120; done\nsleep 60\nexec /tmp/trace_unites.sh\nEOF\nchmod +x /tmp/unites_apres.sh\nsetsid nohup /tmp/unites_ap … [1227 caractères tronqués]`
+
+  ```
+syntaxe OK
+traçage par unité chaîné après la phase 3
+9c5ae5a Traçage PAR UNITÉ : l'invariance à dix points au lieu d'un
+phase 1 : 66/392
+22:56
+  ```
+
+### 🤖 Assistant
+
+⏵ Chaîne complète : 4 phases. J'écris l'outil qui exploitera le traçage par unité.
+
+Chaîne complète en place (4 phases). J'écris l'outil qui exploitera le traçage par unité — l'invariance **groupée par unité**, ce que l'outil multilingue ne sait pas faire.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/invariance_unites.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"invariance_unites.py — l'invariance par UNITÉ, dix points au lieu d'un.\n\nL'outil multilingue mesure l'invariance entre TOUTES les paires d'entrées. Ici les\nent … [5084 caractères tronqués]`
