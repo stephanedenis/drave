@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 180.6 h |
-| Tours | 150 |
-| Messages | 8465 |
-| Appels d'outils | 8029 |
+| Durée | 181.2 h |
+| Tours | 151 |
+| Messages | 8478 |
+| Appels d'outils | 8040 |
 | Fichiers touchés | 177 |
-| Commandes | 6833 |
+| Commandes | 6844 |
 | Sous-agents | 32 |
-| Commits | 606 |
+| Commits | 607 |
 | Compactages de contexte | 11 |
 
 ## Objectifs déclarés
@@ -353,6 +353,8 @@
 **Tour 149** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 **Tour 150** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
+
+**Tour 151** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -7604,15 +7606,57 @@ Rien à faire de votre côté. Commit `2bdae7e`.
 
 **Synthèse produite :**
 
-⏵ **Deux constats.** Romeo a bien avancé (24 scènes, il est au français) mais le second run est **très lent : 1 neurone en 180 s** au lieu des ~22 s attendus — la contention est sévère.
+⏵ Bug corrigé, décision prise. Point d'étape.
 
-**Deux constats.**
+\## Le bug, et ce qu'il a coûté
 
-**1. Mon guetteur a un défaut réel** : il cherchait `TERMINE` sans ancre, et a matché la sous-chaîne du **« caches TERMINE »** écrit 25 minutes plus tôt. Romeo s'est donc déclenché pendant l'analyse au lieu d'après. Corrigé partout avec `grep -qx` (ancre de fin de ligne).
+**Mon guetteur cherchait `TERMINE` sans ancre.** Le journal de l'analyse contient « **caches TERMINE** » 25 minutes avant la fin — la condition a donc matché là, et Romeo s'est déclenché **pendant** l'analyse au lieu d'après.
 
-**2. Le second run paie la contention** : 1 neurone en 180 s au lieu de ~22 s attendus — 8× plus lent, parce que drave (20 threads) et numpy se disputent les cœurs.
+**Mesuré** : le second run de pont est passé de **~22 s par neurone à 180 s** — **8× plus lent**.
 
-**Ma décision : je laisse les deux tourner.** Romeo progresse vite (43 s par scène française) et le second run est une comparaison secondaire — j'ai déjà le résultat principal avec restriction. Interrompre Romeo pour accélérer une comparaison serait le mauvais échange. La chaîne n'est pas bloquée : Wikipedia attend Romeo, et l'analyse finale attend le traçage par unité.
+C'est la troisième fois dans ce parcours qu'un défaut de *plomberie* — pas de science — me coûte du temps : le `chmod +x` manquant, le drapeau sans effet, et maintenant l'ancre manquante. Les trois avaient la même signature : **ça tourne, donc je crois que ça marche**.
+
+**Corrigé partout** : les cinq guetteurs utilisent `grep -qx TERMINE` (ancre de fin de ligne). Vérifié : les quatre autres journaux ne contenaient qu'un seul `TERMINE`, mais l'ancre les protège d'un jalon homonyme ajouté plus tard.
+
+\## La décision, et pourquoi
+
+**Je laisse les deux tourner.** Romeo progresse vite — **31 scènes sur 48**, 30 s par scène française — et le second run est une **comparaison secondaire** : le résultat principal (avec restriction de canaux) est déjà obtenu et commité. Interrompre Romeo pour accélérer une comparaison serait le mauvais échange.
+
+Et **la chaîne n'est pas bloquée** : Wikipedia attend Romeo, l'analyse finale attend le traçage par unité. Le bug a coûté du temps, pas l'ordre de la chaîne.
+
+\## État
+
+| | |
+|---|---|
+| phase 1 | **392/392** ✓ |
+| pont sur 301 langues (restriction) | **fait** · fid TEST 0,7430 · invariance 0,9827 · écart +0,0223 |
+| second run (sans restriction) | en cours, ralenti par la contention |
+| **Romeo** | **31/48 scènes** |
+| Wikipedia, unités, analyse finale | chaînés |
+
+Rien à faire de votre côté. Commit `99878fa`.
+
+### Tour 151 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
+
+*11 appels d'outils.* Actions notables :
+
+- bash — Check Romeo and second run progress
+- bash — Monitor Romeo and chain
+- bash — Check Romeo completion and Wikipedia start
+- bash — Check Romeo finish and Wikipedia launch
+- bash — Verify Wikipedia started
+- bash — Diagnose and relaunch the Wikipedia guard
+- bash — Verify Wikipedia start and guard uniqueness
+- bash — Check scripts executability
+- bash — Fix permissions and make exec robust
+- bash — Relaunch Wikipedia phase and verify
+- bash — Document the recurring trap and commit
+
+**Synthèse produite :**
+
+⏵ **Wikipedia tourne** (7 fichiers, ~24 s par morceau). Le correctif a fonctionné.
+
+**Wikipedia tourne** (7 morceaux, ~24 s chacun). Je consigne ce piège récurrent — c'est la troisième fois qu'il me mord.
 
 ## 3. Travail accompli
 
@@ -7875,7 +7919,7 @@ Rien à faire de votre côté. Commit `2bdae7e`.
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6793 autres
+- … et 6804 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -8629,4 +8673,5 @@ Rien à faire de votre côté. Commit `2bdae7e`.
 - Plateau sur 392 langues : le 'sous-ensemble partagé' s'effondre de 678 à 48 canaux  Mesure sur les 392 langues, dernière position, couche 10 :   50 % de l'énerg
 - LIVRABLE PHASE 2 : le pont sur 301 langues — fid TEST 0,7430, invariance 0,9827    apprentissage / validation : 301 / 50 langues (contre 30 / 10 précédemment)  
 - Bug de guetteur : 'TERMINE' matchait la sous-chaîne de 'caches TERMINE'  rj_apres.sh a déclenché Romeo 25 minutes trop tôt : sa condition cherchait 'TERMINE' sa
+- Le piège du droit d'exécution, trois fois — corrigé à la racine  Romeo a terminé (48 scènes, 24 en + 24 fr, appariement parfait vérifié). Mais Wikipedia n'a pas
 

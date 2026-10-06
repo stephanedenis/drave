@@ -137573,3 +137573,319 @@ load average: 23,79, 22,42, 18,16
 **Ma décision : je laisse les deux tourner.** Romeo progresse vite (43 s par scène française) et le second run est une comparaison secondaire — j'ai déjà le résultat principal avec restriction. Interrompre Romeo pour accélérer une comparaison serait le mauvais échange. La chaîne n'est pas bloquée : Wikipedia attend Romeo, et l'analyse finale attend le traçage par unité.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -i 's|grep -q TERMINE /tmp/trace392.log|grep -qx TERMINE /tmp/trace392.log|' /tmp/analyse392.sh /tmp/rj_apres.sh 2>/dev/null; for f in /tmp/analyse392.sh /tmp/rj_apres.sh; do bash -n \"$f\" || echo \"ERREUR $f\"; done; echo \"con … [1307 caractères tronqués]`
+
+  ```
+conditions ancrées partout
+99878fa Bug de guetteur : 'TERMINE' matchait la sous-chaîne de 'caches TERMINE'
+
+Romeo : 31/48 scènes
+fr scène 6 30s 12173147
+03:23
+  ```
+
+### 🤖 Assistant
+
+⏵ Bug corrigé, décision prise. Point d'étape.
+
+## Le bug, et ce qu'il a coûté
+
+**Mon guetteur cherchait `TERMINE` sans ancre.** Le journal de l'analyse contient « **caches TERMINE** » 25 minutes avant la fin — la condition a donc matché là, et Romeo s'est déclenché **pendant** l'analyse au lieu d'après.
+
+**Mesuré** : le second run de pont est passé de **~22 s par neurone à 180 s** — **8× plus lent**.
+
+C'est la troisième fois dans ce parcours qu'un défaut de *plomberie* — pas de science — me coûte du temps : le `chmod +x` manquant, le drapeau sans effet, et maintenant l'ancre manquante. Les trois avaient la même signature : **ça tourne, donc je crois que ça marche**.
+
+**Corrigé partout** : les cinq guetteurs utilisent `grep -qx TERMINE` (ancre de fin de ligne). Vérifié : les quatre autres journaux ne contenaient qu'un seul `TERMINE`, mais l'ancre les protège d'un jalon homonyme ajouté plus tard.
+
+## La décision, et pourquoi
+
+**Je laisse les deux tourner.** Romeo progresse vite — **31 scènes sur 48**, 30 s par scène française — et le second run est une **comparaison secondaire** : le résultat principal (avec restriction de canaux) est déjà obtenu et commité. Interrompre Romeo pour accélérer une comparaison serait le mauvais échange.
+
+Et **la chaîne n'est pas bloquée** : Wikipedia attend Romeo, l'analyse finale attend le traçage par unité. Le bug a coûté du temps, pas l'ordre de la chaîne.
+
+## État
+
+| | |
+|---|---|
+| phase 1 | **392/392** ✓ |
+| pont sur 301 langues (restriction) | **fait** · fid TEST 0,7430 · invariance 0,9827 · écart +0,0223 |
+| second run (sans restriction) | en cours, ralenti par la contention |
+| **Romeo** | **31/48 scènes** |
+| Wikipedia, unités, analyse finale | chaînés |
+
+Rien à faire de votre côté. Commit `99878fa`.
+
+
+## Tour 151
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de représentation universelle), boîte noire (on ne lit du professeur que la couche à émuler, jamais sa tête ni ses jetons générés), aucune rétropropagation (A et B aléatoires et gelés, seule la lecture s'ajuste en forme fermée), et chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, TAILLE du réseau, avec le diagnostic oracle sur les deux panneaux (test hors vivier et validation du même vivier)."
+Round: 24/256
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Je relève l'état des deux calculs.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date \"+%H:%M\"; echo \"=== Romeo ===\"; ls /home/stephane/Data13TB/stephane/corpus/parallele_rj/ | wc -l; tail -1 /tmp/trace_rj.log; grep -c TERMINE /tmp/trace_rj.log; echo; echo \"=== second run de pont ===\"; grep -c \"^n[0-9]\" / … [312 caractères tronqués]`
+
+  ```
+03:24
+=== Romeo ===
+31
+fr scène 6 30s 12173147
+0
+
+=== second run de pont ===
+13
+n8                8       1    0.6027   0.6056    0.5897   0.9948  0.9745 | communs +0.217 (  0
+
+=== chaîne ===
+bash -x /tmp/analyse_final.sh
+/bin/bash /tmp/trace_rj.sh
+python3 -u tools/pont_generatif.py /tmp/cache392_train.npz /tmp/cache392_te
+load average: 22,92, 22,22, 18,36
+  ```
+
+### 🤖 Assistant
+
+⏵ Romeo à 31/48, second run à n13. J'attends.
+
+- **bash** `{"command": "sleep 580; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date \"+%H:%M\"; echo \"=== Romeo ===\"; ls /home/stephane/Data13TB/stephane/corpus/parallele_rj/ | wc -l; tail -1 /tmp/trace_rj.log; echo \"TERMINE : $(grep -c TERMINE /tmp/trace_rj.log)\"; echo; echo \"=== second run ===\" … [341 caractères tronqués]`
+
+  ```
+03:33
+=== Romeo ===
+40
+fr scène 15 19s 6689238
+TERMINE : 0
+
+=== second run ===
+15
+n24              24       1    0.6128   0.6169    0.6020   0.9826  0.9149 | communs +0.222 ( 12
+
+=== Wikipedia a-t-il démarré ? ===
+(pas encore)
+0
+  ```
+
+### 🤖 Assistant
+
+⏵ Romeo à 40/48. J'attends sa fin et le démarrage de Wikipedia.
+
+- **bash** `{"command": "sleep 500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date \"+%H:%M\"; echo \"=== Romeo ===\"; ls /home/stephane/Data13TB/stephane/corpus/parallele_rj/ | wc -l; tail -2 /tmp/trace_rj.log; echo \"TERMINE : $(grep -c TERMINE /tmp/trace_rj.log)\"; echo; echo \"=== Wikipedia ===\"; … [301 caractères tronqués]`
+
+  ```
+03:42
+=== Romeo ===
+48
+fr scène 22 38s 15864936
+fr scène 23 16s 5148168
+TERMINE : 0
+
+=== Wikipedia ===
+(pas encore)
+0
+
+=== second run ===
+19
+  ```
+
+### 🤖 Assistant
+
+⏵ Romeo à 47/48 scènes. J'attends la dernière et le démarrage de Wikipedia.
+
+- **bash** `{"command": "sleep 400; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date \"+%H:%M\"; echo \"=== Romeo ===\"; tail -2 /tmp/trace_rj.log; echo \"TERMINE : $(grep -c TERMINE /tmp/trace_rj.log) · fichiers : $(ls /home/stephane/Data13TB/stephane/corpus/parallele_rj/ | wc -l)\"; echo; echo \"=== W … [404 caractères tronqués]`
+
+  ```
+03:49
+=== Romeo ===
+fr scène 24 341s 85448585
+TERMINE
+TERMINE : 1 · fichiers : 48
+
+=== Wikipedia ===
+(pas encore)
+0
+
+=== second run ===
+25
+  ```
+
+### 🤖 Assistant
+
+⏵ **Romeo terminé : 48 scènes (24 anglais + 24 français).** Wikipedia devrait démarrer. Je vérifie.
+
+- **bash** `{"command": "sleep 120; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date \"+%H:%M\"; echo \"=== Wikipedia a-t-il démarré ? ===\"; ls /home/stephane/Data13TB/stephane/corpus/wiki_traces 2>/dev/null | wc -l; tail -2 /tmp/trace_wiki.log 2>/dev/null || echo \"(journal pas encore créé)\"; echo; e … [873 caractères tronqués]`
+
+  ```
+03:51
+=== Wikipedia a-t-il démarré ? ===
+0
+(journal pas encore créé)
+
+=== chaîne vivante ? ===
+analyse_final · unites_apres
+
+=== Romeo : vérification de l'appariement ===
+     24 en
+     24 fr
+  ```
+
+### 🤖 Assistant
+
+⏵ **Romeo est parfaitement apparié (24 en + 24 fr), mais Wikipedia n'a pas démarré — et `wiki_apres` n'est plus vivant.**
+
+**Romeo est parfaitement apparié (24 en + 24 fr)**, mais **Wikipedia n'a pas démarré et son guetteur n'est plus vivant**.
+
+La cause est de ma faute : j'ai **modifié les scripts d'attente pendant qu'ils tournaient**. Bash lit un script au fur et à mesure de son exécution ; l'éditer en cours de route le fait dérailler. C'est un piège que je n'avais pas anticipé.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== contenu actuel de wiki_apres ===\"; cat /tmp/wiki_apres.sh; echo \"=== est-il valide ? ===\"; bash -n /tmp/wiki_apres.sh && echo \"syntaxe OK\"; echo; echo \"=== les autres guetteurs vivants ont-ils été édités en cours ? = … [554 caractères tronqués]`
+
+  ```
+=== contenu actuel de wiki_apres ===
+#!/bin/bash
+# Wikipedia seulement APRÈS les deux autres phases : mesuré, deux traçages en
+# parallèle portent la charge à 44 sur 40 threads et font passer le rythme de
+# 36 s à 150 s par langue.
+set -u
+while ! grep -qx TERMINE /tmp/trace_rj.log 2>/dev/null; do sleep 120; done
+sleep 60
+exec /tmp/trace_wiki.sh
+=== est-il valide ? ===
+syntaxe OK
+
+=== les autres guetteurs vivants ont-ils été édités en cours ? ===
+  unites_apres     : 2
+  analyse_final    : 2
+
+=== relance de wiki_apres (Romeo est fini, il doit partir aussitôt) ===
+fichiers wiki : 0
+(journal pas encore)
+  ```
+
+### 🤖 Assistant
+
+⏵ Le guetteur est valide et relancé. Je vérifie que Wikipedia démarre et que les autres guetteurs sont bien en un seul exemplaire.
+
+- **bash** `{"command": "sleep 180; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date \"+%H:%M\"; echo \"=== Wikipedia ===\"; ls /home/stephane/Data13TB/stephane/corpus/wiki_traces 2>/dev/null | wc -l; tail -2 /tmp/trace_wiki.log 2>/dev/null || echo \"(pas encore de journal)\"; echo; echo \"=== instances … [933 caractères tronqués]`
+
+  ```
+03:56
+=== Wikipedia ===
+0
+(pas encore de journal)
+
+=== instances uniques des guetteurs ? ===
+  analyse_final.sh       1 instance(s) [2364779]
+  unites_apres.sh        1 instance(s) [2361698]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je soupçonne le **même bug que la dernière fois**. `exec /tmp/trace_wiki.sh` échouerait sur un droit d'exécution manquant — je vérifie.
+
+**Je soupçonne le même bug que la dernière fois** : `exec /tmp/trace_wiki.sh` échoue si le script n'est pas exécutable. Je vérifie.
+
+- **bash** `{"command": "ls -la /tmp/trace_wiki.sh /tmp/trace_rj.sh /tmp/trace_unites.sh /tmp/trace392.sh /tmp/*.sh 2>/dev/null | awk '{print \"  \"$1\" \"$9}'; echo; echo \"=== lesquels ne sont PAS exécutables ? ===\"; for f in /tmp/trace392.sh /tmp/trace_rj.sh /tmp/trace_wiki.sh /tmp/trace_unites.sh /tmp/wiki … [223 caractères tronqués]`
+
+  ```
+-rwx--x--x. /tmp/ab-after.sh
+  -rwxr-xr-x. /tmp/adv_trap_inner.sh
+  -rwxr-xr-x. /tmp/affinite.sh
+  -rwxr-xr-x. /tmp/after30b.sh
+  -rwxr-xr-x. /tmp/after30b_test.sh
+  -rwx--x--x. /tmp/aig2.sh
+  -rwxr-xr-x. /tmp/aig4.sh
+  -rwx--x--x. /tmp/aig5.sh
+  -rwxr-xr-x. /tmp/aig_s5.sh
+  -rwxr-xr-x. /tmp/aig_s6b.sh
+  -rwxr-xr-x. /tmp/aig_s6.sh
+  -rwxr-xr-x. /tmp/aig_s7.sh
+  -rwxr-xr-x. /tmp/aiguille_1p5b.sh
+  -rwxr-xr-x. /tmp/aiguille30b.sh
+  -rwxr-xr-x. /tmp/aiguille_campagne.sh
+  -rwxr-xr-x. /tmp/aiguille_kv2048.sh
+  -rwxr-xr-x. /tmp/aiguille_kv.sh
+  -rwxr-xr-x. /tmp/aiguille_lance.sh
+  -rwxr-xr-x. /tmp/aiguille_topk.sh
+  -rwxr-xr-x. /tmp/analyse30b.sh
+  -rwx--x--x. /tmp/analyse30.sh
+  -rwx--x--x. /tmp/analyse392.sh
+  -rw-------. /tmp/analyse_final.sh
+  -rwx--x--x. /tmp/analyse_propre.sh
+  -rwxr-xr-x. /tmp/attn512.sh
+  -rwx--x--x. /tmp/audela_4096.sh
+  -rw-r--r--. /tmp/audit.sh
+  -rwx--x--x. /tmp/balayage30.sh
+  -rwxr-xr-x. /tmp/balayage_cascade.sh
+  -rwxr-xr-x. /tmp/balayage.sh
+  -rwxr-xr-x. /tmp/banc_chrono_lot.sh
+  -rwxr-xr-x. /tmp/banc_final.sh
+  -rwxr-xr-x. /tmp/banc_gpu2.sh
+  -rwxr-xr-x. /tmp/banc_gpu.sh
+  -rwxr-xr-x. /tmp/banc_kv2.sh
+  -rwxr-xr-x. /tmp/banc_kv_clés.sh
+  -rwxr-xr-x. /tm
+… [7476 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Cause trouvée, et c'est la troisième fois que ce piège me mord.** Trois scripts créés par l'outil d'écriture ne sont **pas exécutables** : `trace_wiki.sh`, `trace_unites.sh`, `analyse_final.sh`. J'avais vérifié leur **syntaxe** avec `bash -n` — qui ne teste pas le droit d'exécution.
+
+**Cause trouvée, et c'est la troisième fois que ce piège me mord** : trois scripts créés par l'outil d'écriture ont le mode `-rw-------`, donc **non exécutables** — `trace_wiki.sh`, `trace_unites.sh` et `analyse_final.sh`. J'avais vérifié leur **syntaxe** avec `bash -n`, qui ne teste pas le droit d'exécution. `exec /tmp/trace_wiki.sh` échoue donc en silence.
+
+Je corrige **à la racine** : je rends les scripts exécutables **et** je change les `exec` pour qu'ils passent par `bash`, ce qui rend le droit d'exécution inutile.
+
+- **bash** `{"command": "cd /tmp && chmod +x trace_wiki.sh trace_unites.sh analyse_final.sh analyse392.sh rj_apres.sh wiki_apres.sh unites_apres.sh 2>/dev/null; echo \"=== droits après correction ===\"; for f in trace392 trace_rj trace_wiki trace_unites wiki_apres unites_apres analyse_final analyse392 rj_apres; … [774 caractères tronqués]`
+
+  ```
+=== droits après correction ===
+  trace392.sh      -rwx--x--x
+  trace_rj.sh      -rwx--x--x
+  trace_wiki.sh    -rwx--x--x
+  trace_unites.sh  -rwx--x--x
+  wiki_apres.sh    -rwxr-xr-x
+  unites_apres.sh  -rwxr-xr-x
+  analyse_final.sh -rwx--x--x
+  analyse392.sh    -rwx--x--x
+  rj_apres.sh      -rwxr-xr-x
+/tmp/rj_apres.sh : exec -> exec bash
+/tmp/unites_apres.sh : exec -> exec bash
+/tmp/wiki_apres.sh : exec -> exec bash
+syntaxe OK
+exec bash /tmp/trace_rj.sh
+exec bash /tmp/trace_unites.sh
+exec bash /tmp/trace_wiki.sh
+  ```
+
+### 🤖 Assistant
+
+⏵ Corrigé à la racine : **tous les scripts sont exécutables et les `exec` passent par `bash`**, donc le droit d'exécution n'est plus requis — le piège ne peut plus se reproduire. Je relance Wikipedia.
+
+**Corrigé à la racine** : tous les scripts sont exécutables **et** les `exec` passent par `bash`, donc le droit d'exécution n'est plus requis. Le piège ne peut plus se reproduire. Je relance Wikipedia.
+
+- **bash** `{"command": "setsid nohup bash /tmp/wiki_apres.sh >/dev/null 2>&1 < /dev/null & disown; sleep 200; date \"+%H:%M\"; echo \"=== Wikipedia ===\"; ls /home/stephane/Data13TB/stephane/corpus/wiki_traces 2>/dev/null | wc -l; tail -2 /tmp/trace_wiki.log 2>/dev/null || echo \"(pas encore de journal)\"; ech … [165 caractères tronqués]`
+
+  ```
+04:00
+=== Wikipedia ===
+7
+en 5 25s
+en 6 23s
+
+bash /tmp/trace_wiki.sh
+  ```
+
+### 🤖 Assistant
+
+⏵ **Wikipedia tourne** (7 fichiers, ~24 s par morceau). Le correctif a fonctionné.
+
+**Wikipedia tourne** (7 morceaux, ~24 s chacun). Je consigne ce piège récurrent — c'est la troisième fois qu'il me mord.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 15. Le piège du droit d'exécution, trois fois de suite\n\n**Ce qui s'est passé.** Romeo a terminé ses 48 scènes (24 anglais + 24 fran … [3314 caractères tronqués]`
