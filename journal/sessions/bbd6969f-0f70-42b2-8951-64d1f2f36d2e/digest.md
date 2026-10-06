@@ -148411,3 +148411,130 @@ syntaxe OK
 ⏵ **Le test que l'UDHR interdisait a parlé : sur 61 articles multi-domaines, le CONTENU ne devance la LANGUE que de +0,0026 à la couche 8 — et la langue domine à la couche 0.**
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 53. Domaine ou langue ? Enfin testable, et la réponse est « à égalité »\n\n### 53.1 Pourquoi il fallait un autre corpus\n\nL'hypot … [4839 caractères tronqués]`
+
+  ```
+75cc1b7 Domaine ou langue : enfin testable, et la réponse est 'à égalité'
+
+  de_Alexander_Selkirk : 589 pas
+  de_Alexanderplatz : 571 pas
+  de_Alexandra : 656 pas
+  de_Alexis_Carrel : 622 pas
+  de_Alexis_Korner : 654 pas
+  de_Alfons_Maria_Jakob : 602 pas
+  ```
+
+- **bash** `{"command": "sleep 420; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== pont Wikipedia ===\"; grep -E \"^---|fidélité sur|invariance de SORTIE|oracle sur|taille|invariance du PROFESSEUR\" /tmp/wiki_pont.log 2>/dev/null | head -30; echo; echo \"articles : $(grep -c '^ARTICLE' /tmp/tr … [173 caractères tronqués]`
+
+  ```
+=== pont Wikipedia ===
+
+articles : 77
+=== croissance ===
+        f"`poids` doit recopier `a_neur`.")
+ValueError: généalogie désynchronisée : 6 constantes de temps pour 149 neurones. Toute recopie de `poids` doit recopier `a_neur`.
+18:21
+  ```
+
+### 🤖 Assistant
+
+⏵ **La croissance μ = 0,1 a PLANTÉ — et c'est mon garde-fou du §30 qui a parlé : « 6 constantes de temps pour 149 neurones ». Un vrai bug de désynchronisation.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -25 /tmp/croissance3.log", "description": "Read the full crash traceback"}`
+
+  ```
+retrait de 9 (recalculé)           27       1    0.6249   0.6219    0.6247
+retrait de 6 (recalculé)           21       1    0.6225   0.6199    0.6234
+retrait de 5 (recalculé)           16       1    0.6200   0.6177    0.6189
+retrait de 4 (recalculé)           12       1    0.6180   0.6171    0.6173
+retrait de 3 (recalculé)            9       1    0.6165   0.6159    0.6154
+retrait de 2 (recalculé)            7       1    0.6139   0.6124    0.6123
+retrait de 1 (recalculé)            6       1    0.6130   0.6117    0.6098
+retrait REFUSÉ (1 → VAL 0.6109)      6       —         —   0.6117
+  → retour au MEILLEUR passage    149       1         —   0.6311
+
+# ORACLE (lecture ajustée SUR le jeu évalué — diagnostic seulement)
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", line 1012, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", line 991, in main
+    nous_t, or_t, Xt, Wt = oracle_sur(Ete, Yte)
+                           ~~~~~~~~~~^^^^^^^^^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", line 984, in ora
+… [360 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Trouvé, et c'est le MÊME bug que celui de `pont_parallele` : la sauvegarde/restauration du « meilleur passage » de l'attrition ne recopie pas `a_neur`. Mon garde-fou l'a attrapé.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"meilleur_passage\" tools/pont_generatif.py", "description": "Find all meilleur_passage sites"}`
+
+  ```
+919:        meilleur_passage = {"f": f_va, "poids": list(P.poids),
+943:                meilleur_passage = {"f": f_va, "poids": list(P.poids),
+962:        mp = meilleur_passage
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '915,925p;940,948p;960,970p' tools/pont_generatif.py", "description": "Read the restore code"}`
+
+  ```
+# un seuil de validation plus grand que la perte totale fait descendre
+        # jusqu'à un neurone : mesuré, 34 neurones (VAL 0,8353) jusqu'à 1
+        # (0,8220) alors que le meilleur point était le réseau né. On garde donc
+        # le meilleur passage, et on y revient à la fin.
+        meilleur_passage = {"f": f_va, "poids": list(P.poids),
+                            "X": [x.copy() for x in P.X],
+                            "couches": list(P.couches), "n": P.compte_neurones}
+        while len(idx) > 1:
+            sc = (P.redondance(W, idx) if critere == "redondance"
+                  else P.contribution(W, idx))
+            n_ret = max(1, len(idx)//4)
+            idx, W, f_va = idx2, W2, f2
+            if f_va > meilleur_val:
+                meilleur_val = f_va
+                meilleur_passage = {"f": f_va, "poids": list(P.poids),
+                                    "X": [x.copy() for x in P.X],
+                                    "couches": list(P.couches), "n": P.compte_neurones}
+            Xte_a = P.recalcule(garde, Ete)
+            f_te = P.evalue(Xte_a, Yte, W, mt)
+            print(f"{'retrait de ' + str(n_ret) + ' (recalculé)':<30} {len(garde):>6} "
+        # ON REVIEN
+… [559 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\ns = open('tools/pont_generatif.py').read()\nold = \"\"\"        meilleur_passage = {\"f\": f_va, \"poids\": list(P.poids),\n                            \"X\": [x.copy() for x in P.X],\n                            … [2332 caractères tronqués]`
+
+  ```
+corrigé aux trois endroits
+syntaxe OK
+974:            P.a_neur = mp["a_neur"]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Corrigé aux trois endroits. Le résumé final n'a pas été imprimé — j'extrais les chiffres du journal, puis je relance.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"a_neur\\\": list\" tools/pont_generatif.py; echo \"=== meilleur point de la croissance mu=0.1 (n=149) ===\"; grep -E \"^n14[0-9] \" /tmp/croissance3.log; echo \"=== dernier point de naissance ===\"; grep -E \"^n\" /tmp/croi … [173 caractères tronqués]`
+
+  ```
+927:                            "a_neur": list(P.a_neur),
+952:                                    "a_neur": list(P.a_neur),
+=== meilleur point de la croissance mu=0.1 (n=149) ===
+n140            140       1    0.6460   0.6311    0.6290   0.8972  0.6590 | communs -1.388 (  0 %) · contraste 0.989
+n141            141       1    0.6461   0.6311    0.6292   0.8968  0.6445 | communs -1.386 (  0 %) · contraste 0.989
+n142            142       1    0.6462   0.6310    0.6294   0.8968  0.6451 | communs -1.383 (  0 %) · contraste 0.989
+n143            143       1    0.6462   0.6310    0.6298   0.8972  0.6477 | communs -1.378 (  0 %) · contraste 0.989
+n144            144       1    0.6462   0.6311    0.6297   0.8969  0.6473 | communs -1.379 (  0 %) · contraste 0.989
+n145            145       1    0.6463   0.6311    0.6297   0.8965  0.6445 | communs -1.381 (  0 %) · contraste 0.989
+n146            146       1    0.6464   0.6312    0.6298   0.8961  0.6416 | communs -1.388 (  0 %) · contraste 0.989
+n147            147       1    0.6464   0.6312    0.6299   0.8958  0.6392 | communs -1.387 (  0 %) · contraste 0.989
+n148            148       1    0.6465   0.6311    0.6302   0.8959  0.6394 | communs -
+… [867 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le meilleur point μ=0,1 : 149 neurones, TEST 0,6306, invariance 0,8954, pire 0,6433. Je corrige et relance pour obtenir l'oracle.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && setsid nohup python3 -u tools/pont_generatif.py /tmp/cache392_train.npz /tmp/cache392_test.npz --part-langues 0.5 --lecture quadratique --naissance libre --plafond 300 --patience 25 --ride 0.03 --sous-ech 20 --a-min 0.02 --a-max 0.8  … [4415 caractères tronqués]`

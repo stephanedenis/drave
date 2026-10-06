@@ -916,8 +916,15 @@ def main():
         # jusqu'à un neurone : mesuré, 34 neurones (VAL 0,8353) jusqu'à 1
         # (0,8220) alors que le meilleur point était le réseau né. On garde donc
         # le meilleur passage, et on y revient à la fin.
+        # LA CONSTANTE DE TEMPS FAIT PARTIE DE LA GÉNÉALOGIE. Elle manquait ICI
+        # comme elle manquait dans `pont_parallele` : la restauration remettait
+        # `poids` à 149 neurones en laissant `a_neur` à 6, et `recalcule` levait
+        # « généalogie désynchronisée ». C'est le garde-fou ajouté après la première
+        # occurrence qui a attrapé la seconde — sans lui, le calcul aurait produit
+        # des trajectoires avec la MAUVAISE dynamique, en silence.
         meilleur_passage = {"f": f_va, "poids": list(P.poids),
                             "X": [x.copy() for x in P.X],
+                            "a_neur": list(P.a_neur),
                             "couches": list(P.couches), "n": P.compte_neurones}
         while len(idx) > 1:
             sc = (P.redondance(W, idx) if critere == "redondance"
@@ -942,7 +949,9 @@ def main():
                 meilleur_val = f_va
                 meilleur_passage = {"f": f_va, "poids": list(P.poids),
                                     "X": [x.copy() for x in P.X],
-                                    "couches": list(P.couches), "n": P.compte_neurones}
+                                    "a_neur": list(P.a_neur),
+                                    "couches": list(P.couches),
+                                    "n": P.compte_neurones}
             Xte_a = P.recalcule(garde, Ete)
             f_te = P.evalue(Xte_a, Yte, W, mt)
             print(f"{'retrait de ' + str(n_ret) + ' (recalculé)':<30} {len(garde):>6} "
@@ -962,6 +971,7 @@ def main():
         mp = meilleur_passage
         if mp["n"] != P.compte_neurones:
             P.poids = mp["poids"]; P.X = mp["X"]
+            P.a_neur = mp["a_neur"]
             P.couches = mp["couches"]; P.compte_neurones = mp["n"]
             print(f"{'  → retour au MEILLEUR passage':<30} {mp['n']:>6} "
                   f"{len(mp['couches']):>7} {'—':>9} {mp['f']:>8.4f}")

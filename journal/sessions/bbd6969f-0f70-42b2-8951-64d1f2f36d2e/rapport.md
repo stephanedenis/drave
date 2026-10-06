@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 195.4 h |
+| Durée | 195.6 h |
 | Tours | 180 |
-| Messages | 9021 |
-| Appels d'outils | 8503 |
+| Messages | 9028 |
+| Appels d'outils | 8510 |
 | Fichiers touchés | 199 |
-| Commandes | 7212 |
+| Commandes | 7219 |
 | Sous-agents | 32 |
-| Commits | 649 |
+| Commits | 650 |
 | Compactages de contexte | 12 |
 
 ## Objectifs déclarés
@@ -9091,7 +9091,7 @@ L'attrition est descendue de 191 à 9 neurones **avec une validation qui baissai
 
 ### Tour 180 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
 
-*20 appels d'outils.* Actions notables :
+*27 appels d'outils.* Actions notables :
 
 - bash — Check chains status
 - bash — Measure tracing rates
@@ -9107,11 +9107,11 @@ L'attrition est descendue de 191 à 9 neurones **avec une validation qui baissai
 - bash — Check wiki analysis trigger
 - bash — Wait for wiki analysis trigger
 - bash — Check the wiki analysis
-- … et 6 autres
+- … et 13 autres
 
 **Synthèse produite :**
 
-⏵ **Le test que l'UDHR interdisait a parlé : sur 61 articles multi-domaines, le CONTENU ne devance la LANGUE que de +0,0026 à la couche 8 — et la langue domine à la couche 0.**
+⏵ **Le meilleur point μ=0,1 : 149 neurones, TEST 0,6306, invariance 0,8954, pire 0,6433. Je corrige et relance pour obtenir l'oracle.**
 
 ## 3. Travail accompli
 
@@ -9396,7 +9396,7 @@ L'attrition est descendue de 191 à 9 neurones **avec une validation qui baissai
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 7172 autres
+- … et 7179 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10193,4 +10193,5 @@ L'attrition est descendue de 191 à 9 neurones **avec une validation qui baissai
 - La contrainte d'invariance fonctionne DANS la croissance, à 16-20 pour 1  Deux croissances libres, mêmes réglages, à mu=0 et mu=0,1, comparées à taille égale : 
 - Un drave ORPHELIN volait 18 cœurs : 60 s par trace au lieu de 16  SYMPTÔME : le traçage Wikipedia tournait 4x trop lentement (60 s/trace au lieu de 16), soit 48
 - Domaine ou langue : enfin testable, et la réponse est 'à égalité'  L'hypothèse était INTESTABLE sur l'UDHR — un seul texte traduit, donc ses 'contenus différent
+- Le garde-fou du §30 a attrapé une SECONDE occurrence du même bug  La croissance mu=0,1 a parcouru TOUTE la naissance et TOUTE l'attrition, puis a planté au diag
 
