@@ -139383,3 +139383,188 @@ def appariement_par_taille(yA, yB):
 Je ne peux pas éditer `analyse_final.sh` (il tourne), donc je fais deux choses : j'ajoute un **avertissement explicite dans l'outil** pour que le chiffre ne soit jamais lu comme valide, et je le documente dans le rapport.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/pont_parallele.py'; s=open(p).read()\nvieux = \"\"\"    prof, prof_min = inv_appariee(YA, YB)\n    print(f\"# invariance du PROFESSEUR (segment par segment) : {prof:.4f} · \"\n          f\"pire segment {pro … [4588 caractères tronqués]`
+
+  ```
+avertissement ajouté à pont_parallele.py
+syntaxe OK
+0ccef36 PIÈGE : l'invariance sur Wikipedia ne veut rien dire (segments non appariés)
+Wikipedia : 222/480
+  ```
+
+### 🤖 Assistant
+
+⏵ Piège désamorcé. Point d'étape.
+
+## Ce que le tour a rattrapé
+
+`analyse_final.sh` fera tourner `pont_parallele.py` sur **Wikipedia**. Or cet outil **apparie les segments par index** — il compare le morceau 1 anglais au morceau 1 français.
+
+**Vérifié : ces morceaux n'ont rien à voir.**
+
+| | premiers morceaux |
+|---|---|
+| anglais | *Actrius*, *Animalia (book)*, *Alain Connes* |
+| français | *Algèbre générale*, *Armée républicaine irlandaise*, *Aka* |
+
+Deux wikis distincts, triés alphabétiquement. Le chiffre d'« invariance » qui va sortir mesurerait la **similarité entre un film et un article de mathématiques**.
+
+**Ce qui reste mesurable sur Wikipedia** : la **fidélité** et le **transfert** en→fr. Pas l'invariance — elle exige du contenu **apparié**, et Wikipedia n'en a pas. Je l'avais écrit dans le script, mais l'outil produit quand même un nombre, et **un nombre imprimé finit par être lu**.
+
+**Deux corrections** : l'outil imprime maintenant un avertissement explicite sans `--apparie`, et signale une valeur basse comme « cohérente avec un corpus NON apparié — NE PAS l'interpréter ». Et le rapport désigne ce chiffre comme **non interprétable** avant même qu'il soit produit.
+
+**Je n'ai pas corrigé la chaîne** : `analyse_final.sh` tourne, et l'éditer en cours d'exécution est exactement ce qui a tué le guetteur de Wikipedia plus tôt. Le chiffre sera produit — il est désormais étiqueté.
+
+## État
+
+| | |
+|---|---|
+| Wikipedia | **222/480**, 0 échec |
+| chaîne | 6 scripts vivants |
+| pièges désamorcés ce tour | 1 (un chiffre qui n'aurait rien voulu dire) |
+
+Rien à faire de votre côté. Commit `0ccef36`.
+
+
+## Tour 163
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de représentation universelle), boîte noire (on ne lit du professeur que la couche à émuler, jamais sa tête ni ses jetons générés), aucune rétropropagation (A et B aléatoires et gelés, seule la lecture s'ajuste en forme fermée), et chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, TAILLE du réseau, avec le diagnostic oracle sur les deux panneaux (test hors vivier et validation du même vivier)."
+Round: 36/256
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Je relève l'état de la chaîne.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date \"+%H:%M\"; echo \"Wikipedia : $(ls /home/stephane/Data13TB/stephane/corpus/wiki_traces 2>/dev/null | wc -l)/480\"; tail -1 /tmp/trace_wiki.log; echo \"échecs : $(grep -c ÉCHEC /tmp/trace_wiki.log)\"; python3 -c \"\nimport re\nt … [897 caractères tronqués]`
+
+  ```
+05:12
+Wikipedia : 223/480
+en 223 23s
+échecs : 0
+223 morceaux · moyenne 20 s · reste 86 min
+
+=== chaîne ===
+  analyse_final · c8_apres · trace_wiki · unites8 · unites_apres
+  ```
+
+### 🤖 Assistant
+
+⏵ Wikipedia à 223/480. Je fais un **contrôle qualité** sur les traces produites — le même réflexe qui avait rattrapé la troncature.
+
+Wikipedia à 223/480. Je fais un **contrôle qualité** sur les traces produites — le même réflexe qui avait rattrapé les 11 % de troncature.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys, glob, os, random; sys.path.insert(0,'/tmp')\nfrom lire_drvf import lire\nfs=sorted(glob.glob('/home/stephane/Data13TB/stephane/corpus/wiki_traces/*.drvf'))\nprint(f\"{len(fs)} traces Wikipedia\")\nrng=ra … [932 caractères tronqués]`
+
+  ```
+224 traces Wikipedia
+
+     trace  positions    couches   actifs min/max     Mo
+    en_160        537    [0, 10]          820/864    2.8
+    en_066        478    [0, 10]          815/864    2.5
+    en_190        491    [0, 10]          820/864    2.5
+    en_092        720    [0, 10]          820/864    3.7
+    en_204        569    [0, 10]          810/864    2.9
+    en_177        764    [0, 10]          820/864    3.9
+    en_216        545    [0, 10]          823/862    2.8
+    en_167        413    [0, 10]          820/864    2.1
+
+0/8 tronquées · 0/8 vides
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôle qualité passé : **0 troncature, 0 trace vide**.
+
+## Le contrôle
+
+| trace | positions | couches | canaux actifs | Mo |
+|---|---:|---|---:|---:|
+| en_160 | 537 | [0, 10] | 820-864 | 2,8 |
+| en_092 | 720 | [0, 10] | 820-864 | 3,7 |
+| en_216 | 545 | [0, 10] | 823-862 | 2,8 |
+| en_167 | 413 | [0, 10] | 820-864 | 2,1 |
+
+**0 tronquée sur 8, 0 vide.** Les morceaux font 413 à 764 positions — bien en dessous du seuil de troncature de 2040. C'est ce contrôle qui avait rattrapé les 11 % de langues tronquées sur l'UDHR ; il ne trouve rien ici, ce qui est le résultat attendu.
+
+**Une différence notable avec l'UDHR** : les positions Wikipedia ont **810 à 864 canaux actifs sur 896**, contre un minimum de **5** sur les traces UDHR. Le texte encyclopédique active donc la couche beaucoup plus densément que les énoncés administratifs courts — ce qui est cohérent avec l'idée d'un « professeur plus riche ».
+
+C'est exactement ce que la phase Wikipedia devait apporter : du texte long, divers, qui **sollicite** la couche au lieu de la laisser majoritairement éteinte.
+
+## État
+
+| | |
+|---|---|
+| Wikipedia | **224/480**, 0 échec |
+| rythme | 20 s par morceau |
+| restant | ~85 min |
+| chaîne | 6 scripts vivants |
+
+Rien à faire de votre côté.
+
+
+## Tour 164
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de représentation universelle), boîte noire (on ne lit du professeur que la couche à émuler, jamais sa tête ni ses jetons générés), aucune rétropropagation (A et B aléatoires et gelés, seule la lecture s'ajuste en forme fermée), et chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, TAILLE du réseau, avec le diagnostic oracle sur les deux panneaux (test hors vivier et validation du même vivier)."
+Round: 37/256
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Wikipedia à ~250/480. J'utilise l'attente pour **quantifier la « richesse »** du professeur — c'est le mot de l'objectif, et je ne l'ai pas encore mesuré.
+
+Wikipedia à ~250/480. J'utilise l'attente pour **quantifier la « richesse » du professeur** — c'est le mot de l'objectif, et je ne l'ai pas encore mesuré.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys, glob, os, random, statistics; sys.path.insert(0,'/tmp')\nfrom lire_drvf import lire\ndef densite(d, n=12, couche=10):\n    fs=sorted(glob.glob(d+'/*.drvf'))\n    rng=random.Random(7); ech=rng.sample(fs,  … [1125 caractères tronqués]`
+
+  ```
+corpus                   couche 10   couche 0  positions
+UDHR (392 langues)             862        843       1967
+Wikipedia (en/fr)              869        842        581
+Romeo (24 scènes)              870        842       2061
+
+(canaux actifs par position, moyenne ; 896 au total)
+  ```
+
+### 🤖 Assistant
+
+⏵ **Mon observation précédente était trompeuse.** La densité **moyenne** est quasi identique partout (862-870 canaux sur 896) — ce que j'avais vu, c'est le **minimum**. Je mesure la distribution complète.
+
+**Mon observation précédente était trompeuse.** La densité **moyenne** est quasi identique sur les trois corpus (862-870 canaux sur 896). Ce que j'avais vu, c'est le **minimum**. Je mesure la distribution complète.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys, glob, random, statistics; sys.path.insert(0,'/tmp')\nfrom lire_drvf import lire\ndef dist(d, couche=10, n=10):\n    fs=sorted(glob.glob(d+'/*.drvf')); rng=random.Random(7)\n    ech=rng.sample(fs, min(n,l … [912 caractères tronqués]`
+
+  ```
+corpus                   min   p10  médiane   p90   max  positions
+UDHR (392 langues)        60   850      862   873   889      20803
+Wikipedia (en/fr)         63   858      871   880   890       5732
+Romeo (24 scènes)         79   860      872   880   891      19135
+
+canaux actifs par position (couche 10, sur 896)
+  ```
+
+### 🤖 Assistant
+
+⏵ **Je dois corriger ce que j'ai annoncé au tour précédent.**
+
+| corpus | min | p10 | médiane | p90 | max |
+|---|---:|---:|---:|---:|---:|
+| UDHR (392 langues) | 60 | 850 | 862 | 873 | 889 |
+| Wikipedia | 63 | 858 | **871** | 880 | 890 |
+| Romeo | 79 | 860 | **872** | 880 | 891 |
+
+**J'avais annoncé que Wikipedia activait la couche « beaucoup plus densément » (810-864 contre un minimum de 5).** C'est **faux** : la médiane est de 862 à l'UDHR contre 871 à Wikipedia — **1 % d'écart** — et le minimum réel est de 60, pas 5. J'avais comparé un minimum échantillonné à une moyenne.
+
+**La vraie caractérisation, et elle est plus intéressante** : la couche 10 du professeur est **dense en support** (862 canaux non nuls sur 896, soit 96 %) mais **creuse en énergie** (50 % de l'énergie sur 40 canaux, soit 4 %). Les deux mesures sont vraies et décrivent des choses différentes — j'avais laissé entendre qu'elles se contredisaient.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 22. CORRECTION : la « richesse » n'est pas dans le nombre de canaux actifs\n\nAu tour précédent j'ai annoncé, sur un échantillon de h … [3000 caractères tronqués]`

@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 182.4 h |
-| Tours | 162 |
-| Messages | 8540 |
-| Appels d'outils | 8080 |
+| Durée | 182.5 h |
+| Tours | 164 |
+| Messages | 8549 |
+| Appels d'outils | 8085 |
 | Fichiers touchés | 182 |
-| Commandes | 6879 |
+| Commandes | 6884 |
 | Sous-agents | 32 |
-| Commits | 616 |
+| Commits | 617 |
 | Compactages de contexte | 11 |
 
 ## Objectifs déclarés
@@ -377,6 +377,10 @@
 **Tour 161** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 **Tour 162** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
+
+**Tour 163** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
+
+**Tour 164** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -8167,11 +8171,95 @@ Rien à faire de votre côté. Commit `377339d`.
 
 **Synthèse produite :**
 
-⏵ **Confirmé** : les morceaux anglais commencent par *Actrius*, *Animalia*, *Alain Connes* ; les français par *Algèbre générale*, *Armée républicaine irlandaise*, *Aka*. L'appariement par index comparerait des **articles sans rapport**.
+⏵ Piège désamorcé. Point d'étape.
 
-**Confirmé** : les morceaux anglais commencent par *Actrius*, *Animalia*, *Alain Connes* — les français par *Algèbre générale*, *Armée républicaine irlandaise*, *Aka*. L'appariement par index comparerait des **articles sans rapport**.
+\## Ce que le tour a rattrapé
 
-Je ne peux pas éditer `analyse_final.sh` (il tourne), donc je fais deux choses : j'ajoute un **avertissement explicite dans l'outil** pour que le chiffre ne soit jamais lu comme valide, et je le documente dans le rapport.
+`analyse_final.sh` fera tourner `pont_parallele.py` sur **Wikipedia**. Or cet outil **apparie les segments par index** — il compare le morceau 1 anglais au morceau 1 français.
+
+**Vérifié : ces morceaux n'ont rien à voir.**
+
+| | premiers morceaux |
+|---|---|
+| anglais | *Actrius*, *Animalia (book)*, *Alain Connes* |
+| français | *Algèbre générale*, *Armée républicaine irlandaise*, *Aka* |
+
+Deux wikis distincts, triés alphabétiquement. Le chiffre d'« invariance » qui va sortir mesurerait la **similarité entre un film et un article de mathématiques**.
+
+**Ce qui reste mesurable sur Wikipedia** : la **fidélité** et le **transfert** en→fr. Pas l'invariance — elle exige du contenu **apparié**, et Wikipedia n'en a pas. Je l'avais écrit dans le script, mais l'outil produit quand même un nombre, et **un nombre imprimé finit par être lu**.
+
+**Deux corrections** : l'outil imprime maintenant un avertissement explicite sans `--apparie`, et signale une valeur basse comme « cohérente avec un corpus NON apparié — NE PAS l'interpréter ». Et le rapport désigne ce chiffre comme **non interprétable** avant même qu'il soit produit.
+
+**Je n'ai pas corrigé la chaîne** : `analyse_final.sh` tourne, et l'éditer en cours d'exécution est exactement ce qui a tué le guetteur de Wikipedia plus tôt. Le chiffre sera produit — il est désormais étiqueté.
+
+\## État
+
+| | |
+|---|---|
+| Wikipedia | **222/480**, 0 échec |
+| chaîne | 6 scripts vivants |
+| pièges désamorcés ce tour | 1 (un chiffre qui n'aurait rien voulu dire) |
+
+Rien à faire de votre côté. Commit `0ccef36`.
+
+### Tour 163 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Monitor Wikipedia progress
+- bash — Quality check on Wikipedia traces
+
+**Synthèse produite :**
+
+⏵ Contrôle qualité passé : **0 troncature, 0 trace vide**.
+
+\## Le contrôle
+
+| trace | positions | couches | canaux actifs | Mo |
+|---|---:|---|---:|---:|
+| en_160 | 537 | [0, 10] | 820-864 | 2,8 |
+| en_092 | 720 | [0, 10] | 820-864 | 3,7 |
+| en_216 | 545 | [0, 10] | 823-862 | 2,8 |
+| en_167 | 413 | [0, 10] | 820-864 | 2,1 |
+
+**0 tronquée sur 8, 0 vide.** Les morceaux font 413 à 764 positions — bien en dessous du seuil de troncature de 2040. C'est ce contrôle qui avait rattrapé les 11 % de langues tronquées sur l'UDHR ; il ne trouve rien ici, ce qui est le résultat attendu.
+
+**Une différence notable avec l'UDHR** : les positions Wikipedia ont **810 à 864 canaux actifs sur 896**, contre un minimum de **5** sur les traces UDHR. Le texte encyclopédique active donc la couche beaucoup plus densément que les énoncés administratifs courts — ce qui est cohérent avec l'idée d'un « professeur plus riche ».
+
+C'est exactement ce que la phase Wikipedia devait apporter : du texte long, divers, qui **sollicite** la couche au lieu de la laisser majoritairement éteinte.
+
+\## État
+
+| | |
+|---|---|
+| Wikipedia | **224/480**, 0 échec |
+| rythme | 20 s par morceau |
+| restant | ~85 min |
+| chaîne | 6 scripts vivants |
+
+Rien à faire de votre côté.
+
+### Tour 164 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Quantify teacher richness across corpora
+- bash — Measure the full distribution of activation density
+- bash — Commit the density correction
+
+**Synthèse produite :**
+
+⏵ **Je dois corriger ce que j'ai annoncé au tour précédent.**
+
+| corpus | min | p10 | médiane | p90 | max |
+|---|---:|---:|---:|---:|---:|
+| UDHR (392 langues) | 60 | 850 | 862 | 873 | 889 |
+| Wikipedia | 63 | 858 | **871** | 880 | 890 |
+| Romeo | 79 | 860 | **872** | 880 | 891 |
+
+**J'avais annoncé que Wikipedia activait la couche « beaucoup plus densément » (810-864 contre un minimum de 5).** C'est **faux** : la médiane est de 862 à l'UDHR contre 871 à Wikipedia — **1 % d'écart** — et le minimum réel est de 60, pas 5. J'avais comparé un minimum échantillonné à une moyenne.
+
+**La vraie caractérisation, et elle est plus intéressante** : la couche 10 du professeur est **dense en support** (862 canaux non nuls sur 896, soit 96 %) mais **creuse en énergie** (50 % de l'énergie sur 40 canaux, soit 4 %). Les deux mesures sont vraies et décrivent des choses différentes — j'avais laissé entendre qu'elles se contredisaient.
 
 ## 3. Travail accompli
 
@@ -8439,7 +8527,7 @@ Je ne peux pas éditer `analyse_final.sh` (il tourne), donc je fais deux choses 
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6839 autres
+- … et 6844 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9203,4 +9291,5 @@ Je ne peux pas éditer `analyse_final.sh` (il tourne), donc je fais deux choses 
 - Audit (fin) : les deux mêmes incohérences étaient dans recapitulatif.md  1. Tout le document émule la COUCHE 10, désormais connue comme sous-optimale : le    pl
 - Le gain de la couche 8 est ROBUSTE : +0,0215 sur trois graines (variation 0,0005)  Le §19 reposait sur UNE SEULE mesure. Vérification sur trois graines :    gra
 - PIÈGE : l'invariance sur Wikipedia ne veut rien dire (segments non appariés)  analyse_final.sh fait tourner pont_parallele.py sur Wikipedia. Or ce tool apparie 
+- CORRECTION : la 'richesse' n'est PAS dans le nombre de canaux actifs  J'avais annoncé, sur huit traces, que Wikipedia activait la couche 'beaucoup plus densémen
 
