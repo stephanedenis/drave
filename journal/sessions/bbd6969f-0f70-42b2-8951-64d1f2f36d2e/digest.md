@@ -146442,3 +146442,702 @@ de_Aarhus 17s
 ⏵ **Traçage lancé (16 s/trace, ~13 h pour les 2 892). Je consigne la construction du corpus et la vérification.**
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 45. Premier corpus MULTI-DOMAINE et ALIGNÉ : 482 articles Wikipedia en 6 langues\n\n### 45.1 Ce que la machine contenait et qui n' … [6148 caractères tronqués]`
+
+  ```
+48aa0d9 Premier corpus MULTI-DOMAINE et ALIGNÉ : 482 articles Wikipedia en 6 langues
+traces : 5
+n90              90       1    0.6283   0.6648    0.6309   0.8857  0.6825 | communs -0.867 (  3 %) · contraste 0.984
+  ```
+
+- **bash** `{"command": "sleep 480; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== croissance ===\"; tail -4 /tmp/croissance.log; echo \"=== wiki traces ===\"; ls /home/stephane/Data13TB/stephane/corpus/wiki_apparie/traces | wc -l; awk '{if($2 ~ /s$/) {gsub(\"s\",\"\",$2); s+=$2; n++}} END {pr … [188 caractères tronqués]`
+
+  ```
+=== croissance ===
+# née : 105 neurones en 1 couches [105]
+
+########## CYCLE 1 — ATTRITION (redondance) ##########
+après                           neur.  couch.  fid appr  fid VAL  fid TEST
+=== wiki traces ===
+36
+  35 traces · 16.0 s en moyenne · reste ~12.7 h
+14:11
+  ```
+
+### 🤖 Assistant
+
+⏵ **La croissance s'est arrêtée à 105 neurones (critère de patience) et l'attrition tourne.**
+
+- **bash** `{"command": "sleep 480; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== croissance / attrition ===\"; tail -12 /tmp/croissance.log; echo; echo \"=== wiki ===\"; ls /home/stephane/Data13TB/stephane/corpus/wiki_apparie/traces | wc -l; date '+%H:%M'", "description": "Check attrition pr … [29 caractères tronqués]`
+
+  ```
+=== croissance / attrition ===
+n103            103       1    0.6298   0.6643    0.6327   0.8801  0.6313 | communs -0.875 (  4 %) · contraste 0.986
+n104            104       1    0.6298   0.6642    0.6324   0.8805  0.6383 | communs -0.877 (  4 %) · contraste 0.986
+n105            105       1    0.6299   0.6643    0.6324   0.8801  0.6382 | communs -0.880 (  4 %) · contraste 0.986
+  → ARRÊT (couche neuve sans gain)    105       1
+# née : 105 neurones en 1 couches [105]
+
+########## CYCLE 1 — ATTRITION (redondance) ##########
+après                           neur.  couch.  fid appr  fid VAL  fid TEST
+retrait de 26 (recalculé)          79       1    0.6337   0.6647    0.6329
+retrait de 19 (recalculé)          60       1    0.6318   0.6634    0.6318
+retrait de 15 (recalculé)          45       1    0.6297   0.6627    0.6308
+retrait de 11 (recalculé)          34       1    0.6276   0.6617    0.6293
+
+=== wiki ===
+65
+14:19
+  ```
+
+- **bash** `{"command": "sleep 540; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -25 /tmp/croissance.log; echo \"=== wiki ===\"; ls /home/stephane/Data13TB/stephane/corpus/wiki_apparie/traces | wc -l; date '+%H:%M'", "description": "Wait for growth run completion", "timeoutMs": 580000}`
+
+  ```
+retrait de 11 (recalculé)          34       1    0.6276   0.6617    0.6293
+retrait de 8 (recalculé)           26       1    0.6250   0.6600    0.6259
+retrait de 6 (recalculé)           20       1    0.6232   0.6588    0.6226
+retrait de 5 (recalculé)           15       1    0.6210   0.6568    0.6211
+retrait de 3 (recalculé)           12       1    0.6197   0.6570    0.6206
+retrait de 3 (recalculé)            9       1    0.6171   0.6543    0.6179
+retrait de 2 (recalculé)            7       1    0.6147   0.6549    0.6147
+retrait de 1 (recalculé)            6       1    0.6137   0.6535    0.6167
+retrait de 1 (recalculé)            5       1    0.6132   0.6527    0.6165
+retrait de 1 (recalculé)            4       1    0.6122   0.6529    0.6149
+retrait de 1 (recalculé)            3       1    0.6082   0.6492    0.6030
+retrait de 1 (recalculé)            2       1    0.6072   0.6495    0.6017
+retrait de 1 (recalculé)            1       1    0.6044   0.6488    0.6037
+  → retour au MEILLEUR passage    105       1         —   0.6647
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", line 943, in <module>
+    sys.exit(main())
+
+… [448 caractères tronqués]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-239 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -u tools/pont_generatif.py /tmp/cache392_train.npz /tmp/cache392_test.npz --part-langues 0.5 --lecture quadratique --naissance libre --plafond 300 --patience 20 --ride 0.03 --sous-ech 20 --a-min 0.02 --a-max 0.8 --cycles 1 --attrition 1 --val 4 --oracle > /tmp/croissance.log 2>&1; echo "code $?"; tail -40 /tmp/croissance.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 🤖 Assistant
+
+⏵ **Le calcul a abouti (105 nés → attrition → meilleur à 79) mais le résumé final a planté : `--oracle` en dernière position casse `opt`. Bug réel, je le corrige.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== le meilleur passage (79 neurones) dans la table de naissance ===\"; grep -E \"^n79 \" /tmp/croissance.log; echo \"=== retour au meilleur ===\"; grep -A2 \"retour au MEILLEUR\" /tmp/croissance.log; echo \"=== tous les n7x = … [109 caractères tronqués]`
+
+  ```
+=== le meilleur passage (79 neurones) dans la table de naissance ===
+=== retour au meilleur ===
+  → retour au MEILLEUR passage    105       1         —   0.6647
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", line 943, in <module>
+=== tous les n7x ===
+n72              72       1    0.6267   0.6642    0.6311   0.8928  0.6593 | communs -0.824 (  4 %) · contraste 0.979
+  ```
+
+### 🤖 Assistant
+
+⏵ **Je corrige `opt` (tout drapeau sans valeur le casse) et je vérifie la sémantique de `--val`.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"n_val\" tools/pont_generatif.py | head -5; sed -n '/n_val = int/,/^$/p' tools/pont_generatif.py | head -12; echo \"=== opt actuel ===\"; sed -n '510,516p' tools/pont_generatif.py", "description": "Check val semantics and op … [12 caractères tronqués]`
+
+  ```
+517:    n_val = int(opt("--val", 4))
+532:    ival = list(range(n_val))
+533:    itr = list(range(n_val, len(cltr)))
+    n_val = int(opt("--val", 4))
+    attrition = int(opt("--attrition", 1))
+    seuil = float(opt("--seuil", 0.02))
+    graine = int(opt("--graine", 5))
+    part = float(opt("--part", 1.0))
+    critere = opt("--critere", "redondance")
+    cycles = int(opt("--cycles", 3))
+    par_cycle = int(opt("--couches-par-cycle", 3))
+    plafond = int(opt("--plafond", 256))
+
+=== opt actuel ===
+    tr_p, te_p = sys.argv[1], sys.argv[2]
+
+    def opt(nom, defaut):
+        return sys.argv[sys.argv.index(nom)+1] if nom in sys.argv else defaut
+
+    a = float(opt("--a", 0.2))
+    ride = float(opt("--ride", 0.3))
+  ```
+
+### 🤖 Assistant
+
+⏵ **Deux bugs réels : `opt` casse sur un drapeau sans valeur, et `--val 4` ne prend que les 4 PREMIÈRES langues du cache. Je corrige les deux.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\ns = open('tools/pont_generatif.py').read()\nold = \"\"\"    def opt(nom, defaut):\n        return sys.argv[sys.argv.index(nom)+1] if nom in sys.argv else defaut\"\"\"\nnew = \"\"\"    def opt(nom, defaut):\n      … [2489 caractères tronqués]`
+
+  ```
+ok
+syntaxe OK
+--oracle seul -> ''
+--oracle suivi -> ''
+--oracle absent -> ''
+--ride -> '0.03'
+  ```
+
+### 🤖 Assistant
+
+⏵ **Les deux bugs sont corrigés et vérifiés. Je relance l'entraînement avec une validation répartie sur 50 langues.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -u tools/pont_generatif.py /tmp/cache392_train.npz /tmp/cache392_test.npz --part-langues 0.5 --lecture quadratique --naissance libre --plafond 300 --patience 20 --ride 0.03 --sous-ech 20 --a-min 0.02 --a-max 0.8 --cycles 1 -- … [196 caractères tronqués]`
+
+  ```
+started background job bash-240
+  ```
+
+- **bash** `{"command": "sleep 300; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -12 /tmp/croissance2.log; echo \"...\"; tail -3 /tmp/croissance2.log; echo \"=== wiki ===\"; ls /home/stephane/Data13TB/stephane/corpus/wiki_apparie/traces | wc -l; date '+%H:%M'", "description": "Monitor the growth r … [28 caractères tronqués]`
+
+  ```
+# VALIDATION RÉPARTIE : 51 langues (1 sur 7) · 300 langues d'ajustement
+# CANAUX PARTAGÉS : 896/896 canaux présents dans au moins 50% des langues d'apprentissage (100% des canaux)
+# 351 langues d'entraînement = 300 apprentissage + 51 validation
+# 41 langues de TEST · a=0.2 · ride=0.03 · graine=5 · critère=redondance
+# 1 cycles de 3 couches, puis attrition
+# pas — apprentissage 402091 · validation 70381 · test 76812
+# SOUS-ÉCHANTILLONNAGE DU FIT : 1 ligne sur 20 (l'évaluation reste entière) — mesuré 5,8× plus rapide pour -0,0045 de fidélité
+# MULTI-ÉCHELLE : constantes de temps de 0.02 à 0.8
+# LECTURE QUADRATIQUE : le readout voit [états, états²]
+# constante témoin sur le TEST : 0.5762
+
+########## CYCLE 1 — CROISSANCE ##########
+...
+n16              16       1    0.6244   0.6161    0.6213   0.9318  0.6474 | communs -1.382 (  0 %) · contraste 0.919
+n24              24       1    0.6283   0.6201    0.6261   0.9206  0.6551 | communs -1.410 (  0 %) · contraste 0.951
+n32              32       1    0.6332   0.6221    0.6276   0.9126  0.6513 | communs -1.369 (  0 %) · contraste 0.963
+=== wiki ===
+120
+14:34
+  ```
+
+### 🤖 Assistant
+
+⏵ **Point de fin de round. Voici ce qui a été établi.**
+
+## 1. Le résultat décisif : couche 8 contre couche 10 à 392 langues
+
+Même code, même périmètre, **les deux profils recalculés dans la même exécution** — 351 langues d'apprentissage (300 ajustement + 51 validation), 41 de test hors vivier, 896 canaux, 40 neurones.
+
+| | couche 10 | **couche 8** |
+|---|---:|---:|
+| fidélité TEST | 0,5960 | **0,6424** |
+| fidélité VALIDATION | 0,6206 | **0,6768** |
+| oracle TEST | 0,6935 | **0,7427** |
+| **écart à l'oracle TEST** | **+0,0975** | **+0,1003** |
+| invariance du professeur | 0,6529 | **0,6836** |
+| pire paire du professeur | 0,0478 | 0,0104 |
+
+**Langue par langue : apport 41 améliorées / 0 dégradée · oracle 41 / 0.** Aucune langue ne perd. Les plus mal servies gagnent le plus : `amh` +0,0345, `csw` +0,0342, `dzo` +0,0334, `heb` ×7.
+
+**Mais l'écart de transfert est INCHANGÉ** (+0,0975 → +0,1003). Changer de cible améliore tout le monde uniformément sans réduire d'un iota l'écart entre ce que les caractéristiques permettent et ce que la lecture partagée en tire. **Le goulot est structurel.**
+
+**Réserve honnête** : les deux tiers du gain brut sont le témoin constant (+0,0371 à lui seul). L'apport *propre* ne gagne que +0,0093.
+
+## 2. « Où va le temps » — troisième réponse, et la troisième différente
+
+En lisant le code pour lancer l'entraînement : **`nait` boucle `pour chaque langue : pour chaque pas`**, soit 472 472 itérations Python — **28 s par neurone**, et le mode libre fait une naissance par neurone.
+
+Les langues sont indépendantes ; seule la récurrence en `t` est séquentielle. J'ai regroupé les langues par longueurs voisines et bouclé sur `t`.
+
+**Identité bit à bit vérifiée, pas supposée** — 9 cas (k ∈ {1,7,40} × bloc ∈ {4,16,64}) : **écart maximal exactement 0,000e+00**.
+
+**28 s → 1,76 s. ×16.** 300 neurones passent de 2 h 20 de naissances à 9 minutes.
+
+## 3. Premier corpus multi-domaine et aligné
+
+Dix bases **Wikipedia décompressées** (30 Go : ar, de, en, es, fr, it, ja, pt, ru, zh) étaient là depuis le début et n'avaient pas été utilisées. Appariement par titre → **482 articles × 6 langues latines = 2 892 fichiers, 5,7 M de caractères**.
+
+Cela débloque ce que l'UDHR interdisait : **séparer ce qui vient de la langue de ce qui vient du domaine.** L'UDHR est mono-domaine, l'hypothèse « le vocabulaire dépend du domaine » n'y était *pas testable*. Ici, 482 articles de science, histoire, géographie, personnes, chacun traduit.
+
+Traçage lancé (2 892 × 16 s, ~13 h, analysable par lots).
+
+**Gain de traçage vérifié octet à octet** : `--couches 0:9` au lieu de 24 donne une trace de couche 8 **identique, même MD5**, et 1,6× plus rapide.
+
+## 4. Deux bugs réels trouvés et corrigés
+
+- **`opt` cassait sur tout drapeau sans valeur.** `--oracle` en dernière position → `IndexError` **après** que le calcul de 45 min ait abouti ; ailleurs, il renvoyait silencieusement l'option suivante — le drapeau marchait **par accident**.
+- **`--val 4` prenait les quatre PREMIÈRES langues du cache** — une tranche alphabétique arbitraire qui décidait de l'arrêt de la naissance et du meilleur passage de l'attrition. Remplacé par `--val-part 7` (51 langues réparties).
+
+Premier résultat de croissance, avant correction : **105 nés → attrition → 79 retenus, fidélité TEST 0,6329** contre 0,5985 à 40 neurones. Relance en cours avec la validation corrigée.
+
+---
+
+**En cours** : croissance (validation répartie) · traces Wikipedia 120/2 892.
+
+
+## Tour 177
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de représentation universelle), boîte noire (on ne lit du professeur que la couche à émuler, jamais sa tête ni ses jetons générés), aucune rétropropagation (A et B aléatoires et gelés, seule la lecture s'ajuste en forme fermée), et chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, TAILLE du réseau, avec le diagnostic oracle sur les deux panneaux (test hors vivier et validation du même vivier)."
+Round: 50/256
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ **Point d'état sur les deux chaînes.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== croissance (validation répartie) ===\"; tail -5 /tmp/croissance2.log; echo; echo \"=== wiki traces ===\"; ls /home/stephane/Data13TB/stephane/corpus/wiki_apparie/traces | wc -l; echo \"=== mémoire ===\"; free -g | head -2; … [52 caractères tronqués]`
+
+  ```
+=== croissance (validation répartie) ===
+n8                8       1    0.6186   0.6122    0.6151   0.9437  0.7399 | communs -1.384 (  0 %) · contraste 0.874
+n16              16       1    0.6244   0.6161    0.6213   0.9318  0.6474 | communs -1.382 (  0 %) · contraste 0.919
+n24              24       1    0.6283   0.6201    0.6261   0.9206  0.6551 | communs -1.410 (  0 %) · contraste 0.951
+n32              32       1    0.6332   0.6221    0.6276   0.9126  0.6513 | communs -1.369 (  0 %) · contraste 0.963
+n40              40       1    0.6355   0.6238    0.6294   0.9084  0.6559 | communs -1.357 (  0 %) · contraste 0.966
+
+=== wiki traces ===
+121
+=== mémoire ===
+               total        used        free      shared  buff/cache   available
+Mem:             125          27          20           8          88          98
+14:34
+  ```
+
+### 🤖 Assistant
+
+⏵ **L'objectif débloque enfin le test « domaine ou langue ». Je regarde l'outil existant pour l'adapter au corpus Wikipedia.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -35 tools/domaine_ou_langue.py 2>/dev/null; echo \"=== signature ===\"; grep -n \"def main\\|argv\\|usage\\|Usage\" tools/domaine_ou_langue.py | head -10", "description": "Inspect the domain-vs-language tool"}`
+
+  ```
+#!/usr/bin/env python3
+"""domaine_ou_langue.py — qu'est-ce qui rapproche deux représentations : le SUJET ou la LANGUE ?
+
+Hypothèse testée : « certains mots et groupes de mots sont spécifiques à leur domaine ;
+ils sont plus communs à leur domaine qu'à leur langue. »
+
+Le traçage par unité donne les deux axes à la fois :
+  - MÊME unité (même contenu), langues DIFFÉRENTES  -> similarité S_langue
+  - MÊME langue, unités DIFFÉRENTES (contenus ≠)    -> similarité S_domaine
+
+Si S_langue > S_domaine, la représentation se rapproche par CONTENU plus que par
+langue — l'hypothèse tient. Sinon, la langue domine.
+
+Usage : domaine_ou_langue.py <dossier> [--couches 0,8,10]
+"""
+import glob, os, sys
+import numpy as np
+sys.path.insert(0, "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools")
+from invariance_unites import lire
+
+
+def main():
+    d = sys.argv[1]
+    cs = [int(x) for x in (sys.argv[sys.argv.index("--couches")+1].split(",")
+                           if "--couches" in sys.argv else ["0","8","10"])]
+    par = {}
+    for f in sorted(glob.glob(os.path.join(d, "*.drvf"))):
+        b = os.path.basename(f)[:-5]
+        if "_" not in b: continue
+        L, k = b.rsplit("_", 1)
+        try: k = 
+… [402 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **L'outil fait exactement le bon test mais exige une unité numérique. J'accepte les étiquettes de texte.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '25,80p' tools/domaine_ou_langue.py", "description": "Read the rest of the tool"}`
+
+  ```
+if "--couches" in sys.argv else ["0","8","10"])]
+    par = {}
+    for f in sorted(glob.glob(os.path.join(d, "*.drvf"))):
+        b = os.path.basename(f)[:-5]
+        if "_" not in b: continue
+        L, k = b.rsplit("_", 1)
+        try: k = int(k)
+        except ValueError: continue
+        for c in cs:
+            hid, v = lire(f, c)
+            if v is not None:
+                par.setdefault(c, {}).setdefault(L, {})[k] = v
+    for c in cs:
+        langues = {L: ks for L, ks in par.get(c, {}).items() if len(ks) == 10}
+        if len(langues) < 3:
+            print(f"couche {c} : {len(langues)} langues complètes — insuffisant"); continue
+        noms = sorted(langues)
+        # S_langue : même unité, langues différentes
+        sl = []
+        for k in range(10):
+            V = np.array([langues[L][k] for L in noms])
+            N = np.linalg.norm(V, axis=1); ok = N > 0
+            if ok.sum() < 2: continue
+            M = V[ok]/N[ok][:, None]
+            S = M @ M.T; iu = np.triu_indices(len(M), 1)
+            sl += list(S[iu])
+        # S_domaine : même langue, unités différentes
+        sd = []
+        for L in noms:
+            V = np.array([langues[L][k] for k in range(10)])
+… [585 caractères tronqués]
+  ```
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"domaine_ou_langue.py — qu'est-ce qui rapproche deux représentations : le SUJET ou la LANGUE ?\n\nHypothèse testée : « certains mots et groupes de mots sont spécifiques à leur domaine ;\nils sont plus communs à leur domaine qu'à leur langue. »\n\nDeux axes,  … [4052 caractères tronqués]`
+
+  ```
+Error: cannot overwrite existing "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/domaine_ou_langue.py" without reading it first — read the file, then retry
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/domaine_ou_langue.py", "limit": 20}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/domaine_ou_langue.py</path>
+<type>file</type>
+<content>
+1: #!/usr/bin/env python3
+2: """domaine_ou_langue.py — qu'est-ce qui rapproche deux représentations : le SUJET ou la LANGUE ?
+3: 
+4: Hypothèse testée : « certains mots et groupes de mots sont spécifiques à leur domaine ;
+5: ils sont plus communs à leur domaine qu'à leur langue. »
+6: 
+7: Le traçage par unité donne les deux axes à la fois :
+8:   - MÊME unité (même contenu), langues DIFFÉRENTES  -> similarité S_langue
+9:   - MÊME langue, unités DIFFÉRENTES (contenus ≠)    -> similarité S_domaine
+10: 
+11: Si S_langue > S_domaine, la représentation se rapproche par CONTENU plus que par
+12: langue — l'hypothèse tient. Sinon, la langue domine.
+13: 
+14: Usage : domaine_ou_langue.py <dossier> [--couches 0,8,10]
+15: """
+16: import glob, os, sys
+17: import numpy as np
+18: sys.path.insert(0, "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools")
+19: from invariance_unites import lire
+20: 
+
+(Showing lines 1-20 of 69. Use offset=21 to continue.)
+</content>
+  ```
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"domaine_ou_langue.py — qu'est-ce qui rapproche deux représentations : le SUJET ou la LANGUE ?\n\nHypothèse testée : « certains mots et groupes de mots sont spécifiques à leur domaine ;\nils sont plus communs à leur domaine qu'à leur langue. »\n\nDeux axes,  … [3947 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/domaine_ou_langue.py</path>
+<type>file</type>
+<content>
+Updated file
+</content>
+  ```
+
+### 🤖 Assistant
+
+⏵ **Vérification de non-régression sur l'UDHR avant de m'en servir sur Wikipedia.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"import ast; ast.parse(open('tools/domaine_ou_langue.py').read()); print('syntaxe OK')\" && timeout 600 python3 -u tools/domaine_ou_langue.py /home/stephane/Data13TB/stephane/corpus/udhr/unites --couches 8 --min-unites 10 … [322 caractères tronqués]`
+
+  ```
+syntaxe OK
+couche  8 : S_langue 0.6505 · S_domaine 0.8406 · écart -0.1901  -> LANGUE domine
+          (40 langues · 10 contenus communs · 7800 paires inter-langues · 1800 paires intra-langue)
+=== rappel : l'ancienne version donnait S_langue 0,6132 vs S_domaine 0,8578 à la couche 8 ===
+=== jobs ===
+n40              40       1    0.6355   0.6238    0.6294   0.9084  0.6559 | communs -1.357 (  0 %) · contraste 0.966
+n48              48       1    0.6371   0.6241    0.6305   0.9039  0.6403 | communs -1.345 (  0 %) · contraste 0.969
+131
+  ```
+
+### 🤖 Assistant
+
+⏵ **Problème d'ordonnancement : le traçage fait toutes les langues l'une après l'autre, donc aucun article n'est complet avant la fin. Je réordonne par article — les 131 traces déjà faites sont réutilisées.**
+
+- **bash** `{"command": "python3 - <<'PY'\nimport os, signal\nmoi=os.getpid(); anc=set(); q=moi\nfor _ in range(10):\n    try:\n        st=open(f'/proc/{q}/stat').read().split(') ',1)[1].split(); q=int(st[1]); anc.add(q)\n    except Exception: break\ntues=[]\nfor d in os.listdir('/proc'):\n    if not d.isdigit( … [2904 caractères tronqués]`
+
+  ```
+tués : [2582967, 2582971]
+syntaxe OK
+traces : 134
+0
+0 article complet
+  ```
+
+- **bash** `{"command": "sleep 400; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"articles complets : $(grep -c '^ARTICLE' /tmp/trace_wiki_apparie.log)\"; echo \"traces : $(ls /home/stephane/Data13TB/stephane/corpus/wiki_apparie/traces | wc -l)/2892\"; echo \"=== croissance ===\"; tail -3 /tmp/cr … [104 caractères tronqués]`
+
+  ```
+articles complets : 5
+traces : 159/2892
+=== croissance ===
+n64              64       1    0.6399   0.6258    0.6287   0.8971  0.6625 | communs -1.342 (  0 %) · contraste 0.976
+n72              72       1    0.6415   0.6270    0.6292   0.8923  0.6535 | communs -1.331 (  0 %) · contraste 0.979
+n80              80       1    0.6428   0.6281    0.6287   0.8925  0.6636 | communs -1.329 (  0 %) · contraste 0.983
+14:45
+  ```
+
+### 🤖 Assistant
+
+⏵ **Test à blanc de l'outil sur les 5 premiers articles, pour trouver les bugs maintenant et pas dans 12 h.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 python3 -u tools/domaine_ou_langue.py /home/stephane/Data13TB/stephane/corpus/wiki_apparie/traces --couches 0,8 --min-unites 3 2>&1 | tail -10", "description": "Smoke test domain-vs-language on Wikipedia", "timeoutMs": 92 … [5 caractères tronqués]`
+
+  ```
+couche  0 : S_langue 0.0378 · S_domaine 0.0554 · écart -0.0176  -> LANGUE domine
+          (6 langues · 5 contenus communs · 75 paires inter-langues · 60 paires intra-langue)
+couche  8 : S_langue 0.2346 · S_domaine 0.2340 · écart +0.0006  -> CONTENU domine
+          (6 langues · 5 contenus communs · 75 paires inter-langues · 60 paires intra-langue)
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le test fonctionne de bout en bout. Je cherche maintenant le corpus Gutenberg que l'objectif mentionne.**
+
+- **bash** `{"command": "find /home/stephane/Data13TB/stephane -maxdepth 6 -name \"*.db\" -size +1M 2>/dev/null | grep -iv \"wikipedia\\|vscode\\|edge\\|kindle\" | head -10; echo \"=== bases gutenberg possibles ===\"; find /home/stephane -maxdepth 7 -iname \"*gutenberg*\" -size +1M 2>/dev/null | head -10; echo  … [125 caractères tronqués]`
+
+  ```
+/home/stephane/Data13TB/stephane/.config/google-chrome/GPUPersistentCache/GPUCache/DADPHBHGD2NTQ6Y7R6DH35A3P4VF2DOH/cache.db
+/home/stephane/Data13TB/stephane/GitHub/Panini/research/data/mass_ingestion/backlog_gutenberg_de.db
+/home/stephane/Data13TB/stephane/GitHub/Panini/research/data/mass_ingestion/backlog_gutenberg_en.db
+/home/stephane/Data13TB/stephane/GitHub/Panini/research/data/mass_ingestion/backlog_gutenberg_es.db
+/home/stephane/Data13TB/stephane/GitHub/Panini/research/data/mass_ingestion/backlog_gutenberg_fr.db
+/home/stephane/Data13TB/stephane/GitHub/Panini/research/data/pubmed_ingestion/pubmed_articles.db
+/home/stephane/Data13TB/stephane/GitHub/Panini/research/data/scientific_ingestion/papers.db
+/home/stephane/Data13TB/stephane/GitHub/Panini-Research/data/scientific_ingestion/papers.db
+/home/stephane/Data13TB/stephane/GitHub/Panini-Research/data/pubmed_ingestion/pubmed_articles.db
+/home/stephane/Data13TB/stephane/GitHub/Panini-Research/data/mass_ingestion/backlog_gutenberg_en.db
+=== bases gutenberg possibles ===
+/home/stephane/Data13TB/stephane/GitHub/Panini-Research/data/mass_ingestion/backlog_gutenberg_en.db
+/home/stephane/Data13TB/stephane/GitHub/Panini-Research/data/ma
+… [605 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Bases Gutenberg trouvées (en, fr, de, es). Je cherche des œuvres présentes dans plusieurs langues.**
+
+- **bash** `{"command": "ls -la /home/stephane/Data13TB/stephane/GitHub/Panini-Research/data/mass_ingestion/*.db | awk '{print $5, $9}'; timeout 180 python3 - <<'PY'\nimport sqlite3, os\nd='/home/stephane/Data13TB/stephane/GitHub/Panini-Research/data/mass_ingestion'\nfor L in ('en','fr','de','es'):\n    p=os.pa … [621 caractères tronqués]`
+
+  ```
+73728 /home/stephane/Data13TB/stephane/GitHub/Panini-Research/data/mass_ingestion/backlog_arxiv_all.db
+9842688 /home/stephane/Data13TB/stephane/GitHub/Panini-Research/data/mass_ingestion/backlog_gutenberg_de.db
+22081536 /home/stephane/Data13TB/stephane/GitHub/Panini-Research/data/mass_ingestion/backlog_gutenberg_en.db
+11751424 /home/stephane/Data13TB/stephane/GitHub/Panini-Research/data/mass_ingestion/backlog_gutenberg_es.db
+7024640 /home/stephane/Data13TB/stephane/GitHub/Panini-Research/data/mass_ingestion/backlog_gutenberg_fr.db
+17584128 /home/stephane/Data13TB/stephane/GitHub/Panini-Research/data/mass_ingestion/backlog_wikipedia_de.db
+21430272 /home/stephane/Data13TB/stephane/GitHub/Panini-Research/data/mass_ingestion/backlog_wikipedia_en.db
+14307328 /home/stephane/Data13TB/stephane/GitHub/Panini-Research/data/mass_ingestion/backlog_wikipedia_fr.db
+4096 /home/stephane/Data13TB/stephane/GitHub/Panini-Research/data/mass_ingestion/corpus_expansion.db
+458752 /home/stephane/Data13TB/stephane/GitHub/Panini-Research/data/mass_ingestion/gutenberg_meta.db
+483328 /home/stephane/Data13TB/stephane/GitHub/Panini-Research/data/mass_ingestion/ingestion_progress.db
+--- en ---
+   CREATE TABLE ba
+… [1294 caractères tronqués]
+  ```
+
+- **bash** `{"command": "timeout 180 python3 - <<'PY'\nimport sqlite3, os\nd='/home/stephane/Data13TB/stephane/GitHub/Panini-Research/data/mass_ingestion'\ntous={}\nfor L in ('en','fr','de','es'):\n    c=sqlite3.connect(f'file:{os.path.join(d,f\"backlog_gutenberg_{L}.db\")}?mode=ro', uri=True)\n    tous[L]=[(r[ … [360 caractères tronqués]`
+
+  ```
+=== en (13) ===
+  5,359,444 car · The Complete Works of William Shakespeare
+  2,627,361 car · The Count of Monte Cristo
+  1,833,067 car · Middlemarch
+  1,314,436 car · The City of God, Volume I
+  1,219,043 car · Moby Dick; Or, The Whale
+  1,176,911 car · Crime and Punishment
+    728,846 car · Pride and Prejudice
+    593,731 car · The Adventures of Sherlock Holmes
+    419,434 car · Frankenstein; or, the modern prometheus
+    388,586 car · The Blue Castle: a novel
+    383,988 car · A Room with a View
+    144,696 car · Alice's Adventures in Wonderland
+    142,570 car · Romeo and Juliet
+=== fr (11) ===
+  1,355,726 car · Les trois mousquetaires
+  1,236,159 car · L'île mystérieuse
+    727,600 car · Le comte de Monte-Cristo, Tome I
+    620,629 car · Le Fantôme de l'Opéra
+    447,775 car · Voyage au Centre de la Terre
+    364,173 car · Arsène Lupin, gentleman-cambrioleur
+    317,816 car · Les crimes de l'amour: Précédé d'un avant-propos, suivi des 
+    284,126 car · Les enchantements de la forêt
+    240,962 car · Roméo et Juliette: Tragédie
+    226,097 car · Le cas étrange du docteur Jekyll; Un logement pour la nuit
+         55 car · Les mille et une nuits, tome premier
+=== de (10) ===
+  1
+… [1011 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Trois paires parallèles disponibles, dont DEUX nouvelles : Monte-Cristo (en↔fr) et Crime et Châtiment (en↔es). Je regarde leur découpage.**
+
+- **bash** `{"command": "timeout 200 python3 - <<'PY'\nimport sqlite3, os, re\nd='/home/stephane/Data13TB/stephane/GitHub/Panini-Research/data/mass_ingestion'\ndef txt(L, motif):\n    c=sqlite3.connect(f'file:{os.path.join(d,f\"backlog_gutenberg_{L}.db\")}?mode=ro', uri=True)\n    r=c.execute(\"select title, ra … [950 caractères tronqués]`
+
+  ```
+Crime    en :   39 × CHAPTER romain
+           début : 'The Project Gutenberg eBook of Crime and Punishment\r\n    \r\nThis eBook is for the use of an'
+           début : '*** START OF THE PROJECT GUTENBERG EBOOK 61851 ***\r\n\r\n  Nota del Transcriptor:\r\n\r\n\r\n  Se h'
+  Monte    en :  234 × Chapter N
+           début : '*** START OF THE PROJECT GUTENBERG EBOOK 1184 ***\n\n\n\n\nTHE COUNT OF MONTE CRISTO\n\nby Alexan'
+           début : '*** START OF THE PROJECT GUTENBERG EBOOK 17989 ***\n\n\n\n\nLE COMTE DE MONTE-CRISTO\n\nAlexandre'
+  ```
+
+### 🤖 Assistant
+
+⏵ **Marqueurs trouvés pour l'anglais. Je cherche ceux du français et de l'espagnol avec des motifs plus souples.**
+
+- **bash** `{"command": "timeout 200 python3 - <<'PY'\nimport sqlite3, os, re\nd='/home/stephane/Data13TB/stephane/GitHub/Panini-Research/data/mass_ingestion'\ndef txt(L, motif):\n    c=sqlite3.connect(f'file:{os.path.join(d,f\"backlog_gutenberg_{L}.db\")}?mode=ro', uri=True)\n    r=c.execute(\"select title, ra … [1050 caractères tronqués]`
+
+  ```
+=== Crimen es · 1,074,769 caractères ===
+      13 × (?im)^\s*(partie|part|tome|libro|parte)\s*[IVXLC\d]+
+       4 × (?im)^\s*\*\s*\*\s*\*
+      40 × (?im)^\s*[IVXLC]{1,6}\s*$
+   lignes courtes fréquentes : [('BIBLIOTECA DE GRANDES NOVELAS', 1), ('FEDOR DOSTOIEVSKY', 1), ('CRIMEN Y EL CASTIGO', 1), ('TRADUCCIÓN DE', 1), ('PEDRO PEDRAZA Y PAEZ', 1), ('BARCELONA', 1)]
+=== Monte fr · 727,600 caractères ===
+      10 × (?im)^\s*(partie|part|tome|libro|parte)\s*[IVXLC\d]+
+       2 × (?im)^\s*\*\s*\*\s*\*
+      31 × (?im)^\s*[IVXLC]{1,6}\s*$
+   lignes courtes fréquentes : [('LE COMTE DE MONTE-CRISTO', 1), ('VIII', 1), ('XIII', 1), ('XVII', 1), ('XVIII', 1), ('_CES_', 1)]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Crime et Châtiment : 39 chapitres en anglais, 40 sections romaines en espagnol. Je construis la paire parallèle.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 python3 - <<'PY'\nimport sqlite3, os, re\nd='/home/stephane/Data13TB/stephane/GitHub/Panini-Research/data/mass_ingestion'\ndef txt(L, motif):\n    c=sqlite3.connect(f'file:{os.path.join(d,f\"backlog_gutenberg_{L}.db\")}?m … [987 caractères tronqués]`
+
+  ```
+anglais : 39 chapitres · 1,170,970 caractères
+espagnol: 40 chapitres · 1,073,365 caractères
+
+   n        en        es  rapport   (les 6 premiers et 4 derniers)
+   1    18,610    18,721     1.01
+   2    40,502    39,280     0.97
+   3    30,239    24,803     0.82
+   4    28,244    26,385     0.93
+   5    23,416    23,509     1.00
+   6    27,973    28,674     1.03
+  36    30,742    26,655     0.87
+  37    30,530    18,382     0.60
+  38    19,595    22,305     1.14
+  39    76,680    19,664     0.26
+  ```
+
+### 🤖 Assistant
+
+⏵ **Les chapitres sont alignés (rapports 0,82-1,14 sur 38 chapitres). Je garde ceux qui tiennent dans le contexte, en gardant l'alignement EXACT par chapitre.**
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"extrait_crime.py — deuxième œuvre PARALLÈLE, et deuxième paire de langues.\n\nLe corpus parallèle du pont ne comptait qu'UNE œuvre : *Roméo et Juliette*, en\nanglais et en français (24 scènes). L'objectif demande des œuvres parallèles\nGutenberg ; les bases … [4001 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/extrait_crime.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"import ast; ast.parse(open('tools/extrait_crime.py').read()); print('syntaxe OK')\" && timeout 300 python3 -u tools/extrait_crime.py /home/stephane/Data13TB/stephane/corpus/parallele_crime --max-car 26000 2>&1 | tail -12 … [299 caractères tronqués]`
+
+  ```
+syntaxe OK
+# anglais : 39 chapitres · espagnol : 40 chapitres
+# 12 chapitres tiennent dans [4000, 26000] caractères DANS LES DEUX LANGUES, sur 39 alignables
+
+# CORPUS ÉCRIT DANS /home/stephane/Data13TB/stephane/corpus/parallele_crime
+  en : 12 chapitres · 260,512 caractères · 21,709 par chapitre
+  es : 12 chapitres · 248,905 caractères · 20,742 par chapitre
+
+# Rappel : le corpus Romeo (en–fr) sert de comparaison. Une paire ne permet pas de distinguer une propriété du PONT d'une propriété du COUPLE de langues ; deux paires, si.
+24
+=== jobs ===
+n96              96       1    0.6441   0.6297    0.6311   0.8819  0.6419 | communs -1.390 (  0 %) · contraste 0.985
+articles wiki : 9
+  ```
+
+### 🤖 Assistant
+
+⏵ **12 chapitres retenus (24 fichiers) — comparable aux 24 scènes de Romeo. Je tente d'en récupérer plus avec un contexte plus large.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for M in 30000 34000; do timeout 200 python3 -u tools/extrait_crime.py /tmp/essai_crime_$M --max-car $M 2>&1 | grep \"tiennent\"; done; echo \"=== test de contexte : un chapitre de ~30000 caractères tient-il ? ===\"; timeout 200 pyth … [277 caractères tronqués]`
+
+  ```
+# 24 chapitres tiennent dans [4000, 30000] caractères DANS LES DEUX LANGUES, sur 39 alignables
+# 29 chapitres tiennent dans [4000, 34000] caractères DANS LES DEUX LANGUES, sur 39 alignables
+=== test de contexte : un chapitre de ~30000 caractères tient-il ? ===
+fichier /tmp/essai_crime_30000/es_01.txt : 19132 octets
+  ```
+
+### 🤖 Assistant
+
+⏵ **24 chapitres à 30 000 caractères. Je VÉRIFIE qu'ils tiennent dans ctx 8192 par comparaison avec ctx 16384.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -rf /home/stephane/Data13TB/stephane/corpus/parallele_crime && timeout 200 python3 -u tools/extrait_crime.py /home/stephane/Data13TB/stephane/corpus/parallele_crime --max-car 30000 2>&1 | tail -5 && BIG=$(ls -S /home/stephane/Data … [751 caractères tronqués]`
+
+  ```
+# CORPUS ÉCRIT DANS /home/stephane/Data13TB/stephane/corpus/parallele_crime
+  en : 24 chapitres · 590,808 caractères · 24,617 par chapitre
+  es : 24 chapitres · 564,651 caractères · 23,527 par chapitre
+
+# Rappel : le corpus Romeo (en–fr) sert de comparaison. Une paire ne permet pas de distinguer une propriété du PONT d'une propriété du COUPLE de langues ; deux paires, si.
+plus gros fichier espagnol : /home/stephane/Data13TB/stephane/corpus/parallele_crime/es_22.txt (29680 octets)
+[timed out after 600000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "ls -la /tmp/crime_ctx*.drvf 2>/dev/null | awk '{print $5, $9}'; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=drave-core/target/release/drave && M=/home/stephane/Data13TB/stephane/modeles/gguf/qwen2.5-0.5b-instruct-q4_k_m.gguf && BIG=/home/stephane/Data13TB/stephane/corpus/par … [388 caractères tronqués]`
+
+  ```
+31204882 /tmp/crime_ctx8192.drvf
+ctx 8192 : 400s · 22482901 octets
+  ```
+
+### 🤖 Assistant
+
+⏵ **Deux tailles différentes pour le même fichier et le même ctx — je vérifie la déterminisme avant d'aller plus loin.**
+
+- **bash** `{"command": "ls -la /tmp/crime_ctx8192.drvf /tmp/crime8192.drvf 2>/dev/null | awk '{print $5, $9}'; md5sum /tmp/crime8192.drvf 2>/dev/null; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=drave-core/target/release/drave && M=/home/stephane/Data13TB/stephane/modeles/gguf/qwen2.5-0.5b-instruct … [652 caractères tronqués]`
+
+  ```
+22482901 /tmp/crime8192.drvf
+31204882 /tmp/crime_ctx8192.drvf
+25b3214ac4f90ddb10f735914f6e26d5  /tmp/crime8192.drvf
+3106fb1777470c15d2bd122cdeae2062  /tmp/crime8192_bis.drvf
+NON DÉTERMINISTE
+=== tailles de chapitres ===
+11304 16855 18101 19132 19499 19866 22717 22748 22875 22928 23044 24038 25539 25592 26184 27145 27145 28714 28903 28929 29366 29506 29543 29680 
+[stderr]
+cmp: EOF on ‘/tmp/crime8192.drvf’ after byte 22482901, in line 149785
+  ```
+
+### 🤖 Assistant
+
+⏵ **Fausse alerte : je comparais des fichiers PARTIELS (traces tuées par mes timeouts). Test propre sur un petit fichier.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=drave-core/target/release/drave && M=/home/stephane/Data13TB/stephane/modeles/gguf/qwen2.5-0.5b-instruct-q4_k_m.gguf && PETIT=/home/stephane/Data13TB/stephane/corpus/parallele_crime/es_01.txt && echo \"fichier test : $(wc -c < $PET … [470 caractères tronqués]`
+
+  ```
+fichier test : 19132 octets
+[timed out after 600000ms]
+[killed by signal: SIGTERM]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Un chapitre de 19 K caractères prend ~200 s (la machine est partagée). Je lance le traçage Crime en tâche de fond, sans timeout.**
+
+- **bash** `{"command": "cat > /tmp/trace_crime.sh <<'EOF'\n#!/bin/bash\n# DEUXIÈME CORPUS PARALLÈLE — Crime et Châtiment, anglais ↔ espagnol, 24 chapitres.\n#\n# Le corpus parallèle ne comptait qu'UNE œuvre (Roméo et Juliette, en–fr, 24 scènes).\n# Une seule paire ne permet pas de distinguer une propriété du P … [1882 caractères tronqués]`
+
+  ```
+syntaxe OK
+=== croissance ===
+n150            150       1    0.6483   0.6323    0.6318   0.8669  0.5621 | communs -1.389 (  0 %) · contraste 0.989
+n152            152       1    0.6485   0.6326    0.6321   0.8669  0.5568 | communs -1.391 (  0 %) · contraste 0.989
+=== wiki ===
+15
+15:27
+  ```
+
+### 🤖 Assistant
+
+⏵ **Deuxième corpus parallèle lancé. Je consigne et je note la fausse alerte de déterminisme.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 46. Deuxième œuvre parallèle, et deuxième couple de langues\n\n### 46.1 Le manque\n\nLe corpus parallèle du pont ne comptait qu'** … [5533 caractères tronqués]`

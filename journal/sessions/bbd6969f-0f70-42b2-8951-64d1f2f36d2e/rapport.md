@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 191.3 h |
-| Tours | 176 |
-| Messages | 8916 |
-| Appels d'outils | 8410 |
-| Fichiers touchés | 195 |
-| Commandes | 7129 |
+| Durée | 192.7 h |
+| Tours | 177 |
+| Messages | 8952 |
+| Appels d'outils | 8443 |
+| Fichiers touchés | 197 |
+| Commandes | 7158 |
 | Sous-agents | 32 |
-| Commits | 641 |
+| Commits | 642 |
 | Compactages de contexte | 12 |
 
 ## Objectifs déclarés
@@ -405,6 +405,8 @@
 **Tour 175** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 **Tour 176** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
+
+**Tour 177** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -8851,7 +8853,7 @@ Exemple, l'entrée qui manquait le plus :
 
 ### Tour 176 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
 
-*43 appels d'outils.* Actions notables :
+*51 appels d'outils.* Actions notables :
 
 - bash — Check layer-8 analysis progress
 - read
@@ -8867,11 +8869,73 @@ Exemple, l'entrée qui manquait le plus :
 - bash — Check layer-8 analysis status
 - edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py`
 - bash — Verify bit-identity of batched nait
-- … et 27 autres
+- … et 35 autres
 
 **Synthèse produite :**
 
-⏵ **Traçage lancé (16 s/trace, ~13 h pour les 2 892). Je consigne la construction du corpus et la vérification.**
+⏵ **Point de fin de round. Voici ce qui a été établi.**
+
+\## 1. Le résultat décisif : couche 8 contre couche 10 à 392 langues
+
+Même code, même périmètre, **les deux profils recalculés dans la même exécution** — 351 langues d'apprentissage (300 ajustement + 51 validation), 41 de test hors vivier, 896 canaux, 40 neurones.
+
+| | couche 10 | **couche 8** |
+|---|---:|---:|
+| fidélité TEST | 0,5960 | **0,6424** |
+| fidélité VALIDATION | 0,6206 | **0,6768** |
+| oracle TEST | 0,6935 | **0,7427** |
+| **écart à l'oracle TEST** | **+0,0975** | **+0,1003** |
+| invariance du professeur | 0,6529 | **0,6836** |
+| pire paire du professeur | 0,0478 | 0,0104 |
+
+**Langue par langue : apport 41 améliorées / 0 dégradée · oracle 41 / 0.** Aucune langue ne perd. Les plus mal servies gagnent le plus : `amh` +0,0345, `csw` +0,0342, `dzo` +0,0334, `heb` ×7.
+
+**Mais l'écart de transfert est INCHANGÉ** (+0,0975 → +0,1003). Changer de cible améliore tout le monde uniformément sans réduire d'un iota l'écart entre ce que les caractéristiques permettent et ce que la lecture partagée en tire. **Le goulot est structurel.**
+
+**Réserve honnête** : les deux tiers du gain brut sont le témoin constant (+0,0371 à lui seul). L'apport *propre* ne gagne que +0,0093.
+
+\## 2. « Où va le temps » — troisième réponse, et la troisième différente
+
+En lisant le code pour lancer l'entraînement : **`nait` boucle `pour chaque langue : pour chaque pas`**, soit 472 472 itérations Python — **28 s par neurone**, et le mode libre fait une naissance par neurone.
+
+Les langues sont indépendantes ; seule la récurrence en `t` est séquentielle. J'ai regroupé les langues par longueurs voisines et bouclé sur `t`.
+
+**Identité bit à bit vérifiée, pas supposée** — 9 cas (k ∈ {1,7,40} × bloc ∈ {4,16,64}) : **écart maximal exactement 0,000e+00**.
+
+**28 s → 1,76 s. ×16.** 300 neurones passent de 2 h 20 de naissances à 9 minutes.
+
+\## 3. Premier corpus multi-domaine et aligné
+
+Dix bases **Wikipedia décompressées** (30 Go : ar, de, en, es, fr, it, ja, pt, ru, zh) étaient là depuis le début et n'avaient pas été utilisées. Appariement par titre → **482 articles × 6 langues latines = 2 892 fichiers, 5,7 M de caractères**.
+
+Cela débloque ce que l'UDHR interdisait : **séparer ce qui vient de la langue de ce qui vient du domaine.** L'UDHR est mono-domaine, l'hypothèse « le vocabulaire dépend du domaine » n'y était *pas testable*. Ici, 482 articles de science, histoire, géographie, personnes, chacun traduit.
+
+Traçage lancé (2 892 × 16 s, ~1
+… [961 caractères tronqués]
+
+### Tour 177 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
+
+*25 appels d'outils.* Actions notables :
+
+- bash — Check both chains
+- bash — Inspect the domain-vs-language tool
+- bash — Read the rest of the tool
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/domaine_ou_langue.py`
+- read
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/domaine_ou_langue.py`
+- bash — Regression test the generalized tool
+- bash — Reorder tracing by article
+- bash — Verify article-by-article ordering
+- bash — Smoke test domain-vs-language on Wikipedia
+- bash — Locate Gutenberg data
+- bash — Inspect Gutenberg databases
+- bash — List all Gutenberg works
+- bash — Find chapter markers in parallel works
+- … et 11 autres
+
+**Synthèse produite :**
+
+⏵ **Deuxième corpus parallèle lancé. Je consigne et je note la fausse alerte de déterminisme.**
 
 ## 3. Travail accompli
 
@@ -9074,6 +9138,8 @@ Exemple, l'entrée qui manquait le plus :
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/saturation.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/lecture_locale.py` | 1 | 3 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/wiki_apparie.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/domaine_ou_langue.py` | 2 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/extrait_crime.py` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -9152,7 +9218,7 @@ Exemple, l'entrée qui manquait le plus :
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 7089 autres
+- … et 7118 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9941,4 +10007,5 @@ Exemple, l'entrée qui manquait le plus :
 - Croissance vectorisée sur les langues : 28 s → 1,76 s par neurone, identité bit à bit  LE GOULOT CACHÉ : nait boucle 'pour chaque langue : pour chaque pas', soi
 - Couche 8 contre couche 10 à 392 langues : 41 sur 41 s'améliorent, ZÉRO régresse  Même code, même périmètre, mêmes quatre mesures, les deux profils recalculés da
 - Premier corpus MULTI-DOMAINE et ALIGNÉ : 482 articles Wikipedia en 6 langues  CE QUE LA MACHINE CONTENAIT DÉJÀ : dix bases Wikipedia décompressées, 30 Go, dans 
+- Deuxième œuvre parallèle (Crime et Châtiment, en-es) et généralisation du test domaine/langue  LE MANQUE : le corpus parallèle ne comptait qu'UNE œuvre (Roméo e
 

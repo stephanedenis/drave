@@ -510,7 +510,17 @@ def main():
     tr_p, te_p = sys.argv[1], sys.argv[2]
 
     def opt(nom, defaut):
-        return sys.argv[sys.argv.index(nom)+1] if nom in sys.argv else defaut
+        # UN DRAPEAU SANS VALEUR CASSAIT TOUT. `--oracle` placé en dernière
+        # position faisait `sys.argv.index("--oracle")+1` hors Bornes — le calcul
+        # de trois quarts d'heure aboutissait, puis le résumé final plantait. Et
+        # placé ailleurs, il renvoyait silencieusement l'option SUIVANTE, qui est
+        # toujours vraie : le drapeau marchait par accident.
+        if nom in sys.argv:
+            i = sys.argv.index(nom)
+            if i + 1 < len(sys.argv) and not sys.argv[i+1].startswith("--"):
+                return sys.argv[i+1]
+            return ""            # drapeau présent, sans valeur
+        return defaut
 
     a = float(opt("--a", 0.2))
     ride = float(opt("--ride", 0.3))
@@ -529,8 +539,21 @@ def main():
     if part < 1.0:
         garde = max(1, int(len(cltr)*part))
         cltr, Etr, Ytr = cltr[:garde], Etr[:garde], Ytr[:garde]
-    ival = list(range(n_val))
-    itr = list(range(n_val, len(cltr)))
+    # VALIDATION RÉPARTIE. `--val 4` prenait les QUATRE PREMIÈRES langues du cache —
+    # une tranche alphabétique arbitraire, et un critère de décision bien trop
+    # bruité : c'est lui qui décidait de l'arrêt de la naissance et du meilleur
+    # passage de l'attrition. `--val-part N` prend une langue sur N, réparties sur
+    # tout le vivier, comme le fait déjà le profil par langue.
+    val_part = int(opt("--val-part", 0))
+    if val_part > 1:
+        ival = list(range(0, len(cltr), val_part))
+        _s = set(ival)
+        itr = [i for i in range(len(cltr)) if i not in _s]
+        print(f"# VALIDATION RÉPARTIE : {len(ival)} langues (1 sur {val_part}) "
+              f"· {len(itr)} langues d'ajustement")
+    else:
+        ival = list(range(n_val))
+        itr = list(range(n_val, len(cltr)))
     ite = list(range(len(clte)))
     # `--val-liste F` : la validation est désignée par NOMS de langues, pas par
     # position. Un découpage positionnel ne tient pas dès qu'on change de corpus,
