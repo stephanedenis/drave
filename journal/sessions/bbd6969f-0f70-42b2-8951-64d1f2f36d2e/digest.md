@@ -135517,3 +135517,164 @@ struct.error: unpack requires a buffer of 1 bytes
 Les langues refaites sont **propres** : ame 2838, ben 2634, blt 3375, boa 2076 positions — aucune troncature. Je documente le plan et l'état de cette extension dans un rapport dédié.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-toutes-langues.md <<'EOF'\n# Extension à toutes les langues, puis aux grands corpus\n\nObjectif : passer de **46 langues** à **toutes celles disponibles**, puis aux grands\ncorpus multilingues pour obtenir des p … [5819 caractères tronqués]`
+
+  ```
+1424c5d Rapport : extension à toutes les langues — périmètre, convention, découpage, 5 phases
+
+total : 133/392
+  ```
+
+### 🤖 Assistant
+
+⏵ Je vérifie que l'analyse trouvera bien ses listes de langues quand elle se déclenchera.
+
+- **bash** `{"command": "ls -la /tmp/decoupe392.json /tmp/udhr10_toutes 2>/dev/null | head -3; python3 -c \"\nimport json, os\nd=json.load(open('/tmp/decoupe392.json'))\nprint(f\\\"découpe : test {len(d['test'])} · validation {len(d['validation'])} · train {len(d['train'])}\\\")\ntotal=set(d['test'])|set(d['val … [1071 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 3579  5 oct 22:14 /tmp/decoupe392.json
+
+/tmp/udhr10_toutes:
+découpe : test 41 · validation 50 · train 301
+total 392 langues distinctes
+textes manquants : 0
+--- le traçage couvre-t-il toutes les langues du découpage ? ---
+392
+--- noms dans udhr392 (sans extension) vs découpage ---
+langues du découpage : 392 · tracées : 133
+du découpage non encore tracées : 259
+tracées HORS découpage : 0
+  ```
+
+### 🤖 Assistant
+
+⏵ Tout est cohérent : **392 langues dans le découpage, toutes avec leur texte, aucune tracée hors découpage**. Point d'étape.
+
+## Ce que ce tour a produit
+
+**Un rapport qui documente l'extension** (`reports/rapport-toutes-langues.md`), écrit pour que l'état du travail soit lisible sans relire 7 tours de conversation : inventaire des trois corpus et **ce que chacun peut ou ne peut pas mesurer**, la convention de traçage unique drapeau par drapeau, le découpage stratifié, les cinq phases chaînées, et **les deux erreurs de méthode** de ce parcours avec ce qu'elles ont coûté.
+
+**Une vérification de cohérence de bout en bout** : les 392 langues du découpage ont toutes leur texte, **aucune langue tracée n'est hors découpage**, 0 texte manquant. L'analyse ne butera pas sur une liste incohérente quand elle se déclenchera.
+
+**Contrôle des langues refaites après la correction de troncature** : ame 2838, ben 2634, blt 3375, boa 2076 positions — **aucune troncature**, alors qu'elles étaient toutes plafonnées à 2040.
+
+## État
+
+| | |
+|---|---:|
+| phase 1 | **133/392** · 0 échec |
+| restant | 259 langues, ~2,2 h |
+| fin estimée | ~02h00 |
+| chaîne | 6 scripts vivants |
+
+## Ce qui vient, dans l'ordre
+
+1. **Le panel à 301 langues** — la question que je traîne depuis quatre tours : plus de langues changent-elles quelque chose ? (Mesure précédente, sur 20 à 36 langues : **effet nul**.)
+2. **Romeo** — le pont tient-il sur du **littéraire long**, très loin de l'UDHR administratif ?
+3. **Wikipedia** — un professeur plus riche change-t-il la fidélité ou le transfert ?
+4. **Les dix points d'invariance** — la pire paire cesse d'être un agrégat.
+
+Tout se déclenche seul. Rien à faire de votre côté. Commit `1424c5d`.
+
+
+## Tour 135
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de représentation universelle), boîte noire (on ne lit du professeur que la couche à émuler, jamais sa tête ni ses jetons générés), aucune rétropropagation (A et B aléatoires et gelés, seule la lecture s'ajuste en forme fermée), et chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, TAILLE du réseau, avec le diagnostic oracle sur les deux panneaux (test hors vivier et validation du même vivier)."
+Round: 8/256
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Les tours s'enchaînent plus vite que le traçage. Plutôt que d'attendre, je prends un **signal précoce** : j'ai 133 langues tracées, soit déjà 3× plus que les 30 de mes mesures précédentes. C'est assez pour tester « plus de langues aident-elles ? ».
+
+Les tours s'enchaînent plus vite que le traçage. Plutôt que d'attendre deux heures, je prends un **signal précoce** : avec 133 langues tracées j'ai déjà **3× plus** que les 30 de mes mesures précédentes — assez pour tester la question.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls /home/stephane/Data13TB/stephane/corpus/udhr/udhr392 | sed 's/.drvf//' > /tmp/tracees.txt; python3 - <<'PY'\nimport json\nd=json.load(open('/tmp/decoupe392.json'))\ntr={l.strip() for l in open('/tmp/tracees.txt') if l.strip()}\n#  … [873 caractères tronqués]`
+
+  ```
+tracées : 133
+  du TEST       : 9 / 41
+  de VALIDATION : 12 / 50
+  d'APPRENTISSAGE: 112 / 301
+
+listes partielles écrites : 124 apprentissage · 12 validation · 9 test
+  ```
+
+### 🤖 Assistant
+
+⏵ 133 tracées : **112 d'apprentissage, 12 de validation, 9 de test**. Le test est mince, donc je ne compare pas à l'ancien panel — je fais une **courbe de dose sur le même panel** : 30 langues contre 112.
+
+112 langues d'apprentissage (3,7× mes 30 précédentes). Le test partiel est mince, donc je ne compare pas à l'ancien panel — je fais une **courbe de dose sur le même panel** : même validation, même test, 30 langues contre 112.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, random\nd=json.load(open('/tmp/decoupe392.json'))\ntr={l.strip() for l in open('/tmp/tracees.txt') if l.strip()}\ntrain=sorted(tr & set(d['train'])); val=sorted(tr & set(d['validation']))\nrng=random.Ra … [795 caractères tronqués]`
+
+  ```
+dose  30 : 30 apprentissage + 12 validation
+  dose 112 : 112 apprentissage + 12 validation
+--- construction des caches (compétition assumée avec le traçage) ---
+/tmp/cache_dose_30.npz : 42 langues · 54832 pas
+/tmp/cache_dose_112.npz : 124 langues · 154307 pas
+/tmp/cache_dose_test.npz : 9 langues · 11078 pas
+  ```
+
+### 🤖 Assistant
+
+⏵ Caches prêts (54 832 pas pour la dose 30, 154 307 pour la dose 112). Je lance les deux mesures.
+
+- **write** `{"content": "#!/bin/bash\n# COURBE DE DOSE — même validation, même test, seul le nombre de langues\n# d'APPRENTISSAGE change (30 contre 112). Répond à la question laissée ouverte :\n# plus de langues aident-elles ? Les mesures précédentes (20 · 30 · 36 langues)\n# donnaient un effet NUL.\nset -u\ncd … [556 caractères tronqués]`
+
+  ```
+<path>/tmp/dose.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "chmod +x /tmp/dose.sh && bash -n /tmp/dose.sh && echo \"syntaxe OK et exécutable\"; setsid nohup /tmp/dose.sh >/dev/null 2>&1 < /dev/null & disown; sleep 500; grep -E \"^####|SOUS-ENSEMBLE|née :|#   TEST|#   VALIDATION|fidélité TEST|invariance TEST\" /tmp/dose.log; echo \"--- traçage en … [168 caractères tronqués]`
+
+  ```
+syntaxe OK et exécutable
+########## 30 langues d'apprentissage ##########
+# SOUS-ENSEMBLE ACTIF : 134/896 canaux portent 50% de l'énergie (15% des canaux), masque lu sur l'apprentissage seul
+########## CYCLE 1 — CROISSANCE ##########
+# née : 40 neurones en 1 couches [40]
+#   TEST        : nous 0.7032 · oracle 0.7379 · ÉCART +0.0347 · invariance oracle 0.9709
+#   VALIDATION  : nous 0.7450 · oracle 0.7691 · ÉCART +0.0240   (même vivier que l'apprentissage)
+  fidélité TEST    : 0.7029   (constante témoin : 0.6907)
+  invariance TEST  : 0.9787 · pire paire 0.9267
+########## 112 langues d'apprentissage ##########
+# SOUS-ENSEMBLE ACTIF : 136/896 canaux portent 50% de l'énergie (15% des canaux), masque lu sur l'apprentissage seul
+########## CYCLE 1 — CROISSANCE ##########
+# née : 40 neurones en 1 couches [40]
+#   TEST        : nous 0.7106 · oracle 0.7405 · ÉCART +0.0299 · invariance oracle 0.9707
+#   VALIDATION  : nous 0.7478 · oracle 0.7709 · ÉCART +0.0231   (même vivier que l'apprentissage)
+  fidélité TEST    : 0.7105   (constante témoin : 0.6955)
+  invariance TEST  : 0.9809 · pire paire 0.9309
+--- traçage en parallèle ---
+148
+00:10
+  ```
+
+### 🤖 Assistant
+
+⏵ **Signal précoce obtenu, et il contredit ma mesure précédente.**
+
+| | **30 langues** | **112 langues** | gain |
+|---|---:|---:|---:|
+| fidélité TEST | 0,7029 | **0,7105** | **+0,0076** |
+| fidélité VALIDATION | 0,7450 | **0,7478** | +0,0028 |
+| invariance TEST | 0,9787 | **0,9809** | +0,0022 |
+| écart oracle TEST | +0,0347 | **+0,0299** | −0,0048 |
+| constante témoin | 0,6907 | 0,6955 | +0,0048 |
+| **écart à la constante** | **+0,0122** | **+0,0150** | **+23 %** |
+
+**Plus de langues aident**, contrairement à ce que j'avais mesuré dans la plage 20-36 langues où l'effet était nul. L'avantage sur la constante progresse de **+23 %**, et l'écart de transfert se réduit légèrement.
+
+**Plus de langues aident bel et bien** — contrairement à ma mesure de la plage 20-36 langues où l'effet était nul. L'effet n'apparaît qu'à plus grande échelle.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 7. Signal précoce : PLUS DE LANGUES AIDENT\n\nMesure prise sur les 133 premières langues tracées, **avant** la fin du traçage —\npour … [3195 caractères tronqués]`
