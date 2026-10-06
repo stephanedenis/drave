@@ -138932,3 +138932,56 @@ L'audit trouve **deux incohérences réelles** :
 2. `rapport-plateau-semantique.md` — le plus ancien — place le plateau à la **couche 10**, alors que les mesures récentes le placent à la **couche 8**.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\n# 1) pointer la correction depuis le §14 (sinon un lecteur s'arrête à la mauvaise conclusion)\np='reports/rapport-toutes-langues.md'; s=open(p).read()\nvieux = \"**3. L'écart à la constante vaut +0,0223** — exacteme … [3186 caractères tronqués]`
+
+  ```
+§14 : pointeur vers la correction ajouté
+rapport-plateau-semantique.md : correction ajoutée en fin
+6b4a75e Audit de cohérence : deux affirmations périmées pointées dans mes propres rapports
+
+Wikipedia : 132/480
+  ```
+
+### 🤖 Assistant
+
+⏵ Deux incohérences corrigées. Je pousse l'audit plus loin — il y a d'autres affirmations que j'ai corrigées en route.
+
+Deux incohérences corrigées. Je pousse l'audit plus loin — j'ai corrigé d'autres choses en route.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== autres affirmations à vérifier ===\"; for motif in \"généralise\" \"la profondeur\" \"sous-ensemble partagé\" \"attrition\" ; do printf \"\\n--- « %s » ---\\n\" \"$motif\"; grep -rln \"$motif\" reports/*.md 2>/dev/null | h … [264 caractères tronqués]`
+
+  ```
+=== autres affirmations à vérifier ===
+
+--- « généralise » ---
+reports/rapport-aiguille-topk.md
+reports/rapport-drapeaux-ignores.md
+reports/rapport-passage-a-l-echelle.md
+reports/rapport-pont-generatif.md
+
+--- « la profondeur » ---
+reports/rapport-plateau-semantique.md
+reports/rapport-pont-generatif.md
+reports/rapport-toutes-langues.md
+reports/recapitulatif.md
+
+--- « sous-ensemble partagé » ---
+reports/rapport-toutes-langues.md
+
+--- « attrition » ---
+reports/rapport-pont-generatif.md
+reports/recapitulatif.md
+
+=== l'attrition est-elle présentée comme généralisante quelque part ? ===
+reports/rapport-pont-generatif.md:1:# Le pont GÉNÉRATIF : le réseau naît, puis l'attrition le fait généraliser
+reports/recapitulatif.md:571:## 11. Verdict sur l'attrition : elle réduit, elle ne généralise pas
+reports/recapitulatif.md:606:3. **L'attrition ne généralise pas** : elle réduit la taille à coût faible et
+reports/recapitulatif.md:759:Le §11 concluait « l'attrition réduit, elle ne généralise pas ». Le fait était
+  ```
+
+### 🤖 Assistant
+
+⏵ **Troisième incohérence, et c'est la plus visible** : le **titre** de `rapport-pont-generatif.md` annonce que « l'attrition le fait généraliser » — alors que ce même rapport conclut, en §13, qu'elle **ne généralise pas**.
+
+**Troisième incohérence, et c'est la plus visible** : le **titre** de `rapport-pont-generatif.md` annonce que « l'attrition le fait généraliser » — alors que ce même rapport conclut, en §13, qu'elle **ne généralise pas**. Un titre se lit plus que le corps.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-pont-generatif.md'; s=open(p).read()\nvieux = \"# Le pont GÉNÉRATIF : le réseau naît, puis l'attrition le fait généraliser\"\nneuf = (\"# Le pont GÉNÉRATIF : le réseau naît, l'attrition le RÉDUIT\ … [1667 caractères tronqués]`

@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 181.9 h |
 | Tours | 159 |
-| Messages | 8523 |
-| Appels d'outils | 8069 |
+| Messages | 8525 |
+| Appels d'outils | 8071 |
 | Fichiers touchés | 181 |
-| Commandes | 6869 |
+| Commandes | 6871 |
 | Sous-agents | 32 |
-| Commits | 612 |
+| Commits | 613 |
 | Compactages de contexte | 11 |
 
 ## Objectifs déclarés
@@ -8017,20 +8017,19 @@ Les six scripts sont vivants. Rien à faire de votre côté.
 
 ### Tour 159 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
 
-*3 appels d'outils.* Actions notables :
+*5 appels d'outils.* Actions notables :
 
 - bash — Monitor Wikipedia and chain
 - bash — Audit reports for superseded claims
 - bash — Fix report inconsistencies
+- bash — Deeper audit for superseded claims
+- bash — Fix the overclaiming title
 
 **Synthèse produite :**
 
-⏵ L'audit trouve **deux incohérences réelles** dans mes rapports. Je les corrige.
+⏵ **Troisième incohérence, et c'est la plus visible** : le **titre** de `rapport-pont-generatif.md` annonce que « l'attrition le fait généraliser » — alors que ce même rapport conclut, en §13, qu'elle **ne généralise pas**.
 
-L'audit trouve **deux incohérences réelles** :
-
-1. `rapport-toutes-langues.md` §14 affirme « l'invariant des +0,020 » comme acquis, et §16 le corrige — un lecteur qui s'arrête à §14 repart avec la mauvaise conclusion.
-2. `rapport-plateau-semantique.md` — le plus ancien — place le plateau à la **couche 10**, alors que les mesures récentes le placent à la **couche 8**.
+**Troisième incohérence, et c'est la plus visible** : le **titre** de `rapport-pont-generatif.md` annonce que « l'attrition le fait généraliser » — alors que ce même rapport conclut, en §13, qu'elle **ne généralise pas**. Un titre se lit plus que le corps.
 
 ## 3. Travail accompli
 
@@ -8297,7 +8296,7 @@ L'audit trouve **deux incohérences réelles** :
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6829 autres
+- … et 6831 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9057,4 +9056,5 @@ L'audit trouve **deux incohérences réelles** :
 - Romeo : le pont TRANSFÈRE sur du texte littéraire (0,6660 anglais -> 0,5802 français)  Premier test hors de l'UDHR, sur corpus PARALLÈLE (24 scènes appariées en
 - Couche 8 contre couche 10 : la correction de cible PAIE (+0,0213 sur le transfert)  Même corpus (Romeo), même protocole (entraîné sur l'anglais, testé sur le fr
 - Audit de cohérence : deux affirmations périmées pointées dans mes propres rapports  J'ai relu les rapports en cherchant les affirmations que j'ai CORRIGÉES en c
+- Audit (suite) : le TITRE du rapport génératif promettait ce que son corps réfute  '# Le pont GÉNÉRATIF : le réseau naît, puis l'attrition le fait généraliser'  
 

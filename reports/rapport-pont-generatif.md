@@ -1,4 +1,12 @@
-# Le pont GÉNÉRATIF : le réseau naît, puis l'attrition le fait généraliser
+# Le pont GÉNÉRATIF : le réseau naît, l'attrition le RÉDUIT
+
+> **Le titre de ce rapport a été corrigé.** Il annonçait « l'attrition le fait
+> généraliser » — ce que ce rapport même **dément** au §13 : mesurée sur la
+> meilleure configuration, l'attrition fait **décroître la fidélité de test de
+> façon monotone** (80 neurones : 0,6383 → 60 : 0,6356 → 20 : 0,6248 → 1 : 0,6169).
+> Elle **réduit la taille à coût faible**, elle ne généralise rien. Le §16 ajoute
+> qu'un seuil mal réglé la faisait même descendre jusqu'à un neurone. Un titre se
+> lit plus que le corps : il ne doit pas promettre ce que le corps réfute.
 
 `tools/pont_generatif.py` — deux phases, et c'est l'apprentissage qui décide des
 tailles. Aucune rétropropagation : A et B restent aléatoires et **gelés**, seule la
