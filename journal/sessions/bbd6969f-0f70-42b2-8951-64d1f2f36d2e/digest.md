@@ -147883,3 +147883,55 @@ syntaxe OK
 ⏵ **Corrigé. Je consigne le résultat de croissance, puis je relance sous contrainte d'invariance avec l'oracle fonctionnel.**
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/inv179.log | tail -10; python3 - <<'PYEOF'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 49. Croissance libre + attrition à 392 langues : le résultat complet\n\nProtocole entier, couche 1 … [4744 caractères tronqués]`
+
+  ```
+# 896 canaux · 300 ajustement · 51 validation · 41 test
+# réseau 179 neurones · 1 couche(s), construit en 116 s
+# INVARIANCE DU PROFESSEUR : 0.6836 · pire paire 0.0104
+
+#      mu   fid VAL  fid TEST  INVARIANCE  pire paire   vs mu=0
+   0.000    0.7251    0.6922      0.7492      0.3719   +0.0000
+   0.030    0.7246    0.6908      0.7701      0.4089   +0.0209
+   0.100    0.7218    0.6852      0.8019      0.4255   +0.0528
+   0.300    0.7131    0.6695      0.8405      0.4575   +0.0913
+a3abff2 Croissance + attrition à 392 langues : 182 neurones, TEST 0,6340, invariance 0,8659
+  ```
+
+### 🤖 Assistant
+
+⏵ **Je lance la passe définitive : croissance sous contrainte d'invariance, avec l'oracle fonctionnel.**
+
+- **bash** `{"command": "sleep 180; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -4 /tmp/inv179.log; echo \"=== lancement ===\"; setsid nohup python3 -u tools/pont_generatif.py /tmp/cache392_train.npz /tmp/cache392_test.npz --part-langues 0.5 --lecture quadratique --naissance libre --plafond 300 - … [321 caractères tronqués]`
+
+  ```
+# PRÉDICTION : l'invariance doit MONTER et la fidélité BAISSER.
+# Le taux d'échange se lit entre mu=0 et le point où le gain d'invariance
+# cesse de valoir sa perte de fidélité.
+=== lancement ===
+# VALIDATION RÉPARTIE : 51 langues (1 sur 7) · 300 langues d'ajustement
+# CANAUX PARTAGÉS : 896/896 canaux présents dans au moins 50% des langues d'apprentissage (100% des canaux)
+# 351 langues d'entraînement = 300 apprentissage + 51 validation
+# 41 langues de TEST · a=0.2 · ride=0.03 · graine=5 · critère=redondance
+# 1 cycles de 3 couches, puis attrition
+# pas — apprentissage 402091 · validation 70381 · test 76812
+# SOUS-ÉCHANTILLONNAGE DU FIT : 1 ligne sur 20 (l'évaluation reste entière) — mesuré 5,8× plus rapide pour -0,0045 de fidélité
+# MULTI-ÉCHELLE : constantes de temps de 0.02 à 0.8
+# INVARIANCE CONTRAINTE : pénalité inter-langue mu = 0.1 (reste en forme fermée, aucune rétropropagation)
+# LECTURE QUADRATIQUE : le readout voit [états, états²]
+# constante témoin sur le TEST : 0.5762
+
+########## CYCLE 1 — CROISSANCE ##########
+après                           neur.  couch.  fid appr  fid VAL  fid TEST   invar.    pire
+16:46
+  ```
+
+### 🤖 Assistant
+
+⏵ **Réplication à 179 neurones : la contrainte déplace la courbe mais NE SUPPRIME PAS la tension.**
+
+| | 40 neurones | 179 neurones |
+|---|---:|---:|
+| μ=0 : fid TEST / invariance | 0,6646 / 0,8740 | 0,6922 / 0,7492 |
+| **μ=0,1 : fid TEST / invariance** | **0,6564 / 0,9157** | **0,6852 / 0,8019** |
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 50. La contrainte d'invariance déplace la courbe, elle ne supprime pas la tension\n\nLe §48 avait balayé μ sur **40 neurones**. Re … [4187 caractères tronqués]`
