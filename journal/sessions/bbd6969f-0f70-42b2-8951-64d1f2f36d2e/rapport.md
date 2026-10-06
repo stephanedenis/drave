@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 177.4 h |
-| Tours | 135 |
-| Messages | 8376 |
-| Appels d'outils | 7970 |
+| Durée | 177.6 h |
+| Tours | 136 |
+| Messages | 8381 |
+| Appels d'outils | 7973 |
 | Fichiers touchés | 175 |
-| Commandes | 6776 |
+| Commandes | 6779 |
 | Sous-agents | 32 |
-| Commits | 597 |
+| Commits | 598 |
 | Compactages de contexte | 11 |
 
 ## Objectifs déclarés
@@ -323,6 +323,8 @@
 **Tour 134** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1001 caractères tronqués]
 
 **Tour 135** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1001 caractères tronqués]
+
+**Tour 136** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1001 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -6923,30 +6925,75 @@ Tout se déclenche seul. Rien à faire de votre côté. Commit `1424c5d`.
 
 ### Tour 135 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1281 caractères tronqués]
 
-*5 appels d'outils.* Actions notables :
+*6 appels d'outils.* Actions notables :
 
 - bash — Prepare partial-set experiment
 - bash — Build dose-response caches
 - write `/tmp/dose.sh`
 - bash — Run dose-response experiment
 - bash — Commit the early dose-response signal
+- bash — Verify dose experiment done and trace recovered
 
 **Synthèse produite :**
 
-⏵ **Signal précoce obtenu, et il contredit ma mesure précédente.**
+⏵ Expérience terminée, traçage revenu à 37 s par langue. Point d'étape.
+
+\## Le résultat du tour
+
+J'ai pris un **signal précoce** sur les 133 langues déjà tracées plutôt que d'attendre deux heures — et il **contredit une de mes conclusions antérieures**.
+
+À validation et test identiques, en ne changeant que le nombre de langues d'apprentissage :
 
 | | **30 langues** | **112 langues** | gain |
 |---|---:|---:|---:|
-| fidélité TEST | 0,7029 | **0,7105** | **+0,0076** |
-| fidélité VALIDATION | 0,7450 | **0,7478** | +0,0028 |
+| fidélité TEST | 0,7029 | **0,7105** | +0,0076 |
 | invariance TEST | 0,9787 | **0,9809** | +0,0022 |
 | écart oracle TEST | +0,0347 | **+0,0299** | −0,0048 |
 | constante témoin | 0,6907 | 0,6955 | +0,0048 |
 | **écart à la constante** | **+0,0122** | **+0,0150** | **+23 %** |
 
-**Plus de langues aident**, contrairement à ce que j'avais mesuré dans la plage 20-36 langues où l'effet était nul. L'avantage sur la constante progresse de **+23 %**, et l'écart de transfert se réduit légèrement.
+**J'avais conclu que le nombre de langues ne comptait pas** — mesuré sur 20, 30 et 36 langues, l'effet était nul. À 112 langues, il est là : **+23 % d'avantage sur la constante**, et l'écart de transfert se réduit.
 
-**Plus de langues aident bel et bien** — contrairement à ma mesure de la plage 20-36 langues où l'effet était nul. L'effet n'apparaît qu'à plus grande échelle.
+**L'effet existe donc, mais il n'apparaît qu'à plus grande échelle** : entre 20 et 36 langues il est sous le bruit de mesure.
+
+**Réserve que je dois poser** : le test ne compte que **9 langues** à ce stade (41 quand tout sera tracé). Le +0,0076 porte donc sur un panel mince. C'est pourquoi je regarde l'**écart à la constante** — qui corrige la difficulté du panel — plutôt que la fidélité brute.
+
+**Détail structurel** : la naissance libre trouve **40 neurones en 1 seule couche** dans les deux cas, là où le panel à 46 langues donnait [30, 8, 8, 8, 8, 8, 8, 2]. La hiérarchie dépend bien des données — ce qui est exactement ce que l'objectif demande.
+
+\## Le coût, que je dois signaler
+
+L'expérience a **compété avec le traçage** : le rythme est tombé à 79 s par langue pendant les runs, contre 37 s maintenant qu'ils sont finis. J'ai jugé le signal précoce valait ce coût — il change une conclusion — mais c'est un arbitrage, pas une évidence.
+
+\## État
+
+| | |
+|---|---:|
+| phase 1 | **157/392** · 0 échec |
+| restant | ~235 langues, ~2,5 h |
+| fin estimée | ~02h45 |
+
+Rien à faire de votre côté. Commit `1a42f81`.
+
+### Tour 136 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1281 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Add midpoint to dose curve
+- bash — Commit the complete dose curve
+
+**Synthèse produite :**
+
+⏵ **Courbe de dose complète, et elle ne sature pas.**
+
+| langues | fid TEST | constante | **écart** | écart oracle TEST | écart oracle VAL |
+|---:|---:|---:|---:|---:|---:|
+| 30 | 0,7029 | 0,6907 | **+0,0122** | +0,0347 | +0,0240 |
+| **60** | **0,7058** | 0,6928 | **+0,0130** | +0,0343 | +0,0237 |
+| 112 | 0,7105 | 0,6955 | **+0,0150** | +0,0299 | +0,0231 |
+
+Le gain marginal par langue **augmente légèrement** au lieu de diminuer (2,7·10⁻⁵ puis 3,8·10⁻⁵ par langue). **La courbe ne sature donc pas** — pousser à 392 langues devrait continuer de payer. Et l'écart de transfert se réduit régulièrement.
+
+**La courbe ne sature pas** : le gain marginal par langue **augmente légèrement** au lieu de diminuer. Pousser jusqu'à 392 langues devrait donc continuer de payer — ce qui justifie pleinement la phase en cours.
 
 ## 3. Travail accompli
 
@@ -7207,7 +7254,7 @@ Tout se déclenche seul. Rien à faire de votre côté. Commit `1424c5d`.
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6736 autres
+- … et 6739 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -7952,4 +7999,5 @@ Tout se déclenche seul. Rien à faire de votre côté. Commit `1424c5d`.
 - 11 % des langues étaient TRONQUÉES à ctx 2048 — corrigé à ctx 4096, sans surcoût  Trouvé en vérifiant la qualité des traces sur un échantillon, PAS en attendant
 - Rapport : extension à toutes les langues — périmètre, convention, découpage, 5 phases  Documente l'état complet de l'extension : inventaire des trois corpus et 
 - Signal précoce : plus de langues AIDENT (+23 % d'avantage), contrairement à ma mesure antérieure  Mesure prise sur les 133 premières langues tracées, AVANT la f
+- Courbe de dose complète : elle NE sature PAS — le gain marginal par langue augmente  Troisième point ajouté (60 langues, sous-ensemble strict de la dose 112, mê
 
