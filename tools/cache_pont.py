@@ -54,8 +54,17 @@ def main():
     d, sortie = sys.argv[1], sys.argv[2]
     c = int(sys.argv[sys.argv.index("--couche") + 1]) if "--couche" in sys.argv else 10
     hidden = int(sys.argv[sys.argv.index("--hidden") + 1]) if "--hidden" in sys.argv else 896
+    # `--langues F` : ne garder que les langues listées (une par ligne). Sert à
+    # construire des caches séparés pour l'apprentissage et le test à partir du
+    # même dossier de traces.
+    gardees = None
+    if "--langues" in sys.argv:
+        gardees = {l.strip() for l in open(sys.argv[sys.argv.index("--langues")+1])
+                   if l.strip()}
     cles, E, Y = [], [], []
     for f in sorted(glob.glob(os.path.join(d, "*.drvf"))):
+        if gardees is not None and os.path.basename(f)[:-5] not in gardees:
+            continue
         h, pp = lire(f)
         pos = sorted(p for (cc, p) in pp if cc == 0)
         e = np.zeros((len(pos), h), dtype=np.float32)

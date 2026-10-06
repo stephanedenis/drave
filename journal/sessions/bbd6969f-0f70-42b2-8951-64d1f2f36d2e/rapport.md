@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 174.5 h |
-| Tours | 126 |
-| Messages | 8262 |
-| Appels d'outils | 7875 |
-| Fichiers touchés | 166 |
-| Commandes | 6692 |
+| Durée | 175.6 h |
+| Tours | 127 |
+| Messages | 8290 |
+| Appels d'outils | 7900 |
+| Fichiers touchés | 168 |
+| Commandes | 6713 |
 | Sous-agents | 32 |
-| Commits | 583 |
+| Commits | 584 |
 | Compactages de contexte | 11 |
 
 ## Objectifs déclarés
@@ -47,6 +47,10 @@
 … [497 caractères tronqués]
 - **create** — Faire évoluer le pont linguistico-sémantique en BOÎTE NOIRE (émulation des premières couches du professeur, sans accès à ses rouages) par une phase GÉNÉRATIVE — le nombre de neurones et de couches NAÎT pendant l'apprentissage, en partant d'un seul neurone — suivie d'une ATTRITION PÉRIODIQUE qui rédu
 … [482 caractères tronqués]
+- **complete** — Faire évoluer le pont linguistico-sémantique en BOÎTE NOIRE (émulation des premières couches du professeur, sans accès à ses rouages) par une phase GÉNÉRATIVE — le nombre de neurones et de couches NAÎT pendant l'apprentissage, en partant d'un seul neurone — suivie d'une ATTRITION PÉRIODIQUE qui rédu
+… [482 caractères tronqués]
+- **create** — Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes incha
+… [532 caractères tronqués]
 
 ## 1. Ce qui a été demandé
 
@@ -301,6 +305,8 @@
 **Tour 125** — <goal_round> Objective: "Faire évoluer le pont linguistico-sémantique en BOÎTE NOIRE (émulation des premières couches du professeur, sans accès à ses rouages) par une phase GÉNÉRATIVE — le nombre de neurones et de couches NAÎT pendant l'apprentissage, en partant d'un seul neurone — suivie d'une ATTRITION PÉRIODIQUE qui réduit la taille du réseau en GÉNÉRALISANT les concepts (fusion des unités redo … [951 caractères tronqués]
 
 **Tour 126** — <goal_round> Objective: "Faire évoluer le pont linguistico-sémantique en BOÎTE NOIRE (émulation des premières couches du professeur, sans accès à ses rouages) par une phase GÉNÉRATIVE — le nombre de neurones et de couches NAÎT pendant l'apprentissage, en partant d'un seul neurone — suivie d'une ATTRITION PÉRIODIQUE qui réduit la taille du réseau en GÉNÉRALISANT les concepts (fusion des unités redo … [951 caractères tronqués]
+
+**Tour 127** — continue maintenant avec toutes les langues, puis les grands corpus multilingues pour avoir des profs plus riches et étendre notre modèle.
 
 ## 2. Déroulé, étape par étape
 
@@ -6466,7 +6472,7 @@ Tous les livrables sont en place et mesurés : phase générative ✓ (naissance
 
 ### Tour 126 — <goal_round> Objective: "Faire évoluer le pont linguistico-sémantique en BOÎTE NOIRE (émulation des premières couches du … [1231 caractères tronqués]
 
-*19 appels d'outils.* Actions notables :
+*21 appels d'outils.* Actions notables :
 
 - write `/tmp/panneaux.sh`
 - bash — Run two-panel comparison
@@ -6482,20 +6488,69 @@ Tous les livrables sont en place et mesurés : phase générative ✓ (naissance
 - edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py`
 - edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py`
 - edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py`
-- … et 4 autres
+- … et 6 autres
 
 **Synthèse produite :**
 
-⏵ **L'attrition corrigée se comporte enfin comme prévu : elle refuse de couper.**
+⏵ Objectif atteint. Voici la clôture.
 
-| cycle | réseau né | attrition | résultat |
-|---|---|---|---|
-| 1 | 34 neurones / 1 couche | premier retrait **refusé** (VAL 0,8334 < 0,8353) | **34 conservés** |
-| 2 | 40 neurones / 2 couches [34, 6] | premier retrait **refusé** | **40 conservés** |
+\## Le résultat
 
-Réseau final : **40 neurones en 2 couches [34, 6]**, fid TEST **0,7383** (constante 0,7197), invariance **0,9795**, pire paire **0,9465**.
+Le pont linguistico-sémantique **existe, il est mesuré, et il tient dans 40 neurones en 2 couches** — sans une seule rétropropagation.
 
-**L'attrition est devenue une décision, plus une démolition.** Elle tente de réduire, et s'arrête quand ça ne paie pas — au lieu de descendre à un neurone comme avant.
+Chiffres du dernier run vérifié, professeur Qwen2.5-0.5B couche 10, 157 canaux sur 896, lecture quadratique :
+
+| | |
+|---|---|
+| fidélité TEST | **0,7383** (constante témoin 0,7197) |
+| invariance inter-langue | **0,9795** |
+| pire paire | **0,9465** |
+| taille | **40 neurones · 2 couches [34, 6]** |
+| oracle TEST / VALIDATION | 0,8029 / 0,8615 |
+
+\## Ce qui a été fait, et comment c'est vérifié
+
+**La méthode** — naissance d'un neurone à la fois, un neurone ajouté ne lit que la couche précédente (et sa propre couche) ; attrition par **redondance** avec **recalcul** des trajectoires des survivants et réajustement de la lecture ; `A` et `B` aléatoires et gelés, seule la lecture s'ajuste en forme fermée. Outil : `tools/pont_generatif.py` (41 ko), plus `cache_pont.py`, `compare_professeurs.py`, `sous_ensemble_actif.py`.
+
+**Trois résultats qui structurent tout**, tous dans `reports/recapitulatif.md` (788 lignes) :
+
+1. **La loi** — `fid TEST ≈ 1,1150 · (invariance de la cible) − 0,0848`, **r = 0,9570**. La constante témoin suit la **même loi, pente identique à 0,4 % près**. Le pont capte **97 %** du contenu interlingue de la cible, et rien au-delà.
+2. **L'invariant** — la contribution propre du pont est **+0,020 ± 0,0009**, stable de 896 à 23 canaux de sortie, sur deux architectures et deux critères. Améliorer la fidélité passe par **le choix de la cible**, pas par le modèle.
+3. **Le sous-ensemble actif** — 34 canaux sur 896 portent la moitié de l'énergie. Viser 157 canaux fait **monter toute la courbe** : +14 points de fidélité, et l'écart de transfert tombe de +0,0967 à +0,0693.
+
+\## Les corrections que je dois signaler
+
+Plusieurs de mes propres conclusions antérieures étaient fausses, et je les ai corrigées dans le rapport plutôt que de les laisser passer :
+
+- **Une fuite de données** dans le diagnostic oracle : « plafond 0,7762, écart +0,138 » était un ajustement **en échantillon**. Le vrai chiffre est **0,7076, écart +0,069**. La conclusion du tour 3 (« le plafond est dans le transfert ») en est invalidée.
+- **`--n 32` par défaut** : mes traces contenaient 32 jetons **générés** par le professeur (25 à 60 % des positions sur la donnée à une unité) et calculaient sa tête.
+- **`ctx 1024` tronquait ~50 % des langues** — l'invariance comparait alors des contenus différents.
+- *
+… [1550 caractères tronqués]
+
+### Tour 127 — continue maintenant avec toutes les langues, puis les grands corpus multilingues pour avoir des profs plus riches et éte … [18 caractères tronqués]
+
+*23 appels d'outils.* Actions notables :
+
+- create_goal
+- bash — Inventory UDHR languages with 10 units
+- write `/tmp/trace392.sh`
+- bash — Launch 392-language trace and verify args
+- bash — Verify trace arguments
+- bash — Inventory large multilingual corpora
+- bash — Inspect Wikipedia and Gutenberg formats
+- bash — Count Wikipedia chunks and inspect Gutenberg content
+- bash — Build stratified language split by script
+- bash — Check 392-language trace progress
+- bash — Recon Gutenberg parallel structure
+- bash — Add name-based split support
+- write `/tmp/analyse392.sh`
+- bash — Chain analysis and monitor trace
+- … et 9 autres
+
+**Synthèse produite :**
+
+⏵ **Corrigé : 24 lignes de chaque côté, vérifié par `wc`.** Je contrôle la qualité de l'appariement et je commit.
 
 ## 3. Travail accompli
 
@@ -6669,6 +6724,8 @@ Réseau final : **40 neurones en 2 couches [34, 6]**, fid TEST **0,7383** (const
 | `/tmp/reservoir.sh` | 1 | 0 |
 | `/tmp/transfert.sh` | 1 | 0 |
 | `/tmp/panneaux.sh` | 1 | 0 |
+| `/tmp/trace392.sh` | 1 | 0 |
+| `/tmp/analyse392.sh` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -6747,7 +6804,7 @@ Réseau final : **40 neurones en 2 couches [34, 6]**, fid TEST **0,7383** (const
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6652 autres
+- … et 6673 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -7478,4 +7535,5 @@ Réseau final : **40 neurones en 2 couches [34, 6]**, fid TEST **0,7383** (const
 - La restriction réduit aussi l'ÉCART de transfert (−28 %), confirmé sur les deux panneaux  Rejoué sur les deux panneaux — test non latin ET validation du même vi
 - Ce que la restriction NE fait PAS : la contribution du pont reste +0,020  Poussée plus loin, la restriction donne des chiffres spectaculaires (TEST 0,9038 à 3 c
 - L'attrition corrigée : une décision, plus une démolition  Le §11 disait 'l'attrition réduit, elle ne généralise pas'. Le fait était exact, mais la CAUSE était u
+- Phase 2 : corpus PARALLÈLE riche — Romeo and Juliet, 24 scènes alignées en/fr  Un grand corpus monolingue ne permet PAS de mesurer l'invariance inter-langue : i
 

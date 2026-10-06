@@ -450,6 +450,16 @@ def main():
     ival = list(range(n_val))
     itr = list(range(n_val, len(cltr)))
     ite = list(range(len(clte)))
+    # `--val-liste F` : la validation est désignée par NOMS de langues, pas par
+    # position. Un découpage positionnel ne tient pas dès qu'on change de corpus,
+    # et il interdit un panel stratifié par écriture.
+    if "--val-liste" in sys.argv:
+        noms = {l.strip() for l in open(sys.argv[sys.argv.index("--val-liste")+1])
+                if l.strip()}
+        ival = [i for i, c in enumerate(cltr) if c in noms]
+        itr = [i for i, c in enumerate(cltr) if c not in noms]
+        assert ival and itr, "découpe vide — noms de langues inconnus du cache ?"
+        print(f"# découpe par noms : {len(itr)} apprentissage · {len(ival)} validation")
 
     # ------------------------------------------------- SOUS-ENSEMBLE ACTIF
     #

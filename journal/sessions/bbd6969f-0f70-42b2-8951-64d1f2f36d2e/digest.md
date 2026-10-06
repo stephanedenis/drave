@@ -133428,3 +133428,589 @@ Réseau final : **40 neurones en 2 couches [34, 6]**, fid TEST **0,7383** (const
 **L'attrition est devenue une décision, plus une démolition.** Elle tente de réduire, et s'arrête quand ça ne paie pas — au lieu de descendre à un neurone comme avant.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/recapitulatif.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 16. L'attrition corrigée : une décision, plus une démolition\n\nLe §11 concluait « l'attrition réduit, elle ne généralise pas ». Le fait était … [3039 caractères tronqués]`
+
+  ```
+62982fa L'attrition corrigée : une décision, plus une démolition
+  ```
+
+### 🤖 Assistant
+
+⏵ Tous les livrables sont maintenant en place et vérifiés. Je fais la vérification finale avant de statuer.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport os\nmoi=os.getpid(); anc=set(); q=moi\nfor _ in range(8):\n    try:\n        st=open(f'/proc/{q}/stat').read().split(') ',1)[1].split(); q=int(st[1]); anc.add(q)\n    except Exception: break\nn=0\nfor d in os.li … [871 caractères tronqués]`
+
+  ```
+calculs en cours : 0
+--- les livrables, vérifiés ---
+   tools/cache_pont.py 2976 octets
+   tools/compare_professeurs.py 3664 octets
+   tools/pont_generatif.py 41379 octets
+   tools/sous_ensemble_actif.py 3992 octets
+--- rapport ---
+788 reports/recapitulatif.md
+--- traces du professeur retenu ---
+2,7G	/home/stephane/Data13TB/stephane/corpus/udhr/appr10c
+398M	/home/stephane/Data13TB/stephane/corpus/udhr/tenus10c
+  ```
+
+### 🤖 Assistant
+
+⏵ Tout est en place, rien ne tourne, le dépôt est propre. Je marque l'objectif atteint.
+
+- **update_goal** `{"goal_id": "goal-3b3f4915-58ff-46bb-9d02-f2707c9f325d", "revision": 1, "action": "complete"}`
+
+> **Objectif** (complete) : Faire évoluer le pont linguistico-sémantique en BOÎTE NOIRE (émulation des premières couches du professeur, sans accès à ses rouages) par une phase GÉNÉRATIVE — le nombre de neurones et de couches NAÎT pendant l'apprentissage, en partant d'un seul neurone — suivie d'une ATTRITION PÉRIODIQUE qui réduit la taille du réseau en GÉNÉRALISANT les concepts (fusion des unités redondantes, réajustement de la lecture sur les survivants), jamais par simple coupe. Aucune rétropropagation : A et B restent aléatoires et gelés, seule la lecture s'ajuste en forme fermée. Chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, et TAILLE du réseau — mesurées contre le professeur Qwen2.5-0.5B couche 10 et le plateau Qwen3-30B-A3B.
+
+
+  ```
+{"goal":{"id":"goal-3b3f4915-58ff-46bb-9d02-f2707c9f325d","revision":2,"objective":"Faire évoluer le pont linguistico-sémantique en BOÎTE NOIRE (émulation des premières couches du professeur, sans accès à ses rouages) par une phase GÉNÉRATIVE — le nombre de neurones et de couches NAÎT pendant l'apprentissage, en partant d'un seul neurone — suivie d'une ATTRITION PÉRIODIQUE qui réduit la taille du réseau en GÉNÉRALISANT les concepts (fusion des unités redondantes, réajustement de la lecture sur les survivants), jamais par simple coupe. Aucune rétropropagation : A et B restent aléatoires et gelés, seule la lecture s'ajuste en forme fermée. Chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, et TAILLE du réseau — mesurées contre le professeur Qwen2.5-0.5B couche 10 et le plateau Qwen3-30B-A3B.","phase":"complete","roundsStarted":5,"maxGoalRounds":256},"activation":"disarmed"}
+  ```
+
+### 👤 Utilisateur
+
+<goal_complete>
+Objective: "Faire évoluer le pont linguistico-sémantique en BOÎTE NOIRE (émulation des premières couches du professeur, sans accès à ses rouages) par une phase GÉNÉRATIVE — le nombre de neurones et de couches NAÎT pendant l'apprentissage, en partant d'un seul neurone — suivie d'une ATTRITION PÉRIODIQUE qui réduit la taille du réseau en GÉNÉRALISANT les concepts (fusion des unités redondantes, réajustement de la lecture sur les survivants), jamais par simple coupe. Aucune rétropropagation : A et B restent aléatoires et gelés, seule la lecture s'ajuste en forme fermée. Chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, et TAILLE du réseau — mesurées contre le professeur Qwen2.5-0.5B couche 10 et le plateau Qwen3-30B-A3B."
+The goal is marked complete and this autonomous run is ending. Write the closing message to the user now: state the outcome, summarize what was done and how it was verified, and point to the concrete results (files, commits, or other artifacts). Report only what earlier rounds and tool results in this session actually establish; when a detail is not in the session, say so instead of inventing it. Note anything the user should review or do next. Address the user directly. Do not call any more tools in this run; further work waits for the user's next instruction.
+</goal_complete>
+
+### 🤖 Assistant
+
+⏵ Objectif atteint. Voici la clôture.
+
+## Le résultat
+
+Le pont linguistico-sémantique **existe, il est mesuré, et il tient dans 40 neurones en 2 couches** — sans une seule rétropropagation.
+
+Chiffres du dernier run vérifié, professeur Qwen2.5-0.5B couche 10, 157 canaux sur 896, lecture quadratique :
+
+| | |
+|---|---|
+| fidélité TEST | **0,7383** (constante témoin 0,7197) |
+| invariance inter-langue | **0,9795** |
+| pire paire | **0,9465** |
+| taille | **40 neurones · 2 couches [34, 6]** |
+| oracle TEST / VALIDATION | 0,8029 / 0,8615 |
+
+## Ce qui a été fait, et comment c'est vérifié
+
+**La méthode** — naissance d'un neurone à la fois, un neurone ajouté ne lit que la couche précédente (et sa propre couche) ; attrition par **redondance** avec **recalcul** des trajectoires des survivants et réajustement de la lecture ; `A` et `B` aléatoires et gelés, seule la lecture s'ajuste en forme fermée. Outil : `tools/pont_generatif.py` (41 ko), plus `cache_pont.py`, `compare_professeurs.py`, `sous_ensemble_actif.py`.
+
+**Trois résultats qui structurent tout**, tous dans `reports/recapitulatif.md` (788 lignes) :
+
+1. **La loi** — `fid TEST ≈ 1,1150 · (invariance de la cible) − 0,0848`, **r = 0,9570**. La constante témoin suit la **même loi, pente identique à 0,4 % près**. Le pont capte **97 %** du contenu interlingue de la cible, et rien au-delà.
+2. **L'invariant** — la contribution propre du pont est **+0,020 ± 0,0009**, stable de 896 à 23 canaux de sortie, sur deux architectures et deux critères. Améliorer la fidélité passe par **le choix de la cible**, pas par le modèle.
+3. **Le sous-ensemble actif** — 34 canaux sur 896 portent la moitié de l'énergie. Viser 157 canaux fait **monter toute la courbe** : +14 points de fidélité, et l'écart de transfert tombe de +0,0967 à +0,0693.
+
+## Les corrections que je dois signaler
+
+Plusieurs de mes propres conclusions antérieures étaient fausses, et je les ai corrigées dans le rapport plutôt que de les laisser passer :
+
+- **Une fuite de données** dans le diagnostic oracle : « plafond 0,7762, écart +0,138 » était un ajustement **en échantillon**. Le vrai chiffre est **0,7076, écart +0,069**. La conclusion du tour 3 (« le plafond est dans le transfert ») en est invalidée.
+- **`--n 32` par défaut** : mes traces contenaient 32 jetons **générés** par le professeur (25 à 60 % des positions sur la donnée à une unité) et calculaient sa tête.
+- **`ctx 1024` tronquait ~50 % des langues** — l'invariance comparait alors des contenus différents.
+- **Des « couches » cosmétiques** : chaque neurone lisait *tous* les précédents, donc ouvrir une couche et ajouter un neurone faisaient exactement le même calcul.
+- **Le seuil d'attrition (0,02)** dépassait la perte totale possible : l'attrition descendait à **1 neurone** au lieu de s'arrêter au meilleur point.
+
+## Ce que l'objectif demandait et que je n'ai pas fait
+
+**La mesure contre le plateau Qwen3-30B-A3B.** Vous m'avez explicitement demandé de ne travailler que sur **un seul professeur**, ce qui l'a écarté. J'ai lancé ce travail puis l'ai arrêté et supprimé ses artefacts — c'est un manque assumé, pas un oubli.
+
+## Ce qu'il vous reste à regarder
+
+- **L'attrition ne généralise pas.** Elle est correctement implémentée (fusion par redondance, recalcul, réajustement) et elle **réduit** — mais elle n'améliore rien. Avec une lecture linéaire, fusionner des unités redondantes équivaut exactement à les retirer : c'est une conséquence, pas un défaut de réglage. À valider ou contester.
+- **L'écart de typologie (+0,042)** reste ouvert. La piste naturelle — aligner l'entrée entre langues par le corpus parallèle, en forme fermée — se heurte à un manque de données : **mes caches ne conservent pas les frontières des unités**, donc je ne peux pas apparier les jetons entre langues. Il faudrait retracer en gardant ces frontières.
+- **Le panneau de test** est uniquement non latin : un chiffre sur ce seul panneau mélange qualité du pont et distance typologique. Le diagnostic rapporte désormais les **deux**.
+
+Tout est commité ; rien ne tourne.
+
+
+## Tour 127
+
+### 👤 Utilisateur
+
+continue maintenant avec toutes les langues, puis les grands corpus multilingues pour avoir des profs plus riches et étendre notre modèle.
+
+### 🤖 Assistant
+
+⏵ Nouvelle cible : toutes les langues, puis les grands corpus multilingues. Je cadre l'objectif.
+
+Compris. On passe de **46 langues** à **toutes celles disponibles**, puis on monte en richesse de corpus. Je cadre d'abord, puis j'inventorie.
+
+- **create_goal** `{"objective": "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Co … [549 caractères tronqués]`
+
+> **Objectif** (create) : Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de représentation universelle), boîte noire (on ne lit du professeur que la couche à émuler, jamais sa tête ni ses jetons générés), aucune rétropropagation (A et B aléatoires et gelés, seule la lecture s'ajuste en forme fermée), et chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, TAILLE du réseau, avec le diagnostic oracle sur les deux panneaux (test hors vivier et validation du même vivier).
+
+
+  ```
+{"goal":{"id":"goal-975ab185-c6a1-415f-8dcd-38bf09cf8196","revision":1,"objective":"Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de représentation universelle), boîte noire (on ne lit du professeur que la couche à émuler, jamais sa tête ni ses jetons générés), aucune rétropropagation (A et B aléatoires et gelés, seule la lecture s'ajuste en forme fermée), et chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, TAILLE du réseau, avec le diagnostic oracle sur les deux panneaux (test hors vivier et validation du même vivier).","phase":"active","roundsStarted":0,"maxGoalRounds":256},"activation":"armed"}
+  ```
+
+### 🤖 Assistant
+
+⏵ J'inventorie le corpus : combien de langues ont les 10 unités complètes ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/corpus/udhr && python3 - <<'PY'\nimport json, os\nu=[json.loads(l) for l in open('unites.jsonl')]\nprint(f\"unites.jsonl : {len(u)} unités\")\nnoms=[x['unite'] for x in u]\nprint(\"unités :\", noms[:12], \"...\")\n# langues présentes dans les 10 PREMI … [984 caractères tronqués]`
+
+  ```
+unites.jsonl : 42 unités
+unités : ['article-1-00', 'article-10-00', 'article-11', 'article-12-00', 'article-13', 'article-14', 'article-15', 'article-16', 'article-17', 'article-18-00', 'article-19-00', 'article-2-00'] ...
+
+langues avec les 10 premières unités : 392
+langues avec les 42 unités : 66
+
+unités par nombre de langues : min 70 max 400
+
+392 textes de 10 unités écrits dans /tmp/udhr10_toutes
+1,9M	/tmp/udhr10_toutes
+/dev/mapper/system-root   11T  8,8T  2,1T  81% /home/stephane/Data13TB
+  ```
+
+### 🤖 Assistant
+
+⏵ **392 langues ont les 10 unités** — contre 46 utilisées jusqu'ici, soit **8,5× plus**. Je lance le traçage filtré.
+
+**392 langues** disposent des 10 unités — contre 46 utilisées jusqu'ici. Je lance le traçage, en gardant la même convention pour toutes (`--ctx 2048 --n 0`) et en n'écrivant que les couches utiles (`--trace-couches 0,10`), ce qui rend chaque fichier ~11× plus petit.
+
+- **write** `{"content": "#!/bin/bash\n# TOUTES LES LANGUES — 392 langues de l'UDHR, dix unités chacune.\n#\n# Convention UNIQUE pour toutes (une comparaison n'a de sens qu'à convention\n# égale) :\n#   --ctx 2048          aucune troncature (l'abkhaze demande 1958 jetons)\n#   --n 0               ni tête du prof … [1107 caractères tronqués]`
+
+  ```
+<path>/tmp/trace392.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "chmod +x /tmp/trace392.sh && setsid nohup /tmp/trace392.sh >/dev/null 2>&1 < /dev/null & sleep 60; echo \"=== arguments vérifiés dans /proc ===\"; python3 -c \"\nimport os\nfor d in os.listdir('/proc'):\n    if d.isdigit():\n        try: cl=open(f'/proc/{d}/cmdline','rb').read().decode( … [568 caractères tronqués]`
+
+  ```
+=== arguments vérifiés dans /proc ===
+--- progression ---
+1
+abk 48s 10061212
+11M	/home/stephane/Data13TB/stephane/corpus/udhr/udhr392
+  ```
+
+### 🤖 Assistant
+
+⏵ Le traçage tourne (abk : 48 s, 10 Mo). Je vérifie les arguments autrement, mon filtre n'a rien capturé.
+
+- **bash** `{"command": "python3 -c \"\nimport os\ntrouve=0\nfor d in os.listdir('/proc'):\n    if d.isdigit():\n        try: cl=open(f'/proc/{d}/cmdline','rb').read().decode(errors='replace')\n        except Exception: continue\n        if 'gguf' in cl and 'infer' in cl and 'trace-flux' in cl:\n            p=[ … [439 caractères tronqués]`
+
+  ```
+--ctx 2048 · --couches 0:11 · --lot 1 · --n 0 · --trace-couches 0,10
+processus traçants : 1
+--- progression ---
+1
+abk 48s 10061212
+  ```
+
+### 🤖 Assistant
+
+⏵ Arguments confirmés (`--ctx 2048 · --couches 0:11 · --lot 1 · --n 0 · --trace-couches 0,10`). ~2,7 h de traçage. J'inventorie les grands corpus en attendant.
+
+**Arguments confirmés.** Le traçage prendra ~2,7 h. J'inventorie les **grands corpus multilingues** pour la seconde moitié de l'objectif.
+
+- **bash** `{"command": "echo \"=== Wikipedia décompressée ===\"; ls -la /home/stephane/Data13TB/stephane/nipada/wikipedia_decompressed/ 2>/dev/null | head -12; du -sh /home/stephane/Data13TB/stephane/nipada/wikipedia_decompressed/ 2>/dev/null; echo; echo \"=== Gutenberg parallèle (Panini-Research) ===\"; ls -l … [272 caractères tronqués]`
+
+  ```
+=== Wikipedia décompressée ===
+total 0
+drwxrwxr-x. 1 stephane stephane      24  8 jun 21:43 .
+drwxr-xr-x. 1 stephane stephane      44  8 jun 08:53 ..
+drwxr-xr-x. 1 stephane stephane  581600  8 jun 18:51 de
+drwxr-xr-x. 1 stephane stephane 1406300  8 jun 14:58 en
+drwxr-xr-x. 1 stephane stephane  353700  8 jun 20:08 es
+drwxr-xr-x. 1 stephane stephane  469300  8 jun 16:53 fr
+drwxr-xr-x. 1 stephane stephane   98500  8 jun 22:04 it
+drwxr-xr-x. 1 stephane stephane  370050  8 jun 21:43 ru
+81G	/home/stephane/Data13TB/stephane/nipada/wikipedia_decompressed/
+
+=== Gutenberg parallèle (Panini-Research) ===
+-rw-r--r--. 1 stephane stephane    73728  3 jui 16:11 /home/stephane/Data13TB/stephane/GitHub/Panini-Research/data/mass_ingestion/backlog_arxiv_all.db
+-rw-r--r--. 1 stephane stephane  9842688  3 jui 15:25 /home/stephane/Data13TB/stephane/GitHub/Panini-Research/data/mass_ingestion/backlog_gutenberg_de.db
+-rw-r--r--. 1 stephane stephane 22081536  3 jui 15:25 /home/stephane/Data13TB/stephane/GitHub/Panini-Research/data/mass_ingestion/backlog_gutenberg_en.db
+-rw-r--r--. 1 stephane stephane 11751424  3 jui 15:25 /home/stephane/Data13TB/stephane/GitHub/Panini-Research/data/mass_ingestion/backlog_gu
+… [698 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Corpus inventoriés : **Wikipedia 81 Go / 6 langues** et **Gutenberg parallèle 4 langues**. Point critique à vérifier : pour mesurer l'invariance il faut du contenu **parallèle**. Je regarde les formats.
+
+**Deux corpus** : Wikipedia (81 Go, 6 langues) et Gutenberg parallèle (4 langues). Mais un point critique : **l'invariance exige du contenu parallèle**, et des articles Wikipedia ne sont pas parallèles. Je vérifie les formats et les possibilités d'appariement.
+
+- **bash** `{"command": "W=/home/stephane/Data13TB/stephane/nipada/wikipedia_decompressed; echo \"=== structure Wikipedia (en) ===\"; ls $W/en | head -4; f=$(ls $W/en/* | head -1); echo \"--- $f ---\"; file \"$f\"; python3 -c \"\nimport json,sys\nf='$f'\ntry:\n    t=open(f,encoding='utf-8',errors='replace')\n   … [950 caractères tronqués]`
+
+  ```
+=== structure Wikipedia (en) ===
+wiki_en_chunk_000001.json
+wiki_en_chunk_000002.json
+wiki_en_chunk_000003.json
+wiki_en_chunk_000004.json
+---  ---
+cannot open `' (No such file or directory)
+ erreur: [Errno 2] No such file or directory: ''
+
+=== Gutenberg : schéma ===
+backlog_gutenberg_en.db : tables ['backlog']
+   backlog : 13 lignes · colonnes ['item_hash', 'source', 'lang', 'title', 'author', 'url', 'raw_text', 'v14_signature', 'word_count', 'ingested_at', 'status']
+backlog_gutenberg_fr.db : tables ['backlog']
+   backlog : 11 lignes · colonnes ['item_hash', 'source', 'lang', 'title', 'author', 'url', 'raw_text', 'v14_signature', 'word_count', 'ingested_at', 'status']
+[stderr]
+bash: line 1: /usr/bin/ls: Argument list too long
+  ```
+
+### 🤖 Assistant
+
+⏵ `ls` a débordé (répertoires énormes). Je compte et j'inspecte autrement.
+
+- **bash** `{"command": "W=/home/stephane/Data13TB/stephane/nipada/wikipedia_decompressed; python3 - <<'PY'\nimport os, json, glob\nW='/home/stephane/Data13TB/stephane/nipada/wikipedia_decompressed'\nfor L in sorted(os.listdir(W)):\n    d=os.path.join(W,L)\n    n=len(os.listdir(d))\n    print(f\"  {L} : {n} fic … [1212 caractères tronqués]`
+
+  ```
+de : 11632 fichiers
+  en : 28126 fichiers
+  es : 7074 fichiers
+  fr : 9386 fichiers
+  it : 1970 fichiers
+  ru : 7401 fichiers
+
+--- wiki_en_chunk_000001.json (5.0 Mo) ---
+  clés : ['article_count', 'articles', 'created_at', 'lang', 'schema', 'source_dump']
+    schema: str 'nipada_wikipedia_chunk_v1'
+    created_at: str '2026-06-08T08:54:09'
+    lang: str 'en'
+    source_dump: str '/home/stephane/GitHub/Panini-FS/SANDBOX/dolt-concept-store/wikipedia_dumps/en/enwiki-latest-pages-articles.xml.bz2'
+    article_count: int '150'
+    articles: list "[{'title': 'Anarchism', 'page_id': '12', 'lang': 'en', 'text': 'Anarchism is a political philosophy and movement that se"
+
+=== Gutenberg : contenu réel ===
+en : 13 œuvres, 2,891,852 mots au total
+    'The Complete Works of William Shakespeare' · 'Shakespeare, William' · 963478 mots
+    'The Count of Monte Cristo' · 'Dumas, Alexandre' · 460989 mots
+    'Middlemarch' · 'Eliot, George' · 319407 mots
+fr : 11 œuvres, 945,494 mots au total
+    'Les trois mousquetaires' · 'Dumas, Alexandre' · 225175 mots
+    "L'île mystérieuse" · 'Verne, Jules' · 196365 mots
+    'Le comte de Monte-Cristo, Tome I' · 'Dumas, Alexandre' · 121597 mots
+de : 10 œuvres, 1,19
+… [446 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le tableau est clair. Je prépare le découpage pendant le traçage.
+
+**Inventaire établi :**
+
+| corpus | contenu | parallèle ? |
+|---|---|---|
+| **UDHR** | 392 langues × 10 unités | **oui**, aligné |
+| **Wikipedia** | 65 589 fichiers, 6 langues, 81 Go (150 articles/fichier) | non (articles différents) |
+| **Gutenberg** | 40 œuvres, 6,6 M mots — dont **Dumas, Verne, Hugo en parallèle** | **partiellement** |
+
+Je prépare le découpage du nouveau périmètre. Point de méthode : je classerai les langues par **écriture déduite du texte lui-même** (blocs Unicode), pas à la main — c'est objectif et reproductible.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/decoupe_langues.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"decoupe_langues.py — découper un panel de langues par ÉCRITURE, déduite du texte.\n\nUn découpage « à la main » n'est ni reproductible ni vérifiable. Ici l'écriture … [3597 caractères tronqués]`
+
+  ```
+# 392 langues · 22 écritures
+    latin         308  ace acu ada afr agr ajg als amc …
+    cyrillique     26  abk ady alt bel bul cjs eve evn …
+    inconnu        14  aii ccp chr csw guj iii ike jav …
+    arabe           9  arb div fuf pbu pes pnb prs skr …
+    cjk             8  cjy cmn gan hak nan vie wuu yue
+    devanagari      6  bho hin mag mai mar npi
+    birman          3  mnw mya shn
+    ethiopien       2  amh tir
+    tibetain        2  bod dzo
+    hebreu          2  heb ydd
+    bengali         1  ben
+    grec            1  ell
+    armenien        1  hye
+    japonais        1  jpn
+    georgien        1  kat
+    khmer           1  khm
+    coreen          1  kor
+    lao             1  lao
+    malayalam       1  mal
+    tamoul          1  tam
+    telougou        1  tel
+    thai            1  tha
+
+# TEST 41 · VALIDATION 50 · APPRENTISSAGE 301
+# écritures du TEST : {'cyrillique': 2, 'latin': 19, 'inconnu': 1, 'ethiopien': 1, 'arabe': 1, 'bengali': 1, 'devanagari': 1, 'tibetain': 1, 'cjk': 1, 'grec': 1, 'hebreu': 1, 'armenien': 1, 'japonais': 1, 'georgien': 1, 'khmer': 1, 'coreen': 1, 'lao': 1, 'malayalam': 1, 'birman': 1, 'tamoul': 1, 'telougou': 1, 'thai': 1}
+# /tmp/decoupe392.j
+… [9 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Découpage stratifié réussi** : 22 écritures déduites du texte, **toutes représentées dans le test**.
+
+| | langues | écritures couvertes |
+|---|---:|---|
+| **TEST** | 41 | **les 22** |
+| VALIDATION | 50 | — |
+| APPRENTISSAGE | **301** | — |
+
+C'est exactement le panel que je recommandais après la découverte de typologie. Je vérifie le traçage.
+
+- **bash** `{"command": "wc -l < /tmp/trace392.log; tail -3 /tmp/trace392.log; echo \"fichiers : $(ls /home/stephane/Data13TB/stephane/corpus/udhr/udhr392 | wc -l)/392\"; du -sh /home/stephane/Data13TB/stephane/corpus/udhr/udhr392; awk '{s+=$2; n++} END {if(n>0) printf \"moyenne %.0f s · reste %.1f h\\n\", s/n, … [154 caractères tronqués]`
+
+  ```
+4
+ace 27s 5401634
+acu 25s 4881356
+ada 36s 7133839
+fichiers : 4/392
+27M	/home/stephane/Data13TB/stephane/corpus/udhr/udhr392
+moyenne 0 s · reste 0.0 h
+22:14
+  ```
+
+### 🤖 Assistant
+
+⏵ 4/392, ~32 s par langue → fin vers **01h45**. Je fais la reconnaissance Gutenberg en attendant.
+
+4/392, ~32 s par langue : fin estimée vers **01h45**. J'utilise l'attente pour la reconnaissance du corpus parallèle Gutenberg.
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sqlite3, re\np='/home/stephane/Data13TB/stephane/GitHub/Panini-Research/data/mass_ingestion/'\nfor db,titre in [('en','Monte'),('fr','Monte')]:\n    c=sqlite3.connect(f'{p}backlog_gutenberg_{db}.db')\n    r=c.execute(\"select title, raw_text from backlog where t … [609 caractères tronqués]`
+
+  ```
+=== en : 'The Count of Monte Cristo' · 2,627,361 caractères ===
+  marqueurs de chapitre trouvés : 234 · ex ['Chapter', 'Chapter', 'Chapter', 'Chapter', 'Chapter']
+  paragraphes >200 car. : 3968
+  début : '*** START OF THE PROJECT GUTENBERG EBOOK 1184 ***\n\n\n\n\nTHE COUNT OF MONTE CRISTO\n\nby Alexandre Dumas [père]\n\n\n\n\nContents\n\n\n VOLUME ONE\nChapter 1. Marse'
+=== fr : 'Le comte de Monte-Cristo, Tome I' · 727,600 caractères ===
+  marqueurs de chapitre trouvés : 0 · ex []
+  paragraphes >200 car. : 1131
+  début : '*** START OF THE PROJECT GUTENBERG EBOOK 17989 ***\n\n\n\n\nLE COMTE DE MONTE-CRISTO\n\nAlexandre Dumas\n\nTome I (1845-1846)\n\n\n\n\nTable des matières\n\n\nAlexandr'
+  ```
+
+### 🤖 Assistant
+
+⏵ Gutenberg est alignable au niveau des chapitres, mais les éditions diffèrent (l'anglais est l'œuvre complète, le français un tome). Je note pour la phase 2. Pour l'instant, je prépare l'outillage du périmètre à 392 langues.
+
+Gutenberg est alignable au chapitre, mais les éditions diffèrent (anglais = œuvre complète, français = tome I) — je note pour la phase 2. Pour l'instant, je prépare l'outillage : il me faut un découpage **par noms de langues**, pas positionnel.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/cache_pont.py'; s=open(p).read()\ns=s.replace(\"\"\"    cles, E, Y = [], [], []\n    for f in sorted(glob.glob(os.path.join(d, \"*.drvf\"))):\"\"\",\n\"\"\"    # `--langues F` : ne garder que les langues li … [1847 caractères tronqués]`
+
+  ```
+outillage prêt
+syntaxe OK
+ada 36s 7133839
+5
+  ```
+
+### 🤖 Assistant
+
+⏵ Outillage prêt. Je chaîne l'analyse pour qu'elle démarre seule à la fin du traçage.
+
+- **write** `{"content": "#!/bin/bash\n# TOUTES LES LANGUES — analyse dès que les 392 traces sont là.\n#\n# Le découpage est STRATIFIÉ PAR ÉCRITURE (22 écritures, toutes représentées dans\n# le test), déduit du texte lui-même par tools/decoupe_langues.py. C'est la\n# réponse à la découverte de typologie : un tes … [2245 caractères tronqués]`
+
+  ```
+<path>/tmp/analyse392.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "chmod +x /tmp/analyse392.sh && setsid nohup /tmp/analyse392.sh >/dev/null 2>&1 < /dev/null & echo \"analyse 392 chaînée\"; sleep 420; echo \"--- traçage ---\"; tail -1 /tmp/trace392.log; echo \"fichiers : $(ls /home/stephane/Data13TB/stephane/corpus/udhr/udhr392 | wc -l)/392\"; du -sh / … [142 caractères tronqués]`
+
+  ```
+analyse 392 chaînée
+--- traçage ---
+arb 20s 3513880
+fichiers : 17/392
+122M	/home/stephane/Data13TB/stephane/corpus/udhr/udhr392
+22:22
+  ```
+
+### 🤖 Assistant
+
+⏵ 17/392 : je calcule le rythme réel pour estimer la fin.
+
+- **bash** `{"command": "python3 -c \"\nimport re\nt=open('/tmp/trace392.log').read()\nts=[int(x) for x in re.findall(r'(\\d+)s', t)]\nechecs=t.count('ÉCHEC')\nprint(f'{len(ts)} langues tracées · {echecs} échecs')\nif ts:\n    print(f'total {sum(ts)} s = {sum(ts)/60:.1f} min · moyenne {sum(ts)/len(ts):.0f} s ·  … [251 caractères tronqués]`
+
+  ```
+17 langues tracées · 0 échecs
+total 615 s = 10.2 min · moyenne 36 s · min 20 max 49
+reste estimé : 3.8 h
+18
+22:22
+  ```
+
+### 🤖 Assistant
+
+⏵ Rythme réel : **36 s par langue, 3,8 h restantes** → fin vers 02h10. J'utilise l'attente pour préparer la phase 2 : identifier les **œuvres parallèles** entre langues.
+
+**Rythme réel : 36 s par langue, fin vers 02h10.** J'utilise l'attente pour la phase 2 — identifier les œuvres réellement **parallèles** entre langues.
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sqlite3, unicodedata, re\np='/home/stephane/Data13TB/stephane/GitHub/Panini-Research/data/mass_ingestion/'\ndef norm(s):\n    s=unicodedata.normalize('NFKD',str(s)).encode('ascii','ignore').decode().lower()\n    return re.sub(r'[^a-z ]',' ',s)\noeuvres={}\nfor l … [1031 caractères tronqués]`
+
+  ```
+=== auteurs présents dans PLUSIEURS langues ===
+
+  dostoyevsky  fyodor : ['en', 'es']
+     en : 'Crime and Punishment' · 206,549 mots
+     es : 'El crimen y el castigo' · 176,258 mots
+
+  dumas  alexandre : ['en', 'fr']
+     en : 'The Count of Monte Cristo' · 460,989 mots
+     fr : 'Le comte de Monte-Cristo, Tome I' · 121,597 mots
+     fr : 'Les trois mousquetaires' · 225,175 mots
+
+  shakespeare  william : ['en', 'fr']
+     en : 'Romeo and Juliet' · 25,976 mots
+     en : 'The Complete Works of William Shakespeare' · 963,478 mots
+     fr : 'Roméo et Juliette: Tragédie' · 38,298 mots
+
+=== total par langue ===
+  en : 13 œuvres · 2,891,852 mots
+  fr : 11 œuvres · 945,494 mots
+  de : 10 œuvres · 1,197,274 mots
+  es : 10 œuvres · 1,559,905 mots
+  ```
+
+### 🤖 Assistant
+
+⏵ **Trois paires parallèles trouvées** : Dostoïevski (*Crime and Punishment* en/es, longueurs proches : 206K / 176K mots), Shakespeare (*Romeo and Juliet* en/fr), Dumas (Monte Cristo en/fr, partiel). Je vérifie l'alignabilité.
+
+**Trois paires parallèles trouvées** — dont une excellente : Dostoïevski *Crime and Punishment* (anglais 206K mots / espagnol 176K mots, longueurs proches). Je vérifie la structure pour l'alignement.
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sqlite3, re\np='/home/stephane/Data13TB/stephane/GitHub/Panini-Research/data/mass_ingestion/'\ncas=[('en','Crime and Punishment'),('es','El crimen y el castigo'),\n     ('en','Romeo and Juliet'),('fr','Roméo')]\nfor lg,titre in cas:\n    c=sqlite3.connect(f'{p}b … [770 caractères tronqués]`
+
+  ```
+en 'Crime and Punishment'                   1,176,911 car · marqueurs : {'PART': 6, 'CHAPTER': 39}
+ es 'El crimen y el castigo'                 1,074,769 car · marqueurs : {}
+ en 'Romeo and Juliet'                         142,570 car · marqueurs : {'ACT': 10, 'SCENE': 24}
+ fr 'Roméo et Juliette: Tragédie'              240,962 car · marqueurs : {'SCÈNE': 24}
+--- traçage ---
+18
+22:23
+  ```
+
+### 🤖 Assistant
+
+⏵ **Excellente nouvelle : *Romeo and Juliet* a exactement 24 scènes dans les deux langues** (en : 10 actes + 24 scènes ; fr : 24 scènes). C'est un corpus parallèle **propre**, alignable par l'ordre. Je l'extrais pendant que le traçage continue.
+
+**Excellente trouvaille : *Romeo and Juliet* a exactement 24 scènes dans les deux langues.** Corpus parallèle propre, alignable par l'ordre. Je l'extrais.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/extrait_gutenberg.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"extrait_gutenberg.py — sortir des SEGMENTS PARALLÈLES d'œuvres alignables.\n\nUn grand corpus monolingue ne permet pas de mesurer l'invariance inter-langue :\nil  … [1942 caractères tronqués]`
+
+  ```
+/home/stephane/Data13TB/stephane/GitHub/Panini-Research/data/mass_ingestion/backlog_gutenberg_en.db · 'Romeo and Juliet' · 142,570 caractères · 34 segments
+  34 segments écrits dans /tmp/parallele/rj_en.txt (142,349 caractères)
+/home/stephane/Data13TB/stephane/GitHub/Panini-Research/data/mass_ingestion/backlog_gutenberg_fr.db · 'Roméo et Juliette: Tragédie' · 240,962 caractères · 24 segments
+  24 segments écrits dans /tmp/parallele/rj_fr.txt (214,730 caractères)
+    34 /tmp/parallele/rj_en.txt
+    24 /tmp/parallele/rj_fr.txt
+    58 total
+  ```
+
+### 🤖 Assistant
+
+⏵ L'anglais a 34 segments (actes **et** scènes mêlés), le français 24. Je ne prends que les **scènes** des deux côtés.
+
+L'anglais a 34 segments parce que j'ai capturé les **actes et** les scènes. Je ne garde que les scènes des deux côtés pour obtenir 24 = 24.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && P=/home/stephane/Data13TB/stephane/GitHub/Panini-Research/data/mass_ingestion\npython3 tools/extrait_gutenberg.py /tmp/parallele/rj_en.txt --db $P/backlog_gutenberg_en.db --titre \"Romeo and Juliet\" --motif '^\\s*SCENE\\s+[IVXLC]+\\ … [914 caractères tronqués]`
+
+  ```
+/home/stephane/Data13TB/stephane/GitHub/Panini-Research/data/mass_ingestion/backlog_gutenberg_en.db · 'Romeo and Juliet' · 142,570 caractères · 24 segments
+  24 segments écrits dans /tmp/parallele/rj_en.txt (139,784 caractères)
+    24 /tmp/parallele/rj_en.txt
+    24 /tmp/parallele/rj_fr.txt
+    48 total
+
+appariement : 24 scènes en anglais · 4835 en français
+scène  car. en  car. fr  rapport
+    1    10922        7     0.00
+    2     4731        0     0.00
+    3     4997       19     0.00
+    4     5288        0     0.00
+    5     7542       62     0.01
+    6     2069        0     0.00
+  …
+   22     3938       71     0.02
+   23     1394       72     0.05
+   24    14981       71     0.00
+
+total : 139,784 car. en · 946 car. fr
+jetons estimés (÷4) : ~34,946 en · ~236 fr
+  ```
+
+### 🤖 Assistant
+
+⏵ Incohérence entre `wc -l` (24) et mon Python (4835) sur le même fichier : je vérifie directement.
+
+Incohérence : `wc -l` dit 24 lignes pour le français, mon Python en lit 4835. Je regarde le fichier directement.
+
+- **bash** `{"command": "ls -la /tmp/parallele/; echo \"--- wc ---\"; wc -lc /tmp/parallele/rj_fr.txt /tmp/parallele/rj_en.txt; echo \"--- 3 premières lignes fr (tronquées) ---\"; head -3 /tmp/parallele/rj_fr.txt | cut -c1-200; echo \"--- comptage python ---\"; python3 -c \"\nfor f in ('/tmp/parallele/rj_en.txt … [223 caractères tronqués]`
+
+  ```
+total 356
+drwxr-xr-x.   2 stephane stephane     80  5 oct 22:23 .
+drwxrwxrwt. 138 root     root     799160  5 oct 22:23 ..
+-rw-r--r--.   1 stephane stephane 141686  5 oct 22:23 rj_en.txt
+-rw-r--r--.   1 stephane stephane 219247  5 oct 22:23 rj_fr.txt
+--- wc ---
+    24 219247 /tmp/parallele/rj_fr.txt
+    24 141686 /tmp/parallele/rj_en.txt
+    48 360933 total
+--- 3 premières lignes fr (tronquées) ---
+SCÈNE I  Une place publique.  _Entrent_ SAMSON et GRÉGOIRE, _armés d'épées et de boucliers._   SAMSON.--Tiens, Grégoire, sur ma parole, on ne nous fera plus avaler de pilules[4].  [Note 4: 
+SCÈNE II  Une rue.  _Entrent_ CAPULET, PARIS, UN DOMESTIQUE.   CAPULET.--Montaigu est lié par la même défense que moi, et sous des peines semblables; et il ne sera pas difficile, je pense, à d
+SCÈNE III  Un appartement de la maison de Capulet.  LA SIGNORA CAPULET, LA NOURRICE de Juliette.   LA SIGNORA CAPULET.--Nourrice, où est ma fille? Appelle-la, qu'elle vienne.  LA NOURRICE.--
+--- comptage python ---
+/tmp/parallele/rj_en.txt: 139,808 caractères · 24 sauts de ligne · 24 lignes
+/tmp/parallele/rj_fr.txt: 214,754 caractères · 4835 sauts de ligne · 4835 lignes
+  ```
+
+### 🤖 Assistant
+
+⏵ Contradiction réelle entre `wc` et Python sur le même fichier. Je refais l'extraction proprement et je vérifie à chaque étape.
+
+Contradiction réelle entre `wc` (24) et Python (4835 sauts de ligne) sur le **même** fichier. Je refais l'extraction proprement, en vérifiant à chaque étape.
+
+- **bash** `{"command": "rm -f /tmp/parallele/*.txt; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && P=/home/stephane/Data13TB/stephane/GitHub/Panini-Research/data/mass_ingestion\npython3 tools/extrait_gutenberg.py /tmp/parallele/en.txt --db $P/backlog_gutenberg_en.db --titre \"Romeo and Juliet\" --motif  … [476 caractères tronqués]`
+
+  ```
+/home/stephane/Data13TB/stephane/GitHub/Panini-Research/data/mass_ingestion/backlog_gutenberg_en.db · 'Romeo and Juliet' · 142,570 caractères · 24 segments
+  24 segments écrits dans /tmp/parallele/en.txt (139,784 caractères)
+/home/stephane/Data13TB/stephane/GitHub/Panini-Research/data/mass_ingestion/backlog_gutenberg_fr.db · 'Roméo et Juliette: Tragédie' · 240,962 caractères · 24 segments
+  24 segments écrits dans /tmp/parallele/fr.txt (214,730 caractères)
+--- vérification ---
+/tmp/parallele/en.txt : 139,808 car · 24 sauts de ligne
+/tmp/parallele/fr.txt : 214,754 car · 4835 sauts de ligne
+    24 /tmp/parallele/en.txt
+    24 /tmp/parallele/fr.txt
+    48 total
+  ```
+
+### 🤖 Assistant
+
+⏵ **Trouvé : le texte français utilise des retours chariot seuls (`\r`).** Python les traduit en `\n` en mode texte, `wc` compte les `\n` réels — d'où la contradiction. Mon extraction ne les remplaçait pas.
+
+**Trouvé : le texte français de Gutenberg utilise des retours chariot seuls (`\r`).** Python les convertit en `\n` en mode texte, `wc` compte les vrais `\n` — d'où la contradiction apparente. Mon extraction ne les normalisait pas.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/extrait_gutenberg.py'; s=open(p).read()\ns=s.replace('''    with open(sortie, \"w\") as f:\n        for s in segs:\n            f.write(s.replace(\"\\\\n\", \" \") + \"\\\\n\")''',\n'''    # NORMALISATION D … [1079 caractères tronqués]`
+
+  ```
+syntaxe OK
+/home/stephane/Data13TB/stephane/GitHub/Panini-Research/data/mass_ingestion/backlog_gutenberg_en.db · 'Romeo and Juliet' · 142,570 caractères · 24 segments
+  24 segments écrits dans /tmp/parallele/en.txt (139,784 caractères)
+/home/stephane/Data13TB/stephane/GitHub/Panini-Research/data/mass_ingestion/backlog_gutenberg_fr.db · 'Roméo et Juliette: Tragédie' · 240,962 caractères · 24 segments
+  24 segments écrits dans /tmp/parallele/fr.txt (214,730 caractères)
+    24 /tmp/parallele/en.txt
+    24 /tmp/parallele/fr.txt
+    48 total
+  ```
+
+### 🤖 Assistant
+
+⏵ **Corrigé : 24 lignes de chaque côté, vérifié par `wc`.** Je contrôle la qualité de l'appariement et je commit.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nen=[l.strip() for l in open('/tmp/parallele/en.txt')]\nfr=[l.strip() for l in open('/tmp/parallele/fr.txt')]\nprint(f\"{'scène':>5} {'car. en':>8} {'car. fr':>8} {'rapport':>8}\")\nimport statistics\nrap=[]\nfor i,( … [2307 caractères tronqués]`
