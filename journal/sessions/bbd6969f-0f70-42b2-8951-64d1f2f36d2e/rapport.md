@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 194.6 h |
+| Durée | 195.4 h |
 | Tours | 180 |
-| Messages | 9010 |
-| Appels d'outils | 8492 |
+| Messages | 9021 |
+| Appels d'outils | 8503 |
 | Fichiers touchés | 199 |
-| Commandes | 7201 |
+| Commandes | 7212 |
 | Sous-agents | 32 |
-| Commits | 648 |
+| Commits | 649 |
 | Compactages de contexte | 12 |
 
 ## Objectifs déclarés
@@ -9091,7 +9091,7 @@ L'attrition est descendue de 191 à 9 neurones **avec une validation qui baissai
 
 ### Tour 180 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
 
-*9 appels d'outils.* Actions notables :
+*20 appels d'outils.* Actions notables :
 
 - bash — Check chains status
 - bash — Measure tracing rates
@@ -9102,10 +9102,16 @@ L'attrition est descendue de 191 à 9 neurones **avec une validation qui baissai
 - bash — Check for partial trace files
 - bash — Remove the partial trace file
 - bash — Report and commit the orphan process incident
+- bash — Verify the tracing rate improved
+- bash — Measure the recent tracing rate
+- bash — Check wiki analysis trigger
+- bash — Wait for wiki analysis trigger
+- bash — Check the wiki analysis
+- … et 6 autres
 
 **Synthèse produite :**
 
-⏵ **`en_05.drvf` est PARTIEL (30,8 Mo, tué en pleine écriture). Je le supprime et je consigne la leçon opérationnelle.**
+⏵ **Le test que l'UDHR interdisait a parlé : sur 61 articles multi-domaines, le CONTENU ne devance la LANGUE que de +0,0026 à la couche 8 — et la langue domine à la couche 0.**
 
 ## 3. Travail accompli
 
@@ -9390,7 +9396,7 @@ L'attrition est descendue de 191 à 9 neurones **avec une validation qui baissai
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 7161 autres
+- … et 7172 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10186,4 +10192,5 @@ L'attrition est descendue de 191 à 9 neurones **avec une validation qui baissai
 - La contrainte d'invariance déplace la courbe, elle ne supprime pas la tension  Balayage de mu à 179 NEURONES (couche 8, 300/51/41 langues, 896 canaux) :    mu  
 - La contrainte d'invariance fonctionne DANS la croissance, à 16-20 pour 1  Deux croissances libres, mêmes réglages, à mu=0 et mu=0,1, comparées à taille égale : 
 - Un drave ORPHELIN volait 18 cœurs : 60 s par trace au lieu de 16  SYMPTÔME : le traçage Wikipedia tournait 4x trop lentement (60 s/trace au lieu de 16), soit 48
+- Domaine ou langue : enfin testable, et la réponse est 'à égalité'  L'hypothèse était INTESTABLE sur l'UDHR — un seul texte traduit, donc ses 'contenus différent
 

@@ -148229,3 +148229,185 @@ es_04.drvf
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 52. Un processus ORPHELIN volait la moitié de la machine — et mon propre outil de nettoyage l'avait laissé passer\n\n### 52.1 Le s … [4333 caractères tronqués]`
+
+  ```
+0b9599c Un drave ORPHELIN volait 18 cœurs : 60 s par trace au lieu de 16
+
+n112            112       1    0.6437   0.6291    0.6291   0.9044  0.6552 | communs -1.384 (  0 %) · contraste 0.986
+n120            120       1    0.6446   0.6298    0.6297   0.9026  0.6542 | communs -1.382 (  0 %) · contraste 0.987
+articles wiki : 33
+  ```
+
+- **bash** `{"command": "sleep 540; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"articles : $(grep -c '^ARTICLE' /tmp/trace_wiki_apparie.log)\"; awk 'NR>120 {if($2 ~ /s$/) {gsub(\"s\",\"\",$2); s+=$2; n++}} END {if(n>0) printf \"  %d dernières traces : %.1f s en moyenne\\n\", n, s/n}' /tmp/trace … [172 caractères tronqués]`
+
+  ```
+articles : 40
+  101 dernières traces : 55.2 s en moyenne
+=== croissance mu=0.1 ===
+n133            133       1    0.6457   0.6307    0.6289   0.8994  0.6623 | communs -1.385 (  0 %) · contraste 0.988
+n134            134       1    0.6457   0.6308    0.6291   0.8995  0.6598 | communs -1.385 (  0 %) · contraste 0.988
+17:31
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"--- 20 dernières traces ---\"; grep \"s$\" /tmp/trace_wiki_apparie.log | tail -20 | awk '{gsub(\"s\",\"\",$2); s+=$2; n++; print \"  \" $1 \" \" $2 \"s\"} END {printf \"  → moyenne %.1f s sur les %d dernières\\n\", s/n, n}'; e … [182 caractères tronqués]`
+
+  ```
+--- 20 dernières traces ---
+  fr_Akihabara 17s
+  it_Akihabara 16s
+  pt_Akihabara 17s
+  en_Akira_Kurosawa 15s
+  es_Akira_Kurosawa 16s
+  fr_Akira_Kurosawa 17s
+  it_Akira_Kurosawa 18s
+  pt_Akira_Kurosawa 16s
+  en_Akira_Toriyama 14s
+  es_Akira_Toriyama 17s
+  fr_Akira_Toriyama 16s
+  it_Akira_Toriyama 16s
+  pt_Akira_Toriyama 16s
+  en_Alabama 15s
+  es_Alabama 16s
+  fr_Alabama 17s
+  it_Alabama 16s
+  pt_Alabama 18s
+  en_Alain_Connes 15s
+  es_Alain_Connes 16s
+  → moyenne 16.2 s sur les 20 dernières
+--- rythme ---
+  32 articles à 17:21 · 40 à 17:31 → 48 articles/h → 482 en ~10 h (fin vers 03:30)
+17:31
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le débit est rétabli : 16,2 s par trace, 48 articles/h, corpus complet vers 03h30.**
+
+- **bash** `{"command": "sleep 560; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"articles wiki : $(grep -c '^ARTICLE' /tmp/trace_wiki_apparie.log)\"; echo \"=== analyse wiki déclenchée ? ===\"; ls -la /tmp/wiki_analyse.log 2>/dev/null && tail -12 /tmp/wiki_analyse.log || echo \"pas encore (seuil … [149 caractères tronqués]`
+
+  ```
+articles wiki : 47
+=== analyse wiki déclenchée ? ===
+pas encore (seuil 60)
+=== croissance ===
+n144            144       1    0.6462   0.6311    0.6297   0.8969  0.6473 | communs -1.379 (  0 %) · contraste 0.989
+n145            145       1    0.6463   0.6311    0.6297   0.8965  0.6445 | communs -1.381 (  0 %) · contraste 0.989
+17:41
+  ```
+
+- **bash** `{"command": "sleep 580; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"articles : $(grep -c '^ARTICLE' /tmp/trace_wiki_apparie.log)\"; echo \"=== analyse wiki ===\"; tail -16 /tmp/wiki_analyse.log 2>/dev/null || echo \"pas encore\"; date '+%H:%M'", "description": "Wait for wiki analysi … [32 caractères tronqués]`
+
+  ```
+articles : 55
+=== analyse wiki ===
+pas encore
+17:51
+  ```
+
+- **bash** `{"command": "sleep 500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"articles : $(grep -c '^ARTICLE' /tmp/trace_wiki_apparie.log)\"; echo \"=== analyse wiki ===\"; head -30 /tmp/wiki_analyse.log 2>/dev/null || echo \"pas encore déclenchée\"; date '+%H:%M'", "description": "Check the  … [36 caractères tronqués]`
+
+  ```
+articles : 61
+=== analyse wiki ===
+pas encore déclenchée
+17:59
+  ```
+
+- **bash** `{"command": "ps -eo pid,ppid,etime,cmd | grep -E \"wiki_analyse\" | grep -v grep | cut -c1-110; echo \"--- déclenchement attendu sous 5 min ---\"; ls -la /tmp/wiki_analyse.log 2>/dev/null || echo \"fichier absent\"; date '+%H:%M:%S'", "description": "Check the wiki analysis chain process"}`
+
+  ```
+2602157    2357    02:30:07 bash /tmp/wiki_analyse.sh 60
+--- déclenchement attendu sous 5 min ---
+-rw-r--r--. 1 stephane stephane 162  6 oct 17:59 /tmp/wiki_analyse.log
+17:59:56
+  ```
+
+### 🤖 Assistant
+
+⏵ **L'analyse Wikipedia s'est déclenchée. Je lis le test « domaine ou langue ».**
+
+- **bash** `{"command": "sleep 240; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/wiki_analyse.log; date '+%H:%M'", "description": "Read the wiki domain-vs-language test", "timeoutMs": 280000}`
+
+  ```
+=== 61 articles complets ===
+
+=== DOMAINE OU LANGUE — le test que l'UDHR interdisait ===
+  (l'UDHR est MONO-DOMAINE : ses 'contenus différents' n'en sont pas)
+18:04
+  ```
+
+- **bash** `{"command": "sleep 480; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/wiki_analyse.log; echo \"---\"; echo \"articles : $(grep -c '^ARTICLE' /tmp/trace_wiki_apparie.log)\"; date '+%H:%M'", "description": "Wait for the domain-vs-language result", "timeoutMs": 520000}`
+
+  ```
+=== 61 articles complets ===
+
+=== DOMAINE OU LANGUE — le test que l'UDHR interdisait ===
+  (l'UDHR est MONO-DOMAINE : ses 'contenus différents' n'en sont pas)
+couche  0 : S_langue 0.0489 · S_domaine 0.0535 · écart -0.0046  -> LANGUE domine
+          (6 langues · 61 contenus communs · 915 paires inter-langues · 10980 paires intra-langue)
+couche  8 : S_langue 0.2158 · S_domaine 0.2131 · écart +0.0026  -> CONTENU domine
+          (6 langues · 61 contenus communs · 915 paires inter-langues · 10980 paires intra-langue)
+0 articles présents dans les 6 langues
+/tmp/cache_wiki_de.npz : 0 langues · 0 pas
+/tmp/cache_wiki_en.npz : 0 langues · 0 pas
+/tmp/cache_wiki_es.npz : 0 langues · 0 pas
+/tmp/cache_wiki_fr.npz : 0 langues · 0 pas
+/tmp/cache_wiki_it.npz : 0 langues · 0 pas
+/tmp/cache_wiki_pt.npz : 0 langues · 0 pas
+
+=== PONT SUR PAIRES DE LANGUES (couche 8, aligné par article) ===
+
+--- en ↔ fr ---
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_parallele.py", line 143, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_parallele.py", line 48, in main
+    E_ref = np.vstac
+… [1701 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le test « domaine ou langue » a parlé. Mais la construction des caches a échoué (0 article commun) — je débogue.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport os\nB='/home/stephane/Data13TB/stephane/corpus/wiki_apparie/traces'\nLANGS=['de','en','es','fr','it','pt']\ndispo={}\nfor L in LANGS:\n    dispo[L]=sorted(f[:-5] for f in os.listdir(B) if f.startswith(L+'_')) … [409 caractères tronqués]`
+
+  ```
+de : 134 fichiers · ex. ['de_A', 'de_ABBA']
+  en : 72 fichiers · ex. ['en_A', 'en_ABBA']
+  es : 71 fichiers · ex. ['es_A', 'es_ABBA']
+  fr : 71 fichiers · ex. ['fr_A', 'fr_ABBA']
+  it : 71 fichiers · ex. ['it_A', 'it_ABBA']
+  pt : 71 fichiers · ex. ['pt_A', 'pt_ABBA']
+intersection : 0
+  de : 134 · premier ['de_A', 'de_ABBA'] · dernier ['de_Apple_II', 'de_Apple_III']
+  en : 72 · premier ['en_A', 'en_ABBA'] · dernier ['en_Alfons_Maria_Jakob', 'en_Alfonso_Cuar_n']
+  es : 71 · premier ['es_A', 'es_ABBA'] · dernier ['es_Alexis_Korner', 'es_Alfons_Maria_Jakob']
+  fr : 71 · premier ['fr_A', 'fr_ABBA'] · dernier ['fr_Alexis_Korner', 'fr_Alfons_Maria_Jakob']
+  it : 71 · premier ['it_A', 'it_ABBA'] · dernier ['it_Alexis_Korner', 'it_Alfons_Maria_Jakob']
+  pt : 71 · premier ['pt_A', 'pt_ABBA'] · dernier ['pt_Alexis_Korner', 'pt_Alfons_Maria_Jakob']
+  ```
+
+### 🤖 Assistant
+
+⏵ **Bug trouvé : mon intersection portait sur les noms COMPLETS (`de_A` vs `en_A`) au lieu des slugs. L'intersection était vide par construction.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\ns = open('/tmp/wiki_analyse.sh').read()\nold = \"\"\"dispo = {}\nfor L in LANGS:\n    dispo[L] = sorted(f[:-5] for f in os.listdir(B) if f.startswith(L + '_'))\ncommun = sorted(set.intersection(*[set(v) for v in  … [2293 caractères tronqués]`
+
+  ```
+corrigé
+syntaxe OK
+71 articles communs aux 6 langues
+  de_A : 577 pas
+  de_ABBA : 559 pas
+  de_ABC : 560 pas
+  de_AGM_65_Maverick : 566 pas
+18:13
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le test que l'UDHR interdisait a parlé : sur 61 articles multi-domaines, le CONTENU ne devance la LANGUE que de +0,0026 à la couche 8 — et la langue domine à la couche 0.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 53. Domaine ou langue ? Enfin testable, et la réponse est « à égalité »\n\n### 53.1 Pourquoi il fallait un autre corpus\n\nL'hypot … [4839 caractères tronqués]`
