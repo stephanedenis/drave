@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 176.3 h |
-| Tours | 130 |
-| Messages | 8334 |
-| Appels d'outils | 7938 |
-| Fichiers touchés | 173 |
-| Commandes | 6746 |
+| Durée | 176.8 h |
+| Tours | 132 |
+| Messages | 8354 |
+| Appels d'outils | 7954 |
+| Fichiers touchés | 174 |
+| Commandes | 6761 |
 | Sous-agents | 32 |
-| Commits | 593 |
+| Commits | 594 |
 | Compactages de contexte | 11 |
 
 ## Objectifs déclarés
@@ -313,6 +313,10 @@
 **Tour 129** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1001 caractères tronqués]
 
 **Tour 130** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1001 caractères tronqués]
+
+**Tour 131** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1001 caractères tronqués]
+
+**Tour 132** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1001 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -6703,7 +6707,98 @@ Rien à faire de votre côté. Commits `9c5ae5a`, `5a82625`, `74577bc`.
 
 **Synthèse produite :**
 
-⏵ Une seule copie (la première était bien morte) et **les six scripts de la chaîne sont vivants**. Je commit.
+⏵ Tout est chaîné et vivant (80/392). Point d'étape.
+
+\## Ce que ce tour a produit
+
+**L'outil qui manquait** — `pont_unites.py` mesure **notre pont** par unité, en regard du professeur : fidélité de validation, fidélité de TEST, oracle sur le TEST, et l'invariance à **dix points** avec la pire unité et le pire couple de langues **nommés**. C'est le pendant de `invariance_unites.py` (côté professeur).
+
+**Une correction que je me dois de signaler.** J'avais écrit dans un message de commit (`fbc8b1c`) avoir corrigé un double appel à `P.invariance`. C'était **faux** — le correctif n'avait pas été appliqué, deux recalculs complets des trajectoires de test partaient pour rien. Je l'ai fait pour de vrai dans `0380bf5`, en disant explicitement que l'annonce précédente était erronée.
+
+**L'analyse finale chaînée** : un seul script enchaîne les trois analyses restantes dès que le traçage par unité se termine. J'y ai inscrit noir sur blanc que **l'invariance n'est PAS mesurable sur Wikipedia** (pas de contenu apparié), pour qu'aucun chiffre ne soit surinterprété plus tard.
+
+\## La chaîne complète, six scripts vérifiés vivants
+
+| # | phase | état |
+|---|---|---|
+| 1 | **392 langues UDHR** | **en cours, 80/392, zéro échec**, fin ~02h30 |
+| 2 | caches, plateau, pont sur **301 langues** | attend 1 |
+| 3 | **Romeo**, 24 scènes alignées en/fr | attend 1 |
+| 4 | **Wikipedia** en/fr, 240 morceaux | attend 3 |
+| 5 | **traçage par unité**, 40 langues × 10 | attend 4 |
+| 6 | analyse finale (Romeo + Wikipedia + unités) | attend 5 |
+
+J'ai aussi vérifié qu'il n'y avait **pas de doublon** de script — j'en avais lancé un second par erreur, le dédoublonnage confirme qu'une seule copie tourne.
+
+\## Ce qui viendra, dans l'ordre
+
+1. **Le panel à 301 langues** — le test direct de « plus de langues aident-elles ? », que je n'avais pu mesurer que de 20 à 36 langues **sans aucun effet**. Le test est désormais **stratifié sur les 22 écritures**, ce qui corrige le biais typologique de toutes mes mesures précédentes.
+2. **Romeo** — le pont tient-il sur du texte **littéraire et long**, très loin de l'UDHR administratif ?
+3. **Wikipedia** — un professeur plus riche change-t-il quelque chose à la fidélité et au transfert ?
+4. **Les dix points d'invariance** — la « pire paire » cesse d'être un agrégat.
+
+Rien à faire de votre côté. Commit `0d0e338`.
+
+### Tour 131 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1281 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Test the analysis cache command on partial data
+- bash — Test full pipeline on partial 392 data
+- bash — Clean up and final status check
+
+**Synthèse produite :**
+
+⏵ 86/392, **zéro échec**, les six scripts vivants. Point d'étape.
+
+\## Ce que ce tour a produit
+
+**La chaîne est validée de bout en bout, avant le run de cette nuit.** Plutôt que d'attendre 3 h pour découvrir un bogue, j'ai :
+
+1. construit un cache sur les **20 premières langues déjà tracées** (28 373 pas, 60 Mo) → `cache_pont.py --langues` fonctionne ;
+2. fait tourner **le pont complet** dessus (naissance libre, sous-ensemble actif, lecture quadratique, oracle deux panneaux) → tout passe, **24 neurones en 6 couches [5, 4, 4, 4, 4, 3]**.
+
+Les chiffres de ce test **ne veulent rien dire** — j'avais mis le même cache en apprentissage et en test, d'où l'écart oracle de **−0,0000** qui le trahit. C'est un test de plomberie, pas une mesure.
+
+Un détail intéressant quand même : la hiérarchie trouvée sur ces 20 langues, **[5, 4, 4, 4, 4, 3]**, est très différente de celle trouvée sur les 46 langues précédentes ([30, 8, 8, 8, 8, 8, 8, 2]). Elle est donc bien **décidée par les données**, pas par une règle fixe — ce qui est exactement ce que l'objectif demande.
+
+\## État
+
+| | |
+|---|---:|
+| phase 1 (392 langues) | **86/392** · moyenne 38 s · **0 échec** |
+| fin estimée | ~02h30 |
+| scripts de la chaîne vivants | **6 / 6** |
+
+\## Ce qui reste à faire de mon côté
+
+Rien de bloquant : les cinq phases suivantes se déclenchent seules. Mon travail utile d'ici là est de **surveiller les échecs** (il n'y en a aucun pour l'instant) et de relever les résultats.
+
+Quand la phase 1 finira, j'aurai la réponse à la question que je traîne depuis quatre tours : **est-ce que passer de 30 à 301 langues d'apprentissage change quelque chose ?** Je n'avais pu mesurer l'effet que de 20 à 36 langues, où il était **nul**. Si avec 301 l'effet reste nul, cela voudra dire que le pont est limité par autre chose que le nombre de langues — et l'invariant des +0,020 le suggère déjà fortement.
+
+Rien à faire de votre côté.
+
+### Tour 132 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1281 caractères tronqués]
+
+*13 appels d'outils.* Actions notables :
+
+- bash — Measure CPU headroom for parallel tracing
+- write `/tmp/trace392b.sh`
+- bash — Launch parallel reverse trace and measure
+- bash — Verify both traces coexist without collision
+- bash — Fix waiters to require both traces
+- bash — Check if reverse trace survived
+- bash — Debug the reverse trace log
+- bash — Measure true single-trace rate
+- bash — Relaunch reverse trace with close monitoring
+- bash — Fix permissions and measure two-trace rate
+- bash — Stop second trace and confirm rate recovery
+- bash — Revert waiters to single condition
+- bash — Commit the corrections honestly
+
+**Synthèse produite :**
+
+⏵ Corrigé. Je commite cette série d'erreurs honnêtement.
 
 ## 3. Travail accompli
 
@@ -6884,6 +6979,7 @@ Rien à faire de votre côté. Commits `9c5ae5a`, `5a82625`, `74577bc`.
 | `/tmp/trace_wiki.sh` | 1 | 0 |
 | `/tmp/trace_unites.sh` | 1 | 0 |
 | `/tmp/analyse_final.sh` | 1 | 0 |
+| `/tmp/trace392b.sh` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -6962,7 +7058,7 @@ Rien à faire de votre côté. Commits `9c5ae5a`, `5a82625`, `74577bc`.
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6706 autres
+- … et 6721 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -7090,7 +7186,7 @@ Rien à faire de votre côté. Commits `9c5ae5a`, `5a82625`, `74577bc`.
 
 ## 5. Erreurs rencontrées
 
-381 sorties en erreur ou divergentes. Les premières :
+382 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -7703,4 +7799,5 @@ Rien à faire de votre côté. Commits `9c5ae5a`, `5a82625`, `74577bc`.
 - pont_unites.py : notre pont mesuré PAR UNITÉ, professeur contre sortie  Pendant de invariance_unites.py (qui mesure le professeur). Entraîne le pont sur les uni
 - Correction : le correctif annoncé au commit précédent n'avait pas été fait  J'avais écrit dans le message de fbc8b1c que P.invariance n'était plus appelé deux f
 - Analyse finale chaînée : Romeo, Wikipedia, et l'invariance par unité  Un seul script (/tmp/analyse_final.sh) enchaîne les trois analyses dès que la phase 5 (tra
+- Deux erreurs de ma part, et un résultat mesuré qui les tranche  1. LE SECOND TRAÇAGE N'A JAMAIS TOURNÉ. J'ai vérifié sa syntaxe avec bash -n mais    jamais fait
 

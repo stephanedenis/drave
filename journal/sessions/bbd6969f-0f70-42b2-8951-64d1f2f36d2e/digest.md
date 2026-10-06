@@ -134841,3 +134841,382 @@ copies trouvées : [2364779]
 ⏵ Une seule copie (la première était bien morte) et **les six scripts de la chaîne sont vivants**. Je commit.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Analyse finale chaînée : Romeo, Wikipedia, et l'invariance par unité\n\nUn seul script (/tmp/analyse_final.sh) enchaîne les trois analyses dès que la\nphase 5 (traçage par unité) est finie :\n\n  ROME … [1346 caractères tronqués]`
+
+  ```
+0d0e338 Analyse finale chaînée : Romeo, Wikipedia, et l'invariance par unité
+
+=== LA CHAÎNE COMPLÈTE ===
+  1. trace392       392 langues UDHR           [80/392]
+  2. analyse392     caches + plateau + pont sur 301 langues
+  3. trace_rj       Romeo, 24 scènes alignées
+  4. trace_wiki     Wikipedia en/fr, 240 morceaux
+  5. trace_unites   40 langues × 10 unités
+  6. analyse_final  Romeo + Wikipedia + invariance par unité
+23:04
+  ```
+
+### 🤖 Assistant
+
+⏵ Tout est chaîné et vivant (80/392). Point d'étape.
+
+## Ce que ce tour a produit
+
+**L'outil qui manquait** — `pont_unites.py` mesure **notre pont** par unité, en regard du professeur : fidélité de validation, fidélité de TEST, oracle sur le TEST, et l'invariance à **dix points** avec la pire unité et le pire couple de langues **nommés**. C'est le pendant de `invariance_unites.py` (côté professeur).
+
+**Une correction que je me dois de signaler.** J'avais écrit dans un message de commit (`fbc8b1c`) avoir corrigé un double appel à `P.invariance`. C'était **faux** — le correctif n'avait pas été appliqué, deux recalculs complets des trajectoires de test partaient pour rien. Je l'ai fait pour de vrai dans `0380bf5`, en disant explicitement que l'annonce précédente était erronée.
+
+**L'analyse finale chaînée** : un seul script enchaîne les trois analyses restantes dès que le traçage par unité se termine. J'y ai inscrit noir sur blanc que **l'invariance n'est PAS mesurable sur Wikipedia** (pas de contenu apparié), pour qu'aucun chiffre ne soit surinterprété plus tard.
+
+## La chaîne complète, six scripts vérifiés vivants
+
+| # | phase | état |
+|---|---|---|
+| 1 | **392 langues UDHR** | **en cours, 80/392, zéro échec**, fin ~02h30 |
+| 2 | caches, plateau, pont sur **301 langues** | attend 1 |
+| 3 | **Romeo**, 24 scènes alignées en/fr | attend 1 |
+| 4 | **Wikipedia** en/fr, 240 morceaux | attend 3 |
+| 5 | **traçage par unité**, 40 langues × 10 | attend 4 |
+| 6 | analyse finale (Romeo + Wikipedia + unités) | attend 5 |
+
+J'ai aussi vérifié qu'il n'y avait **pas de doublon** de script — j'en avais lancé un second par erreur, le dédoublonnage confirme qu'une seule copie tourne.
+
+## Ce qui viendra, dans l'ordre
+
+1. **Le panel à 301 langues** — le test direct de « plus de langues aident-elles ? », que je n'avais pu mesurer que de 20 à 36 langues **sans aucun effet**. Le test est désormais **stratifié sur les 22 écritures**, ce qui corrige le biais typologique de toutes mes mesures précédentes.
+2. **Romeo** — le pont tient-il sur du texte **littéraire et long**, très loin de l'UDHR administratif ?
+3. **Wikipedia** — un professeur plus riche change-t-il quelque chose à la fidélité et au transfert ?
+4. **Les dix points d'invariance** — la « pire paire » cesse d'être un agrégat.
+
+Rien à faire de votre côté. Commit `0d0e338`.
+
+
+## Tour 131
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de représentation universelle), boîte noire (on ne lit du professeur que la couche à émuler, jamais sa tête ni ses jetons générés), aucune rétropropagation (A et B aléatoires et gelés, seule la lecture s'ajuste en forme fermée), et chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, TAILLE du réseau, avec le diagnostic oracle sur les deux panneaux (test hors vivier et validation du même vivier)."
+Round: 4/256
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Je vérifie que la commande d'analyse fonctionnera, en l'éprouvant sur les traces déjà disponibles (80 langues) plutôt que d'attendre.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls /home/stephane/Data13TB/stephane/corpus/udhr/udhr392 | wc -l; echo \"--- test de cache_pont --langues sur 20 langues déjà tracées ---\"; ls /home/stephane/Data13TB/stephane/corpus/udhr/udhr392 | sed 's/.drvf//' | head -20 > /tmp/t … [322 caractères tronqués]`
+
+  ```
+81
+--- test de cache_pont --langues sur 20 langues déjà tracées ---
+20
+  arl : 1580 pas
+  arn : 1111 pas
+  ast : 920 pas
+/tmp/test20.npz : 20 langues · 28373 pas
+-rw-r--r--. 1 stephane stephane 59598912  5 oct 23:05 /tmp/test20.npz
+  ```
+
+### 🤖 Assistant
+
+⏵ Le cache fonctionne (20 langues, 28 373 pas, 60 Mo). Je vérifie la chaîne complète en éprouvant le pont sur ce cache.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 python3 -u tools/pont_generatif.py /tmp/test20.npz /tmp/test20.npz --naissance libre --cycles 1 --val 4 --a 0.5 --ride 1.0 --plafond 24 --gain-min 0.001 --patience 4 --attrition 0 --part-canaux 0.5 --lecture quadratique - … [193 caractères tronqués]`
+
+  ```
+# SOUS-ENSEMBLE ACTIF : 131/896 canaux portent 50% de l'énergie (15% des canaux), masque lu sur l'apprentissage seul
+# née : 24 neurones en 6 couches [5, 4, 4, 4, 4, 3]
+#   TEST        : nous 0.7556 · oracle 0.7556 · ÉCART -0.0000 · invariance oracle 0.9919
+#   VALIDATION  : nous 0.7759 · oracle 0.7884 · ÉCART +0.0125   (même vivier que l'apprentissage)
+  fidélité TEST    : 0.7556   (constante témoin : 0.7413)
+  invariance TEST  : 0.9912 · pire paire 0.9191
+  ```
+
+### 🤖 Assistant
+
+⏵ **La chaîne complète est validée sur les données au nouveau format** : 24 neurones en 6 couches [5,4,4,4,4,3]. (Les chiffres n'ont pas de sens ici — j'ai utilisé le même cache en apprentissage et en test, d'où l'écart oracle de −0,0000.)
+
+**La chaîne complète est validée** de bout en bout sur les données au nouveau format. Les chiffres n'ont pas de sens ici (j'ai utilisé le même cache des deux côtés, d'où l'écart oracle de −0,0000) — mais les chemins de code le sont, et c'est ce qui compte avant le run de 3 h du matin.
+
+- **bash** `{"command": "rm -f /tmp/test20.npz /tmp/test20.txt; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date \"+%H:%M\"; echo \"phase 1 : $(ls /home/stephane/Data13TB/stephane/corpus/udhr/udhr392 | wc -l)/392\"; python3 -c \"\nimport re\nt=open('/tmp/trace392.log').read()\nts=[int(x) for x in re.f … [936 caractères tronqués]`
+
+  ```
+23:07
+phase 1 : 86/392
+85 langues · moyenne 38 s · échecs 0 · reste 3.3 h
+
+=== la chaîne ===
+  vivant : analyse392
+  vivant : analyse_final
+  vivant : rj_apres
+  vivant : trace392
+  vivant : unites_apres
+  vivant : wiki_apres
+  ```
+
+### 🤖 Assistant
+
+⏵ 86/392, **zéro échec**, les six scripts vivants. Point d'étape.
+
+## Ce que ce tour a produit
+
+**La chaîne est validée de bout en bout, avant le run de cette nuit.** Plutôt que d'attendre 3 h pour découvrir un bogue, j'ai :
+
+1. construit un cache sur les **20 premières langues déjà tracées** (28 373 pas, 60 Mo) → `cache_pont.py --langues` fonctionne ;
+2. fait tourner **le pont complet** dessus (naissance libre, sous-ensemble actif, lecture quadratique, oracle deux panneaux) → tout passe, **24 neurones en 6 couches [5, 4, 4, 4, 4, 3]**.
+
+Les chiffres de ce test **ne veulent rien dire** — j'avais mis le même cache en apprentissage et en test, d'où l'écart oracle de **−0,0000** qui le trahit. C'est un test de plomberie, pas une mesure.
+
+Un détail intéressant quand même : la hiérarchie trouvée sur ces 20 langues, **[5, 4, 4, 4, 4, 3]**, est très différente de celle trouvée sur les 46 langues précédentes ([30, 8, 8, 8, 8, 8, 8, 2]). Elle est donc bien **décidée par les données**, pas par une règle fixe — ce qui est exactement ce que l'objectif demande.
+
+## État
+
+| | |
+|---|---:|
+| phase 1 (392 langues) | **86/392** · moyenne 38 s · **0 échec** |
+| fin estimée | ~02h30 |
+| scripts de la chaîne vivants | **6 / 6** |
+
+## Ce qui reste à faire de mon côté
+
+Rien de bloquant : les cinq phases suivantes se déclenchent seules. Mon travail utile d'ici là est de **surveiller les échecs** (il n'y en a aucun pour l'instant) et de relever les résultats.
+
+Quand la phase 1 finira, j'aurai la réponse à la question que je traîne depuis quatre tours : **est-ce que passer de 30 à 301 langues d'apprentissage change quelque chose ?** Je n'avais pu mesurer l'effet que de 20 à 36 langues, où il était **nul**. Si avec 301 l'effet reste nul, cela voudra dire que le pont est limité par autre chose que le nombre de langues — et l'invariant des +0,020 le suggère déjà fortement.
+
+Rien à faire de votre côté.
+
+
+## Tour 132
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de représentation universelle), boîte noire (on ne lit du professeur que la couche à émuler, jamais sa tête ni ses jetons générés), aucune rétropropagation (A et B aléatoires et gelés, seule la lecture s'ajuste en forme fermée), et chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, TAILLE du réseau, avec le diagnostic oracle sur les deux panneaux (test hors vivier et validation du même vivier)."
+Round: 5/256
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Idée d'accélération à vérifier : drave n'utilise que ~16-20 threads sur 40. Je mesure la marge réelle.
+
+- **bash** `{"command": "echo \"=== threads et CPU ===\"; nproc; ps -eo pid,pcpu,nlwp,etime,comm | grep -E \"drave|COMMAND\" | head -3; echo; echo \"=== charge ===\"; uptime | grep -oE \"load average.*\"; echo; echo \"=== drave est-il limité en threads ? ===\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet … [245 caractères tronqués]`
+
+  ```
+=== threads et CPU ===
+40
+    PID %CPU NLWP     ELAPSED COMMAND
+2366065  998   21       00:14 drave
+
+=== charge ===
+load average: 17,44, 19,28, 20,63
+
+=== drave est-il limité en threads ? ===
+161:    let cpu = engine::coeurs_physiques();
+524:        let cpu = engine::coeurs_physiques();
+664:    let cpu = engine::coeurs_physiques();
+870:    let cpu = engine::coeurs_physiques();
+293:pub fn coeurs_physiques() -> usize {
+294-    let mut vus = std::collections::HashSet::new();
+295-    if let Ok(entrees) = std::fs::read_dir("/sys/devices/system/cpu") {
+296-        for e in entrees.flatten() {
+297-            let p = e.path();
+298-            let nom = match p.file_name().and_then(|n| n.to_str()) { Some(n) => n, None => continue };
+299-            let Some(num) = nom.strip_prefix("cpu") else { continue };
+300-            if num.is_empty() || !num.bytes().all(|c| c.is_ascii_digit()) { continue; }
+301-            let paquet = std::fs::read_to_string(p.join("topology/physical_package_id")).ok();
+  ```
+
+### 🤖 Assistant
+
+⏵ drave utilise ~10 cœurs sur 40 (charge 17). Il y a **2× de marge**. Je lance un second traçage en sens inverse — les deux se rejoindront au milieu, et la logique « sauter si le fichier existe » évite toute collision.
+
+**drave n'utilise que ~10 cœurs sur 40** (charge 17) : il y a de la marge. Je lance un second traçage en **sens inverse** ; les deux se rejoindront au milieu, et la logique « sauter si le fichier existe » évite toute collision.
+
+- **write** `{"content": "#!/bin/bash\n# SECOND TRACAGE, EN SENS INVERSE — pour utiliser la marge de la machine.\n#\n# Mesuré : drave n'occupe que ~10 cœurs sur 40 (charge 17). Un seul traçage\n# laissait donc la moitié de la machine au repos. Celui-ci part de la FIN de la\n# liste ; les deux se rejoignent au mi … [959 caractères tronqués]`
+
+  ```
+<path>/tmp/trace392b.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "bash -n /tmp/trace392b.sh && echo \"syntaxe OK\"; N0=$(ls /home/stephane/Data13TB/stephane/corpus/udhr/udhr392 | wc -l); echo \"avant : $N0\"; setsid nohup /tmp/trace392b.sh >/dev/null 2>&1 < /dev/null & sleep 400; N1=$(ls /home/stephane/Data13TB/stephane/corpus/udhr/udhr392 | wc -l); e … [217 caractères tronqués]`
+
+  ```
+syntaxe OK
+avant : 87
+après 400 s : 101 · produit 14 en 400 s
+load average: 19,08, 19,48, 20,25
+1168 drave
+  ```
+
+### 🤖 Assistant
+
+⏵ **14 langues en 400 s, soit 28,6 s par langue** contre 38 s avec un seul traçage : **gain de 1,33×**, et la charge reste à 19 (pas de sursouscription). Je vérifie que les deux tournent proprement.
+
+**Gain mesuré : 28,6 s par langue au lieu de 38** (1,33×), et la charge reste à 19. Je vérifie que les deux traçages cohabitent sans collision.
+
+- **bash** `{"command": "python3 -c \"\nimport os\nmoi=os.getpid(); anc=set(); q=moi\nfor _ in range(8):\n    try:\n        st=open(f'/proc/{q}/stat').read().split(') ',1)[1].split(); q=int(st[1]); anc.add(q)\n    except Exception: break\nd=[]\nfor x in sorted(os.listdir('/proc')):\n    if not x.isdigit(): cont … [789 caractères tronqués]`
+
+  ```
+traçages actifs : 2
+  2350094 bash -c chmod +x /tmp/trace392.sh && setsid nohup /tmp/trace
+  2350097 /bin/bash /tmp/trace392.sh 
+  2351075 bash -c chmod +x /tmp/analyse392.sh && setsid nohup /tmp/ana
+  2367893 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/t
+--- échecs ---
+/tmp/trace392.log:0
+--- doublons ? (un même fichier écrit deux fois) ---
+total : 101/392
+23:14
+  ```
+
+### 🤖 Assistant
+
+⏵ **Un risque que je dois corriger** : mes scripts d'attente guettent `trace392.log`, mais le second traçage écrit dans `trace392b.log`. Si l'un finit avant l'autre, l'analyse démarrerait sur un jeu incomplet.
+
+**Un risque à corriger** : mes scripts d'attente guettent `trace392.log` seulement. Or le second traçage écrit dans `trace392b.log` — si l'un finit avant l'autre, l'analyse démarrerait sur un jeu **incomplet**. Je corrige les deux scripts d'attente.
+
+- **bash** `{"command": "cat > /tmp/tue_attente.py <<'PY'\nimport os, signal\nmoi = os.getpid(); anc = set(); p = moi\nfor _ in range(8):\n    try:\n        st = open(f\"/proc/{p}/stat\").read().split(\") \", 1)[1].split(); p = int(st[1]); anc.add(p)\n    except Exception: break\nmorts = []\nfor d in os.listdir … [2495 caractères tronqués]`
+
+  ```
+guetteurs arrêtés : [2351075, 2351078, 2356105]
+/tmp/analyse392.sh : garde corrigée
+/tmp/rj_apres.sh : garde corrigée
+syntaxe OK
+  vivant : analyse392
+  vivant : analyse_final
+  vivant : rj_apres
+  vivant : trace392
+  vivant : unites_apres
+  vivant : wiki_apres
+  ```
+
+### 🤖 Assistant
+
+⏵ `trace392b` n'apparaît pas dans la liste : je vérifie immédiatement qu'il tourne encore.
+
+`trace392b` n'apparaît pas dans la liste des vivants — je vérifie **immédiatement** qu'il n'a pas été tué par erreur.
+
+- **bash** `{"command": "wc -l /tmp/trace392b.log 2>/dev/null; tail -2 /tmp/trace392b.log 2>/dev/null; echo \"--- processus ---\"; ps -eo pid,etime,args | grep -E \"trace392b|drave\" | grep -v grep | head -4; echo \"--- fichiers ---\"; ls /home/stephane/Data13TB/stephane/corpus/udhr/udhr392 | wc -l; date \"+%H: … [56 caractères tronqués]`
+
+  ```
+--- processus ---
+2368012       00:02 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/qwen2.5-0.5b-instruct-q4_k_m.gguf --infer --ctx 2048 --couches 0:11 --lot 1 --n 0 --trace-couches 0,10 --prompt Acɛ, susu kpo sisi ɖokpo ɔ kpo wɛ gbɛtɔ bi ɖo ɖò gbɛwiwa tɔn hwenu; ye ɖo linkpɔn bɔ ayi yetɔn mɛ kpe lo bɔ ye ɖo na do alɔ yeɖee ɖi nɔvinɔvi ɖɔhun. E ɖo dandanmɛ bɔ e na se nu ee mɛɖe wa é ɖo hwɛɖɔxɔsa ɖo togumɛ kpa a kwɛɖɔxɔsa enɛ ɔ wɛ ɖo na ɖɔ acɛ e nyi etɔn lɛ é kpodo nu è ɖe na wa lɛ é kpo; mɔ ɖokpo ɔ fi enɛ ɔ wɛ e na ɖɔ nu e wu e ylɔ hwɛ ɛ é ɖé. Gbetakɛn 11 Mɛ e e vɛ nu nyanyaɖe do é na to ɖo yi tɔn yi wɛ hwɛ bɔ e na ba do nu lee nu lɛ yi gbɔn e cobo na ylɔ ɛ ɖo hwɛnukɔn; cobonu e ka na ɖɔ hwɛ do e e ɔ, e ɖo na n'ɛ mɛ e na sixu hwlɛnnɛ ɖɔ hwɛnukɔn e. Enyi nu e mɛɖe wa ɖ'ayi é ma nyi nu e na sa sɛn do mɛ ɖo hwe enɛ nu ɖi lee sɛn é ji tɔ ɔ alo gbɛ ɔ jijɔn é ɖɔ gbɔn é a ɔ, é ɖo na sɛn gan tɔn ǎ. E ɖo na ba do nu mɛ ɖi lee jlo mɛ gbɔn e gbɔn xo e kun kpla. Gbɛzinzan mɛtɔn, hɛnnu mɛtɔn, xɔ mɛtɔn alo wɛn mɛtɔn lɛ é ǎ. Mo ɖokpo ɔ e ka ɖɔ na dɔ winnya mɛ bo lɛ kɔn wi mɛtɔn ǎ. Acɛ e nyi gbɛtɔ tɔn e ɖó hwlɛn mɛ ɖo 
+… [1451 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le traçage inverse **tourne bien** (je le vois tracer `fon.drvf`), mais son journal semble vide — or mes guetteurs en dépendent maintenant. Je vérifie.
+
+Le traçage inverse **tourne bien** (je le vois tracer `fon.drvf`), mais son journal semble vide — or mes guetteurs en dépendent désormais. Je vérifie, sinon ils attendraient indéfiniment.
+
+- **bash** `{"command": "ls -la /tmp/trace392b.log 2>&1; echo \"--- contenu ---\"; cat /tmp/trace392b.log 2>&1 | head -5; echo \"--- le script écrit-il au bon endroit ? ---\"; grep -n \"trace392b.log\" /tmp/trace392b.sh; echo \"--- script encore vivant ? ---\"; ps -eo pid,args | grep \"trace392b.sh\" | grep -v  … [62 caractères tronqués]`
+
+  ```
+ls: cannot access '/tmp/trace392b.log': No such file or directory
+--- contenu ---
+cat: /tmp/trace392b.log: No such file or directory
+--- le script écrit-il au bon endroit ? ---
+20:    echo "B $L $(( $(date +%s) - S ))s $(stat -c%s udhr392/$L.drvf 2>/dev/null || echo 0)" >> /tmp/trace392b.log
+22:    rm -f udhr392/$L.drvf; echo "B $L ÉCHEC" >> /tmp/trace392b.log
+25:echo "B TERMINE" >> /tmp/trace392b.log
+--- script encore vivant ? ---
+  ```
+
+### 🤖 Assistant
+
+⏵ **Je dois corriger ce que j'ai annoncé.** `trace392b.sh` **n'est pas vivant** et son journal **n'existe pas**. Le gain de 1,33× que j'ai attribué au second traçage était donc probablement la simple **fin de la contention** d'avec la phase 2. Je mesure le rythme réel, un seul traçage en course.
+
+**Je dois corriger ce que je viens d'annoncer.** `trace392b.sh` **n'est pas vivant** et son journal **n'a jamais existé** — aucune ligne n'a été écrite. Le « gain de 1,33× » que je lui attribuais était donc probablement la simple **fin de la contention** avec la phase 2. Je mesure le rythme réel, un seul traçage en course.
+
+- **bash** `{"command": "N0=$(ls /home/stephane/Data13TB/stephane/corpus/udhr/udhr392 | wc -l); T0=$(date +%s); sleep 420; N1=$(ls /home/stephane/Data13TB/stephane/corpus/udhr/udhr392 | wc -l); T1=$(date +%s); echo \"un seul traçage : $((N1-N0)) langues en $((T1-T0)) s = $(( (T1-T0)/(N1-N0) )) s/langue\"; uptim … [172 caractères tronqués]`
+
+  ```
+un seul traçage : 15 langues en 420 s = 28 s/langue
+load average: 21,76, 19,52, 19,83
+1334 /home/stephane/Data13TB/stephane/Gi
+  ```
+
+### 🤖 Assistant
+
+⏵ **Confirmé : un seul traçage fait 28 s par langue.** Mon « gain de 1,33× » était faux — c'était la fin de la contention. Je relance le second traçage en surveillant de près pourquoi il meurt.
+
+**Confirmé : un seul traçage fait 28 s par langue, exactement le chiffre que j'attribuais au second.** Mon gain de 1,33× était donc **faux** — c'était la fin de la contention avec la phase 2. Je relance le second traçage en le surveillant de près.
+
+- **bash** `{"command": ": > /tmp/trace392b.log; setsid nohup /tmp/trace392b.sh >/tmp/trace392b.out 2>&1 < /dev/null & disown; for i in 1 2 3; do sleep 60; echo \"après $((i*60)) s : log=$(wc -l < /tmp/trace392b.log 2>/dev/null || echo ABSENT) · processus=$(ps -eo args | grep -c '[t]race392b.sh') · fichiers=$(l … [233 caractères tronqués]`
+
+  ```
+après 60 s : log=0 · processus=2 · fichiers=121
+après 120 s : log=0 · processus=2 · fichiers=122
+après 180 s : log=0 · processus=2 · fichiers=124
+--- sortie éventuelle ---
+nohup: failed to run command '/tmp/trace392b.sh': Permission denied
+  ```
+
+### 🤖 Assistant
+
+⏵ **Cause trouvée : `nohup: failed to run command '/tmp/trace392b.sh': Permission denied`.** J'avais vérifié la syntaxe avec `bash -n` mais **jamais rendu le script exécutable**. Le second traçage n'a donc **jamais tourné** — les 14 langues étaient celles du premier. Ma correction était juste.
+
+**Cause trouvée** : `nohup: failed to run command '/tmp/trace392b.sh': Permission denied`. J'avais vérifié la syntaxe avec `bash -n` mais **jamais rendu le script exécutable**. Le second traçage n'a donc **jamais tourné** — ma correction était juste, les 14 langues venaient du premier.
+
+- **bash** `{"command": "chmod +x /tmp/trace392b.sh && ls -la /tmp/trace392b.sh | awk '{print $1, $9}'; rm -f /tmp/trace392b.out; : > /tmp/trace392b.log; setsid nohup /tmp/trace392b.sh >/tmp/trace392b.out 2>&1 < /dev/null & disown; N0=$(ls /home/stephane/Data13TB/stephane/corpus/udhr/udhr392 | wc -l); sleep 300 … [365 caractères tronqués]`
+
+  ```
+-rwx--x--x. /tmp/trace392b.sh
+avec DEUX traçages : 6 langues en 300 s = 50 s/langue
+log B : 2 lignes
+B zyb 102s 6211250
+B zul 75s 5212836
+load average: 44,39, 34,42, 26,14
+  ```
+
+### 🤖 Assistant
+
+⏵ **Mesure sans ambiguïté : avec DEUX traçages, 50 s par langue — contre 28 s avec un seul.** Mon « optimisations » était fausse deux fois : le second traçage n'avait jamais tourné (permission refusée), et **quand il tourne vraiment, il ralentit tout**. Je l'arrête.
+
+**Mesure sans ambiguïté : avec DEUX traçages, 50 s par langue — contre 28 s avec un seul.** Mon idée d'optimisation était fausse **deux fois** : le second traçage n'avait jamais tourné, et quand il tourne vraiment, **il ralentit l'ensemble**. Charge 44, sursouscription. Je l'arrête.
+
+- **bash** `{"command": "cat > /tmp/tue_b.py <<'PY'\nimport os, signal\nmoi = os.getpid(); anc = set(); p = moi\nfor _ in range(8):\n    try:\n        st = open(f\"/proc/{p}/stat\").read().split(\") \", 1)[1].split(); p = int(st[1]); anc.add(p)\n    except Exception: break\nmorts = []\nfor d in os.listdir(\"/pr … [855 caractères tronqués]`
+
+  ```
+second traçage arrêté : [2370879]
+second traçage arrêté : []
+retour à UN traçage : 7 langues en 300 s = 42 s/langue
+load average: 19,46, 28,89, 26,60
+total : 138/392
+23:36
+  ```
+
+### 🤖 Assistant
+
+⏵ **Problème critique que je viens de créer** : mes guetteurs attendent `B TERMINE` dans le journal du second traçage — que je viens d'arrêter. Ils attendraient **indéfiniment**. Je corrige tout de suite.
+
+**Problème critique que je viens de créer** : mes guetteurs exigent maintenant `B TERMINE` dans le journal du second traçage — que je viens d'arrêter. Ils attendraient **indéfiniment**. Je corrige immédiatement.
+
+- **bash** `{"command": "cat > /tmp/tue_attente.py <<'PY'\nimport os, signal\nmoi = os.getpid(); anc = set(); p = moi\nfor _ in range(8):\n    try:\n        st = open(f\"/proc/{p}/stat\").read().split(\") \", 1)[1].split(); p = int(st[1]); anc.add(p)\n    except Exception: break\nmorts = []\nfor d in os.listdir … [2073 caractères tronqués]`
+
+  ```
+guetteurs arrêtés : [2367976, 2367977]
+/tmp/analyse392.sh : B TERMINE retiré
+/tmp/rj_apres.sh : B TERMINE retiré
+syntaxe OK
+  vivant : analyse392
+  vivant : analyse_final
+  vivant : rj_apres
+  vivant : trace392
+  vivant : unites_apres
+  vivant : wiki_apres
+  ```
+
+### 🤖 Assistant
+
+⏵ Corrigé. Je commite cette série d'erreurs honnêtement.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Deux erreurs de ma part, et un résultat mesuré qui les tranche\n\n1. LE SECOND TRAÇAGE N'A JAMAIS TOURNÉ. J'ai vérifié sa syntaxe avec bash -n mais\n   jamais fait chmod +x : nohup échouait sur 'Permi … [1256 caractères tronqués]`
