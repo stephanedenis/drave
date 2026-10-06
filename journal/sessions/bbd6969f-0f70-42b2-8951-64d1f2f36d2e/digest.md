@@ -134761,3 +134761,83 @@ fbc8b1c pont_unites.py : notre pont mesuré PAR UNITÉ, professeur contre sortie
 **Je dois me corriger : j'ai écrit dans le message de commit un correctif que je n'ai pas appliqué.** Le double appel à `P.invariance` y est toujours — deux recalculs complets pour rien. Je le fais réellement.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"P.invariance\" tools/pont_unites.py; python3 - <<'PY'\np='tools/pont_unites.py'; s=open(p).read()\ns=s.replace('''    print(f\"#   invariance TEST       : \"\n          f\"{P.invariance(Xb, W, mt)[0]:.4f} · pire {P.invarian … [914 caractères tronqués]`
+
+  ```
+101:          f"{P.invariance(Xb, W, mt)[0]:.4f} · pire {P.invariance(Xb, W, mt)[1]:.4f}")
+syntaxe OK
+1
+0380bf5 Correction : le correctif annoncé au commit précédent n'avait pas été fait
+
+phase 1 : 76/392
+23:02
+  ```
+
+### 🤖 Assistant
+
+⏵ Corrigé et commité honnêtement. 76/392. Je chaîne l'analyse des phases 3 à 5.
+
+- **write** `{"content": "#!/bin/bash\n# ANALYSE DES PHASES 3 à 5 — Wikipedia, corpus parallèle, et invariance par unité.\nset -u\nwhile ! grep -q TERMINE /tmp/trace_unites.log 2>/dev/null; do sleep 120; done\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nU=/home/stephane/Data13TB/stephane/corpus\n: > /tmp … [3425 caractères tronqués]`
+
+  ```
+<path>/tmp/analyse_final.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "bash -n /tmp/analyse_final.sh && echo \"syntaxe OK\" || echo \"ERREUR DE SYNTAXE\"; echo \"--- vérification du chemin des unités ---\"; ls -d /home/stephane/Data13TB/stephane/corpus/udhr/unites 2>/dev/null || echo \"  /corpus/udhr/unites n'existe pas encore (normal, phase 5 pas lancée)\ … [792 caractères tronqués]`
+
+  ```
+syntaxe OK
+--- vérification du chemin des unités ---
+  /corpus/udhr/unites n'existe pas encore (normal, phase 5 pas lancée)
+analyse finale chaînée
+analyse_final vivante : 0
+23:03
+77
+  ```
+
+### 🤖 Assistant
+
+⏵ Le script d'analyse finale ne tient pas. Je vérifie pourquoi avant de le relancer.
+
+- **bash** `{"command": "ps -eo pid,etime,args | grep -E \"analyse_final|sleep 120\" | grep -v grep | head; echo \"--- relance avec trace d'erreur ---\"; setsid nohup bash -x /tmp/analyse_final.sh > /tmp/debug_final.log 2>&1 < /dev/null & sleep 8; echo \"--- sortie ---\"; head -5 /tmp/debug_final.log; ps -eo pi … [108 caractères tronqués]`
+
+  ```
+2363973       01:31 sleep 120
+2364604       00:41 sleep 120
+2364612       00:37 sleep 120
+--- relance avec trace d'erreur ---
+--- sortie ---
++ set -u
++ grep -q TERMINE /tmp/trace_unites.log
++ sleep 120
+2364779 bash -x /tmp/analyse_final.sh
+  ```
+
+### 🤖 Assistant
+
+⏵ Fausse alerte : le script **tourne** (il est dans son `sleep 120`). Mais je viens d'en lancer un **deuxième** — je supprime le doublon.
+
+Fausse alerte : le script **tourne** (il était dans son `sleep 120`, mon filtre l'a manqué). Mais je viens d'en lancer un **second** — je supprime le doublon.
+
+- **bash** `{"command": "cat > /tmp/dedoublonne.py <<'PY'\nimport os, signal\nmoi = os.getpid(); anc = set(); p = moi\nfor _ in range(8):\n    try:\n        st = open(f\"/proc/{p}/stat\").read().split(\") \", 1)[1].split(); p = int(st[1]); anc.add(p)\n    except Exception: break\nvus = []\nfor d in sorted(os.li … [1351 caractères tronqués]`
+
+  ```
+copies trouvées : [2364779]
+copies trouvées : [2364779]
+--- état de la chaîne ---
+  analyse392       pid 2351078
+  analyse_final    pid 2364779
+  rj_apres         pid 2356105
+  trace392         pid 2351075
+  unites_apres     pid 2361698
+  wiki_apres       pid 2358143
+  ```
+
+### 🤖 Assistant
+
+⏵ Une seule copie (la première était bien morte) et **les six scripts de la chaîne sont vivants**. Je commit.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Analyse finale chaînée : Romeo, Wikipedia, et l'invariance par unité\n\nUn seul script (/tmp/analyse_final.sh) enchaîne les trois analyses dès que la\nphase 5 (traçage par unité) est finie :\n\n  ROME … [1346 caractères tronqués]`
