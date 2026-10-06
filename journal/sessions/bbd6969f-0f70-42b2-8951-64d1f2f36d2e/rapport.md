@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 174.4 h |
 | Tours | 126 |
-| Messages | 8247 |
-| Appels d'outils | 7860 |
+| Messages | 8250 |
+| Appels d'outils | 7863 |
 | Fichiers touchés | 166 |
-| Commandes | 6686 |
+| Commandes | 6689 |
 | Sous-agents | 32 |
-| Commits | 581 |
+| Commits | 582 |
 | Compactages de contexte | 11 |
 
 ## Objectifs déclarés
@@ -6466,26 +6466,34 @@ Tous les livrables sont en place et mesurés : phase générative ✓ (naissance
 
 ### Tour 126 — <goal_round> Objective: "Faire évoluer le pont linguistico-sémantique en BOÎTE NOIRE (émulation des premières couches du … [1231 caractères tronqués]
 
-*4 appels d'outils.* Actions notables :
+*7 appels d'outils.* Actions notables :
 
 - write `/tmp/panneaux.sh`
 - bash — Run two-panel comparison
 - bash — Wait for two-panel results
 - bash — Commit and push restriction further
+- bash — Compute constant baselines for each restriction
+- bash — Compute comparable constants over all positions
+- bash — Commit the correction on restriction limits
 
 **Synthèse produite :**
 
-⏵ **Découverte utile : la restriction ne fait pas que monter les chiffres — elle réduit l'ÉCART de transfert.**
+⏵ **Je dois corriger avant d'emballer.** J'ai inversé deux colonnes, mais surtout : **la constante monte avec la restriction**.
 
-| périmètre | TEST nous | TEST oracle | **écart TEST** | VAL nous | VAL oracle | **écart VAL** |
-|---|---:|---:|---:|---:|---:|---:|
-| 896 | 0,4945 | 0,5912 | +0,0967 | 0,6397 | 0,6796 | +0,0399 |
-| 424 | 0,5536 | 0,6366 | +0,0830 | 0,6915 | 0,7239 | +0,0324 |
-| **157** | **0,6383** | **0,7076** | **+0,0693** | **0,7500** | **0,7769** | **+0,0269** |
+| périmètre | canaux | constante | nous | **écart** |
+|---|---:|---:|---:|---:|
+| aucun | 896 | 0,4710 | 0,4945 | **+0,0235** |
+| énergie 75 % | 424 | 0,5319 | 0,5536 | **+0,0217** |
+| énergie 50 % | 157 | 0,6140 | 0,6383 | **+0,0243** |
+| énergie 25 % | 23 | 0,7316 | 0,7519 | **+0,0203** |
+| **énergie 10 %** | **3** | **0,8991** | **0,9038** | **+0,0047** |
 
-**L'écart diminue de 28 %** en restreignant la cible, **sur les deux panneaux**. Une cible plus interlingue est aussi **plus transférable**. Et le rapport test/validation reste stable à **~2,5×** — la pénalité de typologie est un facteur constant.
+**L'invariant du tour 2 tient : l'écart à la constante reste +0,020 à +0,024 sur 896 → 23 canaux.** Il ne s'effondre qu'à **3 canaux**, où il ne reste presque rien à prédire — les chiffres spectaculaires (0,90) sont **la constante**, pas le pont.
 
-**L'écart diminue de 28 %** (0,0967 → 0,0693) en restreignant la cible, **sur les deux panneaux** : une cible plus interlingue est aussi **plus transférable**. Et le rapport test/validation reste stable à **~2,5×** — la pénalité de typologie est un facteur constant, pas un mur qui grandit.
+**Je corrige donc ce que j'allais annoncer.** La restriction :
+- ✓ **augmente** la fidélité absolue (la cible devient plus facile),
+- ✓ **réduit** l'écart de transfert (la cible devient plus transférable),
+- ✗ **ne change pas** la contribution propre du pont : **+0,020**.
 
 ## 3. Travail accompli
 
@@ -6737,7 +6745,7 @@ Tous les livrables sont en place et mesurés : phase générative ✓ (naissance
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6646 autres
+- … et 6649 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -7466,4 +7474,5 @@ Tous les livrables sont en place et mesurés : phase générative ✓ (naissance
 - RECTIFICATION : l'oracle du §10.2 était faux ; le plafond est 0,7076, pas 0,7762  LA FAUTE. L'ancien diagnostic faisait P.ajuste(..., ite) puis P.fid(..., ite).
 - journal" 2>/dev/null; git log --oneline -3; wc -l reports/recapitulatif.md
 - La restriction réduit aussi l'ÉCART de transfert (−28 %), confirmé sur les deux panneaux  Rejoué sur les deux panneaux — test non latin ET validation du même vi
+- Ce que la restriction NE fait PAS : la contribution du pont reste +0,020  Poussée plus loin, la restriction donne des chiffres spectaculaires (TEST 0,9038 à 3 c
 

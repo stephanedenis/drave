@@ -133156,3 +133156,82 @@ Created file
 **L'écart diminue de 28 %** (0,0967 → 0,0693) en restreignant la cible, **sur les deux panneaux** : une cible plus interlingue est aussi **plus transférable**. Et le rapport test/validation reste stable à **~2,5×** — la pénalité de typologie est un facteur constant, pas un mur qui grandit.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/recapitulatif.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 14. La restriction réduit aussi l'ÉCART, et les deux panneaux le confirment\n\nLes conclusions des tours précédents avaient été tirées sur un  … [4015 caractères tronqués]`
+
+  ```
+402c2e1 La restriction réduit aussi l'ÉCART de transfert (−28 %), confirmé sur les deux panneaux
+=== on pousse la restriction plus loin ===
+########## énergie 0.25 ##########
+# SOUS-ENSEMBLE ACTIF : 23/896 canaux portent 25% de l'énergie (3% des canaux), masque lu sur l'apprentissage seul
+# née : 80 neurones en 8 couches [8, 8, 8, 12, 8, 8, 15, 13]
+#   TEST        : nous 0.7519 · oracle 0.8053 · ÉCART +0.0535 · invariance oracle 0.9650
+#   VALIDATION  : nous 0.8505 · oracle 0.8675 · ÉCART +0.0170   (même vivier que l'apprentissage)
+########## énergie 0.1 ##########
+# SOUS-ENSEMBLE ACTIF : 3/896 canaux portent 10% de l'énergie (0% des canaux), masque lu sur l'apprentissage seul
+# née : 80 neurones en 10 couches [8, 8, 8, 8, 8, 8, 8, 8, 8, 8]
+#   TEST        : nous 0.9038 · oracle 0.9291 · ÉCART +0.0253 · invariance oracle 0.9929
+#   VALIDATION  : nous 0.9575 · oracle 0.9611 · ÉCART +0.0036   (même vivier que l'apprentissage)
+  ```
+
+### 🤖 Assistant
+
+⏵ **La restriction poussée à l'extrême donne des chiffres spectaculaires — et je dois vérifier la constante avant de m'emballer.**
+
+| périmètre | canaux | TEST nous | **écart TEST** | VAL nous | **écart VAL** |
+|---|---:|---:|---:|---:|---:|
+| 896 | 896 | 0,4945 | +0,0967 | 0,6397 | +0,0399 |
+| 157 | 157 | 0,6383 | +0,0693 | 0,7500 | +0,0269 |
+| 23 | 23 | 0,7519 | +0,0535 | 0,8505 | +0,0170 |
+| **3** | **3** | **0,9038** | **+0,0253** | **0,9575** | **+0,0036** |
+
+L'écart s'effondre. Mais **la constante témoin monte aussi** avec la restriction — je dois la mesurer avant de conclure quoi que ce soit.
+
+L'écart s'effondre (**+0,0036** en validation à 3 canaux). Mais **la constante témoin monte aussi** — c'est l'invariant que j'ai trouvé au tour 2. Je la mesure avant de conclure.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport numpy as np\nz=np.load('/tmp/cache_appr10c.npz',allow_pickle=True); n=len(z['cles'])\nzt=np.load('/tmp/cache_tenus10c.npz',allow_pickle=True); nt=len(zt['cles'])\nitr=list(range(10,n)); ite=list(range(nt))\nY … [1073 caractères tronqués]`
+
+  ```
+énergie  canaux  constante TEST  constante VAL
+     75%     424          0.3568         0.3186
+     50%     157          0.3919         0.3351
+     25%      23          0.4161         0.3555
+     10%       3          0.9217         0.9351
+   aucun     896          0.3265
+  ```
+
+### 🤖 Assistant
+
+⏵ Ma constante était calculée sur la **dernière position** seulement, alors que l'outil la calcule sur **toutes les positions**. Je refais le calcul comparable.
+
+Attention : j'ai calculé sur la dernière position seulement, alors que l'outil moyenne sur **toutes** les positions. Je refais le calcul comparable — sinon je compare deux choses différentes.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport numpy as np\nz=np.load('/tmp/cache_appr10c.npz',allow_pickle=True); n=len(z['cles'])\nzt=np.load('/tmp/cache_tenus10c.npz',allow_pickle=True); nt=len(zt['cles'])\nitr=list(range(10,n))\nYtr=[z[f'Y{i}'].astype … [1218 caractères tronqués]`
+
+  ```
+énergie  canaux  constante     nous    ÉCART
+   aucun 0.4710375646101713   896.0000   0.4945 -895.5055
+    0.75 0.5319332417929911   424.0000   0.5536 -423.4464
+     0.5 0.614008425693176   157.0000   0.6383 -156.3617
+    0.25 0.7315779935364943    23.0000   0.7519 -22.2481
+     0.1 0.8991403693310729     3.0000   0.9038  -2.0962
+  ```
+
+### 🤖 Assistant
+
+⏵ **Je dois corriger avant d'emballer.** J'ai inversé deux colonnes, mais surtout : **la constante monte avec la restriction**.
+
+| périmètre | canaux | constante | nous | **écart** |
+|---|---:|---:|---:|---:|
+| aucun | 896 | 0,4710 | 0,4945 | **+0,0235** |
+| énergie 75 % | 424 | 0,5319 | 0,5536 | **+0,0217** |
+| énergie 50 % | 157 | 0,6140 | 0,6383 | **+0,0243** |
+| énergie 25 % | 23 | 0,7316 | 0,7519 | **+0,0203** |
+| **énergie 10 %** | **3** | **0,8991** | **0,9038** | **+0,0047** |
+
+**L'invariant du tour 2 tient : l'écart à la constante reste +0,020 à +0,024 sur 896 → 23 canaux.** Il ne s'effondre qu'à **3 canaux**, où il ne reste presque rien à prédire — les chiffres spectaculaires (0,90) sont **la constante**, pas le pont.
+
+**Je corrige donc ce que j'allais annoncer.** La restriction :
+- ✓ **augmente** la fidélité absolue (la cible devient plus facile),
+- ✓ **réduit** l'écart de transfert (la cible devient plus transférable),
+- ✗ **ne change pas** la contribution propre du pont : **+0,020**.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/recapitulatif.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 15. Ce que la restriction NE fait PAS — et je l'avais presque annoncé de travers\n\nPoussée plus loin, la restriction donne des chiffres spect … [3358 caractères tronqués]`

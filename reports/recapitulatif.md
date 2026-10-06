@@ -707,3 +707,46 @@ prend le relais de la couverture.
 **Conclusion pratique : la qualité du pont se juge sur les deux panneaux**, et
 c'est désormais ce que le diagnostic rapporte systématiquement. Un chiffre de test
 non latin seul mélange la qualité du pont et la distance typologique.
+
+
+---
+
+## 15. Ce que la restriction NE fait PAS — et je l'avais presque annoncé de travers
+
+Poussée plus loin, la restriction donne des chiffres spectaculaires :
+
+| périmètre | canaux | TEST nous | écart TEST | VAL nous | écart VAL |
+|---|---:|---:|---:|---:|---:|
+| 896 | 896 | 0,4945 | +0,0967 | 0,6397 | +0,0399 |
+| 157 | 157 | 0,6383 | +0,0693 | 0,7500 | +0,0269 |
+| 23 | 23 | 0,7519 | +0,0535 | 0,8505 | +0,0170 |
+| **3** | **3** | **0,9038** | **+0,0253** | **0,9575** | **+0,0036** |
+
+On pourrait en conclure que le pont s'améliore. **C'est faux, et la constante le
+dit** — il fallait la mesurer sur la MÊME métrique (toutes les positions empilées,
+pas la dernière) :
+
+| périmètre | canaux | constante | nous | **écart à la constante** |
+|---|---:|---:|---:|---:|
+| aucun | 896 | 0,4710 | 0,4945 | **+0,0235** |
+| énergie 75 % | 424 | 0,5319 | 0,5536 | **+0,0217** |
+| énergie 50 % | 157 | 0,6140 | 0,6383 | **+0,0243** |
+| énergie 25 % | 23 | 0,7316 | 0,7519 | **+0,0203** |
+| **énergie 10 %** | **3** | **0,8991** | **0,9038** | **+0,0047** |
+
+**L'invariant du §7 tient sur 896 → 23 canaux : +0,020 à +0,024.** Il ne s'effondre
+qu'à **3 canaux**, où il ne reste presque rien à prédire : les 0,90 de fidélité
+sont **la constante**, pas le pont. Le pont y ajoute **+0,005**.
+
+### Les trois énoncés, à ne pas confondre
+
+1. **La fidélité absolue monte** (0,49 → 0,90). Vrai, et cela ne dit **rien** du
+   pont : c'est la cible qui devient plus facile.
+2. **L'écart de transfert se réduit** (+0,0967 → +0,0253 sur le test, +0,0399 →
+   +0,0036 en validation). Vrai, et c'est un **vrai** résultat : une cible plus
+   interlingue est plus transférable.
+3. **La contribution propre du pont ne bouge pas : +0,020**, jusqu'à ce que la
+   cible soit si réduite qu'il n'y ait plus rien à ajouter.
+
+**C'est le §7 qui gouverne**, et ce paragraphe le confirme à trois cents fois
+l'écart de périmètre.
