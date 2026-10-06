@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 189.8 h |
+| Durée | 190.3 h |
 | Tours | 175 |
-| Messages | 8842 |
-| Appels d'outils | 8340 |
+| Messages | 8863 |
+| Appels d'outils | 8359 |
 | Fichiers touchés | 194 |
-| Commandes | 7068 |
+| Commandes | 7084 |
 | Sous-agents | 32 |
-| Commits | 635 |
+| Commits | 636 |
 | Compactages de contexte | 12 |
 
 ## Objectifs déclarés
@@ -8794,7 +8794,7 @@ Rayon spectral du jacobien `J = (1−a)·I + a·D·P` :
 
 ### Tour 175 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
 
-*15 appels d'outils.* Actions notables :
+*34 appels d'outils.* Actions notables :
 
 - bash — Check NLMS experiment and c8 progress
 - read
@@ -8810,11 +8810,11 @@ Rayon spectral du jacobien `J = (1−a)·I + a·D·P` :
 - edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/lecture_locale.py`
 - bash — Move W0 initialization before branch
 - bash — Launch NLMS convergence curve
-- … et 1 autres
+- … et 19 autres
 
 **Synthèse produite :**
 
-⏵ **Je consigne l'écart d'invariance — notre pont est bien plus invariant que sa propre cible.**
+⏵ **Il manque encore valeur propre, complément de Schur, moyenne glissante, parcimonie, impulsion, plongement. Je les ajoute.**
 
 ## 3. Travail accompli
 
@@ -9094,7 +9094,7 @@ Rayon spectral du jacobien `J = (1−a)·I + a·D·P` :
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 7028 autres
+- … et 7044 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9877,4 +9877,5 @@ Rayon spectral du jacobien `J = (1−a)·I + a·D·P` :
 - Correction du §38.2 : le tanh sature PRESQUE TOUJOURS, c'est l'état moyenné qui reste petit  J'avais lu '0,6% de saturation' comme 'la dynamique vit dans son ré
 - La courbe ne plafonne pas (800 neurones → 0,6821) et baisser le gain est RÉFUTÉ  LA COURBE (même vivier, 896 canaux, ride 0,03, fit sur 1/5 des lignes) :    neu
 - Le profil porte tout le protocole — et il révèle un écart d'invariance majeur  tools/profil_langues.py rapporte désormais en une exécution : TAILLE du réseau, I
+- Glossaire : section 10 complète sur le pont, avec les termes de ses propres définitions  Le glossaire ne contenait AUCUNE occurrence de professeur, réservoir, o
 

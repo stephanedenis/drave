@@ -114,11 +114,12 @@ def main():
         # ridge, et à quel coût cumulé ». On relève la qualité APRÈS CHAQUE PASSE.
         print(f"# COURBE DE CONVERGENCE — qualité après chaque passe")
         print(f"\n# {'eta':>5}{'passe':>7}{'cumul s':>10}{'VALID':>9}{'TEST':>9}"
-              f"{'vs ridge':>10}")
+              f"{'vs ridge':>10}   {'||W||':>10} · {'somme ||dW||':>12}")
         for eta in etas:
             W = W0.copy()
             t0 = time.time()
             for p in range(1, passes + 1):
+                dw = 0.0
                 for i in iap:
                     A = P.phi(P.X[i][:, idx])[::se]
                     B = Ytr[i][::se] - mt
@@ -126,11 +127,18 @@ def main():
                         x = A[k]
                         nx = eta/(float(x @ x) + 1e-9)
                         e = B[k] - W.T @ x
-                        W += nx*np.outer(x, e)
+                        d = nx*np.outer(x, e)
+                        # ON MESURE QUE W BOUGE. Sans ce contrôle, une qualité
+                        # identique passe après passe peut vouloir dire « convergé »
+                        # aussi bien que « la boucle ne fait rien » — et les deux
+                        # n'ont pas du tout la même conséquence.
+                        dw += float(np.linalg.norm(d))
+                        W += d
                 fv = cos_lignes(Av @ W + mt, Yv)
                 ft = cos_lignes(At @ W + mt, Yt)
                 print(f" {eta:>5.2f}{p:>7}{time.time()-t0:>10.1f}{fv:>9.4f}"
-                      f"{ft:>9.4f}{ft-fr_t:>+10.4f}")
+                      f"{ft:>9.4f}{ft-fr_t:>+10.4f}   ||W|| {np.linalg.norm(W):>10.2f}"
+                      f" · somme ||dW|| {dw:>12.1f}")
         print(f"\n# RIDGE (référence) : VALID {fr_v:.4f} · TEST {fr_t:.4f} "
               f"en {t_ridge:.1f} s, en UNE fois")
         return 0
