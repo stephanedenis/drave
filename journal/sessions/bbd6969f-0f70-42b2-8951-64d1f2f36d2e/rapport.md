@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 181.9 h |
-| Tours | 159 |
-| Messages | 8525 |
-| Appels d'outils | 8071 |
+| Durée | 182.0 h |
+| Tours | 160 |
+| Messages | 8529 |
+| Appels d'outils | 8073 |
 | Fichiers touchés | 181 |
-| Commandes | 6871 |
+| Commandes | 6873 |
 | Sous-agents | 32 |
-| Commits | 613 |
+| Commits | 614 |
 | Compactages de contexte | 11 |
 
 ## Objectifs déclarés
@@ -371,6 +371,8 @@
 **Tour 158** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 **Tour 159** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
+
+**Tour 160** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -8027,9 +8029,46 @@ Les six scripts sont vivants. Rien à faire de votre côté.
 
 **Synthèse produite :**
 
-⏵ **Troisième incohérence, et c'est la plus visible** : le **titre** de `rapport-pont-generatif.md` annonce que « l'attrition le fait généraliser » — alors que ce même rapport conclut, en §13, qu'elle **ne généralise pas**.
+⏵ Audit terminé : **trois incohérences trouvées et corrigées** dans mes propres rapports.
 
-**Troisième incohérence, et c'est la plus visible** : le **titre** de `rapport-pont-generatif.md` annonce que « l'attrition le fait généraliser » — alors que ce même rapport conclut, en §13, qu'elle **ne généralise pas**. Un titre se lit plus que le corps.
+\## Ce que l'audit a trouvé
+
+J'ai relu les rapports en cherchant les affirmations que j'avais **corrigées en cours de route** et qui pourraient encore y figurer comme valides.
+
+**1. Une conclusion corrigée plus loin dans le même document.** `rapport-toutes-langues.md` §14 affirme « exactement l'invariant des +0,020 », et §16 le corrige 80 lignes plus bas. Un lecteur qui s'arrête à §14 repart avec la mauvaise conclusion. Pointeur ajouté.
+
+**2. Le rapport le plus ancien contredit les mesures récentes.** `rapport-plateau-semantique.md` place le plateau à la **couche 10**. Deux mesures ultérieures le placent à la **couche 8** — sur Romeo (0,5985 contre 0,5703) comme sur l'UDHR propre (0,5471 contre 0,5247). Correction ajoutée en fin, avec la conséquence pratique : viser la couche 8 gagne **+0,0213** de fidélité transférée.
+
+**3. Le titre promettait ce que le corps réfute.** `rapport-pont-generatif.md` s'intitulait « *l'attrition le fait généraliser* », alors que son propre §13 conclut qu'elle **ne généralise pas** — la fidélité de test décroît de façon monotone. **Un titre se lit plus que le corps** : il ne doit pas promettre ce qu'il démentit.
+
+\## Pourquoi c'est utile
+
+Ces trois cas ont la même forme : **une correction faite à un endroit et pas propagée ailleurs**. C'est le revers de la méthode que j'ai suivie — corriger honnêtement chaque erreur dès qu'elle est trouvée — : les corrections s'accumulent localement, et le document devient incohérent avec lui-même.
+
+Un rapport qui contient sa propre contradiction est **pire** qu'un rapport périmé, parce qu'il donne le choix de la conclusion au lecteur.
+
+\## État
+
+| | |
+|---|---|
+| Wikipedia | **135/480**, 0 échec |
+| chaîne | 6 scripts vivants |
+| rapports | **audités et cohérents** |
+
+Rien à faire de votre côté. Commit `75d590a`.
+
+### Tour 160 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Check state and audit recapitulatif
+- bash — Fix recapitulatif inconsistencies
+
+**Synthèse produite :**
+
+⏵ **Les deux mêmes incohérences sont dans `recapitulatif.md`** : le titre du §7 affirme l'invariant des +0,020 « quelle que soit la cible », corrigé au §15 ; et tout le document est bâti autour de la **couche 10**, désormais connue comme sous-optimale.
+
+**Les deux mêmes incohérences sont dans `recapitulatif.md`** : le titre du §7 affirme l'invariant « quelle que soit la cible » — corrigé au §15 — et tout le document est bâti autour de la **couche 10**, désormais connue comme sous-optimale.
 
 ## 3. Travail accompli
 
@@ -8296,7 +8335,7 @@ Les six scripts sont vivants. Rien à faire de votre côté.
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6831 autres
+- … et 6833 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9057,4 +9096,5 @@ Les six scripts sont vivants. Rien à faire de votre côté.
 - Couche 8 contre couche 10 : la correction de cible PAIE (+0,0213 sur le transfert)  Même corpus (Romeo), même protocole (entraîné sur l'anglais, testé sur le fr
 - Audit de cohérence : deux affirmations périmées pointées dans mes propres rapports  J'ai relu les rapports en cherchant les affirmations que j'ai CORRIGÉES en c
 - Audit (suite) : le TITRE du rapport génératif promettait ce que son corps réfute  '# Le pont GÉNÉRATIF : le réseau naît, puis l'attrition le fait généraliser'  
+- Audit (fin) : les deux mêmes incohérences étaient dans recapitulatif.md  1. Tout le document émule la COUCHE 10, désormais connue comme sous-optimale : le    pl
 

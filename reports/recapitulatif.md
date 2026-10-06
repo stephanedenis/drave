@@ -1,6 +1,21 @@
 # Récapitulatif — méthode appliquée et résultats
 
-État au 06/10, soir. Un seul professeur : **Qwen2.5-0.5B, couche 10** (896 canaux).
+État au 06/10. Un seul professeur : **Qwen2.5-0.5B**.
+
+> **DEUX AVERTISSEMENTS POUR LIRE CE DOCUMENT.**
+>
+> **1. La couche cible a changé.** Tout ce document émule la **couche 10**. Des
+> mesures postérieures (Romeo et UDHR) montrent que le plateau du professeur est à
+> la **couche 8** : 0,5985 contre 0,5703 sur Romeo, 0,5471 contre 0,5247 sur
+> l'UDHR. Viser la couche 8 fait gagner **+0,0213 de fidélité transférée**. Les
+> chiffres ci-dessous restent exacts — ils portent sur la couche 10 — mais ils ne
+> décrivent pas le meilleur pont possible. Voir `rapport-toutes-langues.md` §17-19.
+>
+> **2. Le §7 est corrigé au §15.** Le §7 annonce « l'invariant : le pont apporte
+> +0,020, **quelle que soit la cible** ». Le §15 montre que c'est une **plage de
+> +0,020 à +0,032** : les sept périmètres qui donnaient +0,0197 ± 0,0009
+> partageaient le **même panel de 46 langues**. Les deux sections sont conservées
+> — la correction fait partie du travail — mais ne les lisez pas séparément.
 Toutes les mesures portent sur le corpus UDHR, dix unités, 40 langues
 d'entraînement dont 10 de validation, **6 langues tenues à l'écart** (`ell heb hin
 jpn kor tha`, écritures non latines).
@@ -336,6 +351,9 @@ la couche entière.
 ---
 
 ## 7. L'invariant : le pont apporte +0,020, quelle que soit la cible
+
+> **CORRIGÉ AU §15** : c'est une plage de **+0,020 à +0,032**, pas une constante.
+> Les sept périmètres ci-dessous partagent le même panel de 46 langues.
 
 Deux critères de sélection du sous-ensemble actif ont été essayés, plus la
 référence sans restriction. **Même professeur, même protocole, masque lu sur
