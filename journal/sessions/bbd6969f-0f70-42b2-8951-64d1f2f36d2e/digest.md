@@ -136457,3 +136457,122 @@ phase 1 : 303/392
 **Forcer la profondeur gagne en fidélité** (+0,0049 au test, et l'écart à la constante monte de **22 %**), **au prix de l'invariance** (−0,0090). Le taux d'échange est de **0,55 point de fidélité par point d'invariance** — légèrement **meilleur** que la loi générale (0,39). Donc la profondeur forcée est un bon moyen d'acheter de la fidélité, mais ce n'est pas gratuit.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 11. Mon seuil de couche par défaut était TROP STRICT\n\nLe critère de couche n'ouvrait **jamais** de couche sur le panel stratifié\n( … [3600 caractères tronqués]`
+
+  ```
+cf54f8b Mon seuil de couche par défaut était TROP STRICT — la profondeur forcée paie
+traçage : 303/392
+01:44
+  ```
+
+### 🤖 Assistant
+
+⏵ Le seuil était trop strict, mesuré et commité. Point d'étape.
+
+## Le résultat du tour
+
+Le critère de couche n'ouvrait **jamais** de couche sur le panel stratifié. En abaissant le seuil de **décision** — après avoir corrigé le bug qui l'empêchait d'agir :
+
+| seuil-part | réseau | fid VAL | fid TEST | **écart** | invariance | pire paire |
+|---|---|---:|---:|---:|---:|---:|
+| **0,50** (défaut) | 52 neurones · **1 couche** | 0,7621 | 0,7438 | **+0,0223** | **0,9739** | **0,8929** |
+| **0,25** | 80 neurones · **5 couches** | **0,7681** | **0,7487** | **+0,0272** | 0,9649 | 0,8745 |
+
+**Forcer la profondeur gagne en fidélité** (+0,0049 au test, écart à la constante **+22 %**), **au prix de l'invariance** (−0,0090).
+
+**Le taux d'échange est le chiffre intéressant** : 0,0049 de fidélité pour 0,0090 d'invariance abandonnée, soit **0,55 point par point** — contre **0,3856** pour la loi générale mesurée sur onze points de croissance. **Forcer la profondeur est donc un moyen légèrement plus efficace que la moyenne d'acheter de la fidélité.**
+
+## Ce que cela implique, et que je ne tranche pas seul
+
+Mon seuil par défaut **laissait de la fidélité sur la table**. Mais changer le défaut n'est pas neutre : cela déplace le pont le long de la courbe d'échange, vers plus de fidélité et moins d'invariance. **Le bon réglage dépend de l'usage** :
+
+- si le pont sert à un **raisonnement** qui a besoin de fidélité → seuil bas ;
+- si le pont sert de **représentation interlingue** → seuil haut.
+
+Je laisse le défaut à 0,50 (comportement inchangé, aucune régression silencieuse) et je documente l'option. **Si vous avez une préférence, elle est maintenant mesurable et réglable en une ligne.**
+
+## État
+
+| | |
+|---|---:|
+| phase 1 | **303/392** · 0 échec |
+| restant | ~89 langues, **~45 min** |
+| fin estimée | ~02h30 |
+
+Le run à seuil 0,10 tourne encore (profondeur encore plus forcée) — il dira si le gain continue ou se retourne.
+
+Rien à faire de votre côté. Commit `cf54f8b`.
+
+
+## Tour 141
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de représentation universelle), boîte noire (on ne lit du professeur que la couche à émuler, jamais sa tête ni ses jetons générés), aucune rétropropagation (A et B aléatoires et gelés, seule la lecture s'ajuste en forme fermée), et chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, TAILLE du réseau, avec le diagnostic oracle sur les deux panneaux (test hors vivier et validation du même vivier)."
+Round: 14/256
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Je relève l'état des deux calculs en cours.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date \"+%H:%M\"; echo \"phase 1 : $(ls /home/stephane/Data13TB/stephane/corpus/udhr/udhr392 | wc -l)/392\"; tail -1 /tmp/trace392.log; echo \"échecs : $(grep -c ÉCHEC /tmp/trace392.log)\"; echo; echo \"=== seuil-part 0,10 ===\"; tail … [136 caractères tronqués]`
+
+  ```
+01:44
+phase 1 : 303/392
+sah 47s 9572053
+échecs : 0
+
+=== seuil-part 0,10 ===
+  → COUCHE NEUVE (épuisée + concepts + contraste)     54       2
+  → COUCHE NEUVE (épuisée + concepts + contraste)     64       3
+  → COUCHE NEUVE (épuisée + concepts + contraste)     75       4
+# née : 80 neurones en 5 couches [44, 10, 10, 11, 5]
+  fidélité VAL     : 0.7681
+  fidélité TEST    : 0.7487   (constante témoin : 0.7215)
+  invariance TEST  : 0.9649 · pire paire 0.8745
+########## seuil-part (décision) : 0.10 ##########
+TERMINE : 0
+  ```
+
+### 🤖 Assistant
+
+⏵ Le run à 0,10 met beaucoup de temps (profondeur encore plus forcée). Je lui laisse un délai, puis j'aviserai — le traçage est prioritaire.
+
+- **bash** `{"command": "sleep 480; echo \"=== seuil-part 0,10 ===\"; tail -7 /tmp/seuilpart.log; echo \"TERMINE : $(grep -c TERMINE /tmp/seuilpart.log)\"; echo; echo \"phase 1 : $(ls /home/stephane/Data13TB/stephane/corpus/udhr/udhr392 | wc -l)/392\"; tail -1 /tmp/trace392.log; python3 -c \"\nimport re\nt=open … [273 caractères tronqués]`
+
+  ```
+=== seuil-part 0,10 ===
+  → COUCHE NEUVE (épuisée + concepts + contraste)     60       3
+  → COUCHE NEUVE (épuisée + concepts + contraste)     76       4
+# née : 80 neurones en 5 couches [44, 8, 8, 16, 4]
+  fidélité VAL     : 0.7662
+  fidélité TEST    : 0.7481   (constante témoin : 0.7215)
+  invariance TEST  : 0.9634 · pire paire 0.8562
+TERMINE
+TERMINE : 1
+
+phase 1 : 313/392
+slv 28s 5452437
+moyenne 42 s · reste 144 min
+01:52
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le balayage est complet, et il y a un optimum intérieur net.**
+
+| seuil-part | réseau | fid VAL | fid TEST | **écart** | invariance | pire paire |
+|---|---|---:|---:|---:|---:|---:|
+| 0,50 | 52 n · 1 couche | 0,7621 | 0,7438 | +0,0223 | **0,9739** | **0,8929** |
+| **0,25** | 80 n · 5 couches | **0,7681** | **0,7487** | **+0,0272** | 0,9649 | 0,8745 |
+| 0,10 | 80 n · 5 couches | 0,7662 | 0,7481 | +0,0266 | 0,9634 | 0,8562 |
+
+**0,25 est l'optimum** : au-delà, forcer encore la profondeur **détériore** les trois colonnes à la fois (fidélité −0,0006, écart −0,0006, invariance −0,0015). C'est un maximum intérieur, pas un plateau.
+
+**Un optimum intérieur net** : à 0,25 la fidélité et l'écart à la constante sont au maximum ; au-delà, forcer encore la profondeur **détériore les trois colonnes à la fois**. Mon défaut de 0,50 était donc bien trop strict.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 12. L'optimum du seuil de couche : 0,25, et c'est un maximum INTÉRIEUR\n\nBalayage complet, panel stratifié, tout le reste égal :\n\n … [2974 caractères tronqués]`

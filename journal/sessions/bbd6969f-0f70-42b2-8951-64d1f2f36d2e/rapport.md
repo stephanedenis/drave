@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 179.0 h |
-| Tours | 140 |
-| Messages | 8412 |
-| Appels d'outils | 7996 |
+| Durée | 179.1 h |
+| Tours | 141 |
+| Messages | 8417 |
+| Appels d'outils | 7999 |
 | Fichiers touchés | 177 |
-| Commandes | 6800 |
+| Commandes | 6803 |
 | Sous-agents | 32 |
-| Commits | 602 |
+| Commits | 603 |
 | Compactages de contexte | 11 |
 
 ## Objectifs déclarés
@@ -333,6 +333,8 @@
 **Tour 139** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 **Tour 140** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
+
+**Tour 141** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -7183,14 +7185,63 @@ Rien à faire de votre côté. Commit `0ce0f3f`.
 
 **Synthèse produite :**
 
-⏵ **Réponse nette : mon seuil par défaut était trop strict.**
+⏵ Le seuil était trop strict, mesuré et commité. Point d'étape.
 
-| seuil-part | réseau | fid VAL | fid TEST | **écart à la constante** | invariance | pire paire |
+\## Le résultat du tour
+
+Le critère de couche n'ouvrait **jamais** de couche sur le panel stratifié. En abaissant le seuil de **décision** — après avoir corrigé le bug qui l'empêchait d'agir :
+
+| seuil-part | réseau | fid VAL | fid TEST | **écart** | invariance | pire paire |
 |---|---|---:|---:|---:|---:|---:|
 | **0,50** (défaut) | 52 neurones · **1 couche** | 0,7621 | 0,7438 | **+0,0223** | **0,9739** | **0,8929** |
-| **0,25** | 80 neurones · **5 couches** [44,10,10,11,5] | **0,7681** | **0,7487** | **+0,0272** | 0,9649 | 0,8745 |
+| **0,25** | 80 neurones · **5 couches** | **0,7681** | **0,7487** | **+0,0272** | 0,9649 | 0,8745 |
 
-**Forcer la profondeur gagne en fidélité** (+0,0049 au test, et l'écart à la constante monte de **22 %**), **au prix de l'invariance** (−0,0090). Le taux d'échange est de **0,55 point de fidélité par point d'invariance** — légèrement **meilleur** que la loi générale (0,39). Donc la profondeur forcée est un bon moyen d'acheter de la fidélité, mais ce n'est pas gratuit.
+**Forcer la profondeur gagne en fidélité** (+0,0049 au test, écart à la constante **+22 %**), **au prix de l'invariance** (−0,0090).
+
+**Le taux d'échange est le chiffre intéressant** : 0,0049 de fidélité pour 0,0090 d'invariance abandonnée, soit **0,55 point par point** — contre **0,3856** pour la loi générale mesurée sur onze points de croissance. **Forcer la profondeur est donc un moyen légèrement plus efficace que la moyenne d'acheter de la fidélité.**
+
+\## Ce que cela implique, et que je ne tranche pas seul
+
+Mon seuil par défaut **laissait de la fidélité sur la table**. Mais changer le défaut n'est pas neutre : cela déplace le pont le long de la courbe d'échange, vers plus de fidélité et moins d'invariance. **Le bon réglage dépend de l'usage** :
+
+- si le pont sert à un **raisonnement** qui a besoin de fidélité → seuil bas ;
+- si le pont sert de **représentation interlingue** → seuil haut.
+
+Je laisse le défaut à 0,50 (comportement inchangé, aucune régression silencieuse) et je documente l'option. **Si vous avez une préférence, elle est maintenant mesurable et réglable en une ligne.**
+
+\## État
+
+| | |
+|---|---:|
+| phase 1 | **303/392** · 0 échec |
+| restant | ~89 langues, **~45 min** |
+| fin estimée | ~02h30 |
+
+Le run à seuil 0,10 tourne encore (profondeur encore plus forcée) — il dira si le gain continue ou se retourne.
+
+Rien à faire de votre côté. Commit `cf54f8b`.
+
+### Tour 141 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Check trace and threshold run state
+- bash — Wait for 0.10 run and check trace
+- bash — Commit the threshold optimum
+
+**Synthèse produite :**
+
+⏵ **Le balayage est complet, et il y a un optimum intérieur net.**
+
+| seuil-part | réseau | fid VAL | fid TEST | **écart** | invariance | pire paire |
+|---|---|---:|---:|---:|---:|---:|
+| 0,50 | 52 n · 1 couche | 0,7621 | 0,7438 | +0,0223 | **0,9739** | **0,8929** |
+| **0,25** | 80 n · 5 couches | **0,7681** | **0,7487** | **+0,0272** | 0,9649 | 0,8745 |
+| 0,10 | 80 n · 5 couches | 0,7662 | 0,7481 | +0,0266 | 0,9634 | 0,8562 |
+
+**0,25 est l'optimum** : au-delà, forcer encore la profondeur **détériore** les trois colonnes à la fois (fidélité −0,0006, écart −0,0006, invariance −0,0015). C'est un maximum intérieur, pas un plateau.
+
+**Un optimum intérieur net** : à 0,25 la fidélité et l'écart à la constante sont au maximum ; au-delà, forcer encore la profondeur **détériore les trois colonnes à la fois**. Mon défaut de 0,50 était donc bien trop strict.
 
 ## 3. Travail accompli
 
@@ -7453,7 +7504,7 @@ Rien à faire de votre côté. Commit `0ce0f3f`.
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6760 autres
+- … et 6763 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -8203,4 +8254,5 @@ Rien à faire de votre côté. Commit `0ce0f3f`.
 - Signal précoce sur le panel STRATIFIÉ : l'écart de transfert était un artefact  Mesure sur les 168 premières langues tracées (133 apprentissage · 15 validation 
 - Bug : --seuil-commun ne pilotait PAS la décision, seulement l'affichage  Trouvé en testant la calibration du seuil de couche : abaisser --seuil-commun de 0,50 à
 - Mon seuil de couche par défaut était TROP STRICT — la profondeur forcée paie  Le critère n'ouvrait jamais de couche sur le panel stratifié (communs 28-38 %, sou
+- Optimum du seuil de couche : 0,25, et c'est un maximum INTÉRIEUR  Balayage complet sur le panel stratifié, tout le reste égal :    seuil-part  réseau           
 
