@@ -36,6 +36,7 @@ def lire(chemin, couche):
         return out
 
     pos_voulues = {}
+    tronque = False
     with open(chemin, "rb") as f:
         assert f.read(4) == b"DRVF"
         version, = struct.unpack("<H", f.read(2))
@@ -48,9 +49,19 @@ def lire(chemin, couche):
             if c == 0xFFFF:
                 break
             pos, n, ech = struct.unpack("<IIf", f.read(12))
-            pp = paires(f, n, version)
+            # UNE TRACE INTERROMPUE LAISSE UNE QUEUE TRONQUÉE : un traçage arrêté
+            # en cours d'écriture produit un fichier valide jusqu'à un point et
+            # coupé après. On garde ce qui a été lu au lieu de tout perdre — sans
+            # quoi un simple arrêt rend le fichier inexploitable.
+            try:
+                pp = paires(f, n, version)
+            except Exception:
+                tronque = True
+                break
             if c == couche:
                 pos_voulues[pos] = pp
+    if tronque:
+        print(f"  (tronquée : {os.path.basename(chemin)} — on garde ce qui est lisible)")
     if not pos_voulues:
         return hid, None
     p = max(pos_voulues)

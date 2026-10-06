@@ -134546,3 +134546,103 @@ phase 1 : 66/392
 Chaîne complète en place (4 phases). J'écris l'outil qui exploitera le traçage par unité — l'invariance **groupée par unité**, ce que l'outil multilingue ne sait pas faire.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/invariance_unites.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"invariance_unites.py — l'invariance par UNITÉ, dix points au lieu d'un.\n\nL'outil multilingue mesure l'invariance entre TOUTES les paires d'entrées. Ici les\nent … [5084 caractères tronqués]`
+
+  ```
+syntaxe OK
+--- éprouvé sur les traces existantes (une seule unité par langue : le format ne matchera pas) ---
+aucun fichier au format <langue>_<k>.drvf
+5a82625 invariance_unites.py : l'invariance par unité, et une pire paire qui porte sur quelque chose
+  ```
+
+### 🤖 Assistant
+
+⏵ Le format `<langue>_<k>.drvf` correspond exactement aux traces Romeo déjà produites (`en_01`, `fr_01`…). Je peux donc **valider l'outil tout de suite**.
+
+Le format attendu correspond exactement aux traces Romeo déjà produites (`en_01`, `fr_01`…). Je peux donc **valider l'outil immédiatement** — et obtenir au passage l'invariance par scène.
+
+- **bash** `{"command": "ls /home/stephane/Data13TB/stephane/corpus/parallele_rj/ 2>/dev/null; echo \"---\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for C in 0 4 8 10; do timeout 300 python3 tools/invariance_unites.py /home/stephane/Data13TB/stephane/corpus/parallele_rj --couche $C 2>&1 | tail -4; … [91 caractères tronqués]`
+
+  ```
+en_01.drvf
+en_02.drvf
+en_03.drvf
+---
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/invariance_unites.py", line 27, in paires
+    e, = struct.unpack("<B", f.read(1))
+         ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+struct.error: unpack requires a buffer of 1 bytes
+
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/invariance_unites.py", line 27, in paires
+    e, = struct.unpack("<B", f.read(1))
+         ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+struct.error: unpack requires a buffer of 1 bytes
+
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/invariance_unites.py", line 27, in paires
+    e, = struct.unpack("<B", f.read(1))
+         ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+struct.error: unpack requires a buffer of 1 bytes
+
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/invariance_unites.py", line 27, in paires
+    e, = struct.unpack("<B", f.read(1))
+         ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+struct.error: unpack requires a buffer of 1 bytes
+  ```
+
+### 🤖 Assistant
+
+⏵ L'outil plante sur les traces Romeo. Je vérifie si les fichiers sont complets ou si c'est mon lecteur qui est fragile.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la /home/stephane/Data13TB/stephane/corpus/parallele_rj/; echo \"--- lecture avec le lecteur éprouvé /tmp/lire_drvf.py ---\"; python3 -c \"\nimport sys; sys.path.insert(0,'/tmp')\nfrom lire_drvf import lire\nimport glob, os\nfor  … [508 caractères tronqués]`
+
+  ```
+total 51024
+drwxr-xr-x. 1 stephane stephane       60  5 oct 22:34 .
+drwxr-xr-x. 1 stephane stephane       32  5 oct 22:25 ..
+-rw-r--r--. 1 stephane stephane 30883969  5 oct 22:31 en_01.drvf
+-rw-r--r--. 1 stephane stephane 12737089  5 oct 22:34 en_02.drvf
+-rw-r--r--. 1 stephane stephane  8618411  5 oct 22:36 en_03.drvf
+--- lecture avec le lecteur éprouvé /tmp/lire_drvf.py ---
+  en_01.drvf: v2 n_layer=24 hidden=896 · 2965 positions · couches [0, 4, 8, 10]
+  en_02.drvf: v2 n_layer=24 hidden=896 · 1222 positions · couches [0, 4, 8, 10]
+  en_03.drvf: ERREUR error unpack requires a buffer of 1 bytes
+  ```
+
+### 🤖 Assistant
+
+⏵ **Trouvé** : `en_01` et `en_02` sont complets et se lisent parfaitement ; `en_03` est **tronqué** — c'est le fichier en cours d'écriture quand j'ai arrêté la phase 2. Mon lecteur doit tolérer une queue tronquée.
+
+**Trouvé** : `en_03` est **tronqué** — c'est le fichier en cours d'écriture quand j'ai arrêté la phase 2. `en_01` et `en_02` se lisent parfaitement. Mon lecteur doit tolérer une queue tronquée ; c'est un cas qui se reproduira à chaque arrêt.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/invariance_unites.py'; s=open(p).read()\ns=s.replace('''    pos_voulues = {}\n    with open(chemin, \"rb\") as f:\n        assert f.read(4) == b\"DRVF\"\n        version, = struct.unpack(\"<H\", f.read(2))\ … [2068 caractères tronqués]`
+
+  ```
+syntaxe OK
+=== couche 0 ===
+  (tronquée : en_03.drvf — on garde ce qui est lisible)
+# 3 unités · 1 langues max · couche 0
+
+ unité  langues  invariance  pire paire   pire couple
+=== couche 4 ===
+  (tronquée : en_03.drvf — on garde ce qui est lisible)
+# 3 unités · 1 langues max · couche 4
+
+ unité  langues  invariance  pire paire   pire couple
+=== couche 8 ===
+  (tronquée : en_03.drvf — on garde ce qui est lisible)
+# 3 unités · 1 langues max · couche 8
+
+ unité  langues  invariance  pire paire   pire couple
+=== couche 10 ===
+  (tronquée : en_03.drvf — on garde ce qui est lisible)
+# 3 unités · 1 langues max · couche 10
+
+ unité  langues  invariance  pire paire   pire couple
+  ```
+
+### 🤖 Assistant
+
+⏵ L'outil tolère maintenant la troncature. Il ne trouve qu'**une langue** : les traces françaises n'ont jamais tourné (j'avais arrêté la phase 2 après deux scènes anglaises). Je supprime le fichier tronqué pour qu'il soit refait, et je commit.
+
+L'outil tolère maintenant la troncature. Il ne trouve qu'**une langue** : les traces françaises n'ont jamais tourné. Je supprime le fichier tronqué pour qu'il soit refait automatiquement.
+
+- **bash** `{"command": "rm -f /home/stephane/Data13TB/stephane/corpus/parallele_rj/en_03.drvf && echo \"trace tronquée supprimée (elle sera refaite)\"; ls /home/stephane/Data13TB/stephane/corpus/parallele_rj/\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Lecteur toléra … [914 caractères tronqués]`

@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 176.2 h |
 | Tours | 129 |
-| Messages | 8319 |
-| Appels d'outils | 7925 |
+| Messages | 8323 |
+| Appels d'outils | 7929 |
 | Fichiers touchés | 172 |
-| Commandes | 6734 |
+| Commandes | 6738 |
 | Sous-agents | 32 |
-| Commits | 589 |
+| Commits | 590 |
 | Compactages de contexte | 11 |
 
 ## Objectifs déclarés
@@ -6640,7 +6640,7 @@ Rien à faire de votre côté. Commit `ed92627`.
 
 ### Tour 129 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1281 caractères tronqués]
 
-*6 appels d'outils.* Actions notables :
+*10 appels d'outils.* Actions notables :
 
 - bash — Check chain state
 - bash — Smoke-test the parallel bridge tool
@@ -6648,12 +6648,16 @@ Rien à faire de votre côté. Commit `ed92627`.
 - write `/tmp/trace_unites.sh`
 - bash — Chain per-unit tracing and commit
 - bash — Write per-unit invariance tool
+- bash — Validate per-unit tool on Romeo traces
+- bash — Check Romeo trace integrity
+- bash — Make reader truncation-tolerant and test
+- bash — Remove truncated file and commit robustness fix
 
 **Synthèse produite :**
 
-⏵ Chaîne complète : 4 phases. J'écris l'outil qui exploitera le traçage par unité.
+⏵ L'outil tolère maintenant la troncature. Il ne trouve qu'**une langue** : les traces françaises n'ont jamais tourné (j'avais arrêté la phase 2 après deux scènes anglaises). Je supprime le fichier tronqué pour qu'il soit refait, et je commit.
 
-Chaîne complète en place (4 phases). J'écris l'outil qui exploitera le traçage par unité — l'invariance **groupée par unité**, ce que l'outil multilingue ne sait pas faire.
+L'outil tolère maintenant la troncature. Il ne trouve qu'**une langue** : les traces françaises n'ont jamais tourné. Je supprime le fichier tronqué pour qu'il soit refait automatiquement.
 
 ## 3. Travail accompli
 
@@ -6911,7 +6915,7 @@ Chaîne complète en place (4 phases). J'écris l'outil qui exploitera le traça
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6694 autres
+- … et 6698 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -7648,4 +7652,5 @@ Chaîne complète en place (4 phases). J'écris l'outil qui exploitera le traça
 - pont_parallele.py : l'invariance sur un corpus apparié se mesure SEGMENT par SEGMENT  Différence de fond avec pont_generatif.py : là-bas les langues ne sont pas
 - Traçage PAR UNITÉ : l'invariance à dix points au lieu d'un  Faiblesse de fond dans la mesure : l'invariance se mesurait sur la DERNIÈRE position du texte entier
 - invariance_unites.py : l'invariance par unité, et une pire paire qui porte sur quelque chose  L'outil multilingue mesure l'invariance entre TOUTES les paires d'
+- Lecteur tolérant à la TRONCATURE : une trace interrompue reste exploitable  Trouvé en éprouvant invariance_unites.py sur les traces Romeo : en_03.drvf était TRO
 
