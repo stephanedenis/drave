@@ -142413,3 +142413,323 @@ corr(apport, frag) | témoin ET norme : +0.4441
 ⏵ **Image nette et contrôlée. Je réécris la section 27 — ma première version attribuait à la norme ce qui appartient à la fragmentation.**
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ni=s.index(\"\\n---\\n\\n## 27.\")\ns=s[:i]\ns += \"\"\"\n\n---\n\n## 27. Le pont ne sert pas également les langues — et le chiffre de tête est surtout la CONS … [9548 caractères tronqués]`
+
+  ```
+rapport : 1074 lignes
+338d194 Le pont ne sert pas toutes les langues également — et la fidélité EST le témoin constant
+unités: 387/400
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le pont n'apporte rien sur deu/heb : le réservoir n'a qu'une seule échelle de mémoire. J'implémente des constantes de temps par neurone.**
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", "limit": 55, "offset": 224}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py</path>
+<type>file</type>
+<content>
+224:         Pour la Gram `G = XᵀX`, la variance de `x_j` non expliquée par les autres
+225:         est le complément de Schur `1/(G⁻¹)_jj`, donc la part expliquée vaut
+226:         `1 − 1/((G⁻¹)_jj · G_jj)` — une seule inversion, pas K.
+227:         On retire en premier ceux qui sont à la fois expliqués ET utiles.
+228:         """
+229:         X = np.vstack([x[:, idx] for x in self.X]).astype(np.float64)
+230:         G = X.T @ X
+231:         d = np.diag(G).copy(); d[d == 0] = 1.0
+232:         Gi = np.linalg.inv(G + 1e-6*np.trace(G)/len(G)*np.eye(len(G)))
+233:         explique = np.clip(1.0 - (1.0/np.diag(Gi))/d, 0.0, 1.0)
+234:         return explique * self.contribution(W, idx)
+235: 
+236:     # -- RECALCUL HONNÊTE ----------------------------------------------------
+237:     def recalcule(self, S, Ek=None):
+238:         """Refait les trajectoires des SEULS survivants, couche par couche.
+239: 
+240:         Les retirés ne contribuent plus rien. C'est la seule façon de savoir si
+241:         une réduction est réelle : un neurone dont la trajectoire a été calculée
+242:     
+… [2029 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", "limit": 22, "offset": 276}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py</path>
+<type>file</type>
+<content>
+276:     def compacte(self, S):
+277:         """Réécrit la généalogie sur les survivants et renumérote les couches."""
+278:         S = list(S)
+279:         # les trajectoires se calculent AVANT le remappage : `recalcule` lit
+280:         # `self.poids` avec les indices de l'ancienne numérotation.
+281:         Xn = self.recalcule(S)
+282:         nouvelles = []
+283:         tailles = {}
+284:         for j in S:
+285:             c = self.poids[j][3]
+286:             tailles[c] = tailles.get(c, 0) + 1
+287:         renomme = {c: i for i, c in enumerate(sorted(tailles))}
+288:         for j in S:
+289:             wp, ws, b, c = self.poids[j]
+290:             nouvelles.append((wp.copy(), ws.copy(), b.copy(), renomme[c]))
+291:         self.poids = nouvelles
+292:         self.X = Xn
+293:         self.couches = [tailles[c] for c in sorted(tailles)]
+294:         self.compte_neurones = len(S)
+295:         return len(S)
+296: 
+297:     def couches_de(self, S):
+
+(Showing lines 276-297 of 852. Use offset=298 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", "new_string": "        for j in S:\n            wp, ws, b, c = self.poids[j]\n            nouvelles.append((wp.copy(), ws.copy(), b.copy(), renomme[c]))\n        self.poids = nouvelles\n        # la constante de … [374 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", "new_string": "        self.quadratique = False\n        # PESÉE PAR LANGUE du fit (None = moindres carrés ordinaires). Voir\n        # `ajuste` : sans elle, l'objectif est ABSOLU alors que la métrique est un\n  … [1041 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py has been updated successfully.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", "limit": 44, "offset": 126}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py</path>
+<type>file</type>
+<content>
+126: 
+127:     # -- naissance -----------------------------------------------------------
+128:     def nait(self, k, nouvelle_couche=True):
+129:         """Fait naître k neurones, soit dans une couche NEUVE, soit dans la
+130:         couche courante (pour couvrir les activations qui manquent encore)."""
+131:         n_avant = self.compte_neurones
+132:         if nouvelle_couche or not self.couches:
+133:             c = len(self.couches)
+134:             deja = 0
+135:             c_par = c - 1
+136:         else:
+137:             c = len(self.couches) - 1
+138:             deja = self.couches[-1]
+139:             c_par = c - 1
+140:         n_par = self.taille_couche(c_par) if c_par >= 0 else 0
+141:         debut_par = self.debut_couche(c_par) if c_par >= 0 else 0
+142: 
+143:         W_par = (self.rng.randn(k, n_par) / np.sqrt(max(n_par, 1))
+144:                  if n_par > 0 else np.zeros((k, 0)))
+145:         W_self = self.rng.randn(k, deja + k) / np.sqrt(max(deja + k, 1))
+146:         B = self.rng.randn(k, self.H) / np.sqrt(self.H) * self.gain_entree
+147: 
+148:         for
+… [1249 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", "new_string": "        W_par = (self.rng.randn(k, n_par) / np.sqrt(max(n_par, 1))\n                 if n_par > 0 else np.zeros((k, 0)))\n        W_self = self.rng.randn(k, deja + k) / np.sqrt(max(deja + k, 1))\n … [2596 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", "new_string": "            Bs = np.array([self.poids[j][2] for j in membres])\n            As = np.array([self.a_neur[j] for j in membres])\n            for i, E in enumerate(EK):\n                T = len(E)\n   … [826 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py has been updated successfully.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/profil_langues.py", "limit": 30, "offset": 82}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/profil_langues.py</path>
+<type>file</type>
+<content>
+82:     # --- un réseau de taille FIXE. On ne cherche pas le meilleur : on mesure
+83:     #     si la lecture partagée sert également toutes les langues.
+84:     P = Pont((cltr, Etr, Ytr), a, graine, len(garde))
+85:     P.quadratique = True
+86:     P.nait(n_neur, True)
+87:     print(f"# réseau : {P.compte_neurones} neurones · {len(P.couches)} couche(s) "
+88:           f"{P.couches} · lecture quadratique")
+89: 
+90:     itr = np.arange(len(cltr))
+91:     mt = np.vstack([Ytr[i] for i in itr]).mean(axis=0)
+92:     idx = np.arange(P.compte_neurones)
+93: 
+94:     # --- trajectoires du TEST
+95:     Xte = P.recalcule(idx, Ete)
+96: 
+97:     def profil(W, nom):
+98:         lignes = []
+99:         for k, cl in enumerate(clte):
+100:             A = P.phi(P._norm(Xte[k])) @ W + mt
+101:             B = Yte[k]
+102:             # ORACLE PAR LANGUE : une lecture ajustée SUR la langue elle-même.
+103:             # Diagnostic, pas modèle. Il sépare deux causes que la fidélité seule
+104:             # confond : des CARACTÉRISTIQUES qui ne portent pas le contenu (oracle
+105:             # ba
+… [450 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Je restructure le profil pour comparer réservoir mono-échelle et multi-échelle sur les mêmes langues.**
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"PROFIL PAR LANGUE — le pont sert-il également toutes les langues ?\n\nCE QUI A ÉTÉ ÉTABLI (§27 du rapport), et qui commande ce script :\n\n  1. `corr(fidélité, témoin constant) = +0,977`. La fidélité d'une langue est\n     presque entièrement le témoin cons … [7380 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/profil_langues.py</path>
+<type>file</type>
+<content>
+Updated file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/profil_langues.py'; s=open(p).read()\ns=s.replace('''def frag(cl):\n    p = os.path.join(SOURCE, cl + \".txt\")\n    if not os.path.exists(p):\n        return float(\"nan\")\n    return 1.0\n\n\n''','')\nop … [381 caractères tronqués]`
+
+  ```
+syntaxe OK
+fonction parasite retirée
+unités: 396/400
+yap_04 10s
+yap_05 10s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup timeout 3600 python3 -u tools/profil_langues.py /tmp/cache392_train.npz /tmp/cache392_test.npz --neur 40 --part 0.5 --a-min 0.02 --a-max 0.8 > /tmp/profil2.log 2>&1 &\necho \"lancé pid $!\"; date '+%H:%M'", "description": "Laun … [37 caractères tronqués]`
+
+  ```
+lancé pid 2507432
+08:14
+  ```
+
+- **bash** `{"command": "sleep 300; echo \"=== profil2 ===\"; tail -20 /tmp/profil2.log; echo \"=== unités: $(ls /home/stephane/Data13TB/stephane/corpus/udhr/unites | wc -l)/400 ===\"; tail -1 /tmp/trace_unites.log; date '+%H:%M'", "description": "Wait for multi-scale comparison", "timeoutMs": 330000}`
+
+  ```
+=== profil2 ===
+ jpn      0.697     +0.0216       +0.0219  +0.0003
+ kbd      0.721     +0.0195       +0.0209  +0.0013
+ ell      0.919     +0.0220       +0.0195  -0.0025
+ mai      0.948     +0.0417       +0.0438  +0.0021
+ kat      1.000     +0.0331       +0.0348  +0.0017
+ hye      1.000     +0.0316       +0.0328  +0.0012
+ mya      1.017     +0.0769       +0.0814  +0.0045
+ ben      1.056     +0.0546       +0.0560  +0.0014
+ tam      1.092     +0.0504       +0.0498  -0.0006
+ amh      1.145     +0.0535       +0.0565  +0.0030
+ khm      1.189     +0.0453       +0.0407  -0.0046
+ lao      1.284     +0.0379       +0.0393  +0.0014
+ dzo      1.324     +0.0885       +0.0885  +0.0000
+ vie      1.328     +0.0159       +0.0182  +0.0022
+ mal      1.361     +0.0553       +0.0536  -0.0017
+ tel      1.444     +0.0578       +0.0578  +0.0000
+ csw      1.507     +0.0639       +0.0711  +0.0073
+ fuf      1.578     +0.0610       +0.0710  +0.0100
+
+# table écrite : /tmp/profil_langues.csv
+=== unités: 400/400 ===
+TERMINE
+08:19
+  ```
+
+### 🤖 Assistant
+
+⏵ **400/400 unités tracées — la chaîne avance. Je lis le verdict multi-échelle.**
+
+- **bash** `{"command": "head -30 /tmp/profil2.log; echo \"=== chaîne ===\"; pgrep -fa \"analyse_final|trace_unites|unites8|c8_apres\" | head -5; echo \"=== analyse_final ===\"; tail -5 /tmp/analyse_final.log 2>/dev/null || echo \"pas encore de log\"", "description": "Read multi-scale summary and chain status"}`
+
+  ```
+# 351 langues d'apprentissage · 41 langues de test · H=896
+# canaux partagés : 896/896 (100%)
+
+=== MONO-ÉCHELLE (référence, a=0,2) ===
+#   constante de temps unique : 0.2
+#   fidélité 0.5972 · témoin 0.5678 · APPORT +0.0294 · oracle 0.6935
+#   apport ↔ fragmentation : Pearson +0.8206 (R² 0.6735)
+#   apport ↔ norme         : Pearson -0.5912
+#   oracle ↔ norme         : Pearson -0.8368
+
+=== MULTI-ÉCHELLE (a de 0.02 à 0.8) ===
+#   constantes de temps : 0.020 à 0.800 (médiane 0.127)
+#   fidélité 0.5998 · témoin 0.5678 · APPORT +0.0320 · oracle 0.6994
+#   apport ↔ fragmentation : Pearson +0.7973 (R² 0.6358)
+#   apport ↔ norme         : Pearson -0.6002
+#   oracle ↔ norme         : Pearson -0.8314
+
+=== EFFET DU MULTI-ÉCHELLE SUR L'APPORT PROPRE ===
+#   apport moyen : +0.0294 → +0.0320 (+0.0026)
+#   PRÉDICTION : l'effet doit être plus grand là où la fragmentation est FAIBLE
+#   corrélation (effet) ↔ fragmentation : Pearson -0.2103
+
+#langue    frag  apport réf  apport multi    effet
+ deu      0.271     +0.0133       +0.0143  +0.0010
+ pam      0.332     +0.0146       +0.0181  +0.0035
+ tpi      0.352     +0.0133       +0.0182  +0.0049
+ ilo      0.364     +0.0121       +0.0158  +0.0036
+ que   
+… [1862 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Multi-échelle : gain réel (+9 % sur l'apport) mais la prédiction n'est que faiblement confirmée (−0,21).**
+
+- **bash** `{"command": "ls -la /proc/2364779/fd/1 /proc/2364779/fd/2 2>/dev/null; echo \"=== Wikipedia ===\"; ls /home/stephane/Data13TB/stephane/corpus/wiki_traces 2>/dev/null | wc -l; echo \"=== fin de la comparaison multi-échelle ===\"; sed -n '/EFFET DU MULTI/,$p' /tmp/profil2.log | tail -22", "description … [53 caractères tronqués]`
+
+  ```
+l-wx------. 1 stephane stephane 64  6 oct 08:20 /proc/2364779/fd/1 -> /tmp/debug_final.log
+l-wx------. 1 stephane stephane 64  6 oct 08:20 /proc/2364779/fd/2 -> /tmp/debug_final.log
+=== Wikipedia ===
+480
+=== fin de la comparaison multi-échelle ===
+ kor      0.593     +0.0192       +0.0215  +0.0023
+ sah      0.597     +0.0212       +0.0230  +0.0018
+ jpn      0.697     +0.0216       +0.0219  +0.0003
+ kbd      0.721     +0.0195       +0.0209  +0.0013
+ ell      0.919     +0.0220       +0.0195  -0.0025
+ mai      0.948     +0.0417       +0.0438  +0.0021
+ kat      1.000     +0.0331       +0.0348  +0.0017
+ hye      1.000     +0.0316       +0.0328  +0.0012
+ mya      1.017     +0.0769       +0.0814  +0.0045
+ ben      1.056     +0.0546       +0.0560  +0.0014
+ tam      1.092     +0.0504       +0.0498  -0.0006
+ amh      1.145     +0.0535       +0.0565  +0.0030
+ khm      1.189     +0.0453       +0.0407  -0.0046
+ lao      1.284     +0.0379       +0.0393  +0.0014
+ dzo      1.324     +0.0885       +0.0885  +0.0000
+ vie      1.328     +0.0159       +0.0182  +0.0022
+ mal      1.361     +0.0553       +0.0536  -0.0017
+ tel      1.444     +0.0578       +0.0578  +0.0000
+ csw      1.507     +0.0639       
+… [109 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport numpy as np\nrows=[l.strip().split(';') for l in open('/tmp/profil_langues.csv') if l.strip()][1:]\ncl=[r[0] for r in rows]\ng=np.array([float(r[8]) for r in rows]); gm=np.array([float(r[10]) for r in rows])\ … [998 caractères tronqués]`
+
+  ```
+apport moyen : +0.0294 → +0.0320 (+0.0026)
+corr(effet, fragmentation) = -0.2103
+langues AMÉLIORÉES : 37/41 · dégradées 4
+
+par quartile de fragmentation :
+  Q1 (la plus EFFICACE, frag 0.37) : gain +0.0039
+  Q4 (la plus HACHÉE,  frag 1.30) : gain +0.0017
+
+apport dans Q1 : +0.0154 → +0.0193
+apport dans Q4 : +0.0531 → +0.0548
+
+les 4 langues NON SERVIES (deu, srp, jpn, kor) :
+  deu : +0.0133 → +0.0143 (+0.0010)
+  srp : +0.0128 → +0.0144 (+0.0016)
+  jpn : +0.0216 → +0.0219 (+0.0003)
+  kor : +0.0192 → +0.0215 (+0.0023)
+  heb : +0.0014 → +0.0023 (+0.0009)
+  ```
+
+### 🤖 Assistant
+
+⏵ **Verdict honnête : gain général réel, prédiction faiblement confirmée, mais les langues non servies ne bougent pas.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 28. Réservoir multi-échelle : gain réel, mais ce n'était pas la cause\n\n### 28.1 L'idée\n\nLa quantité de contenu par jeton varie de … [4675 caractères tronqués]`

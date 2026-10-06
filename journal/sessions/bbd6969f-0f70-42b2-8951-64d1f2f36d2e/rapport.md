@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 185.4 h |
+| Durée | 185.6 h |
 | Tours | 173 |
-| Messages | 8675 |
-| Appels d'outils | 8183 |
+| Messages | 8691 |
+| Appels d'outils | 8199 |
 | Fichiers touchés | 183 |
-| Commandes | 6964 |
+| Commandes | 6971 |
 | Sous-agents | 32 |
-| Commits | 622 |
+| Commits | 623 |
 | Compactages de contexte | 12 |
 
 ## Objectifs déclarés
@@ -8671,7 +8671,7 @@ Rien à faire de votre côté. Commit `0b91cb0`.
 
 ### Tour 173 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
 
-*58 appels d'outils.* Actions notables :
+*74 appels d'outils.* Actions notables :
 
 - bash — Profile Dzongkha representation vs others
 - bash — Profile representations per language
@@ -8687,11 +8687,11 @@ Rien à faire de votre côté. Commit `0b91cb0`.
 - bash — Read results section and defaults
 - bash — Read evalue and end of main
 - bash — Read nait and recalcule signatures
-- … et 38 autres
+- … et 50 autres
 
 **Synthèse produite :**
 
-⏵ **Image nette et contrôlée. Je réécris la section 27 — ma première version attribuait à la norme ce qui appartient à la fragmentation.**
+⏵ **Verdict honnête : gain général réel, prédiction faiblement confirmée, mais les langues non servies ne bougent pas.**
 
 ## 3. Travail accompli
 
@@ -8849,7 +8849,7 @@ Rien à faire de votre côté. Commit `0b91cb0`.
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/31-le-regroupement-par-experts-mesure-et-k3-au-complet.md` | 1 | 1 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-prefill-par-experts.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/engine.rs` | 0 | 1 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py` | 0 | 33 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py` | 0 | 37 |
 | `/tmp/chaine_propre.sh` | 1 | 0 |
 | `/tmp/analyse_propre.sh` | 1 | 0 |
 | `/tmp/stop2.py` | 1 | 0 |
@@ -8881,7 +8881,7 @@ Rien à faire de votre côté. Commit `0b91cb0`.
 | `/tmp/trace392c8.sh` | 1 | 0 |
 | `/tmp/unites8.sh` | 1 | 0 |
 | `/tmp/rj_graines.sh` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/profil_langues.py` | 1 | 4 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/profil_langues.py` | 2 | 4 |
 
 ### Sous-agents lancés
 
@@ -8960,7 +8960,7 @@ Rien à faire de votre côté. Commit `0b91cb0`.
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6924 autres
+- … et 6931 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9730,4 +9730,5 @@ Rien à faire de votre côté. Commit `0b91cb0`.
 - La pire paire (dzo) : hypothèse de longueur testée et RÉFUTÉE  La mesure par unité nomme la pire paire : deu-dzo (couche 10), ces-dzo (couche 8). Le dzongkha (B
 - Les langues éloignées partagent une NORME plus grande, pas une densité différente  Profil des 22 langues complètes (couche 10), trié par cosinus au centroïde : 
 - Le pont ne sert pas toutes les langues également — et la fidélité EST le témoin constant  PROFIL DES 41 LANGUES DE TEST (896 canaux, 40 neurones / 1 couche, qua
+- Réservoir multi-échelle : +8,8% sur l'apport propre, mais ce n'était pas la cause  La quantité de contenu par jeton varie de 6x selon la langue (1,578 jeton/car
 

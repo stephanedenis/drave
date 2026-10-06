@@ -93,6 +93,16 @@ class Pont:
         # `ajuste` : sans elle, l'objectif est ABSOLU alors que la métrique est un
         # cosinus, et les langues à forte norme dominent la lecture partagée.
         self.pese = None
+        # CONSTANTE DE TEMPS PAR NEURONE. Une seule constante pour tous, c'est UNE
+        # échelle de mémoire. Or la quantité de contenu par jeton varie de 6× selon
+        # la langue (mesuré : 1,578 jeton/caractère en pular contre 0,271 en
+        # allemand) : une mémoire fixe EN JETONS couvre donc 6× moins de CONTENU en
+        # allemand. Avec `a_min`, les neurones reçoivent des constantes ÉTALÉES
+        # logarithmiquement — le réservoir devient multi-échelle et c'est lui qui
+        # choisit l'échelle utile, pas moi.
+        self.a_neur = []
+        self.a_min = None
+        self.a_max = None
         # GAIN D'ENTRÉE : en calcul réservoir c'est LE réglage critique, et il
         # valait 1,0 depuis le début sans avoir jamais été balayé. Trop petit, le
         # tanh reste linéaire et le réservoir n'est qu'un filtre ; trop grand, il
@@ -134,6 +144,11 @@ class Pont:
                  if n_par > 0 else np.zeros((k, 0)))
         W_self = self.rng.randn(k, deja + k) / np.sqrt(max(deja + k, 1))
         B = self.rng.randn(k, self.H) / np.sqrt(self.H) * self.gain_entree
+        # constante de temps de chaque nouveau-né (multi-échelle si `a_min` posé)
+        if self.a_min is None:
+            a_n = np.full(k, self.a)
+        else:
+            a_n = np.exp(np.linspace(np.log(self.a_min), np.log(self.a_max), k))
 
         for i, (E, X) in enumerate(zip(self.E, self.X)):
             T = len(E)
@@ -147,12 +162,13 @@ class Pont:
                 drive = (Xpar[t] @ W_par.T) if n_par > 0 else 0.0
                 drive = drive + s @ W_self.T
                 s = np.concatenate([s[:deja],
-                                    (1-self.a)*s[deja:] + self.a*np.tanh(drive + B @ E[t])])
+                                    (1-a_n)*s[deja:] + a_n*np.tanh(drive + B @ E[t])])
                 S[t] = s[deja:]
             self.X[i] = np.hstack([X, S])
 
         for r in range(k):
             self.poids.append((W_par[r].copy(), W_self[r].copy(), B[r].copy(), c))
+        self.a_neur.extend(a_n.tolist())
         if nouvelle_couche or not self.couches:
             self.couches.append(k)
         else:
@@ -263,13 +279,14 @@ class Pont:
                     if mj - self.debut_couche(c) < len(ws):
                         Ps[r, q] = ws[mj - self.debut_couche(c)]
             Bs = np.array([self.poids[j][2] for j in membres])
+            As = np.array([self.a_neur[j] for j in membres])
             for i, E in enumerate(EK):
                 T = len(E)
                 Xpar = Xn[i][:, ipar] if ipar else np.zeros((T, 0), dtype=np.float32)
                 s = np.zeros(m)
                 for t in range(T):
                     drive = (Xpar[t] @ Pp.T) if ipar else 0.0
-                    s = (1-self.a)*s + self.a*np.tanh(drive + s @ Ps.T + Bs @ E[t])
+                    s = (1-As)*s + As*np.tanh(drive + s @ Ps.T + Bs @ E[t])
                     Xn[i][t, imem] = s
         return Xn
 
@@ -289,6 +306,9 @@ class Pont:
             wp, ws, b, c = self.poids[j]
             nouvelles.append((wp.copy(), ws.copy(), b.copy(), renomme[c]))
         self.poids = nouvelles
+        # la constante de temps suit le neurone, comme la couche : l'oublier ici
+        # ferait changer silencieusement la dynamique de tous les survivants.
+        self.a_neur = [self.a_neur[j] for j in S]
         self.X = Xn
         self.couches = [tailles[c] for c in sorted(tailles)]
         self.compte_neurones = len(S)
