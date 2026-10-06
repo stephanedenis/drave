@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 175.9 h |
-| Tours | 127 |
-| Messages | 8299 |
-| Appels d'outils | 7909 |
-| Fichiers touchés | 170 |
-| Commandes | 6720 |
+| Durée | 176.0 h |
+| Tours | 128 |
+| Messages | 8307 |
+| Appels d'outils | 7915 |
+| Fichiers touchés | 171 |
+| Commandes | 6725 |
 | Sous-agents | 32 |
-| Commits | 585 |
+| Commits | 586 |
 | Compactages de contexte | 11 |
 
 ## Objectifs déclarés
@@ -307,6 +307,8 @@
 **Tour 126** — <goal_round> Objective: "Faire évoluer le pont linguistico-sémantique en BOÎTE NOIRE (émulation des premières couches du professeur, sans accès à ses rouages) par une phase GÉNÉRATIVE — le nombre de neurones et de couches NAÎT pendant l'apprentissage, en partant d'un seul neurone — suivie d'une ATTRITION PÉRIODIQUE qui réduit la taille du réseau en GÉNÉRALISANT les concepts (fusion des unités redo … [951 caractères tronqués]
 
 **Tour 127** — continue maintenant avec toutes les langues, puis les grands corpus multilingues pour avoir des profs plus riches et étendre notre modèle.
+
+**Tour 128** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1001 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -6550,7 +6552,55 @@ Plusieurs de mes propres conclusions antérieures étaient fausses, et je les ai
 
 **Synthèse produite :**
 
-⏵ Charge revenue à 19, rythme rétabli (28-48 s par langue). 37/392. Je commite et je fais le point.
+⏵ Phase 1 en cours, tout est chaîné. Voici le point.
+
+\## Ce qui est lancé
+
+**Phase 1 — toutes les langues.** L'UDHR contient **392 langues avec les dix unités**, contre 46 utilisées jusqu'ici : **8,5× plus**. Le traçage tourne en convention unique, **vérifiée dans `/proc`** avant lancement :
+
+```
+--ctx 2048 · --couches 0:11 · --lot 1 · --n 0 · --trace-couches 0,10
+```
+
+soit : aucune troncature, ni tête du professeur ni jetons générés, et on n'écrit que l'entrée et la cible. **~33 s par langue**, ~6 Mo par fichier, ~2,4 Go au total. **Fin estimée vers 02h00.**
+
+**Phase 2 — corpus parallèle riche — chaînée après la phase 1.** *Romeo and Juliet* : **24 scènes alignées en/fr**, alignement par ordre **vérifié** (le rapport de longueur fr/en est stable d'une scène à l'autre, médiane 1,31). Texte **littéraire et long**, là où l'UDHR est administratif et court — c'est ce qui doit donner un professeur plus riche.
+
+\## Deux décisions que j'ai prises, et pourquoi
+
+**Le découpage est stratifié par écriture.** J'ai écrit `tools/decoupe_langues.py` : l'écriture est déduite des **points de code du texte**, pas choisie à la main. Résultat : **22 écritures trouvées, toutes représentées dans le test** (41 langues), 50 en validation, 301 en apprentissage. C'est la réponse directe à la découverte du tour 4 — mon ancien test, uniquement non latin, mesurait surtout la distance typologique.
+
+**J'ai mis la phase 2 en attente.** Mesuré : lancer les deux ensemble porte la charge à **44 sur 40 threads** et fait passer le traçage UDHR de **36 s à 150 s par langue**. Votre consigne était « d'abord toutes les langues, **puis** les grands corpus » — la phase 2 reprendra donc seule, automatiquement, quand la phase 1 sera finie. La charge est revenue à 19 et le rythme à 28-48 s.
+
+\## Inventaire des grands corpus
+
+| corpus | contenu | parallèle ? |
+|---|---|---|
+| **UDHR** | 392 langues × 10 unités | **oui**, aligné |
+| **Wikipedia** | 81 Go, 6 langues, 65 589 fichiers de 150 articles | **non** — articles différents |
+| **Gutenberg** | 40 œuvres, 6,6 M mots | **3 paires** : Dostoïevski en/es, Dumas en/fr, Shakespeare en/fr |
+
+Point à retenir : **Wikipedia n'est pas parallèle**. Il servira la **richesse** (volume, diversité), mais l'invariance inter-langue devra se mesurer ailleurs — sur l'UDHR et les œuvres traduites.
+
+\## Un piège de données trouvé
+
+Le texte français de Gutenberg emploie des **retours chariot seuls** (`\r`). Python les convertit en `\n` en mode texte, `wc` ne les compte pas 
+… [614 caractères tronqués]
+
+### Tour 128 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1281 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Check trace and analysis state
+- bash — Build and test Wikipedia extraction
+- bash — Test cross-language title alignment in Wikipedia
+- write `/tmp/trace_wiki.sh`
+- bash — Verify chunking and chain Wikipedia phase
+- bash — Verify chained scripts and commit
+
+**Synthèse produite :**
+
+⏵ Wikipedia découpé : 529 morceaux pour l'anglais, 528 pour le français (~355K jetons chacun). Je vérifie la syntaxe des scripts chaînés puis je commit.
 
 ## 3. Travail accompli
 
@@ -6728,6 +6778,7 @@ Plusieurs de mes propres conclusions antérieures étaient fausses, et je les ai
 | `/tmp/analyse392.sh` | 1 | 0 |
 | `/tmp/trace_rj.sh` | 1 | 0 |
 | `/tmp/stop_rj.py` | 1 | 0 |
+| `/tmp/trace_wiki.sh` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -6806,7 +6857,7 @@ Plusieurs de mes propres conclusions antérieures étaient fausses, et je les ai
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6680 autres
+- … et 6685 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -7539,4 +7590,5 @@ Plusieurs de mes propres conclusions antérieures étaient fausses, et je les ai
 - L'attrition corrigée : une décision, plus une démolition  Le §11 disait 'l'attrition réduit, elle ne généralise pas'. Le fait était exact, mais la CAUSE était u
 - Phase 2 : corpus PARALLÈLE riche — Romeo and Juliet, 24 scènes alignées en/fr  Un grand corpus monolingue ne permet PAS de mesurer l'invariance inter-langue : i
 - Phase 1 lancée : 392 langues UDHR · phase 2 chaînée après  PHASE 1 — TOUTES LES LANGUES. 392 langues ont les dix unités (contre 46 utilisées jusqu'ici). Traçage
+- Phase 3 chaînée : Wikipedia pour la RICHESSE, pas pour l'invariance  Wikipedia n'est PAS parallèle, et c'est vérifié : sur 400 articles par langue dans six lang
 

@@ -134173,3 +134173,162 @@ blt 48s 10448720
 ⏵ Charge revenue à 19, rythme rétabli (28-48 s par langue). 37/392. Je commite et je fais le point.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Phase 1 lancée : 392 langues UDHR · phase 2 chaînée après\n\nPHASE 1 — TOUTES LES LANGUES. 392 langues ont les dix unités (contre 46\nutilisées jusqu'ici). Traçage en convention UNIQUE, vérifiée dans  … [1875 caractères tronqués]`
+
+  ```
+809fc83 Phase 1 lancée : 392 langues UDHR · phase 2 chaînée après
+
+=== état ===
+37
+restant ~195 min
+22:42
+  ```
+
+### 🤖 Assistant
+
+⏵ Phase 1 en cours, tout est chaîné. Voici le point.
+
+## Ce qui est lancé
+
+**Phase 1 — toutes les langues.** L'UDHR contient **392 langues avec les dix unités**, contre 46 utilisées jusqu'ici : **8,5× plus**. Le traçage tourne en convention unique, **vérifiée dans `/proc`** avant lancement :
+
+```
+--ctx 2048 · --couches 0:11 · --lot 1 · --n 0 · --trace-couches 0,10
+```
+
+soit : aucune troncature, ni tête du professeur ni jetons générés, et on n'écrit que l'entrée et la cible. **~33 s par langue**, ~6 Mo par fichier, ~2,4 Go au total. **Fin estimée vers 02h00.**
+
+**Phase 2 — corpus parallèle riche — chaînée après la phase 1.** *Romeo and Juliet* : **24 scènes alignées en/fr**, alignement par ordre **vérifié** (le rapport de longueur fr/en est stable d'une scène à l'autre, médiane 1,31). Texte **littéraire et long**, là où l'UDHR est administratif et court — c'est ce qui doit donner un professeur plus riche.
+
+## Deux décisions que j'ai prises, et pourquoi
+
+**Le découpage est stratifié par écriture.** J'ai écrit `tools/decoupe_langues.py` : l'écriture est déduite des **points de code du texte**, pas choisie à la main. Résultat : **22 écritures trouvées, toutes représentées dans le test** (41 langues), 50 en validation, 301 en apprentissage. C'est la réponse directe à la découverte du tour 4 — mon ancien test, uniquement non latin, mesurait surtout la distance typologique.
+
+**J'ai mis la phase 2 en attente.** Mesuré : lancer les deux ensemble porte la charge à **44 sur 40 threads** et fait passer le traçage UDHR de **36 s à 150 s par langue**. Votre consigne était « d'abord toutes les langues, **puis** les grands corpus » — la phase 2 reprendra donc seule, automatiquement, quand la phase 1 sera finie. La charge est revenue à 19 et le rythme à 28-48 s.
+
+## Inventaire des grands corpus
+
+| corpus | contenu | parallèle ? |
+|---|---|---|
+| **UDHR** | 392 langues × 10 unités | **oui**, aligné |
+| **Wikipedia** | 81 Go, 6 langues, 65 589 fichiers de 150 articles | **non** — articles différents |
+| **Gutenberg** | 40 œuvres, 6,6 M mots | **3 paires** : Dostoïevski en/es, Dumas en/fr, Shakespeare en/fr |
+
+Point à retenir : **Wikipedia n'est pas parallèle**. Il servira la **richesse** (volume, diversité), mais l'invariance inter-langue devra se mesurer ailleurs — sur l'UDHR et les œuvres traduites.
+
+## Un piège de données trouvé
+
+Le texte français de Gutenberg emploie des **retours chariot seuls** (`\r`). Python les convertit en `\n` en mode texte, `wc` ne les compte pas — d'où une contradiction apparente de 24 contre 4835 lignes sur le même fichier. L'extraction normalise désormais toutes les fins de ligne.
+
+## Ce qui vient
+
+Le traçage finit vers 02h00, puis l'analyse se déclenche seule (`/tmp/analyse392.sh`) : caches, plateau du professeur sur le panel stratifié, et le pont sur **301 langues d'apprentissage** — à comparer aux 30 langues actuelles. C'est le test direct de « plus de langues aident-elles ? », que je n'avais pu mesurer que de 20 à 36 langues, sans effet.
+
+Commit `809fc83`. Rien à faire de votre côté pour l'instant ; je relèverai les résultats au tour suivant.
+
+
+## Tour 128
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de représentation universelle), boîte noire (on ne lit du professeur que la couche à émuler, jamais sa tête ni ses jetons générés), aucune rétropropagation (A et B aléatoires et gelés, seule la lecture s'ajuste en forme fermée), et chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, TAILLE du réseau, avec le diagnostic oracle sur les deux panneaux (test hors vivier et validation du même vivier)."
+Round: 1/256
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Je relève l'état réel des traçages.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date \"+%H:%M\"; echo \"=== phase 1 : UDHR 392 ===\"; echo \"$(ls /home/stephane/Data13TB/stephane/corpus/udhr/udhr392 | wc -l)/392\"; tail -2 /tmp/trace392.log; grep -c TERMINE /tmp/trace392.log; echo \"=== phase 2 ===\"; cat /tmp/t … [252 caractères tronqués]`
+
+  ```
+22:42
+=== phase 1 : UDHR 392 ===
+38/392
+blt 48s 10448720
+boa 53s 10499204
+0
+=== phase 2 ===
+en scène 1 379s 30883969
+en scène 2 147s 12737089
+=== analyse 392 ===
+(pas encore démarrée)
+=== charge ===
+load average: 20,84, 25,80, 25,24
+  ```
+
+### 🤖 Assistant
+
+⏵ Tout tourne (38/392, phase 2 et analyse en attente). J'utilise ce tour pour préparer la phase Wikipedia sans consommer de CPU.
+
+Tout tourne (38/392). J'utilise ce tour pour préparer la **phase Wikipedia** — un point de conception à trancher : Wikipedia n'est **pas parallèle**, donc il servira la richesse (fidélité), pas l'invariance. Je commence par vérifier que je peux lire le format.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/extrait_wikipedia.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"extrait_wikipedia.py — tirer un échantillon exploitable de Wikipedia décompressée.\n\nATTENTION À CE QUE CE CORPUS EST ET N'EST PAS. Les articles d'une langue ne  … [2371 caractères tronqués]`
+
+  ```
+syntaxe OK
+en : 28126 fichiers de chunk
+  914 articles vus · 150 gardés (800–6000 car.)
+  591,853 caractères ≈ 147,963 jetons · écrit dans /tmp/wiki_en.jsonl
+  ```
+
+### 🤖 Assistant
+
+⏵ L'extraction Wikipedia fonctionne (150 articles, 148K jetons). **Idée à tester** : certains articles ont le **même titre** dans plusieurs langues (noms propres : *Google*, *Linux*, *NASA*). Cela donnerait un sous-ensemble Wikipedia **réellement aligné**.
+
+L'extraction fonctionne. **Idée à tester** : certains articles portent le **même titre** dans plusieurs langues — les noms propres (*Google*, *Linux*, *NASA*). Cela donnerait un sous-ensemble Wikipedia **réellement apparié**, et donc de l'invariance sur du texte riche.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for L in en fr de es it ru; do timeout 900 python3 tools/extrait_wikipedia.py $L --articles 400 --min 400 --max 6000 --sortie /tmp/wiki_$L.jsonl 2>&1 | tail -1; done; echo; python3 - <<'PY'\nimport json\nlangues=['en','fr','de','es', … [560 caractères tronqués]`
+
+  ```
+1,537,683 caractères ≈ 384,420 jetons · écrit dans /tmp/wiki_en.jsonl
+  1,521,081 caractères ≈ 380,270 jetons · écrit dans /tmp/wiki_fr.jsonl
+  1,546,551 caractères ≈ 386,637 jetons · écrit dans /tmp/wiki_de.jsonl
+  1,442,920 caractères ≈ 360,730 jetons · écrit dans /tmp/wiki_es.jsonl
+  1,539,752 caractères ≈ 384,938 jetons · écrit dans /tmp/wiki_it.jsonl
+  1,545,504 caractères ≈ 386,376 jetons · écrit dans /tmp/wiki_ru.jsonl
+
+  en : 400 titres
+  fr : 400 titres
+  de : 400 titres
+  es : 400 titres
+  it : 400 titres
+  ru : 400 titres
+
+titres présents dans les 6 langues : 0
+  ```
+
+### 🤖 Assistant
+
+⏵ **Aucun titre commun aux 6 langues** dans mes échantillons : les dumps sont triés alphabétiquement par titre, donc chaque langue commence à un endroit différent. L'alignement par titre ne donnerait qu'une poignée de noms propres — je n'insiste pas.
+
+**Aucun titre commun aux 6 langues.** Les dumps sont triés par titre et chaque langue commence ailleurs ; l'alignement par titre ne donnerait qu'une poignée de noms propres. Je tranche : **Wikipedia servira la richesse (fidélité), Gutenberg l'invariance (contenu apparié)**. Je chaîne la phase Wikipedia.
+
+- **write** `{"content": "#!/bin/bash\n# PHASE 3 — WIKIPEDIA : un professeur plus RICHE (texte long, divers, encyclopédique).\n#\n# CE QUE CE CORPUS PEUT ET NE PEUT PAS. Les articles d'une langue ne sont pas les\n# traductions de ceux d'une autre — vérifié : sur 400 articles par langue dans six\n# langues, AUCUN … [1765 caractères tronqués]`
+
+  ```
+<path>/tmp/trace_wiki.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cat > /tmp/wiki_apres.sh <<'EOF'\n#!/bin/bash\n# Wikipedia seulement APRÈS les deux autres phases : mesuré, deux traçages en\n# parallèle portent la charge à 44 sur 40 threads et font passer le rythme de\n# 36 s à 150 s par langue.\nset -u\nwhile ! grep -q TERMINE /tmp/trace_rj.log 2>/d … [964 caractères tronqués]`
+
+  ```
+outil OK
+en : 529 morceaux de ~3000 car. · 1,421,331 caractères ≈ 355,332 jetons
+fr : 528 morceaux de ~3000 car. · 1,415,935 caractères ≈ 353,983 jetons
+phase 3 (Wikipedia) chaînée après la phase 2
+22:43
+40
+  ```
+
+### 🤖 Assistant
+
+⏵ Wikipedia découpé : 529 morceaux pour l'anglais, 528 pour le français (~355K jetons chacun). Je vérifie la syntaxe des scripts chaînés puis je commit.
+
+- **bash** `{"command": "for f in /tmp/trace392.sh /tmp/trace_rj.sh /tmp/trace_wiki.sh /tmp/rj_apres.sh /tmp/wiki_apres.sh /tmp/analyse392.sh; do bash -n \"$f\" && echo \"  OK  $f\" || echo \"  ERREUR $f\"; done; echo; echo \"=== chaîne en place ===\"; ps -eo pid,args | awk '/trace|apres/ && !/awk/ {print \"  \ … [1346 caractères tronqués]`
