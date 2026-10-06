@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 174.1 h |
 | Tours | 125 |
-| Messages | 8240 |
-| Appels d'outils | 7855 |
+| Messages | 8241 |
+| Appels d'outils | 7856 |
 | Fichiers touchés | 165 |
-| Commandes | 6682 |
+| Commandes | 6683 |
 | Sous-agents | 32 |
-| Commits | 579 |
+| Commits | 580 |
 | Compactages de contexte | 11 |
 
 ## Objectifs déclarés
@@ -6419,7 +6419,7 @@ Testée sur la meilleure configuration, avec recalcul des trajectoires à chaque
 
 ### Tour 125 — <goal_round> Objective: "Faire évoluer le pont linguistico-sémantique en BOÎTE NOIRE (émulation des premières couches du … [1231 caractères tronqués]
 
-*13 appels d'outils.* Actions notables :
+*14 appels d'outils.* Actions notables :
 
 - bash — Check state and input handling
 - edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py`
@@ -6433,19 +6433,46 @@ Testée sur la meilleure configuration, avec recalcul des trajectoires à chaque
 - bash — Locate the misplaced attrition guard
 - bash — Correct oracle on 80-neuron network
 - bash — Commit the oracle correction
+- bash — Final state check for round 4
 
 **Synthèse produite :**
 
-⏵ **Correction obtenue, et elle change le tableau.**
+⏵ Le tableau est maintenant précis. Je fais le point du tour.
+
+Le diagnostic corrigé donne une lecture nette : **la qualité réelle du pont se mesure sur la validation (0,7500), et le test non latin (0,6383) mesure surtout la distance typologique**. Les deux panneaux servent, mais à des questions différentes.
+
+\## Ce que ce tour a établi
+
+**1. Trois leviers testés, trois échecs** — et ils ferment des pistes :
+
+| levier | effet |
+|---|---|
+| **centrage de l'entrée** (retirer le jeton moyen par langue) | fidélité 0,6383 → **0,6250**, écart **empiré** |
+| normalisation des états par langue (tour 3) | invariance 0,9648 → **0,8823** |
+| plus de langues d'apprentissage (20 → 36) | écart **constant** 0,132-0,141 |
+
+**2. Une faute dans mon propre diagnostic, corrigée.** L'« oracle 0,7762 » du tour 3 était **faux** : mon code faisait `P.ajuste(..., ite)` puis `P.fid(..., ite)` — or `Pont` ne détient que les langues d'entraînement, donc j'ajustais et j'évaluais **sur le même jeu**. C'était un ajustement **en échantillon**. C'est la fuite que j'avais déjà corrigée une fois, réintroduite dans le diagnostic.
+
+**3. Le plafond réel, et sa décomposition :**
 
 | | nous | oracle | **écart** |
 |---|---:|---:|---:|
-| **TEST** (langues non latines, hors vivier) | 0,6383 | 0,7076 | **+0,0693** |
-| **VALIDATION** (même vivier que l'apprentissage) | 0,7500 | 0,7769 | **+0,0269** |
+| **TEST** (non latines, hors vivier) | 0,6383 | **0,7076** | **+0,0693** |
+| **VALIDATION** (même vivier) | 0,7500 | **0,7769** | **+0,0269** |
 
-Le chiffre du tour 3 (**+0,138**) était **gonflé par mon bug** : l'ancien oracle ajustait et évaluait sur **les mêmes** 6 langues d'entraînement, donc en échantillon. Le vrai plafond est **0,7076**, pas 0,7762.
+Le plafond est **0,7076 et non 0,7762** : la marge est de **+0,069, pas +0,138**. La moitié du chiffre annoncé était un artefact.
 
-Et l'écart se **décompose** : **+0,027 de transfert générique** (même vivier) **+ 0,042 de typologie** (les 6 langues de test sont toutes non latines). L'écart du test est **2,6× celui de la validation**.
+Et l'écart se **décompose** :
+- **+0,0269 de transfert générique** — des langues jamais vues, mais du même vivier ;
+- **+0,0424 de typologie** — l'écart supplémentaire dû aux six langues de test, **toutes non latines** (grec, hébreu, hindi, japonais, coréen, thaï) quand l'apprentissage est surtout latin, cyrillique et arabe.
+
+L'écart du test est **2,6×** celui de la validation.
+
+\## Ce que cela change aux conclusions
+
+Les trois échecs du tour 3 restent des **faits** (ces leviers ne déplacent rien), mais **leur interprétation change** : ils ne disent pas « le plafond est dans le transfert ». Le goulot est **pour moitié du transfert ordinaire, pour moitié de la typologie du panel**.
+
+**Le levier n'est donc pas la méthode, c'est le PANEL.** Un jeu de test uniquement non latin mesure surtout la distance typologique. Il faut des langues tenues à l'écart **des deux sortes** — ce que le découpage validation/test permet désormais de séparer, et que le bloc oracle corrigé rapporte systématiquement.
 
 ## 3. Travail accompli
 
@@ -6696,7 +6723,7 @@ Et l'écart se **décompose** : **+0,027 de transfert générique** (même vivie
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 6642 autres
+- … et 6643 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -7423,4 +7450,5 @@ Et l'écart se **décompose** : **+0,027 de transfert générique** (même vivie
 - journal" 2>/dev/null; git log --oneline -1
 - Le plafond est dans le TRANSFERT, pas dans les caractéristiques ; l'attrition ne généralise pas  QUATRE EXPÉRIENCES, QUATRE RÉPONSES.  1. LE RÉSERVOIR N'EST PAS
 - RECTIFICATION : l'oracle du §10.2 était faux ; le plafond est 0,7076, pas 0,7762  LA FAUTE. L'ancien diagnostic faisait P.ajuste(..., ite) puis P.fid(..., ite).
+- journal" 2>/dev/null; git log --oneline -3; wc -l reports/recapitulatif.md
 

@@ -132995,3 +132995,48 @@ Le chiffre du tour 3 (**+0,138**) était **gonflé par mon bug** : l'ancien orac
 Et l'écart se **décompose** : **+0,027 de transfert générique** (même vivier) **+ 0,042 de typologie** (les 6 langues de test sont toutes non latines). L'écart du test est **2,6× celui de la validation**.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/recapitulatif.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 13. RECTIFICATION — l'oracle du §10.2 était faux, et le plafond se décompose\n\n### 13.1 La faute\n\nLe diagnostic du §10.2 (oracle 0,7762 con … [4568 caractères tronqués]`
+
+  ```
+5d00797 RECTIFICATION : l'oracle du §10.2 était faux ; le plafond est 0,7076, pas 0,7762
+  ```
+
+### 🤖 Assistant
+
+⏵ Le tableau est maintenant précis. Je fais le point du tour.
+
+Le diagnostic corrigé donne une lecture nette : **la qualité réelle du pont se mesure sur la validation (0,7500), et le test non latin (0,6383) mesure surtout la distance typologique**. Les deux panneaux servent, mais à des questions différentes.
+
+## Ce que ce tour a établi
+
+**1. Trois leviers testés, trois échecs** — et ils ferment des pistes :
+
+| levier | effet |
+|---|---|
+| **centrage de l'entrée** (retirer le jeton moyen par langue) | fidélité 0,6383 → **0,6250**, écart **empiré** |
+| normalisation des états par langue (tour 3) | invariance 0,9648 → **0,8823** |
+| plus de langues d'apprentissage (20 → 36) | écart **constant** 0,132-0,141 |
+
+**2. Une faute dans mon propre diagnostic, corrigée.** L'« oracle 0,7762 » du tour 3 était **faux** : mon code faisait `P.ajuste(..., ite)` puis `P.fid(..., ite)` — or `Pont` ne détient que les langues d'entraînement, donc j'ajustais et j'évaluais **sur le même jeu**. C'était un ajustement **en échantillon**. C'est la fuite que j'avais déjà corrigée une fois, réintroduite dans le diagnostic.
+
+**3. Le plafond réel, et sa décomposition :**
+
+| | nous | oracle | **écart** |
+|---|---:|---:|---:|
+| **TEST** (non latines, hors vivier) | 0,6383 | **0,7076** | **+0,0693** |
+| **VALIDATION** (même vivier) | 0,7500 | **0,7769** | **+0,0269** |
+
+Le plafond est **0,7076 et non 0,7762** : la marge est de **+0,069, pas +0,138**. La moitié du chiffre annoncé était un artefact.
+
+Et l'écart se **décompose** :
+- **+0,0269 de transfert générique** — des langues jamais vues, mais du même vivier ;
+- **+0,0424 de typologie** — l'écart supplémentaire dû aux six langues de test, **toutes non latines** (grec, hébreu, hindi, japonais, coréen, thaï) quand l'apprentissage est surtout latin, cyrillique et arabe.
+
+L'écart du test est **2,6×** celui de la validation.
+
+## Ce que cela change aux conclusions
+
+Les trois échecs du tour 3 restent des **faits** (ces leviers ne déplacent rien), mais **leur interprétation change** : ils ne disent pas « le plafond est dans le transfert ». Le goulot est **pour moitié du transfert ordinaire, pour moitié de la typologie du panel**.
+
+**Le levier n'est donc pas la méthode, c'est le PANEL.** Un jeu de test uniquement non latin mesure surtout la distance typologique. Il faut des langues tenues à l'écart **des deux sortes** — ce que le découpage validation/test permet désormais de séparer, et que le bloc oracle corrigé rapporte systématiquement.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport os\nmoi=os.getpid(); anc=set(); q=moi\nfor _ in range(8):\n    try:\n        st=open(f'/proc/{q}/stat').read().split(') ',1)[1].split(); q=int(st[1]); anc.add(q)\n    except Exception: break\nn=0\nfor d in os.li … [482 caractères tronqués]`
