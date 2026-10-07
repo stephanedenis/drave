@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 218.1 h |
+| Durée | 218.2 h |
 | Tours | 204 |
-| Messages | 9482 |
-| Appels d'outils | 8907 |
+| Messages | 9490 |
+| Appels d'outils | 8915 |
 | Fichiers touchés | 220 |
-| Commandes | 7573 |
+| Commandes | 7581 |
 | Sous-agents | 32 |
-| Commits | 695 |
+| Commits | 696 |
 | Compactages de contexte | 13 |
 
 ## Objectifs déclarés
@@ -10455,7 +10455,7 @@ Chacun remplace une devinette que j'ai faite sans lui.
 
 ### Tour 204 — bien. vas-y dans l'ordre de ton choix.
 
-*197 appels d'outils.* Actions notables :
+*205 appels d'outils.* Actions notables :
 
 - bash — Launch layer 0-8 tracing for 50 articles
 - bash — Launch the 50-draw distribution
@@ -10471,11 +10471,11 @@ Chacun remplace une devinette que j'ai faite sans lui.
 - bash — Test the layer profile on partial traces
 - bash — Single-pass reader and test
 - bash — Inspect the actual trace format
-- … et 178 autres
+- … et 186 autres
 
 **Synthèse produite :**
 
-⏵ **J'écris le rapport du diagnostic, avec les prédictions chiffrées avant les mesures.**
+⏵ **Je consigne l'attribution des octets : 72 % des lectures sont les experts, 28 % le dense lu une fois par passe.**
 
 ## 3. Travail accompli
 
@@ -10781,7 +10781,7 @@ Chacun remplace une devinette que j'ai faite sans lui.
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 7533 autres
+- … et 7541 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -11624,4 +11624,5 @@ Chacun remplace une devinette que j'ai faite sans lui.
 - localite_couches : le témoin « jeton courant » était décalé de d positions  Dans le bloc de portée, le témoin était accumulé comme somme de E(k)ᵀ Y(k+d) — c'est
 - §95 : la portée du contexte — le voisin immédiat porte presque tout  Modèle {jeton courant, jeton à la distance d}, d = 1, 2, 4, 8, 16, 32, sur les mêmes 300 tr
 - Où passe le temps d'une passe Kimi-K3 : le disque dur, et rien d'autre  Répond à la question que REPRISE.md demandait de trancher en premier. La réponse est exa
+- Attribution des 206,58 Gio : 72 % sont les experts, relus à chaque jeton  Les tailles viennent des en-têtes GGUF (--tensors, 2 573 tenseurs) ; les octets lus, d
 

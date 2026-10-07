@@ -157937,3 +157937,221 @@ python interne OK
 ⏵ **J'écris le rapport du diagnostic, avec les prédictions chiffrées avant les mesures.**
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-passe-k3-disque.md <<'RAPPORT_EOF'\n# Où passe le temps d'une passe Kimi-K3 : le disque, et rien d'autre\n\n> Mesuré le 07/10. Répond à la question laissée ouverte par `REPRISE.md`, qui\n> demandait explicitemen … [8823 caractères tronqués]`
+
+  ```
+648aad6 Où passe le temps d'une passe Kimi-K3 : le disque dur, et rien d'autre
+  ```
+
+### 🤖 Assistant
+
+⏵ **Avant de déplacer des shards, il faut savoir CE QUI pèse dans les 206 Go : dense ou experts. Le moteur a déjà un compteur — je regarde.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '930,960p' drave-core/src/kimi_k3.rs; echo \"=== autres compteurs ===\"; grep -n \"DRAVE_K3_STATS_EXPERTS\\|experts_lus\\|octets\" drave-core/src/kimi_k3.rs | head -12", "description": "Inspect expert stats counter"}`
+
+  ```
+// Ce que le regroupement a économisé, mesuré : `t × k` lectures
+        // d'experts sans lui, `experts_lus` avec. Le taire serait cacher
+        // l'optimisation — et celle-ci ne rapporte PAS de temps (mesuré :
+        // 1 531 851 ms contre 1 516 430 ms), ce qui est une information de plus.
+        if std::env::var("DRAVE_K3_STATS_EXPERTS").is_ok() {
+            eprintln!("    [moe] couche {} : {t} jeton(s) × {k} experts = {} lectures jeton par jeton, \
+{experts_lus} avec le regroupement — gain ×{:.2}",
+                      self.l, t * k, (t * k) as f64 / experts_lus.max(1) as f64);
+        }
+        // ---- 4. norme DANS le latent, remontée, puis experts partagés
+        let mut sorties: Vec<Vec<f32>> = Vec::with_capacity(t);
+        let mut gs = vec![0f32; self.moe_ff];
+        let mut us = vec![0f32; self.moe_ff];
+        let mut sh = vec![0f32; h];
+        for i in 0..t {
+            let mut norme = vec![0f32; latent];
+            rms_norm_poids(&acc[i], &self.rout_norm, self.eps, &mut norme);
+            let mut sortie = vec![0f32; h];
+            mv(&self.rout_up, h, latent, &norme, &mut sortie);
+            mv(&self.sh_gate, self.moe_ff, h, &curs[i], &mut gs);
+         
+… [1282 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Je mesure la composition des octets : tailles de tenseurs par classe (dense contre experts).**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && K=/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf; timeout 180 ./drave-core/target/release/drave \"$K\" --tensors 2>&1 | head -20; echo \"=== essai json ===\"; timeout 180 ./dra … [115 caractères tronqués]`
+
+  ```
+kimi-k3 · 32 fichiers · 2573 tenseurs · 1508.66 Go de poids · en-têtes lus en 113.534308ms
+  fichier 0 :     0 tenseurs · 0.00 Go
+  fichier 1 :   105 tenseurs · 47.48 Go
+  fichier 2 :    77 tenseurs · 49.15 Go
+  fichier 3 :    82 tenseurs · 49.02 Go
+  fichier 4 :    82 tenseurs · 49.02 Go
+  fichier 5 :    92 tenseurs · 49.12 Go
+  fichier 6 :    77 tenseurs · 49.15 Go
+  fichier 7 :    82 tenseurs · 49.02 Go
+  fichier 8 :    82 tenseurs · 49.02 Go
+  fichier 9 :    92 tenseurs · 49.12 Go
+  fichier 10 :    77 tenseurs · 49.15 Go
+  fichier 11 :    82 tenseurs · 49.02 Go
+  fichier 12 :    82 tenseurs · 49.02 Go
+  fichier 13 :    92 tenseurs · 49.12 Go
+  fichier 14 :    77 tenseurs · 49.15 Go
+  fichier 15 :    82 tenseurs · 49.02 Go
+  fichier 16 :    82 tenseurs · 49.02 Go
+  fichier 17 :    92 tenseurs · 49.12 Go
+  fichier 18 :    77 tenseurs · 49.15 Go
+=== essai json ===
+2607
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le moteur liste les 2 573 tenseurs. Je regarde le format pour agréger par classe.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && K=/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf; timeout 300 ./drave-core/target/release/drave \"$K\" --tensors 2>&1 > /tmp/k3_tensors.txt; sed -n '36,50p' /tmp/k3_tensors.txt … [294 caractères tronqués]`
+
+  ```
+F32      output_norm.weight                     [7168] · 0.0 M poids · fichier 1
+  F32      output_res_score.weight                [7168] · 0.0 M poids · fichier 1
+  Q8_0     token_embd.weight                      [163840, 7168] · 1174.4 M poids · fichier 1
+  Q8_0     blk.0.attn_k.weight                    [12288, 7168] · 88.1 M poids · fichier 1
+  F32      blk.0.attn_norm.weight                 [7168] · 0.0 M poids · fichier 1
+  Q8_0     blk.0.attn_output.weight               [7168, 12288] · 88.1 M poids · fichier 1
+  Q8_0     blk.0.attn_q.weight                    [12288, 7168] · 88.1 M poids · fichier 1
+  F32      blk.0.attn_res_score.weight            [7168] · 0.0 M poids · fichier 1
+  Q8_0     blk.0.attn_v.weight                    [12288, 7168] · 88.1 M poids · fichier 1
+  Q8_0     blk.0.ffn_down.weight                  [7168, 33792] · 242.2 M poids · fichier 1
+  Q8_0     blk.0.ffn_gate.weight                  [33792, 7168] · 242.2 M poids · fichier 1
+  F32      blk.0.ffn_norm.weight                  [7168] · 0.0 M poids · fichier 1
+  F32      blk.0.ffn_res_score.weight             [7168] · 0.0 M poids · fichier 1
+  Q8_0     blk.0.ffn_up.weight                    [33792, 7168
+… [142 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **J'agrège les octets par classe à partir de la liste des tenseurs.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -oE \"^ +[A-Z0-9_]+\" /tmp/k3_tensors.txt | tr -d ' ' | sort | uniq -c | sort -rn | head -12; echo \"=== parse ===\"; python3 - <<'PY'\nimport re, collections\n# octets par poids selon le type GGUF (blocs)\nBPW = {'F32':4.0,'F16 … [1369 caractères tronqués]`
+
+  ```
+1181 F32
+   1116 Q8_0
+    276 MXFP4
+=== parse ===
+type inconnu MXFP4
+type inconnu MXFP4
+type inconnu MXFP4
+type inconnu MXFP4
+type inconnu MXFP4
+type inconnu MXFP4
+type inconnu MXFP4
+type inconnu MXFP4
+type inconnu MXFP4
+type inconnu MXFP4
+type inconnu MXFP4
+type inconnu MXFP4
+type inconnu MXFP4
+type inconnu MXFP4
+type inconnu MXFP4
+type inconnu MXFP4
+type inconnu MXFP4
+type inconnu MXFP4
+type inconnu MXFP4
+type inconnu MXFP4
+type inconnu MXFP4
+type inconnu MXFP4
+type inconnu MXFP4
+type inconnu MXFP4
+type inconnu MXFP4
+type inconnu MXFP4
+type inconnu MXFP4
+type inconnu MXFP4
+type inconnu MXFP4
+type inconnu MXFP4
+type inconnu MXFP4
+type inconnu MXFP4
+type inconnu MXFP4
+type inconnu MXFP4
+type inconnu MXFP4
+type inconnu MXFP4
+type inconnu MXFP4
+type inconnu MXFP4
+type inconnu MXFP4
+type inconnu MXFP4
+type inconnu MXFP4
+type inconnu MXFP4
+type inconnu MXFP4
+type inconnu MXFP4
+type inconnu MXFP4
+type inconnu MXFP4
+type inconnu MXFP4
+type inconnu MXFP4
+type inconnu MXFP4
+type inconnu MXFP4
+type inconnu MXFP4
+type inconnu MXFP4
+type inconnu MXFP4
+type inconnu MXFP4
+type inconnu MXFP4
+type inconnu MXFP4
+type inconnu MXFP4
+type inconnu MXFP4
+type inconnu MXFP4
+type inconnu MXFP4
+type incon
+… [38645 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Attribution des octets : experts MXFP4 = 1 450,7 Go (96,2 % du modèle) ; dense+attention+ssm = 57,93 Go. Je vérifie l'espace NVMe pour tester la prédiction.**
+
+- **bash** `{"command": "df -h /home/stephane/FastNVMe 2>/dev/null | tail -2; echo \"=== tailles des shards ===\"; ls -la /home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/*.gguf | awk '{printf \"%s %.1f Go\\n\", $9, $5/1073741824}' | sed 's|.*/||' | head -8; echo \"...\"; echo \"=== taille moyen … [213 caractères tronqués]`
+
+  ```
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/nvme0n1p2  828G  568G  259G  69% /home/stephane/FastNVMe
+=== tailles des shards ===
+Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf 0.0 Go
+Kimi-K3-UD-Q4_K_XL-00002-of-00032.gguf 44.2 Go
+Kimi-K3-UD-Q4_K_XL-00003-of-00032.gguf 45.8 Go
+Kimi-K3-UD-Q4_K_XL-00004-of-00032.gguf 45.7 Go
+Kimi-K3-UD-Q4_K_XL-00005-of-00032.gguf 45.7 Go
+Kimi-K3-UD-Q4_K_XL-00006-of-00032.gguf 45.8 Go
+Kimi-K3-UD-Q4_K_XL-00007-of-00032.gguf 45.8 Go
+Kimi-K3-UD-Q4_K_XL-00008-of-00032.gguf 45.7 Go
+...
+=== taille moyenne ===
+1405.06 Go au total
+  ```
+
+### 🤖 Assistant
+
+⏵ **259 Go libres : 5 shards (229 Go, 16,3 % du modèle) tiennent. Je lance la copie vers le NVMe pour tester la prédiction de 1 328 s.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/nvme_tier.sh <<'EOF'\n#!/bin/bash\n# PRÉDICTION ÉCRITE AVANT LA MESURE (reports/rapport-passe-k3-disque.md, §5) :\n#   « déplacer ~250 Go de shards sur le NVMe -> passe prédite ≈ 1 300 s »\n# On en déplace 5 (229 Go, 16,3  … [1962 caractères tronqués]`
+
+  ```
+/dev/nvme0n1p2  828G  580G  248G  71% /home/stephane/FastNVMe
+  ```
+
+### 🤖 Assistant
+
+⏵ **La copie tourne. Je consigne l'attribution des octets et le modèle de lot, avec les unités vérifiées.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nl=[x.strip().split(',',11) for x in open('/tmp/sonde_k3.csv') if x.strip() and not x.startswith(('t,','#'))]\nr0,r1=int(l[0][9]),int(l[-1][9])\nprint('read_bytes :', r0, '->', r1)\nprint('delta      :', r1-r0, 'octets  … [253 caractères tronqués]`
+
+  ```
+read_bytes : 0 -> 221812322304
+delta      : 221812322304 octets = 206.5788230895996 Gio = 221.812322304 Go
+durée 1585 s · débit 133.46164974369086 Mio/s
+=== moteur : total annoncé ===
+kimi-k3 · 32 fichiers · 2573 tenseurs · 1508.66 Go de poids · en-têtes lus en 107.485975ms
+  ```
+
+### 🤖 Assistant
+
+⏵ **Je consigne l'attribution des octets : 72 % des lectures sont les experts, 28 % le dense lu une fois par passe.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> reports/rapport-passe-k3-disque.md <<'MD_EOF'\n\n---\n\n## 7. Attribution des 206,58 Gio : d'où viennent les octets ?\n\nUn coût sans attribution ne dit pas où agir. Les tailles viennent des en-têtes du\nGGUF (`drave … --tenso … [5810 caractères tronqués]`

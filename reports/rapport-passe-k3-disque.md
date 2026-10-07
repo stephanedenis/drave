@@ -139,3 +139,85 @@ mesurée dans un régime où les pages étaient en cache, ou sur un autre dispos
   Ce rapport mesure un coût, pas une justesse.
 - Il porte sur **une** passe, à froid, sur **un** disque. La reproductibilité du
   débit (130 Mo/s) n'a pas été établie par répétition.
+
+---
+
+## 7. Attribution des 206,58 Gio : d'où viennent les octets ?
+
+Un coût sans attribution ne dit pas où agir. Les tailles viennent des en-têtes du
+GGUF (`drave … --tensors`, 2 573 tenseurs), les octets lus du relevé.
+
+**Unités** : le relevé est en **Gio** (divisé par 2³⁰). Le moteur annonce
+1 508,66 **Go** décimaux = **1 405,06 Gio** — les deux chiffres sont le même
+modèle, et les confondre ferait une erreur de 7 %.
+
+| classe | Gio | part du modèle | quand c'est lu |
+|---|---:|---:|---|
+| **experts MXFP4** (276 tenseurs) | **1 347,13** | **95,9 %** | **par (jeton, couche)** — 16 experts routés par jeton |
+| attention (Q8_0, 678 tenseurs) | 29,58 | 2,1 % | une fois par couche et par passe |
+| FFN dense (Q8_0, 833 tenseurs) | 19,63 | 1,4 % | idem |
+| `ssm_*` | ~6,5 | 0,5 % | idem |
+| `token_embd` + `output` | 2,32 | 0,2 % | une fois |
+| normes, scores, biais (1 181 F32) | ~0,0 | 0,0 % | idem |
+
+**Et la passe a lu 206,58 Gio**, qui se séparent ainsi :
+
+| | Gio | part de la passe |
+|---|---:|---:|
+| dense + attention + `ssm` (une fois par passe, partagés par les 4 jetons) | **57,93** | **28,0 %** |
+| experts (relus pour CHAQUE jeton, à chaque couche) | **148,65** | **72,0 %** |
+
+**Le dense est lu une fois pour quatre jetons ; les experts, quatre fois.** C'est
+la structure du coût, et elle commande tout : les octets d'experts sont
+**proportionnels au nombre de jetons**, ceux du dense non.
+
+### 7.1 Le levier que cela désigne, et il est déjà dans le code
+
+`MoeK3::avant_lot` regroupe déjà les jetons par expert (`kimi_k3.rs:787`) :
+*« un expert lu UNE fois, appliqué à tous ses jetons »*. **La feuille de route le
+donnait pour non implémenté — elle est périmée sur ce point.** Mais le
+regroupement ne rapporte que si des jetons du lot **choisissent le même expert**,
+et à quatre jetons, sur ~581 experts par couche, les collisions sont rares : le
+gain mesuré est nul, ce qui explique la phrase de `REPRISE.md` (« réduire de 25 %
+les experts lus ne change rien ») — non pas que les octets ne comptent pas, mais
+qu'à quatre jetons il n'y a rien à regrouper.
+
+Le modèle, à `k = 16` experts routés par jeton et `n ≈ 581` experts par couche :
+
+    octets d'experts ≈ n·(1 − e^(−T·k/n)) / n × 1 347 Gio
+    total ≈ 57,93 + octets d'experts
+
+| jetons T | experts distincts | octets lus | **Gio par jeton** | gain |
+|---:|---:|---:|---:|---:|
+| **4** (mesuré) | ~61 | 206,6 Gio | **51,6** | — |
+| 16 | ~207 | 538 Gio | 33,6 | ×1,5 |
+| 32 | ~340 | 847 Gio | 26,5 | ×1,9 |
+| 64 | ~481 | 1 174 Gio | 18,3 | **×2,8** |
+| 128 | ~563 | 1 364 Gio | 10,7 | ×4,8 |
+| 512 | ~581 | 1 405 Gio | **2,7** | **×19** |
+
+**Prédiction, écrite ici avant la mesure** : un préremplissage de **64 jetons**
+devrait coûter ≈ **1 174 Gio**, soit ≈ **2 h 27** à 133 Mio/s — c'est-à-dire
+**2,8× moins d'octets par jeton** qu'une passe de quatre. Et un préremplissage de
+**512 jetons** devrait lire **le modèle entier une fois** (1 405 Gio, ≈ 2 h 56)
+pour **2,7 Gio par jeton**, soit **19× mieux**.
+
+**Ce modèle est une extrapolation, pas une mesure** : il suppose que les experts
+sont tirés uniformément et que le routeur ne change pas avec la taille du lot. Le
+routeur, lui, dépend du contexte — donc les 64 jetons ne choisiront pas forcément
+les mêmes experts que 64 passes de 4. C'est précisément ce que la mesure devra
+trancher.
+
+## 8. Ce que ce diagnostic a réfuté, et ce qu'il laisse ouvert
+
+**Réfuté** : l'hypothèse de la **dispersion** au sens de « la tête de lecture se
+déplace d'expert en expert et le temps part là ». Le disque est occupé 87,6 % du
+temps avec une file de ~14 requêtes : il ne cherche pas, il **débite**. Le temps
+est celui du volume, pas du déplacement.
+
+**Réfuté aussi** : que le CPU soit la limite (21 %), que la mémoire le soit (swap
+nul, RSS 66 Gio), que les défauts de page majeurs le soient (zéro).
+
+**Ouvert, et maintenant chiffré** : les octets. 148,65 Gio d'experts relus quatre
+fois, quand un lot plus large les lirait une fois — c'est le seul levier qui
+touche 72 % du trafic, et il est déjà dans le code.
