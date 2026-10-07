@@ -156662,3 +156662,1278 @@ syntaxe OK
 ⏵ **J'écris §95 (portée du contexte), puis je réponds au recul demandé.**
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> reports/rapport-toutes-langues.md <<'MARKDOWN'\n\n---\n\n## 95. LA PORTÉE DU CONTEXTE : le voisin immédiat porte presque tout\n\n### 95.1 Le montage\n\nLe §89 mesurait ce qu'une **fenêtre de trois jetons** ajoute. Il ne disait … [4084 caractères tronqués]`
+
+  ```
+84160d1 §95 : la portée du contexte — le voisin immédiat porte presque tout
+  ```
+
+### 🤖 Assistant
+
+⏵ **Je prends le recul demandé et je réponds sur le fond.**
+
+Oui. Et le dernier résultat tombe à point : la portée du contexte dit que **le voisin immédiat porte les deux tiers du gain**, le reste s'éteignant comme 1/d. Autrement dit, la cible que le pont s'acharne à émuler est **presque locale** — ce qui affaiblit encore le cas de la récurrence. Je prends ça comme le signal de m'arrêter et de regarder l'ensemble.
+
+## Ce que Drave est, en trois couches superposées
+
+**1. Un moteur dont la représentation est le sujet.** Pas des matrices : des *listes de faits valués*, poussées vers leurs lecteurs (AER). La conséquence est énoncée dans `docs/vision.md` — *le coût devient proportionnel à l'activité, pas à la taille du modèle*. Cette couche-là a des victoires **mesurées** : réparti à **0,00e0** d'écart à 40, 200 et 1 024 jetons, préremplissage 18× plus rapide, transport en listes ÷2,3, format de trace ÷2,9, placement des bits KV (+0,018 % pour 39 % de la taille). Ça marche, et c'est vérifiable.
+
+**2. Un instrument d'observation des modèles.** `--trace-couches`, `--couches 0:9`, le format DRVF, le découpage de couches entre nœuds, `--ppl-reparti`. C'est la couche la moins nommée dans le discours, et c'est celle qui a rendu **toute** la session possible : 3 700 traces, 392 langues, 482 articles × 6 langues. Sans elle, on ne saurait rien de ce qu'on vient d'apprendre.
+
+**3. Un programme de recherche : le pont.** Émuler la couche 8 d'un professeur depuis sa couche 0, un professeur à la fois, en boîte noire, sans rétropropagation. C'est le mandat actuel.
+
+## L'écart entre le mandat et les mesures
+
+Le mandat demande de « trouver des indices pour optimiser notre travail de stimulation ». Les indices sont arrivés, et ils sont presque tous **négatifs pour le mécanisme**, positifs pour la connaissance :
+
+- Le réservoir fait **moins bien que l'entrée du professeur lue linéairement**, sur les deux axes (constat déjà écrit au §B.4, quatre fois confirmé).
+- La cible « 12,001 » était un **effet de panel** : le même professeur est à **1,697** sur six langues, **1,494** sur sa pire paire.
+- Le discriminant qui « dépasse le professeur » le dépasse **dans-panel** ; hors vivier il retombe à **31–55 %**.
+- Le seul résultat qui survive à tout — articles, panel, graine — est qu'**un axe contenu/langue existe réellement dans les données** (15,7° d'écart entre tirages indépendants), et qu'un projecteur de **rang 3** donne 104,7 % à 143,1 % du professeur **sur les six tirages**, sans jamais perdre.
+- Et la cible est **locale** : 24 % expliqués par le jeton seul à la couche 8, +11,7 % par trois jetons, le reste hors de portée d'une fenêtre courte.
+
+Le point inconfortable n'est pas qu'un mécanisme ait échoué — c'est la **forme** de l'échec. Sept fois dans cette session, un chiffre s'est révélé indexé sur un choix tu : graine, panel, pooling, ajustement, échelle, rapport variables/points, réplication. Le programme a produit un **excellent instrument de mesure** et une **hypothèse centrale qui ne tient pas**.
+
+## Le besoin humain derrière la technique
+
+Je ne peux que le conjecturer, et je préfère le dire. Derrière « inférence ternaire sur Stratix V », « sans GPU », « sans rétropropagation », « notre propre pont », il y a une même exigence : **qu'une capacité de niveau LLM ne soit pas réservée à ceux qui possèdent les GPU, l'énergie et les données**. C'est un besoin de **souveraineté et de coût**, pas un besoin de fidélité à une couche interne.
+
+Or « fidélité à la couche 8 » est un **proxy** — et ce proxy vient d'être démontré trompeur : dépendant du panel, gonflable par le dénominateur, satisfait par des projections dont la moitié dépend d'un tirage. Optimiser ce proxy pendant des semaines, c'est reproduire à l'échelle du programme l'erreur des « treize heures avant de tester la ligne de base ».
+
+## Ce qu'il devrait être, selon moi
+
+**Arrêter de mesurer le pont à sa ressemblance avec le professeur, et le mesurer à ce qu'il permet de faire.**
+
+Trois convictions que les mesures de cette session soutiennent :
+
+1. **L'axe de contenu est le vrai actif.** Un projecteur **de rang 3**, matrice fixe, en forme fermée, sans rétropropagation, sans choix de graine, qui rend une représentation **invariante à la langue** à travers 392 langues — ça, c'est mesuré, c'est stable, et c'est **déployable**. Ce n'est pas un pont vers une couche : c'est un **outil**, et il répond directement au besoin (traitement multilingue sans modèle multilingue).
+
+2. **Drave doit assumer d'être un instrument, pas un étudiant.** Ce que le projet fait mieux que quiconque ici, c'est **observer et déplacer des activations** — tracer, découper, répartir à l'identique. C'est ce qui a produit toutes les connaissances de cette session. Un instrument qui rend les gros modèles inspectables et déplaçables sert le besoin de souveraineté plus sûrement qu'un élève qui doit surpasser son maître sans jamais y parvenir.
+
+3. **Le critère de succès doit être une tâche et un coût**, pas une couche. « Ce que l'étudiant sait faire, en octets et en joules, face au professeur » — sinon on continuera à fêter des 136 % qui sont des quotients de deux choses trente fois trop petites.
+
+Ce que je **ne** dis pas : que le programme pont est sans valeur. Il a produit le protocole, les corpus alignés, les 33 outils, et une carte précise de ce qui manque. Mais il a maintenant assez de mesures pour qu'on cesse de lui demander ce qu'il ne donne pas.
+
+- **ask_user_question** `{"questions": [{"id": "direction", "header": "Direction", "question": "Sur quel besoin veux-tu que je fasse porter la suite ?", "multi_select": false, "options": [{"label": "L'axe de contenu comme outil déployable (Recommandé)", "description": "Consolider le projecteur de rang 3 en matrice fixe, le  … [1688 caractères tronqués]`
+
+  ```
+{"answers":[{"id":"direction","selected":["Drave comme instrument d'observation et de répartition"]},{"id":"proxy","selected":["Les deux, côte à côte"]}]}
+  ```
+
+### 🤖 Assistant
+
+⏵ **Cap fixé : Drave comme instrument. J'établis l'état exact des chantiers moteur avant de proposer un plan.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '60,140p' README.md", "description": "Read README project state table"}`
+
+  ```
+| **Attention vectorisée (÷2 sur le temps)** | ✅ à perplexité identique |
+| Modèle ternaire *entraîné* (BitNet b1.58) | ⬜ à faire |
+| Extracteur GGUF → plans ternaires | ⬜ à faire |
+| Format binaire + schéma partagé Python/RTL | ⬜ à faire |
+| RTL : PE ternaire + décodeur | ⬜ à faire |
+
+Le matériel est prêt de son côté : voir le dépôt
+[`FPGA-Stratix-V`](../FPGA-Stratix-V) — carte détectée (Gen3 ×8), JTAG validé
+(`0x029070dd`), Quartus Prime Standard 21.1 opérationnel, bitstream produit.
+
+---
+
+## Test de principe (`run_quantify.py`)
+
+Un MLP minimal (32→64→10) est **entraîné** en numpy (aucune dépendance ML), puis
+quantifié selon plusieurs formats. Trois questions, chiffres en main :
+
+**1. Le chemin entier est-il exact ?** Oui — écart avec le calcul flottant :
+**4,2e-07** (couche 1) et **1,9e-06** (couche 2), soit de l'arrondi flottant pur.
+Le principe « que des additions/soustractions, aucun DSP » est validé. Le biais
+s'ajoute à la remise à l'échelle, hors du réseau de MAC.
+
+**2. Le ternaire préserve-t-il le modèle ?**
+
+| Format | b/poids | Accuracy |
+|--------|---------|----------|
+| float32 | 32 | 76,07 % |
+| int8 | 8 | 76,27 % |
+| int4 | 4 | 74,12 % |
+| **ternaire 1,58 b (dense 2 
+… [2001 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Je cherche les chantiers moteur ouverts et les rapports les plus récents.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -25 | cat; echo \"=== rapports récents ===\"; ls -t reports/*.md | head -12; echo \"=== 'à faire' dans la vision ===\"; grep -n \"à faire\\|⬜\\|reste à\\|prochaine étape\" docs/vision.md | head -25", "description":  … [34 caractères tronqués]`
+
+  ```
+84160d1 §95 : la portée du contexte — le voisin immédiat porte presque tout
+0b0161f localite_couches : le témoin « jeton courant » était décalé de d positions
+d186466 §94 : rang 1, 2 ou 3 — le meilleur rang n'est pas celui du meilleur chiffre
+256cd6a §93 : les directions du discriminant — le 1er axe est dans les données, le 2e dans le tirage
+df8980e §92 : la pire paire après échelle — de–en à 486 % du professeur, mais 5 paires sur 15 échouent
+3f7df44 §91 : tableau de bord — chaque chiffre avec ses conditions
+6e9d62f Renvoi du §88.5 vers le §90 : le tableau du gain de rapport ne doit pas être lu seul
+370ed3b §90 : la réplication du §88.5 — le gain de fidélité tient, le gain de rapport s'inverse
+2ef44ea §89 : localité — la couche 8 doit 24 % au jeton, 33 % à trois jetons, 67 % à autre chose
+9d47dcc §88 : correction du §87.3 — l'écart d'énergie est une ÉCHELLE, et centrer la cible est un gain gratuit
+687cb52 §87 : le discriminant roman ne transfère pas parce qu'il a appris sur les paires faciles
+8d76d1e §86 : le discriminant transfère entre panels, mais perd 4 à 7× — et la pire paire résiste
+207ef67 §82–§85 : la cible du projet (12,001) était un effet de panel
+eca1db2 Sonde de couches
+… [1601 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Je lis le récapitulatif du dépôt pour trouver les chantiers ouverts.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && wc -l reports/recapitulatif.md && head -70 reports/recapitulatif.md", "description": "Read repository recap"}`
+
+  ```
+806 reports/recapitulatif.md
+# Récapitulatif — méthode appliquée et résultats
+
+État au 06/10. Un seul professeur : **Qwen2.5-0.5B**.
+
+> **DEUX AVERTISSEMENTS POUR LIRE CE DOCUMENT.**
+>
+> **1. La couche cible a changé.** Tout ce document émule la **couche 10**. Des
+> mesures postérieures (Romeo et UDHR) montrent que le plateau du professeur est à
+> la **couche 8** : 0,5985 contre 0,5703 sur Romeo, 0,5471 contre 0,5247 sur
+> l'UDHR. Viser la couche 8 fait gagner **+0,0213 de fidélité transférée**. Les
+> chiffres ci-dessous restent exacts — ils portent sur la couche 10 — mais ils ne
+> décrivent pas le meilleur pont possible. Voir `rapport-toutes-langues.md` §17-19.
+>
+> **2. Le §7 est corrigé au §15.** Le §7 annonce « l'invariant : le pont apporte
+> +0,020, **quelle que soit la cible** ». Le §15 montre que c'est une **plage de
+> +0,020 à +0,032** : les sept périmètres qui donnaient +0,0197 ± 0,0009
+> partageaient le **même panel de 46 langues**. Les deux sections sont conservées
+> — la correction fait partie du travail — mais ne les lisez pas séparément.
+Toutes les mesures portent sur le corpus UDHR, dix unités, 40 langues
+d'entraînement dont 10 de validation, **6 langues tenues à l'éc
+… [1789 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Je regarde les portes (l'état opérationnel) et je cherche la liste des chantiers ouverts.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -45 tools/portes.sh; echo \"=== chantiers ouverts ===\"; grep -rn \"⬜\\|TODO\\|à faire\\|CHANTIER\" README.md docs/vision.md 2>/dev/null | head -20", "description": "Read gates and find open chantiers"}`
+
+  ```
+#!/bin/bash
+# Les portes du dépôt, en une commande.
+#
+# Un chiffre de référence qui dérive sans qu'on s'en aperçoive ne vaut rien :
+# chaque porte est comparée à la valeur ATTENDUE, et le script sort en erreur si
+# l'une diverge. Les valeurs sont celles publiées dans les rapports.
+#
+#   tools/portes.sh            toutes les portes
+#   tools/portes.sh rapide     sans gpt-oss (le seul qui prenne ~20 min)
+
+set -u
+cd "$(dirname "$0")/.."
+D=./drave-core/target/release/drave
+RAPIDE=${1:-}
+ECHEC=0
+
+[ -x "$D" ] || { echo "compiler d'abord : (cd drave-core && cargo build --release)"; exit 2; }
+
+compare() {  # nom, attendu, obtenu
+    if [ "$2" = "$3" ]; then
+        printf "  %-42s %s  ✅\n" "$1" "$3"
+    else
+        printf "  %-42s %s  ❌ (attendu %s)\n" "$1" "${3:-—}" "$2"
+        ECHEC=1
+    fi
+}
+
+# Attention : le moteur affiche AUSSI une perplexité cumulée par fenêtre, avant
+# le total. Prendre la première occurrence du motif donnait 17,431 (fenêtre 1) au
+# lieu de 19,3885 (total) — un instrument faux qui accuse le code.
+valeur() { grep -oE "=== perplexité [0-9]+\.[0-9]+" | grep -oE "[0-9]+\.[0-9]+" | head -1; }
+
+echo "=== Portes ==="
+
+# 1. Tests unitaires. Le seuil (48) protège le NOMBR
+… [1046 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le rapport « portes P0–P9 » ressemble à une feuille de route. Je le lis.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && wc -l reports/rapport-portes-p0-p9.md && head -80 reports/rapport-portes-p0-p9.md", "description": "Read P0-P9 gates roadmap"}`
+
+  ```
+77 reports/rapport-portes-p0-p9.md
+# Les deux portes, phase par phase (P0 → P9)
+
+> Écrit le 03/10 (bloc 27) pour répondre à une seule question, celle du mandat :
+> **chaque phase a-t-elle ses deux portes, et où est la preuve ?** Chaque ligne
+> renvoie à une mesure, pas à une intention. Ce qui n'est pas tenu est dit tenu
+> pour ce qu'il est : impossible et nommé, ou sans effet et démontré.
+
+Rappel des deux portes (`docs/plan-deepseek41-complet.md:142-149`) :
+
+- **porte de correction** — comparaison à une référence **externe** (llama.cpp,
+  ou une transcription numpy/vLLM indépendante) ;
+- **porte Drave** — les flux : nombre d'événements/paires par jeton, trace écrite
+  puis **rejouée à l'identique**, découpage en grappes, flux **lisible par un
+  outil d'analyse**.
+
+---
+
+## Le tableau
+
+| phase | porte de correction | porte Drave | état |
+|---|---|---|---|
+| **P0** — harnais, coût d'un jeton | `--config` annonce la bonne liste de manques (porte exécutée à chaque passage de `tools/portes.sh` : ✅) ; les deux côtés produisent les mêmes tenseurs nommés | un jeton sur V4-Flash affiche un nombre d'événements **non nul** avec sa provenance (attention · experts · partagé) | **FAIT** (02/10). 
+… [6771 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le rapport P0–P9 nomme l'écart central : Drave TRANSPORTE des listes mais CALCULE dense. Je vérifie dans le code.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls drave-core/src/ | head -40; echo \"=== où les listes servent au calcul ===\"; grep -rln \"liste\" drave-core/src/*.rs | head -15; echo \"=== nombre de lignes ===\"; wc -l drave-core/src/*.rs | tail -3", "description": "Survey engi … [25 caractères tronqués]`
+
+  ```
+clusters.rs
+engine.rs
+engram.rs
+formats.rs
+gguf.rs
+gpu.rs
+kimi_k3.rs
+list.rs
+main.rs
+materiel.rs
+model.rs
+tokenizer.rs
+=== où les listes servent au calcul ===
+drave-core/src/clusters.rs
+drave-core/src/engine.rs
+drave-core/src/engram.rs
+drave-core/src/gguf.rs
+drave-core/src/kimi_k3.rs
+drave-core/src/list.rs
+drave-core/src/main.rs
+drave-core/src/materiel.rs
+drave-core/src/model.rs
+=== nombre de lignes ===
+   9237 drave-core/src/model.rs
+    646 drave-core/src/tokenizer.rs
+  28341 total
+  ```
+
+### 🤖 Assistant
+
+⏵ **Je lance les portes du dépôt (vérité opérationnelle) et je lis la note de reprise.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (setsid nohup bash -c 'cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash tools/portes.sh rapide > /tmp/portes_etat.log 2>&1; echo \"FIN exit=$?\" >> /tmp/portes_etat.log' >/dev/null 2>&1 < /dev/null & disown); ls REPRISE.md  … [141 caractères tronqués]`
+
+  ```
+REPRISE.md
+# Reprise — état du projet et mode d'emploi pour une nouvelle session
+
+> Rédigé à la fin d'une session longue. Tout ce qui suit est **mesuré**, pas
+> déduit. Les valeurs de perplexité sont des **références de non-régression** :
+> si une modification les change, c'est qu'elle a changé le calcul.
+>
+> **Nom** : le projet s'appelle **Drave** (binaire `drave`, paquet `drave-core`,
+> variables `DRAVE_*`, histoire du renommage dans `docs/histoire.md`). Le dossier
+> de travail, lui, s'appelle encore `Qtrinet` — les chemins ci-dessous sont ceux
+> qui existent.
+
+---
+
+## 1. En une phrase
+
+`drave-core` est un moteur d'inférence Rust (~13 758 lignes, `std` seul) qui
+charge les GGUF **en place** (aucune copie, aucune requantification), exécute les
+projections soit en listes d'événements, soit en produit scalaire dense, gère les
+MoE, tient une conversation, et déporte au GPU ce qui y gagne. Il fait tourner du
+0,5 B au 120 B sur le CPU de cette machine.
+
+```bash
+cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo build --release
+./target/release/drave ../models/Qwen2.5-0.5B-Q8_0.gguf \
+    --infer --chat --flux --prompt "Explique le ciel bleu en une phrase." \
+    --n
+… [1381 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Fait décisif : sur Kimi-K3, le DENSE pèse 2,3× les experts (70 % du trafic). Je lis la suite de la note de reprise.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '50,150p' REPRISE.md", "description": "Read more of the resume note"}`
+
+  ```
+>
+> **`--lot N > 1` n'est PAS identique au chemin jeton**, et le moteur l'annonce
+> maintenant : routage différent sur 7 838/9 312 lignes, génération gloutonne
+> divergente au 3e jeton, mais PPL 19,143 contre 19,172, argmax identique
+> 191/191, Pearson min 0,99719. Deux compteurs muets du chemin par lots sont
+> refermés (« paires experts » tombait à 1 % dès le lot 2), et `forward_lot`
+> **refuse** désormais un modèle à experts partagés au lieu d'en calculer un
+> autre en silence.
+>
+> Une hypothèse a été **réfutée** dans le même bloc : la tuile du GEMM 4 bits
+> (8 / 16 / 64 → 21,2 / 21,2 / 22,0 s à lot 32) ne change rien. La constante
+> reste à 8 ; `DRAVE_TUILE_LOT` est un banc d'essai, pas un réglage.
+>
+> `--k3-essai` sur les 32 shards redonne **exactement** les sorties obtenues avec
+> 25 shards (composition 0-3 : 8,7757 / 5,2909 / 5,2559 / 5,4735) : les shards
+> déjà présents portaient les octets définitifs.
+>
+> **LA RÉFÉRENCE A TOURNÉ (22h57)** : `REF_SANS_REPACK=1 tools/ref_logits_k3` sur
+> le modèle complet, 4 jetons → **2 h 48 min 21 s, soit ~42 min par jeton**, à
+> **11 % de CPU** (borné par le disque : 1,80 To lus, 451 Go/jeton, 5,2 balayages
+> du modèle), RSS 102 Go, **swap
+… [4664 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Je continue la note de reprise pour trouver les chantiers ouverts côté moteur.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '150,260p' REPRISE.md; echo \"=== portes ===\"; tail -25 /tmp/portes_etat.log 2>/dev/null", "description": "Read resume note conclusion and gates"}`
+
+  ```
+> n'y change rien (plate de rang 32 à 256). **Le niveau abstrait est déjà à ~90 %
+> déterminé par la plongée du jeton courant.**
+>
+> **ET LE PONT, jugé sur l'invariance inter-langue, 20 langues d'entraînement →
+> 20 langues JAMAIS vues :**
+>
+> | couche 10 | cos moyen | pire paire |
+> |---|---:|---:|
+> | professeur | 0,6284 | 0,3281 |
+> | **pont linéaire** | **0,7343** (+17 %) | **0,4421** (+35 %) |
+>
+> **Le pont rend une représentation PLUS invariante que le professeur lui-même**,
+> et sa pire paire (0,4421) approche celle du plateau d'un **30 B** (0,471) —
+> 60 fois plus gros. **Mécanisme** : une SEULE application linéaire sert toutes les
+> langues à la fois, donc elle ne retient que ce qu'elles ont en commun. Un
+> projecteur sur le partagé, par moindres carrés — sans récurrence, sans
+> rétropropagation, sans oracle. Il fait mieux que l'annulation oracle.
+>
+> **ET IL TIENT EN UN SEUL NEURONE** — intuition de Stéphane (« un neurone par
+> sortie, puis on itère ; l'apprentissage est hyper-rapide au début »), confirmée
+> et chiffrée. Le rang du pont EST le nombre de neurones :
+>
+> | neurones | fidélité au professeur | **invariance** | pire paire |
+> |---|---:|---:|---:|
+> | **1** | 0,
+… [5087 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Il existe une feuille de route : `docs/roadmap-drave.md`. Je la lis.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && wc -l docs/roadmap-drave.md && cat docs/roadmap-drave.md", "description": "Read the Drave roadmap"}`
+
+  ```
+98 docs/roadmap-drave.md
+# Où Drave est à son meilleur — le roadmap, et pourquoi c'est cette niche-là
+
+> Écrit après la mesure du 05/10. Chaque chiffre de ce document vient d'un relevé
+> du dépôt ; ceux qui viennent d'ailleurs sont marqués.
+
+## 1. La niche, définie par une mesure
+
+| | lectures par jeton | vitesse | source |
+|---|---:|---:|---|
+| llama.cpp-k3 sur Kimi-K3 | **451 Go** (1,80 To pour 4 jetons, 5,2 balayages) | 42 min/jeton | `docs/verification-kimi-k3.md` |
+| Drave sur le même fichier | **26 Go** d'experts (16 sur 896) | **7,4 min/jeton** | idem |
+
+Ce n'est pas une victoire de vitesse, c'est une victoire d'**existence**. Et les
+concurrents ne sont pas lents, ils ne **fonctionnent pas** :
+
+- **llama.cpp** repaquette les poids en RAM par défaut : 104 Go résidents et
+  6,9 Go de swap après **16 tenseurs sur 2 573**, sur une machine de 125 Go. Il
+  ne finit pas (`REF_SANS_REPACK` est né de là) ;
+- **Strata** exige que **tous** les experts tiennent en RAM (34-50 Go) : sa cible
+  est la classe 100-350 Go. Ses propres chiffres le disent — quand il doit lire
+  du SSD, il tombe à 7-8,5 tok/s ;
+- **vLLM et consorts** sont GPU-résidents : hors sujet à 1,5 To ;
+- **Ollama** *est* 
+… [3739 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **La feuille de route est claire. Je crée l'objectif et je commence par la question ouverte qu'elle dit de trancher en premier.**
+
+- **create_goal** `{"objective": "Faire de Drave l'instrument d'observation et de répartition des gros modèles, en gardant les deux mesures côte à côte (fidélité comme thermomètre interne, tâche + coût comme juge). Trois chantiers, dans cet ordre : (1) diagnostiquer puis fermer l'écart froid/chaud de la passe complète … [596 caractères tronqués]`
+
+> **Objectif** (create) : Faire de Drave l'instrument d'observation et de répartition des gros modèles, en gardant les deux mesures côte à côte (fidélité comme thermomètre interne, tâche + coût comme juge). Trois chantiers, dans cet ordre : (1) diagnostiquer puis fermer l'écart froid/chaud de la passe complète Kimi-K3 — 2,95 s contre 0,75 s par couple (couche, jeton) — en mesurant majflt, l'attente disque et la dispersion, sans supposer ; (2) implémenter le regroupement des jetons par expert DANS la couche de MoeK3 et le mesurer en A/B, critère « passe à 4 jetons sous 10 min » ; (3) étendre la répartition en grappe (un nœud = une plage de couches) avec le critère mesuré 2,5 min par passe. Chaque affirmation porte sa mesure ET ses conditions (graine, panel, pooling, ajustement, échelle, rapport variables/points, réplication), et tools/portes.sh reste vert à chaque étape.
+
+
+  ```
+{"goal":{"id":"goal-9d55cd0a-c773-40da-961d-235bf5a237f5","revision":1,"objective":"Faire de Drave l'instrument d'observation et de répartition des gros modèles, en gardant les deux mesures côte à côte (fidélité comme thermomètre interne, tâche + coût comme juge). Trois chantiers, dans cet ordre : (1) diagnostiquer puis fermer l'écart froid/chaud de la passe complète Kimi-K3 — 2,95 s contre 0,75 s par couple (couche, jeton) — en mesurant majflt, l'attente disque et la dispersion, sans supposer ; (2) implémenter le regroupement des jetons par expert DANS la couche de MoeK3 et le mesurer en A/B, critère « passe à 4 jetons sous 10 min » ; (3) étendre la répartition en grappe (un nœud = une plage de couches) avec le critère mesuré 2,5 min par passe. Chaque affirmation porte sa mesure ET ses conditions (graine, panel, pooling, ajustement, échelle, rapport variables/points, réplication), et tools/portes.sh reste vert à chaque étape.","phase":"active","roundsStarted":0,"maxGoalRounds":14},"activation":"armed"}
+  ```
+
+### 🤖 Assistant
+
+⏵ **Je vérifie les portes et je cherche l'outillage Kimi-K3 existant.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -30 /tmp/portes_etat.log 2>/dev/null; echo \"=== outillage K3 ===\"; ls tools/ | grep -i \"k3\\|kimi\" ; echo \"=== options K3 du moteur ===\"; grep -oE '\"--k3[a-z-]*\"' drave-core/src/main.rs | sort -u | head -20", "descriptio … [33 caractères tronqués]`
+
+  ```
+=== Portes ===
+  cargo test --release                       77 verts  ✅
+  Qwen2.5-0.5B ctx 256                       19.3885  ✅
+  Qwen3-30B en clusters (origine : 799,8557) 799.8557  ✅
+  threads par défaut (physiques)            20  ✅
+  (portes de formats : ignorées en mode rapide)
+  GLM-5.3 : sigmoïde ×2,5                  sigmoïde  ✅
+  Kimi-K2.7 : sigmoïde ×2,827              sigmoïde  ✅
+  V4-Flash : racine de softplus              racine de softplus  ✅
+  Qwen3-235B : softmax                       softmax  ✅
+  V4-Flash : --config le dit calculable      oui  ✅
+  V4-Flash 43 couches ctx 32 (archivée)     ARCHIVE=1 pour la lancer
+  engram V4.1 : adressage                    rangées DISTINCTES : 479723  ✅
+  le flux relu par tools/analyse_flux.py     51 lignes  ✅
+  le rejeu de la trace (0 manquante, écart ≤ 1e-5) écart 0.00e+00  ✅
+=== outillage K3 ===
+apres-telechargement-k3.sh
+porte-tokenizer-kimi.sh
+ref_logits_k3
+tokenizer_kimi
+=== options K3 du moteur ===
+"--k3-essai"
+  ```
+
+### 🤖 Assistant
+
+⏵ **Je cherche comment le moteur charge et exécute Kimi-K3.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -oE 'DRAVE_[A-Z0-9_]+' drave-core/src/*.rs | sed 's/.*://' | sort -u | grep -iE \"k3|moe|expert|io|lecture|disp\" ; echo \"=== k3-essai ===\"; grep -n \"k3-essai\" -A 20 drave-core/src/main.rs | head -40; echo \"=== chemin du mo … [196 caractères tronqués]`
+
+  ```
+DRAVE_EXPERTS_GARDES
+DRAVE_EXPERTS_RAM
+DRAVE_GPU_EXPERTS
+DRAVE_GPU_EXPERTS_GO
+DRAVE_K3_COUCHES
+DRAVE_K3_DENSE_FIGE
+DRAVE_K3_GEN
+DRAVE_K3_IDS
+DRAVE_K3_IMPOSE
+DRAVE_K3_LOGITS
+DRAVE_K3_MXFP4
+DRAVE_K3_PASSE
+DRAVE_K3_PRELIRE_UNION
+DRAVE_K3_SANS_ETAT
+DRAVE_K3_STATS_EXPERTS
+DRAVE_K3_TETE
+DRAVE_K3_TRACE_EXPERTS
+DRAVE_SANS_COMPRESSION
+DRAVE_TRACE_EXPERTS
+DRAVE_VISION_TEXTE
+=== k3-essai ===
+693:            "--k3-essai" => { o.k3_essai = true; 1 }
+694-            "--banc-kv" => { o.banc_kv = suivant(i).parse().unwrap(); 2 }
+695-            "--banc-topk" => { o.banc_topk = suivant(i).parse().unwrap(); 2 }
+696-            "--banc-mla" => { o.banc_mla = Some(suivant(i).clone()); 2 }
+697-            "--tensors" => { o.tensors = true; 1 }
+698-            "--trace-flux" => { o.trace_flux = Some(suivant(i).clone()); 2 }
+699-            "--flux-forcer" => { o.flux_forcer = Some(suivant(i).clone()); 2 }
+700-            "--flux-serveur" => { o.flux_serveur = Some(suivant(i).clone()); 2 }
+701-            "--options-actives" => { o.options_actives = true; 1 }
+702-            "--options-strict" => { o.options_strict = true; 1 }
+703-            "--tete-partielle" => { o.tete_partielle = true; 1 }
+704-     
+… [1907 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Je cherche le chemin du modèle K3 et le mode « passe complète ».**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"DRAVE_K3_PASSE\\|DRAVE_K3_STATS_EXPERTS\\|DRAVE_K3_PRELIRE_UNION\" drave-core/src/*.rs | head -8; echo \"=== où est K3 ===\"; find /home/stephane -maxdepth 4 -iname \"*Kimi-K3*\" -o -maxdepth 4 -iname \"*kimi-k3*\" 2>/dev/ … [115 caractères tronqués]`
+
+  ```
+drave-core/src/kimi_k3.rs:843:        // chasse celles qu'on allait utiliser. `DRAVE_K3_PRELIRE_UNION=1` la
+drave-core/src/kimi_k3.rs:845:        if std::env::var("DRAVE_K3_PRELIRE_UNION").map(|v| v != "0" && !v.is_empty()).unwrap_or(false) {
+drave-core/src/kimi_k3.rs:934:        if std::env::var("DRAVE_K3_STATS_EXPERTS").is_ok() {
+drave-core/src/main.rs:2044:    // **LA PASSE COMPLÈTE, UNE COUCHE À LA FOIS.** `DRAVE_K3_PASSE=N` calcule
+drave-core/src/main.rs:2049:    if let Ok(v) = std::env::var("DRAVE_K3_PASSE") {
+=== où est K3 ===
+Applications
+artefacts
+cargo
+codex
+kld
+lmstudio
+modeles-lourds
+models
+npm
+qwen3-30b-a3b-Q4_K_M.gguf
+  ```
+
+- **bash** `{"command": "ls -d /home/stephane/FastNVMe/modeles-lourds/* 2>/dev/null | head -10; echo \"=== kimi ===\"; find /home/stephane/FastNVMe -maxdepth 3 -iname \"*kimi*\" 2>/dev/null | head -8; echo \"=== disques ===\"; df -h | grep -vE \"tmpfs|overlay\" | head -8", "description": "Locate K3 model files" … [1 caractères tronqués]`
+
+  ```
+/home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf
+/home/stephane/FastNVMe/modeles-lourds/README.md
+=== kimi ===
+=== disques ===
+Filesystem               Size  Used Avail Use% Mounted on
+/dev/nvme0n1p2           828G  568G  259G  69% /
+efivarfs                 256K  190K   62K  76% /sys/firmware/efi/efivars
+none                     1,0M     0  1,0M   0% /run/credentials/systemd-journald.service
+/dev/nvme0n1p2           828G  568G  259G  69% /.snapshots
+/dev/nvme0n1p2           828G  568G  259G  69% /opt
+/dev/nvme0n1p2           828G  568G  259G  69% /home
+/dev/nvme0n1p2           828G  568G  259G  69% /root
+  ```
+
+### 🤖 Assistant
+
+⏵ **Kimi-K3 n'est pas dans FastNVMe — je le localise sur les disques.**
+
+- **bash** `{"command": "df -h 2>/dev/null | sort -k2 -h | tail -12; echo \"=== recherche ===\"; ls /home/stephane/ 2>/dev/null | head -20; for d in /home/stephane/Data13TB /home/stephane/FastNVMe /mnt /media; do [ -d \"$d\" ] && echo \"-- $d --\" && find \"$d\" -maxdepth 3 -iname \"*kimi*\" 2>/dev/null | head  … [54 caractères tronqués]`
+
+  ```
+tmpfs                     63G   34G   30G  54% /tmp
+/dev/nvme0n1p2           828G  568G  259G  69% /
+/dev/nvme0n1p2           828G  568G  259G  69% /home
+/dev/nvme0n1p2           828G  568G  259G  69% /home/stephane/FastNVMe
+/dev/nvme0n1p2           828G  568G  259G  69% /opt
+/dev/nvme0n1p2           828G  568G  259G  69% /root
+/dev/nvme0n1p2           828G  568G  259G  69% /.snapshots
+/dev/nvme0n1p2           828G  568G  259G  69% /srv
+/dev/nvme0n1p2           828G  568G  259G  69% /usr/local
+/dev/nvme0n1p2           828G  568G  259G  69% /var
+/dev/nvme0n1p2           828G  568G  259G  69% /var/lib/docker
+/dev/mapper/system-root   11T  8,8T  2,1T  81% /home/stephane/Data13TB
+=== recherche ===
+altera_pro
+Applications
+Bureau
+data
+Data13TB
+Desktop
+Documents
+Downloads
+FastNVMe
+flex
+fpga-compat
+GitHub
+gpu-env
+Images
+intelFPGA
+intelFPGA_std
+iverilog
+lib64_shim
+lvm-cache-backup-20251222-131716
+Modèles
+-- /home/stephane/Data13TB --
+-- /home/stephane/FastNVMe --
+-- /mnt --
+[exit code: 1]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Je cherche les shards GGUF de K3 par motif de nom.**
+
+- **bash** `{"command": "timeout 120 find /home/stephane -maxdepth 5 -name \"*-of-00001.gguf\" 2>/dev/null | head -20; echo \"=== Modèles ===\"; ls /home/stephane/Modèles/ 2>/dev/null | head -20", "description": "Find GGUF shards by name pattern", "timeoutMs": 180000}`
+
+  ```
+=== Modèles ===
+  ```
+
+### 🤖 Assistant
+
+⏵ **Je cherche le chemin K3 dans les scripts et la fonction `modele_chemin`.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"Kimi-K3\\|Kimi_K3\\|KimiK3\" tools/*.sh tools/apres-telechargement-k3.sh 2>/dev/null | head -10; echo \"=== modele_chemin ===\"; grep -n \"fn modele_chemin\" -A 12 drave-core/src/main.rs | head -18; echo \"=== gros dossier … [138 caractères tronqués]`
+
+  ```
+tools/apres-telechargement-k3.sh:2:# Après le téléchargement de Kimi-K3 : la séquence, dans l'ordre, automatique.
+tools/apres-telechargement-k3.sh:20:K3=${K3:-/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf}
+tools/apres-telechargement-k3.sh:30:    "https://huggingface.co/api/models/unsloth/Kimi-K3-GGUF?blobs=true", timeout=60))
+tools/portes.sh:103:#       elle ne garde plus rien de vivant. La cible est Kimi-K3
+tools/porte-tokenizer-kimi.sh:2:# Compare nos identifiants à ceux du tokenizer OFFICIEL de Kimi-K3 (pur Python).
+tools/porte-tokenizer-kimi.sh:4:K=${K3:-/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf}
+tools/apres-telechargement-k3.sh:2:# Après le téléchargement de Kimi-K3 : la séquence, dans l'ordre, automatique.
+tools/apres-telechargement-k3.sh:20:K3=${K3:-/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf}
+tools/apres-telechargement-k3.sh:30:    "https://huggingface.co/api/models/unsloth/Kimi-K3-GGUF?blobs=true", timeout=60))
+=== modele_chemin ===
+421:fn modele_chemin() -> String { MODELE.get().cloned().unwrap_
+… [844 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Chemin trouvé. Je vérifie que K3 est bien là.**
+
+- **bash** `{"command": "ls -la /home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/ 2>/dev/null | head -5; echo \"---\"; ls /home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/ 2>/dev/null | wc -l; du -sh /home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/ 2>/dev/null; e … [128 caractères tronqués]`
+
+  ```
+total 1473309300
+drwxr-xr-x. 1 stephane stephane        2432  3 oct 14:01 .
+drwxr-xr-x. 1 stephane stephane        1242  3 oct 10:05 ..
+-rw-r--r--. 1 stephane stephane     6934144  3 oct 10:05 Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf
+-rw-r--r--. 1 stephane stephane 47478326816  3 oct 10:13 Kimi-K3-UD-Q4_K_XL-00002-of-00032.gguf
+---
+32
+1,4T	/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/
+=== ids K3 ===
+-rw-r--r--. 1 stephane stephane   29141  3 oct 14:01 /tmp/dl_k3.log
+-rw-r--r--. 1 stephane stephane     113  4 oct 10:11 /tmp/ids_k3_24.txt
+-rw-r--r--. 1 stephane stephane      55  3 oct 14:19 /tmp/ids_k3_demo.txt
+-rw-r--r--. 1 stephane stephane    1462  4 oct 10:11 /tmp/ids_k3_long.txt
+-rw-r--r--. 1 stephane stephane    1263  3 oct 19:35 /tmp/k3_13.log
+-rw-r--r--. 1 stephane stephane    2412  3 oct 17:18 /tmp/k3_apres.log
+-rw-r--r--. 1 stephane stephane    1256  3 oct 23:37 /tmp/k3_banque.log
+-rw-r--r--. 1 stephane stephane  102469  3 oct 10:15 /tmp/k3build.log
+  ```
+
+### 🤖 Assistant
+
+⏵ **K3 est là (1,4 To, 32 shards). Je lis le mode « passe complète » du moteur.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '2035,2090p' drave-core/src/main.rs", "description": "Read the K3 full-pass mode"}`
+
+  ```
+}
+                    }
+                    Err(e) => { println!("  composition 0-3 : {e}"); ok = false; break; }
+                }
+            }
+            if ok { println!("  composition : {} ms au total", t0.elapsed().as_millis()); }
+        }
+        Err(e) => println!("  composition 0-3 : chargement impossible ({e})"),
+    }
+    // **LA PASSE COMPLÈTE, UNE COUCHE À LA FOIS.** `DRAVE_K3_PASSE=N` calcule
+    // les N premières couches en ne gardant QU'UNE couche en mémoire : c'est ce
+    // qui rend les 93 couches possibles (une couche ≈ 2,2 Go au lieu de ~220 Go
+    // pour toutes). Quand il est posé, on saute la composition `PetitesK3`, qui
+    // garde tout — elle sert à vérifier l'enchaînement, pas à aller loin.
+    if let Ok(v) = std::env::var("DRAVE_K3_PASSE") {
+        if let Ok(n) = v.parse::<usize>() {
+            if n >= 1 {
+                // `DRAVE_K3_IDS=1,2,3` : la séquence à faire passer. Sert à
+                // tracer le routage sur un VRAI texte plutôt que sur quatre
+                // jetons de démonstration — une trace de quatre jetons ne dit
+                // rien d'un cache.
+                let ids4: Vec<u32> = match std::env::var("DRAVE_K3_IDS").ok() {
+
+… [2197 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Je cherche la commande exacte utilisée pour la passe K3.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"DRAVE_K3_PASSE\" /tmp/*.sh /tmp/*.log tools/*.sh 2>/dev/null | head -8; echo \"=== delayacct dispo ? ===\"; awk '{print \"champs stat:\", NF}' /proc/self/stat; echo \"=== essai à blanc de la commande ===\"; K=/home/stephan … [165 caractères tronqués]`
+
+  ```
+=== delayacct dispo ? ===
+champs stat: 52
+=== essai à blanc de la commande ===
+-rw-r--r--. 1 stephane stephane 6934144  3 oct 10:05 /home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf
+  ```
+
+### 🤖 Assistant
+
+⏵ **Je trouve le point d'entrée du mode K3 et ses options.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && awk 'NR<=2044 && /^fn |^    fn /{l=NR\": \"$0} END{}' drave-core/src/main.rs >/dev/null; awk 'NR<=2044 && /fn /{last=NR\": \"$0} END{print \"dernière fn avant 2044 ->\", last}' drave-core/src/main.rs; echo \"=== déclencheur ===\"; gr … [278 caractères tronqués]`
+
+  ```
+dernière fn avant 2044 -> 1899: fn run_k3_essai() {
+=== déclencheur ===
+147:    if opt.k3_essai { run_k3_essai(); return; }
+540:    infer: bool, ppl: bool, plan: bool, tokenize: bool, gpu_banc: bool, k3_essai: bool,
+693:            "--k3-essai" => { o.k3_essai = true; 1 }
+1899:fn run_k3_essai() {
+=== variables K3 ===
+2002:    // la suivante la 12. `DRAVE_K3_COUCHES=13` est donc le premier essai qui
+2005:    let n_k3: usize = std::env::var("DRAVE_K3_COUCHES").ok()
+2130:                            let chemin = std::env::var("DRAVE_K3_LOGITS")
+  ```
+
+### 🤖 Assistant
+
+⏵ **J'écris la sonde de passe K3 (majflt, attente disque, CPU, octets lus) — un instrument réutilisable.**
+
+- **write** `{"content": "#!/bin/bash\n# sonde-passe-k3.sh — OÙ PASSE LE TEMPS d'une passe complète Kimi-K3 ?\n#\n# LA QUESTION OUVERTE, recopiée de `REPRISE.md` :\n#\n#   « la passe complète coûte 2,95 s par couple (couche, jeton) contre 0,75 s à\n#     chaud — quatre fois plus — et réduire de 25 % les experts  … [6721 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/sonde-passe-k3.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+### 🤖 Assistant
+
+⏵ **Je valide la sonde sur 3 couches avant de lancer la passe complète.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && chmod +x tools/sonde-passe-k3.sh && timeout 900 bash tools/sonde-passe-k3.sh 3 1 2>&1 | tail -35", "description": "Validate probe on 3 layers", "timeoutMs": 960000}`
+
+  ```
+# modèle    : /home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf
+# taille    : 1,4T sur /dev/mapper/system-root
+# couches   : 3 · ids 3638,275,1309,3140 · échantillonnage 1s
+# passe terminée en 95 s (code 0)
+  File "<stdin>", line 19
+    print(f"# {'ni l'un ni l'autre (attente/threads)':<34}{fin-cpu-blk:>10.0f} s"
+               ^^^^^^^^
+SyntaxError: invalid syntax. Perhaps you forgot a comma?
+# journal brut : /tmp/sonde_k3.csv · sortie moteur : /tmp/sonde_k3_moteur.log
+  ```
+
+### 🤖 Assistant
+
+⏵ **Apostrophe dans une f-string. Je corrige et je vérifie les mesures déjà collectées.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -i \"s|{'ni l'un ni l'autre (attente/threads)':<34}|{'attente ni CPU ni E/S':<34}|\" tools/sonde-passe-k3.sh && grep -n \"attente ni CPU\" tools/sonde-passe-k3.sh && echo \"=== mesures du run 3 couches ===\" && head -3 /tmp/sonde … [160 caractères tronqués]`
+
+  ```
+110:print(f"# {'attente ni CPU ni E/S':<34}{fin-cpu-blk:>10.0f} s"
+=== mesures du run 3 couches ===
+t,utime_cs,stime_cs,minflt,majflt,blkio_cs,rss_ko,swap_ko,read_ko,rchar_ko,disque_io_ms,disque_pond_ms
+0,0,0,306,0,0,6716,0,1277952,14456,189873557,1604360401
+1,5,3,6785,0,0,32628,0,91127808,53085944,189874504,1604362358
+92,2616,759,117668,0,0,17332468,0,11486765056,141168027,189941924,1605175557
+93,2709,769,120017,0,0,17332468,0,11486765056,141168027,189941924,1605175557
+94,2841,777,120018,0,0,1180752,0,11486765056,141168148,189941942,1605175575
+=== sortie moteur ===
+  ---- chargement 1.9 s (22 %) · calcul 6.8 s (78 %) [attention 2.4 s · FFN 4.4 s]
+  passe 0-2, jeton 0 : |l_out| = 8.1982 · finis : true
+  passe 0-2, jeton 1 : |l_out| = 3.1898 · finis : true
+  passe 0-2, jeton 2 : |l_out| = 3.0704 · finis : true
+  passe 0-2, jeton 3 : |l_out| = 2.8699 · finis : true
+  passe complète : 10710 ms au total
+  ```
+
+### 🤖 Assistant
+
+⏵ **`delayacct_blkio_ticks` est à zéro (comptabilité noyau absente) → je le remplace par l'état du processus (D = attente disque) et je corrige les deltas disque.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/sonde-passe-k3.sh'; s=open(p).read()\n\ns = s.replace(\n\"\"\"#   delayacct_blkio_ticks  le temps passé BLOQUÉ sur les entrées-sorties\n#                          (champ 42 de /proc/PID/stat, noyau avec\n#  … [2940 caractères tronqués]`
+
+  ```
+patch 1 ok
+76:        ETAT=$(awk '{print $1}' <<< "$L")
+88:        log "$(( $(date +%s) - T0 )),$ETAT,$UT,$ST,${MINF:-0},${MAJF:-0},${BLKIO:-0},${RSS:-0},${SWAP:-0},${IO% *},${IO#* },\"$DS\""
+  ```
+
+### 🤖 Assistant
+
+⏵ **Je réécris la sonde proprement (format cohérent, analyse par périphérique).**
+
+- **write** `{"content": "#!/bin/bash\n# sonde-passe-k3.sh — OÙ PASSE LE TEMPS d'une passe complète Kimi-K3 ?\n#\n# LA QUESTION OUVERTE, recopiée de `REPRISE.md` :\n#\n#   « la passe complète coûte 2,95 s par couple (couche, jeton) contre 0,75 s à\n#     chaud — quatre fois plus — et réduire de 25 % les experts  … [7336 caractères tronqués]`
+
+  ```
+Error: cannot write "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/sonde-passe-k3.sh": file changed since it was read — re-read the file, then retry
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -5 tools/sonde-passe-k3.sh && rm -f tools/sonde-passe-k3.sh && echo \"supprimé, je réécris\"", "description": "Remove patched script to rewrite cleanly"}`
+
+  ```
+#!/bin/bash
+# sonde-passe-k3.sh — OÙ PASSE LE TEMPS d'une passe complète Kimi-K3 ?
+#
+# LA QUESTION OUVERTE, recopiée de `REPRISE.md` :
+#
+supprimé, je réécris
+  ```
+
+- **write** `{"content": "#!/bin/bash\n# sonde-passe-k3.sh — OÙ PASSE LE TEMPS d'une passe complète Kimi-K3 ?\n#\n# LA QUESTION OUVERTE, recopiée de `REPRISE.md` :\n#\n#   « la passe complète coûte 2,95 s par couple (couche, jeton) contre 0,75 s à\n#     chaud — quatre fois plus — et réduire de 25 % les experts  … [7228 caractères tronqués]`
+
+  ```
+Error: cannot write "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/sonde-passe-k3.sh": file no longer exists — re-read the file, then retry
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le fichier supprimé bloque l'outil d'écriture — je le crée par heredoc.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/sonde-passe-k3.sh <<'SCRIPT_EOF'\n#!/bin/bash\n# sonde-passe-k3.sh — OÙ PASSE LE TEMPS d'une passe complète Kimi-K3 ?\n#\n# LA QUESTION OUVERTE, recopiée de `REPRISE.md` :\n#\n#   « la passe complète coûte 2,95 s par coup … [7484 caractères tronqués]`
+
+  ```
+syntaxe bash OK
+# modèle    : /home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf
+# taille    : 1,4T
+# couches   : 2 · ids 3638,275,1309,3140 · échantillonnage 1s
+# passe terminée en 32 s (code 0)
+
+# durée de la passe                           32 s
+# CPU travaillé (utime+stime)                 32 s   (101.1%)
+# échantillons en état D (E/S)                 0   ( 0.0% du temps)
+# échantillons en état R (travail)            31   (100.0%)
+# échantillons en état S (sommeil)             0   ( 0.0%)
+# octets lus (bloc)                         0.00 Go
+# octets demandés (rchar)                   0.13 Go
+# défauts de page majeurs                      0
+# RSS max                                   0.00 Go
+# swap max                                 21.30 Go
+# disque le plus sollicité               nvme0n1
+#    occupé                                    0 s   ( 0.6%)
+#    occupé, pondéré par les files             1 s   ( 2.8%)
+# couples (couche, jeton)                      8
+# secondes par couple                      4.000 s
+
+# VERDICT
+#   Le processus TRAVAILLE la majorité du temps : c'est le CPU, pas le disque.
+#   Réduire les lectures ne peut
+… [138 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Lectures et RSS à zéro : je regarde le CSV brut et la sortie moteur.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== CSV (colonnes 1-11) ===\"; awk -F, '{print $1\"|\"$2\"|u\"$3\"|s\"$4\"|minf\"$5\"|majf\"$6\"|rss\"$7\"|swap\"$8\"|read\"$9\"|rchar\"$10}' /tmp/sonde_k3.csv | head -12; echo \"=== moteur ===\"; tail -12 /tmp/sonde_k3_moteur … [58 caractères tronqués]`
+
+  ```
+=== CSV (colonnes 1-11) ===
+t|etat|uutime_cs|sstime_cs|minfminflt|majfmajflt|rssblkio_cs|swaprss_ko|readswap_ko|rcharread_ko
+0|R|u0|s0|minf323|majf0|rss0|swap16024|read0|rchar0
+1|R|u65|s36|minf13464|majf0|rss0|swap2512192|read0|rchar0
+2|R|u132|s72|minf17929|majf0|rss0|swap5365584|read0|rchar0
+3|R|u196|s110|minf26968|majf0|rss0|swap8262816|read0|rchar0
+4|R|u262|s146|minf30463|majf0|rss0|swap11160736|read0|rchar0
+5|R|u345|s177|minf40852|majf0|rss0|swap8382812|read0|rchar0
+6|R|u411|s213|minf42789|majf0|rss0|swap10766836|read0|rchar0
+7|R|u478|s249|minf43920|majf0|rss0|swap13081076|read0|rchar0
+9|R|u566|s262|minf46659|majf0|rss0|swap8292388|read0|rchar0
+10|R|u635|s296|minf48777|majf0|rss0|swap10530868|read0|rchar0
+11|R|u704|s329|minf64602|majf0|rss0|swap12974564|read0|rchar0
+=== moteur ===
+  composition 0-3, jeton 3 : |l_out| = 3.3496 · finis : true
+  composition : 8844 ms au total
+  passe complète : 2 couche(s), une seule en mémoire à la fois
+  dense : projections Q8_0 lues EN PLACE (empruntées au fichier, pas déquantifiées) — ×1,12 mesuré sur la passe, top-1 inchangé, corrélations 0,998 contre 0,9998
+  couche  0 :   1291 ms de chargement +   3726 ms de calcul · banque 1 (empilée)
+  co
+… [405 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Indices de colonnes décalés d'un cran dans l'analyse (RSS pris pour l'attente E/S). Je corrige et j'inspecte la fin du relevé.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== dernière ligne détaillée ===\"; tail -1 /tmp/sonde_k3.csv | awk -F, '{for(i=1;i<=11;i++) printf \"  col%d = %s\\n\", i, $i}'; echo \"=== delta lecture sur le run ===\"; python3 -c \"\nl=[x.split(',',11) for x in open('/tmp … [486 caractères tronqués]`
+
+  ```
+=== dernière ligne détaillée ===
+  col1 = 31
+  col2 = R
+  col3 = 2654
+  col4 = 580
+  col5 = 117182
+  col6 = 0
+  col7 = 0
+  col8 = 17332408
+  col9 = 0
+  col10 = 0
+  col11 = 141168027
+=== delta lecture sur le run ===
+échantillons 31
+read_ko  premier 0 dernier 0 -> delta Go 0.0
+rchar_ko premier 4208760 dernier 141168027 -> delta Go 130.61453533172607
+rss_ko   max Go 21.301239013671875
+swap_ko  max Go 0.0
+  ```
+
+### 🤖 Assistant
+
+⏵ **Deux corrections : les colonnes 10–11 sont des OCTETS (`read_bytes`), et RSS/swap étaient décalés. Je réécris l'analyse.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/sonde-passe-k3.sh'; s=open(p).read()\ns = s.replace('echo \"t,etat,utime_cs,stime_cs,minflt,majflt,blkio_cs,rss_ko,swap_ko,read_ko,rchar_ko,disques\" >> \"$J\"',\n              'echo \"t,etat,utime_cs,stime … [2568 caractères tronqués]`
+
+  ```
+analyse corrigée
+bash OK
+python interne OK
+  ```
+
+### 🤖 Assistant
+
+⏵ **Je lance la passe complète (93 couches) en fond et je pose la liste de tâches.**
+
+- **todo_write** `{"todos": [{"content": "Diagnostiquer l'écart froid/chaud de la passe K3 (état D, E/S, CPU, octets)", "status": "in_progress"}, {"content": "Décider du chantier prioritaire à partir du diagnostic", "status": "pending"}, {"content": "Implémenter le regroupement des jetons par expert dans la couche (M … [359 caractères tronqués]`
+
+  ```
+Updated todo list: 5 pending, 1 in progress, 0 completed.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (setsid nohup bash -c 'cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash tools/sonde-passe-k3.sh 93 2 > /tmp/sonde_k3_93.log 2>&1; echo \"FIN\" >> /tmp/sonde_k3_93.log' >/dev/null 2>&1 < /dev/null & disown); sleep 90; echo \ … [262 caractères tronqués]`
+
+  ```
+=== premières mesures ===
+# modèle    : /home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf
+# taille    : 1,4T
+# couches   : 93 · ids 3638,275,1309,3140 · échantillonnage 2s
+=== CSV ===
+86,S,3811,1006,170185,0,0,21662188,0,7608504320,141168632,nvme0n1:16884473:547453009;nvme0n1p1:665:24097;nvme0n1p2:15639
+89,R,3830,1008,171723,0,0,21795556,0,7862571008,141168632,nvme0n1:16884473:547453009;nvme0n1p1:665:24097;nvme0n1p2:15639
+=== moteur ===
+  couche  4 :   1573 ms de chargement +  14684 ms de calcul · banque 1
+  couche  5 :   1959 ms de chargement +  15542 ms de calcul · banque 1
+  couche  6 :   1570 ms de chargement +  16086 ms de calcul · banque 1
+  ```
+
+### 🤖 Assistant
+
+⏵ **Premier signal fort : ~15 s de CALCUL contre 1,6 s de chargement par couche. Je vérifie ce que le moteur appelle « calcul » — les experts sont peut-être lus pendant.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"de chargement\\|de calcul\" drave-core/src/*.rs | head -5; echo \"=== mesure du temps dans kimi_k3 ===\"; grep -n \"Instant::now()\\|elapsed()\" drave-core/src/kimi_k3.rs | head -20", "description": "Inspect engine timing  … [17 caractères tronqués]`
+
+  ```
+drave-core/src/gpu.rs:186:    /// l'affichage peut refuser les allocations de calcul.
+drave-core/src/kimi_k3.rs:1705:            eprintln!("  couche {l:>2} : {:>6} ms de chargement + {:>6} ms de calcul · banque {}{}",
+drave-core/src/main.rs:518:/// Fils de calcul d'un mode SECONDAIRE : `--threads` s'il est donné, sinon la
+drave-core/src/main.rs:3164:    // distantes : **97,6 ms** d'attente contre 15,6 ms de calcul local — six fois
+drave-core/src/model.rs:1698:    /// plutôt que de calculer faux en silence.
+=== mesure du temps dans kimi_k3 ===
+1619:        let t0 = std::time::Instant::now();
+1624:        let t1 = std::time::Instant::now();
+1657:                let ta = std::time::Instant::now();
+1662:                t_attn += ta.elapsed().as_secs_f64();
+1687:        let tf = std::time::Instant::now();
+1696:        t_ffn += tf.elapsed().as_secs_f64();
+1703:        t_calcul += (std::time::Instant::now() - t1).as_secs_f64();
+1706:                      (t1 - t0).as_millis(), (std::time::Instant::now() - t1).as_millis(),
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le « calcul » inclut la lecture des experts — c'est l'état D qui tranche. Je regarde les échantillons.**
+
+- **bash** `{"command": "sleep 120; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nl=[x.strip().split(',',11) for x in open('/tmp/sonde_k3.csv') if x.strip() and not x.startswith(('t,','#'))]\nimport collections\ne=collections.Counter(x[1] for x in l)\nprint('échantillons', len(l), dict(e) … [434 caractères tronqués]`
+
+  ```
+échantillons 115 {'R': 30, 'D': 22, 'S': 63}
+read_bytes    24.309993743896484 Go
+rchar         0.12755460944026709 Go
+rss max       31.15201187133789 Go
+durée         230 s
+cpu (u+s)     69.57 s
+=== moteur ===
+  couche 12 :   2176 ms de chargement +  19603 ms de calcul · banque 2 (empilée)
+  couche 13 :   2375 ms de chargement +  20472 ms de calcul · banque 2
+  ```
+
+### 🤖 Assistant
+
+⏵ **55 % en état S : je ne mesure que le fil principal. Je lance un second observateur qui agrège TOUS les fils.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/sonde_fils.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"Agrège l'état et le temps CPU de TOUS les fils d'un processus.\n\n/proc/PID/stat ne décrit que le fil PRINCIPAL. Sur un moteur parallélisé, il\npeut dormir (S) pendant qu … [1558 caractères tronqués]`
+
+  ```
+pid drave = 2954089
+observateur de fils lancé
+t,threads,cpu_s,R,D,S,autre
+0.0,11,61.30,0,10,1,0
+2.0,7,61.24,0,6,1,0
+  ```
+
+### 🤖 Assistant
+
+⏵ **Les fils sont massivement en état D (10 sur 11) — c'est bien de l'attente E/S. Je lis le bloc FFN pour préparer le chantier suivant.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1660,1712p' drave-core/src/kimi_k3.rs", "description": "Read the K3 FFN block"}`
+
+  ```
+let attn = if let Some(k) = kda.as_mut() { k.avant(&xn)? }
+                           else { mla.as_mut().unwrap().avant(&xn, &xn, pos0 + i)? };
+                t_attn += ta.elapsed().as_secs_f64();
+                prefix = if banque { vec![0f32; h] } else { x.clone() };
+                for j in 0..h { prefix[j] += attn[j]; }
+                let mut plat = Vec::with_capacity(pile.len() * h);
+                for ck in pile.iter() { plat.extend_from_slice(&ck[i]); }
+                crate::model::res_mix(&plat, pile.len(), h, &prefix,
+                                      &normes.ffn_score, eps, &mut cur2);
+            }
+            let mut xn2 = vec![0f32; h];
+            {
+                let n2 = match &c {
+                    CoucheK3::Dense { normes, .. } => &normes.ffn,
+                    CoucheK3::Moe { normes, .. } => &normes.ffn,
+                };
+                rms_norm_poids(&cur2, n2, eps, &mut xn2);
+            }
+            // ---- l'attention est SÉQUENTIELLE (KDA et MLA portent un état
+            // d'un jeton au suivant), mais la FFN ne l'est pas : on garde le
+            // flux et l'entrée normalisée, et le lot part d'un bloc plus bas.
+            prefixes.push(
+… [1458 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Découverte : le regroupement par expert EXISTE déjà (`avant_lot`). Je vérifie son effectivité et je mesure le débit de lecture réel.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fn avant_lot\" -A 40 drave-core/src/kimi_k3.rs | head -55", "description": "Inspect MoeK3 batch FFN implementation"}`
+
+  ```
+787:    pub fn avant_lot(&self, curs: &[Vec<f32>]) -> Result<Vec<Vec<f32>>, String> {
+788-        let t = curs.len();
+789-        if t == 0 { return Ok(Vec::new()); }
+790-        let (h, latent, n_exp, k) = (self.h, self.latent, self.n_exp, self.k);
+791-        for cur in curs {
+792-            if cur.len() != h { return Err(format!("entrée de {} au lieu de {h}", cur.len())); }
+793-        }
+794-        // ---- 1 & 2. routeur de chaque jeton, puis GROUPES par expert
+795-        let mut rin: Vec<Vec<f32>> = Vec::with_capacity(t);
+796-        let mut poids_par_jeton: Vec<Vec<f32>> = Vec::with_capacity(t);
+797-        let mut groupes: Vec<Vec<(usize, f32)>> = vec![Vec::new(); n_exp];
+798-        for (i, cur) in curs.iter().enumerate() {
+799-            let mut logits = vec![0f32; n_exp];
+800-            mv(&self.gate_inp, n_exp, h, cur, &mut logits);
+801-            let probs: Vec<f32> = logits.iter().map(|v| 1.0 / (1.0 + (-v).exp())).collect();
+802-            let mut choix: Vec<usize> = (0..n_exp).collect();
+803-            choix.sort_by(|&a, &b| {
+804-                let (pa, pb) = (probs[a] + self.biais[a], probs[b] + self.biais[b]);
+805-                pb.partial_cmp(&pa).unwrap_
+… [1306 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le regroupement par expert est déjà fait (la feuille de route est périmée sur ce point). Je lis comment les experts sont LUS.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '827,880p' drave-core/src/kimi_k3.rs", "description": "Read expert reading code"}`
+
+  ```
+// ---- 3. un expert lu UNE fois, appliqué à tous ses jetons
+        // Chaque fil a SES tampons : rien n'est partagé en écriture, seule la
+        // lecture de `rin` l'est.
+        let mut acc: Vec<Vec<f32>> = vec![vec![0f32; latent]; t];
+        // **PRÉLECTURE DE TOUTE L'UNION, AVANT LE PREMIER CALCUL.** Le routeur a
+        // parlé : on connaît les experts du lot avant d'en calculer un seul. Les
+        // demander d'un coup laisse le noyau lancer ses lectures de pages EN
+        // PARALLÈLE au lieu de les subir une par une — mesuré ailleurs dans ce
+        // dépôt, le NVMe passe de 5,4 à 31 Go/s quand les lectures se
+        // recouvrent. C'est aussi le test direct de l'hypothèse de DISPERSION :
+        // si le temps vient des déplacements du disque, recouvrir les demandes
+        // doit se voir tout de suite. `DRAVE_PRELIRE=0` l'éteint.
+        // **ELLE EST ÉTEINTE PAR DÉFAUT, ET ELLE DOIT L'ÊTRE.** Mesurée sur 32
+        // couches : 6 min 57 s avec, 2 min 34 s sans — **×0,37**, et 8,5 fois
+        // plus d'octets lus (97,8 M de blocs contre 11,5 M). Demander d'un coup
+        // les pages de cinquante experts fait travailler le noyau pour rien et
+        // chasse 
+… [2323 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le modèle est mmap : les lectures viennent des défauts de page. La question décisive est le taux d'occupation du NVMe — je le calcule depuis le relevé.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nl=[x.strip().split(',',11) for x in open('/tmp/sonde_k3.csv') if x.strip() and not x.startswith(('t,','#'))]\ndef dis(i):\n    d={}\n    for e in l[i][11].split(';'):\n        if e:\n            p=e.split(':')\n        … [1147 caractères tronqués]`
+
+  ```
+durée 341 s · CPU 83 s
+read_bytes 35.71 Go -> 107 Mo/s
+  nvme0n1      occupé       4 s ( 1.1%) · pondéré       10 s
+  nvme0n1p2    occupé       2 s ( 0.6%) · pondéré       10 s
+  sda          occupé     281 s (82.5%) · pondéré     4800 s
+  sda2         occupé     281 s (82.5%) · pondéré     4800 s
+  dm-0         occupé      35 s (10.2%) · pondéré       86 s
+  dm-1         occupé     282 s (82.7%) · pondéré     4246 s
+=== fils ===
+échantillons 50
+fils moyens 10.0
+=== moteur ===
+  couche 16 :   2482 ms de chargement +  20354 ms de calcul · banque 2
+  couche 17 :   2817 ms de chargement +  22938 ms de calcul · banque 2
+[stderr]
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print('R moyen', round(st.mean(int(x[2]) for x in l),2))
+                           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib64/python3.13/statistics.py", line 488, in mean
+    T, total, n = _sum(data)
+                  ~~~~^^^^^^
+  File "/usr/lib64/python3.13/statistics.py", line 195, in _sum
+    for typ, values in groupby(data, type):
+                       ~~~~~~~^^^^^^^^^^^^
+  File "<string>", line 6, in <genexpr>
+    print('R moyen', round(st.mean(int(x[2]) for x in l),2))
+ 
+… [103 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Trouvé, et c'est décisif : le modèle est sur `sda` (disque dur) à 82 % d'occupation, 107 Mo/s — le NVMe est à 1 %. La passe est entièrement liée au disque.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nl=[x.strip().split(',') for x in open('/tmp/sonde_fils.csv') if x.strip() and not x.startswith('t,')]\nn=len(l); m=lambda i: sum(float(x[i]) for x in l)/n\nprint(f'fils : {m(1):.1f} · R {m(2):.1f} · D {m(3):.1f} · S {m … [622 caractères tronqués]`
+
+  ```
+fils : 10.1 · R 67.6 · D 0.1 · S 9.3 · autre 0.7
+CPU cumulé 74 s sur 114 s -> 0.65 cœur
+=== avancement ===
+19
+  couche 18 :   1984 ms de chargement +  21478 ms de calcul · banque 2
+=== disque : quel est sda ? ===
+sda              10,9T    1 disk 
+├─sda1              8M    1 part 
+└─sda2           10,9T    1 part 
+nvme0n1         931,5G    0 disk 
+├─nvme0n1p1         2G    0 part /boot/efi
+├─nvme0n1p2       828G    0 part /var/lib/docker
+└─nvme0n1p3         1G    0 part
+  ```
+
+### 🤖 Assistant
+
+⏵ **Contradiction à lever : fils en état R mais 0,24 cœur consommé. Je regarde la série brute.**
+
+- **bash** `{"command": "head -1 /tmp/sonde_fils.csv; echo \"--- 20 premiers ---\"; sed -n '2,21p' /tmp/sonde_fils.csv; echo \"--- 10 derniers ---\"; tail -10 /tmp/sonde_fils.csv", "description": "Inspect thread state series"}`
+
+  ```
+t,threads,cpu_s,R,D,S,autre
+--- 20 premiers ---
+0.0,11,61.30,0,10,1,0
+2.0,7,61.24,0,6,1,0
+4.0,2,61.11,0,1,1,0
+6.0,1,62.01,0,1,0,0
+8.0,1,62.57,0,1,0,0
+10.0,17,63.92,1,15,1,0
+12.0,17,63.98,0,16,1,0
+14.0,17,64.04,0,16,1,0
+16.0,17,64.08,0,16,1,0
+18.0,16,64.09,0,15,1,0
+20.0,16,64.13,0,15,1,0
+22.0,15,64.19,0,14,1,0
+24.0,13,64.24,0,12,1,0
+26.0,9,64.15,0,8,1,0
+28.0,1,64.33,1,0,0,0
+30.0,1,64.79,0,1,0,0
+32.0,1,65.04,0,1,0,0
+34.0,1,65.19,0,1,0,0
+36.0,17,66.04,0,16,1,0
+38.0,17,66.12,0,16,1,0
+--- 10 derniers ---
+112.1,16,74.33,0,15,1,0
+114.1,15,74.48,0,14,1,0
+116.1,14,74.51,0,13,1,0
+118.1,10,74.45,1,8,1,0
+120.1,6,74.29,0,5,1,0
+122.1,1,74.68,0,1,0,0
+124.1,1,75.10,0,1,0,0
+126.1,1,75.28,0,1,0,0
+128.1,17,76.10,0,16,1,0
+130.1,17,76.16,0,16,1,0
+  ```
+
+### 🤖 Assistant
+
+⏵ **Verdict net : 15–17 fils en état D pendant ~16 s par couche, CPU quasi nul. La passe est bloquée sur le disque dur. Je vérifie si K3 sait déjà se répartir.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"couches\\b\\|plage\\|DRAVE_K3_COUCHES\" drave-core/src/main.rs | sed -n '1,30p'; echo \"=== le mode K3 connaît-il --couches ? ===\"; sed -n '1995,2035p' drave-core/src/main.rs", "description": "Check if K3 pass supports lay … [11 caractères tronqués]`
+
+  ```
+185:    println!("architecture : {arch} · {n_layer} couches · hidden {hidden} · intermédiaire {inter}");
+423:/// **Sonde de plage** (`--tete-partielle`) : appliquer la tête de sortie à la
+424:/// fin d'une plage `--couches a:b`. Par défaut une plage partielle rend le flux
+426:/// jamais le jour : impossible de comparer des LOGITS par plage, et impossible
+427:/// de vérifier une réduction finale dont les couches suivantes ne tournent pas
+431:    eprintln!("[plage] `--tete-partielle` : la tête de sortie est appliquée à la fin de la \
+432:plage — le résultat est celui d'un modèle TRONQUÉ, pas du modèle entier");
+453:    println!("[options] couches {}..{} · flux brut {} · trace {} · rejeu {}",
+456:    // `--tete-partielle` CHANGE ce que rend une plage : le dire ici, sinon un
+460:        println!("[options] plage : la TÊTE DE SORTIE est appliquée à la fin de la plage \
+553:    /// Phase 3 : nœud MOTEUR qui écoute et applique sa plage de couches.
+571:    /// Nombre de couches gardées en local par le pilote.
+573:    /// Exécution **bornée** `a:b` — le harnais qui exécute les couches dont les
+576:    couches: Option<(usize, usize)>,
+578:    trace_couches: Vec<usize>,
+616:    /// **Sonde de
+… [3675 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le moteur tourne au débit du disque : 46 Go/token à 107 Mo/s = 430 s/token, soit exactement le temps mesuré. J'attends la fin de la passe.**
+
+- **bash** `{"command": "sleep 480; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"couches faites : $(grep -c 'de chargement' /tmp/sonde_k3_moteur.log)/93\"; tail -1 /tmp/sonde_k3_moteur.log; echo \"--- disque ---\"; python3 -c \"\nl=[x.strip().split(',',11) for x in open('/tmp/sonde_k3.csv') if x … [644 caractères tronqués]`
+
+  ```
+couches faites : 53/93
+  couche 52 :   1690 ms de chargement +  14737 ms de calcul · banque 5
+--- disque ---
+durée 887 s · read 114.85 Go -> 133 Mo/s
+  sda        occupé    763 s (86.0%)
+  dm-1       occupé    763 s (86.0%)
+  nvme0n1    occupé      7 s ( 0.7%)
+  ```
+
+### 🤖 Assistant
+
+⏵ **53/93 couches, `sda` à 86 % d'occupation, 133 Mo/s. La projection donne 1 555 s — soit exactement la passe annoncée. J'attends la fin.**
+
+- **bash** `{"command": "sleep 540; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -22 /tmp/sonde_k3_93.log", "description": "Collect final diagnostic results", "timeoutMs": 600000}`
+
+  ```
+# modèle    : /home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf
+# taille    : 1,4T
+# couches   : 93 · ids 3638,275,1309,3140 · échantillonnage 2s
+  ```
+
+### 🤖 Assistant
+
+⏵ **La passe finit dans quelques minutes ; j'attends le bilan.**
+
+- **bash** `{"command": "sleep 480; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"couches : $(grep -c 'de chargement' /tmp/sonde_k3_moteur.log)/93\"; tail -3 /tmp/sonde_k3_moteur.log; echo; tail -35 /tmp/sonde_k3_93.log", "description": "Wait for pass completion", "timeoutMs": 540000}`
+
+  ```
+couches : 93/93
+  passe 0-92, jeton 2 : |l_out| = 79.2901 · finis : true
+  passe 0-92, jeton 3 : |l_out| = 86.2430 · finis : true
+  passe complète : 1562009 ms au total
+
+# modèle    : /home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf
+# taille    : 1,4T
+# couches   : 93 · ids 3638,275,1309,3140 · échantillonnage 2s
+# passe terminée en 1587 s (code 0)
+
+# durée de la passe                         1587 s
+# CPU travaillé (utime+stime)                333 s   (21.0%)
+# échantillons en état D (E/S)               141   (18.0% du temps)
+# échantillons en état R (travail)           124   (15.8%)
+# échantillons en état S (sommeil)           520   (66.2%)
+# octets lus (bloc)                       206.58 Go
+# octets demandés (rchar)                   0.13 Go
+# défauts de page majeurs                      0
+# RSS max                                  66.41 Go
+# swap max                                  0.00 Go
+# disque le plus sollicité                  dm-1
+#    occupé                                 1390 s   (87.6%)
+#    occupé, pondéré par les files         22033 s   (1388.3%)
+# couples (couche, jeton)                    372
+# secondes par c
+… [572 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Diagnostic complet et sans ambiguïté : 206,58 Go lus à 130 Mo/s = 1 589 s, exactement les 1 587 s mesurées. Le disque dur est le seul mur.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/sonde-passe-k3.sh'; s=open(p).read()\n# `tot` servait deux fois : une fois pour le nombre d'échantillons (int), une\n# fois pour la liste des durées trouvées dans la sortie moteur. La seconde\n# écrasait la … [3428 caractères tronqués]`
+
+  ```
+corrigé
+python interne OK
+5
+  ```
+
+### 🤖 Assistant
+
+⏵ **J'écris le rapport du diagnostic, avec les prédictions chiffrées avant les mesures.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-passe-k3-disque.md <<'RAPPORT_EOF'\n# Où passe le temps d'une passe Kimi-K3 : le disque, et rien d'autre\n\n> Mesuré le 07/10. Répond à la question laissée ouverte par `REPRISE.md`, qui\n> demandait explicitemen … [8823 caractères tronqués]`

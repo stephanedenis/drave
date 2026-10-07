@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 215.3 h |
+| Durée | 218.1 h |
 | Tours | 204 |
-| Messages | 9431 |
-| Appels d'outils | 8856 |
-| Fichiers touchés | 219 |
-| Commandes | 7528 |
+| Messages | 9482 |
+| Appels d'outils | 8907 |
+| Fichiers touchés | 220 |
+| Commandes | 7573 |
 | Sous-agents | 32 |
-| Commits | 694 |
+| Commits | 695 |
 | Compactages de contexte | 13 |
 
 ## Objectifs déclarés
@@ -53,6 +53,8 @@
 … [532 caractères tronqués]
 - **complete** — Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes incha
 … [532 caractères tronqués]
+- **create** — Faire de Drave l'instrument d'observation et de répartition des gros modèles, en gardant les deux mesures côte à côte (fidélité comme thermomètre interne, tâche + coût comme juge). Trois chantiers, dans cet ordre : (1) diagnostiquer puis fermer l'écart froid/chaud de la passe complète Kimi-K3 — 2,95
+… [556 caractères tronqués]
 
 ## 1. Ce qui a été demandé
 
@@ -10453,7 +10455,7 @@ Chacun remplace une devinette que j'ai faite sans lui.
 
 ### Tour 204 — bien. vas-y dans l'ordre de ton choix.
 
-*146 appels d'outils.* Actions notables :
+*197 appels d'outils.* Actions notables :
 
 - bash — Launch layer 0-8 tracing for 50 articles
 - bash — Launch the 50-draw distribution
@@ -10469,11 +10471,11 @@ Chacun remplace une devinette que j'ai faite sans lui.
 - bash — Test the layer profile on partial traces
 - bash — Single-pass reader and test
 - bash — Inspect the actual trace format
-- … et 127 autres
+- … et 178 autres
 
 **Synthèse produite :**
 
-⏵ **J'écris §95 (portée du contexte), puis je réponds au recul demandé.**
+⏵ **J'écris le rapport du diagnostic, avec les prédictions chiffrées avant les mesures.**
 
 ## 3. Travail accompli
 
@@ -10700,6 +10702,7 @@ Chacun remplace une devinette que j'ai faite sans lui.
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/localite_couches.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/energie_du_contenu.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/stabilite_directions.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/sonde-passe-k3.sh` | 3 | 0 |
 
 ### Sous-agents lancés
 
@@ -10778,7 +10781,7 @@ Chacun remplace une devinette que j'ai faite sans lui.
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 7488 autres
+- … et 7533 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10906,7 +10909,7 @@ Chacun remplace une devinette que j'ai faite sans lui.
 
 ## 5. Erreurs rencontrées
 
-397 sorties en erreur ou divergentes. Les premières :
+399 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -11620,4 +11623,5 @@ Chacun remplace une devinette que j'ai faite sans lui.
 - §94 : rang 1, 2 ou 3 — le meilleur rang n'est pas celui du meilleur chiffre  Le §93.4 faisait une hypothèse explicite : le premier axe est stable, le second non
 - localite_couches : le témoin « jeton courant » était décalé de d positions  Dans le bloc de portée, le témoin était accumulé comme somme de E(k)ᵀ Y(k+d) — c'est
 - §95 : la portée du contexte — le voisin immédiat porte presque tout  Modèle {jeton courant, jeton à la distance d}, d = 1, 2, 4, 8, 16, 32, sur les mêmes 300 tr
+- Où passe le temps d'une passe Kimi-K3 : le disque dur, et rien d'autre  Répond à la question que REPRISE.md demandait de trancher en premier. La réponse est exa
 
