@@ -116,15 +116,17 @@ def main():
           f"{len(vus)} contenus")
 
     # Grammaires accumulées : on ne matérialise JAMAIS la matrice des features.
+    #
+    # `G = XᵀX` NE DÉPEND PAS DE LA COUCHE. La première version le recalculait une
+    # fois par couche — cinq fois le même produit, soit 30 s par trace au lieu de 7.
+    # Sur 300 traces : 2 h 30 au lieu de 35 min. Le BLAS disponible ici fait 6 GFLOPS
+    # mono-thread (vérifié : `OPENBLAS_NUM_THREADS=16` ne change rien), donc chaque
+    # produit 4480×900×4480 coûte 6 s — ce n'est pas un coût qu'on peut gaspiller.
     nf = 896*(K+1)
-    dims = {c: 896 for c in cs}
-    G = {c: np.zeros((nf, nf)) for c in cs}
+    G = np.zeros((nf, nf))
+    G0 = np.zeros((896, 896))
     D = {c: np.zeros((nf, 896)) for c in cs}
-    G0 = {c: np.zeros((896, 896)) for c in cs}
     D0 = {c: np.zeros((896, 896)) for c in cs}
-    # SST (variance totale de la cible) accumulée DANS LA MÊME PASSE. La calculer
-    # après coup demandait de relire toutes les traces une fois PAR COUCHE — un coût
-    # qui n'apparaissait nulle part dans le résultat.
     somme = {c: np.zeros(896) for c in cs}
     carre = {c: 0.0 for c in cs}
     ntot = 0
@@ -138,16 +140,17 @@ def main():
         # fenêtre : les K positions précédentes, puis la position courante
         X = np.hstack([np.roll(E, k, axis=0) for k in range(K, -1, -1)])
         X = X[K:]
+        Xc = X[:, 896*K:]
+        G += X.T @ X
+        G0 += Xc.T @ Xc
         for c in cs:
             Y = r[c][K:]
-            G[c] += X.T @ X
             D[c] += X.T @ Y
-            G0[c] += X[:, 896*K:].T @ X[:, 896*K:]
-            D0[c] += X[:, 896*K:].T @ Y
+            D0[c] += Xc.T @ Y
             somme[c] += Y.sum(0)
             carre[c] += float((Y*Y).sum())
         ntot += len(X)
-    print(f"# {ntot} positions appariées")
+    print(f"# {ntot} positions appariées", flush=True)
 
     print(f"\n# {'couche':>7}{'R²(0)':>10}{'R²(fenêtre)':>13}{'gain':>9}"
           f"{'gain relatif':>14}")
@@ -155,11 +158,25 @@ def main():
         # R² global = 1 − SSE/SST. SSE = trace(Wᵀ D) ; SST = Σy² − n·‖μ‖².
         mu = somme[c]/ntot
         sst = carre[c] - ntot*float((mu*mu).sum())
-        r2 = {}
-        for nom, g, dd in (("0", G0[c], D0[c]), (f"{K}", G[c], D[c])):
+        # SSE, ET NON « trace(WᵀD) ». La première version prenait `trace(WᵀD)` — qui
+        # est la partie EXPLIQUÉE, pas l'erreur — pour la somme des carrés résiduels.
+        # Le symptôme était des R² NÉGATIFS qui empiraient avec la taille de la
+        # fenêtre : un modèle plus grand semblait faire moins bien, ce qui est
+        # impossible à pénalité égale (le grand modèle contient le petit). La bonne
+        # identité est   SSE = ‖Y‖² − 2·tr(WᵀD) + tr(WᵀGW).
+        r2, sse = {}, {}
+        for nom, g, dd in (("0", G0, D0[c]), (f"{K}", G, D[c])):
             W = np.linalg.solve(g + ride*ntot*np.eye(g.shape[0]), dd)
-            r2[nom] = 1.0 - float(np.trace(W.T @ dd))/sst
+            e = carre[c] - 2.0*float(np.trace(W.T @ dd)) + float(np.trace(W.T @ (g @ W)))
+            sse[nom] = e
+            r2[nom] = 1.0 - e/sst
         r2_0, r2_k = r2["0"], r2[f"{K}"]
+        # CONTRÔLE : à pénalité égale, le modèle à fenêtre CONTIENT le modèle local
+        # (il suffit d'annuler les blocs décalés), donc sa SSE doit être ≤. Si ce
+        # n'est pas le cas, c'est la mesure qui est fausse, pas le professeur.
+        assert sse[f"{K}"] <= sse["0"] + 1e-6*max(1.0, sse["0"]), (
+            f"couche {c} : SSE(fenetre) {sse[f'{K}']:.1f} > SSE(jeton) {sse['0']:.1f}"
+            " - mesure incoherente")
         gain = r2_k - r2_0
         print(f" {c:>7}{r2_0:>10.4f}{r2_k:>13.4f}{gain:>9.4f}"
               f"{(gain/max(1e-12, 1-r2_0)):>13.1%}")

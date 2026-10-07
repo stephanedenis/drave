@@ -155956,3 +155956,79 @@ syntaxe OK
 ⏵ **Mesure faite : ×5,40 → P_cont exactement 100 %, P_lang 73 %, rapport inchangé. Le §87.3 est faux ; j'écris la correction.**
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> reports/rapport-toutes-langues.md <<'MARKDOWN'\n\n---\n\n## 88. CORRECTION DU §87.3 : l'écart d'énergie n'est pas un défaut, c'est une échelle\n\n### 88.1 Ce que j'avais écrit, et pourquoi c'est faux\n\nLe §87.3 concluait, en  … [6734 caractères tronqués]`
+
+  ```
+9d47dcc §88 : correction du §87.3 — l'écart d'énergie est une ÉCHELLE, et centrer la cible est un gain gratuit
+  ```
+
+### 🤖 Assistant
+
+⏵ **Je lance la réplication de la variante B à 482 articles et je vérifie la localité.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/replique_B.sh <<'EOF'\n#!/bin/bash\nset -u\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nJ=/tmp/replique_B.log\n: > \"$J\"\necho \"##### RÉPLICATION DE LA VARIANTE B — 482 articles, de/en/fr appris, es/it/pt testé\" … [645 caractères tronqués]`
+
+  ```
+localité pid=2866727
+cpu (s): 1774.83
+rss: 0.340012 Go
+##### LOCALITÉ — 50 articles × 6 langues, fenêtre 2 (3 jetons), couches 1,2,3,5,8
+# 300 traces · fenêtre 2 · ride 1.0 · 50 contenus
+  ```
+
+### 🤖 Assistant
+
+⏵ **Les deux tournent ; j'attends leurs résultats.**
+
+- **bash** `{"command": "sleep 300; echo \"--- localité ---\"; tail -14 /tmp/localite_v3.log; echo; echo \"--- réplication B ---\"; tail -14 /tmp/replique_B.log 2>/dev/null", "description": "Check locality and replication", "timeoutMs": 360000}`
+
+  ```
+--- localité ---
+##### LOCALITÉ — 50 articles × 6 langues, fenêtre 2 (3 jetons), couches 1,2,3,5,8
+# 300 traces · fenêtre 2 · ride 1.0 · 50 contenus
+# 164775 positions appariées
+
+#  couche     R²(0)  R²(fenêtre)     gain  gain relatif
+       1    0.6051       0.6436   0.0385         9.8%
+       2    0.5059       0.5667   0.0608        12.3%
+       3    0.4139       0.5224   0.1085        18.5%
+
+--- réplication B ---
+##### RÉPLICATION DE LA VARIANTE B — 482 articles, de/en/fr appris, es/it/pt testé
+# 1446 entrées d'apprentissage · 1446 de test · 896 canaux · 120 neurones
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le gain de contexte croît avec la profondeur (9,8 % → 18,5 %) ; j'attends les couches 5 et 8.**
+
+- **bash** `{"command": "sleep 270; echo \"--- localité ---\"; tail -16 /tmp/localite_v3.log; echo; echo \"--- réplication B ---\"; tail -14 /tmp/replique_B.log 2>/dev/null", "description": "Wait for remaining layers", "timeoutMs": 330000}`
+
+  ```
+--- localité ---
+# 164775 positions appariées
+
+#  couche     R²(0)  R²(fenêtre)     gain  gain relatif
+       1    0.6051       0.6436   0.0385         9.8%
+       2    0.5059       0.5667   0.0608        12.3%
+       3    0.4139       0.5224   0.1085        18.5%
+       5    0.2733       0.3604   0.0870        12.0%
+       8    0.2424       0.3313   0.0888        11.7%
+
+# R²(0) : le JETON COURANT seul (lecture linéaire de la couche 0).
+# gain : ce qu'une fenêtre de 3 jetons ajoute — donc ce que le CONTEXTE
+# apporte à une lecture LINÉAIRE. « gain relatif » : la part de ce que le
+# jeton seul laissait inexpliqué et que le contexte récupère.
+# RÉSERVE : mesure LINÉAIRE. Un gain faible ne prouve pas la localité — il
+# prouve qu'aucune lecture linéaire n'en tire profit.
+=== fin ===
+
+--- réplication B ---
+##### RÉPLICATION DE LA VARIANTE B — 482 articles, de/en/fr appris, es/it/pt testé
+# 1446 entrées d'apprentissage · 1446 de test · 896 canaux · 120 neurones
+  ```
+
+### 🤖 Assistant
+
+⏵ **Localité mesurée sur 164 775 positions. J'écris la section.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> reports/rapport-toutes-langues.md <<'MARKDOWN'\n\n---\n\n## 89. LOCALITÉ : la couche 8 doit 24 % au jeton, 33 % à trois jetons, et 67 % à autre chose\n\n### 89.1 La question, et elle décide d'une architecture\n\nNotre pont est … [5751 caractères tronqués]`
