@@ -150794,3 +150794,162 @@ lancé
 | 2 | 12,0 | **0,2385** | 625,8 | 4 356 | ✗ P_lang > 399 |
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 69. Le discriminant fonctionne — et la frontière est maintenant tracée\n\n### 69.1 L'outil qui vise le rapport par les directions\ … [7164 caractères tronqués]`
+
+  ```
+3b50b1a Le discriminant fonctionne : rapport 6,96 (64 % de la cible) — et la frontière est tracée
+  ```
+
+### 🤖 Assistant
+
+⏵ **Round 60 — la question ouverte au §57 a une réponse complète, et la frontière est tracée.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"articles wiki : $(grep -c '^ARTICLE' /tmp/trace_wiki_apparie.log) / 482\"; awk '{if($2 ~ /s$/) {gsub(\"s\",\"\",$2); s+=$2; n++}} END {printf \"  %d traces · %.1f s · reste ~%.1f h\\n\", n, s/n, (2892-n)*s/n/3600}' /tmp/trace_ … [175 caractères tronqués]`
+
+  ```
+articles wiki : 288 / 482
+  1595 traces · 20.4 s · reste ~7.3 h
+--- volume du rapport ---
+3987 reports/rapport-toutes-langues.md
+3b50b1a Le discriminant fonctionne : rapport 6,96 (64 % de la cible) — et la frontière est tracée
+7c3413d Le rapport est INVARIANT D'ÉCHELLE (identité), et imposer la covariance de la cible échoue
+09291d7 Deux leviers DÉPLOYABLES qui se combinent : le rapport passe de 1,46 à 3,06
+1f6dc82 Bug de découpage dans MES outils : l'ajustement ne portait que sur DEUX langues
+33d4018 Le centrage de l'entrée : premier levier de la série à la fois efficace ET déployable
+7414653 Cinquième remède écarté : le sous-espace du contenu appris ne se TRANSFÈRE pas
+120d50c Le remède est trouvé mais n'est pas déployable — et un piège de méthode
+09b0218 Le défaut est LOCALISÉ et QUANTIFIÉ : notre sortie porte 12x moins d'énergie de CONTENU
+23:39
+  ```
+
+### 🤖 Assistant
+
+⏵ **Round 60 — la question ouverte au §57 a une réponse complète.**
+
+## L'outil qui vise la bonne quantité
+
+Après le §67 (aucune amplitude ne peut corriger le rapport — c'est une identité) et le §68 (la covariance totale ne le détermine pas), restait l'outil qui maximise **directement** le rapport entre énergie de contenu et énergie de langue, calculé sur les **moyennes par entrée** de l'apprentissage — l'analyse discriminante linéaire :
+
+```
+C_cont · v = λ · C_lang · v
+```
+
+Valeurs propres : **6286,5 · 1651,2 · 931,8 · 804,5 · 674,6 · 575,6 · 545,6 · 480,9** — structure fortement hiérarchisée.
+
+**Linéaire, forme fermée, sans rétropropagation, déployable** : le projecteur est une matrice fixe apprise une fois.
+
+## Le meilleur rapport de toute la série
+
+| rang | fid TEST | P_lang | P_cont | **RAPPORT** |
+|---:|---:|---:|---:|---:|
+| 0 | 0,4703 | 42,4 | 82,1 | 1,934 |
+| **2** | 0,4341 | 4,3 | 30,2 | **6,961** |
+| 40 | 0,4620 | 23,0 | 64,4 | 2,800 |
+| | | | **professeur 4 356** | **professeur 10,912** |
+
+**6,961 — plus du double du meilleur précédent (3,064), et 64 % de la cible.** Et les directions apprises **se transfèrent** aux langues inconnues.
+
+## Mais la frontière est tracée
+
+Le rapport est élevé **par les deux côtés à la fois** : `P_cont` = 30 contre 4 356. Comme le rapport est invariant d'échelle, on peut amplifier sans le changer — à quel coût ?
+
+| rang | α | fid TEST | P_lang | P_cont | critère |
+|---:|---:|---:|---:|---:|---|
+| **20** | **4,2** | **0,3536** | **300,7** | **1 000** | **✓** |
+| 2 | 12,0 | **0,2385** | 625,8 | 4 356 | ✗ |
+
+**Pour atteindre la magnitude du professeur, la fidélité tombe à 0,24-0,27** (de 0,47). Le meilleur compromis coûte **0,117**.
+
+## La réponse, en quatre lignes
+
+| question | réponse |
+|---|---|
+| La structure contenu/langue est-elle **accessible** ? | **oui, en partie** — 64 % du rapport |
+| Par une transformation **linéaire et déployable** ? | **oui** — matrice fixe, sans rétropropagation |
+| **Sans payer** ? | **non** — 0,117 pour `P_cont` = 1 000, 0,23 pour la magnitude complète |
+| Le **ratio** du professeur est-il atteignable ? | **non par cette voie** — 6,96 est le maximum obtenu |
+
+## Et la conclusion qui n'est plus une conjecture
+
+Puisque **toutes** les transformations linéaires buttent sur la même frontière — **neuf moyens essayés, sept écartés, deux retenus qui donnent 3,06, le discriminant qui monte à 6,96 en payant 0,12 à 0,23** — **le facteur limitant n'est plus l'objectif ni la lecture : ce sont les caractéristiques.**
+
+Le §58 (atteinte par un objectif non convexe et instable) et le §69 (64 % par une voie convexe qui coûte cher) désignent la même conclusion : les états du réservoir **contiennent** la structure, mais **mêlée à la langue** d'une façon qu'aucune transformation linéaire ne démêle sans perdre le contenu.
+
+**La prochaine étape n'est pas un dixième objectif : c'est une caractéristique différente** — un état dont la structure de langue soit séparable **par construction**.
+
+## État
+
+| chaîne | avancement |
+|---|---|
+| **Wikipedia apparié** | **288 / 482 articles** · 1 595 traces · reste **~7,3 h** |
+| **Croissance μ = 0,1** | terminée (§56) |
+| **Crime** | 4/24 segments, conservés |
+
+Le rapport fait maintenant **3 987 lignes** ; les huit derniers commits sont tous issus de cette traque, et chacun corrige ou referme une piste par une mesure.
+
+
+## Tour 188
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de représentation universelle), boîte noire (on ne lit du professeur que la couche à émuler, jamais sa tête ni ses jetons générés), aucune rétropropagation (A et B aléatoires et gelés, seule la lecture s'ajuste en forme fermée), et chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, TAILLE du réseau, avec le diagnostic oracle sur les deux panneaux (test hors vivier et validation du même vivier)."
+Round: 61/256
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ **Avant de concevoir une caractéristique nouvelle, localiser D'OÙ vient l'axe de langue : de l'entrée du professeur, de la dynamique du réservoir, ou de la lecture ?**
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"ou_entre_la_langue.py — d'où vient l'axe de langue : entrée, réservoir, ou lecture ?\n\nLA CONCLUSION DU §69, ET CE QU'ELLE EXIGE. Neuf moyens de post-traitement ont butté sur\nla même frontière : les états du réservoir contiennent la structure contenu/lang … [6029 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/ou_entre_la_langue.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"import ast; ast.parse(open('tools/ou_entre_la_langue.py').read()); print('syntaxe OK')\" && setsid nohup python3 -u tools/ou_entre_la_langue.py /tmp/cache_wikitrain.npz /tmp/cache_wikitest.npz --neur 120 > /tmp/ou_entre. … [146 caractères tronqués]`
+
+  ```
+syntaxe OK
+lancé
+23:40
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/ou_entre.log 2>/dev/null; echo; echo \"articles wiki : $(grep -c '^ARTICLE' /tmp/trace_wiki_apparie.log)\"; date '+%H:%M'", "description": "Read the localization result", "timeoutMs": 620000}`
+
+  ```
+# réseau 120 neurones · 1 couche(s) · 896 canaux
+
+# caractéristiques                    fid TEST    P_lang    P_cont   RAPPORT
+  A · l'ENTRÉE seule (0 neurone)        0.5161     199.5     338.8     1.698
+  B · les ÉTATS du réservoir            0.4751     238.8     323.3     1.354
+  C · ENTRÉE + ÉTATS                    0.5309     312.4     499.2     1.598
+  PROFESSEUR (rappel)                        —     399.2    4356.4    10.912
+
+# PRÉDICTION : si A est proche de B et C, l'axe de langue vient de l'ENTRÉE
+# et le réservoir n'y est pour rien. Si les trois se ressemblent, il vient de
+# la LECTURE. Si A est bien plus haut, la dynamique l'ajoute.
+# CRITÈRE (§62.3) : P_cont PROCHE du professeur ET P_lang qui ne le dépasse
+# pas — le rapport seul peut être gonflé par le dénominateur.
+
+articles wiki : 295
+23:50
+  ```
+
+### 🤖 Assistant
+
+⏵ **Résultat net et important : l'axe de langue vient de l'ENTRÉE, pas du réservoir — et le réservoir l'AMPLIFIE tout en perdant en fidélité.**
+
+| caractéristiques | fid TEST | P_lang | P_cont | **RAPPORT** |
+|---|---:|---:|---:|---:|
+| **A · l'ENTRÉE seule (ZÉRO neurone)** | **0,5161** | 199,5 | **338,8** | **1,698** |
+| B · les ÉTATS du réservoir | 0,4751 | **238,8** | 323,3 | **1,354** |
+| C · ENTRÉE + ÉTATS | **0,5309** | 312,4 | 499,2 | 1,598 |
+| *professeur* | — | *399,2* | *4 356,4* | ***10,912*** |
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 70. OÙ ENTRE LA LANGUE : dans l'entrée du professeur, pas dans le réservoir\n\n### 70.1 La question, et pourquoi il fallait la pos … [6540 caractères tronqués]`

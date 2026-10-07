@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 200.9 h |
-| Tours | 187 |
-| Messages | 9140 |
-| Appels d'outils | 8605 |
-| Fichiers touchés | 208 |
-| Commandes | 7298 |
+| Durée | 201.1 h |
+| Tours | 188 |
+| Messages | 9147 |
+| Appels d'outils | 8610 |
+| Fichiers touchés | 209 |
+| Commandes | 7302 |
 | Sous-agents | 32 |
-| Commits | 664 |
+| Commits | 665 |
 | Compactages de contexte | 12 |
 
 ## Objectifs déclarés
@@ -427,6 +427,8 @@
 **Tour 186** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 **Tour 187** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
+
+**Tour 188** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -9519,7 +9521,7 @@ Si le rapport ne dépend que des directions, la covariance du professeur les con
 
 ### Tour 187 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
 
-*6 appels d'outils.* Actions notables :
+*7 appels d'outils.* Actions notables :
 
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/discriminant_contenu.py`
 - bash — Test the content/language discriminant
@@ -9527,16 +9529,79 @@ Si le rapport ne dépend que des directions, la covariance du professeur les con
 - bash — Test amplification to teacher magnitudes
 - bash — Read the amplified discriminant result
 - bash — Report and commit the discriminant result and frontier
+- bash — Final status check
 
 **Synthèse produite :**
 
-⏵ **Réponse complète, et elle est un compromis chiffré : la structure du professeur est atteignable par les directions, mais PAS en gardant la fidélité.**
+⏵ **Round 60 — la question ouverte au §57 a une réponse complète.**
 
-| rang | α | fid TEST | P_lang | P_cont | critère §62.3 |
+\## L'outil qui vise la bonne quantité
+
+Après le §67 (aucune amplitude ne peut corriger le rapport — c'est une identité) et le §68 (la covariance totale ne le détermine pas), restait l'outil qui maximise **directement** le rapport entre énergie de contenu et énergie de langue, calculé sur les **moyennes par entrée** de l'apprentissage — l'analyse discriminante linéaire :
+
+```
+C_cont · v = λ · C_lang · v
+```
+
+Valeurs propres : **6286,5 · 1651,2 · 931,8 · 804,5 · 674,6 · 575,6 · 545,6 · 480,9** — structure fortement hiérarchisée.
+
+**Linéaire, forme fermée, sans rétropropagation, déployable** : le projecteur est une matrice fixe apprise une fois.
+
+\## Le meilleur rapport de toute la série
+
+| rang | fid TEST | P_lang | P_cont | **RAPPORT** |
+|---:|---:|---:|---:|---:|
+| 0 | 0,4703 | 42,4 | 82,1 | 1,934 |
+| **2** | 0,4341 | 4,3 | 30,2 | **6,961** |
+| 40 | 0,4620 | 23,0 | 64,4 | 2,800 |
+| | | | **professeur 4 356** | **professeur 10,912** |
+
+**6,961 — plus du double du meilleur précédent (3,064), et 64 % de la cible.** Et les directions apprises **se transfèrent** aux langues inconnues.
+
+\## Mais la frontière est tracée
+
+Le rapport est élevé **par les deux côtés à la fois** : `P_cont` = 30 contre 4 356. Comme le rapport est invariant d'échelle, on peut amplifier sans le changer — à quel coût ?
+
+| rang | α | fid TEST | P_lang | P_cont | critère |
 |---:|---:|---:|---:|---:|---|
-| 20 | 1,0 | 0,4575 | 17,4 | 57,9 | — |
-| **20** | **4,2** | **0,3536** | **300,7** | **1 000** | **✓ P_lang ≤ 399** |
-| 2 | 12,0 | **0,2385** | 625,8 | 4 356 | ✗ P_lang > 399 |
+| **20** | **4,2** | **0,3536** | **300,7** | **1 000** | **✓** |
+| 2 | 12,0 | **0,2385** | 625,8 | 4 356 | ✗ |
+
+**Pour atteindre la magnitude du professeur, la fidélité tombe à 0,24-0,27** (de 0,47). Le meilleur compromis coûte **0,117**.
+
+\## La réponse, en quatre lignes
+
+| question | réponse |
+|---|---|
+| La structure contenu/langue est-elle **accessible** ? | **oui, en partie** — 64 % du rapport |
+| Par une transformation **linéaire et déployable** ? | **oui** — matrice fixe, sans rétropropagation |
+| **Sans payer** ? | **non** — 0,117 pour `P_cont` = 1 000, 0,23 pour la magnitude complète |
+| Le **ratio** du professeur est-il atteignable ? | **non par cette voie** — 6,96 est le maximum obtenu |
+
+\## Et la conclusion qui n'est plus une conjecture
+
+Puisque **toutes** les transformations linéaires buttent sur la même frontière — **neuf moyens essayés, sept écartés, deux retenus qui donnent 3,06, le discriminant qui monte à 6,96 en payant 0,12 à 0,23** — **le facteur limitant n'est plus l'objectif ni la lecture : ce sont les c
+… [864 caractères tronqués]
+
+### Tour 188 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
+
+*4 appels d'outils.* Actions notables :
+
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/ou_entre_la_langue.py`
+- bash — Localize where the language axis enters
+- bash — Read the localization result
+- bash — Report and commit the language localization finding
+
+**Synthèse produite :**
+
+⏵ **Résultat net et important : l'axe de langue vient de l'ENTRÉE, pas du réservoir — et le réservoir l'AMPLIFIE tout en perdant en fidélité.**
+
+| caractéristiques | fid TEST | P_lang | P_cont | **RAPPORT** |
+|---|---:|---:|---:|---:|
+| **A · l'ENTRÉE seule (ZÉRO neurone)** | **0,5161** | 199,5 | **338,8** | **1,698** |
+| B · les ÉTATS du réservoir | 0,4751 | **238,8** | 323,3 | **1,354** |
+| C · ENTRÉE + ÉTATS | **0,5309** | 312,4 | 499,2 | 1,598 |
+| *professeur* | — | *399,2* | *4 356,4* | ***10,912*** |
 
 ## 3. Travail accompli
 
@@ -9752,6 +9817,7 @@ Si le rapport ne dépend que des directions, la covariance du professeur les con
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/etats_sans_langue.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/covariance_cible.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/discriminant_contenu.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/ou_entre_la_langue.py` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -9830,7 +9896,7 @@ Si le rapport ne dépend que des directions, la covariance du professeur les con
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 7258 autres
+- … et 7262 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10642,4 +10708,5 @@ Si le rapport ne dépend que des directions, la covariance du professeur les con
 - Deux leviers DÉPLOYABLES qui se combinent : le rapport passe de 1,46 à 3,06  §66.1 RETRAIT DU SOUS-ESPACE DE LANGUE DANS LES ÉTATS (avant la lecture) : on calcu
 - Le rapport est INVARIANT D'ÉCHELLE (identité), et imposer la covariance de la cible échoue  §67 — CONSTAT MATHÉMATIQUE QUI FERME UNE FAMILLE DE PISTES : P_cont 
 - Le discriminant fonctionne : rapport 6,96 (64 % de la cible) — et la frontière est tracée  L'OUTIL QUI VISE LA BONNE QUANTITÉ : analyse discriminante linéaire, 
+- OÙ ENTRE LA LANGUE : dans l'entrée, pas dans le réservoir — et le réservoir l'AMPLIFIE  Trois jeux de caractéristiques emboîtés, même protocole :   A · l'ENTRÉE
 
