@@ -155249,3 +155249,188 @@ eca1db2 Sonde de couches : le rapport contenu/langue dépend du PANEL, pas seule
 ⏵ **Je corrige une formulation imprécise et je commite la section de correction.**
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\nold = \"\"\"   pas une valeur représentative : c'est le **bas de la queue haute**. La médiane des quinze\n   paires est **3,002** ; le 12,001 se situe au 10ᵉ  … [2232 caractères tronqués]`
+
+  ```
+ok
+207ef67 §82–§85 : la cible du projet (12,001) était un effet de panel
+  ```
+
+### 🤖 Assistant
+
+⏵ **La question ouverte est précise : le discriminant apprend sur un panel — transfère-t-il à la pire paire ? J'écris l'outil.**
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"discriminant_transfert.py — les directions apprises sur un panel servent-elles sur un autre ?\n\nLA QUESTION, ET ELLE EST NEUVE. Le §80 a mesuré qu'un discriminant linéaire appris portait\nle rapport contenu/langue à **105 % du professeur**. Mais ce résulta … [7397 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/discriminant_transfert.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+### 🤖 Assistant
+
+⏵ **Je vérifie la mémoire disponible avant de lancer les quatre transferts.**
+
+- **bash** `{"command": "free -g | head -2; echo \"---\"; nproc; echo \"--- syntaxe ---\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"import ast; ast.parse(open('tools/discriminant_transfert.py').read()); print('OK')\"", "description": "Check memory and cores"}`
+
+  ```
+total        used        free      shared  buff/cache   available
+Mem:             125          27          46          12          65          98
+---
+40
+--- syntaxe ---
+OK
+  ```
+
+### 🤖 Assistant
+
+⏵ **98 Go libres, 40 cœurs : je lance les quatre cas de transfert en parallèle.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/mesure_transfert.sh <<'EOF'\n#!/bin/bash\nset -u\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nT=/tmp/cache_vf_train.npz\nE=/tmp/cache_vf_test.npz\nlance () {\n    python3 -u tools/discriminant_transfert.py $T \"$2\ … [538 caractères tronqués]`
+
+  ```
+--- cas1 ---
+--- cas2 ---
+--- cas3 ---
+--- cas4 ---
+  ```
+
+### 🤖 Assistant
+
+⏵ **Pendant que les transferts tournent, j'écris la sonde de localité (ce qu'une couche doit au jeton courant contre au contexte).**
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"localite_couches.py — une couche doit-elle quelque chose au CONTEXTE, ou au jeton ?\n\nLA QUESTION, ET ELLE DÉCIDE D'UNE ARCHITECTURE. Notre pont est RÉCURRENT :\n`s_t = (1−a)·s_{t−1} + a·tanh(P·s_{t−1} + B·e_t)`. La récurrence n'a de sens que si la\ncible  … [7425 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/localite_couches.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+### 🤖 Assistant
+
+⏵ **Je corrige la variance mal calculée (je la lis dans la même passe, sans relire les traces).**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/localite_couches.py'; s=open(p).read()\nold = \"\"\"    G0 = {c: np.zeros((896, 896)) for c in cs}\n    D0 = {c: np.zeros((896, 896)) for c in cs}\n    ntot = 0\"\"\"\nnew = \"\"\"    G0 = {c: np.zeros((896 … [2868 caractères tronqués]`
+
+  ```
+variance corrigée
+syntaxe OK
+--- cas1 ---
+# pont appris sur de,en,fr · discriminant appris sur es,it,pt · mesuré sur es,it,pt · 896 canaux
+--- cas2 ---
+# pont appris sur de,en,fr · discriminant appris sur es,it,pt · mesuré sur de,en,fr · 896 canaux
+--- cas3 ---
+# pont appris sur de,en,fr · discriminant appris sur de,en,fr · mesuré sur de,en,fr · 896 canaux
+--- cas4 ---
+# pont appris sur de,en,fr · discriminant appris sur de,en,fr · mesuré sur es,it,pt · 896 canaux
+  ```
+
+### 🤖 Assistant
+
+⏵ **Je valide la sonde de localité sur un petit sous-ensemble pendant que les transferts tournent.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 python3 -u tools/localite_couches.py /home/stephane/Data13TB/stephane/corpus/wiki_apparie/traces_couches --couches 3,8 --fenetre 3 --langues en --max-articles 4 --ride 1.0 2>&1 | tail -20", "description": "Validate locali … [46 caractères tronqués]`
+
+  ```
+# 4 traces · fenêtre 3 · ride 1.0 · 4 contenus
+# 1766 positions appariées
+
+#  couche     R²(0)  R²(fenêtre)     gain  gain relatif
+       3   -0.0259      -0.2531  -0.2272       -22.1%
+       8    0.1479      -0.1685  -0.3164       -37.1%
+
+# R²(0) : le JETON COURANT seul (lecture linéaire de la couche 0).
+# gain : ce qu'une fenêtre de 4 jetons ajoute — donc ce que le CONTEXTE
+# apporte à une lecture LINÉAIRE. « gain relatif » : la part de ce que le
+# jeton seul laissait inexpliqué et que le contexte récupère.
+# RÉSERVE : mesure LINÉAIRE. Un gain faible ne prouve pas la localité — il
+# prouve qu'aucune lecture linéaire n'en tire profit.
+  ```
+
+### 🤖 Assistant
+
+⏵ **R² négatif = sur-apprentissage (4 480 variables pour 1 766 points). Je relance sur le corpus complet en fond.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/mesure_localite.sh <<'EOF'\n#!/bin/bash\nset -u\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nC=/home/stephane/Data13TB/stephane/corpus/wiki_apparie/traces_couches\nJ=/tmp/mesure_localite.log\n: > \"$J\"\necho \"### … [847 caractères tronqués]`
+
+  ```
+--- cas1 ---
+--- cas2 ---
+--- cas3 ---
+--- cas4 ---
+  ```
+
+### 🤖 Assistant
+
+⏵ **Les quatre ajustements sont encore en cours ; j'attends avant de conclure.**
+
+- **bash** `{"command": "sleep 420; for i in 1 2 3 4; do echo \"=== cas$i ===\"; sed -n '/plancher/,$p' /tmp/cas$i.log 2>/dev/null | head -22; done; echo; echo \"=== localité ===\"; tail -12 /tmp/mesure_localite.log 2>/dev/null", "description": "Collect transfer and locality results", "timeoutMs": 480000}`
+
+  ```
+=== cas1 ===
+# plancher 2.774e-03 · 482 contenus · 3 langues · valeurs propres 70952.2 13712.6 11061.0 8936.3 5345.6 4515.0
+=== cas2 ===
+# plancher 2.774e-03 · 482 contenus · 3 langues · valeurs propres 70952.2 13712.6 11061.0 8936.3 5345.6 4515.0
+=== cas3 ===
+# plancher 2.359e-02 · 482 contenus · 3 langues · valeurs propres 6179.4 2039.0 1151.8 821.9 769.6 593.2
+
+#                           P_lang     P_cont   RAPPORT  part prof
+  PROFESSEUR              3347.7     4405.3     1.316           
+  NOTRE PONT (rang 0)     2113.8      407.0     0.193     14.6%
+  NOTRE PONT (rang 2)       73.6      204.8     2.783    211.5%
+  NOTRE PONT (rang 5)      205.6      269.0     1.308     99.4%
+  NOTRE PONT (rang 10)     364.5      306.5     0.841     63.9%
+  NOTRE PONT (rang 20)     542.9      334.4     0.616     46.8%
+  NOTRE PONT (rang 40)     765.0      356.5     0.466     35.4%
+   # rang 0 — NOTRE PONT — pire de–en 0.240 · meilleure de–fr 0.527
+   # de–en 0.24 · en–fr 0.31 · de–fr 0.53
+   # rang 2 — pire en–fr 2.606 · meilleure de–fr 16.437
+   # en–fr 2.61 · de–en 4.71 · de–fr 16.44
+   # rang 5 — pire en–fr 1.287 · meilleure de–fr 13.114
+   # en–fr 1.29 · de–en 1.88 · de–fr 13.11
+   # rang
+… [1670 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le discriminant TRANSFÈRE : appris sur de/en/fr, il porte es/it/pt de 1,68 à 6,61. J'attends les deux cas restants.**
+
+- **bash** `{"command": "sleep 420; for i in 1 2; do echo \"=== cas$i ===\"; sed -n '/plancher/,$p' /tmp/cas$i.log 2>/dev/null | head -22; done; echo; echo \"=== localité ===\"; tail -14 /tmp/mesure_localite.log 2>/dev/null", "description": "Collect remaining transfer cases", "timeoutMs": 480000}`
+
+  ```
+=== cas1 ===
+# plancher 2.774e-03 · 482 contenus · 3 langues · valeurs propres 70952.2 13712.6 11061.0 8936.3 5345.6 4515.0
+
+#                           P_lang     P_cont   RAPPORT  part prof
+  PROFESSEUR               387.9     4655.4    12.001           
+  NOTRE PONT (rang 0)      248.6      416.6     1.676     14.0%
+  NOTRE PONT (rang 2)        6.6      251.8    38.443    320.3%
+  NOTRE PONT (rang 5)       50.0      306.1     6.127     51.1%
+  NOTRE PONT (rang 10)      62.2      333.1     5.356     44.6%
+  NOTRE PONT (rang 20)      78.0      360.0     4.617     38.5%
+  NOTRE PONT (rang 40)      96.8      378.3     3.910     32.6%
+   # rang 0 — NOTRE PONT — pire es–it 1.945 · meilleure es–pt 3.901
+   # es–it 1.95 · it–pt 2.63 · es–pt 3.90
+   # rang 2 — pire es–it 26.616 · meilleure it–pt 145.801
+   # es–it 26.62 · es–pt 100.47 · it–pt 145.80
+   # rang 5 — pire es–it 4.330 · meilleure it–pt 44.698
+   # es–it 4.33 · es–pt 11.79 · it–pt 44.70
+   # rang 10 — pire es–it 4.242 · meilleure it–pt 19.381
+   # es–it 4.24 · es–pt 10.95 · it–pt 19.38
+   # rang 20 — pire es–it 4.218 · meilleure it–pt 11.557
+   # es–it 4.22 · es–pt 9.40 · it–pt 11.56
+   # rang 40 — pire es–it 4.169 · meilleure
+… [1443 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Les quatre cas sont complets — et le transfert est asymétrique. Je rédige la section.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> reports/rapport-toutes-langues.md <<'MARKDOWN'\n\n---\n\n## 86. LE DISCRIMINANT TRANSFÈRE — mais il perd l'essentiel en changeant de panel\n\n### 86.1 La question, posée au §85.4\n\nLe §80 avait mesuré qu'un discriminant linéa … [7981 caractères tronqués]`
