@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 201.4 h |
-| Tours | 189 |
-| Messages | 9155 |
-| Appels d'outils | 8616 |
-| Fichiers touchés | 210 |
-| Commandes | 7307 |
+| Durée | 201.8 h |
+| Tours | 190 |
+| Messages | 9166 |
+| Appels d'outils | 8625 |
+| Fichiers touchés | 211 |
+| Commandes | 7315 |
 | Sous-agents | 32 |
-| Commits | 667 |
+| Commits | 668 |
 | Compactages de contexte | 12 |
 
 ## Objectifs déclarés
@@ -431,6 +431,8 @@
 **Tour 188** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 **Tour 189** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
+
+**Tour 190** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -9641,23 +9643,79 @@ Et cette transformation, le pont ne la reproduit pas : **un réservoir à poids 
 
 ### Tour 189 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
 
-*5 appels d'outils.* Actions notables :
+*7 appels d'outils.* Actions notables :
 
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/blanchiment_entree.py`
 - bash — Test per-language input whitening
 - bash — Read the input whitening result
 - bash — Wait for the whitening sweep
 - bash — Report and commit the input whitening rejection and the striking number
+- bash — Check processes and chain state
+- bash — Free CPU for the tracing
 
 **Synthèse produite :**
 
-⏵ **Le blanchiment de l'entrée EXPLOSE tout : P_lang 57 → 16 922, fidélité 0,544 → 0,170. Écarté. Mais le α=0 livre un chiffre marquant.**
+⏵ **Round 62 — le réservoir aléatoire gelé est écarté, par quatre mesures indépendantes.**
+
+\## 1. Blanchir l'entrée par langue : ça explose
+
+L'idée découlait du §70 : l'axe de langue vient de l'entrée. Le §64 en avait retiré le **premier moment** (+28 % de rapport) ; je retire le **second** par blanchiment par langue, `E' = (E − m_L)·C_L^(−α/2)`, entièrement déployable.
 
 | α | fid TEST | P_lang | P_cont | RAPPORT |
 |---:|---:|---:|---:|---:|
-| **0,00 (entrée centrée, ZÉRO neurone)** | **0,5437** | 57,1 | 83,6 | **1,466** |
+| **0,00** | **0,5437** | 57,1 | 83,6 | **1,466** |
 | 0,25 | 0,3434 | 761,2 | 1 054,8 | 1,386 |
 | 0,50 | **0,1701** | **16 922** | **27 185** | 1,606 |
+
+**Les énergies explosent (×296) et la fidélité s'effondre.** Blanchir amplifie les directions de **faible variance** de l'entrée — bruit et détail propre à la langue — et fait diverger les énergies sans rien démêler. **Écarté nettement.**
+
+\## 2. Le chiffre qui tombe
+
+**À α = 0 — l'entrée centrée seule, ZÉRO neurone — la fidélité vaut 0,5437.** C'est la meilleure de toute la série :
+
+| modèle | fidélité TEST |
+|---|---:|
+| **entrée centrée seule, 0 neurone** | **0,5437** |
+| entrée + états du réservoir | 0,5309 |
+| entrée seule, non centrée | 0,5161 |
+| **états du réservoir seuls** | **0,4751** |
+
+**Une régression linéaire-quadratique sur l'entrée centrée du professeur, sans un seul neurone, bat tout ce que le pont construit.** Et son rapport contenu/langue (1,466) bat celui du réservoir seul (1,354).
+
+\## 3. Quatre mesures indépendantes, un même constat
+
+| § | mesure | ce qu'elle montre |
+|---|---|---|
+| 29 | 40 neurones contre l'entrée seule | **+0,0564** pour l'entrée seule |
+| 34 | un gros réservoir **avec** l'entrée | le réservoir n'ajoute que **+0,0073** |
+| 70 | caractéristiques emboîtées | le réservoir **abaisse** le rapport (1,698 → 1,354) |
+| **71** | entrée centrée seule | **0,5437 — la meilleure fidélité de la série** |
+
+**Quatre protocoles différents, un même résultat : la dynamique récurrente à poids aléatoires gelés n'apporte rien que l'entrée ne portait déjà, et elle retire de la structure contenu/langue.**
+
+\## 4. Et cela referme la boucle avec la mission
+
+La mission demande d'**émuler les premières couches** d'un gros modèle par un **modèle récurrent n-couches**. Les §58-§71 établissent que :
+
+1. la transformation qui **crée** la séparation contenu/langue entre couche 0 et couche 8 **n'est pas reproduite** par un réservoir aléatoire gelé (§70) ;
+2. aucune transformation **linéaire** de la sortie ne la rattrape sans payer **0,12 à 0,23** de fidélité (§69)
+… [941 caractères tronqués]
+
+### Tour 190 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
+
+*7 appels d'outils.* Actions notables :
+
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/renforcement.py`
+- bash — Check the renforce signature
+- bash — Read the full renforce method
+- bash — Run batched reinforcement test
+- bash — Read the reinforcement result
+- bash — Continue monitoring reinforcement
+- bash — Report and commit the reinforcement failure
+
+**Synthèse produite :**
+
+⏵ **Le renforcement PLATEAU immédiatement : +0,021 à la première passe, +0,001 à la deuxième. Dernier mécanisme sanctionné par le mandat — et il échoue aussi.**
 
 ## 3. Travail accompli
 
@@ -9875,6 +9933,7 @@ Et cette transformation, le pont ne la reproduit pas : **un réservoir à poids 
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/discriminant_contenu.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/ou_entre_la_langue.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/blanchiment_entree.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/renforcement.py` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -9953,7 +10012,7 @@ Et cette transformation, le pont ne la reproduit pas : **un réservoir à poids 
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 7267 autres
+- … et 7275 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10768,4 +10827,5 @@ Et cette transformation, le pont ne la reproduit pas : **un réservoir à poids 
 - OÙ ENTRE LA LANGUE : dans l'entrée, pas dans le réservoir — et le réservoir l'AMPLIFIE  Trois jeux de caractéristiques emboîtés, même protocole :   A · l'ENTRÉE
 - Glossaire : §10.10, le vocabulaire de la mesure contenu/langue  Termes nés de la traque des §57-§70 et devenus LA MESURE CENTRALE du pont :   P_lang · P_cont · 
 - Blanchir l'entrée par langue est écarté — et le chiffre qui tombe  L'IDÉE découlait du §70 : l'axe de langue vient de l'ENTRÉE. Le §64 en avait retiré le premie
+- Le renforcement/atrophie — dernier mécanisme sanctionné — échoue aussi (plateau immédiat)  POURQUOI C'ÉTAIT LE DERNIER RECOURS : les §57-§71 ont écarté neuf moy
 

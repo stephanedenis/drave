@@ -151097,3 +151097,220 @@ articles wiki : 302
 | 0,50 | **0,1701** | **16 922** | **27 185** | 1,606 |
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 71. Blanchir l'entrée par langue : écarté — et un chiffre qui tombe\n\n### 71.1 L'idée, et pourquoi elle découlait du §70\n\nLe §7 … [5978 caractères tronqués]`
+
+  ```
+2a70119 Blanchir l'entrée par langue est écarté — et le chiffre qui tombe
+  ```
+
+### 🤖 Assistant
+
+⏵ **Round 62 — le réservoir aléatoire gelé est écarté, mesuré quatre fois.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ps -eo pid,cmd | grep blanchiment_entree | grep -v grep | cut -c1-70; echo \"articles wiki : $(grep -c '^ARTICLE' /tmp/trace_wiki_apparie.log) / 482\"; awk '{if($2 ~ /s$/) {gsub(\"s\",\"\",$2); s+=$2; n++}} END {printf \"  %d traces  … [153 caractères tronqués]`
+
+  ```
+2721401 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && 
+2721404 python3 -u tools/blanchiment_entree.py /tmp/cache_wikitrain.np
+articles wiki : 309 / 482
+  1724 traces · 20.0 s · reste ~6.5 h
+00:13
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport os, signal\nmoi=os.getpid(); anc=set(); q=moi\nfor _ in range(10):\n    try:\n        st=open(f'/proc/{q}/stat').read().split(') ',1)[1].split(); q=int(st[1]); anc.add(q)\n    except Exception: break\ntues=[]\nfor d in os.listdir('/proc'):\n    if not d.isdigit( … [471 caractères tronqués]`
+
+  ```
+tués (alpha=1 n'apporterait rien, on rend le CPU au traçage) : [2721401, 2721404]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Round 62 — le réservoir aléatoire gelé est écarté, par quatre mesures indépendantes.**
+
+## 1. Blanchir l'entrée par langue : ça explose
+
+L'idée découlait du §70 : l'axe de langue vient de l'entrée. Le §64 en avait retiré le **premier moment** (+28 % de rapport) ; je retire le **second** par blanchiment par langue, `E' = (E − m_L)·C_L^(−α/2)`, entièrement déployable.
+
+| α | fid TEST | P_lang | P_cont | RAPPORT |
+|---:|---:|---:|---:|---:|
+| **0,00** | **0,5437** | 57,1 | 83,6 | **1,466** |
+| 0,25 | 0,3434 | 761,2 | 1 054,8 | 1,386 |
+| 0,50 | **0,1701** | **16 922** | **27 185** | 1,606 |
+
+**Les énergies explosent (×296) et la fidélité s'effondre.** Blanchir amplifie les directions de **faible variance** de l'entrée — bruit et détail propre à la langue — et fait diverger les énergies sans rien démêler. **Écarté nettement.**
+
+## 2. Le chiffre qui tombe
+
+**À α = 0 — l'entrée centrée seule, ZÉRO neurone — la fidélité vaut 0,5437.** C'est la meilleure de toute la série :
+
+| modèle | fidélité TEST |
+|---|---:|
+| **entrée centrée seule, 0 neurone** | **0,5437** |
+| entrée + états du réservoir | 0,5309 |
+| entrée seule, non centrée | 0,5161 |
+| **états du réservoir seuls** | **0,4751** |
+
+**Une régression linéaire-quadratique sur l'entrée centrée du professeur, sans un seul neurone, bat tout ce que le pont construit.** Et son rapport contenu/langue (1,466) bat celui du réservoir seul (1,354).
+
+## 3. Quatre mesures indépendantes, un même constat
+
+| § | mesure | ce qu'elle montre |
+|---|---|---|
+| 29 | 40 neurones contre l'entrée seule | **+0,0564** pour l'entrée seule |
+| 34 | un gros réservoir **avec** l'entrée | le réservoir n'ajoute que **+0,0073** |
+| 70 | caractéristiques emboîtées | le réservoir **abaisse** le rapport (1,698 → 1,354) |
+| **71** | entrée centrée seule | **0,5437 — la meilleure fidélité de la série** |
+
+**Quatre protocoles différents, un même résultat : la dynamique récurrente à poids aléatoires gelés n'apporte rien que l'entrée ne portait déjà, et elle retire de la structure contenu/langue.**
+
+## 4. Et cela referme la boucle avec la mission
+
+La mission demande d'**émuler les premières couches** d'un gros modèle par un **modèle récurrent n-couches**. Les §58-§71 établissent que :
+
+1. la transformation qui **crée** la séparation contenu/langue entre couche 0 et couche 8 **n'est pas reproduite** par un réservoir aléatoire gelé (§70) ;
+2. aucune transformation **linéaire** de la sortie ne la rattrape sans payer **0,12 à 0,23** de fidélité (§69) ;
+3. et le réservoir **coûte** en fidélité comme en structure (§29, §34, §70, §71).
+
+**Le réservoir aléatoire gelé n'est pas le bon mécanisme pour cette transformation.** C'est une conclusion négative — mais elle est mesurée quatre fois, par quatre protocoles, et elle désigne précisément ce qu'il faut remplacer.
+
+**Ce qui reste ouvert, et c'est maintenant la seule question** : sous les contraintes maintenues (`A` et `B` aléatoires et gelés, lecture en forme fermée, aucune rétropropagation), **quel mécanisme** peut produire la transformation couche 0 → couche 8 ?
+
+## État
+
+| chaîne | avancement |
+|---|---|
+| **Wikipedia apparié** | **309 / 482 articles** · 1 724 traces · reste **~6,5 h** |
+| **Croissance μ = 0,1** | terminée (§56) |
+| **Crime** | 4/24 segments, conservés |
+
+J'ai rendu le CPU du dernier essai au traçage : à ce stade de la traque, un point de plus sur une courbe déjà concluante ne valait pas 20 minutes de corpus.
+
+
+## Tour 190
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de représentation universelle), boîte noire (on ne lit du professeur que la couche à émuler, jamais sa tête ni ses jetons générés), aucune rétropropagation (A et B aléatoires et gelés, seule la lecture s'ajuste en forme fermée), et chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, TAILLE du réseau, avec le diagnostic oracle sur les deux panneaux (test hors vivier et validation du même vivier)."
+Round: 63/256
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ **L'objectif désigne la question ouverte : quel mécanisme produit la transformation, sous les contraintes ? Le mandat en sanctionne UN — renforcement/atrophie par relecture du corpus. Il n'a jamais été testé sur cet axe.**
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"renforcement.py — le mécanisme du mandat peut-il produire la transformation ?\n\nLA QUESTION OUVERTE, APRÈS LES §57-§71. Le professeur crée, entre sa couche 0 et sa\ncouche 8, une séparation contenu/langue d'un facteur **10,912** — que sa propre couche 0\nn … [6174 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/renforcement.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"def renforce\" tools/pont_generatif.py && sed -n \"$(grep -n 'def renforce' tools/pont_generatif.py | cut -d: -f1),+14p\" tools/pont_generatif.py", "description": "Check the renforce signature"}`
+
+  ```
+524:    def renforce(self, j, itr, mt, ride, eta=0.6):
+    def renforce(self, j, itr, mt, ride, eta=0.6):
+        """RENFORCEMENT / ATROPHIE — la relecture du corpus qui suit la naissance
+        d'une couche. **Aucune rétropropagation.**
+
+        On relit le corpus pour mesurer ce qui reste à expliquer (le résidu), puis
+        on renforce les entrées dont l'activation le capte et on atrophie les
+        autres. C'est local : chaque neurone ne regarde que sa propre activation
+        et le résidu, jamais le gradient d'une couche lointaine.
+        """
+        if j == 0 or len(itr) == 0:
+            return 0.0
+        idx = np.arange(j)
+        W = self.ajuste(idx, ride, mt, itr)
+        X = np.vstack([self.X[i][:, idx] for i in itr])
+        Y = np.vstack([self.Y[i] for i in itr])
+  ```
+
+### 🤖 Assistant
+
+⏵ **`renforce` fait un ajustement PAR NEURONE — 1 920 ajustements, ~5 h. Je lis la formule pour en faire une version par LOT : une seule relecture du corpus par passe.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '524,560p' tools/pont_generatif.py", "description": "Read the full renforce method"}`
+
+  ```
+def renforce(self, j, itr, mt, ride, eta=0.6):
+        """RENFORCEMENT / ATROPHIE — la relecture du corpus qui suit la naissance
+        d'une couche. **Aucune rétropropagation.**
+
+        On relit le corpus pour mesurer ce qui reste à expliquer (le résidu), puis
+        on renforce les entrées dont l'activation le capte et on atrophie les
+        autres. C'est local : chaque neurone ne regarde que sa propre activation
+        et le résidu, jamais le gradient d'une couche lointaine.
+        """
+        if j == 0 or len(itr) == 0:
+            return 0.0
+        idx = np.arange(j)
+        W = self.ajuste(idx, ride, mt, itr)
+        X = np.vstack([self.X[i][:, idx] for i in itr])
+        Y = np.vstack([self.Y[i] for i in itr])
+        R = Y - (self.phi(X) @ W + mt)        # ce qui reste à expliquer
+        xj = np.concatenate([self.X[i][:, j] for i in itr]).astype(np.float64)
+        if xj.std() == 0.0:
+            return 0.0
+        a_ = xj - xj.mean()
+        b_ = R - R.mean(0)
+        na = float(np.linalg.norm(a_))
+        nb = np.linalg.norm(b_, axis=0)
+        ok = (nb > 0) & np.isfinite(nb)
+        if na == 0.0 or not ok.any():
+            return 0.0
+        # à quel point l'act
+… [559 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Je remplace par une version PAR LOT : même formule de renforcement, mais une seule relecture du corpus par passe au lieu d'une par neurone (~5 h → ~5 min).**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\ns = open('tools/renforcement.py').read()\nold = \"\"\"    for eta in etas:\n        for k in range(passes):\n            t = time.time()\n            # RELECTURE DU CORPUS : renforcement/atrophie de chaque neuron … [2552 caractères tronqués]`
+
+  ```
+version par lot installée
+syntaxe OK
+lancé
+00:15
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/renforcement.log 2>/dev/null; echo; date '+%H:%M'", "description": "Read the reinforcement result", "timeoutMs": 620000}`
+
+  ```
+# réseau 120 neurones · 1 couche(s) · 896 canaux · 6 passes de relecture
+# CIBLE — professeur : P_lang 399.2 · P_cont 4356.4 · rapport 10.912
+
+#  passe   eta  fid TEST    P_lang    P_cont   RAPPORT
+      0     —    0.4766     247.1     318.7     1.290
+      1  0.10    0.4768     241.9     317.2     1.311   (370 s)
+
+00:25
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/renforcement.log 2>/dev/null | tail -8; echo; echo \"articles wiki : $(grep -c '^ARTICLE' /tmp/trace_wiki_apparie.log)\"; date '+%H:%M'", "description": "Continue monitoring reinforcement", "timeoutMs": 620000}`
+
+  ```
+# réseau 120 neurones · 1 couche(s) · 896 canaux · 6 passes de relecture
+# CIBLE — professeur : P_lang 399.2 · P_cont 4356.4 · rapport 10.912
+
+#  passe   eta  fid TEST    P_lang    P_cont   RAPPORT
+      0     —    0.4766     247.1     318.7     1.290
+      1  0.10    0.4768     241.9     317.2     1.311   (370 s)
+      2  0.10    0.4769     241.7     317.0     1.312   (396 s)
+
+articles wiki : 323
+00:35
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le renforcement PLATEAU immédiatement : +0,021 à la première passe, +0,001 à la deuxième. Dernier mécanisme sanctionné par le mandat — et il échoue aussi.**
+
+- **bash** `{"command": "python3 - <<'PY'\nimport os, signal\nmoi=os.getpid(); anc=set(); q=moi\nfor _ in range(10):\n    try:\n        st=open(f'/proc/{q}/stat').read().split(') ',1)[1].split(); q=int(st[1]); anc.add(q)\n    except Exception: break\ntues=[]\nfor d in os.listdir('/proc'):\n    if not d.isdigit( … [7183 caractères tronqués]`
