@@ -149095,3 +149095,269 @@ e266e21 Croissance sous contrainte, protocole ENTIER : 147 neurones, oracle sur 
 ⏵ **J'écris le résultat le plus important du round : il qualifie TOUS les chiffres d'invariance du rapport.**
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 57. LA question ouverte depuis le §41 est tranchée : notre sortie ÉCRASE la distinction contenu / langue\n\n### 57.1 La question,  … [6350 caractères tronqués]`
+
+  ```
+83cd425 LA question du §41 est tranchée : notre sortie ÉCRASE la distinction contenu/langue
+  ```
+
+### 🤖 Assistant
+
+⏵ **Round 54 — un résultat qui qualifie tout le reste du rapport.**
+
+## 1. La question ouverte depuis le §41 est tranchée — et la réponse est dure
+
+Depuis le §41, un fait revenait sans être expliqué : **notre sortie est bien plus invariante entre langues que le professeur** (0,95 contre 0,65 sur l'UDHR ; **0,928 contre 0,347** sur Wikipedia). Mission, ou appauvrissement ? Rien ne départageait.
+
+**Le test** : mesurer la *même* similarité sur les *deux* axes, mêmes entrées, pour notre sortie **et** pour le professeur.
+
+| corpus | | S_langue | S_domaine | écart | rapport |
+|---|---|---:|---:|---:|---:|
+| **Wikipedia** | **notre** | 0,9835 | 0,9866 | **−0,0031** | **1,00** |
+| (moyenne) | professeur | 0,9454 | 0,8937 | **+0,0517** | 1,06 |
+| **UDHR** | **notre** | 0,8824 | 0,9907 | **−0,1083** | **0,89** |
+| | professeur | 0,6939 | 0,9421 | −0,2482 | 0,74 |
+
+*(Vérifié sur deux pooling — dernière position et moyenne — le verdict est le même : ce n'est pas un artefact.)*
+
+**Sur les deux corpus, notre pont sépare moins le contenu de la langue que le professeur.** Sur l'UDHR il en conserve **44 %** ; sur Wikipedia il n'en conserve **rien, et le signe s'inverse** — là où le professeur préfère le contenu, notre sortie est indifférente.
+
+**Conséquence sur tout le rapport** : une invariance de 0,90-0,96 n'est pas à elle seule la preuve d'un pont réussi. Elle mélange **rapprocher les langues** et **effacer les différences**. Ce test est le seul qui les sépare, et il n'avait jamais été fait.
+
+**Ce n'est pas μ** : mesuré à μ = 0 et μ = 0,1, le rapport vaut 1,00 dans les deux cas. L'écrasement existe sans contrainte.
+
+**La suite est désormais précise** : réécrire l'objectif de la lecture pour rapprocher les langues **à contenu égal** *et* éloigner les contenus **à langue égale**. Les deux termes sont quadratiques en `W` — la solution reste en forme fermée, même mécanique que le §48 appliquée au bon objectif.
+
+## 2. Le corpus Wikipedia multi-domaine livre le protocole complet
+
+**3 langues apprises (de, en, fr) / 3 en test (es, it, pt), 85 articles, couche 8, 120 neurones** :
+
+| | |
+|---|---:|
+| fidélité TEST | 0,5962 |
+| oracle TEST | 0,6089 · **écart +0,0127** |
+| invariance TEST | 0,9274 · pire 0,5990 |
+| **invariance du professeur** | **0,3470** |
+
+## 3. La croissance sous contrainte, protocole entier — première fois
+
+| | |
+|---|---:|
+| **TAILLE** | **147 neurones · 1 couche** |
+| fidélité apprentissage | 0,6464 |
+| fidélité VALIDATION / TEST | 0,6312 / **0,6299** (témoin 0,5762) |
+| **apport propre** | **+0,0537** |
+| **invariance / pire paire** | **0,8958 / 0,6392** |
+| **écart à l'oracle** | **TEST +0,0415** · VALIDATION +0,0194 |
+
+**Et le goulot de transfert se resserre** : l'écart hors vivier passe de **+0,1003** (40 neurones, §44) à **+0,0415** — le rapport hors-vivier / dans-le-vivier tombe de **8,7× à 2,1×**. C'est la première fois qu'une décision d'architecture réduit ce goulot.
+
+## 4. Deux bugs corrigés au passage
+
+- **`pont_unites` coupait au dernier souligné** : `de_Alvar_Aalto` devenait langue `de_Alvar` / unité `Aalto`. Corrigé au premier souligné, vérifié sur les deux formats.
+- Le test d'appauvrissement a d'abord été lancé sur un **cache construit avec 0 langue** — intersection sur les noms complets (`de_A` vs `en_A`) au lieu des slugs. Un cache vide ne lève aucune erreur.
+
+## État
+
+| chaîne | avancement |
+|---|---|
+| **Wikipedia apparié** | **114 articles / 482** · fin estimée ~05h00 |
+| **Croissance μ = 0,1** | **terminée** — 147 neurones, protocole entier |
+| **Crime** | 4/24 segments, conservés, à reprendre hors concurrence |
+
+
+## Tour 182
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de représentation universelle), boîte noire (on ne lit du professeur que la couche à émuler, jamais sa tête ni ses jetons générés), aucune rétropropagation (A et B aléatoires et gelés, seule la lecture s'ajuste en forme fermée), et chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, TAILLE du réseau, avec le diagnostic oracle sur les deux panneaux (test hors vivier et validation du même vivier)."
+Round: 55/256
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ **Le §57 désigne la suite : réécrire l'objectif de la lecture pour RAPPROCHER les langues à contenu égal ET ÉLOIGNER les contenus à langue égale. Les deux termes sont quadratiques.**
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", "limit": 18, "offset": 228}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py</path>
+<type>file</type>
+<content>
+228:         # rend 5,8× plus rapide pour 0,0045 de fidélité. Le coût du fit étant
+229:         # O(lignes × caractéristiques²), c'est le seul levier qui compte quand le
+230:         # réseau grossit. `self.sous_ech = 1` par défaut : comportement inchangé.
+231:         se = getattr(self, "sous_ech", 1)
+232:         blocs = [self.phi(self._norm(self.X[i][::se][:, idx])) for i in quel]
+233:         X = np.vstack(blocs)
+234:         Y = np.vstack([self.Y[i][::se] for i in quel])
+235:         n = X.shape[1]
+236:         G = X.T @ X
+237:         # ------------------------------------------------------ INVARIANCE
+238:         #
+239:         # L'ajustement ordinaire minimise ‖XW − Y‖² SEUL : il ignore complètement
+240:         # l'invariance inter-langue. Mesuré (§47) : fidélité et invariance tirent
+241:         # alors en sens OPPOSÉ quand le réseau grandit — +0,0185 de fidélité pour
+242:         # −0,0776 d'invariance de 8 à 179 neurones. On ajoute donc à l'objectif la
+243:         # variance INTER-LANGUE de la sortie :
+244:         #
+245:         #     P(W) = Σ_i n_i ‖m_i − 
+… [118 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", "limit": 26, "offset": 246}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py</path>
+<type>file</type>
+<content>
+246:         #
+247:         # C'est un terme QUADRATIQUE en W : P(W) = tr(Wᵀ C W) avec
+248:         # C = Σ_i n_i (M_i − M̄)ᵀ(M_i − M̄). L'objectif total reste donc quadratique et
+249:         # la solution reste en FORME FERMÉE :
+250:         #
+251:         #     (XᵀX + μ·C + ride·I) W = Xᵀ(Y − mt)
+252:         #
+253:         # On ne change pas d'algorithme, on change d'OBJECTIF : on demande à la
+254:         # lecture de copier la cible TOUT EN rapprochant les langues.
+255:         if getattr(self, "mu_inv", 0.0) > 0.0:
+256:             n_i = np.array([len(b) for b in blocs], dtype=np.float64)
+257:             M = np.vstack([b.mean(0) for b in blocs])          # (langues, n)
+258:             mbar = (n_i[:, None]*M).sum(0)/n_i.sum()
+259:             D = M - mbar
+260:             C = (D*n_i[:, None]).T @ D
+261:             # ÉCHELLE. Première tentative : `mu·len(X)·C`. FAUSSE, et la mesure l'a
+262:             # montrée : `len(X)·trace(C)` vaut ~80× `trace(XᵀX)`, donc même μ=0,003
+263:             # écrasait le terme de données. Résultat observé : une FALAISE (invariance
+… [700 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", "limit": 22, "offset": 268}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py</path>
+<type>file</type>
+<content>
+268:         return np.linalg.solve(G + ride*len(X)*np.eye(n), X.T @ (Y - mt))
+269:         if self.pese is None:
+270:             return np.linalg.solve(X.T @ X + ride*len(X)*np.eye(n), X.T @ (Y - mt))
+271:         # PESÉE PAR LANGUE. La régression minimise une erreur ABSOLUE : une langue
+272:         # dont les cibles ont une norme double pèse quatre fois plus dans
+273:         # l'objectif. Or la métrique finale est un COSINUS, insensible à l'échelle
+274:         # — les deux sont incohérents, et la lecture partagée se met au service
+275:         # des langues « fortes ». On rétablit la cohérence en pondérant chaque pas
+276:         # par 1/norme², ce qui revient à minimiser l'erreur RELATIVE de chaque
+277:         # langue. Les poids sont normalisés à 1 en moyenne pour que le terme de
+278:         # ride garde la même échelle.
+279:         w = np.concatenate([np.full(len(self.Y[i]), self.pese[i], dtype=np.float64)
+280:                             for i in quel])
+281:         w = w/w.mean()
+282:         Xw = X*w[:, None]
+283:         return np.linalg.solve(X.T @ Xw + 
+… [350 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py", "new_string": "        # ------------------------------------ INVARIANCE **ET** SÉPARATION DU CONTENU\n        #\n        # L'ajustement ordinaire minimise ‖XW − Y‖² SEUL. Mesuré (§47) : fidélité et\n        # i … [3525 caractères tronqués]`
+
+  ```
+Error: old_string was not found in "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py"
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\ns = open('tools/pont_generatif.py').read()\ndebut = s.index(\"        # ------------------------------------------------------ INVARIANCE\")\nfin = s.index(\"    def fid(self, idx, W, mt, quel):\")\nnouveau = ''' … [4481 caractères tronqués]`
+
+  ```
+bloc remplacé
+syntaxe OK
+syntaxe OK
+  ```
+
+### 🤖 Assistant
+
+⏵ **J'écris l'outil qui balaie les DEUX termes et mesure la séparation, avec celle du professeur comme cible.**
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"objectif_du_pont.py — ajuster la lecture pour SÉPARER le contenu, pas seulement\nrapprocher les langues.\n\nCE QUE LE §57 A ÉTABLI. Depuis le §41 on lisait l'invariance (0,90-0,96) comme la\npreuve que le pont fonctionnait. Le test à deux axes a montré autr … [5235 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/objectif_du_pont.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"import ast; ast.parse(open('tools/objectif_du_pont.py').read()); print('syntaxe OK')\" && setsid nohup python3 -u tools/objectif_du_pont.py /tmp/cache_unites_train.npz /tmp/cache_unites_test.npz --neur 120 --grille \"0,0 … [267 caractères tronqués]`
+
+  ```
+syntaxe OK
+lancé
+19:47
+articles wiki : 140
+  ```
+
+- **bash** `{"command": "sleep 560; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== objectif du pont (UDHR, unités) ===\"; cat /tmp/objectif_pont.log 2>/dev/null; date '+%H:%M'", "description": "Read the two-knob objective sweep", "timeoutMs": 600000}`
+
+  ```
+=== objectif du pont (UDHR, unités) ===
+# 170 entrées d'apprentissage · 230 de test · 896 canaux
+# réseau 120 neurones · 1 couche(s)
+
+# CIBLE — le professeur : S_langue 0.6939 · S_domaine 0.9421 · SÉPARATION -0.2482
+
+#  mu_lang  mu_cont  fid TEST  S_langue  S_domaine  SÉPARATION  vs prof
+    0.000    0.000    0.5692    0.8824     0.9907     -0.1083  +0.1399
+    0.300    0.000    0.5618    0.9281     0.9923     -0.0642  +0.1840
+# AVERTISSEMENT : mu_cont=0.3 rend la matrice non définie positive (lambda_min -3.456e+04) — les poids peuvent diverger.
+    0.000    0.300    0.5596    0.9056     0.9921     -0.0865  +0.1617
+# AVERTISSEMENT : mu_cont=0.3 rend la matrice non définie positive (lambda_min -4.517e+04) — les poids peuvent diverger.
+    0.300    0.300    0.5563    0.9378     0.9936     -0.0558  +0.1924
+# AVERTISSEMENT : mu_cont=1.0 rend la matrice non définie positive (lambda_min -2.843e+05) — les poids peuvent diverger.
+    1.000    1.000    0.5533    0.9503     0.9945     -0.0442  +0.2040
+# AVERTISSEMENT : mu_cont=3.0 rend la matrice non définie positive (lambda_min -1.913e+06) — les poids peuvent diverger.
+    3.000    3.000    0.5516    0.9594     0.9953     -0.0359  +0.2123
+
+
+… [231 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Sur l'UDHR les curseurs éloignent de la cible — mais la métrique y est dégénérée (§53 : ses « contenus différents » sont le même texte). Le test décisif est sur Wikipedia.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && setsid nohup python3 -u tools/objectif_du_pont.py /tmp/cache_wikitrain.npz /tmp/cache_wikitest.npz --neur 120 --grille \"0,0;0.1,0;0,0.1;0.1,0.1;0.3,0.3;1,1\" > /tmp/objectif_wiki.log 2>&1 < /dev/null & disown\nsleep 500; cat /tmp/ob … [107 caractères tronqués]`
+
+  ```
+# 255 entrées d'apprentissage · 255 de test · 896 canaux
+# réseau 120 neurones · 1 couche(s)
+
+# CIBLE — le professeur : S_langue 0.9454 · S_domaine 0.8937 · SÉPARATION +0.0517
+
+#  mu_lang  mu_cont  fid TEST  S_langue  S_domaine  SÉPARATION  vs prof
+    0.000    0.000    0.4747    0.9835     0.9866     -0.0031  -0.0548
+    0.100    0.000    0.4729    0.9871     0.9908     -0.0037  -0.0554
+# AVERTISSEMENT : mu_cont=0.1 rend la matrice non définie positive (lambda_min -5.689e+03) — les poids peuvent diverger.
+    0.000    0.100    0.2341    0.8436     0.8340     +0.0096  -0.0421
+# AVERTISSEMENT : mu_cont=0.1 rend la matrice non définie positive (lambda_min -1.163e+03) — les poids peuvent diverger.
+    0.100    0.100    0.3359    0.8479     0.7959     +0.0519  +0.0003
+# AVERTISSEMENT : mu_cont=0.3 rend la matrice non définie positive (lambda_min -7.743e+04) — les poids peuvent diverger.
+    0.300    0.300    0.3474    0.9037     0.9158     -0.0122  -0.0639
+# AVERTISSEMENT : mu_cont=1.0 rend la matrice non définie positive (lambda_min -1.042e+06) — les poids peuvent diverger.
+    1.000    1.000    0.2520    0.7636     0.9040     -0.1404  -0.1921
+
+# SÉPARATION = S_langue − S_domaine. Pos
+… [191 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Résultat clé : une configuration ATTEINT la séparation du professeur (+0,0519 contre +0,0517). Mais l'objectif est NON CONVEXE et les résultats sont erratiques.**
+
+| μ_lang | μ_cont | fid TEST | S_langue | S_domaine | **SÉPARATION** | vs prof |
+|---:|---:|---:|---:|---:|---:|---:|
+| 0 | 0 | 0,4747 | 0,9835 | 0,9866 | −0,0031 | −0,0548 |
+| **0,1** | **0,1** | 0,3359 | 0,8479 | 0,7959 | **+0,0519** | **+0,0003** |
+| 0,3 | 0,3 | 0,3474 | 0,9037 | 0,9158 | −0,0122 | −0,0639 |
+| 1 | 1 | 0,2520 | 0,7636 | 0,9040 | −0,1404 | −0,1921 |
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 58. Réécrire l'objectif : la structure du professeur EST atteignable, mais l'objectif à deux curseurs est NON CONVEXE\n\n### 58.1  … [7141 caractères tronqués]`

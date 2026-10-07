@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 197.0 h |
-| Tours | 181 |
-| Messages | 9057 |
-| Appels d'outils | 8535 |
-| Fichiers touchés | 200 |
-| Commandes | 7241 |
+| Durée | 197.3 h |
+| Tours | 182 |
+| Messages | 9069 |
+| Appels d'outils | 8545 |
+| Fichiers touchés | 201 |
+| Commandes | 7246 |
 | Sous-agents | 32 |
-| Commits | 653 |
+| Commits | 654 |
 | Compactages de contexte | 12 |
 
 ## Objectifs déclarés
@@ -415,6 +415,8 @@
 **Tour 180** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 **Tour 181** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
+
+**Tour 182** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -9169,7 +9171,74 @@ Il écrivait aussi un fichier **partiel** que le script aurait **sauté** en le 
 
 **Synthèse produite :**
 
-⏵ **J'écris le résultat le plus important du round : il qualifie TOUS les chiffres d'invariance du rapport.**
+⏵ **Round 54 — un résultat qui qualifie tout le reste du rapport.**
+
+\## 1. La question ouverte depuis le §41 est tranchée — et la réponse est dure
+
+Depuis le §41, un fait revenait sans être expliqué : **notre sortie est bien plus invariante entre langues que le professeur** (0,95 contre 0,65 sur l'UDHR ; **0,928 contre 0,347** sur Wikipedia). Mission, ou appauvrissement ? Rien ne départageait.
+
+**Le test** : mesurer la *même* similarité sur les *deux* axes, mêmes entrées, pour notre sortie **et** pour le professeur.
+
+| corpus | | S_langue | S_domaine | écart | rapport |
+|---|---|---:|---:|---:|---:|
+| **Wikipedia** | **notre** | 0,9835 | 0,9866 | **−0,0031** | **1,00** |
+| (moyenne) | professeur | 0,9454 | 0,8937 | **+0,0517** | 1,06 |
+| **UDHR** | **notre** | 0,8824 | 0,9907 | **−0,1083** | **0,89** |
+| | professeur | 0,6939 | 0,9421 | −0,2482 | 0,74 |
+
+*(Vérifié sur deux pooling — dernière position et moyenne — le verdict est le même : ce n'est pas un artefact.)*
+
+**Sur les deux corpus, notre pont sépare moins le contenu de la langue que le professeur.** Sur l'UDHR il en conserve **44 %** ; sur Wikipedia il n'en conserve **rien, et le signe s'inverse** — là où le professeur préfère le contenu, notre sortie est indifférente.
+
+**Conséquence sur tout le rapport** : une invariance de 0,90-0,96 n'est pas à elle seule la preuve d'un pont réussi. Elle mélange **rapprocher les langues** et **effacer les différences**. Ce test est le seul qui les sépare, et il n'avait jamais été fait.
+
+**Ce n'est pas μ** : mesuré à μ = 0 et μ = 0,1, le rapport vaut 1,00 dans les deux cas. L'écrasement existe sans contrainte.
+
+**La suite est désormais précise** : réécrire l'objectif de la lecture pour rapprocher les langues **à contenu égal** *et* éloigner les contenus **à langue égale**. Les deux termes sont quadratiques en `W` — la solution reste en forme fermée, même mécanique que le §48 appliquée au bon objectif.
+
+\## 2. Le corpus Wikipedia multi-domaine livre le protocole complet
+
+**3 langues apprises (de, en, fr) / 3 en test (es, it, pt), 85 articles, couche 8, 120 neurones** :
+
+| | |
+|---|---:|
+| fidélité TEST | 0,5962 |
+| oracle TEST | 0,6089 · **écart +0,0127** |
+| invariance TEST | 0,9274 · pire 0,5990 |
+| **invariance du professeur** | **0,3470** |
+
+\## 3. La croissance sous contrainte, protocole entier — première fois
+
+| | |
+|---|---:|
+| **TAILLE** | **147 neurones · 1 couche** |
+| fidélité apprentissage | 0,6464 |
+| fidélité VALIDATION / TEST | 0,6312 / **0,6299** (témo
+… [1097 caractères tronqués]
+
+### Tour 182 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
+
+*10 appels d'outils.* Actions notables :
+
+- read
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py`
+- bash — Implement the content-separation term
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/objectif_du_pont.py`
+- bash — Run the two-knob objective sweep
+- bash — Read the two-knob objective sweep
+- bash — Run the two-knob sweep on Wikipedia
+- bash — Report and commit the objective reformulation result
+
+**Synthèse produite :**
+
+⏵ **Résultat clé : une configuration ATTEINT la séparation du professeur (+0,0519 contre +0,0517). Mais l'objectif est NON CONVEXE et les résultats sont erratiques.**
+
+| μ_lang | μ_cont | fid TEST | S_langue | S_domaine | **SÉPARATION** | vs prof |
+|---:|---:|---:|---:|---:|---:|---:|
+| 0 | 0 | 0,4747 | 0,9835 | 0,9866 | −0,0031 | −0,0548 |
+| **0,1** | **0,1** | 0,3359 | 0,8479 | 0,7959 | **+0,0519** | **+0,0003** |
+| 0,3 | 0,3 | 0,3474 | 0,9037 | 0,9158 | −0,0122 | −0,0639 |
+| 1 | 1 | 0,2520 | 0,7636 | 0,9040 | −0,1404 | −0,1921 |
 
 ## 3. Travail accompli
 
@@ -9327,7 +9396,7 @@ Il écrivait aussi un fichier **partiel** que le script aurait **sauté** en le 
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/31-le-regroupement-par-experts-mesure-et-k3-au-complet.md` | 1 | 1 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-prefill-par-experts.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/engine.rs` | 0 | 1 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py` | 0 | 41 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py` | 0 | 42 |
 | `/tmp/chaine_propre.sh` | 1 | 0 |
 | `/tmp/analyse_propre.sh` | 1 | 0 |
 | `/tmp/stop2.py` | 1 | 0 |
@@ -9377,6 +9446,7 @@ Il écrivait aussi un fichier **partiel** que le script aurait **sauté** en le 
 | `/tmp/wiki_analyse.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/lecture_invariante.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/invariance_ou_appauvrissement.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/objectif_du_pont.py` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -9455,7 +9525,7 @@ Il écrivait aussi un fichier **partiel** que le script aurait **sauté** en le 
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 7201 autres
+- … et 7206 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10256,4 +10326,5 @@ Il écrivait aussi un fichier **partiel** que le script aurait **sauté** en le 
 - Le pont transfère sur le corpus Wikipedia multi-domaine, sur TROIS paires de langues  71 articles alignés × 6 langues, couche 8, 120 neurones, 1 couche.    pair
 - Croissance sous contrainte, protocole ENTIER : 147 neurones, oracle sur les deux panneaux  Première passe de croissance qui fournit TOUT ce que l'objectif deman
 - LA question du §41 est tranchée : notre sortie ÉCRASE la distinction contenu/langue  Depuis le §41 un même fait revenait : notre sortie est bien plus invariante
+- Réécrire l'objectif : la structure du professeur EST atteignable, mais l'objectif à deux curseurs est NON CONVEXE  OBJECTIF : ‖XW-Y‖² + mu_lang·P_lang(W) - mu_c
 

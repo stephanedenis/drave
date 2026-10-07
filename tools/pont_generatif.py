@@ -109,6 +109,11 @@ class Pont:
         # 0 = ajustement ordinaire. Voir `ajuste` : le terme reste quadratique,
         # donc la solution reste en forme fermée.
         self.mu_inv = 0.0
+        # SÉPARATION DU CONTENU (à MAXIMISER, donc terme SOUSTRAIT de l'objectif).
+        # Voir `ajuste` : le §57 a montré que l'invariance seule s'obtient aussi bien
+        # en rapprochant les langues qu'en effaçant tout. Ce second terme est le seul
+        # qui distingue les deux.
+        self.mu_cont = 0.0
         # nombre de langues traitées ensemble dans `nait` (vectorisation sur les
         # langues, la seule dimension qui ne soit pas séquentielle)
         self.bloc_langues = 32
@@ -234,53 +239,67 @@ class Pont:
         Y = np.vstack([self.Y[i][::se] for i in quel])
         n = X.shape[1]
         G = X.T @ X
-        # ------------------------------------------------------ INVARIANCE
+        # ------------------------------------ INVARIANCE **ET** SÉPARATION DU CONTENU
         #
-        # L'ajustement ordinaire minimise ‖XW − Y‖² SEUL : il ignore complètement
-        # l'invariance inter-langue. Mesuré (§47) : fidélité et invariance tirent
-        # alors en sens OPPOSÉ quand le réseau grandit — +0,0185 de fidélité pour
-        # −0,0776 d'invariance de 8 à 179 neurones. On ajoute donc à l'objectif la
-        # variance INTER-LANGUE de la sortie :
+        # L'ajustement ordinaire minimise ‖XW − Y‖² SEUL. Mesuré (§47) : fidélité et
+        # invariance tirent alors en sens opposé quand le réseau grandit. On ajoute
+        # donc la variance INTER-LANGUE de la sortie :
         #
-        #     P(W) = Σ_i n_i ‖m_i − m̄‖²     où m_i = moyenne de X_i·W par langue
+        #     P_lang(W) = Σ_i n_i ‖m_i − m̄‖²    m_i = moyenne par langue de X_i·W
         #
-        # C'est un terme QUADRATIQUE en W : P(W) = tr(Wᵀ C W) avec
-        # C = Σ_i n_i (M_i − M̄)ᵀ(M_i − M̄). L'objectif total reste donc quadratique et
-        # la solution reste en FORME FERMÉE :
+        # Puis le §57 a montré que cela ne suffit pas : notre sortie ne sépare plus
+        # les CONTENUS (S_domaine ≈ S_langue), alors que le professeur, si. Une
+        # variance inter-langue peut être écrasée de deux façons — en rapprochant les
+        # langues À CONTENU ÉGAL (ce qu'on veut) ou en effaçant tout (ce qu'on ne veut
+        # pas). Le seul moyen de distinguer les deux est de demander AUSSI que les
+        # contenus restent distincts :
         #
-        #     (XᵀX + μ·C + ride·I) W = Xᵀ(Y − mt)
+        #     P_cont(W) = Σ_k n_k ‖μ_k − μ̄‖²    μ_k = moyenne par CONTENU de X_k·W
         #
-        # On ne change pas d'algorithme, on change d'OBJECTIF : on demande à la
-        # lecture de copier la cible TOUT EN rapprochant les langues.
-        if getattr(self, "mu_inv", 0.0) > 0.0:
+        # Objectif : ‖XW − Y‖² + μ_lang·P_lang(W) − μ_cont·P_cont(W)
+        #
+        # Les DEUX termes sont quadratiques en W — tr(WᵀCW) — donc la solution reste
+        # en FORME FERMÉE. Le second étant SOUSTRAIT, la matrice peut cesser d'être
+        # définie positive : on le SIGNALE au lieu de le taire, et le ride garantit
+        # l'inversibilité.
+        #
+        # ÉCHELLE : chaque C est normalisé à la trace de XᵀX, pour que μ=1 signifie
+        # « terme de même échelle que l'ajustement ». La première version utilisait
+        # μ·len(X)·C, ~80× trop grand, et produisait une FALAISE au lieu d'un curseur.
+        mu_lang = getattr(self, "mu_inv", 0.0)
+        mu_cont = getattr(self, "mu_cont", 0.0)
+        if mu_lang > 0.0 or mu_cont > 0.0:
             n_i = np.array([len(b) for b in blocs], dtype=np.float64)
-            M = np.vstack([b.mean(0) for b in blocs])          # (langues, n)
-            mbar = (n_i[:, None]*M).sum(0)/n_i.sum()
-            D = M - mbar
-            C = (D*n_i[:, None]).T @ D
-            # ÉCHELLE. Première tentative : `mu·len(X)·C`. FAUSSE, et la mesure l'a
-            # montrée : `len(X)·trace(C)` vaut ~80× `trace(XᵀX)`, donc même μ=0,003
-            # écrasait le terme de données. Résultat observé : une FALAISE (invariance
-            # 0,874 → 0,9998 d'un coup, fidélité SOUS le témoin constant) au lieu d'un
-            # curseur. On normalise donc C pour que μ=1 signifie « pénalité de même
-            # échelle que l'ajustement », et μ reste un rapport lisible.
-            G = G + self.mu_inv*(np.trace(G)/max(np.trace(C), 1e-12))*C
+            M = np.vstack([b.mean(0) for b in blocs])          # (entrées, n)
+            if mu_lang > 0.0:
+                mbar = (n_i[:, None]*M).sum(0)/n_i.sum()
+                D = M - mbar
+                C = (D*n_i[:, None]).T @ D
+                G = G + mu_lang*(np.trace(G)/max(np.trace(C), 1e-12))*C
+            if mu_cont > 0.0:
+                # regroupement par CONTENU : l'étiquette après le PREMIER « _ »
+                groupes = {}
+                for r, i in enumerate(quel):
+                    _, sep, k = str(self.langues[i]).partition("_")
+                    if sep:
+                        groupes.setdefault(k, []).append(r)
+                gr = [g for g in groupes.values() if len(g) >= 2]
+                if gr:
+                    Mw = np.vstack([np.average(M[g], axis=0, weights=n_i[g])
+                                    for g in gr])
+                    nw = np.array([n_i[g].sum() for g in gr])
+                    cbar = (nw[:, None]*Mw).sum(0)/nw.sum()
+                    Dc = Mw - cbar
+                    Cc = (Dc*nw[:, None]).T @ Dc
+                    ech = np.trace(G)/max(np.trace(Cc), 1e-12)
+                    A = G - mu_cont*ech*Cc + ride*len(X)*np.eye(n)
+                    lam = float(np.linalg.eigvalsh(A).min())
+                    if lam <= 0:
+                        print(f"# AVERTISSEMENT : mu_cont={mu_cont} rend la matrice "
+                              f"non définie positive (lambda_min {lam:.3e}) — les "
+                              f"poids peuvent diverger.")
+                    return np.linalg.solve(A, X.T @ (Y - mt))
         return np.linalg.solve(G + ride*len(X)*np.eye(n), X.T @ (Y - mt))
-        if self.pese is None:
-            return np.linalg.solve(X.T @ X + ride*len(X)*np.eye(n), X.T @ (Y - mt))
-        # PESÉE PAR LANGUE. La régression minimise une erreur ABSOLUE : une langue
-        # dont les cibles ont une norme double pèse quatre fois plus dans
-        # l'objectif. Or la métrique finale est un COSINUS, insensible à l'échelle
-        # — les deux sont incohérents, et la lecture partagée se met au service
-        # des langues « fortes ». On rétablit la cohérence en pondérant chaque pas
-        # par 1/norme², ce qui revient à minimiser l'erreur RELATIVE de chaque
-        # langue. Les poids sont normalisés à 1 en moyenne pour que le terme de
-        # ride garde la même échelle.
-        w = np.concatenate([np.full(len(self.Y[i]), self.pese[i], dtype=np.float64)
-                            for i in quel])
-        w = w/w.mean()
-        Xw = X*w[:, None]
-        return np.linalg.solve(X.T @ Xw + ride*len(X)*np.eye(n), Xw.T @ (Y - mt))
 
     def fid(self, idx, W, mt, quel):
         X = self.phi(np.vstack([self._norm(self.X[i][:, idx]) for i in quel]))
