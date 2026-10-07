@@ -200,3 +200,69 @@ seconde étape sémantique (ou un artefact de la normalisation).
    symétrisation annule l'effet au premier ordre, elle ne le supprime pas.
 4. **Le corpus grandit pendant qu'on le mesure** : 183 et 209 langues ici, 399
    sont attendues. Les chiffres seront repris quand il sera complet.
+
+---
+
+## 8. Le corpus complet : mêmes pics, et c'est une vraie vérification
+
+Le corpus est passé de **183–209 langues** (§7) à **398 langues** — le traçage de
+l'article 2 s'est terminé pendant la rédaction. Le §7 annonçait qu'il faudrait
+reprendre les chiffres ; les voici, et ils **ne bougent pas**.
+
+| | pic (183–209 langues) | **pic (398 langues)** |
+|---|---|---|
+| pooling moyenne | couche **13** (+0,0322) | couche **13** (+0,0344) |
+| pooling dernière position | couche **10** (+0,0374) | couche **10** (+0,0397) |
+
+**Les deux pics sont identiques, et les amplitudes à 7 % près.** Ce n'est pas une
+vérification de complaisance : le corpus a **plus que doublé**, et 190 langues
+nouvelles — dont des familles et des écritures entièrement neuves — n'ont pas
+déplacé la conclusion d'une seule couche.
+
+### 8.1 Les tableaux complets, 398 langues
+
+**Pooling MOYENNE** — pic couche 13 (+0,0344 = 0,8308 − 0,7964) :
+
+| couche | 0 | 1 | 4 | 8 | 10 | 11 | 12 | **13** | 14 | 15 | 16 | 23 |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| séparation | +0,001 | +0,023 | +0,016 | +0,012 | +0,023 | +0,027 | +0,031 | **+0,034** | +0,030 | +0,029 | +0,023 | +0,021 |
+
+**Pooling DERNIÈRE POSITION** — pic couche 10 (+0,0397 = 0,8025 − 0,7628) :
+
+| couche | 0 | 1 | 4 | 8 | 9 | **10** | 11 | 12 | 13 | 14 | 15 | 23 |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| séparation | +0,000 | +0,016 | +0,030 | +0,019 | +0,023 | **+0,040** | +0,028 | +0,036 | +0,038 | +0,035 | +0,031 | +0,024 |
+
+### 8.2 Ce que la bande 10–15 dit, et ce qu'elle ne dit pas
+
+**Elle dit** où la représentation cesse d'être une transcription de surface : la
+couche 0 a une séparation de **+0,001** (nulle — le même texte dans deux langues
+ne se ressemble pas plus que deux textes différents), la couche 13 a **+0,034**.
+Et les couches **10 à 15** forment un plateau, pas un pic isolé.
+
+**Elle ne dit pas** que la couche 13 est « la » couche à viser. Trois raisons :
+
+1. **Le plateau est large** (10–15, soit six couches sur 24) : rien ne distingue
+   fortement 12, 13 et 14, et le pic se déplace de 10 à 13 selon le pooling.
+2. **Le bombement de la couche 4 est inexpliqué.** Il apparaît dans les deux
+   poolings, sur les deux tailles de corpus (+0,0156 et +0,0299). Deux
+   hypothèses : une première étape sémantique, ou un artefact de normalisation.
+   La mesure qui trancherait : refaire le profil sur un modèle dont on sait
+   qu'il n'a pas cette structure, ou corréler le bombement avec ce que la couche
+   4 fait au même texte dans la MÊME langue.
+3. **Le plancher d'anisotropie est haut** : 0,75 à 0,87 selon la couche et le
+   pooling. Le signal sémantique fait **+0,03 sur un fond de 0,80** — il est
+   réel, il est reproductible, et il est **petit**. C'est la première chose à
+   dire de cette mesure.
+
+### 8.3 Ce que le cycle rapide a coûté
+
+| | |
+|---|---:|
+| traçage article 1 (399 langues × 24 couches) | **26 min** |
+| traçage article 2 (399 langues × 24 couches) | **48 min** |
+| **la mesure elle-même, cache chaud** | **quelques secondes** |
+| taille du cache des vecteurs réduits | quelques Mo |
+
+**Une heure et quart de capture, puis des itérations instantanées.** C'est cela,
+le cycle rapide — et il n'a demandé aucun modèle plus petit.

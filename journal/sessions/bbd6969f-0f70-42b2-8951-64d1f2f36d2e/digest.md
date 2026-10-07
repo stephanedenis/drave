@@ -159520,3 +159520,79 @@ syntaxe OK
 ⏵ **Résultat cohérent entre les deux poolings : la séparation culmine dans la bande des couches 10–15. Je consigne.**
 
 - **bash** `{"command": "date '+%H:%M'; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> reports/rapport-cycle-rapide.md <<'MD_EOF'\n\n---\n\n## 7. Le premier résultat : la première couche sémantique est dans la bande 10–15\n\nMesuré sur **183 langues** (pooling moyenne) et **209 langues** (pooling  … [5026 caractères tronqués]`
+
+  ```
+19:07
+8b232d0 Premier résultat du cycle rapide : la première couche sémantique est dans la bande 10–15
+
+article2 : 231/399
+  ```
+
+### 🤖 Assistant
+
+⏵ **Article 2 à 231/399. J'attends la fin pour reprendre la mesure sur le corpus complet.**
+
+- **bash** `{"command": "sleep 580; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"article2 : $(ls /home/stephane/Data13TB/stephane/corpus/udhr/article2_traces 2>/dev/null | wc -l)/399\"; tail -2 /tmp/trace_article2.log 2>/dev/null", "description": "Wait for article 2 tracing", "timeoutMs": 640000 … [1 caractères tronqués]`
+
+  ```
+article2 : 316/399
+slv 7s
+sme 8s
+  ```
+
+### 🤖 Assistant
+
+⏵ **316/399 ; encore ~11 min.**
+
+- **bash** `{"command": "sleep 580; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"article2 : $(ls /home/stephane/Data13TB/stephane/corpus/udhr/article2_traces 2>/dev/null | wc -l)/399\"; tail -1 /tmp/trace_article2.log 2>/dev/null; ps -eo etimes,cmd | grep trace_articleN | grep -v grep | head -1" … [67 caractères tronqués]`
+
+  ```
+article2 : 399/399
+zul 7s
+   2865 bash /tmp/trace_articleN.sh 2
+  ```
+
+### 🤖 Assistant
+
+⏵ **Corpus complet : 399 langues × 2 articles. Je reprends la mesure finale.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 1800 python3 -u tools/premiere_couche_semantique.py /home/stephane/Data13TB/stephane/corpus/udhr/article1_traces /home/stephane/Data13TB/stephane/corpus/udhr/article2_traces --max-paires 40000 --csv /tmp/pcs_final 2>&1 | grep … [139 caractères tronqués]`
+
+  ```
+# cache périmé (183 traces contre 399) — reconstruction
+=== pooling : MOYENNE · 398 langues · couches 0–23 ===
+#  couche     même   artic≠  SÉPARATION
+       0   0.6690   0.6677     +0.0013
+       1   0.6492   0.6263     +0.0229
+       2   0.7646   0.7574     +0.0073
+       3   0.8005   0.7910     +0.0095
+       4   0.8698   0.8541     +0.0156
+       5   0.8230   0.8047     +0.0184
+       6   0.8131   0.7991     +0.0140
+       7   0.8199   0.8072     +0.0126
+       8   0.8571   0.8454     +0.0118
+       9   0.7849   0.7681     +0.0167
+      10   0.8588   0.8356     +0.0232
+      11   0.7801   0.7529     +0.0273
+      12   0.8489   0.8175     +0.0314
+      13   0.8308   0.7964     +0.0344
+      14   0.8258   0.7962     +0.0295
+      15   0.8250   0.7964     +0.0286
+      16   0.8265   0.8040     +0.0226
+      17   0.7834   0.7611     +0.0223
+      18   0.7422   0.7248     +0.0174
+      19   0.7672   0.7462     +0.0209
+      20   0.7137   0.6932     +0.0205
+      21   0.7170   0.6956     +0.0215
+      22   0.6723   0.6472     +0.0251
+      23   0.6596   0.6388     +0.0208
+# PIC de séparation à la couche 13 (+0.0344 = 0.8308 − 0.7964)
+# cache périmé (210 traces contre 399) — reconstru
+… [1426 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Corpus complet (398 langues) : mêmes pics que sur 183 — la mesure est stable. Je consigne.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> reports/rapport-cycle-rapide.md <<'MD_EOF'\n\n---\n\n## 8. Le corpus complet : mêmes pics, et c'est une vraie vérification\n\nLe corpus est passé de **183–209 langues** (§7) à **398 langues** — le traçage de\nl'article 2 s'est … [4616 caractères tronqués]`
