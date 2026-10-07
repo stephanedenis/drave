@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 204.1 h |
-| Tours | 193 |
-| Messages | 9198 |
-| Appels d'outils | 8651 |
+| Durée | 204.3 h |
+| Tours | 195 |
+| Messages | 9208 |
+| Appels d'outils | 8657 |
 | Fichiers touchés | 212 |
-| Commandes | 7340 |
+| Commandes | 7346 |
 | Sous-agents | 32 |
-| Commits | 673 |
+| Commits | 674 |
 | Compactages de contexte | 12 |
 
 ## Objectifs déclarés
@@ -439,6 +439,10 @@
 **Tour 192** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 **Tour 193** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
+
+**Tour 194** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
+
+**Tour 195** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -9908,15 +9912,110 @@ Le pont **sait maintenant reproduire la structure contenu/langue de son professe
 
 **Synthèse produite :**
 
-⏵ **La courbe est MONOTONE : il n'y a pas de meilleur compromis. α=1 EST l'optimum, et le rapport reste constant à 10,688 sur tout le balayage — l'identité du §67 vérifiée une fois de plus.**
+⏵ **Round 66 — la frontière est close.**
 
-| α | fid TEST | P_lang | P_cont | RAPPORT |
-|---:|---:|---:|---:|---:|
-| **1,00** | **0,4298** | 3,5 | 37,5 | **10,688** |
-| 3,00 | 0,3964 | 31,6 | 337,3 | 10,688 |
-| 6,50 | 0,3169 | 148,2 | 1 583,6 | 10,688 |
-| 10,78 | 0,2512 | 407,5 | 4 355,6 | 10,688 |
-| | | *prof 399,2* | *prof 4 356,4* | *prof 10,912* |
+\## La courbe est monotone : il n'y a pas de meilleur compromis
+
+Le §76 laissait une question — *un point intermédiaire donne-t-il un meilleur compromis ?* La courbe est échantillonnée sur huit points :
+
+| α | **fid TEST** | P_cont | RAPPORT |
+|---:|---:|---:|---:|
+| **1,00** | **0,4298** | 37,5 | **10,688** |
+| 2,00 | 0,4181 | 149,9 | 10,688 |
+| 4,50 | 0,3601 | 759,0 | 10,688 |
+| 10,78 | 0,2512 | 4 355,6 | 10,688 |
+| | | *prof 4 356,4* | *prof 10,912* |
+
+**Deux lectures, et elles sont nettes :**
+
+1. **La fidélité décroît monotônement avec α.** Aucun optimum intermédiaire : **α = 1 est le meilleur compromis**. Toute énergie de contenu supplémentaire se paie en fidélité, sans exception sur huit points.
+2. **Le rapport est constant à 10,688 sur tout le balayage** — l'identité du §67 vérifiée une **huitième fois**, cette fois sur une courbe complète. Le rapport et l'échelle sont deux questions **indépendantes**, et c'est précisément ce qui rend le compromis inévitable : **on ne peut pas acheter de l'énergie de contenu avec du rapport, seulement avec de la fidélité**.
+
+\## Le résultat final, en une ligne
+
+**Le pont reproduit la structure contenu/langue de son professeur à 98 % — pour 0,047 de fidélité — mais il ne peut pas, en plus, porter l'énergie de contenu du professeur : cela coûte 0,18 de plus, et aucun point intermédiaire n'améliore le compromis.**
+
+\## Ce que la traque laisse, après dix-sept moyens
+
+| acquis | mesure |
+|---|---|
+| Le défaut est **découvert** | rapport 1,00, indiscernable de l'écrasement (§57) |
+| Le défaut est **localisé** | **12× moins d'énergie de contenu** (§61) |
+| Une **identité** explique cinq échecs | le rapport est invariant d'échelle (§67) |
+| La langue entre par **l'entrée**, pas le réservoir | 1,698 contre 1,354 (§70) |
+| Le **premier mécanisme aux deux mouvements opposés** | apprendre quoi lire (§73) |
+| **La cible est atteinte en structure** | **10,688 sur 10,912 — 98 %** (§75) |
+| **Le prix est mesuré et la courbe close** | monotone (§76, §77) |
+
+**Quatre erreurs de ma part corrigées en chemin** : §65 le découpage par bloc contigu qui ne gardait que deux langues sur trois, §73.1 la capture **déduite** au lieu d'être lue, §74 l'espace du discriminant, §60.6 le pas fixe. Chacune est signalée dans le rapport, avec sa mesure et sa correction.
+
+**La conclusion n'est ni un succès ni un échec** : le pont sait reproduire la **structure** de son professeur, pas encore son **contenu** — et l'o
+… [513 caractères tronqués]
+
+### Tour 194 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Check Wikipedia tracing completion
+- bash — Arm the final large-scale verification
+
+**Synthèse produite :**
+
+⏵ **Round 67 — la vérification finale est armée.**
+
+\## Ce qui a été fait ce round
+
+**La frontière est close.** Le balayage de l'amplification sur huit points a montré que **la fidélité décroît monotônement** : il n'y a aucun optimum intermédiaire, α = 1 **est** le meilleur compromis. Et le rapport reste **constant à 10,688** sur tout le balayage — l'identité du §67 vérifiée une huitième fois, cette fois sur une courbe complète.
+
+Le résultat tient en une ligne : **le pont reproduit la structure contenu/langue de son professeur à 98 % pour 0,047 de fidélité, mais il ne peut pas, en plus, porter l'énergie de contenu du professeur — cela coûte 0,18 de plus, et aucun point intermédiaire n'améliore le compromis.**
+
+\## La vérification finale est armée
+
+Elle se déclenchera seule quand le traçage atteindra `TERMINE` :
+
+1. intersection des 6 langues → les articles communs ;
+2. partage 3 langues apprises / 3 en test, comme au §75 ;
+3. construction des caches couche 8 ;
+4. **la composition des trois leviers sur le corpus complet**.
+
+**La question qu'elle tranche** : les **98 %** mesurés sur 85 articles sont-ils un effet de la taille du panel ? À 482 articles, les intervalles se resserrent d'un facteur 5,7 et l'effet — s'il est réel — doit tenir.
+
+\## État
+
+| chaîne | avancement |
+|---|---|
+| **Wikipedia apparié** | **410 / 482 articles** · 2 327 / 2 892 traces · ~19 s par trace |
+| **Vérification finale** | armée, attend `TERMINE` |
+| **Croissance μ = 0,1** | terminée (§56, protocole entier) |
+| **Crime** | 4/24 segments, conservés |
+
+\## Le bilan de la traque, en une page
+
+| acquis | mesure |
+|---|---|
+| Le défaut est **découvert** | rapport 1,00, indiscernable de l'écrasement (§57) |
+| Le défaut est **localisé** | **12× moins d'énergie de contenu** (§61) |
+| Une **identité** explique cinq échecs | le rapport est invariant d'échelle (§67) |
+| La langue entre par **l'entrée**, pas le réservoir | 1,698 contre 1,354 (§70) |
+| Le **premier mécanisme aux deux mouvements opposés** | apprendre quoi lire (§73) |
+| **La cible est atteinte en structure** | **10,688 sur 10,912 — 98 %** (§75) |
+| **Le prix est mesuré et la courbe close** | monotone sur huit points (§76, §77) |
+
+**Dix-sept moyens mesurés, dix écartés — chacun par une mesure et souvent par une identité — quatre erreurs de ma part corrigées en chemin et signalées, et une conclusion qui n'est ni un succès ni un échec** : le pont sait reproduire la **structure** de son professeur, pas encore son **contenu**, et l'on sa
+… [246 caractères tronqués]
+
+### Tour 195 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Check tracing status
+- bash — Verify repo state and wait
+- bash — Check the uncommitted file
+- bash — Commit journal and wait
+
+**Synthèse produite :**
+
+⏵ **Un fichier non commité — je vérifie avant de continuer.**
 
 ## 3. Travail accompli
 
@@ -10214,7 +10313,7 @@ Le pont **sait maintenant reproduire la structure contenu/langue de son professe
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 7300 autres
+- … et 7306 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -11035,4 +11134,5 @@ Le pont **sait maintenant reproduire la structure contenu/langue de son professe
 - LA CIBLE EST ATTEINTE : la composition des trois leviers donne 98 % du rapport du professeur    méthode                              fid TEST  P_lang  P_cont   
 - La réserve du §75.4 est mesurée et elle tranche : la structure s'obtient, la fidélité ne suit pas    rang  alpha  fidélité amplifiée  P_lang    P_cont   2     1
 - La courbe est MONOTONE : pas de meilleur compromis, et la frontière est close  BALAYAGE DE L'AMPLIFICATION (rang 2), huit points :   alpha   fid TEST  P_lang   
+- Journal : compteurs de session mis à jour (fichier généré)" && git log --oneline -1 | cat; echo "--- attente ---"; sleep 500; echo "articles : $(grep -c '^ARTIC
 

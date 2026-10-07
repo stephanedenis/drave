@@ -151948,3 +151948,207 @@ articles wiki : 396
 | | | *prof 399,2* | *prof 4 356,4* | *prof 10,912* |
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 77. La courbe est MONOTONE : il n'y a pas de meilleur compromis, et la frontière est close\n\nLe §76 laissait une question : *« si … [5168 caractères tronqués]`
+
+  ```
+98e79fe La courbe est MONOTONE : pas de meilleur compromis, et la frontière est close
+
+articles wiki : 409
+02:55
+  ```
+
+### 🤖 Assistant
+
+⏵ **Round 66 — la frontière est close.**
+
+## La courbe est monotone : il n'y a pas de meilleur compromis
+
+Le §76 laissait une question — *un point intermédiaire donne-t-il un meilleur compromis ?* La courbe est échantillonnée sur huit points :
+
+| α | **fid TEST** | P_cont | RAPPORT |
+|---:|---:|---:|---:|
+| **1,00** | **0,4298** | 37,5 | **10,688** |
+| 2,00 | 0,4181 | 149,9 | 10,688 |
+| 4,50 | 0,3601 | 759,0 | 10,688 |
+| 10,78 | 0,2512 | 4 355,6 | 10,688 |
+| | | *prof 4 356,4* | *prof 10,912* |
+
+**Deux lectures, et elles sont nettes :**
+
+1. **La fidélité décroît monotônement avec α.** Aucun optimum intermédiaire : **α = 1 est le meilleur compromis**. Toute énergie de contenu supplémentaire se paie en fidélité, sans exception sur huit points.
+2. **Le rapport est constant à 10,688 sur tout le balayage** — l'identité du §67 vérifiée une **huitième fois**, cette fois sur une courbe complète. Le rapport et l'échelle sont deux questions **indépendantes**, et c'est précisément ce qui rend le compromis inévitable : **on ne peut pas acheter de l'énergie de contenu avec du rapport, seulement avec de la fidélité**.
+
+## Le résultat final, en une ligne
+
+**Le pont reproduit la structure contenu/langue de son professeur à 98 % — pour 0,047 de fidélité — mais il ne peut pas, en plus, porter l'énergie de contenu du professeur : cela coûte 0,18 de plus, et aucun point intermédiaire n'améliore le compromis.**
+
+## Ce que la traque laisse, après dix-sept moyens
+
+| acquis | mesure |
+|---|---|
+| Le défaut est **découvert** | rapport 1,00, indiscernable de l'écrasement (§57) |
+| Le défaut est **localisé** | **12× moins d'énergie de contenu** (§61) |
+| Une **identité** explique cinq échecs | le rapport est invariant d'échelle (§67) |
+| La langue entre par **l'entrée**, pas le réservoir | 1,698 contre 1,354 (§70) |
+| Le **premier mécanisme aux deux mouvements opposés** | apprendre quoi lire (§73) |
+| **La cible est atteinte en structure** | **10,688 sur 10,912 — 98 %** (§75) |
+| **Le prix est mesuré et la courbe close** | monotone (§76, §77) |
+
+**Quatre erreurs de ma part corrigées en chemin** : §65 le découpage par bloc contigu qui ne gardait que deux langues sur trois, §73.1 la capture **déduite** au lieu d'être lue, §74 l'espace du discriminant, §60.6 le pas fixe. Chacune est signalée dans le rapport, avec sa mesure et sa correction.
+
+**La conclusion n'est ni un succès ni un échec** : le pont sait reproduire la **structure** de son professeur, pas encore son **contenu** — et l'on sait exactement pourquoi. **C'est une identité mathématique, pas un réglage à trouver.**
+
+## État
+
+| chaîne | avancement |
+|---|---|
+| **Wikipedia apparié** | **409 / 482 articles** · reste ~2 h |
+| **Croissance μ = 0,1** | terminée (§56) |
+| **Crime** | 4/24 segments, conservés |
+
+Le corpus sera complet vers 05h00. La dernière mesure de la nuit sera de vérifier sur les 482 articles que la composition des trois leviers tient à grande échelle — c'est-à-dire que les 98 % ne sont pas un effet des 85 articles.
+
+
+## Tour 194
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de représentation universelle), boîte noire (on ne lit du professeur que la couche à émuler, jamais sa tête ni ses jetons générés), aucune rétropropagation (A et B aléatoires et gelés, seule la lecture s'ajuste en forme fermée), et chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, TAILLE du réseau, avec le diagnostic oracle sur les deux panneaux (test hors vivier et validation du même vivier)."
+Round: 67/256
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ **Point d'état, puis vérification à grande échelle dès que le corpus est complet.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"articles wiki : $(grep -c '^ARTICLE' /tmp/trace_wiki_apparie.log) / 482\"; grep -qx TERMINE /tmp/trace_wiki_apparie.log && echo \"TRACAGE TERMINÉ\" || echo \"en cours\"; awk '{if($2 ~ /s$/) {gsub(\"s\",\"\",$2); s+=$2; n++}} E … [146 caractères tronqués]`
+
+  ```
+articles wiki : 410 / 482
+en cours
+  2327 traces · 19.0 s
+02:55
+  ```
+
+### 🤖 Assistant
+
+⏵ **J'arme la vérification finale pour qu'elle se déclenche seule à la fin du traçage.**
+
+- **bash** `{"command": "cat > /tmp/verif_finale.sh <<'EOF'\n#!/bin/bash\n# VÉRIFICATION FINALE : la composition des trois leviers tient-elle à 482 ARTICLES ?\n#\n# Le §75 a mesuré le rapport contenu/langue à 10,688 (98 % du professeur) sur\n# 85 articles. Reste à savoir si c'est un effet de la taille du panel. … [2164 caractères tronqués]`
+
+  ```
+syntaxe OK
+chaîne armée
+02:56
+  ```
+
+### 🤖 Assistant
+
+⏵ **Round 67 — la vérification finale est armée.**
+
+## Ce qui a été fait ce round
+
+**La frontière est close.** Le balayage de l'amplification sur huit points a montré que **la fidélité décroît monotônement** : il n'y a aucun optimum intermédiaire, α = 1 **est** le meilleur compromis. Et le rapport reste **constant à 10,688** sur tout le balayage — l'identité du §67 vérifiée une huitième fois, cette fois sur une courbe complète.
+
+Le résultat tient en une ligne : **le pont reproduit la structure contenu/langue de son professeur à 98 % pour 0,047 de fidélité, mais il ne peut pas, en plus, porter l'énergie de contenu du professeur — cela coûte 0,18 de plus, et aucun point intermédiaire n'améliore le compromis.**
+
+## La vérification finale est armée
+
+Elle se déclenchera seule quand le traçage atteindra `TERMINE` :
+
+1. intersection des 6 langues → les articles communs ;
+2. partage 3 langues apprises / 3 en test, comme au §75 ;
+3. construction des caches couche 8 ;
+4. **la composition des trois leviers sur le corpus complet**.
+
+**La question qu'elle tranche** : les **98 %** mesurés sur 85 articles sont-ils un effet de la taille du panel ? À 482 articles, les intervalles se resserrent d'un facteur 5,7 et l'effet — s'il est réel — doit tenir.
+
+## État
+
+| chaîne | avancement |
+|---|---|
+| **Wikipedia apparié** | **410 / 482 articles** · 2 327 / 2 892 traces · ~19 s par trace |
+| **Vérification finale** | armée, attend `TERMINE` |
+| **Croissance μ = 0,1** | terminée (§56, protocole entier) |
+| **Crime** | 4/24 segments, conservés |
+
+## Le bilan de la traque, en une page
+
+| acquis | mesure |
+|---|---|
+| Le défaut est **découvert** | rapport 1,00, indiscernable de l'écrasement (§57) |
+| Le défaut est **localisé** | **12× moins d'énergie de contenu** (§61) |
+| Une **identité** explique cinq échecs | le rapport est invariant d'échelle (§67) |
+| La langue entre par **l'entrée**, pas le réservoir | 1,698 contre 1,354 (§70) |
+| Le **premier mécanisme aux deux mouvements opposés** | apprendre quoi lire (§73) |
+| **La cible est atteinte en structure** | **10,688 sur 10,912 — 98 %** (§75) |
+| **Le prix est mesuré et la courbe close** | monotone sur huit points (§76, §77) |
+
+**Dix-sept moyens mesurés, dix écartés — chacun par une mesure et souvent par une identité — quatre erreurs de ma part corrigées en chemin et signalées, et une conclusion qui n'est ni un succès ni un échec** : le pont sait reproduire la **structure** de son professeur, pas encore son **contenu**, et l'on sait exactement pourquoi. **C'est une identité mathématique, pas un réglage à trouver.**
+
+Le rapport fait **4 500 lignes**, le glossaire **2 245**, et **treize outils** documentent la traque — chacun avec le chiffre qui l'a fait retenir ou écarter.
+
+
+## Tour 195
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de représentation universelle), boîte noire (on ne lit du professeur que la couche à émuler, jamais sa tête ni ses jetons générés), aucune rétropropagation (A et B aléatoires et gelés, seule la lecture s'ajuste en forme fermée), et chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, TAILLE du réseau, avec le diagnostic oracle sur les deux panneaux (test hors vivier et validation du même vivier)."
+Round: 68/256
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ **Point d'état.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"articles : $(grep -c '^ARTICLE' /tmp/trace_wiki_apparie.log)/482 · traces : $(ls /home/stephane/Data13TB/stephane/corpus/wiki_apparie/traces | wc -l)/2892\"; grep -qx TERMINE /tmp/trace_wiki_apparie.log && echo \"TERMINÉ\" ||  … [73 caractères tronqués]`
+
+  ```
+articles : 410/482 · traces : 2463/2892
+en cours
+02:56
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short | head -5; echo \"--- dernier commit ---\"; git log --oneline -1 | cat; echo \"--- taille du rapport ---\"; wc -l reports/rapport-toutes-langues.md; echo \"--- attente ---\"; sleep 500; echo \"articles : $(grep -c  … [209 caractères tronqués]`
+
+  ```
+M journal/README.md
+--- dernier commit ---
+98e79fe La courbe est MONOTONE : pas de meilleur compromis, et la frontière est close
+--- taille du rapport ---
+4628 reports/rapport-toutes-langues.md
+--- attente ---
+articles : 415 · traces : 2495
+03:05
+  ```
+
+### 🤖 Assistant
+
+⏵ **Un fichier non commité — je vérifie avant de continuer.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff --stat journal/README.md | cat; echo \"---\"; git diff journal/README.md | head -20", "description": "Check the uncommitted file"}`
+
+  ```
+journal/README.md | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+---
+diff --git a/journal/README.md b/journal/README.md
+index e6dfdab..fabd44a 100644
+--- a/journal/README.md
++++ b/journal/README.md
+@@ -41,7 +41,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
+ | `8e04c99a` | Tu es VÉRIFICATEUR de documentation | 2026-09-30 18:07 | 0.2 h | 1 | 85 | 0 | 0 | [rapport](sessions/8e04c99a-8ba1-4675-9f80-fa3338449b17/rapport.md) |
+ | `aa5f9fc5` | Tu es vérificateur de documentation | 2026-09-30 15:07 | 0.2 h | 1 | 100 | 1 | 0 | [rapport](sessions/aa5f9fc5-9450-4118-b65f-e8b99a28519d/rapport.md) |
+ | `b13a6032` | Tu travailles dans le dépôt | 2026-10-02 15:03 | 0.1 h | 1 | 43 | 0 | 0 | [rapport](sessions/b13a6032-4f62-4e86-aa1f-03864a455c83/rapport.md) |
+-| `bbd6969f` | Continue avec REPRISE.md | 2026-09-28 14:46 | 203.8 h | 192 | 8647 | 212 | 672 | [rapport](sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/rapport.md) |
++| `bbd6969f` | Continue avec REPRISE.md | 2026-09-28 14:46 | 204.1 h | 193 | 8651 | 212 | 673 | [rapport](sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/rapport.md) |
+ | `bcfe0b97` | Tu es relecteur ADVERSARIAL dans | 2026-09-30 12:20 | 0.3 h | 
+… [411 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Journal : compteurs de session mis à jour (fichier généré)\" && git log --oneline -1 | cat; echo \"--- attente ---\"; sleep 500; echo \"articles : $(grep -c '^ARTICLE' /tmp/trace_wiki_apparie.log)/482 … [172 caractères tronqués]`
