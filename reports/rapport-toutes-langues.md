@@ -5611,6 +5611,11 @@ soit un panel dix fois plus petit que celui du §79 — or le §79 a préciséme
 effet mesuré à 85 articles ne s'était pas répliqué à 482. **B doit être répliqué avant d'être
 cru**, et la réplication est la prochaine mesure.
 
+> **RÉPLIQUÉ AU §90, ET LE RÉSULTAT EST PARTAGÉ.** Sur 482 articles, le gain de **fidélité**
+> tient (+0,0062 après +0,0092) ; le gain de **rapport** s'inverse (×0,81 après ×8,1).
+> Le tableau ci-dessus ne doit donc pas être lu seul : **la ligne B y est un effet de petit
+> panel pour ce qui est du rapport.**
+
 ---
 
 ## 89. LOCALITÉ : la couche 8 doit 24 % au jeton, 33 % à trois jetons, et 67 % à autre chose

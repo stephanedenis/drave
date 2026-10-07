@@ -156102,3 +156102,17 @@ syntaxe OK
 ⏵ **La réplication REFUTE la moitié du §88.5 : le gain de fidélité tient, le gain de rapport s'inverse. J'écris la section.**
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> reports/rapport-toutes-langues.md <<'MARKDOWN'\n\n---\n\n## 90. LA RÉPLICATION DU §88.5 : le gain de fidélité tient, le gain de rapport s'inverse\n\n### 90.1 Pourquoi j'ai répliqué avant d'y croire\n\nLe §88.5 annonçait que ** … [5158 caractères tronqués]`
+
+  ```
+370ed3b §90 : la réplication du §88.5 — le gain de fidélité tient, le gain de rapport s'inverse
+
+--- portée ---
+##### PORTÉE DU CONTEXTE — 50 articles × 6 langues, distances 1,2,4,8,16,32
+# 300 traces · fenêtre 2 · ride 1.0 · 50 contenus
+  ```
+
+### 🤖 Assistant
+
+⏵ **J'ajoute un renvoi du §88.5 vers la réplication, pour que le lecteur ne s'arrête pas au chiffre réfuté.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\nold = \"\"\"**Réserve, et elle est sérieuse** : ce chiffre est mesuré sur **47 articles d'apprentissage**,\nsoit un panel dix fois plus petit que celui du §79 … [1253 caractères tronqués]`
