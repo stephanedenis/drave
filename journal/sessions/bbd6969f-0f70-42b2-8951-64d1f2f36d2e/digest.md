@@ -149361,3 +149361,108 @@ articles wiki : 140
 | 1 | 1 | 0,2520 | 0,7636 | 0,9040 | −0,1404 | −0,1921 |
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 58. Réécrire l'objectif : la structure du professeur EST atteignable, mais l'objectif à deux curseurs est NON CONVEXE\n\n### 58.1  … [7141 caractères tronqués]`
+
+  ```
+c3de2df Réécrire l'objectif : la structure du professeur EST atteignable, mais l'objectif à deux curseurs est NON CONVEXE
+
+
+# état final du réseau : 149 neurones · 1 couches ([149])
+articles wiki : 152
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le §58 dit que l'objectif est le problème. Test d'une hypothèse simple et convexe : l'information de contenu est dans les PETITES composantes, que les moindres carrés négligent.**
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"ou_est_le_contenu.py — le moindres carrés néglige-t-il l'information de contenu ?\n\nLE CONSTAT DU §58. Une lecture LINÉAIRE des mêmes états de réservoir **atteint** la\nstructure contenu/langue du professeur (séparation +0,0519 contre +0,0517) — mais\nseul … [6581 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/ou_est_le_contenu.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"import ast; ast.parse(open('tools/ou_est_le_contenu.py').read()); print('syntaxe OK')\" && python3 -u tools/ou_est_le_contenu.py /tmp/cache_wikitrain.npz /tmp/cache_wikitest.npz --neur 120 2>&1 | tail -14", "description" … [90 caractères tronqués]`
+
+  ```
+started background job bash-245
+  ```
+
+- **bash** `{"command": "sleep 540; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"articles wiki : $(grep -c '^ARTICLE' /tmp/trace_wiki_apparie.log)\"; date '+%H:%M'", "description": "Wait for the content-location test", "timeoutMs": 580000}`
+
+  ```
+articles wiki : 158
+20:16
+  ```
+
+### 👤 Utilisateur
+
+background job bash-245 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c "import ast; ast.parse(open('tools/ou_est_le_contenu.py').read()); print('syntaxe OK')" && python3 -u tools/ou_est_le_contenu.py /tmp/cache_wikitrain.npz /tmp/cache_wikitest.npz --neur 120 2>&1 | tail -14) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-245"}`
+
+  ```
+syntaxe OK
+# 255 entrées d'apprentissage · 255 de test · 896 canaux
+# réseau 120 neurones · 1 couche(s)
+
+# CIBLE — professeur : S_langue 0.9454 · S_domaine 0.8937 · SÉPARATION +0.0517
+
+# variante          fid TEST  S_langue  S_domaine  SÉPARATION  vs prof
+  A référence         0.4706    0.9957     0.9965     -0.0008  -0.0525
+  B cible centrée     0.4708    0.9869     0.9909     -0.0040  -0.0556
+  C lignes normées    0.4197    1.0000     1.0000     -0.0000  -0.0517
+  B+C                 0.4197    1.0000     1.0000     -0.0000  -0.0517
+
+# Rappel du §58 : l'objectif à deux curseurs atteignait +0,0003 de la
+# cible, mais au prix de 0,139 de fidélité et avec une courbe NON MONOTONE.
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Hypothèse RÉFUTÉE : ni le centrage ni la normalisation n'aident — normaliser COLLAPSE tout (S = 1,0000 exactement). Test de la variante convexe qui manque : blanchir la cible.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\ns = open('tools/ou_est_le_contenu.py').read()\nold = \"\"\"    print(f\"\\\\n# {'variante':<16}{'fid TEST':>10}{'S_langue':>10}{'S_domaine':>11}\"\n          f\"{'SÉPARATION':>12}{'vs prof':>9}\")\n    for mode,  … [3748 caractères tronqués]`
+
+  ```
+syntaxe OK
+lancé
+20:16
+  ```
+
+- **bash** `{"command": "sleep 540; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/blanchiment.log; date '+%H:%M'", "description": "Read the whitening results", "timeoutMs": 580000}`
+
+  ```
+# 255 entrées d'apprentissage · 255 de test · 896 canaux
+# réseau 120 neurones · 1 couche(s)
+
+# CIBLE — professeur : S_langue 0.9454 · S_domaine 0.8937 · SÉPARATION +0.0517
+
+# SPECTRE DE LA CIBLE : 896 directions · énergie de la 1re 4.1% · des 10 premières 21.5%
+
+# variante          fid TEST  S_langue  S_domaine  SÉPARATION  vs prof
+  A référence         0.4706    0.9957     0.9965     -0.0008  -0.0525
+  B cible centrée     0.4708    0.9869     0.9909     -0.0040  -0.0556
+  C lignes normées    0.4197    1.0000     1.0000     -0.0000  -0.0517
+  D blanchiment 0.25    0.4383    0.9996     0.9997     -0.0001  -0.0518
+  D blanchiment 0.50    0.4226    1.0000     1.0000     -0.0000  -0.0517
+20:25
+  ```
+
+### 🤖 Assistant
+
+⏵ **La prémisse elle-même est RÉFUTÉE par la mesure : la cible n'a PAS de masse dominante (1ʳᵉ direction 4,1 % de l'énergie). Le blanchiment n'aide pas non plus.**
+
+| variante | fid TEST | S_langue | S_domaine | SÉPARATION |
+|---|---:|---:|---:|---:|
+| A référence | 0,4706 | 0,9957 | 0,9965 | −0,0008 |
+| B cible centrée | 0,4708 | 0,9869 | 0,9909 | −0,0040 |
+| C lignes normées | 0,4197 | 1,0000 | 1,0000 | −0,0000 |
+| D blanchiment 0,25 | 0,4383 | 0,9996 | 0,9997 | −0,0001 |
+| D blanchiment 0,50 | 0,4226 | 1,0000 | 1,0000 | −0,0000 |
+| | | | **cible** | **+0,0517** |
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 59. La piste « le moindres carrés néglige les petites composantes » est RÉFUTÉE — par sa propre prémisse\n\n### 59.1 L'idée, et el … [5839 caractères tronqués]`

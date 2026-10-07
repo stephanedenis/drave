@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 197.3 h |
+| Durée | 197.7 h |
 | Tours | 182 |
-| Messages | 9069 |
-| Appels d'outils | 8545 |
-| Fichiers touchés | 201 |
-| Commandes | 7246 |
+| Messages | 9077 |
+| Appels d'outils | 8552 |
+| Fichiers touchés | 202 |
+| Commandes | 7251 |
 | Sous-agents | 32 |
-| Commits | 654 |
+| Commits | 655 |
 | Compactages de contexte | 12 |
 
 ## Objectifs déclarés
@@ -9218,7 +9218,7 @@ Depuis le §41, un fait revenait sans être expliqué : **notre sortie est bien 
 
 ### Tour 182 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
 
-*10 appels d'outils.* Actions notables :
+*17 appels d'outils.* Actions notables :
 
 - read
 - edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pont_generatif.py`
@@ -9228,17 +9228,26 @@ Depuis le §41, un fait revenait sans être expliqué : **notre sortie est bien 
 - bash — Read the two-knob objective sweep
 - bash — Run the two-knob sweep on Wikipedia
 - bash — Report and commit the objective reformulation result
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/ou_est_le_contenu.py`
+- bash — Test whether least squares neglects the content components
+- bash — Wait for the content-location test
+- job_output
+- bash — Test target whitening as a convex alternative
+- bash — Read the whitening results
+- … et 1 autres
 
 **Synthèse produite :**
 
-⏵ **Résultat clé : une configuration ATTEINT la séparation du professeur (+0,0519 contre +0,0517). Mais l'objectif est NON CONVEXE et les résultats sont erratiques.**
+⏵ **La prémisse elle-même est RÉFUTÉE par la mesure : la cible n'a PAS de masse dominante (1ʳᵉ direction 4,1 % de l'énergie). Le blanchiment n'aide pas non plus.**
 
-| μ_lang | μ_cont | fid TEST | S_langue | S_domaine | **SÉPARATION** | vs prof |
-|---:|---:|---:|---:|---:|---:|---:|
-| 0 | 0 | 0,4747 | 0,9835 | 0,9866 | −0,0031 | −0,0548 |
-| **0,1** | **0,1** | 0,3359 | 0,8479 | 0,7959 | **+0,0519** | **+0,0003** |
-| 0,3 | 0,3 | 0,3474 | 0,9037 | 0,9158 | −0,0122 | −0,0639 |
-| 1 | 1 | 0,2520 | 0,7636 | 0,9040 | −0,1404 | −0,1921 |
+| variante | fid TEST | S_langue | S_domaine | SÉPARATION |
+|---|---:|---:|---:|---:|
+| A référence | 0,4706 | 0,9957 | 0,9965 | −0,0008 |
+| B cible centrée | 0,4708 | 0,9869 | 0,9909 | −0,0040 |
+| C lignes normées | 0,4197 | 1,0000 | 1,0000 | −0,0000 |
+| D blanchiment 0,25 | 0,4383 | 0,9996 | 0,9997 | −0,0001 |
+| D blanchiment 0,50 | 0,4226 | 1,0000 | 1,0000 | −0,0000 |
+| | | | **cible** | **+0,0517** |
 
 ## 3. Travail accompli
 
@@ -9447,6 +9456,7 @@ Depuis le §41, un fait revenait sans être expliqué : **notre sortie est bien 
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/lecture_invariante.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/invariance_ou_appauvrissement.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/objectif_du_pont.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/ou_est_le_contenu.py` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -9525,7 +9535,7 @@ Depuis le §41, un fait revenait sans être expliqué : **notre sortie est bien 
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 7206 autres
+- … et 7211 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10327,4 +10337,5 @@ Depuis le §41, un fait revenait sans être expliqué : **notre sortie est bien 
 - Croissance sous contrainte, protocole ENTIER : 147 neurones, oracle sur les deux panneaux  Première passe de croissance qui fournit TOUT ce que l'objectif deman
 - LA question du §41 est tranchée : notre sortie ÉCRASE la distinction contenu/langue  Depuis le §41 un même fait revenait : notre sortie est bien plus invariante
 - Réécrire l'objectif : la structure du professeur EST atteignable, mais l'objectif à deux curseurs est NON CONVEXE  OBJECTIF : ‖XW-Y‖² + mu_lang·P_lang(W) - mu_c
+- La piste 'le moindres carrés néglige les petites composantes' est RÉFUTÉE par sa prémisse  IDÉE : la fidélité est un cosinus par ligne, le fit minimise une erre
 
