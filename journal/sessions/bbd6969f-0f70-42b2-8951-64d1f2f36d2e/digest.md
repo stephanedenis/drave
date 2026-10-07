@@ -156414,3 +156414,239 @@ rss (Mo): 644.691
 ⏵ **Résultat clair : le rang 3 est le plus sûr (tous les tirages dépassent le professeur). J'écris la section.**
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> reports/rapport-toutes-langues.md <<'MARKDOWN'\n\n---\n\n## 94. RANG 1, 2 OU 3 : le meilleur rang n'est pas celui du meilleur chiffre\n\n### 94.1 L'hypothèse que je m'étais faite, et sa réfutation\n\nLe §93.4 terminait sur une … [4850 caractères tronqués]`
+
+  ```
+d186466 §94 : rang 1, 2 ou 3 — le meilleur rang n'est pas celui du meilleur chiffre
+
+##### PORTÉE DU CONTEXTE — 50 articles × 6 langues, distances 1,2,4,8,16,32
+# 300 traces · fenêtre 2 · ride 1.0 · 50 contenus
+# 164775 positions appariées
+  ```
+
+### 🤖 Assistant
+
+⏵ **La portée dépasse largement mon estimation. Je vérifie qu'elle progresse réellement.**
+
+- **bash** `{"command": "P=$(ps -eo pid,cmd | grep \"distances 1,2,4,8,16,32\" | grep -v grep | awk '{print $1}' | head -1); echo \"pid=$P\"; for i in 1 2; do [ -n \"$P\" ] && awk '{print \"cpu (s):\", ($14+$15)/100}' /proc/$P/stat; sleep 20; done; [ -n \"$P\" ] && awk '{print \"rss (Mo):\", $2/1024}' /proc/$P/ … [94 caractères tronqués]`
+
+  ```
+pid=2876852
+cpu (s): 3207.89
+cpu (s): 3227.89
+rss (Mo): 0
+rss (Mo): 0.0214844
+rss (Mo): 0
+rss (Mo): 2809.43
+rss (Mo): 0
+rss (Mo): 2809.43
+rss (Mo): 2809.42
+rss (Mo): 0
+rss (Mo): 0.976562
+rss (Mo): 0.976562
+rss (Mo): 0.25
+rss (Mo): 0.0410156
+rss (Mo): 2809.43
+rss (Mo): 2809.43
+rss (Mo): 2809.42
+rss (Mo): 2809.42
+rss (Mo): 0
+rss (Mo): 679.941
+rss (Mo): 666.816
+rss (Mo): 0
+rss (Mo): 0
+rss (Mo): 649.176
+rss (Mo): 636.863
+rss (Mo): 623.137
+rss (Mo): 13.7266
+rss (Mo): 0
+rss (Mo): 623.996
+rss (Mo): 0.132812
+rss (Mo): 0.00390625
+rss (Mo): 32.4961
+rss (Mo): 1.32812
+rss (Mo): 0
+rss (Mo): 0
+rss (Mo): 0
+rss (Mo): 0.000976562
+rss (Mo): 0
+rss (Mo): 0.000976562
+rss (Mo): 0.000976562
+rss (Mo): 0
+rss (Mo): 0
+rss (Mo): 0
+rss (Mo): 977.546
+rss (Mo): 0
+rss (Mo): 781250
+rss (Mo): 0
+rss (Mo): 0
+rss (Mo): 0.000976562
+rss (Mo): 0
+rss (Mo): 0
+rss (Mo): 0
+rss (Mo): 0
+rss (Mo): 0
+rss (Mo): 0
+rss (Mo): 0
+rss (Mo): 0
+rss (Mo): 0
+rss (Mo): 0
+rss (Mo): 0.00195312
+rss (Mo): 20.7686
+rss (Mo): 0
+rss (Mo): 0
+13:36
+  ```
+
+### 🤖 Assistant
+
+⏵ **La portée progresse (54 min CPU, ~1 cœur) — elle approche de la fin.**
+
+- **bash** `{"command": "sleep 420; sed -n '/PORTÉE/,$p' /tmp/mesure_portee.log; echo \"--- processus ---\"; ps -eo pid,etimes,cmd | grep \"distances\" | grep -v grep | head -2", "description": "Wait for reach result", "timeoutMs": 480000}`
+
+  ```
+##### PORTÉE DU CONTEXTE — 50 articles × 6 langues, distances 1,2,4,8,16,32
+# 300 traces · fenêtre 2 · ride 1.0 · 50 contenus
+# 164775 positions appariées
+--- processus ---
+2876852    3676 python3 -u tools/localite_couches.py /home/stephane/Data13TB/stephane/corpus/wiki_apparie/traces_couches --couches 3,8 --fenetre 2 --ride 1.0 --distances 1,2,4,8,16,32 --max-articles 50
+  ```
+
+### 🤖 Assistant
+
+⏵ **Encore ~10 min de calcul. J'attends la fin.**
+
+- **bash** `{"command": "sleep 480; sed -n '/PORTÉE/,$p' /tmp/mesure_portee.log; echo \"--- processus ---\"; ps -eo pid,etimes,cmd | grep \"distances\" | grep -v grep | head -2; tail -3 /tmp/mesure_portee.log", "description": "Wait longer for reach result", "timeoutMs": 540000}`
+
+  ```
+##### PORTÉE DU CONTEXTE — 50 articles × 6 langues, distances 1,2,4,8,16,32
+# 300 traces · fenêtre 2 · ride 1.0 · 50 contenus
+# 164775 positions appariées
+--- processus ---
+2876852    4165 python3 -u tools/localite_couches.py /home/stephane/Data13TB/stephane/corpus/wiki_apparie/traces_couches --couches 3,8 --fenetre 2 --ride 1.0 --distances 1,2,4,8,16,32 --max-articles 50
+##### PORTÉE DU CONTEXTE — 50 articles × 6 langues, distances 1,2,4,8,16,32
+# 300 traces · fenêtre 2 · ride 1.0 · 50 contenus
+# 164775 positions appariées
+  ```
+
+### 🤖 Assistant
+
+⏵ **La portée demande encore ~12 min (deux passes de lecture). J'attends une dernière fois.**
+
+- **bash** `{"command": "sleep 720; sed -n '/PORTÉE/,$p' /tmp/mesure_portee.log; echo \"--- processus ---\"; ps -eo pid,etimes,cmd | grep \"distances\" | grep -v grep | head -2", "description": "Final wait for reach result", "timeoutMs": 780000}`
+
+  ```
+(no output)
+[timed out after 600000ms]
+[killed by signal: SIGTERM]
+  ```
+
+### 👤 Utilisateur
+
+prenons un peu de recul sur mandat actuel vs ce qu'est Drave et ce qu'il devrait être pour répondre au besoin humain derrière la technique
+
+### 🤖 Assistant
+
+⏵ **Je pose les mesures et je relis la raison d'être déclarée de Drave avant de répondre.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '4693,4770p' reports/rapport-toutes-langues.md", "description": "Read section B.4 on Drave's purpose"}`
+
+  ```
+400/400 unités, zéro échec. L'objectif « au-delà des 46 » est atteint.
+2. **La couche cible est établie** — couche 8, **41 langues sur 41**, zéro régression.
+3. **Le protocole complet existe** — fidélité apprentissage / VALIDATION / TEST,
+   invariance, pire paire, taille, **oracle sur les deux panneaux**. Il tourne en une
+   commande.
+4. **Les corpus riches existent** — Wikipedia apparié 482 × 6 est le premier corpus
+   **multi-domaine et aligné** du projet ; il rend testable ce que l'UDHR interdisait.
+5. **Une trentaine d'outils** documentent chaque mesure et chaque échec.
+
+## B.3 Ce qui n'est PAS atteint, et il faut le dire sans détour
+
+**Le pont ne reproduit pas le contenu de son professeur.** Fidélité ~0,63 (couche 10) et
+~0,64 (couche 8) ; apport propre au-dessus de la constante : **+0,03 à +0,06**. Et surtout,
+le §75-§77 ont établi que :
+
+> le pont reproduit la **structure** contenu/langue du professeur à **98 %**, mais **pas
+> son contenu** — et la courbe du prix est monotone, sans meilleur compromis.
+
+## B.4 La question de la raison d'être, posée franchement
+
+Drave veut **notre propre** pont linguistico-sémantique : émuler les premières couches
+d'un gros modèle, en boîte n
+… [3204 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Je lis la mission déclarée du dépôt et l'état du job de portée.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -60 README.md 2>/dev/null; echo \"=== fichiers de doc ===\"; ls docs/ 2>/dev/null | head -20; echo \"=== job portée ===\"; ps -eo pid,etimes,cmd | grep \"distances\" | grep -v grep | head -2; sed -n '/PORTÉE/,$p' /tmp/mesure_por … [63 caractères tronqués]`
+
+  ```
+# Drave
+
+*Anciennement `Qtrinet`.* **La drave**, c'est le flux qu'on conduit : ici, celui
+des **listes d'activation** (*stream of logs*) — le moteur ne lit pas des
+matrices, il pousse des faits valués vers leurs destinations. La vision complète
+est dans [`docs/vision.md`](docs/vision.md).
+
+Origine du projet : inférence de LLM en **ternaire / multi-bits** sur un cluster
+de cartes **Stratix V** (Microsoft Storey Peak) — 100 % logique, sans DSP.
+Le cahier des charges d'origine est dans [`Qtrinet-bootstrap.md`](Qtrinet-bootstrap.md)
+⚠️ **il a été audité et corrigé** : voir la section « Écarts avec le CDC » ci-dessous.
+Le renommage est FAIT : le crate et le binaire s'appellent `drave-core` et
+`drave`, les variables `DRAVE_*` (table de conversion dans `docs/histoire.md`) ;
+le journal de sessions, archivé, n'est pas réécrit.
+
+---
+
+## La journée du 30/09 — huit chantiers, mesurés
+
+Le détail est dans [`reports/rapport-session-2026-09-30.md`](reports/rapport-session-2026-09-30.md).
+
+| chantier | résultat |
+|---|---|
+| **calcul réparti fidèle** | écart local/réparti **0,00e0** à 40, 200 et 1 024 jetons |
+| **préremplissage par lots** (mode 3) | 256 jetons en 4 lots, **0,00e0** ; **18×** plus 
+… [4641 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **La portée est arrivée — je la lis, puis je prends le recul demandé.**
+
+- **bash** `{"command": "sed -n '/PORTÉE/,$p' /tmp/mesure_portee.log | head -14; echo \"=== mission déclarée ===\"; sed -n '1,40p' /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/vision.md 2>/dev/null", "description": "Read reach table and vision doc"}`
+
+  ```
+##### PORTÉE DU CONTEXTE — 50 articles × 6 langues, distances 1,2,4,8,16,32
+# 300 traces · fenêtre 2 · ride 1.0 · 50 contenus
+# 164775 positions appariées
+
+# PORTÉE — 300 traces · modèle {jeton courant, jeton à la distance d}
+#  couche       d=1       d=2       d=4       d=8      d=16      d=32       d=0
+       3    0.5005    0.4507    0.4313    0.4238    0.4238    0.4242    0.0054
+       8    0.3040    0.2803    0.2633    0.2541    0.2524    0.2521    0.0071
+# Lecture : chaque colonne est un modèle DIFFÉRENT, ajusté sur les mêmes
+# points (restreints à k ≤ n−d). La colonne d=0 est le jeton courant seul.
+# La décroissance du gain le long de d est la PORTÉE du contexte.
+
+#  couche     R²(0)  R²(fenêtre)     gain  gain relatif
+       3    0.4139       0.5224   0.1085        18.5%
+=== mission déclarée ===
+# Drave — la vision
+
+> *« Stream of logs »* : le flux des listes. Et, en français d'ici, **la drave** —
+> ces billots qu'on confiait à la rivière au printemps, qu'on guidait de
+> l'estacade jusqu'à la scierie. Le nom dit exactement ce que fait ce moteur :
+> il ne lit pas des matrices, il conduit un flux.
+
+Ce document est la **vision** du projet : ce qu'il cherche, pourquoi la
+représe
+… [1644 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **La colonne d=0 de la portée est fausse (bug : elle prédit le jeton à distance d, pas le courant). Je corrige et j'écris.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/localite_couches.py'; s=open(p).read()\nold = \"\"\"                Xd = np.hstack([E[:len(E)-d], E[d:]])\n                Ec = E[:len(E)-d]\n                Gd[d] += Xd.T @ Xd\n                Gd0[d] += Ec … [2148 caractères tronqués]`

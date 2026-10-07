@@ -152,6 +152,81 @@ def main():
         ntot += len(X)
     print(f"# {ntot} positions appariées", flush=True)
 
+    # ------------------------------------------------ LA PORTÉE DU CONTEXTE
+    #
+    # Une fenêtre de trois jetons ne dit pas JUSQU'OÙ le passé compte. On mesure donc
+    # séparément, pour chaque distance d, ce qu'un modèle `{jeton courant, jeton à la
+    # distance d}` explique. Si le gain décroît avec d, on lit la portée ; s'il ne
+    # décroît pas, c'est que le voisinage immédiat n'était pas le bon résumé.
+    distances = [int(x) for x in opt("--distances", "").split(",") if x.strip()]
+    if distances:
+        Dmax = max(distances)
+        Gd = {d: np.zeros((1792, 1792)) for d in distances}
+        Dd = {d: {c: np.zeros((1792, 896)) for c in cs} for d in distances}
+        Gd0 = {d: np.zeros((896, 896)) for d in distances}
+        Dd0 = {d: {c: np.zeros((896, 896)) for c in cs} for d in distances}
+        som = {d: {c: np.zeros(896) for c in cs} for d in distances}
+        car = {d: {c: 0.0 for c in cs} for d in distances}
+        npts = {d: 0 for d in distances}
+        nd = 0
+        # UNE SEULE PASSE. La premiere version relisait toutes les traces pour le
+        # temoin « jeton courant seul » : 300 fichiers de 13 Mo lus deux fois, pour
+        # des Grammaires de 896x896 qui se calculent dans la meme boucle.
+        for f in retenus:
+            r = lire_positions(f, cs)
+            if r is None or len(r[0]) <= Dmax:
+                continue
+            E = r[0]
+            for d in distances:
+                # ligne k : [E(k), E(k+d)], pour k = 0 .. n-d-1
+                Xd = np.hstack([E[:len(E)-d], E[d:]])
+                # LE TEMOIN EST LE JETON COURANT, DONC E(k+d) — celui qui est
+                # ALIGNE sur la cible Y(k+d). La premiere version prenait E(k),
+                # c'est-a-dire le jeton d il y a d positions : elle predisait donc
+                # la couche c au pas k+d a partir du jeton du pas k, ce qui n'est
+                # pas « le jeton courant seul » mais « le jeton d'il y a d pas ».
+                # Le symptome etait une colonne d=0 a 0,005 la ou la meme quantite
+                # vaut 0,414 dans le tableau principal.
+                Ec = E[d:]
+                Gd[d] += Xd.T @ Xd
+                Gd0[d] += Ec.T @ Ec
+                npts[d] += len(Xd)
+                for c in cs:
+                    Y = r[c][d:]
+                    Dd[d][c] += Xd.T @ Y
+                    Dd0[d][c] += Ec.T @ Y
+                    som[d][c] += Y.sum(0)
+                    car[d][c] += float((Y*Y).sum())
+            nd += 1
+        # R² COMPLET, et non `trace(WᵀD)` qui est la partie expliquée : la même
+        # confusion avait produit des R² négatifs dans la première version de la
+        # fenêtre.   SSE = ‖Y‖² − 2·tr(WᵀD) + tr(WᵀGW)
+        print(f"\n# PORTÉE — {nd} traces · modèle {{jeton courant, jeton à la distance d}}")
+        print(f"# {'couche':>7}" + "".join(f"{'d='+str(d):>10}" for d in distances)
+              + f"{'d=0':>10}")
+        for c in cs:
+            lig = f" {c:>7}"
+            for d in distances:
+                g, dd = Gd[d], Dd[d][c]
+                W = np.linalg.solve(g + ride*npts[d]*np.eye(1792), dd)
+                sse = car[d][c] - 2.0*float(np.trace(W.T @ dd)) + float(
+                    np.trace(W.T @ (g @ W)))
+                mu = som[d][c]/npts[d]
+                sst = car[d][c] - npts[d]*float((mu*mu).sum())
+                lig += f"{1.0 - sse/sst:>10.4f}"
+            # témoin : le jeton courant SEUL, sur les mêmes points
+            d0 = Dmax
+            W0 = np.linalg.solve(Gd0[d0] + ride*npts[d0]*np.eye(896), Dd0[d0][c])
+            sse0 = car[d0][c] - 2.0*float(np.trace(W0.T @ Dd0[d0][c])) + float(
+                np.trace(W0.T @ (Gd0[d0] @ W0)))
+            mu0 = som[d0][c]/npts[d0]
+            sst0 = car[d0][c] - npts[d0]*float((mu0*mu0).sum())
+            lig += f"{1.0 - sse0/sst0:>10.4f}"
+            print(lig)
+        print(f"# Lecture : chaque colonne est un modèle DIFFÉRENT, ajusté sur les mêmes")
+        print(f"# points (restreints à k ≤ n−d). La colonne d=0 est le jeton courant seul.")
+        print(f"# La décroissance du gain le long de d est la PORTÉE du contexte.")
+
     print(f"\n# {'couche':>7}{'R²(0)':>10}{'R²(fenêtre)':>13}{'gain':>9}"
           f"{'gain relatif':>14}")
     for c in cs:

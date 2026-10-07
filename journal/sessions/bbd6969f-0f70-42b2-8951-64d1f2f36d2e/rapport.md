@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 214.8 h |
+| Durée | 215.3 h |
 | Tours | 204 |
-| Messages | 9421 |
-| Appels d'outils | 8847 |
+| Messages | 9430 |
+| Appels d'outils | 8855 |
 | Fichiers touchés | 219 |
-| Commandes | 7519 |
+| Commandes | 7527 |
 | Sous-agents | 32 |
-| Commits | 692 |
+| Commits | 693 |
 | Compactages de contexte | 13 |
 
 ## Objectifs déclarés
@@ -10453,7 +10453,7 @@ Chacun remplace une devinette que j'ai faite sans lui.
 
 ### Tour 204 — bien. vas-y dans l'ordre de ton choix.
 
-*137 appels d'outils.* Actions notables :
+*145 appels d'outils.* Actions notables :
 
 - bash — Launch layer 0-8 tracing for 50 articles
 - bash — Launch the 50-draw distribution
@@ -10469,11 +10469,11 @@ Chacun remplace une devinette que j'ai faite sans lui.
 - bash — Test the layer profile on partial traces
 - bash — Single-pass reader and test
 - bash — Inspect the actual trace format
-- … et 118 autres
+- … et 126 autres
 
 **Synthèse produite :**
 
-⏵ **Résultat clair : le rang 3 est le plus sûr (tous les tirages dépassent le professeur). J'écris la section.**
+⏵ **La colonne d=0 de la portée est fausse (bug : elle prédit le jeton à distance d, pas le courant). Je corrige et j'écris.**
 
 ## 3. Travail accompli
 
@@ -10778,7 +10778,7 @@ Chacun remplace une devinette que j'ai faite sans lui.
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 7479 autres
+- … et 7487 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -11618,4 +11618,5 @@ Chacun remplace une devinette que j'ai faite sans lui.
 - §92 : la pire paire après échelle — de–en à 486 % du professeur, mais 5 paires sur 15 échouent  Le §88 a établi que l'amplitude est gratuite, donc que le critèr
 - §93 : les directions du discriminant — le 1er axe est dans les données, le 2e dans le tirage  Le §92 repose sur NOS sorties, donc sur un tirage aléatoire gelé. 
 - §94 : rang 1, 2 ou 3 — le meilleur rang n'est pas celui du meilleur chiffre  Le §93.4 faisait une hypothèse explicite : le premier axe est stable, le second non
+- localite_couches : le témoin « jeton courant » était décalé de d positions  Dans le bloc de portée, le témoin était accumulé comme somme de E(k)ᵀ Y(k+d) — c'est
 
