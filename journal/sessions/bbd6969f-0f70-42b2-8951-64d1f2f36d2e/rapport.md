@@ -5,15 +5,15 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 211.0 h |
+| Durée | 212.2 h |
 | Tours | 204 |
-| Messages | 9289 |
-| Appels d'outils | 8718 |
-| Fichiers touchés | 212 |
-| Commandes | 7405 |
+| Messages | 9349 |
+| Appels d'outils | 8775 |
+| Fichiers touchés | 215 |
+| Commandes | 7452 |
 | Sous-agents | 32 |
-| Commits | 680 |
-| Compactages de contexte | 12 |
+| Commits | 681 |
+| Compactages de contexte | 13 |
 
 ## Objectifs déclarés
 
@@ -10453,7 +10453,7 @@ Chacun remplace une devinette que j'ai faite sans lui.
 
 ### Tour 204 — bien. vas-y dans l'ordre de ton choix.
 
-*8 appels d'outils.* Actions notables :
+*65 appels d'outils.* Actions notables :
 
 - bash — Launch layer 0-8 tracing for 50 articles
 - bash — Launch the 50-draw distribution
@@ -10463,16 +10463,17 @@ Chacun remplace une devinette que j'ai faite sans lui.
 - bash — Measure input-alone on the same panel
 - bash — Read the input-alone baseline
 - bash — Report and commit the 50-draw correction
+- bash — Check the trace reader API
+- bash — Check the return of lire
+- bash — Write the layer profile tool
+- bash — Test the layer profile on partial traces
+- bash — Single-pass reader and test
+- bash — Inspect the actual trace format
+- … et 47 autres
 
 **Synthèse produite :**
 
-⏵ **Correction importante : le §70 était faux dans sa formulation. Sur le MÊME panel —**
-
-| | fidélité | P_lang | P_cont | **RAPPORT** |
-|---|---:|---:|---:|---:|
-| **entrée seule, 0 neurone** | **0,5268** | 88,8 | 173,7 | **1,956** |
-| **50 tirages de réservoir** | 0,4656 ± 0,0013 | 45,6 | 90,1 | **2,093** · médiane **1,947** · max **4,298** |
-| *professeur* | — | *398,1* | *5 263,4* | ***13,222*** |
+⏵ **Je commite les trois outils pendant que les mesures tournent.**
 
 ## 3. Travail accompli
 
@@ -10692,6 +10693,9 @@ Chacun remplace une devinette que j'ai faite sans lui.
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/blanchiment_entree.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/renforcement.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/renforcement_directions.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/profil_couches.py` | 1 | 1 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/ancre_professeur.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/rapport_du_pont.py` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -10770,7 +10774,7 @@ Chacun remplace une devinette que j'ai faite sans lui.
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 7365 autres
+- … et 7412 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10898,7 +10902,7 @@ Chacun remplace une devinette que j'ai faite sans lui.
 
 ## 5. Erreurs rencontrées
 
-392 sorties en erreur ou divergentes. Les premières :
+395 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -11598,4 +11602,5 @@ Chacun remplace une devinette que j'ai faite sans lui.
 - Le discriminant SE RÉPLIQUE à 482 articles — et DÉPASSE le professeur : 12,645 contre 12,001    rang 0 (référence, centrage seul)   fid 0,4713 · P_lang 39,8 · P
 - CLÔTURE : l'objectif, exigence par exigence, avec la mesure qui y répond  TOUTES LES EXIGENCES SONT ATTEINTES :   1. toutes les langues de l'UDHR      392/392 a
 - DISTRIBUTION SUR 50 TIRAGES : le §70 était faux dans sa formulation  LA LACUNE : la conclusion du §70 (« le réservoir abaisse le rapport de 1,698 à 1,354 ») por
+- Sonde de couches : le rapport contenu/langue dépend du PANEL, pas seulement du modèle  profil_couches.py était cassé de deux façons, toutes deux silencieuses : 
 

@@ -153577,3 +153577,1535 @@ traces couches : 119/300
 | *professeur* | — | *398,1* | *5 263,4* | ***13,222*** |
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 81. DISTRIBUTION SUR 50 TIRAGES : le §70 était faux dans sa formulation\n\n### 81.1 La lacune\n\nToute la conclusion du §70 — *« l … [6105 caractères tronqués]`
+
+  ```
+36e1f2c DISTRIBUTION SUR 50 TIRAGES : le §70 était faux dans sa formulation
+
+traces couches : 122/300
+09:45
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le traçage avance (122/300). J'écris l'outil de profil couche par couche pendant ce temps.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,40p' tools/invariance_unites.py", "description": "Check the trace reader API"}`
+
+  ```
+#!/usr/bin/env python3
+"""invariance_unites.py — l'invariance par UNITÉ, dix points au lieu d'un.
+
+L'outil multilingue mesure l'invariance entre TOUTES les paires d'entrées. Ici les
+entrées sont appariées par unité : le fichier `<langue>_<k>.drvf` est la k-ième
+unité de cette langue, et toutes les langues disent la MÊME unité k. On mesure
+donc, pour chaque k, la similarité entre langues — et « la pire paire » porte
+enfin sur une unité précise et nommable au lieu d'être un agrégat.
+
+Usage : invariance_unites.py <dossier> --couche 10 [--masque fichier.npz]
+"""
+import glob, os, re, struct, sys
+import numpy as np
+
+
+def lire(chemin, couche):
+    def paires(f, n, version, bloc=32):
+        ech = None
+        if version == 3:
+            nb, = struct.unpack("<I", f.read(4))
+            ech = [struct.unpack("<e", f.read(2))[0] for _ in range(nb)]
+        out, prev = [], 0
+        for _ in range(n):
+            if version == 1:
+                i, = struct.unpack("<I", f.read(4))
+            else:
+                e, = struct.unpack("<B", f.read(1))
+                i = struct.unpack("<H", f.read(2))[0] if e == 255 else prev + e
+                prev = i
+            if version == 3:
+           
+… [306 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"return\\|def \" tools/invariance_unites.py | head -12; echo \"---\"; sed -n '40,70p' tools/invariance_unites.py", "description": "Check the return of lire"}`
+
+  ```
+16:def lire(chemin, couche):
+17:    def paires(f, n, version, bloc=32):
+36:        return out
+66:        return hid, None
+72:    return hid, v
+75:def inv(V):
+79:    return float(S[iu].mean()), float(S[iu].min()), S
+82:def main():
+102:        print("aucun fichier au format <langue>_<k>.drvf"); return 1
+122:    return 0
+---
+    with open(chemin, "rb") as f:
+        assert f.read(4) == b"DRVF"
+        version, = struct.unpack("<H", f.read(2))
+        nl, hid = struct.unpack("<II", f.read(8))
+        while True:
+            b = f.read(2)
+            if len(b) < 2:
+                break
+            c, = struct.unpack("<H", b)
+            if c == 0xFFFF:
+                break
+            pos, n, ech = struct.unpack("<IIf", f.read(12))
+            # UNE TRACE INTERROMPUE LAISSE UNE QUEUE TRONQUÉE : un traçage arrêté
+            # en cours d'écriture produit un fichier valide jusqu'à un point et
+            # coupé après. On garde ce qui a été lu au lieu de tout perdre — sans
+            # quoi un simple arrêt rend le fichier inexploitable.
+            try:
+                pp = paires(f, n, version)
+            except Exception:
+                tronque = True
+                break
+        
+… [313 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **`lire` rend la représentation à la dernière position. J'écris le profil couche par couche sur cette base.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/profil_couches.py <<'EOF'\n#!/usr/bin/env python3\n\"\"\"profil_couches.py — où le professeur SÉPARE-t-il le contenu de la langue ?\n\nBUT : des INDICES, pas une cible à reproduire. On garde la boîte noire — la cible rest … [4249 caractères tronqués]`
+
+  ```
+syntaxe OK
+traces : 125/300
+09:46
+  ```
+
+### 🤖 Assistant
+
+⏵ **Je teste l'outil sur les traces partielles pour attraper les bugs avant la fin.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 400 python3 -u tools/profil_couches.py /home/stephane/Data13TB/stephane/corpus/wiki_apparie/traces_couches --couches 0,2,4,8 2>&1 | tail -14", "description": "Test the layer profile on partial traces", "timeoutMs": 440000}`
+
+  ```
+(no output)
+  ```
+
+### 🤖 Assistant
+
+⏵ **`lire` relit le fichier entier pour chaque couche — 9 passes par trace. Je passe à une lecture en UNE passe.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\ns = open('tools/profil_couches.py').read()\nold = \"\"\"import glob\nimport os\nimport sys\n\nimport numpy as np\n\nsys.path.insert(0, \"/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools\")\nfrom invariance_u … [2857 caractères tronqués]`
+
+  ```
+lecture en une passe installée
+syntaxe OK
+# 0 entrées lues dans /home/stephane/Data13TB/stephane/corpus/wiki_apparie/traces_couches
+# 0 langues () · 0 contenus communs
+
+#  couche     P_lang     P_cont   RAPPORT  vs couche 0  dim. eff.
+       0  —  (couche absente des traces)
+       2  —  (couche absente des traces)
+       4  —  (couche absente des traces)
+       8  —  (couche absente des traces)
+
+# P_lang et P_cont : dispersion des moyennes par langue / par contenu.
+# dim. eff. : entropie des valeurs propres — le nombre de directions qui
+# portent réellement la représentation.
+# INDICE, PAS CIBLE : ce qu'on cherche, c'est À QUELLE PROFONDEUR le
+# rapport décolle, et COMBIEN de dimensions suffisent à le porter.
+  ```
+
+### 🤖 Assistant
+
+⏵ **0 entrée lue — mon lecteur ne décode pas. Je regarde l'en-tête réel d'une trace.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport struct, glob, os\nf = sorted(glob.glob('/home/stephane/Data13TB/stephane/corpus/wiki_apparie/traces_couches/*.drvf'))[0]\nprint(\"fichier :\", os.path.basename(f), os.path.getsize(f), \"octets\")\nd = open(f, … [499 caractères tronqués]`
+
+  ```
+fichier : de_A.drvf 13623083 octets
+magic : b'DRVF'
+version : 2
+nl : 24 hid : 896
+record 0 : couche 0 · pos 1 · n 858 · ech 0.0068
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 10, in <module>
+struct.error: unpack requires a buffer of 2 bytes
+[exit code: 1]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Bug dans mon lecteur : `prev + i` au lieu de `prev + e` — `i` n'existe pas encore, l'exception était avalée par le `except`.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -i 's|i = struct.unpack(\"<H\", f.read(2))\\[0\\] if e == 255 else prev + i|i = struct.unpack(\"<H\", f.read(2))[0] if e == 255 else prev + e|' tools/profil_couches.py && grep -n \"prev + e\" tools/profil_couches.py && python3 -c … [310 caractères tronqués]`
+
+  ```
+62:                        i = struct.unpack("<H", f.read(2))[0] if e == 255 else prev + e
+syntaxe OK
+
+#  couche     P_lang     P_cont   RAPPORT  vs couche 0  dim. eff.
+       0  —  (couche absente des traces)
+       2  —  (couche absente des traces)
+       4  —  (couche absente des traces)
+       8  —  (couche absente des traces)
+
+# P_lang et P_cont : dispersion des moyennes par langue / par contenu.
+# dim. eff. : entropie des valeurs propres — le nombre de directions qui
+# portent réellement la représentation.
+# INDICE, PAS CIBLE : ce qu'on cherche, c'est À QUELLE PROFONDEUR le
+# rapport décolle, et COMBIEN de dimensions suffisent à le porter.
+  ```
+
+
+  ```
+-rw-r--r--. 1 stephane stephane 151917192  6 oct 02:58 /tmp/cache392_test.npz
+-rw-r--r--. 1 stephane stephane 985580685  6 oct 02:55 /tmp/cache392_train.npz
+-rw-r--r--. 1 stephane stephane 104866818  5 oct 15:31 /tmp/cache_appr10c.npz
+-rw-r--r--. 1 stephane stephane  81218246  5 oct 12:50 /tmp/cache_appr10.npz
+-rw-r--r--. 1 stephane stephane       389  5 oct 17:57 /tmp/cache_appr30c_l17.npz
+-rw-r--r--. 1 stephane stephane       389  5 oct 17:57 /tmp/cache_appr30c_l8.npz
+-rw-r--r--. 1 stephane stephane   5823787  5 oct 12:43 /tmp/cache_appr40.npz
+-rw-r--r--. 1 stephane stephane 324576526  6 oct 00:00 /tmp/cache_dose_112.npz
+-rw-r--r--. 1 stephane stephane 112183065  5 oct 23:54 /tmp/cache_dose_30.npz
+-rw-r--r--. 1 stephane stephane 185378407  6 oct 00:20 /tmp/cache_dose_60.npz
+-rw-r--r--. 1 stephane stephane  23364712  6 oct 00:01 /tmp/cache_dose_test.npz
+-rw-r--r--. 1 stephane stephane  82894803  6 oct 04:28 /tmp/cache_rj8_en.npz
+-rw-r--r--. 1 stephane stephane 138564219  6 oct 04:32 /tmp/cache_rj8_fr.npz
+-rw-r--r--. 1 stephane stephane  83857467  6 oct 04:17 /tmp/cache_rj_en.npz
+-rw-r--r--. 1 stephane stephane 139662286  6 oct 04:21 /tmp/cache_rj_fr.npz
+-rw-r--r--. 1 stephane step
+… [3958 caractères tronqués]
+  ```
+
+
+  ```
+=== ROMEO AND JULIET — corpus PARALLÈLE, 24 scènes alignées en/fr ===
+--- où est le plateau du professeur sur ce corpus (invariance par scène) ---
+  couche 0 :
+    24        2     -0.0734     -0.0734   en–fr
+
+MOYENNE sur 24 unités : invariance 0.1420 · pire paire 0.1420
+pire unité : -0.0888 · pire paire absolue -0.0888
+  couche 4 :
+    24        2      0.2247      0.2247   en–fr
+
+MOYENNE sur 24 unités : invariance 0.4483 · pire paire 0.4483
+pire unité : 0.1289 · pire paire absolue 0.1289
+  couche 8 :
+    24        2      0.2303      0.2303   en–fr
+
+MOYENNE sur 24 unités : invariance 0.5985 · pire paire 0.5985
+pire unité : 0.1943 · pire paire absolue 0.1943
+  couche 10 :
+    24        2      0.2381      0.2381   en–fr
+
+MOYENNE sur 24 unités : invariance 0.5703 · pire paire 0.5703
+pire unité : 0.2381 · pire paire absolue 0.2381
+--- le pont sur le corpus parallèle ---
+  en_01 : 2965 pas
+  en_02 : 1222 pas
+  en_03 : 1388 pas
+  en_04 : 1424 pas
+  en_05 : 2110 pas
+  en_06 : 563 pas
+  en_07 : 2307 pas
+  en_08 : 1145 pas
+  en_09 : 2627 pas
+  en_10 : 998 pas
+  en_11 : 444 pas
+  en_12 : 2580 pas
+  en_13 : 1748 pas
+  en_14 : 2150 pas
+  en_15 : 469 pas
+  en_16 : 3106 pas
+  en_17 : 1513 pas
+  e
+… [3958 caractères tronqués]
+  ```
+
+
+> **Compactage de contexte** — résumé conservé :
+
+```
+## Primary Request and Intent
+- Standing mandate (verbatim): "Continue en blocs de 2h jusqu'à demain 8h HAE. pour chacun des blocs/sprints tu dois être en autonomie totale… les rétros seront des introspections, les revues seront en mode adverse autonome."
+- Goal `goal-975ab185-c6a1-415f-8dcd-38bf09cf8196` (verbatim): "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de représentation universelle), boîte noire (on ne lit du professeur que la couche à émuler, jamais sa tête ni ses jetons générés), aucune rétropropagation (A et B aléatoires et gelés, seule la lecture s'ajuste en forme fermée), et chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, TAILLE du réseau, avec le diagnostic oracle sur les deux panneaux (test hors vivier et validation du même vivier)." — **marked COMPLETE at round 72** (revision 2, phase complete).
+- After completion, user asked a series of clarifying questions and gave new authorizations:
+  - "C'est le mécanisme qui calcule qu'il faut remplacer" peux tu clarifier cette proposition?
+  - "Notre modèle doit être déterministe, qu'entends-tu par aléatoire?"
+  - (verbatim) "ceci-dit, il ne faut pas s'empêcher de faire des simulations monte-carlo en pseudo-hasard pour distiller stratégiquement les réponses aus stimulis des entrées. L'important est la reproductibilité. tu peux même étudier les premières couches du professeur pour apprendre en simulation."
+  - (verbatim) "attention, on ne cherche pas à reproduire la structure interne du professeur, mais trouver des indices pour optimiser notre travail de stimulation. On conserve le principe de boite noire, mais on triche pour gagner de l'efficacité sur des choses qui seraient évidente en boite blanche et qui nous font perdre du temps."
+  - (verbatim) "bien. vas-y dans l'ordre de ton choix."
+
+## Key Technical Concepts
+- **DRVF trace format**: header `"DRVF"` + `<H` version + `<I` n_layer + `<I` hidden (14 bytes); records = `<H` couche + `<I` pos + `<I` n + `<f` scale (14 bytes) then n pairs. **Pairs are INTERLEAVED**: per pair, `<B` delta (or `<H` absolute if delta==255) THEN `<h` value. `0xFFFF` = terminator.
+- **Bridge**: `s_t = (1−a)·s_{t−1} + a·tanh(P·s_{t−1} + B·e_t)`; `P`,`B` from `np.random.RandomState(graine)` frozen; only readout `W` fitted by ridge (closed form). `phi(X) = [X, X²]` if quadratic.
+- **Content/language decomposition** (`P_lang`, `P_cont`, `rapport = P_cont/P_lang`): variance of per-LANGUAGE means / per-CONTENT means of entry representations. Professor layer 8 ≈ 12.0.
+- **Scale-invariance identity (§67)**: `P_cont` and `P_lang` both quadratic in `W`, so any uniform amplification α multiplies both by α² → **ratio is homogeneous of degree 0**; no amplitude change can fix it. Explains 5 failed remedies.
+- **Discriminant** (`C_cont·v = λ·C_lang·v`, generalized eigenproblem, closed form, deployable fixed matrix) maximizes the ratio.
+- Entry naming convention `<lang>_<slug>`; `nom.partition("_")` (FIRST underscore) — `rpartition` was a bug.
+- Vectorized `nait` (blocks of languages, `bloc_langues=32`), bit-identical to the per-language loop.
+- `--trace-couches` filters only WRITING; forward pass runs all 24 layers regardless. `--couches 0:9` is byte-identical to `0:24` and 1.6× faster.
+
+## Files and Code
+- `tools/pont_generatif.py`: `Pont` class. `ajuste` now has: `sous_ech` subsampling, `pese` per-language weights, `mu_inv` (between-language penalty), `mu_cont` (between-content reward, SUBTRACTED → non-convex, prints λ_min warning). `nait` vectorized by language blocks. `recalcule` has a loud desync guard. `opt()` fixed for valueless flags; flags tested via `in sys.arg
+… [8318 caractères tronqués]
+```
+
+### 👤 Utilisateur
+
+This is an automatically generated checkpoint condensing an earlier span of the conversation to free up context. Treat the captured context as established background and build on it without restating it. Continue the task directly from the messages that follow, without acknowledging this checkpoint.
+
+<compacted-summary>
+## Primary Request and Intent
+- Standing mandate (verbatim): "Continue en blocs de 2h jusqu'à demain 8h HAE. pour chacun des blocs/sprints tu dois être en autonomie totale… les rétros seront des introspections, les revues seront en mode adverse autonome."
+- Goal `goal-975ab185-c6a1-415f-8dcd-38bf09cf8196` (verbatim): "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de représentation universelle), boîte noire (on ne lit du professeur que la couche à émuler, jamais sa tête ni ses jetons générés), aucune rétropropagation (A et B aléatoires et gelés, seule la lecture s'ajuste en forme fermée), et chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, TAILLE du réseau, avec le diagnostic oracle sur les deux panneaux (test hors vivier et validation du même vivier)." — **marked COMPLETE at round 72** (revision 2, phase complete).
+- After completion, user asked a series of clarifying questions and gave new authorizations:
+  - "C'est le mécanisme qui calcule qu'il faut remplacer" peux tu clarifier cette proposition?
+  - "Notre modèle doit être déterministe, qu'entends-tu par aléatoire?"
+  - (verbatim) "ceci-dit, il ne faut pas s'empêcher de faire des simulations monte-carlo en pseudo-hasard pour distiller stratégiquement les réponses aus stimulis des entrées. L'important est la reproductibilité. tu peux même étudier les premières couches du professeur pour apprendre en simulation."
+  - (verbatim) "attention, on ne cherche pas à reproduire la structure interne du professeur, mais trouver des indices pour optimiser notre travail de stimulation. On conserve le principe de boite noire, mais on triche pour gagner de l'efficacité sur des choses qui seraient évidente en boite blanche et qui nous font perdre du temps."
+  - (verbatim) "bien. vas-y dans l'ordre de ton choix."
+
+## Key Technical Concepts
+- **DRVF trace format**: header `"DRVF"` + `<H` version + `<I` n_layer + `<I` hidden (14 bytes); records = `<H` couche + `<I` pos + `<I` n + `<f` scale (14 bytes) then n pairs. **Pairs are INTERLEAVED**: per pair, `<B` delta (or `<H` absolute if delta==255) THEN `<h` value. `0xFFFF` = terminator.
+- **Bridge**: `s_t = (1−a)·s_{t−1} + a·tanh(P·s_{t−1} + B·e_t)`; `P`,`B` from `np.random.RandomState(graine)` frozen; only readout `W` fitted by ridge (closed form). `phi(X) = [X, X²]` if quadratic.
+- **Content/language decomposition** (`P_lang`, `P_cont`, `rapport = P_cont/P_lang`): variance of per-LANGUAGE means / per-CONTENT means of entry representations. Professor layer 8 ≈ 12.0.
+- **Scale-invariance identity (§67)**: `P_cont` and `P_lang` both quadratic in `W`, so any uniform amplification α multiplies both by α² → **ratio is homogeneous of degree 0**; no amplitude change can fix it. Explains 5 failed remedies.
+- **Discriminant** (`C_cont·v = λ·C_lang·v`, generalized eigenproblem, closed form, deployable fixed matrix) maximizes the ratio.
+- Entry naming convention `<lang>_<slug>`; `nom.partition("_")` (FIRST underscore) — `rpartition` was a bug.
+- Vectorized `nait` (blocks of languages, `bloc_langues=32`), bit-identical to the per-language loop.
+- `--trace-couches` filters only WRITING; forward pass runs all 24 layers regardless. `--couches 0:9` is byte-identical to `0:24` and 1.6× faster.
+
+## Files and Code
+- `tools/pont_generatif.py`: `Pont` class. `ajuste` now has: `sous_ech` subsampling, `pese` per-language weights, `mu_inv` (between-language penalty), `mu_cont` (between-content reward, SUBTRACTED → non-convex, prints λ_min warning). `nait` vectorized by language blocks. `recalcule` has a loud desync guard. `opt()` fixed for valueless flags; flags tested via `in sys.argv`.
+- `tools/profil_couches.py` (**NEW, BROKEN**): layer-by-layer `P_lang`/`P_cont`/ratio + effective dimension. Its `lire_tout()` reads indices and values as two separate blocks — **WRONG**; must interleave like `invariance_unites.lire`.
+- `tools/invariance_unites.py`: `lire(chemin, couche)` → `(hid, v)` last available position; correct interleaved parsing (reference implementation).
+- Other traque tools: `decomposition.py`, `discriminant_contenu.py`, `etats_sans_langue.py`, `covariance_cible.py`, `sous_espace_du_contenu.py`, `blanchiment_entree.py`, `amplification.py`, `ou_entre_la_langue.py`, `ou_est_le_contenu.py`, `objectif_du_pont.py`, `invariance_ou_appauvrissement.py`, `renforcement.py`, `renforcement_directions.py` (has combination block), `profil_langues.py`, `grand_et_entree.py`, `lecture_locale.py`, `saturation.py`, `stabilite_evenements.py`, `wiki_apparie.py`, `extrait_crime.py`.
+- `reports/rapport-toutes-langues.md` (~4 900 lines): §1–§81 + `# BILAN` (§B.1–B.7) + `# CLÔTURE` (§C.1–C.5).
+- `docs/glossaire.md` (2 245 lines): §10.10 = content/language vocabulary.
+- `/tmp/trace_couches.sh`: traces layers `0,1,2,3,4,5,6,7,8` for 50 articles × 6 langs → `corpus/wiki_apparie/traces_couches/`, log `/tmp/trace_couches.log`.
+- `/tmp/mc_tirages.py`, `/tmp/mc_base.py`, `/tmp/disc482.py`, `/tmp/vf_rapide.py`; logs `/tmp/mc_tirages.log`, `/tmp/mc_base.log`, `/tmp/disc482.log`.
+- Corpora: `corpus/udhr/udhr392/` (392×2 layers), `udhr392_c8/` (392, layers 0/8/10), `unites/` (400), `corpus/wiki_apparie/traces/` (2 892), `corpus/parallele_rj/` (48), `corpus/parallele_crime/traces/` (8).
+
+## Errors and Fixes
+- `lire_tout()` in `profil_couches.py` returns 0 entries: reads all indices then all values; DRVF interleaves them. Fix = interleave (copy `invariance_unites.paires`).
+- `iap = itr[nt:]` with `nt=len(itr)//3` kept only `en_*`+`fr_*` (entries sorted by language) — fit ran on 2 of 3 languages in SIX tools (§65). Fixed to `iap = itr`.
+- Claimed "capture moyenne ≈ 0,5" in §72 without reading it; actual **0,018** (§73.1). This makes `f = 1 − 0,964·η` → uniform atrophy → global scaling → **forced to fail by §67**.
+- Discriminant computed on STATES (120-d) instead of OUTPUTS (896-d) (§74); fixed.
+- Fixed-step slicing `len(Yte[0])` assumed equal entry lengths → `Mean of empty slice`; fixed with cumulative bounds.
+- **ORPHAN PROCESS**: killed a tracing *script* but not its `drave` child (reparented to systemd, 18 cores, 60 s/trace instead of 16 s, wrote partial `parallele_crime/traces/en_05.drvf`). Rule: kill by process TREE, verify no orphan has `systemd` as parent.
+- `recalcule` called INSIDE a loop (1 446×) in `/tmp/vf_rapide.py`; fixed by hoisting.
+- `opt()` returned `""` for a trailing valueless flag → `--oracle` silently skipped. Flags now tested by presence.
+- `pkill -f <pattern>` self-kills own shell (repeated); use a Python killer excluding ancestors.
+- Regressions from `a_neur`: `pont_parallele.py` copied `poids` without `a_neur`; attrition's `meilleur_passage` save/restore omitted it. Both fixed; `recalcule` now raises loudly.
+- Long jobs die without `setsid`/`disown`; always redirect `> log 2>&1` (not `2>&1 > log`).
+
+## Pending Jobs
+- `/tmp/trace_couches.sh` running: ~125–130/300 traces, ~15–17 s each.
+- `profil_couches.py` must be fixed and run on `traces_couches/` once ≥ all 6 languages present per article.
+- Not yet done, in my chosen order: (4) locality measurement (what a layer owes to current token vs context); (5) targeted Monte-Carlo on revealed directions.
+
+## Current Work
+- Debugging `tools/profil_couches.py`. Format inspection of `traces_couches/de_A.drvf` (13 623 083 bytes): version **2**, nl 24, hid 896, first record `couche 0 · pos 1 · n 858 · ech 0.0068`. My ad-hoc inspection script also errored (`struct.error: unpack requires a buffer of 2 bytes`) because it only read 80 bytes — that one is a bug in the inspection, not the format.
+- Two measurements just completed and committed:
+  - **50 draws** (120 neurons, centering, 30 articles × 3 langs, only seed varies): fidelity **0.4656 ± 0.0013** (min 0.4624, max 0.4681); `P_lang` **45.6 ± 9.97** (21.7–73.4); `P_cont` **90.1 ± 7.75** (65.2–104.4); **RATIO 2.093 ± 0.584** (min 1.298, max 4.298, median 1.947, 5th 1.398, 95th 3.054). Professor on that panel: **13.222**.
+  - **Input alone, same panel**: fid **0.5268**, `P_lang` 88.8, `P_cont` 173.7, ratio **1.956**.
+- **§70 corrected**: reservoir does NOT lower the ratio (median 1.947 ≈ input-alone 1.956); formulation should be "neutral at median, up to 2.2× the input at the top of the distribution". It DOES cost fidelity systematically: **−0.061 = 47× the between-seed std**. Variation is mostly on the language axis (`P_lang` ×3.4 vs `P_cont` ×1.6).
+- Selection is free in fidelity: best-of-50 gives ratio **4.298** at fid 0.4633 — real trade-off is "reservoir vs input alone: −0.061 fid for +2.2× ratio".
+
+## Next Step
+- Fix `lire_tout()` in `tools/profil_couches.py` to parse DRVF pairs **interleaved** (per pair: `<B` delta, optional `<H` absolute if 255, then `<h` value), matching `invariance_unites.paires`; re-run on `traces_couches/` once the tracing completes.
+
+## Critical Context
+- **User authorizations now in force**: pseudo-random Monte-Carlo IS allowed provided it is **reproducible**; the teacher's first layers MAY be read, but strictly as **hints to optimize our stimulation/design**, **not as a structure to reproduce**; black box is preserved.
+- **Reproducibility defect to fix**: weights come from `np.random.RandomState(seed)`, replayable only via numpy's MT19937. Replace with an explicit documented generator (LCG or indexed hash) so it replays anywhere.
+- **My proposed measurement order** (user approved "vas-y dans l'ordre de ton choix"): 1) 50-draw distribution ✅, 2) trace layers 1–7 ✅ launched, 3) layer-by-layer profile, 4) locality measurement, 5) targeted Monte-Carlo.
+- **Layer-profile indices and the design choice each settles**: profile of the ratio per layer → what depth; inter-layer map form (identity + correction of what rank) → what size; current-token vs context dependence → whether recurrence is needed at all; effective dimension → how many neurons; which input directions layer 1 uses → **what to feed** (likely the most valuable, since §70 shows language enters via the input).
+- **Established results (unchanged)**: 392/392 UDHR at layers 8+10, 400/400 units, 0 failures; 482 articles × 6 langs = 2 892 traces, 0 failures; layer 8 beats 10 by 41/41 with 0 regressions (TEST 0.6424 vs 0.5960); `corr(fidélité, témoin constant) = +0.9768`; oracle gap TEST +0.0975 vs VALIDATION +0.0112; ridge optimum **0.03** (not 0.3); growth+attrition 147 neurons with full protocol (fid appr 0.6464, VAL 0.6312, TEST 0.6299, apport +0.0537, invariance 0.8958, pire 0.6392, oracle TEST 0.6721/−+0.0415, oracle VALIDATION 0.6504/+0.0194); plateau curve A200 0.6693 → A400 0.6763 → A800 0.6821; domain-vs-language on Wikipedia: **+0.0026** (vs **+0.19** on UDHR — 70× overstated); Wikipedia transfer 3 pairs: −0.0639 / −0.0657 / −0.0318; defect localized: **13.7× less content energy**; discriminant rank 2 at 482 articles: **12.645 vs professor 12.001 (105%)**; §73 "learn what to read" did NOT replicate (2.411 @85 → 1.759 @482).
+- **Open question**: under the constraints, which mechanism can carry the professor's CONTENT ENERGY (`P_cont` 45 vs 5 263)? The §70 conclusion — "it's the mechanism that computes that must be replaced" — means the **frozen, content-INDEPENDENT random projection** standing in for 8 layers (the teacher routes by content via attention; a fixed map cannot).
+- **Honest limits stated**: the elimination argument is not a proof that no frozen random map can work; only ONE form of reinforcement was tested; no deterministic construction was tested.
+- **Three same-shaped lessons recorded**: §79 small-panel effect published too fast; BILAN thirteen hours before testing the trivial baseline; §81 conclusion from a single draw. Rule: **count how many times you measured before writing "the mechanism does X"**.
+- Trace count total ~3 700, 0 failures. ~100 commits this session. `journal/README.md` is a generated file, modified and uncommitted.
+- Crime and Punishment: 24 chapters written (en–es), only 8 traced (4/24 segments) — stopped to free CPU for Wikipedia.
+</compacted-summary>
+
+### 🤖 Assistant
+
+⏵ **Le lecteur tourne maintenant, mais les couches 0/2/4/8 sont « absentes » — je vérifie ce que contient vraiment le fichier.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane && ls -la corpus/wiki_apparie/traces_couches/ | head -12 && echo \"--- total fichiers ---\" && ls corpus/wiki_apparie/traces_couches/ | wc -l && echo \"--- ce que mon lecteur voit (couches + n) pour de_A ---\" && python3 -c \"\nimport struct\nf=open(' … [579 caractères tronqués]`
+
+  ```
+total 2677528
+drwxr-xr-x. 1 stephane stephane     8016  7 oct 10:09 .
+drwxr-xr-x. 1 stephane stephane   108760  7 oct 09:13 ..
+-rw-r--r--. 1 stephane stephane 13455032  7 oct 09:14 de_Aaliyah.drvf
+-rw-r--r--. 1 stephane stephane 14415395  7 oct 09:16 de_Aarhus.drvf
+-rw-r--r--. 1 stephane stephane  8076743  7 oct 09:18 de_Aaron.drvf
+-rw-r--r--. 1 stephane stephane 13195640  7 oct 09:19 de_ABBA.drvf
+-rw-r--r--. 1 stephane stephane 13177331  7 oct 09:21 de_ABC.drvf
+-rw-r--r--. 1 stephane stephane  8338775  7 oct 09:22 de_Abel.drvf
+-rw-r--r--. 1 stephane stephane 14820119  7 oct 09:24 de_Abel_Tasman.drvf
+-rw-r--r--. 1 stephane stephane 14217143  7 oct 09:26 de_Aberdeen.drvf
+-rw-r--r--. 1 stephane stephane 13694306  7 oct 09:27 de_Aberdeenshire.drvf
+--- total fichiers ---
+214
+--- ce que mon lecteur voit (couches + n) pour de_A ---
+magic b'DRVF' ver 2 nl 24 hid 896
+rec couche 0 pos 1 n 858 ech 0.0068
+rec couche 1 pos 1 n 859 ech 0.0877
+rec couche 2 pos 1 n 846 ech 0.1727
+rec couche 3 pos 1 n 86 ech 0.5016
+rec couche 4 pos 1 n 71 ech 0.3003
+rec couche 5 pos 1 n 129 ech 0.2289
+rec couche 6 pos 1 n 155 ech 0.2228
+rec couche 7 pos 1 n 142 ech 0.2654
+rec couche 8 pos 1 n 137 ech 0.2106
+rec co
+… [143 caractères tronqués]
+  ```
+
+### 👤 Utilisateur
+
+Current runtime context. This snapshot supersedes earlier runtime-context snapshots.
+
+Current DSH file policy: danger-full-access. The DSH file sandbox does not restrict file modifications by available operations.
+
+Approval prompts are disabled in this session: actions that require approval are rejected automatically — do not request sandbox escalation (do not set `sandbox_permissions`).
+
+### 👤 Utilisateur
+
+<system-reminder>
+The available skill catalog changed. This complete catalog replaces every earlier available-skills list in this session:
+
+<available_skills>
+- `microsoft-foundry`: Deploy, evaluate, fine-tune, and manage Foundry agents end-to-end with azd: hosted agent scaffold/run/deploy, prompt agent create, batch eval, continuous eval, prompt optimizer, Agent Optimizer scaffold, agent.yaml, dataset curation from traces, model fine-tuning (SFT/DPO/RFT). USE FOR: azd ai agent, azd provision/deploy, deploy agent, hosted agent, create agent, add tool to agent, invoke agent, evaluate agent, continuous eval, continuous monitoring, agent CI/CD, optimize prompt, improve prom...
+</available_skills>
+
+Use only names in this replacement catalog. If the user names a listed skill, or the task clearly matches its description, call the `skill` tool with the exact name before acting.
+A user may also invoke a skill directly; its <skill_content> block then appears in this conversation. Follow it, and do not call the `skill` tool again for that skill.
+</system-reminder>
+
+### 🤖 Assistant
+
+⏵ **Les 9 couches sont bien présentes — le bug est donc dans mon `lire_tout`, pas dans les traces. Je le lis.**
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/profil_couches.py"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/profil_couches.py</path>
+<type>file</type>
+<content>
+1: #!/usr/bin/env python3
+2: """profil_couches.py — où le professeur SÉPARE-t-il le contenu de la langue ?
+3: 
+4: BUT : des INDICES, pas une cible à reproduire. On garde la boîte noire — la cible reste
+5: la couche 8. On regarde par-dessus l'épaule du professeur pour trancher des choix qu'on
+6: fait aujourd'hui à l'aveugle : quelle profondeur, quelle taille, et surtout QUOI NOURRIR.
+7: 
+8: LA MESURE. Pour chaque couche c de 0 à 8, et sur les mêmes entrées, on calcule le rapport
+9: contenu/langue des représentations BRUTES du professeur :
+10: 
+11:     P_lang = dispersion des moyennes par LANGUE
+12:     P_cont = dispersion des moyennes par CONTENU
+13:     rapport = P_cont / P_lang
+14: 
+15: Le §70 a mesuré que la couche 0 a un rapport de 1,698 et la couche 8 de 12,001 — mais
+16: SANS REGARDER ENTRE. Ce profil dit où la séparation se crée : d'un coup, ou
+17: progressivement ? Y a-t-il un coude ? Et à quelle profondeur la cible utile est-elle
+18: déjà atteinte ?
+19: 
+20: Usage : profil_couches.py <dossier_traces> [--couches 0,1,2,3,4,5,6,7,8]
+21: """
+22: import glob
+23: impor
+… [5126 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le lecteur paraît correct ; je lance la version complète pour voir la ligne « entrées lues » que j'avais coupée.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 500 python3 -u -c \"\nimport sys, glob, os\nsys.path.insert(0,'tools')\nimport profil_couches as pc\nfs = sorted(glob.glob('/home/stephane/Data13TB/stephane/corpus/wiki_apparie/traces_couches/*.drvf'))\nprint('fichiers:', len … [233 caractères tronqués]`
+
+  ```
+fichiers: 215
+de_A.drvf -> [0]
+de_ABBA.drvf -> [0]
+de_ABC.drvf -> [0]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Seule la couche 0 est gardée — la boucle casse après le premier enregistrement. J'instrumente pour voir l'exception avalée.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -u -c \"\nimport struct\nf=open('/home/stephane/Data13TB/stephane/corpus/wiki_apparie/traces_couches/de_A.drvf','rb')\nprint('magic',f.read(4)); version,=struct.unpack('<H',f.read(2)); nl,hid=struct.unpack('<II',f.read(8))\np … [699 caractères tronqués]`
+
+  ```
+magic b'DRVF'
+version 2 nl 24 hid 896
+couche 0
+  pos 1 n 858
+  OK idx 858 val 858 max 65281
+couche 7
+  pos 16781313 n 151126012
+  EXCEPTION error unpack requires a buffer of 1 bytes
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le décodage produit `max(idx)=65281` — un octet 0xFF avalé comme valeur. Je vais lire le code qui ÉCRIT le format.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"DRVF\" --include=*.rs --include=*.c --include=*.cpp --include=*.py -l | head -20", "description": "Locate DRVF writer source"}`
+
+  ```
+tools/diff_flux.py
+tools/profil_flux.py
+tools/flux_codec.py
+tools/analyse_flux.py
+tools/trace_compacite.py
+tools/granularite_flux.py
+tools/invariance_semantique.py
+tools/approximabilite_bloc.py
+tools/plateau_multilingue.py
+tools/lecture_plateau.py
+tools/cancellation_langue.py
+tools/contrastif_hors_echantillon.py
+tools/pont_recurrent.py
+tools/applique_pont.py
+tools/sonde_pont.py
+tools/pont_fidele.py
+tools/pont_reservoir.py
+tools/cache_pont.py
+tools/compare_professeurs.py
+tools/sous_ensemble_actif.py
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"DRVF\" --include=*.rs src/ 2>/dev/null | head -20; echo \"--- recherche du writer binaire ---\"; grep -rn \"0xFFFF\\|65535\\|u16::MAX\" --include=*.rs src/ 2>/dev/null | head -20", "description": "Find Rust DRVF writer"}`
+
+  ```
+--- recherche du writer binaire ---
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"DRVF\" tools/flux_codec.py | head; echo \"=== WRITER ===\"; grep -rn \"write\\|pack\\|magic\" tools/flux_codec.py | head -40", "description": "Read flux_codec writer"}`
+
+  ```
+2:"""Encodeur/décodeur de RÉFÉRENCE du flux d'activation (format DRVF v1 et v2).
+11:    en-tête   "DRVF" · u16 version · u32 n_layer · u32 hidden
+30:MAGIE = b"DRVF"
+=== WRITER ===
+41:    out = bytearray(ENTETE.pack(MAGIE, version, n_layer, hidden))
+43:        out += LISTE.pack(couche, pos, len(actifs), echelle)
+47:                out += PAIRE_V1.pack(i, v)
+51:                    out += PAIRE_V2.pack(ecart, v)
+53:                    out += bytes([255]) + struct.pack("<H", i) + struct.pack("<h", v)
+55:    out += FIN.pack(0xFFFF)
+60:    magie, version, n_layer, hidden = ENTETE.unpack_from(blob, 0)
+68:        couche, = FIN.unpack_from(blob, off)
+71:        couche, pos, n, echelle = LISTE.unpack_from(blob, off)
+78:            n_blocs, = struct.unpack_from("<I", blob, off)
+82:                echelles.append(struct.unpack_from("<e", blob, off)[0])   # f16 natif
+88:                    i = struct.unpack_from("<H", blob, off)[0]; off += 2
+92:                q = struct.unpack_from("<b", blob, off)[0]; off += 1
+96:                i, v = PAIRE_V1.unpack_from(blob, off)
+102:                    i = struct.unpack_from("<H", blob, off)[0]
+107:                v = struct.unpack_from("<h", blob, off)[
+… [2 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le writer est dans `flux_codec.py` — je lis le décodeur de référence, qui fait foi.**
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/flux_codec.py", "offset": 25, "limit": 95}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/flux_codec.py</path>
+<type>file</type>
+<content>
+25: """
+26: import struct
+27: import sys
+28: import time
+29: 
+30: MAGIE = b"DRVF"
+31: VERSION = 2        # ce que ce fichier ÉCRIT ; il LIT la 1, la 2 et la 3
+32: ENTETE = struct.Struct("<4sHII")
+33: LISTE = struct.Struct("<HIIf")
+34: PAIRE_V1 = struct.Struct("<Ih")
+35: PAIRE_V2 = struct.Struct("<Bh")
+36: FIN = struct.Struct("<H")
+37: 
+38: 
+39: def encoder(n_layer, hidden, listes, version=VERSION):
+40:     """listes : itérable de (couche, position, echelle, [(indice, valeur)])."""
+41:     out = bytearray(ENTETE.pack(MAGIE, version, n_layer, hidden))
+42:     for couche, pos, echelle, actifs in listes:
+43:         out += LISTE.pack(couche, pos, len(actifs), echelle)
+44:         prev = 0
+45:         for i, v in actifs:
+46:             if version == 1:
+47:                 out += PAIRE_V1.pack(i, v)
+48:             else:
+49:                 ecart = i - prev
+50:                 if ecart < 255:
+51:                     out += PAIRE_V2.pack(ecart, v)
+52:                 else:
+53:                     out += bytes([255]) + struct.pack("<H", i) + struct.pack("<h", v)
+54:                
+… [2692 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le décodeur de référence confirme ma structure — donc le fichier diffère. Je dump les octets bruts pour trancher empiriquement.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane && python3 -u -c \"\nimport struct\nf=open('corpus/wiki_apparie/traces_couches/de_A.drvf','rb')\nh=f.read(14)\ncouche,pos,n,ech=struct.unpack('<HIIf',f.read(14))\nprint('rec0 couche',couche,'pos',pos,'n',n)\npay=f.read(n*3)\nprint('payload',len(pay),' … [897 caractères tronqués]`
+
+  ```
+rec0 couche 0 pos 1 n 858
+payload 2574 premiers octets: 00 fc ff 01 11 00 01 01 00 01 0a 00 01 f8 ff 01 11 00 01 10 00 01 06 00 01 09 00 01 0e 00 01 e9 ff 01 08 00
+0xFF en position 0 mod 3 : 0   total 0xFF : 423
+decode 3-octets : max idx 895
+decode variable (5 octets si escape) : paires 858 max idx 895
+  ```
+
+### 🤖 Assistant
+
+⏵ **Trouvé : je lisais tous les indices puis toutes les valeurs — or une paire échappée fait 5 octets, pas 3. Je corrige en entrelacé.**
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/profil_couches.py", "old_string": "            try:\n                if version == 1:\n                    idx = struct.unpack(f\"<{n}I\", f.read(4*n))\n                    val = struct.unpack(f\"<{n}h\", f.read(2*n))\n             … [1563 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/profil_couches.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -u -c \"\nimport sys, glob, os\nsys.path.insert(0,'tools')\nimport profil_couches as pc\nfs = sorted(glob.glob('/home/stephane/Data13TB/stephane/corpus/wiki_apparie/traces_couches/*.drvf'))\nfor f in fs[:4]:\n    lu = pc.lire … [329 caractères tronqués]`
+
+  ```
+de_A.drvf couches [0, 1, 2, 3, 4, 5, 6, 7, 8] maxidx {0: 895, 1: 895, 2: 895, 3: 893, 4: 895, 5: 895, 6: 895, 7: 895, 8: 895}
+de_ABBA.drvf couches [0, 1, 2, 3, 4, 5, 6, 7, 8] maxidx {0: 895, 1: 895, 2: 895, 3: 895, 4: 895, 5: 895, 6: 895, 7: 895, 8: 895}
+de_ABC.drvf couches [0, 1, 2, 3, 4, 5, 6, 7, 8] maxidx {0: 895, 1: 895, 2: 895, 3: 895, 4: 895, 5: 895, 6: 895, 7: 895, 8: 895}
+de_AGM_65_Maverick.drvf couches [0, 1, 2, 3, 4, 5, 6, 7, 8] maxidx {0: 895, 1: 895, 2: 895, 3: 895, 4: 895, 5: 895, 6: 895, 7: 895, 8: 895}
+  ```
+
+### 🤖 Assistant
+
+⏵ **Lecteur réparé sur 4 fichiers. Je le valide contre le décodeur de référence, puis je vérifie l'état du traçage.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -u -c \"\nimport sys, numpy as np\nsys.path.insert(0,'tools')\nimport profil_couches as pc, flux_codec as fc\nchemin='/home/stephane/Data13TB/stephane/corpus/wiki_apparie/traces_couches/de_A.drvf'\nnl,hid,listes,blob = fc.lir … [853 caractères tronqués]`
+
+  ```
+couches réf [0, 1, 2, 3, 4, 5, 6, 7, 8]  couches mien [0, 1, 2, 3, 4, 5, 6, 7, 8]
+IDENTIQUE au décodeur de référence
+=== état du traçage ===
+it_Akihabara 16s
+pt_Akihabara 17s
+ARTICLE Akihabara
+222
+  ```
+
+### 🤖 Assistant
+
+⏵ **Lecteur validé identique au décodeur de référence. Je regarde les jobs et lance un premier profil sur les traces déjà présentes.**
+
+- **job_list** `{}`
+
+  ```
+bash-11 [bash] completed — cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && cargo build --release 2>&1 | tail -5 && echo "=== TESTS ===" && cargo test --release 2>&1 | tail -25
+bash-12 [bash] completed — cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ./qtrinet-core/target/release/qtrinet-core models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 256 --abits 16 --threads 16 --limit 512 --dense 2>&1 | tail -12
+bash-13 [bash] completed — cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo "=== H1 brut 64 jetons, motif 1 (ancien comportement fenêtre) ===" && /usr/bin/time -f "TEMPS %e s, MAXRSS %M Ko" ./qtrinet-core/target/release/qtrinet-core /home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf --ppl /tmp/ids_oss.txt --ctx 256 --limit 64 --dense --threads 16 --swa-pattern 1 2>&1 | grep -vE "^\[modele\]|listes" | tail -25
+bash-14 [bash] killed — /tmp/mesures_oss.sh 2>&1 | tail -40
+bash-15 [bash] completed — cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && LD_LIBRARY_PATH=/home/stephane/Data13TB/stephane/GitHub/llama.cpp/build/bin ./tools/ref_logits /home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf /tmp/ids_oss_64.txt /tmp/ref_oss_64.bin
+… [48358 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le lecteur est validé ; je vérifie que le traçage tourne encore, puis je lance le profil complet en fond.**
+
+- **bash** `{"command": "ps -eo pid,ppid,etimes,cmd | grep -E \"trace_couches|drave\" | grep -v grep | head -10; echo \"--- fichiers ---\"; ls /home/stephane/Data13TB/stephane/corpus/wiki_apparie/traces_couches/*.drvf | wc -l", "description": "Check if tracing still running"}`
+
+  ```
+2830685    2357    3574 bash -c cat > /tmp/trace_couches.sh <<'EOF' #!/bin/bash # COUCHES 0 À 8, POUR 50 ARTICLES × 6 LANGUES. # # BUT : des INDICES, pas une cible à reproduire. On garde la boîte noire — la cible # reste la couche 8. On regarde par-dessus l'épaule du professeur pour trancher des # choix de conception qu'on fait aujourd'hui à l'aveugle : quelle profondeur, quelle # taille, quelle localité, et surtout QUOI NOURRIR. # # Le coût en calcul est NUL : --trace-couches ne filtre que l'ÉCRITURE, la passe avant # exécute les couches de toute façon (vérifié : 0:9 contre 0:24 donne des traces # identiques octet à octet). Seul le disque augmente. set -u cd /home/stephane/Data13TB/stephane/corpus/wiki_apparie D=/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/target/release/drave M=/home/stephane/Data13TB/stephane/modeles/gguf/qwen2.5-0.5b-instruct-q4_k_m.gguf mkdir -p traces_couches : > /tmp/trace_couches.log SLUGS=$(ls en_*.txt | sed 's/^en_//; s/\.txt$//' | sort | head -50) for S in $SLUGS; do   for L in de en es fr it pt; do     F="${L}_${S}"     [ -f "${F}.txt" ] || continue     [ -s traces_couches/$F.drvf ] && continue     T0=$(date +%s)     if $D $M --infer --ctx
+… [2891 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le traçage tourne encore (224/300, ~20 min restants). Je lance un profil partiel pour valider l'outil de bout en bout.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (t0=$(date +%s); timeout 1800 python3 -u tools/profil_couches.py /home/stephane/Data13TB/stephane/corpus/wiki_apparie/traces_couches --couches 0,1,2,3,4,5,6,7,8 > /tmp/profil_partiel.log 2>&1; echo \"exit=$? en $(( $(date +%s) - t0 ) … [129 caractères tronqués]`
+
+  ```
+(no output)
+[timed out after 600000ms]
+[killed by signal: SIGTERM]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le profil dépasse 10 min — le parsing paire-à-paire en Python est trop lent. Je regarde où il en est.**
+
+- **bash** `{"command": "cat /tmp/profil_partiel.log 2>/dev/null | tail -20; echo \"--- processus ---\"; ps -eo pid,etimes,cmd | grep profil_couches | grep -v grep | head -3; echo \"--- traces ---\"; ls /home/stephane/Data13TB/stephane/corpus/wiki_apparie/traces_couches/*.drvf | wc -l", "description": "Check pr … [24 caractères tronqués]`
+
+  ```
+# 225 entrées lues dans /home/stephane/Data13TB/stephane/corpus/wiki_apparie/traces_couches
+# 6 langues (de, en, es, fr, it, pt) · 38 contenus communs
+
+#  couche     P_lang     P_cont   RAPPORT  vs couche 0  dim. eff.
+       0    11102.3    69108.1     6.225        1.00×       92.0
+       1    18379.0    93788.2     5.103        0.82×      132.7
+       2    21923.6    87148.5     3.975        0.64×      131.3
+       3     4949.8    23315.2     4.710        0.76×      118.1
+       4    15558.6    78133.4     5.022        0.81×      143.2
+       5     9536.5    50637.4     5.310        0.85×      130.2
+       6    17402.2    85000.0     4.884        0.78×      131.9
+       7     9068.3    43839.1     4.834        0.78×      121.2
+       8     8058.2    41003.4     5.088        0.82×      114.5
+
+# P_lang et P_cont : dispersion des moyennes par langue / par contenu.
+# dim. eff. : entropie des valeurs propres — le nombre de directions qui
+# portent réellement la représentation.
+# INDICE, PAS CIBLE : ce qu'on cherche, c'est À QUELLE PROFONDEUR le
+# rapport décolle, et COMBIEN de dimensions suffisent à le porter.
+--- processus ---
+--- traces ---
+264
+  ```
+
+### 🤖 Assistant
+
+⏵ **Profil obtenu, mais le rapport (6,2 en couche 0) contredit le §70 (1,698). Je vérifie l'échelle et je reproduis l'ancre sur le corpus du §70.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,60p' tools/invariance_unites.py", "description": "Read reference reader for scale handling"}`
+
+  ```
+#!/usr/bin/env python3
+"""invariance_unites.py — l'invariance par UNITÉ, dix points au lieu d'un.
+
+L'outil multilingue mesure l'invariance entre TOUTES les paires d'entrées. Ici les
+entrées sont appariées par unité : le fichier `<langue>_<k>.drvf` est la k-ième
+unité de cette langue, et toutes les langues disent la MÊME unité k. On mesure
+donc, pour chaque k, la similarité entre langues — et « la pire paire » porte
+enfin sur une unité précise et nommable au lieu d'être un agrégat.
+
+Usage : invariance_unites.py <dossier> --couche 10 [--masque fichier.npz]
+"""
+import glob, os, re, struct, sys
+import numpy as np
+
+
+def lire(chemin, couche):
+    def paires(f, n, version, bloc=32):
+        ech = None
+        if version == 3:
+            nb, = struct.unpack("<I", f.read(4))
+            ech = [struct.unpack("<e", f.read(2))[0] for _ in range(nb)]
+        out, prev = [], 0
+        for _ in range(n):
+            if version == 1:
+                i, = struct.unpack("<I", f.read(4))
+            else:
+                e, = struct.unpack("<B", f.read(1))
+                i = struct.unpack("<H", f.read(2))[0] if e == 255 else prev + e
+                prev = i
+            if version == 3:
+           
+… [1140 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Échelle confirmée : en v2 les valeurs sont brutes, mon lecteur est fidèle. Je reproduis maintenant l'ancre du §70 sur les 482 articles.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls /home/stephane/Data13TB/stephane/corpus/wiki_apparie/traces/*.drvf 2>/dev/null | wc -l && (t0=$(date +%s); timeout 3000 python3 -u tools/profil_couches.py /home/stephane/Data13TB/stephane/corpus/wiki_apparie/traces --couches 0,8 > … [273 caractères tronqués]`
+
+  ```
+2892
+--- après 240 s ---
+  ```
+
+### 🤖 Assistant
+
+⏵ **55 Go à lire en Python pur : trop lent. J'arrête et je retrouve comment le §70 avait mesuré, pour comparer à outil égal.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && pkill -f \"profil_couches.py /home/stephane/Data13TB/stephane/corpus/wiki_apparie/traces\" 2>/dev/null; sleep 1; grep -n \"12,00\\|12.001\\|1,698\\|1.698\" reports/rapport-toutes-langues.md | head -20", "description": "Find section 7 … [23 caractères tronqués]`
+
+  ```
+(no output)
+[killed by signal: SIGTERM]
+  ```
+
+### 🤖 Assistant
+
+⏵ **`pkill -f` s'est tué lui-même (piège connu). Je vérifie et j'utilise un tueur Python.**
+
+- **bash** `{"command": "ps -eo pid,etimes,cmd | grep \"profil_couches\" | grep -v grep | head -5; echo \"---\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"12,001\\|1,698\\|12.001\\|1.698\" reports/rapport-toutes-langues.md | head -20", "description": "Check profile process and grep report" … [1 caractères tronqués]`
+
+  ```
+---
+4011:| **A · l'ENTRÉE seule (ZÉRO neurone)** | **0,5161** | 199,5 | **338,8** | **1,698** |
+4018:**1. L'axe de langue vient de l'ENTRÉE.** L'entrée seule a un rapport de **1,698**, le
+4034:inférieur à l'entrée seule (1,698).** Ajouter le réservoir achète donc de la fidélité en
+4040:possible, en a 1,698.** Autrement dit :
+4047:le rapport de 1,698 à 1,354 — il l'**abaisse**.
+4055:| **l'entrée** (couche 0 du professeur) | un rapport de **1,698** — la langue y est déjà, mêlée |
+4126:rapport de 1,698 à 1,354).
+4134:| 70 | caractéristiques emboîtées | le réservoir **abaisse** le rapport (1,698 → 1,354) |
+4166:couche 0 et la couche 8 (rapport 10,912 contre 1,698) n'est pas reproduite par un
+4619:| La langue entre par **l'entrée**, pas le réservoir | 1,698 contre 1,354 (§70) |
+4704:| **l'entrée seule du professeur, 0 neurone** | **0,5161** | **1,698** |
+4782:| *professeur à 482 articles* | — | *387,9* | *4 655,4* | ***12,001*** |
+4807:- la **cible du professeur** : **12,001** contre 10,912 — elle monte aussi, donc l'écart
+4841:| **PROFESSEUR** | — | *387,9* | *4 655,4* | ***12,001*** |
+4845:**Rapport 12,645 contre 12,001 pour le professeur : 105 % de la cible.**
+4851:| professeur | 10,
+… [347 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le §70 vient d'un cache normalisé (P_lang 387,9), ma trace est brute (8058). Je lis le §70 pour retrouver le mode de calcul exact.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '4760,4800p' reports/rapport-toutes-langues.md", "description": "Read section 70 context"}`
+
+  ```
+professeur, boîte noire, aucune rétropropagation — la question ouverte est : **quel
+mécanisme, autre qu'un réservoir aléatoire gelé, peut produire huit couches d'attention ?**
+
+Et la réponse à cette question commence par une mesure que je n'ai pas faite :
+**qu'apporte le réservoir au-dessus de la seule entrée, sur le corpus complet de 482
+articles ?** Le §78 l'a lancée ; elle n'a pas encore rendu son verdict.
+
+
+---
+
+## 79. La vérification à 482 articles : le résultat du §73 NE SE RÉPLIQUE PAS
+
+Le corpus Wikipedia apparié complet — **482 articles × 6 langues, 1 446 entrées
+d'apprentissage et 1 446 de test** — permet de vérifier si les effets mesurés sur 85
+articles tenaient à la taille du panel. Réponse, sur la composition des leviers :
+
+| étape | fid TEST | P_lang | P_cont | **RAPPORT** |
+|---|---:|---:|---:|---:|
+| à **85 articles** — base (centrage seul) | 0,4703 | 42,4 | 82,1 | 1,934 |
+| à **85 articles** — + apprendre quoi lire | 0,4667 | 181,9 | 438,5 | **2,411** |
+| à **482 articles** — base (centrage seul) | 0,4713 | 39,8 | 98,9 | **2,487** |
+| à **482 articles** — + apprendre quoi lire | 0,4546 | **83,3** | 146,6 | **1,759** |
+| *professeur à 482 articles* | — | *387,9* | *
+… [845 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Test décisif : mon outil sur les 50 premiers articles du corpus du §70 doit redonner ≈1,7 / ≈12. Je prépare un sous-dossier.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/corpus/wiki_apparie && du -sh traces 2>/dev/null; ls traces/*.drvf | head -3; echo \"--- tailles ---\"; ls -la traces/ | head -4; echo \"--- exemple de noms ---\"; ls traces/ | sed 's/_[^_]*\\.drvf//' | sort -u | head -5; echo \"--- nb articles distin … [141 caractères tronqués]`
+
+  ```
+7,8G	traces
+traces/de_Aaliyah.drvf
+traces/de_Aarhus.drvf
+traces/de_Aaron.drvf
+--- tailles ---
+total 8078648
+drwxr-xr-x. 1 stephane stephane  114504  7 oct 04:49 .
+drwxr-xr-x. 1 stephane stephane  108760  7 oct 09:13 ..
+-rw-r--r--. 1 stephane stephane 2944100  6 oct 14:02 de_Aaliyah.drvf
+--- exemple de noms ---
+de
+de_A
+de_Abel
+de_Abner
+de_Abraham
+--- nb articles distincts ---
+482
+  ```
+
+### 🤖 Assistant
+
+⏵ **Je cherche l'outil qui a produit les chiffres du §70 et je prépare le sous-ensemble de 50 articles.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rln \"professeur\" tools/*.py | xargs grep -ln \"P_lang\\|plang\" 2>/dev/null | head; echo \"=== recherche du calcul P_lang/P_cont ===\"; grep -rn \"def deux_axes\\|def axes\\|Pl\\b.*Pc\\b\" tools/discriminant_contenu.py tools/ … [97 caractères tronqués]`
+
+  ```
+tools/blanchiment_entree.py
+tools/covariance_cible.py
+tools/decomposition.py
+tools/discriminant_contenu.py
+tools/etats_sans_langue.py
+tools/objectif_du_pont.py
+tools/ou_entre_la_langue.py
+tools/pont_generatif.py
+tools/profil_couches.py
+tools/renforcement_directions.py
+=== recherche du calcul P_lang/P_cont ===
+tools/discriminant_contenu.py:76:    return Pl, Pc, Pc/max(Pl, 1e-12)
+tools/ou_est_le_contenu.py:61:def deux_axes(noms, V):
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/discriminant_contenu.py", "offset": 50, "limit": 80}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/discriminant_contenu.py</path>
+<type>file</type>
+<content>
+50: 
+51: def opt(nom, defaut):
+52:     return sys.argv[sys.argv.index(nom) + 1] if nom in sys.argv else defaut
+53: 
+54: 
+55: def moyennes(noms, O, bornes):
+56:     return np.vstack([O[bornes[i]:bornes[i+1]].mean(0) for i in range(len(noms))])
+57: 
+58: 
+59: def groupes(noms):
+60:     par_c, par_l = {}, {}
+61:     for i, n in enumerate(noms):
+62:         L, _, k = n.partition("_")
+63:         par_c.setdefault(k, []).append(i)
+64:         par_l.setdefault(L, []).append(i)
+65:     return par_c, par_l
+66: 
+67: 
+68: def decompose(noms, V):
+69:     par_c, par_l = groupes(noms)
+70:     m = V.mean(0)
+71:     comm = [k for k, idx in par_c.items() if len(idx) == len(par_l)]
+72:     if not comm:
+73:         return None
+74:     Pl = float(np.mean([np.sum((V[idx].mean(0) - m)**2) for idx in par_l.values()]))
+75:     Pc = float(np.mean([np.sum((V[par_c[k]].mean(0) - m)**2) for k in comm]))
+76:     return Pl, Pc, Pc/max(Pl, 1e-12)
+77: 
+78: 
+79: def cov_groupes(M, par, m, ncan):
+80:     """Covariance des moyennes de groupe autour de la moyenne globale."""
+81:     C = np.zeros((ncan
+… [2103 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Découverte : le §70 PONDE sur toutes les positions, ma sonde ne prend que la dernière. Je vérifie le protocole du corpus §70 puis je corrige.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls /tmp/*wiki*.sh /tmp/*apparie*.sh 2>/dev/null; grep -rn \"traces/\" tools/wiki_apparie.py 2>/dev/null | head -5; echo \"=== structure d'une trace §70 ===\"; python3 -c \"\nimport struct\nf=open('/home/stephane/Data13TB/stephane/cor … [496 caractères tronqués]`
+
+  ```
+/tmp/trace_wiki_apparie.sh
+/tmp/trace_wiki_apparie.sh
+/tmp/trace_wiki.sh
+/tmp/wiki_analyse.sh
+/tmp/wiki_apres.sh
+=== structure d'une trace §70 ===
+magic b'DRVF'
+version 2 nl 24 hid 896
+ couche 0 pos 1 n 851 ech 0.0056
+ couche 8 pos 1 n 127 ech 0.2105
+ couche 0 pos 2 n 831 ech 0.0041
+ couche 8 pos 2 n 852 ech 0.1035
+ couche 0 pos 3 n 844 ech 0.0064
+ couche 8 pos 3 n 857 ech 0.105
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le corpus §70 contient exactement les couches 0 et 8 — parfait pour l'ancre. Je lis son protocole de traçage.**
+
+- **bash** `{"command": "cat /tmp/trace_wiki_apparie.sh", "description": "Read section 70 tracing protocol"}`
+
+  ```
+#!/bin/bash
+# TRAÇAGE DU CORPUS WIKIPEDIA APPARIÉ — 482 articles × 6 langues latines.
+#
+# ORDRE PAR ARTICLE, ET C'EST DÉLIBÉRÉ. La première version triait les fichiers par
+# nom, donc traçait TOUT l'allemand, puis tout l'anglais… : aucun article n'était
+# complet avant la fin, et aucun résultat partiel n'était exploitable. Ici on boucle
+# sur les ARTICLES et, pour chacun, sur les six langues : après n articles on a
+# exactement n points de mesure alignés, utilisables immédiatement.
+#
+# DEUX GAINS MESURÉS, appliqués ici :
+#   --couches 0:9        n'exécute que 0..8 au lieu de 24. VÉRIFIÉ : trace de la
+#                        couche 8 IDENTIQUE OCTET À OCTET (même MD5) sur en et de,
+#                        et 1,6× plus rapide (15 s contre 24 s).
+#   --trace-couches 0,8  on n'écrit que l'entrée et la cible retenue.
+set -u
+cd /home/stephane/Data13TB/stephane/corpus/wiki_apparie
+D=/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/target/release/drave
+M=/home/stephane/Data13TB/stephane/modeles/gguf/qwen2.5-0.5b-instruct-q4_k_m.gguf
+LANGS="de en es fr it pt"
+mkdir -p traces
+: > /tmp/trace_wiki_apparie.log
+# liste des articles = slugs communs aux six langues
+SLUGS=$(ls en_*.txt 
+… [799 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le protocole de traçage est identique (§70 et moi) — seule la sonde diffère. Je réécris l'outil avec moyennage sur positions et parallélisme.**
+
+- **write** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/profil_couches.py", "content": "#!/usr/bin/env python3\n\"\"\"profil_couches.py — où le professeur SÉPARE-t-il le contenu de la langue ?\n\nBUT : des INDICES, pas une cible à reproduire. On garde la boîte noire — la cible reste\nla … [8139 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/profil_couches.py</path>
+<type>file</type>
+<content>
+Updated file
+</content>
+  ```
+
+### 🤖 Assistant
+
+⏵ **Les indices sont strictement croissants — `np.add.at` est inutilement lent. Je corrige puis je valide sur l'ancre.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/profil_couches.py'; s=open(p).read()\nold = \"\"\"            if c in voulues:\n                if pool == \"derniere\":\n                    v = np.zeros(hid)\n                    np.add.at(v, idx[idx < hi … [1396 caractères tronqués]`
+
+  ```
+ok
+syntaxe OK
+=== ancre §70 : 50 premiers articles du corpus 482 ===
+# 50 contenus retenus sur le dossier
+# 300 entrées lues dans /home/stephane/Data13TB/stephane/corpus/wiki_apparie/traces · pooling « moyenne »
+# 6 langues (de, en, es, fr, it, pt) · 50 contenus
+
+#  couche     P_lang     P_cont   RAPPORT  vs couche 0  dim. eff.
+       0     4318.7     1178.2     0.273        1.00×       15.2
+       8     2511.7     4610.4     1.836        6.73×       35.9
+
+# P_lang et P_cont : dispersion des moyennes par langue / par contenu.
+# dim. eff. : entropie des valeurs propres — le nombre de directions qui
+# portent réellement la représentation.
+# INDICE, PAS CIBLE : ce qu'on cherche, c'est À QUELLE PROFONDEUR le
+# rapport décolle, et COMBIEN de dimensions suffisent à le porter.
+en 17 s
+  ```
+
+### 🤖 Assistant
+
+⏵ **17 s pour 300 fichiers (30× plus rapide), mais toujours pas l'ancre : mon P_lang est 21× trop grand. Je dois voir comment le cache du §70 est construit.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rln \"cache_wiki\" tools/*.py /tmp/*.py /tmp/*.sh 2>/dev/null | head; echo \"=== charge() de discriminant_contenu ===\"; sed -n '1,50p' tools/discriminant_contenu.py", "description": "Find cache builder and charge function"}`
+
+  ```
+/tmp/analyse_final.sh
+/tmp/refait_parallele.sh
+/tmp/wiki_analyse.sh
+=== charge() de discriminant_contenu ===
+#!/usr/bin/env python3
+"""discriminant_contenu.py — maximiser le rapport contenu/langue par les DIRECTIONS.
+
+CE QUI MÈNE ICI, en trois étapes établies :
+  §67 — le rapport `P_cont/P_lang` est INVARIANT D'ÉCHELLE : aucune amplitude ne peut
+        le corriger, seulement un changement de DIRECTIONS ;
+  §68 — imposer la covariance TOTALE de la cible ne marche pas, parce que la covariance
+        globale ne détermine pas le partage contenu/langue ;
+  §61 — le partage dépend des **moyennes PAR ENTRÉE**, donc de la structure de groupes.
+
+L'OUTIL QUI VISE EXACTEMENT CELA. On cherche les directions de l'espace de sortie qui
+**maximisent le rapport** entre l'énergie de contenu et l'énergie de langue. C'est un
+problème aux valeurs propres généralisé — l'analyse discriminante linéaire :
+
+    C_cont · v = λ · C_lang · v
+
+où, calculées sur les **moyennes par entrée** de l'APPRENTISSAGE :
+    C_cont = covariance des moyennes par CONTENU   (μ_k − μ̄)
+    C_lang = covariance des moyennes par LANGUE    (ν_L − ν̄)
+
+On garde les `r` directions de plus grand λ et on y projette la sortie.
+
+C'est
+… [1168 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"def charge\" -A 25 tools/pont_generatif.py | head -40; echo \"=== construction du cache (analyse_final.sh) ===\"; grep -n \"cache_wiki\" -B 6 -A 3 /tmp/analyse_final.sh | head -50", "description": "Read charge and cache con … [11 caractères tronqués]`
+
+  ```
+32:def charge(p):
+33-    z = np.load(p, allow_pickle=True)
+34-    cles = [str(c) for c in z["cles"]]
+35-    E = [z[f"E{i}"].astype(np.float32) for i in range(len(cles))]
+36-    Y = [z[f"Y{i}"].astype(np.float32) for i in range(len(cles))]
+37-    return cles, E, Y, int(z["hidden"])
+38-
+39-
+40-def cos_lignes(A, B):
+41-    na = np.linalg.norm(A, axis=1); nb = np.linalg.norm(B, axis=1)
+42-    ok = (na > 0) & (nb > 0)
+43-    return float(np.mean(np.sum(A[ok]*B[ok], axis=1)/(na[ok]*nb[ok])))
+44-
+45-
+46-def inv(V):
+47-    n = np.linalg.norm(V, axis=1, keepdims=True); n[n == 0] = 1
+48-    S = (V/n) @ (V/n).T
+49-    iu = np.triu_indices(len(V), 1)
+50-    return float(S[iu].mean()), float(S[iu].min())
+51-
+52-
+53-# ------------------------------------------------------------------ le pont
+54-class Pont:
+55-    """Réseau récurrent PROFOND : chaque couche ne lit que la PRÉCÉDENTE.
+56-
+57-    C'est ce qui donne un sens au mot « couche ». Dans la version précédente,
+=== construction du cache (analyse_final.sh) ===
+19-python3 -u tools/pont_parallele.py /tmp/cache_rj_en.npz /tmp/cache_rj_fr.npz --couche 10 --canaux 0.5 >> /tmp/analyse_final.log 2>&1
+20-
+21-# ----------------------------------------
+… [911 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Je cherche la commande exacte qui a produit `cache_wikitrain.npz` — c'est elle qui définit l'espace de comparaison.**
+
+- **bash** `{"command": "grep -n \"cache_wikitrain\\|cache_wikitest\" -B 4 -A 2 /tmp/wiki_analyse.sh | head -40; echo \"=== options de cache_pont.py ===\"; grep -n \"add_argument\\|sys.argv\\|def opt\" /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/cache_pont.py | head -20", "description": "Find wiki cac … [18 caractères tronqués]`
+
+  ```
+=== options de cache_pont.py ===
+54:    d, sortie = sys.argv[1], sys.argv[2]
+55:    c = int(sys.argv[sys.argv.index("--couche") + 1]) if "--couche" in sys.argv else 10
+56:    hidden = int(sys.argv[sys.argv.index("--hidden") + 1]) if "--hidden" in sys.argv else 896
+61:    if "--langues" in sys.argv:
+62:        gardees = {l.strip() for l in open(sys.argv[sys.argv.index("--langues")+1])
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la /tmp/cache_wikitrain.npz /tmp/cache_wikitest.npz 2>/dev/null; echo \"=== recherche large ===\"; grep -rln \"cache_wikitrain\" /tmp/*.sh /tmp/*.py 2>/dev/null | head; echo \"=== contenu de cache_pont.py (corps) ===\"; sed -n '4 … [84 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 324599131  6 oct 18:47 /tmp/cache_wikitest.npz
+-rw-r--r--. 1 stephane stephane 311425623  6 oct 18:37 /tmp/cache_wikitrain.npz
+=== recherche large ===
+=== contenu de cache_pont.py (corps) ===
+        pp = {}
+        while True:
+            b = f.read(2)
+            if len(b) < 2:
+                break
+            cc, = struct.unpack("<H", b)
+            if cc == 0xFFFF:
+                break
+            pos, n, ech = struct.unpack("<IIf", f.read(12))
+            pp[(cc, pos)] = paires(f, n, version)
+    return hidden, pp
+
+
+def main():
+    d, sortie = sys.argv[1], sys.argv[2]
+    c = int(sys.argv[sys.argv.index("--couche") + 1]) if "--couche" in sys.argv else 10
+    hidden = int(sys.argv[sys.argv.index("--hidden") + 1]) if "--hidden" in sys.argv else 896
+    # `--langues F` : ne garder que les langues listées (une par ligne). Sert à
+    # construire des caches séparés pour l'apprentissage et le test à partir du
+    # même dossier de traces.
+    gardees = None
+    if "--langues" in sys.argv:
+        gardees = {l.strip() for l in open(sys.argv[sys.argv.index("--langues")+1])
+                   if l.strip()}
+    cles, E, Y = [], [], []
+    for f in sorte
+… [970 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **P_cont colle (4610 vs 4655) mais P_lang diverge (2512 vs 388). Le chiffre du §70 vient de `ou_est_le_contenu.py` — je le lis.**
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/ou_est_le_contenu.py"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/ou_est_le_contenu.py</path>
+<type>file</type>
+<content>
+1: #!/usr/bin/env python3
+2: """ou_est_le_contenu.py — le moindres carrés néglige-t-il l'information de contenu ?
+3: 
+4: LE CONSTAT DU §58. Une lecture LINÉAIRE des mêmes états de réservoir **atteint** la
+5: structure contenu/langue du professeur (séparation +0,0519 contre +0,0517) — mais
+6: seulement avec un objectif à deux curseurs NON CONVEXE, erratique, et coûtant 0,14 de
+7: fidélité. Donc : **les caractéristiques suffisent, c'est l'objectif qui ne les extrait
+8: pas.**
+9: 
+10: L'HYPOTHÈSE, et elle est simple. La fidélité est un **cosinus par ligne**. Le
+11: moindres carrés, lui, minimise une erreur **quadratique absolue**. Or la cible a une
+12: norme de ~440 et une structure dominante commune à tout le corpus ; les écarts qui
+13: distinguent les CONTENUS sont **petits devant cette masse commune**. En minimisant
+14: l'erreur absolue, la lecture est donc surtout payée pour reproduire la masse commune —
+15: et les petites composantes, celles qui portent le contenu, pèsent peu dans l'objectif.
+16: 
+17: TROIS VARIANTES, toutes CONVEXES et en forme fermée, testées cont
+… [9144 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le §70 vient du `decompose` de `discriminant_contenu`. Je lis sa fin pour voir exactement comment il calcule le professeur.**
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/discriminant_contenu.py", "offset": 129, "limit": 57}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/discriminant_contenu.py</path>
+<type>file</type>
+<content>
+129:     pc_a = {k: v for k, v in pc_a.items() if len(v) == len(pl_a)}
+130:     Cc = cov_groupes(Ma, pc_a, ma, len(garde))
+131:     Cl = cov_groupes(Ma, pl_a, ma, len(garde))
+132:     lam = float(opt("--plancher", 1e-2))*np.trace(Cl)/len(garde)
+133:     lam = max(lam, 1e-12)
+134:     # C_cont v = lambda C_lang v  ->  vecteurs propres généralisés
+135:     w, V = np.linalg.eigh(np.linalg.solve(
+136:         Cl + lam*np.eye(len(garde)), Cc))
+137:     ordre = np.argsort(-w)
+138:     V = V[:, ordre]
+139:     w = w[ordre]
+140:     print(f"# DISCRIMINANT : {len(pc_a)} contenus · {len(pl_a)} langues · "
+141:           f"{len(garde)} canaux")
+142:     print(f"# plancher affiché : {lam:.3e} ({opt('--plancher','1e-2')} × "
+143:           f"trace(C_lang)/ncanaux)")
+144:     print(f"# valeurs propres du discriminant (les 8 premières) : "
+145:           + " · ".join(f"{x:.2f}" for x in w[:8]))
+146: 
+147:     Xt = P.recalcule(idx, Ete)
+148:     Ot = np.vstack([P.phi(P._norm(Xt[k])) @ W + mt for k in range(len(clte))])
+149:     bo_t = np.cumsum([0] + [len(Yte[k]) for k in range(le
+… [2018 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Hypothèse : le cache de test ne contient que 3 langues latines, d'où un P_lang 6× plus petit. Je vérifie.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -u -c \"\nimport numpy as np\nfor p in ('/tmp/cache_wikitrain.npz','/tmp/cache_wikitest.npz'):\n    z=np.load(p, allow_pickle=True)\n    cles=[str(c) for c in z['cles']]\n    langs=sorted({c.partition('_')[0] for c in cles})\ … [224 caractères tronqués]`
+
+  ```
+/tmp/cache_wikitrain.npz
+  entrées 255 langues ['de', 'en', 'fr'] - {'de': 85, 'en': 85, 'fr': 85}
+  exemple ['de_A', 'de_ABBA', 'de_ABC']
+/tmp/cache_wikitest.npz
+  entrées 255 langues ['es', 'it', 'pt'] - {'es': 85, 'it': 85, 'pt': 85}
+  exemple ['es_A', 'es_ABBA', 'es_ABC']
+  ```
+
+### 🤖 Assistant
+
+⏵ **Voilà l'explication : les caches sont 85 articles × 3 langues, pas 482 × 6. Je cherche s'il existe un cache 482 plus récent.**
+
+- **bash** `{"command": "ls -la /tmp/cache_*.npz 2>/dev/null | awk '{print $5, $6, $7, $8, $9}'; echo \"=== recherche de caches 482 ===\"; ls -la /tmp/*.npz 2>/dev/null | head -30", "description": "List all caches"}`
+
+  ```
+104866818 5 oct 15:31 /tmp/cache_appr10c.npz
+81218246 5 oct 12:50 /tmp/cache_appr10.npz
+389 5 oct 17:57 /tmp/cache_appr30c_l17.npz
+389 5 oct 17:57 /tmp/cache_appr30c_l8.npz
+5823787 5 oct 12:43 /tmp/cache_appr40.npz
+324576526 6 oct 00:00 /tmp/cache_dose_112.npz
+112183065 5 oct 23:54 /tmp/cache_dose_30.npz
+185378407 6 oct 00:20 /tmp/cache_dose_60.npz
+23364712 6 oct 00:01 /tmp/cache_dose_test.npz
+82894803 6 oct 04:28 /tmp/cache_rj8_en.npz
+138564219 6 oct 04:32 /tmp/cache_rj8_fr.npz
+83857467 6 oct 08:31 /tmp/cache_rj_en.npz
+139662286 6 oct 08:35 /tmp/cache_rj_fr.npz
+71970434 6 oct 00:37 /tmp/cache_str_test.npz
+419702804 6 oct 00:34 /tmp/cache_str_train.npz
+15249949 5 oct 15:34 /tmp/cache_tenus10c.npz
+11236553 5 oct 12:43 /tmp/cache_tenus10.npz
+389 5 oct 17:57 /tmp/cache_tenus30c_l17.npz
+389 5 oct 17:57 /tmp/cache_tenus30c_l8.npz
+1031975 5 oct 12:42 /tmp/cache_tenus_trace.npz
+81228416 6 oct 09:16 /tmp/cache_unites8_test.npz
+51989062 6 oct 09:14 /tmp/cache_unites8_train.npz
+82098232 6 oct 09:11 /tmp/cache_unites_test.npz
+52431452 6 oct 09:09 /tmp/cache_unites_train.npz
+1834865780 7 oct 05:52 /tmp/cache_vf_test.npz
+1747348718 7 oct 05:21 /tmp/cache_vf_train.npz
+94174624 6 oct 18:14 /tmp/c
+… [2777 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Des caches par langue existent aussi, et `cache_vf_*` fait 1,7 Go (≈1446 entrées). Je regarde ce qu'ils contiennent.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -u -c \"\nimport numpy as np\nfor p in ('/tmp/cache_wiki_pt.npz','/tmp/cache_vf_train.npz','/tmp/cache_vf_test.npz','/tmp/cache392_train.npz'):\n    try:\n        z=np.load(p, allow_pickle=True)\n        cles=[str(c) for c in … [348 caractères tronqués]`
+
+  ```
+cache_wiki_pt.npz · entrées 71 · langues ['pt'] · hidden 896 · pas total 2965
+cache_vf_train.npz · entrées 1446 · langues ['de', 'en', 'fr'] · hidden 896 · pas total 2875
+cache_vf_test.npz · entrées 1446 · langues ['es', 'it', 'pt'] · hidden 896 · pas total 2969
+cache392_train.npz · entrées 351 · langues ['abk', 'ace', 'ada', 'ady', 'afr', 'agr', 'aii', 'ajg'] · hidden 896 · pas total 7260
+  ```
+
+### 🤖 Assistant
+
+⏵ **Trouvé : le 12,001 du §70 vient de `cache_vf_test` — 3 langues ROMANES seulement. Je construis l'ancre et je la vérifie.**
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"ancre_professeur.py — le rapport contenu/langue du professeur, et de quoi il dépend.\n\nPOURQUOI CET OUTIL EXISTE. Le rapport `P_cont/P_lang` est devenu le chiffre central du\nprojet — « le professeur est à 12,001, notre pont à 2,487 ». Or ce chiffre n'est  … [4883 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/ancre_professeur.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+### 🤖 Assistant
+
+⏵ **Je nettoie un reste de code mort puis je lance l'ancre sur le cache du §70.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/ancre_professeur.py'; s=open(p).read()\nold = \"\"\"    garde = [i for i, n in enumerate(noms) if n.partition(\"_\")[0] in langues_de(noms)\n             ] if False else list(range(len(noms)))\n    m = M.me … [386 caractères tronqués]`
+
+  ```
+nettoyé
+syntaxe OK
+# 1446 entrées · 896 canaux · /tmp/cache_vf_test.npz
+# langues : es, it, pt
+
+=== tous canaux — 896 canaux ===
+  langues du cache          P_lang     387.9 · P_cont    4655.4 · RAPPORT   12.001
+  ```
+
+### 🤖 Assistant
+
+⏵ **L'ancre reproduit le 12,001 EXACTEMENT. J'ajoute le filtre de langues et je mesure sur les 482 articles du corpus 6 langues.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/profil_couches.py'; s=open(p).read()\nold = \"\"\"    fs = sorted(glob.glob(os.path.join(d, \"*.drvf\")))\n    if maxi:\"\"\"\nnew = \"\"\"    fs = sorted(glob.glob(os.path.join(d, \"*.drvf\")))\n    # LE P … [1009 caractères tronqués]`
+
+  ```
+filtre ajouté
+syntaxe OK
+# 0 entrées lues dans --help · pooling « moyenne »
+# 0 langues () · 0 contenus
+=== avancement du traçage ===
+300
+TERMINE
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le traçage est TERMINÉ (300/300). Je lance les deux mesures définitives : le panel de langues, et le profil en profondeur.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/mesure_profil.sh <<'EOF'\n#!/bin/bash\nset -u\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nT=/home/stephane/Data13TB/stephane/corpus/wiki_apparie/traces\nC=/home/stephane/Data13TB/stephane/corpus/wiki_apparie/trace … [1458 caractères tronqués]`
+
+  ```
+##### 1. 482 ARTICLES × 6 LANGUES — couches 0 et 8, tous panels
+
+--- panel : 6 langues (2 germaniques + 4 romanes) ---
+# 2892 entrées lues dans /home/stephane/Data13TB/stephane/corpus/wiki_apparie/traces · pooling « moyenne »
+# 6 langues (de, en, es, fr, it, pt) · 482 contenus
+#  couche     P_lang     P_cont   RAPPORT  vs couche 0  dim. eff.
+       0     4103.5     1221.4     0.298        1.00×       16.2
+       8     2381.8     4041.9     1.697        5.70×       49.1
+# P_lang et P_cont : dispersion des moyennes par langue / par contenu.
+# dim. eff. : entropie des valeurs propres — le nombre de directions qui
+# portent réellement la représentation.
+# INDICE, PAS CIBLE : ce qu'on cherche, c'est À QUELLE PROFONDEUR le
+# rapport décolle, et COMBIEN de dimensions suffisent à le porter.
+
+--- panel : 3 romanes (le panel du §70) ---
+  ```
+
+### 🤖 Assistant
+
+⏵ **Résultat majeur : sur 6 langues, le professeur est à 1,697 — pas 12,001. J'attends le panel roman pour confirmer.**
+
+- **bash** `{"command": "sleep 180; cat /tmp/mesure_profil.log", "description": "Wait for remaining measurements", "timeoutMs": 240000}`
+
+  ```
+##### 1. 482 ARTICLES × 6 LANGUES — couches 0 et 8, tous panels
+
+--- panel : 6 langues (2 germaniques + 4 romanes) ---
+# 2892 entrées lues dans /home/stephane/Data13TB/stephane/corpus/wiki_apparie/traces · pooling « moyenne »
+# 6 langues (de, en, es, fr, it, pt) · 482 contenus
+#  couche     P_lang     P_cont   RAPPORT  vs couche 0  dim. eff.
+       0     4103.5     1221.4     0.298        1.00×       16.2
+       8     2381.8     4041.9     1.697        5.70×       49.1
+# P_lang et P_cont : dispersion des moyennes par langue / par contenu.
+# dim. eff. : entropie des valeurs propres — le nombre de directions qui
+# portent réellement la représentation.
+# INDICE, PAS CIBLE : ce qu'on cherche, c'est À QUELLE PROFONDEUR le
+# rapport décolle, et COMBIEN de dimensions suffisent à le porter.
+
+--- panel : 3 romanes (le panel du §70) ---
+# 1446 entrées lues dans /home/stephane/Data13TB/stephane/corpus/wiki_apparie/traces · pooling « moyenne »
+# 3 langues (es, it, pt) · 482 contenus
+#  couche     P_lang     P_cont   RAPPORT  vs couche 0  dim. eff.
+       0     1186.1     1575.3     1.328        1.00×       24.7
+       8      387.9     4655.4    12.001        9.04×       60.8
+# P_lang et P_cont
+… [2301 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Résultat décisif : le même professeur est à 12,001 sur 3 langues romanes et 1,697 sur 6 langues. J'ajoute la table des paires.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -8 /tmp/mesure_profil.log && python3 - <<'PY'\np='tools/profil_couches.py'; s=open(p).read()\nold = \"\"\"    if opt(\"--csv\", \"\"):\"\"\"\nnew = \"\"\"    if \"--paires\" in sys.argv and len(langues) >= 2:\n        from itert … [1396 caractères tronqués]`
+
+  ```
+# P_lang et P_cont : dispersion des moyennes par langue / par contenu.
+# dim. eff. : entropie des valeurs propres — le nombre de directions qui
+# portent réellement la représentation.
+# INDICE, PAS CIBLE : ce qu'on cherche, c'est À QUELLE PROFONDEUR le
+# rapport décolle, et COMBIEN de dimensions suffisent à le porter.
+
+##### 3. MÊMES TRACES, DERNIÈRE POSITION (pour montrer l'écart de pooling)
+--paires ajouté
+syntaxe OK
+  ```
+
+### 🤖 Assistant
+
+⏵ **Je corrige la couche utilisée pour les paires (la dernière, pas la première) et je lance les tables.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -i 's|\\[par_couche\\[cs\\[0\\]\\]\\[i\\] for i in sel\\]|[par_couche[cs[-1]][i] for i in sel]|' tools/profil_couches.py && grep -n \"par_couche\\[cs\\[-1\\]\\]\" tools/profil_couches.py && cat > /tmp/mesure_paires.sh <<'EOF'\n#! … [1338 caractères tronqués]`
+
+  ```
+215:                [par_couche[cs[-1]][i] for i in sel]))
+##### PIRE PAIRE — 482 articles, couche 8, 6 langues
+# paire         P_lang     P_cont   RAPPORT
+ de–en         3372.6     5037.6     1.494
+ en–it         2984.1     5331.8     1.787
+ en–fr         2360.0     5400.6     2.288
+ de–fr         1799.7     4293.8     2.386
+ de–es         1807.9     4572.4     2.529
+ de–pt         1746.9     4592.7     2.629
+ en–es         2050.7     5806.8     2.832
+ de–it         1496.0     4304.4     2.877
+ en–pt         1966.6     5903.6     3.002
+ it–pt          391.0     4957.7    12.681
+ fr–it          364.6     4632.4    12.707
+ es–it          381.4     4934.1    12.936
+ fr–pt          319.2     5018.0    15.723
+ es–fr          295.3     4934.4    16.708
+ es–pt          100.4     5465.1    54.428
+# pire paire de–en : 1.494 · meilleure it–pt : 12.681 · étalement ×8.5
+
+##### PIRE PAIRE — 50 articles, couches 5 ET 8 (la profondeur change-t-elle la pire paire ?)
+--- couche 5 ---
+ de–en         4256.2     6759.7     1.588
+ de–fr         2599.7     5372.0     2.066
+ en–it         3420.0     7252.0     2.120
+ de–es         2548.8     5675.6     2.227
+ de–pt         2579.7     5774.9     2.239
+ d
+… [514 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Table des paires éclairante : pire paire de–en = 1,494, meilleure es–pt = 54,4. J'attends la fin puis je consigne.**
+
+- **bash** `{"command": "sleep 120; tail -30 /tmp/mesure_paires.log", "description": "Wait for pair measurements to finish", "timeoutMs": 180000}`
+
+  ```
+en–pt         2391.4     8039.8     3.362
+ fr–it          915.3     6059.5     6.620
+ es–it          839.9     6310.5     7.514
+ it–pt          843.0     6436.7     7.635
+ fr–pt          823.9     6596.9     8.007
+ es–fr          778.7     6367.0     8.176
+ es–pt          310.3     7167.8    23.098
+# pire paire de–en : 1.588 · meilleure it–pt : 7.635 · étalement ×4.8
+--- couche 8 ---
+ de–en         3566.9     5561.6     1.559
+ en–it         3138.0     5936.8     1.892
+ en–fr         2471.8     5926.6     2.398
+ de–fr         1866.1     4556.3     2.442
+ de–es         1880.8     4730.2     2.515
+ de–pt         1824.0     4864.2     2.667
+ en–es         2259.6     6259.0     2.770
+ de–it         1552.5     4652.6     2.997
+ en–pt         2127.9     6461.2     3.036
+ fr–it          408.8     5105.4    12.487
+ it–pt          396.7     5401.3    13.614
+ es–it          372.6     5239.7    14.064
+ fr–pt          336.4     5411.2    16.084
+ es–fr          318.3     5177.4    16.265
+ es–pt          121.1     5844.5    48.269
+# pire paire de–en : 1.559 · meilleure it–pt : 13.614 · étalement ×8.7
+
+##### POOLING : dernière position contre moyenne (couches 0 et 8)
+       0     8798.1    70768.4
+… [111 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Toutes les mesures sont là. J'écris l'outil qui mesure notre pont avec la même loupe (paires), puis je consigne.**
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"rapport_du_pont.py — le rapport contenu/langue de NOTRE pont, panel par panel.\n\nPOURQUOI. Le chiffre « le professeur est à 12,001, nous à 2,487 » a servi de boussole.\nOr `ancre_professeur.py` et `profil_couches.py` viennent d'établir que ce 12,001 est\nm … [5225 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/rapport_du_pont.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"import ast; ast.parse(open('tools/rapport_du_pont.py').read()); print('syntaxe OK')\" && cat > /tmp/mesure_pont.sh <<'EOF'\n#!/bin/bash\nset -u\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nJ=/tmp/mesure_pont.log\ … [745 caractères tronqués]`
+
+  ```
+syntaxe OK
+##### A. NOTRE PONT ÉVALUÉ HORS VIVIER (appris de/en/fr, évalué es/it/pt)
+# apprentissage /tmp/cache_vf_train.npz (1446 entrées, de, en, fr)
+# évaluation    /tmp/cache_vf_test.npz (1446 entrées, es, it, pt) · 896 canaux
+  ```
+
+### 🤖 Assistant
+
+⏵ **L'ajustement du pont sur 1 446 entrées prend du temps — j'attends.**
+
+- **bash** `{"command": "sleep 280; cat /tmp/mesure_pont.log", "description": "Wait for bridge measurement", "timeoutMs": 330000}`
+
+  ```
+##### A. NOTRE PONT ÉVALUÉ HORS VIVIER (appris de/en/fr, évalué es/it/pt)
+# apprentissage /tmp/cache_vf_train.npz (1446 entrées, de, en, fr)
+# évaluation    /tmp/cache_vf_test.npz (1446 entrées, es, it, pt) · 896 canaux
+# réseau 120 neurones · 1 couche(s) · quadratique · ride 0.03 · graine 5
+
+# fidélité de TEST 0.4780
+
+#                   P_lang     P_cont   RAPPORT
+  PROFESSEUR         387.9     4655.4    12.001
+  NOTRE PONT         248.6      416.6     1.676
+  PART DU PROF                           14.0%
+
+# --- paires : PROFESSEUR ---
+# paire         P_lang     P_cont   RAPPORT
+ it–pt          391.0     4957.7    12.681
+ es–it          381.4     4934.1    12.936
+ es–pt          100.4     5465.1    54.428
+# pire es–it 12.936 · meilleure it–pt 12.681 · étalement ×1.0
+
+# --- paires : NOTRE PONT ---
+# paire         P_lang     P_cont   RAPPORT
+ es–it          225.8      439.3     1.945
+ it–pt          196.8      517.3     2.628
+ es–pt          136.6      533.1     3.901
+# pire es–it 1.945 · meilleure it–pt 2.628 · étalement ×1.4
+
+##### B. LE PROFESSEUR SEUL SUR LE CACHE D'APPRENTISSAGE (de/en/fr) — référence des paires
+  ```
+
+### 🤖 Assistant
+
+⏵ **Notre pont : 14,0 % du professeur sur son propre panel. Je corrige le résumé des paires et lance le test croisé (appris es/it/pt → évalué de/en/fr).**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/rapport_du_pont.py'; s=open(p).read()\nold = \"\"\"    for r, a, b, pl, pcn in sorted(res):\n        print(f\" {a+'–'+b:<10}{pl:>10.1f}{pcn:>11.1f}{r:>10.3f}\")\n    print(f\"# pire {res[0][1]}–{res[0][2]}  … [2728 caractères tronqués]`
+
+  ```
+résumés corrigés (les tables étaient justes)
+syntaxe OK
+# pire es–it 1.945 · meilleure it–pt 2.628 · étalement ×1.4
+
+##### B. LE PROFESSEUR SEUL SUR LE CACHE D'APPRENTISSAGE (de/en/fr) — référence des paires
+# apprentissage /tmp/cache_vf_train.npz (1446 entrées, de, en, fr)
+# évaluation    /tmp/cache_vf_train.npz (1446 entrées, de, en, fr) · 896 canaux
+  ```
+
+### 🤖 Assistant
+
+⏵ **Je commite les trois outils pendant que les mesures tournent.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/profil_couches.py tools/ancre_professeur.py tools/rapport_du_pont.py && git commit -q -m \"Sonde de couches : le rapport contenu/langue dépend du PANEL, pas seulement du modèle\n\nprofil_couches.py était cassé de deux f … [2381 caractères tronqués]`
