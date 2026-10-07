@@ -156350,3 +156350,67 @@ syntaxe OK
 ⏵ **Stabilité complète : rapport projeté 99 %–163 % selon la graine, moyenne 134 %. J'écris la section.**
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> reports/rapport-toutes-langues.md <<'MARKDOWN'\n\n---\n\n## 93. LES DIRECTIONS SONT-ELLES DANS LES DONNÉES OU DANS LE TIRAGE ?\n\n### 93.1 La question, et pourquoi elle décide de la validité du §92\n\nNos sorties dépendent d'u … [5926 caractères tronqués]`
+
+  ```
+256cd6a §93 : les directions du discriminant — le 1er axe est dans les données, le 2e dans le tirage
+
+--- portée ---
+##### PORTÉE DU CONTEXTE — 50 articles × 6 langues, distances 1,2,4,8,16,32
+# 300 traces · fenêtre 2 · ride 1.0 · 50 contenus
+# 164775 positions appariées
+pid=2876852
+  ```
+
+### 🤖 Assistant
+
+⏵ **Je lance la mesure du rang 1 (un seul axe reproductible suffit-il ?) pendant que la portée finit.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (setsid nohup bash -c 'cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -u tools/stabilite_directions.py /tmp/cache_6l_train.npz /tmp/cache_6l_train.npz /tmp/cache_6l_test.npz --graines 5,6,7,8,9,10 --rangs 1,2,3 > /tmp/ … [285 caractères tronqués]`
+
+  ```
+--- rang 1 ---
+# 282 entrées d'apprentissage · 282 pour le discriminant · 144 de test · 896 canaux · 6 graines
+  graine   5 : rapport   0.176 (16.3%) · λ₁    5907.7 · APRÈS PROJECTION rang 1   1.459 (135.0%) · rang 2   1.474 (136.4%) · rang 3   1.132 (104.7%)
+  graine   6 : rapport   0.186 (17.2%) · λ₁    6396.4 · APRÈS PROJECTION rang 1   1.102 (102.0%) · rang 2   1.275 (118.0%) · rang 3   1.262 (116.8%)
+  graine   7 : rapport   0.151 (14.0%) · λ₁    5694.1 · APRÈS PROJECTION rang 1   0.812 ( 75.2%) · rang 2   1.601 (148.1%) · rang 3   1.268 (117.3%)
+  graine   8 : rapport   0.173 (16.0%) · λ₁    6178.8 · APRÈS PROJECTION rang 1   1.233 (114.1%) · rang 2   1.071 ( 99.1%) · rang 3   1.265 (117.0%)
+
+--- portée ---
+##### PORTÉE DU CONTEXTE — 50 articles × 6 langues, distances 1,2,4,8,16,32
+# 300 traces · fenêtre 2 · ride 1.0 · 50 contenus
+# 164775 positions appariées
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le rang 3 est bien plus stable (étalement ×1,12 contre ×1,49). J'attends les deux dernières graines et la portée.**
+
+- **bash** `{"command": "P=$(ps -eo pid,cmd | grep \"distances 1,2,4,8,16,32\" | grep -v grep | awk '{print $1}' | head -1); echo \"portée pid=$P\"; [ -n \"$P\" ] && awk '{print \"cpu (s):\", ($14+$15)/100}' /proc/$P/stat && awk '/VmRSS/{print \"rss (Mo):\", $2/1024}' /proc/$P/status && cat /proc/$P/wchan 2>/de … [233 caractères tronqués]`
+
+  ```
+portée pid=2876852
+cpu (s): 2861.45
+rss (Mo): 644.691
+0
+--- rang 1 (fin) ---
+# APRÈS PROJECTION rang 1 : moyenne  112.3% · écart-type  19.7% · min   75.2% · max  135.0% · étalement ×1.80
+# APRÈS PROJECTION rang 2 : moyenne  133.7% · écart-type  20.6% · min   99.1% · max  163.2% · étalement ×1.65
+# APRÈS PROJECTION rang 3 : moyenne  121.6% · écart-type  12.2% · min  104.7% · max  143.1% · étalement ×1.37
+# professeur 1.081 · part moyenne 16.7%
+
+# Lecture : un angle MAXIMAL proche de 90° signifie que les sous-espaces
+# n'ont plus rien en commun — la « direction du contenu » serait alors une
+# propriété du TIRAGE et non des données. Proche de 0°, elle est dans les
+# données. Le 1er axe est plus stable que le second : c'est attendu, et
+# c'est le second qui décide de la séparation fine.
+--- portée ---
+##### PORTÉE DU CONTEXTE — 50 articles × 6 langues, distances 1,2,4,8,16,32
+# 300 traces · fenêtre 2 · ride 1.0 · 50 contenus
+# 164775 positions appariées
+  ```
+
+### 🤖 Assistant
+
+⏵ **Résultat clair : le rang 3 est le plus sûr (tous les tirages dépassent le professeur). J'écris la section.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> reports/rapport-toutes-langues.md <<'MARKDOWN'\n\n---\n\n## 94. RANG 1, 2 OU 3 : le meilleur rang n'est pas celui du meilleur chiffre\n\n### 94.1 L'hypothèse que je m'étais faite, et sa réfutation\n\nLe §93.4 terminait sur une … [4850 caractères tronqués]`
