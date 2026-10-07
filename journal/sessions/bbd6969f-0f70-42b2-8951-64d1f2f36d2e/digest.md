@@ -159035,3 +159035,235 @@ version 2 couches 24 hidden 896
 ⏵ **Le traçage tourne (~9 s/langue, le chargement du modèle domine). Je consigne l'A/B.**
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> reports/rapport-passe-k3-disque.md <<'MD_EOF'\n\n---\n\n## 10. Le palier NVMe : la prédiction était de −16,3 %, la mesure donne −8,8 %\n\n**Prédiction, écrite au §5 avant toute mesure** : déplacer ~250 Go de shards sur\nle NVM … [4550 caractères tronqués]`
+
+  ```
+6df6de4 §10 : le palier NVMe donne −8,8 %, la prédiction était de −16,3 %
+
+=== traçage article 1 ===
+13
+alt 10s
+amc 10s
+ame 14s
+  ```
+
+### 🤖 Assistant
+
+⏵ **11 s par langue : le coût fixe (chargement du modèle) domine. Je mesure la composition réelle et le nombre de positions.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport struct,glob,os\nfor p in sorted(glob.glob('/home/stephane/Data13TB/stephane/corpus/udhr/article1_traces/*.drvf'))[:6]:\n    g=open(p,'rb'); g.read(4); v,=struct.unpack('<H',g.read(2)); nl,hid=struct.unpack('<II' … [834 caractères tronqués]`
+
+  ```
+abk.drvf         95 positions · 5.5 Mo
+ace.drvf         54 positions · 3.1 Mo
+acu.drvf         53 positions · 3.0 Mo
+ada.drvf        115 positions · 6.6 Mo
+ady.drvf        127 positions · 7.3 Mo
+afr.drvf         52 positions · 3.0 Mo
+=== coût d'un traçage, détaillé ===
+généré  : 0 tokens en 0.000 s  (0.00 tok/s)
+événements : 15612128 au total, 473094.8 par token
+paires (poids × activation) : 11623299296 au total, 352.2 M par token — attention 43.6 M · experts 0.0 M · partagé 308.7 M
+postes (ms/token) : matvec-attn 89.2 | rope 0.7 | attention 89.5 | matvec+mlp 143.6 | total mesuré 323.0
+TEMPS 14.86 s · MAXRSS 1154124 Ko
+  ```
+
+### 🤖 Assistant
+
+⏵ **323 ms/jeton : le traçage tourne en mode ÉVÉNEMENTIEL. Je teste `--dense` — s'il est bien plus rapide, le cycle entier change d'échelle.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for p in $(ps -eo pid,cmd | awk '/trace_article1|article1_traces/ && !/awk/ {print $1}'); do kill $p 2>/dev/null; echo \"arrêté $p\"; done; sleep 2; ps -eo pid,cmd | awk '/drave/ && !/awk/ {print $1, $NF}' | head -3; echo \"=== A : d … [782 caractères tronqués]`
+
+  ```
+arrêté 3010241
+arrêté 3011620
+=== A : défaut (événementiel) ===
+postes (ms/token) : matvec-attn 3.5 | rope 0.7 | attention 4.1 | matvec+mlp 24.1 | total mesuré 32.4
+TEMPS 8.00 s
+=== B : --dense ===
+postes (ms/token) : matvec-attn 3.5 | rope 0.7 | attention 4.2 | matvec+mlp 24.0 | total mesuré 32.3
+TEMPS 1.94 s
+  ```
+
+### 🤖 Assistant
+
+⏵ **Trouvé : le mode événementiel paie 6 s de construction au chargement ; `--dense` fait la même chose en 1,94 s. Je relance en dense avec une calibration honnête.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -f /home/stephane/Data13TB/stephane/corpus/udhr/article1_traces/*.drvf && python3 - <<'PY'\np='/tmp/trace_article1.sh'; s=open(p).read()\ns = s.replace(\"\"\"    if $D $M --infer --ctx 256 --couches 0:24 --lot 1 --n 0 \\\\\n       … [1098 caractères tronqués]`
+
+  ```
+mode dense activé
+=== avancement ===
+35
+bem 2s
+ben 6s
+bfa 3s
+bho 6s
+  ```
+
+### 🤖 Assistant
+
+⏵ **35 langues en 2 min (3,3 s/langue). J'écris la calibration dense contre événementiel.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/calibre_modes.py <<'PY_EOF'\n#!/usr/bin/env python3\n\"\"\"calibre_modes.py — le mode DENSE trace-t-il la même chose que le mode ÉVÉNEMENTIEL ?\n\nPOURQUOI LA QUESTION SE POSE. Le mode par défaut du moteur construit ses l … [6327 caractères tronqués]`
+
+  ```
+syntaxe OK
+=== traçage ===
+39
+  ```
+
+### 🤖 Assistant
+
+⏵ **Pour que « sémantique » ait un sens, il faut un contrôle : je généralise l'extracteur à l'article N (article 1 contre article 2).**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/extrait_article1.py'; s=open(p).read()\ns = s.replace('''def main():\n    dossier = sys.argv[1] if len(sys.argv) > 1 else \\\\\n        \"/home/stephane/Data13TB/stephane/corpus/udhr/udhr_xml\"\n    sortie  … [2029 caractères tronqués]`
+
+  ```
+généralisé
+syntaxe OK
+# article 2 : 0 langues écrites dans 2
+=== traçage article 1 ===
+46
+  ```
+
+### 🤖 Assistant
+
+⏵ **Bug : `--article 2` a été pris pour le dossier de sortie. Je corrige l'analyse des arguments.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/extrait_article1.py'; s=open(p).read()\ns = s.replace('''    dossier = sys.argv[1] if len(sys.argv) > 1 else \\\\\n        \"/home/stephane/Data13TB/stephane/corpus/udhr/udhr_xml\"''',\n'''    # Les argumen … [1166 caractères tronqués]`
+
+  ```
+corrigé
+# article 2 : 0 langues écrites dans /home/stephane/Data13TB/stephane/corpus/udhr/article2
+=== article 1 ===
+399
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le tri des positionnels ne sautait pas la VALEUR du drapeau. Je corrige proprement.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls /home/stephane/Data13TB/stephane/corpus/udhr/article1 | wc -l; ls /home/stephane/Data13TB/stephane/corpus/udhr/article1 | head -3; python3 - <<'PY'\np='tools/extrait_article1.py'; s=open(p).read()\nold = \"\"\"    # Les arguments  … [1342 caractères tronqués]`
+
+  ```
+399
+abk.txt
+ace.txt
+acu.txt
+corrigé
+# article 2 : 452 langues écrites dans /home/stephane/Data13TB/stephane/corpus/udhr/article2
+# 4 sans article 2 exploitable : khk taj tgl tzm
+# longueur en caractères : médiane 541 · min 70 · max 1705 · 90e centile 682
+# → un contexte de 128 jetons couvre largement l'article 1 dans toutes les langues sauf les plus longues
+--- vérif ---
+399
+  ```
+
+### 🤖 Assistant
+
+⏵ **Incohérence à lever : `article1/` ne contient plus que 399 fichiers alors que 455 avaient été écrits. Je vérifie et je restaure.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"article1 : $(ls /home/stephane/Data13TB/stephane/corpus/udhr/article1 | wc -l) fichiers\"; echo \"article2 : $(ls /home/stephane/Data13TB/stephane/corpus/udhr/article2 | wc -l) fichiers\"; echo \"--- différence ---\"; comm -13 … [397 caractères tronqués]`
+
+  ```
+article1 : 399 fichiers
+article2 : 399 fichiers
+--- différence ---
+kwi.txt
+--- ré-extraction de l'article 1 ---
+# 1 sans article 1 exploitable : kwi
+# longueur en caractères : médiane 169 · min 40 · max 609 · 90e centile 232
+# → un contexte de 128 jetons couvre largement l'article 1 dans toutes les langues sauf les plus longues
+399
+  ```
+
+### 🤖 Assistant
+
+⏵ **Explication : 456 fichiers XML mais 399 codes `iso639-3` distincts — les doublons s'écrasent. Je le vérifie et corrige le compte.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport glob, os, sys, collections, xml.etree.ElementTree as ET\nNS = \"{http://www.unhchr.ch/udhr}\"\ncodes = collections.Counter(); noms = {}\nfor f in sorted(glob.glob('/home/stephane/Data13TB/stephane/corpus/udhr … [576 caractères tronqués]`
+
+  ```
+fichiers XML : 456
+codes distincts : 400
+codes en double : 41
+  pov × 2 : ['udhr_008.xml', 'udhr_pov.xml']
+  kmb × 2 : ['udhr_009.xml', 'udhr_kmb.xml']
+  umb × 2 : ['udhr_011.xml', 'udhr_umb.xml']
+  und × 5 : ['udhr_012.xml', 'udhr_013.xml', 'udhr_014.xml', 'udhr_016.xml', 'udhr_017.xml']
+  acu × 2 : ['udhr_acu.xml', 'udhr_acu_1.xml']
+  twi × 2 : ['udhr_aka_akuapem.xml', 'udhr_aka_asante.xml']
+  ```
+
+### 🤖 Assistant
+
+⏵ **Confirmé : 456 fichiers XML → 400 codes distincts (41 doublons, dont `und` ×5). Je corrige le compte affiché.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/extrait_article1.py'; s=open(p).read()\ns = s.replace(\"\"\"    faits, vides = 0, []\"\"\", \"\"\"    faits, vides = 0, []\n    # Les codes `iso639-3` ne sont PAS uniques : 456 fichiers XML portent 400\n    … [1483 caractères tronqués]`
+
+  ```
+compte corrigé
+# article 1 : 455 écritures, 399 codes distincts, 56 écrasement(s) — dans /home/stephane/Data13TB/stephane/corpus/udhr/article1
+#   codes portés par des textes DIFFÉRENTS : acu azj bos chr cjk cmn ell fuf hat hau
+# 1 sans article 1 exploitable : kwi
+=== traçage article 1 ===
+71
+cni 4s
+cof 3s
+  ```
+
+### 🤖 Assistant
+
+⏵ **399 langues, traçage à 71. J'écris la sonde de « première couche sémantique » avec son contrôle.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/premiere_couche_semantique.py <<'PY_EOF'\n#!/usr/bin/env python3\n\"\"\"premiere_couche_semantique.py — À QUELLE COUCHE la langue cesse-t-elle de dominer ?\n\nPOURQUOI DEUX ARTICLES, ET PAS UN. La similarité entre les rep … [6873 caractères tronqués]`
+
+  ```
+syntaxe OK
+=== traçage ===
+77
+  ```
+
+### 🤖 Assistant
+
+⏵ **Je vérifie le rythme réel du traçage.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && wc -l /tmp/trace_article1.log; awk '{gsub(/s$/,\"\",$2); s+=$2; n++} END {printf \"%d traces · total %d s · moyenne %.1f s\\n\", n, s, s/n}' /tmp/trace_article1.log; tail -3 /tmp/trace_article1.log; ps -eo etimes,cmd | grep \"trace_a … [82 caractères tronqués]`
+
+  ```
+79 /tmp/trace_article1.log
+79 traces · total 287 s · moyenne 3.6 s
+csw 8s
+ctd 4s
+cym 3s
+    290 bash /tmp/trace_article1.sh
+  ```
+
+### 🤖 Assistant
+
+⏵ **3,67 s/langue, 24 min au total. Je lance la calibration dense/événementiel pendant ce temps.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 python3 -u tools/calibre_modes.py /home/stephane/Data13TB/stephane/corpus/udhr/article1 /tmp/calibre --langues eng,fra,deu,spa,rus,ell,jpn,tha 2>&1 | tail -16", "description": "Run dense vs event calibration", "timeoutMs" … [9 caractères tronqués]`
+
+  ```
+# 8 langues · modèle models/Qwen2.5-0.5B-Q8_0.gguf · ctx 256
+# langue   positions   cos min  cos moyen  ‖dense‖/‖évén‖
+  eng             33    0.9498     0.9943           1.000
+  fra             50    0.9381     0.9959           1.002
+  deu             44    0.9160     0.9963           1.001
+  spa             43    0.9726     0.9960           1.000
+  rus             49    0.9594     0.9966           1.001
+  ell            176    0.9415     0.9970           0.999
+  jpn             52    0.9420     0.9963           1.001
+  tha             54    0.9636     0.9969           1.000
+
+# SUR TOUT : cos minimum 0.9160 · moyen 0.9964 · 5ᵉ centile 0.9924
+# Un cosinus de 0,999 signifie que les deux modes tracent la même chose à 0,1 % près de direction.
+# Un cosinus plus bas signifie que le corpus tracé en dense n'est PAS comparable aux corpus tracés en événementiel — et il faut le dire.
+  ```
+
+### 🤖 Assistant
+
+⏵ **Calibration : cosinus moyen 0,9964 entre les deux modes, normes identiques. Je consigne le dispositif de cycle rapide.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-cycle-rapide.md <<'MD_EOF'\n# Le cycle rapide : l'article 1 de l'UDHR dans 399 langues\n\n> 07/10. Réponse à une demande précise : *« peut-on refaire nos exercices sur un\n> très petit modèle afin de faire des c … [8210 caractères tronqués]`

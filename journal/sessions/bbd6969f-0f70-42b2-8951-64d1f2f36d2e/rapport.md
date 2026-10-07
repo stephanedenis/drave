@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 219.4 h |
+| Durée | 219.6 h |
 | Tours | 204 |
-| Messages | 9532 |
-| Appels d'outils | 8956 |
+| Messages | 9546 |
+| Appels d'outils | 8970 |
 | Fichiers touchés | 220 |
-| Commandes | 7622 |
+| Commandes | 7636 |
 | Sous-agents | 32 |
-| Commits | 699 |
+| Commits | 700 |
 | Compactages de contexte | 13 |
 
 ## Objectifs déclarés
@@ -10455,7 +10455,7 @@ Chacun remplace une devinette que j'ai faite sans lui.
 
 ### Tour 204 — bien. vas-y dans l'ordre de ton choix.
 
-*246 appels d'outils.* Actions notables :
+*260 appels d'outils.* Actions notables :
 
 - bash — Launch layer 0-8 tracing for 50 articles
 - bash — Launch the 50-draw distribution
@@ -10471,11 +10471,11 @@ Chacun remplace une devinette que j'ai faite sans lui.
 - bash — Test the layer profile on partial traces
 - bash — Single-pass reader and test
 - bash — Inspect the actual trace format
-- … et 227 autres
+- … et 241 autres
 
 **Synthèse produite :**
 
-⏵ **Le traçage tourne (~9 s/langue, le chargement du modèle domine). Je consigne l'A/B.**
+⏵ **Calibration : cosinus moyen 0,9964 entre les deux modes, normes identiques. Je consigne le dispositif de cycle rapide.**
 
 ## 3. Travail accompli
 
@@ -10781,7 +10781,7 @@ Chacun remplace une devinette que j'ai faite sans lui.
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 7582 autres
+- … et 7596 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -11628,4 +11628,5 @@ Chacun remplace une devinette que j'ai faite sans lui.
 - §9 : le plafond du disque est 205 Mio/s, la passe en obtient 133  Mesuré pendant la préparation du test de palier : une copie SÉQUENTIELLE du même modèle, du mê
 - Feuille de route : le regroupement par expert EXISTE, l'axe 1 devient un axe de LOT  Deux points périmés, corrigés par la mesure du 07/10 :  1. Le regroupement 
 - §10 : le palier NVMe donne −8,8 %, la prédiction était de −16,3 %  229 Go (5 shards, 16,3 % du modèle) copiés et VÉRIFIÉS sur le NVMe, puis un dossier hybride d
+- Le cycle rapide : l'article 1 de l'UDHR dans 399 langues, et pourquoi le modèle n'est pas le bon levier  Réponse mesurée à « peut-on refaire nos exercices sur u
 
