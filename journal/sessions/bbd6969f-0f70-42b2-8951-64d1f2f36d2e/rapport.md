@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 212.8 h |
+| Durée | 213.1 h |
 | Tours | 204 |
-| Messages | 9365 |
-| Appels d'outils | 8791 |
+| Messages | 9385 |
+| Appels d'outils | 8811 |
 | Fichiers touchés | 217 |
-| Commandes | 7465 |
+| Commandes | 7485 |
 | Sous-agents | 32 |
-| Commits | 683 |
+| Commits | 684 |
 | Compactages de contexte | 13 |
 
 ## Objectifs déclarés
@@ -10453,7 +10453,7 @@ Chacun remplace une devinette que j'ai faite sans lui.
 
 ### Tour 204 — bien. vas-y dans l'ordre de ton choix.
 
-*81 appels d'outils.* Actions notables :
+*101 appels d'outils.* Actions notables :
 
 - bash — Launch layer 0-8 tracing for 50 articles
 - bash — Launch the 50-draw distribution
@@ -10469,11 +10469,11 @@ Chacun remplace une devinette que j'ai faite sans lui.
 - bash — Test the layer profile on partial traces
 - bash — Single-pass reader and test
 - bash — Inspect the actual trace format
-- … et 62 autres
+- … et 82 autres
 
 **Synthèse produite :**
 
-⏵ **Les quatre cas sont complets — et le transfert est asymétrique. Je rédige la section.**
+⏵ **La localité tourne encore. J'écris la section §88 en attendant.**
 
 ## 3. Travail accompli
 
@@ -10776,7 +10776,7 @@ Chacun remplace une devinette que j'ai faite sans lui.
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 7425 autres
+- … et 7445 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10904,7 +10904,7 @@ Chacun remplace une devinette que j'ai faite sans lui.
 
 ## 5. Erreurs rencontrées
 
-395 sorties en erreur ou divergentes. Les premières :
+396 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -11607,4 +11607,5 @@ Chacun remplace une devinette que j'ai faite sans lui.
 - Sonde de couches : le rapport contenu/langue dépend du PANEL, pas seulement du modèle  profil_couches.py était cassé de deux façons, toutes deux silencieuses : 
 - §82–§85 : la cible du projet (12,001) était un effet de panel  Le 12,001 du §70 a servi de boussole pendant une dizaine de paragraphes. Il n'était pas faux : il
 - §86 : le discriminant transfère entre panels, mais perd 4 à 7× — et la pire paire résiste  Le §80 annonçait « le discriminant DÉPASSE le professeur, 105 % de la
+- §87 : le discriminant roman ne transfère pas parce qu'il a appris sur les paires faciles  Six caches par langue (mêmes 71 articles, couche 8) fusionnés en un ca
 

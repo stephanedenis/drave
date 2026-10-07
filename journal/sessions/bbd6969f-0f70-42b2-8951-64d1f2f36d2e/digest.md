@@ -155434,3 +155434,340 @@ syntaxe OK
 ⏵ **Les quatre cas sont complets — et le transfert est asymétrique. Je rédige la section.**
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> reports/rapport-toutes-langues.md <<'MARKDOWN'\n\n---\n\n## 86. LE DISCRIMINANT TRANSFÈRE — mais il perd l'essentiel en changeant de panel\n\n### 86.1 La question, posée au §85.4\n\nLe §80 avait mesuré qu'un discriminant linéa … [7981 caractères tronqués]`
+
+  ```
+8d76d1e §86 : le discriminant transfère entre panels, mais perd 4 à 7× — et la pire paire résiste
+  ```
+
+### 🤖 Assistant
+
+⏵ **§86 commitée. Je vérifie où en est la mesure de localité.**
+
+- **bash** `{"command": "tail -20 /tmp/mesure_localite.log 2>/dev/null; echo \"=== processus ===\"; ps -eo pid,etimes,cmd | grep localite_couches | grep -v grep | head -3", "description": "Check locality job progress"}`
+
+  ```
+##### LOCALITÉ — 50 articles × 6 langues, fenêtre 3 (4 jetons), couches 1,2,3,5,8
+# 300 traces · fenêtre 3 · ride 1.0 · 50 contenus
+=== processus ===
+2861560    1118 python3 -u tools/localite_couches.py /home/stephane/Data13TB/stephane/corpus/wiki_apparie/traces_couches --couches 1,2,3,5,8 --fenetre 3 --ride 1.0 --max-articles 50
+  ```
+
+### 🤖 Assistant
+
+⏵ **Pendant que la localité tourne, j'ajoute un avertissement aux sections BILAN et CLÔTURE, que §82–§86 corrigent.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\na = \"# BILAN — 35 heures contre l'objectif, et contre la raison d'être de Drave\\n\"\nnote = a + \"\"\"\n> **AVERTISSEMENT, AJOUTÉ APRÈS COUP.** Ce bilan et  … [1773 caractères tronqués]`
+
+  ```
+avertissements insérés
+4660:> **AVERTISSEMENT, AJOUTÉ APRÈS COUP.** Ce bilan et la clôture qui le suit ont été écrits
+4928:> **AVERTISSEMENT.** Les §82 à §86, écrits après cette clôture, corrigent la cible qui y
+=== localité ===
+##### LOCALITÉ — 50 articles × 6 langues, fenêtre 3 (4 jetons), couches 1,2,3,5,8
+# 300 traces · fenêtre 3 · ride 1.0 · 50 contenus
+  ```
+
+### 🤖 Assistant
+
+⏵ **La localité tourne depuis 25 min sans sortie — je vérifie si c'est le BLAS qui est lent.**
+
+- **bash** `{"command": "P=$(pgrep -f \"localite_couches.py\" | head -1); if [ -n \"$P\" ]; then echo \"pid=$P\"; awk '{print \"utime+stime (s):\", ($14+$15)/100}' /proc/$P/stat; echo \"threads: $(ls /proc/$P/task | wc -l)\"; grep -c processor /proc/cpuinfo; python3 -c \"import numpy; numpy.show_config()\" 2>/d … [111 caractères tronqués]`
+
+  ```
+pid=2861560
+utime+stime (s): 1086.33
+threads: 1
+40
+  blas:
+    name: blas
+    openblas configuration: unknown
+    name: lapack
+    openblas configuration: unknown
+    name: gcc
+  ```
+
+### 🤖 Assistant
+
+⏵ **BLAS mono-thread : je mesure le débit réel avant de réécrire.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport numpy as np, time\nX = np.random.randn(900, 4480)\nt0=time.time(); G = X.T @ X; t=time.time()-t0\nprint(f'X.T@X (4480x900) : {t:.2f} s -> {2*900*4480**2/t/1e9:.1f} GFLOPS')\nE = np.random.randn(900, 896); Y = np … [450 caractères tronqués]`
+
+  ```
+X.T@X (4480x900) : 6.02 s -> 6.0 GFLOPS
+E.T@Y (896x900)  : 0.282 s
+numpy 2.5.3
+=== OPENBLAS multithread ? ===
+16 fils : 6.23 s -> 5.8 GFLOPS
+  ```
+
+### 🤖 Assistant
+
+⏵ **6 GFLOPS mono-thread : la version actuelle prendrait 2,5 h. Je tue et je réécris en calculant la Grammaire une seule fois.**
+
+- **bash** `{"command": "kill 2861560 2>/dev/null; sleep 2; pgrep -f localite_couches >/dev/null && echo \"encore vivant\" || echo \"arrêté\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/localite_couches.py'; s=open(p).read()\nold = \"\"\"    # Grammaires accumulées : on ne  … [3297 caractères tronqués]`
+
+  ```
+encore vivant
+Grammaires mutualisées
+syntaxe OK
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le processus résiste — je vérifie lequel tourne encore.**
+
+- **bash** `{"command": "ps -eo pid,ppid,etimes,cmd | grep -E \"localite_couches|mesure_localite\" | grep -v grep", "description": "Identify remaining locality processes"}`
+
+  ```
+2861556    2357    1196 bash /tmp/mesure_localite.sh
+2865176 2861556       9 python3 -u tools/localite_couches.py /home/stephane/Data13TB/stephane/corpus/wiki_apparie/traces_couches --couches 1,3,8 --fenetre 3 --ride 1.0 --langues en --max-articles 50
+2865178 2861556       9 tee -a /tmp/mesure_localite.log
+  ```
+
+### 🤖 Assistant
+
+⏵ **L'ancien script était passé au bloc suivant. Je tue proprement par PID et je relance avec la version corrigée.**
+
+- **bash** `{"command": "kill 2861556 2865176 2865178 2>/dev/null; sleep 2; ps -eo pid,cmd | grep -E \"localite|mesure_localite\" | grep -v grep | head -3; echo \"--- propre ---\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/mesure_localite2.sh <<'EOF'\n#!/bin/bash\nset -u\ncd /home/stephan … [906 caractères tronqués]`
+
+  ```
+--- propre ---
+##### LOCALITÉ — anglais, 50 articles, fenêtre 2 (3 jetons), couches 1,2,3,5,8
+# 50 traces · fenêtre 2 · ride 1.0 · 50 contenus
+  ```
+
+### 🤖 Assistant
+
+⏵ **Pendant que la localité tourne, je vérifie si les six caches par langue peuvent être fusionnés en un cache 6 langues.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -u -c \"\nimport numpy as np, glob\nens={}\nfor L in ('de','en','es','fr','it','pt'):\n    z=np.load(f'/tmp/cache_wiki_{L}.npz', allow_pickle=True)\n    cles=[str(c) for c in z['cles']]\n    ens[L]=set(c.partition('_')[2] for … [326 caractères tronqués]`
+
+  ```
+de 71 entrées · 41698 pas
+en 71 entrées · 33468 pas
+es 71 entrées · 39125 pas
+fr 71 entrées · 40726 pas
+it 71 entrées · 40919 pas
+pt 71 entrées · 40620 pas
+articles communs aux six : 71
+union : 71
+  ```
+
+### 🤖 Assistant
+
+⏵ **Les six caches partagent les mêmes 71 articles — je les fusionne en un cache 6 langues et je vérifie la couche.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"cache_wiki_\" /tmp/wiki_analyse.sh 2>/dev/null | head -8; echo \"=== fusion ===\"; python3 -u -c \"\nimport numpy as np\nL6=('de','en','es','fr','it','pt')\ncles, E, Y = [], [], []\nfor L in L6:\n    z=np.load(f'/tmp/cache_ … [738 caractères tronqués]`
+
+  ```
+54:  python3 tools/cache_pont.py $B/traces /tmp/cache_wiki_$L.npz --couche 8 \
+64:  python3 -u tools/pont_parallele.py /tmp/cache_wiki_$1.npz /tmp/cache_wiki_$2.npz \
+=== fusion ===
+entrées fusionnées 426 · langues ['de', 'en', 'es', 'fr', 'it', 'pt']
+pas total 236556
+écrit /tmp/cache_6l.npz
+-rw-r--r--. 1 stephane stephane 529934562  7 oct 11:43 /tmp/cache_6l.npz
+=== localité ===
+# gain : ce qu'une fenêtre de 3 jetons ajoute — donc ce que le CONTEXTE
+# apporte à une lecture LINÉAIRE. « gain relatif » : la part de ce que le
+# jeton seul laissait inexpliqué et que le contexte récupère.
+# RÉSERVE : mesure LINÉAIRE. Un gain faible ne prouve pas la localité — il
+# prouve qu'aucune lecture linéaire n'en tire profit.
+
+##### LOCALITÉ — les 6 langues, même protocole
+# 300 traces · fenêtre 2 · ride 1.0 · 50 contenus
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le résultat anglais est arrivé — je le lis.**
+
+- **bash** `{"command": "sed -n '1,12p' /tmp/mesure_localite2.log", "description": "Read English locality result"}`
+
+  ```
+##### LOCALITÉ — anglais, 50 articles, fenêtre 2 (3 jetons), couches 1,2,3,5,8
+# 50 traces · fenêtre 2 · ride 1.0 · 50 contenus
+# 23176 positions appariées
+
+#  couche     R²(0)  R²(fenêtre)     gain  gain relatif
+       1    0.2353       0.1680  -0.0673        -8.8%
+       2    0.3443       0.2358  -0.1086       -16.6%
+       3    0.2466       0.0914  -0.1552       -20.6%
+       5    0.4521       0.3145  -0.1376       -25.1%
+       8    0.4807       0.3421  -0.1386       -26.7%
+
+# R²(0) : le JETON COURANT seul (lecture linéaire de la couche 0).
+  ```
+
+### 🤖 Assistant
+
+⏵ **Bug de métrique : je calculais `trace(WᵀD)` comme SSE, ce qui n'est pas la SSE. Les R² négatifs venaient de là, pas du contexte.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && pkill -f \"mesure_localite2\" 2>/dev/null; P=$(pgrep -f \"localite_couches.py\" | tr '\\n' ' '); echo \"à tuer: $P\"; for p in $P; do kill $p 2>/dev/null; done; sleep 2; pgrep -f \"localite_couches\" >/dev/null && echo \"encore vivan … [2428 caractères tronqués]`
+
+  ```
+(no output)
+[killed by signal: SIGTERM]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Encore l'auto-kill par `pkill -f` (le motif figurait dans ma propre ligne). Je vérifie l'état sans pkill.**
+
+- **bash** `{"command": "ps -eo pid,cmd | grep -E \"localite_couches|mesure_localite\" | grep -v grep | head -5; echo \"--- édit appliqué ? ---\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -c \"SSE, ET NON\" tools/localite_couches.py; grep -c \"mesure incohérente\" tools/localite_couches.py", " … [42 caractères tronqués]`
+
+  ```
+2866074 python3 -u tools/localite_couches.py /home/stephane/Data13TB/stephane/corpus/wiki_apparie/traces_couches --couches 1,2,3,5,8 --fenetre 2 --ride 1.0 --max-articles 50
+--- édit appliqué ? ---
+0
+0
+[exit code: 1]
+  ```
+
+### 🤖 Assistant
+
+⏵ **L'édition n'avait pas été appliquée. Je tue par PID, puis j'applique la correction.**
+
+- **bash** `{"command": "kill 2866074 2>/dev/null; sleep 2; ps -eo pid,cmd | grep localite_couches | grep -v grep | head -3; echo \"--- édition ---\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/localite_couches.py'; s=open(p).read()\nold = \"\"\"        r2 = {}\n        for … [1954 caractères tronqués]`
+
+  ```
+--- édition ---
+SSE corrigée + contrôle ajouté
+syntaxe OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/localite_v3.sh <<'EOF'\n#!/bin/bash\nset -u\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nC=/home/stephane/Data13TB/stephane/corpus/wiki_apparie/traces_couches\nJ=/tmp/localite_v3.log\n: > \"$J\"\necho \"##### LOCAL … [699 caractères tronqués]`
+
+  ```
+# 8 traces · fenêtre 2 · ride 1.0 · 8 contenus
+# 3674 positions appariées
+#  couche     R²(0)  R²(fenêtre)     gain  gain relatif
+       8    0.5632       0.8689   0.3058        70.0%
+# R²(0) : le JETON COURANT seul (lecture linéaire de la couche 0).
+# gain : ce qu'une fenêtre de 3 jetons ajoute — donc ce que le CONTEXTE
+# apporte à une lecture LINÉAIRE. « gain relatif » : la part de ce que le
+# jeton seul laissait inexpliqué et que le contexte récupère.
+# RÉSERVE : mesure LINÉAIRE. Un gain faible ne prouve pas la localité — il
+# prouve qu'aucune lecture linéaire n'en tire profit.
+  ```
+
+### 🤖 Assistant
+
+⏵ **La correction est validée : le contexte ajoute +0,31 de R² (70 % de l'inexpliqué). Je lance maintenant l'expérience 6 langues du §86.6.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/discriminant_transfert.py'; s=open(p).read()\nold = \"\"\"    cltr, Etr, Ytr, _ = charge(tr_p)\n    cldi, Edi, Ydi, _ = charge(disc_p)\n    clte, Ete, Yte, _ = charge(te_p)\"\"\"\nnew = \"\"\"    cltr, Etr, … [1986 caractères tronqués]`
+
+  ```
+--langues-disc ajouté
+syntaxe OK
+articles 71
+train 282 entrées · ['de', 'en', 'es', 'fr', 'it', 'pt']
+test 144 entrées · ['de', 'en', 'es', 'fr', 'it', 'pt']
+-rw-r--r--. 1 stephane stephane 182822069  7 oct 11:49 /tmp/cache_6l_test.npz
+-rw-r--r--. 1 stephane stephane 347112339  7 oct 11:48 /tmp/cache_6l_train.npz
+  ```
+
+### 🤖 Assistant
+
+⏵ **Je lance les trois expériences 6 langues en parallèle (panel complet, puis panels restreints).**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/mesure_6l.sh <<'EOF'\n#!/bin/bash\nset -u\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nT=/tmp/cache_6l_train.npz\nE=/tmp/cache_6l_test.npz\npython3 -u tools/discriminant_transfert.py $T $T $E --rangs 0,2,5,10,20 -- … [712 caractères tronqués]`
+
+  ```
+--- six_A ---
+# Si les deux sont le même, c'est la référence du §80. Sinon, c'est un
+# TRANSFERT — et c'est la question : un axe de langue appris sur un panel
+# sait-il séparer les langues d'un autre ?
+--- six_B ---
+# Si les deux sont le même, c'est la référence du §80. Sinon, c'est un
+# TRANSFERT — et c'est la question : un axe de langue appris sur un panel
+# sait-il séparer les langues d'un autre ?
+--- six_C ---
+# Si les deux sont le même, c'est la référence du §80. Sinon, c'est un
+# TRANSFERT — et c'est la question : un axe de langue appris sur un panel
+# sait-il séparer les langues d'un autre ?
+--- localité ---
+##### LOCALITÉ — 50 articles × 6 langues, fenêtre 2 (3 jetons), couches 1,2,3,5,8
+# 300 traces · fenêtre 2 · ride 1.0 · 50 contenus
+  ```
+
+### 🤖 Assistant
+
+⏵ **Les trois tournent sont finis — je lis le cas A (panel complet 6 langues).**
+
+- **bash** `{"command": "cat /tmp/six_A.log", "description": "Read 6-language full panel result"}`
+
+  ```
+# pont appris sur de,en,es,fr,it,pt · discriminant appris sur de,en,es,fr,it,pt · mesuré sur de,en,es,fr,it,pt · 896 canaux
+# 120 neurones · quadratique · ride 0,03 · graine 5
+# plancher 1.452e-02 · 47 contenus · 6 langues · valeurs propres 5907.7 2627.3 1621.4 1310.5 1016.4 716.6
+
+#                           P_lang     P_cont   RAPPORT  part prof
+  PROFESSEUR              2410.7     2605.5     1.081           
+  NOTRE PONT (rang 0)     1220.9      215.5     0.176     16.3%
+  NOTRE PONT (rang 2)       60.5       89.2     1.474    136.4%
+  NOTRE PONT (rang 5)      132.9      121.0     0.910     84.2%
+  NOTRE PONT (rang 10)     201.2      143.0     0.710     65.7%
+  NOTRE PONT (rang 20)     368.3      159.7     0.433     40.1%
+   # rang 0 — NOTRE PONT — pire de–en 0.187 · meilleure it–pt 3.621
+   # de–en 0.19 · en–fr 0.20 · en–it 0.23 · en–es 0.27 · en–pt 0.32 · de–fr 0.44 · de–es 0.50 · de–pt 0.51 · de–it 0.73 · es–it 1.88 · fr–pt 2.25 · es–fr 2.56 · fr–it 2.69 · es–pt 3.50 · it–pt 3.62
+   # rang 2 — pire en–fr 1.162 · meilleure it–pt 265.096
+   # en–fr 1.16 · en–it 1.82 · de–fr 2.23 · de–pt 2.60 · en–pt 2.63 · de–it 2.76 · en–es 4.42 · es–fr 4.86 · de–en 4.91 · de–es 6.44 · es–it 7
+… [1119 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Résultat A : 136 % du professeur au rang 2, hors vivier — mais P_cont est 29× trop faible. Je récupère les paires du professeur sur le même cache.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -u -c \"\nimport sys, numpy as np\nsys.path.insert(0,'tools')\nfrom itertools import combinations\nfrom ancre_professeur import charge, moyennes, decompose\ncles,E,Y,hid = charge('/tmp/cache_6l_test.npz')\nM = moyennes(Y)\nla … [880 caractères tronqués]`
+
+  ```
+PROFESSEUR sur cache_6l_test : P_lang 2410.7 · P_cont 2605.5 · RAPPORT 1.081
+
+# paire      P_lang     P_cont   RAPPORT
+  de–en          3297.0     3326.5     1.009
+  en–it          3028.6     3746.8     1.237
+  de–fr          1791.3     2704.1     1.510
+  de–es          1725.1     2779.0     1.611
+  en–fr          2361.1     3820.3     1.618
+  de–pt          1728.3     2992.5     1.731
+  de–it          1497.3     2761.0     1.844
+  en–es          1983.6     3874.7     1.953
+  en–pt          1979.6     4241.4     2.143
+  es–it           491.8     3430.7     6.976
+  fr–it           435.9     3247.9     7.450
+  it–pt           460.6     3631.6     7.885
+  es–fr           384.9     3271.8     8.500
+  fr–pt           375.2     3447.7     9.189
+  es–pt           156.0     3487.8    22.364
+
+=== six_B (panel discriminant de/en/fr) ===
+# 120 neurones · quadratique · ride 0,03 · graine 5
+# plancher 2.065e-02 · 47 contenus · 3 langues · valeurs propres 6433.1 2004.0 1406.6 1042.1 945.2 795.3
+
+#                           P_lang     P_cont   RAPPORT  part prof
+  PROFESSEUR              2410.7     2605.5     1.081           
+  NOTRE PONT (rang 0)     1220.9      215.5     0.176     16.3%
+  NOTRE
+… [1440 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Résultat décisif : apprendre sur les 15 paires (6 langues) transfère mieux (136 %) que sur 3 romanes (54 %). Je vérifie la localité puis je rédige.**
+
+- **bash** `{"command": "tail -12 /tmp/localite_v3.log; echo \"=== processus ===\"; ps -eo pid,etimes,cmd | grep localite_couches | grep -v grep | head -2", "description": "Check locality progress"}`
+
+  ```
+##### LOCALITÉ — 50 articles × 6 langues, fenêtre 2 (3 jetons), couches 1,2,3,5,8
+# 300 traces · fenêtre 2 · ride 1.0 · 50 contenus
+=== processus ===
+2866727     579 python3 -u tools/localite_couches.py /home/stephane/Data13TB/stephane/corpus/wiki_apparie/traces_couches --couches 1,2,3,5,8 --fenetre 2 --ride 1.0 --max-articles 50
+  ```
+
+### 🤖 Assistant
+
+⏵ **La localité tourne encore. J'écris la section §88 en attendant.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> reports/rapport-toutes-langues.md <<'MARKDOWN'\n\n---\n\n## 87. POURQUOI LE DISCRIMINANT ROMAN NE TRANSFÈRE PAS : il a appris sur les paires faciles\n\n### 87.1 Le montage\n\nLe §86 laissait une question précise : *un discrimi … [6320 caractères tronqués]`
