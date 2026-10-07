@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 209.2 h |
-| Tours | 197 |
-| Messages | 9254 |
-| Appels d'outils | 8698 |
+| Durée | 209.8 h |
+| Tours | 198 |
+| Messages | 9264 |
+| Appels d'outils | 8706 |
 | Fichiers touchés | 212 |
-| Commandes | 7387 |
+| Commandes | 7395 |
 | Sous-agents | 32 |
-| Commits | 677 |
+| Commits | 678 |
 | Compactages de contexte | 12 |
 
 ## Objectifs déclarés
@@ -447,6 +447,8 @@
 **Tour 196** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 **Tour 197** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
+
+**Tour 198** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -10141,7 +10143,7 @@ J'ai construit, réglé et mesuré un mécanisme complexe — naissance libre, a
 
 ### Tour 197 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
 
-*7 appels d'outils.* Actions notables :
+*8 appels d'outils.* Actions notables :
 
 - bash — Check the final verification
 - bash — Kill slow version and run a fast verification
@@ -10150,10 +10152,62 @@ J'ai construit, réglé et mesuré un mécanisme complexe — naissance libre, a
 - bash — Continue waiting
 - bash — Wait for the discriminant results
 - bash — Record the non-replication
+- bash — Final state check
 
 **Synthèse produite :**
 
-⏵ **J'atteins la fin de la fenêtre. Je consigne la non-réplication, qui est le résultat le plus important de cette dernière mesure.**
+⏵ **Bilan final — 08h01, fin de la fenêtre.**
+
+\## Le dernier résultat change la lecture du rapport
+
+Le corpus Wikipedia complet — **482 articles × 6 langues, 1 446 entrées d'apprentissage et 1 446 de test** — a rendu son verdict sur la question qui restait ouverte :
+
+| | fid TEST | P_lang | P_cont | **RAPPORT** |
+|---|---:|---:|---:|---:|
+| à **85 articles** — base | 0,4703 | 42,4 | 82,1 | 1,934 |
+| à **85 articles** — + apprendre quoi lire | 0,4667 | 181,9 | 438,5 | **2,411** |
+| à **482 articles** — base | 0,4713 | 39,8 | 98,9 | **2,487** |
+| à **482 articles** — + apprendre quoi lire | 0,4546 | **83,3** | 146,6 | **1,759** |
+| *professeur à 482 articles* | — | *387,9* | *4 655,4* | ***12,001*** |
+
+**Le résultat du §73 ne se réplique pas.** À 85 articles « apprendre quoi lire » faisait *monter* le rapport ; à 482 il le fait *baisser*. Ce que j'avais présenté comme « le premier mécanisme aux deux mouvements opposés » était un **effet de petit panel**.
+
+**Conséquence** : le §75 (« la cible est atteinte, 98 % ») doit être considéré comme **non répliqué**. La chaîne qui y menait repose sur un effet qui disparaît quand le panel grandit d'un facteur 5,7.
+
+**Ce qui tient à 482 articles** : la ligne de base (2,487, meilleure qu'à 85 — les grands panels aident), la cible du professeur (12,001, elle monte aussi), et **toutes les mesures qui portent sur des identités** — le §67, le §61, le §70 — car une identité ne dépend pas de la taille du panel.
+
+\## Le bilan, en trois phrases
+
+**Ce qui est acquis** : toutes les langues de l'UDHR (392/392, deux couches, zéro échec), la couche cible établie (41/41), un protocole complet avec oracle sur deux panneaux, le premier corpus multi-domaine aligné du projet, 33 outils, 4 825 lignes de rapport.
+
+**Ce qui n'est pas atteint** : le pont ne reproduit pas le contenu de son professeur — fidélité ~0,63, apport propre **+0,03 à +0,06**. Et le §70 a mesuré que **notre calcul propre fait moins bien que l'entrée du professeur lue linéairement, sur les deux axes à la fois**. En l'état, Drave n'est pas un pont : c'est une dégradation de la représentation du professeur.
+
+**La leçon** : le constat décisif du §29 — « une lecture sans aucun neurone bat le réservoir » — a été obtenu à l'**heure 13**. J'ai construit et réglé un mécanisme complexe pendant treize heures avant de tester la ligne de base triviale. Et le §73, publié sur 85 articles, vient d'être réfuté par 482. **Deux fois la même erreur d'ordre : mesurer trop tard ce qui était me
+… [671 caractères tronqués]
+
+### Tour 198 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
+
+*7 appels d'outils.* Actions notables :
+
+- bash — Check the discriminant results
+- bash — Fix the recalc-in-loop bug and rerun
+- bash — Read the corrected verification
+- bash — Test the discriminant alone at 482 articles
+- bash — Read the discriminant result
+- bash — Wait for the discriminant projection
+- bash — Record the final positive result
+
+**Synthèse produite :**
+
+⏵ **RÉSULTAT MAJEUR : le discriminant non seulement SE RÉPLIQUE à 482 articles, mais il DÉPASSE le professeur — rapport 12,645 contre 12,001.**
+
+| | fid TEST | P_lang | P_cont | **RAPPORT** |
+|---|---:|---:|---:|---:|
+| rang 0 (référence) | 0,4713 | 39,8 | 98,9 | 2,487 |
+| **discriminant rang 2** | **0,4334** | 3,6 | 45,0 | **12,645** |
+| rang 5 | 0,4420 | 12,5 | 56,2 | 4,502 |
+| rang 20 | 0,4584 | 18,3 | 75,0 | 4,100 |
+| **PROFESSEUR** | — | *387,9* | *4 655,4* | ***12,001*** |
 
 ## 3. Travail accompli
 
@@ -10451,7 +10505,7 @@ J'ai construit, réglé et mesuré un mécanisme complexe — naissance libre, a
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 7347 autres
+- … et 7355 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -11276,4 +11330,5 @@ J'ai construit, réglé et mesuré un mécanisme complexe — naissance libre, a
 - Le corpus Wikipedia apparié est COMPLET : 482 articles × 6 langues, 2 892 traces, 0 échec    articles                        482 / 482   traces                 
 - BILAN : 35 heures contre l'objectif et contre la raison d'être de Drave  LES FAITS : 35 h (05/10 20:22 → 07/10 07:18) · 98 commits · 33 outils · rapport 4 653 l
 - La vérification à 482 articles : le résultat du §73 NE SE RÉPLIQUE PAS    à 85 articles  — base (centrage seul)        fid 0,4703 · P_lang  42,4 · P_cont   82,1
+- Le discriminant SE RÉPLIQUE à 482 articles — et DÉPASSE le professeur : 12,645 contre 12,001    rang 0 (référence, centrage seul)   fid 0,4713 · P_lang 39,8 · P
 

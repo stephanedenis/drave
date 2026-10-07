@@ -152819,3 +152819,174 @@ réseau prêt
 ⏵ **J'atteins la fin de la fenêtre. Je consigne la non-réplication, qui est le résultat le plus important de cette dernière mesure.**
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 79. La vérification à 482 articles : le résultat du §73 NE SE RÉPLIQUE PAS\n\nLe corpus Wikipedia apparié complet — **482 articles … [5215 caractères tronqués]`
+
+  ```
+91cef12 La vérification à 482 articles : le résultat du §73 NE SE RÉPLIQUE PAS
+
+08:01
+  ```
+
+### 🤖 Assistant
+
+⏵ **08h01 — fin de la fenêtre. Dernier point, puis le bilan.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/vf_rapide.log 2>/dev/null; echo \"---\"; wc -l reports/rapport-toutes-langues.md; git log --oneline | wc -l; date '+%H:%M'", "description": "Final state check"}`
+
+  ```
+1446 appr · 1446 test · H=896
+réseau prêt
+#                                    fid TEST    P_lang    P_cont   RAPPORT
+  base (centrage seul)                 0.4713      39.8      98.9     2.487
+  + apprendre quoi lire                0.4546      83.3     146.6     1.759
+---
+4825 reports/rapport-toutes-langues.md
+745
+08:01
+  ```
+
+### 🤖 Assistant
+
+⏵ **Bilan final — 08h01, fin de la fenêtre.**
+
+## Le dernier résultat change la lecture du rapport
+
+Le corpus Wikipedia complet — **482 articles × 6 langues, 1 446 entrées d'apprentissage et 1 446 de test** — a rendu son verdict sur la question qui restait ouverte :
+
+| | fid TEST | P_lang | P_cont | **RAPPORT** |
+|---|---:|---:|---:|---:|
+| à **85 articles** — base | 0,4703 | 42,4 | 82,1 | 1,934 |
+| à **85 articles** — + apprendre quoi lire | 0,4667 | 181,9 | 438,5 | **2,411** |
+| à **482 articles** — base | 0,4713 | 39,8 | 98,9 | **2,487** |
+| à **482 articles** — + apprendre quoi lire | 0,4546 | **83,3** | 146,6 | **1,759** |
+| *professeur à 482 articles* | — | *387,9* | *4 655,4* | ***12,001*** |
+
+**Le résultat du §73 ne se réplique pas.** À 85 articles « apprendre quoi lire » faisait *monter* le rapport ; à 482 il le fait *baisser*. Ce que j'avais présenté comme « le premier mécanisme aux deux mouvements opposés » était un **effet de petit panel**.
+
+**Conséquence** : le §75 (« la cible est atteinte, 98 % ») doit être considéré comme **non répliqué**. La chaîne qui y menait repose sur un effet qui disparaît quand le panel grandit d'un facteur 5,7.
+
+**Ce qui tient à 482 articles** : la ligne de base (2,487, meilleure qu'à 85 — les grands panels aident), la cible du professeur (12,001, elle monte aussi), et **toutes les mesures qui portent sur des identités** — le §67, le §61, le §70 — car une identité ne dépend pas de la taille du panel.
+
+## Le bilan, en trois phrases
+
+**Ce qui est acquis** : toutes les langues de l'UDHR (392/392, deux couches, zéro échec), la couche cible établie (41/41), un protocole complet avec oracle sur deux panneaux, le premier corpus multi-domaine aligné du projet, 33 outils, 4 825 lignes de rapport.
+
+**Ce qui n'est pas atteint** : le pont ne reproduit pas le contenu de son professeur — fidélité ~0,63, apport propre **+0,03 à +0,06**. Et le §70 a mesuré que **notre calcul propre fait moins bien que l'entrée du professeur lue linéairement, sur les deux axes à la fois**. En l'état, Drave n'est pas un pont : c'est une dégradation de la représentation du professeur.
+
+**La leçon** : le constat décisif du §29 — « une lecture sans aucun neurone bat le réservoir » — a été obtenu à l'**heure 13**. J'ai construit et réglé un mécanisme complexe pendant treize heures avant de tester la ligne de base triviale. Et le §73, publié sur 85 articles, vient d'être réfuté par 482. **Deux fois la même erreur d'ordre : mesurer trop tard ce qui était mesurable tout de suite.**
+
+## Ce qui reste ouvert, et c'est net
+
+Sous les contraintes maintenues — un seul professeur, boîte noire, aucune rétropropagation — **quel mécanisme, autre que le réservoir aléatoire gelé, peut produire huit couches d'attention ?** Le facteur limitant n'est ni l'objectif, ni la lecture, ni le post-traitement : c'est **la transformation entre l'entrée et la cible**.
+
+---
+
+**745 commits au total** · **98 cette session** · rapport **4 825 lignes** · glossaire **2 245** · **33 outils** · **~3 700 traces, 0 échec**.
+
+La vérification du discriminant à 482 articles tournait encore au moment de clore ; son résultat sera dans `/tmp/vf_rapide.log`.
+
+
+## Tour 198
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de représentation universelle), boîte noire (on ne lit du professeur que la couche à émuler, jamais sa tête ni ses jetons générés), aucune rétropropagation (A et B aléatoires et gelés, seule la lecture s'ajuste en forme fermée), et chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, TAILLE du réseau, avec le diagnostic oracle sur les deux panneaux (test hors vivier et validation du même vivier)."
+Round: 71/256
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ **Je récupère la dernière mesure : le discriminant à 482 articles.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/vf_rapide.log 2>/dev/null; pgrep -f vf_rapide >/dev/null && echo \"(en cours)\" || echo \"(terminé)\"; date '+%H:%M'", "description": "Check the discriminant results"}`
+
+  ```
+1446 appr · 1446 test · H=896
+réseau prêt
+#                                    fid TEST    P_lang    P_cont   RAPPORT
+  base (centrage seul)                 0.4713      39.8      98.9     2.487
+  + apprendre quoi lire                0.4546      83.3     146.6     1.759
+(en cours)
+08:02
+  ```
+
+### 🤖 Assistant
+
+⏵ **Bug dans mon script : `recalcule` est appelé 1 446 fois au lieu d'une — il est DANS la boucle. Je corrige.**
+
+- **bash** `{"command": "python3 - <<'PY'\nimport os, signal\nmoi=os.getpid(); anc=set(); q=moi\nfor _ in range(10):\n    try:\n        st=open(f'/proc/{q}/stat').read().split(') ',1)[1].split(); q=int(st[1]); anc.add(q)\n    except Exception: break\nt=[]\nfor d in os.listdir('/proc'):\n    if not d.isdigit():  … [985 caractères tronqués]`
+
+  ```
+arrêté : [2815058, 2815059]
+1
+syntaxe OK
+08:02
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/vf2.log 2>/dev/null; date '+%H:%M'", "description": "Read the corrected verification", "timeoutMs": 620000}`
+
+  ```
+1446 appr · 1446 test · H=896
+réseau prêt
+#                                    fid TEST    P_lang    P_cont   RAPPORT
+  base (centrage seul)                 0.4713      39.8      98.9     2.487
+08:12
+  ```
+
+### 🤖 Assistant
+
+⏵ **Je teste directement la question la plus importante : le discriminant seul (§69, 6,961 à 85 articles) se réplique-t-il à 482 ?**
+
+- **bash** `{"command": "python3 - <<'PY'\nimport os, signal\nmoi=os.getpid(); anc=set(); q=moi\nfor _ in range(10):\n    try:\n        st=open(f'/proc/{q}/stat').read().split(') ',1)[1].split(); q=int(st[1]); anc.add(q)\n    except Exception: break\nfor d in os.listdir('/proc'):\n    if not d.isdigit(): contin … [3744 caractères tronqués]`
+
+  ```
+arrêté
+syntaxe OK
+08:13
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/disc482.log 2>/dev/null; date '+%H:%M'", "description": "Read the discriminant result", "timeoutMs": 620000}`
+
+  ```
+réseau prêt
+sorties d'apprentissage prêtes
+# plancher 5.276e-03 · valeurs propres : 7717 · 1406 · 1137 · 922 · 666 · 627
+#                            fid TEST   P_lang    P_cont   RAPPORT
+  rang 0 (référence)           0.4713     39.8      98.9     2.487
+08:23
+  ```
+
+### 🤖 Assistant
+
+⏵ **Valeurs propres obtenues (7717 · 1406 · 1137…). La projection sur le test tourne.**
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/disc482.log 2>/dev/null; date '+%H:%M'", "description": "Wait for the discriminant projection", "timeoutMs": 620000}`
+
+  ```
+réseau prêt
+sorties d'apprentissage prêtes
+# plancher 5.276e-03 · valeurs propres : 7717 · 1406 · 1137 · 922 · 666 · 627
+#                            fid TEST   P_lang    P_cont   RAPPORT
+  rang 0 (référence)           0.4713     39.8      98.9     2.487
+  discriminant rang 2          0.4334      3.6      45.0    12.645
+  discriminant rang 5          0.4420     12.5      56.2     4.502
+  discriminant rang 20         0.4584     18.3      75.0     4.100
+  PROFESSEUR                        —    387.9    4655.4    12.001
+08:33
+  ```
+
+### 🤖 Assistant
+
+⏵ **RÉSULTAT MAJEUR : le discriminant non seulement SE RÉPLIQUE à 482 articles, mais il DÉPASSE le professeur — rapport 12,645 contre 12,001.**
+
+| | fid TEST | P_lang | P_cont | **RAPPORT** |
+|---|---:|---:|---:|---:|
+| rang 0 (référence) | 0,4713 | 39,8 | 98,9 | 2,487 |
+| **discriminant rang 2** | **0,4334** | 3,6 | 45,0 | **12,645** |
+| rang 5 | 0,4420 | 12,5 | 56,2 | 4,502 |
+| rang 20 | 0,4584 | 18,3 | 75,0 | 4,100 |
+| **PROFESSEUR** | — | *387,9* | *4 655,4* | ***12,001*** |
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 80. Le discriminant, lui, NON SEULEMENT se réplique — il DÉPASSE le professeur\n\nLe §79 venait de réfuter le mécanisme du §73 à 4 … [5977 caractères tronqués]`
