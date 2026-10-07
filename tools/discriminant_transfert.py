@@ -58,7 +58,12 @@ def decompose(noms, M):
     return Pl, Pc, Pc/max(Pl, 1e-12)
 
 
-def paires(noms, M, titre, indent="   "):
+def paires(noms, M, titre, indent="   ", ref=None, alpha=1.0):
+    """Table des paires. `ref` et `alpha` : table AMPLIFIÉE, avec la part du professeur.
+
+    L'amplification est GLOBALE (une seule constante pour toutes les paires), parce
+    qu'on ne peut pas choisir une échelle par paire sur du texte neuf.
+    """
     langues = sorted({n.partition("_")[0] for n in noms})
     res = []
     for a, b in combinations(langues, 2):
@@ -66,13 +71,28 @@ def paires(noms, M, titre, indent="   "):
         if len(sel) >= 4:
             r = decompose([noms[i] for i in sel], M[sel])
             if r:
-                res.append((r[2], a, b))
+                res.append((r[2], a, b, r[0], r[1]))
     if not res:
         return
     tri = sorted(res)
     print(f"{indent}# {titre} — pire {tri[0][1]}–{tri[0][2]} {tri[0][0]:.3f} · "
           f"meilleure {tri[-1][1]}–{tri[-1][2]} {tri[-1][0]:.3f}")
-    print(f"{indent}# " + " · ".join(f"{a}–{b} {r:.2f}" for r, a, b in tri))
+    print(f"{indent}# " + " · ".join(f"{a}–{b} {r:.2f}" for r, a, b, _, _ in tri))
+    if ref is None:
+        return
+    # table amplifiée : P_cont ramené à celui du professeur, puis part de P_lang
+    print(f"{indent}# {'paire':<9}{'P_cont':>9}{'% prof':>9}{'P_lang':>10}"
+          f"{'% prof':>9}{'RAPPORT':>9}{'% prof':>9}")
+    for r, a, b, pl, pc in tri:
+        rr = decompose([noms[i] for i in
+                        [j for j, n in enumerate(noms)
+                         if n.partition("_")[0] in (a, b)]],
+                       ref[[j for j, n in enumerate(noms)
+                            if n.partition("_")[0] in (a, b)]])
+        pl2, pc2 = pl*alpha*alpha, pc*alpha*alpha
+        verdict = "ok" if pl2 <= rr[0] else "P_lang DÉPASSE"
+        print(f"{indent}  {a}–{b:<7}{pc2:>9.1f}{pc2/rr[1]:>8.0%}{pl2:>10.1f}"
+              f"{pl2/rr[0]:>8.0%}{r:>9.3f}{r/rr[2]:>8.0%}   {verdict}")
 
 
 def moyennes_sortie(P, idx, W, mt, E):
@@ -191,7 +211,10 @@ def main():
         for r in rangs:
             if r:
                 Vr = V[:, :r]
-                paires(clte, (Mte - mdi) @ Vr @ Vr.T + mdi, f"rang {r}")
+                Mp = (Mte - mdi) @ Vr @ Vr.T + mdi
+                d = decompose(clte, Mp)
+                a = float(np.sqrt(rp[1]/d[1])) if d[1] > 0 else 1.0
+                paires(clte, Mp, f"rang {r}", ref=Mpr, alpha=a)
     print(f"\n# Le discriminant est APPRIS sur le panel « {langs(cldi)} » et MESURÉ sur"
           f" « {langs(clte)} ».")
     print(f"# Si les deux sont le même, c'est la référence du §80. Sinon, c'est un")

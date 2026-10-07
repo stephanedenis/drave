@@ -156163,3 +156163,48 @@ syntaxe OK
 ⏵ **Pendant que la portée tourne, je consolide tous les chiffres de la session en un tableau de bord qui nomme les conditions.**
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> reports/rapport-toutes-langues.md <<'MARKDOWN'\n\n---\n\n## 91. TABLEAU DE BORD — chaque chiffre avec ses conditions\n\nLes §81 à §90 ont montré qu'un chiffre du projet sans ses conditions est un chiffre faux à\nl'usage. Voici … [7357 caractères tronqués]`
+
+  ```
+3f7df44 §91 : tableau de bord — chaque chiffre avec ses conditions
+
+##### PORTÉE DU CONTEXTE — 50 articles × 6 langues, distances 1,2,4,8,16,32
+# 300 traces · fenêtre 2 · ride 1.0 · 50 contenus
+  ```
+
+### 🤖 Assistant
+
+⏵ **Dernière mesure à fort enjeu : la table par paire APRÈS amplification globale, pour trancher la pire paire. Je patche.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/discriminant_transfert.py'; s=open(p).read()\nold = \"\"\"def paires(noms, M, titre, indent=\"   \"):\n    langues = sorted({n.partition(\"_\")[0] for n in noms})\n    res = []\n    for a, b in combinations … [3496 caractères tronqués]`
+
+  ```
+table amplifiée par paire ajoutée
+syntaxe OK
+lancé
+  ```
+
+- **bash** `{"command": "sleep 420; echo \"--- paires amplifiées ---\"; sed -n '/rang 2/,$p' /tmp/paires_amp.log 2>/dev/null | head -25; echo; echo \"--- portée ---\"; tail -12 /tmp/mesure_portee.log", "description": "Collect amplified pair table and reach", "timeoutMs": 480000}`
+
+  ```
+--- paires amplifiées ---
+  NOTRE PONT (rang 2)       60.5       89.2     1.474    136.4%
+    ↳ amplifié ×5.40      1767.9     2605.5     1.474    136.4%   (P_lang 73% · P_cont 100 %)
+   # rang 0 — NOTRE PONT — pire de–en 0.187 · meilleure it–pt 3.621
+   # de–en 0.19 · en–fr 0.20 · en–it 0.23 · en–es 0.27 · en–pt 0.32 · de–fr 0.44 · de–es 0.50 · de–pt 0.51 · de–it 0.73 · es–it 1.88 · fr–pt 2.25 · es–fr 2.56 · fr–it 2.69 · es–pt 3.50 · it–pt 3.62
+   # rang 2 — pire en–fr 1.162 · meilleure it–pt 265.096
+   # en–fr 1.16 · en–it 1.82 · de–fr 2.23 · de–pt 2.60 · en–pt 2.63 · de–it 2.76 · en–es 4.42 · es–fr 4.86 · de–en 4.91 · de–es 6.44 · es–it 7.25 · es–pt 8.20 · fr–pt 33.40 · fr–it 65.00 · it–pt 265.10
+   # paire       P_cont   % prof    P_lang   % prof  RAPPORT   % prof
+     en–fr        3344.9     88%    2879.5    122%    1.162     72%   P_lang DÉPASSE
+     en–it        4901.2    131%    2686.6     89%    1.824    147%   ok
+     de–fr        2968.9    110%    1331.2     74%    2.230    148%   ok
+     de–pt        3067.0    102%    1180.9     68%    2.597    150%   ok
+     en–pt        5820.1    137%    2213.4    112%    2.629    123%   P_lang DÉPASSE
+     de–it        4078.2    148%
+… [1048 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Résultat par paire après échelle globale : critère satisfait sur 10 des 15 paires, dont la PIRE (de–en, 486 %). J'écris la section.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> reports/rapport-toutes-langues.md <<'MARKDOWN'\n\n---\n\n## 92. LA PIRE PAIRE, APRÈS ÉCHELLE : de–en à 486 % du professeur, mais 5 paires sur 15 échouent\n\n### 92.1 Le montage, et pourquoi l'échelle globale\n\nLe §88 a établi … [5954 caractères tronqués]`

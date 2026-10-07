@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 213.9 h |
+| Durée | 214.1 h |
 | Tours | 204 |
-| Messages | 9407 |
-| Appels d'outils | 8833 |
+| Messages | 9410 |
+| Appels d'outils | 8836 |
 | Fichiers touchés | 218 |
-| Commandes | 7506 |
+| Commandes | 7509 |
 | Sous-agents | 32 |
-| Commits | 689 |
+| Commits | 690 |
 | Compactages de contexte | 13 |
 
 ## Objectifs déclarés
@@ -10453,7 +10453,7 @@ Chacun remplace une devinette que j'ai faite sans lui.
 
 ### Tour 204 — bien. vas-y dans l'ordre de ton choix.
 
-*123 appels d'outils.* Actions notables :
+*126 appels d'outils.* Actions notables :
 
 - bash — Launch layer 0-8 tracing for 50 articles
 - bash — Launch the 50-draw distribution
@@ -10469,11 +10469,11 @@ Chacun remplace une devinette que j'ai faite sans lui.
 - bash — Test the layer profile on partial traces
 - bash — Single-pass reader and test
 - bash — Inspect the actual trace format
-- … et 104 autres
+- … et 107 autres
 
 **Synthèse produite :**
 
-⏵ **Pendant que la portée tourne, je consolide tous les chiffres de la session en un tableau de bord qui nomme les conditions.**
+⏵ **Résultat par paire après échelle globale : critère satisfait sur 10 des 15 paires, dont la PIRE (de–en, 486 %). J'écris la section.**
 
 ## 3. Travail accompli
 
@@ -10777,7 +10777,7 @@ Chacun remplace une devinette que j'ai faite sans lui.
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 7466 autres
+- … et 7469 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -11614,4 +11614,5 @@ Chacun remplace une devinette que j'ai faite sans lui.
 - §90 : la réplication du §88.5 — le gain de fidélité tient, le gain de rapport s'inverse  Le §88.5 annonçait que centrer la cible dominait la référence sur les d
 - Renvoi du §88.5 vers le §90 : le tableau du gain de rapport ne doit pas être lu seul" && sleep 420; echo "--- portée ---"; tail -14 /tmp/mesure_portee.log
 - §91 : tableau de bord — chaque chiffre avec ses conditions  Les §81 à §90 ont montré qu'un chiffre du projet sans ses conditions est un chiffre faux à l'usage. 
+- §92 : la pire paire après échelle — de–en à 486 % du professeur, mais 5 paires sur 15 échouent  Le §88 a établi que l'amplitude est gratuite, donc que le critèr
 
