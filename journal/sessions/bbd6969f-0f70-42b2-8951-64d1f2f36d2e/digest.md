@@ -152152,3 +152152,122 @@ index e6dfdab..fabd44a 100644
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Journal : compteurs de session mis à jour (fichier généré)\" && git log --oneline -1 | cat; echo \"--- attente ---\"; sleep 500; echo \"articles : $(grep -c '^ARTICLE' /tmp/trace_wiki_apparie.log)/482 … [172 caractères tronqués]`
+
+  ```
+5fa46ed Journal : compteurs de session mis à jour (fichier généré)
+--- attente ---
+articles : 421/482 · traces : 2531/2892
+03:14
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"articles : $(grep -c '^ARTICLE' /tmp/trace_wiki_apparie.log)/482 · traces : $(ls /home/stephane/Data13TB/stephane/corpus/wiki_apparie/traces | wc -l)/2892\"; grep -qx TERMINE /tmp/trace_wiki_apparie.log && echo TERM … [97 caractères tronqués]`
+
+  ```
+articles : 428/482 · traces : 2569/2892
+en cours
+03:24
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"articles : $(grep -c '^ARTICLE' /tmp/trace_wiki_apparie.log)/482 · traces : $(ls /home/stephane/Data13TB/stephane/corpus/wiki_apparie/traces | wc -l)/2892\"; date '+%H:%M'", "description": "Continue waiting", "timeo … [14 caractères tronqués]`
+
+  ```
+articles : 434/482 · traces : 2608/2892
+03:34
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"articles : $(grep -c '^ARTICLE' /tmp/trace_wiki_apparie.log)/482 · traces : $(ls /home/stephane/Data13TB/stephane/corpus/wiki_apparie/traces | wc -l)/2892\"; date '+%H:%M'", "description": "Continue waiting for the  … [29 caractères tronqués]`
+
+  ```
+articles : 441/482 · traces : 2647/2892
+03:44
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"articles : $(grep -c '^ARTICLE' /tmp/trace_wiki_apparie.log)/482 · traces : $(ls /home/stephane/Data13TB/stephane/corpus/wiki_apparie/traces | wc -l)/2892\"; date '+%H:%M'", "description": "Continue waiting", "timeo … [14 caractères tronqués]`
+
+  ```
+articles : 447/482 · traces : 2685/2892
+03:54
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"$(grep -c '^ARTICLE' /tmp/trace_wiki_apparie.log)/482 articles · $(ls /home/stephane/Data13TB/stephane/corpus/wiki_apparie/traces | wc -l)/2892 traces\"; date '+%H:%M'", "description": "Wait", "timeoutMs": 620000}`
+
+  ```
+453/482 articles · 2723/2892 traces
+04:04
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"$(grep -c '^ARTICLE' /tmp/trace_wiki_apparie.log)/482 articles · $(ls /home/stephane/Data13TB/stephane/corpus/wiki_apparie/traces | wc -l)/2892 traces\"; date '+%H:%M'", "description": "Wait", "timeoutMs": 620000}`
+
+  ```
+460/482 articles · 2760/2892 traces
+04:14
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"$(grep -c '^ARTICLE' /tmp/trace_wiki_apparie.log)/482 articles · $(ls /home/stephane/Data13TB/stephane/corpus/wiki_apparie/traces | wc -l)/2892 traces\"; grep -qx TERMINE /tmp/trace_wiki_apparie.log && echo TERMINÉ  … [96 caractères tronqués]`
+
+  ```
+466/482 articles · 2798/2892 traces
+en cours
+04:24
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"$(grep -c '^ARTICLE' /tmp/trace_wiki_apparie.log)/482 · $(ls /home/stephane/Data13TB/stephane/corpus/wiki_apparie/traces | wc -l)/2892\"; grep -qx TERMINE /tmp/trace_wiki_apparie.log && echo TERMINÉ || echo \"en cou … [65 caractères tronqués]`
+
+  ```
+472/482 · 2836/2892
+en cours
+04:34
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"$(grep -c '^ARTICLE' /tmp/trace_wiki_apparie.log)/482 · $(ls /home/stephane/Data13TB/stephane/corpus/wiki_apparie/traces | wc -l)/2892\"; grep -qx TERMINE /tmp/trace_wiki_apparie.log && echo TERMINÉ || echo \"en cou … [157 caractères tronqués]`
+
+  ```
+478/482 · 2874/2892
+en cours
+04:44
+  ```
+
+- **bash** `{"command": "sleep 400; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"$(grep -c '^ARTICLE' /tmp/trace_wiki_apparie.log)/482 · $(ls /home/stephane/Data13TB/stephane/corpus/wiki_apparie/traces | wc -l)/2892\"; grep -qx TERMINE /tmp/trace_wiki_apparie.log && echo \"TRACAGE TERMINÉ\" || e … [138 caractères tronqués]`
+
+  ```
+482/482 · 2892/2892
+TRACAGE TERMINÉ
+04:51
+  ```
+
+### 🤖 Assistant
+
+⏵ **482/482 articles · 2 892/2 892 traces — le corpus est COMPLET. La vérification finale se déclenche.**
+
+- **bash** `{"command": "sleep 300; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== vérification finale ===\"; head -20 /tmp/verif_finale.log 2>/dev/null || echo \"pas encore déclenchée\"; date '+%H:%M'", "description": "Check the final verification", "timeoutMs": 340000}`
+
+  ```
+=== vérification finale ===
+482 articles communs aux 6 langues
+apprentissage 1446 · test 1446
+  de_A : 577 pas
+  de_ABBA : 559 pas
+  de_ABC : 560 pas
+  de_AGM_65_Maverick : 566 pas
+  de_AGM_88_HARM : 613 pas
+  de_AIM_120_AMRAAM : 602 pas
+  de_AIM_54_Phoenix : 616 pas
+  de_AIM_7_Sparrow : 604 pas
+  de_AOL : 549 pas
+  de_ASA : 484 pas
+  de_ASP : 530 pas
+  de_AWK : 525 pas
+  de_A_Little_Night_Music : 561 pas
+  de_A_cappella : 584 pas
+  de_Aaliyah : 570 pas
+  de_Aarhus : 611 pas
+  de_Aaron : 344 pas
+  de_Abel : 355 pas
+04:56
+  ```
+
+### 🤖 Assistant
+
+⏵ **Jalon : les 482 articles × 6 langues sont tracés, et la vérification tourne sur 2 892 entrées.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 78. Le corpus Wikipedia apparié est COMPLET : 482 articles × 6 langues, 2 892 traces\n\n| | |\n|---|---:|\n| articles | **482 / 48 … [2015 caractères tronqués]`

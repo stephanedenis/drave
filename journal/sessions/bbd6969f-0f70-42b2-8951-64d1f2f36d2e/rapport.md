@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 204.3 h |
+| Durée | 206.2 h |
 | Tours | 195 |
-| Messages | 9208 |
-| Appels d'outils | 8657 |
+| Messages | 9220 |
+| Appels d'outils | 8669 |
 | Fichiers touchés | 212 |
-| Commandes | 7346 |
+| Commandes | 7358 |
 | Sous-agents | 32 |
-| Commits | 674 |
+| Commits | 675 |
 | Compactages de contexte | 12 |
 
 ## Objectifs déclarés
@@ -10006,16 +10006,25 @@ Elle se déclenchera seule quand le traçage atteindra `TERMINE` :
 
 ### Tour 195 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
 
-*4 appels d'outils.* Actions notables :
+*16 appels d'outils.* Actions notables :
 
 - bash — Check tracing status
 - bash — Verify repo state and wait
 - bash — Check the uncommitted file
 - bash — Commit journal and wait
+- bash — Wait for tracing
+- bash — Continue waiting
+- bash — Continue waiting for the corpus
+- bash — Wait
+- bash — Wait for completion
+- bash — Wait for the corpus to complete
+- bash — Check final completion
+- bash — Check the final verification
+- bash — Record the corpus completion milestone
 
 **Synthèse produite :**
 
-⏵ **Un fichier non commité — je vérifie avant de continuer.**
+⏵ **Jalon : les 482 articles × 6 langues sont tracés, et la vérification tourne sur 2 892 entrées.**
 
 ## 3. Travail accompli
 
@@ -10313,7 +10322,7 @@ Elle se déclenchera seule quand le traçage atteindra `TERMINE` :
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 7306 autres
+- … et 7318 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -11135,4 +11144,5 @@ Elle se déclenchera seule quand le traçage atteindra `TERMINE` :
 - La réserve du §75.4 est mesurée et elle tranche : la structure s'obtient, la fidélité ne suit pas    rang  alpha  fidélité amplifiée  P_lang    P_cont   2     1
 - La courbe est MONOTONE : pas de meilleur compromis, et la frontière est close  BALAYAGE DE L'AMPLIFICATION (rang 2), huit points :   alpha   fid TEST  P_lang   
 - Journal : compteurs de session mis à jour (fichier généré)" && git log --oneline -1 | cat; echo "--- attente ---"; sleep 500; echo "articles : $(grep -c '^ARTIC
+- Le corpus Wikipedia apparié est COMPLET : 482 articles × 6 langues, 2 892 traces, 0 échec    articles                        482 / 482   traces                 
 

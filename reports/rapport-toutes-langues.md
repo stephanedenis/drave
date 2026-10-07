@@ -4626,3 +4626,28 @@ cela coûte 0,18 de plus, et aucun point intermédiaire n'améliore le compromis
 discriminant, §60.6 le pas fixe), et une conclusion qui n'est ni un succès ni un échec :
 **le pont sait reproduire la STRUCTURE de son professeur, pas encore son CONTENU, et l'on
 sait exactement pourquoi — c'est une identité mathématique, pas un réglage à trouver.**
+
+
+---
+
+## 78. Le corpus Wikipedia apparié est COMPLET : 482 articles × 6 langues, 2 892 traces
+
+| | |
+|---|---:|
+| articles | **482 / 482** |
+| traces | **2 892 / 2 892** |
+| échecs | **0** |
+| articles présents dans les **six** langues | **482** (100 %) |
+| entrées d'apprentissage | 1 446 (de, en, fr) |
+| entrées de test | 1 446 (es, it, pt) |
+
+Le traçage a duré **~13 heures** à ~19 s par trace, après les corrections du §52 (un
+processus orphelin qui volait 18 cœurs et multipliait les durées par 2,5).
+
+**Le corpus aligné est passé de 85 à 482 articles — un facteur 5,7.** Toutes les mesures
+de la traque §57-§77 qui portaient sur 85 articles vont pouvoir être resserrées, à
+commencer par le résultat central du §75 : **le rapport contenu/langue à 98 % de celui du
+professeur par la composition des trois leviers déployables.**
+
+La vérification est lancée et se déclenche seule : intersection des six langues, partage
+3 langues apprises / 3 en test, caches couche 8, puis la composition complète.
