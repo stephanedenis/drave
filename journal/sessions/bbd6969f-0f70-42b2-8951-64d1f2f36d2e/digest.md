@@ -150411,3 +150411,183 @@ lancé
 | | *professeur 10,912* | |
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 66. Deux leviers DÉPLOYABLES, et ils se combinent\n\n### 66.1 Retirer le sous-espace de langue DANS LES ÉTATS\n\nTous les moyens d … [5587 caractères tronqués]`
+
+  ```
+09291d7 Deux leviers DÉPLOYABLES qui se combinent : le rapport passe de 1,46 à 3,06
+
+articles wiki : 254
+  ```
+
+### 🤖 Assistant
+
+⏵ **Round 58 — deux leviers déployables qui se combinent, et un bug dans mes propres outils.**
+
+## 1. Un bug de découpage dans six de mes outils
+
+Les outils des §57 à §64 découpaient `iap = itr[nt:]` avec `nt = len(itr)//3`. Or **les entrées d'un cache sont ordonnées par langue** (`de_*` 85, `en_*` 85, `fr_*` 85) : prendre le **dernier tiers**, c'est prendre **`en_*` et `fr_*` seulement** — le bloc entier de la première langue disparaît. **L'ajustement portait sur deux langues au lieu de trois.**
+
+**Le signe qui aurait dû m'alerter était dans ma propre sortie du §64** : *« SOUS-ESPACE DE LANGUE : **2 langues** d'apprentissage · la 1re porte **100,0 %** de l'énergie »*. Avec deux groupes, une covariance inter-langue est de **rang 1** — elle ne peut rien séparer. J'ai lu ce chiffre, je l'ai rapporté, et je n'en ai pas tiré la conclusion évidente.
+
+Corrigé et re-mesuré : **les quatre conclusions du diagnostic survivent** (notre `P_cont` reste 13,7× sous celui du professeur), mais **aucun chiffre n'est le même** — rapport TEST 1,460 → 1,290, apprentissage 0,269 → 0,159. Et le **rapport du professeur lui-même** passe de 2,170 à **1,236** selon que le panneau compte deux ou trois langues : **la cible dépend aussi du nombre de langues.**
+
+**La règle qui manquait** : un découpage par position n'est aléatoire que si l'ordre est aléatoire. Un `ival` par **stride** est correct ; par **bloc contigu**, non.
+
+## 2. Deux leviers déployables, et ils se combinent
+
+**Le retrait du sous-espace de langue DANS LES ÉTATS** — appris sur l'apprentissage, appliqué comme une **matrice fixe** à l'inférence, sans étiquette ni regroupement :
+
+| moyen | déployable | rapport | fidélité |
+|---|---|---|---|
+| rien | — | 1,460 | 0,4747 |
+| centrage de l'entrée | oui | 1,871 | 0,4668 |
+| retrait du sous-espace dans les états | oui | 1,584 | 0,4713 |
+| **les deux ensemble** | **oui** | **3,064** | **0,4706** |
+| *professeur* | — | *10,912* | — |
+
+**Le rapport passe de 1,46 à 3,06 — soit 28 % de la cible au lieu de 13 % — et la fidélité ne bouge pratiquement pas (0,4747 → 0,4706).**
+
+Contrairement au §63, **l'effet se transfère** aux langues inconnues : la projection s'applique aux états, calculés de la même façon quelle que soit la langue.
+
+**La formulation honnête du progrès** : on sait maintenant **réduire l'axe de langue sans écraser l'axe de contenu** — c'est nouveau, et c'est déployable. On ne sait toujours pas **remonter l'axe de contenu** sans information sur le contenu.
+
+## 3. La réserve, et elle compte
+
+**Le rapport monte surtout par le dénominateur.** À rang 5, `P_lang` tombe à 22,9 — **17× sous celui du professeur** (399,2) — tandis que `P_cont` reste à 70,2, **62× sous le sien** (4 356,4). C'est le piège du §62.3 : un rapport élevé obtenu en écrasant l'axe de langue ne prouve pas qu'on a rapproché les langues *à contenu égal*.
+
+Ce qui manque reste le même qu'au §61 : remonter `P_cont` à la magnitude du professeur. Le seul moyen qui y parvienne (β = 3 → `P_cont` 5 100) exige le regroupement par contenu, donc n'est pas déployable.
+
+## État
+
+| chaîne | avancement |
+|---|---|
+| **Wikipedia apparié** | **254 / 482 articles** · ~1 500 traces · reste ~8 h |
+| **Croissance μ = 0,1** | terminée (§56) |
+| **Crime** | 4/24 segments, conservés |
+
+Le traçage reste le chemin critique. Chaque nouveau lot resserre les intervalles sur `P_cont/P_lang`, et le corpus complet permettra de vérifier que les deux leviers déployables tiennent à 482 articles comme à 85.
+
+
+## Tour 186
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de représentation universelle), boîte noire (on ne lit du professeur que la couche à émuler, jamais sa tête ni ses jetons générés), aucune rétropropagation (A et B aléatoires et gelés, seule la lecture s'ajuste en forme fermée), et chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, TAILLE du réseau, avec le diagnostic oracle sur les deux panneaux (test hors vivier et validation du même vivier)."
+Round: 59/256
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ **Combinaison décisive à tester : une fois le sous-espace de langue retiré, l'amplification de l'écart devrait porter surtout sur le CONTENU — et elle est déployable.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\ns = open('tools/etats_sans_langue.py').read()\nold = \"\"\"        Ot = P.phi(Xt2) @ W + mt\n        ft = cos_lignes(Ot, np.vstack(Yte))\n        nos = moyennes(clte, Ot, bo_t)\n        dm = decompose(clte, nos)\ … [2181 caractères tronqués]`
+
+  ```
+amplification de l'écart câblée
+syntaxe OK
+lancé
+22:46
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/etats_alpha.log 2>/dev/null; echo; date '+%H:%M'", "description": "Read the amplification-after-removal result", "timeoutMs": 620000}`
+
+  ```
+# CENTRAGE DE L'ENTRÉE activé
+# réseau 120 neurones · 1 couche(s) · 896 canaux
+# SOUS-ESPACE DE LANGUE : 3 langues d'apprentissage · 120 directions · la 1re porte 69.1% de l'énergie de langue
+
+#   rang  fid TEST    P_lang    P_cont  RAPPORT
+      0    0.4703      42.4      81.8    1.927
+      5    0.4706      22.9      70.2    3.064
+        # amplification de l'écart, rang 5 :
+        #   alpha  1.5 : fid 0.4578 · P_lang     51.5 · P_cont     157.9 · rapport   3.064
+        #   alpha  2.0 : fid 0.4370 · P_lang     91.6 · P_cont     280.6 · rapport   3.064
+        #   alpha  3.0 : fid 0.3944 · P_lang    206.0 · P_cont     631.4 · rapport   3.064
+        #   alpha  5.0 : fid 0.3354 · P_lang    572.3 · P_cont    1753.9 · rapport   3.064
+     20    0.4704      24.7      65.7    2.662
+     40    0.4692      21.9      61.9    2.832
+        # amplification de l'écart, rang 40 :
+        #   alpha  1.5 : fid 0.4585 · P_lang     49.2 · P_cont     139.3 · rapport   2.832
+        #   alpha  2.0 : fid 0.4394 · P_lang     87.5 · P_cont     247.7 · rapport   2.832
+        #   alpha  3.0 : fid 0.3980 · P_lang    196.8 · P_cont     557.3 · rapport   2.832
+        #   alpha  5.0 : fid 0.3378 · P_lan
+… [311 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Constat mathématique net : le rapport est INVARIANT d'échelle — aucune amplification uniforme ne peut le changer. Il ne peut venir que d'un changement de DIRECTIONS. Test de la transformation qui vise exactement ça : donner à la sortie la covariance de la cible.**
+
+| rang | α | P_lang | P_cont | rapport |
+|---:|---:|---:|---:|---:|
+| 5 | 1,5 | 51,5 | 157,9 | **3,064** |
+| 5 | 5,0 | 572,3 | 1 753,9 | **3,064** |
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"covariance_cible.py — donner à la sortie la COVARIANCE de la cible.\n\nLE CONSTAT QUI MÈNE ICI. Le §67 a montré une chose mathématiquement nette : **le\nrapport `P_cont/P_lang` est invariant d'échelle**. Une amplification uniforme de\nl'écart multiplie les  … [5880 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/covariance_cible.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"import ast; ast.parse(open('tools/covariance_cible.py').read()); print('syntaxe OK')\" && setsid nohup python3 -u tools/covariance_cible.py /tmp/cache_wikitrain.npz /tmp/cache_wikitest.npz --neur 120 --centre-entree 1 >  … [147 caractères tronqués]`
+
+  ```
+syntaxe OK
+lancé
+22:57
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/covariance.log 2>/dev/null; echo; echo \"articles wiki : $(grep -c '^ARTICLE' /tmp/trace_wiki_apparie.log)\"; date '+%H:%M'", "description": "Read the covariance matching result", "timeoutMs": 620000}`
+
+  ```
+# CENTRAGE DE L'ENTRÉE activé (§64, levier retenu)
+# réseau 120 neurones · 1 couche(s) · 896 canaux
+# trace de la covariance : notre sortie 18,285 · cible 248,429 · rapport 13.59
+# plancher de régularisation : 2.041e-02 (1e-3 × trace/ncanaux)
+
+# professeur : P_lang 399.2 · P_cont 4356.4 · rapport 10.912
+
+#   melange  fid TEST    P_lang    P_cont   RAPPORT
+      0.00    0.4704      42.4      82.1     1.934
+      0.25    0.4486     139.6     254.7     1.825
+
+articles wiki : 267
+23:07
+  ```
+
+- **bash** `{"command": "sleep 500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/covariance.log 2>/dev/null | tail -12; date '+%H:%M'", "description": "Wait for the full covariance sweep", "timeoutMs": 540000}`
+
+  ```
+# professeur : P_lang 399.2 · P_cont 4356.4 · rapport 10.912
+
+#   melange  fid TEST    P_lang    P_cont   RAPPORT
+      0.00    0.4704      42.4      82.1     1.934
+      0.25    0.4486     139.6     254.7     1.825
+      0.50    0.4107     329.2     596.0     1.810
+      0.75    0.3725     611.4    1105.9     1.809
+      1.00    0.3395     986.1    1784.5     1.810
+
+# melange 0 = notre sortie · 1 = covariance de la cible imposée.
+# CRITÈRE (§62.3) : P_cont PROCHE du professeur ET P_lang qui ne le dépasse
+# pas — le rapport seul peut être gonflé par le dénominateur.
+23:16
+  ```
+
+### 🤖 Assistant
+
+⏵ **Sixième remède écarté : imposer la covariance de la cible à notre sortie fait BAISSER le rapport (1,93 → 1,81) et coûte 0,13 de fidélité.**
+
+| mélange | fid TEST | P_lang | P_cont | RAPPORT |
+|---:|---:|---:|---:|---:|
+| 0,00 | 0,4704 | 42,4 | 82,1 | **1,934** |
+| 0,50 | 0,4107 | 329,2 | 596,0 | 1,810 |
+| 1,00 | 0,3395 | 986,1 | 1 784,5 | **1,810** |
+| | | | *prof 4 356* | *prof 10,912* |
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 67. Le rapport est INVARIANT D'ÉCHELLE — donc aucune amplitude ne peut le corriger\n\nC'est un constat mathématique, et il ferme t … [7262 caractères tronqués]`

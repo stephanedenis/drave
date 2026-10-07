@@ -3790,3 +3790,107 @@ professeur. Et le seul moyen qui y parvienne (l'amplification ciblée, β=3 → 
 **La formulation honnête du progrès** : on sait maintenant **réduire l'axe de langue
 sans écraser l'axe de contenu** — c'est nouveau, et c'est déployable. On ne sait
 toujours pas **remonter l'axe de contenu** sans information sur le contenu.
+
+
+---
+
+## 67. Le rapport est INVARIANT D'ÉCHELLE — donc aucune amplitude ne peut le corriger
+
+C'est un constat mathématique, et il ferme toute une famille de pistes.
+
+`P_cont` et `P_lang` sont **toutes deux quadratiques** en la sortie. Multiplier l'écart
+à la moyenne par un facteur `α` multiplie donc les deux par `α²`, et **leur rapport est
+inchangé**. Mesuré, sans exception :
+
+| rang | α | P_lang | P_cont | **rapport** |
+|---:|---:|---:|---:|---:|
+| 5 | 1,5 | 51,5 | 157,9 | **3,064** |
+| 5 | 5,0 | 572,3 | 1 753,9 | **3,064** |
+| 40 | 1,5 | 49,2 | 139,3 | **2,832** |
+| 40 | 5,0 | 546,7 | 1 548,0 | **2,832** |
+
+**Le rapport est identique au chiffre près, à tous les rangs et tous les α.** Ce n'est
+pas une observation empirique, c'est une identité : `P_cont/P_lang` est homogène de
+degré 0.
+
+**Conséquence, et elle est structurante :** le rapport ne peut venir que d'un **changement
+de DIRECTIONS**. Toutes les amplifications — uniformes (§60), par entrée (§62), ciblées
+sur le contenu (§62) — ne peuvent pas le corriger, quelle que soit leur mise à
+l'échelle. C'est la raison profonde pour laquelle cinq remèdes ont échoué.
+
+**Et cela donne la cible en une ligne** : pour atteindre `P_cont` = 4 356 avec
+`P_lang` ≤ 399, il faut un rapport ≥ **10,9** — celui du professeur. Nous sommes à
+**3,06**, soit **28 %**.
+
+---
+
+## 68. Sixième remède écarté : imposer la covariance de la cible
+
+Si le rapport ne dépend que des directions, la **matrice de covariance** du professeur
+les contient. On construit donc une transformation linéaire `A` qui donne à notre sortie
+la covariance de la cible :
+
+```
+A = C_Y^(1/2) · C_O^(-1/2)        (apprise sur l'apprentissage, matrice fixe de 896×896)
+sortie corrigée = (O − m_O)·Aᵀ + m_Y
+```
+
+Purement linéaire, en forme fermée, déployable, sans étiquette ni regroupement.
+
+| mélange | fid TEST | P_lang | P_cont | **rapport** |
+|---:|---:|---:|---:|---:|
+| 0,00 | **0,4704** | 42,4 | 82,1 | **1,934** |
+| 0,25 | 0,4486 | 139,6 | 254,7 | 1,825 |
+| 0,50 | 0,4107 | 329,2 | 596,0 | 1,810 |
+| 0,75 | 0,3725 | 611,4 | 1 105,9 | 1,809 |
+| 1,00 | 0,3395 | 986,1 | 1 784,5 | **1,810** |
+| | | | **professeur 4 356** | **professeur 10,912** |
+
+**Le rapport BAISSE (1,934 → 1,810) au lieu de monter vers 10,912**, et la fidélité
+s'effondre (0,4704 → 0,3395).
+
+### 68.1 Pourquoi — et c'est une distinction importante
+
+**La covariance TOTALE ne détermine pas le partage contenu/langue.** `P_cont` et
+`P_lang` sont construits sur les **moyennes par entrée** — donc sur la façon dont les
+entrées se regroupent, information qui n'est **pas** contenue dans la covariance
+globale. Deux corpus différents peuvent avoir la même covariance et des partages
+contenu/langue opposés.
+
+Imposer la covariance de la cible fixe donc l'**enveloppe** de second ordre sans fixer
+la **structure de groupes** — et c'est cette dernière qui fait le rapport.
+
+### 68.2 Un chiffre au passage, qui confirme le §61
+
+**Trace de la covariance : notre sortie 18 285, la cible 248 429 — un rapport de
+13,59.** Notre sortie porte 13,6 fois moins d'énergie totale que sa cible. C'est une
+**troisième mesure indépendante** du même défaut, après le rapport
+`‖écart‖/‖moyenne‖` du §60.1 (0,291) et la décomposition du §61 (`P_cont` 13,7× plus
+faible). Les trois concordent.
+
+### 68.3 Un point de méthode sur la régularisation
+
+`C_O` est mal conditionnée (nos sorties sont très corrélées) : `C_O^(-1/2)` peut
+amplifier du bruit. Un plancher de `1e-3 × trace/ncanaux` a été posé, et **il est
+affiché** — un résultat obtenu avec une régularisation non déclarée n'est pas un
+résultat. Le plancher vaut ici `2,04e-02`.
+
+### 68.4 La série, après neuf moyens
+
+| § | moyen | rapport obtenu | verdict |
+|---|---|---:|---|
+| — | rien | 1,460 | référence |
+| 58 | objectif à deux curseurs | (cible atteinte) | non convexe, non monotone |
+| 59 | pondération de la cible | ≈ 1,0 | **écarté** |
+| 60 | amplification uniforme | 1,46 (constant) | **écarté** — §67 l'explique |
+| 62 | amplification par entrée | 1,46 (constant) | **écarté** — §67 l'explique |
+| 62 | `μ_lang` | 0,91 | **écarté** |
+| 63 | sous-espace du contenu | 1,50 | **écarté** |
+| 64 | **centrage de l'entrée** | **1,871** | **retenu** |
+| 65-66 | **+ retrait du sous-espace de langue dans les états** | **3,064** | **retenu** |
+| 68 | covariance de la cible | 1,810 | **écarté** |
+| | *professeur* | *10,912* | *la cible* |
+
+**Neuf moyens, sept écartés, deux retenus et combinés.** Le rapport est passé de 1,46 à
+3,06 — **28 % de la cible** — et l'on sait maintenant *pourquoi* les amplifications ne
+peuvent pas faire mieux : c'est une identité mathématique, pas une limite d'essai.

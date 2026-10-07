@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 200.0 h |
-| Tours | 185 |
-| Messages | 9122 |
-| Appels d'outils | 8591 |
-| Fichiers touchés | 206 |
-| Commandes | 7286 |
+| Durée | 200.5 h |
+| Tours | 186 |
+| Messages | 9131 |
+| Appels d'outils | 8598 |
+| Fichiers touchés | 207 |
+| Commandes | 7292 |
 | Sous-agents | 32 |
-| Commits | 662 |
+| Commits | 663 |
 | Compactages de contexte | 12 |
 
 ## Objectifs déclarés
@@ -423,6 +423,8 @@
 **Tour 184** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 **Tour 185** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
+
+**Tour 186** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -9426,15 +9428,61 @@ L'idée était la bonne sur le papier — le regroupement par contenu n'est néc
 
 **Synthèse produite :**
 
-⏵ **La COMBINAISON donne le meilleur résultat de toute la série : rapport 1,311 → 3,064 (+134 %) — et la fidélité ne bouge pas (0,4703 → 0,4706).**
+⏵ **Round 58 — deux leviers déployables qui se combinent, et un bug dans mes propres outils.**
 
-| moyen | rapport | fidélité |
-|---|---:|---:|
-| rien | 1,460 | 0,4747 |
-| centrage de l'entrée (§64) | 1,871 | 0,4668 |
-| retrait du sous-espace de langue dans les états | 1,584 | 0,4713 |
-| **les deux ensemble** | **3,064** | **0,4706** |
-| | *professeur 10,912* | |
+\## 1. Un bug de découpage dans six de mes outils
+
+Les outils des §57 à §64 découpaient `iap = itr[nt:]` avec `nt = len(itr)//3`. Or **les entrées d'un cache sont ordonnées par langue** (`de_*` 85, `en_*` 85, `fr_*` 85) : prendre le **dernier tiers**, c'est prendre **`en_*` et `fr_*` seulement** — le bloc entier de la première langue disparaît. **L'ajustement portait sur deux langues au lieu de trois.**
+
+**Le signe qui aurait dû m'alerter était dans ma propre sortie du §64** : *« SOUS-ESPACE DE LANGUE : **2 langues** d'apprentissage · la 1re porte **100,0 %** de l'énergie »*. Avec deux groupes, une covariance inter-langue est de **rang 1** — elle ne peut rien séparer. J'ai lu ce chiffre, je l'ai rapporté, et je n'en ai pas tiré la conclusion évidente.
+
+Corrigé et re-mesuré : **les quatre conclusions du diagnostic survivent** (notre `P_cont` reste 13,7× sous celui du professeur), mais **aucun chiffre n'est le même** — rapport TEST 1,460 → 1,290, apprentissage 0,269 → 0,159. Et le **rapport du professeur lui-même** passe de 2,170 à **1,236** selon que le panneau compte deux ou trois langues : **la cible dépend aussi du nombre de langues.**
+
+**La règle qui manquait** : un découpage par position n'est aléatoire que si l'ordre est aléatoire. Un `ival` par **stride** est correct ; par **bloc contigu**, non.
+
+\## 2. Deux leviers déployables, et ils se combinent
+
+**Le retrait du sous-espace de langue DANS LES ÉTATS** — appris sur l'apprentissage, appliqué comme une **matrice fixe** à l'inférence, sans étiquette ni regroupement :
+
+| moyen | déployable | rapport | fidélité |
+|---|---|---|---|
+| rien | — | 1,460 | 0,4747 |
+| centrage de l'entrée | oui | 1,871 | 0,4668 |
+| retrait du sous-espace dans les états | oui | 1,584 | 0,4713 |
+| **les deux ensemble** | **oui** | **3,064** | **0,4706** |
+| *professeur* | — | *10,912* | — |
+
+**Le rapport passe de 1,46 à 3,06 — soit 28 % de la cible au lieu de 13 % — et la fidélité ne bouge pratiquement pas (0,4747 → 0,4706).**
+
+Contrairement au §63, **l'effet se transfère** aux langues inconnues : la projection s'applique aux états, calculés de la même façon quelle que soit la langue.
+
+**La formulation honnête du progrès** : on sait maintenant **réduire l'axe de langue sans écraser l'axe de contenu** — c'est nouveau, et c'est déployable. On ne sait toujours pas **remonter l'axe de contenu** sans information sur le contenu.
+
+\## 3. La rés
+… [984 caractères tronqués]
+
+### Tour 186 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
+
+*7 appels d'outils.* Actions notables :
+
+- bash — Test deviation amplification after language removal
+- bash — Read the amplification-after-removal result
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/covariance_cible.py`
+- bash — Test covariance matching
+- bash — Read the covariance matching result
+- bash — Wait for the full covariance sweep
+- bash — Report and commit the scale-invariance and covariance rejection
+
+**Synthèse produite :**
+
+⏵ **Sixième remède écarté : imposer la covariance de la cible à notre sortie fait BAISSER le rapport (1,93 → 1,81) et coûte 0,13 de fidélité.**
+
+| mélange | fid TEST | P_lang | P_cont | RAPPORT |
+|---:|---:|---:|---:|---:|
+| 0,00 | 0,4704 | 42,4 | 82,1 | **1,934** |
+| 0,50 | 0,4107 | 329,2 | 596,0 | 1,810 |
+| 1,00 | 0,3395 | 986,1 | 1 784,5 | **1,810** |
+| | | | *prof 4 356* | *prof 10,912* |
 
 ## 3. Travail accompli
 
@@ -9648,6 +9696,7 @@ L'idée était la bonne sur le papier — le regroupement par contenu n'est néc
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/decomposition.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/sous_espace_du_contenu.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/etats_sans_langue.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/covariance_cible.py` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -9726,7 +9775,7 @@ L'idée était la bonne sur le papier — le regroupement par contenu n'est néc
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 7246 autres
+- … et 7252 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10536,4 +10585,5 @@ L'idée était la bonne sur le papier — le regroupement par contenu n'est néc
 - Le centrage de l'entrée : premier levier de la série à la fois efficace ET déployable  --centre-entree retire à chaque langue son jeton moyen — le décalage prop
 - Bug de découpage dans MES outils : l'ajustement ne portait que sur DEUX langues  LES OUTILS §57-§64 découpaient iap, ival = itr[nt:], itr[:nt] avec nt = len(itr
 - Deux leviers DÉPLOYABLES qui se combinent : le rapport passe de 1,46 à 3,06  §66.1 RETRAIT DU SOUS-ESPACE DE LANGUE DANS LES ÉTATS (avant la lecture) : on calcu
+- Le rapport est INVARIANT D'ÉCHELLE (identité), et imposer la covariance de la cible échoue  §67 — CONSTAT MATHÉMATIQUE QUI FERME UNE FAMILLE DE PISTES : P_cont 
 

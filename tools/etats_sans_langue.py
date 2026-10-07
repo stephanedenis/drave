@@ -71,6 +71,7 @@ def main():
     part = float(opt("--part", 0.5))
     ride, graine = 0.03, 5
     rangs = [int(x) for x in opt("--rangs", "0,2,5,10,20,40").split(",")]
+    alphas_rangs = {int(x) for x in opt("--alphas-rangs", "5,40").split(",")}
 
     cltr, Etr, Ytr, H = charge(tr_p)
     clte, Ete, Yte, _ = charge(te_p)
@@ -147,6 +148,20 @@ def main():
         nos = moyennes(clte, Ot, bo_t)
         dm = decompose(clte, nos)
         print(f" {r:>6}{ft:>10.4f}{dm[0]:>10.1f}{dm[1]:>10.1f}{dm[2]:>9.3f}")
+        # AMPLIFICATION DE L'ÉCART, maintenant que l'axe de langue a été retiré.
+        # Le §60.2 avait montré qu'amplifier uniformément ne change pas le rapport,
+        # parce que les deux axes montent ensemble. Mais si le sous-espace de langue
+        # a été RETIRÉ des états, l'écart restant devrait porter surtout du contenu —
+        # et l'amplification devrait alors monter P_cont plus que P_lang.
+        if r in alphas_rangs:
+            print(f"        # amplification de l'écart, rang {r} :")
+            for a in (1.5, 2.0, 3.0, 5.0):
+                Oa = mt + a*(Ot - mt)
+                fa = cos_lignes(Oa, np.vstack(Yte))
+                na = moyennes(clte, Oa, bo_t)
+                da = decompose(clte, na)
+                print(f"        #   alpha {a:>4.1f} : fid {fa:.4f} · P_lang "
+                      f"{da[0]:>8.1f} · P_cont {da[1]:>9.1f} · rapport {da[2]:>7.3f}")
     rq = decompose(clte, moyennes(clte, np.vstack(Yte), bo_t))
     print(f"# professeur : P_lang {rq[0]:.1f} · P_cont {rq[1]:.1f} · "
           f"rapport {rq[2]:.3f}")
