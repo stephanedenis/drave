@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 213.1 h |
+| Durée | 213.4 h |
 | Tours | 204 |
-| Messages | 9385 |
-| Appels d'outils | 8811 |
-| Fichiers touchés | 217 |
-| Commandes | 7485 |
+| Messages | 9394 |
+| Appels d'outils | 8820 |
+| Fichiers touchés | 218 |
+| Commandes | 7493 |
 | Sous-agents | 32 |
-| Commits | 684 |
+| Commits | 685 |
 | Compactages de contexte | 13 |
 
 ## Objectifs déclarés
@@ -10453,7 +10453,7 @@ Chacun remplace une devinette que j'ai faite sans lui.
 
 ### Tour 204 — bien. vas-y dans l'ordre de ton choix.
 
-*101 appels d'outils.* Actions notables :
+*110 appels d'outils.* Actions notables :
 
 - bash — Launch layer 0-8 tracing for 50 articles
 - bash — Launch the 50-draw distribution
@@ -10469,11 +10469,11 @@ Chacun remplace une devinette que j'ai faite sans lui.
 - bash — Test the layer profile on partial traces
 - bash — Single-pass reader and test
 - bash — Inspect the actual trace format
-- … et 82 autres
+- … et 91 autres
 
 **Synthèse produite :**
 
-⏵ **La localité tourne encore. J'écris la section §88 en attendant.**
+⏵ **Mesure faite : ×5,40 → P_cont exactement 100 %, P_lang 73 %, rapport inchangé. Le §87.3 est faux ; j'écris la correction.**
 
 ## 3. Travail accompli
 
@@ -10698,6 +10698,7 @@ Chacun remplace une devinette que j'ai faite sans lui.
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/rapport_du_pont.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/discriminant_transfert.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/localite_couches.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/energie_du_contenu.py` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -10776,7 +10777,7 @@ Chacun remplace une devinette que j'ai faite sans lui.
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 7445 autres
+- … et 7453 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -11608,4 +11609,5 @@ Chacun remplace une devinette que j'ai faite sans lui.
 - §82–§85 : la cible du projet (12,001) était un effet de panel  Le 12,001 du §70 a servi de boussole pendant une dizaine de paragraphes. Il n'était pas faux : il
 - §86 : le discriminant transfère entre panels, mais perd 4 à 7× — et la pire paire résiste  Le §80 annonçait « le discriminant DÉPASSE le professeur, 105 % de la
 - §87 : le discriminant roman ne transfère pas parce qu'il a appris sur les paires faciles  Six caches par langue (mêmes 71 articles, couche 8) fusionnés en un ca
+- §88 : correction du §87.3 — l'écart d'énergie est une ÉCHELLE, et centrer la cible est un gain gratuit  Le §87.3 affirmait que nous atteignions 136 % du rapport
 

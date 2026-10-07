@@ -93,6 +93,17 @@ def main():
     cltr, Etr, Ytr, _ = charge(tr_p)
     cldi, Edi, Ydi, _ = charge(disc_p)
     clte, Ete, Yte, _ = charge(te_p)
+    # `--langues-disc` : restreindre le PANEL sur lequel le discriminant est appris,
+    # sans toucher ni au pont ni à l'évaluation. C'est ce qui permet de demander :
+    # « un axe appris sur trois langues vaut-il sur six ? »
+    if opt("--langues-disc", ""):
+        gard = {x.strip() for x in opt("--langues-disc", "").split(",") if x.strip()}
+        sel = [i for i, c in enumerate(cldi) if c.partition("_")[0] in gard]
+        print(f"# PANEL DU DISCRIMINANT restreint à {sorted(gard)} : "
+              f"{len(sel)} entrées sur {len(cldi)}")
+        cldi = [cldi[i] for i in sel]
+        Edi = [Edi[i] for i in sel]
+        Ydi = [Ydi[i] for i in sel]
 
     vivant = np.zeros(Ytr[0].shape[1])
     for y in Ytr:
@@ -161,6 +172,20 @@ def main():
         etiq = f"NOTRE PONT (rang {r})"
         print(f"  {etiq:<20}{d[0]:>10.1f}{d[1]:>11.1f}{d[2]:>10.3f}"
               f"{d[2]/rp[2]:>10.1%}")
+        # L'ÉCHELLE N'EST PAS UN DÉFAUT. `P_lang` et `P_cont` sont TOUS DEUX
+        # quadratiques en l'amplitude (§67) : une seule constante multiplie les deux
+        # par le même facteur et laisse le rapport — donc la fidélité, qui est un
+        # cosinus — exactement inchangés. Comparer nos deux énergies BRUTES à celles
+        # du professeur revient donc à compter un défaut qui n'en est pas un. La
+        # question qui compte est : une fois l'énergie de contenu RAMENÉE à celle du
+        # professeur, où tombe celle de langue ? Le critère du §62.3 est « P_cont
+        # proche du professeur ET P_lang qui ne le dépasse pas ».
+        if d[1] > 0:
+            a = float(np.sqrt(rp[1]/d[1]))
+            print(f"  {'  ↳ amplifié ×'+format(a, '.2f'):<20}"
+                  f"{d[0]*a*a:>10.1f}{d[1]*a*a:>11.1f}{d[2]:>10.3f}"
+                  f"{d[2]/rp[2]:>10.1%}"
+                  f"   (P_lang {d[0]*a*a/rp[0]:.0%} · P_cont 100 %)")
     if "--paires" in sys.argv:
         paires(clte, Mte, "rang 0 — NOTRE PONT")
         for r in rangs:

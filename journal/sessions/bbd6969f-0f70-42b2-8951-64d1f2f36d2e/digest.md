@@ -155771,3 +155771,188 @@ PROFESSEUR sur cache_6l_test : P_lang 2410.7 · P_cont 2605.5 · RAPPORT 1.081
 ⏵ **La localité tourne encore. J'écris la section §88 en attendant.**
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> reports/rapport-toutes-langues.md <<'MARKDOWN'\n\n---\n\n## 87. POURQUOI LE DISCRIMINANT ROMAN NE TRANSFÈRE PAS : il a appris sur les paires faciles\n\n### 87.1 Le montage\n\nLe §86 laissait une question précise : *un discrimi … [6320 caractères tronqués]`
+
+  ```
+relu
+687cb52 §87 : le discriminant roman ne transfère pas parce qu'il a appris sur les paires faciles
+  ```
+
+### 🤖 Assistant
+
+⏵ **Je vérifie la localité, puis j'attaque la question du facteur 29 sur l'énergie de contenu.**
+
+- **bash** `{"command": "sleep 240; tail -14 /tmp/localite_v3.log; echo \"=== processus ===\"; ps -eo pid,etimes,cmd | grep localite_couches | grep -v grep | head -2", "description": "Wait for locality result", "timeoutMs": 300000}`
+
+  ```
+##### LOCALITÉ — 50 articles × 6 langues, fenêtre 2 (3 jetons), couches 1,2,3,5,8
+# 300 traces · fenêtre 2 · ride 1.0 · 50 contenus
+=== processus ===
+2866727     866 python3 -u tools/localite_couches.py /home/stephane/Data13TB/stephane/corpus/wiki_apparie/traces_couches --couches 1,2,3,5,8 --fenetre 2 --ride 1.0 --max-articles 50
+  ```
+
+### 🤖 Assistant
+
+⏵ **J'écris l'outil qui attaque la question du facteur 29 : quelle transformation de cible rend l'énergie de contenu ?**
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"energie_du_contenu.py — peut-on retrouver l'ÉNERGIE de contenu, pas seulement son rapport ?\n\nCE QUI MÈNE ICI. Le §87 a mesuré, hors vivier sur un panel de 6 langues, que notre pont\natteint **136 % du RAPPORT** du professeur avec **3,4 % de son énergie de … [7265 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/energie_du_contenu.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+### 🤖 Assistant
+
+⏵ **Point critique : `P.X` contient-il les états d'apprentissage ou ceux du dernier `recalcule` ? Je vérifie la source.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"self.X\\|def recalcule\\|def ajuste\\|def nait\" tools/pont_generatif.py | head -20; echo \"=== recalcule ===\"; sed -n \"$(grep -n 'def recalcule' tools/pont_generatif.py | cut -d: -f1),+22p\" tools/pont_generatif.py", "de … [39 caractères tronqués]`
+
+  ```
+81:        self.X = [np.zeros((len(e), 0), dtype=np.float32) for e in self.E]
+142:    def nait(self, k, nouvelle_couche=True):
+191:                    Xp[r, :T] = self.X[i][:, debut_par:debut_par+n_par]
+203:                self.X[i] = np.hstack([self.X[i], S[r, :len(self.E[i])]])
+230:    def ajuste(self, idx, ride, mt, quel=slice(None)):
+237:        blocs = [self.phi(self._norm(self.X[i][::se][:, idx])) for i in quel]
+305:        X = self.phi(np.vstack([self._norm(self.X[i][:, idx]) for i in quel]))
+310:        return np.array([(self.phi(self._norm(self.X[i][:, idx])) @ W + mt)[-1] for i in quel])
+324:        X = np.vstack([x[:, idx] for x in self.X]).astype(np.float64)
+336:        X = np.vstack([x[:, idx] for x in self.X]).astype(np.float64)
+344:    def recalcule(self, S, Ek=None):
+413:        self.X = Xn
+432:            X = self.X[i][:, idx]
+473:            X = self.X[i][:, idx]
+510:            Xpar = (self.X[i][:, debut_par:debut_par+n_par] if n_par > 0
+512:            cam = self.X[i][:, debut_c:j]        # camarades de couche, antérieurs
+522:            self.X[i][:, j] = v
+537:        X = np.vstack([self.X[i][:, idx] for i in itr])
+540:        xj = np.concatenate([self.X[i][:, 
+… [1382 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **`recalcule` écrase-t-il `self.X` ? Je lis les frontières de méthode.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && awk 'NR>=340 && NR<=420 {printf \"%d: %s\\n\", NR, $0}' tools/pont_generatif.py | grep -nE \"def |self.X = |return |Xn =\" ", "description": "Check method boundaries around recalcule"}`
+
+  ```
+2:341:         return explique * self.contribution(W, idx)
+5:344:     def recalcule(self, S, Ek=None):
+25:364:         Xn = [np.zeros((len(E), len(S)), dtype=np.float32) for E in EK]
+53:392:         return Xn
+55:394:     def compacte(self, S):
+60:399:         Xn = self.recalcule(S)
+74:413:         self.X = Xn
+77:416:         return len(S)
+79:418:     def couches_de(self, S):
+80:419:         return sorted({self.poids[j][3] for j in S})
+  ```
+
+### 🤖 Assistant
+
+⏵ **`recalcule` ne touche pas `self.X` — mon outil est correct. Je lance l'expérience d'énergie.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"import ast; ast.parse(open('tools/energie_du_contenu.py').read()); print('syntaxe OK')\" && cat > /tmp/mesure_energie.sh <<'EOF'\n#!/bin/bash\nset -u\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nJ=/tmp/mesure_ene … [670 caractères tronqués]`
+
+  ```
+syntaxe OK
+--- localité ---
+##### LOCALITÉ — 50 articles × 6 langues, fenêtre 2 (3 jetons), couches 1,2,3,5,8
+# 300 traces · fenêtre 2 · ride 1.0 · 50 contenus
+--- énergie ---
+##### ÉNERGIE DU CONTENU — panel 6 langues, 47 articles appris / 24 testés
+# 282 entrées d'apprentissage · 144 de test · 896 canaux · 120 neurones
+  ```
+
+### 🤖 Assistant
+
+⏵ **Doute sérieux sur le §87.3 : l'écart d'énergie est peut-être une pure ÉCHELLE (§67). Je patche pour le MESURER.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/discriminant_transfert.py'; s=open(p).read()\nold = \"\"\"    for r in rangs:\n        if r == 0:\n            continue\n        Vr = V[:, :r]\n        Mp = (Mte - mdi) @ Vr @ Vr.T + mdi\n        d = decomp … [2451 caractères tronqués]`
+
+  ```
+amplification ajoutée
+syntaxe OK
+--- AMPLIFIÉ A (6 langues) ---
+# 120 neurones · quadratique · ride 0,03 · graine 5
+# plancher 1.452e-02 · 47 contenus · 6 langues · valeurs propres 5907.7 2627.3 1621.4 1310.5 1016.4 716.6
+
+--- AMPLIFIÉ C (es/it/pt) ---
+# 120 neurones · quadratique · ride 0,03 · graine 5
+# plancher 2.073e-03 · 47 contenus · 3 langues · valeurs propres 63540.5 29633.7 16077.1 10611.7 8056.5 7286.8
+  ```
+
+### 🤖 Assistant
+
+⏵ **J'attends les deux mesures (amplification et localité).**
+
+- **bash** `{"command": "sleep 270; echo \"--- AMPLIFIÉ A (6 langues) ---\"; sed -n '/^# 120/,/^$/p' /tmp/amp_A.log; echo \"--- AMPLIFIÉ C (es/it/pt) ---\"; sed -n '/^# 120/,/^$/p' /tmp/amp_C.log; echo; echo \"--- localité ---\"; tail -10 /tmp/localite_v3.log; echo \"--- énergie ---\"; tail -12 /tmp/mesure_ener … [87 caractères tronqués]`
+
+  ```
+--- AMPLIFIÉ A (6 langues) ---
+# 120 neurones · quadratique · ride 0,03 · graine 5
+# plancher 1.452e-02 · 47 contenus · 6 langues · valeurs propres 5907.7 2627.3 1621.4 1310.5 1016.4 716.6
+
+--- AMPLIFIÉ C (es/it/pt) ---
+# 120 neurones · quadratique · ride 0,03 · graine 5
+# plancher 2.073e-03 · 47 contenus · 3 langues · valeurs propres 63540.5 29633.7 16077.1 10611.7 8056.5 7286.8
+
+
+--- localité ---
+##### LOCALITÉ — 50 articles × 6 langues, fenêtre 2 (3 jetons), couches 1,2,3,5,8
+# 300 traces · fenêtre 2 · ride 1.0 · 50 contenus
+--- énergie ---
+##### ÉNERGIE DU CONTENU — panel 6 langues, 47 articles appris / 24 testés
+# 282 entrées d'apprentissage · 144 de test · 896 canaux · 120 neurones
+# SPECTRE DE LA CIBLE : 1re direction 3.9% de l'énergie · 10 premières 21.1% · rang utile (99 %) 807
+
+# variante             fid TEST    P_lang    P_cont  RAPPORT % P_lang % P_cont
+  PROFESSEUR                  —    2410.7    2605.5    1.081    100 %    100 %
+  A référence            0.4910    1549.4     359.2    0.232    64.3%    13.8%
+  B cible centrée        0.5002     107.8     202.3    1.877     4.5%     7.8%
+  C lignes normées       0.4217       9.2     286.0   31.240     0.4%    11.0%
+  D bl
+… [151 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Découverte importante : §67 implique que l'énergie est une pure échelle — mon §87.3 est faux. J'attends les chiffres pour le corriger.**
+
+- **bash** `{"command": "sleep 240; echo \"--- AMPLIFIÉ A (6 langues) ---\"; sed -n '/^# 120/,$p' /tmp/amp_A.log | head -18; echo \"--- localité ---\"; tail -12 /tmp/localite_v3.log; echo; echo \"--- énergie (fin) ---\"; tail -8 /tmp/mesure_energie.log", "description": "Collect final measurements", "timeoutMs": … [8 caractères tronqués]`
+
+  ```
+--- AMPLIFIÉ A (6 langues) ---
+# 120 neurones · quadratique · ride 0,03 · graine 5
+# plancher 1.452e-02 · 47 contenus · 6 langues · valeurs propres 5907.7 2627.3 1621.4 1310.5 1016.4 716.6
+
+#                           P_lang     P_cont   RAPPORT  part prof
+  PROFESSEUR              2410.7     2605.5     1.081           
+  NOTRE PONT (rang 0)     1220.9      215.5     0.176     16.3%
+  NOTRE PONT (rang 2)       60.5       89.2     1.474    136.4%
+    ↳ amplifié ×5.40      1767.9     2605.5     1.474    136.4%   (P_lang 73% · P_cont 100 %)
+  NOTRE PONT (rang 5)      132.9      121.0     0.910     84.2%
+    ↳ amplifié ×4.64      2862.2     2605.5     0.910     84.2%   (P_lang 119% · P_cont 100 %)
+
+# Le discriminant est APPRIS sur le panel « de,en,es,fr,it,pt » et MESURÉ sur « de,en,es,fr,it,pt ».
+# Si les deux sont le même, c'est la référence du §80. Sinon, c'est un
+# TRANSFERT — et c'est la question : un axe de langue appris sur un panel
+# sait-il séparer les langues d'un autre ?
+--- localité ---
+##### LOCALITÉ — 50 articles × 6 langues, fenêtre 2 (3 jetons), couches 1,2,3,5,8
+# 300 traces · fenêtre 2 · ride 1.0 · 50 contenus
+
+--- énergie (fin) ---
+  A référence            0.4910    
+… [517 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Mesure faite : ×5,40 → P_cont exactement 100 %, P_lang 73 %, rapport inchangé. Le §87.3 est faux ; j'écris la correction.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> reports/rapport-toutes-langues.md <<'MARKDOWN'\n\n---\n\n## 88. CORRECTION DU §87.3 : l'écart d'énergie n'est pas un défaut, c'est une échelle\n\n### 88.1 Ce que j'avais écrit, et pourquoi c'est faux\n\nLe §87.3 concluait, en  … [6734 caractères tronqués]`
