@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 198.0 h |
+| Durée | 198.2 h |
 | Tours | 183 |
-| Messages | 9085 |
-| Appels d'outils | 8558 |
-| Fichiers touchés | 203 |
-| Commandes | 7256 |
+| Messages | 9089 |
+| Appels d'outils | 8562 |
+| Fichiers touchés | 204 |
+| Commandes | 7259 |
 | Sous-agents | 32 |
-| Commits | 656 |
+| Commits | 657 |
 | Compactages de contexte | 12 |
 
 ## Objectifs déclarés
@@ -9283,7 +9283,7 @@ Le §58 seul aurait laissé croire qu
 
 ### Tour 183 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
 
-*6 appels d'outils.* Actions notables :
+*10 appels d'outils.* Actions notables :
 
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/amplification.py`
 - bash — Launch the shrinkage/amplification test
@@ -9291,10 +9291,23 @@ Le §58 seul aurait laissé croire qu
 - bash — Fix the slicing bug and add the training-language control
 - bash — Read the corrected amplification test with control
 - bash — Report and commit the shrinkage and instability findings
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/decomposition.py`
+- bash — Run the variance decomposition
+- bash — Read the variance decomposition
+- bash — Report and commit the decomposition diagnosis
 
 **Synthèse produite :**
 
-⏵ **Deux résultats nets : le rétrécissement est réel (3,4×), et la séparation du PROFESSEUR lui-même change de signe selon le jeu de langues (−0,0152 sur de/en/fr contre +0,0517 sur es/it/pt).**
+⏵ **DIAGNOSTIC PRÉCIS, et c'est le résultat le plus net du round : notre sortie porte ~12× MOINS d'énergie de CONTENU que le professeur, à énergie de LANGUE comparable.**
+
+| | P_lang | P_cont | **RAPPORT** |
+|---|---:|---:|---:|
+| **TEST** — notre | 232,0 | **338,7** | **1,46** |
+| TEST — professeur | 399,2 | **4 356,4** | **10,91** |
+| **APPRENTISSAGE** — notre | 1 834,7 | **493,9** | **0,27** |
+| APPRENTISSAGE — professeur | 2 405,1 | **5 219,9** | **2,17** |
+
+Le défaut n'est pas « trop de langue » : c'est **beaucoup trop peu de contenu**.
 
 ## 3. Travail accompli
 
@@ -9505,6 +9518,7 @@ Le §58 seul aurait laissé croire qu
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/objectif_du_pont.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/ou_est_le_contenu.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/amplification.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/decomposition.py` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -9583,7 +9597,7 @@ Le §58 seul aurait laissé croire qu
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 7216 autres
+- … et 7219 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10387,4 +10401,5 @@ Le §58 seul aurait laissé croire qu
 - Réécrire l'objectif : la structure du professeur EST atteignable, mais l'objectif à deux curseurs est NON CONVEXE  OBJECTIF : ‖XW-Y‖² + mu_lang·P_lang(W) - mu_c
 - La piste 'le moindres carrés néglige les petites composantes' est RÉFUTÉE par sa prémisse  IDÉE : la fidélité est un cosinus par ligne, le fit minimise une erre
 - Le rétrécissement est réel (3,4x) mais n'est pas la cause ; et la cible du §58 n'est pas stable  MESURE QUI N'AVAIT JAMAIS ÉTÉ FAITE : rapport ‖écart à la moyen
+- Le défaut est LOCALISÉ et QUANTIFIÉ : notre sortie porte 12x moins d'énergie de CONTENU  Décomposition de variance, exacte et additive :   nu_L  = moyenne sur l
 

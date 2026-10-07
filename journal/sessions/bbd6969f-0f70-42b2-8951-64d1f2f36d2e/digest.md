@@ -149639,3 +149639,68 @@ lancé
 ⏵ **Deux résultats nets : le rétrécissement est réel (3,4×), et la séparation du PROFESSEUR lui-même change de signe selon le jeu de langues (−0,0152 sur de/en/fr contre +0,0517 sur es/it/pt).**
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 60. Le rétrécissement est réel — mais ce n'est pas la cause. Et la cible du §58 n'est pas stable\n\n### 60.1 Un défaut quantifié q … [7427 caractères tronqués]`
+
+  ```
+a41a27b Le rétrécissement est réel (3,4x) mais n'est pas la cause ; et la cible du §58 n'est pas stable
+  ```
+
+### 🤖 Assistant
+
+⏵ **Dernier diagnostic, direct : décomposer la variance en part LANGUE et part CONTENU, pour nous et pour le professeur.**
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"decomposition.py — où va la variance : en LANGUE ou en CONTENU ?\n\nAprès quatre causes écartées (§58 à §60), il reste à LOCALISER le défaut. La bonne\nfaçon n'est pas une similarité cosinus mais une **décomposition de variance**, qui est\nexacte et additiv … [4844 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/decomposition.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"import ast; ast.parse(open('tools/decomposition.py').read()); print('syntaxe OK')\" && setsid nohup python3 -u tools/decomposition.py /tmp/cache_wikitrain.npz /tmp/cache_wikitest.npz --neur 120 > /tmp/decomposition.log 2 … [132 caractères tronqués]`
+
+  ```
+syntaxe OK
+lancé
+20:48
+  ```
+
+- **bash** `{"command": "sleep 560; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/decomposition.log 2>/dev/null; echo; echo \"articles wiki : $(grep -c '^ARTICLE' /tmp/trace_wiki_apparie.log)\"; date '+%H:%M'", "description": "Read the variance decomposition", "timeoutMs": 600000}`
+
+  ```
+# réseau 120 neurones · 1 couche(s)
+
+=== TEST (langues inconnues) === (fidélité 0.4747)
+#                   P_lang      P_cont   RAPPORT  contenus  langues
+  NOTRE              232.0       338.7     1.460        85        3
+  PROFESSEUR         399.2      4356.4    10.912        85        3
+
+=== APPRENTISSAGE (langues connues) === (fidélité 0.5120)
+#                   P_lang      P_cont   RAPPORT  contenus  langues
+  NOTRE             1834.7       493.9     0.269        85        2
+  PROFESSEUR        2405.1      5219.9     2.170        85        2
+
+# P_lang : énergie portée par l'axe LANGUE · P_cont : par l'axe CONTENU.
+# RAPPORT > 1 : le contenu structure plus que la langue (ce qu'on veut).
+# Cette mesure ne dépend PAS de quelles langues sont dans le panel —
+# contrairement à la similarité du §60.3, qui changeait de signe.
+
+articles wiki : 185
+20:58
+  ```
+
+### 🤖 Assistant
+
+⏵ **DIAGNOSTIC PRÉCIS, et c'est le résultat le plus net du round : notre sortie porte ~12× MOINS d'énergie de CONTENU que le professeur, à énergie de LANGUE comparable.**
+
+| | P_lang | P_cont | **RAPPORT** |
+|---|---:|---:|---:|
+| **TEST** — notre | 232,0 | **338,7** | **1,46** |
+| TEST — professeur | 399,2 | **4 356,4** | **10,91** |
+| **APPRENTISSAGE** — notre | 1 834,7 | **493,9** | **0,27** |
+| APPRENTISSAGE — professeur | 2 405,1 | **5 219,9** | **2,17** |
+
+Le défaut n'est pas « trop de langue » : c'est **beaucoup trop peu de contenu**.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 61. Le défaut est LOCALISÉ et QUANTIFIÉ : notre sortie porte douze fois moins d'énergie de CONTENU\n\nAprès quatre causes écartées … [6335 caractères tronqués]`
