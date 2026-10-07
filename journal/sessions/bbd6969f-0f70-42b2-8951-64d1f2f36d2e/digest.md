@@ -149466,3 +149466,176 @@ lancé
 | | | | **cible** | **+0,0517** |
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 59. La piste « le moindres carrés néglige les petites composantes » est RÉFUTÉE — par sa propre prémisse\n\n### 59.1 L'idée, et el … [5839 caractères tronqués]`
+
+  ```
+603b7a6 La piste 'le moindres carrés néglige les petites composantes' est RÉFUTÉE par sa prémisse
+
+articles wiki : 165
+  ```
+
+### 🤖 Assistant
+
+⏵ **Round 55 — un round surtout négatif, et c'est ce qui fait sa valeur.**
+
+## 1. L'objectif à deux curseurs : la cible est atteinte, mais l'objectif est non convexe
+
+J'ai implémenté la réécriture que le §57 désignait : `‖XW − Y‖² + μ_lang·P_lang(W) − μ_cont·P_cont(W)` — variance **inter-langue** (à minimiser) et variance **inter-contenu** (à maximiser), les deux quadratiques donc **forme fermée** préservée. Et une mesure nouvelle, la **séparation** = `S_langue − S_domaine`.
+
+**Sur Wikipedia, une configuration atteint exactement la cible** :
+
+| μ_lang | μ_cont | fid TEST | S_langue | S_domaine | **SÉPARATION** | vs prof |
+|---:|---:|---:|---:|---:|---:|---:|
+| 0 | 0 | 0,4747 | 0,9835 | 0,9866 | −0,0031 | −0,0548 |
+| **0,1** | **0,1** | 0,3359 | 0,8479 | 0,7959 | **+0,0519** | **+0,0003** |
+| | | | | | **cible** | **+0,0517** |
+
+**Donc la structure contenu/langue du professeur EST atteignable par une lecture LINÉAIRE des mêmes états.** Les caractéristiques contiennent l'information.
+
+**Mais** : le terme soustrait rend la matrice **indéfinie** (λ_min −5,7·10³ à μ=0,1, −1,0·10⁶ à μ=1) — le code le **signale** maintenant — et les résultats sont **erratiques** : +0,052 à μ=0,1, **−0,012** à μ=0,3, **−0,140** à μ=1. La solution est un **point selle**, pas un minimum. Coût : −0,139 de fidélité.
+
+## 2. La piste explicative est réfutée par sa propre prémisse
+
+L'explication naturelle — « le moindres carrés minimise une erreur *absolue*, donc il néglige les petites composantes qui portent le contenu » — supposait une masse dominante. **Le spectre de la cible la démentit : la première direction ne porte que 4,1 % de l'énergie**, les dix premières 21,5 %. L'énergie est **étalée**. Il n'y a pas de gros devant quoi négliger le petit.
+
+Et les trois remèdes convexes qui en découlaient ne marchent pas :
+
+| variante | fid TEST | SÉPARATION |
+|---|---:|---:|
+| A référence | 0,4706 | −0,0008 |
+| B cible centrée | 0,4708 | −0,0040 |
+| C lignes normées | 0,4197 | **−0,0000** (S = 1,0000 exactement) |
+| D blanchiment α=0,25 | 0,4383 | −0,0001 |
+| D blanchiment α=0,50 | 0,4226 | −0,0000 |
+
+**Aucune n'améliore ; deux détruisent complètement.**
+
+## 3. Ce qui reste ouvert, et c'est maintenant précis
+
+**Tombe** : l'explication par la pondération de l'objectif. **Reste ouvert** : *par quel objectif convexe* extraire la structure contenu/langue que les caractéristiques contiennent manifestement. Quatre pistes essayées, toutes écartées par une mesure.
+
+Le §58 seul aurait laissé croire que le problème était résolu ; le §59 dit que non.
+
+## État
+
+| chaîne | avancement |
+|---|---|
+| **Wikipedia apparié** | **165 articles / 482** · ~990 traces / 2 892 · fin vers 05h00 |
+| **Croissance μ = 0,1** | terminée — 147 neurones, protocole entier (§56) |
+| **Crime** | 4/24 segments, conservés |
+
+Le corpus Wikipedia est le chemin critique : à 165 articles il permet déjà des mesures à 6 langues, et il en aura ~400 à l'aube. Chaque nouveau lot resserre les intervalles sur la séparation, qui est désormais la mesure centrale.
+
+
+## Tour 183
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de représentation universelle), boîte noire (on ne lit du professeur que la couche à émuler, jamais sa tête ni ses jetons générés), aucune rétropropagation (A et B aléatoires et gelés, seule la lecture s'ajuste en forme fermée), et chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, TAILLE du réseau, avec le diagnostic oracle sur les deux panneaux (test hors vivier et validation du même vivier)."
+Round: 56/256
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ **Une hypothèse que je n'ai pas testée : la constante additive `mt` domine la moyenne de notre sortie, donc les écarts qui portent le contenu sont écrasés. Test d'une amplification — convexe, un paramètre.**
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"amplification.py — notre sortie est-elle ÉCRASÉE VERS LA MOYENNE ?\n\nL'OBSERVATION QUI N'AVAIT PAS ÉTÉ FAITE. Le §57 a montré que notre sortie ne sépare\nplus contenu et langue (S_langue ≈ S_domaine ≈ 0,99 sur Wikipedia), là où le\nprofesseur, si (0,9454 / … [5861 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/amplification.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"import ast; ast.parse(open('tools/amplification.py').read()); print('syntaxe OK')\" && setsid nohup python3 -u tools/amplification.py /tmp/cache_wikitrain.npz /tmp/cache_wikitest.npz --neur 120 > /tmp/amplification.log 2 … [217 caractères tronqués]`
+
+  ```
+syntaxe OK
+lancé
+articles wiki : 166
+20:27
+  ```
+
+- **bash** `{"command": "sleep 560; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/amplification.log 2>/dev/null; date '+%H:%M'", "description": "Read the amplification results", "timeoutMs": 600000}`
+
+  ```
+# 255 entrées d'apprentissage · 255 de test · 896 canaux
+# réseau 120 neurones · 1 couche(s)
+
+# RÉTRÉCISSEMENT — ‖écart à la moyenne‖ / ‖moyenne‖, par ligne :
+#   notre sortie : 0.6234
+#   professeur   : 2.1454
+#   rapport      : 0.291  (RÉTRÉCIE)
+
+# CIBLE — professeur : S_langue 0.9454 · S_domaine 0.8937 · SÉPARATION +0.0517
+
+#   alpha  fid TEST  S_langue  S_domaine  SÉPARATION  vs prof
+/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/amplification.py:138: RuntimeWarning: Mean of empty slice
+  nos = np.array([Oa[k*len(Yte[0]):(k+1)*len(Yte[0])].mean(0)
+/usr/lib64/python3.13/site-packages/numpy/_core/_methods.py:134: RuntimeWarning: invalid value encountered in divide
+  ret = um.true_divide(
+    0.50    0.4701    0.9958     0.9971     -0.0013  -0.0530
+    0.75    0.4769    0.9905     0.9935     -0.0029  -0.0546
+    1.00    0.4747    0.9833     0.9885     -0.0052  -0.0568
+    1.25    0.4667    0.9744     0.9824     -0.0080  -0.0597
+    1.50    0.4553    0.9639     0.9751     -0.0113  -0.0630
+    2.00    0.4291    0.9393     0.9584     -0.0191  -0.0708
+    3.00    0.3817    0.8842     0.9212     -0.0370  -0.0887
+
+# PRÉDICTION : si le rétrécissement est la cause, le rapport ci-de
+… [85 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le rétrécissement est RÉEL (rapport 0,291 — nous écrasons 3,4×) mais amplifier ne rétablit pas l'ordre. Et j'ai un bug de découpage à corriger.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\ns = open('tools/amplification.py').read()\n# BUG : je découpais par pas fixe len(Yte[0]), en supposant toutes les entrées de\n# même longueur. Elles ne le sont pas — d'où « Mean of empty slice ».\nold = \"\"\"    … [3487 caractères tronqués]`
+
+  ```
+corrigé + contrôle ajouté
+syntaxe OK
+lancé
+20:37
+  ```
+
+- **bash** `{"command": "sleep 560; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/amplification2.log 2>/dev/null; echo; echo \"articles wiki : $(grep -c '^ARTICLE' /tmp/trace_wiki_apparie.log)\"; date '+%H:%M'", "description": "Read the corrected amplification test with control", "timeoutMs": 6 … [6 caractères tronqués]`
+
+  ```
+# 255 entrées d'apprentissage · 255 de test · 896 canaux
+# réseau 120 neurones · 1 couche(s)
+
+# RÉTRÉCISSEMENT — ‖écart à la moyenne‖ / ‖moyenne‖, par ligne :
+#   notre sortie : 0.6234
+#   professeur   : 2.1454
+#   rapport      : 0.291  (RÉTRÉCIE)
+
+# CIBLE — professeur : S_langue 0.9454 · S_domaine 0.8937 · SÉPARATION +0.0517
+
+#   alpha  fid TEST  S_langue  S_domaine  SÉPARATION  vs prof
+    0.50    0.4701    0.9958     0.9966     -0.0008  -0.0524
+    0.75    0.4769    0.9906     0.9924     -0.0017  -0.0534
+    1.00    0.4747    0.9835     0.9866     -0.0031  -0.0548
+    1.25    0.4667    0.9746     0.9794     -0.0048  -0.0565
+    1.50    0.4553    0.9643     0.9711     -0.0068  -0.0585
+    2.00    0.4291    0.9404     0.9520     -0.0117  -0.0633
+    3.00    0.3817    0.8872     0.9102     -0.0230  -0.0747
+
+# CONTRÔLE — les deux axes sur les langues d'APPRENTISSAGE
+  alpha 1.00 : fid 0.5120 · S_langue 0.9153 · S_domaine 0.9844 · SÉPARATION -0.0691
+  alpha 2.00 : fid 0.4879 · S_langue 0.7077 · S_domaine 0.9475 · SÉPARATION -0.2398
+  professeur (mêmes entrées) : S_langue 0.8624 · S_domaine 0.8776 · SÉPARATION -0.0152
+
+# PRÉDICTION : si le rétrécissement est la cause, le rapport ci-de
+… [106 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Deux résultats nets : le rétrécissement est réel (3,4×), et la séparation du PROFESSEUR lui-même change de signe selon le jeu de langues (−0,0152 sur de/en/fr contre +0,0517 sur es/it/pt).**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 60. Le rétrécissement est réel — mais ce n'est pas la cause. Et la cible du §58 n'est pas stable\n\n### 60.1 Un défaut quantifié q … [7427 caractères tronqués]`

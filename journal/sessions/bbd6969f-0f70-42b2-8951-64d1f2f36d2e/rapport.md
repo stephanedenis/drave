@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 197.7 h |
-| Tours | 182 |
-| Messages | 9077 |
-| Appels d'outils | 8552 |
-| Fichiers touchés | 202 |
-| Commandes | 7251 |
+| Durée | 198.0 h |
+| Tours | 183 |
+| Messages | 9085 |
+| Appels d'outils | 8558 |
+| Fichiers touchés | 203 |
+| Commandes | 7256 |
 | Sous-agents | 32 |
-| Commits | 655 |
+| Commits | 656 |
 | Compactages de contexte | 12 |
 
 ## Objectifs déclarés
@@ -417,6 +417,8 @@
 **Tour 181** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 **Tour 182** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
+
+**Tour 183** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -9238,16 +9240,61 @@ Depuis le §41, un fait revenait sans être expliqué : **notre sortie est bien 
 
 **Synthèse produite :**
 
-⏵ **La prémisse elle-même est RÉFUTÉE par la mesure : la cible n'a PAS de masse dominante (1ʳᵉ direction 4,1 % de l'énergie). Le blanchiment n'aide pas non plus.**
+⏵ **Round 55 — un round surtout négatif, et c'est ce qui fait sa valeur.**
 
-| variante | fid TEST | S_langue | S_domaine | SÉPARATION |
-|---|---:|---:|---:|---:|
-| A référence | 0,4706 | 0,9957 | 0,9965 | −0,0008 |
-| B cible centrée | 0,4708 | 0,9869 | 0,9909 | −0,0040 |
-| C lignes normées | 0,4197 | 1,0000 | 1,0000 | −0,0000 |
-| D blanchiment 0,25 | 0,4383 | 0,9996 | 0,9997 | −0,0001 |
-| D blanchiment 0,50 | 0,4226 | 1,0000 | 1,0000 | −0,0000 |
-| | | | **cible** | **+0,0517** |
+\## 1. L'objectif à deux curseurs : la cible est atteinte, mais l'objectif est non convexe
+
+J'ai implémenté la réécriture que le §57 désignait : `‖XW − Y‖² + μ_lang·P_lang(W) − μ_cont·P_cont(W)` — variance **inter-langue** (à minimiser) et variance **inter-contenu** (à maximiser), les deux quadratiques donc **forme fermée** préservée. Et une mesure nouvelle, la **séparation** = `S_langue − S_domaine`.
+
+**Sur Wikipedia, une configuration atteint exactement la cible** :
+
+| μ_lang | μ_cont | fid TEST | S_langue | S_domaine | **SÉPARATION** | vs prof |
+|---:|---:|---:|---:|---:|---:|---:|
+| 0 | 0 | 0,4747 | 0,9835 | 0,9866 | −0,0031 | −0,0548 |
+| **0,1** | **0,1** | 0,3359 | 0,8479 | 0,7959 | **+0,0519** | **+0,0003** |
+| | | | | | **cible** | **+0,0517** |
+
+**Donc la structure contenu/langue du professeur EST atteignable par une lecture LINÉAIRE des mêmes états.** Les caractéristiques contiennent l'information.
+
+**Mais** : le terme soustrait rend la matrice **indéfinie** (λ_min −5,7·10³ à μ=0,1, −1,0·10⁶ à μ=1) — le code le **signale** maintenant — et les résultats sont **erratiques** : +0,052 à μ=0,1, **−0,012** à μ=0,3, **−0,140** à μ=1. La solution est un **point selle**, pas un minimum. Coût : −0,139 de fidélité.
+
+\## 2. La piste explicative est réfutée par sa propre prémisse
+
+L'explication naturelle — « le moindres carrés minimise une erreur *absolue*, donc il néglige les petites composantes qui portent le contenu » — supposait une masse dominante. **Le spectre de la cible la démentit : la première direction ne porte que 4,1 % de l'énergie**, les dix premières 21,5 %. L'énergie est **étalée**. Il n'y a pas de gros devant quoi négliger le petit.
+
+Et les trois remèdes convexes qui en découlaient ne marchent pas :
+
+| variante | fid TEST | SÉPARATION |
+|---|---:|---:|
+| A référence | 0,4706 | −0,0008 |
+| B cible centrée | 0,4708 | −0,0040 |
+| C lignes normées | 0,4197 | **−0,0000** (S = 1,0000 exactement) |
+| D blanchiment α=0,25 | 0,4383 | −0,0001 |
+| D blanchiment α=0,50 | 0,4226 | −0,0000 |
+
+**Aucune n'améliore ; deux détruisent complètement.**
+
+\## 3. Ce qui reste ouvert, et c'est maintenant précis
+
+**Tombe** : l'explication par la pondération de l'objectif. **Reste ouvert** : *par quel objectif convexe* extraire la structure contenu/langue que les caractéristiques contiennent manifestement. Quatre pistes essayées, toutes écartées par une mesure.
+
+Le §58 seul aurait laissé croire qu
+… [531 caractères tronqués]
+
+### Tour 183 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/amplification.py`
+- bash — Launch the shrinkage/amplification test
+- bash — Read the amplification results
+- bash — Fix the slicing bug and add the training-language control
+- bash — Read the corrected amplification test with control
+- bash — Report and commit the shrinkage and instability findings
+
+**Synthèse produite :**
+
+⏵ **Deux résultats nets : le rétrécissement est réel (3,4×), et la séparation du PROFESSEUR lui-même change de signe selon le jeu de langues (−0,0152 sur de/en/fr contre +0,0517 sur es/it/pt).**
 
 ## 3. Travail accompli
 
@@ -9457,6 +9504,7 @@ Depuis le §41, un fait revenait sans être expliqué : **notre sortie est bien 
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/invariance_ou_appauvrissement.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/objectif_du_pont.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/ou_est_le_contenu.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/amplification.py` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -9535,7 +9583,7 @@ Depuis le §41, un fait revenait sans être expliqué : **notre sortie est bien 
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 7211 autres
+- … et 7216 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10338,4 +10386,5 @@ Depuis le §41, un fait revenait sans être expliqué : **notre sortie est bien 
 - LA question du §41 est tranchée : notre sortie ÉCRASE la distinction contenu/langue  Depuis le §41 un même fait revenait : notre sortie est bien plus invariante
 - Réécrire l'objectif : la structure du professeur EST atteignable, mais l'objectif à deux curseurs est NON CONVEXE  OBJECTIF : ‖XW-Y‖² + mu_lang·P_lang(W) - mu_c
 - La piste 'le moindres carrés néglige les petites composantes' est RÉFUTÉE par sa prémisse  IDÉE : la fidélité est un cosinus par ligne, le fit minimise une erre
+- Le rétrécissement est réel (3,4x) mais n'est pas la cause ; et la cible du §58 n'est pas stable  MESURE QUI N'AVAIT JAMAIS ÉTÉ FAITE : rapport ‖écart à la moyen
 
