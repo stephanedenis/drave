@@ -200,6 +200,23 @@ def main():
         f3 = cos_lignes(Oc, np.vstack(Yte))
         d3 = decompose(clte, moyennes(clte, Oc, bo_t))
         print(f" {r3:>6}{f3:>10.4f}{d3[0]:>10.1f}{d3[1]:>10.1f}{d3[2]:>10.3f}")
+    # LA RÉSERVE DU §75.4 : le rapport est invariant d'échelle, donc on peut amplifier
+    # jusqu'à la magnitude du professeur SANS changer le rapport — mais la FIDÉLITÉ,
+    # elle, dépend de l'échelle dès qu'il y a un décalage. On la mesure.
+    print(f"\n# AMPLIFICATION jusqu'à P_cont = 4356,4 (magnitude du professeur)")
+    print(f"# {'rang':>6}{'alpha':>8}{'fid amplifiée':>15}{'P_lang':>10}{'P_cont':>10}")
+    for r4 in (2, 5):
+        Vr = V2[:, :r4]
+        Oc = (Ot2 - ma) @ Vr @ Vr.T + ma
+        d4 = decompose(clte, moyennes(clte, Oc, bo_t))
+        if d4[1] <= 0:
+            continue
+        a4 = float(np.sqrt(4356.4/d4[1]))
+        Oa4 = ma + a4*(Oc - ma)
+        f4 = cos_lignes(Oa4, np.vstack(Yte))
+        d5 = decompose(clte, moyennes(clte, Oa4, bo_t))
+        print(f" {r4:>6}{a4:>8.2f}{f4:>15.4f}{d5[0]:>10.1f}{d5[1]:>10.1f}")
+    print(f"# Rappel : fidélité NON amplifiée du rang 2 = 0,4298 · professeur P_lang 399,2")
     print(f"# Comparaison : discriminant SEUL (§69, sans apprentissage des directions)")
     print(f"#   rang 2 : fid 0,4341 · P_lang 4,3 · P_cont 30,2 · rapport 6,961")
     print(f"#   rang 20 : fid 0,4575 · P_lang 17,4 · P_cont 57,9 · rapport 3,326")

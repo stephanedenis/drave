@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 203.4 h |
+| Durée | 203.8 h |
 | Tours | 192 |
-| Messages | 9188 |
-| Appels d'outils | 8643 |
+| Messages | 9192 |
+| Appels d'outils | 8647 |
 | Fichiers touchés | 212 |
-| Commandes | 7332 |
+| Commandes | 7336 |
 | Sous-agents | 32 |
-| Commits | 671 |
+| Commits | 672 |
 | Compactages de contexte | 12 |
 
 ## Objectifs déclarés
@@ -9836,23 +9836,26 @@ Mettre à l'échelle ne change pas **ce qu'un neurone lit**. On apprend donc à 
 
 ### Tour 192 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
 
-*4 appels d'outils.* Actions notables :
+*8 appels d'outils.* Actions notables :
 
 - bash — Test the composition of all three deployable levers
 - bash — Read the composition result
 - bash — Wait for the composition result
 - bash — Report and commit the breakthrough
+- bash — Measure the amplified fidelity
+- bash — Read the amplified fidelity
+- bash — Wait for the amplified fidelity result
+- bash — Report and commit the frontier measurement
 
 **Synthèse produite :**
 
-⏵ **LA CIBLE EST ATTEINTE : rapport 10,688 contre 10,912 pour le professeur — 98 %. Et amplifié à la magnitude du professeur, P_lang tombe à 405 contre 399.**
+⏵ **La réserve est mesurée, et elle est décisive : au point où les magnitudes du professeur sont atteintes, la fidélité tombe à 0,2512.**
 
-| méthode | fid TEST | P_lang | P_cont | **RAPPORT** |
-|---|---:|---:|---:|---:|
-| discriminant seul (§69) | 0,4341 | 4,3 | 30,2 | 6,961 |
-| quoi lire + discriminant (§74) | 0,4305 | 31,8 | 184,4 | 5,803 |
-| **centrage + quoi lire + discriminant** | **0,4298** | **3,5** | **37,5** | **10,688** |
-| *professeur* | — | *399,2* | *4 356,4* | ***10,912*** |
+| rang | α | **fid amplifiée** | P_lang | P_cont |
+|---:|---:|---:|---:|---:|
+| 2 | 10,78 | **0,2512** | 407,6 | **4 356,4** |
+| 5 | 8,82 | 0,2675 | 692,6 | 4 356,4 |
+| | | *0,4298 non amplifié* | *prof 399,2* | |
 
 ## 3. Travail accompli
 
@@ -10150,7 +10153,7 @@ Mettre à l'échelle ne change pas **ce qu'un neurone lit**. On apprend donc à 
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 7292 autres
+- … et 7296 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10969,4 +10972,5 @@ Mettre à l'échelle ne change pas **ce qu'un neurone lit**. On apprend donc à 
 - CORRECTION du §72, et un mécanisme qui fait enfin les DEUX mouvements  CORRECTION : le §72 affirmait 'la capture moyenne vaut ≈ 0,5'. JE NE L'AVAIS PAS LUE — la
 - La combinaison des deux mécanismes DOMINE chacun d'eux : 9x plus de contenu à rapport comparable    méthode                              fid TEST  P_lang  P_con
 - LA CIBLE EST ATTEINTE : la composition des trois leviers donne 98 % du rapport du professeur    méthode                              fid TEST  P_lang  P_cont   
+- La réserve du §75.4 est mesurée et elle tranche : la structure s'obtient, la fidélité ne suit pas    rang  alpha  fidélité amplifiée  P_lang    P_cont   2     1
 

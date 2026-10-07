@@ -151739,3 +151739,72 @@ articles wiki : 369
 | *professeur* | — | *399,2* | *4 356,4* | ***10,912*** |
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport math\nr=10.688; Pl, Pc = 3.5, 37.5\na=math.sqrt(4356.4/Pc)\nprint(f'Amplification pour P_cont = 4356,4 : alpha = {a:.2f}')\nprint(f'  -> P_lang = {Pl*a*a:.1f}   (professeur 399,2)')\nprint(f'  -> rapport inchang … [6489 caractères tronqués]`
+
+  ```
+Amplification pour P_cont = 4356,4 : alpha = 10.78
+  -> P_lang = 406.6   (professeur 399,2)
+  -> rapport inchange : 10.688
+Sur le critere du 62.3 : P_lang 407 contre 399,2 -> SATISFAIT
+d2bfb78 LA CIBLE EST ATTEINTE : la composition des trois leviers donne 98 % du rapport du professeur
+  ```
+
+### 🤖 Assistant
+
+⏵ **Je mesure la réserve que j'ai signalée : la fidélité du point AMPLIFIÉ à la magnitude du professeur.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\ns = open('tools/renforcement_directions.py').read()\nold = \"\"\"    print(f\"# Comparaison : discriminant SEUL (§69, sans apprentissage des directions)\")\"\"\"\nnew = \"\"\"    # LA RÉSERVE DU §75.4 : le rappor … [1591 caractères tronqués]`
+
+  ```
+mesure de la réserve câblée
+syntaxe OK
+lancé
+02:12
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/amplifie.log 2>/dev/null | tail -18; date '+%H:%M'", "description": "Read the amplified fidelity", "timeoutMs": 620000}`
+
+  ```
+# CENTRAGE DE L'ENTRÉE activé (§64)
+# réseau 120 neurones · 1 couche(s) · canaux d'entrée 896 · 1 passes
+# CIBLE — professeur : P_lang 399.2 · P_cont 4356.4 · rapport 10.912
+
+#  passe  capture  fid TEST    P_lang    P_cont   RAPPORT  s
+      0    0.015    0.4703      42.4      82.1     1.934
+02:23
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/amplifie.log 2>/dev/null | tail -18; date '+%H:%M'", "description": "Wait for the amplified fidelity result", "timeoutMs": 620000}`
+
+  ```
+2    0.4298       3.5      37.5    10.688
+      5    0.4362       8.9      56.1     6.290
+     10    0.4419      17.4      70.1     4.035
+     20    0.4445      29.9      80.2     2.680
+
+# AMPLIFICATION jusqu'à P_cont = 4356,4 (magnitude du professeur)
+#   rang   alpha  fid amplifiée    P_lang    P_cont
+      2   10.78         0.2512     407.6    4356.4
+      5    8.82         0.2675     692.6    4356.4
+# Rappel : fidélité NON amplifiée du rang 2 = 0,4298 · professeur P_lang 399,2
+# Comparaison : discriminant SEUL (§69, sans apprentissage des directions)
+#   rang 2 : fid 0,4341 · P_lang 4,3 · P_cont 30,2 · rapport 6,961
+#   rang 20 : fid 0,4575 · P_lang 17,4 · P_cont 57,9 · rapport 3,326
+
+# La capture est la moyenne, sur les neurones, de leur corrélation maximale
+# avec le résidu. 0,5 = le hasard. Le §72 trouvait ≈ 0,5 et un plateau.
+# PRÉDICTION : si l'échec venait de directions aléatoires, la capture doit
+# monter au-dessus de 0,5 et le rapport vers 10,912.
+02:33
+  ```
+
+### 🤖 Assistant
+
+⏵ **La réserve est mesurée, et elle est décisive : au point où les magnitudes du professeur sont atteintes, la fidélité tombe à 0,2512.**
+
+| rang | α | **fid amplifiée** | P_lang | P_cont |
+|---:|---:|---:|---:|---:|
+| 2 | 10,78 | **0,2512** | 407,6 | **4 356,4** |
+| 5 | 8,82 | 0,2675 | 692,6 | 4 356,4 |
+| | | *0,4298 non amplifié* | *prof 399,2* | |
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 76. La réserve du §75.4 est mesurée, et elle tranche : la structure s'obtient, la fidélité ne suit pas\n\nLe §75.4 laissait une me … [5795 caractères tronqués]`
