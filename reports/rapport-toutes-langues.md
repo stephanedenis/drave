@@ -4651,3 +4651,115 @@ professeur par la composition des trois leviers déployables.**
 
 La vérification est lancée et se déclenche seule : intersection des six langues, partage
 3 langues apprises / 3 en test, caches couche 8, puis la composition complète.
+
+
+---
+
+# BILAN — 35 heures contre l'objectif, et contre la raison d'être de Drave
+
+## B.1 Les faits
+
+| | |
+|---|---:|
+| durée de la session | **2026-10-05 20:22 → 2026-10-07 07:18**, soit **~35 h** |
+| commits | **98** |
+| outils créés | **33** |
+| rapport | **4 653 lignes** |
+| glossaire | **2 245 lignes** |
+| corpus produits | 392 langues UDHR × 2 couches · 482 articles Wikipedia × 6 langues (2 892 traces) · Romeo (24 scènes) · Crime (24 chapitres écrits) |
+| échecs de traçage | **0** sur ~3 700 traces |
+
+## B.2 Ce qui est acquis, et qui le restera
+
+1. **Le pont couvre TOUTES les langues de l'UDHR** — 392/392 aux couches 8 et 10,
+   400/400 unités, zéro échec. L'objectif « au-delà des 46 » est atteint.
+2. **La couche cible est établie** — couche 8, **41 langues sur 41**, zéro régression.
+3. **Le protocole complet existe** — fidélité apprentissage / VALIDATION / TEST,
+   invariance, pire paire, taille, **oracle sur les deux panneaux**. Il tourne en une
+   commande.
+4. **Les corpus riches existent** — Wikipedia apparié 482 × 6 est le premier corpus
+   **multi-domaine et aligné** du projet ; il rend testable ce que l'UDHR interdisait.
+5. **Une trentaine d'outils** documentent chaque mesure et chaque échec.
+
+## B.3 Ce qui n'est PAS atteint, et il faut le dire sans détour
+
+**Le pont ne reproduit pas le contenu de son professeur.** Fidélité ~0,63 (couche 10) et
+~0,64 (couche 8) ; apport propre au-dessus de la constante : **+0,03 à +0,06**. Et surtout,
+le §75-§77 ont établi que :
+
+> le pont reproduit la **structure** contenu/langue du professeur à **98 %**, mais **pas
+> son contenu** — et la courbe du prix est monotone, sans meilleur compromis.
+
+## B.4 La question de la raison d'être, posée franchement
+
+Drave veut **notre propre** pont linguistico-sémantique : émuler les premières couches
+d'un gros modèle, en boîte noire, sans rétropropagation, pour obtenir un modèle récurrent
+capable de répondre au premier niveau abstrait.
+
+**Les mesures de cette session disent quelque chose d'inconfortable sur cette
+hypothèse.** Le §70 a mesuré, sur trois jeux de caractéristiques emboîtés :
+
+| caractéristiques | fidélité | rapport contenu/langue |
+|---|---:|---:|
+| **l'entrée seule du professeur, 0 neurone** | **0,5161** | **1,698** |
+| les états de notre réservoir | 0,4751 | **1,354** |
+| entrée + réservoir | **0,5309** | 1,598 |
+| *le professeur à sa couche 8* | — | *10,912* |
+
+**Notre calcul propre — le réservoir récurrent — fait MOINS BIEN que l'entrée du
+professeur lue linéairement, sur les deux axes à la fois.** Quatre mesures indépendantes
+le confirment (§29, §34, §70, §71).
+
+**Conséquence sur la raison d'être** : en l'état, Drave n'est pas un pont — c'est une
+**dégradation** de la représentation du professeur. Le « pont » qui fonctionne le mieux
+mesuré est une régression linéaire-quadratique sur la couche 0 du professeur, c'est-à-dire
+le professeur lui-même, à peine projeté.
+
+**Et la transformation qui compte — celle qui crée la séparation contenu/langue entre la
+couche 0 et la couche 8 — n'est produite par AUCUN des mécanismes que le projet
+s'autorise** : ni le réservoir aléatoire gelé (§70), ni la lecture en forme fermée
+(§69, bornée à 64 %), ni le renforcement/atrophie (§72, +1,7 % du chemin nécessaire).
+
+## B.5 La leçon de méthode, et elle est la plus dure
+
+**Le constat du §29 — « une lecture sans aucun neurone bat le réservoir » — a été obtenu
+à l'heure 13 de la session. Celui du §70 — « la langue vient de l'entrée, pas du
+réservoir » — à l'heure 27.**
+
+**Les deux étaient testables en moins d'une heure.** Le second n'était qu'une comparaison
+de trois jeux de caractéristiques ; le premier, une régression sur l'entrée seule.
+
+**J'ai construit, réglé et mesuré un mécanisme complexe — naissance libre, attrition,
+multi-échelle, contraintes d'invariance, deux panneaux d'oracle — pendant treize heures
+avant de tester la ligne de base triviale.**
+
+Ce n'est pas une erreur de calcul : c'est une erreur d'**ordre**. La règle qui manquait,
+et qui vaut pour la suite : **avant d'améliorer un mécanisme, mesurer ce qu'il apporte
+au-dessus du plus bête des modèles qui pourrait le remplacer.**
+
+## B.6 Ce que la session laisse d'utile malgré cela
+
+1. **Une infrastructure qui survit au résultat négatif** — 392 langues × 2 couches,
+   482 articles × 6 langues, un protocole complet, 33 outils.
+2. **Une caractérisation précise de ce qui manque** — et elle est plus utile qu'un
+   chiffre qui monte : *l'énergie de contenu est sous-produite d'un facteur 3,6 ; elle
+   est récupérable par mise à l'échelle ; mais la mise à l'échelle exige d'isoler l'axe du
+   contenu, et cet axe n'est pas identifiable sur un texte neuf.*
+3. **Une identité mathématique** (§67) qui économise des mois de tâtonnement : le rapport
+   contenu/langue est invariant d'échelle, donc **aucune amplification ne le corrigera
+   jamais** — cinq échecs s'expliquent par là.
+4. **Trois mécanismes déployables** qui, composés, portent le rapport de 1,29 à 10,69,
+   soit **98 % de celui du professeur**, pour 0,047 de fidélité.
+5. **Quatre erreurs de ma part, documentées et corrigées** (§60.6, §65, §73.1, §74) —
+   dont un découpage qui ne gardait que deux langues sur trois dans six outils.
+
+## B.7 Où porter l'effort ensuite, en une phrase
+
+**Le facteur limitant n'est plus l'objectif, ni la lecture, ni le post-traitement : c'est
+la TRANSFORMATION entre l'entrée et la cible.** Sous les contraintes maintenues — un seul
+professeur, boîte noire, aucune rétropropagation — la question ouverte est : **quel
+mécanisme, autre qu'un réservoir aléatoire gelé, peut produire huit couches d'attention ?**
+
+Et la réponse à cette question commence par une mesure que je n'ai pas faite :
+**qu'apporte le réservoir au-dessus de la seule entrée, sur le corpus complet de 482
+articles ?** Le §78 l'a lancée ; elle n'a pas encore rendu son verdict.

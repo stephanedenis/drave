@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 206.2 h |
-| Tours | 195 |
-| Messages | 9220 |
-| Appels d'outils | 8669 |
+| Durée | 208.5 h |
+| Tours | 196 |
+| Messages | 9244 |
+| Appels d'outils | 8690 |
 | Fichiers touchés | 212 |
-| Commandes | 7358 |
+| Commandes | 7379 |
 | Sous-agents | 32 |
-| Commits | 675 |
+| Commits | 676 |
 | Compactages de contexte | 12 |
 
 ## Objectifs déclarés
@@ -443,6 +443,8 @@
 **Tour 194** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 **Tour 195** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
+
+**Tour 196** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -10006,7 +10008,7 @@ Elle se déclenchera seule quand le traçage atteindra `TERMINE` :
 
 ### Tour 195 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
 
-*16 appels d'outils.* Actions notables :
+*29 appels d'outils.* Actions notables :
 
 - bash — Check tracing status
 - bash — Verify repo state and wait
@@ -10021,10 +10023,77 @@ Elle se déclenchera seule quand le traçage atteindra `TERMINE` :
 - bash — Check final completion
 - bash — Check the final verification
 - bash — Record the corpus completion milestone
+- bash — Monitor the final verification
+- … et 10 autres
 
 **Synthèse produite :**
 
-⏵ **Jalon : les 482 articles × 6 langues sont tracés, et la vérification tourne sur 2 892 entrées.**
+⏵ **Round 68 — le corpus est complet, la vérification tourne encore.**
+
+\## Jalon : le corpus Wikipedia apparié est COMPLET
+
+| | |
+|---|---:|
+| articles | **482 / 482** |
+| traces | **2 892 / 2 892** |
+| échecs | **0** |
+| articles présents dans les **six** langues | **482** (100 %) |
+| entrées d'apprentissage / test | 1 446 / 1 446 |
+
+**~13 heures de traçage** à ~19 s par trace, après la correction du §52 (l'orphelin qui volait 18 cœurs). **Le corpus aligné est passé de 85 à 482 articles — un facteur 5,7.**
+
+\## La vérification à grande échelle est en cours
+
+Elle a déjà livré trois chiffres :
+
+| | à 85 articles (§75) | **à 482 articles** |
+|---|---:|---:|
+| **rapport du professeur** | 10,912 | **12,001** |
+| P_lang du professeur | 399,2 | 387,9 |
+| P_cont du professeur | 4 356,4 | 4 655,4 |
+| **ligne de base du pont** (centrage seul) | fid 0,4703 · rapport 1,934 | **fid 0,4713 · rapport 2,486** |
+
+**Deux observations déjà utiles :**
+
+1. **La cible monte** avec la taille du corpus (10,912 → 12,001) : plus d'articles, plus de variance de contenu. Toute comparaison doit donc nommer la taille du panel — c'est la quatrième fois qu'un chiffre de référence dépend du périmètre.
+2. **La ligne de base monte aussi** (1,934 → 2,486) : le centrage seul fait mieux sur 482 articles que sur 85. Les grands panels aident, comme le §34 l'avait montré pour la fidélité.
+
+La passe d'apprentissage des directions tourne encore — la fonction de capture est en boucle par neurone sur 1 446 entrées, ce qui la rend lente (~1 h par passe au lieu de 8 min sur 85 articles).
+
+\## Ce qui reste
+
+**Une seule mesure** : le rapport atteint par la composition des trois leviers sur les 482 articles. Est-il encore à ~98 % de la cible, ou l'effet des 85 articles était-il optimiste ?
+
+Le résultat sera dans `/tmp/verif_finale.log` dès que la passe se termine, et je le rapporterai au round suivant.
+
+\## L'état des chaînes
+
+| chaîne | état |
+|---|---|
+| **Wikipedia apparié** | **terminé** — 482 × 6, 0 échec |
+| **Vérification finale** | en cours (passe 1 sur 1) |
+| **Croissance μ = 0,1** | terminée (§56, protocole entier : fidélité apprentissage/VALIDATION/TEST, invariance, pire paire, taille, oracle sur les deux panneaux) |
+| **Crime** | 4/24 segments, conservés |
+
+La traque §57-§77 reste close sur son résultat : **le pont reproduit la structure contenu/langue de son professeur à 98 % par trois mécanismes déployables, en forme fermée, sans rétropropagation — et la courbe du prix est monotone, sans meill
+… [16 caractères tronqués]
+
+### Tour 196 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
+
+*8 appels d'outils.* Actions notables :
+
+- bash — Read the final verification
+- bash — Check if the verification is alive
+- bash — Find the running process
+- bash — Wait for the verification
+- bash — Wait once more
+- bash — Gather session commits
+- bash — Gather session totals
+- bash — Write and commit the final assessment
+
+**Synthèse produite :**
+
+⏵ **J'écris le bilan — les faits d'abord, le jugement ensuite.**
 
 ## 3. Travail accompli
 
@@ -10322,7 +10391,7 @@ Elle se déclenchera seule quand le traçage atteindra `TERMINE` :
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 7318 autres
+- … et 7339 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -11145,4 +11214,5 @@ Elle se déclenchera seule quand le traçage atteindra `TERMINE` :
 - La courbe est MONOTONE : pas de meilleur compromis, et la frontière est close  BALAYAGE DE L'AMPLIFICATION (rang 2), huit points :   alpha   fid TEST  P_lang   
 - Journal : compteurs de session mis à jour (fichier généré)" && git log --oneline -1 | cat; echo "--- attente ---"; sleep 500; echo "articles : $(grep -c '^ARTIC
 - Le corpus Wikipedia apparié est COMPLET : 482 articles × 6 langues, 2 892 traces, 0 échec    articles                        482 / 482   traces                 
+- BILAN : 35 heures contre l'objectif et contre la raison d'être de Drave  LES FAITS : 35 h (05/10 20:22 → 07/10 07:18) · 98 commits · 33 outils · rapport 4 653 l
 

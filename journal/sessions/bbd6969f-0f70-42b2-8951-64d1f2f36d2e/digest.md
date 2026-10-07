@@ -152271,3 +152271,367 @@ apprentissage 1446 · test 1446
 ⏵ **Jalon : les 482 articles × 6 langues sont tracés, et la vérification tourne sur 2 892 entrées.**
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 78. Le corpus Wikipedia apparié est COMPLET : 482 articles × 6 langues, 2 892 traces\n\n| | |\n|---|---:|\n| articles | **482 / 48 … [2015 caractères tronqués]`
+
+  ```
+f8758eb Le corpus Wikipedia apparié est COMPLET : 482 articles × 6 langues, 2 892 traces, 0 échec
+
+=== vérification ===
+  de_Detroit : 582 pas
+  de_Devon : 337 pas
+  de_Diablo_II : 564 pas
+  de_Digimon : 578 pas
+  de_Digital_Equipment_Corporation : 566 pas
+  de_Dilbert : 568 pas
+04:57
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== vérification ===\"; grep -E \"apprentissage|CANAUX|réseau|professeur|RAPPORT|rang|alpha|^\\s+[0-9]\" /tmp/verif_finale.log 2>/dev/null | tail -20; date '+%H:%M'", "description": "Monitor the final verification", … [21 caractères tronqués]`
+
+  ```
+=== vérification ===
+apprentissage 1446 · test 1446
+05:07
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -4 /tmp/verif_finale.log 2>/dev/null; ls -la /tmp/cache_vf_*.npz 2>/dev/null | awk '{print $5, $9}'; date '+%H:%M'", "description": "Check cache building progress", "timeoutMs": 620000}`
+
+  ```
+fr_The_Ashes : 545 pas
+  fr_The_Beach_Boys : 550 pas
+  fr_The_Big_O : 554 pas
+  fr_Volkssturm : 600 pas
+1210218205 /tmp/cache_vf_train.npz
+05:17
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la /tmp/cache_vf_*.npz 2>/dev/null | awk '{print $5, $9}'; echo \"---\"; tail -3 /tmp/verif_finale.log 2>/dev/null; date '+%H:%M'", "description": "Wait for test cache and composition", "timeoutMs": 620000}`
+
+  ```
+1747348718 /tmp/cache_vf_train.npz
+---
+  it_Advance_Australia_Fair : 598 pas
+  it_Advanced_Encryption_Standard : 547 pas
+  it_Adware : 521 pas
+05:27
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la /tmp/cache_vf_*.npz 2>/dev/null | awk '{print $5, $9}'; echo \"---\"; tail -3 /tmp/verif_finale.log 2>/dev/null; pgrep -c -f renforcement_directions 2>/dev/null || echo \"composition pas encore lancée\"; date '+%H:% … [71 caractères tronqués]`
+
+  ```
+1747348718 /tmp/cache_vf_train.npz
+---
+  pt_Coleco : 571 pas
+  pt_Colette : 630 pas
+  pt_Colin_Maclaurin : 617 pas
+2
+05:37
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"COMPOSITION\\|réseau\\|CIBLE\\|RAPPORT\\|rang\\|alpha\" /tmp/verif_finale.log 2>/dev/null | tail -12; echo \"--- taille log ---\"; wc -l /tmp/verif_finale.log; date '+%H:%M'", "description": "Look for the composition sectio … [3 caractères tronqués]`
+
+  ```
+--- taille log ---
+2792 /tmp/verif_finale.log
+05:37
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -c . /tmp/verif_finale.log; grep -n \"COMPOSITION\\|CIBLE\\|réseau\" /tmp/verif_finale.log | tail -4; tail -2 /tmp/verif_finale.log; date '+%H:%M'", "description": "Wait for the composition to start", "timeoutMs": 620 … [4 caractères tronqués]`
+
+  ```
+2895
+  pt_The_Big_O : 530 pas
+  pt_Volkssturm : 585 pas
+05:47
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"COMPOSITION\\|CIBLE\\|réseau\\|professeur\" /tmp/verif_finale.log | tail -5; echo \"---\"; tail -3 /tmp/verif_finale.log; date '+%H:%M'", "description": "Wait for the composition result", "timeoutMs": 620000}`
+
+  ```
+2898:=== COMPOSITION DES TROIS LEVIERS, À GRANDE ÉCHELLE ===
+2900:# réseau 120 neurones · 1 couche(s) · canaux d'entrée 896 · 1 passes
+2901:# CIBLE — professeur : P_lang 387.9 · P_cont 4655.4 · rapport 12.001
+---
+# CIBLE — professeur : P_lang 387.9 · P_cont 4655.4 · rapport 12.001
+
+#  passe  capture  fid TEST    P_lang    P_cont   RAPPORT  s
+05:57
+  ```
+
+### 🤖 Assistant
+
+⏵ **La composition tourne sur les 482 articles. La cible du professeur y est de 12,001 (contre 10,912 à 85 articles).**
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -12 /tmp/verif_finale.log; date '+%H:%M'", "description": "Wait for the composition result", "timeoutMs": 620000}`
+
+  ```
+pt_The_Ashes : 603 pas
+  pt_The_Beach_Boys : 581 pas
+  pt_The_Big_O : 530 pas
+  pt_Volkssturm : 585 pas
+/tmp/cache_vf_test.npz : 1446 langues · 820114 pas
+
+=== COMPOSITION DES TROIS LEVIERS, À GRANDE ÉCHELLE ===
+# CENTRAGE DE L'ENTRÉE activé (§64)
+# réseau 120 neurones · 1 couche(s) · canaux d'entrée 896 · 1 passes
+# CIBLE — professeur : P_lang 387.9 · P_cont 4655.4 · rapport 12.001
+
+#  passe  capture  fid TEST    P_lang    P_cont   RAPPORT  s
+06:07
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -14 /tmp/verif_finale.log; date '+%H:%M'", "description": "Wait for the composition", "timeoutMs": 620000}`
+
+  ```
+pt_Taiko : 564 pas
+  pt_The_Alan_Parsons_Project : 519 pas
+  pt_The_Ashes : 603 pas
+  pt_The_Beach_Boys : 581 pas
+  pt_The_Big_O : 530 pas
+  pt_Volkssturm : 585 pas
+/tmp/cache_vf_test.npz : 1446 langues · 820114 pas
+
+=== COMPOSITION DES TROIS LEVIERS, À GRANDE ÉCHELLE ===
+# CENTRAGE DE L'ENTRÉE activé (§64)
+# réseau 120 neurones · 1 couche(s) · canaux d'entrée 896 · 1 passes
+# CIBLE — professeur : P_lang 387.9 · P_cont 4655.4 · rapport 12.001
+
+#  passe  capture  fid TEST    P_lang    P_cont   RAPPORT  s
+06:17
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -20 /tmp/verif_finale.log | grep -v \"pas$\"; date '+%H:%M'", "description": "Wait for the composition result", "timeoutMs": 620000}`
+
+  ```
+=== COMPOSITION DES TROIS LEVIERS, À GRANDE ÉCHELLE ===
+# CENTRAGE DE L'ENTRÉE activé (§64)
+# réseau 120 neurones · 1 couche(s) · canaux d'entrée 896 · 1 passes
+# CIBLE — professeur : P_lang 387.9 · P_cont 4655.4 · rapport 12.001
+
+#  passe  capture  fid TEST    P_lang    P_cont   RAPPORT  s
+06:27
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -22 /tmp/verif_finale.log | grep -vE \"pas$\"; pgrep -f \"renforcement_directions\" | wc -l; date '+%H:%M'", "description": "Final wait for the composition", "timeoutMs": 620000}`
+
+  ```
+=== COMPOSITION DES TROIS LEVIERS, À GRANDE ÉCHELLE ===
+# CENTRAGE DE L'ENTRÉE activé (§64)
+# réseau 120 neurones · 1 couche(s) · canaux d'entrée 896 · 1 passes
+# CIBLE — professeur : P_lang 387.9 · P_cont 4655.4 · rapport 12.001
+
+#  passe  capture  fid TEST    P_lang    P_cont   RAPPORT  s
+      0    0.015    0.4713      39.8      98.9     2.486
+3
+06:37
+  ```
+
+### 🤖 Assistant
+
+⏵ **Ligne de base à 482 articles : fidélité 0,4713 · P_lang 39,8 · P_cont 98,9 · rapport 2,486 (contre 1,934 à 85 articles). La passe 1 tourne.**
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -24 /tmp/verif_finale.log | grep -vE \"pas$\"; date '+%H:%M'", "description": "Wait for pass 1", "timeoutMs": 620000}`
+
+  ```
+=== COMPOSITION DES TROIS LEVIERS, À GRANDE ÉCHELLE ===
+# CENTRAGE DE L'ENTRÉE activé (§64)
+# réseau 120 neurones · 1 couche(s) · canaux d'entrée 896 · 1 passes
+# CIBLE — professeur : P_lang 387.9 · P_cont 4655.4 · rapport 12.001
+
+#  passe  capture  fid TEST    P_lang    P_cont   RAPPORT  s
+      0    0.015    0.4713      39.8      98.9     2.486
+06:47
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -26 /tmp/verif_finale.log | grep -vE \"pas$\"; date '+%H:%M'", "description": "Final wait", "timeoutMs": 620000}`
+
+  ```
+=== COMPOSITION DES TROIS LEVIERS, À GRANDE ÉCHELLE ===
+# CENTRAGE DE L'ENTRÉE activé (§64)
+# réseau 120 neurones · 1 couche(s) · canaux d'entrée 896 · 1 passes
+# CIBLE — professeur : P_lang 387.9 · P_cont 4655.4 · rapport 12.001
+
+#  passe  capture  fid TEST    P_lang    P_cont   RAPPORT  s
+      0    0.015    0.4713      39.8      98.9     2.486
+06:57
+  ```
+
+### 🤖 Assistant
+
+⏵ **Round 68 — le corpus est complet, la vérification tourne encore.**
+
+## Jalon : le corpus Wikipedia apparié est COMPLET
+
+| | |
+|---|---:|
+| articles | **482 / 482** |
+| traces | **2 892 / 2 892** |
+| échecs | **0** |
+| articles présents dans les **six** langues | **482** (100 %) |
+| entrées d'apprentissage / test | 1 446 / 1 446 |
+
+**~13 heures de traçage** à ~19 s par trace, après la correction du §52 (l'orphelin qui volait 18 cœurs). **Le corpus aligné est passé de 85 à 482 articles — un facteur 5,7.**
+
+## La vérification à grande échelle est en cours
+
+Elle a déjà livré trois chiffres :
+
+| | à 85 articles (§75) | **à 482 articles** |
+|---|---:|---:|
+| **rapport du professeur** | 10,912 | **12,001** |
+| P_lang du professeur | 399,2 | 387,9 |
+| P_cont du professeur | 4 356,4 | 4 655,4 |
+| **ligne de base du pont** (centrage seul) | fid 0,4703 · rapport 1,934 | **fid 0,4713 · rapport 2,486** |
+
+**Deux observations déjà utiles :**
+
+1. **La cible monte** avec la taille du corpus (10,912 → 12,001) : plus d'articles, plus de variance de contenu. Toute comparaison doit donc nommer la taille du panel — c'est la quatrième fois qu'un chiffre de référence dépend du périmètre.
+2. **La ligne de base monte aussi** (1,934 → 2,486) : le centrage seul fait mieux sur 482 articles que sur 85. Les grands panels aident, comme le §34 l'avait montré pour la fidélité.
+
+La passe d'apprentissage des directions tourne encore — la fonction de capture est en boucle par neurone sur 1 446 entrées, ce qui la rend lente (~1 h par passe au lieu de 8 min sur 85 articles).
+
+## Ce qui reste
+
+**Une seule mesure** : le rapport atteint par la composition des trois leviers sur les 482 articles. Est-il encore à ~98 % de la cible, ou l'effet des 85 articles était-il optimiste ?
+
+Le résultat sera dans `/tmp/verif_finale.log` dès que la passe se termine, et je le rapporterai au round suivant.
+
+## L'état des chaînes
+
+| chaîne | état |
+|---|---|
+| **Wikipedia apparié** | **terminé** — 482 × 6, 0 échec |
+| **Vérification finale** | en cours (passe 1 sur 1) |
+| **Croissance μ = 0,1** | terminée (§56, protocole entier : fidélité apprentissage/VALIDATION/TEST, invariance, pire paire, taille, oracle sur les deux panneaux) |
+| **Crime** | 4/24 segments, conservés |
+
+La traque §57-§77 reste close sur son résultat : **le pont reproduit la structure contenu/langue de son professeur à 98 % par trois mécanismes déployables, en forme fermée, sans rétropropagation — et la courbe du prix est monotone, sans meilleur compromis.**
+
+
+## Tour 196
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de représentation universelle), boîte noire (on ne lit du professeur que la couche à émuler, jamais sa tête ni ses jetons générés), aucune rétropropagation (A et B aléatoires et gelés, seule la lecture s'ajuste en forme fermée), et chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, TAILLE du réseau, avec le diagnostic oracle sur les deux panneaux (test hors vivier et validation du même vivier)."
+Round: 69/256
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ **Je récupère le résultat de la vérification à 482 articles.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -30 /tmp/verif_finale.log | grep -vE \"pas$\"; date '+%H:%M'", "description": "Read the final verification"}`
+
+  ```
+=== COMPOSITION DES TROIS LEVIERS, À GRANDE ÉCHELLE ===
+# CENTRAGE DE L'ENTRÉE activé (§64)
+# réseau 120 neurones · 1 couche(s) · canaux d'entrée 896 · 1 passes
+# CIBLE — professeur : P_lang 387.9 · P_cont 4655.4 · rapport 12.001
+
+#  passe  capture  fid TEST    P_lang    P_cont   RAPPORT  s
+      0    0.015    0.4713      39.8      98.9     2.486
+06:58
+  ```
+
+- **bash** `{"command": "ps -o pid,etime,%cpu,rss -p $(pgrep -f \"renforcement_directions\" | tail -1) 2>/dev/null || echo \"processus absent\"; echo \"---\"; pgrep -f \"renforcement_directions\" | wc -l", "description": "Check if the verification is alive"}`
+
+  ```
+PID     ELAPSED %CPU   RSS
+processus absent
+---
+3
+  ```
+
+- **bash** `{"command": "ps -eo pid,etime,%cpu,rss,cmd --sort=-%cpu | grep -E \"python3\" | grep -v grep | head -3 | cut -c1-95", "description": "Find the running process"}`
+
+  ```
+2802603    01:06:19 99.9 48240344 python3 -u tools/renforcement_directions.py /tmp/cache_vf_tra
+2529717    21:34:44  3.0 33612 python3 /home/stephane/.local/bin/mdserve --port 8770 /home/step
+   2241 15-16:10:22  0.4 520060 /usr/local/bin/python3 -m uvicorn open_webui.main:app --host 0.
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le processus tourne (1 h 06, 100 % CPU) mais consomme 48 Go — la fonction de capture reconstruit des tableaux par neurone. Je le laisse finir et je fais le point.**
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -8 /tmp/verif_finale.log | grep -vE \"pas$\"; ps -o etime,%cpu,rss -p 2802603 2>/dev/null | tail -1; date '+%H:%M'", "description": "Wait for the verification", "timeoutMs": 620000}`
+
+  ```
+=== COMPOSITION DES TROIS LEVIERS, À GRANDE ÉCHELLE ===
+# CENTRAGE DE L'ENTRÉE activé (§64)
+# réseau 120 neurones · 1 couche(s) · canaux d'entrée 896 · 1 passes
+# CIBLE — professeur : P_lang 387.9 · P_cont 4655.4 · rapport 12.001
+
+#  passe  capture  fid TEST    P_lang    P_cont   RAPPORT  s
+      0    0.015    0.4713      39.8      98.9     2.486
+   01:16:19 99.9 46182104
+07:08
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -10 /tmp/verif_finale.log | grep -vE \"pas$\"; ps -o etime,rss -p 2802603 2>/dev/null | tail -1; date '+%H:%M'", "description": "Wait once more", "timeoutMs": 620000}`
+
+  ```
+=== COMPOSITION DES TROIS LEVIERS, À GRANDE ÉCHELLE ===
+# CENTRAGE DE L'ENTRÉE activé (§64)
+# réseau 120 neurones · 1 couche(s) · canaux d'entrée 896 · 1 passes
+# CIBLE — professeur : P_lang 387.9 · P_cont 4655.4 · rapport 12.001
+
+#  passe  capture  fid TEST    P_lang    P_cont   RAPPORT  s
+      0    0.015    0.4713      39.8      98.9     2.486
+   01:26:20 47806168
+07:18
+  ```
+
+### 👤 Utilisateur
+
+C'est le temps de faire le bilan par rapport au temps passé vs objectif final et raison d'être de Drave
+
+### 🤖 Assistant
+
+⏵ **Je rassemble les faits avant de juger.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== commits de la session ===\"; git log --since=\"2026-10-05 20:00\" --format=\"%h %ad %s\" --date=format:\"%d/%m %H:%M\" | cat | head -60; echo; echo \"=== nombre ===\"; git log --since=\"2026-10-05 20:00\" --oneline | wc -l … [43 caractères tronqués]`
+
+  ```
+=== commits de la session ===
+f8758eb 07/10 04:56 Le corpus Wikipedia apparié est COMPLET : 482 articles × 6 langues, 2 892 traces, 0 échec
+5fa46ed 07/10 03:05 Journal : compteurs de session mis à jour (fichier généré)
+98e79fe 07/10 02:55 La courbe est MONOTONE : pas de meilleur compromis, et la frontière est close
+c535276 07/10 02:33 La réserve du §75.4 est mesurée et elle tranche : la structure s'obtient, la fidélité ne suit pas
+d2bfb78 07/10 02:12 LA CIBLE EST ATTEINTE : la composition des trois leviers donne 98 % du rapport du professeur
+5b1b6b6 07/10 01:50 La combinaison des deux mécanismes DOMINE chacun d'eux : 9x plus de contenu à rapport comparable
+e7f3b95 07/10 01:08 CORRECTION du §72, et un mécanisme qui fait enfin les DEUX mouvements
+3133a05 07/10 00:36 Le renforcement/atrophie — dernier mécanisme sanctionné — échoue aussi (plateau immédiat)
+2a70119 07/10 00:13 Blanchir l'entrée par langue est écarté — et le chiffre qui tombe
+f9186a3 06/10 23:51 Glossaire : §10.10, le vocabulaire de la mesure contenu/langue
+97fc5ea 06/10 23:50 OÙ ENTRE LA LANGUE : dans l'entrée, pas dans le réservoir — et le réservoir l'AMPLIFIE
+3b50b1a 06/10 23:38 Le discriminant fonctionne : rapport 6,
+… [4894 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== début de session ===\"; git log --since=\"2026-10-05 20:00\" --format=\"%h %ad %s\" --date=format:\"%d/%m %H:%M\" | tail -3; echo; echo \"=== volumes ===\"; wc -l reports/rapport-toutes-langues.md docs/glossaire.md | head  … [353 caractères tronqués]`
+
+  ```
+=== début de session ===
+5497c34 05/10 20:51 journal
+5d00797 05/10 20:50 RECTIFICATION : l'oracle du §10.2 était faux ; le plafond est 0,7076, pas 0,7762
+635d3c4 05/10 20:22 Le plafond est dans le TRANSFERT, pas dans les caractéristiques ; l'attrition ne généralise pas
+
+=== volumes ===
+  4653 reports/rapport-toutes-langues.md
+  2245 docs/glossaire.md
+  6898 total
+outils créés cette session :
+33
+rapports touchés :
+4
+07/10 07:18
+  ```
+
+### 🤖 Assistant
+
+⏵ **J'écris le bilan — les faits d'abord, le jugement ensuite.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n# BILAN — 35 heures contre l'objectif, et contre la raison d'être de Drave\n\n## B.1 Les faits\n\n| | |\n|---|---:|\n| durée de la se … [8422 caractères tronqués]`
