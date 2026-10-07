@@ -150963,3 +150963,137 @@ articles wiki : 295
 ⏵ **Les termes de la traque sont devenus centraux — je les ajoute au glossaire avant de clore le round.**
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='docs/glossaire.md'; s=open(p).read()\nanchor = \"\\n---\\n\\n## 11. Sources externes ajoutées par le §10\"\nadd = \"\"\"\n### 10.10 Le vocabulaire de la mesure contenu / langue\n\nCes termes sont nés de la tra … [4855 caractères tronqués]`
+
+  ```
+glossaire : 2245 lignes
+f9186a3 Glossaire : §10.10, le vocabulaire de la mesure contenu/langue
+
+articles wiki : 295
+23:51
+  ```
+
+### 🤖 Assistant
+
+⏵ **Round 61 — le maillon manquant est identifié.**
+
+## Où entre la langue : dans l'entrée, pas dans le réservoir
+
+Trois jeux de caractéristiques **emboîtés**, même protocole, même panel :
+
+| caractéristiques | fid TEST | P_lang | P_cont | **RAPPORT** |
+|---|---:|---:|---:|---:|
+| **A · l'ENTRÉE seule (ZÉRO neurone)** | **0,5161** | 199,5 | **338,8** | **1,698** |
+| **B · les ÉTATS du réservoir** | 0,4751 | **238,8** | 323,3 | **1,354** |
+| C · ENTRÉE + ÉTATS | **0,5309** | 312,4 | 499,2 | 1,598 |
+| *professeur* | — | *399,2* | *4 356,4* | ***10,912*** |
+
+**Trois constats :**
+
+1. **L'axe de langue vient de l'ENTRÉE.** L'entrée seule a le meilleur rapport (1,698) ; le réservoir fait **pire** (1,354). La prédiction est confirmée — et au-delà : B est plus **bas** que A.
+2. **Le réservoir AMPLIFIE l'axe de langue** : `P_lang` 199,5 → 238,8 (**+20 %**) pendant que `P_cont` **baisse** (338,8 → 323,3). La dynamique aléatoire ne démêle pas : elle **ajoute** de la langue et **retire** du contenu.
+3. **Le réservoir coûte aussi en fidélité** : 0,5161 seul contre 0,4751 pour le réservoir — **−0,041**. Troisième confirmation indépendante du §29, cette fois avec l'explication structurelle.
+
+Et **C est le meilleur en fidélité (0,5309) mais a un rapport inférieur à l'entrée seule** : ajouter le réservoir **achète de la fidélité en vendant de la structure**.
+
+## Le constat qui commande tout le reste
+
+**Le professeur a un rapport de 10,912 à sa couche 8. Sa propre couche 0, lue le mieux possible, n'en a que 1,698.**
+
+> La séparation contenu/langue de la couche 8 **n'existe pas** dans la couche 0. Elle est **créée** par la transformation couche 0 → couche 8.
+
+Et cette transformation, le pont ne la reproduit pas : **un réservoir à poids aléatoires gelés n'est pas cette transformation** — mesuré, il fait passer le rapport de 1,698 à 1,354, il l'**abaisse**.
+
+## La chaîne, établie de bout en bout
+
+| étape | ce qu'elle apporte |
+|---|---|
+| **l'entrée** (couche 0) | rapport **1,698** — la langue y est déjà, mêlée |
+| **le réservoir** (aléatoire gelé) | **−0,041** de fidélité, **−0,344** de rapport |
+| **la lecture** (linéaire, fermée) | reproduit ce qu'on lui donne |
+| **les post-traitements** (§58-§69) | montent à **6,96** en payant **0,12 à 0,23** de fidélité |
+| **le professeur, couche 8** | rapport **10,912** |
+
+**Le maillon manquant n'est ni la lecture ni l'objectif : c'est la TRANSFORMATION entre l'entrée et la cible.** Ce que la mission appelle « émuler les premières couches » est exactement cela — et c'est précisément ce que l'architecture actuelle ne fait pas. Le réservoir ne projette pas l'entrée comme le professeur le fait ; il la projette **ailleurs**, et la lecture doit tout refaire — ce qu'elle n'atteint qu'à 64 % en sacrifiant la fidélité.
+
+**C'est la conclusion la plus utile de toute la série** : elle ne dit pas « il faut un dixième objectif », elle dit **quelle transformation manque**.
+
+## Glossaire mis à jour
+
+Ajout du **§10.10** : `P_lang`, `P_cont`, rapport contenu/langue, **invariance d'échelle** (présentée comme l'identité qu'elle est, expliquant cinq échecs), décomposition de variance, analyse discriminante linéaire, rétrécissement, frontière, caractéristiques emboîtées, sous-espace de langue. **2245 lignes** au total.
+
+## État
+
+| chaîne | avancement |
+|---|---|
+| **Wikipedia apparié** | **295 / 482 articles** · reste ~7 h |
+| **Croissance μ = 0,1** | terminée (§56) |
+| **Crime** | 4/24 segments, conservés |
+
+Le traçage continue pendant que la traque est arrivée à sa conclusion. À 482 articles, la mesure centrale — le rapport contenu/langue — sera resserrée sur le corpus complet.
+
+
+## Tour 189
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de représentation universelle), boîte noire (on ne lit du professeur que la couche à émuler, jamais sa tête ni ses jetons générés), aucune rétropropagation (A et B aléatoires et gelés, seule la lecture s'ajuste en forme fermée), et chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, TAILLE du réseau, avec le diagnostic oracle sur les deux panneaux (test hors vivier et validation du même vivier)."
+Round: 62/256
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ **Le §70 dit que le réservoir amplifie la langue présente dans l'entrée. Test d'un levier déployable qui attaque la STRUCTURE de covariance de l'entrée par langue — que le centrage seul ne retire pas.**
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"blanchiment_entree.py — retirer de l'entrée sa structure de COVARIANCE par langue.\n\nCE QUE LE §70 A ÉTABLI. L'axe de langue vient de **l'entrée** du professeur, et le\nréservoir ne fait que l'**amplifier** : `P_lang` passe de 199,5 (entrée seule) à 238,8\ … [7109 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/blanchiment_entree.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\ns = open('tools/blanchiment_entree.py').read()\ndebut = s.index(\"def blanchit(Etr, Ete, alpha, plancher, verbose=True):\")\nfin = s.index(\"def main():\")\ns = s[:debut] + s[fin:]\nopen('tools/blanchiment_entree … [434 caractères tronqués]`
+
+  ```
+fonction morte retirée
+syntaxe OK
+lancé
+23:52
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/blanchiment_entree.log 2>/dev/null; echo; echo \"articles wiki : $(grep -c '^ARTICLE' /tmp/trace_wiki_apparie.log)\"; date '+%H:%M'", "description": "Read the input whitening result", "timeoutMs": 620000}`
+
+  ```
+#   alpha  fid TEST    P_lang    P_cont   RAPPORT  (entrée seule, 0 neurone)
+    0.00    0.5437      57.1      83.6     1.466
+
+articles wiki : 302
+00:02
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/blanchiment_entree.log 2>/dev/null; date '+%H:%M'", "description": "Wait for the whitening sweep", "timeoutMs": 620000}`
+
+  ```
+#   alpha  fid TEST    P_lang    P_cont   RAPPORT  (entrée seule, 0 neurone)
+    0.00    0.5437      57.1      83.6     1.466
+    0.25    0.3434     761.2    1054.8     1.386
+    0.50    0.1701   16922.0   27185.0     1.606
+00:12
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le blanchiment de l'entrée EXPLOSE tout : P_lang 57 → 16 922, fidélité 0,544 → 0,170. Écarté. Mais le α=0 livre un chiffre marquant.**
+
+| α | fid TEST | P_lang | P_cont | RAPPORT |
+|---:|---:|---:|---:|---:|
+| **0,00 (entrée centrée, ZÉRO neurone)** | **0,5437** | 57,1 | 83,6 | **1,466** |
+| 0,25 | 0,3434 | 761,2 | 1 054,8 | 1,386 |
+| 0,50 | **0,1701** | **16 922** | **27 185** | 1,606 |
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 71. Blanchir l'entrée par langue : écarté — et un chiffre qui tombe\n\n### 71.1 L'idée, et pourquoi elle découlait du §70\n\nLe §7 … [5978 caractères tronqués]`
