@@ -221,3 +221,33 @@ nul, RSS 66 Gio), que les défauts de page majeurs le soient (zéro).
 **Ouvert, et maintenant chiffré** : les octets. 148,65 Gio d'experts relus quatre
 fois, quand un lot plus large les lirait une fois — c'est le seul levier qui
 touche 72 % du trafic, et il est déjà dans le code.
+
+---
+
+## 9. Le plafond du disque, et l'écart qui reste
+
+Une copie **séquentielle** du même modèle, du même disque vers le NVMe, mesurée
+pendant la préparation du §10 : **205 Mio/s** (moyenne sur 30 s, `cp` d'un shard
+de 44,2 Go).
+
+La passe, elle, lit à **133 Mio/s**. **Le disque n'est donc pas à son plafond
+séquentiel : la passe en obtient 65 %.**
+
+Cela ne renverse pas le verdict — le disque reste la ressource saturée, occupé
+87,6 % du temps — mais cela le précise de deux façons :
+
+1. **Il reste ~35 % de débit à récupérer par le seul motif d'accès**, sans changer
+   de matériel ni lire un octet de moins. Les lectures de la passe sont des
+   défauts de page sur un `mmap` : elles arrivent par morceaux de page, à des
+   endroits dispersés dans le fichier, au rythme où le calcul les touche. Une
+   copie séquentielle lit de gros blocs contigus.
+2. **Le chiffre à citer n'est pas « 130 Mo/s, c'est le disque »** mais **« 133
+   Mio/s sur un plafond séquentiel de 205 »**. La différence est une question de
+   motif, pas de matériel — et c'est une question sur laquelle on peut agir.
+
+**Prédiction, avant mesure** : si la prélecture pouvait rapprocher le motif de la
+passe du motif séquentiel, la même passe tomberait de 1 587 s à **≈ 1 030 s**.
+L'essai de prélecture déjà consigné dans le code (×0,37, et 8,5× plus d'octets
+lus) l'a tenté **en demandant l'union entière d'un coup**, ce qui a fait travailler
+le noyau pour rien : ce n'est pas la même chose que de lire plus gros **au bon
+moment**.

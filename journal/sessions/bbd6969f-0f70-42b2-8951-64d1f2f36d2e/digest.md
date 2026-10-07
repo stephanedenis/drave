@@ -158155,3 +158155,59 @@ kimi-k3 · 32 fichiers · 2573 tenseurs · 1508.66 Go de poids · en-têtes lus 
 ⏵ **Je consigne l'attribution des octets : 72 % des lectures sont les experts, 28 % le dense lu une fois par passe.**
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> reports/rapport-passe-k3-disque.md <<'MD_EOF'\n\n---\n\n## 7. Attribution des 206,58 Gio : d'où viennent les octets ?\n\nUn coût sans attribution ne dit pas où agir. Les tailles viennent des en-têtes du\nGGUF (`drave … --tenso … [5810 caractères tronqués]`
+
+  ```
+3169941 Attribution des 206,58 Gio : 72 % sont les experts, relus à chaque jeton
+
+/dev/nvme0n1p2  828G  591G  237G  72% /home/stephane/FastNVMe
+  ```
+
+### 🤖 Assistant
+
+⏵ **La copie avance. Je vérifie si je peux vider le cache page — sinon l'A/B sera confondu par le cache.**
+
+- **bash** `{"command": "id -u; ls -la /proc/sys/vm/drop_caches 2>/dev/null; (echo 1 > /proc/sys/vm/drop_caches) 2>&1 | head -2 && echo \"drop_caches ÉCRITURE OK\" || echo \"drop_caches refusé\"; free -g | head -2", "description": "Check if page cache can be dropped"}`
+
+  ```
+1000
+--w-------. 1 root root 0  7 oct 16:59 /proc/sys/vm/drop_caches
+bash: line 1: /proc/sys/vm/drop_caches: Permission denied
+drop_caches ÉCRITURE OK
+               total        used        free      shared  buff/cache   available
+Mem:             125          24          19          13          96         100
+  ```
+
+### 🤖 Assistant
+
+⏵ **`drop_caches` est root-only : je ne peux pas contrôler le cache. Je prévois donc un A/B apparié (disque seul, puis hybride) pour annuler la confusion.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/ab_nvme.sh <<'EOF'\n#!/bin/bash\n# A/B APPARIÉ, parce que le cache page ne peut pas être vidé (drop_caches est\n# root-only, uid 1000 ici). Deux passes IDENTIQUES à la suite, même séquence,\n# même moteur : la première sur … [1191 caractères tronqués]`
+
+  ```
+script A/B prêt
+=== copie ===
+/dev/nvme0n1p2  828G  597G  230G  73% /home/stephane/FastNVMe
+  ```
+
+### 🤖 Assistant
+
+⏵ **La copie semble lente — je mesure son débit réel.**
+
+- **bash** `{"command": "ls -la /home/stephane/FastNVMe/k3-nvme/ 2>/dev/null | awk '{printf \"%s %.2f Go\\n\", $9, $5/1073741824}'; echo \"--- 30 s plus tard ---\"; A=$(du -sb /home/stephane/FastNVMe/k3-nvme 2>/dev/null | cut -f1); sleep 30; B=$(du -sb /home/stephane/FastNVMe/k3-nvme 2>/dev/null | cut -f1); ech … [206 caractères tronqués]`
+
+  ```
+0.00 Go
+. 0.00 Go
+.. 0.00 Go
+Kimi-K3-UD-Q4_K_XL-00002-of-00032.gguf 32.74 Go
+--- 30 s plus tard ---
+débit : 205 Mio/s
+--- processus ---
+2971921     184 cp /home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00002-of-00032.gguf /home/stephane/FastNVMe/k3-nvme/Kimi-K3-UD-Q4_K_XL-00002-of-00032.gguf
+  ```
+
+### 🤖 Assistant
+
+⏵ **Fait nouveau : la copie séquentielle fait 205 Mio/s, la passe 133 — il y a 35 % de pénalité de motif. Je le consigne.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> reports/rapport-passe-k3-disque.md <<'MD_EOF'\n\n---\n\n## 9. Le plafond du disque, et l'écart qui reste\n\nUne copie **séquentielle** du même modèle, du même disque vers le NVMe, mesurée\npendant la préparation du §10 : **205 … [2725 caractères tronqués]`
