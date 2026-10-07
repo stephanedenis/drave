@@ -158211,3 +158211,92 @@ débit : 205 Mio/s
 ⏵ **Fait nouveau : la copie séquentielle fait 205 Mio/s, la passe 133 — il y a 35 % de pénalité de motif. Je le consigne.**
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> reports/rapport-passe-k3-disque.md <<'MD_EOF'\n\n---\n\n## 9. Le plafond du disque, et l'écart qui reste\n\nUne copie **séquentielle** du même modèle, du même disque vers le NVMe, mesurée\npendant la préparation du §10 : **205 … [2725 caractères tronqués]`
+
+  ```
+abebe58 §9 : le plafond du disque est 205 Mio/s, la passe en obtient 133
+
+Kimi-K3-UD-Q4_K_XL-00002-of-00032.gguf copié et vérifié en 214 s (44 Go)
+46G	/home/stephane/FastNVMe/k3-nvme
+  ```
+
+### 🤖 Assistant
+
+⏵ **Shard 2 copié et vérifié (205 Mo/s). J'attends les quatre autres.**
+
+- **bash** `{"command": "sleep 780; cat /tmp/nvme_tier.log 2>/dev/null; echo \"---\"; du -sh /home/stephane/FastNVMe/k3-nvme 2>/dev/null; ls /home/stephane/FastNVMe/k3-hybride 2>/dev/null | wc -l", "description": "Wait for shard copy to finish", "timeoutMs": 840000}`
+
+  ```
+(no output)
+[timed out after 600000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cat /tmp/nvme_tier.log 2>/dev/null; echo \"--- taille copiée ---\"; du -sh /home/stephane/FastNVMe/k3-nvme 2>/dev/null; echo \"--- liens ---\"; ls /home/stephane/FastNVMe/k3-hybride 2>/dev/null | wc -l; df -h /home/stephane/FastNVMe | tail -1", "description": "Check copy progress"}`
+
+  ```
+Kimi-K3-UD-Q4_K_XL-00002-of-00032.gguf copié et vérifié en 214 s (44 Go)
+Kimi-K3-UD-Q4_K_XL-00003-of-00032.gguf copié et vérifié en 249 s (45 Go)
+Kimi-K3-UD-Q4_K_XL-00004-of-00032.gguf copié et vérifié en 256 s (45 Go)
+--- taille copiée ---
+155G	/home/stephane/FastNVMe/k3-nvme
+--- liens ---
+0
+/dev/nvme0n1p2  828G  719G  108G  87% /home/stephane/FastNVMe
+  ```
+
+### 🤖 Assistant
+
+⏵ **3 shards sur 5 copiés. J'attends la fin puis je lance l'A/B apparié.**
+
+- **bash** `{"command": "sleep 560; cat /tmp/nvme_tier.log 2>/dev/null; echo \"--- liens ---\"; ls -l /home/stephane/FastNVMe/k3-hybride 2>/dev/null | grep -c \"k3-nvme\"; ls /home/stephane/FastNVMe/k3-hybride 2>/dev/null | wc -l; df -h /home/stephane/FastNVMe | tail -1", "description": "Wait for copy completio … [24 caractères tronqués]`
+
+  ```
+Kimi-K3-UD-Q4_K_XL-00002-of-00032.gguf copié et vérifié en 214 s (44 Go)
+Kimi-K3-UD-Q4_K_XL-00003-of-00032.gguf copié et vérifié en 249 s (45 Go)
+Kimi-K3-UD-Q4_K_XL-00004-of-00032.gguf copié et vérifié en 256 s (45 Go)
+Kimi-K3-UD-Q4_K_XL-00005-of-00032.gguf copié et vérifié en 310 s (45 Go)
+Kimi-K3-UD-Q4_K_XL-00006-of-00032.gguf copié et vérifié en 352 s (45 Go)
+liens : 32 · vers NVMe : 5
+TERMINE
+--- liens ---
+5
+32
+/dev/nvme0n1p2  828G  796G   32G  97% /home/stephane/FastNVMe
+  ```
+
+### 🤖 Assistant
+
+⏵ **Bug repéré avant de lancer : le script A/B définissait `K` mais ne le passait pas à la sonde — les deux passes auraient lu le même modèle. Je corrige.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='/tmp/ab_nvme.sh'; s=open(p).read()\nold = '''    J=/tmp/sonde_$cas.csv bash tools/sonde-passe-k3.sh 93 2 2>&1 \\\\'''\ns2 = s.replace('    J=/tmp/sonde_k3_$cas.csv bash tools/sonde-passe-k3.sh 93 2 2>&1 \\\\',\n  … [565 caractères tronqués]`
+
+  ```
+corrigé : K3 transmis à la sonde
+20:    J=/tmp/sonde_k3_$cas.csv K3="$K" bash tools/sonde-passe-k3.sh 93 2 2>&1 \
+A/B prêt
+lrwxrwxrwx. 1 stephane stephane 103  7 oct 17:20 /home/stephane/FastNVMe/k3-hybride/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf -> /home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf
+kimi-k3 · 32 fichiers · 2573 tenseurs · 1508.66 Go de poids · en-têtes lus en 113.301992ms
+  fichier 0 :     0 tenseurs · 0.00 Go
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le dossier hybride charge le modèle complet. Je lance l'A/B apparié (~52 min) et je fais le point.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (setsid nohup bash /tmp/ab_nvme.sh >/dev/null 2>&1 < /dev/null & disown); sleep 120; echo \"=== A en cours ===\"; head -4 /tmp/ab_nvme.log 2>/dev/null; echo \"--- occupation disque ---\"; python3 -c \"\nimport glob\nf='/tmp/sonde_k3_ … [822 caractères tronqués]`
+
+  ```
+=== A en cours ===
+##### A · tout sur le disque dur
+--- occupation disque ---
+  sda        occupé     64 s (52.9%)
+  dm-1       occupé     64 s (52.9%)
+  nvme0n1    occupé      1 s ( 1.0%)
+  read 10.22 Gio en 120 s
+  ```
+
+### 🤖 Assistant
+
+⏵ **Pendant l'A/B, je mets à jour la feuille de route, qui est périmée sur deux points mesurés.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/roadmap-drave.md'; s=open(p).read()\n\ns = s.replace(\"\"\"> Écrit après la mesure du 05/10. Chaque chiffre de ce document vient d'un relevé\n> du dépôt ; ceux qui viennent d'ailleurs sont marqués.\"\"\",\n\ … [5258 caractères tronqués]`

@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 218.2 h |
+| Durée | 218.6 h |
 | Tours | 204 |
-| Messages | 9494 |
-| Appels d'outils | 8919 |
+| Messages | 9500 |
+| Appels d'outils | 8925 |
 | Fichiers touchés | 220 |
-| Commandes | 7585 |
+| Commandes | 7591 |
 | Sous-agents | 32 |
-| Commits | 697 |
+| Commits | 698 |
 | Compactages de contexte | 13 |
 
 ## Objectifs déclarés
@@ -10455,7 +10455,7 @@ Chacun remplace une devinette que j'ai faite sans lui.
 
 ### Tour 204 — bien. vas-y dans l'ordre de ton choix.
 
-*209 appels d'outils.* Actions notables :
+*215 appels d'outils.* Actions notables :
 
 - bash — Launch layer 0-8 tracing for 50 articles
 - bash — Launch the 50-draw distribution
@@ -10471,11 +10471,11 @@ Chacun remplace une devinette que j'ai faite sans lui.
 - bash — Test the layer profile on partial traces
 - bash — Single-pass reader and test
 - bash — Inspect the actual trace format
-- … et 190 autres
+- … et 196 autres
 
 **Synthèse produite :**
 
-⏵ **Fait nouveau : la copie séquentielle fait 205 Mio/s, la passe 133 — il y a 35 % de pénalité de motif. Je le consigne.**
+⏵ **Pendant l'A/B, je mets à jour la feuille de route, qui est périmée sur deux points mesurés.**
 
 ## 3. Travail accompli
 
@@ -10781,7 +10781,7 @@ Chacun remplace une devinette que j'ai faite sans lui.
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 7545 autres
+- … et 7551 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -11626,4 +11626,5 @@ Chacun remplace une devinette que j'ai faite sans lui.
 - Où passe le temps d'une passe Kimi-K3 : le disque dur, et rien d'autre  Répond à la question que REPRISE.md demandait de trancher en premier. La réponse est exa
 - Attribution des 206,58 Gio : 72 % sont les experts, relus à chaque jeton  Les tailles viennent des en-têtes GGUF (--tensors, 2 573 tenseurs) ; les octets lus, d
 - §9 : le plafond du disque est 205 Mio/s, la passe en obtient 133  Mesuré pendant la préparation du test de palier : une copie SÉQUENTIELLE du même modèle, du mê
+- Feuille de route : le regroupement par expert EXISTE, l'axe 1 devient un axe de LOT  Deux points périmés, corrigés par la mesure du 07/10 :  1. Le regroupement 
 
