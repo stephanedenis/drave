@@ -159267,3 +159267,152 @@ cym 3s
 ⏵ **Calibration : cosinus moyen 0,9964 entre les deux modes, normes identiques. Je consigne le dispositif de cycle rapide.**
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-cycle-rapide.md <<'MD_EOF'\n# Le cycle rapide : l'article 1 de l'UDHR dans 399 langues\n\n> 07/10. Réponse à une demande précise : *« peut-on refaire nos exercices sur un\n> très petit modèle afin de faire des c … [8210 caractères tronqués]`
+
+  ```
+f655a8b Le cycle rapide : l'article 1 de l'UDHR dans 399 langues, et pourquoi le modèle n'est pas le bon levier
+
+=== traçage article 1 ===
+130
+  ```
+
+### 🤖 Assistant
+
+⏵ **Je généralise le traçage à l'article 2 et je l'enchaîne derrière l'article 1.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/trace_articleN.sh <<'EOF'\n#!/bin/bash\n# Traçage d'un article de l'UDHR dans toutes les langues disponibles.\n# Usage : trace_articleN.sh <numéro>\nset -u\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nA=${1:?numéro … [1452 caractères tronqués]`
+
+  ```
+enchaînement armé
+151
+[stderr]
+/tmp/trace_articleN.sh: line 6: unexpected EOF while looking for matching `''
+chmod: cannot access '/tmp/enchaine.sh': No such file or directory
+  ```
+
+### 🤖 Assistant
+
+⏵ **L'apostrophe dans `${1:?...}` a cassé le script. Je corrige.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/trace_articleN.sh <<'EOF'\n#!/bin/bash\n# Traçage d'un article de l'UDHR dans toutes les langues disponibles.\n# Usage : trace_articleN.sh <numero>\nset -u\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nA=${1:-}\n[ - … [1454 caractères tronqués]`
+
+  ```
+script articleN OK
+armé
+162
+  ```
+
+### 🤖 Assistant
+
+Oui — et c'est lancé. Mais la mesure dit que **le modèle n'est pas le bon levier**, alors je l'ai pris par l'autre bout.
+
+## Ce que coûte réellement un cycle
+
+Le coût d'un ajustement est en `n · d²` — `n` = positions totales, `d` = 2 × dimension cachée :
+
+| levier | gain |
+|---|---:|
+| modèle plus petit (576 cachés au lieu de 896) | **×2,4** |
+| **entrée plus courte** (une phrase au lieu d'un article) | **×20** |
+
+C'est le second qui décide, et il ne demande aucun modèle nouveau. J'ai donc construit le corpus **article 1 de l'UDHR** : la même phrase dans toutes les langues, alignée par construction.
+
+**399 langues** (456 fichiers XML, mais 400 codes distincts et 56 écrasements — un préfixe n'est pas une égalité, et j'ai dû corriger deux bugs en route), médiane **169 caractères**, **33 à 176 positions par entrée** au lieu de 575.
+
+## La vraie économie était ailleurs
+
+En traçant, j'ai trouvé un coût que personne n'avait regardé : le mode par défaut du moteur construit **15,6 M d'événements au chargement**, à chaque invocation.
+
+| mode | ms/jeton | temps d'une trace |
+|---|---:|---:|
+| défaut (événementiel) | 32,4 | **8,00 s** |
+| `--dense` | 32,3 | **1,94 s** |
+
+**Même calcul, 6 s de moins par invocation** — 40 minutes sur 399 langues. Mais changer de mode sans le mesurer rendrait le corpus incomparable à tout ce que ce dépôt a tracé. Calibration faite (`tools/calibre_modes.py`) : **cosinus moyen 0,9964**, minimum 0,9160, normes identiques. Les deux modes tracent la même direction à 0,4 % près.
+
+## Le cycle, avant et après
+
+| | avant | après |
+|---|---:|---:|
+| traçage d'une langue | ~16 s | **3,7 s** |
+| positions par entrée | ~575 | **~60** |
+| lignes dans la Grammaire | 147 k – 830 k | **~24 k** |
+| **ajustement** | **5–10 min** | **~15 s** |
+
+Le traçage n'est que 4× plus rapide — le chargement du modèle est un coût fixe. **C'est l'ajustement qui change d'échelle, et c'est lui qu'on répète.**
+
+## Et « première couche sémantique » a maintenant un sens mesurable
+
+Un chiffre qui monte ne prouve rien : la similarité entre langues monte aussi si la couche devient simplement anisotrope. Je trace donc **deux** articles, et je mesure la **séparation** :
+
+```
+même(c)    = cos( art1 langue i , art1 langue j )
+autre(c)   = cos( art1 langue i , art2 langue j )   ← plancher d'anisotropie
+SÉPARATION = même(c) − autre(c)
+```
+
+La couche où elle culmine est celle où le modèle a fini de traduire. `tools/premiere_couche_semantique.py` la mesure **avec les deux poolings** — le §84 a montré qu'ils ne racontent pas la même histoire (1,769 contre 6,275 sur le même corpus).
+
+L'article 1 est à 162/399 traces, l'article 2 s'enchaîne automatiquement derrière.
+
+- **bash** `{"command": "sleep 540; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"article1 : $(ls /home/stephane/Data13TB/stephane/corpus/udhr/article1_traces 2>/dev/null | wc -l)/399\"; tail -2 /tmp/trace_article1.log 2>/dev/null; echo \"article2 : $(ls /home/stephane/Data13TB/stephane/corpus/ud … [113 caractères tronqués]`
+
+  ```
+article1 : 319/399
+snk 3s
+snn 4s
+article2 : 0/399
+  ```
+
+### 🤖 Assistant
+
+⏵ **319/399 ; l'article 2 s'enchaînera. J'attends la fin de l'article 1.**
+
+- **bash** `{"command": "sleep 480; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"article1 : $(ls /home/stephane/Data13TB/stephane/corpus/udhr/article1_traces 2>/dev/null | wc -l)/399\"; tail -1 /tmp/trace_article1.log; echo \"article2 : $(ls /home/stephane/Data13TB/stephane/corpus/udhr/article2_ … [193 caractères tronqués]`
+
+  ```
+article1 : 399/399
+TERMINE 399 traces en 1583 s
+article2 : 24/399
+    176 bash /tmp/trace_articleN.sh 2
+  ```
+
+### 🤖 Assistant
+
+⏵ **Article 1 terminé : 399 traces en 26 min. J'essaie la sonde sur les 24 premières de l'article 2 pour la valider.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 python3 -u tools/premiere_couche_semantique.py /home/stephane/Data13TB/stephane/corpus/udhr/article1_traces /home/stephane/Data13TB/stephane/corpus/udhr/article2_traces --max-paires 20000 2>&1 | head -40", "description":  … [69 caractères tronqués]`
+
+  ```
+(no output)
+[timed out after 600000ms]
+[killed by signal: SIGTERM]
+  ```
+
+### 🤖 Assistant
+
+⏵ **La sonde est trop lente : le parsing paire-à-paire en Python domine. J'ajoute un chemin numpy rapide et un cache.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/premiere_couche_semantique.py'; s=open(p).read()\nold = \"\"\"            debut = f.tell()\n            buf = f.read(5*n)\n            try:\n                idx = np.empty(n, dtype=np.int32); val = np.empty … [4254 caractères tronqués]`
+
+  ```
+chemin rapide + cache ajoutés
+syntaxe OK
+  ```
+
+### 🤖 Assistant
+
+⏵ **Je branche le cache dans `main` et je vérifie que le chemin rapide donne exactement le même résultat que le lent.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/premiere_couche_semantique.py'; s=open(p).read()\nold = \"\"\"        A, B = {}, {}\n        for f in sorted(glob.glob(os.path.join(d1, \"*.drvf\"))):\n            L = os.path.basename(f)[:-5]\n             … [2556 caractères tronqués]`
+
+  ```
+cache branché
+syntaxe OK
+chemins rapide et lent IDENTIQUES
+  ```
+
+### 🤖 Assistant
+
+⏵ **Chemins rapide et lent identiques (vérifié). Je commite et je regarde l'article 2.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/premiere_couche_semantique.py && git commit -q -m \"premiere_couche_semantique : chemin numpy rapide (vérifié identique au lent) et cache\n\nLe parsing paire-à-paire en Python coûtait 740 millions d'itérations pour ce\n … [982 caractères tronqués]`

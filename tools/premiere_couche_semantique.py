@@ -39,6 +39,70 @@ def opt(nom, defaut):
     return sys.argv[sys.argv.index(nom) + 1] if nom in sys.argv else defaut
 
 
+def decode(buf, n):
+    """Paires DRVF v2 : un octet d'écart, deux d'indice absolu si l'écart vaut
+    255, puis DEUX OCTETS DE VALEUR — pour chaque paire.
+
+    CHEMIN RAPIDE, ET IL EST EXACT. Sans échappement, l'enregistrement fait
+    exactement 3n octets et les écarts sont aux positions 0 mod 3. Or un
+    échappement décale tout CE QUI LE SUIT : donc si le PREMIER échappement
+    existe, il est à une position 0 mod 3 des 3n premiers octets. Chercher un
+    255 à ces positions suffit donc à décider — et s'il n'y en a aucun, il n'y a
+    aucun échappement. La première version bouclait en Python sur chaque paire :
+    740 millions d'itérations pour ce corpus, plusieurs minutes par passe. Ici
+    c'est du numpy, et le chemin lent ne sert que les enregistrements qui en ont
+    vraiment besoin.
+    """
+    a = np.frombuffer(buf, dtype=np.uint8, count=3*n)
+    if (a[0::3] == 255).any():
+        idx = np.empty(n, dtype=np.int64); val = np.empty(n, dtype=np.int64)
+        off = prev = 0
+        for k in range(n):
+            d = buf[off]; off += 1
+            if d == 255:
+                i = buf[off] | (buf[off+1] << 8); off += 2
+            else:
+                i = prev + d
+            prev = i
+            v = buf[off] | (buf[off+1] << 8)
+            if v >= 32768:
+                v -= 65536
+            off += 2
+            idx[k] = i; val[k] = v
+        return idx, val, off
+    idx = np.cumsum(a[0::3].astype(np.int64))
+    val = (a[1::3].astype(np.int64) | (a[2::3].astype(np.int64) << 8))
+    val[val >= 32768] -= 65536
+    return idx, val, 3*n
+
+
+def cache(dossier, pool, sortie):
+    """Lit tout un dossier une fois et garde les vecteurs réduits.
+
+    24 couches × ~60 positions par trace, réduites à 24 vecteurs : le corpus
+    entier tient alors en quelques mégaoctets, et les passes suivantes ne
+    relisent plus 2 Go de traces.
+    """
+    if os.path.exists(sortie):
+        z = np.load(sortie, allow_pickle=True)
+        noms = [str(x) for x in z["langues"]]
+        return {L: {int(c): z[f"v_{L}_{c}"] for c in z["couches"]} for L in noms}
+    donnees, langues, couches = {}, [], None
+    for f in sorted(glob.glob(os.path.join(dossier, "*.drvf"))):
+        L = os.path.basename(f)[:-5]
+        r = lire(f, pool)
+        if r:
+            donnees[L] = r; langues.append(L)
+            couches = sorted(r) if couches is None else couches
+    if not donnees:
+        return {}
+    np.savez_compressed(sortie, langues=np.array(langues),
+                        couches=np.array(couches),
+                        **{f"v_{L}_{c}": v for L, r in donnees.items()
+                           for c, v in r.items()})
+    return donnees
+
+
 def lire(chemin, pool):
     """{couche: vecteur} — paires ENTRELACÉES (cf. flux_codec.decoder)."""
     sortie = {}
@@ -59,20 +123,7 @@ def lire(chemin, pool):
             debut = f.tell()
             buf = f.read(5*n)
             try:
-                idx = np.empty(n, dtype=np.int32); val = np.empty(n, dtype=np.int32)
-                off = prev = 0
-                for k in range(n):
-                    d = buf[off]; off += 1
-                    if d == 255:
-                        i = buf[off] | (buf[off+1] << 8); off += 2
-                    else:
-                        i = prev + d
-                    prev = i
-                    v = buf[off] | (buf[off+1] << 8)
-                    if v >= 32768:
-                        v -= 65536
-                    off += 2
-                    idx[k] = i; val[k] = v
+                idx, val, off = decode(buf, n)
             except Exception:
                 break
             f.seek(debut + off)
@@ -111,17 +162,8 @@ def main():
     maxi = int(opt("--max-paires", 40000))
     poolings = ["moyenne", "derniere"]
     for pool in poolings:
-        A, B = {}, {}
-        for f in sorted(glob.glob(os.path.join(d1, "*.drvf"))):
-            L = os.path.basename(f)[:-5]
-            r = lire(f, pool)
-            if r:
-                A[L] = r
-        for f in sorted(glob.glob(os.path.join(d2, "*.drvf"))):
-            L = os.path.basename(f)[:-5]
-            r = lire(f, pool)
-            if r:
-                B[L] = r
+        A = cache(d1, pool, opt("--cache", "/tmp/pcs_a1") + f".{pool}.npz")
+        B = cache(d2, pool, opt("--cache", "/tmp/pcs_a2") + f".{pool}.npz")
         comm = sorted(set(A) & set(B))
         if not comm:
             print(f"# pooling {pool} : aucune langue commune"); continue

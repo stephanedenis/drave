@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 219.6 h |
+| Durée | 220.1 h |
 | Tours | 204 |
-| Messages | 9546 |
-| Appels d'outils | 8970 |
+| Messages | 9554 |
+| Appels d'outils | 8978 |
 | Fichiers touchés | 220 |
-| Commandes | 7636 |
+| Commandes | 7644 |
 | Sous-agents | 32 |
-| Commits | 700 |
+| Commits | 701 |
 | Compactages de contexte | 13 |
 
 ## Objectifs déclarés
@@ -10455,7 +10455,7 @@ Chacun remplace une devinette que j'ai faite sans lui.
 
 ### Tour 204 — bien. vas-y dans l'ordre de ton choix.
 
-*260 appels d'outils.* Actions notables :
+*268 appels d'outils.* Actions notables :
 
 - bash — Launch layer 0-8 tracing for 50 articles
 - bash — Launch the 50-draw distribution
@@ -10471,11 +10471,11 @@ Chacun remplace une devinette que j'ai faite sans lui.
 - bash — Test the layer profile on partial traces
 - bash — Single-pass reader and test
 - bash — Inspect the actual trace format
-- … et 241 autres
+- … et 249 autres
 
 **Synthèse produite :**
 
-⏵ **Calibration : cosinus moyen 0,9964 entre les deux modes, normes identiques. Je consigne le dispositif de cycle rapide.**
+⏵ **Chemins rapide et lent identiques (vérifié). Je commite et je regarde l'article 2.**
 
 ## 3. Travail accompli
 
@@ -10781,7 +10781,7 @@ Chacun remplace une devinette que j'ai faite sans lui.
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 7596 autres
+- … et 7604 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -11629,4 +11629,5 @@ Chacun remplace une devinette que j'ai faite sans lui.
 - Feuille de route : le regroupement par expert EXISTE, l'axe 1 devient un axe de LOT  Deux points périmés, corrigés par la mesure du 07/10 :  1. Le regroupement 
 - §10 : le palier NVMe donne −8,8 %, la prédiction était de −16,3 %  229 Go (5 shards, 16,3 % du modèle) copiés et VÉRIFIÉS sur le NVMe, puis un dossier hybride d
 - Le cycle rapide : l'article 1 de l'UDHR dans 399 langues, et pourquoi le modèle n'est pas le bon levier  Réponse mesurée à « peut-on refaire nos exercices sur u
+- premiere_couche_semantique : chemin numpy rapide (vérifié identique au lent) et cache  Le parsing paire-à-paire en Python coûtait 740 millions d'itérations pour
 
