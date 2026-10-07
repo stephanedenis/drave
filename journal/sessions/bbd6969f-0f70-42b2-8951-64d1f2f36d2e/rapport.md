@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 209.8 h |
-| Tours | 199 |
-| Messages | 9269 |
-| Appels d'outils | 8709 |
+| Durée | 211.0 h |
+| Tours | 204 |
+| Messages | 9289 |
+| Appels d'outils | 8718 |
 | Fichiers touchés | 212 |
-| Commandes | 7397 |
+| Commandes | 7405 |
 | Sous-agents | 32 |
-| Commits | 679 |
+| Commits | 680 |
 | Compactages de contexte | 12 |
 
 ## Objectifs déclarés
@@ -50,6 +50,8 @@
 - **complete** — Faire évoluer le pont linguistico-sémantique en BOÎTE NOIRE (émulation des premières couches du professeur, sans accès à ses rouages) par une phase GÉNÉRATIVE — le nombre de neurones et de couches NAÎT pendant l'apprentissage, en partant d'un seul neurone — suivie d'une ATTRITION PÉRIODIQUE qui rédu
 … [482 caractères tronqués]
 - **create** — Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes incha
+… [532 caractères tronqués]
+- **complete** — Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes incha
 … [532 caractères tronqués]
 
 ## 1. Ce qui a été demandé
@@ -451,6 +453,16 @@
 **Tour 198** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 **Tour 199** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
+
+**Tour 200** — "C'est le mécanisme qui calcule qu'il faut remplacer" peux tu clarifier cette proposition?
+
+**Tour 201** — Notre modèle doit être déterministe, qu'entends-tu par aléatoire?
+
+**Tour 202** — ceci-dit, il ne faut pas s'empêcher de faire des simulations monte-carlo en pseudo-hasard pour distiller stratégiquement les réponses aus stimulis des entrées. L'important est la reproductibilité. tu peux même étudier les premières couches du professeur pour apprendre en simulation.
+
+**Tour 203** — attention, on ne cherche pas à reproduire la structure interne du professeur, mais trouver des indices pour optimiser notre travail de stimulation. On conserve le principe de boite noire, mais on triche pour gagner de l'efficacité sur des choses qui seraient évidente en boite blanche et qui nous font perdre du temps.
+
+**Tour 204** — bien. vas-y dans l'ordre de ton choix.
 
 ## 2. Déroulé, étape par étape
 
@@ -10251,15 +10263,216 @@ Et le contraste avec les 85 articles est instructif :
 
 ### Tour 199 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
 
-*3 appels d'outils.* Actions notables :
+*4 appels d'outils.* Actions notables :
 
 - bash — Gather objective evidence
 - get_goal
 - bash — Write and commit the closing synthesis
+- update_goal
 
 **Synthèse produite :**
 
-⏵ **L'objectif est atteint, preuves à l'appui. J'écris la synthèse de clôture.**
+⏵ **Clôture — objectif atteint, et une conclusion scientifique qui n'était pas celle espérée.**
+
+---
+
+\## L'objectif est atteint, exigence par exigence
+
+| exigence | état | preuve |
+|---|---|---|
+| **Toutes les langues de l'UDHR** (au-delà des 46) | **392 / 392** | tracées aux couches **8 ET 10**, **400 / 400** unités alignées, **0 échec** |
+| **Wikipedia décompressée** | **482 articles × 6 langues** | **2 892 traces**, **0 échec**, **482 articles présents dans les six langues (100 %)** |
+| **Œuvres parallèles Gutenberg** | Romeo **24 scènes en–fr** (48 traces tracées) · Crime et Châtiment **24 chapitres en–es écrits** (8 traces faites sur 48) |
+| **Professeurs plus riches** | le corpus Wikipedia apparié est le **premier corpus multi-domaine ET aligné** du projet — ce que l'UDHR interdisait |
+| **Étendre notre modèle** | croissance libre + attrition, **147 neurones**, protocole entier |
+| **Un seul professeur · boîte noire · aucune rétropropagation** | respectées — seules les couches 0 et cible sont lues ; `A`/`B` gelés ; lecture en forme fermée partout |
+
+**Le protocole exigé est produit en une commande** (`tools/profil_langues.py`) : taille du réseau, fidélité apprentissage / VALIDATION / TEST, apport propre, invariance, pire paire, et **l'oracle sur les deux panneaux**. Produit **pour les couches 8 ET 10, à code identique, sur 392 langues** — c'est ce qui rend la comparaison des cibles légitime.
+
+\## Dix résultats de fond, chacun avec son chiffre
+
+- **La couche 8 est la bonne cible** : **41 langues sur 41** s'améliorent, **0 régresse**.
+- **La fidélité EST le témoin constant** : corrélation **+0,9768** — mon chiffre de tête ne qualifiait pas le pont.
+- **Le goulot est le transfert** : écart à l'oracle **+0,0975 hors vivier** contre **+0,0112 dans le vivier**.
+- **Le ride était 10 à 30 fois trop fort** : optimum à **0,03** au lieu de 0,3 → **+0,0074 gratuit**.
+- **Le réservoir ne sert presque à rien** : l'entrée seule, **zéro neurone**, fait **0,5161** contre 0,4751 — quatre mesures indépendantes.
+- **Domaine ou langue : à égalité** — sur 482 articles multi-domaines, le contenu devance la langue de **+0,0026**, contre **+0,19** sur l'UDHR : **70 fois moins**.
+- **Le pont transfère sur trois paires** : perte **−0,032 à −0,066**.
+- **Le défaut central est localisé** : notre sortie porte **13,7× moins d'énergie de contenu** que le professeur.
+- **Une identité explique cinq échecs** : le rapport contenu/langue est **invariant d'échelle**.
+- **La cible est dépa
+… [3037 caractères tronqués]
+
+### Tour 200 — "C'est le mécanisme qui calcule qu'il faut remplacer" peux tu clarifier cette proposition?
+
+**Synthèse produite :**
+
+⏵ **Ce que je voulais dire, et ce que la mesure autorise à dire.**
+
+\## La phrase désigne une partie précise de l'architecture
+
+Le pont a trois parties, et « le mécanisme qui calcule » désigne la deuxième :
+
+| partie | ce qu'elle fait | qui la fixe |
+|---|---|---|
+| **l'entrée** | les plongements de couche 0 du professeur | le professeur — on les lit, on ne les calcule pas |
+| **le mécanisme** | `s_t = (1−a)·s_{t−1} + a·tanh(P·s_{t−1} + B·e_t)`, avec `P` et `B` aléatoires et **gelés** | personne — c'est un tirage, figé pour toujours |
+| **la lecture** | `W`, ajusté en forme fermée | les données, par ridge |
+
+Quand je dis « c'est le mécanisme qui calcule qu'il faut remplacer », je dis : **ce n'est pas `W`, ce n'est pas la fonction de coût, ce n'est pas le post-traitement — c'est la transformation aléatoire figée entre l'entrée et la cible.**
+
+\## Pourquoi les mesures pointent là, et pas ailleurs
+
+J'ai éliminé les autres suspects un par un, chacun par une mesure :
+
+- **La lecture n'est pas la limite** : un discriminant linéaire sur la sortie atteint un rapport contenu/langue de **12,645** contre **12,001** pour le professeur (§80, 482 articles). Elle sait extraire ce qui est là.
+- **L'objectif n'est pas la limite** : ridge suffit ; la version à deux curseurs (§58) atteignait la cible mais était non convexe — un défaut de formulation, pas de fond.
+- **Le post-traitement n'est pas la limite** : neuf moyens testés, et ceux qui marchent marchent (§64, §66, §69).
+- **Le renforcement par mise à l'échelle ne peut pas être la solution** : le §67 a établi que le rapport contenu/langue est **invariant d'échelle** — c'est une identité, pas une observation. Atrophier ou renforcer uniformément est une mise à l'échelle, donc **mathématiquement forcé à l'échec** (§72).
+- **Apprendre quoi lire ne tient pas à l'échelle** : l'effet mesuré à 85 articles **s'inverse** à 482 (§79).
+
+Et pendant ce temps, le défaut central ne bouge pas : **notre sortie porte 13,7× moins d'énergie de contenu que sa cible** (§61, 85 articles) — et l'écart est **plus grand** sur le corpus complet (§80 : `P_cont` 98,9 contre 4 655,4).
+
+**Le raisonnement est donc un raisonnement par élimination** : la lecture peut réorganiser ce qu'on lui donne, mais elle ne peut pas fabriquer une énergie qui n'est pas dans les états. Et les états sortent du mécanisme.
+
+\## La différence structurelle, et c'est le nœud
+
+| | professeur, couche 0 → couche 8 | notre réservoir |
+|---|---|---|
+| **nature** | 8 couches d'attenti
+… [2594 caractères tronqués]
+
+### Tour 201 — Notre modèle doit être déterministe, qu'entends-tu par aléatoire?
+
+**Synthèse produite :**
+
+⏵ **Distinction importante — et vous avez raison de la demander.**
+
+\## Le modèle est déterministe, et je l'ai vérifié
+
+Même entrée → même sortie, toujours. Deux vérifications dans la session :
+
+- `--couches 0:9` contre `--couches 0:24` sur le même texte : traces **identiques octet à octet**, même MD5.
+- La croissance relancée après correction d'un bug a reproduit **exactement** les mêmes chiffres à 40 neurones (0,6278 · 0,9289 · 0,7329 dans les deux exécutions) — sur un calcul de 40 minutes.
+
+Aucune de mes mesures ne repose sur du non-déterminisme.
+
+\## Ce que « aléatoire » désignait : la PROVENANCE, pas le comportement
+
+Le code fait ceci, une fois pour toutes au démarrage :
+
+```python
+self.rng = np.random.RandomState(graine)      # graine = 5, toujours la même
+W_par  = self.rng.randn(k, n_par) / sqrt(n_par)
+B      = self.rng.randn(k, H) / sqrt(H) * gain
+```
+
+Ces poids sont **tirés une fois** d'un générateur pseudo-aléatoire à graine fixe, puis **gelés** : ils ne changent plus jamais, ni pendant l'apprentissage, ni à l'inférence. C'est le paradigme du *réservoir* (Jaeger 2001, Maass 2002) — et c'est ce que le mandat décrit par « `A` et `B` aléatoires et gelés ».
+
+Donc : **déterministe à l'exécution, mais dont les valeurs proviennent d'un tirage.** Comme une table de constantes qu'on aurait engendrée par un générateur plutôt que tapée à la main.
+
+\## Le vrai axe n'est pas aléatoire/déterministe, c'est APPRIS / NON APPRIS
+
+C'était le sens de ma phrase, et le mot « aléatoire » l'a mal servie. Ce qui distingue notre mécanisme de celui du professeur n'est pas son déterminisme — les deux le sont — mais ceci :
+
+| | professeur, couches 1→8 | notre réservoir |
+|---|---|---|
+| **provenance des poids** | **appris** sur des milliards de textes | **tirés**, jamais ajustés par les données |
+| **ce qu'ils encodent** | un routage qui dépend du contenu | une projection générique, identique partout |
+
+**« Aléatoire » = « non appris », « non ajusté », « tiré plutôt que construit ».** C'est cela qu'il faut entendre.
+
+\## Votre exigence est plus forte — et elle ouvre une porte réelle
+
+Votre projet `neuronspikes` dit : *« Déterminisme absolu — aucun hasard, même pas pour l'ensemencement. »* C'est plus exigeant que ce que fait mon réservoir, et c'est **satisfiable** : au lieu de tirer les poids, on peut les **construire** par une règle algébrique déterministe indexée par le numéro du neurone.
+
+Et ce n'est pas seulement une question de pureté — **c'est peut-être un avantage**, pour 
+… [1979 caractères tronqués]
+
+### Tour 202 — ceci-dit, il ne faut pas s'empêcher de faire des simulations monte-carlo en pseudo-hasard pour distiller stratégiquement … [163 caractères tronqués]
+
+**Synthèse produite :**
+
+⏵ **Ces trois précisions changent ce qu'il est permis de faire — et la troisième ouvre la mesure qui manquait.**
+
+\## 1. Reproductibilité, pas absence de hasard — d'accord, et il y a une correction à faire dans mon code
+
+Vous avez raison : le tirage pseudo-aléatoire n'est un problème que s'il n'est pas **rejouable**. Ce n'est donc pas le tirage qu'il faut supprimer, c'est la **dépendance à une implémentation**.
+
+Mon code fait `np.random.RandomState(5)` — reproductible **chez moi**, mais seulement si l'on rejoue exactement le flux Mersenne Twister de numpy. Une réimplémentation en Rust, ou une autre version, ne redonnerait pas les mêmes poids. **C'est un vrai défaut, et il est petit à corriger** : remplacer l'appel à numpy par un générateur explicite et documenté (LCG ou hachage indexé par neurone), dont le flux tient en dix lignes et se rejoue partout. Les mesures ne changeraient pas ; la reproductibilité, oui.
+
+\## 2. Monte-Carlo pour distiller — et vous nommez une lacune que je n'avais pas vue
+
+**Je n'ai jamais testé qu'UN seul tirage** — graine 5, dans toutes les expériences. Toute ma conclusion du §70 (« le réservoir abaisse le rapport de 1,698 à 1,354 ») porte donc sur **un échantillon de taille un**.
+
+C'est faible, et votre suggestion le répare : **tirer N réservoirs, mesurer leur réponse aux stimuli, garder les meilleurs.** C'est :
+
+- **sans rétropropagation** — on ne calcule aucun gradient, on sélectionne ;
+- **reproductible** — graine fixe, protocole fixe ;
+- **et c'est déjà la logique du projet** : naissance et attrition sélectionnent des *neurones* ; il s'agit de sélectionner aussi des *tirages*.
+
+Le chiffre à produire est simple et il manque : **la distribution du rapport contenu/langue sur, disons, 50 tirages.** Si elle est serrée autour de 1,35, ma conclusion tient et se renforce. Si elle s'étale de 1,3 à 6, alors « le réservoir ne peut pas » était faux — c'était « **ce** réservoir, mal tiré, ne peut pas ».
+
+**C'est la première mesure que je ferais.** Elle est peu coûteuse et elle porte directement sur la conclusion la plus lourde du rapport.
+
+\## 3. Étudier les premières couches du professeur — c'est la mesure qui manque, et elle change la question
+
+C'est le point le plus important de votre message. Le §70 avait établi, par élimination, que le verrou est la **transformation couche 0 → couche 8**, et j'avais conclu « quel mécanisme ? » — une question ouverte faute de pouvoir regarder dedans.
+
+**Si je peux lire les couches 1 à 7, ce n'est plus un
+… [2519 caractères tronqués]
+
+### Tour 203 — attention, on ne cherche pas à reproduire la structure interne du professeur, mais trouver des indices pour optimiser no … [198 caractères tronqués]
+
+**Synthèse produite :**
+
+⏵ **Compris — et ce cadrage déplace la question. Laissons-moi le reformuler pour vérifier que je ne me trompe pas.**
+
+\## Ce que je comprends
+
+**On ne copie pas l'intérieur du professeur.** On s'en sert comme d'un **banc de mesure** pour trancher des choix de conception que je fais aujourd'hui à l'aveugle. La cible reste la couche 8 ; les couches 1-7 ne sont pas à reproduire, elles sont à **interroger**.
+
+La boîte noire tient : on ne lit toujours du professeur que ce qu'on émule. On regarde juste par-dessus son épaule pour ne pas perdre des heures à deviner ce qu'un coup d'œil réglerait.
+
+**Et cela glisse la question.** Je cherchais « quel mécanisme peut produire cette transformation ». Votre formulation dit plutôt : **quoi stimuler, à quelle échelle, et avec quelle profondeur** — et le professeur est là pour répondre à ces trois questions.
+
+\## Les indices, et la décision que chacun tranche
+
+Chacun remplace une devinette que j'ai faite sans lui.
+
+| indice à prendre | décision qu'il tranche | ce que j'ai deviné à la place |
+|---|---|---|
+| **Le profil du rapport contenu/langue, couche par couche** | **quelle profondeur** notre mécanisme doit avoir | j'ai mesuré « la profondeur n'achète rien » avec **1 couche contre 2** — c'est très court pour conclure |
+| **La forme des cartes inter-couches** : identité + correction de quel rang ? | **quelle taille** : un grand développement aléatoire ou une petite correction structurée ? | j'ai mis 120 neurones tirés — sans savoir si la transformation visée est de rang 20 ou 800 |
+| **De quoi dépend la sortie d'une couche** : du jeton courant ou du contexte lointain ? | **faut-il de la récurrence du tout**, ou une fenêtre locale suffit | j'ai imposé une récurrence à mémoire ~5 jetons (§38) sans savoir où le professeur, lui, a besoin de mémoire |
+| **La dimension effective de la séparation** | **combien de neurones** — et lesquels | j'ai laissé la croissance libre s'arrêter à 147, sans savoir si la cible vit dans 30 dimensions |
+| **Quelles directions de l'entrée la première couche utilise** | **quoi nourrir** | je nourris les 896 dimensions brutes, alors que la couche 0 contient la langue mêlée (§70) |
+
+**Le dernier est probablement le plus rentable.** Le §70 a montré que la langue entre par l'entrée ; si la première couche du professeur ne lit qu'un sous-espace étroit et mieux séparé de cette entrée, alors la réponse n'est pas « un meilleur réservoir » mais « **nourrir autre chose** » — et c'est un changement de quelques l
+… [2383 caractères tronqués]
+
+### Tour 204 — bien. vas-y dans l'ordre de ton choix.
+
+*8 appels d'outils.* Actions notables :
+
+- bash — Launch layer 0-8 tracing for 50 articles
+- bash — Launch the 50-draw distribution
+- bash — Monitor both jobs
+- bash — Wait for the full distribution
+- bash — Read the final distribution
+- bash — Measure input-alone on the same panel
+- bash — Read the input-alone baseline
+- bash — Report and commit the 50-draw correction
+
+**Synthèse produite :**
+
+⏵ **Correction importante : le §70 était faux dans sa formulation. Sur le MÊME panel —**
+
+| | fidélité | P_lang | P_cont | **RAPPORT** |
+|---|---:|---:|---:|---:|
+| **entrée seule, 0 neurone** | **0,5268** | 88,8 | 173,7 | **1,956** |
+| **50 tirages de réservoir** | 0,4656 ± 0,0013 | 45,6 | 90,1 | **2,093** · médiane **1,947** · max **4,298** |
+| *professeur* | — | *398,1* | *5 263,4* | ***13,222*** |
 
 ## 3. Travail accompli
 
@@ -10557,7 +10770,7 @@ Et le contraste avec les 85 articles est instructif :
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 7357 autres
+- … et 7365 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -11384,4 +11597,5 @@ Et le contraste avec les 85 articles est instructif :
 - La vérification à 482 articles : le résultat du §73 NE SE RÉPLIQUE PAS    à 85 articles  — base (centrage seul)        fid 0,4703 · P_lang  42,4 · P_cont   82,1
 - Le discriminant SE RÉPLIQUE à 482 articles — et DÉPASSE le professeur : 12,645 contre 12,001    rang 0 (référence, centrage seul)   fid 0,4713 · P_lang 39,8 · P
 - CLÔTURE : l'objectif, exigence par exigence, avec la mesure qui y répond  TOUTES LES EXIGENCES SONT ATTEINTES :   1. toutes les langues de l'UDHR      392/392 a
+- DISTRIBUTION SUR 50 TIRAGES : le §70 était faux dans sa formulation  LA LACUNE : la conclusion du §70 (« le réservoir abaisse le rapport de 1,698 à 1,354 ») por
 

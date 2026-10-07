@@ -153096,3 +153096,484 @@ Continue working toward the objective in this same session. Treat the current wo
 ⏵ **L'objectif est atteint, preuves à l'appui. J'écris la synthèse de clôture.**
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n# CLÔTURE — l'objectif, exigence par exigence\n\n## C.1 Ce que l'objectif demandait, et la mesure qui y répond\n\n| exigence | état | … [6805 caractères tronqués]`
+
+  ```
+32ed5db CLÔTURE : l'objectif, exigence par exigence, avec la mesure qui y répond
+  ```
+
+- **update_goal** `{"goal_id": "goal-975ab185-c6a1-415f-8dcd-38bf09cf8196", "revision": 1, "action": "complete"}`
+
+> **Objectif** (complete) : Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de représentation universelle), boîte noire (on ne lit du professeur que la couche à émuler, jamais sa tête ni ses jetons générés), aucune rétropropagation (A et B aléatoires et gelés, seule la lecture s'ajuste en forme fermée), et chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, TAILLE du réseau, avec le diagnostic oracle sur les deux panneaux (test hors vivier et validation du même vivier).
+
+
+  ```
+{"goal":{"id":"goal-975ab185-c6a1-415f-8dcd-38bf09cf8196","revision":2,"objective":"Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de représentation universelle), boîte noire (on ne lit du professeur que la couche à émuler, jamais sa tête ni ses jetons générés), aucune rétropropagation (A et B aléatoires et gelés, seule la lecture s'ajuste en forme fermée), et chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, TAILLE du réseau, avec le diagnostic oracle sur les deux panneaux (test hors vivier et validation du même vivier).","phase":"complete","roundsStarted":72,"maxGoalRounds":256},"activation":"disarmed"}
+  ```
+
+### 👤 Utilisateur
+
+<goal_complete>
+Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de représentation universelle), boîte noire (on ne lit du professeur que la couche à émuler, jamais sa tête ni ses jetons générés), aucune rétropropagation (A et B aléatoires et gelés, seule la lecture s'ajuste en forme fermée), et chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, TAILLE du réseau, avec le diagnostic oracle sur les deux panneaux (test hors vivier et validation du même vivier)."
+The goal is marked complete and this autonomous run is ending. Write the closing message to the user now: state the outcome, summarize what was done and how it was verified, and point to the concrete results (files, commits, or other artifacts). Report only what earlier rounds and tool results in this session actually establish; when a detail is not in the session, say so instead of inventing it. Note anything the user should review or do next. Address the user directly. Do not call any more tools in this run; further work waits for the user's next instruction.
+</goal_complete>
+
+### 🤖 Assistant
+
+⏵ **Clôture — objectif atteint, et une conclusion scientifique qui n'était pas celle espérée.**
+
+---
+
+## L'objectif est atteint, exigence par exigence
+
+| exigence | état | preuve |
+|---|---|---|
+| **Toutes les langues de l'UDHR** (au-delà des 46) | **392 / 392** | tracées aux couches **8 ET 10**, **400 / 400** unités alignées, **0 échec** |
+| **Wikipedia décompressée** | **482 articles × 6 langues** | **2 892 traces**, **0 échec**, **482 articles présents dans les six langues (100 %)** |
+| **Œuvres parallèles Gutenberg** | Romeo **24 scènes en–fr** (48 traces tracées) · Crime et Châtiment **24 chapitres en–es écrits** (8 traces faites sur 48) |
+| **Professeurs plus riches** | le corpus Wikipedia apparié est le **premier corpus multi-domaine ET aligné** du projet — ce que l'UDHR interdisait |
+| **Étendre notre modèle** | croissance libre + attrition, **147 neurones**, protocole entier |
+| **Un seul professeur · boîte noire · aucune rétropropagation** | respectées — seules les couches 0 et cible sont lues ; `A`/`B` gelés ; lecture en forme fermée partout |
+
+**Le protocole exigé est produit en une commande** (`tools/profil_langues.py`) : taille du réseau, fidélité apprentissage / VALIDATION / TEST, apport propre, invariance, pire paire, et **l'oracle sur les deux panneaux**. Produit **pour les couches 8 ET 10, à code identique, sur 392 langues** — c'est ce qui rend la comparaison des cibles légitime.
+
+## Dix résultats de fond, chacun avec son chiffre
+
+- **La couche 8 est la bonne cible** : **41 langues sur 41** s'améliorent, **0 régresse**.
+- **La fidélité EST le témoin constant** : corrélation **+0,9768** — mon chiffre de tête ne qualifiait pas le pont.
+- **Le goulot est le transfert** : écart à l'oracle **+0,0975 hors vivier** contre **+0,0112 dans le vivier**.
+- **Le ride était 10 à 30 fois trop fort** : optimum à **0,03** au lieu de 0,3 → **+0,0074 gratuit**.
+- **Le réservoir ne sert presque à rien** : l'entrée seule, **zéro neurone**, fait **0,5161** contre 0,4751 — quatre mesures indépendantes.
+- **Domaine ou langue : à égalité** — sur 482 articles multi-domaines, le contenu devance la langue de **+0,0026**, contre **+0,19** sur l'UDHR : **70 fois moins**.
+- **Le pont transfère sur trois paires** : perte **−0,032 à −0,066**.
+- **Le défaut central est localisé** : notre sortie porte **13,7× moins d'énergie de contenu** que le professeur.
+- **Une identité explique cinq échecs** : le rapport contenu/langue est **invariant d'échelle**.
+- **La cible est dépassée** : un discriminant linéaire donne un rapport de **12,645** contre **12,001** pour le professeur, pour 0,038 de fidélité.
+
+## La conclusion, et elle est inconfortable
+
+**Le pont ne reproduit pas le contenu de son professeur** — fidélité ~0,63, apport propre **+0,03 à +0,06** au-dessus de la constante. Et le §70 a mesuré que **notre calcul propre fait moins bien que l'entrée du professeur lue linéairement, sur les deux axes à la fois**. En l'état, Drave n'est pas un pont : c'est une **dégradation** de la représentation du professeur.
+
+**La leçon de méthode est la plus dure** : le constat décisif — « une lecture sans aucun neurone bat le réservoir » — a été obtenu à l'**heure 13**. J'ai construit, réglé et mesuré un mécanisme complexe pendant treize heures avant de tester la ligne de base triviale.
+
+Et une seconde fois la même erreur : le §73, publié sur 85 articles, **a été réfuté** par les 482 (son effet s'inverse). Le §69, lui, non seulement se réplique mais **s'améliore** avec la taille. **Le mécanisme qui survit est celui qui agit sur la lecture, pas sur les caractéristiques.**
+
+## Ce que vous devriez relire en premier
+
+1. **`reports/rapport-toutes-langues.md`** — ~4 900 lignes. La **CLÔTURE** (fin de fichier) donne l'objectif exigence par exigence ; le **BILAN** (§B) donne le temps passé contre le résultat.
+2. **Le couple §79 / §80** — la mesure contradictoire et la mesure confirmée, arrivées dans cet ordre parce que la chaîne avait été armée **avant** de connaître la réponse.
+3. **`docs/glossaire.md`** — 2 245 lignes, dont le §10.10 sur la mesure contenu/langue.
+
+## La question ouverte, seule
+
+> **Sous les contraintes maintenues — un seul professeur, boîte noire, aucune rétropropagation — quel mécanisme peut produire la transformation couche 0 → couche 8 et porter l'énergie de contenu du professeur ?**
+
+Le §70 a montré que ce n'est **ni la lecture, ni l'objectif, ni le post-traitement**. C'est **le mécanisme qui calcule** qu'il faut remplacer. C'est là que je porterais le prochain effort — en commençant, cette fois, par mesurer la ligne de base **avant** de construire.
+
+## Réserves que je dois signaler
+
+- Le corpus **Crime et Châtiment** est écrit (24 chapitres) mais **seulement 4 segments tracés sur 24** — arrêté au profit du corpus Wikipedia.
+- Le résultat du §80 porte sur **un professeur et un corpus** (Wikipedia apparié, 6 langues latines). Il n'a pas été reproduit sur l'UDHR ni sur Romeo.
+- **Cinq erreurs de ma part** sont documentées et corrigées : un découpage qui ne gardait que deux langues sur trois dans six outils, une capture **déduite** au lieu d'être lue, un discriminant calculé dans le mauvais espace, un pas fixe supposant des entrées de longueur égale, et un effet de petit panel publié trop vite.
+- `journal/README.md` reste modifié (fichier généré, non commité).
+
+**~36 heures, ~100 commits cette session, 33 outils, ~3 700 traces sans un seul échec.** L'infrastructure et les mesures survivront au résultat négatif ; c'est ce qu'il y a de plus réutilisable ici.
+
+
+## Tour 200
+
+### 👤 Utilisateur
+
+"C'est le mécanisme qui calcule qu'il faut remplacer" peux tu clarifier cette proposition?
+
+### 🤖 Assistant
+
+⏵ **Ce que je voulais dire, et ce que la mesure autorise à dire.**
+
+## La phrase désigne une partie précise de l'architecture
+
+Le pont a trois parties, et « le mécanisme qui calcule » désigne la deuxième :
+
+| partie | ce qu'elle fait | qui la fixe |
+|---|---|---|
+| **l'entrée** | les plongements de couche 0 du professeur | le professeur — on les lit, on ne les calcule pas |
+| **le mécanisme** | `s_t = (1−a)·s_{t−1} + a·tanh(P·s_{t−1} + B·e_t)`, avec `P` et `B` aléatoires et **gelés** | personne — c'est un tirage, figé pour toujours |
+| **la lecture** | `W`, ajusté en forme fermée | les données, par ridge |
+
+Quand je dis « c'est le mécanisme qui calcule qu'il faut remplacer », je dis : **ce n'est pas `W`, ce n'est pas la fonction de coût, ce n'est pas le post-traitement — c'est la transformation aléatoire figée entre l'entrée et la cible.**
+
+## Pourquoi les mesures pointent là, et pas ailleurs
+
+J'ai éliminé les autres suspects un par un, chacun par une mesure :
+
+- **La lecture n'est pas la limite** : un discriminant linéaire sur la sortie atteint un rapport contenu/langue de **12,645** contre **12,001** pour le professeur (§80, 482 articles). Elle sait extraire ce qui est là.
+- **L'objectif n'est pas la limite** : ridge suffit ; la version à deux curseurs (§58) atteignait la cible mais était non convexe — un défaut de formulation, pas de fond.
+- **Le post-traitement n'est pas la limite** : neuf moyens testés, et ceux qui marchent marchent (§64, §66, §69).
+- **Le renforcement par mise à l'échelle ne peut pas être la solution** : le §67 a établi que le rapport contenu/langue est **invariant d'échelle** — c'est une identité, pas une observation. Atrophier ou renforcer uniformément est une mise à l'échelle, donc **mathématiquement forcé à l'échec** (§72).
+- **Apprendre quoi lire ne tient pas à l'échelle** : l'effet mesuré à 85 articles **s'inverse** à 482 (§79).
+
+Et pendant ce temps, le défaut central ne bouge pas : **notre sortie porte 13,7× moins d'énergie de contenu que sa cible** (§61, 85 articles) — et l'écart est **plus grand** sur le corpus complet (§80 : `P_cont` 98,9 contre 4 655,4).
+
+**Le raisonnement est donc un raisonnement par élimination** : la lecture peut réorganiser ce qu'on lui donne, mais elle ne peut pas fabriquer une énergie qui n'est pas dans les états. Et les états sortent du mécanisme.
+
+## La différence structurelle, et c'est le nœud
+
+| | professeur, couche 0 → couche 8 | notre réservoir |
+|---|---|---|
+| **nature** | 8 couches d'attention + MLP | une projection aléatoire figée, une couche |
+| **dépend du contenu ?** | **oui** — l'attention choisit, à chaque position, quelles positions précédentes comptent, **en fonction de ce qui est dit** | **non** — les mêmes poids s'appliquent partout, quoi qu'il soit dit |
+| **ce que ça produit** | la séparation contenu/langue : rapport **12,001** | il **abaisse** le rapport de 1,698 à 1,354 (§70) |
+
+**C'est cela, le fond.** Une projection fixe ne peut pas router. Or le §70 a montré que la couche 0 du professeur contient **déjà** la langue, mêlée (rapport 1,698) ; la couche 8 a un rapport de 12,001. **Ce que les huit couches font, c'est du routage dépendant du contenu.** Un filtre fixe appliqué à un signal où la langue domine en énergie **amplifie ce qui domine** — c'est exactement ce qu'on mesure : le réservoir ajoute de la langue (+20 % sur `P_lang`) en retirant du contenu.
+
+**Donc** : « le mécanisme qui calcule » = *la transformation fixe et indépendante du contenu qui tient lieu des huit couches*. La remplacer veut dire : mettre à cette place quelque chose qui **dépende de ce qui est dit**, pas seulement de la position et des poids tirés.
+
+## Les limites de cette affirmation, et elles sont réelles
+
+**Ce que je n'ai pas testé, et qui pourrait l'infirmer :**
+
+1. **Un mécanisme dépendant du contenu, sous les contraintes.** Une porte qui s'ouvre selon la similitude entre positions ressemblerait à de l'attention, mais avec des poids **non appris** — ce serait-il encore « `A` et `B` aléatoires et gelés » ? C'est une question de lecture du mandat, que je n'ai pas tranchée seul.
+2. **D'autres formes de renforcement** (§73 n'en a testé qu'une ; la réserve est explicite dans le rapport).
+3. **D'autres dimensions de réservoir, d'autres couches.** Le §29 a montré que la profondeur n'achète rien *à budget constant* — mais avec un mécanisme différent par couche, ce n'est plus la même question.
+
+**Et une réserve plus gênante** : le raisonnement est **par élimination**, pas par construction. Je n'ai pas démontré qu'aucun réservoir aléatoire gelé ne peut produire cette transformation — j'ai montré que **tous ceux que le projet s'autorise** échouent, chacun avec son chiffre. Une démonstration demanderait un argument théorique que je n'ai pas.
+
+**Ce qui reste solide malgré ces réserves** : le fait que la couche 0 contient déjà la langue mêlée, que la couche 8 ne l'a plus mêlée, et que **l'écart entre les deux est ce que rien dans l'architecture actuelle ne franchit**. C'est mesuré, c'est reproductible, et c'est indépendant de l'interprétation qu'on en fait.
+
+
+## Tour 201
+
+### 👤 Utilisateur
+
+Notre modèle doit être déterministe, qu'entends-tu par aléatoire?
+
+### 🤖 Assistant
+
+⏵ **Distinction importante — et vous avez raison de la demander.**
+
+## Le modèle est déterministe, et je l'ai vérifié
+
+Même entrée → même sortie, toujours. Deux vérifications dans la session :
+
+- `--couches 0:9` contre `--couches 0:24` sur le même texte : traces **identiques octet à octet**, même MD5.
+- La croissance relancée après correction d'un bug a reproduit **exactement** les mêmes chiffres à 40 neurones (0,6278 · 0,9289 · 0,7329 dans les deux exécutions) — sur un calcul de 40 minutes.
+
+Aucune de mes mesures ne repose sur du non-déterminisme.
+
+## Ce que « aléatoire » désignait : la PROVENANCE, pas le comportement
+
+Le code fait ceci, une fois pour toutes au démarrage :
+
+```python
+self.rng = np.random.RandomState(graine)      # graine = 5, toujours la même
+W_par  = self.rng.randn(k, n_par) / sqrt(n_par)
+B      = self.rng.randn(k, H) / sqrt(H) * gain
+```
+
+Ces poids sont **tirés une fois** d'un générateur pseudo-aléatoire à graine fixe, puis **gelés** : ils ne changent plus jamais, ni pendant l'apprentissage, ni à l'inférence. C'est le paradigme du *réservoir* (Jaeger 2001, Maass 2002) — et c'est ce que le mandat décrit par « `A` et `B` aléatoires et gelés ».
+
+Donc : **déterministe à l'exécution, mais dont les valeurs proviennent d'un tirage.** Comme une table de constantes qu'on aurait engendrée par un générateur plutôt que tapée à la main.
+
+## Le vrai axe n'est pas aléatoire/déterministe, c'est APPRIS / NON APPRIS
+
+C'était le sens de ma phrase, et le mot « aléatoire » l'a mal servie. Ce qui distingue notre mécanisme de celui du professeur n'est pas son déterminisme — les deux le sont — mais ceci :
+
+| | professeur, couches 1→8 | notre réservoir |
+|---|---|---|
+| **provenance des poids** | **appris** sur des milliards de textes | **tirés**, jamais ajustés par les données |
+| **ce qu'ils encodent** | un routage qui dépend du contenu | une projection générique, identique partout |
+
+**« Aléatoire » = « non appris », « non ajusté », « tiré plutôt que construit ».** C'est cela qu'il faut entendre.
+
+## Votre exigence est plus forte — et elle ouvre une porte réelle
+
+Votre projet `neuronspikes` dit : *« Déterminisme absolu — aucun hasard, même pas pour l'ensemencement. »* C'est plus exigeant que ce que fait mon réservoir, et c'est **satisfiable** : au lieu de tirer les poids, on peut les **construire** par une règle algébrique déterministe indexée par le numéro du neurone.
+
+Et ce n'est pas seulement une question de pureté — **c'est peut-être un avantage**, pour deux raisons :
+
+**1. Reproductibilité.** Mes poids « aléatoires » ne sont reproductibles que si l'on rejoue exactement le flux de `np.random.RandomState` (Mersenne Twister). Une réimplémentation en Rust, ou une autre version de numpy, ne redonnerait pas les mêmes. Une construction algébrique se rejoue **partout, à l'identique**. C'est un vrai défaut de mon implémentation, que votre remarque met au jour.
+
+**2. Le tirage est un choix paresseux.** Un tirage gaussien sert à obtenir des directions « génériques » sans se poser la question. Mais on pourrait **choisir** ces directions : des rangées orthogonales par construction, ou alignées sur les composantes principales de l'entrée, ou couvrant l'espace de façon régulière. Le §70 a montré que le réservoir **amplifie la langue** — une construction conçue pourrait être bâtie pour faire l'inverse, tout en restant totalement déterministe et figée.
+
+**C'est une piste que je n'ai pas essayée**, et elle est parfaitement compatible avec toutes les contraintes du mandat : aucun apprentissage, aucune rétropropagation, aucune modification de `A` et `B` après construction.
+
+## Ce que je ne peux pas affirmer
+
+Je n'ai **pas** testé de construction déterministe. Je ne peux donc pas dire qu'elle marcherait mieux — seulement que :
+
+- rien dans les mesures ne dit que le **tirage** soit nécessaire ;
+- ce qui est nécessaire, c'est que la transformation soit **figée** — et le §70 a montré que figée **et indépendante du contenu**, elle ne franchit pas l'écart couche 0 → couche 8.
+
+**Autrement dit** : remplacer le tirage par une construction déterministe réglerait un problème de reproductibilité et pourrait améliorer la couverture de l'entrée, mais ne changerait pas, à lui seul, le fait que la transformation reste **indépendante du contenu**. Si c'est bien là qu'est le verrou — et le §70 le suggère fortement sans le prouver — c'est le **routage dépendant du contenu** qu'il faudrait construire, pas seulement le déterminisme.
+
+
+## Tour 202
+
+### 👤 Utilisateur
+
+ceci-dit, il ne faut pas s'empêcher de faire des simulations monte-carlo en pseudo-hasard pour distiller stratégiquement les réponses aus stimulis des entrées. L'important est la reproductibilité. tu peux même étudier les premières couches du professeur pour apprendre en simulation.
+
+### 🤖 Assistant
+
+⏵ **Ces trois précisions changent ce qu'il est permis de faire — et la troisième ouvre la mesure qui manquait.**
+
+## 1. Reproductibilité, pas absence de hasard — d'accord, et il y a une correction à faire dans mon code
+
+Vous avez raison : le tirage pseudo-aléatoire n'est un problème que s'il n'est pas **rejouable**. Ce n'est donc pas le tirage qu'il faut supprimer, c'est la **dépendance à une implémentation**.
+
+Mon code fait `np.random.RandomState(5)` — reproductible **chez moi**, mais seulement si l'on rejoue exactement le flux Mersenne Twister de numpy. Une réimplémentation en Rust, ou une autre version, ne redonnerait pas les mêmes poids. **C'est un vrai défaut, et il est petit à corriger** : remplacer l'appel à numpy par un générateur explicite et documenté (LCG ou hachage indexé par neurone), dont le flux tient en dix lignes et se rejoue partout. Les mesures ne changeraient pas ; la reproductibilité, oui.
+
+## 2. Monte-Carlo pour distiller — et vous nommez une lacune que je n'avais pas vue
+
+**Je n'ai jamais testé qu'UN seul tirage** — graine 5, dans toutes les expériences. Toute ma conclusion du §70 (« le réservoir abaisse le rapport de 1,698 à 1,354 ») porte donc sur **un échantillon de taille un**.
+
+C'est faible, et votre suggestion le répare : **tirer N réservoirs, mesurer leur réponse aux stimuli, garder les meilleurs.** C'est :
+
+- **sans rétropropagation** — on ne calcule aucun gradient, on sélectionne ;
+- **reproductible** — graine fixe, protocole fixe ;
+- **et c'est déjà la logique du projet** : naissance et attrition sélectionnent des *neurones* ; il s'agit de sélectionner aussi des *tirages*.
+
+Le chiffre à produire est simple et il manque : **la distribution du rapport contenu/langue sur, disons, 50 tirages.** Si elle est serrée autour de 1,35, ma conclusion tient et se renforce. Si elle s'étale de 1,3 à 6, alors « le réservoir ne peut pas » était faux — c'était « **ce** réservoir, mal tiré, ne peut pas ».
+
+**C'est la première mesure que je ferais.** Elle est peu coûteuse et elle porte directement sur la conclusion la plus lourde du rapport.
+
+## 3. Étudier les premières couches du professeur — c'est la mesure qui manque, et elle change la question
+
+C'est le point le plus important de votre message. Le §70 avait établi, par élimination, que le verrou est la **transformation couche 0 → couche 8**, et j'avais conclu « quel mécanisme ? » — une question ouverte faute de pouvoir regarder dedans.
+
+**Si je peux lire les couches 1 à 7, ce n'est plus une question ouverte, c'est une mesure.** Et le coût est faible : j'ai établi que `--trace-couches` ne filtre que l'**écriture** — la passe avant exécute les 24 couches de toute façon. Tracer 0,1,2,…,8 au lieu de 0,8 ne coûte **rien en calcul**, seulement du disque.
+
+**Ce que je mesurerais, dans cet ordre :**
+
+1. **Le profil du rapport contenu/langue, couche par couche, de 0 à 8.** Où passe-t-il de 1,698 à 12,001 ? D'un coup, ou progressivement ? Y a-t-il un coude ? **C'est la courbe qui dit à quelle profondeur la séparation se fait** — et donc quelle transformation il faut reproduire, et de quelle taille.
+2. **Ce qu'une carte linéaire d'une couche k vers la couche 8 atteint.** Si une régression de la couche 3 vers la 8 capte déjà l'essentiel du rapport, alors la transformation à imiter fait **3 couches**, pas 8 — et le problème change d'échelle.
+3. **Le même profil sur la fidélité.** Si la couche 4 est déjà « presque » la couche 8 pour ce qui compte, la cible utile est plus tôt que je ne le croyais.
+
+**Et cela se branche directement sur le point 2** : au lieu de sélectionner les tirages sur la seule couche 8, on les sélectionne sur leur **ressemblance avec les couches intermédiaires** — c'est-à-dire qu'on distille la *trajectoire* du professeur, pas seulement son point d'arrivée. C'est exactement ce que « distiller stratégiquement les réponses aux stimuli » veut dire, et c'est faisable sans un seul gradient.
+
+## Ce que je propose de faire en premier, si vous validez
+
+| ordre | mesure | coût | ce qu'elle tranche |
+|---|---|---|---|
+| 1 | **distribution du rapport sur ~50 tirages** | court | ma conclusion du §70 tient-elle, ou était-ce un mauvais tirage ? |
+| 2 | **traçage des couches 1-7** sur ~50 articles × 6 langues | ~1,5 h | où la séparation se crée |
+| 3 | **profil couche par couche** du rapport et de la fidélité | court | quelle transformation reproduire, et de quelle taille |
+| 4 | **sélection Monte-Carlo sur les couches intermédiaires** | à définir | est-ce que « distiller la trajectoire » marche |
+
+Les mesures 1 et 3 sont peu coûteuses et l'une comme l'autre peut renverser une conclusion du rapport. La 2 les rend possibles.
+
+**Une réserve honnête** : votre autorisation de lire les couches 1-7 lève une contrainte que j'avais lue comme « on ne lit que la couche à émuler ». Si cette lecture était la bonne, alors la mesure 2 sort du périmètre et il faut se contenter de la 1 — qui, elle, reste entièrement dans les règles, et qui porte déjà sur la conclusion la plus lourde.
+
+
+## Tour 203
+
+### 👤 Utilisateur
+
+attention, on ne cherche pas à reproduire la structure interne du professeur, mais trouver des indices pour optimiser notre travail de stimulation. On conserve le principe de boite noire, mais on triche pour gagner de l'efficacité sur des choses qui seraient évidente en boite blanche et qui nous font perdre du temps.
+
+### 🤖 Assistant
+
+⏵ **Compris — et ce cadrage déplace la question. Laissons-moi le reformuler pour vérifier que je ne me trompe pas.**
+
+## Ce que je comprends
+
+**On ne copie pas l'intérieur du professeur.** On s'en sert comme d'un **banc de mesure** pour trancher des choix de conception que je fais aujourd'hui à l'aveugle. La cible reste la couche 8 ; les couches 1-7 ne sont pas à reproduire, elles sont à **interroger**.
+
+La boîte noire tient : on ne lit toujours du professeur que ce qu'on émule. On regarde juste par-dessus son épaule pour ne pas perdre des heures à deviner ce qu'un coup d'œil réglerait.
+
+**Et cela glisse la question.** Je cherchais « quel mécanisme peut produire cette transformation ». Votre formulation dit plutôt : **quoi stimuler, à quelle échelle, et avec quelle profondeur** — et le professeur est là pour répondre à ces trois questions.
+
+## Les indices, et la décision que chacun tranche
+
+Chacun remplace une devinette que j'ai faite sans lui.
+
+| indice à prendre | décision qu'il tranche | ce que j'ai deviné à la place |
+|---|---|---|
+| **Le profil du rapport contenu/langue, couche par couche** | **quelle profondeur** notre mécanisme doit avoir | j'ai mesuré « la profondeur n'achète rien » avec **1 couche contre 2** — c'est très court pour conclure |
+| **La forme des cartes inter-couches** : identité + correction de quel rang ? | **quelle taille** : un grand développement aléatoire ou une petite correction structurée ? | j'ai mis 120 neurones tirés — sans savoir si la transformation visée est de rang 20 ou 800 |
+| **De quoi dépend la sortie d'une couche** : du jeton courant ou du contexte lointain ? | **faut-il de la récurrence du tout**, ou une fenêtre locale suffit | j'ai imposé une récurrence à mémoire ~5 jetons (§38) sans savoir où le professeur, lui, a besoin de mémoire |
+| **La dimension effective de la séparation** | **combien de neurones** — et lesquels | j'ai laissé la croissance libre s'arrêter à 147, sans savoir si la cible vit dans 30 dimensions |
+| **Quelles directions de l'entrée la première couche utilise** | **quoi nourrir** | je nourris les 896 dimensions brutes, alors que la couche 0 contient la langue mêlée (§70) |
+
+**Le dernier est probablement le plus rentable.** Le §70 a montré que la langue entre par l'entrée ; si la première couche du professeur ne lit qu'un sous-espace étroit et mieux séparé de cette entrée, alors la réponse n'est pas « un meilleur réservoir » mais « **nourrir autre chose** » — et c'est un changement de quelques lignes, pas d'architecture.
+
+## Ce que cela change pour le Monte-Carlo
+
+C'est là que les deux idées se rejoignent, et c'est important.
+
+**Un tirage Monte-Carlo aveugle explore 896 dimensions au hasard.** Mais si les indices disent que la séparation vit dans 30 directions identifiées, alors on ne tire plus au hasard : **on échantillonne autour de ces directions**. Le même budget de tirages devient beaucoup plus efficace — on passe d'une recherche aveugle à une recherche ciblée.
+
+Et si les indices disent que les cartes inter-couches sont « identité + correction de rang faible », alors on ne tire plus du tout : **on construit** la correction, et ce qui reste aléatoire n'est qu'un résidu à échantillonner. Ce serait la réponse à votre remarque sur la reproductibilité : moins de tirage, mieux placé.
+
+## Ce que je propose, dans l'ordre, et ce que chacun peut renverser
+
+| ordre | mesure | ce qu'elle peut renverser |
+|---|---|---|
+| 1 | **distribution du rapport sur ~50 tirages** — entièrement dans les règles | ma conclusion du §70 ne portait que sur **un** tirage |
+| 2 | **traçage des couches 1-7**, ~50 articles × 6 langues (~1,5 h, coût en calcul nul) | c'est l'indice qui rend les autres possibles |
+| 3 | **profil couche par couche** du rapport, de la fidélité, du rang et de la dimension effective | « la profondeur n'achète rien » et « 120 neurones » sont deux devinettes |
+| 4 | **mesure de localité** : ce qu'une couche doit au jeton courant vs au contexte | la récurrence elle-même — que j'ai imposée sans preuve |
+| 5 | **Monte-Carlo ciblé** sur les directions révélées | la conclusion centrale du rapport |
+
+**Réserves, et je les maintiens :**
+
+- **Rien de tout cela n'est fait.** Ce sont des mesures que je propose, pas des résultats.
+- Les indices 2 à 5 supposent que tracer les couches 1-7 reste dans votre définition de « tricher pour gagner du temps ». Si la ligne est plus stricte, l'indice 1 tient seul — et il porte déjà sur la conclusion la plus lourde du rapport.
+- Et un risque réel : **utiliser les couches internes peut orienter notre conception vers une imitation du professeur**, ce que vous excluez explicitement. Je prendrais donc chaque indice comme une **contrainte de dimension** (combien, quelle profondeur, quelle localité), jamais comme une **forme à reproduire**.
+
+Dites-moi si cette lecture est la bonne, et par quoi vous voulez commencer.
+
+
+## Tour 204
+
+### 👤 Utilisateur
+
+bien. vas-y dans l'ordre de ton choix.
+
+### 🤖 Assistant
+
+⏵ **Je commence. D'abord le traçage 0→8 en tâche de fond (le pôle long), puis la distribution des tirages pendant qu'il tourne.**
+
+- **bash** `{"command": "cat > /tmp/trace_couches.sh <<'EOF'\n#!/bin/bash\n# COUCHES 0 À 8, POUR 50 ARTICLES × 6 LANGUES.\n#\n# BUT : des INDICES, pas une cible à reproduire. On garde la boîte noire — la cible\n# reste la couche 8. On regarde par-dessus l'épaule du professeur pour trancher des\n# choix de conce … [1815 caractères tronqués]`
+
+  ```
+traçage : syntaxe OK
+traces : 3/300
+de_A 16s
+en_A 13s
+09:13
+  ```
+
+### 🤖 Assistant
+
+⏵ **Traçage lancé (15 s/trace, ~75 min pour les 300). Maintenant la distribution des tirages.**
+
+- **bash** `{"command": "cat > /tmp/mc_tirages.py <<'EOF'\n\"\"\"DISTRIBUTION DU RAPPORT CONTENU/LANGUE SUR 50 TIRAGES.\n\nLA LACUNE QUE CECI COMBLE. Toute la conclusion du §70 — « le réservoir ABAISSE le\nrapport, de 1,698 à 1,354 » — porte sur UN SEUL tirage (graine 5). Un échantillon de\ntaille un. Si la dis … [4112 caractères tronqués]`
+
+  ```
+syntaxe OK
+09:14
+  ```
+
+- **bash** `{"command": "sleep 400; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== tirages ===\"; head -8 /tmp/mc_tirages.log 2>/dev/null; echo \"...\"; tail -3 /tmp/mc_tirages.log 2>/dev/null; echo; echo \"=== traçage couches ===\"; ls /home/stephane/Data13TB/stephane/corpus/wiki_apparie/trac … [104 caractères tronqués]`
+
+  ```
+=== tirages ===
+90 entrées d'apprentissage · 90 de test · H=896
+# PROFESSEUR : P_lang 398.1 · P_cont 5263.4 · rapport 13.222
+# graine  fid TEST   P_lang    P_cont   RAPPORT
+      1    0.4681     49.7     104.4     2.101
+      2    0.4669     50.1      82.1     1.637
+      3    0.4662     44.9     103.0     2.294
+      4    0.4673     55.2      96.7     1.753
+      5    0.4660     50.9      98.7     1.939
+...
+     13    0.4641     51.8      78.0     1.506
+     14    0.4654     45.9      85.2     1.859
+     15    0.4645     27.9      85.2     3.056
+
+=== traçage couches ===
+31
+09:21
+  ```
+
+### 🤖 Assistant
+
+⏵ **La distribution VARIE BEAUCOUP : le rapport va de 1,506 à 3,056 selon la graine, pour une fidélité quasi constante (0,464-0,468). Mon §70 ne portait donc que sur un point d'une distribution deux fois plus large.**
+
+| graine | fid TEST | P_lang | P_cont | **RAPPORT** |
+|---:|---:|---:|---:|---:|
+| 13 | 0,4641 | 51,8 | 78,0 | 1,506 |
+| 5 | 0,4660 | 50,9 | 98,7 | 1,939 |
+| **15** | 0,4645 | **27,9** | 85,2 | **3,056** |
+| | | | *professeur* | *13,222* |
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== 50 tirages ===\"; grep -c \"^ \" /tmp/mc_tirages.log; tail -12 /tmp/mc_tirages.log; echo; echo \"traces couches : $(ls /home/stephane/Data13TB/stephane/corpus/wiki_apparie/traces_couches 2>/dev/null | wc -l)/300 … [89 caractères tronqués]`
+
+  ```
+=== 50 tirages ===
+40
+     29    0.4663     57.1     103.3     1.808
+     30    0.4650     73.4      97.1     1.322
+     31    0.4650     44.6      89.3     2.001
+     32    0.4672     43.0      82.6     1.922
+     33    0.4661     34.4      89.3     2.594
+     34    0.4641     50.8      86.4     1.700
+     35    0.4665     47.2      95.3     2.017
+     36    0.4652     42.8      99.1     2.317
+     37    0.4624     57.4      74.5     1.298
+     38    0.4656     37.4      97.6     2.611
+     39    0.4640     50.3      98.3     1.954
+     40    0.4659     51.5      87.7     1.705
+
+traces couches : 70/300
+09:31
+  ```
+
+- **bash** `{"command": "sleep 300; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -14 /tmp/mc_tirages.log; echo; echo \"traces : $(ls /home/stephane/Data13TB/stephane/corpus/wiki_apparie/traces_couches 2>/dev/null | wc -l)/300\"; date '+%H:%M'", "description": "Read the final distribution", "timeou … [13 caractères tronqués]`
+
+  ```
+48    0.4670     46.8      88.3     1.887
+     49    0.4633     21.7      93.3     4.298
+     50    0.4650     44.4      89.4     2.015
+
+# DISTRIBUTION SUR 50 TIRAGES — 120 neurones, 30 articles × 3 langues
+#   fidélité  moyenne    0.4656 · écart-type   0.0013 · min    0.4624 · max    0.4681
+#   P_lang    moyenne   45.5705 · écart-type   9.9666 · min   21.6987 · max   73.4342
+#   P_cont    moyenne   90.0978 · écart-type   7.7459 · min   65.1981 · max  104.4481
+#   RAPPORT   moyenne    2.0928 · écart-type   0.5835 · min    1.2981 · max    4.2982
+#   rapport : médiane 1.947 · 5e centile 1.398 · 95e 3.054
+
+# LECTURE : si l'écart-type du rapport est PETIT devant sa moyenne, la
+# conclusion du §70 (le réservoir abaisse le rapport) tient et se renforce.
+# S'il est grand, c'était un mauvais tirage, pas une propriété.
+
+traces : 90/300
+09:36
+  ```
+
+### 🤖 Assistant
+
+⏵ **Résultat des 50 tirages — et il faut une comparaison honnête : où se situe la distribution face à l'entrée SEULE sur le même panel ?**
+
+| | moyenne | écart-type | min | max |
+|---|---:|---:|---:|---:|
+| fidélité | 0,4656 | **0,0013** | 0,4624 | 0,4681 |
+| P_lang | 45,6 | 9,97 | 21,7 | 73,4 |
+| P_cont | 90,1 | 7,75 | 65,2 | 104,4 |
+| **RAPPORT** | **2,093** | **0,584** | **1,298** | **4,298** |
+
+*professeur sur ce panel : 13,222 · médiane 1,947 · 5ᵉ centile 1,398 · 95ᵉ 3,054*
+
+- **bash** `{"command": "cat > /tmp/mc_base.py <<'EOF'\n\"\"\"OÙ SE SITUE LA DISTRIBUTION DES 50 TIRAGES FACE À L'ENTRÉE SEULE ?\n\nLe §70 affirmait : « le réservoir ABAISSE le rapport, de 1,698 à 1,354 ». Mais les deux\nchiffres venaient de panels différents, et le second d'UN SEUL tirage. Ici on mesure les\nd … [3184 caractères tronqués]`
+
+  ```
+syntaxe OK
+09:37
+  ```
+
+- **bash** `{"command": "sleep 400; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/mc_base.log 2>/dev/null; echo; echo \"traces couches : $(ls /home/stephane/Data13TB/stephane/corpus/wiki_apparie/traces_couches 2>/dev/null | wc -l)/300\"; date '+%H:%M'", "description": "Read the input-alone base … [27 caractères tronqués]`
+
+  ```
+# ENTRÉE SEULE, 0 neurone, même panel
+#   fidélité 0.5268 · P_lang 88.8 · P_cont 173.7 · RAPPORT 1.956
+# PROFESSEUR : P_lang 398.1 · P_cont 5263.4 · rapport 13.222
+
+# 50 TIRAGES DE RÉSERVOIR : moyenne 2,093 · médiane 1,947 · max 4,298 · min 1,298
+# LECTURE : si l'entrée seule est AU-DESSUS de la moyenne des tirages, le
+# réservoir n'apporte rien sur cet axe ; si elle est en dessous, il apporte.
+
+traces couches : 119/300
+09:44
+  ```
+
+### 🤖 Assistant
+
+⏵ **Correction importante : le §70 était faux dans sa formulation. Sur le MÊME panel —**
+
+| | fidélité | P_lang | P_cont | **RAPPORT** |
+|---|---:|---:|---:|---:|
+| **entrée seule, 0 neurone** | **0,5268** | 88,8 | 173,7 | **1,956** |
+| **50 tirages de réservoir** | 0,4656 ± 0,0013 | 45,6 | 90,1 | **2,093** · médiane **1,947** · max **4,298** |
+| *professeur* | — | *398,1* | *5 263,4* | ***13,222*** |
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 81. DISTRIBUTION SUR 50 TIRAGES : le §70 était faux dans sa formulation\n\n### 81.1 La lacune\n\nToute la conclusion du §70 — *« l … [6105 caractères tronqués]`
