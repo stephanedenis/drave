@@ -83,10 +83,18 @@ def cache(dossier, pool, sortie):
     entier tient alors en quelques mégaoctets, et les passes suivantes ne
     relisent plus 2 Go de traces.
     """
+    # LE CACHE DOIT S'INVALIDER. Le corpus article 2 se traçait PENDANT qu'on le
+    # mesurait : un cache écrit au premier passage aurait servi éternellement les
+    # 138 langues d'alors en annonçant le corpus entier. On compte donc les
+    # fichiers présents et on refait le cache s'il en manque.
+    n_fichiers = len(glob.glob(os.path.join(dossier, "*.drvf")))
     if os.path.exists(sortie):
         z = np.load(sortie, allow_pickle=True)
-        noms = [str(x) for x in z["langues"]]
-        return {L: {int(c): z[f"v_{L}_{c}"] for c in z["couches"]} for L in noms}
+        if int(z["n_fichiers"]) == n_fichiers:
+            noms = [str(x) for x in z["langues"]]
+            return {L: {int(c): z[f"v_{L}_{c}"] for c in z["couches"]} for L in noms}
+        print(f"# cache périmé ({int(z['n_fichiers'])} traces contre {n_fichiers}) "
+              f"— reconstruction")
     donnees, langues, couches = {}, [], None
     for f in sorted(glob.glob(os.path.join(dossier, "*.drvf"))):
         L = os.path.basename(f)[:-5]
@@ -97,7 +105,7 @@ def cache(dossier, pool, sortie):
     if not donnees:
         return {}
     np.savez_compressed(sortie, langues=np.array(langues),
-                        couches=np.array(couches),
+                        couches=np.array(couches), n_fichiers=n_fichiers,
                         **{f"v_{L}_{c}": v for L, r in donnees.items()
                            for c, v in r.items()})
     return donnees
@@ -170,15 +178,24 @@ def main():
         couches = sorted(set(A[comm[0]]) & set(B[comm[0]]))
         print(f"\n=== pooling : {pool.upper()} · {len(comm)} langues · "
               f"couches {couches[0]}–{couches[-1]} ===")
-        print(f"# {'couche':>7}{'même article':>14}{'articles ≠':>12}"
-              f"{'SÉPARATION':>12}")
+        print(f"# {'couche':>7}{'même':>9}{'artic≠':>9}{'SÉPARATION':>12}")
         lignes = []
         for c in couches:
             Va = np.vstack([A[L][c] for L in comm])
             Vb = np.vstack([B[L][c] for L in comm])
-            meme = cos_moyen(Va, Va, None, maxi)
-            autre = cos_moyen(Va, Vb, None, maxi)
-            print(f" {c:>7}{meme:>14.4f}{autre:>12.4f}{meme-autre:>+12.4f}")
+            # SYMÉTRISATION, ET ELLE EST NÉCESSAIRE. L'article 1 fait 169
+            # caractères de médiane, l'article 2 en fait 541 : si la longueur
+            # déplace le vecteur moyenné, comparer « art1 contre art1 » à
+            # « art1 contre art2 » mesurerait la LONGUEUR autant que le sens. En
+            # moyennant les deux sens — art2 contre art2 est aussi un positif,
+            # art2 contre art1 aussi un négatif — l'effet de longueur s'annule au
+            # premier ordre.
+            a11 = cos_moyen(Va, Va, None, maxi)
+            a22 = cos_moyen(Vb, Vb, None, maxi)
+            a12 = cos_moyen(Va, Vb, None, maxi)
+            meme = (a11 + a22)/2
+            autre = a12          # déjà symétrique : le tirage mélange les deux sens
+            print(f" {c:>7}{meme:>9.4f}{autre:>9.4f}{meme-autre:>+12.4f}")
             lignes.append((c, meme, autre, meme-autre))
         if lignes:
             pic = max(lignes, key=lambda x: x[3])

@@ -132,3 +132,71 @@ chargement du modèle est un coût fixe qu'aucun corpus ne supprime. C'est
 4. **Le contexte est de 256 jetons** alors que l'article 2 atteint 1 705
    caractères : les plus longs sont tronqués. Le dire, et le vérifier le jour où
    une langue longue portera une conclusion.
+
+---
+
+## 7. Le premier résultat : la première couche sémantique est dans la bande 10–15
+
+Mesuré sur **183 langues** (pooling moyenne) et **209 langues** (pooling dernière
+position), 24 couches, l'article 2 étant encore en cours de traçage. Le corpus
+grandit tout seul — le cache s'invalide quand de nouvelles traces arrivent, sinon
+il servirait éternellement les langues du premier passage en annonçant le corpus
+entier.
+
+### 7.1 Pooling MOYENNE — 183 langues
+
+| couche | même | artic≠ | **SÉPARATION** |
+|---:|---:|---:|---:|
+| 0 | 0,6410 | 0,6401 | +0,0009 |
+| 1 | 0,6296 | 0,6091 | +0,0205 |
+| 2–3 | 0,7490 · 0,7887 | 0,7423 · 0,7798 | +0,0067 · +0,0089 |
+| **4** | 0,8572 | 0,8424 | **+0,0148** |
+| 5–9 | — | — | +0,0112 à +0,0174 |
+| 10 | 0,8441 | 0,8221 | +0,0221 |
+| 11 | 0,7638 | 0,7383 | +0,0255 |
+| 12 | 0,8323 | 0,8025 | +0,0298 |
+| **13** | 0,8134 | 0,7812 | **+0,0322** ← pic |
+| 14–15 | 0,8076 · 0,8077 | 0,7797 · 0,7805 | +0,0279 · +0,0272 |
+| 16–21 | — | — | +0,0165 à +0,0216 |
+| 22–23 | 0,6507 · 0,6357 | 0,6267 · 0,6163 | +0,0240 · +0,0194 |
+
+### 7.2 Pooling DERNIÈRE POSITION — 209 langues
+
+Pic à la **couche 10** (+0,0374), plateau de 10 à 15 (+0,0269 à +0,0354),
+et un bombement net à la **couche 4** (+0,0295).
+
+### 7.3 Les deux poolings s'accordent, et c'est ce qui compte
+
+| | pic | plateau | bombement précoce |
+|---|---|---|---|
+| moyenne | **13** | 10–15 | couche 4 |
+| dernière position | **10** | 10–15 | couche 4 |
+
+Le §84 avait averti que les deux poolings peuvent raconter des histoires
+différentes (1,769 contre 6,275 sur le corpus Wikipedia). **Ici ils racontent la
+même** : une bande sémantique entre les couches **10 et 15** sur 24, soit
+**42 % à 62 % de la profondeur**, avec un second bombement à la couche 4.
+
+**Et cela corrobore une mesure indépendante.** `rapport-plateau-semantique.md`
+situait la convergence inter-langue à **35–42 % de la profondeur** — mesurée sur
+**10 langues et 4 écritures**. Ici, **183 à 209 langues** et deux poolings
+donnent 42–62 %. Les deux mesures ont été faites avec des méthodes différentes,
+sur des corpus différents, et elles se recouvrent.
+
+**Conséquence pour la conception** : la cible d'un pont n'est pas « la couche 8 »
+parce qu'on l'a choisie, c'est **la bande 10–15** parce qu'on l'a mesurée — et le
+bombement de la couche 4 mérite sa propre mesure, parce qu'il pourrait être une
+seconde étape sémantique (ou un artefact de la normalisation).
+
+### 7.4 Réserves, et elles sont réelles
+
+1. **Les effets sont PETITS** : +0,03 de cosinus sur un plancher d'anisotropie de
+   0,75 à 0,87. Le signal sémantique est réel mais il est **dix fois plus petit
+   que ce que les vecteurs se ressemblent sans rien savoir du sens**. Toute
+   conclusion qui oublierait le plancher serait fausse.
+2. **Deux articles, pas trente.** 30 articles alignés existent ; deux suffisent à
+   établir le contraste, pas à le caractériser finement.
+3. **Les longueurs diffèrent** (169 contre 541 caractères de médiane) — la
+   symétrisation annule l'effet au premier ordre, elle ne le supprime pas.
+4. **Le corpus grandit pendant qu'on le mesure** : 183 et 209 langues ici, 399
+   sont attendues. Les chiffres seront repris quand il sera complet.

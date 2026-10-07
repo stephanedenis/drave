@@ -159416,3 +159416,107 @@ chemins rapide et lent IDENTIQUES
 ⏵ **Chemins rapide et lent identiques (vérifié). Je commite et je regarde l'article 2.**
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/premiere_couche_semantique.py && git commit -q -m \"premiere_couche_semantique : chemin numpy rapide (vérifié identique au lent) et cache\n\nLe parsing paire-à-paire en Python coûtait 740 millions d'itérations pour ce\n … [982 caractères tronqués]`
+
+  ```
+372385d premiere_couche_semantique : chemin numpy rapide (vérifié identique au lent) et cache
+
+article2 : 125/399
+gug 7s
+guj 9s
+  ```
+
+### 🤖 Assistant
+
+⏵ **125 langues déjà tracées pour l'article 2 — assez pour une première mesure. Je lance la sonde.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 1500 python3 -u tools/premiere_couche_semantique.py /home/stephane/Data13TB/stephane/corpus/udhr/article1_traces /home/stephane/Data13TB/stephane/corpus/udhr/article2_traces --max-paires 20000 --csv /tmp/pcs 2>&1 | head -60", … [81 caractères tronqués]`
+
+  ```
+=== pooling : MOYENNE · 138 langues · couches 0–23 ===
+#  couche  même article  articles ≠  SÉPARATION
+       0        0.6496      0.6590     -0.0095
+       1        0.6083      0.6222     -0.0139
+       2        0.7446      0.7526     -0.0080
+       3        0.7814      0.7882     -0.0068
+       4        0.8536      0.8498     +0.0038
+       5        0.7988      0.7970     +0.0018
+       6        0.7897      0.7932     -0.0035
+       7        0.8001      0.7995     +0.0006
+       8        0.8388      0.8385     +0.0003
+       9        0.7621      0.7607     +0.0014
+      10        0.8379      0.8278     +0.0101
+      11        0.7614      0.7438     +0.0176
+      12        0.8283      0.8086     +0.0197
+      13        0.8143      0.7881     +0.0262
+      14        0.8062      0.7872     +0.0191
+      15        0.8101      0.7879     +0.0222
+      16        0.8135      0.7952     +0.0183
+      17        0.7719      0.7520     +0.0199
+      18        0.7308      0.7207     +0.0101
+      19        0.7513      0.7343     +0.0169
+      20        0.6973      0.6854     +0.0118
+      21        0.7065      0.6903     +0.0161
+      22        0.6683      0.6433     +0.0250
+      23        
+… [1595 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Résultat, mais un confondant possible : l'article 2 est 3× plus long que l'article 1. Je symétrise la mesure pour l'annuler.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/premiere_couche_semantique.py'; s=open(p).read()\nold = \"\"\"        print(f\"# {'couche':>7}{'même article':>14}{'articles ≠':>12}\"\n              f\"{'SÉPARATION':>12}\")\n        lignes = []\n        f … [1890 caractères tronqués]`
+
+  ```
+symétrisé
+syntaxe OK
+=== article 2 ===
+171
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le cache doit s'invalider quand de nouvelles traces arrivent — sinon il mentirait. Je corrige et je relance.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/premiere_couche_semantique.py'; s=open(p).read()\nold = \"\"\"    if os.path.exists(sortie):\n        z = np.load(sortie, allow_pickle=True)\n        noms = [str(x) for x in z[\"langues\"]]\n        return  … [1769 caractères tronqués]`
+
+  ```
+invalidation ajoutée
+syntaxe OK
+=== pooling : MOYENNE · 183 langues · couches 0–23 ===
+#  couche     même   artic≠  SÉPARATION
+       0   0.6410   0.6401     +0.0009
+       1   0.6296   0.6091     +0.0205
+       2   0.7490   0.7423     +0.0067
+       3   0.7887   0.7798     +0.0089
+       4   0.8572   0.8424     +0.0148
+       5   0.8058   0.7884     +0.0174
+       6   0.7971   0.7838     +0.0133
+       7   0.8027   0.7907     +0.0120
+       8   0.8421   0.8309     +0.0112
+       9   0.7711   0.7557     +0.0155
+      10   0.8441   0.8221     +0.0221
+      11   0.7638   0.7383     +0.0255
+      12   0.8323   0.8025     +0.0298
+      13   0.8134   0.7812     +0.0322
+      14   0.8076   0.7797     +0.0279
+      15   0.8077   0.7805     +0.0272
+      16   0.8096   0.7880     +0.0216
+      17   0.7612   0.7397     +0.0214
+      18   0.7196   0.7031     +0.0165
+      19   0.7421   0.7224     +0.0197
+      20   0.6900   0.6705     +0.0195
+      21   0.6932   0.6728     +0.0205
+      22   0.6507   0.6267     +0.0240
+      23   0.6357   0.6163     +0.0194
+# PIC de séparation à la couche 13 (+0.0322 = 0.8134 − 0.7812)
+=== pooling : DERNIERE · 209 langues · couches 0–23 ===
+#  couche     même
+… [1091 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Résultat cohérent entre les deux poolings : la séparation culmine dans la bande des couches 10–15. Je consigne.**
+
+- **bash** `{"command": "date '+%H:%M'; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> reports/rapport-cycle-rapide.md <<'MD_EOF'\n\n---\n\n## 7. Le premier résultat : la première couche sémantique est dans la bande 10–15\n\nMesuré sur **183 langues** (pooling moyenne) et **209 langues** (pooling  … [5026 caractères tronqués]`
