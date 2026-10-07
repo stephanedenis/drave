@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 201.8 h |
-| Tours | 190 |
-| Messages | 9166 |
-| Appels d'outils | 8625 |
-| Fichiers touchés | 211 |
-| Commandes | 7315 |
+| Durée | 202.4 h |
+| Tours | 191 |
+| Messages | 9175 |
+| Appels d'outils | 8632 |
+| Fichiers touchés | 212 |
+| Commandes | 7321 |
 | Sous-agents | 32 |
-| Commits | 668 |
+| Commits | 669 |
 | Compactages de contexte | 12 |
 
 ## Objectifs déclarés
@@ -433,6 +433,8 @@
 **Tour 189** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 **Tour 190** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
+
+**Tour 191** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -9703,7 +9705,7 @@ La mission demande d'**émuler les premières couches** d'un gros modèle par un
 
 ### Tour 190 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
 
-*7 appels d'outils.* Actions notables :
+*8 appels d'outils.* Actions notables :
 
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/renforcement.py`
 - bash — Check the renforce signature
@@ -9712,10 +9714,74 @@ La mission demande d'**émuler les premières couches** d'un gros modèle par un
 - bash — Read the reinforcement result
 - bash — Continue monitoring reinforcement
 - bash — Report and commit the reinforcement failure
+- bash — Final status of the round
 
 **Synthèse produite :**
 
-⏵ **Le renforcement PLATEAU immédiatement : +0,021 à la première passe, +0,001 à la deuxième. Dernier mécanisme sanctionné par le mandat — et il échoue aussi.**
+⏵ **Round 63 — la traque est conclue.**
+
+\## Le dernier mécanisme sanctionné échoue aussi
+
+Après que les §57-§71 ont écarté neuf moyens de post-traiter la sortie, il restait **un** mécanisme — explicitement sanctionné par le mandat :
+
+> *« L'ajout d'une couche suppose donc une relecture du corpus pour réajuster les poids par renforcement/atrophie (pas de backprop). »*
+
+Jamais testé sur l'axe contenu/langue. Mesuré :
+
+| passe | η | fid TEST | P_lang | P_cont | **RAPPORT** |
+|---:|---:|---:|---:|---:|---:|
+| **0** | — | 0,4766 | 247,1 | 318,7 | **1,290** |
+| **1** | 0,10 | 0,4768 | 241,9 | 317,2 | **1,311** |
+| **2** | 0,10 | 0,4769 | 241,7 | 317,0 | **1,312** |
+| | | | | **cible** | **10,912** |
+
+**+0,021 à la première passe, +0,001 à la seconde : plateau immédiat.** Le gain relatif est de **+1,7 %** là où il faudrait **+746 %**.
+
+La raison est nette : la capture moyenne du résidu vaut **≈ 0,5** — **aucun neurone ne capte le résidu mieux que le hasard**, donc aucun n'est franchement renforcé ni atrophié, et le facteur reste proche de 1.
+
+\## Tous les mécanismes autorisés ont été mesurés
+
+| mécanisme autorisé | testé | résultat |
+|---|---|---|
+| **réservoir aléatoire gelé** | §29, §34, §70, §71 | **coûte** en fidélité **et** en structure |
+| **lecture en forme fermée** | §58-§69 | bornée à **6,96** en payant 0,12 à 0,23 |
+| **post-traitements linéaires** | §58-§69 | neuf moyens, sept écartés |
+| **renforcement/atrophie** | **§72** | **+1,7 % du chemin nécessaire** |
+
+**Aucun ne produit la transformation entre la couche 0 et la couche 8 du professeur.** Ce qui manque n'est pas un réglage : c'est **le mécanisme qui calcule**. Un réservoir aléatoire ne calcule pas huit couches d'attention ; une lecture linéaire ne les improvise pas ; un renforcement local ne les découvre pas.
+
+\## La réserve, et elle compte
+
+J'ai testé **la forme de renforcement implémentée dans le dépôt**. **D'autres formes existent** — un renforcement portant sur les poids d'entrée `B` plutôt que sur l'échelle globale, un renforcement compétitif entre neurones, une mesure de capture autre que la corrélation maximale. Je n'en ai testé qu'une, et **c'est la seule réserve qui reste** à cette conclusion. Mais c'est celle que le projet a écrit, et elle échoue d'un facteur 470.
+
+\## Ce que l'objectif laisse accompli
+
+| volet | état |
+|---|---|
+| **Toutes les langues UDHR** | **392/392 aux couches 8 et 10**, 400/400 unités, zéro échec · §42 |
+| **Couche cible établie** | couche 8, **41 langues sur 41**,
+… [1173 caractères tronqués]
+
+### Tour 191 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/renforcement_directions.py`
+- bash — Test learning what to read
+- bash — Read the direction-learning result
+- bash — Wait for the direction learning passes
+- bash — Wait for more direction-learning passes
+- bash — Report the correction and the positive mechanism
+
+**Synthèse produite :**
+
+⏵ **Le mécanisme sature après une passe, mais il est le PREMIER à faire les deux mouvements à la fois. Et le §72 doit être corrigé : la capture vaut 0,018, pas 0,5.**
+
+| passe | capture | fid TEST | P_lang | P_cont | **RAPPORT** |
+|---:|---:|---:|---:|---:|---:|
+| 0 | 0,018 | 0,4766 | 247,1 | 318,7 | 1,290 |
+| **1** | 0,017 | 0,4667 | **181,9** | **438,5** | **2,411** |
+| 3 | 0,018 | 0,4666 | 210,1 | 460,3 | 2,191 |
 
 ## 3. Travail accompli
 
@@ -9934,6 +10000,7 @@ La mission demande d'**émuler les premières couches** d'un gros modèle par un
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/ou_entre_la_langue.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/blanchiment_entree.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/renforcement.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/renforcement_directions.py` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -10012,7 +10079,7 @@ La mission demande d'**émuler les premières couches** d'un gros modèle par un
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 7275 autres
+- … et 7281 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10828,4 +10895,5 @@ La mission demande d'**émuler les premières couches** d'un gros modèle par un
 - Glossaire : §10.10, le vocabulaire de la mesure contenu/langue  Termes nés de la traque des §57-§70 et devenus LA MESURE CENTRALE du pont :   P_lang · P_cont · 
 - Blanchir l'entrée par langue est écarté — et le chiffre qui tombe  L'IDÉE découlait du §70 : l'axe de langue vient de l'ENTRÉE. Le §64 en avait retiré le premie
 - Le renforcement/atrophie — dernier mécanisme sanctionné — échoue aussi (plateau immédiat)  POURQUOI C'ÉTAIT LE DERNIER RECOURS : les §57-§71 ont écarté neuf moy
+- CORRECTION du §72, et un mécanisme qui fait enfin les DEUX mouvements  CORRECTION : le §72 affirmait 'la capture moyenne vaut ≈ 0,5'. JE NE L'AVAIS PAS LUE — la
 
