@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 200.5 h |
-| Tours | 186 |
-| Messages | 9131 |
-| Appels d'outils | 8598 |
-| Fichiers touchés | 207 |
-| Commandes | 7292 |
+| Durée | 200.9 h |
+| Tours | 187 |
+| Messages | 9140 |
+| Appels d'outils | 8605 |
+| Fichiers touchés | 208 |
+| Commandes | 7298 |
 | Sous-agents | 32 |
-| Commits | 663 |
+| Commits | 664 |
 | Compactages de contexte | 12 |
 
 ## Objectifs déclarés
@@ -425,6 +425,8 @@
 **Tour 185** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 **Tour 186** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
+
+**Tour 187** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -9463,7 +9465,7 @@ Contrairement au §63, **l'effet se transfère** aux langues inconnues : la proj
 
 ### Tour 186 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
 
-*7 appels d'outils.* Actions notables :
+*8 appels d'outils.* Actions notables :
 
 - bash — Test deviation amplification after language removal
 - bash — Read the amplification-after-removal result
@@ -9472,17 +9474,69 @@ Contrairement au §63, **l'effet se transfère** aux langues inconnues : la proj
 - bash — Read the covariance matching result
 - bash — Wait for the full covariance sweep
 - bash — Report and commit the scale-invariance and covariance rejection
+- bash — Check the Wikipedia chain
 
 **Synthèse produite :**
 
-⏵ **Sixième remède écarté : imposer la covariance de la cible à notre sortie fait BAISSER le rapport (1,93 → 1,81) et coûte 0,13 de fidélité.**
+⏵ **Round 59 — acquis.**
 
-| mélange | fid TEST | P_lang | P_cont | RAPPORT |
+\## 1. Une identité mathématique qui explique cinq échecs
+
+`P_cont` et `P_lang` sont **toutes deux quadratiques** en la sortie. Multiplier l'écart à la moyenne par `α` multiplie donc les deux par `α²`, et **leur rapport est inchangé**. Mesuré sans exception :
+
+| rang | α | P_lang | P_cont | **rapport** |
+|---:|---:|---:|---:|---:|
+| 5 | 1,5 | 51,5 | 157,9 | **3,064** |
+| 5 | 5,0 | 572,3 | 1 753,9 | **3,064** |
+| 40 | 1,5 | 49,2 | 139,3 | **2,832** |
+| 40 | 5,0 | 546,7 | 1 548,0 | **2,832** |
+
+**Identique au chiffre près, à tous les rangs et tous les α.** Ce n'est pas empirique : le rapport est homogène de degré 0.
+
+**Conséquence structurante** : le rapport ne peut venir que d'un **changement de directions**. Toutes les amplifications — uniformes (§60), par entrée (§62), ciblées sur le contenu (§62) — **ne peuvent pas le corriger, quelle que soit leur échelle**. C'est la raison profonde pour laquelle cinq remèdes ont échoué, et elle était invisible avant de la mesurer.
+
+**Et la cible tient en une ligne** : pour `P_cont` = 4 356 avec `P_lang` ≤ 399, il faut un rapport ≥ **10,9**. Nous sommes à **3,06**, soit 28 %.
+
+\## 2. Sixième remède écarté : imposer la covariance de la cible
+
+Si le rapport ne dépend que des directions, la covariance du professeur les contient. J'ai donc construit `A = C_Y^½ · C_O^(−½)` — matrice fixe de 896×896, apprise sur l'apprentissage, purement linéaire et déployable.
+
+| mélange | fid TEST | P_lang | P_cont | **rapport** |
 |---:|---:|---:|---:|---:|
 | 0,00 | 0,4704 | 42,4 | 82,1 | **1,934** |
 | 0,50 | 0,4107 | 329,2 | 596,0 | 1,810 |
 | 1,00 | 0,3395 | 986,1 | 1 784,5 | **1,810** |
 | | | | *prof 4 356* | *prof 10,912* |
+
+**Le rapport BAISSE au lieu de monter**, et la fidélité s'effondre.
+
+**Pourquoi, et c'est une distinction qui compte** : la covariance **totale** ne détermine pas le partage contenu/langue. `P_cont` et `P_lang` sont construits sur les **moyennes par entrée** — donc sur la façon dont les entrées se **regroupent**, information absente de la covariance globale. Imposer la covariance fixe l'enveloppe de second ordre **sans fixer la structure de groupes**, et c'est cette dernière qui fait le rapport.
+
+\## 3. Une troisième mesure indépendante du même défaut
+
+**Trace de la covariance : la nôtre 18 285, celle de la cible 248 429 — 13,6× moins d'énergie totale.** Après le rapport `‖écart‖/‖moyenne‖` du §60.1 (0,291) et la décomposition du §61 (`P_cont` 13,7× plus faible). **Les trois concordent**, par t
+… [1543 caractères tronqués]
+
+### Tour 187 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/discriminant_contenu.py`
+- bash — Test the content/language discriminant
+- bash — Read the discriminant result
+- bash — Test amplification to teacher magnitudes
+- bash — Read the amplified discriminant result
+- bash — Report and commit the discriminant result and frontier
+
+**Synthèse produite :**
+
+⏵ **Réponse complète, et elle est un compromis chiffré : la structure du professeur est atteignable par les directions, mais PAS en gardant la fidélité.**
+
+| rang | α | fid TEST | P_lang | P_cont | critère §62.3 |
+|---:|---:|---:|---:|---:|---|
+| 20 | 1,0 | 0,4575 | 17,4 | 57,9 | — |
+| **20** | **4,2** | **0,3536** | **300,7** | **1 000** | **✓ P_lang ≤ 399** |
+| 2 | 12,0 | **0,2385** | 625,8 | 4 356 | ✗ P_lang > 399 |
 
 ## 3. Travail accompli
 
@@ -9697,6 +9751,7 @@ Contrairement au §63, **l'effet se transfère** aux langues inconnues : la proj
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/sous_espace_du_contenu.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/etats_sans_langue.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/covariance_cible.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/discriminant_contenu.py` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -9775,7 +9830,7 @@ Contrairement au §63, **l'effet se transfère** aux langues inconnues : la proj
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 7252 autres
+- … et 7258 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10586,4 +10641,5 @@ Contrairement au §63, **l'effet se transfère** aux langues inconnues : la proj
 - Bug de découpage dans MES outils : l'ajustement ne portait que sur DEUX langues  LES OUTILS §57-§64 découpaient iap, ival = itr[nt:], itr[:nt] avec nt = len(itr
 - Deux leviers DÉPLOYABLES qui se combinent : le rapport passe de 1,46 à 3,06  §66.1 RETRAIT DU SOUS-ESPACE DE LANGUE DANS LES ÉTATS (avant la lecture) : on calcu
 - Le rapport est INVARIANT D'ÉCHELLE (identité), et imposer la covariance de la cible échoue  §67 — CONSTAT MATHÉMATIQUE QUI FERME UNE FAMILLE DE PISTES : P_cont 
+- Le discriminant fonctionne : rapport 6,96 (64 % de la cible) — et la frontière est tracée  L'OUTIL QUI VISE LA BONNE QUANTITÉ : analyse discriminante linéaire, 
 

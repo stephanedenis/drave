@@ -150591,3 +150591,206 @@ articles wiki : 267
 | | | | *prof 4 356* | *prof 10,912* |
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 67. Le rapport est INVARIANT D'ÉCHELLE — donc aucune amplitude ne peut le corriger\n\nC'est un constat mathématique, et il ferme t … [7262 caractères tronqués]`
+
+  ```
+7c3413d Le rapport est INVARIANT D'ÉCHELLE (identité), et imposer la covariance de la cible échoue
+  ```
+
+### 🤖 Assistant
+
+⏵ **Round 59 — le rapport est invariant d'échelle, et c'est une identité qui explique cinq échecs.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"articles wiki : $(grep -c '^ARTICLE' /tmp/trace_wiki_apparie.log) / 482\"; awk '{if($2 ~ /s$/) {gsub(\"s\",\"\",$2); s+=$2; n++}} END {printf \"  %d traces · %.1f s · reste ~%.1f h\\n\", n, s/n, (2892-n)*s/n/3600}' /tmp/trace_ … [152 caractères tronqués]`
+
+  ```
+articles wiki : 273 / 482
+  1508 traces · 20.6 s · reste ~7.9 h
+2591189    08:38:54 bash /tmp/trace_wiki_apparie.sh
+23:16
+  ```
+
+### 🤖 Assistant
+
+⏵ **Round 59 — acquis.**
+
+## 1. Une identité mathématique qui explique cinq échecs
+
+`P_cont` et `P_lang` sont **toutes deux quadratiques** en la sortie. Multiplier l'écart à la moyenne par `α` multiplie donc les deux par `α²`, et **leur rapport est inchangé**. Mesuré sans exception :
+
+| rang | α | P_lang | P_cont | **rapport** |
+|---:|---:|---:|---:|---:|
+| 5 | 1,5 | 51,5 | 157,9 | **3,064** |
+| 5 | 5,0 | 572,3 | 1 753,9 | **3,064** |
+| 40 | 1,5 | 49,2 | 139,3 | **2,832** |
+| 40 | 5,0 | 546,7 | 1 548,0 | **2,832** |
+
+**Identique au chiffre près, à tous les rangs et tous les α.** Ce n'est pas empirique : le rapport est homogène de degré 0.
+
+**Conséquence structurante** : le rapport ne peut venir que d'un **changement de directions**. Toutes les amplifications — uniformes (§60), par entrée (§62), ciblées sur le contenu (§62) — **ne peuvent pas le corriger, quelle que soit leur échelle**. C'est la raison profonde pour laquelle cinq remèdes ont échoué, et elle était invisible avant de la mesurer.
+
+**Et la cible tient en une ligne** : pour `P_cont` = 4 356 avec `P_lang` ≤ 399, il faut un rapport ≥ **10,9**. Nous sommes à **3,06**, soit 28 %.
+
+## 2. Sixième remède écarté : imposer la covariance de la cible
+
+Si le rapport ne dépend que des directions, la covariance du professeur les contient. J'ai donc construit `A = C_Y^½ · C_O^(−½)` — matrice fixe de 896×896, apprise sur l'apprentissage, purement linéaire et déployable.
+
+| mélange | fid TEST | P_lang | P_cont | **rapport** |
+|---:|---:|---:|---:|---:|
+| 0,00 | 0,4704 | 42,4 | 82,1 | **1,934** |
+| 0,50 | 0,4107 | 329,2 | 596,0 | 1,810 |
+| 1,00 | 0,3395 | 986,1 | 1 784,5 | **1,810** |
+| | | | *prof 4 356* | *prof 10,912* |
+
+**Le rapport BAISSE au lieu de monter**, et la fidélité s'effondre.
+
+**Pourquoi, et c'est une distinction qui compte** : la covariance **totale** ne détermine pas le partage contenu/langue. `P_cont` et `P_lang` sont construits sur les **moyennes par entrée** — donc sur la façon dont les entrées se **regroupent**, information absente de la covariance globale. Imposer la covariance fixe l'enveloppe de second ordre **sans fixer la structure de groupes**, et c'est cette dernière qui fait le rapport.
+
+## 3. Une troisième mesure indépendante du même défaut
+
+**Trace de la covariance : la nôtre 18 285, celle de la cible 248 429 — 13,6× moins d'énergie totale.** Après le rapport `‖écart‖/‖moyenne‖` du §60.1 (0,291) et la décomposition du §61 (`P_cont` 13,7× plus faible). **Les trois concordent**, par trois chemins indépendants.
+
+## 4. La série, après neuf moyens
+
+| § | moyen | rapport | verdict |
+|---|---|---:|---|
+| — | rien | 1,460 | référence |
+| 58 | objectif à deux curseurs | *(cible atteinte)* | non convexe |
+| 59 | pondération de la cible | ≈ 1,0 | **écarté** |
+| 60-62 | trois formes d'amplification | constant | **écartées** — §67 l'explique |
+| 62 | `μ_lang` | 0,91 | **écarté** |
+| 63 | sous-espace du contenu | 1,50 | **écarté** |
+| 64 | **centrage de l'entrée** | **1,871** | **retenu** |
+| 66 | **+ retrait du sous-espace de langue dans les états** | **3,064** | **retenu** |
+| 68 | covariance de la cible | 1,810 | **écarté** |
+| | *professeur* | *10,912* | *la cible* |
+
+**Neuf moyens, sept écartés, deux retenus et combinés** : le rapport passe de 1,46 à 3,06, et l'on sait maintenant *pourquoi* les amplifications ne peuvent pas faire mieux — c'est une identité, pas une limite d'essai.
+
+**Note de méthode** : le plancher de régularisation de `C_O^(−½)` est **affiché** (2,04·10⁻²) dans la sortie. Un résultat obtenu avec une régularisation non déclarée n'est pas un résultat.
+
+## État
+
+| chaîne | avancement |
+|---|---|
+| **Wikipedia apparié** | **273 / 482 articles** · 1 508 traces · reste **~7,9 h** |
+| **Croissance μ = 0,1** | terminée (§56) |
+| **Crime** | 4/24 segments, conservés |
+
+Le traçage reste le chemin critique jusqu'à l'aube. Il permettra de vérifier à 482 articles que les deux leviers retenus tiennent — et de resserrer l'intervalle sur le rapport de 3,06, qui est désormais la mesure centrale du pont.
+
+
+## Tour 187
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de représentation universelle), boîte noire (on ne lit du professeur que la couche à émuler, jamais sa tête ni ses jetons générés), aucune rétropropagation (A et B aléatoires et gelés, seule la lecture s'ajuste en forme fermée), et chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, TAILLE du réseau, avec le diagnostic oracle sur les deux panneaux (test hors vivier et validation du même vivier)."
+Round: 60/256
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ **Le rapport ne peut venir que de DIRECTIONS. L'outil qui vise exactement ça — et qui utilise les moyennes PAR ENTRÉE, contrairement au §68 : un discriminant contenu/langue (problème aux valeurs propres généralisé), appris et déployable.**
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"discriminant_contenu.py — maximiser le rapport contenu/langue par les DIRECTIONS.\n\nCE QUI MÈNE ICI, en trois étapes établies :\n  §67 — le rapport `P_cont/P_lang` est INVARIANT D'ÉCHELLE : aucune amplitude ne peut\n        le corriger, seulement un change … [6899 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/discriminant_contenu.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"import ast; ast.parse(open('tools/discriminant_contenu.py').read()); print('syntaxe OK')\" && setsid nohup python3 -u tools/discriminant_contenu.py /tmp/cache_wikitrain.npz /tmp/cache_wikitest.npz --neur 120 --centre-ent … [171 caractères tronqués]`
+
+  ```
+syntaxe OK
+lancé
+23:17
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/discriminant.log 2>/dev/null; echo; date '+%H:%M'", "description": "Read the discriminant result", "timeoutMs": 620000}`
+
+  ```
+# CENTRAGE DE L'ENTRÉE activé (§64)
+# réseau 120 neurones · 1 couche(s) · 896 canaux
+# DISCRIMINANT : 85 contenus · 3 langues · 896 canaux
+# plancher affiché : 5.467e-03 (1e-2 × trace(C_lang)/ncanaux)
+# valeurs propres du discriminant (les 8 premières) : 6286.52 · 1651.15 · 931.83 · 804.47 · 674.55 · 575.60 · 545.61 · 480.88
+
+# professeur : P_lang 399.2 · P_cont 4356.4 · rapport 10.912
+
+#   rang  fid TEST    P_lang    P_cont   RAPPORT
+      0    0.4703      42.4      82.1     1.934
+      2    0.4341       4.3      30.2     6.961
+      5    0.4433       9.9      41.6     4.216
+     10    0.4503      13.9      50.2     3.623
+     20    0.4575      17.4      57.9     3.326
+     40    0.4620      23.0      64.4     2.800
+
+# rang 0 = notre sortie · rang r = projection sur les r meilleures
+# directions discriminantes apprises sur l'apprentissage.
+# CRITÈRE (§62.3) : P_cont PROCHE du professeur ET P_lang qui ne le dépasse
+# pas — le rapport seul peut être gonflé par le dénominateur.
+
+23:27
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le discriminant FONCTIONNE : le rapport atteint 6,961 au rang 2 — plus du double du meilleur précédent (3,064) et 64 % de la cible. Mais les énergies sont écrasées. Test décisif : amplifier jusqu'aux magnitudes du professeur.**
+
+| rang | fid TEST | P_lang | P_cont | RAPPORT |
+|---:|---:|---:|---:|---:|
+| 0 | 0,4703 | 42,4 | 82,1 | 1,934 |
+| **2** | 0,4341 | 4,3 | 30,2 | **6,961** |
+| 40 | 0,4620 | 23,0 | 64,4 | 2,800 |
+| | | | *prof 4 356* | *prof 10,912* |
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\ns = open('tools/discriminant_contenu.py').read()\nold = \"\"\"        ft = cos_lignes(Oc, np.vstack(Yte))\n        dm = decompose(clte, moyennes(clte, Oc, bo_t))\n        print(f\" {r:>6}{ft:>10.4f}{dm[0]:>10.1f} … [1959 caractères tronqués]`
+
+  ```
+amplification câblée
+syntaxe OK
+lancé
+23:28
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/discriminant2.log 2>/dev/null; echo; echo \"articles wiki : $(grep -c '^ARTICLE' /tmp/trace_wiki_apparie.log)\"; date '+%H:%M'", "description": "Read the amplified discriminant result", "timeoutMs": 620000}`
+
+  ```
+# CENTRAGE DE L'ENTRÉE activé (§64)
+# réseau 120 neurones · 1 couche(s) · 896 canaux
+# DISCRIMINANT : 85 contenus · 3 langues · 896 canaux
+# plancher affiché : 5.467e-03 (1e-2 × trace(C_lang)/ncanaux)
+# valeurs propres du discriminant (les 8 premières) : 6286.52 · 1651.15 · 931.83 · 804.47 · 674.55 · 575.60 · 545.61 · 480.88
+
+# professeur : P_lang 399.2 · P_cont 4356.4 · rapport 10.912
+
+#   rang  fid TEST    P_lang    P_cont   RAPPORT
+      2    0.4341       4.3      30.2     6.961
+        # -> P_cont visé    1000 : alpha   5.8 · fid 0.3321 · P_lang   143.6 · P_cont   1000.0 · rapport   6.961
+        # -> P_cont visé    4356 : alpha  12.0 · fid 0.2385 · P_lang   625.8 · P_cont   4356.4 · rapport   6.961
+      5    0.4433       9.9      41.6     4.216
+        # -> P_cont visé    1000 : alpha   4.9 · fid 0.3393 · P_lang   237.2 · P_cont   1000.0 · rapport   4.216
+        # -> P_cont visé    4356 : alpha  10.2 · fid 0.2484 · P_lang  1033.4 · P_cont   4356.4 · rapport   4.216
+     20    0.4575      17.4      57.9     3.326
+        # -> P_cont visé    1000 : alpha   4.2 · fid 0.3536 · P_lang   300.7 · P_cont   1000.0 · rapport   3.326
+        # -> P_cont visé    4356 : alpha   8.7 · fid
+… [351 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Réponse complète, et elle est un compromis chiffré : la structure du professeur est atteignable par les directions, mais PAS en gardant la fidélité.**
+
+| rang | α | fid TEST | P_lang | P_cont | critère §62.3 |
+|---:|---:|---:|---:|---:|---|
+| 20 | 1,0 | 0,4575 | 17,4 | 57,9 | — |
+| **20** | **4,2** | **0,3536** | **300,7** | **1 000** | **✓ P_lang ≤ 399** |
+| 2 | 12,0 | **0,2385** | 625,8 | 4 356 | ✗ P_lang > 399 |
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 69. Le discriminant fonctionne — et la frontière est maintenant tracée\n\n### 69.1 L'outil qui vise le rapport par les directions\ … [7164 caractères tronqués]`
