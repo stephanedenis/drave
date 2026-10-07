@@ -156650,3 +156650,15 @@ représe
 ⏵ **La colonne d=0 de la portée est fausse (bug : elle prédit le jeton à distance d, pas le courant). Je corrige et j'écris.**
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/localite_couches.py'; s=open(p).read()\nold = \"\"\"                Xd = np.hstack([E[:len(E)-d], E[d:]])\n                Ec = E[:len(E)-d]\n                Gd[d] += Xd.T @ Xd\n                Gd0[d] += Ec … [2148 caractères tronqués]`
+
+  ```
+témoin corrigé
+syntaxe OK
+0b0161f localite_couches : le témoin « jeton courant » était décalé de d positions
+  ```
+
+### 🤖 Assistant
+
+⏵ **J'écris §95 (portée du contexte), puis je réponds au recul demandé.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> reports/rapport-toutes-langues.md <<'MARKDOWN'\n\n---\n\n## 95. LA PORTÉE DU CONTEXTE : le voisin immédiat porte presque tout\n\n### 95.1 Le montage\n\nLe §89 mesurait ce qu'une **fenêtre de trois jetons** ajoute. Il ne disait … [4084 caractères tronqués]`
