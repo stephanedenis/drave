@@ -156116,3 +156116,50 @@ syntaxe OK
 ⏵ **J'ajoute un renvoi du §88.5 vers la réplication, pour que le lecteur ne s'arrête pas au chiffre réfuté.**
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\nold = \"\"\"**Réserve, et elle est sérieuse** : ce chiffre est mesuré sur **47 articles d'apprentissage**,\nsoit un panel dix fois plus petit que celui du §79 … [1253 caractères tronqués]`
+
+  ```
+renvoi ajouté
+--- portée ---
+##### PORTÉE DU CONTEXTE — 50 articles × 6 langues, distances 1,2,4,8,16,32
+# 300 traces · fenêtre 2 · ride 1.0 · 50 contenus
+  ```
+
+### 🤖 Assistant
+
+⏵ **La portée relit les traces deux fois — je fusionne les deux passes pour la moitié du temps.**
+
+- **bash** `{"command": "P=$(pgrep -f \"distances 1,2,4,8,16,32\" | head -1); echo \"pid=$P\"; [ -n \"$P\" ] && awk '{print \"cpu (s):\", ($14+$15)/100}' /proc/$P/stat; for p in $(pgrep -f \"localite_couches.py\" | tr '\\n' ' '); do kill $p 2>/dev/null; echo \"tué $p\"; done; sleep 2; cd /home/stephane/Data13TB … [3933 caractères tronqués]`
+
+  ```
+pid=2873752
+cpu (s): 1049.93
+tué 2873752
+[killed by signal: SIGTERM]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Encore tué par mon propre `pgrep -f`. Je vérifie l'état et refais l'édition.**
+
+- **bash** `{"command": "ps -eo pid,cmd | grep -E \"localite\" | grep -v grep | head -3; echo \"--- édition appliquée ? ---\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -c \"UNE SEULE PASSE\" tools/localite_couches.py", "description": "Check state after self-kill"}`
+
+  ```
+--- édition appliquée ? ---
+0
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/localite_couches.py'; s=open(p).read()\nold = \"\"\"        Gd = {d: np.zeros((1792, 1792)) for d in distances}\n        Dd = {d: {c: np.zeros((1792, 896)) for c in cs} for d in distances}\n        som = {d … [3269 caractères tronqués]`
+
+  ```
+passe unique appliquée
+syntaxe OK
+##### PORTÉE DU CONTEXTE — 50 articles × 6 langues, distances 1,2,4,8,16,32
+# 300 traces · fenêtre 2 · ride 1.0 · 50 contenus
+  ```
+
+### 🤖 Assistant
+
+⏵ **Pendant que la portée tourne, je consolide tous les chiffres de la session en un tableau de bord qui nomme les conditions.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> reports/rapport-toutes-langues.md <<'MARKDOWN'\n\n---\n\n## 91. TABLEAU DE BORD — chaque chiffre avec ses conditions\n\nLes §81 à §90 ont montré qu'un chiffre du projet sans ses conditions est un chiffre faux à\nl'usage. Voici … [7357 caractères tronqués]`

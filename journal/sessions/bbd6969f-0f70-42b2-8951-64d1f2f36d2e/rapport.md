@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 213.8 h |
+| Durée | 213.9 h |
 | Tours | 204 |
-| Messages | 9403 |
-| Appels d'outils | 8829 |
+| Messages | 9407 |
+| Appels d'outils | 8833 |
 | Fichiers touchés | 218 |
-| Commandes | 7502 |
+| Commandes | 7506 |
 | Sous-agents | 32 |
-| Commits | 688 |
+| Commits | 689 |
 | Compactages de contexte | 13 |
 
 ## Objectifs déclarés
@@ -10453,7 +10453,7 @@ Chacun remplace une devinette que j'ai faite sans lui.
 
 ### Tour 204 — bien. vas-y dans l'ordre de ton choix.
 
-*119 appels d'outils.* Actions notables :
+*123 appels d'outils.* Actions notables :
 
 - bash — Launch layer 0-8 tracing for 50 articles
 - bash — Launch the 50-draw distribution
@@ -10469,11 +10469,11 @@ Chacun remplace une devinette que j'ai faite sans lui.
 - bash — Test the layer profile on partial traces
 - bash — Single-pass reader and test
 - bash — Inspect the actual trace format
-- … et 100 autres
+- … et 104 autres
 
 **Synthèse produite :**
 
-⏵ **J'ajoute un renvoi du §88.5 vers la réplication, pour que le lecteur ne s'arrête pas au chiffre réfuté.**
+⏵ **Pendant que la portée tourne, je consolide tous les chiffres de la session en un tableau de bord qui nomme les conditions.**
 
 ## 3. Travail accompli
 
@@ -10777,7 +10777,7 @@ Chacun remplace une devinette que j'ai faite sans lui.
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 7462 autres
+- … et 7466 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10905,7 +10905,7 @@ Chacun remplace une devinette que j'ai faite sans lui.
 
 ## 5. Erreurs rencontrées
 
-396 sorties en erreur ou divergentes. Les premières :
+397 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -11613,4 +11613,5 @@ Chacun remplace une devinette que j'ai faite sans lui.
 - §89 : localité — la couche 8 doit 24 % au jeton, 33 % à trois jetons, 67 % à autre chose  Notre pont est récurrent ; la récurrence ne se justifie que si la cibl
 - §90 : la réplication du §88.5 — le gain de fidélité tient, le gain de rapport s'inverse  Le §88.5 annonçait que centrer la cible dominait la référence sur les d
 - Renvoi du §88.5 vers le §90 : le tableau du gain de rapport ne doit pas être lu seul" && sleep 420; echo "--- portée ---"; tail -14 /tmp/mesure_portee.log
+- §91 : tableau de bord — chaque chiffre avec ses conditions  Les §81 à §90 ont montré qu'un chiffre du projet sans ses conditions est un chiffre faux à l'usage. 
 
