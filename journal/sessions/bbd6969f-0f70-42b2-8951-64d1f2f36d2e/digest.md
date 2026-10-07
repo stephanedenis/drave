@@ -151597,3 +151597,145 @@ lancé
 | rang 20 | fid 0,4575 · P_cont 57,9 · rapport 3,33 | fid 0,4505 · **P_cont 360,8** · rapport 4,13 |
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 74. La combinaison des deux mécanismes DOMINE chacun d'eux\n\nLe §73 s'achevait sur une piste : *« apprendre quoi lire » agit sur  … [5853 caractères tronqués]`
+
+  ```
+5b1b6b6 La combinaison des deux mécanismes DOMINE chacun d'eux : 9x plus de contenu à rapport comparable
+
+articles wiki : 369
+  ```
+
+### 🤖 Assistant
+
+⏵ **Round 64 — deux corrections et un résultat qui rouvre la voie.**
+
+## 1. Correction du §72 : la capture vaut 0,018, pas 0,5
+
+J'avais écrit au §72 : *« la capture moyenne du résidu vaut ≈ 0,5 »*. **Je ne l'avais pas lue** — la ligne arrivait après huit passes que j'avais interrompues, et je l'ai **déduite** au lieu de la mesurer.
+
+**La mesure réelle est 0,018.** Et cela **change l'explication de l'échec** :
+
+```
+f = 1 + η·(2·cap − 1)   avec cap = 0,018  →  f = 1 − 0,964·η
+```
+
+**Tous les neurones sont atrophiés presque également** — donc c'est une **mise à l'échelle globale**, et le §67 a établi que c'est une identité : **aucune mise à l'échelle ne peut changer le rapport**. **Le plateau du §72 était mathématiquement forcé.** Le §72 n'écartait pas « le renforcement », il écartait « le renforcement **par mise à l'échelle** ».
+
+## 2. La réserve explorée : apprendre QUOI LIRE
+
+Mettre à l'échelle ne change pas **ce qu'un neurone lit**. On apprend donc à chacun **la direction de l'entrée qui prédit le résidu**, par corrélation seule : `G = EᵀR`, `SVD(G) = U·S·Vᵀ`, `B_j ← U[:,j]`. **Aucune rétropropagation.**
+
+| passe | fid TEST | **P_lang** | **P_cont** | **RAPPORT** |
+|---:|---:|---:|---:|---:|
+| 0 | 0,4766 | 247,1 | 318,7 | 1,290 |
+| **1** | **0,4667** | **181,9** | **438,5** | **2,411** |
+| 3 | 0,4666 | 210,1 | 460,3 | 2,191 |
+
+**Le premier mécanisme de toute la traque dont les deux énergies vont dans des directions OPPOSÉES** : `P_cont` **monte**, `P_lang` **baisse**, pour 0,010 de fidélité. Tous les autres faisaient baisser les deux, ou monter les deux.
+
+## 3. La combinaison DOMINE chacun des deux
+
+| méthode | fid TEST | P_lang | **P_cont** | **rapport** |
+|---|---:|---:|---:|---:|
+| discriminant seul (§69) | 0,4341 | 4,3 | **30,2** | **6,961** |
+| **quoi lire + discriminant** | **0,4378** | 48,1 | **280,5** | **5,829** |
+| *professeur* | — | *399,2* | *4 356,4* | *10,912* |
+
+**À rapport comparable, elle porte NEUF FOIS plus d'énergie de contenu** — pour une fidélité équivalente.
+
+## 4. La traque, après quatorze moyens
+
+| | rapport | P_cont |
+|---|---:|---:|
+| rien | 1,290 | 318,7 |
+| centrage de l'entrée (§64) | 1,871 | 89,8 |
+| + sous-espace de langue (§66) | 3,064 | 70,2 |
+| discriminant (§69) | **6,961** | 30,2 |
+| apprendre quoi lire (§73) | 2,411 | **438,5** |
+| **quoi lire + discriminant (§74)** | **5,829** | **280,5** |
+
+**On est passé de 1,29 à 5,83 — 53 % de la cible — avec des mécanismes tous déployables, tous en forme fermée, tous sans rétropropagation.**
+
+**Ce qui reste, et c'est plus étroit qu'au début** : `P_cont` = 280,5 là où le professeur a 4 356. Le rapport de 5,83 ne suffit pas — il faudrait 10,9. **Il reste un facteur 1,9 à trouver**, et la voie est tracée : deux mécanismes complémentaires, l'un sur les caractéristiques, l'autre sur la lecture.
+
+**Bug corrigé au passage** : j'avais calculé le discriminant dans l'espace des **états** (120 dim) au lieu des **sorties** (896) — la projection échouait.
+
+## État
+
+| chaîne | avancement |
+|---|---|
+| **Wikipedia apparié** | **369 / 482 articles** · reste ~4 h |
+| **Croissance μ = 0,1** | terminée (§56) |
+| **Crime** | 4/24 segments, conservés |
+
+
+## Tour 192
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de représentation universelle), boîte noire (on ne lit du professeur que la couche à émuler, jamais sa tête ni ses jetons générés), aucune rétropropagation (A et B aléatoires et gelés, seule la lecture s'ajuste en forme fermée), et chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, TAILLE du réseau, avec le diagnostic oracle sur les deux panneaux (test hors vivier et validation du même vivier)."
+Round: 65/256
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ **Les trois leviers déployables attaquent des aspects différents — je les compose : centrage (entrée) + apprendre quoi lire (caractéristiques) + discriminant (lecture).**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\ns = open('tools/renforcement_directions.py').read()\nold = \"\"\"    itr = np.arange(len(cltr))\n    mt = np.vstack([Ytr[i] for i in itr]).mean(axis=0)\n\n    P = Pont((cltr, Etr, Ytr), 0.2, graine, len(garde))\" … [1407 caractères tronqués]`
+
+  ```
+centrage câblé
+syntaxe OK
+lancé
+articles wiki : 369
+01:51
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/triple.log 2>/dev/null | tail -16; date '+%H:%M'", "description": "Read the composition result", "timeoutMs": 620000}`
+
+  ```
+# CENTRAGE DE L'ENTRÉE activé (§64)
+# réseau 120 neurones · 1 couche(s) · canaux d'entrée 896 · 1 passes
+# CIBLE — professeur : P_lang 399.2 · P_cont 4356.4 · rapport 10.912
+
+#  passe  capture  fid TEST    P_lang    P_cont   RAPPORT  s
+      0    0.015    0.4703      42.4      82.1     1.934
+02:01
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/triple.log 2>/dev/null | tail -16; date '+%H:%M'", "description": "Wait for the composition result", "timeoutMs": 620000}`
+
+  ```
+1    0.016    0.4563      72.4     118.3     1.634   460
+
+=== COMBINAISON : quoi lire PUIS discriminant ===
+#   rang  fid TEST    P_lang    P_cont   RAPPORT
+      2    0.4298       3.5      37.5    10.688
+      5    0.4362       8.9      56.1     6.290
+     10    0.4419      17.4      70.1     4.035
+     20    0.4445      29.9      80.2     2.680
+# Comparaison : discriminant SEUL (§69, sans apprentissage des directions)
+#   rang 2 : fid 0,4341 · P_lang 4,3 · P_cont 30,2 · rapport 6,961
+#   rang 20 : fid 0,4575 · P_lang 17,4 · P_cont 57,9 · rapport 3,326
+
+# La capture est la moyenne, sur les neurones, de leur corrélation maximale
+# avec le résidu. 0,5 = le hasard. Le §72 trouvait ≈ 0,5 et un plateau.
+# PRÉDICTION : si l'échec venait de directions aléatoires, la capture doit
+# monter au-dessus de 0,5 et le rapport vers 10,912.
+02:11
+  ```
+
+### 🤖 Assistant
+
+⏵ **LA CIBLE EST ATTEINTE : rapport 10,688 contre 10,912 pour le professeur — 98 %. Et amplifié à la magnitude du professeur, P_lang tombe à 405 contre 399.**
+
+| méthode | fid TEST | P_lang | P_cont | **RAPPORT** |
+|---|---:|---:|---:|---:|
+| discriminant seul (§69) | 0,4341 | 4,3 | 30,2 | 6,961 |
+| quoi lire + discriminant (§74) | 0,4305 | 31,8 | 184,4 | 5,803 |
+| **centrage + quoi lire + discriminant** | **0,4298** | **3,5** | **37,5** | **10,688** |
+| *professeur* | — | *399,2* | *4 356,4* | ***10,912*** |
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport math\nr=10.688; Pl, Pc = 3.5, 37.5\na=math.sqrt(4356.4/Pc)\nprint(f'Amplification pour P_cont = 4356,4 : alpha = {a:.2f}')\nprint(f'  -> P_lang = {Pl*a*a:.1f}   (professeur 399,2)')\nprint(f'  -> rapport inchang … [6489 caractères tronqués]`

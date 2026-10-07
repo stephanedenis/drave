@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 203.1 h |
-| Tours | 191 |
-| Messages | 9182 |
-| Appels d'outils | 8639 |
+| Durée | 203.4 h |
+| Tours | 192 |
+| Messages | 9188 |
+| Appels d'outils | 8643 |
 | Fichiers touchés | 212 |
-| Commandes | 7328 |
+| Commandes | 7332 |
 | Sous-agents | 32 |
-| Commits | 670 |
+| Commits | 671 |
 | Compactages de contexte | 12 |
 
 ## Objectifs déclarés
@@ -435,6 +435,8 @@
 **Tour 190** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 **Tour 191** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
+
+**Tour 192** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -9782,13 +9784,75 @@ J'ai testé **la forme de renforcement implémentée dans le dépôt**. **D'autr
 
 **Synthèse produite :**
 
-⏵ **La combinaison DOMINE : à rapport comparable, elle porte 9 FOIS plus d'énergie de contenu.**
+⏵ **Round 64 — deux corrections et un résultat qui rouvre la voie.**
 
-| | discriminant seul (§69) | **quoi lire + discriminant** |
-|---|---|---|
-| rang 2 | fid 0,4341 · P_cont **30,2** · rapport 6,96 | fid 0,4305 · P_cont **184,4** · rapport 5,80 |
-| **rang 5** | — | fid 0,4378 · P_lang 48,1 · **P_cont 280,5** · **rapport 5,83** |
-| rang 20 | fid 0,4575 · P_cont 57,9 · rapport 3,33 | fid 0,4505 · **P_cont 360,8** · rapport 4,13 |
+\## 1. Correction du §72 : la capture vaut 0,018, pas 0,5
+
+J'avais écrit au §72 : *« la capture moyenne du résidu vaut ≈ 0,5 »*. **Je ne l'avais pas lue** — la ligne arrivait après huit passes que j'avais interrompues, et je l'ai **déduite** au lieu de la mesurer.
+
+**La mesure réelle est 0,018.** Et cela **change l'explication de l'échec** :
+
+```
+f = 1 + η·(2·cap − 1)   avec cap = 0,018  →  f = 1 − 0,964·η
+```
+
+**Tous les neurones sont atrophiés presque également** — donc c'est une **mise à l'échelle globale**, et le §67 a établi que c'est une identité : **aucune mise à l'échelle ne peut changer le rapport**. **Le plateau du §72 était mathématiquement forcé.** Le §72 n'écartait pas « le renforcement », il écartait « le renforcement **par mise à l'échelle** ».
+
+\## 2. La réserve explorée : apprendre QUOI LIRE
+
+Mettre à l'échelle ne change pas **ce qu'un neurone lit**. On apprend donc à chacun **la direction de l'entrée qui prédit le résidu**, par corrélation seule : `G = EᵀR`, `SVD(G) = U·S·Vᵀ`, `B_j ← U[:,j]`. **Aucune rétropropagation.**
+
+| passe | fid TEST | **P_lang** | **P_cont** | **RAPPORT** |
+|---:|---:|---:|---:|---:|
+| 0 | 0,4766 | 247,1 | 318,7 | 1,290 |
+| **1** | **0,4667** | **181,9** | **438,5** | **2,411** |
+| 3 | 0,4666 | 210,1 | 460,3 | 2,191 |
+
+**Le premier mécanisme de toute la traque dont les deux énergies vont dans des directions OPPOSÉES** : `P_cont` **monte**, `P_lang` **baisse**, pour 0,010 de fidélité. Tous les autres faisaient baisser les deux, ou monter les deux.
+
+\## 3. La combinaison DOMINE chacun des deux
+
+| méthode | fid TEST | P_lang | **P_cont** | **rapport** |
+|---|---:|---:|---:|---:|
+| discriminant seul (§69) | 0,4341 | 4,3 | **30,2** | **6,961** |
+| **quoi lire + discriminant** | **0,4378** | 48,1 | **280,5** | **5,829** |
+| *professeur* | — | *399,2* | *4 356,4* | *10,912* |
+
+**À rapport comparable, elle porte NEUF FOIS plus d'énergie de contenu** — pour une fidélité équivalente.
+
+\## 4. La traque, après quatorze moyens
+
+| | rapport | P_cont |
+|---|---:|---:|
+| rien | 1,290 | 318,7 |
+| centrage de l'entrée (§64) | 1,871 | 89,8 |
+| + sous-espace de langue (§66) | 3,064 | 70,2 |
+| discriminant (§69) | **6,961** | 30,2 |
+| apprendre quoi lire (§73) | 2,411 | **438,5** |
+| **quoi lire + discriminant (§74)** | **5,829** | **280,5** |
+
+**On est passé de 1,29 à 5,83 — 53 % de la cible — avec des mécanismes tous déployables, tous en forme fermée, tous sans rétrop
+… [666 caractères tronqués]
+
+### Tour 192 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Test the composition of all three deployable levers
+- bash — Read the composition result
+- bash — Wait for the composition result
+- bash — Report and commit the breakthrough
+
+**Synthèse produite :**
+
+⏵ **LA CIBLE EST ATTEINTE : rapport 10,688 contre 10,912 pour le professeur — 98 %. Et amplifié à la magnitude du professeur, P_lang tombe à 405 contre 399.**
+
+| méthode | fid TEST | P_lang | P_cont | **RAPPORT** |
+|---|---:|---:|---:|---:|
+| discriminant seul (§69) | 0,4341 | 4,3 | 30,2 | 6,961 |
+| quoi lire + discriminant (§74) | 0,4305 | 31,8 | 184,4 | 5,803 |
+| **centrage + quoi lire + discriminant** | **0,4298** | **3,5** | **37,5** | **10,688** |
+| *professeur* | — | *399,2* | *4 356,4* | ***10,912*** |
 
 ## 3. Travail accompli
 
@@ -10086,7 +10150,7 @@ J'ai testé **la forme de renforcement implémentée dans le dépôt**. **D'autr
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 7288 autres
+- … et 7292 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10904,4 +10968,5 @@ J'ai testé **la forme de renforcement implémentée dans le dépôt**. **D'autr
 - Le renforcement/atrophie — dernier mécanisme sanctionné — échoue aussi (plateau immédiat)  POURQUOI C'ÉTAIT LE DERNIER RECOURS : les §57-§71 ont écarté neuf moy
 - CORRECTION du §72, et un mécanisme qui fait enfin les DEUX mouvements  CORRECTION : le §72 affirmait 'la capture moyenne vaut ≈ 0,5'. JE NE L'AVAIS PAS LUE — la
 - La combinaison des deux mécanismes DOMINE chacun d'eux : 9x plus de contenu à rapport comparable    méthode                              fid TEST  P_lang  P_con
+- LA CIBLE EST ATTEINTE : la composition des trois leviers donne 98 % du rapport du professeur    méthode                              fid TEST  P_lang  P_cont   
 

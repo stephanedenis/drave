@@ -87,6 +87,16 @@ def main():
     itr = np.arange(len(cltr))
     mt = np.vstack([Ytr[i] for i in itr]).mean(axis=0)
 
+    # COMPOSITION DES TROIS LEVIERS DÉPLOYABLES : le centrage agit sur l'ENTRÉE (§64),
+    # « apprendre quoi lire » sur les CARACTÉRISTIQUES (§73), le discriminant sur la
+    # LECTURE (§69). Trois aspects différents, trois mécanismes dans les règles.
+    if opt("--centre-entree", "") != "":
+        Etr = [e - e.mean(0, keepdims=True) for e in Etr]
+        Ete = [e - e.mean(0, keepdims=True) for e in Ete]
+        print("# CENTRAGE DE L'ENTRÉE activé (§64)")
+    # RETRAIT DU SOUS-ESPACE DE LANGUE DANS LES ÉTATS (§66), si demandé
+    r_etats = int(opt("--rang-etats", 0))
+
     P = Pont((cltr, Etr, Ytr), 0.2, graine, len(garde))
     P.quadratique = True
     P.a_min, P.a_max = 0.02, 0.8
