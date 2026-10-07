@@ -156208,3 +156208,145 @@ lancé
 ⏵ **Résultat par paire après échelle globale : critère satisfait sur 10 des 15 paires, dont la PIRE (de–en, 486 %). J'écris la section.**
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> reports/rapport-toutes-langues.md <<'MARKDOWN'\n\n---\n\n## 92. LA PIRE PAIRE, APRÈS ÉCHELLE : de–en à 486 % du professeur, mais 5 paires sur 15 échouent\n\n### 92.1 Le montage, et pourquoi l'échelle globale\n\nLe §88 a établi … [5954 caractères tronqués]`
+
+  ```
+df8980e §92 : la pire paire après échelle — de–en à 486 % du professeur, mais 5 paires sur 15 échouent
+
+##### PORTÉE DU CONTEXTE — 50 articles × 6 langues, distances 1,2,4,8,16,32
+# 300 traces · fenêtre 2 · ride 1.0 · 50 contenus
+  ```
+
+### 🤖 Assistant
+
+⏵ **Je vérifie l'avancement de la portée et l'heure.**
+
+- **bash** `{"command": "date '+%H:%M'; P=$(ps -eo pid,cmd | grep \"distances 1,2,4,8,16,32\" | grep -v grep | awk '{print $1}' | head -1); echo \"pid=$P\"; [ -n \"$P\" ] && awk '{print \"cpu (s):\", ($14+$15)/100}' /proc/$P/stat && awk '/VmRSS/{print \"rss (Go):\", $2/1048576}' /proc/$P/status", "description": … [28 caractères tronqués]`
+
+  ```
+12:51
+pid=2876852
+cpu (s): 551.79
+rss (Go): 0.206242
+  ```
+
+### 🤖 Assistant
+
+⏵ **La portée finira vers 13h35. J'écris en parallèle la mesure de stabilité des directions révélées (graine contre données).**
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"stabilite_directions.py — les directions du discriminant viennent-elles des DONNÉES ou du TIRAGE ?\n\nLA QUESTION. Le §92 montre qu'un discriminant de rang 2 appris sur nos sorties sépare le\ncontenu de la langue mieux que le professeur sur dix des quinze p … [6638 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/stabilite_directions.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"import ast; ast.parse(open('tools/stabilite_directions.py').read()); print('syntaxe OK')\" && (setsid nohup bash -c 'cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -u tools/stabilite_directions.py /tmp/cac … [300 caractères tronqués]`
+
+  ```
+syntaxe OK
+# 282 entrées d'apprentissage · 282 pour le discriminant · 144 de test · 896 canaux · 6 graines
+  graine   5 : rapport    0.176 ( 16.3% du professeur) · λ₁    5907.7
+  graine   6 : rapport    0.186 ( 17.2% du professeur) · λ₁    6396.4
+  ```
+
+### 🤖 Assistant
+
+⏵ **Six graines à ~2 min chacune ; j'attends avec la portée.**
+
+- **bash** `{"command": "sleep 540; echo \"--- stabilité ---\"; cat /tmp/stabilite.log; echo; echo \"--- portée ---\"; tail -12 /tmp/mesure_portee.log", "description": "Collect stability and reach results", "timeoutMs": 600000}`
+
+  ```
+--- stabilité ---
+# 282 entrées d'apprentissage · 282 pour le discriminant · 144 de test · 896 canaux · 6 graines
+  graine   5 : rapport    0.176 ( 16.3% du professeur) · λ₁    5907.7
+  graine   6 : rapport    0.186 ( 17.2% du professeur) · λ₁    6396.4
+  graine   7 : rapport    0.151 ( 14.0% du professeur) · λ₁    5694.1
+  graine   8 : rapport    0.173 ( 16.0% du professeur) · λ₁    6178.8
+  graine   9 : rapport    0.192 ( 17.7% du professeur) · λ₁    7794.9
+  graine  10 : rapport    0.207 ( 19.1% du professeur) · λ₁    6672.2
+
+# ANGLES PRINCIPAUX entre les sous-espaces des différentes graines
+  rang 2 : 15 paires · angle MAXIMAL moyen   35.5° (min 22.5°, max 50.6°) · angle 1er axe moyen   15.7°
+  rang 5 : 15 paires · angle MAXIMAL moyen   66.2° (min 38.5°, max 88.0°) · angle 1er axe moyen   13.1°
+
+# rapport selon la graine : moyenne 0.181 · écart-type 0.017 · min 0.151 · max 0.207
+# professeur 1.081 · part moyenne 16.7%
+
+# Lecture : un angle MAXIMAL proche de 90° signifie que les sous-espaces
+# n'ont plus rien en commun — la « direction du contenu » serait alors une
+# propriété du TIRAGE et non des données. Proche de 0°, elle est dans les
+# données. Le 1er axe est plus stable que
+… [224 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le 1er axe est stable (15,7°), le 2e non (35,5°). Question vitale : le 136 % du §92 survit-il à un changement de graine ? Je patche.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/stabilite_directions.py'; s=open(p).read()\nold = \"\"\"        Mte = moyennes_sortie(P, idx, W, mt, Ete)\n        d = decompose(clte, Mte)\n        rap[g] = (d[2], d[2]/rp[2], w[-1])\n        sous[g] = {r: … [2612 caractères tronqués]`
+
+  ```
+projection par graine ajoutée
+syntaxe OK
+##### PORTÉE DU CONTEXTE — 50 articles × 6 langues, distances 1,2,4,8,16,32
+# 300 traces · fenêtre 2 · ride 1.0 · 50 contenus
+# 164775 positions appariées
+  ```
+
+### 🤖 Assistant
+
+⏵ **La portée a fini sa passe d'accumulation ; j'attends les deux tableaux.**
+
+- **bash** `{"command": "sleep 420; echo \"--- portée ---\"; sed -n '/PORTÉE/,$p' /tmp/mesure_portee.log; echo; echo \"--- stabilité ---\"; cat /tmp/stabilite2.log 2>/dev/null | tail -16", "description": "Collect reach and stability results", "timeoutMs": 480000}`
+
+  ```
+--- portée ---
+##### PORTÉE DU CONTEXTE — 50 articles × 6 langues, distances 1,2,4,8,16,32
+# 300 traces · fenêtre 2 · ride 1.0 · 50 contenus
+# 164775 positions appariées
+
+--- stabilité ---
+# 282 entrées d'apprentissage · 282 pour le discriminant · 144 de test · 896 canaux · 6 graines
+  graine   5 : rapport   0.176 (16.3%) · λ₁    5907.7 · APRÈS PROJECTION rang 2   1.474 (136.4%) · rang 5   0.910 ( 84.2%)
+  graine   6 : rapport   0.186 (17.2%) · λ₁    6396.4 · APRÈS PROJECTION rang 2   1.275 (118.0%) · rang 5   0.793 ( 73.4%)
+  graine   7 : rapport   0.151 (14.0%) · λ₁    5694.1 · APRÈS PROJECTION rang 2   1.601 (148.1%) · rang 5   0.892 ( 82.5%)
+  graine   8 : rapport   0.173 (16.0%) · λ₁    6178.8 · APRÈS PROJECTION rang 2   1.071 ( 99.1%) · rang 5   0.928 ( 85.9%)
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le rapport après projection varie de 99 % à 148 % selon la graine. J'attends les deux dernières graines et la portée.**
+
+- **bash** `{"command": "sleep 420; echo \"--- stabilité (fin) ---\"; sed -n '/ANGLES/,$p' /tmp/stabilite2.log 2>/dev/null; echo; echo \"--- portée ---\"; sed -n '/PORTÉE/,$p' /tmp/mesure_portee.log", "description": "Collect final stability and reach", "timeoutMs": 480000}`
+
+  ```
+--- stabilité (fin) ---
+# ANGLES PRINCIPAUX entre les sous-espaces des différentes graines
+  rang 2 : 15 paires · angle MAXIMAL moyen   35.5° (min 22.5°, max 50.6°) · angle 1er axe moyen   15.7°
+  rang 5 : 15 paires · angle MAXIMAL moyen   66.2° (min 38.5°, max 88.0°) · angle 1er axe moyen   13.1°
+
+# rapport selon la graine : moyenne 0.181 · écart-type 0.017 · min 0.151 · max 0.207
+# APRÈS PROJECTION rang 2 : moyenne  133.7% · écart-type  20.6% · min   99.1% · max  163.2% · étalement ×1.65
+# APRÈS PROJECTION rang 5 : moyenne   92.4% · écart-type  19.7% · min   73.4% · max  134.2% · étalement ×1.83
+# professeur 1.081 · part moyenne 16.7%
+
+# Lecture : un angle MAXIMAL proche de 90° signifie que les sous-espaces
+# n'ont plus rien en commun — la « direction du contenu » serait alors une
+# propriété du TIRAGE et non des données. Proche de 0°, elle est dans les
+# données. Le 1er axe est plus stable que le second : c'est attendu, et
+# c'est le second qui décide de la séparation fine.
+
+--- portée ---
+##### PORTÉE DU CONTEXTE — 50 articles × 6 langues, distances 1,2,4,8,16,32
+# 300 traces · fenêtre 2 · ride 1.0 · 50 contenus
+# 164775 positions appariées
+  ```
+
+### 🤖 Assistant
+
+⏵ **Stabilité complète : rapport projeté 99 %–163 % selon la graine, moyenne 134 %. J'écris la section.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> reports/rapport-toutes-langues.md <<'MARKDOWN'\n\n---\n\n## 93. LES DIRECTIONS SONT-ELLES DANS LES DONNÉES OU DANS LE TIRAGE ?\n\n### 93.1 La question, et pourquoi elle décide de la validité du §92\n\nNos sorties dépendent d'u … [5926 caractères tronqués]`

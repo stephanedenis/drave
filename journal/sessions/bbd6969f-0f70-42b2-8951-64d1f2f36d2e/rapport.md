@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 214.1 h |
+| Durée | 214.6 h |
 | Tours | 204 |
-| Messages | 9410 |
-| Appels d'outils | 8836 |
-| Fichiers touchés | 218 |
-| Commandes | 7509 |
+| Messages | 9418 |
+| Appels d'outils | 8844 |
+| Fichiers touchés | 219 |
+| Commandes | 7516 |
 | Sous-agents | 32 |
-| Commits | 690 |
+| Commits | 691 |
 | Compactages de contexte | 13 |
 
 ## Objectifs déclarés
@@ -10453,7 +10453,7 @@ Chacun remplace une devinette que j'ai faite sans lui.
 
 ### Tour 204 — bien. vas-y dans l'ordre de ton choix.
 
-*126 appels d'outils.* Actions notables :
+*134 appels d'outils.* Actions notables :
 
 - bash — Launch layer 0-8 tracing for 50 articles
 - bash — Launch the 50-draw distribution
@@ -10469,11 +10469,11 @@ Chacun remplace une devinette que j'ai faite sans lui.
 - bash — Test the layer profile on partial traces
 - bash — Single-pass reader and test
 - bash — Inspect the actual trace format
-- … et 107 autres
+- … et 115 autres
 
 **Synthèse produite :**
 
-⏵ **Résultat par paire après échelle globale : critère satisfait sur 10 des 15 paires, dont la PIRE (de–en, 486 %). J'écris la section.**
+⏵ **Stabilité complète : rapport projeté 99 %–163 % selon la graine, moyenne 134 %. J'écris la section.**
 
 ## 3. Travail accompli
 
@@ -10699,6 +10699,7 @@ Chacun remplace une devinette que j'ai faite sans lui.
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/discriminant_transfert.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/localite_couches.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/energie_du_contenu.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/stabilite_directions.py` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -10777,7 +10778,7 @@ Chacun remplace une devinette que j'ai faite sans lui.
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 7469 autres
+- … et 7476 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -11615,4 +11616,5 @@ Chacun remplace une devinette que j'ai faite sans lui.
 - Renvoi du §88.5 vers le §90 : le tableau du gain de rapport ne doit pas être lu seul" && sleep 420; echo "--- portée ---"; tail -14 /tmp/mesure_portee.log
 - §91 : tableau de bord — chaque chiffre avec ses conditions  Les §81 à §90 ont montré qu'un chiffre du projet sans ses conditions est un chiffre faux à l'usage. 
 - §92 : la pire paire après échelle — de–en à 486 % du professeur, mais 5 paires sur 15 échouent  Le §88 a établi que l'amplitude est gratuite, donc que le critèr
+- §93 : les directions du discriminant — le 1er axe est dans les données, le 2e dans le tirage  Le §92 repose sur NOS sorties, donc sur un tirage aléatoire gelé. 
 
