@@ -156032,3 +156032,73 @@ rss: 0.340012 Go
 ⏵ **Localité mesurée sur 164 775 positions. J'écris la section.**
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> reports/rapport-toutes-langues.md <<'MARKDOWN'\n\n---\n\n## 89. LOCALITÉ : la couche 8 doit 24 % au jeton, 33 % à trois jetons, et 67 % à autre chose\n\n### 89.1 La question, et elle décide d'une architecture\n\nNotre pont est … [5751 caractères tronqués]`
+
+  ```
+2ef44ea §89 : localité — la couche 8 doit 24 % au jeton, 33 % à trois jetons, 67 % à autre chose
+
+--- réplication B ---
+##### RÉPLICATION DE LA VARIANTE B — 482 articles, de/en/fr appris, es/it/pt testé
+# 1446 entrées d'apprentissage · 1446 de test · 896 canaux · 120 neurones
+# SPECTRE DE LA CIBLE : 1re direction 4.2% de l'énergie · 10 premières 21.4% · rang utile (99 %) 806
+
+# variante             fid TEST    P_lang    P_cont  RAPPORT % P_lang % P_cont
+  PROFESSEUR                  —     387.9    4655.4   12.001    100 %    100 %
+  ```
+
+### 🤖 Assistant
+
+⏵ **J'ajoute la courbe de portée du contexte (à quelle distance le passé compte), puis je récupère la réplication.**
+
+- **bash** `{"command": "date '+%H:%M'; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/localite_couches.py'; s=open(p).read()\nold = \"\"\"    print(f\"\\\\n# {'couche':>7}{'R²(0)':>10}{'R²(fenêtre)':>13}{'gain':>9}\"\n          f\"{'gain relatif':>14}\")\"\"\"\nnew = \"\"\"    … [2473 caractères tronqués]`
+
+  ```
+12:24
+portée ajoutée
+syntaxe OK
+  ```
+
+### 🤖 Assistant
+
+⏵ **Je nettoie ce bloc (et j'y calcule un vrai R², pas `trace(WᵀD)` — l'erreur que je viens de critiquer).**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/localite_couches.py'; s=open(p).read()\nold = \"\"\"        Dmax = max(distances)\n        Gd = {d: np.zeros((1792, 1792)) for d in distances}\n        Dd = {d: {c: np.zeros((1792, 896)) for c in cs} for d  … [5539 caractères tronqués]`
+
+  ```
+portée réécrite proprement
+syntaxe OK
+--- réplication B ---
+##### RÉPLICATION DE LA VARIANTE B — 482 articles, de/en/fr appris, es/it/pt testé
+# 1446 entrées d'apprentissage · 1446 de test · 896 canaux · 120 neurones
+# SPECTRE DE LA CIBLE : 1re direction 4.2% de l'énergie · 10 premières 21.4% · rang utile (99 %) 806
+
+# variante             fid TEST    P_lang    P_cont  RAPPORT % P_lang % P_cont
+  PROFESSEUR                  —     387.9    4655.4   12.001    100 %    100 %
+  ```
+
+### 🤖 Assistant
+
+⏵ **Les deux mesures tournent (~40 min pour la réplication). J'attends.**
+
+- **bash** `{"command": "sleep 540; echo \"--- réplication B ---\"; tail -12 /tmp/replique_B.log; echo; echo \"--- portée ---\"; tail -14 /tmp/mesure_portee.log", "description": "Wait for replication and reach", "timeoutMs": 600000}`
+
+  ```
+--- réplication B ---
+##### RÉPLICATION DE LA VARIANTE B — 482 articles, de/en/fr appris, es/it/pt testé
+# 1446 entrées d'apprentissage · 1446 de test · 896 canaux · 120 neurones
+# SPECTRE DE LA CIBLE : 1re direction 4.2% de l'énergie · 10 premières 21.4% · rang utile (99 %) 806
+
+# variante             fid TEST    P_lang    P_cont  RAPPORT % P_lang % P_cont
+  PROFESSEUR                  —     387.9    4655.4   12.001    100 %    100 %
+  A référence            0.4689     246.0     423.8    1.723    63.4%     9.1%
+  B cible centrée        0.4751     168.8     236.3    1.400    43.5%     5.1%
+
+--- portée ---
+##### PORTÉE DU CONTEXTE — 50 articles × 6 langues, distances 1,2,4,8,16,32
+# 300 traces · fenêtre 2 · ride 1.0 · 50 contenus
+  ```
+
+### 🤖 Assistant
+
+⏵ **La réplication REFUTE la moitié du §88.5 : le gain de fidélité tient, le gain de rapport s'inverse. J'écris la section.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> reports/rapport-toutes-langues.md <<'MARKDOWN'\n\n---\n\n## 90. LA RÉPLICATION DU §88.5 : le gain de fidélité tient, le gain de rapport s'inverse\n\n### 90.1 Pourquoi j'ai répliqué avant d'y croire\n\nLe §88.5 annonçait que ** … [5158 caractères tronqués]`

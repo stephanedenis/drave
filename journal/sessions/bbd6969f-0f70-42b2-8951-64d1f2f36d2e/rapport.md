@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 213.6 h |
+| Durée | 213.8 h |
 | Tours | 204 |
-| Messages | 9398 |
-| Appels d'outils | 8824 |
+| Messages | 9402 |
+| Appels d'outils | 8828 |
 | Fichiers touchés | 218 |
-| Commandes | 7497 |
+| Commandes | 7501 |
 | Sous-agents | 32 |
-| Commits | 686 |
+| Commits | 687 |
 | Compactages de contexte | 13 |
 
 ## Objectifs déclarés
@@ -10453,7 +10453,7 @@ Chacun remplace une devinette que j'ai faite sans lui.
 
 ### Tour 204 — bien. vas-y dans l'ordre de ton choix.
 
-*114 appels d'outils.* Actions notables :
+*118 appels d'outils.* Actions notables :
 
 - bash — Launch layer 0-8 tracing for 50 articles
 - bash — Launch the 50-draw distribution
@@ -10469,11 +10469,11 @@ Chacun remplace une devinette que j'ai faite sans lui.
 - bash — Test the layer profile on partial traces
 - bash — Single-pass reader and test
 - bash — Inspect the actual trace format
-- … et 95 autres
+- … et 99 autres
 
 **Synthèse produite :**
 
-⏵ **Localité mesurée sur 164 775 positions. J'écris la section.**
+⏵ **La réplication REFUTE la moitié du §88.5 : le gain de fidélité tient, le gain de rapport s'inverse. J'écris la section.**
 
 ## 3. Travail accompli
 
@@ -10777,7 +10777,7 @@ Chacun remplace une devinette que j'ai faite sans lui.
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 7457 autres
+- … et 7461 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -11611,4 +11611,5 @@ Chacun remplace une devinette que j'ai faite sans lui.
 - §87 : le discriminant roman ne transfère pas parce qu'il a appris sur les paires faciles  Six caches par langue (mêmes 71 articles, couche 8) fusionnés en un ca
 - §88 : correction du §87.3 — l'écart d'énergie est une ÉCHELLE, et centrer la cible est un gain gratuit  Le §87.3 affirmait que nous atteignions 136 % du rapport
 - §89 : localité — la couche 8 doit 24 % au jeton, 33 % à trois jetons, 67 % à autre chose  Notre pont est récurrent ; la récurrence ne se justifie que si la cibl
+- §90 : la réplication du §88.5 — le gain de fidélité tient, le gain de rapport s'inverse  Le §88.5 annonçait que centrer la cible dominait la référence sur les d
 
