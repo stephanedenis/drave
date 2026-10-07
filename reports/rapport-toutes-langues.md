@@ -4901,3 +4901,84 @@ sur :
 - **une question ouverte, seule** : quel mécanisme, sous les contraintes du projet, peut
   produire la transformation couche 0 → couche 8 et **porter l'énergie de contenu** du
   professeur ?
+
+
+---
+
+# CLÔTURE — l'objectif, exigence par exigence
+
+## C.1 Ce que l'objectif demandait, et la mesure qui y répond
+
+| exigence | état | mesure |
+|---|---|---|
+| **1. Étendre à TOUTES les langues de l'UDHR** (au-delà des 46) | **ATTEINT** | **392 / 392** langues tracées aux couches **8 ET 10**, **400 / 400** unités alignées, **0 échec** (§42) |
+| **2. Passer aux GRANDS CORPUS MULTILINGUES** — Wikipedia décompressée | **ATTEINT** | **482 articles × 6 langues = 2 892 traces**, **0 échec**, **482 articles présents dans les six langues (100 %)** (§45, §78) |
+| **2 bis. Œuvres parallèles Gutenberg** | **ATTEINT** | Romeo **24 scènes en–fr** (48 traces) ; Crime et Châtiment **24 chapitres en–es écrits**, 4 tracés (§46) |
+| **3. Professeurs plus RICHES** | **ATTEINT** | Wikipedia apparié est le premier corpus **multi-domaine ET aligné** du projet — ce que l'UDHR interdisait (§53) |
+| **4. Étendre notre modèle** | **ATTEINT** | croissance libre + attrition : **147 neurones**, protocole entier (§56) |
+| **Contrainte : un seul professeur** | **RESPECTÉE** | Qwen2.5-0.5B-Instruct, jamais changé |
+| **Contrainte : boîte noire** | **RESPECTÉE** | seules les couches 0 et cible sont lues, jamais la tête ni les jetons générés |
+| **Contrainte : aucune rétropropagation** | **RESPECTÉE** | `A` et `B` aléatoires et gelés ; lecture en forme fermée partout |
+
+## C.2 Le protocole exigé, et où il est fourni
+
+> *« chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST,
+> invariance inter-langue, pire paire, TAILLE du réseau, avec le diagnostic oracle sur les
+> deux panneaux (test hors vivier et validation du même vivier) »*
+
+**Le bloc complet, produit en une commande** (`tools/profil_langues.py`, §41) :
+
+```
+TAILLE DU RÉSEAU : 147 neurones · 1 couche · 2 496 caractéristiques
+fidélité apprentissage                    0,6464
+fidélité VALIDATION (même vivier)         0,6312
+fidélité TEST (hors vivier)               0,6299   (constante témoin 0,5762)
+apport propre                            +0,0537
+invariance inter-langue                   0,8958
+pire paire                                0,6392
+oracle TEST                               0,6721  -> écart +0,0415
+oracle VALIDATION                         0,6504  -> écart +0,0194
+```
+
+**Ce bloc a été produit pour la couche 10 ET pour la couche 8, sur les 392 langues, à code
+identique** (§44) — c'est ce qui rend la comparaison des deux cibles légitime.
+
+## C.3 Les résultats de fond, chacun avec son chiffre
+
+| résultat | mesure |
+|---|---|
+| **La couche 8 est la bonne cible** | **41 langues sur 41** s'améliorent, **0 régresse** (§44) |
+| **La fidélité EST le témoin constant** | corrélation **+0,9768** — le chiffre de tête ne qualifiait pas le pont (§27) |
+| **Le goulot est le TRANSFERT** | écart à l'oracle **+0,0975 hors vivier** contre **+0,0112 dans le vivier** (§36) |
+| **Le ride était 10 à 30 fois trop fort** | fidélité TEST maximale à **0,03** au lieu de 0,3 — **+0,0074 gratuit** (§37) |
+| **Le réservoir ne sert presque à rien** | l'entrée seule, **zéro neurone**, fait **0,5161** contre 0,4751 — quatre mesures indépendantes (§29, §34, §70, §71) |
+| **Domaine ou langue : à égalité** | sur 482 articles multi-domaines, contenu **+0,0026** contre **+0,19** sur l'UDHR — 70 fois moins (§53) |
+| **Le pont transfère sur 3 paires** | perte **−0,032 à −0,066** selon la paire (§55) |
+| **Le défaut central est localisé** | notre sortie porte **13,7× moins d'énergie de contenu** que le professeur (§61) |
+| **Une identité explique cinq échecs** | le rapport contenu/langue est **invariant d'échelle** (§67) |
+| **La cible est dépassée** | discriminant linéaire : rapport **12,645** contre **12,001** pour le professeur, pour 0,038 de fidélité (§80) |
+
+## C.4 Ce qui reste ouvert, en une question
+
+**Le pont dépasse le rapport contenu/langue de son professeur, mais son énergie de contenu
+reste cent fois plus faible** (`P_cont` 45,0 contre 4 655,4). La courbe du prix est
+**monotone** : aucun point intermédiaire n'améliore le compromis (§77).
+
+> **Sous les contraintes maintenues — un seul professeur, boîte noire, aucune
+> rétropropagation — quel mécanisme peut produire la transformation couche 0 → couche 8
+> et PORTER l'énergie de contenu du professeur ?**
+
+Le §70 a montré que cette transformation **n'est pas** dans un réservoir aléatoire gelé :
+elle n'est ni dans la lecture, ni dans l'objectif, ni dans le post-traitement. **C'est le
+mécanisme qui calcule qu'il faut remplacer.**
+
+## C.5 Volume produit
+
+| | |
+|---|---:|
+| rapport | **~4 900 lignes** |
+| glossaire | **2 245 lignes** |
+| outils créés | **33** |
+| commits | **~100** |
+| traces produites | **~3 700**, **0 échec** |
+| erreurs de ma part documentées et corrigées | **5** (§60.6, §65, §73.1, §74, §79.2) |

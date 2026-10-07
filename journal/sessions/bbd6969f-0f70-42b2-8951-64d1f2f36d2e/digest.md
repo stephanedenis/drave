@@ -152990,3 +152990,109 @@ sorties d'apprentissage prêtes
 | **PROFESSEUR** | — | *387,9* | *4 655,4* | ***12,001*** |
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 80. Le discriminant, lui, NON SEULEMENT se réplique — il DÉPASSE le professeur\n\nLe §79 venait de réfuter le mécanisme du §73 à 4 … [5977 caractères tronqués]`
+
+  ```
+3d76ede Le discriminant SE RÉPLIQUE à 482 articles — et DÉPASSE le professeur : 12,645 contre 12,001
+08:34
+  ```
+
+### 🤖 Assistant
+
+⏵ **Round 71 — le rapport se termine sur un résultat positif.**
+
+## Le discriminant, lui, non seulement se réplique — il dépasse le professeur
+
+Le §79 venait de réfuter le mécanisme du §73 à 482 articles. L'autre, testé sur les **1 446 entrées de test** :
+
+| | fid TEST | P_lang | P_cont | **RAPPORT** |
+|---|---:|---:|---:|---:|
+| rang 0 (référence) | **0,4713** | 39,8 | 98,9 | 2,487 |
+| **discriminant rang 2** | 0,4334 | 3,6 | 45,0 | **12,645** |
+| rang 5 | 0,4420 | 12,5 | 56,2 | 4,502 |
+| rang 20 | 0,4584 | 18,3 | 75,0 | 4,100 |
+| **PROFESSEUR** | — | *387,9* | *4 655,4* | ***12,001*** |
+
+**12,645 contre 12,001 : 105 % de la cible.**
+
+Et le contraste avec les 85 articles est instructif :
+
+| | à 85 articles | à **482 articles** |
+|---|---:|---:|
+| professeur | 10,912 | **12,001** |
+| discriminant rang 2 | 6,961 (**64 %**) | **12,645 (105 %)** |
+
+**Le mécanisme ne tient pas seulement à grande échelle : il y gagne.** Et son coût en fidélité est **stable** — 0,036 à 85 articles, 0,038 à 482.
+
+## Ce que cette vérification discrimine — et c'est son vrai apport
+
+| mécanisme | à 85 articles | à 482 articles | verdict |
+|---|---:|---:|---|
+| **apprendre quoi lire** (§73) | 1,934 → **2,411** | 2,487 → **1,759** | **ne se réplique PAS** |
+| **discriminant** (§69) | 1,934 → **6,961** (64 %) | 2,487 → **12,645** (105 %) | **se réplique et s'améliore** |
+
+**Le mécanisme qui survit est celui qui agit sur la LECTURE, pas celui qui agit sur les caractéristiques.** C'est cohérent avec le §70 : la langue entre par l'entrée, et modifier ce que lisent les neurones ne fait que redistribuer le problème. Le discriminant, lui, optimise **directement la quantité qu'on mesure**.
+
+## Le résultat final, et il est positif
+
+**Sur le corpus Wikipedia complet — 482 articles × 6 langues — une analyse discriminante linéaire appliquée à la sortie du pont atteint un rapport contenu/langue de 12,645 contre 12,001 pour le professeur, pour 0,038 de fidélité.**
+
+**En forme fermée, sans rétropropagation, déployable** (matrice fixe apprise sur l'apprentissage), et **sans un neurone ni une couche de plus**.
+
+**Ce que cela ne règle pas** : `P_cont` reste à 45,0 contre 4 655,4 — **cent fois moins**. Le rapport est dépassé, l'énergie de contenu ne l'est pas. Et le §77 a établi que l'amplification qui les rapprocherait coûte la fidélité, **de façon monotone**.
+
+## Le rapport se termine donc sur
+
+- **un mécanisme qui échoue à grande échelle** — apprendre quoi lire (§73, réfuté au §79) ;
+- **un mécanisme qui réussit et s'améliore** — le discriminant, à **105 %** du rapport du professeur (§80) ;
+- **une frontière inchangée** — la structure s'obtient, l'énergie de contenu ne suit pas (§76, §77) ;
+- **une seule question ouverte** : sous les contraintes du projet — un professeur, boîte noire, aucune rétropropagation — **quel mécanisme peut porter l'énergie de contenu du professeur ?**
+
+C'est une meilleure fin que celle d'il y a une heure : la mesure contradictoire est arrivée parce que la chaîne pour l'obtenir avait été armée **avant** de connaître la réponse — et la seconde mesure, faite dans la foulée, a montré que tout n'était pas réfuté.
+
+
+## Tour 199
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de représentation universelle), boîte noire (on ne lit du professeur que la couche à émuler, jamais sa tête ni ses jetons générés), aucune rétropropagation (A et B aléatoires et gelés, seule la lecture s'ajuste en forme fermée), et chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, TAILLE du réseau, avec le diagnostic oracle sur les deux panneaux (test hors vivier et validation du même vivier)."
+Round: 72/256
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ **L'objectif est substantiellement atteint — je rassemble les preuves et je lis le goal avant de conclure.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== git propre ? ===\"; git status --short | head -3; echo \"=== preuves de l'objectif ===\"; echo \"1. UDHR toutes langues :\"; ls /home/stephane/Data13TB/stephane/corpus/udhr/udhr392/*.drvf | wc -l; ls /home/stephane/Data13T … [673 caractères tronqués]`
+
+  ```
+=== git propre ? ===
+ M journal/README.md
+=== preuves de l'objectif ===
+1. UDHR toutes langues :
+392
+392
+400
+2. Wikipedia apparié :
+2892
+   articles complets : 482
+3. Romeo / Crime :
+48
+8
+4. échecs :
+/tmp/trace392.log:0 /tmp/trace392c8.log:0 /tmp/trace_wiki_apparie.log:0
+  ```
+
+- **get_goal** `{}`
+
+  ```
+{"goal":{"id":"goal-975ab185-c6a1-415f-8dcd-38bf09cf8196","revision":1,"objective":"Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de représentation universelle), boîte noire (on ne lit du professeur que la couche à émuler, jamais sa tête ni ses jetons générés), aucune rétropropagation (A et B aléatoires et gelés, seule la lecture s'ajuste en forme fermée), et chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, TAILLE du réseau, avec le diagnostic oracle sur les deux panneaux (test hors vivier et validation du même vivier).","phase":"active","roundsStarted":72,"maxGoalRounds":256},"activation":"armed"}
+  ```
+
+### 🤖 Assistant
+
+⏵ **L'objectif est atteint, preuves à l'appui. J'écris la synthèse de clôture.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n# CLÔTURE — l'objectif, exigence par exigence\n\n## C.1 Ce que l'objectif demandait, et la mesure qui y répond\n\n| exigence | état | … [6805 caractères tronqués]`

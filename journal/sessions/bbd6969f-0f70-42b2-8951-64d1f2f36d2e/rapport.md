@@ -6,13 +6,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
 | Durée | 209.8 h |
-| Tours | 198 |
-| Messages | 9264 |
-| Appels d'outils | 8706 |
+| Tours | 199 |
+| Messages | 9269 |
+| Appels d'outils | 8709 |
 | Fichiers touchés | 212 |
-| Commandes | 7395 |
+| Commandes | 7397 |
 | Sous-agents | 32 |
-| Commits | 678 |
+| Commits | 679 |
 | Compactages de contexte | 12 |
 
 ## Objectifs déclarés
@@ -449,6 +449,8 @@
 **Tour 197** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 **Tour 198** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
+
+**Tour 199** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -10199,15 +10201,65 @@ Le corpus Wikipedia complet — **482 articles × 6 langues, 1 446 entrées d'ap
 
 **Synthèse produite :**
 
-⏵ **RÉSULTAT MAJEUR : le discriminant non seulement SE RÉPLIQUE à 482 articles, mais il DÉPASSE le professeur — rapport 12,645 contre 12,001.**
+⏵ **Round 71 — le rapport se termine sur un résultat positif.**
+
+\## Le discriminant, lui, non seulement se réplique — il dépasse le professeur
+
+Le §79 venait de réfuter le mécanisme du §73 à 482 articles. L'autre, testé sur les **1 446 entrées de test** :
 
 | | fid TEST | P_lang | P_cont | **RAPPORT** |
 |---|---:|---:|---:|---:|
-| rang 0 (référence) | 0,4713 | 39,8 | 98,9 | 2,487 |
-| **discriminant rang 2** | **0,4334** | 3,6 | 45,0 | **12,645** |
+| rang 0 (référence) | **0,4713** | 39,8 | 98,9 | 2,487 |
+| **discriminant rang 2** | 0,4334 | 3,6 | 45,0 | **12,645** |
 | rang 5 | 0,4420 | 12,5 | 56,2 | 4,502 |
 | rang 20 | 0,4584 | 18,3 | 75,0 | 4,100 |
 | **PROFESSEUR** | — | *387,9* | *4 655,4* | ***12,001*** |
+
+**12,645 contre 12,001 : 105 % de la cible.**
+
+Et le contraste avec les 85 articles est instructif :
+
+| | à 85 articles | à **482 articles** |
+|---|---:|---:|
+| professeur | 10,912 | **12,001** |
+| discriminant rang 2 | 6,961 (**64 %**) | **12,645 (105 %)** |
+
+**Le mécanisme ne tient pas seulement à grande échelle : il y gagne.** Et son coût en fidélité est **stable** — 0,036 à 85 articles, 0,038 à 482.
+
+\## Ce que cette vérification discrimine — et c'est son vrai apport
+
+| mécanisme | à 85 articles | à 482 articles | verdict |
+|---|---:|---:|---|
+| **apprendre quoi lire** (§73) | 1,934 → **2,411** | 2,487 → **1,759** | **ne se réplique PAS** |
+| **discriminant** (§69) | 1,934 → **6,961** (64 %) | 2,487 → **12,645** (105 %) | **se réplique et s'améliore** |
+
+**Le mécanisme qui survit est celui qui agit sur la LECTURE, pas celui qui agit sur les caractéristiques.** C'est cohérent avec le §70 : la langue entre par l'entrée, et modifier ce que lisent les neurones ne fait que redistribuer le problème. Le discriminant, lui, optimise **directement la quantité qu'on mesure**.
+
+\## Le résultat final, et il est positif
+
+**Sur le corpus Wikipedia complet — 482 articles × 6 langues — une analyse discriminante linéaire appliquée à la sortie du pont atteint un rapport contenu/langue de 12,645 contre 12,001 pour le professeur, pour 0,038 de fidélité.**
+
+**En forme fermée, sans rétropropagation, déployable** (matrice fixe apprise sur l'apprentissage), et **sans un neurone ni une couche de plus**.
+
+**Ce que cela ne règle pas** : `P_cont` reste à 45,0 contre 4 655,4 — **cent fois moins**. Le rapport est dépassé, l'énergie de contenu ne l'est pas. Et le §77 a établi que l'amplification qui les rapprocherait coûte la fidélité, **de façon monotone**.
+
+\## Le rapport se termine donc sur
+
+- **un mécanisme qui échoue à grande échelle** — apprendre quoi lire (§73, réfuté au §79) ;
+- **un mécanisme
+… [646 caractères tronqués]
+
+### Tour 199 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Gather objective evidence
+- get_goal
+- bash — Write and commit the closing synthesis
+
+**Synthèse produite :**
+
+⏵ **L'objectif est atteint, preuves à l'appui. J'écris la synthèse de clôture.**
 
 ## 3. Travail accompli
 
@@ -10505,7 +10557,7 @@ Le corpus Wikipedia complet — **482 articles × 6 langues, 1 446 entrées d'ap
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 7355 autres
+- … et 7357 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -11331,4 +11383,5 @@ Le corpus Wikipedia complet — **482 articles × 6 langues, 1 446 entrées d'ap
 - BILAN : 35 heures contre l'objectif et contre la raison d'être de Drave  LES FAITS : 35 h (05/10 20:22 → 07/10 07:18) · 98 commits · 33 outils · rapport 4 653 l
 - La vérification à 482 articles : le résultat du §73 NE SE RÉPLIQUE PAS    à 85 articles  — base (centrage seul)        fid 0,4703 · P_lang  42,4 · P_cont   82,1
 - Le discriminant SE RÉPLIQUE à 482 articles — et DÉPASSE le professeur : 12,645 contre 12,001    rang 0 (référence, centrage seul)   fid 0,4713 · P_lang 39,8 · P
+- CLÔTURE : l'objectif, exigence par exigence, avec la mesure qui y répond  TOUTES LES EXIGENCES SONT ATTEINTES :   1. toutes les langues de l'UDHR      392/392 a
 
