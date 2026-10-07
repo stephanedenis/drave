@@ -149985,3 +149985,85 @@ articles wiki : 206
 | | | | | *prof 4 356* | *prof 10,91* |
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\ns = open('tools/sous_espace_du_contenu.py').read()\nold = \"\"\"    pro = moyennes(clte, Ot, bo_t)\n    rp = decompose(clte, pro)\n    print(f\"\\\\n# professeur (TEST) : P_lang {rp[0]:.1f} · P_cont {rp[1]:.1f} · … [7644 caractères tronqués]`
+
+  ```
+étiquette corrigée
+syntaxe OK
+7414653 Cinquième remède écarté : le sous-espace du contenu appris ne se TRANSFÈRE pas
+  ```
+
+### 🤖 Assistant
+
+⏵ **Il existe une option jamais testée sur ce diagnostic : `--centre-entree`, qui retire à l'ENTRÉE son jeton moyen — donc le décalage de langue, à la source et déployable.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\ns = open('tools/decomposition.py').read()\nold = \"\"\"    P = Pont((cltr, Etr, Ytr), 0.2, graine, len(garde))\"\"\"\nnew = \"\"\"    # CENTRAGE DE L'ENTRÉE (`--centre-entree`) : on retire à chaque langue son\n   … [1158 caractères tronqués]`
+
+  ```
+option câblée
+syntaxe OK
+lancé
+21:42
+  ```
+
+- **bash** `{"command": "sleep 580; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -22 /tmp/centre_entree.log 2>/dev/null; echo; echo \"articles wiki : $(grep -c '^ARTICLE' /tmp/trace_wiki_apparie.log)\"; date '+%H:%M'", "description": "Read the input-centering result", "timeoutMs": 620000}`
+
+  ```
+# CENTRAGE DE L'ENTRÉE : le jeton moyen de chaque langue est retiré
+# réseau 120 neurones · 1 couche(s)
+
+=== TEST (langues inconnues) === (fidélité 0.4668)
+#                   P_lang      P_cont   RAPPORT  contenus  langues
+  NOTRE               48.0        89.8     1.871        85        3
+  PROFESSEUR         399.2      4356.4    10.912        85        3
+
+=== APPRENTISSAGE (langues connues) === (fidélité 0.5042)
+#                   P_lang      P_cont   RAPPORT  contenus  langues
+  NOTRE              629.1       139.8     0.222        85        2
+  PROFESSEUR        2405.1      5219.9     2.170        85        2
+
+=== AMPLIFICATION DE L'AXE CONTENU (diagnostic) ===
+#   beta  fid TEST    P_lang    P_cont  RAPPORT
+    0.0    0.4668      48.0      89.8    1.871
+    1.0    0.4667      48.0     359.1    7.484
+    3.0    0.4647      48.0    1436.6   29.937
+   10.0    0.4414      48.0   10863.9  226.402
+   30.0    0.3332      48.0   86283.0 1798.115
+# Rappel professeur : P_lang 399,2 · P_cont 4356,4 · rapport 10,91
+
+
+articles wiki : 219
+21:52
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le centrage de l'entrée ATTAQUE le décalage de langue à la source : P_lang tombe de 232 à 48 (4,8×), et le rapport monte à 1,87 — pour un coût de fidélité de 0,008. Je lis la suite.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '20,40p' /tmp/centre_entree.log", "description": "Read the deployable gamma sweep with centering"}`
+
+  ```
+30.0    0.3332      48.0   86283.0 1798.115
+# Rappel professeur : P_lang 399,2 · P_cont 4356,4 · rapport 10,91
+
+=== AMPLIFICATION DU DÉCALAGE DE MOYENNE, PAR ENTRÉE (déployable) ===
+#   gamma  fid TEST    P_lang    P_cont  RAPPORT
+     0.0    0.4668      48.0      89.8    1.871
+     0.5    0.4664     108.0     202.0    1.871
+     1.0    0.4656     191.9     359.1    1.871
+     2.0    0.4628     431.9     808.1    1.871
+     3.0    0.4585     767.8    1436.6    1.871
+     5.0    0.4462    1727.5    3232.2    1.871
+# gamma=0 est notre sortie actuelle. Aucun regroupement par contenu n'est
+# utilisé ici : seulement la moyenne de l'entrée elle-même.
+
+# P_lang : énergie portée par l'axe LANGUE · P_cont : par l'axe CONTENU.
+# RAPPORT > 1 : le contenu structure plus que la langue (ce qu'on veut).
+# Cette mesure ne dépend PAS de quelles langues sont dans le panel —
+# contrairement à la similarité du §60.3, qui changeait de signe.
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le centrage de l'entrée est un gain RÉEL et DÉPLOYABLE : le rapport passe de 1,460 à 1,871 (+28 %) pour 0,008 de fidélité. Mais l'amplification déployable reste impuissante (1,871 constant).**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 64. Le centrage de l'entrée : un gain réel, déployable, et le premier de la série\n\n### 64.1 Un levier du dépôt qui n'avait jamai … [5521 caractères tronqués]`

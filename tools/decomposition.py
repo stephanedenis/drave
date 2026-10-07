@@ -83,6 +83,15 @@ def main():
     iap = itr[nt:]
     mt = np.vstack([Ytr[i] for i in itr]).mean(axis=0)
 
+    # CENTRAGE DE L'ENTRÉE (`--centre-entree`) : on retire à chaque langue son
+    # « jeton moyen ». Ce décalage est massivement propre à la langue (écriture,
+    # morphologie) et ne dit aucun contenu. C'est le seul levier du dépôt qui attaque
+    # le décalage de langue À LA SOURCE, et il est DÉPLOYABLE : la moyenne de l'entrée
+    # se calcule sur l'entrée elle-même, sans étiquette.
+    if opt("--centre-entree", "") != "":
+        Etr = [e - e.mean(0, keepdims=True) for e in Etr]
+        Ete = [e - e.mean(0, keepdims=True) for e in Ete]
+        print("# CENTRAGE DE L'ENTRÉE : le jeton moyen de chaque langue est retiré")
     P = Pont((cltr, Etr, Ytr), 0.2, graine, len(garde))
     P.quadratique = True
     P.a_min, P.a_max = 0.02, 0.8

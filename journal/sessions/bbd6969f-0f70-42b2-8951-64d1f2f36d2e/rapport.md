@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 198.9 h |
+| Durée | 199.1 h |
 | Tours | 184 |
-| Messages | 9102 |
-| Appels d'outils | 8573 |
+| Messages | 9106 |
+| Appels d'outils | 8577 |
 | Fichiers touchés | 205 |
-| Commandes | 7269 |
+| Commandes | 7273 |
 | Sous-agents | 32 |
-| Commits | 659 |
+| Commits | 660 |
 | Compactages de contexte | 12 |
 
 ## Objectifs déclarés
@@ -9350,23 +9350,20 @@ Sur le panneau d'apprentissage, μ_lang = 0,3 donne un rapport de **3,139**, *su
 
 ### Tour 184 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
 
-*4 appels d'outils.* Actions notables :
+*8 appels d'outils.* Actions notables :
 
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/sous_espace_du_contenu.py`
 - bash — Test the learned content subspace remedy
 - bash — Read the learned subspace result
 - bash — Report and commit the fifth rejected remedy
+- bash — Test input centering on the decomposition diagnostic
+- bash — Read the input-centering result
+- bash — Read the deployable gamma sweep with centering
+- bash — Report and commit the input centering gain
 
 **Synthèse produite :**
 
-⏵ **Cinquième remède ÉCARTÉ : le sous-espace du contenu appris sur l'apprentissage ne se transfère pas — le rapport reste figé à 1,46-1,50. Et je dois signaler une étiquette fausse dans ma sortie.**
-
-| γ | rang | fid TEST | P_lang | P_cont | RAPPORT |
-|---:|---:|---:|---:|---:|---:|
-| 1,00 | 85 | 0,4747 | 232,0 | 338,7 | 1,460 |
-| 2,00 | 85 | 0,4664 | 895,0 | 1 330,6 | **1,487** |
-| 5,00 | 85 | 0,4015 | 5 536,2 | 8 274,3 | **1,495** |
-| | | | | *prof 4 356* | *prof 10,91* |
+⏵ **Le centrage de l'entrée est un gain RÉEL et DÉPLOYABLE : le rapport passe de 1,460 à 1,871 (+28 %) pour 0,008 de fidélité. Mais l'amplification déployable reste impuissante (1,871 constant).**
 
 ## 3. Travail accompli
 
@@ -9657,7 +9654,7 @@ Sur le panneau d'apprentissage, μ_lang = 0,3 donne un rapport de **3,139**, *su
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 7229 autres
+- … et 7233 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10464,4 +10461,5 @@ Sur le panneau d'apprentissage, μ_lang = 0,3 donne un rapport de **3,139**, *su
 - Le défaut est LOCALISÉ et QUANTIFIÉ : notre sortie porte 12x moins d'énergie de CONTENU  Décomposition de variance, exacte et additive :   nu_L  = moyenne sur l
 - Le remède est trouvé mais n'est pas déployable — et un piège de méthode  L'ÉNERGIE DE CONTENU EST RÉCUPÉRABLE, preuve : on amplifie la sortie LE LONG DE L'AXE D
 - Cinquième remède écarté : le sous-espace du contenu appris ne se TRANSFÈRE pas  L'IDÉE : le regroupement par contenu n'est nécessaire qu'à l'APPRENTISSAGE. On a
+- Le centrage de l'entrée : premier levier de la série à la fois efficace ET déployable  --centre-entree retire à chaque langue son jeton moyen — le décalage prop
 
