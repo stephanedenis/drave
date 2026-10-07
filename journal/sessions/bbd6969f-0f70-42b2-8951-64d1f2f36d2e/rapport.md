@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 208.5 h |
-| Tours | 196 |
-| Messages | 9244 |
-| Appels d'outils | 8690 |
+| Durée | 209.2 h |
+| Tours | 197 |
+| Messages | 9254 |
+| Appels d'outils | 8698 |
 | Fichiers touchés | 212 |
-| Commandes | 7379 |
+| Commandes | 7387 |
 | Sous-agents | 32 |
-| Commits | 676 |
+| Commits | 677 |
 | Compactages de contexte | 12 |
 
 ## Objectifs déclarés
@@ -445,6 +445,8 @@
 **Tour 195** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 **Tour 196** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
+
+**Tour 197** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -10080,7 +10082,7 @@ La traque §57-§77 reste close sur son résultat : **le pont reproduit la struc
 
 ### Tour 196 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
 
-*8 appels d'outils.* Actions notables :
+*9 appels d'outils.* Actions notables :
 
 - bash — Read the final verification
 - bash — Check if the verification is alive
@@ -10090,10 +10092,68 @@ La traque §57-§77 reste close sur son résultat : **le pont reproduit la struc
 - bash — Gather session commits
 - bash — Gather session totals
 - bash — Write and commit the final assessment
+- bash — Final check on the verification
 
 **Synthèse produite :**
 
-⏵ **J'écris le bilan — les faits d'abord, le jugement ensuite.**
+⏵ **Bilan — 35 heures contre l'objectif et contre la raison d'être de Drave.**
+
+\## Les faits
+
+| | |
+|---|---:|
+| durée | **05/10 20:22 → 07/10 07:18**, soit **~35 h** |
+| commits | **98** |
+| outils créés | **33** |
+| rapport / glossaire | **4 653** / **2 245** lignes |
+| corpus produits | 392 langues UDHR × 2 couches · **482 articles Wikipedia × 6 langues** · Romeo · Crime |
+| échecs de traçage | **0** sur ~3 700 traces |
+
+\## Ce qui est acquis
+
+L'objectif « **toutes les langues, au-delà des 46** » est atteint : **392/392** aux couches 8 et 10, 400/400 unités. La **couche cible est établie** (couche 8, **41/41**, zéro régression). Le **protocole complet** tourne en une commande. Et le **premier corpus multi-domaine aligné** du projet existe — 482 articles × 6 langues — qui rend testable ce que l'UDHR interdisait.
+
+\## Ce qui n'est pas atteint, sans détour
+
+**Le pont ne reproduit pas le contenu de son professeur.** Fidélité ~0,63, apport propre **+0,03 à +0,06** au-dessus de la constante. Et les §75-§77 ont établi qu'il reproduit la **structure** contenu/langue à **98 %** — mais **pas le contenu** — avec une courbe de prix **monotone**.
+
+\## La raison d'être, posée franchement
+
+Le §70 a mesuré trois jeux de caractéristiques emboîtés :
+
+| | fidélité | rapport contenu/langue |
+|---|---:|---:|
+| **l'entrée seule du professeur, 0 neurone** | **0,5161** | **1,698** |
+| **les états de NOTRE réservoir** | **0,4751** | **1,354** |
+| entrée + réservoir | 0,5309 | 1,598 |
+| *le professeur à sa couche 8* | — | *10,912* |
+
+**Notre calcul propre fait moins bien que l'entrée du professeur lue linéairement, sur les deux axes à la fois.** Quatre mesures indépendantes le confirment (§29, §34, §70, §71).
+
+**En l'état, Drave n'est pas un pont : c'est une dégradation de la représentation du professeur.** Le « pont » qui fonctionne le mieux mesuré est une régression sur la couche 0 du professeur — c'est-à-dire le professeur lui-même, à peine projeté. Et la transformation qui compte — celle qui **crée** la séparation entre couche 0 et couche 8 — n'est produite par **aucun** mécanisme que le projet s'autorise.
+
+\## La leçon de méthode, et c'est la plus dure
+
+**Le constat du §29 — « une lecture sans aucun neurone bat le réservoir » — a été obtenu à l'heure 13. Celui du §70 — « la langue vient de l'entrée » — à l'heure 27. Les deux étaient testables en moins d'une heure.**
+
+J'ai construit, réglé et mesuré un mécanisme complexe — naissance libre, attrition, multi-échelle, contraintes d
+… [1787 caractères tronqués]
+
+### Tour 197 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
+
+*7 appels d'outils.* Actions notables :
+
+- bash — Check the final verification
+- bash — Kill slow version and run a fast verification
+- bash — Read the fast verification
+- bash — Wait for the direction learning result
+- bash — Continue waiting
+- bash — Wait for the discriminant results
+- bash — Record the non-replication
+
+**Synthèse produite :**
+
+⏵ **J'atteins la fin de la fenêtre. Je consigne la non-réplication, qui est le résultat le plus important de cette dernière mesure.**
 
 ## 3. Travail accompli
 
@@ -10391,7 +10451,7 @@ La traque §57-§77 reste close sur son résultat : **le pont reproduit la struc
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 7339 autres
+- … et 7347 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -11215,4 +11275,5 @@ La traque §57-§77 reste close sur son résultat : **le pont reproduit la struc
 - Journal : compteurs de session mis à jour (fichier généré)" && git log --oneline -1 | cat; echo "--- attente ---"; sleep 500; echo "articles : $(grep -c '^ARTIC
 - Le corpus Wikipedia apparié est COMPLET : 482 articles × 6 langues, 2 892 traces, 0 échec    articles                        482 / 482   traces                 
 - BILAN : 35 heures contre l'objectif et contre la raison d'être de Drave  LES FAITS : 35 h (05/10 20:22 → 07/10 07:18) · 98 commits · 33 outils · rapport 4 653 l
+- La vérification à 482 articles : le résultat du §73 NE SE RÉPLIQUE PAS    à 85 articles  — base (centrage seul)        fid 0,4703 · P_lang  42,4 · P_cont   82,1
 

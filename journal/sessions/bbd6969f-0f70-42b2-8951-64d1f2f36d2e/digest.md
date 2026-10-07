@@ -152635,3 +152635,187 @@ rapports touchés :
 ⏵ **J'écris le bilan — les faits d'abord, le jugement ensuite.**
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n# BILAN — 35 heures contre l'objectif, et contre la raison d'être de Drave\n\n## B.1 Les faits\n\n| | |\n|---|---:|\n| durée de la se … [8422 caractères tronqués]`
+
+  ```
+597f577 BILAN : 35 heures contre l'objectif et contre la raison d'être de Drave
+  ```
+
+### 🤖 Assistant
+
+⏵ **Dernier point sur la vérification en cours.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -12 /tmp/verif_finale.log | grep -vE \"pas$\"; ps -o etime,rss -p 2802603 2>/dev/null | tail -1; date '+%H:%M'", "description": "Final check on the verification"}`
+
+  ```
+=== COMPOSITION DES TROIS LEVIERS, À GRANDE ÉCHELLE ===
+# CENTRAGE DE L'ENTRÉE activé (§64)
+# réseau 120 neurones · 1 couche(s) · canaux d'entrée 896 · 1 passes
+# CIBLE — professeur : P_lang 387.9 · P_cont 4655.4 · rapport 12.001
+
+#  passe  capture  fid TEST    P_lang    P_cont   RAPPORT  s
+      0    0.015    0.4713      39.8      98.9     2.486
+   01:27:40 47613656
+07:19
+  ```
+
+### 🤖 Assistant
+
+⏵ **Bilan — 35 heures contre l'objectif et contre la raison d'être de Drave.**
+
+## Les faits
+
+| | |
+|---|---:|
+| durée | **05/10 20:22 → 07/10 07:18**, soit **~35 h** |
+| commits | **98** |
+| outils créés | **33** |
+| rapport / glossaire | **4 653** / **2 245** lignes |
+| corpus produits | 392 langues UDHR × 2 couches · **482 articles Wikipedia × 6 langues** · Romeo · Crime |
+| échecs de traçage | **0** sur ~3 700 traces |
+
+## Ce qui est acquis
+
+L'objectif « **toutes les langues, au-delà des 46** » est atteint : **392/392** aux couches 8 et 10, 400/400 unités. La **couche cible est établie** (couche 8, **41/41**, zéro régression). Le **protocole complet** tourne en une commande. Et le **premier corpus multi-domaine aligné** du projet existe — 482 articles × 6 langues — qui rend testable ce que l'UDHR interdisait.
+
+## Ce qui n'est pas atteint, sans détour
+
+**Le pont ne reproduit pas le contenu de son professeur.** Fidélité ~0,63, apport propre **+0,03 à +0,06** au-dessus de la constante. Et les §75-§77 ont établi qu'il reproduit la **structure** contenu/langue à **98 %** — mais **pas le contenu** — avec une courbe de prix **monotone**.
+
+## La raison d'être, posée franchement
+
+Le §70 a mesuré trois jeux de caractéristiques emboîtés :
+
+| | fidélité | rapport contenu/langue |
+|---|---:|---:|
+| **l'entrée seule du professeur, 0 neurone** | **0,5161** | **1,698** |
+| **les états de NOTRE réservoir** | **0,4751** | **1,354** |
+| entrée + réservoir | 0,5309 | 1,598 |
+| *le professeur à sa couche 8* | — | *10,912* |
+
+**Notre calcul propre fait moins bien que l'entrée du professeur lue linéairement, sur les deux axes à la fois.** Quatre mesures indépendantes le confirment (§29, §34, §70, §71).
+
+**En l'état, Drave n'est pas un pont : c'est une dégradation de la représentation du professeur.** Le « pont » qui fonctionne le mieux mesuré est une régression sur la couche 0 du professeur — c'est-à-dire le professeur lui-même, à peine projeté. Et la transformation qui compte — celle qui **crée** la séparation entre couche 0 et couche 8 — n'est produite par **aucun** mécanisme que le projet s'autorise.
+
+## La leçon de méthode, et c'est la plus dure
+
+**Le constat du §29 — « une lecture sans aucun neurone bat le réservoir » — a été obtenu à l'heure 13. Celui du §70 — « la langue vient de l'entrée » — à l'heure 27. Les deux étaient testables en moins d'une heure.**
+
+J'ai construit, réglé et mesuré un mécanisme complexe — naissance libre, attrition, multi-échelle, contraintes d'invariance, deux panneaux d'oracle — **pendant treize heures avant de tester la ligne de base triviale**.
+
+Ce n'est pas une erreur de calcul, c'est une erreur d'**ordre**. La règle qui manquait : **avant d'améliorer un mécanisme, mesurer ce qu'il apporte au-dessus du plus bête des modèles qui pourrait le remplacer.**
+
+## Ce que la session laisse d'utile malgré cela
+
+1. **Une infrastructure qui survit au résultat négatif** — 392 langues × 2 couches, 482 × 6, un protocole complet, 33 outils.
+2. **Une caractérisation précise de ce qui manque** : *l'énergie de contenu est sous-produite d'un facteur 3,6 ; elle est récupérable par mise à l'échelle ; mais la mise à l'échelle exige d'isoler l'axe du contenu, et cet axe n'est pas identifiable sur un texte neuf.*
+3. **Une identité mathématique** (§67) : le rapport contenu/langue est invariant d'échelle — **aucune amplification ne le corrigera jamais**. Cinq échecs s'expliquent par là, et cela économise des mois de tâtonnement.
+4. **Trois mécanismes déployables** qui, composés, portent le rapport de 1,29 à **10,69 — 98 % du professeur** — pour 0,047 de fidélité.
+5. **Quatre erreurs de ma part, documentées** (§60.6, §65, §73.1, §74), dont un découpage qui ne gardait que deux langues sur trois dans six outils.
+
+## La suite, en une phrase
+
+**Le facteur limitant n'est plus l'objectif, ni la lecture, ni le post-traitement : c'est la transformation entre l'entrée et la cible.** Sous les contraintes maintenues, la question est : **quel mécanisme, autre qu'un réservoir aléatoire gelé, peut produire huit couches d'attention ?**
+
+La vérification à 482 articles tourne encore (1 h 27, la fonction de capture est mal vectorisée) — elle dira si le chiffre de 98 % tenait à la petite taille du panel. C'est la seule mesure en suspens.
+
+
+## Tour 197
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de représentation universelle), boîte noire (on ne lit du professeur que la couche à émuler, jamais sa tête ni ses jetons générés), aucune rétropropagation (A et B aléatoires et gelés, seule la lecture s'ajuste en forme fermée), et chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, TAILLE du réseau, avec le diagnostic oracle sur les deux panneaux (test hors vivier et validation du même vivier)."
+Round: 70/256
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ **Je récupère la dernière mesure en suspens.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -16 /tmp/verif_finale.log | grep -vE \"pas$\"; ps -o etime,rss -p 2802603 2>/dev/null | tail -1; date '+%H:%M'", "description": "Check the final verification"}`
+
+  ```
+=== COMPOSITION DES TROIS LEVIERS, À GRANDE ÉCHELLE ===
+# CENTRAGE DE L'ENTRÉE activé (§64)
+# réseau 120 neurones · 1 couche(s) · canaux d'entrée 896 · 1 passes
+# CIBLE — professeur : P_lang 387.9 · P_cont 4655.4 · rapport 12.001
+
+#  passe  capture  fid TEST    P_lang    P_cont   RAPPORT  s
+      0    0.015    0.4713      39.8      98.9     2.486
+   01:28:03 47140568
+07:20
+  ```
+
+### 🤖 Assistant
+
+⏵ **La fonction de capture (rapport seulement) coûte 1 h 30 et 47 Go. Je l'élimine et je relance une version rapide — c'est la mesure de clôture.**
+
+- **bash** `{"command": "python3 - <<'PY'\nimport os, signal\nmoi=os.getpid(); anc=set(); q=moi\nfor _ in range(10):\n    try:\n        st=open(f'/proc/{q}/stat').read().split(') ',1)[1].split(); q=int(st[1]); anc.add(q)\n    except Exception: break\nt=[]\nfor d in os.listdir('/proc'):\n    if not d.isdigit():  … [4943 caractères tronqués]`
+
+  ```
+arrêté : [2766282, 2802603]
+07:20
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/vf_rapide.log 2>/dev/null; date '+%H:%M'", "description": "Read the fast verification", "timeoutMs": 620000}`
+
+  ```
+1446 appr · 1446 test · H=896
+réseau prêt
+#                                    fid TEST    P_lang    P_cont   RAPPORT
+  base (centrage seul)                 0.4713      39.8      98.9     2.487
+07:30
+  ```
+
+### 🤖 Assistant
+
+⏵ **La version rapide reproduit exactement la ligne de base (0,4713 · 2,487). La suite tourne.**
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/vf_rapide.log 2>/dev/null; date '+%H:%M'", "description": "Wait for the direction learning result", "timeoutMs": 620000}`
+
+  ```
+1446 appr · 1446 test · H=896
+réseau prêt
+#                                    fid TEST    P_lang    P_cont   RAPPORT
+  base (centrage seul)                 0.4713      39.8      98.9     2.487
+07:40
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/vf_rapide.log 2>/dev/null; date '+%H:%M'", "description": "Continue waiting", "timeoutMs": 620000}`
+
+  ```
+1446 appr · 1446 test · H=896
+réseau prêt
+#                                    fid TEST    P_lang    P_cont   RAPPORT
+  base (centrage seul)                 0.4713      39.8      98.9     2.487
+  + apprendre quoi lire                0.4546      83.3     146.6     1.759
+07:50
+  ```
+
+### 🤖 Assistant
+
+⏵ **NON-RÉPLICATION à 482 articles : « apprendre quoi lire » fait BAISSER le rapport (2,487 → 1,759), l'inverse de l'effet mesuré à 85 articles.**
+
+| étape | fid TEST | P_lang | P_cont | RAPPORT |
+|---|---:|---:|---:|---:|
+| base (centrage seul) | 0,4713 | 39,8 | 98,9 | **2,487** |
+| + apprendre quoi lire | 0,4546 | 83,3 | 146,6 | **1,759** |
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/vf_rapide.log 2>/dev/null; date '+%H:%M'", "description": "Wait for the discriminant results", "timeoutMs": 620000}`
+
+  ```
+1446 appr · 1446 test · H=896
+réseau prêt
+#                                    fid TEST    P_lang    P_cont   RAPPORT
+  base (centrage seul)                 0.4713      39.8      98.9     2.487
+  + apprendre quoi lire                0.4546      83.3     146.6     1.759
+08:00
+  ```
+
+### 🤖 Assistant
+
+⏵ **J'atteins la fin de la fenêtre. Je consigne la non-réplication, qui est le résultat le plus important de cette dernière mesure.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 79. La vérification à 482 articles : le résultat du §73 NE SE RÉPLIQUE PAS\n\nLe corpus Wikipedia apparié complet — **482 articles … [5215 caractères tronqués]`
