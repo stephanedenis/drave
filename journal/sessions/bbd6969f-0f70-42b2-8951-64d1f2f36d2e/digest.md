@@ -155109,3 +155109,143 @@ syntaxe OK
 ⏵ **Je commite les trois outils pendant que les mesures tournent.**
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/profil_couches.py tools/ancre_professeur.py tools/rapport_du_pont.py && git commit -q -m \"Sonde de couches : le rapport contenu/langue dépend du PANEL, pas seulement du modèle\n\nprofil_couches.py était cassé de deux f … [2381 caractères tronqués]`
+
+  ```
+eca1db2 Sonde de couches : le rapport contenu/langue dépend du PANEL, pas seulement du modèle
+  ```
+
+- **bash** `{"command": "sleep 270; echo \"=== B ===\"; sed -n '/##### B/,$p' /tmp/mesure_pont.log; echo \"=== C ===\"; cat /tmp/mesure_croise.log 2>/dev/null", "description": "Collect cross-test results", "timeoutMs": 330000}`
+
+  ```
+=== B ===
+##### B. LE PROFESSEUR SEUL SUR LE CACHE D'APPRENTISSAGE (de/en/fr) — référence des paires
+# apprentissage /tmp/cache_vf_train.npz (1446 entrées, de, en, fr)
+# évaluation    /tmp/cache_vf_train.npz (1446 entrées, de, en, fr) · 896 canaux
+# réseau 120 neurones · 1 couche(s) · quadratique · ride 0.03 · graine 5
+=== C ===
+##### C. TEST CROISÉ : appris sur es/it/pt, évalué sur de/en/fr (HORS VIVIER)
+# la pire paire du professeur est de–en : c'est la seule façon de la mesurer chez nous
+# apprentissage /tmp/cache_vf_test.npz (1446 entrées, es, it, pt)
+# évaluation    /tmp/cache_vf_train.npz (1446 entrées, de, en, fr) · 896 canaux
+# réseau 120 neurones · 1 couche(s) · quadratique · ride 0.03 · graine 5
+  ```
+
+### 🤖 Assistant
+
+⏵ **Les deux ajustements sont en cours ; j'attends leurs chiffres avant de rédiger.**
+
+- **bash** `{"command": "sleep 300; echo \"=== B ===\"; sed -n '/##### B/,$p' /tmp/mesure_pont.log; echo \"=== C ===\"; sed -n '/##### C/,$p' /tmp/mesure_croise.log 2>/dev/null; echo \"=== processus ===\"; ps -eo etimes,cmd | grep rapport_du_pont | grep -v grep | head -3", "description": "Wait for fitting to co … [29 caractères tronqués]`
+
+  ```
+=== B ===
+##### B. LE PROFESSEUR SEUL SUR LE CACHE D'APPRENTISSAGE (de/en/fr) — référence des paires
+# apprentissage /tmp/cache_vf_train.npz (1446 entrées, de, en, fr)
+# évaluation    /tmp/cache_vf_train.npz (1446 entrées, de, en, fr) · 896 canaux
+# réseau 120 neurones · 1 couche(s) · quadratique · ride 0.03 · graine 5
+
+# fidélité de TEST 0.5067   (ATTENTION : évaluation sur le cache d'APPRENTISSAGE — in-sample pour nous)
+
+#                   P_lang     P_cont   RAPPORT
+  PROFESSEUR        3347.7     4405.3     1.316
+  NOTRE PONT        2113.8      407.0     0.193
+  PART DU PROF                           14.6%
+
+# --- paires : PROFESSEUR ---
+# paire         P_lang     P_cont   RAPPORT
+ de–en         3372.6     5037.6     1.494
+ en–fr         2360.0     5400.6     2.288
+ de–fr         1799.7     4293.8     2.386
+# pire de–en 1.494 · meilleure en–fr 2.288 · étalement ×1.5
+
+# --- paires : NOTRE PONT ---
+# paire         P_lang     P_cont   RAPPORT
+ de–en         2245.8      539.1     0.240
+ en–fr         1662.2      517.0     0.311
+ de–fr          848.0      446.9     0.527
+# pire de–en 0.240 · meilleure en–fr 0.311 · étalement ×1.3
+=== fin ===
+=== C ===
+##### C. TEST CROISÉ : appris su
+… [1128 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Résultat croisé obtenu. Je regarde la fin du rapport pour y insérer la correction au bon endroit.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && wc -l reports/rapport-toutes-langues.md && grep -n \"^# \\|^## \" reports/rapport-toutes-langues.md | tail -25", "description": "Inspect report structure"}`
+
+  ```
+5063 reports/rapport-toutes-langues.md
+4076:## 71. Blanchir l'entrée par langue : écarté — et un chiffre qui tombe
+4160:## 72. Le dernier mécanisme sanctionné par le mandat — renforcement/atrophie — échoue aussi
+4240:## 73. CORRECTION du §72, et un mécanisme qui fait enfin les DEUX mouvements
+4347:## 74. La combinaison des deux mécanismes DOMINE chacun d'eux
+4423:## 75. LA CIBLE EST ATTEINTE : la composition des trois leviers donne 98 % du rapport du professeur
+4507:## 76. La réserve du §75.4 est mesurée, et elle tranche : la structure s'obtient, la fidélité ne suit pas
+4577:## 77. La courbe est MONOTONE : il n'y a pas de meilleur compromis, et la frontière est close
+4633:## 78. Le corpus Wikipedia apparié est COMPLET : 482 articles × 6 langues, 2 892 traces
+4658:# BILAN — 35 heures contre l'objectif, et contre la raison d'être de Drave
+4660:## B.1 Les faits
+4672:## B.2 Ce qui est acquis, et qui le restera
+4684:## B.3 Ce qui n'est PAS atteint, et il faut le dire sans détour
+4693:## B.4 La question de la raison d'être, posée franchement
+4723:## B.5 La leçon de méthode, et elle est la plus dure
+4740:## B.6 Ce que la session laisse d'utile malgré cela
+4756:## B.7 Où porter l'effort en
+… [575 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Je lis la fin du rapport, puis j'écris la section de correction.**
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-toutes-langues.md", "offset": 4989, "limit": 75}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-toutes-langues.md</path>
+<type>file</type>
+<content>
+4989: ## 81. DISTRIBUTION SUR 50 TIRAGES : le §70 était faux dans sa formulation
+4990: 
+4991: ### 81.1 La lacune
+4992: 
+4993: Toute la conclusion du §70 — *« le réservoir ABAISSE le rapport, de 1,698 à 1,354 »* —
+4994: portait sur **un seul tirage** (graine 5). Un échantillon de taille un, présenté comme une
+4995: propriété. C'est la même faute d'ordre que celle du bilan : conclure avant d'avoir
+4996: échantillonné.
+4997: 
+4998: ### 81.2 Les 50 tirages
+4999: 
+5000: Même protocole, mêmes réglages (120 neurones, centrage de l'entrée, 30 articles ×
+5001: 3 langues), **seule la graine change** :
+5002: 
+5003: | | moyenne | écart-type | min | max |
+5004: |---|---:|---:|---:|---:|
+5005: | **fidélité** | 0,4656 | **0,0013** | 0,4624 | 0,4681 |
+5006: | `P_lang` | 45,6 | 9,97 | 21,7 | 73,4 |
+5007: | `P_cont` | 90,1 | 7,75 | 65,2 | 104,4 |
+5008: | **RAPPORT** | **2,093** | **0,584** | **1,298** | **4,298** |
+5009: 
+5010: **Médiane 1,947 · 5ᵉ centile 1,398 · 95ᵉ centile 3,054.** Le professeur, sur ce panel :
+5011: **13,222**.
+5012: 
+5013: ### 81.3 Et la comparaison honnête
+… [2866 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **J'écris la section de correction : la cible du projet était un effet de panel.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> reports/rapport-toutes-langues.md <<'MARKDOWN'\n\n---\n\n## 82. LA CIBLE DU PROJET ÉTAIT UN EFFET DE PANEL\n\n### 82.1 Ce qui a mis la puce à l'oreille\n\nLe §70 puis le §79 ont fait du **12,001** le chiffre-cible du projet :  … [11739 caractères tronqués]`
+
+  ```
+5301 reports/rapport-toutes-langues.md
+  ```
+
+### 🤖 Assistant
+
+⏵ **Je corrige une formulation imprécise et je commite la section de correction.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\nold = \"\"\"   pas une valeur représentative : c'est le **bas de la queue haute**. La médiane des quinze\n   paires est **3,002** ; le 12,001 se situe au 10ᵉ  … [2232 caractères tronqués]`

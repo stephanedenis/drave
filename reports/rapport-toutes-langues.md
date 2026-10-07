@@ -5061,3 +5061,241 @@ tirage, présentée comme une propriété du mécanisme.**
 **Les trois ont la même forme** : une mesure unique, un énoncé général. La règle qui les
 couvre toutes : **avant d'écrire « le mécanisme fait X », compter combien de fois on l'a
 mesuré.**
+
+---
+
+## 82. LA CIBLE DU PROJET ÉTAIT UN EFFET DE PANEL
+
+### 82.1 Ce qui a mis la puce à l'oreille
+
+Le §70 puis le §79 ont fait du **12,001** le chiffre-cible du projet : *« le professeur a un
+rapport contenu/langue de 12,001, notre pont est à 2,487 »*. Ce chiffre a servi de boussole
+à une dizaine de paragraphes, et il a été recopié dans le bilan et dans la clôture.
+
+En construisant `profil_couches.py` — la sonde qui regarde **par-dessus l'épaule** du
+professeur, couche par couche — le même professeur, à la même couche, sur le même corpus,
+donnait **1,697**. Un facteur 7. L'un des deux chiffres était faux, ou bien ils ne
+mesuraient pas la même chose.
+
+Ils ne mesuraient pas la même chose. Rien dans le chiffre « 12,001 » ne disait **sur quelles
+langues** il était mesuré.
+
+### 82.2 Le même professeur, trois panels
+
+482 articles, couche 8, moyenne sur les positions, 896 canaux. **Seul le panel de langues
+change** :
+
+| panel | P_lang | P_cont | **RAPPORT** | dim. eff. |
+|---|---:|---:|---:|---:|
+| **6 langues** (de, en, es, fr, it, pt) | 2 381,8 | 4 041,9 | **1,697** | 49,1 |
+| **de/en/fr** (2 germaniques + 1 romane) | 3 347,7 | 4 405,3 | **1,316** | 35,4 |
+| **es/it/pt** (3 romanes — le panel du §70) | 387,9 | 4 655,4 | **12,001** | 60,8 |
+
+La ligne `es/it/pt` **reproduit le 12,001 du §70 à la décimale** (387,9 · 4 655,4 · 12,001)
+depuis le cache `cache_vf_test.npz` et depuis les traces elles-mêmes. Le chiffre n'était
+donc pas faux : il était **muet sur son panel**, et son panel était le plus facile des trois.
+
+**Ce que `P_cont` fait pendant ce temps est instructif** : 4 041,9 · 4 405,3 · 4 655,4 — il
+varie de **15 %** à peine. Toute la variation du rapport vient de `P_lang`, c'est-à-dire du
+choix des langues. Le contenu, lui, est stable.
+
+### 82.3 Pourquoi les langues romanes gonflent le rapport
+
+`P_lang` est la dispersion des moyennes par langue. Entre l'espagnol et le portugais, cette
+dispersion est petite : les deux langues se ressemblent. Entre l'allemand et l'anglais, elle
+est grande. En ne gardant que es/it/pt, on divise le dénominateur par 6 sans toucher au
+numérateur — et le rapport paraît six fois meilleur.
+
+**Le 12,001 est donc la valeur qu'on obtient en ne comparant que des langues proches.** Ce
+n'est pas une propriété du professeur, c'est une propriété de la question posée.
+
+### 82.4 Et la couche 0, pour situer
+
+| panel | P_lang | P_cont | **RAPPORT** |
+|---|---:|---:|---:|
+| 6 langues | 4 103,5 | 1 221,4 | **0,298** |
+| es/it/pt | 1 186,1 | 1 575,3 | **1,328** |
+| de/en/fr | 5 564,9 | 1 594,5 | **0,287** |
+
+**L'entrée est dominée par la langue partout** — y compris sur le panel roman, où elle est
+seulement à 1,328 contre 12,001 en couche 8. Le professeur, lui, a bien construit la
+séparation : c'est le seul point que le panel ne discute pas.
+
+---
+
+## 83. LA PIRE PAIRE : de–en, 1,494 — huit fois moins que la meilleure
+
+Le mandat demande la **pire paire**, pas seulement la moyenne. Voici les quinze paires du
+professeur, 482 articles, couche 8, triées :
+
+| paire | P_lang | P_cont | **RAPPORT** |
+|---|---:|---:|---:|
+| **de–en** | 3 372,6 | 5 037,6 | **1,494** |
+| en–it | 2 984,1 | 5 331,8 | 1,787 |
+| en–fr | 2 360,0 | 5 400,6 | 2,288 |
+| de–fr | 1 799,7 | 4 293,8 | 2,386 |
+| de–es | 1 807,9 | 4 572,4 | 2,529 |
+| de–pt | 1 746,9 | 4 592,7 | 2,629 |
+| en–es | 2 050,7 | 5 806,8 | 2,832 |
+| de–it | 1 496,0 | 4 304,4 | 2,877 |
+| en–pt | 1 966,6 | 5 903,6 | 3,002 |
+| it–pt | 391,0 | 4 957,7 | 12,681 |
+| fr–it | 364,6 | 4 632,4 | 12,707 |
+| es–it | 381,4 | 4 934,1 | 12,936 |
+| fr–pt | 319,2 | 5 018,0 | 15,723 |
+| es–fr | 295,3 | 4 934,4 | 16,708 |
+| **es–pt** | 100,4 | 5 465,1 | **54,428** |
+
+**Trois faits, et le troisième est le plus important :**
+
+1. **La pire paire est de–en : 1,494.** Les deux langues les plus proches
+   typologiquement sont, pour le professeur aussi, les plus difficiles à séparer par le
+   contenu. `P_cont` y est *élevé* (5 037,6) : le contenu est bien là, c'est la langue qui
+   résiste.
+
+2. **Les six paires romanes sont toutes entre 12,7 et 54,4.** Le « 12,001 » du §70 n'est
+   pas une valeur représentative : c'est le **bas de la queue haute**. La médiane des quinze
+   paires est **3,002** — quatre fois moins — et 12,001 s'insérerait au 10ᵉ rang sur 15.
+
+3. **L'étalement est de ×8,5** entre la pire (1,494) et la meilleure (54,428) paire. Un
+   chiffre-cible unique, sans paire nommée, n'a donc aucun sens : entre 1,5 et 54, il n'y a
+   pas une cible, il y a une famille de cibles indexées par la paire.
+
+### 83.1 Ce que cela fait au « nous sommes à 2,487 »
+
+Le 2,487 du §79 avait été mesuré sur `cache_vf_test.npz` — c'est-à-dire sur **es/it/pt**.
+La comparaison 2,487 contre 12,001 était donc, elle, **honnête** : même panel des deux
+côtés. Ce qui ne l'était pas, c'est de présenter 12,001 comme « la cible du professeur »
+alors que c'est la cible **sur le panel le plus favorable**, et de ne jamais dire que sur
+de–en le même professeur vaut 1,494.
+
+---
+
+## 84. LE PROFIL EN PROFONDEUR : la séparation se fait entre les couches 3 et 5
+
+50 articles × 6 langues, couches 0 à 8, moyenne sur les positions. Mêmes entrées pour toutes
+les couches ; seule la couche lue change.
+
+| couche | P_lang | P_cont | **RAPPORT** | vs couche 0 | dim. eff. |
+|---:|---:|---:|---:|---:|---:|
+| 0 | 4 401,9 | 1 120,0 | **0,254** | 1,00× | 14,2 |
+| 1 | 10 220,7 | 2 079,1 | **0,203** | 0,80× | 16,1 |
+| 2 | 10 760,1 | 2 509,7 | **0,233** | 0,92× | 18,3 |
+| 3 | 2 000,7 | 853,8 | **0,427** | 1,68× | 22,3 |
+| 4 | 5 644,1 | 3 941,6 | **0,698** | 2,74× | 32,5 |
+| 5 | 3 312,2 | 5 464,3 | **1,650** | 6,48× | 37,5 |
+| 6 | 7 386,3 | 12 821,4 | **1,736** | 6,82× | 37,5 |
+| 7 | 3 475,6 | 5 817,8 | **1,674** | 6,58× | 34,6 |
+| 8 | 2 515,7 | 4 449,6 | **1,769** | 6,95× | 35,5 |
+
+**Deux lectures, et la seconde corrige la première.**
+
+**1. Le saut est entre 3 et 5.** Le rapport passe de 0,233 (couche 2) à 1,650 (couche 5) :
+×7 en trois couches. Les couches 0 à 2 sont *contre-productives* — le rapport y **baisse**
+(0,254 → 0,203), la langue se renforce plus vite que le contenu.
+
+**2. Mais le plateau de 5 à 8 est un artefact d'agrégat.** Sur l'agrégat 6 langues, 5→8
+n'ajoute que +0,119. Or, paire par paire, sur les mêmes 50 articles :
+
+| paire | couche 5 | couche 8 | gain |
+|---|---:|---:|---:|
+| de–en (pire) | 1,588 | 1,559 | −0,029 |
+| es–it | 7,514 | 14,064 | **+6,55** |
+| it–pt | 7,635 | 13,614 | **+5,98** |
+| es–pt (meilleure) | 23,098 | 48,269 | **+25,17** |
+
+**Les paires proches continuent de se séparer jusqu'à la couche 8 — elles doublent.** Ce que
+le plateau agrégé cache, c'est que la paire difficile (de–en) est déjà saturée à la couche 5
+et que l'agrégat, dominé par elle, ne bouge plus. **La dimension effective, elle, sature
+vraiment à la couche 5** (37,5 puis 37,5 · 34,6 · 35,5) : au-delà, le professeur réorganise
+sans ajouter de directions.
+
+**Conséquence pour notre conception** : la séparation contenu/langue que nous cherchons à
+émuler est **acquise dès la couche 5**, et la couche 8 n'apporte un gain que sur les paires
+faciles. Émuler la couche 5 au lieu de la couche 8 ne coûterait donc rien sur l'axe
+difficile — c'est une piste de conception, pas une cible à reproduire.
+
+### 84.1 Le pooling : deux sondes, deux mondes
+
+Mêmes traces, même corpus, même couche. Seule change la façon de réduire les positions d'une
+entrée à un vecteur :
+
+| pooling | couche 0 | couche 8 |
+|---|---:|---:|
+| **moyenne sur les positions** (le pooling du §70) | 0,254 | 1,769 |
+| **dernière position** | 8,044 | 6,275 |
+
+**À la dernière position, le rapport est de 8,0 en couche 0 et 6,3 en couche 8** : la
+dernière position d'un article est un résumé stéréotypé où la langue domine moins, et le
+profil est *plat*. À la moyenne, il est de 0,25 et 1,77, et le profil *monte*. **Les deux
+sondes ne racontent pas la même histoire, et c'est la moyenne qui est comparable au §70 et à
+notre pont** — parce que notre lecture, elle aussi, voit l'entrée entière.
+
+C'est la deuxième fois dans cette session qu'un chiffre se révèle être un artefact de
+réduction (le §81 avait trouvé l'artefact de graine). La règle s'étend : **avant d'écrire un
+chiffre, nommer la graine, le panel, et le pooling.**
+
+---
+
+## 85. NOTRE PONT SUR LA PIRE PAIRE : 14 à 23 % du professeur, et jusqu'à 62 % sur de–fr
+
+Toutes les mesures du §82 portaient sur le professeur. Reste la question qui compte : **nous,
+sur ces mêmes paires ?** `rapport_du_pont.py` mesure les deux sur le même panel, avec le
+protocole de référence du dépôt (masque des canaux vivants ≥ 0,5, 120 neurones, lecture
+quadratique, ride 0,03, graine 5).
+
+### 85.1 Deux sens croisés, tous deux HORS VIVIER
+
+| apprentissage | évaluation | fidélité TEST | notre rapport | professeur | **part** |
+|---|---|---:|---:|---:|---:|
+| de/en/fr | **es/it/pt** | 0,4780 | 1,676 | 12,001 | **14,0 %** |
+| es/it/pt | **de/en/fr** | 0,4652 | 0,301 | 1,316 | **22,9 %** |
+| de/en/fr | de/en/fr *(in-sample pour nous)* | 0,5067 | 0,193 | 1,316 | 14,6 % |
+
+### 85.2 Paire par paire
+
+| évaluation | paire | notre P_lang | notre P_cont | **notre rapport** | professeur | **part** |
+|---|---|---:|---:|---:|---:|---:|
+| es/it/pt | es–it | 225,8 | 439,3 | 1,945 | 12,936 | 15,0 % |
+| es/it/pt | it–pt | 196,8 | 517,3 | 2,628 | 12,681 | 20,7 % |
+| es/it/pt | es–pt | 136,6 | 533,1 | 3,901 | 54,428 | **7,2 %** |
+| de/en/fr | **de–en (la pire)** | 1 197,5 | 457,8 | 0,382 | 1,494 | 25,6 % |
+| de/en/fr | en–fr | 1 173,5 | 451,3 | 0,385 | 2,288 | 16,8 % |
+| de/en/fr | de–fr | 271,7 | 402,4 | **1,481** | 2,386 | **62,1 %** |
+
+### 85.3 Ce que ces chiffres disent, et ce qu'ils ne disent pas
+
+**1. Notre rapport dépend du panel autant que celui du professeur.** 1,676 sur es/it/pt,
+0,301 sur de/en/fr : facteur 5,6. Ce n'est donc pas un défaut du professeur, c'est une
+propriété des paires de langues. **Toute affirmation sur ce rapport doit nommer sa paire.**
+
+**2. La « part du professeur » est, elle, beaucoup plus stable : 14 à 23 %.** C'est la
+formulation robuste. Elle dit la même chose sur les deux sens croisés, alors que les rapports
+absolus, eux, varient d'un facteur 5,6.
+
+**3. Nous sommes en retard sur les DEUX axes, pas seulement sur le contenu.** Sur de–en :
+`P_cont` 457,8 contre 5 037,6 (**11×**) et `P_lang` 1 197,5 contre 3 372,6 (**2,8×**). Le
+professeur sépare *davantage* l'allemand de l'anglais que nous. Le rapport, qui est un
+quotient, masquait ce double retard.
+
+**4. Notre pire paire est la même que la sienne (de–en), et notre meilleure aussi (de–fr
+contre es–pt).** L'ordre des difficultés se transfère. C'est un point commun réel — et c'est
+la première fois qu'une structure du professeur se retrouve chez nous **sur un classement**,
+et non sur une valeur.
+
+**5. La tentation à écarter.** Notre 1,676 sur es/it/pt est numériquement presque égal au
+1,697 du professeur **sur 6 langues**. Il serait malhonnête d'en tirer quoi que ce soit :
+deux panels différents. C'est exactement l'erreur que le §82 vient de corriger, et il serait
+absurde de la refaire dans l'autre sens, à notre avantage.
+
+### 85.4 Ce qui reste ouvert après cette mesure
+
+La part de 14 à 23 % est mesurée **sur le protocole de référence, sans discrimination, sans
+croissance, sans aucun des leviers des §73–§80**. Les §74–§80 avaient mesuré qu'un
+discriminant appris portait le rapport à 105 % de la cible **sur le panel roman**. La
+question ouverte, et elle est maintenant précise :
+
+> **Le discriminant apprend sur un panel donné. Que vaut-il sur la pire paire — et
+> transfère-t-il d'un panel à l'autre ?**
+
+C'est la prochaine mesure, et elle est rendue possible par les outils de ce paragraphe.

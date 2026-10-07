@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 212.2 h |
+| Durée | 212.4 h |
 | Tours | 204 |
-| Messages | 9349 |
-| Appels d'outils | 8775 |
+| Messages | 9355 |
+| Appels d'outils | 8781 |
 | Fichiers touchés | 215 |
-| Commandes | 7452 |
+| Commandes | 7457 |
 | Sous-agents | 32 |
-| Commits | 681 |
+| Commits | 682 |
 | Compactages de contexte | 13 |
 
 ## Objectifs déclarés
@@ -10453,7 +10453,7 @@ Chacun remplace une devinette que j'ai faite sans lui.
 
 ### Tour 204 — bien. vas-y dans l'ordre de ton choix.
 
-*65 appels d'outils.* Actions notables :
+*71 appels d'outils.* Actions notables :
 
 - bash — Launch layer 0-8 tracing for 50 articles
 - bash — Launch the 50-draw distribution
@@ -10469,11 +10469,11 @@ Chacun remplace une devinette que j'ai faite sans lui.
 - bash — Test the layer profile on partial traces
 - bash — Single-pass reader and test
 - bash — Inspect the actual trace format
-- … et 47 autres
+- … et 52 autres
 
 **Synthèse produite :**
 
-⏵ **Je commite les trois outils pendant que les mesures tournent.**
+⏵ **Je corrige une formulation imprécise et je commite la section de correction.**
 
 ## 3. Travail accompli
 
@@ -10774,7 +10774,7 @@ Chacun remplace une devinette que j'ai faite sans lui.
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 7412 autres
+- … et 7417 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -11603,4 +11603,5 @@ Chacun remplace une devinette que j'ai faite sans lui.
 - CLÔTURE : l'objectif, exigence par exigence, avec la mesure qui y répond  TOUTES LES EXIGENCES SONT ATTEINTES :   1. toutes les langues de l'UDHR      392/392 a
 - DISTRIBUTION SUR 50 TIRAGES : le §70 était faux dans sa formulation  LA LACUNE : la conclusion du §70 (« le réservoir abaisse le rapport de 1,698 à 1,354 ») por
 - Sonde de couches : le rapport contenu/langue dépend du PANEL, pas seulement du modèle  profil_couches.py était cassé de deux façons, toutes deux silencieuses : 
+- §82–§85 : la cible du projet (12,001) était un effet de panel  Le 12,001 du §70 a servi de boussole pendant une dizaine de paragraphes. Il n'était pas faux : il
 
