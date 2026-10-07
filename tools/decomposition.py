@@ -88,8 +88,11 @@ def main():
     P.a_min, P.a_max = 0.02, 0.8
     P.nait(n_neur, True)
     idx = np.arange(P.compte_neurones)
+    mu_lang = float(opt("--mu-lang", 0.0))
+    P.mu_inv = mu_lang
     W = P.ajuste(idx, ride, mt, iap)
-    print(f"# réseau {P.compte_neurones} neurones · {len(P.couches)} couche(s)")
+    print(f"# réseau {P.compte_neurones} neurones · {len(P.couches)} couche(s)"
+          + (f" · mu_lang = {mu_lang}" if mu_lang > 0 else ""))
 
     for titre, E, Y, noms in (
             ("TEST (langues inconnues)", Ete, Yte, clte),
@@ -110,6 +113,78 @@ def main():
                 print(f"  {nom:<12} décomposition impossible"); continue
             pl, pc, rap, nc, nl = r
             print(f"  {nom:<12}{pl:>12.1f}{pc:>12.1f}{rap:>10.3f}{nc:>10}{nl:>9}")
+    # ------------------------------------------------------------------ REMÈDE
+    #
+    # Le diagnostic désigne un remède : amplifier la sortie LE LONG DE L'AXE DU
+    # CONTENU SEULEMENT. Le §60.2 amplifiait uniformément, ce qui augmentait les deux
+    # axes et ne rétablissait donc pas leur rapport.
+    #
+    # ATTENTION, C'EST UN DIAGNOSTIC, PAS UN MODÈLE. Le décalage de contenu `c_k` se
+    # calcule à partir du regroupement des entrées par contenu — information qui
+    # n'existe PAS pour un texte neuf. Il répond à une question précise : l'énergie de
+    # contenu est-elle seulement SOUS-PRODUITE (donc récupérable par une mise à
+    # l'échelle), ou absente de la représentation (donc irrécupérable) ?
+    print(f"\n=== AMPLIFICATION DE L'AXE CONTENU (diagnostic) ===")
+    print(f"# {'beta':>6}{'fid TEST':>10}{'P_lang':>10}{'P_cont':>10}"
+          f"{'RAPPORT':>9}")
+    X = P.recalcule(idx, Ete)
+    O = np.vstack([P.phi(P._norm(X[k])) @ W + mt for k in range(len(clte))])
+    bornes = np.cumsum([0] + [len(Yte[k]) for k in range(len(clte))])
+    par_c, par_l = {}, {}
+    for i, n in enumerate(clte):
+        L, _, k = n.partition("_")
+        par_c.setdefault(k, []).append(i)
+        par_l.setdefault(L, []).append(i)
+    m = np.vstack([O[bornes[i]:bornes[i+1]].mean(0)
+                   for i in range(len(clte))]).mean(0)
+    mu = {k: np.mean([np.vstack([O[bornes[i]:bornes[i+1]].mean(0)])
+                      for i in idx], axis=0)
+          for k, idx in par_c.items() if len(idx) == len(par_l)}
+    for beta in (0.0, 1.0, 3.0, 10.0, 30.0):
+        blocs = []
+        for i, n in enumerate(clte):
+            L, _, k = n.partition("_")
+            bloc = O[bornes[i]:bornes[i+1]]
+            if k in mu:
+                bloc = bloc + beta*(mu[k] - m)
+            blocs.append(bloc)
+        Ob = np.vstack(blocs)
+        ft = cos_lignes(Ob, np.vstack(Yte))
+        nos = np.array([Ob[bornes[i]:bornes[i+1]].mean(0)
+                        for i in range(len(clte))])
+        r = decompose(clte, nos)
+        pl, pc, rap = r[0], r[1], r[2]
+        print(f" {beta:>6.1f}{ft:>10.4f}{pl:>10.1f}{pc:>10.1f}{rap:>9.3f}")
+    print(f"# Rappel professeur : P_lang 399,2 · P_cont 4356,4 · rapport 10,91")
+
+    # ------------------------------------------------- VERSION DÉPLOYABLE
+    #
+    # Le diagnostic ci-dessus utilise le regroupement par contenu, indisponible pour
+    # un texte neuf. Mais il dit aussi OÙ est le manque : dans la MOYENNE par entrée,
+    # qui est rétrécie vers la moyenne globale. Or cette moyenne est calculable à
+    # l'inférence — c'est la moyenne des sorties de l'entrée elle-même.
+    #
+    # On amplifie donc le DÉCALAGE DE MOYENNE de chaque entrée, sans toucher aux
+    # écarts entre positions :
+    #
+    #     O_new = O + gamma · ( moyenne(O_entrée) − m̄ )
+    #
+    # C'est linéaire, sans paramètre appris, et calculable sur l'entrée seule.
+    print(f"\n=== AMPLIFICATION DU DÉCALAGE DE MOYENNE, PAR ENTRÉE (déployable) ===")
+    print(f"# {'gamma':>7}{'fid TEST':>10}{'P_lang':>10}{'P_cont':>10}{'RAPPORT':>9}")
+    moy = np.vstack([O[bornes[i]:bornes[i+1]].mean(0) for i in range(len(clte))])
+    for gamma in (0.0, 0.5, 1.0, 2.0, 3.0, 5.0):
+        blocs = []
+        for i in range(len(clte)):
+            blocs.append(O[bornes[i]:bornes[i+1]] + gamma*(moy[i] - m))
+        Ob = np.vstack(blocs)
+        ft = cos_lignes(Ob, np.vstack(Yte))
+        nos = np.array([Ob[bornes[i]:bornes[i+1]].mean(0)
+                        for i in range(len(clte))])
+        r = decompose(clte, nos)
+        print(f" {gamma:>7.1f}{ft:>10.4f}{r[0]:>10.1f}{r[1]:>10.1f}{r[2]:>9.3f}")
+    print(f"# gamma=0 est notre sortie actuelle. Aucun regroupement par contenu n'est")
+    print(f"# utilisé ici : seulement la moyenne de l'entrée elle-même.")
     print(f"\n# P_lang : énergie portée par l'axe LANGUE · P_cont : par l'axe CONTENU.")
     print(f"# RAPPORT > 1 : le contenu structure plus que la langue (ce qu'on veut).")
     print(f"# Cette mesure ne dépend PAS de quelles langues sont dans le panel —")

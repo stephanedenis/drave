@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 198.2 h |
+| Durée | 198.7 h |
 | Tours | 183 |
-| Messages | 9089 |
-| Appels d'outils | 8562 |
+| Messages | 9096 |
+| Appels d'outils | 8569 |
 | Fichiers touchés | 204 |
-| Commandes | 7259 |
+| Commandes | 7266 |
 | Sous-agents | 32 |
-| Commits | 657 |
+| Commits | 658 |
 | Compactages de contexte | 12 |
 
 ## Objectifs déclarés
@@ -9283,7 +9283,7 @@ Le §58 seul aurait laissé croire qu
 
 ### Tour 183 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
 
-*10 appels d'outils.* Actions notables :
+*17 appels d'outils.* Actions notables :
 
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/amplification.py`
 - bash — Launch the shrinkage/amplification test
@@ -9295,19 +9295,22 @@ Le §58 seul aurait laissé croire qu
 - bash — Run the variance decomposition
 - bash — Read the variance decomposition
 - bash — Report and commit the decomposition diagnosis
+- bash — Test targeted content amplification
+- bash — Read the targeted amplification result
+- bash — Test the deployable mean-offset amplification
+- bash — Read the deployable amplification result
+- … et 3 autres
 
 **Synthèse produite :**
 
-⏵ **DIAGNOSTIC PRÉCIS, et c'est le résultat le plus net du round : notre sortie porte ~12× MOINS d'énergie de CONTENU que le professeur, à énergie de LANGUE comparable.**
+⏵ **μ_lang ne rétablit pas le rapport — il comprime les DEUX axes (1,46 → 0,91). Et il révèle un piège de méthode : le rapport peut être gonflé en écrasant tout.**
 
-| | P_lang | P_cont | **RAPPORT** |
-|---|---:|---:|---:|
-| **TEST** — notre | 232,0 | **338,7** | **1,46** |
-| TEST — professeur | 399,2 | **4 356,4** | **10,91** |
-| **APPRENTISSAGE** — notre | 1 834,7 | **493,9** | **0,27** |
-| APPRENTISSAGE — professeur | 2 405,1 | **5 219,9** | **2,17** |
-
-Le défaut n'est pas « trop de langue » : c'est **beaucoup trop peu de contenu**.
+| μ_lang | TEST P_lang | TEST P_cont | RAPPORT | fid |
+|---:|---:|---:|---:|---:|
+| 0 | 232,0 | 338,7 | 1,460 | 0,4747 |
+| 0,1 | 195,7 | 217,5 | 1,112 | 0,4729 |
+| 0,3 | 158,7 | 144,4 | 0,910 | 0,4710 |
+| | | *professeur* | *10,912* | |
 
 ## 3. Travail accompli
 
@@ -9597,7 +9600,7 @@ Le défaut n'est pas « trop de langue » : c'est **beaucoup trop peu de contenu
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 7219 autres
+- … et 7226 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10402,4 +10405,5 @@ Le défaut n'est pas « trop de langue » : c'est **beaucoup trop peu de contenu
 - La piste 'le moindres carrés néglige les petites composantes' est RÉFUTÉE par sa prémisse  IDÉE : la fidélité est un cosinus par ligne, le fit minimise une erre
 - Le rétrécissement est réel (3,4x) mais n'est pas la cause ; et la cible du §58 n'est pas stable  MESURE QUI N'AVAIT JAMAIS ÉTÉ FAITE : rapport ‖écart à la moyen
 - Le défaut est LOCALISÉ et QUANTIFIÉ : notre sortie porte 12x moins d'énergie de CONTENU  Décomposition de variance, exacte et additive :   nu_L  = moyenne sur l
+- Le remède est trouvé mais n'est pas déployable — et un piège de méthode  L'ÉNERGIE DE CONTENU EST RÉCUPÉRABLE, preuve : on amplifie la sortie LE LONG DE L'AXE D
 

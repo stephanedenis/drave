@@ -149704,3 +149704,151 @@ articles wiki : 185
 Le défaut n'est pas « trop de langue » : c'est **beaucoup trop peu de contenu**.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 61. Le défaut est LOCALISÉ et QUANTIFIÉ : notre sortie porte douze fois moins d'énergie de CONTENU\n\nAprès quatre causes écartées … [6335 caractères tronqués]`
+
+  ```
+09b0218 Le défaut est LOCALISÉ et QUANTIFIÉ : notre sortie porte 12x moins d'énergie de CONTENU
+
+articles wiki : 186
+  ```
+
+### 🤖 Assistant
+
+⏵ **Test du remède que le diagnostic désigne — amplification le long de l'axe CONTENU seulement. C'est un diagnostic, pas un modèle : il utilise le regroupement par contenu.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\ns = open('tools/decomposition.py').read()\nold = \"\"\"    print(f\"\\\\n# P_lang : énergie portée par l'axe LANGUE · P_cont : par l'axe CONTENU.\")\"\"\"\nnew = \"\"\"    # -------------------------------------- … [2835 caractères tronqués]`
+
+  ```
+remède ajouté
+syntaxe OK
+lancé
+20:59
+  ```
+
+- **bash** `{"command": "sleep 560; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/decomposition2.log 2>/dev/null; echo; date '+%H:%M'", "description": "Read the targeted amplification result", "timeoutMs": 600000}`
+
+  ```
+# réseau 120 neurones · 1 couche(s)
+
+=== TEST (langues inconnues) === (fidélité 0.4747)
+#                   P_lang      P_cont   RAPPORT  contenus  langues
+  NOTRE              232.0       338.7     1.460        85        3
+  PROFESSEUR         399.2      4356.4    10.912        85        3
+
+=== APPRENTISSAGE (langues connues) === (fidélité 0.5120)
+#                   P_lang      P_cont   RAPPORT  contenus  langues
+  NOTRE             1834.7       493.9     0.269        85        2
+  PROFESSEUR        2405.1      5219.9     2.170        85        2
+
+=== AMPLIFICATION DE L'AXE CONTENU (diagnostic) ===
+#   beta  fid TEST    P_lang    P_cont  RAPPORT
+    0.0    0.4747     232.0     338.7    1.460
+    1.0    0.4749     232.0    1354.8    5.839
+    3.0    0.4688     232.0    5419.2   23.358
+   10.0    0.4129     232.0   40983.1  176.641
+   30.0    0.2647     232.0  325493.5 1402.913
+# Rappel professeur : P_lang 399,2 · P_cont 4356,4 · rapport 10,91
+
+# P_lang : énergie portée par l'axe LANGUE · P_cont : par l'axe CONTENU.
+# RAPPORT > 1 : le contenu structure plus que la langue (ce qu'on veut).
+# Cette mesure ne dépend PAS de quelles langues sont dans le panel —
+# contrairement à la simil
+… [46 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Résultat POSITIF : l'énergie de contenu est RÉCUPÉRABLE par mise à l'échelle. À β=3 on atteint la magnitude du professeur pour 0,006 de fidélité. Mais c'est un diagnostic — je teste la version DÉPLOYABLE.**
+
+| β | fid TEST | P_cont | RAPPORT |
+|---:|---:|---:|---:|
+| 0 | 0,4747 | 338,7 | 1,46 |
+| 1 | **0,4749** | 1 354,8 | 5,84 |
+| 3 | 0,4688 | **5 419,2** | **23,36** |
+| | | *professeur 4 356* | *10,91* |
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\ns = open('tools/decomposition.py').read()\nold = \"\"\"    print(f\"# Rappel professeur : P_lang 399,2 · P_cont 4356,4 · rapport 10,91\")\"\"\"\nnew = \"\"\"    print(f\"# Rappel professeur : P_lang 399,2 · P_con … [2158 caractères tronqués]`
+
+  ```
+version déployable ajoutée
+syntaxe OK
+lancé
+21:09
+  ```
+
+- **bash** `{"command": "sleep 560; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -18 /tmp/decomposition3.log 2>/dev/null; echo; echo \"articles wiki : $(grep -c '^ARTICLE' /tmp/trace_wiki_apparie.log)\"; date '+%H:%M'", "description": "Read the deployable amplification result", "timeoutMs": 600000 … [1 caractères tronqués]`
+
+  ```
+30.0    0.2647     232.0  325493.5 1402.913
+# Rappel professeur : P_lang 399,2 · P_cont 4356,4 · rapport 10,91
+
+=== AMPLIFICATION DU DÉCALAGE DE MOYENNE, PAR ENTRÉE (déployable) ===
+#   gamma  fid TEST    P_lang    P_cont  RAPPORT
+     0.0    0.4747     232.0     338.7    1.460
+     0.5    0.4737     522.0     762.1    1.460
+     1.0    0.4712     928.1    1354.8    1.460
+     2.0    0.4626    2088.1    3048.3    1.460
+     3.0    0.4502    3712.2    5419.2    1.460
+     5.0    0.4191    8352.5   12193.3    1.460
+# gamma=0 est notre sortie actuelle. Aucun regroupement par contenu n'est
+# utilisé ici : seulement la moyenne de l'entrée elle-même.
+
+# P_lang : énergie portée par l'axe LANGUE · P_cont : par l'axe CONTENU.
+# RAPPORT > 1 : le contenu structure plus que la langue (ce qu'on veut).
+# Cette mesure ne dépend PAS de quelles langues sont dans le panel —
+# contrairement à la similarité du §60.3, qui changeait de signe.
+
+articles wiki : 198
+21:19
+  ```
+
+### 🤖 Assistant
+
+⏵ **La version déployable ÉCHOUE, et la raison est nette : le rapport reste EXACTEMENT 1,460 à tout γ — amplifier la moyenne par entrée met les deux axes à l'échelle ensemble. Test du levier §48 sur ce diagnostic.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\ns = open('tools/decomposition.py').read()\nold = \"\"\"    P = Pont((cltr, Etr, Ytr), 0.2, graine, len(garde))\n    P.quadratique = True\n    P.a_min, P.a_max = 0.02, 0.8\n    P.nait(n_neur, True)\n    idx = np.a … [1358 caractères tronqués]`
+
+  ```
+syntaxe OK
+lancé
+21:19
+  ```
+
+- **bash** `{"command": "sleep 580; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/ratio_mu.log 2>/dev/null; echo; echo \"articles wiki : $(grep -c '^ARTICLE' /tmp/trace_wiki_apparie.log)\"; date '+%H:%M'", "description": "Read the mu_lang ratio test", "timeoutMs": 620000}`
+
+  ```
+########## mu_lang = 0.03 ##########
+# réseau 120 neurones · 1 couche(s) · mu_lang = 0.03
+=== TEST (langues inconnues) === (fidélité 0.4741)
+  NOTRE              218.3       283.9     1.300        85        3
+  PROFESSEUR         399.2      4356.4    10.912        85        3
+=== APPRENTISSAGE (langues connues) === (fidélité 0.5107)
+  NOTRE              816.1       405.2     0.496        85        2
+  PROFESSEUR        2405.1      5219.9     2.170        85        2
+########## mu_lang = 0.1 ##########
+# réseau 120 neurones · 1 couche(s) · mu_lang = 0.1
+=== TEST (langues inconnues) === (fidélité 0.4729)
+  NOTRE              195.7       217.5     1.112        85        3
+  PROFESSEUR         399.2      4356.4    10.912        85        3
+=== APPRENTISSAGE (langues connues) === (fidélité 0.5073)
+  NOTRE              258.5       290.2     1.123        85        2
+  PROFESSEUR        2405.1      5219.9     2.170        85        2
+########## mu_lang = 0.3 ##########
+# réseau 120 neurones · 1 couche(s) · mu_lang = 0.3
+=== TEST (langues inconnues) === (fidélité 0.4710)
+  NOTRE              158.7       144.4     0.910        85        3
+  PROFESSEUR         399.2      4356.4    10.912     
+… [243 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **μ_lang ne rétablit pas le rapport — il comprime les DEUX axes (1,46 → 0,91). Et il révèle un piège de méthode : le rapport peut être gonflé en écrasant tout.**
+
+| μ_lang | TEST P_lang | TEST P_cont | RAPPORT | fid |
+|---:|---:|---:|---:|---:|
+| 0 | 232,0 | 338,7 | 1,460 | 0,4747 |
+| 0,1 | 195,7 | 217,5 | 1,112 | 0,4729 |
+| 0,3 | 158,7 | 144,4 | 0,910 | 0,4710 |
+| | | *professeur* | *10,912* | |
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 62. Le remède est trouvé — mais il n'est pas déployable. Et un piège de méthode\n\n### 62.1 L'énergie de contenu EST récupérable : … [6969 caractères tronqués]`
