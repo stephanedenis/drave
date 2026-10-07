@@ -2135,6 +2135,68 @@ propre entrée. Ceux-ci apparaissaient au §10 sans en avoir.
 > jetons qu'un modèle peut lire avant de répondre. Sans rapport avec le « contexte »
 > d'un processus (§4).
 
+### 10.10 Le vocabulaire de la mesure contenu / langue
+
+Ces termes sont nés de la traque des §57 à §70 et sont devenus **la mesure centrale** du
+pont. Ils manquaient au glossaire.
+
+> **`P_lang`** *(énergie de langue)* — la variance des **moyennes par langue** de la
+> sortie, autour de la moyenne globale. Ce que la représentation porte **parce que la
+> langue change**, à contenu égal. On veut qu'elle soit **basse**.
+
+> **`P_cont`** *(énergie de contenu)* — la variance des **moyennes par contenu** de la
+> sortie, autour de la moyenne globale. Ce que la représentation porte **parce que le
+> sujet change**, à langue égale. On veut qu'elle soit **haute** — et proche de celle du
+> professeur.
+
+> **Rapport contenu/langue** *(content-to-language ratio)* — `P_cont / P_lang`. Il vaut
+> **10,912** pour le professeur à sa couche 8, et **1,698** pour une lecture optimale de
+> sa propre couche 0. C'est le premier chiffre qui dise qu'une représentation **sépare**
+> le sujet de la langue au lieu de tout confondre.
+
+> **Invariance d'échelle** *(scale invariance)* — le fait qu'une quantité ne change pas
+> quand on multiplie son objet par un facteur. **Le rapport contenu/langue est invariant
+> d'échelle** : `P_cont` et `P_lang` sont tous deux quadratiques, donc multiplier la
+> sortie par `α` les multiplie tous deux par `α²`. **Aucune amplification ne peut donc
+> corriger le rapport** — seulement un changement de directions. C'est une identité, pas
+> une observation, et elle explique cinq échecs consécutifs (§67).
+
+> **Décomposition de variance** *(variance decomposition)* — écrire la variance totale
+> d'un jeu de représentations comme la somme d'une part **entre langues**, d'une part
+> **entre contenus** et d'un résidu. Exacte et additive. C'est elle qui a **localisé** le
+> défaut du pont : douze fois moins d'énergie de contenu que le professeur, à énergie de
+> langue comparable (§61).
+
+> **Analyse discriminante linéaire** *(linear discriminant analysis ; LDA)* — trouver les
+> directions d'un espace qui **maximisent le rapport** entre la variance d'un groupe et
+> celle d'un autre. C'est un **problème aux valeurs propres généralisé**,
+> `C_cont·v = λ·C_lang·v`, donc **en forme fermée** et sans rétropropagation. Appliquée à
+> la sortie du pont, elle porte le rapport de 1,93 à **6,96** — 64 % de celui du
+> professeur — mais coûte 0,12 à 0,23 de fidélité (§69).
+> Réf. Fisher, *The use of multiple measurements in taxonomic problems* (1936), cité par
+> titre.
+
+> **Rétrécissement** *(shrinkage)* — le fait qu'un ajustement par moindres carrés
+> produise des prédictions **plus petites** que leurs cibles, ramenées vers la moyenne.
+> Mesuré sur le pont : `‖écart à la moyenne‖/‖moyenne‖` vaut **0,623** chez nous contre
+> **2,145** chez le professeur — un facteur **3,4**. C'est un défaut réel, mais
+> l'amplifier ne rétablit pas l'ordre contenu/langue (§60).
+
+> **Frontière** *(trade-off frontier)* — l'ensemble des compromis atteignables entre deux
+> quantités qu'on ne peut pas maximiser ensemble. Ici : **fidélité contre rapport
+> contenu/langue**. Mesurée : à rapport 6,96 la fidélité tombe à 0,43 ; pour amener
+> `P_cont` à la magnitude du professeur elle tombe à **0,24** (§69.3).
+
+> **Caractéristiques emboîtées** *(nested features)* — comparer des jeux de
+> caractéristiques dont l'un contient l'autre, pour attribuer un effet à la partie
+> ajoutée. C'est ainsi qu'on a montré que **l'axe de langue vient de l'entrée** et non du
+> réservoir : l'entrée seule a un rapport de 1,698, le réservoir seul de 1,354 (§70).
+
+> **Sous-espace de langue** *(language subspace)* — les directions d'un espace de
+> représentations qui portent la différence **entre langues**. On l'estime par les
+> vecteurs propres dominants de la covariance inter-langue, puis on projette sur son
+> complément. **Déployable** : c'est une matrice fixe apprise une fois (§66).
+
 ---
 
 ## 11. Sources externes ajoutées par le §10

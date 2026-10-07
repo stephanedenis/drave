@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 201.1 h |
 | Tours | 188 |
-| Messages | 9147 |
-| Appels d'outils | 8610 |
+| Messages | 9148 |
+| Appels d'outils | 8611 |
 | Fichiers touchés | 209 |
-| Commandes | 7302 |
+| Commandes | 7303 |
 | Sous-agents | 32 |
-| Commits | 665 |
+| Commits | 666 |
 | Compactages de contexte | 12 |
 
 ## Objectifs déclarés
@@ -9585,23 +9585,17 @@ Puisque **toutes** les transformations linéaires buttent sur la même frontièr
 
 ### Tour 188 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
 
-*4 appels d'outils.* Actions notables :
+*5 appels d'outils.* Actions notables :
 
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/ou_entre_la_langue.py`
 - bash — Localize where the language axis enters
 - bash — Read the localization result
 - bash — Report and commit the language localization finding
+- bash — Add the content/language vocabulary to the glossary
 
 **Synthèse produite :**
 
-⏵ **Résultat net et important : l'axe de langue vient de l'ENTRÉE, pas du réservoir — et le réservoir l'AMPLIFIE tout en perdant en fidélité.**
-
-| caractéristiques | fid TEST | P_lang | P_cont | **RAPPORT** |
-|---|---:|---:|---:|---:|
-| **A · l'ENTRÉE seule (ZÉRO neurone)** | **0,5161** | 199,5 | **338,8** | **1,698** |
-| B · les ÉTATS du réservoir | 0,4751 | **238,8** | 323,3 | **1,354** |
-| C · ENTRÉE + ÉTATS | **0,5309** | 312,4 | 499,2 | 1,598 |
-| *professeur* | — | *399,2* | *4 356,4* | ***10,912*** |
+⏵ **Les termes de la traque sont devenus centraux — je les ajoute au glossaire avant de clore le round.**
 
 ## 3. Travail accompli
 
@@ -9896,7 +9890,7 @@ Puisque **toutes** les transformations linéaires buttent sur la même frontièr
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 7262 autres
+- … et 7263 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10709,4 +10703,5 @@ Puisque **toutes** les transformations linéaires buttent sur la même frontièr
 - Le rapport est INVARIANT D'ÉCHELLE (identité), et imposer la covariance de la cible échoue  §67 — CONSTAT MATHÉMATIQUE QUI FERME UNE FAMILLE DE PISTES : P_cont 
 - Le discriminant fonctionne : rapport 6,96 (64 % de la cible) — et la frontière est tracée  L'OUTIL QUI VISE LA BONNE QUANTITÉ : analyse discriminante linéaire, 
 - OÙ ENTRE LA LANGUE : dans l'entrée, pas dans le réservoir — et le réservoir l'AMPLIFIE  Trois jeux de caractéristiques emboîtés, même protocole :   A · l'ENTRÉE
+- Glossaire : §10.10, le vocabulaire de la mesure contenu/langue  Termes nés de la traque des §57-§70 et devenus LA MESURE CENTRALE du pont :   P_lang · P_cont · 
 

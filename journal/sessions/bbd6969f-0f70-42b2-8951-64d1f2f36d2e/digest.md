@@ -150953,3 +150953,13 @@ articles wiki : 295
 | *professeur* | — | *399,2* | *4 356,4* | ***10,912*** |
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 70. OÙ ENTRE LA LANGUE : dans l'entrée du professeur, pas dans le réservoir\n\n### 70.1 La question, et pourquoi il fallait la pos … [6540 caractères tronqués]`
+
+  ```
+97fc5ea OÙ ENTRE LA LANGUE : dans l'entrée, pas dans le réservoir — et le réservoir l'AMPLIFIE
+  ```
+
+### 🤖 Assistant
+
+⏵ **Les termes de la traque sont devenus centraux — je les ajoute au glossaire avant de clore le round.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='docs/glossaire.md'; s=open(p).read()\nanchor = \"\\n---\\n\\n## 11. Sources externes ajoutées par le §10\"\nadd = \"\"\"\n### 10.10 Le vocabulaire de la mesure contenu / langue\n\nCes termes sont nés de la tra … [4855 caractères tronqués]`
