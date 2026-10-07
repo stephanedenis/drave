@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 199.1 h |
-| Tours | 184 |
-| Messages | 9106 |
-| Appels d'outils | 8577 |
-| Fichiers touchés | 205 |
-| Commandes | 7273 |
+| Durée | 199.6 h |
+| Tours | 185 |
+| Messages | 9118 |
+| Appels d'outils | 8587 |
+| Fichiers touchés | 206 |
+| Commandes | 7282 |
 | Sous-agents | 32 |
-| Commits | 660 |
+| Commits | 661 |
 | Compactages de contexte | 12 |
 
 ## Objectifs déclarés
@@ -421,6 +421,8 @@
 **Tour 183** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 **Tour 184** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
+
+**Tour 185** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -9350,7 +9352,7 @@ Sur le panneau d'apprentissage, μ_lang = 0,3 donne un rapport de **3,139**, *su
 
 ### Tour 184 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
 
-*8 appels d'outils.* Actions notables :
+*9 appels d'outils.* Actions notables :
 
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/sous_espace_du_contenu.py`
 - bash — Test the learned content subspace remedy
@@ -9360,10 +9362,67 @@ Sur le panneau d'apprentissage, μ_lang = 0,3 donne un rapport de **3,139**, *su
 - bash — Read the input-centering result
 - bash — Read the deployable gamma sweep with centering
 - bash — Report and commit the input centering gain
+- bash — Check the Wikipedia chain health
 
 **Synthèse produite :**
 
-⏵ **Le centrage de l'entrée est un gain RÉEL et DÉPLOYABLE : le rapport passe de 1,460 à 1,871 (+28 %) pour 0,008 de fidélité. Mais l'amplification déployable reste impuissante (1,871 constant).**
+⏵ **Round 57 — état et acquis.**
+
+\## 1. Cinquième remède écarté : le sous-espace du contenu appris ne se transfère pas
+
+L'idée était la bonne sur le papier — le regroupement par contenu n'est nécessaire qu'à l'**apprentissage**, pas à l'inférence. J'ai donc appris une fois pour toutes un **projecteur** `Π` (85 directions, 100 % de l'énergie) et appliqué à l'inférence `O + (γ−1)·Π·(O − m̄)`.
+
+| γ | fid TEST | P_lang | P_cont | **rapport** |
+|---:|---:|---:|---:|---:|
+| 1,00 | 0,4747 | 232,0 | 338,7 | **1,460** |
+| 5,00 | 0,4015 | 5 536,2 | 8 274,3 | **1,495** |
+| | | | *prof 4 356* | *prof 10,912* |
+
+**Le rapport est figé** : multiplier γ par cinq le fait passer de 1,460 à 1,495 — les deux axes montent ensemble.
+
+**Pourquoi, et c'est cohérent avec tout le reste** : les articles du test sont **les mêmes** que ceux de l'apprentissage (partage par langue), donc les contenus sont partagés et le sous-espace *devrait* transférer. Il ne le fait pas parce que **les sorties des langues inconnues sont décalées** — c'est le **même décalage de transfert que le §36** qui revient, cette fois sous forme d'un sous-espace qui ne s'applique plus.
+
+\## 2. Un levier RETENU — le premier de la série à être efficace **et** déployable
+
+`--centre-entree` retire à chaque langue son **jeton moyen** : il attaque le décalage de langue **à la source**, avant le réservoir, et il est calculable sur l'entrée seule.
+
+| | P_lang | P_cont | **rapport** | fidélité |
+|---|---:|---:|---:|---:|
+| sans centrage | 232,0 | 338,7 | 1,460 | 0,4747 |
+| **avec centrage** | **48,0** | 89,8 | **1,871** | 0,4668 |
+| **effet** | **÷ 4,8** | ÷ 3,8 | **+28 %** | −0,008 |
+
+**L'axe de langue tombe d'un facteur 4,8** — le plus grand effet obtenu sur cet axe dans toute la série. Mais l'axe du contenu tombe de 3,8× **en même temps**, donc le rapport ne gagne que 28 %.
+
+**Et une confirmation nette** : le problème n'est pas seulement de *réduire* l'axe de langue — le centrage le fait très bien — mais de **ne pas réduire l'axe du contenu en même temps**. Les deux sont **mêlés** dans les états du réservoir.
+
+\## 3. La série complète : huit moyens, sept écartés, un retenu
+
+| § | moyen | déployable | verdict |
+|---|---|---|---|
+| 58 | objectif à deux curseurs | oui | **non convexe**, non monotone |
+| 59 | centrage/normalisation/blanchiment de la **cible** | oui | **écarté** — prémisse réfutée par le spectre |
+| 60 | amplification uniforme | oui | **écarté** — ne change pas l'ordre |
+| 61 | *décomposition de variance* | — 
+… [1599 caractères tronqués]
+
+### Tour 185 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
+
+*9 appels d'outils.* Actions notables :
+
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/etats_sans_langue.py`
+- bash — Test language-subspace removal in state space
+- bash — Read the state-space language removal result
+- bash — Fix the language-dropping split
+- bash — Find all remaining split sites
+- bash — Fix remaining splits and re-measure the key diagnostic
+- bash — Read the corrected decomposition
+- bash — Read the full corrected decomposition
+- bash — Report and commit the split bug correction
+
+**Synthèse produite :**
+
+⏵ **Toutes les conclusions tiennent après correction — mais aucun chiffre n'est le même. Je consigne la correction.**
 
 ## 3. Travail accompli
 
@@ -9576,6 +9635,7 @@ Sur le panneau d'apprentissage, μ_lang = 0,3 donne un rapport de **3,139**, *su
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/amplification.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/decomposition.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/sous_espace_du_contenu.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/etats_sans_langue.py` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -9654,7 +9714,7 @@ Sur le panneau d'apprentissage, μ_lang = 0,3 donne un rapport de **3,139**, *su
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 7233 autres
+- … et 7242 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10462,4 +10522,5 @@ Sur le panneau d'apprentissage, μ_lang = 0,3 donne un rapport de **3,139**, *su
 - Le remède est trouvé mais n'est pas déployable — et un piège de méthode  L'ÉNERGIE DE CONTENU EST RÉCUPÉRABLE, preuve : on amplifie la sortie LE LONG DE L'AXE D
 - Cinquième remède écarté : le sous-espace du contenu appris ne se TRANSFÈRE pas  L'IDÉE : le regroupement par contenu n'est nécessaire qu'à l'APPRENTISSAGE. On a
 - Le centrage de l'entrée : premier levier de la série à la fois efficace ET déployable  --centre-entree retire à chaque langue son jeton moyen — le décalage prop
+- Bug de découpage dans MES outils : l'ajustement ne portait que sur DEUX langues  LES OUTILS §57-§64 découpaient iap, ival = itr[nt:], itr[:nt] avec nt = len(itr
 

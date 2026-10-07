@@ -150067,3 +150067,260 @@ articles wiki : 219
 ⏵ **Le centrage de l'entrée est un gain RÉEL et DÉPLOYABLE : le rapport passe de 1,460 à 1,871 (+28 %) pour 0,008 de fidélité. Mais l'amplification déployable reste impuissante (1,871 constant).**
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 64. Le centrage de l'entrée : un gain réel, déployable, et le premier de la série\n\n### 64.1 Un levier du dépôt qui n'avait jamai … [5521 caractères tronqués]`
+
+  ```
+33d4018 Le centrage de l'entrée : premier levier de la série à la fois efficace ET déployable
+  ```
+
+### 🤖 Assistant
+
+⏵ **Round 57 — un levier retenu, cinq remèdes écartés, et le problème resserré à une phrase.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"articles wiki : $(grep -c '^ARTICLE' /tmp/trace_wiki_apparie.log) / 482\"; awk '{if($2 ~ /s$/) {gsub(\"s\",\"\",$2); s+=$2; n++}} END {printf \"  %d traces · %.1f s · reste ~%.1f h\\n\", n, s/n, (2892-n)*s/n/3600}' /tmp/trace_ … [209 caractères tronqués]`
+
+  ```
+articles wiki : 220 / 482
+  1189 traces · 21.9 s · reste ~10.4 h
+--- chaînes vivantes ---
+2591189    07:15:06 bash /tmp/trace_wiki_apparie.sh
+21:53
+  ```
+
+### 🤖 Assistant
+
+⏵ **Round 57 — état et acquis.**
+
+## 1. Cinquième remède écarté : le sous-espace du contenu appris ne se transfère pas
+
+L'idée était la bonne sur le papier — le regroupement par contenu n'est nécessaire qu'à l'**apprentissage**, pas à l'inférence. J'ai donc appris une fois pour toutes un **projecteur** `Π` (85 directions, 100 % de l'énergie) et appliqué à l'inférence `O + (γ−1)·Π·(O − m̄)`.
+
+| γ | fid TEST | P_lang | P_cont | **rapport** |
+|---:|---:|---:|---:|---:|
+| 1,00 | 0,4747 | 232,0 | 338,7 | **1,460** |
+| 5,00 | 0,4015 | 5 536,2 | 8 274,3 | **1,495** |
+| | | | *prof 4 356* | *prof 10,912* |
+
+**Le rapport est figé** : multiplier γ par cinq le fait passer de 1,460 à 1,495 — les deux axes montent ensemble.
+
+**Pourquoi, et c'est cohérent avec tout le reste** : les articles du test sont **les mêmes** que ceux de l'apprentissage (partage par langue), donc les contenus sont partagés et le sous-espace *devrait* transférer. Il ne le fait pas parce que **les sorties des langues inconnues sont décalées** — c'est le **même décalage de transfert que le §36** qui revient, cette fois sous forme d'un sous-espace qui ne s'applique plus.
+
+## 2. Un levier RETENU — le premier de la série à être efficace **et** déployable
+
+`--centre-entree` retire à chaque langue son **jeton moyen** : il attaque le décalage de langue **à la source**, avant le réservoir, et il est calculable sur l'entrée seule.
+
+| | P_lang | P_cont | **rapport** | fidélité |
+|---|---:|---:|---:|---:|
+| sans centrage | 232,0 | 338,7 | 1,460 | 0,4747 |
+| **avec centrage** | **48,0** | 89,8 | **1,871** | 0,4668 |
+| **effet** | **÷ 4,8** | ÷ 3,8 | **+28 %** | −0,008 |
+
+**L'axe de langue tombe d'un facteur 4,8** — le plus grand effet obtenu sur cet axe dans toute la série. Mais l'axe du contenu tombe de 3,8× **en même temps**, donc le rapport ne gagne que 28 %.
+
+**Et une confirmation nette** : le problème n'est pas seulement de *réduire* l'axe de langue — le centrage le fait très bien — mais de **ne pas réduire l'axe du contenu en même temps**. Les deux sont **mêlés** dans les états du réservoir.
+
+## 3. La série complète : huit moyens, sept écartés, un retenu
+
+| § | moyen | déployable | verdict |
+|---|---|---|---|
+| 58 | objectif à deux curseurs | oui | **non convexe**, non monotone |
+| 59 | centrage/normalisation/blanchiment de la **cible** | oui | **écarté** — prémisse réfutée par le spectre |
+| 60 | amplification uniforme | oui | **écarté** — ne change pas l'ordre |
+| 61 | *décomposition de variance* | — | **défaut localisé** : 12× moins d'énergie de contenu |
+| 62 | amplification de l'axe contenu | **non** | **fonctionne** (β=3 → magnitude du professeur, coût 0,006) |
+| 62 | amplification de la moyenne par entrée | oui | **écarté** — mêle les deux axes |
+| 62 | `μ_lang` | oui | **écarté** — comprime les deux |
+| 63 | sous-espace du contenu appris | oui | **écarté** — ne se transfère pas |
+| **64** | **centrage de l'ENTRÉE** | **oui** | **RETENU** |
+
+Et le **piège de méthode** du §62.3, qui vaut pour toute la série : sur le panneau d'apprentissage, `μ_lang = 0,3` donne un rapport de **3,139**, *supérieur* à celui du professeur (2,170) — on pourrait annoncer « nous dépassons le professeur ». C'est faux : `P_lang` y vaut **51,3**, le rapport est gonflé par le **dénominateur**.
+
+## 4. Deux erreurs de ma part, corrigées
+
+- Un **découpage par pas fixe** supposant toutes les entrées de même longueur (numpy a signalé `Mean of empty slice`).
+- Une **étiquette fausse** dans ma propre sortie : `# professeur (TEST) : P_lang 232,0 · P_cont 338,7` — ces chiffres sont ceux de **notre** sortie. Un chiffre juste sous un nom faux est plus dangereux qu'un chiffre faux : il passe la relecture.
+
+## État
+
+| chaîne | avancement |
+|---|---|
+| **Wikipedia apparié** | **220 / 482 articles** · 1 189 traces · reste ~10,4 h |
+| **Croissance μ = 0,1** | terminée (§56) |
+| **Crime** | 4/24 segments, conservés |
+
+Le traçage est le chemin critique jusqu'à ~08h00. À 220 articles il donne déjà des mesures à six langues ; chaque lot resserre les intervalles sur `P_cont/P_lang`, désormais la mesure centrale.
+
+
+## Tour 185
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de représentation universelle), boîte noire (on ne lit du professeur que la couche à émuler, jamais sa tête ni ses jetons générés), aucune rétropropagation (A et B aléatoires et gelés, seule la lecture s'ajuste en forme fermée), et chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, TAILLE du réseau, avec le diagnostic oracle sur les deux panneaux (test hors vivier et validation du même vivier)."
+Round: 58/256
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ **Piste structurellement différente : retirer le sous-espace de LANGUE dans l'espace des ÉTATS (avant la lecture), pas dans celui des sorties. C'est linéaire, appris, déployable.**
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"etats_sans_langue.py — retirer l'axe de langue DANS L'ESPACE DES ÉTATS.\n\nPOURQUOI AILLEURS QUE LES §58-§64. Tous les moyens essayés jusqu'ici agissaient soit\nsur l'OBJECTIF du fit, soit sur la SORTIE. Or le §64 a montré que les deux axes sont\n**mêlés da … [6397 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/etats_sans_langue.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"import ast; ast.parse(open('tools/etats_sans_langue.py').read()); print('syntaxe OK')\" && setsid nohup python3 -u tools/etats_sans_langue.py /tmp/cache_wikitrain.npz /tmp/cache_wikitest.npz --neur 120 > /tmp/etats_sans_ … [159 caractères tronqués]`
+
+  ```
+syntaxe OK
+lancé
+21:54
+  ```
+
+- **bash** `{"command": "sleep 580; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/etats_sans_langue.log 2>/dev/null; echo; echo \"articles wiki : $(grep -c '^ARTICLE' /tmp/trace_wiki_apparie.log)\"; date '+%H:%M'", "description": "Read the state-space language removal result", "timeoutMs": 6200 … [3 caractères tronqués]`
+
+  ```
+# réseau 120 neurones · 1 couche(s) · 896 canaux
+# SOUS-ESPACE DE LANGUE : 2 langues d'apprentissage · 120 directions · la 1re porte 100.0% de l'énergie de langue
+
+#   rang  fid TEST    P_lang    P_cont  RAPPORT
+      0    0.4748     227.4     338.0    1.486
+      2    0.4703     227.6     310.8    1.365
+      5    0.4698     226.9     299.4    1.319
+     10    0.4696     210.6     286.0    1.358
+     20    0.4686     216.1     274.8    1.272
+     40    0.4657     140.6     246.9    1.757
+# professeur : P_lang 399.2 · P_cont 4356.4 · rapport 10.912
+
+# rang 0 = notre sortie actuelle, sans retrait.
+# CRITÈRE (leçon du §62.3) : P_cont proche du professeur ET P_lang qui ne
+# le dépasse pas — le rapport seul peut être gonflé par le dénominateur.
+
+articles wiki : 227
+22:04
+  ```
+
+### 🤖 Assistant
+
+⏵ **BUG DE MÉTHODE IMPORTANT : mon découpage `iap = itr[nt:]` ne gardait que les entrées 85..254, soit en_* et fr_* — DEUX langues sur trois. Le sous-espace de langue y est dégénéré (1ʳᵉ direction = 100 %). Toutes les mesures §57-§64 ont ajusté sur 2 langues.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -ln \"iap = itr\\[nt:\\]\" tools/*.py; echo \"--- correction : on ajuste sur TOUTES les entrées d'apprentissage (le test est le panneau hors vivier) ---\"; python3 - <<'PYEOF'\nimport glob\nn = 0\nfor f in glob.glob('tools/*.py' … [1717 caractères tronqués]`
+
+  ```
+tools/decomposition.py
+tools/etats_sans_langue.py
+tools/sous_espace_du_contenu.py
+--- correction : on ajuste sur TOUTES les entrées d'apprentissage (le test est le panneau hors vivier) ---
+  corrigé : tools/decomposition.py
+  corrigé : tools/sous_espace_du_contenu.py
+  corrigé : tools/etats_sans_langue.py
+3 fichiers corrigés
+syntaxe OK partout
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"nt = max\\|iap = \\|ival = \" tools/*.py | grep -v \"^tools/pont_generatif\" | head -20", "description": "Find all remaining split sites"}`
+
+  ```
+tools/amplification.py:99:    nt = max(1, len(itr)//3)
+tools/amplification.py:100:    iap, ival = itr[nt:], itr[:nt]
+tools/decomposition.py:85:    iap = itr
+tools/etats_sans_langue.py:89:    iap = itr
+tools/invariance_ou_appauvrissement.py:93:    nt = max(1, len(itr)//3)
+tools/invariance_ou_appauvrissement.py:94:    iap, ival = itr[nt:], itr[:nt]
+tools/lecture_invariante.py:67:    ival = itr[::7]
+tools/lecture_invariante.py:68:    iap = np.array([i for i in itr if i not in set(ival.tolist())])
+tools/lecture_locale.py:63:    ival = itr[::7]
+tools/lecture_locale.py:64:    iap = np.array([i for i in itr if i not in set(ival.tolist())])
+tools/objectif_du_pont.py:104:    nt = max(1, len(itr)//3)
+tools/objectif_du_pont.py:105:    iap, ival = itr[nt:], itr[:nt]
+tools/ou_est_le_contenu.py:96:    nt = max(1, len(itr)//3)
+tools/ou_est_le_contenu.py:97:    iap, ival = itr[nt:], itr[:nt]
+tools/pont_unites.py:68:    ival = [i for i, n in enumerate(clA) if langue(n) in val]
+tools/profil_langues.py:97:    ival = itr[::7]
+tools/profil_langues.py:98:    iap = np.array([i for i in itr if i not in set(ival.tolist())])
+tools/saturation.py:60:    ival = itr[::7]
+tools/saturation.py:61:    iap = np.arra
+… [99 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nfor f in ('tools/amplification.py','tools/invariance_ou_appauvrissement.py',\n          'tools/objectif_du_pont.py','tools/ou_est_le_contenu.py'):\n    s = open(f).read()\n    old = \"\"\"    nt = max(1, len(itr) … [1045 caractères tronqués]`
+
+  ```
+corrigé : tools/amplification.py
+  corrigé : tools/invariance_ou_appauvrissement.py
+  corrigé : tools/objectif_du_pont.py
+  corrigé : tools/ou_est_le_contenu.py
+syntaxe OK partout
+=== re-mesure du diagnostic clé avec le découpage corrigé ===
+lancé
+22:05
+  ```
+
+- **bash** `{"command": "sleep 580; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -16 /tmp/decomposition_corrige.log 2>/dev/null; echo; date '+%H:%M'", "description": "Read the corrected decomposition", "timeoutMs": 620000}`
+
+  ```
+# réseau 120 neurones · 1 couche(s)
+
+=== TEST (langues inconnues) === (fidélité 0.4766)
+#                   P_lang      P_cont   RAPPORT  contenus  langues
+  NOTRE              247.1       318.7     1.290        85        3
+  PROFESSEUR         399.2      4356.4    10.912        85        3
+
+=== APPRENTISSAGE (langues connues) === (fidélité 0.5081)
+#                   P_lang      P_cont   RAPPORT  contenus  langues
+  NOTRE             2161.7       342.9     0.159        85        3
+  PROFESSEUR        3402.5      4205.5     1.236        85        3
+
+=== AMPLIFICATION DE L'AXE CONTENU (diagnostic) ===
+#   beta  fid TEST    P_lang    P_cont  RAPPORT
+    0.0    0.4766     247.1     318.7    1.290
+    1.0    0.4767     247.1    1275.0    5.159
+
+22:15
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le diagnostic tient après correction : notre P_cont reste ~14× sous celui du professeur (319 contre 4 356), P_lang comparable (247 contre 399). Mais les chiffres changent et je dois le consigner.**
+
+- **bash** `{"command": "sleep 540; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/decomposition_corrige.log 2>/dev/null | sed -n '12,40p'; date '+%H:%M'", "description": "Read the full corrected decomposition", "timeoutMs": 580000}`
+
+  ```
+=== AMPLIFICATION DE L'AXE CONTENU (diagnostic) ===
+#   beta  fid TEST    P_lang    P_cont  RAPPORT
+    0.0    0.4766     247.1     318.7    1.290
+    1.0    0.4767     247.1    1275.0    5.159
+    3.0    0.4711     247.1    5099.9   20.635
+   10.0    0.4178     247.1   38567.7  156.051
+   30.0    0.2704     247.1  306310.2 1239.384
+# Rappel professeur : P_lang 399,2 · P_cont 4356,4 · rapport 10,91
+
+=== AMPLIFICATION DU DÉCALAGE DE MOYENNE, PAR ENTRÉE (déployable) ===
+#   gamma  fid TEST    P_lang    P_cont  RAPPORT
+     0.0    0.4766     247.1     318.7    1.290
+     0.5    0.4756     556.1     717.2    1.290
+     1.0    0.4733     988.6    1275.0    1.290
+     2.0    0.4649    2224.3    2868.7    1.290
+     3.0    0.4528    3954.4    5099.9    1.290
+     5.0    0.4223    8897.3   11474.7    1.290
+# gamma=0 est notre sortie actuelle. Aucun regroupement par contenu n'est
+# utilisé ici : seulement la moyenne de l'entrée elle-même.
+
+# P_lang : énergie portée par l'axe LANGUE · P_cont : par l'axe CONTENU.
+# RAPPORT > 1 : le contenu structure plus que la langue (ce qu'on veut).
+# Cette mesure ne dépend PAS de quelles langues sont dans le panel —
+# contrairement à la similarité du §60.3
+… [31 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Toutes les conclusions tiennent après correction — mais aucun chiffre n'est le même. Je consigne la correction.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 65. Un bug de découpage dans MES outils : l'ajustement ne portait que sur DEUX langues\n\n### 65.1 Le bug\n\nLes outils de diagnos … [6306 caractères tronqués]`

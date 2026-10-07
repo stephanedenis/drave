@@ -78,9 +78,11 @@ def main():
     Ytr = [y[:, garde] for y in Ytr]
     Yte = [y[:, garde] for y in Yte]
 
+    # DÉCOUPAGE CORRIGÉ — voir le commentaire détaillé dans les autres outils : la
+    # version `itr[nt:]` supprimait le bloc entier de la première langue, les entrées
+    # étant ordonnées par langue.
     itr = np.arange(len(cltr))
-    nt = max(1, len(itr)//3)
-    iap = itr[nt:]
+    iap = itr
     mt = np.vstack([Ytr[i] for i in itr]).mean(axis=0)
 
     # CENTRAGE DE L'ENTRÉE (`--centre-entree`) : on retire à chaque langue son

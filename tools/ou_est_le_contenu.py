@@ -93,8 +93,11 @@ def main():
           f"{len(garde)} canaux")
 
     itr = np.arange(len(cltr))
-    nt = max(1, len(itr)//3)
-    iap, ival = itr[nt:], itr[:nt]
+    # DÉCOUPAGE CORRIGÉ. `itr[nt:]` supprimait le bloc entier de la première langue :
+    # les entrées sont ORDONNÉES PAR LANGUE, donc sur le cache Wikipedia (de/en/fr)
+    # l'ajustement ne portait que sur en et fr — deux langues au lieu de trois. On
+    # ajuste sur TOUTES les entrées : le panneau hors vivier est le cache de TEST.
+    iap, ival = itr, itr
     mt = np.vstack([Ytr[i] for i in itr]).mean(axis=0)
 
     P = Pont((cltr, Etr, Ytr), 0.2, graine, len(garde))
