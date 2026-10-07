@@ -149852,3 +149852,136 @@ lancé
 | | | *professeur* | *10,912* | |
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 62. Le remède est trouvé — mais il n'est pas déployable. Et un piège de méthode\n\n### 62.1 L'énergie de contenu EST récupérable : … [6969 caractères tronqués]`
+
+  ```
+120d50c Le remède est trouvé mais n'est pas déployable — et un piège de méthode
+  ```
+
+### 🤖 Assistant
+
+⏵ **Round 56 — la traque a trouvé le défaut, le remède, et la raison pour laquelle le remède ne se déploie pas.**
+
+## 1. Le défaut est LOCALISÉ et QUANTIFIÉ (§61)
+
+Après quatre causes écartées, une **décomposition de variance** — exacte et additive — a tranché :
+
+| panel | | P_lang | **P_cont** | rapport |
+|---|---|---:|---:|---:|
+| **TEST** | notre | 232,0 | **338,7** | **1,46** |
+| | professeur | 399,2 | **4 356,4** | **10,91** |
+| **APPRENTISSAGE** | notre | 1 834,7 | **493,9** | **0,27** |
+| | professeur | 2 405,1 | **5 219,9** | **2,17** |
+
+**Le défaut n'est pas « trop de langue »** — notre énergie de langue (232) est du même ordre que la sienne (399). **C'est notre énergie de CONTENU qui est dérisoire : douze fois moins.** Et l'écart existe aussi sur les langues d'apprentissage : ce n'est donc **pas un défaut de transfert, mais de reproduction**, présent partout.
+
+## 2. Le remède FONCTIONNE (§62)
+
+En amplifiant la sortie **le long de l'axe du contenu seulement** :
+
+| β | fid TEST | **P_cont** | rapport |
+|---:|---:|---:|---:|
+| 0 | 0,4747 | 338,7 | 1,46 |
+| **1** | **0,4749** | 1 354,8 | 5,84 |
+| **3** | 0,4688 | **5 419,2** | 23,36 |
+| | | *professeur 4 356* | *10,91* |
+
+**À β = 3, notre énergie de contenu dépasse celle du professeur pour 0,006 de fidélité ; à β = 1 elle quadruple sans aucun coût.** L'énergie de contenu **n'est pas absente, elle est sous-produite** d'un facteur ~3,6.
+
+## 3. Mais il n'est pas déployable — et le levier du §48 ne le remplace pas
+
+La version calculable à l'inférence (amplifier le décalage de moyenne de chaque entrée) donne un rapport de **1,460 exactement à tout γ** : la moyenne d'une entrée mêle les deux axes, les amplifier ensemble ne change pas leur rapport.
+
+Et **μ_lang fait baisser le rapport** (1,46 → 0,91) : il comprime P_lang, mais comprime P_cont **davantage**.
+
+## 4. Un piège de méthode, et il faut le dire
+
+Sur le panneau d'apprentissage, μ_lang = 0,3 donne un rapport de **3,139**, *supérieur* à celui du professeur (2,170). On pourrait annoncer « nous dépassons le professeur ». **C'est faux** : P_lang y vaut **51,3** — le rapport est gonflé par le **dénominateur**. Le critère doit être double : `P_cont` proche du professeur **et** `P_lang` qui ne le dépasse pas.
+
+## 5. Le problème tient maintenant en une phrase
+
+> L'énergie de contenu est sous-produite d'un facteur ~3,6, elle est récupérable par mise à l'échelle, mais la mise à l'échelle exige d'isoler l'axe du contenu — et cet axe n'est pas identifiable sur un texte neuf par les moyens essayés.
+
+Avec un chiffre, un remède connu, et une raison d'échec connue. Ce n'était pas le cas il y a cinq paragraphes.
+
+## État
+
+| chaîne | avancement |
+|---|---|
+| **Wikipedia apparié** | **205 articles / 482** · fin vers 05h00 |
+| **Croissance μ = 0,1** | terminée (§56) |
+| **Crime** | 4/24 segments, conservés |
+
+Trois erreurs de ma part corrigées ce round : un découpage par pas fixe supposant des entrées de longueur égale, et deux formes de la même hypothèse de forme régulière dans des outils de mesure.
+
+
+## Tour 184
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de représentation universelle), boîte noire (on ne lit du professeur que la couche à émuler, jamais sa tête ni ses jetons générés), aucune rétropropagation (A et B aléatoires et gelés, seule la lecture s'ajuste en forme fermée), et chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, TAILLE du réseau, avec le diagnostic oracle sur les deux panneaux (test hors vivier et validation du même vivier)."
+Round: 57/256
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ **Le remède doit être déployable : apprendre le SOUS-ESPACE DU CONTENU sur l'apprentissage, puis amplifier dedans — c'est une matrice fixe, calculable à l'inférence.**
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"sous_espace_du_contenu.py — rendre le remède DÉPLOYABLE.\n\nLE PROBLÈME, EN UNE PHRASE (§62). L'énergie de contenu de notre sortie est\nsous-produite d'un facteur ~3,6 ; elle est récupérable par mise à l'échelle ; mais la\nmise à l'échelle essayée exigeait  … [6451 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/sous_espace_du_contenu.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"import ast; ast.parse(open('tools/sous_espace_du_contenu.py').read()); print('syntaxe OK')\" && setsid nohup python3 -u tools/sous_espace_du_contenu.py /tmp/cache_wikitrain.npz /tmp/cache_wikitest.npz --neur 120 > /tmp/s … [234 caractères tronqués]`
+
+  ```
+syntaxe OK
+lancé
+articles wiki : 206
+21:31
+  ```
+
+- **bash** `{"command": "sleep 580; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/sous_espace.log 2>/dev/null; echo; date '+%H:%M'", "description": "Read the learned subspace result", "timeoutMs": 620000}`
+
+  ```
+# réseau 120 neurones · 1 couche(s) · 896 canaux · 170 entrées d'apprentissage
+# SOUS-ESPACE DU CONTENU : 85 directions apprises sur 85 contenus · énergie captée 100.0%
+
+# professeur (TEST) : P_lang 232.0 · P_cont 338.7 · rapport 1.460
+
+#   gamma  rang  fid TEST    P_lang    P_cont  RAPPORT
+    1.00    85    0.4747     232.0     338.7    1.460
+    1.50    85    0.4720     508.3     752.0    1.480
+    2.00    85    0.4664     895.0    1330.6    1.487
+    3.00    85    0.4489    2000.1    2983.9    1.492
+    5.00    85    0.4015    5536.2    8274.3    1.495
+    1.00    42    0.4747     232.0     338.7    1.460
+    1.00    20    0.4747     232.0     338.7    1.460
+
+# Le projecteur est APPRIS sur l'apprentissage, puis appliqué tel quel au
+# test : aucun regroupement par contenu n'est demandé au texte neuf.
+# CRITÈRE (leçon du §62.3) : P_cont proche du professeur ET P_lang qui ne
+# le dépasse pas. Le rapport seul peut être gonflé par le dénominateur.
+
+21:40
+  ```
+
+### 🤖 Assistant
+
+⏵ **Cinquième remède ÉCARTÉ : le sous-espace du contenu appris sur l'apprentissage ne se transfère pas — le rapport reste figé à 1,46-1,50. Et je dois signaler une étiquette fausse dans ma sortie.**
+
+| γ | rang | fid TEST | P_lang | P_cont | RAPPORT |
+|---:|---:|---:|---:|---:|---:|
+| 1,00 | 85 | 0,4747 | 232,0 | 338,7 | 1,460 |
+| 2,00 | 85 | 0,4664 | 895,0 | 1 330,6 | **1,487** |
+| 5,00 | 85 | 0,4015 | 5 536,2 | 8 274,3 | **1,495** |
+| | | | | *prof 4 356* | *prof 10,91* |
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\ns = open('tools/sous_espace_du_contenu.py').read()\nold = \"\"\"    pro = moyennes(clte, Ot, bo_t)\n    rp = decompose(clte, pro)\n    print(f\"\\\\n# professeur (TEST) : P_lang {rp[0]:.1f} · P_cont {rp[1]:.1f} · … [7644 caractères tronqués]`

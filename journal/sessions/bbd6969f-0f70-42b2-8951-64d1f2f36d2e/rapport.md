@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 198.7 h |
-| Tours | 183 |
-| Messages | 9096 |
-| Appels d'outils | 8569 |
-| Fichiers touchés | 204 |
-| Commandes | 7266 |
+| Durée | 198.9 h |
+| Tours | 184 |
+| Messages | 9102 |
+| Appels d'outils | 8573 |
+| Fichiers touchés | 205 |
+| Commandes | 7269 |
 | Sous-agents | 32 |
-| Commits | 658 |
+| Commits | 659 |
 | Compactages de contexte | 12 |
 
 ## Objectifs déclarés
@@ -419,6 +419,8 @@
 **Tour 182** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 **Tour 183** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
+
+**Tour 184** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -9303,14 +9305,68 @@ Le §58 seul aurait laissé croire qu
 
 **Synthèse produite :**
 
-⏵ **μ_lang ne rétablit pas le rapport — il comprime les DEUX axes (1,46 → 0,91). Et il révèle un piège de méthode : le rapport peut être gonflé en écrasant tout.**
+⏵ **Round 56 — la traque a trouvé le défaut, le remède, et la raison pour laquelle le remède ne se déploie pas.**
 
-| μ_lang | TEST P_lang | TEST P_cont | RAPPORT | fid |
-|---:|---:|---:|---:|---:|
-| 0 | 232,0 | 338,7 | 1,460 | 0,4747 |
-| 0,1 | 195,7 | 217,5 | 1,112 | 0,4729 |
-| 0,3 | 158,7 | 144,4 | 0,910 | 0,4710 |
-| | | *professeur* | *10,912* | |
+\## 1. Le défaut est LOCALISÉ et QUANTIFIÉ (§61)
+
+Après quatre causes écartées, une **décomposition de variance** — exacte et additive — a tranché :
+
+| panel | | P_lang | **P_cont** | rapport |
+|---|---|---:|---:|---:|
+| **TEST** | notre | 232,0 | **338,7** | **1,46** |
+| | professeur | 399,2 | **4 356,4** | **10,91** |
+| **APPRENTISSAGE** | notre | 1 834,7 | **493,9** | **0,27** |
+| | professeur | 2 405,1 | **5 219,9** | **2,17** |
+
+**Le défaut n'est pas « trop de langue »** — notre énergie de langue (232) est du même ordre que la sienne (399). **C'est notre énergie de CONTENU qui est dérisoire : douze fois moins.** Et l'écart existe aussi sur les langues d'apprentissage : ce n'est donc **pas un défaut de transfert, mais de reproduction**, présent partout.
+
+\## 2. Le remède FONCTIONNE (§62)
+
+En amplifiant la sortie **le long de l'axe du contenu seulement** :
+
+| β | fid TEST | **P_cont** | rapport |
+|---:|---:|---:|---:|
+| 0 | 0,4747 | 338,7 | 1,46 |
+| **1** | **0,4749** | 1 354,8 | 5,84 |
+| **3** | 0,4688 | **5 419,2** | 23,36 |
+| | | *professeur 4 356* | *10,91* |
+
+**À β = 3, notre énergie de contenu dépasse celle du professeur pour 0,006 de fidélité ; à β = 1 elle quadruple sans aucun coût.** L'énergie de contenu **n'est pas absente, elle est sous-produite** d'un facteur ~3,6.
+
+\## 3. Mais il n'est pas déployable — et le levier du §48 ne le remplace pas
+
+La version calculable à l'inférence (amplifier le décalage de moyenne de chaque entrée) donne un rapport de **1,460 exactement à tout γ** : la moyenne d'une entrée mêle les deux axes, les amplifier ensemble ne change pas leur rapport.
+
+Et **μ_lang fait baisser le rapport** (1,46 → 0,91) : il comprime P_lang, mais comprime P_cont **davantage**.
+
+\## 4. Un piège de méthode, et il faut le dire
+
+Sur le panneau d'apprentissage, μ_lang = 0,3 donne un rapport de **3,139**, *supérieur* à celui du professeur (2,170). On pourrait annoncer « nous dépassons le professeur ». **C'est faux** : P_lang y vaut **51,3** — le rapport est gonflé par le **dénominateur**. Le critère doit être double : `P_cont` proche du professeur **et** `P_lang` qui ne le dépasse pas.
+
+\## 5. Le problème tient maintenant en une phrase
+
+> L'énergie de contenu est sous-produite d'un facteur ~3,6, elle est récupérable par mise à l'échelle, mais la mise à l'échelle exige d'isoler l'axe du contenu — et cet axe n'est pas identifiable sur u
+… [541 caractères tronqués]
+
+### Tour 184 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
+
+*4 appels d'outils.* Actions notables :
+
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/sous_espace_du_contenu.py`
+- bash — Test the learned content subspace remedy
+- bash — Read the learned subspace result
+- bash — Report and commit the fifth rejected remedy
+
+**Synthèse produite :**
+
+⏵ **Cinquième remède ÉCARTÉ : le sous-espace du contenu appris sur l'apprentissage ne se transfère pas — le rapport reste figé à 1,46-1,50. Et je dois signaler une étiquette fausse dans ma sortie.**
+
+| γ | rang | fid TEST | P_lang | P_cont | RAPPORT |
+|---:|---:|---:|---:|---:|---:|
+| 1,00 | 85 | 0,4747 | 232,0 | 338,7 | 1,460 |
+| 2,00 | 85 | 0,4664 | 895,0 | 1 330,6 | **1,487** |
+| 5,00 | 85 | 0,4015 | 5 536,2 | 8 274,3 | **1,495** |
+| | | | | *prof 4 356* | *prof 10,91* |
 
 ## 3. Travail accompli
 
@@ -9522,6 +9578,7 @@ Le §58 seul aurait laissé croire qu
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/ou_est_le_contenu.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/amplification.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/decomposition.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/sous_espace_du_contenu.py` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -9600,7 +9657,7 @@ Le §58 seul aurait laissé croire qu
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 7226 autres
+- … et 7229 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10406,4 +10463,5 @@ Le §58 seul aurait laissé croire qu
 - Le rétrécissement est réel (3,4x) mais n'est pas la cause ; et la cible du §58 n'est pas stable  MESURE QUI N'AVAIT JAMAIS ÉTÉ FAITE : rapport ‖écart à la moyen
 - Le défaut est LOCALISÉ et QUANTIFIÉ : notre sortie porte 12x moins d'énergie de CONTENU  Décomposition de variance, exacte et additive :   nu_L  = moyenne sur l
 - Le remède est trouvé mais n'est pas déployable — et un piège de méthode  L'ÉNERGIE DE CONTENU EST RÉCUPÉRABLE, preuve : on amplifie la sortie LE LONG DE L'AXE D
+- Cinquième remède écarté : le sous-espace du contenu appris ne se TRANSFÈRE pas  L'IDÉE : le regroupement par contenu n'est nécessaire qu'à l'APPRENTISSAGE. On a
 
