@@ -151808,3 +151808,143 @@ lancé
 | | | *0,4298 non amplifié* | *prof 399,2* | |
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 76. La réserve du §75.4 est mesurée, et elle tranche : la structure s'obtient, la fidélité ne suit pas\n\nLe §75.4 laissait une me … [5795 caractères tronqués]`
+
+  ```
+c535276 La réserve du §75.4 est mesurée et elle tranche : la structure s'obtient, la fidélité ne suit pas
+
+articles wiki : 396
+02:33
+  ```
+
+### 🤖 Assistant
+
+⏵ **Round 65 — la frontière est tracée avec ses deux extrémités.**
+
+## Le résultat
+
+La réserve que j'avais signalée au §75.4, mesurée :
+
+| rang | α | **fidélité amplifiée** | P_lang | P_cont |
+|---:|---:|---:|---:|---:|
+| **2** | 10,78 | **0,2512** | **407,6** | **4 356,4** |
+| | | *0,4298 non amplifié* | *professeur 399,2* | *professeur 4 356,4* |
+
+**Le rapport est à 98 % de la cible, les deux énergies aux magnitudes du professeur — et la fidélité tombe à 0,2512.**
+
+## La frontière, entièrement tracée
+
+| point de fonctionnement | fidélité | rapport | P_cont |
+|---|---:|---:|---:|
+| rien | **0,4766** | 1,29 | 318,7 |
+| apprendre quoi lire | 0,4667 | 2,41 | 438,5 |
+| quoi lire + discriminant | 0,4378 | 5,83 | 280,5 |
+| discriminant seul | 0,4341 | 6,96 | 30,2 |
+| **les trois, non amplifié** | 0,4298 | **10,69** | 37,5 |
+| **les trois, amplifié** | **0,2512** | 10,69 | **4 356,4** |
+
+**L'avant-dernière ligne est le résultat** : le rapport du professeur atteint à **98 %** pour **0,047** de fidélité. **La dernière est la limite** : amener les énergies aux magnitudes coûte **0,18** de plus.
+
+## Pourquoi la dernière étape coûte si cher — et c'est l'identité du §67 qui le dit
+
+Le rapport est **invariant d'échelle** ; **la fidélité ne l'est pas**, parce qu'il y a un **décalage additif** : la sortie est `ma + (écart)`, et l'amplification porte sur l'écart seul. En le multipliant par 10,8 on garde sa direction mais on éloigne la sortie de sa cible en norme.
+
+**C'est le rétrécissement du §60.1 retourné** : notre sortie était 3,4× trop petite ; la remettre à l'échelle **corrige la norme mais casse la direction** — et le cosinus ne pardonne que la seconde.
+
+## Où en est la traque
+
+**Seize moyens mesurés.** Dix écartés, chacun par une mesure et souvent par une **identité** (§67). Deux retenus séparément. Un troisième qui fait les deux mouvements opposés (§73). Une combinaison qui domine (§74). **Une composition qui atteint la cible en structure (§75) et en montre le prix (§76).**
+
+Le pont **sait maintenant reproduire la structure contenu/langue de son professeur** — trois mécanismes déployables, en forme fermée, sans rétropropagation. Il **ne sait pas encore la reproduire en même temps que le contenu lui-même**.
+
+**Ce qui n'est pas établi, et c'est étroit** : si un point intermédiaire — une amplification partielle, un autre rang — donne un meilleur compromis. La courbe n'a été échantillonnée qu'à deux rangs et une amplitude cible.
+
+## État
+
+| chaîne | avancement |
+|---|---|
+| **Wikipedia apparié** | **396 / 482 articles** · reste ~3 h |
+| **Croissance μ = 0,1** | terminée (§56) |
+| **Crime** | 4/24 segments, conservés |
+
+Le corpus sera complet vers 05h30 — à temps pour vérifier sur les 482 articles que la composition des trois leviers tient à grande échelle, ce qui sera la dernière mesure de la nuit.
+
+
+## Tour 193
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de représentation universelle), boîte noire (on ne lit du professeur que la couche à émuler, jamais sa tête ni ses jetons générés), aucune rétropropagation (A et B aléatoires et gelés, seule la lecture s'ajuste en forme fermée), et chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, TAILLE du réseau, avec le diagnostic oracle sur les deux panneaux (test hors vivier et validation du même vivier)."
+Round: 66/256
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ **Le §76 dit que la courbe n'a été échantillonnée qu'à deux rangs et une amplitude. Je l'échantillonne — c'est la dernière mesure manquante.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\ns = open('tools/renforcement_directions.py').read()\nold = \"\"\"    print(f\"# Rappel : fidélité NON amplifiée du rang 2 = 0,4298 · professeur P_lang 399,2\")\"\"\"\nnew = \"\"\"    # BALAYAGE DE L'AMPLIFICATION … [1684 caractères tronqués]`
+
+  ```
+balayage câblé
+syntaxe OK
+lancé
+articles wiki : 396
+02:34
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -22 /tmp/balayage.log 2>/dev/null; date '+%H:%M'", "description": "Read the amplification sweep", "timeoutMs": 620000}`
+
+  ```
+# CENTRAGE DE L'ENTRÉE activé (§64)
+# réseau 120 neurones · 1 couche(s) · canaux d'entrée 896 · 1 passes
+# CIBLE — professeur : P_lang 399.2 · P_cont 4356.4 · rapport 10.912
+
+#  passe  capture  fid TEST    P_lang    P_cont   RAPPORT  s
+      0    0.015    0.4703      42.4      82.1     1.934
+02:44
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -24 /tmp/balayage.log 2>/dev/null; date '+%H:%M'", "description": "Wait for the sweep", "timeoutMs": 620000}`
+
+  ```
+#   rang   alpha  fid amplifiée    P_lang    P_cont
+      2   10.78         0.2512     407.6    4356.4
+      5    8.82         0.2675     692.6    4356.4
+
+# BALAYAGE DE L'AMPLIFICATION (rang 2) — le compromis norme / direction
+#   alpha  fid TEST    P_lang    P_cont   RAPPORT
+    1.00    0.4298       3.5      37.5    10.688
+    1.50    0.4259       7.9      84.3    10.688
+    2.00    0.4181      14.0     149.9    10.688
+    3.00    0.3964      31.6     337.3    10.688
+    4.50    0.3601      71.0     759.0    10.688
+    6.50    0.3169     148.2    1583.6    10.688
+    8.50    0.2822     253.4    2708.0    10.688
+   10.78    0.2512     407.5    4355.6    10.688
+# (professeur : P_lang 399,2 · P_cont 4 356,4 · rapport 10,912)
+# Rappel : fidélité NON amplifiée du rang 2 = 0,4298 · professeur P_lang 399,2
+# Comparaison : discriminant SEUL (§69, sans apprentissage des directions)
+#   rang 2 : fid 0,4341 · P_lang 4,3 · P_cont 30,2 · rapport 6,961
+#   rang 20 : fid 0,4575 · P_lang 17,4 · P_cont 57,9 · rapport 3,326
+
+# La capture est la moyenne, sur les neurones, de leur corrélation maximale
+# avec le résidu. 0,5 = le hasard. Le §72 trouvait ≈ 0,5 et un plateau.
+# PRÉDICTION : si l'échec ve
+… [105 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **La courbe est MONOTONE : il n'y a pas de meilleur compromis. α=1 EST l'optimum, et le rapport reste constant à 10,688 sur tout le balayage — l'identité du §67 vérifiée une fois de plus.**
+
+| α | fid TEST | P_lang | P_cont | RAPPORT |
+|---:|---:|---:|---:|---:|
+| **1,00** | **0,4298** | 3,5 | 37,5 | **10,688** |
+| 3,00 | 0,3964 | 31,6 | 337,3 | 10,688 |
+| 6,50 | 0,3169 | 148,2 | 1 583,6 | 10,688 |
+| 10,78 | 0,2512 | 407,5 | 4 355,6 | 10,688 |
+| | | *prof 399,2* | *prof 4 356,4* | *prof 10,912* |
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 77. La courbe est MONOTONE : il n'y a pas de meilleur compromis, et la frontière est close\n\nLe §76 laissait une question : *« si … [5168 caractères tronqués]`

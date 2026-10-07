@@ -216,6 +216,21 @@ def main():
         f4 = cos_lignes(Oa4, np.vstack(Yte))
         d5 = decompose(clte, moyennes(clte, Oa4, bo_t))
         print(f" {r4:>6}{a4:>8.2f}{f4:>15.4f}{d5[0]:>10.1f}{d5[1]:>10.1f}")
+    # BALAYAGE DE L'AMPLIFICATION. Le §76 n'avait échantillonné qu'UNE amplitude cible
+    # (celle du professeur) et conclu que la fidélité s'effondre. Mais le cosinus dépend
+    # de l'échelle dès qu'il y a un décalage additif : il doit donc exister un α optimal
+    # entre 1 (direction pure, énergies écrasées) et 10,78 (norme corrigée, direction
+    # cassée). On l'échantillonne.
+    print(f"\n# BALAYAGE DE L'AMPLIFICATION (rang 2) — le compromis norme / direction")
+    print(f"# {'alpha':>7}{'fid TEST':>10}{'P_lang':>10}{'P_cont':>10}{'RAPPORT':>10}")
+    Vr = V2[:, :2]
+    Oc = (Ot2 - ma) @ Vr @ Vr.T + ma
+    for a5 in (1.0, 1.5, 2.0, 3.0, 4.5, 6.5, 8.5, 10.78):
+        Oa5 = ma + a5*(Oc - ma)
+        f5 = cos_lignes(Oa5, np.vstack(Yte))
+        d6 = decompose(clte, moyennes(clte, Oa5, bo_t))
+        print(f" {a5:>7.2f}{f5:>10.4f}{d6[0]:>10.1f}{d6[1]:>10.1f}{d6[2]:>10.3f}")
+    print(f"# (professeur : P_lang 399,2 · P_cont 4 356,4 · rapport 10,912)")
     print(f"# Rappel : fidélité NON amplifiée du rang 2 = 0,4298 · professeur P_lang 399,2")
     print(f"# Comparaison : discriminant SEUL (§69, sans apprentissage des directions)")
     print(f"#   rang 2 : fid 0,4341 · P_lang 4,3 · P_cont 30,2 · rapport 6,961")

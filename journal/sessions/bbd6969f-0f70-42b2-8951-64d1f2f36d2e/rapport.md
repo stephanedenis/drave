@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 203.8 h |
-| Tours | 192 |
-| Messages | 9192 |
-| Appels d'outils | 8647 |
+| Durée | 204.1 h |
+| Tours | 193 |
+| Messages | 9198 |
+| Appels d'outils | 8651 |
 | Fichiers touchés | 212 |
-| Commandes | 7336 |
+| Commandes | 7340 |
 | Sous-agents | 32 |
-| Commits | 672 |
+| Commits | 673 |
 | Compactages de contexte | 12 |
 
 ## Objectifs déclarés
@@ -437,6 +437,8 @@
 **Tour 191** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 **Tour 192** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
+
+**Tour 193** — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de rep … [1002 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -9849,13 +9851,72 @@ Mettre à l'échelle ne change pas **ce qu'un neurone lit**. On apprend donc à 
 
 **Synthèse produite :**
 
-⏵ **La réserve est mesurée, et elle est décisive : au point où les magnitudes du professeur sont atteintes, la fidélité tombe à 0,2512.**
+⏵ **Round 65 — la frontière est tracée avec ses deux extrémités.**
 
-| rang | α | **fid amplifiée** | P_lang | P_cont |
+\## Le résultat
+
+La réserve que j'avais signalée au §75.4, mesurée :
+
+| rang | α | **fidélité amplifiée** | P_lang | P_cont |
 |---:|---:|---:|---:|---:|
-| 2 | 10,78 | **0,2512** | 407,6 | **4 356,4** |
-| 5 | 8,82 | 0,2675 | 692,6 | 4 356,4 |
-| | | *0,4298 non amplifié* | *prof 399,2* | |
+| **2** | 10,78 | **0,2512** | **407,6** | **4 356,4** |
+| | | *0,4298 non amplifié* | *professeur 399,2* | *professeur 4 356,4* |
+
+**Le rapport est à 98 % de la cible, les deux énergies aux magnitudes du professeur — et la fidélité tombe à 0,2512.**
+
+\## La frontière, entièrement tracée
+
+| point de fonctionnement | fidélité | rapport | P_cont |
+|---|---:|---:|---:|
+| rien | **0,4766** | 1,29 | 318,7 |
+| apprendre quoi lire | 0,4667 | 2,41 | 438,5 |
+| quoi lire + discriminant | 0,4378 | 5,83 | 280,5 |
+| discriminant seul | 0,4341 | 6,96 | 30,2 |
+| **les trois, non amplifié** | 0,4298 | **10,69** | 37,5 |
+| **les trois, amplifié** | **0,2512** | 10,69 | **4 356,4** |
+
+**L'avant-dernière ligne est le résultat** : le rapport du professeur atteint à **98 %** pour **0,047** de fidélité. **La dernière est la limite** : amener les énergies aux magnitudes coûte **0,18** de plus.
+
+\## Pourquoi la dernière étape coûte si cher — et c'est l'identité du §67 qui le dit
+
+Le rapport est **invariant d'échelle** ; **la fidélité ne l'est pas**, parce qu'il y a un **décalage additif** : la sortie est `ma + (écart)`, et l'amplification porte sur l'écart seul. En le multipliant par 10,8 on garde sa direction mais on éloigne la sortie de sa cible en norme.
+
+**C'est le rétrécissement du §60.1 retourné** : notre sortie était 3,4× trop petite ; la remettre à l'échelle **corrige la norme mais casse la direction** — et le cosinus ne pardonne que la seconde.
+
+\## Où en est la traque
+
+**Seize moyens mesurés.** Dix écartés, chacun par une mesure et souvent par une **identité** (§67). Deux retenus séparément. Un troisième qui fait les deux mouvements opposés (§73). Une combinaison qui domine (§74). **Une composition qui atteint la cible en structure (§75) et en montre le prix (§76).**
+
+Le pont **sait maintenant reproduire la structure contenu/langue de son professeur** — trois mécanismes déployables, en forme fermée, sans rétropropagation. Il **ne sait pas encore la reproduire en même temps que le contenu lui-même**.
+
+**Ce qui n'est pas établi, et c'est étroit** : si un point intermédiaire — une amplification partielle, un autre rang — donne un meilleur compromis. La courbe n'a été échantillonnée qu'à deux rangs et une amplitude cible.
+
+\## État
+
+| chaîne | avancement |
+|---|
+… [337 caractères tronqués]
+
+### Tour 193 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Sample the amplification curve
+- bash — Read the amplification sweep
+- bash — Wait for the sweep
+- bash — Report and commit the final frontier closure
+
+**Synthèse produite :**
+
+⏵ **La courbe est MONOTONE : il n'y a pas de meilleur compromis. α=1 EST l'optimum, et le rapport reste constant à 10,688 sur tout le balayage — l'identité du §67 vérifiée une fois de plus.**
+
+| α | fid TEST | P_lang | P_cont | RAPPORT |
+|---:|---:|---:|---:|---:|
+| **1,00** | **0,4298** | 3,5 | 37,5 | **10,688** |
+| 3,00 | 0,3964 | 31,6 | 337,3 | 10,688 |
+| 6,50 | 0,3169 | 148,2 | 1 583,6 | 10,688 |
+| 10,78 | 0,2512 | 407,5 | 4 355,6 | 10,688 |
+| | | *prof 399,2* | *prof 4 356,4* | *prof 10,912* |
 
 ## 3. Travail accompli
 
@@ -10153,7 +10214,7 @@ Mettre à l'échelle ne change pas **ce qu'un neurone lit**. On apprend donc à 
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 7296 autres
+- … et 7300 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10973,4 +11034,5 @@ Mettre à l'échelle ne change pas **ce qu'un neurone lit**. On apprend donc à 
 - La combinaison des deux mécanismes DOMINE chacun d'eux : 9x plus de contenu à rapport comparable    méthode                              fid TEST  P_lang  P_con
 - LA CIBLE EST ATTEINTE : la composition des trois leviers donne 98 % du rapport du professeur    méthode                              fid TEST  P_lang  P_cont   
 - La réserve du §75.4 est mesurée et elle tranche : la structure s'obtient, la fidélité ne suit pas    rang  alpha  fidélité amplifiée  P_lang    P_cont   2     1
+- La courbe est MONOTONE : pas de meilleur compromis, et la frontière est close  BALAYAGE DE L'AMPLIFICATION (rang 2), huit points :   alpha   fid TEST  P_lang   
 
