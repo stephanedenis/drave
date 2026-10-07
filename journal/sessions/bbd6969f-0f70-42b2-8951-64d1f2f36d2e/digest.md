@@ -158300,3 +158300,738 @@ kimi-k3 · 32 fichiers · 2573 tenseurs · 1508.66 Go de poids · en-têtes lus 
 ⏵ **Pendant l'A/B, je mets à jour la feuille de route, qui est périmée sur deux points mesurés.**
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/roadmap-drave.md'; s=open(p).read()\n\ns = s.replace(\"\"\"> Écrit après la mesure du 05/10. Chaque chiffre de ce document vient d'un relevé\n> du dépôt ; ceux qui viennent d'ailleurs sont marqués.\"\"\",\n\ … [5258 caractères tronqués]`
+
+  ```
+roadmap mise à jour
+d1cb6b5 Feuille de route : le regroupement par expert EXISTE, l'axe 1 devient un axe de LOT
+
+##### A · tout sur le disque dur
+  ```
+
+### 🤖 Assistant
+
+⏵ **A/B en cours. J'attends la fin de la passe A.**
+
+- **bash** `{"command": "sleep 900; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"couches A : $(grep -c 'de chargement' /tmp/sonde_k3_moteur.log)/93\"; tail -1 /tmp/sonde_k3_moteur.log 2>/dev/null; echo \"--- A ---\"; grep -E \"^#|occupé|octets|débit|durée|VERDICT\" /tmp/ab_nvme.log 2>/dev/null | … [69 caractères tronqués]`
+
+  ```
+(no output)
+[timed out after 600000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"couches : $(grep -c 'de chargement' /tmp/sonde_k3_moteur.log)/93\"; tail -1 /tmp/sonde_k3_moteur.log 2>/dev/null; echo \"--- journal A/B ---\"; cat /tmp/ab_nvme.log 2>/dev/null | tail -20", "description": "Check A/B status aft … [9 caractères tronqués]`
+
+  ```
+couches : 51/93
+  couche 50 :   1676 ms de chargement +  14656 ms de calcul · banque 5
+--- journal A/B ---
+##### A · tout sur le disque dur
+  ```
+
+### 🤖 Assistant
+
+⏵ **Passe A à 51/93. Pendant ce temps, je vérifie le nombre d'experts par couche (j'avais estimé ~581 à rebours).**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"n_exp\" drave-core/src/kimi_k3.rs | head -12; echo \"=== lecture du nombre depuis les métadonnées ===\"; grep -oE \"n_exp[^,;]*\" drave-core/src/kimi_k3.rs | head -6; echo \"=== dims d'un tenseur expert ===\"; grep -E \"exp … [80 caractères tronqués]`
+
+  ```
+52:    pub n_experts: usize,
+53:    pub n_experts_par_jeton: usize,
+78:            self.n_experts, self.n_experts_par_jeton, self.latent);
+170:        n_experts: lire_meta("kimi-k3.expert_count").unwrap_or(0),
+171:        n_experts_par_jeton: lire_meta("kimi-k3.expert_used_count").unwrap_or(0),
+187:               "ffn_gate_exps.weight", "ffn_up_exps.weight", "ffn_down_exps.weight",
+548:    let n_exp = lire("kimi-k3.expert_count", 896);
+613:        attendu(&mut ecarts, p("ffn_gate_inp.weight"), vec![n_exp, h]);
+614:        attendu(&mut ecarts, p("exp_probs_b.bias"), vec![n_exp]);
+618:        attendu(&mut ecarts, p("ffn_gate_exps.weight"), vec![n_exp, n_ff_exp, latent]);
+619:        attendu(&mut ecarts, p("ffn_up_exps.weight"), vec![n_exp, n_ff_exp, latent]);
+620:        attendu(&mut ecarts, p("ffn_down_exps.weight"), vec![n_exp, latent, n_ff_exp]);
+=== lecture du nombre depuis les métadonnées ===
+n_experts: usize
+n_experts_par_jeton: usize
+n_experts
+n_experts_par_jeton
+n_experts: lire_meta("kimi-k3.expert_count").unwrap_or(0)
+n_experts_par_jeton: lire_meta("kimi-k3.expert_used_count").unwrap_or(0)
+=== dims d'un tenseur expert ===
+  MXFP4    blk.1.ffn_down_exps.weight             [89
+… [334 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le vrai compte est 896 experts (mon estimation à rebours était fausse). Je lis `k` dans la sortie du moteur.**
+
+- **bash** `{"command": "head -12 /tmp/sonde_k3_moteur.log; echo \"=== si absent, lire la métadonnée ===\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"expert_count\\|expert_used_count\" drave-core/src/*.rs | head -5", "description": "Read expert count from engine log"}`
+
+  ```
+[k3-essai] 32 shard(s) présents
+[k3] h=7168 nh=96 hd=128 d_inner=12288 d_conv=4 ffn=33792
+  couche 0 : dimensions conformes
+  couche 1 : dimensions conformes
+  couche 3 : dimensions conformes
+  couche 4 : dimensions conformes
+  MoE couche 1 : |sortie| = 0.7316 · finis : true · 197 ms
+  MLA couche 3, jeton 0 : |sortie| = 12.8277 · finis : true · 241 ms
+  MLA couche 3, jeton 1 : |sortie| = 10.4341 · finis : true · 236 ms
+  MLA couche 3, jeton 2 : |sortie| = 9.1516 · finis : true · 234 ms
+  composition : 4 couche(s) — banques aux couches 0
+  composition 0-3, jeton 0 : |l_out| = 8.1933 · finis : true
+=== si absent, lire la métadonnée ===
+drave-core/src/gguf.rs:928:    /// les clefs normalisées de llama.cpp (`expert_count`, `expert_used_count`)
+drave-core/src/gguf.rs:1935:        assert_eq!(g.cfg_ou(&["expert_count", "n_routed_experts"]).and_then(|m| m.as_u64()), None,
+drave-core/src/kimi_k3.rs:170:        n_experts: lire_meta("kimi-k3.expert_count").unwrap_or(0),
+drave-core/src/kimi_k3.rs:171:        n_experts_par_jeton: lire_meta("kimi-k3.expert_used_count").unwrap_or(0),
+drave-core/src/kimi_k3.rs:548:    let n_exp = lire("kimi-k3.expert_count", 896);
+  ```
+
+### 🤖 Assistant
+
+⏵ **Je lis les métadonnées GGUF directement (petit fichier d'en-tête).**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport struct\nf=open('/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf','rb')\nmagic=f.read(4); ver,=struct.unpack('<I',f.read(4)); nt,=struct.unpack('<Q',f.re … [1324 caractères tronqués]`
+
+  ```
+magic b'GGUF' version 3 tenseurs 0 paires clé/valeur 64
+  kimi-k3.block_count = 93
+  kimi-k3.context_length = 1048576
+  kimi-k3.embedding_length = 7168
+  kimi-k3.feed_forward_length = 33792
+  kimi-k3.attention.head_count = 96
+  kimi-k3.attention.head_count_kv = [0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 1]
+  kimi-k3.rope.freq_base = 10000.0
+  kimi-k3.attention.layer_norm_rms_epsilon = 9.999999747378752e-06
+  kimi-k3.expert_count = 896
+  kimi-k3.expert_used_count = 16
+  kimi-k3.expert_group_used_count = 1
+  kimi-k3.expert_gating_func = 2
+  kimi-k3.attention.key_length = 576
+  kimi-k3.attention.value_length = 74
+  kimi-k3.vocab_size = 163840
+  kimi-k3.ssm.conv_kernel = 4
+  kimi-k3.kda.head_dim = 128
+  kimi-k3.kda.gate_lower_bound = -5.0
+  kimi-k3.attention.q_lora_rank = 1536
+  kimi-k3.attention.kv_lora_rank = 512
+  kimi-k3.rope.dimension_count = 64
+  kimi-k3.attention.key_length_mla = 192
+  kimi-k3.attention.value_length_mla = 128
+  kimi-k3.expert_feed_f
+… [320 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Métadonnées confirmées : 896 experts, k=16, et surtout `expert_group_used_count = 1`. Je vérifie si le moteur implémente ce routage groupé.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"group\\|groupe\\|n_group\\|group_used\" drave-core/src/kimi_k3.rs | head -20; echo \"=== le routeur complet ===\"; sed -n '795,825p' drave-core/src/kimi_k3.rs", "description": "Check if grouped routing is implemented"}`
+
+  ```
+526:/// Les deux normalisations de la référence, sur `d_inner` canaux groupés par
+784:    /// le même regroupement vaut ×1,58 au préremplissage (voir
+797:        let mut groupes: Vec<Vec<(usize, f32)>> = vec![Vec::new(); n_exp];
+822:            for (j, &e) in choisis.iter().enumerate() { groupes[e].push((i, poids[j])); }
+849:            for (e, groupe) in groupes.iter().enumerate() {
+850:                if groupe.is_empty() { continue; }
+865:        let taches: Vec<(usize, usize, f32)> = groupes.iter().enumerate()
+869:        let experts_lus = groupes.iter().filter(|g| !g.is_empty()).count();
+930:        // Ce que le regroupement a économisé, mesuré : `t × k` lectures
+936:{experts_lus} avec le regroupement — gain ×{:.2}",
+=== le routeur complet ===
+        let mut rin: Vec<Vec<f32>> = Vec::with_capacity(t);
+        let mut poids_par_jeton: Vec<Vec<f32>> = Vec::with_capacity(t);
+        let mut groupes: Vec<Vec<(usize, f32)>> = vec![Vec::new(); n_exp];
+        for (i, cur) in curs.iter().enumerate() {
+            let mut logits = vec![0f32; n_exp];
+            mv(&self.gate_inp, n_exp, h, cur, &mut logits);
+            let probs: Vec<f32> = logits.iter().map(|v| 1.0 / (1.0 + (-v).ex
+… [1359 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le routeur est un top-16 global sur 896 experts — aucun routage groupé. Je liste TOUTES les clés pour savoir si un compte de groupes existe.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport struct\nf=open('/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf','rb')\nf.read(4); struct.unpack('<I',f.read(4)); struct.unpack('<Q',f.read(8)); nkv,=st … [1149 caractères tronqués]`
+
+  ```
+64 clés :
+  general.architecture = kimi-k3
+  general.type = model
+  general.name = Kimi-K3
+  general.basename = Kimi-K3
+  general.quantized_by = Unsloth
+  general.size_label = 896x60B
+  general.license = other
+  general.license.name = kimi-k3
+  general.repo_url = https://huggingface.co/unsloth
+  general.base_model.count = 1
+  general.base_model.0.name = Kimi K3
+  general.base_model.0.organization = Moonshotai
+  general.base_model.0.repo_url = https://huggingface.co/moonshotai/Kimi-K3
+  general.tags = ['compressed-tensors', 'unsloth', 'conversational', 'image-t...
+  kimi-k3.block_count = 93
+  kimi-k3.context_length = 1048576
+  kimi-k3.embedding_length = 7168
+  kimi-k3.feed_forward_length = 33792
+  kimi-k3.attention.head_count = 96
+  kimi-k3.attention.head_count_kv = [0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1,...
+  kimi-k3.rope.freq_base = 10000.0
+  kimi-k3.attention.layer_norm_rms_epsilon = 9.999999747378752e-06
+  kimi-k3.expert_count = 896
+  kimi-k3.expert_used_count = 16
+  kimi-k3.expert_group_used_count = 1
+  kimi-k3.expert_gating_func = 2
+  kimi-k3.attention.key_length = 576
+  kimi-k3.attention.value_length = 74
+  kimi-k3.vocab_size = 163840
+  kimi-k3.ssm.conv_k
+… [1488 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Découverte : la passe lit ~1,5× plus d'octets que la géométrie ne l'exige (206,6 contre 154,2 Gio). Je vérifie si le moteur conseille le noyau sur le motif d'accès.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"madvise\\|MADV_\\|readahead\\|posix_fadvise\" drave-core/src/*.rs | head -12; echo \"=== mmap des poids ===\"; grep -n \"fn mmap\\|Mmap\\|mmap(\" drave-core/src/gguf.rs | head -10", "description": "Check madvise usage on w … [16 caractères tronqués]`
+
+  ```
+drave-core/src/gguf.rs:49:    fn madvise(addr: *mut u8, len: usize, advice: i32) -> i32;
+drave-core/src/gguf.rs:52:/// `MADV_WILLNEED` : « je vais lire cette plage, lance les lectures ».
+drave-core/src/gguf.rs:53:const MADV_WILLNEED: i32 = 3;
+drave-core/src/gguf.rs:71:    unsafe { madvise(ptr as *mut u8, octets, MADV_WILLNEED); }
+drave-core/src/gguf.rs:86:    unsafe { madvise(ptr as *mut u8, octets, MADV_WILLNEED); }
+=== mmap des poids ===
+41:    fn mmap(addr: *mut u8, len: usize, prot: i32, flags: i32, fd: i32, offset: i64) -> *mut u8;
+106:        let p = unsafe { mmap(std::ptr::null_mut(), len, PROT_READ, MAP_PRIVATE, f.as_raw_fd(), 0) };
+155:fn mmap_voulu() -> bool {
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le moteur ne pose aucun `MADV_RANDOM`. Je prépare la décomposition en deux points (T=1 et T=4) qui sépare dense et experts sans passer par la géométrie.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/decompose_octets.sh <<'EOF'\n#!/bin/bash\n# SÉPARER LE DENSE DES EXPERTS SANS PASSER PAR LA GÉOMÉTRIE.\n#\n# Le §7 du rapport a attribué les octets par la TAILLE DES TENSEURS : 57,93 Gio\n# de dense (lu une fois par passe, … [1532 caractères tronqués]`
+
+  ```
+prêt (à lancer après l'A/B)
+=== A/B ===
+couches : 56/93
+  couche 55 :   3034 ms de chargement +  12947 ms de calcul · banque 5
+  ```
+
+### 🤖 Assistant
+
+⏵ **Je vérifie où en est vraiment la passe A (le compteur de couches me semble en retard).**
+
+- **bash** `{"command": "ps -eo pid,etimes,cmd | grep -E \"drave.*k3-essai|sonde-passe\" | grep -v grep | head -3; echo \"---\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -3 /tmp/ab_nvme.log 2>/dev/null; ls -la /tmp/sonde_k3_A.csv /tmp/sonde_k3_B.csv 2>/dev/null; tail -1 /tmp/sonde_k3_A.csv 2>/ … [66 caractères tronqués]`
+
+  ```
+2976838     897 bash tools/sonde-passe-k3.sh 93 2
+2976847     897 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf --k3-essai
+---
+##### A · tout sur le disque dur
+-rw-r--r--. 1 stephane stephane 157096  7 oct 17:36 /tmp/sonde_k3_A.csv
+896,S,15659,6078,3466555,0,0,71652100,0,128252432384,141174813,nvme0n1:17052767:
+  ```
+
+### 🤖 Assistant
+
+⏵ **Passe A à 56/93 (136 Mio/s). Le cache devrait déjà rendre A plus rapide que la référence — j'attends pour le vérifier.**
+
+- **bash** `{"command": "sleep 900; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== A/B ===\"; grep -E \"#####|octets lus|durée de la passe|débit|occupé |CPU trav|VERDICT|LE DISQUE\" /tmp/ab_nvme.log 2>/dev/null; echo \"--- passe en cours : $(grep -c 'de chargement' /tmp/sonde_k3_moteur.log)/93 … [101 caractères tronqués]`
+
+  ```
+(no output)
+[timed out after 600000ms]
+[killed by signal: SIGTERM]
+  ```
+
+### 👤 Utilisateur
+
+peut-on refaire nos exercices sur un trèes petit modèle afin de faire des cycles de tests plus rapide entre les couches d'entrée et première couche sémantique
+
+### 🤖 Assistant
+
+⏵ **Bonne idée — je regarde quels très petits modèles sont disponibles localement.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la models/ 2>/dev/null | head -20; echo \"=== petits modèles ailleurs ===\"; ls -la /home/stephane/Modèles/ /home/stephane/FastNVMe/models/ 2>/dev/null | head -25; echo \"=== A/B en cours ===\"; grep -cE \"^#####\" /tmp/ab_nvme.l … [121 caractères tronqués]`
+
+  ```
+total 863324
+drwxr-xr-x. 1 stephane stephane        88 25 sep 17:13 .
+drwxr-xr-x. 1 stephane stephane       612  3 oct 16:11 ..
+-rw-r--r--. 1 stephane stephane 352972352 25 sep 17:13 Qwen2.5-0.5B-Q4_0.gguf
+-rw-r--r--. 1 stephane stephane 531068480 25 sep 16:52 Qwen2.5-0.5B-Q8_0.gguf
+=== petits modèles ailleurs ===
+/home/stephane/FastNVMe/models/:
+total 0
+drwxr-xr-x. 1 stephane stephane  38  1 oct 09:46 .
+drwxr-xr-x  1 stephane stephane 226  7 oct 16:57 ..
+drwxr-xr-x. 1 stephane stephane  54  1 oct 08:57 DeepSeek-V4.1-Flash
+
+/home/stephane/Modèles/:
+total 0
+drwxr-xr-x. 1 stephane stephane    0 12 mai 09:07 .
+drwxr-xr-x. 1 stephane stephane 2342  6 oct 09:23 ..
+=== A/B en cours ===
+2
+
+##### B · 5 shards sur le NVMe (16,3 % du modèle)
+  ```
+
+### 🤖 Assistant
+
+⏵ **Je vérifie l'accès réseau, les architectures supportées, et je récupère le résultat du cas A.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/##### A/,/##### B/p' /tmp/ab_nvme.log; echo \"=== architectures supportées ===\"; grep -oE '\"(llama|qwen2|qwen3|smollm|gemma|phi|gpt2|gpt-oss|glm|kimi[a-z0-9-]*|deepseek[a-z0-9]*)\"' drave-core/src/gguf.rs | sort -u | head  … [213 caractères tronqués]`
+
+  ```
+##### A · tout sur le disque dur
+# modèle    : /home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf
+# taille    : 1,4T
+# couches   : 93 · ids 3638,275,1309,3140 · échantillonnage 2s
+# passe terminée en 1495 s (code 0)
+# durée de la passe                         1495 s
+# CPU travaillé (utime+stime)                332 s   (22.2%)
+# échantillons en état D (E/S)               121   (16.4% du temps)
+# échantillons en état R (travail)           135   (18.3%)
+# échantillons en état S (sommeil)           483   (65.4%)
+# octets lus (bloc)                       200.59 Go
+# octets demandés (rchar)                   0.13 Go
+# défauts de page majeurs                      0
+# RSS max                                  72.25 Go
+# swap max                                  0.00 Go
+# disque le plus sollicité                   sda
+#    occupé                                 1295 s   (86.6%)
+#    occupé, pondéré par les files         29567 s   (1977.7%)
+# couples (couche, jeton)                    372
+# secondes par couple                      4.019 s
+# débit de lecture effectif                483.0 Go/h
+# couches mesurées par le moteur              93
+
+… [855 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Cas A : 1 495 s (contre 1 587) — le cache explique ~6 %. Réseau disponible. Je cherche les architectures que le moteur accepte.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"architecture\" drave-core/src/gguf.rs | head -12; echo \"=== quelle fonction choisit le modèle ? ===\"; grep -rn \"match arch\\|arch.as_str()\\|=> Box::new\" drave-core/src/main.rs | head -15", "description": "Find support … [28 caractères tronqués]`
+
+  ```
+187:    /// liste par couche, et c'est une **décision d'architecture** : quelles
+496:            if m.contains_key("general.architecture") {
+498:                    None => arch_ref = m.get("general.architecture")
+501:                        let ici = m.get("general.architecture").and_then(|v| v.as_str());
+504:                                format!("architectures divergentes : {a} puis {ici:?} dans {}",
+539:            "aucun fichier ne porte de métadonnées (general.architecture absent partout)"))?;
+696:            if m.contains_key("general.architecture") {
+698:                    None => arch_ref = m.get("general.architecture")
+701:                        let ici = m.get("general.architecture").and_then(|v| v.as_str());
+704:                                format!("architectures divergentes : {a} puis {ici:?} dans {}",
+731:            "aucun fichier ne porte de métadonnées (general.architecture absent partout)"))?;
+921:        let arch = self.meta.get("general.architecture")?.as_str()?;
+=== quelle fonction choisit le modèle ? ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '915,1000p' drave-core/src/gguf.rs", "description": "Read architecture dispatch"}`
+
+  ```
+fn debut_donnees(meta: &HashMap<String, Meta>, fin_entete: usize) -> usize {
+        let align = meta.get("general.alignment").and_then(|m| m.as_u64()).unwrap_or(32) as usize;
+        (fin_entete + align - 1) / align * align
+    }
+
+    pub fn cfg(&self, key: &str) -> Option<&Meta> {
+        let arch = self.meta.get("general.architecture")?.as_str()?;
+        self.meta.get(&format!("{arch}.{key}"))
+    }
+
+    /// Première clef PRÉSENTE parmi plusieurs noms possibles.
+    ///
+    /// Deux conventions de nommage coexistent dans les GGUF de cette machine :
+    /// les clefs normalisées de llama.cpp (`expert_count`, `expert_used_count`)
+    /// et les noms d'origine de DeepSeek, recopiés tels quels par le
+    /// convertisseur (`n_routed_experts`, `num_experts_per_tok`). Lire une seule
+    /// convention ne donne pas une erreur : cela donne `n_expert = 0`, donc un
+    /// modèle **sans experts** — un V4.1 qui tourne en dense et dont la
+    /// perplexité ne veut plus rien dire.
+    pub fn cfg_ou(&self, cles: &[&str]) -> Option<&Meta> {
+        cles.iter().find_map(|c| self.cfg(c))
+    }
+
+    /// Les ratios de compression, **couche par couche** (0 = brute).
+    pub fn couches_ratios(&sel
+… [3149 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Je vérifie quelles architectures le moteur sait charger avant de télécharger quoi que ce soit.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn '\"llama\"\\|\"qwen2\"\\|\"qwen3\"\\|EstLlama\\|Qwen2\\b' drave-core/src/*.rs | head -15; echo \"=== fichiers de modèle ===\"; ls drave-core/src/; echo \"=== dispatch ===\"; grep -rn \"fn charge\" drave-core/src/model.rs | h … [59 caractères tronqués]`
+
+  ```
+drave-core/src/gguf.rs:269:/// Qwen2.5-0.5B en Q4_K_M — 62 % des poids de ce fichier : sans lui, le modèle
+drave-core/src/gguf.rs:1602:    /// perplexité sur Qwen2.5-0.5B (19,86 → 21,98).
+drave-core/src/main.rs:962:    println!("Qwen2 · {} couches · hidden {} · {} têtes / {} KV · FFN {} · vocab {}",
+drave-core/src/main.rs:1000:            // gabarit Qwen2.5-Instruct, tokens spéciaux insérés tels quels
+drave-core/src/main.rs:1303:/// Le ViT de Qwen2.5-VL commence par une convolution 14 × 14 sur une image
+drave-core/src/main.rs:1484:            // Fenêtre locale : Qwen2.5-VL a une couche COMPLÈTE toutes les huit
+drave-core/src/main.rs:1662:    // pas « 256 valeurs de la même rangée » : Qwen2.5-0.5B a des rangées de 896
+drave-core/src/model.rs:1://! Inférence Qwen2 en **mode listes d'événements** — std seul, sans GPU, sans
+drave-core/src/model.rs:358:    // (Qwen2.5 dense, Qwen3-MoE, gpt-oss) ; les modèles qui déclarent
+drave-core/src/model.rs:2474:    /// Qwen2.5-1.5B en fait partie — ont une matrice de sortie **différente**
+drave-core/src/model.rs:4993:    /// RoPE « neox » (Qwen2) : rotation des deux moitiés de chaque tête.
+drave-core/src/tokenizer.rs:1://! Tokenizer BPE byte-level
+… [611 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le moteur est centré Qwen2. Je cherche d'abord si un modèle minuscule compatible est déjà sur la machine.**
+
+- **bash** `{"command": "ls ~/.cache/huggingface 2>/dev/null && du -sh ~/.cache/huggingface 2>/dev/null; echo \"=== gguf de moins de 400 Mo sur la machine ===\"; timeout 180 find /home/stephane -maxdepth 6 -name \"*.gguf\" -size -400M 2>/dev/null | head -20; echo \"=== terminé ===\"", "description": "Search for … [52 caractères tronqués]`
+
+  ```
+hub
+xet
+3,7G	/home/stephane/.cache/huggingface
+=== gguf de moins de 400 Mo sur la machine ===
+/home/stephane/Data13TB/stephane/GitHub/llama.cpp/models/ggml-vocab-aquila.gguf
+/home/stephane/Data13TB/stephane/GitHub/llama.cpp/models/ggml-vocab-baichuan.gguf
+/home/stephane/Data13TB/stephane/GitHub/llama.cpp/models/ggml-vocab-bert-bge.gguf
+/home/stephane/Data13TB/stephane/GitHub/llama.cpp/models/ggml-vocab-command-r.gguf
+/home/stephane/Data13TB/stephane/GitHub/llama.cpp/models/ggml-vocab-deepseek-coder.gguf
+/home/stephane/Data13TB/stephane/GitHub/llama.cpp/models/ggml-vocab-deepseek-llm.gguf
+/home/stephane/Data13TB/stephane/GitHub/llama.cpp/models/ggml-vocab-falcon.gguf
+/home/stephane/Data13TB/stephane/GitHub/llama.cpp/models/ggml-vocab-gemma-4.gguf
+/home/stephane/Data13TB/stephane/GitHub/llama.cpp/models/ggml-vocab-gpt-2.gguf
+/home/stephane/Data13TB/stephane/GitHub/llama.cpp/models/ggml-vocab-gpt-neox.gguf
+/home/stephane/Data13TB/stephane/GitHub/llama.cpp/models/ggml-vocab-llama-bpe.gguf
+/home/stephane/Data13TB/stephane/GitHub/llama.cpp/models/ggml-vocab-llama-spm.gguf
+/home/stephane/Data13TB/stephane/GitHub/llama.cpp/models/ggml-vocab-mpt.gguf
+/home/stephane/Data13TB/stephane/GitHub/
+… [542 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Pas de modèle minuscule réel sur la machine. Je regarde où en est le cas B avant de lancer des mesures qui le perturberaient.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"couches B : $(grep -c 'de chargement' /tmp/sonde_k3_moteur.log)/93\"; ps -eo pid,etimes,cmd | grep -E \"drave.*k3-essai\" | grep -v grep | head -1; echo \"--- corpus UDHR ---\"; ls /home/stephane/Data13TB/stephane/corpus/udhr/ … [231 caractères tronqués]`
+
+  ```
+couches B : 24/93
+2994644     259 ./drave-core/target/release/drave /home/stephane/FastNVMe/k3-hybride/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf --k3-essai
+--- corpus UDHR ---
+appr
+appr10
+appr10c
+appr40
+appr42
+ids_test.txt
+ids_train.txt
+langues
+langues30b
+langues_adapt
+acu_00.drvf
+acu_01.drvf
+acu_02.drvf
+acu_03.drvf
+acu_04.drvf
+400
+  ```
+
+### 🤖 Assistant
+
+⏵ **Cas B à 24/93 (~20 min). Je regarde la structure du corpus UDHR pour construire un cycle rapide.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/corpus/udhr && ls langues | head -5; ls langues | wc -l; echo \"=== taille des textes ===\"; for f in $(ls langues | head -3); do echo \"$f : $(wc -c < langues/$f) octets, $(wc -w < langues/$f) mots\"; done; echo \"=== unites ===\"; ls unites | head - … [136 caractères tronqués]`
+
+  ```
+deu.drvf
+deu.ids
+deu.txt
+eng.drvf
+eng.ids
+30
+=== taille des textes ===
+deu.drvf : 5393693 octets, 135873 mots
+deu.ids : 220 octets, 44 mots
+deu.txt : 167 octets, 26 mots
+=== unites ===
+acu_00.drvf
+acu_01.drvf
+acu_02.drvf
+acu_03.drvf
+400
+=== exemple de nom ===
+nld.ids
+nld.txt
+por.drvf
+  ```
+
+### 🤖 Assistant
+
+⏵ **Je cherche les textes des 392 langues (le dossier `langues` n'en a que 30).**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/corpus/udhr && ls -la | head -25; echo \"=== udhr392 ===\"; ls udhr392 2>/dev/null | head -5; ls udhr392 2>/dev/null | wc -l; echo \"=== textes des langues ===\"; timeout 60 find . -maxdepth 2 -name \"*.txt\" 2>/dev/null | head -8; timeout 60 find . - … [130 caractères tronqués]`
+
+  ```
+total 8992
+drwxr-xr-x. 1 stephane stephane     650  6 oct 09:14 .
+drwxr-xr-x. 1 stephane stephane     108  6 oct 14:51 ..
+drwxr-xr-x. 1 stephane stephane      70  5 oct 10:07 appr
+drwxr-xr-x. 1 stephane stephane     640  5 oct 12:03 appr10
+drwxr-xr-x. 1 stephane stephane     640  5 oct 15:14 appr10c
+drwxr-xr-x. 1 stephane stephane     640  5 oct 11:14 appr40
+drwxr-xr-x. 1 stephane stephane       0  5 oct 11:46 appr42
+-rw-r--r--. 1 stephane stephane     415  5 oct 09:47 ids_test.txt
+-rw-r--r--. 1 stephane stephane   20661  5 oct 09:47 ids_train.txt
+drwxr-xr-x. 1 stephane stephane     440  5 oct 09:55 langues
+drwxr-xr-x. 1 stephane stephane     160  5 oct 10:02 langues30b
+drwxr-xr-x. 1 stephane stephane     160  5 oct 10:07 langues_adapt
+drwxr-xr-x. 1 stephane stephane     128  5 oct 10:19 langues_train
+-rw-r--r--. 1 stephane stephane 1382064  5 oct 10:47 pont_semantique.npz
+-rw-r--r--. 1 stephane stephane   16560  5 oct 11:02 pont_semantique_r1.npz
+drwxr-xr-x. 1 stephane stephane     168  5 oct 10:14 tenus
+drwxr-xr-x. 1 stephane stephane      96  5 oct 12:06 tenus10
+drwxr-xr-x. 1 stephane stephane      96  5 oct 15:18 tenus10c
+drwxr-xr-x. 1 stephane stephane       0  5 oct 11:45 ten
+… [545 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Je regarde le contenu réel de ces fichiers pour comprendre l'organisation du corpus.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/corpus/udhr && echo \"=== deu.txt ===\"; head -c 300 langues/deu.txt; echo; echo \"=== train.txt (300 premiers octets) ===\"; head -c 300 train.txt; echo; echo \"=== structure de train.txt ===\"; head -3 train.txt; wc -l train.txt; echo \"=== udhr392  … [136 caractères tronqués]`
+
+  ```
+=== deu.txt ===
+Alle Menschen sind frei und gleich an Würde und Rechten geboren. Sie sind mit Vernunft und Gewissen begabt und sollen einander im Geist der Brüderlichkeit begegnen.
+
+=== train.txt (300 premiers octets) ===
+Дарбанзаалак ауаҩы дшоуп ихы дақәиҭны. Ауаа зегь зинлеи патулеи еиҟароуп. Урҭ ирымоуп ахшыҩи аламыси, дара дарагь аешьеи аешьеи реиҧш еизыҟазароуп.
+Bandum manusia lahee bebah m
+=== structure de train.txt ===
+Дарбанзаалак ауаҩы дшоуп ихы дақәиҭны. Ауаа зегь зинлеи патулеи еиҟароуп. Урҭ ирымоуп ахшыҩи аламыси, дара дарагь аешьеи аешьеи реиҧш еизыҟазароуп.
+Bandum manusia lahee bebah merdeka deungon hak ngon martabat nyang sama. Ngon akai taseumikee, ngon atee tameurasa bandum geutanyoe lagee syedara.
+Penker inintimsamka mash aintsti ankan, metekrin nuya nii penkerin takakui nii akiniamunmaya tu ausamti arantukmau atinuitji mai metekrak.
+40 train.txt
+=== udhr392 : exemple ===
+10061212 udhr392/abk.drvf
+2634680 udhr392/eng.drvf
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le corpus « article 1 » existe (train.txt = 40 langues). Je cherche les textes des 392 langues pour construire le cycle rapide.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -30 docs/note-ingestion-corpus.md 2>/dev/null; echo \"=== source UDHR ===\"; grep -rn \"udhr\" tools/extrait_udhr.py 2>/dev/null | head -8", "description": "Find UDHR source texts"}`
+
+  ```
+# Note — l'ingestion des corpus, dans l'ordre demandé
+
+> 06/10. Ordre fixé par Stéphane : **l'UDHR d'abord**, puis **Wikipedia**, puis
+> **la littérature multilingue de Gutenberg**, en commençant par les œuvres au
+> plus grand nombre de traductions.
+
+## 1. UDHR — fait, et c'est le bon premier corpus
+
+`/home/stephane/Data13TB/stephane/corpus/udhr/udhr_xml/` — **456 langues**,
+2,2 Mo, téléchargé depuis l'Internet Archive (le chemin `unicode.org/udhr/…` du
+projet « UDHR in Unicode » renvoie **404** aujourd'hui ; l'archive le sert
+encore).
+
+| propriété | valeur |
+|---|---|
+| langues | **456** |
+| **articles par langue** | **30 — dans TOUTES** |
+| paragraphes de préambule | 58 à 67, variable selon la traduction |
+| unité d'alignement stable | **l'ARTICLE** |
+
+**13 680 unités sémantiques alignées par construction** — même texte, 456
+langues, sans aligneur donc sans décalage possible. Format :
+`<udhr iso639-3='eng' xml:lang='en' n='English'>` → `<preamble><para>` et
+`<article>`.
+
+## 2. Wikipedia — trouvé en local, rien à télécharger
+
+`/home/stephane/Data13TB/stephane/nipada/wikipedia_decompressed/` — **81 Go**,
+six langues :
+
+=== source UDHR ===
+2:"""extrait_udhr.py — l'UDHR en unités ali
+… [224 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Trouvé : `udhr_xml/` a 456 langues × 30 articles. Je construis le corpus « article 1 » — le vrai accélérateur de cycle.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/corpus/udhr && ls udhr_xml | head -3; ls udhr_xml | wc -l; echo \"=== format ===\"; head -c 700 udhr_xml/udhr_eng.xml; echo; echo \"=== structure article ===\"; grep -o \"<article[^>]*>\" udhr_xml/udhr_eng.xml | head -3", "description": "Inspect UDHR  … [12 caractères tronqués]`
+
+  ```
+index.xml
+schema.rnc
+schema.rng
+459
+=== format ===
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--© The Office of the High Commisioner for Human Rights-->
+
+<udhr iso639-3='eng' xml:lang='en' key='eng' n='English' dir='ltr' iso15924='Latn' xmlns="http://www.unhchr.ch/udhr">
+   <title>Universal Declaration of Human Rights</title>
+   <preamble>
+      <title>Preamble</title>
+      <para>Whereas recognition of the inherent dignity and of the equal and inalienable rights of all members of the human family is the foundation of freedom, justice and peace in the world,</para>
+      <para>Whereas disregard and contempt for human rights have resulted in barbarous acts which have outraged the conscience of mankind, and the advent of a world in wh
+=== structure article ===
+<article number="1">
+<article number="2">
+<article number="3">
+  ```
+
+### 🤖 Assistant
+
+⏵ **J'écris l'extracteur de l'article 1 pour les 456 langues.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '20,70p' tools/extrait_udhr.py", "description": "Read existing UDHR extractor"}`
+
+  ```
+import sys
+import unicodedata
+import xml.etree.ElementTree as ET
+
+NS = "{http://www.unhchr.ch/udhr}"
+
+
+def texte(el):
+    """Le texte d'un élément, espaces normalisés — deux langues n'ont pas les
+    mêmes habitudes d'espacement, et ce n'est pas ce qu'on mesure."""
+    t = "".join(el.itertext())
+    t = unicodedata.normalize("NFC", t)
+    return re.sub(r"\s+", " ", t).strip()
+
+
+def lire(chemin):
+    """Rend (code, nom, {cle: texte}) pour une langue. La clé d'un article est
+    `a<n>` — c'est l'unité d'alignement STABLE ; les paragraphes de préambule,
+    eux, varient de 58 à 67 selon la traduction, donc on les indexe par rang et
+    on assume le risque en le DISANT."""
+    r = ET.parse(chemin).getroot()
+    code = r.get("iso639-3") or r.get("key") or os.path.basename(chemin)
+    nom = r.get("n") or code
+    unites = {}
+    for prem in r.findall(f"{NS}preamble"):
+        for i, para in enumerate(prem.findall(f"{NS}para")):
+            unites[f"preambule-{i:02d}"] = texte(para)
+    for art in r.findall(f"{NS}article"):
+        num = art.get("number") or art.get("n") or "?"
+        paras = art.findall(f"{NS}para")
+        if not paras:
+            unites[f"article-{num}"] = texte(art)
+… [513 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **J'écris l'extracteur et je le lance (pur CPU, sans perturber la passe B).**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/extrait_article1.py <<'PY_EOF'\n#!/usr/bin/env python3\n\"\"\"extrait_article1.py — l'ARTICLE 1 DE L'UDHR, dans toutes les langues, en un fichier par langue.\n\nPOURQUOI CE CORPUS, ET PAS UN AUTRE.\n\nLes cycles de cette  … [3278 caractères tronqués]`
+
+  ```
+syntaxe OK
+# 456 langues écrites dans /home/stephane/Data13TB/stephane/corpus/udhr/article1
+# longueur en caractères : médiane 2978 · min 134 · max 7456 · 90e centile 3690
+# → un contexte de 128 jetons couvre largement l'article 1 dans toutes les langues sauf les plus longues
+  ```
+
+### 🤖 Assistant
+
+⏵ **Bug : `article-1` préfixe aussi `article-10` à `article-19`. Je corrige.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/extrait_article1.py'; s=open(p).read()\nold = \"\"\"        morceaux = [v for k, v in sorted(unites.items()) if k.startswith(\"article-1\")]\"\"\"\nnew = \"\"\"        # `startswith(\"article-1\")` attrape  … [639 caractères tronqués]`
+
+  ```
+corrigé
+# 455 langues écrites dans /home/stephane/Data13TB/stephane/corpus/udhr/article1
+# 1 sans article 1 exploitable : kwi
+# longueur en caractères : médiane 169 · min 40 · max 609 · 90e centile 232
+# → un contexte de 128 jetons couvre largement l'article 1 dans toutes les langues sauf les plus longues
+  ```
+
+### 🤖 Assistant
+
+⏵ **455 langues, médiane 169 caractères. J'écris le script de traçage (toutes les couches) et j'attends la fin du cas B.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/trace_article1.sh <<'EOF'\n#!/bin/bash\n# LE CYCLE RAPIDE : l'article 1 de l'UDHR, 455 langues, TOUTES les couches.\n#\n# Une phrase au lieu d'un document : le traçage passe de ~16 s à ~4 s, le cache\n# passe de 575 positi … [1404 caractères tronqués]`
+
+  ```
+script prêt
+=== cas B ===
+couches : 33/93
+    385 ./drave-core/target/release/drave /home/stephane/FastNVMe/k3-hybride/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf --k3-essai
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le cas B va nettement plus vite (11,7 s/couche contre 16,1) — le palier NVMe paie. J'attends le chiffre final.**
+
+- **bash** `{"command": "sleep 560; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"couches : $(grep -c 'de chargement' /tmp/sonde_k3_moteur.log)/93\"; grep -E \"passe complète :|passe 0-92\" /tmp/sonde_k3_moteur.log | tail -2; echo \"--- journal ---\"; sed -n '/##### B/,$p' /tmp/ab_nvme.log | grep … [134 caractères tronqués]`
+
+  ```
+couches : 69/93
+  passe complète : 93 couche(s), une seule en mémoire à la fois
+--- journal ---
+[exit code: 1]
+  ```
+
+### 🤖 Assistant
+
+⏵ **69/93 ; encore ~5 min.**
+
+- **bash** `{"command": "sleep 420; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/##### B/,$p' /tmp/ab_nvme.log | grep -E \"durée de la passe|octets lus|débit|occupé|CPU trav|secondes par|LE DISQUE|Vérification\"", "description": "Get case B final result", "timeoutMs": 480000}`
+
+  ```
+# durée de la passe                         1363 s
+# CPU travaillé (utime+stime)                341 s   (25.1%)
+# octets lus (bloc)                       215.56 Go
+#    occupé                                 1151 s   (84.5%)
+#    occupé, pondéré par les files         26602 s   (1951.7%)
+# secondes par couple                      3.664 s
+# débit de lecture effectif                569.3 Go/h
+#   LE DISQUE. `sda` est occupé 84% du temps et le CPU ne
+#   octets au débit du disque. Vérification : 215.6 Go à 0 Mo/s
+  ```
+
+### 🤖 Assistant
+
+⏵ **Cas B : 1 363 s contre 1 495 — le palier NVMe vaut −8,8 % (prédiction 16,3 %). Je lance le traçage « article 1 » demandé, puis je consigne.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (setsid nohup bash /tmp/trace_article1.sh >/dev/null 2>&1 < /dev/null & disown); sleep 90; echo \"=== traçage article 1 ===\"; ls /home/stephane/Data13TB/stephane/corpus/udhr/article1_traces 2>/dev/null | wc -l; head -3 /tmp/trace_ar … [666 caractères tronqués]`
+
+  ```
+=== traçage article 1 ===
+9
+abk 12s
+ace 8s
+acu 9s
+=== un exemple de trace ===
+abk.drvf 5714810 octets
+magic b'DRVF'
+version 2 couches 24 hidden 896
+1er enregistrement : couche 0 pos 1 n 852
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le traçage tourne (~9 s/langue, le chargement du modèle domine). Je consigne l'A/B.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> reports/rapport-passe-k3-disque.md <<'MD_EOF'\n\n---\n\n## 10. Le palier NVMe : la prédiction était de −16,3 %, la mesure donne −8,8 %\n\n**Prédiction, écrite au §5 avant toute mesure** : déplacer ~250 Go de shards sur\nle NVM … [4550 caractères tronqués]`

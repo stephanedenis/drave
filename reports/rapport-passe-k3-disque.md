@@ -251,3 +251,58 @@ L'essai de prélecture déjà consigné dans le code (×0,37, et 8,5× plus d'oc
 lus) l'a tenté **en demandant l'union entière d'un coup**, ce qui a fait travailler
 le noyau pour rien : ce n'est pas la même chose que de lire plus gros **au bon
 moment**.
+
+---
+
+## 10. Le palier NVMe : la prédiction était de −16,3 %, la mesure donne −8,8 %
+
+**Prédiction, écrite au §5 avant toute mesure** : déplacer ~250 Go de shards sur
+le NVMe ferait tomber la passe à **≈ 1 300 s**.
+
+**Ce qui a été fait** : les cinq premiers shards de contenu (shards 2 à 6,
+**229 Go, 16,3 % du modèle**) copiés sur le NVMe — 259 Go libres, 5 × 45,8 Go —
+chaque copie **vérifiée** (taille *et* empreinte des 64 premiers et derniers
+mégaoctets), puis un dossier **hybride** de 32 liens symboliques dont cinq
+pointent vers le NVMe. Aucun octet du modèle d'origine n'a été déplacé ni
+supprimé.
+
+**Le protocole, et pourquoi il est apparié.** `drop_caches` est réservé à root
+(uid 1000 ici) : le cache de pages ne peut pas être vidé. Une passe « hybride »
+comparée à la passe d'hier mesurerait donc **le palier ET le cache** sans pouvoir
+les séparer. Deux passes identiques ont donc été enchaînées — même séquence, même
+moteur, même sonde — la première sur le modèle d'origine, la seconde sur
+l'hybride.
+
+| | **référence** (07/10, 1ʳᵉ passe) | **A · tout sur le disque dur** | **B · 5 shards sur le NVMe** |
+|---|---:|---:|---:|
+| durée de la passe | 1 587 s | **1 495 s** | **1 363 s** |
+| octets lus (bloc) | 206,58 Gio | 200,59 Gio | 215,56 Gio |
+| débit effectif | 133,5 Mio/s | 137,4 Mio/s | **162,0 Mio/s** |
+| `sda` occupé | 87,6 % | 86,6 % | 84,5 % |
+| CPU travaillé | 21,0 % | 22,2 % | 25,1 % |
+| secondes par couple | 4,266 s | 4,019 s | **3,664 s** |
+
+**Le résultat, en trois lignes :**
+
+1. **Le palier marche : −8,8 %** (1 495 → 1 363 s) contre la passe de contrôle
+   immédiatement précédente, et **−14,1 %** contre la référence à froid.
+2. **La prédiction de −16,3 % était optimiste d'un facteur deux.** L'écart a une
+   cause mesurable : **B a lu 15 Gio de PLUS** que A (215,56 contre 200,59). Les
+   copies sur le NVMe sont des fichiers **différents** — donc des pages froides —
+   tandis que les shards du disque dur, lus deux fois de suite, étaient
+   partiellement en cache. Le palier a échangé des octets *gratuits* contre des
+   octets *rapides*.
+3. **Le débit, lui, progresse de 18 %** (137 → 162 Mio/s) : c'est la preuve
+   directe que les octets servis par le NVMe ne coûtent pas le prix du disque dur.
+
+**Ce que cela dit pour la suite.** Le levier « disques supplémentaires » est
+**réel et proportionnel**, mais son rendement dépend de ce que le cache servait
+déjà gratuitement. Sur une machine où le modèle tient à 16 % sur un second
+disque, on gagne 9 % ; sur trois nœuds à disques disjoints et froids, la
+prédiction de ×3 du §5 reste ouverte — et **elle se mesurerait sur des octets
+froids**, pas sur un régime déjà réchauffé.
+
+**Ce que ce paragraphe ne dit pas** : il ne compare pas des débits de disque
+isolés. Il compare **deux passes complètes**, avec leur cache, leurs files
+d'attente et leur ordonnancement. C'est le chiffre utilisable ; ce n'est pas une
+caractérisation du NVMe seul.

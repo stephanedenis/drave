@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 218.6 h |
+| Durée | 219.4 h |
 | Tours | 204 |
-| Messages | 9500 |
-| Appels d'outils | 8925 |
+| Messages | 9532 |
+| Appels d'outils | 8956 |
 | Fichiers touchés | 220 |
-| Commandes | 7591 |
+| Commandes | 7622 |
 | Sous-agents | 32 |
-| Commits | 698 |
+| Commits | 699 |
 | Compactages de contexte | 13 |
 
 ## Objectifs déclarés
@@ -10455,7 +10455,7 @@ Chacun remplace une devinette que j'ai faite sans lui.
 
 ### Tour 204 — bien. vas-y dans l'ordre de ton choix.
 
-*215 appels d'outils.* Actions notables :
+*246 appels d'outils.* Actions notables :
 
 - bash — Launch layer 0-8 tracing for 50 articles
 - bash — Launch the 50-draw distribution
@@ -10471,11 +10471,11 @@ Chacun remplace une devinette que j'ai faite sans lui.
 - bash — Test the layer profile on partial traces
 - bash — Single-pass reader and test
 - bash — Inspect the actual trace format
-- … et 196 autres
+- … et 227 autres
 
 **Synthèse produite :**
 
-⏵ **Pendant l'A/B, je mets à jour la feuille de route, qui est périmée sur deux points mesurés.**
+⏵ **Le traçage tourne (~9 s/langue, le chargement du modèle domine). Je consigne l'A/B.**
 
 ## 3. Travail accompli
 
@@ -10781,7 +10781,7 @@ Chacun remplace une devinette que j'ai faite sans lui.
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 7551 autres
+- … et 7582 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10909,7 +10909,7 @@ Chacun remplace une devinette que j'ai faite sans lui.
 
 ## 5. Erreurs rencontrées
 
-399 sorties en erreur ou divergentes. Les premières :
+400 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -11627,4 +11627,5 @@ Chacun remplace une devinette que j'ai faite sans lui.
 - Attribution des 206,58 Gio : 72 % sont les experts, relus à chaque jeton  Les tailles viennent des en-têtes GGUF (--tensors, 2 573 tenseurs) ; les octets lus, d
 - §9 : le plafond du disque est 205 Mio/s, la passe en obtient 133  Mesuré pendant la préparation du test de palier : une copie SÉQUENTIELLE du même modèle, du mê
 - Feuille de route : le regroupement par expert EXISTE, l'axe 1 devient un axe de LOT  Deux points périmés, corrigés par la mesure du 07/10 :  1. Le regroupement 
+- §10 : le palier NVMe donne −8,8 %, la prédiction était de −16,3 %  229 Go (5 shards, 16,3 % du modèle) copiés et VÉRIFIÉS sur le NVMe, puis un dossier hybride d
 
