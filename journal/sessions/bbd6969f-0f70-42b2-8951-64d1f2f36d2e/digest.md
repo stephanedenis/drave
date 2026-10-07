@@ -151486,3 +151486,114 @@ articles wiki : 330
 | 3 | 0,018 | 0,4666 | 210,1 | 460,3 | 2,191 |
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 73. CORRECTION du §72, et un mécanisme qui fait enfin les DEUX mouvements\n\n### 73.1 La correction : la capture vaut 0,018, pas 0 … [7553 caractères tronqués]`
+
+  ```
+e7f3b95 CORRECTION du §72, et un mécanisme qui fait enfin les DEUX mouvements
+  ```
+
+### 🤖 Assistant
+
+⏵ **Test de la piste désignée : combiner « apprendre quoi lire » (caractéristiques) et le discriminant (lecture) — les deux sont complémentaires.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\ns = open('tools/renforcement_directions.py').read()\nold = \"\"\"    print(f\"\\\\n# La capture est la moyenne, sur les neurones, de leur corrélation maximale\")\"\"\"\nnew = \"\"\"    # ------------------------- … [2700 caractères tronqués]`
+
+  ```
+combinaison câblée
+syntaxe OK
+lancé
+01:09
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/combinaison.log 2>/dev/null; echo; echo \"articles wiki : $(grep -c '^ARTICLE' /tmp/trace_wiki_apparie.log)\"; date '+%H:%M'", "description": "Read the combination result", "timeoutMs": 620000}`
+
+  ```
+# réseau 120 neurones · 1 couche(s) · canaux d'entrée 896 · 1 passes
+# CIBLE — professeur : P_lang 399.2 · P_cont 4356.4 · rapport 10.912
+
+#  passe  capture  fid TEST    P_lang    P_cont   RAPPORT  s
+      0    0.018    0.4766     247.1     318.7     1.290
+
+articles wiki : 349
+01:19
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/combinaison.log 2>/dev/null | tail -18; date '+%H:%M'", "description": "Continue waiting for the combination", "timeoutMs": 620000}`
+
+  ```
+# réseau 120 neurones · 1 couche(s) · canaux d'entrée 896 · 1 passes
+# CIBLE — professeur : P_lang 399.2 · P_cont 4356.4 · rapport 10.912
+
+#  passe  capture  fid TEST    P_lang    P_cont   RAPPORT  s
+      0    0.018    0.4766     247.1     318.7     1.290
+      1    0.017    0.4667     181.9     438.5     2.411   484
+
+=== COMBINAISON : quoi lire PUIS discriminant ===
+#   rang  fid TEST    P_lang    P_cont   RAPPORT
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/renforcement_directions.py", line 198, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/renforcement_directions.py", line 183, in main
+    Oc = (Ot2 - ma) @ Vr @ Vr.T + ma
+          ~~~~^~~~
+ValueError: operands could not be broadcast together with shapes (144903,896) (120,) 
+01:29
+  ```
+
+### 🤖 Assistant
+
+⏵ **Bug d'espace : j'ai calculé les moyennes sur les ÉTATS (120 dim) au lieu des SORTIES (896 dim). Je corrige.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\ns = open('tools/renforcement_directions.py').read()\nold = \"\"\"    X = np.vstack([P.X[i] for i in itr])\n    Ma = np.vstack([P.X[i].mean(0) for i in itr])\n    ma = Ma.mean(0)\"\"\"\nnew = \"\"\"    # ATTENTION … [1108 caractères tronqués]`
+
+  ```
+espace corrigé
+syntaxe OK
+lancé
+01:29
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/combinaison2.log 2>/dev/null | tail -16; date '+%H:%M'", "description": "Read the corrected combination result", "timeoutMs": 620000}`
+
+  ```
+# réseau 120 neurones · 1 couche(s) · canaux d'entrée 896 · 1 passes
+# CIBLE — professeur : P_lang 399.2 · P_cont 4356.4 · rapport 10.912
+
+#  passe  capture  fid TEST    P_lang    P_cont   RAPPORT  s
+      0    0.018    0.4766     247.1     318.7     1.290
+01:40
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/combinaison2.log 2>/dev/null | tail -16; date '+%H:%M'", "description": "Wait for the combination result", "timeoutMs": 620000}`
+
+  ```
+1    0.017    0.4667     181.9     438.5     2.411   480
+
+=== COMBINAISON : quoi lire PUIS discriminant ===
+#   rang  fid TEST    P_lang    P_cont   RAPPORT
+      2    0.4305      31.8     184.4     5.803
+      5    0.4378      48.1     280.5     5.829
+     10    0.4451      74.6     323.8     4.344
+     20    0.4505      87.4     360.8     4.129
+# Comparaison : discriminant SEUL (§69, sans apprentissage des directions)
+#   rang 2 : fid 0,4341 · P_lang 4,3 · P_cont 30,2 · rapport 6,961
+#   rang 20 : fid 0,4575 · P_lang 17,4 · P_cont 57,9 · rapport 3,326
+
+# La capture est la moyenne, sur les neurones, de leur corrélation maximale
+# avec le résidu. 0,5 = le hasard. Le §72 trouvait ≈ 0,5 et un plateau.
+# PRÉDICTION : si l'échec venait de directions aléatoires, la capture doit
+# monter au-dessus de 0,5 et le rapport vers 10,912.
+01:50
+  ```
+
+### 🤖 Assistant
+
+⏵ **La combinaison DOMINE : à rapport comparable, elle porte 9 FOIS plus d'énergie de contenu.**
+
+| | discriminant seul (§69) | **quoi lire + discriminant** |
+|---|---|---|
+| rang 2 | fid 0,4341 · P_cont **30,2** · rapport 6,96 | fid 0,4305 · P_cont **184,4** · rapport 5,80 |
+| **rang 5** | — | fid 0,4378 · P_lang 48,1 · **P_cont 280,5** · **rapport 5,83** |
+| rang 20 | fid 0,4575 · P_cont 57,9 · rapport 3,33 | fid 0,4505 · **P_cont 360,8** · rapport 4,13 |
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 74. La combinaison des deux mécanismes DOMINE chacun d'eux\n\nLe §73 s'achevait sur une piste : *« apprendre quoi lire » agit sur  … [5853 caractères tronqués]`

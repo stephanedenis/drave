@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 202.4 h |
+| Durée | 203.1 h |
 | Tours | 191 |
-| Messages | 9175 |
-| Appels d'outils | 8632 |
+| Messages | 9182 |
+| Appels d'outils | 8639 |
 | Fichiers touchés | 212 |
-| Commandes | 7321 |
+| Commandes | 7328 |
 | Sous-agents | 32 |
-| Commits | 669 |
+| Commits | 670 |
 | Compactages de contexte | 12 |
 
 ## Objectifs déclarés
@@ -9764,7 +9764,7 @@ J'ai testé **la forme de renforcement implémentée dans le dépôt**. **D'autr
 
 ### Tour 191 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
 
-*6 appels d'outils.* Actions notables :
+*13 appels d'outils.* Actions notables :
 
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/renforcement_directions.py`
 - bash — Test learning what to read
@@ -9772,16 +9772,23 @@ J'ai testé **la forme de renforcement implémentée dans le dépôt**. **D'autr
 - bash — Wait for the direction learning passes
 - bash — Wait for more direction-learning passes
 - bash — Report the correction and the positive mechanism
+- bash — Test learning-what-to-read plus discriminant
+- bash — Read the combination result
+- bash — Continue waiting for the combination
+- bash — Fix the space bug and rerun
+- bash — Read the corrected combination result
+- bash — Wait for the combination result
+- bash — Report and commit the combination result
 
 **Synthèse produite :**
 
-⏵ **Le mécanisme sature après une passe, mais il est le PREMIER à faire les deux mouvements à la fois. Et le §72 doit être corrigé : la capture vaut 0,018, pas 0,5.**
+⏵ **La combinaison DOMINE : à rapport comparable, elle porte 9 FOIS plus d'énergie de contenu.**
 
-| passe | capture | fid TEST | P_lang | P_cont | **RAPPORT** |
-|---:|---:|---:|---:|---:|---:|
-| 0 | 0,018 | 0,4766 | 247,1 | 318,7 | 1,290 |
-| **1** | 0,017 | 0,4667 | **181,9** | **438,5** | **2,411** |
-| 3 | 0,018 | 0,4666 | 210,1 | 460,3 | 2,191 |
+| | discriminant seul (§69) | **quoi lire + discriminant** |
+|---|---|---|
+| rang 2 | fid 0,4341 · P_cont **30,2** · rapport 6,96 | fid 0,4305 · P_cont **184,4** · rapport 5,80 |
+| **rang 5** | — | fid 0,4378 · P_lang 48,1 · **P_cont 280,5** · **rapport 5,83** |
+| rang 20 | fid 0,4575 · P_cont 57,9 · rapport 3,33 | fid 0,4505 · **P_cont 360,8** · rapport 4,13 |
 
 ## 3. Travail accompli
 
@@ -10079,7 +10086,7 @@ J'ai testé **la forme de renforcement implémentée dans le dépôt**. **D'autr
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 7281 autres
+- … et 7288 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10896,4 +10903,5 @@ J'ai testé **la forme de renforcement implémentée dans le dépôt**. **D'autr
 - Blanchir l'entrée par langue est écarté — et le chiffre qui tombe  L'IDÉE découlait du §70 : l'axe de langue vient de l'ENTRÉE. Le §64 en avait retiré le premie
 - Le renforcement/atrophie — dernier mécanisme sanctionné — échoue aussi (plateau immédiat)  POURQUOI C'ÉTAIT LE DERNIER RECOURS : les §57-§71 ont écarté neuf moy
 - CORRECTION du §72, et un mécanisme qui fait enfin les DEUX mouvements  CORRECTION : le §72 affirmait 'la capture moyenne vaut ≈ 0,5'. JE NE L'AVAIS PAS LUE — la
+- La combinaison des deux mécanismes DOMINE chacun d'eux : 9x plus de contenu à rapport comparable    méthode                              fid TEST  P_lang  P_con
 

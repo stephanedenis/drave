@@ -148,6 +148,51 @@ def main():
         dm = decompose(clte, moyennes(clte, Ot, bo_t))
         print(f" {k+1:>6}{cap:>9.3f}{ft:>10.4f}{dm[0]:>10.1f}{dm[1]:>10.1f}"
               f"{dm[2]:>10.3f}{time.time()-t:>6.0f}")
+    # ------------------------------- COMBINAISON AVEC LE DISCRIMINANT (§69)
+    #
+    # « Apprendre quoi lire » agit sur les CARACTÉRISTIQUES ; le discriminant agit sur
+    # la LECTURE. Le §69 a montré que le discriminant optimise le rapport en écrasant le
+    # contenu (P_cont 30,2) ; le §73 a montré que les directions d'entrée font MONTER
+    # P_cont. Les deux devraient donc être complémentaires — et leur combinaison n'avait
+    # jamais été essayée.
+    print(f"\n=== COMBINAISON : quoi lire PUIS discriminant ===")
+    # ATTENTION À L'ESPACE : le discriminant du §69 vit dans l'espace des SORTIES
+    # (896 canaux), pas dans celui des états (120). La première version prenait
+    # `P.X[i].mean(0)` — 120 dimensions — et la projection échouait. On calcule donc
+    # les moyennes sur les SORTIES d'apprentissage.
+    Xa2 = P.recalcule(idx, Etr)
+    Oa2 = np.vstack([P.phi(P._norm(Xa2[j])) @ W + mt for j in range(len(cltr))])
+    bo_a2 = np.cumsum([0] + [len(Ytr[i]) for i in range(len(cltr))])
+    Ma = np.vstack([Oa2[bo_a2[j]:bo_a2[j+1]].mean(0) for j in range(len(cltr))])
+    ma = Ma.mean(0)
+    pc, pl = {}, {}
+    for r2, n in enumerate(cltr):
+        L, _, kk2 = n.partition("_")
+        pc.setdefault(kk2, []).append(r2)
+        pl.setdefault(L, []).append(r2)
+    pc = {k2: v for k2, v in pc.items() if len(v) == len(pl)}
+    def covg(M, par, m):
+        C = np.zeros((M.shape[1], M.shape[1]))
+        for idxg in par.values():
+            d = M[idxg].mean(0) - m
+            C += np.outer(d, d)
+        return C/max(len(par), 1)
+    Cc, Cl = covg(Ma, pc, ma), covg(Ma, pl, ma)
+    lam = 1e-2*float(np.trace(Cl))/Ma.shape[1]
+    w2, V2 = np.linalg.eigh(np.linalg.solve(Cl + max(lam, 1e-12)*np.eye(Ma.shape[1]), Cc))
+    V2 = V2[:, np.argsort(-w2)]
+    Xt2 = P.recalcule(idx, Ete)
+    Ot2 = np.vstack([P.phi(P._norm(Xt2[k])) @ W + mt for k in range(len(clte))])
+    print(f"# {'rang':>6}{'fid TEST':>10}{'P_lang':>10}{'P_cont':>10}{'RAPPORT':>10}")
+    for r3 in (2, 5, 10, 20):
+        Vr = V2[:, :r3]
+        Oc = (Ot2 - ma) @ Vr @ Vr.T + ma
+        f3 = cos_lignes(Oc, np.vstack(Yte))
+        d3 = decompose(clte, moyennes(clte, Oc, bo_t))
+        print(f" {r3:>6}{f3:>10.4f}{d3[0]:>10.1f}{d3[1]:>10.1f}{d3[2]:>10.3f}")
+    print(f"# Comparaison : discriminant SEUL (§69, sans apprentissage des directions)")
+    print(f"#   rang 2 : fid 0,4341 · P_lang 4,3 · P_cont 30,2 · rapport 6,961")
+    print(f"#   rang 20 : fid 0,4575 · P_lang 17,4 · P_cont 57,9 · rapport 3,326")
     print(f"\n# La capture est la moyenne, sur les neurones, de leur corrélation maximale")
     print(f"# avec le résidu. 0,5 = le hasard. Le §72 trouvait ≈ 0,5 et un plateau.")
     print(f"# PRÉDICTION : si l'échec venait de directions aléatoires, la capture doit")
