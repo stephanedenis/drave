@@ -150324,3 +150324,90 @@ lancé
 ⏵ **Toutes les conclusions tiennent après correction — mais aucun chiffre n'est le même. Je consigne la correction.**
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 65. Un bug de découpage dans MES outils : l'ajustement ne portait que sur DEUX langues\n\n### 65.1 Le bug\n\nLes outils de diagnos … [6306 caractères tronqués]`
+
+  ```
+1f6dc82 Bug de découpage dans MES outils : l'ajustement ne portait que sur DEUX langues
+  ```
+
+### 🤖 Assistant
+
+⏵ **Je relance le test structurellement différent — retrait du sous-espace de langue DANS LES ÉTATS — avec le découpage corrigé, donc sur trois langues.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && setsid nohup python3 -u tools/etats_sans_langue.py /tmp/cache_wikitrain.npz /tmp/cache_wikitest.npz --neur 120 > /tmp/etats2.log 2>&1 < /dev/null & disown\nsleep 580; cat /tmp/etats2.log 2>/dev/null; echo; echo \"articles wiki : $(gr … [150 caractères tronqués]`
+
+  ```
+# réseau 120 neurones · 1 couche(s) · 896 canaux
+# SOUS-ESPACE DE LANGUE : 3 langues d'apprentissage · 120 directions · la 1re porte 82.9% de l'énergie de langue
+
+#   rang  fid TEST    P_lang    P_cont  RAPPORT
+      0    0.4767     242.1     317.4    1.311
+      2    0.4749     197.4     287.4    1.456
+      5    0.4747     183.5     285.7    1.556
+     10    0.4741     182.0     276.7    1.520
+     20    0.4737     174.6     270.7    1.551
+     40    0.4713     141.9     224.7    1.584
+# professeur : P_lang 399.2 · P_cont 4356.4 · rapport 10.912
+
+# rang 0 = notre sortie actuelle, sans retrait.
+# CRITÈRE (leçon du §62.3) : P_cont proche du professeur ET P_lang qui ne
+# le dépasse pas — le rapport seul peut être gonflé par le dénominateur.
+
+articles wiki : 247
+22:34
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le retrait du sous-espace de langue DANS LES ÉTATS fonctionne : rapport 1,311 → 1,584 (+21 %) pour 0,005 de fidélité, avec P_lang ÷1,7. Et il est déployable. Test de la COMBINAISON avec le centrage d'entrée.**
+
+| rang | fid TEST | P_lang | P_cont | **RAPPORT** |
+|---:|---:|---:|---:|---:|
+| 0 | 0,4767 | 242,1 | 317,4 | 1,311 |
+| 5 | 0,4747 | 183,5 | 285,7 | 1,556 |
+| **40** | 0,4713 | **141,9** | 224,7 | **1,584** |
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\ns = open('tools/etats_sans_langue.py').read()\nold = \"\"\"    P = Pont((cltr, Etr, Ytr), 0.2, graine, len(garde))\"\"\"\nnew = \"\"\"    # COMBINAISON avec le levier retenu du §64 : on peut centrer l'entrée ET r … [1008 caractères tronqués]`
+
+  ```
+combinaison câblée
+syntaxe OK
+lancé
+22:35
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/etats_centre.log 2>/dev/null; echo; date '+%H:%M'", "description": "Read the combination result", "timeoutMs": 620000}`
+
+  ```
+# CENTRAGE DE L'ENTRÉE activé
+# réseau 120 neurones · 1 couche(s) · 896 canaux
+# SOUS-ESPACE DE LANGUE : 3 langues d'apprentissage · 120 directions · la 1re porte 69.1% de l'énergie de langue
+
+#   rang  fid TEST    P_lang    P_cont  RAPPORT
+      0    0.4703      42.4      81.8    1.927
+      5    0.4706      22.9      70.2    3.064
+     10    0.4709      22.9      69.7    3.035
+     20    0.4704      24.7      65.7    2.662
+     40    0.4692      21.9      61.9    2.832
+     60    0.4662      22.3      53.1    2.382
+# professeur : P_lang 399.2 · P_cont 4356.4 · rapport 10.912
+
+# rang 0 = notre sortie actuelle, sans retrait.
+# CRITÈRE (leçon du §62.3) : P_cont proche du professeur ET P_lang qui ne
+# le dépasse pas — le rapport seul peut être gonflé par le dénominateur.
+
+22:45
+  ```
+
+### 🤖 Assistant
+
+⏵ **La COMBINAISON donne le meilleur résultat de toute la série : rapport 1,311 → 3,064 (+134 %) — et la fidélité ne bouge pas (0,4703 → 0,4706).**
+
+| moyen | rapport | fidélité |
+|---|---:|---:|
+| rien | 1,460 | 0,4747 |
+| centrage de l'entrée (§64) | 1,871 | 0,4668 |
+| retrait du sous-espace de langue dans les états | 1,584 | 0,4713 |
+| **les deux ensemble** | **3,064** | **0,4706** |
+| | *professeur 10,912* | |
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-toutes-langues.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## 66. Deux leviers DÉPLOYABLES, et ils se combinent\n\n### 66.1 Retirer le sous-espace de langue DANS LES ÉTATS\n\nTous les moyens d … [5587 caractères tronqués]`

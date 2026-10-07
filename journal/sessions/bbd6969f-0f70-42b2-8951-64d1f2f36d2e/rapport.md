@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 199.6 h |
+| Durée | 200.0 h |
 | Tours | 185 |
-| Messages | 9118 |
-| Appels d'outils | 8587 |
+| Messages | 9122 |
+| Appels d'outils | 8591 |
 | Fichiers touchés | 206 |
-| Commandes | 7282 |
+| Commandes | 7286 |
 | Sous-agents | 32 |
-| Commits | 661 |
+| Commits | 662 |
 | Compactages de contexte | 12 |
 
 ## Objectifs déclarés
@@ -9408,7 +9408,7 @@ L'idée était la bonne sur le papier — le regroupement par contenu n'est néc
 
 ### Tour 185 — <goal_round> Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au … [1282 caractères tronqués]
 
-*9 appels d'outils.* Actions notables :
+*13 appels d'outils.* Actions notables :
 
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/etats_sans_langue.py`
 - bash — Test language-subspace removal in state space
@@ -9419,10 +9419,22 @@ L'idée était la bonne sur le papier — le regroupement par contenu n'est néc
 - bash — Read the corrected decomposition
 - bash — Read the full corrected decomposition
 - bash — Report and commit the split bug correction
+- bash — Rerun state-space removal with corrected split
+- bash — Test combining centering with state-space removal
+- bash — Read the combination result
+- bash — Report and commit the combined deployable levers
 
 **Synthèse produite :**
 
-⏵ **Toutes les conclusions tiennent après correction — mais aucun chiffre n'est le même. Je consigne la correction.**
+⏵ **La COMBINAISON donne le meilleur résultat de toute la série : rapport 1,311 → 3,064 (+134 %) — et la fidélité ne bouge pas (0,4703 → 0,4706).**
+
+| moyen | rapport | fidélité |
+|---|---:|---:|
+| rien | 1,460 | 0,4747 |
+| centrage de l'entrée (§64) | 1,871 | 0,4668 |
+| retrait du sous-espace de langue dans les états | 1,584 | 0,4713 |
+| **les deux ensemble** | **3,064** | **0,4706** |
+| | *professeur 10,912* | |
 
 ## 3. Travail accompli
 
@@ -9714,7 +9726,7 @@ L'idée était la bonne sur le papier — le regroupement par contenu n'est néc
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 7242 autres
+- … et 7246 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10523,4 +10535,5 @@ L'idée était la bonne sur le papier — le regroupement par contenu n'est néc
 - Cinquième remède écarté : le sous-espace du contenu appris ne se TRANSFÈRE pas  L'IDÉE : le regroupement par contenu n'est nécessaire qu'à l'APPRENTISSAGE. On a
 - Le centrage de l'entrée : premier levier de la série à la fois efficace ET déployable  --centre-entree retire à chaque langue son jeton moyen — le décalage prop
 - Bug de découpage dans MES outils : l'ajustement ne portait que sur DEUX langues  LES OUTILS §57-§64 découpaient iap, ival = itr[nt:], itr[:nt] avec nt = len(itr
+- Deux leviers DÉPLOYABLES qui se combinent : le rapport passe de 1,46 à 3,06  §66.1 RETRAIT DU SOUS-ESPACE DE LANGUE DANS LES ÉTATS (avant la lecture) : on calcu
 

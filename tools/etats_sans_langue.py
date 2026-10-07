@@ -89,6 +89,13 @@ def main():
     iap = itr
     mt = np.vstack([Ytr[i] for i in itr]).mean(axis=0)
 
+    # COMBINAISON avec le levier retenu du §64 : on peut centrer l'entrée ET retirer
+    # le sous-espace de langue des états. Les deux attaquent le même axe par des
+    # chemins différents — l'entrée avant le réservoir, les états après.
+    if opt("--centre-entree", "") != "":
+        Etr = [e - e.mean(0, keepdims=True) for e in Etr]
+        Ete = [e - e.mean(0, keepdims=True) for e in Ete]
+        print("# CENTRAGE DE L'ENTRÉE activé")
     P = Pont((cltr, Etr, Ytr), 0.2, graine, len(garde))
     P.quadratique = True
     P.a_min, P.a_max = 0.02, 0.8
