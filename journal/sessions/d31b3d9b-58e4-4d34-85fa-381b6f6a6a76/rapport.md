@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 4.1 h |
-| Tours | 6 |
-| Messages | 348 |
-| Appels d'outils | 352 |
+| Durée | 4.3 h |
+| Tours | 7 |
+| Messages | 356 |
+| Appels d'outils | 358 |
 | Fichiers touchés | 11 |
-| Commandes | 262 |
+| Commandes | 267 |
 | Sous-agents | 3 |
-| Commits | 8 |
+| Commits | 9 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -35,6 +35,8 @@
 **Tour 5** — Hypothèse de changement de configuration matériel : Si je déploie ce projet sur une station de travail bi-processeur (Xeon E5-2687W v3) sous Linux, configurée avec une topologie NUMA asymétrique stricte pour séparer le système du calcul intensif.  Voici la ségrégation matérielle exacte de la machine : - Nœud NUMA 0 (OS & Tâches de fond) : CPU 0, 32 Go de RAM, SSD NVMe système, et GPU AMD dédié à l … [403 caractères tronqués]
 
 **Tour 6** — je viens de commander une carte pcie pour 4 nvme 4x4 et 4 unités Patriot P320 256GB PCIe Gen 3x4 M.2 2280 SSD pour aller dessus. je compte mettre cet array de nvme sur le même noeud que les gpu, déplacer aussi le nvme existant pour le mettre sur l'autre noeud avec une carte graphique amd 100-c44971-00 pour avoir un noeud xeon de travail et un noeud os et desktop. je maintiens la topologie ram actu … [16 caractères tronqués]
+
+**Tour 7** — le ram est actuellement hors de prix. je t'ai fait évaluer une approche asymétrique, mais c'est déconseillé. Que peut-on faire pour le ram.
 
 ## 2. Déroulé, étape par étape
 
@@ -286,7 +288,52 @@ Deux portes ont été franchies et sont commitées (`a9f4b40`) :
 
 **Synthèse produite :**
 
-⏵ Trois contraintes matérielles à vérifier dans ce plan — je les chiffre et j'ajoute la section au document
+⏵ Analyse terminée et ajoutée au document (§11) — voici l'essentiel
+
+\## Le plan est bon sur le placement, mais trois contraintes mordent avant lui
+
+J'ai ajouté une section au document (`docs/numa-segregation.md` §11, commit `42ea1ae`). Ce qui est juste d'abord : **l'array sur le nœud des GPU, l'OS/affichage isolés de l'autre côté, la RAM symétrique** — c'est exactement ce que les mesures recommandaient. Et les P320 annoncent 2 200 Mo/s, soit ~5× le NVMe actuel (mesuré **1,6 Go/s**) et ~9× le disque dur (**246 Mo/s**).
+
+\### 1. Les lignes PCIe — c'est là que ça coince
+
+Le Xeon E5-2687W v3 donne **40 lignes PCIe 3.0 par socket**. Relevé à l'instant sur le nœud 0 :
+
+| périphérique | liaison | max |
+|---|---|---|
+| Quadro RTX 5000 (`03:00.0`) | **x16** (2,5 → 5,0 GT/s selon la charge) | x16 Gen3 |
+| Quadro RTX 5000 (`04:00.0`) | **x16** (2,5 → 8,0 GT/s) | x16 Gen3 |
+| NVMe système (`02:00.0`, MAP1602) | x4 Gen3 | x4 Gen4 |
+
+**36 lignes sur 40 sont déjà prises.** Une carte 4×NVMe x16 en demande 16 de plus : **52**. Il faudra choisir, et ce choix se fait au BIOS :
+
+- **GPU en x8 + carte en x16** : l'array est complet, mais chaque GPU perd la moitié de sa bande passante hôte (le dépôt a mesuré **6,5 Go/s en x8**) — et c'est ce trafic qui porte le miroir du cache KV, donc le « 22,16 → 3,29 ms/jeton ».
+- **GPU en x16 + carte en x4** : les 4 SSD partagent ~3,9 Go/s, soit **le débit d'un seul**. L'array ne sert à rien.
+
+Deux vérifications à faire **avant** de tout démonter : la **bifurcation `x4x4x4x4`** du slot choisi (les cartes passives l'exigent ; sans elle, **un seul SSD apparaît**), et que ce slot est bien câblé au **CPU** — derrière le PCH, c'est du x4 Gen2 partagé, ~2 Go/s pour les quatre. Et c'est le slot qui décide du nœud : si le seul x16 libre est câblé au CPU 1, l'array sera sur le nœud 1, pas avec les GPU.
+
+\### 2. Les canaux mémoire — la moitié est vide
+
+EDAC le dit sans ambiguïté : **2 DIMM par socket, sur un contrôleur à 4 canaux**. Deux canaux sur quatre sont vides, et la bande passante mesurée aujourd'hui le confirme : **20,4 Go/s** (64 Mo, 16 threads) — un ordre de grandeur de dual-channel.
+
+Donc « je maintiens 2×32 + 2×32 » = **la moitié de la bande passante mémoire de la machine**, dans le régime même que le placement NUMA ne rattrape pas (§3 : forcer un socket coûte 8 à 19 %). Passer à **4 DIMM par socket** doublerait à peu près cette bande passante. C'est probablement le meilleur gain par dollar de toute la liste, et il n'est pas dans le plan.
+
+
+… [1410 caractères tronqués]
+
+### Tour 7 — le ram est actuellement hors de prix. je t'ai fait évaluer une approche asymétrique, mais c'est déconseillé. Que peut-on … [19 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Check uncore, governor, THP settings
+- bash — Check swap, memory sysctls and zram
+- bash — Read swap settings and biggest swap users
+- bash — Measure memory bandwidth under three placements
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/numa-segregation.md`
+- bash — Commit the RAM section
+
+**Synthèse produite :**
+
+⏵ La RAM est chère : je regarde ce qui est récupérable gratuitement avant de recommander un achat
 
 ## 3. Travail accompli
 
@@ -303,7 +350,7 @@ Deux portes ont été franchies et sont commitées (`a9f4b40`) :
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py` | 1 | 2 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-reparti-moteur.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs` | 0 | 2 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/numa-segregation.md` | 1 | 2 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/numa-segregation.md` | 1 | 3 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-modele-moteur.md` | 1 | 0 |
 
 ### Sous-agents lancés
@@ -354,7 +401,7 @@ Deux portes ont été franchies et sont commitées (`a9f4b40`) :
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 222 autres
+- … et 227 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -509,4 +556,5 @@ Deux portes ont été franchies et sont commitées (`a9f4b40`) :
 - docs/numa-segregation : la ségrégation NUMA proposée, mesurée plutôt que raisonnée  Réponse à une proposition de station bi-Xeon avec topologie asymétrique stri
 - Le modèle produit ici tourne dans Drave et se découpe — les deux portes sont tenues  Porte d'exécution : un Qwen3-MoE entraîné ici (4 couches, 8 experts, top-2,
 - docs/numa-segregation §11 : la carte 4xNVMe et l'AMD, chiffrées avant achat du reste  Le placement proposé est juste (array sur le nœud des GPU, OS/affichage is
+- docs/numa-segregation §12 : quoi faire de la RAM quand elle est hors de prix  Trois réponses, dans l'ordre où elles paient, et toutes mesurées :  1. RÉCUPÉRER C
 

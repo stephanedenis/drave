@@ -321,3 +321,102 @@ CUDA, et le déport se décide sur la VRAM libre des Quadro. Une carte AMD ne pe
 donc servir qu'à **l'affichage** — ce qui est exactement l'usage proposé, et c'est
 utile : c'est ce qui rend au calcul la VRAM et les cycles que le bureau prend
 aujourd'hui. Aucune capacité de calcul n'est perdue en la déplaçant.
+
+---
+
+## 12. La RAM est hors de prix : quoi faire à la place
+
+> DDR4 ECC en fin de vie de plateforme, prix du neuf dissuasifs. La question
+> devient : que peut-on récupérer, économiser ou remplacer, sans acheter de RAM ?
+
+### 12.1 Ce qui est déjà perdu, et qui ne coûte rien à reprendre
+
+**26 Go sont en swap, sur le disque dur.** Relevé aujourd'hui : `Swap: 62 Gi
+total, 26 Gi utilisé`, et le swap est sur `sda` (**246 Mo/s** mesuré). Toute page
+touchée là coûte des centaines de microsecondes. Le dépôt avait déjà croisé ce
+fantôme pendant les travaux Kimi-K3 (« VmSwap 28,5 Go » relevé alors que le
+moteur affirmait « pas de swap »).
+
+- `swapoff -a && swapon -a` ramène ces pages en RAM (103 Go disponibles, donc
+  l'opération passe) ;
+- quand l'array arrive, **le swap va sur le NVMe, jamais sur `sda`** ;
+- `vm.swappiness` est déjà à 10, `vm.overcommit_memory` à 1 : les réglages ne
+  sont pas le problème, le support l'est.
+
+**La bande passante mémoire, entrelacée — mais elle ne se transfère pas à la
+charge.** Trois mesures du banc du moteur (64 Mo lus) :
+
+| placement | débit |
+|---|---:|
+| sans liaison (16 fils) | 20,4 Go/s |
+| lié au nœud 0 (10 fils) | 22,4 Go/s (**+10 %**) |
+| **entrelacé sur les deux nœuds** (20 fils) | **23,8 Go/s (+17 %)** |
+
+Ces +17 % sont visibles **au banc**, pas sur la charge : l'A/B du § 7 donne
+**−0,9 %** pour la même configuration sur une passe réelle. C'est la règle du
+dépôt — *un banc qui ne ressemble pas à la charge ne décide pas du placement* —
+et elle joue ici contre l'optimisation gratuite.
+
+**Ce qui est déjà réglé** : gouverneur `performance`, THP `always`, `mmap` par
+défaut. Il ne reste, côté gratuit, que la **fréquence de l'uncore** (le ring
+plafonne la bande passante sur Haswell-EP ; MSR `0x620`, à mettre au maximum —
+le noyau n'expose pas `intel_uncore_frequency` ici, il faut `msr-tools` et root).
+
+### 12.2 Le substitut de RAM, c'est le disque — et il est déjà commandé
+
+C'est le point qui rend l'achat de RAM inutile pour l'usage principal :
+
+| | RAM aujourd'hui | array 4×NVMe (commandé) |
+|---|---:|---:|
+| bande passante | 20,4 Go/s *(mesuré)* | **6 à 8 Go/s** *(attendu)* |
+| capacité | 125 Go (dont ~100 en cache) | **1 To** |
+| lire 206,58 Gio (passe K3) | impossible à garder | **~30 s** |
+
+La passe Kimi-K3 lit 206,58 Gio dont **57,93 Gio de dense, lus une fois** et
+148,65 Gio d'experts relus à chaque jeton. Le dépôt a mesuré que **la page cache
+ne retient pas le dense** d'une passe à l'autre (1 516 430 puis 1 522 584 ms) :
+compter sur la RAM pour ça ne marche pas. Un array à 7 Go/s lit ces 58 Go en
+**8 secondes** — le problème disparaît au lieu d'être résolu.
+
+Et le corollaire du programme : **un modèle routé n'a pas besoin d'être en RAM
+pour être gros.** Mesuré sur le prototype : 2,3 M poids lus par jeton pour
+7,58 M stockés, soit **3,35× de paramètres pour la même lecture**. La RAM cesse
+d'être le facteur limitant dès que le modèle est creux en lecture.
+
+### 12.3 Réduire ce qui DOIT tenir en RAM
+
+Le cache KV est le seul poste qui grandit avec l'usage, et il est déjà chiffré
+par le dépôt :
+
+| réglage | coût en qualité | gain en RAM |
+|---|---|---|
+| KV int8, 512 jetons | **+1,5 % de perplexité** | 2× |
+| KV int8, 8 192 jetons | **+3,0 %** | 2× |
+| KV int4 | +364 % → inutilisable | 4× |
+| **KV paginé à la demande** | mesuré, contexte 1 M | **0,03 Go au lieu de 25,77 Go** |
+
+À l'inverse, deux pistes mesurées **perdantes** qu'il ne faut pas rouvrir :
+`DRAVE_EXPERTS_RAM` (+4 % à 4 Go, +21 % à 32 Go) et le cache d'experts en VRAM
+tel quel (+6 %, verdict « ne pas activer »). La VRAM reste utile — 32 Go à
+84,9 Go/s, 4× la RAM — mais pour le KV et les projections, pas comme cache
+d'experts générique.
+
+### 12.4 Si l'on achète quand même : quoi, exactement
+
+1. **4 DIMM par socket (un par canal) est la seule configuration qui double la
+   bande passante** — et elle double la capacité si l'on prend 4×32 Go. C'est le
+   seul achat qui attaque le facteur limitant mesuré (2 canaux sur 4 vides,
+   confirmé par EDAC).
+2. **2×64 Go par socket ne double que la capacité**, pas la bande passante — et
+   peut exiger des LRDIMM selon la carte mère.
+3. **Attention au dérating** : sur Haswell-EP, 2 DIMM par canal fait tomber la
+   fréquence (1866 au lieu de 2133). Un DIMM par canal tient la fréquence
+   maximale : c'est un argument de plus pour 4 DIMM plutôt que 8.
+4. **Plateforme en fin de vie = marché de l'occasion serveur.** Les RDIMM DDR4
+   ECC déclassés coûtent une fraction du neuf. Vérifier la QVL de la carte mère,
+   ne pas mélanger les rangs dans un canal, et garder les 4 DIMM identiques.
+5. **L'ordre des dépenses** que ces mesures dictent : array NVMe (déjà commandé)
+   → 4 DIMM par socket **seulement si** une charge réelle reste limitée par la
+   mémoire → rien d'autre. Acheter de la RAM pour faire tenir un modèle de 1,5 To
+   est perdu d'avance sur une machine de 125 Go (c'est la définition de la niche
+   du projet).

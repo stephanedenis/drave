@@ -6267,3 +6267,124 @@ The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/numa-segregation.m
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && wc -l docs/numa-segregation.md && git add docs/numa-segregation.md && git commit -q -m \"docs/numa-segregation §11 : la carte 4xNVMe et l'AMD, chiffrées avant achat du reste\n\nLe placement proposé est juste (array sur le nœud des GP … [1391 caractères tronqués]`
+
+  ```
+323 docs/numa-segregation.md
+42ea1ae docs/numa-segregation §11 : la carte 4xNVMe et l'AMD, chiffrées avant achat du reste
+  ```
+
+### 🤖 Assistant
+
+⏵ Analyse terminée et ajoutée au document (§11) — voici l'essentiel
+
+## Le plan est bon sur le placement, mais trois contraintes mordent avant lui
+
+J'ai ajouté une section au document (`docs/numa-segregation.md` §11, commit `42ea1ae`). Ce qui est juste d'abord : **l'array sur le nœud des GPU, l'OS/affichage isolés de l'autre côté, la RAM symétrique** — c'est exactement ce que les mesures recommandaient. Et les P320 annoncent 2 200 Mo/s, soit ~5× le NVMe actuel (mesuré **1,6 Go/s**) et ~9× le disque dur (**246 Mo/s**).
+
+### 1. Les lignes PCIe — c'est là que ça coince
+
+Le Xeon E5-2687W v3 donne **40 lignes PCIe 3.0 par socket**. Relevé à l'instant sur le nœud 0 :
+
+| périphérique | liaison | max |
+|---|---|---|
+| Quadro RTX 5000 (`03:00.0`) | **x16** (2,5 → 5,0 GT/s selon la charge) | x16 Gen3 |
+| Quadro RTX 5000 (`04:00.0`) | **x16** (2,5 → 8,0 GT/s) | x16 Gen3 |
+| NVMe système (`02:00.0`, MAP1602) | x4 Gen3 | x4 Gen4 |
+
+**36 lignes sur 40 sont déjà prises.** Une carte 4×NVMe x16 en demande 16 de plus : **52**. Il faudra choisir, et ce choix se fait au BIOS :
+
+- **GPU en x8 + carte en x16** : l'array est complet, mais chaque GPU perd la moitié de sa bande passante hôte (le dépôt a mesuré **6,5 Go/s en x8**) — et c'est ce trafic qui porte le miroir du cache KV, donc le « 22,16 → 3,29 ms/jeton ».
+- **GPU en x16 + carte en x4** : les 4 SSD partagent ~3,9 Go/s, soit **le débit d'un seul**. L'array ne sert à rien.
+
+Deux vérifications à faire **avant** de tout démonter : la **bifurcation `x4x4x4x4`** du slot choisi (les cartes passives l'exigent ; sans elle, **un seul SSD apparaît**), et que ce slot est bien câblé au **CPU** — derrière le PCH, c'est du x4 Gen2 partagé, ~2 Go/s pour les quatre. Et c'est le slot qui décide du nœud : si le seul x16 libre est câblé au CPU 1, l'array sera sur le nœud 1, pas avec les GPU.
+
+### 2. Les canaux mémoire — la moitié est vide
+
+EDAC le dit sans ambiguïté : **2 DIMM par socket, sur un contrôleur à 4 canaux**. Deux canaux sur quatre sont vides, et la bande passante mesurée aujourd'hui le confirme : **20,4 Go/s** (64 Mo, 16 threads) — un ordre de grandeur de dual-channel.
+
+Donc « je maintiens 2×32 + 2×32 » = **la moitié de la bande passante mémoire de la machine**, dans le régime même que le placement NUMA ne rattrape pas (§3 : forcer un socket coûte 8 à 19 %). Passer à **4 DIMM par socket** doublerait à peu près cette bande passante. C'est probablement le meilleur gain par dollar de toute la liste, et il n'est pas dans le plan.
+
+### 3. Capacité — 1 To ne contient pas K3
+
+4 × 256 Go = 1 To brut. État du NVMe actuel (828 Go, **97 % plein**) : V4-Flash **341 Go** ✅, gpt-oss-120b **63 Go** ✅ — mais **Kimi-K3 fait 1,5 To** (et il n'en reste que **5 shards sur 32**, 228 Go, sur le disque). L'array est un excellent support pour **un** modèle de classe 350-950 Go ; pour K3 entier il faut 2 To ou un étalement array + disque dur.
+
+### Ce que ça peut rapporter, et ce qu'il faudra mesurer
+
+4 × 2 200 Mo/s = 8,8 Go/s théoriques, plafonnés par le lien x16 Gen3 (~7,9) et par les contrôleurs **DRAM-less** : attendre **6 à 8 Go/s** est raisonnable. La passe K3 (206,58 Gio) passe de 26,5 min à **~30 s** — mais le moteur n'obtient que **133 Mio/s là où le disque dur plafonne à 205**, donc **le motif d'accès coûte 35 %** et un array ne corrige pas un motif. Trois mesures le diront : `dd iflag=direct` par SSD puis sur l'array, une passe en **JBOD** et en **RAID0** (le moteur lit par `mmap` : pour qu'un *seul* fichier soit lu par les 4 SSD, il faut un stripe), et la relecture des largeurs de liaison **sous charge** — au repos les Quadro annoncent 2,5 GT/s alors qu'elles montent à 5,0 et 8,0.
+
+Enfin, la carte AMD : le moteur n'a **aucun noyau AMD** (`gpu.rs` compile du PTX), elle ne peut donc servir qu'à l'affichage — ce qui est précisément l'usage proposé, et c'est utile (VRAM et cycles rendus au calcul). Aucune capacité n'est perdue.
+
+
+## Tour 7
+
+### 👤 Utilisateur
+
+le ram est actuellement hors de prix. je t'ai fait évaluer une approche asymétrique, mais c'est déconseillé. Que peut-on faire pour le ram.
+
+### 🤖 Assistant
+
+⏵ La RAM est chère : je regarde ce qui est récupérable gratuitement avant de recommander un achat
+
+- **bash** `{"command": "echo \"=== uncore (fréquence du ring, plafond de bande passante sur Haswell-EP) ===\"; for u in /sys/devices/system/cpu/intel_uncore_frequency/uncore*/; do [ -d \"$u\" ] && echo \"$(basename $u) : actuel $(cat $u/current_freq_khz 2>/dev/null) kHz · min $(cat $u/min_freq_khz 2>/dev/null) … [650 caractères tronqués]`
+
+  ```
+=== uncore (fréquence du ring, plafond de bande passante sur Haswell-EP) ===
+=== gouverneur CPU ===
+performance
+passive
+=== THP ===
+[always] madvise never
+=== fréquence mémoire (EDAC ne la donne pas ; /proc) ===
+cpu MHz		: 3194.584
+cpu MHz		: 3193.797
+cpu family	: 6
+  ```
+
+- **bash** `{"command": "swapon --show 2>/dev/null; echo \"=== usage ===\"; free -h | head -3; echo \"=== réglages noyau ===\"; for k in vm.swappiness vm.overcommit_memory vm.vfs_cache_pressure vm.dirty_ratio vm.zone_reclaim_mode; do echo -n \"$k = \"; sysctl -n $k 2>/dev/null; done; echo \"=== zram ? ===\"; ls … [191 caractères tronqués]`
+
+  ```
+=== usage ===
+               total        used        free      shared  buff/cache   available
+Mem:           125Gi        22Gi        23Gi        13Gi        94Gi       103Gi
+Swap:           62Gi        26Gi        36Gi
+=== réglages noyau ===
+vm.swappiness = vm.overcommit_memory = vm.vfs_cache_pressure = vm.dirty_ratio = vm.zone_reclaim_mode = === zram ? ===
+=== vmstat : activité swap ===
+ 4  0 27365108 24511916 24 99180156 57  345 21557  5123 13742   2 14  1 84  1  0  0
+ 1  0 27365108 24525248 24 99179124  0    0     0     0 2977 7741  2  0 97  0  0  0
+ 1  0 27365108 24530140 24 99179124  0    0     0   200 2665 6437  2  1 97  0  0  0
+  ```
+
+- **bash** `{"command": "for f in swappiness vfs_cache_pressure zone_reclaim_mode overcommit_memory; do echo -n \"vm.$f = \"; cat /proc/sys/vm/$f 2>/dev/null || echo \"?\"; done; echo \"=== qui est en swap (VmSwap) ===\"; for p in /proc/[0-9]*; do s=$(grep -m1 VmSwap $p/status 2>/dev/null | awk '{print $2}'); c … [208 caractères tronqués]`
+
+  ```
+vm.swappiness = 10
+vm.vfs_cache_pressure = 50
+vm.zone_reclaim_mode = 0
+vm.overcommit_memory = 1
+=== qui est en swap (VmSwap) ===
+574976 ko  node-MainThread (pid 2062778)
+556112 ko  xdg-desktop-por (pid 4024)
+389228 ko  plasma-discover (pid 27261)
+310548 ko  node-MainThread (pid 11117)
+306636 ko  plasmashell (pid 3770)
+219984 ko  DiscoverNotifie (pid 3964)
+162212 ko  python3 (pid 2241)
+145680 ko  Xorg.bin (pid 2411)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf\necho -n \"sans liaison (20 fils)      : \"; timeout 600 $D $M --threads 16 2>&1 | grep -oE \"bande passante mémoire mesurée : [0-9.]+ Go/s\" | head -1\necho -n \"n … [447 caractères tronqués]`
+
+  ```
+sans liaison (20 fils)      : bande passante mémoire mesurée : 20.4 Go/s
+nœud 0 lié (10 fils)        : bande passante mémoire mesurée : 22.4 Go/s
+entrelacé 2 nœuds (20 fils) : bande passante mémoire mesurée : 23.8 Go/s
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/numa-segregation.md", "new_string": "### 11.5 La carte AMD\n\nLe moteur n'a **aucun noyau AMD** : `drave-core/src/gpu.rs` compile du PTX pour\nCUDA, et le déport se décide sur la VRAM libre des Quadro. Une carte AMD ne peut\ndonc se … [5694 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/numa-segregation.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/numa-segregation.md && git commit -q -m \"docs/numa-segregation §12 : quoi faire de la RAM quand elle est hors de prix\n\nTrois réponses, dans l'ordre où elles paient, et toutes mesurées :\n\n1. RÉCUPÉRER CE QUI EST DÉJÀ … [1407 caractères tronqués]`
