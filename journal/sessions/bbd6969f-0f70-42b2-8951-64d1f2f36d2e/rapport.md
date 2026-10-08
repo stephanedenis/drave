@@ -5,12 +5,12 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 222.0 h |
+| Durée | 222.5 h |
 | Tours | 205 |
-| Messages | 9596 |
-| Appels d'outils | 9018 |
+| Messages | 9630 |
+| Appels d'outils | 9050 |
 | Fichiers touchés | 220 |
-| Commandes | 7683 |
+| Commandes | 7714 |
 | Sous-agents | 32 |
 | Commits | 706 |
 | Compactages de contexte | 13 |
@@ -10520,7 +10520,7 @@ La couche 0 a une séparation **nulle** (+0,001) : le même texte dans deux lang
 
 ### Tour 205 — <goal_round> Objective: "Faire de Drave l'instrument d'observation et de répartition des gros modèles, en gardant les de … [1304 caractères tronqués]
 
-*31 appels d'outils.* Actions notables :
+*63 appels d'outils.* Actions notables :
 
 - bash — Check workspace state before resuming
 - bash — Launch byte decomposition passes
@@ -10536,11 +10536,11 @@ La couche 0 a une séparation **nulle** (+0,001) : le même texte dans deux lang
 - bash — Fix loop and rebuild
 - bash — Read K3 plain pass call site
 - bash — Read end of K3 pass block
-- … et 17 autres
+- … et 49 autres
 
 **Synthèse produite :**
 
-⏵ **Portes vertes. Je commite et je lance la mesure « une moitié de modèle » pour remplacer l'extrapolation par une mesure.**
+⏵ **PREUVE : les normes passent de ×100 à ×1,003 une fois l'échelle appliquée. Nos lecteurs l'ignorent depuis toujours. Je quantifie l'impact sur le résultat publié.**
 
 ## 3. Travail accompli
 
@@ -10846,7 +10846,7 @@ La couche 0 a une séparation **nulle** (+0,001) : le même texte dans deux lang
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 7643 autres
+- … et 7674 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10974,7 +10974,7 @@ La couche 0 a une séparation **nulle** (+0,001) : le même texte dans deux lang
 
 ## 5. Erreurs rencontrées
 
-401 sorties en erreur ou divergentes. Les premières :
+403 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '

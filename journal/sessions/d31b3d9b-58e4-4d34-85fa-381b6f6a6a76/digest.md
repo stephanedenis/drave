@@ -1,0 +1,3055 @@
+# Session DSH — relecture
+
+- identifiant : `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76`
+- dossier : `/home/stephane/Data13TB/stephane/GitHub/Qtrinet`
+- créée : 2026-10-08 09:11:35
+- agent : standard
+
+
+## Tour 1
+
+### 👤 Utilisateur
+
+où en est-on
+
+### 👤 Utilisateur
+
+Current runtime context. This snapshot supersedes earlier runtime-context snapshots.
+
+Current DSH file policy: danger-full-access. The DSH file sandbox does not restrict file modifications by available operations.
+
+Approval prompts are disabled in this session: actions that require approval are rejected automatically — do not request sandbox escalation (do not set `sandbox_permissions`).
+
+### 👤 Utilisateur
+
+<system-reminder>
+A skill is a reusable set of task-specific instructions. The following skills are available in this session:
+
+<available_skills>
+- `microsoft-foundry`: Deploy, evaluate, fine-tune, and manage Foundry agents end-to-end with azd: hosted agent scaffold/run/deploy, prompt agent create, batch eval, continuous eval, prompt optimizer, Agent Optimizer scaffold, agent.yaml, dataset curation from traces, model fine-tuning (SFT/DPO/RFT). USE FOR: azd ai agent, azd provision/deploy, deploy agent, hosted agent, create agent, add tool to agent, invoke agent, evaluate agent, continuous eval, continuous monitoring, agent CI/CD, optimize prompt, improve prom...
+</available_skills>
+
+If the user names a skill, or the task clearly matches a skill's description, call the `skill` tool with the exact skill name before taking task actions. Load all applicable skills, then follow their full instructions. This catalog contains summaries only; do not infer or follow a skill's instructions until it has been loaded.
+A user may also invoke a skill directly; its <skill_content> block then appears in this conversation. Follow it, and do not call the `skill` tool again for that skill.
+</system-reminder>
+
+### 🤖 Assistant
+
+⏵ Inspection de l'état du dépôt Qtrinet pour faire le point
+
+Je regarde l'état du dépôt (git, fichiers récents, docs de suivi).
+
+- **bash** `{"command": "git status --short --branch 2>&1 | head -50; echo \"---LOG---\"; git log --oneline -20 2>&1", "description": "Show git status and recent commits"}`
+
+  ```
+## master
+ M journal/README.md
+ M journal/sessions/MANIFEST.md
+ M journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md
+ M journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/rapport.md
+ M tools/premiere_couche_semantique.py
+?? tools/trace_gpu.py
+---LOG---
+7d32b4f Déclare DRAVE_K3_RELAIS_ENTREE et DRAVE_K3_RELAIS_SORTIE dans VARS_LUES
+3c2b542 Chantier 3 : un nœud = une plage de couches, et la porte est TENUE au bit près
+6f62aec §11 : la loi des octets (79,0 + 31,9·T Gio) validée sur trois points — et le critère du chantier 2 est impossible
+9eb9732 Le corpus complet confirme : la bande sémantique 10–15 ne bouge pas quand le corpus double
+8b232d0 Premier résultat du cycle rapide : la première couche sémantique est dans la bande 10–15
+372385d premiere_couche_semantique : chemin numpy rapide (vérifié identique au lent) et cache
+f655a8b Le cycle rapide : l'article 1 de l'UDHR dans 399 langues, et pourquoi le modèle n'est pas le bon levier
+6df6de4 §10 : le palier NVMe donne −8,8 %, la prédiction était de −16,3 %
+d1cb6b5 Feuille de route : le regroupement par expert EXISTE, l'axe 1 devient un axe de LOT
+abebe58 §9 : le plafond du disque est 205 Mio/s, la passe en obtient 133
+3
+… [861 caractères tronqués]
+  ```
+
+- **bash** `{"command": "ls -la 2>&1 | head -60", "description": "List top-level files"}`
+
+  ```
+total 308
+drwxr-xr-x. 1 stephane stephane    612  7 oct 18:16 .
+drwxr-xr-x. 1 stephane stephane   2374  3 oct 10:09 ..
+drwxr-xr-x. 1 stephane stephane     40 25 sep 15:38 bench
+drwxr-xr-x. 1 stephane stephane     56 30 sep 12:20 colab
+drwxr-xr-x. 1 stephane stephane     96  1 oct 06:58 data
+drwxr-xr-x. 1 stephane stephane   1130  5 oct 13:47 docs
+drwxr-xr-x. 1 stephane stephane     82 28 sep 11:58 drave-core
+drwxr-xr-x. 1 stephane stephane    164  8 oct 09:11 .git
+-rw-r--r--. 1 stephane stephane    399 30 sep 10:01 .gitignore
+drwxr-xr-x. 1 stephane stephane     34 27 sep 11:39 journal
+drwxr-xr-x. 1 stephane stephane     88 25 sep 17:13 models
+drwxr-xr-x. 1 stephane stephane    114 25 sep 15:24 __pycache__
+-rw-r--r--. 1 stephane stephane   4992 25 sep 10:54 Qtrinet-bootstrap.md
+-rw-------. 1 stephane stephane  36518  2 oct 10:21 README.md
+drwxr-xr-x. 1 stephane stephane   4256  7 oct 18:22 reports
+-rw-------. 1 stephane stephane 120322  5 oct 16:21 REPRISE.md
+-rw-------. 1 stephane stephane   8566 30 sep 08:44 run_8bit_perfection.py
+-rw-------. 1 stephane stephane  10507 30 sep 08:44 run_clusters.py
+-rw-------. 1 stephane stephane  12507 30 sep 08:44 run_cpu.py
+-rw-------. 1 stephan
+… [708 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && wc -l journal/sessions/MANIFEST.md journal/README.md journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/rapport.md tools/trace_gpu.py 2>&1; echo \"---DIFFSTAT---\"; g … [83 caractères tronqués]`
+
+  ```
+55 journal/sessions/MANIFEST.md
+      54 journal/README.md
+  161134 journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md
+   11703 journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/rapport.md
+     197 tools/trace_gpu.py
+  173143 total
+---DIFFSTAT---
+ journal/README.md                                  |   2 +-
+ journal/sessions/MANIFEST.md                       |   4 +-
+ .../bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md | 766 +++++++++++++++++++++
+ .../rapport.md                                     |  18 +-
+ tools/premiere_couche_semantique.py                |  30 +-
+ 5 files changed, 801 insertions(+), 19 deletions(-)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -lat reports 2>&1 | head -30; echo \"---SPRINTS---\"; ls -lat sprints 2>&1 | head -20", "description": "List most recent reports and sprints"}`
+
+  ```
+total 1256
+-rw-r--r--. 1 stephane stephane  24096  7 oct 20:29 rapport-passe-k3-disque.md
+-rw-r--r--. 1 stephane stephane  12913  7 oct 19:34 rapport-cycle-rapide.md
+drwxr-xr-x. 1 stephane stephane   4256  7 oct 18:22 .
+drwxr-xr-x. 1 stephane stephane    612  7 oct 18:16 ..
+-rw-r--r--. 1 stephane stephane 302658  7 oct 14:03 rapport-toutes-langues.md
+-rw-------. 1 stephane stephane  36740  6 oct 04:44 recapitulatif.md
+-rw-r--r--. 1 stephane stephane  21771  6 oct 04:43 rapport-pont-generatif.md
+-rw-r--r--. 1 stephane stephane   6425  6 oct 04:42 rapport-plateau-semantique.md
+-rw-r--r--. 1 stephane stephane  18223  5 oct 12:52 rapport-pont-semantique.md
+-rw-r--r--. 1 stephane stephane   4424  5 oct 08:02 rapport-morcellement-experts.md
+-rw-r--r--. 1 stephane stephane   4211  4 oct 10:43 rapport-cache-experts-vram.md
+-rw-------. 1 stephane stephane   5941  3 oct 14:26 rapport-prefill-par-experts.md
+-rw-------. 1 stephane stephane   6080  3 oct 11:51 rapport-reutilisation-experts.md
+-rw-------. 1 stephane stephane   5096  3 oct 11:50 rapport-budget-kimi-k3.md
+-rw-------. 1 stephane stephane   6772  3 oct 11:04 rapport-gpu-tandem-nvlink.md
+-rw-------. 1 stephane stephane   8224  3 oct 
+… [2803 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/MANIFEST.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/MANIFEST.md</path>
+<type>file</type>
+<content>
+1: # Sessions DSH archivées
+2: 
+3: Régénéré par `tools/archive_sessions.py`. Le digest est versionnable ; la
+4: trace brute (`session.jsonl.zstd`) reste sur disque et n'est pas suivie par git.
+5: 
+6: | Session | Début | Trace | Digest | Tours | Messages | Outils | Erreurs | Compactages |
+7: |---|---|---|---|---|---|---|---|---|
+8: | `11b2d312` | 2026-10-01 02:56 | 0.5 Mo | 82 Ko | 1 | 42 | 60 | 0 | 0 |
+9: | `13446299` | 2026-10-01 01:07 | 0.5 Mo | 84 Ko | 1 | 50 | 68 | 0 | 0 |
+10: | `15fd322f` | 2026-09-30 12:00 | 0.6 Mo | 66 Ko | 1 | 57 | 67 | 0 | 0 |
+11: | `1820cf6b` | 2026-10-02 19:36 | 0.3 Mo | 30 Ko | 1 | 23 | 21 | 0 | 0 |
+12: | `18b8879c` | 2026-10-02 15:12 | 0.4 Mo | 78 Ko | 1 | 33 | 55 | 3 | 0 |
+13: | `18c3f6d0` | 2026-10-01 05:26 | 0.3 Mo | 51 Ko | 1 | 26 | 38 | 0 | 0 |
+14: | `22bcae27` | 2026-09-28 14:45 | 14.8 Mo | 1398 Ko | 54 | 1250 | 1227 | 19 | 4 |
+15: | `27c99b10` | 2026-09-25 19:50 | 1.0 Mo | 61 Ko | 1 | 57 | 54 | 1 | 0 |
+16: | `2c2a6595` | 2026-10-02 15:11 | 0.4 Mo | 66 Ko | 1 | 29 | 44 | 0 | 0 |
+17: | `31f26a6e` | 2026-10-02 19:48 | 0.9 Mo | 171 K
+… [2924 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff journal/README.md journal/sessions/MANIFEST.md journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/rapport.md 2>&1 | head -120", "description": "Show diff of journal metadata files"}`
+
+  ```
+diff --git a/journal/README.md b/journal/README.md
+index fad9d58..cc0903a 100644
+--- a/journal/README.md
++++ b/journal/README.md
+@@ -41,7 +41,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
+ | `8e04c99a` | Tu es VÉRIFICATEUR de documentation | 2026-09-30 18:07 | 0.2 h | 1 | 85 | 0 | 0 | [rapport](sessions/8e04c99a-8ba1-4675-9f80-fa3338449b17/rapport.md) |
+ | `aa5f9fc5` | Tu es vérificateur de documentation | 2026-09-30 15:07 | 0.2 h | 1 | 100 | 1 | 0 | [rapport](sessions/aa5f9fc5-9450-4118-b65f-e8b99a28519d/rapport.md) |
+ | `b13a6032` | Tu travailles dans le dépôt | 2026-10-02 15:03 | 0.1 h | 1 | 43 | 0 | 0 | [rapport](sessions/b13a6032-4f62-4e86-aa1f-03864a455c83/rapport.md) |
+-| `bbd6969f` | Continue avec REPRISE.md | 2026-09-28 14:46 | 210.5 h | 204 | 8713 | 212 | 679 | [rapport](sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/rapport.md) |
++| `bbd6969f` | Continue avec REPRISE.md | 2026-09-28 14:46 | 222.5 h | 205 | 9050 | 220 | 706 | [rapport](sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/rapport.md) |
+ | `bcfe0b97` | Tu es relecteur ADVERSARIAL dans | 2026-09-30 12:20 | 0.3 h | 1 | 110 | 0 | 0 | [rapport](sessions/bcfe0b97-1795-4610-8e8b-b598ca1ba6cb/ra
+… [4375 caractères tronqués]
+  ```
+
+- **get_goal** `{}`
+
+  ```
+{"goal":null}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff tools/premiere_couche_semantique.py 2>&1; echo \"=== trace_gpu head ===\"; head -40 tools/trace_gpu.py", "description": "Diff tool changes and inspect new script"}`
+
+  ```
+diff --git a/tools/premiere_couche_semantique.py b/tools/premiere_couche_semantique.py
+index 0248f4a..15d0203 100644
+--- a/tools/premiere_couche_semantique.py
++++ b/tools/premiere_couche_semantique.py
+@@ -76,7 +76,7 @@ def decode(buf, n):
+     return idx, val, 3*n
+ 
+ 
+-def cache(dossier, pool, sortie):
++def cache(dossier, pool, sortie, echelle=True):
+     """Lit tout un dossier une fois et garde les vecteurs réduits.
+ 
+     24 couches × ~60 positions par trace, réduites à 24 vecteurs : le corpus
+@@ -98,7 +98,7 @@ def cache(dossier, pool, sortie):
+     donnees, langues, couches = {}, [], None
+     for f in sorted(glob.glob(os.path.join(dossier, "*.drvf"))):
+         L = os.path.basename(f)[:-5]
+-        r = lire(f, pool)
++        r = lire(f, pool, echelle)
+         if r:
+             donnees[L] = r; langues.append(L)
+             couches = sorted(r) if couches is None else couches
+@@ -111,8 +111,19 @@ def cache(dossier, pool, sortie):
+     return donnees
+ 
+ 
+-def lire(chemin, pool):
+-    """{couche: vecteur} — paires ENTRELACÉES (cf. flux_codec.decoder)."""
++def lire(chemin, pool, echelle=True):
++    """{couche: vecteur} — paires ENTRELACÉES (cf. flux_codec.decoder).
++
++    L'ÉCHELL
+… [4023 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -120 REPRISE.md", "description": "Read head of REPRISE.md status file"}`
+
+  ```
+# Reprise — état du projet et mode d'emploi pour une nouvelle session
+
+> Rédigé à la fin d'une session longue. Tout ce qui suit est **mesuré**, pas
+> déduit. Les valeurs de perplexité sont des **références de non-régression** :
+> si une modification les change, c'est qu'elle a changé le calcul.
+>
+> **Nom** : le projet s'appelle **Drave** (binaire `drave`, paquet `drave-core`,
+> variables `DRAVE_*`, histoire du renommage dans `docs/histoire.md`). Le dossier
+> de travail, lui, s'appelle encore `Qtrinet` — les chemins ci-dessous sont ceux
+> qui existent.
+
+---
+
+## 1. En une phrase
+
+`drave-core` est un moteur d'inférence Rust (~13 758 lignes, `std` seul) qui
+charge les GGUF **en place** (aucune copie, aucune requantification), exécute les
+projections soit en listes d'événements, soit en produit scalaire dense, gère les
+MoE, tient une conversation, et déporte au GPU ce qui y gagne. Il fait tourner du
+0,5 B au 120 B sur le CPU de cette machine.
+
+```bash
+cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo build --release
+./target/release/drave ../models/Qwen2.5-0.5B-Q8_0.gguf \
+    --infer --chat --flux --prompt "Explique le ciel bleu en une phrase." \
+    --n 64 --ctx 5
+… [5338 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -150 journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md", "description": "Read tail of latest session digest"}`
+
+  ```
+```
+
+### 🤖 Assistant
+
+⏵ **En transformers 5, `AutoModel` rend directement `Qwen2Model` (pas de `.model`). Je corrige le diagnostic.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 /home/stephane/gpu-env/bin/python - <<'PY' 2>&1 | grep -v \"it/s\\]\"\nimport torch, numpy as np\nfrom transformers import AutoModel, AutoTokenizer\ntok = AutoTokenizer.from_pretrained('Qwen/Qwen2.5-0.5B')\nm = AutoModel. … [824 caractères tronqués]`
+
+  ```
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+type Qwen2Model · eps 1e-06 · sqrt(h) 29.93
+  c     ‖hs[c]‖   ‖norm(hs)‖  rms(poids)
+  0      0.5296       4.2874      0.0962
+  1      3.6784      19.2276      0.7525
+  2      7.4217      28.6599      0.9849
+  3      7.2495      30.6551      1.0654
+  4      7.9342      40.0922      1.1467
+  ```
+
+### 🤖 Assistant
+
+⏵ **Piste sérieuse : le moteur QUANTIFIE `hn` avec une échelle par enregistrement. Je lis `quant_scratch` et `ecrire`.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fn quant_scratch\" -A 30 drave-core/src/model.rs | he
+… [6457 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^## \\*\\*ÉTAT\\|^## ÉTAT\\|^# \" REPRISE.md | tail -40", "description": "List state sections in REPRISE.md"}`
+
+  ```
+1286:# 2. si /tmp a été vidé, régénérer le corpus et les identifiants (§2)
+1288:# 3. gpt-oss : le chiffre de contrôle de cette session (≈ 45 s de chargement,
+1289:#    ~100 s pour 510 jetons). SANS `DRAVE_GPU` : la variable ouvre le pilote, et le
+1290:#    moteur déporte alors tout seul les projections Q8_0 de plus de 8 Mo — le
+1291:#    chiffre devient 15,1667 (même calcul, ordre de sommation du noyau GPU).
+1294:#    (15,1757 avant le correctif de routage du 02/10 ; DRAVE_GPU=1 donne un écart
+1295:#    du même ordre que les 0,06 % mesurés alors — non re-mesuré depuis.)
+1297:# 4. puis §6.b : la rotation ne bascule plus qu'au-delà de 4 × la longueur
+1298:#    d'origine déclarée (16 384 pour gpt-oss) — mesuré, voir docs/contexte-long.md §5.quater
+1300:# 5. le calcul réparti (§6bis) : deux nœuds, 12 couches chacun, et le même chiffre
+1301:#    des deux côtés. Le nœud moteur doit être lancé AVANT le pilote.
+1308:# attendu : « écart : 0.00e0 » en mode dense (le transport f32 est exact)
+1310:# 6. le contrôle qui attrape les fautes de banc : `tools/pair_factice.py` parle le
+1311:#    protocole sans charger de modèle et DIT ce qu'il reçoit (tailles, modes,
+1312:#    réglages). C'est lui qu
+… [1883 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== lecteurs DRVF ===\"; grep -rln \"DRVF\" tools/ src/ 2>/dev/null | head -30; echo \"=== processus en cours ===\"; ps -eo pid,etime,pcpu,comm,args --sort=-pcpu 2>/dev/null | grep -Ev \"grep|ps -eo\" | head -12; echo \"=== da … [74 caractères tronqués]`
+
+  ```
+=== lecteurs DRVF ===
+tools/__pycache__/trace_compacite.cpython-313.pyc
+tools/__pycache__/flux_codec.cpython-313.pyc
+tools/__pycache__/granularite_flux.cpython-313.pyc
+tools/__pycache__/applique_pont.cpython-313.pyc
+tools/__pycache__/compare_professeurs.cpython-313.pyc
+tools/__pycache__/invariance_unites.cpython-313.pyc
+tools/__pycache__/profil_couches.cpython-313.pyc
+tools/__pycache__/premiere_couche_semantique.cpython-313.pyc
+tools/diff_flux.py
+tools/profil_flux.py
+tools/flux_codec.py
+tools/analyse_flux.py
+tools/trace_compacite.py
+tools/granularite_flux.py
+tools/invariance_semantique.py
+tools/approximabilite_bloc.py
+tools/plateau_multilingue.py
+tools/lecture_plateau.py
+tools/cancellation_langue.py
+tools/contrastif_hors_echantillon.py
+tools/pont_recurrent.py
+tools/applique_pont.py
+tools/sonde_pont.py
+tools/pont_fidele.py
+tools/pont_reservoir.py
+tools/cache_pont.py
+tools/compare_professeurs.py
+tools/sous_ensemble_actif.py
+tools/invariance_unites.py
+tools/profil_couches.py
+=== processus en cours ===
+    PID     ELAPSED %CPU COMMAND         COMMAND
+2062778  2-23:15:37 42.8 node-MainThread node /home/stephane/.local/share/../bin/dsh --profile dsh-tui
+3302400       00:41 38.6 node-Main
+… [3024 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^#\\{2,3\\} \" REPRISE.md | tail -50; echo \"=== TAILLE ===\"; wc -l REPRISE.md", "description": "List REPRISE.md section headings"}`
+
+  ```
+14:## 1. En une phrase
+31:## 2. Références de non-régression
+655:## 2bis. La cible a changé (03/10) : Kimi-K3, et le tokenizer kimi
+678:## 3. Ce qui est implémenté et vérifié
+712:## 4. Pièges de l'environnement (tous rencontrés)
+729:## 5. Règles de méthode (chacune a coûté une erreur)
+772:## 6. Les huit chantiers : où ils en sont
+785:### Mesures du tour « huit chantiers » (toutes commitées)
+815:### Ce qu'il faut faire ensuite, dans l'ordre
+863:### Les variables d'environnement, et leurs pièges
+894:## 6bis. Session « Drave » — le calcul réparti tient debout
+949:### Session « autonomie jusqu'à 15h » — ce qui s'ajoute (12h → 15h)
+989:### Créneau 15h07 → 18h00 : le mode 4, et la frontière KV confirmée
+1018:### Créneau 17h41 → 19h41 (sprint 1) : le top-k GPU, du banc au moteur
+1091:### Sprint 2 (19h49 → 21h49) : la chaîne du top-k fusionnée en UN noyau
+1130:### Sprint 7 (05h39 → 07h39) : clôture de la nuit — le livelock du contexte
+1153:### Ce que la nuit a établi (sprints 2 à 6)
+1165:### La frontière du cache KV, mesurée en entier
+1189:### Le mode lot gagne sur les deux tableaux
+1195:### Hygiène et garde-fous ajoutés depuis (13h)
+1229:### Les prochains chantiers, dans l'ordre
+1249:## 7
+… [1448 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -lat docs | head -25; echo \"=== git log dates ===\"; git log -8 --format=\"%h %ad %s\" --date=format:\"%d/%m %H:%M\"", "description": "List recent docs and commit dates"}`
+
+  ```
+total 644
+drwxr-xr-x. 1 stephane stephane    612  7 oct 18:16 ..
+-rw-r--r--. 1 stephane stephane   7235  7 oct 17:23 roadmap-drave.md
+-rw-------. 1 stephane stephane 142853  6 oct 23:51 glossaire.md
+-rw-r--r--. 1 stephane stephane   6198  5 oct 14:55 note-un-pont-par-professeur.md
+drwxr-xr-x. 1 stephane stephane   1130  5 oct 13:47 .
+-rw-r--r--. 1 stephane stephane   5247  5 oct 11:47 note-cout-professeur.md
+-rw-r--r--. 1 stephane stephane   7730  5 oct 10:19 note-regle-contrastive.md
+-rw-r--r--. 1 stephane stephane  15275  5 oct 10:15 note-cancellation-evenementielle.md
+-rw-r--r--. 1 stephane stephane   4532  5 oct 09:08 note-ingestion-corpus.md
+-rw-r--r--. 1 stephane stephane   3928  5 oct 08:52 note-corpus-panini.md
+-rw-------. 1 stephane stephane  36973  5 oct 07:03 verification-kimi-k3.md
+-rw-------. 1 stephane stephane  19350  3 oct 18:05 architecture-kimi-k3.md
+-rw-------. 1 stephane stephane  11947  3 oct 14:27 plan-kimi-k3.md
+-rw-------. 1 stephane stephane  65929  3 oct 10:24 plan-deepseek41-complet.md
+-rw-------. 1 stephane stephane  17286  3 oct 09:15 vision.md
+-rw-r--r--. 1 stephane stephane  12731  3 oct 01:20 format-flux.md
+-rw-------. 1 stephane stephane  33243  2 o
+… [1413 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/roadmap-drave.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/roadmap-drave.md</path>
+<type>file</type>
+<content>
+1: # Où Drave est à son meilleur — le roadmap, et pourquoi c'est cette niche-là
+2: 
+3: > Écrit après la mesure du 05/10. Chaque chiffre de ce document vient d'un relevé
+4: > du dépôt ; ceux qui viennent d'ailleurs sont marqués.
+5: >
+6: > **MISE À JOUR DU 07/10 — LA PASSE K3 EST LIÉE AU DISQUE, ET RIEN D'AUTRE.**
+7: > `reports/rapport-passe-k3-disque.md` mesure la passe complète : **1 587 s**,
+8: > dont **206,58 Gio lus** à **133 Mio/s**, avec **`sda` (disque DUR de 10,9 To)
+9: > occupé 87,6 % du temps** et le CPU à **21 %**. La vérification est exacte à
+10: > 0,1 % : 206,58 Gio à 133 Mio/s = 1 589 s.
+11: >
+12: > Deux conséquences pour ce document :
+13: > 1. **L'axe 1 est mal nommé.** Le regroupement des jetons par expert **est déjà
+14: >    implémenté** (`MoeK3::avant_lot`, `kimi_k3.rs:787`) — le point qui le donnait
+15: >    pour absent est périmé. Il ne paie pas à 4 jetons parce qu'il n'y a rien à
+16: >    regrouper ; le levier n'est pas du code, c'est la **TAILLE DU LOT**.
+17: > 2. **L'axe 3 change de statut.** Il n'est plus « le seul moyen de descendre
+18: >    sous la
+… [6491 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -60 reports/rapport-cycle-rapide.md", "description": "Read the rapid-cycle report intro"}`
+
+  ```
+# Le cycle rapide : l'article 1 de l'UDHR dans 399 langues
+
+> 07/10. Réponse à une demande précise : *« peut-on refaire nos exercices sur un
+> très petit modèle afin de faire des cycles de tests plus rapides entre les
+> couches d'entrée et première couche sémantique ? »*
+>
+> La réponse est oui, mais **le modèle n'est pas le bon levier** — et c'est
+> mesuré, pas supposé.
+
+---
+
+## 1. D'où venait la lenteur, chiffres en main
+
+| poste | ce qui coûtait |
+|---|---|
+| traçage d'une entrée | **~16 s** sur Wikipedia (un article entier, `ctx 1024`, 9 couches) |
+| taille d'une entrée | **~575 positions** (l'article entier, moyenné) |
+| ajustement d'un pont | **5 à 10 min** sur 1 446 entrées × 575 positions, parce que la Grammaire `AᵀA` coûte `n·d²` avec `d = 1 792` |
+
+Le coût d'un ajustement est en `n · d²` : **n** = nombre total de positions,
+**d** = 2 × dimension cachée. Les deux termes sont attaquables, mais pas au même
+prix :
+
+- **diviser `d` par 1,5** (un modèle de 576 cachés au lieu de 896) gagne **×2,4** ;
+- **diviser `n` par 20** (une phrase au lieu d'un article) gagne **×20**.
+
+C'est le second qui décide, et il ne demande aucun modèle nouveau.
+
+## 2. Le corpus : l'article 1, pas l'ar
+… [1332 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== flux_codec: ech ===\"; grep -n \"ech\\|echelle\\|scale\" tools/flux_codec.py | head -30; echo; echo \"=== lecteurs avec ech ===\"; for f in tools/*.py; do n=$(grep -c \"ech\" \"$f\" 2>/dev/null); if [ \"$n\" != \"0\" ]; th … [90 caractères tronqués]`
+
+  ```
+=== flux_codec: ech ===
+12:    liste     u16 couche · u32 position · u32 n_actifs · f32 echelle
+40:    """listes : itérable de (couche, position, echelle, [(indice, valeur)])."""
+42:    for couche, pos, echelle, actifs in listes:
+43:        out += LISTE.pack(couche, pos, len(actifs), echelle)
+71:        couche, pos, n, echelle = LISTE.unpack_from(blob, off)
+75:        echelles = None
+80:            echelles = []
+82:                echelles.append(struct.unpack_from("<e", blob, off)[0])   # f16 natif
+93:                actifs.append((i, q * echelles[i // 32]))
+110:        listes.append((couche, pos, echelle, actifs))
+
+=== lecteurs avec ech ===
+tools/analyse_flux.py: 9
+tools/applique_pont.py: 4
+tools/approximabilite_bloc.py: 8
+tools/cache_pont.py: 4
+tools/calibre_modes.py: 1
+tools/cancellation_langue.py: 4
+tools/clusters_moe.py: 2
+tools/compare_professeurs.py: 4
+tools/contrastif_hors_echantillon.py: 6
+tools/convertir_clusters.py: 1
+tools/diff_flux.py: 2
+tools/engram_reference.py: 1
+tools/flux_codec.py: 10
+tools/grand_et_entree.py: 1
+tools/granularite_flux.py: 9
+tools/invariance_semantique.py: 7
+tools/invariance_unites.py: 4
+tools/lecture_locale.py: 1
+tools/lecture_plateau.py: 7
+tools
+… [598 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls tools/*.py | wc -l; echo \"=== derniers fichiers modifiés tools ===\"; ls -lat tools/*.py | head -12", "description": "Count tools and show recently modified"}`
+
+  ```
+104
+=== derniers fichiers modifiés tools ===
+-rw-r--r--. 1 stephane stephane 10777  7 oct 21:14 tools/premiere_couche_semantique.py
+-rw-r--r--. 1 stephane stephane  9355  7 oct 21:12 tools/trace_gpu.py
+-rw-r--r--. 1 stephane stephane  5340  7 oct 18:17 tools/extrait_article1.py
+-rw-r--r--. 1 stephane stephane  6064  7 oct 18:15 tools/calibre_modes.py
+-rw-------. 1 stephane stephane 12529  7 oct 14:02 tools/localite_couches.py
+-rw-------. 1 stephane stephane  7645  7 oct 13:05 tools/stabilite_directions.py
+-rw-------. 1 stephane stephane 10311  7 oct 12:43 tools/discriminant_transfert.py
+-rw-------. 1 stephane stephane  7304  7 oct 11:58 tools/energie_du_contenu.py
+-rw-r--r--. 1 stephane stephane 10023  7 oct 10:56 tools/profil_couches.py
+-rw-------. 1 stephane stephane  5538  7 oct 10:56 tools/rapport_du_pont.py
+-rw-------. 1 stephane stephane  4815  7 oct 10:32 tools/ancre_professeur.py
+-rw-------. 1 stephane stephane 11887  7 oct 02:34 tools/renforcement_directions.py
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for f in tools/profil_couches.py tools/invariance_unites.py tools/localite_couches.py tools/flux_codec.py; do echo \"=== $f ===\"; grep -n \"ech\" \"$f\" | head -8; done", "description": "Inspect scale handling in key readers"}`
+
+  ```
+=== tools/profil_couches.py ===
+66:            pos, n, ech = struct.unpack("<IIf", f.read(12))
+=== tools/invariance_unites.py ===
+18:        ech = None
+21:            ech = [struct.unpack("<e", f.read(2))[0] for _ in range(nb)]
+32:                out.append((i, v*(ech[i//bloc] if ech else 1.0)))
+51:            pos, n, ech = struct.unpack("<IIf", f.read(12))
+=== tools/localite_couches.py ===
+60:            pos, n, ech = struct.unpack("<IIf", f.read(12))
+=== tools/flux_codec.py ===
+12:    liste     u16 couche · u32 position · u32 n_actifs · f32 echelle
+40:    """listes : itérable de (couche, position, echelle, [(indice, valeur)])."""
+42:    for couche, pos, echelle, actifs in listes:
+43:        out += LISTE.pack(couche, pos, len(actifs), echelle)
+71:        couche, pos, n, echelle = LISTE.unpack_from(blob, off)
+75:        echelles = None
+80:            echelles = []
+82:                echelles.append(struct.unpack_from("<e", blob, off)[0])   # f16 natif
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"echelle\" tools/localite_couches.py tools/profil_couches.py tools/invariance_unites.py 2>/dev/null | head -20", "description": "Search echelle usage in readers"}`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "ls -lat /tmp/pcs_* /tmp/*.npz 2>/dev/null | head -20; echo \"=== /tmp dossiers recents ===\"; ls -lat /tmp 2>/dev/null | head -25", "description": "Check temp caches from recent runs"}`
+
+  ```
+-rw-r--r--. 1 stephane stephane        739  7 oct 19:33 /tmp/pcs_final.derniere.csv
+-rw-r--r--. 1 stephane stephane   11578669  7 oct 19:33 /tmp/pcs_a2.derniere.npz
+-rw-r--r--. 1 stephane stephane   11578669  7 oct 19:33 /tmp/pcs_a2.derniere.npz
+-rw-r--r--. 1 stephane stephane        739  7 oct 19:31 /tmp/pcs_final.moyenne.csv
+-rw-r--r--. 1 stephane stephane   29657362  7 oct 19:30 /tmp/pcs_a2.moyenne.npz
+-rw-r--r--. 1 stephane stephane   29657362  7 oct 19:30 /tmp/pcs_a2.moyenne.npz
+-rw-r--r--. 1 stephane stephane   11611290  7 oct 19:05 /tmp/pcs_a1.derniere.npz
+-rw-r--r--. 1 stephane stephane   11611290  7 oct 19:05 /tmp/pcs_a1.derniere.npz
+-rw-r--r--. 1 stephane stephane   26829195  7 oct 19:02 /tmp/pcs_a1.moyenne.npz
+-rw-r--r--. 1 stephane stephane   26829195  7 oct 19:02 /tmp/pcs_a1.moyenne.npz
+-rw-r--r--. 1 stephane stephane  182822069  7 oct 11:49 /tmp/cache_6l_test.npz
+-rw-r--r--. 1 stephane stephane  347112339  7 oct 11:48 /tmp/cache_6l_train.npz
+-rw-r--r--. 1 stephane stephane  529934562  7 oct 11:43 /tmp/cache_6l.npz
+-rw-r--r--. 1 stephane stephane 1834865780  7 oct 05:52 /tmp/cache_vf_test.npz
+-rw-r--r--. 1 stephane stephane 1747348718  7 oct 05:21 /tmp/cache_vf_train.n
+… [2224 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -60 tools/trace_gpu.py", "description": "Read end of new GPU tracer script"}`
+
+  ```
+f"et il faut passer en DRVF v3 (échelles) avant de s'en servir.")
+    if opt("--calibrer", ""):
+        calibre(sortie, opt("--calibrer", ""), noms)
+    return 0
+
+
+def calibre(gpu_dir, moteur_dir, noms=None):
+    """Le cosinus, couche par couche, entre les traces GPU et celles du moteur.
+
+    On ne compare que les langues présentes des deux côtés, et on rapporte le
+    minimum autant que la moyenne : une moyenne bonne peut cacher une couche
+    fausse.
+    """
+    import struct
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from premiere_couche_semantique import lire
+    communs = sorted({os.path.basename(f)[:-5] for f in glob.glob(os.path.join(gpu_dir, "*.drvf"))}
+                     & {os.path.basename(f)[:-5] for f in glob.glob(os.path.join(moteur_dir, "*.drvf"))})
+    print(f"\n# CALIBRATION GPU contre MOTEUR — {len(communs)} langues communes")
+    if not communs:
+        print("# aucune langue commune : rien à calibrer")
+        return
+    # Le nombre de couches se LIT dans les fichiers, il ne se suppose pas : la
+    # première version bouclait sur 24 en dur et laissait les couches 24 à 27
+    # hors de la calibration d'un modèle qui en a 28.
+    impor
+… [1347 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md; grep -n \"CALIBRATION GPU\\|sans_echelle\\|sans-échelle\\|sans echelle\" \"$D\" | tail -20; echo \"=== v3 / échelles ===\"; grep -n \"DRVF v3\\|passer en DRVF v3\" \" … [88 caractères tronqués]`
+
+  ```
+=== v3 / échelles ===
+26884:⏵ Trace DRVF v3 : valeurs i8 + échelle f16 par bloc (l'étude déléguée annonce −63 % ; je vérifie).
+27144:ae85043 DRVF v3 : −66 % de trace au total, pour +0,074 % de perplexité
+27751:**Le dépôt a bougé pendant l'audit** : HEAD est passé de `a0687b9` (12:20) à `ae85043` (12:30, DRVF v3) puis `a9fff24` (12:36, « deux bugs de protocole »), et `model.rs` porte à 12:40 des modifications non commitées. Le binaire du dépôt a été **reconstruit à 12:25:26** en pleine session : mes premières exécutions n'étaient pas reproductibles. J'ai donc reconstruit trois binaires épinglés dans `/tmp` (`cda3162` = l'ancien « v3 » à en-tête 39 o, `ae85043`, `a9fff24`) et **chaque preuve ci-dessous cite le binaire utilisé**. Aucun fichier du dépôt n'a été touché.
+27766:- `drave-core/src/model.rs:2789` (HEAD `a9fff24`) : `if listes.get(..) { servies += 1 } else if listes_blocs.contains_key(..) { manquantes += 1 }` — **il n'y a plus de `else` simple**. Avant `ae85043` c'était `else { manquantes += 1 }` : c'est une régression du commit DRVF v3.
+[stderr]
+grep: journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md: binary file matches
+grep: journal/sessions/bbd6969f-0f70-42b
+… [50 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"bande\\|10–15\\|10-15\" reports/rapport-cycle-rapide.md | head -20; echo \"=== fin du rapport cycle rapide ===\"; tail -40 reports/rapport-cycle-rapide.md", "description": "Check rapid-cycle report conclusions"}`
+
+  ```
+138:## 7. Le premier résultat : la première couche sémantique est dans la bande 10–15
+172:| moyenne | **13** | 10–15 | couche 4 |
+173:| dernière position | **10** | 10–15 | couche 4 |
+177:même** : une bande sémantique entre les couches **10 et 15** sur 24, soit
+187:parce qu'on l'a choisie, c'est **la bande 10–15** parce qu'on l'a mesurée — et le
+236:### 8.2 Ce que la bande 10–15 dit, et ce qu'elle ne dit pas
+245:1. **Le plateau est large** (10–15, soit six couches sur 24) : rien ne distingue
+=== fin du rapport cycle rapide ===
+
+**Pooling DERNIÈRE POSITION** — pic couche 10 (+0,0397 = 0,8025 − 0,7628) :
+
+| couche | 0 | 1 | 4 | 8 | 9 | **10** | 11 | 12 | 13 | 14 | 15 | 23 |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| séparation | +0,000 | +0,016 | +0,030 | +0,019 | +0,023 | **+0,040** | +0,028 | +0,036 | +0,038 | +0,035 | +0,031 | +0,024 |
+
+### 8.2 Ce que la bande 10–15 dit, et ce qu'elle ne dit pas
+
+**Elle dit** où la représentation cesse d'être une transcription de surface : la
+couche 0 a une séparation de **+0,001** (nulle — le même texte dans deux langues
+ne se ressemble pas plus que deux textes différents), la couche 13 a **+0,034**.
+Et les couches **10 à
+… [1416 caractères tronqués]
+  ```
+
+- **bash** `{"command": "tail -25 /tmp/moitie47.log 2>&1; echo \"=== sonde k3 moteur log (fin) ===\"; tail -12 /tmp/sonde_k3_moteur.log 2>&1", "description": "Read half-model measurement logs"}`
+
+  ```
+# défauts de page majeurs                      0
+# RSS max                                  52.78 Go
+# swap max                                  0.00 Go
+# disque le plus sollicité                   sda
+#    occupé                                  473 s   (85.3%)
+#    occupé, pondéré par les files         12578 s   (2270.4%)
+# couples (couche, jeton)                    188
+# secondes par couple                      2.947 s
+# débit de lecture effectif                367.4 Go/h
+
+# couches mesurées par le moteur              47
+#    chargement (somme)                     69.0 s
+#    calcul (somme)                        394.9 s
+#    calcul par couple                     2.100 s
+# passe annoncée par le moteur             466.4 s
+
+# VERDICT
+#   LE DISQUE. `sda` est occupé 85% du temps et le CPU ne
+#   travaille que 31% : le temps de la passe est le temps de LIRE les
+#   octets au débit du disque. Vérification : 56.5 Go à 0 Mo/s
+#   demandent 0 s, et la passe en a duré 554.
+#   Conséquence : toute réduction d'OCTETS LUS se traduit en temps, et
+#   tout disque supplémentaire aussi. Le calcul, lui, n'est pas la limite.
+# journal brut : /tmp/sonde_k3_p47.csv · sortie moteur : /tmp/sonde_k3_m
+… [830 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -45 reports/rapport-passe-k3-disque.md", "description": "Read K3 disk-pass report conclusion"}`
+
+  ```
+| **B** | 13..25 | repart du relais A |
+| **C** | 0..25 | le monolithe |
+| **comparaison** | couche 25 | **B et C identiques au BIT, 4 jetons, 28 672 octets chacun** |
+
+```
+PORTE TENUE : le découpage ne change pas un bit
+```
+
+**Le découpage de Kimi-K3 est donc déployable.** Là où V4.1 butait sur la `pre`
+reçue, K3 passe : le payload est minuscule et sa composition est connue.
+
+### 12.3 L'économie, et le nombre de nœuds que le critère exige
+
+La loi du §11 — `octets(T) = 79,0 + 31,9·T` Gio — dit exactement ce qu'un
+découpage rapporte. À `N` nœuds à **disques disjoints**, chaque nœud lit
+`octets(T)/N`, et le temps de lecture est ce quotient divisé par 133 Mio/s :
+
+| nœuds | octets par nœud (T=4) | durée de la passe |
+|---:|---:|---:|
+| 1 | 206,6 Gio | 26,5 min |
+| 2 | 103,3 Gio | 13,3 min |
+| **3** | **68,9 Gio** | **8,8 min** |
+| 4 | 51,7 Gio | 6,6 min |
+| **11** | **18,8 Gio** | **2,4 min** |
+
+**Le critère du mandat — « 2,5 min par passe » — demande ONZE nœuds.** À trois
+nœuds on obtient 8,8 min, ce qui est exactement le chiffre que la feuille de
+route annonçait (« une passe de 25 min devient ~8 min à trois nœuds ») : la
+prédiction de la feuille de route est donc confirmée par la me
+… [934 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -a -o \"Objective: \\\"[^\\\"]*\\\"\" journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md | tail -3", "description": "Extract latest session objective text"}`
+
+  ```
+Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa propre version du pont, pas de représentation universelle), boîte noire (on ne lit du professeur que la couche à émuler, jamais sa tête ni ses jetons générés), aucune rétropropagation (A et B aléatoires et gelés, seule la lecture s'ajuste en forme fermée), et chaque affirmation porte sa mesure : fidélité d'entraînement, fidélité de TEST, invariance inter-langue, pire paire, TAILLE du réseau, avec le diagnostic oracle sur les deux panneaux (test hors vivier et validation du même vivier)."
+Objective: "Étendre le pont linguistico-sémantique à TOUTES les langues disponibles dans le corpus UDHR (au-delà des 46 actuelles), puis passer aux GRANDS CORPUS MULTILINGUES (Wikipedia décompressée, œuvres parallèles Gutenberg) pour obtenir des professeurs plus riches et étendre notre modèle. Contraintes inchangées : un seul professeur à la fois (sa p
+… [1361 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '10515,10545p' journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/rapport.md", "description": "Read last tour summary in session report"}`
+
+  ```
+La couche 0 a une séparation **nulle** (+0,001) : le même texte dans deux langues ne se ressemble pas plus que deux textes différents. La couche 13 a **+0,034**, et les couches **10 à 15 forment un plateau**. Cela corrobore `rapport-plateau-semantique.md` — qui donnait 35–42 % sur **10 langues** ; ici 42–62 % sur **398**.
+
+**Trois réserves, et la première est la plus importante** : le pl
+… [429 caractères tronqués]
+
+### Tour 205 — <goal_round> Objective: "Faire de Drave l'instrument d'observation et de répartition des gros modèles, en gardant les de … [1304 caractères tronqués]
+
+*63 appels d'outils.* Actions notables :
+
+- bash — Check workspace state before resuming
+- bash — Launch byte decomposition passes
+- bash — Read K3 passe_complete signature
+- bash — Inspect K3 layer state type
+- bash — Prepare half-model measurement script
+- bash — Read K3 layer loop and pile handling
+- bash — Find passe_complete callers
+- bash — Read the rest of passe_complete
+- bash — Read main dispatch and passe_complete start
+- bash — Refactor passe_complete into passe_plage with relay
+- bash — Find remaining layer loop
+- bash — Fix loop and rebuild
+- bash — Read K3 plain pass call site
+- bash — Read en
+… [253 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== lecteurs qui APPLIQUENT l'échelle (motif *ech) ===\"; grep -rn \"\\* *ech\\|\\*ech\\|ech *\\*\\|v\\*echelle\\|\\* *echelle\" tools/*.py | grep -v \"^tools/premiere_couche_semantique\" | head -20", "description": "Find read … [33 caractères tronqués]`
+
+  ```
+=== lecteurs qui APPLIQUENT l'échelle (motif *ech) ===
+tools/analyse_flux.py:50:            paires.append((i, v * ech))
+tools/analyse_flux.py:80:                           [(i, v * echelle if version != 3 else v) for i, v in paires]))
+tools/approximabilite_bloc.py:75:                ligne[i] = val * ech
+tools/flux_codec.py:93:                actifs.append((i, q * echelles[i // 32]))
+tools/invariance_semantique.py:74:                    v[i] = val * ech
+tools/lecture_plateau.py:85:                        if i < hidden: v[i] = val * ech
+tools/plateau_multilingue.py:88:                            v[i] = val * ech
+tools/pont_generatif.py:295:                    A = G - mu_cont*ech*Cc + ride*len(X)*np.eye(n)
+tools/profil_flux.py:31:                actifs.append((i, v * echelle))
+tools/trace_compacite.py:168:                    e = v - q * ech_bloc
+tools/trace_compacite.py:371:          f"({dec(100.0 * ech / actifs, 4)} %) — coût {nb(2 * ech)} octets")
+tools/v41_experts_reference.py:132:        poids = poids / poids.sum() * echelle
+tools/verifier_v41_engram.py:73:        return vals * ech
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --stat 7d32b4f 2>&1 | head -20; echo \"=== état des portes ===\"; ls -la tools/portes.sh 2>/dev/null; ls -lat /tmp/portes*.log 2>/dev/null | head -5", "description": "Inspect last commit and gates status"}`
+
+  ```
+commit 7d32b4f2081159f52743c9d569277d8c01cf66b0
+Author: Stéphane <stephane@localhost>
+Date:   Wed Oct 7 20:45:20 2026 -0400
+
+    Déclare DRAVE_K3_RELAIS_ENTREE et DRAVE_K3_RELAIS_SORTIE dans VARS_LUES
+    
+    La porte « cargo test » a divergé dès l'ajout du relais : le test
+    les_vars_lues_sont_completes compare les DRAVE_* lues dans le source à une liste
+    déclarée, et refuse une variable lue mais non déclarée — « une variable lue mais
+    absente d'ici rendrait le message muet ». La discipline du dépôt a donc attrapé
+    mon ajout avant moi. Les deux variables sont déclarées, 77 tests verts, et
+    tools/portes.sh rapide rend « toutes les portes sont vertes » (exit 0).
+
+ drave-core/src/main.rs                             |   2 +-
+ journal/sessions/MANIFEST.md                       |   2 +-
+ .../bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md | 114 +++++++++++++++++++++
+ .../rapport.md                                     |  19 ++--
+ 4 files changed, 126 insertions(+), 11 deletions(-)
+=== état des portes ===
+-rwx--x--x. 1 stephane stephane 18779  3 oct 10:54 tools/portes.sh
+-rw-r--r--. 1 stephane stephane 1702  7 oct 20:40 /tmp/portes_final2.log
+-rw-r--r--. 1 stephane stephane 
+… [245 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== parseurs d'en-tête d'enregistrement <IIf ===\"; grep -rn 'unpack(\"<IIf\"' tools/*.py; echo; echo \"=== fichiers .drvf lus directement ===\"; grep -rln '\\.drvf' tools/*.py | head -30", "description": "Locate raw DRVF reco … [21 caractères tronqués]`
+
+  ```
+=== parseurs d'en-tête d'enregistrement <IIf ===
+tools/analyse_flux.py:77:            pos, n, echelle = struct.unpack("<IIf", f.read(12))
+tools/applique_pont.py:50:            pos, n, ech = struct.unpack("<IIf", f.read(12))
+tools/approximabilite_bloc.py:60:            pos, n, ech = struct.unpack("<IIf", f.read(12))
+tools/cache_pont.py:48:            pos, n, ech = struct.unpack("<IIf", f.read(12))
+tools/calibre_modes.py:53:            pos, n, ech = struct.unpack("<IIf", f.read(12))
+tools/cancellation_langue.py:66:            pos, n, ech = struct.unpack("<IIf", f.read(12))
+tools/compare_professeurs.py:53:            pos, n, ech = struct.unpack("<IIf", f.read(12))
+tools/contrastif_hors_echantillon.py:63:            pos, n, ech = struct.unpack("<IIf", f.read(12))
+tools/diff_flux.py:27:            pos, n, echelle = struct.unpack("<IIf", f.read(12))
+tools/invariance_semantique.py:60:            pos, n, ech = struct.unpack("<IIf", f.read(12))
+tools/invariance_unites.py:51:            pos, n, ech = struct.unpack("<IIf", f.read(12))
+tools/lecture_plateau.py:58:            pos, n, ech = struct.unpack("<IIf", f.read(12))
+tools/localite_couches.py:60:            pos, n, ech = struct.unpack("<I
+… [1409 caractères tronqués]
+  ```
+
+- **bash** `{"command": "tail -6 /tmp/portes_final2.log 2>&1; echo \"=== nb outils affectés (parseurs .drvf sans échelle) ===\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for f in $(grep -rl 'unpack(\"<IIf\"' tools/*.py); do if ! grep -q \"\\* *ech\\|\\* *echelle\\|ech *\\*\\|echelle *\\*\" \"$f\";  … [112 caractères tronqués]`
+
+  ```
+mode 2 — listes par blocs        3.65e-2  ✅  (réf 61.9920 / deux nœuds 64.2535)
+  mode 3 — lot dense f32           0.00e0  ✅  (réf 60.8135 / deux nœuds 60.8135)
+  mode 4 — lot en listes           4.45e-3  ✅  (réf 60.8135 / deux nœuds 60.5427)
+
+toutes les portes sont vertes
+FIN exit=0
+=== nb outils affectés (parseurs .drvf sans échelle) ===
+applique_pont.py cache_pont.py calibre_modes.py cancellation_langue.py compare_professeurs.py contrastif_hors_echantillon.py diff_flux.py invariance_unites.py localite_couches.py pont_fidele.py pont_recurrent.py pont_reservoir.py premiere_couche_semantique.py profil_couches.py sonde_pont.py sous_ensemble_actif.py
+  ```
+
+### 🤖 Assistant
+
+⏵ Point complet sur l'état du projet Drave
+
+## Où on en est — 08/10 09:12
+
+**Dernière activité** : hier soir 21h14 (session `bbd6969f`, 222,5 h, archivée dans le journal). Dépôt sur `7d32b4f`, **aucun job en cours**, portes vertes (`portes.sh` exit 0, 77 tests cargo).
+
+### Les trois chantiers du mandat en cours
+
+| chantier | état | ce qui le dit |
+|---|---|---|
+| **1. Écart froid/chaud de la passe K3** | ✅ **clos** | La mesure « une moitié de modèle » (47 couches) tranche : `sda` occupé **85,3 %**, CPU **31 %**, **367 Go/h**, 554 s. Le temps de la passe est le temps de **lire les octets**. Rien d'autre. |
+| **2. Regroupement par expert / critère « 4 jetons < 10 min »** | ❌ **impossible à un nœud** | Le regroupement **existait déjà** (`MoeK3::avant_lot`) — le levier est la **taille du lot**, pas le code. Et la loi des octets `79,0 + 31,9·T Gio` (validée sur 3 points, §11) interdit le critère : 4 jetons = 206,6 Gio à 133 Mio/s. |
+| **3. Grappe, un nœud = une plage de couches** | ✅ **fait, porte tenue au bit près** | Commit `3c2b542` : 2 plages + monolithe, sorties **identiques au bit**. Mais « 2,5 min/passe » demande **11 nœuds** — c'est une extrapolation, pas une mesure. Transport réseau encore par **fichier**, et la porte n'a été tenue que pour **deux** plages. |
+
+### En chantier, non commité (l'heure finale d'hier)
+
+**Un vrai bug, trouvé par comparaison moteur/GPU** : le moteur quantifie chaque enregistrement DRVF v2 sur 127 niveaux (`round(v/s)`) et range `s` dans l'en-tête… que **les lecteurs du dépôt ignoraient**. Preuve : le rapport de normes passe de **×100 à ×1,003** une fois l'échelle appliquée (cosinus couche 0 : 0,849 → 0,864).
+
+- corrigé **seulement** dans `tools/premiere_couche_semantique.py`, avec `--sans-echelle` pour mesurer l'écart — **non commité** ;
+- **15 autres outils** lisent toujours les entiers ±127 comme des valeurs physiques (`profil_couches`, `localite_couches`, `invariance_unites`, `pont_*`, `cache_pont`, `sonde_pont`, `compare_professeurs`…) ;
+- **l'impact sur le résultat publié n'est pas mesuré** : la « bande sémantique 10–15 » (`rapport-cycle-rapide.md`, commits `8b232d0`/`9eb9732`) a été calculée avec le lecteur bogué, et les caches `/tmp/pcs_*.sans_echelle.npz` n'existent pas → la session s'est arrêtée juste avant.
+
+**Deux autres fichiers en attente** : `tools/trace_gpu.py` (nouveau — traçage du professeur sur GPU dans le format du moteur, calibré hier 21h11 ; sa propre note dit qu'il faut passer en **DRVF v3** pour les échelles par bloc avant de s'en servir à l'échelle) et le journal régénéré (digest +766 lignes).
+
+### La prochaine action, dans l'ordre
+
+1. relancer la bande 10–15 **avec l'échelle** (+ `--sans-echelle` pour chiffrer l'écart) ;
+2. propager le correctif aux 15 lecteurs, puis revérifier ce qui en dépend (invariance, directions §92–95, localité) ;
+3. commiter le tout (correctif + journal + `trace_gpu.py`).
+
+Je lance le point 1 ?
+
+
+## Tour 2
+
+### 👤 Utilisateur
+
+ça fait plusieurs jours qu'on est sur des travaux lourds avec peu de résultats constructifs. Il faut revenir à l'essence de Drave et produire un modèle qui est à son meilleur dans une architecture événementielle facilement distribuable sur les divers types d'unité de traitement et ressources d'une machine et de plusieurs machines en réseau.
+
+### 🤖 Assistant
+
+⏵ Cadrage du retour à l'essentiel : j'inventorie les faits avant de proposer
+
+Compris. Avant de proposer quoi que ce soit, je fais l'inventaire de ce que le dépôt sait **déjà** sur trois points : la parcimonie événementielle, ce qui a été construit côté modèle, et ce que le moteur sait distribuer. Je lance trois inventaires en parallèle et je lis les deux documents fondateurs moi-même.
+
+- **subagent** `{"description": "Inventaire parcimonie événementielle", "prompt": "Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (projet « Drave » : un moteur d'inférence écrit en Rust dans drave-core/, plus ~100 outils d'analyse en Python dans tools/, des rapports dans reports/, des s … [1832 caractères tronqués]`
+- **subagent** `{"description": "Inventaire du travail modèle", "prompt": "Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (projet « Drave » : moteur d'inférence Rust dans drave-core/, outils Python dans tools/, rapports dans reports/, sprints dans sprints/, journal des sessions dans jou … [2358 caractères tronqués]`
+- **subagent** `{"description": "Inventaire capacités de distribution", "prompt": "Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (projet « Drave » : un moteur d'inférence en Rust, drave-core/, qui charge des GGUF en place et fait tourner de gros modèles sur une machine à RAM limitée ;  … [2050 caractères tronqués]`
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/vision.md"}`
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/programme-recherche.md"}`
+
+  ```
+started subagent 850eebf1-88b1-443e-b75e-6f89890b35ec
+  ```
+
+
+  ```
+started subagent 48ec07ab-ec9d-4297-a7bf-d84974667e61
+  ```
+
+
+  ```
+started subagent 482522d1-31f1-43eb-ae9c-a681336404f7
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/vision.md</path>
+<type>file</type>
+<content>
+1: # Drave — la vision
+2: 
+3: > *« Stream of logs »* : le flux des listes. Et, en français d'ici, **la drave** —
+4: > ces billots qu'on confiait à la rivière au printemps, qu'on guidait de
+5: > l'estacade jusqu'à la scierie. Le nom dit exactement ce que fait ce moteur :
+6: > il ne lit pas des matrices, il conduit un flux.
+7: 
+8: Ce document est la **vision** du projet : ce qu'il cherche, pourquoi la
+9: représentation qu'il a choisie change la nature des problèmes, et ce que cela
+10: ouvre sur chaque axe. Il ne remplace pas les rapports — chaque affirmation
+11: mesurée renvoie à celui qui la porte — et il distingue partout ce qui est
+12: **mesuré**, ce qui est **raisonné**, et ce qui est **à faire**.
+13: 
+14: Le projet s'appelait `Qtrinet`, du nom de son origine : un cahier des charges
+15: d'inférence ternaire sur un cluster de cartes Stratix V
+16: (`Qtrinet-bootstrap.md`). Ce cahier des charges reste l'acte de naissance ; le
+17: nom, lui, ne dit plus ce que le projet est devenu. **Drave** le dit.
+18: 
+19: ---
+20: 
+21: ## 1. Le cœur : des listes, pas des matrices
+22: 
+23: Un moteu
+… [17093 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/programme-recherche.md</path>
+<type>file</type>
+<content>
+1: # Programme de recherche — vers une intelligence locale
+2: 
+3: **Objet.** Définir une feuille de route vérifiable vers un système capable
+4: d'apprendre et d'évoluer *localement*, sur du matériel qu'une personne possède,
+5: sans centre de données. Ce document ne promet pas l'AGI : il définit des paliers
+6: **mesurables** et nomme ce qui, aujourd'hui, n'est pas démontré.
+7: 
+8: **Règle du programme.** Chaque affirmation est mesurée, chaque erreur est
+9: consignée. Sept affirmations de ce projet ont déjà été retirées ou corrigées
+10: (encodage ×2,17 retiré pour violation de Kraft, divergence fantôme, tokenizer
+11: non conforme, roofline corrigée, coût du mode liste inversé, 4 bits sans gain).
+12: C'est la méthode, pas un accident : **une trace de recherche qui ne contient pas
+13: ses erreurs ne vaut rien.**
+14: 
+15: ---
+16: 
+17: ## 1. Thèse
+18: 
+19: Une intelligence locale doit être **traçable**, **incrémentale**, **bornée en
+20: énergie** et **capable d'évoluer sans salle machine**. Les piles denses
+21: généralistes optimisent une seule de ces dimensions — le débit
+… [12163 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== mentions spike/LIF/SNN dans le dépôt (hors journal) ===\"; grep -rln \"spik\\|Spik\\|LIF\\b\\|SNN\" --include=\"*.py\" --include=\"*.rs\" --include=\"*.md\" . 2>/dev/null | grep -v \"^./journal\" | head -25; echo; echo \"= … [154 caractères tronqués]`
+
+  ```
+=== mentions spike/LIF/SNN dans le dépôt (hors journal) ===
+./reports/rapport-parcimonie-imposee.md
+./reports/rapport-campagne-parcimonie.md
+./reports/rapport-croisement-push-pull.md
+./reports/rapport-coherence-docs.md
+./reports/rapport-coherence-docs-2.md
+./reports/rapport-coherence-vision.md
+./tools/lecture_locale.py
+./docs/programme-recherche.md
+./docs/comparaison-spiking.md
+./docs/glossaire.md
+./README.md
+
+=== rapports parcimonie ===
+-rw-------. 1 stephane stephane   4652 30 sep 08:44 rapport-campagne-parcimonie.md
+-rw-r--r--. 1 stephane stephane   3269 30 sep 08:44 rapport-cpu-aer.md
+-rw-------. 1 stephane stephane   6479 30 sep 08:44 rapport-parcimonie-imposee.md
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/comparaison-spiking.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/comparaison-spiking.md</path>
+<type>file</type>
+<content>
+1: # SpikeGPT, Spikformer, Spikingformer — ce qu'ils nous apprennent
+2: 
+3: Comparaison des trois architectures neuromorphiques de référence avec la nôtre,
+4: et inventaire des astuces transposables.
+5: 
+6: Le cœur de Drave n'est pas remis en cause par cette comparaison : **router des
+7: flux d'activation sur des grappes de neurones réparties entre composants et
+8: machines** (`docs/vision.md`, axes 2-3) et **lire ces flux pour adapter
+9: l'architecture à la tâche** (§2) restent les deux dimensions structurantes. Le
+10: spike n'est examiné ici que comme **moyen d'obtenir la parcimonie** que nos
+11: modèles quantifiés n'ont pas naturellement.
+12: 
+13: Mesures internes : `reports/rapport-inference.md`,
+14: `reports/rapport-attention-creuse.md`, `reports/rapport-localite-activation.md`,
+15: `reports/bilan-multi-materiel.md`.
+16: 
+17: Sources : [Spikformer](https://ar5iv.labs.arxiv.org/html/2209.15425) (Zhang et
+18: al., ICLR 2023), [SpikeGPT](https://ar5iv.labs.arxiv.org/html/2302.13939) (Zhu
+19: et al., 2023), [Spikingformer](https://ar5iv.labs.arxiv.org/html/2304.1195
+… [8852 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== corpus disponibles ===\"; ls -la data/ 2>/dev/null | head; echo; du -sh data/* 2>/dev/null | head -20; echo \"=== torch/gpu ===\"; /home/stephane/gpu-env/bin/python -c \"import torch;print('torch',torch.__version__,'cuda', … [254 caractères tronqués]`
+
+  ```
+=== corpus disponibles ===
+total 776
+drwxr-xr-x. 1 stephane stephane     96  1 oct 06:58 .
+drwxr-xr-x. 1 stephane stephane    612  7 oct 18:16 ..
+-rw-r--r--. 1 stephane stephane 359041 25 sep 18:02 wikitext2_test.txt
+-rw-r--r--. 1 stephane stephane 398564  1 oct 07:37 wikitext2_test.txt.ids
+-rw-r--r--. 1 stephane stephane  30005 25 sep 17:53 wt2.json
+
+352K	data/wikitext2_test.txt
+392K	data/wikitext2_test.txt.ids
+32K	data/wt2.json
+=== torch/gpu ===
+torch 2.11.0+cu130 cuda True Quadro RTX 5000
+name, memory.total [MiB], memory.used [MiB]
+Quadro RTX 5000, 16384 MiB, 1275 MiB
+Quadro RTX 5000, 16384 MiB, 381 MiB
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -60 reports/rapport-parcimonie-imposee.md; echo \"===== CAMPAGNE =====\"; head -50 reports/rapport-campagne-parcimonie.md", "description": "Read imposed-sparsity and campaign reports"}`
+
+  ```
+# Parcimonie imposée à l'inférence — la frontière mesurée
+
+*Peut-on donner à un modèle **préentraîné** le débit variable d'un réseau à
+décharge, sans rien réentraîner ?* Campagne mesurée sur Qwen2.5-0.5B Q8_0, avec
+deux jeux de 1 024 tokens : **A** pour le réglage, **B** (jamais vu) pour la
+vérification.
+
+Tout est déterministe : mêmes tokens, même perplexité, au chiffre près. Les
+comptes d'événements et les perplexités sont donc exacts ; seule la mesure de
+**temps** est bruitée (la machine tournait sous une charge de 8 à 14).
+
+---
+
+## 1. Pourquoi cette campagne
+
+Le cahier des charges promet un débit **variable** selon ce qui s'active. Nous
+avons mesuré le contraire sur un LLM dense : **0,00 % d'activations nulles**, donc
+un débit constant, et l'argument « on ne paie que ce qui s'active » restait
+théorique. Deux moyens d'imposer la parcimonie à l'inférence, tous deux inspirés
+des neurones à décharge, aucun ne demandant d'entraînement :
+
+- **seuil** : écarter les activations sous une fraction du maximum du vecteur
+  (l'effet du seuil d'un neurone) ;
+- **k-WTA** : ne garder que les k plus grandes (inhibition latérale).
+
+## 2. Le seuil est catastrophique
+
+Jeu de 512 tokens, référence 1
+… [3918 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== scripts qui utilisent torch ===\"; grep -rln \"^import torch\\|^from torch\\|import torch\" tools/*.py *.py 2>/dev/null | head -20; echo; echo \"=== scripts avec un optimiseur/entraînement ===\"; grep -rln \"optim\\.\\|los … [275 caractères tronqués]`
+
+  ```
+=== scripts qui utilisent torch ===
+tools/trace_gpu.py
+
+=== scripts avec un optimiseur/entraînement ===
+
+=== gpu-env ===
+numpy                                    2.4.4
+tokenizers                               0.22.2
+torch                                    2.11.0
+torch_c_dlpack_ext                       0.1.5
+torchaudio                               2.11.0+cu130
+torchcodec                               0.15.0
+torchvision                              0.26.0
+transformers                             5.15.0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== gros corpus sur disque ===\"; for d in /tmp/udhr_xml /tmp/art1* /tmp/wiki* /home/stephane/Data13TB/stephane/GitHub/Qtrinet/models; do [ -e \"$d\" ] && du -sh \"$d\" 2>/dev/null; done; echo; ls -d /tmp/*/ 2>/dev/null | head … [277 caractères tronqués]`
+
+  ```
+=== gros corpus sur disque ===
+618M	/tmp/art1_gpu
+4,0K	/tmp/wiki_analyse.log
+4,0K	/tmp/wiki_analyse.sh
+4,0K	/tmp/wiki_apparie.log
+4,0K	/tmp/wiki_apres.sh
+1,6M	/tmp/wiki_de.jsonl
+4,0K	/tmp/wiki_de.txt
+1,6M	/tmp/wiki_en.jsonl
+4,0K	/tmp/wiki_en.txt
+1,5M	/tmp/wiki_es.jsonl
+4,0K	/tmp/wiki_es.txt
+1,6M	/tmp/wiki_fr.jsonl
+4,0K	/tmp/wiki_fr.txt
+1,6M	/tmp/wiki_it.jsonl
+4,0K	/tmp/wiki_it.txt
+1,4M	/tmp/wiki_lignes_en.txt
+1,4M	/tmp/wiki_lignes_fr.txt
+16K	/tmp/wiki_pont.log
+4,0K	/tmp/wiki_pt.txt
+2,7M	/tmp/wiki_ru.jsonl
+8,0K	/tmp/wikitest_cache.log
+8,0K	/tmp/wiki_test.txt
+8,0K	/tmp/wiki_train.txt
+8,0K	/tmp/wiki_unites.log
+844M	/home/stephane/Data13TB/stephane/GitHub/Qtrinet/models
+
+/tmp/adv/
+/tmp/alt0721_2068253130541681921.dir/
+/tmp/alt0721_5069695069757290032.dir/
+/tmp/alt0721_5363127623948090930.dir/
+/tmp/alt0721_6083820515342465105.dir/
+/tmp/alt0722_114981493572739540.dir/
+/tmp/alt0722_1684396189862637386.dir/
+/tmp/alt0722_2030702176719657362.dir/
+/tmp/alt0722_2545933787021658120.dir/
+/tmp/alt0722_2751217005371760191.dir/
+/tmp/alt0722_4676685756618214134.dir/
+/tmp/alt0722_4836261571067196865.dir/
+/tmp/alt0722_6917390455939835040.dir/
+/tmp/alt0722_7793593057555130421.dir/
+/tmp/art1_gpu/
+/tmp/a
+… [948 caractères tronqués]
+  ```
+
+- **list_agents** `{}`
+
+  ```
+850eebf1-88b1-443e-b75e-6f89890b35ec [running] — Inventaire parcimonie événementielle
+48ec07ab-ec9d-4297-a7bf-d84974667e61 [running] — Inventaire du travail modèle
+482522d1-31f1-43eb-ae9c-a681336404f7 [running] — Inventaire capacités de distribution
+  ```
+
+- **job_list** `{}`
+
+  ```
+(no background jobs)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls reports/ | grep -iE \"croisement|aer|inference|localite-activation|bilan-multi\" ; echo \"=== croisement push/pull (extrait) ===\"; sed -n '1,45p' reports/rapport-croisement-push-pull.md 2>/dev/null", "description": "Read push/pul … [20 caractères tronqués]`
+
+  ```
+bilan-multi-materiel.md
+rapport-cpu-aer.md
+rapport-croisement-push-pull.md
+rapport-inference.md
+rapport-localite-activation.md
+=== croisement push/pull (extrait) ===
+# Croisement push / pull — quand l'architecture événementielle est-elle justifiée ?
+
+Deux façons d'exécuter le même modèle quantifié :
+
+- **push** (notre architecture) : pour chaque source active, on *disperse* ses
+  poids dans un accumulateur (`acc[dest] += x·w`). Le flux est indexé par
+  source, un événement = écart + valeur, 2 octets.
+- **pull** (le noyau dense ordinaire) : pour chaque sortie, on *lit* sa ligne de
+  poids et on fait un produit scalaire. 1 octet par poids, aucune dispersion.
+
+Elles donnent **exactement le même résultat** — vérifié : perplexité 19,2647 au
+chiffre près sur 510 jetons, tokens identiques, en écrivant les deux chemins avec
+le même ordre d'opérations (les sommes entières sont exactes des deux côtés).
+
+> ⚠️ **Corrigé le 27/09** : le tableau de croisement de la section 1 mesurait
+> « push » contre « dense » alors que le drapeau `--dense`, placé en dernier
+> argument, n'était jamais lu (`while i + 1 < args.len()`), et le mode dense
+> sommait des tranches périmées. Les chiffres ci-dessous sont
+… [1017 caractères tronqués]
+  ```
+
+- **bash** `{"command": "du -sh /home/stephane/Data13TB/stephane/corpus/* 2>/dev/null | sort -h | tail -12; echo \"=== HF cache ===\"; du -sh /home/stephane/.cache/huggingface/* 2>/dev/null | head; echo \"=== datasets HF en cache ===\"; ls /home/stephane/.cache/huggingface/hub 2>/dev/null | head -20", "descript … [39 caractères tronqués]`
+
+  ```
+261M	/home/stephane/Data13TB/stephane/corpus/parallele_crime
+988M	/home/stephane/Data13TB/stephane/corpus/parallele_rj
+1,8G	/home/stephane/Data13TB/stephane/corpus/wiki_traces
+12G	/home/stephane/Data13TB/stephane/corpus/wiki_apparie
+21G	/home/stephane/Data13TB/stephane/corpus/udhr
+=== HF cache ===
+6,0G	/home/stephane/.cache/huggingface/hub
+432K	/home/stephane/.cache/huggingface/xet
+=== datasets HF en cache ===
+CACHEDIR.TAG
+models--ggml-org--gemma-3-1b-it-GGUF
+models--Qwen--Qwen2.5-0.5B
+models--Qwen--Qwen3-0.6B
+models--Systran--faster-whisper-large-v3
+  ```
+
+- **list_agents** `{}`
+
+  ```
+850eebf1-88b1-443e-b75e-6f89890b35ec [running] — Inventaire parcimonie événementielle
+48ec07ab-ec9d-4297-a7bf-d84974667e61 [running] — Inventaire du travail modèle
+482522d1-31f1-43eb-ae9c-a681336404f7 [running] — Inventaire capacités de distribution
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== format .ids ===\"; /home/stephane/gpu-env/bin/python - <<'PY'\nimport numpy as np, os\np=\"data/wikitext2_test.txt.ids\"\nb=open(p,'rb').read(16)\nprint(\"taille\", os.path.getsize(p), \"octets · 16 premiers octets\", b.he … [396 caractères tronqués]`
+
+  ```
+=== format .ids ===
+taille 398564 octets · 16 premiers octets 3230312c3433382c31303439382c3130
+<u4 n= 99641 min 741355568 max 960051513 premiers [741421106 741880628 959721521 808528952 825702194 842019884 942879788
+ 959526444]
+<u2 n= 199282 min 11312 max 14649 premiers [12338 11313 13108 11320 12337 14644 11320 12337]
+=== tokenizer dispo ? ===
+porte-tokenizer-kimi.sh
+tokenize_llama
+tokenize_llama.cpp
+tokenizer_kimi
+config.json
+generation_config.json
+merges.txt
+model.safetensors
+tokenizer_config.json
+tokenizer.json
+vocab.json
+  ```
+
+- **list_agents** `{}`
+
+  ```
+850eebf1-88b1-443e-b75e-6f89890b35ec [running] — Inventaire parcimonie événementielle
+48ec07ab-ec9d-4297-a7bf-d84974667e61 [running] — Inventaire du travail modèle
+482522d1-31f1-43eb-ae9c-a681336404f7 [running] — Inventaire capacités de distribution
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== binaire/ternaire dans le moteur ===\"; grep -rn \"ternaire\\|binaire\\|1 bit\\|1bit\" drave-core/src/*.rs | head -15; echo; echo \"=== ops non-GGUF / chemins d'activation ===\"; grep -rn \"fn forward\\b\\|fn forward_lot\\| … [120 caractères tronqués]`
+
+  ```
+=== binaire/ternaire dans le moteur ===
+drave-core/src/clusters.rs:17://! dépendance, et un format binaire maison demanderait un lecteur de plus à
+drave-core/src/clusters.rs:391:        // le binaire, où un seul modèle est ouvert.
+drave-core/src/list.rs:9://!    valeur** (idéal pour le binaire/ternaire).
+drave-core/src/list.rs:10://! 2. `BitmapSign` — un bitmap des non-nuls (1 bit/poids) + un bit de signe par
+drave-core/src/list.rs:12://! 3. `SparseK` — bitmap (1 bit/poids) + k bits par non-nul : les valeurs gardent
+drave-core/src/list.rs:101:    pub mask: Vec<u64>,        // 1 bit par poids
+drave-core/src/list.rs:102:    pub signs: Vec<u64>,       // 1 bit par non-nul, dans l'ordre du bitmap
+drave-core/src/list.rs:149:    pub sign_bits: u64,        // 1 bit par non-nul (signe)
+drave-core/src/list.rs:151:    pub bitmap_bits: u64,      // 1 bit par poids
+drave-core/src/list.rs:155:    /// k = largeur totale en bits par non-nul (1 = signe seul = ternaire/binaire).
+drave-core/src/list.rs:182:/// triée par destination, accompagnée d'un plan de signes (1 bit par événement).
+drave-core/src/list.rs:192:    pub signs: Vec<u64>,        // 1 bit par événement (1 = positif)
+drave-core/src/mai
+… [1058 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/corpus && ls parallele_rj | head -5; echo \"---\"; ls wiki_apparie | head -5; echo \"--- tailles ---\"; du -sh wiki_apparie/* 2>/dev/null | head -5; echo \"--- un fichier ---\"; f=$(ls wiki_apparie/* | head -1); echo \"$f\"; head -c 300 \"$f\"; echo;  … [81 caractères tronqués]`
+
+  ```
+en_01.drvf
+en_02.drvf
+en_03.drvf
+en_04.drvf
+en_05.drvf
+---
+de_Aaliyah.txt
+de_Aarhus.txt
+de_Aaron.txt
+de_ABBA.txt
+de_ABC.txt
+--- tailles ---
+4,0K	wiki_apparie/de_Aaliyah.txt
+4,0K	wiki_apparie/de_Aarhus.txt
+4,0K	wiki_apparie/de_Aaron.txt
+4,0K	wiki_apparie/de_ABBA.txt
+4,0K	wiki_apparie/de_ABC.txt
+--- un fichier ---
+wiki_apparie/de_Aaliyah.txt
+Aaliyah Dana Haughton (* 16. Januar 1979 in Brooklyn, New York City; † 25. August 2001 in Marsh Harbour, Abaco, Bahamas) war eine US-amerikanische R&B-Sängerin und Schauspielerin. Ihren Durchbruch hatte sie mit Try Again, dem Titellied des Films Romeo Must Die, in dem sie die weibliche Hauptrolle
+wiki_apparie/de_Aaliyah.txt: Unicode text, UTF-8 text, with very long lines (2000), with no line terminators
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/corpus/wiki_apparie && ls | sed 's/_.*//' | sort | uniq -c | sort -rn | head; echo \"=== taille en_ ===\"; du -shc en_*.txt 2>/dev/null | tail -1; ls en_*.txt 2>/dev/null | wc -l", "description": "Check English corpus size"}`
+
+  ```
+482 pt
+    482 it
+    482 fr
+    482 es
+    482 en
+    482 de
+      2 traces
+=== taille en_ ===
+1,9M	total
+482
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/corpus && du -sh wiki_apparie/traces* 2>/dev/null; ls wiki_apparie/traces 2>/dev/null | head -3; echo \"=== gros .txt sur le disque (projet + corpus) ===\"; find /home/stephane/Data13TB/stephane/corpus /home/stephane/Data13TB/stephane/GitHub -maxdepth … [234 caractères tronqués]`
+
+  ```
+7,8G	wiki_apparie/traces
+3,7G	wiki_apparie/traces_couches
+de_Aaliyah.drvf
+de_Aarhus.drvf
+de_Aaron.drvf
+=== gros .txt sur le disque (projet + corpus) ===
+=== jsonl > 5M ===
+/home/stephane/Data13TB/stephane/corpus/udhr/unites.jsonl
+  ```
+
+- **bash** `{"command": "timeout 60 find /home/stephane -maxdepth 4 \\( -name \"*.txt\" -o -name \"*.jsonl\" -o -name \"*.json\" -o -name \"*.xml\" -o -name \"*.zst\" -o -name \"*.gz\" -o -name \"*.parquet\" \\) -size +20M -printf \"%s\\t%p\\n\" 2>/dev/null | sort -rn | head -15", "description": "Search for lar … [18 caractères tronqués]`
+
+  ```
+164580201	/home/stephane/Data13TB/stephane/Downloads/Antigravity.tar.gz
+129454441	/home/stephane/Data13TB/stephane/archives/.hash-db.json
+  ```
+
+### 🤖 Assistant
+
+Les corpus texte sont petits (~4 Mo utilisables) mais suffisants pour un premier cycle. Je pose le plan et j'attaque le premier essai : **est-ce que la parcimonie s'entraîne, et à quel prix en qualité ?**
+
+- **create_goal** `{"objective": "Produire un modèle nativement événementiel qui soit à son meilleur dans l'architecture de Drave : parcimonie ENTRAÎNÉE (décharge/LIF ou parcimonie structurée), exécutable en listes d'événements, et découpable en unités de travail autonomes plaçables sur les unités d'une machine (cœurs … [388 caractères tronqués]`
+
+> **Objectif** (create) : Produire un modèle nativement événementiel qui soit à son meilleur dans l'architecture de Drave : parcimonie ENTRAÎNÉE (décharge/LIF ou parcimonie structurée), exécutable en listes d'événements, et découpable en unités de travail autonomes plaçables sur les unités d'une machine (cœurs, GPU, disque) puis sur plusieurs machines en réseau. Chaque affirmation porte sa mesure : qualité contre un jumeau dense à paramètres et budget égaux, densité d'activation R̂, événements et octets par jeton, débit, et mise à l'échelle sur N unités. Livrables : un prototype entraîné et mesuré, sa porte d'exécution dans Drave, et la démonstration de répartition.
+
+
+  ```
+{"goal":{"id":"goal-b5c7212b-5f46-4784-9b76-8d9b5cba23b4","revision":1,"objective":"Produire un modèle nativement événementiel qui soit à son meilleur dans l'architecture de Drave : parcimonie ENTRAÎNÉE (décharge/LIF ou parcimonie structurée), exécutable en listes d'événements, et découpable en unités de travail autonomes plaçables sur les unités d'une machine (cœurs, GPU, disque) puis sur plusieurs machines en réseau. Chaque affirmation porte sa mesure : qualité contre un jumeau dense à paramètres et budget égaux, densité d'activation R̂, événements et octets par jeton, débit, et mise à l'échelle sur N unités. Livrables : un prototype entraîné et mesuré, sa porte d'exécution dans Drave, et la démonstration de répartition.","phase":"active","roundsStarted":0,"maxGoalRounds":40},"activation":"armed"}
+  ```
+
+- **todo_write** `{"todos": [{"content": "Cycle 1 : entraîner un petit modèle à décharge et son jumeau dense sur le même corpus, mesurer qualité (bits/car) contre densité R̂", "status": "in_progress"}, {"content": "Cycle 1 : compter exactement les événements par jeton et projeter le débit (loi push/pull mesurée à 22  … [499 caractères tronqués]`
+
+  ```
+Updated todo list: 4 pending, 1 in progress, 0 completed.
+  ```
+
+- **write** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/essai_decharge.py", "content": "#!/usr/bin/env python3\n\"\"\"essai_decharge.py — la parcimonie ENTRAÎNÉE, mesurée contre un jumeau dense.\n\nPOURQUOI CE BANC. Le dépôt a mesuré deux choses qui se tiennent par la main :\n\n  * un L … [16868 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/essai_decharge.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+### 👤 Utilisateur
+
+Agent 850eebf1-88b1-443e-b75e-6f89890b35ec sent a message:
+RAPPORT — Parcimonie des activations et mode événementiel (Drave). Aucun fichier modifié, aucune compilation lancée. Légende : [M]=mesuré dans le dépôt, [D]=déduit/projeté par l'auteur, [S]=supposé/déclaré sans mesure. Toutes les mesures [M] sont sur 2×Xeon E5-2687W v3, 16 threads (reports/rapport-cpu-aer.md:14).
+
+1. LE MÉCANISME EXACT
+- Un « événement » = une activation quantifiée NON NULLE, poussée vers ses destinations : `SparseVec { idx: Vec<u32>, val: Vec<i32> }` (drave-core/src/engine.rs:29-32) ; en mode listes « une paire EST un événement » (model.rs:4535-4540 ; test list.rs:1591). L'événement ≠ la paire payée : sur un chemin dense (MLA f32, experts IQ déquantifiés, tête, 4 bits), on paie la matrice entière sans construire de liste (reports/rapport-p0-flux.md:29-34).
+- Construction : `quant_scratch(x, levels, thresh, topk, renorm, scratch)` (model.rs:4401-4451). Échelle s = max|x|/levels (4406) ; q = round(v/s) (4428/4446). Si topk>0 → k-WTA : k = round(topk/1000 × dimension), borné [1, dim] (4419-4420) ; seuil = (len−k)-ième plus grande magnitude par `select_nth_unstable_by` (4425) ; on garde |v| ≥ cut ET q ≠ 0 (4426-4429). `topk` est un pour-mille de la DIMENSION, pas un k absolu. Sinon seuil absolu : garder si q ≠ 0 et |q| > thresh×levels (4409, 4447). `renorm` remet la norme L1 des gardés à celle du vecteur complet (4431-4443).
+- Défauts : act_levels=127 (--abits absent, 8 bits) en inférence et modes flux (main.rs:873, 2493 ; model.rs:4339) ; 32 767 (16 bits) en perplexité (main.rs:5091) ; act_thresh=0.0, act_topk=0, act_renorm=false, act_topk_proj=[0;7], attn_topk=qk_topk=moe_topk=0 (model.rs:4339-4341) ; seuil_push=0.22 (model.rs:4358).
+- Réglages CLI : --act-thresh, --act-topk, --topk-q/k/v/o/gate/up/down (main.rs:754-762), --act-renorm (781), --abits (736, niveaux = (1<<(abits−1))−1, borné 16, main.rs:2477-2490), --attn-topk/--qk-topk/--moe-topk (742-747), --profil-neurones (791). Il n'existe AUCUNE option --act-levels : les niveaux ne se règlent que par --abits.
+- `--flux` n'est PAS le mode événementiel : c'est la sortie texte en flux (main.rs:591, 1156). Le transport en listes, c'est --flux-liste / --flux-blocs (main.rs:771-772), protocole TCP v6, en-tête 79 o transportant le contrat d'activation complet (main.rs:2525, 2558-2561).
+- Passage dense→liste : `matvec` bascule push (listes) / pull (produit scalaire) selon `frac > seuil_push` (model.rs:4492-4504) ; --auto charge les deux et bascule par mesure, --push/--dense forcent (main.rs:775-777). Chemins q4 (4482-4491) et déquantification IQ (4613-4630) sont TOUJOURS denses.
+- Encodage : en-tête 14 o « DRVF » + u16 version + u32 n_layer + u32 hidden (model.rs:2117-2128) ; par enregistrement u16 couche, u32 position, u32 n, f32 échelle (2210-2213). v1 = u32 indice + i16 valeur (6 o/actif) ; v2 (défaut) = écart u8 (255 → indice absolu u16) + i16 (3 o/actif) ; v3 (DRAVE_TRACE_BLOCS=1) = valeur i8 + échelle f16 par bloc de 32 canaux (2 o/actif + 4 + 2×ceil(n/32)) (2143-2183, 2215). Trace = l'entrée quantifiée de l'attention (couche L, model.rs:7029-7035) et de la FFN (couche L+1000, 7522-7528).
+- Le chemin par LOTS est dense et produit 0 événement (docs/note-cancellation-evenementielle.md:69-70 ; model.rs:5349-5352 utilise `quantifier`). Codec Python de référence : tools/flux_codec.py:10-36,131 ; lecteurs : tools/analyse_flux.py:57-81, tools/granularite_flux.py:36-47, tools/trace_compacite.py, tools/approximabilite_bloc.py:16-18.
+
+2. TAUX D'ACTIVITÉ MESURÉS
+| modèle / couche | mesure | source |
+|---|---|---|
+| Qwen2.5-0.5B Q8_0 (494 M poids, 24 c., hidden 896) | densité des poids 99,2 % | rapport-8bits.md:7 ; rapport-mode-listes.md:7 [M] |
+| idem, à seuil nul | 0,00 % d'activations nulles ; 352,7 M événements/token à 100 % | rapport-parcimonie-imposee.md:17 ; rapport-inference.md:271 [M] |
+| idem, trace 512 jetons | 24 576 listes · 22 008 776 actifs (≈99,9 % de 22 020 096 emplacements) | docs/format-flux.md:64 ; rapport-compacite-trace.md:59 [M] |
+| idem, trace --act-thresh 0.05, 256 jetons | 8 791 414 actifs → 39,9 % | rapport-compacite-trace.md:58 [M] |
+| idem, densité PAR COUCHE (seuil 0.05) | 20,1 % (c.9) à 56,3 % (c.1) — aussi 45,6/40,5/29,2/28,8/26,7/25,9 % | rapport-analyse-flux.md:17-22 [M] |
+| idem, --profil-neurones (seuil 5 % du max), 512 j. wikitext | 17,9 % des neurones/jeton ; 0,08 % tirés >90 % du temps ; 2,82 % >50 % ; 1/10/50 % les plus lourds = 12,3/33,1/74,2 % de la magnitude | rapport-localite-activation.md:43-47 [M] |
+| idem, persistance par couche | 0,89 % à 1,90 % d'actifs dans ≥90 % des jetons | rapport-analyse-flux.md:30 [M] |
+| Qwen 0.5B, attention top-32 | 12,5 % (ctx 256) ; 3,1 % (1 024) ; 0,78 % (4 096) ; poids d'attention 0,04 M paires/token contre 354 M événements | rapport-attention-creuse.md:43-46,112 [M] |
+| V4-Flash `l_last` (16 384 valeurs = 4 copies hc × 4 096, 43 couches) | 12 071 / 9 448 / 5 829 / 3 193 événements à θ = 0,01/0,02/0,05/0,10 | rapport-granularite-flux.md:20-23 [M] |
+| trace code 64 jetons | 34 335 939 o, 27 265 463 événements = 419 469/jeton | docs/note-cancellation-evenementielle.md:63 [M] |
+| GLM-5.3 (MLA + experts IQ) | 58,2 G paires/token — dont 0 en listes (0 %) | rapport-p0-flux.md:60-64 [M] |
+| gpt-oss / GLM MoE | 4 experts sur 128 par couche et jeton (3,1 %) ; 8 sur 256 (3 %) | rapport-localite-activation.md:59 ; rapport-p0-flux.md:73-74 [M] |
+| SpikeGPT (externe, pas notre mesure) | R̂ = 0,15 → ~6,7× moins d'événements | rapport-croisement-push-pull.md:56 ; docs/comparaison-spiking.md:70-72 [D] |
+
+3. GAINS MESURÉS DU MODE ÉVÉNEMENTIEL (et conditions)
+- Croisement push/pull, matrice blk.0.ffn_gate.weight (4 864×896, 4,36 M poids, 16 threads) : push/pull = 0,03 / 0,12 / 0,28 / 0,48 / 1,11 / 2,15 / 4,69 à 0/1/5/10/25/50/100 % de densité → croisement ~22 %, pas 10 % (rapport-croisement-push-pull.md:33-46 ; rapport-mur-memoire-4bits.md:50-53) [M]. Autres matrices : attn_q croise à 24 %, ffn_down à 33-45 % (mesure bruyante, mur-memoire:45-48).
+- --auto, modèle entier, 255 jetons, 16 threads : 11 % de densité → 9,1 s → 7,1 s (×1,28) ; 5 % → 6,2 s (×1,47) (croisement:94-98) [M].
+- Bascule pull sur modèle dense : ×2,27 de bout en bout (13,6 → 30,7 tok/s, 510 jetons), PPL identique au chiffre près (croisement:107-108) [M]. Push 15,59 tok/s contre pull dense i8 corrigé 36,43 tok/s, même PPL 24,8995 (croisement:75-77).
+- Octets : listes PushMat 1,98 o/événement ; dense int8 1,00 o/poids ; 4 bits 0,53 (rapport-passage-a-l-echelle.md:39-41) [M]. En mémoire, les listes coûtent 0,71 Go pour 494 M poids = 1,44 o/poids contre 1,06 en Q8_0 dense, soit +36 % de mémoire à 99 % de densité (rapport-inference.md:195-197) [M].
+- Transport : 3 623 o/flux dense f32 → 1 568 o (blocs + indices par écarts), ÷2,3, pour 2,74e-2 d'écart local/réparti (rapport-transport-liste.md:176-178) ; blocs seuil 0,01 = 2 268 o / 2,7e-2 (REPRISE.md:926-928) ; mode 4 « lot en listes » 1 500 o/jeton contre 3 663 en lot dense, écart 3,03e-2 (rapport-mode4-lot-listes.md:25-31 ; REPRISE.md:994) [M].
+- Trace disque : 132 396 736 o (v1) → 66 370 408 o (v2, −49,87 %, rejeu identique 19,3885) → 45 079 930 o (v3, −32,1 % vs v2, +0,074 % de PPL) (docs/format-flux.md:58-65 ; REPRISE.md:967-970) [M]. v1 = 6,04 o/neurone actif contre ~2 sur le câble ; zstd -19 sur écarts+blocs = 1,27 o/actif (−79 %) (rapport-compacite-trace.md:43-45,93) [M].
+- Parcimonie imposée (Qwen 0.5B, 1 024 jetons, jeu B tenu à l'écart) : FFN à 85 % = −13,1 % d'événements pour +0,46 % de PPL (rapport-parcimonie-imposee.md:71) [M] ; temps CPU −12,7 % (machine calme) à −3,0 % (load 8-14), fourchette honnête 3-13 % pour 13-15 % d'événements économisés (96-105).
+- Noyau AER : 7,79 G événements/s à 16 threads avec décodage par écarts (dispersion pure 3,20) (rapport-cpu-aer.md:24-26) [M] ; en moteur 3,9 G év/s, puis 5,3 G après suppression de la liste des destinations touchées (+35 %, PPL identique 24,8995) (rapport-inference.md:84,216-219) [M].
+- Lot sur lien à 20 ms : 18× (47,6 → 2,6 s) ; 7× par jeton en local (116,7 → 16,6 ms) (rapport-prefill-reparti.md:51-61, via rapport-coherence-docs-2.md:89) [M].
+- Matériel : CPU 16 threads 5,3 G évts/s [M] ; GPU (dispersion) 18,1 G évts/s [M] ; FPGA 1 carte 4,83 G évts/s [D, projeté], ~8,3 nJ/événement [D] contre ~57 nJ CPU [M] (reports/bilan-multi-materiel.md:45-48).
+
+4. LES TROUS (non mesuré, supposé, déduit)
+- Aucun volume d'activation PAR EXPERT n'est mesuré : cela exige un vidage par expert qui n'existe pas (rapport-granularite-flux.md:94-98). Aucune latence par liste mesurée (99-100).
+- Le chemin par lots/préremplissage est dense → 0 événement (note-cancellation:69-70) ; MLA f32 et experts IQ → 0 événement (rapport-p0-flux.md:19-21,63-64) ; le compteur de paires de `forward_lot` ne couvre que q/k/v (130-133).
+- Sur V4-Flash, `--dense` est inerte et « dont en listes » reste à 0,0 M : le modèle passe par le dense de toute façon (REPRISE.md:751-755).
+- Densité par couche mesurée sur UN seul modèle (Qwen2.5-0.5B), UN seuil (0.05) et 256 jetons (rapport-analyse-flux.md:7-10). Rien d'équivalent pour gpt-oss, V4-Flash, GLM.
+- Les 17,9 % sont obtenus à seuil 5 % du max, qui est un réglage de coût, pas de qualité : à ce seuil la trace a une PPL de 2 445 (analyse-flux:8-10) et une densité de 5,1 % donne une PPL ×107 (rapport-optimisations-auto.md:117). Taux d'activité et qualité ne sont pas au même point de fonctionnement.
+- L'unité « événements/token » n'est pas documentée sans ambiguïté : rapport-parcimonie-imposee.md:28 annonce 352,8 M événements pour un jeu de 512 jetons puis étiquette la colonne « événements/token » avec 343,8 M (32-37), tandis que rapport-inference.md:271 écrit 352,7 M/token.
+- Le croisement 22 % vient d'UNE matrice ; l'énergie FPGA et le débit FPGA sont projetés, pas mesurés (bilan-multi-materiel.md:46-47 ; comparaison-spiking:70). Le « R̂ = 0,15 » est une valeur externe (SpikeGPT), pas une mesure du dépôt.
+- Le critère de profilage par défaut (5 % du max, model.rs:4691) n'a pas de justification de qualité ; le critère « valeur quantifiée non nulle » est inutilisable (densité mesurée 51 104 %, localite:37).
+- Mesures de temps faites sous charge 8-14 pour partie (parcimonie:96-97) ; aucune mesure du coût de la sélection k-WTA isolée.
+
+5. HYPOTHÈSES RÉFUTÉES (avec le chiffre qui réfute)
+- « Le seuil absolu suffit » : −11,5 % d'événements → +5 % de PPL ; −34,6 % → ×1,59 ; −58,9 % → ×117 (parcimonie:32-37). Le k-WTA est ~10× meilleur à sparsité égale (49-52).
+- « La renormalisation homéostatique compense la coupure » : elle DÉGRADE (+0,2 % / +1,2 % / +3,6 % à 90/85/80 %) (parcimonie:84).
+- « La parcimonie uniforme vaut la parcimonie ciblée » : uniforme 85 % = −14,9 %/+1,23 % ; FFN seul 85 % = −13,1 %/+0,46 % (parcimonie:67-71).
+- « Le croisement push/pull est à 10 % » → 22 % (croisement:43-48 ; mur-memoire:50-57). README.md:34 le dit encore à 10 % (relevé dans rapport-coherence-docs.md:128).
+- « Le mode liste est 8 % plus rapide que le noyau dense » → faux : 15,59 contre 36,43 tok/s après correction de l'accumulation i64 du pull (croisement:66-77).
+- « La granularité fine compresse » → non : à erreur égale, G=1 = 43,3 % du dense contre 68,1 % pour G=512 ; elle route, elle ne compresse pas (granularite:37-47,66-68).
+- « Transmettre l'entrée normée » : l'écart passe de 0,00e0 à 5,61e0 en mode dense (transport-liste:65-70 ; REPRISE.md:945-947).
+- « L'écart croît avec la longueur » → il DÉCROÎT : 1,37e-1 à 64 jetons, 1,32e-2 à 1 024 (transport-liste:147-152).
+- « Un préchargement statique des neurones chauds (PowerInfer) paie » → l'ensemble toujours chaud fait 0,08 % ; la localité est dynamique (localite:49-54).
+- « L'attention creuse fait gagner du temps » → aucun gain : 11,5 ms en dense, 11,5 ms à k=32, 11,6 ms à k=1 ; le coût est dans le calcul des scores (attention-creuse:91-103). Bénéfice réel : qualité +0,5 à +1,2 % (109) et poids creux listables (110).
+- « Attention creuse + k-WTA FFN s'additionnent » → non : +0,19 % au lieu de −0,52 %, le FFN mange le gain (attention-creuse:154-157).
+- « Le creux gagne » : CSR rentable seulement sous 6 % (indice 32 b) ou 12 % (indice 16 b) de densité (rapport-eparsite.md:63) ; le 4 bits ne paie pas : −12 % d'événements et +14 % de débit pour +12 % de PPL (inference:255-258).
+- « Un LLM dense a un débit variable » : 0,00 % de zéros, débit constant ; le débit événementiel ne paie que sur des modèles creux par construction (parcimonie:17 ; inference:189-192).
+- Bug historique : k-WTA inversé gardait les k plus PETITES → 3,8 M événements au lieu de 349 M (parcimonie:121-123).
+- Encodage unaire : 42,45 opérations/poids contre 3,10 en décalage-addition (rapport-mode-listes.md:21-22,40-41).
+- « Le compteur d'événements décrit le coût » : MLA + IQ affichent « 0 événement » pour 58,2 G paires payées par jeton (p0-flux:23-24,60-64).
+
+### 👤 Utilisateur
+
+Background subagent 850eebf1-88b1-443e-b75e-6f89890b35ec finished and will do no further work unless you send it more.
+Its closing message:
+⏵ Rapport livré au parent ; restitution du résultat
+
+Inventaire factuel et chiffré — parcimonie des activations et mode événementiel (Drave). Aucun fichier modifié, aucune compilation lancée.
+Légende : **[M]** mesuré dans le dépôt · **[D]** déduit/projeté par l'auteur du rapport source · **[S]** supposé. Toutes les mesures [M] sont sur 2×Xeon E5-2687W v3, 16 threads (`reports/rapport-cpu-aer.md:14`).
+
+## 1. Le mécanisme exact
+- Un **événement** = une activation quantifiée non nulle poussée vers ses destinations : `SparseVec { idx: Vec<u32>, val: Vec<i32> }` (`engine.rs:29-32`) ; en mode listes « une paire EST un événement » (`model.rs:4535-4540`, test `list.rs:1591`). Événement ≠ paire payée : les chemins denses (MLA f32, experts IQ déquantifiés, tête, 4 bits) paient la matrice entière sans liste (`rapport-p0-flux.md:29-34`).
+- Construction : `quant_scratch(x, levels, thresh, topk, renorm, scratch)` (`model.rs:4401-4451`). Échelle `s = max|x|/levels` (4406), `q = round(v/s)` (4428/4446). Si `topk>0` → **k-WTA** : `k = round(topk/1000 × dimension)` borné `[1,dim]` (4419-4420) ; seuil = (len−k)-ième magnitude via `select_nth_unstable_by` (4425) ; garde si `|v| ≥ cut` **et** `q ≠ 0` (4426-4429). `topk` est un **pour-mille de la dimension**, pas un k absolu. Sinon seuil absolu : `q ≠ 0` et `|q| > thresh×levels` (4409, 4447). `renorm` remet la L1 des gardés à celle du vecteur complet (4431-4443).
+- Défauts : `act_levels=127` (8 bits) en inférence/modes flux (`main.rs:873,2493` ; `model.rs:4339`), `32767` (16 bits) en perplexité (`main.rs:5091`) ; `act_thresh=0.0`, `act_topk=0`, `act_renorm=false`, `act_topk_proj=[0;7]`, `attn_topk=qk_topk=moe_topk=0` (`model.rs:4339-4341`) ; `seuil_push=0.22` (`model.rs:4358`).
+- CLI : `--act-thresh`, `--act-topk`, `--topk-q/k/v/o/gate/up/down` (`main.rs:754-762`), `--act-renorm` (781), `--abits` (736 ; niveaux = `(1<<(abits−1))−1`, borné 16, `main.rs:2477-2490`), `--attn-topk/--qk-topk/--moe-topk` (742-747), `--profil-neurones` (791). **Aucune option `--act-levels`** : les niveaux ne se règlent que par `--abits`.
+- `--flux` n'est **pas** le mode événementiel : c'est la sortie texte en flux (`main.rs:591,1156`). Le transport en listes = `--flux-liste`/`--flux-blocs` (771-772), protocole TCP v6, en-tête 79 o portant le contrat d'activation complet (`main.rs:2525,2558-2561`).
+- Bascule dense→liste : `matvec` choisit push/pull selon `frac > seuil_push` (`model.rs:4492-4504`) ; `--auto` charge les deux et bascule par mesure, `--push`/`--dense` forcent (`main.rs:775-777`). Chemins q4 (4482-4491) et déquantification IQ (4613-4630) toujours denses.
+- Format DRVF : en-tête 14 o (`model.rs:2117-2128`), puis u16 couche, u32 position, u32 n, f32 échelle (2210-2213). v1 = u32+i16 (6 o/actif) ; **v2 défaut** = écart u8 (255 → absolu u16) + i16 (3 o/actif) ; v3 (`DRAVE_TRACE_BLOCS=1`) = i8 + échelle f16/32 canaux (2 o/actif + 4+2·⌈n/32⌉) (2143-2183, 2215). Tracé = entrée quantifiée de l'attention (couche L, 7029-7035) et de la FFN (L+1000, 7522-7528).
+- Le chemin par **lots** est dense → 0 événement (`note-cancellation-evenementielle.md:69-70` ; `model.rs:5349-5352`). Codec de référence : `tools/flux_codec.py:10-36,131` ; lecteurs `analyse_flux.py:57-81`, `granularite_flux.py:36-47`, `trace_compacite.py`, `approximabilite_bloc.py:16-18`.
+
+## 2. Taux d'activité mesurés
+| modèle / couche | mesure | source |
+|---|---|---|
+| Qwen2.5-0.5B Q8_0 (494 M poids, 24 c., hidden 896) | densité des poids **99,2 %** | `rapport-8bits.md:7` ; `rapport-mode-listes.md:7` [M] |
+| idem, seuil nul | **0,00 %** d'activations nulles ; **352,7 M** événements/token | `rapport-parcimonie-imposee.md:17` ; `rapport-inference.md:271` [M] |
+| idem, trace 512 jetons | 24 576 listes · **22 008 776 actifs** (≈99,9 %) | `docs/format-flux.md:64` ; `rapport-compacite-trace.md:59` [M] |
+| idem, trace `--act-thresh 0.05`, 256 j. | 8 791 414 actifs → **39,9 %** | `rapport-compacite-trace.md:58` [M] |
+| idem, **par couche** (seuil 0.05) | **20,1 % (c.9) à 56,3 % (c.1)** ; aussi 45,6/40,5/29,2/28,8/26,7/25,9 % | `rapport-analyse-flux.md:17-22` [M] |
+| idem, `--profil-neurones` (5 % du max), 512 j. | **17,9 %** des neurones/jeton ; **0,08 %** tirés >90 % du temps ; 2,82 % >50 % ; 1/10/50 % les plus lourds = 12,3/33,1/74,2 % | `rapport-localite-activation.md:43-47` [M] |
+| idem, persistance | **0,89 à 1,90 %** d'actifs dans ≥90 % des jetons | `rapport-analyse-flux.md:30` [M] |
+| Qwen 0.5B, attention top-32 | **12,5 %** (ctx 256) ; 3,1 % (1 024) ; 0,78 % (4 096) ; poids d'attention 0,04 M paires/token contre **354 M** événements | `rapport-attention-creuse.md:43-46,112` [M] |
+| V4-Flash `l_last` (16 384 val. = 4 hc × 4 096) | **12 071 / 9 448 / 5 829 / 3 193** événements à θ=0,01/0,02/0,05/0,10 | `rapport-granularite-flux.md:20-23` [M] |
+| trace code 64 jetons | 34 335 939 o, 27 265 463 événements = **419 469/jeton** | `note-cancellation-evenementielle.md:63` [M] |
+| GLM-5.3 (MLA + experts IQ) | **58,2 G paires/token — 0 en listes** | `rapport-p0-flux.md:60-64` [M] |
+| gpt-oss / GLM MoE | **4 experts sur 128** par couche et jeton (3,1 %) ; 8/256 (3 %) | `rapport-localite-activation.md:59` ; `rapport-p0-flux.md:73-74` [M] |
+| SpikeGPT (valeur externe) | **R̂ = 0,15** → ~6,7× moins d'événements | `rapport-croisement-push-pull.md:56` [D] |
+
+## 3. Gains mesurés (et conditions)
+- **Croisement push/pull**, `blk.0.ffn_gate.weight` (4 864×896, 4,36 M poids, 16 threads) : push/pull = 0,03/0,12/0,28/0,48/1,11/2,15/4,69 à 0/1/5/10/25/50/100 % → **croisement ~22 %**, pas 10 % (`rapport-croisement-push-pull.md:33-46` ; `rapport-mur-memoire-4bits.md:50-53`) [M]. Autres matrices : `attn_q` 24 %, `ffn_down` 33-45 % (bruyant, 45-48).
+- **--auto**, modèle entier, 255 jetons : 11 % → 9,1→**7,1 s** (×1,28) ; 5 % → **6,2 s** (×1,47) (croisement:94-98) [M].
+- Bascule pull sur modèle dense : **×2,27** (13,6 → 30,7 tok/s, 510 j.), PPL identique (croisement:107-108) [M] ; push 15,59 vs pull dense corrigé **36,43 tok/s**, même PPL 24,8995 (75-77).
+- Octets : listes **1,98 o/événement** vs dense int8 1,00 vs 4 bits 0,53 (`rapport-passage-a-l-echelle.md:39-41`) [M]. En mémoire : 1,44 o/poids pour 494 M poids contre 1,06 en Q8_0 dense (**+36 %**) (`rapport-inference.md:195-197`) [M].
+- Transport : 3 623 o → **1 568 o** (÷2,3) pour 2,74e-2 d'écart (`transport-liste.md:176-178`) ; blocs 0,01 = 2 268 o/2,7e-2 (`REPRISE.md:926-928`) ; mode 4 **1 500 o/jeton contre 3 663** en lot dense, écart 3,03e-2 (`mode4-lot-listes.md:25-31` ; `REPRISE.md:994`) [M].
+- Trace disque : 132 396 736 → **66 370 408** (−49,87 %, rejeu identique 19,3885) → **45 079 930** (−32,1 %, +0,074 % PPL) (`format-flux.md:58-65` ; `REPRISE.md:967-970`) [M]. v1 = **6,04 o/actif** contre ~2 sur le câble ; zstd -19 = 1,27 o/actif (**−79 %**) (`compacite-trace.md:43-45,93`) [M].
+- Parcimonie imposée (jeu B tenu à l'écart) : FFN 85 % = **−13,1 % d'événements pour +0,46 % de PPL** (`parcimonie-imposee.md:71`) [M] ; temps CPU −12,7 % (calme) à −3,0 % (load 8-14), fourchette 3-13 % (96-105).
+- Noyau AER : **7,79 G év/s** à 16 threads avec décodage par écarts (`cpu-aer.md:24-26`) [M] ; en moteur 3,9 → **5,3 G év/s** après suppression de la liste des destinations (+35 %, PPL identique) (`inference.md:84,216-219`) [M].
+- Lot sur lien 20 ms : **18×** (47,6→2,6 s) ; **7×** par jeton en local (`prefill-reparti.md:51-61`) [M].
+- Matériel : CPU 5,3 G évts/s [M] ; GPU dispersion **18,1 G évts/s** [M] ; FPGA 4,83 G évts/s [D], ~8,3 nJ/événement [D] contre ~57 nJ CPU [M] (`bilan-multi-materiel.md:45-48`).
+
+## 4. Les trous
+- **Aucun volume d'activation par expert** n'est mesuré (vidage par expert inexistant) ; aucune latence par liste (`granularite-flux.md:94-100`).
+- Chemins à **0 événement** : lots/préremplissage (`note-cancellation:69-70`), MLA f32 et experts IQ (`p0-flux.md:19-21,63-64`) ; compteur de paires de `forward_lot` limité à q/k/v (130-133).
+- V4-Flash : `--dense` **inerte**, « dont en listes » = 0,0 M (`REPRISE.md:751-755`).
+- Densité par couche : **un seul modèle** (Qwen2.5-0.5B), un seuil (0.05), 256 jetons (`analyse-flux.md:7-10`). Rien pour gpt-oss, V4-Flash, GLM.
+- Les 17,9 % sont à seuil 5 %, réglage de **coût** : PPL 2 445 à ce seuil (`analyse-flux.md:8-10`) ; densité 5,1 % ⇒ PPL **×107** (`optimisations-auto.md:117`). Taux d'activité et qualité ne sont pas au même point de fonctionnement.
+- Unité « événements/token » ambiguë : `parcimonie-imposee.md:28` annonce 352,8 M pour 512 jetons puis étiquette la colonne « /token » avec 343,8 M (32-37) ; `inference.md:271` écrit 352,7 M/token.
+- Le croisement 22 % vient d'**une matrice** ; énergie et débit FPGA sont **projetés** (`bilan-multi-materiel.md:46-47`). Le « R̂ = 0,15 » est externe (SpikeGPT), non mesuré ici.
+- Seuil de profilage 5 % (`model.rs:4691`) sans justification de qualité ; le critère « valeur quantifiée non nulle » est inutilisable (densité mesurée **51 104 %**, `localite:37`). Temps mesurés sous charge 8-14 pour partie (`parcimonie:96-97`).
+
+## 5. Hypothèses réfutées
+- **Le seuil absolu suffit** : −11,5 % d'événements → +5 % PPL ; −34,6 % → ×1,59 ; −58,9 % → **×117** (`parcimonie-imposee.md:32-37`). Le k-WTA est ~10× meilleur (49-52).
+- **La renormalisation homéostatique compense** : elle dégrade (+0,2/+1,2/+3,6 % à 90/85/80 %) (84).
+- **Parcimonie uniforme = parcimonie ciblée** : −14,9 %/+1,23 % contre **−13,1 %/+0,46 %** (67-71).
+- **Croisement à 10 %** → **22 %** (`croisement:43-48` ; `mur-memoire:50-57`) ; `README.md:34` le dit encore à 10 % (`coherence-docs.md:128`).
+- **« Le mode liste est 8 % plus rapide que le dense »** → faux : 15,59 vs **36,43 tok/s** après correction de l'accumulation i64 (66-77).
+- **La granularité fine compresse** → non : à erreur égale G=1 = 43,3 % du dense contre **68,1 %** pour G=512 ; elle route (37-47,66-68).
+- **Transmettre l'entrée normée** : 0,00e0 → **5,61e0** (`transport-liste:65-70`).
+- **L'écart croît avec la longueur** → il décroît : 1,37e-1 (64 j.) → **1,32e-2** (1 024 j.) (147-152).
+- **Préchargement statique des neurones chauds** → ensemble toujours chaud = **0,08 %** ; localité dynamique (`localite:49-54`).
+- **L'attention creuse fait gagner du temps** → aucun gain : 11,5 ms dense, 11,5 ms à k=32, **11,6 ms à k=1** ; le coût est dans les scores (`attention-creuse:91-103`). Gains réels : qualité +0,5 à +1,2 % (109), poids creux (110).
+- **Attention creuse + k-WTA FFN s'additionnent** → non : **+0,19 %** au lieu de −0,52 % (154-157).
+- **Le creux gagne** : CSR rentable seulement <6 %/<12 % de densité (`eparsite:63`) ; le 4 bits ne paie pas : −12 % d'événements, +14 % de débit, **+12 % de PPL** (`inference:255-258`).
+- **Un LLM dense a un débit variable** : 0,00 % de zéros, débit constant (`parcimonie:17` ; `inference:189-192`).
+- Bug historique : k-WTA **inversé** gardait les k plus petites → 3,8 M événements au lieu de 349 M (`parcimonie:121-123`). Encodage unaire : 42,45 opérations/poids contre **3,10** (`mode-listes:21-22,40-41`).
+- **Le compteur d'événements décrit le coût** : MLA + IQ affichent « 0 événement » pour **58,2 G paires payées** par jeton (`p0-flux:23-24,60-64`).
+
+### 🤖 Assistant
+
+⏵ Premier essai : je vérifie que le banc tourne, puis je lance la comparaison décharge/dense
+
+L'inventaire de la parcimonie confirme le cadre : **croisement push/pull à ~22 %**, **0,00 % de zéros** sur un LLM dense, et **R̂ ≈ 0,15** (valeur externe, jamais obtenue ici). Le banc que je viens d'écrire teste exactement ça. Essai à blanc :
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 /home/stephane/gpu-env/bin/python tools/essai_decharge.py --pas 20 --dim 96 --couches 2 --cache 384 2>&1 | tail -40", "description": "Smoke test the spiking-vs-dense bench", "timeoutMs": 900000}`
+
+  ```
+# corpus 1320120 caractères · alphabet 297 · train 1254114 · val 66006 · appareil cuda
+
+=== décharge · 281376 paramètres · 221184 poids dans les couches linéaires ===
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/essai_decharge.py", line 382, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/essai_decharge.py", line 346, in main
+    logits = modele(x)
+  File "/home/stephane/gpu-env/lib64/python3.13/site-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/home/stephane/gpu-env/lib64/python3.13/site-packages/torch/nn/modules/module.py", line 1790, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/essai_decharge.py", line 225, in forward
+    x = b(x, masque, rap, nom=f"bloc{i}")
+  File "/home/stephane/gpu-env/lib64/python3.13/site-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  Fi
+… [1093 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/essai_decharge.py", "old_string": "    def forward(self, x):\n        if self.training:\n            m = x.mean(dim=(0, 1))\n            v = x.var(dim=(0, 1), unbiased=False)\n            with torch.no_grad():\n                self … [942 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/essai_decharge.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 /home/stephane/gpu-env/bin/python tools/essai_decharge.py --pas 20 --dim 96 --couches 2 --cache 384 2>&1 | tail -30", "description": "Re-run smoke test after fix", "timeoutMs": 900000}`
+
+  ```
+File "/home/stephane/gpu-env/lib64/python3.13/site-packages/torch/utils/_contextlib.py", line 124, in decorate_context
+    return func(*args, **kwargs)
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/essai_decharge.py", line 298, in evaluer
+    logits = modele(x, rap)
+  File "/home/stephane/gpu-env/lib64/python3.13/site-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/home/stephane/gpu-env/lib64/python3.13/site-packages/torch/nn/modules/module.py", line 1790, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/essai_decharge.py", line 225, in forward
+    x = self.emb(idx)
+  File "/home/stephane/gpu-env/lib64/python3.13/site-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/home/stephane/gpu-env/lib64/python3.13/site-packages/torch/nn/modules/module.py", line 1790, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/stephane/gpu-env/lib64/python3.13/site-p
+… [673 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/essai_decharge.py", "new_string": "@torch.no_grad()\ndef evaluer(modele, ids, seq, lot, rap=None, max_lots=20):\n    modele.eval()\n    dev = next(modele.parameters()).device\n    perte, n = 0.0, 0\n    for x, y in lots_valides(ids … [299 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/essai_decharge.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 /home/stephane/gpu-env/bin/python tools/essai_decharge.py --pas 20 --dim 96 --couches 2 --cache 384 2>&1 | tail -30", "description": "Re-run smoke test after device fix", "timeoutMs": 900000}`
+
+  ```
+=== décharge · 281376 paramètres · 221184 poids dans les couches linéaires ===
+  pas    20 · perte 3.7873 · val 5.7989 bits/car · 1 s
+
+  # événements/token 0.03 M · R̂ moyen 0.1001 · val 5.7989 bits/car
+  #   bloc0.ffn_in       R̂ 0.1679
+  #   bloc0.ffn_milieu   R̂ 0.0837
+  #   bloc0.in           R̂ 0.1667
+  #   bloc0.k            R̂ 0.0967
+  #   bloc0.o            R̂ 0.0181
+  #   bloc0.q            R̂ 0.0978
+  #   bloc0.v            R̂ 0.0771
+  #   bloc1.ffn_in       R̂ 0.1630
+  #   bloc1.ffn_milieu   R̂ 0.1149
+  #   bloc1.in           R̂ 0.1666
+  #   bloc1.k            R̂ 0.0808
+  #   bloc1.o            R̂ 0.0128
+  #   bloc1.q            R̂ 0.0806
+  #   bloc1.v            R̂ 0.0750
+
+=== dense · 280128 paramètres · 221184 poids dans les couches linéaires ===
+  pas    20 · perte 2.7670 · val 4.0237 bits/car · 0 s
+
+  # MACs/token 0.22 M · val 4.0237 bits/car
+
+=== VERDICT (val tenue à l'écart) ===
+  dense    :    280128 paramètres · 4.0237 bits/car ·    0.22 M MACs/token
+  décharge :    281376 paramètres · 5.7989 bits/car ·    0.03 M événements/token
+  rapport de coût 0.131 · écart de qualité +177.52 point de bits/car
+  (la loi du dépôt : sous 0,22 de densité, le push bat le pull)
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/essai_decharge.py", "new_string": "        debut = time.time()\n        meilleur = (float(\"inf\"), None, 0)\n        for pas in range(1, a.pas + 1):\n            x, y = lot_aleatoire(train, a.seq, a.lot, g)\n            x, y = x.t … [2070 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/essai_decharge.py has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/essai_decharge.py", "new_string": "        print(f\"  rapport de coût {cp/cd:.3f} · écart de qualité {bp-bd:+.3f} bits/car\")\n        print(f\"  (la loi du dépôt : sous 0,22 de densité, le push bat le pull)\")", "old_string": "    … [189 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/essai_decharge.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup /home/stephane/gpu-env/bin/python tools/essai_decharge.py --pas 4000 --dim 192 --couches 4 --tetes 4 --cache 768 --lr 3e-3 --graine 1 > /tmp/essai_decharge_1.log 2>&1 &\necho \"lance ; pid $!\"", "description": "Launch full spi … [60 caractères tronqués]`
+
+  ```
+started background job bash-1
+  ```
+
+- **bash** `{"command": "sleep 90; tail -5 /tmp/essai_decharge_1.log", "description": "Check training run started well", "timeoutMs": 120000}`
+
+  ```
+(no output)
+  ```
+
+### 👤 Utilisateur
+
+background job bash-1 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup /home/stephane/gpu-env/bin/python tools/essai_decharge.py --pas 4000 --dim 192 --couches 4 --tetes 4 --cache 768 --lr 3e-3 --graine 1 > /tmp/essai_decharge_1.log 2>&1 &
+echo "lance ; pid $!") finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 👤 Utilisateur
+
+Agent 482522d1-31f1-43eb-ae9c-a681336404f7 sent a message:
+# Drave — capacités de DISTRIBUTION et d'EXPLOITATION HÉTÉROGÈNE (inventaire, LECTURE SEULE)
+
+Aucun fichier modifié, aucune compilation ni test lancé. Légende : **P** = mesuré ET vérifié par une porte du dépôt · **M** = mesuré (rapport/REPRISE) · **D** = déduit du code · **S** = supposé.
+
+## 1. TABLEAU PAR CAPACITÉ
+
+### 1.a Plusieurs machines en réseau — `--flux-serveur` / `--ppl-reparti`
+| capacité | fait | état | source | chiffre |
+|---|---|---|---|---|
+| Nœud moteur TCP | charge le modèle, écoute, applique SA plage reçue dans l'en-tête, renvoie le flux brut | P | `main.rs:3170-3340` (`run_serveur_flux`) | 1 client à la fois |
+| Pilote TCP | garde N couches locales, envoie, reçoit, note la perplexité | P | `main.rs:3340-3650` (`run_ppl_reparti`) | écart local/réparti **0,00e0** (144,8289=144,8289 à 40 jetons ; 9,5146 à 1 024) — `reports/rapport-phase3-reparti.md:42-54` |
+| Protocole v6 | en-tête 79 o (magie, version, mode, plage, pos, n, échelle, 14 champs de réglages), 5 modes | P | `main.rs:2495-2620`, `VERSION_FLUX=6`, `TAILLE_TETE=79` | tests `tests_flux`, `tests_plafond` (`main.rs:5511-5845`) |
+| Modes 0-4 | dense f32 · listes i16 · blocs i8+échelle/32 · lot dense · lot en listes | P | `tools/porte-flux.sh` | écarts 0 / 0 / ≤6e-2 / 0 / ≤1e-2 |
+| Préremplissage réparti | 1 aller-retour par lot au lieu d'un par jeton | P (mode 3) | `main.rs:3360-3520` | 256 jetons en 4 lots → **0,00e0** ; 1 lot de 917 583 o → 0,00e0 — `reports/rapport-prefill-reparti.md:39-44` |
+| TCP_NODELAY | supprime Nagle + ACK différé | M | `main.rs:3196-3201, 3428-3430` | attente **97,6 → 16,1 ms**/jeton (calcul local 15,9) = 1,01× |
+| Relais de latence | mesure le coût d'un lien distant | M | `tools/proxy_latence.py` | attente ≈ calcul distant + **3,2 × latence** ; 1,01×/1,99×/4,89× à 0/5/20 ms |
+| Pair factice | contrôle indépendant du cadriciel (ne calcule rien) | M | `tools/pair_factice.py` | 127.0.0.1 seulement |
+| Recette Colab | bundle git + notebook + tunnel | **non exécutée** | `tools/preparer_colab.sh`, `colab/`, `docs/colab-reparti.md` | roadmap 3.4 = 🔬 « reste à faire tourner » |
+
+### 1.b Découpage en plages de couches — Kimi-K3
+| capacité | fait | état | source | chiffre |
+|---|---|---|---|---|
+| `--couches a:b` | exécute [a,b) ; hors plage → flux résiduel brut | M (V4.1), D | `main.rs:705-712, 2123-2160`, `model.rs:2551-2569, 6904` | V4.1 2 nœuds : 0,00e0 — `reports/rapport-decoupage-v41.md` |
+| Relais entre nœuds | flux résiduel + pile des banques (sinon `res_mix` faux ET muet) | **M, porte manuelle tenue** | `kimi_k3.rs:1595-1690` | **142 ko** (4 jetons × 7 168 canaux + 2 banques) |
+| Transport du relais | **fichier** `std::fs::File::create` / `std::fs::read` | M | `kimi_k3.rs:1610-1655` ; le commentaire dit : « ce n'est pas un protocole de réseau, c'est un fichier » | — |
+| Garde-fou | refuse un relais pris à une autre couche que le début de plage | M | `kimi_k3.rs:1683-1688` | — |
+| Porte bit à bit | A 0:13 → relais → B 13:26 vs C 0:26 monolithe | **M hors porte** | `tools/test-plage-k3.sh` (jamais appelé par `portes.sh`) | `cmp` identique, commit `3c2b542` |
+
+### 1.c Découpage en clusters (experts)
+| capacité | fait | état | source | chiffre |
+|---|---|---|---|---|
+| Lecteur clusters | comun.gguf + cluster-XX.gguf + mapping.tsv réunis en un Gguf | P | `clusters.rs:150-297` | Qwen3-30B : 9 fichiers, 1 587 tenseurs, 18,55 Go |
+| Convertisseur | copie d'octets, sans requantification | M | `tools/convertir_clusters.py:402-582` | 351,7 s, SHA-256 concorde |
+| Mode « couches » | groupes `blk.N` contigus, sans mapping | M | `convertir_clusters.py:446-463` | Qwen2.5-0.5B : commun + 4×6 couches |
+| Nœud partiel | `DRAVE_CLUSTERS=0,3` ne charge que ces clusters | M | `clusters.rs:166-275` | 1 cl. **2,35 Go**/PPL 268 786,62 · 4 cl. 4,60 Go/3 378,91 · 8 cl. 6,28 Go/799,8557 |
+| mmap du dossier | N fichiers mappés, pages à la demande | M | `gguf.rs:153-170`, `clusters.rs:282-286` | **9,32 s/6,35 Go** contre 30,68 s/19,20 Go |
+| Porte clusters | dossier complet Qwen3-30B, mêmes jetons | P | `tools/portes.sh:55-61` (artefact présent sur disque) | attendu **799.8557** |
+| Outils d'analyse | co-activation, union d'experts, localité | M | `tools/clusters_moe.py`, `analyse_union_experts.py`, `localite_couches.py` | couverture 0,799/0,607/0,442 à 4/8/16 clusters (hasard 0,440/0,319/0,250) |
+
+### 1.d GPU (une machine)
+| capacité | fait | état | source | chiffre |
+|---|---|---|---|---|
+| Pilote + 15 noyaux PTX sm_75 | API CUDA brute, PTX compilé par clang | M | `gpu.rs:40, 187-347`, `drave-core/gpu/` | 2× Quadro RTX 5000 16 Go ; NVLink 25,781 Go/s/sens |
+| Projections Q8_0 auto | poids ≥ 8 Mio copiés en VRAM | M | `model.rs:1558-1568` | seuil `n_out × nb_ligne × 34 ≥ 8 Mio` ; gpt-oss PPL 15,1757→15,1667 |
+| Tête Q8_0/Q6_K | logits en VRAM | M | `model.rs:4202-4227` | 1,6 ms / 88 Go/s, écart 1,99e-7 (CPU 7,3 ms) |
+| Miroir KV | KV en VRAM, attention déportée | M | `model.rs:4230-4282, 5447` | attn 22,16→3,29 ms/jeton (÷6,7) ; à 1 M clés int4 : ×73 |
+| Top-k GPU | scores + radix + collecte + softmax | M | `model.rs:7220-7312`, `docs/plan-gpu-topk.md` | 262 k clés : 2,25e-7, ×40 ; à 2 047 clés seulement −61 % |
+| Cache experts MXFP4 | LRU (couche,expert) en VRAM | M | `model.rs:4291-4310` | +6 % (gpt-oss), verdict « ne pas activer par défaut » |
+| 2 GPU simultanés | **KV seulement**, en tourniquet `l % machines.len()` | M | `model.rs:4239`, `gpu.rs:1538-1561` | projections/tête/experts : 1 seule carte ; aucun P2P/NVLink explicite |
+
+### 1.e Mémoire, disque, fils (une machine)
+| capacité | fait | état | source | chiffre |
+|---|---|---|---|---|
+| Détection matérielle | /sys (physiques/SMT/NUMA/caches), /proc/meminfo, nvidia-smi, df | P (partielle) | `materiel.rs:91-282` | 20 cœurs/40 fils, 125 Go, 2 GPU, NVMe + sda |
+| mmap des poids | PROT_READ/MAP_PRIVATE, tranches empruntées | M | `gguf.rs:30-177` | **47 Mo RSS pour 365,7 Go** adressés |
+| `DRAVE_MMAP=0` | lecture complète (repli) | M | `gguf.rs:153-160` | 30,68 s/19,20 Go contre 9,32 s/6,35 Go |
+| Prélecture | `madvise(WILLNEED)` des experts routés | M | `model.rs:7562-7564` | **+0,3 %** (sans gain) |
+| Éviction | VRAM LRU + RAM `DRAVE_EXPERTS_RAM` | M | `model.rs:1573-1646` | RAM +4 % (4 Go), +21 % (32 Go) → déconseillé |
+| Threads | cœurs PHYSIQUES par défaut, `--threads` prioritaire | P | `main.rs:521-527`, `engine.rs:289-313` | porte `portes.sh:63-68` |
+| Affinité | `--pin` → `sched_setaffinity`, 1re moitié de chaque nœud NUMA | M (aucune porte) | `engine.rs:268-364` | 20,7→**24,7 Go/s** épinglé ; node 0 seul : −16 % |
+| Plan de placement | `--plan` chiffre couche par couche où mettre les poids | **affichage seul** | `main.rs:4769-4830` | CPU 20 · PCIe 6,5 · NVLink 25,78 · GPU 380 Go/s |
+
+## 2. CE QUI EST PROUVÉ PAR UNE PORTE (et ce qui ne l'est pas)
+
+**Prouvé :** (1) `tools/portes.sh:32-44` — `cargo test --release`, seuil ≥48 verts ET 0 échec (**77 tests** dans le source) ; il couvre le codec de flux et les refus de trames (`tests_flux`, `tests_plafond` : plafond R4, 100 M d'états refusés AVANT allocation) et 6 tests clusters. (2) `portes.sh:55-61` — Qwen3-30B en clusters = **799.8557**. (3) `portes.sh:63-68` — threads par défaut = cœurs physiques. (4) `portes.sh:88-103` — `tools/porte-flux.sh`, **la seule porte du découpage** : deux processus sur **127.0.0.1**, Qwen2.5-0.5B, 12 couches locales, les 5 modes. (5) `portes.sh:243-263` — rejeu de trace + formats contre libggml.
+
+**Non prouvé par une porte :** aucun mode **au-delà de loopback** (le seul essai « réseau » est un serveur `0.0.0.0:45797` joint par l'IP LAN **192.168.1.101 de la MÊME machine** : journal `bbd6969f…/digest.md:24220-24233`, 0,00e0, 15,1 vs 15,7 ms) ; **aucune porte GPU** (grep `DRAVE_GPU` dans `tools/*.sh` = vide ; `gpu.rs` n'a aucun `#[cfg(test)]`) ; **aucune porte** mmap/disque/éviction/affinité ; **aucune porte** pour `DRAVE_CLUSTERS`, `--couches a:b`, `--couches-locales`, `--flux-serveur`, `--ppl-reparti` hors `porte-flux.sh` ; `tools/test-plage-k3.sh` (relais K3) n'est appelé par personne ; **Colab jamais exécuté** (roadmap 3.4 = 🔬).
+
+## 3. CE QUI MANQUE CONCRÈTEMENT
+
+**(a) Répartir sur les unités d'UNE machine**
+1. **Ordonnanceur absent** (roadmap phase 2.1 = ⏳) : `--plan` conseille mais rien ne décide à l'exécution ; le seul dispatch automatique est un seuil codé en dur (Q8_0 ≥ 8 Mio, `model.rs:1558-1568`), sans modèle de coût PCIe/NVLink/latence.
+2. **2 GPU sous-exploités** : seul le KV est réparti (`l % machines.len()`, `model.rs:4239`) ; projections, tête et cache d'experts restent sur `instance()` ; aucun appel P2P/NVLink dans `gpu.rs`/`drave_gpu.cu` (D).
+3. **Disque non parallélisé** : `plan.lecteurs = 16.min(physiques.max(4))` est calculé et affiché mais **jamais utilisé** (`materiel.rs:318-325`, seul appel `main.rs:2400`) ; le parallélisme réel vient des page faults, pas d'un lecteur dédié. Pas de `O_DIRECT`/`pread` (grep vide).
+4. **Nœud partiel par clusters inexploitable en calcul** : `Moe::ou()` rend `None` et le code fait `continue` (`model.rs:5642, 7571`) — l'expert absent est **sauté sans un mot**. Il manque « la somme des contributions entre nœuds » (`docs/format-clusters.md:173-179`, `reports/rapport-lecteur-multifichiers.md:261-263`) : un nœud à 1 cluster donne PPL 268 786,62. Rien n'additionne.
+5. Éviction RAM d'experts mesurée perdante (+4 %/+21 %) et prélecture sans gain (+0,3 %) : le seul levier disque restant est le page cache.
+
+**(b) Répartir sur PLUSIEURS machines en réseau**
+1. **Bloqueur n°1 : chaque nœud charge le modèle ENTIER** — `Model::load` mappe tout le GGUF ; le découpage porte sur le CALCUL, pas sur la RAM ni le disque (`docs/colab-reparti.md:32`). Un modèle > RAM ne peut donc PAS être réparti ; les deux machines doivent avoir le même fichier.
+2. **Le découpage par plages K3 ne passe pas par le réseau** : `kimi_k3::Relais::ecrire/lire` = `std::fs` (`kimi_k3.rs:1610-1655`) ; aucun TCP dans ce chemin. C'est exactement « un transport par fichier au lieu d'un transport réseau ».
+3. **Pas de sommation inter-nœuds** pour les clusters (voir a.4) : la seule voie MoE répartie est inutilisable.
+4. **Banc d'essai, pas service** : `run_serveur_flux` sert **un seul client puis s'arrête** (`main.rs:3169`) ; pas de reconnexion, pas de reprise, pas de TLS, pas de compression, pas de découverte d'appairage ; pas de découpage à plus de 2 nœuds (`reports/rapport-passe-k3-disque.md:478-486`).
+5. **Aucune mesure de bande passante réelle** : pas d'iperf, pas de 1 GbE, pas de RTT WAN ; la latence n'est simulée que par un `sleep` dans un relais loopback (`tools/proxy_latence.py:40`) — ni gigue, ni perte, ni MTU, ni congestion.
+6. **Colab non démontré** ; contraintes non automatisées : même build + même GGUF + même `--ctx` des deux côtés, tunnel obligatoire (Colab refuse les connexions entrantes).
+
+## 4. LIMITES MESURÉES
+
+**Réseau / transport** : 3 663 o par flux dense (79 + 896×4) ; 1 608 o en blocs à 256 jetons (écart 2,74e-2, ÷2,3) ; 1,5 ko/jeton en mode 4 (écart 3,03e-2) ; 229 455 o pour un lot de 64 = 3,5 ko/jeton. Débit jamais limitant : **0,25 Mbit/s** à 20 jetons/s (< 1 Mbit/s). Latence = seul poste : 1 aller-retour/jeton, ≈3,2 messages/jeton, **4,89× le calcul local à 20 ms**. Nagle/ACK différé coûtait ×6. Colab 60 ms → ≈112 ms/jeton, ~8 jetons/s contre ~60 local : **DÉDUIT** de la droite mesurée jusqu'à 20 ms, pas mesuré.
+**PCIe / GPU** : PCIe x8 6,5 Go/s (cité `gpu.rs:7`), NVLink **25,781 Go/s**/sens (mesuré), VRAM 84,9 Go/s, RAM 22,5 Go/s, CPU 14-25 Go/s. Seuil de bascule CPU/GPU ≈ 8 Mio, aller-retour ≈ 60 µs ; sous ~255 clés le GPU **perd** (7,68 vs 4,21 ms).
+**Disque** : NVMe 1→5,37 · 4→18,08 · 8→28,29 · **16 lecteurs→31,08 Go/s** ; `dd iflag=direct` 2,0 Go/s ; disque dur sda plafond séquentiel **205 Mio/s**, passe Kimi-K3 **133,5 Mio/s** (65 % du plafond, disque occupé 87,6 %, CPU 21 %). Goulot identifié : K3 sur HDD = **le disque** (206,58 Go / 130 Mo/s ≈ 1 589 s, mesuré 1 587 s) ; V4.1 Q2 sur NVMe = **le calcul** (≈0,6 Go/s, 30 % du disque).
+**Mémoire** : 47 Mo RSS pour 365,7 Go adressés (mmap) ; cache VRAM experts +6 % seulement ; LRU RAM perdante. Contradiction relevée : `kimi_k3.rs:1144-1148` affirme « pas de swap », or `docs/verification-kimi-k3.md:300-303` relève **62,8 Go de swap** (VmSwap 28,5 Go) — à traiter comme non tranché.
+**Cohérence doc** : `docs/colab-reparti.md:42` et `docs/roadmap.md:123` disent encore protocole **v5** alors que `VERSION_FLUX=6` (`main.rs`, `docs/format-flux.md:88`) ; le titre « deux machines avec le même GGUF ❌ » est la limite la plus lourde, assumée.
+
+**Verdict court** : le dépôt sait faire *un* découpage juste et prouvé — **2 nœuds TCP, 2 à N plages de couches, mêmes logits au bit près** — mais uniquement sur la même machine, avec le modèle entier de chaque côté. Ce qui manque n'est pas le transport (il est fidèle et prouvé) : c'est (i) le partage de la MÉMOIRE et du DISQUE entre nœuds, (ii) la sommation inter-nœuds des experts, (iii) le branchement réseau du relais K3, (iv) toute mesure sur un vrai lien, et (v) toute porte GPU/mmap/disque.
+
+### 👤 Utilisateur
+
+Agent 482522d1-31f1-43eb-ae9c-a681336404f7 sent a message:
+ADDENDUM au rapport « distribution / exploitation hétérogène » (4 précisions, aucune correction du corps du rapport) :
+
+1. **Plages de couches mesurées, au-delà de V4.1** : `reports/rapport-phase3-reparti.md:42-53` — pilote 0..12 / nœud 12..24 sur Qwen2.5-0.5B ctx 256 : locale = répartie = **144,8289**, écart 0,00e0 (avant correctif ×11,2 ; après la norme seule ×4,8) ; 1 023 flux, **9,5146** des deux côtés, 19,4 vs 19,7 ms/jeton. Et `reports/rapport-passe-k3-disque.md:409-467` — Kimi-K3 coupé à la couche 13 (0..12 → relais → 13..26 vs monolithe 0..26) : **B et C identiques AU BIT**, 4 jetons, relais de **28 672 octets**.
+2. `tools/test-plage-k3.sh:1-36` EST la porte du découpage K3 (`--k3-essai --couches 0:13 / 13:26 / 0:26`) mais **n'est pas câblée** dans `tools/portes.sh` (grep « plage » = 0 occurrence). Seules portes liées : n°3 (clusters, 799.8557) et n°1 (`cargo test` ≥48, qui couvre les 6 tests de `clusters.rs`).
+3. **Second artefact clusters complet** : V4-Flash **86,9 Go** → commun + 8 clusters, **11 008 entrées** de mapping (43 couches × 256 experts), 450 s de conversion ; chargement/passe 8 430,2968 en 111,8 s (original) contre **39,9 s** (éclaté), soit **2,8×** (`reports/rapport-v4-reparti.md:55-70`) ; `--ppl-reparti` sur le même artefact : 0,00e0 (`reports/rapport-materiel-disque-ou-cpu.md:72-75`).
+4. **Sensibilité de la porte clusters** : un correctif de routage avait déplacé transitoirement la valeur à 799,8152 (−0,005 %, cause `x/s` au lieu de `x*(1/s)`), puis retour à **799.8557 au bit près** (`reports/rapport-routage-experts.md:65-77`) — la valeur attendue de `portes.sh:60` est donc cohérente. Confirmations : 799,8557 inchangée dans `rapport-optimisations-auto.md:135`, `rapport-mla-experts.md:98-100`, `rapport-coherence-vision.md:159`.
+
+Nuance de vocabulaire : aucun fichier `reports/*cluster*` n'existe ; les documents « grappes » (neurones/co-activation) traitent un autre objet que le format fichiers `commun.gguf` + `cluster-XX.gguf`.
+
+### 👤 Utilisateur
+
+Agent 48ec07ab-ec9d-4297-a7bf-d84974667e61 sent a message:
+RAPPORT — INVENTAIRE DU TRAVAIL « CÔTÉ MODÈLE » DE QTRINET/DRAVE
+(Lecture seule : aucun fichier modifié, aucun entraînement lancé. [M]=mesuré dans un rapport/artefact, [D]=déduit du code, [S]=supposé.)
+
+## 1. TABLEAU DES DISPOSITIFS ENTRAÎNÉS
+Professeur = Qwen2.5-0.5B GGUF (24 couches, 896 canaux), jamais entraîné ici, lu en boîte noire (couche 0 → couche 10). Tout apprentissage est en forme fermée, numpy seul : aucun torch, aucun backward dans tools/ [M].
+| Dispositif | Architecture / taille | Corpus | Coût | Fid. appr. | Fid. TEST | Invariance | Pire paire | Source |
+|---|---|---|---|---|---|---|---|---|
+| Pont linéaire rang 1 (`pont_recurrent.py`, `pont_fidele.py`) | y=(e·W0)·Pᵀ+moy ; 1 792–2 688 nombres ; artefact `pont_semantique_r1.npz` 16 560 o | UDHR art.1, 20 langues apprises / 20 jamais vues | 1 inversion ridge, 3 254 pas | 0,6677 | — | **0,9492** | **0,7762** | `reports/rapport-pont-semantique.md` §5 |
+| Pont linéaire rang 128 (`pont_semantique.npz`, 1,38 Mo) | P,W0 896×128 = 230 400 param. | UDHR art.1, 40 langues → 6 tenues | idem | 0,8444 | **0,3691** | 0,2812 | — | idem §7 |
+| ELM 2 couches (R aléatoire gelé + tanh, W ajusté) | H=64 : 114 688 p. ; H=256 : 458 752 ; H=4096 : 7 340 032 | idem | 1 inversion | 0,7278 / 0,7753 / 0,8947 | 0,5725 / 0,5795 / 0,5557 | 0,8882 / 0,7855 / 0,6048 | — | idem §7 |
+| Réservoir 1 couche récurrente (`pont_reservoir.py`), réglé a=0,2 ride 3·10⁻¹, N=64 | s=(1−a)s+a·tanh(A·s+B·e) ; A,B gelés ; W ajusté ; 118 784 p. | UDHR art.1, 40 langues → 6 non latines | 1 inversion | — | **0,5921** (1 unité) / **0,4767** (10 unités) | **0,9772** / 0,9797 | **0,9576** / 0,9606 | `rapport-pont-semantique.md` §8-10 ; `rapport-pont-generatif.md` §13 |
+| Réservoir variantes | N=256 ; N=8 ; ride 10 ; ensemble K=2 ; saut e_t ; rayon 0,7→1,2 | idem | idem | — | 0,5868 / 0,5671 / 0,5653 / 0,6010 / 0,3792 / 0,5924 | 0,8187 / 0,9884 / 0,9989 / 0,8563 / 0,2757 / 0,9076 | 0,6918 / 0,9777 / 0,9978 / 0,7938 / −0,0693 / 0,844 | idem §8-10 |
+| Cascade générative + attrition (`pont_generatif.py`) : naissance 1 neurone à la fois, couches réelles, a=0,5 ride 1,0 | 256 neurones · 11 couches ; 1 neurone ; 128 | données PROPRES, 40 langues → 6, 10 unités | Gram recalculée par naissance | 0,7330 (256) | 0,4734 → 0,5059 → **0,5186** | 0,9983 → 0,9327 → 0,8874 | pire 0,6738 | `rapport-pont-generatif.md` §11-14 |
+| Cascade sur données contaminées (comparaison) | 256/9 couches ; attrition→192 ; 2 cycles 108/10 couches ; 512/14 couches ; attrition→384 | ctx 1024 + 32 jetons générés | idem | — | 0,6056 / 0,6078 / 0,6079 / 0,5026 / **0,5035** | 0,9128 (128 n.) | 0,7719 | idem §1-9 |
+| Loi fidélité/invariance | fid ≈ 0,3856·(1−invariance)+0,4752 | 11 points de croissance, données propres | — | r=0,9920, err. max 0,0047 | — | — | — | `rapport-pont-generatif.md` §14 ; `recapitulatif.md` §2.1 |
+| Sous-ensemble actif + lecture quadratique | 157 canaux / 896 (18 %), 80 neurones · 8 couches [30,8,8,8,8,8,8,2] ; 34 canaux = 50 % de l'énergie | 40 langues → 6 tenues, masque lu sur l'apprentissage seul | 1 inversion | — | **0,6383** (const. 0,6140) | 0,9648 | 0,8821 | `recapitulatif.md` §6-9 |
+| Discriminant de Fisher rang k (`discriminant_contenu.py`, `discriminant_transfert.py`, `stabilite_directions.py`) | projecteur eigh(solve(C_lang+λI, C_cont)), λ=1e-2·tr/ncan ; pont 120 neurones quadratique ride 0,03 graine 5 | 6 langues, 47 articles appris / 24 test | 1 eigh | — | — | rapport 1,474 = **136,4 %** du prof (rang 2) ; 0,910 (rang 5) | de–en 486 % du prof | `rapport-toutes-langues.md` §86-94 |
+| Renforcement/atrophie local (`renforcement.py`) | cap_j=|corr(act, résidu)| = 0,018 ; f=1+η(2cap−1), η=0,1, 8 passes | caches Wikipedia | 8 passes | — | — | rapport P_cont/P_lang 1,290 → **1,312** (cible 10,912) | — | `rapport-toutes-langues.md` §72-73 |
+| Renforcement des DIRECTIONS (`renforcement_directions.py`) | G=EᵀR, SVD(G), b_j←U[:,j] (Hebb sur l'entrée) ; 5 passes | idem | 1 SVD/passe | 0,4766 → 0,4667 | — | — | P_cont 318,7→**438,5** ▲ et P_lang 247,1→**181,9** ▼ | idem §73 |
+| MLP synthétique `src/tiny_model.py` | 32→64→10, ReLU+softmax, SGD lr 0,05, batch 128, 300-400 epochs, professeur = MLP gelé (teacher_seed 1234) | gaussiennes synthétiques 32 d / 10 classes | quelques min CPU | — | — | — | — | code + `run_quantify.py`, `run_clusters.py`, `run_sparsity.py` |
+| Sonde linéaire (`sonde_pont.py`) ridge 1e-2 | prédit la plongée de t+1 depuis l'état | idem | 1 inversion | prof 0,7088 / pont 0,2599 / témoin 0,6600 | **−1,7411 / 0,0066 / −3,3080** (échec) | — | — | `rapport-pont-semantique.md` §6 |
+| k-means experts (`run_real_clusters.py`) | 30 itérations, seed 0, centroïdes sur experts GGUF | GGUF qwen | — | sortie texte, aucun poids | — | — | — | code |
+Coût d'un cycle [M] : traçage 3,7 s/langue (art.1, `--dense` 1,94 s vs 8,00 s défaut) ; ajustement 5-10 min avant → **~15 s** après (24 000 lignes de Gram au lieu de 147 000-830 000 ; coût en n·d², d=1 792) ; 399 langues × 24 couches = 26 min (art.1) + 48 min (art.2) (`rapport-cycle-rapide.md`).
+Artefacts de poids persistés [M] : `pont_semantique.npz` (1,38 Mo) et `pont_semantique_r1.npz` (16 560 o), tous deux sous `/home/stephane/Data13TB/stephane/corpus/udhr/` (+ copie à `/home/stephane/Data13TB/stephane/`). **Aucun .pt/.pth/.safetensors/.ckpt dans le dépôt** ; le reste des ajustements est éphémère (RAM).
+
+## 2. CE QUI A MARCHÉ (positifs reproductibles)
+1. **Pont = projecteur du partagé, sans récurrence ni gradient** : une seule application linéaire entraînée sur N langues rend une sortie PLUS invariante que la couche qu'elle émule — 0,6965/0,5487 (pont) vs 0,6027/0,4269 (prof, couche 4) ; 0,6357/0,3828 vs 0,5464/0,2790 (couche 10), sur 6 écritures jamais vues (`rapport-pont-semantique.md` §3). Validé 20/20 : 0,7343 / 0,4421 (+17 % / +35 %) (§4).
+2. **Un seul neurone suffit** : invariance 0,9492, pire paire 0,7762, 1 792 nombres (§5). Au-delà, la fidélité monte mais l'invariance baisse monotonement (0,9492 → 0,7658 de 1 à 64 neurones).
+3. **Le réglage du réservoir est gratuit** : a 0,5→0,2 + ride 3·10⁻¹ : fidélité identique (0,5921 vs 0,5923), **+7,0 pts d'invariance, +11,4 pts de pire paire** ; répliqué sur 10 unités (+4,8 / +8,6) (§9-10). Le rayon spectral 0,7→1,2 est un **knob mort** (±3·10⁻⁴).
+4. **Ajouter une COUCHE aide, ajouter des NEURONES à un linéaire nuit** : linéaire 1→128 neurones : fid TEST 0,4752 → 0,3691 (surajustement pur) ; ELM 2 couches 64 : 0,5725, invariance 0,8882 (§7).
+5. **La LOI** : fidélité et invariance sont les deux axes d'une droite (r=0,9920) ; la droite est une propriété du professeur, les deux architectures (plat, cascade) la parcourent (`rapport-pont-generatif.md` §14).
+6. **Le sous-ensemble actif monte la cible** : 157 canaux/896 → +14 pts de fidélité, +1,7 d'invariance, +5,7 de pire paire ; la contribution propre du pont reste **+0,0197 ± 0,0009** sur 7 périmètres de 896 à 89 canaux. Lecture **quadratique** : +0,020 → +0,024 (+18 %), sans coût d'invariance (`recapitulatif.md` §6-9). Confirmé par Romeo : invariance prof 0,6532 (canaux énergétiques) vs 0,5703 (896) (`rapport-toutes-langues.md` §18).
+7. **Bande sémantique 10-15 sur 24 couches (42-62 %)** confirmée sur **398 langues** : pic couche 13 pooling moyenne (+0,0344), couche 10 dernière position (+0,0397) ; couche 0 séparation +0,001. Effet petit mais reproductible (fond anisotrope 0,75-0,87) (`rapport-cycle-rapide.md` §7-8).
+8. **Localité** : le jeton immédiat précédent porte les 2/3 du gain contextuel (+0,0866 sur +0,108 à la couche 3) ; le gain est divisé par 2 à chaque doublement de distance (`rapport-toutes-langues.md` §89, §95).
+9. **Centrer la cible** : gain de fidélité **répliqué** +0,0092 puis +0,0062 (5-7 σ) (`§88.5`, `§90`).
+10. **Transfert hors UDHR** : Romeo en→fr sans réapprentissage 0,6660 → 0,5802 ; viser la **couche 8** au lieu de 10 gagne **+0,0213** de fidélité transférée (§17-20).
+11. **À l'échelle** : 301 langues apprises / 41 test, 40 neurones · 1 couche : fid TEST **0,7430**, invariance **0,9827**, pire paire **0,9165** (§14).
+
+## 3. CE QUI A ÉCHOUÉ OU A ÉTÉ RÉFUTÉ
+1. **Récurrence linéaire** s_t=A·s_{t−1}+B·e_t : fidélité en un pas 0,49-0,58, **boucle libre 0,0016 à 0,1266** selon le rang ; le témoin « linéaire de e_t seul » fait **0,90-0,92** — la récurrence est deux fois moins bonne (`rapport-pont-semantique.md` §1-2).
+2. **La profondeur en cascade n'apporte rien sur données PROPRES** : à 256 neurones, cascade 0,5186 vs réservoir plat 0,5145 (+0,41 pt), médiane sur 4 graines 0,5155 vs 0,5145 ; à 64 neurones **le plat gagne** (0,4998 vs 0,4940). L'attrition 256→192 fait **baisser** le test (0,5186 → 0,5161) alors qu'elle le faisait monter sur données contaminées (0,4998 → 0,5002). **Les +37 % à +70 % annoncés étaient un effet des défauts de traçage** (32 jetons générés, troncature ctx 1024) (`rapport-pont-generatif.md` §13 ; `docs/note-un-pont-par-professeur.md` §3, §6).
+3. **L'attrition ne généralise pas** : −0,003 pour −25 % de neurones, −0,021 pour 99 % ; critère de validation trop indulgent (seuil 0,005) (`recapitulatif.md` §11).
+4. **La règle hebbienne locale ne transfère pas** : 29,151 vs 29,151 (autre texte), 1 116,532 vs 1 116,532 (autre article, breton) ; test tenu à l'écart : 0,6027 → **0,5461**, et elle **dégrade de 5 à 10 %** les langues non vues (`docs/note-cancellation-evenementielle.md` §9). Le gain apparent de +11,7 % venait de ce que les langues de test étaient dans l'entraînement.
+5. **Renforcement/atrophie par mise à l'échelle : forcé à l'échec.** La capture réelle vaut 0,018 (pas 0,5 — chiffre déduit, corrigé au §73), donc atrophie uniforme = identité du §67 : +1,7 % du chemin nécessaire (1,290 → 1,312 vs cible 10,912) (§72-73).
+6. **Normalisation par langue** : invariance 0,9648 → 0,8823, pire paire 0,8821 → 0,6464. Échec net (`recapitulatif.md` §10.3).
+7. **Plus de langues ne réduit pas l'écart de transfert** : 0,132-0,141 constant de 20 à 36 langues ; écart TEST +0,0693 (dont +0,0269 de transfert générique et +0,0424 de typologie) (§10.4, §13).
+8. **Comparer deux professeurs est vide** : « notre pont bat le 30B » (0,9425 vs 0,9014) est un classement sans sens — deux espaces ; **il faut un pont par professeur** (`docs/note-un-pont-par-professeur.md`).
+9. **Les énergies absolues ne mesurent rien** : l'échelle est gratuite (×5,40 ramène P_cont à 100 % sans changer le rapport) ; le critère §62.3 se réduit à « notre rapport ≥ celui du professeur » (`rapport-toutes-langues.md` §88, §91.6).
+10. **Centrer la cible** : gain de rapport non répliqué (×8,1 à 47 articles → **×0,81** à 482) (§90).
+11. **La sonde prédictive n'a rien prouvé** : R² de test négatif pour les trois états (prof −1,7411, pont 0,0066, témoin −3,3080) — échec de protocole (`rapport-pont-semantique.md` §6).
+12. **Le discriminant perd 4 à 7× en transfert de panel** : 31,2 % (roman→germanique) à 55,1 % (germanique→roman) contre 211-320 % dans-panel ; **rang 1 pire que tout** (moyenne 112,3 %, min 75,2 %) ; rang 3 = seul à ne jamais perdre (min 104,7 %, σ 12,2) ; le classement des difficultés ne survit pas à la projection (§86-87, §93-94). Réserve : appris et mesuré sur les mêmes 6 langues (§92.4).
+13. **Cancellation de langue = oracle, non déployable** : pire paire 0,2790 → 0,3779 (+35 %), mais δ calculé sur les langues de test ; témoin δ aléatoire même norme : 0,2296 (baisse) (`docs/note-regle-contrastive.md` §1bis).
+14. **Localité linéaire insuffisante** : 66,9 % de la variance de la couche 8 inexpliqués par le jeton + 3 voisins (R² 0,3313) (§89).
+15. **La cible initiale était mal choisie** : la couche 10 est déjà en re-spécialisation ; pic à la couche 8 (0,5985 Romeo / 0,5471 UDHR vs 0,5703 / 0,5247) (§17-20).
+
+## 4. CORPUS DISPONIBLES
+| Corpus | Chemin | Taille | Producteur |
+|---|---|---|---|
+| UDHR XML (456 langues) | `/home/stephane/Data13TB/stephane/corpus/udhr/udhr_xml` | 9,8 Mo, 456 XML | amont (zip) ; lu par `tools/extrait_udhr.py` |
+| UDHR unités alignées (42 unités) | `.../corpus/udhr/unites.jsonl` | 5,47 Mo, 42 lignes | `tools/extrait_udhr.py` |
+| UDHR article 1 | `.../corpus/udhr/article1` | 399 .txt, 1,6 Mo, 92 124 car. | `tools/extrait_article1.py` |
+| UDHR article 2 | `.../corpus/udhr/article2` | 399 .txt, 271 958 car. | idem `--article 2` |
+| Traces UDHR | `article1_traces` 399 .drvf/2,1 Go ; `article2_traces` 399/4,7 Go ; `udhr392` 392/2,7 Go ; `udhr392_c8` 392/4,0 Go ; `unites` 400/491 Mo | 14 Go | moteur `--trace-flux` via `/tmp/trace_*.sh` (non versionnés) |
+| Wikipedia apparié | `.../corpus/wiki_apparie` | 12 Go : 2 892 .txt + 2 892 .drvf = 482 titres × 6 langues (en,fr,de,es,it,pt) | `tools/wiki_apparie.py` ← `data/wikipedia/db/*wiki_v14.db` (132 Go, 10 bases) |
+| Wikipedia non apparié | `/tmp/wiki_{en,fr}.jsonl` (1,59/1,62 Mo) ; traces `corpus/wiki_traces` 480 .drvf/1,8 Go | 1,8 Go | `tools/extrait_wikipedia.py` ← `/home/stephane/Data13TB/stephane/nipada/wikipedia_decompressed` (81 Go, de/en/es/fr/it/ru) |
+| Gutenberg / œuvres parallèles | `/home/stephane/Data13TB/stephane/GitHub/Panini-Research/data/mass_ingestion/backlog_gutenberg_{en,fr,de,es}.db` (21,1/6,7/9,4/11,2 Mo) | 1,3 Go au total | `tools/extrait_gutenberg.py` (Romeo en↔fr, 48 .drvf ; textes dans `/tmp/parallele/`), `tools/extrait_crime.py` (Crime et Châtiment en↔es, 48 .txt, traçage arrêté à 8 .drvf) |
+| WikiText-2 | `data/wikitext2_test.txt` (.ids, wt2.json) | 359 ko / 1 995 lignes | amont ; utilisé par `tools/aiguille.py`, `run_harness.py` |
+| Caches d'activations | `/tmp/cache_*.npz` | 41 fichiers, 9,5 Go (dont `cache_vf_{train,test}.npz` 1,75/1,83 Go = 482 articles × 6 langues ; `cache392*`, `cache_wiki_*`, `cache_rj_*`, `pcs_a1/a2`) | `tools/cache_pont.py` |
+| Poids appris | `.../corpus/udhr/pont_semantique{,_r1}.npz` | 1,38 Mo + 16 560 o | `tools/pont_recurrent.py` |
+| Découpage stratifié | `/tmp/decoupe392.json` (20 test / 40 val, graine 5) | — | `tools/decoupe_langues.py` |
+Totaux [M] : `.../stephane/corpus` = **35 Go**, 3 804 .txt, 5 972 .drvf. `models/` = 2 GGUF (Qwen2.5-0.5B Q4_0 353 Mo, Q8_0 531 Mo), téléchargés, jamais entraînés. **Aucun `tools/ingestion*.py`** n'existe.
+
+## 5. CE QUI MANQUE (jamais entraîné ni essayé)
+1. **Aucun transformer entraîné de bout en bout** : zéro rétropropagation dans `tools/` ; seul apprentissage par gradient = MLP 32→64→10 sur gaussiennes synthétiques (`src/tiny_model.py`), aucun poids écrit.
+2. **Aucune distillation** : mentionnée (`tools/approximabilite_bloc.py` L5, `reports/rapport-morcellement-experts.md`) mais jamais réalisée.
+3. **Le test qui dirait si le pont jette de l'information utile n'a jamais été fait** : brancher le pont devant les couches suivantes du professeur et mesurer la perplexité (`rapport-pont-semantique.md`, « ce que ce rapport ne dit pas » §1).
+4. **La règle contrastive anti-hebbienne n'a jamais été apprise** : `D −= η·Δy⊗Δx` entre langues, avec alignement au jeton et terme de partage — seul l'oracle de cancellation et la règle hebbienne NON contrastive ont été mesurés (`docs/note-regle-contrastive.md`).
+5. **La trace élargie portant la sortie de la porte FFN** (nécessaire à `HebbDiff` ciblé) n'existe pas ; `--trace-flux` ne porte que des largeurs cachées.
+6. **Aucun vrai arrêt anticipé moteur** : `--couches a:b` borne l'exécution mais charge les 24 couches (`docs/note-cout-professeur.md` §6) ; 77 à 83 % du calcul du professeur est jeté.
+7. **Stabilité du sous-espace de rang 3, fidélité TEST et pire paire par rang de discriminant** : nommées comme mesures suivantes, non faites (`rapport-toutes-langues.md` §94.4).
+8. **Aucune récurrence NON LINÉAIRE entraînée autre que le réservoir gelé** (DeltaNet du moteur, vérifié sur K3, jamais appliqué au pont) — réserve explicite du §4 de `rapport-pont-semantique.md`.
+9. **Un seul professeur** : le 30B (Qwen3-30B-A3B) est abandonné ; aucun `pont_30B` ni second pont n'existe, alors que la règle est « un pont par professeur ».
+10. **Alignement au niveau du jeton absent** : l'UDHR n'est aligné que par article (33 jetons en anglais, 174 en hindi) ; seuls 2 des 30 articles alignés sont utilisés (~3 % du corpus UDHR disponible).
+11. **Le pont n'est jamais branché dans le moteur pour la génération** : `tools/applique_pont.py` est un applicateur hors ligne sur un `.drvf`.
+12. **Parcimonie entraînée** : un seul essai, sur le MLP synthétique (~1,5 M paramètres) ; jamais sur le pont ni sur un vrai modèle.
+13. **Attrition sur un réseau né librement**, optimisation du seuil de restriction (50/75 %), examen des 218 canaux propres à certaines langues : ouverts et non faits (`recapitulatif.md` §6.4).
+14. **Manques matériels** : `udhr_xml.zip`/`udhr_txt.zip` = pages 404 de 196 o ; traçage Crime 8/48 ; `wiki_{de,es,it,pt}.jsonl` absents ; dossiers `appr42`/`tenus42` vides ; 399 fichiers pour 456 langues annoncées (collisions de codes ISO).
+
+
+### 👤 Utilisateur
+
+Background subagent 482522d1-31f1-43eb-ae9c-a681336404f7 finished and will do no further work unless you send it more.
+Its closing message:
+⏵ Inventaire terminé : rapport et addendum transmis au parent
+
+Mission terminée. Livrables envoyés à `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` : le rapport complet (≤150 lignes, tableau par capacité, portes, manques, limites mesurées) puis un addendum issu du dernier sous-agent.
+
+**Complément (addendum) — 4 points qui s'ajoutent au rapport, sans le corriger :**
+1. **Plages de couches mesurées au-delà de V4.1** : `reports/rapport-phase3-reparti.md:42-53` (0..12 / 12..24 sur Qwen2.5-0.5B : 144,8289 = 144,8289, 0,00e0, 1 023 flux, 9,5146 à 1 024 jetons) et `reports/rapport-passe-k3-disque.md:409-467` (Kimi-K3 coupé couche 13 : B et C **identiques au bit**, 4 jetons, relais de **28 672 octets**).
+2. `tools/test-plage-k3.sh:1-36` **est** la porte du découpage K3, mais elle **n'est pas câblée** dans `tools/portes.sh` (0 occurrence de « plage ») — les seules portes liées restent n°1 (`cargo test` ≥48) et n°3 (clusters, 799.8557).
+3. **Second artefact clusters** : V4-Flash 86,9 Go → commun + 8 clusters, 11 008 entrées de mapping (43 × 256), 450 s ; 8 430,2968 en 39,9 s contre 111,8 s, soit **2,8×** (`rapport-v4-reparti.md:55-70`) ; `--ppl-reparti` sur le même : 0,00e0.
+4. **Sensibilité de la porte clusters** : passage transitoire à 799,8152 (−0,005 %, `x/s` au lieu de `x*(1/s)`) puis retour à **799.8557 au bit près** (`rapport-routage-experts.md:65-77`) — la valeur attendue par `portes.sh:60` est cohérente.
+
+Nuance de vocabulaire : aucun `reports/*cluster*` n'existe ; les documents « grappes » traitent un autre objet que le format `commun.gguf` + `cluster-XX.gguf`.
+
+**Conclusion inchangée** : un seul découpage est à la fois juste et prouvé — 2 nœuds TCP, N plages de couches, mêmes logits au bit près — mais uniquement sur la même machine, chaque nœud chargeant le modèle entier. Les manques structurants restent le partage RAM/disque entre nœuds, la sommation inter-nœuds des experts, le branchement réseau du relais K3, toute mesure sur un vrai lien réseau, et toute porte GPU/mmap/disque. Aucun fichier n'a été modifié, aucune compilation ni test lancé.
+
+### 👤 Utilisateur
+
+Background subagent 48ec07ab-ec9d-4297-a7bf-d84974667e61 finished and will do no further work unless you send it more.
+Its closing message:
+⏵ Livraison du rapport final.
+
+Rapport envoyé au parent. Le voici (lecture seule ; aucun fichier modifié, aucun entraînement lancé) :
+
+# Inventaire du travail « côté modèle » — Qtrinet / Drave
+[M] = mesuré (rapport ou artefact) · [D] = déduit du code · [S] = supposé.
+
+## 1. TABLEAU DES DISPOSITIFS ENTRAÎNÉS
+Professeur = Qwen2.5-0.5B GGUF (24 couches, 896 canaux), **jamais entraîné ici**, lu en boîte noire (couche 0 → couche 10). Tout apprentissage est en **forme fermée, numpy seul** : aucun torch, aucun `backward` dans `tools/` [M].
+
+| Dispositif | Architecture / taille | Corpus | Coût | Fid. appr. | Fid. TEST | Invariance | Pire paire | Source |
+|---|---|---|---|---|---|---|---|---|
+| Pont linéaire rang 1 (`pont_recurrent.py`, `pont_fidele.py`) | y=(e·W0)·Pᵀ+moy ; 1 792–2 688 nombres ; artefact `pont_semantique_r1.npz` 16 560 o | UDHR art.1, 20 langues apprises / 20 jamais vues | 1 inversion ridge, 3 254 pas | 0,6677 | — | **0,9492** | **0,7762** | `reports/rapport-pont-semantique.md` §5 |
+| Pont linéaire rang 128 (`pont_semantique.npz`, 1,38 Mo) | P,W0 896×128 = 230 400 param. | UDHR art.1, 40 langues → 6 tenues | idem | 0,8444 | **0,3691** | 0,2812 | — | idem §7 |
+| ELM 2 couches (R aléatoire gelé + tanh, W ajusté) | H=64 : 114 688 p. ; H=256 : 458 752 ; H=4096 : 7 340 032 | idem | 1 inversion | 0,7278 / 0,7753 / 0,8947 | 0,5725 / 0,5795 / 0,5557 | 0,8882 / 0,7855 / 0,6048 | — | idem §7 |
+| Réservoir 1 couche récurrente (`pont_reservoir.py`), réglé a=0,2 ride 3·10⁻¹, N=64 | s=(1−a)s+a·tanh(A·s+B·e) ; A,B gelés ; W ajusté ; 118 784 p. | UDHR art.1, 40 langues → 6 non latines | 1 inversion | — | **0,5921** (1 unité) / **0,4767** (10 unités) | **0,9772** / 0,9797 | **0,9576** / 0,9606 | `rapport-pont-semantique.md` §8-10 ; `rapport-pont-generatif.md` §13 |
+| Réservoir variantes | N=256 ; N=8 ; ride 10 ; ensemble K=2 ; saut e_t ; rayon 0,7→1,2 | idem | idem | — | 0,5868 / 0,5671 / 0,5653 / 0,6010 / 0,3792 / 0,5924 | 0,8187 / 0,9884 / 0,9989 / 0,8563 / 0,2757 / 0,9076 | 0,6918 / 0,9777 / 0,9978 / 0,7938 / −0,0693 / 0,844 | idem §8-10 |
+| Cascade générative + attrition (`pont_generatif.py`) : naissance 1 neurone à la fois, couches réelles, a=0,5 ride 1,0 | 256 neurones · 11 couches ; 1 neurone ; 128 | données PROPRES, 40 langues → 6, 10 unités | Gram recalculée par naissance | 0,7330 (256) | 0,4734 → 0,5059 → **0,5186** | 0,9983 → 0,9327 → 0,8874 | 0,6738 | `rapport-pont-generatif.md` §11-14 |
+| Cascade sur données contaminées (comparaison) | 256/9 couches ; attrition→192 ; 2 cycles 108/10 couches ; 512/14 couches ; attrition→384 | ctx 1024 + 32 jetons générés | idem | — | 0,6056 / 0,6078 / 0,6079 / 0,5026 / **0,5035** | 0,9128 (128 n.) | 0,7719 | idem §1-9 |
+| Loi fidélité/invariance | fid ≈ 0,3856·(1−invariance)+0,4752 | 11 points, données propres | — | r=0,9920, err. max 0,0047 | — | — | — | `rapport-pont-generatif.md` §14 ; `recapitulatif.md` §2.1 |
+| Sous-ensemble actif + lecture quadratique | 157 canaux / 896 (18 %), 80 neurones · 8 couches [30,8,8,8,8,8,8,2] ; 34 canaux = 50 % de l'énergie | 40 langues → 6 tenues, masque lu sur l'apprentissage seul | 1 inversion | — | **0,6383** (const. 0,6140) | 0,9648 | 0,8821 | `recapitulatif.md` §6-9 |
+| Discriminant de Fisher rang k (`discriminant_contenu.py`, `discriminant_transfert.py`, `stabilite_directions.py`) | eigh(solve(C_lang+λI, C_cont)), λ=1e-2·tr/ncan ; pont 120 neurones quadratique ride 0,03 graine 5 | 6 langues, 47 articles appris / 24 test | 1 eigh | — | — | rapport 1,474 = **136,4 %** du prof (rang 2) ; 0,910 (rang 5) | de–en 486 % du prof | `rapport-toutes-langues.md` §86-94 |
+| Renforcement/atrophie local (`renforcement.py`) | cap_j=|corr(act, résidu)| = 0,018 ; f=1+η(2cap−1), η=0,1, 8 passes | caches Wikipedia | 8 passes | — | — | rapport P_cont/P_lang 1,290 → **1,312** (cible 10,912) | — | `rapport-toutes-langues.md` §72-73 |
+| Renforcement des DIRECTIONS (`renforcement_directions.py`) | G=EᵀR, SVD(G), b_j←U[:,j] (Hebb sur l'entrée) ; 5 passes | idem | 1 SVD/passe | 0,4766 → 0,4667 | — | — | P_cont 318,7→**438,5** ▲, P_lang 247,1→**181,9** ▼ | idem §73 |
+| MLP synthétique `src/tiny_model.py` | 32→64→10, ReLU+softmax, SGD lr 0,05, batch 128, 300-400 epochs, professeur = MLP gelé (teacher_seed 1234) | gaussiennes synthétiques 32 d / 10 classes | quelques min CPU | — | — | — | — | code + `run_quantify.py`, `run_clusters.py`, `run_sparsity.py` |
+| Sonde linéaire (`sonde_pont.py`) ridge 1e-2 | prédit la plongée de t+1 depuis l'état | idem | 1 inversion | prof 0,7088 / pont 0,2599 / témoin 0,6600 | **−1,7411 / 0,0066 / −3,3080** (échec) | — | — | `rapport-pont-semantique.md` §6 |
+| k-means experts (`run_real_clusters.py`) | 30 itérations, seed 0, centroïdes sur experts GGUF | GGUF qwen | — | sortie texte, aucun poids | — | — | — | code |
+
+Coût d'un cycle [M] : traçage 3,7 s/langue (art.1 ; `--dense` 1,94 s vs 8,00 s défaut) ; ajustement **5-10 min → ~15 s** (24 000 lignes de Gram au lieu de 147 000-830 000 ; coût en n·d², d=1 792) ; 399 langues × 24 couches = 26 min (art.1) + 48 min (art.2) — `reports/rapport-cycle-rapide.md`.
+Poids persistés [M] : `pont_semantique.npz` (1,38 Mo) et `pont_semantique_r1.npz` (16 560 o) sous `/home/stephane/Data13TB/stephane/corpus/udhr/` (+ copie dans `.../stephane/`). **Aucun .pt/.pth/.safetensors/.ckpt dans le dépôt** ; le reste des ajustements est éphémère (RAM).
+
+## 2. CE QUI A MARCHÉ (positifs reproductibles)
+1. **Le pont est un projecteur du partagé, sans récurrence ni gradient** : une seule application linéaire rend une sortie plus invariante que la couche qu'elle émule — 0,6965/0,5487 (pont) vs 0,6027/0,4269 (prof, couche 4) ; 0,6357/0,3828 vs 0,5464/0,2790 (couche 10), sur 6 écritures jamais vues (`rapport-pont-semantique.md` §3). Validé 20/20 : 0,7343 / 0,4421 (+17 % / +35 %) (§4).
+2. **Un seul neurone suffit** : invariance 0,9492, pire paire 0,7762, 1 792 nombres (§5). Au-delà, la fidélité monte mais l'invariance baisse monotonement (0,9492 → 0,7658 de 1 à 64 neurones).
+3. **Le réglage du réservoir est gratuit** : a 0,5→0,2 + ride 3·10⁻¹ → fidélité identique (0,5921 vs 0,5923), **+7,0 pts d'invariance, +11,4 pts de pire paire** ; répliqué sur 10 unités (+4,8 / +8,6) (§9-10). Le rayon spectral 0,7→1,2 est un **knob mort** (±3·10⁻⁴).
+4. **Ajouter une COUCHE aide ; ajouter des NEURONES à un linéaire nuit** : linéaire 1→128 neurones, fid TEST 0,4752 → 0,3691 (surajustement pur) ; ELM 64 : 0,5725 / invariance 0,8882 (§7).
+5. **La LOI** : fidélité et invariance sont les deux axes d'une droite (r=0,9920) ; la droite est une propriété du professeur, les deux architectures la parcourent (`rapport-pont-generatif.md` §14).
+6. **Le sous-ensemble actif monte la cible** : 157 canaux/896 → +14 pts de fidélité, +1,7 d'invariance, +5,7 de pire paire ; contribution propre du pont **+0,0197 ± 0,0009** sur 7 périmètres (896→89 canaux). Lecture **quadratique** : +0,020 → +0,024 (+18 %), sans coût d'invariance (`recapitulatif.md` §6-9). Confirmé par Romeo : 0,6532 (canaux énergétiques) vs 0,5703 (896) (`rapport-toutes-langues.md` §18).
+7. **Bande sémantique 10-15 / 24 couches (42-62 %)** confirmée sur **398 langues** : pic couche 13 (pooling moyenne, +0,0344), couche 10 (dernière position, +0,0397) ; couche 0 → +0,001. Effet réel mais petit (fond anisotrope 0,75-0,87) (`rapport-cycle-rapide.md` §7-8).
+8. **Localité** : le jeton immédiat précédent porte les 2/3 du gain contextuel (+0,0866 sur +0,108 à la couche 3) ; gain divisé par 2 à chaque doublement de distance (`rapport-toutes-langues.md` §89, §95).
+9. **Centrer la cible** : gain de fidélité **répliqué** +0,0092 puis +0,0062 (5-7 σ) (§88.5, §90).
+10. **Transfert hors UDHR** : Romeo en→fr sans réapprentissage 0,6660 → 0,5802 ; viser la **couche 8** au lieu de 10 gagne **+0,0213** de fidélité transférée (§17-20).
+11. **À l'échelle** : 301 langues apprises / 41 test, 40 neurones · 1 couche : fid TEST **0,7430**, invariance **0,9827**, pire paire **0,9165** (§14).
+
+## 3. CE QUI A ÉCHOUÉ OU A ÉTÉ RÉFUTÉ
+1. **Récurrence linéaire** s_t=A·s_{t−1}+B·e_t : fidélité en un pas 0,49-0,58, **boucle libre 0,0016 à 0,1266** ; le témoin « linéaire de e_t seul » fait **0,90-0,92** — la récurrence est deux fois moins bonne (`rapport-pont-semantique.md` §1-2).
+2. **La profondeur en cascade n'apporte rien sur données PROPRES** : à 256 neurones, cascade 0,5186 vs réservoir plat 0,5145 (+0,41 pt) ; médiane 4 graines 0,5155 vs 0,5145 ; à 64 neurones **le plat gagne** (0,4998 vs 0,4940). L'attrition 256→192 fait **baisser** le test (0,5186 → 0,5161) alors qu'elle le faisait monter sur données contaminées. **Les +37 % à +70 % annoncés venaient des défauts de traçage** (32 jetons générés, troncature ctx 1024) (`rapport-pont-generatif.md` §13 ; `docs/note-un-pont-par-professeur.md` §3, §6).
+3. **L'attrition ne généralise pas** : −0,003 pour −25 % de neurones, −0,021 pour 99 % ; critère de validation trop indulgent (seuil 0,005) (`recapitulatif.md` §11).
+4. **La règle hebbienne locale ne transfère pas** : 29,151 vs 29,151 (autre texte), 1 116,532 vs 1 116,532 (autre article, breton) ; test tenu à l'écart 0,6027 → **0,5461**, et **dégrade de 5 à 10 %** les langues non vues (`docs/note-cancellation-evenementielle.md` §9). Le +11,7 % apparent venait de langues de test présentes dans l'entraînement.
+5. **Renforcement/atrophie par mise à l'échelle : forcé à l'échec.** Capture réelle 0,018 (le 0,5 avait été *déduit*, corrigé au §73) → atrophie uniforme = identité du §67 : +1,7 % du chemin nécessaire (1,290 → 1,312 vs cible 10,912) (§72-73).
+6. **Normalisation par langue** : invariance 0,9648 → 0,8823, pire paire 0,8821 → 0,6464 (`recapitulatif.md` §10.3).
+7. **Plus de langues ne réduit pas l'écart de transfert** : 0,132-0,141 constant de 20 à 36 langues ; écart TEST +0,0693 (dont +0,0269 générique, +0,0424 de typologie) (§10.4, §13).
+8. **Comparer deux professeurs est vide** : « notre pont bat le 30B » (0,9425 vs 0,9014) ne classe rien — deux espaces ; **il faut un pont par professeur** (`docs/note-un-pont-par-professeur.md`).
+9. **Les énergies absolues ne mesurent rien** : l'échelle est gratuite (×5,40 ramène P_cont à 100 % sans changer le rapport) ; le critère §62.3 se réduit au rapport (`rapport-toutes-langues.md` §88, §91.6).
+10. **Centrer la cible** : gain de rapport non répliqué (×8,1 à 47 articles → **×0,81** à 482) (§90).
+11. **Sonde prédictive** : R² de test négatif pour les trois états (prof −1,7411, pont 0,0066, témoin −3,3080) — échec de protocole (`rapport-pont-semantique.md` §6).
+12. **Discriminant : perd 4 à 7× en transfert de panel** (31,2 % roman→germanique, 55,1 % inverse, vs 211-320 % dans-panel) ; **rang 1 pire que tout** (112,3 %, min 75,2 %) ; rang 3 = seul à ne jamais perdre (min 104,7 %, σ 12,2) ; le classement des difficultés ne survit pas à la projection (§86-87, §93-94).
+13. **Cancellation de langue = oracle, non déployable** : pire paire 0,2790 → 0,3779 (+35 %), δ calculé sur les langues de test ; témoin δ aléatoire même norme → 0,2296 (`docs/note-regle-contrastive.md` §1bis).
+14. **Localité linéaire insuffisante** : 66,9 % de la variance de la couche 8 inexpliqués par jeton + 3 voisins (R² 0,3313) (§89).
+15. **La cible initiale était mal choisie** : couche 10 déjà en re-spécialisation ; pic couche 8 (0,5985 Romeo / 0,5471 UDHR vs 0,5703 / 0,5247) (§17-20).
+
+## 4. CORPUS DISPONIBLES
+| Corpus | Chemin | Taille | Producteur |
+|---|---|---|---|
+| UDHR XML (456 langues) | `/home/stephane/Data13TB/stephane/corpus/udhr/udhr_xml` | 9,8 Mo, 456 XML | amont ; lu par `tools/extrait_udhr.py` |
+| UDHR unités alignées | `.../corpus/udhr/unites.jsonl` | 5,47 Mo, 42 unités | `tools/extrait_udhr.py` |
+| UDHR article 1 / article 2 | `.../corpus/udhr/article1` (399 .txt, 92 124 car.) / `article2` (271 958 car.) | 1,6 Mo | `tools/extrait_article1.py` |
+| Traces UDHR | `article1_traces` 399 .drvf/2,1 Go ; `article2_traces` 4,7 Go ; `udhr392` 2,7 Go ; `udhr392_c8` 4,0 Go ; `unites` 491 Mo | 14 Go | moteur `--trace-flux` via `/tmp/trace_*.sh` (non versionnés) |
+| Wikipedia apparié | `.../corpus/wiki_apparie` | 12 Go : 2 892 .txt + 2 892 .drvf = 482 titres × 6 langues | `tools/wiki_apparie.py` ← `data/wikipedia/db/*wiki_v14.db` (132 Go, 10 bases) |
+| Wikipedia non apparié | `/tmp/wiki_{en,fr}.jsonl` ; traces `corpus/wiki_traces` 480 .drvf/1,8 Go | 1,8 Go | `tools/extrait_wikipedia.py` ← `.../nipada/wikipedia_decompressed` (81 Go, de/en/es/fr/it/ru) |
+| Gutenberg parallèle | `Panini-Research/data/mass_ingestion/backlog_gutenberg_{en,fr,de,es}.db` (21,1/6,7/9,4/11,2 Mo) | 1,3 Go | `tools/extrait_gutenberg.py` (Romeo en↔fr, 48 .drvf), `tools/extrait_crime.py` (Crime en↔es, 48 .txt, traçage 8/48) |
+| WikiText-2 | `data/wikitext2_test.txt` (+ .ids, wt2.json) | 359 ko | amont ; `tools/aiguille.py`, `run_harness.py` |
+| Caches d'activations | `/tmp/cache_*.npz` | 41 fichiers, 9,5 Go (`cache_vf_{train,test}.npz` 1,75/1,83 Go = 482 art. × 6 langues ; `cache392*`, `cache_wiki_*`, `cache_rj_*`, `pcs_a1/a2`) | `tools/cache_pont.py` |
+| Poids appris | `.../corpus/udhr/pont_semantique{,_r1}.npz` | 1,38 Mo + 16 560 o | `tools/pont_recurrent.py` |
+| Découpage stratifié | `/tmp/decoupe392.json` (20 test / 40 val, graine 5) | — | `tools/decoupe_langues.py` |
+
+Totaux [M] : `.../stephane/corpus` = **35 Go**, 3 804 .txt, 5 972 .drvf. `models/` = 2 GGUF Qwen2.5-0.5B (353 Mo / 531 Mo) téléchargés, jamais entraînés. **Aucun `tools/ingestion*.py`** n'existe.
+
+## 5. CE QUI MANQUE (jamais entraîné ni essayé)
+1. **Aucun transformer entraîné de bout en bout** : zéro rétropropagation dans `tools/` ; seul apprentissage par gradient = MLP 32→64→10 sur gaussiennes (`src/tiny_model.py`), aucun poids écrit.
+2. **Aucune distillation** : mentionnée (`tools/approximabilite_bloc.py` L5, `reports/rapport-morcellement-experts.md`), jamais réalisée.
+3. **Le test qui dirait si le pont jette de l'information utile n'a jamais été fait** : brancher le pont devant les couches suivantes du professeur et mesurer la perplexité (`rapport-pont-semantique.md`, réserves §1).
+4. **La règle contrastive anti-hebbienne n'a jamais été apprise** : `D −= η·Δy⊗Δx` entre langues, avec alignement au jeton et terme de partage — seuls l'oracle de cancellation et la règle NON contrastive ont été mesurés (`docs/note-regle-contrastive.md`).
+5. **La trace élargie portant la sortie de la porte FFN** (nécessaire à `HebbDiff` ciblé) n'existe pas.
+6. **Aucun vrai arrêt anticipé moteur** : `--couches a:b` borne l'exécution mais charge les 24 couches ; **77 à 83 %** du calcul du professeur est jeté (`docs/note-cout-professeur.md` §6).
+7. **Stabilité du sous-espace de rang 3, fidélité TEST et pire paire par rang** : nommées, non faites (`rapport-toutes-langues.md` §94.4).
+8. **Aucune récurrence NON LINÉAIRE entraînée** autre que le réservoir gelé (DeltaNet du moteur, vérifié sur K3, jamais appliqué au pont).
+9. **Un seul professeur** : le 30B est abandonné ; aucun `pont_30B`, alors que la règle est « un pont par professeur ».
+10. **Alignement au jeton absent** (UDHR aligné par article : 33 jetons en anglais, 174 en hindi) ; seuls 2 des 30 articles alignés utilisés, ~3 % du corpus UDHR.
+11. **Le pont n'est jamais branché dans le moteur** : `tools/applique_pont.py` est un applicateur hors ligne sur un `.drvf`.
+12. **Parcimonie entraînée** : un seul essai sur le MLP synthétique ; jamais sur le pont ni un vrai modèle.
+13. **Attrition sur réseau né librement, seuil de restriction (50/75 %), examen des 218 canaux propres à certaines langues** : ouverts (`recapitulatif.md` §6.4).
+14. **Manques matériels** : `udhr_xml.zip`/`udhr_txt.zip` = pages 404 (196 o) ; traçage Crime 8/48 ; `wiki_{de,es,it,pt}.jsonl` absents ; `appr42`/`tenus42` vides ; 399 fichiers pour 456 langues annoncées (collisions ISO).
+
+**Note de fiabilité** : les chiffres marqués [M] proviennent des rapports cités, qui documentent eux-mêmes leurs corrections successives (§81-§95 de `rapport-toutes-langues.md` listent sept chiffres antérieurs invalidés par un choix non déclaré : graine, panel, pooling, ajustement, échelle, ratio variables/points, réplication). Les résultats « couche 10 » antérieurs au 6 octobre sont à lire avec les réserves de troncature et de contamination ; les chiffres « données propres » sont ceux du §13-14 de `rapport-pont-generatif.md`.
+
+- **bash** `{"command": "tail -20 /tmp/essai_decharge_1.log 2>&1; echo \"---\"; pgrep -af \"essai_decharge\" | head -3", "description": "Check training progress"}`
+
+  ```
+---
+3307202 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup /home/stephane/gpu-env/bin/python tools/essai_decharge.py --pas 4000 --dim 192 --couches 4 --tetes 4 --cache 768 --lr 3e-3 --graine 1 > /tmp/essai_decharge_1.log 2>&1 & echo "lance ; pid $!"
+3307203 /home/stephane/gpu-env/bin/python tools/essai_decharge.py --pas 4000 --dim 192 --couches 4 --tetes 4 --cache 768 --lr 3e-3 --graine 1
+3307461 bash -c tail -20 /tmp/essai_decharge_1.log 2>&1; echo "---"; pgrep -af "essai_decharge" | head -3
+  ```
+
+- **bash** `{"command": "sleep 240; echo \"=== log ===\"; cat /tmp/essai_decharge_1.log 2>&1 | tail -25; echo \"=== processus ===\"; pgrep -af \"essai_decharge\" | grep -c python", "description": "Wait and check training log", "timeoutMs": 300000}`
+
+  ```
+=== log ===
+  pas   250 · perte 2.5040 · val 3.6847 bits/car · 4 s
+  pas   500 · perte 2.4932 · val 3.6207 bits/car · 8 s
+  pas   750 · perte 2.3790 · val 3.5037 bits/car · 13 s
+  pas  1000 · perte 2.1807 · val 3.3123 bits/car · 17 s
+  pas  1250 · perte 2.1362 · val 3.1348 bits/car · 21 s
+  pas  1500 · perte 2.0131 · val 2.9721 bits/car · 25 s
+  pas  1750 · perte 1.9161 · val 2.8781 bits/car · 28 s
+  pas  2000 · perte 1.8231 · val 2.7746 bits/car · 32 s
+  pas  2250 · perte 1.8283 · val 2.7028 bits/car · 36 s
+  pas  2500 · perte 1.7320 · val 2.6572 bits/car · 40 s
+  pas  2750 · perte 1.7382 · val 2.6090 bits/car · 44 s
+  pas  3000 · perte 1.6915 · val 2.6045 bits/car · 48 s
+  pas  3250 · perte 1.5797 · val 2.5671 bits/car · 52 s
+  pas  3500 · perte 1.5239 · val 2.5338 bits/car · 55 s
+  pas  3750 · perte 1.6666 · val 2.5333 bits/car · 59 s
+  pas  4000 · perte 1.5059 · val 2.5086 bits/car · 62 s
+  # meilleur point : pas 4000 · val 2.5086 bits/car
+
+  # MACs/token 1.77 M · val 2.5086 bits/car
+
+=== VERDICT (val tenue à l'écart) ===
+  dense    :   1890816 paramètres · 2.5086 bits/car ·    1.77 M MACs/token
+  décharge :   1895808 paramètres · 3.4828 bits/car ·    0.26 M événements/token
+  
+… [140 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/tmp/essai_decharge_1.log"}`
+
+  ```
+<path>/tmp/essai_decharge_1.log</path>
+<type>file</type>
+<content>
+1: # corpus 1320120 caractères · alphabet 297 · train 1254114 · val 66006 · appareil cuda
+2: 
+3: === décharge · 1895808 paramètres · 1769472 poids dans les couches linéaires ===
+4:   pas   250 · perte 2.5495 · val 3.7315 bits/car · 12 s
+5:   pas   500 · perte 2.5503 · val 3.7121 bits/car · 25 s
+6:   pas   750 · perte 2.5311 · val 3.6881 bits/car · 37 s
+7:   pas  1000 · perte 2.4547 · val 3.6681 bits/car · 51 s
+8:   pas  1250 · perte 2.5337 · val 3.6552 bits/car · 65 s
+9:   pas  1500 · perte 2.4876 · val 3.6540 bits/car · 79 s
+10:   pas  1750 · perte 2.5180 · val 3.6422 bits/car · 93 s
+11:   pas  2000 · perte 2.4943 · val 3.6384 bits/car · 106 s
+12:   pas  2250 · perte 2.5150 · val 3.6294 bits/car · 118 s
+13:   pas  2500 · perte 2.4349 · val 3.6092 bits/car · 132 s
+14:   pas  2750 · perte 2.4719 · val 3.5965 bits/car · 146 s
+15:   pas  3000 · perte 2.4257 · val 3.5561 bits/car · 159 s
+16:   pas  3250 · perte 2.3984 · val 3.5210 bits/car · 172 s
+17:   pas  3500 · perte 2.3606 · val 3.5331 bits/car · 185 s
+18:   pas  3750 · perte 2.4465 · val 3.5293 bits/car · 199 s
+19:   pas  4000 · perte 2.3071 · val 3.4828 bits/car 
+… [2771 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Premier résultat mesuré : la parcimonie s'entraîne (R̂ = 0,165), mais le coût réel n'est pas celui qu'on croyait
+
+Le banc tourne et il est **rapide : 3,5 min pour les deux modèles**. Premier résultat, et il corrige une idée reçue du dépôt :
+
+| | val | coût |
+|---|---|---|
+| dense (jumeau) | **2,5086** bits/car | 1,77 M MACs/jeton |
+| décharge | **3,4828** bits/car | 0,26 M événements/jeton (R̂ = 0,165) |
+
+Le point que personne n'avait posé : **un événement n'est pas un MAC**. La loi push/pull mesurée du dépôt coûte **4,69× plus cher par opération** à pleine densité (et 0,48 à 10 %). Donc à R̂ = 0,165, le gain de *temps* n'est pas 6,8× mais **≈ 1,4×** — le « 6,7× » des documents venait des événements, pas du temps. C'est précisément ce qu'il faut attaquer : descendre R̂ vers quelques pour cent. J'instrumente le banc pour le dire, puis je balaie.
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/essai_decharge.py", "new_string": "    p.add_argument(\"--dense-seul\", action=\"store_true\")\n    p.add_argument(\"--decharge-seul\", action=\"store_true\")\n    p.add_argument(\"--sans-gpu\", action=\"store_true\")\n    a = p.pa … [279 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/essai_decharge.py has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/essai_decharge.py", "new_string": "    resultats = {}\n    if a.dense_seul:\n        variantes = [True]\n    elif a.decharge_seul:\n        variantes = [False]\n    else:\n        variantes = [False, True]\n    for dense in variant … [104 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/essai_decharge.py has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/essai_decharge.py", "new_string": "        rap = Rapport()\n        bpc = evaluer(modele, val, a.seq, a.lot, rap)\n        taux = rap.table()\n        poids_lineaires = sum(n for _, n in plan)\n        if dense:\n            cout = … [1550 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/essai_decharge.py has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/essai_decharge.py", "new_string": "    if len(resultats) == 2:\n        (bd, cd, pd_, dd), (bp, cp, pp, dp) = resultats[\"dense\"], resultats[\"décharge\"]\n        print(\"\\n=== VERDICT (val tenue à l'écart) ===\")\n        print … [1218 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/essai_decharge.py has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/essai_decharge.py", "new_string": "def decharge(x):\n    return Substitut.apply(x)\n\n\n# Loi MESURÉE du dépôt, et le chiffre qui manquait partout dans les documents :\n# sur `blk.0.ffn_gate.weight` (4,36 M poids, 16 threads), push … [496 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/essai_decharge.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && P=/home/stephane/gpu-env/bin/python\n(CUDA_VISIBLE_DEVICES=0 $P -u tools/essai_decharge.py --dim 256 --cache 1024 --pas 4000 > /tmp/essai_d256.log 2>&1; \\\n CUDA_VISIBLE_DEVICES=0 $P -u tools/essai_decharge.py --dim 320 --cache 1280 … [430 caractères tronqués]`
+
+  ```
+started background job bash-2
+  ```
+
+- **bash** `{"command": "sleep 270; for f in /tmp/essai_d256.log /tmp/essai_s15.log /tmp/essai_d320.log /tmp/essai_s20.log; do echo \"=== $f ===\"; tail -4 \"$f\" 2>/dev/null; done", "description": "Check sweep progress", "timeoutMs": 300000}`
+
+  ```
+=== /tmp/essai_d256.log ===
+  pas  1000 · perte 2.4421 · val 3.6480 bits/car · 21 s
+  pas  1250 · perte 2.5168 · val 3.6535 bits/car · 26 s
+  pas  1500 · perte 2.4624 · val 3.6122 bits/car · 31 s
+  pas  1750 · perte 2.5069 · val 3.6388 bits/car · 36 s
+=== /tmp/essai_s15.log ===
+  #   bloc3.k            R̂ 0.1234
+  #   bloc3.o            R̂ 0.1529
+  #   bloc3.q            R̂ 0.1673
+  #   bloc3.v            R̂ 0.0721
+=== /tmp/essai_d320.log ===
+=== /tmp/essai_s20.log ===
+  pas   750 · perte 2.5667 · val 3.7270 bits/car · 37 s
+  pas  1000 · perte 2.5030 · val 3.7181 bits/car · 49 s
+  pas  1250 · perte 2.5835 · val 3.7150 bits/car · 62 s
+  pas  1500 · perte 2.5309 · val 3.7112 bits/car · 74 s
+  ```
+
+### 👤 Utilisateur
+
+background job bash-2 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && P=/home/stephane/gpu-env/bin/python
+(CUDA_VISIBLE_DEVICES=0 $P -u tools/essai_decharge.py --dim 256 --cache 1024 --pas 4000 > /tmp/essai_d256.log 2>&1; \
+ CUDA_VISIBLE_DEVICES=0 $P -u tools/essai_decharge.py --dim 320 --cache 1280 --pas 4000 > /tmp/essai_d320.log 2>&1) &
+(CUDA_VISIBLE_DEVICES=1 $P -u tools/essai_decharge.py --dim 192 --seuil 1.5 --decharge-seul --pas 4000 > /tmp/essai_s15.log 2>&1; \
+ CUDA_VISIBLE_DEVICES=1 $P -u tools/essai_decharge.py --dim 192 --seuil 2.0 --decharge-seul --pas 4000 > /tmp/essai_s20.log 2>&1) &
+echo "deux files lancées") finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "sed -n '1,3p;18,60p' /tmp/essai_s15.log", "description": "Read threshold-1.5 result"}`
+
+  ```
+# corpus 1320120 caractères · alphabet 297 · train 1254114 · val 66006 · appareil cuda
+
+=== décharge · 1895808 paramètres · 1769472 poids dans les couches linéaires ===
+  pas  3750 · perte 2.4839 · val 3.5868 bits/car · 179 s
+  pas  4000 · perte 2.3700 · val 3.5704 bits/car · 191 s
+  # meilleur point : pas 4000 · val 3.5704 bits/car
+
+  # événements/token 0.14 M · R̂ moyen 0.0899 · densité 0.0781 · val 3.5704 bits/car
+  # temps relatif au jumeau dense ≈ 0.366× (loi push/pull mesurée : 4.69 à densité 1)
+  #   bloc0.ffn_in       R̂ 0.0785
+  #   bloc0.ffn_milieu   R̂ 0.0487
+  #   bloc0.in           R̂ 0.0668
+  #   bloc0.k            R̂ 0.0710
+  #   bloc0.o            R̂ 0.0301
+  #   bloc0.q            R̂ 0.0538
+  #   bloc0.v            R̂ 0.0685
+  #   bloc1.ffn_in       R̂ 0.0819
+  #   bloc1.ffn_milieu   R̂ 0.0313
+  #   bloc1.in           R̂ 0.0695
+  #   bloc1.k            R̂ 0.0676
+  #   bloc1.o            R̂ 0.0734
+  #   bloc1.q            R̂ 0.0643
+  #   bloc1.v            R̂ 0.0853
+  #   bloc2.ffn_in       R̂ 0.0883
+  #   bloc2.ffn_milieu   R̂ 0.0479
+  #   bloc2.in           R̂ 0.0956
+  #   bloc2.k            R̂ 0.1019
+  #   bloc2.o            R̂ 0.1907
+  #   bloc2.q            R̂ 
+… [286 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sleep 200; for f in /tmp/essai_d256.log /tmp/essai_s20.log /tmp/essai_d320.log; do echo \"=== $f ===\"; grep -E \"^  (dense|décharge) |^=== |événements/token|MACs/token|temps relatif|rapport de coût|densité\" \"$f\" 2>/dev/null | tail -8; tail -2 \"$f\" 2>/dev/null | head -2; done", "de … [64 caractères tronqués]`
+
+  ```
+=== /tmp/essai_d256.log ===
+=== dense · 3307520 paramètres · 3145728 poids dans les couches linéaires ===
+  # MACs/token 3.15 M · val 3.4611 bits/car
+=== VERDICT (val tenue à l'écart) ===
+  dense    :   3307520 paramètres · 3.4611 bits/car ·    3.15 M MACs/token
+  décharge :   3314176 paramètres · 3.4316 bits/car ·    0.44 M événements/token
+  rapport de coût (événements/MACs) 0.140 · écart de qualité -0.029 bits/car
+  densité 0.1404 · temps du chemin par listes ≈ 0.66× le dense (1.52× plus rapide si < 1)
+  (loi du dépôt : croisement push/pull à 0,22 de densité — reports/rapport-croisement-push-pull.md)
+  densité 0.1404 · temps du chemin par listes ≈ 0.66× le dense (1.52× plus rapide si < 1)
+  (loi du dépôt : croisement push/pull à 0,22 de densité — reports/rapport-croisement-push-pull.md)
+=== /tmp/essai_s20.log ===
+=== décharge · 1895808 paramètres · 1769472 poids dans les couches linéaires ===
+  # événements/token 0.05 M · R̂ moyen 0.0293 · densité 0.0297 · val 3.6765 bits/car
+  # temps relatif au jumeau dense ≈ 0.140× (loi push/pull mesurée : 4.69 à densité 1)
+  #   bloc3.q            R̂ 0.0420
+  #   bloc3.v            R̂ 0.0360
+=== /tmp/essai_d320.log ===
+=== décharge · 5125760
+… [172 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cat /tmp/essai_d256.log", "description": "Read full dim-256 run log"}`
+
+  ```
+# corpus 1320120 caractères · alphabet 297 · train 1254114 · val 66006 · appareil cuda
+
+=== décharge · 3314176 paramètres · 3145728 poids dans les couches linéaires ===
+  pas   250 · perte 2.5549 · val 3.7332 bits/car · 15 s
+  pas   500 · perte 2.5462 · val 3.7152 bits/car · 30 s
+  pas   750 · perte 2.5247 · val 3.6744 bits/car · 44 s
+  pas  1000 · perte 2.4525 · val 3.6678 bits/car · 58 s
+  pas  1250 · perte 2.5548 · val 3.6944 bits/car · 72 s
+  pas  1500 · perte 2.5244 · val 3.6963 bits/car · 87 s
+  pas  1750 · perte 2.5372 · val 3.6692 bits/car · 103 s
+  pas  2000 · perte 2.5100 · val 3.6619 bits/car · 118 s
+  pas  2250 · perte 2.5141 · val 3.6287 bits/car · 133 s
+  pas  2500 · perte 2.4109 · val 3.5911 bits/car · 149 s
+  pas  2750 · perte 2.4687 · val 3.5908 bits/car · 164 s
+  pas  3000 · perte 2.4170 · val 3.5508 bits/car · 179 s
+  pas  3250 · perte 2.3956 · val 3.5050 bits/car · 193 s
+  pas  3500 · perte 2.3315 · val 3.4887 bits/car · 208 s
+  pas  3750 · perte 2.3840 · val 3.4441 bits/car · 222 s
+  pas  4000 · perte 2.2685 · val 3.4316 bits/car · 236 s
+  # meilleur point : pas 4000 · val 3.4316 bits/car
+
+  # événements/token 0.44 M · R̂ moyen 0.1527 · densité 0.1404 · val 3.4
+… [2611 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nvidia-smi --query-compute-apps=pid,used_memory --format=csv 2>&1 | head -5\nP=/home/stephane/gpu-env/bin/python\n(CUDA_VISIBLE_DEVICES=1 $P -u tools/essai_decharge.py --dim 192 --lr 1e-3 --pas 8000 > /tmp/essai_lr1e3_d192.log 2>&1;  … [294 caractères tronqués]`
+
+  ```
+started background job bash-3
+  ```
+
+### 🤖 Assistant
+
+⏵ Premier cycle mesuré : la parcimonie s'entraîne, et une idée reçue du dépôt tombe
+
+La redirection est engagée, et elle produit déjà des chiffres. Voici où on en est.
+
+## 1. L'essence, remise au centre
+
+Les trois inventaires que j'ai fait tourner disent la même chose : **le dépôt n'a jamais entraîné un seul modèle** (zéro rétropropagation dans `tools/` ; tout l'apprentissage était en forme fermée, numpy). Et le document fondateur avait déjà nommé la cible — `docs/programme-recherche.md` §2 ter : *« la parcimonie ne s'impose pas, elle s'entraîne »*. Les deux seules choses essayées jusqu'ici étaient l'inverse : imposer la parcimonie après coup (plafond mesuré : −15 % d'événements pour +0,6 à +1,2 % de perplexité), ou exécuter des modèles denses qui n'ont **jamais** d'activation nulle (0,00 % de zéros).
+
+J'ai donc écrit `tools/essai_decharge.py` : un modèle à **décharge** (activations discrètes par construction, gradient de substitution) contre un **jumeau dense** de mêmes paramètres, même corpus, même budget. Un run complet : **3 min 30**.
+
+## 2. Premier résultat — et il corrige un chiffre que le dépôt répète
+
+| dim 192 (1,9 M param.) | val (bits/car) | coût | temps vs dense |
+|---|---|---|---|
+| dense (jumeau) | **2,5086** | 1,77 M MACs | 1,00× |
+| décharge, R̂ = 0,165 | 3,4828 | 0,26 M événements | 0,69× |
+| décharge, R̂ = 0,090 (seuil 1,5) | 3,5704 | 0,14 M événements | **0,37×** |
+| décharge, R̂ = 0,029 (seuil 2,0) | 3,6765 | 0,05 M événements | **0,14×** |
+
+**Un événement n'est pas un MAC.** Le croisement push/pull mesuré par le dépôt vaut **4,69** à densité 1 et 0,48 à 10 % : le chemin par listes traite ~4,7× moins d'opérations par seconde que le produit scalaire. Donc le « R̂ = 0,15 → 6,7× moins d'événements → ~100 tok/s » de `docs/comparaison-spiking.md` §4 est un facteur **4,7 trop optimiste** : à R̂ = 0,165 le gain de temps réel est **≈ 1,45×**. C'est le premier chiffre que je corrige, et c'est celui qui commande la cible : il faut viser quelques pour cent de densité, pas 15 %.
+
+Ce qui marche déjà : **le seuil est un vrai bouton** (R̂ 0,165 → 0,029) et la qualité ne s'effondre pas — +0,19 bit/car en divisant le coût par 5. À comparer au plafond de la parcimonie imposée, qui restait à 85 % de densité.
+
+## 3. Ce qui est en cours, et la réserve que je ne veux pas cacher
+
+Un point à **dim 256** donne décharge 3,4316 contre dense 3,4611 — la décharge gagnerait — **mais le témoin dense y est mal réglé** (perte d'entraînement bloquée, courbe de validation erratique) : à taux d'apprentissage égal, le modèle qui grossit décroche. Tant que ce n'est pas tranché, ce point ne prouve rien. Un balayage du taux d'apprentissage est en cours sur les deux familles (1e-3 / 3e-3, 8 000 pas), et il tourne en fond.
+
+## 4. Le plan, et pourquoi il répond à « distribuable »
+
+| cycle | livrable | porte |
+|---|---|---|
+| **1 (en cours)** | la frontière qualité/coût des deux familles, taux d'apprentissage réglé | la décharge bat le dense **à temps égal** |
+| **2** | distillation depuis Qwen2.5-0.5B (local, jamais utilisée) pour fermer l'écart de qualité | ≤ +0,1 bit/car derrière le dense à coût moitié |
+| **3** | le modèle exécuté par Drave : LIF + projection à entrée discrète, op vérifiée contre la référence PyTorch | mêmes logits que la référence, à la tolérance du dépôt |
+| **4** | découpage en **unités de travail autonomes** (blocs de neurones + interface d'événements) réparties sur N processus, puis deux machines | mise à l'échelle mesurée, et l'écart de qualité nul entre monolithique et réparti |
+
+Le point clé pour la distribution, sorti de l'inventaire : le blocage actuel n'est pas le transport (il est prouvé au bit près) mais que **chaque nœud charge le modèle entier**. Un modèle à blocs creux de quelques mégaoctets transforme cette limite en non-sujet — et les listes d'événements sont déjà l'unité de routage du moteur.
+
+Je continue : balayage du taux d'apprentissage, puis le point qui tranchera (frontière à temps égal), et la distillation.
+
+### 👤 Utilisateur
+
+background job bash-3 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nvidia-smi --query-compute-apps=pid,used_memory --format=csv 2>&1 | head -5
+P=/home/stephane/gpu-env/bin/python
+(CUDA_VISIBLE_DEVICES=1 $P -u tools/essai_decharge.py --dim 192 --lr 1e-3 --pas 8000 > /tmp/essai_lr1e3_d192.log 2>&1; \
+ CUDA_VISIBLE_DEVICES=1 $P -u tools/essai_decharge.py --dim 256 --lr 1e-3 --pas 8000 > /tmp/essai_lr1e3_d256.log 2>&1) &
+echo "balaie le taux d'apprentissage sur GPU1 (l'ancien tourne encore sur GPU0)") finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "sleep 240; for f in /tmp/essai_lr1e3_d192.log /tmp/essai_d320.log /tmp/essai_lr1e3_d256.log; do echo \"=== $f ===\"; grep -E \"^(=== |  dense|  décharge|  # (MACs|événements|temps))|VERDICT|rapport de coût\" \"$f\" 2>/dev/null | tail -7; echo \"  [dernier] $(tail -1 \"$f\" 2>/dev/null)\ … [86 caractères tronqués]`
+
+  ```
+=== /tmp/essai_lr1e3_d192.log ===
+=== décharge · 1895808 paramètres · 1769472 poids dans les couches linéaires ===
+  [dernier]   pas  5000 · perte 2.4172 · val 3.5392 bits/car · 244 s
+=== /tmp/essai_d320.log ===
+  # temps relatif au jumeau dense ≈ 0.658× (loi push/pull mesurée : 4.69 à densité 1)
+=== dense · 5117440 paramètres · 4915200 poids dans les couches linéaires ===
+  # MACs/token 4.92 M · val 3.6204 bits/car
+=== VERDICT (val tenue à l'écart) ===
+  dense    :   5117440 paramètres · 3.6204 bits/car ·    4.92 M MACs/token
+  décharge :   5125760 paramètres · 3.2945 bits/car ·    0.69 M événements/token
+  rapport de coût (événements/MACs) 0.140 · écart de qualité -0.326 bits/car
+  [dernier]   (loi du dépôt : croisement push/pull à 0,22 de densité — reports/rapport-croisement-push-pull.md)
+=== /tmp/essai_lr1e3_d256.log ===
+  [dernier]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && P=/home/stephane/gpu-env/bin/python\n(CUDA_VISIBLE_DEVICES=0 $P -u tools/essai_decharge.py --dim 256 --dense-seul --lr 3e-4 --pas 8000 > /tmp/essai_dense256_lr3e4.log 2>&1; \\\n CUDA_VISIBLE_DEVICES=0 $P -u tools/essai_decharge.py -- … [211 caractères tronqués]`
+
+  ```
+started background job bash-4
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la /home/stephane/Data13TB/stephane/nipada/wikipedia_decompressed 2>/dev/null | head -8; echo \"=== bases DB ===\"; ls -la data/wikipedia/db/ 2>/dev/null | head -12; echo \"=== outil d'extraction ===\"; head -30 tools/extrait_wik … [81 caractères tronqués]`
+
+  ```
+total 0
+drwxrwxr-x. 1 stephane stephane      24  8 jun 21:43 .
+drwxr-xr-x. 1 stephane stephane      44  8 jun 08:53 ..
+drwxr-xr-x. 1 stephane stephane  581600  8 jun 18:51 de
+drwxr-xr-x. 1 stephane stephane 1406300  8 jun 14:58 en
+drwxr-xr-x. 1 stephane stephane  353700  8 jun 20:08 es
+drwxr-xr-x. 1 stephane stephane  469300  8 jun 16:53 fr
+drwxr-xr-x. 1 stephane stephane   98500  8 jun 22:04 it
+=== bases DB ===
+=== outil d'extraction ===
+#!/usr/bin/env python3
+"""extrait_wikipedia.py — tirer un échantillon exploitable de Wikipedia décompressée.
+
+ATTENTION À CE QUE CE CORPUS EST ET N'EST PAS. Les articles d'une langue ne sont
+pas les traductions de ceux d'une autre : les titres diffèrent, et le corpus ne
+porte AUCUN lien interlangue. Wikipedia donne donc du VOLUME et de la DIVERSITÉ
+— de quoi rendre un professeur plus riche, et de quoi mesurer la fidélité — mais
+il ne permet PAS de mesurer l'invariance inter-langue, qui exige du contenu
+apparié. L'invariance reste mesurée sur l'UDHR et les œuvres traduites.
+
+Usage : extrait_wikipedia.py <langue> --articles 200 [--min 800] [--max 6000]
+"""
+import glob, json, os, sys
+
+W = "/home/stephane/Data13TB/stephane/nipada/wikipedia_decompresse
+… [678 caractères tronqués]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-4 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && P=/home/stephane/gpu-env/bin/python
+(CUDA_VISIBLE_DEVICES=0 $P -u tools/essai_decharge.py --dim 256 --dense-seul --lr 3e-4 --pas 8000 > /tmp/essai_dense256_lr3e4.log 2>&1; \
+ CUDA_VISIBLE_DEVICES=0 $P -u tools/essai_decharge.py --dim 192 --dense-seul --lr 3e-4 --pas 8000 > /tmp/essai_dense192_lr3e4.log 2>&1) &
+echo "témoin dense à 3e-4 lancé sur GPU0") finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "for f in /tmp/essai_lr1e3_d192.log /tmp/essai_dense256_lr3e4.log /tmp/essai_lr1e3_d256.log; do echo \"=== $f ===\"; grep -E \"VERDICT|^  dense |^  décharge |# (MACs|événements|temps rel)|meilleur point\" \"$f\" 2>/dev/null | tail -6; echo \"  [dernier] $(tail -1 \"$f\" 2>/dev/null)\"; d … [57 caractères tronqués]`
+
+  ```
+=== /tmp/essai_lr1e3_d192.log ===
+  [dernier]   pas  5500 · perte 2.4502 · val 3.5426 bits/car · 271 s
+=== /tmp/essai_dense256_lr3e4.log ===
+  [dernier]   pas   500 · perte 2.4691 · val 3.5949 bits/car · 9 s
+=== /tmp/essai_lr1e3_d256.log ===
+  [dernier]
+  ```
+
+- **bash** `{"command": "ls /home/stephane/Data13TB/stephane/nipada/wikipedia_decompressed/en | head -3; f=$(ls /home/stephane/Data13TB/stephane/nipada/wikipedia_decompressed/en/*.json | head -1); echo \"=== $f ===\"; ls -la \"$f\"; /home/stephane/gpu-env/bin/python -c \"\nimport json,sys\nd=json.load(open('$f' … [469 caractères tronqués]`
+
+  ```
+wiki_en_chunk_000001.json
+wiki_en_chunk_000002.json
+wiki_en_chunk_000003.json
+===  ===
+=== nombre de chunks en ===
+0
+34G	/home/stephane/Data13TB/stephane/nipada/wikipedia_decompressed/en
+[stderr]
+bash: line 1: /usr/bin/ls: Argument list too long
+ls: cannot access '': No such file or directory
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+    d=json.load(open('',encoding='utf-8',errors='replace'))
+                ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: ''
+bash: line 7: /usr/bin/ls: Argument list too long
+  ```
+
+- **bash** `{"command": "/home/stephane/gpu-env/bin/python - <<'PY'\nimport glob, json, os\nfs = sorted(glob.glob(\"/home/stephane/Data13TB/stephane/nipada/wikipedia_decompressed/en/*.json\"))[:3]\nprint(\"exemples de fichiers :\", [os.path.basename(f) for f in fs], \"· taille\", [os.path.getsize(f) for f in fs … [363 caractères tronqués]`
+
+  ```
+exemples de fichiers : ['wiki_en_chunk_000001.json', 'wiki_en_chunk_000002.json', 'wiki_en_chunk_000003.json'] · taille [4974974, 3874315, 3051547]
+type dict longueur 6
+  ```
+
+- **bash** `{"command": "/home/stephane/gpu-env/bin/python - <<'PY'\nimport glob, json, os\nf = sorted(glob.glob(\"/home/stephane/Data13TB/stephane/nipada/wikipedia_decompressed/en/*.json\"))[0]\nd = json.load(open(f, encoding=\"utf-8\", errors=\"replace\"))\nprint(\"clés :\", list(d.keys()))\nfor k, v in d.ite … [446 caractères tronqués]`
+
+  ```
+clés : ['schema', 'created_at', 'lang', 'source_dump', 'article_count', 'articles']
+  schema: str 25
+  created_at: str 19
+  lang: str 2
+  source_dump: str 114
+  article_count: int 150
+  articles: list 150
+     ex. élément : ['title', 'page_id', 'lang', 'text']
+       title: 'Anarchism'
+       page_id: '12'
+       lang: 'en'
+       text: 'Anarchism is a political philosophy and movement that seeks to abolish all institutions that perpetuate authority, coerc'
+  ```
+
+- **bash** `{"command": "df -h /home/stephane/Data13TB | tail -1; free -g | head -2", "description": "Check disk and memory headroom"}`
+
+  ```
+/dev/mapper/system-root   11T  8,8T  2,1T  81% /home/stephane/Data13TB
+               total        used        free      shared  buff/cache   available
+Mem:             125          25           3          13         111         100
+  ```
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"corpus_wikipedia.py — assembler un VRAI corpus d'entraînement depuis Wikipedia.\n\nPOURQUOI. Le banc `essai_decharge.py` tournait sur 1,3 million de caractères\n(wikitext-2 + les 482 articles appariés) : assez pour voir une dynamique, pas\nassez pour compar … [4028 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/corpus_wikipedia.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"corpus_wikipedia.py — assembler un VRAI corpus d'entraînement depuis Wikipedia.\n\nPOURQUOI. Le banc `essai_decharge.py` tournait sur 1,3 million de caractères\n(wikitext-2 + les 482 articles appariés) : assez pour voir une dynamique, pas\nassez pour compar … [3568 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/corpus_wikipedia.py</path>
+<type>file</type>
+<content>
+Updated file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 /home/stephane/gpu-env/bin/python tools/corpus_wikipedia.py --langue en --octets 100000000 --val-octets 2000000 2>&1 | tail -10; ls -la data/corpus_en*.txt", "description": "Build 100 MB English training corpus", "timeout … [12 caractères tronqués]`
+
+  ```
+# en : 28126 chapitres disponibles
+# apprentissage : 100000009 caractères · 4212 articles → data/corpus_en.txt
+# validation    : 2024235 caractères · 267 articles → data/corpus_en_val.txt (40 chapitres écartés)
+# alphabet d'apprentissage : 3237 caractères
+-rw-r--r--. 1 stephane stephane 100276153  8 oct 09:42 data/corpus_en.txt
+-rw-r--r--. 1 stephane stephane   2032162  8 oct 09:42 data/corpus_en_val.txt
+  ```
+
+### 🤖 Assistant
+
+⏵ Corpus réel construit (100 Mo) ; je passe le banc en octets pour supprimer le plafond de données
+
+Corpus assemblé : **100 Mo d'apprentissage, 2 Mo de validation** (chapitres de validation retirés de l'apprentissage). Je passe le banc au **niveau octet** (256 symboles, UTF-8) : plus d'alphabet à choisir, plus de caractère inconnu, et la mesure devient comparable d'un corpus à l'autre.
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"essai_decharge.py — la parcimonie ENTRAÎNÉE, mesurée contre un jumeau dense.\n\nPOURQUOI CE BANC. Le dépôt a mesuré deux choses qui se tiennent par la main :\n\n  * un LLM dense n'a JAMAIS d'activation exactement nulle (**0,00 % de zéros**) :\n    le débit  … [19396 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/essai_decharge.py</path>
+<type>file</type>
+<content>
+Updated file
+</content>
+  ```
+
+- **bash** `{"command": "pkill -f \"essai_decharge.py\" ; sleep 2; pgrep -af essai_decharge | grep -c python; echo \"--- nettoyé ---\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && P=/home/stephane/gpu-env/bin/python\n(CUDA_VISIBLE_DEVICES=0 $P -u tools/essai_decharge.py --dim 192 --lr 3e-3 --pas 20000 … [312 caractères tronqués]`
+
+  ```
+started background job bash-5
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== FusedSign / BitmapSign : usage et bancs ===\"; grep -rn \"FusedSign\\|BitmapSign\" drave-core/src/*.rs | head -12; echo; echo \"=== bancs binaires/ternaires mesurés ===\"; grep -rln \"FusedSign\\|binaire\\|ternaire\" repor … [232 caractères tronqués]`
+
+  ```
+=== FusedSign / BitmapSign : usage et bancs ===
+drave-core/src/engine.rs:11://! 4. **Listes fusionnées** (`FusedSign`) : une seule liste triée par destination
+drave-core/src/engine.rs:17:use crate::list::{DenseQ4, DenseQ8, FusedSign, PushMat, SignedDelta, BLOC_Q4};
+drave-core/src/engine.rs:72:pub fn row_fused_into(f: &FusedSign, r: usize, xv: i64, acc: &mut [i64],
+drave-core/src/engine.rs:227:    lists: AtomicPtr<FusedSign>,
+drave-core/src/engine.rs:792:    pub fn accumulate(&mut self, f: &FusedSign, sv: &SparseVec) -> (Vec<i64>, usize) {
+drave-core/src/list.rs:10://! 2. `BitmapSign` — un bitmap des non-nuls (1 bit/poids) + un bit de signe par
+drave-core/src/list.rs:98:pub struct BitmapSign {
+drave-core/src/list.rs:108:impl BitmapSign {
+drave-core/src/list.rs:129:        BitmapSign { n_rows, n_cols, mask, signs, n_events, sign_pos }
+drave-core/src/list.rs:187:pub struct FusedSign {
+drave-core/src/list.rs:197:impl FusedSign {
+drave-core/src/list.rs:227:        FusedSign { n_rows, n_cols, row_start, data, signs, sign_pos, n_events }
+
+=== bancs binaires/ternaires mesurés ===
+reports/bilan-multi-materiel.md
+reports/rapport-aiguille-topk.md
+reports/rapport-coherence-docs.md
+reports/rapp
+… [827 caractères tronqués]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-5 (bash: pkill -f "essai_decharge.py" ; sleep 2; pgrep -af essai_decharge | grep -c python; echo "--- nettoyé ---"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && P=/home/stephane/gpu-env/bin/python
+(CUDA_VISIBLE_DEVICES=0 $P -u tools/essai_decharge.py --dim 192 --lr 3e-3 --pas 20000 > /tmp/ec_d192_lr3e3.log 2>&1) &
+(CUDA_VISIBLE_DEVICES=1 $P -u tools/essai_decharge.py --dim 192 --lr 1e-3 --pas 20000 > /tmp/ec_d192_lr1e3.log 2>&1) &
+echo "protocole propre lancé sur le corpus de 100 Mo (d192, deux taux)") finished [status: killed, signal: SIGTERM]. Read its output with job_output.
+
+- **bash** `{"command": "pgrep -af \"essai_decharge\" | grep python | head; echo \"--- logs ---\"; tail -2 /tmp/ec_d192_lr3e3.log 2>/dev/null; tail -2 /tmp/ec_d192_lr1e3.log 2>/dev/null; echo \"---\"; ls -la /tmp/ec_*.log 2>/dev/null", "description": "Check whether clean runs survived"}`
+
+  ```
+3310393 bash -c pgrep -af "essai_decharge" | grep python | head; echo "--- logs ---"; tail -2 /tmp/ec_d192_lr3e3.log 2>/dev/null; tail -2 /tmp/ec_d192_lr1e3.log 2>/dev/null; echo "---"; ls -la /tmp/ec_*.log 2>/dev/null
+--- logs ---
+---
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && setsid nohup env CUDA_VISIBLE_DEVICES=0 /home/stephane/gpu-env/bin/python -u tools/essai_decharge.py --dim 192 --lr 3e-3 --pas 20000 > /tmp/ec_lr3e3.log 2>&1 < /dev/null &\nsetsid nohup env CUDA_VISIBLE_DEVICES=1 /home/stephane/gpu-e … [302 caractères tronqués]`
+
+  ```
+--- état ---
+4
+
+=== décharge · 1880064 paramètres · 1769472 poids dans les couches linéaires · lr 0.003 ===
+
+=== décharge · 1880064 paramètres · 1769472 poids dans les couches linéaires · lr 0.001 ===
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/essai_decharge.py", "new_string": "class Rapport:", "old_string": "class Rapport:\n    \"\"\"Compte les unités actives par site, sans casser le graphe.\"\"\""}`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/essai_decharge.py has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/essai_decharge.py", "new_string": "class LineaireSignes(nn.Module):\n    \"\"\"Poids dans {−1, 0, +1} au calcul, f32 pour l'optimiseur (gradient droit).\n\n    Ce que ça change n'est pas cosmétique. Avec une entrée **binaire** et u … [1990 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/essai_decharge.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"class BlocDecharge\" -A 22 tools/essai_decharge.py | head -28", "description": "Show spiking block init for edit"}`
+
+  ```
+182:class BlocDecharge(nn.Module):
+183-    """Un bloc où CHAQUE produit matriciel reçoit un vecteur DISCRET.
+184-
+185-    L'ordre du résiduel est celui de **Spikingformer** : le flux résiduel reste
+186-    flottant (ce ne sont que des additions), mais l'entrée de chaque couche
+187-    linéaire est un train de décharges. C'est la contrainte qui fait que le coût
+188-    suit l'activité : une unité silencieuse ne fait lire **aucun** poids.
+189-    L'attention est sans softmax et décomposable (Spikformer) : Q, K, V sont des
+190-    décharges, donc le score est un compte entier et le softmax disparaît.
+191-    """
+192-
+193-    def __init__(self, d, tetes, cache, seuil):
+194-        super().__init__()
+195-        self.tetes, self.dh, self.seuil = tetes, d // tetes, seuil
+196-        self.bn_in = NormeLot(d)
+197-        self.wq = nn.Linear(d, d, bias=False)
+198-        self.wk = nn.Linear(d, d, bias=False)
+199-        self.wv = nn.Linear(d, d, bias=False)
+200-        self.bn_q, self.bn_k, self.bn_v = NormeLot(self.dh), NormeLot(self.dh), NormeLot(self.dh)
+201-        self.bn_o = NormeLot(d)
+202-        self.wo = nn.Linear(d, d, bias=False)
+203-        self.bn_mid = NormeLot(d)
+204-       
+… [43 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/essai_decharge.py", "new_string": "    def __init__(self, d, tetes, cache, seuil, signes=False, alpha=0.0):\n        super().__init__()\n        self.tetes, self.dh, self.seuil = tetes, d // tetes, seuil\n        self.bn_in = Norme … [1027 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/essai_decharge.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '205,212p' tools/essai_decharge.py", "description": "Show fc2 line for edit"}`
+
+  ```
+self.bn_fc1 = NormeLot(cache)
+        self.fc2 = nn.Linear(cache, d, bias=False)
+
+    def forward(self, x, masque, rap=None, nom=""):
+        B, T, D = x.shape
+        s = decharge(self.bn_in(x) - self.seuil)
+        if rap is not None:
+            rap.note(nom + ".in", s)
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/essai_decharge.py", "new_string": "        self.bn_fc1 = NormeLot(cache)\n        self.fc2 = lineaire(cache, d, signes, alpha)", "old_string": "        self.bn_fc1 = NormeLot(cache)\n        self.fc2 = nn.Linear(cache, d, bias=Fals … [4 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/essai_decharge.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"class Modele\" -A 20 tools/essai_decharge.py", "description": "Show Modele class"}`
+
+  ```
+263:class Modele(nn.Module):
+264-    def __init__(self, vocab, d, couches, tetes, cache, seuil, dense=False):
+265-        super().__init__()
+266-        self.dense = dense
+267-        self.emb = nn.Embedding(vocab, d)
+268-        if dense:
+269-            self.blocs = nn.ModuleList([BlocDense(d, tetes, cache) for _ in range(couches)])
+270-            self.ln_f = nn.LayerNorm(d)
+271-        else:
+272-            self.blocs = nn.ModuleList([BlocDecharge(d, tetes, cache, seuil) for _ in range(couches)])
+273-            self.bn_f = NormeLot(d)
+274-        self.tete = nn.Linear(d, vocab, bias=False)
+275-
+276-    def forward(self, idx, rap=None):
+277-        B, T = idx.shape
+278-        x = self.emb(idx)
+279-        masque = torch.triu(torch.ones(T, T, dtype=torch.bool, device=idx.device), diagonal=1)
+280-        for i, b in enumerate(self.blocs):
+281-            x = b(x, masque, rap, nom=f"bloc{i}")
+282-        x = self.ln_f(x) if self.dense else self.bn_f(x)
+283-        return self.tete(x)
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/essai_decharge.py", "new_string": "class Modele(nn.Module):\n    def __init__(self, vocab, d, couches, tetes, cache, seuil, dense=False,\n                 signes=False, alpha=0.0):\n        super().__init__()\n        self.dense =  … [1253 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/essai_decharge.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n 'seuil\", type=float\\|Modele(256\\|décharge ·' tools/essai_decharge.py", "description": "Locate CLI and model construction lines"}`
+
+  ```
+379:    p.add_argument("--seuil", type=float, default=1.0)
+411:        modele = Modele(256, a.dim, a.couches, a.tetes, cache, a.seuil, dense).to(dev)
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/essai_decharge.py", "new_string": "    p.add_argument(\"--seuil\", type=float, default=1.0)\n    p.add_argument(\"--poids-signes\", action=\"store_true\",\n                   help=\"poids dans {−1,0,+1} : le produit devient une acc … [233 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/essai_decharge.py has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/essai_decharge.py", "new_string": "        modele = Modele(256, a.dim, a.couches, a.tetes, cache, a.seuil, dense,\n                        a.poids_signes, a.alpha).to(dev)\n        opt = torch.optim.AdamW(modele.parameters(), lr=a. … [858 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/essai_decharge.py has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/essai_decharge.py", "new_string": "            print(f\"  # temps relatif au jumeau dense ≈ {densite * FACTEUR_PUSH:.3f}× \"\n                  f\"(loi push/pull : {FACTEUR_PUSH} à densité 1)\")\n            if a.poids_signes:\n    … [380 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/essai_decharge.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && CUDA_VISIBLE_DEVICES=1 timeout 600 /home/stephane/gpu-env/bin/python -u tools/essai_decharge.py --decharge-seul --poids-signes --dim 96 --cache 384 --pas 300 --eval-tous 150 2>&1 | tail -12", "description": "Smoke test binary-weight  … [30 caractères tronqués]`
+
+  ```
+#   bloc2.in           R̂ 0.1454
+  #   bloc2.k            R̂ 0.1513
+  #   bloc2.o            R̂ 0.1198
+  #   bloc2.q            R̂ 0.1491
+  #   bloc2.v            R̂ 0.1564
+  #   bloc3.ffn_in       R̂ 0.2111
+  #   bloc3.ffn_milieu   R̂ 0.1644
+  #   bloc3.in           R̂ 0.1717
+  #   bloc3.k            R̂ 0.2044
+  #   bloc3.o            R̂ 0.1990
+  #   bloc3.q            R̂ 0.2694
+  #   bloc3.v            R̂ 0.1860
+  ```
+
+- **bash** `{"command": "sleep 120; for f in /tmp/ec_lr3e3.log /tmp/ec_lr1e3.log; do echo \"=== $f ===\"; tail -3 \"$f\"; done", "description": "Check corpus training progress", "timeoutMs": 180000}`
+
+  ```
+=== /tmp/ec_lr3e3.log ===
+  pas   3000 · perte 2.4418 · val 3.6344 bits/octet · 150 s
+  pas   3500 · perte 2.3734 · val 3.6183 bits/octet · 174 s
+  pas   4000 · perte 2.3565 · val 3.5763 bits/octet · 198 s
+=== /tmp/ec_lr1e3.log ===
+  pas   3000 · perte 2.4909 · val 3.7020 bits/octet · 158 s
+  pas   3500 · perte 2.4451 · val 3.6784 bits/octet · 182 s
+  pas   4000 · perte 2.4334 · val 3.6646 bits/octet · 205 s
+  ```
+
+- **bash** `{"command": "sleep 420; for f in /tmp/ec_lr3e3.log /tmp/ec_lr1e3.log; do echo \"=== $f ===\"; grep -E \"^=== |^  # (MACs|événements|temps|meilleur)|VERDICT|rapport de coût|^  dense |^  décharge \" \"$f\" | tail -8; echo \"  [dernier] $(tail -1 \"$f\")\"; done", "description": "Check corpus runs afte … [36 caractères tronqués]`
+
+  ```
+=== /tmp/ec_lr3e3.log ===
+=== décharge · 1880064 paramètres · 1769472 poids dans les couches linéaires · lr 0.003 ===
+  [dernier]   pas  13000 · perte 2.1853 · val 3.3033 bits/octet · 630 s
+=== /tmp/ec_lr1e3.log ===
+=== décharge · 1880064 paramètres · 1769472 poids dans les couches linéaires · lr 0.001 ===
+  [dernier]   pas  12500 · perte 2.1876 · val 3.3541 bits/octet · 628 s
+  ```
+
+- **bash** `{"command": "sleep 480; for f in /tmp/ec_lr3e3.log /tmp/ec_lr1e3.log; do echo \"=== $f ===\"; grep -E \"VERDICT|^  dense |^  décharge |^  rapport|^  densité|meilleur point|# (MACs|événements|temps)\" \"$f\" | tail -8; echo \"  [dernier] $(tail -1 \"$f\")\"; done", "description": "Collect final corpu … [36 caractères tronqués]`
+
+  ```
+=== /tmp/ec_lr3e3.log ===
+  # meilleur point : pas 19500 · val 3.1788 bits/octet
+  # événements/token 0.27 M · R̂ moyen 0.1704 · densité 0.1525 · val 3.2004 bits/octet
+  # temps relatif au jumeau dense ≈ 0.715× (loi push/pull : 4.69 à densité 1)
+  [dernier]   pas  10500 · perte 1.6144 · val 2.4708 bits/octet · 153 s
+=== /tmp/ec_lr1e3.log ===
+  # meilleur point : pas 20000 · val 3.1914 bits/octet
+  # événements/token 0.29 M · R̂ moyen 0.1779 · densité 0.1639 · val 3.2128 bits/octet
+  # temps relatif au jumeau dense ≈ 0.769× (loi push/pull : 4.69 à densité 1)
+  [dernier]   pas  10500 · perte 1.4617 · val 2.3027 bits/octet · 139 s
+  ```
+
+- **bash** `{"command": "sleep 240; for f in /tmp/ec_lr3e3.log /tmp/ec_lr1e3.log; do echo \"=== $f ===\"; grep -E \"VERDICT|^  dense |^  décharge |^  rapport de coût|^  densité\" \"$f\" | tail -6; done; pgrep -c -f \"tools/essai\"", "description": "Get final dense-vs-spiking verdict on real corpus", "timeoutMs" … [9 caractères tronqués]`
+
+  ```
+=== /tmp/ec_lr3e3.log ===
+=== VERDICT (validation tenue à l'écart) ===
+  dense    :   1875072 paramètres · 2.4420 bits/octet ·    1.77 M MACs/token
+  décharge :   1880064 paramètres · 3.2004 bits/octet ·    0.27 M événements/token
+  rapport de coût (événements/MACs) 0.153 · écart de qualité +0.758 bits/octet
+  densité 0.1525 · temps du chemin par listes ≈ 0.72× le dense (1.40× plus rapide si < 1)
+=== /tmp/ec_lr1e3.log ===
+=== VERDICT (validation tenue à l'écart) ===
+  dense    :   1875072 paramètres · 2.2572 bits/octet ·    1.77 M MACs/token
+  décharge :   1880064 paramètres · 3.2128 bits/octet ·    0.29 M événements/token
+  rapport de coût (événements/MACs) 0.164 · écart de qualité +0.956 bits/octet
+  densité 0.1639 · temps du chemin par listes ≈ 0.77× le dense (1.30× plus rapide si < 1)
+0
+[exit code: 1]
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 1 conclu : résultat négatif mesuré — je lance la variante qui attaque la vraie cause
+
+Le protocole est propre maintenant (100 Mo, 20 000 pas, taux d'apprentissage balayé). Verdict :
+
+| dim 192, 20 000 pas | val (bits/octet) | coût | temps |
+|---|---|---|---|
+| **dense** (meilleur lr) | **2,2572** | 1,77 M MACs | 1,00× |
+| décharge (meilleur lr) | 3,2128 | 0,29 M événements | 0,77× |
+
+**+0,96 bit/octet pour 1,3× de vitesse : la parcimonie entraînée ne paie pas dans cette forme-là.** Ce n'est pas un échec de la parcimonie — R̂ = 0,16 est bien atteint — c'est l'arithmétique du moteur qui mange le gain : le push *valué* coûte 4,69× le dense par opération. La cible n'est donc pas « plus creux », c'est **une arithmétique par événement qui ne multiplie pas**. Je lance les poids binaires/ternaires, et je cherche le banc du moteur pour chiffrer le push par signe.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && setsid nohup env CUDA_VISIBLE_DEVICES=0 /home/stephane/gpu-env/bin/python -u tools/essai_decharge.py --dim 192 --lr 1e-3 --pas 20000 --decharge-seul --poids-signes > /tmp/ec_signes_bin.log 2>&1 < /dev/null &\nsetsid nohup env CUDA_VI … [326 caractères tronqués]`
+
+  ```
+signes binaire + ternaire lancés
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== banc push/pull d'origine ===\"; grep -rn \"PushMat\\|DenseQ8\" drave-core/src/main.rs | head -10; echo \"=== tests/bench dans list.rs et engine.rs ===\"; grep -n \"#\\[test\\]\\|fn bench\\|--banc\\|banc\" drave-core/src/li … [124 caractères tronqués]`
+
+  ```
+=== banc push/pull d'origine ===
+50:use list::{dense_bits, BitmapSign, DenseQ4, DenseQ8, FusedSign, PushMat, SignedDelta, SparseK};
+246:    // deux ne calculent pas la même chose. `PushMat` et `DenseQ8` partagent au
+249:    // SCALAIRE. La transposée est nécessaire : PushMat/DenseQ8 sont rangés par
+254:    let pm = PushMat::build(&wt, n_cols, n_rows);
+255:    let dl = DenseQ8::build(&wt, n_cols, n_rows);
+4482:    let d = unsafe { DenseQ8::emprunter_q8(blocs.as_ptr(), n_out, n_in, nb) };
+=== tests/bench dans list.rs et engine.rs ===
+1408:    #[test]
+1432:    #[test]
+1504:    #[test]
+1543:    #[test]
+1561:    #[test]
+1581:    #[test]
+120:        (opt.banc_vision.is_some(), "--banc-vision"),
+123:        (opt.tensors, "--tensors"), (opt.banc_mla.is_some(), "--banc-mla"),
+124:        (opt.banc_kv > 0, "--banc-kv"), (opt.banc_topk > 0, "--banc-topk"),
+125:        (opt.gpu_banc, "--gpu-banc"), (opt.materiel, "--materiel"), (opt.config, "--config"),
+139:    if let Some(f) = opt.banc_vision.clone() { run_banc_vision(&f); return; }
+143:    if let Some(f) = opt.banc_mla.clone() { run_banc_mla(opt, &f); return; }
+144:    if opt.banc_kv > 0 { run_banc_kv(opt); return; }
+145:    if opt.banc_topk
+… [36 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '225,320p' drave-core/src/main.rs", "description": "Read engine push/pull benchmark code"}`
+
+  ```
+let t = g.tensor(&matrix).expect("matrice absente");
+    let levels = g.raw_levels(&matrix);
+    let n_rows = t.dims[0] as usize;
+    let n_cols = t.dims[1] as usize;
+    let n = n_rows * n_cols;
+    let tern: Vec<i8> = levels.iter().map(|&v| v.signum()).collect();
+
+    let fused = FusedSign::build(&tern, n_rows, n_cols);
+    let old = SignedDelta::build(&tern, n_rows, n_cols);
+    let bitmap = BitmapSign::build(&tern, n_rows, n_cols);
+    println!("  {matrix} : {n_rows} entrées × {n_cols} sorties, {} événements", fused.n_events);
+    println!("  listes fusionnées {:.2} Mo ({:.2} b/poids) | anciennes {:.2} Mo ({:.2}) | bitmap {:.2} Mo ({:.2})\n",
+             fused.bits() as f64 / 8.0 / 1e6, fused.bits_per_weight(),
+             old.bits() as f64 / 8.0 / 1e6, old.bits_per_weight(),
+             bitmap.bits() as f64 / 8.0 / 1e6, bitmap.bits_per_weight());
+
+    let mut x = vec![0i32; n_rows];
+    for (i, v) in x.iter_mut().enumerate() { *v = ((i * 2654435761usize) % 200) as i32 - 100; }
+
+    // ---- croisement push/pull sur la MÊME arithmétique ----
+    // Comparer le ternaire (FusedSign) au dense int8 n'aurait aucun sens : les
+    // deux ne calculent pas la même chose. `PushMat` et
+… [3813 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fn run_banc\\|banc_push\\|banc-matvec\\|push_pull\" drave-core/src/main.rs | head -10; echo \"=== options CLI 'banc' ===\"; grep -n '\"--banc' drave-core/src/main.rs | head -12; echo \"=== usage/résumé ===\"; grep -n \"banc … [106 caractères tronqués]`
+
+  ```
+1308:fn run_banc_vision(sortie: &str) {
+3648:fn run_banc_topk(opt: Options) {
+4221:fn run_banc_mla(opt: Options, sortie: &str) {
+4262:fn run_banc_kv(opt: Options) {
+=== options CLI 'banc' ===
+120:        (opt.banc_vision.is_some(), "--banc-vision"),
+123:        (opt.tensors, "--tensors"), (opt.banc_mla.is_some(), "--banc-mla"),
+124:        (opt.banc_kv > 0, "--banc-kv"), (opt.banc_topk > 0, "--banc-topk"),
+694:            "--banc-kv" => { o.banc_kv = suivant(i).parse().unwrap(); 2 }
+695:            "--banc-topk" => { o.banc_topk = suivant(i).parse().unwrap(); 2 }
+696:            "--banc-mla" => { o.banc_mla = Some(suivant(i).clone()); 2 }
+715:            "--banc-vision" => { o.banc_vision = Some(suivant(i).clone()); 2 }
+=== usage/résumé ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && awk 'NR>=180 && NR<=225' drave-core/src/main.rs | grep -n \"fn \\|matrix\\|args\\|opt\\.\" | head -20; echo \"=== qui appelle la fonction du banc (ligne ~220) ===\"; awk 'NR>=150 && NR<=225 && /^fn |^pub fn /' drave-core/src/main.rs; … [126 caractères tronqués]`
+
+  ```
+46:    let t = g.tensor(&matrix).expect("matrice absente");
+=== qui appelle la fonction du banc (ligne ~220) ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^fn \\|^pub fn \" drave-core/src/main.rs | awk -F: '$1>100 && $1<240'; echo \"---\"; sed -n '196,224p' drave-core/src/main.rs", "description": "Show enclosing function of the bench"}`
+
+  ```
+---
+    for name in mats {
+        let Some(t) = g.tensor(name) else { continue };
+        let levels = g.raw_levels(name);
+        let n = t.nelem();
+        let n_rows = t.dims[0] as usize;
+        let n_cols = t.dims[1] as usize;
+        let nz = levels.iter().filter(|&&v| v != 0).count();
+        let dens = nz as f64 / n as f64;
+
+        let sd = SignedDelta::build(&levels, n_rows, n_cols);
+        let bs = BitmapSign::build(&levels, n_rows, n_cols);
+        let sk8 = SparseK::build(&levels, n_rows, n_cols, 8);
+        let sk4 = SparseK::build(&levels, n_rows, n_cols, 4);
+        let sk1 = SparseK::build(&levels, n_rows, n_cols, 1);
+
+        println!("\n{name}  [{n_rows} × {n_cols}]  densité {:.1} %", dens * 100.0);
+        println!("  dense 8 bits            {}", fmt_bits(dense_bits(n, 8), n));
+        println!("  bitmap + signe          {}", fmt_bits(bs.bits(), n));
+        println!("  creux k=1 (signe seul)  {}", fmt_bits(sk1.bits(), n));
+        println!("  creux k=4               {}", fmt_bits(sk4.bits(), n));
+        println!("  creux k=8               {}", fmt_bits(sk8.bits(), n));
+        println!("  listes signées + écarts {}", fmt_bits(sd.bits(), n));
+        println!
+… [393 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^fn [a-z_]*(\" drave-core/src/main.rs | awk -F: '$1<200' | tail -3; echo \"=== appel ===\"; grep -n \"run_banc_mur\\|mur_memoire\\|banc_mur\\|--mur\" drave-core/src/main.rs | head -6", "description": "Find function name and … [18 caractères tronqués]`
+
+  ```
+53:fn fmt_bits(b: u64, n: usize) -> String {
+66:fn rapport_hebb_diff(mdl: &model::Model) {
+76:fn main() {
+=== appel ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '76,100p' drave-core/src/main.rs; echo \"=== où démarre la section 1 du banc (avant ligne 196) ===\"; sed -n '160,196p' drave-core/src/main.rs | head -40", "description": "Trace the benchmark call site in main"}`
+
+  ```
+fn main() {
+    let args: Vec<String> = std::env::args().collect();
+    if args.len() < 2 {
+        eprintln!("usage: drave <modele.gguf|dossier-de-clusters> [--matrix NOM] [--threads N]");
+        eprintln!("       drave <modele> --infer (--ids 1,2,3 | --prompt TEXTE | --ids-file F)");
+        eprintln!("             [--n 32] [--temp 0] [--ctx 512] [--threads N]");
+        eprintln!("       drave <modele> --ppl FICHIER-IDS [--ctx N] [--limit N] [--dense]");
+        eprintln!("       drave <modele> --tensors      inventaire par les en-têtes seuls");
+        eprintln!("       drave <modele> --materiel     détection matérielle et plan de");
+        eprintln!("                                     configuration, AVEC la raison de chaque");
+        eprintln!("                                     choix — ne charge pas le modèle");
+        eprintln!("       drave <modele> --sonder-engram N   accès mmappé à une table d'engram");
+        eprintln!("       drave <modele> --tete-restreinte F  génération CONTRAINTE : la tête ne");
+        eprintln!("                                     calcule que les tokens de F. Change la");
+        eprintln!("                                     sortie — re
+… [2531 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"Instant::now\\|elapsed\" drave-core/src/main.rs | awk -F: '$1>320 && $1<520' | head -20; echo \"=== appels fused/old/bitmap dans la suite ===\"; grep -n \"fused\\.\\|old\\.\\|bitmap\\.\" drave-core/src/main.rs | head -20",  … [62 caractères tronqués]`
+
+  ```
+334:        let t0 = Instant::now();
+336:        let dt = t0.elapsed().as_secs_f64() / reps as f64;
+338:        let t0 = Instant::now();
+340:        let dt_d = t0.elapsed().as_secs_f64() / reps as f64;
+363:        let t0 = Instant::now();
+365:        let dt_push = t0.elapsed().as_secs_f64() / reps as f64;
+366:        let t0 = Instant::now();
+369:        let dt_pull = t0.elapsed().as_secs_f64() / reps as f64;
+395:    let t0 = Instant::now();
+397:    let t_mul = t0.elapsed().as_secs_f64();
+398:    let t0 = Instant::now();
+400:    let t_sa = t0.elapsed().as_secs_f64();
+=== appels fused/old/bitmap dans la suite ===
+235:    println!("  {matrix} : {n_rows} entrées × {n_cols} sorties, {} événements", fused.n_events);
+237:             fused.bits() as f64 / 8.0 / 1e6, fused.bits_per_weight(),
+238:             old.bits() as f64 / 8.0 / 1e6, old.bits_per_weight(),
+239:             bitmap.bits() as f64 / 8.0 / 1e6, bitmap.bits_per_weight());
+342:        for &s in &sv.idx { fused.row_events_count(s as usize, &mut ev); }
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '320,380p' drave-core/src/main.rs", "description": "Read event-engine timing section"}`
+
+  ```
+println!("  pool 4 bits vs scalaire : {}",
+                 if pire.1 == 0.0 { "IDENTIQUE ✅".to_string() }
+                 else { format!("DIVERGENT rang {} (écart relatif {:.3}) ❌", pire.0, pire.1) });
+    }
+    println!("  {:>8}  {:>12}  {:>14}  {:>12}  {:>10}",
+             "densité", "événements", "G év/s", "ms/appel", "M év/s/thread");
+    for dens in [0.0, 0.01, 0.05, 0.10, 0.25, 0.50, 1.00] {
+        let mut xa = x.clone();
+        for i in 0..n_rows {
+            if (i as f64 * 0.6180339887).fract() >= dens { xa[i] = 0; }
+        }
+        let sv = SparseVec::from_dense(&xa);
+        let reps = if dens == 0.0 { 50 } else { 30 };
+        let (out, _) = pool.accumulate(&fused, &sv);
+        let t0 = Instant::now();
+        for _ in 0..reps { let _ = pool.accumulate(&fused, &sv); }
+        let dt = t0.elapsed().as_secs_f64() / reps as f64;
+        let (out_d, _) = pool.accumulate_delta(&old, &sv);
+        let t0 = Instant::now();
+        for _ in 0..reps { let _ = pool.accumulate_delta(&old, &sv); }
+        let dt_d = t0.elapsed().as_secs_f64() / reps as f64;
+        let mut ev = 0usize;
+        for &s in &sv.idx { fused.row_events_count(s as usize, &mut ev); }
+        printl
+… [2017 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && ls -la target/release/drave 2>/dev/null; ls ../models/*.gguf 2>/dev/null", "description": "Check built binary and models"}`
+
+  ```
+-rwxr-xr-x. 2 stephane stephane 2545176  7 oct 20:38 target/release/drave
+../models/Qwen2.5-0.5B-Q4_0.gguf
+../models/Qwen2.5-0.5B-Q8_0.gguf
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && timeout 900 ./target/release/drave ../models/Qwen2.5-0.5B-Q8_0.gguf --threads 16 2>&1 | sed -n '/densité/,/^$/p' | head -40", "description": "Run engine event-rate benchmark", "timeoutMs": 900000}`
+
+  ```
+blk.0.ffn_gate.weight  [4864 × 896]  densité 99.2 %
+  dense 8 bits               8.000 b/poids  (   4.36 Mo)
+  bitmap + signe             1.992 b/poids  (   1.09 Mo)
+  creux k=1 (signe seul)     1.992 b/poids  (   1.09 Mo)
+  creux k=4                  4.970 b/poids  (   2.71 Mo)
+  creux k=8                  8.939 b/poids  (   4.87 Mo)
+  listes signées + écarts    7.975 b/poids  (   4.34 Mo)
+  (varint : 4325087 événements, 1.0 écart moyen)
+
+blk.0.ffn_down.weight  [896 × 4864]  densité 99.2 %
+  dense 8 bits               8.000 b/poids  (   4.36 Mo)
+  bitmap + signe             1.992 b/poids  (   1.09 Mo)
+  creux k=1 (signe seul)     1.992 b/poids  (   1.09 Mo)
+  creux k=4                  4.967 b/poids  (   2.71 Mo)
+  creux k=8                  8.934 b/poids  (   4.87 Mo)
+  listes signées + écarts    7.941 b/poids  (   4.33 Mo)
+  (varint : 4322341 événements, 1.0 écart moyen)
+
+blk.0.attn_q.weight  [896 × 896]  densité 99.1 %
+  dense 8 bits               8.000 b/poids  (   0.80 Mo)
+  bitmap + signe             1.991 b/poids  (   0.20 Mo)
+  creux k=1 (signe seul)     1.991 b/poids  (   0.20 Mo)
+  creux k=4                  4.964 b/poids  (   0.50 Mo)
+  creux k=8                  8.929 
+… [798 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && timeout 900 ./target/release/drave ../models/Qwen2.5-0.5B-Q8_0.gguf --threads 16 2>&1 | sed -n '/=== 2\\./,$p' | head -60", "description": "Capture full event-engine benchmark table", "timeoutMs": 900000}`
+
+  ```
+=== 2. Moteur d'événements optimisé (4 optimisations) ===
+     réduction incrémentale · décodage SWAR · vecteur creux · listes fusionnées
+  blk.0.ffn_gate.weight : 4864 entrées × 896 sorties, 4325087 événements
+  listes fusionnées 4.89 Mo (8.97 b/poids) | anciennes 4.34 Mo (7.98) | bitmap 1.09 Mo (1.99)
+
+  push int8 : 15.88 b/poids, 4325087 événements | pull int8 : 8.00 b/poids
+  bande passante mémoire mesurée : 20.8 Go/s (64 Mo lus, 16 threads, somme 248 )
+  4 bits : 4.50 b/poids
+  pool de 16 threads, barrière atomique
+
+  noyau 4 bits : scalaire vs AVX2 → BIT À BIT IDENTIQUE ✅
+  pool 4 bits vs scalaire : IDENTIQUE ✅
+   densité    événements          G év/s      ms/appel  M év/s/thread
+      0.0%             0  fusion   0.00 G (0.0073 ms) | 2-listes   0.00 G (0.0070 ms)
+           → fusion : IDENTIQUE ✅
+           → 2-listes : IDENTIQUE ✅
+           push int8 122995.48 matvec/s (0.008 ms, 0 év) | pull 3209.41 matvec/s (0.312 ms) | push/pull = ×0.03
+           pull : 14.0 Go/s de poids lus (4.4 Mo), soit 67 % du repère mémoire
+           → push vs pull (même arithmétique) : BIT À BIT IDENTIQUE ✅
+      1.0%         43560  fusion   1.36 G (0.0321 ms) | 2-listes   1.47 G (0.0297 ms)
+  
+… [2630 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le moteur vient de donner le chiffre qui manquait : le coût réel par événement
+
+Mesure fraîche sur le binaire du dépôt (`Qwen2.5-0.5B-Q8_0`, 16 fils, matrice 4864×896) — **le chemin par listes existe déjà en deux saveurs, et aucune ne coûte ce que les documents supposaient** :
+
+| densité | pull dense | push valué (int8) | push **signe** (FusedSign) |
+|---|---|---|---|
+| 1 % | 0,312 ms | 0,023 ms | 0,032 ms |
+| 5 % | 0,313 ms | 0,060 ms | 0,082 ms |
+| 10 % | 0,312 ms | 0,104 ms | 0,142 ms |
+| 25 % | 0,312 ms | 0,240 ms | 0,340 ms |
+| 100 % | 0,311 ms | 0,916 ms | 1,322 ms |
+
+Le pull est au mur mémoire (14,0 Go/s = 67 % du repère 20,8 Go/s). Aux faibles densités, les deux push sont **linéaires en événements** : 0,21 ns/événement (valué), 0,305 ns/événement (signe) — soit **2,9× et 4,3× le coût d'un poids dense**. D'où la loi : `temps ≈ (0,011 ms + 0,305 ns × événements)` par couche pour le signe, contre `0,0716 ns × poids` pour le dense. **Le croisement du chemin par signe est à ~9 %, pas à 22 %** — et un événement ne vaut donc pas un poids.
+
+J'inscris cette loi dans le banc (elle remplace le facteur unique 4,69) :
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/essai_decharge.py", "new_string": "# ---------------------------------------------------------------------------\n# LA LOI DU COÛT, MESURÉE DANS LE MOTEUR (et pas déduite des documents).\n#\n# Banc du moteur, `blk.0.ffn_gate.weight … [1935 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/essai_decharge.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"rap = Rapport()\" -A 40 tools/essai_decharge.py | head -50", "description": "Show reporting block to update"}`
+
+  ```
+471:        rap = Rapport()
+472-        bpc = evaluer(modele, val, a.seq, a.lot, rap, max_lots=40)
+473-        taux = rap.table()
+474-        poids_lineaires = sum(n for _, n in plan)
+475-        if dense:
+476-            cout = poids_lineaires
+477-            print(f"\n  # MACs/token {cout/1e6:.2f} M · val {bpc:.4f} bits/octet")
+478-        else:
+479-            cout = sum(taux.get(cle, 0.0) * n for cle, n in plan)
+480-            rmoy = sum(taux.values()) / max(len(taux), 1)
+481-            densite = cout / poids_lineaires
+482-            print(f"\n  # événements/token {cout/1e6:.2f} M · R̂ moyen {rmoy:.4f} "
+483-                  f"· densité {densite:.4f} · val {bpc:.4f} bits/octet")
+484-            print(f"  # temps relatif au jumeau dense ≈ {densite * FACTEUR_PUSH:.3f}× "
+485-                  f"(loi push/pull : {FACTEUR_PUSH} à densité 1)")
+486-            if a.poids_signes:
+487-                print("  # ATTENTION : ce temps est celui d'événements VALUÉS (int8). Le push par")
+488-                print("  #   SIGNE (FusedSign, 1 bit) n'a pas de banc dans le moteur — à mesurer.")
+489-            for k in sorted(taux):
+490-                print(f"  #   {k:<18} R̂ {taux[k]:.4f}"
+… [1031 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/essai_decharge.py", "new_string": "        rap = Rapport()\n        bpc = evaluer(modele, val, a.seq, a.lot, rap, max_lots=40)\n        taux = rap.table()\n        poids_lineaires = sum(n for _, n in plan)\n        # Temps projeté, … [4518 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/essai_decharge.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "for f in /tmp/ec_signes_bin.log /tmp/ec_signes_ter.log; do echo \"=== $f ===\"; tail -3 \"$f\"; done", "description": "Check binary/ternary weight runs"}`
+
+  ```
+=== /tmp/ec_signes_bin.log ===
+  pas    500 · perte 2.8665 · val 4.3681 bits/octet · 27 s
+  pas   1000 · perte 2.7191 · val 4.0924 bits/octet · 55 s
+  pas   1500 · perte 2.6488 · val 3.9903 bits/octet · 82 s
+=== /tmp/ec_signes_ter.log ===
+  pas    500 · perte 2.7833 · val 4.2786 bits/octet · 29 s
+  pas   1000 · perte 2.7132 · val 4.1095 bits/octet · 57 s
+  pas   1500 · perte 2.6529 · val 4.0075 bits/octet · 84 s
+  ```
+
+- **write** `{"content": "# La parcimonie entraînée — premier banc, et la loi du coût par événement\n\n> 08/10. Premier essai de la phrase du `docs/programme-recherche.md` § 2 ter :\n> **« la parcimonie ne s'impose pas, elle s'entraîne »**. Le dépôt n'avait\n> jusqu'ici jamais entraîné un seul modèle (zéro rétro … [7145 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-parcimonie-entrainee.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "sleep 540; for f in /tmp/ec_signes_bin.log /tmp/ec_signes_ter.log; do echo \"=== $f ===\"; grep -E \"meilleur point|événements/token|temps projeté\" \"$f\" | tail -4; echo \"  [dernier] $(tail -1 \"$f\")\"; done", "description": "Check sign-weight runs progress", "timeoutMs": 600000}`
+
+  ```
+=== /tmp/ec_signes_bin.log ===
+  [dernier]   pas  11500 · perte 2.3729 · val 3.5917 bits/octet · 622 s
+=== /tmp/ec_signes_ter.log ===
+  [dernier]   pas  11000 · perte 2.4532 · val 3.6555 bits/octet · 625 s
+  ```
+
+- **bash** `{"command": "sleep 480; for f in /tmp/ec_signes_bin.log /tmp/ec_signes_ter.log; do echo \"=== $f ===\"; grep -E \"meilleur point|événements/token|temps projeté\" \"$f\" | tail -3; done; pgrep -c -f \"tools/essai\" || true", "description": "Collect final sign-weight results", "timeoutMs": 540000}`
+
+  ```
+=== /tmp/ec_signes_bin.log ===
+  # meilleur point : pas 20000 · val 3.4924 bits/octet
+  # événements/token 0.32 M · R̂ moyen 0.1949 · densité 0.1819 · val 3.5032 bits/octet
+=== /tmp/ec_signes_ter.log ===
+  # meilleur point : pas 19000 · val 3.5091 bits/octet
+  # événements/token 0.30 M · R̂ moyen 0.1850 · densité 0.1718 · val 3.5248 bits/octet
+1
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/essai_decharge.py", "new_string": "            signes = bool(a.poids_signes)\n            # Coût MARGINAL seul : le coût fixe par appel (0,011 à 0,014 ms sur une\n            # matrice de 4 864 × 896) dépend de la taille de l'accum … [1868 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/essai_decharge.py has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-parcimonie-entrainee.md", "new_string": "| taux | modèle | val (bits/octet) | coût | R̂ |\n|---|---|---:|---|---:|\n| 3·10⁻³ | dense | 2,4420 | 1,77 M MACs | — |\n| 3·10⁻³ | décharge | 3,2004 | 0,27 M événements | 0,170 | … [945 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-parcimonie-entrainee.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-parcimonie-entrainee.md", "new_string": "## 4. Ce que cela change pour la cible\n\nDeux façons de lire la loi du § 3, et il faut les deux :\n\n- **au marginal** (grandes matrices, beaucoup d'événements) : un événement vau … [2194 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-parcimonie-entrainee.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-parcimonie-entrainee.md", "new_string": "1. **Poids signés (binaire/ternaire)** — mesuré (voir § 2) : −0,28 à −0,30\n   bit/octet, et aucun gain de temps tant que le noyau signé reste plus lent que\n   le valué. Le stocka … [2093 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-parcimonie-entrainee.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short && git add tools/essai_decharge.py tools/corpus_wikipedia.py reports/rapport-parcimonie-entrainee.md && git commit -q -m \"Parcimonie entraînée : premier banc, et la loi du coût par événement mesurée dans le moteur … [1608 caractères tronqués]`
