@@ -5555,3 +5555,97 @@ ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/entrainer_moteur.py && git commit -q -m \"entrainer_moteur : deux erreurs qui faussaient la mesure, corrigées\n\n1. Double décalage. Le modèle HF décale lui-même (shift_logits/shift_labels) ;\n   lui passer une entrée D … [770 caractères tronqués]`
+
+  ```
+f96aefa entrainer_moteur : deux erreurs qui faussaient la mesure, corrigées
+  ```
+
+- **bash** `{"command": "sleep 420; tail -3 /tmp/m3_dense.log; echo \"---\"; tail -3 /tmp/m3_route.log", "description": "Check improved pair progress", "timeoutMs": 480000}`
+
+  ```
+pas  14000 · perte 1.8874 · val 7.4750 bits/octet · 369 s
+  pas  16000 · perte 1.9428 · val 7.5588 bits/octet · 426 s
+  pas  18000 · perte 1.8931 · val 7.5551 bits/octet · 485 s
+---
+  pas   4000 · perte 1.9073 · val 7.0259 bits/octet · 207 s
+  pas   6000 · perte 1.8768 · val 7.2126 bits/octet · 314 s
+  pas   8000 · perte 1.9544 · val 7.3827 bits/octet · 419 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && /home/stephane/gpu-env/bin/python - <<'PY' 2>&1 | grep -vE \"Loading|Deprecat|__array\" | tail -6\nimport numpy as np, torch, math\nfrom transformers import AutoModelForCausalLM\nm = AutoModelForCausalLM.from_pretrained(\"/tmp/m2_den … [934 caractères tronqués]`
+
+  ```
+File "/home/stephane/gpu-env/lib64/python3.13/site-packages/torch/nn/modules/module.py", line 1790, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/stephane/gpu-env/lib64/python3.13/site-packages/transformers/models/qwen3/modeling_qwen3.py", line 252, in forward
+    query_states = self.q_norm(self.q_proj(hidden_states).view(hidden_shape)).transpose(1, 2)
+                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+RuntimeError: cannot reshape tensor of 0 elements into shape [16, 0, -1, 48] because the unspecified dimension size -1 can be any value and is ambiguous
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && /home/stephane/gpu-env/bin/python - <<'PY' 2>&1 | grep -vE \"Loading|Deprecat|__array\" | tail -6\nimport numpy as np, torch, math\nfrom transformers import AutoModelForCausalLM\nm = AutoModelForCausalLM.from_pretrained(\"/tmp/m2_den … [1000 caractères tronqués]`
+
+  ```
+APPRIS  offset 0        : 7.9378 bits/octet
+APPRIS  offset 1 000 000: 7.5444
+APPRIS  offset 50 000 000: 7.8207
+VALID   offset 0        : 7.2566
+uniforme (repère)       : 8.0
+  ```
+
+### 🤖 Assistant
+
+⏵ Erreur plus grave : le décalage double était aussi dans la **boucle d'entraînement**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && pkill -f \"entrainer_moteu[r]\" ; sleep 2; python3 - <<'PY'\np=\"tools/entrainer_moteur.py\"; s=open(p).read()\ns = s.replace('''        sortie = modele(input_ids=x, labels=y)\n        perte = sortie.loss''',\n'''        # Entrée et  … [685 caractères tronqués]`
+
+  ```
+(no output)
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "pgrep -af \"entrainer\" | head -3; echo \"--- état du fichier ---\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"labels=y\" tools/entrainer_moteur.py | head -3", "description": "Check processes and file state"}`
+
+  ```
+3431707 bash -c pgrep -af "entrainer" | head -3; echo "--- état du fichier ---"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n "labels=y" tools/entrainer_moteur.py | head -3
+--- état du fichier ---
+118:        sortie = modele(input_ids=x, labels=y)
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py", "limit": 10, "offset": 113}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py</path>
+<type>file</type>
+<content>
+113:     debut = time.time()
+114:     modele.train()
+115:     for pas in range(1, a.pas + 1):
+116:         x, y = lot_aleatoire(train, a.seq, a.lot, g)
+117:         x, y = x.to(dev), y.to(dev)
+118:         sortie = modele(input_ids=x, labels=y)
+119:         perte = sortie.loss
+120:         opt.zero_grad(set_to_none=True)
+121:         perte.backward()
+122:         torch.nn.utils.clip_grad_norm_(modele.parameters(), 1.0)
+
+(Showing lines 113-122 of 158. Use offset=123 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py", "new_string": "    for pas in range(1, a.pas + 1):\n        x, y = lot_aleatoire(train, a.seq, a.lot, g)\n        x = x.to(dev)\n        # Entrée et étiquettes = LA MÊME séquence : le modèle décale lui-même\n  … [826 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && setsid nohup env CUDA_VISIBLE_DEVICES=0 /home/stephane/gpu-env/bin/python -u tools/entrainer_moteur.py --famille dense --dim 192 --couches 4 --tetes 4 --cache 768 --pas 20000 --sortie /tmp/m4_dense --eval-tous 2000 > /tmp/m4_dense.lo … [465 caractères tronqués]`
+
+  ```
+pas   2000 · perte 1.5899 · val 2.3727 bits/octet · 56 s
+  pas   4000 · perte 1.3314 · val 2.2644 bits/octet · 111 s
+# route · 7.58 M paramètres · 0.59 M poids LUS par jeton et par couche · 1.92 M stockés · corpus 100276153 octets · cuda
+  pas   2000 · perte 1.5674 · val 2.3385 bits/octet · 100 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/entrainer_moteur.py && git commit -q -m \"entrainer_moteur : le double décalage était AUSSI dans la boucle d'entraînement\n\nLa correction précédente n'avait touché que l'évaluation. Le défaut était plus\ngrave en amont … [553 caractères tronqués]`

@@ -114,8 +114,16 @@ def main():
     modele.train()
     for pas in range(1, a.pas + 1):
         x, y = lot_aleatoire(train, a.seq, a.lot, g)
-        x, y = x.to(dev), y.to(dev)
-        sortie = modele(input_ids=x, labels=y)
+        x = x.to(dev)
+        # Entrée et étiquettes = LA MÊME séquence : le modèle décale lui-même
+        # (`shift_logits`/`shift_labels`). Passer `y` — déjà décalé par
+        # `lot_aleatoire` — décale DEUX FOIS, et l'entraînement optimise alors la
+        # prédiction de t+2 : un autre objectif, qui ne donne pas un modèle de
+        # langage. Mesuré : perte d'entraînement 1,9 nat, et 7,9 bits/octet
+        # partout à la fin, soit l'uniforme. Les bancs (`essai_decharge`,
+        # `essai_blocs`) n'ont pas ce défaut : ils appellent `cross_entropy`
+        # eux-mêmes sur des fenêtres décalées une seule fois.
+        sortie = modele(input_ids=x, labels=x)
         perte = sortie.loss
         opt.zero_grad(set_to_none=True)
         perte.backward()

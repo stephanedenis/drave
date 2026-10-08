@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 2.3 h |
+| Durée | 2.5 h |
 | Tours | 4 |
-| Messages | 296 |
-| Appels d'outils | 300 |
+| Messages | 305 |
+| Appels d'outils | 309 |
 | Fichiers touchés | 9 |
-| Commandes | 223 |
+| Commandes | 230 |
 | Sous-agents | 3 |
-| Commits | 4 |
+| Commits | 5 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -187,7 +187,7 @@ Les deux seules mesures « inter-nœuds » du dépôt donnent 3 % et 4 % — de 
 
 ### Tour 4 — <goal_round> Objective: "Produire un modèle nativement événementiel qui soit à son meilleur dans l'architecture de Drave … [1096 caractères tronqués]
 
-*66 appels d'outils.* Actions notables :
+*75 appels d'outils.* Actions notables :
 
 - bash — Check trained model and bench outcome
 - bash — Check bench process state
@@ -203,11 +203,11 @@ Les deux seules mesures « inter-nœuds » du dépôt donnent 3 % et 4 % — de 
 - bash — Inspect distributed run output in detail
 - bash — Compare truncated vs full model perplexity
 - bash — Verify the reference flux gate is green
-- … et 51 autres
+- … et 59 autres
 
 **Synthèse produite :**
 
-⏵ Erreur de mesure trouvée chez moi : double décalage dans l'évaluation HF — je remesure
+⏵ Erreur plus grave : le décalage double était aussi dans la **boucle d'entraînement**
 
 ## 3. Travail accompli
 
@@ -221,7 +221,7 @@ Les deux seules mesures « inter-nœuds » du dépôt donnent 3 % et 4 % — de 
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/essai_blocs.py` | 1 | 5 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/exporter_gguf.py` | 1 | 17 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte_moteur.py` | 1 | 1 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py` | 1 | 1 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py` | 1 | 2 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-reparti-moteur.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs` | 0 | 2 |
 
@@ -273,7 +273,7 @@ Les deux seules mesures « inter-nœuds » du dépôt donnent 3 % et 4 % — de 
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 183 autres
+- … et 190 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -422,4 +422,5 @@ Les deux seules mesures « inter-nœuds » du dépôt donnent 3 % et 4 % — de 
 - Porte d'exécution : un modèle entraîné ici tourne dans Drave, logits identiques  Le moteur lit le GGUF en place et n'avait pas de convertisseur : le dépôt ne po
 - Réparti : --ids-file était ignoré, et les jetons synthétiques sortaient du vocabulaire  Deux défauts trouvés en essayant de répartir le modèle entraîné ici.  1.
 - entrainer_moteur : deux erreurs qui faussaient la mesure, corrigées  1. Double décalage. Le modèle HF décale lui-même (shift_logits/shift_labels) ;    lui passe
+- entrainer_moteur : le double décalage était AUSSI dans la boucle d'entraînement  La correction précédente n'avait touché que l'évaluation. Le défaut était plus 
 
