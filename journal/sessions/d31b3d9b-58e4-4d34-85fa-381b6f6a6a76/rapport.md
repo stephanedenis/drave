@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 4.3 h |
-| Tours | 7 |
-| Messages | 356 |
-| Appels d'outils | 358 |
-| Fichiers touchés | 11 |
-| Commandes | 267 |
+| Durée | 8.2 h |
+| Tours | 8 |
+| Messages | 368 |
+| Appels d'outils | 369 |
+| Fichiers touchés | 12 |
+| Commandes | 274 |
 | Sous-agents | 3 |
-| Commits | 9 |
+| Commits | 10 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -37,6 +37,8 @@
 **Tour 6** — je viens de commander une carte pcie pour 4 nvme 4x4 et 4 unités Patriot P320 256GB PCIe Gen 3x4 M.2 2280 SSD pour aller dessus. je compte mettre cet array de nvme sur le même noeud que les gpu, déplacer aussi le nvme existant pour le mettre sur l'autre noeud avec une carte graphique amd 100-c44971-00 pour avoir un noeud xeon de travail et un noeud os et desktop. je maintiens la topologie ram actu … [16 caractères tronqués]
 
 **Tour 7** — le ram est actuellement hors de prix. je t'ai fait évaluer une approche asymétrique, mais c'est déconseillé. Que peut-on faire pour le ram.
+
+**Tour 8** — donc les nouveaux nvme seront sur l'autre cpu pour ne pas réduire le nombre de voies des gpu. La ram reste tel-quelle. la carte amd pour le desktop sera sur le même cpu que les nouveaux nvme à mettre en raid. Quelels sont les autres optimisations à faire ? prépare un document pour ce changement de configuration et la configuration de la carte amd-yeston (6 ports mini-dp) et les nouveaux nvme en ra … [2 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -333,7 +335,60 @@ Donc « je maintiens 2×32 + 2×32 » = **la moitié de la bande passante mémoi
 
 **Synthèse produite :**
 
-⏵ La RAM est chère : je regarde ce qui est récupérable gratuitement avant de recommander un achat
+⏵ Section RAM ajoutée au document (§12, commit `ffa46da`) — voici la réponse
+
+\## 1. D'abord : 26 Go sont déjà perdus, et ça ne coûte rien à reprendre
+
+Relevé à l'instant : **62 Go de swap, 26 Go utilisés — et le swap est sur le disque dur** (246 Mo/s mesuré). Toute page touchée là coûte des centaines de microsecondes. Le dépôt avait déjà croisé ce fantôme pendant les travaux Kimi-K3 (« VmSwap 28,5 Go » relevé alors que le moteur affirmait « pas de swap »).
+
+`swapoff -a && swapon -a` les ramène en RAM — il y a 103 Go disponibles. Et quand l'array arrive, **le swap va sur le NVMe, jamais sur `sda`**. `vm.swappiness` est déjà à 10 : le réglage n'est pas le problème, le support l'est.
+
+Côté réglages, le reste est déjà propre (gouverneur `performance`, THP `always`, `mmap` par défaut). J'ai quand même mesuré le banc mémoire sous trois placements :
+
+| placement | débit |
+|---|---:|
+| sans liaison (16 fils) | 20,4 Go/s |
+| lié au nœud 0 (10 fils) | 22,4 Go/s (+10 %) |
+| **entrelacé sur les deux nœuds** (20 fils) | **23,8 Go/s (+17 %)** |
+
+**Mais** : le même entrelacement donne **−0,9 %** sur une passe réelle (l'A/B du § 7). Le gain de banc ne se transfère pas — c'est exactement la règle du dépôt, et elle joue ici contre l'optimisation gratuite. Le seul levier gratuit qui reste est la **fréquence de l'uncore** (le ring plafonne la bande passante sur Haswell-EP ; MSR `0x620`, non exposé par le noyau ici, il faut `msr-tools` et root).
+
+\## 2. Le substitut de RAM, c'est le disque — et il est déjà commandé
+
+La passe K3 lit **206,58 Gio** dont 57,93 de dense lu une fois. Le dépôt a mesuré que **la page cache ne retient pas ce dense** d'une passe à l'autre (1 516 430 puis 1 522 584 ms). Un array à 7 Go/s lit ces 58 Go en **8 secondes** : le problème disparaît au lieu d'être résolu.
+
+Et le corollaire du programme, qui est le vrai argument : **un modèle routé n'a pas besoin d'être en RAM pour être gros**. Mesuré sur le prototype — 2,3 M poids lus par jeton pour 7,58 M stockés, **3,35× de paramètres pour la même lecture**. Acheter de la RAM pour faire tenir un modèle de 1,5 To sur une machine de 125 Go est perdu d'avance : c'est la définition de la niche du projet.
+
+\## 3. Réduire ce qui *doit* tenir en RAM
+
+Le cache KV est le seul poste qui grandit avec l'usage, et il est déjà chiffré :
+
+| réglage | coût qualité | gain RAM |
+|---|---|---|
+| KV int8 à 512 jetons | **+1,5 %** de perplexité | 2× |
+| KV int8 à 8 192 jetons | **+3,0 %** | 2× |
+| KV int4 | +364 % → inutilisable |
+… [1303 caractères tronqués]
+
+### Tour 8 — donc les nouveaux nvme seront sur l'autre cpu pour ne pas réduire le nombre de voies des gpu. La ram reste tel-quelle. l … [282 caractères tronqués]
+
+*11 appels d'outils.* Actions notables :
+
+- bash — Check RAID tooling, ECC and kernel
+- web_search
+- bash — Check I/O queue settings, md modules, amdgpu firmware
+- bash — Verify md RAID and GPU driver modules
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/configuration-nvme-raid-amd.md`
+- bash — Verify missing storage tools
+- bash — Check tools by full path, not PATH
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/configuration-nvme-raid-amd.md`
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/configuration-nvme-raid-amd.md`
+- bash — Check section 5 numbering for the lspci reference
+- bash — Commit the reconfiguration document
+
+**Synthèse produite :**
+
+⏵ Correction : les outils sont là, c'est le PATH qui les cache — je rectifie le document
 
 ## 3. Travail accompli
 
@@ -352,6 +407,7 @@ Donc « je maintiens 2×32 + 2×32 » = **la moitié de la bande passante mémoi
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs` | 0 | 2 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/numa-segregation.md` | 1 | 3 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-modele-moteur.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/configuration-nvme-raid-amd.md` | 1 | 2 |
 
 ### Sous-agents lancés
 
@@ -401,7 +457,7 @@ Donc « je maintiens 2×32 + 2×32 » = **la moitié de la bande passante mémoi
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 227 autres
+- … et 234 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -557,4 +613,5 @@ Donc « je maintiens 2×32 + 2×32 » = **la moitié de la bande passante mémoi
 - Le modèle produit ici tourne dans Drave et se découpe — les deux portes sont tenues  Porte d'exécution : un Qwen3-MoE entraîné ici (4 couches, 8 experts, top-2,
 - docs/numa-segregation §11 : la carte 4xNVMe et l'AMD, chiffrées avant achat du reste  Le placement proposé est juste (array sur le nœud des GPU, OS/affichage is
 - docs/numa-segregation §12 : quoi faire de la RAM quand elle est hors de prix  Trois réponses, dans l'ordre où elles paient, et toutes mesurées :  1. RÉCUPÉRER C
+- docs/configuration-nvme-raid-amd : préparation de la reconfiguration (array sur le nœud 1, AMD pour le bureau)  Document écrit AVANT l'intervention, pour que ch
 
