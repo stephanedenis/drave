@@ -7,12 +7,12 @@
 | Début | 2026-10-08 09:11 |
 | Durée | 2.8 h |
 | Tours | 5 |
-| Messages | 322 |
-| Appels d'outils | 326 |
-| Fichiers touchés | 10 |
-| Commandes | 245 |
+| Messages | 338 |
+| Appels d'outils | 342 |
+| Fichiers touchés | 11 |
+| Commandes | 254 |
 | Sous-agents | 3 |
-| Commits | 6 |
+| Commits | 7 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -215,7 +215,7 @@ Les deux seules mesures « inter-nœuds » du dépôt donnent 3 % et 4 % — de 
 
 ### Tour 5 — Hypothèse de changement de configuration matériel : Si je déploie ce projet sur une station de travail bi-processeur (Xe … [683 caractères tronqués]
 
-*16 appels d'outils.* Actions notables :
+*32 appels d'outils.* Actions notables :
 
 - bash — Check background work and machine state
 - bash — Prepare interleaved NUMA A/B script
@@ -231,7 +231,7 @@ Les deux seules mesures « inter-nœuds » du dépôt donnent 3 % et 4 % — de 
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/numa-segregation.md`
 - bash — Verify cited numbers in the document
 - bash — Verify PCIe root complex for each GPU
-- … et 2 autres
+- … et 17 autres
 
 **Synthèse produite :**
 
@@ -247,12 +247,13 @@ Les deux seules mesures « inter-nœuds » du dépôt donnent 3 % et 4 % — de 
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/corpus_wikipedia.py` | 2 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-parcimonie-entrainee.md` | 1 | 3 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/essai_blocs.py` | 1 | 5 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/exporter_gguf.py` | 1 | 17 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte_moteur.py` | 1 | 1 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/exporter_gguf.py` | 1 | 18 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte_moteur.py` | 1 | 4 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py` | 1 | 2 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-reparti-moteur.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs` | 0 | 2 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/numa-segregation.md` | 1 | 1 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-modele-moteur.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -302,7 +303,7 @@ Les deux seules mesures « inter-nœuds » du dépôt donnent 3 % et 4 % — de 
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 205 autres
+- … et 214 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -455,4 +456,5 @@ Les deux seules mesures « inter-nœuds » du dépôt donnent 3 % et 4 % — de 
 - entrainer_moteur : deux erreurs qui faussaient la mesure, corrigées  1. Double décalage. Le modèle HF décale lui-même (shift_logits/shift_labels) ;    lui passe
 - entrainer_moteur : le double décalage était AUSSI dans la boucle d'entraînement  La correction précédente n'avait touché que l'évaluation. Le défaut était plus 
 - docs/numa-segregation : la ségrégation NUMA proposée, mesurée plutôt que raisonnée  Réponse à une proposition de station bi-Xeon avec topologie asymétrique stri
+- Le modèle produit ici tourne dans Drave et se découpe — les deux portes sont tenues  Porte d'exécution : un Qwen3-MoE entraîné ici (4 couches, 8 experts, top-2,
 

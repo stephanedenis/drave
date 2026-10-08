@@ -27,7 +27,8 @@ import numpy as np
 import torch
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from exporter_gguf import q4_0_decoder, q4_0_encoder, q8_0_decoder, q8_0_encoder  # noqa: E402
+from exporter_gguf import (q4_0_decoder, q4_0_encoder, q8_0_decoder, q8_0_encoder,  # noqa: E402
+                           quant_du_tenseur)
 
 
 def arrondi(enc, dec, a):
@@ -43,20 +44,25 @@ def main():
     p.add_argument("--n", type=int, default=0, help="0 = tout le fichier d'ids")
     a = p.parse_args()
 
-    from transformers import Qwen3MoeForCausalLM
-    modele = Qwen3MoeForCausalLM.from_pretrained(a.hf, dtype=torch.float32)
+    # Le jumeau DENSE n'a ni experts ni `moe_intermediate_size` : lire ces clefs
+    # sans défaut faisait échouer la référence du dense, et donc sa porte.
+    import transformers
     cfg = json.load(open(os.path.join(a.hf, "config.json")))
+    classe = (transformers.Qwen3MoeForCausalLM
+              if ("num_local_experts" in cfg or "num_experts" in cfg)
+              else transformers.Qwen3ForCausalLM)
+    modele = classe.from_pretrained(a.hf, dtype=torch.float32)
     sd = modele.state_dict()
-    n_exp, n_ff = cfg["num_local_experts"], cfg["moe_intermediate_size"]
+    n_exp = cfg.get("num_local_experts", cfg.get("num_experts", 0))
+    n_ff = cfg.get("moe_intermediate_size", 0)
 
     n_q8 = n_q4 = 0
     for k in list(sd.keys()):
-        # Les experts FUSIONNÉS ne finissent PAS par « .weight »
-        # (`mlp.experts.gate_up_proj`) : un filtre sur le suffixe les laissait en
-        # f32, et la « porte » comparait alors le Q4_0 du moteur à un modèle qui
-        # ne l'avait jamais reçu.
-        est_poids = k.endswith(".weight") or "gate_up_proj" in k or "down_proj" in k
-        if not est_poids:
+        # La règle de quantification vient de l'EXPORT (`quant_du_tenseur`), pas
+        # d'une copie locale : les deux doivent rester d'accord, sinon la porte
+        # compare deux quantifications au lieu de comparer le moteur.
+        genre = quant_du_tenseur(k)
+        if genre is None:
             continue
         w = sd[k].detach().cpu().numpy().astype(np.float32)
         if w.ndim == 3 and "gate_up_proj" in k:          # (E, 2·ff, d) fusionné
@@ -64,15 +70,16 @@ def main():
             droite = arrondi(q4_0_encoder, q4_0_decoder, w[:, n_ff:, :])
             sd[k] = torch.tensor(np.concatenate([gauche, droite], axis=1))
             n_q4 += 1
-        elif w.ndim == 3 and "down_proj" in k:
+        elif genre == "q4" and w.shape[-1] % 32 == 0:
             sd[k] = torch.tensor(arrondi(q4_0_encoder, q4_0_decoder, w))
             n_q4 += 1
-        elif w.ndim == 2 and w.shape[-1] % 32 == 0:
+        elif genre == "q8" and w.shape[-1] % 32 == 0:
             sd[k] = torch.tensor(arrondi(q8_0_encoder, q8_0_decoder, w))
             n_q8 += 1
     modele.load_state_dict(sd)
     modele.eval()
-    print(f"# quantification appliquée à la référence : {n_q8} tenseurs Q8_0, {n_q4} experts Q4_0")
+    print(f"# quantification appliquée à la référence : {n_q8} tenseurs Q8_0, "
+          f"{n_q4} tenseurs Q4_0 (FFN et experts)")
 
     ids = np.array([int(v) for v in open(a.ids).read().strip().split(",")], dtype=np.int64)
     if a.n:

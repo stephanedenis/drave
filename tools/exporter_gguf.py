@@ -259,6 +259,24 @@ def tenseurs_depuis_hf(poids, cfg, experts_q4=True):
     return t
 
 
+def quant_du_tenseur(nom_hf):
+    """Quel type GGUF l'export écrit pour ce tenseur — 'q4', 'q8', ou None.
+
+    LA MÊME règle sert à l'export ET à la référence (`porte_moteur.py`) : sans ce
+    point unique, la référence quantifiait la FFN dense en Q8_0 là où l'export
+    l'écrivait en Q4_0, et la « porte » comparait deux quantifications
+    différentes au lieu de comparer le moteur à la référence.
+    """
+    if "gate_up_proj" in nom_hf:
+        return "q4"                                    # experts fusionnés (MoE)
+    if ".mlp." in nom_hf and nom_hf.endswith(("gate_proj.weight", "up_proj.weight",
+                                              "down_proj.weight")):
+        return "q4"                                    # experts éclatés, ou FFN dense
+    if nom_hf.endswith(".weight"):
+        return "q8"
+    return None
+
+
 def _arch(cfg):
     """Le nom d'architecture que le moteur lira dans `general.architecture` :
     c'est lui qui préfixe TOUTES les clefs de configuration (`gguf.rs::cfg`)."""

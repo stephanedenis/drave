@@ -5908,3 +5908,184 @@ The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/numa-segregation.m
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/numa-segregation.md && git commit -q -m \"docs/numa-segregation : la ségrégation NUMA proposée, mesurée plutôt que raisonnée\n\nRéponse à une proposition de station bi-Xeon avec topologie asymétrique stricte\n(32 Go + OS … [996 caractères tronqués]`
+
+  ```
+29a68c8 docs/numa-segregation : la ségrégation NUMA proposée, mesurée plutôt que raisonnée
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && P=/home/stephane/gpu-env/bin/python; D=./drave-core/target/release/drave\nfor m in m4_dense m4_route; do $P tools/exporter_gguf.py --hf /tmp/$m --sortie /tmp/$m.gguf 2>&1 | head -1; done\nfor m in m4_dense m4_route; do\n  echo \"===  … [482 caractères tronqués]`
+
+  ```
+# /tmp/m4_dense.gguf : 47 tenseurs · 1.6 Mo (f32 pour les normes, Q8_0 pour les projections, Q4_0 pour la FFN et les experts) · 13 métadonnées
+# /tmp/m4_route.gguf : 51 tenseurs · 4.6 Mo (f32 pour les normes, Q8_0 pour les projections, Q4_0 pour la FFN et les experts) · 17 métadonnées
+=== m4_dense ===
+    paires (poids × activation) par token : attention 0.4 M · experts 0.0 M · partagé 1.8 M · scores 2 K · total 2.3 M
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/m4_dense_ref.bin'
+=== m4_route ===
+# référence : 255 prédictions · NLL 1.6752 nats · perplexité 5.3398
+    paires (poids × activation) par token : attention 0.4 M · experts 1.8 M · partagé 0.0 M · scores 2 K · total 2.3 M
+✅ porte de correction tenue (100.0 % des positions UTILES au-dessus de 0.95, min 1.0000 >= plancher 0.9, top-1 100.0 % sur toutes les positions, 49 saturées exclues de la corrélation)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && /home/stephane/gpu-env/bin/python tools/porte_moteur.py --hf /tmp/m4_dense --ids /tmp/route_ids.txt --logits /tmp/m4_dense_ref.bin 2>&1 | grep -vE \"Loading\" | tail -6", "description": "Diagnose dense reference failure", "timeoutMs" … [9 caractères tronqués]`
+
+  ```
+sys.exit(main())
+             ~~~~^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte_moteur.py", line 50, in main
+    n_exp, n_ff = cfg["num_local_experts"], cfg["moe_intermediate_size"]
+                  ~~~^^^^^^^^^^^^^^^^^^^^^
+KeyError: 'num_local_experts'
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte_moteur.py", "limit": 12, "offset": 46}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte_moteur.py</path>
+<type>file</type>
+<content>
+46:     from transformers import Qwen3MoeForCausalLM
+47:     modele = Qwen3MoeForCausalLM.from_pretrained(a.hf, dtype=torch.float32)
+48:     cfg = json.load(open(os.path.join(a.hf, "config.json")))
+49:     sd = modele.state_dict()
+50:     n_exp, n_ff = cfg["num_local_experts"], cfg["moe_intermediate_size"]
+51: 
+52:     n_q8 = n_q4 = 0
+53:     for k in list(sd.keys()):
+54:         # Les experts FUSIONNÉS ne finissent PAS par « .weight »
+55:         # (`mlp.experts.gate_up_proj`) : un filtre sur le suffixe les laissait en
+56:         # f32, et la « porte » comparait alors le Q4_0 du moteur à un modèle qui
+57:         # ne l'avait jamais reçu.
+
+(Showing lines 46-57 of 101. Use offset=58 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte_moteur.py", "new_string": "    # Le jumeau DENSE n'a ni experts ni `moe_intermediate_size` : lire ces clefs\n    # sans défaut faisait échouer la référence du dense, et donc sa porte.\n    import transformers\n    classe = (t … [753 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte_moteur.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && P=/home/stephane/gpu-env/bin/python; D=./drave-core/target/release/drave\n$P tools/porte_moteur.py --hf /tmp/m4_dense --ids /tmp/route_ids.txt --logits /tmp/m4_dense_ref.bin 2>&1 | grep -E \"^# (quantification|référence)\"\ntimeout 3 … [334 caractères tronqués]`
+
+  ```
+paires (poids × activation) par token : attention 0.4 M · experts 0.0 M · partagé 1.8 M · scores 2 K · total 2.3 M
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/m4_dense_ref.bin'
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && /home/stephane/gpu-env/bin/python tools/porte_moteur.py --hf /tmp/m4_dense --ids /tmp/route_ids.txt --logits /tmp/m4_dense_ref.bin 2>&1 | grep -vE \"Loading\" | tail -5", "description": "Show dense reference error", "timeoutMs": 3000 … [3 caractères tronqués]`
+
+  ```
+~~~~^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte_moteur.py", line 50, in main
+    if "num_local_experts" in cfg or "num_experts" in cfg
+                              ^^^
+UnboundLocalError: cannot access local variable 'cfg' where it is not associated with a value
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte_moteur.py", "new_string": "    # Le jumeau DENSE n'a ni experts ni `moe_intermediate_size` : lire ces clefs\n    # sans défaut faisait échouer la référence du dense, et donc sa porte.\n    import transformers\n    cfg = json. … [1092 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte_moteur.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && P=/home/stephane/gpu-env/bin/python; D=./drave-core/target/release/drave\n$P tools/porte_moteur.py --hf /tmp/m4_dense --ids /tmp/route_ids.txt --logits /tmp/m4_dense_ref.bin 2>&1 | grep -E \"^# (quantification|référence)\"\ntimeout 3 … [313 caractères tronqués]`
+
+  ```
+# quantification appliquée à la référence : 30 tenseurs Q8_0, 0 experts Q4_0
+# référence : 255 prédictions · NLL 1.6969 nats · perplexité 5.4572
+✅ porte de correction tenue (100.0 % des positions UTILES au-dessus de 0.95, min 0.9940 >= plancher 0.9, top-1 93.3 % sur toutes les positions, 42 saturées exclues de la corrélation)
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/exporter_gguf.py", "new_string": "def quant_du_tenseur(nom_hf):\n    \"\"\"Quel type GGUF l'export écrit pour ce tenseur — 'q4', 'q8', ou None.\n\n    LA MÊME règle sert à l'export ET à la référence (`porte_moteur.py`) : sans ce\n  … [730 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/exporter_gguf.py has been updated successfully.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte_moteur.py", "limit": 28, "offset": 56}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte_moteur.py</path>
+<type>file</type>
+<content>
+56:     n_ff = cfg.get("moe_intermediate_size", 0)
+57: 
+58:     n_q8 = n_q4 = 0
+59:     for k in list(sd.keys()):
+60:         # Les experts FUSIONNÉS ne finissent PAS par « .weight »
+61:         # (`mlp.experts.gate_up_proj`) : un filtre sur le suffixe les laissait en
+62:         # f32, et la « porte » comparait alors le Q4_0 du moteur à un modèle qui
+63:         # ne l'avait jamais reçu.
+64:         est_poids = k.endswith(".weight") or "gate_up_proj" in k or "down_proj" in k
+65:         if not est_poids:
+66:             continue
+67:         w = sd[k].detach().cpu().numpy().astype(np.float32)
+68:         if w.ndim == 3 and "gate_up_proj" in k:          # (E, 2·ff, d) fusionné
+69:             gauche = arrondi(q4_0_encoder, q4_0_decoder, w[:, :n_ff, :])
+70:             droite = arrondi(q4_0_encoder, q4_0_decoder, w[:, n_ff:, :])
+71:             sd[k] = torch.tensor(np.concatenate([gauche, droite], axis=1))
+72:             n_q4 += 1
+73:         elif w.ndim == 3 and "down_proj" in k:
+74:             sd[k] = torch.tensor(arrondi(q4_0_encoder, q4_0_decoder, w))
+75:             n
+… [498 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte_moteur.py", "new_string": "    n_q8 = n_q4 = 0\n    for k in list(sd.keys()):\n        # La règle de quantification vient de l'EXPORT (`quant_du_tenseur`), pas\n        # d'une copie locale : les deux doivent rester d'accord, … [2381 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte_moteur.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"tools/porte_moteur.py\"; s=open(p).read()\ns = s.replace(\"from exporter_gguf import q4_0_decoder, q4_0_encoder, q8_0_decoder, q8_0_encoder  # noqa: E402\",\n              \"from exporter_gguf import (q4_0_decod … [792 caractères tronqués]`
+
+  ```
+import ajouté
+=== m4_dense ===
+# quantification appliquée à la référence : 27 tenseurs Q8_0, 12 tenseurs Q4_0 (FFN et experts)
+# référence : 255 prédictions · NLL 1.7149 nats · perplexité 5.5563
+=== perplexité 5.5500 sur 255 tokens (0 événements, 0.2 s) ===
+✅ porte de correction tenue (100.0 % des positions UTILES au-dessus de 0.95, min 0.9998 >= plancher 0.9, top-1 98.8 % sur toutes les positions, 43 saturées exclues de la corrélation)
+=== m4_route ===
+# quantification appliquée à la référence : 31 tenseurs Q8_0, 4 tenseurs Q4_0 (FFN et experts)
+# référence : 255 prédictions · NLL 1.6787 nats · perplexité 5.3585
+=== perplexité 5.3397 sur 255 tokens (0 événements, 0.2 s) ===
+✅ porte de correction tenue (100.0 % des positions UTILES au-dessus de 0.95, min 0.9906 >= plancher 0.9, top-1 95.7 % sur toutes les positions, 47 saturées exclues de la corrélation)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && MODELE=/tmp/m4_route.gguf IDS=/tmp/route_ids128.txt LIMITE=128 timeout 600 tools/porte-reparti-moteur.sh 2>&1 | tail -5", "description": "Distributed gate on the final model", "timeoutMs": 700000}`
+
+  ```
+=== référence : le modèle ENTIER, un seul processus ===
+  perplexité entière : 3.9020
+=== deux nœuds : 2 couches locales, le reste à distance ===
+  perplexité répartie : 3.9020 · écart de flux : 0.00e0
+PORTE TENUE : le découpage ne change pas la perplexité (écart relatif 0.0000 %)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; for m in m4_route m4_dense; do echo \"=== $m --push (chemin listes) ===\"; timeout 300 $D /tmp/$m.gguf --ppl /tmp/route_ids.txt --ctx 256 --threads 8 --push 2>&1 | grep -E \"perplexité [0-9]|dont  … [113 caractères tronqués]`
+
+  ```
+=== m4_route --push (chemin listes) ===
+=== perplexité 5.3352 sur 255 tokens (112245612 événements, 0.2 s) ===
+    1222.1 tok/s effectifs (avant + tête)
+    dont en listes (une paire y est un événement) : 0.4 M — le reste est dense (déquantifié ou f32)
+=== m4_dense --push (chemin listes) ===
+=== perplexité 5.5500 sur 255 tokens (512284004 événements, 0.3 s) ===
+    867.3 tok/s effectifs (avant + tête)
+    dont en listes (une paire y est un événement) : 2.0 M — le reste est dense (déquantifié ou f32)
+  ```
+
+- **write** `{"content": "# Le modèle produit ici tourne dans Drave — et se découpe\n\n> 08/10. Deuxième volet de l'objectif : après les bancs (`rapport-parcimonie-entrainee.md`),\n> il fallait un modèle **entraîné ici**, **exécuté par le moteur**, et **découpé\n> entre deux nœuds**. Les trois sont faits, et cha … [6897 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-modele-moteur.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/porte_moteur.py tools/exporter_gguf.py reports/rapport-modele-moteur.md && git commit -q -m \"Le modèle produit ici tourne dans Drave et se découpe — les deux portes sont tenues\n\nPorte d'exécution : un Qwen3-MoE entra … [1405 caractères tronqués]`
