@@ -205,3 +205,119 @@ Trois mesures, entrelacées, sur les deux charges qui comptent :
 La porte est simple : **une configuration n'est adoptée que si elle gagne sur les
 deux charges, ou si le compromis est chiffré et assumé.** Les mesures du § 7
 prédisent qu'aucune ne gagne sur les deux.
+
+---
+
+## 11. Second projet : carte 4×NVMe + AMD, RAM inchangée (2×32 + 2×32)
+
+> Configuration annoncée : une carte PCIe 4×NVMe (bifurcation x4x4x4x4) portant
+> **4 Patriot P320 256 Go** (Gen3 x4, 2 200 / 1 200 Mo/s, TBW 120 To), placée sur
+> le nœud des GPU ; le NVMe système actuel déplacé sur l'autre nœud avec une
+> carte AMD pour l'affichage ; RAM **inchangée** (2×32 Go par socket).
+
+**Le bon côté, et il est réel.** Le placement est juste : les données vont du
+disque au GPU sans traverser le QPI, l'OS et le bureau partent de l'autre côté, et
+la RAM reste symétrique — ce que le § 9 recommandait. Les SSD P320 annoncent
+2 200 Mo/s en lecture, soit **~5× le NVMe actuel** (mesuré **1,6 Go/s**) et
+**~9× le disque dur** (mesuré 246 Mo/s).
+
+**Trois contraintes à vérifier avant de commander le reste**, dans l'ordre où
+elles mordent.
+
+### 11.1 Les lignes PCIe : un x16 de plus ne rentre pas tel quel
+
+Le Xeon E5-2687W v3 fournit **40 lignes PCIe 3.0 par socket**. Relevé aujourd'hui
+sur le nœud 0 (`/sys/bus/pci/devices/*/` et `lspci`) :
+
+| périphérique | liaison actuelle | max |
+|---|---|---|
+| Quadro RTX 5000 (`03:00.0`) | x16 (2,5 → 5,0 GT/s selon la charge) | x16 Gen3 |
+| Quadro RTX 5000 (`04:00.0`) | x16 (2,5 → 8,0 GT/s selon la charge) | x16 Gen3 |
+| NVMe système (`02:00.0`, MAP1602) | x4 Gen3 | x4 Gen4 |
+
+Deux GPU en x16 (32 lignes) + le NVMe (4) = **36 lignes occupées sur 40**. Une
+carte 4×NVMe **x16** en demande 16 de plus : **52 sur 40**. Il faudra donc choisir,
+et le choix se fait dans le BIOS :
+
+- **GPU en x8 + carte en x16** (16 + 16 + 4 = 36 ✅) : le tableau est complet, mais
+  chaque GPU perd la moitié de sa bande passante hôte — le dépôt a mesuré
+  **6,5 Go/s en x8** (`drave-core/src/gpu.rs:7`) contre ~13 en x16. Le trafic
+  concerné est le miroir du cache KV et les projections déportées : c'est
+  précisément ce qui a donné « attention 22,16 → 3,29 ms/jeton ».
+- **GPU en x16 + carte en x4** (32 + 4 + 4 = 40 ✅) : les 4 SSD partagent alors
+  ~3,9 Go/s — **le débit d'un seul SSD**. L'array ne sert à rien.
+
+**À vérifier au BIOS** : la bifurcation `x4x4x4x4` sur le slot choisi, et que ce
+slot est bien câblé au **CPU** (un slot derrière le PCH donne du x4 Gen2 partagé,
+soit ~2 Go/s pour les quatre). Les cartes 4×M.2 passives l'exigent ; sans
+bifurcation, **un seul SSD apparaît**.
+
+### 11.2 Les canaux mémoire : la RAM n'est pas « 2×32 + 2×32 », elle est à moitié
+
+EDAC répond sans ambiguïté (`/sys/devices/system/edac/mc/mc*/dimm*/`) :
+
+```
+CPU 0 : Chan#0 → 32 Go · Chan#1 → 32 Go
+CPU 1 : Chan#0 → 32 Go · Chan#1 → 32 Go
+```
+
+Le Xeon E5-2687W v3 a **quatre canaux mémoire par socket**. Deux DIMM par socket,
+c'est **deux canaux sur quatre vides**. La bande passante mesurée aujourd'hui le
+confirme : **20,4 Go/s** (64 Mo lus, 16 threads) — c'est un ordre de grandeur de
+dual-channel, pas de quad-channel.
+
+Conséquence directe : **le plan garde la moitié de la bande passante mémoire de la
+machine.** Or c'est *le* facteur limitant du régime mémoire (les passes denses),
+celui-là même que le § 3 montre qu'on ne rattrape pas par le placement. Passer à
+**4 DIMM par socket** (1 par canal) doublerait à peu près la bande passante —
+probablement le meilleur rapport gain/prix de toute la liste, et il n'est pas
+dans le plan.
+
+### 11.3 Capacité : 1 To ne contient pas Kimi-K3
+
+4 × 256 Go = **1,024 To** brut, ~950 Gio utiles. État actuel du NVMe
+(`FastNVMe`, 828 Go, **97 % plein, 29 Go libres**) :
+
+| contenu | taille | tient dans l'array de 1 To ? |
+|---|---:|---|
+| DeepSeek-V4.1-Flash Q2 | 341 Go | ✅ oui, avec de la place |
+| Kimi-K3 (32 shards) | **1,5 To** — **5 shards seulement sont sur disque** (228 Go) | ❌ non, même complet |
+| gpt-oss-120b MXFP4 | 63 Go | ✅ oui |
+| artefacts, qwen3-30b | 134 Go | ✅ oui |
+
+C'est le point qui décide de l'usage : l'array est un très bon support pour
+**un** gros modèle de la classe 350-950 Go, pas pour K3 entier. Si l'objectif est
+de faire tenir K3, il faut 2 To (8 SSD) ou garder K3 réparti entre l'array et le
+disque dur.
+
+### 11.4 Ce que l'array peut rapporter, et ce qu'il faut mesurer
+
+- **Débit attendu** : 4 × 2 200 Mo/s = 8,8 Go/s en théorie, plafonné par le lien
+  x16 Gen3 (~7,9 Go/s utiles) et par le caractère **DRAM-less** des contrôleurs.
+  Attendre **6 à 8 Go/s** est raisonnable, contre 1,6 Go/s aujourd'hui.
+- **Ce que ça change pour Drave** : la passe K3 lit 206,58 Gio. À 133 Mio/s (le
+  débit *obtenu* par le moteur sur le disque dur) elle dure 26,5 min ; à 7 Go/s
+  elle durerait **~30 s**. Mais attention : le moteur obtient 133 Mio/s là où le
+  disque dur plafonne à 205 en séquentiel — **le motif d'accès coûte 35 %**. Un
+  array ne corrige pas un motif ; il faut donc mesurer, pas extrapoler.
+- **Répartition** : le moteur lit par `mmap`. Pour qu'un *seul* fichier soit lu
+  par les 4 SSD, il faut un **RAID0** (`mdadm`) — le noyau répartit les bandes.
+  Sinon chaque SSD est un volume et il faut quatre fichiers (le moteur sait lire
+  un modèle en clusters multi-fichiers). **À mesurer dans les deux dispositions**
+  avec la même passe.
+- **Endurance** : les lectures n'usent pas le TBW. Les 120 To du P320 ne
+  concernent que les écritures (téléchargements de modèles) — non critique ici.
+- **Mesures avant/après**, dans l'ordre : `dd iflag=direct` par SSD puis sur
+  l'array (plafond brut) → `--materiel` du moteur (topologie vue) → une passe
+  disque (K3 ou 4 jetons de V4-Flash) en JBOD et en RAID0 → et la **relecture des
+  largeurs de liaison** (`current_link_width`, `current_link_speed`) **sous
+  charge**, pas au repos : au repos, les deux Quadro annoncent 2,5 GT/s alors
+  qu'elles montent à 5,0 et 8,0 GT/s en travail.
+
+### 11.5 La carte AMD
+
+Le moteur n'a **aucun noyau AMD** : `drave-core/src/gpu.rs` compile du PTX pour
+CUDA, et le déport se décide sur la VRAM libre des Quadro. Une carte AMD ne peut
+donc servir qu'à **l'affichage** — ce qui est exactement l'usage proposé, et c'est
+utile : c'est ce qui rend au calcul la VRAM et les cycles que le bureau prend
+aujourd'hui. Aucune capacité de calcul n'est perdue en la déplaçant.

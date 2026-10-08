@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 2.8 h |
-| Tours | 5 |
-| Messages | 338 |
-| Appels d'outils | 342 |
+| Durée | 4.1 h |
+| Tours | 6 |
+| Messages | 348 |
+| Appels d'outils | 352 |
 | Fichiers touchés | 11 |
-| Commandes | 254 |
+| Commandes | 262 |
 | Sous-agents | 3 |
-| Commits | 7 |
+| Commits | 8 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -33,6 +33,8 @@
 **Tour 4** — <goal_round> Objective: "Produire un modèle nativement événementiel qui soit à son meilleur dans l'architecture de Drave : parcimonie ENTRAÎNÉE (décharge/LIF ou parcimonie structurée), exécutable en listes d'événements, et découpable en unités de travail autonomes plaçables sur les unités d'une machine (cœurs, GPU, disque) puis sur plusieurs machines en réseau. Chaque affirmation porte sa mesure : … [816 caractères tronqués]
 
 **Tour 5** — Hypothèse de changement de configuration matériel : Si je déploie ce projet sur une station de travail bi-processeur (Xeon E5-2687W v3) sous Linux, configurée avec une topologie NUMA asymétrique stricte pour séparer le système du calcul intensif.  Voici la ségrégation matérielle exacte de la machine : - Nœud NUMA 0 (OS & Tâches de fond) : CPU 0, 32 Go de RAM, SSD NVMe système, et GPU AMD dédié à l … [403 caractères tronqués]
+
+**Tour 6** — je viens de commander une carte pcie pour 4 nvme 4x4 et 4 unités Patriot P320 256GB PCIe Gen 3x4 M.2 2280 SSD pour aller dessus. je compte mettre cet array de nvme sur le même noeud que les gpu, déplacer aussi le nvme existant pour le mettre sur l'autre noeud avec une carte graphique amd 100-c44971-00 pour avoir un noeud xeon de travail et un noeud os et desktop. je maintiens la topologie ram actu … [16 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -215,7 +217,7 @@ Les deux seules mesures « inter-nœuds » du dépôt donnent 3 % et 4 % — de 
 
 ### Tour 5 — Hypothèse de changement de configuration matériel : Si je déploie ce projet sur une station de travail bi-processeur (Xe … [683 caractères tronqués]
 
-*32 appels d'outils.* Actions notables :
+*33 appels d'outils.* Actions notables :
 
 - bash — Check background work and machine state
 - bash — Prepare interleaved NUMA A/B script
@@ -231,11 +233,60 @@ Les deux seules mesures « inter-nœuds » du dépôt donnent 3 % et 4 % — de 
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/numa-segregation.md`
 - bash — Verify cited numbers in the document
 - bash — Verify PCIe root complex for each GPU
-- … et 17 autres
+- … et 18 autres
 
 **Synthèse produite :**
 
-⏵ Je produis le document demandé, avec des mesures A/B faites sur la machine plutôt que des principes
+⏵ Document NUMA livré et commité ; je fais le point sur l'objectif
+
+\## Le document demandé
+
+**`docs/numa-segregation.md`** (207 lignes, commit `29a68c8`) répond à la question avec des mesures faites **sur cette machine aujourd'hui**, pas des principes.
+
+**Réponse en trois lignes :**
+
+1. **Séparer l'OS, le bureau et l'affichage du calcul : bénéfique** — pour la reproductibilité des mesures (le dépôt note jusqu'à 30 % de variation du temps mur à cause de la charge de fond) et pour la VRAM rendue au moteur. Pas pour le QPI.
+2. **Forcer le calcul sur un seul socket : coûteux, et mesuré.** J'ai lancé un A/B entrelacé (3 répétitions, charge réelle, Qwen 0.5B) :
+
+| configuration | médiane | écart |
+|---|---:|---:|
+| A — défaut (20 fils, aucune liaison) | 15 365 ms | — |
+| **B — nœud 1 seul (10 fils, mémoire nœud 1)** | **16 614 ms** | **+8,1 %** |
+| C — nœud 1, mémoire entrelacée | 16 474 ms | +7,2 % |
+| D — deux nœuds, mémoire entrelacée | 15 225 ms | −0,9 % |
+
+La proposition est **la plus lente des quatre**, et le dépôt avait déjà mesuré pire sur un 30B MoE (`--pin` : 23,2 → 27,6 s, −19 %). Le facteur limitant n'est pas la liaison QPI (3 à 4 % d'écart entre nœuds en calcul pur et en lecture NVMe) mais **la bande passante mémoire d'un socket**.
+
+3. **Le goulot réel est le disque.** Mesuré aujourd'hui en lecture directe : **246 Mo/s** sur le disque dur `sda` contre **1 600 Mo/s** sur le NVMe — facteur 6,5, qui décide d'une passe de 26 minutes. Le document note aussi que la page cache ne retient pas le dense de Kimi-K3 (déjà mesuré : 1 516 430 puis 1 522 584 ms), donc les 128 Go n'achètent pas ce qu'on croit, et que le NVMe actuel est plein à 97 %.
+
+Il contient aussi la topologie relevée (distances NUMA 10/21, 64/64 Go symétrique, **les deux Quadro déjà sur le nœud 0, sur deux root complexes distincts**, NVLink 25,781 Go/s), les recommandations, les réserves, et un protocole à trois mesures entrelacées si la configuration proposée est retenue.
+
+\## Et l'objectif, pendant ce temps
+
+Deux portes ont été franchies et sont commitées (`a9f4b40`) :
+
+- **Porte d'exécution** : un Qwen3-MoE **entraîné ici** tourne dans Drave — 5,3397 de perplexité contre 5,3585 pour la référence à poids quantifiés identiques, corrélation des logits min 0,9906, top-1 95,7 %, `compare_logits --porte` **exit 0**.
+- **Porte de répartition** : deux processus, deux plages de couches — **3,9020 = 3,9020**, écart de flux 0,00e0, écart relatif **0,0000 %**.
+- **À lecture égale** (2,3 M poids/jeton, v
+… [892 caractères tronqués]
+
+### Tour 6 — je viens de commander une carte pcie pour 4 nvme 4x4 et 4 unités Patriot P320 256GB PCIe Gen 3x4 M.2 2280 SSD pour aller … [296 caractères tronqués]
+
+*9 appels d'outils.* Actions notables :
+
+- bash — Inspect PCIe link widths for GPUs and NVMe
+- bash — Check DIMM population
+- bash — Try verbose lspci and EDAC DIMM data
+- bash — Read PCIe link widths and measure memory bandwidth
+- bash — Check NVMe contents and capacity
+- web_search
+- bash — Measure PCIe link speed under GPU load
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/numa-segregation.md`
+- bash — Commit the array analysis section
+
+**Synthèse produite :**
+
+⏵ Trois contraintes matérielles à vérifier dans ce plan — je les chiffre et j'ajoute la section au document
 
 ## 3. Travail accompli
 
@@ -252,7 +303,7 @@ Les deux seules mesures « inter-nœuds » du dépôt donnent 3 % et 4 % — de 
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py` | 1 | 2 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-reparti-moteur.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs` | 0 | 2 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/numa-segregation.md` | 1 | 1 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/numa-segregation.md` | 1 | 2 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-modele-moteur.md` | 1 | 0 |
 
 ### Sous-agents lancés
@@ -303,7 +354,7 @@ Les deux seules mesures « inter-nœuds » du dépôt donnent 3 % et 4 % — de 
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 214 autres
+- … et 222 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -457,4 +508,5 @@ Les deux seules mesures « inter-nœuds » du dépôt donnent 3 % et 4 % — de 
 - entrainer_moteur : le double décalage était AUSSI dans la boucle d'entraînement  La correction précédente n'avait touché que l'évaluation. Le défaut était plus 
 - docs/numa-segregation : la ségrégation NUMA proposée, mesurée plutôt que raisonnée  Réponse à une proposition de station bi-Xeon avec topologie asymétrique stri
 - Le modèle produit ici tourne dans Drave et se découpe — les deux portes sont tenues  Porte d'exécution : un Qwen3-MoE entraîné ici (4 couches, 8 experts, top-2,
+- docs/numa-segregation §11 : la carte 4xNVMe et l'AMD, chiffrées avant achat du reste  Le placement proposé est juste (array sur le nœud des GPU, OS/affichage is
 
