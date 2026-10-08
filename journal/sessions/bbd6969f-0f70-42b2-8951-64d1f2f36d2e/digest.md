@@ -159596,3 +159596,582 @@ zul 7s
 ⏵ **Corpus complet (398 langues) : mêmes pics que sur 183 — la mesure est stable. Je consigne.**
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> reports/rapport-cycle-rapide.md <<'MD_EOF'\n\n---\n\n## 8. Le corpus complet : mêmes pics, et c'est une vraie vérification\n\nLe corpus est passé de **183–209 langues** (§7) à **398 langues** — le traçage de\nl'article 2 s'est … [4616 caractères tronqués]`
+
+  ```
+9eb9732 Le corpus complet confirme : la bande sémantique 10–15 ne bouge pas quand le corpus double
+  ```
+
+### 🤖 Assistant
+
+⏵ **Je mets à jour la liste de tâches et je fais le point.**
+
+- **todo_write** `{"todos": [{"content": "Diagnostiquer l'écart froid/chaud de la passe K3 (état D, E/S, CPU, octets)", "status": "completed"}, {"content": "Attribuer les octets : dense contre experts (72 % experts, relus à chaque jeton)", "status": "completed"}, {"content": "Tester le palier NVMe en A/B apparié (−8, … [665 caractères tronqués]`
+
+  ```
+Updated todo list: 3 pending, 0 in progress, 5 completed.
+  ```
+
+### 🤖 Assistant
+
+Oui, c'est fait — et le résultat est arrivé. **Mais la mesure dit que le modèle n'était pas le bon levier.**
+
+## Pourquoi
+
+Le coût d'un ajustement est en `n · d²` (`n` = positions totales, `d` = 2 × dimension cachée) :
+
+| levier | gain |
+|---|---:|
+| modèle plus petit (576 cachés au lieu de 896) | ×2,4 |
+| **entrée plus courte** (une phrase au lieu d'un article) | **×20** |
+
+J'ai donc pris le second, et trouvé au passage une économie que personne n'avait regardée : **le mode par défaut construit 15,6 M d'événements au chargement**, 8,00 s par invocation contre 1,94 s en `--dense`, **à calcul par jeton identique** (32,4 contre 32,3 ms). Sur 399 langues, ces 6 s fixes font 40 minutes.
+
+J'ai calibré le changement de mode avant de l'employer — **cosinus moyen 0,9964**, minimum 0,9160, normes identiques — parce que tout ce dépôt avait été tracé en mode événementiel et qu'un corpus silencieusement incomparable aurait invalidé les comparaisons.
+
+## Le cycle
+
+| | avant | après |
+|---|---:|---:|
+| traçage d'une langue | ~16 s | **3,7 s** |
+| positions par entrée | ~575 | **~60** |
+| **ajustement** | **5–10 min** | **~15 s** |
+
+Le traçage n'est que 4× plus rapide — le chargement est un coût fixe. **C'est l'ajustement qui change d'échelle, et c'est lui qu'on répète.** 399 langues × 2 articles × 24 couches : **1 h 15 de capture, puis des itérations instantanées.**
+
+## Le premier résultat : 42 à 62 % de la profondeur
+
+Un cosinus qui monte ne prouve rien — il monte aussi si la couche devient anisotrope. D'où le contrôle : **même article dans deux langues** moins **un autre article dans deux autres langues**.
+
+| | pic (183–209 langues) | **pic (398 langues)** |
+|---|---|---|
+| pooling moyenne | couche **13** (+0,0322) | couche **13** (+0,0344) |
+| pooling dernière position | couche **10** (+0,0374) | couche **10** (+0,0397) |
+
+Le corpus a **plus que doublé** pendant la rédaction : 190 langues nouvelles, des familles et des écritures entièrement neuves, et **la conclusion ne bouge pas d'une couche**. Les deux poolings, qui divergeaient sur Wikipedia (1,769 contre 6,275), s'accordent ici.
+
+La couche 0 a une séparation **nulle** (+0,001) : le même texte dans deux langues ne se ressemble pas plus que deux textes différents. La couche 13 a **+0,034**, et les couches **10 à 15 forment un plateau**. Cela corrobore `rapport-plateau-semantique.md` — qui donnait 35–42 % sur **10 langues** ; ici 42–62 % sur **398**.
+
+**Trois réserves, et la première est la plus importante** : le plancher d'anisotropie est à 0,75–0,87, donc le signal sémantique fait **+0,03 sur un fond de 0,80** — réel, reproductible, et **petit**. Le plateau est large (le pic se déplace de 10 à 13 selon le pooling), et **le bombement de la couche 4 reste inexpliqué** — il apparaît dans les deux poolings et sur les deux tailles de corpus.
+
+C'est la prochaine mesure : soit une première étape sémantique, soit un artefact de normalisation.
+
+
+## Tour 205
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Faire de Drave l'instrument d'observation et de répartition des gros modèles, en gardant les deux mesures côte à côte (fidélité comme thermomètre interne, tâche + coût comme juge). Trois chantiers, dans cet ordre : (1) diagnostiquer puis fermer l'écart froid/chaud de la passe complète Kimi-K3 — 2,95 s contre 0,75 s par couple (couche, jeton) — en mesurant majflt, l'attente disque et la dispersion, sans supposer ; (2) implémenter le regroupement des jetons par expert DANS la couche de MoeK3 et le mesurer en A/B, critère « passe à 4 jetons sous 10 min » ; (3) étendre la répartition en grappe (un nœud = une plage de couches) avec le critère mesuré 2,5 min par passe. Chaque affirmation porte sa mesure ET ses conditions (graine, panel, pooling, ajustement, échelle, rapport variables/points, réplication), et tools/portes.sh reste vert à chaque étape."
+Round: 1/14
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ **Objectif : chantiers 2 et 3 restants. Je vérifie l'état courant avant de reprendre.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== jobs ===\"; ps -eo pid,etimes,cmd | grep -E \"drave|sonde|trace_article\" | grep -v grep | head -5; echo \"=== script de décomposition ===\"; ls -la /tmp/decompose_octets.sh 2>/dev/null && head -20 /tmp/decompose_octets.sh … [310 caractères tronqués]`
+
+  ```
+=== jobs ===
+=== script de décomposition ===
+-rwxr-xr-x. 1 stephane stephane 1343  7 oct 17:35 /tmp/decompose_octets.sh
+#!/bin/bash
+# SÉPARER LE DENSE DES EXPERTS SANS PASSER PAR LA GÉOMÉTRIE.
+#
+# Le §7 du rapport a attribué les octets par la TAILLE DES TENSEURS : 57,93 Gio
+# de dense (lu une fois par passe, partagé par les jetons) et le reste en
+# experts (relus à chaque jeton). C'est une déduction, pas une mesure — et elle
+# bute sur un écart : 206,58 Gio lus contre 154,2 Gio impliqués par la géométrie,
+# soit 34 % de plus.
+#
+# DEUX POINTS SUFFISENT À TRANCHER, parce que les deux termes n'ont pas la même
+# dépendance au nombre de jetons T :
+#
+#     octets(T) = D + E·T
+#
+# Si D ressort à ~58 Gio, le dense est bien lu une fois et l'excédent est du
+# SUR-LECTURE sur les experts. S'il ressort à ~90 Gio, c'est le dense qui est lu
+# plus d'une fois — et le remède n'est pas le même.
+set -u
+cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet
+J=/tmp/decompose_octets.log
+=== corpus rapide ===
+article1_traces: 399 · article2_traces: 399
+  ```
+
+### 🤖 Assistant
+
+⏵ **Rien ne tourne. Je lance la décomposition des octets (T=1 et T=2) — la mesure manquante du chantier 2.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (setsid nohup bash /tmp/decompose_octets.sh >/dev/null 2>&1 < /dev/null & disown); sleep 240; echo \"=== T=1 ===\"; grep -E \"#####|octets lus|durée de la passe|débit|occupé|secondes par\" /tmp/decompose_octets.log 2>/dev/null; echo  … [158 caractères tronqués]`
+
+  ```
+=== T=1 ===
+##### T = 1 jeton(s)
+--- couches : 21/93
+  ```
+
+### 🤖 Assistant
+
+⏵ **T=1 tourne (~18 min). Pendant ce temps j'attaque le chantier 3 : la plage de couches pour K3.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"pub fn passe_complete\" -A 30 drave-core/src/kimi_k3.rs | head -45", "description": "Read K3 passe_complete signature"}`
+
+  ```
+1585:pub fn passe_complete(g: &Gguf, ids: &[u32], n: usize, verbeux: bool, tete: bool,
+1586-                      pos0: usize, mut etats: Option<&mut Vec<EtatCouche>>)
+1587-                      -> Result<Vec<Vec<f32>>, String> {
+1588-    let h = g.tensor("blk.0.attn_norm.weight").map(|t| t.dims[0] as usize)
+1589-        .ok_or_else(|| "blk.0.attn_norm absent".to_string())?;
+1590-    let eps = 1e-5f32;
+1591-    let bloc = 12usize;
+1592-    let ntok = ids.len();
+1593-    let embd = g.dequant("token_embd.weight");
+1594-    let mut flux: Vec<Vec<f32>> = ids.iter()
+1595-        .map(|&t| embd[t as usize * h..(t as usize + 1) * h].to_vec()).collect();
+1596-    // pile[k][i] = entrée BRUTE du jeton i à la couche banque k.
+1597-    let mut pile: Vec<Vec<Vec<f32>>> = Vec::new();
+1598-
+1599-    // Le temps se sépare en deux : CHARGER (lire les poids, les déquantifier en
+1600-    // f32, restaurer l'état) et CALCULER. Sans cette séparation, on optimise à
+1601-    // l'aveugle — et « ça a l'air lent » n'est pas une mesure.
+1602-    let (mut t_charge, mut t_calcul) = (0f64, 0f64);
+1603-    let (mut t_attn, mut t_ffn) = (0f64, 0f64);
+1604-    // **Le dense emprunté change la sortie : il le DIT.
+… [840 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Je vérifie ce que coûterait une plage de couches pour K3 : l'état de couche est-il sérialisable, et le protocole existe-t-il déjà ?**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"enum EtatCouche\" -A 25 drave-core/src/kimi_k3.rs | head -35; echo \"=== sérialisation ===\"; grep -n \"fn sauver\\|fn restaurer\\|impl EtatCouche\\|Serialize\" drave-core/src/kimi_k3.rs | head -10", "description": "Inspect … [22 caractères tronqués]`
+
+  ```
+1522:pub enum EtatCouche {
+1523-    Kda { cq: Vec<f32>, ck: Vec<f32>, cv: Vec<f32>, delta: Vec<f32> },
+1524-    Mla { cle: Vec<f32>, val: Vec<f32>, n_pos: usize },
+1525-    Aucun,
+1526-}
+1527-
+1528-impl CoucheK3 {
+1529-    fn sauver(&self) -> EtatCouche {
+1530-        match self {
+1531-            CoucheK3::Dense { kda, mla, .. } | CoucheK3::Moe { kda, mla, .. } => {
+1532-                if let Some(k) = kda {
+1533-                    EtatCouche::Kda { cq: k.etat_conv_q.clone(), ck: k.etat_conv_k.clone(),
+1534-                                      cv: k.etat_conv_v.clone(), delta: k.etat_delta.clone() }
+1535-                } else if let Some(m) = mla {
+1536-                    EtatCouche::Mla { cle: m.cle.clone(), val: m.val.clone(), n_pos: m.n_pos }
+1537-                } else { EtatCouche::Aucun }
+1538-            }
+1539-        }
+1540-    }
+1541-    fn restaurer(&mut self, e: &EtatCouche) {
+1542-        let (kda, mla) = match self {
+1543-            CoucheK3::Dense { kda, mla, .. } => (kda, mla),
+1544-            CoucheK3::Moe { kda, mla, .. } => (kda, mla),
+1545-        };
+1546-        match e {
+1547-            EtatCouche::Kda { cq, ck, cv, delta } => {
+=== sérialisation ===
+
+… [92 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Je regarde où en est la décomposition, et je prépare la mesure « une moitié de modèle » pour le chantier 3.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/moitie_k3.sh <<'EOF'\n#!/bin/bash\n# CHANTIER 3 — CE QUE COÛTE UNE MOITIÉ DE MODÈLE, donc UN NŒUD.\n#\n# On ne peut pas encore chaîner deux nœuds sur K3 : la reprise à une couche\n# intermédiaire exige de transporter le fl … [1414 caractères tronqués]`
+
+  ```
+prêt
+=== décomposition en cours ===
+##### T = 1 jeton(s)
+couches : 28/93
+  ```
+
+### 🤖 Assistant
+
+⏵ **T=1 à 28/93 — plus lent que prévu, ce qui est déjà une information. J'examine le chaînage de plage pendant ce temps.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1620,1660p' drave-core/src/kimi_k3.rs; echo \"...\"; grep -n \"for l in 0..n\\|for l in \\|pile.push\\|banque\" drave-core/src/kimi_k3.rs | sed -n '1,20p'", "description": "Read K3 layer loop and pile handling"}`
+
+  ```
+let mut c = CoucheK3::charge(g, l)?;
+        if let Some(e) = etats.as_deref_mut() {
+            if let Some(ec) = e.get(l) { c.restaurer(ec); }
+        }
+        let t1 = std::time::Instant::now();
+        let banque = l % bloc == 0;
+        // ---- phase 1 : l'attention résiduelle voit la banque d'AVANT la
+        //      couche courante (`res_mix` est appelé avant `res_push`).
+        let n_avant = pile.len();
+        let mut curs: Vec<Vec<f32>> = Vec::with_capacity(ntok);
+        for i in 0..ntok {
+            if n_avant == 0 { curs.push(flux[i].clone()); continue; }
+            let mut plat = Vec::with_capacity(n_avant * h);
+            for ck in pile.iter() { plat.extend_from_slice(&ck[i]); }
+            let w = match &c {
+                CoucheK3::Dense { normes, .. } => &normes.attn_score,
+                CoucheK3::Moe { normes, .. } => &normes.attn_score,
+            };
+            let mut out = vec![0f32; h];
+            crate::model::res_mix(&plat, n_avant, h, &flux[i], w, eps, &mut out);
+            curs.push(out);
+        }
+        // ---- la couche est une banque : on empile son entrée BRUTE, toutes
+        //      les colonnes du lot d'un coup.
+        if banque { pi
+… [2210 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le chaînage K3 est faisable : le transfert ne fait que flux + pile (~140 Ko). J'implémente la plage de couches.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"passe_complete\" drave-core/src/*.rs | head; echo \"=== appelant principal ===\"; sed -n '2075,2105p' drave-core/src/main.rs", "description": "Find passe_complete callers"}`
+
+  ```
+drave-core/src/kimi_k3.rs:1585:pub fn passe_complete(g: &Gguf, ids: &[u32], n: usize, verbeux: bool, tete: bool,
+drave-core/src/main.rs:2084:                        let lgs = match kimi_k3::passe_complete(
+drave-core/src/main.rs:2123:                match kimi_k3::passe_complete(&g, &ids4, n, true, tete, 0, None) {
+=== appelant principal ===
+                // séquence [3638, 275, 1309, 3140] disent que la position 1 doit
+                // choisir 1309 et la position 2, 3140.
+                let gen = std::env::var("DRAVE_K3_GEN").ok()
+                    .and_then(|v| v.parse::<usize>().ok()).unwrap_or(0);
+                if gen > 0 {
+                    let mut etats: Vec<kimi_k3::EtatCouche> = Vec::new();
+                    let mut suite: Vec<u32> = vec![3638, 275];
+                    for pas in 0..=gen {
+                        let t0 = std::time::Instant::now();
+                        let lgs = match kimi_k3::passe_complete(
+                                &g, &suite, n, pas == 0, true,
+                                suite.len() - 1,
+                                Some(&mut etats)) {
+                            Ok(v) => v,
+                            Err(e) => { println!
+… [1081 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Je lis le corps complet de `passe_complete` pour le refactorer proprement en plage.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1712,1800p' drave-core/src/kimi_k3.rs", "description": "Read the rest of passe_complete"}`
+
+  ```
+if e.len() <= l { e.resize_with(l + 1, || EtatCouche::Aucun); }
+            e[l] = sauve;
+        }
+        // `c` tombe ici : c'est tout l'intérêt (ses POIDS, pas son état).
+    }
+    if verbeux {
+        let tot = t_charge + t_calcul;
+        eprintln!("  ---- chargement {:.1} s ({:.0} %) · calcul {:.1} s ({:.0} %) \
+[attention {:.1} s · FFN {:.1} s]",
+                  t_charge, 100.0 * t_charge / tot.max(1e-9),
+                  t_calcul, 100.0 * t_calcul / tot.max(1e-9), t_attn, t_ffn);
+    }
+    // ---- LA TÊTE : mélange résiduel final, norme, puis la matrice de sortie.
+    // C'est ce que la référence fait APRÈS la boucle (`res_mix(cur, output_res_score, -1)`,
+    // `build_norm(output_norm)`, `output`), et c'est ce qui rend la comparaison
+    // possible sur les LOGITS — le critère de la porte de correction du dépôt —
+    // et non seulement sur un état caché.
+    if tete {
+        let w = g.dequant("output_res_score.weight");
+        let norme = g.dequant("output_norm.weight");
+        let sortie = g.dequant("output.weight");
+        let vocab = g.tensor("output.weight").map(|t| t.dims[0] as usize)
+            .ok_or_else(|| "output.weight absent".to_string())?;
+        le
+… [705 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **J'implémente : refactor de `passe_complete` en `passe_plage` + un relais sérialisable.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '140,150p' drave-core/src/main.rs; echo \"=== début de passe_complete ===\"; sed -n '1576,1596p' drave-core/src/kimi_k3.rs", "description": "Read main dispatch and passe_complete start"}`
+
+  ```
+if let Some(adresse) = opt.flux_serveur.clone() { run_serveur_flux(opt, &adresse); return; }
+    if let Some(pair) = opt.ppl_reparti.clone() { run_ppl_reparti(opt, &pair); return; }
+    if opt.tensors { run_tensors(); return; }
+    if let Some(f) = opt.banc_mla.clone() { run_banc_mla(opt, &f); return; }
+    if opt.banc_kv > 0 { run_banc_kv(opt); return; }
+    if opt.banc_topk > 0 { run_banc_topk(opt); return; }
+    if opt.gpu_banc { run_gpu_banc(opt); return; }
+    if opt.k3_essai { run_k3_essai(); return; }
+    if opt.plan { run_plan(opt); return; }
+    if opt.tokenize { run_tokenize(opt); return; }
+    if opt.ppl { run_ppl(opt); return; }
+=== début de passe_complete ===
+/// **La passe complète** : `ids` traversés de la couche 0 à la couche `n-1`,
+/// une couche chargée à la fois. Rend le flux résiduel de chaque jeton après la
+/// dernière couche — ce que la référence vide sous le nom `l_out-<n-1>`.
+///
+/// La banque est `[point de contrôle][jeton][canal]` : dans la référence,
+/// `resi_stack` est `[n_embd, n_ckpt, n_tokens]`, donc un point de contrôle
+/// porte UNE COLONNE PAR JETON du lot. L'aplatir en poussant une entrée par
+/// jeton et par couche donnerait un `n_ckpt` quatre 
+… [713 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **J'écris le refactor et le relais sérialisable.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/kimi_k3.rs'; s=open(p).read()\n\n# 1) le type Relais, juste avant passe_complete\nold_doc = '''pub fn passe_complete(g: &Gguf, ids: &[u32], n: usize, verbeux: bool, tete: bool,\n                    … [7374 caractères tronqués]`
+
+  ```
+refactor appliqué
+3
+error[E0425]: cannot find value `n` in this scope
+    --> src/kimi_k3.rs:1720:17
+     |
+1720 |     for l in 0..n {
+     |                 ^
+--
+warning: unused imports: `GGML_IQ1_M`, `GGML_IQ1_S`, `GGML_IQ2_XXS`, and `GGML_IQ3_XXS`
+   --> src/model.rs:596:23
+    |
+596 |     use crate::gguf::{GGML_IQ1_M, GGML_IQ1_S, GGML_IQ2_XXS, GGML_IQ3_XXS,
+    |                       ^^^^^^^^^^  ^^^^^^^^^^  ^^^^^^^^^^^^  ^^^^^^^^^^^^
+--
+warning: unused attribute
+    --> src/model.rs:4396:5
+     |
+4396 |     #[inline]
+     |     ^^^^^^^^^ help: remove this attribute
+--
+warning: unused variable: `t`
+   --> src/kimi_k3.rs:272:17
+    |
+272 |             let t = g.tensor(nom).ok_or_else(|| format!("tenseur absent : {nom}"))?;
+    |                 ^ help: if this is intentional, prefix it with an underscore: `_t`
+--
+warning: unused variable: `id`
+   --> src/engram.rs:134:23
+    |
+134 |         for (token, (&id, &position)) in ids.iter().zip(positions.iter()).enumerate() {
+    |                       ^^ help: if this is intentional, prefix it with an underscore: `_id`
+--
+BUILD_END
+  ```
+
+### 🤖 Assistant
+
+⏵ **Il reste une seconde boucle `0..n`. Je regarde son contexte.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1705,1725p' drave-core/src/kimi_k3.rs; echo \"=== toutes les boucles 0..n ===\"; grep -n \"for l in 0\\.\\.n\" drave-core/src/kimi_k3.rs", "description": "Find remaining layer loop"}`
+
+  ```
+let (mut t_attn, mut t_ffn) = (0f64, 0f64);
+    // **Le dense emprunté change la sortie : il le DIT.** Le noyau Q8_0 calcule
+    // en entier (i8 × i32, échelle par bloc) là où le chemin f32 déquantifiait
+    // puis sommait en flottant. Mesuré sur le modèle entier : ×1,12 sur la
+    // passe, top-1 identique 3/3 contre la référence, corrélations 0,998059 /
+    // 0,998563 / 0,999059 au lieu de 0,999802 / 0,999900 / 0,999924. C'est un
+    // peu moins précis et personne ne doit l'apprendre par surprise.
+    if verbeux {
+        eprintln!("  dense : projections Q8_0 lues EN PLACE (empruntées au fichier, pas \
+déquantifiées) — ×1,12 mesuré sur la passe, top-1 inchangé, corrélations 0,998 contre 0,9998");
+        if arene_fige() {
+            eprintln!("  dense : arène RÉSIDENTE active ({} Mo figés, DRAVE_K3_DENSE_FIGE)",
+                      Q8::arene_octets() / 1_000_000);
+        }
+    }
+    for l in 0..n {
+        let t0 = std::time::Instant::now();
+        let mut c = CoucheK3::charge(g, l)?;
+        if let Some(e) = etats.as_deref_mut() {
+            if let Some(ec) = e.get(l) { c.restaurer(ec); }
+        }
+=== toutes les boucles 0..n ===
+1404:        for l in 0..n {
+1720:    f
+… [14 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **La boucle avait une ligne de plus avant `let mut c`. Je corrige.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/kimi_k3.rs'; s=open(p).read()\nold = \"\"\"    for l in 0..n {\n        let t0 = std::time::Instant::now();\n        let mut c = CoucheK3::charge(g, l)?;\"\"\"\nnew = \"\"\"    for l in debut..fin  … [425 caractères tronqués]`
+
+  ```
+boucle corrigée
+BUILD_END
+2537912 7 oct 19:42
+  ```
+
+### 🤖 Assistant
+
+⏵ **Compilation OK. Je branche la plage et le relais dans `run_k3_essai`.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '2112,2160p' drave-core/src/main.rs", "description": "Read K3 plain pass call site"}`
+
+  ```
+// permet de vérifier un pas d'APRÈS que la référence ait
+                        // publié ses logits, et de tester la PERSISTANCE de
+                        // l'état entre deux appels (le 2e appel ne voit qu'un
+                        // jeton nouveau, l'état vient du 1er).
+                        let impose: Vec<u32> = std::env::var("DRAVE_K3_IMPOSE").ok()
+                            .map(|v| v.split(',').filter_map(|x| x.trim().parse().ok()).collect())
+                            .unwrap_or_default();
+                        suite.push(impose.get(pas).copied().unwrap_or(imax as u32));
+                    }
+                    return;
+                }
+                match kimi_k3::passe_complete(&g, &ids4, n, true, tete, 0, None) {
+                    Ok(flux) => {
+                        if tete {
+                            // Les logits vont dans un fichier binaire au format de
+                            // `--logits-bin` : int32 vocab, int32 n_pos, puis
+                            // n_pos × vocab f32.
+                            let vocab = flux.first().map(|v| v.len()).unwrap_or(0);
+                            let chemin = std::env::var("DRAVE_K3_LOGITS")
+             
+… [2084 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Je regarde la fin du bloc pour le remplacer exactement.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '2160,2200p' drave-core/src/main.rs", "description": "Read end of K3 pass block"}`
+
+  ```
+}
+                            }
+                        }
+                        }
+                        println!("  passe complète : {} ms au total", t0.elapsed().as_millis());
+                    }
+                    Err(e) => println!("  passe complète : {e}"),
+                }
+                return;
+            }
+        }
+    }
+    // L'entrée de la couche 0 est l'embarquement du jeton.
+    let ids = vec![3638u32, 275, 1309];      // « Le ciel est… » (tokenizer du modèle)
+    let embd = g.dequant("token_embd.weight");
+    let h = c0.hauteur();
+    // `DRAVE_K3_SANS_ETAT=1` remet l'état (convolution + delta) à zéro AVANT
+    // chaque jeton. C'est un essai de DISCRIMINATION, pas un mode : si les
+    // positions 1 et 2 se rapprochent de la référence avec un état neuf, c'est
+    // que la référence traite ces jetons indépendamment ; si rien ne bouge, le
+    // défaut est ailleurs. Le drapeau change la sortie, donc il le DIT.
+    let sans_etat = std::env::var("DRAVE_K3_SANS_ETAT")
+        .map(|v| v != "0" && !v.is_empty()).unwrap_or(false);
+    if sans_etat {
+        eprintln!("[k3-essai] DRAVE_K3_SANS_ETAT : état remis à zéro avant CHAQUE jeton \
+(essai de discrimination 
+… [832 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **J'applique le branchement de la plage et du relais.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\n\n# 1) la plage entre dans run_k3_essai par le drapeau --couches, qui veut déjà\n#    dire « plage de couches » partout ailleurs dans ce moteur\na = \"    if opt.k3_essa … [3894 caractères tronqués]`
+
+  ```
+branché
+BUILD_END
+  ```
+
+### 🤖 Assistant
+
+⏵ **Compilation OK. Je vérifie où en est la décomposition avant de tester le découpage.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -E \"#####|octets lus|durée de la passe|secondes par|couple\" /tmp/decompose_octets.log 2>/dev/null; echo \"--- couches : $(grep -c 'de chargement' /tmp/sonde_k3_moteur.log)/93 ---\"; ps -eo etimes,cmd | grep -E \"drave.*k3-essa … [77 caractères tronqués]`
+
+  ```
+##### T = 1 jeton(s)
+--- couches : 56/93 ---
+    506 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf --k3-essai
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le refactor est propre. Je prépare le test de découpage (13 + 13 + 26 couches) à lancer après la décomposition.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/test_plage.sh <<'EOF'\n#!/bin/bash\n# CHANTIER 3 — LA PORTE DE CORRECTION DU DÉCOUPAGE.\n#\n# Deux nœuds doivent donner EXACTEMENT ce que donne la passe monolithe. On\n# coupe à la couche 13, donc on TRAVERSE la banque de  … [2543 caractères tronqués]`
+
+  ```
+test prêt
+##### T = 1 jeton(s)
+couches : 59/93
+  ```
+
+### 🤖 Assistant
+
+⏵ **T=1 à 59/93. J'attends sa fin pour enchaîner sur le test de découpage.**
+
+- **bash** `{"command": "sleep 420; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -E \"#####|octets lus|durée de la passe|débit|occupé |CPU trav|secondes par|couple\" /tmp/decompose_octets.log 2>/dev/null; echo \"--- couches : $(grep -c 'de chargement' /tmp/sonde_k3_moteur.log)/93\"; ps -eo etimes, … [146 caractères tronqués]`
+
+  ```
+##### T = 1 jeton(s)
+# durée de la passe                          813 s
+# CPU travaillé (utime+stime)                188 s   (23.1%)
+# octets lus (bloc)                       110.55 Go
+#    occupé                                  727 s   (89.4%)
+# couples (couche, jeton)                    372
+# secondes par couple                      2.185 s
+# débit de lecture effectif                489.5 Go/h
+#    calcul par couple                     1.436 s
+#   LE DISQUE. `sda` est occupé 89% du temps et le CPU ne
+#   octets au débit du disque. Vérification : 110.5 Go à 0 Mo/s
+##### T = 2 jeton(s)
+--- couches : 8/93
+144 /home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf
+  ```
+
+### 🤖 Assistant
+
+⏵ **T=1 : 110,55 Gio en 813 s. La décomposition à deux points donne D ≈ 79 Gio et E ≈ 31 Gio/jeton — soit ~35 % au-dessus de la géométrie. J'attends T=2 pour tester la linéarité.**
+
+- **bash** `{"command": "sleep 580; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -E \"#####|octets lus|durée de la passe|secondes par\" /tmp/decompose_octets.log 2>/dev/null; echo \"couches : $(grep -c 'de chargement' /tmp/sonde_k3_moteur.log)/93\"", "description": "Wait for T=2", "timeoutMs": 640 … [4 caractères tronqués]`
+
+  ```
+##### T = 1 jeton(s)
+# durée de la passe                          813 s
+# octets lus (bloc)                       110.55 Go
+# secondes par couple                      2.185 s
+##### T = 2 jeton(s)
+couches : 63/93
+  ```
+
+### 🤖 Assistant
+
+⏵ **T=2 à 63/93 ; encore ~8 min.**
+
+- **bash** `{"command": "sleep 540; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -E \"#####|octets lus|durée de la passe|secondes par|couple|débit\" /tmp/decompose_octets.log 2>/dev/null | tail -12", "description": "Get T=2 result", "timeoutMs": 600000}`
+
+  ```
+# secondes par couple                      2.185 s
+# débit de lecture effectif                489.5 Go/h
+#    calcul par couple                     1.436 s
+#   octets au débit du disque. Vérification : 110.5 Go à 0 Mo/s
+##### T = 2 jeton(s)
+# durée de la passe                         1117 s
+# octets lus (bloc)                       143.52 Go
+# couples (couche, jeton)                    372
+# secondes par couple                      3.003 s
+# débit de lecture effectif                462.6 Go/h
+#    calcul par couple                     2.280 s
+#   octets au débit du disque. Vérification : 143.5 Go à 0 Mo/s
+  ```
+
+### 🤖 Assistant
+
+⏵ **Trois points, modèle affine validé (résidu ≤ 0,4 %). Je consigne — et le critère du chantier 2 tombe.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> reports/rapport-passe-k3-disque.md <<'MD_EOF'\n\n---\n\n## 11. La loi des octets : `79,0 + 31,9 × T` Gio, validée sur trois points\n\nLe §7 attribuait les octets par la **géométrie des tenseurs** : 57,93 Gio de dense\n(lu une  … [6133 caractères tronqués]`

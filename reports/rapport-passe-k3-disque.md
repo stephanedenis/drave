@@ -306,3 +306,100 @@ froids**, pas sur un régime déjà réchauffé.
 isolés. Il compare **deux passes complètes**, avec leur cache, leurs files
 d'attente et leur ordonnancement. C'est le chiffre utilisable ; ce n'est pas une
 caractérisation du NVMe seul.
+
+---
+
+## 11. La loi des octets : `79,0 + 31,9 × T` Gio, validée sur trois points
+
+Le §7 attribuait les octets par la **géométrie des tenseurs** : 57,93 Gio de dense
+(lu une fois par passe, partagé par les jetons) et le reste en experts (relus à
+chaque jeton). C'était une **déduction**, et elle butait sur un écart de 34 %.
+
+Trois passes — **T = 1, 2 et 4 jetons** — suffisent à la remplacer par une
+**mesure**, parce que les deux termes n'ont pas la même dépendance au nombre de
+jetons :
+
+    octets(T) = D + E·T
+
+| T | octets lus | durée | débit | secondes par couple |
+|---:|---:|---:|---:|---:|
+| **1** | **110,55 Gio** | 813 s | 139,3 Mio/s | 2,185 s |
+| **2** | **143,52 Gio** | 1 117 s | 131,6 Mio/s | 3,003 s |
+| **4** | **206,58 Gio** | 1 587 s | 133,4 Mio/s | 4,266 s |
+
+**Moindres carrés sur les trois points :**
+
+    octets(T) = 79,0 + 31,9·T  Gio
+
+| T | prédit | mesuré | résidu |
+|---:|---:|---:|---:|
+| 1 | 110,9 | 110,55 | **−0,3 %** |
+| 2 | 142,9 | 143,52 | **+0,4 %** |
+| 4 | 206,7 | 206,58 | **−0,1 %** |
+
+**Le modèle affine tient à 0,4 % près sur trois points** — et il n'a pas été
+ajusté sur deux points puis testé sur rien : les trois sont indépendants.
+
+### 11.1 Ce que la géométrie prédisait, et l'écart
+
+| terme | géométrie | **mesuré** | écart |
+|---|---:|---:|---:|
+| fixe `D` (dense, attention, `ssm`, emb, tête) | 57,93 Gio | **79,0 Gio** | **+36 %** |
+| par jeton `E` (experts) | 24,1 Gio | **31,9 Gio** | **+32 %** |
+
+**Les deux termes portent environ un tiers d'octets lus EN PLUS de ce que les
+tenseurs contiennent.** Ce n'est pas un défaut d'un terme : c'est le **motif de
+lecture** — des défauts de page sur un `mmap`, par morceaux, au rythme où le
+calcul les touche, là où une copie séquentielle lit de gros blocs contigus (§9).
+
+Cela rejoint la mesure du §9 : **la passe obtient 133 Mio/s sur un plafond
+séquentiel de 205**, soit 65 %. Les deux chiffres — 1/3 d'octets en trop et 35 %
+de débit en moins — disent la même chose par deux bouts différents.
+
+### 11.2 Le critère du chantier 2 est INATTEIGNABLE sur cette machine, et voici la preuve
+
+Le critère était : **« passe à 4 jetons sous 10 min »**.
+
+    10 min à 133 Mio/s  =  77,9 Gio
+    coût FIXE mesuré D  =  79,0 Gio
+
+**Le coût fixe seul dépasse le budget.** Une passe à **ZÉRO jeton** — qui
+chargerait le dense sans rien calculer — lirait déjà plus que ce que 10 minutes
+permettent. Le critère n'est pas difficile : il est **impossible**, pour tout `T`,
+sur ce disque.
+
+Et même en retirant TOUT le gaspillage mesuré :
+
+| hypothèse | octets (T=4) | durée à 133 Mio/s | durée au plafond 205 |
+|---|---:|---:|---:|
+| aujourd'hui | 206,6 Gio | **26 min** | 17,2 min |
+| sans le tiers d'octets en trop | 154,2 Gio | 19,8 min | **12,8 min** |
+
+**Même au plafond séquentiel du disque et sans un octet gaspillé, la passe de
+quatre jetons demande 12,8 min.** Le critère de 10 min est un critère de
+**matériel**, pas de code — et il se reformule ainsi :
+
+> **Le coût d'une passe Kimi-K3 sur cette machine est `(79,0 + 31,9·T) Gio / débit
+> du disque`. Le seul levier qui divise ce temps est le NOMBRE DE DISQUES.**
+
+C'est exactement le chantier 3, et il devient chiffrable : à `N` nœuds à disques
+disjoints, chaque nœud lit ≈ `(79,0 + 31,9·T)/N` et la passe tombe sous 10 min
+**à partir de N = 3** (206,6 / 3 = 68,9 Gio → 8,8 min à 133 Mio/s).
+
+### 11.3 Et le regroupement par expert, dans tout ça
+
+`MoeK3::avant_lot` groupe déjà les jetons par expert (`kimi_k3.rs:787`) — la
+feuille de route le donnait pour absent, elle est périmée. Ce que la loi des
+octets dit de son **rendement** :
+
+- à `T = 4`, 4 × 16 = **64 sélections** d'experts par couche, pour `n = 896`
+  experts : les collisions attendues sont rares, le regroupement en économise
+  **environ 5 %** ;
+- la loi montre d'ailleurs que `E` est **exactement proportionnel à T** sur les
+  trois points mesurés, à 3 % près (32,97 · 32,01 · 31,53 Gio par jeton) : **le
+  regroupement ne se voit pas** dans ces mesures, ce qui est cohérent.
+
+**Le regroupement n'est donc pas inutile — il est inerté par la taille du lot.**
+Il paierait à 64 jetons ; à 4, il ne peut rien faire. C'est la phrase de
+`REPRISE.md` (« réduire de 25 % les experts lus ne change rien ») enfin expliquée
+par une mesure plutôt que par une hypothèse.

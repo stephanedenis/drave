@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 220.8 h |
-| Tours | 204 |
-| Messages | 9562 |
-| Appels d'outils | 8986 |
+| Durée | 221.4 h |
+| Tours | 205 |
+| Messages | 9586 |
+| Appels d'outils | 9008 |
 | Fichiers touchés | 220 |
-| Commandes | 7652 |
+| Commandes | 7673 |
 | Sous-agents | 32 |
-| Commits | 703 |
+| Commits | 704 |
 | Compactages de contexte | 13 |
 
 ## Objectifs déclarés
@@ -465,6 +465,8 @@
 **Tour 203** — attention, on ne cherche pas à reproduire la structure interne du professeur, mais trouver des indices pour optimiser notre travail de stimulation. On conserve le principe de boite noire, mais on triche pour gagner de l'efficacité sur des choses qui seraient évidente en boite blanche et qui nous font perdre du temps.
 
 **Tour 204** — bien. vas-y dans l'ordre de ton choix.
+
+**Tour 205** — <goal_round> Objective: "Faire de Drave l'instrument d'observation et de répartition des gros modèles, en gardant les deux mesures côte à côte (fidélité comme thermomètre interne, tâche + coût comme juge). Trois chantiers, dans cet ordre : (1) diagnostiquer puis fermer l'écart froid/chaud de la passe complète Kimi-K3 — 2,95 s contre 0,75 s par couple (couche, jeton) — en mesurant majflt, l'attente … [1024 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -10455,7 +10457,7 @@ Chacun remplace une devinette que j'ai faite sans lui.
 
 ### Tour 204 — bien. vas-y dans l'ordre de ton choix.
 
-*276 appels d'outils.* Actions notables :
+*277 appels d'outils.* Actions notables :
 
 - bash — Launch layer 0-8 tracing for 50 articles
 - bash — Launch the 50-draw distribution
@@ -10475,7 +10477,70 @@ Chacun remplace une devinette que j'ai faite sans lui.
 
 **Synthèse produite :**
 
-⏵ **Corpus complet (398 langues) : mêmes pics que sur 183 — la mesure est stable. Je consigne.**
+Oui, c'est fait — et le résultat est arrivé. **Mais la mesure dit que le modèle n'était pas le bon levier.**
+
+\## Pourquoi
+
+Le coût d'un ajustement est en `n · d²` (`n` = positions totales, `d` = 2 × dimension cachée) :
+
+| levier | gain |
+|---|---:|
+| modèle plus petit (576 cachés au lieu de 896) | ×2,4 |
+| **entrée plus courte** (une phrase au lieu d'un article) | **×20** |
+
+J'ai donc pris le second, et trouvé au passage une économie que personne n'avait regardée : **le mode par défaut construit 15,6 M d'événements au chargement**, 8,00 s par invocation contre 1,94 s en `--dense`, **à calcul par jeton identique** (32,4 contre 32,3 ms). Sur 399 langues, ces 6 s fixes font 40 minutes.
+
+J'ai calibré le changement de mode avant de l'employer — **cosinus moyen 0,9964**, minimum 0,9160, normes identiques — parce que tout ce dépôt avait été tracé en mode événementiel et qu'un corpus silencieusement incomparable aurait invalidé les comparaisons.
+
+\## Le cycle
+
+| | avant | après |
+|---|---:|---:|
+| traçage d'une langue | ~16 s | **3,7 s** |
+| positions par entrée | ~575 | **~60** |
+| **ajustement** | **5–10 min** | **~15 s** |
+
+Le traçage n'est que 4× plus rapide — le chargement est un coût fixe. **C'est l'ajustement qui change d'échelle, et c'est lui qu'on répète.** 399 langues × 2 articles × 24 couches : **1 h 15 de capture, puis des itérations instantanées.**
+
+\## Le premier résultat : 42 à 62 % de la profondeur
+
+Un cosinus qui monte ne prouve rien — il monte aussi si la couche devient anisotrope. D'où le contrôle : **même article dans deux langues** moins **un autre article dans deux autres langues**.
+
+| | pic (183–209 langues) | **pic (398 langues)** |
+|---|---|---|
+| pooling moyenne | couche **13** (+0,0322) | couche **13** (+0,0344) |
+| pooling dernière position | couche **10** (+0,0374) | couche **10** (+0,0397) |
+
+Le corpus a **plus que doublé** pendant la rédaction : 190 langues nouvelles, des familles et des écritures entièrement neuves, et **la conclusion ne bouge pas d'une couche**. Les deux poolings, qui divergeaient sur Wikipedia (1,769 contre 6,275), s'accordent ici.
+
+La couche 0 a une séparation **nulle** (+0,001) : le même texte dans deux langues ne se ressemble pas plus que deux textes différents. La couche 13 a **+0,034**, et les couches **10 à 15 forment un plateau**. Cela corrobore `rapport-plateau-semantique.md` — qui donnait 35–42 % sur **10 langues** ; ici 42–62 % sur **398**.
+
+**Trois réserves, et la première est la plus importante** : le pl
+… [429 caractères tronqués]
+
+### Tour 205 — <goal_round> Objective: "Faire de Drave l'instrument d'observation et de répartition des gros modèles, en gardant les de … [1304 caractères tronqués]
+
+*21 appels d'outils.* Actions notables :
+
+- bash — Check workspace state before resuming
+- bash — Launch byte decomposition passes
+- bash — Read K3 passe_complete signature
+- bash — Inspect K3 layer state type
+- bash — Prepare half-model measurement script
+- bash — Read K3 layer loop and pile handling
+- bash — Find passe_complete callers
+- bash — Read the rest of passe_complete
+- bash — Read main dispatch and passe_complete start
+- bash — Refactor passe_complete into passe_plage with relay
+- bash — Find remaining layer loop
+- bash — Fix loop and rebuild
+- bash — Read K3 plain pass call site
+- bash — Read end of K3 pass block
+- … et 7 autres
+
+**Synthèse produite :**
+
+⏵ **Trois points, modèle affine validé (résidu ≤ 0,4 %). Je consigne — et le critère du chantier 2 tombe.**
 
 ## 3. Travail accompli
 
@@ -10781,7 +10846,7 @@ Chacun remplace une devinette que j'ai faite sans lui.
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 7612 autres
+- … et 7633 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10909,7 +10974,7 @@ Chacun remplace une devinette que j'ai faite sans lui.
 
 ## 5. Erreurs rencontrées
 
-400 sorties en erreur ou divergentes. Les premières :
+401 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -11632,4 +11697,5 @@ Chacun remplace une devinette que j'ai faite sans lui.
 - premiere_couche_semantique : chemin numpy rapide (vérifié identique au lent) et cache  Le parsing paire-à-paire en Python coûtait 740 millions d'itérations pour
 - Premier résultat du cycle rapide : la première couche sémantique est dans la bande 10–15  183 langues (pooling moyenne) et 209 (dernière position), 24 couches, 
 - Le corpus complet confirme : la bande sémantique 10–15 ne bouge pas quand le corpus double  Le traçage de l'article 2 s'est terminé pendant la rédaction : 398 l
+- §11 : la loi des octets (79,0 + 31,9·T Gio) validée sur trois points — et le critère du chantier 2 est impossible  Le §7 attribuait les octets par la GÉOMÉTRIE 
 
