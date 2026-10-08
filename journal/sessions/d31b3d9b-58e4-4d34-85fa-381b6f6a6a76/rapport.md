@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 2.0 h |
+| Durée | 2.3 h |
 | Tours | 4 |
-| Messages | 282 |
-| Appels d'outils | 286 |
+| Messages | 296 |
+| Appels d'outils | 300 |
 | Fichiers touchés | 9 |
-| Commandes | 209 |
+| Commandes | 223 |
 | Sous-agents | 3 |
-| Commits | 3 |
+| Commits | 4 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -187,7 +187,7 @@ Les deux seules mesures « inter-nœuds » du dépôt donnent 3 % et 4 % — de 
 
 ### Tour 4 — <goal_round> Objective: "Produire un modèle nativement événementiel qui soit à son meilleur dans l'architecture de Drave … [1096 caractères tronqués]
 
-*52 appels d'outils.* Actions notables :
+*66 appels d'outils.* Actions notables :
 
 - bash — Check trained model and bench outcome
 - bash — Check bench process state
@@ -203,11 +203,11 @@ Les deux seules mesures « inter-nœuds » du dépôt donnent 3 % et 4 % — de 
 - bash — Inspect distributed run output in detail
 - bash — Compare truncated vs full model perplexity
 - bash — Verify the reference flux gate is green
-- … et 37 autres
+- … et 51 autres
 
 **Synthèse produite :**
 
-⏵ Confusion trouvée : le jumeau dense avait `head_dim = 128` par défaut, pas 48 — la comparaison n'était pas à lecture égale
+⏵ Erreur de mesure trouvée chez moi : double décalage dans l'évaluation HF — je remesure
 
 ## 3. Travail accompli
 
@@ -273,7 +273,7 @@ Les deux seules mesures « inter-nœuds » du dépôt donnent 3 % et 4 % — de 
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 169 autres
+- … et 183 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -421,4 +421,5 @@ Les deux seules mesures « inter-nœuds » du dépôt donnent 3 % et 4 % — de 
 - Parcimonie entraînée : premier banc, et la loi du coût par événement mesurée dans le moteur  Le dépôt n'avait jamais entraîné un seul modèle (zéro rétropropagat
 - Porte d'exécution : un modèle entraîné ici tourne dans Drave, logits identiques  Le moteur lit le GGUF en place et n'avait pas de convertisseur : le dépôt ne po
 - Réparti : --ids-file était ignoré, et les jetons synthétiques sortaient du vocabulaire  Deux défauts trouvés en essayant de répartir le modèle entraîné ici.  1.
+- entrainer_moteur : deux erreurs qui faussaient la mesure, corrigées  1. Double décalage. Le modèle HF décale lui-même (shift_logits/shift_labels) ;    lui passe
 

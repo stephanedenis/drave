@@ -5403,3 +5403,155 @@ The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add drave-core/src/main.rs tools/exporter_gguf.py tools/porte-reparti-moteur.sh tools/entrainer_moteur.py tools/porte_moteur.py && git commit -q -m \"Réparti : --ids-file était ignoré, et les jetons synthétiques sortaient du voca … [1461 caractères tronqués]`
+
+  ```
+8de0612 Réparti : --ids-file était ignoré, et les jetons synthétiques sortaient du vocabulaire
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; echo \"=== --push sur le modèle routé (chemin listes) ===\"; timeout 300 $D /tmp/moteur_route.gguf --ppl /tmp/route_ids.txt --ctx 256 --threads 8 --push 2>&1 | grep -E \"perplexité 1|paires \\(poi … [348 caractères tronqués]`
+
+  ```
+=== --push sur le modèle routé (chemin listes) ===
+=== perplexité 172.9404 sur 255 tokens (112254338 événements, 0.3 s) ===
+    979.6 tok/s effectifs (avant + tête)
+    paires (poids × activation) par token : attention 0.4 M · experts 1.8 M · partagé 0.0 M · scores 2 K · total 2.3 M
+    dont en listes (une paire y est un événement) : 0.4 M — le reste est dense (déquantifié ou f32)
+    postes (ms/token) : projets-attn 0.19 | rope 0.02 | attention 0.31 | proj+mlp 0.40 | somme 0.93 | reste (tête + échantillonnage) 0.09
+
+=== --dense (référence) ===
+=== perplexité 173.0196 sur 255 tokens (0 événements, 0.2 s) ===
+    1242.4 tok/s effectifs (avant + tête)
+    dont en listes (une paire y est un événement) : 0.0 M — le reste est dense (déquantifié ou f32)
+  ```
+
+- **bash** `{"command": "tail -2 /tmp/m2_dense.log; tail -2 /tmp/m2_route.log", "description": "Check clean pair progress"}`
+
+  ```
+# dense · 2.26 M paramètres · 0.59 M poids LUS par jeton et par couche · 0.59 M stockés · corpus 100276153 octets · cuda
+# route · 7.58 M paramètres · 0.59 M poids LUS par jeton et par couche · 1.92 M stockés · corpus 100276153 octets · cuda
+  ```
+
+- **bash** `{"command": "sleep 420; tail -3 /tmp/m2_dense.log; echo \"---\"; tail -3 /tmp/m2_route.log", "description": "Wait for clean pair training", "timeoutMs": 480000}`
+
+  ```
+pas  10000 · perte 2.0623 · val 3.0991 bits/octet · 324 s
+  pas  12000 · perte 1.8884 · val 3.0582 bits/octet · 386 s
+  pas  14000 · perte 1.8888 · val 3.0593 bits/octet · 442 s
+---
+  pas   4000 · perte 1.9202 · val 3.2044 bits/octet · 233 s
+  pas   6000 · perte 1.8872 · val 3.1439 bits/octet · 348 s
+  pas   8000 · perte 1.9464 · val 3.0803 bits/octet · 452 s
+  ```
+
+- **bash** `{"command": "sleep 450; echo \"=== dense ===\"; tail -3 /tmp/m2_dense.log; echo \"=== route ===\"; tail -3 /tmp/m2_route.log", "description": "Wait for both trainings to finish", "timeoutMs": 520000}`
+
+  ```
+=== dense ===
+
+  # meilleur point : pas 20000 · val 2.9991 bits/octet
+  # écrit dans /tmp/m2_dense · 2.26 M paramètres · 0.59 M poids lus/jeton/couche
+=== route ===
+  pas  14000 · perte 1.8474 · val 2.9960 bits/octet · 744 s
+  pas  16000 · perte 1.8964 · val 2.9704 bits/octet · 839 s
+  pas  18000 · perte 1.8424 · val 2.9619 bits/octet · 937 s
+  ```
+
+- **bash** `{"command": "sleep 150; tail -2 /tmp/m2_route.log; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && P=/home/stephane/gpu-env/bin/python; for m in m2_dense m2_route; do echo \"=== export $m ===\"; $P tools/exporter_gguf.py --hf /tmp/$m --sortie /tmp/$m.gguf 2>&1 | tail -2; done", "description":  … [62 caractères tronqués]`
+
+  ```
+# meilleur point : pas 20000 · val 2.9490 bits/octet
+  # écrit dans /tmp/m2_route · 7.58 M paramètres · 0.59 M poids lus/jeton/couche
+=== export m2_dense ===
+# /tmp/m2_dense.gguf : 47 tenseurs · 1.6 Mo (f32 pour les normes, Q8_0 pour les projections, Q4_0 pour la FFN et les experts) · 13 métadonnées
+# architecture 4 couches · 192 cachés · FFN dense
+=== export m2_route ===
+# /tmp/m2_route.gguf : 51 tenseurs · 4.6 Mo (f32 pour les normes, Q8_0 pour les projections, Q4_0 pour la FFN et les experts) · 17 métadonnées
+# architecture 4 couches · 192 cachés · 8 experts (top-2) · norm_topk_prob=True
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; P=/home/stephane/gpu-env/bin/python\nfor m in m2_dense m2_route; do\n  echo \"=== $m ===\"\n  $P tools/porte_moteur.py --hf /tmp/$m --ids /tmp/route_ids.txt --logits /tmp/${m}_ref.bin 2>&1 | grep  … [384 caractères tronqués]`
+
+  ```
+=== m2_dense ===
+=== perplexité 160.3658 sur 255 tokens (0 événements, 0.2 s) ===
+    1318.7 tok/s effectifs (avant + tête)
+    paires (poids × activation) par token : attention 0.4 M · experts 0.0 M · partagé 1.8 M · scores 2 K · total 2.3 M
+         ~~~~^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/m2_dense_ref.bin'
+=== m2_route ===
+# quantification appliquée à la référence : 22 tenseurs Q8_0, 8 experts Q4_0
+# référence : 255 prédictions · NLL 5.1534 nats · perplexité 173.0197
+=== perplexité 173.0196 sur 255 tokens (0 événements, 0.2 s) ===
+    1387.8 tok/s effectifs (avant + tête)
+    paires (poids × activation) par token : attention 0.4 M · experts 1.8 M · partagé 0.0 M · scores 2 K · total 2.3 M
+corrélation des logits (position 0) : 1.000000
+✅ porte de correction tenue (100.0 % des positions UTILES au-dessus de 0.95, min 1.0000 >= plancher 0.9, top-1 100.0 % sur toutes les positions, 0 saturées exclues de la corrélation)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && P=/home/stephane/gpu-env/bin/python; $P tools/porte_moteur.py --hf /tmp/m2_route --ids /tmp/route_ids.txt --logits /tmp/m2_route_ref.bin 2>&1 | grep -vE \"Loading\" | tail -3; echo \"=== référence NON quantifiée (f32, HF tel quel) == … [645 caractères tronqués]`
+
+  ```
+# quantification appliquée à la référence : 22 tenseurs Q8_0, 8 experts Q4_0
+# référence : 255 prédictions · NLL 5.1534 nats · perplexité 173.0197
+# logits écrits : /tmp/m2_route_ref.bin (256 positions × 256)
+=== référence NON quantifiée (f32, HF tel quel) ===
+<stdin>:8: DeprecationWarning: __array_wrap__ must accept context and return_scalar arguments (positionally) in the future. (Deprecated NumPy 2.0)
+référence f32 : 2.265404224395752 nats · 3.2682874401446598 bits/octet · PPL 9.635018348693848
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && /home/stephane/gpu-env/bin/python - <<'PY' 2>&1 | grep -vE \"Loading|Deprecat|__array\" | tail -6\nimport sys, json, numpy as np, torch\nsys.path.insert(0,\"tools\")\nfrom exporter_gguf import q8_0_encoder, q8_0_decoder, q4_0_encoder … [1735 caractères tronqués]`
+
+  ```
+f32                              : PPL 9.635
+Q8_0 sur 22 tenseurs 2D         : PPL 9.637
+Q4_0 sur les experts seuls       : PPL 9.544
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && /home/stephane/gpu-env/bin/python - <<'PY' 2>&1 | grep -vE \"Loading|Deprecat|__array\" | tail -8\nimport sys, json, numpy as np, torch\nsys.path.insert(0,\"tools\")\nimport porte_moteur as pm\nfrom transformers import Qwen3MoeForCau … [1445 caractères tronqués]`
+
+  ```
+avant  : 9.635
+q8 22 q4 8
+après  : 9.545
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && /home/stephane/gpu-env/bin/python tools/porte_moteur.py --hf /tmp/m2_route --ids /tmp/route_ids.txt --logits /tmp/m2_route_ref.bin 2>&1 | grep -vE \"Loading\" | tail -3; echo \"--- et sur l'ANCIEN modèle ---\"; /home/stephane/gpu-env … [232 caractères tronqués]`
+
+  ```
+# quantification appliquée à la référence : 22 tenseurs Q8_0, 8 experts Q4_0
+# référence : 255 prédictions · NLL 5.1534 nats · perplexité 173.0197
+# logits écrits : /tmp/m2_route_ref.bin (256 positions × 256)
+--- et sur l'ANCIEN modèle ---
+# référence : 255 prédictions · NLL 5.1534 nats · perplexité 173.0197
+# logits écrits : /tmp/old_ref.bin (256 positions × 256)
+  ```
+
+### 🤖 Assistant
+
+⏵ Erreur de mesure trouvée chez moi : double décalage dans l'évaluation HF — je remesure
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && /home/stephane/gpu-env/bin/python - <<'PY' 2>&1 | grep -vE \"Loading|Deprecat|__array\" | tail -12\nimport numpy as np, torch, math\nfrom transformers import AutoModelForCausalLM\nval = np.frombuffer(open(\"data/corpus_en_val.txt\",\ … [1080 caractères tronqués]`
+
+  ```
+dense  m2_dense : 7.4456 bits/octet
+routé  m2_route : 7.522 bits/octet
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"tools/entrainer_moteur.py\"; s=open(p).read()\ns = s.replace('''                  head_dim=a.dim // a.tetes,\n                  rope_parameters={\"rope_theta\": 10000.0, \"rope_type\": \"default\"})''',\n'''     … [3027 caractères tronqués]`
+
+  ```
+ok
+51:                  # `initializer_range` : le défaut de HuggingFace (0,02) est
+58:                  initializer_range=a.init,
+138:                    tot += float(modele(input_ids=xv, labels=xv).loss) * xv.numel()
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && setsid nohup env CUDA_VISIBLE_DEVICES=0 /home/stephane/gpu-env/bin/python -u tools/entrainer_moteur.py --famille dense --dim 192 --couches 4 --tetes 4 --cache 768 --pas 20000 --sortie /tmp/m3_dense --eval-tous 2000 > /tmp/m3_dense.lo … [455 caractères tronqués]`
+
+  ```
+# dense · 2.26 M paramètres · 0.59 M poids LUS par jeton et par couche · 0.59 M stockés · corpus 100276153 octets · cuda
+  pas   2000 · perte 2.2467 · val 6.6367 bits/octet · 52 s
+# route · 7.58 M paramètres · 0.59 M poids LUS par jeton et par couche · 1.92 M stockés · corpus 100276153 octets · cuda
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/entrainer_moteur.py && git commit -q -m \"entrainer_moteur : deux erreurs qui faussaient la mesure, corrigées\n\n1. Double décalage. Le modèle HF décale lui-même (shift_logits/shift_labels) ;\n   lui passer une entrée D … [770 caractères tronqués]`

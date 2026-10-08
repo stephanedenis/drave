@@ -48,6 +48,14 @@ def construire(famille, a):
                   # lisait 1,2 M poids d'attention contre 0,4 M pour le routé, et
                   # la comparaison « à lecture égale » ne comparait rien.
                   head_dim=a.dim // a.tetes,
+                  # `initializer_range` : le défaut de HuggingFace (0,02) est
+                  # calibré pour des modèles de plusieurs centaines de millions
+                  # de paramètres. À 2 M, il laisse les logits si proches de zéro
+                  # que le softmax part uniforme et que l'apprentissage rampe
+                  # (mesuré : 7,4 bits/octet après 20 000 pas, contre 2,2 pour le
+                  # même modèle initialisé à la main par les bancs). Ce n'est pas
+                  # un détail de goût, c'est ce qui rend la comparaison valide.
+                  initializer_range=a.init,
                   rope_parameters={"rope_theta": 10000.0, "rope_type": "default"})
     if famille == "dense":
         cfg = Qwen3Config(intermediate_size=a.cache, **commun)
@@ -75,6 +83,7 @@ def main():
     p.add_argument("--pas", type=int, default=20000)
     p.add_argument("--lr", type=float, default=1e-3)
     p.add_argument("--graine", type=int, default=1)
+    p.add_argument("--init", type=float, default=0.08, help="écart-type d'initialisation")
     p.add_argument("--eval-tous", type=int, default=1000)
     p.add_argument("--sortie", required=True)
     p.add_argument("--sans-gpu", action="store_true")
@@ -120,11 +129,14 @@ def main():
                     xv = torch.from_numpy(
                         np.stack([val[(k * a.lot + j) * a.seq:(k * a.lot + j) * a.seq + a.seq]
                                   for j in range(a.lot)]).astype(np.int64)).to(dev)
-                    yv = torch.from_numpy(
-                        np.stack([val[(k * a.lot + j) * a.seq + 1:(k * a.lot + j) * a.seq + a.seq + 1]
-                                  for j in range(a.lot)]).astype(np.int64)).to(dev)
-                    tot += float(modele(input_ids=xv, labels=yv).loss) * yv.numel()
-                    n += yv.numel()
+                    # LA MÊME séquence en entrée et en étiquettes : le modèle
+                    # décale lui-même (`shift_logits`/`shift_labels`). Passer une
+                    # entrée DÉJÀ décalée avec des étiquettes décalées décale
+                    # DEUX FOIS et mesure la prédiction de t+2 — l'erreur a été
+                    # commise ici, et elle a produit des « 2,95 bits/octet » pour
+                    # un modèle dont la vraie mesure est 7,5.
+                    tot += float(modele(input_ids=xv, labels=xv).loss) * xv.numel()
+                    n += xv.numel()
             bpo = tot / max(n, 1) / math.log(2)
             if bpo < meilleur[0]:
                 meilleur = (bpo, {kk: v.detach().clone() for kk, v in modele.state_dict().items()}, pas)
