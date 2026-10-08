@@ -5649,3 +5649,262 @@ pas   2000 · perte 1.5899 · val 2.3727 bits/octet · 56 s
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/entrainer_moteur.py && git commit -q -m \"entrainer_moteur : le double décalage était AUSSI dans la boucle d'entraînement\n\nLa correction précédente n'avait touché que l'évaluation. Le défaut était plus\ngrave en amont … [553 caractères tronqués]`
+
+  ```
+d739cbd entrainer_moteur : le double décalage était AUSSI dans la boucle d'entraînement
+  ```
+
+- **bash** `{"command": "sleep 540; tail -3 /tmp/m4_dense.log; echo \"---\"; tail -3 /tmp/m4_route.log", "description": "Wait for corrected pair", "timeoutMs": 600000}`
+
+  ```
+Error: tool call aborted
+  ```
+
+
+> **Objectif** (pause) : Produire un modèle nativement événementiel qui soit à son meilleur dans l'architecture de Drave : parcimonie ENTRAÎNÉE (décharge/LIF ou parcimonie structurée), exécutable en listes d'événements, et découpable en unités de travail autonomes plaçables sur les unités d'une machine (cœurs, GPU, disque) puis sur plusieurs machines en réseau. Chaque affirmation porte sa mesure : qualité contre un jumeau dense à paramètres et budget égaux, densité d'activation R̂, événements et octets par jeton, débit, et mise à l'échelle sur N unités. Livrables : un prototype entraîné et mesuré, sa porte d'exécution dans Drave, et la démonstration de répartition.
+
+
+## Tour 5
+
+### 👤 Utilisateur
+
+Hypothèse de changement de configuration matériel : Si je déploie ce projet sur une station de travail bi-processeur (Xeon E5-2687W v3) sous Linux, configurée avec une topologie NUMA asymétrique stricte pour séparer le système du calcul intensif.
+
+Voici la ségrégation matérielle exacte de la machine :
+- Nœud NUMA 0 (OS & Tâches de fond) : CPU 0, 32 Go de RAM, SSD NVMe système, et GPU AMD dédié à l'affichage.
+- Nœud NUMA 1 (Calcul Intensif) : CPU 1, 128 Go de RAM, SSD NVMe dédié au stockage des datasets/modèles, et un tandem de GPU Nvidia Quadro RTX 5000 reliées par un pont NVLink.
+
+L'objectif critique est d'éviter toute latence et tout goulot d'étranglement sur le bus d'interconnexion QPI entre les deux processeurs.Est-ce bénéfique? produit un document dans docs pour répondre à cette question
+
+### 🤖 Assistant
+
+⏵ Je produis le document demandé, avec des mesures A/B faites sur la machine plutôt que des principes
+
+- **bash** `{"command": "tail -2 /tmp/m4_dense.log 2>/dev/null; tail -2 /tmp/m4_route.log 2>/dev/null; echo \"=== charge machine ===\"; uptime; numactl --hardware 2>&1 | head -8", "description": "Check background work and machine state"}`
+
+  ```
+# meilleur point : pas 18000 · val 2.0903 bits/octet
+  # écrit dans /tmp/m4_dense · 2.26 M paramètres · 0.59 M poids lus/jeton/couche
+  pas  10000 · perte 1.3948 · val 2.1192 bits/octet · 511 s
+  pas  12000 · perte 1.2702 · val 2.0864 bits/octet · 613 s
+=== charge machine ===
+ 11:50:24  up 17 days  1:02,  2 users,  load average: 2,46, 3,55, 4,55
+available: 2 nodes (0-1)
+node 0 cpus: 0 1 2 3 4 5 6 7 8 9 20 21 22 23 24 25 26 27 28 29
+node 0 size: 64347 MB
+node 0 free: 16461 MB
+node 1 cpus: 10 11 12 13 14 15 16 17 18 19 30 31 32 33 34 35 36 37 38 39
+node 1 size: 64448 MB
+node 1 free: 6961 MB
+node distances:
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/ab_numa.sh <<'SH'\n#!/bin/bash\n# A/B entrelacé : trois placements, trois répétitions, même charge de fond.\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nD=./drave-core/target/release/drave\nM=models/Qwen2.5-0.5B-Q8 … [701 caractères tronqués]`
+
+  ```
+script prêt
+40
+CPU(s):                                  40
+Thread(s) per core:                      2
+Core(s) per socket:                      10
+Socket(s):                               2
+CPU(s) scaling MHz:                      96%
+NUMA node(s):                            2
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/ab_numa.sh <<'SH'\n#!/bin/bash\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nD=./drave-core/target/release/drave\nM=models/Qwen2.5-0.5B-Q8_0.gguf\nIDS=data/wikitext2_test.txt.ids\nmesure() {\n  local etiq=\"$1\"; sh … [1468 caractères tronqués]`
+
+  ```
+/tmp/ab_numa_run.sh: line 11: printf: : invalid number
+D 0,00
+/tmp/ab_numa_run.sh: line 11: bc: command not found
+/tmp/ab_numa_run.sh: line 11: printf: : invalid number
+A 0,00
+/tmp/ab_numa_run.sh: line 11: bc: command not found
+/tmp/ab_numa_run.sh: line 11: printf: : invalid number
+B 0,00
+/tmp/ab_numa_run.sh: line 11: bc: command not found
+/tmp/ab_numa_run.sh: line 11: printf: : invalid number
+C 0,00
+/tmp/ab_numa_run.sh: line 11: bc: command not found
+/tmp/ab_numa_run.sh: line 11: printf: : invalid number
+D 0,00
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/ab_numa_run.sh <<'SH'\n#!/bin/bash\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nD=./drave-core/target/release/drave\nM=models/Qwen2.5-0.5B-Q8_0.gguf\nIDS=data/wikitext2_test.txt.ids\nmesure() {\n  local etiq=\"$1\" … [560 caractères tronqués]`
+
+  ```
+A 15729
+B 16787
+C 16623
+D 15225
+A 15108
+B 16496
+C 16118
+D 15307
+A 15365
+B 16614
+C 16474
+D 14774
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== GPU : root complexes ===\"; for g in /sys/bus/pci/devices/0000:0*/; do n=$(cat $g/numa_node 2>/dev/null); c=$(cat $g/class 2>/dev/null); [ \"${c:0:4}\" = \"0x03\" ] && echo \"$(basename $g) numa=$n\"; done 2>/dev/null | he … [187 caractères tronqués]`
+
+  ```
+=== GPU : root complexes ===
+0000:03:00.0 numa=0
+0000:04:00.0 numa=0
+00:01.0 PCI bridge: Intel Corporation Xeon E7 v3/Xeon E5 v3/Core i7 PCI Express Root Port 1 (rev 02)
+00:01.1 PCI bridge: Intel Corporation Xeon E7 v3/Xeon E5 v3/Core i7 PCI Express Root Port 1 (rev 02)
+00:02.0 PCI bridge: Intel Corporation Xeon E7 v3/Xeon E5 v3/Core i7 PCI Express Root Port 2 (rev 02)
+00:03.0 PCI bridge: Intel Corporation Xeon E7 v3/Xeon E5 v3/Core i7 PCI Express Root Port 3 (rev 02)
+00:1c.0 PCI bridge: Intel Corporation C610/X99 series chipset PCI Express Root Port #1 (rev d5)
+00:1c.1 PCI bridge: Intel Corporation C610/X99 series chipset PCI Express Root Port #2 (rev d5)
+03:00.0 VGA compatible controller: NVIDIA Corporation TU104GL [Quadro RTX 5000] (rev a1)
+04:00.0 VGA compatible controller: NVIDIA Corporation TU104GL [Quadro RTX 5000] (rev a1)
+=== NVLink ===
+GPU 0: Quadro RTX 5000 (UUID: GPU-ff8cc368-1bb8-ccef-8a76-4d17375e212e)
+	 Link 0: 25.781 GB/s
+GPU 1: Quadro RTX 5000 (UUID: GPU-bd161106-3e3e-c50f-161a-2550ab688ce2)
+	 Link 0: 25.781 GB/s
+  ```
+
+- **bash** `{"command": "ls -la /home/stephane/Data13TB/stephane/ 2>/dev/null | head -8; echo \"=== où sont les gros modèles ===\"; find /home/stephane/Data13TB -maxdepth 2 -name \"*.gguf\" -size +1G 2>/dev/null | head -5; df -h | grep -E \"Filesystem|Data13TB|FastNVMe|/$\" | head -5", "description": "Locate bi … [20 caractères tronqués]`
+
+  ```
+total 186804776
+drwxr-xr-x. 1 stephane stephane         2342  6 oct 09:23 .
+dr-xr-xr-x. 1 root     root               16 28 nov  2025 ..
+-rw-r--r--. 1 stephane stephane        11688 30 mar  2026 adobe_account_backup_uuid_d79a3839-50e8-4906-bb1a-e8c3954711b2.zip
+-rw-r--r--. 1 stephane stephane          111 19 mar  2026 .ado_orgs.cache
+drwxr-xr-x. 1 stephane stephane          386 25 sep 09:52 agent-kit
+drwxr-xr-x. 1 stephane stephane          132  2 avr  2026 .agents
+drwxr-xr-x. 1 stephane stephane         4154 14 mai 10:14 .aitk
+=== où sont les gros modèles ===
+Filesystem               Size  Used Avail Use% Mounted on
+/dev/nvme0n1p2           828G  799G   29G  97% /
+/dev/nvme0n1p2           828G  799G   29G  97% /home/stephane/FastNVMe
+/dev/mapper/system-root   11T  8,8T  2,1T  81% /home/stephane/Data13TB
+  ```
+
+- **bash** `{"command": "lsblk -o NAME,SIZE,TYPE,MOUNTPOINT 2>/dev/null | head -12; echo \"=== nœud NUMA des disques ===\"; for d in sda nvme0n1; do echo -n \"$d : \"; cat /sys/block/$d/device/numa_node 2>/dev/null || echo \"?\"; done; echo \"=== gros modèles K3 ===\"; du -sh /home/stephane/Data13TB/stephane/mo … [202 caractères tronqués]`
+
+  ```
+NAME              SIZE TYPE MOUNTPOINT
+sda              10,9T disk 
+├─sda1              8M part 
+└─sda2           10,9T part 
+  ├─system-swap  62,8G lvm  [SWAP]
+  └─system-root  10,9T lvm  /home/stephane/Data13TB
+nvme0n1         931,5G disk 
+├─nvme0n1p1         2G part /boot/efi
+├─nvme0n1p2       828G part /var/lib/docker
+└─nvme0n1p3         1G part 
+=== nœud NUMA des disques ===
+sda : ?
+nvme0n1 : 0
+=== gros modèles K3 ===
+0	/home/stephane/Data13TB/stephane/models
+/home/stephane/Data13TB/stephane/GitHub/llama.cpp-k3
+/home/stephane/Data13TB/stephane/Documents/My Kindle Content/VVVGYLC6LUVTUN6EN3K5C5WK3LBIUOQX_PDOC
+/home/stephane/Data13TB/stephane/Documents/My Kindle Content/U4G2OK3XR3ZEKC5Y5NYXU6ENPLBDJ7Z7_PDOC
+/home/stephane/Data13TB/stephane/Documents/My Kindle Content/TTD5ZNMOHN5NGKKFNLHK3LONAP6A4CAV_PDOC
+/home/stephane/Data13TB/stephane/Documents/My Kindle Content/GK3GEHOQT336A3QFGNSWEG6WMRT6KFO6_PDOC
+  ```
+
+- **bash** `{"command": "f=$(find /home/stephane/Data13TB/stephane/corpus/wiki_apparie/traces -maxdepth 1 -type f -size +200M 2>/dev/null | head -1); echo \"fichier : $f\"; [ -n \"$f\" ] && sudo -n true 2>/dev/null; [ -n \"$f\" ] && dd if=\"$f\" of=/dev/null bs=1M count=2000 iflag=direct 2>&1 | tail -1; echo \" … [295 caractères tronqués]`
+
+  ```
+fichier : 
+=== NVMe ===
+fichier : 
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "timeout 90 find /home/stephane/Data13TB -maxdepth 4 -type f -size +300M -printf \"%s %p\\n\" 2>/dev/null | sort -rn | head -5; echo \"---\"; timeout 60 find /home/stephane/FastNVMe /var/lib/docker -maxdepth 3 -type f -size +300M -printf \"%s %p\\n\" 2>/dev/null | sort -rn | head -3", "d … [73 caractères tronqués]`
+
+  ```
+256087425024 /home/stephane/Data13TB/stephane/windows-sda-20260729-042042.img
+63387346208 /home/stephane/Data13TB/stephane/modeles/gguf/gpt-oss-120b-MXFP4.gguf
+26304317440 /home/stephane/Data13TB/stephane/Downloads/Téléchargements.merged-20260729-130915/Quartus-21.1.1.850-linux-complete.tar
+26304317440 /home/stephane/Data13TB/stephane/Downloads/Quartus-21.1.1.850-linux-complete.tar
+19851336384 /home/stephane/Data13TB/stephane/ollama-models/blobs/sha256-ac3d1ba8aa77755dab3806d9024e9c385ea0d5b412d6bdf9157f8a4a7e9fc0d9
+---
+365713686528 /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf
+49151700032 /home/stephane/FastNVMe/k3-nvme/Kimi-K3-UD-Q4_K_XL-00003-of-00032.gguf
+49123697600 /home/stephane/FastNVMe/k3-nvme/Kimi-K3-UD-Q4_K_XL-00006-of-00032.gguf
+  ```
+
+- **bash** `{"command": "echo \"=== HDD sda (Data13TB) ===\"; dd if=/home/stephane/Data13TB/stephane/modeles/gguf/gpt-oss-120b-MXFP4.gguf of=/dev/null bs=1M count=3000 iflag=direct 2>&1 | tail -1; echo \"=== NVMe (FastNVMe, nœud 0) ===\"; dd if=/home/stephane/FastNVMe/k3-nvme/Kimi-K3-UD-Q4_K_XL-00003-of-00032.g … [137 caractères tronqués]`
+
+  ```
+=== HDD sda (Data13TB) ===
+3145728000 bytes (3,1 GB, 2,9 GiB) copied, 12,7668 s, 246 MB/s
+=== NVMe (FastNVMe, nœud 0) ===
+3145728000 bytes (3,1 GB, 2,9 GiB) copied, 1,99552 s, 1,6 GB/s
+  ```
+
+- **bash** `{"command": "tail -3 /tmp/m4_route.log; echo \"=== charge ===\"; uptime; free -g | head -2", "description": "Check routed training and load"}`
+
+  ```
+# meilleur point : pas 20000 · val 2.0490 bits/octet
+  # écrit dans /tmp/m4_route · 7.58 M paramètres · 0.59 M poids lus/jeton/couche
+=== charge ===
+ 11:58:03  up 17 days  1:10,  2 users,  load average: 7,49, 11,06, 8,24
+               total        used        free      shared  buff/cache   available
+Mem:             125          23          23          13          93         102
+  ```
+
+- **write** `{"content": "# Ségrégation NUMA : ce que la machine répond\n\n> 08/10. Réponse à une proposition de configuration : *station bi-processeur\n> Xeon E5-2687W v3, topologie NUMA asymétrique stricte — nœud 0 pour l'OS et\n> l'affichage (CPU 0, 32 Go, NVMe système, GPU AMD), nœud 1 pour le calcul\n> (CPU … [10660 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/numa-segregation.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '99,103p;190,194p' docs/convertisseur.md; echo \"=== REPRISE 1521-1526 ===\"; sed -n '1521,1526p' REPRISE.md; echo \"=== REPRISE 1515-1519 ===\"; sed -n '1515,1519p' REPRISE.md", "description": "Verify cited numbers in the doc … [7 caractères tronqués]`
+
+  ```
+Deux enseignements pour le placement :
+
+- **NUMA d'abord** : 20,7 → **24,7 Go/s** en liant un socket (mesuré au banc).
+  Un plan de placement qui ignore les nœuds NUMA laisse 20 % sur la table, et
+  probablement bien plus sur un modèle qui ne tient pas dans un socket.
+| 3 | **routeur MoE** + tranches par expert | ✅ | Qwen3-30B-A3B (128 experts, top-8) : PPL 7,61 |
+| 4 | **index de placement** (`--plan`) | ✅ | poids par couche, octets actifs par jeton, débit prévu par support |
+| 4 bis | **épinglage NUMA** (`--pin`) | ✅ mesuré, **négatif** | 23,2 → 25,5 s (cœurs physiques) et → 27,6 s (un socket) sur le 30B MoE |
+| 5 | **Q8_0 en place** (projections) | ✅ | chargement 2,73 → 0,81 s, mémoire 921 → 566 Mo |
+
+=== REPRISE 1521-1526 ===
+| mesure | résultat |
+|---|---|
+| NUMA, calcul pur | 13,8 (node 0) vs 14,2 (node 1) Go/s — **bruit** |
+| NUMA, lecture NVMe | 22,41 vs 21,45 Go/s — **4 %** |
+| **10 cœurs, 10 fils** | 14,7 Go/s |
+| **10 cœurs, 20 fils (paires HT)** | **18,7 Go/s — +27 %** |
+=== REPRISE 1515-1519 ===
+### Topologie matérielle et affinités
+
+Relevé : NVMe (02:00.0), **les deux GPU** (03:00.0, 04:00.0) et les CPU 0-9 sont
+sur le **NUMA node 0**. **NVLink présent entre les GPU :
+… [44 caractères tronqués]
+  ```
+
+- **bash** `{"command": "lspci -tv 2>/dev/null | grep -A 3 -B 1 \"03:00.0\\|04:00.0\" | head -20; echo \"=== chemin sysfs ===\"; for d in 0000:03:00.0 0000:04:00.0; do echo \"$d → $(readlink -f /sys/bus/pci/devices/$d | sed 's|/sys/devices/||')\"; done", "description": "Verify PCIe root complex for each GPU"}`
+
+  ```
+=== chemin sysfs ===
+0000:03:00.0 → pci0000:00/0000:00:02.0/0000:03:00.0
+0000:04:00.0 → pci0000:00/0000:00:03.0/0000:04:00.0
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/numa-segregation.md", "new_string": "**Conséquence immédiate** : la proposition déplace les deux Quadro du nœud 0\n(leur place actuelle) vers le nœud 1. C'est un changement de câblage, pas de\nréglage — et il faut vérifier que chaqu … [618 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/numa-segregation.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/numa-segregation.md && git commit -q -m \"docs/numa-segregation : la ségrégation NUMA proposée, mesurée plutôt que raisonnée\n\nRéponse à une proposition de station bi-Xeon avec topologie asymétrique stricte\n(32 Go + OS … [996 caractères tronqués]`
