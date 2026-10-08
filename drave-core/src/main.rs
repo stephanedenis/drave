@@ -3376,17 +3376,32 @@ y est le découpage entre nœuds (voir `--couches-locales`), pas un `--couches a
     println!("[flux] quantification : {} niveaux, seuil {}, top-k {}, renorm {}",
              mdl.act_levels, mdl.act_thresh, mdl.act_topk, mdl.act_renorm);
     let n_layer = mdl.cfg.n_layer;
-    // `limite` (≤ ctx) est respectée pour les ids SYNTHÉTIQUES, mais un `--ids`
-    // fourni la contournait : 300 jetons à ctx 256 faisaient écrire le cache
-    // au-delà du contexte — corruption silencieuse du bloc de la tête KV suivante,
-    // puis panique. On tronque, en le disant.
-    let ids: Vec<u32> = if opt.ids.is_empty() {
-        (1..=limite as u32).collect()
-    } else if opt.ids.len() > limite {
-        println!("[flux] --ids fournit {} jetons > limite {} (ctx {}) : troncature aux {} \
-derniers", opt.ids.len(), limite, ctx, limite);
-        opt.ids[opt.ids.len() - limite..].to_vec()
-    } else { opt.ids.clone() };
+    // Les jetons viennent de `--ids`, SINON de `--ids-file`. Le fichier était
+    // ignoré ici : le mode réparti retombait sur des jetons synthétiques et
+    // mesurait donc un AUTRE texte que la référence, sans le dire — un écart de
+    // perplexité de 3,7× attribué au découpage alors que le découpage était
+    // exact à 0,00e0.
+    let mut ids: Vec<u32> = if !opt.ids.is_empty() {
+        opt.ids.clone()
+    } else if let Some(f) = opt.ids_file.as_deref().filter(|f| !f.is_empty()) {
+        let raw = std::fs::read_to_string(f).expect("fichier d'identifiants illisible");
+        raw.split(|c: char| c == ',' || c.is_whitespace())
+            .filter(|s| !s.is_empty())
+            .filter_map(|s| s.parse().ok())
+            .collect()
+    } else {
+        // Jetons synthétiques : ils doivent RESTER dans le vocabulaire. Une suite
+        // `1..=limite` en sort dès que `limite > vocab` (modèle à 256 entrées,
+        // limite 256) et fait paniquer l'indexation des logits — panique qui
+        // accuse le modèle alors que c'est l'appelant.
+        let vocab = mdl.cfg.vocab.max(1);
+        (1..=limite).map(|i| (i % vocab) as u32).collect()
+    };
+    if ids.len() > limite {
+        println!("[flux] {} jetons fournis > limite {} (ctx {}) : troncature aux {} derniers",
+                 ids.len(), limite, ctx, limite);
+        ids = ids[ids.len() - limite..].to_vec();
+    }
     if ids.len() < 2 {
         // La perplexité est une moyenne sur `len - 1` jetons notés : avec un seul
         // jeton elle vaut NaN, et un NaN affiché comme un résultat ne dit rien.

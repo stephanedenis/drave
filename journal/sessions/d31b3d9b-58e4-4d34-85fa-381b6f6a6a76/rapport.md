@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 1.4 h |
-| Tours | 3 |
-| Messages | 207 |
-| Appels d'outils | 213 |
-| Fichiers touchés | 6 |
-| Commandes | 151 |
+| Durée | 2.0 h |
+| Tours | 4 |
+| Messages | 282 |
+| Appels d'outils | 286 |
+| Fichiers touchés | 9 |
+| Commandes | 209 |
 | Sous-agents | 3 |
-| Commits | 2 |
+| Commits | 3 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -27,6 +27,8 @@
 **Tour 2** — ça fait plusieurs jours qu'on est sur des travaux lourds avec peu de résultats constructifs. Il faut revenir à l'essence de Drave et produire un modèle qui est à son meilleur dans une architecture événementielle facilement distribuable sur les divers types d'unité de traitement et ressources d'une machine et de plusieurs machines en réseau.
 
 **Tour 3** — <goal_round> Objective: "Produire un modèle nativement événementiel qui soit à son meilleur dans l'architecture de Drave : parcimonie ENTRAÎNÉE (décharge/LIF ou parcimonie structurée), exécutable en listes d'événements, et découpable en unités de travail autonomes plaçables sur les unités d'une machine (cœurs, GPU, disque) puis sur plusieurs machines en réseau. Chaque affirmation porte sa mesure : … [816 caractères tronqués]
+
+**Tour 4** — <goal_round> Objective: "Produire un modèle nativement événementiel qui soit à son meilleur dans l'architecture de Drave : parcimonie ENTRAÎNÉE (décharge/LIF ou parcimonie structurée), exécutable en listes d'événements, et découpable en unités de travail autonomes plaçables sur les unités d'une machine (cœurs, GPU, disque) puis sur plusieurs machines en réseau. Chaque affirmation porte sa mesure : … [816 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -132,7 +134,7 @@ Donc le « R̂ = 0,15 → 6,7× moins d'événements → ~100 tok/s » de `docs/
 
 ### Tour 3 — <goal_round> Objective: "Produire un modèle nativement événementiel qui soit à son meilleur dans l'architecture de Drave … [1096 caractères tronqués]
 
-*74 appels d'outils.* Actions notables :
+*95 appels d'outils.* Actions notables :
 
 - bash — Check workspace and resources state
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/essai_blocs.py`
@@ -148,11 +150,64 @@ Donc le « R̂ = 0,15 → 6,7× moins d'événements → ~100 tok/s » de `docs/
 - bash — Check engine MoE architecture support
 - bash — Look for a GGUF writer in the repo
 - bash — Read the repo's GGUF writer
-- … et 59 autres
+- … et 80 autres
 
 **Synthèse produite :**
 
-⏵ Porte d'exécution TENUE : le moteur calcule notre modèle au bit près
+⏵ Réponse chiffrée sur la ségrégation NUMA, à partir des mesures du dépôt
+
+\## Réponse courte
+
+**Une partie est bénéfique, une autre est probablement contre-productive, et la raison invoquée — le QPI — n'est pas le goulot sur cette machine.** Le dépôt a déjà mesuré les trois régimes qui comptent, et ils ne répondent pas de la même façon.
+
+\## Ce que la machine mesure aujourd'hui
+
+| mesure | valeur | source |
+|---|---|---|
+| distances NUMA | 10 local / **21 distant** (2,1×) | `numactl --hardware` |
+| RAM | **64,3 / 64,4 Go symétrique** (libre : 2,6 / 0,4 Go — page cache) | idem |
+| calcul pur, nœud 0 vs nœud 1 | 13,8 vs 14,2 Go/s → **3 %, du bruit** | `REPRISE.md:1523` |
+| lecture NVMe, nœud 0 vs nœud 1 | 22,41 vs 21,45 Go/s → **4 %** | `REPRISE.md:1524` |
+| **épinglage sur UN socket, charge réelle** (30B MoE) | **23,2 → 27,6 s, soit −19 %** | `docs/convertisseur.md:192` |
+| banc mémoire, lié à un socket | 20,7 → **24,7 Go/s** | `docs/convertisseur.md:101` |
+| 20 cœurs / +hyperthreads | 22,5 / 18,9 Go/s | plan du moteur |
+| NVMe 16 lecteurs | 5,4 → **31,1 Go/s** | idem |
+| passe Kimi-K3 | `sda` occupé **87,6 %**, CPU **21 %**, 133 Mio/s (plafond 205) | `rapport-passe-k3-disque.md` |
+
+Les deux dernières lignes sont la clé : **la passe lourde du projet est liée au disque, pas à l'interconnexion.** Pendant 26 minutes, le CPU est à 21 % — le QPI est quasiment au repos. Le séparer ne rapporte rien ; c'est le **motif d'accès disque** qui laisse 35 % sur la table (133 contre 205 Mio/s).
+
+\## Pourquoi le QPI n'est pas votre goulot
+
+Les deux seules mesures « inter-nœuds » du dépôt donnent 3 % et 4 % — de l'ordre du bruit de cette machine. Et surtout, l'expérience qui devait montrer le coût du QPI montre l'inverse : **restreindre un calcul au seul socket 1 le ralentit de 19 %**. La ressource rare n'est pas la liaison entre processeurs, c'est **la bande passante mémoire d'un socket**. Le micro-banc dit le contraire (20,7 → 24,7 Go/s en liant un socket) parce qu'il fait un flux unique : une charge réelle a beaucoup de flux simultanés et a besoin des deux contrôleurs mémoire.
+
+\## Ce que votre ségrégation apporte réellement
+
+1. **La reproductibilité des mesures — et c'est le gain le plus solide.** Le dépôt le répète partout : « la machine portait une charge de fond (bureau, autres projets) qui fait varier le temps mur de 30 % », et plusieurs campagnes ont dû être refaites sous charge 8-14. Isoler le bureau et l'affichage sur le nœud 0 rend les chiffres reproductibles. **Bén
+… [3380 caractères tronqués]
+
+### Tour 4 — <goal_round> Objective: "Produire un modèle nativement événementiel qui soit à son meilleur dans l'architecture de Drave … [1096 caractères tronqués]
+
+*52 appels d'outils.* Actions notables :
+
+- bash — Check trained model and bench outcome
+- bash — Check bench process state
+- bash — Kill diverged bench and start dense twin
+- bash — Stop leftover bench, confirm dense twin running
+- bash — Export trained routed model to GGUF
+- bash — Run reference and engine on trained routed model
+- bash — Run formal gate on trained routed model
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/exporter_gguf.py`
+- bash — Simplify exporter flags
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-reparti-moteur.sh`
+- bash — Run the distributed gate on our trained model
+- bash — Inspect distributed run output in detail
+- bash — Compare truncated vs full model perplexity
+- bash — Verify the reference flux gate is green
+- … et 37 autres
+
+**Synthèse produite :**
+
+⏵ Confusion trouvée : le jumeau dense avait `head_dim = 128` par défaut, pas 48 — la comparaison n'était pas à lecture égale
 
 ## 3. Travail accompli
 
@@ -164,8 +219,11 @@ Donc le « R̂ = 0,15 → 6,7× moins d'événements → ~100 tok/s » de `docs/
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/corpus_wikipedia.py` | 2 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-parcimonie-entrainee.md` | 1 | 3 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/essai_blocs.py` | 1 | 5 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/exporter_gguf.py` | 1 | 9 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/exporter_gguf.py` | 1 | 17 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte_moteur.py` | 1 | 1 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py` | 1 | 1 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-reparti-moteur.sh` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs` | 0 | 2 |
 
 ### Sous-agents lancés
 
@@ -215,7 +273,7 @@ Donc le « R̂ = 0,15 → 6,7× moins d'événements → ~100 tok/s » de `docs/
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 111 autres
+- … et 169 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -343,7 +401,7 @@ Donc le « R̂ = 0,15 → 6,7× moins d'événements → ~100 tok/s » de `docs/
 
 ## 5. Erreurs rencontrées
 
-8 sorties en erreur ou divergentes. Les premières :
+12 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : ```  ### 🤖 Assistant  ⏵ **En transformers 5, `AutoModel` rend directement `Qwen2Model` (pas de `.model`). Je corrige le diagnostic.**  - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitH
 - **T2** : 3310393 bash -c pgrep -af "essai_decharge" | grep python | head; echo "--- logs ---"; tail -2 /tmp/ec_d192_lr3e3.log 2>/dev/null; tail -2 /tmp/ec_d192_lr1e3.log 2>/dev/null; echo "---"; ls -la /tmp/ec
@@ -353,9 +411,14 @@ Donc le « R̂ = 0,15 → 6,7× moins d'événements → ~100 tok/s » de `docs/
 - **T3** : gu = poids[p + "mlp.experts.gate_up_proj"]      # (E, 2·ff, d)          ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ KeyError: 'model.layers.0.mlp.experts.gate_up_proj' === en-tête vu par le moteur ===  thre
 - **T3** : /tmp/moe_ids.txt : 256 tokens, fenêtres de 256 [moe] couche 0 : « blk.0.ffn_gate_exps.weight » de type F32 — format sans noyau ni déquantification  thread 'main' (3319853) panicked at src/model.rs:148
 - **T3** : # /tmp/moe_test.gguf : 51 tenseurs · 6.2 Mo (f32, experts Q4_0) · 17 métadonnées # architecture 4 couches · 192 cachés · 8 experts (top-2) · norm_topk_prob=True /tmp/moe_ids.txt : 256 tokens, fenêtres
+- **T3** : assert a.shape[-1] % 32 == 0, f"dernière dimension non multiple de 32 : {a.shape}"            ^^^^^^^^^^^^^^^^^^^^^ AssertionError: dernière dimension non multiple de 32 : (4, 64, 48) === le moteur ch
+- **T4** : [config] mélanges d'experts chargés : 4/4 couches · mapping absent (experts en clair dans le fichier) [config] puits appris sur 0/4 couches · n_rot 48 · ffn 768 · experts 8 [config] rotation : RoPE si
+- **T4** : [flux] quantification : 127 niveaux, seuil 0, top-k 0, renorm false [flux] pilote : 2 couches en local, 2 chez le pair, 128 jetons   référence locale  : perplexité 1186.5313  (0.1 s)   deux nœuds     
+- **T4** : ~~~~~^^^^^^^^^^^^^^^^^^^^^^^ KeyError: 'model.layers.0.mlp.gate.weight' === charge ===  thread 'main' (3374822) panicked at src/main.rs:2427:40: === ppl dense === [exit code: 1]
 
 ## 6. Commits
 
 - Parcimonie entraînée : premier banc, et la loi du coût par événement mesurée dans le moteur  Le dépôt n'avait jamais entraîné un seul modèle (zéro rétropropagat
 - Porte d'exécution : un modèle entraîné ici tourne dans Drave, logits identiques  Le moteur lit le GGUF en place et n'avait pas de convertisseur : le dépôt ne po
+- Réparti : --ids-file était ignoré, et les jetons synthétiques sortaient du vocabulaire  Deux défauts trouvés en essayant de répartir le modèle entraîné ici.  1.
 

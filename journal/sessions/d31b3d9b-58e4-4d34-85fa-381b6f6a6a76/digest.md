@@ -4302,3 +4302,1104 @@ corrélation des logits par position : min 1.000000 (pos 6) · moyenne 1.000000 
 ⏵ Porte d'exécution TENUE : le moteur calcule notre modèle au bit près
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/exporter_gguf.py tools/porte_moteur.py tools/essai_blocs.py && git commit -q -m \"Porte d'exécution : un modèle entraîné ici tourne dans Drave, logits identiques\n\nLe moteur lit le GGUF en place et n'avait pas de conve … [1342 caractères tronqués]`
+
+  ```
+a6f9bb7 Porte d'exécution : un modèle entraîné ici tourne dans Drave, logits identiques
+  ```
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"entrainer_moteur.py — entraîner un modèle que DRAVE SAIT EXÉCUTER.\n\nPOURQUOI CE SCRIPT APRÈS LES BANCS. `essai_decharge.py` et `essai_blocs.py` ont\nmesuré la qualité et le coût des deux familles, mais dans des architectures\n« de banc » (LayerNorm, pas d … [6605 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "for f in /tmp/blocs_e8.log /tmp/blocs_e8_dech.log; do echo \"=== $f ===\"; tail -2 \"$f\"; done; nvidia-smi --query-gpu=index,memory.used --format=csv,noheader", "description": "Check GPU occupancy and bench progress"}`
+
+  ```
+=== /tmp/blocs_e8.log ===
+=== routé · 7774080 paramètres · 2365440 poids traversés par jeton · lr 0.001 ===
+  pas    500 · perte 2.1556 · val 3.2264 bits/octet · 36 s
+=== /tmp/blocs_e8_dech.log ===
+  pas  10500 · perte 2.0721 · val 3.1654 bits/octet · 385 s
+  pas  11000 · perte 2.0555 · val 3.1486 bits/octet · 403 s
+0, 2136 MiB
+1, 1332 MiB
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 /home/stephane/gpu-env/bin/python -u tools/entrainer_moteur.py --famille route --dim 64 --couches 2 --tetes 2 --cache 96 --experts 4 --k 2 --pas 20 --eval-tous 20 --sortie /tmp/essai_moteur --sans-gpu 2>&1 | grep -v \"Loa … [108 caractères tronqués]`
+
+  ```
+# route · 0.12 M paramètres · 0.03 M poids LUS par jeton et par couche · 0.05 M stockés · corpus 100276153 octets · cpu
+  pas     20 · perte 4.0048 · val 5.7634 bits/octet · 2 s
+
+  # meilleur point : pas 20 · val 5.7634 bits/octet
+  # écrit dans /tmp/essai_moteur · 0.12 M paramètres · 0.03 M poids lus/jeton/couche
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/exporter_gguf.py", "new_string": "def _arch(cfg):\n    \"\"\"Le nom d'architecture que le moteur lira dans `general.architecture` :\n    c'est lui qui préfixe TOUTES les clefs de configuration (`gguf.rs::cfg`).\"\"\"\n    mt = cfg. … [4246 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/exporter_gguf.py has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/exporter_gguf.py", "new_string": "        if p + \"self_attn.q_norm.weight\" in poids:\n            t += [(b + \"attn_q_norm.weight\", poids[p + \"self_attn.q_norm.weight\"]),\n                  (b + \"attn_k_norm.weight\", poids[p … [1370 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/exporter_gguf.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"def tenseurs_depuis_hf\" -A 8 tools/exporter_gguf.py | head -12", "description": "Check function head for est_moe/n_exp definitions"}`
+
+  ```
+201:def tenseurs_depuis_hf(poids, cfg, experts_q4=True):
+202-    """La table de conversion, et les pièges qu'elle évite (cf. docstring).
+203-
+204-    Les tenseurs 2D sont écrits en **Q8_0** : c'est le type que `q8_view` et
+205-    l'emprunt de blocs attendent côté moteur. Les normes (1D) restent en F32 —
+206-    les quantifier n'apporterait rien et changerait le calcul.
+207-    """
+208-    n_l = cfg["num_hidden_layers"]
+209-    n_exp = int(cfg.get("num_experts", cfg.get("num_local_experts")))
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/exporter_gguf.py", "new_string": "    n_l = cfg[\"num_hidden_layers\"]\n    est_moe = _arch(cfg) == \"qwen3moe\"\n    n_exp = int(cfg.get(\"num_experts\", cfg.get(\"num_local_experts\")) or 0)", "old_string": "    n_l = cfg[\"num_h … [92 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/exporter_gguf.py has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/exporter_gguf.py", "new_string": "    n_exp = cfg.get(\"num_experts\", cfg.get(\"num_local_experts\"))\n    detail = (f\"{n_exp} experts (top-{cfg['num_experts_per_tok']}) · \"\n              f\"norm_topk_prob={cfg.get('norm_topk_p … [474 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/exporter_gguf.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && /home/stephane/gpu-env/bin/python tools/exporter_gguf.py --hf /tmp/essai_moteur --sortie /tmp/essai_moteur.gguf 2>&1 | tail -3; echo \"=== le moteur charge-t-il ? ===\"; ./drave-core/target/release/drave /tmp/essai_moteur.gguf --tens … [102 caractères tronqués]`
+
+  ```
+assert a.shape[-1] % 32 == 0, f"dernière dimension non multiple de 32 : {a.shape}"
+           ^^^^^^^^^^^^^^^^^^^^^
+AssertionError: dernière dimension non multiple de 32 : (4, 64, 48)
+=== le moteur charge-t-il ? ===
+
+thread 'main' (3327181) panicked at src/main.rs:2427:40:
+ouverture de l'en-tête GGUF: Os { code: 2, kind: NotFound, message: "No such file or directory" }
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/exporter_gguf.py", "new_string": "def q4_0_encoder(a):\n    \"\"\"Blocs de 32 poids : échelle f16 puis 16 octets (nibbles bas = 0..15,\n    nibbles hauts = 16..31). Reproduction de `quantize_row_q4_0_ref` de ggml —\n    `d = max_si … [788 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/exporter_gguf.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && /home/stephane/gpu-env/bin/python tools/exporter_gguf.py --hf /tmp/moe_hf --sortie /tmp/moe_test.gguf 2>&1 | tail -2 && ./drave-core/target/release/drave /tmp/moe_test.gguf --tensors 2>&1 | head -2; echo \"=== benchs ===\"; tail -1 / … [125 caractères tronqués]`
+
+  ```
+# /tmp/moe_test.gguf : 51 tenseurs · 4.6 Mo (f32, experts Q4_0) · 17 métadonnées
+# architecture 4 couches · 192 cachés · 8 experts (top-2) · norm_topk_prob=True
+qwen3moe · 1 fichiers · 51 tenseurs · 0.00 Go de poids · en-têtes lus en 2.275952ms
+ · block_count 4 · embedding_length 192 · feed_forward_length 384 · attention.head_count 4 · attention.head_count_kv 2 · expert_count 8 · expert_used_count 2 · context_length 1024
+=== benchs ===
+  pas   1000 · perte 1.8508 · val 2.7631 bits/octet · 73 s
+  pas  12000 · perte 2.0086 · val 3.1220 bits/octet · 439 s
+  ```
+
+- **bash** `{"command": "pgrep -af \"essai_bloc[s].*decharge\" | awk '{print $1}' | head -3", "description": "Find decharge bench processes"}`
+
+  ```
+3318464
+  ```
+
+- **bash** `{"command": "kill 3318464 2>/dev/null; pkill -f \"lb1.s[h]\"; sleep 2; pgrep -af \"essai_bloc[s]\" | head -3; echo \"--- GPU1 libéré ---\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && setsid nohup env CUDA_VISIBLE_DEVICES=1 /home/stephane/gpu-env/bin/python -u tools/entrainer_moteur.py --f … [312 caractères tronqués]`
+
+  ```
+3318463 /home/stephane/gpu-env/bin/python -u tools/essai_blocs.py --dim 192 --cache 768 --experts 8 --k 2 --pas 20000
+--- GPU1 libéré ---
+# route · 7.58 M paramètres · 0.59 M poids LUS par jeton et par couche · 1.92 M stockés · corpus 100276153 octets · cuda
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,60p' tools/porte-flux.sh", "description": "Read the proven flux gate script"}`
+
+  ```
+#!/bin/bash
+# Porte du DÉCOUPAGE : deux nœuds, un petit modèle, cinq modes de flux.
+#
+# Pourquoi elle existe : le défaut de la `pre` reçue (sprint 13) a vécu jusqu'à
+# ce qu'on compare des tenseurs à la main sur un modèle de 365 Go et quatre
+# minutes par passe. Aucune porte ne couvrait un COUPLE DE NŒUDS ; celle-ci le
+# fait en quelques secondes, sur Qwen2.5-0.5B, et elle attrape trois familles de
+# défauts d'un coup :
+#   · la couture (l'état rendu par le second nœud doit être celui de la passe
+#     complète — pour les modes exacts, au bit près) ;
+#   · le cadriciel de flux lui-même (en-tête, mode, compte `np`, positions) ;
+#   · l'accord entre les modes (un mode avec perte ne doit pas coûter plus que
+#     son codec).
+#
+# Les modes 0 (f32 dense), 1 et 3 (lot dense) sont EXACTS : écart attendu 0,00e0.
+# Les modes 2 et 4 passent par le codec quantifié (indices par écarts, valeurs i8,
+# une échelle par bloc de 32 canaux) : leur écart est une perte assumée, et la
+# porte vérifie qu'il reste sous un plafond mesuré, pas qu'il est nul.
+#
+#   tools/porte-flux.sh            la porte
+#   MODELE=... tools/porte-flux.sh autre modèle (dense, sans hyper-connexions)
+
+set -u
+cd "$(dirname "$0"
+… [1602 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"ppl-reparti\" -A 6 tools/porte-flux.sh | head -20", "description": "Get distributed perplexity invocation"}`
+
+  ```
+78:    sortie=$(timeout 180 "$D" "$MODELE" --ppl-reparti "127.0.0.1:$PORT" \
+79-             --couches-locales "$COUCHES" --limit "$N_IDS" --ctx "$CTX" --threads 8 "$@" 2>&1)
+80-    code=$?
+81-    arreter_serveur
+82-    local ecart
+83-    ecart=$(printf '%s\n' "$sortie" | grep -oE "écart +: +[0-9.e+-]+" | grep -oE "[0-9.e+-]+$")
+84-    local ppl_ref ppl_deux
+  ```
+
+- **bash** `{"command": "sleep 420; echo \"=== moteur_route ===\"; tail -3 /tmp/moteur_route.log; echo \"=== bench E8 routé ===\"; tail -2 /tmp/blocs_e8.log", "description": "Check training progress", "timeoutMs": 480000}`
+
+  ```
+=== moteur_route ===
+  pas   7000 · perte 1.9169 · val 3.0981 bits/octet · 357 s
+  pas   8000 · perte 1.9464 · val 3.0803 bits/octet · 404 s
+  pas   9000 · perte 1.8830 · val 3.0673 bits/octet · 451 s
+=== bench E8 routé ===
+  pas   7000 · perte 1.4905 · val 2.2442 bits/octet · 506 s
+  pas   7500 · perte 1.4578 · val 2.2202 bits/octet · 541 s
+  ```
+
+- **bash** `{"command": "sleep 480; echo \"=== moteur_route ===\"; tail -2 /tmp/moteur_route.log; echo \"=== bench E8 ===\"; grep -E \"VERDICT|^  dense |^  routé \" /tmp/blocs_e8.log | tail -4; tail -1 /tmp/blocs_e8.log", "description": "Check both runs again", "timeoutMs": 540000}`
+
+  ```
+=== moteur_route ===
+  pas  18000 · perte 1.8424 · val 2.9619 bits/octet · 894 s
+  pas  19000 · perte 1.7317 · val 2.9631 bits/octet · 943 s
+=== bench E8 ===
+  pas  15500 · perte nan · val nan bits/octet · 1051 s
+  ```
+
+### 👤 Utilisateur
+
+Hypothèse de changement de configuration matériel : Si je déploie ce projet sur une station de travail bi-processeur (Xeon E5-2687W v3) sous Linux, configurée avec une topologie NUMA asymétrique stricte pour séparer le système du calcul intensif.
+
+Voici la ségrégation matérielle exacte de la machine :
+- Nœud NUMA 0 (OS & Tâches de fond) : CPU 0, 32 Go de RAM, SSD NVMe système, et GPU AMD dédié à l'affichage.
+- Nœud NUMA 1 (Calcul Intensif) : CPU 1, 128 Go de RAM, SSD NVMe dédié au stockage des datasets/modèles, et un tandem de GPU Nvidia Quadro RTX 5000 reliées par un pont NVLink.
+
+L'objectif critique est d'éviter toute latence et tout goulot d'étranglement sur le bus d'interconnexion QPI entre les deux processeurs.Est-ce bénéfique
+
+### 🤖 Assistant
+
+⏵ Question matériel : je réponds à partir de ce que la machine a déjà mesuré, pas de principes
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== mesures NUMA / affinité ===\"; grep -rn \"numa\\|NUMA\" reports/*.md docs/*.md REPRISE.md 2>/dev/null | grep -iE \"go/s|%|mesur|écart|gain\" | head -18", "description": "Search repo for NUMA measurements"}`
+
+  ```
+=== mesures NUMA / affinité ===
+reports/rapport-gpu-tandem-nvlink.md:121:+6 %, cache RAM d'experts plus lent, épinglage NUMA perdant).
+reports/rapport-materiel-disque-ou-cpu.md:62:  d'experts** est plus lent (+4 % à 4 Go, +21 % à 32 Go) et l'**épinglage NUMA**
+reports/rapport-passage-a-l-echelle.md:165:Test NUMA préliminaire (8 threads, `numactl`) : repère 20,7 → **24,7 Go/s** en
+docs/convertisseur.md:101:- **NUMA d'abord** : 20,7 → **24,7 Go/s** en liant un socket (mesuré au banc).
+docs/convertisseur.md:102:  Un plan de placement qui ignore les nœuds NUMA laisse 20 % sur la table, et
+docs/convertisseur.md:173:| 5 | placement : épinglage NUMA, threads par couche | ✅ mesuré, **perdant** (`--pin` : 23,2 → 27,6 s) | 20,7 → 24,7 Go/s mesuré au banc |
+docs/convertisseur.md:192:| 4 bis | **épinglage NUMA** (`--pin`) | ✅ mesuré, **négatif** | 23,2 → 25,5 s (cœurs physiques) et → 27,6 s (un socket) sur le 30B MoE |
+docs/glossaire.md:243:`docs/contexte-long.md:355-366`), l'épinglage NUMA (« mesuré, perdant »,
+REPRISE.md:1518:sur le **NUMA node 0**. **NVLink présent entre les GPU : 25,78 Go/s** (2× le
+REPRISE.md:1523:| NUMA, calcul pur | 13,8 (node 0) vs 14,2 (node 1) Go/s — **bruit** |
+REPR
+… [66 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== topologie réelle vue par le moteur ===\"; ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --materiel 2>&1 | head -40", "description": "Run engine hardware detection"}`
+
+  ```
+=== topologie réelle vue par le moteur ===
+CPU  20 cœurs physiques · 40 threads logiques · 2 sockets NUMA · caches L1 32 Ko · L2 256 Ko · L3 25600 Ko
+     nœud 0 : 20 CPU · 66 Go
+     nœud 1 : 20 CPU · 66 Go
+RAM  132 Go au total · 104 Go disponibles
+GPU  0 · Quadro RTX 5000 · 13.4/16.0 Go libres · 1 lien(s) NVLink
+GPU  1 · Quadro RTX 5000 · 14.3/16.0 Go libres · 1 lien(s) NVLink
+DISQ /home/stephane/FastNVMe · 29 Go libres · nœud 0
+DISQ /home/stephane/Data13TB · 2123 Go libres · nœud ?
+[materiel] taille d'expert introuvable (couche 0) : le plan utilisera 9,95 Mo par expert, valeur de DeepSeek-V4.1
+Modèle : qwen2 · 0.5 Go · dense (aucun expert)
+
+
+Plan pour un contexte de 512 jetons, d'après les dimensions du modèle :
+  threads          : 20
+  lecteurs disque  : 16
+  cache experts    : 17.8 Go en VRAM
+  cache KV         : 32 bits
+
+  · threads = 20 cœurs physiques (40 logiques détectés) — au-delà, la bande passante mémoire sature : 20 cœurs = 22,5 Go/s, 20 cœurs + hyperthreads = 18,9
+  · lecteurs disque = 16 — le NVMe passe de 5,4 Go/s (1 lecteur) à 31,1 (16), soit ×6 ; c'est ce qui rend le chargement à la demande viable
+  · cache d'experts VRAM = 17.8 Go — 27.8 Go libres moins 2 de ré
+… [423 caractères tronqués]
+  ```
+
+- **bash** `{"command": "numactl --hardware 2>&1 | head -12; echo \"=== distances ===\"; cat /sys/devices/system/node/node0/distance 2>/dev/null; cat /sys/devices/system/node/node1/distance 2>/dev/null; echo \"=== disques et leur nœud ===\"; for d in sda nvme0n1 nvme1n1; do n=$(cat /sys/block/$d/device/numa_nod … [271 caractères tronqués]`
+
+  ```
+available: 2 nodes (0-1)
+node 0 cpus: 0 1 2 3 4 5 6 7 8 9 20 21 22 23 24 25 26 27 28 29
+node 0 size: 64347 MB
+node 0 free: 2617 MB
+node 1 cpus: 10 11 12 13 14 15 16 17 18 19 30 31 32 33 34 35 36 37 38 39
+node 1 size: 64448 MB
+node 1 free: 384 MB
+node distances:
+node     0    1 
+   0:   10   21 
+   1:   21   10 
+=== distances ===
+10 21
+21 10
+=== disques et leur nœud ===
+sda → numa_node ?
+nvme0n1 → numa_node 0
+nvme1n1 → numa_node ?
+=== GPU et leur nœud ===
+/sys/class/drm/card1/device/numa_node = 0
+/sys/class/drm/card2/device/numa_node = 0
+  ```
+
+- **bash** `{"command": "nvidia-smi --query-compute-apps=pid,process_name,used_memory --format=csv 2>&1 | head -6; echo \"=== qui tourne sur les cœurs ===\"; ps -eo pid,pcpu,comm --sort=-pcpu 2>/dev/null | head -6; echo \"=== formation en cours ===\"; tail -1 /tmp/moteur_route.log; tail -1 /tmp/blocs_e8.log", " … [50 caractères tronqués]`
+
+  ```
+pid, process_name, used_gpu_memory [MiB]
+3318463, /home/stephane/gpu-env/bin/python, 880 MiB
+3327294, /home/stephane/gpu-env/bin/python, 866 MiB
+=== qui tourne sur les cœurs ===
+    PID %CPU COMMAND
+3327294  100 python
+3318463  100 python
+3302400 67.1 node-MainThread
+2062778 42.6 node-MainThread
+  11117 32.5 node-MainThread
+=== formation en cours ===
+  pas  19000 · perte 1.7317 · val 2.9631 bits/octet · 943 s
+  pas  16500 · perte nan · val nan bits/octet · 1086 s
+  ```
+
+### 🤖 Assistant
+
+⏵ Réponse chiffrée sur la ségrégation NUMA, à partir des mesures du dépôt
+
+## Réponse courte
+
+**Une partie est bénéfique, une autre est probablement contre-productive, et la raison invoquée — le QPI — n'est pas le goulot sur cette machine.** Le dépôt a déjà mesuré les trois régimes qui comptent, et ils ne répondent pas de la même façon.
+
+## Ce que la machine mesure aujourd'hui
+
+| mesure | valeur | source |
+|---|---|---|
+| distances NUMA | 10 local / **21 distant** (2,1×) | `numactl --hardware` |
+| RAM | **64,3 / 64,4 Go symétrique** (libre : 2,6 / 0,4 Go — page cache) | idem |
+| calcul pur, nœud 0 vs nœud 1 | 13,8 vs 14,2 Go/s → **3 %, du bruit** | `REPRISE.md:1523` |
+| lecture NVMe, nœud 0 vs nœud 1 | 22,41 vs 21,45 Go/s → **4 %** | `REPRISE.md:1524` |
+| **épinglage sur UN socket, charge réelle** (30B MoE) | **23,2 → 27,6 s, soit −19 %** | `docs/convertisseur.md:192` |
+| banc mémoire, lié à un socket | 20,7 → **24,7 Go/s** | `docs/convertisseur.md:101` |
+| 20 cœurs / +hyperthreads | 22,5 / 18,9 Go/s | plan du moteur |
+| NVMe 16 lecteurs | 5,4 → **31,1 Go/s** | idem |
+| passe Kimi-K3 | `sda` occupé **87,6 %**, CPU **21 %**, 133 Mio/s (plafond 205) | `rapport-passe-k3-disque.md` |
+
+Les deux dernières lignes sont la clé : **la passe lourde du projet est liée au disque, pas à l'interconnexion.** Pendant 26 minutes, le CPU est à 21 % — le QPI est quasiment au repos. Le séparer ne rapporte rien ; c'est le **motif d'accès disque** qui laisse 35 % sur la table (133 contre 205 Mio/s).
+
+## Pourquoi le QPI n'est pas votre goulot
+
+Les deux seules mesures « inter-nœuds » du dépôt donnent 3 % et 4 % — de l'ordre du bruit de cette machine. Et surtout, l'expérience qui devait montrer le coût du QPI montre l'inverse : **restreindre un calcul au seul socket 1 le ralentit de 19 %**. La ressource rare n'est pas la liaison entre processeurs, c'est **la bande passante mémoire d'un socket**. Le micro-banc dit le contraire (20,7 → 24,7 Go/s en liant un socket) parce qu'il fait un flux unique : une charge réelle a beaucoup de flux simultanés et a besoin des deux contrôleurs mémoire.
+
+## Ce que votre ségrégation apporte réellement
+
+1. **La reproductibilité des mesures — et c'est le gain le plus solide.** Le dépôt le répète partout : « la machine portait une charge de fond (bureau, autres projets) qui fait varier le temps mur de 30 % », et plusieurs campagnes ont dû être refaites sous charge 8-14. Isoler le bureau et l'affichage sur le nœud 0 rend les chiffres reproductibles. **Bénéfique.**
+2. **La VRAM rendue au calcul.** Le plan du moteur dimensionne le cache d'experts sur la VRAM *libre* ; un GPU d'affichage en consomme une partie en permanence. Passer l'affichage sur l'AMD est un délestage net. **Bénéfique.**
+3. **Le disque dédié aux modèles/datasets**, séparé du disque système. **Bénéfique** — mais attention : sur cette machine le NVMe est sur le nœud 0 et les deux Quadro **aussi** (mesuré : `card1` et `card2` → `numa_node 0`). Votre plan les déplace ; c'est un changement de câblage, pas de configuration.
+
+## Ce qu'elle coûte
+
+1. **La mémoire asymétrique 32/128 Go est le point faible.** Aujourd'hui c'est 64/64. Une charge dense (0,5 B à 30 B en RAM) forcée sur un seul socket paie les ~20 % mesurés. Et sur le nœud 1, 128 Go n'ont d'intérêt que si les quatre canaux sont peuplés équilibré — sinon la bande passante baisse au lieu de monter. Le gain réel de 128 Go serait de garder le **dense de Kimi-K3 (57,93 Gio lus une fois par passe)** en page cache… mais le dépôt a **déjà mesuré que la page cache ne le retient pas** (deux passes : 1 516 430 puis 1 522 584 ms). Donc 128 Go n'achètent pas ce qu'on croit.
+2. **Figer la topologie fige la stratégie.** Drave alterne entre charges disque (un socket suffit) et charges mémoire (les deux sont nécessaires). Une config figée « calcul sur le nœud 1 » transforme un choix réversible en contrainte.
+
+## Ce que je recommande
+
+- **Garder la RAM symétrique** (64/64) : la flexibilité vaut plus que 128 Go d'un côté, parce que la bande passante d'un socket est le facteur limitant et que la moitié des charges n'en a pas besoin.
+- **Séparer par placement, pas par topologie** : `numactl --cpunodebind=1 --membind=1` pour les passes disque, **les deux sockets** pour les passes mémoire. Le moteur sait déjà le faire (`--pin`), et la mesure a montré que le forçage systématique est perdant.
+- **Isoler l'affichage et le bureau** (nœud 0 + GPU AMD) : oui, pour la reproductibilité et la VRAM.
+- **Deux Quadro sur le même socket, avec NVLink** : les chiffres sont là (25,78 Go/s entre cartes, 2× le PCIe). Vérifiez surtout que chaque carte a **son propre root complex** — sinon elles se partagent le x8 (6,5 Go/s mesuré) et le tandem perd son intérêt.
+- **Le vrai levier reste ailleurs et il est chiffré** : le motif d'accès disque (+35 % possibles sur la passe), et la cible « gros modèle, peu lu » sur laquelle je travaille en ce moment.
+
+## Pour trancher sur la machine, pas en théorie
+
+Le dépôt a déjà la porte : `tools/test-plage-k3.sh` et le protocole de passe. Trois configurations A/B, mesures entrelacées (la charge de fond variant de 30 %, l'entrelacement est obligatoire) :
+
+1. configuration actuelle ;
+2. `numactl --cpunodebind=1 --membind=1` ;
+3. `--pin` du moteur (première moitié de chaque nœud).
+
+Sur deux charges : la passe K3 (disque) et une passe dense 0,5 B (mémoire). Si le nœud 1 gagne sur la passe disque et perd sur la dense — c'est ce que les mesures actuelles prédisent — alors la bonne config n'est pas « tout sur le nœud 1 », c'est **un ordonnanceur qui place selon le régime**. Je peux le lancer si vous voulez le chiffre sur votre matériel plutôt que mon extrapolation.
+
+*Note d'état, pour ne rien cacher : la formation « moteur » en cours est à 19 000/20 000 pas (2,963 bits/octet), et le banc de routage a divergé en NaN à 16 500 pas — je le reprends après cette réponse.*
+
+
+## Tour 4
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Produire un modèle nativement événementiel qui soit à son meilleur dans l'architecture de Drave : parcimonie ENTRAÎNÉE (décharge/LIF ou parcimonie structurée), exécutable en listes d'événements, et découpable en unités de travail autonomes plaçables sur les unités d'une machine (cœurs, GPU, disque) puis sur plusieurs machines en réseau. Chaque affirmation porte sa mesure : qualité contre un jumeau dense à paramètres et budget égaux, densité d'activation R̂, événements et octets par jeton, débit, et mise à l'échelle sur N unités. Livrables : un prototype entraîné et mesuré, sa porte d'exécution dans Drave, et la démonstration de répartition."
+Round: 2/40
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Suite du cycle : le modèle entraîné passe-t-il la porte du moteur ?
+
+- **bash** `{"command": "tail -4 /tmp/moteur_route.log; echo \"=== sortie ===\"; ls -la /tmp/moteur_route/ 2>/dev/null | head -6; echo \"=== bench ===\"; grep -E \"VERDICT|^  dense |^  routé |meilleur\" /tmp/blocs_e8.log | tail -5", "description": "Check trained model and bench outcome"}`
+
+  ```
+Writing model shards:   0%|          | 0/1 [00:00<?, ?it/s]Writing model shards: 100%|██████████| 1/1 [00:00<00:00, 17.48it/s]
+
+  # meilleur point : pas 20000 · val 2.9490 bits/octet
+  # écrit dans /tmp/moteur_route · 7.58 M paramètres · 0.59 M poids lus/jeton/couche
+=== sortie ===
+total 29624
+drwxr-xr-x.   2 stephane stephane      100  8 oct 10:54 .
+drwxrwxrwt. 155 root     root       805680  8 oct 10:54 ..
+-rw-r--r--.   1 stephane stephane      956  8 oct 10:54 config.json
+-rw-r--r--.   1 stephane stephane      153  8 oct 10:54 generation_config.json
+-rw-------.   1 stephane stephane 30325816  8 oct 10:54 model.safetensors
+=== bench ===
+  # meilleur point : pas 19500 · val 2.2250 bits/octet
+  ```
+
+- **bash** `{"command": "pgrep -af \"essai_bloc[s]\" | head -3; echo \"---\"; tail -3 /tmp/blocs_e8.log; echo \"=== GPU ===\"; nvidia-smi --query-compute-apps=pid,used_memory --format=csv,noheader", "description": "Check bench process state"}`
+
+  ```
+3318463 /home/stephane/gpu-env/bin/python -u tools/essai_blocs.py --dim 192 --cache 768 --experts 8 --k 2 --pas 20000
+---
+  pas  16500 · perte nan · val nan bits/octet · 1086 s
+  pas  17000 · perte nan · val nan bits/octet · 1104 s
+  pas  17500 · perte nan · val nan bits/octet · 1121 s
+=== GPU ===
+3318463, 880 MiB
+  ```
+
+- **bash** `{"command": "kill 3318463 2>/dev/null; sleep 2; pkill -f \"lb0.s[h]\" 2>/dev/null; sleep 1; pgrep -af \"essai_bloc[s]\" | head -2; echo \"--- GPU libre ---\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && setsid nohup env CUDA_VISIBLE_DEVICES=0 /home/stephane/gpu-env/bin/python -u tools/entr … [296 caractères tronqués]`
+
+  ```
+3329387 /home/stephane/gpu-env/bin/python -u tools/essai_blocs.py --dim 192 --cache 768 --experts 32 --k 2 --pas 20000
+--- GPU libre ---
+# dense · 3.00 M paramètres · 0.59 M poids LUS par jeton et par couche · 0.59 M stockés · corpus 100276153 octets · cuda
+  ```
+
+- **bash** `{"command": "kill 3329387 2>/dev/null; sleep 2; pkill -f \"lb0.s[h]\" 2>/dev/null; sleep 1; pgrep -af \"essai_bloc[s]\" | head -2; echo \"--- reste ---\"; pgrep -af \"entrainer_moteu[r]\" | head -2; nvidia-smi --query-compute-apps=pid,used_memory --format=csv,noheader", "description": "Stop leftover … [36 caractères tronqués]`
+
+  ```
+--- reste ---
+3329437 bash -c kill 3318463 2>/dev/null; sleep 2; pkill -f "lb0.s[h]" 2>/dev/null; sleep 1; pgrep -af "essai_bloc[s]" | head -2; echo "--- GPU libre ---"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && setsid nohup env CUDA_VISIBLE_DEVICES=0 /home/stephane/gpu-env/bin/python -u tools/entrainer_moteur.py --famille dense --dim 192 --couches 4 --tetes 4 --cache 768 --pas 20000 --sortie /tmp/moteur_dense --eval-tous 1000 > /tmp/moteur_dense.log 2>&1 < /dev/null & sleep 20; tail -3 /tmp/moteur_dense.log
+3329439 /home/stephane/gpu-env/bin/python -u tools/entrainer_moteur.py --famille dense --dim 192 --couches 4 --tetes 4 --cache 768 --pas 20000 --sortie /tmp/moteur_dense --eval-tous 1000
+3329439, 936 MiB
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && /home/stephane/gpu-env/bin/python -c \"\nimport numpy as np\nd = np.frombuffer(open('data/corpus_en_val.txt','rb').read(256), dtype=np.uint8)\nopen('/tmp/route_ids.txt','w').write(','.join(str(int(v)) for v in d))\nprint('ids écrits  … [222 caractères tronqués]`
+
+  ```
+ids écrits : 256
+# /tmp/moteur_route.gguf : 51 tenseurs · 4.6 Mo (f32, experts Q4_0) · 17 métadonnées
+# architecture 4 couches · 192 cachés · 8 experts (top-2) · norm_topk_prob=True
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && /home/stephane/gpu-env/bin/python tools/porte_moteur.py --hf /tmp/moteur_route --ids /tmp/route_ids.txt --logits /tmp/route_ref.bin 2>&1 | grep -v \"Loading weights\" | tail -3; echo \"=== moteur ===\"; timeout 900 ./drave-core/targe … [274 caractères tronqués]`
+
+  ```
+# quantification appliquée à la référence : 22 tenseurs Q8_0, 8 experts Q4_0
+# référence : 255 prédictions · NLL 5.1534 nats · perplexité 173.0197
+# logits écrits : /tmp/route_ref.bin (256 positions × 256)
+=== moteur ===
+[config] mélanges d'experts chargés : 4/4 couches · mapping absent (experts en clair dans le fichier)
+[config] puits appris sur 0/4 couches · n_rot 48 · ffn 768 · experts 8
+     255 tokens notés — perplexité cumulée 173.020  (1236.2 tok/s)
+logits exportés : /tmp/route_eng.bin — 255 positions × 256 valeurs
+=== perplexité 173.0196 sur 255 tokens (0 événements, 0.2 s) ===
+    1235.9 tok/s effectifs (avant + tête)
+    attention : 0.00 M paires (requête, clé) par token
+    paires (poids × activation) par token : attention 0.4 M · experts 1.8 M · partagé 0.0 M · scores 2 K · total 2.3 M
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && /home/stephane/gpu-env/bin/python tools/compare_logits.py /tmp/route_eng.bin /tmp/route_ref.bin /tmp/route_ids.txt --porte 2>&1 | tail -8; echo \"code retour : $?\"", "description": "Run formal gate on trained routed model", "timeout … [12 caractères tronqués]`
+
+  ```
+corrélation des logits par position : min 1.000000 (pos 59) · moyenne 1.000000 · max 1.000000
+  positions SATURÉES (NLL réf < 0.05) : 0/255 — exclues de la corrélation, couvertes par le top-1
+  corrélation sur les 255 positions utiles : min 1.000000 · moyenne 1.000000
+  sous 0.95 : 0/255 (0.0 %) · au-dessus : 100.0 % (seuil 99 %) · plancher 0.9 respecté
+  tranche     0-   63 : corrélation moyenne 1.00000 · top-1 64/64 (100.0 %)
+  tranche    64-  254 : corrélation moyenne 1.00000 · top-1 191/191 (100.0 %)
+corrélation des logits (position 0) : 1.000000
+✅ porte de correction tenue (100.0 % des positions UTILES au-dessus de 0.95, min 1.0000 >= plancher 0.9, top-1 100.0 % sur toutes les positions, 0 saturées exclues de la corrélation)
+code retour : 0
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/exporter_gguf.py", "new_string": "        else:\n            # Jumeau dense : sa FFN peut être quantifiée en Q4_0 COMME les experts\n            # du routé. Sans cela, la comparaison « à lecture égale » serait\n            # faussé … [886 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/exporter_gguf.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport re\np = \"tools/exporter_gguf.py\"\ns = open(p).read()\ns = s.replace('''    p.add_argument(\"--experts-f32\", action=\"store_true\",\n                   help=\"écrire les experts en F32 (le moteur les REFUSE … [900 caractères tronqués]`
+
+  ```
+ok
+204:def tenseurs_depuis_hf(poids, cfg, experts_q4=True):
+315:    tenseurs = tenseurs_depuis_hf(poids, cfg, experts_q4=True)
+319:          f"Q4_0 pour la FFN et les experts) · {len(kv)} métadonnées")
+  ```
+
+- **write** `{"content": "#!/bin/bash\n# Porte de RÉPARTITION du modèle entraîné ici : deux nœuds, deux plages de couches.\n#\n# Ce qu'elle vérifie, et pourquoi elle est distincte de `tools/porte-flux.sh` :\n# celle-ci tourne sur Qwen2.5-0.5B, un modèle venu d'ailleurs. Ici c'est NOTRE\n# modèle (Qwen3-MoE entra … [3259 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-reparti-moteur.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && chmod +x tools/porte-reparti-moteur.sh && timeout 600 tools/porte-reparti-moteur.sh 2>&1 | tail -12; echo \"exit=$?\"", "description": "Run the distributed gate on our trained model", "timeoutMs": 700000}`
+
+  ```
+=== référence : le modèle ENTIER, un seul processus ===
+  perplexité entière : 321.9623
+=== deux nœuds : 2 couches locales, le reste à distance ===
+  perplexité répartie : 1186.5313 · écart de flux : 0.00e0
+PORTE NON TENUE : écart relatif 268.5311 % entre entier et réparti
+exit=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; PORT=49777; timeout 300 $D /tmp/moteur_route.gguf --flux-serveur $PORT --ctx 256 --threads 8 > /tmp/srv.log 2>&1 & sleep 3; timeout 300 $D /tmp/moteur_route.gguf --ppl-reparti 127.0.0.1:49777 --co … [240 caractères tronqués]`
+
+  ```
+[modele] 4 couches chargées en 1.749267ms — listes 0.00 Go , 8 threads
+[config] 4 couches, hidden 192 · softmaxmoe 
+[config] mélanges d'experts chargés : 4/4 couches · mapping absent (experts en clair dans le fichier)
+[config] puits appris sur 0/4 couches · n_rot 48 · ffn 768 · experts 8
+[config] rotation : RoPE simple (le modèle ne déclare pas YaRN)
+[flux] quantification : 127 niveaux, seuil 0, top-k 0, renorm false
+[flux] pilote : 2 couches en local, 2 chez le pair, 128 jetons
+  référence locale  : perplexité 1186.5313  (0.1 s)
+  deux nœuds        : perplexité 1186.5313  (0.1 s)
+  écart             : 0.00e0
+  transport         : dense f32 · 848 octets par flux (aller) · 848 au retour · 100.0 % d'activité (192 neurones par flux) · 127 flux
+  temps             : 0.3 ms par jeton en local · 0.3 ms à attendre le pair (son calcul + l'aller-retour) · soit 1.34× le calcul local seul
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; echo \"=== modèle tronqué 0:2 en un seul processus ===\"; timeout 300 $D /tmp/moteur_route.gguf --ppl /tmp/route_ids.txt --limit 128 --ctx 256 --threads 8 --couches 0:2 2>&1 | grep -E \"perplexité … [271 caractères tronqués]`
+
+  ```
+=== modèle tronqué 0:2 en un seul processus ===
+=== perplexité 353877796603.0974 sur 127 tokens (0 événements, 0.1 s) ===
+=== entier ===
+=== perplexité 321.9623 sur 127 tokens (0 événements, 0.1 s) ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 tools/porte-flux.sh 2>&1 | tail -8", "description": "Verify the reference flux gate is green", "timeoutMs": 900000}`
+
+  ```
+mode 0 — f32 dense               0.00e0  ✅  (réf 61.9920 / deux nœuds 61.9920)
+  mode 1 — listes quantifiées     0.00e0  ✅  (réf 61.9920 / deux nœuds 61.9920)
+  mode 2 — listes par blocs        3.65e-2  ✅  (réf 61.9920 / deux nœuds 64.2535)
+  mode 3 — lot dense f32           0.00e0  ✅  (réf 60.8135 / deux nœuds 60.8135)
+  mode 4 — lot en listes           4.45e-3  ✅  (réf 60.8135 / deux nœuds 60.5427)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"référence locale\" -B 12 drave-core/src/main.rs | head -40", "description": "Understand the reparti local reference"}`
+
+  ```
+3334-    for &v in lg { if v > mx { mx = v; } }
+3335-    let mut somme = 0f64;
+3336-    for &v in lg { somme += ((v - mx) as f64).exp(); }
+3337-    (mx as f64 + somme.ln()) - lg[cible as usize] as f64
+3338-}
+3339-
+3340-fn run_ppl_reparti(opt: Options, pair: &str) {
+3341-    use std::time::Instant;
+3342-    let chemin = modele_chemin();
+3343-    let ctx = if opt.ctx_impose { opt.ctx } else { 256 };
+3344-    let limite = opt.limit.max(1).min(ctx);
+3345-    let couches_locales = if opt.couches_locales > 0 { opt.couches_locales } else { 12 };
+3346:    // `--lot T` : préremplissage par LOTS sur le fil. La référence locale est
+--
+3388-        opt.ids[opt.ids.len() - limite..].to_vec()
+3389-    } else { opt.ids.clone() };
+3390-    if ids.len() < 2 {
+3391-        // La perplexité est une moyenne sur `len - 1` jetons notés : avec un seul
+3392-        // jeton elle vaut NaN, et un NaN affiché comme un résultat ne dit rien.
+3393-        println!("[flux] il faut au moins DEUX jetons pour noter une perplexité \
+3394-(le premier ne prédit rien) — reçu {}. Rien n'a été calculé.", ids.len());
+3395-        return;
+3396-    }
+3397-    println!("[flux] pilote : {couches_locales} couches en local, {} 
+… [591 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; echo \"=== --ppl --limit 128 ===\"; timeout 300 $D /tmp/moteur_route.gguf --ppl /tmp/route_ids.txt --limit 128 --ctx 256 --threads 8 2>&1 | grep -oE \"perplexité [0-9.]+ sur [0-9]+\"; echo \"=== - … [611 caractères tronqués]`
+
+  ```
+=== --ppl --limit 128 ===
+perplexité 321.9623 sur 127
+=== --ppl --limit 256 ===
+perplexité 173.0196 sur 255
+=== reparti, limite 256 ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; PORT=49779; setsid nohup $D /tmp/moteur_route.gguf --flux-serveur $PORT --ctx 256 --threads 8 > /tmp/srv3.log 2>&1 < /dev/null & sleep 4; timeout 300 $D /tmp/moteur_route.gguf --ppl-reparti 127.0. … [249 caractères tronqués]`
+
+  ```
+[config] mélanges d'experts chargés : 4/4 couches · mapping absent (experts en clair dans le fichier)
+[config] puits appris sur 0/4 couches · n_rot 48 · ffn 768 · experts 8
+[config] rotation : RoPE simple (le modèle ne déclare pas YaRN)
+[flux] quantification : 127 niveaux, seuil 0, top-k 0, renorm false
+[flux] pilote : 2 couches en local, 2 chez le pair, 256 jetons
+
+thread 'main' (3346071) panicked at src/main.rs:3337:32:
+index out of bounds: the len is 256 but the index is 256
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+timeout: the monitored command dumped core
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '3355,3390p' drave-core/src/main.rs; echo \"=== max des ids ===\"; /home/stephane/gpu-env/bin/python -c \"\nv=[int(x) for x in open('/tmp/route_ids.txt').read().strip().split(',')]\nprint('n=',len(v),'min',min(v),'max',max(v)) … [57 caractères tronqués]`
+
+  ```
+let hc_pilote = mdl.hc.as_ref().map(|v| v[0].0.hc).unwrap_or(1);
+    // `--tete-partielle` n'a pas d'objet ici : la « plage » de ce mode est le
+    // découpage entre les DEUX nœuds, et le modèle local est le modèle entier.
+    // Le taire serait exactement le défaut que `--options-actives` combat.
+    if opt.tete_partielle {
+        eprintln!("[plage] `--tete-partielle` est sans effet en `--ppl-reparti` : la plage \
+y est le découpage entre nœuds (voir `--couches-locales`), pas un `--couches a:b`");
+    }
+    if opt.options_actives { options_actives(&mdl, "pilote du flux", opt.ctx_impose, true, opt.keep); }
+    let mode = if opt.flux_blocs { MODE_BLOCS }
+               else if opt.flux_liste { MODE_LISTE }
+               else { MODE_DENSE };
+    // Le mode des LOTS est distinct : `--flux-blocs` donne le mode 4 (lot en
+    // listes), tout le reste donne le mode 3 (lot dense f32). Déclaré ici pour
+    // que l'affichage du transport, plus bas, le connaisse.
+    // Un modèle à **hyper-connexions** transporte son état en `hc` copies
+    // (16 384 canaux pour V4-Flash au lieu de 4 096) : le protocole accepte les
+    // deux largeurs depuis que le nœud distant les valide contre SON mo
+… [1127 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"tools/porte-reparti-moteur.sh\"; s=open(p).read()\ns = s.replace('LIMITE=${LIMITE:-128}', 'LIMITE=${LIMITE:-128}          # doit valoir le nombre de jetons du fichier IDS')\ns = s.replace('''SORTIE=$(timeout 300 … [825 caractères tronqués]`
+
+  ```
+ok
+128 ids écrits
+=== référence : le modèle ENTIER, un seul processus ===
+  perplexité entière : 321.9623
+=== deux nœuds : 2 couches locales, le reste à distance ===
+  perplexité répartie : 1186.5313 · écart de flux : 0.00e0
+PORTE NON TENUE : écart relatif 268.5311 % entre entier et réparti
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; for opts in \"--limit 128\" \"--limit 128 --lot 1\" \"--limit 128 --dense\"; do echo \"=== --ppl $opts ===\"; timeout 300 $D /tmp/moteur_route.gguf --ppl /tmp/route_ids128.txt $opts --ctx 256 --th … [160 caractères tronqués]`
+
+  ```
+=== --ppl --limit 128 ===
+perplexité 321.9623 sur 127
+=== --ppl --limit 128 --lot 1 ===
+perplexité 321.9623 sur 127
+=== --ppl --limit 128 --dense ===
+perplexité 321.9623 sur 127
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; for a in 16 8; do echo \"=== --ppl --abits $a ===\"; timeout 300 $D /tmp/moteur_route.gguf --ppl /tmp/route_ids128.txt --limit 128 --ctx 256 --threads 8 --abits $a 2>&1 | grep -oE \"perplexité [0- … [273 caractères tronqués]`
+
+  ```
+=== --ppl --abits 16 ===
+perplexité 321.9623 sur 127
+=== --ppl --abits 8 ===
+perplexité 323.7873 sur 127
+=== tableau complet ===
+     127 tokens notés — perplexité cumulée 323.787  (1500.8 tok/s)
+
+=== perplexité 323.7873 sur 127 tokens (0 événements, 0.1 s) ===
+    1500.5 tok/s effectifs (avant + tête)
+    attention : 0.00 M paires (requête, clé) par token
+    projections : 0.0 M événements par token
+    paires (poids × activation) par token : attention 0.4 M · experts 1.8 M · partagé 0.0 M · scores 1 K · total 2.3 M
+    dont en listes (une paire y est un événement) : 0.0 M — le reste est dense (déquantifié ou f32)
+    part de l'attention dans le flux total : 19.6 %
+    postes (ms/token) : projets-attn 0.08 | rope 0.02 | attention 0.14 | proj+mlp 0.30 | somme 0.53 | reste (tête + échantillonnage) 0.13
+    dont tête de sortie 0.22 | notation log-sum-exp 0.00 (le reste du « reste » n'est pas chronométré)
+    dont attention : scores 0.02 | softmax 0.01 | somme pondérée + écriture KV 0.11
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '3400,3440p' drave-core/src/main.rs", "description": "Read the local reference computation"}`
+
+  ```
+// 1. référence locale, tout le modèle (même découpage que le chemin réparti)
+    let t0 = Instant::now();
+    let mut nll_ref = 0f64;
+    if lot > 1 {
+        let mut pos = 0usize;
+        while pos < ids.len() {
+            let t = lot.min(ids.len() - pos);
+            let hs = mdl.forward_lot(&ids[pos..pos + t], pos);
+            let lgs = mdl.logits_lot(&hs);
+            for i in 0..t {
+                if pos + i + 1 < ids.len() {
+                    nll_ref += nll_logits(&lgs[i], ids[pos + i + 1]);
+                }
+            }
+            pos += t;
+        }
+    } else {
+        for (pos, &t) in ids.iter().enumerate() {
+            let last = mdl.forward(t, pos);
+            if pos + 1 < ids.len() {
+                nll_ref += nll_logits(&mdl.logits(&last), ids[pos + 1]);
+            }
+        }
+    }
+    let ppl_ref = (nll_ref / (ids.len() - 1) as f64).exp();
+    println!("  référence locale  : perplexité {ppl_ref:.4}  ({:.1} s)", t0.elapsed().as_secs_f64());
+
+    // 2. la même chose, coupée en deux nœuds
+    let mut sock = std::net::TcpStream::connect(pair).expect("connexion au nœud moteur");
+    sock.set_nodelay(true).expect("TCP_NODELAY");   // cf. le nœud moteur : Nagle
+… [391 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '3340,3356p' drave-core/src/main.rs; echo \"=== forward_lot : gestion MoE ? ===\"; grep -n \"pub fn forward_lot\" -A 12 drave-core/src/model.rs | head -16", "description": "Find lot default and forward_lot MoE support"}`
+
+  ```
+fn run_ppl_reparti(opt: Options, pair: &str) {
+    use std::time::Instant;
+    let chemin = modele_chemin();
+    let ctx = if opt.ctx_impose { opt.ctx } else { 256 };
+    let limite = opt.limit.max(1).min(ctx);
+    let couches_locales = if opt.couches_locales > 0 { opt.couches_locales } else { 12 };
+    // `--lot T` : préremplissage par LOTS sur le fil. La référence locale est
+    // alors calculée avec le MÊME découpage — sinon l'écart mesurerait la
+    // différence entre deux ordres de sommation, pas celle du découpage.
+    let lot = opt.lot.max(1);
+    let mut mdl = model::Model::load(&chemin,
+                                     ctx, fils(&opt), true, opt.keep, false, 0, 0);
+    appliquer_quantification(&mut mdl, &opt);
+    // Le `hc` du PILOTE : c'est SON modèle qui décide de la largeur du pré-mix
+    // qu'il envoie et de celle de celui qu'il reçoit (le pair valide le sien).
+    let hc_pilote = mdl.hc.as_ref().map(|v| v[0].0.hc).unwrap_or(1);
+    // `--tete-partielle` n'a pas d'objet ici : la « plage » de ce mode est le
+=== forward_lot : gestion MoE ? ===
+5209:    pub fn forward_lot(&mut self, toks: &[u32], pos0: usize) -> Vec<Vec<f32>> {
+5210-        // **Le chemin par lots
+… [885 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"lot:\" drave-core/src/main.rs | head -8; grep -n \"lot: usize\\|lot:\" drave-core/src/main.rs | head; grep -n '\"--lot\"' -A 2 drave-core/src/main.rs | head -5", "description": "Find the default lot value"}`
+
+  ```
+641:    lot: usize,
+641:    lot: usize,
+740:            "--lot" => { o.lot = suivant(i).parse().unwrap(); 2 }
+741-            "--keep" => { o.keep = suivant(i).parse().unwrap(); 2 }
+742-            "--moe-topk" => { o.moe_topk = suivant(i).parse().unwrap(); 2 }
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; PORT=49781; setsid nohup $D /tmp/moteur_route.gguf --flux-serveur $PORT --ctx 256 --threads 8 > /tmp/srv4.log 2>&1 < /dev/null & sleep 4; timeout 300 $D /tmp/moteur_route.gguf --ppl-reparti 127.0. … [278 caractères tronqués]`
+
+  ```
+[flux] quantification : 127 niveaux, seuil 0, top-k 0, renorm false
+[flux] pilote : 2 couches en local, 2 chez le pair, 128 jetons
+  référence locale  : perplexité 1186.5313  (0.1 s)
+  deux nœuds        : perplexité 1186.5313  (0.1 s)
+  écart             : 0.00e0
+  transport         : dense f32 · 848 octets par flux (aller) · 848 au retour · 100.0 % d'activité (192 neurones par flux) · 127 flux
+  temps             : 0.2 ms par jeton en local · 0.3 ms à attendre le pair (son calcul + l'aller-retour) · soit 1.37× le calcul local seul
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"pub fn load(\" -A 10 drave-core/src/model.rs | head -14; echo \"=== appels ===\"; grep -n \"Model::load(\" drave-core/src/main.rs | head -6", "description": "Compare model load calls between paths"}`
+
+  ```
+2690:    pub fn load(path: &str) -> std::io::Result<Patch> {
+2691-        use std::io::Read;
+2692-        let mut buf = Vec::new();
+2693-        std::fs::File::open(path)?.read_to_end(&mut buf)?;
+2694-        if buf.len() < 16 || &buf[0..4] != b"QPAT" {
+2695-            return Err(std::io::Error::new(std::io::ErrorKind::InvalidData, "magie QPAT absente"));
+2696-        }
+2697-        let g = |o: usize| u32::from_le_bytes(buf[o..o+4].try_into().unwrap()) as usize;
+2698-        let (layer, n) = (g(8), g(12));
+2699-        let f = |base: usize| (0..n).map(|i| {
+2700-            let o = base + 4*i;
+--
+3296:    pub fn load(path: &str, ctx: usize, n_threads: usize, dense: bool, keep: f32,
+3297-                auto: bool, q4: u8, b6: u8) -> Model {
+=== appels ===
+1623:            let mut mdl = model::Model::load(&chemin, 512, 16, true, 1.0, false, 0, 0);
+3185:    let mut mdl = model::Model::load(&chemin, ctx, fils(&opt), true, opt.keep, false, 0, 0);
+3350:    let mut mdl = model::Model::load(&chemin,
+4232:    let mut mdl = model::Model::load(path, 4096, fils(&opt), opt.dense, opt.keep, false, 0, 0);
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; head -c 4 data/corpus_en_val.txt | od -An -tu1 | tr -s ' ' ',' | sed 's/^,//;s/,$//' > /tmp/ids4.txt; cat /tmp/ids4.txt; echo; for n in 4 8 16; do /home/stephane/gpu-env/bin/python -c \"\nimport n … [919 caractères tronqués]`
+
+  ```
+89,32,80,97
+
+=== 4 jetons ===
+  ppl     : perplexité 61.7585
+  reparti : 389239.0506
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fn run_ppl\\|fn perplexite\" drave-core/src/main.rs | head -3; sed -n '5040,5090p' drave-core/src/main.rs | grep -n \"Model::load\\|ctx\\|dense\\|keep\" | head -10", "description": "Find the ppl path model load"}`
+
+  ```
+3340:fn run_ppl_reparti(opt: Options, pair: &str) {
+5063:fn run_ppl(opt: Options) {
+36:        ctx: ctx_opt, threads: threads_opt, abits: abits_opt,
+37:        ctx_impose, threads_impose, abits_impose,
+38:        dense, auto, q4, b6, attn_window, swa_pattern,
+41:        ffn_gain, logits_bin, keep,
+50:    let ctx = if ctx_impose { ctx_opt } else { 256 };
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '5095,5130p' drave-core/src/main.rs", "description": "Read ppl model loading"}`
+
+  ```
+} else {
+        let raw = std::fs::read_to_string(&idfile).expect("fichier d'identifiants illisible");
+        raw.split(|c: char| c == ',' || c.is_whitespace())
+            .filter(|s| !s.is_empty())
+            .filter_map(|s| s.parse().ok())
+            // `--depuis N` : on charge N jetons de plus que la limite, pour que
+            // le premier jeton noté ait un contexte complet (voir plus bas).
+            .take(limit.saturating_add(depuis))
+            .collect()
+    };
+    // Garde-fou : des identifiants hors vocabulaire signifient qu'on nourrit le
+    // modèle avec le découpage d'un AUTRE modèle. La perplexité ne mesurerait
+    // alors que l'absurdité de l'entrée — vérifié : 42 127 au lieu de 11.
+    let vocab = mdl_cfg_vocab(path);
+    if let Some(v) = vocab {
+        if let Some(&mauvais) = ids.iter().find(|&&i| i as usize >= v) {
+            panic!("identifiant {mauvais} ≥ vocabulaire du modèle ({v}) : \
+                    ce fichier de jetons vient d'un autre tokenizer");
+        }
+    }
+    if !idfile.is_empty() {
+        println!("{idfile} : {} tokens, fenêtres de {ctx}", ids.len());
+    }
+
+    let mut mdl = model::Model::load_partiel(path, ctx, n_threads, dense,
+… [559 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"impl Default for Options\" -A 20 drave-core/src/main.rs | head -25; echo \"=== prune_rows avec keep=1 ? ===\"; grep -n \"fn prune_rows\" -A 8 drave-core/src/model.rs | head -12", "description": "Check Options defaults and p … [8 caractères tronqués]`
+
+  ```
+=== prune_rows avec keep=1 ? ===
+1428:fn prune_rows(w: &mut [f32], n_out: usize, n_in: usize, keep: f32) {
+1429-    if keep >= 1.0 { return; }
+1430-    let k = ((n_in as f32 * keep) as usize).max(1);
+1431-    let mut abs = vec![0f32; n_in];
+1432-    for o in 0..n_out {
+1433-        let row = &mut w[o * n_in..(o + 1) * n_in];
+1434-        for (i, &v) in row.iter().enumerate() { abs[i] = v.abs(); }
+1435-        // seuil = k-ième plus grande magnitude (sélection en O(n))
+1436-        let (_, &mut seuil, _) = abs.select_nth_unstable_by(n_in - k, |a, b| a.partial_cmp(b).unwrap());
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"keep:\" drave-core/src/main.rs | head -5; grep -rn \"fn default\\|Options {\" drave-core/src/main.rs | head -5; grep -n \"let mut o = Options\\|let mut o = opt\\|Options::new\\|o = Options\" drave-core/src/main.rs | head - … [49 caractères tronqués]`
+
+  ```
+445:fn options_actives(mdl: &model::Model, mode: &str, ctx_impose: bool, dense: bool, keep: f32) {
+598:    q4: u8, b6: u8, keep: f32, bits: u32, moe_topk: usize, pin: bool,
+658:        hebb_out: String::from("hebb.bin"), keep: 1.0, abits: 8,
+538:struct Options {
+655:fn analyser(args: &[String]) -> Options {
+656:    let mut o = Options {
+856:    let Options {
+5073:    let Options {
+656:    let mut o = Options {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; PORT=49790; setsid nohup $D models/Qwen2.5-0.5B-Q8_0.gguf --flux-serveur $PORT --ctx 64 --threads 8 > /dev/null 2>&1 < /dev/null & sleep 4; echo \"=== reparti Qwen, 24 jetons ===\"; timeout 300 $D … [493 caractères tronqués]`
+
+  ```
+=== reparti Qwen, 24 jetons ===
+  référence locale  : perplexité 61.9920  (1.2 s)
+  deux nœuds        : perplexité 61.9920  (1.0 s)
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; /home/stephane/gpu-env/bin/python -c \"\nv=[x for x in open('data/wikitext2_test.txt.ids').read().strip().split(',')][:24]\nopen('/tmp/qwen24.txt','w').write(','.join(v)); print('24 ids Qwen')\"\n … [716 caractères tronqués]`
+
+  ```
+24 ids Qwen
+ppl     : perplexité 191158.4288 sur 23
+reparti : 61.9920
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; PORT=49795; setsid nohup $D /tmp/moteur_route.gguf --flux-serveur $PORT --ctx 256 --threads 8 > /dev/null 2>&1 < /dev/null & sleep 3; echo \"=== reparti avec --ids INLINE (89,32,80,97) ===\"; time … [345 caractères tronqués]`
+
+  ```
+=== reparti avec --ids INLINE (89,32,80,97) ===
+  référence locale  : perplexité 61.5679  (0.0 s)
+  deux nœuds        : perplexité 61.5679  (0.0 s)
+  écart             : 0.00e0
+[killed by signal: SIGTERM]
+  ```
+
+### 🤖 Assistant
+
+⏵ Bug réel trouvé dans le moteur : `--ids-file` est ignoré par `--ppl-reparti`
+
+Avec `--ids` en ligne, le réparti donne 61,5679 pour la référence locale **et** pour deux nœuds, écart 0,00e0 — donc le découpage tient. Les 1186,53 venaient de mon script : le chemin réparti **ignore `--ids-file`** et retombe sur des jetons synthétiques `1..=limite` — qui, sur un vocabulaire de 256, produisent même un jeton 256 hors bornes. Je corrige les deux.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '3378,3392p' drave-core/src/main.rs; echo \"=== lecture ids du --ppl (pour copier la logique) ===\"; sed -n '5085,5104p' drave-core/src/main.rs", "description": "Read code to patch"}`
+
+  ```
+let n_layer = mdl.cfg.n_layer;
+    // `limite` (≤ ctx) est respectée pour les ids SYNTHÉTIQUES, mais un `--ids`
+    // fourni la contournait : 300 jetons à ctx 256 faisaient écrire le cache
+    // au-delà du contexte — corruption silencieuse du bloc de la tête KV suivante,
+    // puis panique. On tronque, en le disant.
+    let ids: Vec<u32> = if opt.ids.is_empty() {
+        (1..=limite as u32).collect()
+    } else if opt.ids.len() > limite {
+        println!("[flux] --ids fournit {} jetons > limite {} (ctx {}) : troncature aux {} \
+derniers", opt.ids.len(), limite, ctx, limite);
+        opt.ids[opt.ids.len() - limite..].to_vec()
+    } else { opt.ids.clone() };
+    if ids.len() < 2 {
+        // La perplexité est une moyenne sur `len - 1` jetons notés : avec un seul
+        // jeton elle vaut NaN, et un NaN affiché comme un résultat ne dit rien.
+=== lecture ids du --ppl (pour copier la logique) ===
+    let path = &modele_chemin();
+    // Défauts du mode PERPLEXITÉ : 256 jetons, trois quarts des cœurs, 16 bits
+    // d'activation (la référence de non-régression en dépend).
+    let cpu = engine::coeurs_physiques();
+    let ctx = if ctx_impose { ctx_opt } else { 256 };
+    let n_threads
+… [718 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs", "new_string": "    let n_layer = mdl.cfg.n_layer;\n    // Les jetons viennent de `--ids`, SINON de `--ids-file`. Le fichier était\n    // ignoré ici : le mode réparti retombait sur des jetons synthétiques, et\n   … [2062 caractères tronqués]`
+
+  ```
+Error: edit requires reading "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs" first — read the file, then retry
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs", "offset": 3376, "limit": 16}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs</path>
+<type>file</type>
+<content>
+3376:     println!("[flux] quantification : {} niveaux, seuil {}, top-k {}, renorm {}",
+3377:              mdl.act_levels, mdl.act_thresh, mdl.act_topk, mdl.act_renorm);
+3378:     let n_layer = mdl.cfg.n_layer;
+3379:     // `limite` (≤ ctx) est respectée pour les ids SYNTHÉTIQUES, mais un `--ids`
+3380:     // fourni la contournait : 300 jetons à ctx 256 faisaient écrire le cache
+3381:     // au-delà du contexte — corruption silencieuse du bloc de la tête KV suivante,
+3382:     // puis panique. On tronque, en le disant.
+3383:     let ids: Vec<u32> = if opt.ids.is_empty() {
+3384:         (1..=limite as u32).collect()
+3385:     } else if opt.ids.len() > limite {
+3386:         println!("[flux] --ids fournit {} jetons > limite {} (ctx {}) : troncature aux {} \
+3387: derniers", opt.ids.len(), limite, ctx, limite);
+3388:         opt.ids[opt.ids.len() - limite..].to_vec()
+3389:     } else { opt.ids.clone() };
+3390:     if ids.len() < 2 {
+3391:         // La perplexité est une moyenne sur `len - 1` jetons notés : avec un seul
+
+(Showing lines 3376-3391 of 5903. Use offset=3392 to c
+… [20 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs", "new_string": "    let n_layer = mdl.cfg.n_layer;\n    // Les jetons viennent de `--ids`, SINON de `--ids-file`. Le fichier était\n    // ignoré ici : le mode réparti retombait sur des jetons synthétiques et\n    … [1968 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && timeout 1800 cargo build --release 2>&1 | tail -5", "description": "Rebuild engine with the fix", "timeoutMs": 1800000}`
+
+  ```
+|
+    = note: `#[warn(non_shorthand_field_patterns)]` on by default
+
+warning: `drave-core` (bin "drave") generated 48 warnings (run `cargo fix --bin "drave" -p drave-core` to apply 24 suggestions)
+    Finished `release` profile [optimized] target(s) in 39.70s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"tools/porte-reparti-moteur.sh\"; s=open(p).read()\ns = s.replace('''SORTIE=$(timeout 300 \"$D\" \"$MODELE\" --ppl-reparti \"127.0.0.1:$PORT\" --ids-file \"$IDS\" \\\\\n         --couches-locales \"$COUCHES\" --l … [731 caractères tronqués]`
+
+  ```
+ok
+=== référence : le modèle ENTIER, un seul processus ===
+  perplexité entière : 321.9623
+=== deux nœuds : 2 couches locales, le reste à distance ===
+  perplexité répartie : 321.9623 · écart de flux : 0.00e0
+PORTE TENUE : le découpage ne change pas la perplexité (écart relatif 0.0000 %)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && setsid nohup bash tools/portes.sh > /tmp/portes_apres_fix.log 2>&1 < /dev/null & sleep 5; echo \"portes lancées\"; tail -3 /tmp/moteur_dense.log", "description": "Launch repo gates and check dense twin", "timeoutMs": 60000}`
+
+  ```
+portes lancées
+  pas   7000 · perte 1.9790 · val 3.1628 bits/octet · 247 s
+  pas   8000 · perte 1.9931 · val 3.1278 bits/octet · 281 s
+  pas   9000 · perte 1.9342 · val 3.1259 bits/octet · 315 s
+  ```
+
+- **bash** `{"command": "sleep 240; tail -20 /tmp/portes_apres_fix.log; echo \"=== dense twin ===\"; tail -2 /tmp/moteur_dense.log", "description": "Check gates and dense twin progress", "timeoutMs": 300000}`
+
+  ```
+=== Portes ===
+  cargo test --release                       77 verts  ✅
+  Qwen2.5-0.5B ctx 256                       19.3885  ✅
+  Qwen3-30B en clusters (origine : 799,8557) 799.8557  ✅
+  threads par défaut (physiques)            20  ✅
+  formats contre libggml                     17 concorde(s), 0 divergence(s), 0 absent(s)  ✅
+  GLM-5.3 : sigmoïde ×2,5                  sigmoïde  ✅
+  Kimi-K2.7 : sigmoïde ×2,827              sigmoïde  ✅
+  V4-Flash : racine de softplus              racine de softplus  ✅
+  Qwen3-235B : softmax                       softmax  ✅
+  V4-Flash : --config le dit calculable      oui  ✅
+  V4-Flash 43 couches ctx 32 (archivée)     ARCHIVE=1 pour la lancer
+  engram V4.1 : adressage                    rangées DISTINCTES : 479723  ✅
+  gpt-oss : --config le dit calculable       oui  ✅
+=== dense twin ===
+  pas  15000 · perte 1.9206 · val 3.0600 bits/octet · 520 s
+  pas  16000 · perte 1.9511 · val 3.0532 bits/octet · 554 s
+  ```
+
+- **bash** `{"command": "sleep 150; tail -3 /tmp/moteur_dense.log; ls /tmp/moteur_dense/ 2>/dev/null | head -3", "description": "Wait for dense twin completion", "timeoutMs": 300000}`
+
+  ```
+# meilleur point : pas 20000 · val 3.0335 bits/octet
+  # écrit dans /tmp/moteur_dense · 3.00 M paramètres · 0.59 M poids lus/jeton/couche
+config.json
+generation_config.json
+model.safetensors
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; /home/stephane/gpu-env/bin/python tools/exporter_gguf.py --hf /tmp/moteur_dense --sortie /tmp/moteur_dense.gguf 2>&1 | tail -2; echo \"=== charge ===\"; $D /tmp/moteur_dense.gguf --tensors 2>&1 |  … [254 caractères tronqués]`
+
+  ```
+~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 'model.layers.0.mlp.gate.weight'
+=== charge ===
+
+thread 'main' (3374822) panicked at src/main.rs:2427:40:
+=== ppl dense ===
+[exit code: 1]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/exporter_gguf.py", "new_string": "              (b + \"ffn_norm.weight\", poids[p + \"post_attention_layernorm.weight\"])]\n        if est_moe:\n            # Le ROUTEUR n'existe que dans la famille MoE : l'ajouter à un modèle\n    … [427 caractères tronqués]`
+
+  ```
+Error: cannot edit "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/exporter_gguf.py": file changed since it was read — re-read the file, then retry
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/exporter_gguf.py", "limit": 22, "offset": 213}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/exporter_gguf.py</path>
+<type>file</type>
+<content>
+213:     n_exp = int(cfg.get("num_experts", cfg.get("num_local_experts")) or 0)
+214: 
+215:     def q8(nom, arr):
+216:         return (nom, (q8_0_encoder(arr), GGML_Q8_0, arr.shape))
+217: 
+218:     t = [q8("token_embd.weight", poids["model.embed_tokens.weight"]),
+219:          ("output_norm.weight", poids["model.norm.weight"])]
+220:     # Embeddings liés (Qwen3) : le moteur exige la tête, on la donne.
+221:     t.append(q8("output.weight", poids.get("lm_head.weight", poids["model.embed_tokens.weight"])))
+222:     for l in range(n_l):
+223:         p, b = f"model.layers.{l}.", f"blk.{l}."
+224:         t += [("blk.%d.attn_norm.weight" % l, poids[p + "input_layernorm.weight"]),
+225:               q8(b + "attn_q.weight", poids[p + "self_attn.q_proj.weight"]),
+226:               q8(b + "attn_k.weight", poids[p + "self_attn.k_proj.weight"]),
+227:               q8(b + "attn_v.weight", poids[p + "self_attn.v_proj.weight"]),
+228:               q8(b + "attn_output.weight", poids[p + "self_attn.o_proj.weight"]),
+229:               (b + "ffn_norm.weight", poids[p + "post_attention_layer
+… [426 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/exporter_gguf.py", "new_string": "              (b + \"ffn_norm.weight\", poids[p + \"post_attention_layernorm.weight\"])]\n        if est_moe:\n            # Le ROUTEUR n'existe que dans la famille MoE : l'ajouter à un modèle\n    … [427 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/exporter_gguf.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; /home/stephane/gpu-env/bin/python tools/exporter_gguf.py --hf /tmp/moteur_dense --sortie /tmp/moteur_dense.gguf 2>&1 | tail -2; echo \"=== dense dans le moteur ===\"; timeout 300 $D /tmp/moteur_de … [196 caractères tronqués]`
+
+  ```
+# /tmp/moteur_dense.gguf : 47 tenseurs · 2.4 Mo (f32 pour les normes, Q8_0 pour les projections, Q4_0 pour la FFN et les experts) · 13 métadonnées
+# architecture 4 couches · 192 cachés · FFN dense
+=== dense dans le moteur ===
+=== perplexité 156.3652 sur 255 tokens (0 événements, 0.3 s) ===
+    887.4 tok/s effectifs (avant + tête)
+    paires (poids × activation) par token : attention 1.2 M · experts 0.0 M · partagé 1.8 M · scores 2 K · total 3.0 M
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; for m in /tmp/moteur_dense.gguf /tmp/moteur_route.gguf; do echo \"=== $m ===\"; $D $m --tensors 2>&1 | grep -E \"attn_q|attn_k|attn_v|attn_output|ffn_gate|feed_forward|expert_count\" | head -8; do … [69 caractères tronqués]`
+
+  ```
+=== /tmp/moteur_dense.gguf ===
+ · block_count 4 · embedding_length 192 · feed_forward_length 768 · attention.head_count 4 · attention.head_count_kv 2 · context_length 512
+  Q8_0     blk.0.attn_q.weight                    [512, 192] · 0.1 M poids · fichier 0
+  Q8_0     blk.0.attn_k.weight                    [256, 192] · 0.0 M poids · fichier 0
+  Q8_0     blk.0.attn_v.weight                    [256, 192] · 0.0 M poids · fichier 0
+  Q8_0     blk.0.attn_output.weight               [192, 512] · 0.1 M poids · fichier 0
+  F32      blk.0.attn_q_norm.weight               [128] · 0.0 M poids · fichier 0
+  F32      blk.0.attn_k_norm.weight               [128] · 0.0 M poids · fichier 0
+  Q4_0     blk.0.ffn_gate.weight                  [768, 192] · 0.1 M poids · fichier 0
+=== /tmp/moteur_route.gguf ===
+ · block_count 4 · embedding_length 192 · feed_forward_length 768 · attention.head_count 4 · attention.head_count_kv 2 · expert_count 8 · expert_used_count 2 · context_length 512
+  Q8_0     blk.0.attn_q.weight                    [192, 192] · 0.0 M poids · fichier 0
+  Q8_0     blk.0.attn_k.weight                    [96, 192] · 0.0 M poids · fichier 0
+  Q8_0     blk.0.attn_v.weight                 
+… [372 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Confusion trouvée : le jumeau dense avait `head_dim = 128` par défaut, pas 48 — la comparaison n'était pas à lecture égale
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py", "new_string": "    commun = dict(vocab_size=256, hidden_size=a.dim, num_hidden_layers=a.couches,\n                  num_attention_heads=a.tetes, num_key_value_heads=max(1, a.tetes // 2),\n                  max … [1113 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && setsid nohup env CUDA_VISIBLE_DEVICES=0 /home/stephane/gpu-env/bin/python -u tools/entrainer_moteur.py --famille dense --dim 192 --couches 4 --tetes 4 --cache 768 --pas 20000 --sortie /tmp/m2_dense --eval-tous 2000 > /tmp/m2_dense.lo … [445 caractères tronqués]`
+
+  ```
+# dense · 2.26 M paramètres · 0.59 M poids LUS par jeton et par couche · 0.59 M stockés · corpus 100276153 octets · cuda
+# route · 7.58 M paramètres · 0.59 M poids LUS par jeton et par couche · 1.92 M stockés · corpus 100276153 octets · cuda
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add drave-core/src/main.rs tools/exporter_gguf.py tools/porte-reparti-moteur.sh tools/entrainer_moteur.py tools/porte_moteur.py && git commit -q -m \"Réparti : --ids-file était ignoré, et les jetons synthétiques sortaient du voca … [1461 caractères tronqués]`

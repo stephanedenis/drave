@@ -79,7 +79,10 @@ def q4_0_encoder(a):
     nibbles hauts = 16..31). Reproduction de `quantize_row_q4_0_ref` de ggml —
     `d = max_signe / -8`, `q = min(15, tronc(v/d + 8,5))`."""
     a = np.ascontiguousarray(a, dtype=np.float32)
-    assert a.shape[-1] % 32 == 0, f"dernière dimension non multiple de 32 : {a.shape}"
+    assert a.shape[-1] % 32 == 0, (
+        f"dernière dimension {a.shape} non multiple de 32 : les blocs ggml font 32 poids, "
+        f"et le moteur REFUSE une couche dont l'entrée n'est pas un multiple de 32. "
+        f"Choisir une largeur d'expert multiple de 32.")
     plat = a.reshape(-1, 32)
     idx = np.abs(plat).argmax(axis=1)
     mx = plat[np.arange(plat.shape[0]), idx]
@@ -206,7 +209,8 @@ def tenseurs_depuis_hf(poids, cfg, experts_q4=True):
     les quantifier n'apporterait rien et changerait le calcul.
     """
     n_l = cfg["num_hidden_layers"]
-    n_exp = int(cfg.get("num_experts", cfg.get("num_local_experts")))
+    est_moe = _arch(cfg) == "qwen3moe"
+    n_exp = int(cfg.get("num_experts", cfg.get("num_local_experts")) or 0)
 
     def q8(nom, arr):
         return (nom, (q8_0_encoder(arr), GGML_Q8_0, arr.shape))
@@ -222,35 +226,54 @@ def tenseurs_depuis_hf(poids, cfg, experts_q4=True):
               q8(b + "attn_k.weight", poids[p + "self_attn.k_proj.weight"]),
               q8(b + "attn_v.weight", poids[p + "self_attn.v_proj.weight"]),
               q8(b + "attn_output.weight", poids[p + "self_attn.o_proj.weight"]),
-              (b + "ffn_norm.weight", poids[p + "post_attention_layernorm.weight"]),
-              q8(b + "ffn_gate_inp.weight", poids[p + "mlp.gate.weight"])]
+              (b + "ffn_norm.weight", poids[p + "post_attention_layernorm.weight"])]
+        if est_moe:
+            # Le ROUTEUR n'existe que dans la famille MoE : l'ajouter à un modèle
+            # dense lève une KeyError sur `mlp.gate.weight` — nom qui, dans un
+            # dense, désigne la PREMIÈRE matrice du SwiGLU, pas un routeur.
+            t.append(q8(b + "ffn_gate_inp.weight", poids[p + "mlp.gate.weight"]))
         if p + "self_attn.q_norm.weight" in poids:
             t += [(b + "attn_q_norm.weight", poids[p + "self_attn.q_norm.weight"]),
                   (b + "attn_k_norm.weight", poids[p + "self_attn.k_norm.weight"])]
-        gate, up, down = _experts(poids, p, n_exp)
-        for nom, arr in (("ffn_gate_exps.weight", gate), ("ffn_up_exps.weight", up),
-                         ("ffn_down_exps.weight", down)):
-            if experts_q4:
-                t.append((b + nom, (q4_0_encoder(arr), GGML_Q4_0, arr.shape)))
-            else:
-                t.append((b + nom, arr))
+        if est_moe:
+            gate, up, down = _experts(poids, p, n_exp)
+            for nom, arr in (("ffn_gate_exps.weight", gate), ("ffn_up_exps.weight", up),
+                             ("ffn_down_exps.weight", down)):
+                if experts_q4:
+                    t.append((b + nom, (q4_0_encoder(arr), GGML_Q4_0, arr.shape)))
+                else:
+                    t.append((b + nom, arr))
+        else:
+            # Jumeau dense : sa FFN peut être quantifiée en Q4_0 COMME les experts
+            # du routé. Sans cela, la comparaison « à lecture égale » serait
+            # faussée d'un facteur 1,8 sur les octets — le routé stockant ses
+            # experts en 4 bits et le dense sa FFN en 8.
+            for nom, cle in (("ffn_gate.weight", "mlp.gate_proj.weight"),
+                             ("ffn_up.weight", "mlp.up_proj.weight"),
+                             ("ffn_down.weight", "mlp.down_proj.weight")):
+                arr = poids[p + cle]
+                if experts_q4:
+                    t.append((b + nom, (q4_0_encoder(arr), GGML_Q4_0, arr.shape)))
+                else:
+                    t.append(q8(b + nom, arr))
     return t
 
 
+def _arch(cfg):
+    """Le nom d'architecture que le moteur lira dans `general.architecture` :
+    c'est lui qui préfixe TOUTES les clefs de configuration (`gguf.rs::cfg`)."""
+    mt = cfg.get("model_type", "qwen3_moe")
+    return "qwen3" if mt == "qwen3" else "qwen3moe"
+
+
 def kv_depuis_config(cfg):
-    arch = "qwen3moe"
+    arch = _arch(cfg)
+    est_moe = arch == "qwen3moe"
     rope = cfg.get("rope_parameters") or {}
     theta = float(rope.get("rope_theta", cfg.get("rope_theta", 10000.0)))
     n_tete = cfg["num_attention_heads"]
     d = cfg["hidden_size"]
-    # Transformers 5 nomme le champ `num_local_experts` (héritage Mixtral) là où
-    # les cartes de Qwen disent `num_experts` : lire le mauvais nom ne lève pas
-    # d'erreur, il écrit `expert_count = 0` — et le moteur exécute alors un
-    # modèle SANS experts, en silence.
-    n_exp = cfg.get("num_experts", cfg.get("num_local_experts"))
-    if not n_exp:
-        raise KeyError("ni num_experts ni num_local_experts dans la configuration")
-    return [
+    kv = [
         ("general.architecture", arch),
         ("general.name", cfg.get("_name_or_path", "modele-drave")),
         ("general.file_type", 0),
@@ -264,12 +287,24 @@ def kv_depuis_config(cfg):
         (f"{arch}.attention.value_length", int(cfg.get("head_dim", d // n_tete))),
         (f"{arch}.attention.layer_norm_rms_epsilon", float(cfg.get("rms_norm_eps", 1e-6))),
         (f"{arch}.rope.freq_base", theta),
+    ]
+    if not est_moe:
+        return kv
+    # Transformers 5 nomme le champ `num_local_experts` (héritage Mixtral) là où
+    # les cartes de Qwen disent `num_experts` : lire le mauvais nom ne lève pas
+    # d'erreur, il écrit `expert_count = 0` — et le moteur exécute alors un
+    # modèle SANS experts, en silence.
+    n_exp = cfg.get("num_experts", cfg.get("num_local_experts"))
+    if not n_exp:
+        raise KeyError("ni num_experts ni num_local_experts dans la configuration")
+    kv += [
         (f"{arch}.expert_count", int(n_exp)),
         (f"{arch}.expert_used_count", int(cfg["num_experts_per_tok"])),
         (f"{arch}.expert_feed_forward_length", int(cfg["moe_intermediate_size"])),
         # Le drapeau qui, oublié, change le routage en silence.
         (f"{arch}.expert_weights_norm", bool(cfg.get("norm_topk_prob", True))),
     ]
+    return kv
 
 
 def main():
@@ -277,22 +312,19 @@ def main():
     p.add_argument("--hf", required=True, help="dossier save_pretrained (config.json + safetensors)")
     p.add_argument("--sortie", required=True)
     p.add_argument("--f16", action="store_true")
-    p.add_argument("--experts-f32", action="store_true",
-                   help="écrire les experts en F32 (le moteur les REFUSE : sans noyau)")
     a = p.parse_args()
     cfg = json.load(open(os.path.join(a.hf, "config.json")))
     poids = _poids(a.hf)
     kv = kv_depuis_config(cfg)
-    tenseurs = tenseurs_depuis_hf(poids, cfg, experts_q4=not a.experts_f32)
+    tenseurs = tenseurs_depuis_hf(poids, cfg, experts_q4=True)
     octets = ecrire_gguf(a.sortie, kv, tenseurs, a.f16)
     print(f"# {a.sortie} : {len(tenseurs)} tenseurs · {octets/1e6:.1f} Mo "
-          f"({'f16' if a.f16 else 'f32'}"
-          f"{', experts Q4_0' if not a.experts_f32 else ', experts F32 (refusé par le moteur)'}) "
-          f"· {len(kv)} métadonnées")
+          f"({'f16' if a.f16 else 'f32'} pour les normes, Q8_0 pour les projections, "
+          f"Q4_0 pour la FFN et les experts) · {len(kv)} métadonnées")
     n_exp = cfg.get("num_experts", cfg.get("num_local_experts"))
-    print(f"# architecture {cfg['num_hidden_layers']} couches · {cfg['hidden_size']} cachés · "
-          f"{n_exp} experts (top-{cfg['num_experts_per_tok']}) · "
-          f"norm_topk_prob={cfg.get('norm_topk_prob', True)}")
+    detail = (f"{n_exp} experts (top-{cfg['num_experts_per_tok']}) · "
+              f"norm_topk_prob={cfg.get('norm_topk_prob', True)}" if n_exp else "FFN dense")
+    print(f"# architecture {cfg['num_hidden_layers']} couches · {cfg['hidden_size']} cachés · {detail}")
     return 0
 
 
