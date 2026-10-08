@@ -160252,3 +160252,117 @@ PORTE TENUE : le découpage ne change pas un bit
 ⏵ **PORTE TENUE : le découpage est bit-à-bit identique au monolithe, banque traversée comprise. Je consigne et je lance les portes.**
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cp /tmp/test_plage.sh tools/test-plage-k3.sh && chmod +x tools/test-plage-k3.sh && cat >> reports/rapport-passe-k3-disque.md <<'MD_EOF'\n\n---\n\n## 12. Chantier 3 : un nœud = une plage de couches, et la porte est TENUE\n\n### 12.1 C … [6105 caractères tronqués]`
+
+  ```
+3c2b542 Chantier 3 : un nœud = une plage de couches, et la porte est TENUE au bit près
+  ```
+
+### 🤖 Assistant
+
+⏵ **Je lance les portes du dépôt pour vérifier qu'aucune régression n'a été introduite.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (setsid nohup bash -c 'cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash tools/portes.sh rapide > /tmp/portes_final.log 2>&1; echo \"FIN exit=$?\" >> /tmp/portes_final.log' >/dev/null 2>&1 < /dev/null & disown); sleep 420; t … [103 caractères tronqués]`
+
+  ```
+=== Portes ===
+  cargo test --release                       76 verts  ❌ (échecs : 2)
+test tests_vars::les_vars_lues_sont_completes ... FAILED
+test result: FAILED. 76 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+  Qwen2.5-0.5B ctx 256                       19.3885  ✅
+  Qwen3-30B en clusters (origine : 799,8557) 799.8557  ✅
+  threads par défaut (physiques)            20  ✅
+  (portes de formats : ignorées en mode rapide)
+  GLM-5.3 : sigmoïde ×2,5                  sigmoïde  ✅
+  Kimi-K2.7 : sigmoïde ×2,827              sigmoïde  ✅
+  V4-Flash : racine de softplus              racine de softplus  ✅
+  Qwen3-235B : softmax                       softmax  ✅
+  V4-Flash : --config le dit calculable      oui  ✅
+  V4-Flash 43 couches ctx 32 (archivée)     ARCHIVE=1 pour la lancer
+  engram V4.1 : adressage                    rangées DISTINCTES : 479723  ✅
+  le flux relu par tools/analyse_flux.py     51 lignes  ✅
+  le rejeu de la trace (0 manquante, écart ≤ 1e-5) écart 0.00e+00  ✅
+  porte de correction (llama.cpp, 71 positions) (100.0 % des positions UTILES au-dessus de 0.95, min 0.9959 >= plancher 0.9, top-1 94.4 % sur toutes les positions, 6 saturées exclues de la co
+… [589 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Une porte a divergé : le test qui exige que toute variable d'environnement lue soit déclarée. J'ai ajouté deux variables — je les déclare.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"les_vars_lues_sont_completes\" -A 30 drave-core/tests/*.rs 2>/dev/null | head -45", "description": "Find the env var completeness test"}`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"les_vars_lues_sont_completes\" drave-core/ 2>/dev/null | head -3; echo \"---\"; F=$(grep -rln \"les_vars_lues_sont_completes\" drave-core/ | head -1); echo \"fichier: $F\"; grep -n \"les_vars_lues_sont_completes\" -A 40 \" … [56 caractères tronqués]`
+
+  ```
+drave-core/src/main.rs:14:/// Le test `les_vars_lues_sont_completes` vérifie cette liste contre le source :
+drave-core/src/main.rs:5866:    fn les_vars_lues_sont_completes() {
+---
+fichier: drave-core/src/main.rs
+14:/// Le test `les_vars_lues_sont_completes` vérifie cette liste contre le source :
+15-/// une variable lue mais absente d'ici rendrait le message muet, et une variable
+16-/// listée mais jamais lue annoncerait une option qui n'existe pas.
+17-const VARS_LUES: &[&str] = &[
+18-    "BANC_KV_DEBUG", "BANC_KV_GPU_SEUL", "BANC_KV_GRAD", "BANC_KV_K0",
+19-    "BANC_KV_KUNIT", "BANC_KV_UNIT", "BANC_KV_V1", "BANC_SANS_PUITS",
+20-    "CLUSTERS", "DEBUG_ETAT", "DEBUG_FLUX", "DEBUG_MLA", "DEBUG_YARN", "DUMP_COUCHES",
+21-    "ETAT_ENTREE",
+22-    "FLUX_VERIF", "GPU", "GPU_EXPERTS",
+23-    "GPU_EXPERTS_GO", "GPU_KV", "GPU_TETE", "GPU_TOPK", "HARMONY_TRACE",
+24-    "KV_BITS", "KV_F16", "KV_K_F16", "KV_K_F32", "KV_V_F32", "MMAP",
+25-    "BIAIS_VL", "EXPERTS_RAM", "PRELIRE", "PRELIRE_TOUT", "Q8_BLOCS", "SANS_ENGRAM",
+26-    "SANS_EMPRUNT",
+27-    "TRACE_BLOCS", "TUILE_LOT", "K3_COUCHES", "K3_SANS_ETAT", "K3_PASSE", "K3_TETE", "K3_LOGITS", "K3_GEN", "K3_MXFP4", "K3_TRACE_EXPERTS", "K3_IDS", 
+… [1347 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **J'ajoute les deux variables à la liste déclarée et je relance le test.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\nold = '\"K3_STATS_EXPERTS\", \"HEBB_SEUIL\"'\nnew = '\"K3_STATS_EXPERTS\", \"K3_RELAIS_ENTREE\", \"K3_RELAIS_SORTIE\", \"HEBB_SEUIL\"'\nassert s.count(old) == 1; s = s.r … [258 caractères tronqués]`
+
+  ```
+déclarées
+test result: ok. 77 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+TEST_END
+  ```
+
+### 🤖 Assistant
+
+⏵ **77 tests verts. Je recompile et relance les portes complètes.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo build --release 2>&1 | grep -E \"^error\" -A 5 | head -10; echo \"BUILD_OK\"; cd .. && (setsid nohup bash -c 'cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash tools/portes.sh rapide > /tmp/portes_final2.log … [213 caractères tronqués]`
+
+  ```
+BUILD_OK
+  Qwen2.5-0.5B ctx 256                       19.3885  ✅
+  Qwen3-30B en clusters (origine : 799,8557) 799.8557  ✅
+  threads par défaut (physiques)            20  ✅
+  (portes de formats : ignorées en mode rapide)
+  GLM-5.3 : sigmoïde ×2,5                  sigmoïde  ✅
+  Kimi-K2.7 : sigmoïde ×2,827              sigmoïde  ✅
+  V4-Flash : racine de softplus              racine de softplus  ✅
+  Qwen3-235B : softmax                       softmax  ✅
+  V4-Flash : --config le dit calculable      oui  ✅
+  V4-Flash 43 couches ctx 32 (archivée)     ARCHIVE=1 pour la lancer
+  engram V4.1 : adressage                    rangées DISTINCTES : 479723  ✅
+  le flux relu par tools/analyse_flux.py     51 lignes  ✅
+  le rejeu de la trace (0 manquante, écart ≤ 1e-5) écart 0.00e+00  ✅
+  porte de correction (llama.cpp, 71 positions) (100.0 % des positions UTILES au-dessus de 0.95, min 0.9959 >= plancher 0.9, top-1 94.4 % sur toutes les positions, 6 saturées exclues de la corrélation)  ✅
+  poids de connexion hc écrits et relus     connexions significatives (≥ 0.05) : 22/48 (46 %)  ✅
+
+=== Découpage (deux nœuds) ===
+  mode 0 — f32 dense               0.00e0  ✅  (réf 61.9920 / deux nœuds 61.9920)
+  mode 1
+… [358 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Portes vertes. Je commite et je lance la mesure « une moitié de modèle » pour remplacer l'extrapolation par une mesure.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add drave-core/src/main.rs && git commit -q -m \"Déclare DRAVE_K3_RELAIS_ENTREE et DRAVE_K3_RELAIS_SORTIE dans VARS_LUES\n\nLa porte « cargo test » a divergé dès l'ajout du relais : le test\nles_vars_lues_sont_completes compare l … [918 caractères tronqués]`
