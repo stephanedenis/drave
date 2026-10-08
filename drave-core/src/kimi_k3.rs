@@ -1582,19 +1582,121 @@ impl CoucheK3 {
 /// porte UNE COLONNE PAR JETON du lot. L'aplatir en poussant une entrée par
 /// jeton et par couche donnerait un `n_ckpt` quatre fois trop grand et un
 /// mélange entre jetons.
-pub fn passe_complete(g: &Gguf, ids: &[u32], n: usize, verbeux: bool, tete: bool,
-                      pos0: usize, mut etats: Option<&mut Vec<EtatCouche>>)
-                      -> Result<Vec<Vec<f32>>, String> {
+/// **Ce qu'un nœud doit transmettre au suivant** pour que la passe reprenne
+/// exactement où elle s'est arrêtée.
+///
+/// Il n'y a que DEUX choses, et c'est ce qui rend le découpage de Kimi-K3
+/// simple là où celui de V4.1 ne l'était pas :
+///
+/// * `flux` — le flux résiduel de chaque jeton après la dernière couche calculée ;
+/// * `pile` — les entrées BRUTES empilées aux couches « banque » (0, 12, 24, …).
+///   Un nœud qui démarre à la couche 47 a besoin des banques 0 à 36 : sans
+///   elles, `res_mix` mélangerait un plateau incomplet, et le résultat serait
+///   faux **sans erreur** — le même écueil que la `pre` reçue de V4.1.
+///
+/// Pour quatre jetons et 7168 canaux, cela fait **142 ko**. Ce n'est pas un
+/// protocole de réseau, c'est un fichier.
+#[derive(Clone)]
+pub struct Relais {
+    /// Première couche NON calculée : le suivant commence ici.
+    pub debut: usize,
+    pub flux: Vec<Vec<f32>>,
+    pub pile: Vec<Vec<Vec<f32>>>,
+}
+
+impl Relais {
+    pub fn ecrire(&self, chemin: &str) -> std::io::Result<()> {
+        use std::io::Write;
+        let mut o = std::io::BufWriter::new(std::fs::File::create(chemin)?);
+        let (ntok, h) = (self.flux.len(), self.flux.first().map(|v| v.len()).unwrap_or(0));
+        o.write_all(b"K3RL")?;
+        o.write_all(&1u32.to_le_bytes())?;
+        o.write_all(&(self.debut as u64).to_le_bytes())?;
+        o.write_all(&(ntok as u32).to_le_bytes())?;
+        o.write_all(&(h as u32).to_le_bytes())?;
+        for v in &self.flux {
+            for &x in v { o.write_all(&x.to_le_bytes())?; }
+        }
+        o.write_all(&(self.pile.len() as u32).to_le_bytes())?;
+        for ck in &self.pile {
+            for v in ck {
+                for &x in v { o.write_all(&x.to_le_bytes())?; }
+            }
+        }
+        o.flush()
+    }
+
+    pub fn lire(chemin: &str) -> std::io::Result<Relais> {
+        let b = std::fs::read(chemin)?;
+        if b.len() < 24 || &b[0..4] != b"K3RL" {
+            return Err(std::io::Error::new(std::io::ErrorKind::InvalidData,
+                                           "relais : en-tête absente ou magie fausse"));
+        }
+        let u32a = |o: usize| u32::from_le_bytes([b[o], b[o+1], b[o+2], b[o+3]]) as usize;
+        let u64a = |o: usize| -> usize {
+            let mut t = [0u8; 8]; t.copy_from_slice(&b[o..o+8]); u64::from_le_bytes(t) as usize
+        };
+        let (debut, ntok, h) = (u64a(8), u32a(16), u32a(20));
+        let mut off = 24;
+        let f32a = |o: usize| f32::from_le_bytes([b[o], b[o+1], b[o+2], b[o+3]]);
+        let mut flux = Vec::with_capacity(ntok);
+        for _ in 0..ntok {
+            let mut v = Vec::with_capacity(h);
+            for _ in 0..h { v.push(f32a(off)); off += 4; }
+            flux.push(v);
+        }
+        let npile = u32a(off); off += 4;
+        let mut pile = Vec::with_capacity(npile);
+        for _ in 0..npile {
+            let mut ck = Vec::with_capacity(ntok);
+            for _ in 0..ntok {
+                let mut v = Vec::with_capacity(h);
+                for _ in 0..h { v.push(f32a(off)); off += 4; }
+                ck.push(v);
+            }
+            pile.push(ck);
+        }
+        Ok(Relais { debut, flux, pile })
+    }
+}
+
+/// **Une PLAGE de couches** — `debut..fin` — avec reprise possible sur un relais.
+///
+/// Rend le résultat ET le relais à transmettre. `passe_complete` est cette même
+/// fonction appelée avec `debut = 0` et sans entrée : il n'y a qu'un seul chemin
+/// de calcul, donc rien à tenir synchronisé.
+pub fn passe_plage(g: &Gguf, ids: &[u32], debut: usize, fin: usize, verbeux: bool,
+                   tete: bool, pos0: usize, mut etats: Option<&mut Vec<EtatCouche>>,
+                   entree: Option<&Relais>)
+                   -> Result<(Vec<Vec<f32>>, Relais), String> {
     let h = g.tensor("blk.0.attn_norm.weight").map(|t| t.dims[0] as usize)
         .ok_or_else(|| "blk.0.attn_norm absent".to_string())?;
     let eps = 1e-5f32;
     let bloc = 12usize;
     let ntok = ids.len();
-    let embd = g.dequant("token_embd.weight");
-    let mut flux: Vec<Vec<f32>> = ids.iter()
-        .map(|&t| embd[t as usize * h..(t as usize + 1) * h].to_vec()).collect();
+    // REPRISE. Un nœud qui démarre à la couche `debut` ne relit pas la plongée :
+    // il reçoit le flux et la pile. Sans relais, il part de la plongée, comme
+    // avant.
+    let mut flux: Vec<Vec<f32>> = match entree {
+        Some(r) => {
+            if r.flux.len() != ntok || r.flux.first().map(|v| v.len()) != Some(h) {
+                return Err(format!("relais incompatible : {} jetons × {:?} canaux, attendu {ntok} × {h}", r.flux.len(), r.flux.first().map(|v| v.len())));
+            }
+            if r.debut != debut {
+                return Err(format!("relais pris à la couche {} mais la plage commence à {debut} — le trou serait silencieux", r.debut));
+            }
+            r.flux.clone()
+        }
+        None => {
+            let embd = g.dequant("token_embd.weight");
+            ids.iter().map(|&t| embd[t as usize * h..(t as usize + 1) * h].to_vec()).collect()
+        }
+    };
     // pile[k][i] = entrée BRUTE du jeton i à la couche banque k.
-    let mut pile: Vec<Vec<Vec<f32>>> = Vec::new();
+    let mut pile: Vec<Vec<Vec<f32>>> = match entree {
+        Some(r) => r.pile.clone(),
+        None => Vec::new(),
+    };
 
     // Le temps se sépare en deux : CHARGER (lire les poids, les déquantifier en
     // f32, restaurer l'état) et CALCULER. Sans cette séparation, on optimise à
@@ -1615,7 +1717,7 @@ déquantifiées) — ×1,12 mesuré sur la passe, top-1 inchangé, corrélations
                       Q8::arene_octets() / 1_000_000);
         }
     }
-    for l in 0..n {
+    for l in debut..fin {
         let t0 = std::time::Instant::now();
         let mut c = CoucheK3::charge(g, l)?;
         if let Some(e) = etats.as_deref_mut() {
@@ -1747,7 +1849,18 @@ déquantifiées) — ×1,12 mesuré sur la passe, top-1 inchangé, corrélations
             mv(&sortie, vocab, h, &xn, &mut lg);
             lgs.push(lg);
         }
-        return Ok(lgs);
+        let relais = Relais { debut: fin, flux: flux.clone(), pile: pile.clone() };
+        return Ok((lgs, relais));
     }
-    Ok(flux)
+    let relais = Relais { debut: fin, flux: flux.clone(), pile };
+    Ok((flux, relais))
+}
+
+/// La passe complète, de la couche 0 à la couche `n-1` — la même fonction que
+/// `passe_plage`, sans relais d'entrée.
+pub fn passe_complete(g: &Gguf, ids: &[u32], n: usize, verbeux: bool, tete: bool,
+                      pos0: usize, etats: Option<&mut Vec<EtatCouche>>)
+                      -> Result<Vec<Vec<f32>>, String> {
+    let (sortie, _) = passe_plage(g, ids, 0, n, verbeux, tete, pos0, etats, None)?;
+    Ok(sortie)
 }

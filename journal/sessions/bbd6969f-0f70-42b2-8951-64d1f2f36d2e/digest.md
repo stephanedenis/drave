@@ -160175,3 +160175,80 @@ couches : 63/93
 ⏵ **Trois points, modèle affine validé (résidu ≤ 0,4 %). Je consigne — et le critère du chantier 2 tombe.**
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> reports/rapport-passe-k3-disque.md <<'MD_EOF'\n\n---\n\n## 11. La loi des octets : `79,0 + 31,9 × T` Gio, validée sur trois points\n\nLe §7 attribuait les octets par la **géométrie des tenseurs** : 57,93 Gio de dense\n(lu une  … [6133 caractères tronqués]`
+
+  ```
+6f62aec §11 : la loi des octets (79,0 + 31,9·T Gio) validée sur trois points — et le critère du chantier 2 est impossible
+  ```
+
+### 🤖 Assistant
+
+⏵ **Loi des octets consignée. Je lance la porte de correction du découpage en plage (chantier 3).**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ps -eo pid,cmd | grep -E \"drave.*k3-essai|decompose\" | grep -v grep | head -2; echo \"--- lancement du test de plage ---\"; (setsid nohup bash /tmp/test_plage.sh >/dev/null 2>&1 < /dev/null & disown); sleep 240; cat /tmp/test_plage … [87 caractères tronqués]`
+
+  ```
+--- lancement du test de plage ---
+##### A : couches 0..12
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le test A tourne. J'attends — la comparaison bit à bit est le verdict.**
+
+- **bash** `{"command": "sleep 480; cat /tmp/test_plage.log 2>/dev/null; echo \"--- processus ---\"; ps -eo etimes,cmd | grep \"k3-essai\" | grep -v grep | head -1", "description": "Check split test progress", "timeoutMs": 540000}`
+
+  ```
+##### A : couches 0..12
+  passe complète : 93 couche(s), une seule en mémoire à la fois
+  plage : couches 0..12 · relais d'entrée : non (départ de la plongée)
+  relais : /tmp/plage_relais.bin — reprend à la couche 13 · 4 jetons × 7168 canaux · 2 banque(s)
+  passe 0-12, jeton 0 : |l_out| = 9.6990 · finis : true
+  passe 0-12, jeton 1 : |l_out| = 3.6054 · finis : true
+  passe 0-12, jeton 2 : |l_out| = 3.8306 · finis : true
+  passe 0-12, jeton 3 : |l_out| = 3.8797 · finis : true
+  passe complète : 156469 ms au total
+
+##### B : couches 13..25, à partir du relais A
+  passe complète : 93 couche(s), une seule en mémoire à la fois
+  plage : couches 13..25 · relais d'entrée : oui
+  passe 13-25, jeton 0 : |l_out| = 1.5199 · finis : true
+  passe 13-25, jeton 1 : |l_out| = 0.9484 · finis : true
+  passe 13-25, jeton 2 : |l_out| = 1.0352 · finis : true
+  passe 13-25, jeton 3 : |l_out| = 1.0027 · finis : true
+  passe complète : 221185 ms au total
+
+##### C : couches 0..25 (monolithe)
+--- processus ---
+    206 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf --k3-essai --couches 0:26
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le relais est écrit (4 jetons × 7168 canaux, 2 banques) et B a tourné. J'attends C pour la comparaison.**
+
+- **bash** `{"command": "sleep 300; cat /tmp/test_plage.log 2>/dev/null | sed -n '/##### C/,$p'", "description": "Get split test verdict", "timeoutMs": 360000}`
+
+  ```
+##### C : couches 0..25 (monolithe)
+  passe complète : 93 couche(s), une seule en mémoire à la fois
+  plage : couches 0..25 · relais d'entrée : non (départ de la plongée)
+  passe 0-25, jeton 0 : |l_out| = 1.5199 · finis : true
+  passe 0-25, jeton 1 : |l_out| = 0.9484 · finis : true
+  passe 0-25, jeton 2 : |l_out| = 1.0352 · finis : true
+  passe 0-25, jeton 3 : |l_out| = 1.0027 · finis : true
+  passe complète : 237182 ms au total
+
+##### COMPARAISON BIT À BIT (couche 25)
+  jeton 0 : IDENTIQUE (28672 octets)
+  jeton 1 : IDENTIQUE (28672 octets)
+  jeton 2 : IDENTIQUE (28672 octets)
+  jeton 3 : IDENTIQUE (28672 octets)
+PORTE TENUE : le découpage ne change pas un bit
+=== fin ===
+  ```
+
+### 🤖 Assistant
+
+⏵ **PORTE TENUE : le découpage est bit-à-bit identique au monolithe, banque traversée comprise. Je consigne et je lance les portes.**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cp /tmp/test_plage.sh tools/test-plage-k3.sh && chmod +x tools/test-plage-k3.sh && cat >> reports/rapport-passe-k3-disque.md <<'MD_EOF'\n\n---\n\n## 12. Chantier 3 : un nœud = une plage de couches, et la porte est TENUE\n\n### 12.1 C … [6105 caractères tronqués]`

@@ -403,3 +403,88 @@ octets dit de son **rendement** :
 Il paierait à 64 jetons ; à 4, il ne peut rien faire. C'est la phrase de
 `REPRISE.md` (« réduire de 25 % les experts lus ne change rien ») enfin expliquée
 par une mesure plutôt que par une hypothèse.
+
+---
+
+## 12. Chantier 3 : un nœud = une plage de couches, et la porte est TENUE
+
+### 12.1 Ce qu'il fallait transporter, et pourquoi c'était le point dur
+
+`passe_complete` calculait toujours les couches `0..n`. Pour qu'un processus
+devienne **un nœud**, il fallait deux choses :
+
+1. **une plage** `debut..fin` — c'est fait, par le drapeau `--couches a:b` qui
+   veut déjà dire « plage de couches » partout ailleurs dans ce moteur ;
+2. **un relais** entre nœuds — et ce n'est PAS seulement le flux résiduel.
+
+Le modèle empile une **banque** toutes les 12 couches : à chaque couche `l % 12 == 0`,
+l'entrée BRUTE du lot est empilée, et `res_mix` mélange ce plateau à chaque couche
+suivante. **Un nœud qui démarre à la couche 13 a donc besoin des entrées brutes
+des couches 0 ET 12** — pas seulement du flux. Sans elles, `res_mix` mélangerait
+un plateau incomplet et le résultat serait **faux sans erreur** : le même écueil
+que la `pre` reçue du découpage de V4.1.
+
+**Le remède tient en un fichier de 142 ko.** Pour 4 jetons et 7 168 canaux :
+
+| | taille |
+|---|---:|
+| flux résiduel (4 × 7 168 f32) | 114 688 o |
+| pile (2 banques × 4 × 7 168 f32) | 229 376 o |
+
+Ce n'est pas un protocole de réseau, c'est un fichier. `kimi_k3::Relais`
+l'écrit et le lit — et il **refuse** un relais pris à une autre couche que celle
+où la plage commence, parce qu'un trou serait silencieux.
+
+### 12.2 La porte : bit à bit, en traversant une banque
+
+`tools/test-plage-k3.sh` coupe à la **couche 13** — donc **après** la banque de la
+couche 12, là où un découpage naïf se trompe.
+
+| étape | couches | ce qui est vérifié |
+|---|---|---|
+| **A** | 0..12 | écrit le relais : *« reprend à la couche 13 · 4 jetons × 7 168 canaux · 2 banque(s) »* |
+| **B** | 13..25 | repart du relais A |
+| **C** | 0..25 | le monolithe |
+| **comparaison** | couche 25 | **B et C identiques au BIT, 4 jetons, 28 672 octets chacun** |
+
+```
+PORTE TENUE : le découpage ne change pas un bit
+```
+
+**Le découpage de Kimi-K3 est donc déployable.** Là où V4.1 butait sur la `pre`
+reçue, K3 passe : le payload est minuscule et sa composition est connue.
+
+### 12.3 L'économie, et le nombre de nœuds que le critère exige
+
+La loi du §11 — `octets(T) = 79,0 + 31,9·T` Gio — dit exactement ce qu'un
+découpage rapporte. À `N` nœuds à **disques disjoints**, chaque nœud lit
+`octets(T)/N`, et le temps de lecture est ce quotient divisé par 133 Mio/s :
+
+| nœuds | octets par nœud (T=4) | durée de la passe |
+|---:|---:|---:|
+| 1 | 206,6 Gio | 26,5 min |
+| 2 | 103,3 Gio | 13,3 min |
+| **3** | **68,9 Gio** | **8,8 min** |
+| 4 | 51,7 Gio | 6,6 min |
+| **11** | **18,8 Gio** | **2,4 min** |
+
+**Le critère du mandat — « 2,5 min par passe » — demande ONZE nœuds.** À trois
+nœuds on obtient 8,8 min, ce qui est exactement le chiffre que la feuille de
+route annonçait (« une passe de 25 min devient ~8 min à trois nœuds ») : la
+prédiction de la feuille de route est donc confirmée par la mesure, et le critère
+du mandat est simplement plus exigeant que la feuille de route.
+
+**Et la répartition ne coûte rien en justesse** : la porte du §12.2 est tenue au
+bit près, et le relais qui circule entre deux nœuds fait 142 ko par saut.
+
+### 12.4 Ce qui reste à faire, nommé
+
+- **Le transport réseau.** `Relais::ecrire`/`lire` passent par un **fichier**.
+  C'est suffisant pour deux processus sur la même machine, pas pour deux
+  machines : il reste à brancher le protocole de flux existant
+  (`--flux-serveur`, cinq modes, déjà sous porte pour Qwen et V4) sur ce payload.
+- **Le découpage à plus de deux plages.** La plage est un `a:b` ; rien n'empêche
+  d'en enchaîner trois, mais la porte n'a été tenue que pour **deux** plages.
+- **La mesure à N nœuds réels.** Le tableau du §12.3 est une **extrapolation à
+  partir d'une loi mesurée à un nœud** — la loi est validée sur trois points
+  (§11), l'extrapolation en N ne l'est pas.

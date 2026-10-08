@@ -144,7 +144,7 @@ sont ignorés", modes.len(), modes.join(", "), modes[0]);
     if opt.banc_kv > 0 { run_banc_kv(opt); return; }
     if opt.banc_topk > 0 { run_banc_topk(opt); return; }
     if opt.gpu_banc { run_gpu_banc(opt); return; }
-    if opt.k3_essai { run_k3_essai(); return; }
+    if opt.k3_essai { run_k3_essai(opt.couches); return; }
     if opt.plan { run_plan(opt); return; }
     if opt.tokenize { run_tokenize(opt); return; }
     if opt.ppl { run_ppl(opt); return; }
@@ -1896,7 +1896,7 @@ l'en-tête du premier shard présent ; tout « manque » peut n'être qu'un shar
 }
 
 /// Test de fumée de la couche 0 de Kimi-K3 (voir `--k3-essai`).
-fn run_k3_essai() {
+fn run_k3_essai(plage: Option<(usize, usize)>) {
     let chemin = modele_chemin();
     let chemin = std::path::Path::new(&chemin);
     // Les shards PRÉSENTS, dans l'ordre — un transfert en cours en laisse
@@ -2120,8 +2120,41 @@ fn run_k3_essai() {
                     }
                     return;
                 }
-                match kimi_k3::passe_complete(&g, &ids4, n, true, tete, 0, None) {
-                    Ok(flux) => {
+                // ---- PLAGE ET RELAIS : c'est ici qu'un processus devient UN NŒUD.
+                //
+                // `--couches a:b` borne la plage. Le relais transporte ce que le
+                // nœud suivant ne PEUT PAS recalculer : le flux résiduel et la
+                // pile des entrées de banque. Sans la pile, `res_mix` mélangerait
+                // un plateau incomplet et le résultat serait faux SANS ERREUR —
+                // l'écueil exact de la `pre` reçue de V4.1.
+                let (debut, fin) = plage.unwrap_or((0, n));
+                if debut >= fin || fin > n {
+                    println!("  plage {debut}:{fin} invalide pour {n} couche(s)");
+                    return;
+                }
+                let entree = match std::env::var("DRAVE_K3_RELAIS_ENTREE") {
+                    Ok(c) if !c.is_empty() => match kimi_k3::Relais::lire(&c) {
+                        Ok(r) => Some(r),
+                        Err(e) => { println!("  relais d'entrée illisible ({c}) : {e}"); return; }
+                    },
+                    _ => None,
+                };
+                println!("  plage : couches {debut}..{} · relais d'entrée : {}", fin - 1,
+                         if entree.is_some() { "oui" } else { "non (départ de la plongée)" });
+                match kimi_k3::passe_plage(&g, &ids4, debut, fin, true, tete, 0, None,
+                                           entree.as_ref()) {
+                    Ok((flux, relais)) => {
+                        if let Ok(c) = std::env::var("DRAVE_K3_RELAIS_SORTIE") {
+                            if !c.is_empty() {
+                                match relais.ecrire(&c) {
+                                    Ok(()) => println!("  relais : {c} — reprend à la couche \
+{} · {} jetons × {} canaux · {} banque(s)", relais.debut, relais.flux.len(),
+                                        relais.flux.first().map(|v| v.len()).unwrap_or(0),
+                                        relais.pile.len()),
+                                    Err(e) => println!("  relais NON écrit ({c}) : {e}"),
+                                }
+                            }
+                        }
                         if tete {
                             // Les logits vont dans un fichier binaire au format de
                             // `--logits-bin` : int32 vocab, int32 n_pos, puis
@@ -2146,13 +2179,13 @@ fn run_k3_essai() {
                         for (i, y) in flux.iter().enumerate() {
                             let nor: f32 = y.iter().map(|v| v * v).sum::<f32>().sqrt();
                             let finis = y.iter().all(|v| v.is_finite());
-                            println!("  passe 0-{}, jeton {i} : |l_out| = {nor:.4} · finis : {finis}",
-                                     n - 1);
+                            println!("  passe {debut}-{}, jeton {i} : |l_out| = {nor:.4} · finis : {finis}",
+                                     fin - 1);
                             if let Ok(prefixe) = std::env::var("DRAVE_DUMP_COUCHES") {
                                 if !prefixe.is_empty() {
                                     use std::io::Write;
                                     if let Ok(mut f) = std::fs::File::create(
-                                            format!("{prefixe}-l_out-{}-{i}.bin", n - 1)) {
+                                            format!("{prefixe}-l_out-{}-{i}.bin", fin - 1)) {
                                         let mut o = Vec::with_capacity(y.len() * 4);
                                         for v in y { o.extend_from_slice(&v.to_le_bytes()); }
                                         let _ = f.write_all(&o);
@@ -2163,7 +2196,7 @@ fn run_k3_essai() {
                         }
                         println!("  passe complète : {} ms au total", t0.elapsed().as_millis());
                     }
-                    Err(e) => println!("  passe complète : {e}"),
+                    Err(e) => println!("  passe {debut}..{fin} : {e}"),
                 }
                 return;
             }
