@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 1.2 h |
-| Tours | 2 |
-| Messages | 132 |
-| Appels d'outils | 139 |
-| Fichiers touchés | 3 |
-| Commandes | 95 |
+| Durée | 1.4 h |
+| Tours | 3 |
+| Messages | 207 |
+| Appels d'outils | 213 |
+| Fichiers touchés | 6 |
+| Commandes | 151 |
 | Sous-agents | 3 |
-| Commits | 1 |
+| Commits | 2 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -25,6 +25,8 @@
 **Tour 1** — où en est-on
 
 **Tour 2** — ça fait plusieurs jours qu'on est sur des travaux lourds avec peu de résultats constructifs. Il faut revenir à l'essence de Drave et produire un modèle qui est à son meilleur dans une architecture événementielle facilement distribuable sur les divers types d'unité de traitement et ressources d'une machine et de plusieurs machines en réseau.
+
+**Tour 3** — <goal_round> Objective: "Produire un modèle nativement événementiel qui soit à son meilleur dans l'architecture de Drave : parcimonie ENTRAÎNÉE (décharge/LIF ou parcimonie structurée), exécutable en listes d'événements, et découpable en unités de travail autonomes plaçables sur les unités d'une machine (cœurs, GPU, disque) puis sur plusieurs machines en réseau. Chaque affirmation porte sa mesure : … [816 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -97,21 +99,60 @@
 
 **Synthèse produite :**
 
-⏵ Le moteur vient de donner le chiffre qui manquait : le coût réel par événement
+⏵ Cycle 1 bouclé et commité : la cible se déplace, et c'est la mesure qui la déplace
 
-Mesure fraîche sur le binaire du dépôt (`Qwen2.5-0.5B-Q8_0`, 16 fils, matrice 4864×896) — **le chemin par listes existe déjà en deux saveurs, et aucune ne coûte ce que les documents supposaient** :
+\## Ce que le banc a établi (dim 192, 100 Mo, 20 000 pas, meilleur point de validation)
 
-| densité | pull dense | push valué (int8) | push **signe** (FusedSign) |
+| modèle | val (bits/octet) | densité | coût |
 |---|---|---|---|
-| 1 % | 0,312 ms | 0,023 ms | 0,032 ms |
-| 5 % | 0,313 ms | 0,060 ms | 0,082 ms |
-| 10 % | 0,312 ms | 0,104 ms | 0,142 ms |
-| 25 % | 0,312 ms | 0,240 ms | 0,340 ms |
-| 100 % | 0,311 ms | 0,916 ms | 1,322 ms |
+| **dense (jumeau)** | **2,2572** | 1,00 | 1,77 M MACs/jeton |
+| décharge, poids valués | 3,2128 | 0,16 | 0,29 M événements |
+| décharge, poids binaires | 3,4924 | 0,18 | 0,32 M événements |
+| décharge, poids ternaires | 3,5091 | 0,17 | 0,30 M événements |
 
-Le pull est au mur mémoire (14,0 Go/s = 67 % du repère 20,8 Go/s). Aux faibles densités, les deux push sont **linéaires en événements** : 0,21 ns/événement (valué), 0,305 ns/événement (signe) — soit **2,9× et 4,3× le coût d'un poids dense**. D'où la loi : `temps ≈ (0,011 ms + 0,305 ns × événements)` par couche pour le signe, contre `0,0716 ns × poids` pour le dense. **Le croisement du chemin par signe est à ~9 %, pas à 22 %** — et un événement ne vaut donc pas un poids.
+**La parcimonie s'entraîne** — c'était la question ouverte du dépôt, et elle est tranchée : R̂ = 0,17 obtenu par l'entraînement, réglable jusqu'à 0,03 par le seuil, là où la parcimonie *imposée* après coup plafonnait à 85 % de densité. Mais à taille égale, le dense garde ~0,9 bit/octet d'avance, et les poids signés coûtent 0,3 de plus.
 
-J'inscris cette loi dans le banc (elle remplace le facteur unique 4,69) :
+\## Le chiffre qui manquait, et qui déplace la cible
+
+J'ai fait tourner le banc du moteur (binaire du dépôt, `blk.0.ffn_gate.weight`, 16 fils) :
+
+- le **pull dense est au mur mémoire** : 14,0 Go/s, soit 67 % de la bande passante mesurée (20,8 Go/s) ;
+- un **événement coûte 2,9× (valué) à 4,3× (signé) un poids dense** — 0,210 et 0,305 ns contre 0,0716 ns.
+
+Donc le « R̂ = 0,15 → 6,7× moins d'événements → ~100 tok/s » de `docs/comparaison-spiking.md` **n'est pas soutenable** : à R̂ = 0,17, le gain réel de temps est ≈ 1,4×, pas 6,7×. Et le push *signé* est aujourd'hui plus lent par événement que le push valué, alors qu'il stocke 1 bit au lieu de 8 — un défaut de noyau (`FusedSign` n'a pas reçu le traitement AVX2 du push int8), pas une loi de la nature.
+
+**Et le constat qui commande la suite** : à 1,9 M paramètres, le modèle dense tient dans le cache et le chemin par listes n'a structurellement rien à gagner. L'avantage de Drave — ne lire que ce qui parle — n'existe que sur un modèle **plus gros que la mémoire**, avec une activité par jeton minuscule. C'est exactement la leçon du disque de Kimi-K3, et ça recentre tout : un modèle « à son meilleur dans Drave » se mesure en **octets lus par jeton**, pas en MACs ni en événements.
+
+\## La suite, dans cet ordre
+
+1. **Banc 2 — gros modèle, activité minuscule, routé par blocs** : paramètres ≫ cache, quelques pour cent actifs par jeton, mesure en octets/jeton contre un dense à *même lecture d'octets* (c'est la comparaison honnête).
+2. **Distillation depuis Qwen2.5-0.5B** (sur le disque, jamais utilisée dans ce dépôt) pour payer la qualité du routage.
+3. **Noyau signé** : chronométrer `FusedSign` optim
+… [563 caractères tronqués]
+
+### Tour 3 — <goal_round> Objective: "Produire un modèle nativement événementiel qui soit à son meilleur dans l'architecture de Drave … [1096 caractères tronqués]
+
+*74 appels d'outils.* Actions notables :
+
+- bash — Check workspace and resources state
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/essai_blocs.py`
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/essai_blocs.py`
+- bash — Smoke test block-routed bench
+- bash — Locate cache and family lines
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/essai_blocs.py`
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/essai_blocs.py`
+- bash — Show family loop for edit
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/essai_blocs.py`
+- bash — Smoke test iso-reads routed bench
+- bash — Launch routed-model experiments on both GPUs
+- bash — Check engine MoE architecture support
+- bash — Look for a GGUF writer in the repo
+- bash — Read the repo's GGUF writer
+- … et 59 autres
+
+**Synthèse produite :**
+
+⏵ Porte d'exécution TENUE : le moteur calcule notre modèle au bit près
 
 ## 3. Travail accompli
 
@@ -122,6 +163,9 @@ J'inscris cette loi dans le banc (elle remplace le facteur unique 4,69) :
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/essai_decharge.py` | 2 | 20 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/corpus_wikipedia.py` | 2 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-parcimonie-entrainee.md` | 1 | 3 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/essai_blocs.py` | 1 | 5 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/exporter_gguf.py` | 1 | 9 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte_moteur.py` | 1 | 1 |
 
 ### Sous-agents lancés
 
@@ -171,7 +215,7 @@ J'inscris cette loi dans le banc (elle remplace le facteur unique 4,69) :
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 55 autres
+- … et 111 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -299,14 +343,19 @@ J'inscris cette loi dans le banc (elle remplace le facteur unique 4,69) :
 
 ## 5. Erreurs rencontrées
 
-4 sorties en erreur ou divergentes. Les premières :
+8 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : ```  ### 🤖 Assistant  ⏵ **En transformers 5, `AutoModel` rend directement `Qwen2Model` (pas de `.model`). Je corrige le diagnostic.**  - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitH
 - **T2** : 3310393 bash -c pgrep -af "essai_decharge" | grep python | head; echo "--- logs ---"; tail -2 /tmp/ec_d192_lr3e3.log 2>/dev/null; tail -2 /tmp/ec_d192_lr1e3.log 2>/dev/null; echo "---"; ls -la /tmp/ec
 - **T2** : === /tmp/ec_lr3e3.log === === VERDICT (validation tenue à l'écart) ===   dense    :   1875072 paramètres · 2.4420 bits/octet ·    1.77 M MACs/token   décharge :   1880064 paramètres · 3.2004 bits/octe
 - **T2** : println!("  pool 4 bits vs scalaire : {}",                  if pire.1 == 0.0 { "IDENTIQUE ✅".to_string() }                  else { format!("DIVERGENT rang {} (écart relatif {:.3}) ❌", pire.0, pire.1) 
+- **T3** : File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/exporter_gguf.py", line 155, in kv_depuis_config     (f"{arch}.expert_count", int(cfg["num_experts"])),                                  ~~~
+- **T3** : gu = poids[p + "mlp.experts.gate_up_proj"]      # (E, 2·ff, d)          ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ KeyError: 'model.layers.0.mlp.experts.gate_up_proj' === en-tête vu par le moteur ===  thre
+- **T3** : /tmp/moe_ids.txt : 256 tokens, fenêtres de 256 [moe] couche 0 : « blk.0.ffn_gate_exps.weight » de type F32 — format sans noyau ni déquantification  thread 'main' (3319853) panicked at src/model.rs:148
+- **T3** : # /tmp/moe_test.gguf : 51 tenseurs · 6.2 Mo (f32, experts Q4_0) · 17 métadonnées # architecture 4 couches · 192 cachés · 8 experts (top-2) · norm_topk_prob=True /tmp/moe_ids.txt : 256 tokens, fenêtres
 
 ## 6. Commits
 
 - Parcimonie entraînée : premier banc, et la loi du coût par événement mesurée dans le moteur  Le dépôt n'avait jamais entraîné un seul modèle (zéro rétropropagat
+- Porte d'exécution : un modèle entraîné ici tourne dans Drave, logits identiques  Le moteur lit le GGUF en place et n'avait pas de convertisseur : le dépôt ne po
 
