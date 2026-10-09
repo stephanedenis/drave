@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 22.2 h |
+| Durée | 22.4 h |
 | Tours | 27 |
-| Messages | 974 |
-| Appels d'outils | 936 |
+| Messages | 976 |
+| Appels d'outils | 938 |
 | Fichiers touchés | 29 |
-| Commandes | 766 |
+| Commandes | 768 |
 | Sous-agents | 3 |
-| Commits | 65 |
+| Commits | 66 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -1270,7 +1270,7 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 
 ### Tour 27 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1477 caractères tronqués]
 
-*327 appels d'outils.* Actions notables :
+*329 appels d'outils.* Actions notables :
 
 - bash — Check the full state
 - bash — Measure the distilled d384 with the correct protocol
@@ -1286,11 +1286,11 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - bash — Read parcimonie, contexte, lot steps
 - bash — Inspect batch2 script
 - bash — Read batch2 journal and latency map
-- … et 294 autres
+- … et 296 autres
 
 **Synthèse produite :**
 
-⏵ Résultat : la distillation n'ajoute rien au creux appris (les deux leviers ne se cumulent pas)
+⏵ Section de liaison : ce que le nouveau matériel change, d'après ces mesures
 
 ## 3. Travail accompli
 
@@ -1376,7 +1376,7 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 726 autres
+- … et 728 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1589,4 +1589,5 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - Le débit de lecture réel : 8,6 Mo/s sur disque dur contre 243 Mo/s en séquentiel  Mesuré machine au calme : le disque dur qui porte les gguf délivre 243 Mo/s en
 - Codestral corrigé, mesuré au protocole commun : 133,08 sur 255 jetons (1,842 bit/octet)  Le chiffre publié jusqu'ici (117,91) portait sur 63 jetons, parce que l
 - Les deux leviers ne se cumulent pas : la distillation n'ajoute rien au creux appris  m9_d384_kwta25_distille reprend exactement la recette de kwta025 PLUS la di
+- Ce que le nouveau matériel change, d'après les mesures — et ce qu'il ne change pas  Section de liaison avec le plan matériel (4xNVMe en RAID + carte AMD pour l'
 

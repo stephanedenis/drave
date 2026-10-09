@@ -15842,3 +15842,21 @@ fenetres_m9-topk250 : PPL moyenne (log) sur 8 fenêtres : 5.1553
 ⏵ Résultat : la distillation n'ajoute rien au creux appris (les deux leviers ne se cumulent pas)
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\nancre = \"\"\"**Ce que cela ne dit pas** : la plage de taux qu'un même modèle supporte. Les trois\nmodèles entraînés pe … [2574 caractères tronqués]`
+
+  ```
+ok
+f3673af Les deux leviers ne se cumulent pas : la distillation n'ajoute rien au creux appris
+  ```
+
+- **bash** `{"command": "sleep 580; cd /tmp/campagne24 && tail -1 tr_m9_route_long.log 2>/dev/null; grep -E \"route_long\" journal9.txt | tail -2", "description": "Poll the 80k-step routed training", "timeoutMs": 610000}`
+
+  ```
+# route · 78.81 M paramètres · 3.41 M poids LUS par jeton et par couche · 19.92 M stockés · corpus 100276153 octets · cuda
+[09/10 07:20:09] charge 4.49 · m9_d512_route_long : départ (routé 512, 80 000 pas au lieu de 40 000)
+  ```
+
+### 🤖 Assistant
+
+⏵ Section de liaison : ce que le nouveau matériel change, d'après ces mesures
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\nancre = \"\"\"## 23. Ce qui reste à mesurer\"\"\"\nassert ancre in s\najout = \"\"\"## 22 bis. Ce que le nouveau matéri … [2848 caractères tronqués]`
