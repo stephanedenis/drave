@@ -15944,3 +15944,22 @@ tableaux vérifiés · 1 ligne(s) irrégulière(s)
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\nvieux = \"aucune notion de brouillon dans le moteur (`grep eagle\\\\|brouillon\\\\|specul` = 0)\"\nassert vieux in s\nn … [1102 caractères tronqués]`
+
+  ```
+corrigé
+0 ligne(s) irrégulière(s)
+ok
+  ```
+
+- **bash** `{"command": "sleep 590; tail -1 /tmp/campagne24/tr_m9_route_long.log; date '+%H:%M'", "description": "Poll the long training", "timeoutMs": 620000}`
+
+  ```
+pas  32000 · perte 1.1520 · val 1.9055 bits/octet · 3537 s
+08:23
+  ```
+
+### 🤖 Assistant
+
+⏵ Ajout de la recette au rapport du modèle (le livrable)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-modele-moteur.md\")\ns = p.read_text()\nancre = \"\"\"---\n\n## 4. La porte de répartition : tenue\"\"\"\nassert ancre in s\najout = \"\"\"---\n\n## 3 ter. La recet … [3369 caractères tronqués]`

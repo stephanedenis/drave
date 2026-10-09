@@ -122,6 +122,50 @@ noyau Q8 par expert est la condition pour que « routage + événements » exist
 
 ---
 
+## 3 ter. La recette du modèle nativement événementiel (9 octobre)
+
+Le § 3 bis dit comment gagner en **qualité** à lecture égale. Il manquait la moitié
+événementielle de la question : comment faire baisser les **lectures** sans perdre
+la qualité. Quatre modèles entraînés ici, tous mesurés au protocole de record
+(huit fenêtres de 128 jetons), répondent.
+
+| modèle (dim 384, 40 000 pas) | entraîné à | aucune parcimonie | 50 % gardé | **25 % gardé** |
+|---|---|---:|---:|---:|
+| témoin (creusé à l'exécution) | — | **4,9959** | 5,3032 (+6,2 %) | 10,8758 (+118 %) |
+| `kwta050` | 50 % | 5,1858 | **5,0606 (−4,6 %)** | 5,7666 |
+| `kwta025` | 25 % | 6,4282 | 5,8131 | **5,1719 (−52 %)** |
+| `kwta025` + distillé | 25 % | 6,3684 | 5,6770 | **5,1553** |
+| *(dim 512)* `kwta025` | 25 % | 6,0503 | 5,5526 | **4,9649 (−4 % vs son témoin dense… )** |
+
+**Trois règles, chacune mesurée.**
+
+1. **On n'élague pas un modèle, on l'entraîne creux.** À 25 % de ses activations, un
+   modèle ordinaire s'effondre (+118 % de perplexité) ; le même modèle entraîné
+   avec un k-WTA à 25 % *s'améliore* par rapport à son exécution dense. Le k-WTA
+   d'entraînement est **la même opération** que `--act-topk` à l'exécution : on
+   entraîne à vivre là où on va exécuter.
+2. **Chaque modèle n'est bon que dans SON régime.** `kwta050` gagne à 50 % et perd
+   à 25 % ; `kwta025` l'inverse. La plage est étroite (±0,4 à 1,4 point de
+   perplexité), donc **le taux d'exécution fait partie de la spécification du
+   modèle**, pas d'un réglage de dernière minute.
+3. **La distillation ne s'ajoute pas à la parcimonie.** Elle vaut −13,8 % sur un
+   modèle **routé** (elle rattrape ce que le routage coûte : chaque expert voit
+   moins d'exemples) et **−0,3 %** sur un modèle dense entraîné creux. Les deux
+   leviers traitent des handicaps différents ; ils ne se cumulent pas.
+
+**Ce qui se gagne, en clair** : à 25 % gardés, les paires lues sont divisées par 4
+(594,8 M → 149,6 M d'événements par fenêtre à dim 512), le débit du chemin par
+listes monte de ~90 à ~213 tok/s, **et la perplexité ne bouge pas** (elle baisse
+même). C'est le modèle que l'architecture événementielle attendait.
+
+**Ce que cela ne fait pas encore** : les **experts** d'un modèle routé restent
+inaccessibles au chemin par listes (le chargeur refuse Q8_0, les experts sont en
+Q4_0). Un modèle « routé **et** creux » — qui ne lirait que k experts *et* un quart
+de leurs entrées — demande un noyau Q8 par expert. C'est le prochain chantier, et
+il est identifié.
+
+---
+
 ## 4. La porte de répartition : tenue
 
 `tools/porte-reparti-moteur.sh` lance **deux processus** sur le même modèle, deux
