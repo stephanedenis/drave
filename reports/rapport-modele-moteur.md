@@ -83,6 +83,45 @@ noyau Q4_0 en listes, qui n'existe pas.
 
 ---
 
+## 3 bis. La courbe d'échelle (9 octobre) : le routage seul s'inverse à dim 512, la distillation le rattrape
+
+Le § 3 portait sur la première paire (dim 256). Trois paires sont maintenant
+entraînées **avec le même protocole** (4 couches, 40 000 pas, mêmes données) et
+mesurées dans le moteur sur le protocole de record — **huit fenêtres de 128
+jetons**, moyennées en log (`tools/mesure_fenetres.sh`).
+
+| dim | jumeau dense | routé | **routé distillé** | stockage du routé | lecture (paires/jeton) |
+|---:|---:|---:|---:|---:|---:|
+| 256 | 5,0155 | 4,8858 (−2,6 %) | **4,7642 (−5,0 %)** | ×3,2 | 3,2 M des deux côtés |
+| 384 | 5,0108 | 4,8646 (−2,9 %) | **4,4113 (−12,0 %)** | ×6,2 | 7,2 M des deux côtés |
+| **512** | 4,5686 | **5,0255 (+10 % — il perd)** | **4,3305 (−5,2 %)** | ×6,2 | **12,8 M des deux côtés** |
+
+**Deux faits, et le second est le plus utile.**
+
+1. **Le routage seul n'est pas une loi d'échelle** : son gain décroît (−3,5 % puis
+   −1,4 % en validation) et **s'inverse à dim 512**, où le routé est 10 % pire que
+   son jumeau dense à lecture identique (12,8 M paires par jeton, compteur du
+   moteur). La réserve est consignée : les deux ont reçu 40 000 pas alors que le
+   routé stocke 6,2× plus de paramètres — il peut être sous-entraîné.
+2. **Le gain de la distillation, lui, CROÎT avec la taille** : −2,5 % (sur son
+   jumeau routé, dim 256), −9,3 % (384), **−13,8 % (512)**. À dim 512 il est assez
+   grand pour compenser un routage qui perdait 10 % : le modèle produit est
+   **5,2 % meilleur que son jumeau dense, à lecture égale**.
+
+**La recette qui sort de cette courbe est donc « router ET distiller »** — et
+c'est la distillation qui porte le gain aux grandes échelles. Le mécanisme n'est
+pas établi (hypothèse : un élève à experts multiples profite plus d'une cible
+dense que d'un objectif d'argmax, chaque expert voyant moins d'exemples) ; c'est
+noté comme hypothèse.
+
+**Ce qui n'est toujours pas possible** : faire exécuter les experts par le chemin
+par **listes**. Le chargeur d'experts refuse les tenseurs Q8_0 (« format sans noyau
+ni déquantification »), et les experts sont écrits en Q4_0 — format sans noyau de
+listes. Les événements d'un modèle routé restent donc ceux de l'attention. Un
+noyau Q8 par expert est la condition pour que « routage + événements » existe.
+
+---
+
 ## 4. La porte de répartition : tenue
 
 `tools/porte-reparti-moteur.sh` lance **deux processus** sur le même modèle, deux

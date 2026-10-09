@@ -14770,3 +14770,79 @@ ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add reports/rapport-campagne-benefices.md && git commit -q -m \"Dim 512 : le routage seul perd, le routé DISTILLÉ gagne de 5,2 %\n\nLa courbe d'échelle est complète, et elle a deux branches :\n\n  dim 256 : dense 5,0155 -> routé  … [628 caractères tronqués]`
+
+  ```
+b822984 Dim 512 : le routage seul perd, le routé DISTILLÉ gagne de 5,2 %
+  ```
+
+- **bash** `{"command": "sleep 500; cd /tmp/campagne24 && echo \"=== aiguille ===\"; tail -5 aiguille_long.log; echo \"=== kwta (nuit3) ===\"; grep -E \"kwta|creux\" journal7.txt 2>/dev/null | tail -3; tail -1 tr_m7_d384_kwta050.log 2>/dev/null; echo \"=== spec 0.5->14 ===\"; cat spec_05_14.log 2>/dev/null | ta … [109 caractères tronqués]`
+
+  ```
+=== aiguille ===
+aiguille v2 : models/Qwen2.5-0.5B-Q8_0.gguf
+  remplissage : data/wikitext2_test.txt (353778 caractères), fenêtres décalées
+  lot 256 · 24 jetons de réponse · GPU non · attention COMPLÈTE
+ contexte  profondeur  trouvé  secondes  détail
+     8192        0.10     oui     935.2  prompt 7963 jetons
+=== kwta (nuit3) ===
+[09/10 03:22:02] charge 21.13 · === GPU libre : deux modèles creux à entraîner (dim 384, 40 000 pas, mêmes réglages que le témoin) ===
+[09/10 03:22:02] charge 21.13 · m7_d384_kwta050 : départ (k-WTA gardant 0.50)
+  pas   8000 · perte 1.3932 · val 2.2195 bits/octet · 651 s
+=== spec 0.5->14 ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la reports/ | head -20; echo \"=== rapport-modele-moteur.md ===\"; grep -n \"^#\\|^##\" reports/rapport-modele-moteur.md 2>/dev/null | head -20; wc -l reports/rapport-modele-moteur.md 2>/dev/null", "description": "Inspect the mod … [11 caractères tronqués]`
+
+  ```
+total 1340
+drwxr-xr-x. 1 stephane stephane   4424  9 oct 01:11 .
+drwxr-xr-x. 1 stephane stephane    612  7 oct 18:16 ..
+-rw-r--r--. 1 stephane stephane    386  1 oct 09:38 aiguille-30b.md
+-rw-r--r--. 1 stephane stephane    370  1 oct 09:38 aiguille-gpt-oss.md
+-rw-------. 1 stephane stephane   9416  2 oct 15:32 bilan-multi-materiel.md
+-rw-r--r--. 1 stephane stephane  16731  2 oct 21:44 decoupage-v41-digest.txt
+-rw-r--r--. 1 stephane stephane   2465 30 sep 08:44 rapport-8bits.md
+-rw-------. 1 stephane stephane   5208 29 sep 19:14 rapport-aiguille.md
+-rw-------. 1 stephane stephane  19506  1 oct 06:53 rapport-aiguille-topk.md
+-rw-r--r--. 1 stephane stephane   3250 30 sep 10:36 rapport-analyse-flux.md
+-rw-------. 1 stephane stephane  20161  1 oct 22:26 rapport-architecture-memoire.md
+-rw-------. 1 stephane stephane   7834 30 sep 08:44 rapport-attention-creuse.md
+-rw-r--r--. 1 stephane stephane   2532 30 sep 15:30 rapport-attribution-kv.md
+-rw-------. 1 stephane stephane   5096  3 oct 11:50 rapport-budget-kimi-k3.md
+-rw-r--r--. 1 stephane stephane   4211  4 oct 10:43 rapport-cache-experts-vram.md
+-rw-------. 1 stephane stephane  64401  9 oct 03:26 rapport-campagne-benefices.md
+-rw------
+… [708 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-modele-moteur.md", "limit": 30, "offset": 58}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-modele-moteur.md</path>
+<type>file</type>
+<content>
+58: ## 3. La comparaison à lecture égale
+59: 
+60: Deux modèles de **même lecture par jeton** : `k` experts de 384 valent un FFN
+61: dense de 768, soit **0,59 M poids lus par jeton et par couche** — vérifié dans le
+62: moteur, qui compte **2,3 M paires par jeton** pour les deux.
+63: 
+64: | | dense | routé |
+65: |---|---:|---:|
+66: | paramètres stockés | 2,26 M | **7,58 M** (×3,35) |
+67: | poids lus par jeton | 2,3 M | 2,3 M |
+68: | **validation, bits/octet** | 2,0903 | **2,0490** |
+69: | **perplexité dans le moteur** | 5,5500 | **5,3397** (−3,8 %) |
+70: | événements par jeton (`--push`) | 2 009 000 | **440 178** (÷4,6) |
+71: | débit moteur (`--push`) | 867 tok/s | **1 222 tok/s** (×1,41) |
+72: 
+73: **Le routé gagne sur les trois tableaux** : un peu meilleur à lecture égale,
+74: quatre fois moins d'événements, et 1,4× plus rapide dans le chemin par listes.
+75: C'est le régime que l'analyse désignait : beaucoup de paramètres, peu lus.
+76: 
+77: **Réserve, et elle compte** : les experts sont écrits en **Q4_0**, format pour
+78: lequel le moteur n'a **pas de noyau de l
+… [476 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-modele-moteur.md\")\ns = p.read_text()\nancre = \"\"\"---\n\n## 4. La porte de répartition : tenue\"\"\"\nassert ancre in s\najout = \"\"\"---\n\n## 3 bis. La courb … [3210 caractères tronqués]`
