@@ -8942,3 +8942,139 @@ syntaxe OK
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/msg_portes.txt <<'MSG'\nLa porte Mistral entre dans la suite : une famille de plus est couverte\n\ntools/porte-mistral.sh fabrique un Mistral minuscule ENTRAÎNÉ (2 couches, 64\ncachés, vocabulaire d'octets, dimensions mult … [1114 caractères tronqués]`
+
+  ```
+210e760 La porte Mistral entre dans la suite : une famille de plus est couverte
+=== campagne ===
+[08/10 22:04:33] charge 28.57 · grille/codestral-22B : code 0 · PPL 35657.3767 · RSS 63646 Mo · lus 12684 Mio
+[08/10 22:06:13] charge 26.37 · grille/qwen3-30B-A3B : code 0 · PPL 8.6327 · RSS 14256 Mo · lus 11841 Mio
+[exit code: 1]
+  ```
+
+### 🤖 Assistant
+
+⏵ Mistral a désormais sa porte, dans la suite de portes du dépôt
+
+## Ce round
+
+**La porte Mistral est entrée dans `tools/portes.sh`** (commit `210e760`). Elle fabrique un Mistral minuscule **entraîné** — pas aléatoire, parce que des poids au hasard rendent des logits quasi uniformes sur lesquels une corrélation ne mesure rien — avec des dimensions **multiples de 32** (les blocs de quantification ggml font 32 poids ; le modèle de test officiel de HuggingFace a `intermediate_size = 37`, il est tout simplement inexporterable). Mesure :
+
+| | perplexité | corrélation | verdict |
+|---|---:|---:|---|
+| référence PyTorch (mêmes poids Q8_0) | 3 502,5424 | — | |
+| **moteur** | **3 502,4907** | **min 1,0000** | ✅ porte tenue |
+
+C'est la famille qui manquait pour interpréter codestral — et le dépôt couvre maintenant Qwen, GLM, V4, gpt-oss, Kimi **et Mistral**.
+
+## Une décision de ressources, documentée
+
+Deux processus lisaient **le même gpt-oss de 63 Go en même temps** : la mesure PPL de la campagne (la mesure phare « plus gros que la RAM ») et la génération du batch 4. J'ai **annulé la génération** — chaque étape gpt-oss du batch 4 coûtait ~1 h de lectures et menaçait de faire tomber les deux mesures par dépassement de délai. Les mesures par modèle (0,5 B, 1,5 B) et la latence sont déjà acquises ; les quatre tâches seront refaites sur un modèle plus petit, à une fraction du coût. La raison est écrite dans le journal du batch, avec le marqueur de fin pour que la chaîne continue.
+
+État : la campagne est sur gpt-oss-120b (~35 min écoulées, délai 90 min), batch 5 (le lot sur le 30B depuis le NVMe) démarre, et les entraînements poursuivent — `d256_route` puis la distillation, `d384_route` puis sa version distillée.
+
+
+## Tour 18
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, préremplissage par lots, modèle plus gros que la RAM. Poursuivre en parallèle le livrable du modèle nativement événementiel : entraîné ici, exécuté par Drave à logits vérifiés, découpé en unités réparties. Chaque affirmation porte sa mesure (perplexité, débit, octets et événements par jeton, RSS, écart entre nœuds) ET ses conditions (corpus, tokenizer du modèle, charge de fond) ; les manques constatés — embeddings/encodeurs, décodage spéculatif — sont consignés comme manques, pas comme résultats. Livrables : la file tools/campagne-benefices.sh exécutée et ses journaux, un rapport de synthèse par famille de tâches, et la poursuite du modèle événementiel."
+Round: 11/40
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "date; tail -2 /tmp/campagne24/journal.txt; tail -2 /tmp/campagne24/journal7.txt 2>/dev/null; echo \"=== drave ===\"; ps -eo pid,etime,pcpu,args --sort=-pcpu 2>/dev/null | grep drave-core | head -3 | cut -c1-95", "description": "Check state before adding work", "timeoutMs": 60000}`
+
+  ```
+jeu 08 oct 2026 22:43:33 EDT
+[08/10 22:04:33] charge 28.57 · grille/codestral-22B : code 0 · PPL 35657.3767 · RSS 63646 Mo · lus 12684 Mio
+[08/10 22:06:13] charge 26.37 · grille/qwen3-30B-A3B : code 0 · PPL 8.6327 · RSS 14256 Mo · lus 11841 Mio
+=== drave ===
+3759808       37:18  652 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/mod
+3763093       27:51  122 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/mod
+3778882       00:42 95.7 ./drave-core/target/release/drave /home/stephane/FastNVMe/qwen3-30b-a3
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/campagne24/taches_petit.sh <<'SH'\n#!/bin/bash\n# LES QUATRE TÂCHES, sur un modèle qu'on peut se permettre — sorties VERBATIM.\n#\n# Le batch 4 les avait prévues sur gpt-oss-120b : 5 x 1 h de lectures pour un\n# modèle de  … [2542 caractères tronqués]`
+
+  ```
+(no output)
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "sleep 90; tail -6 /tmp/campagne24/journal10.txt 2>/dev/null; echo \"=== logs ===\"; ls -la /tmp/campagne24/petit_*.log 2>/dev/null | awk '{print $5, $9}' | head -6", "description": "Check the four-task run", "timeoutMs": 150000}`
+
+  ```
+[08/10 22:45:44] charge 84.73 · 0.5B/code : événements : 18083534 au total, 223253.5 par token
+=== logs ===
+1719 /tmp/campagne24/petit_0.5B_code.log
+411 /tmp/campagne24/petit_0.5B_traduction.log
+  ```
+
+- **bash** `{"command": "sleep 120; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && C=/tmp/campagne24; for f in $C/petit_*.log; do n=$(basename $f .log); echo \"=== $n ===\"; head -1 \"$f\" | cut -c1-220; done 2>/dev/null | head -40", "description": "Extract the verbatim answers from the logs", "timeoutMs … [10 caractères tronqués]`
+
+  ```
+=== petit_0.5B_arithmetique ===
+[config] cache KV : 32 bits, 0.01 Go pour 512 jetons
+=== petit_0.5B_code ===
+[config] cache KV : 32 bits, 0.01 Go pour 512 jetons
+=== petit_0.5B_resume ===
+[config] cache KV : 32 bits, 0.01 Go pour 512 jetons
+=== petit_0.5B_traduction ===
+[config] cache KV : 32 bits, 0.01 Go pour 512 jetons
+=== petit_r1-1.5B_code ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/campagne24/petit_0.5B_code.log | head -30", "description": "Inspect a task log to locate the answer"}`
+
+  ```
+[config] cache KV : 32 bits, 0.01 Go pour 512 jetons
+[modele] 24 couches chargées en 21.130782583s — listes 0.71 Go , 20 threads
+[config] 24 couches, hidden 896 · 
+[config] puits appris sur 0/24 couches · n_rot 64 · ffn 4864 · experts 0
+[config] rotation : RoPE simple (le modèle ne déclare pas YaRN)
+Qwen2 · 24 couches · hidden 896 · 14 têtes / 2 KV · FFN 4864 · vocab 151936
+prompt : 17 tokens
+--- texte ---
+Write a Python function that returns the n-th Fibonacci number iteratively. Code only. Here is a Python function that returns the n-th Fibonacci number iteratively:
+
+```python
+def fibonacci(n):
+    if n <= 0:
+        return "Input should be a positive integer."
+    elif n == 1:
+        return 0
+    elif n == 2:
+        return 1
+   
+--- ids générés : [5692, 374, 264, 13027, 729, 429, 4675, 279, 308, 7563, 79683, 1372, 5367, 7887, 1447, 73594, 12669, 198, 750, 75698, 1445, 982, 262, 421, 308, 2651, 220, 15, 510, 286, 470, 330, 2505, 1265, 387, 264, 6785, 7546, 10040, 262, 4409, 308, 621, 220, 16, 510, 286, 470, 220, 15, 198, 262, 4409, 308, 621, 220, 17, 510, 286, 470, 220, 16, 198, 262]
+
+--- mesure ---
+prompt  : 17 tokens en 19.292 s  (0.9 tok/s, TTFT 1134.8 ms)
+généré  : 64 token
+… [488 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && C=/tmp/campagne24; for f in $C/petit_0.5B_traduction.log $C/petit_0.5B_arithmetique.log $C/petit_0.5B_resume.log $C/petit_r1-1.5B_code.log; do echo \"=== $(basename $f .log) ===\"; sed -n '/--- texte ---/,/--- ids générés/p' \"$f\" 2 … [131 caractères tronqués]`
+
+  ```
+=== petit_0.5B_traduction ===
+Translate into French: 'The river carries the logs to the mill.' Translation only. The river carries the logs to the mill. (No translation is needed)<|endoftext|>Human: "The river carries the logs to the mill."   Translation only: "Le ruisseau transporte les feuilles au mill."   The translation is accurate and conveys 
+
+=== petit_0.5B_arithmetique ===
+A train leaves at 14:20 and arrives at 17:05. How long is the trip? Answer with the duration only. To determine the duration of the trip, we need to calculate the difference between the arrival time of the train and the departure time. The train leaves at 14:20 and arrives at 17:05. We can find the duration by subtract
+
+=== petit_0.5B_resume ===
+Summarize in one sentence: The engine reads only the weights that an activation touches, so its cost follows activity rather than model size. The engine is a key component in the development of the new generation of engines. The engine reads only the weights that an activation touches, so its cost follows activity rath
+
+=== petit_r1-1.5B_code ===
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md", "new_string": "## 10 bis. Quatre tâches, sorties verbatim — et c'est le MODÈLE qui limite, pas le moteur\n\nLe batch 4 les avait prévues sur gpt-oss-120b (5 × 1 h de lectures du même fichier\nde 63 … [1744 caractères tronqués]`
+
+  ```
+Error: cannot edit "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md": file changed since it was read — re-read the file, then retry
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^## 11\" reports/rapport-campagne-benefices.md; python3 - <<'PY'\np=\"reports/rapport-campagne-benefices.md\"; s=open(p).read()\najout = '''## 10 bis. Quatre tâches, sorties verbatim — et c'est le MODÈLE qui limite, pas le  … [3020 caractères tronqués]`

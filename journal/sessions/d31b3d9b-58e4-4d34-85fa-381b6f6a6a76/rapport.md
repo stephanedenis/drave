@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 13.5 h |
-| Tours | 17 |
-| Messages | 544 |
-| Appels d'outils | 528 |
+| Durée | 13.6 h |
+| Tours | 18 |
+| Messages | 554 |
+| Appels d'outils | 536 |
 | Fichiers touchés | 21 |
-| Commandes | 407 |
+| Commandes | 414 |
 | Sous-agents | 3 |
-| Commits | 27 |
+| Commits | 28 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -61,6 +61,8 @@
 **Tour 16** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1196 caractères tronqués]
 
 **Tour 17** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1197 caractères tronqués]
+
+**Tour 18** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1197 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -845,7 +847,37 @@ La campagne continue (gpt-oss-120b en cours depuis 22:06), les quatre entraînem
 
 **Synthèse produite :**
 
-⏵ Deux lectures simultanées du même gpt-oss de 63 Go — je libère la mesure phare
+⏵ Mistral a désormais sa porte, dans la suite de portes du dépôt
+
+\## Ce round
+
+**La porte Mistral est entrée dans `tools/portes.sh`** (commit `210e760`). Elle fabrique un Mistral minuscule **entraîné** — pas aléatoire, parce que des poids au hasard rendent des logits quasi uniformes sur lesquels une corrélation ne mesure rien — avec des dimensions **multiples de 32** (les blocs de quantification ggml font 32 poids ; le modèle de test officiel de HuggingFace a `intermediate_size = 37`, il est tout simplement inexporterable). Mesure :
+
+| | perplexité | corrélation | verdict |
+|---|---:|---:|---|
+| référence PyTorch (mêmes poids Q8_0) | 3 502,5424 | — | |
+| **moteur** | **3 502,4907** | **min 1,0000** | ✅ porte tenue |
+
+C'est la famille qui manquait pour interpréter codestral — et le dépôt couvre maintenant Qwen, GLM, V4, gpt-oss, Kimi **et Mistral**.
+
+\## Une décision de ressources, documentée
+
+Deux processus lisaient **le même gpt-oss de 63 Go en même temps** : la mesure PPL de la campagne (la mesure phare « plus gros que la RAM ») et la génération du batch 4. J'ai **annulé la génération** — chaque étape gpt-oss du batch 4 coûtait ~1 h de lectures et menaçait de faire tomber les deux mesures par dépassement de délai. Les mesures par modèle (0,5 B, 1,5 B) et la latence sont déjà acquises ; les quatre tâches seront refaites sur un modèle plus petit, à une fraction du coût. La raison est écrite dans le journal du batch, avec le marqueur de fin pour que la chaîne continue.
+
+État : la campagne est sur gpt-oss-120b (~35 min écoulées, délai 90 min), batch 5 (le lot sur le 30B depuis le NVMe) démarre, et les entraînements poursuivent — `d256_route` puis la distillation, `d384_route` puis sa version distillée.
+
+### Tour 18 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1477 caractères tronqués]
+
+*8 appels d'outils.* Actions notables :
+
+- bash — Check state before adding work
+- bash — Run the four tasks on small models, verbatim
+- bash — Check the four-task run
+- bash — Extract the verbatim answers from the logs
+- bash — Inspect a task log to locate the answer
+- bash — Extract all task answers
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md`
+- bash — Add and commit the four-task verbatim results
 
 ## 3. Travail accompli
 
@@ -870,7 +902,7 @@ La campagne continue (gpt-oss-120b en cours depuis 22:06), les quatre entraînem
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/campagne_synthese.py` | 1 | 2 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/speculatif.py` | 1 | 0 |
 | `/tmp/campagne24/batch3_niah.sh` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md` | 1 | 9 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md` | 1 | 10 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/census_routage.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte_mistral.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-mistral.sh` | 1 | 0 |
@@ -923,7 +955,7 @@ La campagne continue (gpt-oss-120b en cours depuis 22:06), les quatre entraînem
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 367 autres
+- … et 374 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1051,7 +1083,7 @@ La campagne continue (gpt-oss-120b en cours depuis 22:06), les quatre entraînem
 
 ## 5. Erreurs rencontrées
 
-21 sorties en erreur ou divergentes. Les premières :
+23 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : ```  ### 🤖 Assistant  ⏵ **En transformers 5, `AutoModel` rend directement `Qwen2Model` (pas de `.model`). Je corrige le diagnostic.**  - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitH
 - **T2** : 3310393 bash -c pgrep -af "essai_decharge" | grep python | head; echo "--- logs ---"; tail -2 /tmp/ec_d192_lr3e3.log 2>/dev/null; tail -2 /tmp/ec_d192_lr1e3.log 2>/dev/null; echo "---"; ls -la /tmp/ec
@@ -1098,4 +1130,5 @@ La campagne continue (gpt-oss-120b en cours depuis 22:06), les quatre entraînem
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/msg_mistral.txt <<'MSG' La famille Mistral a désormais sa porte — et l'anomalie codestral est e
 - Rapport : l'anomalie codestral est un décalage de tâche, pas un bug du moteur  La porte Mistral (commit précédent) tranche : référence 3411,4394 contre moteur 3
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/msg_portes.txt <<'MSG' La porte Mistral entre dans la suite : une famille de plus est couverte 
+- Quatre tâches, sorties verbatim : le moteur tient, c'est le modèle qui limite  Refaites sur le 0,5 B après avoir coupé les mêmes essais sur gpt-oss-120b (5 x 1 
 
