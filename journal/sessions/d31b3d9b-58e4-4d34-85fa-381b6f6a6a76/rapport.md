@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 12.9 h |
-| Tours | 14 |
-| Messages | 496 |
-| Appels d'outils | 486 |
+| Durée | 13.1 h |
+| Tours | 15 |
+| Messages | 504 |
+| Appels d'outils | 492 |
 | Fichiers touchés | 19 |
-| Commandes | 369 |
+| Commandes | 374 |
 | Sous-agents | 3 |
-| Commits | 22 |
+| Commits | 23 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -55,6 +55,8 @@
 **Tour 13** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1196 caractères tronqués]
 
 **Tour 14** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1196 caractères tronqués]
+
+**Tour 15** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1196 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -704,7 +706,45 @@ Côté GPU : `d256_route` (12 000/40 000, val 2,075) et `d384_route` (8 000/40 0
 
 **Synthèse produite :**
 
-⏵ Famille de tâches non couverte : les sorties contraintes — je mesure `--tete-restreinte`
+⏵ Deux résultats de tâche atterris : la mémoire tient, et la latence est mesurée
+
+\## Ce que les batches ont rendu (ils ont tourné plus tôt que prévu)
+
+**L'aiguille est retrouvée 12 fois sur 12** — test de mémoire, pas de perplexité : un code unique planté dans une botte de foin à trois profondeurs, quatre longueurs, Qwen2.5-0.5B, `--infer`, `temp 0`.
+
+| longueur | profondeur 10 % | 50 % | 90 % |
+|---|---:|---:|---:|
+| 512 jetons | ✅ | ✅ | ✅ |
+| 1 024 | ✅ | ✅ | ✅ |
+| 2 048 | ✅ | ✅ | ✅ |
+| **4 096** | ✅ | ✅ | ✅ |
+
+**C'est la démonstration de tâche que la revendication « contexte long » attendait** : le cache KV, sa quantification et sa pagination ne détruisent pas la mémoire du contexte, même à 4 096 jetons sur un 0,5 B.
+
+**La génération, mesurée directement** : 0,5 B → **TTFT 27,9 ms, 29,0 tok/s** ; r1-1.5B → 114,6 ms et 7,1 tok/s. La perplexité ne donne pas la latence perçue ; celle-ci, si.
+
+\## Et deux incidents, traités
+
+**Un défaut d'enchaînement** a fait partir les batches 3 et 4 pendant la campagne : `pgrep` sur un script pas encore lancé rend la main immédiatement. Conséquence : deux gros modèles lisaient le disque en même temps — **les verdicts n'en dépendent pas, les durées oui** (26 s à 609 s pour la même taille). C'est écrit dans le rapport, et j'ai supprimé l'enchaîneur devenu redondant (le batch 3 aurait retourné 30 minutes pour rien).
+
+**Le reste de la chaîne tient** : campagne (codestral-22B, puis 30B, puis gpt-oss) → batch 2 (densité par tâche) → batch 5 (le lot sur le 30B) → batch 6 (**V4-Flash, 365 Go sur 125 Go**) → batch 7 (sorties contraintes). Les entraînements avancent : `d256_route` 16 000/40 000 (val 2,047), `d384_route` 8 000/40 000.
+
+Le rapport (`reports/rapport-campagne-benefices.md`) porte maintenant onze sections : le piège du tokenizer, le spéculatif à ×1,2, les deux familles manquantes, la grille de modèles, les modèles entraînés mesurés dans le moteur, l'état des lieux sourcé par famille, le recensement du routage, les sorties contraintes à ×1,42, la mémoire qui tient, et la latence.
+
+### Tour 15 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1476 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Check state after the early batches
+- bash — Test codestral on code vs prose
+- bash — Launch the codestral diagnostic in the background
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md`
+- bash — Verify the report structure
+- bash — Fix the heading and commit the verdict table
+
+**Synthèse produite :**
+
+⏵ Codestral donne 35 657 de perplexité sur de la prose — je vérifie si c'est le modèle ou la tâche
 
 ## 3. Travail accompli
 
@@ -729,7 +769,7 @@ Côté GPU : `d256_route` (12 000/40 000, val 2,075) et `d384_route` (8 000/40 0
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/campagne_synthese.py` | 1 | 2 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/speculatif.py` | 1 | 0 |
 | `/tmp/campagne24/batch3_niah.sh` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md` | 1 | 7 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md` | 1 | 8 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/census_routage.py` | 1 | 0 |
 
 ### Sous-agents lancés
@@ -780,7 +820,7 @@ Côté GPU : `d256_route` (12 000/40 000, val 2,075) et `d384_route` (8 000/40 0
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 329 autres
+- … et 334 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -950,4 +990,5 @@ Côté GPU : `d256_route` (12 000/40 000, val 2,075) et `d384_route` (8 000/40 0
 - Campagne : les cinq batches enchaînés (tâche, mémoire, génération, lot, cas extrême)  Le plan porte maintenant la file complète : après les neuf étapes viennent
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 git add reports/rapport-campagne-benefices.md && timeout 300 git commit -q -F - <<'MSG' Les tâ
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 git add reports/rapport-campagne-benefices.md && timeout 300 git commit -q -F - <<'MSG' La mém
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="reports/rapport-campagne-benefices.md"; s=open(p).read() # La section « décodage spécu
 

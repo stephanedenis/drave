@@ -8298,3 +8298,119 @@ The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagn
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 git add reports/rapport-campagne-benefices.md && timeout 300 git commit -q -F - <<'MSG'\nLa mémoire tient : 12 configurations sur 12 retrouvent l'aiguille, jusqu'à 4 096 jetons\n\nTest d'aiguille dans la botte de foin (Qw … [1031 caractères tronqués]`
+
+  ```
+2d57177 La mémoire tient : 12 configurations sur 12 retrouvent l'aiguille, jusqu'à 4 096 jetons
+  ```
+
+### 🤖 Assistant
+
+⏵ Deux résultats de tâche atterris : la mémoire tient, et la latence est mesurée
+
+## Ce que les batches ont rendu (ils ont tourné plus tôt que prévu)
+
+**L'aiguille est retrouvée 12 fois sur 12** — test de mémoire, pas de perplexité : un code unique planté dans une botte de foin à trois profondeurs, quatre longueurs, Qwen2.5-0.5B, `--infer`, `temp 0`.
+
+| longueur | profondeur 10 % | 50 % | 90 % |
+|---|---:|---:|---:|
+| 512 jetons | ✅ | ✅ | ✅ |
+| 1 024 | ✅ | ✅ | ✅ |
+| 2 048 | ✅ | ✅ | ✅ |
+| **4 096** | ✅ | ✅ | ✅ |
+
+**C'est la démonstration de tâche que la revendication « contexte long » attendait** : le cache KV, sa quantification et sa pagination ne détruisent pas la mémoire du contexte, même à 4 096 jetons sur un 0,5 B.
+
+**La génération, mesurée directement** : 0,5 B → **TTFT 27,9 ms, 29,0 tok/s** ; r1-1.5B → 114,6 ms et 7,1 tok/s. La perplexité ne donne pas la latence perçue ; celle-ci, si.
+
+## Et deux incidents, traités
+
+**Un défaut d'enchaînement** a fait partir les batches 3 et 4 pendant la campagne : `pgrep` sur un script pas encore lancé rend la main immédiatement. Conséquence : deux gros modèles lisaient le disque en même temps — **les verdicts n'en dépendent pas, les durées oui** (26 s à 609 s pour la même taille). C'est écrit dans le rapport, et j'ai supprimé l'enchaîneur devenu redondant (le batch 3 aurait retourné 30 minutes pour rien).
+
+**Le reste de la chaîne tient** : campagne (codestral-22B, puis 30B, puis gpt-oss) → batch 2 (densité par tâche) → batch 5 (le lot sur le 30B) → batch 6 (**V4-Flash, 365 Go sur 125 Go**) → batch 7 (sorties contraintes). Les entraînements avancent : `d256_route` 16 000/40 000 (val 2,047), `d384_route` 8 000/40 000.
+
+Le rapport (`reports/rapport-campagne-benefices.md`) porte maintenant onze sections : le piège du tokenizer, le spéculatif à ×1,2, les deux familles manquantes, la grille de modèles, les modèles entraînés mesurés dans le moteur, l'état des lieux sourcé par famille, le recensement du routage, les sorties contraintes à ×1,42, la mémoire qui tient, et la latence.
+
+
+## Tour 15
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, préremplissage par lots, modèle plus gros que la RAM. Poursuivre en parallèle le livrable du modèle nativement événementiel : entraîné ici, exécuté par Drave à logits vérifiés, découpé en unités réparties. Chaque affirmation porte sa mesure (perplexité, débit, octets et événements par jeton, RSS, écart entre nœuds) ET ses conditions (corpus, tokenizer du modèle, charge de fond) ; les manques constatés — embeddings/encodeurs, décodage spéculatif — sont consignés comme manques, pas comme résultats. Livrables : la file tools/campagne-benefices.sh exécutée et ses journaux, un rapport de synthèse par famille de tâches, et la poursuite du modèle événementiel."
+Round: 8/40
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "date; echo \"=== campagne ===\"; tail -3 /tmp/campagne24/journal.txt; echo \"=== batch 4 ===\"; tail -3 /tmp/campagne24/journal6.txt; echo \"=== processus ===\"; ps -eo pid,etime,pcpu,args --sort=-pcpu 2>/dev/null | grep -E \"drave-core\" | head -3 | cut -c1-140; uptime", "description": … [59 caractères tronqués]`
+
+  ```
+jeu 08 oct 2026 22:05:25 EDT
+=== campagne ===
+[08/10 21:21:10] charge 17.44 · grille/r1-1.5B : code 0 · PPL 47.1403 · RSS 4647 Mo · lus 988 Mio
+[08/10 21:39:54] charge 47.40 · grille/r1-14B : code 0 · PPL 14.3048 · RSS 38898 Mo · lus 8304 Mio
+[08/10 22:04:33] charge 28.57 · grille/codestral-22B : code 0 · PPL 35657.3767 · RSS 63646 Mo · lus 12684 Mio
+=== batch 4 ===
+[08/10 21:57:03] charge 16.95 · === batch 4 : latence de génération ===
+[08/10 21:57:15] charge 15.43 · gen/0.5B : prompt  : 11 tokens en 0.307 s  (35.9 tok/s, TTFT 27.9 ms) · suite 29.01 tok/s
+[08/10 21:58:13] charge 13.15 · gen/r1-1.5B : prompt  : 11 tokens en 1.260 s  (8.7 tok/s, TTFT 114.6 ms) · suite 7.14 tok/s
+=== processus ===
+3753967       00:52  708 ./drave-core/target/release/drave /home/stephane/FastNVMe/qwen3-30b-a3b-Q4_K_M.gguf --ppl /tmp/campagne24/ids_qwen3
+3745125       07:12 98.6 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/deepseek-r1-distill-qwen-14b-q4_k_m
+3745124       07:12  0.0 timeout 3600 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/deepseek-r1-distill-qw
+ 22:05:25  up 17 days 11:17,  2 users,  load average: 23,91, 25,15, 25,5
+… [1 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Codestral donne 35 657 de perplexité sur de la prose — je vérifie si c'est le modèle ou la tâche
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=/home/stephane/Data13TB/stephane/modeles/gguf/codestral-22b-v0.1-q4_k_m.gguf; C=/tmp/campagne24\necho \"=== tokenisation du corpus CODE par codestral ===\"; timeout 600 $D $M --tokenize --fichie … [467 caractères tronqués]`
+
+  ```
+=== tokenisation du corpus CODE par codestral ===
+  retour  : "#include\"arg.h\"#include\"common.h\"#include\"downlo"
+codestral sur code (64 jetons) : 
+[timed out after 600000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && setsid nohup bash -c '\nM=/home/stephane/Data13TB/stephane/modeles/gguf/codestral-22b-v0.1-q4_k_m.gguf\nD=./drave-core/target/release/drave\nC=/tmp/campagne24\necho \"=== 1. génération de code (le moteur exécute-t-il Mistral correcte … [671 caractères tronqués]`
+
+  ```
+diagnostic codestral lancé en arrière-plan
+jeu 08 oct 2026 22:15:51 EDT
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md", "new_string": "## 0 bis. Le verdict, famille par famille\n\nLe tableau qui répond à la question posée, avec la mesure qui le porte. ⏳ = file\nen cours au moment de l'écriture.\n\n| famille de tâche … [2207 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -20 reports/rapport-campagne-benefices.md | tail -8; echo \"...\"; grep -n \"^## \" reports/rapport-campagne-benefices.md | head -14", "description": "Verify the report structure"}`
+
+  ```
+## 0. Le piège qui a failli tout fausser
+
+`data/wikitext2_test.txt.ids` **vient d'un autre tokenizer** que Qwen2.5 :
+`201,438,10498…` là où le modèle produit `198,284,8397…`. Sur les mêmes octets :
+
+| identifiants | perplexité (256 jetons, ctx 512) |
+|---|---:|
+...
+14:## 0. Le piège qui a failli tout fausser
+30:## 0 bis. Le verdict, famille par famille
+89:## 2. Les deux familles de tâches que Drave ne couvre pas
+104:## 3. La grille de modèles — « ce modèle tourne-t-il, et à quel prix ? »
+144:## 4. Ce que le dépôt sait déjà, par famille de tâches (avant cette campagne)
+170:## 5. Les modèles entraînés ici, mesurés DANS le moteur
+209:## 7. Répartir par EXPERTS : ce que coûterait l'unité de travail naturelle
+242:## 8. Les tâches à SORTIE CONTRAINTE : une matrice qu'on ne lit pas
+278:## 9. La mémoire TIENT : l'aiguille est retrouvée à toutes les profondeurs
+305:## 10. La génération : TTFT et débit, mesure directe
+321:## 11. Ce qui reste à mesurer (file en cours)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"reports/rapport-campagne-benefices.md\"; s=open(p).read()\n# La section « décodage spéculatif » a perdu son titre en insérant le verdict.\ns = s.replace('''**Ce que le tableau dit en une phrase**''', '''**Ce que … [1901 caractères tronqués]`

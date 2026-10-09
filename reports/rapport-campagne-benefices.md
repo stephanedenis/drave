@@ -27,7 +27,36 @@ perplexité publiée quelque part.
 
 ---
 
-## 1. Le décodage spéculatif : ×1,2, pas ×2 — et c'est mesuré avant d'écrire du moteur
+## 0 bis. Le verdict, famille par famille
+
+Le tableau qui répond à la question posée, avec la mesure qui le porte. ⏳ = file
+en cours au moment de l'écriture.
+
+| famille de tâches | verdict | mesure |
+|---|---|---|
+| **langage** (perplexité) | ✅ tourne — **mais le chemin par listes n'aide pas** | 1,8 à 2,1× **plus lent** en listes sur nos modèles denses (densité 90 %, croisement à 22 %) |
+| **génération / latence** | ✅ mesuré | TTFT **27,9 ms** et **29,0 tok/s** (0,5 B) · 114,6 ms et 7,1 tok/s (1,5 B) |
+| **contexte long — la mémoire** | ✅ **elle tient** | **12 aiguilles sur 12** retrouvées, de 512 à **4 096 jetons**, à 10 %, 50 % et 90 % de profondeur |
+| **contexte long — le coût** | ✅ réglable | KV int8 : +1,5 % (512 j.) à +3,0 % (8 192 j.) de PPL · paginé : **0,03 Go au lieu de 25,77 Go** à 1 M |
+| **préremplissage par lots** | ⏳ | dépôt : **×1,58** · batch 5 sur le 30B depuis le NVMe |
+| **code** | ⏳ diagnostic | codestral-22B : **35 657** de PPL sur de la prose (son propre corpus de code est en cours) |
+| **raisonnement** | ✅ mesuré, et contre-intuitif | r1-distill-1.5B = **1,326 bit/octet**, soit **2,7× pire** que le 0,5 B (0,983) |
+| **MoE / routage d'experts** | ✅ mesuré | 4 experts sur 128 (3,1 %) · déséquilibre **×3,90** · **847 octets** par jeton à router |
+| **sortie contrainte** | ✅ **gagne par construction** | **×1,42** de débit *et* garantie que la sortie appartient à l'ensemble autorisé |
+| **modèle plus gros que la RAM** | ⏳ | dépôt : K3 **206,58 Gio** lus par passe, 133 Mio/s · batch 6 : V4-Flash, **365 Go sur 125 Go** |
+| **répartition à deux nœuds** | ✅ **porte tenue** | écart de perplexité **0,0000 %**, écart de flux **0,00e0** |
+| **embeddings / recherche** | ❌ **manque** | `bge-m3` lisible en en-tête, **inexécutable** (pas d'encodeur bidirectionnel) |
+| **décodage spéculatif** | ❌ manque, et chiffré | brouillon générique : **×1,20** — insuffisant pour justifier le chantier |
+
+**Ce que le tableau dit en une phrase** : Drave gagne **par construction** sur les
+sorties contraintes, **par ses circonstances** sur les modèles plus gros que la
+RAM, et **perd** sur la modélisation de langue ordinaire tant que le modèle n'est
+pas creux — ce qui est exactement le chantier de la parcimonie entraînée.
+
+---
+
+
+## 1. Le décodage spéculatif : ×1,2, pas ×2 — mesuré avant d'écrire du moteur
 
 Le moteur n'a **aucune** implémentation du décodage spéculatif, et le brouillon
 qui dort sur le disque (`eagle3-gpt-oss-120b`) ne peut pas servir seul : un Eagle3
