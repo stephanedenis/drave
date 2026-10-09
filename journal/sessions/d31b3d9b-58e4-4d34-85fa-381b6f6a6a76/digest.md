@@ -8027,3 +8027,25 @@ The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagn
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 git add tools/census_routage.py reports/rapport-campagne-benefices.md && timeout 300 git commit -q -F - <<'MSG'\nRépartir par experts : le déséquilibre est réel, l'élagage impossible, la latence est le coût\n\ntools/censu … [1322 caractères tronqués]`
+
+  ```
+1e11cc7 Répartir par experts : le déséquilibre est réel, l'élagage impossible, la latence est le coût
+jeu 08 oct 2026 21:58:24 EDT
+[08/10 21:21:10] charge 17.44 · grille/r1-1.5B : code 0 · PPL 47.1403 · RSS 4647 Mo · lus 988 Mio
+[08/10 21:39:54] charge 47.40 · grille/r1-14B : code 0 · PPL 14.3048 · RSS 38898 Mo · lus 8304 Mio
+  ```
+
+- **bash** `{"command": "cat > /tmp/campagne24/batch6_v4.sh <<'SH'\n#!/bin/bash\n# Batch 6 — LE CAS EXTRÊME : 365 Go sur une machine de 125 Go de RAM.\n#\n# C'est la revendication centrale du projet, et elle mérite son propre chiffre\n# plutôt qu'une extrapolation : DeepSeek-V4.1-Flash Q2 (365,7 Go, sur le NVMe … [2471 caractères tronqués]`
+
+  ```
+5
+batch 6 (V4.1-Flash, 365 Go) enchaîné
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/campagne-benefices.md", "new_string": "| `portes` | les portes de non-régression | ~10 min |\n\n**Et cinq batches enchaînés automatiquement après la file** (chacun attend le\nmarqueur de fin du précédent — un `pgrep` sur un script p … [995 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/campagne-benefices.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^## \" docs/campagne-benefices.md | head -8; timeout 300 git add docs/campagne-benefices.md && timeout 300 git commit -q -m \"Campagne : les cinq batches enchaînés (tâche, mémoire, génération, lot, cas extrême)\n\nLe plan p … [869 caractères tronqués]`

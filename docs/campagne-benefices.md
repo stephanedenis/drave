@@ -62,9 +62,19 @@ prise sur un fichier d'identifiants d'origine inconnue.
 | `repartition` | `porte-flux.sh` + la porte du modèle entraîné | ~20 min |
 | `portes` | les portes de non-régression | ~10 min |
 
----
+**Et cinq batches enchaînés automatiquement après la file** (chacun attend le
+marqueur de fin du précédent — un `pgrep` sur un script pas encore lancé rend la
+main tout de suite, et deux gros modèles se retrouveraient lus en même temps) :
 
-## 4. Les entraînements lancés en parallèle
+| batch | question | mesure |
+|---|---|---|
+| **2** | le bénéfice événementiel dépend-il de la **tâche** ? | même modèle sur prose, français, code, multilingue : densité, PPL, débit en dense et en listes |
+| **3** | la mémoire **tient-elle** ? | aiguille dans la botte de foin, 512 → 4 096 jetons, 3 profondeurs |
+| **4** | que vaut la **génération** ? | TTFT et débit par modèle, quatre tâches (code, traduction, arithmétique, résumé) verbatim, conversation à trois tours |
+| **5** | le **lot** paie-t-il sur un modèle qui ne tient pas en cache ? | Qwen3-30B-A3B depuis le NVMe, `--lot` 1 → 64 |
+| **6** | le **cas extrême** | DeepSeek-V4.1-Flash Q2, **365,7 Go sur 125 Go de RAM** : octets lus, RSS, temps |
+
+### Les entraînements lancés en parallèle
 
 Deux paires **à lecture égale** (le jumeau dense lit exactement ce que le routé
 lit par jeton), pour voir si l'avantage du routage tient à l'échelle :

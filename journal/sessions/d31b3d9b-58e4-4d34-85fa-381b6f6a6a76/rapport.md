@@ -7,12 +7,12 @@
 | Début | 2026-10-08 09:11 |
 | Durée | 12.8 h |
 | Tours | 13 |
-| Messages | 476 |
-| Appels d'outils | 468 |
+| Messages | 479 |
+| Appels d'outils | 471 |
 | Fichiers touchés | 19 |
-| Commandes | 354 |
+| Commandes | 356 |
 | Sous-agents | 3 |
-| Commits | 19 |
+| Commits | 20 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -646,13 +646,16 @@ Côté GPU : `d256_route` et `d384_route` s'entraînent ; ensuite distillation, 
 
 ### Tour 13 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1476 caractères tronqués]
 
-*5 appels d'outils.* Actions notables :
+*8 appels d'outils.* Actions notables :
 
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/census_routage.py`
 - bash — Run the routing census on the trained model
 - bash — Fix the hook and run the census
 - edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md`
 - bash — Commit the routing census
+- bash — Chain the extreme-size model test
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/campagne-benefices.md`
+- bash — Commit the campaign plan update
 
 **Synthèse produite :**
 
@@ -677,7 +680,7 @@ Côté GPU : `d256_route` et `d384_route` s'entraînent ; ensuite distillation, 
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-modele-moteur.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/configuration-nvme-raid-amd.md` | 1 | 2 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/campagne-benefices.sh` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/campagne-benefices.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/campagne-benefices.md` | 1 | 1 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/campagne_synthese.py` | 1 | 2 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/speculatif.py` | 1 | 0 |
 | `/tmp/campagne24/batch3_niah.sh` | 1 | 0 |
@@ -732,7 +735,7 @@ Côté GPU : `d256_route` et `d384_route` s'entraînent ; ensuite distillation, 
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 314 autres
+- … et 316 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -899,4 +902,5 @@ Côté GPU : `d256_route` et `d384_route` s'entraînent ; ensuite distillation, 
 - Campagne : les quatre premiers modèles entraînés passent la porte du moteur  Chaîne automatique : chaque dossier d'entraînement est exporté dès qu'il apparaît, 
 - Campagne : le chemin par listes coûte 1,8 à 2,1x sur nos propres modèles, et c'est la réponse  Mesuré sur les deux modèles denses entraînés ici, mêmes jetons, m
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 git add tools/census_routage.py reports/rapport-campagne-benefices.md && timeout 300 git commi
+- Campagne : les cinq batches enchaînés (tâche, mémoire, génération, lot, cas extrême)  Le plan porte maintenant la file complète : après les neuf étapes viennent
 
