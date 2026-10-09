@@ -17789,3 +17789,146 @@ MODULE=valeur : sur B = 9.6674 (référence 8.3869 · règle nue 8.8246 · nouve
 ⏵ M1 mesuré : la valeur auto-référentielle ne sauve pas la règle — il faut un signal EXTERNE
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/impulsion-pure-apprenant.md\")\ns = p.read_text()\nancre = \"\"\"**Ce que cela corrige dans ce document** : le troisième facteur de la biologie n'est\npas « la nouveauté », c' … [5285 caractères tronqués]`
+
+  ```
+ok
+4878d81 M1 : le bus de valeur est implémenté, et la valeur auto-référentielle ne suffit pas
+  ```
+
+- **bash** `{"command": "sleep 570; cd /tmp/campagne24 && tail -1 tr_m15.log; grep -E \"m15\" journal14.txt 2>/dev/null | tail -2", "description": "Poll the combined model", "timeoutMs": 600000}`
+
+  ```
+pas  16000 · perte 1.4581 · val 2.2845 bits/octet · 1145 s
+  ```
+
+- **bash** `{"command": "sleep 590; cd /tmp/campagne24 && tail -1 tr_m15.log; grep -E \"m15\" journal14.txt 2>/dev/null | tail -3", "description": "Poll the combined model again", "timeoutMs": 620000}`
+
+  ```
+pas  24000 · perte 1.4511 · val 2.2551 bits/octet · 1713 s
+  ```
+
+### 👤 Utilisateur
+
+nos modèles à décharges fonctionnent-elles en gpu?
+
+### 🤖 Assistant
+
+⏵ Question GPU : je vérifie d'abord ce que le moteur offre comme noyaux
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls drave-core/src/ | head -20; echo \"=== noyaux GPU ===\"; grep -n \"pub fn \\|extern \\\"C\\\"\\|fn proj\\|fn kv\\|fn topk\\|fn expert\" drave-core/src/gpu.rs 2>/dev/null | head -20; echo \"=== taille ===\"; wc -l drave-core/src/gp … [59 caractères tronqués]`
+
+  ```
+clusters.rs
+engine.rs
+engram.rs
+formats.rs
+gguf.rs
+gpu.rs
+kimi_k3.rs
+list.rs
+main.rs
+materiel.rs
+model.rs
+tokenizer.rs
+=== noyaux GPU ===
+17:extern "C" {
+187:    pub fn ouvrir_auto() -> Option<Gpu> {
+195:    pub fn ouvrir(ordinal: c_int) -> Option<Gpu> {
+338:            extern "C" {
+356:    pub fn charger_tete(&self, blocs: &[u8], n_out: usize, _n_in: usize, nb: usize) -> Option<MatriceGpu> {
+379:    pub fn charger_proj(&self, blocs: &[u8], n_out: usize, nb: usize) -> Option<MatriceGpu> {
+385:    pub fn charger_mxfp4(&self, blocs: &[u8], n_out: usize, nb: usize) -> Option<MatriceGpu> {
+404:    pub fn charger_q4k(&self, blocs: &[u8], n_out: usize, nb: usize) -> Option<MatriceGpu> {
+424:    pub fn kv_allouer(&self, n_kv: usize, ctx: usize, hd: usize, bits: u32) -> Option<KvGpu> {
+440:    pub fn kv_assurer(&self, m: &mut KvGpu, besoin: usize) -> bool {
+519:    pub fn kv_ecrire_tranche(&self, m: &mut KvGpu, kvh: usize, pos0: usize, t: usize,
+548:    pub fn kv_ecrire(&self, m: &mut KvGpu, kvh: usize, pos: usize,
+561:    pub fn attn_scores(&self, m: &mut KvGpu, q: &[f32], n: usize, scale: f32,
+641:    pub fn attn_scores_sans_relecture(&self, m: &mut KvGpu, q: &[f32], n: usize,
+736:    pu
+… [553 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"pub fn proj\\|fn proj(\" drave-core/src/gpu.rs; grep -n \"pub fn proj\" -A 22 drave-core/src/gpu.rs | grep -E \"MATVEC|DENSE|events|events|//\" | head -12; echo \"=== le chemin push peut-il passer au GPU ? ===\"; grep -n \" … [138 caractères tronqués]`
+
+  ```
+1307:    pub fn proj_q6k(&self, m: &MatriceGpu, x: &[i32], sx: f32) -> Option<Vec<f32>> {
+1343:    pub fn proj_q4k(&self, m: &MatriceGpu, x: &[i32], sx: f32) -> Option<Vec<f32>> {
+1379:    pub fn proj_mxfp4(&self, m: &MatriceGpu, x: &[i32], sx: f32) -> Option<Vec<f32>> {
+1416:    pub fn proj(&self, m: &MatriceGpu, x: &[i32], sx: f32) -> Option<Vec<f32>> {
+=== le chemin push peut-il passer au GPU ? ===
+1559:        let gpu = match (&d, crate::gpu::instance()) {
+4287:                          && crate::gpu::instance().is_some() {
+4288:            let machine = crate::gpu::instance();
+4372:                               && crate::gpu::instance().is_some()
+4583:        if let (Some(machine), Some(mg)) = (crate::gpu::instance(), p.gpu.as_ref()) {
+4587:            if let Some(y) = machine.proj(mg, &xd, sx) {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1416,1432p' drave-core/src/gpu.rs; echo \"=== où p.gpu est-il rempli ? ===\"; sed -n '1556,1572p' drave-core/src/model.rs", "description": "Read the GPU projection kernel and its wiring"}`
+
+  ```
+pub fn proj(&self, m: &MatriceGpu, x: &[i32], sx: f32) -> Option<Vec<f32>> {
+        cu_ctx(self.ctx);
+        let n_in = m.nb * 32;
+        if x.len() < n_in { return None; }
+        unsafe {
+            let rc = cuMemcpyHtoD_v2(m.x_dev, x.as_ptr() as *const c_void, n_in * 4);
+            if rc != 0 { return None; }
+            let mut p_poids = m.poids;
+            let mut p_x = m.x_dev;
+            let mut p_out = m.out_dev;
+            let n_out = m.n_out as c_int;
+            let nb = m.nb as c_int;
+            let mut params: [*mut c_void; 6] = [
+                &mut p_poids as *mut u64 as *mut c_void,
+                &mut p_x as *mut u64 as *mut c_void,
+                &mut p_out as *mut u64 as *mut c_void,
+                &n_out as *const c_int as *mut c_void,
+=== où p.gpu est-il rempli ? ===
+        // tout en latence de lancement et de synchronisation : c'est ce qu'il
+        // faudra réduire (lancements groupés, flux) avant de descendre le seuil.
+        const SEUIL_GPU: usize = 8 << 20;
+        let gpu = match (&d, crate::gpu::instance()) {
+            (Some(d8), Some(machine))
+                if d8.src == crate::list::Source8::Q8_0 && keep >= 1.0
+                   &&
+… [344 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification empirique : que fait le moteur avec `DRAVE_GPU=1` sur nos modèles creux ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && C=/tmp/campagne24; echo \"=== taille de la plus grosse projection de nos modèles ===\"; /home/stephane/gpu-env/bin/python -c \"\nfor n in ['m8_d512_kwta25','m7_d384_kwta025','m5_d384_dense']:\n    import json\n    c=json.load(open(f' … [612 caractères tronqués]`
+
+  ```
+=== taille de la plus grosse projection de nos modèles ===
+  m8_d512_kwta25         .mlp.down_proj = 1536x512 -> Q8 0.80 Mio (seuil GPU : 8,00 Mio)
+  m7_d384_kwta025        .mlp.down_proj = 1152x384 -> Q8 0.45 Mio (seuil GPU : 8,00 Mio)
+  m5_d384_dense          .mlp.down_proj = 1152x384 -> Q8 0.45 Mio (seuil GPU : 8,00 Mio)
+=== DRAVE_GPU=1 sur le modèle creux ===
+CUDA cuDeviceGet : CUDA_ERROR_INVALID_DEVICE (101)
+[gpu] périphérique 1 indisponible, essai du suivant
+      63 tokens notés — perplexité cumulée 4.566  (200.2 tok/s)
+=== perplexité 4.5656 sur 63 tokens (792749361 événements, 0.3 s) ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/gpt-oss-120b-MXFP4.gguf --tensors 2>/dev/null | grep -E \"attn_q|attn_output|ffn_down\" | head -4; echo \"=== et le 30B ===\"; timeout 300 ./ … [253 caractères tronqués]`
+
+  ```
+F32      blk.0.attn_output.bias                 [2880] · 0.0 M poids · fichier 0
+  Q8_0     blk.0.attn_output.weight               [2880, 4096] · 11.8 M poids · fichier 0
+  F32      blk.0.attn_q.bias                      [4096] · 0.0 M poids · fichier 0
+  Q8_0     blk.0.attn_q.weight                    [4096, 2880] · 11.8 M poids · fichier 0
+=== et le 30B ===
+  Q4_K     blk.0.attn_output.weight               [2048, 4096] · 8.4 M poids · fichier 0
+  Q4_K     blk.0.attn_q.weight                    [4096, 2048] · 8.4 M poids · fichier 0
+  F32      blk.0.attn_q_norm.weight               [128] · 0.0 M poids · fichier 0
+  ```
+
+### 🤖 Assistant
+
+⏵ Réponse mesurée : nos modèles à décharges ne vont PAS sur le GPU — deux raisons distinctes
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/modele-pour-drave.md\")\ns = p.read_text()\nancre = \"\"\"---\n\n## 5. Les expériences à faire, par ordre de rendement\"\"\"\nassert ancre in s\najout = \"\"\"---\n\n## 4 bis. … [3968 caractères tronqués]`

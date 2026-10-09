@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 28.3 h |
+| Durée | 28.6 h |
 | Tours | 30 |
-| Messages | 1126 |
-| Appels d'outils | 1077 |
+| Messages | 1135 |
+| Appels d'outils | 1085 |
 | Fichiers touchés | 34 |
-| Commandes | 890 |
+| Commandes | 898 |
 | Sous-agents | 3 |
-| Commits | 90 |
+| Commits | 91 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -1412,7 +1412,7 @@ Rien n'est laissé en suspens dans le dépôt : tout est committé (dernier : `e
 
 ### Tour 30 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1477 caractères tronqués]
 
-*6 appels d'outils.* Actions notables :
+*14 appels d'outils.* Actions notables :
 
 - bash — Poll the combined structure+sparsity model
 - bash — Read the token scoring spot
@@ -1420,10 +1420,18 @@ Rien n'est laissé en suspens dans le dépôt : tout est committé (dernier : `e
 - bash — Test the value-modulated local rule
 - bash — Run the value-modulation experiment correctly
 - bash — Record the M1 measurement and check m15
+- bash — Poll the combined model
+- bash — Poll the combined model again
+- bash — Inspect the GPU module
+- bash — Check whether the GPU projection kernel is dense only
+- bash — Read the GPU projection kernel and its wiring
+- bash — Check GPU thresholds and behaviour on our models
+- bash — Check which models have Q8_0 projections eligible for GPU offload
+- bash — Record the GPU answer and check m15
 
 **Synthèse produite :**
 
-⏵ M1 mesuré : la valeur auto-référentielle ne sauve pas la règle — il faut un signal EXTERNE
+⏵ Réponse mesurée : nos modèles à décharges ne vont PAS sur le GPU — deux raisons distinctes
 
 ## 3. Travail accompli
 
@@ -1514,7 +1522,7 @@ Rien n'est laissé en suspens dans le dépôt : tout est committé (dernier : `e
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 850 autres
+- … et 858 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1752,4 +1760,5 @@ Rien n'est laissé en suspens dans le dépôt : tout est committé (dernier : `e
 - E6 : mesure définitive — le fichier sauvé ne reproduit pas le modèle entraîné  Avec le protocole de l'entraînement lui-même (mêmes fenêtres, même formule) :   t
 - L'architecture du cerveau face à Drave : les briques y sont, les formes non  Nouveau document : après la brique (docs/biologie-pour-drave.md), l'édifice. Les ch
 - M1 : le bus de valeur est implémenté, et la valeur auto-référentielle ne suffit pas  Le manque M1 (un scalaire diffusé à toutes les couches, comme un noyau neur
+- Nos modèles à décharges ne vont pas sur GPU : trop petits, et le noyau GPU est dense  Vérifié dans le code et par la mesure. Trois conditions pour déporter une 
 

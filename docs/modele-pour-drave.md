@@ -293,6 +293,50 @@ un noyau Q8 par expert, un exporteur qui réordonne, et un entraînement à fen�
 
 ---
 
+## 4 bis. Nos modèles à décharges fonctionnent-ils en GPU ? Non — et il y a deux raisons distinctes
+
+Question posée le 9 octobre. Réponse vérifiée dans le code **et** par la mesure.
+
+**Ce que le moteur sait déporter** (`gpu.rs`, 1 573 lignes) : les projections Q8_0
+(`charger_proj` → noyau dense int8), le cache KV (`kv_*`), les scores d'attention et
+leur top-k (`attn_scores`, `attn_topk_*`), et les experts MXFP4 / Q4_K
+(`charger_mxfp4`, `charger_q4k`).
+
+**Trois conditions pour qu'une projection parte sur le GPU** (model.rs, `Proj::load`) :
+
+| condition | valeur | nos modèles |
+|---|---|---|
+| source **Q8_0** (forme dense 8 bits) | obligatoire | ✅ (FFN exportée en Q8) |
+| **aucun élagage** (`keep >= 1.0`) | obligatoire | ❌ pour tout modèle à poids creux |
+| taille **≥ 8 Mio** par projection | `SEUIL_GPU` | ❌ **0,45 à 0,80 Mio** — dix fois trop petits |
+
+**Donc : aucun de nos modèles à décharges n'utilise le GPU.** Mesuré à l'instant :
+`DRAVE_GPU=1` sur `m8_d512_kwta25` rend exactement la même perplexité (4,5656) et le
+même débit, en annonçant au passage que le périphérique demandé est indisponible —
+puis il retombe proprement sur le CPU, sans changer un chiffre.
+
+**Et la seconde raison est plus profonde que la taille** : le noyau GPU est un
+**produit dense** — `proj(m, x: &[i32], sx)` reçoit le **vecteur d'activation complet**,
+zéros compris, et calcule le produit entier. Or tout l'avantage du chemin par listes
+est de **ne pas lire les poids nuls**. Déporter une projection creuse sur ce noyau
+**détruirait exactement ce que la parcimonie apporte** : on gagnerait la bande passante
+de la carte et on perdrait le saut des lectures.
+
+**Pour qu'un modèle à décharges aille sur GPU, il faudrait un noyau de LISTES sur la
+carte** : n'envoyer que les indices non nuls et ne lire que les lignes de poids
+correspondantes (un *gather* sur le périphérique, ou un format creux compressé). Ça
+n'existe pas — c'est le pendant GPU exact du manque déjà consigné côté experts
+(« le chargeur d'experts refuse Q8_0 »).
+
+**Ce que le GPU sert déjà, en revanche** : sur **gpt-oss-120B**, les projections
+d'attention sont en Q8_0 et pèsent **12,5 Mio** — au-dessus du seuil — donc elles
+*sont* déportées dès `DRAVE_GPU=1`. Sur le 30B (Q4_K partout), aucune projection n'a
+de forme dense 8 bits : rien à déporter. Le seuil de 8 Mio, lui, n'est pas arbitraire :
+il vient de la mesure — 60 µs d'aller-retour contre 123 µs de calcul CPU pour la FFN
+du 0,5 B (le CPU gagne), 187 contre 216 µs pour l'attention de gpt-oss (le GPU gagne).
+
+---
+
 ## 5. Les expériences à faire, par ordre de rendement
 
 1. **Élagage appris** (B) — ajouter au harnais d'entraînement un élagage par
