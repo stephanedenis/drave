@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 26.8 h |
+| Durée | 27.0 h |
 | Tours | 27 |
-| Messages | 1059 |
-| Appels d'outils | 1018 |
+| Messages | 1064 |
+| Appels d'outils | 1022 |
 | Fichiers touchés | 32 |
-| Commandes | 836 |
+| Commandes | 840 |
 | Sous-agents | 3 |
-| Commits | 81 |
+| Commits | 82 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -1270,7 +1270,7 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 
 ### Tour 27 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1477 caractères tronqués]
 
-*409 appels d'outils.* Actions notables :
+*413 appels d'outils.* Actions notables :
 
 - bash — Check the full state
 - bash — Measure the distilled d384 with the correct protocol
@@ -1286,11 +1286,11 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - bash — Read parcimonie, contexte, lot steps
 - bash — Inspect batch2 script
 - bash — Read batch2 journal and latency map
-- … et 362 autres
+- … et 366 autres
 
 **Synthèse produite :**
 
-⏵ Rédaction : notre règle hebbienne différentielle face à la biologie
+⏵ Résultat E1 : un connectome inné ALÉATOIRE coûte +1 % et divise les événements par 4
 
 ## 3. Travail accompli
 
@@ -1379,7 +1379,7 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 796 autres
+- … et 800 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1608,4 +1608,5 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - E6 outillée : poids log-normaux (theta = log|w| appris, signes figés à la naissance)  Les synapses corticales sont log-normales ; nos modèles sont quasi gaussie
 - Les deux axes appris se cumulent : +poids élagués appris = ÷2 lectures à qualité égale  m11_d384_kwta25_elag50 reprend exactement kwta025 plus un élagage APPRIS
 - Notre hebbien différentiel face à la biologie : pourquoi il échoue, et par quoi le remplacer  Le dépôt a appliqué, mesuré, sauvé, rechargé ET réfuté une règle h
+- E1 : un connectome inné ALÉATOIRE coûte 1 % de perplexité et divise les lectures par 4  Même modèle que le témoin dense (dim 384, 40 000 pas, même export), sauf
 

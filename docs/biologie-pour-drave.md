@@ -261,6 +261,34 @@ rétropropagation — c'est une facilité qu'il ne faut pas confondre avec une
 nécessité) ; et comment croître **sans réentraîner** (le cerveau ajoute des synapses
 localement).
 
+### 4 bis. E1 — le résultat : un connectome inné ALÉATOIRE coûte 1 %
+
+Mesuré le 9 octobre à 12 h 06. Même modèle que le témoin dense (dim 384, 4 couches,
+40 000 pas, mêmes données, même export Q8), **sauf** qu'un quart des connexions de
+chaque ligne est tiré **au hasard à la naissance** et ne change plus jamais — seuls
+les poids des connexions existantes sont appris.
+
+| dim 384, 8 × 128 jetons | perplexité | **événements/fenêtre** | débit |
+|---|---:|---:|---:|
+| témoin dense (toutes les connexions) | **4,9959** | 336,7 M | 131,4 tok/s |
+| **connectome inné à 25 %** (aléatoire, figé) | **5,0472** (+1,0 %) | **81,6 M (÷4,1)** | **276,2 tok/s (×2,1)** |
+
+**Un pour cent de perplexité pour quatre fois moins de lectures et deux fois plus de
+débit.** Et c'est un masque **aléatoire** : la structure n'a pas eu besoin d'être
+apprise ni optimisée. La validation à l'entraînement suit (2,0413 contre 1,9020 pour
+le témoin, soit +7 % en bits/octet là où le moteur ne mesure que +1 % de perplexité —
+l'écart entre les deux unités est le même qu'au § 5 bis de la campagne).
+
+**Ce que cela établit** : la thèse du § 4 — *structure innée, poids appris* — tient
+pour un modèle de cette taille, sur cette tâche, avec un masque tiré au hasard. Le
+coût d'exécution est **borné dès la conception** (81,6 M d'événements au lieu de
+336,7 M), sans aucun top-k à l'exécution, donc sans la fragilité du « exécuter au
+taux appris » (§ 5 ter de la campagne).
+
+**Ce que cela n'établit pas** : qu'un masque *appris* ne ferait pas mieux (l'écart de
+1 % est peut-être récupérable), ni que le résultat tient à d'autres échelles — et
+c'est la prochaine mesure à faire (le même masque à dim 512 et à 12,5 %).
+
 ---
 
 ## 5. L'axe « génie / idiot » : ce que la littérature dit vraiment
@@ -295,7 +323,7 @@ Aucune ne demande de nouveau moteur : le harnais d'entraînement (`--kwta`,
 
 | # | expérience | ce qu'elle teste | coût |
 |---|---|---|---|
-| **E1** | **masque inné creux** : masque aléatoire fixe à **25 %** des connexions par ligne, seuls ces poids sont appris, mesuré au protocole 8 × 128 contre un dense iso-tout | la structure fixe suffit-elle, ou faut-il apprendre *où* sont les connexions ? | **outillé et en file** (`--masque`, chaîne jour4) |
+| **E1** | **masque inné creux** : masque aléatoire fixe à **25 %** des connexions par ligne, seuls ces poids sont appris, mesuré au protocole 8 × 128 contre un dense iso-tout | la structure fixe suffit-elle, ou faut-il apprendre *où* sont les connexions ? | **FAIT — voir § 4 bis** |
 | **E2** | **croissance** : partir de 10 % de connexions, en **ajouter** selon l'activité (règle locale : une connexion naît là où deux neurones s'activent ensemble), mesurer la trajectoire | l'inné + la croissance locale peuvent-ils remplacer l'apprentissage global des poids ? | ~2 h, règle locale à écrire |
 | **E3** | **élagage développemental** : dense → élagage appris à 50 % puis 25 % (§ déjà outillé) | la trajectoire biologique (surproduire puis élaguer) bat-elle l'entraînement creux direct (`--kwta`) ? | **déjà en file** (`m11`, chaîne jour3) |
 | **E4** | **balance excitation/inhibition** : contrainte de signe sur les poids (80 % excitateurs / 20 % inhibiteurs), mesurer stabilité et qualité | la séparation E/I est-elle un levier de stabilité à long entraînement ? | le banc `--poids-signes` existe ; à porter dans l'entraînement |

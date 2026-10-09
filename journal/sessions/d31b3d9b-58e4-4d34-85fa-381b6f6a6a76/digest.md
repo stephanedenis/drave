@@ -16881,3 +16881,46 @@ Created file
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/hebbien-differentiel-et-biologie.md && git commit -q -m \"Notre hebbien différentiel face à la biologie : pourquoi il échoue, et par quoi le remplacer\n\nLe dépôt a appliqué, mesuré, sauvé, rechargé ET réfuté une règle h … [1614 caractères tronqués]`
+
+  ```
+5eaa70b Notre hebbien différentiel face à la biologie : pourquoi il échoue, et par quoi le remplacer
+  ```
+
+- **bash** `{"command": "cd /tmp/campagne24 && grep -E \"m12|INNÉ\" journal12.txt 2>/dev/null | tail -4; tail -1 tr_m12_masque.log 2>/dev/null; tail -1 tr_m13_lognormal.log 2>/dev/null || echo \"(m13 en attente)\"", "description": "Check the innate-mask and log-normal chains"}`
+
+  ```
+pas  32000 · perte 1.2614 · val 2.0610 bits/octet · 1605 s
+(m13 en attente)
+  ```
+
+- **bash** `{"command": "ls -la /tmp/*hebb* /tmp/*langue* 2>/dev/null | head -8; ls /tmp/campagne24/*hebb* 2>/dev/null | head; grep -rl \"hebb-diff\" /tmp/*.sh /tmp/campagne24/*.sh 2>/dev/null | head -3", "description": "Look for the Hebbian out-of-sample scripts"}`
+
+  ```
+-rw-r--r--. 1 stephane stephane      414  1 oct 15:07 /tmp/analyse_langues2.log
+-rw-r--r--. 1 stephane stephane     2533  1 oct 15:07 /tmp/analyse_langues2.py
+-rw-r--r--. 1 stephane stephane      549  1 oct 15:07 /tmp/analyse_langues.log
+-rw-r--r--. 1 stephane stephane     1748  1 oct 14:57 /tmp/analyse_langues.py
+-rw-r--r--. 1 stephane stephane      768  6 oct 21:58 /tmp/etats_sans_langue.log
+-rw-r--r--. 1 stephane stephane 17432576 27 sep 08:58 /tmp/hebb12.bin
+-rw-r--r--. 1 stephane stephane 17432576 27 sep 08:55 /tmp/hebb_test.bin
+-rw-r--r--. 1 stephane stephane      306  1 oct 14:43 /tmp/mesure_langue.log
+  ```
+
+- **bash** `{"command": "sleep 590; cd /tmp/campagne24 && grep -E \"m12|m5_d384\" journal12.txt 2>/dev/null | tail -4; tail -1 tr_m12_masque.log", "description": "Poll the innate connectome results", "timeoutMs": 620000}`
+
+  ```
+[09/10 12:06:34] charge 3.00 · m12_d384_masque25 :   # meilleur point : pas 40000 · val 2.0413 bits/octet
+[09/10 12:06:42] charge 3.64 · m5_d384_dense_q8 : PPL 4.9959 · 336683915 événements/fenêtre · 131.4 tok/s
+[09/10 12:06:46] charge 4.47 · m12_d384_masque25 : PPL 5.0472 · 81603388 événements/fenêtre · 276.2 tok/s
+  # écrit dans /tmp/m12_d384_masque25 · 7.18 M paramètres · 1.92 M poids lus/jeton/couche
+  ```
+
+### 👤 Utilisateur
+
+Drave en mode impulsion pur, moyennant des mécanismes supplémentaires, serait-il un meilleur apprenant?
+
+### 🤖 Assistant
+
+⏵ Résultat E1 : un connectome inné ALÉATOIRE coûte +1 % et divise les événements par 4
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/biologie-pour-drave.md\")\ns = p.read_text()\nancre = \"\"\"| **E1** | **masque inné creux** : masque aléatoire fixe à **25 %** des connexions par ligne, seuls ces poids sont  … [3588 caractères tronqués]`
