@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 12.3 h |
+| Durée | 12.5 h |
 | Tours | 10 |
-| Messages | 421 |
-| Appels d'outils | 419 |
+| Messages | 428 |
+| Appels d'outils | 426 |
 | Fichiers touchés | 18 |
-| Commandes | 313 |
+| Commandes | 319 |
 | Sous-agents | 3 |
-| Commits | 13 |
+| Commits | 14 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -488,7 +488,7 @@ Toute la campagne serait partie d'un chiffre faux. La règle est maintenant dans
 
 ### Tour 10 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1476 caractères tronqués]
 
-*26 appels d'outils.* Actions notables :
+*33 appels d'outils.* Actions notables :
 
 - bash — Check campaign and training status
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/campagne_synthese.py`
@@ -504,7 +504,7 @@ Toute la campagne serait partie d'un chiffre faux. La règle est maintenant dans
 - bash — Download a 1.5B target model for the speculative test
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/speculatif.py`
 - bash — Test the speculative acceptance script
-- … et 12 autres
+- … et 19 autres
 
 **Synthèse produite :**
 
@@ -533,7 +533,7 @@ Toute la campagne serait partie d'un chiffre faux. La règle est maintenant dans
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/campagne_synthese.py` | 1 | 2 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/speculatif.py` | 1 | 0 |
 | `/tmp/campagne24/batch3_niah.sh` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md` | 1 | 1 |
 
 ### Sous-agents lancés
 
@@ -583,7 +583,7 @@ Toute la campagne serait partie d'un chiffre faux. La règle est maintenant dans
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 273 autres
+- … et 279 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -744,4 +744,5 @@ Toute la campagne serait partie d'un chiffre faux. La règle est maintenant dans
 - Campagne 24 h : mesurer ce que l'architecture par listes vaut, tâche par tâche  Le dépôt a surtout mesuré un couple (Qwen2.5-0.5B, perplexité). tools/campagne-b
 - Campagne : le décodage spéculatif naïf vaut ×1,2 (mesuré), et deux familles manquent  tools/speculatif.py mesure ce qu'il faut savoir AVANT d'écrire le décodage
 - Campagne : le décodage spéculatif naïf vaut ×1,2 (mesuré), et deux familles manquent  tools/speculatif.py mesure ce qu'il faut savoir AVANT d'écrire le décodage
+- Campagne : la perplexité n'est comparable qu'à tokenizer égal — colonne bits/octet  Trois modèles de la grille partagent EXACTEMENT le même tokenizer (leurs fic
 

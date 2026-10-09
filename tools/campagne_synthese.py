@@ -13,6 +13,7 @@ Usage :
 """
 import argparse
 import glob
+import math
 import os
 import re
 import sys
@@ -25,6 +26,7 @@ RE_PAIRES = re.compile(r"total ([0-9.]+) M")
 RE_RSS = re.compile(r"Maximum resident set size \(kbytes\): (\d+)")
 RE_LUS = re.compile(r"File system inputs: (\d+)")
 RE_TEMPS = re.compile(r"Elapsed \(wall clock\) time[^:]*: ([0-9:.]+)")
+RE_TOK_CORPUS = re.compile(r"(\d+) tokens écrits")
 
 
 def lire(chemin):
@@ -32,6 +34,19 @@ def lire(chemin):
         with open(chemin, encoding="utf-8", errors="replace") as f:
             return f.read()
     except OSError:
+        return ""
+
+
+def bits_par_octet(ppl, jetons_corpus, octets_corpus):
+    """La perplexité n'est comparable entre modèles QUE si le tokenizer est le
+    même. Codestral (32 768 entrées) découpe le même texte en 288 554 jetons là où
+    Qwen en fait 85 626 : son « PPL » ne se lit pas sur la même échelle. Le
+    bits/octet, lui, se compare — c'est la seule unité commune entre tokenizers."""
+    if not ppl or not jetons_corpus or not octets_corpus:
+        return ""
+    try:
+        return f"{math.log2(float(ppl)) * jetons_corpus / octets_corpus:.3f}"
+    except (ValueError, ZeroDivisionError):
         return ""
 
 
@@ -60,8 +75,16 @@ def mesure(prefixe, dossier):
     rss = RE_RSS.search(t)
     lus = RE_LUS.search(t)
     duree = RE_TEMPS.search(t)
+    # Le nombre de jetons du corpus vient du log de tokenisation du MÊME modèle.
+    base = prefixe.split("_ppl")[0]
+    tok_log = lire(os.path.join(dossier, base + "_tokenize.log"))
+    mt = RE_TOK_CORPUS.search(tok_log)
+    octets_corpus = 359041          # data/wikitext2_test.txt, mesuré une fois
+    bpo = bits_par_octet(ppl.group(1) if ppl else "", int(mt.group(1)) if mt else 0,
+                         octets_corpus)
     return {
         "etape": prefixe,
+        "bits_octet": bpo,
         "ppl": ppl.group(1) if ppl else "",
         "jetons": ppl.group(2) if ppl else "",
         "evenements": ev.group(1) if ev else "",
@@ -90,9 +113,9 @@ def main():
     if not lignes:
         print("aucune mesure trouvée", file=sys.stderr)
         return 1
-    colonnes = ["etape", "ppl", "jetons", "evenements", "tok_s", "en_listes",
-                "paires", "rss_go", "lus_go", "duree"]
-    titres = ["mesure", "perplexité", "jetons", "événements", "tok/s",
+    colonnes = ["etape", "ppl", "bits_octet", "jetons", "evenements", "tok_s",
+                "en_listes", "paires", "rss_go", "lus_go", "duree"]
+    titres = ["mesure", "perplexité", "bits/octet", "jetons", "événements", "tok/s",
               "en listes (M)", "paires (M)", "RSS (Go)", "lus (Go)", "durée"]
     out = ["| " + " | ".join(titres) + " |",
            "|" + "|".join(["---"] * len(titres)) + "|"]

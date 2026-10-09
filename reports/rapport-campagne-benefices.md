@@ -79,17 +79,38 @@ MoE, multilingue, lots, gros-modèle-sur-petite-machine) est couvert.
 Mêmes 256 jetons, même contexte, chaque modèle tokenisant son propre corpus
 (`/usr/bin/time -v` pour la mémoire et les octets lus).
 
-| modèle | perplexité | tok/s | RSS | octets lus | condition |
-|---|---:|---:|---:|---:|---|
-| Qwen2.5-0.5B Q8_0 | **17,43** | 28,7 | 1,28 Go | 0 | en cache |
-| r1-distill-Qwen-1.5B Q4_K_M | **47,14** | 9,5 | 4,76 Go | 1,04 Go | lu du disque |
-| r1-distill-Qwen-14B Q4_K_M | *en cours* | | | | |
-| codestral-22B Q4_K_M | *en cours* | | | | |
-| Qwen3-30B-A3B Q4_K_M (MoE) | *en cours* | | | | |
-| gpt-oss-120b MXFP4 | *en cours* | | | | 63 Go depuis le disque dur |
+| modèle | perplexité | **bits/octet** | tok/s | RSS | octets lus | condition |
+|---|---:|---:|---:|---:|---:|---|
+| Qwen2.5-0.5B Q8_0 | **17,43** | **0,983** | 28,7 | 1,28 Go | 0 | en cache |
+| r1-distill-Qwen-1.5B Q4_K_M | **47,14** | **1,326** | 9,5 | 4,76 Go | 1,04 Go | lu du disque |
+| r1-distill-Qwen-14B Q4_K_M | **14,30** | **0,915** | 0,5 | 39,8 Go | 8,71 Go | lu du disque, charge 47 |
+| codestral-22B Q4_K_M | *en cours* | | | | | tokenizer Mistral (32 768) |
+| Qwen3-30B-A3B Q4_K_M (MoE) | *en cours* | | | | | |
+| gpt-oss-120b MXFP4 | *en cours* | | | | | 63 Go depuis le disque dur |
+
+**La perplexité n'est PAS comparable d'un tokenizer à l'autre.** Codestral
+(32 768 entrées) découpe ce texte en **288 554** jetons là où Qwen en fait
+**85 626** : son « PPL » se lit sur une autre échelle. La colonne **bits/octet**
+est la seule unité commune — `log₂(PPL) × jetons / octets`, recalculée depuis le
+journal de tokenisation de chaque modèle. Le tableau la porte pour que la
+comparaison reste possible.
+
+**Un résultat contre-intuitif, et il est solide** : les trois premiers modèles
+partagent **exactement le même tokenizer** (leurs fichiers d'identifiants
+commencent par les mêmes jetons `198,284,8397,…`), donc leurs chiffres se
+comparent directement. Or le **r1-distill-1.5B est 2,7× PIRE que le 0.5B** sur
+cette tâche (1,326 contre 0,983 bit/octet). Ce n'est pas la quantification
+(Q4_K_M contre Q8_0) qui explique un tel écart : c'est le modèle — un distillat de
+raisonnement, entraîné pour produire de longues chaînes de pensée, est mauvais en
+modélisation de langue pure. **La taille ne dit pas la qualité pour une tâche
+donnée** ; c'est exactement ce que la question « pour tout type de tâches »
+demandait de vérifier, et la réponse est non.
+
+Le 14B redresse la barre (0,915 bit/octet) mais à **0,5 tok/s** sous charge 47 —
+le temps, lui, n'est pas une mesure propre ici, et c'est écrit dans le journal.
 
 *(tableau complété à mesure ; `tools/campagne_synthese.py` le régénère depuis les
-journaux)*
+journaux, colonne `bits/octet` comprise)*
 
 ---
 

@@ -7334,3 +7334,89 @@ A  tools/campagne_synthese.py
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 git commit -q -m \"Campagne : le décodage spéculatif naïf vaut ×1,2 (mesuré), et deux familles manquent\n\ntools/speculatif.py mesure ce qu'il faut savoir AVANT d'écrire le décodage\nspéculatif dans le moteur : le taux d' … [786 caractères tronqués]`
+
+  ```
+89ae2c3 Campagne : le décodage spéculatif naïf vaut ×1,2 (mesuré), et deux familles manquent
+  ```
+
+- **bash** `{"command": "ps -eo pid,pcpu,pmem,stat,comm --sort=-pcpu 2>/dev/null | head -8; echo \"=== iowait ===\"; vmstat 1 2 2>/dev/null | tail -1; echo \"=== campagne ===\"; tail -3 /tmp/campagne24/journal.txt", "description": "Identify what is loading the machine"}`
+
+  ```
+PID %CPU %MEM STAT COMMAND
+3710537 1649  0.8 Rl   drave
+3705939  444 30.1 Rl   drave
+3713176  400  0.0 R    ps
+3658389 98.6  1.0 Sl   python
+3658390 97.6  1.1 Rl   python
+2062778 42.0  0.1 Rl+  node-MainThread
+  11117 32.2  0.3 Rl   node-MainThread
+=== iowait ===
+48  0 24078988 6848108  24 75917688  0    0     0   420 46136 10983 99 1 0  0  0  0
+=== campagne ===
+[08/10 21:19:49] charge 15.61 · --- étape grille ---
+[08/10 21:20:04] charge 17.95 · grille/0.5B-Q8 : code 0 · PPL 17.4315 · RSS 1249 Mo · lus 0 Mio
+[08/10 21:21:10] charge 17.44 · grille/r1-1.5B : code 0 · PPL 47.1403 · RSS 4647 Mo · lus 988 Mio
+  ```
+
+- **bash** `{"command": "sleep 600; echo \"=== journal ===\"; tail -6 /tmp/campagne24/journal.txt; echo \"=== processus drave ===\"; ps -eo pid,etime,pcpu,rss,comm --sort=-pcpu 2>/dev/null | grep -E \"drave|python\" | head -4; echo \"=== entraînements ===\"; tail -1 /tmp/campagne24/tr_d256_dense.log; tail -1 /t … [105 caractères tronqués]`
+
+  ```
+(no output)
+[timed out after 600000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "date; tail -8 /tmp/campagne24/journal.txt; echo \"=== drave ===\"; ps -eo pid,etime,pcpu,rss,comm --sort=-pcpu 2>/dev/null | grep drave | head -3", "description": "Check campaign state after wait", "timeoutMs": 60000}`
+
+  ```
+jeu 08 oct 2026 21:43:33 EDT
+[08/10 21:17:25] charge 2.97 · noyau : bande passante mémoire mesurée : 18.1 Go/s
+[08/10 21:17:25] charge 2.97 · noyau : push/pull = ×3.10
+[08/10 21:19:49] charge 15.61 · === campagne démarrée (pid 3695400) ===
+[08/10 21:19:49] charge 15.61 · --- étape grille ---
+[08/10 21:20:04] charge 17.95 · grille/0.5B-Q8 : code 0 · PPL 17.4315 · RSS 1249 Mo · lus 0 Mio
+[08/10 21:21:10] charge 17.44 · grille/r1-1.5B : code 0 · PPL 47.1403 · RSS 4647 Mo · lus 988 Mio
+[08/10 21:39:54] charge 47.40 · grille/r1-14B : code 0 · PPL 14.3048 · RSS 38898 Mo · lus 8304 Mio
+=== drave ===
+3719203       00:58 1875 1214304 drave
+3718149       03:38 98.0 17591400 drave
+  ```
+
+- **bash** `{"command": "cd /tmp/campagne24 && echo \"=== en-tête des ids ===\"; head -c 60 ids_0.5B-Q8.txt; echo; head -c 60 ids_r1-1.5B.txt; echo; head -c 60 ids_r1-14B.txt; echo; echo \"=== tailles de vocabulaire annoncées ===\"; grep -h \"vocabulaire\" grille_*_tokenize.log; echo \"=== premières mesures === … [187 caractères tronqués]`
+
+  ```
+=== en-tête des ids ===
+198,284,8397,425,10965,465,284,14731,8397,425,10965,465,374,
+198,284,8397,425,10965,465,284,14731,8397,425,10965,465,374,
+198,284,8397,425,10965,465,284,14731,8397,425,10965,465,374,
+=== tailles de vocabulaire annoncées ===
+85626 tokens écrits dans /tmp/campagne24/ids_0.5B-Q8.txt (vocabulaire du modèle : 151936)
+288554 tokens écrits dans /tmp/campagne24/ids_codestral-22B.txt (vocabulaire du modèle : 32768)
+85626 tokens écrits dans /tmp/campagne24/ids_r1-14B.txt (vocabulaire du modèle : 152064)
+85626 tokens écrits dans /tmp/campagne24/ids_r1-1.5B.txt (vocabulaire du modèle : 151936)
+=== premières mesures ===
+| mesure | perplexité | jetons | événements | tok/s | en listes (M) | paires (M) | RSS (Go) | lus (Go) | durée |
+|---|---|---|---|---|---|---|---|---|---|
+| `grille_0.5B-Q8_ppl` | `17.4315` | `255` | `0` | `28.7` | `0.0` | `495.4` | `1.28` | `0.00` | `` |
+| `grille_r1-1.5B_ppl` | `47.1403` | `255` | `0` | `9.5` | `0.0` | `1548.8` | `4.76` | `1.04` | `` |
+| `grille_r1-14B_ppl` | `14.3048` | `255` | `0` | `0.5` | `0.0` | `14042.7` | `39.83` | `8.71` | `` |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"tools/campagne_synthese.py\"; s=open(p).read()\ns = s.replace('''RE_TEMPS = re.compile(r\"Elapsed \\\\(wall clock\\\\) time[^:]*: ([0-9:.]+)\")''',\n'''RE_TEMPS = re.compile(r\"Elapsed \\\\(wall clock\\\\) time[ … [2473 caractères tronqués]`
+
+  ```
+ok
+| mesure | perplexité | bits/octet | jetons | événements | tok/s | en listes (M) | paires (M) | RSS (Go) | lus (Go) | durée |
+|---|---|---|---|---|---|---|---|---|---|---|
+| `grille_0.5B-Q8_ppl` | `17.4315` | `0.983` | `255` | `0` | `28.7` | `0.0` | `495.4` | `1.28` | `0.00` | `` |
+| `grille_r1-1.5B_ppl` | `47.1403` | `1.326` | `255` | `0` | `9.5` | `0.0` | `1548.8` | `4.76` | `1.04` | `` |
+| `grille_r1-14B_ppl` | `14.3048` | `0.915` | `255` | `0` | `0.5` | `0.0` | `14042.7` | `39.83` | `8.71` | `` |
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md", "new_string": "## 3. La grille de modèles — « ce modèle tourne-t-il, et à quel prix ? »\n\nMêmes 256 jetons, même contexte, chaque modèle tokenisant son propre corpus\n(`/usr/bin/time -v` pour la m … [2908 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 git add tools/campagne_synthese.py reports/rapport-campagne-benefices.md && timeout 300 git commit -q -m \"Campagne : la perplexité n'est comparable qu'à tokenizer égal — colonne bits/octet\n\nTrois modèles de la grille p … [802 caractères tronqués]`
