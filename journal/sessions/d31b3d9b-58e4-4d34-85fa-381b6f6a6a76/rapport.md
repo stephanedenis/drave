@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 21.7 h |
+| Durée | 22.2 h |
 | Tours | 27 |
-| Messages | 968 |
-| Appels d'outils | 930 |
+| Messages | 974 |
+| Appels d'outils | 936 |
 | Fichiers touchés | 29 |
-| Commandes | 760 |
+| Commandes | 766 |
 | Sous-agents | 3 |
-| Commits | 64 |
+| Commits | 65 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -1270,7 +1270,7 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 
 ### Tour 27 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1477 caractères tronqués]
 
-*321 appels d'outils.* Actions notables :
+*327 appels d'outils.* Actions notables :
 
 - bash — Check the full state
 - bash — Measure the distilled d384 with the correct protocol
@@ -1286,11 +1286,11 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - bash — Read parcimonie, contexte, lot steps
 - bash — Inspect batch2 script
 - bash — Read batch2 journal and latency map
-- … et 288 autres
+- … et 294 autres
 
 **Synthèse produite :**
 
-⏵ Codestral corrigé sur 256 jetons : 133,08 — je corrige la ligne de la grille
+⏵ Résultat : la distillation n'ajoute rien au creux appris (les deux leviers ne se cumulent pas)
 
 ## 3. Travail accompli
 
@@ -1376,7 +1376,7 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 720 autres
+- … et 726 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1504,7 +1504,7 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 
 ## 5. Erreurs rencontrées
 
-41 sorties en erreur ou divergentes. Les premières :
+42 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : ```  ### 🤖 Assistant  ⏵ **En transformers 5, `AutoModel` rend directement `Qwen2Model` (pas de `.model`). Je corrige le diagnostic.**  - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitH
 - **T2** : 3310393 bash -c pgrep -af "essai_decharge" | grep python | head; echo "--- logs ---"; tail -2 /tmp/ec_d192_lr3e3.log 2>/dev/null; tail -2 /tmp/ec_d192_lr1e3.log 2>/dev/null; echo "---"; ls -la /tmp/ec
@@ -1588,4 +1588,5 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - Résumé exécutif : les cinq résultats qui comptent et les cinq manques  Une page en tête du rapport, chacun renvoyant à sa section et à sa mesure. Le rapport fai
 - Le débit de lecture réel : 8,6 Mo/s sur disque dur contre 243 Mo/s en séquentiel  Mesuré machine au calme : le disque dur qui porte les gguf délivre 243 Mo/s en
 - Codestral corrigé, mesuré au protocole commun : 133,08 sur 255 jetons (1,842 bit/octet)  Le chiffre publié jusqu'ici (117,91) portait sur 63 jetons, parce que l
+- Les deux leviers ne se cumulent pas : la distillation n'ajoute rien au creux appris  m9_d384_kwta25_distille reprend exactement la recette de kwta025 PLUS la di
 

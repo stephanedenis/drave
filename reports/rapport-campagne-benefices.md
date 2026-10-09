@@ -546,6 +546,28 @@ mêmes mesures (8 × 128) :
    la même chose : l'écart de 1,3 % de perplexité entre 4,9649 et 4,9011 vient de
    l'encodage des poids, comme au § 22, pas de la parcimonie.)*
 
+**Les deux leviers ne se cumulent PAS** — mesuré le 9 octobre à 7 h 20. Un
+quatrième modèle, `m9_d384_kwta25_distille`, reprend **exactement** la recette de
+`kwta025` (dim 384, 40 000 pas, k-WTA 25 %) **plus** la distillation de l'enseignant
+dense 384 — le levier qui vaut −13,8 % sur un modèle routé (§ 5 bis) :
+
+| dim 384 | aucune parcimonie | 50 % | **25 %** |
+|---|---:|---:|---:|
+| `kwta025` (creux seul) | 6,4282 | 5,8131 | **5,1719** |
+| **`kwta025` + distillé** | 6,3684 | 5,6770 | **5,1553** |
+| **gain de la distillation** | −0,9 % | −2,3 % | **−0,3 %** |
+
+**La distillation n'ajoute presque rien au creux appris.** Son gain, qui croît avec
+l'échelle sur un modèle routé, valait −2,5 % (256), −9,3 % (384), −13,8 % (512) —
+et ici, à dim 384 sur un modèle **dense** entraîné creux, il tombe à **−0,3 %**.
+
+**Ce que cela dit** : les deux leviers ne traitent pas le même handicap. La
+distillation rattrape ce que le **routage** coûte (chaque expert voit moins
+d'exemples) ; elle n'a rien à rattraper sur un modèle dense, même creusé, où le
+k-WTA ne fait que réduire le nombre d'activations sans retirer de capacité. Les
+deux recettes sont donc **complémentaires par leur objet, pas additives par leur
+effet** — et c'est mesuré, pas supposé.
+
 **Ce que cela ne dit pas** : la plage de taux qu'un même modèle supporte. Les trois
 modèles entraînés perdent hors de leur régime (0,4 à 1,4 point de perplexité), donc
 la réponse est étroite — c'est un résultat, pas une réserve de politesse.

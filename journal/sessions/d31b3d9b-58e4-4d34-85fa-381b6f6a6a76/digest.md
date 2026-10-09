@@ -15784,3 +15784,61 @@ ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\ns = s.replace(\"\"\"| **code** | ✅ mesuré, décalage de tâche | codestral-22B : **117,91** de PPL sur de la prose = **1, … [1112 caractères tronqués]`
+
+  ```
+ok
+b25c641 Codestral corrigé, mesuré au protocole commun : 133,08 sur 255 jetons (1,842 bit/octet)
+  ```
+
+- **bash** `{"command": "sleep 570; cd /tmp/campagne24 && tail -1 tr_m9_kwta_distille.log; grep -E \"m9\" journal9.txt | tail -3", "description": "Poll the distillation+sparsity training", "timeoutMs": 600000}`
+
+  ```
+pas  28000 · perte 0.8115 · val 2.0348 bits/octet · 2463 s
+[09/10 06:21:07] charge 1.87 · m9_d384_kwta25_distille : départ (k-WTA 25 %, enseignant dense 384)
+  ```
+
+### 🤖 Assistant
+
+⏵ Mise en file d'un troisième point de la carte des taux : 12,5 % gardé
+
+- **bash** `{"command": "cat > /tmp/campagne24/jour2_kwta125.sh <<'EOF'\n#!/bin/bash\n# jour2_kwta125.sh — le troisième point de la carte des taux.\n#\n# § 5 ter a montré que chaque modèle n'est bon que dans SON régime, à 50 % et à\n# 25 %. Un modèle entraîné à 25 % perd 7 % quand on le pousse à 12,5 % : la\n#  … [2057 caractères tronqués]`
+
+  ```
+jour2 en file
+  pas  28000 · perte 0.8115 · val 2.0348 bits/octet · 2463 s
+  ```
+
+- **bash** `{"command": "sleep 580; cd /tmp/campagne24 && tail -2 journal9.txt; for f in fenetres_m9-sans.log fenetres_m9-topk500.log fenetres_m9-topk250.log; do [ -s \"$f\" ] && echo \"$(basename $f) : $(grep -oE 'PPL moyenne.*' $f | tail -1)\"; done", "description": "Check the sparsity+distillation results",  … [20 caractères tronqués]`
+
+  ```
+[09/10 06:21:07] charge 1.87 · === GPU libre : creux + distillé, et le routé 512 deux fois plus longtemps ===
+[09/10 06:21:07] charge 1.87 · m9_d384_kwta25_distille : départ (k-WTA 25 %, enseignant dense 384)
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "sleep 570; cd /tmp/campagne24 && tail -1 tr_m9_kwta_distille.log; ls fenetres_m9*.log 2>/dev/null | head -3", "description": "Poll the m9 training", "timeoutMs": 600000}`
+
+  ```
+# écrit dans /tmp/m9_d384_kwta25_distille · 7.18 M paramètres · 1.92 M poids lus/jeton/couche
+fenetres_m9-sans.log
+fenetres_m9-topk250.log
+fenetres_m9-topk500.log
+  ```
+
+- **bash** `{"command": "cd /tmp/campagne24 && grep -E \"m9\" journal9.txt | tail -4; for f in fenetres_m9-sans.log fenetres_m9-topk500.log fenetres_m9-topk250.log; do echo \"$(basename $f .log) : $(grep -oE 'PPL moyenne \\(log\\) sur [0-9]+ fenêtres : [0-9.]+' $f | tail -1)\"; done", "description": "Read the c … [38 caractères tronqués]`
+
+  ```
+[09/10 07:20:00] charge 4.01 · m9-sans : PPL moyenne (log) sur 8 fenêtres : 6.3684 · 2678468942 événements
+[09/10 07:20:05] charge 4.49 · m9-topk500 : PPL moyenne (log) sur 8 fenêtres : 5.6770 · 1345883727 événements
+[09/10 07:20:09] charge 4.49 · m9-topk250 : PPL moyenne (log) sur 8 fenêtres : 5.1553 · 672917116 événements
+[09/10 07:20:09] charge 4.49 · m9_d512_route_long : départ (routé 512, 80 000 pas au lieu de 40 000)
+fenetres_m9-sans : PPL moyenne (log) sur 8 fenêtres : 6.3684
+fenetres_m9-topk500 : PPL moyenne (log) sur 8 fenêtres : 5.6770
+fenetres_m9-topk250 : PPL moyenne (log) sur 8 fenêtres : 5.1553
+  ```
+
+### 🤖 Assistant
+
+⏵ Résultat : la distillation n'ajoute rien au creux appris (les deux leviers ne se cumulent pas)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\nancre = \"\"\"**Ce que cela ne dit pas** : la plage de taux qu'un même modèle supporte. Les trois\nmodèles entraînés pe … [2574 caractères tronqués]`
