@@ -259,6 +259,27 @@ Un modèle plus gros qui lit autant : c'est exactement ce que « nativement
    un écart qui ne compare pas la même chose). La mesure honnête est la colonne
    **paires/jeton**, et elle est égale par construction.
 
+## 5 bis. La distillation : le levier de qualité qui ne coûte aucun paramètre
+
+Le dépôt notait dans son inventaire du 08/10 : « distillation — mentionnée, jamais
+réalisée ». Elle l'est maintenant (`--enseignant`, `--alpha-distill 0.5`,
+température 2), et le témoin existe : **même architecture, mêmes pas, même
+données**, seule la KL change.
+
+| élève routé | sans distillation | **avec distillation** | gain |
+|---|---:|---:|---:|
+| dim 256, 8 experts (10,3 M) | 1,9373 | **1,9088** *(36 000/40 000)* | **−1,5 %** |
+| dim 384, 16 experts (44,4 M) | 1,8762 | **1,8578** *(24 000/40 000)* | **−1,0 %** et il continue |
+
+L'enseignant est le **dense de la même famille** (dim 384, val 1,9194), gelé. Les
+deux élèves distillés **battent donc à la fois leur témoin routé ET l'enseignant**
+— pour la même lecture par jeton, et sans un paramètre de plus.
+
+*(Chiffres à l'écriture : les deux passes distillées tournaient encore. Le sens du
+gain est établi ; son amplitude définitive le sera à 40 000 pas.)*
+
+---
+
 ## 7. Répartir par EXPERTS : ce que coûterait l'unité de travail naturelle
 
 Le dépôt découpe par **plages de couches** (prouvé, écart 0,00e0). Mais l'unité

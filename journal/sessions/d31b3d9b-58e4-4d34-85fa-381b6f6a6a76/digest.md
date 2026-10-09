@@ -9679,3 +9679,81 @@ jeu 08 oct 2026 23:27:28 EDT
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"reports/rapport-campagne-benefices.md\"; s=open(p).read()\najout = '''## 12. Le cas extrême : **365,7 Go sur une machine de 125 Go**\n\nDeepSeek-V4.1-Flash Q2, exécuté par le moteur, mmappé, sans copie — deux fe … [4703 caractères tronqués]`
+
+  ```
+ajouté
+8db69e8 365,7 Go sur 125 Go de RAM : 38 Go résidents, et une mesure de lot à refaire
+  ```
+
+### 🤖 Assistant
+
+⏵ Trois batches ont rendu : le cas extrême, la tête restreinte, et une mesure à refaire
+
+## 365,7 Go sur une machine de 125 Go — mesuré
+
+DeepSeek-V4.1-Flash Q2, exécuté par le moteur, mmappé :
+
+| fenêtre | **RSS** | octets lus | temps |
+|---|---:|---:|---:|
+| 8 jetons | **27,7 Go** | 32,5 Go | 216 s |
+| 16 jetons | **37,6 Go** | 37,7 Go | 266 s |
+
+**Un modèle de 365,7 Go tourne avec 38 Go résidents** : il n'est pas chargé, il est **ruisselé**. C'est la revendication centrale du projet, mesurée sur le plus gros modèle du disque. Et je dis ce que ces chiffres ne disent pas : la perplexité de ces fenêtres (13,2 M) **n'a aucune valeur** — Q2 agressif, 16 jetons, tokenisation non vérifiée. La ligne du verdict porte sur l'existence et le coût, pas la qualité.
+
+## La tête restreinte, sur deux modèles
+
+| modèle | tête complète | **restreinte** | gain |
+|---|---:|---:|---:|
+| Qwen2.5-0.5B | 17,35 / 15,73 tok/s | **21,40 / 23,85** | **×1,36** |
+| r1-distill-1.5B | 4,66 / 8,45 tok/s | 6,27 / 7,08 | ×1,11 (bruité) |
+
+Et le contrôle qui compte : les occurrences d'étiquettes passent de **10 à 67** — la tête restreinte **ne peut pas** produire autre chose. Le robuste ici est **la garantie**, pas le débit : le gain de vitesse dépend du rapport tête/corps du modèle, alors que la contrainte de sortie est structurelle.
+
+## Une mesure que je retire
+
+**Le batch 5 (le lot sur le 30B) a mesuré le cache de pages, pas le lot.** Seule la première passe a lu (10,9 Go, à froid) ; les suivantes ont tout trouvé en mémoire (0 octet lu) et durent toutes ~2 minutes. La comparaison lot 1 / lot 4 n'est donc pas une mesure du lot — c'est « à froid contre à chaud ». Ce qui survit : les PPL sont identiques de lot 4 à 64 (7,6098), donc **le lot ne change pas le résultat**. Pour le mesurer vraiment, il faut un modèle plus gros que la mémoire — ce que le § 12 fournit — ou vider le cache, ce que la campagne ne peut pas faire sans root.
+
+Encore en cours : la campa
+
+gne sur gpt-oss (à 9 minutes de son délai), la mesure codestral corrigée, et la tête restreinte sur gpt-oss.
+
+
+## Tour 22
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, préremplissage par lots, modèle plus gros que la RAM. Poursuivre en parallèle le livrable du modèle nativement événementiel : entraîné ici, exécuté par Drave à logits vérifiés, découpé en unités réparties. Chaque affirmation porte sa mesure (perplexité, débit, octets et événements par jeton, RSS, écart entre nœuds) ET ses conditions (corpus, tokenizer du modèle, charge de fond) ; les manques constatés — embeddings/encodeurs, décodage spéculatif — sont consignés comme manques, pas comme résultats. Livrables : la file tools/campagne-benefices.sh exécutée et ses journaux, un rapport de synthèse par famille de tâches, et la poursuite du modèle événementiel."
+Round: 15/40
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "date; echo \"=== campagne ===\"; tail -3 /tmp/campagne24/journal.txt; echo \"=== codestral corrigé ===\"; grep -E \"perplexité|FIN\" /tmp/campagne24/codestral_spm.log 2>/dev/null | tail -3; echo \"=== batch 7 ===\"; tail -2 /tmp/campagne24/journal9.txt; echo \"=== entraînements ===\"; t … [198 caractères tronqués]`
+
+  ```
+jeu 08 oct 2026 23:28:42 EDT
+=== campagne ===
+[08/10 21:39:54] charge 47.40 · grille/r1-14B : code 0 · PPL 14.3048 · RSS 38898 Mo · lus 8304 Mio
+[08/10 22:04:33] charge 28.57 · grille/codestral-22B : code 0 · PPL 35657.3767 · RSS 63646 Mo · lus 12684 Mio
+[08/10 22:06:13] charge 26.37 · grille/qwen3-30B-A3B : code 0 · PPL 8.6327 · RSS 14256 Mo · lus 11841 Mio
+=== codestral corrigé ===
+=== batch 7 ===
+[08/10 23:19:51] charge 41.22 · tête/r1-1.5B restreinte tour 2 : 7.08 tok/s · 67 étiquettes reconnues
+[08/10 23:19:53] charge 41.22 · tête/gpt-oss-120B : étiquettes 8841,12626,27000,
+=== entraînements ===
+  pas  36000 · perte 0.6688 · val 1.9088 bits/octet · 3247 s
+  pas  24000 · perte 0.6863 · val 1.8578 bits/octet · 2757 s
+  ```
+
+- **bash** `{"command": "grep \"meilleur point\" /tmp/campagne24/tr_d256_route.log /tmp/campagne24/tr_d384_route.log /tmp/campagne24/tr_d256_distille.log /tmp/campagne24/tr_d384_distille.log 2>/dev/null; echo \"=== en cours ===\"; tail -1 /tmp/campagne24/tr_d256_distille.log; tail -1 /tmp/campagne24/tr_d384_dis … [95 caractères tronqués]`
+
+  ```
+/tmp/campagne24/tr_d256_route.log:  # meilleur point : pas 40000 · val 1.9373 bits/octet
+/tmp/campagne24/tr_d384_route.log:  # meilleur point : pas 40000 · val 1.8762 bits/octet
+=== en cours ===
+  pas  36000 · perte 0.6688 · val 1.9088 bits/octet · 3247 s
+  pas  24000 · perte 0.6863 · val 1.8578 bits/octet · 2757 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"reports/rapport-campagne-benefices.md\"; s=open(p).read()\najout = '''## 5 bis. La distillation : le levier de qualité qui ne coûte aucun paramètre\n\nLe dépôt notait dans son inventaire du 08/10 : « distillatio … [2047 caractères tronqués]`

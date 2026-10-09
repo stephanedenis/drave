@@ -6,13 +6,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
 | Durée | 14.3 h |
-| Tours | 21 |
-| Messages | 595 |
-| Appels d'outils | 571 |
+| Tours | 22 |
+| Messages | 600 |
+| Appels d'outils | 574 |
 | Fichiers touchés | 21 |
-| Commandes | 449 |
+| Commandes | 452 |
 | Sous-agents | 3 |
-| Commits | 34 |
+| Commits | 35 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -69,6 +69,8 @@
 **Tour 20** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1197 caractères tronqués]
 
 **Tour 21** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1197 caractères tronqués]
+
+**Tour 22** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1197 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1020,6 +1022,46 @@ L'octet restant est l'espace initial de la convention `▁` de llama.cpp. J'ai c
 - bash — Read the batch 6 and 7 results
 - bash — Record batches 5, 6 and 7 in the report
 
+**Synthèse produite :**
+
+⏵ Trois batches ont rendu : le cas extrême, la tête restreinte, et une mesure à refaire
+
+\## 365,7 Go sur une machine de 125 Go — mesuré
+
+DeepSeek-V4.1-Flash Q2, exécuté par le moteur, mmappé :
+
+| fenêtre | **RSS** | octets lus | temps |
+|---|---:|---:|---:|
+| 8 jetons | **27,7 Go** | 32,5 Go | 216 s |
+| 16 jetons | **37,6 Go** | 37,7 Go | 266 s |
+
+**Un modèle de 365,7 Go tourne avec 38 Go résidents** : il n'est pas chargé, il est **ruisselé**. C'est la revendication centrale du projet, mesurée sur le plus gros modèle du disque. Et je dis ce que ces chiffres ne disent pas : la perplexité de ces fenêtres (13,2 M) **n'a aucune valeur** — Q2 agressif, 16 jetons, tokenisation non vérifiée. La ligne du verdict porte sur l'existence et le coût, pas la qualité.
+
+\## La tête restreinte, sur deux modèles
+
+| modèle | tête complète | **restreinte** | gain |
+|---|---:|---:|---:|
+| Qwen2.5-0.5B | 17,35 / 15,73 tok/s | **21,40 / 23,85** | **×1,36** |
+| r1-distill-1.5B | 4,66 / 8,45 tok/s | 6,27 / 7,08 | ×1,11 (bruité) |
+
+Et le contrôle qui compte : les occurrences d'étiquettes passent de **10 à 67** — la tête restreinte **ne peut pas** produire autre chose. Le robuste ici est **la garantie**, pas le débit : le gain de vitesse dépend du rapport tête/corps du modèle, alors que la contrainte de sortie est structurelle.
+
+\## Une mesure que je retire
+
+**Le batch 5 (le lot sur le 30B) a mesuré le cache de pages, pas le lot.** Seule la première passe a lu (10,9 Go, à froid) ; les suivantes ont tout trouvé en mémoire (0 octet lu) et durent toutes ~2 minutes. La comparaison lot 1 / lot 4 n'est donc pas une mesure du lot — c'est « à froid contre à chaud ». Ce qui survit : les PPL sont identiques de lot 4 à 64 (7,6098), donc **le lot ne change pas le résultat**. Pour le mesurer vraiment, il faut un modèle plus gros que la mémoire — ce que le § 12 fournit — ou vider le cache, ce que la campagne ne peut pas faire sans root.
+
+Encore en cours : la campa
+
+gne sur gpt-oss (à 9 minutes de son délai), la mesure codestral corrigée, et la tête restreinte sur gpt-oss.
+
+### Tour 22 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1477 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Check state after the gpt-oss timeout window
+- bash — Compare distilled vs non-distilled validation
+- bash — Record the distillation result
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -1096,7 +1138,7 @@ L'octet restant est l'espace initial de la convention `▁` de llama.cpp. J'ai c
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 409 autres
+- … et 412 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1278,4 +1320,5 @@ L'octet restant est l'espace initial de la convention `▁` de llama.cpp. J'ai c
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="reports/rapport-campagne-benefices.md"; s=open(p).read() vieux_debut = s.index("**L'an
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/msg_tok.txt <<'MSG' Tokenizers SentencePiece (Llama, Mistral, Codestral) : les espaces étaient 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="reports/rapport-campagne-benefices.md"; s=open(p).read() ajout = '''## 12. Le cas extr
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="reports/rapport-campagne-benefices.md"; s=open(p).read() ajout = '''## 5 bis. La disti
 
