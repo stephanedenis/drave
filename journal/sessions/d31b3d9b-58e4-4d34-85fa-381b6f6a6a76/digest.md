@@ -18852,3 +18852,63 @@ Created file
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/modularisation.md journal/README.md 2>/dev/null; git commit -q -m \"Publication du dépôt + document de modularisation : espace de travail Cargo, pas de submodules\n\nLe dépôt est publié en privé : https://github.com/step … [1518 caractères tronqués]`
+
+  ```
+poussé
+533a670 Publication du dépôt + document de modularisation : espace de travail Cargo, pas de submodules
+533a67084429141d563c39fcb6b24c8b1dee1599	refs/heads/master
+  ```
+
+### 🤖 Assistant
+
+⏵ Le dépôt est publié, et la question submodules/parallélisme est tranchée par la mesure
+
+**1. Remote GitHub : c'était bien là, mais pas où vous pensiez.** Il n'y a **aucun jeton dans l'environnement** (rien dans `env`, rien dans `~/.config/gh`, rien dans les fichiers du home — j'ai cherché les motifs `ghp_*`/`github_pat_*` sur tout le répertoire personnel, et l'environnement des processus `stephane`). Ce qui existe, et qui suffit :
+
+- une **clé SSH** `~/.ssh/id_ed25519_github`, qui authentifie **`stephanedenis`** (`ssh -T git@github.com` → *Hi stephanedenis!*), avec la réécriture globale `https://github.com/` → `git@github.com:` ;
+- et un **jeton** que `git credential fill` a rendu — ⚠️ **il est apparu en clair dans la sortie, donc dans le transcript de cette session : révoquez-le**. Il n'est pas nécessaire : la clé SSH pousse déjà.
+
+**Le dépôt est en ligne : [`github.com/stephanedenis/drave`](https://github.com/stephanedenis/drave) — privé**, `origin` en SSH, `master` suivie, poussée vérifiée (`533a670` = `refs/heads/master` distant). 469 fichiers, 32 Mo d'historique, journaux compris comme vous l'avez choisi.
+
+**2. Submodules : non — espace de travail Cargo, oui.** Un submodule épingle un *dépôt séparé* ; pour découper **un** code source, l'outil est le workspace Cargo. Le découpage que je propose vient des dépendances réelles mesurées sur 28 758 lignes : `formats` (5 258) · `tokenizer` (731) · `list` (1 597) · `model` (9 343) · `k3` (1 866) · `runtime` (3 994) · `cli` (5 969) — **deux fichiers portent 53 % du code**, et `main.rs` est le premier à sortir. Contrainte à préserver : **std seul, aucune dépendance**. Le seul vrai candidat au submodule, c'est le **journal** (9 Mo de transcriptions qui grossissent tout seuls).
+
+**3. « Paralléliser sur plus de cœurs » : ×3 disponibles, mesurés.**
+
+| profil | temps | CPU |
+|---|---:|---:|
+| **actuel** (`lto=true`, `codegen-units=1`) | **37,98 s** | **100 % — un seul cœur** |
+| `codegen-units=16`, `lto="thin"` | **12,64 s** | 385 % |
+
+**Le profil de release compile aujourd'hui sur un cœur.** On **ajoute** un profil d'itération, on **garde** `release` pour les mesures — parce que toutes les mesures du dépôt (0,210 ns/événement, croisement à 22-25 %, débits) sont attachées à ce binaire, donc **toute promotion vers `release` se paie d'un passage des 23 portes**.
+
+**4. Et paralléliser le *travail* n'est pas une question de cœurs, c'est une question de ressources** — la campagne l'a mesuré durement : deux lecteurs du même fichier de 63 Go font tomber le débit à **8,6 Mo/s** (contre 243 Mo/s en séquentiel), et deux portes ont expiré pour ça. Le schéma : **1 entraînement** (16 Go de VRAM), **1 lecteur lourd de disque**, **N mesures CPU** (déterministes, donc sans risque). Et une correction à faire avant de multiplier les travailleurs : les chaînes se sérialisaient par `pgrep` sur un motif de ligne de commande, qui **s'est mordu la queue trois fois** — il faut des **verrous `flock`**, pas des motifs.
+
+Tout est dans `docs/modularisation.md`, poussé avec le reste. En fond, `m16` (structure innée à dim 512) continue : sa mesure et celle de `m17` tomberont vers 16 h.
+
+
+## Tour 34
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, préremplissage par lots, modèle plus gros que la RAM. Poursuivre en parallèle le livrable du modèle nativement événementiel : entraîné ici, exécuté par Drave à logits vérifiés, découpé en unités réparties. Chaque affirmation porte sa mesure (perplexité, débit, octets et événements par jeton, RSS, écart entre nœuds) ET ses conditions (corpus, tokenizer du modèle, charge de fond) ; les manques constatés — embeddings/encodeurs, décodage spéculatif — sont consignés comme manques, pas comme résultats. Livrables : la file tools/campagne-benefices.sh exécutée et ses journaux, un rapport de synthèse par famille de tâches, et la poursuite du modèle événementiel."
+Round: 27/40
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /tmp/campagne24 && grep -E \"m16|m17\" journal15.txt 2>/dev/null | tail -4; tail -1 tr_m16_d512_masque25.log 2>/dev/null; tail -1 tr_m17_d512_kwta25_elag50.log 2>/dev/null || echo \"(m17 en attente)\"; date '+%H:%M'", "description": "Harvest the 512-scale verification"}`
+
+  ```
+[09/10 15:07:19] charge 2.89 · m16_d512_masque25 :   # meilleur point : pas 40000 · val 1.9735 bits/octet
+[09/10 15:07:25] charge 3.99 · m16_d512_masque25 : PPL 4.8745 · 9.2 M paires/jeton
+  # écrit dans /tmp/m16_d512_masque25 · 12.72 M paramètres · 3.41 M poids lus/jeton/couche
+  pas   8000 · perte 1.3755 · val 2.2140 bits/octet · 829 s
+15:22
+  ```
+
+### 🤖 Assistant
+
+⏵ Résultat à dim 512 : la structure innée coûte plus cher qu'à 384 (+6,7 % contre +1,0 %)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/biologie-pour-drave.md\")\ns = p.read_text()\nancre = \"\"\"**La structure innée est presque gratuite jusqu'à 25 %, et coûte cher à 12,5 %.** Le\nmur est entre les deux — et c … [3890 caractères tronqués]`

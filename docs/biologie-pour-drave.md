@@ -339,6 +339,21 @@ deux fois plus creux —
 mur est entre les deux — et c'est une information de conception : un connectome inné
 doit viser un quart des connexions, pas un huitième.
 
+**Et le prix dépend de l'ÉCHELLE** (mesuré à 15 h 07, dim 512, même recette, même
+témoin dense — `m6_d512_dense` : 4,5686 · 34,4 M paires/jeton) :
+
+| dim 512 | perplexité | paires/jeton | écart au témoin | lectures |
+|---|---:|---:|---:|---:|
+| témoin dense | **4,5686** | 34,4 M | — | — |
+| **masque inné 25 %** (aléatoire, figé) | **4,8745** | **9,2 M** | **+6,7 %** | **÷3,7** |
+
+**Le même masque coûte +1,0 % à dim 384 et +6,7 % à dim 512.** Un modèle plus grand
+a plus de capacité à perdre quand on lui retire au hasard un quart de ses connexions
+— et cela dit quelque chose d'utile : **la structure innée n'est pas gratuite « par
+principe », elle l'est à une certaine taille**, et le masque utilisé ici est
+*aléatoire* (un masque choisi, par fréquence ou par gradient, ferait probablement
+mieux). C'est une mesure, pas une loi : deux points d'échelle.
+
 **Ce que cela n'établit pas** : qu'un masque *appris* ne ferait pas mieux (l'écart de
 1 % à 25 % est peut-être récupérable), ni que le résultat tient à d'autres échelles.
 

@@ -625,6 +625,20 @@ est celle de la fenêtre 8 (même préfixe pour tous, donc comparable) :
 subit pas — et c'est exactement ce qu'une architecture événementielle permet de faire
 pour la première fois : **borner le coût à la conception**.
 
+**Et la courbe dépend de l'échelle** — vérifié à dim 512 (15 h 07), mêmes recettes,
+mêmes témoins :
+
+| dim 512 | perplexité | paires/jeton | écart au témoin dense |
+|---|---:|---:|---:|
+| témoin dense (`m6_d512_dense`) | **4,5686** | 34,4 M | — |
+| structure innée 25 % (`m16`) | **4,8745** | **9,2 M** | **+6,7 %** (÷3,7) |
+
+Le **même masque aléatoire** coûte **+1,0 % à dim 384** et **+6,7 % à dim 512** : la
+structure innée n'est pas gratuite « par principe », elle l'est **à une certaine
+taille** — un modèle plus grand a plus de capacité à perdre. Deux points ne font pas
+une loi, et c'est écrit comme tel. *(La mesure des deux axes appris à dim 512 est en
+cours.)*
+
 **Et les deux axes SE CUMULENT quand les deux sont appris** (9 octobre, 11 h 32) :
 `m11_d384_kwta25_elag50` reprend exactement `kwta025` (dim 384, 40 000 pas) **plus un
 élagage appris à 50 %** des poids par ligne — même règle que `--keep`, appliquée

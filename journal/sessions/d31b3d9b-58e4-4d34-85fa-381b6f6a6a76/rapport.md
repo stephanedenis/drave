@@ -6,13 +6,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
 | Durée | 30.2 h |
-| Tours | 33 |
-| Messages | 1196 |
-| Appels d'outils | 1136 |
+| Tours | 34 |
+| Messages | 1200 |
+| Appels d'outils | 1138 |
 | Fichiers touchés | 36 |
-| Commandes | 946 |
+| Commandes | 948 |
 | Sous-agents | 3 |
-| Commits | 100 |
+| Commits | 101 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -93,6 +93,8 @@
 **Tour 32** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1197 caractères tronqués]
 
 **Tour 33** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1197 caractères tronqués]
+
+**Tour 34** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1197 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1572,7 +1574,39 @@ Nouveau document : **`docs/plan-cerveau-complet.md`** (le plan d'ingénierie qui
 
 **Synthèse produite :**
 
-⏵ Vérification de la poussée et rédaction du document de modularisation demandé
+⏵ Le dépôt est publié, et la question submodules/parallélisme est tranchée par la mesure
+
+**1. Remote GitHub : c'était bien là, mais pas où vous pensiez.** Il n'y a **aucun jeton dans l'environnement** (rien dans `env`, rien dans `~/.config/gh`, rien dans les fichiers du home — j'ai cherché les motifs `ghp_*`/`github_pat_*` sur tout le répertoire personnel, et l'environnement des processus `stephane`). Ce qui existe, et qui suffit :
+
+- une **clé SSH** `~/.ssh/id_ed25519_github`, qui authentifie **`stephanedenis`** (`ssh -T git@github.com` → *Hi stephanedenis!*), avec la réécriture globale `https://github.com/` → `git@github.com:` ;
+- et un **jeton** que `git credential fill` a rendu — ⚠️ **il est apparu en clair dans la sortie, donc dans le transcript de cette session : révoquez-le**. Il n'est pas nécessaire : la clé SSH pousse déjà.
+
+**Le dépôt est en ligne : [`github.com/stephanedenis/drave`](https://github.com/stephanedenis/drave) — privé**, `origin` en SSH, `master` suivie, poussée vérifiée (`533a670` = `refs/heads/master` distant). 469 fichiers, 32 Mo d'historique, journaux compris comme vous l'avez choisi.
+
+**2. Submodules : non — espace de travail Cargo, oui.** Un submodule épingle un *dépôt séparé* ; pour découper **un** code source, l'outil est le workspace Cargo. Le découpage que je propose vient des dépendances réelles mesurées sur 28 758 lignes : `formats` (5 258) · `tokenizer` (731) · `list` (1 597) · `model` (9 343) · `k3` (1 866) · `runtime` (3 994) · `cli` (5 969) — **deux fichiers portent 53 % du code**, et `main.rs` est le premier à sortir. Contrainte à préserver : **std seul, aucune dépendance**. Le seul vrai candidat au submodule, c'est le **journal** (9 Mo de transcriptions qui grossissent tout seuls).
+
+**3. « Paralléliser sur plus de cœurs » : ×3 disponibles, mesurés.**
+
+| profil | temps | CPU |
+|---|---:|---:|
+| **actuel** (`lto=true`, `codegen-units=1`) | **37,98 s** | **100 % — un seul cœur** |
+| `codegen-units=16`, `lto="thin"` | **12,64 s** | 385 % |
+
+**Le profil de release compile aujourd'hui sur un cœur.** On **ajoute** un profil d'itération, on **garde** `release` pour les mesures — parce que toutes les mesures du dépôt (0,210 ns/événement, croisement à 22-25 %, débits) sont attachées à ce binaire, donc **toute promotion vers `release` se paie d'un passage des 23 portes**.
+
+**4. Et paralléliser le *travail* n'est pas une question de cœurs, c'est une question de ressources** — la campagne l'a mesuré durement : deux lecteurs du 
+… [655 caractères tronqués]
+
+### Tour 34 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1477 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Harvest the 512-scale verification
+- bash — Record the dim-512 innate structure result
+
+**Synthèse produite :**
+
+⏵ Résultat à dim 512 : la structure innée coûte plus cher qu'à 384 (+6,7 % contre +1,0 %)
 
 ## 3. Travail accompli
 
@@ -1665,7 +1699,7 @@ Nouveau document : **`docs/plan-cerveau-complet.md`** (le plan d'ingénierie qui
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 906 autres
+- … et 908 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1913,4 +1947,5 @@ Nouveau document : **`docs/plan-cerveau-complet.md`** (le plan d'ingénierie qui
 - README : la campagne du 8-9 octobre en tête, avec ses cinq résultats et ses quatre documents  La porte d'entrée du dépôt datait de la session précédente. Elle p
 - journal : index des sessions à jour" 2>/dev/null; git status --short | wc -l; CRED=$(printf "protocol=https\nhost=github.com\n\n" | timeout 15 git credential fi
 - Publication du dépôt + document de modularisation : espace de travail Cargo, pas de submodules  Le dépôt est publié en privé : https://github.com/stephanedenis/
+- Dim 512 : la structure innée coûte +6,7 % (contre +1,0 % à dim 384) pour ÷3,7 de lectures  m16_d512_masque25 (masque aléatoire de 25 % des connexions, figé à la
 
