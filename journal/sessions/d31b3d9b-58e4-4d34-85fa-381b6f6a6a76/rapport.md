@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 19.9 h |
+| Durée | 20.0 h |
 | Tours | 27 |
-| Messages | 922 |
-| Appels d'outils | 885 |
+| Messages | 929 |
+| Appels d'outils | 892 |
 | Fichiers touchés | 29 |
-| Commandes | 716 |
+| Commandes | 723 |
 | Sous-agents | 3 |
-| Commits | 56 |
+| Commits | 57 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -1270,7 +1270,7 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 
 ### Tour 27 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1477 caractères tronqués]
 
-*276 appels d'outils.* Actions notables :
+*283 appels d'outils.* Actions notables :
 
 - bash — Check the full state
 - bash — Measure the distilled d384 with the correct protocol
@@ -1286,11 +1286,11 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - bash — Read parcimonie, contexte, lot steps
 - bash — Inspect batch2 script
 - bash — Read batch2 journal and latency map
-- … et 244 autres
+- … et 251 autres
 
 **Synthèse produite :**
 
-⏵ Sentinelle pour la chaîne 512 creux et la fin de l'aiguille
+⏵ Défaut trouvé : la chaîne 512 attendait son marqueur dans le mauvais journal
 
 ## 3. Travail accompli
 
@@ -1376,7 +1376,7 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 676 autres
+- … et 683 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1580,4 +1580,5 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - Parcimonie IMPOSÉE ou APPRISE : la réponse est mesurée, et elle est nette  Deux modèles identiques par ailleurs (dim 384, mêmes pas, FFN en Q8 pour que le chemi
 - Parcimonie apprise : le tableau complet à trois modèles, et la recette qui en sort  Trois modèles identiques par ailleurs, un témoin et deux entraînés creux (50
 - Le point de la file à 5 h 20 : ce qui est fait, ce qui tourne, ce qui reste un manque  Le tableau de clôture distingue trois choses qui ne doivent pas être conf
+- Un quatrième piège de méthode : la chaîne qui attendait son marqueur dans le mauvais journal  Deux heures de GPU perdues devant un marqueur écrit dans le journa
 

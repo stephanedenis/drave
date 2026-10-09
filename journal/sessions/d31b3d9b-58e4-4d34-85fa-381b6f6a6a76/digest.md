@@ -15277,3 +15277,74 @@ ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add reports/rapport-campagne-benefices.md && git commit -q -m \"Le point de la file à 5 h 20 : ce qui est fait, ce qui tourne, ce qui reste un manque\n\nLe tableau de clôture distingue trois choses qui ne doivent pas être confond … [493 caractères tronqués]`
+
+  ```
+fc056fb Le point de la file à 5 h 20 : ce qui est fait, ce qui tourne, ce qui reste un manque
+  lot 256 · 24 jetons de réponse · GPU non · attention COMPLÈTE
+ contexte  profondeur  trouvé  secondes  détail
+  ```
+
+- **bash** `{"command": "ls -la /tmp/campagne24/tr_m8_d512_kwta25.log 2>/dev/null; ps -eo pid,etime,pcpu,args | grep -E \"entrainer_moteur\" | grep -v grep | sed 's/\\(.\\{130\\}\\).*/\\1/'; tail -3 /tmp/campagne24/journal8.txt 2>/dev/null", "description": "Check the d512 sparse training"}`
+
+  ```
+[08/10 23:08:43] charge 46.65 · v4/8 jetons ctx 32 : code 0 · PPL 13182012.2384 · RSS 27734 Mo · lus 32464 Mio · 216s
+[08/10 23:13:09] charge 77.22 · v4/16 jetons ctx 64 : code 0 · PPL 659139.3353 · RSS 37642 Mo · lus 37683 Mio · 266s
+[08/10 23:13:09] charge 77.22 · === batch 6 terminé ===
+  ```
+
+- **bash** `{"command": "sed -n '20,32p' /tmp/campagne24/nuit4_route_creux.sh; echo \"=== console nuit4 ===\"; cat /tmp/campagne24/nuit4_console.log 2>/dev/null | tail -3", "description": "Inspect the nuit4 guard"}`
+
+  ```
+#     listes — mais seulement si le modèle a appris à l'être (§ 19).
+# Une architecture événementielle à son meilleur devrait porter LES DEUX : un
+# modèle dont chaque jeton n'ouvre que k experts et ne réveille qu'un quart de
+# leurs entrées. C'est ce qu'on entraîne ici — routé, distillé, avec k-WTA.
+#
+# LA MESURE QUI DÉCIDE : paires/jeton et événements/jeton contre les trois
+# témoins déjà mesurés (dense, routé, routé distillé à dim 384).
+set -u
+cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet
+P=/home/stephane/gpu-env/bin/python
+C=/tmp/campagne24
+J=$C/journal8.txt
+dire() { echo "[$(date '+%d/%m %H:%M:%S')] charge $(cut -d' ' -f1 /proc/loadavg) · $*" | tee -a "$J"; }
+=== console nuit4 ===
+  ```
+
+- **bash** `{"command": "grep -n \"chaîne creux terminée\" /tmp/campagne24/nuit4_route_creux.sh; sed -n '/^# Deux chaînes/,+3p' /tmp/campagne24/nuit4_route_creux.sh", "description": "Find the faulty guard line"}`
+
+  ```
+37:while ! grep -q "chaîne creux terminée" "$J" 2>/dev/null; do sleep 120; done
+# Deux chaînes qui attendent « plus aucun entraînement » se réveilleraient ENSEMBLE
+# et se disputeraient le GPU : celle-ci attend le marqueur de fin de la chaîne
+# « creux » (nuit3), pas la simple absence de processus.
+while ! grep -q "chaîne creux terminée" "$J" 2>/dev/null; do sleep 120; done
+  ```
+
+### 🤖 Assistant
+
+⏵ Défaut trouvé : la chaîne 512 attendait son marqueur dans le mauvais journal
+
+- **bash** `{"command": "cd /tmp/campagne24 && for p in $(pgrep -f \"bash /tmp/campagne24/nuit4_route_creux.sh\"); do kill $p 2>/dev/null; done; sleep 1; python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"/tmp/campagne24/nuit4_route_creux.sh\")\ns = p.read_text()\ns = s.replace('while ! grep -q \"chaîne creux … [835 caractères tronqués]`
+
+  ```
+(no output)
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /tmp/campagne24 && for p in $(pgrep -f \"nuit4_route_creux\"); do cmd=$(tr '\\0' ' ' < /proc/$p/cmdline 2>/dev/null); case \"$cmd\" in \"bash /tmp/campagne24/nuit4_route_creux.sh \"*) echo \"kill $p : $cmd\"; kill $p;; esac; done; sleep 1; python3 - <<'PY'\nimport pathlib\np = pathli … [814 caractères tronqués]`
+
+  ```
+garde corrigée
+syntaxe OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && setsid nohup bash /tmp/campagne24/nuit4_route_creux.sh > /tmp/campagne24/nuit4_console.log 2>&1 < /dev/null & sleep 30; tail -2 /tmp/campagne24/tr_m8_d512_kwta25.log 2>/dev/null; tail -1 /tmp/campagne24/journal8.txt", "description":  … [58 caractères tronqués]`
+
+  ```
+# dense · 12.72 M paramètres · 3.41 M poids LUS par jeton et par couche · 3.41 M stockés · corpus 100276153 octets · cuda
+# k-WTA à l'entraînement : 25% gardés sur 29 projections (toutes les couches linéaires, comme `--act-topk` du moteur)
+[09/10 05:08:44] charge 16.07 · === GPU libre : dense dim 512, k-WTA 25 % appris (FFN en Q8) ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\nvieux = \"\"\"**Un outil dont l'option `--cache` écrase les deux côtés.**\"\"\"\nassert vieux in s\nneuf = \"\"\"**Une  … [1189 caractères tronqués]`
