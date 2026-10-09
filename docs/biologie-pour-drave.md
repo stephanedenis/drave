@@ -326,9 +326,21 @@ coût d'exécution est **borné dès la conception** (81,6 M d'événements au l
 336,7 M), sans aucun top-k à l'exécution, donc sans la fragilité du « exécuter au
 taux appris » (§ 5 ter de la campagne).
 
+**Et la limite apparaît à 12,5 %** (mesuré à 13 h 18) : le même masque inné, mais
+deux fois plus creux —
+
+| dim 384, 8 × 128 | perplexité | événements/fenêtre | débit |
+|---|---:|---:|---:|
+| témoin dense | **4,9959** | 336,7 M | 131 tok/s |
+| masque inné **25 %** | 5,0472 (+1,0 %) | 81,6 M | 276 tok/s |
+| masque inné **12,5 %** | **5,6810 (+13,7 %)** | **40,6 M** | **341 tok/s** |
+
+**La structure innée est presque gratuite jusqu'à 25 %, et coûte cher à 12,5 %.** Le
+mur est entre les deux — et c'est une information de conception : un connectome inné
+doit viser un quart des connexions, pas un huitième.
+
 **Ce que cela n'établit pas** : qu'un masque *appris* ne ferait pas mieux (l'écart de
-1 % est peut-être récupérable), ni que le résultat tient à d'autres échelles — et
-c'est la prochaine mesure à faire (le même masque à dim 512 et à 12,5 %).
+1 % à 25 % est peut-être récupérable), ni que le résultat tient à d'autres échelles.
 
 ---
 

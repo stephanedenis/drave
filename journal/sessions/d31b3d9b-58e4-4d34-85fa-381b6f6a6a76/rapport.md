@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 27.9 h |
+| Durée | 28.2 h |
 | Tours | 29 |
-| Messages | 1108 |
-| Appels d'outils | 1062 |
-| Fichiers touchés | 33 |
-| Commandes | 878 |
+| Messages | 1116 |
+| Appels d'outils | 1069 |
+| Fichiers touchés | 34 |
+| Commandes | 882 |
 | Sous-agents | 3 |
-| Commits | 88 |
+| Commits | 89 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -1365,7 +1365,7 @@ Rien n'est laissé en suspens dans le dépôt : tout est committé (dernier : `e
 
 ### Tour 29 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1477 caractères tronqués]
 
-*7 appels d'outils.* Actions notables :
+*14 appels d'outils.* Actions notables :
 
 - bash — Poll the structure chain
 - bash — Compare the configs and weight scales of the two models
@@ -1374,10 +1374,16 @@ Rien n'est laissé en suspens dans le dépôt : tout est committé (dernier : `e
 - bash — Read the validation computation
 - bash — Evaluate the saved files with the training protocol
 - bash — Record the definitive E6 measurement and guard the variant
+- bash — Check whether m14 is alive
+- bash — Harvest the 12.5% mask result
+- bash — Check the 12.5% mask measurement
+- web_search
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/architecture-cerveau-et-drave.md`
+- bash — Commit the brain-architecture study and the 12.5% result
 
 **Synthèse produite :**
 
-⏵ E6 : le fichier sauvé ne reproduit PAS le modèle entraîné — mesure définitive et garde-fou
+⏵ Rédaction : l'architecture du cerveau et ce qui manque à Drave comme moteur
 
 ## 3. Travail accompli
 
@@ -1418,6 +1424,7 @@ Rien n'est laissé en suspens dans le dépôt : tout est committé (dernier : `e
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/biologie-pour-drave.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/hebbien-differentiel-et-biologie.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/impulsion-pure-apprenant.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/architecture-cerveau-et-drave.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -1467,7 +1474,7 @@ Rien n'est laissé en suspens dans le dépôt : tout est committé (dernier : `e
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 838 autres
+- … et 842 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1703,4 +1710,5 @@ Rien n'est laissé en suspens dans le dépôt : tout est committé (dernier : `e
 - E6 (poids log-normaux) : échec de code, consigné comme tel — le modèle sauvegardé n'est pas le modèle entraîné  La reparamétrisation w = signe·e^theta a été ent
 - E6 : le soupçon de matérialisation est testé et ÉLIMINÉ (écart 0,000e+00) — le défaut est ailleurs  La matérialisation a été refaite en recalculant explicitemen
 - E6 : mesure définitive — le fichier sauvé ne reproduit pas le modèle entraîné  Avec le protocole de l'entraînement lui-même (mêmes fenêtres, même formule) :   t
+- L'architecture du cerveau face à Drave : les briques y sont, les formes non  Nouveau document : après la brique (docs/biologie-pour-drave.md), l'édifice. Les ch
 
