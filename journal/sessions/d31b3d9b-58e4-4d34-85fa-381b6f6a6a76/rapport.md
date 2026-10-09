@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 23.2 h |
+| Durée | 24.1 h |
 | Tours | 27 |
-| Messages | 987 |
-| Appels d'outils | 949 |
-| Fichiers touchés | 29 |
-| Commandes | 779 |
+| Messages | 1000 |
+| Appels d'outils | 961 |
+| Fichiers touchés | 30 |
+| Commandes | 789 |
 | Sous-agents | 3 |
-| Commits | 69 |
+| Commits | 70 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -1270,7 +1270,7 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 
 ### Tour 27 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1477 caractères tronqués]
 
-*340 appels d'outils.* Actions notables :
+*352 appels d'outils.* Actions notables :
 
 - bash — Check the full state
 - bash — Measure the distilled d384 with the correct protocol
@@ -1286,11 +1286,11 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - bash — Read parcimonie, contexte, lot steps
 - bash — Inspect batch2 script
 - bash — Read batch2 journal and latency map
-- … et 305 autres
+- … et 312 autres
 
 **Synthèse produite :**
 
-⏵ Ajout de la recette au rapport du modèle (le livrable)
+⏵ Mise en file de l'expérience décisive : élagage APPRIS + activations creuses
 
 ## 3. Travail accompli
 
@@ -1327,6 +1327,7 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mesure_lot_disque.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/carte_latence.sh` | 1 | 1 |
 | `/tmp/campagne24/jour1_suite.sh` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/modele-pour-drave.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -1376,7 +1377,7 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 739 autres
+- … et 749 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1593,4 +1594,5 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - Résumé : la distillation s'ajoute au routage, pas à la parcimonie" && echo committed; sleep 540; tail -1 /tmp/campagne24/tr_m9_route_long.log
 - Le tableau des manques était cassé par des barres verticales non échappées" && echo ok
 - Rapport du modèle : la recette du modèle nativement événementiel  Trois règles mesurées : on n'élague pas un modèle, on l'entraîne creux (à 25 % le témoin s'eff
+- Distinguer le moteur du modèle : évaluer un modèle ad hoc pour Drave  Le rapport de campagne mesurait le MOTEUR sur des modèles faits pour d'autres architecture
 

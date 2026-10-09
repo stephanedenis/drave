@@ -1,0 +1,200 @@
+# Quel modèle pour Drave ? — évaluer un modèle *ad hoc*, pas le moteur
+
+> 9 octobre 2026. Ce document sépare deux choses que les rapports mélangeaient
+> jusqu'ici : **ce que le moteur Drave fait payer** (un coût précis, mesurable) et
+> **ce qu'un modèle devrait être** pour que ce coût soit minimal. La campagne
+> `rapport-campagne-benefices.md` a mesuré le moteur *sur des modèles faits pour
+> d'autres architectures* ; ici on cherche la forme du modèle qui lui est propre —
+> y compris inédite.
+
+---
+
+## 1. Le coût, formalisé
+
+Dans Drave, une passe avant ne paie pas « des paramètres », elle paie des
+**paires (poids × activation)** :
+
+    paires = Σ_{projections} Σ_{i ∈ activations vivantes}  (poids non nuls de la ligne i)
+
+Trois conséquences, toutes vérifiées par la campagne :
+
+| levier | effet sur les paires | où c'est mesuré |
+|---|---|---|
+| **sparsité d'activation** (entrées vivantes) | facteur direct | § 19, § 5 ter |
+| **sparsité de poids** (non-nuls par ligne) | facteur direct | § 6 de ce document (mesuré le 9/10) |
+| **routage** (quelles lignes existent) | facteur direct, par expert | § 7 |
+
+Et deux coûts qui ne sont **pas** des paires :
+
+- **le croisement push/pull** : au-dessus de ~22-25 % de densité, le chemin par
+  listes coûte *plus cher* que le produit scalaire dense, même à paires égales
+  (mesuré : ×0,02 à vide, ×1,54 à 50 %, ×3,19 à densité 1). **Un modèle ad hoc doit
+  vivre sous ce seuil** ;
+- **la lecture** : les paires doivent venir du disque. Mesuré le 9/10 : **8,6 Mo/s
+  en mmap sur disque dur contre 243 Mo/s en séquentiel** (`dd` direct) — soit ÷28.
+  Sur NVMe, 140-300 Mo/s (÷5 à ÷11). **La disposition des poids est donc un
+  paramètre de conception du modèle**, pas un détail d'implémentation.
+
+**Ce que le moteur ne fait PAS payer** : le nombre de couches (chaque couche ne paie
+que ses paires), la taille du vocabulaire *d'entrée* (l'embedding est une lecture de
+ligne), la VRAM (les projections peuvent rester sur le CPU), la RAM (mmap).
+
+---
+
+## 2. Ce que la campagne a déjà établi, et qui contraint le dessin
+
+| fait mesuré | conséquence pour le modèle |
+|---|---|
+| la densité d'activation d'un modèle dense est **71 %**, identique sur prose, français, code et 399 langues (§ 10 ter) | un modèle ordinaire **ne peut pas** bénéficier des listes : sa parcimonie ne dépend pas de la tâche, elle n'existe pas |
+| à 25 % gardés, un modèle ordinaire perd **+118 %** de perplexité ; le même entraîné avec k-WTA **s'améliore** (§ 5 ter) | la sparsité doit être **apprise**, et le taux d'exécution fait partie de la spécification |
+| la distillation rattrape le **routage** (−13,8 % à dim 512) mais **pas** la parcimonie (−0,3 %) (§ 5 bis, 5 ter) | les deux leviers traitent des handicaps distincts : ne pas les confondre dans un dessin |
+| 4 experts sur 128 (3,1 %), déséquilibre ×3,90 (§ 7) | le routage est un levier **fort** sur les paires — mais voir § 3 ci-dessous |
+| la couche de sortie de gpt-oss pèse **12 %** des paires par jeton (§ 13) | la tête compte, et un **petit vocabulaire** la rend négligeable |
+| le lot **ne divise pas** les lectures sur un MoE (§ 14 bis) | la sparsité par experts et le lot se contredisent : un dessin ad hoc doit choisir |
+
+---
+
+## 3. Les candidats, et ce que chacun vaut
+
+Sept familles ont été examinées. Pour chacune : le gain **attendu** sur les paires,
+l'état de la **mesure**, et ce qui manque.
+
+### A. Modèle à activations creuses apprises (k-WTA) — **mesuré, gagnant**
+
+Entraîner avec un k-WTA sur l'entrée de toutes les couches linéaires, exécuter avec
+`--act-topk` au même taux.
+
+- **Mesuré** : à 25 % gardés, perplexité **5,1719 contre 10,8758** au témoin à taux
+  égal (−52 %) ; à dim 512, **4,9649 contre 6,0503** en dense ; paires ÷4.
+- **Prix** : néant à son taux d'entraînement (le modèle creux fait *mieux* que
+  dense) ; hors de son régime, 0,4 à 1,4 point de perplexité.
+- **Statut** : recette établie, reproductible (`--kwta` + `--act-topk`).
+
+### B. Modèle à POIDS creux — **mesuré le 9/10, et c'est le levier oublié**
+
+Le chemin par listes compte les **non-nuls par ligne** : élaguer les poids réduit
+les paires *sans toucher aux activations*. Mesuré sur `m8_d512_kwta25` (128 jetons,
+`DRAVE_SANS_EMPRUNT=1` pour comparer la même arithmétique) :
+
+| poids gardés (par ligne) | activations | perplexité | **paires (événements)** |
+|---|---:|---:|---:|
+| 100 % | 100 % | 4,2831 | 1 585 574 447 |
+| 100 % | 25 % | **3,9152** | 398 967 618 |
+| **50 %** | **25 %** | **3,9139** | **201 308 279** |
+| 25 % | 25 % | 13,0141 | 100 757 395 |
+
+**Deux résultats.** 1) Les deux leviers **se multiplient** : 1 586 M → 399 M → 201 M
+→ 101 M de paires, soit **÷7,9** pour la combinaison 50 %/25 %. 2) À 50 % de poids
+gardés, **la perplexité ne bouge pas** (3,9139 contre 3,9152) — l'élagage imposé
+coûte zéro à ce taux. À 25 % il s'effondre (+232 %) : la limite est entre les deux.
+
+**Ce qui manque** : ces poids ont été élagués **à l'exécution** (`--keep`), pas
+appris. Par symétrie avec A, un modèle *entraîné* avec élagage devrait tenir plus
+bas que 50 %. C'est l'expérience la plus prometteuse du lot, et elle est en file.
+
+### C. Routage d'experts — **mesuré : fort sur les paires, aveugle aux événements**
+
+- **Mesuré** : 4 experts sur 128 (3,1 %) ; −2,6 % à dim 256, −2,9 % à 384 à lecture
+  égale, **+10 % à dim 512** — et la distillation rattrape (−5,2 % vs le dense).
+- **La limite, et elle est structurelle** : les experts sont écrits en **Q4_0**,
+  format sans noyau de listes, et le chargeur **refuse Q8_0** pour les experts. Un
+  modèle routé **économise des experts, pas des événements** : à l'intérieur des
+  experts, tout est lu.
+- **Conséquence pour un dessin ad hoc** : A et B doivent s'appliquer **dans** les
+  experts, ce qui demande le noyau Q8 par expert — sinon le routage et la parcimonie
+  ne se rencontrent jamais.
+
+### D. Disposition « par événements » des poids — **inédit, motivé par une mesure**
+
+Sur disque dur, le moteur lit à **8,6 Mo/s** là où le disque donne 243 Mo/s : la
+faute aux défauts de page *aléatoires*. Un modèle dont les poids actifs d'une même
+décision sont **contigus** (experts en blocs, lignes regroupées par fréquence
+d'activation, en-têtes au début) transformerait cette lecture en séquentiel.
+
+- **Gain attendu** : jusqu'à **×28** sur le débit de lecture dans la niche « plus
+  gros que la RAM » — c'est-à-dire la différence entre 90 minutes et 3 minutes pour
+  une passe gpt-oss.
+- **Ce qui manque** : un exporteur qui réordonne, et rien d'autre — le moteur lit
+  par pointeur et n'impose aucun ordre. **C'est le candidat le moins coûteux à
+  tester et le plus spécifique à Drave.**
+
+### E. Tête et vocabulaire — **mesuré, et c'est un choix de modèle**
+
+La couche de sortie est lue **en entier** à chaque jeton (0,58 G de poids pour
+gpt-oss, 12 % des paires). Un vocabulaire de 32 k au lieu de 201 k divise ce poste
+par 6 ; un modèle **byte-level** (vocabulaire 256, comme ceux entraînés ici) le rend
+négligeable. Les modèles de la campagne sont byte-level pour cette raison.
+
+- **Mesuré** : tête restreinte ×1,36-1,42 (0,5 B) ; sur gpt-oss la borne est ×1,12
+  et l'essentiel est ailleurs (experts).
+- **Conséquence** : à qualité égale, **un petit vocabulaire est un avantage
+  structurel** en Drave — l'inverse de l'usage courant, où le vocabulaire est
+  choisi pour la compression du texte.
+
+### F. Attention : ce que le contexte coûte vraiment
+
+Les paires d'attention croissent avec la longueur (0,15 M/jeton à 128 jetons mais
+910 M/jeton sur le 30B à 512 jetons, § 14 bis). Un dessin ad hoc doit **borner** ce
+poste : fenêtre glissante (le moteur l'implémente pour gpt-oss), cache compressé
+partagé (V4), ou état récurrent (KDA de Kimi).
+
+- **Mesuré** : la mémoire tient jusqu'à **12 288 jetons** (18/18, § 9) ; le KV int8
+  coûte +1,5 à +3,0 % (§ 0 bis) ; le KV paginé fait 0,03 Go au lieu de 25,77 Go à
+  1 M.
+- **Ce qui manque** : un modèle entraîné ici **avec** fenêtre glissante ou état
+  récurrent, pour mesurer ce que la borne coûte en qualité *quand elle est apprise*.
+
+### G. Le lot et le routage se contredisent — **mesuré**
+
+Sur un MoE lu du disque, augmenter le lot **ne divise pas** les lectures : l'union
+des experts touchés par une passe sature (§ 14 bis). Un modèle ad hoc destiné au
+disque doit donc soit **router peu** (peu d'experts, très creusés), soit **accepter
+de lire tout le jeu chaud** — les deux ne se cumulent pas.
+
+---
+
+## 4. Le classement, et le modèle qui en sort
+
+Par **gain sur les paires** × **certitude de la mesure** × **coût de mise en œuvre** :
+
+| rang | levier | gain mesuré sur les paires | coût |
+|---|---|---|---|
+| 1 | **activations creuses apprises** (A) | **÷4** à 25 % gardés, qualité conservée | fait (`--kwta`, `--act-topk`) |
+| 2 | **poids creux** (B) | **÷2** à 50 % gardés, qualité conservée | fait à l'exécution (`--keep`) ; **à apprendre** |
+| 3 | **disposition par événements** (D) | jusqu'à **÷28 sur le débit de lecture** (disque dur) | exporteur à écrire |
+| 4 | **routage** (C) | ÷32 sur les experts non lus | fait, mais **aveugle aux événements** sans noyau Q8 |
+| 5 | **petit vocabulaire / tête** (E) | 12 % des paires chez gpt-oss | fait (byte-level) |
+| 6 | **borne d'attention** (F) | dépend du contexte | partiel |
+
+**Le modèle ad hoc que ces mesures dessinent** — et il n'existe pas :
+
+> Un modèle **byte-level** (tête négligeable), **entraîné creux sur les deux axes à
+> la fois** (k-WTA à ~25 % sur les activations *et* élagage appris à ~50 % sur les
+> poids par ligne), **routé** avec peu d'experts très creusés, dont les poids sont
+> **rangés par groupes d'événements** pour que le disque lise en séquentiel, et dont
+> l'attention est **bornée par une fenêtre apprise**.
+
+Les mesures de ce document en donnent les trois premiers étages : ÷4 (activations),
+÷2 (poids, et ils se multiplient : **÷7,9 mesuré**), et un facteur de lecture qui
+peut aller jusqu'à ×28 sur disque dur. Les trois derniers demandent, dans l'ordre :
+un noyau Q8 par expert, un exporteur qui réordonne, et un entraînement à fenêtre.
+
+---
+
+## 5. Les expériences à faire, par ordre de rendement
+
+1. **Élagage appris** (B) — ajouter au harnais d'entraînement un élagage par
+   magnitude à rampe (garder 50 %, puis 25 %), et mesurer qualité + paires. *C'est
+   la seule expérience dont on attend un gain comparable à celui des activations, et
+   le harnais existe déjà.*
+2. **Noyau Q8 par expert** (C) — sans lui, un modèle « routé et creux » ne peut pas
+   exister ; c'est aussi la seule façon de mesurer ce que le routage vaut *en
+   événements*.
+3. **Disposition par événements** (D) — réordonner les tenseurs à l'export et
+   re-mesurer le débit de lecture à froid. Le moteur n'a rien à changer.
+4. **Fenêtre apprise** (F) — entraîner avec fenêtre glissante et comparer à
+   contexte plein, à mémoire égale.
+
+**Ce que ce document ne dit pas** : aucun de ces dessins n'a été entraîné *en
+entier*. Le classement est fait de mesures isolées, pas d'un modèle complet — et
+c'est écrit à chaque ligne du § 3.

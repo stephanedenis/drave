@@ -15963,3 +15963,131 @@ pas  32000 · perte 1.1520 · val 1.9055 bits/octet · 3537 s
 ⏵ Ajout de la recette au rapport du modèle (le livrable)
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-modele-moteur.md\")\ns = p.read_text()\nancre = \"\"\"---\n\n## 4. La porte de répartition : tenue\"\"\"\nassert ancre in s\najout = \"\"\"---\n\n## 3 ter. La recet … [3369 caractères tronqués]`
+
+  ```
+ok
+2ee0305 Rapport du modèle : la recette du modèle nativement événementiel
+  ```
+
+- **bash** `{"command": "sleep 590; tail -1 /tmp/campagne24/tr_m9_route_long.log; date '+%H:%M'", "description": "Poll the long training", "timeoutMs": 620000}`
+
+  ```
+pas  40000 · perte 1.1359 · val 1.8843 bits/octet · 4432 s
+08:34
+  ```
+
+- **get_goal** `{}`
+
+  ```
+{"goal":{"id":"goal-b5c7212b-5f46-4784-9b76-8d9b5cba23b4","revision":4,"objective":"Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, préremplissage par lots, modèle plus gros que la RAM. Poursuivre en parallèle le livrable du modèle nativement événementiel : entraîné ici, exécuté par Drave à logits vérifiés, découpé en unités réparties. Chaque affirmation porte sa mesure (perplexité, débit, octets et événements par jeton, RSS, écart entre nœuds) ET ses conditions (corpus, tokenizer du modèle, charge de fond) ; les manques constatés — embeddings/encodeurs, décodage spéculatif — sont consignés comme manques, pas comme résultats. Livrables : la file tools/campagne-benefices.sh exécutée et ses journaux, un rapport de synthèse par famille de tâches, et la poursuite du modèle événementiel.","phase":"active","roundsStarted":20,"maxGoalRounds":40},"activation":"armed"}
+  ```
+
+- **bash** `{"command": "sleep 590; tail -1 /tmp/campagne24/tr_m9_route_long.log", "description": "Poll training", "timeoutMs": 620000}`
+
+  ```
+pas  40000 · perte 1.1359 · val 1.8843 bits/octet · 4432 s
+  ```
+
+- **bash** `{"command": "sleep 595; tail -1 /tmp/campagne24/tr_m9_route_long.log; date '+%H:%M'", "description": "Poll training", "timeoutMs": 620000}`
+
+  ```
+pas  48000 · perte 1.1019 · val 1.8646 bits/octet · 5327 s
+08:54
+  ```
+
+- **bash** `{"command": "sleep 595; tail -1 /tmp/campagne24/tr_m9_route_long.log", "description": "Poll training", "timeoutMs": 620000}`
+
+  ```
+pas  56000 · perte 1.1596 · val 1.8545 bits/octet · 6219 s
+  ```
+
+- **bash** `{"command": "sleep 595; tail -1 /tmp/campagne24/tr_m9_route_long.log", "description": "Poll training", "timeoutMs": 620000}`
+
+  ```
+pas  56000 · perte 1.1596 · val 1.8545 bits/octet · 6219 s
+  ```
+
+### 👤 Utilisateur
+
+distinguer moteur Drave et modèle optimisé pour Drave. On doit évaluer quel type de modèle ad hoc (probablement inédit) serait le plus efficace en Drave.
+
+### 🤖 Assistant
+
+⏵ Distinguer moteur et modèle : mesure du second levier (poids creux) et modèle de coût
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fn prune_rows\" -A 12 drave-core/src/model.rs | head -18; grep -n \"\\\"--keep\\\"\" drave-core/src/main.rs", "description": "Check the weight-pruning semantics"}`
+
+  ```
+1428:fn prune_rows(w: &mut [f32], n_out: usize, n_in: usize, keep: f32) {
+1429-    if keep >= 1.0 { return; }
+1430-    let k = ((n_in as f32 * keep) as usize).max(1);
+1431-    let mut abs = vec![0f32; n_in];
+1432-    for o in 0..n_out {
+1433-        let row = &mut w[o * n_in..(o + 1) * n_in];
+1434-        for (i, &v) in row.iter().enumerate() { abs[i] = v.abs(); }
+1435-        // seuil = k-ième plus grande magnitude (sélection en O(n))
+1436-        let (_, &mut seuil, _) = abs.select_nth_unstable_by(n_in - k, |a, b| a.partial_cmp(b).unwrap());
+1437-        for v in row.iter_mut() { if v.abs() < seuil { *v = 0.0; } }
+1438-    }
+1439-}
+1440-
+745:            "--keep" => { o.keep = suivant(i).parse().unwrap(); 2 }
+  ```
+
+### 🤖 Assistant
+
+⏵ Mesure du levier « poids creux » × « activations creuses » sur le modèle entraîné
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=/tmp/m8_d512_kwta25.gguf; IDS=/tmp/campagne24/ids_m8_d512_kwta25.txt; [ -s \"$IDS\" ] || python3 -c \"\nd=open('data/corpus_en_val.txt','rb').read(256); open('$IDS','w').write(','.join(str(b) for b in d))\"; for keep in 1.0 0.5 0.2 … [690 caractères tronqués]`
+
+  ```
+keep 1.0   act100 PPL 4.2831     événements 1585574447
+keep 1.0   act25  PPL 3.9152     événements 398967618
+keep 0.5   act100 PPL 4.9539     événements 801957842
+keep 0.5   act25  PPL 3.9139     événements 201308279
+keep 0.25  act100 PPL 17.8763    événements 402497382
+keep 0.25  act25  PPL 13.0141    événements 100757395
+  ```
+
+- **write** `{"content": "# Quel modèle pour Drave ? — évaluer un modèle *ad hoc*, pas le moteur\n\n> 9 octobre 2026. Ce document sépare deux choses que les rapports mélangeaient\n> jusqu'ici : **ce que le moteur Drave fait payer** (un coût précis, mesurable) et\n> **ce qu'un modèle devrait être** pour que ce co … [11000 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/modele-pour-drave.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"for pas in range\\|modele.train()\\|eval_tous\\|a.eval_tous\\|meilleur\" tools/entrainer_moteur.py | head -12", "description": "Locate the training loop"}`
+
+  ```
+166:    meilleur = (float("inf"), None, 0)
+168:    modele.train()
+185:    for pas in range(1, a.pas + 1):
+218:        if pas % a.eval_tous == 0 or pas == a.pas:
+235:            if bpo < meilleur[0]:
+236:                meilleur = (bpo, {kk: v.detach().clone() for kk, v in modele.state_dict().items()}, pas)
+239:            modele.train()
+241:    modele.load_state_dict(meilleur[1])
+245:    print(f"\n  # meilleur point : pas {meilleur[2]} · val {meilleur[0]:.4f} bits/octet")
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"tools/entrainer_moteur.py\")\ns = p.read_text()\n\n# 1) la fonction d'élagage, à côté de installer_kwta\nancre = \"def main():\"\nelag = '''def elaguer_lignes(modele, garde):\n     … [3302 caractères tronqués]`
+
+  ```
+ok
+syntaxe OK
+  pas    100 · perte 2.6410 · val 4.2303 bits/octet · 2 s
+  pas    200 · perte 2.3185 · val 3.6389 bits/octet · 4 s
+Writing model shards:   0%|          | 0/1 [00:00<?, ?it/s]Writing model shards: 100%|██████████| 1/1 [00:00<00:00, 183.95it/s]
+
+  # meilleur point : pas 200 · val 3.6389 bits/octet
+  # écrit dans /tmp/fumee_elagage · 0.25 M paramètres · 0.12 M poids lus/jeton/couche
+  ```
+
+### 🤖 Assistant
+
+⏵ Mise en file de l'expérience décisive : élagage APPRIS + activations creuses
+
+- **bash** `{"command": "cat > /tmp/campagne24/jour3_poids_creux.sh <<'EOF'\n#!/bin/bash\n# jour3_poids_creux.sh — le levier que la campagne avait oublié : les POIDS.\n#\n# Mesuré le 9/10 (§ 6 de docs/modele-pour-drave.md) : sur le chemin par listes, le\n# coût est un nombre de PAIRES = (poids non nuls) × (acti … [4068 caractères tronqués]`

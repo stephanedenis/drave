@@ -110,6 +110,33 @@ def installer_kwta(modele, fraction, cibles=None):
     return n
 
 
+def elaguer_lignes(modele, garde):
+    """Élagage par MAGNITUDE, par LIGNE de sortie — la règle exacte de `--keep`.
+
+    POURQUOI LES DEUX AXES. Le coût de Drave est un nombre de PAIRES (poids non nul
+    × activation vivante) : la sparsité d'activation divise ce nombre, la sparsité
+    de POIDS le divise aussi, et les deux se multiplient — mesuré le 9/10 sur
+    `m8_d512_kwta25` : 100 %/100 % = 1 586 M paires, 25 %/100 % = 399 M,
+    25 %/50 % = 201 M, soit ÷7,9 pour la combinaison. À 50 % de poids gardés la
+    perplexité ne bouge pas (3,9139 contre 3,9152) ; à 25 % elle s'effondre.
+
+    Ici on l'APPREND au lieu de l'imposer : le modèle s'adapte aux poids qui
+    restent. La règle est copiée de `model.rs::prune_rows` — garder les k plus
+    grandes magnitudes de chaque ligne — pour que l'entraînement et l'exécution
+    parlent du même modèle.
+    """
+    n = 0
+    with torch.no_grad():
+        for mod in modele.modules():
+            if isinstance(mod, nn.Linear):
+                w = mod.weight
+                k = max(1, int(round(garde * w.shape[1])))
+                idx = w.abs().topk(k, dim=1).indices
+                w.mul_(torch.zeros_like(w).scatter_(1, idx, 1.0))
+                n += 1
+    return n
+
+
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("--famille", choices=["dense", "route"], default="route")
@@ -137,6 +164,11 @@ def main():
     p.add_argument("--kwta", type=float, default=0.0,
                    help="part GARDÉE par k-WTA sur l'entrée de o_proj/down_proj "
                         "(0 = aucun ; 0,25 = on annule 75 %% des activations)")
+    p.add_argument("--elagage", type=float, default=0.0,
+                   help="part GARDÉE des poids, par ligne de sortie (0 = aucun "
+                        "élagage ; 0,5 = on annule la moitié des poids de chaque ligne)")
+    p.add_argument("--elagage-tous", type=int, default=500,
+                   help="pas entre deux élagages (rampe cubique de 1,0 vers la cible)")
     p.add_argument("--sans-gpu", action="store_true")
     a = p.parse_args()
     # Lecture égale par construction : k experts lisent ce que lit le FFN dense.
@@ -160,6 +192,9 @@ def main():
 
     if a.kwta > 0.0:
         installer_kwta(modele, a.kwta)
+    if a.elagage > 0.0:
+        print(f"# élagage APPRIS : {a.elagage:.0%} des poids gardés par ligne, "
+              f"rampe sur la première moitié de l'entraînement")
 
     opt = torch.optim.AdamW(modele.parameters(), lr=a.lr, weight_decay=0.01)
     g = torch.Generator().manual_seed(a.graine)
@@ -215,6 +250,15 @@ def main():
         perte.backward()
         torch.nn.utils.clip_grad_norm_(modele.parameters(), 1.0)
         opt.step()
+        # ÉLAGAGE À RAMPE CUBIQUE : on ne coupe pas la moitié des poids au premier
+        # pas (le modèle n'a rien appris), on y va progressivement — c'est la
+        # différence entre élaguer et détruire.
+        if a.elagage > 0.0 and pas % a.elagage_tous == 0:
+            frac = min(1.0, pas / max(1, a.pas * 0.5)) ** 3
+            garde = 1.0 - (1.0 - a.elagage) * frac
+            if garde < 1.0:
+                elaguer_lignes(modele, garde)
+
         if pas % a.eval_tous == 0 or pas == a.pas:
             modele.eval()
             tot, n = 0.0, 0
