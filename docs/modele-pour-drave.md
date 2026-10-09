@@ -151,6 +151,55 @@ des experts touchés par une passe sature (§ 14 bis). Un modèle ad hoc destin�
 disque doit donc soit **router peu** (peu d'experts, très creusés), soit **accepter
 de lire tout le jeu chaud** — les deux ne se cumulent pas.
 
+### H. Routage par PROFONDEUR (chaque jeton ne traverse que k couches) — **inédit, et Drave l'exécute déjà**
+
+Le levier le plus violent sur les paires n'est pas de réduire les activations d'une
+couche, c'est de **ne pas exécuter la couche du tout** : une couche sautée vaut
+zéro paire. Le moteur sait déjà exécuter une plage de couches (`--couches`, nœud
+partiel, découpage à deux nœuds) et son protocole de flux transporte une liste
+d'activations, pas un tenseur — donc **sauter une couche est une décision locale,
+pas une reconstruction**.
+
+- **Gain attendu** : proportionnel au taux de saut — un jeton qui traverse 2 des 4
+  couches divise ses paires par 2, et se cumule avec A et B.
+- **Ce qui manque** : un modèle entraîné ainsi (mixture-of-depths) **et** un routeur
+  de profondeur bon marché — c'est un projet d'entraînement, pas de moteur.
+- **Pourquoi c'est spécifiquement Drave** : dans une architecture dense classique,
+  sauter une couche casse le graphe et impose des masques ; dans une architecture
+  événementielle, c'est simplement « ne rien envoyer ».
+
+### I. Budget d'ÉVÉNEMENTS appris, au lieu d'un k-WTA uniforme — **inédit, et mesurable aujourd'hui**
+
+Le k-WTA de A coupe **le même taux partout** (25 % sur chaque couche, chaque
+neurone). Or les couches ne se valent pas : la campagne a mesuré, projection par
+projection, que `o` et `down` tolèrent 30 % gardés sans perdre 17 % de perplexité
+là où `gate` et `up` s'effondrent (+101 %, +75 %, § 19 bis).
+
+- **L'idée** : entraîner avec une **contrainte globale** (un budget d'événements par
+  jeton, ex. 25 % du total) au lieu d'un taux local, et laisser le modèle répartir —
+  une couche qui a besoin de toutes ses activations les garde, une autre tombe à
+  5 %. La contrainte est un lagrangien sur le nombre de non-zéros attendus, donc
+  dérivable par un seuil appris.
+- **Gain attendu** : à budget égal, la perplexité d'un modèle qui *choisit* où être
+  creux doit être meilleure que celle d'un modèle creusé uniformément — de combien,
+  c'est la question, et elle n'est pas mesurée.
+- **Ce qui manque** : un seuil appris par projection dans le harnais. C'est un
+  changement **local** de l'entraînement (`--kwta` existe déjà), et la mesure se
+  fait avec les outils de la campagne.
+
+### J. Quantification adaptée au chemin par LISTES — **pratique, et chiffré**
+
+Le chemin par listes stocke en **int8 + listes de rangs** : 15,88 bits par poids
+mesurés, contre 8,00 pour la forme dense (§ 21 du rapport de campagne). Un modèle
+entraîné pour cette grille (quantification-aware) garderait sa qualité à 8 bits
+**tout en** ayant des listes d'événements — alors qu'aujourd'hui la forme 8 bits
+coûte 2× le stockage de la forme 4 bits, laquelle n'a **aucun** noyau de listes.
+
+- **Gain attendu** : le chemin événementiel sans le doublement de taille, donc la
+  possibilité de l'employer sur un modèle qui ne tient pas en RAM.
+- **Ce qui manque** : un entraînement avec bruit de quantification (le moteur a déjà
+  la grille, `--abits`, et son banc d'encodages).
+
 ---
 
 ## 4. Le classement, et le modèle qui en sort
@@ -165,6 +214,9 @@ Par **gain sur les paires** × **certitude de la mesure** × **coût de mise en 
 | 4 | **routage** (C) | ÷32 sur les experts non lus | fait, mais **aveugle aux événements** sans noyau Q8 |
 | 5 | **petit vocabulaire / tête** (E) | 12 % des paires chez gpt-oss | fait (byte-level) |
 | 6 | **borne d'attention** (F) | dépend du contexte | partiel |
+| 7 | **routage par profondeur** (H) | ÷ par le taux de saut, **cumulable** | modèle à entraîner |
+| 8 | **budget d'événements appris** (I) | à budget égal, meilleure qualité | seuil par projection à coder |
+| 9 | **quantification-aware pour les listes** (J) | événements sans doublement de taille | entraînement bruité |
 
 **Le modèle ad hoc que ces mesures dessinent** — et il n'existe pas :
 

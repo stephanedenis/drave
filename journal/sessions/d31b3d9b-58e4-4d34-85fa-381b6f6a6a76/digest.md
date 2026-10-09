@@ -16091,3 +16091,20 @@ syntaxe OK
 ⏵ Mise en file de l'expérience décisive : élagage APPRIS + activations creuses
 
 - **bash** `{"command": "cat > /tmp/campagne24/jour3_poids_creux.sh <<'EOF'\n#!/bin/bash\n# jour3_poids_creux.sh — le levier que la campagne avait oublié : les POIDS.\n#\n# Mesuré le 9/10 (§ 6 de docs/modele-pour-drave.md) : sur le chemin par listes, le\n# coût est un nombre de PAIRES = (poids non nuls) × (acti … [4068 caractères tronqués]`
+
+  ```
+ff3ae75 Distinguer le moteur du modèle : évaluer un modèle ad hoc pour Drave
+  ```
+
+- **bash** `{"command": "sleep 400; cd /tmp/campagne24 && tail -1 tr_m9_route_long.log; grep -E \"route_long\" journal9.txt | tail -2", "description": "Poll the long routed training", "timeoutMs": 420000}`
+
+  ```
+pas  64000 · perte 1.0995 · val 1.8521 bits/octet · 7119 s
+[09/10 07:20:09] charge 4.49 · m9_d512_route_long : départ (routé 512, 80 000 pas au lieu de 40 000)
+  ```
+
+### 🤖 Assistant
+
+⏵ Trois dessins inédits que Drave récompense, ajoutés à l'évaluation
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/modele-pour-drave.md\")\ns = p.read_text()\nancre = \"\"\"---\n\n## 4. Le classement, et le modèle qui en sort\"\"\"\nassert ancre in s\najout = \"\"\"### H. Routage par PROFO … [5835 caractères tronqués]`
