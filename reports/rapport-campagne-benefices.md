@@ -113,9 +113,24 @@ Mêmes 256 jetons, même contexte, chaque modèle tokenisant son propre corpus
 | Qwen2.5-0.5B Q8_0 | **17,43** | **0,983** | 28,7 | 1,28 Go | 0 | en cache |
 | r1-distill-Qwen-1.5B Q4_K_M | **47,14** | **1,326** | 9,5 | 4,76 Go | 1,04 Go | lu du disque |
 | r1-distill-Qwen-14B Q4_K_M | **14,30** | **0,915** | 0,5 | 39,8 Go | 8,71 Go | lu du disque, charge 47 |
-| codestral-22B Q4_K_M | *en cours* | | | | | tokenizer Mistral (32 768) |
-| Qwen3-30B-A3B Q4_K_M (MoE) | *en cours* | | | | | |
+| codestral-22B Q4_K_M | **35 657** ⚠️ | — | — | 63,6 Go | 12,7 Go | tokenizer Mistral ; **diagnostic en cours** |
+| Qwen3-30B-A3B Q4_K_M (MoE) | **8,63** | **0,742** | — | **14,3 Go** | 11,8 Go | MoE, lu du NVMe |
 | gpt-oss-120b MXFP4 | *en cours* | | | | | 63 Go depuis le disque dur |
+
+**Le MoE gagne sur les deux tableaux — la thèse du projet démontrée par un modèle
+qui n'a pas été fait pour ça.** Qwen3-30B-A3B (30 milliards de paramètres, 3
+actifs) donne la **meilleure qualité de la grille** (0,742 bit/octet, mieux que le
+14B dense à 0,915) pour **14,3 Go de mémoire résidente** — moins que le 14B
+(39,8 Go) et trois fois moins que codestral-22B (63,6 Go). Un modèle plus gros qui
+lit moins : exactement ce que le prototype routé cherche à reproduire en
+l'entraînant.
+
+**L'anomalie codestral, consignée comme telle.** 35 657 de perplexité sur de la
+prose, c'est 4 000× le 30B. Deux explications : le modèle est spécialisé pour le
+**code** et mauvais en prose — ou le moteur exécute mal l'architecture Mistral,
+qui n'a **aucune porte** dans `tools/portes.sh`. Un diagnostic tourne (génération
+de code, puis perplexité **sur du code**). Tant qu'il n'a pas rendu, ce chiffre
+n'est pas un résultat, c'est un point d'interrogation.
 
 **La perplexité n'est PAS comparable d'un tokenizer à l'autre.** Codestral
 (32 768 entrées) découpe ce texte en **288 554** jetons là où Qwen en fait

@@ -7,12 +7,12 @@
 | Début | 2026-10-08 09:11 |
 | Durée | 13.1 h |
 | Tours | 15 |
-| Messages | 504 |
-| Appels d'outils | 492 |
+| Messages | 508 |
+| Appels d'outils | 496 |
 | Fichiers touchés | 19 |
-| Commandes | 374 |
+| Commandes | 377 |
 | Sous-agents | 3 |
-| Commits | 23 |
+| Commits | 24 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -733,7 +733,7 @@ Le rapport (`reports/rapport-campagne-benefices.md`) porte maintenant onze secti
 
 ### Tour 15 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1476 caractères tronqués]
 
-*6 appels d'outils.* Actions notables :
+*10 appels d'outils.* Actions notables :
 
 - bash — Check state after the early batches
 - bash — Test codestral on code vs prose
@@ -741,6 +741,10 @@ Le rapport (`reports/rapport-campagne-benefices.md`) porte maintenant onze secti
 - edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md`
 - bash — Verify the report structure
 - bash — Fix the heading and commit the verdict table
+- bash — Check the codestral diagnostic
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md`
+- bash — Re-read the grid section
+- bash — Commit the grid update with the MoE result
 
 **Synthèse produite :**
 
@@ -769,7 +773,7 @@ Le rapport (`reports/rapport-campagne-benefices.md`) porte maintenant onze secti
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/campagne_synthese.py` | 1 | 2 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/speculatif.py` | 1 | 0 |
 | `/tmp/campagne24/batch3_niah.sh` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md` | 1 | 8 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md` | 1 | 9 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/census_routage.py` | 1 | 0 |
 
 ### Sous-agents lancés
@@ -820,7 +824,7 @@ Le rapport (`reports/rapport-campagne-benefices.md`) porte maintenant onze secti
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 334 autres
+- … et 337 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -991,4 +995,5 @@ Le rapport (`reports/rapport-campagne-benefices.md`) porte maintenant onze secti
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 git add reports/rapport-campagne-benefices.md && timeout 300 git commit -q -F - <<'MSG' Les tâ
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 git add reports/rapport-campagne-benefices.md && timeout 300 git commit -q -F - <<'MSG' La mém
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="reports/rapport-campagne-benefices.md"; s=open(p).read() # La section « décodage spécu
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="reports/rapport-campagne-benefices.md"; s=open(p).read() s = s.replace('''| r1-distill
 

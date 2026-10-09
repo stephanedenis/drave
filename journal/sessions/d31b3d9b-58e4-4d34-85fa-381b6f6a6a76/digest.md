@@ -8414,3 +8414,58 @@ The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagn
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"reports/rapport-campagne-benefices.md\"; s=open(p).read()\n# La section « décodage spéculatif » a perdu son titre en insérant le verdict.\ns = s.replace('''**Ce que le tableau dit en une phrase**''', '''**Ce que … [1901 caractères tronqués]`
+
+  ```
+titre restauré
+14:## 0. Le piège qui a failli tout fausser
+30:## 0 bis. Le verdict, famille par famille
+59:## 1. Le décodage spéculatif : ×1,2, pas ×2 — mesuré avant d'écrire du moteur
+91:## 2. Les deux familles de tâches que Drave ne couvre pas
+106:## 3. La grille de modèles — « ce modèle tourne-t-il, et à quel prix ? »
+146:## 4. Ce que le dépôt sait déjà, par famille de tâches (avant cette campagne)
+8343f82 Le verdict par famille de tâches, en tête du rapport
+  ```
+
+- **bash** `{"command": "tail -20 /tmp/campagne24/codestral_diag.log 2>/dev/null | head -20; echo \"=== campagne ===\"; tail -2 /tmp/campagne24/journal.txt; date", "description": "Check the codestral diagnostic", "timeoutMs": 60000}`
+
+  ```
+=== 1. génération de code (le moteur exécute-t-il Mistral correctement ?) ===
+=== campagne ===
+[08/10 22:04:33] charge 28.57 · grille/codestral-22B : code 0 · PPL 35657.3767 · RSS 63646 Mo · lus 12684 Mio
+[08/10 22:06:13] charge 26.37 · grille/qwen3-30B-A3B : code 0 · PPL 8.6327 · RSS 14256 Mo · lus 11841 Mio
+jeu 08 oct 2026 22:17:24 EDT
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md", "new_string": "| modèle | perplexité | **bits/octet** | tok/s | RSS | octets lus | condition |\n|---|---:|---:|---:|---:|---:|---|\n| Qwen2.5-0.5B Q8_0 | 17,43 | 0,983 | 28,7 | 1,28 Go | 0 | en cac … [2923 caractères tronqués]`
+
+  ```
+Error: cannot edit "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md": file changed since it was read — re-read the file, then retry
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '106,126p' reports/rapport-campagne-benefices.md", "description": "Re-read the grid section"}`
+
+  ```
+## 3. La grille de modèles — « ce modèle tourne-t-il, et à quel prix ? »
+
+Mêmes 256 jetons, même contexte, chaque modèle tokenisant son propre corpus
+(`/usr/bin/time -v` pour la mémoire et les octets lus).
+
+| modèle | perplexité | **bits/octet** | tok/s | RSS | octets lus | condition |
+|---|---:|---:|---:|---:|---:|---|
+| Qwen2.5-0.5B Q8_0 | **17,43** | **0,983** | 28,7 | 1,28 Go | 0 | en cache |
+| r1-distill-Qwen-1.5B Q4_K_M | **47,14** | **1,326** | 9,5 | 4,76 Go | 1,04 Go | lu du disque |
+| r1-distill-Qwen-14B Q4_K_M | **14,30** | **0,915** | 0,5 | 39,8 Go | 8,71 Go | lu du disque, charge 47 |
+| codestral-22B Q4_K_M | *en cours* | | | | | tokenizer Mistral (32 768) |
+| Qwen3-30B-A3B Q4_K_M (MoE) | *en cours* | | | | | |
+| gpt-oss-120b MXFP4 | *en cours* | | | | | 63 Go depuis le disque dur |
+
+**La perplexité n'est PAS comparable d'un tokenizer à l'autre.** Codestral
+(32 768 entrées) découpe ce texte en **288 554** jetons là où Qwen en fait
+**85 626** : son « PPL » se lit sur une autre échelle. La colonne **bits/octet**
+est la seule unité commune — `log₂(PPL) × jetons / octets`, recalculée depuis le
+journal de tokenisation de chaque modèle. Le tableau la porte pour que la
+compara
+… [20 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"reports/rapport-campagne-benefices.md\"; s=open(p).read()\ns = s.replace('''| r1-distill-Qwen-14B Q4_K_M | **14,30** | **0,915** | 0,5 | 39,8 Go | 8,71 Go | lu du disque, charge 47 |\n| codestral-22B Q4_K_M | *e … [2644 caractères tronqués]`
