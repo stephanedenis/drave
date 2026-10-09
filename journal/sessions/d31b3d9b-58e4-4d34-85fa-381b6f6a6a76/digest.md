@@ -8221,3 +8221,80 @@ The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagn
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 git add reports/rapport-campagne-benefices.md && timeout 300 git commit -q -F - <<'MSG'\nLes tâches à sortie contrainte : x1,42 de débit, et une garantie qui vaut plus\n\nLa tête de sortie est la PLUS GROSSE matrice du mo … [1031 caractères tronqués]`
+
+  ```
+6379e49 Les tâches à sortie contrainte : x1,42 de débit, et une garantie qui vaut plus
+  ```
+
+- **bash** `{"command": "date; tail -3 /tmp/campagne24/journal.txt; echo \"=== codestral ===\"; ps -eo pid,etime,pcpu,rss,comm --sort=-pcpu 2>/dev/null | grep drave | head -2; echo \"=== entraînements ===\"; tail -1 /tmp/campagne24/tr_d256_route.log; tail -1 /tmp/campagne24/tr_d384_route.log", "description": "S … [33 caractères tronqués]`
+
+  ```
+jeu 08 oct 2026 22:03:58 EDT
+[08/10 21:20:04] charge 17.95 · grille/0.5B-Q8 : code 0 · PPL 17.4315 · RSS 1249 Mo · lus 0 Mio
+[08/10 21:21:10] charge 17.44 · grille/r1-1.5B : code 0 · PPL 47.1403 · RSS 4647 Mo · lus 988 Mio
+[08/10 21:39:54] charge 47.40 · grille/r1-14B : code 0 · PPL 14.3048 · RSS 38898 Mo · lus 8304 Mio
+=== codestral ===
+3718149       24:03  554 63903972 drave
+3745125       05:44 98.9 19865248 drave
+=== entraînements ===
+  pas  16000 · perte 1.2912 · val 2.0465 bits/octet · 1094 s
+  pas   8000 · perte 1.3160 · val 2.1169 bits/octet · 689 s
+  ```
+
+- **bash** `{"command": "ps -o pid,etime,args -p 3718149,3745125 2>/dev/null | cut -c1-160; echo \"=== journal export ===\"; tail -3 /tmp/campagne24/journal4.txt; echo \"=== journal généraux ===\"; ls -la /tmp/campagne24/journal*.txt 2>/dev/null | awk '{print $5, $9}'", "description": "Identify the running drav … [13 caractères tronqués]`
+
+  ```
+PID     ELAPSED COMMAND
+3718149       24:13 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/codestral-22b-v0.1-q4_k_m.gguf --ppl /tmp/campagne24/ids_cod
+3745125       05:54 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/deepseek-r1-distill-qwen-14b-q4_k_m.gguf --infer --prompt Ex
+=== journal export ===
+[08/10 21:49:56] charge 26.98 · m5_d256_dense : PPL 5.3973 · paires 3.2 M · événements 732865376 · 438.3 tok/s · porte 1
+[08/10 21:50:09] charge 28.03 · m5_d384_dense : PPL 5.3719 · paires 7.2 M · événements 1648531958 · 240.2 tok/s · porte 1
+=== journal généraux ===
+1027 /tmp/campagne24/journal3.txt
+257 /tmp/campagne24/journal4.txt
+325 /tmp/campagne24/journal6.txt
+579 /tmp/campagne24/journal.txt
+  ```
+
+- **bash** `{"command": "cat /tmp/campagne24/journal3.txt; echo \"=== journal 6 (batch 4) ===\"; cat /tmp/campagne24/journal6.txt", "description": "Read the early batch results"}`
+
+  ```
+[08/10 21:26:45] charge 10.06 · === batch 3 : aiguille dans la botte de foin (models/Qwen2.5-0.5B-Q8_0.gguf) ===
+[08/10 21:27:13] charge 15.21 · niah/512·prof0.1 : RETROUVÉ en 28s
+[08/10 21:27:40] charge 18.46 · niah/512·prof0.5 : RETROUVÉ en 26s
+[08/10 21:28:06] charge 19.93 · niah/512·prof0.9 : RETROUVÉ en 26s
+[08/10 21:28:57] charge 22.87 · niah/1024·prof0.1 : RETROUVÉ en 51s
+[08/10 21:29:48] charge 24.16 · niah/1024·prof0.5 : RETROUVÉ en 51s
+[08/10 21:30:39] charge 25.08 · niah/1024·prof0.9 : RETROUVÉ en 51s
+[08/10 21:40:48] charge 34.79 · niah/2048·prof0.1 : RETROUVÉ en 609s
+[08/10 21:42:34] charge 27.72 · niah/2048·prof0.5 : RETROUVÉ en 106s
+[08/10 21:44:23] charge 27.16 · niah/2048·prof0.9 : RETROUVÉ en 109s
+[08/10 21:48:35] charge 28.63 · niah/4096·prof0.1 : RETROUVÉ en 252s
+[08/10 21:52:27] charge 26.99 · niah/4096·prof0.5 : RETROUVÉ en 232s
+[08/10 21:56:25] charge 28.13 · niah/4096·prof0.9 : RETROUVÉ en 238s
+[08/10 21:56:25] charge 28.13 · === batch 3 terminé ===
+=== journal 6 (batch 4) ===
+[08/10 21:57:03] charge 16.95 · === batch 4 : latence de génération ===
+[08/10 21:57:15] charge 15.43 · gen/0.5B : prompt  : 11 tokens en 0.307 s  (35.9 tok/s, TTFT 27.9 ms) · suite 29
+… [133 caractères tronqués]
+  ```
+
+- **bash** `{"command": "kill 3742943 2>/dev/null; sleep 1; ps -eo pid,args | grep -F \"enchainer\" | grep -v grep | sed 's|/tmp/campagne24/||' | awk '{print $1, $3}' | head -6; echo \"--- (enchainer2 supprimé : le batch 3 a déjà tourné, le refaire serait 30 min perdues) ---\"", "description": "Cancel the dupli … [18 caractères tronqués]`
+
+  ```
+3706650 enchainer.sh
+3742628 enchainer4.sh
+3742944 enchainer3.sh
+3745352 enchainer5.sh
+3751804 enchainer6.sh
+--- (enchainer2 supprimé : le batch 3 a déjà tourné, le refaire serait 30 min perdues) ---
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md", "new_string": "## 9. La mémoire TIENT : l'aiguille est retrouvée à toutes les profondeurs\n\nLa perplexité moyenne ne dit pas si un modèle **retrouve** un fait précis. Test :\nun code unique planté … [1818 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 git add reports/rapport-campagne-benefices.md && timeout 300 git commit -q -F - <<'MSG'\nLa mémoire tient : 12 configurations sur 12 retrouvent l'aiguille, jusqu'à 4 096 jetons\n\nTest d'aiguille dans la botte de foin (Qw … [1031 caractères tronqués]`

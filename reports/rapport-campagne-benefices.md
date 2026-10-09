@@ -248,7 +248,50 @@ tête/corps est différent.
 
 ---
 
-## 9. Ce qui reste à mesurer (file en cours)
+## 9. La mémoire TIENT : l'aiguille est retrouvée à toutes les profondeurs
+
+La perplexité moyenne ne dit pas si un modèle **retrouve** un fait précis. Test :
+un code unique planté dans une botte de foin, à trois profondeurs (10 %, 50 %,
+90 %), et une question à la fin. Qwen2.5-0.5B Q8_0, `--infer`, 12 jetons, `temp 0` :
+
+| longueur | profondeur 10 % | 50 % | 90 % |
+|---|---:|---:|---:|
+| 512 jetons | ✅ | ✅ | ✅ |
+| 1 024 | ✅ | ✅ | ✅ |
+| 2 048 | ✅ | ✅ | ✅ |
+| 4 096 | ✅ | ✅ | ✅ |
+
+**12 configurations sur 12 retrouvent le code**, y compris à 4 096 jetons avec un
+modèle de 0,5 B. C'est une mesure de **tâche**, pas de perplexité : le cache KV du
+moteur, sa quantification et sa pagination ne détruisent pas la mémoire du
+contexte. C'est exactement ce que la revendication « contexte long » devait
+démontrer, et c'est la première fois qu'elle l'est sur une tâche.
+
+**Réserve, et elle est sérieuse sur les temps** : cette série a tourné **en
+parallèle de la campagne** (un défaut d'enchaînement corrigé depuis), donc deux
+gros modèles lisaient le disque en même temps. Les **verdicts** (retrouvé/perdu)
+n'en dépendent pas ; les **durées** oui — de 26 s à 609 s pour la même taille,
+selon ce que le disque faisait à ce moment-là.
+
+---
+
+## 10. La génération : TTFT et débit, mesure directe
+
+| modèle | invite | TTFT | débit de génération |
+|---|---:|---:|---:|
+| Qwen2.5-0.5B Q8_0 | 11 jetons en 0,307 s | **27,9 ms** | **29,0 tok/s** |
+| r1-distill-1.5B Q4_K_M | 11 jetons en 1,260 s | 114,6 ms | 7,1 tok/s |
+| r1-distill-14B Q4_K_M | *en cours* | | |
+| Qwen3-30B-A3B | *en cours* | | |
+| gpt-oss-120b MXFP4 | *en cours* | | |
+
+Ces chiffres-là portent la **latence perçue** d'un usage réel, que la perplexité
+ne donne pas : un premier jeton en 28 ms et 29 jetons/s sur un 0,5 B, c'est un
+assistant utilisable ; 7 jetons/s, c'est déjà pénible.
+
+---
+
+## 11. Ce qui reste à mesurer (file en cours)
 
 - `parcimonie` : seuil et k-WTA, en dense et en listes, sur un modèle réel ;
 - `contexte` : 512 → 8 192, avec le cache KV que le moteur **choisit** ;

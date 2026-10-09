@@ -7,12 +7,12 @@
 | Début | 2026-10-08 09:11 |
 | Durée | 12.9 h |
 | Tours | 14 |
-| Messages | 490 |
-| Appels d'outils | 480 |
+| Messages | 496 |
+| Appels d'outils | 486 |
 | Fichiers touchés | 19 |
-| Commandes | 364 |
+| Commandes | 369 |
 | Sous-agents | 3 |
-| Commits | 21 |
+| Commits | 22 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -685,7 +685,7 @@ Côté GPU : `d256_route` (12 000/40 000, val 2,075) et `d384_route` (8 000/40 0
 
 ### Tour 14 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1476 caractères tronqués]
 
-*8 appels d'outils.* Actions notables :
+*14 appels d'outils.* Actions notables :
 
 - bash — Understand the restricted-head feature
 - bash — Read the restricted-head implementation
@@ -695,6 +695,12 @@ Côté GPU : `d256_route` (12 000/40 000, val 2,075) et `d384_route` (8 000/40 0
 - bash — Chain the constrained-output batch
 - edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md`
 - bash — Commit the constrained-output finding
+- bash — Status check
+- bash — Identify the running drave processes
+- bash — Read the early batch results
+- bash — Cancel the duplicate batch 3 run
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md`
+- bash — Commit the needle and generation results
 
 **Synthèse produite :**
 
@@ -723,7 +729,7 @@ Côté GPU : `d256_route` (12 000/40 000, val 2,075) et `d384_route` (8 000/40 0
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/campagne_synthese.py` | 1 | 2 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/speculatif.py` | 1 | 0 |
 | `/tmp/campagne24/batch3_niah.sh` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md` | 1 | 6 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md` | 1 | 7 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/census_routage.py` | 1 | 0 |
 
 ### Sous-agents lancés
@@ -774,7 +780,7 @@ Côté GPU : `d256_route` (12 000/40 000, val 2,075) et `d384_route` (8 000/40 0
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 324 autres
+- … et 329 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -943,4 +949,5 @@ Côté GPU : `d256_route` (12 000/40 000, val 2,075) et `d384_route` (8 000/40 0
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 git add tools/census_routage.py reports/rapport-campagne-benefices.md && timeout 300 git commi
 - Campagne : les cinq batches enchaînés (tâche, mémoire, génération, lot, cas extrême)  Le plan porte maintenant la file complète : après les neuf étapes viennent
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 git add reports/rapport-campagne-benefices.md && timeout 300 git commit -q -F - <<'MSG' Les tâ
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 git add reports/rapport-campagne-benefices.md && timeout 300 git commit -q -F - <<'MSG' La mém
 
