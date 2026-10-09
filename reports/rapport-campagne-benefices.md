@@ -125,30 +125,48 @@ actifs) donne la **meilleure qualité de la grille** (0,742 bit/octet, mieux que
 lit moins : exactement ce que le prototype routé cherche à reproduire en
 l'entraînant.
 
-**L'anomalie codestral est EXPLIQUÉE — et elle a fait naître une porte.** 35 657
-de perplexité sur de la prose, c'est 4 000× le 30B. L'hypothèse sérieuse était :
-le moteur exécute mal l'architecture **Mistral**, qui n'avait **aucune porte**
-dans `tools/portes.sh` (Qwen, GLM, V4, gpt-oss et Kimi en ont une).
+**L'anomalie codestral : le TOKENIZER du moteur, pas le modèle — et la mesure est INVALIDE.**
 
-`tools/porte_mistral.py` comble le trou : il exporte un Mistral (mapping des
-tenseurs, clefs préfixées `llama.`) et fabrique la référence PyTorch **sur les
-mêmes poids quantifiés**. Sur un Mistral minuscule entraîné ici même (2 couches,
-64 cachés, vocabulaire d'octets) :
+Trois hypothèses ont été testées dans l'ordre, et les deux premières sont tombées :
 
-| | perplexité | corrélation des logits | top-1 |
-|---|---:|---:|---:|
-| référence PyTorch (mêmes poids Q8_0) | 3 411,4394 | — | — |
-| **moteur** | **3 411,4405** | **min 1,0000** | **100 %** |
+1. *le moteur exécute mal l'architecture Mistral* → **réfutée** par la porte
+   `tools/porte-mistral.sh` (référence 3 502,5424 contre moteur 3 502,4907,
+   corrélation min 1,0000, top-1 100 %) ;
+2. *le modèle est spécialisé pour le code et mauvais en prose* → **réfutée** : sa
+   génération de code dégénère en boucle de répétition
+   (`deffibonacci(n):"""Returnthen-th…"""` suivi de vingt sauts de ligne) ;
+3. **le tokenizer est faux** → **confirmée, et reproductible** :
 
-**Le moteur exécute Mistral correctement.** Les 35 657 de codestral sont donc un
-décalage de **tâche** — un modèle spécialisé pour le code, évalué sur de la prose
-— et non un défaut d'exécution. C'est la réponse à la ligne « code » du verdict :
-la famille tourne, c'est le modèle qui n'est pas fait pour ça.
+```
+$ drave codestral-22b --tokenize --fichier "The river carries the logs to the mill."
+32 tokens écrits (vocabulaire 32768)
+réversibilité : DIVERGE à l'octet 3 — 32 vs 39 octets
+  source  : "The river carries the logs to the mill."
+  retour  : "Therivercarriesthelogstothemill."
+```
 
-*(Une fausse alerte est consignée : la première version du script instanciait le
-modèle par `MistralForCausalLM(config)` — des poids **aléatoires** — au lieu de
-`from_pretrained`. La porte accusait donc le moteur d'un défaut de la référence,
-et rendait « NON TENUE » à tort.)*
+Le même test sur Qwen2.5-0.5B rend « texte reconstruit identique ✅ (39 octets) ».
+
+**La cause est identifiable** : le fichier de codestral ne déclare **pas**
+`tokenizer.ggml.model` (il a `tokens`, `scores`, `token_type`, pas de `merges` —
+c'est un modèle *sentencepiece*), et `build_tokenizer` (`main.rs:1237`) ne lit que
+`tokenizer.ggml.pre`, `tokens`, `merges` et `token_type`. Sans indication de
+schéma, le moteur retombe sur un découpage qui perd les espaces : **32 jetons pour
+39 octets** là où Qwen en fait 9.
+
+**Conséquence directe, et elle annule un chiffre de ce rapport** : les 35 657 de
+perplexité de codestral ne mesurent **pas** le modèle — ils mesurent un corpus
+découpé par un tokenizer qui mange les espaces. La ligne « code » de la grille est
+donc **invalide**, et la conclusion que j'en avais tirée (« modèle spécialisé,
+mauvais en prose ») est **retirée**.
+
+**Ce que le moteur fait déjà, et ce qu'il ne fait pas** : il **détecte** la
+divergence (le contrôle de réversibilité affiche `DIVERGE`) mais **continue**
+quand même. C'est le défaut de méthode que le dépôt combat partout ailleurs :
+« plutôt refuser qu'un résultat faux et silencieux ». Deux correctifs possibles,
+à trancher hors campagne : refuser la tokenisation non réversible, ou déduire le
+schéma *sentencepiece* de la table elle-même (les jetons `▁…` et `<0x00>` la
+trahissent) quand `tokenizer.ggml.model` manque.
 
 **La perplexité n'est PAS comparable d'un tokenizer à l'autre.** Codestral
 (32 768 entrées) découpe ce texte en **288 554** jetons là où Qwen en fait

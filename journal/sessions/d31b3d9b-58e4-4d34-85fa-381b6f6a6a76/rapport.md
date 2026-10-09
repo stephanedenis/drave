@@ -7,12 +7,12 @@
 | Début | 2026-10-08 09:11 |
 | Durée | 13.9 h |
 | Tours | 19 |
-| Messages | 564 |
-| Appels d'outils | 544 |
+| Messages | 571 |
+| Appels d'outils | 551 |
 | Fichiers touchés | 21 |
-| Commandes | 422 |
+| Commandes | 429 |
 | Sous-agents | 3 |
-| Commits | 31 |
+| Commits | 32 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -906,7 +906,7 @@ La campagne est toujours sur **gpt-oss-120b** (63 Go depuis le disque dur), le b
 
 ### Tour 19 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1477 caractères tronqués]
 
-*8 appels d'outils.* Actions notables :
+*15 appels d'outils.* Actions notables :
 
 - bash — Check all running work
 - bash — Check exported routed models and distillation start
@@ -916,10 +916,17 @@ La campagne est toujours sur **gpt-oss-120b** (63 Go depuis le disque dur), le b
 - bash — Measure activation density by task corpus
 - bash — Compute bits/byte across task corpora
 - bash — Record the task-independence of density
+- bash — Check the codestral code-PPL result
+- bash — Extract codestral's code generation
+- bash — Verify the tokenizer reversibility for Mistral vs Qwen
+- bash — Inspect codestral's tokenizer metadata
+- bash — See the engine's tokenizer choice and detection code
+- bash — Read the engine's tokenizer construction
+- … et 1 autres
 
 **Synthèse produite :**
 
-⏵ Le résultat central est là : à lecture égale, le routé bat le dense de 6 %
+⏵ Fait nouveau : le tokenizer du moteur perd les ESPACES sur la famille Mistral
 
 ## 3. Travail accompli
 
@@ -997,7 +1004,7 @@ La campagne est toujours sur **gpt-oss-120b** (63 Go depuis le disque dur), le b
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 382 autres
+- … et 389 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1176,4 +1183,5 @@ La campagne est toujours sur **gpt-oss-120b** (63 Go depuis le disque dur), le b
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="reports/rapport-campagne-benefices.md"; s=open(p).read() vieux = s[s.index("## 5. Les 
 - Verdict : la ligne « langage » porte maintenant le gain du routage à lecture égale  Le verdict famille par famille disait « le chemin par listes n'aide pas ». C
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="reports/rapport-campagne-benefices.md"; s=open(p).read() ajout = '''## 10 ter. La dens
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="reports/rapport-campagne-benefices.md"; s=open(p).read() vieux_debut = s.index("**L'an
 

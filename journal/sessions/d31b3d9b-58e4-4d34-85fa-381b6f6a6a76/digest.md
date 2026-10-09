@@ -9215,3 +9215,104 @@ code                 4000000   1246649        0.3117   7.0924       0.881
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"reports/rapport-campagne-benefices.md\"; s=open(p).read()\najout = '''## 10 ter. La densité d'activation ne dépend PAS de la tâche — la qualité, si\n\nMême modèle (Qwen2.5-0.5B Q8_0), même matériel, quatre corpu … [2721 caractères tronqués]`
+
+  ```
+ajouté
+a8a4cdd La densité d'activation ne dépend PAS de la tâche — la qualité, si
+=== campagne / batch5 ===
+[08/10 22:04:33] charge 28.57 · grille/codestral-22B : code 0 · PPL 35657.3767 · RSS 63646 Mo · lus 12684 Mio
+[08/10 22:06:13] charge 26.37 · grille/qwen3-30B-A3B : code 0 · PPL 8.6327 · RSS 14256 Mo · lus 11841 Mio
+[08/10 23:00:40] charge 70.59 · lot30B/32 : PPL 7.6098 · 1.2 tok/s · lus 0 Mio · 138s mur
+[08/10 23:02:55] charge 67.93 · lot30B/64 : PPL 7.6098 · 1.2 tok/s · lus 0 Mio · 135s mur
+[08/10 23:02:55] charge 67.93 · === batch 5 terminé ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== diagnostic codestral (fin ?) ===\"; tail -6 /tmp/campagne24/codestral_diag.log; echo \"=== processus ===\"; ps -eo pid,etime,args --sort=-pcpu 2>/dev/null | grep drave-core | head -3 | cut -c1-100", "description": "Check t … [50 caractères tronqués]`
+
+  ```
+=== diagnostic codestral (fin ?) ===
+paires (poids × activation) : 1617329949895 au total, 18806.2 M par token — attention 4380.3 M · experts 0.0 M · partagé 14425.9 M
+postes (ms/token) : matvec-attn 667.3 | rope 8.8 | attention 688.0 | matvec+mlp 2279.6 | total mesuré 3643.7
+[tete] densite de l'entree : 75.5 % de coordonnees vivantes sur 24 jetons
+[tete] -> un stockage par COLONNES ne lirait que ces coordonnees : 75.5 % de la matrice au lieu de 100 %
+=== 2. perplexité sur du CODE (32 jetons) ===
+/tmp/campagne24/ids_code_codestral.txt : 32 tokens, fenêtres de 256
+=== processus ===
+3759808       57:49 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/
+3787314       16:53 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/
+3759806       57:49 /usr/bin/time -v timeout 5400 ./drave-core/target/release/drave /home/stephane/D
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/--- texte ---/,/--- ids générés/p' /tmp/campagne24/codestral_diag.log 2>/dev/null | sed '1d;$d' | head -20", "description": "Extract codestral's code generation", "timeoutMs": 60000}`
+
+  ```
+deffibonacci(n):"""Returnthen-thFibonaccinumberiteratively."""<0x0A><0x0A><0x0A><0x0A><0x0A><0x0A><0x0A><0x0A><0x0A><0x0A><0x0A><0x0A><0x0A><0x0A><0x0A><0x0A><0x0A><0x0A><0x0A><0x0A><0x0A><0x0A><0x0A><0x0A>
+  ```
+
+### 🤖 Assistant
+
+⏵ Fait nouveau : le tokenizer du moteur perd les ESPACES sur la famille Mistral
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=/home/stephane/Data13TB/stephane/modeles/gguf/codestral-22b-v0.1-q4_k_m.gguf; printf 'The river carries the logs to the mill.' > /tmp/txt_esp.txt; timeout 300 ./drave-core/target/release/drave $M --tokenize --fichier /tmp/txt_esp.t … [400 caractères tronqués]`
+
+  ```
+réversibilité : DIVERGE à l'octet 3 — 32 vs 39 octets
+  source  : "The river carries the logs to the mill."
+  retour  : "Therivercarriesthelogstothemill."
+=== le même test avec Qwen ===
+9 tokens écrits dans /tmp/esp2.ids (vocabulaire du modèle : 151936)
+réversibilité : texte reconstruit identique ✅ (39 octets)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && /home/stephane/gpu-env/bin/python - <<'PY' 2>&1 | tail -12\nimport struct\np=\"/home/stephane/Data13TB/stephane/modeles/gguf/codestral-22b-v0.1-q4_k_m.gguf\"\nf=open(p,'rb'); assert f.read(4)==b'GGUF'\nver,=struct.unpack('<I',f.read( … [956 caractères tronqués]`
+
+  ```
+tokenizer.ggml.tokens                         <32768 entrées>
+tokenizer.ggml.scores                         <tableau 32768>
+tokenizer.ggml.token_type                     <tableau 32768>
+tokenizer.ggml.bos_token_id                   1
+tokenizer.ggml.eos_token_id                   2
+tokenizer.ggml.add_bos_token                  True
+tokenizer.ggml.add_eos_token                  False
+general.quantization_version                  2
+quantize.imatrix.file                         /models/Codestral-22B-v0.1-GGUF/Codestral-22B-v0.1.imatrix
+quantize.imatrix.dataset                      /training_data/calibration_datav3.txt
+quantize.imatrix.entries_count                392
+quantize.imatrix.chunks_count                 148
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=/home/stephane/Data13TB/stephane/modeles/gguf/codestral-22b-v0.1-q4_k_m.gguf; timeout 300 ./drave-core/target/release/drave $M --tokenize --fichier /tmp/txt_esp.txt --sortie /tmp/esp.ids 2>&1 | head -6; echo \"=== ce que le moteur  … [195 caractères tronqués]`
+
+  ```
+32 tokens écrits dans /tmp/esp.ids (vocabulaire du modèle : 32768)
+réversibilité : DIVERGE à l'octet 3 — 32 vs 39 octets
+  source  : "The river carries the logs to the mill."
+  retour  : "Therivercarriesthelogstothemill."
+=== ce que le moteur cherche comme clef ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"fn build_tokenizer\" -A 25 drave-core/src/*.rs | head -32", "description": "Read the engine's tokenizer construction"}`
+
+  ```
+drave-core/src/main.rs:1237:fn build_tokenizer(g: &Gguf) -> tokenizer::Tokenizer {
+drave-core/src/main.rs-1238-    let pre = g.meta.get("tokenizer.ggml.pre").and_then(|m| m.as_str()).unwrap_or("").to_string();
+drave-core/src/main.rs-1239-    tokenizer::Tokenizer::new(
+drave-core/src/main.rs-1240-        meta_strings(g, "tokenizer.ggml.tokens"),
+drave-core/src/main.rs-1241-        meta_strings(g, "tokenizer.ggml.merges"),
+drave-core/src/main.rs-1242-        meta_ints(g, "tokenizer.ggml.token_type"),
+drave-core/src/main.rs-1243-        &pre,
+drave-core/src/main.rs-1244-    )
+drave-core/src/main.rs-1245-}
+drave-core/src/main.rs-1246-
+drave-core/src/main.rs-1247-/// Charge une liste d'identifiants et la pose sur le modèle.
+drave-core/src/main.rs-1248-///
+drave-core/src/main.rs-1249-/// Rend `false` si le fichier est vide ou illisible — auquel cas la tête reste
+drave-core/src/main.rs-1250-/// complète, ce qui est le comportement sûr.
+drave-core/src/main.rs-1251-fn poser_tete_restreinte(mdl: &mut model::Model, fichier: &str) -> bool {
+drave-core/src/main.rs-1252-    let mut ids: Vec<u32> = Vec::new();
+drave-core/src/main.rs-1253-    if let Ok(t) = std::fs::read_to_string(fichier) {
+drave
+… [582 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"reports/rapport-campagne-benefices.md\"; s=open(p).read()\nvieux_debut = s.index(\"**L'anomalie codestral est EXPLIQUÉE\")\nvieux_fin = s.index(\"**La perplexité n'est PAS comparable d'un tokenizer à l'autre.**\ … [4208 caractères tronqués]`
