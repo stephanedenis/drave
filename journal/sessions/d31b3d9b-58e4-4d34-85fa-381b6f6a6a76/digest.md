@@ -15492,3 +15492,42 @@ PORTE TENUE : le découpage ne change pas la perplexité (écart relatif 0.0000 
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\nancre = \"\"\"**La leçon de méthode** : un correctif non promu est un correctif qui n'existe pas,\"\"\"\nassert ancre i … [1231 caractères tronqués]`
+
+  ```
+ok
+e473968 Les correctifs du moteur sont promus : 77 tests verts, Codestral à 8 jetons, porte rejouée
+  pas  20000 · perte 1.3316 · val 2.0891 bits/octet · 2092 s
+  ```
+
+- **bash** `{"command": "sleep 590; cd /tmp/campagne24 && tail -1 tr_m8_d512_kwta25.log; tail -2 aiguille_long.log; tail -2 journal8.txt", "description": "Poll training and needle progress", "timeoutMs": 620000}`
+
+  ```
+pas  28000 · perte 1.3130 · val 2.0570 bits/octet · 2931 s
+fenêtres distinctes utilisées : 2 sur 2 sondes
+code 0
+[08/10 23:13:09] charge 77.22 · === batch 6 terminé ===
+[09/10 05:08:44] charge 16.07 · === GPU libre : dense dim 512, k-WTA 25 % appris (FFN en Q8) ===
+  ```
+
+- **bash** `{"command": "cd /tmp/campagne24 && tail -12 aiguille_long.log", "description": "Read the completed needle results"}`
+
+  ```
+8192        0.50     oui    1199.3  prompt 9224 jetons
+     8192        0.90     oui     954.1  prompt 8033 jetons
+    12288        0.10     oui    1814.8  prompt 11857 jetons
+code 124
+aiguille v2 : models/Qwen2.5-0.5B-Q8_0.gguf
+  remplissage : data/wikitext2_test.txt (353778 caractères), fenêtres décalées
+  lot 256 · 24 jetons de réponse · GPU non · attention COMPLÈTE
+ contexte  profondeur  trouvé  secondes  détail
+    12288        0.50     oui    1963.6  prompt 12474 jetons
+    12288        0.90     oui    2055.0  prompt 12601 jetons
+fenêtres distinctes utilisées : 2 sur 2 sondes
+code 0
+  ```
+
+### 🤖 Assistant
+
+⏵ Aiguille : 18 sondes sur 18, jusqu'à 12 288 jetons
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\ndebut = s.index(\"**Étendu à 8 192 jetons le 9 octobre**\")\nfin = s.index(\"**Réserve, et elle est sérieuse sur les te … [2035 caractères tronqués]`
