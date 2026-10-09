@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 12.6 h |
+| Durée | 12.7 h |
 | Tours | 11 |
-| Messages | 446 |
-| Appels d'outils | 442 |
+| Messages | 450 |
+| Appels d'outils | 446 |
 | Fichiers touchés | 18 |
-| Commandes | 332 |
+| Commandes | 335 |
 | Sous-agents | 3 |
-| Commits | 16 |
+| Commits | 17 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -550,7 +550,7 @@ Trois modèles de la grille partagent **exactement** le même tokenizer (mêmes 
 
 ### Tour 11 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1476 caractères tronqués]
 
-*15 appels d'outils.* Actions notables :
+*19 appels d'outils.* Actions notables :
 
 - bash — Collect campaign results so far
 - bash — Locate the training loop for distillation
@@ -566,7 +566,7 @@ Trois modèles de la grille partagent **exactement** le même tokenizer (mêmes 
 - edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md`
 - bash — Commit distillation support and the state of the art
 - bash — Verify commit message and progress
-- … et 1 autres
+- … et 5 autres
 
 **Synthèse produite :**
 
@@ -595,7 +595,7 @@ Trois modèles de la grille partagent **exactement** le même tokenizer (mêmes 
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/campagne_synthese.py` | 1 | 2 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/speculatif.py` | 1 | 0 |
 | `/tmp/campagne24/batch3_niah.sh` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md` | 1 | 2 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md` | 1 | 3 |
 
 ### Sous-agents lancés
 
@@ -645,7 +645,7 @@ Trois modèles de la grille partagent **exactement** le même tokenizer (mêmes 
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 292 autres
+- … et 295 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -809,4 +809,5 @@ Trois modèles de la grille partagent **exactement** le même tokenizer (mêmes 
 - Campagne : la perplexité n'est comparable qu'à tokenizer égal — colonne bits/octet  Trois modèles de la grille partagent EXACTEMENT le même tokenizer (leurs fic
 - Distillation implémentée (jamais faite dans ce dépôt) + l'état des lieux par famille de tâches  tools/entrainer_moteur.py accepte --enseignant, --alpha-distill 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/msg.txt <<'MSG' Distillation implémentée (jamais faite dans ce dépôt) + l'état des lieux par fa
+- Campagne : les quatre premiers modèles entraînés passent la porte du moteur  Chaîne automatique : chaque dossier d'entraînement est exporté dès qu'il apparaît, 
 

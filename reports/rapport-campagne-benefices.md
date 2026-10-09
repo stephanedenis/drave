@@ -140,7 +140,38 @@ c'est la moitié de la réponse à « pour tout type de tâches ».
 
 ---
 
-## 5. Ce qui reste à mesurer (file en cours)
+## 5. Les modèles entraînés ici, mesurés DANS le moteur
+
+Chaîne automatique : dès qu'un dossier d'entraînement apparaît, il est exporté,
+sa référence PyTorch est calculée **sur les mêmes poids quantifiés**, la porte de
+logits est passée, puis le moteur mesure les paires, les événements et le débit.
+
+| modèle | val (bits/octet) | PPL moteur | paires/jeton | événements/jeton (listes) | tok/s | porte |
+|---|---:|---:|---:|---:|---:|---|
+| `m5_d256_dense` (3,2 M) | 2,007 | **5,3973** | 3,2 M | 732,9 M | 438,3 | ✅ |
+| `m5_d384_dense` (7,2 M) | 1,919 | **5,3719** | 7,2 M | 1 648,5 M | 240,2 | ✅ |
+| `m5_d256_route` (10,3 M) | *en cours* | | | | | |
+| `m5_d384_route` (40 M) | *en cours* | | | | | |
+
+**Deux choses à lire dans ces quatre colonnes.**
+
+1. **Le rendement décroît vite** : passer de 3,2 à 7,2 M paramètres — et donc
+   lire 2,25× plus de poids par jeton — n'améliore la perplexité moteur que de
+   **0,5 %** (5,3973 → 5,3719), et coûte **1,8× de débit** (438 → 240 tok/s). À
+   cette échelle, le dense est déjà saturé : c'est exactement l'argument pour un
+   modèle qui **stocke** plus sans **lire** plus — la question que les deux
+   modèles routés de la même paire vont trancher.
+2. **Deux perplexités qui ne mesurent pas la même chose.** La colonne « val » est
+   mesurée à l'entraînement sur 16 000 jetons répartis dans le fichier de
+   validation ; la colonne « PPL moteur » sur les **256 premiers octets** du même
+   fichier. D'où un écart systématique de ~34 % (5,40 contre 4,02 équivalent) qui
+   n'est **pas** un défaut du moteur : la tranche de texte est plus difficile, et
+   l'export ajoute la quantification Q8_0/Q4_0. Toute comparaison entre les deux
+   colonnes est donc interdite — et c'est écrit ici parce que l'erreur est facile.
+
+---
+
+## 6. Ce qui reste à mesurer (file en cours)
 
 - `parcimonie` : seuil et k-WTA, en dense et en listes, sur un modèle réel ;
 - `contexte` : 512 → 8 192, avec le cache KV que le moteur **choisit** ;

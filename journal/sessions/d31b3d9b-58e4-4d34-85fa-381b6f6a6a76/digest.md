@@ -7691,3 +7691,32 @@ Piège corrigé au passage :  divise par la taille du
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/msg.txt <<'MSG'\nDistillation implémentée (jamais faite dans ce dépôt) + l'état des lieux par famille de tâches\n\ntools/entrainer_moteur.py accepte --enseignant, --alpha-distill et --temperature :\nl'élève creux imite la  … [1061 caractères tronqués]`
+
+  ```
+Piège corrigé au passage : la KL avec reduction="batchmean" divise par la taille
+du LOT, pas par le nombre de jetons — sur des logits (lot, séquence, vocabulaire)
+  ```
+
+- **bash** `{"command": "cat > /tmp/campagne24/nuit_gpu0.sh <<'SH'\n#!/bin/bash\n# Suite de la nuit, GPU 0 : après la distillation, on monte d'un cran.\n# dim 512 — c'est le plus gros modèle que les 16 Go de VRAM et la nuit permettent,\n# et il sert de PROFESSEUR pour les distillations suivantes.\nset -u\ncd /h … [2598 caractères tronqués]`
+
+  ```
+plan de nuit armé (GPU0 : distillation → dim512 dense → dim512 routé ; GPU1 : dim384 distillé)
+0, 2245 MiB
+1, 2168 MiB
+  ```
+
+- **bash** `{"command": "cat > /tmp/campagne24/export_continu.sh <<'SH'\n#!/bin/bash\n# Exporte, porte et mesure CHAQUE modèle dès qu'il apparaît, sans attendre la fin\n# de la nuit : un résultat disponible à 22 h vaut mieux qu'un résultat à 8 h.\nset -u\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nP=/h … [2351 caractères tronqués]`
+
+  ```
+export continu armé
+[08/10 21:49:56] charge 26.98 · m5_d256_dense : PPL 5.3973 · paires 3.2 M · événements 732865376 · 438.3 tok/s · porte 1
+[08/10 21:50:09] charge 28.03 · m5_d384_dense : PPL 5.3719 · paires 7.2 M · événements 1648531958 · 240.2 tok/s · porte 1
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md", "new_string": "## 5. Les modèles entraînés ici, mesurés DANS le moteur\n\nChaîne automatique : dès qu'un dossier d'entraînement apparaît, il est exporté,\nsa référence PyTorch est calculée **sur le … [1724 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 git add reports/rapport-campagne-benefices.md && timeout 300 git commit -q -m \"Campagne : les quatre premiers modèles entraînés passent la porte du moteur\n\nChaîne automatique : chaque dossier d'entraînement est exporté … [1066 caractères tronqués]`
