@@ -15599,3 +15599,92 @@ background job bash-7 (bash: cd /tmp/campagne24 && until grep -q "chaîne creux 
 ⏵ Échelle 512 confirmée : la recette tient, mais le temps ne suit pas (modèle en cache)
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\nancre = \"\"\"**Ce que cela ne dit pas** : la plage de taux qu'un même modèle supporte. Les deux\nmodèles entraînés per … [4032 caractères tronqués]`
+
+  ```
+ok
+b61cc96 Échelle 512 : la recette creuse tient, et le débit ne distingue plus les deux chemins
+  ```
+
+- **bash** `{"command": "cd /tmp/campagne24 && tail -3 journal9.txt 2>/dev/null || echo \"(jour1 pas encore de ligne)\"; ps -eo pid,etime,args | grep -E \"entrainer_moteur\" | grep -v grep | sed 's/\\(.\\{120\\}\\).*/\\1/'; uptime", "description": "Check the daytime chain"}`
+
+  ```
+[09/10 00:33:17] charge 48.80 · === batch 7 terminé ===
+[09/10 06:21:07] charge 1.87 · === GPU libre : creux + distillé, et le routé 512 deux fois plus longtemps ===
+[09/10 06:21:07] charge 1.87 · m9_d384_kwta25_distille : départ (k-WTA 25 %, enseignant dense 384)
+1828695       04:01 /home/stephane/gpu-env/bin/python -u tools/entrainer_moteur.py --famille dense --dim 384 --couches 4
+ 06:25:09  up 17 days 19:37,  2 users,  load average: 3,91, 3,30, 4,86
+  ```
+
+### 🤖 Assistant
+
+⏵ Machine au calme : re-mesure codestral corrigée (la dernière mesure en attente)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash -c 'D=./drave-core/target/release/drave; M=/home/stephane/Data13TB/stephane/modeles/gguf/codestral-22b-v0.1-q4_k_m.gguf; /usr/bin/time -v timeout 3600 $D \"$M\" --ppl /tmp/campagne24/ids_codestral_CORRIGE.txt --limit 256 - … [701 caractères tronqués]`
+
+  ```
+codestral corrigé relancé (machine calme)
+code 124 ·
+  ```
+
+- **bash** `{"command": "ps -eo pid,etime,pcpu,args | grep -E \"codestral\" | grep -v grep | sed 's/\\(.\\{100\\}\\).*/\\1/' | head -3; ls -la /tmp/campagne24/grille_codestral-22B_CORRIGE.log 2>/dev/null; tail -3 /tmp/campagne24/grille_codestral-22B_CORRIGE.log 2>/dev/null", "description": "Verify the codestral … [15 caractères tronqués]`
+
+  ```
+1829964       02:08  0.0 /usr/bin/time -v timeout 3600 ./drave-core/target/release/drave /home/steph
+1829965       02:08  0.0 timeout 3600 ./drave-core/target/release/drave /home/stephane/Data13TB/step
+1829966       02:08 97.3 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/
+-rw-r--r--. 1 stephane stephane 73  9 oct 06:25 /tmp/campagne24/grille_codestral-22B_CORRIGE.log
+/tmp/campagne24/ids_codestral_CORRIGE.txt : 256 tokens, fenêtres de 256
+  ```
+
+- **bash** `{"command": "sleep 420; cat /tmp/campagne24/codestral_corrige_marqueur.txt 2>/dev/null; grep -oE \"perplexité [0-9.]+ sur [0-9]+ tokens\" /tmp/campagne24/grille_codestral-22B_CORRIGE.log 2>/dev/null | tail -1; tail -1 /tmp/campagne24/tr_m9_kwta_distille.log 2>/dev/null", "description": "Read the cor … [46 caractères tronqués]`
+
+  ```
+code 124 · 
+  pas   8000 · perte 0.8855 · val 2.1765 bits/octet · 706 s
+  ```
+
+- **bash** `{"command": "ps -eo pid,etime,pcpu,args | grep \"codestral-22b\" | grep -v grep | sed 's/\\(.\\{80\\}\\).*/\\1/' | head -2; echo \"--- log ---\"; ls -la /tmp/campagne24/grille_codestral-22B_CORRIGE.log; tail -2 /tmp/campagne24/grille_codestral-22B_CORRIGE.log; echo \"--- temps ---\"; grep -E \"Elaps … [134 caractères tronqués]`
+
+  ```
+1829964       09:18  0.0 /usr/bin/time -v timeout 3600 ./drave-core/target/relea
+1829965       09:18  0.0 timeout 3600 ./drave-core/target/release/drave /home/st
+--- log ---
+-rw-r--r--. 1 stephane stephane 73  9 oct 06:25 /tmp/campagne24/grille_codestral-22B_CORRIGE.log
+/tmp/campagne24/ids_codestral_CORRIGE.txt : 256 tokens, fenêtres de 256
+--- temps ---
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "ps -eo pid,ppid,stat,etime,pcpu,args | awk '$2==1829965 || $1==1829965 || $2==1829964' | cut -c1-120; echo \"--- tous les drave ---\"; pgrep -a drave | cut -c1-100 | head -5", "description": "Inspect the codestral process tree"}`
+
+  ```
+1829965 1829964 S          09:22  0.0 timeout 3600 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/mo
+1829966 1829965 R          09:22 97.8 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/co
+--- tous les drave ---
+1829966 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/codestral-22
+  ```
+
+### 🤖 Assistant
+
+⏵ Rédaction du résumé exécutif de la campagne (la porte d'entrée du rapport)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,14p' reports/rapport-campagne-benefices.md", "description": "Read the report header"}`
+
+  ```
+# Campagne 24 h — où Drave est à son meilleur, tâche par tâche
+
+> 08/10 21 h → 09/10. Rapport **vivant** : il est mis à jour au fil des étapes.
+> File : `tools/campagne-benefices.sh`. Journaux bruts : `/tmp/campagne24/`.
+> Plan : `docs/campagne-benefices.md`.
+>
+> Règle de lecture : chaque chiffre porte ses conditions (corpus, tokenizer,
+> charge de fond). La charge a oscillé entre 3 et 18 pendant la campagne
+> (entraînements en parallèle) — les mesures **déterministes** (perplexité,
+> comptes d'événements) n'en dépendent pas, les **temps** oui, et c'est écrit.
+
+---
+
+## 0. Le piège qui a failli tout fausser
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\nancre = \"\"\"---\n\n## 0. Le piège qui a failli tout fausser\"\"\"\nassert ancre in s\nresume = \"\"\"---\n\n## Résumé … [2678 caractères tronqués]`

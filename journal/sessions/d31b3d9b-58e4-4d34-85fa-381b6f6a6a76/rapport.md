@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 21.2 h |
+| Durée | 21.4 h |
 | Tours | 27 |
-| Messages | 950 |
-| Appels d'outils | 912 |
+| Messages | 958 |
+| Appels d'outils | 920 |
 | Fichiers touchés | 29 |
-| Commandes | 742 |
+| Commandes | 750 |
 | Sous-agents | 3 |
-| Commits | 61 |
+| Commits | 62 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -1270,7 +1270,7 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 
 ### Tour 27 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1477 caractères tronqués]
 
-*303 appels d'outils.* Actions notables :
+*311 appels d'outils.* Actions notables :
 
 - bash — Check the full state
 - bash — Measure the distilled d384 with the correct protocol
@@ -1286,11 +1286,11 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - bash — Read parcimonie, contexte, lot steps
 - bash — Inspect batch2 script
 - bash — Read batch2 journal and latency map
-- … et 270 autres
+- … et 278 autres
 
 **Synthèse produite :**
 
-⏵ Échelle 512 confirmée : la recette tient, mais le temps ne suit pas (modèle en cache)
+⏵ Rédaction du résumé exécutif de la campagne (la porte d'entrée du rapport)
 
 ## 3. Travail accompli
 
@@ -1376,7 +1376,7 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 702 autres
+- … et 710 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1504,7 +1504,7 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 
 ## 5. Erreurs rencontrées
 
-40 sorties en erreur ou divergentes. Les premières :
+41 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : ```  ### 🤖 Assistant  ⏵ **En transformers 5, `AutoModel` rend directement `Qwen2Model` (pas de `.model`). Je corrige le diagnostic.**  - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitH
 - **T2** : 3310393 bash -c pgrep -af "essai_decharge" | grep python | head; echo "--- logs ---"; tail -2 /tmp/ec_d192_lr3e3.log 2>/dev/null; tail -2 /tmp/ec_d192_lr1e3.log 2>/dev/null; echo "---"; ls -la /tmp/ec
@@ -1585,4 +1585,5 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - Les correctifs du moteur sont promus : 77 tests verts, Codestral à 8 jetons, porte rejouée  Le binaire de référence datait du 8/10 11 h 00 et trois commits de d
 - L'aiguille tient jusqu'à 12 288 jetons : 18 sondes sur 18  La série est complétée à 8 192 puis 12 288 jetons, trois profondeurs à chaque fois : toutes retrouven
 - Échelle 512 : la recette creuse tient, et le débit ne distingue plus les deux chemins  m8_d512_kwta25 (entraîné à 25 %, mêmes 40 000 pas que son témoin) :    sa
+- Résumé exécutif : les cinq résultats qui comptent et les cinq manques  Une page en tête du rapport, chacun renvoyant à sa section et à sa mesure. Le rapport fai
 
