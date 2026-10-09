@@ -10231,3 +10231,216 @@ en cours au moment de l'écriture.
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"reports/rapport-campagne-benefices.md\"; s=open(p).read()\ndeb = s.index(\"## 0 bis. Le verdict, famille par famille\")\nfin = s.index(\"## 1. Le décodage spéculatif\")\nneuf = '''## 0 bis. Le verdict, famille p … [4958 caractères tronqués]`
+
+  ```
+verdict réécrit
+a564279 Le verdict, famille par famille — mis à jour avec tout ce que la campagne a établi
+  ```
+
+### 🤖 Assistant
+
+⏵ Le verdict est à jour : quinze familles, chacune avec sa mesure
+
+## Le tableau qui répond à la question
+
+| famille | verdict | mesure |
+|---|---|---|
+| **langage** | ✅ et le routage entraîné gagne | dense 5,0155 → routé 4,8858 → **distillé 4,7642 (−5,0 %)** à lecture égale |
+| **génération / latence** | ✅ | TTFT **27,9 ms**, 29,0 tok/s (0,5 B) |
+| **contexte long — mémoire** | ✅ **elle tient** | **12 aiguilles sur 12**, jusqu'à 4 096 jetons |
+| **contexte long — coût** | ✅ réglable | KV int8 : +1,5 à +3,0 % · paginé : 0,03 Go au lieu de 25,77 Go |
+| **préremplissage par lots** | ⚠️ **non mesuré** | le batch 5 a mesuré le cache de pages, pas le lot |
+| **code** | ✅ décalage de tâche | codestral 1,797 bit/octet contre **0,983** pour un 0,5 B |
+| **raisonnement** | ✅ contre-intuitif | r1-1.5B **2,7× pire** que le 0,5 B |
+| **MoE / routage** | ✅ | déséquilibre **×3,90**, 847 octets par jeton à router |
+| **parcimonie imposée** | ✅ reproduit | seuil **+69 %** contre k-WTA **+4 %** à −30 % d'événements |
+| **sortie contrainte** | ✅ **gagne par construction** | ×1,36-1,42 **et** garantie d'ensemble |
+| **plus gros que la RAM** | ✅ **démontré** | V4-Flash **365,7 Go sur 125 Go**, 37,6 Go résidents |
+| **répartition 2 nœuds** | ✅ | 0,0000 % — sur dense, routé **et distillé** |
+| **embeddings** | ❌ manque | `bge-m3` inexécutable |
+| **décodage spéculatif** | ❌ manque, chiffré | ×1,20 |
+
+**En une phrase** : Drave gagne **par construction** sur les sorties contraintes, **par sa structure** quand le modèle est creux, **par ses circonstances** sur les modèles plus gros que la RAM — et **perd** sur un modèle dense ordinaire, où le chemin par listes coûte 1,8 à 2,1× pour rien.
+
+La porte de répartition est d'ailleurs tenue sur le **modèle distillé** aussi (3,6024 = 3,6024, écart 0,00e0) — le livrable final se découpe.
+
+## Et trois corrections de méthode, qui comptent autant que les chiffres
+
+1. **Le tokenizer étranger** : `data/wikitext2_test.txt.ids` n'est pas celui de Qwen — facteur 442 sur la perplexité.
+2. **La fenêtre d'évaluation trop courte** : trois protocoles, trois réponses dont deux inversées ; la longueur d'évaluation doit être celle de l'entraînement.
+3. **Le cache qui survit à son correctif** : il faisait mesurer l'ancien code avec le nouveau.
+
+La campagne continue : contexte (le PPL y est constant par construction — l'étape mesure le KV, pas la qualité), puis lots, routage, sémantique comparée, et les portes. Les entraînements de nuit avancent : `d384` distillé à 36 000/40 000 (val 1,8345), `dim 512` dense à 12 000/40 000.
+
+
+## Tour 26
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, préremplissage par lots, modèle plus gros que la RAM. Poursuivre en parallèle le livrable du modèle nativement événementiel : entraîné ici, exécuté par Drave à logits vérifiés, découpé en unités réparties. Chaque affirmation porte sa mesure (perplexité, débit, octets et événements par jeton, RSS, écart entre nœuds) ET ses conditions (corpus, tokenizer du modèle, charge de fond) ; les manques constatés — embeddings/encodeurs, décodage spéculatif — sont consignés comme manques, pas comme résultats. Livrables : la file tools/campagne-benefices.sh exécutée et ses journaux, un rapport de synthèse par famille de tâches, et la poursuite du modèle événementiel."
+Round: 19/40
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"SEUIL_GPU\\|DRAVE_GPU\" drave-core/src/model.rs | head -8; echo \"=== variables d'environnement GPU ===\"; grep -rn 'std::env::var(\"DRAVE_GPU' drave-core/src/*.rs | head -5; grep -n \"SEUIL_GPU: usize\" drave-core/src/mode … [75 caractères tronqués]`
+
+  ```
+1558:        const SEUIL_GPU: usize = 8 << 20;
+1562:                   && n_out * d8.nb_ligne * 34 >= SEUIL_GPU => {
+2522:    /// Miroir VRAM du cache KV, une entrée par couche (`DRAVE_GPU_KV=1`).
+2651:    /// Cache VRAM des experts MoE (`DRAVE_GPU_EXPERTS=1`).
+3246:/// nombre de couches et de jetons (voir la branche `DRAVE_GPU_TOPK`).
+4202:        // Opt-in : `DRAVE_GPU_TETE=1`.
+4204:        // en Q8_0 — sans cette reconnaissance, `DRAVE_GPU_TETE=1` ne faisait rien
+4208:        let tete_gpu = if std::env::var("DRAVE_GPU_TETE").is_ok()
+=== variables d'environnement GPU ===
+drave-core/src/gpu.rs:1540:        if std::env::var("DRAVE_GPU").is_err() { return None; }
+drave-core/src/gpu.rs:1565:        if std::env::var("DRAVE_GPU").is_err() { return None; }
+drave-core/src/main.rs:494:    if std::env::var("DRAVE_GPU_TOPK").map(|v| v != "0" && !v.is_empty()).unwrap_or(false) {
+drave-core/src/main.rs:507:        } else if std::env::var("DRAVE_GPU").is_err() {
+drave-core/src/main.rs:509:        } else if std::env::var("DRAVE_GPU_KV").is_err() {
+1558:        const SEUIL_GPU: usize = 8 << 20;
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && C=/tmp/campagne24; D=./drave-core/target/release/drave; M=/tmp/m5_d256_route_distille.gguf\necho \"=== tête sur CPU ===\"; timeout 300 $D $M --ppl $C/ids_512.txt --limit 256 --ctx 512 --threads 8 2>&1 | grep -E \"perplexité|tête|GPU\ … [284 caractères tronqués]`
+
+  ```
+=== tête sur CPU ===
+     255 tokens notés — perplexité cumulée 5.133  (695.8 tok/s)
+=== perplexité 5.1326 sur 255 tokens (0 événements, 0.4 s) ===
+    695.8 tok/s effectifs (avant + tête)
+=== tête sur GPU (DRAVE_GPU_TETE=1) ===
+     255 tokens notés — perplexité cumulée 5.133  (366.2 tok/s)
+=== perplexité 5.1326 sur 255 tokens (0 événements, 0.7 s) ===
+    366.2 tok/s effectifs (avant + tête)
+    postes (ms/token) : projets-attn 0.53 | rope 0.04 | attention 0.71 | proj+mlp 0.92 | somme 2.20 | reste (tête + échantillonnage) 0.53
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && G=/home/stephane/Data13TB/stephane/modeles/gguf; D=./drave-core/target/release/drave; M=$G/deepseek-r1-distill-qwen-1.5b-q4_k_m.gguf; C=/tmp/campagne24\necho \"=== génération en FRANÇAIS (1,5 B) ===\"; timeout 900 $D $M --infer --pro … [480 caractères tronqués]`
+
+  ```
+=== génération en FRANÇAIS (1,5 B) ===
+Explique en deux phrases pourquoi le ciel est bleu. (paraphrase) Pourrie-tu expliquer en trois phrases pourquoi le ciel est bleu ? (paraphrase) Pourrie-tu expliquer en cinq phrases pourquoi le ciel est bleu ? (paraph 
+
+=== conversation à trois tours (1,5 B) ===
+GGUF ouvert en 28.834141ms — 339 tenseurs
+architecture : qwen2 · 28 couches · hidden 1536 · intermédiaire 8960
+threads : 20
+
+=== 1. Taille exacte des encodages (mesurée sur les niveaux réels) ===
+
+thread 'main' (638069) panicked at src/gguf.rs:1095:22:
+raw_levels : type 12 non géré
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+timeout: the monitored command dumped core
+  ```
+
+### 🤖 Assistant
+
+⏵ Bug trouvé : le mode `--chat` plante sur un modèle Q4_K
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; G=/home/stephane/Data13TB/stephane/modeles/gguf\necho \"=== chat avec Q8_0 (Qwen2.5-0.5B) ===\"; printf 'Hi\\n/quit\\n' | timeout 300 $D models/Qwen2.5-0.5B-Q8_0.gguf --chat --ctx 256 --n 8 --thre … [474 caractères tronqués]`
+
+  ```
+=== chat avec Q8_0 (Qwen2.5-0.5B) ===
+
+  → aucun DSP, aucune multiplication : la contrainte du cahier des charges
+    est satisfaite pour un modèle 8 bits, sans réentraînement ni élagage.
+=== chat avec Q4_K (r1-1.5B) ===
+raw_levels : type 12 non géré
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+timeout: the monitored command dumped core
+=== ce que fait raw_levels ===
+                    for j in 0..16 {
+                        let q = buf[p + 2 + j];
+                        out.push(((q & 0x0F) as i16 - 8) as i8);
+                    }
+                    for j in 0..16 {
+                        let q = buf[p + 2 + j];
+                        out.push(((q >> 4) as i16 - 8) as i8);
+                    }
+                }
+            }
+            other => panic!("raw_levels : type {other} non géré"),
+        }
+        out
+    }
+
+    /// Déquantifie un bloc **MXFP4** (17 octets, 32 poids) : un octet d'exposant
+1073-        match t.ttype {
+1074-            GGML_Q8_0 => {
+1081-            GGML_Q4_0 => {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"raw_levels\" drave-core/src/*.rs | head -6; echo \"=== l'appel dans le chat ===\"; grep -n \"raw_levels\" -B 8 -A 12 drave-core/src/main.rs | head -36", "description": "Find the chat path calling raw_levels"}`
+
+  ```
+drave-core/src/gguf.rs:1068:    pub fn raw_levels(&self, name: &str) -> Vec<i8> {
+drave-core/src/gguf.rs:1095:            other => panic!("raw_levels : type {other} non géré"),
+drave-core/src/main.rs:198:        let levels = g.raw_levels(name);
+drave-core/src/main.rs:226:    let levels = g.raw_levels(&matrix);
+=== l'appel dans le chat ===
+190-    let mats = [
+191-        "blk.0.ffn_gate.weight",
+192-        "blk.0.ffn_down.weight",
+193-        "blk.0.attn_q.weight",
+194-        "blk.0.attn_output.weight",
+195-    ];
+196-    for name in mats {
+197-        let Some(t) = g.tensor(name) else { continue };
+198:        let levels = g.raw_levels(name);
+199-        let n = t.nelem();
+200-        let n_rows = t.dims[0] as usize;
+201-        let n_cols = t.dims[1] as usize;
+202-        let nz = levels.iter().filter(|&&v| v != 0).count();
+203-        let dens = nz as f64 / n as f64;
+204-
+205-        let sd = SignedDelta::build(&levels, n_rows, n_cols);
+206-        let bs = BitmapSign::build(&levels, n_rows, n_cols);
+207-        let sk8 = SparseK::build(&levels, n_rows, n_cols, 8);
+208-        let sk4 = SparseK::build(&levels, n_rows, n_cols, 4);
+209-        let sk1 = SparseK::build(&levels, n
+… [763 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Deux défauts en un : `--chat` seul n'est pas un mode, et le banc d'encodages plante sur tout modèle K-quant
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"drave-core/src/gguf.rs\"; s=open(p).read()\ns = s.replace('''    pub fn raw_levels(&self, name: &str) -> Vec<i8> {''',\n'''    /// Les niveaux quantifiés d'un tenseur — `None` si le format n'est pas\n    /// cou … [2183 caractères tronqués]`
+
+  ```
+gguf.rs patché
+main.rs patché
+2552232
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && P=/tmp/target-spm/release/drave; G=/home/stephane/Data13TB/stephane/modeles/gguf\necho \"=== banc sur Q4_K (patché) ===\"; timeout 600 $P $G/deepseek-r1-distill-qwen-1.5b-q4_k_m.gguf --threads 8 2>&1 | tail -5\necho \"=== chat correc … [409 caractères tronqués]`
+
+  ```
+=== banc sur Q4_K (patché) ===
+=== 2. Moteur d'événements optimisé (4 optimisations) ===
+     réduction incrémentale · décodage SWAR · vecteur creux · listes fusionnées
+[banc] blk.0.ffn_gate.weight : quantification de type 12 — le banc des encodages ne couvre que Q8_0 (8) et Q4_0 (2) ; ce tenseur est ignoré, les autres quantifications ayant leurs propres noyaux. Rien n'est faux, mais tout n'est pas montré.
+
+=== 2. Moteur d'événements — SAUTÉ : la matrice blk.0.ffn_gate.weight n'est pas en Q8_0/Q4_0, et ce banc ne sait lire que ces deux formats.
+=== chat correct : --infer --chat sur Q4_K ===
+[tête 4 bits] 151936 × 1536 → 6.56 b/poids, 0 Mo, 0.0 s
+Qwen2 · 28 couches · hidden 1536 · 12 têtes / 2 KV · FFN 8960 · vocab 151936
+rien à générer : --ids ou --prompt requis
+=== non-régression : banc sur Q8_0 ===
+27
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && P=/tmp/target-spm/release/drave; G=/home/stephane/Data13TB/stephane/modeles/gguf; C=/tmp/campagne24\necho \"=== chat correct (--infer --chat --prompt) sur Q4_K ===\"; timeout 600 $P $G/deepseek-r1-distill-qwen-1.5b-q4_k_m.gguf --infe … [475 caractères tronqués]`
+
+  ```
+=== chat correct (--infer --chat --prompt) sur Q4_K ===
+My name is Camille. I am 10 years old. I live in Paris. I have a pet named Flossy. Floss
+=== et en boucle (deux tours) ===
+1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/msg_banc.txt <<'MSG'\nLe banc des encodages ne plante plus sur les modèles K-quant (c'était la première ligne de l'aide)\n\n« drave <modele> » — la PREMIÈRE ligne de l'aide du moteur — paniquait sur tout\nmodèle en super-b … [1320 caractères tronqués]`

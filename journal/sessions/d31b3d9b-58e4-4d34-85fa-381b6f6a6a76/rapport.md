@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 14.8 h |
-| Tours | 25 |
-| Messages | 630 |
-| Appels d'outils | 598 |
+| Durée | 14.9 h |
+| Tours | 26 |
+| Messages | 641 |
+| Appels d'outils | 607 |
 | Fichiers touchés | 21 |
-| Commandes | 476 |
+| Commandes | 485 |
 | Sous-agents | 3 |
-| Commits | 40 |
+| Commits | 41 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -77,6 +77,8 @@
 **Tour 24** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1197 caractères tronqués]
 
 **Tour 25** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1197 caractères tronqués]
+
+**Tour 26** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1197 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1189,7 +1191,57 @@ La parcimonie déroule (k-WTA 800 → 17,43 ; 700 → 18,11 ; seuil 2 % → 29,5
 
 **Synthèse produite :**
 
-⏵ Le balayage de parcimonie a rendu : 24 configurations, et le k-WTA écrase le seuil (encore)
+⏵ Le verdict est à jour : quinze familles, chacune avec sa mesure
+
+\## Le tableau qui répond à la question
+
+| famille | verdict | mesure |
+|---|---|---|
+| **langage** | ✅ et le routage entraîné gagne | dense 5,0155 → routé 4,8858 → **distillé 4,7642 (−5,0 %)** à lecture égale |
+| **génération / latence** | ✅ | TTFT **27,9 ms**, 29,0 tok/s (0,5 B) |
+| **contexte long — mémoire** | ✅ **elle tient** | **12 aiguilles sur 12**, jusqu'à 4 096 jetons |
+| **contexte long — coût** | ✅ réglable | KV int8 : +1,5 à +3,0 % · paginé : 0,03 Go au lieu de 25,77 Go |
+| **préremplissage par lots** | ⚠️ **non mesuré** | le batch 5 a mesuré le cache de pages, pas le lot |
+| **code** | ✅ décalage de tâche | codestral 1,797 bit/octet contre **0,983** pour un 0,5 B |
+| **raisonnement** | ✅ contre-intuitif | r1-1.5B **2,7× pire** que le 0,5 B |
+| **MoE / routage** | ✅ | déséquilibre **×3,90**, 847 octets par jeton à router |
+| **parcimonie imposée** | ✅ reproduit | seuil **+69 %** contre k-WTA **+4 %** à −30 % d'événements |
+| **sortie contrainte** | ✅ **gagne par construction** | ×1,36-1,42 **et** garantie d'ensemble |
+| **plus gros que la RAM** | ✅ **démontré** | V4-Flash **365,7 Go sur 125 Go**, 37,6 Go résidents |
+| **répartition 2 nœuds** | ✅ | 0,0000 % — sur dense, routé **et distillé** |
+| **embeddings** | ❌ manque | `bge-m3` inexécutable |
+| **décodage spéculatif** | ❌ manque, chiffré | ×1,20 |
+
+**En une phrase** : Drave gagne **par construction** sur les sorties contraintes, **par sa structure** quand le modèle est creux, **par ses circonstances** sur les modèles plus gros que la RAM — et **perd** sur un modèle dense ordinaire, où le chemin par listes coûte 1,8 à 2,1× pour rien.
+
+La porte de répartition est d'ailleurs tenue sur le **modèle distillé** aussi (3,6024 = 3,6024, écart 0,00e0) — le livrable final se découpe.
+
+\## Et trois corrections de méthode, qui comptent autant que les chiffres
+
+1. **Le tokenizer étranger** : `data/wikitext2_test.txt.ids` n'est pas celui de Qwen — facteur 442 sur la perplexité.
+2. **La fenêtre d'évaluation trop courte** : trois protocoles, trois réponses dont deux inversées ; la longueur d'évaluation doit être celle de l'entraînement.
+3. **Le cache qui survit à son correctif** : il faisait mesurer l'ancien code avec le nouveau.
+
+La campagne continue : contexte (le PPL y est constant par construction — l'étape mesure le KV, pas la qualité), puis lots, routage, sémantique comparée, et les portes. Les entraînements de nuit avancent : `d384` dis
+… [68 caractères tronqués]
+
+### Tour 26 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1477 caractères tronqués]
+
+*9 appels d'outils.* Actions notables :
+
+- bash — Check the GPU dispatch threshold and its overrides
+- bash — Test GPU head placement on our model
+- bash — Test French generation and multi-turn chat
+- bash — Confirm the chat bug and locate it
+- bash — Find the chat path calling raw_levels
+- bash — Fix the bench panic and rebuild separately
+- bash — Test the fix on Q4_K and check non-regression
+- bash — Test the chat mode correctly
+- bash — Commit the bench panic fix
+
+**Synthèse produite :**
+
+⏵ Deux défauts en un : `--chat` seul n'est pas un mode, et le banc d'encodages plante sur tout modèle K-quant
 
 ## 3. Travail accompli
 
@@ -1267,7 +1319,7 @@ La parcimonie déroule (k-WTA 800 → 17,43 ; 700 → 18,11 ; seuil 2 % → 29,5
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 436 autres
+- … et 445 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1395,7 +1447,7 @@ La parcimonie déroule (k-WTA 800 → 17,43 ; 700 → 18,11 ; seuil 2 % → 29,5
 
 ## 5. Erreurs rencontrées
 
-25 sorties en erreur ou divergentes. Les premières :
+26 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : ```  ### 🤖 Assistant  ⏵ **En transformers 5, `AutoModel` rend directement `Qwen2Model` (pas de `.model`). Je corrige le diagnostic.**  - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitH
 - **T2** : 3310393 bash -c pgrep -af "essai_decharge" | grep python | head; echo "--- logs ---"; tail -2 /tmp/ec_d192_lr3e3.log 2>/dev/null; tail -2 /tmp/ec_d192_lr1e3.log 2>/dev/null; echo "---"; ls -la /tmp/ec
@@ -1455,4 +1507,5 @@ La parcimonie déroule (k-WTA 800 → 17,43 ; 700 → 18,11 ; seuil 2 % → 29,5
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="reports/rapport-campagne-benefices.md"; s=open(p).read()  # 1. La ligne codestral, cor
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="reports/rapport-campagne-benefices.md"; s=open(p).read() ajout = '''## 19. La parcimon
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="reports/rapport-campagne-benefices.md"; s=open(p).read() deb = s.index("## 0 bis. Le v
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/msg_banc.txt <<'MSG' Le banc des encodages ne plante plus sur les modèles K-quant (c'était la p
 

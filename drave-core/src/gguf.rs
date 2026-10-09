@@ -1065,7 +1065,16 @@ zéro, l'inventaire sera sous-évalué", t.ttype, t.name);
     }
 
     /// Niveaux entiers bruts (avant mise à l'échelle) pour Q4_0 / Q8_0.
-    pub fn raw_levels(&self, name: &str) -> Vec<i8> {
+    /// Les niveaux quantifiés d'un tenseur — `None` si le format n'est pas
+    /// couvert par le BANC.
+    ///
+    /// Le banc des encodages (« drave <modele> », la première ligne de l'aide)
+    /// ne connaît que Q8_0 et Q4_0 : sur tout modèle en super-blocs (Q4_K,
+    /// Q6_K, MXFP4, IQ*), il PANIQUAIT — « raw_levels : type 12 non géré ».
+    /// Or ces formats sont la majorité de ce qui tourne ici (gpt-oss, codestral,
+    /// 14B, 30B-A3B). La commande documentée plantait donc sur la plupart des
+    /// modèles. On refuse proprement, en le disant, au lieu de paniquer.
+    pub fn raw_levels(&self, name: &str) -> Option<Vec<i8>> {
         let t = self.tensor(name).unwrap_or_else(|| panic!("tenseur {name} absent"));
         let buf = self.tbuf(t);
         let n = t.nelem();
@@ -1092,9 +1101,14 @@ zéro, l'inventaire sera sous-évalué", t.ttype, t.name);
                     }
                 }
             }
-            other => panic!("raw_levels : type {other} non géré"),
+            other => {
+                eprintln!("[banc] {name} : quantification de type {other} — le banc des \
+encodages ne couvre que Q8_0 (8) et Q4_0 (2) ; ce tenseur est ignoré, les autres \
+quantifications ayant leurs propres noyaux. Rien n'est faux, mais tout n'est pas montré.");
+                return None;
+            }
         }
-        out
+        Some(out)
     }
 
     /// Déquantifie un bloc **MXFP4** (17 octets, 32 poids) : un octet d'exposant

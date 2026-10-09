@@ -195,7 +195,7 @@ sont ignorés", modes.len(), modes.join(", "), modes[0]);
     ];
     for name in mats {
         let Some(t) = g.tensor(name) else { continue };
-        let levels = g.raw_levels(name);
+        let Some(levels) = g.raw_levels(name) else { continue };
         let n = t.nelem();
         let n_rows = t.dims[0] as usize;
         let n_cols = t.dims[1] as usize;
@@ -223,7 +223,11 @@ sont ignorés", modes.len(), modes.join(", "), modes[0]);
     println!("\n=== 2. Moteur d'événements optimisé (4 optimisations) ===");
     println!("     réduction incrémentale · décodage SWAR · vecteur creux · listes fusionnées");
     let t = g.tensor(&matrix).expect("matrice absente");
-    let levels = g.raw_levels(&matrix);
+    let Some(levels) = g.raw_levels(&matrix) else {
+        println!("\n=== 2. Moteur d'événements — SAUTÉ : la matrice {matrix} n'est pas en \
+Q8_0/Q4_0, et ce banc ne sait lire que ces deux formats.");
+        return;
+    };
     let n_rows = t.dims[0] as usize;
     let n_cols = t.dims[1] as usize;
     let n = n_rows * n_cols;
