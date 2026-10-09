@@ -9,6 +9,31 @@
 
 ---
 
+## 0. Moteur contre modèle : qui paie quoi
+
+Les rapports de la campagne mesurent **le moteur** — mais toujours *sur des modèles
+faits pour d'autres architectures*. La distinction n'est pas rhétorique : les mêmes
+chiffres disent deux choses différentes selon la colonne où on les lit.
+
+| mesure de la campagne | ce qu'elle établit sur le **MOTEUR** | ce qu'elle établit sur le **MODÈLE** |
+|---|---|---|
+| densité d'activation **71 %**, identique sur quatre corpus (§ 10 ter) | le chemin par listes n'est pas rentable au-dessus de ~22-25 % de densité — c'est une propriété du moteur, mesurée sur son banc | un modèle dense ordinaire **n'est pas un client** pour Drave : sa parcimonie ne dépend pas de la tâche, elle n'existe pas |
+| k-WTA appris (§ 5 ter) | le moteur exécute un top-k **sans changer le calcul** (logits identiques au bit près, § 22) | la sparsité doit être **apprise**, et le taux d'exécution fait partie de la spécification du modèle |
+| routage d'experts (§ 7, § 5 bis) | le moteur ouvre k experts sur 128 et n'en lit que les poids… **mais n'a pas de noyau de listes pour eux** (Q4_0, Q8 refusé) | le routage seul ne passe pas l'échelle (+10 % à dim 512) ; **la distillation le rattrape** (−5,2 %) |
+| poids creux `--keep` (§ 6 de ce document) | le moteur compte les **non-nuls par ligne** : élaguer réduit les paires sans toucher aux activations | à 50 % de poids gardés la qualité **ne bouge pas** ; à 25 % elle s'effondre — et ces 50 % étaient *imposés*, pas appris |
+| export Q4_0 contre Q8 (§ 5 bis) | la porte de correction tient dans les deux cas (corrélation 0,9998) : le moteur est fidèle | **le format fait partie du modèle** : deux fois plus d'entraînement améliore le fp32 (1,8237) et dégrade l'exporté (5,3845) — la pénalité de quantification passe de +0,445 à +0,605 bit/octet |
+| lecture mmap **8,6 Mo/s** sur disque dur contre 243 Mo/s en séquentiel (§ 12 bis) | le moteur lit par défauts de page : sur un plateau, une page aléatoire coûte ~5 ms | un modèle dont les poids actifs sont **contigus** transformerait cette lecture en séquentiel — **×28 disponibles par un choix de disposition**, pas de code de noyau |
+| découpage à deux nœuds : **3,4 ms par jeton et par ms de RTT** (§ 8 bis) | le transport est exact à toute latence (perplexité inchangée à 50 ms) | répartir ne paie que si le calcul local dépasse 3,4 ms × RTT : **la taille du modèle décide**, pas le réseau |
+| tête restreinte : borne **×1,12** sur gpt-oss (§ 13) | le moteur sait restreindre une tête et garantir la sortie | le gain dépend du **rapport tête/corps** du modèle — donc d'un choix d'architecture (vocabulaire) |
+
+**La règle qui sort de ce tableau** : quand une mesure est décevante, il faut savoir
+*de qui* elle est décevante. Le chemin par listes est lent sur un modèle dense —
+c'est le modèle qui n'est pas fait pour lui. Le décodage spéculatif ne paie pas sur
+une cible qui tient en RAM — c'est la cible qui est trop rapide. Les experts ne
+passent pas par les listes — **là, c'est le moteur qui manque** (noyau Q8 absent).
+
+---
+
 ## 1. Le coût, formalisé
 
 Dans Drave, une passe avant ne paie pas « des paramètres », elle paie des

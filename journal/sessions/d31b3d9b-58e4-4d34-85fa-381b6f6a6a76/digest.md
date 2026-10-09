@@ -16188,3 +16188,22 @@ corrélation des logits (position 0) : 0.999815
 ⏵ Résultat : le modèle 80k est meilleur en fp32 et PIRE après quantification — le format fait partie du modèle
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\nancre = \"\"\"**La recette qui sort de cette courbe est donc « router ET distiller »**, pas\n« router » — et c'est la d … [3952 caractères tronqués]`
+
+  ```
+ok
+5e32971 80 000 pas : meilleur en fp32, PIRE après export — le format fait partie du modèle
+  ```
+
+- **bash** `{"command": "sleep 500; cd /tmp/campagne24 && tail -2 journal10.txt 2>/dev/null; tail -1 tr_m10_kwta125.log 2>/dev/null", "description": "Check the 12.5% sparsity training", "timeoutMs": 540000}`
+
+  ```
+[08/10 22:58:31] charge 86.06 · === conversation à trois tours (r1-1.5B) ===
+[09/10 09:49:39] charge 3.41 · === GPU libre : troisième point de la carte des taux (k-WTA 12,5 %) ===
+  pas   8000 · perte 1.4314 · val 2.2777 bits/octet · 602 s
+  ```
+
+### 🤖 Assistant
+
+⏵ Ajout de la séparation explicite moteur / modèle en tête du document
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/modele-pour-drave.md\")\ns = p.read_text()\nancre = \"\"\"---\n\n## 1. Le coût, formalisé\"\"\"\nassert ancre in s\najout = \"\"\"---\n\n## 0. Moteur contre modèle : qui paie  … [3723 caractères tronqués]`
