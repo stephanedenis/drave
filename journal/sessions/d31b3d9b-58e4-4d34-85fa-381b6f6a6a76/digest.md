@@ -9858,3 +9858,126 @@ ajouté
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"reports/rapport-campagne-benefices.md\"; s=open(p).read()\ns = s.replace('''| gpt-oss-120b MXFP4 | *en cours* | | | | | 63 Go depuis le disque dur |''',\n'''| gpt-oss-120b MXFP4 | **expiré à 90 min** | — | — | 1 … [3260 caractères tronqués]`
+
+  ```
+ajouté
+bab38c7 gpt-oss n'a pas fini en 90 minutes — et deux pièges de méthode consignés
+  ```
+
+### 🤖 Assistant
+
+⏵ gpt-oss a expiré, et deux pièges de méthode consignés
+
+## Le résultat, même négatif
+
+**La passe de 256 jetons sur gpt-oss-120b n'a pas fini en 90 minutes** : 35,5 Go lus, 13,9 Go résidents, délai atteint. C'est un résultat en soi — sur le disque dur et sous cette charge (4 gros processus en parallèle), une passe de 256 jetons sur un modèle de 63 Go **ne tient pas dans un créneau de 90 minutes**. Une fenêtre de 32 jetons est relancée pour obtenir le chiffre manquant.
+
+À comparer avec V4-Flash, qui a fait **16 jetons en 266 s** avec 37,6 Go résidents : le coût par jeton est du même ordre (~17-21 s/jeton) pour un modèle **six fois plus petit**. C'est le régime disque, pas la taille, qui décide.
+
+## Deux pièges de méthode — je les écris plutôt que de les cacher
+
+**1. Un cache qui survit à son correctif.** La mesure sémantique avec l'échelle corrigée a d'abord rendu **exactement les chiffres publiés** (couche 0 : +0,0002 ; couche 4 : +0,0156)... parce que le cache de vecteurs datait de la session précédente, **avant** le correctif du lecteur. Un cache qui ne porte pas la version de l'outil fait mesurer l'ancien code avec le nouveau. Fichiers supprimés, comparaison relancée à caches neufs — c'est en cours.
+
+**2. `--cache` écrase les deux côtés.** Dans `premiere_couche_semantique.py`, la même expression sert aux **deux** dossiers comparés (A et B) : passer `--cache X` fait écrire les deux jeux au même endroit, et la comparaison oppose un dossier à lui-même. Sans l'option, les deux défauts sont distincts — c'est pourquoi le piège ne s'était jamais vu.
+
+## Où en est le reste
+
+La campagne est sortie de la grille et déroule la **parcimonie** (déjà : k-WTA et seuils, PPL 17,34 à 17,43 selon le réglage, 90 milliards d'événements en mode listes) ; la **distillation** continue de progresser sur les deux GPU (−1,5 % et −1,0 % pour l'instant) ; et je relancerai la sémantique dès que les caches neufs sont écrits.
+
+
+## Tour 23
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, préremplissage par lots, modèle plus gros que la RAM. Poursuivre en parallèle le livrable du modèle nativement événementiel : entraîné ici, exécuté par Drave à logits vérifiés, découpé en unités réparties. Chaque affirmation porte sa mesure (perplexité, débit, octets et événements par jeton, RSS, écart entre nœuds) ET ses conditions (corpus, tokenizer du modèle, charge de fond) ; les manques constatés — embeddings/encodeurs, décodage spéculatif — sont consignés comme manques, pas comme résultats. Livrables : la file tools/campagne-benefices.sh exécutée et ses journaux, un rapport de synthèse par famille de tâches, et la poursuite du modèle événementiel."
+Round: 16/40
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "date; echo \"=== sémantique ===\"; tail -3 /tmp/campagne24/journal11.txt; echo \"=== codestral corrigé ===\"; grep -E \"=== perplexité|FIN\" /tmp/campagne24/codestral_spm.log 2>/dev/null | tail -2; echo \"=== gpt-oss court ===\"; tail -2 /tmp/campagne24/journal12.txt; echo \"=== parcimo … [239 caractères tronqués]`
+
+  ```
+jeu 08 oct 2026 23:40:02 EDT
+=== sémantique ===
+[08/10 23:30:57] ancienne : 0 lignes
+[08/10 23:30:57] === sémantique terminé ===
+[08/10 23:30:59] === sémantique CORRIGÉE, caches NEUFS (les anciens dataient du lecteur bogué) ===
+=== codestral corrigé ===
+=== gpt-oss court ===
+[08/10 23:37:19] === gpt-oss-120B, fenêtre COURTE (la passe de 256 jetons a expiré à 90 min) ===
+=== parcimonie ===
+[08/10 23:39:35] charge 62.87 · parcimonie/actthresh0_01push : PPL 20.5332 · événements 71531828375 · 10.9 tok/s
+[08/10 23:39:55] charge 66.65 · parcimonie/actthresh0_02dense : PPL 29.4957 · événements 0 · 13.7 tok/s
+=== distillation ===
+  # écrit dans /tmp/m5_d256_route_distille · 10.30 M paramètres · 0.85 M poids lus/jeton/couche
+  pas  28000 · perte 0.6672 · val 1.8535 bits/octet · 3122 s
+  ```
+
+- **bash** `{"command": "grep \"meilleur point\" /tmp/campagne24/tr_d256_distille.log; ls /tmp/m5_d256_route_distille/config.json 2>/dev/null && echo \"PRÊT\"; tail -3 /tmp/campagne24/journal4.txt", "description": "Check the distilled model result and export", "timeoutMs": 60000}`
+
+  ```
+# meilleur point : pas 36000 · val 1.9088 bits/octet
+/tmp/m5_d256_route_distille/config.json
+PRÊT
+[08/10 22:30:41] charge 51.86 · m5_d256_route : PPL 5.0684 · paires 3.2 M · événements 199484606 · 662.8 tok/s · porte 1
+[08/10 22:42:59] charge 39.13 · m5_d384_route : PPL 5.0614 · paires 7.2 M · événements 448796684 · 184.0 tok/s · porte 1
+[08/10 23:37:08] charge 49.46 · m5_d256_route_distille : PPL 5.1326 · paires 3.2 M · événements 199497531 · 802.6 tok/s · porte 1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && C=/tmp/campagne24; /home/stephane/gpu-env/bin/python -c \"\nimport numpy as np\nd = np.frombuffer(open('data/corpus_en_val.txt','rb').read(512), dtype=np.uint8)\nopen('$C/ids_512.txt','w').write(','.join(str(int(v)) for v in d))\npri … [395 caractères tronqués]`
+
+  ```
+512 identifiants écrits
+m5_d256_route (512 jetons) : === perplexité 7.6514
+m5_d256_route_distille (512 jetons) : === perplexité 7.2191
+m5_d384_route (512 jetons) : === perplexité 6.4896
+  ```
+
+### 🤖 Assistant
+
+⏵ Correction de protocole : la fenêtre de 256 octets est trop courte — je revérifie le résultat central sur 512
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && C=/tmp/campagne24; /home/stephane/gpu-env/bin/python -c \"\nimport numpy as np\nd = np.frombuffer(open('data/corpus_en_val.txt','rb').read(1024), dtype=np.uint8)\nopen('$C/ids_1024.txt','w').write(','.join(str(int(v)) for v in d))\"\ … [362 caractères tronqués]`
+
+  ```
+m5_d256_dense : === perplexité 6.5975
+m5_d256_route : === perplexité 7.6514
+m5_d384_dense : === perplexité 8.4034
+m5_d384_route : === perplexité 6.4896
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && C=/tmp/campagne24; /home/stephane/gpu-env/bin/python -c \"\nimport numpy as np\nd = np.frombuffer(open('data/corpus_en_val.txt','rb').read(4096), dtype=np.uint8)\nopen('$C/ids_4096.txt','w').write(','.join(str(int(v)) for v in d))\"\ … [384 caractères tronqués]`
+
+  ```
+m5_d256_dense (2048 jetons) : === perplexité 15.6697 sur 2047
+m5_d256_route (2048 jetons) : === perplexité 21.3664 sur 2047
+m5_d384_dense (2048 jetons) : === perplexité 21.5769 sur 2047
+m5_d384_route (2048 jetons) : === perplexité 14.0862 sur 2047
+  ```
+
+### 🤖 Assistant
+
+⏵ Le désaccord vient de la longueur de fenêtre : à 2 048 jetons on évalue HORS de la distribution d'entraînement (128)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && C=/tmp/campagne24; D=./drave-core/target/release/drave; /home/stephane/gpu-env/bin/python -c \"\nimport numpy as np\nd = np.frombuffer(open('data/corpus_en_val.txt','rb').read(200000), dtype=np.uint8)\nopen('$C/ids_val_long.txt','w') … [752 caractères tronqués]`
+
+  ```
+m5_d256_dense : PPL moyenne sur 8 fenêtres de 128 (dans la distribution d'entraînement) = 5.0155
+m5_d256_route : PPL moyenne sur 8 fenêtres de 128 (dans la distribution d'entraînement) = 4.8858
+m5_d384_dense : PPL moyenne sur 8 fenêtres de 128 (dans la distribution d'entraînement) = 5.0108
+m5_d384_route : PPL moyenne sur 8 fenêtres de 128 (dans la distribution d'entraînement) = 4.8646
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && C=/tmp/campagne24; D=./drave-core/target/release/drave; for m in m5_d256_route_distille; do\n  tot=0; n=0\n  for k in 0 128 256 384 512 640 768 896; do\n    v=$(timeout 300 $D /tmp/$m.gguf --ppl $C/ids_val_long.txt --depuis $k --limi … [461 caractères tronqués]`
+
+  ```
+m5_d256_route_distille : PPL moyenne sur 8 fenêtres = 4.7642
+  ```
+
+### 🤖 Assistant
+
+⏵ Protocole corrigé : routage −2,6 %, distillation −2,5 %, et les deux se cumulent
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"reports/rapport-campagne-benefices.md\"; s=open(p).read()\ndeb = s.index(\"## 5. Les modèles entraînés ici\")\nfin = s.index(\"## 5 bis. La distillation\")\nneuf = '''## 5. Les modèles entraînés ici, mesurés DAN … [3867 caractères tronqués]`

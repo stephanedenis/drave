@@ -226,44 +226,48 @@ c'est la moitié de la réponse à « pour tout type de tâches ».
 
 ---
 
-## 5. Les modèles entraînés ici, mesurés DANS le moteur — et le routage GAGNE
+## 5. Les modèles entraînés ici, mesurés DANS le moteur — routage ET distillation gagnent
 
-Chaîne automatique : dès qu'un dossier d'entraînement apparaît, il est exporté,
-sa référence PyTorch est calculée **sur les mêmes poids quantifiés**, la porte de
-logits est passée, puis le moteur mesure les paires, les événements et le débit.
-Les deux membres de chaque paire **lisent exactement le même nombre de poids par
-jeton** (vérifié par le compteur du moteur, colonne « paires/jeton »).
+**Le protocole, et il a fallu le corriger.** Le moteur évalue une fenêtre
+contiguë de `--limit` jetons. Or ces modèles ont été **entraînés sur des fenêtres
+de 128 jetons** : les évaluer sur 256, 512 ou 2 048 positions les fait sortir de
+leur distribution (à 2 048, la perplexité triple et le classement s'inverse). La
+mesure retenue est donc **huit fenêtres de 128 jetons** (`--depuis` décale le
+début), moyennées en log — dans la longueur d'entraînement, sur huit tranches
+différentes du fichier de validation.
 
-| modèle | val (bits/octet) | **PPL moteur** | paires/jeton | tok/s dense | tok/s listes | porte |
-|---|---:|---:|---:|---:|---:|---|
-| `m5_d256_dense` (3,2 M) | 2,007 | 5,3973 | 3,2 M | 787,2 | 442,3 | ✅ |
-| **`m5_d256_route` (10,3 M)** | — | **5,0684** | **3,2 M** | — | **662,8** | ✅ |
-| `m5_d384_dense` (7,2 M) | 1,919 | 5,3719 | 7,2 M | 528,2 | 255,0 | ✅ |
-| **`m5_d384_route` (44,4 M)** | — | **5,0614** | **7,2 M** | — | 184,0 | ✅ |
+| modèle | PPL moyenne (8 × 128 jetons) | paires/jeton | vs jumeau dense |
+|---|---:|---:|---:|
+| `m5_d256_dense` (3,2 M) | 5,0155 | 3,2 M | — |
+| **`m5_d256_route` (10,3 M)** | **4,8858** | 3,2 M | **−2,6 %** |
+| **`m5_d256_route_distille` (10,3 M)** | **4,7642** | 3,2 M | **−5,0 %** |
+| `m5_d384_dense` (7,2 M) | 5,0108 | 7,2 M | — |
+| **`m5_d384_route` (44,4 M)** | **4,8646** | 7,2 M | **−2,9 %** |
 
-**À lecture ÉGALE, le routage gagne de 6 % de perplexité** — et c'est la thèse du
-projet, démontrée avec des modèles entraînés ici et exécutés par le moteur :
+**Les deux leviers fonctionnent, et ils se cumulent** : à lecture **exactement
+égale** (vérifié par le compteur du moteur), le routage rend le modèle **2,6 à
+2,9 % meilleur** que son jumeau dense — en stockant 3,2× et 6,2× plus de
+paramètres, ce qui est tout son intérêt — et la distillation depuis le dense de la
+même famille en ajoute **2,5 %**. Le tout sans un paramètre de plus à lire.
 
-- `d256` : **5,0684 contre 5,3973** (−6,1 %) pour les mêmes 3,2 M poids lus, en
-  **stockant 3,2× plus de paramètres** (10,3 M contre 3,2 M) ;
-- `d384` : **5,0614 contre 5,3719** (−5,8 %) pour les mêmes 7,2 M poids lus, en
-  stockant **6,2× plus** (44,4 M contre 7,2 M).
+**Ce que le protocole a coûté à comprendre, et c'est consigné** : la première
+mesure (fenêtre de 256 octets) donnait −6,1 % ; une fenêtre de 512 donnait
+l'inverse pour une des deux paires ; une fenêtre de 2 048 inversait tout. Trois
+protocoles, trois réponses — parce qu'aucun n'évaluait le modèle là où il a
+appris. C'est la règle du dépôt appliquée à ses propres mesures : **la longueur de
+l'évaluation doit être celle de l'entraînement**, et une fenêtre courte ne compare
+rien.
 
-Un modèle plus gros qui lit autant : c'est exactement ce que « nativement
-événementiel » veut dire, et le gain ne vient pas d'un réglage — il vient de la
-**structure** (2 experts sur 8 ou 16, choisis par un routeur appris).
+**Une réserve qui reste** : les débits. À `d256` le routé est plus rapide que le
+dense (662,8 contre 442,3 tok/s dans le chemin par listes), à `d384` il est plus
+lent (184,0 contre 255,0) — le regroupement des jetons par expert a un coût fixe
+qui pèse quand le modèle grandit. Le gain de qualité, lui, tient dans les deux cas.
 
-**Deux réserves, et elles comptent.**
+**Et les experts ne passent PAS par les listes** : écrits en Q4_0, format pour
+lequel le moteur n'a pas de noyau de listes, ils sont exécutés en dense. La mesure
+honnête du coût est donc la colonne « paires/jeton », égale par construction.
 
-1. **Le débit ne suit pas toujours.** À `d256` le routé est **1,5× plus rapide**
-   (662,8 contre 442,3 tok/s) ; à `d384` il est **1,4× plus lent** (184,0 contre
-   255,0) — le regroupement des jetons par expert a un coût fixe qui pèse quand le
-   modèle grandit. Le gain de qualité, lui, tient dans les deux cas.
-2. **Les experts ne passent PAS par les listes.** Ils sont écrits en Q4_0, format
-   pour lequel le moteur n'a pas de noyau de listes : le compte d'« événements »
-   ne les couvre donc pas (199,5 M pour le routé contre 2 874 M pour le dense —
-   un écart qui ne compare pas la même chose). La mesure honnête est la colonne
-   **paires/jeton**, et elle est égale par construction.
+---
 
 ## 5 bis. La distillation : le levier de qualité qui ne coûte aucun paramètre
 

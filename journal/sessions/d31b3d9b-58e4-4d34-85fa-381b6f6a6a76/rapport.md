@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 14.4 h |
-| Tours | 22 |
-| Messages | 607 |
-| Appels d'outils | 581 |
+| Durée | 14.7 h |
+| Tours | 23 |
+| Messages | 617 |
+| Appels d'outils | 589 |
 | Fichiers touchés | 21 |
-| Commandes | 459 |
+| Commandes | 467 |
 | Sous-agents | 3 |
-| Commits | 36 |
+| Commits | 37 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -71,6 +71,8 @@
 **Tour 21** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1197 caractères tronqués]
 
 **Tour 22** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1197 caractères tronqués]
+
+**Tour 23** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1197 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1071,7 +1073,40 @@ gne sur gpt-oss (à 9 minutes de son délai), la mesure codestral corrigée, et 
 
 **Synthèse produite :**
 
-⏵ La passe gpt-oss a expiré à 90 minutes — je la relance sur une fenêtre plus courte
+⏵ gpt-oss a expiré, et deux pièges de méthode consignés
+
+\## Le résultat, même négatif
+
+**La passe de 256 jetons sur gpt-oss-120b n'a pas fini en 90 minutes** : 35,5 Go lus, 13,9 Go résidents, délai atteint. C'est un résultat en soi — sur le disque dur et sous cette charge (4 gros processus en parallèle), une passe de 256 jetons sur un modèle de 63 Go **ne tient pas dans un créneau de 90 minutes**. Une fenêtre de 32 jetons est relancée pour obtenir le chiffre manquant.
+
+À comparer avec V4-Flash, qui a fait **16 jetons en 266 s** avec 37,6 Go résidents : le coût par jeton est du même ordre (~17-21 s/jeton) pour un modèle **six fois plus petit**. C'est le régime disque, pas la taille, qui décide.
+
+\## Deux pièges de méthode — je les écris plutôt que de les cacher
+
+**1. Un cache qui survit à son correctif.** La mesure sémantique avec l'échelle corrigée a d'abord rendu **exactement les chiffres publiés** (couche 0 : +0,0002 ; couche 4 : +0,0156)... parce que le cache de vecteurs datait de la session précédente, **avant** le correctif du lecteur. Un cache qui ne porte pas la version de l'outil fait mesurer l'ancien code avec le nouveau. Fichiers supprimés, comparaison relancée à caches neufs — c'est en cours.
+
+**2. `--cache` écrase les deux côtés.** Dans `premiere_couche_semantique.py`, la même expression sert aux **deux** dossiers comparés (A et B) : passer `--cache X` fait écrire les deux jeux au même endroit, et la comparaison oppose un dossier à lui-même. Sans l'option, les deux défauts sont distincts — c'est pourquoi le piège ne s'était jamais vu.
+
+\## Où en est le reste
+
+La campagne est sortie de la grille et déroule la **parcimonie** (déjà : k-WTA et seuils, PPL 17,34 à 17,43 selon le réglage, 90 milliards d'événements en mode listes) ; la **distillation** continue de progresser sur les deux GPU (−1,5 % et −1,0 % pour l'instant) ; et je relancerai la sémantique dès que les caches neufs sont écrits.
+
+### Tour 23 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1477 caractères tronqués]
+
+*8 appels d'outils.* Actions notables :
+
+- bash — Check all running experiments
+- bash — Check the distilled model result and export
+- bash — Compare routed vs distilled on a larger window
+- bash — Re-verify the iso-reads result on a 512-token window
+- bash — Compare the four models on a 2048-token window
+- bash — Average PPL over training-length windows
+- bash — Measure the distilled model with the correct protocol
+- bash — Rewrite section 5 with the corrected protocol
+
+**Synthèse produite :**
+
+⏵ Protocole corrigé : routage −2,6 %, distillation −2,5 %, et les deux se cumulent
 
 ## 3. Travail accompli
 
@@ -1149,7 +1184,7 @@ gne sur gpt-oss (à 9 minutes de son délai), la mesure codestral corrigée, et 
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 419 autres
+- … et 427 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1333,4 +1368,5 @@ gne sur gpt-oss (à 9 minutes de son délai), la mesure codestral corrigée, et 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="reports/rapport-campagne-benefices.md"; s=open(p).read() ajout = '''## 12. Le cas extr
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="reports/rapport-campagne-benefices.md"; s=open(p).read() ajout = '''## 5 bis. La disti
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="reports/rapport-campagne-benefices.md"; s=open(p).read() s = s.replace('''| gpt-oss-12
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="reports/rapport-campagne-benefices.md"; s=open(p).read() deb = s.index("## 5. Les modè
 
