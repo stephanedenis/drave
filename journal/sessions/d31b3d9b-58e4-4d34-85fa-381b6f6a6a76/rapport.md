@@ -6,13 +6,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
 | Durée | 27.2 h |
-| Tours | 27 |
-| Messages | 1081 |
-| Appels d'outils | 1039 |
+| Tours | 28 |
+| Messages | 1087 |
+| Appels d'outils | 1043 |
 | Fichiers touchés | 33 |
-| Commandes | 855 |
+| Commandes | 859 |
 | Sous-agents | 3 |
-| Commits | 84 |
+| Commits | 85 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -81,6 +81,8 @@
 **Tour 26** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1197 caractères tronqués]
 
 **Tour 27** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1197 caractères tronqués]
+
+**Tour 28** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1197 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1270,7 +1272,7 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 
 ### Tour 27 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1477 caractères tronqués]
 
-*430 appels d'outils.* Actions notables :
+*431 appels d'outils.* Actions notables :
 
 - bash — Check the full state
 - bash — Measure the distilled d384 with the correct protocol
@@ -1286,11 +1288,45 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - bash — Read parcimonie, contexte, lot steps
 - bash — Inspect batch2 script
 - bash — Read batch2 journal and latency map
-- … et 382 autres
+- … et 383 autres
 
 **Synthèse produite :**
 
-⏵ Résultat : les deux mécanismes ne sauvent PAS la règle — la nouveauté empire les choses
+⏵ Trois documents et deux mesures nouvelles : je fais le point
+
+**1. Ce que la biologie impose (nouveau : `docs/biologie-pour-drave.md`)**
+
+Les faits sont maintenant assez solides pour contraindre un dessin : **139 255 neurones et 50 M de connexions** pour la drosophile adulte, 8 000 types cellulaires, **0,5 % de variation développementale** — et le constat que « les cerveaux ne sont pas des flocons de neige » ([FlyWire](https://www.eurekalert.org/news-releases/1059473)) ; **20 W pour 2 % du poids du corps** ; décharge **0,1-1 Hz**, ~1 % des neurones actifs à un instant ; **~10 % de probabilité de connexion** ; surproduction synaptique puis élagage.
+
+Trois traductions, dont une mesurée aujourd'hui :
+
+- **Le coût cérébral est proportionnel aux événements ; celui de Drave aux paires.** Même forme fonctionnelle — mais le cerveau paie **0,4 pJ** par événement synaptique là où notre implémentation paie **0,9 µJ** : six ordres de grandeur, et l'écart est dans le **substrat**, pas dans l'algorithme (nos événements passent par un processeur généraliste, avec du trafic mémoire).
+- **Nos poids sont quasi gaussiens (p99,9/médiane = 5,2) alors que les synapses corticales sont log-normales** — ce qui explique une mesure de la campagne : élaguer 50 % ne coûte rien, élaguer à 25 % effondre. Un modèle paramétré en log-magnitude (E6) est en entraînement.
+- **Le dessin « structure innée, poids appris » tient — et il est mesuré (E1)** : masque de 25 % des connexions tiré **au hasard** à la naissance, jamais modifié :
+
+| dim 384 | perplexité | événements/fenêtre | débit |
+|---|---:|---:|---:|
+| témoin dense | 4,9959 | 336,7 M | 131 tok/s |
+| **connectome inné 25 % (aléatoire)** | **5,0472 (+1,0 %)** | **81,6 M (÷4,1)** | **276 tok/s (×2,1)** |
+
+**2. Notre hebbien différentiel face à la biologie (nouveau : `docs/hebbien-differentiel-et-biologie.md`)**
+
+Cinq points où notre règle **est** biologique (elle porte sur des *changements* — forme STDP ; le seuil d'événement est un seuil de spike ; la décroissance est le renouvellement synaptique ; la forme signée est le principe de Dale ; garder `D` séparé de `W` est l'architecture à deux échelles). Trois écarts, qui **expliquent le verdict négatif** du dépôt (transfert nul, −5 à −10 % sur les langues non vues) : pas de crédit, pas de décorrélation, et des structures **saturées** où la croissance ne peut rien ajouter — sauf si elles sont creuses (lien direct avec E1) et non linéaires (les 401 856 monômes quadratiques).
+
+**3. « Impulsi
+… [1429 caractères tronqués]
+
+### Tour 28 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1477 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Check chains and training state
+- bash — Queue the structure follow-up experiments
+- bash — Cross-reference the new documents and wait
+
+**Synthèse produite :**
+
+⏵ Mise en file de la suite du dessin « structure innée » (12,5 % et combiné avec les activations creuses)
 
 ## 3. Travail accompli
 
@@ -1380,7 +1416,7 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 815 autres
+- … et 819 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1612,4 +1648,5 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - E1 : un connectome inné ALÉATOIRE coûte 1 % de perplexité et divise les lectures par 4  Même modèle que le témoin dense (dim 384, 40 000 pas, même export), sauf
 - Drave en impulsion pure serait-il un meilleur apprenant ? Pas en l'état, oui sous conditions nommées  Trois sens de « mode impulsion pur » : l'EXÉCUTION (déjà é
 - E7 et E8 implémentés et mesurés : la nouveauté empire la règle, la décorrélation est inerte  Deux mécanismes écrits dans le moteur (DRAVE_HEBB_MODULE, DRAVE_HEB
+- Le rapport de campagne renvoie aux trois documents de conception, et porte le résultat de structure innée" && echo ok; sleep 420; tail -1 /tmp/campagne24/tr_m13
 

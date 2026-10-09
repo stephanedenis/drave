@@ -17175,3 +17175,102 @@ les-deux : sur B avec D appris sur A = 10.0974 (référence 8.3869)
 ⏵ Résultat : les deux mécanismes ne sauvent PAS la règle — la nouveauté empire les choses
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/impulsion-pure-apprenant.md\")\ns = p.read_text()\nancre = \"\"\"**Ce qui manque pour L3, en une phrase**\"\"\"\nassert ancre in s\nneuf = \"\"\"### 5 bis. E7 et E8 IMPLÉMENTÉ … [3951 caractères tronqués]`
+
+  ```
+ok
+5adb39b E7 et E8 implémentés et mesurés : la nouveauté empire la règle, la décorrélation est inerte
+  pas  16000 · perte 1.5431 · val 2.4238 bits/octet · 841 s
+  ```
+
+- **bash** `{"command": "cd /tmp/campagne24 && for f in journal12.txt journal13.txt; do echo \"--- $f\"; tail -2 $f 2>/dev/null; done; ps -eo pid,etime,args | grep -E \"entrainer_moteur\" | grep -v grep | cut -c1-70", "description": "Final status of the running chains"}`
+
+  ```
+--- journal12.txt
+[09/10 12:06:46] charge 4.47 · m12_d384_masque25 : PPL 5.0472 · 81603388 événements/fenêtre · 276.2 tok/s
+[09/10 12:06:46] charge 4.47 · === chaîne connectome inné terminée ===
+--- journal13.txt
+[09/10 12:07:51] charge 2.51 · === GPU libre : poids log-normaux (signes innés, magnitudes apprises) ===
+2074683       16:10 /home/stephane/gpu-env/bin/python -u tools/entrain
+  ```
+
+### 🤖 Assistant
+
+⏵ Trois documents et deux mesures nouvelles : je fais le point
+
+**1. Ce que la biologie impose (nouveau : `docs/biologie-pour-drave.md`)**
+
+Les faits sont maintenant assez solides pour contraindre un dessin : **139 255 neurones et 50 M de connexions** pour la drosophile adulte, 8 000 types cellulaires, **0,5 % de variation développementale** — et le constat que « les cerveaux ne sont pas des flocons de neige » ([FlyWire](https://www.eurekalert.org/news-releases/1059473)) ; **20 W pour 2 % du poids du corps** ; décharge **0,1-1 Hz**, ~1 % des neurones actifs à un instant ; **~10 % de probabilité de connexion** ; surproduction synaptique puis élagage.
+
+Trois traductions, dont une mesurée aujourd'hui :
+
+- **Le coût cérébral est proportionnel aux événements ; celui de Drave aux paires.** Même forme fonctionnelle — mais le cerveau paie **0,4 pJ** par événement synaptique là où notre implémentation paie **0,9 µJ** : six ordres de grandeur, et l'écart est dans le **substrat**, pas dans l'algorithme (nos événements passent par un processeur généraliste, avec du trafic mémoire).
+- **Nos poids sont quasi gaussiens (p99,9/médiane = 5,2) alors que les synapses corticales sont log-normales** — ce qui explique une mesure de la campagne : élaguer 50 % ne coûte rien, élaguer à 25 % effondre. Un modèle paramétré en log-magnitude (E6) est en entraînement.
+- **Le dessin « structure innée, poids appris » tient — et il est mesuré (E1)** : masque de 25 % des connexions tiré **au hasard** à la naissance, jamais modifié :
+
+| dim 384 | perplexité | événements/fenêtre | débit |
+|---|---:|---:|---:|
+| témoin dense | 4,9959 | 336,7 M | 131 tok/s |
+| **connectome inné 25 % (aléatoire)** | **5,0472 (+1,0 %)** | **81,6 M (÷4,1)** | **276 tok/s (×2,1)** |
+
+**2. Notre hebbien différentiel face à la biologie (nouveau : `docs/hebbien-differentiel-et-biologie.md`)**
+
+Cinq points où notre règle **est** biologique (elle porte sur des *changements* — forme STDP ; le seuil d'événement est un seuil de spike ; la décroissance est le renouvellement synaptique ; la forme signée est le principe de Dale ; garder `D` séparé de `W` est l'architecture à deux échelles). Trois écarts, qui **expliquent le verdict négatif** du dépôt (transfert nul, −5 à −10 % sur les langues non vues) : pas de crédit, pas de décorrélation, et des structures **saturées** où la croissance ne peut rien ajouter — sauf si elles sont creuses (lien direct avec E1) et non linéaires (les 401 856 monômes quadratiques).
+
+**3. « Impulsion pure » serait-il un meilleur apprenant ? (`docs/impulsion-pure-apprenant.md`)**
+
+La question se chiffre : notre **exécution** la plus économe touche 12,5 % des poids par jeton, notre **apprenant** en touche 100 % — huit fois plus cher. J'ai implémenté les deux mécanismes manquants et **mesuré** :
+
+| adapter sur l'anglais, évaluer sur le français | perplexité |
+|---|---:|
+| référence sans adaptateur | **8,3869** |
+| règle actuelle | 8,8246 (+5,2 %) |
+| + décorrélation (E8) | 8,8225 (+5,2 %, **inerte**) |
+| + modulation par nouveauté (E7) | **10,1034 (+20,4 %)** |
+
+**Moduler par la nouveauté est le contraire de ce qu'il faut** : la nouveauté est maximale exactement sur l'entrée hors distribution, donc elle amplifie l'apprentissage de ce qui est *spécifique* à la langue nouvelle. Le troisième facteur de la biologie n'est pas « c'est nouveau » mais « **ça a marché** » — et notre seul mécanisme d'utilité mesuré efficace reste la distillation. Réponse courte : **pas meilleur en l'état ; potentiellement meilleur par unité de coût, à condition d'un signal de valeur** — avec un argument structurel déjà mesuré : le format d'exécution fait partie du modèle (la pénalité de quantification croît de +36 % avec l'entraînement), donc apprendre ailleurs pour exporter coûte cher.
+
+En file : le modèle à poids log-normaux (E6, en entraînement), puis le noyau Q8 par expert qui manque pour que « routage + événements » existe.
+
+
+## Tour 28
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, préremplissage par lots, modèle plus gros que la RAM. Poursuivre en parallèle le livrable du modèle nativement événementiel : entraîné ici, exécuté par Drave à logits vérifiés, découpé en unités réparties. Chaque affirmation porte sa mesure (perplexité, débit, octets et événements par jeton, RSS, écart entre nœuds) ET ses conditions (corpus, tokenizer du modèle, charge de fond) ; les manques constatés — embeddings/encodeurs, décodage spéculatif — sont consignés comme manques, pas comme résultats. Livrables : la file tools/campagne-benefices.sh exécutée et ses journaux, un rapport de synthèse par famille de tâches, et la poursuite du modèle événementiel."
+Round: 21/40
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ État de la file et des chaînes avant de décider de la suite
+
+- **bash** `{"command": "cd /tmp/campagne24 && echo \"=== chaînes ===\"; for s in jour5_lognormal jour4_masque_inne jour3_poids_creux; do pid=$(pgrep -f \"bash /tmp/campagne24/$s.sh\" | head -1); printf \"%-22s %s\\n\" \"$s\" \"${pid:-terminée}\"; done; echo \"=== m13 ===\"; tail -1 tr_m13_lognormal.log 2>/dev/ … [152 caractères tronqués]`
+
+  ```
+=== chaînes ===
+jour5_lognormal        1991144
+jour4_masque_inne      terminée
+jour3_poids_creux      terminée
+=== m13 ===
+  pas  16000 · perte 1.5431 · val 2.4238 bits/octet · 841 s
+=== journal13 ===
+[09/10 12:07:51] charge 2.51 · === GPU libre : poids log-normaux (signes innés, magnitudes apprises) ===
+=== charge ===
+ 12:24:16  up 18 days  1:36,  2 users,  load average: 7,27, 8,36, 5,99
+  ```
+
+### 🤖 Assistant
+
+⏵ Mise en file de la suite du dessin « structure innée » (12,5 % et combiné avec les activations creuses)
+
+- **bash** `{"command": "cat > /tmp/campagne24/jour6_structure.sh <<'EOF'\n#!/bin/bash\n# jour6_structure.sh — la structure innée, poussée plus loin.\n#\n# E1 (9/10 12 h 06) : un masque inné ALÉATOIRE à 25 % des connexions coûte +1,0 % de\n# perplexité et divise les événements par 4,1 (débit ×2,1). Deux questio … [3167 caractères tronqués]`
+
+  ```
+jour6 en file
+  pas  16000 · perte 1.5431 · val 2.4238 bits/octet · 841 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\ns = s.replace(\"\"\"| **fidélité listes ↔ dense** | ✅ **exacte, démontrée** |\"\"\",\n\"\"\"| **structure innée** | ✅ * … [1302 caractères tronqués]`

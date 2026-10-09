@@ -79,6 +79,7 @@ file encore en cours.
 | **embeddings / recherche** | ❌ **manque** | `bge-m3` lisible en en-tête, **inexécutable** (ni encodeur bidirectionnel ni pooling) |
 | **décodage spéculatif** | ⚠️ **le chantier n'existe pas, mais le gain est démontré dans la niche du projet** | trois paires mesurées par le moteur : ×0,70 (brouillon à 0,21×) · ×1,09 (0,13×) · **×1,52 pour un brouillon à 0,039× de sa cible** — c'est le **rapport de coût** qui décide, et il est minimal quand la cible est bornée par le disque (§ 1 bis) |
 | **routage à l'échelle** | ⚠️ **le routage seul s'inverse à dim 512, la distillation le rattrape et dépasse** | routé seul : −3,5 % (val, 256) → −1,4 % (384) → **+1,4 % (512)** · **routé distillé : 4,3305 contre 4,5686 au dense (−5,2 %)**, le gain du distillat croissant avec la taille (−2,5 % → −9,3 % → **−13,8 %**) · **12,8 M paires/jeton des deux côtés** |
+| **structure innée** | ✅ **le masque aléatoire coûte 1 % et divise les lectures par 4** | connectome tiré à la naissance (25 % des connexions, jamais modifié) : **5,0472** contre 4,9959 au témoin dense, **81,6 M** d'événements/fenêtre contre 336,7 M, **276** tok/s contre 131 (§ 4 bis de `biologie-pour-drave.md`) |
 | **fidélité listes ↔ dense** | ✅ **exacte, démontrée** | logits identiques **au bit près** (`cmp` sur 4 254 216 octets) et mêmes jetons gloutons, à encodage de poids égal ; ×0,02 à ×3,19 selon la densité |
 
 **En une phrase** : Drave gagne **par construction** sur les sorties contraintes,
@@ -88,6 +89,12 @@ file encore en cours.
 § 5 bis) — **par ses circonstances** sur les modèles plus gros que la RAM, et
 **perd** sur un modèle dense ordinaire, où le chemin par listes coûte 1,8 à 2,1×
 pour rien.
+
+**Trois documents accompagnent ce rapport** : `docs/modele-pour-drave.md` (quel
+modèle *ad hoc* l'architecture récompense — moteur contre modèle, dix dessins
+évalués), `docs/biologie-pour-drave.md` (ce que les connectomes imposent comme
+contraintes, et l'expérience E1 mesurée) et `docs/impulsion-pure-apprenant.md` (un
+exécutant événementiel n'est pas encore un apprenant événementiel, et pourquoi).
 
 **Quatre corrections de méthode sont consignées dans ce rapport**, et elles
 comptent autant que les chiffres : le tokenizer étranger (`data/…ids`, facteur
