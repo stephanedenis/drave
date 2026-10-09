@@ -15860,3 +15860,36 @@ f3673af Les deux leviers ne se cumulent pas : la distillation n'ajoute rien au c
 ⏵ Section de liaison : ce que le nouveau matériel change, d'après ces mesures
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\nancre = \"\"\"## 23. Ce qui reste à mesurer\"\"\"\nassert ancre in s\najout = \"\"\"## 22 bis. Ce que le nouveau matéri … [2848 caractères tronqués]`
+
+  ```
+ok
+838c511 Ce que le nouveau matériel change, d'après les mesures — et ce qu'il ne change pas
+  ```
+
+- **bash** `{"command": "sleep 580; cd /tmp/campagne24 && tail -1 tr_m9_route_long.log; echo \"--- charge ---\"; uptime", "description": "Poll the long routed training", "timeoutMs": 610000}`
+
+  ```
+pas   8000 · perte 1.3143 · val 2.1142 bits/octet · 870 s
+--- charge ---
+ 07:43:39  up 17 days 20:55,  2 users,  load average: 2,21, 2,66, 3,00
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/^## Résumé/,/^## 0\\./p' reports/rapport-campagne-benefices.md | head -40", "description": "Review the executive summary"}`
+
+  ```
+## Résumé — les cinq résultats qui comptent, et les manques
+
+*Détail et conditions dans les sections indiquées ; le verdict famille par famille
+est au § 0 bis.*
+
+| # | résultat | mesure |
+|---|---|---|
+| 1 | **Le chemin par listes n'approxime RIEN** | à encodage de poids égal, `--push` et `--dense` produisent des logits **identiques au bit près** (`cmp` sur 4 254 216 octets) et la même suite gloutonne (§ 22) |
+| 2 | **La parcimonie doit être APPRISE, pas imposée** | à 25 % gardés : témoin **10,8758** de perplexité, modèle entraîné creux **5,1719** (−52 %) · à 50 % : 5,3032 contre 5,0606 · et **chaque modèle n'est bon que dans son régime** (§ 5 ter) |
+| 3 | **Le routage seul s'inverse à dim 512 — la distillation le rattrape** | routé : −2,6 % (256), −2,9 % (384), **+10 % (512)** · routé **distillé** : **4,3305 contre 4,5686** au dense (−5,2 %), à 12,8 M paires/jeton des deux côtés (§ 5 bis) |
+| 4 | **Le brouillon spéculatif paie quand la cible est bornée par le disque** | ×0,70 à 0,210× de coût relatif · ×1,09 à 0,134× · **×1,52 à 0,039×** — c'est le rapport de coût qui décide, pas l'acceptation (§ 1 bis) |
+| 5 | **La mémoire tient, et les gros modèles tournent** | **18 aiguilles su
+… [971 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\ns = s.replace(\"\"\"| 2 | **La parcimonie doit être APPRISE, pas imposée** | à 25 % gardés : témoin **10,8758** de perp … [818 caractères tronqués]`
