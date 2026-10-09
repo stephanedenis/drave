@@ -137,6 +137,45 @@ def elaguer_lignes(modele, garde):
     return n
 
 
+def installer_masque_inne(modele, garde, graine):
+    """Un CONNECTOME INNÉ : masque de connexions tiré UNE fois, puis jamais modifié.
+
+    POURQUOI CETTE EXPÉRIENCE (docs/biologie-pour-drave.md, § 4). Le cerveau a un
+    plan de câblage largement partagé entre individus, très creux (~10 % de
+    probabilité de connexion, ~7 000 synapses par neurone) et dont seuls les POIDS
+    changent avec l'apprentissage. Si la structure peut être fixée à la naissance,
+    alors le coût d'exécution d'un modèle est **borné à la compilation** — le
+    nombre de paires par jeton est connu avant le premier pas d'entraînement — et
+    l'architecture événementielle n'a plus besoin d'un top-k à l'exécution, ni de la
+    fragilité qui va avec (« exécuter au taux appris, sinon le modèle se dégrade »,
+    § 5 ter de la campagne).
+
+    Ce n'est PAS de l'élagage : on ne retire pas des poids devenus petits, on
+    interdit des connexions dès le départ, et le tirage est aléatoire — c'est le
+    point : si un masque ALÉATOIRE fixe suffit, alors la structure n'a pas besoin
+    d'être apprise ; sinon, il faudra apprendre *où* sont les connexions.
+    """
+    gen = torch.Generator().manual_seed(graine)
+    masques = {}
+    for nom, mod in modele.named_modules():
+        if isinstance(mod, nn.Linear):
+            w = mod.weight
+            k = max(1, int(round(garde * w.shape[1])))
+            # Le tirage se fait sur CPU (reproductible quelle que soit la
+            # machine), le masque vit sur le même appareil que les poids.
+            idx = torch.argsort(torch.rand(w.shape, generator=gen), dim=1)[:, :k]
+            masques[nom] = torch.zeros_like(w).scatter_(1, idx.to(w.device), 1.0)
+    return masques
+
+
+def appliquer_masque(modele, masques):
+    """Le masque est réappliqué après CHAQUE pas : une connexion absente le reste."""
+    with torch.no_grad():
+        for nom, mod in modele.named_modules():
+            if isinstance(mod, nn.Linear) and nom in masques:
+                mod.weight.mul_(masques[nom])
+
+
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("--famille", choices=["dense", "route"], default="route")
@@ -169,6 +208,10 @@ def main():
                         "élagage ; 0,5 = on annule la moitié des poids de chaque ligne)")
     p.add_argument("--elagage-tous", type=int, default=500,
                    help="pas entre deux élagages (rampe cubique de 1,0 vers la cible)")
+    p.add_argument("--masque", type=float, default=0.0,
+                   help="part des CONNEXIONS existantes à la naissance (0 = dense ; "
+                        "0,25 = un connectome inné qui ne garde qu'un quart des poids "
+                        "par ligne, tiré aléatoirement, jamais modifié)")
     p.add_argument("--sans-gpu", action="store_true")
     a = p.parse_args()
     # Lecture égale par construction : k experts lisent ce que lit le FFN dense.
@@ -195,6 +238,12 @@ def main():
     if a.elagage > 0.0:
         print(f"# élagage APPRIS : {a.elagage:.0%} des poids gardés par ligne, "
               f"rampe sur la première moitié de l'entraînement")
+    masques = None
+    if a.masque > 0.0:
+        masques = installer_masque_inne(modele, a.masque, a.graine)
+        print(f"# CONNECTOME INNÉ : {a.masque:.0%} des connexions, tirées une fois "
+              f"(graine {a.graine}) et jamais modifiées — "
+              f"{sum(m.sum().item() for m in masques.values())/1e6:.2f} M connexions")
 
     opt = torch.optim.AdamW(modele.parameters(), lr=a.lr, weight_decay=0.01)
     g = torch.Generator().manual_seed(a.graine)
@@ -250,6 +299,8 @@ def main():
         perte.backward()
         torch.nn.utils.clip_grad_norm_(modele.parameters(), 1.0)
         opt.step()
+        if masques is not None:
+            appliquer_masque(modele, masques)
         # ÉLAGAGE À RAMPE CUBIQUE : on ne coupe pas la moitié des poids au premier
         # pas (le modèle n'a rien appris), on y va progressivement — c'est la
         # différence entre élaguer et détruire.

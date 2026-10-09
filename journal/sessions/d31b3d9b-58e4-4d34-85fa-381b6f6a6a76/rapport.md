@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 24.8 h |
+| Durée | 25.3 h |
 | Tours | 27 |
-| Messages | 1013 |
-| Appels d'outils | 974 |
-| Fichiers touchés | 30 |
-| Commandes | 802 |
+| Messages | 1024 |
+| Appels d'outils | 985 |
+| Fichiers touchés | 31 |
+| Commandes | 807 |
 | Sous-agents | 3 |
-| Commits | 74 |
+| Commits | 75 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -1270,7 +1270,7 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 
 ### Tour 27 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1477 caractères tronqués]
 
-*365 appels d'outils.* Actions notables :
+*376 appels d'outils.* Actions notables :
 
 - bash — Check the full state
 - bash — Measure the distilled d384 with the correct protocol
@@ -1286,11 +1286,11 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - bash — Read parcimonie, contexte, lot steps
 - bash — Inspect batch2 script
 - bash — Read batch2 journal and latency map
-- … et 324 autres
+- … et 332 autres
 
 **Synthèse produite :**
 
-⏵ Ajout de la séparation explicite moteur / modèle en tête du document
+⏵ Mise en file de E1 et commit du document biologie
 
 ## 3. Travail accompli
 
@@ -1328,6 +1328,7 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/carte_latence.sh` | 1 | 1 |
 | `/tmp/campagne24/jour1_suite.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/modele-pour-drave.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/biologie-pour-drave.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -1377,7 +1378,7 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 762 autres
+- … et 767 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1599,4 +1600,5 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - Budget d'événements : le premier essai d'allocation ciblée ÉCHOUE, et il apprend pourquoi  À événements comparables, une allocation ciblée d'après le tableau de
 - 80 000 pas : meilleur en fp32, PIRE après export — le format fait partie du modèle  Le routé 512 entraîné deux fois plus longtemps améliore sa validation fp32 (
 - Moteur contre modèle : un tableau qui dit, pour chaque mesure, de qui elle parle  Quand une mesure est décevante, il faut savoir de qui : le chemin par listes e
+- Biologie : ce que les connectomes imposent comme contraintes, et l'expérience E1 outillée  Nouveau document docs/biologie-pour-drave.md : les faits mesurés (dro
 
