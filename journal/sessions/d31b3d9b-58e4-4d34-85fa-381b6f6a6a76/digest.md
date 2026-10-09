@@ -19836,3 +19836,379 @@ topologie : la région distante est sur « 127.0.0.1:50325 » mais `--ppl-repart
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && timeout 600 cargo test --release 2>&1 | tail -3; cd .. && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/sprint-cerveau.md\")\ns = p.read_text()\nancre = \"\"\"## C1b — pilote multi-régions : la conception, rele … [4035 caractères tronqués]`
+
+  ```
+test result: ok. 85 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+
+sprint doc mis à jour
+poussé
+  ```
+
+- **todo_write** `{"todos": [{"content": "Écrire docs/sprint-cerveau.md (plan du sprint, portes, état resumable)", "status": "completed"}, {"content": "C1a : descripteur de topologie + validateur de DAG + impression du plan", "status": "completed"}, {"content": "C1b pas 1 : la topologie pilote le découpage (porte ten … [457 caractères tronqués]`
+
+  ```
+Updated todo list: 3 pending, 1 in progress, 3 completed.
+  ```
+
+### 🤖 Assistant
+
+⏵ C1b pas 1 franchi, porte outillée et tenue — le relais est le prochain jalon
+
+**Ce qui est fait et vérifié depuis le début du sprint** (85 tests verts, 23 portes intactes, tout poussé) :
+
+**C1a — le descripteur de topologie** (`drave-core/src/topologie.rs`) : JSON minimal analysé à la main (le crate reste *std seul*), validation stricte avec un refus explicite par cas — trou de couverture, recouvrement, doublon, lien orphelin, lien réflexif, cycle, clé inconnue, mode inconnu — tri topologique de Kahn, et détection **chaîne *vs* graphe**.
+
+**C1b pas 1 — la topologie PILOTE le découpage.** `--ppl-reparti … --topologie F` exécute maintenant le découpage **décrit par le fichier**. Le pilote vérifie que la région locale commence à la couche 0, que les deux régions recouvrent le modèle entier (nombre de couches lu dans l'**en-tête** du GGUF, sans charger les poids) et **refuse** une topologie dont l'adresse contredit `--ppl-reparti`.
+
+**La porte est outillée** (`tools/porte-topologie.sh`, quatre cas) et elle tient :
+
+| cas | mesure (m5_d384_dense, 2 couches locales sur 4) |
+|---|---|
+| 1. référence, modèle entier | perplexité **3,7326** |
+| 2. découpage historique `--couches-locales` | **5,0374** · écart de flux **0.00e0** |
+| 3. **découpage par TOPOLOGIE** | **5,0374** · écart **0.00e0** — *le même chiffre* |
+| 4. refus | trou de couverture → refusé · adresse contredite → refusée avec le message |
+
+**PORTE TENUE** : la topologie rend exactement le chiffre du découpage historique, et l'écart de flux reste 0,00e0.
+
+Un détail qui a failli coûter cher, et qui est consigné : `--topologie` seul imprime le plan et sort, ce qui **avalait** `--ppl-reparti … --topologie` (la commande imprimait le plan au lieu de mesurer). La pré-analyse est maintenant restreinte à l'absence de `--ppl-reparti`.
+
+**Le prochain jalon est le RELAIS** — trois régions sur trois instances : le pilote porte la première, le nœud du milieu applique sa plage puis **transmet à son successeur** au lieu de répondre, et le retour se fait de proche en proche. Le point d'insertion est relevé précisément (`run_serveur_flux` après `mdl.forward`, main.rs:3347), et la découverte qui le rend tractable est que **le protocole transporte déjà la plage de couches dans la trame** : le découpage voyage avec le flux, il n'y a rien à inventer côté format. Le protocole de mesure des quatre cas (dont le relais de latence) est écrit dans `docs/sprint-cerveau.md`, qui tient l'état du sprint round par round.
+
+
+## Tour 38
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Sprint « cerveau complet » en autonomie jusqu'au 10 octobre 9 h (HAE) : implémenter, avec portes mesurées, les trois premières capacités du plan docs/plan-cerveau-complet.md — C1 graphe de régions (descripteur de topologie, validateur de DAG, ordonnanceur par dépendances, pilote multi-nœuds ; porte : un graphe linéaire doit rendre des logits identiques au bit près et un découpage à trois régions doit égaler le modèle d'un seul tenant), C12 trace globale horodatée et rejeu exact (porte : rejeu == exécution, 0,00e0), C5 bus de modulation multi-canaux (porte : canal nul ⇒ sortie inchangée). Chaque capacité livrée avec son invariant vérifié, ses tests, sa mesure et sa documentation ; l'état d'avancement est écrit dans docs/sprint-cerveau.md à chaque round pour être resumable. Ne rien casser : les 23 portes du dépôt et les 77 tests doivent rester verts, et le profil release reste le binaire de mesure."
+Round: 2/40
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && grep -n \"couche_debut = \\|couche_fin = \\|couche_debut:\" src/main.rs | head -8; sed -n '3336,3352p' src/main.rs", "description": "Check how the node sets its layer range"}`
+
+  ```
+3284:                mdl.couche_debut = f.debut as usize;
+3285:                mdl.couche_fin = f.fin as usize;
+3542:    mdl.couche_fin = couches_locales;
+                // pas non plus passer par surprise.
+                //
+                // **Elle n'a de sens que si ce nœud REPREND au milieu du modèle.**
+                // Une trame qui demande `debut = 0` fait entrer l'état imposé par
+                // la couche 0 : la chaîne du modèle y commence, la `pre` d'un
+                // raccord précédent n'existe pas, et l'ignorer en silence serait
+                // exactement le défaut qu'on vient de corriger. Une trame pareille
+                // n'est émise par personne (le pilote envoie `couches_locales ≥ 1`),
+                // donc la refuser ne coûte rien et ferme le cas.
+                if !f.premix.is_empty() && f.debut == 0 {
+                    println!("[flux] flux refusé : la trame porte une `pre` (v6) mais demande \
+de reprendre à la couche 0 — la chaîne mHC retardée commence là, cette `pre` n'a pas de \
+raccord précédent où s'appliquer et l'ignorer serait muet. Le nœud continue");
+                    continue;
+                }
+                mdl.hc_porte_imposee =
+… [126 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && sed -n '3270,3290p' src/main.rs; echo \"=== début de la boucle du nœud ===\"; sed -n '3241,3248p' src/main.rs", "description": "Read the node loop context precisely"}`
+
+  ```
+println!("[flux] flux refusé : {} canaux annoncés, {hidden} (ou \
+{largeur_etat} avec hyper-connexions) attendus — le nœud continue", f.n);
+                    continue;
+                }
+                if f.pos as usize >= ctx_local
+                   && !(f.mode == MODE_LOT || f.mode == MODE_LOT_LISTES) {
+                    println!("[flux] flux refusé : position {} au-delà du contexte {} — le \
+nœud continue", f.pos, ctx_local);
+                    continue;
+                }
+                // Les réglages du client s'appliquent ICI : les deux nœuds
+                // doivent quantifier les activations pareil, sinon ils ne
+                // calculent pas la même chose.
+                f.act.appliquer(&mut mdl);
+                mdl.couche_debut = f.debut as usize;
+                mdl.couche_fin = f.fin as usize;
+                // Le nœud moteur rend TOUJOURS un flux résiduel brut : la norme
+                // finale appartient au nœud qui a la tête de sortie, et à lui
+                // seul. C'est ce qui manquait — 798,3 au lieu de 18,2.
+                mdl.flux_brut = true;
+                // Les DEUX modes de lot : 3 (dense f32) et 4 (listes). Oublier le
+=== début de la b
+… [453 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"src/main.rs\")\ns = p.read_text()\n\n# 1) option --region\ns = s.replace('            \"--topologie\" => { o.topologie = Some(suivant(i).clone()); 2 }',\n'''             … [6074 caractères tronqués]`
+
+  ```
+relais câblé
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"src/main.rs\")\ns = p.read_text()\nvieux = \"\"\"        let locales: Vec<&topologie::Region> =\n            t.regions.iter().filter(|r| r.instance == \"local\").collect … [4751 caractères tronqués]`
+
+  ```
+pilote : chaîne distante acceptée
+=== trois régions, trois instances ===
+[topologie] chaîne de 2 régions distantes : la première est le pair direct, les autres seront atteintes par relais
+--- journaux des nœuds ---
+  1. n1     couches   2..2   sur 127.0.0.1:49801        → n2
+  2. n2     couches   3..3   sur 127.0.0.1:49802        → (sortie du graphe)
+  1. n1     couches   2..2   sur 127.0.0.1:49801        → n2
+  2. n2     couches   3..3   sur 127.0.0.1:49802        → (sortie du graphe)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"src/main.rs\")\ns = p.read_text()\nvieux = \"\"\"    // …mais PAS si le pilote réparti est demandé : dans ce cas la topologie DÉCRIT\n    // le découpage à exécuter, ell … [1956 caractères tronqués]`
+
+  ```
+pré-analyse restreinte aux deux usages d'exécution
+=== TROIS régions, TROIS instances ===
+[topologie] chaîne de 2 régions distantes : la première est le pair direct, les autres seront atteintes par relais
+--- n1 ---
+[flux] nœud moteur sur 127.0.0.1:49811 · 384 cachés · 4 couches · contexte 256
+--- n2 ---
+[flux] nœud moteur sur 127.0.0.1:49812 · 384 cachés · 4 couches · contexte 256
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=/tmp/m5_d384_dense.gguf; IDS=/tmp/campagne24/ids_m5_d384_dense.txt; P1=49821; P2=49822; sed -i \"s/498[0-9]*/$P1/;s/127.0.0.1:$P1\\\"/127.0.0.1:$P1\\\"/\" /tmp/topo3.json; python3 - <<PY\nimport json,pathlib\nt=json.load(open('/tmp … [946 caractères tronqués]`
+
+  ```
+code 3
+[topologie] chaîne de 2 régions distantes : la première est le pair direct, les autres seront atteintes par relais
+topologie : couverture 0..1 puis 2..2 ne recouvre pas le modèle entier
+--- n1 ---
+--- n2 ---
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"src/main.rs\")\ns = p.read_text()\nvieux = \"\"\"        if l.derniere + 1 != d.premiere || d.derniere + 1 != n_layer_total(&chemin) {\n            eprintln!(\"topologie … [1689 caractères tronqués]`
+
+  ```
+garde à deux régions retirée
+code 124
+[config] rotation : RoPE simple (le modèle ne déclare pas YaRN)
+[flux] quantification : 32767 niveaux, seuil 0, top-k 0, renorm false
+[flux] 256 jetons fournis > limite 128 (ctx 256) : troncature aux 128 derniers
+[flux] pilote : 2 couches en local, 2 chez le pair, 128 jetons
+  référence locale  : perplexité 5.0374  (0.2 s)
+--- n1 (relais) ---
+[relais] région « n1 » : couches 2..2
+[relais] successeur : « n2 » sur 127.0.0.1:49832 (couches 3..3)
+--- n2 (sortie) ---
+[relais] région « n2 » : couches 3..3
+[relais] sortie du graphe : ce nœud rend son état à son appelant
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && grep -n \"pilote : {} couches en local\\|envoyer_flux(&mut sock, couches_locales\" src/main.rs | head -4", "description": "Find the driver frame call"}`
+
+  ```
+3764:        let (o, a) = envoyer_flux(&mut sock, couches_locales as u32, n_layer as u32,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && sed -n '3740,3766p' src/main.rs | grep -nE \"couches_locales|n_layer|println|let \" | head -8; python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"src/main.rs\")\ns = p.read_text()\n# la plage envoyée au pair vient de la  … [2566 caractères tronqués]`
+
+  ```
+3:            let lgs = mdl.logits_lot(&hn);
+13:        let dernier = pos + 1 == ids.len();
+15:        // distant, c'est payer un calcul complet — des deux côtés — pour un état
+21:        let horloge = Instant::now();
+22:        let etat = mdl.forward(t, pos);
+24:        let horloge = Instant::now();
+25:        let (o, a) = envoyer_flux(&mut sock, couches_locales as u32, n_layer as u32,
+plage du pair câblée
+error[E0425]: cannot find value `mdl` in this scope
+    --> src/main.rs:3549:19
+     |
+3549 |     let n_layer = mdl.cfg.n_layer;
+     |                   ^^^ not found in this scope
+
+warning: type `io_result` should have an upper camel case name
+  --> src/gguf.rs:16:6
+   |
+--
+error: could not compile `drave-core` (bin "drave") due to 1 previous error; 30 warnings emitted
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && sed -i 's/    let n_layer = mdl.cfg.n_layer;\\n/    let n_layer = n_layer_total(\\&chemin);/' src/main.rs; python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"src/main.rs\")\ns = p.read_text()\ns = s.replace(\"\"\"    //  … [1750 caractères tronqués]`
+
+  ```
+n_layer lu dans l'en-tête
+code 124
+[flux] pilote : 2 couches en local, 2 chez le pair, 128 jetons
+  référence locale  : perplexité 5.0374  (0.2 s)
+  ```
+
+- **bash** `{"command": "tail -6 /tmp/n1.log; echo \"=== n2 ===\"; tail -6 /tmp/n2.log; echo \"=== pilote (fin) ===\"; tail -3 /tmp/pil.log", "description": "Inspect the node logs after the hang"}`
+
+  ```
+[relais] région « n1 » : couches 2..2
+[relais] successeur : « n2 » sur 127.0.0.1:49842 (couches 3..3)
+[flux] client connecté : 127.0.0.1:51586
+[flux] flux refusé : plage de couches 2..2 invalide pour 4 couches — le nœud continue
+[flux] arrêt : failed to fill whole buffer
+[flux] 0 flux servis
+=== n2 ===
+[flux] nœud moteur sur 127.0.0.1:49842 · 384 cachés · 4 couches · contexte 256
+[relais] région « n2 » : couches 3..3
+[relais] sortie du graphe : ce nœud rend son état à son appelant
+[flux] client connecté : 127.0.0.1:39964
+[flux] arrêt : failed to fill whole buffer
+[flux] 0 flux servis
+=== pilote (fin) ===
+[flux] 256 jetons fournis > limite 128 (ctx 256) : troncature aux 128 derniers
+[flux] pilote : 2 couches en local, 2 chez le pair, 128 jetons
+  référence locale  : perplexité 5.0374  (0.2 s)
+  ```
+
+### 🤖 Assistant
+
+⏵ Cause trouvée : le nœud refuse une plage d'UNE couche — j'utilise un modèle à 24 couches
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=models/Qwen2.5-0.5B-Q8_0.gguf; IDS=/tmp/campagne24/ids_0.5B-Q8.txt; P1=49851; P2=49852; python3 - <<PY\nimport json,pathlib\nt={\"regions\":[{\"id\":\"local\",\"couches\":[0,11],\"instance\":\"local\"},\n              {\"id\":\"n1\ … [1417 caractères tronqués]`
+
+  ```
+=== 1. référence : modèle entier ===
+perplexité 14.6496 sur
+=== 2. TROIS régions, TROIS instances ===
+  code 0
+[topologie] chaîne vérifiée : local 0..11 → 127.0.0.1:49851 12..17
+  référence locale  : perplexité 40.0277  (7.0 s)
+  deux nœuds        : perplexité 150.0062  (6.1 s)
+  écart             : 2.75e0
+--- n1 ---
+[relais] région « n1 » : couches 12..17
+[relais] successeur : « n2 » sur 127.0.0.1:49852 (couches 18..23)
+[flux] 127 flux servis
+--- n2 ---
+[relais] région « n2 » : couches 18..23
+[relais] sortie du graphe : ce nœud rend son état à son appelant
+[flux] 127 flux servis
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=models/Qwen2.5-0.5B-Q8_0.gguf; IDS=/tmp/campagne24/ids_0.5B-Q8.txt; P=49861; python3 - <<PY\nimport json,pathlib\nt={\"regions\":[{\"id\":\"local\",\"couches\":[0,11],\"instance\":\"local\"},\n              {\"id\":\"distant\",\"co … [1107 caractères tronqués]`
+
+  ```
+=== référence (mêmes réglages, sans découpage) ===
+  référence locale  : perplexité 40.0277  (5.2 s)
+  deux nœuds        : perplexité 109.5371  (5.2 s)
+  écart             : 1.74e0
+=== 2 régions PAR TOPOLOGIE (mêmes bornes 0..11 | 12..23) ===
+  référence locale  : perplexité 40.0277  (5.1 s)
+  deux nœuds        : perplexité 109.5371  (4.8 s)
+  écart             : 1.74e0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=models/Qwen2.5-0.5B-Q8_0.gguf; IDS=/tmp/campagne24/ids_0.5B-Q8.txt; P=49871; P2=49872; python3 - <<PY\nimport json,pathlib\npathlib.Path('/tmp/t2.json').write_text(json.dumps({\"regions\":[{\"id\":\"local\",\"couches\":[0,11],\"ins … [1622 caractères tronqués]`
+
+  ```
+=== A. DEUX régions, mode listes ===
+  référence locale  : perplexité 40.0277  (5.3 s)
+  deux nœuds        : perplexité 109.5036  (5.0 s)
+  écart             : 1.74e0
+=== B. TROIS régions (relais), mode listes ===
+  référence locale  : perplexité 40.0277  (5.9 s)
+  deux nœuds        : perplexité 149.9682  (5.6 s)
+  écart             : 2.75e0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -nE \"ppl-reparti|flux-serveur|--abat|--flux|lotes|MODELE=|--ctx\" tools/porte-flux.sh | head -12", "description": "Find the exact flags of the known-good flux gate"}`
+
+  ```
+21:#   MODELE=... tools/porte-flux.sh autre modèle (dense, sans hyper-connexions)
+26:MODELE=${MODELE:-models/Qwen2.5-0.5B-Q8_0.gguf}
+55:    "$D" "$MODELE" --flux-serveur "$PORT" --ctx "$CTX" --threads 8 \
+78:    sortie=$(timeout 180 "$D" "$MODELE" --ppl-reparti "127.0.0.1:$PORT" \
+79:             --couches-locales "$COUCHES" --limit "$N_IDS" --ctx "$CTX" --threads 8 "$@" 2>&1)
+118:tester "mode 0 — f32 dense"          "0"      --flux
+119:tester "mode 1 — listes quantifiées" "0"      --flux-listes
+120:tester "mode 2 — listes par blocs"   "6e-2"   --flux-blocs --lot 1
+122:tester "mode 4 — lot en listes"      "1e-2"   --lot 4 --flux-blocs
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=models/Qwen2.5-0.5B-Q8_0.gguf; IDS=/tmp/campagne24/ids_0.5B-Q8.txt; D=./drave-core/target/release/drave; P=49881; P2=49882; python3 - <<PY\nimport json,pathlib\npathlib.Path('/tmp/t2.json').write_text(json.dumps({\"regions\":[{\"id … [1578 caractères tronqués]`
+
+  ```
+=== A. DEUX régions, mode 0 (--flux) ===
+  référence locale  : perplexité 42.5477  (5.3 s)
+  deux nœuds        : perplexité 116.6646  (5.1 s)
+  écart             : 1.74e0
+=== B. TROIS régions (relais), mode 0 (--flux) ===
+  référence locale  : perplexité 42.5477  (6.1 s)
+  deux nœuds        : perplexité 163.7303  (5.7 s)
+  écart             : 2.85e0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 tools/porte-flux.sh 2>&1 | tail -12", "description": "Run the known-good flux gate to recover the exact protocol", "timeoutMs": 700000}`
+
+  ```
+mode 0 — f32 dense               1.69e1  ❌ (plafond 0)
+  mode 1 — listes quantifiées     1.69e1  ❌ (plafond 0)
+  mode 2 — listes par blocs        1.67e1  ❌ (plafond 6e-2)
+  mode 3 — lot dense f32           0.00e0  ✅  (réf 60.8135 / deux nœuds 60.8135)
+  mode 4 — lot en listes           4.45e-3  ✅  (réf 60.8135 / deux nœuds 60.5427)
+  ```
+
+### 🤖 Assistant
+
+⏵ Bug trouvé : la fin de plage est EXCLUSIVE — j'envoyais `n_layer-1` au lieu de `n_layer`
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"src/main.rs\")\ns = p.read_text()\nvieux = \"\"\"    let (debut_pair, fin_pair) = if tp_fin > 0 { (tp_debut, tp_fin) } else { (couches_locales, n_layer - 1) };\"\"\"\nas … [1349 caractères tronqués]`
+
+  ```
+fin exclusive corrigée (pilote + relais)
+=== porte-flux (les cinq modes) ===
+  mode 0 — f32 dense               0.00e0  ✅  (réf 61.9920 / deux nœuds 61.9920)
+  mode 1 — listes quantifiées     0.00e0  ✅  (réf 61.9920 / deux nœuds 61.9920)
+  mode 2 — listes par blocs        3.65e-2  ✅  (réf 61.9920 / deux nœuds 64.2535)
+  mode 3 — lot dense f32           0.00e0  ✅  (réf 60.8135 / deux nœuds 60.8135)
+  mode 4 — lot en listes           4.45e-3  ✅  (réf 60.8135 / deux nœuds 60.5427)
+  ```
+
+### 🤖 Assistant
+
+⏵ Régression réparée (5 modes verts) — je reprends le test du relais
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=models/Qwen2.5-0.5B-Q8_0.gguf; IDS=/tmp/campagne24/ids_0.5B-Q8.txt; D=./drave-core/target/release/drave; P=49891; P2=49892; python3 - <<PY\nimport json,pathlib\npathlib.Path('/tmp/t2.json').write_text(json.dumps({\"regions\":[{\"id … [1550 caractères tronqués]`
+
+  ```
+=== A. DEUX régions (mode 0) ===
+  référence locale  : perplexité 42.5477  (5.0 s)
+  deux nœuds        : perplexité 42.5477  (5.3 s)
+  écart             : 0.00e0
+=== B. TROIS régions, relais (mode 0) ===
+  référence locale  : perplexité 42.5477  (7.0 s)
+  deux nœuds        : perplexité 42.5477  (6.5 s)
+  écart             : 0.00e0
+  ```
+
+### 🤖 Assistant
+
+⏵ **C1b pas 2 : le relais est EXACT — trois régions, trois instances, écart 0,00e0**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"tools/porte-topologie.sh\")\ns = p.read_text()\ns = s.replace('''rm -rf \"$T\"''', '''# ---------------------------------------------------------------- 5. LE RELAIS\n# C1b pas 2 : … [2908 caractères tronqués]`
+
+  ```
+cas 5 ajouté à la porte
+topologie invalide : couche 2 n'est portée par aucune région
+topologie : la première région distante est sur « 127.0.0.1:50570 » mais `--ppl-reparti` dit « 127.0.0.1:1 » — deux sources pour la même chose, et elles se contredisent
+=== 5. trois régions sur trois instances (relais) ===
+  deux régions / deux instances :   deux nœuds        : perplexité 42.5477  (5.3 s)
+  trois régions / trois instances :
+      deux nœuds        : perplexité 42.5477  (6.0 s)
+      écart             : 0.00e0
+  ÉCHEC : deux régions  · trois régions 42.5477
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"tools/porte-topologie.sh\")\ns = p.read_text()\ns = s.replace('''    V2=$(printf '%s' \"$R2\" | grep -oE \"[0-9.]+$\"); V3=$(printf '%s' \"$R3\" | grep -oE \"[0-9.]+\" | head -1)'' … [495 caractères tronqués]`
+
+  ```
+extraction corrigée
+  deux régions / deux instances :   deux nœuds        : perplexité 42.5477  (5.2 s)
+  trois régions / trois instances :
+      deux nœuds        : perplexité 42.5477  (6.5 s)
+      écart             : 0.00e0
+  PORTE TENUE : le relais ne change pas un chiffre (42.5477)
+test result: ok. 85 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/sprint-cerveau.md\")\ns = p.read_text()\nancre = \"\"\"## C1b pas 2 — le relais : la conception, relevée sur le code\"\"\"\nassert ancre in s\nneuf = \"\"\"## C1b pas 2 — **FA … [4996 caractères tronqués]`

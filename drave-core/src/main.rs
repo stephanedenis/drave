@@ -124,10 +124,15 @@ il faut écrire DRAVE_{} (voir docs/histoire.md). Rien n'a été appliqué.", &v
     // fichier GGUF pour lire un graphe obligerait à en inventer un, et la
     // commande mentirait sur ce qu'elle fait. `--topologie F` imprime le plan
     // VÉRIFIÉ et sort ; l'exécution d'un graphe viendra après (capacité C1b).
-    // …mais PAS si le pilote réparti est demandé : dans ce cas la topologie DÉCRIT
-    // le découpage à exécuter, elle n'est pas une commande de lecture. Sans cette
-    // condition, `--ppl-reparti … --topologie …` imprimait le plan et sortait.
-    if !args.iter().any(|a| a == "--ppl-reparti") {
+    // …mais PAS si la topologie est là pour DÉCRIRE une exécution : le pilote
+    // réparti (`--ppl-reparti`) et le nœud relais (`--flux-serveur`, `--region`)
+    // l'exécutent, ils ne la lisent pas. Sans cette condition, les deux
+    // imprimaient le plan et sortaient — arrivé deux fois, dont une pendant la
+    // mise au point du relais.
+    let topologie_executee = args.iter().any(|a| a == "--ppl-reparti")
+        || args.iter().any(|a| a == "--flux-serveur")
+        || args.iter().any(|a| a == "--region");
+    if !topologie_executee {
     if let Some(pos) = args.iter().position(|a| a == "--topologie") {
         let f = match args.get(pos + 1) {
             Some(f) => f.clone(),
@@ -575,6 +580,8 @@ struct Options {
     infer: bool, ppl: bool, plan: bool, tokenize: bool, gpu_banc: bool, k3_essai: bool,
     /// C1 — descripteur de topologie de régions (docs/plan-cerveau-complet.md).
     topologie: Option<String>,
+    /// C1b — identifiant de MA région, sur un nœud relais.
+    region: Option<String>,
     /// Banc du KV déporté : nombre de clés à faire tenir en VRAM.
     banc_kv: usize,
     /// Banc des SCORES d'attention : nombre de clés à noter (noyau 1 du top-k).
@@ -720,6 +727,9 @@ fn analyser(args: &[String]) -> Options {
                                o.texte_file = Some(suivant(i).clone()); 2 }
             "--plan" => { o.plan = true; 1 }
             "--topologie" => { o.topologie = Some(suivant(i).clone()); 2 }
+            // C1b : le nœud RELAIS dit QUI il est dans la topologie ; c'est la
+            // topologie, et elle seule, qui dit à qui il transmet ensuite.
+            "--region" => { o.region = Some(suivant(i).clone()); 2 }
             "--tokenize" => { o.tokenize = true; 1 }
             "--gpu-banc" => { o.gpu_banc = true; 1 }
             // Test de fumée de la couche 0 de Kimi-K3, **sur un modèle même
@@ -3242,6 +3252,55 @@ nœud rend un flux résiduel BRUT par contrat (la tête appartient au nœud qui 
     // différé du pair la retarde encore. Mesuré sur localhost, 12 couches
     // distantes : **97,6 ms** d'attente contre 15,6 ms de calcul local — six fois
     // le calcul, payés par la seule latence du protocole.
+    // ---- C1b : LE RELAIS. Un nœud du milieu applique SA plage (celle que la
+    // trame lui donne) puis transmet à son successeur, au lieu de répondre à son
+    // appelant. Le découpage voyage DÉJÀ dans la trame (`f.debut`, `f.fin`) : le
+    // relais n'a donc qu'à réexpédier une trame portant la plage du successeur.
+    // Le retour se fait de proche en proche — le pilote n'a pas à connaître le
+    // nombre de relais.
+    let mut successeur: Option<(std::net::TcpStream, u32, u32)> = None;
+    match (&opt.topologie, &opt.region) {
+        (None, None) => {}
+        (Some(_), None) => {
+            eprintln!("--topologie sur un nœud exige --region : sans identifiant, le nœud ne \
+sait ni sa plage ni à qui transmettre"); std::process::exit(2);
+        }
+        (None, Some(_)) => {
+            eprintln!("--region sans --topologie : la plage et le successeur viennent du \
+fichier de topologie"); std::process::exit(2);
+        }
+        (Some(f), Some(moi)) => {
+            let texte = std::fs::read_to_string(f).unwrap_or_else(|e| {
+                eprintln!("topologie : lecture de {f} impossible : {e}"); std::process::exit(2) });
+            let t = topologie::lire_json(&texte).unwrap_or_else(|e| {
+                eprintln!("{e}"); std::process::exit(3) });
+            t.valider().unwrap_or_else(|e| { eprintln!("{e}"); std::process::exit(3) });
+            let ma = t.region(moi).unwrap_or_else(|| {
+                eprintln!("topologie : aucune région « {moi} » — le nœud s'arrête plutôt que \
+d'appliquer une plage inventée"); std::process::exit(3) }).clone();
+            println!("[relais] région « {} » : couches {}..{}", ma.id, ma.premiere, ma.derniere);
+            match t.successeur(moi) {
+                Ok(None) => println!("[relais] sortie du graphe : ce nœud rend son état à son appelant"),
+                Ok(Some(lien)) => {
+                    if mdl.hc.is_some() {
+                        eprintln!("[relais] refusé : un modèle à hyper-connexions fait voyager une \
+`pre` que le relais ne transporte pas encore (v6) — mieux vaut refuser que mesurer autre chose");
+                        std::process::exit(3);
+                    }
+                    let cible = t.region(&lien.vers).unwrap().clone();
+                    let mut sc = std::net::TcpStream::connect(&cible.instance).unwrap_or_else(|e| {
+                        eprintln!("[relais] connexion au successeur « {} » ({}) impossible : {e}",
+                                  cible.id, cible.instance); std::process::exit(1) });
+                    sc.set_nodelay(true).expect("TCP_NODELAY");
+                    println!("[relais] successeur : « {} » sur {} (couches {}..{})",
+                             cible.id, cible.instance, cible.premiere, cible.derniere);
+                    // Fin EXCLUSIVE ici aussi (voir le pilote).
+                    successeur = Some((sc, cible.premiere as u32, (cible.derniere + 1) as u32));
+                }
+                Err(e) => { eprintln!("{e}"); std::process::exit(3); }
+            }
+        }
+    }
     sock.set_nodelay(true).expect("TCP_NODELAY");
     println!("[flux] client connecté : {pair}");
     let mut servis = 0u64;
@@ -3353,7 +3412,29 @@ raccord précédent où s'appliquer et l'ignorer serait muet. Le nœud continue"
                 // La RÉPONSE est encodée comme la demande : un pair qui parle en
                 // listes reçoit des listes, sans second réglage à faire tenir
                 // cohérent entre les deux machines.
-                if envoyer_flux(&mut sock, f.debut, f.fin, f.pos, &sortie, f.mode,
+                // C1b : si un successeur est déclaré, l'état calculé ici part chez
+                // lui, et c'est SA réponse qui remonte à l'appelant.
+                let a_rendre = match successeur.as_mut() {
+                    None => sortie,
+                    Some((sc, d, fi)) => {
+                        if envoyer_flux(sc, *d, *fi, f.pos, &sortie, f.mode, Some(&mdl)).is_err() {
+                            println!("[relais] le successeur a fermé la connexion");
+                            break;
+                        }
+                        match recevoir_flux(sc, hidden, hc_mult) {
+                            Ok(r) => {
+                                if r.mode != f.mode {
+                                    println!("[relais] le successeur a répondu en mode {} au lieu \
+de {} — flux refusé", r.mode, f.mode);
+                                    break;
+                                }
+                                r.charge.en_dense(largeur_etat)
+                            }
+                            Err(e) => { println!("[relais] réponse du successeur illisible : {e}"); break; }
+                        }
+                    }
+                };
+                if envoyer_flux(&mut sock, f.debut, f.fin, f.pos, &a_rendre, f.mode,
                                 Some(&mdl)).is_err() {
                     break;
                 }
@@ -3401,7 +3482,7 @@ fn run_ppl_reparti(opt: Options, pair: &str) {
     // Toute incohérence entre le fichier et la ligne de commande est REFUSÉE —
     // mesurer un découpage qui n'est pas celui qu'on croit serait pire que ne
     // rien mesurer.
-    let (couches_locales, pair_cli) = if let Some(f) = opt.topologie.clone() {
+    let (couches_locales, pair_cli, tp_debut, tp_fin) = if let Some(f) = opt.topologie.clone() {
         let texte = std::fs::read_to_string(&f).unwrap_or_else(|e| {
             eprintln!("topologie : lecture de {f} impossible : {e}"); std::process::exit(2) });
         let t = topologie::lire_json(&texte).unwrap_or_else(|e| {
@@ -3409,37 +3490,76 @@ fn run_ppl_reparti(opt: Options, pair: &str) {
         t.valider().unwrap_or_else(|e| { eprintln!("{e}"); std::process::exit(3) });
         let locales: Vec<&topologie::Region> =
             t.regions.iter().filter(|r| r.instance == "local").collect();
-        let distantes: Vec<&topologie::Region> =
-            t.regions.iter().filter(|r| r.instance != "local").collect();
-        if locales.len() != 1 || distantes.len() != 1 {
-            eprintln!("topologie : le pilote exige UNE région locale et UNE région distante \
-(trouvé {} et {}) — les chaînes de plus de deux régions viendront avec le relais",
-                      locales.len(), distantes.len());
+        if locales.len() != 1 {
+            eprintln!("topologie : le pilote exige exactement UNE région locale (trouvé {})",
+                      locales.len());
             std::process::exit(3);
         }
-        let (l, d) = (locales[0], distantes[0]);
+        let l = locales[0];
+        // Les régions DISTANTES sont maintenant une CHAÎNE : la première est le
+        // pair direct, les suivantes sont atteintes par relais. On vérifie qu'elles
+        // forment bien une suite contiguë qui reprend juste après la région locale
+        // — un trou ici ferait sauter des couches en silence.
+        let ordre = t.valider().unwrap_or_else(|e| { eprintln!("{e}"); std::process::exit(3) });
+        let distantes: Vec<&topologie::Region> = ordre.iter()
+            .filter_map(|id| t.region(id))
+            .filter(|r| r.instance != "local").collect();
+        if distantes.is_empty() {
+            eprintln!("topologie : aucune région distante — rien à répartir");
+            std::process::exit(3);
+        }
+        let d = distantes[0];
+        let mut attendue = l.derniere + 1;
+        for r in &distantes {
+            if r.premiere != attendue {
+                eprintln!("topologie : la chaîne distante n'est pas contiguë — « {} » commence à \
+{} alors que la couche attendue est {attendue}", r.id, r.premiere);
+                std::process::exit(3);
+            }
+            attendue = r.derniere + 1;
+        }
+        if attendue != n_layer_total(&chemin) {
+            eprintln!("topologie : la chaîne s'arrête à la couche {} alors que le modèle en a {}",
+                      attendue - 1, n_layer_total(&chemin));
+            std::process::exit(3);
+        }
+        if distantes.len() > 1 {
+            println!("[topologie] chaîne de {} régions distantes : la première est le pair direct, \
+les autres seront atteintes par relais", distantes.len());
+        }
         if l.premiere != 0 {
             eprintln!("topologie : la région locale doit commencer à la couche 0 (elle est {}..{}) \
 — le pilote lit les jetons, il porte donc la première région", l.premiere, l.derniere);
             std::process::exit(3);
         }
-        if l.derniere + 1 != d.premiere || d.derniere + 1 != n_layer_total(&chemin) {
-            eprintln!("topologie : couverture {}..{} puis {}..{} ne recouvre pas le modèle entier",
-                      l.premiere, l.derniere, d.premiere, d.derniere);
-            std::process::exit(3);
-        }
         if d.instance != pair {
-            eprintln!("topologie : la région distante est sur « {} » mais `--ppl-reparti` dit \
-« {pair} » — deux sources pour la même chose, et elles se contredisent", d.instance);
+            eprintln!("topologie : la première région distante est sur « {} » mais `--ppl-reparti` \
+dit « {pair} » — deux sources pour la même chose, et elles se contredisent", d.instance);
             std::process::exit(3);
         }
         println!("[topologie] chaîne vérifiée : local 0..{} → {} {}..{}",
                  l.derniere, d.instance, d.premiere, d.derniere);
-        (l.couches(), pair.to_string())
+        (l.couches(), pair.to_string(), d.premiere, d.derniere)
     } else {
-        (if opt.couches_locales > 0 { opt.couches_locales } else { 12 }, pair.to_string())
+        (if opt.couches_locales > 0 { opt.couches_locales } else { 12 }, pair.to_string(),
+         0usize, 0usize)
     };
     let pair: &str = &pair_cli;
+    // La plage du pair : celle de la topologie s'il y en a une, sinon « tout ce
+    // qui reste après les couches locales » — le comportement historique, intact.
+    // Le nombre de couches vient de l'EN-TÊTE : à cet endroit le modèle n'est pas
+    // encore chargé (et le charger pour compter des couches coûterait 62 Go sur
+    // gpt-oss).
+    let n_layer = n_layer_total(&chemin);
+    // LA FIN DE PLAGE EST EXCLUSIVE : le nœud fait `couche_fin = f.fin` et exécute
+    // `debut..fin`. Envoyer `derniere` au lieu de `derniere + 1` saute la dernière
+    // couche de la région — et ça ne se voit QUE sur les modes non-lot, ce qui a
+    // rendu le diagnostic pénible (modes 0, 1 et 2 cassés, 3 et 4 intacts).
+    let (debut_pair, fin_pair) = if tp_fin > 0 {
+        (tp_debut, tp_fin + 1)
+    } else {
+        (couches_locales, n_layer)
+    };
     // `--lot T` : préremplissage par LOTS sur le fil. La référence locale est
     // alors calculée avec le MÊME découpage — sinon l'écart mesurerait la
     // différence entre deux ordres de sommation, pas celle du découpage.
@@ -3658,7 +3778,11 @@ un lot de plus d'un état n'a pas UNE `pre`). Rien n'a été calculé.");
         let etat = mdl.forward(t, pos);
         t_local += horloge.elapsed().as_secs_f64();
         let horloge = Instant::now();
-        let (o, a) = envoyer_flux(&mut sock, couches_locales as u32, n_layer as u32,
+        // C1b : la plage confiée au pair est celle de SA région (la première
+        // région distante), pas « tout ce qui reste » : avec un relais, « ce qui
+        // reste » appartient à plusieurs nœuds, et le premier calculerait le
+        // travail des autres.
+        let (o, a) = envoyer_flux(&mut sock, debut_pair as u32, fin_pair as u32,
                                   pos as u32, &etat, mode, Some(&mdl))
                         .unwrap_or_else(|e| {
                             eprintln!("[flux] le nœud moteur a fermé la connexion pendant \

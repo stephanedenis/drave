@@ -12,7 +12,7 @@ Trois capacités du plan, chacune avec sa **porte mesurée** :
 
 | # | capacité | porte (invariant à vérifier) | état |
 |---|---|---|---|
-| **C1** | **graphe de régions** : descripteur de topologie, validateur, ordonnanceur par dépendances, pilote multi-nœuds | un graphe **linéaire** rend des logits identiques **au bit près** ; un découpage à **trois régions** égale le modèle d'un seul tenant | **C1a FAIT** · C1b à faire |
+| **C1** | **graphe de régions** : descripteur de topologie, validateur, ordonnanceur par dépendances, pilote multi-nœuds | un graphe **linéaire** rend des logits identiques **au bit près** ; un découpage à **trois régions** égale le modèle d'un seul tenant | **FAIT** : C1a + C1b (topologie pilote + relais trois instances, écart **0,00e0**) · reste C2 (entrées multiples) hors périmètre |
 | **C12** | **trace globale horodatée + rejeu** | rejeu d'une exécution distribuée == exécution, **0,00e0** | à faire |
 | **C5** | **bus de modulation multi-canaux** | canal nul ⇒ sortie **inchangée** | mécanique partielle (fichier), bus à faire |
 
@@ -91,7 +91,50 @@ instances », et donc la **distribution sur plusieurs instances** demandée.
 
 ---
 
-## C1b pas 2 — le relais : la conception, relevée sur le code
+## C1b pas 2 — **FAIT (9 octobre 18 h)** : le RELAIS, trois régions sur trois instances
+
+**Livré** : un nœud du milieu (`--flux-serveur … --topologie F --region n1`) applique
+**sa** plage (celle que la trame lui donne), puis **transmet à son successeur** au
+lieu de répondre à son appelant ; le retour se fait de proche en proche. Le pilote,
+lui, accepte désormais une **chaîne de régions distantes** : la première est le pair
+direct, les suivantes sont atteintes par relais.
+
+**La porte, mesurée** (`tools/porte-topologie.sh`, cas 5 — modèle à 24 couches,
+mode 0 f32) :
+
+| montage | perplexité | écart de flux |
+|---|---:|---:|
+| référence locale (mêmes réglages) | 42,5477 | — |
+| **deux régions / deux instances** | **42,5477** | **0.00e0** |
+| **trois régions / trois instances** (pilote + relais + sortie) | **42,5477** | **0.00e0** |
+
+**PORTE TENUE : le relais ne change pas un chiffre.** Deux nœuds distants servent
+127 trames chacun, et le résultat est identique au découpage à deux régions comme à
+la référence locale.
+
+### Le bug que cette étape a trouvé — et la porte qui l'a attrapé
+
+En câblant la plage du pair, j'ai envoyé `derniere` au lieu de `derniere + 1` : **la
+fin de plage est EXCLUSIVE** (le nœud fait `couche_fin = f.fin` et exécute
+`debut..fin`). Conséquence : la dernière couche de la région distante n'était plus
+exécutée — et **le défaut ne touchait que les modes 0, 1 et 2** (les modes 3 et 4
+passent par un autre encodeur, intact).
+
+C'est `tools/porte-flux.sh` qui l'a dit, en trois lignes :
+
+```
+mode 0 — f32 dense            1.69e1  ❌ (plafond 0)     -> après correctif : 0.00e0 ✅
+mode 1 — listes quantifiées   1.69e1  ❌                -> 0.00e0 ✅
+mode 2 — listes par blocs     1.67e1  ❌                -> 3.65e-2 ✅
+```
+
+**Leçon de méthode, à appliquer pour tout le sprint** : toute modification du chemin
+d'exécution se paie d'un **passage de `porte-flux.sh`** — cinq modes, deux minutes —
+et sans lui, trois modes sur cinq seraient restés cassés en silence.
+
+---
+
+## C1b pas 3 (conception d'origine, pour mémoire) — le relais : points d'insertion
 
 **Ce que le protocole permet déjà, et c'est beaucoup.** Une trame porte la **plage de
 couches à appliquer** (`f.debut`, `f.fin`), le mode, la position, et la charge ; le
@@ -152,3 +195,4 @@ du plan, pas C1.
 |---|---|
 | 9/10 17 h 10 | **C1a** : module `topologie.rs`, validation stricte, plan, 8 tests, suite à 85 tests. |
 | 9/10 17 h 20 | **C1b pas 1** : la topologie pilote le découpage · porte `tools/porte-topologie.sh` **TENUE** (même chiffre, écart 0,00e0) · deux refus vérifiés. |
+| 9/10 18 h 00 | **C1b pas 2** : le RELAIS · trois régions sur trois instances, **écart 0,00e0**, même chiffre que deux régions. **Bug de fin de plage exclusive trouvé et corrigé** — attrapé par `porte-flux.sh` (modes 0, 1, 2 cassés, réparés : 0.00e0 / 0.00e0 / 3.65e-2). |

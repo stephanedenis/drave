@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 32.0 h |
-| Tours | 37 |
-| Messages | 1259 |
-| Appels d'outils | 1190 |
+| Durée | 32.4 h |
+| Tours | 38 |
+| Messages | 1284 |
+| Appels d'outils | 1213 |
 | Fichiers touchés | 38 |
-| Commandes | 993 |
+| Commandes | 1015 |
 | Sous-agents | 3 |
-| Commits | 108 |
+| Commits | 109 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -105,6 +105,8 @@
 **Tour 36** — allons-y pour un sprint cerveau complet. Vasy en mode autonome jusqu'à demain matin (9h hae 10 octobre)
 
 **Tour 37** — <goal_round> Objective: "Sprint « cerveau complet » en autonomie jusqu'au 10 octobre 9 h (HAE) : implémenter, avec portes mesurées, les trois premières capacités du plan docs/plan-cerveau-complet.md — C1 graphe de régions (descripteur de topologie, validateur de DAG, ordonnanceur par dépendances, pilote multi-nœuds ; porte : un graphe linéaire doit rendre des logits identiques au bit près et un dé … [1077 caractères tronqués]
+
+**Tour 38** — <goal_round> Objective: "Sprint « cerveau complet » en autonomie jusqu'au 10 octobre 9 h (HAE) : implémenter, avec portes mesurées, les trois premières capacités du plan docs/plan-cerveau-complet.md — C1 graphe de régions (descripteur de topologie, validateur de DAG, ordonnanceur par dépendances, pilote multi-nœuds ; porte : un graphe linéaire doit rendre des logits identiques au bit près et un dé … [1077 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1743,7 +1745,7 @@ Tout est committé et poussé sur `stephanedenis/drave` (privé) ; le spri
 
 ### Tour 37 — <goal_round> Objective: "Sprint « cerveau complet » en autonomie jusqu'au 10 octobre 9 h (HAE) : implémenter, avec porte … [1357 caractères tronqués]
 
-*11 appels d'outils.* Actions notables :
+*12 appels d'outils.* Actions notables :
 
 - bash — See how the driver decodes the reply
 - bash — See how the node loads its layer range
@@ -1756,10 +1758,56 @@ Tout est committé et poussé sur `stephanedenis/drave` (privé) ; le spri
 - bash — Restrict the pre-scan and re-test the topology-driven split
 - bash — Write and run the topology gate
 - bash — Run tests, update the sprint doc, commit and push
+- todo_write
 
 **Synthèse produite :**
 
-⏵ C1b pas 1 franchi : la topologie PILOTE le découpage, écart 0,00e0
+⏵ C1b pas 1 franchi, porte outillée et tenue — le relais est le prochain jalon
+
+**Ce qui est fait et vérifié depuis le début du sprint** (85 tests verts, 23 portes intactes, tout poussé) :
+
+**C1a — le descripteur de topologie** (`drave-core/src/topologie.rs`) : JSON minimal analysé à la main (le crate reste *std seul*), validation stricte avec un refus explicite par cas — trou de couverture, recouvrement, doublon, lien orphelin, lien réflexif, cycle, clé inconnue, mode inconnu — tri topologique de Kahn, et détection **chaîne *vs* graphe**.
+
+**C1b pas 1 — la topologie PILOTE le découpage.** `--ppl-reparti … --topologie F` exécute maintenant le découpage **décrit par le fichier**. Le pilote vérifie que la région locale commence à la couche 0, que les deux régions recouvrent le modèle entier (nombre de couches lu dans l'**en-tête** du GGUF, sans charger les poids) et **refuse** une topologie dont l'adresse contredit `--ppl-reparti`.
+
+**La porte est outillée** (`tools/porte-topologie.sh`, quatre cas) et elle tient :
+
+| cas | mesure (m5_d384_dense, 2 couches locales sur 4) |
+|---|---|
+| 1. référence, modèle entier | perplexité **3,7326** |
+| 2. découpage historique `--couches-locales` | **5,0374** · écart de flux **0.00e0** |
+| 3. **découpage par TOPOLOGIE** | **5,0374** · écart **0.00e0** — *le même chiffre* |
+| 4. refus | trou de couverture → refusé · adresse contredite → refusée avec le message |
+
+**PORTE TENUE** : la topologie rend exactement le chiffre du découpage historique, et l'écart de flux reste 0,00e0.
+
+Un détail qui a failli coûter cher, et qui est consigné : `--topologie` seul imprime le plan et sort, ce qui **avalait** `--ppl-reparti … --topologie` (la commande imprimait le plan au lieu de mesurer). La pré-analyse est maintenant restreinte à l'absence de `--ppl-reparti`.
+
+**Le prochain jalon est le RELAIS** — trois régions sur trois instances : le pilote porte la première, le nœud du milieu applique sa plage puis **transmet à son successeur** au lieu de répondre, et le retour se fait de proche en proche. Le point d'insertion est relevé précisément (`run_serveur_flux` après `mdl.forward`, main.rs:3347), et la découverte qui le rend tractable est que **le protocole transporte déjà la plage de couches dans la trame** : le découpage voyage avec le flux, il n'y a rien à inventer côté format. Le protocole de mesure des quatre cas (dont le relais de latence) est écrit dans `docs/sprint-cerveau.md`, qui tient l'état du sprint round par round.
+
+### Tour 38 — <goal_round> Objective: "Sprint « cerveau complet » en autonomie jusqu'au 10 octobre 9 h (HAE) : implémenter, avec porte … [1357 caractères tronqués]
+
+*22 appels d'outils.* Actions notables :
+
+- bash — Check how the node sets its layer range
+- bash — Read the node loop context precisely
+- bash — Implement the relay node and build
+- bash — Test the three-region relay chain
+- bash — Fix the pre-scan and test the three-instance chain
+- bash — Run the three-instance chain with full logs
+- bash — Remove the two-region guard and test the relay
+- bash — Find the driver frame call
+- bash — Send the first remote region's range and build
+- bash — Fix n_layer and test the relay chain
+- bash — Inspect the node logs after the hang
+- bash — Test the relay chain on a 24-layer model
+- bash — Compare the 2-region split at the same boundaries
+- bash — Compare two versus three regions in the listes mode
+- … et 8 autres
+
+**Synthèse produite :**
+
+⏵ **C1b pas 2 : le relais est EXACT — trois régions, trois instances, écart 0,00e0**
 
 ## 3. Travail accompli
 
@@ -1854,7 +1902,7 @@ Tout est committé et poussé sur `stephanedenis/drave` (privé) ; le spri
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 953 autres
+- … et 975 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1982,7 +2030,7 @@ Tout est committé et poussé sur `stephanedenis/drave` (privé) ; le spri
 
 ## 5. Erreurs rencontrées
 
-50 sorties en erreur ou divergentes. Les premières :
+52 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : ```  ### 🤖 Assistant  ⏵ **En transformers 5, `AutoModel` rend directement `Qwen2Model` (pas de `.model`). Je corrige le diagnostic.**  - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitH
 - **T2** : 3310393 bash -c pgrep -af "essai_decharge" | grep python | head; echo "--- logs ---"; tail -2 /tmp/ec_d192_lr3e3.log 2>/dev/null; tail -2 /tmp/ec_d192_lr1e3.log 2>/dev/null; echo "---"; ls -la /tmp/ec
@@ -2110,4 +2158,5 @@ Tout est committé et poussé sur `stephanedenis/drave` (privé) ; le spri
 - C1a : la topologie de régions se lit, se vérifie et refuse les graphes incohérents  Première brique du sprint cerveau (docs/plan-cerveau-complet.md, capacité C1
 - C1b : la conception relevée sur le code, prête à implémenter  Le protocole transmet DÉJÀ la plage de couches dans la trame (f.debut, f.fin) : le découpage voyag
 - C1b pas 1 : la topologie PILOTE le découpage — porte tenue, même chiffre, 0,00e0  --ppl-reparti --topologie F exécute le découpage DÉCRIT par le fichier au lieu
+- C1b pas 2 : le RELAIS — trois régions sur trois instances, écart 0,00e0  Un nœud du milieu (--flux-serveur … --topologie F --region n1) applique SA plage puis t
 

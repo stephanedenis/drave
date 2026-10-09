@@ -72,4 +72,52 @@ sed "s/\[$COUCHES, $((N-1))\]/[$((COUCHES+1)), $((N-1))]/" "$TOPO" > "$T/trou.js
 $D "$M" --topologie "$T/trou.json" 2>&1 | tail -1
 $D "$M" --ppl-reparti "127.0.0.1:1" --topologie "$TOPO" --ids-file "$IDS" --limit 8 \
     --ctx 256 --threads 8 2>&1 | tail -1
+# ---------------------------------------------------------------- 5. LE RELAIS
+# C1b pas 2 : trois régions sur TROIS instances (pilote + relais + sortie). Le
+# nœud du milieu applique SA plage puis transmet à son successeur ; le retour se
+# fait de proche en proche. La porte : le résultat doit être IDENTIQUE au
+# découpage à deux régions, et l'écart de flux nul.
+echo "=== 5. trois régions sur trois instances (relais) ==="
+M3=${M3:-models/Qwen2.5-0.5B-Q8_0.gguf}
+IDS3=${IDS3:-/tmp/campagne24/ids_0.5B-Q8.txt}
+if [ ! -s "$M3" ] || [ ! -s "$IDS3" ]; then
+    echo "  (modèle à 24 couches ou identifiants absents — cas sauté)"
+else
+    P1=$((PORT + 1)); P2=$((PORT + 2))
+    cat > "$T/t3.json" <<JSON
+{"regions":[
+  {"id":"local","couches":[0,11],"instance":"local"},
+  {"id":"n1","couches":[12,17],"instance":"127.0.0.1:$P1"},
+  {"id":"n2","couches":[18,23],"instance":"127.0.0.1:$P2"}],
+ "liens":[{"de":"local","vers":"n1","mode":"f32"},{"de":"n1","vers":"n2","mode":"f32"}]}
+JSON
+    cat > "$T/t2.json" <<JSON
+{"regions":[
+  {"id":"local","couches":[0,11],"instance":"local"},
+  {"id":"n1","couches":[12,23],"instance":"127.0.0.1:$P1"}],
+ "liens":[{"de":"local","vers":"n1","mode":"f32"}]}
+JSON
+    $D "$M3" --flux-serveur "$P1" --ctx 256 --threads 8 > "$T/n1.log" 2>&1 & N1=$!
+    sleep 2
+    R2=$($D "$M3" --ppl-reparti "127.0.0.1:$P1" --topologie "$T/t2.json" --ids-file "$IDS3" \
+         --limit 128 --ctx 256 --threads 8 --flux 2>&1 | grep -E "deux nœuds +: perplexité [0-9.]+")
+    echo "  deux régions / deux instances : $R2"
+    kill $N1 2>/dev/null; wait $N1 2>/dev/null
+    $D "$M3" --flux-serveur "$P2" --topologie "$T/t3.json" --region n2 --ctx 256 --threads 8 > "$T/n2.log" 2>&1 & N2=$!
+    sleep 2
+    $D "$M3" --flux-serveur "$P1" --topologie "$T/t3.json" --region n1 --ctx 256 --threads 8 > "$T/n1b.log" 2>&1 & N1=$!
+    sleep 3
+    R3=$($D "$M3" --ppl-reparti "127.0.0.1:$P1" --topologie "$T/t3.json" --ids-file "$IDS3" \
+         --limit 128 --ctx 256 --threads 8 --flux 2>&1 | grep -E "deux nœuds +: perplexité [0-9.]+|écart +: +[0-9.e+-]+")
+    echo "  trois régions / trois instances :"
+    printf '%s\n' "$R3" | sed 's/^/    /'
+    kill $N1 $N2 2>/dev/null; wait $N1 $N2 2>/dev/null
+    V2=$(printf '%s' "$R2" | grep -oE "perplexité [0-9.]+" | grep -oE "[0-9.]+" | head -1)
+    V3=$(printf '%s' "$R3" | grep -oE "perplexité [0-9.]+" | grep -oE "[0-9.]+" | head -1)
+    if [ -n "$V2" ] && [ "$V2" = "$V3" ]; then
+        echo "  PORTE TENUE : le relais ne change pas un chiffre ($V2)"
+    else
+        echo "  ÉCHEC : deux régions $V2 · trois régions $V3"; exit 1
+    fi
+fi
 rm -rf "$T"
