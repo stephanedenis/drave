@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 30.7 h |
+| Durée | 31.2 h |
 | Tours | 35 |
-| Messages | 1212 |
-| Appels d'outils | 1148 |
+| Messages | 1216 |
+| Appels d'outils | 1152 |
 | Fichiers touchés | 37 |
-| Commandes | 957 |
+| Commandes | 961 |
 | Sous-agents | 3 |
-| Commits | 104 |
+| Commits | 105 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -1641,7 +1641,7 @@ Plus quatre manques du **modèle**, les douze capacités d'**architecture**, et 
 
 ### Tour 35 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1477 caractères tronqués]
 
-*7 appels d'outils.* Actions notables :
+*11 appels d'outils.* Actions notables :
 
 - bash — Poll the two-axis model at dim 512
 - bash — Build the campaign log manifest
@@ -1649,10 +1649,13 @@ Plus quatre manques du **modèle**, les douze capacités d'**architecture**, et 
 - bash — Verify m17 is progressing
 - bash — Poll m17
 - bash — Update the campaign report's closing section
+- bash — Harvest the final measurement
+- bash — Harvest the two-axis 512 result
+- bash — Record the final scale result
 
 **Synthèse produite :**
 
-⏵ Mise à jour de la clôture du rapport de campagne (état réel de la file)
+⏵ Dernier point de la courbe : à dim 512, la parcimonie coûte plus cher qu'à 384
 
 ## 3. Travail accompli
 
@@ -1746,7 +1749,7 @@ Plus quatre manques du **modèle**, les douze capacités d'**architecture**, et 
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 917 autres
+- … et 921 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1998,4 +2001,5 @@ Plus quatre manques du **modèle**, les douze capacités d'**architecture**, et 
 - Registre consolidé des manques — le capstone que l'objectif demande  docs/manques.md : huit manques du MOTEUR (noyau de listes pour les experts — mesuré par le 
 - Annexe : manifeste des journaux de la campagne (59 fichiers d'étape, 79 Kio, 17 journaux de chaînes)  Le livrable « la file exécutée et ses journaux » est maint
 - Clôture du rapport : ce qui reste n'est plus de la mesure en retard mais du travail identifié  Le § 23 renvoie désormais au registre des manques et au plan des 
+- Dim 512 : le prix de la parcimonie croît avec l'échelle (+6,7 % et +8,0 % contre +1,0 % et +3,8 % à 384)  Dernier point de la courbe lecture-qualité, mesuré à 1
 

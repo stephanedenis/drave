@@ -347,7 +347,9 @@ témoin dense — `m6_d512_dense` : 4,5686 · 34,4 M paires/jeton) :
 | témoin dense | **4,5686** | 34,4 M | — | — |
 | **masque inné 25 %** (aléatoire, figé) | **4,8745** | **9,2 M** | **+6,7 %** | **÷3,7** |
 
-**Le même masque coûte +1,0 % à dim 384 et +6,7 % à dim 512.** Un modèle plus grand
+**Le même masque coûte +1,0 % à dim 384 et +6,7 % à dim 512** — et le modèle à deux
+axes appris suit la même pente (+3,8 % à 384, **+8,0 %** à 512) : le prix de la
+parcimonie croît avec la taille, même quand c'est le modèle qui choisit. Un modèle plus grand
 a plus de capacité à perdre quand on lui retire au hasard un quart de ses connexions
 — et cela dit quelque chose d'utile : **la structure innée n'est pas gratuite « par
 principe », elle l'est à une certaine taille**, et le masque utilisé ici est

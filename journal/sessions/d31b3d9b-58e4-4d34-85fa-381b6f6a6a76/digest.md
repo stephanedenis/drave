@@ -19054,3 +19054,37 @@ pas  24000 · perte 1.3312 · val 2.0407 bits/octet · 2483 s
 ⏵ Mise à jour de la clôture du rapport de campagne (état réel de la file)
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\ndebut = s.index(\"## 23. Ce qui reste à mesurer\")\nfin = s.index(\"## Annexe — manifeste des journaux\")\nneuf = \"\"\ … [2130 caractères tronqués]`
+
+  ```
+ok
+poussé
+  ```
+
+- **bash** `{"command": "sleep 595; tail -1 /tmp/campagne24/tr_m17_d512_kwta25_elag50.log; grep -E \"m17\" /tmp/campagne24/journal15.txt 2>/dev/null | tail -2", "description": "Poll m17", "timeoutMs": 620000}`
+
+  ```
+pas  32000 · perte 1.2570 · val 2.0315 bits/octet · 3308 s
+  ```
+
+- **bash** `{"command": "sleep 595; cd /tmp/campagne24 && grep -E \"m17\" journal15.txt 2>/dev/null | tail -3; tail -1 tr_m17_d512_kwta25_elag50.log", "description": "Harvest the final measurement", "timeoutMs": 620000}`
+
+  ```
+pas  36000 · perte 1.2513 · val 2.0192 bits/octet · 3720 s
+  ```
+
+- **bash** `{"command": "sleep 560; cd /tmp/campagne24 && grep -E \"m17\" journal15.txt 2>/dev/null | tail -3; grep -E \"PPL moyenne|fenêtre 8\" fenetres_m17_d512_kwta25_elag50.log 2>/dev/null | tail -4", "description": "Harvest the two-axis 512 result", "timeoutMs": 600000}`
+
+  ```
+[09/10 16:16:24] charge 2.89 · m17_d512_kwta25_elag50 :   # meilleur point : pas 40000 · val 2.0079 bits/octet
+[09/10 16:16:37] charge 3.48 · m17_d512_kwta25_elag50 : PPL 4.9345 · 4.8 M paires/jeton
+  --push fenêtre 8 (depuis 896) : PPL 5.2451     128 jetons · 18.5 M paires/jeton · 2354781973 événements · 149.7 tok/s
+  --push --act-topk 250 fenêtre 8 (depuis 896) : PPL 4.7250     128 jetons · 4.8 M paires/jeton · 600286712 événements · 284.3 tok/s
+  →   push                                     PPL moyenne (log) sur 8 fenêtres : 5.6992
+  →   push   act topk 250                      PPL moyenne (log) sur 8 fenêtres : 4.9345
+  ```
+
+### 🤖 Assistant
+
+⏵ Dernier point de la courbe : à dim 512, la parcimonie coûte plus cher qu'à 384
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\nancre = \"\"\"Le **même masque aléatoire** coûte **+1,0 % à dim 384** et **+6,7 % à dim 512** : la\nstructure innée n'e … [3440 caractères tronqués]`

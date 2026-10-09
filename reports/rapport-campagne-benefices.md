@@ -633,11 +633,31 @@ mêmes témoins :
 | témoin dense (`m6_d512_dense`) | **4,5686** | 34,4 M | — |
 | structure innée 25 % (`m16`) | **4,8745** | **9,2 M** | **+6,7 %** (÷3,7) |
 
-Le **même masque aléatoire** coûte **+1,0 % à dim 384** et **+6,7 % à dim 512** : la
-structure innée n'est pas gratuite « par principe », elle l'est **à une certaine
-taille** — un modèle plus grand a plus de capacité à perdre. Deux points ne font pas
-une loi, et c'est écrit comme tel. *(La mesure des deux axes appris à dim 512 est en
-cours.)*
+**La courbe complète, aux deux échelles** (les deux mesures de dim 512 sont tombées
+le 9 octobre à 15 h 07 et 16 h 16 ; paires/jeton prises à la même fenêtre 8) :
+
+| modèle | dim 384 | lectures | dim 512 | lectures |
+|---|---:|---:|---:|---:|
+| **témoin dense** | 4,9959 · 21,1 M | — | **4,5686 · 34,4 M** | — |
+| **structure innée 25 %** (aléatoire) | 5,0472 (+1,0 %) | ÷4,1 | **4,8745 (+6,7 %)** | ÷3,7 |
+| **les deux axes appris** (k-WTA + élagage) | 5,1866 (+3,8 %) | ÷7,8 | **4,9345 (+8,0 %)** | ÷7,2 |
+| un axe imposé (masque + k-WTA) | 6,0792 (+21,7 %) | ÷15,1 | — | — |
+
+**Deux conclusions, et la seconde n'était pas attendue.**
+
+1. **Les recettes tiennent à l'échelle** : la structure innée divise les lectures par
+   3,7 à dim 512 (contre 4,1 à 384), les deux axes appris par 7,2 (contre 7,8). Les
+   ordres de grandeur sont conservés.
+2. **Mais leur PRIX croît avec la taille** : +1,0 % → **+6,7 %** pour la structure
+   innée, +3,8 % → **+8,0 %** pour les deux axes appris. Un modèle plus grand a plus
+   de capacité à perdre quand on lui retire la même fraction — et cela vaut pour les
+   deux recettes, y compris celle où **c'est le modèle lui-même qui choisit** quelles
+   connexions garder.
+
+**Conséquence pour un modèle ad hoc** : le point de fonctionnement « ÷8 pour +4 % »
+est un point **de dim 384**. À dim 512, le même point coûte +8 %. La courbe n'est pas
+universelle — elle dépend de la taille, et toute affirmation sur la parcimonie doit
+porter son échelle, comme les autres mesures de ce rapport.
 
 **Et les deux axes SE CUMULENT quand les deux sont appris** (9 octobre, 11 h 32) :
 `m11_d384_kwta25_elag50` reprend exactement `kwta025` (dim 384, 40 000 pas) **plus un
