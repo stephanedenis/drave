@@ -2771,6 +2771,23 @@ pub struct HebbDiff {
     /// **Décroissance** par pas : `D ← D·decroi + η·…`. Sans elle, l'adaptateur
     /// ne fait que croître, et la bande stable se réduit à un facteur dix.
     pub decroi: f32,
+    /// **Décorrélation (E8)** : on retire au différentiel sa MOYENNE courante
+    /// avant de l'accumuler. C'est l'anti-Hebbien que le verdict hors échantillon
+    /// réclame : sans lui, `D` apprend ce qui est COMMUN à tout ce qu'elle voit
+    /// (la langue, le style) en même temps que ce qui est partagé, et une entrée
+    /// nouvelle est tirée vers une direction fausse.
+    pub decorrele: bool,
+    /// **Modulation (E7)** : l'ampleur de la mise à jour suit la NOUVEAUTÉ —
+    /// `‖Δx centré‖` rapportée à sa moyenne courante. C'est la version locale et
+    /// autoportée d'une règle à trois facteurs (pré × post × modulateur) : la
+    /// corrélation ne devient un changement durable que si l'entrée est
+    /// inattendue. Sans elle, tout est appris également — c'est la cause écrite
+    /// au verdict des langues non vues.
+    pub module: bool,
+    /// Moyenne courante du différentiel d'entrée (pour E8 et E7).
+    moy_x: Vec<f32>,
+    /// Moyenne courante de la norme du différentiel centré (pour E7).
+    moy_norme: f32,
     /// `n_canaux` : tous les canaux parcourus. `n_evenements` : ceux dont le
     /// différentiel a dépassé le seuil. Le rapport des deux dit ce que
     /// « événement » veut dire sur ce flux — et les deux étaient INVERSÉS dans
@@ -2817,7 +2834,19 @@ impl HebbDiff {
     }
 
     pub fn new(layer: usize, n_out: usize, n_in: usize, eta: f32, clamp: f32) -> Self {
-        HebbDiff { layer, eta, n_out, n_in, d: vec![0f32; n_out * n_in],
+        // RECHARGE de `D` (DRAVE_HEBB_D_CHARGE) : c'est ce qui permet le seul test
+        // qui compte — adapter sur A, puis ÉVALUER sur B sans rien réapprendre.
+        let mut d = vec![0f32; n_out * n_in];
+        if let Ok(f) = std::env::var("DRAVE_HEBB_D_CHARGE") {
+            if let Ok(brut) = std::fs::read(&f) {
+                let n = (brut.len() / 4).min(d.len());
+                for (i, v) in d.iter_mut().take(n).enumerate() {
+                    *v = f32::from_le_bytes([brut[4*i], brut[4*i+1], brut[4*i+2], brut[4*i+3]]);
+                }
+                eprintln!("[hebb-diff] D rechargé depuis {f} : {n} valeurs");
+            }
+        }
+        HebbDiff { layer, eta, n_out, n_in, d,
                    x_prec: Vec::new(), y_prec: Vec::new(), pas: 0, norme_maj: 0.0, clamp,
                    seuil: std::env::var("DRAVE_HEBB_SEUIL").ok()
                        .and_then(|v| v.parse().ok()).unwrap_or(0.0),
@@ -2825,6 +2854,15 @@ impl HebbDiff {
                        .unwrap_or(false),
                    decroi: std::env::var("DRAVE_HEBB_DECROI").ok()
                        .and_then(|v| v.parse().ok()).unwrap_or(1.0),
+                   // E7 et E8 : deux mécanismes que la biologie possède et que
+                   // notre verdict hors échantillon réclame (voir
+                   // `docs/impulsion-pure-apprenant.md`). Désactivés par défaut :
+                   // on mesure leur effet, on ne le suppose pas.
+                   decorrele: std::env::var("DRAVE_HEBB_DECORRELE").map(|v| v == "1")
+                       .unwrap_or(false),
+                   module: std::env::var("DRAVE_HEBB_MODULE").map(|v| v == "1")
+                       .unwrap_or(false),
+                   moy_x: Vec::new(), moy_norme: 0.0,
                    n_evenements: 0, n_canaux: 0 }
     }
 
@@ -2842,20 +2880,40 @@ impl HebbDiff {
         // 1. les différentiels — c'est là qu'est tout le sens de la règle
         let mut maj = 0f64;
         let (seuil, signe, decroi) = (self.seuil, self.signe, self.decroi);
+        let (decorrele, module) = (self.decorrele, self.module);
+        if self.moy_x.len() != ni { self.moy_x = vec![0.0; ni]; }
+        // E7 : l'ampleur de la mise à jour suit la nouveauté du différentiel,
+        // rapportée à sa propre histoire (un scalaire, pas un gradient).
+        let mut eta = self.eta;
+        if module {
+            let mut n2 = 0f64;
+            for i in 0..ni {
+                let dx = x[i] - self.x_prec[i] - if decorrele { self.moy_x[i] } else { 0.0 };
+                n2 += (dx as f64) * (dx as f64);
+            }
+            let norme = n2.sqrt() as f32;
+            let refe = self.moy_norme.max(1e-6);
+            eta *= (norme / refe).clamp(0.25, 4.0);
+            self.moy_norme = 0.99 * self.moy_norme + 0.01 * norme;
+        }
         for o in 0..no {
             let dy = y[o] - self.y_prec[o];
             if dy == 0.0 { continue; }
             let gy = if signe { if dy > 0.0 { 1.0 } else { -1.0 } } else { dy };
             let ligne = &mut self.d[o * ni..(o + 1) * ni];
             for i in 0..ni {
-                let dx = x[i] - self.x_prec[i];
+                let mut dx = x[i] - self.x_prec[i];
+                // E8 : on retire la composante COMMUNE (la moyenne courante du
+                // différentiel) — ce qui reste est ce qui distingue cette entrée
+                // de celles qu'on a vues.
+                if decorrele { dx -= self.moy_x[i]; }
                 // LE SEUIL EST LA PARTIE ÉVÉNEMENTIELLE : sous lui, ce n'est pas
                 // un changement, c'est du bruit de dernier bit.
                 self.n_canaux += 1;
                 if dx.abs() <= seuil { continue; }
                 self.n_evenements += 1;
                 let gx = if signe { if dx > 0.0 { 1.0 } else { -1.0 } } else { dx };
-                let dv = self.eta * gy * gx;
+                let dv = eta * gy * gx;
                 let nv = (ligne[i] * decroi + dv).clamp(-self.clamp, self.clamp);
                 maj += (dv as f64) * (dv as f64);
                 ligne[i] = nv;
@@ -2869,6 +2927,11 @@ impl HebbDiff {
             for i in 0..ni { s += ligne[i] * x[i]; }
             sortie[o] += s;
 
+        }
+        // La moyenne courante du différentiel se met à jour APRÈS usage.
+        for i in 0..ni {
+            let dx = x[i] - self.x_prec[i];
+            self.moy_x[i] = 0.99 * self.moy_x[i] + 0.01 * dx;
         }
         self.x_prec.copy_from_slice(&x[..ni]);
         self.y_prec.copy_from_slice(&y[..no]);

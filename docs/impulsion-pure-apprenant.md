@@ -104,6 +104,44 @@ paires lues et **poids mis à jour**, plus le temps et les octets.
 | **L2** gradient + contraintes apprises | k-WTA 25 % + élagage 50 % appris (la recette du § 5 ter) | **fait** (5,1866 à 42,2 M d'événements) |
 | **L3** apprenant embarqué | mises à jour **seulement sur les poids touchés**, modulées par un signal global (perte ou nouveauté), avec décorrélation anti-Hebbienne, sur un **connectome inné** (25 %) | **à construire** — les briques existent (`--hebb-diff` sait accumuler, seuiliser, décroître, signer, **sauver et recharger**) |
 
+### 5 bis. E7 et E8 IMPLÉMENTÉS ET MESURÉS — et le résultat est négatif
+
+Les deux mécanismes ont été écrits dans le moteur le 9 octobre (`DRAVE_HEBB_MODULE`,
+`DRAVE_HEBB_DECORRELE`, plus la persistance de `D` — `DRAVE_HEBB_D_SAUVE` et
+`DRAVE_HEBB_D_CHARGE` — sans laquelle le test hors échantillon n'existe pas). Le
+protocole : adapter `D` sur **A** (WikiText anglais, 256 jetons, couche 12, η = 4e-4,
+seuil + décroissance + forme signée), **puis évaluer sur B** (français, 128 jetons)
+sans autre apprentissage que celui qui continue en ligne.
+
+| configuration | perplexité sur B | écart à la référence |
+|---|---:|---:|
+| **référence, sans adaptateur** | **8,3869** | — |
+| règle actuelle (seuil + décroissance + signes) | 8,8246 | **+5,2 %** |
+| **+ décorrélation (E8)** | 8,8225 | +5,2 % — *inerte* |
+| **+ modulation par nouveauté (E7)** | **10,1034** | **+20,4 %** |
+| + les deux | 10,0974 | +20,4 % |
+
+**Trois enseignements, et aucun n'est celui qu'on espérait.**
+
+1. **Le transfert A → B dégrade** (+5,2 %) : le verdict précédent est reproduit dans
+   un protocole compact — une matrice apprise sur une langue nuit à une autre.
+2. **La décorrélation est inerte** à cette échelle : soustraire une moyenne courante
+   (β = 0,01 sur 256 pas) ne change rien au chiffre. Elle n'est pas réfutée, elle est
+   **trop lente** pour ce protocole, et c'est écrit comme tel.
+3. **Moduler par la NOUVEAUTÉ est le contraire de ce qu'il faut** (+20 % au lieu de
+   +5 %). L'explication est simple une fois le chiffre connu : la nouveauté est
+   maximale **exactement sur l'entrée hors distribution**, donc la modulation
+   amplifie l'apprentissage de ce qui est spécifique à la nouvelle langue — le défaut
+   qu'on voulait corriger.
+
+**Ce que cela corrige dans ce document** : le troisième facteur de la biologie n'est
+pas « la nouveauté », c'est **l'utilité** — ce que la dopamine code n'est pas
+« c'est nouveau » mais « ça a marché ». Or notre seul mécanisme d'utilité mesuré
+comme efficace est la **distillation** (−13,8 % sur un modèle routé) : un signal
+global venu d'une cible, pas une statistique locale. La conclusion du § 6 s'en trouve
+resserrée : ce qui manque à un apprenant par impulsions n'est pas un signal de
+surprise, c'est un **signal de valeur**.
+
 **Ce qui manque pour L3, en une phrase** : `D` est aujourd'hui un *ajout* appris en
 ligne ; il faut (i) le moduler (E7), (ii) le décorréler (E8), (iii) l'appliquer à un
 graphe creux inné (E1, fait), et (iv) accepter qu'il porte l'apprentissage **en plus**

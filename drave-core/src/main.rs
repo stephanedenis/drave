@@ -24,7 +24,12 @@ const VARS_LUES: &[&str] = &[
     "KV_BITS", "KV_F16", "KV_K_F16", "KV_K_F32", "KV_V_F32", "MMAP",
     "BIAIS_VL", "EXPERTS_RAM", "PRELIRE", "PRELIRE_TOUT", "Q8_BLOCS", "SANS_ENGRAM",
     "SANS_EMPRUNT",
-    "TRACE_BLOCS", "TUILE_LOT", "K3_COUCHES", "K3_SANS_ETAT", "K3_PASSE", "K3_TETE", "K3_LOGITS", "K3_GEN", "K3_MXFP4", "K3_TRACE_EXPERTS", "K3_IDS", "K3_DENSE_FIGE", "K3_STATS_EXPERTS", "K3_RELAIS_ENTREE", "K3_RELAIS_SORTIE", "HEBB_SEUIL", "HEBB_SIGNE", "HEBB_DECROI", "HEBB_SAUVER", "HEBB_CHARGER", "K3_PRELIRE_UNION", "EXPERTS_GARDES", "K3_IMPOSE",
+    "TRACE_BLOCS", "TUILE_LOT", "K3_COUCHES", "K3_SANS_ETAT", "K3_PASSE", "K3_TETE", "K3_LOGITS", "K3_GEN", "K3_MXFP4", "K3_TRACE_EXPERTS", "K3_IDS", "K3_DENSE_FIGE", "K3_STATS_EXPERTS", "K3_RELAIS_ENTREE", "K3_RELAIS_SORTIE", "HEBB_SEUIL", "HEBB_SIGNE", "HEBB_DECROI", "HEBB_SAUVER", "HEBB_CHARGER",
+    // E7/E8 (docs/impulsion-pure-apprenant.md) : modulation par nouveauté,
+    // décorrélation anti-Hebbienne, et la persistance de `D` sans laquelle le
+    // test hors échantillon n'est pas possible. Le test qui exige cette liste
+    // a d'ailleurs attrapé les deux dernières à la première compilation.
+    "HEBB_MODULE", "HEBB_DECORRELE", "HEBB_D_CHARGE", "HEBB_D_SAUVE", "K3_PRELIRE_UNION", "EXPERTS_GARDES", "K3_IMPOSE",
     "SANS_BLOCS", "SANS_COMPRESSION", "SIMD_DOT", "TRACE_EXPERTS", "V41_SANS_RETARD",
     "V41_TETE_COPIE0",
     "VISION_TEXTE",
@@ -1185,6 +1190,14 @@ troncature aux {} derniers", ids.len(), garde, ctx, n_new, garde);
              pa.iter().sum::<u64>(), pa.iter().sum::<u64>() as f64 / ng / 1e6,
              pa[0] as f64 / ng / 1e6, pa[1] as f64 / ng / 1e6, pa[2] as f64 / ng / 1e6);
     rapport_hebb_diff(&mdl);
+    // SAUVEGARDE de `D` après une passe d'adaptation : c'est ce qui rend le
+    // test hors échantillon possible (adapter sur A, évaluer sur B).
+    if let (Ok(f), Some(hd)) = (std::env::var("DRAVE_HEBB_D_SAUVE"), mdl.hebb_diff.as_ref()) {
+        use std::io::Write;
+        let mut fic = std::fs::File::create(&f).expect("écriture de D");
+        for v in &hd.d { fic.write_all(&v.to_le_bytes()).unwrap(); }
+        eprintln!("[hebb-diff] D sauvé dans {f} : {} valeurs", hd.d.len());
+    }
     if let Some(hb) = mdl.hebb.as_ref() {
         use std::io::Write;
         let mut f = std::fs::File::create(&hebb_out).expect("création du fichier hebbien");
@@ -5440,6 +5453,14 @@ prédit rien) — la perplexité cumulée n'a pas de sens ici");
         return;
     }
     rapport_hebb_diff(&mdl);
+    // SAUVEGARDE de `D` : adapter sur A puis évaluer sur B n'est possible
+    // que si la matrice apprise survit à la passe (cf. verdict hors échantillon).
+    if let (Ok(f), Some(hd)) = (std::env::var("DRAVE_HEBB_D_SAUVE"), mdl.hebb_diff.as_ref()) {
+        use std::io::Write;
+        let mut fic = std::fs::File::create(&f).expect("écriture de D");
+        for v in &hd.d { fic.write_all(&v.to_le_bytes()).unwrap(); }
+        eprintln!("[hebb-diff] D sauvé dans {f} : {} valeurs", hd.d.len());
+    }
     if let Some(hb) = mdl.hebb.as_ref() {
         if hb.log_on {
             use std::io::Write;

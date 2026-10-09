@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 27.0 h |
+| Durée | 27.2 h |
 | Tours | 27 |
-| Messages | 1066 |
-| Appels d'outils | 1024 |
+| Messages | 1081 |
+| Appels d'outils | 1039 |
 | Fichiers touchés | 33 |
-| Commandes | 841 |
+| Commandes | 855 |
 | Sous-agents | 3 |
-| Commits | 83 |
+| Commits | 84 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -1270,7 +1270,7 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 
 ### Tour 27 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1477 caractères tronqués]
 
-*415 appels d'outils.* Actions notables :
+*430 appels d'outils.* Actions notables :
 
 - bash — Check the full state
 - bash — Measure the distilled d384 with the correct protocol
@@ -1286,11 +1286,11 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - bash — Read parcimonie, contexte, lot steps
 - bash — Inspect batch2 script
 - bash — Read batch2 journal and latency map
-- … et 368 autres
+- … et 382 autres
 
 **Synthèse produite :**
 
-⏵ Rédaction : Drave en impulsion pure serait-il un meilleur apprenant ? (ce que nos mesures disent)
+⏵ Résultat : les deux mécanismes ne sauvent PAS la règle — la nouveauté empire les choses
 
 ## 3. Travail accompli
 
@@ -1380,7 +1380,7 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 801 autres
+- … et 815 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1508,7 +1508,7 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 
 ## 5. Erreurs rencontrées
 
-44 sorties en erreur ou divergentes. Les premières :
+45 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : ```  ### 🤖 Assistant  ⏵ **En transformers 5, `AutoModel` rend directement `Qwen2Model` (pas de `.model`). Je corrige le diagnostic.**  - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitH
 - **T2** : 3310393 bash -c pgrep -af "essai_decharge" | grep python | head; echo "--- logs ---"; tail -2 /tmp/ec_d192_lr3e3.log 2>/dev/null; tail -2 /tmp/ec_d192_lr1e3.log 2>/dev/null; echo "---"; ls -la /tmp/ec
@@ -1611,4 +1611,5 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - Notre hebbien différentiel face à la biologie : pourquoi il échoue, et par quoi le remplacer  Le dépôt a appliqué, mesuré, sauvé, rechargé ET réfuté une règle h
 - E1 : un connectome inné ALÉATOIRE coûte 1 % de perplexité et divise les lectures par 4  Même modèle que le témoin dense (dim 384, 40 000 pas, même export), sauf
 - Drave en impulsion pure serait-il un meilleur apprenant ? Pas en l'état, oui sous conditions nommées  Trois sens de « mode impulsion pur » : l'EXÉCUTION (déjà é
+- E7 et E8 implémentés et mesurés : la nouveauté empire la règle, la décorrélation est inerte  Deux mécanismes écrits dans le moteur (DRAVE_HEBB_MODULE, DRAVE_HEB
 

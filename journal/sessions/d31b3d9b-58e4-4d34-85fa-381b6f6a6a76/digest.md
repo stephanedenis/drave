@@ -16945,3 +16945,233 @@ Created file
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/impulsion-pure-apprenant.md && git commit -q -m \"Drave en impulsion pure serait-il un meilleur apprenant ? Pas en l'état, oui sous conditions nommées\n\nTrois sens de « mode impulsion pur » : l'EXÉCUTION (déjà événement … [1294 caractères tronqués]`
+
+  ```
+0307077 Drave en impulsion pure serait-il un meilleur apprenant ? Pas en l'état, oui sous conditions nommées
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fn pas\" -A 40 drave-core/src/model.rs | sed -n '1,45p'", "description": "Read the HebbDiff update function"}`
+
+  ```
+1118:    fn pas(&self) -> usize {
+1119-        use crate::list::Source::*;
+1120-        match self.src {
+1121-            Q4_K => crate::gguf::TAILLE_Q4K,
+1122-            Q6_K => crate::gguf::TAILLE_Q6K,
+1123-            Mxfp4 => 17,
+1124-            Q4_0 => 18,
+1125-            Propre => 0,
+1126-            Dequant(t) => crate::list::octets_grille(t),
+1127-        }
+1128-    }
+1129-
+1130-    /// Produit matrice-vecteur sur une source **sans noyau** : déquantifie
+1131-    /// chaque super-bloc de 256 poids et accumule en f32.
+1132-    ///
+1133-    /// Le travail est découpé par LIGNES de sortie entre `n_fils` fils : les
+1134-    /// super-blocs d'une ligne sont indépendants, et la déquantification domine
+1135-    /// le coût (recherches dans les grilles), donc le parallélisme paie.
+1136-    ///
+1137-    /// **Ce qui domine vraiment, mesuré** : le produit scalaire du super-bloc, pas
+1138-    /// la déquantification (vectoriser la déquantification d'IQ1_M n'a donné que
+1139-    /// ×1,07). Une seule accumulation de gauche à droite enchaîne 256 additions
+1140-    /// dépendantes : ~4 cycles de latence chacune, soit ~0,25 produit par cycle.
+1141-    /// `DRAVE_SIMD_DOT=1` prend le che
+… [1508 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "limit": 55, "offset": 2833}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs</path>
+<type>file</type>
+<content>
+2833:     fn pas(&mut self, x: &[f32], y: &[f32], sortie: &mut [f32]) -> bool {
+2834:         let (no, ni) = (self.n_out, self.n_in);
+2835:         if self.x_prec.len() != ni || self.y_prec.len() != no {
+2836:             self.x_prec = x[..ni.min(x.len())].to_vec();
+2837:             self.x_prec.resize(ni, 0.0);
+2838:             self.y_prec = y[..no.min(y.len())].to_vec();
+2839:             self.y_prec.resize(no, 0.0);
+2840:             return false;
+2841:         }
+2842:         // 1. les différentiels — c'est là qu'est tout le sens de la règle
+2843:         let mut maj = 0f64;
+2844:         let (seuil, signe, decroi) = (self.seuil, self.signe, self.decroi);
+2845:         for o in 0..no {
+2846:             let dy = y[o] - self.y_prec[o];
+2847:             if dy == 0.0 { continue; }
+2848:             let gy = if signe { if dy > 0.0 { 1.0 } else { -1.0 } } else { dy };
+2849:             let ligne = &mut self.d[o * ni..(o + 1) * ni];
+2850:             for i in 0..ni {
+2851:                 let dx = x[i] - self.x_prec[i];
+2852:                 // LE SEUIL EST LA PARTIE ÉVÉ
+… [1688 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Implémentation d'E7 (modulation par nouveauté) et E8 (décorrélation anti-Hebbienne)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/model.rs\")\ns = p.read_text()\n\n# 1) champs nouveaux dans HebbDiff\ns = s.replace(\"\"\"    /// **Décroissance** par pas : `D ← D·decroi + η·…`. Sans elle, l'adapt … [4327 caractères tronqués]`
+
+  ```
+model.rs patché
+2836:    pub fn new(layer: usize, n_out: usize, n_in: usize, eta: f32, clamp: f32) -> Self {
+2837-        HebbDiff { layer, eta, n_out, n_in, d: vec![0f32; n_out * n_in],
+2838-                   x_prec: Vec::new(), y_prec: Vec::new(), pas: 0, norme_maj: 0.0, clamp,
+2839-                   seuil: std::env::var("DRAVE_HEBB_SEUIL").ok()
+2840-                       .and_then(|v| v.parse().ok()).unwrap_or(0.0),
+2841-                   signe: std::env::var("DRAVE_HEBB_SIGNE").map(|v| v != "0" && !v.is_empty())
+2842-                       .unwrap_or(false),
+2843-                   decroi: std::env::var("DRAVE_HEBB_DECROI").ok()
+2844-                       .and_then(|v| v.parse().ok()).unwrap_or(1.0),
+2845-                   n_evenements: 0, n_canaux: 0 }
+2846-    }
+2847-
+2848-    /// Un pas : met à jour `D` avec les différentiels, puis applique `D·x`.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/model.rs\")\ns = p.read_text()\ns = s.replace(\"\"\"                   decroi: std::env::var(\"DRAVE_HEBB_DECROI\").ok()\n                       .and_then(|v| v.pars … [1119 caractères tronqués]`
+
+  ```
+ok
+warning: unused imports: `GGML_IQ1_M`, `GGML_IQ1_S`, `GGML_IQ2_XXS`, and `GGML_IQ3_XXS`
+warning: unused attribute
+warning: unused variable: `t`
+warning: unused variable: `id`
+warning: unused variable: `plan`
+warning: unused variable: `cfg`
+warning: unused variable: `clusters`
+warning: unused variable: `ctx`
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && timeout 900 cargo build --release 2>&1 | tail -3; ls -la target/release/drave", "description": "Confirm the build succeeded", "timeoutMs": 960000}`
+
+  ```
+warning: `drave-core` (bin "drave") generated 48 warnings (run `cargo fix --bin "drave" -p drave-core` to apply 24 suggestions)
+    Finished `release` profile [optimized] target(s) in 0.01s
+-rwxr-xr-x. 2 stephane stephane 2553944  9 oct 12:15 target/release/drave
+  ```
+
+### 🤖 Assistant
+
+⏵ Ajout de la sauvegarde/recharge de D pour tester le transfert hors échantillon
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/model.rs\")\ns = p.read_text()\n# chargement dans new()\ns = s.replace(\"\"\"    pub fn new(layer: usize, n_out: usize, n_in: usize, eta: f32, clamp: f32) -> Self {\ … [2079 caractères tronqués]`
+
+  ```
+chargement ajouté
+-rwxr-xr-x. 2 stephane stephane 2555384  9 oct 12:16 target/release/drave
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 28, in <module>
+AssertionError
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"rapport_hebb_diff(&mdl);\" drave-core/src/main.rs; python3 - <<'PY'\nimport pathlib, re\nm = pathlib.Path(\"drave-core/src/main.rs\")\nt = m.read_text()\nmotif = re.compile(r\"( *)rapport_hebb_diff\\(&mdl\\);\")\ntrouve = m … [1069 caractères tronqués]`
+
+  ```
+1187:    rapport_hebb_diff(&mdl);
+5442:    rapport_hebb_diff(&mdl);
+sauvegarde ajoutée (indentation «      »)
+-rwxr-xr-x. 2 stephane stephane 2556184  9 oct 12:16 target/release/drave
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\nm = pathlib.Path(\"drave-core/src/main.rs\")\nt = m.read_text()\nif \"DRAVE_HEBB_D_SAUVE\" in t and t.count(\"DRAVE_HEBB_D_SAUVE\") >= 2:\n    print(\"déjà dans les deux\")\nelse:\n    motif = re … [1525 caractères tronqués]`
+
+  ```
+2 occurrence(s)
+sauvegarde posée dans les deux chemins
+test result: FAILED. 76 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+
+error: test failed, to rerun pass `--bin drave`
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && timeout 300 cargo test --release 2>&1 | grep -E \"FAILED|panicked|assert\" -B 2 -A 6 | head -25", "description": "Identify the failing test", "timeoutMs": 400000}`
+
+  ```
+test gguf::tests::prefixes_distinguent_les_homonymes ... ok
+test tests_plafond::zero_element_est_refuse_seulement_ou_c_est_une_dimension ... ok
+test tests_vars::les_vars_lues_sont_completes ... FAILED
+test materiel::tests::detection_coherente ... ok
+test engine::tests_gemm::gemm_bat_le_matvec ... ok
+test materiel::tests::plan_dans_les_bornes ... ok
+
+failures:
+
+---- tests_vars::les_vars_lues_sont_completes stdout ----
+
+thread 'tests_vars::les_vars_lues_sont_completes' (2080384) panicked at src/main.rs:5930:13:
+DRAVE_HEBB_D_CHARGE est lu dans le source mais absent de VARS_LUES : un ancien nom QT_HEBB_D_CHARGE resterait muet
+
+
+failures:
+    tests_vars::les_vars_lues_sont_completes
+
+test result: FAILED. 76 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+
+error: test failed, to rerun pass `--bin drave`
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"VARS_LUES\" drave-core/src/main.rs | head -3; grep -n \"DRAVE_HEBB_SEUIL\" drave-core/src/main.rs | head -3", "description": "Locate the declared env vars list"}`
+
+  ```
+17:const VARS_LUES: &[&str] = &[
+109:        k.strip_prefix("QT_").map(|s| VARS_LUES.contains(&s)).unwrap_or(false)
+5896:    use super::VARS_LUES;
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '17,30p' drave-core/src/main.rs; grep -rn \"DRAVE_HEBB_SEUIL\\|DRAVE_HEBB_SIGNE\\|DRAVE_HEBB_DECROI\" drave-core/src/main.rs | head -3", "description": "Inspect VARS_LUES and existing Hebbian vars"}`
+
+  ```
+const VARS_LUES: &[&str] = &[
+    "BANC_KV_DEBUG", "BANC_KV_GPU_SEUL", "BANC_KV_GRAD", "BANC_KV_K0",
+    "BANC_KV_KUNIT", "BANC_KV_UNIT", "BANC_KV_V1", "BANC_SANS_PUITS",
+    "CLUSTERS", "DEBUG_ETAT", "DEBUG_FLUX", "DEBUG_MLA", "DEBUG_YARN", "DUMP_COUCHES",
+    "ETAT_ENTREE",
+    "FLUX_VERIF", "GPU", "GPU_EXPERTS",
+    "GPU_EXPERTS_GO", "GPU_KV", "GPU_TETE", "GPU_TOPK", "HARMONY_TRACE",
+    "KV_BITS", "KV_F16", "KV_K_F16", "KV_K_F32", "KV_V_F32", "MMAP",
+    "BIAIS_VL", "EXPERTS_RAM", "PRELIRE", "PRELIRE_TOUT", "Q8_BLOCS", "SANS_ENGRAM",
+    "SANS_EMPRUNT",
+    "TRACE_BLOCS", "TUILE_LOT", "K3_COUCHES", "K3_SANS_ETAT", "K3_PASSE", "K3_TETE", "K3_LOGITS", "K3_GEN", "K3_MXFP4", "K3_TRACE_EXPERTS", "K3_IDS", "K3_DENSE_FIGE", "K3_STATS_EXPERTS", "K3_RELAIS_ENTREE", "K3_RELAIS_SORTIE", "HEBB_SEUIL", "HEBB_SIGNE", "HEBB_DECROI", "HEBB_SAUVER", "HEBB_CHARGER", "K3_PRELIRE_UNION", "EXPERTS_GARDES", "K3_IMPOSE",
+    "SANS_BLOCS", "SANS_COMPRESSION", "SIMD_DOT", "TRACE_EXPERTS", "V41_SANS_RETARD",
+    "V41_TETE_COPIE0",
+    "VISION_TEXTE",
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\nvieux = '\"HEBB_SEUIL\", \"HEBB_SIGNE\", \"HEBB_DECROI\", \"HEBB_SAUVER\", \"HEBB_CHARGER\"'\nassert vieux in s\nneuf = ('\"HEBB_SEUIL … [758 caractères tronqués]`
+
+  ```
+VARS_LUES complétée
+
+test result: ok. 77 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+  ```
+
+### 🤖 Assistant
+
+⏵ L'expérience décisive : adapter sur A, évaluer sur B, avec et sans les deux mécanismes
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf; C=/tmp/campagne24; $D $M --tokenize --fichier $C/corpus_fr.txt --sortie $C/ids_fr_05B.txt >/dev/null 2>&1; A=$C/ids_0.5B-Q8.txt; B=$C/ids_fr_05B.txt; echo \"A = $( … [404 caractères tronqués]`
+
+  ```
+A = 198,284,8397,425,10965,465,284,14731,839... (85625 jetons) · B = 32,7956,94680,11,308,7888,512,3784,1532,... (270585 jetons)
+référence sur B (sans adaptateur) : 8.3869
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf; C=/tmp/campagne24; A=$C/ids_0.5B-Q8.txt; B=$C/ids_fr_05B.txt; ppl() { timeout 600 $D $M --ppl \"$2\" --limit \"$3\" --ctx 256 --threads 12 $1 2>/dev/null | grep -o … [1182 caractères tronqués]`
+
+  ```
+aucun : référence $ (sans adaptateur) = 8.3869
+nu : sur B avec D appris sur A = 8.8246 (référence 8.3869)
+decorrele : sur B avec D appris sur A = 8.8225 (référence 8.3869)
+module : sur B avec D appris sur A = 10.1034 (référence 8.3869)
+les-deux : sur B avec D appris sur A = 10.0974 (référence 8.3869)
+  ```
+
+### 🤖 Assistant
+
+⏵ Résultat : les deux mécanismes ne sauvent PAS la règle — la nouveauté empire les choses
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/impulsion-pure-apprenant.md\")\ns = p.read_text()\nancre = \"\"\"**Ce qui manque pour L3, en une phrase**\"\"\"\nassert ancre in s\nneuf = \"\"\"### 5 bis. E7 et E8 IMPLÉMENTÉ … [3951 caractères tronqués]`
