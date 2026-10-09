@@ -7,12 +7,12 @@
 | Début | 2026-10-08 09:11 |
 | Durée | 13.5 h |
 | Tours | 16 |
-| Messages | 530 |
-| Appels d'outils | 516 |
+| Messages | 531 |
+| Appels d'outils | 517 |
 | Fichiers touchés | 20 |
-| Commandes | 396 |
+| Commandes | 397 |
 | Sous-agents | 3 |
-| Commits | 25 |
+| Commits | 26 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -782,7 +782,7 @@ Le reste de la nuit continue : campagne sur gpt-oss-120b, batches 2/5/6/7 encha�
 
 ### Tour 16 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1476 caractères tronqués]
 
-*20 appels d'outils.* Actions notables :
+*21 appels d'outils.* Actions notables :
 
 - bash — Check diagnostic, campaign and training state
 - bash — Check the codestral diagnostic progress
@@ -798,7 +798,7 @@ Le reste de la nuit continue : campagne sur gpt-oss-120b, batches 2/5/6/7 encha�
 - bash — Run the Mistral gate: reference and engine
 - bash — Fix the reference class and run the gate
 - bash — Train the tiny Mistral so its logits have structure
-- … et 6 autres
+- … et 7 autres
 
 **Synthèse produite :**
 
@@ -879,7 +879,7 @@ Le reste de la nuit continue : campagne sur gpt-oss-120b, batches 2/5/6/7 encha�
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 356 autres
+- … et 357 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1052,4 +1052,5 @@ Le reste de la nuit continue : campagne sur gpt-oss-120b, batches 2/5/6/7 encha�
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="reports/rapport-campagne-benefices.md"; s=open(p).read() # La section « décodage spécu
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="reports/rapport-campagne-benefices.md"; s=open(p).read() s = s.replace('''| r1-distill
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/msg_mistral.txt <<'MSG' La famille Mistral a désormais sa porte — et l'anomalie codestral est e
+- Rapport : l'anomalie codestral est un décalage de tâche, pas un bug du moteur  La porte Mistral (commit précédent) tranche : référence 3411,4394 contre moteur 3
 

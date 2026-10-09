@@ -8749,3 +8749,9 @@ corrigé
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/msg_mistral.txt <<'MSG'\nLa famille Mistral a désormais sa porte — et l'anomalie codestral est expliquée\n\nLe dépôt avait une porte pour Qwen, GLM, V4, gpt-oss, Kimi. Mistral : aucune. Or\ncodestral-22B a rendu 35 657 de  … [1606 caractères tronqués]`
+
+  ```
+26e55bd La famille Mistral a désormais sa porte — et l'anomalie codestral est expliquée
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"reports/rapport-campagne-benefices.md\"; s=open(p).read()\ns = s.replace('''**L'anomalie codestral, consignée comme telle.** 35 657 de perplexité sur de la\nprose, c'est 4 000× le 30B. Deux explications : le mod … [2440 caractères tronqués]`

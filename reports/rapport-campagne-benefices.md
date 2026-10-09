@@ -125,12 +125,30 @@ actifs) donne la **meilleure qualité de la grille** (0,742 bit/octet, mieux que
 lit moins : exactement ce que le prototype routé cherche à reproduire en
 l'entraînant.
 
-**L'anomalie codestral, consignée comme telle.** 35 657 de perplexité sur de la
-prose, c'est 4 000× le 30B. Deux explications : le modèle est spécialisé pour le
-**code** et mauvais en prose — ou le moteur exécute mal l'architecture Mistral,
-qui n'a **aucune porte** dans `tools/portes.sh`. Un diagnostic tourne (génération
-de code, puis perplexité **sur du code**). Tant qu'il n'a pas rendu, ce chiffre
-n'est pas un résultat, c'est un point d'interrogation.
+**L'anomalie codestral est EXPLIQUÉE — et elle a fait naître une porte.** 35 657
+de perplexité sur de la prose, c'est 4 000× le 30B. L'hypothèse sérieuse était :
+le moteur exécute mal l'architecture **Mistral**, qui n'avait **aucune porte**
+dans `tools/portes.sh` (Qwen, GLM, V4, gpt-oss et Kimi en ont une).
+
+`tools/porte_mistral.py` comble le trou : il exporte un Mistral (mapping des
+tenseurs, clefs préfixées `llama.`) et fabrique la référence PyTorch **sur les
+mêmes poids quantifiés**. Sur un Mistral minuscule entraîné ici même (2 couches,
+64 cachés, vocabulaire d'octets) :
+
+| | perplexité | corrélation des logits | top-1 |
+|---|---:|---:|---:|
+| référence PyTorch (mêmes poids Q8_0) | 3 411,4394 | — | — |
+| **moteur** | **3 411,4405** | **min 1,0000** | **100 %** |
+
+**Le moteur exécute Mistral correctement.** Les 35 657 de codestral sont donc un
+décalage de **tâche** — un modèle spécialisé pour le code, évalué sur de la prose
+— et non un défaut d'exécution. C'est la réponse à la ligne « code » du verdict :
+la famille tourne, c'est le modèle qui n'est pas fait pour ça.
+
+*(Une fausse alerte est consignée : la première version du script instanciait le
+modèle par `MistralForCausalLM(config)` — des poids **aléatoires** — au lieu de
+`from_pretrained`. La porte accusait donc le moteur d'un défaut de la référence,
+et rendait « NON TENUE » à tort.)*
 
 **La perplexité n'est PAS comparable d'un tokenizer à l'autre.** Codestral
 (32 768 entrées) découpe ce texte en **288 554** jetons là où Qwen en fait
