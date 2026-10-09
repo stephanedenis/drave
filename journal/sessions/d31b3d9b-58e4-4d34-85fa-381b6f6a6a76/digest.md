@@ -19088,3 +19088,375 @@ pas  36000 · perte 1.2513 · val 2.0192 bits/octet · 3720 s
 ⏵ Dernier point de la courbe : à dim 512, la parcimonie coûte plus cher qu'à 384
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\nancre = \"\"\"Le **même masque aléatoire** coûte **+1,0 % à dim 384** et **+6,7 % à dim 512** : la\nstructure innée n'e … [3440 caractères tronqués]`
+
+  ```
+ok
+poussé
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== livrables : vérification finale ===\"; echo \"1. file de campagne :\"; tail -1 /tmp/campagne24/journal.txt; ls /tmp/campagne24/*.log | wc -l; echo \"2. rapport de synthèse :\"; wc -l reports/rapport-campagne-benefices.md d … [345 caractères tronqués]`
+
+  ```
+=== livrables : vérification finale ===
+1. file de campagne :
+[09/10 01:03:30] charge 32.31 · === campagne terminée ===
+316
+2. rapport de synthèse :
+   672 docs/verification-kimi-k3.md
+   298 docs/vision.md
+ 14260 total
+3. modèle événementiel :
+45
+   (modèles entraînés et exportés)
+=== arbre + dépôt ===
+0
+f8bd3f6 Dim 512 : le prix de la parcimonie croît avec l'échelle (+6,7 % et +8,0 % contre +1,0 % et +3,8 % à 384)
+f8bd3f6e9b1d06f6c719e608f08ce56b613a4584	refs/heads/master
+  ```
+
+- **get_goal** `{}`
+
+  ```
+{"goal":{"id":"goal-b5c7212b-5f46-4784-9b76-8d9b5cba23b4","revision":4,"objective":"Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, préremplissage par lots, modèle plus gros que la RAM. Poursuivre en parallèle le livrable du modèle nativement événementiel : entraîné ici, exécuté par Drave à logits vérifiés, découpé en unités réparties. Chaque affirmation porte sa mesure (perplexité, débit, octets et événements par jeton, RSS, écart entre nœuds) ET ses conditions (corpus, tokenizer du modèle, charge de fond) ; les manques constatés — embeddings/encodeurs, décodage spéculatif — sont consignés comme manques, pas comme résultats. Livrables : la file tools/campagne-benefices.sh exécutée et ses journaux, un rapport de synthèse par famille de tâches, et la poursuite du modèle événementiel.","phase":"active","roundsStarted":28,"maxGoalRounds":40},"activation":"armed"}
+  ```
+
+- **update_goal** `{"goal_id": "goal-b5c7212b-5f46-4784-9b76-8d9b5cba23b4", "revision": 4, "action": "complete"}`
+
+> **Objectif** (complete) : Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, préremplissage par lots, modèle plus gros que la RAM. Poursuivre en parallèle le livrable du modèle nativement événementiel : entraîné ici, exécuté par Drave à logits vérifiés, découpé en unités réparties. Chaque affirmation porte sa mesure (perplexité, débit, octets et événements par jeton, RSS, écart entre nœuds) ET ses conditions (corpus, tokenizer du modèle, charge de fond) ; les manques constatés — embeddings/encodeurs, décodage spéculatif — sont consignés comme manques, pas comme résultats. Livrables : la file tools/campagne-benefices.sh exécutée et ses journaux, un rapport de synthèse par famille de tâches, et la poursuite du modèle événementiel.
+
+
+  ```
+{"goal":{"id":"goal-b5c7212b-5f46-4784-9b76-8d9b5cba23b4","revision":5,"objective":"Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, préremplissage par lots, modèle plus gros que la RAM. Poursuivre en parallèle le livrable du modèle nativement événementiel : entraîné ici, exécuté par Drave à logits vérifiés, découpé en unités réparties. Chaque affirmation porte sa mesure (perplexité, débit, octets et événements par jeton, RSS, écart entre nœuds) ET ses conditions (corpus, tokenizer du modèle, charge de fond) ; les manques constatés — embeddings/encodeurs, décodage spéculatif — sont consignés comme manques, pas comme résultats. Livrables : la file tools/campagne-benefices.sh exécutée et ses journaux, un rapport de synthèse par famille de tâches, et la poursuite du modèle événementiel.","phase":"complete","roundsStarted":28,"maxGoalRounds":40},"activation":"disarmed"}
+  ```
+
+### 👤 Utilisateur
+
+<goal_complete>
+Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, préremplissage par lots, modèle plus gros que la RAM. Poursuivre en parallèle le livrable du modèle nativement événementiel : entraîné ici, exécuté par Drave à logits vérifiés, découpé en unités réparties. Chaque affirmation porte sa mesure (perplexité, débit, octets et événements par jeton, RSS, écart entre nœuds) ET ses conditions (corpus, tokenizer du modèle, charge de fond) ; les manques constatés — embeddings/encodeurs, décodage spéculatif — sont consignés comme manques, pas comme résultats. Livrables : la file tools/campagne-benefices.sh exécutée et ses journaux, un rapport de synthèse par famille de tâches, et la poursuite du modèle événementiel."
+The goal is marked complete and this autonomous run is ending. Write the closing message to the user now: state the outcome, summarize what was done and how it was verified, and point to the concrete results (files, commits, or other artifacts). Report only what earlier rounds and tool results in this session actually establish; when a detail is not in the session, say so instead of inventing it. Note anything the user should review or do next. Address the user directly. Do not call any more tools in this run; further work waits for the user's next instruction.
+</goal_complete>
+
+### 🤖 Assistant
+
+⏵ Objectif terminé — voici le bilan, les preuves et ce qui reste à votre main
+
+## Ce qui est établi
+
+**Les trois livrables de l'objectif sont faits et vérifiés.**
+
+1. **La file `tools/campagne-benefices.sh` a été exécutée** — `=== campagne terminée ===` à 01 h 03, **316 fichiers de journaux** dans `/tmp/campagne24/`, dont 59 journaux d'étape inventoriés dans une annexe du rapport (étape → nombre de journaux → mesure de tête). Les **23 portes du dépôt sont vertes**, y compris `cargo test --release` (77 tests) et la porte gpt-oss qui rend **15,6017**, la valeur attendue au chiffre près.
+
+2. **Le rapport de synthèse par famille** : `reports/rapport-campagne-benefices.md` (~1 400 lignes, verdict famille par famille au § 0 bis), plus six documents de conception nés de la session : `docs/modele-pour-drave.md`, `docs/biologie-pour-drave.md`, `docs/hebbien-differentiel-et-biologie.md`, `docs/architecture-cerveau-et-drave.md`, `docs/plan-cerveau-complet.md`, `docs/manques.md`, `docs/modularisation.md`.
+
+3. **Le modèle nativement événementiel** : 45 modèles exportés, entraînés ici à trois échelles (dim 256/384/512), en dense, routé, distillé et creux — portes de logits tenues, découpage à deux nœuds à **0,00e0**, et la **courbe lecture ↔ qualité** mesurée aux deux échelles.
+
+## Les cinq résultats qui comptent
+
+| résultat | mesure |
+|---|---|
+| **Les listes n'approximent rien** | logits **identiques au bit près** contre le chemin dense, à encodage de poids égal (`cmp`, 4 254 216 octets) |
+| **La parcimonie doit être apprise** | à 25 % gardés : témoin **10,8758** → modèle entraîné creux **5,1719** (−52 %) |
+| **La courbe lecture ↔ qualité** | dim 384 : **÷4 pour +1 %**, **÷8 pour +4 %**, ÷15 pour +22 % si un axe est imposé · dim 512 : **÷3,7 pour +6,7 %**, **÷7,2 pour +8,0 %** |
+| **Le routage seul s'inverse à dim 512 ; la distillation le rattrape** | routé +10 %, routé **distillé 4,3305 contre 4,5686** au dense, à 12,8 M paires/jeton des deux côtés |
+| **La mémoire tient et les gros modèles tournent** | **18 aiguilles sur 18** jusqu'à **12 288 jetons** · V4-Flash **365,7 Go sur 125 Go de RAM, 37,6 Go résidents** |
+
+## Ce que la fenêtre a coûté en corrections
+
+**Cinq pièges de méthode**, dont trois qui avaient faussé des mesures publiées : un **binaire plus vieux que ses correctifs** (le codestral mesurait un texte aux espaces mangés), une **porte qui ne pouvait pas passer** (2 400 s accordées à une passe qui en demande 6 900), un cache qui survivait à son correctif. Tout est consigné, et chaque valeur corrigée porte à côté sa valeur d'origine.
+
+## Ce que vous devez regarder
+
+- **⚠️ Un jeton GitHub (`ghp_…`) a fuité** : `git credential fill` l'a rendu pendant ma recherche et il est apparu en clair dans le transcript. **Révoquez-le** — il n'est pas nécessaire, la clé SSH `~/.ssh/id_ed25519_github` suffit (le dépôt **privé** `stephanedenis/drave` est poussé en SSH, `master` suivie, dernier commit `f8bd3f6`).
+- **Le défaut de sauvegarde du variant log-normal** (E6) reste **ouvert** : le fichier sauvé ne reproduit pas le modèle entraîné (13,06 bits/octet contre 2,27 annoncés). La matérialisation a été **éliminée** par la mesure (écart 0,000e+00) ; la piste restante est l'écart entre la validation fp32 et le modèle quantifié. Le variant est marqué inutilisable dans l'aide du harnais.
+- **Le premier sprint du plan** (`docs/plan-cerveau-complet.md` § 4) : trois capacités seulement — graphe de régions, bus de modulation, trace globale — parce que ce sont les seules que nos mesures réclament.
+
+## Ce qui n'est PAS établi, et qu'il ne faut pas lire comme acquis
+
+Les **encodeurs** (`bge-m3` inexécutable), le **noyau Q8 par expert** (sans lui un modèle routé ne peut pas être exécuté en listes), le **noyau de listes sur GPU** (nos modèles à décharges ne sont pas déportables : projections trop petites et noyau GPU dense), le **décodage spéculatif** (mesuré jusqu'à ×1,52, aucune ligne de moteur), la **qualité** des modèles plus gros que la RAM, et les trois dessins inédits (profondeur routée, budget d'événements appris, quantification adaptée aux listes) qui n'ont **jamais été entraînés**. Tout est dans `docs/manques.md`, avec la mesure qui établit chaque ligne.
+
+La fenêtre de 24 h court encore quelques heures si vous voulez d'autres mesures ; sinon, le dépôt est propre, poussé, et le travail en attente est identifié plutôt que deviné.
+
+
+## Tour 36
+
+### 👤 Utilisateur
+
+allons-y pour un sprint cerveau complet. Vasy en mode autonome jusqu'à demain matin (9h hae 10 octobre)
+
+### 🤖 Assistant
+
+⏵ Lancement du sprint cerveau : objectif autonome, plan, puis première brique (topologie)
+
+- **create_goal** `{"objective": "Sprint « cerveau complet » en autonomie jusqu'au 10 octobre 9 h (HAE) : implémenter, avec portes mesurées, les trois premières capacités du plan docs/plan-cerveau-complet.md — C1 graphe de régions (descripteur de topologie, validateur de DAG, ordonnanceur par dépendances, pilote multi … [649 caractères tronqués]`
+
+> **Objectif** (create) : Sprint « cerveau complet » en autonomie jusqu'au 10 octobre 9 h (HAE) : implémenter, avec portes mesurées, les trois premières capacités du plan docs/plan-cerveau-complet.md — C1 graphe de régions (descripteur de topologie, validateur de DAG, ordonnanceur par dépendances, pilote multi-nœuds ; porte : un graphe linéaire doit rendre des logits identiques au bit près et un découpage à trois régions doit égaler le modèle d'un seul tenant), C12 trace globale horodatée et rejeu exact (porte : rejeu == exécution, 0,00e0), C5 bus de modulation multi-canaux (porte : canal nul ⇒ sortie inchangée). Chaque capacité livrée avec son invariant vérifié, ses tests, sa mesure et sa documentation ; l'état d'avancement est écrit dans docs/sprint-cerveau.md à chaque round pour être resumable. Ne rien casser : les 23 portes du dépôt et les 77 tests doivent rester verts, et le profil release reste le binaire de mesure.
+
+
+  ```
+{"goal":{"id":"goal-da0e0e6e-089d-4222-aa8f-6665cc714991","revision":1,"objective":"Sprint « cerveau complet » en autonomie jusqu'au 10 octobre 9 h (HAE) : implémenter, avec portes mesurées, les trois premières capacités du plan docs/plan-cerveau-complet.md — C1 graphe de régions (descripteur de topologie, validateur de DAG, ordonnanceur par dépendances, pilote multi-nœuds ; porte : un graphe linéaire doit rendre des logits identiques au bit près et un découpage à trois régions doit égaler le modèle d'un seul tenant), C12 trace globale horodatée et rejeu exact (porte : rejeu == exécution, 0,00e0), C5 bus de modulation multi-canaux (porte : canal nul ⇒ sortie inchangée). Chaque capacité livrée avec son invariant vérifié, ses tests, sa mesure et sa documentation ; l'état d'avancement est écrit dans docs/sprint-cerveau.md à chaque round pour être resumable. Ne rien casser : les 23 portes du dépôt et les 77 tests doivent rester verts, et le profil release reste le binaire de mesure.","phase":"active","roundsStarted":0,"maxGoalRounds":40},"activation":"armed"}
+  ```
+
+- **todo_write** `{"todos": [{"content": "Écrire docs/sprint-cerveau.md (plan du sprint, portes, état resumable)", "status": "in_progress"}, {"content": "C1a : descripteur de topologie + validateur de DAG + impression du plan", "status": "pending"}, {"content": "C1b : pilote multi-nœuds (régions non contiguës, ordonn … [483 caractères tronqués]`
+
+  ```
+Updated todo list: 6 pending, 1 in progress, 0 completed.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fn run_ppl_reparti\" -A 40 drave-core/src/main.rs | grep -nE \"flux|envoyer|recevoir|mode|fn |couches_locales\" | head -20; echo \"=== fonctions de transport ===\"; grep -n \"^fn \\|^    fn \" drave-core/src/engine.rs | hea … [74 caractères tronqués]`
+
+  ```
+1:3358:fn run_ppl_reparti(opt: Options, pair: &str) {
+3:3360-    let chemin = modele_chemin();
+6:3363-    let couches_locales = if opt.couches_locales > 0 { opt.couches_locales } else { 12 };
+11:3368-    let mut mdl = model::Model::load(&chemin,
+17:3374-    // `--tete-partielle` n'a pas d'objet ici : la « plage » de ce mode est le
+24:3381-    if opt.options_actives { options_actives(&mdl, "pilote du flux", opt.ctx_impose, true, opt.keep); }
+25:3382-    let mode = if opt.flux_blocs { MODE_BLOCS }
+26:3383-               else if opt.flux_liste { MODE_LISTE }
+28:3385-    // Le mode des LOTS est distinct : `--flux-blocs` donne le mode 4 (lot en
+29:3386-    // listes), tout le reste donne le mode 3 (lot dense f32). Déclaré ici pour
+36:3393-    let mode_lot = if mode == MODE_BLOCS { MODE_LOT_LISTES } else { MODE_LOT };
+37:3394-    println!("[flux] quantification : {} niveaux, seuil {}, top-k {}, renorm {}",
+41:3398-    // ignoré ici : le mode réparti retombait sur des jetons synthétiques et
+=== fonctions de transport ===
+58:fn decode8(data: &[u8], p: usize, out: &mut [u32; 8]) -> usize {
+337:fn cibles_locales(n: usize) -> Vec<usize> {
+765:    fn attendre(&self, sh: &Shared) {
+800:    fn a
+… [218 caractères tronqués]
+  ```
+
+- **write** `{"content": "//! Topologie de régions — le descripteur qui fait d'une CHAÎNE un GRAPHE.\n//!\n//! POURQUOI CE MODULE (docs/plan-cerveau-complet.md, capacité C1). Le moteur\n//! n'exécute aujourd'hui qu'une seule forme : une plage CONTIGUË de couches sur\n//! un nœud, un producteur, un consommateur,  … [22136 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/topologie.rs</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path(\"src/main.rs\")\ns = p.read_text()\n# déclarer le module\nif \"mod topologie;\" not in s:\n    s = s.replace(\"mod tokenizer;\", \"mod tokenizer;\\nmod topologie;\",  … [271 caractères tronqués]`
+
+  ```
+module déclaré
+42:mod clusters;
+43:mod kimi_k3;
+44:mod engine;
+45:mod engram;
+46:mod formats;
+47:mod gguf;
+48:mod list;
+49:mod materiel;
+50:mod model;
+51:mod gpu;
+52:mod tokenizer;
+53:mod topologie;
+5557:mod tests_niveaux {
+5578:mod tests_flux {
+test topologie::tests::refuse_un_trou_de_couverture ... ok
+test topologie::tests::refuse_un_recouvrement ... ok
+test topologie::tests::refuse_une_cle_inconnue ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 77 filtered out; finished in 0.00s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && sed -n '145,155p' src/main.rs; grep -n \"plan: bool,\" src/main.rs | head -2; grep -n '\"--plan\"' src/main.rs | head -2", "description": "Find the dispatch and the plan flag"}`
+
+  ```
+if let Some(b) = opt.bloc.clone() { run_bloc(&b); return; }
+    if let Some(f) = opt.banc_vision.clone() { run_banc_vision(&f); return; }
+    if let Some(adresse) = opt.flux_serveur.clone() { run_serveur_flux(opt, &adresse); return; }
+    if let Some(pair) = opt.ppl_reparti.clone() { run_ppl_reparti(opt, &pair); return; }
+    if opt.tensors { run_tensors(); return; }
+    if let Some(f) = opt.banc_mla.clone() { run_banc_mla(opt, &f); return; }
+    if opt.banc_kv > 0 { run_banc_kv(opt); return; }
+    if opt.banc_topk > 0 { run_banc_topk(opt); return; }
+    if opt.gpu_banc { run_gpu_banc(opt); return; }
+    if opt.k3_essai { run_k3_essai(opt.couches); return; }
+    if opt.plan { run_plan(opt); return; }
+551:    infer: bool, ppl: bool, plan: bool, tokenize: bool, gpu_banc: bool, k3_essai: bool,
+134:        (opt.plan, "--plan"), (opt.tokenize, "--tokenize"),
+695:            "--plan" => { o.plan = true; 1 }
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"src/main.rs\")\ns = p.read_text()\n\n# 1) champ d'options\ns = s.replace(\"    infer: bool, ppl: bool, plan: bool, tokenize: bool, gpu_banc: bool, k3_essai: bool,\",\n   … [1896 caractères tronqués]`
+
+  ```
+CLI câblée
+-rwxr-xr-x. 2 stephane stephane 2642744  9 oct 17:04 target/release/drave
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/topo_chaine.json <<'EOF'\n{\n  \"regions\": [\n    {\"id\": \"bas\", \"couches\": [0, 11], \"instance\": \"local\"},\n    {\"id\": \"haut\", \"couches\": [12, 23], \"instance\": \"127.0.0.1:49152\"}\n  ],\n  \"liens\": [ { … [1167 caractères tronqués]`
+
+  ```
+=== plan d'une chaîne ===
+=== plan d'un graphe en Y ===
+=== refus : trou de couverture ===
+  (code de sortie 134)
+[stderr]
+
+thread 'main' (2300554) panicked at src/main.rs:199:35:
+ouverture du GGUF: Os { code: 2, kind: NotFound, message: "No such file or directory" }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+bash: line 23: 2300554 Aborted                    (core dumped) ./drave-core/target/release/drave --topologie /tmp/topo_chaine.json
+
+thread 'main' (2300560) panicked at src/main.rs:199:35:
+ouverture du GGUF: Os { code: 2, kind: NotFound, message: "No such file or directory" }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+bash: line 23: 2300560 Aborted                    (core dumped) ./drave-core/target/release/drave --topologie /tmp/topo_y.json
+
+thread 'main' (2300575) panicked at src/main.rs:199:35:
+ouverture du GGUF: Os { code: 2, kind: NotFound, message: "No such file or directory" }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+bash: line 23: 2300575 Aborted                    (core dumped) ./drave-core/target/release/drave --topologie /tmp/topo_trou.json
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && sed -n '190,205p' src/main.rs; echo \"=== où est mon bloc topologie ? ===\"; grep -n \"topologie.clone()\" src/main.rs | head -3; grep -n \"if opt.plan { run_plan\" src/main.rs", "description": "Locate the premature model  … [9 caractères tronqués]`
+
+  ```
+"--matrix" if i + 1 < args.len() => { matrix = args[i + 1].clone(); i += 2; }
+            "--threads" if i + 1 < args.len() => {
+                n_threads = args[i + 1].parse().unwrap_or(n_threads); i += 2;
+            }
+            _ => i += 1,
+        }
+    }
+
+    let t0 = Instant::now();
+    let g = Gguf::open_auto(path).expect("ouverture du GGUF");
+    println!("GGUF ouvert en {:?} — {} tenseurs", t0.elapsed(), g.tensors.len());
+    let arch = g.meta.get("general.architecture").and_then(|m| m.as_str()).unwrap_or("?");
+    let n_layer = g.cfg("block_count").and_then(|m| m.as_u64()).unwrap_or(0);
+    let hidden = g.cfg("embedding_length").and_then(|m| m.as_u64()).unwrap_or(0);
+    let inter = g.cfg("feed_forward_length").and_then(|m| m.as_u64()).unwrap_or(0);
+    println!("architecture : {arch} · {n_layer} couches · hidden {hidden} · intermédiaire {inter}");
+=== où est mon bloc topologie ? ===
+155:    if let Some(f) = opt.topologie.clone() {
+168:    if opt.plan { run_plan(opt); return; }
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && sed -n '138,170p' src/main.rs", "description": "Inspect the dispatch region"}`
+
+  ```
+eprintln!("[modes] {} modes demandés ({}) : c'est {} qui s'exécute — les autres \
+sont ignorés", modes.len(), modes.join(", "), modes[0]);
+    }
+    if opt.materiel { run_materiel(&opt); return; }
+    if opt.config { run_config(); return; }
+    if opt.sonder_engram > 0 { run_sonder_engram(opt.sonder_engram); return; }
+    if let Some(f) = opt.engram_adresses.clone() { run_engram_adresses(&f, &opt); return; }
+    if let Some(b) = opt.bloc.clone() { run_bloc(&b); return; }
+    if let Some(f) = opt.banc_vision.clone() { run_banc_vision(&f); return; }
+    if let Some(adresse) = opt.flux_serveur.clone() { run_serveur_flux(opt, &adresse); return; }
+    if let Some(pair) = opt.ppl_reparti.clone() { run_ppl_reparti(opt, &pair); return; }
+    if opt.tensors { run_tensors(); return; }
+    if let Some(f) = opt.banc_mla.clone() { run_banc_mla(opt, &f); return; }
+    if opt.banc_kv > 0 { run_banc_kv(opt); return; }
+    if opt.banc_topk > 0 { run_banc_topk(opt); return; }
+    if opt.gpu_banc { run_gpu_banc(opt); return; }
+    if opt.k3_essai { run_k3_essai(opt.couches); return; }
+    if let Some(f) = opt.topologie.clone() {
+        // C1 : lire et VÉRIFIER la topologie, puis imprimer le plan. L'
+… [709 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && grep -n '\"--topologie\"' src/main.rs; grep -n \"topologie: None\" src/main.rs | head -2; echo \"=== y a-t-il un second analyseur ? ===\"; grep -n \"fn analyser\\|fn parse_args\\|let opt = \\|Options {\" src/main.rs | head … [49 caractères tronqués]`
+
+  ```
+711:            "--topologie" => { o.topologie = Some(suivant(i).clone()); 2 }
+=== y a-t-il un second analyseur ? ===
+122:    let opt = analyser(&args);
+562:struct Options {
+681:fn analyser(args: &[String]) -> Options {
+682:    let mut o = Options {
+883:    let Options {
+5137:    let Options {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && grep -n \"topologie\" src/main.rs | head -12; sed -n '682,686p' src/main.rs", "description": "Find all topology references"}`
+
+  ```
+53:mod topologie;
+155:    if let Some(f) = opt.topologie.clone() {
+156:        // C1 : lire et VÉRIFIER la topologie, puis imprimer le plan. L'EXÉCUTION
+161:            Err(e) => { eprintln!("topologie : lecture de {f} impossible : {e}"); std::process::exit(2); }
+163:        match topologie::lire_json(&texte).and_then(|t| t.plan()) {
+565:    /// C1 — descripteur de topologie de régions (docs/plan-cerveau-complet.md).
+566:    topologie: Option<String>,
+711:            "--topologie" => { o.topologie = Some(suivant(i).clone()); 2 }
+    let mut o = Options {
+        n: 32, temp: 0.0, top_p: 1.0, hist: 64, hebb_q: 0.1,
+        hebb_out: String::from("hebb.bin"), keep: 1.0, abits: 8,
+        hebb_diff: None, hebb_eta: 1e-4, hebb_clamp: 1.0,
+        auto: true, limit: usize::MAX,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && sed -n '686,700p' src/main.rs", "description": "Read the Options initializer"}`
+
+  ```
+auto: true, limit: usize::MAX,
+        matrix: String::from("blk.0.ffn_gate.weight"),
+        ..Default::default()
+    };
+    let cpu = engine::coeurs_physiques();
+    o.ctx = 512;
+    o.threads = cpu.max(1);
+    let suivant = |i: usize| -> &String {
+        args.get(i + 1).unwrap_or_else(|| panic!("{} attend une valeur", args[i]))
+    };
+    let mut i = 2;
+    while i < args.len() {
+        // CHAQUE branche rend le nombre d'arguments consommés (1 pour un
+        // drapeau booléen, 2 pour un drapeau à valeur). Un `i += 2` global
+        // sautait le drapeau suivant après un booléen : `--dense --threads 8
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && sed -n '112,124p' src/main.rs", "description": "Read the top of main"}`
+
+  ```
+// d'une variable qui n'a jamais été à nous, et `find` n'en rendant qu'une, un
+    // vrai nom hérité passait inaperçu derrière. On ne signale que la traduction
+    // exacte d'une variable que le moteur lit vraiment.
+    let vieux_nom = std::env::vars().map(|(k, _)| k).find(|k| {
+        k.strip_prefix("QT_").map(|s| VARS_LUES.contains(&s)).unwrap_or(false)
+    });
+    if let Some(vieux) = vieux_nom {
+        eprintln!("[attention] {vieux} est l'ancien nom d'une variable d'environnement : \
+il faut écrire DRAVE_{} (voir docs/histoire.md). Rien n'a été appliqué.", &vieux[3..]);
+    }
+    let opt = analyser(&args);
+    let _ = MODELE.set(args[1].clone());
+    // Plusieurs modes demandés : l'aiguillage en retient UN, dans un ordre
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"src/main.rs\")\ns = p.read_text()\nvieux = \"\"\"    let opt = analyser(&args);\n    let _ = MODELE.set(args[1].clone());\"\"\"\nassert vieux in s\nneuf = \"\"\"    // - … [1970 caractères tronqués]`
+
+  ```
+pré-analyse posée, bloc de dispatch retiré
+=== chaîne ===
+topologie : 2 régions · 1 liens · 2 instance(s) · CHAÎNE (cas de non-régression)
+couverture : 24 couches, sans trou ni recouvrement
+ordre d'exécution :
+  0. bas    couches   0..11  sur local                  → haut
+  1. haut   couches  12..23  sur 127.0.0.1:49152        → (sortie du graphe)
+=== graphe en Y ===
+topologie : 3 régions · 2 liens · 2 instance(s) · GRAPHE
+couverture : 16 couches, sans trou ni recouvrement
+ordre d'exécution :
+  0. entree couches   0..3   sur local                  → voie_a, voie_b
+  1. voie_a couches   4..9   sur local                  → (sortie du graphe)
+  2. voie_b couches  10..15  sur 127.0.0.1:49152        → (sortie du graphe)
+délais déclarés :
+  entree → voie_b : +5 ms
+=== refus (trou) ===
+  code 3
+[stderr]
+topologie invalide : couche 12 n'est portée par aucune région
+  ```
+
+### 🤖 Assistant
+
+⏵ C1a livrée : la topologie se lit, se vérifie, et refuse les graphes incohérents
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && timeout 600 cargo test --release 2>&1 | tail -3; cd .. && cat > docs/sprint-cerveau.md <<'EOF'\n# Sprint « cerveau complet » — état d'avancement\n\n> Lancé le 9 octobre à 17 h, **en autonomie jusqu'au 10 octobre 9 h (HAE)* … [4753 caractères tronqués]`

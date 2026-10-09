@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 31.2 h |
-| Tours | 35 |
-| Messages | 1216 |
-| Appels d'outils | 1152 |
-| Fichiers touchés | 37 |
-| Commandes | 961 |
+| Durée | 31.9 h |
+| Tours | 36 |
+| Messages | 1238 |
+| Appels d'outils | 1171 |
+| Fichiers touchés | 38 |
+| Commandes | 975 |
 | Sous-agents | 3 |
-| Commits | 105 |
+| Commits | 106 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -25,6 +25,10 @@
 … [728 caractères tronqués]
 - **resume** — Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, cod
 … [728 caractères tronqués]
+- **complete** — Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, cod
+… [728 caractères tronqués]
+- **create** — Sprint « cerveau complet » en autonomie jusqu'au 10 octobre 9 h (HAE) : implémenter, avec portes mesurées, les trois premières capacités du plan docs/plan-cerveau-complet.md — C1 graphe de régions (descripteur de topologie, validateur de DAG, ordonnanceur par dépendances, pilote multi-nœuds ; porte 
+… [609 caractères tronqués]
 
 ## 1. Ce qui a été demandé
 
@@ -97,6 +101,8 @@
 **Tour 34** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1197 caractères tronqués]
 
 **Tour 35** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1197 caractères tronqués]
+
+**Tour 36** — allons-y pour un sprint cerveau complet. Vasy en mode autonome jusqu'à demain matin (9h hae 10 octobre)
 
 ## 2. Déroulé, étape par étape
 
@@ -1641,7 +1647,7 @@ Plus quatre manques du **modèle**, les douze capacités d'**architecture**, et 
 
 ### Tour 35 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1477 caractères tronqués]
 
-*11 appels d'outils.* Actions notables :
+*14 appels d'outils.* Actions notables :
 
 - bash — Poll the two-axis model at dim 512
 - bash — Build the campaign log manifest
@@ -1652,10 +1658,62 @@ Plus quatre manques du **modèle**, les douze capacités d'**architecture**, et 
 - bash — Harvest the final measurement
 - bash — Harvest the two-axis 512 result
 - bash — Record the final scale result
+- bash — Final verification of the objective's deliverables
+- get_goal
+- update_goal
 
 **Synthèse produite :**
 
-⏵ Dernier point de la courbe : à dim 512, la parcimonie coûte plus cher qu'à 384
+⏵ Objectif terminé — voici le bilan, les preuves et ce qui reste à votre main
+
+\## Ce qui est établi
+
+**Les trois livrables de l'objectif sont faits et vérifiés.**
+
+1. **La file `tools/campagne-benefices.sh` a été exécutée** — `=== campagne terminée ===` à 01 h 03, **316 fichiers de journaux** dans `/tmp/campagne24/`, dont 59 journaux d'étape inventoriés dans une annexe du rapport (étape → nombre de journaux → mesure de tête). Les **23 portes du dépôt sont vertes**, y compris `cargo test --release` (77 tests) et la porte gpt-oss qui rend **15,6017**, la valeur attendue au chiffre près.
+
+2. **Le rapport de synthèse par famille** : `reports/rapport-campagne-benefices.md` (~1 400 lignes, verdict famille par famille au § 0 bis), plus six documents de conception nés de la session : `docs/modele-pour-drave.md`, `docs/biologie-pour-drave.md`, `docs/hebbien-differentiel-et-biologie.md`, `docs/architecture-cerveau-et-drave.md`, `docs/plan-cerveau-complet.md`, `docs/manques.md`, `docs/modularisation.md`.
+
+3. **Le modèle nativement événementiel** : 45 modèles exportés, entraînés ici à trois échelles (dim 256/384/512), en dense, routé, distillé et creux — portes de logits tenues, découpage à deux nœuds à **0,00e0**, et la **courbe lecture ↔ qualité** mesurée aux deux échelles.
+
+\## Les cinq résultats qui comptent
+
+| résultat | mesure |
+|---|---|
+| **Les listes n'approximent rien** | logits **identiques au bit près** contre le chemin dense, à encodage de poids égal (`cmp`, 4 254 216 octets) |
+| **La parcimonie doit être apprise** | à 25 % gardés : témoin **10,8758** → modèle entraîné creux **5,1719** (−52 %) |
+| **La courbe lecture ↔ qualité** | dim 384 : **÷4 pour +1 %**, **÷8 pour +4 %**, ÷15 pour +22 % si un axe est imposé · dim 512 : **÷3,7 pour +6,7 %**, **÷7,2 pour +8,0 %** |
+| **Le routage seul s'inverse à dim 512 ; la distillation le rattrape** | routé +10 %, routé **distillé 4,3305 contre 4,5686** au dense, à 12,8 M paires/jeton des deux côtés |
+| **La mémoire tient et les gros modèles tournent** | **18 aiguilles sur 18** jusqu'à **12 288 jetons** · V4-Flash **365,7 Go sur 125 Go de RAM, 37,6 Go résidents** |
+
+\## Ce que la fenêtre a coûté en corrections
+
+**Cinq pièges de méthode**, dont trois qui avaient faussé des mesures publiées : un **binaire plus vieux que ses correctifs** (le codestral mesurait un texte aux espaces mangés), une **porte qui ne pouvait pas passer** (2 400 s accordées à une passe qui en demande 6 900), un cache qui survivait à son correctif. 
+… [1889 caractères tronqués]
+
+### Tour 36 — allons-y pour un sprint cerveau complet. Vasy en mode autonome jusqu'à demain matin (9h hae 10 octobre)
+
+*16 appels d'outils.* Actions notables :
+
+- create_goal
+- todo_write
+- bash — Inspect the distributed driver and transport API
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/topologie.rs`
+- bash — Wire the module and run its tests
+- bash — Find the dispatch and the plan flag
+- bash — Wire the topology CLI and build
+- bash — Test the topology plan and refusals
+- bash — Locate the premature model loading
+- bash — Inspect the dispatch region
+- bash — Verify the flag is parsed
+- bash — Find all topology references
+- bash — Read the Options initializer
+- bash — Read the top of main
+- … et 2 autres
+
+**Synthèse produite :**
+
+⏵ C1a livrée : la topologie se lit, se vérifie, et refuse les graphes incohérents
 
 ## 3. Travail accompli
 
@@ -1700,6 +1758,7 @@ Plus quatre manques du **modèle**, les douze capacités d'**architecture**, et 
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-cerveau-complet.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/modularisation.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/manques.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/topologie.rs` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -1749,7 +1808,7 @@ Plus quatre manques du **modèle**, les douze capacités d'**architecture**, et 
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 921 autres
+- … et 935 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1877,7 +1936,7 @@ Plus quatre manques du **modèle**, les douze capacités d'**architecture**, et 
 
 ## 5. Erreurs rencontrées
 
-47 sorties en erreur ou divergentes. Les premières :
+48 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : ```  ### 🤖 Assistant  ⏵ **En transformers 5, `AutoModel` rend directement `Qwen2Model` (pas de `.model`). Je corrige le diagnostic.**  - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitH
 - **T2** : 3310393 bash -c pgrep -af "essai_decharge" | grep python | head; echo "--- logs ---"; tail -2 /tmp/ec_d192_lr3e3.log 2>/dev/null; tail -2 /tmp/ec_d192_lr1e3.log 2>/dev/null; echo "---"; ls -la /tmp/ec
@@ -2002,4 +2061,5 @@ Plus quatre manques du **modèle**, les douze capacités d'**architecture**, et 
 - Annexe : manifeste des journaux de la campagne (59 fichiers d'étape, 79 Kio, 17 journaux de chaînes)  Le livrable « la file exécutée et ses journaux » est maint
 - Clôture du rapport : ce qui reste n'est plus de la mesure en retard mais du travail identifié  Le § 23 renvoie désormais au registre des manques et au plan des 
 - Dim 512 : le prix de la parcimonie croît avec l'échelle (+6,7 % et +8,0 % contre +1,0 % et +3,8 % à 384)  Dernier point de la courbe lecture-qualité, mesuré à 1
+- C1a : la topologie de régions se lit, se vérifie et refuse les graphes incohérents  Première brique du sprint cerveau (docs/plan-cerveau-complet.md, capacité C1
 

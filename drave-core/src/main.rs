@@ -50,6 +50,7 @@ mod materiel;
 mod model;
 mod gpu;
 mod tokenizer;
+mod topologie;
 
 use engine::{matvec_dense, matvec_shift_add, Pool, SparseVec};
 use gguf::Gguf;
@@ -117,6 +118,25 @@ fn main() {
     if let Some(vieux) = vieux_nom {
         eprintln!("[attention] {vieux} est l'ancien nom d'une variable d'environnement : \
 il faut écrire DRAVE_{} (voir docs/histoire.md). Rien n'a été appliqué.", &vieux[3..]);
+    }
+    // ---- C1 : la TOPOLOGIE passe AVANT tout le reste, et avant même le chemin
+    // du modèle. Un descripteur de régions ne décrit pas des poids : exiger un
+    // fichier GGUF pour lire un graphe obligerait à en inventer un, et la
+    // commande mentirait sur ce qu'elle fait. `--topologie F` imprime le plan
+    // VÉRIFIÉ et sort ; l'exécution d'un graphe viendra après (capacité C1b).
+    if let Some(pos) = args.iter().position(|a| a == "--topologie") {
+        let f = match args.get(pos + 1) {
+            Some(f) => f.clone(),
+            None => { eprintln!("--topologie attend un fichier"); std::process::exit(2); }
+        };
+        let texte = match std::fs::read_to_string(&f) {
+            Ok(t) => t,
+            Err(e) => { eprintln!("topologie : lecture de {f} impossible : {e}"); std::process::exit(2); }
+        };
+        match topologie::lire_json(&texte).and_then(|t| t.plan()) {
+            Ok(plan) => { print!("{plan}"); std::process::exit(0); }
+            Err(e) => { eprintln!("{e}"); std::process::exit(3); }
+        }
     }
     let opt = analyser(&args);
     let _ = MODELE.set(args[1].clone());
@@ -548,6 +568,8 @@ fn fils(opt: &Options) -> usize {
 struct Options {
     // --- sélection du mode
     infer: bool, ppl: bool, plan: bool, tokenize: bool, gpu_banc: bool, k3_essai: bool,
+    /// C1 — descripteur de topologie de régions (docs/plan-cerveau-complet.md).
+    topologie: Option<String>,
     /// Banc du KV déporté : nombre de clés à faire tenir en VRAM.
     banc_kv: usize,
     /// Banc des SCORES d'attention : nombre de clés à noter (noyau 1 du top-k).
@@ -692,6 +714,7 @@ fn analyser(args: &[String]) -> Options {
             "--ppl-texte" => { o.ppl = true; o.ppl_texte = true;
                                o.texte_file = Some(suivant(i).clone()); 2 }
             "--plan" => { o.plan = true; 1 }
+            "--topologie" => { o.topologie = Some(suivant(i).clone()); 2 }
             "--tokenize" => { o.tokenize = true; 1 }
             "--gpu-banc" => { o.gpu_banc = true; 1 }
             // Test de fumée de la couche 0 de Kimi-K3, **sur un modèle même
