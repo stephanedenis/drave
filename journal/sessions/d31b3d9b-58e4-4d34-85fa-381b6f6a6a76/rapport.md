@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 26.5 h |
+| Durée | 26.8 h |
 | Tours | 27 |
-| Messages | 1046 |
-| Appels d'outils | 1006 |
-| Fichiers touchés | 31 |
-| Commandes | 826 |
+| Messages | 1059 |
+| Appels d'outils | 1018 |
+| Fichiers touchés | 32 |
+| Commandes | 836 |
 | Sous-agents | 3 |
-| Commits | 80 |
+| Commits | 81 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -1270,7 +1270,7 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 
 ### Tour 27 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1477 caractères tronqués]
 
-*397 appels d'outils.* Actions notables :
+*409 appels d'outils.* Actions notables :
 
 - bash — Check the full state
 - bash — Measure the distilled d384 with the correct protocol
@@ -1286,11 +1286,11 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - bash — Read parcimonie, contexte, lot steps
 - bash — Inspect batch2 script
 - bash — Read batch2 journal and latency map
-- … et 351 autres
+- … et 362 autres
 
 **Synthèse produite :**
 
-⏵ Résultat : l'élagage APPRIS divise encore les lectures par deux, à qualité égale
+⏵ Rédaction : notre règle hebbienne différentielle face à la biologie
 
 ## 3. Travail accompli
 
@@ -1329,6 +1329,7 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 | `/tmp/campagne24/jour1_suite.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/modele-pour-drave.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/biologie-pour-drave.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/hebbien-differentiel-et-biologie.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -1378,7 +1379,7 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 786 autres
+- … et 796 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1606,4 +1607,5 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - Le fait biologique que nos modèles ne reproduisent pas : des poids à queue lourde  Les efficacités synaptiques corticales sont log-normales, sur plusieurs ordre
 - E6 outillée : poids log-normaux (theta = log|w| appris, signes figés à la naissance)  Les synapses corticales sont log-normales ; nos modèles sont quasi gaussie
 - Les deux axes appris se cumulent : +poids élagués appris = ÷2 lectures à qualité égale  m11_d384_kwta25_elag50 reprend exactement kwta025 plus un élagage APPRIS
+- Notre hebbien différentiel face à la biologie : pourquoi il échoue, et par quoi le remplacer  Le dépôt a appliqué, mesuré, sauvé, rechargé ET réfuté une règle h
 
