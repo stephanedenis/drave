@@ -14846,3 +14846,115 @@ drwxr-xr-x. 1 stephane stephane    612  7 oct 18:16 ..
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-modele-moteur.md\")\ns = p.read_text()\nancre = \"\"\"---\n\n## 4. La porte de répartition : tenue\"\"\"\nassert ancre in s\najout = \"\"\"---\n\n## 3 bis. La courb … [3210 caractères tronqués]`
+
+  ```
+ok
+a5c4d49 Rapport du modèle : la courbe d'échelle 256/384/512, et le routage qui s'inverse
+  ```
+
+- **bash** `{"command": "sleep 540; cd /tmp/campagne24 && echo \"=== aiguille ===\"; tail -4 aiguille_long.log; echo \"=== kwta50 ===\"; tail -1 tr_m7_d384_kwta050.log; echo \"=== spec ===\"; cat spec_05_14.log 2>/dev/null | tail -4 || echo \"(en cours)\"; date '+%H:%M'", "description": "Poll the three long mea … [32 caractères tronqués]`
+
+  ```
+=== aiguille ===
+  remplissage : data/wikitext2_test.txt (353778 caractères), fenêtres décalées
+  lot 256 · 24 jetons de réponse · GPU non · attention COMPLÈTE
+ contexte  profondeur  trouvé  secondes  détail
+     8192        0.10     oui     935.2  prompt 7963 jetons
+=== kwta50 ===
+  pas  16000 · perte 1.3444 · val 2.1118 bits/octet · 1299 s
+=== spec ===
+03:44
+  ```
+
+- **bash** `{"command": "ps -eo pid,etime,pcpu,args --sort=-pcpu | grep -E \"aiguille|drave \" | grep -v grep | sed 's/\\(.\\{120\\}\\).*/\\1/' | head -4; echo \"--- charge ---\"; uptime", "description": "Check the needle run and load"}`
+
+  ```
+1105802       19:31 1293 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --infer --chat --flux --prompt 
+1113237       01:53  100 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/deepseek-r1-dis
+1090495       35:07  0.0 /home/stephane/gpu-env/bin/python -u tools/aiguille.py models/Qwen2.5-0.5B-Q8_0.gguf 8192,12288
+1090492       35:07  0.0 bash -c timeout 5400 /home/stephane/gpu-env/bin/python -u tools/aiguille.py models/Qwen2.5-0.5B
+--- charge ---
+ 03:44:59  up 17 days 16:57,  2 users,  load average: 19,72, 22,60, 20,73
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/### 8 bis/,/^## 9\\./p' reports/rapport-campagne-benefices.md | head -30", "description": "Verify the latency section formatting"}`
+
+  ```
+### 8 bis. La carte de latence : à partir de quand un réseau coûte plus que le calcul
+
+Le découpage à deux nœuds est exact sur localhost (écart 0,00e0). Mais localhost
+est un plancher optimiste : ce qui décide, sur un vrai réseau, n'est pas le débit
+(0,25 Mbit/s de flux) mais **la latence par message**. `tools/proxy_latence.py`
+est un relais TCP qui ajoute un délai réglable ; `tools/carte_latence.sh`
+l'intercale entre le pilote et le nœud et refait la mesure pour chaque délai.
+Modèle entraîné ici, 4 couches dont **2 locales** (donc deux frontières franchies
+par jeton), 128 jetons :
+
+| latence ajoutée par message | m5_d384 (44 M) | m6_d512 (79 M) | perplexité |
+|---:|---:|---:|---|
+| 0 ms (localhost) | ×5,32 | ×3,49 | **3,5140 / 3,6064** |
+| +1 ms | ×6,31 | ×4,99 | identique |
+| +2 ms | ×7,97 | ×11,47 | identique |
+| +5 ms | ×12,96 | ×10,97 | identique |
+| +10 ms | ×18,94 | ×17,71 | identique |
+| +20 ms | ×37,54 | ×28,18 | identique |
+| +50 ms | ×79,73 | ×56,11 | identique |
+
+**La perplexité ne bouge PAS d'un chiffre à 50 ms de latence par message** : le
+transport est exact quelle que soit la latence, et c'est la seule chose que le
+découpage doit garantir.
+
+**Le temps, lui, croît li
+… [307 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\nvieux = \"\"\"**Le temps, lui, croît linéairement** — et la pente donne la règle :\n**≈ 3,4 ms de plus par jeton pour c … [838 caractères tronqués]`
+
+  ```
+ok
+ contexte  profondeur  trouvé  secondes  détail
+     8192        0.10     oui     935.2  prompt 7963 jetons
+  ```
+
+- **bash** `{"command": "sleep 560; cd /tmp/campagne24 && echo \"=== aiguille ===\"; tail -4 aiguille_long.log; echo \"=== kwta50 ===\"; tail -1 tr_m7_d384_kwta050.log; echo \"=== spec ===\"; cat spec_05_14.log 2>/dev/null | tail -3 || echo \"(en cours)\"", "description": "Poll jobs", "timeoutMs": 600000}`
+
+  ```
+=== aiguille ===
+  lot 256 · 24 jetons de réponse · GPU non · attention COMPLÈTE
+ contexte  profondeur  trouvé  secondes  détail
+     8192        0.10     oui     935.2  prompt 7963 jetons
+     8192        0.50     oui    1199.3  prompt 9224 jetons
+=== kwta50 ===
+  pas  20000 · perte 1.3390 · val 2.0985 bits/octet · 1623 s
+=== spec ===
+  ```
+
+- **bash** `{"command": "sleep 580; cd /tmp/campagne24 && echo \"=== aiguille ===\"; tail -3 aiguille_long.log; echo \"=== kwta50 ===\"; tail -1 tr_m7_d384_kwta050.log; grep -E \"kwta0|kwta1|kwta2\" journal7.txt 2>/dev/null | tail -2; echo \"=== spec ===\"; cat spec_05_14.log 2>/dev/null | tail -3 || echo \"(en … [97 caractères tronqués]`
+
+  ```
+=== aiguille ===
+     8192        0.10     oui     935.2  prompt 7963 jetons
+     8192        0.50     oui    1199.3  prompt 9224 jetons
+     8192        0.90     oui     954.1  prompt 8033 jetons
+=== kwta50 ===
+  pas  28000 · perte 1.3197 · val 2.0703 bits/octet · 2269 s
+[09/10 03:22:02] charge 21.13 · m7_d384_kwta050 : départ (k-WTA gardant 0.50)
+=== spec ===
+coût relatif mesuré du brouillon : **0.039×** la cible (26.93 vs 1.05 tok/s)
+gain net attendu à k=8 : **×1.52** (= (1.00+1) / (8×0.039+1))
+seuil de rentabilité : il faut r < 0.125× (acceptation moyenne 12.5% par jeton proposé)
+04:04
+  ```
+
+### 🤖 Assistant
+
+⏵ Troisième paire spéculative : le brouillon minuscule donne ×1,52 — le verdict s'inverse en grande cible
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\nvieux = \"\"\"**Ce qu'il faudrait pour que ça paie** : un brouillon entraîné *sur les sorties de\nsa cible* (distillati … [3178 caractères tronqués]`
+
+  ```
+ok
+180:**Et la troisième paire renverse le verdict — mais pas par l'acceptation.** Un
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add reports/rapport-campagne-benefices.md && git commit -q -m \"Spéculatif : c'est le RAPPORT DE COÛT qui décide, et il est minimal sur un modèle plus gros que la RAM\n\nTroisième paire mesurée par le moteur — un brouillon minusc … [904 caractères tronqués]`

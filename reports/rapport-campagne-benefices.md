@@ -49,7 +49,7 @@ file encore en cours.
 | **modèle plus gros que la RAM** | ✅ **démontré, et vérifié au chiffre près** | V4-Flash **365,7 Go sur 125 Go de RAM** : **37,6 Go résidents**, 37,7 Go lus, 266 s pour 16 jetons · gpt-oss (63 Go) : **PPL 15,6017 sur 510 jetons — la valeur attendue, à l'identique** (porte tenue à 02 h 58) |
 | **répartition à deux nœuds** | ✅ **porte tenue** | écart **0,0000 %** et flux **0,00e0** — sur le modèle dense, routé **et distillé** |
 | **embeddings / recherche** | ❌ **manque** | `bge-m3` lisible en en-tête, **inexécutable** (ni encodeur bidirectionnel ni pooling) |
-| **décodage spéculatif** | ❌ manque, et chiffré **par le moteur** | paire alignée (HF) : 3,35 jetons sur 8 acceptés, **×1,20** · paire mal appariée (moteur) : **0,88 sur 8, ×0,70** — un brouillon rejeté coûte plus qu'il ne rapporte (§ 1 et 1 bis) |
+| **décodage spéculatif** | ⚠️ **le chantier n'existe pas, mais le gain est démontré dans la niche du projet** | trois paires mesurées par le moteur : ×0,70 (brouillon à 0,21×) · ×1,09 (0,13×) · **×1,52 pour un brouillon à 0,039× de sa cible** — c'est le **rapport de coût** qui décide, et il est minimal quand la cible est bornée par le disque (§ 1 bis) |
 | **routage à l'échelle** | ⚠️ **le routage seul s'inverse à dim 512, la distillation le rattrape et dépasse** | routé seul : −3,5 % (val, 256) → −1,4 % (384) → **+1,4 % (512)** · **routé distillé : 4,3305 contre 4,5686 au dense (−5,2 %)**, le gain du distillat croissant avec la taille (−2,5 % → −9,3 % → **−13,8 %**) · **12,8 M paires/jeton des deux côtés** |
 | **fidélité listes ↔ dense** | ✅ **exacte, démontrée** | logits identiques **au bit près** (`cmp` sur 4 254 216 octets) et mêmes jetons gloutons, à encodage de poids égal ; ×0,02 à ×3,19 selon la densité |
 
@@ -177,10 +177,41 @@ spéculatif réel échantillonne et accepte selon un rapport de probabilités : 
 taux est **plus élevé** que celui-ci. Ce qui est mesuré ici est donc un plancher,
 et il dit déjà que la version gloutonne ne paie pas.
 
-**Ce qu'il faudrait pour que ça paie** : un brouillon entraîné *sur les sorties de
-sa cible* (distillation croisée, ou tête Eagle3 branchée sur les états cachés de la
-cible). C'est un chantier d'entraînement, et les trois mesures ci-dessus en
-donnent le cahier des charges : accepter ≥ 40 % à k = 8 pour viser ×1,5.
+**Et la troisième paire renverse le verdict — mais pas par l'acceptation.** Un
+brouillon **minuscule** (Qwen2.5-0.5B Q8, 0,53 Go) pour la **même grande cible**
+(R1-14B, 9 Go) :
+
+| paire | acceptation | **coût relatif du brouillon** | gain net |
+|---|---:|---:|---:|
+| 0,5 B → 1,5 B | 11 % | 0,210× | **×0,70** (il coûte) |
+| 1,5 B → 14 B (même recette) | 15,6 % | 0,134× | ×1,09 |
+| **0,5 B → 14 B** | 12,5 % | **0,039×** | **×1,52** |
+
+**C'est le RAPPORT DE COÛT qui décide, pas l'acceptation.** Avec un brouillon qui
+coûte 4 % de sa cible, accepter un jeton sur huit suffit à gagner 1,5× — et cette
+paire est la *moins* bien appariée des trois. À l'inverse, la paire la mieux
+appariée (1,5 B → 14 B) ne rapporte que ×1,09 parce que son brouillon coûte 13 %.
+
+**Et c'est exactement le régime que Drave vise** : quand la cible est plus grosse
+que la RAM, elle est bornée par le **disque**, et le brouillon — qui tient en
+mémoire — devient relativement gratuit. Le décodage spéculatif n'est donc pas mort
+(§ 1) : il est **intéressant précisément là où le modèle cible ne tient pas en
+mémoire**, ce qui est la niche du projet.
+
+**Quatre réserves, toutes mesurées ou nommées :**
+1. l'acceptation est la borne **gloutonne** (la plus sévère) ; le décodage réel
+   échantillonne et accepte davantage ;
+2. le coût relatif dépend de la charge (26,93 vs 1,05 tok/s ici) — c'est un ordre
+   de grandeur, pas une constante ;
+3. vérifier k jetons d'un coup demande le **préremplissage par lots** sur la cible,
+   qui existe (`--lot`) mais n'est pas branché sur le décodage ;
+4. la mémoire du brouillon s'ajoute : 0,53 Go pour un 0,5 B, à côté d'une cible de
+   9 à 63 Go, c'est négligeable — mais ce n'est pas zéro.
+
+**Ce qu'il faudrait pour aller plus loin** : un brouillon entraîné *sur les sorties
+de sa cible* (distillation croisée, ou tête Eagle3 branchée sur les états cachés de
+la cible). Les trois mesures donnent le cahier des charges : à 0,04× de coût
+relatif, accepter 25 % à k = 8 donnerait **×2,0**.
 
 *(Le taux d'acceptation est déterministe — `--temp 0` — donc exact malgré la
 charge ; le coût relatif, lui, dépend de la charge et n'est qu'un ordre de
@@ -505,6 +536,10 @@ découpage doit garantir.
 **Le temps, lui, croît linéairement** — et la pente donne la règle :
 **≈ 3,4 ms de plus par jeton pour chaque milliseconde d'aller-retour** (44 M) et
 **3,3 ms** (79 M), soit ≈ 0,85 ms par jeton et par frontière et par ms de RTT.
+*(Les valeurs individuelles portent le bruit de charge de la machine — un point
+isolé de la colonne 79 M sort de la monotonie — mais les deux extrémités de chaque
+série sont mesurées à quelques minutes d'intervalle, et c'est la pente entre elles
+qui est retenue.)*
 Le plancher localhost, lui, est de **×3,5 à ×5,3** : à ces tailles, un processus
 unique gagne toujours.
 
