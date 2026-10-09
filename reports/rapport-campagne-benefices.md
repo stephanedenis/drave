@@ -50,7 +50,7 @@ file encore en cours.
 | **répartition à deux nœuds** | ✅ **porte tenue** | écart **0,0000 %** et flux **0,00e0** — sur le modèle dense, routé **et distillé** |
 | **embeddings / recherche** | ❌ **manque** | `bge-m3` lisible en en-tête, **inexécutable** (ni encodeur bidirectionnel ni pooling) |
 | **décodage spéculatif** | ❌ manque, et chiffré **par le moteur** | paire alignée (HF) : 3,35 jetons sur 8 acceptés, **×1,20** · paire mal appariée (moteur) : **0,88 sur 8, ×0,70** — un brouillon rejeté coûte plus qu'il ne rapporte (§ 1 et 1 bis) |
-| **routage à l'échelle** | ❌ **le gain s'inverse à dim 512** | val : −3,5 % (256) → −1,4 % (384) → **+1,4 % (512)** · moteur : 4,5686 → 5,0255 ; même recette, mêmes 40 000 pas, **12,8 M paires/jeton des deux côtés** |
+| **routage à l'échelle** | ⚠️ **le routage seul s'inverse à dim 512, la distillation le rattrape et dépasse** | routé seul : −3,5 % (val, 256) → −1,4 % (384) → **+1,4 % (512)** · **routé distillé : 4,3305 contre 4,5686 au dense (−5,2 %)**, le gain du distillat croissant avec la taille (−2,5 % → −9,3 % → **−13,8 %**) · **12,8 M paires/jeton des deux côtés** |
 | **fidélité listes ↔ dense** | ✅ **exacte, démontrée** | logits identiques **au bit près** (`cmp` sur 4 254 216 octets) et mêmes jetons gloutons, à encodage de poids égal ; ×0,02 à ×3,19 selon la densité |
 
 **En une phrase** : Drave gagne **par construction** sur les sorties contraintes,
@@ -370,6 +370,28 @@ disent**, la validation à l'entraînement et le moteur après export :
 | 256 | 2,0074 | 1,9373 | **−3,5 %** | 5,0155 → 4,8858 (−2,6 %) |
 | 384 | 1,9020 | 1,8762 | −1,4 % | 5,0108 → 4,8646 (−2,9 %) |
 | **512** | **1,8580** | **1,8843** | **+1,4 % — le routé PERD** | **4,5686 → 5,0255 (+10 %)** |
+
+**Et la distillation renverse le renversement.** Le distillat du routé 512 a été
+entraîné et mesuré dans la nuit (professeur : le dense 512, mêmes 40 000 pas) :
+
+| dim | dense | routé | **routé distillé** | gain du distillat sur son jumeau routé |
+|---:|---:|---:|---:|---:|
+| 256 | 5,0155 | 4,8858 | **4,7642** | −2,5 % |
+| 384 | 5,0108 | 4,8646 | **4,4113** | −9,3 % |
+| **512** | 4,5686 | 5,0255 | **4,3305** | **−13,8 %** |
+
+**Le gain de la distillation croît avec la taille : −2,5 %, −9,3 %, −13,8 %**, et
+il est assez grand à dim 512 pour compenser un routage qui, seul, perdait 10 %.
+Le modèle produit ici est donc **5,2 % meilleur que son jumeau dense à lecture
+égale** (12,8 M paires par jeton de part et d'autre, vérifié par le compteur du
+moteur) — alors que sa partie routée seule était 10 % pire.
+
+**La recette qui sort de cette courbe est donc « router ET distiller »**, pas
+« router » — et c'est la distillation, pas le routage, qui porte le gain aux
+grandes échelles. Le mécanisme reste à expliquer (l'hypothèse la plus simple :
+un élève à experts multiples profite beaucoup plus d'une cible dense que d'un
+objectif d'argmax, parce que chaque expert voit moins d'exemples) — c'est une
+hypothèse, pas une mesure, et elle est notée comme telle.
 
 **Et c'est bien à lecture ÉGALE**, vérifié par le compteur du moteur sur les deux
 modèles exportés : **12,8 M de paires par jeton de part et d'autre** (attention

@@ -14623,3 +14623,150 @@ les cinq modes de découpage à deux nœuds (écart **0,00e0** pour les modes 0,
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\ns = s.replace(\"\"\"| **modèle plus gros que la RAM** | ✅ **démontré** | V4-Flash **365,7 Go sur 125 Go de RAM** : **37 … [1211 caractères tronqués]`
+
+  ```
+ok
+ec4fd0c La porte gpt-oss rend 15,6017 au chiffre près : la campagne est verte partout
+  ```
+
+- **bash** `{"command": "sleep 540; cd /tmp/campagne24 && echo \"=== distillé d512 ===\"; tail -2 tr_d512_distille.log; echo \"=== journal6 ===\"; grep -E \"m6|512\" journal6.txt | tail -3; echo \"=== spec 0.5->14 ===\"; cat spec_05_14.log 2>/dev/null | tail -6 || echo \"(en cours)\"; echo \"=== kwta ===\"; gre … [111 caractères tronqués]`
+
+  ```
+=== distillé d512 ===
+  pas  28000 · perte 0.6641 · val 1.8337 bits/octet · 3789 s
+  pas  32000 · perte 0.6260 · val 1.8202 bits/octet · 4316 s
+=== journal6 ===
+[09/10 01:51:30] charge 25.97 · m6_d512_route : PPL moyenne (log) sur 8 fenêtres : 5.0255 · 37.8 M paires/jeton
+[09/10 01:51:32] charge 25.73 · répartition/m6_d512_route : PORTE TENUE : le découpage ne change pas la perplexité (écart relatif 0.0000 %)
+[09/10 01:51:32] charge 25.73 · === échelle 512 mesurée — distillation du routé 512 (professeur : dense 512) ===
+=== spec 0.5->14 ===
+=== kwta ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -20 tools/aiguille.py; grep -n \"add_argument\" tools/aiguille.py | head -10; echo \"=== résultats NIAH existants ===\"; ls -la /tmp/campagne24/*aiguille* 2>/dev/null | head -5", "description": "Inspect the needle-in-a-haystack  … [6 caractères tronqués]`
+
+  ```
+#!/usr/bin/env python3
+"""Aiguille dans la botte de foin — version 2, celle qui mesure vraiment.
+
+La perplexité ne dit pas si un modèle RETROUVE une information. Ce script plante
+un code à une profondeur donnée dans un contexte long, puis le redemande.
+
+Ce qui a changé par rapport à la v1 (mesurée et arrêtée) :
+
+1. **le remplissage est du vrai texte VARIÉ** (`data/wikitext2_test.txt`), et non
+   la même phrase recopiée jusqu'à la longueur voulue. Un remplissage répété ne
+   teste rien : le modèle pouvait répondre en devinant la structure. Chaque sonde
+   prend en plus une FENÊTRE DIFFÉRENTE du corpus, pour que les sondes ne
+   partagent pas leur remplissage ;
+2. **la réponse est longue** (`--n 40` par défaut) : un code peut sortir au
+   deuxième ou troisième jeton, et s'arrêter à 8 jetons faisait échouer des
+   sondes que le modèle savait résoudre ;
+3. **le préremplissage par lots** (`--lot`) rend chaque sonde abordable : le
+   moteur ne l'utilisait que pour la perplexité ;
+   ⚠️ et depuis le sprint 4, le décalage de fenêtre est RÉELLEMENT appliqué (il
+   comparait à une marge de 400 000 caractères pour un corpus qui en fait 353 778,
+127:    ap.add_argument("modele")
+128:    ap.add
+… [650 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/## 9. La mémoire TIENT/,/## 10\\./p' reports/rapport-campagne-benefices.md | head -28", "description": "Read the needle section protocol"}`
+
+  ```
+## 9. La mémoire TIENT : l'aiguille est retrouvée à toutes les profondeurs
+
+La perplexité moyenne ne dit pas si un modèle **retrouve** un fait précis. Test :
+un code unique planté dans une botte de foin, à trois profondeurs (10 %, 50 %,
+90 %), et une question à la fin. Qwen2.5-0.5B Q8_0, `--infer`, 12 jetons, `temp 0` :
+
+| longueur | profondeur 10 % | 50 % | 90 % |
+|---|---:|---:|---:|
+| 512 jetons | ✅ | ✅ | ✅ |
+| 1 024 | ✅ | ✅ | ✅ |
+| 2 048 | ✅ | ✅ | ✅ |
+| 4 096 | ✅ | ✅ | ✅ |
+
+**12 configurations sur 12 retrouvent le code**, y compris à 4 096 jetons avec un
+modèle de 0,5 B. C'est une mesure de **tâche**, pas de perplexité : le cache KV du
+moteur, sa quantification et sa pagination ne détruisent pas la mémoire du
+contexte. C'est exactement ce que la revendication « contexte long » devait
+démontrer, et c'est la première fois qu'elle l'est sur une tâche.
+
+**Réserve, et elle est sérieuse sur les temps** : cette série a tourné **en
+parallèle de la campagne** (un défaut d'enchaînement corrigé depuis), donc deux
+gros modèles lisaient le disque en même temps. Les **verdicts** (retrouvé/perdu)
+n'en dépendent pas ; les **durées** oui — de 26 s à 609 s pour la même taille,
+selon ce que le di
+… [87 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash -c 'timeout 5400 /home/stephane/gpu-env/bin/python -u tools/aiguille.py models/Qwen2.5-0.5B-Q8_0.gguf 8192,16384 0.1,0.5,0.9 --n 24 --threads 12 --lot 256 > /tmp/campagne24/aiguille_long.log 2>&1; echo \"code $?\" >> /tmp/ … [235 caractères tronqués]`
+
+  ```
+aiguille longue portée pid 1090250
+aiguille v2 : models/Qwen2.5-0.5B-Q8_0.gguf
+  remplissage : data/wikitext2_test.txt (353778 caractères), fenêtres décalées
+  lot 256 · 24 jetons de réponse · GPU non · attention COMPLÈTE
+ contexte  profondeur  trouvé  secondes  détail
+AVERTISSEMENT : le corpus (353778 caractères) ne permet pas 6 fenêtres distinctes de 69212 caractères — certaines sondes rejoueront la même invite, et des répétitions d'un calcul déterministe ne mesurent rien de plus qu'une.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for p in $(pgrep -f \"aiguille.py models/Qwen2.5-0.5B-Q8_0.gguf 8192,1638[4]\"); do kill $p 2>/dev/null; done; sleep 2; nohup bash -c 'timeout 5400 /home/stephane/gpu-env/bin/python -u tools/aiguille.py models/Qwen2.5-0.5B-Q8_0.gguf  … [320 caractères tronqués]`
+
+  ```
+relancé
+aiguille v2 : models/Qwen2.5-0.5B-Q8_0.gguf
+  remplissage : data/wikitext2_test.txt (353778 caractères), fenêtres décalées
+  lot 256 · 24 jetons de réponse · GPU non · attention COMPLÈTE
+ contexte  profondeur  trouvé  secondes  détail
+  ```
+
+- **bash** `{"command": "sleep 420; cd /tmp/campagne24 && echo \"=== aiguille ===\"; tail -8 aiguille_long.log; echo \"=== distillé ===\"; tail -1 tr_d512_distille.log; echo \"=== spec ===\"; cat spec_05_14.log 2>/dev/null | tail -5 || echo \"(en cours)\"", "description": "Poll needle, training, and speculative … [28 caractères tronqués]`
+
+  ```
+=== aiguille ===
+aiguille v2 : models/Qwen2.5-0.5B-Q8_0.gguf
+  remplissage : data/wikitext2_test.txt (353778 caractères), fenêtres décalées
+  lot 256 · 24 jetons de réponse · GPU non · attention COMPLÈTE
+ contexte  profondeur  trouvé  secondes  détail
+=== distillé ===
+  pas  36000 · perte 0.6278 · val 1.8089 bits/octet · 4843 s
+=== spec ===
+  ```
+
+- **bash** `{"command": "cd /tmp/campagne24 && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"/tmp/campagne24/nuit4_route_creux.sh\")\ns = p.read_text()\nvieux = '''for tk in \"\" \"500\" \"250\" \"125\"; do\n    if [ -z \"$tk\" ]; then chemins=\"--push\"; etiq=\"m8_d512-sans\"; else chemins=\"--push --ac … [812 caractères tronqués]`
+
+  ```
+ok
+syntaxe OK
+  ```
+
+- **bash** `{"command": "sleep 480; cd /tmp/campagne24 && echo \"=== aiguille ===\"; tail -6 aiguille_long.log; echo \"=== distillé v2 ===\"; tail -2 tr_d512_distille.log; echo \"=== journal6 ===\"; grep -E \"m6_d512_route_distille\" journal6.txt | tail -2", "description": "Poll needle and distillation", "timeo … [14 caractères tronqués]`
+
+  ```
+=== aiguille ===
+aiguille v2 : models/Qwen2.5-0.5B-Q8_0.gguf
+  remplissage : data/wikitext2_test.txt (353778 caractères), fenêtres décalées
+  lot 256 · 24 jetons de réponse · GPU non · attention COMPLÈTE
+ contexte  profondeur  trouvé  secondes  détail
+     8192        0.10     oui     935.2  prompt 7963 jetons
+=== distillé v2 ===
+  # meilleur point : pas 36000 · val 1.8089 bits/octet
+  # écrit dans /tmp/m6_d512_route_distille · 78.81 M paramètres · 3.41 M poids lus/jeton/couche
+=== journal6 ===
+[09/10 03:21:28] charge 18.13 · m6_d512_route_distille : PPL moyenne (log) sur 8 fenêtres : 4.3305 · 37.8 M paires/jeton
+  ```
+
+### 🤖 Assistant
+
+⏵ Résultat de la nuit : le distillat d512 bat le dense (−5,2 %) après un routé qui perdait
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\nvieux = \"\"\"| dim | dense (val, bits/octet) | routé (val) | gain du routage | PPL moteur (8 × 128) |\n|---:|---:|---: … [2773 caractères tronqués]`
+
+  ```
+ok
+374:**Et la distillation renverse le renversement.** Le distillat du routé 512 a été
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add reports/rapport-campagne-benefices.md && git commit -q -m \"Dim 512 : le routage seul perd, le routé DISTILLÉ gagne de 5,2 %\n\nLa courbe d'échelle est complète, et elle a deux branches :\n\n  dim 256 : dense 5,0155 -> routé  … [628 caractères tronqués]`
