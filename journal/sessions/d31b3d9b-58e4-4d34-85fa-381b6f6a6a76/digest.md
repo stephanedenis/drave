@@ -16924,3 +16924,24 @@ Drave en mode impulsion pur, moyennant des mécanismes supplémentaires, serait-
 ⏵ Résultat E1 : un connectome inné ALÉATOIRE coûte +1 % et divise les événements par 4
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/biologie-pour-drave.md\")\ns = p.read_text()\nancre = \"\"\"| **E1** | **masque inné creux** : masque aléatoire fixe à **25 %** des connexions par ligne, seuls ces poids sont  … [3588 caractères tronqués]`
+
+  ```
+ok
+47a180d E1 : un connectome inné ALÉATOIRE coûte 1 % de perplexité et divise les lectures par 4
+  ```
+
+### 🤖 Assistant
+
+⏵ Rédaction : Drave en impulsion pure serait-il un meilleur apprenant ? (ce que nos mesures disent)
+
+- **write** `{"content": "# Drave en mode impulsion pur serait-il un meilleur apprenant ?\n\n> 9 octobre 2026. Question posée telle quelle. Réponse en trois temps : ce que\n> « impulsion pure » peut vouloir dire chez nous, ce que nos propres mesures disent\n> déjà, et les mécanismes supplémentaires qu'il faudrai … [8325 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/impulsion-pure-apprenant.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/impulsion-pure-apprenant.md && git commit -q -m \"Drave en impulsion pure serait-il un meilleur apprenant ? Pas en l'état, oui sous conditions nommées\n\nTrois sens de « mode impulsion pur » : l'EXÉCUTION (déjà événement … [1294 caractères tronqués]`
