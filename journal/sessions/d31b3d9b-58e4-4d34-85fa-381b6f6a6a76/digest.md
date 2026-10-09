@@ -7420,3 +7420,274 @@ The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagn
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 git add tools/campagne_synthese.py reports/rapport-campagne-benefices.md && timeout 300 git commit -q -m \"Campagne : la perplexité n'est comparable qu'à tokenizer égal — colonne bits/octet\n\nTrois modèles de la grille p … [802 caractères tronqués]`
+
+  ```
+f87e9c1 Campagne : la perplexité n'est comparable qu'à tokenizer égal — colonne bits/octet
+  ```
+
+- **bash** `{"command": "date; tail -3 /tmp/campagne24/journal.txt; echo \"=== ce qui tourne ===\"; ps -eo pid,etime,pcpu,rss,comm --sort=-pcpu 2>/dev/null | grep -E \"drave|entrainer\" | head -4; echo \"=== entraînements ===\"; tail -1 /tmp/campagne24/tr_d256_dense.log; tail -1 /tmp/campagne24/tr_d384_dense.lo … [79 caractères tronqués]`
+
+  ```
+jeu 08 oct 2026 21:44:47 EDT
+[08/10 21:20:04] charge 17.95 · grille/0.5B-Q8 : code 0 · PPL 17.4315 · RSS 1249 Mo · lus 0 Mio
+[08/10 21:21:10] charge 17.44 · grille/r1-1.5B : code 0 · PPL 47.1403 · RSS 4647 Mo · lus 988 Mio
+[08/10 21:39:54] charge 47.40 · grille/r1-14B : code 0 · PPL 14.3048 · RSS 38898 Mo · lus 8304 Mio
+=== ce qui tourne ===
+3720096       00:24 1547 1185492 drave
+3718149       04:52 98.1 23005728 drave
+=== entraînements ===
+  # écrit dans /tmp/m5_d256_dense · 3.21 M paramètres · 0.85 M poids lus/jeton/couche
+  pas  32000 · perte 1.1581 · val 1.9307 bits/octet · 1530 s
+ 21:44:47  up 17 days 10:56,  2 users,  load average: 25,88, 32,28, 26,59
+  ```
+
+### 🤖 Assistant
+
+⏵ Point de mi-campagne : deux résultats solides, et la file continue
+
+## Ce que la campagne a déjà établi (21 h 45, 25 min après le départ)
+
+**1. Le décodage spéculatif naïf vaut ×1,2 — mesuré avant d'écrire une ligne de moteur.**
+
+`tools/speculatif.py` : brouillon Qwen2.5-0.5B, cible Qwen2.5-1.5B (même tokenizer), 40 préfixes, k = 8.
+
+| | |
+|---|---:|
+| acceptation moyenne | **3,35 jetons sur 8 (41,9 %)** |
+| médiane · min · max | 3 · 0 · 8 |
+| au moins 1 / 2 / 3 / 4 acceptés | 68 % · 60 % · 52 % · 42 % |
+| gain si le brouillon coûte 0,25× / **0,33×** / 0,50× la cible | ×1,45 · **×1,20** · ×0,87 |
+
+Sur cette machine, bornée par la bande passante mémoire, un 0,5 B coûte ~1/3 d'un 1,5 B par pas : **×1,20**, là où la feuille de route attendait ×1,58. Un brouillon **générique** ne paie pas — il faut un brouillon aligné (distillé, ou une tête Eagle3 qui consomme les états cachés de la cible), donc un chantier d'entraînement, pas une option de moteur.
+
+**2. La perplexité n'est comparable qu'à tokenizer égal — et la taille ne dit pas la qualité.**
+
+Trois modèles de la grille partagent **exactement** le même tokenizer (mêmes premiers jetons `198,284,8397,…`) :
+
+| modèle | perplexité | **bits/octet** | tok/s | RSS | lus |
+|---|---:|---:|---:|---:|---:|
+| Qwen2.5-0.5B Q8 | 17,43 | **0,983** | 28,7 | 1,28 Go | 0 |
+| r1-distill-1.5B Q4 | **47,14** | **1,326** | 9,5 | 4,76 Go | 1,04 Go |
+| r1-distill-14B Q4 | 14,30 | **0,915** | 0,5 | 39,8 Go | 8,71 Go |
+
+**Le 1.5B est 2,7× pire que le 0.5B** : un distillat de raisonnement est mauvais en langue pure. Et codestral (tokenizer Mistral, 32 768 entrées) découpe le même texte en **288 554** jetons contre 85 626 : sa perplexité ne se lit pas sur la même échelle, d'où la colonne **bits/octet** que j'ai ajoutée au dépouillement.
+
+## Ce qui tourne
+
+- **La file** : grille (codestral-22B en cours, puis Qwen3-30B-A3B, puis gpt-oss-120b depuis le disque dur), puis parcimonie, contexte, lots, routage, sémantique, noyau, répartition, portes.
+- **Batch 2 enchaîné** : la densité d'activation dépend-elle de la **tâche** (prose, français, code, multilingue) ?
+- **Batch 3 enchaîné** : l'aiguille dans la botte de foin — la perplexité moyenne ne dit pas si la mémoire tient à 4 000 jetons.
+- **Les entraînements** : `d256 dense` **terminé** (val 1,9307 bits/octet), le routé 8 experts suit ; `d384` à 32 000/40 000. La chaîne export → porte → mesure moteur → répartition à deux nœuds est armée pour se déclencher dès qu'ils finissent.
+- **Deux manques consignés** : `bge-m3` (embeddings) lisible mais **inexécutable**, et `eagle3` inutilisable faute de notion de brouillon dans le moteur.
+
+Tout est commité (`89ae2c3`, `f87e9c1`), le rapport vivant est `reports/rapport-campagne-benefices.md`. Je continue à dépouiller au fil des étapes.
+
+
+## Tour 11
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, préremplissage par lots, modèle plus gros que la RAM. Poursuivre en parallèle le livrable du modèle nativement événementiel : entraîné ici, exécuté par Drave à logits vérifiés, découpé en unités réparties. Chaque affirmation porte sa mesure (perplexité, débit, octets et événements par jeton, RSS, écart entre nœuds) ET ses conditions (corpus, tokenizer du modèle, charge de fond) ; les manques constatés — embeddings/encodeurs, décodage spéculatif — sont consignés comme manques, pas comme résultats. Livrables : la file tools/campagne-benefices.sh exécutée et ses journaux, un rapport de synthèse par famille de tâches, et la poursuite du modèle événementiel."
+Round: 4/40
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Nouveau point : je relève ce qui a atterri et je dépouille
+
+- **bash** `{"command": "date; echo \"=== journal campagne ===\"; tail -12 /tmp/campagne24/journal.txt; echo \"=== synthèse ===\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 120 /home/stephane/gpu-env/bin/python tools/campagne_synthese.py 2>/dev/null | head -14", "description": "Collect campa … [41 caractères tronqués]`
+
+  ```
+jeu 08 oct 2026 21:45:01 EDT
+=== journal campagne ===
+[08/10 21:17:25] charge 2.97 · noyau : bande passante mémoire mesurée : 18.1 Go/s
+[08/10 21:17:25] charge 2.97 · noyau : push/pull = ×3.10
+[08/10 21:19:49] charge 15.61 · === campagne démarrée (pid 3695400) ===
+[08/10 21:19:49] charge 15.61 · --- étape grille ---
+[08/10 21:20:04] charge 17.95 · grille/0.5B-Q8 : code 0 · PPL 17.4315 · RSS 1249 Mo · lus 0 Mio
+[08/10 21:21:10] charge 17.44 · grille/r1-1.5B : code 0 · PPL 47.1403 · RSS 4647 Mo · lus 988 Mio
+[08/10 21:39:54] charge 47.40 · grille/r1-14B : code 0 · PPL 14.3048 · RSS 38898 Mo · lus 8304 Mio
+=== synthèse ===
+| mesure | perplexité | bits/octet | jetons | événements | tok/s | en listes (M) | paires (M) | RSS (Go) | lus (Go) | durée |
+|---|---|---|---|---|---|---|---|---|---|---|
+| `grille_0.5B-Q8_ppl` | `17.4315` | `0.983` | `255` | `0` | `28.7` | `0.0` | `495.4` | `1.28` | `0.00` | `` |
+| `grille_r1-1.5B_ppl` | `47.1403` | `1.326` | `255` | `0` | `9.5` | `0.0` | `1548.8` | `4.76` | `1.04` | `` |
+| `grille_r1-14B_ppl` | `14.3048` | `0.915` | `255` | `0` | `0.5` | `0.0` | `14042.7` | `39.83` | `8.71` | `` |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"sortie = modele(input_ids=x, labels=x)\" -B 12 tools/entrainer_moteur.py | head -20", "description": "Locate the training loop for distillation"}`
+
+  ```
+114-    modele.train()
+115-    for pas in range(1, a.pas + 1):
+116-        x, y = lot_aleatoire(train, a.seq, a.lot, g)
+117-        x = x.to(dev)
+118-        # Entrée et étiquettes = LA MÊME séquence : le modèle décale lui-même
+119-        # (`shift_logits`/`shift_labels`). Passer `y` — déjà décalé par
+120-        # `lot_aleatoire` — décale DEUX FOIS, et l'entraînement optimise alors la
+121-        # prédiction de t+2 : un autre objectif, qui ne donne pas un modèle de
+122-        # langage. Mesuré : perte d'entraînement 1,9 nat, et 7,9 bits/octet
+123-        # partout à la fin, soit l'uniforme. Les bancs (`essai_decharge`,
+124-        # `essai_blocs`) n'ont pas ce défaut : ils appellent `cross_entropy`
+125-        # eux-mêmes sur des fenêtres décalées une seule fois.
+126:        sortie = modele(input_ids=x, labels=x)
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py", "new_string": "    modele.train()\n    # DISTILLATION : un enseignant gelé, de la MÊME famille et du MÊME tokenizer,\n    # dont on imite la distribution entière et pas seulement l'argmax. C'est le\n    # levi … [2367 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '135,152p' tools/entrainer_moteur.py", "description": "Show the loss computation block"}`
+
+  ```
+# (`shift_logits`/`shift_labels`). Passer `y` — déjà décalé par
+        # `lot_aleatoire` — décale DEUX FOIS, et l'entraînement optimise alors la
+        # prédiction de t+2 : un autre objectif, qui ne donne pas un modèle de
+        # langage. Mesuré : perte d'entraînement 1,9 nat, et 7,9 bits/octet
+        # partout à la fin, soit l'uniforme. Les bancs (`essai_decharge`,
+        # `essai_blocs`) n'ont pas ce défaut : ils appellent `cross_entropy`
+        # eux-mêmes sur des fenêtres décalées une seule fois.
+        sortie = modele(input_ids=x, labels=x)
+        perte = sortie.loss
+        opt.zero_grad(set_to_none=True)
+        perte.backward()
+        torch.nn.utils.clip_grad_norm_(modele.parameters(), 1.0)
+        opt.step()
+        if pas % a.eval_tous == 0 or pas == a.pas:
+            modele.eval()
+            tot, n = 0.0, 0
+            with torch.no_grad():
+                for k in range(min(8, (len(val) - 1) // (a.seq * a.lot))):
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py", "new_string": "        sortie = modele(input_ids=x, labels=x)\n        perte = sortie.loss\n        if enseignant is not None and a.alpha_distill > 0.0:\n            # KL(enseignant || eleve), température T :  … [772 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"tools/entrainer_moteur.py\"; s=open(p).read()\ns = s.replace('''    p.add_argument(\"--init\", type=float, default=0.08, help=\"écart-type d'initialisation\")''',\n'''    p.add_argument(\"--init\", type=float, d … [696 caractères tronqués]`
+
+  ```
+ok
+syntaxe OK
+3
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 /home/stephane/gpu-env/bin/python -u tools/entrainer_moteur.py --famille route --dim 64 --couches 2 --tetes 2 --cache 96 --cache-perle 32 --experts 4 --k 2 --pas 10 --eval-tous 10 --enseignant /tmp/m5_d256_dense --alpha-d … [165 caractères tronqués]`
+
+  ```
+# route · 0.09 M paramètres · 0.03 M poids LUS par jeton et par couche · 0.04 M stockés · corpus 100276153 octets · cpu
+# distillation depuis /tmp/m5_d256_dense · alpha 0.5 · température 2.0
+  pas     10 · perte 622.7837 · val 6.3074 bits/octet · 28 s
+
+  # meilleur point : pas 10 · val 6.3074 bits/octet
+  # écrit dans /tmp/distill_test · 0.09 M paramètres · 0.03 M poids lus/jeton/couche
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"tools/entrainer_moteur.py\"; s=open(p).read()\ns = s.replace('''            kl = torch.nn.functional.kl_div(logp_s, p_e, reduction=\"batchmean\")''',\n'''            # `batchmean` divise par la TAILLE DU LOT, pa … [854 caractères tronqués]`
+
+  ```
+ok
+  pas     10 · perte 7.0484 · val 6.2813 bits/octet · 27 s
+
+  # meilleur point : pas 10 · val 6.2813 bits/octet
+  # écrit dans /tmp/distill_test · 0.09 M paramètres · 0.03 M poids lus/jeton/couche
+  ```
+
+- **bash** `{"command": "cat > /tmp/campagne24/distillation.sh <<'SH'\n#!/bin/bash\n# L'expérience que le dépôt n'avait jamais faite : DISTILLER l'élève creux.\n#\n# Question : à lecture égale, un modèle routé rattrape-t-il le dense quand un\n# enseignant lui montre la distribution entière plutôt que le seul ar … [1410 caractères tronqués]`
+
+  ```
+distillation armée
+  # meilleur point : pas 36000 · val 2.0074 bits/octet
+  # écrit dans /tmp/m5_d256_dense · 3.21 M paramètres · 0.85 M poids lus/jeton/couche
+  pas  36000 · perte 1.1717 · val 1.9194 bits/octet · 1710 s
+  ```
+
+- **bash** `{"command": "date; tail -4 /tmp/campagne24/journal.txt; echo \"=== drave en cours ===\"; ps -eo pid,etime,pcpu,rss,comm --sort=-pcpu 2>/dev/null | grep drave | head -3; echo \"=== entraînements ===\"; tail -1 /tmp/campagne24/tr_d384_dense.log; ls /tmp/m5_d256_route/ 2>/dev/null | head -2; tail -1 /t … [120 caractères tronqués]`
+
+  ```
+jeu 08 oct 2026 21:47:24 EDT
+[08/10 21:19:49] charge 15.61 · --- étape grille ---
+[08/10 21:20:04] charge 17.95 · grille/0.5B-Q8 : code 0 · PPL 17.4315 · RSS 1249 Mo · lus 0 Mio
+[08/10 21:21:10] charge 17.44 · grille/r1-1.5B : code 0 · PPL 47.1403 · RSS 4647 Mo · lus 988 Mio
+[08/10 21:39:54] charge 47.40 · grille/r1-14B : code 0 · PPL 14.3048 · RSS 38898 Mo · lus 8304 Mio
+=== drave en cours ===
+3720096       03:01 2020 1278196 drave
+3718149       07:29 98.3 33671308 drave
+=== entraînements ===
+  pas  36000 · perte 1.1717 · val 1.9194 bits/octet · 1710 s
+# route · 10.30 M paramètres · 0.85 M poids LUS par jeton et par couche · 2.62 M stockés · corpus 100276153 octets · cuda
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/^def main/,/^if __name__/p' tools/premiere_couche_semantique.py | head -24; echo \"=== dossiers de traces ===\"; ls /home/stephane/Data13TB/stephane/corpus/udhr/ | head -8", "description": "Verify the semantic tool CLI befor … [21 caractères tronqués]`
+
+  ```
+def main():
+    d1, d2 = sys.argv[1], sys.argv[2]
+    maxi = int(opt("--max-paires", 40000))
+    ech = "--sans-echelle" not in sys.argv
+    if not ech:
+        print("# ATTENTION : --sans-echelle reproduit l'ANCIEN comportement (échelle "
+              "par enregistrement ignorée). Ce n'est pas la bonne lecture.")
+    poolings = ["moyenne", "derniere"]
+    for pool in poolings:
+        sfx = "" if ech else ".sans_echelle"
+        A = cache(d1, pool, opt("--cache", "/tmp/pcs_a1") + f".{pool}{sfx}.npz", ech)
+        B = cache(d2, pool, opt("--cache", "/tmp/pcs_a2") + f".{pool}{sfx}.npz", ech)
+        comm = sorted(set(A) & set(B))
+        if not comm:
+            print(f"# pooling {pool} : aucune langue commune"); continue
+        couches = sorted(set(A[comm[0]]) & set(B[comm[0]]))
+        print(f"\n=== pooling : {pool.upper()} · {len(comm)} langues · "
+              f"couches {couches[0]}–{couches[-1]} ===")
+        print(f"# {'couche':>7}{'même':>9}{'artic≠':>9}{'SÉPARATION':>12}")
+        lignes = []
+        for c in couches:
+            Va = np.vstack([A[L][c] for L in comm])
+            Vb = np.vstack([B[L][c] for L in comm])
+            # SYMÉTRISATION, ET ELLE EST NÉCESSAIRE. 
+… [115 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md", "new_string": "## 4. Ce que le dépôt sait déjà, par famille de tâches (avant cette campagne)\n\nConsolidé des rapports existants, pour que les chiffres du jour se lisent dans un\nensemble plutôt qu … [2507 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 git add tools/entrainer_moteur.py reports/rapport-campagne-benefices.md && timeout 300 git commit -q -m \"Distillation implémentée (jamais faite dans ce dépôt) + l'état des lieux par famille de tâches\n\ntools/entrainer_m … [1030 caractères tronqués]`
+
+  ```
+e4a51e5 Distillation implémentée (jamais faite dans ce dépôt) + l'état des lieux par famille de tâches
+[stderr]
+bash: command substitution: line 1: syntax error near unexpected token `reduction="batchmean"'
+bash: command substitution: line 1: `kl_div(reduction="batchmean")'
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format=%B | head -8; echo \"=== campagne ===\"; tail -3 /tmp/campagne24/journal.txt; echo \"=== entraînements ===\"; tail -1 /tmp/campagne24/tr_d384_dense.log; ls /tmp/m5_d256_route/config.json 2>/dev/null && echo \"rout … [133 caractères tronqués]`
+
+  ```
+Distillation implémentée (jamais faite dans ce dépôt) + l'état des lieux par famille de tâches
+
+tools/entrainer_moteur.py accepte --enseignant, --alpha-distill et --temperature :
+l'élève creux imite la distribution ENTIÈRE d'un dense gelé de la même famille,
+pas seulement son argmax. C'est le levier de qualité qui ne coûte aucun paramètre
+supplémentaire, et l'inventaire du dépôt notait qu'il n'avait jamais été essayé.
+
+Piège corrigé au passage :  divise par la taille du
+=== campagne ===
+[08/10 21:20:04] charge 17.95 · grille/0.5B-Q8 : code 0 · PPL 17.4315 · RSS 1249 Mo · lus 0 Mio
+[08/10 21:21:10] charge 17.44 · grille/r1-1.5B : code 0 · PPL 47.1403 · RSS 4647 Mo · lus 988 Mio
+[08/10 21:39:54] charge 47.40 · grille/r1-14B : code 0 · PPL 14.3048 · RSS 38898 Mo · lus 8304 Mio
+=== entraînements ===
+  # écrit dans /tmp/m5_d384_dense · 7.18 M paramètres · 1.92 M poids lus/jeton/couche
+  pas   4000 · perte 1.2965 · val 2.2329 bits/octet · 278 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/msg.txt <<'MSG'\nDistillation implémentée (jamais faite dans ce dépôt) + l'état des lieux par famille de tâches\n\ntools/entrainer_moteur.py accepte --enseignant, --alpha-distill et --temperature :\nl'élève creux imite la  … [1061 caractères tronqués]`

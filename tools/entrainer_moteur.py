@@ -84,6 +84,10 @@ def main():
     p.add_argument("--lr", type=float, default=1e-3)
     p.add_argument("--graine", type=int, default=1)
     p.add_argument("--init", type=float, default=0.08, help="écart-type d'initialisation")
+    p.add_argument("--enseignant", default="", help="dossier d'un modèle gelé à imiter")
+    p.add_argument("--alpha-distill", type=float, default=0.0,
+                   help="poids de la KL d'enseignant ; 0 = apprentissage ordinaire")
+    p.add_argument("--temperature", type=float, default=2.0, help="température de distillation")
     p.add_argument("--eval-tous", type=int, default=1000)
     p.add_argument("--sortie", required=True)
     p.add_argument("--sans-gpu", action="store_true")
@@ -112,6 +116,22 @@ def main():
     meilleur = (float("inf"), None, 0)
     debut = time.time()
     modele.train()
+    # DISTILLATION : un enseignant gelé, de la MÊME famille et du MÊME tokenizer,
+    # dont on imite la distribution entière et pas seulement l'argmax. C'est le
+    # levier que le dépôt n'avait jamais essayé (inventaire du 08/10 : « aucune
+    # distillation, mentionnée mais jamais réalisée »), et c'est le seul qui
+    # puisse rattraper l'écart de qualité d'un modèle creux sans lui ajouter de
+    # paramètres. `alpha` = 0 → apprentissage ordinaire, mesurable en A/B.
+    enseignant = None
+    if a.enseignant:
+        from transformers import AutoModelForCausalLM
+        enseignant = AutoModelForCausalLM.from_pretrained(a.enseignant,
+                                                          dtype=torch.float32).to(dev).eval()
+        for p in enseignant.parameters():
+            p.requires_grad_(False)
+        print(f"# distillation depuis {a.enseignant} · alpha {a.alpha_distill} · "
+              f"température {a.temperature}")
+
     for pas in range(1, a.pas + 1):
         x, y = lot_aleatoire(train, a.seq, a.lot, g)
         x = x.to(dev)
@@ -125,6 +145,22 @@ def main():
         # eux-mêmes sur des fenêtres décalées une seule fois.
         sortie = modele(input_ids=x, labels=x)
         perte = sortie.loss
+        if enseignant is not None and a.alpha_distill > 0.0:
+            # KL(enseignant || eleve), température T : `T²` remet le gradient à
+            # l'échelle de la CE — sans lui, la distillation douce pèse T² fois
+            # trop et écrase l'apprentissage.
+            with torch.no_grad():
+                lgt_e = enseignant(input_ids=x).logits
+            lgt_s = sortie.logits
+            logp_s = torch.log_softmax(lgt_s / a.temperature, dim=-1)
+            p_e = torch.softmax(lgt_e / a.temperature, dim=-1)
+            # `batchmean` divise par la TAILLE DU LOT, pas par le nombre de
+            # jetons : sur des logits (lot, séquence, vocabulaire), la KL sortait
+            # 128 fois trop grande (mesuré : perte 622 au lieu de ~10). On
+            # redivise par la longueur de séquence, sinon la distillation écrase
+            # l'apprentissage au lieu de le guider.
+            kl = torch.nn.functional.kl_div(logp_s, p_e, reduction="batchmean") / x.shape[1]
+            perte = (1.0 - a.alpha_distill) * perte + a.alpha_distill * (a.temperature ** 2) * kl
         opt.zero_grad(set_to_none=True)
         perte.backward()
         torch.nn.utils.clip_grad_norm_(modele.parameters(), 1.0)

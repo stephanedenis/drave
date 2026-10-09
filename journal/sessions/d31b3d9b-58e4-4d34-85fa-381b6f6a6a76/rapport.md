@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 12.5 h |
-| Tours | 10 |
-| Messages | 428 |
-| Appels d'outils | 426 |
+| Durée | 12.6 h |
+| Tours | 11 |
+| Messages | 446 |
+| Appels d'outils | 442 |
 | Fichiers touchés | 18 |
-| Commandes | 319 |
+| Commandes | 332 |
 | Sous-agents | 3 |
-| Commits | 14 |
+| Commits | 16 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -47,6 +47,8 @@
 **Tour 9** — encore une journée complète avant l'arrivé du nouveau matériel. Exécute pendant 24h les tâches que tu trouves les plus adéquates pour explorer les bénéfices attendus de Drave pour tout type de tâches.
 
 **Tour 10** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1196 caractères tronqués]
+
+**Tour 11** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1196 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -488,7 +490,7 @@ Toute la campagne serait partie d'un chiffre faux. La règle est maintenant dans
 
 ### Tour 10 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1476 caractères tronqués]
 
-*33 appels d'outils.* Actions notables :
+*34 appels d'outils.* Actions notables :
 
 - bash — Check campaign and training status
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/campagne_synthese.py`
@@ -504,11 +506,71 @@ Toute la campagne serait partie d'un chiffre faux. La règle est maintenant dans
 - bash — Download a 1.5B target model for the speculative test
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/speculatif.py`
 - bash — Test the speculative acceptance script
-- … et 19 autres
+- … et 20 autres
 
 **Synthèse produite :**
 
-⏵ Résultat décisif : le décodage spéculatif avec un brouillon naïf vaut ×1,2, pas ×2
+⏵ Point de mi-campagne : deux résultats solides, et la file continue
+
+\## Ce que la campagne a déjà établi (21 h 45, 25 min après le départ)
+
+**1. Le décodage spéculatif naïf vaut ×1,2 — mesuré avant d'écrire une ligne de moteur.**
+
+`tools/speculatif.py` : brouillon Qwen2.5-0.5B, cible Qwen2.5-1.5B (même tokenizer), 40 préfixes, k = 8.
+
+| | |
+|---|---:|
+| acceptation moyenne | **3,35 jetons sur 8 (41,9 %)** |
+| médiane · min · max | 3 · 0 · 8 |
+| au moins 1 / 2 / 3 / 4 acceptés | 68 % · 60 % · 52 % · 42 % |
+| gain si le brouillon coûte 0,25× / **0,33×** / 0,50× la cible | ×1,45 · **×1,20** · ×0,87 |
+
+Sur cette machine, bornée par la bande passante mémoire, un 0,5 B coûte ~1/3 d'un 1,5 B par pas : **×1,20**, là où la feuille de route attendait ×1,58. Un brouillon **générique** ne paie pas — il faut un brouillon aligné (distillé, ou une tête Eagle3 qui consomme les états cachés de la cible), donc un chantier d'entraînement, pas une option de moteur.
+
+**2. La perplexité n'est comparable qu'à tokenizer égal — et la taille ne dit pas la qualité.**
+
+Trois modèles de la grille partagent **exactement** le même tokenizer (mêmes premiers jetons `198,284,8397,…`) :
+
+| modèle | perplexité | **bits/octet** | tok/s | RSS | lus |
+|---|---:|---:|---:|---:|---:|
+| Qwen2.5-0.5B Q8 | 17,43 | **0,983** | 28,7 | 1,28 Go | 0 |
+| r1-distill-1.5B Q4 | **47,14** | **1,326** | 9,5 | 4,76 Go | 1,04 Go |
+| r1-distill-14B Q4 | 14,30 | **0,915** | 0,5 | 39,8 Go | 8,71 Go |
+
+**Le 1.5B est 2,7× pire que le 0.5B** : un distillat de raisonnement est mauvais en langue pure. Et codestral (tokenizer Mistral, 32 768 entrées) découpe le même texte en **288 554** jetons contre 85 626 : sa perplexité ne se lit pas sur la même échelle, d'où la colonne **bits/octet** que j'ai ajoutée au dépouillement.
+
+\## Ce qui tourne
+
+- **La file** : grille (codestral-22B en cours, puis Qwen3-30B-A3B, puis gpt-oss-120b depuis le disque dur), puis parcimonie, contexte, lots, routage, sémantique, noyau, répartition, portes.
+- **Batch 2 enchaîné** : la densité d'activation dépend-elle de la **tâche** (prose, français, code, multilingue) ?
+- **Batch 3 enchaîné** : l'aiguille dans la botte de foin — la perplexité moyenne ne dit pas si la mémoire tient à 4 000 jetons.
+- **Les entraînements** : `d256 dense` **terminé** (val 1,9307 bits/octet), le routé 8 experts suit ; `d384` à 32 000/40 000. La chaîne export → porte → mesure moteur → répartition à deux nœuds est armée pour se déclencher dès qu'ils finissent.
+- **Deux ma
+… [291 caractères tronqués]
+
+### Tour 11 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1476 caractères tronqués]
+
+*15 appels d'outils.* Actions notables :
+
+- bash — Collect campaign results so far
+- bash — Locate the training loop for distillation
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py`
+- bash — Show the loss computation block
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py`
+- bash — Add distillation CLI options and validate syntax
+- bash — Smoke-test distillation training
+- bash — Fix KL normalization and retest
+- bash — Chain the distillation experiment
+- bash — Check campaign and training progress
+- bash — Verify the semantic tool CLI before its campaign step
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md`
+- bash — Commit distillation support and the state of the art
+- bash — Verify commit message and progress
+- … et 1 autres
+
+**Synthèse produite :**
+
+⏵ Nouveau point : je relève ce qui a atterri et je dépouille
 
 ## 3. Travail accompli
 
@@ -522,7 +584,7 @@ Toute la campagne serait partie d'un chiffre faux. La règle est maintenant dans
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/essai_blocs.py` | 1 | 5 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/exporter_gguf.py` | 1 | 18 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte_moteur.py` | 1 | 4 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py` | 1 | 2 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py` | 1 | 4 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-reparti-moteur.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs` | 0 | 2 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/numa-segregation.md` | 1 | 3 |
@@ -533,7 +595,7 @@ Toute la campagne serait partie d'un chiffre faux. La règle est maintenant dans
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/campagne_synthese.py` | 1 | 2 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/speculatif.py` | 1 | 0 |
 | `/tmp/campagne24/batch3_niah.sh` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md` | 1 | 1 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md` | 1 | 2 |
 
 ### Sous-agents lancés
 
@@ -583,7 +645,7 @@ Toute la campagne serait partie d'un chiffre faux. La règle est maintenant dans
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 279 autres
+- … et 292 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -745,4 +807,6 @@ Toute la campagne serait partie d'un chiffre faux. La règle est maintenant dans
 - Campagne : le décodage spéculatif naïf vaut ×1,2 (mesuré), et deux familles manquent  tools/speculatif.py mesure ce qu'il faut savoir AVANT d'écrire le décodage
 - Campagne : le décodage spéculatif naïf vaut ×1,2 (mesuré), et deux familles manquent  tools/speculatif.py mesure ce qu'il faut savoir AVANT d'écrire le décodage
 - Campagne : la perplexité n'est comparable qu'à tokenizer égal — colonne bits/octet  Trois modèles de la grille partagent EXACTEMENT le même tokenizer (leurs fic
+- Distillation implémentée (jamais faite dans ce dépôt) + l'état des lieux par famille de tâches  tools/entrainer_moteur.py accepte --enseignant, --alpha-distill 
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/msg.txt <<'MSG' Distillation implémentée (jamais faite dans ce dépôt) + l'état des lieux par fa
 
