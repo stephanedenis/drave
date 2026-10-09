@@ -212,7 +212,43 @@ décident, mesurés sur `m4_route` (4 couches, 8 experts, top-2, 1 024 jetons) :
 
 ---
 
-## 8. Ce qui reste à mesurer (file en cours)
+## 8. Les tâches à SORTIE CONTRAINTE : une matrice qu'on ne lit pas
+
+La tête de sortie est **la plus grosse matrice du modèle** : vocabulaire × cachés.
+Pour le 0,5 B, 151 936 × 896 = **136 M poids, soit 136 Mo lus par jeton** — un
+cinquième du modèle entier pour une seule projection. Or une classification ou un
+choix multiple n'a que quelques sorties valides : `--tete-restreinte` ne calcule
+que celles-là.
+
+Mesure entrelacée, 64 jetons générés, 0,5 B Q8_0, 8 fils :
+
+| tête | tour 1 | tour 2 | moyenne |
+|---|---:|---:|---:|
+| complète (151 936 jetons) | 14,79 tok/s | 16,14 tok/s | 15,47 |
+| **restreinte à 3 jetons** | **21,92** | **22,07** | **22,00** |
+
+**×1,42 de débit**, et la tête restreinte est **stable** (21,92 / 22,07 là où la
+complète varie de 14,79 à 16,14 — moins de travail, donc moins de sensibilité à
+la charge).
+
+**Le second bénéfice compte plus que le premier, et il ne se mesure pas en
+tok/s** : la sortie **ne peut pas** être hors de l'ensemble autorisé. Dans l'essai,
+le modèle a produit `neutral negative negative positive positive negative neutral
+positive` — des réponses incohérentes (un 0,5 B ne sait pas juger un sentiment),
+**mais jamais un mot hors des trois étiquettes**. Pour une tâche de production,
+cela vaut plus que la vitesse : plus de post-traitement, plus de reprise, plus de
+réponse invalide à rattraper.
+
+C'est donc la **première famille de tâches où l'architecture de Drave gagne par
+construction** plutôt que par ses circonstances (modèle plus gros que la RAM) —
+et elle ne demande aucun modèle particulier.
+
+Le batch 7 refait la mesure sur le 1,5 B et sur gpt-oss-120b, où le rapport
+tête/corps est différent.
+
+---
+
+## 9. Ce qui reste à mesurer (file en cours)
 
 - `parcimonie` : seuil et k-WTA, en dense et en listes, sur un modèle réel ;
 - `contexte` : 512 → 8 192, avec le cache KV que le moteur **choisit** ;

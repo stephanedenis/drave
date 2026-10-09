@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 12.8 h |
-| Tours | 13 |
-| Messages | 479 |
-| Appels d'outils | 471 |
+| Durée | 12.9 h |
+| Tours | 14 |
+| Messages | 490 |
+| Appels d'outils | 480 |
 | Fichiers touchés | 19 |
-| Commandes | 356 |
+| Commandes | 364 |
 | Sous-agents | 3 |
-| Commits | 20 |
+| Commits | 21 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -53,6 +53,8 @@
 **Tour 12** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1196 caractères tronqués]
 
 **Tour 13** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1196 caractères tronqués]
+
+**Tour 14** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1196 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -646,7 +648,7 @@ Côté GPU : `d256_route` et `d384_route` s'entraînent ; ensuite distillation, 
 
 ### Tour 13 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1476 caractères tronqués]
 
-*8 appels d'outils.* Actions notables :
+*9 appels d'outils.* Actions notables :
 
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/census_routage.py`
 - bash — Run the routing census on the trained model
@@ -656,10 +658,47 @@ Côté GPU : `d256_route` et `d384_route` s'entraînent ; ensuite distillation, 
 - bash — Chain the extreme-size model test
 - edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/campagne-benefices.md`
 - bash — Commit the campaign plan update
+- bash — Round status check
 
 **Synthèse produite :**
 
-⏵ Nouvelle mesure : le recensement du routage — ce que coûterait de répartir par EXPERTS
+⏵ Nouvelle mesure livrée : le recensement du routage, et le cas extrême armé
+
+\## Ce round a produit
+
+**Le recensement du routage** (`tools/census_routage.py`, commit `1e11cc7`) — les trois chiffres qui décident d'un découpage par **experts** plutôt que par plages de couches, mesurés sur `m4_route` (4 couches, 8 experts, top-2, 1 024 jetons) :
+
+| couche | charge max | moyenne | déséquilibre | experts pour 90 % des jetons |
+|---|---:|---:|---:|---:|
+| 0 | 537 | 256 | **×2,10** | 5 sur 8 |
+| 1 | 517 | 256 | ×2,02 | 7 sur 8 |
+| 2 | 703 | 256 | **×2,75** | 6 sur 8 |
+| 3 | 999 | 256 | **×3,90** | 4 sur 8 |
+
+**Trois conséquences** : le déséquilibre est réel (jusqu'à 3,9× — un partage naïf donnerait un nœud quatre fois plus chargé) ; **on ne peut pas élaguer** (4 à 7 experts sur 8 servent) ; et **le volume à router est négligeable — 847 octets par jeton**, du même ordre que les 848 octets déjà mesurés pour un flux de couche. Ce qui coûte, c'est l'**aller-retour par couche**, pas les octets : répartir par experts multiplie les allers-retours que répartir par couches évite.
+
+**Le cas extrême armé** : batch 6 exécute **DeepSeek-V4.1-Flash Q2 — 365,7 Go sur une machine de 125 Go de RAM** — et mesure les octets lus, la mémoire résidente et le temps. C'est la revendication centrale du projet, et elle méritait son propre chiffre plutôt qu'une extrapolation.
+
+**La chaîne complète est posée** : campagne (codestral-22B en cours, puis Qwen3-30B-A3B, puis gpt-oss-120b depuis le disque dur) → batch 2 (densité par tâche) → batch 3 (aiguille) → batch 4 (génération, quatre tâches verbatim, conversation) → batch 5 (le lot sur le 30B depuis le NVMe) → batch 6 (V4-Flash). Cinq enchaîneurs, chacun attendant un **marqueur de fin** dans le journal — la correction qui évite que deux gros modèles se fassent lire en même temps et que les temps ne mesurent plus rien.
+
+Côté GPU : `d256_route` (12 000/40 000, val 2,075) et `d384_route` (8 000/40 000, val 2,117) s'entraînent ; ensuite distillation, dim 512, et l'export continu. Charge 24, tout tourne.
+
+### Tour 14 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1476 caractères tronqués]
+
+*8 appels d'outils.* Actions notables :
+
+- bash — Understand the restricted-head feature
+- bash — Read the restricted-head implementation
+- bash — Build the label token list for a classification task
+- bash — Compare full head vs restricted head
+- bash — Measure the restricted head with 64 tokens, interleaved
+- bash — Chain the constrained-output batch
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md`
+- bash — Commit the constrained-output finding
+
+**Synthèse produite :**
+
+⏵ Famille de tâches non couverte : les sorties contraintes — je mesure `--tete-restreinte`
 
 ## 3. Travail accompli
 
@@ -684,7 +723,7 @@ Côté GPU : `d256_route` et `d384_route` s'entraînent ; ensuite distillation, 
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/campagne_synthese.py` | 1 | 2 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/speculatif.py` | 1 | 0 |
 | `/tmp/campagne24/batch3_niah.sh` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md` | 1 | 5 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md` | 1 | 6 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/census_routage.py` | 1 | 0 |
 
 ### Sous-agents lancés
@@ -735,7 +774,7 @@ Côté GPU : `d256_route` et `d384_route` s'entraînent ; ensuite distillation, 
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 316 autres
+- … et 324 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -903,4 +942,5 @@ Côté GPU : `d256_route` et `d384_route` s'entraînent ; ensuite distillation, 
 - Campagne : le chemin par listes coûte 1,8 à 2,1x sur nos propres modèles, et c'est la réponse  Mesuré sur les deux modèles denses entraînés ici, mêmes jetons, m
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 git add tools/census_routage.py reports/rapport-campagne-benefices.md && timeout 300 git commi
 - Campagne : les cinq batches enchaînés (tâche, mémoire, génération, lot, cas extrême)  Le plan porte maintenant la file complète : après les neuf étapes viennent
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 git add reports/rapport-campagne-benefices.md && timeout 300 git commit -q -F - <<'MSG' Les tâ
 

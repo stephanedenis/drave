@@ -8049,3 +8049,175 @@ The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/campagne-benefices
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^## \" docs/campagne-benefices.md | head -8; timeout 300 git add docs/campagne-benefices.md && timeout 300 git commit -q -m \"Campagne : les cinq batches enchaînés (tâche, mémoire, génération, lot, cas extrême)\n\nLe plan p … [869 caractères tronqués]`
+
+  ```
+14:## 1. Le piège trouvé avant de commencer
+32:## 2. Les familles de tâches, et ce qui est mesurable aujourd'hui
+51:## 3. La file
+94:## 5. Ce qui est déjà acquis avant la campagne (pour ne pas le refaire)
+86d518b Campagne : les cinq batches enchaînés (tâche, mémoire, génération, lot, cas extrême)
+  ```
+
+- **bash** `{"command": "date; tail -3 /tmp/campagne24/journal.txt; echo \"=== entraînements ===\"; tail -1 /tmp/campagne24/tr_d256_route.log 2>/dev/null; tail -1 /tmp/campagne24/tr_d384_route.log 2>/dev/null; echo \"=== charge ===\"; uptime", "description": "Round status check", "timeoutMs": 60000}`
+
+  ```
+jeu 08 oct 2026 21:59:58 EDT
+[08/10 21:20:04] charge 17.95 · grille/0.5B-Q8 : code 0 · PPL 17.4315 · RSS 1249 Mo · lus 0 Mio
+[08/10 21:21:10] charge 17.44 · grille/r1-1.5B : code 0 · PPL 47.1403 · RSS 4647 Mo · lus 988 Mio
+[08/10 21:39:54] charge 47.40 · grille/r1-14B : code 0 · PPL 14.3048 · RSS 38898 Mo · lus 8304 Mio
+=== entraînements ===
+  pas  12000 · perte 1.2662 · val 2.0753 bits/octet · 826 s
+  pas   8000 · perte 1.3160 · val 2.1169 bits/octet · 689 s
+=== charge ===
+ 21:59:58  up 17 days 11:12,  2 users,  load average: 23,92, 22,62, 24,92
+  ```
+
+### 🤖 Assistant
+
+⏵ Nouvelle mesure livrée : le recensement du routage, et le cas extrême armé
+
+## Ce round a produit
+
+**Le recensement du routage** (`tools/census_routage.py`, commit `1e11cc7`) — les trois chiffres qui décident d'un découpage par **experts** plutôt que par plages de couches, mesurés sur `m4_route` (4 couches, 8 experts, top-2, 1 024 jetons) :
+
+| couche | charge max | moyenne | déséquilibre | experts pour 90 % des jetons |
+|---|---:|---:|---:|---:|
+| 0 | 537 | 256 | **×2,10** | 5 sur 8 |
+| 1 | 517 | 256 | ×2,02 | 7 sur 8 |
+| 2 | 703 | 256 | **×2,75** | 6 sur 8 |
+| 3 | 999 | 256 | **×3,90** | 4 sur 8 |
+
+**Trois conséquences** : le déséquilibre est réel (jusqu'à 3,9× — un partage naïf donnerait un nœud quatre fois plus chargé) ; **on ne peut pas élaguer** (4 à 7 experts sur 8 servent) ; et **le volume à router est négligeable — 847 octets par jeton**, du même ordre que les 848 octets déjà mesurés pour un flux de couche. Ce qui coûte, c'est l'**aller-retour par couche**, pas les octets : répartir par experts multiplie les allers-retours que répartir par couches évite.
+
+**Le cas extrême armé** : batch 6 exécute **DeepSeek-V4.1-Flash Q2 — 365,7 Go sur une machine de 125 Go de RAM** — et mesure les octets lus, la mémoire résidente et le temps. C'est la revendication centrale du projet, et elle méritait son propre chiffre plutôt qu'une extrapolation.
+
+**La chaîne complète est posée** : campagne (codestral-22B en cours, puis Qwen3-30B-A3B, puis gpt-oss-120b depuis le disque dur) → batch 2 (densité par tâche) → batch 3 (aiguille) → batch 4 (génération, quatre tâches verbatim, conversation) → batch 5 (le lot sur le 30B depuis le NVMe) → batch 6 (V4-Flash). Cinq enchaîneurs, chacun attendant un **marqueur de fin** dans le journal — la correction qui évite que deux gros modèles se fassent lire en même temps et que les temps ne mesurent plus rien.
+
+Côté GPU : `d256_route` (12 000/40 000, val 2,075) et `d384_route` (8 000/40 000, val 2,117) s'entraînent ; ensuite distillation, dim 512, et l'export continu. Charge 24, tout tourne.
+
+
+## Tour 14
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, préremplissage par lots, modèle plus gros que la RAM. Poursuivre en parallèle le livrable du modèle nativement événementiel : entraîné ici, exécuté par Drave à logits vérifiés, découpé en unités réparties. Chaque affirmation porte sa mesure (perplexité, débit, octets et événements par jeton, RSS, écart entre nœuds) ET ses conditions (corpus, tokenizer du modèle, charge de fond) ; les manques constatés — embeddings/encodeurs, décodage spéculatif — sont consignés comme manques, pas comme résultats. Livrables : la file tools/campagne-benefices.sh exécutée et ses journaux, un rapport de synthèse par famille de tâches, et la poursuite du modèle événementiel."
+Round: 7/40
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Famille de tâches non couverte : les sorties contraintes — je mesure `--tete-restreinte`
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"tete_restreinte\\|tete-restreinte\" drave-core/src/main.rs | head -8; echo \"=== ce que fait le drapeau ===\"; grep -n \"fn poser_tete_partielle\" -A 20 drave-core/src/main.rs | head -26", "description": "Understand the res … [22 caractères tronqués]`
+
+  ```
+88:        eprintln!("       drave <modele> --tete-restreinte F  génération CONTRAINTE : la tête ne");
+634:    tete_restreinte: Option<String>,
+789:            "--tete-restreinte" if i + 1 < args.len() => {
+790:                o.tete_restreinte = Some(suivant(i).clone()); 2 }
+879:    if let Some(f) = &opt.tete_restreinte {
+880:        poser_tete_restreinte(&mut mdl, f);
+1251:fn poser_tete_restreinte(mdl: &mut model::Model, fichier: &str) -> bool {
+1266:    mdl.tete_restreinte = Some(ids);
+=== ce que fait le drapeau ===
+429:fn poser_tete_partielle(mdl: &mut model::Model) {
+430-    mdl.tete_partielle = true;
+431-    eprintln!("[plage] `--tete-partielle` : la tête de sortie est appliquée à la fin de la \
+432-plage — le résultat est celui d'un modèle TRONQUÉ, pas du modèle entier");
+433-}
+434-
+435-/// **Tableau de bord des réglages en vigueur** (`--options-actives`), lus sur le
+436-/// MODÈLE après toutes les affectations.
+437-///
+438-/// Pourquoi il existe : le défaut le plus coûteux de ce dépôt n'est pas un calcul
+439-/// faux, c'est un drapeau qui ne fait rien. Huit ont été corrigés en une session
+440-/// (`--keep` en perplexité, `--ffn-gain` en inférence, les top-k dans les modes
+4
+… [658 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1251,1270p' drave-core/src/main.rs; echo \"=== usage de tete_restreinte dans la tête ===\"; grep -n \"tete_restreinte\" drave-core/src/model.rs | head -6", "description": "Read the restricted-head implementation"}`
+
+  ```
+fn poser_tete_restreinte(mdl: &mut model::Model, fichier: &str) -> bool {
+    let mut ids: Vec<u32> = Vec::new();
+    if let Ok(t) = std::fs::read_to_string(fichier) {
+        for x in t.split(|c: char| c == ',' || c.is_whitespace()) {
+            if let Ok(v) = x.trim().parse::<u32>() { ids.push(v); }
+        }
+    }
+    ids.sort_unstable();
+    ids.dedup();
+    if ids.is_empty() {
+        eprintln!("[tete] {fichier} ne contient aucun identifiant utilisable : tête complète");
+        return false;
+    }
+    println!("[tete] restreinte à {} tokens sur {} ({:.1} %) — le routeur, lui, reste global",
+             ids.len(), mdl.cfg.vocab, 100.0 * ids.len() as f64 / mdl.cfg.vocab as f64);
+    mdl.tete_restreinte = Some(ids);
+    true
+}
+
+fn cfg_dims(m: &model::Model) -> usize { m.cfg.hidden }
+=== usage de tete_restreinte dans la tête ===
+2516:    pub tete_restreinte: Option<Vec<u32>>,
+4361:            tete_gpu, tete_gpu_q6k, head4, tete_restreinte: None,
+7846:        let lignes: Vec<u32> = match &self.tete_restreinte {
+8104:            let lignes: Vec<u32> = match &self.tete_restreinte {
+8136:        let lignes: Vec<u32> = match &self.tete_restreinte {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf; mkdir -p /tmp/campagne24/tete\nfor w in \" positive\" \" negative\" \" neutral\"; do\n  n=$(echo \"$w\" | tr -d ' ')\n  printf '%s' \"$w\" > /tmp/campagne24/tete/w … [536 caractères tronqués]`
+
+  ```
+positive → 6785
+ negative → 8225
+ neutral → 20628
+labels : 6785822520628
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf; T=/tmp/campagne24/tete\necho \"6785,8225,20628\" > $T/labels.txt; cat $T/labels.txt\nINVITE=\"Classify the sentiment of this sentence: 'The engine reads only the w … [583 caractères tronqués]`
+
+  ```
+6785,8225,20628
+=== tête COMPLÈTE ===
+prompt  : 31 tokens en 1.471 s  (21.1 tok/s, TTFT 47.4 ms)
+généré  : 8 tokens en 0.725 s  (11.03 tok/s)
+événements : 15224433 au total, 390370.1 par token
+paires (poids × activation) : 14858948209 au total, 381.0 M par token — attention 43.6 M · experts 0.0 M · partagé 337.4 M
+postes (ms/token) : matvec-attn 4.4 | rope 0.8 | attention 5.6 | matvec+mlp 41.4 | total mesuré 52.2
+=== tête RESTREINTE (3 jetons) ===
+Classify the sentiment of this sentence: 'The engine reads only the weights that an activation touches.' Answer with one word: positive, negative or neutral. neutral negative negative positive positive negative neutral positive
+prompt  : 31 tokens en 1.363 s  (22.7 tok/s, TTFT 44.0 ms)
+généré  : 8 tokens en 0.373 s  (21.46 tok/s)
+événements : 15224433 au total, 390370.1 par token
+paires (poids × activation) : 14858948209 au total, 381.0 M par token — attention 43.6 M · experts 0.0 M · partagé 337.4 M
+postes (ms/token) : matvec-attn 4.1 | rope 0.7 | attention 5.2 | matvec+mlp 39.0 | total mesuré 49.0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf; T=/tmp/campagne24/tete\nINVITE=\"Classify the sentiment of this sentence: 'The engine reads only the weights that an activation touches.' Answer with one word: pos … [514 caractères tronqués]`
+
+  ```
+tour 1 tête complète : généré  : 64 tokens en 4.328 s  (14.79 tok/s
+tour 1 tête restreinte : généré  : 64 tokens en 2.920 s  (21.92 tok/s
+tour 2 tête complète : généré  : 64 tokens en 3.965 s  (16.14 tok/s
+tour 2 tête restreinte : généré  : 64 tokens en 2.899 s  (22.07 tok/s
+  ```
+
+- **bash** `{"command": "cat > /tmp/campagne24/batch7_tete.sh <<'SH'\n#!/bin/bash\n# Batch 7 — LES TÂCHES À SORTIE CONTRAINTE, et une matrice qu'on ne lit pas.\n#\n# La tête de sortie est la PLUS GROSSE matrice du modèle : vocabulaire × cachés.\n# Pour un 0,5 B, 151 936 × 896 = 136 M poids — 136 Mo lus PAR JETO … [3425 caractères tronqués]`
+
+  ```
+batch 7 (sorties contraintes) enchaîné
+jeu 08 oct 2026 22:02:52 EDT
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md", "new_string": "## 8. Les tâches à SORTIE CONTRAINTE : une matrice qu'on ne lit pas\n\nLa tête de sortie est **la plus grosse matrice du modèle** : vocabulaire × cachés.\nPour le 0,5 B, 151 936 × 89 … [1626 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 git add reports/rapport-campagne-benefices.md && timeout 300 git commit -q -F - <<'MSG'\nLes tâches à sortie contrainte : x1,42 de débit, et une garantie qui vaut plus\n\nLa tête de sortie est la PLUS GROSSE matrice du mo … [1031 caractères tronqués]`
