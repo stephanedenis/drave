@@ -287,8 +287,10 @@ def main():
                         "0,25 = un connectome inné qui ne garde qu'un quart des poids "
                         "par ligne, tiré aléatoirement, jamais modifié)")
     p.add_argument("--poids-lognormaux", action="store_true",
-                   help="apprendre theta et exécuter w = signe(theta)·exp(|theta|) — "
-                        "distribution log-normale, comme les synapses corticales")
+                   help="INUTILISABLE EN L'ÉTAT (bug de sauvegarde, cf. "
+                        "docs/biologie-pour-drave.md § 3 ter) : le fichier sauvé ne "
+                        "reproduit pas le modèle entraîné (13,06 bits/octet au lieu "
+                        "de 2,27). Conservé pour la démonstration du défaut")
     p.add_argument("--sans-gpu", action="store_true")
     a = p.parse_args()
     # Lecture égale par construction : k experts lisent ce que lit le FFN dense.

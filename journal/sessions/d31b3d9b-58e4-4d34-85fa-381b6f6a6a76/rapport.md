@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 27.7 h |
-| Tours | 28 |
-| Messages | 1097 |
-| Appels d'outils | 1053 |
+| Durée | 27.9 h |
+| Tours | 29 |
+| Messages | 1108 |
+| Appels d'outils | 1062 |
 | Fichiers touchés | 33 |
-| Commandes | 869 |
+| Commandes | 878 |
 | Sous-agents | 3 |
-| Commits | 87 |
+| Commits | 88 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -83,6 +83,8 @@
 **Tour 27** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1197 caractères tronqués]
 
 **Tour 28** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1197 caractères tronqués]
+
+**Tour 29** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1197 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1318,7 +1320,7 @@ Cinq points où notre règle **est** biologique (elle porte sur des *changements
 
 ### Tour 28 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1477 caractères tronqués]
 
-*13 appels d'outils.* Actions notables :
+*15 appels d'outils.* Actions notables :
 
 - bash — Check chains and training state
 - bash — Queue the structure follow-up experiments
@@ -1333,10 +1335,49 @@ Cinq points où notre règle **est** biologique (elle porte sur des *changements
 - bash — Verify commit state and active chains
 - bash — Fix and test the materialization
 - bash — Eliminate the materialization suspicion and record it
+- bash — Poll the structure chain
+- … et 1 autres
 
 **Synthèse produite :**
 
-⏵ Correction du défaut de matérialisation de E6 (copie explicite avant retrait)
+⏵ Point d'étape : livrables en place, deux mesures en file — objectif laissé actif
+
+**Livrables de l'objectif — état vérifié**
+
+| livrable | état |
+|---|---|
+| `tools/campagne-benefices.sh` exécutée + journaux | ✅ 9 étapes terminées à 01 h 03, **16 journaux** bruts dans `/tmp/campagne24/`, **23 portes vertes / 0 rouge** |
+| rapport de synthèse par famille de tâches | ✅ `reports/rapport-campagne-benefices.md` (**1 397 lignes**, verdict famille par famille au § 0 bis) + `rapports/rapport-modele-moteur.md` (232 l.) |
+| poursuite du modèle événementiel | ✅ trois échelles entraînées, portes tenues, découpage à deux nœuds à 0,00e0 ; et la recette mesurée : **creux sur les deux axes appris** (÷8 de lectures à qualité égale) |
+
+**Quatre documents de conception nés de cette session** : `docs/modele-pour-drave.md` (312 l., moteur contre modèle, dix dessins évalués), `docs/biologie-pour-drave.md` (384 l., connectomes, budget énergétique, structure innée), `docs/hebbien-differentiel-et-biologie.md` (185 l.) et `docs/impulsion-pure-apprenant.md` (169 l.).
+
+**Résultats mesurés depuis le dernier point**
+
+- **E1 — structure innée** : masque de 25 % des connexions tiré **au hasard** à la naissance → perplexité **5,0472** contre 4,9959 (+1,0 %), événements **81,6 M contre 336,7 M (÷4,1)**, débit **276 contre 131 tok/s**. La structure peut être innée ; seuls les poids ont besoin d'être appris.
+- **E7/E8 — mécanismes biologiques implémentés et mesurés** : la décorrélation est **inerte** (8 8225 contre 8 8246) et la modulation par **nouveauté empire** (+20,4 % contre +5,2 %). Le troisième facteur de la biologie n'est pas « c'est nouveau » mais « **ça a marché** » — d'où la conclusion que le signal manquant est un signal de **valeur**.
+- **E6 — poids log-normaux** : **inconclusive**, et consignée comme telle. Le modèle sauvegardé ne reproduit pas le modèle entraîné (validation 2,2662 bits/octet, perplexité moteur 8 668, référence PyTorch 15 552). Le premier soupçon — la matérialisation de la reparamétrisation — a été **testé et éliminé** (écart mesuré 0,000e+00), et la piste restante est notée : l'écart entre la validation fp32 et le modèle quantifié.
+
+**En file (chaîne `jour6_structure`, ~15 h 30)** : le masque inné à **12,5 %** (jusqu'où descendre ?) et le modèle **structure innée 25 % + activations creuses apprises 25 %** — les deux facteurs du coût divisés chacun par quatre, soit 1/16 des paires.
+
+Rien n'est laissé en suspens dans le dépôt : tout est committé (dernier : `e1
+… [114 caractères tronqués]
+
+### Tour 29 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1477 caractères tronqués]
+
+*7 appels d'outils.* Actions notables :
+
+- bash — Poll the structure chain
+- bash — Compare the configs and weight scales of the two models
+- bash — Evaluate the saved models with the training tool's own metric
+- bash — Find the evaluation function name
+- bash — Read the validation computation
+- bash — Evaluate the saved files with the training protocol
+- bash — Record the definitive E6 measurement and guard the variant
+
+**Synthèse produite :**
+
+⏵ E6 : le fichier sauvé ne reproduit PAS le modèle entraîné — mesure définitive et garde-fou
 
 ## 3. Travail accompli
 
@@ -1426,7 +1467,7 @@ Cinq points où notre règle **est** biologique (elle porte sur des *changements
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 829 autres
+- … et 838 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1554,7 +1595,7 @@ Cinq points où notre règle **est** biologique (elle porte sur des *changements
 
 ## 5. Erreurs rencontrées
 
-45 sorties en erreur ou divergentes. Les premières :
+46 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : ```  ### 🤖 Assistant  ⏵ **En transformers 5, `AutoModel` rend directement `Qwen2Model` (pas de `.model`). Je corrige le diagnostic.**  - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitH
 - **T2** : 3310393 bash -c pgrep -af "essai_decharge" | grep python | head; echo "--- logs ---"; tail -2 /tmp/ec_d192_lr3e3.log 2>/dev/null; tail -2 /tmp/ec_d192_lr1e3.log 2>/dev/null; echo "---"; ls -la /tmp/ec
@@ -1661,4 +1702,5 @@ Cinq points où notre règle **est** biologique (elle porte sur des *changements
 - Le rapport de campagne renvoie aux trois documents de conception, et porte le résultat de structure innée" && echo ok; sleep 420; tail -1 /tmp/campagne24/tr_m13
 - E6 (poids log-normaux) : échec de code, consigné comme tel — le modèle sauvegardé n'est pas le modèle entraîné  La reparamétrisation w = signe·e^theta a été ent
 - E6 : le soupçon de matérialisation est testé et ÉLIMINÉ (écart 0,000e+00) — le défaut est ailleurs  La matérialisation a été refaite en recalculant explicitemen
+- E6 : mesure définitive — le fichier sauvé ne reproduit pas le modèle entraîné  Avec le protocole de l'entraînement lui-même (mêmes fenêtres, même formule) :   t
 

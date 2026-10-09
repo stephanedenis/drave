@@ -188,6 +188,15 @@ l'écart entre la validation d'entraînement (évaluée en fp32 sur le modèle v
 le modèle *sauvegardé puis quantifié* — c'est-à-dire, une fois de plus, la
 quantification et non l'entraînement.
 
+**Et la mesure définitive, avec le protocole de l'entraînement lui-même** (même
+corpus, mêmes fenêtres, même formule) : le fichier sauvé du témoin gaussien redonne
+**exactement** sa validation (1,9020 bits/octet), celui du modèle log-normal donne
+**13,0614** là où l'entraînement annonçait 2,2662. **Le fichier ne reproduit pas le
+modèle entraîné**, et ce n'est ni le moteur (il exécute fidèlement ce qu'on lui
+donne), ni la quantification (la référence PyTorch sur les mêmes poids donne 15 552),
+ni la matérialisation (écart mesuré 0,000e+00). La cause reste **ouverte** ; le
+variant est marqué inutilisable dans le harnais tant qu'elle ne l'est pas.
+
 **E6 est donc INCONCLUSIVE : ni la prédiction, ni son contraire, ne sont établis** —
 et c'est écrit comme tel plutôt que présenté comme un échec de la biologie. Deux
 faits subsistent : la distribution obtenue n'est **pas** à queue lourde

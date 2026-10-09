@@ -17380,3 +17380,172 @@ syntaxe OK
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"tools/entrainer_moteur.py\")\ns = p.read_text()\n# retirer le message de matérialisation en double (l'ancien, plus haut)\ns = s.replace('''    if a.poids_lognormaux:\n        print … [3242 caractères tronqués]`
+
+  ```
+doublon retiré
+doc corrigée
+syntaxe OK
+e164570 E6 : le soupçon de matérialisation est testé et ÉLIMINÉ (écart 0,000e+00) — le défaut est ailleurs
+  ```
+
+- **bash** `{"command": "sleep 560; cd /tmp/campagne24 && tail -1 tr_m14_masque125.log; grep -E \"m14|m15\" journal14.txt 2>/dev/null | tail -3", "description": "Poll the structure chain", "timeoutMs": 600000}`
+
+  ```
+pas  20000 · perte 1.4069 · val 2.1764 bits/octet · 1008 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && wc -l reports/rapport-campagne-benefices.md reports/rapport-modele-moteur.md docs/modele-pour-drave.md docs/biologie-pour-drave.md docs/hebbien-differentiel-et-biologie.md docs/impulsion-pure-apprenant.md 2>/dev/null; echo \"=== jour … [201 caractères tronqués]`
+
+  ```
+1397 reports/rapport-campagne-benefices.md
+   232 reports/rapport-modele-moteur.md
+   312 docs/modele-pour-drave.md
+   384 docs/biologie-pour-drave.md
+   185 docs/hebbien-differentiel-et-biologie.md
+   169 docs/impulsion-pure-apprenant.md
+  2679 total
+=== journaux de campagne ===
+16
+=== file de la campagne ===
+18
+  ```
+
+### 🤖 Assistant
+
+⏵ Point d'étape : livrables en place, deux mesures en file — objectif laissé actif
+
+**Livrables de l'objectif — état vérifié**
+
+| livrable | état |
+|---|---|
+| `tools/campagne-benefices.sh` exécutée + journaux | ✅ 9 étapes terminées à 01 h 03, **16 journaux** bruts dans `/tmp/campagne24/`, **23 portes vertes / 0 rouge** |
+| rapport de synthèse par famille de tâches | ✅ `reports/rapport-campagne-benefices.md` (**1 397 lignes**, verdict famille par famille au § 0 bis) + `rapports/rapport-modele-moteur.md` (232 l.) |
+| poursuite du modèle événementiel | ✅ trois échelles entraînées, portes tenues, découpage à deux nœuds à 0,00e0 ; et la recette mesurée : **creux sur les deux axes appris** (÷8 de lectures à qualité égale) |
+
+**Quatre documents de conception nés de cette session** : `docs/modele-pour-drave.md` (312 l., moteur contre modèle, dix dessins évalués), `docs/biologie-pour-drave.md` (384 l., connectomes, budget énergétique, structure innée), `docs/hebbien-differentiel-et-biologie.md` (185 l.) et `docs/impulsion-pure-apprenant.md` (169 l.).
+
+**Résultats mesurés depuis le dernier point**
+
+- **E1 — structure innée** : masque de 25 % des connexions tiré **au hasard** à la naissance → perplexité **5,0472** contre 4,9959 (+1,0 %), événements **81,6 M contre 336,7 M (÷4,1)**, débit **276 contre 131 tok/s**. La structure peut être innée ; seuls les poids ont besoin d'être appris.
+- **E7/E8 — mécanismes biologiques implémentés et mesurés** : la décorrélation est **inerte** (8 8225 contre 8 8246) et la modulation par **nouveauté empire** (+20,4 % contre +5,2 %). Le troisième facteur de la biologie n'est pas « c'est nouveau » mais « **ça a marché** » — d'où la conclusion que le signal manquant est un signal de **valeur**.
+- **E6 — poids log-normaux** : **inconclusive**, et consignée comme telle. Le modèle sauvegardé ne reproduit pas le modèle entraîné (validation 2,2662 bits/octet, perplexité moteur 8 668, référence PyTorch 15 552). Le premier soupçon — la matérialisation de la reparamétrisation — a été **testé et éliminé** (écart mesuré 0,000e+00), et la piste restante est notée : l'écart entre la validation fp32 et le modèle quantifié.
+
+**En file (chaîne `jour6_structure`, ~15 h 30)** : le masque inné à **12,5 %** (jusqu'où descendre ?) et le modèle **structure innée 25 % + activations creuses apprises 25 %** — les deux facteurs du coût divisés chacun par quatre, soit 1/16 des paires.
+
+Rien n'est laissé en suspens dans le dépôt : tout est committé (dernier : `e164570`), et l'objectif reste **actif** pour la prochaine fenêtre, le temps que les deux dernières mesures tombent.
+
+
+## Tour 29
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, préremplissage par lots, modèle plus gros que la RAM. Poursuivre en parallèle le livrable du modèle nativement événementiel : entraîné ici, exécuté par Drave à logits vérifiés, découpé en unités réparties. Chaque affirmation porte sa mesure (perplexité, débit, octets et événements par jeton, RSS, écart entre nœuds) ET ses conditions (corpus, tokenizer du modèle, charge de fond) ; les manques constatés — embeddings/encodeurs, décodage spéculatif — sont consignés comme manques, pas comme résultats. Livrables : la file tools/campagne-benefices.sh exécutée et ses journaux, un rapport de synthèse par famille de tâches, et la poursuite du modèle événementiel."
+Round: 22/40
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Reprise : état des deux dernières mesures de structure
+
+- **bash** `{"command": "cd /tmp/campagne24 && echo \"=== m14 ===\"; tail -1 tr_m14_masque125.log 2>/dev/null; echo \"=== m15 ===\"; tail -1 tr_m15.log 2>/dev/null || echo \"(pas commencé)\"; echo \"=== journal14 ===\"; grep -E \"masque|structure|m1[45]\" journal14.txt 2>/dev/null | tail -5; date '+%H:%M'", "de … [39 caractères tronqués]`
+
+  ```
+=== m14 ===
+  pas  20000 · perte 1.4069 · val 2.1764 bits/octet · 1008 s
+=== m15 ===
+(pas commencé)
+=== journal14 ===
+[09/10 12:44:24] charge 3.58 · === 1. masque inné à 12,5 % ===
+13:02
+  ```
+
+- **bash** `{"command": "cd /tmp && diff <(python3 -m json.tool m5_d384_dense/config.json) <(python3 -m json.tool m13_d384_lognormal/config.json) | head -20; echo \"=== taille des tenseurs ===\"; for d in m5_d384_dense m13_d384_lognormal; do echo \"--- $d\"; /home/stephane/gpu-env/bin/python -c \"\nfrom safeten … [433 caractères tronqués]`
+
+  ```
+=== taille des tenseurs ===
+--- m5_d384_dense
+ clés: 46
+  model.embed_tokens.weight                    min -1.1789 max +1.8551 abs-moy 0.1574
+  model.layers.0.mlp.gate_proj.weight          min -0.7920 max +0.8316 abs-moy 0.1333
+  model.layers.0.self_attn.q_proj.weight       min -0.7969 max +0.7334 abs-moy 0.1255
+--- m13_d384_lognormal
+ clés: 46
+  model.embed_tokens.weight                    min -1.1338 max +1.1782 abs-moy 0.0705
+  model.layers.0.mlp.gate_proj.weight          min -0.4611 max +0.4361 abs-moy 0.0640
+  model.layers.0.self_attn.q_proj.weight       min -0.4949 max +0.3965 abs-moy 0.0640
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 /home/stephane/gpu-env/bin/python - <<'PY'\nimport sys, torch, numpy as np\nsys.path.insert(0, \"tools\")\nfrom transformers import AutoModelForCausalLM\nfrom entrainer_moteur import charger, evaluer\nval = charger([\"dat … [383 caractères tronqués]`
+
+  ```
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 4, in <module>
+ImportError: cannot import name 'evaluer' from 'entrainer_moteur' (/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py)
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^def \\|^    def \" tools/entrainer_moteur.py | head -12; grep -n \"def evaluer\\|def valider\\|bits/octet\" tools/entrainer_moteur.py | head -6", "description": "Find the evaluation function name"}`
+
+  ```
+38:def construire(famille, a):
+69:def installer_kwta(modele, fraction, cibles=None):
+93:    def fabrique(f):
+131:    def __init__(self, signes):
+135:    def forward(self, theta):
+141:def installer_poids_lognormaux(modele):
+158:def materialiser_poids(modele):
+187:def elaguer_lignes(modele, garde):
+214:def installer_masque_inne(modele, garde, graine):
+245:def appliquer_masque(modele, masques):
+253:def main():
+55:                  # (mesuré : 7,4 bits/octet après 20 000 pas, contre 2,2 pour le
+163:    poids qui ne reproduisaient PAS le modèle entraîné — validation 2,2662 bits/octet
+366:        # langage. Mesuré : perte d'entraînement 1,9 nat, et 7,9 bits/octet
+415:                    # commise ici, et elle a produit des « 2,95 bits/octet » pour
+422:            print(f"  pas {pas:>6} · perte {perte.item():.4f} · val {bpo:.4f} bits/octet "
+435:    print(f"\n  # meilleur point : pas {meilleur[2]} · val {meilleur[0]:.4f} bits/octet")
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '405,425p' tools/entrainer_moteur.py", "description": "Read the validation computation"}`
+
+  ```
+tot, n = 0.0, 0
+            with torch.no_grad():
+                for k in range(min(8, (len(val) - 1) // (a.seq * a.lot))):
+                    xv = torch.from_numpy(
+                        np.stack([val[(k * a.lot + j) * a.seq:(k * a.lot + j) * a.seq + a.seq]
+                                  for j in range(a.lot)]).astype(np.int64)).to(dev)
+                    # LA MÊME séquence en entrée et en étiquettes : le modèle
+                    # décale lui-même (`shift_logits`/`shift_labels`). Passer une
+                    # entrée DÉJÀ décalée avec des étiquettes décalées décale
+                    # DEUX FOIS et mesure la prédiction de t+2 — l'erreur a été
+                    # commise ici, et elle a produit des « 2,95 bits/octet » pour
+                    # un modèle dont la vraie mesure est 7,5.
+                    tot += float(modele(input_ids=xv, labels=xv).loss) * xv.numel()
+                    n += xv.numel()
+            bpo = tot / max(n, 1) / math.log(2)
+            if bpo < meilleur[0]:
+                meilleur = (bpo, {kk: v.detach().clone() for kk, v in modele.state_dict().items()}, pas)
+            print(f"  pas {pas:>6} · perte {perte.item():.4f} · val {bpo:.4f} bits/o
+… [83 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 /home/stephane/gpu-env/bin/python - <<'PY'\nimport sys, math, torch, numpy as np\nsys.path.insert(0, \"tools\")\nfrom transformers import AutoModelForCausalLM\nfrom entrainer_moteur import charger\nval = charger([\"data/c … [770 caractères tronqués]`
+
+  ```
+m5_d384_dense          fichier SAUVEGARDÉ, même protocole que l'entraînement : 1.9020 bits/octet
+m13_d384_lognormal     fichier SAUVEGARDÉ, même protocole que l'entraînement : 13.0614 bits/octet
+[stderr]
+Loading weights:   0%|          | 0/46 [00:00<?, ?it/s]Loading weights: 100%|██████████| 46/46 [00:00<00:00, 6869.30it/s]
+Loading weights:   0%|          | 0/46 [00:00<?, ?it/s]Loading weights: 100%|██████████| 46/46 [00:00<00:00, 5295.11it/s]
+  ```
+
+### 🤖 Assistant
+
+⏵ E6 : le fichier sauvé ne reproduit PAS le modèle entraîné — mesure définitive et garde-fou
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\nd = pathlib.Path(\"docs/biologie-pour-drave.md\")\nt = d.read_text()\nvieux = \"\"\"**E6 est donc INCONCLUSIVE : ni la prédiction, ni son contraire, ne sont établis** —\"\"\"\nassert vieux in t\nneuf … [2419 caractères tronqués]`
