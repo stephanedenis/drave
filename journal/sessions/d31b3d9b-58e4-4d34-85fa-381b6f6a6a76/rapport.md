@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 28.6 h |
-| Tours | 30 |
-| Messages | 1135 |
-| Appels d'outils | 1085 |
+| Durée | 28.7 h |
+| Tours | 31 |
+| Messages | 1139 |
+| Appels d'outils | 1087 |
 | Fichiers touchés | 34 |
-| Commandes | 898 |
+| Commandes | 900 |
 | Sous-agents | 3 |
-| Commits | 91 |
+| Commits | 92 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -87,6 +87,8 @@
 **Tour 29** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1197 caractères tronqués]
 
 **Tour 30** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1197 caractères tronqués]
+
+**Tour 31** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1197 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1431,7 +1433,39 @@ Rien n'est laissé en suspens dans le dépôt : tout est committé (dernier : `e
 
 **Synthèse produite :**
 
-⏵ Réponse mesurée : nos modèles à décharges ne vont PAS sur le GPU — deux raisons distinctes
+⏵ Réponse : non — et les deux raisons sont distinctes
+
+**Vérifié dans le code et par la mesure** (nouvelle section `docs/modele-pour-drave.md` § 4 bis).
+
+**Ce que le moteur sait déporter** : les projections **Q8_0** (noyau dense int8), le cache KV, les scores d'attention et leur top-k, et les experts MXFP4/Q4_K. Mais une projection ne part sur le GPU que sous **trois conditions** :
+
+| condition | nos modèles à décharges |
+|---|---|
+| source **Q8_0** (forme dense 8 bits) | ✅ (nos FFN sont exportées en Q8) |
+| **aucun élagage** (`keep >= 1.0`) | ❌ tout modèle à poids creux est exclu |
+| **≥ 8 Mio** par projection (`SEUIL_GPU`) | ❌ **0,45 à 0,80 Mio** — dix fois trop petits |
+
+**Donc aucun de nos modèles à décharges n'utilise le GPU.** Mesuré à l'instant : `DRAVE_GPU=1` sur `m8_d512_kwta25` rend **exactement la même perplexité (4,5656)** et le même débit, après avoir annoncé que le périphérique demandé était indisponible puis être retombé proprement sur le CPU — pas de changement silencieux.
+
+**Et la seconde raison est plus profonde que la taille.** Le noyau GPU est un **produit dense** : `proj(m, x: &[i32], sx)` reçoit le **vecteur d'activation complet, zéros compris**, et calcule le produit entier. Or tout l'avantage du chemin par listes est de **ne pas lire les poids nuls** — déporter une projection creuse sur ce noyau **détruirait exactement ce que la parcimonie apporte** : on gagnerait la bande passante de la carte et on perdrait le saut des lectures.
+
+**Ce qu'il faudrait** : un **noyau de listes sur la carte** — n'envoyer que les indices non nuls et ne lire que les lignes de poids correspondantes (un *gather* sur le périphérique, ou un format creux compressé). Ça n'existe pas, et c'est le **pendant GPU exact** du manque déjà consigné côté experts (« le chargeur d'experts refuse Q8_0, donc un modèle routé ne peut pas être exécuté en listes »). Autrement dit : **l'architecture événementielle est aujourd'hui une architecture CPU**, et la rendre GPU est un chantier de noyaux, pas de réglages.
+
+**Ce que le GPU sert déjà** : sur **gpt-oss-120B**, les projections d'attention sont en Q8_0 et pèsent **12,5 Mio** — au-dessus du seuil — donc elles *sont* déportées sous `DRAVE_GPU=1`. Sur le 30B (Q4_K partout), rien n'a de forme dense 8 bits : rien à déporter. Le seuil de 8 Mio vient d'ailleurs d'une mesure : 60 µs d'aller-retour contre 123 µs de calcul CPU pour la FFN du 0,5 B (le CPU gagne), 187 contre 216 µs pour l'attention de gpt-oss (le GPU gagne).
+
+En cours 
+… [128 caractères tronqués]
+
+### Tour 31 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1477 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Harvest the combined structure+sparsity result
+- bash — Update experiment statuses in the docs
+
+**Synthèse produite :**
+
+⏵ Consolidation : mise à jour des statuts d'expériences dans les documents
 
 ## 3. Travail accompli
 
@@ -1522,7 +1556,7 @@ Rien n'est laissé en suspens dans le dépôt : tout est committé (dernier : `e
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 858 autres
+- … et 860 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1761,4 +1795,5 @@ Rien n'est laissé en suspens dans le dépôt : tout est committé (dernier : `e
 - L'architecture du cerveau face à Drave : les briques y sont, les formes non  Nouveau document : après la brique (docs/biologie-pour-drave.md), l'édifice. Les ch
 - M1 : le bus de valeur est implémenté, et la valeur auto-référentielle ne suffit pas  Le manque M1 (un scalaire diffusé à toutes les couches, comme un noyau neur
 - Nos modèles à décharges ne vont pas sur GPU : trop petits, et le noyau GPU est dense  Vérifié dans le code et par la mesure. Trois conditions pour déporter une 
+- Statuts d'expériences à jour : E1 et E3 faits, E2/E4 cadrées, et le pendant GPU du noyau de listes ajouté au plan" && echo ok
 

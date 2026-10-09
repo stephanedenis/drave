@@ -17932,3 +17932,58 @@ F32      blk.0.attn_output.bias                 [2880] · 0.0 M poids · fichier
 ⏵ Réponse mesurée : nos modèles à décharges ne vont PAS sur le GPU — deux raisons distinctes
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/modele-pour-drave.md\")\ns = p.read_text()\nancre = \"\"\"---\n\n## 5. Les expériences à faire, par ordre de rendement\"\"\"\nassert ancre in s\najout = \"\"\"---\n\n## 4 bis. … [3968 caractères tronqués]`
+
+  ```
+ok
+5c6413f Nos modèles à décharges ne vont pas sur GPU : trop petits, et le noyau GPU est dense
+  pas  24000 · perte 1.4511 · val 2.2551 bits/octet · 1713 s
+  ```
+
+### 🤖 Assistant
+
+⏵ Réponse : non — et les deux raisons sont distinctes
+
+**Vérifié dans le code et par la mesure** (nouvelle section `docs/modele-pour-drave.md` § 4 bis).
+
+**Ce que le moteur sait déporter** : les projections **Q8_0** (noyau dense int8), le cache KV, les scores d'attention et leur top-k, et les experts MXFP4/Q4_K. Mais une projection ne part sur le GPU que sous **trois conditions** :
+
+| condition | nos modèles à décharges |
+|---|---|
+| source **Q8_0** (forme dense 8 bits) | ✅ (nos FFN sont exportées en Q8) |
+| **aucun élagage** (`keep >= 1.0`) | ❌ tout modèle à poids creux est exclu |
+| **≥ 8 Mio** par projection (`SEUIL_GPU`) | ❌ **0,45 à 0,80 Mio** — dix fois trop petits |
+
+**Donc aucun de nos modèles à décharges n'utilise le GPU.** Mesuré à l'instant : `DRAVE_GPU=1` sur `m8_d512_kwta25` rend **exactement la même perplexité (4,5656)** et le même débit, après avoir annoncé que le périphérique demandé était indisponible puis être retombé proprement sur le CPU — pas de changement silencieux.
+
+**Et la seconde raison est plus profonde que la taille.** Le noyau GPU est un **produit dense** : `proj(m, x: &[i32], sx)` reçoit le **vecteur d'activation complet, zéros compris**, et calcule le produit entier. Or tout l'avantage du chemin par listes est de **ne pas lire les poids nuls** — déporter une projection creuse sur ce noyau **détruirait exactement ce que la parcimonie apporte** : on gagnerait la bande passante de la carte et on perdrait le saut des lectures.
+
+**Ce qu'il faudrait** : un **noyau de listes sur la carte** — n'envoyer que les indices non nuls et ne lire que les lignes de poids correspondantes (un *gather* sur le périphérique, ou un format creux compressé). Ça n'existe pas, et c'est le **pendant GPU exact** du manque déjà consigné côté experts (« le chargeur d'experts refuse Q8_0, donc un modèle routé ne peut pas être exécuté en listes »). Autrement dit : **l'architecture événementielle est aujourd'hui une architecture CPU**, et la rendre GPU est un chantier de noyaux, pas de réglages.
+
+**Ce que le GPU sert déjà** : sur **gpt-oss-120B**, les projections d'attention sont en Q8_0 et pèsent **12,5 Mio** — au-dessus du seuil — donc elles *sont* déportées sous `DRAVE_GPU=1`. Sur le 30B (Q4_K partout), rien n'a de forme dense 8 bits : rien à déporter. Le seuil de 8 Mio vient d'ailleurs d'une mesure : 60 µs d'aller-retour contre 123 µs de calcul CPU pour la FFN du 0,5 B (le CPU gagne), 187 contre 216 µs pour l'attention de gpt-oss (le GPU gagne).
+
+En cours : le modèle **structure innée 25 % + activations creuses apprises 25 %** (étape 24 000/40 000) — sa mesure tombera vers 14 h 10.
+
+
+## Tour 31
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, préremplissage par lots, modèle plus gros que la RAM. Poursuivre en parallèle le livrable du modèle nativement événementiel : entraîné ici, exécuté par Drave à logits vérifiés, découpé en unités réparties. Chaque affirmation porte sa mesure (perplexité, débit, octets et événements par jeton, RSS, écart entre nœuds) ET ses conditions (corpus, tokenizer du modèle, charge de fond) ; les manques constatés — embeddings/encodeurs, décodage spéculatif — sont consignés comme manques, pas comme résultats. Livrables : la file tools/campagne-benefices.sh exécutée et ses journaux, un rapport de synthèse par famille de tâches, et la poursuite du modèle événementiel."
+Round: 24/40
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /tmp/campagne24 && grep -E \"m15|structure terminée\" journal14.txt 2>/dev/null | tail -4; tail -1 tr_m15.log; date '+%H:%M'", "description": "Harvest the combined structure+sparsity result"}`
+
+  ```
+pas  24000 · perte 1.4511 · val 2.2551 bits/octet · 1713 s
+13:50
+  ```
+
+### 🤖 Assistant
+
+⏵ Consolidation : mise à jour des statuts d'expériences dans les documents
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/biologie-pour-drave.md\")\ns = p.read_text()\nremplacements = [\n (\"| **E2** | **croissance** : partir de 10 % de connexions, en **ajouter** selon l'activité (règle locale :  … [3446 caractères tronqués]`

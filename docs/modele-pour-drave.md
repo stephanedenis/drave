@@ -339,13 +339,15 @@ du 0,5 B (le CPU gagne), 187 contre 216 µs pour l'attention de gpt-oss (le GPU 
 
 ## 5. Les expériences à faire, par ordre de rendement
 
-1. **Élagage appris** (B) — ajouter au harnais d'entraînement un élagage par
-   magnitude à rampe (garder 50 %, puis 25 %), et mesurer qualité + paires. *C'est
-   la seule expérience dont on attend un gain comparable à celui des activations, et
-   le harnais existe déjà.*
+1. ~~**Élagage appris** (B)~~ — **FAIT** (9/10, 11 h 32) : ÷2 lectures à qualité
+   égale (+0,3 % à 25 % d'activations, −6,0 % en dense), et les deux axes se
+   multiplient comme prévu. Il reste à descendre plus bas (25 % de poids) et à
+   croiser avec la structure innée (chaîne `jour6`).
 2. **Noyau Q8 par expert** (C) — sans lui, un modèle « routé et creux » ne peut pas
    exister ; c'est aussi la seule façon de mesurer ce que le routage vaut *en
-   événements*.
+   événements*. **Et son pendant GPU** : le noyau de listes sur la carte, sans lequel
+   un modèle à décharges ne peut pas être déporté sans perdre ce que la parcimonie
+   apporte (§ 4 bis).
 3. **Disposition par événements** (D) — réordonner les tenseurs à l'export et
    re-mesurer le débit de lecture à froid. Le moteur n'a rien à changer.
 4. **Fenêtre apprise** (F) — entraîner avec fenêtre glissante et comparer à
