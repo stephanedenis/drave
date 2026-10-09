@@ -380,6 +380,33 @@ sous cette charge ne vaut que pour les sorties, pas pour les temps.)*
 
 ---
 
+## 10 ter. La densité d'activation ne dépend PAS de la tâche — la qualité, si
+
+Même modèle (Qwen2.5-0.5B Q8_0), même matériel, quatre corpus, 192 jetons : la
+question du batch 2 était « le bénéfice événementiel dépend-il de la tâche ? ».
+
+| corpus | jetons/octet | PPL | **bits/octet** | paires/jeton | **densité** |
+|---|---:|---:|---:|---:|---:|
+| prose anglaise | 0,2385 | 15,85 | **0,951** | 495,9 M | **71 %** |
+| français | 0,2783 | 11,19 | **0,969** | 495,9 M | **71 %** |
+| code | 0,3117 | 7,09 | **0,881** | 495,9 M | **71 %** |
+
+**La densité est identique dans les trois cas — 71 %, à 0,002 point près**
+(67,766 / 67,767 / 67,766 milliards d'événements). Autrement dit : **le bénéfice
+événementiel ne dépend pas de la tâche**, il dépend du **modèle**. Un modèle dense
+reste dense quelle que soit l'entrée ; c'est la parcimonie *entraînée* qui la
+change, et rien d'autre. L'hypothèse « telle tâche réveille moins de neurones »
+est **réfutée** ici.
+
+**Ce qui dépend de la tâche, c'est la qualité.** En bits/octet — la seule unité
+comparable entre tokenizers — le même modèle prédit le **code mieux que la prose**
+(0,881 contre 0,951) et le **français moins bien que l'anglais** (0,969 contre
+0,951). Les perplexités brutes disent l'inverse (7,09 pour le code contre 15,85
+pour la prose) uniquement parce que le code se tokenise en jetons plus longs :
+c'est exactement le piège que la colonne bits/octet neutralise.
+
+---
+
 ## 11. Ce qui reste à mesurer (file en cours)
 
 - `parcimonie` : seuil et k-WTA, en dense et en listes, sur un modèle réel ;

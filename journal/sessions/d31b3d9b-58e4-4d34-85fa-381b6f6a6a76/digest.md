@@ -9182,3 +9182,36 @@ section remplacée
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"reports/rapport-campagne-benefices.md\"; s=open(p).read()\ns = s.replace('''| **langage** (perplexité) | ✅ tourne — **mais le chemin par listes n'aide pas** | 1,8 à 2,1× **plus lent** en listes sur nos modèles d … [1027 caractères tronqués]`
+
+  ```
+verdict mis à jour
+45026f0 Verdict : la ligne « langage » porte maintenant le gain du routage à lecture égale
+=== batch 5 ===
+[08/10 22:48:36] charge 68.55 · lot30B/1 : PPL 7.6139 · 0.4 tok/s · lus 10954 Mio · 345s mur
+[08/10 22:50:34] charge 63.78 · lot30B/4 : PPL 7.6098 · 1.4 tok/s · lus 0 Mio · 118s mur
+[08/10 22:52:32] charge 64.14 · lot30B/8 : PPL 7.6098 · 1.4 tok/s · lus 0 Mio · 118s mur
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && C=/tmp/campagne24; D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf\nfor paire in \"prose:data/wikitext2_test.txt\" \"francais:$C/corpus_fr.txt\" \"code:$C/corpus_code.txt\" \"multilingue:$C/corpus_multi.txt\"; do … [816 caractères tronqués]`
+
+  ```
+prose/dense : PPL 15.8452 · 495.9 M paires/jeton · événements 0
+prose/push : PPL 15.8716 · 491.0 M paires/jeton · événements 67766879119
+francais/dense : PPL 11.1896 · 495.9 M paires/jeton · événements 0
+francais/push : PPL 11.3069 · 491.0 M paires/jeton · événements 67767022328
+code/dense : PPL 7.0924 · 495.9 M paires/jeton · événements 0
+code/push : PPL 7.0526 · 491.0 M paires/jeton · événements 67765526623
+[timed out after 600000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && C=/tmp/campagne24; /home/stephane/gpu-env/bin/python - <<'PY'\nimport os, math\nC=\"/tmp/campagne24\"\ncas = [(\"prose (anglais)\", \"data/wikitext2_test.txt\", f\"{C}/ids_dens_prose.txt\", 15.8452),\n       (\"français\", f\"{C}/cor … [666 caractères tronqués]`
+
+  ```
+corpus                octets    jetons  jetons/octet      PPL  bits/octet
+prose (anglais)       359041     85626        0.2385  15.8452       0.951
+français              972439    270586        0.2783  11.1896       0.969
+code                 4000000   1246649        0.3117   7.0924       0.881
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"reports/rapport-campagne-benefices.md\"; s=open(p).read()\najout = '''## 10 ter. La densité d'activation ne dépend PAS de la tâche — la qualité, si\n\nMême modèle (Qwen2.5-0.5B Q8_0), même matériel, quatre corpu … [2721 caractères tronqués]`
