@@ -14286,3 +14286,297 @@ ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add reports/rapport-campagne-benefices.md tools/carte_latence.sh tools/proxy_latence.py 2>/dev/null; git commit -q -m \"La carte de latence : répartir ne paie que si le calcul dépasse 3,4 ms x RTT\n\nLe découpage était prouvé exa … [774 caractères tronqués]`
+
+  ```
+1530bee La carte de latence : répartir ne paie que si le calcul dépasse 3,4 ms x RTT
+  ```
+
+- **bash** `{"command": "sleep 480; cd /tmp/campagne24 && echo \"=== porte ===\"; cat porte_gptoss_seule_marqueur.txt 2>/dev/null || echo \"(en cours)\"; tail -c 200 porte_gptoss_seule.log 2>/dev/null; echo; echo \"=== spec ===\"; cat spec_15_14.log 2>/dev/null | grep -E \"acceptés|gain|coût\" || echo \"(en cou … [133 caractères tronqués]`
+
+  ```
+=== porte ===
+code 124 ·  · attendu 15.6017
+� ffn 2880 · experts 128
+[config] fenêtre glissante 128 sur 18/36 couches (motif 2 alterné)
+[config] rotation : RoPE simple (contexte 256 ≤ 4096 initial ; YaRN ×32 prendrait le relais au-delà)
+
+=== spec ===
+(en cours)
+=== distillé d512 ===
+  pas  20000 · perte 0.6851 · val 1.8665 bits/octet · 2731 s
+  ```
+
+### 🤖 Assistant
+
+⏵ Relance de la porte gpt-oss avec un délai calibré (2 h, pas 40 min) et correction du script de portes
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"tools/portes.sh\")\ns = p.read_text()\nvieux = \"\"\"            p=$(timeout 2400 $D \"$O\" --ppl /tmp/ids_oss_512.txt --ctx 256 --dense \\\\\n                --threads 16 --limit  … [2437 caractères tronqués]`
+
+  ```
+portes.sh corrigé
+rapport mis à jour
+porte relancée (3e) pid 1070758
+02:40:32
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport subprocess\ncorpus = open(\"data/wikitext2_test.txt\", encoding=\"utf-8\", errors=\"replace\").read()\ntranches = [corpus[i*2240:i*2240+320].strip() for i in range(8)]\nout = subprocess.run([\"ps\",\"-eo\",\" … [319 caractères tronqués]`
+
+  ```
+tranche(s) en cours : [7]
+journal pas encore écrit
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"experts_q4\" tools/exporter_gguf.py | head -8; grep -n \"f16\\|experts\" tools/exporter_gguf.py | sed -n '1,12p'", "description": "Check exporter expert quantization options"}`
+
+  ```
+204:def tenseurs_depuis_hf(poids, cfg, experts_q4=True):
+242:                if experts_q4:
+262:                if experts_q4 and os.environ.get("DRAVE_FFN_Q8") != "1":
+353:    tenseurs = tenseurs_depuis_hf(poids, cfg, experts_q4=True)
+8:`ffn_gate_inp.weight`, experts SwiGLU `ffn_{gate,up,down}_exps.weight`, normes
+15:  * les experts sont en **[n_expert, n_ff, n_embd]** (`ffn_down_exps` :
+27:    exporter_gguf.py --hf modele_hf/ --sortie modele.gguf [--f16]
+49:    """Blocs de 32 : échelle f16 (`amax/127`) puis 32 entiers signés."""
+72:# d'experts : Q4_K, Q6_K, MXFP4, Q4_0 et les super-blocs « sans noyau ». Un
+73:# tenseur d'experts en F32 est REFUSÉ — « format sans noyau ni déquantification »
+78:    """Blocs de 32 poids : échelle f16 puis 16 octets (nibbles bas = 0..15,
+143:def ecrire_gguf(chemin, kv, tenseurs, f16=False):
+144:    """`tenseurs` : liste de (nom, tableau numpy) — tableau converti en f32/f16 —
+160:                a = np.ascontiguousarray(contenu.astype(np.float16 if f16 else np.float32))
+161:                ttype = GGML_F16 if f16 else GGML_F32
+183:def _experts(poids, p, n_exp):
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^def q8\\|^q8\\|def q8\" tools/exporter_gguf.py | head -3; sed -n '/^def q8/,/^def /p' tools/exporter_gguf.py | head -20", "description": "Inspect the q8 helper"}`
+
+  ```
+48:def q8_0_encoder(a):
+63:def q8_0_decoder(brut, forme):
+215:    def q8(nom, arr):
+def q8_0_encoder(a):
+    """Blocs de 32 : échelle f16 (`amax/127`) puis 32 entiers signés."""
+    a = np.ascontiguousarray(a, dtype=np.float32)
+    assert a.shape[-1] % 32 == 0, f"dernière dimension non multiple de 32 : {a.shape}"
+    plat = a.reshape(-1, 32)
+    amax = np.abs(plat).max(axis=1)
+    d = (amax / 127.0).astype(np.float32)
+    inv = np.where(d != 0, 1.0 / np.where(d == 0, 1.0, d), 0.0).astype(np.float32)
+    q = np.clip(np.rint(plat * inv[:, None]), -127, 127).astype(np.int8)
+    octets = np.empty((plat.shape[0], 34), dtype=np.uint8)
+    octets[:, :2] = d.astype(np.float16).view(np.uint8).reshape(-1, 2)
+    octets[:, 2:] = q.view(np.uint8)
+    return octets.tobytes()
+
+
+def q8_0_decoder(brut, forme):
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '208,222p' tools/exporter_gguf.py; python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"tools/exporter_gguf.py\")\ns = p.read_text()\nvieux = \"\"\"                if experts_q4:\n                    t.append((b + nom, (q4_0_e … [1292 caractères tronqués]`
+
+  ```
+l'emprunt de blocs attendent côté moteur. Les normes (1D) restent en F32 —
+    les quantifier n'apporterait rien et changerait le calcul.
+    """
+    n_l = cfg["num_hidden_layers"]
+    est_moe = _arch(cfg) == "qwen3moe"
+    n_exp = int(cfg.get("num_experts", cfg.get("num_local_experts")) or 0)
+
+    def q8(nom, arr):
+        return (nom, (q8_0_encoder(arr), GGML_Q8_0, arr.shape))
+
+    t = [q8("token_embd.weight", poids["model.embed_tokens.weight"]),
+         ("output_norm.weight", poids["model.norm.weight"])]
+    # Embeddings liés (Qwen3) : le moteur exige la tête, on la donne.
+    t.append(q8("output.weight", poids.get("lm_head.weight", poids["model.embed_tokens.weight"])))
+    for l in range(n_l):
+exporteur : experts en Q8 possibles
+syntaxe OK
+  ```
+
+### 🤖 Assistant
+
+⏵ Validation : les experts en Q8 donnent-ils enfin des événements au chemin par listes ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && P=/home/stephane/gpu-env/bin/python; DRAVE_FFN_Q8=1 $P tools/exporter_gguf.py --hf /tmp/m5_d384_route --sortie /tmp/m5_d384_route_q8exp.gguf 2>&1 | tail -1; ./drave-core/target/release/drave /tmp/m5_d384_route_q8exp.gguf --tensors 2> … [513 caractères tronqués]`
+
+  ```
+# architecture 4 couches · 384 cachés · 16 experts (top-2) · norm_topk_prob=True
+  Q8_0     blk.0.ffn_gate_exps.weight             [16, 576, 384] · 3.5 M poids · fichier 0
+  Q8_0     blk.0.ffn_up_exps.weight               [16, 576, 384] · 3.5 M poids · fichier 0
+  Q8_0     blk.0.ffn_down_exps.weight             [16, 384, 576] · 3.5 M poids · fichier 0
+--- --push ---
+--- --push --act-topk 250 ---
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 ./drave-core/target/release/drave /tmp/m5_d384_route_q8exp.gguf --ppl /tmp/campagne24/route_ids128.txt --limit 128 --ctx 256 --threads 8 --push 2>&1 | tail -12", "description": "Show the engine error with Q8 experts", "ti … [17 caractères tronqués]`
+
+  ```
+/tmp/campagne24/route_ids128.txt : 128 tokens, fenêtres de 256
+[moe] couche 0 : « blk.0.ffn_gate_exps.weight » de type Q8_0 — format sans noyau ni déquantification
+
+thread 'main' (1071150) panicked at src/model.rs:1485:50:
+tenseur blk.0.ffn_gate.weight absent
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+timeout: the monitored command dumped core
+  ```
+
+### 🤖 Assistant
+
+⏵ Le moteur refuse les experts Q8 — j'examine le chargeur d'experts pour l'ouvrir
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"format sans noyau ni déquantification\" drave-core/src/*.rs | head -5; grep -rn \"\\[moe\\] couche\" drave-core/src/model.rs | head -3", "description": "Locate the expert format refusal"}`
+
+  ```
+drave-core/src/model.rs:678:                eprintln!("[moe] couche {l} : « {nom} » de type {} — format sans noyau ni déquantification", crate::gguf::Gguf::nom_type(t.ttype));
+645:                    eprintln!("[moe] couche {l} : aucun cluster chargé ne porte « {base} »");
+651:            None => { eprintln!("[moe] couche {l} : « {base} » absent et aucun mapping"); return None; }
+654:            eprintln!("[moe] couche {l} : aucun fichier ne porte « {base} » (essayé le nom \
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "limit": 60, "offset": 655}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs</path>
+<type>file</type>
+<content>
+655: en clair et cl0..cl{})", map.map(|m| m.n_clusters.saturating_sub(1)).unwrap_or(0));
+656:             return None;
+657:         }
+658:         let mut out = Vec::with_capacity(noms.len());
+659:         for nom in &noms {
+660:             let t = g.tensor(nom)?;
+661:             if t.dims.len() < 3 { return None; }
+662:             let ligne_experts = t.dims[0] as usize;
+663:             // La dimension d'expert du tenseur doit être EXACTEMENT celle que
+664:             // le mapping annonce : ni le nombre global (ce serait un tenseur non
+665:             // découpé, dont les lignes locales n'ont pas le même sens), ni autre
+666:             // chose. Une tolérance ici ferait lire le mauvais expert sans bruit.
+667:             let attendu = match map { Some(m) => m.par_cluster, None => n_expert };
+668:             if ligne_experts != attendu {
+669:                 match map {
+670:                     Some(m) => eprintln!("[moe] couche {l} : « {nom} » a {ligne_experts} \
+671: experts, le mapping en annonce {} par cluster", m.par_cluster),
+672:                     None =
+… [2562 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fn source_de\" -A 30 drave-core/src/model.rs | head -45", "description": "Read the expert source-format mapping"}`
+
+  ```
+595:fn source_de(t: u32) -> Option<crate::list::Source> {
+596-    use crate::gguf::{GGML_IQ1_M, GGML_IQ1_S, GGML_IQ2_XXS, GGML_IQ3_XXS,
+597-                      GGML_MXFP4, GGML_Q4_0, GGML_Q4_K, GGML_Q6_K};
+598-    use crate::list::Source;
+599-    match t {
+600-        GGML_Q4_K => Some(Source::Q4_K),
+601-        GGML_Q6_K => Some(Source::Q6_K),
+602-        GGML_MXFP4 => Some(Source::Mxfp4),
+603-        GGML_Q4_0 => Some(Source::Q4_0),
+604-        // Super-blocs de 256 poids SANS noyau dédié : déquantification puis
+605-        // produit en f32. La liste est celle de `list::sans_noyau` — un test
+606-        // vérifie que les deux ne peuvent pas diverger.
+607-        _ if crate::list::sans_noyau(t) => Some(Source::Dequant(t)),
+608-        _ => None,
+609-    }
+610-}
+611-
+612-/// Charge le mélange d'experts d'une couche, s'il existe.
+613-///
+614-/// Les trois tenseurs `ffn_*_exps` sont des tenseurs **3D** dont la première
+615-/// dimension (la plus lente) est l'expert : chaque expert est donc un bloc
+616-/// contigu, et le moteur n'a besoin que d'un pointeur et d'un pas.
+617-fn charger_moe(g: &Gguf, l: usize, n_expert: usize, map: Option<&'static crate::clusters::Mapping>)
+618-    -
+… [486 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fn sans_noyau\" -A 20 drave-core/src/list.rs | head -28", "description": "List the formats the expert path accepts"}`
+
+  ```
+587:pub fn sans_noyau(t: u32) -> bool {
+588-    matches!(t, 10 | 11 | 13 | 16 | 18 | 19 | 23 | 29)
+589-}
+590-
+591-/// Déquantifie un super-bloc de 256 poids d'un format sans noyau dédié.
+592-///
+593-/// La version `_dans` écrit dans un tampon FOURNI : le produit par expert
+594-/// déquantifie 49 000 blocs par projection et par expert, et allouer 256 f32 à
+595-/// chaque fois coûtait plus cher que la déquantification elle-même (mesuré :
+596-/// 253 s par jeton sur GLM-5.3, dont l'essentiel dans ces allocations).
+597-pub fn dequant_grille_dans(t: u32, bloc: &[u8], out: &mut [f32]) {
+598-    // Q2_K est LE format des experts de V4.1 (25 % de la passe, 45 % du poste
+599-    // d'experts mesurés au bloc 17) : il a son noyau vectorisé, choisi une fois.
+600-    #[cfg(target_arch = "x86_64")]
+601-    {
+602-        static AVX2: std::sync::OnceLock<bool> = std::sync::OnceLock::new();
+603-        if t == 10 && *AVX2.get_or_init(|| std::is_x86_feature_detected!("avx2")) {
+604-            // Sûreté : la détection ci-dessus garantit AVX2, et le noyau borne
+605-            // comme la version scalaire (bloc ≥ 84, sortie ≥ 256).
+606-            unsafe { crate::gguf::Gguf::dequant_q2k_avx2(bloc, ou
+… [376 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le moteur refuse les experts Q8 : je consigne le manque et réoriente la chaîne de nuit
+
+- **bash** `{"command": "cd /tmp/campagne24 && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"/tmp/campagne24/nuit4_route_creux.sh\")\ns = p.read_text()\ns = s.replace('''# nuit4_route_creux.sh — le candidat « meilleur des deux » : routage ET activations creuses.''',\n'''# nuit4_kwta512.sh — la parcimonie … [3763 caractères tronqués]`
+
+  ```
+nuit4 réorienté
+syntaxe OK
+1071763 bash -c cd /tmp/campagne24 && python3 - <<'PY' import pathlib p = pathlib.Path("/tmp/campagne24/nuit4_route_creux.sh") s = p.read_text() s = s.replace('''# nuit4_route_creux.sh — le candidat « meilleur des deux » : routage ET activations creuses.''', '''# nuit4_kwta512.sh — la parcimonie APPRISE à l'échelle 512 (et un manque consigné). # # CE QUI A CHANGÉ EN COURS DE ROUTE. Ce script devait entraîner un modèle « routé # ET creux ». Le moteur l'a refusé, et c'est un résultat : le chargeur d'experts # n'accepte QUE les formats 4 bits et les super-blocs (`source_de` : Q4_K, Q6_K, # MXFP4, Q4_0, plus `sans_noyau`). Un tenseur d'experts en Q8_0 donne : #   « blk.0.ffn_gate_exps.weight de type Q8_0 — format sans noyau ni déquantification » # Or c'est le 8 bits qui donne accès au chemin PAR LISTES (le 4 bits n'a qu'un # noyau dense, sans événements). Donc, aujourd'hui, **un modèle routé ne peut pas # être exécuté en listes** : le routage économise des experts, pas des événements. # On garde la question « la parcimonie doit-elle être apprise ? » à l'échelle 512, # sur un modèle dense dont la FFN est exportée en 8 bits — la seule configuration # où la mesu
+… [2659 caractères tronqués]
+  ```
+
+- **bash** `{"command": "for s in nuit2_m6 nuit3_kwta nuit4_route_creux; do pid=$(pgrep -f \"bash /tmp/campagne24/$s.sh\" | head -1); printf \"%-20s %s\\n\" \"$s\" \"${pid:-ABSENT}\"; done; echo \"--- ce qui tourne ---\"; ps -eo pid,etime,args | grep -E \"entrainer_moteur|drave \" | grep -v grep | sed 's/\\(.\\ … [82 caractères tronqués]`
+
+  ```
+nuit2_m6             799130
+nuit3_kwta           844914
+nuit4_route_creux    910914
+--- ce qui tourne ---
+ 963168       50:59 /home/stephane/gpu-env/bin/python -u tools/entrainer_moteur.py --famille route -
+1070040       05:56 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/
+1070759       02:00 /usr/bin/time -v timeout 9000 ./drave-core/target/release/drave /home/stephane/D
+1070760       02:00 timeout 9000 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/
+1070761       02:00 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\nvieux = \"\"\"**Et les experts ne passent PAS par les listes** : écrits en Q4_0, format pour\nlequel le moteur n'a pas  … [2088 caractères tronqués]`
+
+  ```
+ok
+990:| **experts en listes (Q8)** | le chargeur d'experts refuse Q8_0 (« format sans noyau ni déquantification ») : **un modèle routé ne peut pas être exécuté en listes**. Le noyau Q8 par expert reste à écrire ; c'est la condition pour que « routage + activations creuses » existe un jour |
+  ```
+
+- **bash** `{"command": "sleep 400; cd /tmp/campagne24 && echo \"=== spec 1.5->14 ===\"; cat spec_15_14.log 2>/dev/null | tail -12 || echo \"(en cours)\"; echo \"=== marqueurs ===\"; cat spec_marqueurs.txt", "description": "Check the aligned-pair speculative result", "timeoutMs": 440000}`
+
+  ```
+=== spec 1.5->14 ===
+
+## acceptation, 8 invites, 48 jetons, décodage glouton
+
+| k (jetons proposés) | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| P(préfixe ≥ k) | 38 % | 12 % | 12 % | 12 % | 12 % | 12 % | 12 % | 12 % |
+
+jetons acceptés par tour (espérance, k=8) : **1.25 sur 8** · préfixe médian 0 · max 9
+
+coût relatif mesuré du brouillon : **0.134×** la cible (7.05 vs 0.95 tok/s)
+gain net attendu à k=8 : **×1.09** (= (1.25+1) / (8×0.134+1))
+seuil de rentabilité : il faut r < 0.156× (acceptation moyenne 15.6% par jeton proposé)
+=== marqueurs ===
+[contrôle fait] 00:16:25
+[1.5->14 fait] 00:16:25
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\nancre = \"\"\"**La leçon est plus dure que celle du § 1** : ce n'est pas la taille du brouillon\nqui décide, c'est **le … [2461 caractères tronqués]`
+
+  ```
+ok
+151:**La paire ALIGNÉE, mesurée le 9 octobre** (brouillon R1-distill-1,5 B → cible
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add reports/rapport-campagne-benefices.md tools/exporter_gguf.py tools/portes.sh && git commit -q -m \"Spéculatif : l'alignement du brouillon aide, mais l'acceptation plafonne à 15,6 %\n\nTrois paires mesurées par le moteur, en d … [1105 caractères tronqués]`

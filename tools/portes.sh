@@ -178,7 +178,15 @@ if [ "$RAPIDE" != "rapide" ]; then
             $D "$O" --tokenize --fichier /tmp/wt2_txt.txt --sortie /tmp/ids_oss_512.txt >/dev/null 2>&1
         fi
         if [ -s /tmp/ids_oss_512.txt ]; then
-            p=$(timeout 2400 $D "$O" --ppl /tmp/ids_oss_512.txt --ctx 256 --dense \
+            # LE DÉLAI EST CALIBRÉ SUR LE DÉBIT MESURÉ, pas sur l'optimisme. Une
+            # passe de 512 jetons sur gpt-oss-120B vaut 0,074 tok/s sur cette
+            # machine (mesuré : 32 jetons en 432 s) — soit **1 h 55**. Le délai de
+            # 2 400 s rendait cette porte impossible à passer, et une porte qui ne
+            # peut pas passer ne vérifie rien : elle a expiré deux fois le 9/10
+            # (à 2 400 s puis à 5 400 s) sans jamais rendre de valeur.
+            # `GATE_GPTOSS_DELAI` permet de l'abaisser sur une machine où le
+            # fichier est en cache.
+            p=$(timeout "${GATE_GPTOSS_DELAI:-9000}" $D "$O" --ppl /tmp/ids_oss_512.txt --ctx 256 --dense \
                 --threads 16 --limit 512 2>&1 | valeur)
             compare "gpt-oss-120b MXFP4 ctx 256" "15.6017" "$p"
         else

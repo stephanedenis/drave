@@ -76,7 +76,7 @@ rouge** :
 
 | porte rouge | pourquoi | suite |
 |---|---|---|
-| `gpt-oss-120b MXFP4 ctx 256` — attendu **15,6017** | la passe de 512 jetons a été **tuée par son délai de 2 400 s** pendant que deux autres processus lisaient le même fichier de 63 Go. Le résultat est vide, pas faux | relancée seule à 01 h 04, machine libre de tout autre lecteur |
+| `gpt-oss-120b MXFP4 ctx 256` — attendu **15,6017** | la passe de 512 jetons a été **tuée par son délai** — deux fois. **Le délai lui-même est en cause** : à 0,074 tok/s mesuré sur cette machine (32 jetons en 432 s), 512 jetons demandent **1 h 55**, et la porte en accordait 40 min. Une porte qui ne peut pas passer ne vérifie rien | délai recalibré dans `tools/portes.sh` (`GATE_GPTOSS_DELAI`, défaut **9 000 s**), relancée à 02 h 55 |
 
 Tout le reste est vert, y compris `cargo test --release` (**77 tests**), les 17
 formats confrontés à libggml, la porte de correction contre llama.cpp
@@ -145,10 +145,36 @@ continuations également plausibles, acceptation nulle.
 
 **La leçon est plus dure que celle du § 1** : ce n'est pas la taille du brouillon
 qui décide, c'est **le partage de son post-entraînement**. Un brouillon de la même
-famille mais d'une autre recette ne propose rien d'acceptables — et un brouillon
-rejeté coûte plus qu'il ne rapporte. Les paires alignées (1,5 B → 14 B, même
-recette R1) sont en cours de mesure ; c'est là que le rapport de coût change de
-camp, pas sur la taille.
+famille mais d'une autre recette ne propose rien d'acceptable — et un brouillon
+rejeté coûte plus qu'il ne rapporte.
+
+**La paire ALIGNÉE, mesurée le 9 octobre** (brouillon R1-distill-1,5 B → cible
+R1-distill-14 B : même famille, même distillation, même tokenizer, 8 invites de
+48 jetons) :
+
+| mesure | paire alignée (1,5 B → 14 B) | paire mal appariée (0,5 B → 1,5 B) |
+|---|---:|---:|
+| acceptation moyenne | **1,25 jeton sur 8 (15,6 %)** | 0,88 sur 8 (11 %) |
+| P(préfixe ≥ 1 / 2 / 8) | 38 % · 12 % · 12 % | 38 % · 12 % · 0 % |
+| coût relatif du brouillon | **0,134×** (7,05 vs 0,95 tok/s) | 0,210× |
+| **gain net attendu** | **×1,09** | ×0,70 |
+
+**L'alignement aide, mais il ne suffit pas** : 15,6 % au lieu de 11 %, et un gain
+net qui passe de ×0,70 (il coûte) à ×1,09 (il ne rapporte presque rien). Le
+brouillon ne coûte pourtant qu'un dixième de la cible — c'est bien
+**l'acceptation** qui plafonne, pas l'économie de calcul.
+
+**Une réserve, et elle est de taille** : cette acceptation est la borne **gloutonne**
+(`--temp 0`), le critère le plus sévère possible — il exige que le brouillon
+choisisse *exactement* l'argmax de la cible à chaque position. Le décodage
+spéculatif réel échantillonne et accepte selon un rapport de probabilités : son
+taux est **plus élevé** que celui-ci. Ce qui est mesuré ici est donc un plancher,
+et il dit déjà que la version gloutonne ne paie pas.
+
+**Ce qu'il faudrait pour que ça paie** : un brouillon entraîné *sur les sorties de
+sa cible* (distillation croisée, ou tête Eagle3 branchée sur les états cachés de la
+cible). C'est un chantier d'entraînement, et les trois mesures ci-dessus en
+donnent le cahier des charges : accepter ≥ 40 % à k = 8 pour viser ×1,5.
 
 *(Le taux d'acceptation est déterministe — `--temp 0` — donc exact malgré la
 charge ; le coût relatif, lui, dépend de la charge et n'est qu'un ordre de
@@ -311,6 +337,20 @@ modèle grandit. Le gain de qualité, lui, tient dans les deux cas.
 **Et les experts ne passent PAS par les listes** : écrits en Q4_0, format pour
 lequel le moteur n'a pas de noyau de listes, ils sont exécutés en dense. La mesure
 honnête du coût est donc la colonne « paires/jeton », égale par construction.
+
+**Un manque mesuré, découvert en préparant l'expérience « routé ET creux »** : le
+chargeur d'experts n'accepte que les formats à noyau dédié (Q4_K, Q6_K, MXFP4,
+Q4_0) et les super-blocs de 256 poids (`list::sans_noyau`). Un tenseur d'experts en
+**Q8_0 — le seul format qui donne accès au chemin par listes** — est refusé :
+
+    [moe] couche 0 : « blk.0.ffn_gate_exps.weight » de type Q8_0
+          — format sans noyau ni déquantification
+
+**Conséquence, et elle est structurelle** : aujourd'hui, **un modèle routé ne peut
+pas être exécuté en listes**. Le routage économise des *experts*, pas des
+*événements* ; la parcimonie d'activation, qui est ce que les listes exploitent, ne
+peut pas s'appliquer aux experts. C'est la limite la plus nette du moteur pour la
+thèse « routage + événements », et elle tient en une ligne de format.
 
 ### 5 bis. Le gain du routage N'EST PAS monotone : il s'inverse à dim 512
 
@@ -973,6 +1013,7 @@ bit (§ 22), la tête restreinte sur gpt-oss (§ 13), le lot à froid avec évic
 | manque | état exact |
 |---|---|
 | **embeddings / encodeurs** | `bge-m3` est lisible en en-tête et **inexécutable** : ni attention bidirectionnelle, ni pooling. Le manque le plus net du relevé, et rien ne l'a entamé aujourd'hui |
+| **experts en listes (Q8)** | le chargeur d'experts refuse Q8_0 (« format sans noyau ni déquantification ») : **un modèle routé ne peut pas être exécuté en listes**. Le noyau Q8 par expert reste à écrire ; c'est la condition pour que « routage + activations creuses » existe un jour |
 | **décodage spéculatif** | le taux d'acceptation est mesuré pour deux paires, dont une mal appariée (§ 1 bis) ; les paires **alignées à grande cible** (1,5 B → 14 B, 0,5 B → 14 B) tournent, et c'est là que le rapport de coût peut changer de camp. Aucune ligne de moteur n'est écrite, et c'est délibéré |
 | **modèles entraînés creux** | `m7_d384_kwta50` et `m7_d384_kwta25` (k-WTA appris) puis `m8_d384_route_creux` (routé **et** creux) sont en file pour la nuit : la question « la parcimonie doit-elle être imposée ou apprise ? » n'a pas encore de réponse mesurée |
 | **échelle du routage** | la courbe s'arrête à dim 384 (−2,6 % à 256, −2,9 % à 384) ; dim 512 est entraîné, sa mesure et sa distillation sont en file |

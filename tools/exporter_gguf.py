@@ -239,8 +239,16 @@ def tenseurs_depuis_hf(poids, cfg, experts_q4=True):
             gate, up, down = _experts(poids, p, n_exp)
             for nom, arr in (("ffn_gate_exps.weight", gate), ("ffn_up_exps.weight", up),
                              ("ffn_down_exps.weight", down)):
-                if experts_q4:
+                if experts_q4 and os.environ.get("DRAVE_FFN_Q8") != "1":
                     t.append((b + nom, (q4_0_encoder(arr), GGML_Q4_0, arr.shape)))
+                elif os.environ.get("DRAVE_FFN_Q8") == "1":
+                    # EXPERTS EN 8 BITS : c'est la seule façon de faire passer les
+                    # experts par le chemin PAR LISTES. En 4 bits, le moteur n'a
+                    # qu'un noyau dense (`DenseQ4`) : le top-k imposé y masque des
+                    # activations sans économiser une seule lecture, et un modèle
+                    # routé creux ne peut pas être mesuré. Le prix est la taille
+                    # (8 bits contre 4) — sur un modèle d'essai, il est nul.
+                    t.append((b + nom, (q8_0_encoder(arr), GGML_Q8_0, arr.shape)))
                 else:
                     t.append((b + nom, arr))
         else:

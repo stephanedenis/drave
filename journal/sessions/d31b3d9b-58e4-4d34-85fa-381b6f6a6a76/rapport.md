@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 17.3 h |
+| Durée | 17.6 h |
 | Tours | 27 |
-| Messages | 850 |
-| Appels d'outils | 814 |
+| Messages | 868 |
+| Appels d'outils | 832 |
 | Fichiers touchés | 28 |
-| Commandes | 650 |
+| Commandes | 667 |
 | Sous-agents | 3 |
-| Commits | 48 |
+| Commits | 49 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -1270,7 +1270,7 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 
 ### Tour 27 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1477 caractères tronqués]
 
-*205 appels d'outils.* Actions notables :
+*223 appels d'outils.* Actions notables :
 
 - bash — Check the full state
 - bash — Measure the distilled d384 with the correct protocol
@@ -1286,11 +1286,11 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - bash — Read parcimonie, contexte, lot steps
 - bash — Inspect batch2 script
 - bash — Read batch2 journal and latency map
-- … et 175 autres
+- … et 192 autres
 
 **Synthèse produite :**
 
-⏵ Balayage complet de la carte de latence sur deux tailles de modèle
+⏵ Le moteur refuse les experts Q8 : je consigne le manque et réoriente la chaîne de nuit
 
 ## 3. Travail accompli
 
@@ -1375,7 +1375,7 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 610 autres
+- … et 627 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1503,7 +1503,7 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 
 ## 5. Erreurs rencontrées
 
-36 sorties en erreur ou divergentes. Les premières :
+38 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : ```  ### 🤖 Assistant  ⏵ **En transformers 5, `AutoModel` rend directement `Qwen2Model` (pas de `.model`). Je corrige le diagnostic.**  - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitH
 - **T2** : 3310393 bash -c pgrep -af "essai_decharge" | grep python | head; echo "--- logs ---"; tail -2 /tmp/ec_d192_lr3e3.log 2>/dev/null; tail -2 /tmp/ec_d192_lr1e3.log 2>/dev/null; echo "---"; ls -la /tmp/ec
@@ -1571,4 +1571,5 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - Deux harnais qui manquaient : le protocole 8×128 écrit, l'acceptation mesurée par le moteur  mesure_fenetres.sh — le protocole de record des modèles entraînés i
 - Campagne 24 h : l'équivalence au bit près, le routage qui s'inverse, le lot à froid  Cinq résultats de la fenêtre, tous avec leur protocole.  1. FIDÉLITÉ (§ 22)
 - La carte de latence : répartir ne paie que si le calcul dépasse 3,4 ms x RTT  Le découpage était prouvé exact sur localhost — un plancher optimiste. Un relais T
+- Spéculatif : l'alignement du brouillon aide, mais l'acceptation plafonne à 15,6 %  Trois paires mesurées par le moteur, en décodage glouton :   - 0,5 B nu -> 1,
 
