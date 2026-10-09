@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 22.5 h |
+| Durée | 23.0 h |
 | Tours | 27 |
-| Messages | 979 |
-| Appels d'outils | 941 |
+| Messages | 985 |
+| Appels d'outils | 947 |
 | Fichiers touchés | 29 |
-| Commandes | 771 |
+| Commandes | 777 |
 | Sous-agents | 3 |
-| Commits | 67 |
+| Commits | 68 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -1270,7 +1270,7 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 
 ### Tour 27 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1477 caractères tronqués]
 
-*332 appels d'outils.* Actions notables :
+*338 appels d'outils.* Actions notables :
 
 - bash — Check the full state
 - bash — Measure the distilled d384 with the correct protocol
@@ -1286,11 +1286,11 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - bash — Read parcimonie, contexte, lot steps
 - bash — Inspect batch2 script
 - bash — Read batch2 journal and latency map
-- … et 299 autres
+- … et 304 autres
 
 **Synthèse produite :**
 
-⏵ Section de liaison : ce que le nouveau matériel change, d'après ces mesures
+⏵ Sentinelle finale : elle me rendra les deux derniers résultats d'un coup
 
 ## 3. Travail accompli
 
@@ -1376,7 +1376,7 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 731 autres
+- … et 737 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1591,4 +1591,5 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - Les deux leviers ne se cumulent pas : la distillation n'ajoute rien au creux appris  m9_d384_kwta25_distille reprend exactement la recette de kwta025 PLUS la di
 - Ce que le nouveau matériel change, d'après les mesures — et ce qu'il ne change pas  Section de liaison avec le plan matériel (4xNVMe en RAID + carte AMD pour l'
 - Résumé : la distillation s'ajoute au routage, pas à la parcimonie" && echo committed; sleep 540; tail -1 /tmp/campagne24/tr_m9_route_long.log
+- Le tableau des manques était cassé par des barres verticales non échappées" && echo ok
 

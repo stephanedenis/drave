@@ -15893,3 +15893,54 @@ est au § 0 bis.*
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\ns = s.replace(\"\"\"| 2 | **La parcimonie doit être APPRISE, pas imposée** | à 25 % gardés : témoin **10,8758** de perp … [818 caractères tronqués]`
+
+  ```
+ok
+committed
+  pas  16000 · perte 1.2641 · val 1.9971 bits/octet · 1738 s
+  ```
+
+- **bash** `{"command": "sleep 590; cd /tmp/campagne24 && tail -1 tr_m9_route_long.log", "description": "Poll the long training", "timeoutMs": 620000}`
+
+  ```
+pas  16000 · perte 1.2641 · val 1.9971 bits/octet · 1738 s
+  ```
+
+### 🤖 Assistant
+
+⏵ Sentinelle finale : elle me rendra les deux derniers résultats d'un coup
+
+- **bash** `{"command": "cd /tmp/campagne24 && until grep -q \"carte des taux terminée\" journal10.txt 2>/dev/null; do sleep 300; done; echo \"=== jour1 (routé 512 long) ===\"; grep -E \"m9_d512_route_long\" journal9.txt | tail -3; echo; echo \"=== jour2 (k-WTA 12,5 %) ===\"; tail -8 journal10.txt; echo; echo \ … [351 caractères tronqués]`
+
+  ```
+started background job bash-8
+  ```
+
+- **bash** `{"command": "sleep 590; tail -1 /tmp/campagne24/tr_m9_route_long.log; date '+%H:%M'", "description": "Poll the long training", "timeoutMs": 620000}`
+
+  ```
+pas  24000 · perte 1.2391 · val 1.9280 bits/octet · 2641 s
+08:13
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\nlignes = pathlib.Path(\"reports/rapport-campagne-benefices.md\").read_text().splitlines()\ni = 0; problemes = 0\nwhile i < len(lignes):\n    if lignes[i].strip().startswith(\"|\") and i+1 < len(ligne … [629 caractères tronqués]`
+
+  ```
+ligne 257 : 6 colonnes au lieu de 4 — | **décodage spéculatif** | `eagle3-gpt-oss-120b` (0,84 Go, 1 couche) 
+tableaux vérifiés · 1 ligne(s) irrégulière(s)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '253,260p' reports/rapport-campagne-benefices.md | cat -n | cut -c1-200", "description": "Inspect the irregular table row"}`
+
+  ```
+1	
+     2	| famille | état | ce qui manque |
+     3	|---|---|---|
+     4	| **embeddings / recherche** | `bge-m3` (BERT, 24 couches, vocab 250 002) est **lisible en en-tête** mais **inexécutable** | le moteur exige `blk.0.attn_norm.weight` et une attention causale ; 
+     5	| **décodage spéculatif** | `eagle3-gpt-oss-120b` (0,84 Go, 1 couche) présent sur le disque | aucune notion de brouillon dans le moteur (`grep eagle\|brouillon\|specul` = 0) — et la mesure par 
+     6	
+     7	Ce sont les deux seules familles demandées par un usage courant qui manquent au
+     8	relevé : tout le reste (langage, génération, contexte long, code, raisonnement,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\nvieux = \"aucune notion de brouillon dans le moteur (`grep eagle\\\\|brouillon\\\\|specul` = 0)\"\nassert vieux in s\nn … [1102 caractères tronqués]`
