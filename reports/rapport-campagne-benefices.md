@@ -66,7 +66,7 @@ file encore en cours.
 | **contexte long — la mémoire** | ✅ **elle tient, et plus loin qu'annoncé** | **18 aiguilles sur 18** retrouvées, de 512 à **12 288 jetons**, à 10 %, 50 % et 90 % de profondeur (§ 9) |
 | **contexte long — le coût** | ✅ réglable | KV int8 : +1,5 % (512 j.) à +3,0 % (8 192 j.) · paginé : **0,03 Go au lieu de 25,77 Go** à 1 M |
 | **préremplissage par lots** | ✅ ×1,4 en RAM, ⚠️ disque non testé | 0,5 B, 512 jetons : **16,8 → 23,7 tok/s** et PPL **identique** (13,1368 → 13,1359) · sur le 30B le lot n'a lu que le **cache de pages** (10,9 Go à froid, 0 ensuite) |
-| **code** | ✅ mesuré, décalage de tâche | codestral-22B : **117,91** de PPL sur de la prose = **1,797 bit/octet**, contre **0,983** pour un 0,5 B — un 22 B 1,8× **pire** qu'un 0,5 B hors de sa tâche |
+| **code** | ✅ mesuré, décalage de tâche | codestral-22B : **133,08** de PPL sur de la prose (255 jetons) = **1,842 bit/octet**, contre **0,983** pour un 0,5 B — un 22 B **1,87× pire** qu'un 0,5 B hors de sa tâche |
 | **raisonnement** | ✅ mesuré, contre-intuitif | r1-distill-1.5B : **1,326 bit/octet**, **2,7× pire** que le 0,5 B (0,983) |
 | **MoE / routage d'experts** | ✅ mesuré | 4 experts sur 128 (3,1 %) · déséquilibre **×3,90** · **847 octets** par jeton à router |
 | **multilingue (399 langues)** | ✅ mesuré, et c'est le point faible du modèle | **3,227 bit/octet** contre 0,951 en prose — **3,4× pire** · densité **identique** (71 %) · seuil absolu : PPL **×11**, le k-WTA tient (§ 10 ter) |
@@ -272,7 +272,7 @@ Mêmes 256 jetons, même contexte, chaque modèle tokenisant son propre corpus
 | Qwen2.5-0.5B Q8_0 | **17,43** | **0,983** | 28,7 | 1,28 Go | 0 | en cache |
 | r1-distill-Qwen-1.5B Q4_K_M | **47,14** | **1,326** | 9,5 | 4,76 Go | 1,04 Go | lu du disque |
 | r1-distill-Qwen-14B Q4_K_M | **14,30** | **0,915** | 0,5 | 39,8 Go | 8,71 Go | lu du disque, charge 47 |
-| codestral-22B Q4_K_M | **117,91** ✅ *(tokenizer corrigé)* | **1,797** | — | 63,6 Go | 12,7 Go | mesure invalide avant le correctif (§ 3) |
+| codestral-22B Q4_K_M | **133,08** ✅ *(tokenizer corrigé, 255 j.)* | **1,842** | — | 63,6 Go | 11,3 Go | 35 657 avant correctif · 117,91 sur 63 jetons |
 | Qwen3-30B-A3B Q4_K_M (MoE) | **8,63** | **0,742** | — | **14,3 Go** | 11,8 Go | MoE, lu du NVMe |
 | gpt-oss-120b MXFP4 | **expiré à 90 min** | — | — | 13,9 Go | **35,5 Go lus** | 63 Go depuis le disque dur |
 
@@ -297,8 +297,11 @@ confirmée **et corrigée** (§ 3) :
 
 Avant le correctif, le corpus était découpé par un tokenizer qui mangeait les
 espaces : **35 657** de perplexité, chiffre sans valeur. Après le correctif, la
-même mesure donne **117,91** sur 63 jetons — soit **1,797 bit/octet**, contre
-**0,983** pour un Qwen2.5-0.5B sur le même texte.
+même mesure donne **133,08** sur 255 jetons — soit **1,842 bit/octet**, contre
+**0,983** pour un Qwen2.5-0.5B sur le même texte. *(Le chiffre publié plus tôt,
+117,91, portait sur 63 jetons seulement ; la ligne de la grille est maintenant
+mesurée au même protocole que les autres — 256 jetons, contexte 256 — et c'est
+cette valeur qui vaut. Le rapport est corrigé, pas complété.)*
 
 **Un modèle de 22 milliards de paramètres est donc 1,8× PIRE qu'un 0,5 B sur de
 la prose**, parce qu'il a été entraîné pour du code. C'est le décalage de tâche

@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 21.4 h |
+| Durée | 21.7 h |
 | Tours | 27 |
-| Messages | 963 |
-| Appels d'outils | 925 |
+| Messages | 968 |
+| Appels d'outils | 930 |
 | Fichiers touchés | 29 |
-| Commandes | 755 |
+| Commandes | 760 |
 | Sous-agents | 3 |
-| Commits | 63 |
+| Commits | 64 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -1270,7 +1270,7 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 
 ### Tour 27 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1477 caractères tronqués]
 
-*316 appels d'outils.* Actions notables :
+*321 appels d'outils.* Actions notables :
 
 - bash — Check the full state
 - bash — Measure the distilled d384 with the correct protocol
@@ -1286,11 +1286,11 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - bash — Read parcimonie, contexte, lot steps
 - bash — Inspect batch2 script
 - bash — Read batch2 journal and latency map
-- … et 283 autres
+- … et 288 autres
 
 **Synthèse produite :**
 
-⏵ Découverte : le streaming mmap donne 8 Mo/s sur disque dur contre 243 Mo/s en séquentiel
+⏵ Codestral corrigé sur 256 jetons : 133,08 — je corrige la ligne de la grille
 
 ## 3. Travail accompli
 
@@ -1376,7 +1376,7 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 715 autres
+- … et 720 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1587,4 +1587,5 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - Échelle 512 : la recette creuse tient, et le débit ne distingue plus les deux chemins  m8_d512_kwta25 (entraîné à 25 %, mêmes 40 000 pas que son témoin) :    sa
 - Résumé exécutif : les cinq résultats qui comptent et les cinq manques  Une page en tête du rapport, chacun renvoyant à sa section et à sa mesure. Le rapport fai
 - Le débit de lecture réel : 8,6 Mo/s sur disque dur contre 243 Mo/s en séquentiel  Mesuré machine au calme : le disque dur qui porte les gguf délivre 243 Mo/s en
+- Codestral corrigé, mesuré au protocole commun : 133,08 sur 255 jetons (1,842 bit/octet)  Le chiffre publié jusqu'ici (117,91) portait sur 63 jetons, parce que l
 

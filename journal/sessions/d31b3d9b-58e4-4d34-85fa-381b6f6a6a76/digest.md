@@ -15738,3 +15738,49 @@ read_bytes: 10219110400
 ⏵ Découverte : le streaming mmap donne 8 Mo/s sur disque dur contre 243 Mo/s en séquentiel
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\nancre = \"\"\"---\n\n## 13. La tête restreinte, sur deux modèles de plus\"\"\"\nassert ancre in s\najout = \"\"\"### 12 … [2553 caractères tronqués]`
+
+  ```
+ok
+f9d94ba Le débit de lecture réel : 8,6 Mo/s sur disque dur contre 243 Mo/s en séquentiel
+  ```
+
+- **bash** `{"command": "sleep 570; cd /tmp/campagne24 && grep -oE \"perplexité [0-9.]+ sur [0-9]+ tokens\" grille_codestral-22B_CORRIGE.log 2>/dev/null | tail -1; cat codestral_corrige_marqueur.txt 2>/dev/null; tail -1 tr_m9_kwta_distille.log", "description": "Poll codestral and the distillation training", "ti … [17 caractères tronqués]`
+
+  ```
+code 124 · 
+  pas  16000 · perte 0.8267 · val 2.0893 bits/octet · 1413 s
+  ```
+
+- **bash** `{"command": "for p in $(pgrep -f \"codestral-22b-v0.1-q4_k_m.gguf --ppl\" 2>/dev/null); do cmd=$(tr '\\0' ' ' < /proc/$p/cmdline 2>/dev/null); case \"$cmd\" in *\"timeout 3600\"*) ;; *) echo \"PID $p : $(grep read_bytes /proc/$p/io) · $(ps -o etime=,pcpu= -p $p)\";; esac; done; date '+%H:%M'", "desc … [46 caractères tronqués]`
+
+  ```
+PID 1829966 : read_bytes: 11838103552 ·       21:01  626
+PID 1839859 :  · 
+06:46
+[stderr]
+bash: line 1: /proc/1839859/cmdline: No such file or directory
+grep: /proc/1839859/io: No such file or directory
+  ```
+
+- **bash** `{"command": "sleep 420; cat /tmp/campagne24/codestral_corrige_marqueur.txt 2>/dev/null; grep -oE \"perplexité [0-9.]+ sur [0-9]+ tokens\" /tmp/campagne24/grille_codestral-22B_CORRIGE.log 2>/dev/null | tail -1; tail -1 /tmp/campagne24/tr_m9_kwta_distille.log", "description": "Read the codestral resul … [24 caractères tronqués]`
+
+  ```
+code 0 · perplexité 133.0798 sur 255 tokens · lus 11289 Mio
+perplexité 133.0798 sur 255 tokens
+  pas  20000 · perte 0.8328 · val 2.0762 bits/octet · 1763 s
+  ```
+
+### 🤖 Assistant
+
+⏵ Codestral corrigé sur 256 jetons : 133,08 — je corrige la ligne de la grille
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport math, pathlib\nb = math.log2(133.0798) * (93748/359041)\nprint(f\"bits/octet = {b:.3f}\")\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\ns = s.replace(\"\"\"| codestral-22B Q … [1327 caractères tronqués]`
+
+  ```
+bits/octet = 1.842
+ok
+275:| codestral-22B Q4_K_M | **133,08** ✅ *(tokenizer corrigé, 255 j.)* | **1,842** | — | 63,6 Go | 11,3 Go | 35 657 avant correctif · 117,91 sur 63 jetons |
+300:même mesure donne **133,08** sur 255 jetons — soit **1,842 bit/octet**, contre
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\ns = s.replace(\"\"\"| **code** | ✅ mesuré, décalage de tâche | codestral-22B : **117,91** de PPL sur de la prose = **1, … [1112 caractères tronqués]`
