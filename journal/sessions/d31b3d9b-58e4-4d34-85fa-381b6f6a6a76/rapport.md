@@ -7,12 +7,12 @@
 | Début | 2026-10-08 09:11 |
 | Durée | 31.9 h |
 | Tours | 36 |
-| Messages | 1238 |
-| Appels d'outils | 1171 |
+| Messages | 1246 |
+| Appels d'outils | 1179 |
 | Fichiers touchés | 38 |
-| Commandes | 975 |
+| Commandes | 982 |
 | Sous-agents | 3 |
-| Commits | 106 |
+| Commits | 107 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -1693,7 +1693,7 @@ Plus quatre manques du **modèle**, les douze capacités d'**architecture**, et 
 
 ### Tour 36 — allons-y pour un sprint cerveau complet. Vasy en mode autonome jusqu'à demain matin (9h hae 10 octobre)
 
-*16 appels d'outils.* Actions notables :
+*24 appels d'outils.* Actions notables :
 
 - create_goal
 - todo_write
@@ -1709,11 +1709,11 @@ Plus quatre manques du **modèle**, les douze capacités d'**architecture**, et 
 - bash — Find all topology references
 - bash — Read the Options initializer
 - bash — Read the top of main
-- … et 2 autres
+- … et 9 autres
 
 **Synthèse produite :**
 
-⏵ C1a livrée : la topologie se lit, se vérifie, et refuse les graphes incohérents
+⏵ C1b : conception précise consignée (points d'insertion exacts) pour le prochain round
 
 ## 3. Travail accompli
 
@@ -1808,7 +1808,7 @@ Plus quatre manques du **modèle**, les douze capacités d'**architecture**, et 
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 935 autres
+- … et 942 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2062,4 +2062,5 @@ Plus quatre manques du **modèle**, les douze capacités d'**architecture**, et 
 - Clôture du rapport : ce qui reste n'est plus de la mesure en retard mais du travail identifié  Le § 23 renvoie désormais au registre des manques et au plan des 
 - Dim 512 : le prix de la parcimonie croît avec l'échelle (+6,7 % et +8,0 % contre +1,0 % et +3,8 % à 384)  Dernier point de la courbe lecture-qualité, mesuré à 1
 - C1a : la topologie de régions se lit, se vérifie et refuse les graphes incohérents  Première brique du sprint cerveau (docs/plan-cerveau-complet.md, capacité C1
+- C1b : la conception relevée sur le code, prête à implémenter  Le protocole transmet DÉJÀ la plage de couches dans la trame (f.debut, f.fin) : le découpage voyag
 

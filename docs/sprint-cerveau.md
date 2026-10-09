@@ -53,12 +53,55 @@ inconnu, graphe en Y, chaîne du moteur). Suite complète : **85 tests**.
 
 ---
 
+## C1b — pilote multi-régions : la conception, relevée sur le code
+
+**Ce que le protocole permet déjà, et c'est beaucoup.** Une trame porte la **plage de
+couches à appliquer** (`f.debut`, `f.fin`), le mode, la position, et la charge ; le
+nœud applique `mdl.forward(0, f.pos)` **sur sa plage** puis renvoie l'état sur le
+même socket (`envoyer_flux`, main.rs:3351). Autrement dit, **le découpage est déjà
+transmis par le flux** : rien à inventer côté format.
+
+**Ce qui manque : le RELAIS.** Aujourd'hui un nœud rend toujours la main à son
+appelant. Une chaîne à trois régions sur trois instances demande qu'un nœud du milieu
+**transmette à son successeur** au lieu de répondre.
+
+**Les points d'insertion, relevés :**
+
+| où | quoi |
+|---|---|
+| `run_serveur_flux`, après `let sortie = mdl.forward(0, f.pos as usize);` (**main.rs:3347**) | si `--relais` est déclaré : ouvrir une connexion vers le successeur, lui envoyer la trame de **sa** plage, lire sa réponse (`recevoir_flux`, main.rs:2977), et renvoyer **cette** réponse à l'appelant — au lieu de `sortie` |
+| `run_ppl_reparti` (**main.rs:3605**) | la plage et l'adresse du pair viennent de la **topologie** (première région distante) au lieu de `--couches-locales` et du pair unique |
+| `Options` (main.rs:562) | `relais: Option<String>`, `region: Option<String>` (côté nœud) et `topologie: Option<String>` (côté pilote) |
+| `topologie.rs` | `Topologie::successeur(id)` et `Topologie::region(id)` — deux accesseurs, déjà presque écrits (`est_une_chaine`, `valider`) |
+
+**Le format de trame n'a pas à changer** : le relais réexpédie une trame de même
+mode, avec la plage de son successeur. Le retour se fait de proche en proche, chaque
+nœud rendant sur son socket entrant — donc **le pilote n'a rien à savoir du nombre de
+relais**.
+
+**Protocole de mesure de la porte** (à écrire dans `tools/porte-graphe.sh`, sur le
+modèle de `tools/porte-reparti-moteur.sh`) :
+
+1. référence : le modèle **entier**, un seul processus, même mode et même `--abits` ;
+2. **deux régions / deux instances** : doit reproduire l'écart **0,00e0** d'aujourd'hui
+   (non-régression du chemin existant) ;
+3. **trois régions / trois instances** (pilote + deux nœuds en relais, ports
+   distincts sur localhost) : la perplexité doit être **la même** que la référence ;
+4. et la même chose derrière le **relais de latence** (`tools/proxy_latence.py`), pour
+   vérifier que les délais ne changent pas le résultat — seulement le temps.
+
+**Ce qui reste hors de C1b, et il faut le dire** : les régions **non contiguës** et
+les **entrées multiples** (un graphe en Y qui s'exécute) demandent que le moteur
+sache tenir deux plages disjointes dans un même processus — c'est la capacité **C2**
+du plan, pas C1.
+
+---
+
 ## Prochaines étapes (dans l'ordre)
 
-1. **C1b — pilote multi-régions** : `--topologie F --ppl-reparti` doit exécuter le
-   graphe au lieu de la chaîne. Premier jalon : une topologie **linéaire** à trois
-   régions sur deux instances doit rendre la **même perplexité** que le modèle entier,
-   puis le cas à deux nœuds doit reproduire l'écart **0,00e0** d'aujourd'hui.
+1. **C1b — pilote multi-régions** (conception ci-dessus) : une topologie **linéaire** à
+   trois régions sur trois instances doit rendre la **même perplexité** que le modèle
+   entier, et le cas à deux nœuds doit reproduire l'écart **0,00e0** d'aujourd'hui.
 2. **C12 — trace globale** : chaque événement porte `(région, pas, lien, horodatage)`,
    et un mode `--rejouer-globale` doit rejouer l'exécution **à l'identique**.
 3. **C5 — bus de modulation** : canaux (`recompense`, `nouveaute`, `incertitude`)

@@ -19460,3 +19460,160 @@ topologie invalide : couche 12 n'est portée par aucune région
 ⏵ C1a livrée : la topologie se lit, se vérifie, et refuse les graphes incohérents
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && timeout 600 cargo test --release 2>&1 | tail -3; cd .. && cat > docs/sprint-cerveau.md <<'EOF'\n# Sprint « cerveau complet » — état d'avancement\n\n> Lancé le 9 octobre à 17 h, **en autonomie jusqu'au 10 octobre 9 h (HAE)* … [4753 caractères tronqués]`
+
+  ```
+test result: ok. 85 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+
+poussé
+  ```
+
+- **todo_write** `{"todos": [{"content": "Écrire docs/sprint-cerveau.md (plan du sprint, portes, état resumable)", "status": "completed"}, {"content": "C1a : descripteur de topologie + validateur de DAG + impression du plan", "status": "completed"}, {"content": "C1b : pilote multi-nœuds (régions non contiguës, ordonn … [487 caractères tronqués]`
+
+  ```
+Updated todo list: 4 pending, 1 in progress, 2 completed.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && grep -n \"fn run_serveur_flux\" -A 30 src/main.rs | grep -E \"fn |couches|recevoir|envoyer|while|for |mode\\[|println\" | head -18", "description": "Inspect the flux node loop"}`
+
+  ```
+3209:fn run_serveur_flux(opt: Options, adresse: &str) {
+3211-        eprintln!("[plage] `--tete-partielle` est sans effet sur un SERVEUR de flux : ce \
+3232-    println!("[flux] nœud moteur sur {hote}:{port} · {hidden} cachés · {} couches · contexte {ctx}",
+3237-    // différé du pair la retarde encore. Mesuré sur localhost, 12 couches
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && sed -n '3238,3270p' src/main.rs; echo \"=== fonctions de trame dans engine.rs ===\"; grep -n \"pub fn envoyer\\|pub fn recevoir\\|pub fn attendre\\|pub fn servir\" src/engine.rs | head -10", "description": "Read the node l … [27 caractères tronqués]`
+
+  ```
+// distantes : **97,6 ms** d'attente contre 15,6 ms de calcul local — six fois
+    // le calcul, payés par la seule latence du protocole.
+    sock.set_nodelay(true).expect("TCP_NODELAY");
+    println!("[flux] client connecté : {pair}");
+    let mut servis = 0u64;
+    loop {
+        match recevoir_flux(&mut sock, hidden, hc_local) {
+            Ok(f) => {
+                // Un en-tête FORGÉ ne doit pas tuer le nœud : `debut`, `fin` et
+                // `pos` venaient du réseau sans contrôle, et une trame de 83
+                // octets suffisait à faire tomber le moteur (assert sur `pos`,
+                // index hors `layers`, dimension fausse — relecture adversariale).
+                let (n_layer_local, ctx_local) = (mdl.cfg.n_layer, mdl.ctx);
+                if f.fin as usize > n_layer_local || f.debut >= f.fin {
+                    println!("[flux] flux refusé : plage de couches {}..{} invalide pour {} \
+couches — le nœud continue", f.debut, f.fin, n_layer_local);
+                    continue;
+                }
+                // Largeur attendue : `cachés` — ou `hc × cachés` pour un modèle
+                // à **hyper-connexions**, dont l'état résiduel voyage en `hc`
+        
+… [859 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && grep -n \"envoyer_flux\\|fn envoyer\" src/main.rs src/engine.rs | head -8; grep -n \"envoyer_flux\" -B 4 -A 10 src/main.rs | sed -n '1,40p'", "description": "Find the node's return path"}`
+
+  ```
+src/main.rs:2843:fn envoyer_flux(s: &mut std::net::TcpStream, debut: u32, fin: u32, pos: u32,
+src/main.rs:2924:fn envoyer_lot(s: &mut std::net::TcpStream, debut: u32, fin: u32, pos0: u32,
+src/main.rs:2958:fn envoyer_lot_listes(s: &mut std::net::TcpStream, debut: u32, fin: u32, pos0: u32,
+src/main.rs:3351:                if envoyer_flux(&mut sock, f.debut, f.fin, f.pos, &sortie, f.mode,
+src/main.rs:3605:        let (o, a) = envoyer_flux(&mut sock, couches_locales as u32, n_layer as u32,
+src/main.rs:5661:        let (octets, n) = envoyer_flux(&mut client, 12, 24, 0, &valeurs,
+2839-}
+2840-
+2841-/// Envoie un flux et rend le nombre d'octets écrits (en-tête compris) — c'est ce
+2842-/// que la phase 3 doit chiffrer : octets par jeton × latence.
+2843:fn envoyer_flux(s: &mut std::net::TcpStream, debut: u32, fin: u32, pos: u32,
+2844-                actifs: &[f32], mode: u8, mdl: Option<&model::Model>)
+2845-                -> std::io::Result<(usize, usize)> {
+2846-    use std::io::Write;
+2847-    let (n, echelle, corps): (usize, f32, Vec<u8>) = if mode == MODE_BLOCS {
+2848-        let (idx, val, echelles) = mdl.expect("modèle requis pour quantifier un flux")
+2849-                            
+… [1721 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && grep -n \"fn recevoir_flux\" -A 12 src/main.rs | head -18; grep -n \"struct Flux\" -A 12 src/main.rs | head -16", "description": "Read the receive helper and the frame struct"}`
+
+  ```
+2977:fn recevoir_flux(s: &mut std::net::TcpStream, hidden: usize, hc_destinataire: usize)
+2978-                -> std::io::Result<Flux> {
+2979-    use std::io::Read;
+2980-    let mut tete = [0u8; TAILLE_TETE];
+2981-    s.read_exact(&mut tete)?;
+2982-    let u = |o: usize| u32::from_le_bytes([tete[o], tete[o+1], tete[o+2], tete[o+3]]);
+2983-    if u(0) != MAGIE_FLUX {
+2984-        return Err(std::io::Error::new(std::io::ErrorKind::InvalidData,
+2985-                                       "magie de flux absente"));
+2986-    }
+2987-    let version = tete[4];
+2988-    let mode = tete[5];
+2989-    if version != VERSION_FLUX {
+2643:struct Flux {
+2644-    /// Nombre du mode : canaux (dense, listes), actifs (blocs) ou ÉTATS (lot).
+2645-    n: usize,
+2646-    debut: u32,
+2647-    fin: u32,
+2648-    pos: u32,
+2649-    mode: u8,
+2650-    act: Act,
+2651-    charge: ChargeFlux,
+2652-    /// Octets du corps effectivement lus sur le câble (en-tête exclu) : la
+2653-    /// comptabilité du banc doit être la taille RÉELLE, pas une formule par mode.
+2654-    octets_corps: usize,
+2655-    /// **La `pre` portée** par le dernier raccord FFN du nœud émetteur (protocole
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && grep -n \"actifs_du_flux\\|fn actifs\\|Act::Dense\" src/main.rs | head -6; sed -n '3608,3625p' src/main.rs", "description": "Find how the driver reads the reply activations"}`
+
+  ```
+2731:    fn actifs(&self) -> usize {
+                            eprintln!("[flux] le nœud moteur a fermé la connexion pendant \
+l'envoi du flux ({e}) — il a dit pourquoi de son côté.");
+                            std::process::exit(1);
+                        });
+        octets_envoyes += o as u64;
+        actifs_envoyes += a as u64;
+        flux_envoyes += 1;
+        let rep = match recevoir_flux(&mut sock, mdl.cfg.hidden, hc_pilote) {
+            Ok(r) => r,
+            Err(e) => {
+                eprintln!("[flux] le nœud moteur a fermé la connexion ({e}) — version du \
+protocole, réglages, ou contexte : il a dit pourquoi de son côté.");
+                std::process::exit(1);
+            }
+        };
+        // Ce que coûte le découpage : le calcul local, et l'attente du pair
+        // (son calcul + l'aller-retour réseau) — la latence, pas le débit.
+        t_pair += horloge.elapsed().as_secs_f64();
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && sed -n '2726,2745p' src/main.rs", "description": "Read the Act enum and its accessor"}`
+
+  ```
+}
+                x
+            }
+        }
+    }
+    fn actifs(&self) -> usize {
+        match self {
+            ChargeFlux::Dense(v) => v.len(),
+            ChargeFlux::Liste { idx, .. } | ChargeFlux::Blocs { idx, .. } => idx.len(),
+            ChargeFlux::Lot(v) => v.len(),
+        }
+    }
+    /// Le lot aplati, pour le nœud qui doit le rendre à `forward_lot`.
+    fn plat(&self) -> &[f32] {
+        match self { ChargeFlux::Lot(v) => v, _ => &[] }
+    }
+}
+
+/// Construit l'en-tête d'un flux (79 octets) : magie, version, mode, plage,
+/// position, `n`, échelle, et le contrat d'activation.
+  ```
+
+### 🤖 Assistant
+
+⏵ C1b : conception précise consignée (points d'insertion exacts) pour le prochain round
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/sprint-cerveau.md\")\ns = p.read_text()\nancre = \"\"\"## Prochaines étapes (dans l'ordre)\n\n1. **C1b — pilote multi-régions** : `--topologie F --ppl-reparti` doit exécuter l … [4452 caractères tronqués]`
