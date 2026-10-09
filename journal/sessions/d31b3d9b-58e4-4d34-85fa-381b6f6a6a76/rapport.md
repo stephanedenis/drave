@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 14.7 h |
+| Durée | 14.8 h |
 | Tours | 25 |
-| Messages | 627 |
-| Appels d'outils | 595 |
+| Messages | 630 |
+| Appels d'outils | 598 |
 | Fichiers touchés | 21 |
-| Commandes | 473 |
+| Commandes | 476 |
 | Sous-agents | 3 |
-| Commits | 39 |
+| Commits | 40 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -1178,11 +1178,14 @@ La parcimonie déroule (k-WTA 800 → 17,43 ; 700 → 18,11 ; seuil 2 % → 29,5
 
 ### Tour 25 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1477 caractères tronqués]
 
-*3 appels d'outils.* Actions notables :
+*6 appels d'outils.* Actions notables :
 
 - bash — Check all pending work
 - bash — Extract the sparsity sweep results
 - bash — Record the sparsity sweep results
+- bash — Run the distributed gate on the distilled model and extract context data
+- bash — Read the current verdict table
+- bash — Rewrite the verdict table with all findings
 
 **Synthèse produite :**
 
@@ -1264,7 +1267,7 @@ La parcimonie déroule (k-WTA 800 → 17,43 ; 700 → 18,11 ; seuil 2 % → 29,5
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 433 autres
+- … et 436 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1451,4 +1454,5 @@ La parcimonie déroule (k-WTA 800 → 17,43 ; 700 → 18,11 ; seuil 2 % → 29,5
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="reports/rapport-campagne-benefices.md"; s=open(p).read() deb = s.index("## 5. Les modè
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="reports/rapport-campagne-benefices.md"; s=open(p).read()  # 1. La ligne codestral, cor
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="reports/rapport-campagne-benefices.md"; s=open(p).read() ajout = '''## 19. La parcimon
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="reports/rapport-campagne-benefices.md"; s=open(p).read() deb = s.index("## 0 bis. Le v
 

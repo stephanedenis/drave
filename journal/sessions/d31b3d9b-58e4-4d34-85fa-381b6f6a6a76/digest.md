@@ -10182,3 +10182,52 @@ acttopk1000push                      17.4084       354.345
 ⏵ Le balayage de parcimonie a rendu : 24 configurations, et le k-WTA écrase le seuil (encore)
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"reports/rapport-campagne-benefices.md\"; s=open(p).read()\najout = '''## 19. La parcimonie imposée, sur 24 réglages : le k-WTA écrase le seuil, encore\n\nQwen2.5-0.5B Q8_0, 256 jetons, ctx 512, deux familles de  … [3085 caractères tronqués]`
+
+  ```
+ajouté
+dedeba5 Parcimonie imposée, 24 réglages : le k-WTA écrase le seuil d'un facteur 17
+=== campagne ===
+[08/10 23:56:08] charge 64.51 · contexte/1024 : PPL 17.4315 · cache KV : 32 bits · RSS 1248 Mo
+[08/10 23:56:30] charge 63.84 · contexte/2048 : PPL 17.4315 · cache KV : 32 bits · RSS 1249 Mo
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && C=/tmp/campagne24; echo \"=== répartition à 2 nœuds : modèle DISTILLÉ ===\"; MODELE=/tmp/m5_d256_route_distille.gguf IDS=$C/route_ids128.txt LIMITE=128 timeout 900 tools/porte-reparti-moteur.sh 2>&1 | tail -4; echo \"=== contexte : c … [564 caractères tronqués]`
+
+  ```
+=== répartition à 2 nœuds : modèle DISTILLÉ ===
+  perplexité entière : 3.6024
+=== deux nœuds : 2 couches locales, le reste à distance ===
+  perplexité répartie : 3.6024 · écart de flux : 0.00e0
+PORTE TENUE : le découpage ne change pas la perplexité (écart relatif 0.0000 %)
+=== contexte : ce que la campagne a mesuré ===
+ctx 1024 : PPL 17.4315 · cache KV : 32 bits · RSS 1248 Mo
+ctx 1024_temps : PPL ? ·  · RSS 0 Mo
+ctx 2048 : PPL 17.4315 · cache KV : 32 bits · RSS 1249 Mo
+ctx 2048_temps : PPL ? ·  · RSS 0 Mo
+ctx 4096 : PPL ? · cache KV : 32 bits · RSS 0 Mo
+ctx 4096_temps : PPL ? ·  · RSS 0 Mo
+ctx 512 : PPL 17.4315 · cache KV : 32 bits · RSS 1249 Mo
+ctx 512_temps : PPL ? ·  · RSS 0 Mo
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/## 0 bis/,/^---$/p' reports/rapport-campagne-benefices.md | head -25", "description": "Read the current verdict table"}`
+
+  ```
+## 0 bis. Le verdict, famille par famille
+
+Le tableau qui répond à la question posée, avec la mesure qui le porte. ⏳ = file
+en cours au moment de l'écriture.
+
+| famille de tâches | verdict | mesure |
+|---|---|---|
+| **langage** (perplexité) | ✅ tourne — et **le routage gagne à lecture égale** | dense 5,3973 → **routé 5,0684** (−6,1 %) pour les mêmes 3,2 M poids lus · le chemin par listes reste 1,8 à 2,1× plus lent si le modèle est dense (90 %) |
+| **génération / latence** | ✅ mesuré | TTFT **27,9 ms** et **29,0 tok/s** (0,5 B) · 114,6 ms et 7,1 tok/s (1,5 B) |
+| **contexte long — la mémoire** | ✅ **elle tient** | **12 aiguilles sur 12** retrouvées, de 512 à **4 096 jetons**, à 10 %, 50 % et 90 % de profondeur |
+| **contexte long — le coût** | ✅ réglable | KV int8 : +1,5 % (512 j.) à +3,0 % (8 192 j.) de PPL · paginé : **0,03 Go au lieu de 25,77 Go** à 1 M |
+| **préremplissage par lots** | ⏳ | dépôt : **×1,58** · batch 5 sur le 30B depuis le NVMe |
+| **code** | ⏳ diagnostic | codestral-22B : **35 657** de PPL sur de la prose (son propre corpus de code est en cours) |
+| **raisonnement** | ✅ mesuré, et contre-intuitif | r1-distill-1.5B = **1,326 bit/octet**, soit **2,7× pire** que le 
+… [1109 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"reports/rapport-campagne-benefices.md\"; s=open(p).read()\ndeb = s.index(\"## 0 bis. Le verdict, famille par famille\")\nfin = s.index(\"## 1. Le décodage spéculatif\")\nneuf = '''## 0 bis. Le verdict, famille p … [4958 caractères tronqués]`

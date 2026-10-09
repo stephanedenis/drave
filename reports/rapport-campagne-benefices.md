@@ -29,32 +29,38 @@ perplexité publiée quelque part.
 
 ## 0 bis. Le verdict, famille par famille
 
-Le tableau qui répond à la question posée, avec la mesure qui le porte. ⏳ = file
-en cours au moment de l'écriture.
+Le tableau qui répond à la question posée, chaque ligne portant sa mesure. ⏳ =
+file encore en cours.
 
 | famille de tâches | verdict | mesure |
 |---|---|---|
-| **langage** (perplexité) | ✅ tourne — et **le routage gagne à lecture égale** | dense 5,3973 → **routé 5,0684** (−6,1 %) pour les mêmes 3,2 M poids lus · le chemin par listes reste 1,8 à 2,1× plus lent si le modèle est dense (90 %) |
-| **génération / latence** | ✅ mesuré | TTFT **27,9 ms** et **29,0 tok/s** (0,5 B) · 114,6 ms et 7,1 tok/s (1,5 B) |
+| **langage** (perplexité) | ✅ tourne, et **le routage entraîné gagne** | à lecture égale (3,2 M poids/jeton) : dense **5,0155** → routé **4,8858** (−2,6 %) → **distillé 4,7642 (−5,0 %)**, protocole 8 × 128 jetons |
+| **génération / latence** | ✅ mesuré | TTFT **27,9 ms**, **29,0 tok/s** (0,5 B) · 114,6 ms, 7,1 tok/s (1,5 B) |
 | **contexte long — la mémoire** | ✅ **elle tient** | **12 aiguilles sur 12** retrouvées, de 512 à **4 096 jetons**, à 10 %, 50 % et 90 % de profondeur |
-| **contexte long — le coût** | ✅ réglable | KV int8 : +1,5 % (512 j.) à +3,0 % (8 192 j.) de PPL · paginé : **0,03 Go au lieu de 25,77 Go** à 1 M |
-| **préremplissage par lots** | ⏳ | dépôt : **×1,58** · batch 5 sur le 30B depuis le NVMe |
-| **code** | ⏳ diagnostic | codestral-22B : **35 657** de PPL sur de la prose (son propre corpus de code est en cours) |
-| **raisonnement** | ✅ mesuré, et contre-intuitif | r1-distill-1.5B = **1,326 bit/octet**, soit **2,7× pire** que le 0,5 B (0,983) |
+| **contexte long — le coût** | ✅ réglable | KV int8 : +1,5 % (512 j.) à +3,0 % (8 192 j.) · paginé : **0,03 Go au lieu de 25,77 Go** à 1 M |
+| **préremplissage par lots** | ⚠️ non mesuré | le batch 5 a mesuré le **cache de pages** (10,9 Go lus à froid, 0 ensuite) — à refaire sur un modèle plus gros que la RAM |
+| **code** | ✅ mesuré, décalage de tâche | codestral-22B : **117,91** de PPL sur de la prose = **1,797 bit/octet**, contre **0,983** pour un 0,5 B — un 22 B 1,8× **pire** qu'un 0,5 B hors de sa tâche |
+| **raisonnement** | ✅ mesuré, contre-intuitif | r1-distill-1.5B : **1,326 bit/octet**, **2,7× pire** que le 0,5 B (0,983) |
 | **MoE / routage d'experts** | ✅ mesuré | 4 experts sur 128 (3,1 %) · déséquilibre **×3,90** · **847 octets** par jeton à router |
-| **sortie contrainte** | ✅ **gagne par construction** | **×1,42** de débit *et* garantie que la sortie appartient à l'ensemble autorisé |
-| **modèle plus gros que la RAM** | ⏳ | dépôt : K3 **206,58 Gio** lus par passe, 133 Mio/s · batch 6 : V4-Flash, **365 Go sur 125 Go** |
-| **répartition à deux nœuds** | ✅ **porte tenue** | écart de perplexité **0,0000 %**, écart de flux **0,00e0** |
-| **embeddings / recherche** | ❌ **manque** | `bge-m3` lisible en en-tête, **inexécutable** (pas d'encodeur bidirectionnel) |
+| **parcimonie imposée** | ✅ reproduit, et nuancé | à −30 % d'événements : seuil **+69 %** de PPL, k-WTA **+4 %** (facteur 17) · en dense, **aucune lecture économisée** |
+| **sortie contrainte** | ✅ **gagne par construction** | **×1,36-1,42** de débit *et* garantie que la sortie appartient à l'ensemble autorisé |
+| **modèle plus gros que la RAM** | ✅ **démontré** | V4-Flash **365,7 Go sur 125 Go de RAM** : **37,6 Go résidents**, 37,7 Go lus, 266 s pour 16 jetons · gpt-oss (63 Go) : passe de 256 jetons **non finie en 90 min** |
+| **répartition à deux nœuds** | ✅ **porte tenue** | écart **0,0000 %** et flux **0,00e0** — sur le modèle dense, routé **et distillé** |
+| **embeddings / recherche** | ❌ **manque** | `bge-m3` lisible en en-tête, **inexécutable** (ni encodeur bidirectionnel ni pooling) |
 | **décodage spéculatif** | ❌ manque, et chiffré | brouillon générique : **×1,20** — insuffisant pour justifier le chantier |
 
-**Ce que le tableau dit en une phrase** : Drave gagne **par construction** sur les
-sorties contraintes, **par ses circonstances** sur les modèles plus gros que la
-RAM, et **perd** sur la modélisation de langue ordinaire tant que le modèle n'est
-pas creux — ce qui est exactement le chantier de la parcimonie entraînée.
+**En une phrase** : Drave gagne **par construction** sur les sorties contraintes,
+**par sa structure** quand le modèle est creux (routage entraîné : −2,6 %, et la
+distillation porte le total à −5,0 % à lecture égale), **par ses circonstances**
+sur les modèles plus gros que la RAM, et **perd** sur un modèle dense ordinaire —
+où le chemin par listes coûte 1,8 à 2,1× pour rien.
+
+**Trois corrections de méthode sont consignées dans ce rapport**, et elles
+comptent autant que les chiffres : le tokenizer étranger (`data/…ids`, facteur
+442), la fenêtre d'évaluation trop courte (trois protocoles, trois réponses), et le
+cache qui survit à son correctif.
 
 ---
-
 
 ## 1. Le décodage spéculatif : ×1,2, pas ×2 — mesuré avant d'écrire du moteur
 
