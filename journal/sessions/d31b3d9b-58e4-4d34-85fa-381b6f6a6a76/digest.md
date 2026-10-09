@@ -18261,3 +18261,35 @@ décorrélation β=0.3 : sur B = 8.7112
 ⏵ Courbe de dose complète : la règle locale converge vers « ne rien apprendre »
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/impulsion-pure-apprenant.md\")\ns = p.read_text()\nancre = \"\"\"**Ce qu'il faudrait, et c'est maintenant précisément spécifié** : une règle\n**contrastive**\"\"\"\nassert anc … [2707 caractères tronqués]`
+
+  ```
+ok
+722cc34 Décorrélation en courbe de dose : elle améliore de façon monotone et converge vers « ne rien apprendre »
+  pas   8000 · perte 1.3484 · val 2.1438 bits/octet · 573 s
+  ```
+
+- **bash** `{"command": "sleep 595; tail -1 /tmp/campagne24/tr_m16_d512_masque25.log", "description": "Poll m16", "timeoutMs": 620000}`
+
+  ```
+pas  16000 · perte 1.3136 · val 2.0632 bits/octet · 1148 s
+  ```
+
+### 👤 Utilisateur
+
+fain un plan détaillé pour toutes les capacités manquantes à Drave (y compris la distribution sur plusieurs instances de Drave sur plusieurs machines concertées) pour simuler le fonctionnement d'un cerveau humain.
+
+### 🤖 Assistant
+
+⏵ Rédaction du plan détaillé : les capacités manquantes, jusqu'à la distribution multi-instances
+
+- **write** `{"content": "# Plan détaillé — les capacités manquantes à Drave pour simuler un cerveau\n\n> 9 octobre 2026. Complète `docs/architecture-cerveau-et-drave.md` (qui établit *ce\n> qui* manque et *pourquoi*) par un plan d'ingénierie : douze capacités, leur\n> conception, leur interface, l'invariant qui … [21031 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-cerveau-complet.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/plan-cerveau-complet.md && git commit -q -m \"Plan détaillé des douze capacités manquantes, jusqu'à la distribution multi-instances\n\nDouze fiches (structure cérébrale -> état du moteur -> conception -> interface ->\nin … [1532 caractères tronqués]`

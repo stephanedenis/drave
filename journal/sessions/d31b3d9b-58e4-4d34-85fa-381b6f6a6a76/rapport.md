@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 29.3 h |
+| Durée | 29.5 h |
 | Tours | 32 |
-| Messages | 1164 |
-| Appels d'outils | 1110 |
-| Fichiers touchés | 34 |
-| Commandes | 923 |
+| Messages | 1168 |
+| Appels d'outils | 1113 |
+| Fichiers touchés | 35 |
+| Commandes | 925 |
 | Sous-agents | 3 |
-| Commits | 96 |
+| Commits | 97 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -1503,7 +1503,7 @@ En cours
 
 ### Tour 32 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1477 caractères tronqués]
 
-*9 appels d'outils.* Actions notables :
+*12 appels d'outils.* Actions notables :
 
 - bash — Poll the dim-512 scale verification
 - bash — Wire the external modulator file and build
@@ -1514,10 +1514,13 @@ En cours
 - bash — Test the decorrelation time constant
 - bash — Confirm the decorrelation asymptote
 - bash — Record the dose-response curve and check jour7
+- bash — Poll m16
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-cerveau-complet.md`
+- bash — Commit the detailed plan
 
 **Synthèse produite :**
 
-⏵ Courbe de dose complète : la règle locale converge vers « ne rien apprendre »
+⏵ Rédaction du plan détaillé : les capacités manquantes, jusqu'à la distribution multi-instances
 
 ## 3. Travail accompli
 
@@ -1559,6 +1562,7 @@ En cours
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/hebbien-differentiel-et-biologie.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/impulsion-pure-apprenant.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/architecture-cerveau-et-drave.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-cerveau-complet.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -1608,7 +1612,7 @@ En cours
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 883 autres
+- … et 885 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1852,4 +1856,5 @@ En cours
 - M1 dans le moteur : le bus de modulation (nouveauté ou valeur), et la persistance de D  DRAVE_HEBB_MODULE accepte désormais « valeur » : eta est piloté par hd.m
 - Signal externe mesuré : meilleur des modulateurs, et toujours pire que la règle nue  Le moteur lit maintenant un modulateur externe (DRAVE_HEBB_MODULATEUR_FICHI
 - Décorrélation en courbe de dose : elle améliore de façon monotone et converge vers « ne rien apprendre »  DRAVE_HEBB_BETA rend la constante de temps réglable. M
+- Plan détaillé des douze capacités manquantes, jusqu'à la distribution multi-instances  Douze fiches (structure cérébrale -> état du moteur -> conception -> inte
 
