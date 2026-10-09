@@ -7,12 +7,12 @@
 | Début | 2026-10-08 09:11 |
 | Durée | 13.7 h |
 | Tours | 19 |
-| Messages | 559 |
-| Appels d'outils | 539 |
+| Messages | 561 |
+| Appels d'outils | 541 |
 | Fichiers touchés | 21 |
-| Commandes | 417 |
+| Commandes | 419 |
 | Sous-agents | 3 |
-| Commits | 29 |
+| Commits | 30 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -906,11 +906,13 @@ La campagne est toujours sur **gpt-oss-120b** (63 Go depuis le disque dur), le b
 
 ### Tour 19 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1477 caractères tronqués]
 
-*3 appels d'outils.* Actions notables :
+*5 appels d'outils.* Actions notables :
 
 - bash — Check all running work
 - bash — Check exported routed models and distillation start
 - bash — Record the iso-reads result in the report
+- bash — Check the verdict row and codestral code PPL
+- bash — Update the verdict row and check batch 5
 
 **Synthèse produite :**
 
@@ -992,7 +994,7 @@ La campagne est toujours sur **gpt-oss-120b** (63 Go depuis le disque dur), le b
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 377 autres
+- … et 379 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1169,4 +1171,5 @@ La campagne est toujours sur **gpt-oss-120b** (63 Go depuis le disque dur), le b
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/msg_portes.txt <<'MSG' La porte Mistral entre dans la suite : une famille de plus est couverte 
 - Quatre tâches, sorties verbatim : le moteur tient, c'est le modèle qui limite  Refaites sur le 0,5 B après avoir coupé les mêmes essais sur gpt-oss-120b (5 x 1 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="reports/rapport-campagne-benefices.md"; s=open(p).read() vieux = s[s.index("## 5. Les 
+- Verdict : la ligne « langage » porte maintenant le gain du routage à lecture égale  Le verdict famille par famille disait « le chemin par listes n'aide pas ». C
 

@@ -9164,3 +9164,21 @@ jeu 08 oct 2026 22:50:44 EDT
 ⏵ Le résultat central est là : à lecture égale, le routé bat le dense de 6 %
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"reports/rapport-campagne-benefices.md\"; s=open(p).read()\nvieux = s[s.index(\"## 5. Les modèles entraînés ici\"):s.index(\"## 7. Répartir par EXPERTS\")]\nneuf = '''## 5. Les modèles entraînés ici, mesurés DANS … [3862 caractères tronqués]`
+
+  ```
+section remplacée
+2599abd À lecture égale, le routage gagne 6 % de perplexité — la thèse du projet, mesurée
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -A2 \"langage\\*\\* (perplexité)\" reports/rapport-campagne-benefices.md | head -3; echo \"=== diagnostic codestral ===\"; grep -E \"perplexité|=== \" /tmp/campagne24/codestral_diag.log | tail -3", "description": "Check the verd … [52 caractères tronqués]`
+
+  ```
+| **langage** (perplexité) | ✅ tourne — **mais le chemin par listes n'aide pas** | 1,8 à 2,1× **plus lent** en listes sur nos modèles denses (densité 90 %, croisement à 22 %) |
+| **génération / latence** | ✅ mesuré | TTFT **27,9 ms** et **29,0 tok/s** (0,5 B) · 114,6 ms et 7,1 tok/s (1,5 B) |
+| **contexte long — la mémoire** | ✅ **elle tient** | **12 aiguilles sur 12** retrouvées, de 512 à **4 096 jetons**, à 10 %, 50 % et 90 % de profondeur |
+=== diagnostic codestral ===
+=== 1. génération de code (le moteur exécute-t-il Mistral correctement ?) ===
+=== 2. perplexité sur du CODE (32 jetons) ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"reports/rapport-campagne-benefices.md\"; s=open(p).read()\ns = s.replace('''| **langage** (perplexité) | ✅ tourne — **mais le chemin par listes n'aide pas** | 1,8 à 2,1× **plus lent** en listes sur nos modèles d … [1027 caractères tronqués]`

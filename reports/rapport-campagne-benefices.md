@@ -34,7 +34,7 @@ en cours au moment de l'écriture.
 
 | famille de tâches | verdict | mesure |
 |---|---|---|
-| **langage** (perplexité) | ✅ tourne — **mais le chemin par listes n'aide pas** | 1,8 à 2,1× **plus lent** en listes sur nos modèles denses (densité 90 %, croisement à 22 %) |
+| **langage** (perplexité) | ✅ tourne — et **le routage gagne à lecture égale** | dense 5,3973 → **routé 5,0684** (−6,1 %) pour les mêmes 3,2 M poids lus · le chemin par listes reste 1,8 à 2,1× plus lent si le modèle est dense (90 %) |
 | **génération / latence** | ✅ mesuré | TTFT **27,9 ms** et **29,0 tok/s** (0,5 B) · 114,6 ms et 7,1 tok/s (1,5 B) |
 | **contexte long — la mémoire** | ✅ **elle tient** | **12 aiguilles sur 12** retrouvées, de 512 à **4 096 jetons**, à 10 %, 50 % et 90 % de profondeur |
 | **contexte long — le coût** | ✅ réglable | KV int8 : +1,5 % (512 j.) à +3,0 % (8 192 j.) de PPL · paginé : **0,03 Go au lieu de 25,77 Go** à 1 M |
