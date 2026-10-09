@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 20.4 h |
+| Durée | 20.6 h |
 | Tours | 27 |
-| Messages | 936 |
-| Appels d'outils | 899 |
+| Messages | 940 |
+| Appels d'outils | 903 |
 | Fichiers touchés | 29 |
-| Commandes | 730 |
+| Commandes | 734 |
 | Sous-agents | 3 |
-| Commits | 58 |
+| Commits | 59 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -1270,7 +1270,7 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 
 ### Tour 27 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1477 caractères tronqués]
 
-*290 appels d'outils.* Actions notables :
+*294 appels d'outils.* Actions notables :
 
 - bash — Check the full state
 - bash — Measure the distilled d384 with the correct protocol
@@ -1286,11 +1286,11 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - bash — Read parcimonie, contexte, lot steps
 - bash — Inspect batch2 script
 - bash — Read batch2 journal and latency map
-- … et 258 autres
+- … et 262 autres
 
 **Synthèse produite :**
 
-⏵ Le moteur refuse le lot sur V4.1 (hyper-connexions) — un refus explicite, consigné
+⏵ Reconstruction du binaire de référence pour promouvoir les correctifs (item en attente)
 
 ## 3. Travail accompli
 
@@ -1376,7 +1376,7 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 690 autres
+- … et 694 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1582,4 +1582,5 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - Le point de la file à 5 h 20 : ce qui est fait, ce qui tourne, ce qui reste un manque  Le tableau de clôture distingue trois choses qui ne doivent pas être conf
 - Un quatrième piège de méthode : la chaîne qui attendait son marqueur dans le mauvais journal  Deux heures de GPU perdues devant un marqueur écrit dans le journa
 - Le lot sur un modèle plus gros que la RAM : le moteur refuse, et il dit pourquoi  V4.1-Flash (365,7 Go sur 125 Go) est le seul modèle de la machine qui ne tient
+- Les correctifs du moteur sont promus : 77 tests verts, Codestral à 8 jetons, porte rejouée  Le binaire de référence datait du 8/10 11 h 00 et trois commits de d
 

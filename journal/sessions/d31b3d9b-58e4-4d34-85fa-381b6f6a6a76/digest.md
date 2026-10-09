@@ -15444,3 +15444,51 @@ bash: line 1: 1767895 Aborted                    timeout 900 ./drave-core/target
 ⏵ Le moteur refuse le lot sur V4.1 (hyper-connexions) — un refus explicite, consigné
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\nancre = \"\"\"**Ce que cette mesure ne dit pas** : les temps. Ils varient de 78 s à 252 s pour la\nmême quantité de cal … [3163 caractères tronqués]`
+
+  ```
+ok
+ok2
+a595bf7 Le lot sur un modèle plus gros que la RAM : le moteur refuse, et il dit pourquoi
+  ```
+
+- **bash** `{"command": "sleep 570; cd /tmp/campagne24 && tail -1 tr_m8_d512_kwta25.log; tail -2 aiguille_long.log; tail -1 journal8.txt", "description": "Poll training and needle", "timeoutMs": 600000}`
+
+  ```
+pas  20000 · perte 1.3316 · val 2.0891 bits/octet · 2092 s
+ contexte  profondeur  trouvé  secondes  détail
+    12288        0.50     oui    1963.6  prompt 12474 jetons
+[09/10 05:08:44] charge 16.07 · === GPU libre : dense dim 512, k-WTA 25 % appris (FFN en Q8) ===
+  ```
+
+### 🤖 Assistant
+
+⏵ Reconstruction du binaire de référence pour promouvoir les correctifs (item en attente)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && timeout 1800 cargo build --release 2>&1 | tail -5; ls -la target/release/drave; cd .. && timeout 300 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/codestral-22b-v0.1-q4_k_m.gguf --tokenize … [158 caractères tronqués]`
+
+  ```
+|
+    = note: `#[warn(non_shorthand_field_patterns)]` on by default
+
+warning: `drave-core` (bin "drave") generated 48 warnings (run `cargo fix --bin "drave" -p drave-core` to apply 24 suggestions)
+    Finished `release` profile [optimized] target(s) in 41.44s
+-rwxr-xr-x. 2 stephane stephane 2552512  9 oct 05:46 target/release/drave
+8 tokens
+1183 8550 22045 1040 23666 1066 1040 3313 
+recolle : " The river carries the logs to the mill"
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (cd drave-core && timeout 1200 cargo test --release 2>&1 | tail -4); echo \"=== reparti m6 (binaire corrigé) ===\"; MODELE=/tmp/m6_d512_route.gguf IDS=/tmp/campagne24/route_ids128.txt LIMITE=128 timeout 900 tools/porte-reparti-moteur … [113 caractères tronqués]`
+
+  ```
+test engine::tests_gemm::gemm_bat_le_matvec ... ok
+
+test result: ok. 77 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+
+=== reparti m6 (binaire corrigé) ===
+=== deux nœuds : 2 couches locales, le reste à distance ===
+  perplexité répartie : 3.6064 · écart de flux : 0.00e0
+PORTE TENUE : le découpage ne change pas la perplexité (écart relatif 0.0000 %)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\nancre = \"\"\"**La leçon de méthode** : un correctif non promu est un correctif qui n'existe pas,\"\"\"\nassert ancre i … [1231 caractères tronqués]`

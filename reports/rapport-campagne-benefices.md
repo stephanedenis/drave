@@ -964,6 +964,13 @@ binaire périmé et doivent être refaits, pas réutilisés.
    sans lui on compare deux schémas de quantification, pas deux chemins
    d'exécution (§ 22).
 
+**Les correctifs sont maintenant PROMUS** (9 octobre, 5 h 46) : `cargo build
+--release` refait, les **77 tests passent**, et le contrôle qui avait révélé le
+problème donne le résultat attendu — Codestral découpe « The river carries the logs
+to the mill » en **8 jetons** au lieu de 31, et recolle le texte exact. La porte de
+répartition à deux nœuds a été **rejouée avec ce binaire** : perplexité 3,6064,
+écart de flux **0.00e0**, porte tenue.
+
 **La leçon de méthode** : un correctif non promu est un correctif qui n'existe pas,
 et un cache d'identifiants ne porte pas la version de l'outil qui l'a écrit. Les
 deux pièges du § 16 sont de la même famille — et celui-ci est le plus coûteux,
