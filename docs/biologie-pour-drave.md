@@ -177,13 +177,23 @@ entraîné.**
 | échelle des poids linéaires sauvegardés | \|w\| max **0,453** — contre **1,89** pour le témoin |
 
 La référence PyTorch sur les poids sauvegardés donne *pire* que le moteur : **ce n'est
-pas le moteur, c'est le fichier.** Le soupçon est la matérialisation de la
-reparamétrisation avant `save_pretrained` (le tampon de signes vit dans le module de
-paramétrisation, et `remove_parametrizations` doit le recomposer). **E6 est donc
-INCONCLUSIVE : ni la prédiction, ni son contraire, ne sont établis** — et c'est écrit
-comme tel plutôt que présenté comme un échec de la biologie. Le défaut reste à
-corriger ; la mesure qui le détecte est la porte de correction, et elle a fait son
-travail.
+pas le moteur, c'est le fichier.**
+
+**Le premier soupçon a été testé et ÉLIMINÉ** : la matérialisation de la
+reparamétrisation avant `save_pretrained` a été refaite en recalculant explicitement
+`signes · clamp(theta, −12, 6).exp()` et en le **vérifiant** — écart mesuré avant
+copie : **0,000e+00**, c'est-à-dire que la reparamétrisation était déjà cohérente. Le
+défaut est donc **ailleurs**, et il reste ouvert : la piste la plus courte est
+l'écart entre la validation d'entraînement (évaluée en fp32 sur le modèle vivant) et
+le modèle *sauvegardé puis quantifié* — c'est-à-dire, une fois de plus, la
+quantification et non l'entraînement.
+
+**E6 est donc INCONCLUSIVE : ni la prédiction, ni son contraire, ne sont établis** —
+et c'est écrit comme tel plutôt que présenté comme un échec de la biologie. Deux
+faits subsistent : la distribution obtenue n'est **pas** à queue lourde
+(p99,9/médiane 5,5 contre 5,2 au témoin), et la validation d'entraînement est
+nettement moins bonne (2,2662 contre 1,9020 bits/octet) — ce qui suggère que **figer
+les signes coûte cher**, indépendamment du défaut de fichier.
 
 ---
 

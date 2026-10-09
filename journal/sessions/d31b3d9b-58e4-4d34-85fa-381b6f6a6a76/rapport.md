@@ -7,12 +7,12 @@
 | Début | 2026-10-08 09:11 |
 | Durée | 27.7 h |
 | Tours | 28 |
-| Messages | 1093 |
-| Appels d'outils | 1049 |
+| Messages | 1097 |
+| Appels d'outils | 1053 |
 | Fichiers touchés | 33 |
-| Commandes | 865 |
+| Commandes | 869 |
 | Sous-agents | 3 |
-| Commits | 86 |
+| Commits | 87 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -1318,7 +1318,7 @@ Cinq points où notre règle **est** biologique (elle porte sur des *changements
 
 ### Tour 28 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1477 caractères tronqués]
 
-*9 appels d'outils.* Actions notables :
+*13 appels d'outils.* Actions notables :
 
 - bash — Check chains and training state
 - bash — Queue the structure follow-up experiments
@@ -1329,10 +1329,14 @@ Cinq points où notre règle **est** biologique (elle porte sur des *changements
 - bash — Check tied embeddings in the log-normal model
 - bash — Gate the log-normal model against the PyTorch reference
 - bash — Record the E6 code failure
+- bash — Check the structure chain progress
+- bash — Verify commit state and active chains
+- bash — Fix and test the materialization
+- bash — Eliminate the materialization suspicion and record it
 
 **Synthèse produite :**
 
-⏵ E6 : échec de code, pas un résultat — je le consigne avec sa preuve
+⏵ Correction du défaut de matérialisation de E6 (copie explicite avant retrait)
 
 ## 3. Travail accompli
 
@@ -1422,7 +1426,7 @@ Cinq points où notre règle **est** biologique (elle porte sur des *changements
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 825 autres
+- … et 829 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1656,4 +1660,5 @@ Cinq points où notre règle **est** biologique (elle porte sur des *changements
 - E7 et E8 implémentés et mesurés : la nouveauté empire la règle, la décorrélation est inerte  Deux mécanismes écrits dans le moteur (DRAVE_HEBB_MODULE, DRAVE_HEB
 - Le rapport de campagne renvoie aux trois documents de conception, et porte le résultat de structure innée" && echo ok; sleep 420; tail -1 /tmp/campagne24/tr_m13
 - E6 (poids log-normaux) : échec de code, consigné comme tel — le modèle sauvegardé n'est pas le modèle entraîné  La reparamétrisation w = signe·e^theta a été ent
+- E6 : le soupçon de matérialisation est testé et ÉLIMINÉ (écart 0,000e+00) — le défaut est ailleurs  La matérialisation a été refaite en recalculant explicitemen
 

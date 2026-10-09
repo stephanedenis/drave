@@ -17335,3 +17335,48 @@ corrélation des logits (position 0) : 0.975224
 ⏵ E6 : échec de code, pas un résultat — je le consigne avec sa preuve
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/biologie-pour-drave.md\")\ns = p.read_text()\nancre = \"\"\"**Prédiction mesurable** : à budget d'événements égal, un modèle à poids\nlog-normaux doit **mieux supporter l'élag … [3132 caractères tronqués]`
+
+  ```
+ok
+d222f9d E6 (poids log-normaux) : échec de code, consigné comme tel — le modèle sauvegardé n'est pas le modèle entraîné
+  ```
+
+- **bash** `{"command": "cd /tmp/campagne24 && tail -1 tr_m14_masque125.log 2>/dev/null || echo \"(m14 pas commencé)\"; tail -2 journal14.txt 2>/dev/null; tail -2 journal13.txt", "description": "Check the structure chain progress"}`
+
+  ```
+pas   8000 · perte 1.4107 · val 2.2469 bits/octet · 403 s
+[09/10 12:44:24] charge 3.58 · === 1. masque inné à 12,5 % ===
+[09/10 12:42:43] charge 4.61 · m13_d384_lognormal keep=0.25 : PPL 3323.5007 · 226590463 événements
+[09/10 12:42:43] charge 4.61 · === chaîne log-normale terminée ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short | grep -v \"^ M journal\" | head -8; echo \"=== derniers commits ===\"; git log --oneline -6; echo \"=== chaînes actives ===\"; pgrep -af \"bash /tmp/campagne24/jour[0-9]\" | sed 's/.*campagne24/campagne24/' | cut  … [64 caractères tronqués]`
+
+  ```
+=== derniers commits ===
+d222f9d E6 (poids log-normaux) : échec de code, consigné comme tel — le modèle sauvegardé n'est pas le modèle entraîné
+e681012 Le rapport de campagne renvoie aux trois documents de conception, et porte le résultat de structure innée
+5adb39b E7 et E8 implémentés et mesurés : la nouveauté empire la règle, la décorrélation est inerte
+0307077 Drave en impulsion pure serait-il un meilleur apprenant ? Pas en l'état, oui sous conditions nommées
+47a180d E1 : un connectome inné ALÉATOIRE coûte 1 % de perplexité et divise les lectures par 4
+5eaa70b Notre hebbien différentiel face à la biologie : pourquoi il échoue, et par quoi le remplacer
+=== chaînes actives ===
+campagne24/tr_m13_lognormal.log
+campagne24/jour6_structure.sh
+  ```
+
+### 🤖 Assistant
+
+⏵ Correction du défaut de matérialisation de E6 (copie explicite avant retrait)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"tools/entrainer_moteur.py\")\ns = p.read_text()\nvieux = '''def materialiser_poids(modele):\n    \"\"\"Retire la reparamétrisation pour que l'export voie des poids ordinaires.\"\"\ … [2368 caractères tronqués]`
+
+  ```
+ok
+syntaxe OK
+# matérialisation : 15 couches · écart max avant copie 0.000e+00 (0 = la reparamétrisation était déjà cohérente)
+# matérialisation : 15 couches (les poids redeviennent des tenseurs ordinaires)
+  # meilleur point : pas 400 · val 5.7158 bits/octet
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"tools/entrainer_moteur.py\")\ns = p.read_text()\n# retirer le message de matérialisation en double (l'ancien, plus haut)\ns = s.replace('''    if a.poids_lognormaux:\n        print … [3242 caractères tronqués]`

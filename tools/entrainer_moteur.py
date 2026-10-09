@@ -156,13 +156,31 @@ def installer_poids_lognormaux(modele):
 
 
 def materialiser_poids(modele):
-    """Retire la reparamétrisation pour que l'export voie des poids ordinaires."""
+    """Écrit les poids DÉFINITIFS, puis retire la reparamétrisation.
+
+    POURQUOI LA COPIE EST EXPLICITE (défaut trouvé le 9/10). Le premier essai se
+    contentait de `remove_parametrizations` : le fichier sauvé portait alors des
+    poids qui ne reproduisaient PAS le modèle entraîné — validation 2,2662 bits/octet
+    à l'entraînement, perplexité 8 668 dans le moteur et **15 552** pour la référence
+    PyTorch sur les mêmes poids quantifiés (donc le fichier, pas le moteur). On
+    recalcule donc la valeur exacte du `forward` — `signes · clamp(theta, −12, 6).exp()`
+    — et on l'écrit AVANT de retirer la reparamétrisation, en le VÉRIFIANT.
+    """
     from torch.nn.utils.parametrize import remove_parametrizations
-    n = 0
-    for mod in modele.modules():
-        if hasattr(mod, "parametrizations") and hasattr(mod.parametrizations, "weight"):
-            remove_parametrizations(mod, "weight")
-            n += 1
+    n, ecart = 0, 0.0
+    with torch.no_grad():
+        for mod in modele.modules():
+            if hasattr(mod, "parametrizations") and hasattr(mod.parametrizations, "weight"):
+                par = mod.parametrizations.weight
+                theta = par.original
+                signes = par[0].signes
+                attendu = signes * theta.clamp(-12.0, 6.0).exp()
+                ecart = max(ecart, float((mod.weight - attendu).abs().max()))
+                mod.weight.copy_(attendu)
+                remove_parametrizations(mod, "weight")
+                n += 1
+    print(f"# matérialisation : {n} couches · écart max avant copie {ecart:.3e} "
+          f"(0 = la reparamétrisation était déjà cohérente)")
     return n
 
 
@@ -410,8 +428,7 @@ def main():
     # fichier porterait des clés `parametrizations.weight.original` que l'exporteur
     # ne connaît pas).
     if a.poids_lognormaux:
-        print(f"# matérialisation : {materialiser_poids(modele)} couches "
-              f"(les poids redeviennent des tenseurs ordinaires)")
+        materialiser_poids(modele)
     modele.eval()
     os.makedirs(a.sortie, exist_ok=True)
     modele.save_pretrained(a.sortie)
