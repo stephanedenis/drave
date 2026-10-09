@@ -46,7 +46,7 @@ file encore en cours.
 | **sémantique multilingue** | ✅ le résultat publié **survit** au correctif d'échelle | pic de séparation à la **couche 13** (+0,0391) sur 398 langues, bande 10-15 — et l'ancien lecteur donnait +0,0349 au même endroit |
 | **parcimonie imposée** | ✅ reproduit, et nuancé | à −30 % d'événements : seuil **+69 %** de PPL, k-WTA **+4 %** (facteur 17) · en dense, **aucune lecture économisée** |
 | **sortie contrainte** | ✅ **gagne par construction** | **×1,36-1,42** de débit *et* garantie que la sortie appartient à l'ensemble autorisé |
-| **modèle plus gros que la RAM** | ✅ **démontré** | V4-Flash **365,7 Go sur 125 Go de RAM** : **37,6 Go résidents**, 37,7 Go lus, 266 s pour 16 jetons · gpt-oss (63 Go) : passe de 256 jetons **non finie en 90 min** |
+| **modèle plus gros que la RAM** | ✅ **démontré, et vérifié au chiffre près** | V4-Flash **365,7 Go sur 125 Go de RAM** : **37,6 Go résidents**, 37,7 Go lus, 266 s pour 16 jetons · gpt-oss (63 Go) : **PPL 15,6017 sur 510 jetons — la valeur attendue, à l'identique** (porte tenue à 02 h 58) |
 | **répartition à deux nœuds** | ✅ **porte tenue** | écart **0,0000 %** et flux **0,00e0** — sur le modèle dense, routé **et distillé** |
 | **embeddings / recherche** | ❌ **manque** | `bge-m3` lisible en en-tête, **inexécutable** (ni encodeur bidirectionnel ni pooling) |
 | **décodage spéculatif** | ❌ manque, et chiffré **par le moteur** | paire alignée (HF) : 3,35 jetons sur 8 acceptés, **×1,20** · paire mal appariée (moteur) : **0,88 sur 8, ×0,70** — un brouillon rejeté coûte plus qu'il ne rapporte (§ 1 et 1 bis) |
@@ -72,17 +72,23 @@ campagne (§ 17).
 
 Les **neuf étapes** de `tools/campagne-benefices.sh` sont allées au bout
 (`=== campagne terminée ===` à 01 h 03), et les portes rendent **22 vertes · 1
-rouge** :
+rouge** — puis, à 02 h 58, **23 vertes · 0 rouge**.
 
-| porte rouge | pourquoi | suite |
+| porte | état | ce qui s'est passé |
 |---|---|---|
-| `gpt-oss-120b MXFP4 ctx 256` — attendu **15,6017** | la passe de 512 jetons a été **tuée par son délai** — deux fois. **Le délai lui-même est en cause** : à 0,074 tok/s mesuré sur cette machine (32 jetons en 432 s), 512 jetons demandent **1 h 55**, et la porte en accordait 40 min. Une porte qui ne peut pas passer ne vérifie rien | délai recalibré dans `tools/portes.sh` (`GATE_GPTOSS_DELAI`, défaut **9 000 s**), relancée à 02 h 55 |
+| `gpt-oss-120b MXFP4 ctx 256` — attendu **15.6017** | ✅ **rend 15.6017 sur 510 jetons**, au chiffre près | elle avait expiré **deux fois** (2 400 s puis 5 400 s). Le délai était en cause, pas le moteur : à 0,074 tok/s mesuré (32 jetons en 432 s), 512 jetons demandent ~1 h 55. Délai recalibré (`GATE_GPTOSS_DELAI`, défaut 9 000 s) ; relancée seule, elle rend la valeur **attendue à l'identique** |
 
 Tout le reste est vert, y compris `cargo test --release` (**77 tests**), les 17
 formats confrontés à libggml, la porte de correction contre llama.cpp
 (100 % des positions utiles au-dessus de 0,95, top-1 94,4 %), la porte Mistral, et
 les cinq modes de découpage à deux nœuds (écart **0,00e0** pour les modes 0, 1 et
 3, 3,65e-2 pour le mode 2, 4,45e-3 pour le mode 4).
+
+**Ce que cette porte dit vraiment** : le moteur reproduit **au chiffre près** la
+perplexité de référence d'un modèle de 63 Go en MXFP4, exécuté en dense, sur le
+disque. C'est la vérification la plus lourde du dépôt, et elle ne tenait qu'à un
+délai mal calibré — une porte qui ne peut pas passer ne vérifie rien, et celle-ci
+était dans ce cas depuis sa mise en service.
 
 ---
 

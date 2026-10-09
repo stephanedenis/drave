@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 17.6 h |
+| Durée | 17.8 h |
 | Tours | 27 |
-| Messages | 868 |
-| Appels d'outils | 832 |
+| Messages | 871 |
+| Appels d'outils | 835 |
 | Fichiers touchés | 28 |
-| Commandes | 667 |
+| Commandes | 670 |
 | Sous-agents | 3 |
-| Commits | 49 |
+| Commits | 50 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -1270,7 +1270,7 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 
 ### Tour 27 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1477 caractères tronqués]
 
-*223 appels d'outils.* Actions notables :
+*226 appels d'outils.* Actions notables :
 
 - bash — Check the full state
 - bash — Measure the distilled d384 with the correct protocol
@@ -1286,11 +1286,11 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - bash — Read parcimonie, contexte, lot steps
 - bash — Inspect batch2 script
 - bash — Read batch2 journal and latency map
-- … et 192 autres
+- … et 195 autres
 
 **Synthèse produite :**
 
-⏵ Le moteur refuse les experts Q8 : je consigne le manque et réoriente la chaîne de nuit
+⏵ La porte gpt-oss passe : 15,6017 exactement — la campagne est entièrement verte
 
 ## 3. Travail accompli
 
@@ -1375,7 +1375,7 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 627 autres
+- … et 630 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1572,4 +1572,5 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - Campagne 24 h : l'équivalence au bit près, le routage qui s'inverse, le lot à froid  Cinq résultats de la fenêtre, tous avec leur protocole.  1. FIDÉLITÉ (§ 22)
 - La carte de latence : répartir ne paie que si le calcul dépasse 3,4 ms x RTT  Le découpage était prouvé exact sur localhost — un plancher optimiste. Un relais T
 - Spéculatif : l'alignement du brouillon aide, mais l'acceptation plafonne à 15,6 %  Trois paires mesurées par le moteur, en décodage glouton :   - 0,5 B nu -> 1,
+- La porte gpt-oss rend 15,6017 au chiffre près : la campagne est verte partout  Relancée seule après recalibrage du délai, la passe de 512 jetons sur gpt-oss-120
 

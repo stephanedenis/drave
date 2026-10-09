@@ -14580,3 +14580,46 @@ ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add reports/rapport-campagne-benefices.md tools/exporter_gguf.py tools/portes.sh && git commit -q -m \"Spéculatif : l'alignement du brouillon aide, mais l'acceptation plafonne à 15,6 %\n\nTrois paires mesurées par le moteur, en d … [1105 caractères tronqués]`
+
+  ```
+c372bfc Spéculatif : l'alignement du brouillon aide, mais l'acceptation plafonne à 15,6 %
+  ```
+
+- **bash** `{"command": "sleep 500; cd /tmp/campagne24 && echo \"=== porte 3 ===\"; cat porte_gptoss_3_marqueur.txt 2>/dev/null || echo \"(en cours)\"; grep -cE \"tokens notés|perplexité\" porte_gptoss_3.log 2>/dev/null; echo \"=== distillé d512 ===\"; tail -1 tr_d512_distille.log; echo \"=== spec 0.5->14 ===\" … [143 caractères tronqués]`
+
+  ```
+=== porte 3 ===
+code 0 · perplexité 15.6017 sur 510 tokens · attendu 15.6017
+3
+=== distillé d512 ===
+  pas  28000 · perte 0.6641 · val 1.8337 bits/octet · 3789 s
+=== spec 0.5->14 ===
+3
+02:58
+  ```
+
+### 🤖 Assistant
+
+⏵ La porte gpt-oss passe : 15,6017 exactement — la campagne est entièrement verte
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\nvieux = \"\"\"Les **neuf étapes** de `tools/campagne-benefices.sh` sont allées au bout\n(`=== campagne terminée ===` à  … [2578 caractères tronqués]`
+
+  ```
+ok
+### 0 ter. L'état de la campagne au 9 octobre, 1 h 05
+
+Les **neuf étapes** de `tools/campagne-benefices.sh` sont allées au bout
+(`=== campagne terminée ===` à 01 h 03), et les portes rendent **22 vertes · 1
+rouge** — puis, à 02 h 58, **23 vertes · 0 rouge**.
+
+| porte | état | ce qui s'est passé |
+|---|---|---|
+| `gpt-oss-120b MXFP4 ctx 256` — attendu **15.6017** | ✅ **rend 15.6017 sur 510 jetons**, au chiffre près | elle avait expiré **deux fois** (2 400 s puis 5 400 s). Le délai était en cause, pas le moteur : à 0,074 tok/s mesuré (32 jetons en 432 s), 512 jetons demandent ~1 h 55. Délai recalibré (`GATE_GPTOSS_DELAI`, défaut 9 000 s) ; relancée seule, elle rend la valeur **attendue à l'identique** |
+
+Tout le reste est vert, y compris `cargo test --release` (**77 tests**), les 17
+formats confrontés à libggml, la porte de correction contre llama.cpp
+(100 % des positions utiles au-dessus de 0,95, top-1 94,4 %), la porte Mistral, et
+les cinq modes de découpage à deux nœuds (écart **0,00e0** pour les modes 0, 1 et
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\ns = s.replace(\"\"\"| **modèle plus gros que la RAM** | ✅ **démontré** | V4-Flash **365,7 Go sur 125 Go de RAM** : **37 … [1211 caractères tronqués]`
