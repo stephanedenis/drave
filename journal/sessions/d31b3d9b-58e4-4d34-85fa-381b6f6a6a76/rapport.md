@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 20.0 h |
+| Durée | 20.4 h |
 | Tours | 27 |
-| Messages | 929 |
-| Appels d'outils | 892 |
+| Messages | 936 |
+| Appels d'outils | 899 |
 | Fichiers touchés | 29 |
-| Commandes | 723 |
+| Commandes | 730 |
 | Sous-agents | 3 |
-| Commits | 57 |
+| Commits | 58 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -1270,7 +1270,7 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 
 ### Tour 27 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1477 caractères tronqués]
 
-*283 appels d'outils.* Actions notables :
+*290 appels d'outils.* Actions notables :
 
 - bash — Check the full state
 - bash — Measure the distilled d384 with the correct protocol
@@ -1286,11 +1286,11 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - bash — Read parcimonie, contexte, lot steps
 - bash — Inspect batch2 script
 - bash — Read batch2 journal and latency map
-- … et 251 autres
+- … et 258 autres
 
 **Synthèse produite :**
 
-⏵ Défaut trouvé : la chaîne 512 attendait son marqueur dans le mauvais journal
+⏵ Le moteur refuse le lot sur V4.1 (hyper-connexions) — un refus explicite, consigné
 
 ## 3. Travail accompli
 
@@ -1376,7 +1376,7 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 683 autres
+- … et 690 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1504,7 +1504,7 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 
 ## 5. Erreurs rencontrées
 
-39 sorties en erreur ou divergentes. Les premières :
+40 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : ```  ### 🤖 Assistant  ⏵ **En transformers 5, `AutoModel` rend directement `Qwen2Model` (pas de `.model`). Je corrige le diagnostic.**  - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitH
 - **T2** : 3310393 bash -c pgrep -af "essai_decharge" | grep python | head; echo "--- logs ---"; tail -2 /tmp/ec_d192_lr3e3.log 2>/dev/null; tail -2 /tmp/ec_d192_lr1e3.log 2>/dev/null; echo "---"; ls -la /tmp/ec
@@ -1581,4 +1581,5 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - Parcimonie apprise : le tableau complet à trois modèles, et la recette qui en sort  Trois modèles identiques par ailleurs, un témoin et deux entraînés creux (50
 - Le point de la file à 5 h 20 : ce qui est fait, ce qui tourne, ce qui reste un manque  Le tableau de clôture distingue trois choses qui ne doivent pas être conf
 - Un quatrième piège de méthode : la chaîne qui attendait son marqueur dans le mauvais journal  Deux heures de GPU perdues devant un marqueur écrit dans le journa
+- Le lot sur un modèle plus gros que la RAM : le moteur refuse, et il dit pourquoi  V4.1-Flash (365,7 Go sur 125 Go) est le seul modèle de la machine qui ne tient
 

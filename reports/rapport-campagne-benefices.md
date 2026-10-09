@@ -873,6 +873,24 @@ même quantité de calcul, sous une charge de fond de 30 à 40 (d'autres lecture
 modèles tournaient). La colonne tok/s n'est publiable qu'avec cette réserve, et
 l'ordre de grandeur seul est utilisable.
 
+**Et le seul modèle plus gros que la RAM REFUSE le lot — explicitement.** Restait à
+faire la mesure dans le régime où le lot devrait le plus payer : V4.1-Flash,
+365,7 Go sur 125 Go. Mesure à `--lot 1` d'abord : **39 216 Mio lus**, 129 s.
+Puis `--lot 16` :
+
+    chemin par LOTS et hyper-connexions : ce chemin n'est pas porté (le résidu y est
+    additionné au lieu d'être remélangé par `hc_post`) — utilisez `--lot 1`, ou
+    implémentez-le. Le lot n'est pas neutre ici : il change le modèle
+
+**Le moteur refuse plutôt que de rendre un chiffre faux**, et il dit pourquoi : sur
+un modèle à hyper-connexions, une passe par lots additionnerait le résidu au lieu
+de le remélanger, donc **ce n'est pas le même modèle** qui serait mesuré. C'est le
+comportement voulu, et c'est le seul résultat possible aujourd'hui : **le seul
+modèle plus gros que la RAM de cette machine ne peut pas être exécuté par lots**.
+La question « le lot amortit-il les lectures du disque quand le modèle ne tient
+pas en mémoire » reste donc **ouverte**, et ce n'est pas un oubli : c'est un
+chemin de code qui n'existe pas (le § 23 le porte comme manque).
+
 ---
 
 ## 16. Deux pièges de méthode, consignés
@@ -1170,6 +1188,7 @@ réponse à « imposée ou apprise »** (§ 5 ter).
 | **experts en listes (Q8)** | le chargeur d'experts refuse les tenseurs Q8_0 (« format sans noyau ni déquantification ») : **un modèle routé ne peut pas être exécuté en listes**. Tant que ce noyau n'existe pas, « routage + activations creuses » n'existe pas non plus |
 | **décodage spéculatif** | le gain est démontré dans la niche (×1,52 pour un brouillon à 0,039× de sa cible), mais **aucune ligne de moteur n'est écrite** : vérifier k jetons d'un coup demande de brancher le préremplissage par lots sur le décodage |
 | **qualité des modèles plus gros que la RAM** | le § 12 ne mesure que l'existence et le coût (365,7 Go sur 125 Go) ; la perplexité publiée pour V4-Flash n'a aucune valeur, et c'est écrit |
+| **lot sur un modèle plus gros que la RAM** | **impossible aujourd'hui** : le seul modèle > RAM de la machine (V4.1, hyper-connexions) **refuse** le chemin par lots — « le résidu y est additionné au lieu d'être remélangé par `hc_post` ». Le moteur a raison de refuser (ce ne serait pas le même modèle), mais la question « le lot amortit-il les lectures du disque » reste **ouverte** |
 | **codestral corrigé sur 256 jetons** | le run de contrôle a expiré sous la contention ; la valeur publiée reste celle à **63 jetons** (117,91), obtenue avec le binaire corrigé |
 
 **Ce que la fenêtre a établi, en une ligne par famille** : le verdict du § 0 bis.

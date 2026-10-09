@@ -15348,3 +15348,99 @@ syntaxe OK
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\nvieux = \"\"\"**Un outil dont l'option `--cache` écrase les deux côtés.**\"\"\"\nassert vieux in s\nneuf = \"\"\"**Une  … [1189 caractères tronqués]`
+
+  ```
+ok
+be5305c Un quatrième piège de méthode : la chaîne qui attendait son marqueur dans le mauvais journal
+  ```
+
+- **bash** `{"command": "sleep 570; cd /tmp/campagne24 && tail -1 tr_m8_d512_kwta25.log; echo \"--- aiguille ---\"; tail -3 aiguille_long.log; echo \"--- charge ---\"; uptime", "description": "Poll the d512 sparse training", "timeoutMs": 600000}`
+
+  ```
+pas   4000 · perte 1.3643 · val 2.3329 bits/octet · 420 s
+--- aiguille ---
+  remplissage : data/wikitext2_test.txt (353778 caractères), fenêtres décalées
+  lot 256 · 24 jetons de réponse · GPU non · attention COMPLÈTE
+ contexte  profondeur  trouvé  secondes  détail
+--- charge ---
+ 05:19:21  up 17 days 18:31,  2 users,  load average: 15,93, 16,14, 15,87
+  ```
+
+- **bash** `{"command": "ls -la /tmp/campagne24/ids_v4* /tmp/ids_v4* 2>/dev/null | head; grep -n \"ids\\|ppl\" /tmp/campagne24/batch6_v4.sh | head -8", "description": "Find the V4 identifiers used earlier"}`
+
+  ```
+-rw-r--r--. 1 stephane stephane 398564  8 oct 23:05 /tmp/campagne24/ids_v4.txt
+-rw-r--r--. 1 stephane stephane     40  3 oct 07:51 /tmp/ids_v41_8.txt
+-rw-r--r--. 1 stephane stephane   4791  3 oct 04:42 /tmp/ids_v4f1024.txt
+-rw-r--r--. 1 stephane stephane    156  3 oct 06:07 /tmp/ids_v4f32.txt
+-rw-r--r--. 1 stephane stephane  21419  2 oct 11:40 /tmp/ids_v4flash.txt
+-rw-r--r--. 1 stephane stephane    599  3 oct 07:41 /tmp/ids_v4f_rep2.txt
+-rw-r--r--. 1 stephane stephane   1199  3 oct 07:54 /tmp/ids_v4f_rep4.txt
+20:ids=$C/ids_v4.txt
+21:[ -s "$ids" ] || timeout 1800 "$D" "$M" --tokenize --fichier data/wikitext2_test.txt \
+22:    --sortie "$ids" > "$C/v4_tokenize.log" 2>&1
+23:if [ ! -s "$ids" ]; then dire "batch 6 : tokenisation impossible"; exit 0; fi
+29:    /usr/bin/time -v timeout 5400 "$D" "$M" --ppl "$ids" --limit "$limite" --ctx "$ctx" \
+33:    ppl=$(grep -oE "perplexité [0-9.]+ sur" "$C/v4_${limite}_${ctx}.log" | grep -oE "[0-9.]+" | tail -1)
+36:    dire "v4/$limite jetons ctx $ctx : code $code · PPL ${ppl:-?} · RSS $(( ${rss:-0}/1024 )) Mo · lus $(( ${lus:-0}/2048 )) Mio · ${dt}s"
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash -c 'bash tools/mesure_lot_disque.sh /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf /tmp/campagne24/ids_v4.txt --lots \"1 16\" --limit 16 --ctx 64 --threads 20 --journal /tmp/campagne24/journal_lot_v4.tx … [230 caractères tronqués]`
+
+  ```
+lot V4 lancé (1 vs 16)
+# préremplissage par lots sur DISQUE · DeepSeek-V4.1-Flash-Q2.gguf · 16 jetons, ctx 64
+| lot | PPL | lus (Mio) | mur (s) | tok/s |
+|---:|---:|---:|---:|---:|
+  (cache du modèle évincé : 340.6 Go)
+  ```
+
+- **bash** `{"command": "sleep 570; cd /tmp/campagne24 && cat lot_v4.log; echo \"--- d512 kwta ---\"; tail -1 tr_m8_d512_kwta25.log; echo \"--- aiguille ---\"; tail -2 aiguille_long.log", "description": "Check the V4 batch measurement", "timeoutMs": 600000}`
+
+  ```
+# préremplissage par lots sur DISQUE · DeepSeek-V4.1-Flash-Q2.gguf · 16 jetons, ctx 64
+| lot | PPL | lus (Mio) | mur (s) | tok/s |
+|---:|---:|---:|---:|---:|
+  (cache du modèle évincé : 340.6 Go)
+| 1 | 659139.3353 | 39216 | 2:09.36 | 0.1 |
+  (cache du modèle évincé : 340.6 Go)
+| 16 | ? | 6270 | 4:52.06 | ? |
+# fin
+--- d512 kwta ---
+  pas  12000 · perte 1.3111 · val 2.1467 bits/octet · 1257 s
+--- aiguille ---
+ contexte  profondeur  trouvé  secondes  détail
+    12288        0.50     oui    1963.6  prompt 12474 jetons
+  ```
+
+- **bash** `{"command": "tail -20 /tmp/lot_disque.log; echo \"=== temps ===\"; grep -E \"Elapsed|Maximum resident|File system inputs\" /tmp/lot_disque_temps.log", "description": "Diagnose the V4 lot=16 run"}`
+
+  ```
+/tmp/campagne24/ids_v4.txt : 16 tokens, fenêtres de 64
+[rope] YaRN déclaré par le JSON `<arch>.config` (`rope_scaling`), pas par une clef GGUF — lu là, et ANNONCÉ
+[config] cache compressé PARTAGÉ entre couches (`kv_source_layer_ids`) : 2..7 → 2 · 8..13 → 8 · 14..19 → 14 · 20..39 → 20. Les couches SOURCES projettent leur état ; les CONSOMMATRICES lisent les tampons de leur source au lieu d'en calculer d'autres — un compresseur par couche donnerait d'AUTRES clés, donc faux sans rien casser
+[config] indexeurs : couches [2, 8, 14, 20, 24, 28, 32, 36] · les quatre premières possèdent le cache de clés, les autres lisent celui de leur source de KV — une couche qui porte `indexer.proj` sans être dans cette liste serait un fichier contradictoire
+[config] attention V4 : 40 couches · 1 tête latente de 512 (448 nope + 64 rope) · 64 têtes de requête · sortie groupée 8×1024 · puits par tête
+[config] hyper-connexions : 4 copies · 24 mélanges par couche (pre 4 + post 4 + comb 16) · Sinkhorn 20 itérations · eps 1e-6 · pas de mélange de tête (absent du fichier) · chaîne RETARDÉE (V4.1) : la `pre` d'un raccord sert au raccord SUIVANT, et la tête se replie avec la `pre` de la dernière FFN
+[config] eng
+… [997 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 ./drave-core/target/release/drave /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf --ppl /tmp/campagne24/ids_v4.txt --limit 16 --ctx 64 --threads 20 --lot 16 > /tmp/v4lot16.log 2>&1; echo \"code $?\"; ta … [114 caractères tronqués]`
+
+  ```
+code 134
+
+thread 'main' (1767896) panicked at src/model.rs:5217:13:
+chemin par LOTS et hyper-connexions : ce chemin n'est pas porté (le résidu y est additionné au lieu d'être remélangé par `hc_post`) — utilisez `--lot 1`, ou implémentez-le. Le lot n'est pas neutre ici : il change le modèle
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+timeout: the monitored command dumped core
+[stderr]
+bash: line 1: 1767895 Aborted                    timeout 900 ./drave-core/target/release/drave /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf --ppl /tmp/campagne24/ids_v4.txt --limit 16 --ctx 64 --threads 20 --lot 16 > /tmp/v4lot16.log 2>&1
+  ```
+
+### 🤖 Assistant
+
+⏵ Le moteur refuse le lot sur V4.1 (hyper-connexions) — un refus explicite, consigné
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\nancre = \"\"\"**Ce que cette mesure ne dit pas** : les temps. Ils varient de 78 s à 252 s pour la\nmême quantité de cal … [3163 caractères tronqués]`
