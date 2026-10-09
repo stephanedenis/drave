@@ -123,6 +123,46 @@ en dessous. Ce n'est pas un détail de réglage : c'est une **différence de ré
 | **0,5 %** de variation développementale ; cerveaux similaires | nos modèles sont réentraînés de zéro à chaque fois | un **connectome de base partagé** est une hypothèse défendable — et vérifiable chez nous |
 | cerveau : 20 W pour ~10¹⁵ synapses | notre niche : un modèle **plus gros que la RAM** qui ruisselle (365 Go sur 125 Go) | le streaming n'est pas une concession : c'est **le régime biologique** (le poids n'est jamais « chargé ») |
 
+### 3 ter. Le fait biologique que nos modèles NE reproduisent PAS : des poids à queue lourde
+
+C'est le fait le plus directement exploitable de tout ce document, et il se voit en
+une commande.
+
+**En biologie**, les efficacités synaptiques corticales ne sont pas distribuées
+autour d'une moyenne : elles suivent une loi **log-normale**, sur plusieurs ordres de
+grandeur — quelques synapses très fortes portent l'essentiel, la grande majorité est
+faible ([Song, Sjöström, Reigl, Nelson & Chklovskii 2005](https://janeliafarm.org/publication/highly-nonrandom-features-synaptic-connectivity-local-cortical-circuits) ;
+[implications computationnelles](https://ieeexplore.ieee.org/document/6767040) ;
+[auto-organisation de la distribution](https://infoscience.epfl.ch/bitstreams/988897d4-089b-4c04-8ded-86e45b6fa304/download)).
+C'est une distribution **multiplicative**, produite par des produits de variables
+aléatoires (croissance, potentialisation, dépression).
+
+**Chez nous**, mesuré sur les modèles entraînés de la campagne :
+
+| modèle | \|w\| médian | p99,9 / médiane | poids sous **10 % du max de leur ligne** |
+|---|---:|---:|---:|
+| `m5_d384_dense` (témoin) | 0,1148 | **5,2** | **25,7 %** |
+| `m7_d384_kwta025` (creux appris) | 0,1080 | **5,6** | **27,6 %** |
+
+Une gaussienne donne un rapport p99,9/médiane de l'ordre de 4 ; **nos modèles sont
+donc quasi gaussiens**, pas log-normaux. Conséquence directe, et elle explique une
+mesure de la campagne : élaguer 50 % des poids **ne coûte rien** (les 50 % qui
+restent portent presque toute l'énergie), mais élaguer à 25 % **effondre** le modèle
+(+232 % de perplexité, § 6 de `modele-pour-drave.md`). Le cerveau, lui, est
+élagable *par construction* : sa distribution est faite pour ça.
+
+**Ce que cela donne comme dessin, et c'est inédit** : **paramétrer les poids en
+log-magnitude** — apprendre `θ` et utiliser `w = signe(θ) · e^{|θ|}` — produit une
+distribution **log-normale par construction** (c'est le générateur même de cette
+loi). Le modèle apprendrait alors naturellement à concentrer le calcul sur peu de
+connexions fortes, ce qui est exactement ce que le chemin par listes récompense, et
+ce que l'élagage développemental exploite.
+
+**Prédiction mesurable** : à budget d'événements égal, un modèle à poids
+log-normaux doit **mieux supporter l'élagage** qu'un modèle gaussien — de combien,
+c'est l'expérience à faire, et elle est peu coûteuse (une reparamétrisation, plus
+`--elagage` qui existe déjà).
+
 ---
 
 ## 3 bis. Le budget, chiffré : où nous en sommes
@@ -260,6 +300,7 @@ Aucune ne demande de nouveau moteur : le harnais d'entraînement (`--kwta`,
 | **E3** | **élagage développemental** : dense → élagage appris à 50 % puis 25 % (§ déjà outillé) | la trajectoire biologique (surproduire puis élaguer) bat-elle l'entraînement creux direct (`--kwta`) ? | **déjà en file** (`m11`, chaîne jour3) |
 | **E4** | **balance excitation/inhibition** : contrainte de signe sur les poids (80 % excitateurs / 20 % inhibiteurs), mesurer stabilité et qualité | la séparation E/I est-elle un levier de stabilité à long entraînement ? | le banc `--poids-signes` existe ; à porter dans l'entraînement |
 | **E5** | **rejeu** : tracer une passe (DRVF), la rejouer, et distiller le modèle *sur ses propres traces* | le rejeu améliore-t-il la consolidation (comme le sommeil) ? | le moteur trace et rejoue déjà ; l'outil de distillation existe |
+| **E6** | **poids log-normaux** : apprendre `θ`, exécuter `w = signe(θ)·e^{\|θ\|}`, puis élaguer à 50 % et 25 % | une distribution multiplicative (celle du cerveau) rend-elle l'élagage gratuit, là où la nôtre est quasi gaussienne (p99,9/médiane 5,2) ? | ~1 h 30 ; une reparamétrisation + `--elagage` |
 
 **La première à faire est E1** : c'est la moins chère, elle teste directement la
 thèse « structure innée, poids appris », et elle se mesure avec le protocole de

@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 25.6 h |
+| Durée | 25.8 h |
 | Tours | 27 |
-| Messages | 1030 |
-| Appels d'outils | 990 |
+| Messages | 1034 |
+| Appels d'outils | 994 |
 | Fichiers touchés | 31 |
-| Commandes | 811 |
+| Commandes | 814 |
 | Sous-agents | 3 |
-| Commits | 77 |
+| Commits | 78 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -1270,7 +1270,7 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 
 ### Tour 27 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1477 caractères tronqués]
 
-*381 appels d'outils.* Actions notables :
+*385 appels d'outils.* Actions notables :
 
 - bash — Check the full state
 - bash — Measure the distilled d384 with the correct protocol
@@ -1286,11 +1286,11 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - bash — Read parcimonie, contexte, lot steps
 - bash — Inspect batch2 script
 - bash — Read batch2 journal and latency map
-- … et 336 autres
+- … et 339 autres
 
 **Synthèse produite :**
 
-⏵ Ajout du budget énergétique chiffré (cerveau contre notre implémentation)
+⏵ Le fait biologique que nos modèles ne reproduisent pas : des poids à queue lourde
 
 ## 3. Travail accompli
 
@@ -1378,7 +1378,7 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 771 autres
+- … et 774 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1603,4 +1603,5 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - Biologie : ce que les connectomes imposent comme contraintes, et l'expérience E1 outillée  Nouveau document docs/biologie-pour-drave.md : les faits mesurés (dro
 - Le budget chiffré : 0,4 pJ par événement synaptique contre 0,9 µJ chez nous  Deux calculs d'ordre de grandeur, à partir des chiffres du document et des mesures 
 - Carte des taux complète : 50 %, 25 %, 12,5 % — chaque division par deux coûte 2 % puis 8 %  Troisième point mesuré (m10_d384_kwta125, mêmes 40 000 pas, même tém
+- Le fait biologique que nos modèles ne reproduisent pas : des poids à queue lourde  Les efficacités synaptiques corticales sont log-normales, sur plusieurs ordre
 
