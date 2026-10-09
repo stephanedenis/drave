@@ -17274,3 +17274,64 @@ jour6 en file
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\ns = s.replace(\"\"\"| **fidélité listes ↔ dense** | ✅ **exacte, démontrée** |\"\"\",\n\"\"\"| **structure innée** | ✅ * … [1302 caractères tronqués]`
+
+  ```
+ok
+ok
+  pas  24000 · perte 1.5072 · val 2.3476 bits/octet · 1253 s
+  ```
+
+- **bash** `{"command": "sleep 590; tail -1 /tmp/campagne24/tr_m13_lognormal.log; grep -E \"m13|distribution\" /tmp/campagne24/journal13.txt 2>/dev/null | tail -3", "description": "Poll the log-normal model", "timeoutMs": 620000}`
+
+  ```
+pas  36000 · perte 1.4054 · val 2.2826 bits/octet · 1873 s
+  ```
+
+- **bash** `{"command": "sleep 500; cd /tmp/campagne24 && grep -E \"m13|distribution\" journal13.txt 2>/dev/null | tail -8", "description": "Harvest the log-normal results", "timeoutMs": 560000}`
+
+  ```
+[09/10 12:42:39] charge 4.61 · m13_d384_lognormal :   # meilleur point : pas 40000 · val 2.2662 bits/octet
+[09/10] distribution : p99,9/médiane = 5.5 (témoin gaussien : 5,2)
+[09/10 12:42:42] charge 4.61 · m13_d384_lognormal keep=1.0 : PPL 8668.4627 · 897363557 événements
+[09/10 12:42:42] charge 4.61 · m13_d384_lognormal keep=0.5 : PPL 2467.5660 · 453072061 événements
+[09/10 12:42:43] charge 4.61 · m13_d384_lognormal keep=0.25 : PPL 3323.5007 · 226590463 événements
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && C=/tmp/campagne24; head -c 60 $C/ids_m13_d384_lognormal.txt 2>/dev/null; echo; tr ',' '\\n' < $C/ids_m13_d384_lognormal.txt | wc -l; DRAVE_SANS_EMPRUNT=1 ./drave-core/target/release/drave /tmp/m13_d384_lognormal.gguf --ppl $C/ids_m13 … [190 caractères tronqués]`
+
+  ```
+89,32,80,97,110,116,115,32,119,101,114,101,32,97,110,32,65,1
+255
+     127 tokens notés — perplexité cumulée 8668.463  (267.7 tok/s)
+=== perplexité 8668.4627 sur 127 tokens (897363557 événements, 0.5 s) ===
+    attention : 0.00 M paires (requête, clé) par token
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && /home/stephane/gpu-env/bin/python -c \"\nimport numpy as np\nfrom safetensors.numpy import load_file\nfor nom in ['m5_d384_dense','m13_d384_lognormal']:\n    w = load_file(f'/tmp/{nom}/model.safetensors')\n    cles = [k for k in w if … [405 caractères tronqués]`
+
+  ```
+m5_d384_dense · clés liées : ['model.embed_tokens.weight']
+    model.embed_tokens.weight (256, 384) 1.855051875114441
+    model.layers.0.input_layernorm.weight (384,) 0.706278920173645
+    model.layers.0.mlp.down_proj.weight (384, 1152) 1.8885998725891113
+m13_d384_lognormal · clés liées : ['model.embed_tokens.weight']
+    model.embed_tokens.weight (256, 384) 1.17818284034729
+    model.layers.0.input_layernorm.weight (384,) 1.1285791397094727
+    model.layers.0.mlp.down_proj.weight (384, 1152) 0.4532501697540283
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && C=/tmp/campagne24; timeout 600 /home/stephane/gpu-env/bin/python tools/porte_moteur.py --hf /tmp/m13_d384_lognormal --ids $C/ids_m13_d384_lognormal.txt --logits $C/m13_ref.bin 2>&1 | tail -3; timeout 300 ./drave-core/target/release/d … [394 caractères tronqués]`
+
+  ```
+# quantification appliquée à la référence : 35 tenseurs Q8_0, 12 tenseurs Q4_0 (FFN et experts)
+# référence : 255 prédictions · NLL 9.6520 nats · perplexité 15552.2168
+# logits écrits : /tmp/campagne24/m13_ref.bin (256 positions × 256)
+corrélation des logits (position 0) : 0.975224
+❌ PORTE DE CORRECTION NON TENUE : seulement 14.5 % des positions utiles au-dessus de 0.95 (< 99 %) · corrélation minimale (positions utiles) 0.84325 < plancher 0.9 · corrélation moyenne 0.92454 < 0.98 · top-1 49.4 % < 85 % · perplexité à 11.5 % > 10 %
+  ```
+
+### 🤖 Assistant
+
+⏵ E6 : échec de code, pas un résultat — je le consigne avec sa preuve
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/biologie-pour-drave.md\")\ns = p.read_text()\nancre = \"\"\"**Prédiction mesurable** : à budget d'événements égal, un modèle à poids\nlog-normaux doit **mieux supporter l'élag … [3132 caractères tronqués]`

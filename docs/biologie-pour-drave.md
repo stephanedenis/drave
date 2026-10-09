@@ -159,9 +159,31 @@ connexions fortes, ce qui est exactement ce que le chemin par listes récompense
 ce que l'élagage développemental exploite.
 
 **Prédiction mesurable** : à budget d'événements égal, un modèle à poids
-log-normaux doit **mieux supporter l'élagage** qu'un modèle gaussien — de combien,
-c'est l'expérience à faire, et elle est peu coûteuse (une reparamétrisation, plus
-`--elagage` qui existe déjà).
+log-normaux doit **mieux supporter l'élagage** qu'un modèle gaussien.
+
+**E6 A ÉTÉ TENTÉE, ET ELLE A ÉCHOUÉ — PAR UN DÉFAUT DE CODE, PAS PAR UN RÉSULTAT.**
+La reparamétrisation `w = signe · e^{theta}` (signes figés à la naissance, magnitudes
+apprises) a été écrite et entraînée (40 000 pas, dim 384) : la distribution obtenue
+n'est d'ailleurs **toujours pas à queue lourde** (p99,9/médiane **5,5**, contre 5,2 au
+témoin gaussien), et la qualité en validation est **nettement moins bonne** (2,2662
+contre 1,9020 bits/octet). Mais surtout : **le modèle sauvegardé n'est pas le modèle
+entraîné.**
+
+| mesure | valeur |
+|---|---|
+| validation à l'entraînement | 2,2662 bits/octet (perplexité ≈ 4,8) |
+| perplexité du modèle SAUVEGARDÉ, moteur | **8 668** |
+| perplexité du modèle SAUVEGARDÉ, référence PyTorch (mêmes poids quantifiés) | **15 552** |
+| échelle des poids linéaires sauvegardés | \|w\| max **0,453** — contre **1,89** pour le témoin |
+
+La référence PyTorch sur les poids sauvegardés donne *pire* que le moteur : **ce n'est
+pas le moteur, c'est le fichier.** Le soupçon est la matérialisation de la
+reparamétrisation avant `save_pretrained` (le tampon de signes vit dans le module de
+paramétrisation, et `remove_parametrizations` doit le recomposer). **E6 est donc
+INCONCLUSIVE : ni la prédiction, ni son contraire, ne sont établis** — et c'est écrit
+comme tel plutôt que présenté comme un échec de la biologie. Le défaut reste à
+corriger ; la mesure qui le détecte est la porte de correction, et elle a fait son
+travail.
 
 ---
 

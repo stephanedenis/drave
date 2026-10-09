@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 27.2 h |
+| Durée | 27.7 h |
 | Tours | 28 |
-| Messages | 1087 |
-| Appels d'outils | 1043 |
+| Messages | 1093 |
+| Appels d'outils | 1049 |
 | Fichiers touchés | 33 |
-| Commandes | 859 |
+| Commandes | 865 |
 | Sous-agents | 3 |
-| Commits | 85 |
+| Commits | 86 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -1318,15 +1318,21 @@ Cinq points où notre règle **est** biologique (elle porte sur des *changements
 
 ### Tour 28 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1477 caractères tronqués]
 
-*3 appels d'outils.* Actions notables :
+*9 appels d'outils.* Actions notables :
 
 - bash — Check chains and training state
 - bash — Queue the structure follow-up experiments
 - bash — Cross-reference the new documents and wait
+- bash — Poll the log-normal model
+- bash — Harvest the log-normal results
+- bash — Diagnose the log-normal model measurement
+- bash — Check tied embeddings in the log-normal model
+- bash — Gate the log-normal model against the PyTorch reference
+- bash — Record the E6 code failure
 
 **Synthèse produite :**
 
-⏵ Mise en file de la suite du dessin « structure innée » (12,5 % et combiné avec les activations creuses)
+⏵ E6 : échec de code, pas un résultat — je le consigne avec sa preuve
 
 ## 3. Travail accompli
 
@@ -1416,7 +1422,7 @@ Cinq points où notre règle **est** biologique (elle porte sur des *changements
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 819 autres
+- … et 825 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1649,4 +1655,5 @@ Cinq points où notre règle **est** biologique (elle porte sur des *changements
 - Drave en impulsion pure serait-il un meilleur apprenant ? Pas en l'état, oui sous conditions nommées  Trois sens de « mode impulsion pur » : l'EXÉCUTION (déjà é
 - E7 et E8 implémentés et mesurés : la nouveauté empire la règle, la décorrélation est inerte  Deux mécanismes écrits dans le moteur (DRAVE_HEBB_MODULE, DRAVE_HEB
 - Le rapport de campagne renvoie aux trois documents de conception, et porte le résultat de structure innée" && echo ok; sleep 420; tail -1 /tmp/campagne24/tr_m13
+- E6 (poids log-normaux) : échec de code, consigné comme tel — le modèle sauvegardé n'est pas le modèle entraîné  La reparamétrisation w = signe·e^theta a été ent
 
