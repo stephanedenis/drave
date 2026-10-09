@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 8.2 h |
-| Tours | 8 |
-| Messages | 368 |
-| Appels d'outils | 369 |
-| Fichiers touchés | 12 |
-| Commandes | 274 |
+| Durée | 12.2 h |
+| Tours | 9 |
+| Messages | 387 |
+| Appels d'outils | 387 |
+| Fichiers touchés | 14 |
+| Commandes | 290 |
 | Sous-agents | 3 |
-| Commits | 10 |
+| Commits | 11 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -39,6 +39,8 @@
 **Tour 7** — le ram est actuellement hors de prix. je t'ai fait évaluer une approche asymétrique, mais c'est déconseillé. Que peut-on faire pour le ram.
 
 **Tour 8** — donc les nouveaux nvme seront sur l'autre cpu pour ne pas réduire le nombre de voies des gpu. La ram reste tel-quelle. la carte amd pour le desktop sera sur le même cpu que les nouveaux nvme à mettre en raid. Quelels sont les autres optimisations à faire ? prépare un document pour ce changement de configuration et la configuration de la carte amd-yeston (6 ports mini-dp) et les nouveaux nvme en ra … [2 caractères tronqués]
+
+**Tour 9** — encore une journée complète avant l'arrivé du nouveau matériel. Exécute pendant 24h les tâches que tu trouves les plus adéquates pour explorer les bénéfices attendus de Drave pour tout type de tâches.
 
 ## 2. Déroulé, étape par étape
 
@@ -388,7 +390,54 @@ Le cache KV est le seul poste qui grandit avec l'usage, et il est déjà chiffr�
 
 **Synthèse produite :**
 
-⏵ Correction : les outils sont là, c'est le PATH qui les cache — je rectifie le document
+⏵ Document livré (`docs/configuration-nvme-raid-amd.md`, commit `1353c8e`) — voici l'essentiel
+
+\## Le plan tient : les GPU gardent leurs x16
+
+36 voies sur 40 utilisées sur le nœud 0 (2 GPU x16 + NVMe système x4). En mettant l'array sur le CPU 1, les Quadro **restent en x16** — c'est le bon arbitrage, puisque les faire tomber en x8 coûte la moitié de la bande passante hôte (6,5 Go/s mesuré). Le prix à payer : **6 à 8 Go/s traverseront le QPI**, soit la moitié de ce qu'il écoule. Les mesures du dépôt donnent 3-4 % de pénalité pour le traverser, donc le pari est raisonnable — mais c'est un pari, et le § 7 dit comment le vérifier (trois placements de fils à comparer).
+
+\## Les vérifications à faire **avant** de démonter
+
+1. **Bifurcation `x4x4x4x4`** sur le slot, et qu'il est bien câblé au **CPU 1** — derrière le PCH c'est du x4 Gen2 partagé, ~2 Go/s pour les quatre SSD, et tout le bénéfice part.
+2. **`Above 4G Decoding`**, **ASPM désactivé** sur les slots NVMe, **affichage primaire = AMD**.
+3. **La carte AMD dans un slot x4 ou x8**, pas x16 : elle n'en a pas besoin, et chaque voie laissée libre va aux SSD.
+
+\## Le RAID
+
+RAID0 `mdadm` (les poids se retéléchargent), `--chunk=512K`, `--assume-clean`, XFS, `noatime`, `fstrim.timer`, `mdadm.conf` + `dracut -f`. Attendu : **~2 Go/s par P320, 6-7 Go/s sur `md0`** (plafonné par le lien x16 Gen3, pas par les disques). Si `md0` plafonne à 2 Go/s → la bifurcation n'est pas active : `current_link_width` le dira. **Deux pièges** : les P320 sont **DRAM-less** (l'écriture soutenue s'effondre après le cache SLC — télécharger les gros modèles un par un), et **pas de swap sur le RAID0** (une panne de SSD corromprait la mémoire paginée).
+
+\## La carte Yeston 6 mini-DP
+
+C'est très probablement une **R7 350** (GCN 1.0, Southern Islands). Le noyau la pilote avec **`radeon` par défaut** — rien à faire. Pour `amdgpu` : `amdgpu.si_support=1 radeon.si_support=0`. **Attention** : `cik_support` concerne Sea Islands (Bonaire/Hawaii), pas cette carte — les confondre donne un écran noir. Le firmware `amdgpu/` est déjà en place, et les deux modules aussi.
+
+**Le point qui annule tout si on le rate** : vérifier que X ne prend pas les Quadro (`xrandr --listproviders` → un seul fournisseur ; `nvidia-smi` → aucun processus). Si elles apparaissent, forcer le `BusID` de l'AMD dans `xorg.conf.d`. Et pour les six écrans : les adaptateurs mini-DP→HDMI/DVI doivent être **actifs** sauf si la sortie émet du DP++.
+
+\## Les autres optimisations, par ordre de 
+… [1255 caractères tronqués]
+
+### Tour 9 — encore une journée complète avant l'arrivé du nouveau matériel. Exécute pendant 24h les tâches que tu trouves les plus a … [80 caractères tronqués]
+
+*18 appels d'outils.* Actions notables :
+
+- bash — Inventory runnable models
+- bash — Inventory corpora and traces
+- bash — Verify big model paths and free space
+- bash — Check speculative decoding support
+- bash — Check time tool, tokenizer and a second model
+- bash — Find KV and sparsity CLI flags
+- bash — Find KV precision flag
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/campagne-benefices.sh`
+- bash — Launch the scaled training pairs on both GPUs
+- bash — Smoke-test campaign steps
+- bash — Measure dense/push baselines before the sweep
+- bash — Verify the tokenizer trap
+- bash — Fix the tokenizer trap in the campaign
+- bash — Launch the full 24h campaign queue
+- … et 4 autres
+
+**Synthèse produite :**
+
+⏵ Piège trouvé : `wikitext2_test.txt.ids` vient d'un AUTRE tokenizer — toutes les mesures auraient été fausses
 
 ## 3. Travail accompli
 
@@ -408,6 +457,8 @@ Le cache KV est le seul poste qui grandit avec l'usage, et il est déjà chiffr�
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/numa-segregation.md` | 1 | 3 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-modele-moteur.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/configuration-nvme-raid-amd.md` | 1 | 2 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/campagne-benefices.sh` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/campagne-benefices.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -457,7 +508,7 @@ Le cache KV est le seul poste qui grandit avec l'usage, et il est déjà chiffr�
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 234 autres
+- … et 250 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -585,7 +636,7 @@ Le cache KV est le seul poste qui grandit avec l'usage, et il est déjà chiffr�
 
 ## 5. Erreurs rencontrées
 
-14 sorties en erreur ou divergentes. Les premières :
+15 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : ```  ### 🤖 Assistant  ⏵ **En transformers 5, `AutoModel` rend directement `Qwen2Model` (pas de `.model`). Je corrige le diagnostic.**  - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitH
 - **T2** : 3310393 bash -c pgrep -af "essai_decharge" | grep python | head; echo "--- logs ---"; tail -2 /tmp/ec_d192_lr3e3.log 2>/dev/null; tail -2 /tmp/ec_d192_lr1e3.log 2>/dev/null; echo "---"; ls -la /tmp/ec
@@ -601,6 +652,7 @@ Le cache KV est le seul poste qui grandit avec l'usage, et il est déjà chiffr�
 - **T4** : ~~~~~^^^^^^^^^^^^^^^^^^^^^^^ KeyError: 'model.layers.0.mlp.gate.weight' === charge ===  thread 'main' (3374822) panicked at src/main.rs:2427:40: === ppl dense === [exit code: 1]
 - **T4** : Error: tool call aborted
 - **T5** : fichier :  === NVMe === fichier :  [exit code: 1]
+- **T9** : === bge-m3 : exécution ? ===  thread 'main' (3706022) panicked at src/gguf.rs:1752:53: tenseur blk.0.attn_norm.weight absent note: run with `RUST_BACKTRACE=1` environment variable to display a backtra
 
 ## 6. Commits
 
@@ -614,4 +666,5 @@ Le cache KV est le seul poste qui grandit avec l'usage, et il est déjà chiffr�
 - docs/numa-segregation §11 : la carte 4xNVMe et l'AMD, chiffrées avant achat du reste  Le placement proposé est juste (array sur le nœud des GPU, OS/affichage is
 - docs/numa-segregation §12 : quoi faire de la RAM quand elle est hors de prix  Trois réponses, dans l'ordre où elles paient, et toutes mesurées :  1. RÉCUPÉRER C
 - docs/configuration-nvme-raid-amd : préparation de la reconfiguration (array sur le nœud 1, AMD pour le bureau)  Document écrit AVANT l'intervention, pour que ch
+- Campagne 24 h : mesurer ce que l'architecture par listes vaut, tâche par tâche  Le dépôt a surtout mesuré un couple (Qwen2.5-0.5B, perplexité). tools/campagne-b
 

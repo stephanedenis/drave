@@ -6620,3 +6620,262 @@ The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/configuration-nvme
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"docs/configuration-nvme-raid-amd.md\"; s=open(p).read()\ns = s.replace(\"La commande `lspci -nn` du § 5.0 tranche.\", \"La commande `lspci -nn` du § 5 tranche.\")\nopen(p,\"w\").write(s); print(\"ok\")\nPY\nwc - … [1691 caractères tronqués]`
+
+  ```
+ok
+332 docs/configuration-nvme-raid-amd.md
+1353c8e docs/configuration-nvme-raid-amd : préparation de la reconfiguration (array sur le nœud 1, AMD pour le bureau)
+  ```
+
+### 🤖 Assistant
+
+⏵ Document livré (`docs/configuration-nvme-raid-amd.md`, commit `1353c8e`) — voici l'essentiel
+
+## Le plan tient : les GPU gardent leurs x16
+
+36 voies sur 40 utilisées sur le nœud 0 (2 GPU x16 + NVMe système x4). En mettant l'array sur le CPU 1, les Quadro **restent en x16** — c'est le bon arbitrage, puisque les faire tomber en x8 coûte la moitié de la bande passante hôte (6,5 Go/s mesuré). Le prix à payer : **6 à 8 Go/s traverseront le QPI**, soit la moitié de ce qu'il écoule. Les mesures du dépôt donnent 3-4 % de pénalité pour le traverser, donc le pari est raisonnable — mais c'est un pari, et le § 7 dit comment le vérifier (trois placements de fils à comparer).
+
+## Les vérifications à faire **avant** de démonter
+
+1. **Bifurcation `x4x4x4x4`** sur le slot, et qu'il est bien câblé au **CPU 1** — derrière le PCH c'est du x4 Gen2 partagé, ~2 Go/s pour les quatre SSD, et tout le bénéfice part.
+2. **`Above 4G Decoding`**, **ASPM désactivé** sur les slots NVMe, **affichage primaire = AMD**.
+3. **La carte AMD dans un slot x4 ou x8**, pas x16 : elle n'en a pas besoin, et chaque voie laissée libre va aux SSD.
+
+## Le RAID
+
+RAID0 `mdadm` (les poids se retéléchargent), `--chunk=512K`, `--assume-clean`, XFS, `noatime`, `fstrim.timer`, `mdadm.conf` + `dracut -f`. Attendu : **~2 Go/s par P320, 6-7 Go/s sur `md0`** (plafonné par le lien x16 Gen3, pas par les disques). Si `md0` plafonne à 2 Go/s → la bifurcation n'est pas active : `current_link_width` le dira. **Deux pièges** : les P320 sont **DRAM-less** (l'écriture soutenue s'effondre après le cache SLC — télécharger les gros modèles un par un), et **pas de swap sur le RAID0** (une panne de SSD corromprait la mémoire paginée).
+
+## La carte Yeston 6 mini-DP
+
+C'est très probablement une **R7 350** (GCN 1.0, Southern Islands). Le noyau la pilote avec **`radeon` par défaut** — rien à faire. Pour `amdgpu` : `amdgpu.si_support=1 radeon.si_support=0`. **Attention** : `cik_support` concerne Sea Islands (Bonaire/Hawaii), pas cette carte — les confondre donne un écran noir. Le firmware `amdgpu/` est déjà en place, et les deux modules aussi.
+
+**Le point qui annule tout si on le rate** : vérifier que X ne prend pas les Quadro (`xrandr --listproviders` → un seul fournisseur ; `nvidia-smi` → aucun processus). Si elles apparaissent, forcer le `BusID` de l'AMD dans `xorg.conf.d`. Et pour les six écrans : les adaptateurs mini-DP→HDMI/DVI doivent être **actifs** sauf si la sortie émet du DP++.
+
+## Les autres optimisations, par ordre de gain
+
+1. **26 Go sont en swap sur le disque dur** — `swapoff -a && swapon -a` les ramène (103 Go disponibles). Puis zram, ou une petite partition sur **un seul** NVMe, hors array.
+2. **`read_ahead_kb` à 1 024 → 4 096-8 192** sur `md0` (l'ordonnanceur est déjà `none` ✅).
+3. **Les lecteurs parallèles du moteur ne sont jamais utilisés** : le plan calcule `lecteurs = 16` et ne s'en sert pas — sur un RAID0, c'est le chemin de lecture qu'il faut paralléliser (`pread` par bande).
+4. **Le motif d'accès coûte 35 %** (133 vs 205 Mio/s) : l'array rendra l'écart visible — s'il donne 6 Go/s en `dd` et 2 Go/s dans la passe, le coupable est le motif, pas le matériel.
+5. **L'uncore** (MSR `0x620`) : non exposé par le noyau ici, il faut `msr-tools`.
+
+**À ne pas toucher** : ECC des Quadro déjà désactivé ✅, THP `always` ✅, gouverneur `performance` ✅, `mmap` (47 Mo de RSS pour 365 Go adressés), et surtout **ne pas** activer `DRAVE_EXPERTS_RAM` (+4 %/+21 % mesuré perdant).
+
+Un rectificatif que je consigne : mon premier contrôle disait `mdadm`/`mkfs.xfs`/`smartctl` absents — **c'était faux**, ils sont dans `/sbin` que le PATH utilisateur ne contient pas. Le document porte la version vérifiée par chemin complet : **tout est déjà installé**, rien à installer.
+
+
+## Tour 9
+
+### 👤 Utilisateur
+
+encore une journée complète avant l'arrivé du nouveau matériel. Exécute pendant 24h les tâches que tu trouves les plus adéquates pour explorer les bénéfices attendus de Drave pour tout type de tâches.
+
+### 🤖 Assistant
+
+⏵ Campagne 24 h : je vérifie d'abord les modèles et corpus réellement disponibles, puis je lance la file
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== modèles exécutables ===\"; ls -la models/*.gguf 2>/dev/null | awk '{print $5, $9}'; ls -d /home/stephane/FastNVMe/modeles-lourds/*.gguf 2>/dev/null; ls -d ../modeles/gguf/*.gguf 2>/dev/null | head -5; echo \"=== clusters Q … [207 caractères tronqués]`
+
+  ```
+=== modèles exécutables ===
+352972352 models/Qwen2.5-0.5B-Q4_0.gguf
+531068480 models/Qwen2.5-0.5B-Q8_0.gguf
+/home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf
+=== clusters Qwen3-30B (porte) ===
+/tmp/clusters_qwen3_30b.json
+/tmp/routage_qwen3_30b.txt
+60:    compare "Qwen3-30B en clusters (origine : 799,8557)" "799.8557" "$v"
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== corpus textes ===\"; du -sh /home/stephane/Data13TB/stephane/corpus/* 2>/dev/null | sort -h | tail -8; echo \"=== traces sémantiques ===\"; ls -d /home/stephane/Data13TB/stephane/corpus/udhr/*traces* 2>/dev/null; du -sh /h … [176 caractères tronqués]`
+
+  ```
+=== corpus textes ===
+261M	/home/stephane/Data13TB/stephane/corpus/parallele_crime
+988M	/home/stephane/Data13TB/stephane/corpus/parallele_rj
+1,8G	/home/stephane/Data13TB/stephane/corpus/wiki_traces
+12G	/home/stephane/Data13TB/stephane/corpus/wiki_apparie
+21G	/home/stephane/Data13TB/stephane/corpus/udhr
+=== traces sémantiques ===
+/home/stephane/Data13TB/stephane/corpus/udhr/article1_traces
+/home/stephane/Data13TB/stephane/corpus/udhr/article2_traces
+2,1G	/home/stephane/Data13TB/stephane/corpus/udhr/article1_traces
+=== état git ===
+ M journal/README.md
+ M journal/sessions/MANIFEST.md
+ M journal/sessions/d31b3d9b-58e4-4d34-85fa-381b6f6a6a76/digest.md
+ M journal/sessions/d31b3d9b-58e4-4d34-85fa-381b6f6a6a76/rapport.md
+ M tools/premiere_couche_semantique.py
+  ```
+
+- **bash** `{"command": "ls -la /home/stephane/Data13TB/stephane/modeles/gguf/*.gguf 2>/dev/null | awk '{printf \"%.1f Go %s\\n\", $5/1e9, $9}' | head -6; echo \"=== V4-Flash ===\"; ls -la /home/stephane/FastNVMe/modeles-lourds/*.gguf 2>/dev/null | awk '{printf \"%.1f Go %s\\n\", $5/1e9, $9}'; echo \"=== espace … [238 caractères tronqués]`
+
+  ```
+1.2 Go /home/stephane/Data13TB/stephane/modeles/gguf/bge-m3-FP16.gguf
+13.3 Go /home/stephane/Data13TB/stephane/modeles/gguf/codestral-22b-v0.1-q4_k_m.gguf
+9.0 Go /home/stephane/Data13TB/stephane/modeles/gguf/deepseek-r1-distill-qwen-14b-q4_k_m.gguf
+1.1 Go /home/stephane/Data13TB/stephane/modeles/gguf/deepseek-r1-distill-qwen-1.5b-q4_k_m.gguf
+0.8 Go /home/stephane/Data13TB/stephane/modeles/gguf/eagle3-gpt-oss-120b-Q8_0.gguf
+63.4 Go /home/stephane/Data13TB/stephane/modeles/gguf/gpt-oss-120b-MXFP4.gguf
+=== V4-Flash ===
+365.7 Go /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf
+=== espace disque ===
+/dev/mapper/system-root   11T  8,8T  2,1T  81% /home/stephane/Data13TB
+/dev/nvme0n1p2           828G  799G   29G  97% /home/stephane/FastNVMe
+tmpfs                     63G   32G   32G  50% /tmp
+=== charge ===
+ 21:15:30  up 17 days 10:27,  2 users,  load average: 1,49, 0,99, 0,95
+0, 1262 MiB
+1, 381 MiB
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== décodage spéculatif dans le moteur ? ===\"; grep -rn \"eagle\\|Eagle\\|brouillon\\|specul\\|draft\" drave-core/src/*.rs | head -12; echo \"=== options CLI associées ===\"; grep -n '\"--brouillon\\|\"--spec\\|\"--eagle\\|\" … [96 caractères tronqués]`
+
+  ```
+=== décodage spéculatif dans le moteur ? ===
+=== options CLI associées ===
+  ```
+
+- **bash** `{"command": "ls -la /usr/bin/time 2>/dev/null || echo \"time externe absent\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== tokenize dispo ? ===\"; ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --tokenize --fichier data/wikitext2_test.txt --sortie /tmp/essai.ids … [329 caractères tronqués]`
+
+  ```
+-rwxr-xr-x. 1 root root 27320 16 avr 15:40 /usr/bin/time
+=== tokenize dispo ? ===
+85626 tokens écrits dans /tmp/essai.ids (vocabulaire du modèle : 151936)
+réversibilité : texte reconstruit identique ✅ (359041 octets)
+198,284,8397,425,10965,465,284,14731,8397,425,10965,465,374,
+=== modèle 1.5B : supporté ? ===
+qwen2 · 1 fichiers · 339 tenseurs · 1.11 Go de poids · en-têtes lus en 237.45839ms
+ · block_count 28 · embedding_length 1536 · feed_forward_length 8960 · attention.head_count 12 · attention.head_count_kv 2 · context_length 131072
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n '\"--kv' drave-core/src/main.rs | head -5; grep -n '\"--act-topk\"\\|\"--act-thresh\"\\|\"--profil-experts\"\\|\"--topk-q\"\\|\"--moe-topk\"' drave-core/src/main.rs | head -6; echo \"=== aide du moteur (extraits) ===\"; grep  … [114 caractères tronqués]`
+
+  ```
+742:            "--moe-topk" => { o.moe_topk = suivant(i).parse().unwrap(); 2 }
+754:            "--act-thresh" => { o.act_thresh = suivant(i).parse().unwrap(); 2 }
+755:            "--act-topk" => { o.act_topk = suivant(i).parse().unwrap(); 2 }
+756:            "--topk-q" => { o.topk_proj[0] = suivant(i).parse().unwrap(); 2 }
+=== aide du moteur (extraits) ===
+80:        eprintln!("       drave <modele> --infer (--ids 1,2,3 | --prompt TEXTE | --ids-file F)");
+82:        eprintln!("       drave <modele> --ppl FICHIER-IDS [--ctx N] [--limit N] [--dense]");
+83:        eprintln!("       drave <modele> --tensors      inventaire par les en-têtes seuls");
+84:        eprintln!("       drave <modele> --materiel     détection matérielle et plan de");
+87:        eprintln!("       drave <modele> --sonder-engram N   accès mmappé à une table d'engram");
+88:        eprintln!("       drave <modele> --tete-restreinte F  génération CONTRAINTE : la tête ne");
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"kv_bits\\|kv-bits\\|bits_kv\\|cache KV :\" drave-core/src/main.rs | head -6", "description": "Find KV precision flag"}`
+
+  ```
+482:        println!("[options] cache KV : {} bits{} · f16 avant {}",
+2402:    println!("  cache KV         : {} bits", plan.kv_bits);
+  ```
+
+- **write** `{"content": "#!/bin/bash\n# campagne-benefices.sh — 24 h de mesures : où Drave est à son meilleur, tâche par tâche.\n#\n# POURQUOI CETTE CAMPAGNE. Le dépôt a mesuré beaucoup de choses, mais presque\n# toujours sur UN modèle (Qwen2.5-0.5B) et UN type de tâche (la perplexité). La\n# question posée est … [10654 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/campagne-benefices.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && mkdir -p /tmp/campagne24 && /home/stephane/gpu-env/bin/python -c \"\nimport numpy as np\nd = np.frombuffer(open('data/corpus_en_val.txt','rb').read(128), dtype=np.uint8)\nopen('/tmp/campagne24/route_ids128.txt','w').write(','.join(st … [1985 caractères tronqués]`
+
+  ```
+ids prêts
+# dense · 3.21 M paramètres · 0.85 M poids LUS par jeton et par couche · 0.85 M stockés · corpus 100276153 octets · cuda
+# dense · 7.18 M paramètres · 1.92 M poids LUS par jeton et par couche · 1.92 M stockés · corpus 100276153 octets · cuda
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && chmod +x tools/campagne-benefices.sh && timeout 900 tools/campagne-benefices.sh noyau 2>&1 | tail -3; echo \"=== parsing d'une mesure de parcimonie ===\"; D=./drave-core/target/release/drave; timeout 300 $D models/Qwen2.5-0.5B-Q8_0.g … [218 caractères tronqués]`
+
+  ```
+[08/10 21:17:25] charge 2.97 · noyau : bande passante mémoire mesurée : 18.1 Go/s
+[08/10 21:17:25] charge 2.97 · noyau : push/pull = ×3.10
+=== parsing d'une mesure de parcimonie ===
+     255 tokens notés — perplexité cumulée 7669.245  (13.7 tok/s)
+=== perplexité 7669.2453 sur 255 tokens (76891424313 événements, 18.7 s) ===
+    13.7 tok/s effectifs (avant + tête)
+    projections : 301.5 M événements par token
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; for opt in \"--dense\" \"--push\" \"\"; do echo -n \"opt='${opt:-defaut}' : \"; timeout 300 $D models/Qwen2.5-0.5B-Q8_0.gguf --ppl data/wikitext2_test.txt.ids --limit 256 --ctx 512 --threads 20 $o … [162 caractères tronqués]`
+
+  ```
+opt='--dense' : perplexité 7710.7220 sur 255 tokens
+opt='--push' : perplexité 7676.7982 sur 255 tokens
+opt='defaut' : perplexité 7710.7220 sur 255 tokens
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; echo \"=== ids tokenisés PAR le modèle ===\"; timeout 300 $D models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/essai.ids --limit 256 --ctx 512 --threads 20 2>&1 | grep -oE \"perplexité [0-9.]+ sur [0-9]+ t … [386 caractères tronqués]`
+
+  ```
+=== ids tokenisés PAR le modèle ===
+perplexité 17.4315 sur 255 tokens
+=== 512 jetons, ctx 512 ===
+perplexité 13.1368 sur 511 tokens
+=== les deux fichiers d'ids ===
+201,438,10498,102771,402,438,61915,10498,102771,40
+198,284,8397,425,10965,465,284,14731,8397,425,1096
+  ```
+
+### 🤖 Assistant
+
+⏵ Piège trouvé : `wikitext2_test.txt.ids` vient d'un AUTRE tokenizer — toutes les mesures auraient été fausses
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"tools/campagne-benefices.sh\"; s=open(p).read()\n\n# 1) un utilitaire d'identifiants : chaque modèle tokenise SON corpus.\ns = s.replace('''dire() { echo \"[$(date '+%d/%m %H:%M:%S')] charge $(cut -d' ' -f1 /pro … [1983 caractères tronqués]`
+
+  ```
+corrigé
+4
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash -n tools/campagne-benefices.sh && echo \"syntaxe OK\" && setsid nohup bash tools/campagne-benefices.sh > /tmp/campagne24/file.log 2>&1 < /dev/null & sleep 90; tail -6 /tmp/campagne24/journal.txt 2>/dev/null", "description": "Lau … [54 caractères tronqués]`
+
+  ```
+syntaxe OK
+[08/10 21:17:25] charge 2.97 · noyau : bande passante mémoire mesurée : 18.1 Go/s
+[08/10 21:17:25] charge 2.97 · noyau : push/pull = ×3.10
+[08/10 21:19:49] charge 15.61 · === campagne démarrée (pid 3695400) ===
+[08/10 21:19:49] charge 15.61 · --- étape grille ---
+[08/10 21:20:04] charge 17.95 · grille/0.5B-Q8 : code 0 · PPL 17.4315 · RSS 1249 Mo · lus 0 Mio
+[08/10 21:21:10] charge 17.44 · grille/r1-1.5B : code 0 · PPL 47.1403 · RSS 4647 Mo · lus 988 Mio
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== bge-m3 (embeddings) : le moteur le lit-il ? ===\"; timeout 120 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/bge-m3-FP16.gguf --tensors 2>&1 | head -3; echo \"=== eagle3 (brouillon) ? ===\ … [229 caractères tronqués]`
+
+  ```
+=== bge-m3 (embeddings) : le moteur le lit-il ? ===
+bert · 1 fichiers · 389 tenseurs · 1.15 Go de poids · en-têtes lus en 173.266143ms
+ · block_count 24 · embedding_length 1024 · feed_forward_length 4096 · attention.head_count 16 · context_length 8192
+  F16      token_embd.weight                      [250002, 1024] · 256.0 M poids · fichier 0
+=== eagle3 (brouillon) ? ===
+eagle3 · 1 fichiers · 14 tenseurs · 0.84 Go de poids · en-têtes lus en 454.749241ms
+ · block_count 1 · embedding_length 2880 · feed_forward_length 16384 · attention.head_count 64 · attention.head_count_kv 8 · context_length 131072 · vocab_size 201088
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; echo \"=== bge-m3 : exécution ? ===\"; timeout 300 $D /home/stephane/Data13TB/stephane/modeles/gguf/bge-m3-FP16.gguf --ppl /tmp/essai.ids --limit 64 --ctx 64 --threads 16 2>&1 | tail -5", "descrip … [79 caractères tronqués]`
+
+  ```
+=== bge-m3 : exécution ? ===
+
+thread 'main' (3706022) panicked at src/gguf.rs:1752:53:
+tenseur blk.0.attn_norm.weight absent
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+timeout: the monitored command dumped core
+  ```
+
+- **write** `{"content": "# Campagne 24 h — où Drave est à son meilleur, tâche par tâche\n\n> 08/10, 21 h. Le matériel suivant n'est pas encore là ; cette campagne occupe\n> la machine à mesurer ce que l'architecture par listes vaut **pour chaque\n> famille de tâches**, au lieu du seul couple (Qwen2.5-0.5B, perp … [4638 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/campagne-benefices.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/campagne-benefices.sh docs/campagne-benefices.md && git commit -q -m \"Campagne 24 h : mesurer ce que l'architecture par listes vaut, tâche par tâche\n\nLe dépôt a surtout mesuré un couple (Qwen2.5-0.5B, perplexité). to … [1219 caractères tronqués]`
