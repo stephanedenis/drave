@@ -15,6 +15,54 @@ le journal de sessions, archivé, n'est pas réécrit.
 
 ---
 
+## La campagne du 8-9 octobre — 24 h de mesures, par famille de tâches
+
+Ce que l'architecture événementielle vaut, **tâche par tâche**, avec pour chaque
+chiffre ses conditions (corpus, tokenizer, charge) :
+[`reports/rapport-campagne-benefices.md`](reports/rapport-campagne-benefices.md)
+(verdict famille par famille au § 0 bis). La file de mesures est
+[`tools/campagne-benefices.sh`](tools/campagne-benefices.sh), ses journaux bruts
+sont dans `/tmp/campagne24/`, et **les 23 portes du dépôt sont vertes**.
+
+**Cinq résultats, chacun avec sa mesure :**
+
+| résultat | mesure |
+|---|---|
+| **Le chemin par listes n'approxime RIEN** | logits **identiques au bit près** contre le chemin dense, à encodage de poids égal (`cmp` sur 4 254 216 octets) |
+| **La parcimonie doit être APPRISE** | à 25 % gardés : témoin **10,8758** de perplexité, modèle entraîné creux **5,1719** (−52 %) |
+| **La courbe lecture ↔ qualité** | **÷4 pour +1 %** (structure innée aléatoire) · **÷8 pour +4 %** (deux axes appris) · ÷15 pour +22 % si un axe est imposé |
+| **Le routage seul s'inverse à dim 512 ; la distillation le rattrape** | routé +10 % à 512, routé **distillé 4,3305 contre 4,5686** au dense (à 12,8 M paires/jeton des deux côtés) |
+| **La mémoire tient, et les gros modèles tournent** | **18 aiguilles sur 18** jusqu'à **12 288 jetons** · V4-Flash **365,7 Go sur 125 Go de RAM, 37,6 Go résidents** · gpt-oss rend **15,6017**, la valeur attendue au chiffre près |
+
+**Quatre documents de conception** en sortent, et ils disent aussi ce qui manque :
+
+- [`docs/modele-pour-drave.md`](docs/modele-pour-drave.md) — **moteur contre
+  modèle** : ce que l'architecture récompense, dix dessins évalués, dont trois
+  inédits (profondeur routée, budget d'événements appris, quantification adaptée aux
+  listes) ; et la réponse GPU : **nos modèles à décharges ne sont pas déportables**
+  (projections trop petites, noyau GPU dense).
+- [`docs/biologie-pour-drave.md`](docs/biologie-pour-drave.md) — ce que les
+  connectomes imposent : structure innée (~gratuite à 25 %, chère à 12,5 %), poids
+  synaptiques log-normaux (les nôtres sont gaussiens), et **six ordres de grandeur**
+  entre l'énergie par événement du cerveau et la nôtre.
+- [`docs/hebbien-differentiel-et-biologie.md`](docs/hebbien-differentiel-et-biologie.md)
+  — notre règle locale est **réfutée**, et la biologie dit pourquoi : pas de crédit,
+  pas de décorrélation, structures saturées.
+- [`docs/architecture-cerveau-et-drave.md`](docs/architecture-cerveau-et-drave.md) +
+  [`docs/plan-cerveau-complet.md`](docs/plan-cerveau-complet.md) — les **douze
+  capacités manquantes** pour porter une architecture de cerveau (graphe de régions,
+  délais, horloges, bus de modulation, mémoire épisodique, consolidation,
+  périphérie, latéralité, budgets, instances concertées, traçage distribué), en six
+  phases à portes mesurées, avec la distribution multi-instances développable **sur
+  cette seule machine**.
+
+**Deux manques restent des manques**, et sont écrits comme tels : les
+**encodeurs/embeddings** (`bge-m3` inexécutable : ni attention bidirectionnelle ni
+pooling) et le **noyau Q8 par expert** (sans lui, un modèle routé ne peut pas être
+exécuté en listes).
+
+---
+
 ## La journée du 30/09 — huit chantiers, mesurés
 
 Le détail est dans [`reports/rapport-session-2026-09-30.md`](reports/rapport-session-2026-09-30.md).

@@ -18293,3 +18293,132 @@ Created file
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/plan-cerveau-complet.md && git commit -q -m \"Plan détaillé des douze capacités manquantes, jusqu'à la distribution multi-instances\n\nDouze fiches (structure cérébrale -> état du moteur -> conception -> interface ->\nin … [1532 caractères tronqués]`
+
+  ```
+b0276ef Plan détaillé des douze capacités manquantes, jusqu'à la distribution multi-instances
+  pas  16000 · perte 1.3136 · val 2.0632 bits/octet · 1148 s
+  ```
+
+### 🤖 Assistant
+
+⏵ Plan livré : douze capacités, six phases à portes mesurées, distribution multi-instances détaillée
+
+Nouveau document : **`docs/plan-cerveau-complet.md`** (le plan d'ingénierie qui complète l'étude d'architecture).
+
+**Douze fiches**, chacune structurée identiquement — structure cérébrale → état exact du moteur → conception → interface → **invariant vérifiable** → mesure de validation → coût → risque :
+
+| # | capacité | état actuel du moteur |
+|---|---|---|
+| C1 | **graphe de régions** | une **chaîne** (`--couches-locales` = plage contiguë) |
+| C2 | liens multiples + **récurrence** | une entrée par couche, aucune boucle |
+| C3 | **délais** par lien | la latence coûte (3,4 ms/jeton/ms) au lieu de servir |
+| C4 | **horloges par région** | passe synchrone, barrières implicites |
+| C5 | **bus de modulation** | amorcé (modulateur externe par fichier), à généraliser en bus multi-canaux |
+| C6 | **mémoire épisodique** par contenu | `engram` = adressage par hachage (la moitié du chemin) |
+| C7 | **consolidation** (rejeu → poids) | rejeu exact ✓, distillation ✓, **le lien manque** |
+| C8 | **périphérie et réflexes** | un banc vision ; rien ne sort |
+| C9 | **latéralité / corps calleux** | n'existe pas (mais c'est un graphe symétrique ⇒ C1) |
+| C10 | **budgets par lien** | le moteur mesure tout, n'impose rien |
+| C11 | **instances concertées** | 1 producteur → 1 consommateur |
+| C12 | **trace globale + rejeu** | traces exactes, mais locales |
+
+**Six phases, chacune avec sa porte — une égalité mesurée, jamais une impression** : P0 graphe linéaire ⇒ logits **identiques au bit près** ; P1 délai 0 ⇒ 0,00e0 + terminaison bornée ; P2 trois machines ⇒ **rejeu à 0,00e0** ; P3 round-trip épisodique exact ; P4 canal nul ⇒ sortie inchangée ; P5 entrée constante ⇒ sortie constante ; P6 échange désactivé ⇒ identique. **Total réaliste : 5 à 7 mois.**
+
+**La distribution multi-instances (§ 3) est traitée en détail** : ce qui est réutilisable tel quel (protocole de flux exact à 0,00e0, `TCP_NODELAY`, plafonds d'allocation, découpage par experts à 2,36 Go, relais de latence), ce qui manque (topologie, découverte, multi-pairs, ordonnancement, état par région, pannes, budgets, observabilité, hétérogénéité), un **protocole tramé précis** (types `ACTIVATIONS`/`HORLOGE`/`MODULATION`/`EPISODE`, ordre par lien seulement, crédits plutôt que perte silencieuse, file temporisée pour les délais, heartbeat + politique de panne **annoncée**), et six étapes de validation.
+
+**Et le point pratique qui débloque tout** : **la distribution multi-machines est développable sur cette seule machine**. Ce qui change d'une machine à plusieurs n'est qu'une constante — la latence — et nous avons déjà la loi qui la relie au coût (3,4 ms/jeton/ms) **et** l'instrument qui la simule (relais TCP + balayage, courbe tracée jusqu'à 50 ms). V1-V6 vont de deux instances en boucle locale jusqu'au rejeu global d'une exécution à trois instances, avec la carte 4×NVMe et les deux sockets NUMA comme dernier étage.
+
+**Le premier sprint recommandé (3 semaines)** ne prend que trois capacités, celles que **nos mesures réclament** : **C1** (sans topologie rien n'est possible, et sa porte est immédiate), **C5** (la mécanique existe déjà ; notre mesure du signal externe — +9,1 % contre +5,2 % pour la règle nue — est le meilleur modulateur trouvé, et le seul qui mérite d'être poussé), **C12** (sans trace globale, un graphe distribué n'est pas débogable).
+
+**Ce que le plan ne donne pas, et c'est écrit au § 5** : aucune garantie qu'une architecture de régions soit meilleure qu'un empilement de couches ; **aucun modèle n'existe aujourd'hui qui demande** un graphe, des délais ou une périphérie ; le moteur **n'apprend pas** (C7 est le vrai saut, et notre seule règle locale a été réfutée) ; et sur douze capacités, **zéro est implémentée** — les mesures qui justifient ce plan sont celles de la campagne, pas celles d'un cerveau simulé.
+
+*(En fond : `m16` — structure innée à dim 512 — tourne toujours, 16 000/40 000 pas.)*
+
+
+## Tour 33
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, préremplissage par lots, modèle plus gros que la RAM. Poursuivre en parallèle le livrable du modèle nativement événementiel : entraîné ici, exécuté par Drave à logits vérifiés, découpé en unités réparties. Chaque affirmation porte sa mesure (perplexité, débit, octets et événements par jeton, RSS, écart entre nœuds) ET ses conditions (corpus, tokenizer du modèle, charge de fond) ; les manques constatés — embeddings/encodeurs, décodage spéculatif — sont consignés comme manques, pas comme résultats. Livrables : la file tools/campagne-benefices.sh exécutée et ses journaux, un rapport de synthèse par famille de tâches, et la poursuite du modèle événementiel."
+Round: 26/40
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ État de la vérification à l'échelle 512
+
+- **bash** `{"command": "cd /tmp/campagne24 && tail -1 tr_m16_d512_masque25.log 2>/dev/null; grep -E \"m16|512\" journal15.txt 2>/dev/null | tail -3; tail -1 tr_m17_d512_kwta25_elag50.log 2>/dev/null || echo \"(m17 en attente)\"; date '+%H:%M'", "description": "Poll the 512-scale verification"}`
+
+  ```
+pas  16000 · perte 1.3136 · val 2.0632 bits/octet · 1148 s
+[09/10 14:19:27] charge 2.13 · === dim 512 : les deux dessins qui marchent ===
+(m17 en attente)
+14:42
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && wc -l README.md; grep -n \"^#\\|^##\" README.md | head -20", "description": "Inspect the README structure"}`
+
+  ```
+654 README.md
+1:# Drave
+18:## La journée du 30/09 — huit chantiers, mesurés
+36:## État du projet
+72:## Test de principe (`run_quantify.py`)
+122:## Élagage et approche par événement (`run_sparsity.py`)
+170:## Encodage de structure : éliminer complètement la valeur (`run_encoding.py`)
+213:## Architecture « push » (AER) et exécution CPU (`run_cpu.py`, `bench/cpu_aer.c`)
+260:## Tri et dédoublonnage des contributions (`bench/cpu_merge.c`)
+295:## Moteur d'événements Rust (`drave-core`)
+350:## Formats et modèles réellement lisibles
+396:### Les modèles éclatés se lisent comme un seul
+417:## Inférence complète en Rust (`--infer`)
+499:## Écarts avec le CDC d'origine
+512:## Structure
+530:## Lancer
+543:## L'empreinte mémoire : ce qu'il faut charger avant d'opérer
+576:# Chiffrer l'empreinte d'un MoE depuis une trace de routage réelle
+585:## Architecture mémoire : ce qui va en VRAM, en RAM, sur le disque
+622:## Prochaines étapes
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,20p' README.md; echo \"=== Prochaines étapes ===\"; sed -n '622,654p' README.md", "description": "Read the README head and tail"}`
+
+  ```
+# Drave
+
+*Anciennement `Qtrinet`.* **La drave**, c'est le flux qu'on conduit : ici, celui
+des **listes d'activation** (*stream of logs*) — le moteur ne lit pas des
+matrices, il pousse des faits valués vers leurs destinations. La vision complète
+est dans [`docs/vision.md`](docs/vision.md).
+
+Origine du projet : inférence de LLM en **ternaire / multi-bits** sur un cluster
+de cartes **Stratix V** (Microsoft Storey Peak) — 100 % logique, sans DSP.
+Le cahier des charges d'origine est dans [`Qtrinet-bootstrap.md`](Qtrinet-bootstrap.md)
+⚠️ **il a été audité et corrigé** : voir la section « Écarts avec le CDC » ci-dessous.
+Le renommage est FAIT : le crate et le binaire s'appellent `drave-core` et
+`drave`, les variables `DRAVE_*` (table de conversion dans `docs/histoire.md`) ;
+le journal de sessions, archivé, n'est pas réécrit.
+
+---
+
+## La journée du 30/09 — huit chantiers, mesurés
+
+Le détail est dans [`reports/rapport-session-2026-09-30.md`](reports/rapport-session-2026-09-30.md).
+=== Prochaines étapes ===
+## Prochaines étapes
+
+La feuille de route complète est dans [`docs/roadmap.md`](docs/roadmap.md). Ce qui
+est ouvert aujourd'hui, par ordre de valeur mesurée :
+
+1. **Le top-k déporté fonct
+… [2051 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Mise à jour de la porte d'entrée du dépôt avec la campagne et les documents de conception
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"README.md\")\ns = p.read_text()\nancre = \"\"\"---\n\n## La journée du 30/09 — huit chantiers, mesurés\"\"\"\nassert ancre in s\najout = \"\"\"---\n\n## La campagne du 8-9 octobre  … [3926 caractères tronqués]`

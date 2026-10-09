@@ -6,13 +6,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
 | Durée | 29.5 h |
-| Tours | 32 |
-| Messages | 1168 |
-| Appels d'outils | 1113 |
+| Tours | 33 |
+| Messages | 1174 |
+| Appels d'outils | 1117 |
 | Fichiers touchés | 35 |
-| Commandes | 925 |
+| Commandes | 929 |
 | Sous-agents | 3 |
-| Commits | 97 |
+| Commits | 98 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -91,6 +91,8 @@
 **Tour 31** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1197 caractères tronqués]
 
 **Tour 32** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1197 caractères tronqués]
+
+**Tour 33** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1197 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1520,7 +1522,46 @@ En cours
 
 **Synthèse produite :**
 
-⏵ Rédaction du plan détaillé : les capacités manquantes, jusqu'à la distribution multi-instances
+⏵ Plan livré : douze capacités, six phases à portes mesurées, distribution multi-instances détaillée
+
+Nouveau document : **`docs/plan-cerveau-complet.md`** (le plan d'ingénierie qui complète l'étude d'architecture).
+
+**Douze fiches**, chacune structurée identiquement — structure cérébrale → état exact du moteur → conception → interface → **invariant vérifiable** → mesure de validation → coût → risque :
+
+| # | capacité | état actuel du moteur |
+|---|---|---|
+| C1 | **graphe de régions** | une **chaîne** (`--couches-locales` = plage contiguë) |
+| C2 | liens multiples + **récurrence** | une entrée par couche, aucune boucle |
+| C3 | **délais** par lien | la latence coûte (3,4 ms/jeton/ms) au lieu de servir |
+| C4 | **horloges par région** | passe synchrone, barrières implicites |
+| C5 | **bus de modulation** | amorcé (modulateur externe par fichier), à généraliser en bus multi-canaux |
+| C6 | **mémoire épisodique** par contenu | `engram` = adressage par hachage (la moitié du chemin) |
+| C7 | **consolidation** (rejeu → poids) | rejeu exact ✓, distillation ✓, **le lien manque** |
+| C8 | **périphérie et réflexes** | un banc vision ; rien ne sort |
+| C9 | **latéralité / corps calleux** | n'existe pas (mais c'est un graphe symétrique ⇒ C1) |
+| C10 | **budgets par lien** | le moteur mesure tout, n'impose rien |
+| C11 | **instances concertées** | 1 producteur → 1 consommateur |
+| C12 | **trace globale + rejeu** | traces exactes, mais locales |
+
+**Six phases, chacune avec sa porte — une égalité mesurée, jamais une impression** : P0 graphe linéaire ⇒ logits **identiques au bit près** ; P1 délai 0 ⇒ 0,00e0 + terminaison bornée ; P2 trois machines ⇒ **rejeu à 0,00e0** ; P3 round-trip épisodique exact ; P4 canal nul ⇒ sortie inchangée ; P5 entrée constante ⇒ sortie constante ; P6 échange désactivé ⇒ identique. **Total réaliste : 5 à 7 mois.**
+
+**La distribution multi-instances (§ 3) est traitée en détail** : ce qui est réutilisable tel quel (protocole de flux exact à 0,00e0, `TCP_NODELAY`, plafonds d'allocation, découpage par experts à 2,36 Go, relais de latence), ce qui manque (topologie, découverte, multi-pairs, ordonnancement, état par région, pannes, budgets, observabilité, hétérogénéité), un **protocole tramé précis** (types `ACTIVATIONS`/`HORLOGE`/`MODULATION`/`EPISODE`, ordre par lien seulement, crédits plutôt que perte silencieuse, file temporisée pour les délais, heartbeat + politique de panne **annoncée**), et six étapes de validation.
+
+**Et le point pratique qu
+… [1508 caractères tronqués]
+
+### Tour 33 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1477 caractères tronqués]
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Poll the 512-scale verification
+- bash — Inspect the README structure
+- bash — Read the README head and tail
+- bash — Update the README with the campaign results
+
+**Synthèse produite :**
+
+⏵ Mise à jour de la porte d'entrée du dépôt avec la campagne et les documents de conception
 
 ## 3. Travail accompli
 
@@ -1612,7 +1653,7 @@ En cours
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 885 autres
+- … et 889 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1857,4 +1898,5 @@ En cours
 - Signal externe mesuré : meilleur des modulateurs, et toujours pire que la règle nue  Le moteur lit maintenant un modulateur externe (DRAVE_HEBB_MODULATEUR_FICHI
 - Décorrélation en courbe de dose : elle améliore de façon monotone et converge vers « ne rien apprendre »  DRAVE_HEBB_BETA rend la constante de temps réglable. M
 - Plan détaillé des douze capacités manquantes, jusqu'à la distribution multi-instances  Douze fiches (structure cérébrale -> état du moteur -> conception -> inte
+- README : la campagne du 8-9 octobre en tête, avec ses cinq résultats et ses quatre documents  La porte d'entrée du dépôt datait de la session précédente. Elle p
 
