@@ -16490,3 +16490,100 @@ Sources:
 ⏵ Le fait biologique que nos modèles ne reproduisent pas : des poids à queue lourde
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/biologie-pour-drave.md\")\ns = p.read_text()\nancre = \"\"\"---\n\n## 3 bis. Le budget, chiffré : où nous en sommes\"\"\"\nassert ancre in s\najout = \"\"\"### 3 ter. Le fait  … [4535 caractères tronqués]`
+
+  ```
+ok
+2919789 Le fait biologique que nos modèles ne reproduisent pas : des poids à queue lourde
+  ```
+
+- **bash** `{"command": "sleep 570; cd /tmp/campagne24 && tail -1 tr_m11_poids_creux.log; grep -E \"m11\" journal11.txt 2>/dev/null | tail -3", "description": "Poll the learned weight-pruning run", "timeoutMs": 600000}`
+
+  ```
+pas  20000 · perte 1.3749 · val 2.1489 bits/octet · 1515 s
+  ```
+
+### 🤖 Assistant
+
+⏵ Implémentation de E6 : poids log-normaux par reparamétrisation
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '243,256p' tools/entrainer_moteur.py", "description": "Read the save section of the trainer"}`
+
+  ```
+masques = installer_masque_inne(modele, a.masque, a.graine)
+        print(f"# CONNECTOME INNÉ : {a.masque:.0%} des connexions, tirées une fois "
+              f"(graine {a.graine}) et jamais modifiées — "
+              f"{sum(m.sum().item() for m in masques.values())/1e6:.2f} M connexions")
+
+    opt = torch.optim.AdamW(modele.parameters(), lr=a.lr, weight_decay=0.01)
+    g = torch.Generator().manual_seed(a.graine)
+    meilleur = (float("inf"), None, 0)
+    debut = time.time()
+    modele.train()
+    # DISTILLATION : un enseignant gelé, de la MÊME famille et du MÊME tokenizer,
+    # dont on imite la distribution entière et pas seulement l'argmax. C'est le
+    # levier que le dépôt n'avait jamais essayé (inventaire du 08/10 : « aucune
+    # distillation, mentionnée mais jamais réalisée »), et c'est le seul qui
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"load_state_dict(meilleur\\|save_pretrained\" tools/entrainer_moteur.py | head -4; python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"tools/entrainer_moteur.py\")\ns = p.read_text()\n\n# la classe et l'installeur\nancre =  … [2901 caractères tronqués]`
+
+  ```
+336:    modele.load_state_dict(meilleur[1])
+339:    modele.save_pretrained(a.sortie)
+ok
+syntaxe OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '334,340p' tools/entrainer_moteur.py; python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"tools/entrainer_moteur.py\")\ns = p.read_text()\ns = s.replace(\"\"\"    modele.load_state_dict(meilleur[1])\"\"\",\n\"\"\"    modele.l … [1279 caractères tronqués]`
+
+  ```
+# KL(enseignant || eleve), température T : `T²` remet le gradient à
+            # l'échelle de la CE — sans lui, la distillation douce pèse T² fois
+            # trop et écrase l'apprentissage.
+            with torch.no_grad():
+                lgt_e = enseignant(input_ids=x).logits
+            lgt_s = sortie.logits
+            logp_s = torch.log_softmax(lgt_s / a.temperature, dim=-1)
+ok
+  pas    200 · perte 8458.0801 · val 12327.5142 bits/octet · 5 s
+# matérialisation : 15 couches (les poids redeviennent des tenseurs ordinaires)
+Writing model shards:   0%|          | 0/1 [00:00<?, ?it/s]Writing model shards: 100%|██████████| 1/1 [00:00<00:00, 192.34it/s]
+
+  # meilleur point : pas 200 · val 12327.5142 bits/octet
+  # écrit dans /tmp/fumee_lognorm · 0.25 M paramètres · 0.12 M poids lus/jeton/couche
+p99.9/médiane = 549.0 (gaussien ≈ 4, log-normal >> 10)
+clés non ordinaires : aucune
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"tools/entrainer_moteur.py\")\ns = p.read_text()\ns = s.replace(\"\"\"    opt = torch.optim.AdamW(modele.parameters(), lr=a.lr, weight_decay=0.01)\"\"\",\n\"\"\"    # AVEC DES POIDS … [1007 caractères tronqués]`
+
+  ```
+ok
+  pas    200 · perte 20753.0176 · val 29641.3076 bits/octet · 5 s
+  pas    400 · perte 12137.7363 · val 17840.7321 bits/octet · 9 s
+  # meilleur point : pas 400 · val 17840.7321 bits/octet
+  ```
+
+### 🤖 Assistant
+
+⏵ Correction : signes fixés à la naissance (principe de Dale) et magnitudes en log
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"tools/entrainer_moteur.py\")\ns = p.read_text()\ndebut = s.index(\"class MagnitudeLog(nn.Module):\")\nfin = s.index(\"def materialiser_poids(modele):\")\nneuf = '''class PoidsLogNo … [2538 caractères tronqués]`
+
+  ```
+ok
+syntaxe OK
+  pas    200 · perte 4.5633 · val 6.6007 bits/octet · 4 s
+  pas    400 · perte 3.9778 · val 5.7158 bits/octet · 8 s
+  pas    600 · perte 3.4191 · val 5.2162 bits/octet · 12 s
+  # meilleur point : pas 600 · val 5.2162 bits/octet
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && /home/stephane/gpu-env/bin/python -c \"\nimport numpy as np, glob\nfrom safetensors.numpy import load_file\nw=load_file('/tmp/fumee_ln3/model.safetensors'); ms=[v for v in w.values() if getattr(v,'ndim',0)==2]\na=np.concatenate([np.a … [3315 caractères tronqués]`
+
+  ```
+p99.9/médiane = 5.2 · clés parametrize : aucune
+jour5 en file
+  ```
+
+- **bash** `{"command": "cd /tmp/campagne24 && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"/tmp/campagne24/jour5_lognormal.sh\")\ns = p.read_text()\nvieux = \"\"\"    for keep in 1.0 0.5 0.25; do\n        out=$(DRAVE_SANS_EMPRUNT=1 timeout 600 ./drave-core/target/release/drave /tmp/$m.gguf \\\\\n       … [1844 caractères tronqués]`

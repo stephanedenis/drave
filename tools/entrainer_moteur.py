@@ -110,6 +110,62 @@ def installer_kwta(modele, fraction, cibles=None):
     return n
 
 
+class PoidsLogNormaux(nn.Module):
+    """`w = signe_inné · e^{theta}` — log-normale par construction, signes FIXÉS.
+
+    POURQUOI (docs/biologie-pour-drave.md § 3 ter). Les efficacités synaptiques
+    corticales sont log-normales sur plusieurs ordres de grandeur ; nos modèles sont
+    quasi gaussiens (p99,9/médiane 5,2), d'où un élagage gratuit à 50 % et fatal à
+    25 %. Une distribution multiplicative est élagable par construction.
+
+    ET POURQUOI LES SIGNES SONT FIXÉS : en biologie, un neurone est excitateur OU
+    inhibiteur — son signe ne change pas (principe de Dale). Le figer à la naissance
+    est donc fidèle *et* numériquement nécessaire : une reparamétrisation qui
+    déduirait le signe de `theta` ne peut pas représenter un petit poids positif
+    (|w| = e^{theta} ≥ 1 dès que theta > 0), et l'entraînement diverge — mesuré,
+    perte 12 137 après 400 pas.
+
+    `theta` est la log-magnitude, apprise ; `signes` est un tampon figé.
+    """
+
+    def __init__(self, signes):
+        super().__init__()
+        self.register_buffer("signes", signes)
+
+    def forward(self, theta):
+        # Borne douce : e^{theta} sans borne laisse un pas d'AdamW multiplier un
+        # poids par e^{0,3} ≈ 1,35 ; au-delà de ±12 nats on est déjà à 1,6×10^5.
+        return self.signes * theta.clamp(-12.0, 6.0).exp()
+
+
+def installer_poids_lognormaux(modele):
+    """θ = log|w| appris, signes figés à la naissance (principe de Dale)."""
+    from torch.nn.utils.parametrize import register_parametrization
+    n = 0
+    for mod in modele.modules():
+        if isinstance(mod, nn.Linear):
+            with torch.no_grad():
+                w = mod.weight
+                signes = w.sign().clone()
+                theta0 = w.abs().clamp(min=1e-6).log()
+            register_parametrization(mod, "weight", PoidsLogNormaux(signes))
+            with torch.no_grad():
+                mod.parametrizations.weight.original.copy_(theta0)
+            n += 1
+    return n
+
+
+def materialiser_poids(modele):
+    """Retire la reparamétrisation pour que l'export voie des poids ordinaires."""
+    from torch.nn.utils.parametrize import remove_parametrizations
+    n = 0
+    for mod in modele.modules():
+        if hasattr(mod, "parametrizations") and hasattr(mod.parametrizations, "weight"):
+            remove_parametrizations(mod, "weight")
+            n += 1
+    return n
+
+
 def elaguer_lignes(modele, garde):
     """Élagage par MAGNITUDE, par LIGNE de sortie — la règle exacte de `--keep`.
 
@@ -212,6 +268,9 @@ def main():
                    help="part des CONNEXIONS existantes à la naissance (0 = dense ; "
                         "0,25 = un connectome inné qui ne garde qu'un quart des poids "
                         "par ligne, tiré aléatoirement, jamais modifié)")
+    p.add_argument("--poids-lognormaux", action="store_true",
+                   help="apprendre theta et exécuter w = signe(theta)·exp(|theta|) — "
+                        "distribution log-normale, comme les synapses corticales")
     p.add_argument("--sans-gpu", action="store_true")
     a = p.parse_args()
     # Lecture égale par construction : k experts lisent ce que lit le FFN dense.
@@ -245,7 +304,20 @@ def main():
               f"(graine {a.graine}) et jamais modifiées — "
               f"{sum(m.sum().item() for m in masques.values())/1e6:.2f} M connexions")
 
-    opt = torch.optim.AdamW(modele.parameters(), lr=a.lr, weight_decay=0.01)
+    if a.poids_lognormaux:
+        n = installer_poids_lognormaux(modele)
+        print(f"# POIDS LOG-NORMAUX : {n} couches reparamétrées "
+              f"(w = signe(theta)·exp(|theta|))")
+
+    # AVEC DES POIDS LOG-NORMAUX, LA DÉCROISSANCE DE POIDS EST PROSCRITE : elle
+    # s'applique à `theta`, pas à `w`, et tirer theta vers 0 pousse |w| vers 1 au
+    # lieu de 0 — le modèle ne peut plus éteindre une connexion et l'entraînement
+    # diverge (mesuré : perte 8 458 en 200 pas). Le taux d'apprentissage est réduit
+    # pour la même raison : un pas sur theta est un pas MULTIPLICATIF sur w.
+    decroissance = 0.0 if a.poids_lognormaux else 0.01
+    if a.poids_lognormaux:
+        a.lr = min(a.lr, 3e-4)
+    opt = torch.optim.AdamW(modele.parameters(), lr=a.lr, weight_decay=decroissance)
     g = torch.Generator().manual_seed(a.graine)
     meilleur = (float("inf"), None, 0)
     debut = time.time()
@@ -334,6 +406,12 @@ def main():
             modele.train()
 
     modele.load_state_dict(meilleur[1])
+    # L'export lit des poids ORDINAIRES : on matérialise avant d'écrire (sinon le
+    # fichier porterait des clés `parametrizations.weight.original` que l'exporteur
+    # ne connaît pas).
+    if a.poids_lognormaux:
+        print(f"# matérialisation : {materialiser_poids(modele)} couches "
+              f"(les poids redeviennent des tenseurs ordinaires)")
     modele.eval()
     os.makedirs(a.sortie, exist_ok=True)
     modele.save_pretrained(a.sortie)
