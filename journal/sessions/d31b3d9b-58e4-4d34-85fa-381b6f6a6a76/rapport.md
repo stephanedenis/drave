@@ -7,12 +7,12 @@
 | Début | 2026-10-08 09:11 |
 | Durée | 14.9 h |
 | Tours | 26 |
-| Messages | 641 |
-| Appels d'outils | 607 |
+| Messages | 643 |
+| Appels d'outils | 609 |
 | Fichiers touchés | 21 |
-| Commandes | 485 |
+| Commandes | 487 |
 | Sous-agents | 3 |
-| Commits | 41 |
+| Commits | 42 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -1227,7 +1227,7 @@ La campagne continue : contexte (le PPL y est constant par construction — l'é
 
 ### Tour 26 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1477 caractères tronqués]
 
-*9 appels d'outils.* Actions notables :
+*11 appels d'outils.* Actions notables :
 
 - bash — Check the GPU dispatch threshold and its overrides
 - bash — Test GPU head placement on our model
@@ -1238,6 +1238,8 @@ La campagne continue : contexte (le PPL y est constant par construction — l'é
 - bash — Test the fix on Q4_K and check non-regression
 - bash — Test the chat mode correctly
 - bash — Commit the bench panic fix
+- bash — Collect the campaign's context, batch and routing results
+- bash — Record the context and batch results
 
 **Synthèse produite :**
 
@@ -1319,7 +1321,7 @@ La campagne continue : contexte (le PPL y est constant par construction — l'é
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 445 autres
+- … et 447 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1508,4 +1510,5 @@ La campagne continue : contexte (le PPL y est constant par construction — l'é
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="reports/rapport-campagne-benefices.md"; s=open(p).read() ajout = '''## 19. La parcimon
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="reports/rapport-campagne-benefices.md"; s=open(p).read() deb = s.index("## 0 bis. Le v
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/msg_banc.txt <<'MSG' Le banc des encodages ne plante plus sur les modèles K-quant (c'était la p
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="reports/rapport-campagne-benefices.md"; s=open(p).read() ajout = '''## 20. Contexte et
 

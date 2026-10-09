@@ -10444,3 +10444,31 @@ My name is Camille. I am 10 years old. I live in Paris. I have a pet named Floss
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/msg_banc.txt <<'MSG'\nLe banc des encodages ne plante plus sur les modèles K-quant (c'était la première ligne de l'aide)\n\n« drave <modele> » — la PREMIÈRE ligne de l'aide du moteur — paniquait sur tout\nmodèle en super-b … [1320 caractères tronqués]`
+
+  ```
+9cdfbd7 Le banc des encodages ne plante plus sur les modèles K-quant (c'était la première ligne de l'aide)
+=== campagne ===
+[09/10 00:03:16] charge 72.67 · routage/modèle entraîné : experts 1.8 M
+[09/10 00:03:16] charge 72.67 · --- étape semantique ---
+  ```
+
+- **bash** `{"command": "grep -E \"contexte/|lot/|routage/\" /tmp/campagne24/journal.txt | tail -18", "description": "Collect the campaign's context, batch and routing results"}`
+
+  ```
+[08/10 23:55:47] charge 66.35 · contexte/512 : PPL 17.4315 · cache KV : 32 bits · RSS 1249 Mo
+[08/10 23:56:08] charge 64.51 · contexte/1024 : PPL 17.4315 · cache KV : 32 bits · RSS 1248 Mo
+[08/10 23:56:30] charge 63.84 · contexte/2048 : PPL 17.4315 · cache KV : 32 bits · RSS 1249 Mo
+[08/10 23:57:03] charge 69.05 · contexte/4096 : PPL 17.4315 · cache KV : 32 bits · RSS 1248 Mo
+[08/10 23:57:22] charge 66.18 · contexte/8192 : PPL 17.4315 · cache KV : 32 bits · RSS 1248 Mo
+[08/10 23:58:00] charge 67.50 · lot/1 : PPL 13.1368 · 16.8 tok/s
+[08/10 23:58:35] charge 67.47 · lot/2 : PPL 13.1359 · 18.4 tok/s
+[08/10 23:59:04] charge 66.82 · lot/4 : PPL 13.1359 · 23.2 tok/s
+[08/10 23:59:34] charge 66.16 · lot/8 : PPL 13.1359 · 23.2 tok/s
+[09/10 00:00:05] charge 67.45 · lot/16 : PPL 13.1359 · 21.5 tok/s
+[09/10 00:00:33] charge 67.62 · lot/32 : PPL 13.1359 · 23.7 tok/s
+[09/10 00:01:21] charge 80.98 · lot/64 : PPL 13.1359 · 13.1 tok/s
+[09/10 00:03:15] charge 72.67 · routage/30B : experts 1826.2 M · perplexité 7.6139
+[09/10 00:03:16] charge 72.67 · routage/modèle entraîné : experts 1.8 M
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"reports/rapport-campagne-benefices.md\"; s=open(p).read()\najout = '''## 20. Contexte et lots : deux réponses, dont une qui n'est pas celle qu'on croit\n\n**Contexte long — le protocole mesurait le cache, pas la … [2556 caractères tronqués]`
