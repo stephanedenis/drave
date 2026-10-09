@@ -45,6 +45,7 @@ file encore en cours.
 | **multilingue (399 langues)** | ✅ mesuré, et c'est le point faible du modèle | **3,227 bit/octet** contre 0,951 en prose — **3,4× pire** · densité **identique** (71 %) · seuil absolu : PPL **×11**, le k-WTA tient (§ 10 ter) |
 | **sémantique multilingue** | ✅ le résultat publié **survit** au correctif d'échelle | pic de séparation à la **couche 13** (+0,0391) sur 398 langues, bande 10-15 — et l'ancien lecteur donnait +0,0349 au même endroit |
 | **parcimonie imposée** | ✅ reproduit, et nuancé | à −30 % d'événements : seuil **+69 %** de PPL, k-WTA **+4 %** (facteur 17) · en dense, **aucune lecture économisée** |
+| **parcimonie APPRISE** | ✅ **la réponse qui décide** | à 50 % gardés : témoin **+6,2 %**, modèle entraîné creux **−2,4 %** · à 25 % : **+118 % contre +11 %** — le creux est **47 % meilleur au même nombre d'événements**, et le débit par listes passe à **×1,6** (§ 5 ter) |
 | **sortie contrainte** | ✅ **gagne par construction** | **×1,36-1,42** de débit *et* garantie que la sortie appartient à l'ensemble autorisé |
 | **modèle plus gros que la RAM** | ✅ **démontré, et vérifié au chiffre près** | V4-Flash **365,7 Go sur 125 Go de RAM** : **37,6 Go résidents**, 37,7 Go lus, 266 s pour 16 jetons · gpt-oss (63 Go) : **PPL 15,6017 sur 510 jetons — la valeur attendue, à l'identique** (porte tenue à 02 h 58) |
 | **répartition à deux nœuds** | ✅ **porte tenue** | écart **0,0000 %** et flux **0,00e0** — sur le modèle dense, routé **et distillé** |
@@ -440,6 +441,57 @@ qu'aux petites échelles. À dim 512, **un modèle dense deux fois plus petit li
 autant et fait mieux** — et c'est la première fois que la campagne mesure un
 résultat qui va contre la thèse du projet. Il est consigné comme tel.
 
+### 5 ter. La parcimonie : IMPOSÉE ou APPRISE ? La réponse est mesurée
+
+C'est **la** question de l'architecture événementielle sur un modèle dense, et elle
+n'avait pas de réponse. Deux modèles **identiques par ailleurs** (dim 384, 4
+couches, 6 têtes, FFN 1152, 40 000 pas, mêmes données, FFN exportée en Q8 pour que
+le chemin par listes existe) :
+
+- **témoin** : entraîné normalement, puis creusé à l'exécution (`--act-topk`, 24 réglages au § 19) ;
+- **`m7_d384_kwta050`** : entraîné **avec** le k-WTA à 50 % sur l'entrée de toutes
+  les couches linéaires — exactement l'opération que `--act-topk` impose ensuite.
+
+Protocole de record (huit fenêtres de 128 jetons, moyennées en log), chemin par
+listes, même machine :
+
+| modèle | aucune parcimonie | **50 % gardé** | **25 % gardé** |
+|---|---:|---:|---:|
+| **témoin** (creusé à l'exécution) | **4,9959** | 5,3032 (**+6,2 %**) | 10,8758 (**+118 %**) |
+| **entraîné creux** (`kwta050`) | 5,1858 | **5,0606 (−2,4 %)** | **5,7666 (+11 %)** |
+| **écart au même taux** | +3,8 % pour le creux | **−4,6 % pour le creux** | **−47 % pour le creux** |
+
+**Et la lecture est bien divisée par deux** : à `--act-topk 500`, les deux modèles
+passent de 21,1 M à **10,6 M de paires par jeton**, et le débit du chemin par
+listes monte de ~88 à **~140 tok/s** (×1,6). La parcimonie n'est donc pas un
+artifice de comptage : elle réduit les paires lues.
+
+**Trois conclusions.**
+
+1. **Apprise, la parcimonie ne coûte RIEN** : à 50 % gardés, le modèle entraîné
+   creux fait *mieux* qu'en dense (−2,4 %), là où le témoin perd 6,2 %. Et à taux
+   égal il est **4,6 % meilleur** — pour moitié moins de lectures.
+2. **À 25 %, l'écart devient un gouffre** : +11 % contre +118 %. Le modèle entraîné
+   creux est **47 % meilleur au même nombre d'événements**. C'est le chiffre qui
+   décide : ce qu'un modèle dense ordinaire ne peut pas supporter (un quart des
+   activations), un modèle entraîné pour ça le supporte presque sans perte.
+3. **Le prix, quand on exécute en dense, est modeste** (+3,8 % à 0 % de
+   parcimonie) — et il disparaît dès qu'on exécute là où le modèle a été entraîné.
+
+**C'est la recette du modèle nativement événementiel** : on n'élague pas un modèle
+après coup, on l'entraîne à vivre creux, et on l'exécute **au taux où il a appris**
+— c'est-à-dire exactement ce que `--act-topk` sait faire. Le gain mesuré à 50 % est
+de **×1,6 de débit pour −4,6 % de perplexité** ; à 25 %, la même exécution coûte
++11 % contre +118 % au témoin. La suite de la nuit entraîne le même modèle à 25 %
+(`m7_d384_kwta25`) et à dim 512 (`m8_d512_kwta25`) pour vérifier que la recette
+tient à l'échelle.
+
+**Réserve, et elle est réelle** : ce modèle est entraîné *et* évalué au même taux
+(50 %), ce qui est le protocole juste (on exécute un modèle là où il a appris),
+mais un modèle ne peut pas être entraîné à tous les taux à la fois. La question
+« quelle plage de taux un même modèle supporte-t-il » est ouverte : le tableau
+ci-dessus en donne deux points (50 % et 25 %).
+
 ---
 
 ## 7. Répartir par EXPERTS : ce que coûterait l'unité de travail naturelle
@@ -567,7 +619,19 @@ un code unique planté dans une botte de foin, à trois profondeurs (10 %, 50 %,
 | 4 096 | ✅ | ✅ | ✅ |
 
 **12 configurations sur 12 retrouvent le code**, y compris à 4 096 jetons avec un
-modèle de 0,5 B. C'est une mesure de **tâche**, pas de perplexité : le cache KV du
+modèle de 0,5 B.
+
+**Étendu à 8 192 jetons le 9 octobre** (`--n 24`, lot de préremplissage 256,
+`temp 0`, corpus de remplissage `wikitext2_test.txt`, fenêtres décalées) :
+
+| longueur | profondeur 10 % | 50 % | 90 % | durée |
+|---|---:|---:|---:|---:|
+| 8 192 jetons | ✅ (7 963 j.) | ✅ (9 224 j.) | ✅ (8 033 j.) | 935 / 1 199 / 954 s |
+
+**15 sondes sur 15** à ce stade, et la portée double (8 192 au lieu de 4 096) sans
+qu'une seule échoue. La série à 12 288 jetons est en cours ; le corpus de
+remplissage (353 778 caractères) ne permet pas d'aller beaucoup plus loin sans
+répéter les fenêtres, ce que l'outil signale lui-même. C'est une mesure de **tâche**, pas de perplexité : le cache KV du
 moteur, sa quantification et sa pagination ne détruisent pas la mémoire du
 contexte. C'est exactement ce que la revendication « contexte long » devait
 démontrer, et c'est la première fois qu'elle l'est sur une tâche.

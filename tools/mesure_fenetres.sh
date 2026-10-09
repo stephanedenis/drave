@@ -46,28 +46,43 @@ fi
 [ -s "$IDS" ] || { echo "identifiants indisponibles"; exit 3; }
 
 echo "# $ETIQ · $FENETRES fenêtres de $TAILLE jetons · $CHEMINS · $(cut -d' ' -f1 /proc/loadavg) de charge"
-NLL_TMP=$(mktemp); n_fenetres=0
+NLL_DIR=$(mktemp -d); n_fenetres=0
 for w in $(seq 1 "$FENETRES"); do
     depuis=$(( (w - 1) * TAILLE ))
-    for chemin in $CHEMINS; do
+    # `--chemins` porte UN ou PLUSIEURS jeux d'options, séparés par « ; ». Le
+    # découpage par espaces était un piège : « --push --act-topk 500 » devenait
+    # TROIS chemins, dont deux invalides, et la moyenne portait sur autre chose
+    # que ce qui était demandé (mesuré : un « 0 événements » inexplicable).
+    while IFS= read -r chemin; do
+        [ -n "$chemin" ] || continue
         sortie=$(timeout 1800 $D "$MODELE" --ppl "$IDS" --limit "$TAILLE" --depuis "$depuis" \
                      --ctx $(( TAILLE * 2 )) --threads "$THREADS" $chemin 2>&1)
         ppl=$(echo "$sortie" | grep -oE "perplexité [0-9.]+ sur" | grep -oE "[0-9.]+" | tail -1)
         jetons=$(echo "$sortie" | grep -oE "sur [0-9]+ tokens" | grep -oE "[0-9]+" | tail -1)
         paires=$(echo "$sortie" | grep -oE "paires \(poids × activation\) par token : .*" | head -1 | sed 's/.*total //')
         ev=$(echo "$sortie" | grep -oE "\((\s*[0-9]+) événements" | grep -oE "[0-9]+" | head -1)
+        # Le DÉBIT est mesuré sous la charge du moment : il n'est publiable qu'avec
+        # elle, mais il est indispensable pour dire ce que le moteur rend vraiment.
+        ts=$(echo "$sortie" | grep -oE "[0-9.]+ tok/s effectifs" | grep -oE "^[0-9.]+")
         printf "  %-4s fenêtre %d (depuis %d) : PPL %-10s %s jetons" \
                "$chemin" "$w" "$depuis" "${ppl:-?}" "${jetons:-?}"
         [ -n "$paires" ] && printf " · %s paires/jeton" "$paires"
         [ -n "$ev" ] && printf " · %s événements" "$ev"
+        [ -n "$ts" ] && printf " · %s tok/s" "$ts"
         printf "\n"
         if [ -n "$ppl" ]; then
-            echo "$ppl" >> "$NLL_TMP"          # bc n'est pas installé : on
-            n_fenetres=$((n_fenetres + 1))     # moyenne en log avec awk
+            # UN FICHIER PAR CHEMIN : moyenner ensemble le dense et le creux
+            # donnerait un chiffre qui ne décrit ni l'un ni l'autre (mesuré : une
+            # « moyenne sur 24 fenêtres » qui mélangeait trois exécutions).
+            cle=$(printf '%s' "$chemin" | tr -c 'A-Za-z0-9' '_')
+            echo "$ppl" >> "$NLL_DIR/$cle"
+            n_fenetres=$((n_fenetres + 1))
         fi
-    done
+    done <<< "$(printf '%s' "$CHEMINS" | tr ';' '\n')"
 done
-if [ "$n_fenetres" -gt 0 ]; then
-    awk '{ s += log($1); n++ } END { printf "  → PPL moyenne (log) sur %d fenêtres : %.4f\n", n, exp(s/n) }' "$NLL_TMP"
-fi
-rm -f "$NLL_TMP"
+for f in "$NLL_DIR"/*; do
+    [ -s "$f" ] || continue
+    nom=$(basename "$f" | tr '_' ' ')
+    awk -v nom="$nom" '{ s += log($1); n++ } END { printf "  → %-42s PPL moyenne (log) sur %d fenêtres : %.4f\n", nom, n, exp(s/n) }' "$f"
+done
+rm -rf "$NLL_DIR"

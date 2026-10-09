@@ -14958,3 +14958,130 @@ ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add reports/rapport-campagne-benefices.md && git commit -q -m \"Spéculatif : c'est le RAPPORT DE COÛT qui décide, et il est minimal sur un modèle plus gros que la RAM\n\nTroisième paire mesurée par le moteur — un brouillon minusc … [904 caractères tronqués]`
+
+  ```
+b15d1a0 Spéculatif : c'est le RAPPORT DE COÛT qui décide, et il est minimal sur un modèle plus gros que la RAM
+  ```
+
+- **bash** `{"command": "sleep 580; cd /tmp/campagne24 && echo \"=== aiguille ===\"; tail -3 aiguille_long.log; echo \"=== kwta50 ===\"; tail -1 tr_m7_d384_kwta050.log; echo \"=== journal7 ===\"; tail -3 journal7.txt", "description": "Poll needle and sparse training", "timeoutMs": 620000}`
+
+  ```
+=== aiguille ===
+     8192        0.10     oui     935.2  prompt 7963 jetons
+     8192        0.50     oui    1199.3  prompt 9224 jetons
+     8192        0.90     oui     954.1  prompt 8033 jetons
+=== kwta50 ===
+  pas  36000 · perte 1.2419 · val 2.0421 bits/octet · 2916 s
+=== journal7 ===
+[08/10 23:02:55] charge 67.93 · === batch 5 terminé ===
+[09/10 03:22:02] charge 21.13 · === GPU libre : deux modèles creux à entraîner (dim 384, 40 000 pas, mêmes réglages que le témoin) ===
+[09/10 03:22:02] charge 21.13 · m7_d384_kwta050 : départ (k-WTA gardant 0.50)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\nvieux = \"\"\"**12 configurations sur 12 retrouvent le code**, y compris à 4 096 jetons avec un\nmodèle de 0,5 B.\"\"\" … [940 caractères tronqués]`
+
+  ```
+ok
+572:**Étendu à 8 192 jetons le 9 octobre** (`--n 24`, lot de préremplissage 256,
+  ```
+
+- **bash** `{"command": "sleep 500; cd /tmp/campagne24 && echo \"=== journal7 (kwta) ===\"; tail -4 journal7.txt; echo \"=== aiguille ===\"; tail -2 aiguille_long.log", "description": "Check the sparse-training chain results", "timeoutMs": 540000}`
+
+  ```
+=== journal7 (kwta) ===
+[09/10 03:22:02] charge 21.13 · === GPU libre : deux modèles creux à entraîner (dim 384, 40 000 pas, mêmes réglages que le témoin) ===
+[09/10 03:22:02] charge 21.13 · m7_d384_kwta050 : départ (k-WTA gardant 0.50)
+[09/10 04:16:27] charge 15.62 · m7_d384_kwta050 :   # meilleur point : pas 40000 · val 2.0205 bits/octet
+[09/10 04:16:27] charge 15.62 · m7_d384_kwta025 : départ (k-WTA gardant 0.25)
+=== aiguille ===
+     8192        0.50     oui    1199.3  prompt 9224 jetons
+     8192        0.90     oui     954.1  prompt 8033 jetons
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification anticipée : le modèle creux appris bat-il le témoin à top-k imposé égal ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && P=/home/stephane/gpu-env/bin/python; for m in m7_d384_kwta050 m5_d384_dense; do DRAVE_FFN_Q8=1 $P tools/exporter_gguf.py --hf /tmp/$m --sortie /tmp/${m}_q8.gguf > /tmp/campagne24/exp_${m}_q8.log 2>&1; done; ls -la /tmp/m7_d384_kwta05 … [599 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 7748320  9 oct 04:23 /tmp/m5_d384_dense_q8.gguf
+-rw-r--r--. 1 stephane stephane 7748320  9 oct 04:23 /tmp/m7_d384_kwta050_q8.gguf
+m5_d384_dense_q8 sans :   --push fenêtre 4 (depuis 384) : PPL 4.9309     128 jetons · 21.1 M paires/jeton · 2693570350 événements · 86.5 tok/s   → PPL moyenne (log) sur 4 fenêtres : 5.0400 
+m5_d384_dense_q8 topk500 :   500  fenêtre 4 (depuis 384) : PPL 4.9276     128 jetons · 21.3 M paires/jeton · 0 événements · 248.7 tok/s   → PPL moyenne (log) sur 8 fenêtres : 5.0393 
+m7_d384_kwta050_q8 sans :   --push fenêtre 4 (depuis 384) : PPL 5.4487     128 jetons · 21.1 M paires/jeton · 2690476710 événements · 87.8 tok/s   → PPL moyenne (log) sur 4 fenêtres : 5.1835 
+m7_d384_kwta050_q8 topk500 :   500  fenêtre 4 (depuis 384) : PPL 5.4485     128 jetons · 21.3 M paires/jeton · 0 événements · 230.1 tok/s   → PPL moyenne (log) sur 8 fenêtres : 5.1838
+  ```
+
+### 🤖 Assistant
+
+⏵ Correction d'un défaut du harnais : `--chemins` était découpé en mots
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"tools/mesure_fenetres.sh\")\ns = p.read_text()\nvieux = \"\"\"    for chemin in $CHEMINS; do\"\"\"\nassert vieux in s\nneuf = \"\"\"    # `--chemins` porte UN ou PLUSIEURS jeux d'o … [1320 caractères tronqués]`
+
+  ```
+ok
+syntaxe OK
+# test · 2 fenêtres de 128 jetons · --push;--push --act-topk 500 · 20.20 de charge
+  --push fenêtre 1 (depuis 0) : PPL 3.7169     127 jetons · 7.2 M paires/jeton · 897753869 événements · 242.9 tok/s
+  --push --act-topk 500 fenêtre 1 (depuis 0) : PPL 3.6521     127 jetons · 3.6 M paires/jeton · 449348892 événements · 396.8 tok/s
+  --push fenêtre 2 (depuis 128) : PPL 7.5826     128 jetons · 14.1 M paires/jeton · 1795717398 événements · 119.6 tok/s
+  --push --act-topk 500 fenêtre 2 (depuis 128) : PPL 8.5630     128 jetons · 7.1 M paires/jeton · 898696965 événements · 198.9 tok/s
+  → PPL moyenne (log) sur 4 fenêtres : 5.4487
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for m in m5_d384_dense_q8 m7_d384_kwta050_q8; do echo \"=== $m ===\"; bash tools/mesure_fenetres.sh /tmp/$m.gguf --fenetres 8 --taille 128 --threads 8 --chemins \"--push;--push --act-topk 500;--push --act-topk 250\" --etiquette \"$m\ … [168 caractères tronqués]`
+
+  ```
+=== m5_d384_dense_q8 ===
+  --push fenêtre 8 (depuis 896) : PPL 4.7438     128 jetons · 21.1 M paires/jeton · 2693471323 événements · 88.2 tok/s
+  --push --act-topk 500 fenêtre 8 (depuis 896) : PPL 5.3099     128 jetons · 10.6 M paires/jeton · 1348047598 événements · 137.2 tok/s
+  --push --act-topk 250 fenêtre 8 (depuis 896) : PPL 12.3450    128 jetons · 5.4 M paires/jeton · 674011677 événements · 209.1 tok/s
+  → PPL moyenne (log) sur 24 fenêtres : 6.6050
+=== m7_d384_kwta050_q8 ===
+  --push fenêtre 8 (depuis 896) : PPL 4.6217     128 jetons · 21.1 M paires/jeton · 2690506967 événements · 87.9 tok/s
+  --push --act-topk 500 fenêtre 8 (depuis 896) : PPL 4.6202     128 jetons · 10.6 M paires/jeton · 1347644989 événements · 141.5 tok/s
+  --push --act-topk 250 fenêtre 8 (depuis 896) : PPL 5.9702     128 jetons · 5.4 M paires/jeton · 673812937 événements · 211.7 tok/s
+  → PPL moyenne (log) sur 24 fenêtres : 5.3290
+  ```
+
+### 🤖 Assistant
+
+⏵ Correction du harnais : une moyenne PAR chemin, pas une moyenne mélangée
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"tools/mesure_fenetres.sh\")\ns = p.read_text()\ns = s.replace('''NLL_TMP=$(mktemp); n_fenetres=0''', '''NLL_DIR=$(mktemp -d); n_fenetres=0''')\ns = s.replace('''        if [ -n \"$ … [1450 caractères tronqués]`
+
+  ```
+ok
+syntaxe OK
+  --push --act-topk 500 fenêtre 2 (depuis 128) : PPL 8.5630     128 jetons · 7.1 M paires/jeton · 898696965 événements · 204.2 tok/s
+  →   push                                     PPL moyenne (log) sur 2 fenêtres : 5.3088
+  →   push   act topk 500                      PPL moyenne (log) sur 2 fenêtres : 5.5922
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for m in m5_d384_dense_q8 m7_d384_kwta050_q8; do echo \"=== $m ===\"; bash tools/mesure_fenetres.sh /tmp/$m.gguf --fenetres 8 --taille 128 --threads 8 --chemins \"--push;--push --act-topk 500;--push --act-topk 250\" --etiquette \"$m\ … [109 caractères tronqués]`
+
+  ```
+=== m5_d384_dense_q8 ===
+  →   push                                     PPL moyenne (log) sur 8 fenêtres : 4.9959
+  →   push   act topk 250                      PPL moyenne (log) sur 8 fenêtres : 10.8758
+  →   push   act topk 500                      PPL moyenne (log) sur 8 fenêtres : 5.3032
+=== m7_d384_kwta050_q8 ===
+  →   push                                     PPL moyenne (log) sur 8 fenêtres : 5.1858
+  →   push   act topk 250                      PPL moyenne (log) sur 8 fenêtres : 5.7666
+  →   push   act topk 500                      PPL moyenne (log) sur 8 fenêtres : 5.0606
+  ```
+
+### 🤖 Assistant
+
+⏵ Résultat décisif : la parcimonie apprise ne coûte rien à 50 %, l'imposée coûte 6 %
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\nancre = \"\"\"---\n\n## 7. Répartir par EXPERTS : ce que coûterait l'unité de travail naturelle\"\"\"\nassert ancre in  … [4031 caractères tronqués]`
+
+  ```
+ok
+48:| **parcimonie APPRISE** | ✅ **la réponse qui décide** | à 50 % gardés : témoin **+6,2 %**, modèle entraîné creux **−2,4 %** · à 25 % : **+118 % contre +11 %** — le creux est **47 % meilleur au même nombre d'événements**, et le débit par listes passe à **×1,6** (§ 5 ter) |
+444:### 5 ter. La parcimonie : IMPOSÉE ou APPRISE ? La réponse est mesurée
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add reports/rapport-campagne-benefices.md tools/mesure_fenetres.sh && git commit -q -m \"Parcimonie IMPOSÉE ou APPRISE : la réponse est mesurée, et elle est nette\n\nDeux modèles identiques par ailleurs (dim 384, mêmes pas, FFN e … [1074 caractères tronqués]`

@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 18.9 h |
+| Durée | 19.2 h |
 | Tours | 27 |
-| Messages | 893 |
-| Appels d'outils | 857 |
+| Messages | 903 |
+| Appels d'outils | 867 |
 | Fichiers touchés | 28 |
-| Commandes | 691 |
+| Commandes | 701 |
 | Sous-agents | 3 |
-| Commits | 53 |
+| Commits | 54 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -1270,7 +1270,7 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 
 ### Tour 27 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1477 caractères tronqués]
 
-*248 appels d'outils.* Actions notables :
+*258 appels d'outils.* Actions notables :
 
 - bash — Check the full state
 - bash — Measure the distilled d384 with the correct protocol
@@ -1286,11 +1286,11 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - bash — Read parcimonie, contexte, lot steps
 - bash — Inspect batch2 script
 - bash — Read batch2 journal and latency map
-- … et 216 autres
+- … et 226 autres
 
 **Synthèse produite :**
 
-⏵ Troisième paire spéculative : le brouillon minuscule donne ×1,52 — le verdict s'inverse en grande cible
+⏵ Résultat décisif : la parcimonie apprise ne coûte rien à 50 %, l'imposée coûte 6 %
 
 ## 3. Travail accompli
 
@@ -1375,7 +1375,7 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 651 autres
+- … et 661 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1576,4 +1576,5 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - Dim 512 : le routage seul perd, le routé DISTILLÉ gagne de 5,2 %  La courbe d'échelle est complète, et elle a deux branches :    dim 256 : dense 5,0155 -> routé
 - Rapport du modèle : la courbe d'échelle 256/384/512, et le routage qui s'inverse  Trois paires entraînées au même protocole, mesurées au protocole de record : l
 - Spéculatif : c'est le RAPPORT DE COÛT qui décide, et il est minimal sur un modèle plus gros que la RAM  Troisième paire mesurée par le moteur — un brouillon min
+- Parcimonie IMPOSÉE ou APPRISE : la réponse est mesurée, et elle est nette  Deux modèles identiques par ailleurs (dim 384, mêmes pas, FFN en Q8 pour que le chemi
 
