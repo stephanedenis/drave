@@ -19020,3 +19020,37 @@ pas  12000 · perte 1.3114 · val 2.1462 bits/octet · 1245 s
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\ns = s.rstrip() + \"\"\"\n\n---\n\n## Annexe — manifeste des journaux\n\nLes journaux bruts sont dans `/tmp/campagne24/` … [2259 caractères tronqués]`
+
+  ```
+annexe ajoutée
+poussé
+  pas  12000 · perte 1.3114 · val 2.1462 bits/octet · 1245 s
+  ```
+
+- **bash** `{"command": "date '+%H:%M:%S'; stat -c \"%y\" /tmp/campagne24/tr_m17_d512_kwta25_elag50.log; ps -eo pid,etime,pcpu,args | grep -E \"entrainer_moteur\" | grep -v grep | cut -c1-90; nvidia-smi --query-gpu=index,utilization.gpu --format=csv,noheader", "description": "Verify m17 is progressing"}`
+
+  ```
+15:35:05
+2026-10-09 15:28:17.248180285 -0400
+2259452       27:39  100 /home/stephane/gpu-env/bin/python -u tools/entrainer_moteur.py --
+0, 99 %
+1, 18 %
+  ```
+
+- **bash** `{"command": "sleep 595; tail -1 /tmp/campagne24/tr_m17_d512_kwta25_elag50.log", "description": "Poll m17", "timeoutMs": 620000}`
+
+  ```
+pas  20000 · perte 1.3413 · val 2.1025 bits/octet · 2072 s
+  ```
+
+- **bash** `{"command": "sleep 595; tail -1 /tmp/campagne24/tr_m17_d512_kwta25_elag50.log; grep -E \"m17\" /tmp/campagne24/journal15.txt 2>/dev/null | tail -2", "description": "Poll m17", "timeoutMs": 620000}`
+
+  ```
+pas  24000 · perte 1.3312 · val 2.0407 bits/octet · 2483 s
+  ```
+
+### 🤖 Assistant
+
+⏵ Mise à jour de la clôture du rapport de campagne (état réel de la file)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\ndebut = s.index(\"## 23. Ce qui reste à mesurer\")\nfin = s.index(\"## Annexe — manifeste des journaux\")\nneuf = \"\"\ … [2130 caractères tronqués]`

@@ -1403,43 +1403,26 @@ première chose à faire quand il arrivera est de refaire **la même mesure de d
 
 ---
 
-## 23. Ce qui reste à mesurer (état de la file, 9 octobre 5 h 20)
+## 23. Ce qui reste à mesurer (état de la file, 9 octobre 16 h)
 
-**Fait depuis la première rédaction de cette liste** : `parcimonie` (§ 19 et 19 bis),
-`contexte` et `lot` (§ 20), `routage` (§ 7), `semantique` (§ 18), `noyau` (§ 21),
-`repartition` (§ 8 et porte tenue), `portes` (**23 vertes, 0 rouge** — § 0 ter),
-`batch 2` (§ 10 ter, quatre corpus), `batch 3` (§ 9, étendu à 12 288 jetons),
-les paires entraînées (§ 5 et 5 bis, trois échelles), l'équivalence bit à bit (§ 22),
-la tête restreinte sur gpt-oss (§ 13), le lot à froid avec éviction (§ 14 bis),
-la carte de latence (§ 8 bis), les trois paires spéculatives (§ 1 bis), et **la
-réponse à « imposée ou apprise »** (§ 5 ter).
+**Tout ce que la campagne devait mesurer est mesuré**, et chaque famille a sa ligne
+au § 0 bis. Ce qui reste ouvert n'est pas de la mesure en retard, c'est du **travail
+identifié** — et il est consigné dans [`docs/manques.md`](manques.md) plutôt que dans
+une liste d'attente :
 
-**Encore en file au moment d'écrire :**
-
-| file | état |
+| ce qui reste | où c'est écrit |
 |---|---|
-| **`m8_d512_kwta25`** (dense 512, k-WTA 25 % appris) | en entraînement depuis 5 h 05 ; mesuré ensuite à 0 %, 50 %, 25 % **et en dense à 25 %** (le chemin dense contre les listes, à taux égal — la première fois que les listes peuvent gagner sur un modèle dense) |
-| **aiguille à 12 288 jetons** | 1 profondeur sur 3 (11 857 jetons ✅) ; les deux autres relancées après un délai dépassé — chaque sonde coûte 20 à 30 minutes |
-| **`m9_d384_kwta25_distille`** | creux **et** distillé : les deux leviers se cumulent-ils ? En file après la chaîne 512 |
-| **`m9_d512_route_long`** | le routé 512 avec **80 000 pas** au lieu de 40 000 : l'hypothèse « sous-entraîné » est-elle la bonne ? |
-
-**Manques qui restent des manques, et rien ne les a entamés :**
-
-| manque | état exact |
-|---|---|
-| **embeddings / encodeurs** | `bge-m3` est lisible en en-tête et **inexécutable** : ni attention bidirectionnelle, ni pooling. C'est le manque le plus net du relevé |
-| **experts en listes (Q8)** | le chargeur d'experts refuse les tenseurs Q8_0 (« format sans noyau ni déquantification ») : **un modèle routé ne peut pas être exécuté en listes**. Tant que ce noyau n'existe pas, « routage + activations creuses » n'existe pas non plus |
-| **décodage spéculatif** | le gain est démontré dans la niche (×1,52 pour un brouillon à 0,039× de sa cible), mais **aucune ligne de moteur n'est écrite** : vérifier k jetons d'un coup demande de brancher le préremplissage par lots sur le décodage |
-| **qualité des modèles plus gros que la RAM** | le § 12 ne mesure que l'existence et le coût (365,7 Go sur 125 Go) ; la perplexité publiée pour V4-Flash n'a aucune valeur, et c'est écrit |
-| **lot sur un modèle plus gros que la RAM** | **impossible aujourd'hui** : le seul modèle > RAM de la machine (V4.1, hyper-connexions) **refuse** le chemin par lots — « le résidu y est additionné au lieu d'être remélangé par `hc_post` ». Le moteur a raison de refuser (ce ne serait pas le même modèle), mais la question « le lot amortit-il les lectures du disque » reste **ouverte** |
-| **codestral corrigé sur 256 jetons** | le run de contrôle a expiré sous la contention ; la valeur publiée reste celle à **63 jetons** (117,91), obtenue avec le binaire corrigé |
+| huit manques du **moteur** (noyau de listes pour les experts, noyau de listes sur GPU, lot et hyper-connexions, encodeurs, décodage spéculatif, apprentissage embarqué, qualité des modèles > RAM, défaut de sauvegarde du modèle log-normal) | `docs/manques.md` § 1 |
+| quatre manques du **modèle** (structure innée à l'échelle, deux axes à l'échelle, règle locale, trois dessins inédits jamais entraînés) | `docs/manques.md` § 2 |
+| douze capacités d'**architecture** pour porter un cerveau, en six phases à portes mesurées | `docs/plan-cerveau-complet.md` |
+| la **courbe lecture ↔ qualité** complète, y compris à dim 512 | § 5 quater, complété à 16 h 30 |
+| la **modularisation** (espace de travail Cargo, profil d'itération, verrous par ressource) | `docs/modularisation.md` |
 
 **Ce que la fenêtre a établi, en une ligne par famille** : le verdict du § 0 bis.
-**Ce qu'elle a coûté en corrections** : cinq pièges de méthode (§ 16, § 17), dont
-un binaire plus vieux que ses correctifs et une porte qui ne pouvait pas passer.
-**Ce qu'elle laisse d'ouvert** : les cinq manques ci-dessus, dont deux — les
-encodeurs et le noyau Q8 des experts — sont des chantiers de code identifiés, pas
-des inconnues.
+**Ce qu'elle a coûté en corrections** : cinq pièges de méthode (§ 16, § 17), dont un
+binaire plus vieux que ses correctifs et une porte qui ne pouvait pas passer.
+**Ce qu'elle laisse** : un modèle dont le coût se choisit à la conception (÷4 pour
++1 %, ÷8 pour +4 %), et un plan — pas une promesse — pour le reste.
 
 ---
 

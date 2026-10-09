@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 30.4 h |
+| Durée | 30.7 h |
 | Tours | 35 |
-| Messages | 1208 |
-| Appels d'outils | 1144 |
+| Messages | 1212 |
+| Appels d'outils | 1148 |
 | Fichiers touchés | 37 |
-| Commandes | 953 |
+| Commandes | 957 |
 | Sous-agents | 3 |
-| Commits | 103 |
+| Commits | 104 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -1641,15 +1641,18 @@ Plus quatre manques du **modèle**, les douze capacités d'**architecture**, et 
 
 ### Tour 35 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1477 caractères tronqués]
 
-*3 appels d'outils.* Actions notables :
+*7 appels d'outils.* Actions notables :
 
 - bash — Poll the two-axis model at dim 512
 - bash — Build the campaign log manifest
 - bash — Add the log manifest appendix and push
+- bash — Verify m17 is progressing
+- bash — Poll m17
+- bash — Update the campaign report's closing section
 
 **Synthèse produite :**
 
-⏵ Fabrication du manifeste des journaux de la campagne (livrable vérifiable)
+⏵ Mise à jour de la clôture du rapport de campagne (état réel de la file)
 
 ## 3. Travail accompli
 
@@ -1743,7 +1746,7 @@ Plus quatre manques du **modèle**, les douze capacités d'**architecture**, et 
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 913 autres
+- … et 917 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1994,4 +1997,5 @@ Plus quatre manques du **modèle**, les douze capacités d'**architecture**, et 
 - Dim 512 : la structure innée coûte +6,7 % (contre +1,0 % à dim 384) pour ÷3,7 de lectures  m16_d512_masque25 (masque aléatoire de 25 % des connexions, figé à la
 - Registre consolidé des manques — le capstone que l'objectif demande  docs/manques.md : huit manques du MOTEUR (noyau de listes pour les experts — mesuré par le 
 - Annexe : manifeste des journaux de la campagne (59 fichiers d'étape, 79 Kio, 17 journaux de chaînes)  Le livrable « la file exécutée et ses journaux » est maint
+- Clôture du rapport : ce qui reste n'est plus de la mesure en retard mais du travail identifié  Le § 23 renvoie désormais au registre des manques et au plan des 
 
