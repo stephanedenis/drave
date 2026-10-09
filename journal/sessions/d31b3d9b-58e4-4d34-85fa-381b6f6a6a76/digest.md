@@ -7720,3 +7720,149 @@ The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagn
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 git add reports/rapport-campagne-benefices.md && timeout 300 git commit -q -m \"Campagne : les quatre premiers modèles entraînés passent la porte du moteur\n\nChaîne automatique : chaque dossier d'entraînement est exporté … [1066 caractères tronqués]`
+
+  ```
+d8e1311 Campagne : les quatre premiers modèles entraînés passent la porte du moteur
+  ```
+
+- **bash** `{"command": "pkill -f \"export_continu.s[h]\" 2>/dev/null; sleep 2; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"/tmp/campagne24/export_continu.sh\"; s=open(p).read()\ns = s.replace('''        nom=$(basename \"$dossier\")\n        grep -qx \"$nom\" \"$FAIT\" && continu … [1254 caractères tronqués]`
+
+  ```
+(no output)
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "pgrep -af \"export_contin\" | head -3; echo \"--- patch appliqué ? ---\"; grep -c \"model.safetensors\" /tmp/campagne24/export_continu.sh; ls -la /tmp/campagne24/exportes.txt 2>/dev/null", "description": "Check export loop state after the kill"}`
+
+  ```
+3732892 bash -c pgrep -af "export_contin" | head -3; echo "--- patch appliqué ? ---"; grep -c "model.safetensors" /tmp/campagne24/export_continu.sh; ls -la /tmp/campagne24/exportes.txt 2>/dev/null
+--- patch appliqué ? ---
+0
+-rw-r--r--. 1 stephane stephane 28  8 oct 21:49 /tmp/campagne24/exportes.txt
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"/tmp/campagne24/export_continu.sh\"; s=open(p).read()\ns = s.replace('''        nom=$(basename \"$dossier\")\n        grep -qx \"$nom\" \"$FAIT\" && continue\n        echo \"$nom\" >> \"$FAIT\"''',\n'''        n … [1049 caractères tronqués]`
+
+  ```
+patch appliqué : 1
+syntaxe OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && setsid nohup bash /tmp/campagne24/export_continu.sh > /dev/null 2>&1 < /dev/null & sleep 90; tail -4 /tmp/campagne24/journal4.txt; echo \"=== vivants ===\"; pgrep -c -f \"export_contin\" 2>/dev/null; pgrep -c -f \"campagne-benefic\"  … [87 caractères tronqués]`
+
+  ```
+[08/10 21:49:56] charge 26.98 · m5_d256_dense : PPL 5.3973 · paires 3.2 M · événements 732865376 · 438.3 tok/s · porte 1
+[08/10 21:50:09] charge 28.03 · m5_d384_dense : PPL 5.3719 · paires 7.2 M · événements 1648531958 · 240.2 tok/s · porte 1
+=== vivants ===
+3
+4
+  ```
+
+### 🤖 Assistant
+
+⏵ Mi-parcours : deux modèles entraînés passent la porte, la nuit est armée
+
+## Ce qui a atterri depuis le dernier point
+
+**Les modèles entraînés passent la porte du moteur, automatiquement.** J'ai armé une chaîne qui exporte, calcule la référence PyTorch **sur les mêmes poids quantifiés**, passe la porte de logits, puis mesure dans le moteur :
+
+| modèle | val (bits/octet) | PPL moteur | paires/jeton | événements/jeton | tok/s | porte |
+|---|---:|---:|---:|---:|---:|---|
+| `m5_d256_dense` (3,2 M) | 2,007 | **5,3973** | 3,2 M | 732,9 M | 438,3 | ✅ |
+| `m5_d384_dense` (7,2 M) | 1,919 | **5,3719** | 7,2 M | 1 648,5 M | 240,2 | ✅ |
+
+**Le rendement décroît vite** : 2,25× plus de paramètres lus n'apporte que **0,5 %** de perplexité et coûte **1,8× de débit**. C'est exactement l'argument du modèle qui *stocke* plus sans *lire* plus — ce que les deux routés de la même paire vont trancher.
+
+Et j'ai consigné une mise en garde qui évite une erreur facile : la colonne « val » (16 000 jetons répartis) et la colonne « PPL moteur » (les 256 premiers octets) **ne mesurent pas la même tranche de texte** — 34 % d'écart systématique, qui n'est pas un défaut du moteur.
+
+**La distillation est implémentée** — le levier que l'inventaire du dépôt notait « mentionné, jamais réalisé ». L'élève creux imite la distribution entière d'un dense gelé, pas seulement son argmax. Piège corrigé au passage : `kl_div(reduction="batchmean")` divise par la taille du **lot**, pas par le nombre de jetons — sur des logits (lot, séquence, vocabulaire) la KL sortait **128 fois trop grande** (perte 622 mesurée, contre ~7 après correction).
+
+## La nuit est armée
+
+- **GPU 0** : distillation du routé dim 256 (enseignant = dense dim 384) → puis **dim 512 dense** → puis **dim 512 routé, 16 experts**.
+- **GPU 1** : **dim 384 routé distillé** — le témoin non distillé existe déjà, seul le terme de KL change.
+- **CPU/disque** : la file de campagne continue (codestral-22B en cours, puis Qwen3-30B-A3B, puis **gpt-oss-120b depuis le disque dur**), puis batch 2 (densité par tâche), batch 3 (aiguille dans la botte de foin), et l'export continu à chaque modèle.
+
+Tout est commité (`d8e1311`), et les journaux sont horodatés avec la charge de fond — parce qu'elle a déjà atteint 47 pendant la passe du 14B, et qu'un temps mesuré sous cette charge ne se compare pas à un temps mesuré sous charge 3.
+
+
+## Tour 12
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, préremplissage par lots, modèle plus gros que la RAM. Poursuivre en parallèle le livrable du modèle nativement événementiel : entraîné ici, exécuté par Drave à logits vérifiés, découpé en unités réparties. Chaque affirmation porte sa mesure (perplexité, débit, octets et événements par jeton, RSS, écart entre nœuds) ET ses conditions (corpus, tokenizer du modèle, charge de fond) ; les manques constatés — embeddings/encodeurs, décodage spéculatif — sont consignés comme manques, pas comme résultats. Livrables : la file tools/campagne-benefices.sh exécutée et ses journaux, un rapport de synthèse par famille de tâches, et la poursuite du modèle événementiel."
+Round: 5/40
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "date; tail -6 /tmp/campagne24/journal.txt; echo \"=== codestral ===\"; ls -la /tmp/campagne24/grille_codestral-22B* 2>/dev/null | awk '{print $5, $9}'; tail -3 /tmp/campagne24/grille_codestral-22B_ppl.log 2>/dev/null; echo \"=== entraînements ===\"; ls /tmp/m5_d256_route/config.json 2>/ … [150 caractères tronqués]`
+
+  ```
+jeu 08 oct 2026 21:53:55 EDT
+[08/10 21:17:25] charge 2.97 · noyau : push/pull = ×3.10
+[08/10 21:19:49] charge 15.61 · === campagne démarrée (pid 3695400) ===
+[08/10 21:19:49] charge 15.61 · --- étape grille ---
+[08/10 21:20:04] charge 17.95 · grille/0.5B-Q8 : code 0 · PPL 17.4315 · RSS 1249 Mo · lus 0 Mio
+[08/10 21:21:10] charge 17.44 · grille/r1-1.5B : code 0 · PPL 47.1403 · RSS 4647 Mo · lus 988 Mio
+[08/10 21:39:54] charge 47.40 · grille/r1-14B : code 0 · PPL 14.3048 · RSS 38898 Mo · lus 8304 Mio
+=== codestral ===
+69 /tmp/campagne24/grille_codestral-22B_ppl.log
+0 /tmp/campagne24/grille_codestral-22B_temps.log
+279 /tmp/campagne24/grille_codestral-22B_tokenize.log
+/tmp/campagne24/ids_codestral-22B.txt : 256 tokens, fenêtres de 256
+=== entraînements ===
+  pas   8000 · perte 1.3227 · val 2.1385 bits/octet · 559 s
+  ```
+
+- **bash** `{"command": "cat > /tmp/campagne24/batch4_generation.sh <<'SH'\n#!/bin/bash\n# Batch 4 — LA GÉNÉRATION, PAS LA PERPLEXITÉ.\n#\n# La perplexité moyenne ne dit ni la latence de génération, ni si le modèle SAIT\n# faire une tâche. Or c'est ce qu'on demande à un moteur : le premier jeton\n# (TTFT), le d … [3283 caractères tronqués]`
+
+  ```
+batch 4 (génération, tâches, conversation) enchaîné
+[08/10 21:39:54] charge 47.40 · grille/r1-14B : code 0 · PPL 14.3048 · RSS 38898 Mo · lus 8304 Mio
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '656,672p' drave-core/src/main.rs | grep -nE \"lot|keep|abit\" ; echo \"=== usage de lot dans le chemin ppl ===\"; grep -n \"lot\" drave-core/src/main.rs | awk -F: '$1>5060 && $1<5400' | head -8", "description": "Check the def … [22 caractères tronqués]`
+
+  ```
+3:        hebb_out: String::from("hebb.bin"), keep: 1.0, abits: 8,
+=== usage de lot dans le chemin ppl ===
+5096:        ppl_profil, lot, profil_neurones, neurones_sortie, trace_flux, trace_couches, flux_forcer,
+5099:    let lot = lot.max(1);
+5220:effective est W+D : ce modèle N'EST PLUS celui du fichier. Exige --lot 1.");
+5307:    // « reste » les mélangeait et on ne pouvait pas dire si la tête par lots
+5312:        // Préremplissage par lots : `lot` jetons d'un coup. `lot == 1` emprunte
+5316:            let t = lot.min(chunk.len() - pos);
+5317:            let hs = mdl.forward_lot(&chunk[pos..pos + t], pos);
+5318:            // Tête par lots : la matrice la plus lourde du modèle est lue une
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"lot:\" drave-core/src/main.rs | head -5; echo \"=== valeur par défaut ===\"; sed -n '656,700p' drave-core/src/main.rs | grep -nE \"^\\s+[a-z_]+:\" | head -20", "description": "Find the default lot value"}`
+
+  ```
+641:    lot: usize,
+=== valeur par défaut ===
+2:        n: 32, temp: 0.0, top_p: 1.0, hist: 64, hebb_q: 0.1,
+3:        hebb_out: String::from("hebb.bin"), keep: 1.0, abits: 8,
+4:        hebb_diff: None, hebb_eta: 1e-4, hebb_clamp: 1.0,
+5:        auto: true, limit: usize::MAX,
+6:        matrix: String::from("blk.0.ffn_gate.weight"),
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; for m in m5_d256_dense m5_d384_dense; do ids=/tmp/campagne24/ids_$m.txt; for mode in \"--dense\" \"--push\"; do echo -n \"$m $mode : \"; timeout 600 $D /tmp/$m.gguf --ppl $ids --ctx 256 --threads  … [241 caractères tronqués]`
+
+  ```
+m5_d256_dense --dense : perplexité 5.3973 sur 255 tokens (0 événements, 0.3 s) 787.2 tok/s effectifs 
+m5_d256_dense --push : perplexité 5.4026 sur 255 tokens (732865376 événements, 0.6 s) 442.3 tok/s effectifs 
+m5_d384_dense --dense : perplexité 5.3719 sur 255 tokens (0 événements, 0.5 s) 528.2 tok/s effectifs 
+m5_d384_dense --push : perplexité 5.3705 sur 255 tokens (1648531958 événements, 1.0 s) 255.0 tok/s effectifs
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md", "new_string": "| modèle | val (bits/octet) | PPL moteur | paires/jeton | événements/jeton | tok/s dense | tok/s listes | porte |\n|---|---:|---:|---:|---:|---:|---:|---|\n| `m5_d256_dense` (3,2 M)  … [3400 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 git add reports/rapport-campagne-benefices.md && timeout 300 git commit -q -m \"Campagne : le chemin par listes coûte 1,8 à 2,1x sur nos propres modèles, et c'est la réponse\n\nMesuré sur les deux modèles denses entraînés … [977 caractères tronqués]`

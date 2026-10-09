@@ -6,13 +6,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
 | Durée | 12.7 h |
-| Tours | 11 |
-| Messages | 450 |
-| Appels d'outils | 446 |
+| Tours | 12 |
+| Messages | 463 |
+| Appels d'outils | 457 |
 | Fichiers touchés | 18 |
-| Commandes | 335 |
+| Commandes | 345 |
 | Sous-agents | 3 |
-| Commits | 17 |
+| Commits | 18 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -49,6 +49,8 @@
 **Tour 10** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1196 caractères tronqués]
 
 **Tour 11** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1196 caractères tronqués]
+
+**Tour 12** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1196 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -550,7 +552,7 @@ Trois modèles de la grille partagent **exactement** le même tokenizer (mêmes 
 
 ### Tour 11 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1476 caractères tronqués]
 
-*19 appels d'outils.* Actions notables :
+*23 appels d'outils.* Actions notables :
 
 - bash — Collect campaign results so far
 - bash — Locate the training loop for distillation
@@ -566,11 +568,46 @@ Trois modèles de la grille partagent **exactement** le même tokenizer (mêmes 
 - edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md`
 - bash — Commit distillation support and the state of the art
 - bash — Verify commit message and progress
-- … et 5 autres
+- … et 9 autres
 
 **Synthèse produite :**
 
-⏵ Nouveau point : je relève ce qui a atterri et je dépouille
+⏵ Mi-parcours : deux modèles entraînés passent la porte, la nuit est armée
+
+\## Ce qui a atterri depuis le dernier point
+
+**Les modèles entraînés passent la porte du moteur, automatiquement.** J'ai armé une chaîne qui exporte, calcule la référence PyTorch **sur les mêmes poids quantifiés**, passe la porte de logits, puis mesure dans le moteur :
+
+| modèle | val (bits/octet) | PPL moteur | paires/jeton | événements/jeton | tok/s | porte |
+|---|---:|---:|---:|---:|---:|---|
+| `m5_d256_dense` (3,2 M) | 2,007 | **5,3973** | 3,2 M | 732,9 M | 438,3 | ✅ |
+| `m5_d384_dense` (7,2 M) | 1,919 | **5,3719** | 7,2 M | 1 648,5 M | 240,2 | ✅ |
+
+**Le rendement décroît vite** : 2,25× plus de paramètres lus n'apporte que **0,5 %** de perplexité et coûte **1,8× de débit**. C'est exactement l'argument du modèle qui *stocke* plus sans *lire* plus — ce que les deux routés de la même paire vont trancher.
+
+Et j'ai consigné une mise en garde qui évite une erreur facile : la colonne « val » (16 000 jetons répartis) et la colonne « PPL moteur » (les 256 premiers octets) **ne mesurent pas la même tranche de texte** — 34 % d'écart systématique, qui n'est pas un défaut du moteur.
+
+**La distillation est implémentée** — le levier que l'inventaire du dépôt notait « mentionné, jamais réalisé ». L'élève creux imite la distribution entière d'un dense gelé, pas seulement son argmax. Piège corrigé au passage : `kl_div(reduction="batchmean")` divise par la taille du **lot**, pas par le nombre de jetons — sur des logits (lot, séquence, vocabulaire) la KL sortait **128 fois trop grande** (perte 622 mesurée, contre ~7 après correction).
+
+\## La nuit est armée
+
+- **GPU 0** : distillation du routé dim 256 (enseignant = dense dim 384) → puis **dim 512 dense** → puis **dim 512 routé, 16 experts**.
+- **GPU 1** : **dim 384 routé distillé** — le témoin non distillé existe déjà, seul le terme de KL change.
+- **CPU/disque** : la file de campagne continue (codestral-22B en cours, puis Qwen3-30B-A3B, puis **gpt-oss-120b depuis le disque dur**), puis batch 2 (densité par tâche), batch 3 (aiguille dans la botte de foin), et l'export continu à chaque modèle.
+
+Tout est commité (`d8e1311`), et les journaux sont horodatés avec la charge de fond — parce qu'elle a déjà atteint 47 pendant la passe du 14B, et qu'un temps mesuré sous cette charge ne se compare pas à un temps mesuré sous charge 3.
+
+### Tour 12 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1476 caractères tronqués]
+
+*7 appels d'outils.* Actions notables :
+
+- bash — Check campaign and training state
+- bash — Add the generation and task-quality batch
+- bash — Check the default lot for prefill
+- bash — Find the default lot value
+- bash — Measure dense vs push on our trained models
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md`
+- bash — Commit the dense-vs-push measurement
 
 ## 3. Travail accompli
 
@@ -595,7 +632,7 @@ Trois modèles de la grille partagent **exactement** le même tokenizer (mêmes 
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/campagne_synthese.py` | 1 | 2 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/speculatif.py` | 1 | 0 |
 | `/tmp/campagne24/batch3_niah.sh` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md` | 1 | 3 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md` | 1 | 4 |
 
 ### Sous-agents lancés
 
@@ -645,7 +682,7 @@ Trois modèles de la grille partagent **exactement** le même tokenizer (mêmes 
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 295 autres
+- … et 305 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -810,4 +847,5 @@ Trois modèles de la grille partagent **exactement** le même tokenizer (mêmes 
 - Distillation implémentée (jamais faite dans ce dépôt) + l'état des lieux par famille de tâches  tools/entrainer_moteur.py accepte --enseignant, --alpha-distill 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/msg.txt <<'MSG' Distillation implémentée (jamais faite dans ce dépôt) + l'état des lieux par fa
 - Campagne : les quatre premiers modèles entraînés passent la porte du moteur  Chaîne automatique : chaque dossier d'entraînement est exporté dès qu'il apparaît, 
+- Campagne : le chemin par listes coûte 1,8 à 2,1x sur nos propres modèles, et c'est la réponse  Mesuré sur les deux modèles denses entraînés ici, mêmes jetons, m
 

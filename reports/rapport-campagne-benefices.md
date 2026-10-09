@@ -146,19 +146,27 @@ Chaîne automatique : dès qu'un dossier d'entraînement apparaît, il est expor
 sa référence PyTorch est calculée **sur les mêmes poids quantifiés**, la porte de
 logits est passée, puis le moteur mesure les paires, les événements et le débit.
 
-| modèle | val (bits/octet) | PPL moteur | paires/jeton | événements/jeton (listes) | tok/s | porte |
-|---|---:|---:|---:|---:|---:|---|
-| `m5_d256_dense` (3,2 M) | 2,007 | **5,3973** | 3,2 M | 732,9 M | 438,3 | ✅ |
-| `m5_d384_dense` (7,2 M) | 1,919 | **5,3719** | 7,2 M | 1 648,5 M | 240,2 | ✅ |
-| `m5_d256_route` (10,3 M) | *en cours* | | | | | |
-| `m5_d384_route` (40 M) | *en cours* | | | | | |
+| modèle | val (bits/octet) | PPL moteur | paires/jeton | événements/jeton | tok/s dense | tok/s listes | porte |
+|---|---:|---:|---:|---:|---:|---:|---|
+| `m5_d256_dense` (3,2 M) | 2,007 | **5,3973** | 3,2 M | 2,874 M | **787,2** | 442,3 | ✅ |
+| `m5_d384_dense` (7,2 M) | 1,919 | **5,3719** | 7,2 M | 6,465 M | **528,2** | 255,0 | ✅ |
+| `m5_d256_route` (10,3 M) | *en cours* | | | | | | |
+| `m5_d384_route` (40 M) | *en cours* | | | | | | |
 
-**Deux choses à lire dans ces quatre colonnes.**
+**Le chemin par listes coûte 1,8 à 2,1× sur nos propres modèles — et c'est normal.**
+La densité d'activation y est de **~90 %** (2,874 M événements pour 3,2 M paires),
+très au-dessus du croisement mesuré de 22 %. L'architecture par listes ne paie
+que sur un modèle **creux** ; sur un modèle de langue ordinaire, elle est un coût.
+C'est la réponse la plus directe à « pour quel type de tâche » : pour la
+modélisation de langue telle qu'on l'entraîne aujourd'hui, non — et c'est
+précisément ce que la branche « parcimonie entraînée » cherche à changer.
+
+**Deux choses à lire dans ces colonnes.**
 
 1. **Le rendement décroît vite** : passer de 3,2 à 7,2 M paramètres — et donc
    lire 2,25× plus de poids par jeton — n'améliore la perplexité moteur que de
-   **0,5 %** (5,3973 → 5,3719), et coûte **1,8× de débit** (438 → 240 tok/s). À
-   cette échelle, le dense est déjà saturé : c'est exactement l'argument pour un
+   **0,5 %** (5,3973 → 5,3719), et coûte **1,5× de débit dense** (787 → 528 tok/s).
+   À cette échelle, le dense est déjà saturé : c'est exactement l'argument pour un
    modèle qui **stocke** plus sans **lire** plus — la question que les deux
    modèles routés de la même paire vont trancher.
 2. **Deux perplexités qui ne mesurent pas la même chose.** La colonne « val » est
