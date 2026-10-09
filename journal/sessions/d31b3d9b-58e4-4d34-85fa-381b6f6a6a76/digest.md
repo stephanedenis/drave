@@ -6879,3 +6879,458 @@ Created file
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/campagne-benefices.sh docs/campagne-benefices.md && git commit -q -m \"Campagne 24 h : mesurer ce que l'architecture par listes vaut, tâche par tâche\n\nLe dépôt a surtout mesuré un couple (Qwen2.5-0.5B, perplexité). to … [1219 caractères tronqués]`
+
+  ```
+596de74 Campagne 24 h : mesurer ce que l'architecture par listes vaut, tâche par tâche
+=== file ===
+[08/10 21:19:49] charge 15.61 · === campagne démarrée (pid 3695400) ===
+[08/10 21:19:49] charge 15.61 · --- étape grille ---
+[08/10 21:20:04] charge 17.95 · grille/0.5B-Q8 : code 0 · PPL 17.4315 · RSS 1249 Mo · lus 0 Mio
+[08/10 21:21:10] charge 17.44 · grille/r1-1.5B : code 0 · PPL 47.1403 · RSS 4647 Mo · lus 988 Mio
+  ```
+
+- **get_goal** `{}`
+
+  ```
+{"goal":{"id":"goal-b5c7212b-5f46-4784-9b76-8d9b5cba23b4","revision":2,"objective":"Produire un modèle nativement événementiel qui soit à son meilleur dans l'architecture de Drave : parcimonie ENTRAÎNÉE (décharge/LIF ou parcimonie structurée), exécutable en listes d'événements, et découpable en unités de travail autonomes plaçables sur les unités d'une machine (cœurs, GPU, disque) puis sur plusieurs machines en réseau. Chaque affirmation porte sa mesure : qualité contre un jumeau dense à paramètres et budget égaux, densité d'activation R̂, événements et octets par jeton, débit, et mise à l'échelle sur N unités. Livrables : un prototype entraîné et mesuré, sa porte d'exécution dans Drave, et la démonstration de répartition.","phase":"paused","roundsStarted":2,"maxGoalRounds":40},"activation":"disarmed"}
+  ```
+
+- **update_goal** `{"goal_id": "goal-b5c7212b-5f46-4784-9b76-8d9b5cba23b4", "revision": 2, "action": "edit", "objective": "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour … [834 caractères tronqués]`
+
+> **Objectif** (edit) : Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, préremplissage par lots, modèle plus gros que la RAM. Poursuivre en parallèle le livrable du modèle nativement événementiel : entraîné ici, exécuté par Drave à logits vérifiés, découpé en unités réparties. Chaque affirmation porte sa mesure (perplexité, débit, octets et événements par jeton, RSS, écart entre nœuds) ET ses conditions (corpus, tokenizer du modèle, charge de fond) ; les manques constatés — embeddings/encodeurs, décodage spéculatif — sont consignés comme manques, pas comme résultats. Livrables : la file tools/campagne-benefices.sh exécutée et ses journaux, un rapport de synthèse par famille de tâches, et la poursuite du modèle événementiel.
+
+
+  ```
+{"goal":{"id":"goal-b5c7212b-5f46-4784-9b76-8d9b5cba23b4","revision":3,"objective":"Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, préremplissage par lots, modèle plus gros que la RAM. Poursuivre en parallèle le livrable du modèle nativement événementiel : entraîné ici, exécuté par Drave à logits vérifiés, découpé en unités réparties. Chaque affirmation porte sa mesure (perplexité, débit, octets et événements par jeton, RSS, écart entre nœuds) ET ses conditions (corpus, tokenizer du modèle, charge de fond) ; les manques constatés — embeddings/encodeurs, décodage spéculatif — sont consignés comme manques, pas comme résultats. Livrables : la file tools/campagne-benefices.sh exécutée et ses journaux, un rapport de synthèse par famille de tâches, et la poursuite du modèle événementiel.","phase":"paused","roundsStarted":2,"maxGoalRounds":40},"activation":"disarmed"}
+  ```
+
+- **update_goal** `{"action": "resume", "goal_id": "goal-b5c7212b-5f46-4784-9b76-8d9b5cba23b4", "revision": 3}`
+
+> **Objectif** (resume) : Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, préremplissage par lots, modèle plus gros que la RAM. Poursuivre en parallèle le livrable du modèle nativement événementiel : entraîné ici, exécuté par Drave à logits vérifiés, découpé en unités réparties. Chaque affirmation porte sa mesure (perplexité, débit, octets et événements par jeton, RSS, écart entre nœuds) ET ses conditions (corpus, tokenizer du modèle, charge de fond) ; les manques constatés — embeddings/encodeurs, décodage spéculatif — sont consignés comme manques, pas comme résultats. Livrables : la file tools/campagne-benefices.sh exécutée et ses journaux, un rapport de synthèse par famille de tâches, et la poursuite du modèle événementiel.
+
+
+  ```
+{"goal":{"id":"goal-b5c7212b-5f46-4784-9b76-8d9b5cba23b4","revision":4,"objective":"Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, préremplissage par lots, modèle plus gros que la RAM. Poursuivre en parallèle le livrable du modèle nativement événementiel : entraîné ici, exécuté par Drave à logits vérifiés, découpé en unités réparties. Chaque affirmation porte sa mesure (perplexité, débit, octets et événements par jeton, RSS, écart entre nœuds) ET ses conditions (corpus, tokenizer du modèle, charge de fond) ; les manques constatés — embeddings/encodeurs, décodage spéculatif — sont consignés comme manques, pas comme résultats. Livrables : la file tools/campagne-benefices.sh exécutée et ses journaux, un rapport de synthèse par famille de tâches, et la poursuite du modèle événementiel.","phase":"active","roundsStarted":2,"maxGoalRounds":40},"activation":"armed"}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && C=/tmp/campagne24\n# corpus CODE : sources réelles du dépôt voisin\nfind /home/stephane/Data13TB/stephane/GitHub/llama.cpp-k3 -name \"*.cpp\" -o -name \"*.h\" -o -name \"*.hpp\" 2>/dev/null | head -400 | xargs cat 2>/dev/null | head  … [630 caractères tronqués]`
+
+  ```
+4.0 Mo /tmp/campagne24/corpus_code.txt
+1.0 Mo /tmp/campagne24/corpus_fr.txt
+0.3 Mo /tmp/campagne24/corpus_multi.txt
+#include "arg.h"
+#include "common.h"
+#include "download.h"
+#include "log.h"
+
+#include <cstdio>
+#include <filesystem>
+
+st
+Aaliyah, née le à New York, dans l'État de New York, aux États-Unis, et morte dans un accident d
+  ```
+
+- **bash** `{"command": "cat > /tmp/campagne24/batch2.sh <<'SH'\n#!/bin/bash\n# Batch 2 — « le bénéfice événementiel dépend-il de la TÂCHE ? »\n# Même modèle, même matériel, quatre corpus : prose anglaise, français, code,\n# multilingue. Ce qui change d'un corpus à l'autre n'est pas le coût des poids\n# mais la … [4115 caractères tronqués]`
+
+  ```
+batch 2 enchaîné après la campagne
+[08/10 21:19:49] charge 15.61 · --- étape grille ---
+[08/10 21:20:04] charge 17.95 · grille/0.5B-Q8 : code 0 · PPL 17.4315 · RSS 1249 Mo · lus 0 Mio
+[08/10 21:21:10] charge 17.44 · grille/r1-1.5B : code 0 · PPL 47.1403 · RSS 4647 Mo · lus 988 Mio
+  ```
+
+- **bash** `{"command": "tail -2 /tmp/campagne24/tr_d256_dense.log; tail -2 /tmp/campagne24/tr_d384_dense.log; echo \"=== campagne ===\"; tail -2 /tmp/campagne24/journal.txt; echo \"=== charge ===\"; uptime", "description": "Check training and campaign status"}`
+
+  ```
+pas   4000 · perte 1.3071 · val 2.2498 bits/octet · 134 s
+  pas   8000 · perte 1.3614 · val 2.1618 bits/octet · 270 s
+  pas   4000 · perte 1.2749 · val 2.2025 bits/octet · 177 s
+  pas   8000 · perte 1.3100 · val 2.1204 bits/octet · 353 s
+=== campagne ===
+[08/10 21:20:04] charge 17.95 · grille/0.5B-Q8 : code 0 · PPL 17.4315 · RSS 1249 Mo · lus 0 Mio
+[08/10 21:21:10] charge 17.44 · grille/r1-1.5B : code 0 · PPL 47.1403 · RSS 4647 Mo · lus 988 Mio
+=== charge ===
+ 21:22:56  up 17 days 10:35,  2 users,  load average: 7,70, 8,64, 4,76
+  ```
+
+### 🤖 Assistant
+
+⏵ Campagne 24 h lancée : file de mesures + deux paires d'entraînement en parallèle
+
+## Ce qui tourne maintenant, et jusqu'à demain
+
+**1. La file de mesures** (`tools/campagne-benefices.sh`, commit `596de74`) — neuf étapes, ~4 à 8 h, journal dans `/tmp/campagne24/journal.txt` :
+
+| étape | ce qu'elle mesure |
+|---|---|
+| `grille` | **6 modèles, 0,5 B → gpt-oss-120b** : perplexité, RSS, octets lus, débit — le HDD et le NVMe à l'œuvre |
+| `parcimonie` | 12 réglages × {dense, listes} : le coût suit-il l'activité sur un VRAI modèle ? |
+| `contexte` | ctx 512 → 8 192 : PPL, cache KV choisi, mémoire |
+| `lot` | `--lot` 1 → 64 : le seul levier qui multiplie un débit de disque |
+| `routage` | MoE 30B-A3B : experts réveillés, volume à router |
+| `semantique` | traces UDHR **avec et sans** l'échelle corrigée |
+| `noyau` | bande passante, push/pull par densité |
+| `repartition` | deux nœuds, porte du modèle entraîné |
+| `portes` | non-régression |
+
+**2. Deux paires d'entraînement** sur les deux GPU, à **lecture égale** — pour voir si l'avantage du routage tient à l'échelle :
+
+| GPU | paire | lectures/jeton/couche |
+|---|---|---|
+| 0 | dense dim 256 (3,2 M) vs **routé 8 experts** (~10 M) | 0,85 M |
+| 1 | dense dim 384 (7,2 M) vs **routé 16 experts** (~40 M) | 1,92 M |
+
+Déjà à 8 000 pas, val **2,12-2,16 bits/octet**.
+
+**3. Un batch 2 enchaîné automatiquement** (`batch2.sh`) pour la question que je trouve la plus intéressante de la journée : **le bénéfice événementiel dépend-il de la tâche ?** Même modèle, quatre corpus — prose anglaise, français, code, multilingue — et pour chacun, densité d'activation en dense et en listes. Plus chaque modèle sur sa tâche *et* sur l'autre (codestral-22B sur du code et sur de la prose), et la carte de latence réseau.
+
+## Deux trouvailles avant même de commencer
+
+**Le piège du tokenizer.** `data/wikitext2_test.txt.ids` vient d'un **autre** tokenizer que Qwen2.5 (`201,438,10498…` contre `198,284,8397…`). Sur les mêmes octets :
+
+| identifiants | perplexité (256 jetons, ctx 512) |
+|---|---:|
+| ceux du dépôt | **7 710,72** |
+| tokenisés par le modèle | **17,43** |
+
+Toute la campagne serait partie d'un chiffre faux. La règle est maintenant dans le script : **chaque modèle tokenise son propre corpus**.
+
+**Deux manques, consignés comme manques.** `bge-m3` (embeddings, BERT 24 couches) est lisible en en-tête mais **inexécutable** — le moteur exige `blk.0.attn_norm.weight` et une attention causale : la famille « recherche/embeddings » n'est pas couverte. Et `eagle3-gpt-oss-120b` (0,84 Go, 1 couche) est sur le disque alors que le moteur n'a **aucune** notion de décodage spéculatif (`grep eagle|brouillon|specul` = 0) — c'est le multiplicateur de décodage de la feuille de route, et il ne tient qu'à du code moteur.
+
+Je laisse tourner, je relève les résultats au fil des étapes et j'écrirai la synthèse par famille de tâches — en gardant les conditions avec chaque chiffre (corpus, tokenizer, charge de fond), parce que la charge est déjà montée à 17 avec les entraînements.
+
+
+## Tour 10
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, préremplissage par lots, modèle plus gros que la RAM. Poursuivre en parallèle le livrable du modèle nativement événementiel : entraîné ici, exécuté par Drave à logits vérifiés, découpé en unités réparties. Chaque affirmation porte sa mesure (perplexité, débit, octets et événements par jeton, RSS, écart entre nœuds) ET ses conditions (corpus, tokenizer du modèle, charge de fond) ; les manques constatés — embeddings/encodeurs, décodage spéculatif — sont consignés comme manques, pas comme résultats. Livrables : la file tools/campagne-benefices.sh exécutée et ses journaux, un rapport de synthèse par famille de tâches, et la poursuite du modèle événementiel."
+Round: 3/40
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Point d'étape sur la campagne et les entraînements
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; echo \"=== journal campagne ===\"; cat /tmp/campagne24/journal.txt 2>/dev/null | tail -20; echo \"=== processus vivants ===\"; pgrep -af \"campagne-benefic[e]s|entrainer_mote[u]r|batch[2].sh\" | head -5; echo \"=== charge ===\" … [63 caractères tronqués]`
+
+  ```
+jeu 08 oct 2026 21:23:07 EDT
+=== journal campagne ===
+[08/10 21:17:25] charge 2.97 · noyau : bande passante mémoire mesurée : 18.1 Go/s
+[08/10 21:17:25] charge 2.97 · noyau : push/pull = ×3.10
+[08/10 21:19:49] charge 15.61 · === campagne démarrée (pid 3695400) ===
+[08/10 21:19:49] charge 15.61 · --- étape grille ---
+[08/10 21:20:04] charge 17.95 · grille/0.5B-Q8 : code 0 · PPL 17.4315 · RSS 1249 Mo · lus 0 Mio
+[08/10 21:21:10] charge 17.44 · grille/r1-1.5B : code 0 · PPL 47.1403 · RSS 4647 Mo · lus 988 Mio
+=== processus vivants ===
+3658389 /home/stephane/gpu-env/bin/python -u tools/entrainer_moteur.py --famille dense --dim 256 --couches 4 --tetes 4 --cache 768 --pas 40000 --sortie /tmp/m5_d256_dense --eval-tous 4000
+3658390 /home/stephane/gpu-env/bin/python -u tools/entrainer_moteur.py --famille dense --dim 384 --couches 4 --tetes 6 --cache 1152 --pas 40000 --sortie /tmp/m5_d384_dense --eval-tous 4000
+3695397 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash -n tools/campagne-benefices.sh && echo "syntaxe OK" && setsid nohup bash tools/campagne-benefices.sh > /tmp/campagne24/file.log 2>&1 < /dev/null & sleep 90; tail -6 /tmp/campagne24/journal.txt 2>/dev/null
+36954
+… [121 caractères tronqués]
+  ```
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"campagne_synthese.py — transformer les journaux de campagne en tableaux.\n\nPOURQUOI. Une campagne de 24 h produit des dizaines de fichiers de sortie bruts\ndans `/tmp/campagne24/`. Ce script les relit, en extrait les seules grandeurs\nqui décident (perplex … [3692 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/campagne_synthese.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && /home/stephane/gpu-env/bin/python tools/campagne_synthese.py 2>&1 | head -12", "description": "Test the synthesis parser on current logs"}`
+
+  ```
+| mesure | perplexité | jetons | événements | tok/s | en listes (M) | paires (M) | RSS (Go) | lus (Go) | durée |
+|---|---|---|---|---|---|---|---|---|---|
+| `file` | `` | `` | `` | `` | `` | `` | `` | `` | `` |
+| `grille_0.5B-Q8_ppl` | `17.4315` | `255` | `0` | `28.7` | `0.0` | `495.4` | `` | `` | `` |
+| `grille_0.5B-Q8_tokenize` | `` | `` | `` | `` | `` | `` | `` | `` | `` |
+| `grille_r1-1.5B_ppl` | `47.1403` | `255` | `0` | `9.5` | `0.0` | `1548.8` | `` | `` | `` |
+| `grille_r1-1.5B_tokenize` | `` | `` | `` | `` | `` | `` | `` | `` | `` |
+| `grille_r1-14B_ppl` | `` | `` | `` | `` | `` | `` | `` | `` | `` |
+| `grille_r1-14B_tokenize` | `` | `` | `` | `` | `` | `` | `` | `` | `` |
+| `noyau` | `` | `` | `` | `` | `` | `` | `` | `` | `` |
+| `tr_d256_dense` | `` | `` | `` | `` | `` | `` | `` | `` | `` |
+| `tr_d384_dense` | `` | `` | `` | `` | `` | `` | `` | `` | `` |
+  ```
+
+- **bash** `{"command": "head -6 /tmp/campagne24/grille_0.5B-Q8_ppl_temps.log 2>/dev/null; echo \"---\"; grep -iE \"resident|residente|inputs|entrées\" /tmp/campagne24/grille_0.5B-Q8_ppl_temps.log 2>/dev/null | head -4; echo \"=== locale ===\"; locale 2>/dev/null | head -2", "description": "Inspect time -v outp … [11 caractères tronqués]`
+
+  ```
+---
+=== locale ===
+LANG=en_US.UTF-8
+LC_CTYPE="en_US.UTF-8"
+  ```
+
+- **bash** `{"command": "ls -la /tmp/campagne24/grille_0.5B-Q8_ppl_temps.log; /usr/bin/time -v true 2>&1 | head -4; echo \"=== version ===\"; /usr/bin/time --version 2>&1 | head -2", "description": "Debug the time -v capture"}`
+
+  ```
+Command being timed: "true"
+	User time (seconds): 0.00
+	System time (seconds): 0.00
+	Percent of CPU this job got: 0%
+=== version ===
+time (GNU Time) 1.10
+Copyright (C) 2026 Free Software Foundation, Inc.
+[stderr]
+ls: cannot access '/tmp/campagne24/grille_0.5B-Q8_ppl_temps.log': No such file or directory
+  ```
+
+- **bash** `{"command": "ls -la /tmp/campagne24/ | head -20; echo \"=== recherches ===\"; ls /tmp/campagne24/*temps* 2>/dev/null | head -5", "description": "List campaign directory"}`
+
+  ```
+total 6372
+drwxr-xr-x.   2 stephane stephane     560  8 oct 21:22 .
+drwxrwxrwt. 167 root     root      806420  8 oct 21:23 ..
+-rwxr-xr-x.   1 stephane stephane    3510  8 oct 21:22 batch2.sh
+-rw-r--r--.   1 stephane stephane 4000000  8 oct 21:22 corpus_code.txt
+-rw-r--r--.   1 stephane stephane  972439  8 oct 21:22 corpus_fr.txt
+-rw-r--r--.   1 stephane stephane  271958  8 oct 21:22 corpus_multi.txt
+-rwxr-xr-x.   1 stephane stephane     303  8 oct 21:22 enchainer.sh
+-rwxr-xr-x.   1 stephane stephane     739  8 oct 21:16 entrainer2.sh
+-rwxr-xr-x.   1 stephane stephane     633  8 oct 21:16 entrainer.sh
+-rw-r--r--.   1 stephane stephane     332  8 oct 21:21 file.log
+-rw-r--r--.   1 stephane stephane    1201  8 oct 21:20 grille_0.5B-Q8_ppl.log
+-rw-r--r--.   1 stephane stephane     954  8 oct 21:20 grille_0.5B-Q8_temps.log
+-rw-r--r--.   1 stephane stephane     158  8 oct 21:19 grille_0.5B-Q8_tokenize.log
+-rw-r--r--.   1 stephane stephane      62  8 oct 21:21 grille_r1-14B_ppl.log
+-rw-r--r--.   1 stephane stephane       0  8 oct 21:21 grille_r1-14B_temps.log
+-rw-r--r--.   1 stephane stephane     157  8 oct 21:21 grille_r1-14B_tokenize.log
+-rw-r--r--.   1 stephane stephane    1269  8 oct 
+… [332 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cat /tmp/campagne24/grille_r1-14B_ppl.log; echo \"--- temps ---\"; cat /tmp/campagne24/grille_r1-14B_temps.log; echo \"--- 0.5B temps (extrait) ---\"; grep -E \"Maximum resident|File system inputs|Elapsed\" /tmp/campagne24/grille_0.5B-Q8_temps.log", "description": "Inspect the 14B run a … [16 caractères tronqués]`
+
+  ```
+/tmp/campagne24/ids_r1-14B.txt : 256 tokens, fenêtres de 256
+--- temps ---
+--- 0.5B temps (extrait) ---
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:15.55
+	Maximum resident set size (kbytes): 1279580
+	File system inputs: 0
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/campagne_synthese.py", "new_string": "def mesure(prefixe, dossier):\n    \"\"\"Une ligne de tableau à partir d'un log et de son fichier de temps.\n\n    Le fichier de temps ne suit pas toujours le nom du log : la campagne écrit\n   … [773 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/campagne_synthese.py has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/campagne_synthese.py", "new_string": "    lignes = [m for m in (mesure(x, a.dir) for x in prefixes) if m]\n    # On ne garde que les lignes qui portent AU MOINS une mesure : les journaux\n    # de tokenisation et les files d'attent … [301 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/campagne_synthese.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && /home/stephane/gpu-env/bin/python tools/campagne_synthese.py 2>&1 | head -8; echo \"=== campagne ===\"; tail -3 /tmp/campagne24/journal.txt", "description": "Verify the fixed synthesis parser"}`
+
+  ```
+| mesure | perplexité | jetons | événements | tok/s | en listes (M) | paires (M) | RSS (Go) | lus (Go) | durée |
+|---|---|---|---|---|---|---|---|---|---|
+| `grille_0.5B-Q8_ppl` | `17.4315` | `255` | `0` | `28.7` | `0.0` | `495.4` | `1.28` | `0.00` | `` |
+| `grille_r1-1.5B_ppl` | `47.1403` | `255` | `0` | `9.5` | `0.0` | `1548.8` | `4.76` | `1.04` | `` |
+=== campagne ===
+[08/10 21:19:49] charge 15.61 · --- étape grille ---
+[08/10 21:20:04] charge 17.95 · grille/0.5B-Q8 : code 0 · PPL 17.4315 · RSS 1249 Mo · lus 0 Mio
+[08/10 21:21:10] charge 17.44 · grille/r1-1.5B : code 0 · PPL 47.1403 · RSS 4647 Mo · lus 988 Mio
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 60 curl -sI https://huggingface.co/Qwen/Qwen2.5-1.5B/resolve/main/config.json 2>&1 | head -3; echo \"=== modèles HF en cache ===\"; ls ~/.cache/huggingface/hub 2>/dev/null | head -8", "description": "Check HuggingFace network … [39 caractères tronqués]`
+
+  ```
+HTTP/2 307 
+content-type: text/plain; charset=utf-8
+content-length: 238
+=== modèles HF en cache ===
+CACHEDIR.TAG
+models--ggml-org--gemma-3-1b-it-GGUF
+models--Qwen--Qwen2.5-0.5B
+models--Qwen--Qwen3-0.6B
+models--Systran--faster-whisper-large-v3
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && mkdir -p /home/stephane/Data13TB/stephane/hf-cache && setsid nohup env HF_HOME=/home/stephane/Data13TB/stephane/hf-cache /home/stephane/gpu-env/bin/python -c \"\nfrom huggingface_hub import snapshot_download\np = snapshot_download('Q … [368 caractères tronqués]`
+
+  ```
+Fetching 7 files:   0%|          | 0/7 [00:00<?, ?it/s]Fetching 7 files:  14%|█▍        | 1/7 [00:00<00:00,  9.10it/s]Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Fetching 7 files:  57%|█████▋    | 4/7 [00:00<00:00, 18.22it/s]398M	/home/stephane/Data13TB/stephane/hf-cache
+  ```
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"speculatif.py — le taux d'acceptation d'un brouillon, mesuré AVANT d'écrire du moteur.\n\nPOURQUOI CE CHIFFRE AVANT CE CODE. Le décodage spéculatif est le multiplicateur\nde la feuille de route : il rend le décodage **par lots**, donc il ferait servir\nau d … [4765 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/speculatif.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "tail -2 /tmp/campagne24/telechargement.log; du -sh /home/stephane/Data13TB/stephane/hf-cache 2>/dev/null; echo \"=== test du script spéculatif (4 préfixes) ===\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && HF_HOME=/home/stephane/Data13TB/stephane/hf-cache CUDA_VISIBLE_DEVICES … [219 caractères tronqués]`
+
+  ```
+Fetching 7 files:  57%|█████▋    | 4/7 [00:00<00:00, 18.22it/s]Fetching 7 files:  86%|████████▌ | 6/7 [00:19<00:00, 18.22it/s]Fetching 7 files: 100%|██████████| 7/7 [00:25<00:00,  4.51s/it]Fetching 7 files: 100%|██████████| 7/7 [00:25<00:00,  3.62s/it]
+téléchargé dans /home/stephane/Data13TB/stephane/hf-cache/hub/models--Qwen--Qwen2.5-1.5B/snapshots/8faed761d45a263340a0528343f099c05c9a4323
+2,9G	/home/stephane/Data13TB/stephane/hf-cache
+=== test du script spéculatif (4 préfixes) ===
+# brouillon Qwen/Qwen2.5-0.5B · cible Qwen/Qwen2.5-1.5B · appareil cuda
+# 4 préfixes de 64 jetons · k = 4
+# acceptation moyenne : 1.00 jetons sur 4 (25.0 %) · médiane 0 · minimum 0 · maximum 3
+#   au moins 1 jeton(s) accepté(s) : 50 % des préfixes
+#   au moins 2 jeton(s) accepté(s) : 25 % des préfixes
+#   au moins 3 jeton(s) accepté(s) : 25 % des préfixes
+#   au moins 4 jeton(s) accepté(s) : 0 % des préfixes
+#   gain espéré si le brouillon coûte 0.25× la cible par pas : ×1.00
+#   gain espéré si le brouillon coûte 0.33× la cible par pas : ×0.86
+#   gain espéré si le brouillon coûte 0.50× la cible par pas : ×0.67
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && setsid nohup env HF_HOME=/home/stephane/Data13TB/stephane/hf-cache CUDA_VISIBLE_DEVICES=1 /home/stephane/gpu-env/bin/python tools/speculatif.py --prefixes 40 --k 8 > /tmp/campagne24/speculatif.log 2>&1 < /dev/null & sleep 5; echo \"m … [173 caractères tronqués]`
+
+  ```
+mesure spéculative lancée (40 préfixes, k=8)
+[08/10 21:20:04] charge 17.95 · grille/0.5B-Q8 : code 0 · PPL 17.4315 · RSS 1249 Mo · lus 0 Mio
+[08/10 21:21:10] charge 17.44 · grille/r1-1.5B : code 0 · PPL 47.1403 · RSS 4647 Mo · lus 988 Mio
+  ```
+
+- **write** `{"content": "#!/bin/bash\n# Batch 3 — LA TÂCHE DE CONTEXTE LONG : retrouver une aiguille dans la botte de foin.\n#\n# POURQUOI CETTE MESURE APRÈS LES AUTRES. La campagne mesure la perplexité, qui\n# moyenne tout : un modèle peut garder une perplexité correcte et avoir perdu la\n# capacité de RETROUV … [2753 caractères tronqués]`
+
+  ```
+<path>/tmp/campagne24/batch3_niah.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n '\"--prompt\"\\|\"--fichier\"\\|\"--ids-file\"' drave-core/src/main.rs | head -6; echo \"=== le prompt en mode infer ===\"; grep -n \"prompt\" drave-core/src/main.rs | grep -iE \"read_to_string|std::fs::read|from_file\" | hea … [57 caractères tronqués]`
+
+  ```
+718:            "--ids-file" => { o.ids_file = Some(suivant(i).clone()); 2 }
+719:            "--prompt" => { o.prompt = Some(suivant(i).clone()); 2 }
+721:            "--fichier" => { o.fichier = Some(suivant(i).clone()); 2 }
+=== le prompt en mode infer ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"opt.prompt\\|\\.fichier\" drave-core/src/main.rs | head -10", "description": "Trace prompt and fichier usage"}`
+
+  ```
+721:            "--fichier" => { o.fichier = Some(suivant(i).clone()); 2 }
+2437:            par_fichier[t.fichier] += 1;
+2438:            octets[t.fichier] += Gguf::octets_tensor(t);
+2460:                 Gguf::nom_type(t.ttype), t.name, t.dims, poids as f64 / 1e6, t.fichier);
+4733:    let fichier = opt.fichier.clone().unwrap_or_default();
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '4730,4745p' drave-core/src/main.rs; echo \"=== où le prompt est-il lu ? ===\"; grep -rn \"prompt\" drave-core/src/main.rs | grep -vE \"^\\s*//\" | head -12", "description": "Find the prompt reading path"}`
+
+  ```
+fn run_tokenize(opt: Options) {
+    let path = &modele_chemin();
+    let texte = opt.texte.clone().unwrap_or_default();
+    let fichier = opt.fichier.clone().unwrap_or_default();
+    let sortie = opt.sortie.clone().unwrap_or_default();
+    // En-tête seul : le décodage du vocabulaire n'a pas besoin des poids, et
+    // `open` lisait le fichier entier (62 Go pour gpt-oss) à chaque appel.
+    // Tolérant au modèle en cours de téléchargement (le vocabulaire vit dans le
+    // shard 1) : c'est ce qui permet de vérifier le tokenizer AVANT la fin du
+    // transfert — et de comparer à llama.cpp ensuite.
+    let g = ouvrir_meta_tolerant(path, "--tokenize");
+    let tk = build_tokenizer(&g);
+    if !fichier.is_empty() {
+        // Encoder un corpus ENTIER avec le tokenizer du modèle : chaque modèle
+        // a le sien, et nourrir un modèle avec les identifiants d'un autre
+        // donne une perplexité qui ne mesure que l'absurdité de l'entrée.
+=== où le prompt est-il lu ? ===
+80:        eprintln!("       drave <modele> --infer (--ids 1,2,3 | --prompt TEXTE | --ids-file F)");
+588:    ppl_texte: bool, prompt: Option<String>, limit: usize, depuis: usize,
+719:            "--prompt" => { o.p
+… [603 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/campagne24 && python3 - <<'PY'\np=\"/tmp/campagne24/batch3_niah.sh\"; s=open(p).read()\ns = s.replace('''        timeout 1800 \"$D\" \"$M\" --infer --fichier \"$f\" --n 12 --ctx $((jetons + 256)) \\\\\n            --threads 20 --temp 0 > \"$C/${etiquette}.log\" 2>&1''',\n'''     … [1035 caractères tronqués]`
+
+  ```
+corrigé
+syntaxe OK
+batch 3 enchaîné après le batch 2
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<02:03,  2.35it/s]Loading weights:  14%|█▍        | 40/290 [00:00<00:02, 94.70it/s]Loading weights:  22%|██▏       | 63/290 [00:00<00:01, 116.74it/s]Loading weights:  28%|██▊       | 81/290 [00:00<00:02, 102.43it/s]Loading weights:  33%|███▎      | 96/290 [00:01<00:02, 77.78it/s] Loading weights:  41%|████      | 119/290 [00:01<00:01, 95.59it/s]Loading weights:  47%|████▋     | 136/290 [00:01<00:01, 102.54it/s]Loading weights:  55%|█████▌    | 160/290 [00:01<00:01, 95.30it/s] Loading weights:  62%|██████▏   | 181/290 [00:01<00:01, 107.69it/s]Loading weights:  67%|██████▋   | 195/290 [00:02<00:00, 111.34it/s]Loading weights:  72%|███████▏  | 208/290 [00:02<00:00, 88.95it/s] Loading weights:  76%|███████▌  | 219/290 [00:02<00:00, 74.99it/s]Loading weights:  80%|███████▉  | 231/290 [00:02<00:01, 49.32it/s]Loading weights:  84%|████████▍ | 244/290 [00:03<00:00, 57.43it/s]Loading wei
+… [1782 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cat > /tmp/campagne24/apres_entrainement.sh <<'SH'\n#!/bin/bash\n# Après les entraînements : exporter, porter, mesurer, répartir.\n# La chaîne complète du livrable « modèle nativement événementiel ».\nset -u\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nP=/home/stephane/gpu-env/b … [2706 caractères tronqués]`
+
+  ```
+chaîne du modèle armée
+  ```
+
+- **bash** `{"command": "sleep 240; echo \"=== spéculatif ===\"; grep -E \"^#\" /tmp/campagne24/speculatif.log 2>/dev/null | tail -10; echo \"=== campagne ===\"; tail -4 /tmp/campagne24/journal.txt; echo \"=== entraînements ===\"; tail -1 /tmp/campagne24/tr_d256_dense.log; tail -1 /tmp/campagne24/tr_d384_dense. … [84 caractères tronqués]`
+
+  ```
+=== spéculatif ===
+# brouillon Qwen/Qwen2.5-0.5B · cible Qwen/Qwen2.5-1.5B · appareil cuda
+# 40 préfixes de 64 jetons · k = 8
+# acceptation moyenne : 3.35 jetons sur 8 (41.9 %) · médiane 3 · minimum 0 · maximum 8
+#   au moins 1 jeton(s) accepté(s) : 68 % des préfixes
+#   au moins 2 jeton(s) accepté(s) : 60 % des préfixes
+#   au moins 3 jeton(s) accepté(s) : 52 % des préfixes
+#   au moins 4 jeton(s) accepté(s) : 42 % des préfixes
+#   gain espéré si le brouillon coûte 0.25× la cible par pas : ×1.45
+#   gain espéré si le brouillon coûte 0.33× la cible par pas : ×1.20
+#   gain espéré si le brouillon coûte 0.50× la cible par pas : ×0.87
+=== campagne ===
+[08/10 21:19:49] charge 15.61 · === campagne démarrée (pid 3695400) ===
+[08/10 21:19:49] charge 15.61 · --- étape grille ---
+[08/10 21:20:04] charge 17.95 · grille/0.5B-Q8 : code 0 · PPL 17.4315 · RSS 1249 Mo · lus 0 Mio
+[08/10 21:21:10] charge 17.44 · grille/r1-1.5B : code 0 · PPL 47.1403 · RSS 4647 Mo · lus 988 Mio
+=== entraînements ===
+  pas  24000 · perte 1.3035 · val 2.0364 bits/octet · 793 s
+  pas  16000 · perte 1.2858 · val 2.0147 bits/octet · 714 s
+  ```
+
+### 🤖 Assistant
+
+⏵ Résultat décisif : le décodage spéculatif avec un brouillon naïf vaut ×1,2, pas ×2
+
+- **write** `{"content": "# Campagne 24 h — où Drave est à son meilleur, tâche par tâche\n\n> 08/10 21 h → 09/10. Rapport **vivant** : il est mis à jour au fil des étapes.\n> File : `tools/campagne-benefices.sh`. Journaux bruts : `/tmp/campagne24/`.\n> Plan : `docs/campagne-benefices.md`.\n>\n> Règle de lecture  … [5218 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/campagne_synthese.py tools/speculatif.py reports/rapport-campagne-benefices.md && git commit -q -m \"Campagne : le décodage spéculatif naïf vaut ×1,2 (mesuré), et deux familles manquent\n\ntools/speculatif.py mesure ce  … [1289 caractères tronqués]`
+
+  ```
+(no output)
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -1 2>&1 | head -2; git status --short 2>&1 | head -5; uptime", "description": "Check whether the commit landed", "timeoutMs": 120000}`
+
+  ```
+596de74 Campagne 24 h : mesurer ce que l'architecture par listes vaut, tâche par tâche
+ M journal/README.md
+ M journal/sessions/MANIFEST.md
+ M journal/sessions/d31b3d9b-58e4-4d34-85fa-381b6f6a6a76/digest.md
+A  reports/rapport-campagne-benefices.md
+A  tools/campagne_synthese.py
+ 21:31:56  up 17 days 10:44,  2 users,  load average: 41,62, 23,75, 12,57
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 git commit -q -m \"Campagne : le décodage spéculatif naïf vaut ×1,2 (mesuré), et deux familles manquent\n\ntools/speculatif.py mesure ce qu'il faut savoir AVANT d'écrire le décodage\nspéculatif dans le moteur : le taux d' … [786 caractères tronqués]`

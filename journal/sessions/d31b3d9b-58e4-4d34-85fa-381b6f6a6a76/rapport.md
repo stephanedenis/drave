@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 12.2 h |
-| Tours | 9 |
-| Messages | 387 |
-| Appels d'outils | 387 |
-| Fichiers touchés | 14 |
-| Commandes | 290 |
+| Durée | 12.3 h |
+| Tours | 10 |
+| Messages | 421 |
+| Appels d'outils | 419 |
+| Fichiers touchés | 18 |
+| Commandes | 313 |
 | Sous-agents | 3 |
-| Commits | 11 |
+| Commits | 13 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -21,6 +21,10 @@
 … [348 caractères tronqués]
 - **pause** — Produire un modèle nativement événementiel qui soit à son meilleur dans l'architecture de Drave : parcimonie ENTRAÎNÉE (décharge/LIF ou parcimonie structurée), exécutable en listes d'événements, et découpable en unités de travail autonomes plaçables sur les unités d'une machine (cœurs, GPU, disque) 
 … [348 caractères tronqués]
+- **edit** — Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, cod
+… [728 caractères tronqués]
+- **resume** — Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, cod
+… [728 caractères tronqués]
 
 ## 1. Ce qui a été demandé
 
@@ -41,6 +45,8 @@
 **Tour 8** — donc les nouveaux nvme seront sur l'autre cpu pour ne pas réduire le nombre de voies des gpu. La ram reste tel-quelle. la carte amd pour le desktop sera sur le même cpu que les nouveaux nvme à mettre en raid. Quelels sont les autres optimisations à faire ? prépare un document pour ce changement de configuration et la configuration de la carte amd-yeston (6 ports mini-dp) et les nouveaux nvme en ra … [2 caractères tronqués]
 
 **Tour 9** — encore une journée complète avant l'arrivé du nouveau matériel. Exécute pendant 24h les tâches que tu trouves les plus adéquates pour explorer les bénéfices attendus de Drave pour tout type de tâches.
+
+**Tour 10** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1196 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -417,7 +423,7 @@ C'est très probablement une **R7 350** (GCN 1.0, Southern Islands). Le noyau la
 
 ### Tour 9 — encore une journée complète avant l'arrivé du nouveau matériel. Exécute pendant 24h les tâches que tu trouves les plus a … [80 caractères tronqués]
 
-*18 appels d'outils.* Actions notables :
+*24 appels d'outils.* Actions notables :
 
 - bash — Inventory runnable models
 - bash — Inventory corpora and traces
@@ -433,11 +439,76 @@ C'est très probablement une **R7 350** (GCN 1.0, Southern Islands). Le noyau la
 - bash — Verify the tokenizer trap
 - bash — Fix the tokenizer trap in the campaign
 - bash — Launch the full 24h campaign queue
-- … et 4 autres
+- … et 9 autres
 
 **Synthèse produite :**
 
-⏵ Piège trouvé : `wikitext2_test.txt.ids` vient d'un AUTRE tokenizer — toutes les mesures auraient été fausses
+⏵ Campagne 24 h lancée : file de mesures + deux paires d'entraînement en parallèle
+
+\## Ce qui tourne maintenant, et jusqu'à demain
+
+**1. La file de mesures** (`tools/campagne-benefices.sh`, commit `596de74`) — neuf étapes, ~4 à 8 h, journal dans `/tmp/campagne24/journal.txt` :
+
+| étape | ce qu'elle mesure |
+|---|---|
+| `grille` | **6 modèles, 0,5 B → gpt-oss-120b** : perplexité, RSS, octets lus, débit — le HDD et le NVMe à l'œuvre |
+| `parcimonie` | 12 réglages × {dense, listes} : le coût suit-il l'activité sur un VRAI modèle ? |
+| `contexte` | ctx 512 → 8 192 : PPL, cache KV choisi, mémoire |
+| `lot` | `--lot` 1 → 64 : le seul levier qui multiplie un débit de disque |
+| `routage` | MoE 30B-A3B : experts réveillés, volume à router |
+| `semantique` | traces UDHR **avec et sans** l'échelle corrigée |
+| `noyau` | bande passante, push/pull par densité |
+| `repartition` | deux nœuds, porte du modèle entraîné |
+| `portes` | non-régression |
+
+**2. Deux paires d'entraînement** sur les deux GPU, à **lecture égale** — pour voir si l'avantage du routage tient à l'échelle :
+
+| GPU | paire | lectures/jeton/couche |
+|---|---|---|
+| 0 | dense dim 256 (3,2 M) vs **routé 8 experts** (~10 M) | 0,85 M |
+| 1 | dense dim 384 (7,2 M) vs **routé 16 experts** (~40 M) | 1,92 M |
+
+Déjà à 8 000 pas, val **2,12-2,16 bits/octet**.
+
+**3. Un batch 2 enchaîné automatiquement** (`batch2.sh`) pour la question que je trouve la plus intéressante de la journée : **le bénéfice événementiel dépend-il de la tâche ?** Même modèle, quatre corpus — prose anglaise, français, code, multilingue — et pour chacun, densité d'activation en dense et en listes. Plus chaque modèle sur sa tâche *et* sur l'autre (codestral-22B sur du code et sur de la prose), et la carte de latence réseau.
+
+\## Deux trouvailles avant même de commencer
+
+**Le piège du tokenizer.** `data/wikitext2_test.txt.ids` vient d'un **autre** tokenizer que Qwen2.5 (`201,438,10498…` contre `198,284,8397…`). Sur les mêmes octets :
+
+| identifiants | perplexité (256 jetons, ctx 512) |
+|---|---:|
+| ceux du dépôt | **7 710,72** |
+| tokenisés par le modèle | **17,43** |
+
+Toute la campagne serait partie d'un chiffre faux. La règle est maintenant dans le script : **chaque modèle tokenise son propre corpus**.
+
+**Deux manques, consignés comme manques.** `bge-m3` (embeddings, BERT 24 couches) est lisible en en-tête mais **inexécutable** — le moteur exige `blk.0.attn_norm.weight` et une attention causale : la famille « recherche/embeddings » n'est pas co
+… [528 caractères tronqués]
+
+### Tour 10 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1476 caractères tronqués]
+
+*26 appels d'outils.* Actions notables :
+
+- bash — Check campaign and training status
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/campagne_synthese.py`
+- bash — Test the synthesis parser on current logs
+- bash — Inspect time -v output format
+- bash — Debug the time -v capture
+- bash — List campaign directory
+- bash — Inspect the 14B run and time output
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/campagne_synthese.py`
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/campagne_synthese.py`
+- bash — Verify the fixed synthesis parser
+- bash — Check HuggingFace network access and cache
+- bash — Download a 1.5B target model for the speculative test
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/speculatif.py`
+- bash — Test the speculative acceptance script
+- … et 12 autres
+
+**Synthèse produite :**
+
+⏵ Résultat décisif : le décodage spéculatif avec un brouillon naïf vaut ×1,2, pas ×2
 
 ## 3. Travail accompli
 
@@ -459,6 +530,10 @@ C'est très probablement une **R7 350** (GCN 1.0, Southern Islands). Le noyau la
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/configuration-nvme-raid-amd.md` | 1 | 2 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/campagne-benefices.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/campagne-benefices.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/campagne_synthese.py` | 1 | 2 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/speculatif.py` | 1 | 0 |
+| `/tmp/campagne24/batch3_niah.sh` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -508,7 +583,7 @@ C'est très probablement une **R7 350** (GCN 1.0, Southern Islands). Le noyau la
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 250 autres
+- … et 273 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -667,4 +742,6 @@ C'est très probablement une **R7 350** (GCN 1.0, Southern Islands). Le noyau la
 - docs/numa-segregation §12 : quoi faire de la RAM quand elle est hors de prix  Trois réponses, dans l'ordre où elles paient, et toutes mesurées :  1. RÉCUPÉRER C
 - docs/configuration-nvme-raid-amd : préparation de la reconfiguration (array sur le nœud 1, AMD pour le bureau)  Document écrit AVANT l'intervention, pour que ch
 - Campagne 24 h : mesurer ce que l'architecture par listes vaut, tâche par tâche  Le dépôt a surtout mesuré un couple (Qwen2.5-0.5B, perplexité). tools/campagne-b
+- Campagne : le décodage spéculatif naïf vaut ×1,2 (mesuré), et deux familles manquent  tools/speculatif.py mesure ce qu'il faut savoir AVANT d'écrire le décodage
+- Campagne : le décodage spéculatif naïf vaut ×1,2 (mesuré), et deux familles manquent  tools/speculatif.py mesure ce qu'il faut savoir AVANT d'écrire le décodage
 
