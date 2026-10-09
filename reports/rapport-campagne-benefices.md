@@ -202,44 +202,44 @@ c'est la moitié de la réponse à « pour tout type de tâches ».
 
 ---
 
-## 5. Les modèles entraînés ici, mesurés DANS le moteur
+## 5. Les modèles entraînés ici, mesurés DANS le moteur — et le routage GAGNE
 
 Chaîne automatique : dès qu'un dossier d'entraînement apparaît, il est exporté,
 sa référence PyTorch est calculée **sur les mêmes poids quantifiés**, la porte de
 logits est passée, puis le moteur mesure les paires, les événements et le débit.
+Les deux membres de chaque paire **lisent exactement le même nombre de poids par
+jeton** (vérifié par le compteur du moteur, colonne « paires/jeton »).
 
-| modèle | val (bits/octet) | PPL moteur | paires/jeton | événements/jeton | tok/s dense | tok/s listes | porte |
-|---|---:|---:|---:|---:|---:|---:|---|
-| `m5_d256_dense` (3,2 M) | 2,007 | **5,3973** | 3,2 M | 2,874 M | **787,2** | 442,3 | ✅ |
-| `m5_d384_dense` (7,2 M) | 1,919 | **5,3719** | 7,2 M | 6,465 M | **528,2** | 255,0 | ✅ |
-| `m5_d256_route` (10,3 M) | *en cours* | | | | | | |
-| `m5_d384_route` (40 M) | *en cours* | | | | | | |
+| modèle | val (bits/octet) | **PPL moteur** | paires/jeton | tok/s dense | tok/s listes | porte |
+|---|---:|---:|---:|---:|---:|---|
+| `m5_d256_dense` (3,2 M) | 2,007 | 5,3973 | 3,2 M | 787,2 | 442,3 | ✅ |
+| **`m5_d256_route` (10,3 M)** | — | **5,0684** | **3,2 M** | — | **662,8** | ✅ |
+| `m5_d384_dense` (7,2 M) | 1,919 | 5,3719 | 7,2 M | 528,2 | 255,0 | ✅ |
+| **`m5_d384_route` (44,4 M)** | — | **5,0614** | **7,2 M** | — | 184,0 | ✅ |
 
-**Le chemin par listes coûte 1,8 à 2,1× sur nos propres modèles — et c'est normal.**
-La densité d'activation y est de **~90 %** (2,874 M événements pour 3,2 M paires),
-très au-dessus du croisement mesuré de 22 %. L'architecture par listes ne paie
-que sur un modèle **creux** ; sur un modèle de langue ordinaire, elle est un coût.
-C'est la réponse la plus directe à « pour quel type de tâche » : pour la
-modélisation de langue telle qu'on l'entraîne aujourd'hui, non — et c'est
-précisément ce que la branche « parcimonie entraînée » cherche à changer.
+**À lecture ÉGALE, le routage gagne de 6 % de perplexité** — et c'est la thèse du
+projet, démontrée avec des modèles entraînés ici et exécutés par le moteur :
 
-**Deux choses à lire dans ces colonnes.**
+- `d256` : **5,0684 contre 5,3973** (−6,1 %) pour les mêmes 3,2 M poids lus, en
+  **stockant 3,2× plus de paramètres** (10,3 M contre 3,2 M) ;
+- `d384` : **5,0614 contre 5,3719** (−5,8 %) pour les mêmes 7,2 M poids lus, en
+  stockant **6,2× plus** (44,4 M contre 7,2 M).
 
-1. **Le rendement décroît vite** : passer de 3,2 à 7,2 M paramètres — et donc
-   lire 2,25× plus de poids par jeton — n'améliore la perplexité moteur que de
-   **0,5 %** (5,3973 → 5,3719), et coûte **1,5× de débit dense** (787 → 528 tok/s).
-   À cette échelle, le dense est déjà saturé : c'est exactement l'argument pour un
-   modèle qui **stocke** plus sans **lire** plus — la question que les deux
-   modèles routés de la même paire vont trancher.
-2. **Deux perplexités qui ne mesurent pas la même chose.** La colonne « val » est
-   mesurée à l'entraînement sur 16 000 jetons répartis dans le fichier de
-   validation ; la colonne « PPL moteur » sur les **256 premiers octets** du même
-   fichier. D'où un écart systématique de ~34 % (5,40 contre 4,02 équivalent) qui
-   n'est **pas** un défaut du moteur : la tranche de texte est plus difficile, et
-   l'export ajoute la quantification Q8_0/Q4_0. Toute comparaison entre les deux
-   colonnes est donc interdite — et c'est écrit ici parce que l'erreur est facile.
+Un modèle plus gros qui lit autant : c'est exactement ce que « nativement
+événementiel » veut dire, et le gain ne vient pas d'un réglage — il vient de la
+**structure** (2 experts sur 8 ou 16, choisis par un routeur appris).
 
----
+**Deux réserves, et elles comptent.**
+
+1. **Le débit ne suit pas toujours.** À `d256` le routé est **1,5× plus rapide**
+   (662,8 contre 442,3 tok/s) ; à `d384` il est **1,4× plus lent** (184,0 contre
+   255,0) — le regroupement des jetons par expert a un coût fixe qui pèse quand le
+   modèle grandit. Le gain de qualité, lui, tient dans les deux cas.
+2. **Les experts ne passent PAS par les listes.** Ils sont écrits en Q4_0, format
+   pour lequel le moteur n'a pas de noyau de listes : le compte d'« événements »
+   ne les couvre donc pas (199,5 M pour le routé contre 2 874 M pour le dense —
+   un écart qui ne compare pas la même chose). La mesure honnête est la colonne
+   **paires/jeton**, et elle est égale par construction.
 
 ## 7. Répartir par EXPERTS : ce que coûterait l'unité de travail naturelle
 

@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 13.6 h |
-| Tours | 18 |
-| Messages | 554 |
-| Appels d'outils | 536 |
+| Durée | 13.7 h |
+| Tours | 19 |
+| Messages | 559 |
+| Appels d'outils | 539 |
 | Fichiers touchés | 21 |
-| Commandes | 414 |
+| Commandes | 417 |
 | Sous-agents | 3 |
-| Commits | 28 |
+| Commits | 29 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -63,6 +63,8 @@
 **Tour 17** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1197 caractères tronqués]
 
 **Tour 18** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1197 caractères tronqués]
+
+**Tour 19** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1197 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -879,6 +881,41 @@ Deux processus lisaient **le même gpt-oss de 63 Go en même temps** : la mesure
 - edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md`
 - bash — Add and commit the four-task verbatim results
 
+**Synthèse produite :**
+
+⏵ Quatre tâches, sorties verbatim : le moteur tient, c'est le modèle qui limite
+
+\## Ce que le 0,5 B a réellement produit
+
+J'ai refait les quatre tâches que le batch 4 prévoyait sur gpt-oss-120b (5 × 1 h de lectures du même fichier de 63 Go) — sur le **0,5 B**, qui suffit à répondre à la question posée. Sorties **telles quelles**, `temp 0`, 64 jetons :
+
+| tâche | sortie | verdict |
+|---|---|---|
+| **code** | `def fibonacci(n):` … gère `n <= 0`, `n == 1`, `n == 2` | ✅ **correcte et utilisable** |
+| traduction FR | *« The river carries the logs to the mill. (No translation is needed) »* puis *« Le ruisseau transporte les feuilles au mill. »* | ❌ refuse, puis traduit faux |
+| arithmétique | entame un raisonnement juste (« we need to calculate the difference… ») | ⚠️ tronquée à 64 jetons |
+| résumé | *« The engine is a key component in the development of the new generation of engines. »* | ❌ hallucination, puis recopie |
+
+**Une fonction Python correcte, avec ses cas limites, produite par un modèle de 0,5 B** — sur la tâche où le format est contraint. Sur les trois autres, c'est le **modèle** qui échoue, pas l'exécution : Drave fait ce que le modèle sait faire. C'est aussi ce qui rend la ligne « sortie contrainte » du verdict unique en son genre — elle ne dépend pas du modèle.
+
+Réserve consignée : ces essais ont tourné sous une **charge de fond de 84** (trois gros modèles lus en parallèle) — les **sorties** sont valides, les débits ne disent rien (0,84 tok/s).
+
+\## Où en est la machine
+
+La campagne est toujours sur **gpt-oss-120b** (63 Go depuis le disque dur), le batch 5 (le lot sur le 30B depuis le NVMe) a démarré, le diagnostic codestral tourne, et les quatre entraînements avancent avec la distillation derrière. C'est la dernière grosse mesure en cours ; le reste de la file (batchs 6 et 7, portes) suivra pendant la nuit.
+
+### Tour 19 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1477 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Check all running work
+- bash — Check exported routed models and distillation start
+- bash — Record the iso-reads result in the report
+
+**Synthèse produite :**
+
+⏵ Le résultat central est là : à lecture égale, le routé bat le dense de 6 %
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -955,7 +992,7 @@ Deux processus lisaient **le même gpt-oss de 63 Go en même temps** : la mesure
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 374 autres
+- … et 377 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1131,4 +1168,5 @@ Deux processus lisaient **le même gpt-oss de 63 Go en même temps** : la mesure
 - Rapport : l'anomalie codestral est un décalage de tâche, pas un bug du moteur  La porte Mistral (commit précédent) tranche : référence 3411,4394 contre moteur 3
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/msg_portes.txt <<'MSG' La porte Mistral entre dans la suite : une famille de plus est couverte 
 - Quatre tâches, sorties verbatim : le moteur tient, c'est le modèle qui limite  Refaites sur le 0,5 B après avoir coupé les mêmes essais sur gpt-oss-120b (5 x 1 
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="reports/rapport-campagne-benefices.md"; s=open(p).read() vieux = s[s.index("## 5. Les 
 

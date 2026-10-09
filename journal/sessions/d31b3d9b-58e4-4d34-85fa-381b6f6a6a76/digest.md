@@ -9078,3 +9078,89 @@ Error: cannot edit "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapp
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^## 11\" reports/rapport-campagne-benefices.md; python3 - <<'PY'\np=\"reports/rapport-campagne-benefices.md\"; s=open(p).read()\najout = '''## 10 bis. Quatre tâches, sorties verbatim — et c'est le MODÈLE qui limite, pas le  … [3020 caractères tronqués]`
+
+  ```
+356:## 11. Ce qui reste à mesurer (file en cours)
+ajouté
+d82f01a Quatre tâches, sorties verbatim : le moteur tient, c'est le modèle qui limite
+  ```
+
+### 🤖 Assistant
+
+⏵ Quatre tâches, sorties verbatim : le moteur tient, c'est le modèle qui limite
+
+## Ce que le 0,5 B a réellement produit
+
+J'ai refait les quatre tâches que le batch 4 prévoyait sur gpt-oss-120b (5 × 1 h de lectures du même fichier de 63 Go) — sur le **0,5 B**, qui suffit à répondre à la question posée. Sorties **telles quelles**, `temp 0`, 64 jetons :
+
+| tâche | sortie | verdict |
+|---|---|---|
+| **code** | `def fibonacci(n):` … gère `n <= 0`, `n == 1`, `n == 2` | ✅ **correcte et utilisable** |
+| traduction FR | *« The river carries the logs to the mill. (No translation is needed) »* puis *« Le ruisseau transporte les feuilles au mill. »* | ❌ refuse, puis traduit faux |
+| arithmétique | entame un raisonnement juste (« we need to calculate the difference… ») | ⚠️ tronquée à 64 jetons |
+| résumé | *« The engine is a key component in the development of the new generation of engines. »* | ❌ hallucination, puis recopie |
+
+**Une fonction Python correcte, avec ses cas limites, produite par un modèle de 0,5 B** — sur la tâche où le format est contraint. Sur les trois autres, c'est le **modèle** qui échoue, pas l'exécution : Drave fait ce que le modèle sait faire. C'est aussi ce qui rend la ligne « sortie contrainte » du verdict unique en son genre — elle ne dépend pas du modèle.
+
+Réserve consignée : ces essais ont tourné sous une **charge de fond de 84** (trois gros modèles lus en parallèle) — les **sorties** sont valides, les débits ne disent rien (0,84 tok/s).
+
+## Où en est la machine
+
+La campagne est toujours sur **gpt-oss-120b** (63 Go depuis le disque dur), le batch 5 (le lot sur le 30B depuis le NVMe) a démarré, le diagnostic codestral tourne, et les quatre entraînements avancent avec la distillation derrière. C'est la dernière grosse mesure en cours ; le reste de la file (batchs 6 et 7, portes) suivra pendant la nuit.
+
+
+## Tour 19
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, préremplissage par lots, modèle plus gros que la RAM. Poursuivre en parallèle le livrable du modèle nativement événementiel : entraîné ici, exécuté par Drave à logits vérifiés, découpé en unités réparties. Chaque affirmation porte sa mesure (perplexité, débit, octets et événements par jeton, RSS, écart entre nœuds) ET ses conditions (corpus, tokenizer du modèle, charge de fond) ; les manques constatés — embeddings/encodeurs, décodage spéculatif — sont consignés comme manques, pas comme résultats. Livrables : la file tools/campagne-benefices.sh exécutée et ses journaux, un rapport de synthèse par famille de tâches, et la poursuite du modèle événementiel."
+Round: 12/40
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "date; echo \"=== campagne ===\"; tail -4 /tmp/campagne24/journal.txt; echo \"=== batch 5 (lot 30B) ===\"; tail -4 /tmp/campagne24/journal7.txt 2>/dev/null; echo \"=== diagnostic ===\"; tail -3 /tmp/campagne24/codestral_diag.log; echo \"=== entraînements ===\"; tail -1 /tmp/campagne24/tr … [223 caractères tronqués]`
+
+  ```
+jeu 08 oct 2026 22:50:44 EDT
+=== campagne ===
+[08/10 21:21:10] charge 17.44 · grille/r1-1.5B : code 0 · PPL 47.1403 · RSS 4647 Mo · lus 988 Mio
+[08/10 21:39:54] charge 47.40 · grille/r1-14B : code 0 · PPL 14.3048 · RSS 38898 Mo · lus 8304 Mio
+[08/10 22:04:33] charge 28.57 · grille/codestral-22B : code 0 · PPL 35657.3767 · RSS 63646 Mo · lus 12684 Mio
+[08/10 22:06:13] charge 26.37 · grille/qwen3-30B-A3B : code 0 · PPL 8.6327 · RSS 14256 Mo · lus 11841 Mio
+=== batch 5 (lot 30B) ===
+[08/10 22:48:36] charge 68.55 · lot30B/1 : PPL 7.6139 · 0.4 tok/s · lus 10954 Mio · 345s mur
+[08/10 22:50:34] charge 63.78 · lot30B/4 : PPL 7.6098 · 1.4 tok/s · lus 0 Mio · 118s mur
+=== diagnostic ===
+[tete] -> un stockage par COLONNES ne lirait que ces coordonnees : 75.5 % de la matrice au lieu de 100 %
+=== 2. perplexité sur du CODE (32 jetons) ===
+/tmp/campagne24/ids_code_codestral.txt : 32 tokens, fenêtres de 256
+=== entraînements ===
+  # écrit dans /tmp/m5_d256_route · 10.30 M paramètres · 0.85 M poids lus/jeton/couche
+  # écrit dans /tmp/m5_d384_route · 44.36 M paramètres · 1.92 M poids lus/jeton/couche
+/tmp/m5_d256_route/config.json
+/tmp/m5_d384_route/config.json
+  ```
+
+- **bash** `{"command": "tail -6 /tmp/campagne24/journal4.txt; echo \"=== distillation / nuit ===\"; tail -3 /tmp/campagne24/journal5.txt 2>/dev/null; echo \"=== entraînements en cours ===\"; ps -eo pid,etime,pcpu,args --sort=-pcpu 2>/dev/null | grep -E \"entrainer_moteur|distill\" | head -3 | cut -c1-120", "de … [86 caractères tronqués]`
+
+  ```
+[08/10 21:49:56] charge 26.98 · m5_d256_dense : PPL 5.3973 · paires 3.2 M · événements 732865376 · 438.3 tok/s · porte 1
+[08/10 21:50:09] charge 28.03 · m5_d384_dense : PPL 5.3719 · paires 7.2 M · événements 1648531958 · 240.2 tok/s · porte 1
+[08/10 22:30:41] charge 51.86 · m5_d256_route : PPL 5.0684 · paires 3.2 M · événements 199484606 · 662.8 tok/s · porte 1
+[08/10 22:42:59] charge 39.13 · m5_d384_route : PPL 5.0614 · paires 7.2 M · événements 448796684 · 184.0 tok/s · porte 1
+=== distillation / nuit ===
+[08/10 22:25:18] charge 51.19 · enseignant prêt (m5_d384_dense), GPU 0 libre — distillation lancée
+[08/10 22:41:30] charge 40.17 · dim 384 routé DISTILLÉ (enseignant m5_d384_dense) : départ (GPU 1)
+=== entraînements en cours ===
+3795135       00:28 99.8 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/deepseek-r1-dis
+3777528       09:21 77.3 /home/stephane/gpu-env/bin/python -u tools/entrainer_moteur.py --famille route --dim 384 --couc
+3766527       25:33 71.6 /home/stephane/gpu-env/bin/python -u tools/entrainer_moteur.py --famille route --dim 256 --couc
+  ```
+
+### 🤖 Assistant
+
+⏵ Le résultat central est là : à lecture égale, le routé bat le dense de 6 %
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"reports/rapport-campagne-benefices.md\"; s=open(p).read()\nvieux = s[s.index(\"## 5. Les modèles entraînés ici\"):s.index(\"## 7. Répartir par EXPERTS\")]\nneuf = '''## 5. Les modèles entraînés ici, mesurés DANS … [3862 caractères tronqués]`
