@@ -51,6 +51,7 @@ mod model;
 mod gpu;
 mod tokenizer;
 mod topologie;
+mod trace_globale;
 
 use engine::{matvec_dense, matvec_shift_add, Pool, SparseVec};
 use gguf::Gguf;
@@ -582,6 +583,10 @@ struct Options {
     topologie: Option<String>,
     /// C1b — identifiant de MA région, sur un nœud relais.
     region: Option<String>,
+    /// C12 — trace globale : où écrire ce qui traverse chaque lien.
+    trace_globale: Option<String>,
+    /// C12 — vérification : rejouer et comparer à cette trace.
+    verifier_globale: Option<String>,
     /// Banc du KV déporté : nombre de clés à faire tenir en VRAM.
     banc_kv: usize,
     /// Banc des SCORES d'attention : nombre de clés à noter (noyau 1 du top-k).
@@ -730,6 +735,9 @@ fn analyser(args: &[String]) -> Options {
             // C1b : le nœud RELAIS dit QUI il est dans la topologie ; c'est la
             // topologie, et elle seule, qui dit à qui il transmet ensuite.
             "--region" => { o.region = Some(suivant(i).clone()); 2 }
+            // C12 : la trace globale, et sa vérification par rejeu.
+            "--trace-globale" => { o.trace_globale = Some(suivant(i).clone()); 2 }
+            "--verifier-globale" => { o.verifier_globale = Some(suivant(i).clone()); 2 }
             "--tokenize" => { o.tokenize = true; 1 }
             "--gpu-banc" => { o.gpu_banc = true; 1 }
             // Test de fumée de la couche 0 de Kimi-K3, **sur un modèle même
@@ -3482,7 +3490,7 @@ fn run_ppl_reparti(opt: Options, pair: &str) {
     // Toute incohérence entre le fichier et la ligne de commande est REFUSÉE —
     // mesurer un découpage qui n'est pas celui qu'on croit serait pire que ne
     // rien mesurer.
-    let (couches_locales, pair_cli, tp_debut, tp_fin) = if let Some(f) = opt.topologie.clone() {
+    let (couches_locales, pair_cli, tp_debut, tp_fin, pair_region) = if let Some(f) = opt.topologie.clone() {
         let texte = std::fs::read_to_string(&f).unwrap_or_else(|e| {
             eprintln!("topologie : lecture de {f} impossible : {e}"); std::process::exit(2) });
         let t = topologie::lire_json(&texte).unwrap_or_else(|e| {
@@ -3539,10 +3547,10 @@ dit « {pair} » — deux sources pour la même chose, et elles se contredisent"
         }
         println!("[topologie] chaîne vérifiée : local 0..{} → {} {}..{}",
                  l.derniere, d.instance, d.premiere, d.derniere);
-        (l.couches(), pair.to_string(), d.premiere, d.derniere)
+        (l.couches(), pair.to_string(), d.premiere, d.derniere, d.id.clone())
     } else {
         (if opt.couches_locales > 0 { opt.couches_locales } else { 12 }, pair.to_string(),
-         0usize, 0usize)
+         0usize, 0usize, String::from("pair"))
     };
     let pair: &str = &pair_cli;
     // La plage du pair : celle de la topologie s'il y en a une, sinon « tout ce
@@ -3555,6 +3563,8 @@ dit « {pair} » — deux sources pour la même chose, et elles se contredisent"
     // `debut..fin`. Envoyer `derniere` au lieu de `derniere + 1` saute la dernière
     // couche de la région — et ça ne se voit QUE sur les modes non-lot, ce qui a
     // rendu le diagnostic pénible (modes 0, 1 et 2 cassés, 3 et 4 intacts).
+    // C12 : la trace globale — créée ici, écrite (ou vérifiée) à la fin.
+    let mut trace = trace_globale::TraceGlobale::nouvelle();
     let (debut_pair, fin_pair) = if tp_fin > 0 {
         (tp_debut, tp_fin + 1)
     } else {
@@ -3782,6 +3792,7 @@ un lot de plus d'un état n'a pas UNE `pre`). Rien n'a été calculé.");
         // région distante), pas « tout ce qui reste » : avec un relais, « ce qui
         // reste » appartient à plusieurs nœuds, et le premier calculerait le
         // travail des autres.
+        trace.enregistrer("local", pos as u32, "local->pair", &etat, 0.0);
         let (o, a) = envoyer_flux(&mut sock, debut_pair as u32, fin_pair as u32,
                                   pos as u32, &etat, mode, Some(&mdl))
                         .unwrap_or_else(|e| {
@@ -3824,6 +3835,7 @@ attendus — pair incohérent. Rien n'a été calculé.", rep.n, mdl.cfg.hidden,
             std::process::exit(1);
         }
         let final_ = rep.charge.en_dense(largeur_etat);
+        trace.enregistrer(&pair_region, pos as u32, "pair->local", &final_, t_pair * 1e3);
         // La réponse porte la `pre` de la DERNIÈRE FFN du pair (v6) : c'est elle
         // que la réduction finale du pilote doit employer — il ne peut pas la
         // recalculer, il n'a pas exécuté ces couches.
@@ -3840,6 +3852,20 @@ attendus — pair incohérent. Rien n'a été calculé.", rep.n, mdl.cfg.hidden,
     }
     let ppl = (nll / (ids.len() - 1) as f64).exp();
     println!("  deux nœuds        : perplexité {ppl:.4}  ({:.1} s)", t1.elapsed().as_secs_f64());
+    // C12 : la trace est écrite, ou vérifiée par rejeu. La vérification compare
+    // les empreintes AU BIT PRÈS : toute divergence est nommée avec son pas et
+    // son lien, et le processus sort en erreur.
+    if let Some(f) = opt.verifier_globale.clone() {
+        match trace_globale::TraceGlobale::lire(&f) {
+            Ok(reference) => match trace_globale::TraceGlobale::verifier(&reference, &trace.lignes_pub()) {
+                Ok(n) => println!("  rejeu global      : {n} croisements, AUCUNE divergence ✅"),
+                Err(e) => { eprintln!("  {e}"); std::process::exit(4); }
+            },
+            Err(e) => { eprintln!("  {e}"); std::process::exit(3); }
+        }
+    } else {
+        trace_globale::ecrire_si(&trace, &opt.trace_globale);
+    }
     println!("  écart             : {:.2e}", (ppl - ppl_ref).abs() / ppl_ref);
     // Divisor : le nombre de flux RÉELLEMENT envoyés (un par jeton, le dernier
     // compris) et non le nombre de jetons NOTÉS — l'erreur d'un facteur 40/39

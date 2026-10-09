@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 32.4 h |
-| Tours | 38 |
-| Messages | 1284 |
-| Appels d'outils | 1213 |
-| Fichiers touchés | 38 |
-| Commandes | 1015 |
+| Durée | 32.5 h |
+| Tours | 39 |
+| Messages | 1297 |
+| Appels d'outils | 1224 |
+| Fichiers touchés | 39 |
+| Commandes | 1024 |
 | Sous-agents | 3 |
-| Commits | 109 |
+| Commits | 110 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -107,6 +107,8 @@
 **Tour 37** — <goal_round> Objective: "Sprint « cerveau complet » en autonomie jusqu'au 10 octobre 9 h (HAE) : implémenter, avec portes mesurées, les trois premières capacités du plan docs/plan-cerveau-complet.md — C1 graphe de régions (descripteur de topologie, validateur de DAG, ordonnanceur par dépendances, pilote multi-nœuds ; porte : un graphe linéaire doit rendre des logits identiques au bit près et un dé … [1077 caractères tronqués]
 
 **Tour 38** — <goal_round> Objective: "Sprint « cerveau complet » en autonomie jusqu'au 10 octobre 9 h (HAE) : implémenter, avec portes mesurées, les trois premières capacités du plan docs/plan-cerveau-complet.md — C1 graphe de régions (descripteur de topologie, validateur de DAG, ordonnanceur par dépendances, pilote multi-nœuds ; porte : un graphe linéaire doit rendre des logits identiques au bit près et un dé … [1077 caractères tronqués]
+
+**Tour 39** — <goal_round> Objective: "Sprint « cerveau complet » en autonomie jusqu'au 10 octobre 9 h (HAE) : implémenter, avec portes mesurées, les trois premières capacités du plan docs/plan-cerveau-complet.md — C1 graphe de régions (descripteur de topologie, validateur de DAG, ordonnanceur par dépendances, pilote multi-nœuds ; porte : un graphe linéaire doit rendre des logits identiques au bit près et un dé … [1077 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1787,7 +1789,7 @@ Un détail qui a failli coûter cher, et qui est consigné : `--topologie` seul 
 
 ### Tour 38 — <goal_round> Objective: "Sprint « cerveau complet » en autonomie jusqu'au 10 octobre 9 h (HAE) : implémenter, avec porte … [1357 caractères tronqués]
 
-*22 appels d'outils.* Actions notables :
+*23 appels d'outils.* Actions notables :
 
 - bash — Check how the node sets its layer range
 - bash — Read the node loop context precisely
@@ -1803,11 +1805,60 @@ Un détail qui a failli coûter cher, et qui est consigné : `--topologie` seul 
 - bash — Test the relay chain on a 24-layer model
 - bash — Compare the 2-region split at the same boundaries
 - bash — Compare two versus three regions in the listes mode
-- … et 8 autres
+- … et 9 autres
 
 **Synthèse produite :**
 
-⏵ **C1b pas 2 : le relais est EXACT — trois régions, trois instances, écart 0,00e0**
+⏵ **C1 est livrée** : le relais est exact à trois instances — et il a fait trouver un vrai bug
+
+**Ce qui est fait ce round, mesuré et poussé :**
+
+| montage (modèle 24 couches, mode 0) | perplexité | écart de flux |
+|---|---:|---:|
+| référence locale | 42,5477 | — |
+| deux régions / deux instances | **42,5477** | **0.00e0** |
+| **trois régions / trois instances** (pilote + relais + sortie) | **42,5477** | **0.00e0** |
+
+**Le relais ne change pas un chiffre** — 127 trames servies par chaque nœud, résultat identique au découpage à deux régions et à la référence locale. C'est la **distribution sur plusieurs instances concertées** demandée, avec sa porte tenue.
+
+**Le bug que cette étape a trouvé, et qui compte autant que la capacité.** En câblant la plage du pair, j'ai envoyé `derniere` au lieu de `derniere + 1` : **la fin de plage est EXCLUSIVE** (le nœud exécute `debut..fin`). La dernière couche de la région distante n'était plus exécutée — et le défaut **ne touchait que les modes 0, 1 et 2** (les modes 3 et 4 passent par un autre encodeur, resté intact).
+
+C'est `tools/porte-flux.sh` qui l'a dit, en trois lignes :
+
+```
+mode 0 — f32 dense            1.69e1  ❌ (plafond 0)   →  après correctif : 0.00e0 ✅
+mode 1 — listes quantifiées   1.69e1  ❌              →  0.00e0 ✅
+mode 2 — listes par blocs     1.67e1  ❌              →  3.65e-2 ✅
+```
+
+J'ai cassé trois modes sur cinq pendant le sprint, **et la porte du dépôt l'a attrapé**. La leçon est inscrite dans `docs/sprint-cerveau.md` : toute modification du chemin d'exécution se paie d'un passage de `porte-flux.sh` — cinq modes, deux minutes — sans quoi trois modes seraient restés cassés en silence. Les 85 tests repassent ✓.
+
+**État du sprint** (`docs/sprint-cerveau.md` tenu à jour, tout poussé sur `stephanedenis/drave`) :
+
+- **C1 — FAIT** : descripteur de topologie (C1a) · la topologie pilote le découpage (C1b pas 1) · le relais trois instances (C1b pas 2). La porte est outillée (`tools/porte-topologie.sh`, cinq cas dont deux refus) et tenue.
+- **C12 — trace globale + rejeu** : en cours, c'est le prochain jalon.
+- **C5 — bus de modulation** : à suivre.
+
+Reste hors périmètre, et c'est dit : les **entrées multiples** (un graphe en Y qui s'exécute vraiment) demandent deux plages disjointes dans un même processus — c'est la capacité **C2** du plan, pas C1.
+
+### Tour 39 — <goal_round> Objective: "Sprint « cerveau complet » en autonomie jusqu'au 10 octobre 9 h (HAE) : implémenter, avec porte … [1357 caractères tronqués]
+
+*10 appels d'outils.* Actions notables :
+
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/trace_globale.rs`
+- bash — Wire the trace module and run its tests
+- bash — Find the driver's summary print
+- bash — Wire the trace into the driver and build
+- bash — Define the region name and rebuild
+- bash — Test the global trace and its replay verification
+- bash — Re-test the trace with a matching topology port
+- bash — Verify that a falsified trace is detected
+- bash — Write and run the C12 gate
+- bash — Check the flux gate, update the doc, commit and push
+
+**Synthèse produite :**
+
+⏵ C12 : trace exacte, rejeu identique, et trace faussée détectée au pas près
 
 ## 3. Travail accompli
 
@@ -1853,6 +1904,7 @@ Un détail qui a failli coûter cher, et qui est consigné : `--topologie` seul 
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/modularisation.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/manques.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/topologie.rs` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/trace_globale.rs` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -1902,7 +1954,7 @@ Un détail qui a failli coûter cher, et qui est consigné : `--topologie` seul 
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 975 autres
+- … et 984 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2030,7 +2082,7 @@ Un détail qui a failli coûter cher, et qui est consigné : `--topologie` seul 
 
 ## 5. Erreurs rencontrées
 
-52 sorties en erreur ou divergentes. Les premières :
+53 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : ```  ### 🤖 Assistant  ⏵ **En transformers 5, `AutoModel` rend directement `Qwen2Model` (pas de `.model`). Je corrige le diagnostic.**  - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitH
 - **T2** : 3310393 bash -c pgrep -af "essai_decharge" | grep python | head; echo "--- logs ---"; tail -2 /tmp/ec_d192_lr3e3.log 2>/dev/null; tail -2 /tmp/ec_d192_lr1e3.log 2>/dev/null; echo "---"; ls -la /tmp/ec
@@ -2159,4 +2211,5 @@ Un détail qui a failli coûter cher, et qui est consigné : `--topologie` seul 
 - C1b : la conception relevée sur le code, prête à implémenter  Le protocole transmet DÉJÀ la plage de couches dans la trame (f.debut, f.fin) : le découpage voyag
 - C1b pas 1 : la topologie PILOTE le découpage — porte tenue, même chiffre, 0,00e0  --ppl-reparti --topologie F exécute le découpage DÉCRIT par le fichier au lieu
 - C1b pas 2 : le RELAIS — trois régions sur trois instances, écart 0,00e0  Un nœud du milieu (--flux-serveur … --topologie F --region n1) applique SA plage puis t
+- C12 : trace globale horodatée et rejeu exact — 126 croisements, aucune divergence  TraceGlobale enregistre, par croisement : région, pas, lien, nombre de valeur
 

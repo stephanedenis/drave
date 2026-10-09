@@ -13,7 +13,7 @@ Trois capacités du plan, chacune avec sa **porte mesurée** :
 | # | capacité | porte (invariant à vérifier) | état |
 |---|---|---|---|
 | **C1** | **graphe de régions** : descripteur de topologie, validateur, ordonnanceur par dépendances, pilote multi-nœuds | un graphe **linéaire** rend des logits identiques **au bit près** ; un découpage à **trois régions** égale le modèle d'un seul tenant | **FAIT** : C1a + C1b (topologie pilote + relais trois instances, écart **0,00e0**) · reste C2 (entrées multiples) hors périmètre |
-| **C12** | **trace globale horodatée + rejeu** | rejeu d'une exécution distribuée == exécution, **0,00e0** | à faire |
+| **C12** | **trace globale horodatée + rejeu** | rejeu d'une exécution distribuée == exécution, **0,00e0** | **FAIT** : 126 croisements, aucune divergence · trace faussée détectée au bit près |
 | **C5** | **bus de modulation multi-canaux** | canal nul ⇒ sortie **inchangée** | mécanique partielle (fichier), bus à faire |
 
 **Contraintes non négociables** : les **23 portes** du dépôt et les tests restent
@@ -178,6 +178,31 @@ du plan, pas C1.
 
 ---
 
+## C12 — FAIT (9 octobre 18 h 40) : trace globale et rejeu exact
+
+**Livré** : `drave-core/src/trace_globale.rs` (5 tests) + deux drapeaux —
+`--trace-globale F` (le pilote écrit ce qui traverse chaque lien) et
+`--verifier-globale F` (il rejoue et compare).
+
+**Ce qui est enregistré** par croisement : région, pas, lien, nombre de valeurs,
+**empreinte FNV-1a des octets** (donc au **bit près**, sans epsilon) et horodatage.
+Les valeurs elles-mêmes ne sont **pas** stockées : 126 croisements tiennent en 128
+lignes de texte, et la trace dit *où* regarder — le rejeu recompte et compare.
+
+**La porte** (`tools/porte-trace.sh`), trois cas mesurés :
+
+| cas | résultat |
+|---|---|
+| 1. exécution répartie + trace | **126 croisements** écrits (64 pas × 2 liens) · perplexité 59,0790 |
+| 2. rejeu de la même exécution | **126 croisements, AUCUNE divergence ✅** |
+| 3. trace **faussée d'un seul bit** | **DÉTECTÉE** : « DIVERGENCE AU BIT PRÈS au croisement 0 — région « local », pas 0, lien « local->pair » : empreinte 0x…d696 attendue, 0x…d697 obtenue » |
+
+**Le cas 3 est le plus important** : une porte qui ne sait pas échouer ne vérifie
+rien. La vérification nomme le pas, la région et le lien — c'est exactement ce qui
+manquait pour déboguer un graphe distribué.
+
+---
+
 ## Prochaines étapes (dans l'ordre)
 
 1. **C1b — pilote multi-régions** (conception ci-dessus) : une topologie **linéaire** à
@@ -195,4 +220,5 @@ du plan, pas C1.
 |---|---|
 | 9/10 17 h 10 | **C1a** : module `topologie.rs`, validation stricte, plan, 8 tests, suite à 85 tests. |
 | 9/10 17 h 20 | **C1b pas 1** : la topologie pilote le découpage · porte `tools/porte-topologie.sh` **TENUE** (même chiffre, écart 0,00e0) · deux refus vérifiés. |
+| 9/10 18 h 40 | **C12** : trace globale + rejeu · porte `tools/porte-trace.sh` (126 croisements, aucune divergence ; trace faussée détectée au bit près). 90 tests. |
 | 9/10 18 h 00 | **C1b pas 2** : le RELAIS · trois régions sur trois instances, **écart 0,00e0**, même chiffre que deux régions. **Bug de fin de plage exclusive trouvé et corrigé** — attrapé par `porte-flux.sh` (modes 0, 1, 2 cassés, réparés : 0.00e0 / 0.00e0 / 3.65e-2). |

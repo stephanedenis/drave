@@ -20212,3 +20212,180 @@ test result: ok. 85 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fin
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/sprint-cerveau.md\")\ns = p.read_text()\nancre = \"\"\"## C1b pas 2 — le relais : la conception, relevée sur le code\"\"\"\nassert ancre in s\nneuf = \"\"\"## C1b pas 2 — **FA … [4996 caractères tronqués]`
+
+  ```
+sprint doc à jour
+poussé
+  ```
+
+- **todo_write** `{"todos": [{"content": "C1a : descripteur de topologie + validateur de DAG + impression du plan", "status": "completed"}, {"content": "C1b pas 1 : la topologie pilote le découpage (porte tenue, 0,00e0)", "status": "completed"}, {"content": "C1b pas 2 : le RELAIS — trois régions sur trois instances ( … [358 caractères tronqués]`
+
+  ```
+Updated todo list: 2 pending, 1 in progress, 3 completed.
+  ```
+
+### 🤖 Assistant
+
+⏵ **C1 est livrée** : le relais est exact à trois instances — et il a fait trouver un vrai bug
+
+**Ce qui est fait ce round, mesuré et poussé :**
+
+| montage (modèle 24 couches, mode 0) | perplexité | écart de flux |
+|---|---:|---:|
+| référence locale | 42,5477 | — |
+| deux régions / deux instances | **42,5477** | **0.00e0** |
+| **trois régions / trois instances** (pilote + relais + sortie) | **42,5477** | **0.00e0** |
+
+**Le relais ne change pas un chiffre** — 127 trames servies par chaque nœud, résultat identique au découpage à deux régions et à la référence locale. C'est la **distribution sur plusieurs instances concertées** demandée, avec sa porte tenue.
+
+**Le bug que cette étape a trouvé, et qui compte autant que la capacité.** En câblant la plage du pair, j'ai envoyé `derniere` au lieu de `derniere + 1` : **la fin de plage est EXCLUSIVE** (le nœud exécute `debut..fin`). La dernière couche de la région distante n'était plus exécutée — et le défaut **ne touchait que les modes 0, 1 et 2** (les modes 3 et 4 passent par un autre encodeur, resté intact).
+
+C'est `tools/porte-flux.sh` qui l'a dit, en trois lignes :
+
+```
+mode 0 — f32 dense            1.69e1  ❌ (plafond 0)   →  après correctif : 0.00e0 ✅
+mode 1 — listes quantifiées   1.69e1  ❌              →  0.00e0 ✅
+mode 2 — listes par blocs     1.67e1  ❌              →  3.65e-2 ✅
+```
+
+J'ai cassé trois modes sur cinq pendant le sprint, **et la porte du dépôt l'a attrapé**. La leçon est inscrite dans `docs/sprint-cerveau.md` : toute modification du chemin d'exécution se paie d'un passage de `porte-flux.sh` — cinq modes, deux minutes — sans quoi trois modes seraient restés cassés en silence. Les 85 tests repassent ✓.
+
+**État du sprint** (`docs/sprint-cerveau.md` tenu à jour, tout poussé sur `stephanedenis/drave`) :
+
+- **C1 — FAIT** : descripteur de topologie (C1a) · la topologie pilote le découpage (C1b pas 1) · le relais trois instances (C1b pas 2). La porte est outillée (`tools/porte-topologie.sh`, cinq cas dont deux refus) et tenue.
+- **C12 — trace globale + rejeu** : en cours, c'est le prochain jalon.
+- **C5 — bus de modulation** : à suivre.
+
+Reste hors périmètre, et c'est dit : les **entrées multiples** (un graphe en Y qui s'exécute vraiment) demandent deux plages disjointes dans un même processus — c'est la capacité **C2** du plan, pas C1.
+
+
+## Tour 39
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Sprint « cerveau complet » en autonomie jusqu'au 10 octobre 9 h (HAE) : implémenter, avec portes mesurées, les trois premières capacités du plan docs/plan-cerveau-complet.md — C1 graphe de régions (descripteur de topologie, validateur de DAG, ordonnanceur par dépendances, pilote multi-nœuds ; porte : un graphe linéaire doit rendre des logits identiques au bit près et un découpage à trois régions doit égaler le modèle d'un seul tenant), C12 trace globale horodatée et rejeu exact (porte : rejeu == exécution, 0,00e0), C5 bus de modulation multi-canaux (porte : canal nul ⇒ sortie inchangée). Chaque capacité livrée avec son invariant vérifié, ses tests, sa mesure et sa documentation ; l'état d'avancement est écrit dans docs/sprint-cerveau.md à chaque round pour être resumable. Ne rien casser : les 23 portes du dépôt et les 77 tests doivent rester verts, et le profil release reste le binaire de mesure."
+Round: 3/40
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ C12 : la trace globale horodatée et sa vérification par rejeu
+
+- **write** `{"content": "//! Trace GLOBALE d'une exécution répartie — ce qui a traversé chaque lien, pas à pas.\n//!\n//! POURQUOI CE MODULE (docs/plan-cerveau-complet.md, capacité C12). Une exécution\n//! répartie n'est aujourd'hui observable que par ce que chaque processus imprime :\n//! quand un graphe de ré … [9778 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/trace_globale.rs</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"src/main.rs\")\ns = p.read_text()\n# module\ns = s.replace(\"mod topologie;\", \"mod topologie;\\nmod trace_globale;\", 1)\n# options\ns = s.replace(\"    /// C1b — iden … [1006 caractères tronqués]`
+
+  ```
+options C12 posées
+test trace_globale::tests::verifier_detecte_la_divergence_et_la_nomme ... ok
+test trace_globale::tests::refuse_une_trace_tronquee_ou_bruitee ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 85 filtered out; finished in 0.00s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && grep -n \"écart             :\" src/main.rs | head -2; sed -n '/écart             :/,+4p' src/main.rs | head -8", "description": "Find the driver's summary print"}`
+
+  ```
+3851:    println!("  écart             : {:.2e}", (ppl - ppl_ref).abs() / ppl_ref);
+    println!("  écart             : {:.2e}", (ppl - ppl_ref).abs() / ppl_ref);
+    // Divisor : le nombre de flux RÉELLEMENT envoyés (un par jeton, le dernier
+    // compris) et non le nombre de jetons NOTÉS — l'erreur d'un facteur 40/39
+    // faisait apparaître un flux de « 919 canaux » pour un modèle qui en a 896.
+    let nflux = flux_envoyes.max(1);
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"src/main.rs\")\ns = p.read_text()\n\n# 1) la trace, créée avant la boucle : ancrer sur la déclaration des compteurs\nvieux = \"\"\"    let (debut_pair, fin_pair) = if tp … [3117 caractères tronqués]`
+
+  ```
+trace câblée dans le pilote
+accesseur ajouté
+3838:        trace.enregistrer(&pair_region, pos as u32, "pair->local", &final_, t_pair * 1e3);
+error[E0425]: cannot find value `pair_region` in this scope
+    --> src/main.rs:3838:28
+     |
+3838 |         trace.enregistrer(&pair_region, pos as u32, "pair->local", &final_, t_pair * 1e3);
+     |                            ^^^^^^^^^^^ not found in this scope
+
+warning: type `io_result` should have an upper camel case name
+--
+error: could not compile `drave-core` (bin "drave") due to 1 previous error; 30 warnings emitted
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"src/main.rs\")\ns = p.read_text()\n# définir pair_region à côté de pair, dans les deux branches\ns = s.replace(\"\"\"        (l.couches(), pair.to_string(), d.premiere,  … [965 caractères tronqués]`
+
+  ```
+pair_region défini
+test result: ok. 90 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=models/Qwen2.5-0.5B-Q8_0.gguf; IDS=/tmp/campagne24/ids_0.5B-Q8.txt; D=./drave-core/target/release/drave; P=49901; echo \"=== A. exécution AVEC trace globale (deux régions) ===\"; $D $M --flux-serveur $P --ctx 256 --threads 8 > /dev … [836 caractères tronqués]`
+
+  ```
+=== A. exécution AVEC trace globale (deux régions) ===
+--- la trace ---
+=== B. rejeu + vérification ===
+  code 1
+[stderr]
+head: cannot open '/tmp/trace1.txt' for reading: No such file or directory
+wc: /tmp/trace1.txt: No such file or directory
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=models/Qwen2.5-0.5B-Q8_0.gguf; IDS=/tmp/campagne24/ids_0.5B-Q8.txt; D=./drave-core/target/release/drave; P=49911; python3 - <<PY\nimport json,pathlib\npathlib.Path('/tmp/t2.json').write_text(json.dumps({\"regions\":[{\"id\":\"local … [1111 caractères tronqués]`
+
+  ```
+=== A. exécution + trace ===
+  deux nœuds        : perplexité 59.0790  (2.6 s)
+[trace] 126 croisements écrits dans /tmp/trace1.txt
+  écart             : 0.00e0
+# drave trace globale v1 · 126 croisements
+# region pas lien n empreinte ms
+local 0 local->pair 896 0xddd44db579dfd697 0.000
+128
+=== B. rejeu + vérification ===
+  rejeu global      : 126 croisements, AUCUNE divergence ✅
+  ```
+
+### 🤖 Assistant
+
+⏵ C12 : trace écrite et rejeu identique — je vérifie maintenant qu'une trace FAUSSE est détectée
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=models/Qwen2.5-0.5B-Q8_0.gguf; IDS=/tmp/campagne24/ids_0.5B-Q8.txt; D=./drave-core/target/release/drave; P=49921; python3 - <<PY\nimport json,pathlib\npathlib.Path('/tmp/t2.json').write_text(json.dumps({\"regions\":[{\"id\":\"local … [1174 caractères tronqués]`
+
+  ```
+trace faussée au pas 20 : local 20 local->pair 896 0xa9994307fd6cf76 0.000
+=== vérification d'une trace FAUSSÉE (un bit) ===
+  rejeu : DIVERGENCE AU BIT PRÈS au croisement 40 — région « local », pas 20, lien « local->pair » : empreinte 0x0a9994307fd6cf76 attendue, 0x0a9994307fd6cf77 obtenue
+  code de sortie : 4
+  ```
+
+### 🤖 Assistant
+
+⏵ C12 : trace exacte, rejeu identique, et trace faussée détectée au pas près
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/porte-trace.sh <<'EOF'\n#!/bin/bash\n# porte-trace.sh — la porte de la capacité C12 : la trace globale et son rejeu.\n#\n# Trois cas, et le troisième est le plus important :\n#   1. une exécution répartie ÉCRIT une trace  … [2793 caractères tronqués]`
+
+  ```
+=== 1. exécution + trace globale ===
+    deux nœuds        : perplexité 59.0790  (2.6 s)
+  [trace] 126 croisements écrits dans /tmp/tmp.z0ppirQs4c/trace.txt
+  croisements enregistrés : 126
+=== 2. rejeu de la même exécution ===
+    rejeu global      : 126 croisements, AUCUNE divergence ✅
+  ✅ rejeu identique
+=== 3. trace FAUSSÉE d'un seul bit ===
+    rejeu : DIVERGENCE AU BIT PRÈS au croisement 0 — région « local », pas 0, lien « local->pair » : empreinte 0xddd44db579dfd696 attendue, 0xddd44db579dfd697 obtenue
+  ✅ la trace fausse est détectée et nommée
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== non-régression : porte-flux ===\"; timeout 600 tools/porte-flux.sh 2>&1 | tail -5; python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/sprint-cerveau.md\")\ns = p.read_text()\nancre = \"\"\"## Prochaines étapes (dans … [3332 caractères tronqués]`
