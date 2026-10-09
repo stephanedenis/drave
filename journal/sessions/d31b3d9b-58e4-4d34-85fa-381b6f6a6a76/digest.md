@@ -13394,3 +13394,564 @@ e87e37f Instrument : la convention SentencePiece nommée, le k-WTA appris, la FF
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/mesure_fenetres.sh tools/speculatif_moteur.py tools/trace_gpu.py && git commit -q -m \"Deux harnais qui manquaient : le protocole 8×128 écrit, l'acceptation mesurée par le moteur\n\nmesure_fenetres.sh — le protocole de  … [921 caractères tronqués]`
+
+  ```
+4251a4f Deux harnais qui manquaient : le protocole 8×128 écrit, l'acceptation mesurée par le moteur
+  ```
+
+- **bash** `{"command": "cd /tmp/campagne24 && echo \"=== spec 1.5->14 ===\"; ls -la spec_15_14.log 2>/dev/null && grep -E \"acceptés|coût|gain\" spec_15_14.log; echo \"=== porte gpt-oss ===\"; cat porte_gptoss_seule_marqueur.txt 2>/dev/null || echo \"(en cours)\"; echo \"=== campagne : journal final ===\"; tai … [154 caractères tronqués]`
+
+  ```
+=== spec 1.5->14 ===
+=== porte gpt-oss ===
+(en cours)
+=== campagne : journal final ===
+[09/10 01:03:30] charge 32.31 · portes : 22 vertes · 1 rouges
+[09/10 01:03:30] charge 32.31 · === campagne terminée ===
+=== journal6 (m6) ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"tools/mesure_fenetres.sh\")\ns = p.read_text()\ns = s.replace('''        ev=$(echo \"$sortie\" | grep -oE \"\\\\((\\\\s*[0-9]+) événements\" | grep -oE \"[0-9]+\" | head -1)''',\n' … [749 caractères tronqués]`
+
+  ```
+ok
+syntaxe OK
+  ```
+
+- **write** `{"content": "#!/bin/bash\n# nuit4_route_creux.sh — le candidat « meilleur des deux » : routage ET activations creuses.\n#\n# POURQUOI CETTE EXPÉRIENCE. Deux leviers ont été mesurés séparément :\n#   — le ROUTAGE (MoE) fait lire moins de poids par jeton : −2,6 % à dim 256, et il\n#     ne paie que ce … [3014 caractères tronqués]`
+
+  ```
+<path>/tmp/campagne24/nuit4_route_creux.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash -n /tmp/campagne24/nuit4_route_creux.sh && setsid nohup bash /tmp/campagne24/nuit4_route_creux.sh > /tmp/campagne24/nuit4_console.log 2>&1 < /dev/null & sleep 2; pgrep -af \"nuit4_route_creu[x]\" | head -1; echo \"--- files d'at … [213 caractères tronqués]`
+
+  ```
+910636 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash -n /tmp/campagne24/nuit4_route_creux.sh && setsid nohup bash /tmp/campagne24/nuit4_route_creux.sh > /tmp/campagne24/nuit4_console.log 2>&1 < /dev/null & sleep 2; pgrep -af "nuit4_route_creu[x]" | head -1; echo "--- files d'attente ---"; for f in /tmp/campagne24/nuit*.sh; do printf "%-40s %s\n" "$(basename $f)" "$(pgrep -cf "$(basename $f)" 2>/dev/null)"; done
+--- files d'attente ---
+nuit2_m6.sh                              2
+nuit3_kwta.sh                            2
+nuit4_route_creux.sh                     4
+nuit_gpu0.sh                             1
+nuit_gpu1.sh                             0
+  ```
+
+- **bash** `{"command": "pkill -f \"nuit4_route_creu[x]\" ; sleep 1; python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"/tmp/campagne24/nuit4_route_creux.sh\")\ns = p.read_text()\ns = s.replace('''while pgrep -f \"entrainer_moteu[r]\" > /dev/null 2>&1; do sleep 120; done''',\n'''# Deux chaînes qui attendent « … [706 caractères tronqués]`
+
+  ```
+(no output)
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "pgrep -af \"bash /tmp/campagne24/nuit4_route_creux.sh\" | head -3; echo \"---\"; python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"/tmp/campagne24/nuit4_route_creux.sh\")\ns = p.read_text()\nif \"chaîne creux terminée\" not in s.split(\"dire()\")[0]:\n    s = s.replace('''while pgrep … [759 caractères tronqués]`
+
+  ```
+910821 bash -c pgrep -af "bash /tmp/campagne24/nuit4_route_creux.sh" | head -3; echo "---"; python3 - <<'PY' import pathlib p = pathlib.Path("/tmp/campagne24/nuit4_route_creux.sh") s = p.read_text() if "chaîne creux terminée" not in s.split("dire()")[0]:     s = s.replace('''while pgrep -f "entrainer_moteu[r]" > /dev/null 2>&1; do sleep 120; done''', '''# Deux chaînes qui attendent « plus aucun entraînement » se réveilleraient ENSEMBLE # et se disputeraient le GPU : celle-ci attend le marqueur de fin de la chaîne # « creux » (nuit3), pas la simple absence de processus. while ! grep -q "chaîne creux terminée" "$J" 2>/dev/null; do sleep 120; done while pgrep -f "entrainer_moteu[r]" > /dev/null 2>&1; do sleep 120; done''', 1)     p.write_text(s)     print("garde ajoutée") else:     print("garde déjà présente") PY bash -n /tmp/campagne24/nuit4_route_creux.sh && echo "syntaxe OK"; grep -n "chaîne creux terminée" /tmp/campagne24/nuit4_route_creux.sh | head -2
+---
+garde ajoutée
+syntaxe OK
+25:while ! grep -q "chaîne creux terminée" "$J" 2>/dev/null; do sleep 120; done
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && setsid nohup bash /tmp/campagne24/nuit4_route_creux.sh > /tmp/campagne24/nuit4_console.log 2>&1 < /dev/null & sleep 2; ps -eo pid,etime,args | grep -E \"nuit[0-9]_\" | grep -v grep | sed 's/\\(.\\{110\\}\\).*/\\1/' | head -6", "descr … [46 caractères tronqués]`
+
+  ```
+799133       34:39 bash /tmp/campagne24/nuit2_m6.sh
+ 844917       07:19 bash /tmp/campagne24/nuit3_kwta.sh
+ 910916       00:02 bash /tmp/campagne24/nuit4_route_creux.sh
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md", "new_string": "**Trois corrections de méthode sont consignées dans ce rapport**, et elles\ncomptent autant que les chiffres : le tokenizer étranger (`data/…ids`, facteur\n442), la fenêtre d'évaluat … [1322 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /tmp/campagne24 && ls -la spec_15_14.log spec_05_14.log 2>/dev/null; pgrep -af \"speculatif_moteu[r]\" | grep -oE \"cible [^ ]+\" | head -2; echo \"--- porte gpt-oss ---\"; ls -la porte_gptoss_seule.log 2>/dev/null; tail -c 300 porte_gptoss_seule.log 2>/dev/null; echo; cat porte_gpto … [107 caractères tronqués]`
+
+  ```
+cible $G/deepseek-r1-distill-qwen-1.5b-q4_k_m.gguf
+cible $G/deepseek-r1-distill-qwen-14b-q4_k_m.gguf
+--- porte gpt-oss ---
+-rw-r--r--. 1 stephane stephane 541  9 oct 01:05 porte_gptoss_seule.log
+ping absent (experts en clair dans le fichier)
+[config] puits appris sur 36/36 couches · n_rot 64 · ffn 2880 · experts 128
+[config] fenêtre glissante 128 sur 18/36 couches (motif 2 alterné)
+[config] rotation : RoPE simple (contexte 256 ≤ 4096 initial ; YaRN ×32 prendrait le relais au-delà)
+
+(en cours)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/## 3. La grille de modèles/,/## 4\\./p' reports/rapport-campagne-benefices.md | head -45", "description": "Review the model grid section"}`
+
+  ```
+## 3. La grille de modèles — « ce modèle tourne-t-il, et à quel prix ? »
+
+Mêmes 256 jetons, même contexte, chaque modèle tokenisant son propre corpus
+(`/usr/bin/time -v` pour la mémoire et les octets lus).
+
+| modèle | perplexité | **bits/octet** | tok/s | RSS | octets lus | condition |
+|---|---:|---:|---:|---:|---:|---|
+| Qwen2.5-0.5B Q8_0 | **17,43** | **0,983** | 28,7 | 1,28 Go | 0 | en cache |
+| r1-distill-Qwen-1.5B Q4_K_M | **47,14** | **1,326** | 9,5 | 4,76 Go | 1,04 Go | lu du disque |
+| r1-distill-Qwen-14B Q4_K_M | **14,30** | **0,915** | 0,5 | 39,8 Go | 8,71 Go | lu du disque, charge 47 |
+| codestral-22B Q4_K_M | **117,91** ✅ *(tokenizer corrigé)* | **1,797** | — | 63,6 Go | 12,7 Go | mesure invalide avant le correctif (§ 3) |
+| Qwen3-30B-A3B Q4_K_M (MoE) | **8,63** | **0,742** | — | **14,3 Go** | 11,8 Go | MoE, lu du NVMe |
+| gpt-oss-120b MXFP4 | **expiré à 90 min** | — | — | 13,9 Go | **35,5 Go lus** | 63 Go depuis le disque dur |
+
+**Le MoE gagne sur les deux tableaux — la thèse du projet démontrée par un modèle
+qui n'a pas été fait pour ça.** Qwen3-30B-A3B (30 milliards de paramètres, 3
+actifs) donne la **meilleure qualité de la grille** (0,742 bit/octet, mieux que le
+14
+… [1530 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Mesure propre du lot sur disque : éviction du cache par `posix_fadvise` puis passes à froid
+
+- **write** `{"content": "#!/bin/bash\n# mesure_lot_disque.sh — le préremplissage par LOTS, mesuré sur le DISQUE.\n#\n# POURQUOI CE SCRIPT EXISTE. Le batch 5 avait comparé `--lot 1` à `--lot 4..64`\n# sur le 30B : la première passe avait lu 10,9 Go et les suivantes ZÉRO octet. Le\n# protocole mesurait donc le ca … [2828 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mesure_lot_disque.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && chmod +x tools/mesure_lot_disque.sh && bash -n tools/mesure_lot_disque.sh && nohup bash -c 'bash tools/mesure_lot_disque.sh /home/stephane/FastNVMe/qwen3-30b-a3b-Q4_K_M.gguf /tmp/campagne24/ids_qwen3-30B-A3B.txt --lots \"1 2 4 8 16\" … [240 caractères tronqués]`
+
+  ```
+lot disque pid 911407
+  ```
+
+- **bash** `{"command": "sleep 150; cat /tmp/campagne24/lot_disque.log 2>/dev/null | head -12", "description": "Check the cold-cache batch run early output", "timeoutMs": 200000}`
+
+  ```
+# préremplissage par lots sur DISQUE · qwen3-30b-a3b-Q4_K_M.gguf · 192 jetons, ctx 512
+| lot | PPL | lus (Mio) | mur (s) | tok/s |
+|---:|---:|---:|---:|---:|
+  (cache du modèle évincé : 17.3 Go)
+| 1 | 7.4244 | 12586 | 2:05.89 | 2.1 |
+  (cache du modèle évincé : 17.3 Go)
+  ```
+
+- **bash** `{"command": "cd /tmp/campagne24 && echo \"=== spec ===\"; ls -la spec_15_14.log 2>/dev/null && grep -E \"acceptés|coût relatif|gain net\" spec_15_14.log; echo \"=== porte gpt-oss ===\"; cat porte_gptoss_seule_marqueur.txt 2>/dev/null || echo \"(en cours)\"; echo \"=== m6 ===\"; tail -1 tr_d512_route … [99 caractères tronqués]`
+
+  ```
+=== spec ===
+=== porte gpt-oss ===
+(en cours)
+=== m6 ===
+  pas  24000 · perte 1.2391 · val 1.9280 bits/octet · 2697 s
+=== lot disque ===
+|---:|---:|---:|---:|---:|
+  (cache du modèle évincé : 17.3 Go)
+| 1 | 7.4244 | 12586 | 2:05.89 | 2.1 |
+  (cache du modèle évincé : 17.3 Go)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/## 0 bis/,/### 0 ter/p' reports/rapport-campagne-benefices.md", "description": "Review the verdict table"}`
+
+  ```
+## 0 bis. Le verdict, famille par famille
+
+Le tableau qui répond à la question posée, chaque ligne portant sa mesure. ⏳ =
+file encore en cours.
+
+| famille de tâches | verdict | mesure |
+|---|---|---|
+| **langage** (perplexité) | ✅ tourne, et **le routage entraîné gagne** | à lecture égale (3,2 M poids/jeton) : dense **5,0155** → routé **4,8858** (−2,6 %) → **distillé 4,7642 (−5,0 %)**, protocole 8 × 128 jetons |
+| **génération / latence** | ✅ mesuré | TTFT **27,9 ms**, **29,0 tok/s** (0,5 B) · 114,6 ms, 7,1 tok/s (1,5 B) |
+| **contexte long — la mémoire** | ✅ **elle tient** | **12 aiguilles sur 12** retrouvées, de 512 à **4 096 jetons**, à 10 %, 50 % et 90 % de profondeur |
+| **contexte long — le coût** | ✅ réglable | KV int8 : +1,5 % (512 j.) à +3,0 % (8 192 j.) · paginé : **0,03 Go au lieu de 25,77 Go** à 1 M |
+| **préremplissage par lots** | ✅ ×1,4 en RAM, ⚠️ disque non testé | 0,5 B, 512 jetons : **16,8 → 23,7 tok/s** et PPL **identique** (13,1368 → 13,1359) · sur le 30B le lot n'a lu que le **cache de pages** (10,9 Go à froid, 0 ensuite) |
+| **code** | ✅ mesuré, décalage de tâche | codestral-22B : **117,91** de PPL sur de la prose = **1,797 bit/octet**, contre **0,983** pour u
+… [2612 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\ns = s.replace('''| **décodage spéculatif** | ❌ manque, et chiffré | brouillon générique : **×1,20** — insuffisant pour  … [1200 caractères tronqués]`
+
+  ```
+ok
+| **décodage spéculatif** | ❌ manque, et chiffré **par le moteur** | paire alignée (HF) : 3,35 jetons sur 8 acceptés, **×1,20** · paire mal appariée (moteur) : **0,88 sur 8, ×0,70** — un brouillon rejeté coûte plus qu'il ne rapporte (§ 1 et 1 bis) |
+| **fidélité listes ↔ dense** | ✅ **exacte, démontrée** | logits identiques **au bit près** (`cmp` sur 4 254 216 octets) et mêmes jetons gloutons, à encodage de poids égal ; ×0,02 à ×3,19 selon la densité |
+| **décodage spéculatif** | `eagle3-gpt-oss-120b` (0,84 Go, 1 couche) présent sur le disque | aucune notion de brouillon dans le moteur (`grep eagle\|brouillon\|specul` = 0), et le § 1 montre qu'un brouillon générique ne suffirait pas |
+
+| **décodage spéculatif** | **rien** dans le moteur ; le taux d'acceptation mesuré est de 41,9 % (§ 1) | cette campagne |
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md", "new_string": "| **décodage spéculatif** | `eagle3-gpt-oss-120b` (0,84 Go, 1 couche) présent sur le disque | aucune notion de brouillon dans le moteur (`grep eagle\\|brouillon\\|specul` = 0) — et l … [515 caractères tronqués]`
+
+  ```
+Error: cannot edit "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md": file changed since it was read — re-read the file, then retry
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\nvieux = \"aucune notion de brouillon dans le moteur (`grep eagle\\\\|brouillon\\\\|specul` = 0), et le § 1 montre qu'un … [844 caractères tronqués]`
+
+  ```
+ok
+# préremplissage par lots sur DISQUE · qwen3-30b-a3b-Q4_K_M.gguf · 192 jetons, ctx 512
+| lot | PPL | lus (Mio) | mur (s) | tok/s |
+|---:|---:|---:|---:|---:|
+  (cache du modèle évincé : 17.3 Go)
+| 1 | 7.4244 | 12586 | 2:05.89 | 2.1 |
+  (cache du modèle évincé : 17.3 Go)
+=== spec ===
+(en cours)
+=== porte ===
+(en cours)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff journal/README.md journal/sessions/MANIFEST.md | head -40; echo \"=== digest : début ===\"; git diff journal/sessions/d31b3d9b-58e4-4d34-85fa-381b6f6a6a76/digest.md | head -20", "description": "Inspect journal changes"}`
+
+  ```
+diff --git a/journal/README.md b/journal/README.md
+index fad9d58..2dcc264 100644
+--- a/journal/README.md
++++ b/journal/README.md
+@@ -6,12 +6,14 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
+ 
+ | Session | Titre | Début | Durée | Tours | Outils | Fichiers | Commits | Rapport |
+ |---|---|---|---|---|---|---|---|---|
++| `04ed1834` | Tu travailles dans le dépôt | 2026-10-08 09:18 | 0.0 h | 1 | 42 | 0 | 0 | [rapport](sessions/04ed1834-b0f8-42a1-aa21-75a75c19647e/rapport.md) |
+ | `11b2d312` | Tu es relecteur ADVERSARIAL autonome | 2026-10-01 02:50 | 0.1 h | 1 | 60 | 0 | 0 | [rapport](sessions/11b2d312-9a7e-4a4e-814f-ed0384ed9d4d/rapport.md) |
+ | `13446299` | Tu es relecteur ADVERSARIAL autonome | 2026-10-01 00:54 | 0.2 h | 1 | 68 | 0 | 0 | [rapport](sessions/13446299-79d8-497c-ba83-673c176a4637/rapport.md) |
+ | `15fd322f` | Tu travailles dans le dépôt | 2026-09-30 11:47 | 0.2 h | 1 | 67 | 2 | 0 | [rapport](sessions/15fd322f-7e9e-48c0-a970-f36335eb622a/rapport.md) |
+ | `1820cf6b` | Tu es un vérificateur ADVERSARIAL | 2026-10-02 19:29 | 0.1 h | 1 | 21 | 4 | 0 | [rapport](sessions/1820cf6b-c8a4-411c-894c-31195b9ff7a8/rapport.md) |
+ | `18b8879c` | Tu travailles dans 
+… [4225 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sleep 240; cd /tmp/campagne24 && echo \"=== lot disque ===\"; tail -5 lot_disque.log; echo \"=== spec 1.5->14 ===\"; cat spec_15_14.log 2>/dev/null | tail -6 || echo \"(en cours)\"; echo \"=== porte gpt-oss ===\"; cat porte_gptoss_seule_marqueur.txt 2>/dev/null || echo \"(en cours)\"",  … [76 caractères tronqués]`
+
+  ```
+=== lot disque ===
+  (cache du modèle évincé : 17.3 Go)
+| 1 | 7.4244 | 12586 | 2:05.89 | 2.1 |
+  (cache du modèle évincé : 17.3 Go)
+| 2 | 7.4228 | 17520 | 2:13.59 | 1.9 |
+  (cache du modèle évincé : 17.3 Go)
+=== spec 1.5->14 ===
+=== porte gpt-oss ===
+(en cours)
+  ```
+
+- **bash** `{"command": "ps -eo pid,etime,pcpu,args --sort=-pcpu | grep -E \"drave\" | grep -v grep | sed 's/\\(.\\{150\\}\\).*/\\1/' | head -6; echo \"--- fichiers récents /tmp ---\"; ls -lat /tmp/campagne24/*.log 2>/dev/null | head -4", "description": "Check running drave processes"}`
+
+  ```
+845406       16:17  582 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/gpt-oss-120b-MXFP4.gguf --ppl /tmp/ids_oss_51
+ 898033       12:32  120 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/deepseek-r1-distill-qwen-14b-q4_k_m.gguf --pp
+ 921269       00:07 98.8 ./drave-core/target/release/drave /home/stephane/FastNVMe/qwen3-30b-a3b-Q4_K_M.gguf --ppl /tmp/campagne24/ids_qwen3-30B-A3B.t
+ 909956       11:44 80.9 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/codestral-22b-v0.1-q4_k_m.gguf --ppl /tmp/cam
+ 920271       00:57 68.8 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/deepseek-r1-distill-qwen-1.5b-q4_k_m.gguf --i
+ 845404       16:17  0.0 /usr/bin/time -v timeout 5400 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/gpt-oss-120b-MX
+--- fichiers récents /tmp ---
+-rw-r--r--. 1 stephane stephane   438  9 oct 01:21 /tmp/campagne24/lot_disque.log
+-rw-r--r--. 1 stephane stephane   451  9 oct 01:20 /tmp/campagne24/b2_r1-14B-corpus_code.log
+-rw-r--r--. 1 stephane stephane   512  9 oct 01:14 /tmp/campagne24/tr_d512_route.log
+-rw-r
+… [79 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sleep 280; cd /tmp/campagne24 && cat lot_disque.log | tail -8; echo \"=== spec ===\"; cat spec_15_14.log 2>/dev/null | tail -8 || echo \"(en cours)\"", "description": "Poll batch and speculative results", "timeoutMs": 320000}`
+
+  ```
+| 1 | 7.4244 | 12586 | 2:05.89 | 2.1 |
+  (cache du modèle évincé : 17.3 Go)
+| 2 | 7.4228 | 17520 | 2:13.59 | 1.9 |
+  (cache du modèle évincé : 17.3 Go)
+| 4 | 7.4228 | 21006 | 4:11.71 | 0.9 |
+  (cache du modèle évincé : 17.3 Go)
+| 8 | 7.4228 | 17338 | 4:03.02 | 0.9 |
+  (cache du modèle évincé : 17.3 Go)
+=== spec ===
+  ```
+
+- **bash** `{"command": "sleep 200; tail -3 /tmp/campagne24/lot_disque.log; echo \"=== marqueur fin ? ===\"; grep -c \"fin\" /tmp/campagne24/lot_disque.log", "description": "Wait for the final batch setting", "timeoutMs": 240000}`
+
+  ```
+(cache du modèle évincé : 17.3 Go)
+| 16 | 7.4228 | 13360 | 1:17.90 | 3.8 |
+# fin
+=== marqueur fin ? ===
+1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -25 tools/census_routage.py; echo \"=== usage ===\"; grep -n \"add_argument\" tools/census_routage.py | head -8", "description": "Inspect the expert census tool"}`
+
+  ```
+#!/usr/bin/env python3
+"""census_routage.py — ce que coûterait de répartir par EXPERTS, chiffré.
+
+POURQUOI. Le dépôt sait découper un modèle par PLAGES DE COUCHES : deux nœuds,
+écart de flux 0,00e0, c'est prouvé. Mais l'unité de travail naturelle d'un modèle
+routé n'est pas la couche, c'est l'EXPERT — et l'inventaire du 08/10 note que la
+sommation inter-nœuds des experts **n'existe pas** : un nœud partiel saute
+l'expert absent sans un mot (`model.rs`, `Moe::ou` → `None` → `continue`).
+
+Avant d'écrire cette sommation, il faut les trois chiffres qui décident :
+  1. la CHARGE par expert — un expert qui reçoit 30 % des jetons impose un nœud
+     trois fois plus chargé que les autres ;
+  2. le VOLUME qui traverserait le réseau si les experts étaient sur deux
+     machines — en octets par jeton, comparable aux 848 octets d'un flux de
+     couche déjà mesurés ;
+  3. le JEU CHAUD — combien d'experts couvrent 90 % des jetons. S'il en faut la
+     moitié, la répartition par experts ne réduit rien.
+
+Usage :
+    census_routage.py --modele /tmp/m4_route [--lots 8] [--seq 128]
+"""
+import argparse
+import sys
+
+import numpy as np
+=== usage ===
+32:    p.add_argument("--modele", default="/tmp/m4_rout
+… [273 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -E \"paires|événements|experts|lot|tok/s\" /tmp/lot_disque.log | head -12", "description": "Read the last batch run diagnostics"}`
+
+  ```
+[config] mélanges d'experts chargés : 48/48 couches · mapping absent (experts en clair dans le fichier)
+[config] puits appris sur 0/48 couches · n_rot 128 · ffn 6144 · experts 128
+     191 tokens notés — perplexité cumulée 7.423  (3.8 tok/s)
+=== perplexité 7.4228 sur 191 tokens (0 événements, 49.8 s) ===
+    3.8 tok/s effectifs (avant + tête)
+    attention : 0.15 M paires (requête, clé) par token
+    projections : 0.0 M événements par token
+    paires (poids × activation) par token : attention 910.7 M · experts 1821.4 M · partagé 0.0 M · scores 149 K · total 2732.3 M
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification du mécanisme : le lot élargit-il l'union des experts ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=/home/stephane/FastNVMe/qwen3-30b-a3b-Q4_K_M.gguf; IDS=/tmp/campagne24/ids_qwen3-30B-A3B.txt; for lot in 1 2 4 8; do out=$(timeout 900 $D \"$M\" --ppl \"$IDS\" --limit 64 --ctx 512 --threads 20  … [426 caractères tronqués]`
+
+  ```
+lot 1   experts 1840.7 M total 3072.3 M   perplexité 15.2789
+[timed out after 600000ms]
+[killed by signal: SIGTERM]
+  ```
+
+### 🤖 Assistant
+
+⏵ Consignation de la mesure à froid du lot sur un MoE (protocole corrigé)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\nancre = \"Pour mesurer le lot, il faut un modèle plus gros que la mémoire — ce que le § 12\\ndonne — ou vider le cache  … [2469 caractères tronqués]`
+
+  ```
+ok
+594:### 14 bis. Le protocole corrigé : éviction sans root, et le résultat n'est pas celui qu'on attendait
+  ```
+
+- **bash** `{"command": "cd /tmp/campagne24 && echo \"=== porte gpt-oss ===\"; cat porte_gptoss_seule_marqueur.txt 2>/dev/null || echo \"(en cours)\"; echo \"=== spec 1.5->14 ===\"; cat spec_15_14.log 2>/dev/null | tail -8 || echo \"(en cours)\"; echo \"=== m6 ===\"; tail -1 tr_d512_route.log; echo \"=== batch2 … [71 caractères tronqués]`
+
+  ```
+=== porte gpt-oss ===
+(en cours)
+=== spec 1.5->14 ===
+=== m6 ===
+  pas  36000 · perte 1.1515 · val 1.8916 bits/octet · 4074 s
+=== batch2 ===
+[09/10 01:24:42] charge 71.99 · b2/r1-14B-corpus_code : PPL 15.6913 · 0.3 tok/s · dont en listes (une paire y est un événement) : 0.1 M
+[09/10 01:39:35] charge 73.52 · b2/codestral-22B-corpus_code : PPL ? · ? tok/s ·
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/## 23. Ce qui reste à mesurer/,$p' reports/rapport-campagne-benefices.md", "description": "Review the remaining-work section"}`
+
+  ```
+## 23. Ce qui reste à mesurer (état de la file, 9 octobre 00 h 30)
+
+**Fait depuis la première rédaction de cette liste** : `parcimonie` (§ 19), `contexte`
+et `lot` (§ 20), `routage` (§ 7), `semantique` (§ 18), `noyau` (§ 21), `repartition`
+(§ 8 et porte tenue), `portes` (en cours au moment d'écrire), `batch 2` (§ 10 ter),
+`batch 3` (§ 9), les paires entraînées (§ 5), l'équivalence bit à bit (§ 22).
+
+**Encore en file, et ce sont des manques, pas des résultats :**
+
+- **embeddings / recherche** : `bge-m3` reste **inexécutable** (ni attention
+  bidirectionnelle, ni pooling) — le manque le plus net du relevé ;
+- **décodage spéculatif** : le chiffre générique est là (§ 1, ×1,20), mais la
+  **régime grande cible** — brouillon 1,5 B, cible 14 B, où le brouillon ne coûte
+  qu'un dixième — n'est pas mesuré ; c'est là que le rapport de coût change de
+  camp, et c'est en cours (`tools/speculatif_moteur.py`, mesure par le moteur,
+  identifiants comparés sans re-tokenisation) ;
+- **multilingue** : la densité par tâche est mesurée pour prose/français/code
+  (§ 10 ter) ; le corpus multilingue est en cours dans le même batch ;
+- **le lot sur un modèle plus gros que la RAM** : le batch 5 a mesuré le
+… [483 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\ni = s.index(\"## 23. Ce qui reste à mesurer\")\nneuf = \"\"\"## 23. Ce qui reste à mesurer (état de la file, 9 octo … [2919 caractères tronqués]`
+
+  ```
+section 23 réécrite
+885 reports/rapport-campagne-benefices.md
+  ```
+
+- **bash** `{"command": "sleep 420; cd /tmp/campagne24 && echo \"=== porte gpt-oss ===\"; cat porte_gptoss_seule_marqueur.txt 2>/dev/null || echo \"(en cours)\"; echo \"=== spec ===\"; cat spec_15_14.log 2>/dev/null | tail -6 || echo \"(en cours)\"; echo \"=== m6 ===\"; tail -1 tr_d512_route.log; cat journal6.t … [108 caractères tronqués]`
+
+  ```
+=== porte gpt-oss ===
+(en cours)
+=== spec ===
+=== m6 ===
+  # écrit dans /tmp/m6_d512_route · 78.81 M paramètres · 3.41 M poids lus/jeton/couche
+[09/10 01:47:44] charge 31.38 · === échelle 512 : export, portes, mesure ===
+  ```
+
+- **bash** `{"command": "ps -eo pid,etime,args | grep \"r1-distill-qwen\" | grep -v grep | sed 's/--n 48.*--prompt //' | cut -c1-200 | tail -3; echo \"=== correspondance avec les tranches du corpus ===\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport subprocess, re\ncorpus = ope … [465 caractères tronqués]`
+
+  ```
+735011    01:32:14 bash -c  /home/stephane/gpu-env/bin/python tools/speculatif_moteur.py --brouillon models/Qwen2.5-0.5B-Q8_0.gguf --cible /home/stephane/Data13TB/stephane/modeles/gguf/deepseek-r1-di
+ 780939    01:14:25 /home/stephane/gpu-env/bin/python tools/speculatif_moteur.py --brouillon /home/stephane/Data13TB/stephane/modeles/gguf/deepseek-r1-distill-qwen-1.5b-q4_k_m.gguf --cible /home/steph
+ 933459       01:06 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/deepseek-r1-distill-qwen-14b-q4_k_m.gguf --infer --prompt Traditional Chinese literary criticism emp
+=== correspondance avec les tranches du corpus ===
+tranche 3 en cours (commence par 'Traditional Chinese literary c')
+  ```
+
+- **bash** `{"command": "sleep 120; cd /tmp/campagne24 && cat journal6.txt | grep -E \"m6|512\" | tail -5; echo \"=== fenetres m6 ===\"; for f in fenetres_m6_d512_dense.log fenetres_m6_d512_route.log; do [ -s \"$f\" ] && echo \"--- $f\" && tail -3 \"$f\"; done", "description": "Check m6 chain progress", "timeou … [13 caractères tronqués]`
+
+  ```
+[09/10 01:47:44] charge 31.38 · === échelle 512 : export, portes, mesure ===
+=== fenetres m6 ===
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /tmp/campagne24 && ls -la exp_m6* ref_m6* eng_m6* porte_m6* 2>/dev/null | head; echo \"=== console nuit2 ===\"; tail -5 nuit2_console.log 2>/dev/null; echo \"=== procesos ===\"; ps -eo pid,etime,args | grep -E \"exporter_gguf|porte_moteur|compare_logits|mesure_fenetres\" | grep -v gr … [93 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 1366  9 oct 01:50 eng_m6_d512_dense.log
+-rw-r--r--. 1 stephane stephane 1482  9 oct 01:50 eng_m6_d512_route.log
+-rw-r--r--. 1 stephane stephane  205  9 oct 01:47 exp_m6_d512_dense.log
+-rw-r--r--. 1 stephane stephane  238  9 oct 01:49 exp_m6_d512_route.log
+-rw-r--r--. 1 stephane stephane 4001  9 oct 01:50 porte_m6_d512_dense.log
+-rw-r--r--. 1 stephane stephane 4024  9 oct 01:50 porte_m6_d512_route.log
+-rw-r--r--. 1 stephane stephane  398  9 oct 01:50 ref_m6_d512_dense.log
+-rw-r--r--. 1 stephane stephane  540  9 oct 01:50 ref_m6_d512_route.log
+=== console nuit2 ===
+[09/10 01:47:44] charge 31.38 · === échelle 512 : export, portes, mesure ===
+[09/10 01:50:49] charge 24.88 · m6_d512_dense : ✅ porte de correction tenue (100.0 % des positions UTILES au-dessus de 0.95, min 0.9999 >=
+=== procesos ===
+ 939995       00:07 bash tools/mesure_fenetres.sh /tmp/m6_d512_dense.gguf --fenetres 8 --taille 128 --threads 8 --chemin
+ 944934       00:00 bash tools/mesure_fenetres.sh /tmp/m6_d512_dense.gguf --fenetres 8 --taille 128 --threads 8 --chemin
+  ```
+
+- **bash** `{"command": "sleep 200; cd /tmp/campagne24 && grep -E \"m6_d512\" journal6.txt | tail -4; echo \"=== fenetres dense ===\"; tail -4 fenetres_m6_d512_dense.log 2>/dev/null; echo \"=== chaîne m5 (apres_entrainement) ===\"; tail -2 journal4.txt 2>/dev/null", "description": "Check the d512 measurement re … [28 caractères tronqués]`
+
+  ```
+[09/10 01:51:04] charge 26.23 · m6_d512_dense : PPL moyenne (log) sur 8 fenêtres : 4.5686 · 34.4 M paires/jeton
+[09/10 01:51:23] charge 25.53 · m6_d512_route : ✅ porte de correction tenue (100.0 % des positions UTILES au-dessus de 0.95, min 0.9995 >=
+[09/10 01:51:30] charge 25.97 · m6_d512_route : PPL moyenne (log) sur 8 fenêtres : 5.0255 · 37.8 M paires/jeton
+[09/10 01:51:32] charge 25.73 · répartition/m6_d512_route : PORTE TENUE : le découpage ne change pas la perplexité (écart relatif 0.0000 %)
+=== fenetres dense ===
+  --push fenêtre 6 (depuis 640) : PPL 4.5273     128 jetons · 34.4 M paires/jeton · 4389865830 événements · 65.0 tok/s
+  --push fenêtre 7 (depuis 768) : PPL 4.0764     128 jetons · 34.4 M paires/jeton · 4389383726 événements · 72.5 tok/s
+  --push fenêtre 8 (depuis 896) : PPL 4.2671     128 jetons · 34.4 M paires/jeton · 4390648150 événements · 70.0 tok/s
+  → PPL moyenne (log) sur 8 fenêtres : 4.5686
+=== chaîne m5 (apres_entrainement) ===
+[09/10 00:30:00] charge 54.03 · m6_d512_dense : PPL 4.2171 · paires 12.8 M · événements 2927366051 · 148.7 tok/s · porte 1
+[09/10 01:50:50] charge 24.88 · m6_d512_route : PPL 5.8853 · paires 12.8 M · événements 797384096 · 354.4 tok
+… [12 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/campagne24 && for f in eng_m6_d512_dense eng_m6_d512_route; do echo \"--- $f ---\"; grep -E \"perplexité|paires|experts|événements\" $f.log | head -6; done; echo \"=== fenetres (paires par fenêtre) ===\"; grep -E \"paires/jeton\" fenetres_m6_d512_dense.log | head -3; grep -E \"p … [126 caractères tronqués]`
+
+  ```
+--- eng_m6_d512_dense ---
+[config] puits appris sur 0/4 couches · n_rot 64 · ffn 1536 · experts 0
+     255 tokens notés — perplexité cumulée 4.217  (325.5 tok/s)
+=== perplexité 4.2171 sur 255 tokens (0 événements, 0.8 s) ===
+    attention : 0.00 M paires (requête, clé) par token
+    projections : 0.0 M événements par token
+    paires (poids × activation) par token : attention 3.2 M · experts 0.0 M · partagé 9.6 M · scores 4 K · total 12.8 M
+--- eng_m6_d512_route ---
+[config] mélanges d'experts chargés : 4/4 couches · mapping absent (experts en clair dans le fichier)
+[config] puits appris sur 0/4 couches · n_rot 64 · ffn 1536 · experts 16
+     255 tokens notés — perplexité cumulée 5.885  (515.1 tok/s)
+=== perplexité 5.8853 sur 255 tokens (0 événements, 0.5 s) ===
+    attention : 0.00 M paires (requête, clé) par token
+    projections : 0.0 M événements par token
+=== fenetres (paires par fenêtre) ===
+  --push fenêtre 1 (depuis 0) : PPL 3.6167     127 jetons · 11.7 M paires/jeton · 1463659741 événements · 212.2 tok/s
+  --push fenêtre 2 (depuis 128) : PPL 4.9180     128 jetons · 23.0 M paires/jeton · 2927366051 événements · 93.6 tok/s
+  --push fenêtre 3 (depuis 256) : PPL 4.7769     128
+… [422 caractères tronqués]
+  ```
+
+- **bash** `{"command": "for d in /tmp/m5_d384_dense /tmp/m5_d384_route /tmp/m6_d512_dense /tmp/m6_d512_route; do echo \"--- $d\"; python3 -c \"\nimport json,sys\nc=json.load(open('$d/config.json'))\nfor k in ('hidden_size','intermediate_size','moe_intermediate_size','num_experts','num_experts_per_tok','shared_ … [180 caractères tronqués]`
+
+  ```
+--- /tmp/m5_d384_dense
+  hidden_size: 384
+  intermediate_size: 1152
+  num_hidden_layers: 4
+  head_dim: 64
+--- /tmp/m5_d384_route
+  hidden_size: 384
+  intermediate_size: 1152
+  moe_intermediate_size: 576
+  num_experts_per_tok: 2
+  num_hidden_layers: 4
+  head_dim: 64
+--- /tmp/m6_d512_dense
+  hidden_size: 512
+  intermediate_size: 1536
+  num_hidden_layers: 4
+  head_dim: 64
+--- /tmp/m6_d512_route
+  hidden_size: 512
+  intermediate_size: 1536
+  moe_intermediate_size: 768
+  num_experts_per_tok: 2
+  num_hidden_layers: 4
+  head_dim: 64
+  ```
+
+- **bash** `{"command": "cd /tmp/campagne24 && for f in tr_d256_dense tr_d256_route tr_d384_dense tr_d384_route tr_d512_dense tr_d512_route; do printf \"%-16s %s\\n\" \"$f\" \"$(grep -oE \"meilleur point : pas [0-9]+ · val [0-9.]+ bits/octet\" $f.log 2>/dev/null | tail -1)\"; done; echo; grep -E \"paires \\(poi … [88 caractères tronqués]`
+
+  ```
+tr_d256_dense    meilleur point : pas 36000 · val 2.0074 bits/octet
+tr_d256_route    meilleur point : pas 40000 · val 1.9373 bits/octet
+tr_d384_dense    meilleur point : pas 40000 · val 1.9020 bits/octet
+tr_d384_route    meilleur point : pas 40000 · val 1.8762 bits/octet
+tr_d512_dense    meilleur point : pas 40000 · val 1.8580 bits/octet
+tr_d512_route    meilleur point : pas 40000 · val 1.8843 bits/octet
+
+    paires (poids × activation) par token : attention 3.2 M · experts 9.5 M · partagé 0.1 M · scores 4 K · total 12.8 M
+  ```
+
+### 🤖 Assistant
+
+⏵ Résultat majeur : le gain du routage s'inverse à dim 512 — je le consigne et corrige le verdict
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\nancre = \"\"\"**Et les experts ne passent PAS par les listes** : écrits en Q4_0, format pour\nlequel le moteur n'a pas  … [2075 caractères tronqués]`
+
+  ```
+ok
+311:### 5 bis. Le gain du routage N'EST PAS monotone : il s'inverse à dim 512
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\ns = s.replace(\"\"\"| **langage** (perplexité) | ✅ tourne, et **le routage entraîné gagne** | à lecture égale (3,2 M po … [1948 caractères tronqués]`
+
+  ```
+ok
+## 0 bis. Le verdict, famille par famille
+
+Le tableau qui répond à la question posée, chaque ligne portant sa mesure. ⏳ =
+file encore en cours.
+
+| famille de tâches | verdict | mesure |
+|---|---|---|
+| **langage** (perplexité) | ✅ tourne — **le routage gagne aux petites échelles, et PERD à dim 512** | à lecture égale : dim 256 dense **5,0155** → routé **4,8858** (−2,6 %) → **distillé 4,7642 (−5,0 %)** · dim 384 : 5,0108 → 4,8646 (−2,9 %) · **dim 512 : 4,5686 → 5,0255 (+10 %)**, 12,8 M paires/jeton des deux côtés (§ 5 bis) |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add reports/rapport-campagne-benefices.md tools/mesure_lot_disque.sh && git commit -q -m \"Campagne 24 h : l'équivalence au bit près, le routage qui s'inverse, le lot à froid\n\nCinq résultats de la fenêtre, tous avec leur protoc … [2022 caractères tronqués]`

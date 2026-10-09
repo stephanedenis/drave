@@ -34,31 +34,55 @@ file encore en cours.
 
 | famille de tâches | verdict | mesure |
 |---|---|---|
-| **langage** (perplexité) | ✅ tourne, et **le routage entraîné gagne** | à lecture égale (3,2 M poids/jeton) : dense **5,0155** → routé **4,8858** (−2,6 %) → **distillé 4,7642 (−5,0 %)**, protocole 8 × 128 jetons |
+| **langage** (perplexité) | ✅ tourne — **le routage gagne aux petites échelles, et PERD à dim 512** | à lecture égale : dim 256 dense **5,0155** → routé **4,8858** (−2,6 %) → **distillé 4,7642 (−5,0 %)** · dim 384 : 5,0108 → 4,8646 (−2,9 %) · **dim 512 : 4,5686 → 5,0255 (+10 %)**, 12,8 M paires/jeton des deux côtés (§ 5 bis) |
 | **génération / latence** | ✅ mesuré | TTFT **27,9 ms**, **29,0 tok/s** (0,5 B) · 114,6 ms, 7,1 tok/s (1,5 B) |
 | **contexte long — la mémoire** | ✅ **elle tient** | **12 aiguilles sur 12** retrouvées, de 512 à **4 096 jetons**, à 10 %, 50 % et 90 % de profondeur |
 | **contexte long — le coût** | ✅ réglable | KV int8 : +1,5 % (512 j.) à +3,0 % (8 192 j.) · paginé : **0,03 Go au lieu de 25,77 Go** à 1 M |
-| **préremplissage par lots** | ⚠️ non mesuré | le batch 5 a mesuré le **cache de pages** (10,9 Go lus à froid, 0 ensuite) — à refaire sur un modèle plus gros que la RAM |
+| **préremplissage par lots** | ✅ ×1,4 en RAM, ⚠️ disque non testé | 0,5 B, 512 jetons : **16,8 → 23,7 tok/s** et PPL **identique** (13,1368 → 13,1359) · sur le 30B le lot n'a lu que le **cache de pages** (10,9 Go à froid, 0 ensuite) |
 | **code** | ✅ mesuré, décalage de tâche | codestral-22B : **117,91** de PPL sur de la prose = **1,797 bit/octet**, contre **0,983** pour un 0,5 B — un 22 B 1,8× **pire** qu'un 0,5 B hors de sa tâche |
 | **raisonnement** | ✅ mesuré, contre-intuitif | r1-distill-1.5B : **1,326 bit/octet**, **2,7× pire** que le 0,5 B (0,983) |
 | **MoE / routage d'experts** | ✅ mesuré | 4 experts sur 128 (3,1 %) · déséquilibre **×3,90** · **847 octets** par jeton à router |
+| **multilingue (399 langues)** | ✅ mesuré, et c'est le point faible du modèle | **3,227 bit/octet** contre 0,951 en prose — **3,4× pire** · densité **identique** (71 %) · seuil absolu : PPL **×11**, le k-WTA tient (§ 10 ter) |
+| **sémantique multilingue** | ✅ le résultat publié **survit** au correctif d'échelle | pic de séparation à la **couche 13** (+0,0391) sur 398 langues, bande 10-15 — et l'ancien lecteur donnait +0,0349 au même endroit |
 | **parcimonie imposée** | ✅ reproduit, et nuancé | à −30 % d'événements : seuil **+69 %** de PPL, k-WTA **+4 %** (facteur 17) · en dense, **aucune lecture économisée** |
 | **sortie contrainte** | ✅ **gagne par construction** | **×1,36-1,42** de débit *et* garantie que la sortie appartient à l'ensemble autorisé |
 | **modèle plus gros que la RAM** | ✅ **démontré** | V4-Flash **365,7 Go sur 125 Go de RAM** : **37,6 Go résidents**, 37,7 Go lus, 266 s pour 16 jetons · gpt-oss (63 Go) : passe de 256 jetons **non finie en 90 min** |
 | **répartition à deux nœuds** | ✅ **porte tenue** | écart **0,0000 %** et flux **0,00e0** — sur le modèle dense, routé **et distillé** |
 | **embeddings / recherche** | ❌ **manque** | `bge-m3` lisible en en-tête, **inexécutable** (ni encodeur bidirectionnel ni pooling) |
-| **décodage spéculatif** | ❌ manque, et chiffré | brouillon générique : **×1,20** — insuffisant pour justifier le chantier |
+| **décodage spéculatif** | ❌ manque, et chiffré **par le moteur** | paire alignée (HF) : 3,35 jetons sur 8 acceptés, **×1,20** · paire mal appariée (moteur) : **0,88 sur 8, ×0,70** — un brouillon rejeté coûte plus qu'il ne rapporte (§ 1 et 1 bis) |
+| **routage à l'échelle** | ❌ **le gain s'inverse à dim 512** | val : −3,5 % (256) → −1,4 % (384) → **+1,4 % (512)** · moteur : 4,5686 → 5,0255 ; même recette, mêmes 40 000 pas, **12,8 M paires/jeton des deux côtés** |
+| **fidélité listes ↔ dense** | ✅ **exacte, démontrée** | logits identiques **au bit près** (`cmp` sur 4 254 216 octets) et mêmes jetons gloutons, à encodage de poids égal ; ×0,02 à ×3,19 selon la densité |
 
 **En une phrase** : Drave gagne **par construction** sur les sorties contraintes,
-**par sa structure** quand le modèle est creux (routage entraîné : −2,6 %, et la
-distillation porte le total à −5,0 % à lecture égale), **par ses circonstances**
-sur les modèles plus gros que la RAM, et **perd** sur un modèle dense ordinaire —
-où le chemin par listes coûte 1,8 à 2,1× pour rien.
+**par sa structure** quand le modèle est creux — mais seulement aux petites
+échelles : le routage entraîné rend −2,6 % à dim 256 et −2,9 % à dim 384, puis
+**+10 % (il perd) à dim 512**, à lecture égale (12,8 M paires/jeton des deux côtés,
+§ 5 bis) — **par ses circonstances** sur les modèles plus gros que la RAM, et
+**perd** sur un modèle dense ordinaire, où le chemin par listes coûte 1,8 à 2,1×
+pour rien.
 
-**Trois corrections de méthode sont consignées dans ce rapport**, et elles
+**Quatre corrections de méthode sont consignées dans ce rapport**, et elles
 comptent autant que les chiffres : le tokenizer étranger (`data/…ids`, facteur
-442), la fenêtre d'évaluation trop courte (trois protocoles, trois réponses), et le
-cache qui survit à son correctif.
+442), la fenêtre d'évaluation trop courte (trois protocoles, trois réponses), le
+cache qui survit à son correctif, et le **binaire plus vieux que ses correctifs**
+— trois commits de `drave-core/src` n'étaient pas dans le binaire qui a mesuré la
+campagne (§ 17).
+
+### 0 ter. L'état de la campagne au 9 octobre, 1 h 05
+
+Les **neuf étapes** de `tools/campagne-benefices.sh` sont allées au bout
+(`=== campagne terminée ===` à 01 h 03), et les portes rendent **22 vertes · 1
+rouge** :
+
+| porte rouge | pourquoi | suite |
+|---|---|---|
+| `gpt-oss-120b MXFP4 ctx 256` — attendu **15,6017** | la passe de 512 jetons a été **tuée par son délai de 2 400 s** pendant que deux autres processus lisaient le même fichier de 63 Go. Le résultat est vide, pas faux | relancée seule à 01 h 04, machine libre de tout autre lecteur |
+
+Tout le reste est vert, y compris `cargo test --release` (**77 tests**), les 17
+formats confrontés à libggml, la porte de correction contre llama.cpp
+(100 % des positions utiles au-dessus de 0,95, top-1 94,4 %), la porte Mistral, et
+les cinq modes de découpage à deux nœuds (écart **0,00e0** pour les modes 0, 1 et
+3, 3,65e-2 pour le mode 2, 4,45e-3 pour le mode 4).
 
 ---
 
@@ -92,6 +116,44 @@ brouillon **aligné** sur sa cible (distillé, ou une tête Eagle3 qui consomme 
 états cachés de la cible) — c'est-à-dire un chantier d'entraînement, pas une
 option de moteur. Le chiffre est là pour éviter d'écrire le mauvais code.
 
+### 1 bis. Le même chiffre, mesuré PAR LE MOTEUR — et il est bien plus dur
+
+`tools/speculatif_moteur.py` refait la mesure sans HuggingFace : deux GGUF, le
+moteur, `--temp 0`, et la comparaison porte sur les **identifiants générés**
+(`--- ids générés`), donc sans re-tokenisation. Le vocabulaire partagé est
+**vérifié** avant de conclure (même sonde → mêmes identifiants, sinon l'outil
+refuse).
+
+Paire mesurée : brouillon **Qwen2.5-0.5B Q8_0** (modèle de base) → cible
+**R1-distill-Qwen-1.5B Q4_K_M** (distillat de raisonnement), 8 invites de prose,
+48 jetons, k = 8 :
+
+| mesure | valeur |
+|---|---|
+| acceptation moyenne | **0,88 jeton sur 8 (11 %)** |
+| P(préfixe ≥ 1 / 2 / 5) | 38 % · 12 % · 12 % |
+| coût relatif du brouillon | 0,210× (14,47 vs 3,04 tok/s, sous charge 30-40) |
+| gain net attendu | **×0,70** — il COÛTE |
+
+**Pourquoi 11 % ici et 41,9 % en § 1 : la paire, pas le moteur.** La mesure HF
+comparait Qwen2.5-0.5B à **Qwen2.5-1.5B** — même famille *et* même post-
+entraînement. Ici la cible a reçu une distillation de raisonnement que le
+brouillon n'a pas : les deux modèles divergent **au premier jeton**. Vérifié sur
+une invite, texte en clair : le brouillon propose « …which were **not accepted** by
+the Convention », la cible « …which were **later used** by other poets » — deux
+continuations également plausibles, acceptation nulle.
+
+**La leçon est plus dure que celle du § 1** : ce n'est pas la taille du brouillon
+qui décide, c'est **le partage de son post-entraînement**. Un brouillon de la même
+famille mais d'une autre recette ne propose rien d'acceptables — et un brouillon
+rejeté coûte plus qu'il ne rapporte. Les paires alignées (1,5 B → 14 B, même
+recette R1) sont en cours de mesure ; c'est là que le rapport de coût change de
+camp, pas sur la taille.
+
+*(Le taux d'acceptation est déterministe — `--temp 0` — donc exact malgré la
+charge ; le coût relatif, lui, dépend de la charge et n'est qu'un ordre de
+grandeur : 0,210 ici contre 0,245 en § 1 pour la même paire de tailles.)*
+
 ---
 
 ## 2. Les deux familles de tâches que Drave ne couvre pas
@@ -101,7 +163,7 @@ Constatées, et consignées comme manques — pas comme résultats :
 | famille | état | ce qui manque |
 |---|---|---|
 | **embeddings / recherche** | `bge-m3` (BERT, 24 couches, vocab 250 002) est **lisible en en-tête** mais **inexécutable** | le moteur exige `blk.0.attn_norm.weight` et une attention causale ; il n'a ni encodeur bidirectionnel ni pooling |
-| **décodage spéculatif** | `eagle3-gpt-oss-120b` (0,84 Go, 1 couche) présent sur le disque | aucune notion de brouillon dans le moteur (`grep eagle\|brouillon\|specul` = 0), et le § 1 montre qu'un brouillon générique ne suffirait pas |
+| **décodage spéculatif** | `eagle3-gpt-oss-120b` (0,84 Go, 1 couche) présent sur le disque | aucune notion de brouillon dans le moteur (`grep eagle\|brouillon\|specul` = 0) — et la mesure par le moteur (§ 1 bis) ajoute une condition que le code ne peut pas lever : **le brouillon doit partager le post-entraînement de sa cible**, sinon il n'accepte rien (0,88 jeton sur 8). Le chantier commence par un entraînement, pas par une option |
 
 Ce sont les deux seules familles demandées par un usage courant qui manquent au
 relevé : tout le reste (langage, génération, contexte long, code, raisonnement,
@@ -248,6 +310,35 @@ modèle grandit. Le gain de qualité, lui, tient dans les deux cas.
 **Et les experts ne passent PAS par les listes** : écrits en Q4_0, format pour
 lequel le moteur n'a pas de noyau de listes, ils sont exécutés en dense. La mesure
 honnête du coût est donc la colonne « paires/jeton », égale par construction.
+
+### 5 bis. Le gain du routage N'EST PAS monotone : il s'inverse à dim 512
+
+La courbe s'arrête d'abord à dim 384 dans ce rapport. L'échelle 512 a été
+entraînée **avec exactement le même protocole** (4 couches, 40 000 pas, mêmes
+données), et le résultat renverse la tendance — **deux mesures indépendantes le
+disent**, la validation à l'entraînement et le moteur après export :
+
+| dim | dense (val, bits/octet) | routé (val) | gain du routage | PPL moteur (8 × 128) |
+|---:|---:|---:|---:|---|
+| 256 | 2,0074 | 1,9373 | **−3,5 %** | 5,0155 → 4,8858 (−2,6 %) |
+| 384 | 1,9020 | 1,8762 | −1,4 % | 5,0108 → 4,8646 (−2,9 %) |
+| **512** | **1,8580** | **1,8843** | **+1,4 % — le routé PERD** | **4,5686 → 5,0255 (+10 %)** |
+
+**Et c'est bien à lecture ÉGALE**, vérifié par le compteur du moteur sur les deux
+modèles exportés : **12,8 M de paires par jeton de part et d'autre** (attention
+3,2 M pour les deux ; experts 9,5 M + partagé 0,1 M pour le routé contre partagé
+9,6 M pour le dense).
+
+Deux réserves, et elles sont dans la mesure : les deux modèles ont reçu
+**40 000 pas**, alors que le routé stocke 78,8 M paramètres contre 12,7 M — il est
+donc possible qu'il soit **sous-entraîné** à cette échelle, et c'est une hypothèse,
+pas un résultat. La distillation du routé 512 (professeur : son jumeau dense) est
+en cours et dira si le levier du § 5 rattrape ce renversement.
+
+**Ce que cela change dans ce rapport** : la phrase « le routage gagne » n'est vraie
+qu'aux petites échelles. À dim 512, **un modèle dense deux fois plus petit lit
+autant et fait mieux** — et c'est la première fois que la campagne mesure un
+résultat qui va contre la thèse du projet. Il est consigné comme tel.
 
 ---
 
@@ -400,13 +491,15 @@ question du batch 2 était « le bénéfice événementiel dépend-il de la tâc
 | prose anglaise | 0,2385 | 15,85 | **0,951** | 495,9 M | **71 %** |
 | français | 0,2783 | 11,19 | **0,969** | 495,9 M | **71 %** |
 | code | 0,3117 | 7,09 | **0,881** | 495,9 M | **71 %** |
+| **399 langues** (UDHR, article 1) | 0,4113 | **229,84** | **3,227** | 495,9 M | **71 %** |
 
-**La densité est identique dans les trois cas — 71 %, à 0,002 point près**
-(67,766 / 67,767 / 67,766 milliards d'événements). Autrement dit : **le bénéfice
-événementiel ne dépend pas de la tâche**, il dépend du **modèle**. Un modèle dense
-reste dense quelle que soit l'entrée ; c'est la parcimonie *entraînée* qui la
-change, et rien d'autre. L'hypothèse « telle tâche réveille moins de neurones »
-est **réfutée** ici.
+**La densité est identique dans les quatre cas — 71 %, à 0,002 point près**
+(67,766 / 67,767 / 67,766 / 67,764 milliards d'événements). Autrement dit : **le
+bénéfice événementiel ne dépend pas de la tâche**, il dépend du **modèle**. Un
+modèle dense reste dense quelle que soit l'entrée ; c'est la parcimonie
+*entraînée* qui la change, et rien d'autre. L'hypothèse « telle tâche réveille
+moins de neurones » est **réfutée** ici — y compris sur un corpus qui change
+complètement d'écriture et de langue.
 
 **Ce qui dépend de la tâche, c'est la qualité.** En bits/octet — la seule unité
 comparable entre tokenizers — le même modèle prédit le **code mieux que la prose**
@@ -414,6 +507,21 @@ comparable entre tokenizers — le même modèle prédit le **code mieux que la 
 0,951). Les perplexités brutes disent l'inverse (7,09 pour le code contre 15,85
 pour la prose) uniquement parce que le code se tokenise en jetons plus longs :
 c'est exactement le piège que la colonne bits/octet neutralise.
+
+**Et sur 399 langues, le même modèle est 3,4× pire qu'en prose** (3,227 contre
+0,951 bit/octet) — la ligne la plus défavorable du relevé. La réserve est dans la
+nature du corpus : ce n'est pas *une* langue, c'est un empilement de 399 langues
+dont beaucoup sont peu dotées, donc cela mesure une **couverture**, pas une
+performance linguistique. C'est néanmoins la réponse à « pour tout type de
+tâches » : sur cette famille, l'échelle de 0,5 B ne suffit pas, et **la densité
+d'activation ne bouge pas d'un iota** — le moteur événementiel n'y gagne donc
+rien de plus qu'ailleurs ; c'est le modèle qui est en défaut.
+
+**Le seuil absolu, lui, s'effondre sur ce corpus** : `--act-thresh 0,05` fait
+passer la perplexité de 229,8 à **2 542** (et l'événementiel de 67,8 à 29,2 G) —
+soit ×11, alors que le k-WTA au même taux d'événements ne coûte que quelques pour
+cent (§ 19). Le résultat du § 19 n'est donc pas une propriété de la prose
+anglaise : il tient sur les quatre corpus.
 
 ---
 
@@ -462,6 +570,34 @@ où d'autres postes dominent), alors que la contrainte de sortie, elle, est
 **structurelle** — et c'est la seule ligne du verdict où l'architecture gagne sans
 dépendre ni du modèle ni de la machine.
 
+**Et sur un modèle plus gros que la RAM, la tête restreinte ne gagne RIEN** — la
+mesure qui manquait, faite le 9 octobre sur gpt-oss-120B (63 Go, MXFP4, disque),
+même invite, 64 jetons :
+
+| passe (gpt-oss-120B, 20 threads) | 64 jetons | tok/s | conditions |
+|---|---:|---:|---|
+| tête complète, 1er essai | **aucun jeton en 3 600 s** | — | une autre passe lisait les mêmes 63 Go |
+| tête restreinte (3 jetons) | 163,9 s | 0,39 | cache chaud, lecteur concurrent |
+| tête complète, 2e essai | 171,9 s | 0,37 | cache chaud, lecteur concurrent |
+| tête restreinte, 2e essai | **71,0 s** | **0,90** | cache chaud, **seule** |
+
+**Les durées ne sont pas comparables entre elles** (la lecture concurrente du même
+fichier les domine : 3 600 s contre 164 s pour la même tâche), mais une borne,
+elle, ne dépend pas de la charge : la couche de sortie de ce modèle pèse
+**0,58 G de poids par jeton sur 4,93 G de paires lues, soit 12 %**. Restreindre la
+tête ne peut donc pas rapporter plus de **×1,12** ici — et l'essentiel est dans les
+**experts** (3 583 M paires/jeton), que la tête restreinte ne touche pas.
+
+Le diagnostic de colonnes, imprimé par la même passe, va dans le même sens :
+94,8 % des coordonnées d'entrée de la tête sont vivantes, donc un stockage par
+colonnes n'éviterait que **5 %** de la matrice. **Sur un MoE plus gros que la RAM,
+le levier n'est ni la tête ni sa disposition : c'est le routage des experts.**
+
+*(Rappel de méthode : le premier essai « tête complète » a été tué par le délai de
+3 600 s **pendant** qu'une mesure de perplexité lisait le même fichier de 63 Go —
+c'est un résultat sur la contention, pas sur la tête. Les deux passes à cache
+chaud donnent ×1,05, très en dessous de la borne de ×1,12.)*
+
 ---
 
 ## 14. Une mesure à refaire : le lot sur le 30B a mesuré le cache de pages
@@ -487,6 +623,43 @@ Pour mesurer le lot, il faut un modèle plus gros que la mémoire — ce que le 
 donne — ou vider le cache entre les passes, ce que la campagne ne peut pas faire
 sans root.
 
+### 14 bis. Le protocole corrigé : éviction sans root, et le résultat n'est pas celui qu'on attendait
+
+`posix_fadvise(POSIX_FADV_DONTNEED)` jette les pages d'un fichier hors du cache
+**sans être root** : c'est ce qui manquait. `tools/mesure_lot_disque.sh` évince le
+modèle avant **chaque** réglage — le journal le confirme (« cache du modèle
+évincé : 17,3 Go ») — puis lit les octets réellement lus dans `File system inputs`.
+
+Qwen3-30B-A3B depuis le NVMe, 192 jetons, ctx 512, à froid à chaque passe :
+
+| `--lot` | PPL | **octets lus** | mur | tok/s |
+|---:|---:|---:|---:|---:|
+| 1 | 7,4244 | **12 586 Mio** | 2 min 06 | 2,1 |
+| 2 | 7,4228 | 17 520 Mio | 2 min 14 | 1,9 |
+| 4 | 7,4228 | **21 006 Mio** | 4 min 12 | 0,9 |
+| 8 | 7,4228 | 17 338 Mio | 4 min 03 | 0,9 |
+| 16 | 7,4228 | 13 360 Mio | 1 min 18 | 3,8 |
+
+**La perplexité est invariante au lot** (7,4228 dès le lot 2 — 0,02 % d'écart avec
+le lot 1) : c'est le résultat net, et il confirme le § 20 sur un second modèle.
+
+**Les octets lus, eux, ne baissent pas** — ils montent, puis redescendent, pour un
+fichier de 17,3 Go. Le mécanisme est visible dans les compteurs du moteur : les
+paires d'experts **par jeton** valent 1 840,7 M au lot 1 et 1 821,4 M au lot 16,
+soit **le même chiffre** — le moteur regroupe bien les jetons par expert et ne
+relit pas un expert pour chaque jeton du lot. Ce qui change avec le lot, c'est
+**l'union des experts touchés par une passe** : sur 48 couches à 128 experts et
+4 experts par jeton, une passe de 192 jetons finit par ouvrir **presque tous les
+experts de toutes les couches**, quel que soit le découpage en lots. Le disque
+n'est donc pas un levier de lot sur un MoE : il l'est sur un modèle **dense**, où
+chaque passe relit les mêmes poids — et là, c'est le nombre de **jetons par passe**
+qui amortit la lecture, pas la taille du lot.
+
+**Ce que cette mesure ne dit pas** : les temps. Ils varient de 78 s à 252 s pour la
+même quantité de calcul, sous une charge de fond de 30 à 40 (d'autres lectures de
+modèles tournaient). La colonne tok/s n'est publiable qu'avec cette réserve, et
+l'ordre de grandeur seul est utilisable.
+
 ---
 
 ## 16. Deux pièges de méthode, consignés
@@ -504,6 +677,57 @@ les fichiers ont été supprimés et la comparaison relancée à caches neufs.
 `--cache X` fait donc écrire les deux jeux dans `X.moyenne.npz`, et la
 comparaison oppose un dossier à lui-même. Sans `--cache`, les deux défauts sont
 distincts et tout va bien — c'est pourquoi le piège ne s'était pas vu.
+
+---
+
+## 17. L'instrument : le binaire de la campagne était plus VIEUX que ses correctifs
+
+**Le fait.** `drave-core/target/release/drave` portait la date du 8 octobre 11 h 00.
+Trois commits touchant `drave-core/src` sont **postérieurs** : `8de0612` (11 h 08,
+`--ids-file` ignoré en mode réparti), `ddebb6b` (23 h 26, tokenizers SentencePiece),
+`9cdfbd7` (00 h 05, le banc des encodages qui plantait sur les K-quants). Les
+correctifs existaient donc dans les sources et **pas dans le binaire qui a mesuré
+la campagne** — ils avaient été compilés à part (`CARGO_TARGET_DIR=/tmp/target-spm`)
+pour ne pas déranger la campagne en cours, et jamais promus.
+
+**La preuve, en une commande.** Le même texte, les deux binaires :
+
+| binaire | « The river carries the logs to the mill » |
+|---|---|
+| celui de la campagne (8/10 11 h 00) | **31 jetons**, recolle `"Therivercarriesthelogstothemill"` |
+| celui des correctifs (`/tmp/target-spm`, 00 h 02) | **8 jetons**, recolle `" The river carries the logs to the mill"` |
+
+**Ce qui est touché, et ce qui ne l'est pas.** Seuls les modèles à tokenizer
+**SentencePiece** (Mistral, Codestral, Llama, Gemma). Tous les autres — Qwen,
+Qwen3-MoE, gpt-oss, V4 — sont en BPE byte-level, chemin qui n'a pas changé. Et le
+dépôt porte la vérification : `--tokenize` imprime un contrôle de réversibilité, et
+les six journaux de tokenisation de la campagne disent lesquels sont valides :
+
+| modèle | contrôle de réversibilité (journal de la campagne) |
+|---|---|
+| Qwen2.5-0.5B · R1-1,5B · R1-14B · Qwen3-30B-A3B · gpt-oss-120B | **texte reconstruit identique ✅** |
+| codestral-22B | **DIVERGE** — l'instrument a signalé lui-même sa propre ligne |
+
+**Ce que cela change dans ce rapport** : la ligne « codestral-22B » de la grille
+(§ 3) porte **35 657**, chiffre mesuré sur un texte dont les espaces étaient
+mangés, et **117,91** après correctif — c'est le corrigé qui est retenu, et il a
+été obtenu avec le binaire corrigé. Les fichiers d'identifiants en cache
+(`ids_codestral-22B.txt`) sont, eux, **empoisonnés** : ils ont été produits par le
+binaire périmé et doivent être refaits, pas réutilisés.
+
+**Deux corrections de code sont nées de ce constat :**
+1. le contrôle de réversibilité distingue maintenant l'écart d'**un espace de tête**
+   — la convention `add_dummy_prefix` de SentencePiece, qui faisait afficher
+   « DIVERGE à l'octet 0 » sur *tous* les modèles SPM pour un octet de convention —
+   d'une **vraie** perte d'information, qui reste signalée comme telle ;
+2. `DRAVE_SANS_EMPRUNT=1` devient obligatoire pour toute comparaison dense/listes :
+   sans lui on compare deux schémas de quantification, pas deux chemins
+   d'exécution (§ 22).
+
+**La leçon de méthode** : un correctif non promu est un correctif qui n'existe pas,
+et un cache d'identifiants ne porte pas la version de l'outil qui l'a écrit. Les
+deux pièges du § 16 sont de la même famille — et celui-ci est le plus coûteux,
+parce qu'il ne se voyait que sur un modèle sur six.
 
 ---
 
@@ -566,6 +790,16 @@ que mettre à zéro des activations. Ce n'est que dans le chemin **par listes** 
 les événements baissent (354 → 248 M). Autrement dit, **la parcimonie imposée ne
 paie que si le moteur exécute en listes** ; en dense, elle ne coûte que la qualité.
 
+**Correction du 9 octobre : les deux colonnes de ce tableau ne comparent pas la
+même arithmétique.** En mode `--dense`, le moteur *emprunte* les blocs Q8_0 du
+fichier tels quels (schéma d'échelle de llama.cpp) ; en mode `--push`, il
+reconstruit ses propres listes depuis les poids déquantifiés (notre schéma). Même
+corpus, même modèle, aucune parcimonie : **17,4315 emprunté · 17,4084 reconstruit ·
+17,4084 en listes**. L'écart entre les colonnes dense et listes du tableau
+ci-dessus (0,1 à 0,5 %) vient donc **de l'encodage des poids, pas du chemin
+d'exécution** — et la variable d'environnement `DRAVE_SANS_EMPRUNT=1` le prouve :
+elle ramène le dense sur les listes, au chiffre près, puis au **bit près** (§ 22).
+
 ---
 
 ## 20. Contexte et lots : deux réponses, dont une qui n'est pas celle qu'on croit
@@ -596,17 +830,88 @@ décimale non.)*
 
 ---
 
-## 21. Ce qui reste à mesurer (file en cours)
+## 21. Le noyau, re-mesuré : le croisement est là, et il coûte à densité 1
 
-- `parcimonie` : seuil et k-WTA, en dense et en listes, sur un modèle réel ;
-- `contexte` : 512 → 8 192, avec le cache KV que le moteur **choisit** ;
-- `lot` : 1 → 64, le seul levier qui multiplie un débit de disque ;
-- `routage` : MoE 30B, experts réveillés et volume à router ;
-- `semantique` : la bande 10-15 **survit-elle** à la correction d'échelle ?
-- `noyau`, `repartition`, `portes` ;
-- **batch 2** : la densité d'activation dépend-elle de la **tâche** (prose,
-  français, code, multilingue) ? Même modèle, même matériel ;
-- **batch 3** : l'aiguille dans la botte de foin — la perplexité moyenne ne dit
-  pas si la mémoire tient à 4 000 jetons ;
-- **les paires d'entraînement** (dim 256 et 384, dense contre routé à lecture
-  égale) : export, porte d'exécution, mesure dans le moteur, répartition.
+`drave <modèle>` sans autre argument refait la mesure fondatrice du projet sur le
+binaire du jour — Qwen2.5-0.5B, 64 Mo lus, 20 threads, sous charge 44 :
+
+| mesure | valeur |
+|---|---|
+| bande passante mémoire | **21,5 Go/s** |
+| forme listes (push) | 15,88 bits/poids (int8 + listes de rangs) |
+| forme dense (pull) | 8,00 bits/poids |
+| push, 0 événement | 233 134 matvec/s (**0,004 ms**) · **×0,02** du dense |
+| push, 43 560 événements | 40 027 matvec/s · ×0,10 |
+| push, 430 359 événements | 10 474 matvec/s · ×0,36 |
+| push, 1 076 785 événements | 4 498 matvec/s · ×0,86 |
+| push, 2 152 648 événements | 2 473 matvec/s · **×1,54** |
+| pull (dense), tous les cas | 3 830-3 875 matvec/s (0,26 ms) |
+
+**Le croisement est entre 1,08 et 2,15 M d'événements**, et il est franc : à vide
+les listes sont **50× plus rapides**, à pleine densité **1,5 à 3,2× plus lentes**
+(le journal de l'étape retient ×3,19 sur la dernière ligne). Ce n'est pas une
+contradiction avec le seuil de 22 % du dépôt : c'est la même courbe, vue en
+événements au lieu de la fraction. **Et cela dit pourquoi le chemin dense reste le
+défaut sur un modèle dense** : à 71 % de densité (§ 10 ter), on est du mauvais côté
+du croisement, d'un facteur 2 à 3.
+
+---
+
+## 22. Les listes ne calculent pas une approximation : les logits sont identiques AU BIT PRÈS
+
+Le résultat qui compte pour l'architecture, et il tient en une commande. Même
+modèle (Qwen2.5-0.5B Q8_0), mêmes 7 jetons, `--logits-bin` écrit les logits
+`(positions × 151 936)` en f32 ; on compare les fichiers octet par octet :
+
+| chemin | perplexité (7 jetons) | fichier de logits |
+|---|---:|---|
+| `--push` (listes) | 920,0752 | 4 254 216 octets |
+| `--dense` + `DRAVE_SANS_EMPRUNT=1` | **920,0752** | **identique au bit près** ✅ (`cmp`) |
+| `--dense` (blocs Q8_0 empruntés) | 795,0325 | divergent (autre encodage des poids) |
+
+**Le chemin par listes n'approxime rien.** À encodage de poids égal, il produit
+les **mêmes octets** que le produit scalaire dense — et la même suite de jetons en
+décodage glouton (`[3541, 10908, 1134, 14789, 12422, 355, 13, 356]` des deux
+côtés, contre `[512, 13309, 321, 1788, …]` pour le dense à blocs empruntés). Ce qui
+diffère entre les deux chemins n'est pas le calcul, c'est **ce qu'on a le droit de
+sauter** : un poids nul ne contribue rien, donc l'omettre est exact — et c'est
+toute l'architecture.
+
+**Deux conséquences pratiques.** 1) Toute comparaison dense/listes doit fixer
+`DRAVE_SANS_EMPRUNT=1`, sinon elle mesure deux quantifications (§ 19). 2) Sur un
+modèle **4 bits** la question ne se pose même pas : le moteur n'a qu'un chemin
+(`DenseQ4`), sans événements — la forme 4 bits ne paie aucun des deux avantages.
+C'est un argument de plus pour entraîner des modèles **creux en 8 bits** (§ 5)
+plutôt que d'élaguer des modèles 4 bits.
+
+---
+
+## 23. Ce qui reste à mesurer (état de la file, 9 octobre 1 h 45)
+
+**Fait depuis la première rédaction de cette liste** : `parcimonie` (§ 19), `contexte`
+et `lot` (§ 20), `routage` (§ 7), `semantique` (§ 18), `noyau` (§ 21), `repartition`
+(§ 8 et porte tenue), `portes` (22 vertes, 1 rouge — § 0 ter), `batch 2` (§ 10 ter,
+quatre corpus), `batch 3` (§ 9), les paires entraînées (§ 5), l'équivalence bit à
+bit (§ 22), la tête restreinte sur gpt-oss (§ 13), le lot à froid avec éviction
+(§ 14 bis), et l'acceptation spéculative mesurée par le moteur (§ 1 bis).
+
+**Encore en file — et ce sont des manques, pas des résultats :**
+
+| manque | état exact |
+|---|---|
+| **embeddings / encodeurs** | `bge-m3` est lisible en en-tête et **inexécutable** : ni attention bidirectionnelle, ni pooling. Le manque le plus net du relevé, et rien ne l'a entamé aujourd'hui |
+| **décodage spéculatif** | le taux d'acceptation est mesuré pour deux paires, dont une mal appariée (§ 1 bis) ; les paires **alignées à grande cible** (1,5 B → 14 B, 0,5 B → 14 B) tournent, et c'est là que le rapport de coût peut changer de camp. Aucune ligne de moteur n'est écrite, et c'est délibéré |
+| **modèles entraînés creux** | `m7_d384_kwta50` et `m7_d384_kwta25` (k-WTA appris) puis `m8_d384_route_creux` (routé **et** creux) sont en file pour la nuit : la question « la parcimonie doit-elle être imposée ou apprise ? » n'a pas encore de réponse mesurée |
+| **échelle du routage** | la courbe s'arrête à dim 384 (−2,6 % à 256, −2,9 % à 384) ; dim 512 est entraîné, sa mesure et sa distillation sont en file |
+| **qualité des modèles plus gros que la RAM** | le § 12 ne mesure que **l'existence et le coût** (365,7 Go sur 125 Go). La perplexité publiée pour V4-Flash n'a aucune valeur et c'est écrit |
+| **porte gpt-oss de la campagne** | relancée **seule** à 01 h 04 (la première passe a été tuée par son délai sous contention) ; à cache froid, elle demande sa demi-heure |
+| **codestral corrigé sur 256 jetons** | le run de contrôle a **expiré** (délai de 1 800 s) sous la contention des autres lecteurs. La valeur publiée reste celle à **63 jetons** (117,91), obtenue avec le binaire corrigé |
+
+**Ce que cette liste dit du reste de la fenêtre** : les trois chaînes de nuit
+(`nuit2_m6`, `nuit3_kwta`, `nuit4_route_creux`) sont sérialisées par marqueurs et
+occupent le GPU jusqu'au matin ; la mesure de l'acceptation spéculative à grande
+cible et la porte gpt-oss occupent le processeur et le disque en attendant. Aucune
+de ces files ne peut fausser les autres : elles ne partagent ni les mêmes fichiers,
+ni les mêmes répertoires de cache, et les mesures déterministes (perplexité,
+identifiants, octets lus) ne dépendent pas de la charge — ce qui n'est pas le cas
+des débits, et c'est écrit à chaque fois.

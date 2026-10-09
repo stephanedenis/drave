@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 16.0 h |
+| Durée | 16.7 h |
 | Tours | 27 |
-| Messages | 788 |
-| Appels d'outils | 752 |
-| Fichiers touchés | 25 |
-| Commandes | 595 |
+| Messages | 829 |
+| Appels d'outils | 793 |
+| Fichiers touchés | 27 |
+| Commandes | 632 |
 | Sous-agents | 3 |
-| Commits | 46 |
+| Commits | 47 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -1270,7 +1270,7 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 
 ### Tour 27 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1477 caractères tronqués]
 
-*143 appels d'outils.* Actions notables :
+*184 appels d'outils.* Actions notables :
 
 - bash — Check the full state
 - bash — Measure the distilled d384 with the correct protocol
@@ -1286,11 +1286,11 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - bash — Read parcimonie, contexte, lot steps
 - bash — Inspect batch2 script
 - bash — Read batch2 journal and latency map
-- … et 114 autres
+- … et 155 autres
 
 **Synthèse produite :**
 
-⏵ Revue et commit des correctifs d'instrument et des nouveaux outils
+⏵ Résultat majeur : le gain du routage s'inverse à dim 512 — je le consigne et corrige le verdict
 
 ## 3. Travail accompli
 
@@ -1315,7 +1315,7 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/campagne_synthese.py` | 1 | 2 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/speculatif.py` | 1 | 0 |
 | `/tmp/campagne24/batch3_niah.sh` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md` | 1 | 21 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md` | 1 | 23 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/census_routage.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte_mistral.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-mistral.sh` | 1 | 0 |
@@ -1323,6 +1323,8 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mesure_fenetres.sh` | 1 | 0 |
 | `/tmp/campagne24/nuit2_m6.sh` | 1 | 0 |
 | `/tmp/campagne24/nuit3_kwta.sh` | 1 | 0 |
+| `/tmp/campagne24/nuit4_route_creux.sh` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mesure_lot_disque.sh` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -1372,7 +1374,7 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 555 autres
+- … et 592 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1500,7 +1502,7 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 
 ## 5. Erreurs rencontrées
 
-34 sorties en erreur ou divergentes. Les premières :
+35 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : ```  ### 🤖 Assistant  ⏵ **En transformers 5, `AutoModel` rend directement `Qwen2Model` (pas de `.model`). Je corrige le diagnostic.**  - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitH
 - **T2** : 3310393 bash -c pgrep -af "essai_decharge" | grep python | head; echo "--- logs ---"; tail -2 /tmp/ec_d192_lr3e3.log 2>/dev/null; tail -2 /tmp/ec_d192_lr1e3.log 2>/dev/null; echo "---"; ls -la /tmp/ec
@@ -1566,4 +1568,5 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - L'échelle par enregistrement des traces : les lecteurs l'ignoraient, et le résultat change  Le moteur quantifie chaque enregistrement DRVF sur act_levels = 127 
 - Instrument : la convention SentencePiece nommée, le k-WTA appris, la FFN en Q8  Trois corrections nées de la campagne, chacune pour lever un silence.  1. Le con
 - Deux harnais qui manquaient : le protocole 8×128 écrit, l'acceptation mesurée par le moteur  mesure_fenetres.sh — le protocole de record des modèles entraînés i
+- Campagne 24 h : l'équivalence au bit près, le routage qui s'inverse, le lot à froid  Cinq résultats de la fenêtre, tous avec leur protocole.  1. FIDÉLITÉ (§ 22)
 
