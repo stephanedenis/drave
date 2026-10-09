@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 28.7 h |
+| Durée | 29.0 h |
 | Tours | 31 |
-| Messages | 1139 |
-| Appels d'outils | 1087 |
+| Messages | 1144 |
+| Appels d'outils | 1092 |
 | Fichiers touchés | 34 |
-| Commandes | 900 |
+| Commandes | 905 |
 | Sous-agents | 3 |
-| Commits | 92 |
+| Commits | 93 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -1458,14 +1458,18 @@ En cours
 
 ### Tour 31 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1477 caractères tronqués]
 
-*2 appels d'outils.* Actions notables :
+*7 appels d'outils.* Actions notables :
 
 - bash — Harvest the combined structure+sparsity result
 - bash — Update experiment statuses in the docs
+- bash — Poll the combined model
+- bash — Read the combined model measurements
+- bash — Extract comparable numbers for the two-axis models
+- bash — Record the final reads-vs-quality curve
 
 **Synthèse produite :**
 
-⏵ Consolidation : mise à jour des statuts d'expériences dans les documents
+⏵ Résultat final : la courbe lecture ↔ qualité, à deux axes appris contre un axe imposé
 
 ## 3. Travail accompli
 
@@ -1556,7 +1560,7 @@ En cours
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 860 autres
+- … et 865 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1796,4 +1800,5 @@ En cours
 - M1 : le bus de valeur est implémenté, et la valeur auto-référentielle ne suffit pas  Le manque M1 (un scalaire diffusé à toutes les couches, comme un noyau neur
 - Nos modèles à décharges ne vont pas sur GPU : trop petits, et le noyau GPU est dense  Vérifié dans le code et par la mesure. Trois conditions pour déporter une 
 - Statuts d'expériences à jour : E1 et E3 faits, E2/E4 cadrées, et le pendant GPU du noyau de listes ajouté au plan" && echo ok
+- La courbe lecture-qualité, réponse finale : ÷4 pour +1 %, ÷8 pour +4 %, ÷15 pour +22 % si l'axe est imposé  Cinq modèles identiques par ailleurs (dim 384, 40 00
 

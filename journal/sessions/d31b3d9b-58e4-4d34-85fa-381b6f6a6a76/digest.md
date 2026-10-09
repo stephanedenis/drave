@@ -17987,3 +17987,55 @@ pas  24000 · perte 1.4511 · val 2.2551 bits/octet · 1713 s
 ⏵ Consolidation : mise à jour des statuts d'expériences dans les documents
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/biologie-pour-drave.md\")\ns = p.read_text()\nremplacements = [\n (\"| **E2** | **croissance** : partir de 10 % de connexions, en **ajouter** selon l'activité (règle locale :  … [3446 caractères tronqués]`
+
+  ```
+biologie : statuts E2/E3/E4 mis à jour
+modele : expériences 1 et 2 mises à jour
+ok
+  ```
+
+- **bash** `{"command": "sleep 580; cd /tmp/campagne24 && tail -1 tr_m15.log; grep -E \"m15\" journal14.txt 2>/dev/null | tail -3", "description": "Poll the combined model", "timeoutMs": 610000}`
+
+  ```
+pas  36000 · perte 1.3758 · val 2.2157 bits/octet · 2562 s
+  ```
+
+- **bash** `{"command": "sleep 590; cd /tmp/campagne24 && tail -1 tr_m15.log; grep -E \"m15\" journal14.txt 2>/dev/null | tail -3", "description": "Poll the combined model", "timeoutMs": 620000}`
+
+  ```
+# écrit dans /tmp/m15_d384_masque25_kwta25 · 7.18 M paramètres · 1.92 M poids lus/jeton/couche
+[09/10 14:05:29] charge 3.99 · m15_d384_masque25_kwta25 :   # meilleur point : pas 40000 · val 2.2057 bits/octet
+[09/10 14:05:36] charge 4.63 · m15_d384_masque25_kwta25 · --push;--push --act-topk 250 : PPL 7.0793
+  ```
+
+- **bash** `{"command": "cd /tmp/campagne24 && grep -E \"PPL moyenne|événements\" fenetres_m15_d384_masque25_kwta25.log 2>/dev/null | tail -6; echo \"=== rappel ===\"; echo \"m5_d384_dense (référence) : PPL 4,9959 · 336,7 M événements/fenêtre\"; echo \"m12 masque 25%           : PPL 5,0472 ·  81,6 M\"; echo \"m … [163 caractères tronqués]`
+
+  ```
+--push fenêtre 7 (depuis 768) : PPL 5.7057     128 jetons · 5.2 M paires/jeton · 650765826 événements · 324.8 tok/s
+  --push --act-topk 250 fenêtre 7 (depuis 768) : PPL 4.7315     128 jetons · 1.4 M paires/jeton · 167845674 événements · 399.4 tok/s
+  --push fenêtre 8 (depuis 896) : PPL 6.4742     128 jetons · 5.2 M paires/jeton · 650786052 événements · 277.9 tok/s
+  --push --act-topk 250 fenêtre 8 (depuis 896) : PPL 5.4647     128 jetons · 1.4 M paires/jeton · 167842830 événements · 402.9 tok/s
+  →   push                                     PPL moyenne (log) sur 8 fenêtres : 7.0793
+  →   push   act topk 250                      PPL moyenne (log) sur 8 fenêtres : 6.0792
+=== rappel ===
+m5_d384_dense (référence) : PPL 4,9959 · 336,7 M événements/fenêtre
+m12 masque 25%           : PPL 5,0472 ·  81,6 M
+m7  kwta 25%             : PPL 5,1719 ·  84,2 M
+m11 kwta25+poids50%      : PPL 5,1866 ·  42,2 M
+  ```
+
+- **bash** `{"command": "cd /tmp/campagne24 && for f in fenetres_m5_d384_dense_q8-sans.log fenetres_m12_d384_masque25-sans.log fenetres_m7_d384_kwta025-topk250.log fenetres_m11_d384_kwta25_elag50-topk250.log fenetres_m15_d384_masque25_kwta25.log; do [ -s \"$f\" ] || continue; ppl=$(grep -oE \"PPL moyenne \\(log … [290 caractères tronqués]`
+
+  ```
+fenetres_m5_d384_dense_q8-sans : PPL 4.9959 · 21.1 M paires/jeton
+fenetres_m12_d384_masque25-sans : PPL 5.0472 · 5.2 M paires/jeton
+fenetres_m7_d384_kwta025-topk250 : PPL 5.1719 · 5.4 M paires/jeton
+fenetres_m11_d384_kwta25_elag50-topk250 : PPL 5.1866 · 2.7 M paires/jeton
+fenetres_m15_d384_masque25_kwta25 : PPL 6.0792 · 1.4 M paires/jeton
+  ```
+
+### 🤖 Assistant
+
+⏵ Résultat final : la courbe lecture ↔ qualité, à deux axes appris contre un axe imposé
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\nancre = \"\"\"**Et les deux axes SE CUMULENT quand les deux sont appris**\"\"\"\nassert ancre in s\nneuf = \"\"\"### 5  … [3332 caractères tronqués]`

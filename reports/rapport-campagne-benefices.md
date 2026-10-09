@@ -594,6 +594,37 @@ fois moins** que le témoin sans parcimonie (672 M) pour une perplexité de 5,60
 contre 4,996 — soit **+12 % de perplexité pour ÷16 de lecture**, et le chemin par
 listes y est environ deux fois plus rapide qu'à 50 %.
 
+### 5 quater. La courbe lecture ↔ qualité, et la réponse finale
+
+Cinq modèles **identiques par ailleurs** (dim 384, 4 couches, 40 000 pas, mêmes
+données, FFN exportée en Q8), mesurés au protocole de record. La colonne « paires »
+est celle de la fenêtre 8 (même préfixe pour tous, donc comparable) :
+
+| modèle | ce qui est creux | perplexité | **paires/jeton** | lectures |
+|---|---|---:|---:|---:|
+| `m5_d384_dense` | rien (témoin) | **4,9959** | 21,1 M | — |
+| **`m12` structure innée 25 %** (aléatoire, figée) | poids seuls, **imposés** | **5,0472** (+1,0 %) | **5,2 M** | ÷4,1 |
+| **`m7` k-WTA 25 % appris** | activations, **apprises** | **5,1719** (+3,5 %) | **5,4 M** | ÷3,9 |
+| **`m11` k-WTA 25 % + élagage 50 % appris** | **les deux, appris** | **5,1866** (+3,8 %) | **2,7 M** | **÷7,8** |
+| `m15` masque inné 25 % + k-WTA 25 % | les deux, dont un imposé | 6,0792 (+21,7 %) | **1,4 M** | ÷15,1 |
+
+**Trois lectures, et la troisième est la réponse.**
+
+1. **Un seul axe suffit à diviser les lectures par quatre** — et il coûte 1 % quand il
+   est **structurel** (masque inné) contre 3,5 % quand il est **d'activations**
+   (k-WTA). La structure innée est le moins cher des deux.
+2. **Les deux axes appris se cumulent presque gratuitement** : ÷7,8 lectures pour
+   +3,8 % de perplexité (le second axe n'ajoute que 0,3 point).
+3. **Imposer un axe coûte cher** : la même combinaison, mais avec la structure
+   *imposée* au lieu d'apprise, passe de +3,8 % à **+21,7 %** de perplexité. À
+   ÷15 lectures, le modèle imposé paie cinq fois plus que le modèle appris à ÷8.
+
+**La réponse à « quel modèle pour Drave ? » est donc une courbe, pas un chiffre** :
+**÷4 pour +1 %** (structure innée), **÷8 pour +4 %** (les deux axes appris),
+**÷15 pour +22 %** (un axe imposé). Le point de fonctionnement se choisit ; il ne se
+subit pas — et c'est exactement ce qu'une architecture événementielle permet de faire
+pour la première fois : **borner le coût à la conception**.
+
 **Et les deux axes SE CUMULENT quand les deux sont appris** (9 octobre, 11 h 32) :
 `m11_d384_kwta25_elag50` reprend exactement `kwta025` (dim 384, 40 000 pas) **plus un
 élagage appris à 50 %** des poids par ligne — même règle que `--keep`, appliquée
