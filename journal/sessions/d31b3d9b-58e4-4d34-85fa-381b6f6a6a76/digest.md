@@ -18422,3 +18422,380 @@ est ouvert aujourd'hui, par ordre de valeur mesurée :
 ⏵ Mise à jour de la porte d'entrée du dépôt avec la campagne et les documents de conception
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"README.md\")\ns = p.read_text()\nancre = \"\"\"---\n\n## La journée du 30/09 — huit chantiers, mesurés\"\"\"\nassert ancre in s\najout = \"\"\"---\n\n## La campagne du 8-9 octobre  … [3926 caractères tronqués]`
+
+  ```
+README mis à jour
+ccdd6e7 README : la campagne du 8-9 octobre en tête, avec ses cinq résultats et ses quatre documents
+  pas  16000 · perte 1.3136 · val 2.0632 bits/octet · 1148 s
+  ```
+
+- **bash** `{"command": "sleep 595; cd /tmp/campagne24 && tail -1 tr_m16_d512_masque25.log; grep -E \"m16\" journal15.txt 2>/dev/null | tail -2", "description": "Poll m16", "timeoutMs": 620000}`
+
+  ```
+pas  24000 · perte 1.2927 · val 2.0280 bits/octet · 1722 s
+  ```
+
+### 👤 Utilisateur
+
+as-t-on configuré un remote github pour notre projet? il est peut-être temps de diviser en submodules et paralléliser le travail sur plusirurs cpu-coeurs
+
+### 🤖 Assistant
+
+⏵ Diagnostic : remote git, structure du dépôt et ce qui se parallélise réellement
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== remote ===\"; git remote -v; echo \"(vide = aucun remote)\"; echo \"=== branche et état ===\"; git branch --show-current; git log --oneline -1; echo \"=== structure ===\"; ls; echo \"=== Cargo ===\"; cat drave-core/Cargo.t … [175 caractères tronqués]`
+
+  ```
+=== remote ===
+(vide = aucun remote)
+=== branche et état ===
+master
+ccdd6e7 README : la campagne du 8-9 octobre en tête, avec ses cinq résultats et ses quatre documents
+=== structure ===
+bench
+colab
+data
+docs
+drave-core
+journal
+models
+__pycache__
+Qtrinet-bootstrap.md
+README.md
+reports
+REPRISE.md
+run_8bit_perfection.py
+run_clusters.py
+run_cpu.py
+run_encoding.py
+run_harness.py
+run_list_mode.py
+run_precision.py
+run_quantify.py
+run_real_clusters.py
+run_sparsity.py
+run_value_encoding.py
+sprints
+src
+tools
+=== Cargo ===
+[package]
+name = "drave-core"
+version = "0.1.0"
+edition = "2021"
+description = "Drave — moteur d'exécution par listes d'activation (stream of logs) pour modèles quantifiés"
+
+[[bin]]
+name = "drave"
+path = "src/main.rs"
+
+[dependencies]
+# aucune : std seul, pour rester sans dépendance réseau
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+panic = "abort"
+=== tailles des sources Rust ===
+   1866 drave-core/src/kimi_k3.rs
+   2357 drave-core/src/gguf.rs
+   2901 drave-core/src/formats.rs
+   5969 drave-core/src/main.rs
+   9343 drave-core/src/model.rs
+  28758 total
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== taille ===\"; du -sh .git 2>/dev/null; git count-objects -vH | grep size-pack; echo \"=== fichiers suivis ===\"; git ls-files | wc -l; du -sh --exclude=.git . 2>/dev/null | tail -1; echo \"=== gh CLI ===\"; command -v gh > … [331 caractères tronqués]`
+
+  ```
+=== taille ===
+32M	.git
+size-pack: 29.70 MiB
+=== fichiers suivis ===
+469
+1,1G	.
+=== gh CLI ===
+You are not logged into any GitHub hosts. To log in, run: gh auth login
+=== gitignore couvre-t-il les gros ? ===
+__pycache__/
+*.pyc
+reports/*.tmp
+models/
+data/
+qtrinet-core/target/
+
+# Traces de session : la copie brute reste sur disque (volumineuse, binaire),
+# le digest markdown est versionné.
+journal/sessions/*/session.jsonl.zstd
+journal/sessions/archive.log
+
+# Outil de référence : la source est versionnée, le binaire se recompile
+# (commande exacte dans tools/ref_logits.md).
+tools/ref_logits
+target/
+=== plus gros fichiers suivis ===
+9,0M	journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md
+2,7M	tools/tokenizer_kimi/tiktoken.model
+1,4M	journal/sessions/22bcae27-254b-47b2-acda-87467dab060c/digest.md
+1,2M	journal/sessions/d31b3d9b-58e4-4d34-85fa-381b6f6a6a76/digest.md
+820K	journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/rapport.md
+  ```
+
+### 🤖 Assistant
+
+⏵ Mesure du gain de parallélisme de compilation : profil actuel contre profil parallèle
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && grep -A4 \"profile.release\" Cargo.toml; echo \"=== A : profil actuel (lto=true, codegen-units=1) ===\"; touch src/main.rs; /usr/bin/time -f \"  %e s · %P CPU\" cargo build --release 2>&1 | tail -2; echo \"=== B : codegen  … [481 caractères tronqués]`
+
+  ```
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+panic = "abort"
+=== A : profil actuel (lto=true, codegen-units=1) ===
+    Finished `release` profile [optimized] target(s) in 37.97s
+  37.98 s · 100% CPU
+=== B : codegen parallèle (16 unités, lto=thin) ===
+    Finished `release` profile [optimized] target(s) in 12.62s
+  12.64 s · 385% CPU
+=== C : sans LTO du tout ===
+    Finished `release` profile [optimized] target(s) in 11.65s
+  11.67 s · 319% CPU
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && wc -l drave-core/src/*.rs | sort -rn; echo \"=== dépendances internes (qui utilise qui) ===\"; for m in gguf formats list engine model gpu clusters engram materiel tokenizer kimi_k3; do echo -n \"$m <- \"; grep -oh \"crate::$m\" drav … [100 caractères tronqués]`
+
+  ```
+28758 total
+   9343 drave-core/src/model.rs
+   5969 drave-core/src/main.rs
+   2901 drave-core/src/formats.rs
+   2357 drave-core/src/gguf.rs
+   1866 drave-core/src/kimi_k3.rs
+   1597 drave-core/src/list.rs
+   1573 drave-core/src/gpu.rs
+   1029 drave-core/src/engine.rs
+    731 drave-core/src/tokenizer.rs
+    506 drave-core/src/clusters.rs
+    478 drave-core/src/materiel.rs
+    408 drave-core/src/engram.rs
+=== dépendances internes (qui utilise qui) ===
+gguf <- 53
+formats <- 16
+list <- 46
+engine <- 1
+model <- 22
+gpu <- 33
+clusters <- 11
+engram <- 2
+materiel <- 2
+tokenizer <- 0
+kimi_k3 <- 0
+  ```
+
+### 🤖 Assistant
+
+⏵ Réponse : pas de remote, et la mesure du parallélisme de compilation (×3 disponible)
+
+**1. Remote GitHub : il n'y en a aucun.** `git remote -v` est vide, et `gh` n'est **authentifié sur aucun hôte** — je ne peux donc ni créer le dépôt ni pousser à votre place. Ce qu'il faut savoir avant de le faire :
+
+- le dépôt est **poussable tel quel** : 469 fichiers suivis, `.git` de **32 Mo** (pack 29,7 Mio) ; `models/`, `data/`, `target/` sont déjà ignorés ;
+- mais **1,1 Go** de répertoire de travail, dont l'essentiel ignoré ✓ ;
+- le plus gros fichier suivi est un **digest de session de 9 Mo** (`journal/sessions/…/digest.md`) — le journal pèse à lui seul l'essentiel du dépôt. Si vous poussez, ces transcriptions partent avec : **privé d'abord** est le choix raisonnable, d'autant que les rapports contiennent des chemins internes et des mesures de la machine.
+
+Les commandes, quand vous serez authentifié (`gh auth login`) : `gh repo create drave --private --source=. --push`. Je peux préparer un `.gitattributes` (LFS) pour les digests, ou archiver le journal, si vous voulez alléger avant.
+
+**2. « Submodules » : ce n'est pas le bon outil ici — et la mesure le dit.** Un submodule découpe des **dépôts** (utile pour épingler une dépendance externe, ou pour sortir le *journal* dans son propre dépôt). Pour découper **un** code source, l'outil adapté est un **espace de travail Cargo** : plusieurs caisses dans un même dépôt, compilées en parallèle, avec des frontières vérifiées par le compilateur. La structure actuelle s'y prête bien, et les dépendances internes sont déjà hiérarchisées :
+
+| couche | modules actuels | lignes |
+|---|---|---|
+| **socle** (aucune dépendance interne) | `gguf` (2 357) · `formats` (2 901) · `tokenizer` (731) | 5 989 |
+| **listes** | `list` (1 597, utilisé 46× ailleurs) | 1 597 |
+| **exécution** | `model` (9 343) · `engine` (1 029) · `kimi_k3` (1 866) | 12 238 |
+| **ressources** | `gpu` (1 573, utilisé 33×) · `clusters` (506) · `materiel` (478) | 2 557 |
+| **mémoire** | `engram` (408) | 408 |
+| **interface** | `main` (5 969) | 5 969 |
+
+Deux fichiers portent **53 %** du code (`model.rs` 9 343 + `main.rs` 5 969) : c'est là que le découpage rapporte le plus — et c'est aussi là que deux personnes se marchent dessus aujourd'hui.
+
+**3. « Paralléliser sur plus de cœurs » : mesuré, et il y a ×3 à prendre — au prix d'un piège.** Recompilation du crate à l'instant, machine sous charge de fond :
+
+| profil | temps | CPU utilisé |
+|---|---:|---:|
+| **actuel** (`lto = true`, `codegen-units = 1`) | **37,98 s** | **100 %** — *un seul cœur* |
+| `codegen-units = 16`, `lto = "thin"` | **12,64 s** | 385 % |
+| `codegen-units = 16`, `lto = false` | 11,67 s | 319 % |
+
+**Le profil de release actuel compile sur un cœur.** C'est un choix explicite du dépôt (binaire plus rapide), et il a un prix caché : chaque itération de développement paie 38 s de compilation mono-cœur sur une machine qui a 40 threads.
+
+**Le piège, et il est sérieux** : changer le profil change **le binaire de mesure**. Or toutes nos mesures — 0,210 ns par événement, le croisement push/pull à 22-25 %, les débits — sont attachées au binaire actuel. La règle à inscrire : **le profil `release` reste celui des mesures ; on ajoute un profil d'itération** (`[profile.rapide]` : `codegen-units=16`, `lto="thin"`) pour le développement et les tests, et **toute promotion vers `release` se paie d'un passage des 23 portes**. Les 77 tests, eux, tournent déjà en 12 s.
+
+**4. Paralléliser le *travail*** — et là, ce n'est pas une question de cœurs mais de **ressources**, ce que la campagne a mesuré durement : deux lecteurs du même fichier de 63 Go font tomber le débit effectif à **8,6 Mo/s** (contre 243 Mo/s en séquentiel), et nos deux tentatives de porte gpt-oss ont expiré pour cette raison. Le schéma qui marche sur cette machine :
+
+- **1 entraînement GPU** à la fois (les 16 Go sont le facteur limitant, pas les cœurs) ;
+- **N mesures CPU** en parallèle sans risque (elles sont déterministes : perplexité, événements, paires) ;
+- **au plus 1 lecteur lourd de disque** — c'est la ressource rare, et c'est elle qui doit servir de sémaphore ;
+- **compilation/test** toujours possible en parallèle (ils ne touchent ni le disque des modèles ni la VRAM).
+
+C'est exactement le schéma que les chaînes `jourN` appliquent depuis ce matin, avec une correction : leur garde par `pgrep` s'est mordue la queue **trois fois** — un sémaphore par ressource (un fichier verrou) serait plus sûr qu'un motif de ligne de commande.
+
+*(En fond : `m16` — structure innée à dim 512 — est à 24 000/40 000 pas ; sa mesure tombera vers 15 h 10, suivie de `m17`.)*
+
+### 👤 Utilisateur
+
+gh est installé sur cette machine et il y a un token dans l'environnement ou la config
+
+### 🤖 Assistant
+
+⏵ Recherche du jeton et de l'authentification gh (sans jamais l'afficher)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== variables présentes (noms seulement) ===\"; env | grep -iE \"^(GH|GITHUB|GITLAB)_\" | cut -d= -f1; echo \"=== config gh ===\"; ls -la ~/.config/gh/ 2>/dev/null; echo \"=== statut ===\"; gh auth status 2>&1 | head -8; echo  … [151 caractères tronqués]`
+
+  ```
+=== variables présentes (noms seulement) ===
+=== config gh ===
+=== statut ===
+You are not logged into any GitHub hosts. To log in, run: gh auth login
+=== netrc/credentials ===
+-rw-------. 1 stephane stephane 226  9 sep 11:39 /home/stephane/.git-credentials
+  ```
+
+- **bash** `{"command": "sed 's#//[^@]*@#//***@#' ~/.git-credentials; echo \"=== test d'accès réseau + identité (sans afficher le jeton) ===\"; TOK=$(python3 -c \"\nimport re\ns=open('/home/stephane/.git-credentials').read()\nm=re.search(r'://([^:]+):([^@]+)@github\\.com', s)\nprint(m.group(2) if m else '')\"); … [529 caractères tronqués]`
+
+  ```
+https://***@dev.azure.com
+https://***@dev.azure.com
+=== test d'accès réseau + identité (sans afficher le jeton) ===
+aucun jeton GitHub dans .git-credentials
+  ```
+
+### 🤖 Assistant
+
+⏵ Le jeton n'est ni dans l'environnement de mon shell ni dans la config `gh` — je le cherche ailleurs
+
+- **bash** `{"command": "echo \"=== fichiers de démarrage mentionnant un jeton (noms seulement) ===\"; grep -l -iE \"GITHUB_TOKEN|GH_TOKEN\" ~/.bashrc ~/.bash_profile ~/.profile ~/.zshrc /etc/environment 2>/dev/null; echo \"=== GH_CONFIG_DIR / XDG ===\"; echo \"GH_CONFIG_DIR=${GH_CONFIG_DIR:-(absent)} · XDG_CON … [751 caractères tronqués]`
+
+  ```
+=== fichiers de démarrage mentionnant un jeton (noms seulement) ===
+=== GH_CONFIG_DIR / XDG ===
+GH_CONFIG_DIR=(absent) · XDG_CONFIG_HOME=/home/stephane/.config
+=== processus dont l'environnement porte GH_TOKEN/GITHUB_TOKEN (PID seulement) ===
+=== fichiers .env / *.token / gh dans le home (profondeur 3) ===
+[stderr]
+bash: line 1: /proc/100/environ: Permission denied
+bash: line 1: /proc/101/environ: Permission denied
+bash: line 1: /proc/102/environ: Permission denied
+bash: line 1: /proc/103/environ: Permission denied
+bash: line 1: /proc/105/environ: Permission denied
+bash: line 1: /proc/106/environ: Permission denied
+bash: line 1: /proc/107/environ: Permission denied
+bash: line 1: /proc/108/environ: Permission denied
+bash: line 1: /proc/109/environ: Permission denied
+bash: line 1: /proc/1102/environ: Permission denied
+bash: line 1: /proc/110/environ: Permission denied
+bash: line 1: /proc/1111357/environ: Permission denied
+bash: line 1: /proc/1116496/environ: Permission denied
+bash: line 1: /proc/1127720/environ: Permission denied
+bash: line 1: /proc/1127/environ: Permission denied
+bash: line 1: /proc/112/environ: Permission denied
+bash: line 1: /proc/1133/environ: Permission denied
+b
+… [43382 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Ce que la machine a réellement comme accès : je vérifie SSH et la config git
+
+- **bash** `{"command": "echo \"=== identité ===\"; id -un; echo \"=== clés SSH ===\"; ls -la ~/.ssh/ 2>/dev/null | grep -vE \"^total\" | head -8; echo \"=== github dans known_hosts ? ===\"; grep -c \"github.com\" ~/.ssh/known_hosts 2>/dev/null || echo \"0\"; echo \"=== config git globale (urls/aide) ===\"; git … [301 caractères tronqués]`
+
+  ```
+=== identité ===
+stephane
+=== clés SSH ===
+drwx------. 1 stephane stephane  180 20 sep 10:32 .
+drwx--x---+ 1 stephane stephane 1978 26 sep 07:35 ..
+drwx------. 1 stephane stephane   58 21 sep 14:48 agent
+-rw-------. 1 stephane stephane  194  7 sep 12:25 authorized_keys
+-rw-------. 1 stephane stephane  178  7 sep 12:45 config
+-rw-------. 1 stephane stephane  411  7 sep 12:45 id_ed25519_github
+-rw-r--r--. 1 stephane stephane  103  7 sep 12:45 id_ed25519_github.pub
+-rw-------. 1 stephane stephane  828  7 sep 12:45 known_hosts
+=== github dans known_hosts ? ===
+3
+=== config git globale (urls/aide) ===
+url.https://Fn3NWgAK9ZMWQPk5kYc4kONylBlAvBZIZiPGyqpLCbIVA0LVrMlwJQQJ99CAACAAAAAZymvpAAASAZDO1o9x@dev.azure.com.insteadof=https://dev.azure.com
+credential.helper=store
+credential.usehttppath=false
+url.git@github.com:.insteadof=https://github.com/
+=== test SSH vers github (5 s) ===
+Hi stephanedenis! You've successfully authenticated, but GitHub does not provide shell access.
+  ```
+
+### 🤖 Assistant
+
+⏵ GitHub est accessible en SSH (compte `stephanedenis`) — je cherche si un dépôt existe déjà
+
+- **bash** `{"command": "for r in Qtrinet qtrinet Drave drave drave-core; do printf \"%-12s \" \"$r\"; out=$(timeout 25 git ls-remote \"git@github.com:stephanedenis/$r.git\" 2>&1 | head -1); case \"$out\" in *\"HEAD\"*|*\"refs/\"*) echo \"EXISTE ($(echo \"$out\" | cut -c1-40)...)\";; *\"Repository not found\"*) … [130 caractères tronqués]`
+
+  ```
+Qtrinet      absent
+qtrinet      absent
+Drave        absent
+drave        absent
+drave-core   absent
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short | wc -l; git status --short | head -5; echo \"=== ce qui serait poussé ===\"; git log --oneline -1; git ls-files | wc -l; du -sh .git", "description": "Check the working tree state before a push"}`
+
+  ```
+1
+ M journal/README.md
+=== ce qui serait poussé ===
+ccdd6e7 README : la campagne du 8-9 octobre en tête, avec ses cinq résultats et ses quatre documents
+469
+32M	.git
+  ```
+
+- **ask_user_question** `{"questions": [{"id": "remote", "header": "Publication du dépôt", "question": "J'ai trouvé l'accès GitHub : une clé SSH qui authentifie le compte **stephanedenis** (git réécrit même les URL https en SSH). Mais aucun jeton n'est visible depuis mon shell (pas de GH_TOKEN/GITHUB_TOKEN, pas de ~/.config … [1826 caractères tronqués]`
+
+  ```
+{"answers":[{"id":"remote","selected":["Je crée et pousse avec un jeton"]},{"id":"journal","selected":["Tout, dépôt privé (Recommandé)"]}]}
+  ```
+
+### 🤖 Assistant
+
+⏵ Recherche exhaustive du jeton (motifs de jeton GitHub dans les fichiers et l'environnement systemd)
+
+- **bash** `{"command": "echo \"=== environnement systemd utilisateur ===\"; systemctl --user show-environment 2>/dev/null | grep -iE \"GH|GITHUB\" | cut -d= -f1 || echo \"(rien ou pas de systemd --user)\"; echo \"=== recherche de motifs de jeton dans les fichiers du home (noms seulement) ===\"; timeout 120 gre … [657 caractères tronqués]`
+
+  ```
+=== environnement systemd utilisateur ===
+=== recherche de motifs de jeton dans les fichiers du home (noms seulement) ===
+(fin)
+=== processus de stephane dont l'environnement porte un jeton ===
+(fin)
+[stderr]
+bash: line 1: /proc/2357/environ: Permission denied
+bash: line 1: /proc/2364/environ: Permission denied
+bash: line 1: /proc/3520/environ: Permission denied
+bash: line 1: /proc/3792/environ: Permission denied
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== git credential fill pour github.com (nom d'utilisateur seulement) ===\"; printf \"protocol=https\\nhost=github.com\\n\\n\" | git credential fill 2>/dev/null | sed -n 's/^username=/  username : /p;s/^password=/  password :  … [513 caractères tronqués]`
+
+  ```
+=== git credential fill pour github.com (nom d'utilisateur seulement) ===
+  username : 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
+  password : PRÉSENT (non affiché)
+[timed out after 120000ms]
+[killed by signal: SIGTERM]
+  ```
+
+### 🤖 Assistant
+
+⏵ Jeton trouvé dans le magasin d'identifiants de git — ⚠️ il vient d'apparaître en clair dans la sortie
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add journal/README.md && git commit -q -m \"journal : index des sessions à jour\" 2>/dev/null; git status --short | wc -l; CRED=$(printf \"protocol=https\\nhost=github.com\\n\\n\" | timeout 15 git credential fill 2>/dev/null); TO … [665 caractères tronqués]`
