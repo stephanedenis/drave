@@ -587,6 +587,26 @@ fois moins** que le témoin sans parcimonie (672 M) pour une perplexité de 5,60
 contre 4,996 — soit **+12 % de perplexité pour ÷16 de lecture**, et le chemin par
 listes y est environ deux fois plus rapide qu'à 50 %.
 
+**Et les deux axes SE CUMULENT quand les deux sont appris** (9 octobre, 11 h 32) :
+`m11_d384_kwta25_elag50` reprend exactement `kwta025` (dim 384, 40 000 pas) **plus un
+élagage appris à 50 %** des poids par ligne — même règle que `--keep`, appliquée
+pendant l'entraînement à rampe cubique.
+
+| dim 384 | aucune parcimonie | 50 % d'activations | **25 % d'activations** |
+|---|---|---|---|
+| `kwta025` (activations seules) | 6,4282 · 335,3 M | 5,8131 · 168,3 M | 5,1719 · **84,2 M** |
+| **+ poids élagués APRIS (50 %)** | **6,0422 · 165,9 M** | **5,6842 · 84,7 M** | **5,1866 · 42,2 M** |
+| écart | **−6,0 %** | −2,2 % | **+0,3 %** |
+
+**Les lectures sont divisées par deux à chaque point de fonctionnement, et la
+perplexité ne bouge pas** (5,1866 contre 5,1719 à 25 % d'activations, soit +0,3 %) —
+elle s'améliore même en dense (−6,0 %). Cumulé avec la parcimonie d'activation, le
+modèle lit **huit fois moins** que le témoin sans parcimonie (42,2 M contre 336 M
+d'événements par fenêtre) pour une perplexité comparable.
+
+**C'est la réponse à « quel modèle pour Drave ? »** : entraîné creux **sur les deux
+axes** — activations (~25 %) et poids (~50 %) — plutôt que sur un seul.
+
 **Les deux leviers ne se cumulent PAS** — mesuré le 9 octobre à 7 h 20. Un
 quatrième modèle, `m9_d384_kwta25_distille`, reprend **exactement** la recette de
 `kwta025` (dim 384, 40 000 pas, k-WTA 25 %) **plus** la distillation de l'enseignant

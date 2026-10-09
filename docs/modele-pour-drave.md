@@ -113,9 +113,18 @@ les paires *sans toucher aux activations*. Mesuré sur `m8_d512_kwta25` (128 jet
 gardés, **la perplexité ne bouge pas** (3,9139 contre 3,9152) — l'élagage imposé
 coûte zéro à ce taux. À 25 % il s'effondre (+232 %) : la limite est entre les deux.
 
-**Ce qui manque** : ces poids ont été élagués **à l'exécution** (`--keep`), pas
-appris. Par symétrie avec A, un modèle *entraîné* avec élagage devrait tenir plus
-bas que 50 %. C'est l'expérience la plus prometteuse du lot, et elle est en file.
+**ET C'EST APPRIS, MAINTENANT — mesuré le 9/10 à 11 h 32.** `m11_d384_kwta25_elag50`
+= `kwta025` (activations à 25 %, apprises) **+ élagage appris à 50 %** des poids :
+
+| dim 384 | aucune parcimonie | 50 % act. | **25 % act.** |
+|---|---|---|---|
+| `kwta025` seul | 6,4282 · 335,3 M | 5,8131 · 168,3 M | 5,1719 · 84,2 M |
+| **+ poids élagués appris** | **6,0422 · 165,9 M** | **5,6842 · 84,7 M** | **5,1866 · 42,2 M** |
+
+**÷2 lectures à chaque point, qualité inchangée** (+0,3 % à 25 % d'activations,
+−6,0 % en dense). Cumulé, le modèle lit **huit fois moins** que le témoin sans
+parcimonie, pour une perplexité comparable : c'est la vérification de l'hypothèse
+« les deux facteurs se multiplient », cette fois avec les deux **appris**.
 
 ### C. Routage d'experts — **mesuré : fort sur les paires, aveugle aux événements**
 

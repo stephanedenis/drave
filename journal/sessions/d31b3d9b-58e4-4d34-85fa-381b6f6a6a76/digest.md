@@ -16587,3 +16587,39 @@ jour5 en file
   ```
 
 - **bash** `{"command": "cd /tmp/campagne24 && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"/tmp/campagne24/jour5_lognormal.sh\")\ns = p.read_text()\nvieux = \"\"\"    for keep in 1.0 0.5 0.25; do\n        out=$(DRAVE_SANS_EMPRUNT=1 timeout 600 ./drave-core/target/release/drave /tmp/$m.gguf \\\\\n       … [1844 caractères tronqués]`
+
+  ```
+corrigé
+syntaxe OK
+33cc455 E6 outillée : poids log-normaux (theta = log|w| appris, signes figés à la naissance)
+  ```
+
+- **bash** `{"command": "sleep 570; cd /tmp/campagne24 && tail -1 tr_m11_poids_creux.log; grep -E \"m11\" journal11.txt 2>/dev/null | tail -4", "description": "Poll the weight-pruning results", "timeoutMs": 600000}`
+
+  ```
+pas  28000 · perte 1.3643 · val 2.0848 bits/octet · 2128 s
+  ```
+
+- **bash** `{"command": "sleep 590; cd /tmp/campagne24 && tail -1 tr_m11_poids_creux.log; grep -E \"m11\" journal11.txt | tail -4", "description": "Poll m11", "timeoutMs": 620000}`
+
+  ```
+pas  36000 · perte 1.2838 · val 2.0704 bits/octet · 2733 s
+  ```
+
+- **bash** `{"command": "sleep 590; cd /tmp/campagne24 && grep -E \"m11|m7_d384_kwta025\" journal11.txt | tail -8", "description": "Check the learned-pruning comparison", "timeoutMs": 620000}`
+
+  ```
+[09/10 11:32:20] charge 2.69 · m11_d384_kwta25_elag50 :   # meilleur point : pas 40000 · val 2.0652 bits/octet
+[09/10 11:32:29] charge 4.05 · m7_d384_kwta025-sans : PPL 6.4282 · 335265738 événements/fenêtre
+[09/10 11:32:34] charge 4.53 · m7_d384_kwta025-topk500 : PPL 5.8131 · 168334222 événements/fenêtre
+[09/10 11:32:39] charge 5.05 · m7_d384_kwta025-topk250 : PPL 5.1719 · 84164640 événements/fenêtre
+[09/10 11:32:44] charge 4.80 · m11_d384_kwta25_elag50-sans : PPL 6.0422 · 165880847 événements/fenêtre
+[09/10 11:32:48] charge 5.38 · m11_d384_kwta25_elag50-topk500 : PPL 5.6842 · 84669601 événements/fenêtre
+[09/10 11:32:52] charge 5.38 · m11_d384_kwta25_elag50-topk250 : PPL 5.1866 · 42204246 événements/fenêtre
+  ```
+
+### 🤖 Assistant
+
+⏵ Résultat : l'élagage APPRIS divise encore les lectures par deux, à qualité égale
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\nancre = \"\"\"**Les deux leviers ne se cumulent PAS** — mesuré le 9 octobre à 7 h 20.\"\"\"\nassert ancre in s\nneuf =  … [3417 caractères tronqués]`
