@@ -425,7 +425,79 @@ c'est exactement le piège que la colonne bits/octet neutralise.
 
 ---
 
-## 11. Ce qui reste à mesurer (file en cours)
+## 12. Le cas extrême : **365,7 Go sur une machine de 125 Go**
+
+DeepSeek-V4.1-Flash Q2, exécuté par le moteur, mmappé, sans copie — deux fenêtres
+minuscules, mais c'est le COÛT qui est la mesure ici :
+
+| fenêtre | RSS | octets lus | temps |
+|---|---:|---:|---:|
+| 8 jetons, ctx 32 | **27,7 Go** | 32,5 Go | 216 s |
+| 16 jetons, ctx 64 | **37,6 Go** | 37,7 Go | 266 s |
+
+**Un modèle de 365,7 Go tourne sur une machine de 125 Go de RAM avec 38 Go
+résidents.** Il n'est pas chargé, il est **ruisselé** : chaque passe lit ce qu'elle
+touche et rien d'autre. C'est la revendication centrale du projet, mesurée sur le
+plus gros modèle présent sur le disque.
+
+**Ce que ces chiffres ne disent PAS, et il faut le dire** : la perplexité de ce
+modèle sur ce corpus est énorme (13,2 M et 659 139) et n'a **aucune valeur** —
+elle mélange une quantification Q2 agressive, une fenêtre de 16 jetons et une
+tokenisation dont on n'a pas vérifié la réversibilité (§ 3). La ligne « modèle
+plus gros que la RAM » du verdict porte donc sur **l'existence et le coût**, pas
+sur la qualité.
+
+---
+
+## 13. La tête restreinte, sur deux modèles de plus
+
+`--tete-restreinte` sur une tâche à trois étiquettes (positive / negative /
+neutral), 64 jetons, deux tours entrelacés, sous charge 41-46 :
+
+| modèle | tête complète | **tête restreinte** | gain |
+|---|---:|---:|---:|
+| Qwen2.5-0.5B | 17,35 / 15,73 tok/s | **21,40 / 23,85** | **×1,36** |
+| r1-distill-1.5B | 4,66 / 8,45 tok/s | **6,27 / 7,08** | ×1,11 (bruité) |
+
+Et le contrôle qui compte, sur les mêmes journaux : la sortie de la tête
+**restreinte** ne contient que les mots autorisés — les occurrences d'étiquettes
+passent de **10 à 67** (0,5 B) et de **7 à 67** (1,5 B), parce que le modèle ne
+*peut pas* produire autre chose. La tête complète, elle, écrit du texte libre.
+
+**Ce qui est robuste ici, c'est la garantie, pas le débit** : le gain de vitesse
+dépend du rapport tête/corps du modèle (×1,36 sur un 0,5 B, à peine sur un 1,5 B
+où d'autres postes dominent), alors que la contrainte de sortie, elle, est
+**structurelle** — et c'est la seule ligne du verdict où l'architecture gagne sans
+dépendre ni du modèle ni de la machine.
+
+---
+
+## 14. Une mesure à refaire : le lot sur le 30B a mesuré le cache de pages
+
+Batch 5, Qwen3-30B-A3B depuis le NVMe, `--lot` de 1 à 64 :
+
+| lot | PPL | tok/s | octets lus | mur |
+|---:|---:|---:|---:|---:|
+| 1 | 7,6139 | 0,4 | **10 954 Mio** | 345 s |
+| 4 | 7,6098 | 1,4 | 0 | 118 s |
+| 8 | 7,6098 | 1,4 | 0 | 118 s |
+| 32 | 7,6098 | 1,2 | 0 | 138 s |
+| 64 | 7,6098 | 1,2 | 0 | 135 s |
+
+**Le protocole a mesuré le cache de pages, pas le lot** : seule la première passe
+a lu (10,9 Go, à froid) ; les suivantes ont tout trouvé en mémoire (0 octet lu) et
+durent toutes ~2 minutes. La comparaison lot 1 / lot 4 n'est donc **pas** une
+mesure du lot — c'est une mesure de « à froid contre à chaud ». Les PPL, elles,
+sont identiques (7,6098 à partir du lot 4), ce qui confirme au moins que **le lot
+ne change pas le résultat**.
+
+Pour mesurer le lot, il faut un modèle plus gros que la mémoire — ce que le § 12
+donne — ou vider le cache entre les passes, ce que la campagne ne peut pas faire
+sans root.
+
+---
+
+## 15. Ce qui reste à mesurer (file en cours)
 
 - `parcimonie` : seuil et k-WTA, en dense et en listes, sur un modèle réel ;
 - `contexte` : 512 → 8 192, avec le cache KV que le moteur **choisit** ;

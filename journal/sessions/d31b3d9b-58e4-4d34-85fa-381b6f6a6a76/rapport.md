@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 14.2 h |
-| Tours | 20 |
-| Messages | 590 |
-| Appels d'outils | 568 |
+| Durée | 14.3 h |
+| Tours | 21 |
+| Messages | 595 |
+| Appels d'outils | 571 |
 | Fichiers touchés | 21 |
-| Commandes | 446 |
+| Commandes | 449 |
 | Sous-agents | 3 |
-| Commits | 33 |
+| Commits | 34 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -67,6 +67,8 @@
 **Tour 19** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1197 caractères tronqués]
 
 **Tour 20** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1197 caractères tronqués]
+
+**Tour 21** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1197 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -979,7 +981,44 @@ Et le défaut de méthode est nommé : **le moteur détecte la divergence** (le 
 
 **Synthèse produite :**
 
-⏵ Bug dans mon correctif : les jetons-octets `<0x0A>` se décodaient littéralement
+⏵ Correctif livré : les tokenizers SentencePiece (Llama, Mistral, Codestral) ne perdent plus les espaces
+
+\## Ce que le moteur faisait
+
+Il ne savait découper qu'en **BPE byte-level** (Qwen, gpt-oss, Kimi, V4). Sur une table **SentencePiece** — pas de fusions, espace porté par la marque `▁` en tête de mot — il ne trouvait aucune fusion et retombait sur **un jeton par caractère** :
+
+```
+source : "The river carries the logs to the mill."   (39 octets, 9 jetons chez Qwen)
+retour : "Therivercarriesthelogstothemill."          (32 jetons)
+```
+
+C'est ce défaut qui a produit les **35 657** de perplexité de codestral — un chiffre qui ne mesurait pas le modèle.
+
+\## Le correctif (commit `ddebb6b`)
+
+Détection du schéma (aucune fusion **et** marque `▁` dans la table), encodeur « plus long morceau d'abord » avec repli octet `<0xXX>`, et un décodage qui **défait** ce repli. Ce dernier point m'a coûté une itération : recoller `<0x0A>` littéralement allongeait le texte de **10 206 octets sur 359 041** — un défaut invisible sauf sur le contrôle de réversibilité, **et c'est précisément pourquoi ce contrôle existe**.
+
+**Non-régression mesurée**, mêmes identifiants, binaire patché contre binaire d'avant :
+
+| vérification | résultat |
+|---|---|
+| Qwen2.5-0.5B (mêmes ids) | **17,4315 = 17,4315** |
+| identifiants Qwen pour un texte donné | **identiques** |
+| gpt-oss-120b | réversibilité « identique » conservée |
+| notre modèle routé | porte de logits tenue (min 0,9982, top-1 98,8 %) |
+| **codestral, prose** | **93 748 jetons** (au lieu de 288 554), réversibilité à **1 octet** près |
+
+**Le changement ne peut pas dégrader un modèle qui marchait** : il ne s'applique qu'aux tables *sans fusions* **et** *avec* `▁` — exactement celles que l'ancien code découpait caractère par caractère.
+
+L'octet restant est l'espace initial de la convention `▁` de llama.cpp. J'ai compilé dans un répertoire séparé (`CARGO_TARGET_DIR`) pour **ne pas toucher au binaire de la campagne en cours**, et la mesure codestral corrigée tourne en arrière-plan : elle donnera enfin le chiffre valide de la famille « code ».
+
+### Tour 21 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1477 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Check current state
+- bash — Read the batch 6 and 7 results
+- bash — Record batches 5, 6 and 7 in the report
 
 ## 3. Travail accompli
 
@@ -1057,7 +1096,7 @@ Et le défaut de méthode est nommé : **le moteur détecte la divergence** (le 
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 406 autres
+- … et 409 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1238,4 +1277,5 @@ Et le défaut de méthode est nommé : **le moteur détecte la divergence** (le 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="reports/rapport-campagne-benefices.md"; s=open(p).read() ajout = '''## 10 ter. La dens
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="reports/rapport-campagne-benefices.md"; s=open(p).read() vieux_debut = s.index("**L'an
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/msg_tok.txt <<'MSG' Tokenizers SentencePiece (Llama, Mistral, Codestral) : les espaces étaient 
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="reports/rapport-campagne-benefices.md"; s=open(p).read() ajout = '''## 12. Le cas extr
 

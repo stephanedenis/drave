@@ -9586,3 +9586,96 @@ mesure codestral corrigée lancée
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/msg_tok.txt <<'MSG'\nTokenizers SentencePiece (Llama, Mistral, Codestral) : les espaces étaient perdus\n\nLe moteur ne savait découper qu'en BPE byte-level (Qwen, gpt-oss, Kimi, V4). Sur\nune table SentencePiece — pas de f … [1868 caractères tronqués]`
+
+  ```
+ddebb6b Tokenizers SentencePiece (Llama, Mistral, Codestral) : les espaces étaient perdus
+  ```
+
+### 🤖 Assistant
+
+⏵ Correctif livré : les tokenizers SentencePiece (Llama, Mistral, Codestral) ne perdent plus les espaces
+
+## Ce que le moteur faisait
+
+Il ne savait découper qu'en **BPE byte-level** (Qwen, gpt-oss, Kimi, V4). Sur une table **SentencePiece** — pas de fusions, espace porté par la marque `▁` en tête de mot — il ne trouvait aucune fusion et retombait sur **un jeton par caractère** :
+
+```
+source : "The river carries the logs to the mill."   (39 octets, 9 jetons chez Qwen)
+retour : "Therivercarriesthelogstothemill."          (32 jetons)
+```
+
+C'est ce défaut qui a produit les **35 657** de perplexité de codestral — un chiffre qui ne mesurait pas le modèle.
+
+## Le correctif (commit `ddebb6b`)
+
+Détection du schéma (aucune fusion **et** marque `▁` dans la table), encodeur « plus long morceau d'abord » avec repli octet `<0xXX>`, et un décodage qui **défait** ce repli. Ce dernier point m'a coûté une itération : recoller `<0x0A>` littéralement allongeait le texte de **10 206 octets sur 359 041** — un défaut invisible sauf sur le contrôle de réversibilité, **et c'est précisément pourquoi ce contrôle existe**.
+
+**Non-régression mesurée**, mêmes identifiants, binaire patché contre binaire d'avant :
+
+| vérification | résultat |
+|---|---|
+| Qwen2.5-0.5B (mêmes ids) | **17,4315 = 17,4315** |
+| identifiants Qwen pour un texte donné | **identiques** |
+| gpt-oss-120b | réversibilité « identique » conservée |
+| notre modèle routé | porte de logits tenue (min 0,9982, top-1 98,8 %) |
+| **codestral, prose** | **93 748 jetons** (au lieu de 288 554), réversibilité à **1 octet** près |
+
+**Le changement ne peut pas dégrader un modèle qui marchait** : il ne s'applique qu'aux tables *sans fusions* **et** *avec* `▁` — exactement celles que l'ancien code découpait caractère par caractère.
+
+L'octet restant est l'espace initial de la convention `▁` de llama.cpp. J'ai compilé dans un répertoire séparé (`CARGO_TARGET_DIR`) pour **ne pas toucher au binaire de la campagne en cours**, et la mesure codestral corrigée tourne en arrière-plan : elle donnera enfin le chiffre valide de la famille « code ».
+
+
+## Tour 21
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, préremplissage par lots, modèle plus gros que la RAM. Poursuivre en parallèle le livrable du modèle nativement événementiel : entraîné ici, exécuté par Drave à logits vérifiés, découpé en unités réparties. Chaque affirmation porte sa mesure (perplexité, débit, octets et événements par jeton, RSS, écart entre nœuds) ET ses conditions (corpus, tokenizer du modèle, charge de fond) ; les manques constatés — embeddings/encodeurs, décodage spéculatif — sont consignés comme manques, pas comme résultats. Livrables : la file tools/campagne-benefices.sh exécutée et ses journaux, un rapport de synthèse par famille de tâches, et la poursuite du modèle événementiel."
+Round: 14/40
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "date; echo \"=== campagne ===\"; tail -3 /tmp/campagne24/journal.txt; echo \"=== codestral corrigé ===\"; tail -3 /tmp/campagne24/codestral_spm.log 2>/dev/null; echo \"=== batch 6/7 ? ===\"; tail -2 /tmp/campagne24/journal8.txt 2>/dev/null; tail -2 /tmp/campagne24/journal9.txt 2>/dev/nu … [199 caractères tronqués]`
+
+  ```
+jeu 08 oct 2026 23:27:28 EDT
+=== campagne ===
+[08/10 21:39:54] charge 47.40 · grille/r1-14B : code 0 · PPL 14.3048 · RSS 38898 Mo · lus 8304 Mio
+[08/10 22:04:33] charge 28.57 · grille/codestral-22B : code 0 · PPL 35657.3767 · RSS 63646 Mo · lus 12684 Mio
+[08/10 22:06:13] charge 26.37 · grille/qwen3-30B-A3B : code 0 · PPL 8.6327 · RSS 14256 Mo · lus 11841 Mio
+=== codestral corrigé ===
+=== codestral, identifiants CORRIGÉS (SPM), prose ===
+/tmp/campagne24/ids_codestral_spm.txt : 64 tokens, fenêtres de 256
+=== batch 6/7 ? ===
+[08/10 23:13:09] charge 77.22 · v4/16 jetons ctx 64 : code 0 · PPL 659139.3353 · RSS 37642 Mo · lus 37683 Mio · 266s
+[08/10 23:13:09] charge 77.22 · === batch 6 terminé ===
+[08/10 23:19:51] charge 41.22 · tête/r1-1.5B restreinte tour 2 : 7.08 tok/s · 67 étiquettes reconnues
+[08/10 23:19:53] charge 41.22 · tête/gpt-oss-120B : étiquettes 8841,12626,27000,
+=== drave ===
+ 306079       07:34  677 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/
+3759808    01:21:13  559 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/
+ 306742       06:22 64.3 /tmp/target-spm/release/drave /home/stephane/Data13TB/stephane/modeles/gguf
+  ```
+
+- **bash** `{"command": "cat /tmp/campagne24/journal8.txt; echo \"=== batch 7 (tête restreinte) ===\"; cat /tmp/campagne24/journal9.txt", "description": "Read the batch 6 and 7 results"}`
+
+  ```
+[08/10 23:05:06] charge 32.84 · === batch 6 : DeepSeek-V4.1-Flash Q2, 365,7 Go ===
+[08/10 23:08:43] charge 46.65 · v4/8 jetons ctx 32 : code 0 · PPL 13182012.2384 · RSS 27734 Mo · lus 32464 Mio · 216s
+[08/10 23:13:09] charge 77.22 · v4/16 jetons ctx 64 : code 0 · PPL 659139.3353 · RSS 37642 Mo · lus 37683 Mio · 266s
+[08/10 23:13:09] charge 77.22 · === batch 6 terminé ===
+=== batch 7 (tête restreinte) ===
+[08/10 23:15:18] charge 40.30 · tête/0.5B : étiquettes 6785,8225,20628,
+[08/10 23:15:31] charge 41.11 · tête/0.5B complete tour 1 : 17.35 tok/s · 10 étiquettes reconnues
+[08/10 23:15:43] charge 41.69 · tête/0.5B restreinte tour 1 : 21.40 tok/s · 67 étiquettes reconnues
+[08/10 23:15:56] charge 41.97 · tête/0.5B complete tour 2 : 15.73 tok/s · 10 étiquettes reconnues
+[08/10 23:16:08] charge 42.66 · tête/0.5B restreinte tour 2 : 23.85 tok/s · 67 étiquettes reconnues
+[08/10 23:16:09] charge 42.53 · tête/r1-1.5B : étiquettes 6785,8225,20628,
+[08/10 23:17:17] charge 45.21 · tête/r1-1.5B complete tour 1 : 4.66 tok/s · 7 étiquettes reconnues
+[08/10 23:18:10] charge 45.37 · tête/r1-1.5B restreinte tour 1 : 6.27 tok/s · 67 étiquettes reconnues
+[08/10 23:19:01] charge 43.33 · tête/r1-1.5B com
+… [233 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"reports/rapport-campagne-benefices.md\"; s=open(p).read()\najout = '''## 12. Le cas extrême : **365,7 Go sur une machine de 125 Go**\n\nDeepSeek-V4.1-Flash Q2, exécuté par le moteur, mmappé, sans copie — deux fe … [4703 caractères tronqués]`
