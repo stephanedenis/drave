@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 30.2 h |
+| Durée | 30.4 h |
 | Tours | 34 |
-| Messages | 1200 |
-| Appels d'outils | 1138 |
-| Fichiers touchés | 36 |
-| Commandes | 948 |
+| Messages | 1203 |
+| Appels d'outils | 1141 |
+| Fichiers touchés | 37 |
+| Commandes | 950 |
 | Sous-agents | 3 |
-| Commits | 101 |
+| Commits | 102 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -1599,14 +1599,17 @@ Nouveau document : **`docs/plan-cerveau-complet.md`** (le plan d'ingénierie qui
 
 ### Tour 34 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1477 caractères tronqués]
 
-*2 appels d'outils.* Actions notables :
+*5 appels d'outils.* Actions notables :
 
 - bash — Harvest the 512-scale verification
 - bash — Record the dim-512 innate structure result
+- bash — Poll the two-axis model at dim 512
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/manques.md`
+- bash — Commit and push the consolidated gap register
 
 **Synthèse produite :**
 
-⏵ Résultat à dim 512 : la structure innée coûte plus cher qu'à 384 (+6,7 % contre +1,0 %)
+⏵ Capstone : registre consolidé des manques (ce que l'objectif demande de consigner)
 
 ## 3. Travail accompli
 
@@ -1650,6 +1653,7 @@ Nouveau document : **`docs/plan-cerveau-complet.md`** (le plan d'ingénierie qui
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/architecture-cerveau-et-drave.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-cerveau-complet.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/modularisation.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/manques.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -1699,7 +1703,7 @@ Nouveau document : **`docs/plan-cerveau-complet.md`** (le plan d'ingénierie qui
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 908 autres
+- … et 910 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1948,4 +1952,5 @@ Nouveau document : **`docs/plan-cerveau-complet.md`** (le plan d'ingénierie qui
 - journal : index des sessions à jour" 2>/dev/null; git status --short | wc -l; CRED=$(printf "protocol=https\nhost=github.com\n\n" | timeout 15 git credential fi
 - Publication du dépôt + document de modularisation : espace de travail Cargo, pas de submodules  Le dépôt est publié en privé : https://github.com/stephanedenis/
 - Dim 512 : la structure innée coûte +6,7 % (contre +1,0 % à dim 384) pour ÷3,7 de lectures  m16_d512_masque25 (masque aléatoire de 25 % des connexions, figé à la
+- Registre consolidé des manques — le capstone que l'objectif demande  docs/manques.md : huit manques du MOTEUR (noyau de listes pour les experts — mesuré par le 
 

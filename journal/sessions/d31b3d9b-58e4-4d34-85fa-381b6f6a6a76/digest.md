@@ -18912,3 +18912,30 @@ Continue working toward the objective in this same session. Treat the current wo
 ⏵ Résultat à dim 512 : la structure innée coûte plus cher qu'à 384 (+6,7 % contre +1,0 %)
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/biologie-pour-drave.md\")\ns = p.read_text()\nancre = \"\"\"**La structure innée est presque gratuite jusqu'à 25 %, et coûte cher à 12,5 %.** Le\nmur est entre les deux — et c … [3890 caractères tronqués]`
+
+  ```
+ok
+poussé
+  ```
+
+- **bash** `{"command": "sleep 590; cd /tmp/campagne24 && tail -1 tr_m17_d512_kwta25_elag50.log; grep -E \"m17\" journal15.txt 2>/dev/null | tail -2", "description": "Poll the two-axis model at dim 512", "timeoutMs": 620000}`
+
+  ```
+pas  12000 · perte 1.3114 · val 2.1462 bits/octet · 1245 s
+  ```
+
+### 🤖 Assistant
+
+⏵ Capstone : registre consolidé des manques (ce que l'objectif demande de consigner)
+
+- **write** `{"content": "# Registre des manques\n\n> 9 octobre 2026. Ce que le dépôt **ne sait pas faire**, consigné comme manque — pas\n> comme résultat. Chaque ligne porte la mesure qui l'établit, ce qu'elle bloque, et\n> où c'est documenté. Rien ici n'est une feuille de route : la feuille de route est\n> `do … [5199 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/manques.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"README.md\")\ns = p.read_text()\nvieux = \"\"\"**Deux manques restent des manques**, et sont écrits comme tels : les\n**encodeurs/embeddings** (`bge-m3` inexécutable : ni attention … [1784 caractères tronqués]`

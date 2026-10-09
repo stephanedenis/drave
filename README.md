@@ -56,10 +56,12 @@ sont dans `/tmp/campagne24/`, et **les 23 portes du dépôt sont vertes**.
   phases à portes mesurées, avec la distribution multi-instances développable **sur
   cette seule machine**.
 
-**Deux manques restent des manques**, et sont écrits comme tels : les
-**encodeurs/embeddings** (`bge-m3` inexécutable : ni attention bidirectionnelle ni
-pooling) et le **noyau Q8 par expert** (sans lui, un modèle routé ne peut pas être
-exécuté en listes).
+**Le registre des manques est consolidé** dans
+[`docs/manques.md`](docs/manques.md) : huit manques du **moteur** (noyau de listes
+pour les experts, noyau de listes sur GPU, lot et hyper-connexions, encodeurs, décodage
+spéculatif, apprentissage embarqué, qualité des modèles plus gros que la RAM, défaut
+de sauvegarde du variant log-normal), quatre du **modèle**, les douze capacités
+d'**architecture** — chacun avec la mesure qui l'établit.
 
 ---
 
