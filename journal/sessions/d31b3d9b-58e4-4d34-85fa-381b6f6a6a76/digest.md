@@ -16383,3 +16383,21 @@ ok
 ⏵ Mise en file de E1 et commit du document biologie
 
 - **bash** `{"command": "cat > /tmp/campagne24/jour4_masque_inne.sh <<'EOF'\n#!/bin/bash\n# jour4_masque_inne.sh — E1 : un CONNECTOME INNÉ suffit-il ?\n#\n# docs/biologie-pour-drave.md § 4 : le cerveau a un plan de câblage partagé, très\n# creux, dont seuls les POIDS changent. Si un masque aléatoire FIXE (25 %  … [4493 caractères tronqués]`
+
+  ```
+doc mis à jour
+1f6889e Biologie : ce que les connectomes imposent comme contraintes, et l'expérience E1 outillée
+  ```
+
+- **bash** `{"command": "sleep 560; cd /tmp/campagne24 && tail -1 tr_m10_kwta125.log; tail -1 tr_m11_poids_creux.log 2>/dev/null || echo \"(m11 en attente)\"", "description": "Poll the queued trainings", "timeoutMs": 600000}`
+
+  ```
+pas  36000 · perte 1.2852 · val 2.1081 bits/octet · 2701 s
+(m11 en attente)
+  ```
+
+### 🤖 Assistant
+
+⏵ Ajout du budget énergétique chiffré (cerveau contre notre implémentation)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/biologie-pour-drave.md\")\ns = p.read_text()\nancre = \"\"\"---\n\n## 4. Le dessin qui sort de là : **structure innée, poids appris**\"\"\"\nassert ancre in s\najout = \"\"\"- … [4121 caractères tronqués]`

@@ -125,6 +125,59 @@ en dessous. Ce n'est pas un détail de réglage : c'est une **différence de ré
 
 ---
 
+## 3 bis. Le budget, chiffré : où nous en sommes
+
+Deux calculs, faits avec les chiffres du § 1 et les mesures de la campagne. Ils sont
+**d'ordre de grandeur** et comparent des substrats incomparables — c'est écrit à la
+fin.
+
+**Le cerveau.** ~16 × 10⁹ neurones corticaux, ~1 % actifs à un instant, ~0,5 Hz de
+taux moyen, ~7 000 synapses par neurone :
+
+    16×10⁹ × 0,5 Hz × 7 000 ≈ 5,6×10¹³ événements synaptiques par seconde
+
+pour **20 W** (et le cortex n'en prend qu'une partie) :
+
+    → ≈ 0,4 picojoule par événement synaptique
+
+Ce chiffre recoupe la littérature : un événement synaptique coûte 10⁵ à 10⁷ molécules
+d'ATP, soit **0,01 à 1 pJ** ([Attwell & Laughlin](https://rcseng.ovidds.com/discover/result?logSearchID=163215621&pubid=solr_6306-sage%3A10.1097%2F00004647-200110000-00001&pubid=solr_7902-info%3Adoi%2F10.1097%252F00004647-200110000-00001&pubid=solr_6057-medline%3A11598490)).
+
+**Notre modèle le plus économe** (`m8_d512_kwta25` exécuté à 25 % d'activations et
+50 % de poids, mesuré le 9/10) :
+
+    201 308 279 événements pour 128 jetons ≈ 1,57 × 10⁶ événements par jeton
+    à 213 jetons/s → 3,3 × 10⁸ événements par seconde
+
+sur une machine qui consomme, en charge, de l'ordre de **300 W** (deux Xeon à
+160 W de TDP, plus la mémoire et la carte) :
+
+    → ≈ 0,9 microjoule par événement
+
+**L'écart est de six ordres de grandeur (≈ 2 × 10⁶).** Et il ne dit *pas* que
+l'algorithme est mauvais : dans les deux cas, le coût est **proportionnel au nombre
+d'événements** — c'est la même loi. L'écart est dans le **substrat** : nos événements
+sont exécutés par un processeur généraliste, un par un, avec du trafic mémoire ; ceux
+du cerveau par du matériel analogique **colocalisé avec sa mémoire**.
+
+**Ce que cela change dans la façon de concevoir** : la sparsité apprise fait gagner
+×4 à ×8 sur les événements (§ 5 ter de la campagne, § 6 de `modele-pour-drave.md`) —
+c'est réel, et c'est le levier que nous contrôlons. Mais **aucun gain algorithmique
+ne comblera six ordres de grandeur** : ce que la biologie enseigne ici, c'est que
+l'énergie se joue dans la **disposition** (mémoire proche du calcul), pas dans le
+nombre d'opérations seul. Cela donne un argument de plus au dessin du § 4, et au
+rangement des poids par groupes d'événements (§ 3, D de `modele-pour-drave.md`) :
+moins de trafic, moins de joules.
+
+**Les réserves, et elles sont lourdes** : un « événement synaptique » n'est pas une
+multiplication-accumulation int8 ; le cerveau calcule en analogique, avec du bruit,
+et sa « précision » n'est pas comparable ; les 300 W sont une estimation de TDP, pas
+une mesure (aucun compteur RAPL exploité ici) ; et le cerveau fait mille autres
+choses avec ses 20 W. **Ces deux nombres encadrent un ordre de grandeur, ils ne
+comparent pas deux ordinateurs.**
+
+---
+
 ## 4. Le dessin qui sort de là : **structure innée, poids appris**
 
 C'est la question posée, et la biologie y répond assez précisément : le cerveau a un

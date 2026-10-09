@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 25.3 h |
+| Durée | 25.4 h |
 | Tours | 27 |
-| Messages | 1024 |
-| Appels d'outils | 985 |
+| Messages | 1026 |
+| Appels d'outils | 987 |
 | Fichiers touchés | 31 |
-| Commandes | 807 |
+| Commandes | 809 |
 | Sous-agents | 3 |
-| Commits | 75 |
+| Commits | 76 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -1270,7 +1270,7 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 
 ### Tour 27 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1477 caractères tronqués]
 
-*376 appels d'outils.* Actions notables :
+*378 appels d'outils.* Actions notables :
 
 - bash — Check the full state
 - bash — Measure the distilled d384 with the correct protocol
@@ -1286,11 +1286,11 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - bash — Read parcimonie, contexte, lot steps
 - bash — Inspect batch2 script
 - bash — Read batch2 journal and latency map
-- … et 332 autres
+- … et 334 autres
 
 **Synthèse produite :**
 
-⏵ Mise en file de E1 et commit du document biologie
+⏵ Ajout du budget énergétique chiffré (cerveau contre notre implémentation)
 
 ## 3. Travail accompli
 
@@ -1378,7 +1378,7 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 767 autres
+- … et 769 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1601,4 +1601,5 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - 80 000 pas : meilleur en fp32, PIRE après export — le format fait partie du modèle  Le routé 512 entraîné deux fois plus longtemps améliore sa validation fp32 (
 - Moteur contre modèle : un tableau qui dit, pour chaque mesure, de qui elle parle  Quand une mesure est décevante, il faut savoir de qui : le chemin par listes e
 - Biologie : ce que les connectomes imposent comme contraintes, et l'expérience E1 outillée  Nouveau document docs/biologie-pour-drave.md : les faits mesurés (dro
+- Le budget chiffré : 0,4 pJ par événement synaptique contre 0,9 µJ chez nous  Deux calculs d'ordre de grandeur, à partir des chiffres du document et des mesures 
 
