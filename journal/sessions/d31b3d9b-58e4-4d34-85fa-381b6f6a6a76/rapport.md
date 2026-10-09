@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 13.1 h |
-| Tours | 15 |
-| Messages | 508 |
-| Appels d'outils | 496 |
-| Fichiers touchés | 19 |
-| Commandes | 377 |
+| Durée | 13.5 h |
+| Tours | 16 |
+| Messages | 530 |
+| Appels d'outils | 516 |
+| Fichiers touchés | 20 |
+| Commandes | 396 |
 | Sous-agents | 3 |
-| Commits | 24 |
+| Commits | 25 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -57,6 +57,8 @@
 **Tour 14** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1196 caractères tronqués]
 
 **Tour 15** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1196 caractères tronqués]
+
+**Tour 16** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1196 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -748,7 +750,59 @@ Le rapport (`reports/rapport-campagne-benefices.md`) porte maintenant onze secti
 
 **Synthèse produite :**
 
-⏵ Codestral donne 35 657 de perplexité sur de la prose — je vérifie si c'est le modèle ou la tâche
+⏵ Le MoE gagne sur les deux tableaux, et une anomalie consignée comme telle
+
+\## Le résultat de la grille qui compte
+
+| modèle | PPL | **bits/octet** | RSS | octets lus |
+|---|---:|---:|---:|---:|
+| Qwen2.5-0.5B Q8 | 17,43 | 0,983 | 1,28 Go | 0 |
+| r1-distill-1.5B Q4 | 47,14 | 1,326 | 4,76 Go | 1,04 Go |
+| r1-distill-14B Q4 | 14,30 | 0,915 | 39,8 Go | 8,71 Go |
+| codestral-22B Q4 | **35 657** ⚠️ | — | 63,6 Go | 12,7 Go |
+| **Qwen3-30B-A3B Q4 (MoE)** | **8,63** | **0,742** | **14,3 Go** | 11,8 Go |
+| gpt-oss-120b MXFP4 | en cours | | | |
+
+**Le MoE donne la meilleure qualité de la grille pour trois fois moins de mémoire que codestral-22B** — et moins que le 14B dense. Un modèle plus gros qui lit moins : c'est la thèse du projet, démontrée ici par un modèle qui n'a pas été conçu pour ça. Le prototype routé qu'on entraîne cherche exactement à reproduire ce rapport en le construisant.
+
+\## L'anomalie, consignée comme un point d'interrogation
+
+Codestral-22B à **35 657** de perplexité sur de la prose, c'est 4 000× le 30B. Deux hypothèses : le modèle est spécialisé pour le **code** et mauvais en prose — ou **le moteur exécute mal l'architecture Mistral**, qui n'a aucune porte dans `tools/portes.sh`. Un diagnostic tourne en arrière-plan : génération de code (le texte est-il cohérent ?) puis perplexité **sur du code**. Tant qu'il n'a pas rendu, je ne le compte pas comme un résultat.
+
+\## Le rapport porte maintenant son verdict
+
+J'ai ajouté en tête un tableau **famille par famille** avec la mesure qui le porte :
+
+- **gagne par construction** : sorties contraintes (×1,42 + garantie d'ensemble) ;
+- **gagne par ses circonstances** : modèles plus gros que la RAM, contexte long (12 aiguilles sur 12) ;
+- **perd** : la modélisation de langue ordinaire tant que le modèle n'est pas creux (1,8 à 2,1× plus lent en listes à 90 % de densité) ;
+- **manque** : embeddings (inexécutable) et décodage spéculatif (mesuré à ×1,20, insuffisant).
+
+Le reste de la nuit continue : campagne sur gpt-oss-120b, batches 2/5/6/7 enchaînés, et les quatre entraînements dont la distillation.
+
+### Tour 16 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1476 caractères tronqués]
+
+*20 appels d'outils.* Actions notables :
+
+- bash — Check diagnostic, campaign and training state
+- bash — Check the codestral diagnostic progress
+- bash — Download a tiny Mistral for the architecture gate
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte_mistral.py`
+- bash — Locate the tiny Mistral snapshot
+- bash — Export the tiny Mistral and test engine loading
+- bash — Fix import and retry the export
+- bash — List the tiny Mistral files
+- bash — Download the tiny Mistral weights
+- bash — Support pytorch_model.bin and export again
+- bash — Build a dimensionally valid tiny Mistral and export it
+- bash — Run the Mistral gate: reference and engine
+- bash — Fix the reference class and run the gate
+- bash — Train the tiny Mistral so its logits have structure
+- … et 6 autres
+
+**Synthèse produite :**
+
+⏵ Fausse alerte : c'est MON script de référence qui ne chargeait pas les poids — je corrige
 
 ## 3. Travail accompli
 
@@ -775,6 +829,7 @@ Le rapport (`reports/rapport-campagne-benefices.md`) porte maintenant onze secti
 | `/tmp/campagne24/batch3_niah.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md` | 1 | 9 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/census_routage.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte_mistral.py` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -824,7 +879,7 @@ Le rapport (`reports/rapport-campagne-benefices.md`) porte maintenant onze secti
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 337 autres
+- … et 356 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -952,7 +1007,7 @@ Le rapport (`reports/rapport-campagne-benefices.md`) porte maintenant onze secti
 
 ## 5. Erreurs rencontrées
 
-15 sorties en erreur ou divergentes. Les premières :
+20 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : ```  ### 🤖 Assistant  ⏵ **En transformers 5, `AutoModel` rend directement `Qwen2Model` (pas de `.model`). Je corrige le diagnostic.**  - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitH
 - **T2** : 3310393 bash -c pgrep -af "essai_decharge" | grep python | head; echo "--- logs ---"; tail -2 /tmp/ec_d192_lr3e3.log 2>/dev/null; tail -2 /tmp/ec_d192_lr1e3.log 2>/dev/null; echo "---"; ls -la /tmp/ec
@@ -996,4 +1051,5 @@ Le rapport (`reports/rapport-campagne-benefices.md`) porte maintenant onze secti
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 git add reports/rapport-campagne-benefices.md && timeout 300 git commit -q -F - <<'MSG' La mém
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="reports/rapport-campagne-benefices.md"; s=open(p).read() # La section « décodage spécu
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="reports/rapport-campagne-benefices.md"; s=open(p).read() s = s.replace('''| r1-distill
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/msg_mistral.txt <<'MSG' La famille Mistral a désormais sa porte — et l'anomalie codestral est e
 

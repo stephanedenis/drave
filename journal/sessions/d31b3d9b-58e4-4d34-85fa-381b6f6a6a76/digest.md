@@ -8469,3 +8469,283 @@ compara
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"reports/rapport-campagne-benefices.md\"; s=open(p).read()\ns = s.replace('''| r1-distill-Qwen-14B Q4_K_M | **14,30** | **0,915** | 0,5 | 39,8 Go | 8,71 Go | lu du disque, charge 47 |\n| codestral-22B Q4_K_M | *e … [2644 caractères tronqués]`
+
+  ```
+ok
+8ac3fbe Grille : le MoE 30B-A3B donne la meilleure qualité pour trois fois moins de mémoire
+  ```
+
+### 🤖 Assistant
+
+⏵ Le MoE gagne sur les deux tableaux, et une anomalie consignée comme telle
+
+## Le résultat de la grille qui compte
+
+| modèle | PPL | **bits/octet** | RSS | octets lus |
+|---|---:|---:|---:|---:|
+| Qwen2.5-0.5B Q8 | 17,43 | 0,983 | 1,28 Go | 0 |
+| r1-distill-1.5B Q4 | 47,14 | 1,326 | 4,76 Go | 1,04 Go |
+| r1-distill-14B Q4 | 14,30 | 0,915 | 39,8 Go | 8,71 Go |
+| codestral-22B Q4 | **35 657** ⚠️ | — | 63,6 Go | 12,7 Go |
+| **Qwen3-30B-A3B Q4 (MoE)** | **8,63** | **0,742** | **14,3 Go** | 11,8 Go |
+| gpt-oss-120b MXFP4 | en cours | | | |
+
+**Le MoE donne la meilleure qualité de la grille pour trois fois moins de mémoire que codestral-22B** — et moins que le 14B dense. Un modèle plus gros qui lit moins : c'est la thèse du projet, démontrée ici par un modèle qui n'a pas été conçu pour ça. Le prototype routé qu'on entraîne cherche exactement à reproduire ce rapport en le construisant.
+
+## L'anomalie, consignée comme un point d'interrogation
+
+Codestral-22B à **35 657** de perplexité sur de la prose, c'est 4 000× le 30B. Deux hypothèses : le modèle est spécialisé pour le **code** et mauvais en prose — ou **le moteur exécute mal l'architecture Mistral**, qui n'a aucune porte dans `tools/portes.sh`. Un diagnostic tourne en arrière-plan : génération de code (le texte est-il cohérent ?) puis perplexité **sur du code**. Tant qu'il n'a pas rendu, je ne le compte pas comme un résultat.
+
+## Le rapport porte maintenant son verdict
+
+J'ai ajouté en tête un tableau **famille par famille** avec la mesure qui le porte :
+
+- **gagne par construction** : sorties contraintes (×1,42 + garantie d'ensemble) ;
+- **gagne par ses circonstances** : modèles plus gros que la RAM, contexte long (12 aiguilles sur 12) ;
+- **perd** : la modélisation de langue ordinaire tant que le modèle n'est pas creux (1,8 à 2,1× plus lent en listes à 90 % de densité) ;
+- **manque** : embeddings (inexécutable) et décodage spéculatif (mesuré à ×1,20, insuffisant).
+
+Le reste de la nuit continue : campagne sur gpt-oss-120b, batches 2/5/6/7 enchaînés, et les quatre entraînements dont la distillation.
+
+
+## Tour 16
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, préremplissage par lots, modèle plus gros que la RAM. Poursuivre en parallèle le livrable du modèle nativement événementiel : entraîné ici, exécuté par Drave à logits vérifiés, découpé en unités réparties. Chaque affirmation porte sa mesure (perplexité, débit, octets et événements par jeton, RSS, écart entre nœuds) ET ses conditions (corpus, tokenizer du modèle, charge de fond) ; les manques constatés — embeddings/encodeurs, décodage spéculatif — sont consignés comme manques, pas comme résultats. Livrables : la file tools/campagne-benefices.sh exécutée et ses journaux, un rapport de synthèse par famille de tâches, et la poursuite du modèle événementiel."
+Round: 9/40
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Point d'étape : diagnostic codestral, campagne et entraînements
+
+- **bash** `{"command": "date; echo \"=== diagnostic codestral ===\"; tail -14 /tmp/campagne24/codestral_diag.log 2>/dev/null; echo \"=== campagne ===\"; tail -2 /tmp/campagne24/journal.txt; echo \"=== entraînements ===\"; tail -1 /tmp/campagne24/tr_d256_route.log; tail -1 /tmp/campagne24/tr_d384_route.log; ls  … [156 caractères tronqués]`
+
+  ```
+jeu 08 oct 2026 22:19:00 EDT
+=== diagnostic codestral ===
+=== 1. génération de code (le moteur exécute-t-il Mistral correctement ?) ===
+=== campagne ===
+[08/10 22:04:33] charge 28.57 · grille/codestral-22B : code 0 · PPL 35657.3767 · RSS 63646 Mo · lus 12684 Mio
+[08/10 22:06:13] charge 26.37 · grille/qwen3-30B-A3B : code 0 · PPL 8.6327 · RSS 14256 Mo · lus 11841 Mio
+=== entraînements ===
+  pas  32000 · perte 1.1855 · val 1.9615 bits/octet · 2064 s
+  pas  20000 · perte 1.2330 · val 1.9598 bits/octet · 1650 s
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "sleep 120; tail -12 /tmp/campagne24/codestral_diag.log 2>/dev/null; echo \"=== processus ===\"; ps -eo pid,etime,pcpu,comm --sort=-pcpu 2>/dev/null | grep drave | head -3", "description": "Check the codestral diagnostic progress", "timeoutMs": 200000}`
+
+  ```
+=== 1. génération de code (le moteur exécute-t-il Mistral correctement ?) ===
+=== processus ===
+3761989       10:57  617 drave
+3759808       15:03  566 drave
+3763093       05:36 87.4 drave
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 env HF_HOME=/home/stephane/Data13TB/stephane/hf-cache /home/stephane/gpu-env/bin/python - <<'PY' 2>&1 | tail -12\nfrom huggingface_hub import snapshot_download\nimport json, os\np = snapshot_download('hf-internal-testing/ … [571 caractères tronqués]`
+
+  ```
+model_type                 mistral
+  hidden_size                32
+  num_hidden_layers          2
+  num_attention_heads        4
+  num_key_value_heads        2
+  intermediate_size          37
+  vocab_size                 32000
+  rms_norm_eps               1e-06
+  rope_theta                 10000.0
+  sliding_window             4096
+  max_position_embeddings    512
+  head_dim                   ABSENT
+  ```
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"porte_mistral.py — la famille Mistral a-t-elle une porte, elle aussi ?\n\nPOURQUOI CE SCRIPT EXISTE. `codestral-22B` a rendu **35 657** de perplexité sur de\nla prose dans la campagne — 4 000 fois le Qwen3-30B-A3B. Deux explications\ntiennent : le modèle es … [6824 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte_mistral.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && HF=/home/stephane/Data13TB/stephane/hf-cache/hub/models--hf-internal-testing--tiny-random-MistralForCausalLM/snapshots/*/; HF=$(ls -d $HF 2>/dev/null | head -1); echo \"dossier : $HF\"; C=/tmp/campagne24\n# identifiants : avec le tok … [206 caractères tronqués]`
+
+  ```
+dossier : /home/stephane/Data13TB/stephane/hf-cache/hub/models--hf-internal-testing--tiny-random-MistralForCausalLM/snapshots/7517176934d50d00707900b92ef6a95c782e51a2/
+
+thread 'main' (3765759) panicked at src/main.rs:2427:40:
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && HF=$(ls -d /home/stephane/Data13TB/stephane/hf-cache/hub/models--hf-internal-testing--tiny-random-MistralForCausalLM/snapshots/*/ | head -1); C=/tmp/campagne24\ntimeout 300 /home/stephane/gpu-env/bin/python tools/porte_mistral.py --h … [269 caractères tronqués]`
+
+  ```
+from exporter_gguf import ecrire_gguf, q8_0_decode  # noqa: F401
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ImportError: cannot import name 'q8_0_decode' from 'exporter_gguf' (/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/exporter_gguf.py). Did you mean: 'q8_0_decoder'?
+=== le moteur lit-il l'en-tête ? ===
+
+thread 'main' (3765911) panicked at src/main.rs:2427:40:
+ouverture de l'en-tête GGUF: Os { code: 2, kind: NotFound, message: "No such file or directory" }
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -i 's/from exporter_gguf import ecrire_gguf, q8_0_decode  # noqa: F401/from exporter_gguf import ecrire_gguf  # noqa: F401/' tools/porte_mistral.py && HF=$(ls -d /home/stephane/Data13TB/stephane/hf-cache/hub/models--hf-internal-t … [408 caractères tronqués]`
+
+  ```
+with safe_open(filename, framework="np", backend=backend) as f:
+         ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: No such file or directory: /home/stephane/Data13TB/stephane/hf-cache/hub/models--hf-internal-testing--tiny-random-MistralForCausalLM/snapshots/7517176934d50d00707900b92ef6a95c782e51a2/model.safetensors
+=== le moteur lit-il l'en-tête ? ===
+
+thread 'main' (3766006) panicked at src/main.rs:2427:40:
+ouverture de l'en-tête GGUF: Os { code: 2, kind: NotFound, message: "No such file or directory" }
+  ```
+
+- **bash** `{"command": "ls -la /home/stephane/Data13TB/stephane/hf-cache/hub/models--hf-internal-testing--tiny-random-MistralForCausalLM/snapshots/*/ 2>/dev/null | head -10", "description": "List the tiny Mistral files"}`
+
+  ```
+total 24
+drwxr-xr-x. 1 stephane stephane 216  8 oct 22:22 .
+drwxr-xr-x. 1 stephane stephane  80  8 oct 22:22 ..
+lrwxrwxrwx. 1 stephane stephane  52  8 oct 22:22 added_tokens.json -> ../../blobs/cbce74e5c64b97114098962fa58454a57d7fb532
+lrwxrwxrwx. 1 stephane stephane  52  8 oct 22:22 config.json -> ../../blobs/45e796922f7f946dac372098d9186874030d40cf
+lrwxrwxrwx. 1 stephane stephane  52  8 oct 22:22 generation_config.json -> ../../blobs/f8a1a7672b6cea251c23cc86f67d54edf29b1289
+lrwxrwxrwx. 1 stephane stephane  52  8 oct 22:22 special_tokens_map.json -> ../../blobs/451134b2ddc2e78555d1e857518c54b4bdc2e87d
+lrwxrwxrwx. 1 stephane stephane  52  8 oct 22:22 tokenizer_config.json -> ../../blobs/a3d2b3483cca077d3c6e93771d3203f29c46bc8c
+lrwxrwxrwx. 1 stephane stephane  76  8 oct 22:22 tokenizer.json -> ../../blobs/fc4f0bd70b3709312d9d1d9e5ba674794b6bc5abc17429897a540f93882f25fc
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 env HF_HOME=/home/stephane/Data13TB/stephane/hf-cache /home/stephane/gpu-env/bin/python -c \"\nfrom huggingface_hub import snapshot_download\np = snapshot_download('hf-internal-testing/tiny-random-MistralForCausalLM')\nim … [337 caractères tronqués]`
+
+  ```
+Fetching 11 files:   0%|          | 0/11 [00:00<?, ?it/s]Fetching 11 files:  64%|██████▎   | 7/11 [00:01<00:00,  6.05it/s]Fetching 11 files:  73%|███████▎  | 8/11 [00:01<00:00,  6.29it/s]Fetching 11 files:  82%|████████▏ | 9/11 [00:02<00:00,  3.64it/s]Fetching 11 files:  91%|█████████ | 10/11 [00:02<00:00,  3.79it/s]Fetching 11 files: 100%|██████████| 11/11 [00:03<00:00,  1.80it/s]Fetching 11 files: 100%|██████████| 11/11 [00:03<00:00,  2.93it/s]
+['pytorch_model.bin']
+lrwxrwxrwx. 1 stephane stephane  76  8 oct 22:24 pytorch_model.bin -> ../../blobs/5b088c5542805c008baaf3612989c2b6adaa6df9d5ebc5a0510525b58442a332
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"tools/porte_mistral.py\"; s=open(p).read()\ns = s.replace('''    from safetensors.numpy import load_file\n    from transformers import MistralForCausalLM''',\n'''    import torch as _t\n    from transformers imp … [1972 caractères tronqués]`
+
+  ```
+adapté
+    assert a.shape[-1] % 32 == 0, f"dernière dimension non multiple de 32 : {a.shape}"
+           ^^^^^^^^^^^^^^^^^^^^^
+AssertionError: dernière dimension non multiple de 32 : (32, 37)
+=== en-tête vue par le moteur ===
+
+thread 'main' (3766905) panicked at src/main.rs:2427:40:
+ouverture de l'en-tête GGUF: Os { code: 2, kind: NotFound, message: "No such file or directory" }
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 /home/stephane/gpu-env/bin/python - <<'PY' 2>&1 | tail -3\nimport torch, numpy as np\nfrom transformers import MistralConfig, MistralForCausalLM\ntorch.manual_seed(11)\n# Dimensions MULTIPLES DE 32 : les blocs de quantifi … [1323 caractères tronqués]`
+
+  ```
+Writing model shards:   0%|          | 0/1 [00:00<?, ?it/s]Writing model shards: 100%|██████████| 1/1 [00:00<00:00,  6.98it/s]Writing model shards: 100%|██████████| 1/1 [00:00<00:00,  6.97it/s]
+écrit : 115008 paramètres
+64 identifiants écrits
+# /tmp/campagne24/tiny_mistral.gguf : 21 tenseurs · 0.12 Mo · 2 couches · 64 cachés
+=== en-tête ===
+llama · 1 fichiers · 21 tenseurs · 0.00 Go de poids · en-têtes lus en 3.71063ms
+ · block_count 2 · embedding_length 64 · feed_forward_length 64 · attention.head_count 4 · attention.head_count_kv 2 · context_length 512
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && C=/tmp/campagne24; timeout 600 /home/stephane/gpu-env/bin/python tools/porte_mistral.py --hf /tmp/tiny_mistral_hf --ids /tmp/tiny_mistral_ids.txt --logits $C/tiny_mistral_ref.bin 2>&1 | grep -vE \"Loading|it/s\" | tail -3; echo \"=== … [301 caractères tronqués]`
+
+  ```
+modele = MistralForCausalLM.from_config(
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: type object 'MistralForCausalLM' has no attribute 'from_config'
+=== moteur ===
+      63 tokens notés — perplexité cumulée 500.897  (5362.9 tok/s)
+logits exportés : /tmp/campagne24/tiny_mistral_eng.bin — 63 positions × 512 valeurs
+=== perplexité 500.8965 sur 63 tokens (0 événements, 0.0 s) ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"tools/porte_mistral.py\"; s=open(p).read()\ns = s.replace('''    modele = MistralForCausalLM.from_config(\n        MistralForCausalLM.config_class.from_pretrained(hf))''',\n'''    # En transformers 5, `from_conf … [778 caractères tronqués]`
+
+  ```
+adapté
+# référence : 63 prédictions · NLL 6.2403 nats · perplexité 513.0086
+# logits écrits : /tmp/campagne24/tiny_mistral_ref.bin
+=== la porte ===
+  corrélation sur les 63 positions utiles : min -0.119807 · moyenne 0.011515
+  sous 0.95 : 63/63 (100.0 %) · au-dessus : 0.0 % (seuil 99 %) · plancher 0.9 FRANCHI
+  tranche     0-   62 : corrélation moyenne 0.01151 · top-1 0/63 (0.0 %)
+corrélation des logits (position 0) : -0.011721
+(perplexité NON jugée : 63 < 64 prédictions — sur une fenêtre courte l'écart mesure le chaos, pas le moteur)
+❌ PORTE DE CORRECTION NON TENUE : seulement 0.0 % des positions utiles au-dessus de 0.95 (< 99 %) · corrélation minimale (positions utiles) -0.11981 < plancher 0.9 · corrélation moyenne 0.01151 < 0.98 · top-1 0.0 % < 85 %
+  ```
+
+### 🤖 Assistant
+
+⏵ Porte Mistral non tenue sur un modèle ALÉATOIRE — je refais le test avec des poids entraînés
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 /home/stephane/gpu-env/bin/python - <<'PY' 2>&1 | tail -4\nimport numpy as np, torch, torch.nn.functional as F\nfrom transformers import MistralConfig, MistralForCausalLM\ntorch.manual_seed(11)\ncfg = MistralConfig(vocab_ … [1382 caractères tronqués]`
+
+  ```
+perte après 300 pas : 1.6874 nats · 2.434 bits/octet (uniforme = 8,0)
+Writing model shards:   0%|          | 0/1 [00:00<?, ?it/s]Writing model shards: 100%|██████████| 1/1 [00:00<00:00, 525.80it/s]
+modèle et identifiants écrits
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && C=/tmp/campagne24; timeout 300 /home/stephane/gpu-env/bin/python tools/porte_mistral.py --hf /tmp/tiny_mistral_entraine --gguf $C/tiny_mistral2.gguf 2>&1 | tail -2\ntimeout 600 /home/stephane/gpu-env/bin/python tools/porte_mistral.py … [587 caractères tronqués]`
+
+  ```
+# /tmp/campagne24/tiny_mistral2.gguf : 21 tenseurs · 0.09 Mo · 2 couches · 64 cachés
+# référence : 16 tenseurs quantifiés en Q8_0 (les mêmes que l'export)
+# référence : 63 prédictions · NLL 5.7532 nats · perplexité 315.2048
+=== perplexité 3411.4405 sur 63 tokens (0 événements, 0.0 s) ===
+corrélation des logits (position 0) : 0.091746
+(perplexité NON jugée : 63 < 64 prédictions — sur une fenêtre courte l'écart mesure le chaos, pas le moteur)
+❌ PORTE DE CORRECTION NON TENUE : seulement 0.0 % des positions utiles au-dessus de 0.95 (< 99 %) · corrélation minimale (positions utiles) -0.14035 < plancher 0.9 · corrélation moyenne -0.00092 < 0.98 · top-1 0.0 % < 85 %
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 /home/stephane/gpu-env/bin/python - <<'PY' 2>&1 | tail -4\nimport sys, json, os\nsys.path.insert(0, \"tools\")\nfrom exporter_gguf import ecrire_gguf\nimport porte_mistral as pm\nimport torch\nfrom safetensors.numpy impor … [1186 caractères tronqués]`
+
+  ```
+qwen3 : 88320 octets écrits
+=== perplexité 3411.4405 sur 63 tokens (0 événements, 0.0 s) ===
+(perplexité NON jugée : 63 < 64 prédictions — sur une fenêtre courte l'écart mesure le chaos, pas le moteur)
+❌ PORTE DE CORRECTION NON TENUE : seulement 0.0 % des positions utiles au-dessus de 0.95 (< 99 %) · corrélation minimale (positions utiles) -0.14035 < plancher 0.9 · corrélation moyenne -0.00092 < 0.98 · top-1 0.0 % < 85 %
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 /home/stephane/gpu-env/bin/python - <<'PY' 2>&1 | grep -vE \"it/s|Loading\" | tail -4\nimport numpy as np, torch\nfrom transformers import Qwen3Config, Qwen3ForCausalLM\ntorch.manual_seed(11)\ncfg = Qwen3Config(vocab_size … [1739 caractères tronqués]`
+
+  ```
+Qwen3 minuscule entraîné et écrit (mêmes dimensions que le Mistral minuscule)
+# architecture 2 couches · 64 cachés · FFN dense
+# référence : 63 prédictions · NLL 8.3217 nats · perplexité 4111.9608
+=== perplexité 4106.0482 sur 63 tokens (0 événements, 0.0 s) ===
+(perplexité NON jugée : 63 < 64 prédictions — sur une fenêtre courte l'écart mesure le chaos, pas le moteur)
+✅ porte de correction tenue (100.0 % des positions UTILES au-dessus de 0.95, min 0.9997 >= plancher 0.9, top-1 98.4 % sur toutes les positions, 0 saturées exclues de la corrélation)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 /home/stephane/gpu-env/bin/python - <<'PY' 2>&1 | tail -3\nimport sys, json\nsys.path.insert(0, \"tools\")\nfrom exporter_gguf import ecrire_gguf\nimport porte_mistral as pm\nfrom safetensors.numpy import load_file\npoids … [979 caractères tronqués]`
+
+  ```
+écrit sans la clef sliding_window : 88320 octets
+=== perplexité 3411.4405 sur 63 tokens (0 événements, 0.0 s) ===
+(perplexité NON jugée : 63 < 64 prédictions — sur une fenêtre courte l'écart mesure le chaos, pas le moteur)
+❌ PORTE DE CORRECTION NON TENUE : seulement 0.0 % des positions utiles au-dessus de 0.95 (< 99 %) · corrélation minimale (positions utiles) -0.14035 < plancher 0.9 · corrélation moyenne -0.00092 < 0.98 · top-1 0.0 % < 85 %
+  ```
+
+### 🤖 Assistant
+
+⏵ Fausse alerte : c'est MON script de référence qui ne chargeait pas les poids — je corrige
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"tools/porte_mistral.py\"; s=open(p).read()\ns = s.replace('''    # En transformers 5, `from_config` n'existe plus sur la classe du modèle :\n    # on instancie directement avec la configuration relue du dossier. … [1124 caractères tronqués]`
+
+  ```
+corrigé
+# référence : 16 tenseurs quantifiés en Q8_0 (les mêmes que l'export)
+# référence : 63 prédictions · NLL 8.1349 nats · perplexité 3411.4394
+(perplexité NON jugée : 63 < 64 prédictions — sur une fenêtre courte l'écart mesure le chaos, pas le moteur)
+✅ porte de correction tenue (100.0 % des positions UTILES au-dessus de 0.95, min 1.0000 >= plancher 0.9, top-1 100.0 % sur toutes les positions, 0 saturées exclues de la corrélation)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/msg_mistral.txt <<'MSG'\nLa famille Mistral a désormais sa porte — et l'anomalie codestral est expliquée\n\nLe dépôt avait une porte pour Qwen, GLM, V4, gpt-oss, Kimi. Mistral : aucune. Or\ncodestral-22B a rendu 35 657 de  … [1606 caractères tronqués]`
