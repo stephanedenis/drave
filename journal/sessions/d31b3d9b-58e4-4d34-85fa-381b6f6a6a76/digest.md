@@ -17636,3 +17636,156 @@ Created file
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\nd = pathlib.Path(\"docs/biologie-pour-drave.md\")\nt = d.read_text()\nancre = \"\"\"**Ce que cela n'établit pas** : qu'un masque *appris* ne ferait pas mieux (l'écart de\n1 % est peut-être récupérabl … [2649 caractères tronqués]`
+
+  ```
+ok
+255088d L'architecture du cerveau face à Drave : les briques y sont, les formes non
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"for (pos\\|forward(.*pos\\|let lgt\\|nll +=\" drave-core/src/main.rs | sed -n '1,14p'; sed -n '5340,5372p' drave-core/src/main.rs", "description": "Locate the PPL scoring loop"}`
+
+  ```
+1133:        for (pos, &t) in ids.iter().enumerate() { last = mdl.forward(t, pos); }
+3323:                let sortie = mdl.forward(0, f.pos as usize);
+3449:        for (pos, &t) in ids.iter().enumerate() {
+3450:            let last = mdl.forward(t, pos);
+3562:                    nll += nll_logits(&lgs[i], ids[pos + i + 1]);
+3568:    for (pos, &t) in ids.iter().enumerate() {
+3578:        let etat = mdl.forward(t, pos);
+3633:            nll += nll_logits(&mdl.logits(&reduit), ids[pos + 1]);
+4275:    for (pos, &t) in ids.iter().enumerate() {
+5376:                nll += nll_tok;
+    let (mut t_tete, mut t_note) = (0f64, 0f64);
+    for (i_f, (chunk, masque)) in fenetres.iter().enumerate() {
+        let (mut nll_f, mut n_f) = (0f64, 0usize);
+        // Préremplissage par lots : `lot` jetons d'un coup. `lot == 1` emprunte
+        // exactement le chemin historique jeton par jeton.
+        let mut pos = 0usize;
+        while pos < chunk.len() {
+            let t = lot.min(chunk.len() - pos);
+            let hs = mdl.forward_lot(&chunk[pos..pos + t], pos);
+            // Tête par lots : la matrice la plus lourde du modèle est lue une
+            // fois pour le groupe au lieu d'une fois par
+… [1067 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/campagne24 && tail -1 tr_m15.log 2>/dev/null; grep -E \"m15|structure\" journal14.txt 2>/dev/null | tail -3; date '+%H:%M'", "description": "Check the combined structure+sparsity model"}`
+
+  ```
+pas   4000 · perte 1.4963 · val 2.5228 bits/octet · 286 s
+[09/10 13:17:58] charge 3.02 · === 2. structure innée (25 %) + activations creuses APPRISES (25 %) ===
+13:24
+  ```
+
+### 🤖 Assistant
+
+⏵ Étude livrée : l'édifice cérébral face aux primitives du moteur
+
+**Ce que l'architecture est, en chiffres publiés** — nouveau document `docs/architecture-cerveau-et-drave.md` :
+
+| structure | mesure | source |
+|---|---|---|
+| cortex | **180 aires** par hémisphère (parcellation multi-modale, pas un découpage arbitraire) | [Glasser 2016](https://pubmed.ncbi.nlm.nih.gov/27437579/) |
+| corps calleux | **~2 × 10⁸ axones**, majoritairement homotopiques | [Hubel, ch. 7](http://hubel.med.harvard.edu/book/ch7.pdf) |
+| cervelet | **~7 × 10¹⁰ neurones** — plus que tout le reste du cerveau réuni — une sortie, un signal d'erreur | Herculano-Houzel |
+| nerf optique | **~1,2 × 10⁶ axones** → LGN → V1 | [NCBI](https://www.ncbi.nlm.nih.gov/books/NBK507907/) |
+| neuromodulation | des noyaux de **quelques dizaines de milliers** de neurones qui modulent tout le reste | [Luo lab](https://luolab.stanford.edu/news/shades-blue-how-position-gradually-shapes-structure-and-function-locus-coeruleus) |
+| substance blanche | ~1,5 × 10⁵ km d'axones, vitesses 1-100 m/s → **délais de 1 à 100 ms** | ordres de grandeur |
+| hippocampe | circuit trisynaptique, épisodique, **rejeu** sharp-wave | [Phil. Trans. R. Soc. B](https://royalsocietypublishing.org/rstb/article/375/1799/20190236/23761/Potential-factors-influencing-replay-across-CA1) |
+
+**Six motifs font « cerveau » plutôt que « réseau »** : boucles descendantes aussi nombreuses que les montantes ; **noyaux diffuseurs** (un scalaire, pas un chemin de données) ; **deux mémoires** (épisodique rapide / sémantique lente, avec consolidation par rejeu) ; **délais** qui font partie du calcul, sans horloge globale ; **latéralité** et décussation ; **périphérie autonome** (la moelle épinière décide sans le cortex).
+
+**Ce que Drave possède : les briques, pas les formes.** Il a les événements, une mémoire adressable (engram, 479 723 rangées vérifiées), le **rejeu exact** (0,00e0), le routage d'experts, le transport entre nœuds à 0,00e0, une greffe de neurone (`patch`), un banc vision, et il mesure déjà octets, paires et temps par lien. Il n'a **aucune** des formes : sa topologie est une **chaîne** (plage de couches), sans boucle, sans délai, sans bus diffus, sans consolidation.
+
+**Huit manques, classés par coût, chacun justifié par une mesure du dépôt** — et c'est le point important : **deux seulement** répondent à un défaut que *nos* mesures ont identifié.
+
+1. **M1 — bus de neuromodulation** (un scalaire diffusé par passe). Coût faible. Justification : notre règle locale a été réfutée **faute de signal de valeur**, et nous venons de mesurer que la *nouveauté* n'en est pas un (elle dégrade : +20,4 % contre +5,2 %). La biologie code « ça a marché », pas « c'est nouveau ».
+2. **M4 + M5 — mémoire épisodique + consolidation**. Le rejeu est déjà exact et la distillation déjà outillée ; entre les deux, il n'y a rien. C'est le couple qui transformerait un rejeu en apprentissage, dans le moteur.
+
+Les six autres — **graphe** (M2), **délais** (M3), **périphérie** (M6), **corps calleux** (M7), **budgets par lien** (M8) — sont des chantiers qui n'ont d'intérêt **que si un modèle les réclame**, et aucun modèle n'existe aujourd'hui qui le fasse. Le document le dit explicitement plutôt que de proposer de construire une route sans véhicule. La carte de latence donne d'ailleurs déjà le prix d'un délai : **3,4 ms par jeton et par ms de RTT**.
+
+**Et une mesure tombée entre-temps** (limite du dessin « structure innée ») : le masque inné est presque gratuit à **25 %** de connexions (+1,0 % de perplexité, ÷4,1 d'événements, ×2,1 de débit) mais coûte **+13,7 %** à **12,5 %** (40,6 M d'événements, 341 tok/s). Un connectome inné doit viser un quart des connexions, pas un huitième.
+
+En cours : le modèle **structure innée 25 % + activations creuses apprises 25 %** — les deux facteurs du coût divisés chacun par quatre, mesure vers 14 h 10.
+
+
+## Tour 30
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, préremplissage par lots, modèle plus gros que la RAM. Poursuivre en parallèle le livrable du modèle nativement événementiel : entraîné ici, exécuté par Drave à logits vérifiés, découpé en unités réparties. Chaque affirmation porte sa mesure (perplexité, débit, octets et événements par jeton, RSS, écart entre nœuds) ET ses conditions (corpus, tokenizer du modèle, charge de fond) ; les manques constatés — embeddings/encodeurs, décodage spéculatif — sont consignés comme manques, pas comme résultats. Livrables : la file tools/campagne-benefices.sh exécutée et ses journaux, un rapport de synthèse par famille de tâches, et la poursuite du modèle événementiel."
+Round: 23/40
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Reprise : résultat du modèle « structure innée + activations creuses »
+
+- **bash** `{"command": "cd /tmp/campagne24 && grep -E \"m15|structure terminée\" journal14.txt 2>/dev/null | tail -4; tail -1 tr_m15.log 2>/dev/null; date '+%H:%M'", "description": "Poll the combined structure+sparsity model"}`
+
+  ```
+pas   4000 · perte 1.4963 · val 2.5228 bits/octet · 286 s
+13:25
+  ```
+
+### 🤖 Assistant
+
+⏵ M1 : implémentation du bus de modulation par la VALEUR (et non la nouveauté)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '5370,5382p' drave-core/src/main.rs", "description": "Read the token scoring spot"}`
+
+  ```
+let mut mx = f32::NEG_INFINITY;
+                for &v in &lg { if v > mx { mx = v; } }
+                let mut sum = 0f64;
+                for &v in &lg { sum += ((v - mx) as f64).exp(); }
+                let lse = mx as f64 + sum.ln();
+                let nll_tok = lse - lg[chunk[pos + 1] as usize] as f64;
+                nll += nll_tok;
+                nll_f += nll_tok;
+                n += 1;
+                n_f += 1;
+                let b = (pos + 1) / 256;
+                if b < seaux.len() { seaux[b].0 += nll_tok; seaux[b].1 += 1; }
+                perte.push(nll_tok as f32);
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/model.rs\")\ns = p.read_text()\ns = s.replace(\"\"\"    /// Moyenne courante de la norme du différentiel centré (pour E7).\n    moy_norme: f32,\"\"\",\n\"\"\"    /// … [3011 caractères tronqués]`
+
+  ```
+model.rs : bus de valeur ajouté
+main.rs : modulateur alimenté par l'amélioration de la perte
+
+test result: ok. 77 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+  ```
+
+### 🤖 Assistant
+
+⏵ Expérience M1 : la modulation par la VALEUR sauve-t-elle le transfert A → B ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf; C=/tmp/campagne24; A=$C/ids_0.5B-Q8.txt; B=$C/ids_fr_05B.txt; export DRAVE_HEBB_SEUIL=0.002 DRAVE_HEBB_DECROI=0.99 DRAVE_HEBB_SIGNE=1; ref=$(timeout 300 $D $M --pp … [930 caractères tronqués]`
+
+  ```
+référence sur B : 8.3869
+nue (MODULE=DRAVE_HEBB_MODULE=0) : sur B = 8.8246
+valeur (MODULE=DRAVE_HEBB_MODULE=0) : sur B = 8.8246
+0
+-rw-r--r--. 1 stephane stephane 17432576  9 oct 13:27 /tmp/D_valeur.bin
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf; C=/tmp/campagne24; A=$C/ids_0.5B-Q8.txt; B=$C/ids_fr_05B.txt; export DRAVE_HEBB_SEUIL=0.002 DRAVE_HEBB_DECROI=0.99 DRAVE_HEBB_SIGNE=1; rm -f /tmp/D_val.bin; DRAVE_ … [618 caractères tronqués]`
+
+  ```
+[hebb-diff] D sauvé dans /tmp/D_val.bin : 4358144 valeurs
+=== perplexité 17.6531 sur 255 tokens (0 événements, 17.6 s) ===
+MODULE=valeur : sur B = 9.6674 (référence 8.3869 · règle nue 8.8246 · nouveauté 10.1034)
+  ```
+
+### 🤖 Assistant
+
+⏵ M1 mesuré : la valeur auto-référentielle ne sauve pas la règle — il faut un signal EXTERNE
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/impulsion-pure-apprenant.md\")\ns = p.read_text()\nancre = \"\"\"**Ce que cela corrige dans ce document** : le troisième facteur de la biologie n'est\npas « la nouveauté », c' … [5285 caractères tronqués]`

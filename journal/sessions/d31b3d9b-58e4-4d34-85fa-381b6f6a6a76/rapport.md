@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 28.2 h |
-| Tours | 29 |
-| Messages | 1116 |
-| Appels d'outils | 1069 |
+| Durée | 28.3 h |
+| Tours | 30 |
+| Messages | 1126 |
+| Appels d'outils | 1077 |
 | Fichiers touchés | 34 |
-| Commandes | 882 |
+| Commandes | 890 |
 | Sous-agents | 3 |
-| Commits | 89 |
+| Commits | 90 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -85,6 +85,8 @@
 **Tour 28** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1197 caractères tronqués]
 
 **Tour 29** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1197 caractères tronqués]
+
+**Tour 30** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1197 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1365,7 +1367,7 @@ Rien n'est laissé en suspens dans le dépôt : tout est committé (dernier : `e
 
 ### Tour 29 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1477 caractères tronqués]
 
-*14 appels d'outils.* Actions notables :
+*16 appels d'outils.* Actions notables :
 
 - bash — Poll the structure chain
 - bash — Compare the configs and weight scales of the two models
@@ -1380,10 +1382,48 @@ Rien n'est laissé en suspens dans le dépôt : tout est committé (dernier : `e
 - web_search
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/architecture-cerveau-et-drave.md`
 - bash — Commit the brain-architecture study and the 12.5% result
+- bash — Locate the PPL scoring loop
+- … et 1 autres
 
 **Synthèse produite :**
 
-⏵ Rédaction : l'architecture du cerveau et ce qui manque à Drave comme moteur
+⏵ Étude livrée : l'édifice cérébral face aux primitives du moteur
+
+**Ce que l'architecture est, en chiffres publiés** — nouveau document `docs/architecture-cerveau-et-drave.md` :
+
+| structure | mesure | source |
+|---|---|---|
+| cortex | **180 aires** par hémisphère (parcellation multi-modale, pas un découpage arbitraire) | [Glasser 2016](https://pubmed.ncbi.nlm.nih.gov/27437579/) |
+| corps calleux | **~2 × 10⁸ axones**, majoritairement homotopiques | [Hubel, ch. 7](http://hubel.med.harvard.edu/book/ch7.pdf) |
+| cervelet | **~7 × 10¹⁰ neurones** — plus que tout le reste du cerveau réuni — une sortie, un signal d'erreur | Herculano-Houzel |
+| nerf optique | **~1,2 × 10⁶ axones** → LGN → V1 | [NCBI](https://www.ncbi.nlm.nih.gov/books/NBK507907/) |
+| neuromodulation | des noyaux de **quelques dizaines de milliers** de neurones qui modulent tout le reste | [Luo lab](https://luolab.stanford.edu/news/shades-blue-how-position-gradually-shapes-structure-and-function-locus-coeruleus) |
+| substance blanche | ~1,5 × 10⁵ km d'axones, vitesses 1-100 m/s → **délais de 1 à 100 ms** | ordres de grandeur |
+| hippocampe | circuit trisynaptique, épisodique, **rejeu** sharp-wave | [Phil. Trans. R. Soc. B](https://royalsocietypublishing.org/rstb/article/375/1799/20190236/23761/Potential-factors-influencing-replay-across-CA1) |
+
+**Six motifs font « cerveau » plutôt que « réseau »** : boucles descendantes aussi nombreuses que les montantes ; **noyaux diffuseurs** (un scalaire, pas un chemin de données) ; **deux mémoires** (épisodique rapide / sémantique lente, avec consolidation par rejeu) ; **délais** qui font partie du calcul, sans horloge globale ; **latéralité** et décussation ; **périphérie autonome** (la moelle épinière décide sans le cortex).
+
+**Ce que Drave possède : les briques, pas les formes.** Il a les événements, une mémoire adressable (engram, 479 723 rangées vérifiées), le **rejeu exact** (0,00e0), le routage d'experts, le transport entre nœuds à 0,00e0, une greffe de neurone (`patch`), un banc vision, et il mesure déjà octets, paires et temps par lien. Il n'a **aucune** des formes : sa topologie est une **chaîne** (plage de couches), sans boucle, sans délai, sans bus diffus, sans consolidation.
+
+**Huit manques, classés par coût, chacun justifié par une mesure du dépôt** — et c'est le point important : **deux seulement** répondent à un défaut que *nos* mesures ont identifié.
+
+1. **M1 — bus de neuromodulation** (un scalaire diffusé par passe). Coût faible. Justifica
+… [1392 caractères tronqués]
+
+### Tour 30 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1477 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Poll the combined structure+sparsity model
+- bash — Read the token scoring spot
+- bash — Implement the value bus and build
+- bash — Test the value-modulated local rule
+- bash — Run the value-modulation experiment correctly
+- bash — Record the M1 measurement and check m15
+
+**Synthèse produite :**
+
+⏵ M1 mesuré : la valeur auto-référentielle ne sauve pas la règle — il faut un signal EXTERNE
 
 ## 3. Travail accompli
 
@@ -1474,7 +1514,7 @@ Rien n'est laissé en suspens dans le dépôt : tout est committé (dernier : `e
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 842 autres
+- … et 850 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1711,4 +1751,5 @@ Rien n'est laissé en suspens dans le dépôt : tout est committé (dernier : `e
 - E6 : le soupçon de matérialisation est testé et ÉLIMINÉ (écart 0,000e+00) — le défaut est ailleurs  La matérialisation a été refaite en recalculant explicitemen
 - E6 : mesure définitive — le fichier sauvé ne reproduit pas le modèle entraîné  Avec le protocole de l'entraînement lui-même (mêmes fenêtres, même formule) :   t
 - L'architecture du cerveau face à Drave : les briques y sont, les formes non  Nouveau document : après la brique (docs/biologie-pour-drave.md), l'édifice. Les ch
+- M1 : le bus de valeur est implémenté, et la valeur auto-référentielle ne suffit pas  Le manque M1 (un scalaire diffusé à toutes les couches, comme un noyau neur
 

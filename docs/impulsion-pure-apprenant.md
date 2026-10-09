@@ -142,6 +142,36 @@ global venu d'une cible, pas une statistique locale. La conclusion du § 6 s'en 
 resserrée : ce qui manque à un apprenant par impulsions n'est pas un signal de
 surprise, c'est un **signal de valeur**.
 
+### 5 ter. M1 — le bus de valeur est IMPLÉMENTÉ, et la valeur auto-référentielle ne suffit pas
+
+Le manque M1 de `docs/architecture-cerveau-et-drave.md` (un scalaire diffusé à
+toutes les couches, comme un noyau neuromodulateur) est maintenant dans le moteur :
+`DRAVE_HEBB_MODULE=valeur` fait piloter `η` par `hd.modulateur`, alimenté à chaque
+jeton par **l'amélioration de la perte** — « ce jeton s'est-il mieux passé que la
+moyenne courante ? » — avec un retard d'un jeton, comme la modulation biologique.
+
+Même protocole que ci-dessus (adapter sur l'anglais, évaluer sur le français) :
+
+| modulation de `η` | perplexité sur B | écart à la référence |
+|---|---:|---:|
+| aucune (référence) | **8,3869** | — |
+| règle nue | 8,8246 | +5,2 % |
+| par la nouveauté | 10,1034 | +20,4 % |
+| **par la VALEUR (amélioration de la perte)** | **9,6674** | **+15,3 %** |
+
+**La valeur est meilleure que la nouveauté — et toujours pire que rien.** Le signal
+est meilleur, il ne suffit pas, et la raison est nette : une valeur **auto-référentielle**
+(« ma perte baisse ») récompense exactement ce qui marche **sur le domaine courant**.
+Hors distribution, cela veut dire : apprends plus vite les spécificités de la langue
+nouvelle. C'est le même piège, en plus doux.
+
+**Ce que cela spécifie pour M1** : le bus doit porter un signal **externe** — une
+cible, une récompense, un environnement — et non une statistique dérivée du modèle
+lui-même. C'est cohérent avec nos seules mesures positives : la **distillation**
+(−13,8 % sur un modèle routé) est un signal venu d'**un autre modèle**. Concrètement,
+cela veut dire que le moteur devrait savoir faire tourner **deux modèles** et
+diffuser leur désaccord — une fonctionnalité de moteur, pas un réglage.
+
 **Ce qui manque pour L3, en une phrase** : `D` est aujourd'hui un *ajout* appris en
 ligne ; il faut (i) le moduler (E7), (ii) le décorréler (E8), (iii) l'appliquer à un
 graphe creux inné (E1, fait), et (iv) accepter qu'il porte l'apprentissage **en plus**
