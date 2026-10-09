@@ -7866,3 +7866,164 @@ The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagn
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 git add reports/rapport-campagne-benefices.md && timeout 300 git commit -q -m \"Campagne : le chemin par listes coûte 1,8 à 2,1x sur nos propres modèles, et c'est la réponse\n\nMesuré sur les deux modèles denses entraînés … [977 caractères tronqués]`
+
+  ```
+1f5e2f7 Campagne : le chemin par listes coûte 1,8 à 2,1x sur nos propres modèles, et c'est la réponse
+[08/10 21:21:10] charge 17.44 · grille/r1-1.5B : code 0 · PPL 47.1403 · RSS 4647 Mo · lus 988 Mio
+[08/10 21:39:54] charge 47.40 · grille/r1-14B : code 0 · PPL 14.3048 · RSS 38898 Mo · lus 8304 Mio
+  ```
+
+- **bash** `{"command": "cat > /tmp/campagne24/batch5_lot_30b.sh <<'SH'\n#!/bin/bash\n# Batch 5 — LE LOT SUR UN MODÈLE QUI NE TIENT PAS EN CACHE.\n#\n# L'axe 1 de la feuille de route : un lot partage les octets du dense entre ses\n# jetons, et regroupe les experts par couche. La campagne le mesure sur un 0,5 B\ … [1925 caractères tronqués]`
+
+  ```
+batch 5 (le lot sur le 30B depuis le NVMe) enchaîné
+jeu 08 oct 2026 21:55:57 EDT
+[08/10 21:39:54] charge 47.40 · grille/r1-14B : code 0 · PPL 14.3048 · RSS 38898 Mo · lus 8304 Mio
+  ```
+
+- **bash** `{"command": "pkill -f \"enchainer[4]\" 2>/dev/null; sleep 1; pgrep -af \"enchainer\" | head -4; echo \"--- relance du bon chaînage ---\"\ncat > /tmp/campagne24/enchainer4.sh <<'SH'\n#!/bin/bash\n# Attend la FIN du batch 4 (marqueur dans son journal), pas son démarrage :\n# `pgrep` sur un script pas  … [646 caractères tronqués]`
+
+  ```
+(no output)
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "ps -eo pid,args 2>/dev/null | grep -F \"enchainer\" | grep -v grep | awk '{print $1}' | head -5; echo \"--- fin liste ---\"", "description": "List waiter PIDs only"}`
+
+  ```
+3706650
+3708100
+3733585
+--- fin liste ---
+  ```
+
+- **bash** `{"command": "cat > /tmp/campagne24/enchainer4.sh <<'SH'\n#!/bin/bash\n# Attend la FIN du batch 4 (marqueur dans son journal), pas son démarrage :\n# `pgrep` sur un script pas encore lancé rend la main tout de suite, et le\n# batch 5 partait alors en parallèle de la campagne — deux gros modèles lus e … [540 caractères tronqués]`
+
+  ```
+syntaxe OK
+1
+  ```
+
+- **bash** `{"command": "kill 3708100 3733585 2>/dev/null; sleep 1; cat > /tmp/campagne24/enchainer2.sh <<'SH'\n#!/bin/bash\n# Attend la FIN du batch 2 (marqueur), pas son démarrage : `pgrep` sur un script\n# pas encore lancé rend la main tout de suite et enchaîne trop tôt.\nwhile ! grep -q \"batch 2 terminé\"  … [823 caractères tronqués]`
+
+  ```
+syntaxe OK
+3706650 bash /tmp/campagne24/enchainer.sh
+3742628 bash /tmp/campagne24/enchainer4.sh
+3742943 bash /tmp/campagne24/enchainer2.sh
+3742944 bash /tmp/campagne24/enchainer3.sh
+  ```
+
+- **bash** `{"command": "date; echo \"=== état ===\"; tail -2 /tmp/campagne24/journal.txt; tail -1 /tmp/campagne24/journal4.txt 2>/dev/null; echo \"=== processus clés ===\"; ps -eo pid,etime,pcpu,comm --sort=-pcpu 2>/dev/null | grep -E \"drave|python\" | head -4; echo \"=== charge ===\"; uptime", "description": … [56 caractères tronqués]`
+
+  ```
+jeu 08 oct 2026 21:56:43 EDT
+=== état ===
+[08/10 21:21:10] charge 17.44 · grille/r1-1.5B : code 0 · PPL 47.1403 · RSS 4647 Mo · lus 988 Mio
+[08/10 21:39:54] charge 47.40 · grille/r1-14B : code 0 · PPL 14.3048 · RSS 38898 Mo · lus 8304 Mio
+[08/10 21:50:09] charge 28.03 · m5_d384_dense : PPL 5.3719 · paires 7.2 M · événements 1648531958 · 240.2 tok/s · porte 1
+=== processus clés ===
+3722266       08:30  100 python
+3719262       13:58 99.6 python
+3718149       16:48 98.5 drave
+2529717  2-12:33:02  6.9 python3
+=== charge ===
+ 21:56:43  up 17 days 11:08,  2 users,  load average: 21,58, 26,11, 26,58
+  ```
+
+### 🤖 Assistant
+
+⏵ Chaînage corrigé, et une réponse nette sur « pour quel type de tâche »
+
+## Ce que ce round a établi
+
+**Le chemin par listes coûte 1,8 à 2,1× sur nos propres modèles — et c'est la réponse.** Mêmes jetons, mêmes 8 fils :
+
+| modèle | dense | listes | densité |
+|---|---:|---:|---:|
+| `m5_d256_dense` (3,2 M) | **787,2 tok/s** | 442,3 tok/s | 2,874 M événements / 3,2 M paires ≈ **90 %** |
+| `m5_d384_dense` (7,2 M) | **528,2 tok/s** | 255,0 tok/s | 6,465 M / 7,2 M ≈ **90 %** |
+
+La densité d'activation vaut **90 %**, très au-dessus du croisement mesuré de 22 %. Autrement dit : **sur un modèle de langue ordinaire, l'architecture par listes est un coût, pas un bénéfice.** C'est la réponse la plus directe à « pour quel type de tâche » — et c'est précisément ce que la branche « parcimonie entraînée » cherche à changer. (J'ai aussi corrigé une étiquette trompeuse dans le rapport : la colonne « événements » portait le total de la fenêtre, pas le compte par jeton.)
+
+**Un bug de chaînage trouvé et corrigé avant qu'il ne fausse la nuit.** Mes quatre « enchaîneurs » attendaient la fin d'un script avec `pgrep` — or `pgrep` sur un script **pas encore lancé** rend la main immédiatement : le batch 5 serait parti en parallèle de la campagne, deux gros modèles lus en même temps, et des temps qui ne mesurent plus rien. Ils attendent maintenant un **marqueur de fin** écrit dans le journal.
+
+## La file, désormais complète
+
+1. **Campagne** (en cours : codestral-22B, puis Qwen3-30B-A3B, puis **gpt-oss-120b depuis le disque dur**) ;
+2. **batch 2** — la densité d'activation dépend-elle de la **tâche** (prose, français, code, multilingue) ?
+3. **batch 3** — l'aiguille dans la botte de foin : la perplexité moyenne ne dit pas si la mémoire tient ;
+4. **batch 4** *(nouveau)* — la **génération** : TTFT et débit par modèle, quatre tâches (code, traduction, arithmétique, résumé) avec les sorties **verbatim**, et une conversation à trois tours ;
+5. **batch 5** *(nouveau)* — le **lot** sur le Qwen3-30B-A3B lu depuis le NVMe, de 1 à 64 : l'axe 1 de la feuille de route, mesuré sur le modèle qui ne tient pas en cache.
+
+Côté GPU : `d256_route` et `d384_route` s'entraînent ; ensuite distillation, dim 512, et l'export continu qui passe déjà la porte pour chaque modèle dès qu'il existe.
+
+
+## Tour 13
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, préremplissage par lots, modèle plus gros que la RAM. Poursuivre en parallèle le livrable du modèle nativement événementiel : entraîné ici, exécuté par Drave à logits vérifiés, découpé en unités réparties. Chaque affirmation porte sa mesure (perplexité, débit, octets et événements par jeton, RSS, écart entre nœuds) ET ses conditions (corpus, tokenizer du modèle, charge de fond) ; les manques constatés — embeddings/encodeurs, décodage spéculatif — sont consignés comme manques, pas comme résultats. Livrables : la file tools/campagne-benefices.sh exécutée et ses journaux, un rapport de synthèse par famille de tâches, et la poursuite du modèle événementiel."
+Round: 6/40
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Nouvelle mesure : le recensement du routage — ce que coûterait de répartir par EXPERTS
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"census_routage.py — ce que coûterait de répartir par EXPERTS, chiffré.\n\nPOURQUOI. Le dépôt sait découper un modèle par PLAGES DE COUCHES : deux nœuds,\nécart de flux 0,00e0, c'est prouvé. Mais l'unité de travail naturelle d'un modèle\nrouté n'est pas la c … [4407 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/census_routage.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 /home/stephane/gpu-env/bin/python tools/census_routage.py --modele /tmp/m4_route --lots 8 --seq 128 2>&1 | grep -vE \"Loading|it/s\" | tail -14", "description": "Run the routing census on the trained model", "timeoutMs":  … [7 caractères tronqués]`
+
+  ```
+File "/home/stephane/gpu-env/lib64/python3.13/site-packages/transformers/models/qwen3_moe/modeling_qwen3_moe.py", line 279, in forward
+    _, routing_weights, selected_experts = self.gate(hidden_states_reshaped)
+                                           ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/stephane/gpu-env/lib64/python3.13/site-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/home/stephane/gpu-env/lib64/python3.13/site-packages/torch/nn/modules/module.py", line 1885, in _call_impl
+    return inner()
+  File "/home/stephane/gpu-env/lib64/python3.13/site-packages/torch/nn/modules/module.py", line 1846, in inner
+    hook_result = hook(self, args, result)
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/census_routage.py", line 57, in fn
+    capturés.append((idx, sortie.detach()))
+                          ^^^^^^^^^^^^^
+AttributeError: 'tuple' object has no attribute 'detach'
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"tools/census_routage.py\"; s=open(p).read()\ns = s.replace('''    def crochet(idx):\n        def fn(mod, entree, sortie):\n            capturés.append((idx, sortie.detach()))\n        return fn''',\n'''    def c … [1087 caractères tronqués]`
+
+  ```
+corrigé
+# /tmp/m4_route : 4 couches routées · 8 experts · top-2
+
+#  couche   jetons  charge max  charge moy  max/moy  experts pour 90 %
+        0     1024         537         256     2.10                  5
+        1     1024         517         256     2.02                  7
+        2     1024         703         256     2.75                  6
+        3     1024         999         256     3.90                  4
+
+# état transporté par jeton : 847 octets (79 d'en-tête + 192 × 4)
+# pour un partage à 2 nœuds, le déséquilibre de jetons par couche vaut ×1.00
+# un expert « moyen » reçoit 256 jetons sur la fenêtre de 1024
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md", "new_string": "## 7. Répartir par EXPERTS : ce que coûterait l'unité de travail naturelle\n\nLe dépôt découpe par **plages de couches** (prouvé, écart 0,00e0). Mais l'unité\nnaturelle d'un modèle r … [1707 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 git add tools/census_routage.py reports/rapport-campagne-benefices.md && timeout 300 git commit -q -F - <<'MSG'\nRépartir par experts : le déséquilibre est réel, l'élagage impossible, la latence est le coût\n\ntools/censu … [1322 caractères tronqués]`

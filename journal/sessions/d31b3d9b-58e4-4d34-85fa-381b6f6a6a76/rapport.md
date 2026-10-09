@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 12.7 h |
-| Tours | 12 |
-| Messages | 463 |
-| Appels d'outils | 457 |
-| Fichiers touchés | 18 |
-| Commandes | 345 |
+| Durée | 12.8 h |
+| Tours | 13 |
+| Messages | 476 |
+| Appels d'outils | 468 |
+| Fichiers touchés | 19 |
+| Commandes | 354 |
 | Sous-agents | 3 |
-| Commits | 18 |
+| Commits | 19 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -51,6 +51,8 @@
 **Tour 11** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1196 caractères tronqués]
 
 **Tour 12** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1196 caractères tronqués]
+
+**Tour 13** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1196 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -599,7 +601,7 @@ Tout est commité (`d8e1311`), et les journaux sont horodatés avec la charge de
 
 ### Tour 12 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1476 caractères tronqués]
 
-*7 appels d'outils.* Actions notables :
+*13 appels d'outils.* Actions notables :
 
 - bash — Check campaign and training state
 - bash — Add the generation and task-quality batch
@@ -608,6 +610,53 @@ Tout est commité (`d8e1311`), et les journaux sont horodatés avec la charge de
 - bash — Measure dense vs push on our trained models
 - edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md`
 - bash — Commit the dense-vs-push measurement
+- bash — Chain the batch-size sweep on the 30B MoE
+- bash — Fix the batch 5 waiter to wait for a real end marker
+- bash — List waiter PIDs only
+- bash — Rewrite and launch the fixed waiter
+- bash — Fix all waiters to use end markers
+- bash — Final state check for this round
+
+**Synthèse produite :**
+
+⏵ Chaînage corrigé, et une réponse nette sur « pour quel type de tâche »
+
+\## Ce que ce round a établi
+
+**Le chemin par listes coûte 1,8 à 2,1× sur nos propres modèles — et c'est la réponse.** Mêmes jetons, mêmes 8 fils :
+
+| modèle | dense | listes | densité |
+|---|---:|---:|---:|
+| `m5_d256_dense` (3,2 M) | **787,2 tok/s** | 442,3 tok/s | 2,874 M événements / 3,2 M paires ≈ **90 %** |
+| `m5_d384_dense` (7,2 M) | **528,2 tok/s** | 255,0 tok/s | 6,465 M / 7,2 M ≈ **90 %** |
+
+La densité d'activation vaut **90 %**, très au-dessus du croisement mesuré de 22 %. Autrement dit : **sur un modèle de langue ordinaire, l'architecture par listes est un coût, pas un bénéfice.** C'est la réponse la plus directe à « pour quel type de tâche » — et c'est précisément ce que la branche « parcimonie entraînée » cherche à changer. (J'ai aussi corrigé une étiquette trompeuse dans le rapport : la colonne « événements » portait le total de la fenêtre, pas le compte par jeton.)
+
+**Un bug de chaînage trouvé et corrigé avant qu'il ne fausse la nuit.** Mes quatre « enchaîneurs » attendaient la fin d'un script avec `pgrep` — or `pgrep` sur un script **pas encore lancé** rend la main immédiatement : le batch 5 serait parti en parallèle de la campagne, deux gros modèles lus en même temps, et des temps qui ne mesurent plus rien. Ils attendent maintenant un **marqueur de fin** écrit dans le journal.
+
+\## La file, désormais complète
+
+1. **Campagne** (en cours : codestral-22B, puis Qwen3-30B-A3B, puis **gpt-oss-120b depuis le disque dur**) ;
+2. **batch 2** — la densité d'activation dépend-elle de la **tâche** (prose, français, code, multilingue) ?
+3. **batch 3** — l'aiguille dans la botte de foin : la perplexité moyenne ne dit pas si la mémoire tient ;
+4. **batch 4** *(nouveau)* — la **génération** : TTFT et débit par modèle, quatre tâches (code, traduction, arithmétique, résumé) avec les sorties **verbatim**, et une conversation à trois tours ;
+5. **batch 5** *(nouveau)* — le **lot** sur le Qwen3-30B-A3B lu depuis le NVMe, de 1 à 64 : l'axe 1 de la feuille de route, mesuré sur le modèle qui ne tient pas en cache.
+
+Côté GPU : `d256_route` et `d384_route` s'entraînent ; ensuite distillation, dim 512, et l'export continu qui passe déjà la porte pour chaque modèle dès qu'il existe.
+
+### Tour 13 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1476 caractères tronqués]
+
+*5 appels d'outils.* Actions notables :
+
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/census_routage.py`
+- bash — Run the routing census on the trained model
+- bash — Fix the hook and run the census
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md`
+- bash — Commit the routing census
+
+**Synthèse produite :**
+
+⏵ Nouvelle mesure : le recensement du routage — ce que coûterait de répartir par EXPERTS
 
 ## 3. Travail accompli
 
@@ -632,7 +681,8 @@ Tout est commité (`d8e1311`), et les journaux sont horodatés avec la charge de
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/campagne_synthese.py` | 1 | 2 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/speculatif.py` | 1 | 0 |
 | `/tmp/campagne24/batch3_niah.sh` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md` | 1 | 4 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md` | 1 | 5 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/census_routage.py` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -682,7 +732,7 @@ Tout est commité (`d8e1311`), et les journaux sont horodatés avec la charge de
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 305 autres
+- … et 314 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -848,4 +898,5 @@ Tout est commité (`d8e1311`), et les journaux sont horodatés avec la charge de
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/msg.txt <<'MSG' Distillation implémentée (jamais faite dans ce dépôt) + l'état des lieux par fa
 - Campagne : les quatre premiers modèles entraînés passent la porte du moteur  Chaîne automatique : chaque dossier d'entraînement est exporté dès qu'il apparaît, 
 - Campagne : le chemin par listes coûte 1,8 à 2,1x sur nos propres modèles, et c'est la réponse  Mesuré sur les deux modèles denses entraînés ici, mêmes jetons, m
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 git add tools/census_routage.py reports/rapport-campagne-benefices.md && timeout 300 git commi
 
