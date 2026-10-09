@@ -10547,3 +10547,2838 @@ rappel : d384 dense 5.0108 · d384 routé 4.8646
 ⏵ La distillation à l'échelle 384 donne −12 % — le gain croît avec la taille
 
 - **bash** `{"command": "tail -4 /tmp/campagne24/journal4.txt; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"reports/rapport-campagne-benefices.md\"; s=open(p).read()\ndeb = s.index(\"## 5. Les modèles entraînés ici\")\nfin = s.index(\"## 7. Répartir par EXPERTS\")\nneuf = '''## 5. … [3493 caractères tronqués]`
+
+  ```
+[08/10 22:30:41] charge 51.86 · m5_d256_route : PPL 5.0684 · paires 3.2 M · événements 199484606 · 662.8 tok/s · porte 1
+[08/10 22:42:59] charge 39.13 · m5_d384_route : PPL 5.0614 · paires 7.2 M · événements 448796684 · 184.0 tok/s · porte 1
+[08/10 23:37:08] charge 49.46 · m5_d256_route_distille : PPL 5.1326 · paires 3.2 M · événements 199497531 · 802.6 tok/s · porte 1
+[09/10 00:05:37] charge 53.21 · m5_d384_route_distille : PPL 4.3745 · paires 7.2 M · événements 448703956 · 478.8 tok/s · porte 1
+section 5 mise à jour
+9321cfc Distillation à l'échelle 384 : -12 % au total, et le gain CROÎT avec la taille
+  ```
+
+- **bash** `{"command": "ps -eo pid,etime,args 2>/dev/null | grep -E \"premiere_couche\" | grep -v grep | cut -c1-90; echo \"--- fin ---\"; tail -2 /tmp/campagne24/journal11.txt", "description": "Find the semantic A/B processes"}`
+
+  ```
+642165       04:57 timeout 3600 /home/stephane/gpu-env/bin/python tools/premiere_couche_s
+ 642166       04:57 /home/stephane/gpu-env/bin/python tools/premiere_couche_semantique.py 
+--- fin ---
+[09/10 00:07:31] ancienne : 60 lignes
+[09/10 00:07:31] === sémantique terminé ===
+  ```
+
+- **bash** `{"command": "cd /tmp/campagne24 && /home/stephane/gpu-env/bin/python - <<'PY'\nimport re\ndef lire(p):\n    out={}\n    couche=None\n    for l in open(p, encoding=\"utf-8\", errors=\"replace\"):\n        if l.startswith(\"=== pooling\"):\n            pool = l.split(\":\")[1].strip()\n        m = re. … [801 caractères tronqués]`
+
+  ```
+--- pooling MOYENNE · 398 langues · couches 0–23 === ---
+ couche    ancienne    corrigée     écart
+      0      0.0002      0.0030   +0.0028
+      1      0.0226      0.0260   +0.0034
+      4      0.0156      0.0175   +0.0019
+     10      0.0235      0.0259   +0.0024
+     11      0.0270      0.0279   +0.0009
+     12      0.0319      0.0354   +0.0035
+     13      0.0348      0.0395   +0.0047
+     14      0.0301      0.0342   +0.0041
+     15      0.0294      0.0326   +0.0032
+     20      0.0210      0.0241   +0.0031
+     23      0.0215      0.0243   +0.0028
+--- pooling DERNIERE · 398 langues · couches 0–23 === ---
+ couche    ancienne    corrigée     écart
+      0      0.0006      0.0006   +0.0000
+      1      0.0184      0.0184   +0.0000
+      4      0.0314      0.0314   +0.0000
+     10      0.0408      0.0408   +0.0000
+     11      0.0290      0.0290   +0.0000
+     12      0.0371      0.0371   +0.0000
+     13      0.0393      0.0393   +0.0000
+     14      0.0367      0.0367   +0.0000
+     15      0.0326      0.0326   +0.0000
+     20      0.0211      0.0211   +0.0000
+     23      0.0253      0.0253   +0.0000
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/vision.md</path>
+<type>file</type>
+<content>
+1: # Drave — la vision
+2: 
+3: > *« Stream of logs »* : le flux des listes. Et, en français d'ici, **la drave** —
+4: > ces billots qu'on confiait à la rivière au printemps, qu'on guidait de
+5: > l'estacade jusqu'à la scierie. Le nom dit exactement ce que fait ce moteur :
+6: > il ne lit pas des matrices, il conduit un flux.
+7: 
+8: Ce document est la **vision** du projet : ce qu'il cherche, pourquoi la
+9: représentation qu'il a choisie change la nature des problèmes, et ce que cela
+10: ouvre sur chaque axe. Il ne remplace pas les rapports — chaque affirmation
+11: mesurée renvoie à celui qui la porte — et il distingue partout ce qui est
+12: **mesuré**, ce qui est **raisonné**, et ce qui est **à faire**.
+13: 
+14: Le projet s'appelait `Qtrinet`, du nom de son origine : un cahier des charges
+15: d'inférence ternaire sur un cluster de cartes Stratix V
+16: (`Qtrinet-bootstrap.md`). Ce cahier des charges reste l'acte de naissance ; le
+17: nom, lui, ne dit plus ce que le projet est devenu. **Drave** le dit.
+18: 
+19: ---
+20: 
+21: ## 1. Le cœur : des listes, pas des matrices
+22: 
+23: Un moteu
+… [3959 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/programme-recherche.md</path>
+<type>file</type>
+<content>
+1: # Programme de recherche — vers une intelligence locale
+2: 
+3: **Objet.** Définir une feuille de route vérifiable vers un système capable
+4: d'apprendre et d'évoluer *localement*, sur du matériel qu'une personne possède,
+5: sans centre de données. Ce document ne promet pas l'AGI : il définit des paliers
+6: **mesurables** et nomme ce qui, aujourd'hui, n'est pas démontré.
+7: 
+8: **Règle du programme.** Chaque affirmation est mesurée, chaque erreur est
+9: consignée. Sept affirmations de ce projet ont déjà été retirées ou corrigées
+10: (encodage ×2,17 retiré pour violation de Kraft, divergence fantôme, tokenizer
+11: non conforme, roofline corrigée, coût du mode liste inversé, 4 bits sans gain).
+12: C'est la méthode, pas un accident : **une trace de recherche qui ne contient pas
+13: ses erreurs ne vaut rien.**
+14: 
+15: ---
+16: 
+17: ## 1. Thèse
+18: 
+19: Une intelligence locale doit être **traçable**, **incrémentale**, **bornée en
+20: énergie** et **capable d'évoluer sans salle machine**. Les piles denses
+21: généralistes optimisent une seule de ces dimensions — le débit
+… [3959 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/comparaison-spiking.md</path>
+<type>file</type>
+<content>
+1: # SpikeGPT, Spikformer, Spikingformer — ce qu'ils nous apprennent
+2: 
+3: Comparaison des trois architectures neuromorphiques de référence avec la nôtre,
+4: et inventaire des astuces transposables.
+5: 
+6: Le cœur de Drave n'est pas remis en cause par cette comparaison : **router des
+7: flux d'activation sur des grappes de neurones réparties entre composants et
+8: machines** (`docs/vision.md`, axes 2-3) et **lire ces flux pour adapter
+9: l'architecture à la tâche** (§2) restent les deux dimensions structurantes. Le
+10: spike n'est examiné ici que comme **moyen d'obtenir la parcimonie** que nos
+11: modèles quantifiés n'ont pas naturellement.
+12: 
+13: Mesures internes : `reports/rapport-inference.md`,
+14: `reports/rapport-attention-creuse.md`, `reports/rapport-localite-activation.md`,
+15: `reports/bilan-multi-materiel.md`.
+16: 
+17: Sources : [Spikformer](https://ar5iv.labs.arxiv.org/html/2209.15425) (Zhang et
+18: al., ICLR 2023), [SpikeGPT](https://ar5iv.labs.arxiv.org/html/2302.13939) (Zhu
+19: et al., 2023), [Spikingformer](https://ar5iv.labs.arxiv.org/html/2304.1195
+… [3959 caractères tronqués]
+  ```
+
+
+> **Compactage de contexte** — résumé conservé :
+
+```
+<compacted-summary>
+
+## Primary Request and Intent
+- Initial: "où en est-on" — status of the Qtrinet/Drave repo.
+- Redirect: "ça fait plusieurs jours qu'on est sur des travaux lourds avec peu de résultats constructifs. Il faut revenir à l'essence de Drave et produire un modèle qui est à son meilleur dans une architecture événementielle facilement distribuable sur les divers types d'unité de traitement et ressources d'une machine et de plusieurs machines en réseau."
+- Hardware question (asked twice, second time with "produit un document dans docs pour répondre à cette question"): bi-Xeon E5-2687W v3, NUMA asymétrique strict (nœud 0 = OS/affichage AMD/32 Go ; nœud 1 = calcul/128 Go/2 Quadro RTX 5000 NVLink) — "Est-ce bénéfique ?"
+- Refined hardware plan: carte PCIe 4×NVMe (4× Patriot P320 256 Go, Gen3 x4) **sur l'autre CPU** pour ne pas réduire les voies GPU ; RAM inchangée (2×32 + 2×32) ; carte AMD Yeston 6 mini-DP pour le desktop sur le même CPU que les NVMe ; NVMe en RAID. "Quelles sont les autres optimisations à faire ? prépare un document pour ce changement de configuration et la configuration de la carte amd-yeston (6 ports mini-dp) et les nouveaux nvme en raid"
+- Current goal-round objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, préremplissage par lots, modèle plus gros que la RAM. Poursuivre en parallèle le livrable du modèle nativement événementiel : entraîné ici, exécuté par Drave à logits vérifiés, découpé en unités réparties. Chaque affirmation porte sa mesure (ET ses conditions) ; les manques constatés — embeddings/encodeurs, décodage spéculatif — sont consignés comme manques, pas comme résultats."
+- Latest user instruction: "Exécute pendant 24h les tâches que tu trouves les plus adéquates pour explorer les bénéfices attendus de Drave pour tout type de tâches."
+
+## Key Technical Concepts
+- Drave: Rust inference engine (`drave-core/`, ~13 758 lines, std-only), event-list ("push") vs dense ("pull") execution, GGUF in-place mmap.
+- Push/pull crossover measured at **~22 % density**; a fresh engine bench gave **4.69 → 3.10** push/pull at density 1 depending on run; push costs 0.210 ns/event (valued), 0.305 ns/event (signed), dense pull 0.0716 ns/weight.
+- DRVF v1/v2/v3 trace format; per-record scale `ech` (act_levels = 127) — all repo readers ignored it until fixed.
+- NUMA: 2 nodes, distances 10/21, 64.3/64.4 GB symmetric, both Quadros + NVMe on node 0; `--pin` on one socket measured **−19 %** on 30B MoE; memory BW measured 20.4 (unbound) / 22.4 (node0) / 23.8 (interleaved) Go/s.
+- Disk: `sda` HDD 246 MB/s measured; `nvme0n1` (MAP1602, DRAM-less) 1 600 MB/s measured; 16 readers → 31.1 Go/s.
+- Training: PyTorch/HF in `/home/stephane/gpu-env/bin/python`; transformers 5.15; Qwen3 dense + Qwen3MoE byte-level (vocab 256) models; distillation via `--enseignant`/`--alpha-distill`/`--temperature`.
+- Isolated-build technique: `CARGO_TARGET_DIR=/tmp/target-spm cargo build --release` so the running campaign's binary is untouched.
+- Evaluation protocol: **8 windows of 128 tokens** (`--depuis` shifts start), log-averaged; long windows are out-of-distribution (models trained at seq 128).
+- bits/octet = log2(PPL) × tokens / bytes — only cross-tokenizer comparable unit.
+
+## Files and Code
+- `tools/essai_decharge.py` — spiking vs dense bench, byte-level, `--poids-signes/--alpha`, FACTEUR_PUSH=4.69.
+- `tools/essai_blocs.py` — routed-MoE vs dense iso-reads bench (SwiGLU, engine-shaped).
+- `tools/entrainer_moteur.py` — trains engine-runnable Qwen3/Qwen3MoE; fixed double-shift (labels=x), `--init` default 0.08, distillation (`--enseignant`, `--alpha-distill`, `--temperature`, KL re-divided by seq len).
+- `tools/expor
+… [6570 caractères tronqués]
+```
+
+### 👤 Utilisateur
+
+This is an automatically generated checkpoint condensing an earlier span of the conversation to free up context. Treat the captured context as established background and build on it without restating it. Continue the task directly from the messages that follow, without acknowledging this checkpoint.
+
+<compacted-summary>
+<compacted-summary>
+
+## Primary Request and Intent
+- Initial: "où en est-on" — status of the Qtrinet/Drave repo.
+- Redirect: "ça fait plusieurs jours qu'on est sur des travaux lourds avec peu de résultats constructifs. Il faut revenir à l'essence de Drave et produire un modèle qui est à son meilleur dans une architecture événementielle facilement distribuable sur les divers types d'unité de traitement et ressources d'une machine et de plusieurs machines en réseau."
+- Hardware question (asked twice, second time with "produit un document dans docs pour répondre à cette question"): bi-Xeon E5-2687W v3, NUMA asymétrique strict (nœud 0 = OS/affichage AMD/32 Go ; nœud 1 = calcul/128 Go/2 Quadro RTX 5000 NVLink) — "Est-ce bénéfique ?"
+- Refined hardware plan: carte PCIe 4×NVMe (4× Patriot P320 256 Go, Gen3 x4) **sur l'autre CPU** pour ne pas réduire les voies GPU ; RAM inchangée (2×32 + 2×32) ; carte AMD Yeston 6 mini-DP pour le desktop sur le même CPU que les NVMe ; NVMe en RAID. "Quelles sont les autres optimisations à faire ? prépare un document pour ce changement de configuration et la configuration de la carte amd-yeston (6 ports mini-dp) et les nouveaux nvme en raid"
+- Current goal-round objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, préremplissage par lots, modèle plus gros que la RAM. Poursuivre en parallèle le livrable du modèle nativement événementiel : entraîné ici, exécuté par Drave à logits vérifiés, découpé en unités réparties. Chaque affirmation porte sa mesure (ET ses conditions) ; les manques constatés — embeddings/encodeurs, décodage spéculatif — sont consignés comme manques, pas comme résultats."
+- Latest user instruction: "Exécute pendant 24h les tâches que tu trouves les plus adéquates pour explorer les bénéfices attendus de Drave pour tout type de tâches."
+
+## Key Technical Concepts
+- Drave: Rust inference engine (`drave-core/`, ~13 758 lines, std-only), event-list ("push") vs dense ("pull") execution, GGUF in-place mmap.
+- Push/pull crossover measured at **~22 % density**; a fresh engine bench gave **4.69 → 3.10** push/pull at density 1 depending on run; push costs 0.210 ns/event (valued), 0.305 ns/event (signed), dense pull 0.0716 ns/weight.
+- DRVF v1/v2/v3 trace format; per-record scale `ech` (act_levels = 127) — all repo readers ignored it until fixed.
+- NUMA: 2 nodes, distances 10/21, 64.3/64.4 GB symmetric, both Quadros + NVMe on node 0; `--pin` on one socket measured **−19 %** on 30B MoE; memory BW measured 20.4 (unbound) / 22.4 (node0) / 23.8 (interleaved) Go/s.
+- Disk: `sda` HDD 246 MB/s measured; `nvme0n1` (MAP1602, DRAM-less) 1 600 MB/s measured; 16 readers → 31.1 Go/s.
+- Training: PyTorch/HF in `/home/stephane/gpu-env/bin/python`; transformers 5.15; Qwen3 dense + Qwen3MoE byte-level (vocab 256) models; distillation via `--enseignant`/`--alpha-distill`/`--temperature`.
+- Isolated-build technique: `CARGO_TARGET_DIR=/tmp/target-spm cargo build --release` so the running campaign's binary is untouched.
+- Evaluation protocol: **8 windows of 128 tokens** (`--depuis` shifts start), log-averaged; long windows are out-of-distribution (models trained at seq 128).
+- bits/octet = log2(PPL) × tokens / bytes — only cross-tokenizer comparable unit.
+
+## Files and Code
+- `tools/essai_decharge.py` — spiking vs dense bench, byte-level, `--poids-signes/--alpha`, FACTEUR_PUSH=4.69.
+- `tools/essai_blocs.py` — routed-MoE vs dense iso-reads bench (SwiGLU, engine-shaped).
+- `tools/entrainer_moteur.py` — trains engine-runnable Qwen3/Qwen3MoE; fixed double-shift (labels=x), `--init` default 0.08, distillation (`--enseignant`, `--alpha-distill`, `--temperature`, KL re-divided by seq len).
+- `tools/exporter_gguf.py` — HF→GGUF (dims reversed, Q8_0 2D, Q4_0 FFN/experts, `quant_du_tenseur` single rule shared with reference, `num_local_experts` handling).
+- `tools/porte_moteur.py` — PyTorch reference on the *same quantized weights*; handles dense Qwen3 and MoE.
+- `tools/compare_logits.py --porte` — gate.
+- `tools/porte-reparti-moteur.sh` — 2-node split gate for our models.
+- `tools/porte_mistral.sh` + `tools/porte_mistral.py` — new Mistral-family gate; added to `tools/portes.sh`.
+- `tools/campagne-benefices.sh` — 9-step 24 h campaign (grille, parcimonie, contexte, lot, routage, semantique, noyau, repartition, portes); `ids_pour` forces per-model tokenization.
+- `tools/campagne_synthese.py` — parses logs into Markdown table with bits/octet.
+- `tools/speculatif.py` — draft acceptance rate.
+- `tools/census_routage.py` — expert load census.
+- `drave-core/src/tokenizer.rs` — added SentencePiece (`spm`) detection (no merges AND `▁` in table), `encode_spm`, byte-fallback decode.
+- `drave-core/src/gguf.rs` + `main.rs` — `raw_levels` now returns `Option<Vec<i8>>`, refuses cleanly instead of panicking on type 12 (Q4_K).
+- `drave-core/src/main.rs` — `run_ppl_reparti` now honours `--ids-file`; synthetic ids clamped modulo vocab.
+- `docs/numa-segregation.md` (323 lines) — NUMA answer, §11 4×NVMe card + AMD, §12 RAM.
+- `docs/configuration-nvme-raid-amd.md` (332 lines) — RAID0 recipe, BIOS bifurcation, AMG GPU driver (radeon default; `amdgpu.si_support=1 radeon.si_support=0`), optimisations.
+- `docs/campagne-benefices.md` — campaign plan + 5 chained batches.
+- `reports/rapport-parcimonie-entrainee.md`, `reports/rapport-modele-moteur.md`, `reports/rapport-campagne-benefices.md` (living, ~21 sections, verdict table at §0 bis).
+
+## Errors and Fixes
+- Spiking vs dense: `NormeLot` broadcast → reshape(-1, last); device mismatch → move batches in `evaluer`.
+- **Tokenizer trap**: `data/wikitext2_test.txt.ids` belongs to another tokenizer → PPL 7 710.72 vs 17.43 for Qwen2.5-0.5B; rule: each model tokenizes its own corpus.
+- **Double shift** in `entrainer_moteur.py`: `labels=y` already shifted + HF internal shift → trained t+2; fixed `labels=x`. Earlier runs (m2/m3) invalid.
+- **KL normalization**: `kl_div(reduction="batchmean")` on (B,T,V) → 128× too large (loss 622); divide by seq length.
+- **`--ids-file` ignored by `--ppl-reparti`** → 1 186.53 vs 321.96; synthetic ids `1..=limite` exceeded vocab → panic. Both fixed.
+- **Stale cache**: semantic run reused `/tmp/pcs_a*.npz` built by the buggy reader, reproducing published numbers; caches deleted, re-run with fresh caches.
+- **`--cache` in `premiere_couche_semantique.py` overwrites both sides** (same expression for A and B).
+- **Mistral false alarm**: `MistralForCausalLM(config)` = random weights → gate "NON TENUE"; fixed with `from_pretrained`; gate then passes (3 411,4394 vs 3 411,4405, corr 1.0000).
+- **SentencePiece tokenizer**: spaces lost ("Therivercarriesthelogstothemill", 32 tokens vs 9); fixed; byte tokens `<0xXX>` initially decoded literally (+10 206 bytes) → fixed.
+- **Bench panic** `raw_levels : type 12 non géré` on `drave <modele>` (first usage line) for K-quants; fixed (Option + skip).
+- **Chaining bug**: `pgrep` on a not-yet-started script returns immediately → batches 3/4 ran early concurrently; replaced with end-marker waits in journal files.
+- **Resource conflict**: two concurrent reads of gpt-oss 63 GB (campaign PPL + batch4 generation) → batch4's gpt-oss steps cancelled deliberately, marker written so chain continues.
+- Recurring self-inflicted: `pkill -f "<name>"` kills own bash command (name appears in its own command line); use bracket patterns or kill by PID.
+
+## Pending Jobs
+- Campaign steps semantique → noyau → repartition → portes (running).
+- batch2 (density by task + latency map `/tmp/campagne24/batch2.sh`) then batch3/4/5/6/7 chained (3,4 already ran; 6,7 done; 5 done with protocol flaw).
+- gpt-oss short-window PPL (`--limit 32 --ctx 64`) and batch7 gpt-oss restricted-head run — both still running.
+- dim 512 dense (20 000/40 000, val 1.9415) then dim 512 routed (16 experts) on GPU0; d384 distilled finished.
+- Promote committed engine fixes to the main `target/release/drave` (rebuild) after campaign; validates via `portes.sh` (which also runs `cargo test --release`).
+- Embeddings/encoder support (`bge-m3` unexecutable) and speculative decoding remain documented gaps.
+
+## Current Work
+- Killing redundant background semantic A/B (PID 642165/642166, "ancienne lecture" variant) to avoid cache collision with the campaign's own semantique step, which started at 00:03 and uses the same `/tmp/pcs_a*.npz` paths.
+- Just recorded: d384 distilled PPL **4.4113** (8×128) vs routed 4.8646, dense 5.0108 → **−12.0 %** at iso-reads; export chain measured 4.3745 with gate held.
+
+## Next Step
+- Kill PIDs 642165/642166 (redundant semantic A/B), then verify the campaign's `semantique` step output and continue harvesting campaign results into `reports/rapport-campagne-benefices.md`.
+
+## Critical Context
+- Machine: 2× Xeon E5-2687W v3 (10 cores/20 threads per socket, 40 lanes each), 125 GB RAM, 2× Quadro RTX 5000 (NVLink 25.781 Go/s, ECC disabled), no FPGA; load has peaked 47–103 during the campaign, so **times are polluted, deterministic values (PPL, events, pairs) are not**.
+- RAM: 2 DIMMs/socket on a 4-channel controller (EDAC: Chan#0/#1 only) → dual-channel; 4 DIMMs/socket is the only configuration that doubles bandwidth; 26 GB currently in swap on the HDD (free fix: `swapoff -a && swapon -a`).
+- Key measured results: routed wins at iso-reads (−2.6 %/−2.9 %), distillation adds (−2.5 % at d256, −9.3 % at d384); V4-Flash 365.7 GB runs with **37.6 GB RSS**; NIAH 12/12 up to 4 096 tokens; constrained head ×1.36-1.42 + output guarantee; sparsity k-WTA +4 % vs threshold +69 % at −30 % events; density ~71 % independent of task; speculative draft ×1.20 (insufficient).
+- Model files: `models/Qwen2.5-0.5B-Q8_0.gguf`; `/home/stephane/Data13TB/stephane/modeles/gguf/{gpt-oss-120b-MXFP4, codestral-22b-v0.1-q4_k_m, deepseek-r1-distill-qwen-14b/1.5b-q4_k_m, bge-m3-FP16, eagle3-gpt-oss-120b-Q8_0}.gguf`; `/home/stephane/FastNVMe/{qwen3-30b-a3b-Q4_K_M.gguf, modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf}`.
+- User preference: every affirmation carries its measure AND conditions; record errors/corrections explicitly; no silent failures; prefer refusing over a false silent result.
+- Commits today include: a1dc996, a6f9bb7, 8de0612, 596de74, f96aefa, d739cbd, 26e55bd, 210e760, 4f233d7, ddebb6b, 9cdfbd7, 9321cfc (latest).
+</compacted-summary>
+</compacted-summary>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"cos\\|produit\\|norm\\|mesure\\|def \" tools/premiere_couche_semantique.py | head -30", "description": "Check the similarity metric used"}`
+
+  ```
+14:    même(c)      = cos( art1 langue i , art1 langue j )     i ≠ j
+15:    autre(c)     = cos( art1 langue i , art2 langue j )     i ≠ j
+38:def opt(nom, defaut):
+42:def decode(buf, n):
+79:def cache(dossier, pool, sortie, echelle=True):
+114:def lire(chemin, pool, echelle=True):
+123:    le rapport de normes va de ×6 à ×100 selon la couche ; avec, il tombe entre
+124:    0,96 et 1,01. `echelle=False` reproduit l'ancien comportement, pour pouvoir
+125:    mesurer ce que la correction change.
+160:def cos_moyen(A, B, iu, maxi):
+162:    na = np.linalg.norm(A, axis=1); nb = np.linalg.norm(B, axis=1)
+179:def main():
+184:        print("# ATTENTION : --sans-echelle reproduit l'ANCIEN comportement (échelle "
+205:            # « art1 contre art2 » mesurerait la LONGUEUR autant que le sens. En
+209:            a11 = cos_moyen(Va, Va, None, maxi)
+210:            a22 = cos_moyen(Vb, Vb, None, maxi)
+211:            a12 = cos_moyen(Va, Vb, None, maxi)
+  ```
+
+### 👤 Utilisateur
+
+Current runtime context. This snapshot supersedes earlier runtime-context snapshots.
+
+Current DSH file policy: danger-full-access. The DSH file sandbox does not restrict file modifications by available operations.
+
+Approval prompts are disabled in this session: actions that require approval are rejected automatically — do not request sandbox escalation (do not set `sandbox_permissions`).
+
+### 👤 Utilisateur
+
+<system-reminder>
+The available skill catalog changed. This complete catalog replaces every earlier available-skills list in this session:
+
+<available_skills>
+- `microsoft-foundry`: Deploy, evaluate, fine-tune, and manage Foundry agents end-to-end with azd: hosted agent scaffold/run/deploy, prompt agent create, batch eval, continuous eval, prompt optimizer, Agent Optimizer scaffold, agent.yaml, dataset curation from traces, model fine-tuning (SFT/DPO/RFT). USE FOR: azd ai agent, azd provision/deploy, deploy agent, hosted agent, create agent, add tool to agent, invoke agent, evaluate agent, continuous eval, continuous monitoring, agent CI/CD, optimize prompt, improve prom...
+</available_skills>
+
+Use only names in this replacement catalog. If the user names a listed skill, or the task clearly matches its description, call the `skill` tool with the exact name before acting.
+A user may also invoke a skill directly; its <skill_content> block then appears in this conversation. Follow it, and do not call the `skill` tool again for that skill.
+</system-reminder>
+
+### 🤖 Assistant
+
+⏵ Vérification de l'état des jobs et de la campagne en cours
+
+- **job_list** `{}`
+
+  ```
+bash-1 [bash] completed — cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup /home/stephane/gpu-env/bin/python tools/essai_decharge.py --pas 4000 --dim 192 --couches 4 --tetes 4 --cache 768 --lr 3e-3 --graine 1 > /tmp/essai_decharge_1.log 2>&1 &
+echo "lance ; pid $!"
+bash-2 [bash] completed — cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && P=/home/stephane/gpu-env/bin/python
+(CUDA_VISIBLE_DEVICES=0 $P -u tools/essai_decharge.py --dim 256 --cache 1024 --pas 4000 > /tmp/essai_d256.log 2>&1; \
+ CUDA_VISIBLE_DEVICES=0 $P -u tools/essai_decharge.py --dim 320 --cache 1280 --pas 4000 > /tmp/essai_d320.log 2>&1) &
+(CUDA_VISIBLE_DEVICES=1 $P -u tools/essai_decharge.py --dim 192 --seuil 1.5 --decharge-seul --pas 4000 > /tmp/essai_s15.log 2>&1; \
+ CUDA_VISIBLE_DEVICES=1 $P -u tools/essai_decharge.py --dim 192 --seuil 2.0 --decharge-seul --pas 4000 > /tmp/essai_s20.log 2>&1) &
+echo "deux files lancées"
+bash-3 [bash] completed — cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nvidia-smi --query-compute-apps=pid,used_memory --format=csv 2>&1 | head -5
+P=/home/stephane/gpu-env/bin/python
+(CUDA_VISIBLE_DEVICES=1 $P -u tools/essai_decharge.py --dim 192 --lr 1e-3 --pas 8000 > /t
+… [1197 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/campagne24 && ls -la *.log 2>/dev/null | tail -20; echo \"--- journal\"; tail -5 journal_campagne.txt 2>/dev/null; echo \"--- procs\"; ps -eo pid,etime,pcpu,rss,args --sort=-pcpu | grep -E \"drave|python|benefices\" | grep -v grep | head -12", "description": "Check campaign logs … [24 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane  1927  8 oct 23:15 tete_0.5B_complete_2.log
+-rw-r--r--. 1 stephane stephane  2234  8 oct 23:15 tete_0.5B_restreinte_1.log
+-rw-r--r--. 1 stephane stephane  2234  8 oct 23:16 tete_0.5B_restreinte_2.log
+-rw-r--r--. 1 stephane stephane   670  8 oct 23:20 tete_gpt-oss-120B_complete_1.log
+-rw-r--r--. 1 stephane stephane  2011  8 oct 23:17 tete_r1-1.5B_complete_1.log
+-rw-r--r--. 1 stephane stephane  2010  8 oct 23:19 tete_r1-1.5B_complete_2.log
+-rw-r--r--. 1 stephane stephane  2307  8 oct 23:18 tete_r1-1.5B_restreinte_1.log
+-rw-r--r--. 1 stephane stephane  2305  8 oct 23:19 tete_r1-1.5B_restreinte_2.log
+-rw-r--r--. 1 stephane stephane  1057  8 oct 21:42 tr_d256_dense.log
+-rw-r--r--. 1 stephane stephane  1379  8 oct 23:31 tr_d256_distille.log
+-rw-r--r--. 1 stephane stephane  1151  8 oct 22:25 tr_d256_route.log
+-rw-r--r--. 1 stephane stephane  1059  8 oct 21:48 tr_d384_dense.log
+-rw-r--r--. 1 stephane stephane  1381  8 oct 23:59 tr_d384_distille.log
+-rw-r--r--. 1 stephane stephane  1153  8 oct 22:40 tr_d384_route.log
+-rw-r--r--. 1 stephane stephane   510  9 oct 00:08 tr_d512_dense.log
+-rw-r--r--. 1 stephane stephane  3234  8 oct 23:13 v4_16_64.log
+-rw-r--r--.
+… [2740 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/campagne24 && echo \"=== parenté ===\"; ps -o pid,ppid,etime,args -p 642166,306079,330460 2>/dev/null; echo; echo \"=== journal campagne ===\"; ls -la journal*.txt 2>/dev/null; tail -20 journal*.txt 2>/dev/null | tail -30; echo; echo \"=== derniers logs modifiés ===\"; ls -lat * … [89 caractères tronqués]`
+
+  ```
+=== parenté ===
+    PID    PPID     ELAPSED COMMAND
+ 642166  642165       06:04 /home/stephane/gpu-env/bin/python tools/premiere_couche_semantique.py /home/stephane/Data13TB/stephane/corpus/udhr/article1_traces /home/stephane/Data13TB/stephane/corpus/udhr/article2_traces --max-paires 40000
+ 306079  306078       49:27 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/gpt-oss-120b-MXFP4.gguf --infer --prompt Classify the sentiment of this sentence: 'The engine reads only the weights that an activation touches.' Answer with one word: positive, negative or neutral. --n 64 --ctx 256 --threads 20 --temp 0
+
+=== journal campagne ===
+-rw-r--r--. 1 stephane stephane  913  8 oct 22:58 journal10.txt
+-rw-r--r--. 1 stephane stephane  545  9 oct 00:07 journal11.txt
+-rw-r--r--. 1 stephane stephane  192  9 oct 00:09 journal12.txt
+-rw-r--r--. 1 stephane stephane 1027  8 oct 21:56 journal3.txt
+-rw-r--r--. 1 stephane stephane  787  9 oct 00:05 journal4.txt
+-rw-r--r--. 1 stephane stephane  387  8 oct 23:50 journal5.txt
+-rw-r--r--. 1 stephane stephane 1167  8 oct 22:41 journal6.txt
+-rw-r--r--. 1 stephane stephane  623  8 oct 23:02 journal7.txt
+-rw-r--r--. 1 stephane stephan
+… [805 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/campagne24 && echo \"=== 642165 ===\"; ps -o pid,ppid,etime,args -p 642165 2>/dev/null || echo \"disparu\"; echo; echo \"=== journal12 ===\"; cat journal12.txt; echo; echo \"=== journal.txt (tail 25) ===\"; tail -25 journal.txt; echo; echo \"=== grep semantique dans le script ca … [235 caractères tronqués]`
+
+  ```
+=== 642165 ===
+    PID    PPID     ELAPSED COMMAND
+ 642165 3695400       06:09 timeout 3600 /home/stephane/gpu-env/bin/python tools/premiere_couche_semantique.py /home/stephane/Data13TB/stephane/corpus/udhr/article1_traces /home/stephane/Data13TB/stephane/corpus/udhr/article2_traces --max-paires 40000
+
+=== journal12 ===
+[08/10 23:37:19] === gpt-oss-120B, fenêtre COURTE (la passe de 256 jetons a expiré à 90 min) ===
+[09/10 00:09:20] gpt-oss 32 jetons : code 0 · PPL 43.0027 · RSS 17867 Mo · lus 28820 Mio
+
+=== journal.txt (tail 25) ===
+[08/10 23:52:34] charge 83.27 · parcimonie/acttopk850push : PPL 17.3963 · événements 76891038859 · 6.5 tok/s
+[08/10 23:52:50] charge 78.36 · parcimonie/acttopk800dense : PPL 17.5788 · événements 0 · 17.1 tok/s
+[08/10 23:53:34] charge 74.05 · parcimonie/acttopk800push : PPL 17.4257 · événements 72355953843 · 6.9 tok/s
+[08/10 23:53:52] charge 71.57 · parcimonie/acttopk700dense : PPL 18.1141 · événements 0 · 14.4 tok/s
+[08/10 23:54:29] charge 68.55 · parcimonie/acttopk700push : PPL 18.9177 · événements 63285098996 · 8.7 tok/s
+[08/10 23:54:48] charge 67.90 · parcimonie/acttopk500dense : PPL 28.3605 · événements 0 · 13.9 tok/s
+[08/10 23:55:22] charge 67.20 ·
+… [1687 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Lecture du script de campagne pour interpréter correctement parcimonie/contexte/lot
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,60p' tools/campagne-benefices.sh", "description": "Read campaign script header"}`
+
+  ```
+#!/bin/bash
+# campagne-benefices.sh — 24 h de mesures : où Drave est à son meilleur, tâche par tâche.
+#
+# POURQUOI CETTE CAMPAGNE. Le dépôt a mesuré beaucoup de choses, mais presque
+# toujours sur UN modèle (Qwen2.5-0.5B) et UN type de tâche (la perplexité). La
+# question posée est plus large : pour quelles TÂCHES l'architecture par listes
+# est-elle le bon outil, et de combien ? Ce script parcourt les familles
+# disponibles sur cette machine et consigne, pour chacune, la mesure qui décide.
+#
+# Chaque étape : un journal, un délai maximal, et une ligne de synthèse. Une
+# étape qui échoue n'arrête pas la file — elle est consignée comme échouée.
+#
+#   tools/campagne-benefices.sh              toute la file
+#   tools/campagne-benefices.sh grille       une seule étape
+#   tools/campagne-benefices.sh --liste      les étapes disponibles
+set -u
+cd "$(dirname "$0")/.."
+D=${D:-./drave-core/target/release/drave}
+C=${CAMPAGNE_DIR:-/tmp/campagne24}
+G=/home/stephane/Data13TB/stephane/modeles/gguf
+mkdir -p "$C"
+JOURNAL="$C/journal.txt"
+
+dire() { echo "[$(date '+%d/%m %H:%M:%S')] charge $(cut -d' ' -f1 /proc/loadavg) · $*" | tee -a "$JOURNAL"; }
+
+# LES IDENTIFIANTS SE TOKENISENT AVEC LE MODÈLE QUI 
+… [1775 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '60,200p' tools/campagne-benefices.sh", "description": "Read parcimonie, contexte, lot steps"}`
+
+  ```
+if [ ! -s "$ids" ]; then
+            "$D" "$chemin" --tokenize --fichier "$corpus" --sortie "$ids" \
+                > "$C/grille_${nom}_tokenize.log" 2>&1 \
+                || { dire "grille/$nom : tokenisation impossible (tokenizer non couvert ?)"; continue; }
+        fi
+        # 256 jetons, contexte 256 : la référence du dépôt, comparable d'un
+        # modèle à l'autre. `/usr/bin/time -v` donne le RSS et les octets lus.
+        /usr/bin/time -v timeout "$delai" "$D" "$chemin" --ppl "$ids" \
+            --limit 256 --ctx 256 --threads 20 \
+            > "$C/grille_${nom}_ppl.log" 2> "$C/grille_${nom}_temps.log"
+        local code=$?
+        local ppl rss lus
+        ppl=$(grep -oE "perplexité [0-9.]+ sur" "$C/grille_${nom}_ppl.log" | grep -oE "[0-9.]+" | tail -1)
+        rss=$(grep -oE "Maximum resident set size \(kbytes\): [0-9]+" "$C/grille_${nom}_temps.log" | grep -oE "[0-9]+$")
+        lus=$(grep -oE "File system inputs: [0-9]+" "$C/grille_${nom}_temps.log" | grep -oE "[0-9]+$")
+        dire "grille/$nom : code $code · PPL ${ppl:-?} · RSS $(( ${rss:-0} / 1024 )) Mo · lus $(( ${lus:-0} / 2048 )) Mio"
+    done
+}
+
+# -------------------------------------------------------------
+… [6618 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/campagne24 && ls -la batch*.sh 2>/dev/null; echo \"=== batch2 ===\"; cat batch2.sh 2>/dev/null | head -60", "description": "Inspect batch2 script"}`
+
+  ```
+-rwxr-xr-x. 1 stephane stephane 3510  8 oct 21:22 batch2.sh
+-rw-------. 1 stephane stephane 3091  8 oct 21:26 batch3_niah.sh
+-rwxr-xr-x. 1 stephane stephane 2859  8 oct 21:54 batch4_generation.sh
+-rwxr-xr-x. 1 stephane stephane 1552  8 oct 21:55 batch5_lot_30b.sh
+-rwxr-xr-x. 1 stephane stephane 2077  8 oct 21:58 batch6_v4.sh
+-rwxr-xr-x. 1 stephane stephane 3052  8 oct 22:02 batch7_tete.sh
+=== batch2 ===
+#!/bin/bash
+# Batch 2 — « le bénéfice événementiel dépend-il de la TÂCHE ? »
+# Même modèle, même matériel, quatre corpus : prose anglaise, français, code,
+# multilingue. Ce qui change d'un corpus à l'autre n'est pas le coût des poids
+# mais la DENSITÉ d'activation — donc l'endroit où le chemin par listes gagne.
+set -u
+cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet
+D=./drave-core/target/release/drave
+C=/tmp/campagne24
+J=$C/journal2.txt
+dire() { echo "[$(date '+%d/%m %H:%M:%S')] charge $(cut -d' ' -f1 /proc/loadavg) · $*" | tee -a "$J"; }
+M=models/Qwen2.5-0.5B-Q8_0.gguf
+
+dire "=== batch 2 : densité par tâche ==="
+for paire in "prose:data/wikitext2_test.txt" "francais:$C/corpus_fr.txt" \
+             "code:$C/corpus_code.txt" "multilingue:$C/corpus_multi.txt"; do
+    IFS=':' read -
+… [2675 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/campagne24 && echo \"=== journal2 ===\"; cat journal2.txt 2>/dev/null | tail -30; echo; echo \"=== latence ===\"; ls -la b2_latence.log 2>/dev/null && tail -25 b2_latence.log", "description": "Read batch2 journal and latency map"}`
+
+  ```
+=== journal2 ===
+
+=== latence ===
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "cd /tmp/campagne24 && ls -la b2_* 2>/dev/null | head; echo \"=== arbre des processus ===\"; for p in 306078 330458 3695400; do ps -o pid,ppid,etime,args -p $p --no-headers 2>/dev/null; done; echo; echo \"=== qui est parent de 306078 ===\"; ps -o ppid= -p 306078 2>/dev/null | xargs -r ps … [188 caractères tronqués]`
+
+  ```
+=== arbre des processus ===
+ 306078  259899       49:58 timeout 3600 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/gpt-oss-120b-MXFP4.gguf --infer --prompt Classify the sentiment of this sentence: 'The engine reads only the weights that an activation touches.' Answer with one word: positive, negative or neutral. --n 64 --ctx 256 --threads 20 --temp 0
+3695400 3695397    02:50:03 bash tools/campagne-benefices.sh
+
+=== qui est parent de 306078 ===
+    PID    PPID     ELAPSED COMMAND
+ 259899 3751804       54:33 bash /tmp/campagne24/batch7_tete.sh
+
+=== scripts batch en cours ===
+259899 bash /tmp/campagne24/batch7_tete.sh
+  ```
+
+### 🤖 Assistant
+
+⏵ Lancement du batch 2 (densité par tâche) qui n'a jamais tourné
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la tools/proxy_latence.py 2>/dev/null || echo \"proxy_latence.py ABSENT\"; ls /tmp/campagne24/corpus_*.txt 2>/dev/null; echo \"--- lancement batch2 ---\"; nohup bash /tmp/campagne24/batch2.sh > /tmp/campagne24/batch2_console.log  … [91 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 1900 30 sep 11:37 tools/proxy_latence.py
+/tmp/campagne24/corpus_code.txt
+/tmp/campagne24/corpus_fr.txt
+/tmp/campagne24/corpus_multi.txt
+--- lancement batch2 ---
+batch2 pid 657789
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^#\\|^##\" reports/rapport-campagne-benefices.md | head -60; echo \"=== taille ===\"; wc -l reports/rapport-campagne-benefices.md", "description": "List report sections"}`
+
+  ```
+1:# Campagne 24 h — où Drave est à son meilleur, tâche par tâche
+14:## 0. Le piège qui a failli tout fausser
+30:## 0 bis. Le verdict, famille par famille
+65:## 1. Le décodage spéculatif : ×1,2, pas ×2 — mesuré avant d'écrire du moteur
+97:## 2. Les deux familles de tâches que Drave ne couvre pas
+112:## 3. La grille de modèles — « ce modèle tourne-t-il, et à quel prix ? »
+186:## 4. Ce que le dépôt sait déjà, par famille de tâches (avant cette campagne)
+212:## 5. Les modèles entraînés ici, mesurés DANS le moteur — routage ET distillation gagnent
+254:## 7. Répartir par EXPERTS : ce que coûterait l'unité de travail naturelle
+287:## 8. Les tâches à SORTIE CONTRAINTE : une matrice qu'on ne lit pas
+323:## 9. La mémoire TIENT : l'aiguille est retrouvée à toutes les profondeurs
+350:## 10. La génération : TTFT et débit, mesure directe
+366:## 10 bis. Quatre tâches, sorties verbatim — et c'est le MODÈLE qui limite, pas le moteur
+393:## 10 ter. La densité d'activation ne dépend PAS de la tâche — la qualité, si
+420:## 12. Le cas extrême : **365,7 Go sur une machine de 125 Go**
+444:## 13. La tête restreinte, sur deux modèles de plus
+467:## 14. Une mesure à refaire : le lot sur le 30B a mesuré le c
+… [421 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md", "offset": 30, "limit": 40}`
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md", "offset": 393, "limit": 60}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md</path>
+<type>file</type>
+<content>
+30: ## 0 bis. Le verdict, famille par famille
+31: 
+32: Le tableau qui répond à la question posée, chaque ligne portant sa mesure. ⏳ =
+33: file encore en cours.
+34: 
+35: | famille de tâches | verdict | mesure |
+36: |---|---|---|
+37: | **langage** (perplexité) | ✅ tourne, et **le routage entraîné gagne** | à lecture égale (3,2 M poids/jeton) : dense **5,0155** → routé **4,8858** (−2,6 %) → **distillé 4,7642 (−5,0 %)**, protocole 8 × 128 jetons |
+38: | **génération / latence** | ✅ mesuré | TTFT **27,9 ms**, **29,0 tok/s** (0,5 B) · 114,6 ms, 7,1 tok/s (1,5 B) |
+39: | **contexte long — la mémoire** | ✅ **elle tient** | **12 aiguilles sur 12** retrouvées, de 512 à **4 096 jetons**, à 10 %, 50 % et 90 % de profondeur |
+40: | **contexte long — le coût** | ✅ réglable | KV int8 : +1,5 % (512 j.) à +3,0 % (8 192 j.) · paginé : **0,03 Go au lieu de 25,77 Go** à 1 M |
+41: | **préremplissage par lots** | ⚠️ non mesuré | le batch 5 a mesuré le **cache de pages** (10,9 Go lus à froid, 0 ensuite) — à refaire sur un modèle plus gros que la RAM |
+42: | **code** | ✅ mesuré, d
+… [2522 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md</path>
+<type>file</type>
+<content>
+393: ## 10 ter. La densité d'activation ne dépend PAS de la tâche — la qualité, si
+394: 
+395: Même modèle (Qwen2.5-0.5B Q8_0), même matériel, quatre corpus, 192 jetons : la
+396: question du batch 2 était « le bénéfice événementiel dépend-il de la tâche ? ».
+397: 
+398: | corpus | jetons/octet | PPL | **bits/octet** | paires/jeton | **densité** |
+399: |---|---:|---:|---:|---:|---:|
+400: | prose anglaise | 0,2385 | 15,85 | **0,951** | 495,9 M | **71 %** |
+401: | français | 0,2783 | 11,19 | **0,969** | 495,9 M | **71 %** |
+402: | code | 0,3117 | 7,09 | **0,881** | 495,9 M | **71 %** |
+403: 
+404: **La densité est identique dans les trois cas — 71 %, à 0,002 point près**
+405: (67,766 / 67,767 / 67,766 milliards d'événements). Autrement dit : **le bénéfice
+406: événementiel ne dépend pas de la tâche**, il dépend du **modèle**. Un modèle dense
+407: reste dense quelle que soit l'entrée ; c'est la parcimonie *entraînée* qui la
+408: change, et rien d'autre. L'hypothèse « telle tâche réveille moins de neurones »
+409: est **réfutée** ici.
+410: 
+411: **Ce qui dépend de l
+… [2215 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md", "limit": 80, "offset": 533}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md</path>
+<type>file</type>
+<content>
+533: de lecteur, et il survit.** La conclusion (une bande 10–15, un plateau, un effet
+534: petit sur un fond anisotrope élevé) reste celle du `rapport-cycle-rapide.md`.
+535: 
+536: ---
+537: 
+538: ## 19. La parcimonie imposée, sur 24 réglages : le k-WTA écrase le seuil, encore
+539: 
+540: Qwen2.5-0.5B Q8_0, 256 jetons, ctx 512, deux familles de réglages et les deux
+541: chemins d'exécution. **Seules les colonnes déterministes sont utilisables** :
+542: `acttopk1000dense` et `actthresh0dense` sont *la même configuration* et donnent
+543: 12,1 et 22,6 tok/s — le bruit de temps vaut ×2 sous cette charge de fond (67-84).
+544: Les PPL, les événements et les paires, eux, sont exacts.
+545: 
+546: | réglage | PPL (dense / listes) | M événements/jeton | **PPL à −30 % d'événements** |
+547: |---|---|---:|---:|
+548: | aucune parcimonie | 17,43 / 17,41 | 354 | — |
+549: | seuil 0,1 % | 17,34 / 17,31 | 344 | −2,6 % d'évts |
+550: | seuil 0,5 % | 17,84 / 17,87 | 312 | **+2,3 % de PPL** |
+551: | seuil 1 % | 21,01 / 20,53 | 281 | **+20 %** |
+552: | seuil 2 % | 29,50 / 29,48 | 229 |
+… [3535 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/campagne24 && echo \"=== sem.log (campagne) ===\"; ls -la sem.log sem-sansechelle.log 2>/dev/null; tail -3 sem.log 2>/dev/null; echo; echo \"=== gpt-oss infer (batch7) partial ===\"; ls -la tete_gpt-oss*.log 2>/dev/null; tail -6 $(ls -t tete_gpt-oss*.log 2>/dev/null | head -1) 2 … [361 caractères tronqués]`
+
+  ```
+=== sem.log (campagne) ===
+-rw-r--r--. 1 stephane stephane 0  9 oct 00:03 sem.log
+
+=== gpt-oss infer (batch7) partial ===
+-rw-r--r--. 1 stephane stephane 670  8 oct 23:20 tete_gpt-oss-120B_complete_1.log
+[config] mélanges d'experts chargés : 36/36 couches · mapping absent (experts en clair dans le fichier)
+[config] puits appris sur 36/36 couches · n_rot 64 · ffn 2880 · experts 128
+[config] fenêtre glissante 128 sur 18/36 couches (motif 2 alterné)
+[config] rotation : RoPE simple (contexte 256 ≤ 4096 initial ; YaRN ×32 prendrait le relais au-delà)
+Qwen2 · 36 couches · hidden 2880 · 64 têtes / 8 KV · FFN 2880 · vocab 201088
+prompt : 31 tokens
+
+=== journal7 (batch7) ===
+[08/10 22:50:34] charge 63.78 · lot30B/4 : PPL 7.6098 · 1.4 tok/s · lus 0 Mio · 118s mur
+[08/10 22:52:32] charge 64.14 · lot30B/8 : PPL 7.6098 · 1.4 tok/s · lus 0 Mio · 118s mur
+[08/10 22:58:22] charge 88.62 · lot30B/16 : PPL 7.6098 · 0.4 tok/s · lus 0 Mio · 350s mur
+[08/10 23:00:40] charge 70.59 · lot30B/32 : PPL 7.6098 · 1.2 tok/s · lus 0 Mio · 138s mur
+[08/10 23:02:55] charge 67.93 · lot30B/64 : PPL 7.6098 · 1.2 tok/s · lus 0 Mio · 135s mur
+[08/10 23:02:55] charge 67.93 · === batch 5 terminé ===
+
+=== entrainements ==
+… [659 caractères tronqués]
+  ```
+
+- **bash** `{"command": "nvidia-smi --query-gpu=index,utilization.gpu,memory.used,memory.total --format=csv,noheader; echo \"=== processus GPU ===\"; nvidia-smi --query-compute-apps=pid,gpu_uuid,used_memory --format=csv,noheader | head; echo; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,40p'  … [83 caractères tronqués]`
+
+  ```
+0, 98 %, 2770 MiB, 16384 MiB
+1, 14 %, 2598 MiB, 16384 MiB
+=== processus GPU ===
+310121, GPU-ff8cc368-1bb8-ccef-8a76-4d17375e212e, 1508 MiB
+3777528, GPU-bd161106-3e3e-c50f-161a-2550ab688ce2, 2214 MiB
+
+#!/usr/bin/env python3
+"""speculatif.py — le taux d'acceptation d'un brouillon, mesuré AVANT d'écrire du moteur.
+
+POURQUOI CE CHIFFRE AVANT CE CODE. Le décodage spéculatif est le multiplicateur
+de la feuille de route : il rend le décodage **par lots**, donc il ferait servir
+au décodage ce que le regroupement par experts donne déjà au préremplissage. Le
+moteur n'en a **aucune** implémentation (`grep eagle|brouillon|specul` dans
+`drave-core/src/` = 0), et le seul brouillon présent sur le disque
+(`eagle3-gpt-oss-120b`) ne peut pas servir tel quel : un Eagle3 s'attache aux
+états cachés de SA cible, ce n'est pas un modèle autonome.
+
+Avant d'écrire du moteur, il faut donc la seule mesure qui décide : **quel taux
+d'acceptation un petit modèle de la même famille donne-t-il pour un plus gros ?**
+Un brouillon rejeté coûte plus qu'il ne rapporte ; un brouillon accepté 3 fois sur
+4 vaut ~2,5× sur le décodage.
+
+CE QUI EST MESURÉ : pour k = 1..8, la longueur du préfixe commun entre la suite
+gloutonn
+… [721 caractères tronqués]
+  ```
+
+- **bash** `{"command": "ls /home/stephane/.cache/huggingface/hub 2>/dev/null | head -30; echo \"=== taille cache ===\"; du -sh /home/stephane/.cache/huggingface/hub 2>/dev/null; echo \"=== modeles HF locaux (data13TB) ===\"; ls /home/stephane/Data13TB/stephane/modeles/ 2>/dev/null | head -20", "description": " … [23 caractères tronqués]`
+
+  ```
+CACHEDIR.TAG
+models--ggml-org--gemma-3-1b-it-GGUF
+models--Qwen--Qwen2.5-0.5B
+models--Qwen--Qwen3-0.6B
+models--Systran--faster-whisper-large-v3
+=== taille cache ===
+6,0G	/home/stephane/.cache/huggingface/hub
+=== modeles HF locaux (data13TB) ===
+artefacts
+gguf
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md", "limit": 50, "offset": 65}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md</path>
+<type>file</type>
+<content>
+65: ## 1. Le décodage spéculatif : ×1,2, pas ×2 — mesuré avant d'écrire du moteur
+66: 
+67: Le moteur n'a **aucune** implémentation du décodage spéculatif, et le brouillon
+68: qui dort sur le disque (`eagle3-gpt-oss-120b`) ne peut pas servir seul : un Eagle3
+69: s'attache aux états cachés de sa cible. Avant d'écrire du moteur, il fallait le
+70: chiffre qui décide — `tools/speculatif.py`, brouillon Qwen2.5-0.5B pour cible
+71: Qwen2.5-1.5B (même tokenizer), 40 préfixes de 64 jetons, k = 8 :
+72: 
+73: | mesure | valeur |
+74: |---|---|
+75: | acceptation moyenne | **3,35 jetons sur 8 (41,9 %)** |
+76: | médiane · min · max | 3 · 0 · 8 |
+77: | au moins 1 / 2 / 3 / 4 acceptés | 68 % · 60 % · 52 % · 42 % |
+78: | gain espéré si le brouillon coûte **0,25×** la cible | ×1,45 |
+79: | gain espéré s'il coûte **0,33×** | **×1,20** |
+80: | gain espéré s'il coûte **0,50×** | ×0,87 |
+81: 
+82: **Conclusion, et elle est négative pour la version naïve** : un petit modèle de la
+83: même famille propose en moyenne 3,35 jetons justes sur 8, et le gain net dépend
+84: entièrement du co
+… [1908 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n '\"--' drave-core/src/main.rs | head -60", "description": "List drave CLI flags"}`
+
+  ```
+120:        (opt.banc_vision.is_some(), "--banc-vision"),
+121:        (opt.flux_serveur.is_some(), "--flux-serveur"),
+122:        (opt.ppl_reparti.is_some(), "--ppl-reparti"),
+123:        (opt.tensors, "--tensors"), (opt.banc_mla.is_some(), "--banc-mla"),
+124:        (opt.banc_kv > 0, "--banc-kv"), (opt.banc_topk > 0, "--banc-topk"),
+125:        (opt.gpu_banc, "--gpu-banc"), (opt.materiel, "--materiel"), (opt.config, "--config"),
+126:        (opt.sonder_engram > 0, "--sonder-engram"),
+127:        (opt.plan, "--plan"), (opt.tokenize, "--tokenize"),
+128:        (opt.ppl, "--ppl"), (opt.infer, "--infer"),
+170:            "--matrix" if i + 1 < args.len() => { matrix = args[i + 1].clone(); i += 2; }
+171:            "--threads" if i + 1 < args.len() => {
+684:            "--infer" => { o.infer = true; 1 }
+685:            "--ppl" => { o.ppl = true; o.ids_file = Some(suivant(i).clone()); 2 }
+686:            "--ppl-texte" => { o.ppl = true; o.ppl_texte = true;
+688:            "--plan" => { o.plan = true; 1 }
+689:            "--tokenize" => { o.tokenize = true; 1 }
+690:            "--gpu-banc" => { o.gpu_banc = true; 1 }
+697:            "--k3-essai" => { o.k3_essai = true; 1 }
+698:           
+… [3184 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Préparation d'une mesure spéculative moteur : petit brouillon, grande cible
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"tokenize\" drave-core/src/main.rs | head -20; echo \"=== usage infer ===\"; grep -n \"fn run_infer\\|fn run_tokenize\" drave-core/src/main.rs", "description": "Inspect tokenize interface"}`
+
+  ```
+46:mod tokenizer;
+95:    // Une seule analyse, puis un aiguillage : `--plan`, `--tokenize`,
+127:        (opt.plan, "--plan"), (opt.tokenize, "--tokenize"),
+149:    if opt.tokenize { run_tokenize(opt); return; }
+535:/// Les modes (inférence, perplexité, plan, tokenize) la remplissent par la MÊME
+544:    infer: bool, ppl: bool, plan: bool, tokenize: bool, gpu_banc: bool, k3_essai: bool,
+653:    // --- tokenize / plan
+689:            "--tokenize" => { o.tokenize = true; 1 }
+962:        mdl.stop_id = build_tokenizer(&mdl.g).special_id("<|im_end|>");
+970:        let tk = build_tokenizer(&mdl.g);
+1067:        let tks = build_tokenizer(&mdl.g);
+1148:        let tk = build_tokenizer(&mdl.g);
+1164:        let tk = build_tokenizer(&mdl.g);
+1241:fn build_tokenizer(g: &Gguf) -> tokenizer::Tokenizer {
+1242:    let pre = g.meta.get("tokenizer.ggml.pre").and_then(|m| m.as_str()).unwrap_or("").to_string();
+1243:    tokenizer::Tokenizer::new(
+1244:        meta_strings(g, "tokenizer.ggml.tokens"),
+1245:        meta_strings(g, "tokenizer.ggml.merges"),
+1246:        meta_ints(g, "tokenizer.ggml.token_type"),
+2210:    let ids = vec![3638u32, 275, 1309];      // « Le ciel est… » (tokenizer du modèle)
+==
+… [87 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs", "offset": 4734, "limit": 45}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs</path>
+<type>file</type>
+<content>
+4734: fn run_tokenize(opt: Options) {
+4735:     let path = &modele_chemin();
+4736:     let texte = opt.texte.clone().unwrap_or_default();
+4737:     let fichier = opt.fichier.clone().unwrap_or_default();
+4738:     let sortie = opt.sortie.clone().unwrap_or_default();
+4739:     // En-tête seul : le décodage du vocabulaire n'a pas besoin des poids, et
+4740:     // `open` lisait le fichier entier (62 Go pour gpt-oss) à chaque appel.
+4741:     // Tolérant au modèle en cours de téléchargement (le vocabulaire vit dans le
+4742:     // shard 1) : c'est ce qui permet de vérifier le tokenizer AVANT la fin du
+4743:     // transfert — et de comparer à llama.cpp ensuite.
+4744:     let g = ouvrir_meta_tolerant(path, "--tokenize");
+4745:     let tk = build_tokenizer(&g);
+4746:     if !fichier.is_empty() {
+4747:         // Encoder un corpus ENTIER avec le tokenizer du modèle : chaque modèle
+4748:         // a le sien, et nourrir un modèle avec les identifiants d'un autre
+4749:         // donne une perplexité qui ne mesure que l'absurdité de l'entrée.
+4750:         let texte = std::fs::read
+… [1743 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs", "limit": 70, "offset": 1090}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs</path>
+<type>file</type>
+<content>
+1090:             let _ = std::io::Write::flush(&mut std::io::stdout());
+1091:             let mut accumules: Vec<u32> = Vec::new();
+1092:             let mut deja = String::new();
+1093:             let mut affiche = |t: u32| {
+1094:                 accumules.push(t);
+1095:                 let texte = tks.decode(&accumules);
+1096:                 if texte.len() > deja.len() {
+1097:                     print!("{}", &texte[deja.len()..]);
+1098:                     let _ = std::io::Write::flush(&mut std::io::stdout());
+1099:                     deja = texte;
+1100:                 }
+1101:             };
+1102:             let (out, st) = mdl.generate(&ids, n_new, temp, top_p, rep_pen, hist,
+1103:                                          Some(&mut affiche));
+1104:             println!();
+1105:             eprintln!("  [{:.1} tok/s, {} jetons]", st.n_gen as f64 / st.gen_s.max(1e-9), st.n_gen);
+1106:             conversation.push_str(&tks.decode(&out));
+1107:             conversation.push('\n');
+1108:             n_tour += 1;
+1109:             if n_tour >= 50 { break; }
+1110:    
+… [2740 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs", "limit": 40, "offset": 1159}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs</path>
+<type>file</type>
+<content>
+1159:         };
+1160:         let cb: Option<&mut dyn FnMut(u32)> = if flux { Some(&mut affiche) } else { None };
+1161:         mdl.generate(&ids, n_new, temp, top_p, rep_pen, hist, cb)
+1162:     };
+1163:     if prompt.is_some() {
+1164:         let tk = build_tokenizer(&mdl.g);
+1165:         let mut all: Vec<u32> = ids.clone();
+1166:         all.extend(all_ids_of(&out));
+1167:         println!("--- texte ---");
+1168:         print!("{}", tk.decode(&all));
+1169:         println!("\n--- ids générés : {:?}", &out);
+1170:     } else {
+1171:         println!("tokens générés : {:?}", &out);
+1172:     }
+1173:     println!("\n--- mesure ---");
+1174:     println!("prompt  : {} tokens en {:.3} s  ({:.1} tok/s, TTFT {:.1} ms)",
+1175:              st.n_prompt, st.prompt_s, st.n_prompt as f64 / st.prompt_s,
+1176:              st.prompt_s * 1e3 / st.n_prompt.max(1) as f64);
+1177:     println!("généré  : {} tokens en {:.3} s  ({:.2} tok/s)",
+1178:              st.n_gen, st.gen_s, st.n_gen as f64 / st.gen_s);
+1179:     stats_experts(&mdl);
+1180:     println!("événements : {} au total, {
+… [1226 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Écriture d'un outil de mesure spéculative par le moteur (ids générés, pas de re-tokenisation)
+
+- **write** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/speculatif_moteur.py", "content": "#!/usr/bin/env python3\n\"\"\"speculatif_moteur.py — le taux d'acceptation, mesuré PAR LE MOTEUR, sur des GGUF.\n\nPOURQUOI UN DEUXIÈME OUTIL. `tools/speculatif.py` mesure l'acceptation avec\nHugg … [7954 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/speculatif_moteur.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 /home/stephane/gpu-env/bin/python tools/speculatif_moteur.py --brouillon models/Qwen2.5-0.5B-Q8_0.gguf --cible /home/stephane/Data13TB/stephane/modeles/gguf/deepseek-r1-distill-qwen-1.5b-q4_k_m.gguf --n 16 --k 8 --prompts … [111 caractères tronqués]`
+
+  ```
+# décodage spéculatif mesuré par le moteur
+brouillon : models/Qwen2.5-0.5B-Q8_0.gguf
+cible     : /home/stephane/Data13TB/stephane/modeles/gguf/deepseek-r1-distill-qwen-1.5b-q4_k_m.gguf
+vocabulaire partagé : NON (0 vs 0 identifiants sur la même sonde)
+REFUS : les deux modèles ne partagent pas leurs identifiants — l'acceptation mesurée ne voudrait rien dire.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --tokenize --texte \"Le moteur ne lit que les poids qu'une activation touche.\" 2>&1 | tail -5 | cat -A | tail -5", "description": "Debug tokenize output format"}`
+
+  ```
+14 tokens$
+2304 87386 324 834 13020 1709 3541 96318 922 30009 15099 14776 1528 13 $
+recolle : "Le moteur ne lit que les poids qu'une activation touche."$
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/speculatif_moteur.py", "old_string": "def vocabulaire_identique(modele_a, modele_b, sonde):\n    \"\"\"Même texte → mêmes identifiants ? Sinon la comparaison ne veut rien dire.\"\"\"\n    cmd = lambda m: [MOTEUR, m, \"--tokenize\", … [1257 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/speculatif_moteur.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 /home/stephane/gpu-env/bin/python tools/speculatif_moteur.py --brouillon models/Qwen2.5-0.5B-Q8_0.gguf --cible /home/stephane/Data13TB/stephane/modeles/gguf/deepseek-r1-distill-qwen-1.5b-q4_k_m.gguf --n 16 --k 8 --prompts … [107 caractères tronqués]`
+
+  ```
+# décodage spéculatif mesuré par le moteur
+brouillon : models/Qwen2.5-0.5B-Q8_0.gguf
+cible     : /home/stephane/Data13TB/stephane/modeles/gguf/deepseek-r1-distill-qwen-1.5b-q4_k_m.gguf
+vocabulaire partagé : oui (14 vs 14 identifiants sur la même sonde)
+
+| # | jetons brouillon | jetons cible | préfixe commun | tok/s brouillon | tok/s cible |
+|---|---:|---:|---:|---:|---:|
+| 0 | 16 | 16 | **0** | 30.11 | 1.23 |
+| 1 | 16 | 16 | **5** | 8.28 | 7.15 |
+
+## acceptation, 2 invites, 16 jetons, décodage glouton
+
+| k (jetons proposés) | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| P(préfixe ≥ k) | 50 % | 50 % | 50 % | 50 % | 50 % | 0 % | 0 % | 0 % |
+
+jetons acceptés par tour (espérance, k=8) : **2.50 sur 8** · préfixe médian 5 · max 5
+
+coût relatif mesuré du brouillon : **0.218×** la cible (19.20 vs 4.19 tok/s)
+gain net attendu à k=8 : **×1.27** (= (2.50+1) / (8×0.218+1))
+seuil de rentabilité : il faut r < 0.312× (acceptation moyenne 31.2% par jeton proposé)
+  ```
+
+### 🤖 Assistant
+
+⏵ Lancement des trois mesures spéculatives (contrôle 0,5B→1,5B, puis grandes cibles)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && P=/home/stephane/gpu-env/bin/python && G=/home/stephane/Data13TB/stephane/modeles/gguf && nohup bash -c \"\n$P tools/speculatif_moteur.py --brouillon models/Qwen2.5-0.5B-Q8_0.gguf --cible $G/deepseek-r1-distill-qwen-1.5b-q4_k_m.gguf  … [1051 caractères tronqués]`
+
+  ```
+série spéculative pid 735007
+  ```
+
+- **bash** `{"command": "cd /tmp/campagne24 && echo \"=== journal.txt (fin) ===\"; tail -8 journal.txt; echo; echo \"=== batch2 ===\"; tail -6 journal2.txt 2>/dev/null || echo \"(pas encore de ligne)\"; echo; echo \"=== sem.log ===\"; ls -la sem.log; echo; echo \"=== gpu/cuda dans le moteur ===\"; cd /home/step … [256 caractères tronqués]`
+
+  ```
+=== journal.txt (fin) ===
+[09/10 00:13:18] charge 45.62 · sémantique/semsansechelle : code 0 · 60 lignes
+[09/10 00:13:18] charge 45.62 · --- étape noyau ---
+[09/10 00:13:19] charge 44.37 · noyau : bande passante mémoire mesurée : 21.5 Go/s
+[09/10 00:13:19] charge 44.37 · noyau : push/pull = ×3.19
+[09/10 00:13:19] charge 44.37 · --- étape repartition ---
+[09/10 00:14:49] charge 68.86 · répartition/flux :   mode 4 — lot en listes           4.45e-3  ✅  (réf 60.8135 / deux nœuds 60.5427)
+[09/10 00:15:02] charge 68.72 · répartition/modèle : PORTE TENUE : le découpage ne change pas la perplexité (écart relatif 0.0000 %)
+[09/10 00:15:02] charge 68.72 · --- étape portes ---
+
+=== batch2 ===
+[09/10 00:13:05] charge 44.64 · b2/codepushactthresh0_05 : PPL 958.7634 · événements 21947953401 · 19.4 tok/s · RSS 1241 Mo
+[09/10 00:13:16] charge 45.62 · b2/multilinguedense : PPL 229.8371 · événements 0 · 19.8 tok/s · RSS 555 Mo
+[09/10 00:15:05] charge 67.14 · b2/multilinguepush : PPL 226.4291 · événements 67763975088 · 1.9 tok/s · RSS 1249 Mo
+[09/10 00:15:18] charge 65.71 · b2/multilinguedenseactthresh0_05 : PPL 2541.7196 · événements 0 · 15.5 tok/s · RSS 554 Mo
+[09/10 00:15:44] charge 59.43 · b2/mul
+… [307 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification critique : le chemin « listes » reproduit-il exactement le chemin dense ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la /tmp/lp_*.bin 2>/dev/null; D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf; timeout 600 $D $M --prompt \"Le ciel est bleu parce que\" --n 4 --ctx 64 --threads 12 --temp 0 --dense --logits-bin /tmp/lp_dense … [323 caractères tronqués]`
+
+  ```
+résultat identique    : OUI ✅
+
+  → aucun DSP, aucune multiplication : la contrainte du cahier des charges
+    est satisfaite pour un modèle 8 bits, sans réentraînement ni élagage.
+---- push ----
+  résultat identique    : OUI ✅
+
+  → aucun DSP, aucune multiplication : la contrainte du cahier des charges
+    est satisfaite pour un modèle 8 bits, sans réentraînement ni élagage.
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf; timeout 600 $D $M --infer --prompt \"Le ciel est bleu parce que\" --n 4 --ctx 64 --threads 12 --temp 0 --dense --logits-bin /tmp/lp_dense.bin 2>&1 | grep -E \"ids  … [389 caractères tronqués]`
+
+  ```
+--- ids générés : [512, 13309, 321, 1788]
+généré  : 4 tokens en 0.161 s  (24.91 tok/s)
+---- push ----
+--- ids générés : [3541, 10908, 1134, 14789]
+généré  : 4 tokens en 0.422 s  (9.47 tok/s)
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"act_thresh\\|act_topk\\|push\\b\" drave-core/src/main.rs | head -30; echo \"=== défauts Options ===\"; sed -n '/^struct Options/,/^}/p' drave-core/src/main.rs | head -60", "description": "Inspect push/dense defaults"}`
+
+  ```
+248:    // ---- croisement push/pull sur la MÊME arithmétique ----
+260:    println!("  push int8 : {:.2} b/poids, {} événements | pull int8 : {:.2} b/poids",
+366:        let acc = pool.accumulate_push(&pm, &sv);
+368:        for _ in 0..reps { let _ = pool.accumulate_push(&pm, &sv); }
+369:        let dt_push = t0.elapsed().as_secs_f64() / reps as f64;
+374:        let mut ev_push = 0usize;
+375:        for &s in &sv.idx { ev_push += pm.row_ev[s as usize] as usize; }
+385:        println!("           push int8 {:>7.2} matvec/s ({:.3} ms, {} év) | pull {:>7.2} matvec/s ({:.3} ms) | push/pull = ×{:.2}",
+386:                 1.0 / dt_push, dt_push * 1e3, ev_push, 1.0 / dt_pull, dt_pull * 1e3, dt_push / dt_pull);
+390:            None => println!("           → push vs pull (même arithmétique) : BIT À BIT IDENTIQUE ✅"),
+391:            Some((o, a, b)) => println!("           → push vs pull : DIVERGENT au rang {o} : {a:e} vs {b:e} ❌"),
+454:             mdl.act_levels, mdl.act_thresh, mdl.act_topk, mdl.act_renorm);
+456:             mdl.attn_topk, mdl.qk_topk, mdl.moe_topk, mdl.act_topk_proj);
+467:    println!("[options] fenêtre {} · motif {} · seuil push {} · lot {} · ffn_gain {:?} · hebb {}",
+
+… [4364 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"seuil_push\" drave-core/src/*.rs | head -20; echo \"=== définition ===\"; grep -rn \"seuil_push:\" drave-core/src/model.rs | head", "description": "Find the push threshold semantics"}`
+
+  ```
+drave-core/src/main.rs:468:             mdl.attn_window, mdl.swa_pattern, mdl.seuil_push, mdl.lot,
+drave-core/src/model.rs:1494:        // (`seuil_push = 0.22`, `reports/rapport-croisement-push-pull.md`).
+drave-core/src/model.rs:2464:    pub seuil_push: f32,
+drave-core/src/model.rs:4358:            seuil_push: 0.22,
+drave-core/src/model.rs:5380:                                     self.act_renorm, &mut scratch, self.seuil_push);
+drave-core/src/model.rs:7087:                Self::matvec(pool, &lay.wq, &hn, &mut q, events, &mut paires[0], self.act_levels, self.act_thresh, tk(0), self.act_renorm, &mut scratch, self.seuil_push);
+drave-core/src/model.rs:7088:                Self::matvec(pool, &lay.wk, &hn, &mut k, events, &mut paires[0], self.act_levels, self.act_thresh, tk(1), self.act_renorm, &mut scratch, self.seuil_push);
+drave-core/src/model.rs:7089:                Self::matvec(pool, &lay.wv, &hn, &mut v, events, &mut paires[0], self.act_levels, self.act_thresh, tk(2), self.act_renorm, &mut scratch, self.seuil_push);
+drave-core/src/model.rs:7458:                Self::matvec(pool, &lay.wo, &att[..n_att.min(att.len())], &mut o, events, &mut paires[0], self.act_levels, self.act_thresh
+… [745 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fn matvec\" drave-core/src/model.rs; grep -n \"seuil_push\\|seuil\" drave-core/src/model.rs | sed -n '1,12p'; echo \"=== usage dans matvec ===\"; awk 'NR>=5300 && NR<=5450 && (/seuil/ || /push/ || /fn matvec/)' drave-core/s … [83 caractères tronqués]`
+
+  ```
+1145:    fn matvec_dequant(&self, loc: usize, t: u32, x: &[f32], out: &mut [f32], n_fils: usize) {
+1999:fn matvec_f32(w: &[f32], x: &[f32], n_in: usize, n_out: usize, y: &mut [f32]) {
+2030:fn matvec_f32_fils(w: &[f32], x: &[f32], n_in: usize, n_out: usize, y: &mut [f32],
+4455:    fn matvec(pool: &mut Pool, p: &Proj, x: &[f32], out: &mut [f32], events: &mut u64,
+4609:    fn matvec4_ou_iq(pool: &mut Pool, vue: &Vue4, loc: usize, x: &[f32], out: &mut [f32],
+4637:    fn matvec_q4(pool: &mut Pool, m: &crate::list::DenseQ4, x: &[f32], out: &mut [f32],
+1435:        // seuil = k-ième plus grande magnitude (sélection en O(n))
+1436:        let (_, &mut seuil, _) = abs.select_nth_unstable_by(n_in - k, |a, b| a.partial_cmp(b).unwrap());
+1437:        for v in row.iter_mut() { if v.abs() < seuil { *v = 0.0; } }
+1494:        // (`seuil_push = 0.22`, `reports/rapport-croisement-push-pull.md`).
+1557:        // faudra réduire (lancements groupés, flux) avant de descendre le seuil.
+1696:    /// nombre de blocs reste sous ce seuil, le top-k les garde TOUS et le
+2403:    /// l'effet du seuil d'un neurone à décharge sur un modèle préentraîné
+2461:    /// (`reports/rapport-croisement-push-pull.md` : le s
+… [529 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "limit": 60, "offset": 4455}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs</path>
+<type>file</type>
+<content>
+4455:     fn matvec(pool: &mut Pool, p: &Proj, x: &[f32], out: &mut [f32], events: &mut u64,
+4456:               paires: &mut u64,
+4457:               levels: f32, thresh: f32, topk: usize, renorm: bool, scratch: &mut Vec<f32>,
+4458:               thresh_auto: f32) {
+4459:         // On ne quantifie QUE la tranche utile de l'activation. Les appelants
+4460:         // passent volontiers un tampon de travail plus large que l'entrée de la
+4461:         // projection (12 288 valeurs pour une descente d'expert qui en lit
+4462:         // 2 048, 36 864 pour une sortie d'attention MLA qui en produit 16 384) :
+4463:         // quantifier le reste fait dépendre l'ÉCHELLE d'activation de valeurs
+4464:         // périmées laissées par la position ou la couche précédente. Mesuré :
+4465:         // l'écart à llama.cpp sur GLM-5.3 passait de 0,33 à 1,69 de NLL entre la
+4466:         // position 0 et la position 6 — une erreur qui grandit avec la position,
+4467:         // donc dans le cache ou dans la quantification, pas dans les poids.
+4468:         let n_in = p.q4.as_ref().map(|q| q
+… [2918 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"\\.dense\\b\\|dense:\" drave-core/src/main.rs | head -20; echo \"=== dans model.rs ===\"; grep -n \"pub dense\\|self.dense\\|dense =\\|auto\" drave-core/src/model.rs | head -20", "description": "Trace how dense/push flags a … [12 caractères tronqués]`
+
+  ```
+449:fn options_actives(mdl: &model::Model, mode: &str, ctx_impose: bool, dense: bool, keep: f32) {
+597:    ctx: usize, threads: usize, abits: u32, dense: bool, auto: bool,
+779:            "--dense" => { o.dense = true; 1 }
+781:            "--push" => { o.auto = false; o.dense = false; 1 }
+4251:    let mut mdl = model::Model::load(path, 4096, fils(&opt), opt.dense, opt.keep, false, 0, 0);
+=== dans model.rs ===
+899:/// Transcription de `build_delta_net_autoregressive` (`llama.cpp-k3`,
+915:/// autorégressif, fusionné) : c'est celui-ci qui sert au décodage, et c'est le
+1483:    fn load(g: &Gguf, name: &str, bias: Option<&str>, dense: bool, auto: bool, keep: f32,
+1491:        // `auto` charge les DEUX formes : le moteur choisit ensuite, par mesure
+1536:        } else if auto {
+3297:                auto: bool, q4: u8, b6: u8) -> Model {
+3298:        Self::load_partiel(path, ctx, n_threads, dense, keep, auto, q4, b6, None)
+3303:                        auto: bool, q4: u8, b6: u8, couches: Option<(usize, usize)>) -> Model {
+3305:        let g = Gguf::open_auto(path).expect("ouverture du GGUF");
+3721:                // sien. Le fichier de V4.1 est cohérent (2..7 en ratio 2 autour de
+3722:   
+… [1147 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "limit": 75, "offset": 1483}`
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "limit": 45, "offset": 4514}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs</path>
+<type>file</type>
+<content>
+1483:     fn load(g: &Gguf, name: &str, bias: Option<&str>, dense: bool, auto: bool, keep: f32,
+1484:             q4: bool, bits6: bool) -> Self {
+1485:         let t = g.tensor(name).unwrap_or_else(|| panic!("tenseur {name} absent"));
+1486:         let n_out = t.dims[0] as usize;
+1487:         let n_in = t.dims[1] as usize;
+1488:         let mut w = g.dequant(name);
+1489:         if keep < 0.0 { prune_structured(&mut w, n_out, n_in, -keep); }
+1490:         else { prune_rows(&mut w, n_out, n_in, keep); }
+1491:         // `auto` charge les DEUX formes : le moteur choisit ensuite, par mesure
+1492:         // de la densité d'activation, entre dispersion (push) et produit
+1493:         // scalaire dense (pull). Le croisement mesuré est à 22 %
+1494:         // (`seuil_push = 0.22`, `reports/rapport-croisement-push-pull.md`).
+1495:         // Six bits empaquetés : même déquantification que les autres chemins,
+1496:         // mais la quantification vise la grille [-32, 31] au lieu de [-8, 7].
+1497:         if bits6 {
+1498:             let z = DenseQ4::build6(&w, n_out, n_in);
+
+… [4278 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs</path>
+<type>file</type>
+<content>
+4514:                     out[o] = y[o] + p.bias.as_ref().map_or(0.0, |b| b[o]);
+4515:                 }
+4516:                 return;
+4517:             }
+4518:         }
+4519:         if let Some(d) = &p.d {
+4520:             if use_dense {
+4521:             // référence dense : pas d'événement, chaque sortie est un produit
+4522:             // scalaire complet sur la ligne de poids
+4523:             let mut xd = vec![0i32; x.len()];
+4524:             for (&i, &v) in sv.idx.iter().zip(sv.val.iter()) { xd[i as usize] = v; }
+4525:             let y = pool.matvec_dense_i8(d, &xd, sx);
+4526:             *paires += (d.n_in as u64) * (d.n_out as u64);
+4527:             for o in 0..d.n_out {
+4528:                 out[o] = y[o] + p.bias.as_ref().map_or(0.0, |b| b[o]);
+4529:             }
+4530:             return;
+4531:             }
+4532:         }
+4533:         {
+4534:             let m = p.m.as_ref().expect("projection sans format");
+4535:             // En listes, une paire EST un événement : on ne paie que les poids
+4536:             // non nuls. Les deux compteurs doivent 
+… [1326 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Expérience décisive : le schéma d'échelle des poids explique-t-il l'écart dense/listes ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf; IDS=/tmp/campagne24/ids_0.5B-Q8.txt; PPL() { timeout 900 $D \"$M\" --ppl \"$IDS\" --limit 256 --ctx 512 --threads 12 $1 2>/dev/null | grep -oE \"perplexité [0-9.]+ … [368 caractères tronqués]`
+
+  ```
+dense emprunté     : perplexité 17.4315
+dense reconstruit  : perplexité 17.4084
+push               : perplexité 17.4084
+push sans emprunt  : perplexité 17.4084
+auto (défaut)      : perplexité 17.4315
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf; IN() { timeout 600 $D \"$M\" --infer --prompt \"Le ciel est bleu parce que\" --n 8 --ctx 64 --threads 12 --temp 0 $1 2>/dev/null | grep -oE \"ids générés : \\[[0-9 … [343 caractères tronqués]`
+
+  ```
+dense emprunté : ids générés : [512, 13309, 321, 1788, 12422, 84, 13, 356]
+dense reconstruit : ids générés : [3541, 10908, 1134, 14789, 12422, 355, 13, 356]
+push           : ids générés : [3541, 10908, 1134, 14789, 12422, 355, 13, 356]
+
+=== logits-bin ===
+609:    logits_bin: Option<String>, ppl_profil: bool,
+728:            "--logits-bin" => { o.logits_bin = Some(suivant(i).clone()); 2 }
+5099:        ffn_gain, logits_bin, keep,
+5290:    let mut journal = match &logits_bin {
+5384:    if let (Some(w), Some(f)) = (journal, &logits_bin) {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '5285,5295p;5380,5392p' drave-core/src/main.rs", "description": "Read logits journal format"}`
+
+  ```
+let mut nll = 0f64;
+    let mut n = 0usize;
+    let mut perte: Vec<f32> = Vec::new();
+    // Journal de logits : écrit à la volée (une matrice de vocabulaire fait
+    // 800 Mo sur gpt-oss, la garder en mémoire serait absurde).
+    let mut journal = match &logits_bin {
+        Some(f) => {
+            use std::io::Write;
+            let mut w = std::io::BufWriter::new(
+                std::fs::File::create(f).expect("création du fichier de logits"));
+            w.write_all(&(mdl.cfg.vocab as i32).to_le_bytes()).unwrap();
+                             i_f + 1, n_f, (nll_f / n_f.max(1) as f64).exp())
+                 } else { String::new() });
+        }
+    }
+    if let (Some(w), Some(f)) = (journal, &logits_bin) {
+        use std::io::{Seek, SeekFrom, Write};
+        let mut fic = w.into_inner().expect("vidage du journal de logits");
+        fic.seek(SeekFrom::Start(4)).unwrap();
+        fic.write_all(&n_logits.to_le_bytes()).unwrap();
+        fic.sync_all().unwrap();
+        println!("logits exportés : {f} — {n_logits} positions × {} valeurs", mdl.cfg.vocab);
+    }
+    if profil {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf; IDS=/tmp/campagne24/ids_0.5B-Q8.txt; timeout 600 $D $M --ppl \"$IDS\" --limit 8 --ctx 64 --threads 12 --push --logits-bin /tmp/lg_push.bin 2>&1 | grep -E \"logits  … [800 caractères tronqués]`
+
+  ```
+7 tokens notés — perplexité cumulée 920.075  (7.2 tok/s)
+logits exportés : /tmp/lg_push.bin — 7 positions × 151936 valeurs
+=== perplexité 920.0752 sur 7 tokens (2817612439 événements, 1.0 s) ===
+       7 tokens notés — perplexité cumulée 920.075  (17.0 tok/s)
+logits exportés : /tmp/lg_dense_rebati.bin — 7 positions × 151936 valeurs
+=== perplexité 920.0752 sur 7 tokens (0 événements, 0.4 s) ===
+       7 tokens notés — perplexité cumulée 795.033  (18.9 tok/s)
+logits exportés : /tmp/lg_dense_emprunte.bin — 7 positions × 151936 valeurs
+=== perplexité 795.0325 sur 7 tokens (0 événements, 0.4 s) ===
+=== comparaison ===
+-rw-r--r--. 1 stephane stephane   4254216  9 oct 00:25 /tmp/lg_dense_emprunte.bin
+-rw-r--r--. 1 stephane stephane   4254216  9 oct 00:25 /tmp/lg_dense_rebati.bin
+-rw-r--r--. 1 stephane stephane   2585608  3 oct 03:29 /tmp/lg_fr.bin
+-rw-r--r--. 1 stephane stephane 529013768  3 oct 02:17 /tmp/lg_long.bin
+-rw-r--r--. 1 stephane stephane   4254216  9 oct 00:25 /tmp/lg_push.bin
+-rw-r--r--. 1 stephane stephane  20167688  3 oct 02:58 /tmp/lg_rep.bin
+push vs dense-rebâti : BIT À BIT IDENTIQUE ✅
+push vs dense-emprunté : DIVERGENT (attendu)
+  ```
+
+### 🤖 Assistant
+
+⏵ Résultat fort : logits identiques au bit près. Relevé du reste de la campagne
+
+- **bash** `{"command": "cd /tmp/campagne24 && echo \"=== sem.log (échelle corrigée) ===\"; head -30 sem.log; echo; echo \"=== comparaison des deux lectures ===\"; grep -E \"bande|plateau|anisotrop|MEILLEURE|meilleure\" sem.log | head -8", "description": "Read semantic step results"}`
+
+  ```
+=== sem.log (échelle corrigée) ===
+
+=== pooling : MOYENNE · 398 langues · couches 0–23 ===
+#  couche     même   artic≠  SÉPARATION
+       0   0.6391   0.6344     +0.0046
+       1   0.6644   0.6382     +0.0262
+       2   0.7764   0.7688     +0.0076
+       3   0.8036   0.7933     +0.0103
+       4   0.8703   0.8528     +0.0174
+       5   0.8246   0.8033     +0.0213
+       6   0.8168   0.8004     +0.0164
+       7   0.8224   0.8090     +0.0134
+       8   0.8571   0.8441     +0.0130
+       9   0.7845   0.7675     +0.0169
+      10   0.8593   0.8337     +0.0256
+      11   0.7796   0.7514     +0.0282
+      12   0.8486   0.8137     +0.0349
+      13   0.8307   0.7916     +0.0391
+      14   0.8263   0.7927     +0.0336
+      15   0.8256   0.7937     +0.0319
+      16   0.8276   0.8034     +0.0242
+      17   0.7845   0.7598     +0.0248
+      18   0.7433   0.7241     +0.0192
+      19   0.7686   0.7461     +0.0226
+      20   0.7155   0.6920     +0.0236
+      21   0.7192   0.6949     +0.0244
+      22   0.6786   0.6501     +0.0285
+      23   0.6631   0.6397     +0.0234
+# PIC de séparation à la couche 13 (+0.0391 = 0.8307 − 0.7916)
+
+=== pooling : DERNIERE · 398 langues · couches 0–23 ===
+
+=== comparai
+… [96 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/campagne24 && echo \"=== noyau ===\"; grep -E \"bande passante|push/pull|push int8|pull int8\" noyau.log | head -8; echo; echo \"=== repartition flux ===\"; tail -8 repartition_flux.log 2>/dev/null; echo; echo \"=== portes (en cours ?) ===\"; ls -la portes.log 2>/dev/null; tail  … [125 caractères tronqués]`
+
+  ```
+=== noyau ===
+  push int8 : 15.88 b/poids, 4325087 événements | pull int8 : 8.00 b/poids
+  bande passante mémoire mesurée : 21.5 Go/s (64 Mo lus, 20 threads, somme 864 )
+           push int8 233133.93 matvec/s (0.004 ms, 0 év) | pull 3830.18 matvec/s (0.261 ms) | push/pull = ×0.02
+           push int8 40026.84 matvec/s (0.025 ms, 43560 év) | pull 3855.63 matvec/s (0.259 ms) | push/pull = ×0.10
+           push int8 17518.09 matvec/s (0.057 ms, 216960 év) | pull 3874.79 matvec/s (0.258 ms) | push/pull = ×0.22
+           push int8 10474.16 matvec/s (0.095 ms, 430359 év) | pull 3751.39 matvec/s (0.267 ms) | push/pull = ×0.36
+           push int8 4497.52 matvec/s (0.222 ms, 1076785 év) | pull 3863.78 matvec/s (0.259 ms) | push/pull = ×0.86
+           push int8 2473.10 matvec/s (0.404 ms, 2152648 év) | pull 3809.62 matvec/s (0.262 ms) | push/pull = ×1.54
+
+=== repartition flux ===
+  mode 0 — f32 dense               0.00e0  ✅  (réf 61.9920 / deux nœuds 61.9920)
+  mode 1 — listes quantifiées     0.00e0  ✅  (réf 61.9920 / deux nœuds 61.9920)
+  mode 2 — listes par blocs        3.65e-2  ✅  (réf 61.9920 / deux nœuds 64.2535)
+  mode 3 — lot dense f32           0.00e0  ✅  (réf 60.8135 / deux nœud
+… [431 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/campagne24 && ls -la tete_gpt-oss*.log; echo \"=== contenu ===\"; cat tete_gpt-oss-120B_complete_1.log 2>/dev/null | tail -12; echo; echo \"=== le processus tourne-t-il encore ? ===\"; pgrep -af \"gpt-oss-120b-MXFP4.gguf --infer\" | head -3 || echo \"terminé\"", "description": " … [34 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane  670  8 oct 23:20 tete_gpt-oss-120B_complete_1.log
+-rw-r--r--. 1 stephane stephane  670  9 oct 00:26 tete_gpt-oss-120B_complete_2.log
+-rw-r--r--. 1 stephane stephane 2574  9 oct 00:25 tete_gpt-oss-120B_restreinte_1.log
+=== contenu ===
+[config] cache KV : 32 bits, 0.04 Go pour 256 jetons
+[modele] 36 couches chargées en 45.366776277s — listes 1.87 Go , 20 threads
+[config] 36 couches, hidden 2880 · activation-oss top-k brut + softmaxmoe 
+[config] mélanges d'experts chargés : 36/36 couches · mapping absent (experts en clair dans le fichier)
+[config] puits appris sur 36/36 couches · n_rot 64 · ffn 2880 · experts 128
+[config] fenêtre glissante 128 sur 18/36 couches (motif 2 alterné)
+[config] rotation : RoPE simple (contexte 256 ≤ 4096 initial ; YaRN ×32 prendrait le relais au-delà)
+Qwen2 · 36 couches · hidden 2880 · 64 têtes / 8 KV · FFN 2880 · vocab 201088
+prompt : 31 tokens
+
+=== le processus tourne-t-il encore ? ===
+762326 timeout 3600 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/gpt-oss-120b-MXFP4.gguf --infer --prompt Classify the sentiment of this sentence: 'The engine reads only the weights that an activation touche
+… [696 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/campagne24 && cat tete_gpt-oss-120B_restreinte_1.log", "description": "Read restricted-head gpt-oss result"}`
+
+  ```
+[config] cache KV : 32 bits, 0.04 Go pour 256 jetons
+[modele] 36 couches chargées en 27.999759048s — listes 1.87 Go , 20 threads
+[config] 36 couches, hidden 2880 · activation-oss top-k brut + softmaxmoe 
+[config] mélanges d'experts chargés : 36/36 couches · mapping absent (experts en clair dans le fichier)
+[config] puits appris sur 36/36 couches · n_rot 64 · ffn 2880 · experts 128
+[config] fenêtre glissante 128 sur 18/36 couches (motif 2 alterné)
+[config] rotation : RoPE simple (contexte 256 ≤ 4096 initial ; YaRN ×32 prendrait le relais au-delà)
+[tete] restreinte à 3 tokens sur 201088 (0.0 %) — le routeur, lui, reste global
+Qwen2 · 36 couches · hidden 2880 · 64 têtes / 8 KV · FFN 2880 · vocab 201088
+prompt : 31 tokens
+--- texte ---
+Classify the sentiment of this sentence: 'The engine reads only the weights that an activation touches.' Answer with one word: positive, negative or neutral. negative negative negative negative negative negative negative negative negative negative negative negative negative negative negative negative negative negative negative negative negative negative negative negative negative negative negative negative negative negative negative negative negative neg
+… [1333 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/campagne24 && grep -n \"gpt-oss\" -A4 -B2 batch7_tete.sh | head -40", "description": "Read batch7 gpt-oss protocol"}`
+
+  ```
+25-for entree in "0.5B:models/Qwen2.5-0.5B-Q8_0.gguf" \
+26-              "r1-1.5B:$G/deepseek-r1-distill-qwen-1.5b-q4_k_m.gguf" \
+27:              "gpt-oss-120B:$G/gpt-oss-120b-MXFP4.gguf"; do
+28-    IFS=':' read -r nom chemin <<< "$entree"
+29-    [ -f "$chemin" ] || continue
+30-    # Les identifiants des trois étiquettes viennent du tokenizer DU MODÈLE.
+31-    for w in positive negative neutral; do
+  ```
+
+- **bash** `{"command": "cd /tmp/campagne24 && sed -n '25,75p' batch7_tete.sh", "description": "Read batch7 full protocol"}`
+
+  ```
+for entree in "0.5B:models/Qwen2.5-0.5B-Q8_0.gguf" \
+              "r1-1.5B:$G/deepseek-r1-distill-qwen-1.5b-q4_k_m.gguf" \
+              "gpt-oss-120B:$G/gpt-oss-120b-MXFP4.gguf"; do
+    IFS=':' read -r nom chemin <<< "$entree"
+    [ -f "$chemin" ] || continue
+    # Les identifiants des trois étiquettes viennent du tokenizer DU MODÈLE.
+    for w in positive negative neutral; do
+        printf ' %s' "$w" > "$T/w_${nom}_$w.txt"
+        "$D" "$chemin" --tokenize --fichier "$T/w_${nom}_$w.txt" \
+            --sortie "$T/w_${nom}_$w.ids" >/dev/null 2>&1
+    done
+    labels=$(cat "$T"/w_${nom}_*.ids 2>/dev/null | tr -d '\n' | sed 's/\([0-9]\)\([0-9]\)/\1,\2/g')
+    # Reconstruit proprement : un identifiant par fichier, séparés par des virgules.
+    labels=$(for w in positive negative neutral; do head -c 12 "$T/w_${nom}_$w.ids"; echo -n ","; done)
+    [ -n "$labels" ] || continue
+    printf '%s' "$labels" > "$T/labels_$nom.txt"
+    dire "tête/$nom : étiquettes $(cat "$T/labels_$nom.txt")"
+
+    for rep in 1 2; do
+        for mode in complete restreinte; do
+            if [ "$mode" = "complete" ]; then OPT=""; else OPT="--tete-restreinte $T/labels_$nom.txt"; fi
+            timeout 3600 "$D
+… [620 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Consignation du résultat d'équivalence bit à bit et des mesures de la campagne
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md", "old_string": "**Et une nuance que la mesure ajoute** : dans le chemin **dense**, la parcimonie ne\nréduit **aucune lecture** (495,4 M paires/jeton dans tous les cas) — elle ne fait\nque mettre à z … [1396 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md", "new_string": "## 21. Le noyau, re-mesuré : le croisement est là, et il coûte à densité 1\n\n`drave <modèle>` sans autre argument refait la mesure fondatrice du projet sur le\nbinaire du jour — Qwe … [2871 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md has been updated successfully.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md", "limit": 25, "offset": 655}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md</path>
+<type>file</type>
+<content>
+655: 
+656: **Deux conséquences pratiques.** 1) Toute comparaison dense/listes doit fixer
+657: `DRAVE_SANS_EMPRUNT=1`, sinon elle mesure deux quantifications (§ 19). 2) Sur un
+658: modèle **4 bits** la question ne se pose même pas : le moteur n'a qu'un chemin
+659: (`DenseQ4`), sans événements — la forme 4 bits ne paie aucun des deux avantages.
+660: C'est un argument de plus pour entraîner des modèles **creux en 8 bits** (§ 5)
+661: plutôt que d'élaguer des modèles 4 bits.
+662: 
+663: ---
+664: 
+665: ## 23. Ce qui reste à mesurer (file en cours)
+666: 
+667: - `parcimonie` : seuil et k-WTA, en dense et en listes, sur un modèle réel ;
+668: - `contexte` : 512 → 8 192, avec le cache KV que le moteur **choisit** ;
+669: - `lot` : 1 → 64, le seul levier qui multiplie un débit de disque ;
+670: - `routage` : MoE 30B, experts réveillés et volume à router ;
+671: - `semantique` : la bande 10-15 **survit-elle** à la correction d'échelle ?
+672: - `noyau`, `repartition`, `portes` ;
+673: - **batch 2** : la densité d'activation dépend-elle de la **tâche** (prose,
+674:   français,
+… [389 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md", "new_string": "## 23. Ce qui reste à mesurer (état de la file, 9 octobre 00 h 30)\n\n**Fait depuis la première rédaction de cette liste** : `parcimonie` (§ 19), `contexte`\net `lot` (§ 20), `routag … [2410 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md", "new_string": "| **préremplissage par lots** | ✅ ×1,4 en RAM, ⚠️ disque non testé | 0,5 B, 512 jetons : **16,8 → 23,7 tok/s** et PPL **identique** (13,1368 → 13,1359) · sur le 30B le lot n'a lu que … [244 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md", "new_string": "| **décodage spéculatif** | ❌ manque, et chiffré | brouillon générique : **×1,20** — insuffisant pour justifier le chantier |\n| **fidélité listes ↔ dense** | ✅ **exacte, démontrée** … [296 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /tmp/campagne24 && echo \"=== spéculatif ===\"; cat spec_marqueurs.txt 2>/dev/null; for f in spec_05_15 spec_15_14 spec_05_14; do if [ -s $f.log ]; then echo \"--- $f ---\"; grep -E \"jetons acceptés|coût relatif|gain net|seuil de rentab|vocabulaire\" $f.log; fi; done; echo; echo \"= … [163 caractères tronqués]`
+
+  ```
+=== spéculatif ===
+
+=== campagne ===
+[09/10 00:14:49] charge 68.86 · répartition/flux :   mode 4 — lot en listes           4.45e-3  ✅  (réf 60.8135 / deux nœuds 60.5427)
+[09/10 00:15:02] charge 68.72 · répartition/modèle : PORTE TENUE : le découpage ne change pas la perplexité (écart relatif 0.0000 %)
+[09/10 00:15:02] charge 68.72 · --- étape portes ---
+
+=== batch2 ===
+[09/10 00:15:05] charge 67.14 · b2/multilinguepush : PPL 226.4291 · événements 67763975088 · 1.9 tok/s · RSS 1249 Mo
+[09/10 00:15:18] charge 65.71 · b2/multilinguedenseactthresh0_05 : PPL 2541.7196 · événements 0 · 15.5 tok/s · RSS 554 Mo
+[09/10 00:15:44] charge 59.43 · b2/multilinguepushactthresh0_05 : PPL 2456.9857 · événements 29216275230 · 9.9 tok/s · RSS 1249 Mo
+[09/10 00:15:44] charge 59.43 · === batch 2 : chaque modèle sur SA tâche et sur l'autre ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la drave-core/target/release/drave; echo \"--- sources les plus récentes ---\"; ls -lat drave-core/src/*.rs | head -5; echo \"--- git ---\"; git log --oneline -3; git status --short | head -10; echo \"--- portes.sh : rebuild ? -- … [131 caractères tronqués]`
+
+  ```
+-rwxr-xr-x. 2 stephane stephane 2545336  8 oct 11:00 drave-core/target/release/drave
+--- sources les plus récentes ---
+-rw-r--r--. 1 stephane stephane 311471  9 oct 00:02 drave-core/src/main.rs
+-rw-------. 1 stephane stephane 112950  9 oct 00:02 drave-core/src/gguf.rs
+-rw-------. 1 stephane stephane  30822  8 oct 23:20 drave-core/src/tokenizer.rs
+-rw-------. 1 stephane stephane  94592  7 oct 19:41 drave-core/src/kimi_k3.rs
+-rw-r--r--. 1 stephane stephane 521949  5 oct 09:50 drave-core/src/model.rs
+--- git ---
+9321cfc Distillation à l'échelle 384 : -12 % au total, et le gain CROÎT avec la taille
+f9ca016 Contexte et lots : le contexte déclaré ne coûte rien à fenêtre courte, et le lot vaut x1,4
+9cdfbd7 Le banc des encodages ne plante plus sur les modèles K-quant (c'était la première ligne de l'aide)
+ M journal/README.md
+ M journal/sessions/MANIFEST.md
+ M journal/sessions/d31b3d9b-58e4-4d34-85fa-381b6f6a6a76/digest.md
+ M journal/sessions/d31b3d9b-58e4-4d34-85fa-381b6f6a6a76/rapport.md
+ M reports/rapport-campagne-benefices.md
+ M tools/premiere_couche_semantique.py
+?? tools/speculatif_moteur.py
+?? tools/trace_gpu.py
+--- portes.sh : rebuild ? ---
+13:D=./drave-core/target/release/drave
+17:
+… [386 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls /home/stephane/.cache/huggingface/hub/models--ggml-org--gemma-3-1b-it-GGUF/snapshots/*/ 2>/dev/null | head -3; GM=$(ls /home/stephane/.cache/huggingface/hub/models--ggml-org--gemma-3-1b-it-GGUF/snapshots/*/*.gguf 2>/dev/null | hea … [212 caractères tronqués]`
+
+  ```
+gemma-3-1b-it-Q4_K_M.gguf
+gemma: /home/stephane/.cache/huggingface/hub/models--ggml-org--gemma-3-1b-it-GGUF/snapshots/f9c28bcd85737ffc5aef028638d3341d49869c27/gemma-3-1b-it-Q4_K_M.gguf
+30 tokens
+236798 236744 245237 236757 236748 236745 236744 236756 236750 245237 236749 236744 245237 236752 236747 236745 245237 236809 236756 236744 245237 236752 236744 236751 245237 236758 236748 236747 236753 236751 
+recolle : "Le moteur ne lit que les poids"
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --pretty=\"%h %ad %s\" --date=format:\"%d/%m %H:%M\" -8; echo \"--- commits touchant drave-core/src depuis 8/10 10:00 ---\"; git log --since=\"2025-10-08 10:00\" --pretty=\"%h %ad %s\" --date=format:\"%d/%m %H:%M\" -- drave-c … [80 caractères tronqués]`
+
+  ```
+9321cfc 09/10 00:07 Distillation à l'échelle 384 : -12 % au total, et le gain CROÎT avec la taille
+f9ca016 09/10 00:06 Contexte et lots : le contexte déclaré ne coûte rien à fenêtre courte, et le lot vaut x1,4
+9cdfbd7 09/10 00:05 Le banc des encodages ne plante plus sur les modèles K-quant (c'était la première ligne de l'aide)
+a564279 08/10 23:57 Le verdict, famille par famille — mis à jour avec tout ce que la campagne a établi
+dedeba5 08/10 23:56 Parcimonie imposée, 24 réglages : le k-WTA écrase le seuil d'un facteur 17
+baeb2c6 08/10 23:54 Deux vérifications : le codestral corrigé donne 117,9 — et le résultat sémantique publié SURVIT
+6565358 08/10 23:52 Protocole corrigé : routage -2,6 %, distillation -2,5 %, et les deux se cumulent
+bab38c7 08/10 23:38 gpt-oss n'a pas fini en 90 minutes — et deux pièges de méthode consignés
+--- commits touchant drave-core/src depuis 8/10 10:00 ---
+9cdfbd7 09/10 00:05 Le banc des encodages ne plante plus sur les modèles K-quant (c'était la première ligne de l'aide)
+ddebb6b 08/10 23:26 Tokenizers SentencePiece (Llama, Mistral, Codestral) : les espaces étaient perdus
+8de0612 08/10 11:08 Réparti : --ids-file était ignoré, et les jetons synthétiques so
+… [17246 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la drave-core/target/release/deps/drave-* 2>/dev/null | head -3; stat -c \"%n mtime=%y links=%h\" drave-core/target/release/drave; echo \"=== test du correctif K-quant (commit 00:05) ===\"; timeout 300 ./drave-core/target/release … [144 caractères tronqués]`
+
+  ```
+-rwxr-xr-x. 1 stephane stephane 1717568  9 oct 00:15 drave-core/target/release/deps/drave-9a06049b91b56c63
+-rw-r--r--. 1 stephane stephane     799  9 oct 00:15 drave-core/target/release/deps/drave-9a06049b91b56c63.d
+-rwxr-xr-x. 2 stephane stephane 2545336  8 oct 11:00 drave-core/target/release/deps/drave-b2a3479b6c01a1da
+drave-core/target/release/drave mtime=2026-10-08 11:00:35.966827208 -0400 links=2
+=== test du correctif K-quant (commit 00:05) ===
+GGUF ouvert en 90.859922ms — 579 tenseurs
+architecture : qwen3moe · 48 couches · hidden 2048 · intermédiaire 6144
+threads : 20
+
+=== 1. Taille exacte des encodages (mesurée sur les niveaux réels) ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show ddebb6b --stat | head -8; echo \"=== littéraux ajoutés ===\"; git show ddebb6b -- drave-core/src/tokenizer.rs | grep -E \"^\\+.*\\\"\" | grep -oE '\"[^\"]{6,}\"' | sort -u | head -10; echo \"=== présents dans le binaire ? == … [248 caractères tronqués]`
+
+  ```
+commit ddebb6b8b1aac6086172920765b868e4cbfc2166
+Author: Stéphane <stephane@localhost>
+Date:   Thu Oct 8 23:26:44 2026 -0400
+
+    Tokenizers SentencePiece (Llama, Mistral, Codestral) : les espaces étaient perdus
+    
+    Le moteur ne savait découper qu'en BPE byte-level (Qwen, gpt-oss, Kimi, V4). Sur
+    une table SentencePiece — pas de fusions, espace porté par la marque U+2581 en
+=== littéraux ajoutés ===
+"<0x{b:02X}>"
+"\u{2581}{m}"
+=== présents dans le binaire ? ===
+spm              0
+SentencePiece    0
+byte-fallback    0
+sentencepiece    0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/codestral-22b-v0.1-q4_k_m.gguf --tokenize --texte \"The river carries the logs to the mill\" 2>&1 | tail -3", "description": "Decisive test o … [62 caractères tronqués]`
+
+  ```
+31 tokens
+29506 29484 29474 29480 29478 29496 29474 29480 29485 29476 29480 29480 29478 29474 29481 29475 29484 29474 29482 29477 29489 29481 29475 29477 29475 29484 29474 29487 29478 29482 29482 
+recolle : "Therivercarriesthelogstothemill"
+  ```
+
+### 🤖 Assistant
+
+⏵ Découverte : le binaire de campagne est périmé (tokenizer SPM d'avant correctif) — vérification des builds isolés
+
+- **bash** `{"command": "ls -la /tmp/target-spm/release/drave 2>/dev/null && timeout 300 /tmp/target-spm/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/codestral-22b-v0.1-q4_k_m.gguf --tokenize --texte \"The river carries the logs to the mill\" 2>&1 | tail -3; echo \"=== autres builds isolés ===\"; … [116 caractères tronqués]`
+
+  ```
+-rwxr-xr-x. 2 stephane stephane 2552232  9 oct 00:02 /tmp/target-spm/release/drave
+8 tokens
+1183 8550 22045 1040 23666 1066 1040 3313 
+recolle : " The river carries the logs to the mill"
+=== autres builds isolés ===
+/tmp/target-spm
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md", "limit": 50, "offset": 130}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md</path>
+<type>file</type>
+<content>
+130: 14B dense à 0,915) pour **14,3 Go de mémoire résidente** — moins que le 14B
+131: (39,8 Go) et trois fois moins que codestral-22B (63,6 Go). Un modèle plus gros qui
+132: lit moins : exactement ce que le prototype routé cherche à reproduire en
+133: l'entraînant.
+134: 
+135: **L'anomalie codestral : le TOKENIZER du moteur — et la mesure valide après correctif.**
+136: 
+137: Trois hypothèses ont été testées, les deux premières réfutées, la troisième
+138: confirmée **et corrigée** (§ 3) :
+139: 
+140: | hypothèse | verdict |
+141: |---|---|
+142: | le moteur exécute mal l'architecture Mistral | **réfutée** — porte Mistral : corrélation 1,0000, top-1 100 % |
+143: | le modèle est spécialisé pour le code, mauvais en prose | **confirmée**, mais seulement après correction |
+144: | le tokenizer du moteur perd les espaces (SentencePiece) | **confirmée et corrigée** |
+145: 
+146: Avant le correctif, le corpus était découpé par un tokenizer qui mangeait les
+147: espaces : **35 657** de perplexité, chiffre sans valeur. Après le correctif, la
+148: même mesure donne **117,91*
+… [2193 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/campagne24 && grep -E \"grille/\" journal.txt | head -10; echo; echo \"=== ids codestral : premiers jetons ===\"; head -c 120 ids_codestral-22B.txt 2>/dev/null; echo; ls -la ids_*.txt | head -12; echo; echo \"=== portes en cours ? ===\"; pgrep -af \"cargo test\" | head -3; tail  … [77 caractères tronqués]`
+
+  ```
+[08/10 21:20:04] charge 17.95 · grille/0.5B-Q8 : code 0 · PPL 17.4315 · RSS 1249 Mo · lus 0 Mio
+[08/10 21:21:10] charge 17.44 · grille/r1-1.5B : code 0 · PPL 47.1403 · RSS 4647 Mo · lus 988 Mio
+[08/10 21:39:54] charge 47.40 · grille/r1-14B : code 0 · PPL 14.3048 · RSS 38898 Mo · lus 8304 Mio
+[08/10 22:04:33] charge 28.57 · grille/codestral-22B : code 0 · PPL 35657.3767 · RSS 63646 Mo · lus 12684 Mio
+[08/10 22:06:13] charge 26.37 · grille/qwen3-30B-A3B : code 0 · PPL 8.6327 · RSS 14256 Mo · lus 11841 Mio
+[08/10 23:36:15] charge 50.53 · grille/gpt-oss-120B : code 124 · PPL ? · RSS 13902 Mo · lus 36359 Mio
+
+=== ids codestral : premiers jetons ===
+29514,29522,29477,29494,29474,29480,29475,29528,29477,29486,29482,29475,29474,29480,29514,29522,29477,29494,29474,29480,
+-rw-r--r--. 1 stephane stephane   394684  8 oct 21:19 ids_0.5B-Q8.txt
+-rw-r--r--. 1 stephane stephane     3706  8 oct 23:41 ids_1024.txt
+-rw-r--r--. 1 stephane stephane    14626  8 oct 23:42 ids_4096.txt
+-rw-r--r--. 1 stephane stephane     1859  8 oct 23:40 ids_512.txt
+-rw-r--r--. 1 stephane stephane 17338751  9 oct 00:15 ids_b2_codestral-22B-corpus_code.txt
+-rw-r--r--. 1 stephane stephane  5204592  9 oct 00:12 ids_b2_code.
+… [917 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/campagne24 && tail -4 journal.txt; echo \"=== script campagne encore vivant ? ===\"; pgrep -af \"campagne-benefices.sh\" | head -2 || echo \"TERMINÉ\"; echo \"=== portes ===\"; tail -6 portes.log; grep -cE \"✅\" portes.log; grep -cE \"❌\" portes.log", "description": "Check campa … [33 caractères tronqués]`
+
+  ```
+[09/10 00:13:19] charge 44.37 · --- étape repartition ---
+[09/10 00:14:49] charge 68.86 · répartition/flux :   mode 4 — lot en listes           4.45e-3  ✅  (réf 60.8135 / deux nœuds 60.5427)
+[09/10 00:15:02] charge 68.72 · répartition/modèle : PORTE TENUE : le découpage ne change pas la perplexité (écart relatif 0.0000 %)
+[09/10 00:15:02] charge 68.72 · --- étape portes ---
+=== script campagne encore vivant ? ===
+777532 bash -c cd /tmp/campagne24 && tail -4 journal.txt; echo "=== script campagne encore vivant ? ==="; pgrep -af "campagne-benefices.sh" | head -2 || echo "TERMINÉ"; echo "=== portes ==="; tail -6 portes.log; grep -cE "✅" portes.log; grep -cE "❌" portes.log
+3695397 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash -n tools/campagne-benefices.sh && echo "syntaxe OK" && setsid nohup bash tools/campagne-benefices.sh > /tmp/campagne24/file.log 2>&1 < /dev/null & sleep 90; tail -6 /tmp/campagne24/journal.txt 2>/dev/null
+=== portes ===
+  V4-Flash : racine de softplus              racine de softplus  ✅
+  Qwen3-235B : softmax                       softmax  ✅
+  V4-Flash : --config le dit calculable      oui  ✅
+  V4-Flash 43 couches ctx 32 (archivée)     ARCHIVE=
+… [164 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Re-mesure de la ligne codestral avec le tokenizer corrigé (binaire isolé)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash -c '\nD=/tmp/target-spm/release/drave\nM=/home/stephane/Data13TB/stephane/modeles/gguf/codestral-22b-v0.1-q4_k_m.gguf\n$D \"$M\" --tokenize --fichier data/wikitext2_test.txt --sortie /tmp/campagne24/ids_codestral_CORRIGE.t … [633 caractères tronqués]`
+
+  ```
+codestral corrigé pid 777628
+  ```
+
+- **bash** `{"command": "cd /tmp/campagne24 && for f in grille_*_tokenize.log; do printf \"%-40s %s\\n\" \"$f\" \"$(grep -oE 'réversibilité : [A-Za-z ]+' \"$f\" | head -1)\"; done 2>/dev/null; echo; echo \"=== spéculatif ===\"; cat spec_marqueurs.txt 2>/dev/null; ls -la spec_*.log 2>/dev/null | head", "descript … [54 caractères tronqués]`
+
+  ```
+grille_0.5B-Q8_tokenize.log              réversibilité : texte reconstruit identique 
+grille_codestral-22B_tokenize.log        réversibilité : DIVERGE à l
+grille_gpt-oss-120B_tokenize.log         réversibilité : texte reconstruit identique 
+grille_qwen3-30B-A3B_tokenize.log        réversibilité : texte reconstruit identique 
+grille_r1-14B_tokenize.log               réversibilité : texte reconstruit identique 
+grille_r1-1.5B_tokenize.log              réversibilité : texte reconstruit identique 
+
+=== spéculatif ===
+-rw-r--r--. 1 stephane stephane 0  9 oct 00:16 spec_05_15_console.log
+  ```
+
+- **bash** `{"command": "pgrep -af \"speculatif_moteur\" | head -5; echo \"---\"; ps -eo pid,etime,pcpu,args --sort=-pcpu | grep -E \"drave|python\" | grep -v grep | head -8", "description": "Check speculative series progress"}`
+
+  ```
+735007 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && P=/home/stephane/gpu-env/bin/python && G=/home/stephane/Data13TB/stephane/modeles/gguf && nohup bash -c " $P tools/speculatif_moteur.py --brouillon models/Qwen2.5-0.5B-Q8_0.gguf --cible $G/deepseek-r1-distill-qwen-1.5b-q4_k_m.gguf --n 48 --k 8 --prompts 8 --threads 16 --journal /tmp/campagne24/spec_05_15.log > /tmp/campagne24/spec_05_15_console.log 2>&1 echo \"[contrôle fait] $(date '+%H:%M:%S')\" >> /tmp/campagne24/spec_marqueurs.txt $P tools/speculatif_moteur.py --brouillon $G/deepseek-r1-distill-qwen-1.5b-q4_k_m.gguf --cible $G/deepseek-r1-distill-qwen-14b-q4_k_m.gguf --n 48 --k 8 --prompts 8 --threads 16 --journal /tmp/campagne24/spec_15_14.log > /tmp/campagne24/spec_15_14_console.log 2>&1 echo \"[1.5->14 fait] $(date '+%H:%M:%S')\" >> /tmp/campagne24/spec_marqueurs.txt $P tools/speculatif_moteur.py --brouillon models/Qwen2.5-0.5B-Q8_0.gguf --cible $G/deepseek-r1-distill-qwen-14b-q4_k_m.gguf --n 48 --k 8 --prompts 8 --threads 16 --journal /tmp/campagne24/spec_05_14.log > /tmp/campagne24/spec_05_14_console.log 2>&1 echo \"[0.5->14 fait] $(date '+%H:%M:%S')\" >> /tmp/campagne24/spec_marqueurs.txt " > /tmp/campag
+… [3833 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/campagne24 && echo \"=== gpt-oss complete_2 ===\"; tail -14 tete_gpt-oss-120B_complete_2.log; echo; echo \"=== journal7 tete ===\"; grep \"tête/gpt-oss\" journal7.txt | tail -4; echo; echo \"=== d512 dense (m6) ===\"; tail -3 tr_d512_dense.log; ls -la /tmp/m6_d512_dense 2>/dev/n … [82 caractères tronqués]`
+
+  ```
+=== gpt-oss complete_2 ===
+
+The sentence "The engine reads only the weights that an activation touches." is a factual statement describing a specific behavior or characteristic of an engine. It does not express any positive or negative sentiment.
+
+The sentence "The engine reads only the weights that an activation touches." is a factual statement describing a specific behavior
+--- ids générés : [279, 126240, 279, 976, 21872, 392, 976, 6018, 31523, 1606, 290, 28460, 484, 448, 28961, 45060, 3692, 382, 261, 106694, 9710, 42904, 261, 4857, 12741, 503, 44596, 328, 448, 6018, 13, 1225, 2226, 625, 6101, 1062, 8841, 503, 12626, 39160, 13, 279, 976, 21872, 392, 976, 6018, 31523, 1606, 290, 28460, 484, 448, 28961, 45060, 3692, 382, 261, 106694, 9710, 42904, 261, 4857, 12741]
+
+--- mesure ---
+prompt  : 31 tokens en 39.623 s  (0.8 tok/s, TTFT 1278.2 ms)
+généré  : 64 tokens en 171.864 s  (0.37 tok/s)
+événements : 6555241 au total, 69002.5 par token
+paires (poids × activation) : 468099729001 au total, 4927.4 M par token — attention 954.0 M · experts 3583.2 M · partagé 390.2 M
+postes (ms/token) : matvec-attn 254.1 | rope 3.7 | attention 265.5 | matvec+mlp 1935.3 | total mesuré 2458.7
+[tete] densite
+… [552 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md", "limit": 55, "offset": 452}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md</path>
+<type>file</type>
+<content>
+452: | Qwen2.5-0.5B | 17,35 / 15,73 tok/s | **21,40 / 23,85** | **×1,36** |
+453: | r1-distill-1.5B | 4,66 / 8,45 tok/s | **6,27 / 7,08** | ×1,11 (bruité) |
+454: 
+455: Et le contrôle qui compte, sur les mêmes journaux : la sortie de la tête
+456: **restreinte** ne contient que les mots autorisés — les occurrences d'étiquettes
+457: passent de **10 à 67** (0,5 B) et de **7 à 67** (1,5 B), parce que le modèle ne
+458: *peut pas* produire autre chose. La tête complète, elle, écrit du texte libre.
+459: 
+460: **Ce qui est robuste ici, c'est la garantie, pas le débit** : le gain de vitesse
+461: dépend du rapport tête/corps du modèle (×1,36 sur un 0,5 B, à peine sur un 1,5 B
+462: où d'autres postes dominent), alors que la contrainte de sortie, elle, est
+463: **structurelle** — et c'est la seule ligne du verdict où l'architecture gagne sans
+464: dépendre ni du modèle ni de la machine.
+465: 
+466: ---
+467: 
+468: ## 14. Une mesure à refaire : le lot sur le 30B a mesuré le cache de pages
+469: 
+470: Batch 5, Qwen3-30B-A3B depuis le NVMe, `--lot` de 1 à 64 :
+471: 
+472: | lot
+… [1964 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md", "new_string": "**Ce qui est robuste ici, c'est la garantie, pas le débit** : le gain de vitesse\ndépend du rapport tête/corps du modèle (×1,36 sur un 0,5 B, à peine sur un 1,5 B\noù d'autres postes … [2044 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /tmp/campagne24 && cat codestral_corrige_marqueur.txt 2>/dev/null || echo \"(en cours)\"; grep -oE \"perplexité [0-9.]+ sur [0-9]+ jetons\" grille_codestral-22B_CORRIGE.log 2>/dev/null | tail -1; wc -c ids_codestral_CORRIGE.txt 2>/dev/null; grep -E \"réversibilité|tokens écrits\" cod … [97 caractères tronqués]`
+
+  ```
+(en cours)
+497074 ids_codestral_CORRIGE.txt
+93748 tokens écrits dans /tmp/campagne24/ids_codestral_CORRIGE.txt (vocabulaire du modèle : 32768)
+réversibilité : DIVERGE à l'octet 0 — 359042 vs 359041 octets
+  ```
+
+### 🤖 Assistant
+
+⏵ Correction du contrôle de réversibilité : distinguer l'espace de convention SPM d'une vraie perte
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs", "limit": 30, "offset": 4746}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs</path>
+<type>file</type>
+<content>
+4746:     if !fichier.is_empty() {
+4747:         // Encoder un corpus ENTIER avec le tokenizer du modèle : chaque modèle
+4748:         // a le sien, et nourrir un modèle avec les identifiants d'un autre
+4749:         // donne une perplexité qui ne mesure que l'absurdité de l'entrée.
+4750:         let texte = std::fs::read_to_string(&fichier).expect("fichier illisible");
+4751:         let ids = tk.encode(&texte);
+4752:         let cible = if sortie.is_empty() { format!("{fichier}.ids") } else { sortie };
+4753:         let corps: Vec<String> = ids.iter().map(|i| i.to_string()).collect();
+4754:         std::fs::write(&cible, corps.join(",")).expect("écriture impossible");
+4755:         println!("{} tokens écrits dans {cible} (vocabulaire du modèle : {})",
+4756:                  ids.len(), tk.vocab_size());
+4757:         // Contrôle de réversibilité : si le texte reconstruit diffère de la
+4758:         // source, l'encodage a perdu de l'information — et une perplexité
+4759:         // calculée sur ce flux ne mesurerait plus le texte.
+4760:         let retour = tk.decode(&ids)
+… [913 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs", "new_string": "        // Contrôle de réversibilité : si le texte reconstruit diffère de la\n        // source, l'encodage a perdu de l'information — et une perplexité\n        // calculée sur ce flux ne mesurera … [2532 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /tmp/campagne24 && echo \"=== codestral corrigé ===\"; cat codestral_corrige_marqueur.txt 2>/dev/null || echo \"(en cours)\"; echo; echo \"=== campagne ===\"; pgrep -c -f \"campagne-benefices.sh\" 2>/dev/null; tail -2 journal.txt; echo; echo \"=== spéculatif ===\"; ls -la spec_*.log  … [113 caractères tronqués]`
+
+  ```
+=== codestral corrigé ===
+(en cours)
+
+=== campagne ===
+3
+[09/10 00:15:02] charge 68.72 · répartition/modèle : PORTE TENUE : le découpage ne change pas la perplexité (écart relatif 0.0000 %)
+[09/10 00:15:02] charge 68.72 · --- étape portes ---
+
+=== spéculatif ===
+-rw-r--r--. 1 stephane stephane 0  9 oct 00:16 spec_05_15_console.log
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "ls -lat /tmp/*.sh 2>/dev/null | head -10; echo \"=== chaîne m6 ? ===\"; grep -l \"m6_d512\" /tmp/*.sh /tmp/campagne24/*.sh 2>/dev/null; echo \"=== journal d'entraînement ===\"; ls -lat /tmp/*.log 2>/dev/null | head -8", "description": "Find the training chain script"}`
+
+  ```
+-rwxr-xr-x. 1 stephane stephane  567  8 oct 11:53 /tmp/ab_numa_run.sh
+-rwxr-xr-x. 1 stephane stephane  808  8 oct 11:50 /tmp/ab_numa.sh
+-rw-r--r--. 1 stephane stephane  376  8 oct 10:30 /tmp/lb1.sh
+-rw-r--r--. 1 stephane stephane  344  8 oct 10:30 /tmp/lb0.sh
+-rwxr-xr-x. 1 stephane stephane  375  8 oct 10:28 /tmp/lance_blocs_gpu1.sh
+-rwxr-xr-x. 1 stephane stephane  343  8 oct 10:28 /tmp/lance_blocs_gpu0.sh
+-rwxr-xr-x. 1 stephane stephane 2331  7 oct 19:44 /tmp/test_plage.sh
+-rwxr-xr-x. 1 stephane stephane 1271  7 oct 19:40 /tmp/moitie_k3.sh
+-rwxr-xr-x. 1 stephane stephane  121  7 oct 18:24 /tmp/enchaine.sh
+-rwxr-xr-x. 1 stephane stephane 1043  7 oct 18:24 /tmp/trace_articleN.sh
+=== chaîne m6 ? ===
+/tmp/campagne24/nuit_gpu0.sh
+=== journal d'entraînement ===
+-rw-r--r--. 1 stephane stephane   1279  8 oct 13:18 /tmp/gpu_charge.log
+-rw-r--r--. 1 stephane stephane   9828  8 oct 13:13 /tmp/mdserve.log
+-rw-r--r--. 1 stephane stephane   1050  8 oct 11:56 /tmp/m4_route.log
+-rw-r--r--. 1 stephane stephane   1048  8 oct 11:48 /tmp/m4_dense.log
+-rw-r--r--. 1 stephane stephane   1047  8 oct 11:38 /tmp/m3_dense.log
+-rw-r--r--. 1 stephane stephane    443  8 oct 11:38 /tmp/m3_route.log
+-rw-r--r--. 
+… [127 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cat /tmp/campagne24/nuit_gpu0.sh 2>/dev/null; echo \"=== nuit_gpu1 ===\"; ls /tmp/campagne24/nuit*.sh; cat /tmp/campagne24/nuit_gpu1.sh 2>/dev/null | head -40", "description": "Read the overnight training chain"}`
+
+  ```
+#!/bin/bash
+# Suite de la nuit, GPU 0 : après la distillation, on monte d'un cran.
+# dim 512 — c'est le plus gros modèle que les 16 Go de VRAM et la nuit permettent,
+# et il sert de PROFESSEUR pour les distillations suivantes.
+set -u
+cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet
+P=/home/stephane/gpu-env/bin/python
+J=/tmp/campagne24/journal5.txt
+dire() { echo "[$(date '+%d/%m %H:%M:%S')] charge $(cut -d' ' -f1 /proc/loadavg) · $*" | tee -a "$J"; }
+
+while [ ! -f /tmp/m5_d256_route_distille/config.json ]; do sleep 120; done
+dire "dim 512 dense : départ (GPU 0)"
+CUDA_VISIBLE_DEVICES=0 $P -u tools/entrainer_moteur.py --famille dense --dim 512 --couches 4 \
+    --tetes 8 --cache 1536 --pas 40000 --sortie /tmp/m6_d512_dense --eval-tous 4000 \
+    > /tmp/campagne24/tr_d512_dense.log 2>&1
+dire "dim 512 dense : $(tail -2 /tmp/campagne24/tr_d512_dense.log | head -1)"
+
+dire "dim 512 routé (16 experts, 8x de stockage pour la même lecture) : départ"
+CUDA_VISIBLE_DEVICES=0 $P -u tools/entrainer_moteur.py --famille route --dim 512 --couches 4 \
+    --tetes 8 --cache 1536 --cache-perle 768 --experts 16 --k 2 --pas 40000 \
+    --sortie /tmp/m6_d512_route --eval-tous 4000 \
+    > /tmp/campagne24
+… [1159 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -rl \"m5_d384_route_distille\\|m5_d384\" /tmp/*.sh /tmp/campagne24/*.sh /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/*.sh 2>/dev/null | head; echo \"=== contenu ===\"; for f in $(grep -rl \"m5_d384\" /tmp/campagne24/*.sh 2>/dev/null | head -2); do echo \"--- $f ---\"; cat  … [78 caractères tronqués]`
+
+  ```
+/tmp/campagne24/apres_entrainement.sh
+/tmp/campagne24/distillation.sh
+/tmp/campagne24/entrainer2.sh
+/tmp/campagne24/nuit_gpu1.sh
+=== contenu ===
+--- /tmp/campagne24/apres_entrainement.sh ---
+#!/bin/bash
+# Après les entraînements : exporter, porter, mesurer, répartir.
+# La chaîne complète du livrable « modèle nativement événementiel ».
+set -u
+cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet
+P=/home/stephane/gpu-env/bin/python
+D=./drave-core/target/release/drave
+C=/tmp/campagne24
+J=$C/journal4.txt
+dire() { echo "[$(date '+%d/%m %H:%M:%S')] charge $(cut -d' ' -f1 /proc/loadavg) · $*" | tee -a "$J"; }
+
+# On attend que les quatre entraînements soient finis.
+while pgrep -f "entrainer_moteu[r]" > /dev/null 2>&1; do sleep 120; done
+dire "=== entraînements finis, chaîne du modèle ==="
+
+for m in m5_d256_dense m5_d256_route m5_d384_dense m5_d384_route; do
+    [ -d /tmp/$m ] || { dire "$m : absent"; continue; }
+    $P tools/exporter_gguf.py --hf /tmp/$m --sortie /tmp/$m.gguf > "$C/exp_$m.log" 2>&1
+    ids="$C/ids_$m.txt"
+    [ -s "$ids" ] || $P -c "
+import numpy as np
+d = np.frombuffer(open('data/corpus_en_val.txt','rb').read(256), dtype=np.uint8)
+open('$ids','w').write(','.join(str(int(v)) 
+… [2801 caractères tronqués]
+  ```
+
+- **bash** `{"command": "pgrep -af \"apres_entrainement|nuit_gpu|distillation.sh\" | grep -v grep | head; echo \"=== état m6 ===\"; ls /tmp/m6_d512_* 2>/dev/null; tail -2 /tmp/campagne24/tr_d512_route.log 2>/dev/null; echo \"=== ids m5 (protocole) ===\"; head -c 80 /tmp/campagne24/ids_m5_d384_dense.txt 2>/dev/n … [123 caractères tronqués]`
+
+  ```
+3708133 bash /tmp/campagne24/apres_entrainement.sh
+3723347 bash /tmp/campagne24/nuit_gpu0.sh
+=== état m6 ===
+/tmp/m6_d512_dense.gguf
+
+/tmp/m6_d512_dense:
+config.json
+generation_config.json
+model.safetensors
+# route · 78.81 M paramètres · 3.41 M poids LUS par jeton et par couche · 19.92 M stockés · corpus 100276153 octets · cuda
+=== ids m5 (protocole) ===
+89,32,80,97,110,116,115,32,119,101,114,101,32,97,110,32,65,109,101,114,105,99,97
+1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/## 5. Les modèles entraînés ici/,/## 7\\./p' reports/rapport-campagne-benefices.md | head -50", "description": "Read report section 5 protocol"}`
+
+  ```
+## 5. Les modèles entraînés ici, mesurés DANS le moteur — routage ET distillation gagnent
+
+**Le protocole, et il a fallu le corriger.** Le moteur évalue une fenêtre contiguë
+de `--limit` jetons ; ces modèles ont été **entraînés sur des fenêtres de 128
+jetons**. Les évaluer sur 256, 512 ou 2 048 positions les fait sortir de leur
+distribution (à 2 048, la perplexité triple et le classement s'inverse). La mesure
+retenue est donc **huit fenêtres de 128 jetons** (`--depuis` décale le début),
+moyennées en log — dans la longueur d'entraînement, sur huit tranches du fichier
+de validation. Toutes les portes de logits sont tenues.
+
+| modèle | paramètres | PPL moyenne (8 × 128) | paires/jeton | vs jumeau dense |
+|---|---:|---:|---:|---:|
+| `m5_d256_dense` | 3,2 M | 5,0155 | 3,2 M | — |
+| `m5_d256_route` | 10,3 M | 4,8858 | 3,2 M | −2,6 % |
+| **`m5_d256_route_distille`** | 10,3 M | **4,7642** | 3,2 M | **−5,0 %** |
+| `m5_d384_dense` *(le professeur)* | 7,2 M | 5,0108 | 7,2 M | — |
+| `m5_d384_route` | 44,4 M | 4,8646 | 7,2 M | −2,9 % |
+| **`m5_d384_route_distille`** | 44,4 M | **4,4113** | 7,2 M | **−12,0 %** |
+
+**Trois résultats, et le troisième est le plus fort.**
+
+1. **Le routage gagne à lec
+… [1216 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rln \"depuis\" tools/*.sh tools/*.py 2>/dev/null | head; echo \"=== scripts /tmp utilisant --depuis ===\"; grep -rln -- \"--depuis\" /tmp/campagne24/*.sh 2>/dev/null | head; echo \"=== exemple ===\"; grep -rn -- \"--depuis\" /t … [101 caractères tronqués]`
+
+  ```
+tools/colab_cote_local.sh
+tools/porte-flux.sh
+tools/portes.sh
+tools/preparer_colab.sh
+tools/sonde-passe-k3.sh
+tools/sprint.sh
+tools/verifier_table_types.sh
+tools/aiguille.py
+tools/analyse_empreinte.py
+tools/approximabilite_bloc.py
+=== scripts /tmp utilisant --depuis ===
+=== exemple ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la /tmp/campagne24/ids_m5_*.txt data/corpus_en_val.txt 2>/dev/null; echo \"=== un log d'évaluation m5 ===\"; grep -oE \"perplexité [0-9.]+ sur [0-9]+ jetons\" /tmp/campagne24/eng_m5_d384_dense.log | tail -2; head -3 /tmp/campagne … [201 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 2032162  8 oct 09:42 data/corpus_en_val.txt
+-rw-r--r--. 1 stephane stephane     920  8 oct 21:49 /tmp/campagne24/ids_m5_d256_dense.txt
+-rw-r--r--. 1 stephane stephane     920  8 oct 23:33 /tmp/campagne24/ids_m5_d256_route_distille.txt
+-rw-r--r--. 1 stephane stephane     920  8 oct 22:26 /tmp/campagne24/ids_m5_d256_route.txt
+-rw-r--r--. 1 stephane stephane     920  8 oct 21:49 /tmp/campagne24/ids_m5_d384_dense.txt
+-rw-r--r--. 1 stephane stephane     920  9 oct 00:01 /tmp/campagne24/ids_m5_d384_route_distille.txt
+-rw-r--r--. 1 stephane stephane     920  8 oct 22:42 /tmp/campagne24/ids_m5_d384_route.txt
+=== un log d'évaluation m5 ===
+/tmp/campagne24/ids_m5_d384_dense.txt : 256 tokens, fenêtres de 256
+[config] cache KV : 32 bits, 0.00 Go pour 256 jetons
+[modele] 4 couches chargées en 143.175495ms — listes 0.02 Go , 8 threads
+=== logs de fenêtres ? ===
+-rw-r--r--. 1 stephane stephane 456  8 oct 21:16 /tmp/campagne24/route_ids128.txt
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls tools/ | grep -iE \"fenet|window|mesure|evalu\" | head; echo \"=== recherche de '8 × 128' ou 'fenetres' dans tools ===\"; grep -rln \"fenêtres de 128\\|8 × 128\\|8x128\" tools/ reports/ 2>/dev/null | head; echo \"=== fichiers ids  … [154 caractères tronqués]`
+
+  ```
+mesure-prefill-lot.sh
+mesurer_lecture_experts.py
+=== recherche de '8 × 128' ou 'fenetres' dans tools ===
+reports/rapport-campagne-benefices.md
+=== fichiers ids volumineux ===
+-rw-r--r--. 1 stephane stephane  1731323  8 oct 21:39 /tmp/campagne24/ids_codestral-22B.txt
+-rw-r--r--. 1 stephane stephane  4000000  8 oct 21:22 /tmp/campagne24/corpus_code.txt
+-rw-r--r--. 1 stephane stephane  5204592  8 oct 23:00 /tmp/campagne24/ids_dens_code.txt
+-rw-r--r--. 1 stephane stephane  5204592  9 oct 00:12 /tmp/campagne24/ids_b2_code.txt
+-rw-r--r--. 1 stephane stephane 17338751  8 oct 22:05 /tmp/campagne24/ids_code_codestral.txt
+-rw-r--r--. 1 stephane stephane 17338751  9 oct 00:15 /tmp/campagne24/ids_b2_codestral-22B-corpus_code.txt
+  ```
+
+### 🤖 Assistant
+
+⏵ Écriture du harnais « 8 fenêtres × 128 » et validation sur les modèles m5 connus
+
+- **write** `{"content": "#!/bin/bash\n# mesure_fenetres.sh — le protocole d'évaluation des modèles entraînés ICI.\n#\n# POURQUOI HUIT FENÊTRES DE 128. Ces modèles sont entraînés sur des fenêtres de\n# 128 jetons. Les évaluer sur une fenêtre plus longue les fait sortir de leur\n# distribution : mesuré, la perple … [3548 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mesure_fenetres.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && chmod +x tools/mesure_fenetres.sh && timeout 900 bash tools/mesure_fenetres.sh /tmp/m5_d384_dense.gguf --fenetres 8 --taille 128 --threads 8 --chemins \"--push\" --etiquette m5_d384_dense 2>&1 | tail -12", "description": "Validate th … [55 caractères tronqués]`
+
+  ```
+tools/mesure_fenetres.sh: line 64: bc: command not found
+  --push fenêtre 4 (depuis 384) : PPL 4.9259     ? jetons · 2472812765 événements
+tools/mesure_fenetres.sh: line 64: bc: command not found
+  --push fenêtre 5 (depuis 512) : PPL 6.1480     ? jetons · 2472582205 événements
+tools/mesure_fenetres.sh: line 64: bc: command not found
+  --push fenêtre 6 (depuis 640) : PPL 4.5898     ? jetons · 2472692817 événements
+tools/mesure_fenetres.sh: line 64: bc: command not found
+  --push fenêtre 7 (depuis 768) : PPL 4.5075     ? jetons · 2472547350 événements
+tools/mesure_fenetres.sh: line 64: bc: command not found
+  --push fenêtre 8 (depuis 896) : PPL 4.7328     ? jetons · 2472717756 événements
+tools/mesure_fenetres.sh: line 64: bc: command not found
+awk: cmd. line:1: (FILENAME=- FNR=1) fatal: division by zero attempted
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -E \"perplexité|paires|événements\" /tmp/campagne24/eng_m5_d384_dense.log | head -5", "description": "Check exact engine output format in ppl mode"}`
+
+  ```
+255 tokens notés — perplexité cumulée 5.372  (459.4 tok/s)
+=== perplexité 5.3719 sur 255 tokens (0 événements, 0.6 s) ===
+    attention : 0.00 M paires (requête, clé) par token
+    projections : 0.0 M événements par token
+    paires (poids × activation) par token : attention 1.8 M · experts 0.0 M · partagé 5.4 M · scores 3 K · total 7.2 M
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport re, pathlib\np = pathlib.Path(\"tools/mesure_fenetres.sh\")\ns = p.read_text()\ns = s.replace('''        jetons=$(echo \"$sortie\" | grep -oE \"sur [0-9]+ jetons\" | grep -oE \"[0-9]+\" | tail -1)\n        pa … [1981 caractères tronqués]`
+
+  ```
+ok
+# m5_d384_dense · 8 fenêtres de 128 jetons · --push · 30.18 de charge
+  --push fenêtre 1 (depuis 0) : PPL 3.7347     127 jetons · 6.6 M paires/jeton · 824186428 événements
+  --push fenêtre 2 (depuis 128) : PPL 7.7009     128 jetons · 13.0 M paires/jeton · 1648531958 événements
+  --push fenêtre 3 (depuis 256) : PPL 4.6624     128 jetons · 19.4 M paires/jeton · 2472760914 événements
+  --push fenêtre 4 (depuis 384) : PPL 4.9259     128 jetons · 19.4 M paires/jeton · 2472812765 événements
+  --push fenêtre 5 (depuis 512) : PPL 6.1480     128 jetons · 19.4 M paires/jeton · 2472582205 événements
+  --push fenêtre 6 (depuis 640) : PPL 4.5898     128 jetons · 19.4 M paires/jeton · 2472692817 événements
+  --push fenêtre 7 (depuis 768) : PPL 4.5075     128 jetons · 19.4 M paires/jeton · 2472547350 événements
+  --push fenêtre 8 (depuis 896) : PPL 4.7328     128 jetons · 19.4 M paires/jeton · 2472717756 événements
+  → PPL moyenne (log) sur 8 fenêtres : 5.0111
+  ```
+
+- **bash** `{"command": "ls -la /tmp/m6_d512_dense.gguf; ls /tmp/m6_d512_dense/", "description": "Check existing m6 dense export"}`
+
+  ```
+-rw-r--r--. 1 stephane stephane 8953056  9 oct 00:29 /tmp/m6_d512_dense.gguf
+config.json
+generation_config.json
+model.safetensors
+  ```
+
+- **write** `{"content": "#!/bin/bash\n# nuit2_m6.sh — la chaîne du livrable à l'échelle 512, puis la distillation qui suit.\n#\n# POURQUOI. Le rapport porte deux courbes : le gain du ROUTAGE (−2,6 % à 256,\n# −2,9 % à 384) et le gain de la DISTILLATION (−2,5 % à 256, −9,3 % à 384 — il\n# croît avec la taille).  … [3404 caractères tronqués]`
+
+  ```
+<path>/tmp/campagne24/nuit2_m6.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash -n /tmp/campagne24/nuit2_m6.sh && echo \"syntaxe OK\" && setsid nohup bash /tmp/campagne24/nuit2_m6.sh > /tmp/campagne24/nuit2_console.log 2>&1 < /dev/null & sleep 3; pgrep -af \"nuit2_m6\" | head -2", "description": "Launch the … [25 caractères tronqués]`
+
+  ```
+syntaxe OK
+799129 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash -n /tmp/campagne24/nuit2_m6.sh && echo "syntaxe OK" && setsid nohup bash /tmp/campagne24/nuit2_m6.sh > /tmp/campagne24/nuit2_console.log 2>&1 < /dev/null & sleep 3; pgrep -af "nuit2_m6" | head -2
+799130 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash -n /tmp/campagne24/nuit2_m6.sh && echo "syntaxe OK" && setsid nohup bash /tmp/campagne24/nuit2_m6.sh > /tmp/campagne24/nuit2_console.log 2>&1 < /dev/null & sleep 3; pgrep -af "nuit2_m6" | head -2
+  ```
+
+- **bash** `{"command": "pgrep -af \"nuit2_m[6]\" | head -3; echo \"---\"; cd /tmp/campagne24 && echo \"=== codestral corrigé ===\"; cat codestral_corrige_marqueur.txt 2>/dev/null || echo \"(en cours)\"; echo \"=== spec ===\"; cat spec_marqueurs.txt 2>/dev/null; ls -la spec_*.log 2>/dev/null | head -3; echo \"= … [139 caractères tronqués]`
+
+  ```
+799130 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash -n /tmp/campagne24/nuit2_m6.sh && echo "syntaxe OK" && setsid nohup bash /tmp/campagne24/nuit2_m6.sh > /tmp/campagne24/nuit2_console.log 2>&1 < /dev/null & sleep 3; pgrep -af "nuit2_m6" | head -2
+799133 bash /tmp/campagne24/nuit2_m6.sh
+---
+=== codestral corrigé ===
+(en cours)
+=== spec ===
+[contrôle fait] 00:16:25
+-rw-r--r--. 1 stephane stephane 1309  9 oct 00:34 spec_05_15_console.log
+-rw-r--r--. 1 stephane stephane 1255  9 oct 00:34 spec_05_15.log
+-rw-r--r--. 1 stephane stephane    0  9 oct 00:34 spec_15_14_console.log
+=== campagne ===
+2
+[09/10 00:15:02] charge 68.72 · --- étape portes ---
+  ```
+
+- **read** `{"file_path": "/tmp/campagne24/spec_05_15.log"}`
+
+  ```
+<path>/tmp/campagne24/spec_05_15.log</path>
+<type>file</type>
+<content>
+1: # décodage spéculatif mesuré par le moteur
+2: brouillon : models/Qwen2.5-0.5B-Q8_0.gguf
+3: cible     : /home/stephane/Data13TB/stephane/modeles/gguf/deepseek-r1-distill-qwen-1.5b-q4_k_m.gguf
+4: vocabulaire partagé : oui (14 vs 14 identifiants sur la même sonde)
+5: 
+6: | # | jetons brouillon | jetons cible | préfixe commun | tok/s brouillon | tok/s cible |
+7: |---|---:|---:|---:|---:|---:|
+8: | 0 | 48 | 48 | **0** | 26.71 | 5.62 |
+9: | 1 | 48 | 48 | **5** | 22.41 | 1.63 |
+10: | 2 | 48 | 48 | **0** | 10.22 | 1.46 |
+11: | 3 | 48 | 48 | **0** | 2.64 | 1.10 |
+12: | 4 | 48 | 48 | **0** | 20.89 | 2.24 |
+13: | 5 | 48 | 48 | **0** | 4.90 | 2.58 |
+14: | 6 | 48 | 48 | **1** | 22.87 | 3.30 |
+15: | 7 | 48 | 48 | **1** | 5.13 | 6.36 |
+16: 
+17: ## acceptation, 8 invites, 48 jetons, décodage glouton
+18: 
+19: | k (jetons proposés) | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 |
+20: |---|---:|---:|---:|---:|---:|---:|---:|---:|
+21: | P(préfixe ≥ k) | 38 % | 12 % | 12 % | 12 % | 12 % | 0 % | 0 % | 0 % |
+22: 
+23: jetons acceptés par tour (espérance, k=8) : **0.88 sur 8** · préfixe médian 0 · max 5
+24: 
+25: coût relatif mesuré du brouillon : 
+… [242 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+`-style tokens or a distinctive style that the plain 0.5B draft can't predict → LCP 0. Indeed, the draft is Qwen2.5-0.5B (plain) vs target r1-distill-1.5B (reasoning-tuned) — a *mismatched pair*: different post-training. §1 used Qwen2.5-0.5B vs **Qwen2.5-1.5B** (same family, same recipe) — much better matched.
+
+So my "control" isn't a control at all: the target is a different model family lineage (R1 distill). The acceptance collapse is *expected* and, in fact, is itself informative: **a draft that isn't post-trained like its target accepts almost nothing (11%)**.
+
+Also note the draft's tok/s varies wildly (2.64 to 26.71) due to load — the cost ratio 0.210 is a noisy average.
+
+So: I need to run the real control pair (Qwen2.5-0.5B draft → **Qwen2.5-1.5B** target, both plain) to reproduce §1's 41.9%. Do I have Qwen2.5-1.5B as a GGUF locally? The HF cache has Qwen2.5-0.5B and Qwen3-0.6B only. Hmm. But `tools/speculatif.py` downloaded Qwen2.5-1.5B? Let me check the HF cache more carefully (maybe it downloaded to a different cache dir or was deleted).
+
+If Qwen2.5-1.5B isn't available locally as GGUF, I can't run the control in the engine. Alternatives:
+- Use Qwen3-0.6B (draft) → ... no target.
+- Use the pair r1-1.5B → r1-14B (running now) — matched (same distillation recipe) ✓ the real measurement of interest.
+- Use 0.5B → r1-14B (running) — mismatched, expected low.
+
+The two running pairs are still valuable:
+1. r1-1.5B → r1-14B: matched lineage, large size ratio ✓ the headline.
+2. 0.5B → r1-14B: mismatched lineage + huge size ratio → tests whether a tiny draft can still pay.
+
+And the 0.5B → r1-1.5B result (11%, ×0.70) is the "mismatched pair" datum.
+
+Hmm, but wait. There's something else: maybe the low acceptance is not (only) lineage but **the prose continuation protocol**: r1-distill models tend to produce a ` thinking` block or a different style. Let me look at the actual generated ids for prompt 1 (LCP 5)... I don't have them in the journal (only counts). It'd be useful to see the texts. My tool doesn't save the outputs. Let me improve the tool? Since the runs are long, maybe not.
+
+Better: run a small companion measurement to *understand* the acceptance, e.g. compare the draft and target outputs on one prompt and print the two texts. Actually the console log (spec_05_15_console.log) prints the same table only.
+
+Given time constraints, the honest reporting is:
+- The engine measurement of the (plain 0.5B → R1-distill 1.5B) pair gives 0.88/8 accepted → ×0.70.
+- §1's HF measurement (0.5B → 1.5B, both plain) gave 3.35/8 → ×1.20.
+- **The divergence is explained by the pairing, not by the engine**: a draft that hasn't received the same post-training (R1 distillation) predicts almost none of its target's tokens. This *strengthens* §1's conclusion (a generic draft doesn't pay) and adds a sharp requirement: the draft must share the target's post-training, not just its tokenizer.
+
+That's a legitimate, useful result. But I should verify the explanation rather than assert it. A cheap verification: use the **r1-1.5B as draft** against the r1-14B target (running) — if the acceptance jumps well above 11%, the lineage explanation is supported ✓ (the size ratio is the same order).
+
+Even better verification: run the control pair *within the R1 family* at the same size ratio as §1: r1-1.5B → r1-14B (ratio ~9×, not 3×) hmm.
+
+Alternatively, verify with Qwen2.5-0.5B → Qwen2.5-0.5B? Acceptance 100% trivially (not informative).
+
+Honestly, the two running pairs give the evidence: if matched lineage (1.5B→14B) gives much higher acceptance than mismatched (0.5B→1.5B), the lineage effect is demonstrated. And if 0.5B→14B gives a small-but-nonzero acceptance with an excellent cost ratio, we learn where the break-even lies.
+
+Let me wait for those results.
+
+Meanwhile, note the tool's cost-ratio computation: `r = (sum(deb_c)/len)/(sum(deb_b)/len)` — for the 0.5B→1.5B pair under load, tok/s varied 2.64-26.71 for the draft and 1.10-6.36 for the target → the ratio is very noisy (0.210 here vs 0.245 in §1). Under load, the per-token cost ratio isn't reliable. I should note that the *acceptance* is the robust part (deterministic), and the cost ratio is load-dependent → the gain estimate carries the load condition.
+
+Good. Let me now check the corrected codestral result and then update the report with the speculative findings.
+
+Let me also think about whether to fix my tool to record the texts. It would help diagnose. Let me add a `--garder` option that writes the generated ids per prompt into the journal as a compact line. Actually, simpler: for the analysis of the *mismatched* pair, I can run one prompt manually with both models and print both texts (2 runs, ~1 min). Let me do that: it's the evidence for "the R1 target talks differently".
+
+Let me check the current load first, and the codestral run.
+
+- **bash** `{"command": "cd /tmp/campagne24 && cat codestral_corrige_marqueur.txt 2>/dev/null || echo \"codestral (en cours)\"; echo \"--- charge ---\"; uptime; echo \"--- spec 1.5->14 en cours ? ---\"; pgrep -af \"speculatif_moteu[r]\" | sed 's/--journal.*//' | head -2", "description": "Check load and running  … [6 caractères tronqués]`
+
+  ```
+codestral (en cours)
+--- charge ---
+ 00:37:16  up 17 days 13:49,  2 users,  load average: 34,23, 40,43, 50,54
+--- spec 1.5->14 en cours ? ---
+735007 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && P=/home/stephane/gpu-env/bin/python && G=/home/stephane/Data13TB/stephane/modeles/gguf && nohup bash -c " $P tools/speculatif_moteur.py --brouillon models/Qwen2.5-0.5B-Q8_0.gguf --cible $G/deepseek-r1-distill-qwen-1.5b-q4_k_m.gguf --n 48 --k 8 --prompts 8 --threads 16 
+735011 bash -c  /home/stephane/gpu-env/bin/python tools/speculatif_moteur.py --brouillon models/Qwen2.5-0.5B-Q8_0.gguf --cible /home/stephane/Data13TB/stephane/modeles/gguf/deepseek-r1-distill-qwen-1.5b-q4_k_m.gguf --n 48 --k 8 --prompts 8 --threads 16
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification de l'écart d'acceptation : la paire est-elle seulement mal appariée ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && G=/home/stephane/Data13TB/stephane/modeles/gguf; INV=\"In 1793 , during the French Revolution , the National Convention created a new calendar and renamed the months . The poet Fabre d'Eglantine proposed the names , which were\"; D=. … [576 caractères tronqués]`
+
+  ```
+=== brouillon 0.5B (Qwen2.5 nu) ===
+--- texte ---
+In 1793 , during the French Revolution , the National Convention created a new calendar and renamed the months . The poet Fabre d'Eglantine proposed the names , which were not accepted by the Convention . The names were : January - January , February - February , March - March , April -
+--- ids générés : [537, 11666, 553, 279, 25872, 659, 576, 5036, 1033, 549, 6058, 481, 6058, 1154, 7400, 481, 7400, 1154, 5470, 481, 5470, 1154, 5813, 481]
+
+=== cible r1-distill-1.5B ===
+--- texte ---
+In 1793 , during the French Revolution , the National Convention created a new calendar and renamed the months . The poet Fabre d'Eglantine proposed the names , which were later used by other poets. The new calendar was based on the Gregorian calendar, but with some modifications. The months
+--- ids générés : [2937, 1483, 553, 1008, 72972, 13, 576, 501, 13168, 572, 3118, 389, 279, 16046, 22090, 13168, 11, 714, 448, 1045, 28782, 13, 576, 3951]
+  ```
+
+- **bash** `{"command": "cd /tmp/campagne24 && cat codestral_corrige_marqueur.txt 2>/dev/null || echo \"codestral (en cours)\"; pgrep -af \"ids_codestral_CORRIGE\" | sed 's/.*drave/drave/' | head -2; echo \"--- spec 1.5->14 ---\"; ls -la spec_15_14.log 2>/dev/null; tail -3 spec_15_14_console.log 2>/dev/null", " … [50 caractères tronqués]`
+
+  ```
+codestral (en cours)
+drave M=/home/stephane/Data13TB/stephane/modeles/gguf/codestral-22b-v0.1-q4_k_m.gguf $D "$M" --tokenize --fichier data/wikitext2_test.txt --sortie /tmp/campagne24/ids_codestral_CORRIGE.txt > /tmp/campagne24/codestral_corrige_tokenize.log 2>&1 /usr/bin/time -v timeout 1800 $D "$M" --ppl /tmp/campagne24/ids_codestral_CORRIGE.txt --limit 256 --ctx 256 --threads 20 > /tmp/campagne24/grille_codestral-22B_CORRIGE.log 2> /tmp/campagne24/grille_codestral-22B_CORRIGE_temps.log echo "code $? · $(grep -oE "perplexité [0-9.]+ sur [0-9]+ jetons" /tmp/campagne24/grille_codestral-22B_CORRIGE.log | tail -1)" >> /tmp/campagne24/codestral_corrige_marqueur.txt ' > /tmp/campagne24/codestral_corrige_console.log 2>&1 & echo "codestral corrigé pid $!"
+drave M=/home/stephane/Data13TB/stephane/modeles/gguf/codestral-22b-v0.1-q4_k_m.gguf $D "$M" --tokenize --fichier data/wikitext2_test.txt --sortie /tmp/campagne24/ids_codestral_CORRIGE.txt > /tmp/campagne24/codestral_corrige_tokenize.log 2>&1 /usr/bin/time -v timeout 1800 $D "$M" --ppl /tmp/campagne24/ids_codestral_CORRIGE.txt --limit 256 --ctx 256 --threads 20 > /tmp/campagne24/grille_codestral-22B_CORRIGE.log 2> /tmp/campagne24/grille
+… [231 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/campagne24 && echo \"=== portes.log ===\"; wc -l portes.log; tail -4 portes.log; echo; echo \"=== ce qui tourne pour les portes ? ===\"; ps -eo pid,etime,args | grep -E \"portes.sh|drave|python\" | grep -v grep | head -6; echo; echo \"=== batch2 ===\"; tail -4 journal2.txt", "de … [49 caractères tronqués]`
+
+  ```
+=== portes.log ===
+14 portes.log
+  V4-Flash : --config le dit calculable      oui  ✅
+  V4-Flash 43 couches ctx 32 (archivée)     ARCHIVE=1 pour la lancer
+  engram V4.1 : adressage                    rangées DISTINCTES : 479723  ✅
+  gpt-oss : --config le dit calculable       oui  ✅
+
+=== ce qui tourne pour les portes ? ===
+   1447 17-09:51:38 /usr/bin/python3.13 /usr/sbin/firewalld --nofork --nopid
+   1631 17-09:51:37 /usr/bin/python3.13 /usr/bin/fail2ban-server -xf start
+   2241 17-09:51:35 /usr/local/bin/python3 -m uvicorn open_webui.main:app --host 0.0.0.0 --port 8080 --forwarded-allow-ips * --workers 1
+ 717449       24:36 timeout 3600 tools/portes.sh
+ 717450       24:36 /bin/bash tools/portes.sh
+ 735007       23:12 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && P=/home/stephane/gpu-env/bin/python && G=/home/stephane/Data13TB/stephane/modeles/gguf && nohup bash -c " $P tools/speculatif_moteur.py --brouillon models/Qwen2.5-0.5B-Q8_0.gguf --cible $G/deepseek-r1-distill-qwen-1.5b-q4_k_m.gguf --n 48 --k 8 --prompts 8 --threads 16 --journal /tmp/campagne24/spec_05_15.log > /tmp/campagne24/spec_05_15_console.log 2>&1 echo \"[contrôle fait] $(date '+%H:%M:%S')\" >> /tmp/ca
+… [1291 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"argparse\\|add_argument\" tools/entrainer_moteur.py | head -30; echo \"=== classe du bloc / activation ===\"; grep -n \"class \\|def forward\\|gelu\\|silu\\|relu\\|kwt\\|topk\" tools/entrainer_moteur.py | head -25", "descri … [53 caractères tronqués]`
+
+  ```
+24:import argparse
+70:    p = argparse.ArgumentParser()
+71:    p.add_argument("--famille", choices=["dense", "route"], default="route")
+72:    p.add_argument("--donnees", nargs="+", default=["data/corpus_en.txt"])
+73:    p.add_argument("--validation", default="data/corpus_en_val.txt")
+74:    p.add_argument("--dim", type=int, default=192)
+75:    p.add_argument("--couches", type=int, default=4)
+76:    p.add_argument("--tetes", type=int, default=4)
+77:    p.add_argument("--cache", type=int, default=768, help="FFN dense, ou largeur d'expert")
+78:    p.add_argument("--cache-perle", type=int, default=0, help="largeur d'un expert (routé)")
+79:    p.add_argument("--experts", type=int, default=8)
+80:    p.add_argument("--k", type=int, default=2)
+81:    p.add_argument("--seq", type=int, default=128)
+82:    p.add_argument("--lot", type=int, default=32)
+83:    p.add_argument("--pas", type=int, default=20000)
+84:    p.add_argument("--lr", type=float, default=1e-3)
+85:    p.add_argument("--graine", type=int, default=1)
+86:    p.add_argument("--init", type=float, default=0.08, help="écart-type d'initialisation")
+87:    p.add_argument("--enseignant", default="", help="dossier d'un modèle gelé à im
+… [434 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '30,70p' tools/entrainer_moteur.py", "description": "Read model construction in the training tool"}`
+
+  ```
+import numpy as np
+import torch
+import torch.nn as nn
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from essai_decharge import charger, lot_aleatoire  # noqa: E402
+
+
+def construire(famille, a):
+    from transformers import Qwen3Config, Qwen3ForCausalLM, Qwen3MoeConfig, Qwen3MoeForCausalLM
+    commun = dict(vocab_size=256, hidden_size=a.dim, num_hidden_layers=a.couches,
+                  num_attention_heads=a.tetes, num_key_value_heads=max(1, a.tetes // 2),
+                  max_position_embeddings=a.seq * 4, rms_norm_eps=1e-6,
+                  tie_word_embeddings=True,
+                  # `head_dim` DOIT être posé : `Qwen3Config` en a un défaut de 128,
+                  # indépendant de `hidden_size`, alors que `Qwen3MoeConfig` prend
+                  # `hidden // têtes`. Sans cette ligne, les deux familles
+                  # n'avaient pas la même attention du tout — le jumeau dense
+                  # lisait 1,2 M poids d'attention contre 0,4 M pour le routé, et
+                  # la comparaison « à lecture égale » ne comparait rien.
+                  head_dim=a.dim // a.tetes,
+                  # `initializer_range` : le défaut de HuggingFace (0,02) est
+     
+… [1044 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"topk_proj\\|topk-proj\\|act_topk\" drave-core/src/main.rs | head -12", "description": "Check per-projection top-k CLI"}`
+
+  ```
+454:             mdl.act_levels, mdl.act_thresh, mdl.act_topk, mdl.act_renorm);
+456:             mdl.attn_topk, mdl.qk_topk, mdl.moe_topk, mdl.act_topk_proj);
+607:    act_thresh: f32, act_topk: usize, act_renorm: bool, topk_proj: [usize; 7],
+759:            "--act-topk" => { o.act_topk = suivant(i).parse().unwrap(); 2 }
+760:            "--topk-q" => { o.topk_proj[0] = suivant(i).parse().unwrap(); 2 }
+761:            "--topk-k" => { o.topk_proj[1] = suivant(i).parse().unwrap(); 2 }
+762:            "--topk-v" => { o.topk_proj[2] = suivant(i).parse().unwrap(); 2 }
+763:            "--topk-o" => { o.topk_proj[3] = suivant(i).parse().unwrap(); 2 }
+764:            "--topk-gate" => { o.topk_proj[4] = suivant(i).parse().unwrap(); 2 }
+765:            "--topk-up" => { o.topk_proj[5] = suivant(i).parse().unwrap(); 2 }
+766:            "--topk-down" => { o.topk_proj[6] = suivant(i).parse().unwrap(); 2 }
+865:        act_thresh, act_topk, act_renorm, topk_proj, moe_topk, patch: patch_file,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"add_argument\\|quant_du_tenseur\" tools/exporter_gguf.py | head -20; echo \"=== règle ===\"; sed -n \"/def quant_du_tenseur/,/^def /p\" tools/exporter_gguf.py | head -25", "description": "Check exporter quantization rules a … [10 caractères tronqués]`
+
+  ```
+262:def quant_du_tenseur(nom_hf):
+330:    p.add_argument("--hf", required=True, help="dossier save_pretrained (config.json + safetensors)")
+331:    p.add_argument("--sortie", required=True)
+332:    p.add_argument("--f16", action="store_true")
+=== règle ===
+def quant_du_tenseur(nom_hf):
+    """Quel type GGUF l'export écrit pour ce tenseur — 'q4', 'q8', ou None.
+
+    LA MÊME règle sert à l'export ET à la référence (`porte_moteur.py`) : sans ce
+    point unique, la référence quantifiait la FFN dense en Q8_0 là où l'export
+    l'écrivait en Q4_0, et la « porte » comparait deux quantifications
+    différentes au lieu de comparer le moteur à la référence.
+    """
+    if "gate_up_proj" in nom_hf:
+        return "q4"                                    # experts fusionnés (MoE)
+    if ".mlp." in nom_hf and nom_hf.endswith(("gate_proj.weight", "up_proj.weight",
+                                              "down_proj.weight")):
+        return "q4"                                    # experts éclatés, ou FFN dense
+    if nom_hf.endswith(".weight"):
+        return "q8"
+    return None
+
+
+def _arch(cfg):
+  ```
+
+### 🤖 Assistant
+
+⏵ Implémentation du k-WTA à l'entraînement (le modèle apprend à vivre creux)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/^def main/,/^if __name__/p' tools/entrainer_moteur.py | sed -n '1,60p'", "description": "Read training main to place the hook"}`
+
+  ```
+def main():
+    p = argparse.ArgumentParser()
+    p.add_argument("--famille", choices=["dense", "route"], default="route")
+    p.add_argument("--donnees", nargs="+", default=["data/corpus_en.txt"])
+    p.add_argument("--validation", default="data/corpus_en_val.txt")
+    p.add_argument("--dim", type=int, default=192)
+    p.add_argument("--couches", type=int, default=4)
+    p.add_argument("--tetes", type=int, default=4)
+    p.add_argument("--cache", type=int, default=768, help="FFN dense, ou largeur d'expert")
+    p.add_argument("--cache-perle", type=int, default=0, help="largeur d'un expert (routé)")
+    p.add_argument("--experts", type=int, default=8)
+    p.add_argument("--k", type=int, default=2)
+    p.add_argument("--seq", type=int, default=128)
+    p.add_argument("--lot", type=int, default=32)
+    p.add_argument("--pas", type=int, default=20000)
+    p.add_argument("--lr", type=float, default=1e-3)
+    p.add_argument("--graine", type=int, default=1)
+    p.add_argument("--init", type=float, default=0.08, help="écart-type d'initialisation")
+    p.add_argument("--enseignant", default="", help="dossier d'un modèle gelé à imiter")
+    p.add_argument("--alpha-distill", type=float, defa
+… [2140 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"tools/entrainer_moteur.py\")\ns = p.read_text()\n\nhook = '''\ndef installer_kwta(modele, fraction, cibles=(\"o_proj\", \"down_proj\")):\n    \"\"\"Entraîne le modèle À VIVRE CREUX … [4364 caractères tronqués]`
+
+  ```
+entrainer_moteur.py modifié
+exporter_gguf.py modifié
+31:import os
+syntaxe python OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -c \"^import os\" tools/exporter_gguf.py; grep -n \"quant_du_tenseur\" tools/porte_moteur.py | head -3; echo \"=== fumée k-WTA (120 pas, dim 96) ===\"; CUDA_VISIBLE_DEVICES=0 timeout 600 /home/stephane/gpu-env/bin/python -u tool … [233 caractères tronqués]`
+
+  ```
+1
+31:                           quant_du_tenseur)
+61:        # La règle de quantification vient de l'EXPORT (`quant_du_tenseur`), pas
+64:        genre = quant_du_tenseur(k)
+=== fumée k-WTA (120 pas, dim 96) ===
+# dense · 0.25 M paramètres · 0.12 M poids LUS par jeton et par couche · 0.12 M stockés · corpus 100276153 octets · cuda
+# k-WTA à l'entraînement : 25% gardés sur 4 projections (o_proj, down_proj)
+  pas     60 · perte 2.7971 · val 4.2064 bits/octet · 13 s
+  pas    120 · perte 2.5022 · val 3.8540 bits/octet · 14 s
+Writing model shards:   0%|          | 0/1 [00:00<?, ?it/s]Writing model shards: 100%|██████████| 1/1 [00:00<00:00,  2.45it/s]Writing model shards: 100%|██████████| 1/1 [00:00<00:00,  2.45it/s]
+
+  # meilleur point : pas 120 · val 3.8540 bits/octet
+  # écrit dans /tmp/fumee_kwta · 0.25 M paramètres · 0.12 M poids lus/jeton/couche
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && DRAVE_FFN_Q8=1 /home/stephane/gpu-env/bin/python tools/exporter_gguf.py --hf /tmp/fumee_kwta --sortie /tmp/fumee_kwta.gguf 2>&1 | tail -3; head -c 256 data/corpus_en_val.txt | od -An -tu1 -v | tr -s ' ' '\\n' | grep -v '^$' | paste - … [510 caractères tronqués]`
+
+  ```
+# /tmp/fumee_kwta.gguf : 25 tenseurs · 0.2 Mo (f32 pour les normes, Q8_0 pour les projections, Q4_0 pour la FFN et les experts) · 13 métadonnées
+# architecture 2 couches · 96 cachés · FFN dense
+--- --push ---
+perplexité 11.9533 sur 127 tokens (25786828 événements
+paires (poids × activation) par token : attention 0.1 M · experts 0.0 M · partagé 0.2 M · scores 0 K · total 0.2 M
+--- --push --topk-down 250 ---
+perplexité 11.9593 sur 127 tokens (21103573 événements
+paires (poids × activation) par token : attention 0.1 M · experts 0.0 M · partagé 0.1 M · scores 0 K · total 0.2 M
+--- --push --topk-down 250 --topk-o 250 ---
+perplexité 12.2793 sur 127 tokens (19344703 événements
+paires (poids × activation) par token : attention 0.0 M · experts 0.0 M · partagé 0.1 M · scores 0 K · total 0.2 M
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && DRAVE_FFN_Q8=1 python3 -c \"\nimport sys; sys.path.insert(0,'tools')\nfrom exporter_gguf import quant_du_tenseur\nfor n in ['model.layers.0.mlp.down_proj.weight','model.layers.0.mlp.gate_proj.weight','model.layers.0.self_attn.o_proj. … [298 caractères tronqués]`
+
+  ```
+model.layers.0.mlp.down_proj.weight -> q8
+model.layers.0.mlp.gate_proj.weight -> q8
+model.layers.0.self_attn.o_proj.weight -> q8
+model.layers.0.mlp.experts.gate_up_proj -> q4
+=== types réels dans le gguf ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ./drave-core/target/release/drave /tmp/fumee_kwta.gguf --tensors 2>&1 | head -20; echo \"=== print de l'exporteur ===\"; grep -n \"Q4_0 pour la FFN\" tools/exporter_gguf.py", "description": "List exported tensor types"}`
+
+  ```
+qwen3 · 1 fichiers · 25 tenseurs · 0.00 Go de poids · en-têtes lus en 4.531514ms
+ · block_count 2 · embedding_length 96 · feed_forward_length 288 · attention.head_count 2 · attention.head_count_kv 1 · context_length 512
+  Q8_0     token_embd.weight                      [256, 96] · 0.0 M poids · fichier 0
+  F32      output_norm.weight                     [96] · 0.0 M poids · fichier 0
+  Q8_0     output.weight                          [256, 96] · 0.0 M poids · fichier 0
+  F32      blk.0.attn_norm.weight                 [96] · 0.0 M poids · fichier 0
+  Q8_0     blk.0.attn_q.weight                    [96, 96] · 0.0 M poids · fichier 0
+  Q8_0     blk.0.attn_k.weight                    [48, 96] · 0.0 M poids · fichier 0
+  Q8_0     blk.0.attn_v.weight                    [48, 96] · 0.0 M poids · fichier 0
+  Q8_0     blk.0.attn_output.weight               [96, 96] · 0.0 M poids · fichier 0
+  F32      blk.0.ffn_norm.weight                  [96] · 0.0 M poids · fichier 0
+  F32      blk.0.attn_q_norm.weight               [48] · 0.0 M poids · fichier 0
+  F32      blk.0.attn_k_norm.weight               [48] · 0.0 M poids · fichier 0
+  Q4_0     blk.0.ffn_gate.weight                  [288, 96] · 0
+… [634 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/^def quant_du_tenseur/,/^def _arch/p' tools/exporter_gguf.py", "description": "Inspect the modified quantization rule"}`
+
+  ```
+def quant_du_tenseur(nom_hf):
+    """Quel type GGUF l'export écrit pour ce tenseur — 'q4', 'q8', ou None.
+
+    LA MÊME règle sert à l'export ET à la référence (`porte_moteur.py`) : sans ce
+    point unique, la référence quantifiait la FFN dense en Q8_0 là où l'export
+    l'écrivait en Q4_0, et la « porte » comparait deux quantifications
+    différentes au lieu de comparer le moteur à la référence.
+    """
+    if "gate_up_proj" in nom_hf:
+        return "q4"                                    # experts fusionnés (MoE)
+    if ".mlp." in nom_hf and nom_hf.endswith(("gate_proj.weight", "up_proj.weight",
+                                              "down_proj.weight")):
+        # `DRAVE_FFN_Q8=1` écrit la FFN en 8 bits. POURQUOI CE DRAPEAU EXISTE :
+        # en 4 bits, le moteur n'a qu'un chemin (`DenseQ4`), SANS événements —
+        # donc un top-k imposé sur l'entrée de `down_proj` n'économise aucune
+        # lecture (§ 19 : « en dense, la parcimonie ne coûte que la qualité »).
+        # Pour mesurer ce qu'un modèle creux rapporte VRAIMENT, il faut que sa
+        # FFN soit exécutable en listes : c'est le seul chemin où un événement
+        # est une paire, donc le seul où la parcim
+… [260 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"quant_du_tenseur\\|\\\"q4\\\"\\|'q4'\\|q4_0\\|Q4_0\" tools/exporter_gguf.py | head -20", "description": "Find all quantization call sites in the exporter"}`
+
+  ```
+38:GGML_Q4_0, GGML_Q8_0 = 2, 8
+70:# ------------------------------------------------------------------- Q4_0
+72:# d'experts : Q4_K, Q6_K, MXFP4, Q4_0 et les super-blocs « sans noyau ». Un
+75:# chargement meurt sur « blk.0.ffn_gate.weight absent ». Q4_0 est le plus simple
+77:def q4_0_encoder(a):
+79:    nibbles hauts = 16..31). Reproduction de `quantize_row_q4_0_ref` de ggml —
+98:def q4_0_decoder(brut, forme):
+101:    Sans lui, la comparaison moteur/référence mesurerait la quantification Q4_0
+145:    ou de (nom, (octets, type_ggml)) pour un format écrit à la main (Q4_0)."""
+243:                    t.append((b + nom, (q4_0_encoder(arr), GGML_Q4_0, arr.shape)))
+247:            # Jumeau dense : sa FFN peut être quantifiée en Q4_0 COMME les experts
+256:                    t.append((b + nom, (q4_0_encoder(arr), GGML_Q4_0, arr.shape)))
+262:def quant_du_tenseur(nom_hf):
+263:    """Quel type GGUF l'export écrit pour ce tenseur — 'q4', 'q8', ou None.
+267:    l'écrivait en Q4_0, et la « porte » comparait deux quantifications
+271:        return "q4"                                    # experts fusionnés (MoE)
+283:        return "q4"                                    # experts éclatés, ou FFN d
+… [79 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/exporter_gguf.py", "limit": 45, "offset": 222}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/exporter_gguf.py</path>
+<type>file</type>
+<content>
+222:     for l in range(n_l):
+223:         p, b = f"model.layers.{l}.", f"blk.{l}."
+224:         t += [("blk.%d.attn_norm.weight" % l, poids[p + "input_layernorm.weight"]),
+225:               q8(b + "attn_q.weight", poids[p + "self_attn.q_proj.weight"]),
+226:               q8(b + "attn_k.weight", poids[p + "self_attn.k_proj.weight"]),
+227:               q8(b + "attn_v.weight", poids[p + "self_attn.v_proj.weight"]),
+228:               q8(b + "attn_output.weight", poids[p + "self_attn.o_proj.weight"]),
+229:               (b + "ffn_norm.weight", poids[p + "post_attention_layernorm.weight"])]
+230:         if est_moe:
+231:             # Le ROUTEUR n'existe que dans la famille MoE : l'ajouter à un modèle
+232:             # dense lève une KeyError sur `mlp.gate.weight` — nom qui, dans un
+233:             # dense, désigne la PREMIÈRE matrice du SwiGLU, pas un routeur.
+234:             t.append(q8(b + "ffn_gate_inp.weight", poids[p + "mlp.gate.weight"]))
+235:         if p + "self_attn.q_norm.weight" in poids:
+236:             t += [(b + "attn_q_norm.weight", poids[p + "self_attn.q
+… [1760 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/exporter_gguf.py", "new_string": "            for nom, cle in ((\"ffn_gate.weight\", \"mlp.gate_proj.weight\"),\n                             (\"ffn_up.weight\", \"mlp.up_proj.weight\"),\n                             (\"ffn_down.we … [1328 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/exporter_gguf.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && DRAVE_FFN_Q8=1 /home/stephane/gpu-env/bin/python tools/exporter_gguf.py --hf /tmp/fumee_kwta --sortie /tmp/fumee_kwta_q8.gguf 2>&1 | tail -2; ./drave-core/target/release/drave /tmp/fumee_kwta_q8.gguf --tensors 2>/dev/null | grep -E \ … [407 caractères tronqués]`
+
+  ```
+# /tmp/fumee_kwta_q8.gguf : 25 tenseurs · 0.3 Mo (f32 pour les normes, Q8_0 pour les projections, Q4_0 pour la FFN et les experts) · 13 métadonnées
+# architecture 2 couches · 96 cachés · FFN dense
+  F32      blk.0.ffn_norm.weight                  [96] · 0.0 M poids · fichier 0
+  Q8_0     blk.0.ffn_gate.weight                  [288, 96] · 0.0 M poids · fichier 0
+  Q8_0     blk.0.ffn_up.weight                    [288, 96] · 0.0 M poids · fichier 0
+  Q8_0     blk.0.ffn_down.weight                  [96, 288] · 0.0 M poids · fichier 0
+--- --push ---
+perplexité 11.9968 sur 127 tokens (28084300 événements
+--- --push --topk-down 250 ---
+perplexité 12.0314 sur 127 tokens (22824403 événements
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"tools/entrainer_moteur.py\")\ns = p.read_text()\ns = s.replace('''def installer_kwta(modele, fraction, cibles=(\"o_proj\", \"down_proj\")):''',\n'''def installer_kwta(modele, fract … [1983 caractères tronqués]`
+
+  ```
+ok
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && CUDA_VISIBLE_DEVICES=0 timeout 300 /home/stephane/gpu-env/bin/python -u tools/entrainer_moteur.py --famille dense --dim 96 --couches 2 --tetes 2 --cache 288 --pas 60 --eval-tous 60 --kwta 0.25 --sortie /tmp/fumee_kwta2 2>&1 | tail -1 … [74 caractères tronqués]`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && CUDA_VISIBLE_DEVICES=0 timeout 300 /home/stephane/gpu-env/bin/python -u tools/entrainer_moteur.py --famille dense --dim 96 --couches 2 --tetes 2 --cache 288 --pas 60 --eval-tous 60 --kwta 0.25 --sortie /tmp/fumee_kwta2 > /tmp/fumee2. … [127 caractères tronqués]`
+
+  ```
+code 0
+# dense · 0.25 M paramètres · 0.12 M poids LUS par jeton et par couche · 0.12 M stockés · corpus 100276153 octets · cuda
+# k-WTA à l'entraînement : 25% gardés sur 15 projections (toutes les couches linéaires, comme `--act-topk` du moteur)
+  pas     60 · perte 3.0803 · val 4.5995 bits/octet · 5 s
+Writing model shards:   0%|          | 0/1 [00:00<?, ?it/s]Writing model shards: 100%|██████████| 1/1 [00:00<00:00, 185.29it/s]
+
+  # meilleur point : pas 60 · val 4.5995 bits/octet
+  # écrit dans /tmp/fumee_kwta2 · 0.25 M paramètres · 0.12 M poids lus/jeton/couche
+  ```
+
+### 🤖 Assistant
+
+⏵ Mise en file des entraînements « creux par construction » pour la nuit
+
+- **write** `{"content": "#!/bin/bash\n# nuit3_kwta.sh — la question qui décide de l'architecture sur un modèle DENSE :\n# la parcimonie doit-elle être IMPOSÉE ou APPRISE ?\n#\n# CE QUE LA CAMPAGNE A DÉJÀ MESURÉ. Sur un modèle qui n'a jamais appris à être\n# creux, un top-k imposé coûte cher : +4 % de perplexité … [3184 caractères tronqués]`
+
+  ```
+<path>/tmp/campagne24/nuit3_kwta.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash -n /tmp/campagne24/nuit3_kwta.sh && echo \"syntaxe OK\" && setsid nohup bash /tmp/campagne24/nuit3_kwta.sh > /tmp/campagne24/nuit3_console.log 2>&1 < /dev/null & sleep 2; pgrep -af \"nuit3_kwt[a]\" | head -2; echo \"--- état des … [286 caractères tronqués]`
+
+  ```
+syntaxe OK
+844913 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash -n /tmp/campagne24/nuit3_kwta.sh && echo "syntaxe OK" && setsid nohup bash /tmp/campagne24/nuit3_kwta.sh > /tmp/campagne24/nuit3_console.log 2>&1 < /dev/null & sleep 2; pgrep -af "nuit3_kwt[a]" | head -2; echo "--- état des chaînes ---"; cat /tmp/campagne24/journal6.txt 2>/dev/null | tail -3; cat /tmp/campagne24/spec_marqueurs.txt 2>/dev/null; cat /tmp/campagne24/codestral_corrige_marqueur.txt 2>/dev/null || echo "codestral en cours"
+844914 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash -n /tmp/campagne24/nuit3_kwta.sh && echo "syntaxe OK" && setsid nohup bash /tmp/campagne24/nuit3_kwta.sh > /tmp/campagne24/nuit3_console.log 2>&1 < /dev/null & sleep 2; pgrep -af "nuit3_kwt[a]" | head -2; echo "--- état des chaînes ---"; cat /tmp/campagne24/journal6.txt 2>/dev/null | tail -3; cat /tmp/campagne24/spec_marqueurs.txt 2>/dev/null; cat /tmp/campagne24/codestral_corrige_marqueur.txt 2>/dev/null || echo "codestral en cours"
+--- état des chaînes ---
+[08/10 22:41:02] charge 49.08 · === batch 4 : quatre tâches, réponses verbatim ===
+[08/10 22:41:24] === batch 4 INTERROMPU volontairement : 
+… [380 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md", "new_string": "Ce que cela dit pour la suite : un brouillon **générique** ne paie pas. Il faut un\nbrouillon **aligné** sur sa cible (distillé, ou une tête Eagle3 qui consomme les\nétats cachés de  … [2519 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /tmp/campagne24 && echo \"=== spec 1.5->14 ===\"; ls -la spec_15_14.log 2>/dev/null && grep -E \"jetons acceptés|coût relatif|gain net\" spec_15_14.log; echo \"=== gpt-oss restreinte_2 ===\"; ls -la tete_gpt-oss*restreinte*; echo \"=== campagne portes ===\"; tail -2 journal.txt; grep … [125 caractères tronqués]`
+
+  ```
+=== spec 1.5->14 ===
+=== gpt-oss restreinte_2 ===
+-rw-r--r--. 1 stephane stephane 2574  9 oct 00:25 tete_gpt-oss-120B_restreinte_1.log
+-rw-r--r--. 1 stephane stephane 2573  9 oct 00:33 tete_gpt-oss-120B_restreinte_2.log
+=== campagne portes ===
+[09/10 01:03:30] charge 32.31 · portes : 22 vertes · 1 rouges
+[09/10 01:03:30] charge 32.31 · === campagne terminée ===
+22
+=== journal6 (m6) ===
+[08/10 22:41:24] === batch 4 INTERROMPU volontairement : ses étapes gpt-oss (4 tâches + conversation, 5 x timeout 3600) coûtaient 4 à 5 h de lectures du même fichier de 63 Go et concurrençaient la mesure PPL de la campagne. Les mesures par modèle (0,5 B, 1,5 B) et la latence sont déjà acquises ; les quatre tâches seront refaites sur un modèle plus petit. ===
+[08/10 22:41:24] === batch 4 terminé ===
+  ```
+
+### 🤖 Assistant
+
+⏵ La campagne est terminée : 22 portes vertes, 1 rouge — il faut la nommer
+
+- **bash** `{"command": "cd /tmp/campagne24 && grep -nE \"❌\" portes.log; echo \"=== contexte ===\"; grep -nE \"❌\" -B3 -A3 portes.log | head -20; echo \"=== résumé complet ===\"; cat portes.log", "description": "Identify the failing gate"}`
+
+  ```
+15:  gpt-oss-120b MXFP4 ctx 256                 —  ❌ (attendu 15.6017)
+=== contexte ===
+12-  V4-Flash 43 couches ctx 32 (archivée)     ARCHIVE=1 pour la lancer
+13-  engram V4.1 : adressage                    rangées DISTINCTES : 479723  ✅
+14-  gpt-oss : --config le dit calculable       oui  ✅
+15:  gpt-oss-120b MXFP4 ctx 256                 —  ❌ (attendu 15.6017)
+16-  le flux relu par tools/analyse_flux.py     51 lignes  ✅
+17-  le rejeu de la trace (0 manquante, écart ≤ 1e-5) écart 0.00e+00  ✅
+18-  porte de correction (llama.cpp, 71 positions) (100.0 % des positions UTILES au-dessus de 0.95, min 0.9959 >= plancher 0.9, top-1 94.4 % sur toutes les positions, 6 saturées exclues de la corrélation)  ✅
+=== résumé complet ===
+=== Portes ===
+  cargo test --release                       77 verts  ✅
+  Qwen2.5-0.5B ctx 256                       19.3885  ✅
+  Qwen3-30B en clusters (origine : 799,8557) 799.8557  ✅
+  threads par défaut (physiques)            20  ✅
+  formats contre libggml                     17 concorde(s), 0 divergence(s), 0 absent(s)  ✅
+  GLM-5.3 : sigmoïde ×2,5                  sigmoïde  ✅
+  Kimi-K2.7 : sigmoïde ×2,827              sigmoïde  ✅
+  V4-Flash : racine de softplus  
+… [1503 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"15.6017\" -B6 -A6 tools/portes.sh | head -40", "description": "Find the gpt-oss gate definition"}`
+
+  ```
+177-            [ -s /tmp/wt2_txt.txt ] || head -c 20000 data/wikitext2_test.txt > /tmp/wt2_txt.txt
+178-            $D "$O" --tokenize --fichier /tmp/wt2_txt.txt --sortie /tmp/ids_oss_512.txt >/dev/null 2>&1
+179-        fi
+180-        if [ -s /tmp/ids_oss_512.txt ]; then
+181-            p=$(timeout 2400 $D "$O" --ppl /tmp/ids_oss_512.txt --ctx 256 --dense \
+182-                --threads 16 --limit 512 2>&1 | valeur)
+183:            compare "gpt-oss-120b MXFP4 ctx 256" "15.6017" "$p"
+184-        else
+185-            printf "  %-42s %s\n" "gpt-oss-120b MXFP4 ctx 256" "identifiants indisponibles"
+186-        fi
+187-    else
+188-        printf "  %-42s %s\n" "gpt-oss-120b MXFP4 ctx 256" "modèle absent"
+189-    fi
+  ```
+
+- **bash** `{"command": "pgrep -af \"batch7_tet[e]\" | head -2; echo \"--- gpt-oss readers ---\"; pgrep -af \"gpt-oss-120b-MXFP4\" | sed 's/.*drave/drave/' | cut -c1-110 | head; echo \"--- restreinte_2 ---\"; grep -E \"généré|jetons\\]\" /tmp/campagne24/tete_gpt-oss-120B_restreinte_2.log | head -3; echo \"--- j … [144 caractères tronqués]`
+
+  ```
+--- gpt-oss readers ---
+drave/' | cut -c1-110 | head; echo "--- restreinte_2 ---"; grep -E "généré|jetons\]" /tmp/campagne24/tete_gpt-
+--- restreinte_2 ---
+--- ids générés : [12626, 12626, 12626, 12626, 12626, 12626, 12626, 12626, 12626, 12626, 12626, 12626, 12626, 12626, 12626, 12626, 12626, 12626, 12626, 12626, 12626, 12626, 12626, 12626, 12626, 12626, 12626, 12626, 12626, 12626, 12626, 12626, 12626, 12626, 12626, 12626, 12626, 12626, 12626, 12626, 12626, 12626, 12626, 12626, 12626, 12626, 12626, 12626, 12626, 12626, 12626, 12626, 12626, 12626, 12626, 12626, 12626, 12626, 12626, 12626, 12626, 12626, 12626, 12626]
+généré  : 64 tokens en 71.032 s  (0.90 tok/s)
+--- journal7 tete ---
+  ```
+
+### 🤖 Assistant
+
+⏵ Relance de la porte gpt-oss seule (la machine est libre de lecteurs)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash -c '\nD=./drave-core/target/release/drave\nO=/home/stephane/Data13TB/stephane/modeles/gguf/gpt-oss-120b-MXFP4.gguf\n/usr/bin/time -v timeout 5400 $D \"$O\" --ppl /tmp/ids_oss_512.txt --ctx 256 --dense --threads 16 --limit  … [409 caractères tronqués]`
+
+  ```
+porte gpt-oss seule pid 845402
+01:04:52
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md", "new_string": "**Et sur un modèle plus gros que la RAM, la tête restreinte ne gagne RIEN** — la\nmesure qui manquait, faite le 9 octobre sur gpt-oss-120B (63 Go, MXFP4, disque),\nmême invite, 64 je … [3061 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md", "new_string": "## 17. L'instrument : le binaire de la campagne était plus VIEUX que ses correctifs\n\n**Le fait.** `drave-core/target/release/drave` portait la date du 8 octobre 11 h 00.\nTrois com … [3026 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport os, math\nC=\"/tmp/campagne24/\"\npaires = [(\"prose\", \"data/wikitext2_test.txt\", \"ids_b2_prose.txt\", 15.85),\n          (\"français\", C+\"corpus_fr.txt\", \"ids_b2_francais.txt\", 11.19),\n          (\ … [687 caractères tronqués]`
+
+  ```
+corpus          octets    jetons  jetons/octet       PPL  bits/octet
+prose           359041     85626        0.2385     15.85       0.951
+français        972439    270586        0.2783     11.19       0.969
+code           4000000   1246649        0.3117      7.09       0.881
+multilingue     271958    111869        0.4113    229.84       3.227
+  ```
+
+- **bash** `{"command": "cd /tmp/campagne24 && head -c 300 corpus_multi.txt; echo; echo \"---- composition (premiers mots de chaque ligne) ----\"; head -6 corpus_multi.txt | cut -c1-80; echo \"---- taille/lignes ----\"; wc -lc corpus_multi.txt", "description": "Inspect the multilingual corpus"}`
+
+  ```
+Дарбанзаалак ауаҩы абри Адекларациа ирыланаҳәо азинқәеи ахақәиҭрақәеи зегь имазароуп, милаҭлеи, хаҵалеи ҧҳәыслеи, бызшәалеи, хылҵшьҭралеи, динлеи, маллеи, маҵура�
+---- composition (premiers mots de chaque ligne) ----
+Дарбанзаалак ауаҩы абри Адекларациа ирыланаҳәо азинқәеи ахақәиҭрақәеи зегь имаза
+Tiep ureung na hak saban bandum bebah lam grak, bebah lam bicara meunan keuh dik
+Juu chithamnumka mash aintnau ayamprumaktin takakji warinmaksha pase inintimtuni
+Nɔ fɛɛ nɔ ngɛ he blɔhi kɛ he jɔmi nɛ a je ngɔ tsɔɔ ngɛ womi nɛ ɔ mi a he blɔ, nɛ
+Хэтрэ цIыфи зэфэдэу фит мы джэпсалъэм хэт цІыф фэшъуашэхэмрэ фитыныгъэхэмрэ зыфи
+Elke persoon het die reg tot al die regte en vryhede soos in die Verklaring verv
+---- taille/lignes ----
+   399 271958 corpus_multi.txt
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"10 ter\" reports/rapport-campagne-benefices.md; sed -n '/## 10 ter/,/^---$/p' reports/rapport-campagne-benefices.md | head -30", "description": "Locate section 10 ter"}`
+
+  ```
+432:## 10 ter. La densité d'activation ne dépend PAS de la tâche — la qualité, si
+749:défaut sur un modèle dense** : à 71 % de densité (§ 10 ter), on est du mauvais côté
+787:(§ 8 et porte tenue), `portes` (en cours au moment d'écrire), `batch 2` (§ 10 ter),
+800:  (§ 10 ter) ; le corpus multilingue est en cours dans le même batch ;
+## 10 ter. La densité d'activation ne dépend PAS de la tâche — la qualité, si
+
+Même modèle (Qwen2.5-0.5B Q8_0), même matériel, quatre corpus, 192 jetons : la
+question du batch 2 était « le bénéfice événementiel dépend-il de la tâche ? ».
+
+| corpus | jetons/octet | PPL | **bits/octet** | paires/jeton | **densité** |
+|---|---:|---:|---:|---:|---:|
+| prose anglaise | 0,2385 | 15,85 | **0,951** | 495,9 M | **71 %** |
+| français | 0,2783 | 11,19 | **0,969** | 495,9 M | **71 %** |
+| code | 0,3117 | 7,09 | **0,881** | 495,9 M | **71 %** |
+
+**La densité est identique dans les trois cas — 71 %, à 0,002 point près**
+(67,766 / 67,767 / 67,766 milliards d'événements). Autrement dit : **le bénéfice
+événementiel ne dépend pas de la tâche**, il dépend du **modèle**. Un modèle dense
+reste dense quelle que soit l'entrée ; c'est la parcimonie *entraînée* qui la
+change, et 
+… [560 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md", "new_string": "| corpus | jetons/octet | PPL | **bits/octet** | paires/jeton | **densité** |\n|---|---:|---:|---:|---:|---:|\n| prose anglaise | 0,2385 | 15,85 | **0,951** | 495,9 M | **71 %** |\n| … [3407 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md", "new_string": "| **MoE / routage d'experts** | ✅ mesuré | 4 experts sur 128 (3,1 %) · déséquilibre **×3,90** · **847 octets** par jeton à router |\n| **multilingue (399 langues)** | ✅ mesuré, et c' … [550 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /tmp/campagne24 && echo \"=== spec 1.5->14 ===\"; ls -la spec_15_14.log 2>/dev/null && grep -E \"acceptés|coût|gain\" spec_15_14.log; echo \"=== porte gpt-oss seule ===\"; cat porte_gptoss_seule_marqueur.txt 2>/dev/null || echo \"(en cours, démarrée 01:04)\"; echo \"=== charge ===\"; … [192 caractères tronqués]`
+
+  ```
+=== spec 1.5->14 ===
+=== porte gpt-oss seule ===
+(en cours, démarrée 01:04)
+=== charge ===
+ 01:06:53  up 17 days 14:18,  2 users,  load average: 34,41, 32,66, 36,08
+=== m6 ===
+  pas  16000 · perte 1.2641 · val 1.9971 bits/octet · 1809 s
+  ```
+
+### 🤖 Assistant
+
+⏵ Revue et commit des correctifs d'instrument et des nouveaux outils
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short | head -20; echo \"=== diff stat ===\"; git diff --stat | tail -8", "description": "Review working tree changes"}`
+
+  ```
+M drave-core/src/main.rs
+ M journal/README.md
+ M journal/sessions/MANIFEST.md
+ M journal/sessions/d31b3d9b-58e4-4d34-85fa-381b6f6a6a76/digest.md
+ M journal/sessions/d31b3d9b-58e4-4d34-85fa-381b6f6a6a76/rapport.md
+ M reports/rapport-campagne-benefices.md
+ M tools/entrainer_moteur.py
+ M tools/exporter_gguf.py
+ M tools/premiere_couche_semantique.py
+?? tools/mesure_fenetres.sh
+?? tools/speculatif_moteur.py
+?? tools/trace_gpu.py
+=== diff stat ===
+ journal/sessions/MANIFEST.md                       |   4 +-
+ .../d31b3d9b-58e4-4d34-85fa-381b6f6a6a76/digest.md | 991 +++++++++++++++++++++
+ .../rapport.md                                     |  33 +-
+ reports/rapport-campagne-benefices.md              | 256 +++++-
+ tools/entrainer_moteur.py                          |  50 ++
+ tools/exporter_gguf.py                             |  21 +-
+ tools/premiere_couche_semantique.py                |  30 +-
+ 9 files changed, 1371 insertions(+), 43 deletions(-)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff tools/premiere_couche_semantique.py | head -40", "description": "Check the semantic tool diff"}`
+
+  ```
+diff --git a/tools/premiere_couche_semantique.py b/tools/premiere_couche_semantique.py
+index 0248f4a..15d0203 100644
+--- a/tools/premiere_couche_semantique.py
++++ b/tools/premiere_couche_semantique.py
+@@ -76,7 +76,7 @@ def decode(buf, n):
+     return idx, val, 3*n
+ 
+ 
+-def cache(dossier, pool, sortie):
++def cache(dossier, pool, sortie, echelle=True):
+     """Lit tout un dossier une fois et garde les vecteurs réduits.
+ 
+     24 couches × ~60 positions par trace, réduites à 24 vecteurs : le corpus
+@@ -98,7 +98,7 @@ def cache(dossier, pool, sortie):
+     donnees, langues, couches = {}, [], None
+     for f in sorted(glob.glob(os.path.join(dossier, "*.drvf"))):
+         L = os.path.basename(f)[:-5]
+-        r = lire(f, pool)
++        r = lire(f, pool, echelle)
+         if r:
+             donnees[L] = r; langues.append(L)
+             couches = sorted(r) if couches is None else couches
+@@ -111,8 +111,19 @@ def cache(dossier, pool, sortie):
+     return donnees
+ 
+ 
+-def lire(chemin, pool):
+-    """{couche: vecteur} — paires ENTRELACÉES (cf. flux_codec.decoder)."""
++def lire(chemin, pool, echelle=True):
++    """{couche: vecteur} — paires ENTRELACÉES (cf. flux_codec.decoder).
++
++    L'ÉCHELL
+… [678 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -20 tools/trace_gpu.py; echo \"...\"; ls -la tools/trace_gpu.py", "description": "Inspect untracked trace_gpu tool"}`
+
+  ```
+#!/usr/bin/env python3
+"""trace_gpu.py — tracer le professeur sur GPU, au MÊME format que le moteur.
+
+POURQUOI. Le traçage est le coût fixe de tous nos cycles : 3,7 s par langue avec
+le moteur, soit 26 minutes pour les 399 langues de l'article 1 — et le corpus
+Wikipedia complet avait demandé des heures. Une passe avant de 50 jetons sur un
+0,5 B est, sur un GPU, un problème de quelques centaines de microsecondes : c'est
+la même opération, cent fois plus rapide.
+
+CE QUI CHANGE, ET QU'IL FAUT MESURER. Le moteur trace avec ses POIDS QUANTIFIÉS
+(Q8_0) et son noyau emprunté ; ici on trace avec les poids d'origine en
+safetensors, en fp32. Ce ne sont PAS les mêmes nombres. Un corpus tracé sur GPU
+n'est donc comparable à un corpus tracé par le moteur que si on le chiffre — même
+discipline que la calibration dense/événementiel (`tools/calibre_modes.py`), et
+`--calibrer` le fait : il trace les mêmes textes dans les deux et rend le cosinus
+par couche.
+
+LE FORMAT EST CELUI DU MOTEUR — DRVF v2, via `flux_codec.encoder`. C'est
+délibéré : tous les outils d'analyse du dépôt (`premiere_couche_semantique.py`,
+`profil_couches.py`, `invariance_unites.py`…) lisent ce format, et un corpus GPU
+...
+-rw-r--
+… [61 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/premiere_couche_semantique.py && git commit -q -m \"L'échelle par enregistrement des traces : les lecteurs l'ignoraient, et le résultat change\n\nLe moteur quantifie chaque enregistrement DRVF sur act_levels = 127 et ra … [538 caractères tronqués]`

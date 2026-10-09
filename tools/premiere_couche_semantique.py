@@ -76,7 +76,7 @@ def decode(buf, n):
     return idx, val, 3*n
 
 
-def cache(dossier, pool, sortie):
+def cache(dossier, pool, sortie, echelle=True):
     """Lit tout un dossier une fois et garde les vecteurs réduits.
 
     24 couches × ~60 positions par trace, réduites à 24 vecteurs : le corpus
@@ -98,7 +98,7 @@ def cache(dossier, pool, sortie):
     donnees, langues, couches = {}, [], None
     for f in sorted(glob.glob(os.path.join(dossier, "*.drvf"))):
         L = os.path.basename(f)[:-5]
-        r = lire(f, pool)
+        r = lire(f, pool, echelle)
         if r:
             donnees[L] = r; langues.append(L)
             couches = sorted(r) if couches is None else couches
@@ -111,8 +111,19 @@ def cache(dossier, pool, sortie):
     return donnees
 
 
-def lire(chemin, pool):
-    """{couche: vecteur} — paires ENTRELACÉES (cf. flux_codec.decoder)."""
+def lire(chemin, pool, echelle=True):
+    """{couche: vecteur} — paires ENTRELACÉES (cf. flux_codec.decoder).
+
+    L'ÉCHELLE PAR ENREGISTREMENT EST APPLIQUÉE, et ce n'était pas le cas avant.
+    Le moteur quantifie chaque enregistrement sur `act_levels = 127` niveaux :
+    il écrit `round(v / s)` avec `s = max|v| / 127`, et range `s` dans l'en-tête
+    de l'enregistrement (`ech`). **Tous les lecteurs de ce dépôt ignoraient `s`**,
+    donc lisaient des entiers bornés à ±127 à la place des valeurs physiques.
+    Vérifié contre une référence PyTorch fp32 sur Qwen2.5-0.5B : sans l'échelle,
+    le rapport de normes va de ×6 à ×100 selon la couche ; avec, il tombe entre
+    0,96 et 1,01. `echelle=False` reproduit l'ancien comportement, pour pouvoir
+    mesurer ce que la correction change.
+    """
     sortie = {}
     with open(chemin, "rb") as f:
         if f.read(4) != b"DRVF":
@@ -137,7 +148,7 @@ def lire(chemin, pool):
             f.seek(debut + off)
             v = np.zeros(hid)
             ok = idx < hid
-            v[idx[ok]] = val[ok]
+            v[idx[ok]] = val[ok]*(ech if echelle else 1.0)
             par_pos.setdefault(c, []).append((pos, v))
         for c, liste in par_pos.items():
             liste.sort(key=lambda x: x[0])
@@ -168,10 +179,15 @@ def cos_moyen(A, B, iu, maxi):
 def main():
     d1, d2 = sys.argv[1], sys.argv[2]
     maxi = int(opt("--max-paires", 40000))
+    ech = "--sans-echelle" not in sys.argv
+    if not ech:
+        print("# ATTENTION : --sans-echelle reproduit l'ANCIEN comportement (échelle "
+              "par enregistrement ignorée). Ce n'est pas la bonne lecture.")
     poolings = ["moyenne", "derniere"]
     for pool in poolings:
-        A = cache(d1, pool, opt("--cache", "/tmp/pcs_a1") + f".{pool}.npz")
-        B = cache(d2, pool, opt("--cache", "/tmp/pcs_a2") + f".{pool}.npz")
+        sfx = "" if ech else ".sans_echelle"
+        A = cache(d1, pool, opt("--cache", "/tmp/pcs_a1") + f".{pool}{sfx}.npz", ech)
+        B = cache(d2, pool, opt("--cache", "/tmp/pcs_a2") + f".{pool}{sfx}.npz", ech)
         comm = sorted(set(A) & set(B))
         if not comm:
             print(f"# pooling {pool} : aucune langue commune"); continue

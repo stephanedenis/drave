@@ -5,15 +5,15 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 14.9 h |
+| Durée | 15.9 h |
 | Tours | 27 |
-| Messages | 648 |
-| Appels d'outils | 612 |
-| Fichiers touchés | 21 |
-| Commandes | 490 |
+| Messages | 786 |
+| Appels d'outils | 750 |
+| Fichiers touchés | 25 |
+| Commandes | 593 |
 | Sous-agents | 3 |
-| Commits | 43 |
-| Compactages de contexte | 0 |
+| Commits | 44 |
+| Compactages de contexte | 1 |
 
 ## Objectifs déclarés
 
@@ -1270,15 +1270,27 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 
 ### Tour 27 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1477 caractères tronqués]
 
-*3 appels d'outils.* Actions notables :
+*141 appels d'outils.* Actions notables :
 
 - bash — Check the full state
 - bash — Measure the distilled d384 with the correct protocol
 - bash — Record the d384 distillation result
+- bash — Find the semantic A/B processes
+- bash — Compare the two semantic readings layer by layer
+- bash — Check the similarity metric used
+- job_list
+- bash — Check campaign logs and running processes
+- bash — Check parentage and campaign step progress
+- bash — Inspect campaign journal and semantic step definition
+- bash — Read campaign script header
+- bash — Read parcimonie, contexte, lot steps
+- bash — Inspect batch2 script
+- bash — Read batch2 journal and latency map
+- … et 112 autres
 
 **Synthèse produite :**
 
-⏵ La distillation à l'échelle 384 donne −12 % — le gain croît avec la taille
+⏵ Revue et commit des correctifs d'instrument et des nouveaux outils
 
 ## 3. Travail accompli
 
@@ -1290,11 +1302,11 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/corpus_wikipedia.py` | 2 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-parcimonie-entrainee.md` | 1 | 3 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/essai_blocs.py` | 1 | 5 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/exporter_gguf.py` | 1 | 18 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/exporter_gguf.py` | 1 | 19 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte_moteur.py` | 1 | 4 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py` | 1 | 4 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-reparti-moteur.sh` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs` | 0 | 2 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs` | 0 | 3 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/numa-segregation.md` | 1 | 3 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-modele-moteur.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/configuration-nvme-raid-amd.md` | 1 | 2 |
@@ -1303,10 +1315,14 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/campagne_synthese.py` | 1 | 2 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/speculatif.py` | 1 | 0 |
 | `/tmp/campagne24/batch3_niah.sh` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md` | 1 | 10 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-benefices.md` | 1 | 21 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/census_routage.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte_mistral.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-mistral.sh` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/speculatif_moteur.py` | 1 | 1 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mesure_fenetres.sh` | 1 | 0 |
+| `/tmp/campagne24/nuit2_m6.sh` | 1 | 0 |
+| `/tmp/campagne24/nuit3_kwta.sh` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -1356,7 +1372,7 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 450 autres
+- … et 553 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1484,7 +1500,7 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 
 ## 5. Erreurs rencontrées
 
-26 sorties en erreur ou divergentes. Les premières :
+34 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : ```  ### 🤖 Assistant  ⏵ **En transformers 5, `AutoModel` rend directement `Qwen2Model` (pas de `.model`). Je corrige le diagnostic.**  - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitH
 - **T2** : 3310393 bash -c pgrep -af "essai_decharge" | grep python | head; echo "--- logs ---"; tail -2 /tmp/ec_d192_lr3e3.log 2>/dev/null; tail -2 /tmp/ec_d192_lr1e3.log 2>/dev/null; echo "---"; ls -la /tmp/ec
@@ -1547,4 +1563,5 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/msg_banc.txt <<'MSG' Le banc des encodages ne plante plus sur les modèles K-quant (c'était la p
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="reports/rapport-campagne-benefices.md"; s=open(p).read() ajout = '''## 20. Contexte et
 - tail -4 /tmp/campagne24/journal4.txt; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="reports/rapport-campagne-benefices.md"; s=open(p
+- L'échelle par enregistrement des traces : les lecteurs l'ignoraient, et le résultat change  Le moteur quantifie chaque enregistrement DRVF sur act_levels = 127 
 
