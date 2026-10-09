@@ -181,8 +181,25 @@ là où `gate` et `up` s'effondrent (+101 %, +75 %, § 19 bis).
   5 %. La contrainte est un lagrangien sur le nombre de non-zéros attendus, donc
   dérivable par un seuil appris.
 - **Gain attendu** : à budget égal, la perplexité d'un modèle qui *choisit* où être
-  creux doit être meilleure que celle d'un modèle creusé uniformément — de combien,
-  c'est la question, et elle n'est pas mesurée.
+  creux doit être meilleure que celle d'un modèle creusé uniformément.
+- **PREMIER ESSAI, ET IL ÉCHOUE** (9/10, `m5_d384_dense_q8`, 127 jetons, mêmes
+  conditions) : à événements comparables, une allocation **ciblée d'après le tableau
+  de sensibilité du § 19 bis** (`o` et `down` à 30 %, le reste à 100 % → 689 M
+  d'événements, soit l'équivalent d'un taux uniforme de 77 %) donne **3,9469** de
+  perplexité, contre **3,6998** pour un taux uniforme de 70 % (629 M) — et **3,7169**
+  sans aucune parcimonie (898 M).
+
+  | allocation (même fenêtre) | événements | perplexité |
+  |---|---:|---:|
+  | aucune | 897 753 869 | 3,7169 |
+  | **uniforme 70 %** | 629 364 528 | **3,6998** |
+  | uniforme 50 % | 449 348 892 | **3,6521** |
+  | ciblée (o/down 30 %) | 688 874 158 | 3,9469 |
+
+  **La sensibilité par projection n'est pas transposable d'un modèle à l'autre** :
+  le tableau du § 19 bis avait été mesuré sur Qwen2.5-0.5B, et sur notre modèle
+  c'est l'inverse qui se produit. Le principe « répartir le budget » n'est donc pas
+  réfuté — mais il doit être **appris**, pas déduit d'un autre modèle.
 - **Ce qui manque** : un seuil appris par projection dans le harnais. C'est un
   changement **local** de l'entraînement (`--kwta` existe déjà), et la mesure se
   fait avec les outils de la campagne.

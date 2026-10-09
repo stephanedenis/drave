@@ -16108,3 +16108,43 @@ pas  64000 · perte 1.0995 · val 1.8521 bits/octet · 7119 s
 ⏵ Trois dessins inédits que Drave récompense, ajoutés à l'évaluation
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/modele-pour-drave.md\")\ns = p.read_text()\nancre = \"\"\"---\n\n## 4. Le classement, et le modèle qui en sort\"\"\"\nassert ancre in s\najout = \"\"\"### H. Routage par PROFO … [5835 caractères tronqués]`
+
+  ```
+ok
+eaa17b8 Trois dessins inédits que Drave récompense : profondeur routée, budget d'événements appris, quantification-aware
+  ```
+
+- **bash** `{"command": "sleep 580; cd /tmp/campagne24 && tail -1 tr_m9_route_long.log; ls fenetres_m9_route_long.log 2>/dev/null && grep -oE \"PPL moyenne.*\" fenetres_m9_route_long.log | tail -1", "description": "Poll the 80k-step routed model", "timeoutMs": 610000}`
+
+  ```
+pas  64000 · perte 1.0995 · val 1.8521 bits/octet · 7119 s
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "date '+%H:%M:%S'; stat -c \"%y\" /tmp/campagne24/tr_m9_route_long.log; ps -eo pid,etime,pcpu,args | grep \"entrainer_moteur\" | grep -v grep | cut -c1-80", "description": "Verify the training is alive"}`
+
+  ```
+09:33:21
+2026-10-09 09:18:55.684384520 -0400
+1873055    02:13:12  100 /home/stephane/gpu-env/bin/python -u tools/entrainer_mo
+  ```
+
+### 🤖 Assistant
+
+⏵ Test immédiat du dessin (I) : allocation ciblée contre allocation uniforme, à événements égaux
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=/tmp/m5_d384_dense_q8.gguf; for opt in \"--push --act-topk 700\" \"--push --act-topk 500\" \"--push --topk-o 300 --topk-down 300\"; do out=$(DRAVE_SANS_EMPRUNT=1 timeout 300 ./drave-core/target/release/drave $M --ppl /tmp/campagne2 … [445 caractères tronqués]`
+
+  ```
+--push --act-topk 700                      PPL 3.6998    événements 629364528
+--push --act-topk 500                      PPL 3.6521    événements 449348892
+--push --topk-o 300 --topk-down 300        PPL 3.9469    événements 688874158
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=/tmp/m5_d384_dense_q8.gguf; out=$(DRAVE_SANS_EMPRUNT=1 timeout 300 ./drave-core/target/release/drave $M --ppl /tmp/campagne24/ids_m5_d384_dense.txt --limit 128 --ctx 256 --threads 8 --push 2>/dev/null); echo \"baseline --push : PPL … [251 caractères tronqués]`
+
+  ```
+baseline --push : PPL perplexité 3.7169 · 897753869 événements
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/modele-pour-drave.md\")\ns = p.read_text()\nancre = \"\"\"- **Gain attendu** : à budget égal, la perplexité d'un modèle qui *choisit* où être\n  creux doit être meilleure que  … [2631 caractères tronqués]`
