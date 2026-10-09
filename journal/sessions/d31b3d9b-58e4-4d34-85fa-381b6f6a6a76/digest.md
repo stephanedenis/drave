@@ -16401,3 +16401,48 @@ pas  36000 · perte 1.2852 · val 2.1081 bits/octet · 2701 s
 ⏵ Ajout du budget énergétique chiffré (cerveau contre notre implémentation)
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/biologie-pour-drave.md\")\ns = p.read_text()\nancre = \"\"\"---\n\n## 4. Le dessin qui sort de là : **structure innée, poids appris**\"\"\"\nassert ancre in s\najout = \"\"\"- … [4121 caractères tronqués]`
+
+  ```
+ok
+7f24b33 Le budget chiffré : 0,4 pJ par événement synaptique contre 0,9 µJ chez nous
+  ```
+
+- **bash** `{"command": "sleep 570; cd /tmp/campagne24 && grep -E \"m10\" journal10.txt | tail -5; tail -1 tr_m11_poids_creux.log 2>/dev/null", "description": "Check the 12.5% results and the weight-pruning start", "timeoutMs": 600000}`
+
+  ```
+[09/10 10:39:48] charge 4.91 · m10_d384_kwta125 :   # meilleur point : pas 40000 · val 2.0956 bits/octet
+[09/10 10:39:57] charge 5.56 · m10-sans : PPL moyenne (log) sur 8 fenêtres : 11.9778 · 2683850508 événements
+[09/10 10:40:02] charge 6.78 · m10-topk500 : PPL moyenne (log) sur 8 fenêtres : 9.0234 · 1345232381 événements
+[09/10 10:40:06] charge 6.78 · m10-topk250 : PPL moyenne (log) sur 8 fenêtres : 6.1823 · 672602657 événements
+[09/10 10:40:10] charge 7.28 · m10-topk125 : PPL moyenne (log) sur 8 fenêtres : 5.5973 · 336290198 événements
+  pas   4000 · perte 1.3807 · val 2.3580 bits/octet · 304 s
+  ```
+
+### 👤 Utilisateur
+
+background job bash-8 (bash: cd /tmp/campagne24 && until grep -q "carte des taux terminée" journal10.txt 2>/dev/null; do sleep 300; done; echo "=== jour1 (routé 512 long) ==="; grep -E "m9_d512_route_long" journal9.txt | tail -3; echo; echo "=== jour2 (k-WTA 12,5 %) ==="; tail -8 journal10.txt; echo; echo "=== carte des taux ==="; for f in fenetres_m10-sans.log fenetres_m10-topk500.log fenetres_m10-topk250.log fenetres_m10-topk125.log; do [ -s "$f" ] && echo "$(basename $f .log) : $(grep -oE 'PPL moyenne \(log\) sur [0-9]+ fenêtres : [0-9.]+' $f | tail -1)"; done) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-8"}`
+
+  ```
+=== jour1 (routé 512 long) ===
+[09/10 07:20:09] charge 4.49 · m9_d512_route_long : départ (routé 512, 80 000 pas au lieu de 40 000)
+[09/10 09:48:44] charge 3.14 · m9_d512_route_long :   # meilleur point : pas 80000 · val 1.8237 bits/octet
+[09/10 09:48:52] charge 4.66 · m9_d512_route_long : PPL moyenne (log) sur 8 fenêtres : 5.3845
+
+=== jour2 (k-WTA 12,5 %) ===
+[08/10 22:58:31] charge 86.06 · === conversation à trois tours (r1-1.5B) ===
+[09/10 09:49:39] charge 3.41 · === GPU libre : troisième point de la carte des taux (k-WTA 12,5 %) ===
+[09/10 10:39:48] charge 4.91 · m10_d384_kwta125 :   # meilleur point : pas 40000 · val 2.0956 bits/octet
+[09/10 10:39:57] charge 5.56 · m10-sans : PPL moyenne (log) sur 8 fenêtres : 11.9778 · 2683850508 événements
+[09/10 10:40:02] charge 6.78 · m10-topk500 : PPL moyenne (log) sur 8 fenêtres : 9.0234 · 1345232381 événements
+[09/10 10:40:06] charge 6.78 · m10-topk250 : PPL moyenne (log) sur 8 fenêtres : 6.1823 · 672602657 événements
+[09/10 10:40:10] charge 7.28 · m10-topk125 : PPL moyenne (log) sur 8 fenêtres : 5.5973 · 336290198 événements
+[09/10 10:40:10] charge 7.28 · === carte des taux terminée ===
+
+=== carte des taux ===
+fenetres_m10-sans : PPL m
+… [266 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\nancre = \"\"\"**Les deux leviers ne se cumulent PAS** — mesuré le 9 octobre à 7 h 20.\"\"\"\nassert ancre in s\nneuf =  … [1857 caractères tronqués]`

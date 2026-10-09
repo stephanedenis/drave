@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 25.4 h |
+| Durée | 25.6 h |
 | Tours | 27 |
-| Messages | 1026 |
-| Appels d'outils | 987 |
+| Messages | 1030 |
+| Appels d'outils | 990 |
 | Fichiers touchés | 31 |
-| Commandes | 809 |
+| Commandes | 811 |
 | Sous-agents | 3 |
-| Commits | 76 |
+| Commits | 77 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -1270,7 +1270,7 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 
 ### Tour 27 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1477 caractères tronqués]
 
-*378 appels d'outils.* Actions notables :
+*381 appels d'outils.* Actions notables :
 
 - bash — Check the full state
 - bash — Measure the distilled d384 with the correct protocol
@@ -1286,7 +1286,7 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - bash — Read parcimonie, contexte, lot steps
 - bash — Inspect batch2 script
 - bash — Read batch2 journal and latency map
-- … et 334 autres
+- … et 336 autres
 
 **Synthèse produite :**
 
@@ -1378,7 +1378,7 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 769 autres
+- … et 771 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1602,4 +1602,5 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - Moteur contre modèle : un tableau qui dit, pour chaque mesure, de qui elle parle  Quand une mesure est décevante, il faut savoir de qui : le chemin par listes e
 - Biologie : ce que les connectomes imposent comme contraintes, et l'expérience E1 outillée  Nouveau document docs/biologie-pour-drave.md : les faits mesurés (dro
 - Le budget chiffré : 0,4 pJ par événement synaptique contre 0,9 µJ chez nous  Deux calculs d'ordre de grandeur, à partir des chiffres du document et des mesures 
+- Carte des taux complète : 50 %, 25 %, 12,5 % — chaque division par deux coûte 2 % puis 8 %  Troisième point mesuré (m10_d384_kwta125, mêmes 40 000 pas, même tém
 

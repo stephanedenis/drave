@@ -569,6 +569,24 @@ mêmes mesures (8 × 128) :
    la même chose : l'écart de 1,3 % de perplexité entre 4,9649 et 4,9011 vient de
    l'encodage des poids, comme au § 22, pas de la parcimonie.)*
 
+**La carte des taux est complète** (troisième point, `m10_d384_kwta125`, entraîné
+à 12,5 % gardés — mêmes 40 000 pas, même témoin) :
+
+| modèle (dim 384) | entraîné à | exécuté à | perplexité | événements/fenêtre |
+|---|---|---:|---:|---:|
+| témoin | — | 25 % | 10,8758 | 84 M |
+| `kwta050` | 50 % | **50 %** | **5,0606** | 168 M |
+| `kwta025` | 25 % | **25 %** | **5,1719** | 84 M |
+| **`kwta125`** | 12,5 % | **12,5 %** | **5,5973** | **42 M** |
+
+**Chaque division par deux des événements coûte 2 % puis 8 % de perplexité**
+(5,0606 → 5,1719 → 5,5973) — alors que le même exercice imposé au témoin le fait
+s'effondrer (+118 % à 25 %). La courbe de la parcimonie **apprise** est plate là où
+la courbe imposée est verticale. À 42 M d'événements par fenêtre, on lit **seize
+fois moins** que le témoin sans parcimonie (672 M) pour une perplexité de 5,60
+contre 4,996 — soit **+12 % de perplexité pour ÷16 de lecture**, et le chemin par
+listes y est environ deux fois plus rapide qu'à 50 %.
+
 **Les deux leviers ne se cumulent PAS** — mesuré le 9 octobre à 7 h 20. Un
 quatrième modèle, `m9_d384_kwta25_distille`, reprend **exactement** la recette de
 `kwta025` (dim 384, 40 000 pas, k-WTA 25 %) **plus** la distillation de l'enseignant
