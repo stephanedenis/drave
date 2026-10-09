@@ -18220,3 +18220,44 @@ signal EXTERNE (enseignant) : sur B = 9.1511  [référence 8,3869 · règle nue 
 ⏵ Signal externe mesuré : le meilleur des modulateurs, et toujours pire que rien
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/impulsion-pure-apprenant.md\")\ns = p.read_text()\nancre = \"\"\"**Ce que cela spécifie pour M1** : le bus doit porter un signal **externe** — une\ncible, une récompense, un e … [4018 caractères tronqués]`
+
+  ```
+ok
+9a7d708 Signal externe mesuré : meilleur des modulateurs, et toujours pire que la règle nue
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/model.rs\")\ns = p.read_text()\ns = s.replace(\"\"\"            self.moy_x[i] = 0.99 * self.moy_x[i] + 0.01 * dx;\"\"\",\n\"\"\"            // β réglable : la décorr … [1476 caractères tronqués]`
+
+  ```
+β réglable ajouté
+test result: ok. 77 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf; C=/tmp/campagne24; A=$C/ids_0.5B-Q8.txt; B=$C/ids_fr_05B.txt; export DRAVE_HEBB_SEUIL=0.002 DRAVE_HEBB_DECROI=0.99 DRAVE_HEBB_SIGNE=1 DRAVE_HEBB_DECORRELE=1; for b … [635 caractères tronqués]`
+
+  ```
+décorrélation β=0.01 : sur B = 8.8244
+décorrélation β=0.1 : sur B = 8.7942
+décorrélation β=0.3 : sur B = 8.7112
+[référence 8,3869 · règle nue (sans décorrélation) 8,8246]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification de l'asymptote : la décorrélation converge-t-elle vers « ne rien apprendre » ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf; C=/tmp/campagne24; A=$C/ids_0.5B-Q8.txt; B=$C/ids_fr_05B.txt; export DRAVE_HEBB_SEUIL=0.002 DRAVE_HEBB_DECROI=0.99 DRAVE_HEBB_SIGNE=1 DRAVE_HEBB_DECORRELE=1; for b … [879 caractères tronqués]`
+
+  ```
+β=0.5 : 8.6316
+β=0.8 : 8.5381
+[référence SANS adaptateur : 8,3869 — c'est la limite attendue quand β→1]
+‖D‖ β=0.3 : 8.7022
+‖D‖ β=0.8 : 8.4232
+  ```
+
+### 🤖 Assistant
+
+⏵ Courbe de dose complète : la règle locale converge vers « ne rien apprendre »
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/impulsion-pure-apprenant.md\")\ns = p.read_text()\nancre = \"\"\"**Ce qu'il faudrait, et c'est maintenant précisément spécifié** : une règle\n**contrastive**\"\"\"\nassert anc … [2707 caractères tronqués]`

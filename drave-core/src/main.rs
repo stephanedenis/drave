@@ -30,7 +30,7 @@ const VARS_LUES: &[&str] = &[
     // test hors échantillon n'est pas possible. Le test qui exige cette liste
     // a d'ailleurs attrapé les deux dernières à la première compilation.
     "HEBB_MODULE", "HEBB_DECORRELE", "HEBB_D_CHARGE", "HEBB_D_SAUVE",
-    "HEBB_MODULATEUR_FICHIER", "K3_PRELIRE_UNION", "EXPERTS_GARDES", "K3_IMPOSE",
+    "HEBB_MODULATEUR_FICHIER", "HEBB_BETA", "K3_PRELIRE_UNION", "EXPERTS_GARDES", "K3_IMPOSE",
     "SANS_BLOCS", "SANS_COMPRESSION", "SIMD_DOT", "TRACE_EXPERTS", "V41_SANS_RETARD",
     "V41_TETE_COPIE0",
     "VISION_TEXTE",

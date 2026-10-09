@@ -193,6 +193,31 @@ problème **n'est pas la force ni le crédit de la mise à jour**, c'est **ce qu
 appris**. Moduler le *taux* d'une règle qui accumule les statistiques de transition
 du domaine courant ne change pas la *nature* de ce qu'elle accumule.
 
+### 5 quinquies. La décorrélation, en courbe de dose : elle améliore, et converge vers « ne rien apprendre »
+
+La décorrélation était **inerte** à β = 0,01 (une moyenne courante trop lente sur
+256 pas). β est maintenant réglable (`DRAVE_HEBB_BETA`), et voici la courbe complète
+— même protocole, adapté sur l'anglais, évalué sur le français :
+
+| β (constante de temps) | perplexité sur B | ‖D‖ |
+|---:|---:|---:|
+| pas de décorrélation | 8,8246 | — |
+| 0,01 | 8,8244 | — |
+| 0,1 | 8,7942 | — |
+| 0,3 | 8,7112 | 8,70 |
+| 0,5 | 8,6316 | — |
+| **0,8** | **8,5381** | **8,42** |
+| **1,0 (limite)** | **8,3869** = la référence **sans aucun adaptateur** | 0 |
+
+**La décorrélation améliore de façon monotone — et la limite de la courbe est la
+référence elle-même.** À β = 1, la moyenne courante *est* le différentiel courant :
+le différentiel centré est nul, `D` ne bouge plus, et le moteur rend exactement le
+chiffre du modèle intact. Autrement dit : **le mieux que la règle locale sache faire
+hors de son domaine, c'est ne rien faire.**
+
+*(Et ce n'est pas un simple amortissement : ‖D‖ **augmente** avec β — 8,42 contre
+8,70 — donc la décorrélation change bien *ce qui* est stocké, pas seulement *combien*.)*
+
 **Ce qu'il faudrait, et c'est maintenant précisément spécifié** : une règle
 **contrastive** — soustraire explicitement ce qui est propre au domaine, au lieu de
 moduler. Le verdict du dépôt le disait déjà (« `D -= η·(différentiel INTER-langue)` »),

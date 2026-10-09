@@ -2797,6 +2797,8 @@ pub struct HebbDiff {
     pub modulateur: f32,
     /// Vrai si le modulateur externe pilote `η` (DRAVE_HEBB_MODULE=valeur).
     module_valeur: bool,
+    /// Constante de temps de la décorrélation (DRAVE_HEBB_BETA, défaut 0,01).
+    beta: f32,
     /// **Le modulateur EXTERNE**, un scalaire par pas, lu dans un fichier
     /// (`DRAVE_HEBB_MODULATEUR_FICHIER`). C'est ce que la mesure réclame : ni la
     /// nouveauté ni l'amélioration de sa propre perte ne sauvent la règle locale
@@ -2883,6 +2885,8 @@ impl HebbDiff {
                    modulateur: 1.0,
                    module_valeur: std::env::var("DRAVE_HEBB_MODULE").map(|v| v == "valeur")
                        .unwrap_or(false),
+                   beta: std::env::var("DRAVE_HEBB_BETA").ok()
+                       .and_then(|v| v.parse().ok()).unwrap_or(0.01),
                    modulateurs: std::env::var("DRAVE_HEBB_MODULATEUR_FICHIER").ok()
                        .and_then(|f| std::fs::read(f).ok())
                        .map(|b| b.chunks_exact(4)
@@ -2966,7 +2970,11 @@ impl HebbDiff {
         // La moyenne courante du différentiel se met à jour APRÈS usage.
         for i in 0..ni {
             let dx = x[i] - self.x_prec[i];
-            self.moy_x[i] = 0.99 * self.moy_x[i] + 0.01 * dx;
+            // β réglable : la décorrélation par moyenne courante était INERTE à
+            // 0,01 sur 256 pas (mesuré). Il faut pouvoir la rendre rapide pour
+            // savoir si le principe est en cause ou seulement sa constante de temps.
+            let beta = self.beta;
+            self.moy_x[i] = (1.0 - beta) * self.moy_x[i] + beta * dx;
         }
         self.x_prec.copy_from_slice(&x[..ni]);
         self.y_prec.copy_from_slice(&y[..no]);
