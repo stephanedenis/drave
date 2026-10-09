@@ -211,65 +211,43 @@ c'est la moitié de la réponse à « pour tout type de tâches ».
 
 ## 5. Les modèles entraînés ici, mesurés DANS le moteur — routage ET distillation gagnent
 
-**Le protocole, et il a fallu le corriger.** Le moteur évalue une fenêtre
-contiguë de `--limit` jetons. Or ces modèles ont été **entraînés sur des fenêtres
-de 128 jetons** : les évaluer sur 256, 512 ou 2 048 positions les fait sortir de
-leur distribution (à 2 048, la perplexité triple et le classement s'inverse). La
-mesure retenue est donc **huit fenêtres de 128 jetons** (`--depuis` décale le
-début), moyennées en log — dans la longueur d'entraînement, sur huit tranches
-différentes du fichier de validation.
+**Le protocole, et il a fallu le corriger.** Le moteur évalue une fenêtre contiguë
+de `--limit` jetons ; ces modèles ont été **entraînés sur des fenêtres de 128
+jetons**. Les évaluer sur 256, 512 ou 2 048 positions les fait sortir de leur
+distribution (à 2 048, la perplexité triple et le classement s'inverse). La mesure
+retenue est donc **huit fenêtres de 128 jetons** (`--depuis` décale le début),
+moyennées en log — dans la longueur d'entraînement, sur huit tranches du fichier
+de validation. Toutes les portes de logits sont tenues.
 
-| modèle | PPL moyenne (8 × 128 jetons) | paires/jeton | vs jumeau dense |
-|---|---:|---:|---:|
-| `m5_d256_dense` (3,2 M) | 5,0155 | 3,2 M | — |
-| **`m5_d256_route` (10,3 M)** | **4,8858** | 3,2 M | **−2,6 %** |
-| **`m5_d256_route_distille` (10,3 M)** | **4,7642** | 3,2 M | **−5,0 %** |
-| `m5_d384_dense` (7,2 M) | 5,0108 | 7,2 M | — |
-| **`m5_d384_route` (44,4 M)** | **4,8646** | 7,2 M | **−2,9 %** |
+| modèle | paramètres | PPL moyenne (8 × 128) | paires/jeton | vs jumeau dense |
+|---|---:|---:|---:|---:|
+| `m5_d256_dense` | 3,2 M | 5,0155 | 3,2 M | — |
+| `m5_d256_route` | 10,3 M | 4,8858 | 3,2 M | −2,6 % |
+| **`m5_d256_route_distille`** | 10,3 M | **4,7642** | 3,2 M | **−5,0 %** |
+| `m5_d384_dense` *(le professeur)* | 7,2 M | 5,0108 | 7,2 M | — |
+| `m5_d384_route` | 44,4 M | 4,8646 | 7,2 M | −2,9 % |
+| **`m5_d384_route_distille`** | 44,4 M | **4,4113** | 7,2 M | **−12,0 %** |
 
-**Les deux leviers fonctionnent, et ils se cumulent** : à lecture **exactement
-égale** (vérifié par le compteur du moteur), le routage rend le modèle **2,6 à
-2,9 % meilleur** que son jumeau dense — en stockant 3,2× et 6,2× plus de
-paramètres, ce qui est tout son intérêt — et la distillation depuis le dense de la
-même famille en ajoute **2,5 %**. Le tout sans un paramètre de plus à lire.
+**Trois résultats, et le troisième est le plus fort.**
 
-**Ce que le protocole a coûté à comprendre, et c'est consigné** : la première
-mesure (fenêtre de 256 octets) donnait −6,1 % ; une fenêtre de 512 donnait
-l'inverse pour une des deux paires ; une fenêtre de 2 048 inversait tout. Trois
-protocoles, trois réponses — parce qu'aucun n'évaluait le modèle là où il a
-appris. C'est la règle du dépôt appliquée à ses propres mesures : **la longueur de
-l'évaluation doit être celle de l'entraînement**, et une fenêtre courte ne compare
-rien.
+1. **Le routage gagne à lecture exactement égale** (vérifié par le compteur du
+   moteur) : −2,6 % et −2,9 % de perplexité en stockant 3,2× et 6,2× plus de
+   paramètres. C'est la thèse du projet — un modèle plus gros qui lit autant.
+2. **La distillation ajoute, et son gain CROÎT avec la taille** : −2,5 % à
+   dim 256, **−9,3 % à dim 384**. Le professeur (dense dim 384, 5,0108) est
+   **battu par son élève** (4,4113), qui lit pourtant 1,92 M poids par jeton au
+   lieu de 7,2 M.
+3. **Au total, à lecture égale, le modèle produit ici est 12 % meilleur que son
+   jumeau dense** — sans un paramètre de plus à lire.
 
 **Une réserve qui reste** : les débits. À `d256` le routé est plus rapide que le
-dense (662,8 contre 442,3 tok/s dans le chemin par listes), à `d384` il est plus
-lent (184,0 contre 255,0) — le regroupement des jetons par expert a un coût fixe
-qui pèse quand le modèle grandit. Le gain de qualité, lui, tient dans les deux cas.
+dense en listes (662,8 contre 442,3 tok/s), à `d384` plus lent (184,0 contre
+255,0) — le regroupement des jetons par expert a un coût fixe qui pèse quand le
+modèle grandit. Le gain de qualité, lui, tient dans les deux cas.
 
 **Et les experts ne passent PAS par les listes** : écrits en Q4_0, format pour
 lequel le moteur n'a pas de noyau de listes, ils sont exécutés en dense. La mesure
 honnête du coût est donc la colonne « paires/jeton », égale par construction.
-
----
-
-## 5 bis. La distillation : le levier de qualité qui ne coûte aucun paramètre
-
-Le dépôt notait dans son inventaire du 08/10 : « distillation — mentionnée, jamais
-réalisée ». Elle l'est maintenant (`--enseignant`, `--alpha-distill 0.5`,
-température 2), et le témoin existe : **même architecture, mêmes pas, même
-données**, seule la KL change.
-
-| élève routé | sans distillation | **avec distillation** | gain |
-|---|---:|---:|---:|
-| dim 256, 8 experts (10,3 M) | 1,9373 | **1,9088** *(36 000/40 000)* | **−1,5 %** |
-| dim 384, 16 experts (44,4 M) | 1,8762 | **1,8578** *(24 000/40 000)* | **−1,0 %** et il continue |
-
-L'enseignant est le **dense de la même famille** (dim 384, val 1,9194), gelé. Les
-deux élèves distillés **battent donc à la fois leur témoin routé ET l'enseignant**
-— pour la même lecture par jeton, et sans un paramètre de plus.
-
-*(Chiffres à l'écriture : les deux passes distillées tournaient encore. Le sens du
-gain est établi ; son amplitude définitive le sera à 40 000 pas.)*
 
 ---
 

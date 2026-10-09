@@ -10472,3 +10472,78 @@ My name is Camille. I am 10 years old. I live in Paris. I have a pet named Floss
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"reports/rapport-campagne-benefices.md\"; s=open(p).read()\najout = '''## 20. Contexte et lots : deux réponses, dont une qui n'est pas celle qu'on croit\n\n**Contexte long — le protocole mesurait le cache, pas la … [2556 caractères tronqués]`
+
+  ```
+ajouté
+f9ca016 Contexte et lots : le contexte déclaré ne coûte rien à fenêtre courte, et le lot vaut x1,4
+  ```
+
+### 🤖 Assistant
+
+⏵ Deux nouveaux résultats, et un troisième bug du moteur corrigé
+
+## Ce que la campagne a rendu
+
+**Le contexte déclaré ne coûte rien — et le protocole le dit.** L'étape fait varier `--ctx` de 512 à 8 192 en gardant `--limit 256` : la perplexité est donc **constante par construction** (17,4315), et ce qui varie est l'allocation du cache KV. Résultat : **RSS 1 248-1 249 Mo pour tous les contextes**. C'est la mesure d'aiguille (§ 9, 12/12 retrouvées jusqu'à 4 096 jetons) qui porte la qualité à longue portée, pas celle-ci — et la campagne dit maintenant **laquelle des deux mesure quoi**.
+
+**Le lot vaut ×1,4, sans toucher au résultat** :
+
+| `--lot` | 1 | 2 | 4 | 8 | 16 | 32 | 64 |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| PPL | 13,1368 | 13,1359 | 13,1359 | 13,1359 | 13,1359 | 13,1359 | 13,1359 |
+| tok/s | 16,8 | 18,4 | **23,2** | 23,2 | 21,5 | **23,7** | 13,1 |
+
+La perplexité est **identique au chiffre près dès le lot 2**, et le débit gagne ×1,4 — sur un modèle qui tient en RAM, donc **sans le disque** : le lot paie même quand rien n'est lu. C'est l'ordre du ×1,58 du dépôt.
+
+## Et un troisième bug du moteur, corrigé
+
+`--chat` seul a planté sur le 1.5B — et le vrai défaut est plus large : **`drave <modèle>` sans mode, la première ligne de l'aide du moteur, paniquait sur tout modèle en super-blocs** (`raw_levels : type 12 non géré`). Or c'est la majorité de ce qui tourne ici : gpt-oss (MXFP4), codestral, 14B, 30B-A3B. Le banc ne connaît que Q8_0 et Q4_0 et **paniquait au lieu de le dire**.
+
+Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sautent le tenseur. Vérifié — Q4_K passe et le dit, Q8_0 garde ses 27 lignes (aucune régression), `--infer --chat` fonctionne et **le contexte de conversation est bien porté** (le prénom donné au premier tour ressort au second). Compilé à part : le binaire de la campagne n'est pas touché.
+
+*Bilan de la journée côté moteur : quatre défauts trouvés et corrigés — `--ids-file` ignoré par le réparti, jetons synthétiques hors vocabulaire, tokenizers SentencePiece sans espaces, banc qui plante sur les K-quants. Tous trouvés en mesurant, aucun par relecture.*
+
+
+## Tour 27
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, préremplissage par lots, modèle plus gros que la RAM. Poursuivre en parallèle le livrable du modèle nativement événementiel : entraîné ici, exécuté par Drave à logits vérifiés, découpé en unités réparties. Chaque affirmation porte sa mesure (perplexité, débit, octets et événements par jeton, RSS, écart entre nœuds) ET ses conditions (corpus, tokenizer du modèle, charge de fond) ; les manques constatés — embeddings/encodeurs, décodage spéculatif — sont consignés comme manques, pas comme résultats. Livrables : la file tools/campagne-benefices.sh exécutée et ses journaux, un rapport de synthèse par famille de tâches, et la poursuite du modèle événementiel."
+Round: 20/40
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "date; echo \"=== campagne ===\"; tail -3 /tmp/campagne24/journal.txt; echo \"=== sémantique A/B ===\"; tail -2 /tmp/campagne24/journal11.txt; echo \"=== gpt-oss court ===\"; tail -1 /tmp/campagne24/journal12.txt; echo \"=== entraînements ===\"; tail -1 /tmp/campagne24/tr_d384_distille.l … [182 caractères tronqués]`
+
+  ```
+ven 09 oct 2026 00:07:13 EDT
+=== campagne ===
+[09/10 00:03:15] charge 72.67 · routage/30B : experts 1826.2 M · perplexité 7.6139
+[09/10 00:03:16] charge 72.67 · routage/modèle entraîné : experts 1.8 M
+[09/10 00:03:16] charge 72.67 · --- étape semantique ---
+=== sémantique A/B ===
+[08/10 23:52:57] corrigée : 59 lignes
+[08/10 23:52:57] === sémantique ANCIENNE lecture, caches neufs ===
+=== gpt-oss court ===
+[08/10 23:37:19] === gpt-oss-120B, fenêtre COURTE (la passe de 256 jetons a expiré à 90 min) ===
+=== entraînements ===
+  # écrit dans /tmp/m5_d384_route_distille · 44.36 M paramètres · 1.92 M poids lus/jeton/couche
+  pas  20000 · perte 1.1985 · val 1.9415 bits/octet · 1603 s
+=== batch 7 ===
+[08/10 23:19:53] charge 41.22 · tête/gpt-oss-120B : étiquettes 8841,12626,27000,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && C=/tmp/campagne24; D=./drave-core/target/release/drave; for m in m5_d384_route_distille; do\n  tot=0; n=0\n  for k in 0 128 256 384 512 640 768 896; do\n    v=$(timeout 300 $D /tmp/$m.gguf --ppl $C/ids_val_long.txt --depuis $k --limi … [512 caractères tronqués]`
+
+  ```
+m5_d384_route_distille : PPL moyenne (8 x 128) = 4.4113
+rappel : d384 dense 5.0108 · d384 routé 4.8646
+  ```
+
+### 🤖 Assistant
+
+⏵ La distillation à l'échelle 384 donne −12 % — le gain croît avec la taille
+
+- **bash** `{"command": "tail -4 /tmp/campagne24/journal4.txt; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"reports/rapport-campagne-benefices.md\"; s=open(p).read()\ndeb = s.index(\"## 5. Les modèles entraînés ici\")\nfin = s.index(\"## 7. Répartir par EXPERTS\")\nneuf = '''## 5. … [3493 caractères tronqués]`

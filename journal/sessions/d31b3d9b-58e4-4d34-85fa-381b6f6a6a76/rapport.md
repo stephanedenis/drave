@@ -6,13 +6,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
 | Durée | 14.9 h |
-| Tours | 26 |
-| Messages | 643 |
-| Appels d'outils | 609 |
+| Tours | 27 |
+| Messages | 648 |
+| Appels d'outils | 612 |
 | Fichiers touchés | 21 |
-| Commandes | 487 |
+| Commandes | 490 |
 | Sous-agents | 3 |
-| Commits | 42 |
+| Commits | 43 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -79,6 +79,8 @@
 **Tour 25** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1197 caractères tronqués]
 
 **Tour 26** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1197 caractères tronqués]
+
+**Tour 27** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1197 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1243,7 +1245,40 @@ La campagne continue : contexte (le PPL y est constant par construction — l'é
 
 **Synthèse produite :**
 
-⏵ Deux défauts en un : `--chat` seul n'est pas un mode, et le banc d'encodages plante sur tout modèle K-quant
+⏵ Deux nouveaux résultats, et un troisième bug du moteur corrigé
+
+\## Ce que la campagne a rendu
+
+**Le contexte déclaré ne coûte rien — et le protocole le dit.** L'étape fait varier `--ctx` de 512 à 8 192 en gardant `--limit 256` : la perplexité est donc **constante par construction** (17,4315), et ce qui varie est l'allocation du cache KV. Résultat : **RSS 1 248-1 249 Mo pour tous les contextes**. C'est la mesure d'aiguille (§ 9, 12/12 retrouvées jusqu'à 4 096 jetons) qui porte la qualité à longue portée, pas celle-ci — et la campagne dit maintenant **laquelle des deux mesure quoi**.
+
+**Le lot vaut ×1,4, sans toucher au résultat** :
+
+| `--lot` | 1 | 2 | 4 | 8 | 16 | 32 | 64 |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| PPL | 13,1368 | 13,1359 | 13,1359 | 13,1359 | 13,1359 | 13,1359 | 13,1359 |
+| tok/s | 16,8 | 18,4 | **23,2** | 23,2 | 21,5 | **23,7** | 13,1 |
+
+La perplexité est **identique au chiffre près dès le lot 2**, et le débit gagne ×1,4 — sur un modèle qui tient en RAM, donc **sans le disque** : le lot paie même quand rien n'est lu. C'est l'ordre du ×1,58 du dépôt.
+
+\## Et un troisième bug du moteur, corrigé
+
+`--chat` seul a planté sur le 1.5B — et le vrai défaut est plus large : **`drave <modèle>` sans mode, la première ligne de l'aide du moteur, paniquait sur tout modèle en super-blocs** (`raw_levels : type 12 non géré`). Or c'est la majorité de ce qui tourne ici : gpt-oss (MXFP4), codestral, 14B, 30B-A3B. Le banc ne connaît que Q8_0 et Q4_0 et **paniquait au lieu de le dire**.
+
+Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sautent le tenseur. Vérifié — Q4_K passe et le dit, Q8_0 garde ses 27 lignes (aucune régression), `--infer --chat` fonctionne et **le contexte de conversation est bien porté** (le prénom donné au premier tour ressort au second). Compilé à part : le binaire de la campagne n'est pas touché.
+
+*Bilan de la journée côté moteur : quatre défauts trouvés et corrigés — `--ids-file` ignoré par le réparti, jetons synthétiques hors vocabulaire, tokenizers SentencePiece sans espaces, banc qui plante sur les K-quants. Tous trouvés en mesurant, aucun par relecture.*
+
+### Tour 27 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1477 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Check the full state
+- bash — Measure the distilled d384 with the correct protocol
+- bash — Record the d384 distillation result
+
+**Synthèse produite :**
+
+⏵ La distillation à l'échelle 384 donne −12 % — le gain croît avec la taille
 
 ## 3. Travail accompli
 
@@ -1321,7 +1356,7 @@ La campagne continue : contexte (le PPL y est constant par construction — l'é
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 447 autres
+- … et 450 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1511,4 +1546,5 @@ La campagne continue : contexte (le PPL y est constant par construction — l'é
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="reports/rapport-campagne-benefices.md"; s=open(p).read() deb = s.index("## 0 bis. Le v
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/msg_banc.txt <<'MSG' Le banc des encodages ne plante plus sur les modèles K-quant (c'était la p
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="reports/rapport-campagne-benefices.md"; s=open(p).read() ajout = '''## 20. Contexte et
+- tail -4 /tmp/campagne24/journal4.txt; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="reports/rapport-campagne-benefices.md"; s=open(p
 
