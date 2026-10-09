@@ -7,12 +7,12 @@
 | Début | 2026-10-08 09:11 |
 | Durée | 19.9 h |
 | Tours | 27 |
-| Messages | 916 |
-| Appels d'outils | 880 |
+| Messages | 922 |
+| Appels d'outils | 885 |
 | Fichiers touchés | 29 |
-| Commandes | 712 |
+| Commandes | 716 |
 | Sous-agents | 3 |
-| Commits | 55 |
+| Commits | 56 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -1270,7 +1270,7 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 
 ### Tour 27 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1477 caractères tronqués]
 
-*271 appels d'outils.* Actions notables :
+*276 appels d'outils.* Actions notables :
 
 - bash — Check the full state
 - bash — Measure the distilled d384 with the correct protocol
@@ -1286,11 +1286,11 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - bash — Read parcimonie, contexte, lot steps
 - bash — Inspect batch2 script
 - bash — Read batch2 journal and latency map
-- … et 239 autres
+- … et 244 autres
 
 **Synthèse produite :**
 
-⏵ Résultat complet : chaque modèle est meilleur dans SON régime — le tableau à trois modèles
+⏵ Sentinelle pour la chaîne 512 creux et la fin de l'aiguille
 
 ## 3. Travail accompli
 
@@ -1376,7 +1376,7 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 672 autres
+- … et 676 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1579,4 +1579,5 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - Spéculatif : c'est le RAPPORT DE COÛT qui décide, et il est minimal sur un modèle plus gros que la RAM  Troisième paire mesurée par le moteur — un brouillon min
 - Parcimonie IMPOSÉE ou APPRISE : la réponse est mesurée, et elle est nette  Deux modèles identiques par ailleurs (dim 384, mêmes pas, FFN en Q8 pour que le chemi
 - Parcimonie apprise : le tableau complet à trois modèles, et la recette qui en sort  Trois modèles identiques par ailleurs, un témoin et deux entraînés creux (50
+- Le point de la file à 5 h 20 : ce qui est fait, ce qui tourne, ce qui reste un manque  Le tableau de clôture distingue trois choses qui ne doivent pas être conf
 

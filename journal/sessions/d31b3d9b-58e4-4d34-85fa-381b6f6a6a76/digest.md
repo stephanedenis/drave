@@ -15220,3 +15220,60 @@ verdict mis à jour
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add reports/rapport-campagne-benefices.md && git commit -q -m \"Parcimonie apprise : le tableau complet à trois modèles, et la recette qui en sort\n\nTrois modèles identiques par ailleurs, un témoin et deux entraînés creux (50 %  … [893 caractères tronqués]`
+
+  ```
+cc8f1e1 Parcimonie apprise : le tableau complet à trois modèles, et la recette qui en sort
+  ```
+
+### 👤 Utilisateur
+
+background job bash-6 (bash: cd /tmp/campagne24 && until grep -q "chaîne creux terminée" journal7.txt 2>/dev/null; do sleep 120; done; echo "=== nuit3 (creux) terminée ==="; tail -20 journal7.txt; echo; echo "=== aiguille longue portée ==="; tail -8 aiguille_long.log; echo; echo "=== kwta25 vs témoin ==="; for f in fenetres_m5_d384_dense_q8-topk500.log fenetres_m7_d384_kwta050-topk500.log fenetres_m7_d384_kwta025-topk500.log; do [ -s "$f" ] && echo "$f : $(grep -oE 'PPL moyenne.*' $f | tail -1)"; done) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-6"}`
+
+  ```
+=== nuit3 (creux) terminée ===
+[09/10 03:22:02] charge 21.13 · === GPU libre : deux modèles creux à entraîner (dim 384, 40 000 pas, mêmes réglages que le témoin) ===
+[09/10 03:22:02] charge 21.13 · m7_d384_kwta050 : départ (k-WTA gardant 0.50)
+[09/10 04:16:27] charge 15.62 · m7_d384_kwta050 :   # meilleur point : pas 40000 · val 2.0205 bits/octet
+[09/10 04:16:27] charge 15.62 · m7_d384_kwta025 : départ (k-WTA gardant 0.25)
+[09/10 05:04:29] charge 16.86 · m7_d384_kwta025 :   # meilleur point : pas 36000 · val 2.0770 bits/octet
+[09/10 05:04:29] charge 16.86 · === export (FFN en Q8 : sans cela, pas d'événements à économiser) ===
+[09/10 05:04:29] charge 16.86 · m7_d384_kwta050 → /tmp/m7_d384_kwta050.gguf : Q8_0 écrit
+[09/10 05:04:29] charge 16.86 · m7_d384_kwta025 → /tmp/m7_d384_kwta025.gguf : Q8_0 écrit
+[09/10 05:04:30] charge 16.86 · m5_d384_dense → /tmp/m5_d384_dense_q8.gguf : Q8_0 écrit
+[09/10 05:04:30] charge 16.86 · === la mesure : à même top-k, qui garde sa qualité ? ===
+[09/10 05:04:40] charge 17.44 · m5_d384_dense_q8-sans : PPL 4.9959 · 336683915 événements/fenêtre
+[09/10 05:04:48] charge 18.21 · m5_d384_dense_q8-topk500 : PPL 5.3032 · 168505949 événements/fenêtre
+[09/10 05:04
+… [1503 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Sentinelle pour la chaîne 512 creux et la fin de l'aiguille
+
+- **bash** `{"command": "cd /tmp/campagne24 && until grep -q \"chaîne creux 512 terminée\" journal8.txt 2>/dev/null; do sleep 180; done; echo \"=== nuit4 (creux 512) terminée ===\"; tail -12 journal8.txt; echo; echo \"=== aiguille 12288 ===\"; tail -5 aiguille_long.log; echo; echo \"=== chaîne du jour ===\"; ta … [153 caractères tronqués]`
+
+  ```
+started background job bash-7
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== état des chaînes ===\"; for s in nuit4_route_creux jour1_suite; do pid=$(pgrep -f \"bash /tmp/campagne24/$s.sh\" | head -1); printf \"%-20s %s\\n\" \"$s\" \"${pid:-ABSENT}\"; done; tail -2 /tmp/campagne24/tr_m8_d512_kwta25 … [154 caractères tronqués]`
+
+  ```
+=== état des chaînes ===
+nuit4_route_creux    910914
+jour1_suite          1264055
+=== portes : l'état final ===
+22
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\ndebut = s.index(\"## 23. Ce qui reste à mesurer\")\nneuf = \"\"\"## 23. Ce qui reste à mesurer (état de la file, 9 octo … [3146 caractères tronqués]`
+
+  ```
+ok
+1171 reports/rapport-campagne-benefices.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add reports/rapport-campagne-benefices.md && git commit -q -m \"Le point de la file à 5 h 20 : ce qui est fait, ce qui tourne, ce qui reste un manque\n\nLe tableau de clôture distingue trois choses qui ne doivent pas être confond … [493 caractères tronqués]`

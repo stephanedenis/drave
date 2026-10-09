@@ -1133,33 +1133,39 @@ plutôt que d'élaguer des modèles 4 bits.
 
 ---
 
-## 23. Ce qui reste à mesurer (état de la file, 9 octobre 1 h 45)
+## 23. Ce qui reste à mesurer (état de la file, 9 octobre 5 h 20)
 
-**Fait depuis la première rédaction de cette liste** : `parcimonie` (§ 19), `contexte`
-et `lot` (§ 20), `routage` (§ 7), `semantique` (§ 18), `noyau` (§ 21), `repartition`
-(§ 8 et porte tenue), `portes` (22 vertes, 1 rouge — § 0 ter), `batch 2` (§ 10 ter,
-quatre corpus), `batch 3` (§ 9), les paires entraînées (§ 5), l'équivalence bit à
-bit (§ 22), la tête restreinte sur gpt-oss (§ 13), le lot à froid avec éviction
-(§ 14 bis), et l'acceptation spéculative mesurée par le moteur (§ 1 bis).
+**Fait depuis la première rédaction de cette liste** : `parcimonie` (§ 19 et 19 bis),
+`contexte` et `lot` (§ 20), `routage` (§ 7), `semantique` (§ 18), `noyau` (§ 21),
+`repartition` (§ 8 et porte tenue), `portes` (**23 vertes, 0 rouge** — § 0 ter),
+`batch 2` (§ 10 ter, quatre corpus), `batch 3` (§ 9, étendu à 12 288 jetons),
+les paires entraînées (§ 5 et 5 bis, trois échelles), l'équivalence bit à bit (§ 22),
+la tête restreinte sur gpt-oss (§ 13), le lot à froid avec éviction (§ 14 bis),
+la carte de latence (§ 8 bis), les trois paires spéculatives (§ 1 bis), et **la
+réponse à « imposée ou apprise »** (§ 5 ter).
 
-**Encore en file — et ce sont des manques, pas des résultats :**
+**Encore en file au moment d'écrire :**
+
+| file | état |
+|---|---|
+| **`m8_d512_kwta25`** (dense 512, k-WTA 25 % appris) | en entraînement depuis 5 h 05 ; mesuré ensuite à 0 %, 50 %, 25 % **et en dense à 25 %** (le chemin dense contre les listes, à taux égal — la première fois que les listes peuvent gagner sur un modèle dense) |
+| **aiguille à 12 288 jetons** | 1 profondeur sur 3 (11 857 jetons ✅) ; les deux autres relancées après un délai dépassé — chaque sonde coûte 20 à 30 minutes |
+| **`m9_d384_kwta25_distille`** | creux **et** distillé : les deux leviers se cumulent-ils ? En file après la chaîne 512 |
+| **`m9_d512_route_long`** | le routé 512 avec **80 000 pas** au lieu de 40 000 : l'hypothèse « sous-entraîné » est-elle la bonne ? |
+
+**Manques qui restent des manques, et rien ne les a entamés :**
 
 | manque | état exact |
 |---|---|
-| **embeddings / encodeurs** | `bge-m3` est lisible en en-tête et **inexécutable** : ni attention bidirectionnelle, ni pooling. Le manque le plus net du relevé, et rien ne l'a entamé aujourd'hui |
-| **experts en listes (Q8)** | le chargeur d'experts refuse Q8_0 (« format sans noyau ni déquantification ») : **un modèle routé ne peut pas être exécuté en listes**. Le noyau Q8 par expert reste à écrire ; c'est la condition pour que « routage + activations creuses » existe un jour |
-| **décodage spéculatif** | le taux d'acceptation est mesuré pour deux paires, dont une mal appariée (§ 1 bis) ; les paires **alignées à grande cible** (1,5 B → 14 B, 0,5 B → 14 B) tournent, et c'est là que le rapport de coût peut changer de camp. Aucune ligne de moteur n'est écrite, et c'est délibéré |
-| **modèles entraînés creux** | **réponse obtenue** (§ 5 ter) : à 50 % gardés le modèle entraîné creux ne perd rien là où le témoin perd 6,2 %, et à 25 % il est 47 % meilleur. `m7_d384_kwta25` (entraîné à 25 %) et `m8_d512_kwta25` (la même recette à dim 512) sont en file : reste à vérifier que la recette tient à l'échelle et sur la plage de taux |
-| **échelle du routage** | **faite** (§ 5 bis) : dim 512 s'inverse en routage seul (+10 %), la distillation le rattrape (−5,2 % vs le dense). La recette « router et distiller » est établie sur trois échelles |
-| **qualité des modèles plus gros que la RAM** | le § 12 ne mesure que **l'existence et le coût** (365,7 Go sur 125 Go). La perplexité publiée pour V4-Flash n'a aucune valeur et c'est écrit |
-| **porte gpt-oss de la campagne** | relancée **seule** à 01 h 04 (la première passe a été tuée par son délai sous contention) ; à cache froid, elle demande sa demi-heure |
-| **codestral corrigé sur 256 jetons** | le run de contrôle a **expiré** (délai de 1 800 s) sous la contention des autres lecteurs. La valeur publiée reste celle à **63 jetons** (117,91), obtenue avec le binaire corrigé |
+| **embeddings / encodeurs** | `bge-m3` est lisible en en-tête et **inexécutable** : ni attention bidirectionnelle, ni pooling. C'est le manque le plus net du relevé |
+| **experts en listes (Q8)** | le chargeur d'experts refuse les tenseurs Q8_0 (« format sans noyau ni déquantification ») : **un modèle routé ne peut pas être exécuté en listes**. Tant que ce noyau n'existe pas, « routage + activations creuses » n'existe pas non plus |
+| **décodage spéculatif** | le gain est démontré dans la niche (×1,52 pour un brouillon à 0,039× de sa cible), mais **aucune ligne de moteur n'est écrite** : vérifier k jetons d'un coup demande de brancher le préremplissage par lots sur le décodage |
+| **qualité des modèles plus gros que la RAM** | le § 12 ne mesure que l'existence et le coût (365,7 Go sur 125 Go) ; la perplexité publiée pour V4-Flash n'a aucune valeur, et c'est écrit |
+| **codestral corrigé sur 256 jetons** | le run de contrôle a expiré sous la contention ; la valeur publiée reste celle à **63 jetons** (117,91), obtenue avec le binaire corrigé |
 
-**Ce que cette liste dit du reste de la fenêtre** : les trois chaînes de nuit
-(`nuit2_m6`, `nuit3_kwta`, `nuit4_route_creux`) sont sérialisées par marqueurs et
-occupent le GPU jusqu'au matin ; la mesure de l'acceptation spéculative à grande
-cible et la porte gpt-oss occupent le processeur et le disque en attendant. Aucune
-de ces files ne peut fausser les autres : elles ne partagent ni les mêmes fichiers,
-ni les mêmes répertoires de cache, et les mesures déterministes (perplexité,
-identifiants, octets lus) ne dépendent pas de la charge — ce qui n'est pas le cas
-des débits, et c'est écrit à chaque fois.
+**Ce que la fenêtre a établi, en une ligne par famille** : le verdict du § 0 bis.
+**Ce qu'elle a coûté en corrections** : cinq pièges de méthode (§ 16, § 17), dont
+un binaire plus vieux que ses correctifs et une porte qui ne pouvait pas passer.
+**Ce qu'elle laisse d'ouvert** : les cinq manques ci-dessus, dont deux — les
+encodeurs et le noyau Q8 des experts — sont des chantiers de code identifiés, pas
+des inconnues.
