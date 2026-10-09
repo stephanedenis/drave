@@ -12,9 +12,9 @@ Trois capacités du plan, chacune avec sa **porte mesurée** :
 
 | # | capacité | porte (invariant à vérifier) | état |
 |---|---|---|---|
-| **C1** | **graphe de régions** : descripteur de topologie, validateur, ordonnanceur par dépendances, pilote multi-nœuds | un graphe **linéaire** rend des logits identiques **au bit près** ; un découpage à **trois régions** égale le modèle d'un seul tenant | **FAIT** : C1a + C1b (topologie pilote + relais trois instances, écart **0,00e0**) · reste C2 (entrées multiples) hors périmètre |
-| **C12** | **trace globale horodatée + rejeu** | rejeu d'une exécution distribuée == exécution, **0,00e0** | **FAIT** : 126 croisements, aucune divergence · trace faussée détectée au bit près |
-| **C5** | **bus de modulation multi-canaux** | canal nul ⇒ sortie **inchangée** | **FAIT** : bus neutre = empreintes identiques (126 croisements) · bus actif = la sortie change · bus d'un nœud relais = agit à travers les instances |
+| **C1** | **graphe de régions** : descripteur de topologie, validateur, ordonnanceur par dépendances, pilote multi-nœuds | un graphe **linéaire** rend des logits identiques **au bit près** ; un découpage à **trois régions** égale le modèle d'un seul tenant | ✅ **FAIT** — `topologie.rs` (8 tests) · la topologie pilote le découpage (0,00e0) · relais trois instances (0,00e0) · `tools/porte-topologie.sh` (5 cas, dont 2 refus) |
+| **C12** | **trace globale horodatée + rejeu** | rejeu d'une exécution distribuée == exécution, **0,00e0** | ✅ **FAIT** — `trace_globale.rs` (5 tests) · 126 croisements, **aucune divergence** · trace faussée d'un bit **détectée et nommée** · `tools/porte-trace.sh` |
+| **C5** | **bus de modulation multi-canaux** | canal nul ⇒ sortie **inchangée** | ✅ **FAIT** — `bus.rs` (5 tests) · neutre ⇒ **empreintes identiques** · gain 1,5 ⇒ la sortie change · bus d'un **relais** ⇒ agit à travers les instances · `tools/porte-bus.sh` |
 
 **Contraintes non négociables** : les **23 portes** du dépôt et les tests restent
 verts ; le profil `release` reste le **binaire de mesure** (toute promotion se paie
@@ -245,12 +245,47 @@ de contrôle `MODULATION canal valeur`, dont le format est écrit dans `bus.rs`)
    diffusés à toutes les régions, y compris entre instances ; porte : canal nul ⇒
    aucune différence, bit à bit.
 
+## Bilan du sprint (9 octobre, 19 h 20)
+
+**Les trois capacités sont livrées avec leurs invariants vérifiés**, chacune par une
+porte outillée et rejouable :
+
+| capacité | module | porte | invariant mesuré |
+|---|---|---|---|
+| **C1** graphe de régions | `topologie.rs` | `tools/porte-topologie.sh` | graphe linéaire = découpage historique (**même chiffre**) · trois régions sur trois instances = référence (**écart 0,00e0**) · deux refus vérifiés |
+| **C12** trace globale | `trace_globale.rs` | `tools/porte-trace.sh` | **126 croisements, aucune divergence** au rejeu · trace faussée d'un bit **détectée et nommée** |
+| **C5** bus de modulation | `bus.rs` | `tools/porte-bus.sh` | bus neutre ⇒ **empreintes identiques** (126 croisements) · gain 1,5 ⇒ la sortie change · bus d'un nœud **relais** ⇒ agit à travers les instances |
+
+**Tests : 95** (77 d'origine + 18 ajoutés). **Non-régression** : `porte-flux.sh`
+repassée après chaque modification du chemin d'exécution — cinq modes verts
+(0.00e0 / 0.00e0 / 3.65e-2 / 0.00e0 / 4.45e-3) — et les **23 portes du dépôt**
+relancées en fin de sprint.
+
+**Trois défauts trouvés par les portes, et c'est leur raison d'être** :
+
+1. **fin de plage exclusive** — j'envoyais `derniere` au lieu de `derniere + 1` :
+   la dernière couche de la région distante n'était plus exécutée, et **seuls les
+   modes 0, 1 et 2** étaient touchés (3 et 4 passent par un autre encodeur) ;
+2. **`--topologie` avalait `--ppl-reparti`** — la commande imprimait le plan au lieu
+   de mesurer (arrivé deux fois : au pilote, puis au nœud relais) ;
+3. **le gain d'un nœud final est absorbé par la normalisation de sortie** — le test
+   du bus était faux, pas le bus ; c'est un nœud du **milieu** qui le prouve.
+
+**Ce qui reste, et qui n'est pas dans le périmètre du sprint** : les entrées
+multiples et la récurrence (**C2**), les délais et horloges (**C3**, **C4**), la
+mémoire épisodique et la consolidation (**C6**, **C7**), la périphérie (**C8**), la
+latéralité et les budgets (**C9**, **C10**) — et, pour C5, la **diffusion réseau** du
+bus (le format de la ligne de contrôle est écrit, le transport reste à câbler).
+
+---
+
 ## Journal du sprint
 
 | heure | fait |
 |---|---|
 | 9/10 17 h 10 | **C1a** : module `topologie.rs`, validation stricte, plan, 8 tests, suite à 85 tests. |
 | 9/10 17 h 20 | **C1b pas 1** : la topologie pilote le découpage · porte `tools/porte-topologie.sh` **TENUE** (même chiffre, écart 0,00e0) · deux refus vérifiés. |
+| 9/10 19 h 20 | **Bilan** : trois capacités livrées, 95 tests, 23 portes relancées. |
 | 9/10 19 h 10 | **C5** : bus de modulation · porte `tools/porte-bus.sh` (neutre ⇒ empreintes identiques · gain 1,5 ⇒ la sortie change · bus du relais ⇒ agit). 95 tests, porte-flux verte. |
 | 9/10 18 h 40 | **C12** : trace globale + rejeu · porte `tools/porte-trace.sh` (126 croisements, aucune divergence ; trace faussée détectée au bit près). 90 tests. |
 | 9/10 18 h 00 | **C1b pas 2** : le RELAIS · trois régions sur trois instances, **écart 0,00e0**, même chiffre que deux régions. **Bug de fin de plage exclusive trouvé et corrigé** — attrapé par `porte-flux.sh` (modes 0, 1, 2 cassés, réparés : 0.00e0 / 0.00e0 / 3.65e-2). |

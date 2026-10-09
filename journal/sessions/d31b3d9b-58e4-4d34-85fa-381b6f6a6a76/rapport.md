@@ -7,12 +7,12 @@
 | Début | 2026-10-08 09:11 |
 | Durée | 32.6 h |
 | Tours | 40 |
-| Messages | 1307 |
-| Appels d'outils | 1232 |
+| Messages | 1310 |
+| Appels d'outils | 1235 |
 | Fichiers touchés | 39 |
-| Commandes | 1031 |
+| Commandes | 1033 |
 | Sous-agents | 3 |
-| Commits | 111 |
+| Commits | 112 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -1891,7 +1891,7 @@ Deux capacités sur trois sont livrées avec leurs invariants vérifiés, et les
 
 ### Tour 40 — <goal_round> Objective: "Sprint « cerveau complet » en autonomie jusqu'au 10 octobre 9 h (HAE) : implémenter, avec porte … [1357 caractères tronqués]
 
-*7 appels d'outils.* Actions notables :
+*10 appels d'outils.* Actions notables :
 
 - bash — Create the bus module and its tests
 - bash — Wire the bus into driver and node, build, test
@@ -1900,10 +1900,13 @@ Deux capacités sur trois sont livrées avec leurs invariants vérifiés, et les
 - bash — Test the bus on a relay node
 - bash — Run tests and the flux regression gate
 - bash — Record C5 and push
+- todo_write
+- bash — Launch the repo gates in the background
+- bash — Write the sprint summary, push, and check the gates
 
 **Synthèse produite :**
 
-⏵ C5 livrée : bus neutre exact au bit près, bus actif sur un nœud relais
+⏵ Lancement des 23 portes du dépôt en fond, puis bilan du sprint
 
 ## 3. Travail accompli
 
@@ -1999,7 +2002,7 @@ Deux capacités sur trois sont livrées avec leurs invariants vérifiés, et les
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 991 autres
+- … et 993 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2258,4 +2261,5 @@ Deux capacités sur trois sont livrées avec leurs invariants vérifiés, et les
 - C1b pas 2 : le RELAIS — trois régions sur trois instances, écart 0,00e0  Un nœud du milieu (--flux-serveur … --topologie F --region n1) applique SA plage puis t
 - C12 : trace globale horodatée et rejeu exact — 126 croisements, aucune divergence  TraceGlobale enregistre, par croisement : région, pas, lien, nombre de valeur
 - C5 : bus de modulation multi-canaux — canal neutre exact au bit près, canal actif sur un relais  bus.rs : canaux nommés, valeur NEUTRE par canal (gain = 1,0, le
+- Bilan du sprint : C1, C12 et C5 livrées avec leurs invariants, 95 tests, trois défauts trouvés par les portes  Les trois capacités ont leur module, leur porte o
 
