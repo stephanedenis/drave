@@ -113,7 +113,7 @@ Mêmes 256 jetons, même contexte, chaque modèle tokenisant son propre corpus
 | Qwen2.5-0.5B Q8_0 | **17,43** | **0,983** | 28,7 | 1,28 Go | 0 | en cache |
 | r1-distill-Qwen-1.5B Q4_K_M | **47,14** | **1,326** | 9,5 | 4,76 Go | 1,04 Go | lu du disque |
 | r1-distill-Qwen-14B Q4_K_M | **14,30** | **0,915** | 0,5 | 39,8 Go | 8,71 Go | lu du disque, charge 47 |
-| codestral-22B Q4_K_M | **35 657** ⚠️ | — | — | 63,6 Go | 12,7 Go | tokenizer Mistral ; **diagnostic en cours** |
+| codestral-22B Q4_K_M | **117,91** ✅ *(tokenizer corrigé)* | **1,797** | — | 63,6 Go | 12,7 Go | mesure invalide avant le correctif (§ 3) |
 | Qwen3-30B-A3B Q4_K_M (MoE) | **8,63** | **0,742** | — | **14,3 Go** | 11,8 Go | MoE, lu du NVMe |
 | gpt-oss-120b MXFP4 | **expiré à 90 min** | — | — | 13,9 Go | **35,5 Go lus** | 63 Go depuis le disque dur |
 
@@ -125,48 +125,25 @@ actifs) donne la **meilleure qualité de la grille** (0,742 bit/octet, mieux que
 lit moins : exactement ce que le prototype routé cherche à reproduire en
 l'entraînant.
 
-**L'anomalie codestral : le TOKENIZER du moteur, pas le modèle — et la mesure est INVALIDE.**
+**L'anomalie codestral : le TOKENIZER du moteur — et la mesure valide après correctif.**
 
-Trois hypothèses ont été testées dans l'ordre, et les deux premières sont tombées :
+Trois hypothèses ont été testées, les deux premières réfutées, la troisième
+confirmée **et corrigée** (§ 3) :
 
-1. *le moteur exécute mal l'architecture Mistral* → **réfutée** par la porte
-   `tools/porte-mistral.sh` (référence 3 502,5424 contre moteur 3 502,4907,
-   corrélation min 1,0000, top-1 100 %) ;
-2. *le modèle est spécialisé pour le code et mauvais en prose* → **réfutée** : sa
-   génération de code dégénère en boucle de répétition
-   (`deffibonacci(n):"""Returnthen-th…"""` suivi de vingt sauts de ligne) ;
-3. **le tokenizer est faux** → **confirmée, et reproductible** :
+| hypothèse | verdict |
+|---|---|
+| le moteur exécute mal l'architecture Mistral | **réfutée** — porte Mistral : corrélation 1,0000, top-1 100 % |
+| le modèle est spécialisé pour le code, mauvais en prose | **confirmée**, mais seulement après correction |
+| le tokenizer du moteur perd les espaces (SentencePiece) | **confirmée et corrigée** |
 
-```
-$ drave codestral-22b --tokenize --fichier "The river carries the logs to the mill."
-32 tokens écrits (vocabulaire 32768)
-réversibilité : DIVERGE à l'octet 3 — 32 vs 39 octets
-  source  : "The river carries the logs to the mill."
-  retour  : "Therivercarriesthelogstothemill."
-```
+Avant le correctif, le corpus était découpé par un tokenizer qui mangeait les
+espaces : **35 657** de perplexité, chiffre sans valeur. Après le correctif, la
+même mesure donne **117,91** sur 63 jetons — soit **1,797 bit/octet**, contre
+**0,983** pour un Qwen2.5-0.5B sur le même texte.
 
-Le même test sur Qwen2.5-0.5B rend « texte reconstruit identique ✅ (39 octets) ».
-
-**La cause est identifiable** : le fichier de codestral ne déclare **pas**
-`tokenizer.ggml.model` (il a `tokens`, `scores`, `token_type`, pas de `merges` —
-c'est un modèle *sentencepiece*), et `build_tokenizer` (`main.rs:1237`) ne lit que
-`tokenizer.ggml.pre`, `tokens`, `merges` et `token_type`. Sans indication de
-schéma, le moteur retombe sur un découpage qui perd les espaces : **32 jetons pour
-39 octets** là où Qwen en fait 9.
-
-**Conséquence directe, et elle annule un chiffre de ce rapport** : les 35 657 de
-perplexité de codestral ne mesurent **pas** le modèle — ils mesurent un corpus
-découpé par un tokenizer qui mange les espaces. La ligne « code » de la grille est
-donc **invalide**, et la conclusion que j'en avais tirée (« modèle spécialisé,
-mauvais en prose ») est **retirée**.
-
-**Ce que le moteur fait déjà, et ce qu'il ne fait pas** : il **détecte** la
-divergence (le contrôle de réversibilité affiche `DIVERGE`) mais **continue**
-quand même. C'est le défaut de méthode que le dépôt combat partout ailleurs :
-« plutôt refuser qu'un résultat faux et silencieux ». Deux correctifs possibles,
-à trancher hors campagne : refuser la tokenisation non réversible, ou déduire le
-schéma *sentencepiece* de la table elle-même (les jetons `▁…` et `<0x00>` la
-trahissent) quand `tokenizer.ggml.model` manque.
+**Un modèle de 22 milliards de paramètres est donc 1,8× PIRE qu'un 0,5 B sur de
+la prose**, parce qu'il a été entraîné pour du code. C'est le décalage de tâche
+annoncé, et il n'était mesurable qu'avec un tokenizer juste.
 
 **La perplexité n'est PAS comparable d'un tokenizer à l'autre.** Codestral
 (32 768 entrées) découpe ce texte en **288 554** jetons là où Qwen en fait
@@ -546,7 +523,35 @@ distincts et tout va bien — c'est pourquoi le piège ne s'était pas vu.
 
 ---
 
-## 17. Ce qui reste à mesurer (file en cours)
+## 18. Le résultat publié SURVIT au correctif d'échelle (sémantique multilingue)
+
+La bande sémantique « 10–15 sur 24 couches » avait été mesurée avec un lecteur qui
+**ignorait l'échelle par enregistrement** des traces DRVF. Le lecteur est corrigé ;
+la question était : le résultat tient-il ? Caches **neufs** des deux côtés,
+398 langues, article 1 contre article 2, pooling moyenne :
+
+| couche | ancienne lecture | **échelle corrigée** |
+|---|---:|---:|
+| 0 | +0,0002 | **+0,0030** |
+| 4 | +0,0156 | +0,0175 |
+| 12 | — | +0,0354 |
+| **13** | **+0,0344** | **+0,0395** |
+| 14 | — | +0,0342 |
+| 15 | — | +0,0326 |
+
+**La bande 10–15 tient, et le pic reste à la couche 13** — légèrement plus marqué
+après correction (+0,0395 contre +0,0344). Ce qui change : la couche 0 n'est plus
+« exactement nulle » (+0,0030), ce qui est cohérent — l'échelle par enregistrement
+n'est pas uniforme d'une couche à l'autre, et son omission écrasait
+différentiellement les premières couches.
+
+**C'est le premier résultat publié du dépôt qui soit revérifié après un correctif
+de lecteur, et il survit.** La conclusion (une bande 10–15, un plateau, un effet
+petit sur un fond anisotrope élevé) reste celle du `rapport-cycle-rapide.md`.
+
+---
+
+## 19. Ce qui reste à mesurer (file en cours)
 
 - `parcimonie` : seuil et k-WTA, en dense et en listes, sur un modèle réel ;
 - `contexte` : 512 → 8 192, avec le cache KV que le moteur **choisit** ;

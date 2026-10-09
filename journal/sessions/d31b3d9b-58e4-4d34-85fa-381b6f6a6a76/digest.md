@@ -9981,3 +9981,114 @@ m5_d256_route_distille : PPL moyenne sur 8 fenêtres = 4.7642
 ⏵ Protocole corrigé : routage −2,6 %, distillation −2,5 %, et les deux se cumulent
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"reports/rapport-campagne-benefices.md\"; s=open(p).read()\ndeb = s.index(\"## 5. Les modèles entraînés ici\")\nfin = s.index(\"## 5 bis. La distillation\")\nneuf = '''## 5. Les modèles entraînés ici, mesurés DAN … [3867 caractères tronqués]`
+
+  ```
+section 5 réécrite
+6565358 Protocole corrigé : routage -2,6 %, distillation -2,5 %, et les deux se cumulent
+  ```
+
+### 🤖 Assistant
+
+⏵ Le résultat central, corrigé et consolidé : les deux leviers se cumulent
+
+## Ce que j'ai dû corriger
+
+Trois protocoles m'ont donné trois réponses différentes, dont deux inversées :
+
+| fenêtre | d256 dense vs routé | d384 dense vs routé |
+|---|---|---|
+| 256 octets | routé −6,1 % | routé −5,8 % |
+| 512 jetons | **dense** gagne | routé gagne |
+| 2 048 jetons | **dense** gagne largement | routé gagne largement |
+
+La raison est simple et décisive : **ces modèles sont entraînés sur des fenêtres de 128 jetons**, et les évaluer sur 2 048 positions les fait sortir de leur distribution (la perplexité triple). Aucun des trois protocoles n'évaluait le modèle là où il a appris.
+
+## Le protocole retenu : huit fenêtres de 128 jetons, moyennées
+
+| modèle | PPL moyenne | paires/jeton | vs jumeau dense |
+|---|---:|---:|---:|
+| `m5_d256_dense` (3,2 M) | 5,0155 | 3,2 M | — |
+| **`m5_d256_route` (10,3 M)** | **4,8858** | 3,2 M | **−2,6 %** |
+| **`m5_d256_route_distille`** | **4,7642** | 3,2 M | **−5,0 %** |
+| `m5_d384_dense` (7,2 M) | 5,0108 | 7,2 M | — |
+| **`m5_d384_route` (44,4 M)** | **4,8646** | 7,2 M | **−2,9 %** |
+
+**À lecture exactement égale** (vérifié par le compteur du moteur), le routage rend le modèle **2,6 à 2,9 % meilleur** que son jumeau dense — en stockant 3,2× et 6,2× plus de paramètres — et **la distillation en ajoute 2,5 %**. Les deux leviers **se cumulent** : −5,0 % au total, sans un paramètre de plus à lire.
+
+C'est la règle du dépôt appliquée à mes propres mesures : **la longueur de l'évaluation doit être celle de l'entraînement**, et une fenêtre courte ne compare rien. Je garde la trace des trois protocoles dans le rapport, parce que l'erreur est instructive.
+
+Reste en cours : la parcimonie (les seuils absolus s'effondrent comme le dépôt l'avait mesuré : PPL 29,5 à 2 % du max), la sémantique à caches neufs, la mesure codestral corrigée, gpt-oss sur fenêtre courte, et les deux distillations qui finissent.
+
+
+## Tour 24
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, préremplissage par lots, modèle plus gros que la RAM. Poursuivre en parallèle le livrable du modèle nativement événementiel : entraîné ici, exécuté par Drave à logits vérifiés, découpé en unités réparties. Chaque affirmation porte sa mesure (perplexité, débit, octets et événements par jeton, RSS, écart entre nœuds) ET ses conditions (corpus, tokenizer du modèle, charge de fond) ; les manques constatés — embeddings/encodeurs, décodage spéculatif — sont consignés comme manques, pas comme résultats. Livrables : la file tools/campagne-benefices.sh exécutée et ses journaux, un rapport de synthèse par famille de tâches, et la poursuite du modèle événementiel."
+Round: 17/40
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "date; echo \"=== sémantique ===\"; tail -2 /tmp/campagne24/journal11.txt; echo \"=== codestral corrigé ===\"; grep -E \"=== perplexité|FIN\" /tmp/campagne24/codestral_spm.log 2>/dev/null | tail -2; echo \"=== gpt-oss court ===\"; tail -1 /tmp/campagne24/journal12.txt; echo \"=== parcimo … [264 caractères tronqués]`
+
+  ```
+jeu 08 oct 2026 23:53:56 EDT
+=== sémantique ===
+[08/10 23:52:57] corrigée : 59 lignes
+[08/10 23:52:57] === sémantique ANCIENNE lecture, caches neufs ===
+=== codestral corrigé ===
+=== perplexité 117.9145 sur 63 tokens (9326812 événements, 374.5 s) ===
+FIN
+=== gpt-oss court ===
+[08/10 23:37:19] === gpt-oss-120B, fenêtre COURTE (la passe de 256 jetons a expiré à 90 min) ===
+=== parcimonie ===
+[08/10 23:53:34] charge 74.05 · parcimonie/acttopk800push : PPL 17.4257 · événements 72355953843 · 6.9 tok/s
+[08/10 23:53:52] charge 71.57 · parcimonie/acttopk700dense : PPL 18.1141 · événements 0 · 14.4 tok/s
+=== distillation d384 ===
+  pas  36000 · perte 0.6369 · val 1.8345 bits/octet · 4059 s
+=== nuit GPU0 ===
+[08/10 23:50:21] charge 102.92 · distillation terminée :   # meilleur point : pas 36000 · val 1.9088 bits/octet
+  ```
+
+### 🤖 Assistant
+
+⏵ Le codestral corrigé donne 117,9 — et la sémantique corrigée a rendu
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== SÉMANTIQUE CORRIGÉE (échelle appliquée) ===\"; sed -n '1,20p' /tmp/campagne24/sem_avec_echelle.log; echo \"...\"; grep -E \"^\\s+(10|11|12|13|14|15)\\s\" /tmp/campagne24/sem_avec_echelle.log | head -8", "description": "Rea … [33 caractères tronqués]`
+
+  ```
+=== SÉMANTIQUE CORRIGÉE (échelle appliquée) ===
+
+=== pooling : MOYENNE · 398 langues · couches 0–23 ===
+#  couche     même   artic≠  SÉPARATION
+       0   0.6438   0.6407     +0.0030
+       1   0.6670   0.6410     +0.0260
+       2   0.7779   0.7706     +0.0073
+       3   0.8047   0.7947     +0.0100
+       4   0.8718   0.8543     +0.0175
+       5   0.8265   0.8050     +0.0215
+       6   0.8192   0.8026     +0.0166
+       7   0.8247   0.8112     +0.0135
+       8   0.8590   0.8457     +0.0133
+       9   0.7856   0.7689     +0.0167
+      10   0.8611   0.8352     +0.0259
+      11   0.7809   0.7530     +0.0279
+      12   0.8501   0.8147     +0.0354
+      13   0.8319   0.7924     +0.0395
+      14   0.8280   0.7937     +0.0342
+      15   0.8272   0.7945     +0.0326
+      16   0.8290   0.8042     +0.0247
+...
+      10   0.8611   0.8352     +0.0259
+      11   0.7809   0.7530     +0.0279
+      12   0.8501   0.8147     +0.0354
+      13   0.8319   0.7924     +0.0395
+      14   0.8280   0.7937     +0.0342
+      15   0.8272   0.7945     +0.0326
+      10   0.8037   0.7629     +0.0408
+      11   0.6120   0.5829     +0.0290
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"reports/rapport-campagne-benefices.md\"; s=open(p).read()\n\n# 1. La ligne codestral, corrigée par la mesure valide\ns = s.replace('''| codestral-22B Q4_K_M | **35 657** ⚠️ | — | — | 63,6 Go | 12,7 Go | tokenize … [4368 caractères tronqués]`

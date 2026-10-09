@@ -6,13 +6,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
 | Durée | 14.7 h |
-| Tours | 23 |
-| Messages | 617 |
-| Appels d'outils | 589 |
+| Tours | 24 |
+| Messages | 622 |
+| Appels d'outils | 592 |
 | Fichiers touchés | 21 |
-| Commandes | 467 |
+| Commandes | 470 |
 | Sous-agents | 3 |
-| Commits | 37 |
+| Commits | 38 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -73,6 +73,8 @@
 **Tour 22** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1197 caractères tronqués]
 
 **Tour 23** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1197 caractères tronqués]
+
+**Tour 24** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1197 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1106,7 +1108,47 @@ La campagne est sortie de la grille et déroule la **parcimonie** (déjà : k-WT
 
 **Synthèse produite :**
 
-⏵ Protocole corrigé : routage −2,6 %, distillation −2,5 %, et les deux se cumulent
+⏵ Le résultat central, corrigé et consolidé : les deux leviers se cumulent
+
+\## Ce que j'ai dû corriger
+
+Trois protocoles m'ont donné trois réponses différentes, dont deux inversées :
+
+| fenêtre | d256 dense vs routé | d384 dense vs routé |
+|---|---|---|
+| 256 octets | routé −6,1 % | routé −5,8 % |
+| 512 jetons | **dense** gagne | routé gagne |
+| 2 048 jetons | **dense** gagne largement | routé gagne largement |
+
+La raison est simple et décisive : **ces modèles sont entraînés sur des fenêtres de 128 jetons**, et les évaluer sur 2 048 positions les fait sortir de leur distribution (la perplexité triple). Aucun des trois protocoles n'évaluait le modèle là où il a appris.
+
+\## Le protocole retenu : huit fenêtres de 128 jetons, moyennées
+
+| modèle | PPL moyenne | paires/jeton | vs jumeau dense |
+|---|---:|---:|---:|
+| `m5_d256_dense` (3,2 M) | 5,0155 | 3,2 M | — |
+| **`m5_d256_route` (10,3 M)** | **4,8858** | 3,2 M | **−2,6 %** |
+| **`m5_d256_route_distille`** | **4,7642** | 3,2 M | **−5,0 %** |
+| `m5_d384_dense` (7,2 M) | 5,0108 | 7,2 M | — |
+| **`m5_d384_route` (44,4 M)** | **4,8646** | 7,2 M | **−2,9 %** |
+
+**À lecture exactement égale** (vérifié par le compteur du moteur), le routage rend le modèle **2,6 à 2,9 % meilleur** que son jumeau dense — en stockant 3,2× et 6,2× plus de paramètres — et **la distillation en ajoute 2,5 %**. Les deux leviers **se cumulent** : −5,0 % au total, sans un paramètre de plus à lire.
+
+C'est la règle du dépôt appliquée à mes propres mesures : **la longueur de l'évaluation doit être celle de l'entraînement**, et une fenêtre courte ne compare rien. Je garde la trace des trois protocoles dans le rapport, parce que l'erreur est instructive.
+
+Reste en cours : la parcimonie (les seuils absolus s'effondrent comme le dépôt l'avait mesuré : PPL 29,5 à 2 % du max), la sémantique à caches neufs, la mesure codestral corrigée, gpt-oss sur fenêtre courte, et les deux distillations qui finissent.
+
+### Tour 24 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1477 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Check all pending experiments
+- bash — Read the corrected semantic result
+- bash — Record the corrected codestral and the surviving semantic result
+
+**Synthèse produite :**
+
+⏵ Le codestral corrigé donne 117,9 — et la sémantique corrigée a rendu
 
 ## 3. Travail accompli
 
@@ -1184,7 +1226,7 @@ La campagne est sortie de la grille et déroule la **parcimonie** (déjà : k-WT
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 427 autres
+- … et 430 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1369,4 +1411,5 @@ La campagne est sortie de la grille et déroule la **parcimonie** (déjà : k-WT
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="reports/rapport-campagne-benefices.md"; s=open(p).read() ajout = '''## 5 bis. La disti
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="reports/rapport-campagne-benefices.md"; s=open(p).read() s = s.replace('''| gpt-oss-12
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="reports/rapport-campagne-benefices.md"; s=open(p).read() deb = s.index("## 5. Les modè
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="reports/rapport-campagne-benefices.md"; s=open(p).read()  # 1. La ligne codestral, cor
 
