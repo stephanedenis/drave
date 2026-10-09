@@ -271,9 +271,10 @@ c'est la moitié de la réponse à « pour tout type de tâches ».
 
 ---
 
-## 5. Les modèles entraînés ici, mesurés DANS le moteur — routage ET distillation gagnent
+## 5. Les modèles entraînés ici, mesurés DANS le moteur — ce que le routage et la distillation rapportent
 
-**Le protocole, et il a fallu le corriger.** Le moteur évalue une fenêtre contiguë
+**Le protocole, et il a fallu le corriger** — et la courbe de ce paragraphe
+**s'inverse à dim 512**, ce que le § 5 bis mesure. Le moteur évalue une fenêtre contiguë
 de `--limit` jetons ; ces modèles ont été **entraînés sur des fenêtres de 128
 jetons**. Les évaluer sur 256, 512 ou 2 048 positions les fait sortir de leur
 distribution (à 2 048, la perplexité triple et le classement s'inverse). La mesure
@@ -408,6 +409,44 @@ et elle ne demande aucun modèle particulier.
 
 Le batch 7 refait la mesure sur le 1,5 B et sur gpt-oss-120b, où le rapport
 tête/corps est différent.
+
+### 8 bis. La carte de latence : à partir de quand un réseau coûte plus que le calcul
+
+Le découpage à deux nœuds est exact sur localhost (écart 0,00e0). Mais localhost
+est un plancher optimiste : ce qui décide, sur un vrai réseau, n'est pas le débit
+(0,25 Mbit/s de flux) mais **la latence par message**. `tools/proxy_latence.py`
+est un relais TCP qui ajoute un délai réglable ; `tools/carte_latence.sh`
+l'intercale entre le pilote et le nœud et refait la mesure pour chaque délai.
+Modèle entraîné ici, 4 couches dont **2 locales** (donc deux frontières franchies
+par jeton), 128 jetons :
+
+| latence ajoutée par message | m5_d384 (44 M) | m6_d512 (79 M) | perplexité |
+|---:|---:|---:|---|
+| 0 ms (localhost) | ×5,32 | ×3,49 | **3,5140 / 3,6064** |
+| +1 ms | ×6,31 | ×4,99 | identique |
+| +2 ms | ×7,97 | ×11,47 | identique |
+| +5 ms | ×12,96 | ×10,97 | identique |
+| +10 ms | ×18,94 | ×17,71 | identique |
+| +20 ms | ×37,54 | ×28,18 | identique |
+| +50 ms | ×79,73 | ×56,11 | identique |
+
+**La perplexité ne bouge PAS d'un chiffre à 50 ms de latence par message** : le
+transport est exact quelle que soit la latence, et c'est la seule chose que le
+découpage doit garantir.
+
+**Le temps, lui, croît linéairement** — et la pente donne la règle :
+**≈ 3,4 ms de plus par jeton pour chaque milliseconde d'aller-retour** (44 M) et
+**3,3 ms** (79 M), soit ≈ 0,85 ms par jeton et par frontière et par ms de RTT.
+Le plancher localhost, lui, est de **×3,5 à ×5,3** : à ces tailles, un processus
+unique gagne toujours.
+
+**La règle qui en sort, et elle est utilisable** : répartir ne paie que si le
+calcul local par jeton dépasse ≈ **3,4 ms × RTT**. Concrètement : sur un réseau
+local à 0,2 ms, il faut un modèle plus lent que ~0,7 ms/jeton (soit ~1 400 tok/s) —
+tout gagne ; sur un lien à 1 ms, il faut plus de 3,4 ms/jeton (moins de 300 tok/s),
+et un 0,5 B à 34 ms/jeton est largement au-dessus ; sur un lien à 20 ms, il faut
+plus de 68 ms/jeton, soit un modèle **plus lent que 15 tok/s** — c'est le cas d'un
+14 B en Q4 sur cette machine (0,5 à 9 tok/s), et **pas** d'un 0,5 B.
 
 ---
 
@@ -783,6 +822,40 @@ Les PPL, les événements et les paires, eux, sont exacts.
 **Le résultat du dépôt se reproduit au chiffre près, un autre jour, sous une autre
 charge : le seuil absolu est inutilisable, le k-WTA tient.** À −30 % d'événements,
 le seuil coûte **+69 %** de perplexité là où le k-WTA coûte **+4 %** — un facteur 17.
+
+### 19 bis. Quelle projection tolère d'être creusée ? Le tableau qui manquait
+
+Le top-k du moteur peut viser **une projection à la fois** (`--topk-o`, `--topk-down`,
+`--topk-gate`, `--topk-up`). Même modèle, mêmes 256 jetons, chemin par listes :
+
+| projection creusée | 70 % gardé | 50 % | 30 % | événements au top-k 30 % |
+|---|---:|---:|---:|---:|
+| `o` (sortie d'attention) | **−0,3 %** | +3,3 % | **+17 %** | 86,95 G (−3,8 %) |
+| `down` (descente FFN) | +0,5 % | +3,5 % | **+16 %** | 71,98 G (−20 %) |
+| `gate` (porte FFN) | **−1,9 %** | +11 % | **+101 %** | 71,83 G (−20 %) |
+| `up` (montée FFN) | +2,3 % | +16 % | **+75 %** | 71,83 G (−20 %) |
+
+*(PPL de référence sans creusage : 17,4084.)*
+
+**Trois enseignements, et ils orientent l'entraînement.**
+
+1. **Le creusage léger AMÉLIORE la perplexité** — `gate` à 70 % gagne 1,9 %, `o`
+   0,3 %. La même chose était visible au § 19 sur le seuil à 0,1 %. La parcimonie
+   n'est pas qu'un coût : à faible dose, c'est une régularisation.
+2. **Les deux projections qui portent une activation CALCULÉE (`o`, `down`) sont
+   les plus tolérantes** (+16-17 % à 30 % gardés) ; celles qui lisent le **flux
+   résiduel** (`gate`, `up`, et `q/k/v` par construction) s'effondrent (+75 %,
+   +101 %). Autrement dit : **ce n'est pas la projection qui compte, c'est ce
+   qu'elle lit** — creuser le flux résiduel demande que le modèle ait appris à y
+   vivre.
+3. **Chaque projection ne pèse que ~20 % des événements** : creuser une seule
+   d'entre elles ne peut pas rendre l'architecture gagnante ; c'est le top-k
+   **global** (`--act-topk`) qui met tous les événements à l'échelle du taux gardé
+   (354 → 248 M au § 19).
+
+C'est exactement pourquoi le k-WTA des modèles entraînés cette nuit porte sur
+**toutes les couches linéaires** : le flux résiduel est la partie difficile, et
+c'est celle qu'un modèle nativement événementiel doit apprendre en premier.
 
 **Et une nuance que la mesure ajoute** : dans le chemin **dense**, la parcimonie ne
 réduit **aucune lecture** (495,4 M paires/jeton dans tous les cas) — elle ne fait

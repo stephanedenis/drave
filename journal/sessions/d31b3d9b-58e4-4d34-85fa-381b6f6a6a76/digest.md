@@ -13955,3 +13955,334 @@ file encore en cours.
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add reports/rapport-campagne-benefices.md tools/mesure_lot_disque.sh && git commit -q -m \"Campagne 24 h : l'équivalence au bit près, le routage qui s'inverse, le lot à froid\n\nCinq résultats de la fenêtre, tous avec leur protoc … [2022 caractères tronqués]`
+
+  ```
+69cf405 Campagne 24 h : l'équivalence au bit près, le routage qui s'inverse, le lot à froid
+  ```
+
+- **bash** `{"command": "sleep 400; cd /tmp/campagne24 && echo \"=== porte gpt-oss ===\"; cat porte_gptoss_seule_marqueur.txt 2>/dev/null || echo \"(en cours)\"; echo \"=== spec ===\"; cat spec_15_14.log 2>/dev/null | tail -5 || echo \"(en cours)\"; echo \"=== m6 distillé ===\"; tail -1 tr_d512_distille.log 2>/ … [105 caractères tronqués]`
+
+  ```
+=== porte gpt-oss ===
+(en cours)
+=== spec ===
+=== m6 distillé ===
+  pas   4000 · perte 0.7810 · val 2.0930 bits/octet · 566 s
+=== charge ===
+ 02:03:12  up 17 days 15:15,  2 users,  load average: 35,12, 38,10, 38,09
+  ```
+
+### 🤖 Assistant
+
+⏵ Expérience ciblée : quelle projection tolère le mieux la parcimonie ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf; IDS=/tmp/campagne24/ids_0.5B-Q8.txt; printf \"%-14s %10s %14s %14s\\n\" \"projection\" \"top-k\" \"PPL\" \"événements\"; for proj in \"--topk-o\" \"--topk-down\" \ … [619 caractères tronqués]`
+
+  ```
+projection          top-k            PPL   événements
+--topk-o              —        17.4084    90358043147
+--topk-o              700        17.3482    88898298168
+--topk-o              500        17.9791    87926505555
+--topk-o              300        20.3363    86951506564
+--topk-down           —        17.4084    90358043147
+--topk-down           700        17.4910    82509826347
+--topk-down           500        18.0162    77244207168
+--topk-down           300        20.2833    71978513706
+--topk-gate           —        17.4084    90358043147
+--topk-gate           700        17.0715    82414889858
+--topk-gate           500        19.2728    77122762437
+--topk-gate           300        34.9918    71831376510
+--topk-up             —        17.4084    90358043147
+--topk-up             700        17.8050    82412106376
+--topk-up             500        20.2744    77117957254
+--topk-up             300        30.3836    71826005489
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\nancre = \"\"\"**Et une nuance que la mesure ajoute** : dans le chemin **dense**, la parcimonie ne\nréduit **aucune lect … [2351 caractères tronqués]`
+
+  ```
+ok
+787:### 19 bis. Quelle projection tolère d'être creusée ? Le tableau qui manquait
+  ```
+
+- **bash** `{"command": "sleep 500; cd /tmp/campagne24 && echo \"=== porte gpt-oss ===\"; cat porte_gptoss_seule_marqueur.txt 2>/dev/null || echo \"(en cours)\"; echo \"=== spec ===\"; cat spec_15_14.log 2>/dev/null | tail -4 || echo \"(en cours)\"; echo \"=== distillé d512 ===\"; tail -1 tr_d512_distille.log", … [64 caractères tronqués]`
+
+  ```
+=== porte gpt-oss ===
+(en cours)
+=== spec ===
+=== distillé d512 ===
+  pas  12000 · perte 0.6956 · val 1.9412 bits/octet · 1653 s
+  ```
+
+- **bash** `{"command": "for p in $(pgrep -f \"gpt-oss-120b-MXFP4.gguf --ppl\") $(pgrep -f \"r1-distill-qwen-14b\"); do [ -n \"$p\" ] && echo \"PID $p : $(grep -E 'read_bytes|rchar' /proc/$p/io 2>/dev/null | tr '\\n' ' ') · $(ps -o etime=,pcpu= -p $p 2>/dev/null)\"; done; echo \"--- disque ---\"; iostat -d 2 2  … [151 caractères tronqués]`
+
+  ```
+PID 845404 : rchar: 2772 read_bytes: 20480  ·    01:16:55  0.0
+PID 845405 : rchar: 5712 read_bytes: 0  ·    01:16:55  0.0
+PID 845406 : rchar: 20990439 read_bytes: 81236897792  ·    01:16:55  564
+PID 1026706 : rchar: 4517063 read_bytes: 192512  ·       00:00  4.3
+PID 735007 : rchar: 34320 read_bytes: 0  ·    02:05:22  0.0
+PID 735011 : rchar: 44699067 read_bytes: 847732736  ·    02:05:22  0.0
+PID 780939 : rchar: 44594563 read_bytes: 38317268992  ·    01:47:32  0.0
+PID 1020613 : rchar: 5712 read_bytes: 0  ·       09:10  0.0
+PID 1020614 : rchar: 21382632 read_bytes: 557797376  ·       09:10  310
+PID 1023673 : rchar: 14677 read_bytes: 0  ·       06:24 99.9
+PID 1026706 : rchar: 4786005 read_bytes: 192512  ·       00:00  3.4
+--- disque ---
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport subprocess\ncorpus = open(\"data/wikitext2_test.txt\", encoding=\"utf-8\", errors=\"replace\").read()\ntranches = [corpus[i*2240:i*2240+320].strip() for i in range(8)]\nout = subprocess.run([\"ps\",\"-eo\",\" … [330 caractères tronqués]`
+
+  ```
+tranche(s) en cours : aucune (entre deux appels)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^#\\{2,3\\} \" reports/rapport-campagne-benefices.md; echo \"=== taille ===\"; wc -l reports/rapport-campagne-benefices.md", "description": "List report structure"}`
+
+  ```
+14:## 0. Le piège qui a failli tout fausser
+30:## 0 bis. Le verdict, famille par famille
+71:### 0 ter. L'état de la campagne au 9 octobre, 1 h 05
+89:## 1. Le décodage spéculatif : ×1,2, pas ×2 — mesuré avant d'écrire du moteur
+119:### 1 bis. Le même chiffre, mesuré PAR LE MOTEUR — et il est bien plus dur
+159:## 2. Les deux familles de tâches que Drave ne couvre pas
+174:## 3. La grille de modèles — « ce modèle tourne-t-il, et à quel prix ? »
+248:## 4. Ce que le dépôt sait déjà, par famille de tâches (avant cette campagne)
+274:## 5. Les modèles entraînés ici, mesurés DANS le moteur — routage ET distillation gagnent
+314:### 5 bis. Le gain du routage N'EST PAS monotone : il s'inverse à dim 512
+345:## 7. Répartir par EXPERTS : ce que coûterait l'unité de travail naturelle
+378:## 8. Les tâches à SORTIE CONTRAINTE : une matrice qu'on ne lit pas
+414:## 9. La mémoire TIENT : l'aiguille est retrouvée à toutes les profondeurs
+441:## 10. La génération : TTFT et débit, mesure directe
+457:## 10 bis. Quatre tâches, sorties verbatim — et c'est le MODÈLE qui limite, pas le moteur
+484:## 10 ter. La densité d'activation ne dépend PAS de la tâche — la qualité, si
+528:## 12. Le cas extrême : **365,7 Go
+… [1044 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\ns = s.replace(\"## 5. Les modèles entraînés ici, mesurés DANS le moteur — routage ET distillation gagnent\",\n          … [712 caractères tronqués]`
+
+  ```
+ok
+porte (en cours)
+spec (en cours)
+  pas  12000 · perte 0.6956 · val 1.9412 bits/octet · 1653 s
+  ```
+
+- **bash** `{"command": "nvidia-smi --query-gpu=index,utilization.gpu,memory.used --format=csv,noheader; ps -o pid,etime,pcpu,args -p $(pgrep -f \"entrainer_moteur.*m6_d512_route_distille\" | head -1) 2>/dev/null | cut -c1-140; echo \"--- log mtime ---\"; stat -c \"%y %n\" /tmp/campagne24/tr_d512_distille.log;  … [68 caractères tronqués]`
+
+  ```
+0, 98 %, 4313 MiB
+1, 14 %, 381 MiB
+    PID     ELAPSED %CPU COMMAND
+ 963168       30:54 98.0 /home/stephane/gpu-env/bin/python -u tools/entrainer_moteur.py --famille route --dim 512 --couches 4 --tetes 8 --ca
+--- log mtime ---
+2026-10-09 02:19:19.368227135 -0400 /tmp/campagne24/tr_d512_distille.log
+02:22:26
+  ```
+
+- **bash** `{"command": "cd /tmp/campagne24 && echo \"=== batch2 ===\"; tail -3 journal2.txt; pgrep -cf \"batch2.s[h]\"; echo \"=== chaîne m5 ===\"; tail -4 journal4.txt; echo \"=== journaux de nuit ===\"; for f in journal5.txt journal7.txt journal8.txt; do echo \"--- $f\"; tail -2 $f 2>/dev/null; done", "descr … [41 caractères tronqués]`
+
+  ```
+=== batch2 ===
+[09/10 02:21:49] charge 36.44 · === batch 2 : carte de latence (à partir de quand le réseau coûte plus que le calcul) ===
+[09/10 02:21:49] charge 36.44 · b2/latence :                ~~~~~~~~^^^ IndexError: list index out of range 
+[09/10 02:21:49] charge 36.44 · === batch 2 terminé ===
+0
+=== chaîne m5 ===
+[08/10 23:37:08] charge 49.46 · m5_d256_route_distille : PPL 5.1326 · paires 3.2 M · événements 199497531 · 802.6 tok/s · porte 1
+[09/10 00:05:37] charge 53.21 · m5_d384_route_distille : PPL 4.3745 · paires 7.2 M · événements 448703956 · 478.8 tok/s · porte 1
+[09/10 00:30:00] charge 54.03 · m6_d512_dense : PPL 4.2171 · paires 12.8 M · événements 2927366051 · 148.7 tok/s · porte 1
+[09/10 01:50:50] charge 24.88 · m6_d512_route : PPL 5.8853 · paires 12.8 M · événements 797384096 · 354.4 tok/s · porte 1
+=== journaux de nuit ===
+--- journal5.txt
+[09/10 00:29:02] charge 50.65 · dim 512 routé (16 experts, 8x de stockage pour la même lecture) : départ
+[09/10 02:05:05] charge 33.45 · dim 512 routé :   # meilleur point : pas 40000 · val 1.8843 bits/octet
+--- journal7.txt
+[08/10 23:02:55] charge 67.93 · lot30B/64 : PPL 7.6098 · 1.2 tok/s · lus 0 Mio · 135s mur
+[08/10 23:02:55]
+… [229 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Correction de l'outil de carte de latence (le batch 2 a échoué dessus)
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/proxy_latence.py"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/proxy_latence.py</path>
+<type>file</type>
+<content>
+1: #!/usr/bin/env python3
+2: """Relais TCP qui ajoute une latence par message, pour mesurer ce qu'un lien
+3: distant coûte à un découpage de modèle.
+4: 
+5: Pourquoi : sur localhost, l'attente du pair vaut 1,01× le calcul local — c'est un
+6: plancher optimiste. Une VM Colab est à quelques dizaines de millisecondes, et la
+7: phase 3.3 demande « à partir de quel débit le découpage gagne ». Le débit n'est
+8: jamais le problème (0,25 Mbit/s) ; la latence, si. Ce relais la rend réglable.
+9: 
+10:     python3 tools/proxy_latence.py <port_écoute> <hôte_cible:port> [délai_ms]
+11: """
+12: import socket, sys, threading, time
+13: 
+14: 
+15: def relais(src, dst, delai):
+16:     try:
+17:         while True:
+18:             donnees = src.recv(65536)
+19:             if not donnees:
+20:                 break
+21:             if delai:
+22:                 time.sleep(delai)
+23:             dst.sendall(donnees)
+24:     except OSError:
+25:         pass
+26:     finally:
+27:         for s in (src, dst):
+28:             try:
+29:                 s.shutdown(socket.SHUT_RDWR)
+30:             except OS
+… [1039 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,60p' tools/porte-reparti-moteur.sh", "description": "Read the 2-node split gate protocol"}`
+
+  ```
+#!/bin/bash
+# Porte de RÉPARTITION du modèle entraîné ici : deux nœuds, deux plages de couches.
+#
+# Ce qu'elle vérifie, et pourquoi elle est distincte de `tools/porte-flux.sh` :
+# celle-ci tourne sur Qwen2.5-0.5B, un modèle venu d'ailleurs. Ici c'est NOTRE
+# modèle (Qwen3-MoE entraîné sur le corpus d'octets), et la question n'est pas
+# « le transport est-il fidèle » mais « le modèle qu'on a produit est-il
+# découpable sans changer un chiffre ». Un modèle dont le routage d'experts ou
+# les normes dépendraient d'un état global ne passerait pas.
+#
+#   tools/porte-reparti-moteur.sh
+#   MODELE=/tmp/moteur_dense.gguf COUCHES=2 tools/porte-reparti-moteur.sh
+set -u
+cd "$(dirname "$0")/.."
+D=${D:-./drave-core/target/release/drave}
+MODELE=${MODELE:-/tmp/moteur_route.gguf}
+IDS=${IDS:-/tmp/route_ids.txt}
+PORT=${PORT:-$((49000 + RANDOM % 800))}
+CTX=${CTX:-256}
+LIMITE=${LIMITE:-128}          # doit valoir le nombre de jetons du fichier IDS
+COUCHES=${COUCHES:-2}          # couches gardées côté pilote ; le reste au nœud
+
+TRAVAIL=$(mktemp -d "${TMPDIR:-/tmp}/porte-reparti-XXXXXX")
+LOG_SRV="$TRAVAIL/serveur.log"
+
+[ -x "$D" ] || { echo "  $D absent : construire d'abord"; exit 1; }
+[ -s "$MODELE" ] ||
+… [1609 caractères tronqués]
+  ```
+
+- **write** `{"content": "#!/bin/bash\n# carte_latence.sh — « à partir de quel aller-retour le découpage cesse de payer ? »\n#\n# POURQUOI CETTE CARTE. Le découpage à deux nœuds est prouvé exact (écart 0,00e0,\n# § 8 et portes). Mais il est prouvé sur LOCALHOST, où l'aller-retour vaut quelques\n# dizaines de mic … [3111 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/carte_latence.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && chmod +x tools/carte_latence.sh && bash -n tools/carte_latence.sh && echo \"syntaxe OK\" && timeout 900 bash tools/carte_latence.sh --delais \"0 5\" 2>&1 | tail -12", "description": "Smoke-test the latency map", "timeoutMs": 900000}`
+
+  ```
+[stderr]
+tools/carte_latence.sh: line 47: syntax error near unexpected token `|'
+tools/carte_latence.sh: line 47: `|---:|---:|---:|---:|"'
+[exit code: 2]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/carte_latence.sh", "old_string": "echo \"| latence par message | perplexité | mur (s) | vs entier |\"\n|---:|---:|---:|---:|\"", "new_string": "echo \"| latence par message | perplexité | mur (s) | vs entier |\"\necho \"|---:|---:| … [14 caractères tronqués]`
+
+  ```
+Error: cannot edit "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/carte_latence.sh": file changed since it was read — re-read the file, then retry
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"tools/carte_latence.sh\")\ns = p.read_text()\ns = s.replace('echo \"| latence par message | perplexité | mur (s) | vs entier |\"\\n|---:|---:|---:|---:|\"',\n              'echo \" … [346 caractères tronqués]`
+
+  ```
+corrigé
+syntaxe OK
+# m5_d384_route_distille.gguf · entier : perplexité 3.5140 en 0.3 s
+
+| latence par message | perplexité | mur (s) | vs entier |
+|---:|---:|---:|---:|
+| +0 ms | 3.5140 | 0.8 | x2.66 |
+| +5 ms | 3.5140 | 3.7 | x12.29 |
+  ```
+
+### 🤖 Assistant
+
+⏵ Balayage complet de la carte de latence sur deux tailles de modèle
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash -c '\necho \"=== m5_d384_route_distille (44 M, 4 couches) ===\"\nbash tools/carte_latence.sh --delais \"0 1 2 5 10 20 50\" 2>&1\necho\necho \"=== m6_d512_route (79 M, 4 couches) ===\"\nbash tools/carte_latence.sh --modele  … [233 caractères tronqués]`
+
+  ```
+carte latence pid 1032509
+=== m5_d384_route_distille (44 M, 4 couches) ===
+# m5_d384_route_distille.gguf · entier : perplexité 3.5140 en 0.3 s
+  ```
+
+- **bash** `{"command": "sleep 420; cd /tmp/campagne24 && cat carte_latence.log; echo \"=== porte gpt-oss ===\"; cat porte_gptoss_seule_marqueur.txt 2>/dev/null || echo \"(en cours)\"; echo \"=== spec ===\"; cat spec_15_14.log 2>/dev/null | grep -E \"acceptés|gain|coût\" || echo \"(en cours)\"", "description":  … [60 caractères tronqués]`
+
+  ```
+=== m5_d384_route_distille (44 M, 4 couches) ===
+# m5_d384_route_distille.gguf · entier : perplexité 3.5140 en 0.3 s
+
+| latence par message | perplexité | mur (s) | vs entier |
+|---:|---:|---:|---:|
+| +0 ms | 3.5140 | 1.6 | x5.32 |
+| +1 ms | 3.5140 | 1.9 | x6.31 |
+| +2 ms | 3.5140 | 2.4 | x7.97 |
+| +5 ms | 3.5140 | 3.9 | x12.96 |
+| +10 ms | 3.5140 | 5.7 | x18.94 |
+| +20 ms | 3.5140 | 11.3 | x37.54 |
+| +50 ms | 3.5140 | 24.0 | x79.73 |
+
+=== m6_d512_route (79 M, 4 couches) ===
+# m6_d512_route.gguf · entier : perplexité 3.6064 en 0.4 s
+
+| latence par message | perplexité | mur (s) | vs entier |
+|---:|---:|---:|---:|
+| +0 ms | 3.6064 | 1.4 | x3.49 |
+| +1 ms | 3.6064 | 2.0 | x4.99 |
+| +2 ms | 3.6064 | 4.6 | x11.47 |
+| +5 ms | 3.6064 | 4.4 | x10.97 |
+| +10 ms | 3.6064 | 7.1 | x17.71 |
+| +20 ms | 3.6064 | 11.3 | x28.18 |
+| +50 ms | 3.6064 | 22.5 | x56.11 |
+=== porte gpt-oss ===
+(en cours)
+=== spec ===
+(en cours)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/## 8. Les tâches à SORTIE CONTRAINTE/,/^## 9\\./p' reports/rapport-campagne-benefices.md | tail -8", "description": "Locate the end of section 8"}`
+
+  ```
+et elle ne demande aucun modèle particulier.
+
+Le batch 7 refait la mesure sur le 1,5 B et sur gpt-oss-120b, où le rapport
+tête/corps est différent.
+
+---
+
+## 9. La mémoire TIENT : l'aiguille est retrouvée à toutes les profondeurs
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\nancre = \"\"\"Le batch 7 refait la mesure sur le 1,5 B et sur gpt-oss-120b, où le rapport\ntête/corps est différent.\n\ … [2485 caractères tronqués]`
+
+  ```
+ok
+413:### 8 bis. La carte de latence : à partir de quand un réseau coûte plus que le calcul
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add reports/rapport-campagne-benefices.md tools/carte_latence.sh tools/proxy_latence.py 2>/dev/null; git commit -q -m \"La carte de latence : répartir ne paie que si le calcul dépasse 3,4 ms x RTT\n\nLe découpage était prouvé exa … [774 caractères tronqués]`
