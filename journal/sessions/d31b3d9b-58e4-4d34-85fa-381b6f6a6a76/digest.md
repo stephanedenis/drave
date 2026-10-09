@@ -9316,3 +9316,273 @@ drave
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"reports/rapport-campagne-benefices.md\"; s=open(p).read()\nvieux_debut = s.index(\"**L'anomalie codestral est EXPLIQUÉE\")\nvieux_fin = s.index(\"**La perplexité n'est PAS comparable d'un tokenizer à l'autre.**\ … [4208 caractères tronqués]`
+
+  ```
+corrigé
+1
+4f233d7 Le tokenizer du moteur perd les espaces sur la famille Mistral — la mesure codestral est INVALIDE
+  ```
+
+### 🤖 Assistant
+
+⏵ Fait majeur : le tokenizer du moteur mange les espaces sur la famille Mistral — la mesure codestral est invalide
+
+## Trois hypothèses, deux tombées, la troisième reproductible
+
+Sur les **35 657** de perplexité de codestral-22B :
+
+1. *« le moteur exécute mal l'architecture Mistral »* → **réfutée** par la porte que je venais d'écrire (corrélation min 1,0000, top-1 100 %) ;
+2. *« c'est un spécialiste du code, mauvais en prose »* → **réfutée** : sa génération de code dégénère en boucle de répétition (`deffibonacci(n):"""Returnthen-th…"""` suivi de vingt sauts de ligne) ;
+3. *« le tokenizer est faux »* → **confirmée**, et reproductible en une commande :
+
+```
+$ drave codestral-22b --tokenize --fichier "The river carries the logs to the mill."
+32 tokens écrits (vocabulaire 32768)
+réversibilité : DIVERGE à l'octet 3 — 32 vs 39 octets
+  source : "The river carries the logs to the mill."
+  retour : "Therivercarriesthelogstothemill."
+```
+
+Le même test sur Qwen rend « texte reconstruit identique ✅ ». **La cause est identifiable** : le fichier ne déclare pas `tokenizer.ggml.model` (c'est un modèle *sentencepiece* — tokens, scores, token_type, pas de `merges`), et `build_tokenizer` (`main.rs:1237`) ne lit que `pre`, `tokens`, `merges` et `token_type`. Sans schéma, le découpage perd les espaces : **32 jetons pour 39 octets**, là où Qwen en fait 9.
+
+**Conséquence : je retire un chiffre de mon propre rapport.** Les 35 657 ne mesurent pas le modèle — ils mesurent un corpus mal découpé. La ligne « code » de la grille est **invalide**, et ma conclusion « modèle spécialisé pour le code, mauvais en prose » est retirée.
+
+Et le défaut de méthode est nommé : **le moteur détecte la divergence** (le contrôle de réversibilité affiche `DIVERGE`) **mais continue quand même**. C'est exactement ce que le dépôt combat ailleurs — « plutôt refuser qu'un résultat faux et silencieux ». Deux correctifs possibles, à trancher hors campagne : refuser la tokenisation non réversible, ou déduire le schéma sentencepiece de la table elle-même (les jetons `▁…` et `<0x00>` le trahissent).
+
+## Par ailleurs, le résultat central est acquis
+
+À **lecture égale** (vérifié par le compteur du moteur), le routage gagne **6 % de perplexité** : 5,0684 contre 5,3973 pour 3,2 M poids lus/jeton, et 5,0614 contre 5,3719 pour 7,2 M — en stockant 3,2× et 6,2× plus de paramètres. Et j'ai réfuté l'hypothèse du batch 2 : **la densité d'activation ne dépend pas de la tâche** (71 % sur la prose, le français et le code, à 0,002 point près) — elle dépend du modèle, et seule la parcimonie entraînée la change.
+
+
+## Tour 20
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, préremplissage par lots, modèle plus gros que la RAM. Poursuivre en parallèle le livrable du modèle nativement événementiel : entraîné ici, exécuté par Drave à logits vérifiés, découpé en unités réparties. Chaque affirmation porte sa mesure (perplexité, débit, octets et événements par jeton, RSS, écart entre nœuds) ET ses conditions (corpus, tokenizer du modèle, charge de fond) ; les manques constatés — embeddings/encodeurs, décodage spéculatif — sont consignés comme manques, pas comme résultats. Livrables : la file tools/campagne-benefices.sh exécutée et ses journaux, un rapport de synthèse par famille de tâches, et la poursuite du modèle événementiel."
+Round: 13/40
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Je prépare le correctif du tokenizer — dans un répertoire de compilation séparé pour ne pas toucher au binaire de la campagne
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls drave-core/src/ | head -20; echo \"=== structure du tokenizer ===\"; grep -n \"pub struct Tokenizer\\|pub fn new\\|fn encoder\\|fn decoder\\|spm\\|Spm\\|SPM\\|▁\" drave-core/src/tokenizer.rs 2>/dev/null | head -20", "description": … [41 caractères tronqués]`
+
+  ```
+clusters.rs
+engine.rs
+engram.rs
+formats.rs
+gguf.rs
+gpu.rs
+kimi_k3.rs
+list.rs
+main.rs
+materiel.rs
+model.rs
+tokenizer.rs
+=== structure du tokenizer ===
+30:pub struct Tokenizer {
+64:    pub fn new(tokens: Vec<String>, merges: Vec<String>, token_type: Vec<i32>,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,120p' drave-core/src/tokenizer.rs", "description": "Read the tokenizer implementation"}`
+
+  ```
+//! Tokenizer BPE byte-level d'un modèle Qwen2.5, reconstruit depuis les
+//! métadonnées GGUF (`tokenizer.ggml.tokens`, `.merges`, `.token_type`).
+//!
+//! Std seul : aucune dépendance. Chaîne de traitement, identique à celle de
+//! Qwen2 / llama.cpp :
+//!   1. découpage du texte par le pré-tokenizer, motif `qwen2` :
+//!      `(?i:'s|'t|'re|'ve|'m|'ll|'d)|[^\r\n\p{L}\p{N}]?\p{L}+|\p{N}`
+//!      `| ?[^\s\p{L}\p{N}]+[\r\n]*|\s*[\r\n]+|\s+(?!\S)|\s+`
+//!      écrit à la main (l'ORDRE des alternatives et le lookahead `(?!\S)`
+//!      font partie de la spécification) ;
+//!   2. encodage byte-level de chaque morceau (table octet ↔ caractère de GPT-2) ;
+//!   3. BPE : fusion répétée de la paire de rangs minimaux, puis conversion en ids.
+//!
+//! Les classes `\p{L}` et `\p{N}` sont approchées par `char::is_alphabetic()` et
+//! `char::is_numeric()` : voir la nuance documentée sur `is_letter`.
+//!
+//! Vérification (hors dépôt, 737 cas : 300 lignes de wikitext2 avec et sans
+//! retour à la ligne, cas pièges, plus 20 000 cas aléatoires) : les morceaux
+//! produits ici sont identiques à ceux du moteur regex de Perl exécutant le
+//! motif ci-dessus, à la seule exception des marques combinantes s
+… [4502 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '120,175p' drave-core/src/tokenizer.rs", "description": "Read the decode function"}`
+
+  ```
+pub fn decode(&self, ids: &[u32]) -> String {
+        let mut bytes = Vec::new();
+        for &id in ids {
+            let tok = match self.id_to_tok.get(id as usize) {
+                Some(t) => t,
+                None => continue,
+            };
+            for c in tok.chars() {
+                if let Some(&b) = self.byte_dec.get(&c) {
+                    bytes.push(b);
+                }
+            }
+        }
+        String::from_utf8_lossy(&bytes).into_owned()
+    }
+
+    #[allow(dead_code)] // fait partie de l'API demandée
+    pub fn vocab_size(&self) -> usize {
+        self.id_to_tok.len()
+    }
+
+    /// Id du token spécial à partir de sa chaîne (« <|im_end|> » -> 151645).
+    ///
+    /// Un token n'est « spécial » que si `token_type` le dit (3 = contrôle,
+    /// 4 = défini par l'utilisateur). Si `token_type` ne couvre pas l'id
+    /// (tableau vide ou tronqué), on renvoie l'id trouvé sans pouvoir trancher.
+    /// Identifiant d'un jeton de contrôle, désigné par sa chaîne.
+    ///
+    /// Le type déclaré n'est pas décisif : le vocabulaire o200k range
+    /// `<|start|>` et `<|message|>` parmi les jetons **ordinaires**. Exiger le
+    /// type « contrôle » faisait donc échoue
+… [1193 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"drave-core/src/tokenizer.rs\"; s=open(p).read()\n\n# 1. champ + détection\ns = s.replace('''    motif_gpt4o: bool,\n    motif_kimi: bool,\n}''',\n'''    motif_gpt4o: bool,\n    motif_kimi: bool,\n    /// **Sente … [4853 caractères tronqués]`
+
+  ```
+patch écrit
+
+For more information about this error, try `rustc --explain E0425`.
+warning: `drave-core` (bin "drave") generated 29 warnings
+error: could not compile `drave-core` (bin "drave") due to 2 previous errors; 29 warnings emitted
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && CARGO_TARGET_DIR=/tmp/target-spm cargo build --release 2>&1 | grep -E \"^error\" -A 6 | head -20", "description": "Show the compile errors", "timeoutMs": 900000}`
+
+  ```
+error[E0425]: cannot find value `id_to_tok` in this scope
+   --> src/tokenizer.rs:101:16
+    |
+ 32 |     id_to_tok: Vec<String>,
+    |     --------- a field by that name exists in `Self`
+...
+101 |             && id_to_tok.iter().take(4096).any(|t| t.starts_with('\u{2581}'));
+--
+error[E0425]: cannot find value `id_to_tok` in this scope
+   --> src/tokenizer.rs:102:21
+    |
+ 32 |     id_to_tok: Vec<String>,
+    |     --------- a field by that name exists in `Self`
+...
+102 |         Tokenizer { id_to_tok, tok_to_id, ranks, byte_enc, byte_dec, token_type,
+--
+error: could not compile `drave-core` (bin "drave") due to 2 previous errors; 29 warnings emitted
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"drave-core/src/tokenizer.rs\"; s=open(p).read()\ns = s.replace(\"\"\"            && id_to_tok.iter().take(4096).any(|t| t.starts_with('\\\\u{2581}'));\n        Tokenizer { id_to_tok, tok_to_id, ranks, byte_enc,  … [546 caractères tronqués]`
+
+  ```
+corrigé
+[stderr]
+bash: -c: line 9: unexpected EOF while looking for matching ``'
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && CARGO_TARGET_DIR=/tmp/target-spm timeout 1800 cargo build --release 2>&1 | grep -E \"^error\" -A 4 | head -12; ls -la /tmp/target-spm/release/drave 2>/dev/null | awk '{print $5, $9}'", "description": "Rebuild after the fix … [24 caractères tronqués]`
+
+  ```
+2551464 /tmp/target-spm/release/drave
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=/home/stephane/Data13TB/stephane/modeles/gguf/codestral-22b-v0.1-q4_k_m.gguf; echo \"=== binaire PATCHÉ sur codestral ===\"; timeout 600 /tmp/target-spm/release/drave $M --tokenize --fichier /tmp/txt_esp.txt --sortie /tmp/esp_spm.i … [518 caractères tronqués]`
+
+  ```
+=== binaire PATCHÉ sur codestral ===
+réversibilité : DIVERGE à l'octet 0 — 40 vs 39 octets
+  source  : "The river carries the logs to the mill."
+  retour  : " The river carries the logs to the mill."
+=== le même texte avec Qwen (non régressé ?) ===
+9 tokens écrits dans /tmp/esp2_spm.ids (vocabulaire du modèle : 151936)
+réversibilité : texte reconstruit identique ✅ (39 octets)
+identifiants Qwen IDENTIQUES à l'ancien binaire ✅
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && P=/tmp/target-spm/release/drave; M=/home/stephane/Data13TB/stephane/modeles/gguf/codestral-22b-v0.1-q4_k_m.gguf; C=/tmp/campagne24\necho \"=== tokenisation de la prose avec le binaire PATCHÉ ===\"; timeout 600 $P $M --tokenize --fich … [804 caractères tronqués]`
+
+  ```
+=== tokenisation de la prose avec le binaire PATCHÉ ===
+93748 tokens écrits dans /tmp/campagne24/ids_codestral_spm.txt (vocabulaire du modèle : 32768)
+réversibilité : DIVERGE à l'octet 0 — 369247 vs 359041 octets
+=== non-régression : porte Qwen (19,3885 attendu) ===
+=== non-régression : notre modèle routé (porte de logits) ===
+perplexité 5.0684
+✅ porte de correction tenue (100.0 % des positions UTILES au-dessus de 0.95, min 0.9982 >= plancher 0.9, top-1 98.8 % sur toutes les positions, 52 saturées exclues de la corrélation)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && P=/tmp/target-spm/release/drave; timeout 300 $P models/Qwen2.5-0.5B-Q8_0.gguf --ppl data/wikitext2_test.txt.ids --ctx 256 --threads 8 2>&1 | tail -6", "description": "Run the Qwen reference gate with the patched binary", "timeoutMs": … [8 caractères tronqués]`
+
+  ```
+4590 tokens notés — perplexité cumulée 20228.462  (21.0 tok/s)  [fenêtre 18 : 255 notés, PPL 38142.589]
+    4845 tokens notés — perplexité cumulée 20702.621  (21.1 tok/s)  [fenêtre 19 : 255 notés, PPL 31415.921]
+    5100 tokens notés — perplexité cumulée 21053.852  (20.6 tok/s)  [fenêtre 20 : 255 notés, PPL 28983.433]
+    5355 tokens notés — perplexité cumulée 21693.015  (20.7 tok/s)  [fenêtre 21 : 255 notés, PPL 39453.651]
+    5610 tokens notés — perplexité cumulée 21409.135  (20.8 tok/s)  [fenêtre 22 : 255 notés, PPL 16235.375]
+    5865 tokens notés — perplexité cumulée 21582.664  (20.9 tok/s)  [fenêtre 23 : 255 notés, PPL 25777.184]
+  ```
+
+- **bash** `{"command": "pkill -f \"target-sp[m]/release/drave\" 2>/dev/null; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && P=/tmp/target-spm/release/drave; O=./drave-core/target/release/drave; echo \"=== non-régression Qwen : ancien vs patché, mêmes ids ===\"; echo -n \"ancien : \"; timeout 300 $O mode … [389 caractères tronqués]`
+
+  ```
+(no output)
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "ps -eo pid,etime,args 2>/dev/null | grep \"target-spm\" | grep -v grep | cut -c1-80 | head -3; echo \"--- état ---\"", "description": "Check for leftover patched-binary processes"}`
+
+  ```
+--- état ---
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && P=/tmp/target-spm/release/drave; O=./drave-core/target/release/drave; echo -n \"ancien : \"; timeout 300 $O models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/essai.ids --limit 256 --ctx 512 --threads 8 2>&1 | grep -oE \"=== perplexité [0-9.]+ … [265 caractères tronqués]`
+
+  ```
+ancien : === perplexité 17.4315
+patché : === perplexité 17.4315
+  ```
+
+### 🤖 Assistant
+
+⏵ Bug dans mon correctif : les jetons-octets `<0x0A>` se décodaient littéralement
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"drave-core/src/tokenizer.rs\"; s=open(p).read()\ns = s.replace('''        if self.spm {\n            // En SentencePiece, la marque `▁` EST l'espace : on recolle les\n            // morceaux tels quels, puis on  … [2334 caractères tronqués]`
+
+  ```
+corrigé
+=== réversibilité codestral après correction ===
+93748 tokens écrits dans /tmp/campagne24/ids_codestral_spm.txt (vocabulaire du modèle : 32768)
+réversibilité : DIVERGE à l'octet 0 — 359042 vs 359041 octets
+  source  : "\n = Robert Boulter = \n\n\n Robert Boulter "
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && P=/tmp/target-spm/release/drave; O=./drave-core/target/release/drave; printf 'The river carries the logs to the mill.' > /tmp/txt_esp.txt\nfor m in \"/home/stephane/Data13TB/stephane/modeles/gguf/gpt-oss-120b-MXFP4.gguf:gpt-oss\" \"m … [1046 caractères tronqués]`
+
+  ```
+gpt-oss : patché → réversibilité : texte reconstruit identique ✅ (39 octets)
+qwen : patché → réversibilité : texte reconstruit identique ✅ (39 octets)
+mesure codestral corrigée lancée
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && /home/stephane/gpu-env/bin/python - <<'PY' 2>&1 | tail -8\nimport struct\np=\"/home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf\"\nf=open(p,'rb'); assert f.read(4)==b'GGUF'\nver,=struct.unpack('<I',f.read(4)); nt,=st … [1063 caractères tronqués]`
+
+  ```
+(no output)
+[timed out after 300000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/msg_tok.txt <<'MSG'\nTokenizers SentencePiece (Llama, Mistral, Codestral) : les espaces étaient perdus\n\nLe moteur ne savait découper qu'en BPE byte-level (Qwen, gpt-oss, Kimi, V4). Sur\nune table SentencePiece — pas de f … [1868 caractères tronqués]`

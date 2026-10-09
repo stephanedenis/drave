@@ -53,6 +53,14 @@ pub struct Tokenizer {
     /// C'était un défaut SILENCIEUX sur Kimi-K2.7 comme sur Kimi-K3.
     motif_gpt4o: bool,
     motif_kimi: bool,
+    /// **SentencePiece** (Llama, Mistral, Codestral…) : la table n'a PAS de
+    /// fusions BPE, et l'espace est porté par la marque `▁` (U+2581) en tête de
+    /// mot. Le découpage byte-level de Qwen appliqué à une telle table ne trouve
+    /// aucune fusion et retombe sur un jeton par caractère : « The river carries
+    /// the logs to the mill. » sortait en **32 jetons** (au lieu de 9) et se
+    /// relisait **sans les espaces**. C'est un défaut silencieux : la perplexité
+    /// qui en découle ne mesure pas le modèle.
+    spm: bool,
 }
 
 impl Tokenizer {
@@ -86,12 +94,18 @@ impl Tokenizer {
         let motif_gpt4o = pre.starts_with("gpt-4o") || pre.starts_with("o200k");
         // `kimi-k2` (Kimi-K2.7) et `kimi-k3` (Kimi-K3) partagent le même motif.
         let motif_kimi = pre.starts_with("kimi");
+        // Détection du schéma SentencePiece : aucune fusion BPE ET une marque
+        // `▁` dans la table. Les deux conditions sont nécessaires — un modèle
+        // BPE sans fusions existe (table seule), mais il n'a pas de `▁`.
+        let spm = ranks.is_empty()
+            && tokens.iter().take(4096).any(|t| t.starts_with('\u{2581}'));
         Tokenizer { id_to_tok: tokens, tok_to_id, ranks, byte_enc, byte_dec, token_type,
-                    motif_gpt4o, motif_kimi }
+                    motif_gpt4o, motif_kimi, spm }
     }
 
     /// Encode un texte en ids.
     pub fn encode(&self, text: &str) -> Vec<u32> {
+        if self.spm { return self.encode_spm(text); }
         let cs: Vec<char> = text.chars().collect();
         let mut out = Vec::new();
         let mut i = 0;
@@ -113,11 +127,82 @@ impl Tokenizer {
         out
     }
 
+    /// Encodeur **SentencePiece** : découpage sur les espaces, marque `▁` en
+    /// tête de chaque mot, puis plus long morceau d'abord dans la table.
+    ///
+    /// Le repli octet (`<0xXX>`) est celui de la référence : un caractère absent
+    /// de la table est émis octet par octet, ce qui rend le décodage réversible
+    /// même sur de l'inconnu — c'est ce que le contrôle de réversibilité vérifie.
+    fn encode_spm(&self, text: &str) -> Vec<u32> {
+        let mut out = Vec::new();
+        let mut mot = String::new();
+        let mut mots: Vec<String> = Vec::new();
+        for c in text.chars() {
+            if c == ' ' {
+                if !mot.is_empty() { mots.push(std::mem::take(&mut mot)); }
+            } else {
+                mot.push(c);
+            }
+        }
+        if !mot.is_empty() { mots.push(mot); }
+        for m in mots {
+            let frag = format!("\u{2581}{m}");
+            let cs: Vec<char> = frag.chars().collect();
+            let mut i = 0;
+            while i < cs.len() {
+                let mut trouve: Option<(usize, u32)> = None;
+                // Le plus long d'abord : c'est la règle de la référence.
+                for j in (i + 1..=cs.len()).rev() {
+                    let s: String = cs[i..j].iter().collect();
+                    if let Some(&id) = self.tok_to_id.get(&s) { trouve = Some((j, id)); break; }
+                }
+                match trouve {
+                    Some((j, id)) => { out.push(id); i = j; }
+                    None => {
+                        let mut buf = [0u8; 4];
+                        for b in cs[i].encode_utf8(&mut buf).as_bytes() {
+                            if let Some(&id) = self.tok_to_id.get(&format!("<0x{b:02X}>")) {
+                                out.push(id);
+                            }
+                        }
+                        i += 1;
+                    }
+                }
+            }
+        }
+        out
+    }
+
     /// Décode des ids en texte (les tokens spéciaux sont conservés tels quels).
     ///
     /// Les ids hors vocabulaire sont ignorés ; les caractères absents de la table
     /// byte-level le sont aussi (même comportement que la référence Python).
     pub fn decode(&self, ids: &[u32]) -> String {
+        if self.spm {
+            // En SentencePiece, la marque `▁` EST l'espace : on recolle les
+            // morceaux tels quels, puis on la remplace. Le chemin byte-level
+            // ci-dessous ne la connaît pas et rendait « Therivercarries… ».
+            //
+            // ET le repli octet se défait : un jeton `<0x0A>` vaut l'OCTET 0x0A,
+            // pas les six caractères « <0x0A> ». Les recoller littéralement
+            // allongeait le texte de 10 206 octets sur 359 041 (mesuré) — un
+            // défaut qui ne se voit que sur un contrôle de réversibilité.
+            let mut octets: Vec<u8> = Vec::new();
+            for &id in ids {
+                let t = match self.id_to_tok.get(id as usize) { Some(t) => t, None => continue };
+                if t.len() == 6 && t.starts_with("<0x") && t.ends_with('>') {
+                    if let Ok(b) = u8::from_str_radix(&t[3..5], 16) { octets.push(b); continue; }
+                }
+                for c in t.chars() {
+                    if c == '\u{2581}' { octets.push(b' '); }
+                    else {
+                        let mut buf = [0u8; 4];
+                        octets.extend_from_slice(c.encode_utf8(&mut buf).as_bytes());
+                    }
+                }
+            }
+            return String::from_utf8_lossy(&octets).into_owned();
+        }
         let mut bytes = Vec::new();
         for &id in ids {
             let tok = match self.id_to_tok.get(id as usize) {

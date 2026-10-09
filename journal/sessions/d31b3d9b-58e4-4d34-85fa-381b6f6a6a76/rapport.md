@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 13.9 h |
-| Tours | 19 |
-| Messages | 571 |
-| Appels d'outils | 551 |
+| Durée | 14.2 h |
+| Tours | 20 |
+| Messages | 590 |
+| Appels d'outils | 568 |
 | Fichiers touchés | 21 |
-| Commandes | 429 |
+| Commandes | 446 |
 | Sous-agents | 3 |
-| Commits | 32 |
+| Commits | 33 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -65,6 +65,8 @@
 **Tour 18** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1197 caractères tronqués]
 
 **Tour 19** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1197 caractères tronqués]
+
+**Tour 20** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1197 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -926,7 +928,58 @@ La campagne est toujours sur **gpt-oss-120b** (63 Go depuis le disque dur), le b
 
 **Synthèse produite :**
 
-⏵ Fait nouveau : le tokenizer du moteur perd les ESPACES sur la famille Mistral
+⏵ Fait majeur : le tokenizer du moteur mange les espaces sur la famille Mistral — la mesure codestral est invalide
+
+\## Trois hypothèses, deux tombées, la troisième reproductible
+
+Sur les **35 657** de perplexité de codestral-22B :
+
+1. *« le moteur exécute mal l'architecture Mistral »* → **réfutée** par la porte que je venais d'écrire (corrélation min 1,0000, top-1 100 %) ;
+2. *« c'est un spécialiste du code, mauvais en prose »* → **réfutée** : sa génération de code dégénère en boucle de répétition (`deffibonacci(n):"""Returnthen-th…"""` suivi de vingt sauts de ligne) ;
+3. *« le tokenizer est faux »* → **confirmée**, et reproductible en une commande :
+
+```
+$ drave codestral-22b --tokenize --fichier "The river carries the logs to the mill."
+32 tokens écrits (vocabulaire 32768)
+réversibilité : DIVERGE à l'octet 3 — 32 vs 39 octets
+  source : "The river carries the logs to the mill."
+  retour : "Therivercarriesthelogstothemill."
+```
+
+Le même test sur Qwen rend « texte reconstruit identique ✅ ». **La cause est identifiable** : le fichier ne déclare pas `tokenizer.ggml.model` (c'est un modèle *sentencepiece* — tokens, scores, token_type, pas de `merges`), et `build_tokenizer` (`main.rs:1237`) ne lit que `pre`, `tokens`, `merges` et `token_type`. Sans schéma, le découpage perd les espaces : **32 jetons pour 39 octets**, là où Qwen en fait 9.
+
+**Conséquence : je retire un chiffre de mon propre rapport.** Les 35 657 ne mesurent pas le modèle — ils mesurent un corpus mal découpé. La ligne « code » de la grille est **invalide**, et ma conclusion « modèle spécialisé pour le code, mauvais en prose » est retirée.
+
+Et le défaut de méthode est nommé : **le moteur détecte la divergence** (le contrôle de réversibilité affiche `DIVERGE`) **mais continue quand même**. C'est exactement ce que le dépôt combat ailleurs — « plutôt refuser qu'un résultat faux et silencieux ». Deux correctifs possibles, à trancher hors campagne : refuser la tokenisation non réversible, ou déduire le schéma sentencepiece de la table elle-même (les jetons `▁…` et `<0x00>` le trahissent).
+
+\## Par ailleurs, le résultat central est acquis
+
+À **lecture égale** (vérifié par le compteur du moteur), le routage gagne **6 % de perplexité** : 5,0684 contre 5,3973 pour 3,2 M poids lus/jeton, et 5,0614 contre 5,3719 pour 7,2 M — en stockant 3,2× et 6,2× plus de paramètres. Et j'ai réfuté l'hypothèse du batch 2 : **la densité d'activation ne dépend pas de la tâche** (71 % sur la prose, le français et le code, à 0
+… [85 caractères tronqués]
+
+### Tour 20 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1477 caractères tronqués]
+
+*17 appels d'outils.* Actions notables :
+
+- bash — Inspect the engine's tokenizer module
+- bash — Read the tokenizer implementation
+- bash — Read the decode function
+- bash — Implement SPM tokenization and build separately
+- bash — Show the compile errors
+- bash — Fix the scope error and rebuild
+- bash — Rebuild after the fix
+- bash — Test the SPM tokenizer on codestral and check Qwen non-regression
+- bash — Validate the patched binary on the reference gates
+- bash — Run the Qwen reference gate with the patched binary
+- bash — Compare old vs patched binary on Qwen
+- bash — Check for leftover patched-binary processes
+- bash — Non-regression test old vs patched
+- bash — Fix byte-token decoding and re-test reversibility
+- … et 3 autres
+
+**Synthèse produite :**
+
+⏵ Bug dans mon correctif : les jetons-octets `<0x0A>` se décodaient littéralement
 
 ## 3. Travail accompli
 
@@ -1004,7 +1057,7 @@ La campagne est toujours sur **gpt-oss-120b** (63 Go depuis le disque dur), le b
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 389 autres
+- … et 406 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1132,7 +1185,7 @@ La campagne est toujours sur **gpt-oss-120b** (63 Go depuis le disque dur), le b
 
 ## 5. Erreurs rencontrées
 
-23 sorties en erreur ou divergentes. Les premières :
+25 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : ```  ### 🤖 Assistant  ⏵ **En transformers 5, `AutoModel` rend directement `Qwen2Model` (pas de `.model`). Je corrige le diagnostic.**  - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitH
 - **T2** : 3310393 bash -c pgrep -af "essai_decharge" | grep python | head; echo "--- logs ---"; tail -2 /tmp/ec_d192_lr3e3.log 2>/dev/null; tail -2 /tmp/ec_d192_lr1e3.log 2>/dev/null; echo "---"; ls -la /tmp/ec
@@ -1184,4 +1237,5 @@ La campagne est toujours sur **gpt-oss-120b** (63 Go depuis le disque dur), le b
 - Verdict : la ligne « langage » porte maintenant le gain du routage à lecture égale  Le verdict famille par famille disait « le chemin par listes n'aide pas ». C
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="reports/rapport-campagne-benefices.md"; s=open(p).read() ajout = '''## 10 ter. La dens
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="reports/rapport-campagne-benefices.md"; s=open(p).read() vieux_debut = s.index("**L'an
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/msg_tok.txt <<'MSG' Tokenizers SentencePiece (Llama, Mistral, Codestral) : les espaces étaient 
 
