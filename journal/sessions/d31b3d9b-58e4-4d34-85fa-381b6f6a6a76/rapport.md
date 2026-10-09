@@ -7,12 +7,12 @@
 | Début | 2026-10-08 09:11 |
 | Durée | 21.4 h |
 | Tours | 27 |
-| Messages | 958 |
-| Appels d'outils | 920 |
+| Messages | 963 |
+| Appels d'outils | 925 |
 | Fichiers touchés | 29 |
-| Commandes | 750 |
+| Commandes | 755 |
 | Sous-agents | 3 |
-| Commits | 62 |
+| Commits | 63 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -1270,7 +1270,7 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 
 ### Tour 27 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1477 caractères tronqués]
 
-*311 appels d'outils.* Actions notables :
+*316 appels d'outils.* Actions notables :
 
 - bash — Check the full state
 - bash — Measure the distilled d384 with the correct protocol
@@ -1286,11 +1286,11 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - bash — Read parcimonie, contexte, lot steps
 - bash — Inspect batch2 script
 - bash — Read batch2 journal and latency map
-- … et 278 autres
+- … et 283 autres
 
 **Synthèse produite :**
 
-⏵ Rédaction du résumé exécutif de la campagne (la porte d'entrée du rapport)
+⏵ Découverte : le streaming mmap donne 8 Mo/s sur disque dur contre 243 Mo/s en séquentiel
 
 ## 3. Travail accompli
 
@@ -1376,7 +1376,7 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 710 autres
+- … et 715 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1586,4 +1586,5 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - L'aiguille tient jusqu'à 12 288 jetons : 18 sondes sur 18  La série est complétée à 8 192 puis 12 288 jetons, trois profondeurs à chaque fois : toutes retrouven
 - Échelle 512 : la recette creuse tient, et le débit ne distingue plus les deux chemins  m8_d512_kwta25 (entraîné à 25 %, mêmes 40 000 pas que son témoin) :    sa
 - Résumé exécutif : les cinq résultats qui comptent et les cinq manques  Une page en tête du rapport, chacun renvoyant à sa section et à sa mesure. Le rapport fai
+- Le débit de lecture réel : 8,6 Mo/s sur disque dur contre 243 Mo/s en séquentiel  Mesuré machine au calme : le disque dur qui porte les gguf délivre 243 Mo/s en
 

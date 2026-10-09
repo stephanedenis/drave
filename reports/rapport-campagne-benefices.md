@@ -809,6 +809,31 @@ tokenisation dont on n'a pas vérifié la réversibilité (§ 3). La ligne « mo
 plus gros que la RAM » du verdict porte donc sur **l'existence et le coût**, pas
 sur la qualité.
 
+### 12 bis. Le débit de lecture RÉEL : 8 Mo/s sur disque dur, 140-300 Mo/s sur NVMe
+
+Le § 12 démontre qu'un modèle plus gros que la RAM **tourne**. Il ne dit pas à
+quelle vitesse il *lit*, et c'est la question qui décide de l'usage. Mesuré le
+9 octobre, machine au calme :
+
+| disque | débit séquentiel (`dd` direct) | débit du moteur (mmap, page faults) | rapport |
+|---|---:|---:|---:|
+| **disque dur** (`sda`, modèles gguf) | **243 Mo/s** | **8,6 Mo/s** | **÷28** |
+| **NVMe** (V4.1, 365 Go) | 1 600 Mo/s (mesuré au dépôt) | **140 à 300 Mo/s** | ÷5 à ÷11 |
+
+**Le même moteur, le même code de lecture, deux comportements opposés** : sur NVMe,
+les défauts de page coûtent peu et le streaming tient 140-300 Mo/s ; sur un disque
+dur, une lecture aléatoire de 4 Ko coûte ~5 ms, soit ~2 000 IOPS et **8 Mo/s** —
+vingt-huit fois moins que ce que le disque sait faire en séquentiel.
+
+**Ce que cela explique, et ce que cela change** : les 90 minutes qu'une passe de
+256 jetons met sur gpt-oss (§ 3), les 6,6 Mo/s du § 12, et le fait que le codestral
+(13 Go) demande 25 minutes pour être lu. **Le facteur limitant n'est pas le moteur,
+c'est le disque** — et sur un disque dur, la niche « modèle plus gros que la RAM »
+se paie en heures, pas en minutes. Sur NVMe elle se paie en minutes. *(La
+conséquence pratique est un préchargement séquentiel — `madvise(WILLNEED)` ou une
+lecture ordonnée des experts — qui n'est pas implémenté ; c'est un manque, pas une
+mesure.)*
+
 ---
 
 ## 13. La tête restreinte, sur deux modèles de plus

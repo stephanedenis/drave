@@ -15688,3 +15688,53 @@ code 124 ·
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\nancre = \"\"\"---\n\n## 0. Le piège qui a failli tout fausser\"\"\"\nassert ancre in s\nresume = \"\"\"---\n\n## Résumé … [2678 caractères tronqués]`
+
+  ```
+ok
+4836fc8 Résumé exécutif : les cinq résultats qui comptent et les cinq manques
+code 124 ·
+  ```
+
+- **bash** `{"command": "grep -oE \"perplexité [0-9.]+ sur [0-9]+ tokens\" /tmp/campagne24/grille_codestral-22B_CORRIGE.log 2>/dev/null | tail -1; pgrep -c -f \"codestral-22b-v0.1-q4_k_m.gguf --ppl\" 2>/dev/null; tail -1 /tmp/campagne24/tr_m9_kwta_distille.log", "description": "Check codestral and the distillat … [14 caractères tronqués]`
+
+  ```
+4
+  pas   8000 · perte 0.8855 · val 2.1765 bits/octet · 706 s
+  ```
+
+- **bash** `{"command": "date '+%H:%M:%S'; stat -c \"%y %n\" /tmp/campagne24/tr_m9_kwta_distille.log /tmp/campagne24/grille_codestral-22B_CORRIGE.log; ps -eo pid,etime,pcpu,args | grep -E \"entrainer_moteur|codestral-22b\" | grep -v grep | cut -c1-90", "description": "Check timestamps and processes"}`
+
+  ```
+06:35:26
+2026-10-09 06:33:01.385798134 -0400 /tmp/campagne24/tr_m9_kwta_distille.log
+2026-10-09 06:25:14.794285177 -0400 /tmp/campagne24/grille_codestral-22B_CORRIGE.log
+1828695       14:18  100 /home/stephane/gpu-env/bin/python -u tools/entrainer_moteur.py --
+1829964       10:11  0.0 /usr/bin/time -v timeout 3600 ./drave-core/target/release/drave /
+1829965       10:11  0.0 timeout 3600 ./drave-core/target/release/drave /home/stephane/Dat
+1829966       10:11 97.9 ./drave-core/target/release/drave /home/stephane/Data13TB/stephan
+  ```
+
+- **bash** `{"command": "grep -E \"read_bytes|rchar\" /proc/1829966/io 2>/dev/null; echo \"--- avec 1 s d'écart ---\"; sleep 5; grep -E \"read_bytes\" /proc/1829966/io 2>/dev/null; echo \"--- iostat ---\"; command -v iostat >/dev/null && iostat -d 1 2 2>/dev/null | tail -4 || echo \"(iostat absent)\"; ls -la /t … [98 caractères tronqués]`
+
+  ```
+rchar: 4706006
+read_bytes: 10175688704
+--- avec 1 s d'écart ---
+read_bytes: 10219110400
+--- iostat ---
+(iostat absent)
+-rw-r--r--. 1 stephane stephane 73  9 oct 06:25 /tmp/campagne24/grille_codestral-22B_CORRIGE.log
+  ```
+
+- **bash** `{"command": "cd /tmp && dd if=/home/stephane/Data13TB/stephane/modeles/gguf/codestral-22b-v0.1-q4_k_m.gguf of=/dev/null bs=1M count=1500 iflag=direct 2>&1 | tail -2", "description": "Measure the HDD sequential read speed now", "timeoutMs": 300000}`
+
+  ```
+1500+0 records out
+1572864000 bytes (1,6 GB, 1,5 GiB) copied, 6,46958 s, 243 MB/s
+  ```
+
+### 🤖 Assistant
+
+⏵ Découverte : le streaming mmap donne 8 Mo/s sur disque dur contre 243 Mo/s en séquentiel
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\nancre = \"\"\"---\n\n## 13. La tête restreinte, sur deux modèles de plus\"\"\"\nassert ancre in s\najout = \"\"\"### 12 … [2553 caractères tronqués]`
