@@ -52,6 +52,7 @@ mod gpu;
 mod tokenizer;
 mod topologie;
 mod trace_globale;
+mod bus;
 
 use engine::{matvec_dense, matvec_shift_add, Pool, SparseVec};
 use gguf::Gguf;
@@ -587,6 +588,8 @@ struct Options {
     trace_globale: Option<String>,
     /// C12 — vérification : rejouer et comparer à cette trace.
     verifier_globale: Option<String>,
+    /// C5 — bus de modulation : `canal=valeur`, répétable.
+    bus: Vec<String>,
     /// Banc du KV déporté : nombre de clés à faire tenir en VRAM.
     banc_kv: usize,
     /// Banc des SCORES d'attention : nombre de clés à noter (noyau 1 du top-k).
@@ -738,6 +741,8 @@ fn analyser(args: &[String]) -> Options {
             // C12 : la trace globale, et sa vérification par rejeu.
             "--trace-globale" => { o.trace_globale = Some(suivant(i).clone()); 2 }
             "--verifier-globale" => { o.verifier_globale = Some(suivant(i).clone()); 2 }
+            // C5 : le bus de modulation, canal par canal.
+            "--bus" => { o.bus.push(suivant(i).clone()); 2 }
             "--tokenize" => { o.tokenize = true; 1 }
             "--gpu-banc" => { o.gpu_banc = true; 1 }
             // Test de fumée de la couche 0 de Kimi-K3, **sur un modèle même
@@ -3309,6 +3314,14 @@ d'appliquer une plage inventée"); std::process::exit(3) }).clone();
             }
         }
     }
+    // C5 : le bus du NŒUD. Chaque région décide de ce qu'elle fait du canal ; ici
+    // le gain s'applique à l'état que le nœud produit, avant de le rendre.
+    let bus = bus::Bus::analyser(&opt.bus).unwrap_or_else(|e| {
+        eprintln!("{e}"); std::process::exit(2) });
+    if !bus.est_neutre() {
+        println!("[bus] canaux actifs sur ce nœud : {}",
+                 bus.canaux().iter().map(|(k, v)| format!("{k}={v}")).collect::<Vec<_>>().join(" "));
+    }
     sock.set_nodelay(true).expect("TCP_NODELAY");
     println!("[flux] client connecté : {pair}");
     let mut servis = 0u64;
@@ -3416,7 +3429,8 @@ raccord précédent où s'appliquer et l'ignorer serait muet. Le nœud continue"
                     continue;
                 }
                 mdl.hc_porte_imposee = if f.premix.is_empty() { None } else { Some(f.premix.clone()) };
-                let sortie = mdl.forward(0, f.pos as usize);
+                let mut sortie = mdl.forward(0, f.pos as usize);
+                bus.appliquer_gain(&mut sortie);
                 // La RÉPONSE est encodée comme la demande : un pair qui parle en
                 // listes reçoit des listes, sans second réglage à faire tenir
                 // cohérent entre les deux machines.
@@ -3563,6 +3577,15 @@ dit « {pair} » — deux sources pour la même chose, et elles se contredisent"
     // `debut..fin`. Envoyer `derniere` au lieu de `derniere + 1` saute la dernière
     // couche de la région — et ça ne se voit QUE sur les modes non-lot, ce qui a
     // rendu le diagnostic pénible (modes 0, 1 et 2 cassés, 3 et 4 intacts).
+    // C5 : le BUS DE MODULATION. Un canal neutre ne change RIEN (c'est la porte),
+    // un canal non neutre change la sortie — sans quoi le bus ne serait pas
+    // branché. Chaque région décide de ce qu'elle en fait : ici, le gain.
+    let bus = bus::Bus::analyser(&opt.bus).unwrap_or_else(|e| {
+        eprintln!("{e}"); std::process::exit(2) });
+    if !bus.est_neutre() {
+        println!("[bus] canaux actifs : {} · gain de région appliqué à la région locale",
+                 bus.canaux().iter().map(|(k, v)| format!("{k}={v}")).collect::<Vec<_>>().join(" "));
+    }
     // C12 : la trace globale — créée ici, écrite (ou vérifiée) à la fin.
     let mut trace = trace_globale::TraceGlobale::nouvelle();
     let (debut_pair, fin_pair) = if tp_fin > 0 {
@@ -3792,6 +3815,9 @@ un lot de plus d'un état n'a pas UNE `pre`). Rien n'a été calculé.");
         // région distante), pas « tout ce qui reste » : avec un relais, « ce qui
         // reste » appartient à plusieurs nœuds, et le premier calculerait le
         // travail des autres.
+        // Le gain de région s'applique à l'état que la région PRODUIT (C5).
+        let mut etat = etat;
+        bus.appliquer_gain(&mut etat);
         trace.enregistrer("local", pos as u32, "local->pair", &etat, 0.0);
         let (o, a) = envoyer_flux(&mut sock, debut_pair as u32, fin_pair as u32,
                                   pos as u32, &etat, mode, Some(&mdl))

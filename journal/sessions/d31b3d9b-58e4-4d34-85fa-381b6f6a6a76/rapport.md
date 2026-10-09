@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 32.5 h |
-| Tours | 39 |
-| Messages | 1297 |
-| Appels d'outils | 1224 |
+| Durée | 32.6 h |
+| Tours | 40 |
+| Messages | 1307 |
+| Appels d'outils | 1232 |
 | Fichiers touchés | 39 |
-| Commandes | 1024 |
+| Commandes | 1031 |
 | Sous-agents | 3 |
-| Commits | 110 |
+| Commits | 111 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -109,6 +109,8 @@
 **Tour 38** — <goal_round> Objective: "Sprint « cerveau complet » en autonomie jusqu'au 10 octobre 9 h (HAE) : implémenter, avec portes mesurées, les trois premières capacités du plan docs/plan-cerveau-complet.md — C1 graphe de régions (descripteur de topologie, validateur de DAG, ordonnanceur par dépendances, pilote multi-nœuds ; porte : un graphe linéaire doit rendre des logits identiques au bit près et un dé … [1077 caractères tronqués]
 
 **Tour 39** — <goal_round> Objective: "Sprint « cerveau complet » en autonomie jusqu'au 10 octobre 9 h (HAE) : implémenter, avec portes mesurées, les trois premières capacités du plan docs/plan-cerveau-complet.md — C1 graphe de régions (descripteur de topologie, validateur de DAG, ordonnanceur par dépendances, pilote multi-nœuds ; porte : un graphe linéaire doit rendre des logits identiques au bit près et un dé … [1077 caractères tronqués]
+
+**Tour 40** — <goal_round> Objective: "Sprint « cerveau complet » en autonomie jusqu'au 10 octobre 9 h (HAE) : implémenter, avec portes mesurées, les trois premières capacités du plan docs/plan-cerveau-complet.md — C1 graphe de régions (descripteur de topologie, validateur de DAG, ordonnanceur par dépendances, pilote multi-nœuds ; porte : un graphe linéaire doit rendre des logits identiques au bit près et un dé … [1077 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1843,7 +1845,7 @@ Reste hors périmètre, et c'est dit : les **entrées multiples** (un graphe en 
 
 ### Tour 39 — <goal_round> Objective: "Sprint « cerveau complet » en autonomie jusqu'au 10 octobre 9 h (HAE) : implémenter, avec porte … [1357 caractères tronqués]
 
-*10 appels d'outils.* Actions notables :
+*11 appels d'outils.* Actions notables :
 
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/trace_globale.rs`
 - bash — Wire the trace module and run its tests
@@ -1855,10 +1857,53 @@ Reste hors périmètre, et c'est dit : les **entrées multiples** (un graphe en 
 - bash — Verify that a falsified trace is detected
 - bash — Write and run the C12 gate
 - bash — Check the flux gate, update the doc, commit and push
+- todo_write
 
 **Synthèse produite :**
 
-⏵ C12 : trace exacte, rejeu identique, et trace faussée détectée au pas près
+⏵ **C12 livrée** : trace globale au bit près, rejeu sans divergence, et trace fausse détectée
+
+**Ce qui est fait ce round** (90 tests verts, `porte-flux.sh` repassé et vert, tout poussé) :
+
+**`drave-core/src/trace_globale.rs`** — par croisement : région, pas, lien, nombre de valeurs, **empreinte FNV-1a des octets** (donc **au bit près**, sans epsilon) et horodatage. Les valeurs ne sont **pas** stockées : la trace dit *où* regarder, le rejeu recompte et compare — 126 croisements tiennent en 128 lignes de texte.
+
+**La porte** (`tools/porte-trace.sh`), trois cas mesurés :
+
+| cas | résultat |
+|---|---|
+| 1. exécution répartie + trace | **126 croisements** écrits (64 pas × 2 liens) · perplexité 59,0790 |
+| 2. rejeu de la même exécution | **126 croisements, AUCUNE divergence ✅** |
+| 3. trace **faussée d'un seul bit** | **DÉTECTÉE et NOMMÉE** : « DIVERGENCE AU BIT PRÈS au croisement 0 — région *local*, pas 0, lien *local->pair* : empreinte 0x…d696 attendue, 0x…d697 obtenue » — code de sortie 4 |
+
+**Le cas 3 est le cœur de la capacité** : une porte qui ne sait pas échouer ne vérifie rien. C'est précisément ce qui manquait pour déboguer un graphe distribué — savoir *quel pas, quelle région, quel lien* ont divergé.
+
+**Non-régression vérifiée** : `porte-flux.sh` repassé après la modification du chemin d'exécution, cinq modes verts (0.00e0 / 0.00e0 / 3.65e-2 / 0.00e0 / 4.45e-3) — la leçon du round précédent, appliquée.
+
+**État du sprint** (`docs/sprint-cerveau.md` à jour, poussé sur `stephanedenis/drave`) :
+
+| capacité | état |
+|---|---|
+| **C1** — graphe de régions | **FAIT** : descripteur + validateur, la topologie pilote le découpage, relais trois instances (**écart 0,00e0**), porte outillée (5 cas dont 2 refus) |
+| **C12** — trace globale + rejeu | **FAIT** : 126 croisements, aucune divergence, trace fausse détectée au bit près |
+| **C5** — bus de modulation multi-canaux | **en cours** : c'est le prochain jalon — canaux diffusés à toutes les régions (y compris entre instances), avec la porte « canal nul ⇒ sortie inchangée » |
+
+Deux capacités sur trois sont livrées avec leurs invariants vérifiés, et les deux ont trouvé ou attrapé un vrai défaut au passage (la fin de plage exclusive, réparée ; la porte de trace qui sait échouer).
+
+### Tour 40 — <goal_round> Objective: "Sprint « cerveau complet » en autonomie jusqu'au 10 octobre 9 h (HAE) : implémenter, avec porte … [1357 caractères tronqués]
+
+*7 appels d'outils.* Actions notables :
+
+- bash — Create the bus module and its tests
+- bash — Wire the bus into driver and node, build, test
+- bash — Write and run the C5 bus gate
+- bash — Fix the gate comparison and re-run
+- bash — Test the bus on a relay node
+- bash — Run tests and the flux regression gate
+- bash — Record C5 and push
+
+**Synthèse produite :**
+
+⏵ C5 livrée : bus neutre exact au bit près, bus actif sur un nœud relais
 
 ## 3. Travail accompli
 
@@ -1954,7 +1999,7 @@ Reste hors périmètre, et c'est dit : les **entrées multiples** (un graphe en 
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 984 autres
+- … et 991 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2212,4 +2257,5 @@ Reste hors périmètre, et c'est dit : les **entrées multiples** (un graphe en 
 - C1b pas 1 : la topologie PILOTE le découpage — porte tenue, même chiffre, 0,00e0  --ppl-reparti --topologie F exécute le découpage DÉCRIT par le fichier au lieu
 - C1b pas 2 : le RELAIS — trois régions sur trois instances, écart 0,00e0  Un nœud du milieu (--flux-serveur … --topologie F --region n1) applique SA plage puis t
 - C12 : trace globale horodatée et rejeu exact — 126 croisements, aucune divergence  TraceGlobale enregistre, par croisement : région, pas, lien, nombre de valeur
+- C5 : bus de modulation multi-canaux — canal neutre exact au bit près, canal actif sur un relais  bus.rs : canaux nommés, valeur NEUTRE par canal (gain = 1,0, le
 

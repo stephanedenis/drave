@@ -14,7 +14,7 @@ Trois capacités du plan, chacune avec sa **porte mesurée** :
 |---|---|---|---|
 | **C1** | **graphe de régions** : descripteur de topologie, validateur, ordonnanceur par dépendances, pilote multi-nœuds | un graphe **linéaire** rend des logits identiques **au bit près** ; un découpage à **trois régions** égale le modèle d'un seul tenant | **FAIT** : C1a + C1b (topologie pilote + relais trois instances, écart **0,00e0**) · reste C2 (entrées multiples) hors périmètre |
 | **C12** | **trace globale horodatée + rejeu** | rejeu d'une exécution distribuée == exécution, **0,00e0** | **FAIT** : 126 croisements, aucune divergence · trace faussée détectée au bit près |
-| **C5** | **bus de modulation multi-canaux** | canal nul ⇒ sortie **inchangée** | mécanique partielle (fichier), bus à faire |
+| **C5** | **bus de modulation multi-canaux** | canal nul ⇒ sortie **inchangée** | **FAIT** : bus neutre = empreintes identiques (126 croisements) · bus actif = la sortie change · bus d'un nœud relais = agit à travers les instances |
 
 **Contraintes non négociables** : les **23 portes** du dépôt et les tests restent
 verts ; le profil `release` reste le **binaire de mesure** (toute promotion se paie
@@ -203,6 +203,37 @@ manquait pour déboguer un graphe distribué.
 
 ---
 
+## C5 — FAIT (9 octobre 19 h 10) : le bus de modulation multi-canaux
+
+**Livré** : `drave-core/src/bus.rs` (5 tests) + `--bus canal=valeur` (répétable, sur
+le pilote **et** sur les nœuds). Le bus porte des canaux nommés ; **chaque région
+décide de ce qu'elle en fait** — c'est la définition biologique du neuromodulateur.
+Premier consommateur câblé : le **gain de région**, appliqué à l'état que la région
+produit. Valeur neutre par canal (`gain` = 1,0, les autres 0,0) : un canal absent ne
+change rien, et c'est ce qui rend la porte vérifiable.
+
+**La porte** (`tools/porte-bus.sh`), trois cas — et le troisième a demandé une
+correction de protocole :
+
+| cas | mesure |
+|---|---|
+| 1. bus **neutre** (`gain=1`) | perplexité **59,0790 = 59,0790** · **126 croisements, empreintes identiques** (horodatage exclu) ✅ |
+| 2. bus **non neutre** (`gain=1,5`) | perplexité **64,1160** (elle change) · empreintes changent ✅ — le bus est **branché** |
+| 3. bus sur un nœud **relais** (région du milieu) | **66,0379** contre **59,0790** sans bus ✅ — le bus **traverse les instances** |
+
+**Ce que le cas 3 a appris** : le gain d'un nœud **final** est **absorbé par la
+normalisation de sortie** (une norme divise par la norme : un facteur scalaire y
+disparaît). C'est un nœud du **milieu** qui prouve que le bus agit — sa sortie
+alimente une autre région, sans normalisation interposée. Le premier test était donc
+faux, pas le bus.
+
+**Ce qui reste pour C5, et c'est dit** : le transport du bus est **local à chaque
+instance** (`--bus` sur chacun). La diffusion d'un canal par le **réseau** (message
+de contrôle `MODULATION canal valeur`, dont le format est écrit dans `bus.rs`) reste
+à câbler — c'est la prochaine étape de la capacité, pas son invariant.
+
+---
+
 ## Prochaines étapes (dans l'ordre)
 
 1. **C1b — pilote multi-régions** (conception ci-dessus) : une topologie **linéaire** à
@@ -220,5 +251,6 @@ manquait pour déboguer un graphe distribué.
 |---|---|
 | 9/10 17 h 10 | **C1a** : module `topologie.rs`, validation stricte, plan, 8 tests, suite à 85 tests. |
 | 9/10 17 h 20 | **C1b pas 1** : la topologie pilote le découpage · porte `tools/porte-topologie.sh` **TENUE** (même chiffre, écart 0,00e0) · deux refus vérifiés. |
+| 9/10 19 h 10 | **C5** : bus de modulation · porte `tools/porte-bus.sh` (neutre ⇒ empreintes identiques · gain 1,5 ⇒ la sortie change · bus du relais ⇒ agit). 95 tests, porte-flux verte. |
 | 9/10 18 h 40 | **C12** : trace globale + rejeu · porte `tools/porte-trace.sh` (126 croisements, aucune divergence ; trace faussée détectée au bit près). 90 tests. |
 | 9/10 18 h 00 | **C1b pas 2** : le RELAIS · trois régions sur trois instances, **écart 0,00e0**, même chiffre que deux régions. **Bug de fin de plage exclusive trouvé et corrigé** — attrapé par `porte-flux.sh` (modes 0, 1, 2 cassés, réparés : 0.00e0 / 0.00e0 / 3.65e-2). |

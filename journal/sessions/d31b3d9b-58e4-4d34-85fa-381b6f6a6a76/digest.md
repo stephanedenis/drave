@@ -20389,3 +20389,149 @@ trace faussée au pas 20 : local 20 local->pair 896 0xa9994307fd6cf76 0.000
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== non-régression : porte-flux ===\"; timeout 600 tools/porte-flux.sh 2>&1 | tail -5; python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/sprint-cerveau.md\")\ns = p.read_text()\nancre = \"\"\"## Prochaines étapes (dans … [3332 caractères tronqués]`
+
+  ```
+=== non-régression : porte-flux ===
+  mode 0 — f32 dense               0.00e0  ✅  (réf 61.9920 / deux nœuds 61.9920)
+  mode 1 — listes quantifiées     0.00e0  ✅  (réf 61.9920 / deux nœuds 61.9920)
+  mode 2 — listes par blocs        3.65e-2  ✅  (réf 61.9920 / deux nœuds 64.2535)
+  mode 3 — lot dense f32           0.00e0  ✅  (réf 60.8135 / deux nœuds 60.8135)
+  mode 4 — lot en listes           4.45e-3  ✅  (réf 60.8135 / deux nœuds 60.5427)
+sprint doc à jour
+poussé
+  ```
+
+- **todo_write** `{"todos": [{"content": "C1a : descripteur de topologie + validateur de DAG + impression du plan", "status": "completed"}, {"content": "C1b pas 1 : la topologie pilote le découpage (porte tenue, 0,00e0)", "status": "completed"}, {"content": "C1b pas 2 : le RELAIS — trois régions sur trois instances ( … [377 caractères tronqués]`
+
+  ```
+Updated todo list: 1 pending, 1 in progress, 4 completed.
+  ```
+
+### 🤖 Assistant
+
+⏵ **C12 livrée** : trace globale au bit près, rejeu sans divergence, et trace fausse détectée
+
+**Ce qui est fait ce round** (90 tests verts, `porte-flux.sh` repassé et vert, tout poussé) :
+
+**`drave-core/src/trace_globale.rs`** — par croisement : région, pas, lien, nombre de valeurs, **empreinte FNV-1a des octets** (donc **au bit près**, sans epsilon) et horodatage. Les valeurs ne sont **pas** stockées : la trace dit *où* regarder, le rejeu recompte et compare — 126 croisements tiennent en 128 lignes de texte.
+
+**La porte** (`tools/porte-trace.sh`), trois cas mesurés :
+
+| cas | résultat |
+|---|---|
+| 1. exécution répartie + trace | **126 croisements** écrits (64 pas × 2 liens) · perplexité 59,0790 |
+| 2. rejeu de la même exécution | **126 croisements, AUCUNE divergence ✅** |
+| 3. trace **faussée d'un seul bit** | **DÉTECTÉE et NOMMÉE** : « DIVERGENCE AU BIT PRÈS au croisement 0 — région *local*, pas 0, lien *local->pair* : empreinte 0x…d696 attendue, 0x…d697 obtenue » — code de sortie 4 |
+
+**Le cas 3 est le cœur de la capacité** : une porte qui ne sait pas échouer ne vérifie rien. C'est précisément ce qui manquait pour déboguer un graphe distribué — savoir *quel pas, quelle région, quel lien* ont divergé.
+
+**Non-régression vérifiée** : `porte-flux.sh` repassé après la modification du chemin d'exécution, cinq modes verts (0.00e0 / 0.00e0 / 3.65e-2 / 0.00e0 / 4.45e-3) — la leçon du round précédent, appliquée.
+
+**État du sprint** (`docs/sprint-cerveau.md` à jour, poussé sur `stephanedenis/drave`) :
+
+| capacité | état |
+|---|---|
+| **C1** — graphe de régions | **FAIT** : descripteur + validateur, la topologie pilote le découpage, relais trois instances (**écart 0,00e0**), porte outillée (5 cas dont 2 refus) |
+| **C12** — trace globale + rejeu | **FAIT** : 126 croisements, aucune divergence, trace fausse détectée au bit près |
+| **C5** — bus de modulation multi-canaux | **en cours** : c'est le prochain jalon — canaux diffusés à toutes les régions (y compris entre instances), avec la porte « canal nul ⇒ sortie inchangée » |
+
+Deux capacités sur trois sont livrées avec leurs invariants vérifiés, et les deux ont trouvé ou attrapé un vrai défaut au passage (la fin de plage exclusive, réparée ; la porte de trace qui sait échouer).
+
+
+## Tour 40
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Sprint « cerveau complet » en autonomie jusqu'au 10 octobre 9 h (HAE) : implémenter, avec portes mesurées, les trois premières capacités du plan docs/plan-cerveau-complet.md — C1 graphe de régions (descripteur de topologie, validateur de DAG, ordonnanceur par dépendances, pilote multi-nœuds ; porte : un graphe linéaire doit rendre des logits identiques au bit près et un découpage à trois régions doit égaler le modèle d'un seul tenant), C12 trace globale horodatée et rejeu exact (porte : rejeu == exécution, 0,00e0), C5 bus de modulation multi-canaux (porte : canal nul ⇒ sortie inchangée). Chaque capacité livrée avec son invariant vérifié, ses tests, sa mesure et sa documentation ; l'état d'avancement est écrit dans docs/sprint-cerveau.md à chaque round pour être resumable. Ne rien casser : les 23 portes du dépôt et les 77 tests doivent rester verts, et le profil release reste le binaire de mesure."
+Round: 4/40
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ C5 : le bus de modulation multi-canaux, avec un consommateur qui a des dents
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > drave-core/src/bus.rs <<'RUST'\n//! Bus de MODULATION — des scalaires diffusés, pas des données.\n//!\n//! POURQUOI CE MODULE (docs/plan-cerveau-complet.md, capacité C5). Dans un cerveau,\n//! quelques dizaines de milliers de n … [6432 caractères tronqués]`
+
+  ```
+options C5 posées
+test bus::tests::un_gain_non_neutre_change_l_etat ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 90 filtered out; finished in 0.00s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"src/main.rs\")\ns = p.read_text()\n\n# --- PILOTE : construire le bus et appliquer le gain de région\nvieux = \"\"\"    // C12 : la trace globale — créée ici, écrite (ou … [2878 caractères tronqués]`
+
+  ```
+bus câblé (pilote + nœud)
+test result: ok. 95 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/porte-bus.sh <<'EOF'\n#!/bin/bash\n# porte-bus.sh — la porte de la capacité C5 : le bus de modulation.\n#\n# L'invariant, et il a des dents :\n#   1. bus NEUTRE (`gain=1`)      -> les empreintes de la trace sont IDENTIQUE … [3036 caractères tronqués]`
+
+  ```
+=== 1. bus NEUTRE : la sortie doit être identique AU BIT PRÈS ===
+  sans bus : 59.0790 · bus neutre : 59.0790
+  ❌ le bus neutre a changé quelque chose
+  ```
+
+### 🤖 Assistant
+
+⏵ Le bus neutre est identique (59,0790) — c'est ma porte qui comparait aussi les temps
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"tools/porte-bus.sh\")\ns = p.read_text()\n# les empreintes se comparent SANS l'horodatage : la porte porte sur les valeurs,\n# pas sur le temps — qui varie d'une exécution à l'autr … [979 caractères tronqués]`
+
+  ```
+comparaison corrigée (horodatage exclu)
+=== 1. bus NEUTRE : la sortie doit être identique AU BIT PRÈS ===
+  sans bus : 59.0790 · bus neutre : 59.0790
+  ✅ perplexité ET empreintes identiques (126 croisements, horodatage exclu)
+=== 2. bus NON NEUTRE : le bus doit être BRANCHÉ ===
+  gain=1.5 : 64.1160
+  ✅ la sortie change : le bus agit
+  ✅ les empreintes changent aussi
+=== 3. le bus sur le NŒUD (région distante) ===
+  bus du nœud, gain=1.5 : 59.0790
+  ❌ le bus du nœud est sans effet
+  ```
+
+### 🤖 Assistant
+
+⏵ Cas 3 : le gain du nœud final est absorbé par la normalisation — je teste sur un nœud RELAIS
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"tools/porte-bus.sh\")\ns = p.read_text()\nvieux = s[s.index('echo \"=== 3. le bus sur le NŒUD'):]\nneuf = '''echo \"=== 3. le bus sur un nœud RELAIS (région du MILIEU) ===\"\n# Le  … [2371 caractères tronqués]`
+
+  ```
+cas 3 réécrit sur le relais
+=== 1. bus NEUTRE : la sortie doit être identique AU BIT PRÈS ===
+  sans bus : 59.0790 · bus neutre : 59.0790
+  ✅ perplexité ET empreintes identiques (126 croisements, horodatage exclu)
+=== 2. bus NON NEUTRE : le bus doit être BRANCHÉ ===
+  gain=1.5 : 64.1160
+  ✅ la sortie change : le bus agit
+  ✅ les empreintes changent aussi
+=== 3. le bus sur un nœud RELAIS (région du MILIEU) ===
+  relais sans bus : 59.0790 · relais avec bus gain=1.5 : 66.0379
+  ✅ le bus traverse les instances et agit sur la région du milieu
+  ```
+
+### 🤖 Assistant
+
+⏵ C5 livrée : bus neutre exact au bit près, bus actif sur un nœud relais
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 cargo test --release --manifest-path drave-core/Cargo.toml 2>&1 | tail -2; echo \"=== non-régression : porte-flux ===\"; timeout 600 tools/porte-flux.sh 2>&1 | tail -5", "description": "Run tests and the flux regression g … [27 caractères tronqués]`
+
+  ```
+test result: ok. 95 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+
+=== non-régression : porte-flux ===
+  mode 0 — f32 dense               0.00e0  ✅  (réf 61.9920 / deux nœuds 61.9920)
+  mode 1 — listes quantifiées     0.00e0  ✅  (réf 61.9920 / deux nœuds 61.9920)
+  mode 2 — listes par blocs        3.65e-2  ✅  (réf 61.9920 / deux nœuds 64.2535)
+  mode 3 — lot dense f32           0.00e0  ✅  (réf 60.8135 / deux nœuds 60.8135)
+  mode 4 — lot en listes           4.45e-3  ✅  (réf 60.8135 / deux nœuds 60.5427)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/sprint-cerveau.md\")\ns = p.read_text()\nancre = \"\"\"## Prochaines étapes (dans l'ordre)\"\"\"\nassert ancre in s\nneuf = \"\"\"## C5 — FAIT (9 octobre 19 h 10) : le bus de  … [3971 caractères tronqués]`
