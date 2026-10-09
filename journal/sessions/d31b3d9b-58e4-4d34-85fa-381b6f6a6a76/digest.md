@@ -9757,3 +9757,104 @@ jeu 08 oct 2026 23:28:42 EDT
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"reports/rapport-campagne-benefices.md\"; s=open(p).read()\najout = '''## 5 bis. La distillation : le levier de qualité qui ne coûte aucun paramètre\n\nLe dépôt notait dans son inventaire du 08/10 : « distillatio … [2047 caractères tronqués]`
+
+  ```
+ajouté
+7768bba La distillation paie : -1,5 % et -1,0 % de validation, sans un paramètre de plus
+=== campagne (le gpt-oss a-t-il rendu ?) ===
+[08/10 22:04:33] charge 28.57 · grille/codestral-22B : code 0 · PPL 35657.3767 · RSS 63646 Mo · lus 12684 Mio
+[08/10 22:06:13] charge 26.37 · grille/qwen3-30B-A3B : code 0 · PPL 8.6327 · RSS 14256 Mo · lus 11841 Mio
+  ```
+
+### 🤖 Assistant
+
+⏵ Je lance maintenant la mesure sémantique (l'échelle corrigée) plutôt que d'attendre la file
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && T=/home/stephane/Data13TB/stephane/corpus/udhr; ls $T/article1_traces | wc -l; ls $T/article2_traces | wc -l; setsid nohup bash -c '\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nT=/home/stephane/Data13TB/stephane/corpus/udhr\ … [1230 caractères tronqués]`
+
+  ```
+399
+399
+[08/10 23:29:41] === sémantique : échelle CORRIGÉE ===
+[08/10 23:30:03] corrigée : 59 lignes
+[08/10 23:30:03] === sémantique : ANCIENNE lecture (sans échelle) ===
+=== en cours ===
+ 309662       00:37  0.0 timeout 3600 /home/stephane/gpu-env/bin/python tools/pr
+ 309663       00:37 31.4 /home/stephane/gpu-env/bin/python tools/premiere_couche
+  ```
+
+- **bash** `{"command": "ls -la /tmp/pcs_a*.npz 2>/dev/null | awk '{print $6, $7, $8, $9}'; echo \"=== sortie corrigée (extrait) ===\"; head -12 /tmp/campagne24/sem_avec_echelle.log; echo \"=== caches utilisés ===\"; grep -c \"\" /tmp/campagne24/sem_avec_echelle.log", "description": "Check whether the semantic  … [26 caractères tronqués]`
+
+  ```
+7 oct 19:05 /tmp/pcs_a1.derniere.npz
+7 oct 19:02 /tmp/pcs_a1.moyenne.npz
+7 oct 19:33 /tmp/pcs_a2.derniere.npz
+7 oct 19:30 /tmp/pcs_a2.moyenne.npz
+=== sortie corrigée (extrait) ===
+
+=== pooling : MOYENNE · 398 langues · couches 0–23 ===
+#  couche     même   artic≠  SÉPARATION
+       0   0.6722   0.6720     +0.0002
+       1   0.6519   0.6293     +0.0226
+       2   0.7661   0.7591     +0.0070
+       3   0.8016   0.7923     +0.0092
+       4   0.8712   0.8555     +0.0156
+       5   0.8249   0.8064     +0.0185
+       6   0.8155   0.8013     +0.0142
+       7   0.8221   0.8094     +0.0127
+       8   0.8590   0.8470     +0.0120
+=== caches utilisés ===
+63
+  ```
+
+### 🤖 Assistant
+
+⏵ Piège : les caches sémantiques dataient d'avant le correctif — je les invalide et je relance
+
+- **bash** `{"command": "kill 309662 309663 2>/dev/null; sleep 2; rm -f /tmp/pcs_a1.*.npz /tmp/pcs_a2.*.npz; ls /tmp/pcs_a*.npz 2>/dev/null | wc -l; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && setsid nohup bash -c '\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nT=/home/stephane/Data13TB/stephan … [1194 caractères tronqués]`
+
+  ```
+0
+[08/10 23:30:57] === sémantique terminé ===
+[08/10 23:30:59] === sémantique CORRIGÉE, caches NEUFS (les anciens dataient du lecteur bogué) ===
+  ```
+
+- **bash** `{"command": "sleep 300; tail -3 /tmp/campagne24/journal11.txt; echo \"=== sortie corrigée ===\"; sed -n '1,14p' /tmp/campagne24/sem_avec_echelle.log 2>/dev/null; echo \"=== campagne ===\"; tail -2 /tmp/campagne24/journal.txt", "description": "Wait and check the semantic re-run", "timeoutMs": 400000}`
+
+  ```
+[08/10 23:30:57] ancienne : 0 lignes
+[08/10 23:30:57] === sémantique terminé ===
+[08/10 23:30:59] === sémantique CORRIGÉE, caches NEUFS (les anciens dataient du lecteur bogué) ===
+=== sortie corrigée ===
+=== campagne ===
+[08/10 23:36:15] charge 50.53 · --- étape parcimonie ---
+[08/10 23:36:35] charge 48.06 · parcimonie/actthresh0dense : PPL 17.4315 · événements 0 · 22.6 tok/s
+  ```
+
+- **bash** `{"command": "grep -i \"gpt-oss\" /tmp/campagne24/journal.txt | tail -3; echo \"---\"; ls -la /tmp/campagne24/grille_gpt-oss-120B* 2>/dev/null | awk '{print $5, $9}'; tail -3 /tmp/campagne24/grille_gpt-oss-120B_ppl.log 2>/dev/null", "description": "Find the gpt-oss grid result"}`
+
+  ```
+[08/10 23:36:15] charge 50.53 · grille/gpt-oss-120B : code 124 · PPL ? · RSS 13902 Mo · lus 36359 Mio
+---
+557 /tmp/campagne24/grille_gpt-oss-120B_ppl.log
+1068 /tmp/campagne24/grille_gpt-oss-120B_temps.log
+163 /tmp/campagne24/grille_gpt-oss-120B_tokenize.log
+[config] puits appris sur 36/36 couches · n_rot 64 · ffn 2880 · experts 128
+[config] fenêtre glissante 128 sur 18/36 couches (motif 2 alterné)
+[config] rotation : RoPE simple (contexte 256 ≤ 4096 initial ; YaRN ×32 prendrait le relais au-delà)
+  ```
+
+### 🤖 Assistant
+
+⏵ La passe gpt-oss a expiré à 90 minutes — je la relance sur une fenêtre plus courte
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && setsid nohup bash -c '\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nJ=/tmp/campagne24/journal12.txt\necho \"[$(date \"+%d/%m %H:%M:%S\")] === gpt-oss-120B, fenêtre COURTE (la passe de 256 jetons a expiré à 90 min) ===\" >> $J … [1052 caractères tronqués]`
+
+  ```
+[08/10 23:37:19] === gpt-oss-120B, fenêtre COURTE (la passe de 256 jetons a expiré à 90 min) ===
+=== parcimonie ===
+[08/10 23:37:08] charge 49.46 · parcimonie/actthresh0push : PPL 17.4084 · événements 90358043147 · 10.5 tok/s
+[08/10 23:37:22] charge 50.96 · parcimonie/actthresh0_001dense : PPL 17.3381 · événements 0 · 19.5 tok/s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"reports/rapport-campagne-benefices.md\"; s=open(p).read()\ns = s.replace('''| gpt-oss-120b MXFP4 | *en cours* | | | | | 63 Go depuis le disque dur |''',\n'''| gpt-oss-120b MXFP4 | **expiré à 90 min** | — | — | 1 … [3260 caractères tronqués]`

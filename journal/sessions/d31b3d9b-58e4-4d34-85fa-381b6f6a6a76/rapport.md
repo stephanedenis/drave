@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 14.3 h |
+| Durée | 14.4 h |
 | Tours | 22 |
-| Messages | 600 |
-| Appels d'outils | 574 |
+| Messages | 607 |
+| Appels d'outils | 581 |
 | Fichiers touchés | 21 |
-| Commandes | 452 |
+| Commandes | 459 |
 | Sous-agents | 3 |
-| Commits | 35 |
+| Commits | 36 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -1056,11 +1056,22 @@ gne sur gpt-oss (à 9 minutes de son délai), la mesure codestral corrigée, et 
 
 ### Tour 22 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1477 caractères tronqués]
 
-*3 appels d'outils.* Actions notables :
+*10 appels d'outils.* Actions notables :
 
 - bash — Check state after the gpt-oss timeout window
 - bash — Compare distilled vs non-distilled validation
 - bash — Record the distillation result
+- bash — Launch the semantic échelle comparison
+- bash — Check whether the semantic run reused a stale cache
+- bash — Invalidate stale caches and relaunch the semantic comparison
+- bash — Wait and check the semantic re-run
+- bash — Find the gpt-oss grid result
+- bash — Relaunch gpt-oss with a short window
+- bash — Record the timeout and the method traps
+
+**Synthèse produite :**
+
+⏵ La passe gpt-oss a expiré à 90 minutes — je la relance sur une fenêtre plus courte
 
 ## 3. Travail accompli
 
@@ -1138,7 +1149,7 @@ gne sur gpt-oss (à 9 minutes de son délai), la mesure codestral corrigée, et 
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 412 autres
+- … et 419 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1321,4 +1332,5 @@ gne sur gpt-oss (à 9 minutes de son délai), la mesure codestral corrigée, et 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/msg_tok.txt <<'MSG' Tokenizers SentencePiece (Llama, Mistral, Codestral) : les espaces étaient 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="reports/rapport-campagne-benefices.md"; s=open(p).read() ajout = '''## 12. Le cas extr
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="reports/rapport-campagne-benefices.md"; s=open(p).read() ajout = '''## 5 bis. La disti
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="reports/rapport-campagne-benefices.md"; s=open(p).read() s = s.replace('''| gpt-oss-12
 

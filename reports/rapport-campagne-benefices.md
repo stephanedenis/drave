@@ -115,7 +115,7 @@ Mêmes 256 jetons, même contexte, chaque modèle tokenisant son propre corpus
 | r1-distill-Qwen-14B Q4_K_M | **14,30** | **0,915** | 0,5 | 39,8 Go | 8,71 Go | lu du disque, charge 47 |
 | codestral-22B Q4_K_M | **35 657** ⚠️ | — | — | 63,6 Go | 12,7 Go | tokenizer Mistral ; **diagnostic en cours** |
 | Qwen3-30B-A3B Q4_K_M (MoE) | **8,63** | **0,742** | — | **14,3 Go** | 11,8 Go | MoE, lu du NVMe |
-| gpt-oss-120b MXFP4 | *en cours* | | | | | 63 Go depuis le disque dur |
+| gpt-oss-120b MXFP4 | **expiré à 90 min** | — | — | 13,9 Go | **35,5 Go lus** | 63 Go depuis le disque dur |
 
 **Le MoE gagne sur les deux tableaux — la thèse du projet démontrée par un modèle
 qui n'a pas été fait pour ça.** Qwen3-30B-A3B (30 milliards de paramètres, 3
@@ -188,6 +188,12 @@ demandait de vérifier, et la réponse est non.
 
 Le 14B redresse la barre (0,915 bit/octet) mais à **0,5 tok/s** sous charge 47 —
 le temps, lui, n'est pas une mesure propre ici, et c'est écrit dans le journal.
+
+**gpt-oss-120b : la passe de 256 jetons n'a PAS fini en 90 minutes** (délai
+atteint), après avoir lu **35,5 Go** avec 13,9 Go résidents. C'est un résultat en
+soi : sur ce disque et sous cette charge, une passe de 256 jetons sur un modèle de
+63 Go **ne tient pas dans un créneau de 90 minutes**. Une fenêtre plus courte
+(32 jetons) a été relancée pour obtenir le chiffre manquant.
 
 *(tableau complété à mesure ; `tools/campagne_synthese.py` le régénère depuis les
 journaux, colonne `bits/octet` comprise)*
@@ -518,7 +524,25 @@ sans root.
 
 ---
 
-## 15. Ce qui reste à mesurer (file en cours)
+## 16. Deux pièges de méthode, consignés
+
+**Un cache qui survit à son correctif.** La mesure sémantique avec l'échelle
+corrigée a d'abord rendu **exactement les chiffres publiés** (couche 0 : +0,0002 ;
+couche 4 : +0,0156) — parce que le cache de vecteurs de `/tmp` datait de la
+session précédente, **avant** le correctif du lecteur. Un cache qui ne porte pas
+la version de l'outil qui l'a écrit fait mesurer l'ancien code avec le nouveau :
+les fichiers ont été supprimés et la comparaison relancée à caches neufs.
+
+**Un outil dont l'option `--cache` écrase les deux côtés.** Dans
+`premiere_couche_semantique.py`, la même expression
+`opt("--cache", "/tmp/pcs_a1")` sert aux DEUX dossiers comparés (A et B) : passer
+`--cache X` fait donc écrire les deux jeux dans `X.moyenne.npz`, et la
+comparaison oppose un dossier à lui-même. Sans `--cache`, les deux défauts sont
+distincts et tout va bien — c'est pourquoi le piège ne s'était pas vu.
+
+---
+
+## 17. Ce qui reste à mesurer (file en cours)
 
 - `parcimonie` : seuil et k-WTA, en dense et en listes, sur un modèle réel ;
 - `contexte` : 512 → 8 192, avec le cache KV que le moteur **choisit** ;
