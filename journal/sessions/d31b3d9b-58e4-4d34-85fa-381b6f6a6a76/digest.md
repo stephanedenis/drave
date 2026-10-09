@@ -18039,3 +18039,34 @@ fenetres_m15_d384_masque25_kwta25 : PPL 6.0792 · 1.4 M paires/jeton
 ⏵ Résultat final : la courbe lecture ↔ qualité, à deux axes appris contre un axe imposé
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\nancre = \"\"\"**Et les deux axes SE CUMULENT quand les deux sont appris**\"\"\"\nassert ancre in s\nneuf = \"\"\"### 5  … [3332 caractères tronqués]`
+
+  ```
+ok
+f9afaaf La courbe lecture-qualité, réponse finale : ÷4 pour +1 %, ÷8 pour +4 %, ÷15 pour +22 % si l'axe est imposé
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short | grep -v \"^ M journal\" | head -5; echo \"=== file active ===\"; pgrep -af \"bash /tmp/campagne24/jour\" | sed 's/.*campagne24/campagne24/' | cut -c1-30; echo \"=== documents ===\"; wc -l reports/rapport-campagne … [171 caractères tronqués]`
+
+  ```
+M drave-core/src/main.rs
+ M drave-core/src/model.rs
+=== file active ===
+campagne24/journal.txt
+=== documents ===
+   431 docs/plan-prefill-reparti.md
+   221 docs/programme-recherche.md
+   126 docs/roadmap-drave.md
+   311 docs/roadmap.md
+    75 docs/sprints.md
+   672 docs/verification-kimi-k3.md
+   298 docs/vision.md
+ 13606 total
+=== portes (campagne) ===
+[09/10 01:03:30] charge 32.31 · === campagne terminée ===
+  ```
+
+### 🤖 Assistant
+
+⏵ Commit du bus de valeur, puis mise en file de la vérification à l'échelle 512
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add drave-core/src/main.rs drave-core/src/model.rs && git commit -q -m \"M1 dans le moteur : le bus de modulation (nouveauté ou valeur), et la persistance de D\n\nDRAVE_HEBB_MODULE accepte désormais « valeur » : eta est piloté pa … [3028 caractères tronqués]`

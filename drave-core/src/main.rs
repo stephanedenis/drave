@@ -5377,6 +5377,17 @@ effective est W+D : ce modèle N'EST PLUS celui du fichier. Exige --lot 1.");
                 nll_f += nll_tok;
                 n += 1;
                 n_f += 1;
+                // M1 — LE BUS DE VALEUR. Le modulateur n'est pas la perte
+                // (c'est de la surprise, et la surprise dégrade : mesuré), c'est
+                // l'AMÉLIORATION : ce jeton s'est-il mieux passé que la moyenne
+                // courante ? Le signal est diffusé à toutes les couches par ce
+                // scalaire, comme un noyau neuromodulateur — et il est en retard
+                // d'un jeton, puisque la modulation biologique l'est aussi.
+                if let Some(hd) = mdl.hebb_diff.as_mut() {
+                    let moy = nll / n.max(1) as f64;
+                    let gain = if moy > 1e-9 { (moy - nll_tok) / moy } else { 0.0 };
+                    hd.modulateur = (1.0 + 2.0 * gain as f32).clamp(0.25, 4.0);
+                }
                 let b = (pos + 1) / 256;
                 if b < seaux.len() { seaux[b].0 += nll_tok; seaux[b].1 += 1; }
                 perte.push(nll_tok as f32);

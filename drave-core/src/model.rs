@@ -2788,6 +2788,15 @@ pub struct HebbDiff {
     moy_x: Vec<f32>,
     /// Moyenne courante de la norme du différentiel centré (pour E7).
     moy_norme: f32,
+    /// **M1 — le BUS DE VALEUR.** Quand `module_valeur` est actif, `η` est
+    /// multiplié par ce scalaire, que l'appelant met à jour à partir d'un signal
+    /// d'UTILITÉ (ici : l'amélioration de la perte courante par rapport à sa
+    /// moyenne — « ce que tu viens de faire a aidé »), et non de la nouveauté.
+    /// Mesuré le 9/10 : moduler par la nouveauté DÉGRADE (+20,4 % contre +5,2 %)
+    /// parce que la nouveauté est maximale sur l'entrée hors distribution.
+    pub modulateur: f32,
+    /// Vrai si le modulateur externe pilote `η` (DRAVE_HEBB_MODULE=valeur).
+    module_valeur: bool,
     /// `n_canaux` : tous les canaux parcourus. `n_evenements` : ceux dont le
     /// différentiel a dépassé le seuil. Le rapport des deux dit ce que
     /// « événement » veut dire sur ce flux — et les deux étaient INVERSÉS dans
@@ -2863,6 +2872,9 @@ impl HebbDiff {
                    module: std::env::var("DRAVE_HEBB_MODULE").map(|v| v == "1")
                        .unwrap_or(false),
                    moy_x: Vec::new(), moy_norme: 0.0,
+                   modulateur: 1.0,
+                   module_valeur: std::env::var("DRAVE_HEBB_MODULE").map(|v| v == "valeur")
+                       .unwrap_or(false),
                    n_evenements: 0, n_canaux: 0 }
     }
 
@@ -2885,6 +2897,9 @@ impl HebbDiff {
         // E7 : l'ampleur de la mise à jour suit la nouveauté du différentiel,
         // rapportée à sa propre histoire (un scalaire, pas un gradient).
         let mut eta = self.eta;
+        if self.module_valeur {
+            eta *= self.modulateur.clamp(0.25, 4.0);
+        }
         if module {
             let mut n2 = 0f64;
             for i in 0..ni {
