@@ -20561,3 +20561,177 @@ portes lancées en fond
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/sprint-cerveau.md\")\ns = p.read_text()\n# tableau d'état en tête : les trois capacités\ns = s.replace(\"\"\"| **C1** | **graphe de régions** : descripteur de topologie, valid … [5491 caractères tronqués]`
+
+  ```
+bilan écrit
+poussé
+  Qwen3-235B : softmax                       softmax  ✅
+  V4-Flash : --config le dit calculable      oui  ✅
+  V4-Flash 43 couches ctx 32 (archivée)     ARCHIVE=1 pour la lancer
+  engram V4.1 : adressage                    rangées DISTINCTES : 479723  ✅
+  gpt-oss : --config le dit calculable       oui  ✅
+  ```
+
+### 🤖 Assistant
+
+⏵ **Les trois capacités du sprint sont livrées** — les 23 portes tournent en fond
+
+**C1, C12 et C5 sont faites, chacune avec son module, sa porte outillée et son invariant mesuré :**
+
+| capacité | module | porte | invariant vérifié |
+|---|---|---|---|
+| **C1** graphe de régions | `topologie.rs` (8 tests) | `porte-topologie.sh` (5 cas) | graphe linéaire = découpage historique (**même chiffre**) · **trois régions sur trois instances = référence, écart 0,00e0** · deux refus contrôlés |
+| **C12** trace globale | `trace_globale.rs` (5 tests) | `porte-trace.sh` (3 cas) | **126 croisements, aucune divergence** au rejeu · une trace faussée **d'un seul bit** est **détectée et nommée** (pas, région, lien) |
+| **C5** bus de modulation | `bus.rs` (5 tests) | `porte-bus.sh` (3 cas) | bus **neutre** ⇒ **empreintes identiques** (126 croisements) · gain 1,5 ⇒ la sortie change · bus d'un nœud **relais** ⇒ agit **à travers les instances** |
+
+**95 tests** (77 d'origine + 18 ajoutés) et `porte-flux.sh` repassée après chaque modification du chemin d'exécution — cinq modes verts (0.00e0 / 0.00e0 / 3.65e-2 / 0.00e0 / 4.45e-3). Les **23 portes du dépôt** tournent en fond depuis 17 h 46 (elles ont atteint la porte gpt-oss, la plus lente) ; leur résultat sera relevé au prochain round.
+
+**Trois défauts trouvés par les portes — et c'est exactement leur raison d'être :**
+
+1. **Fin de plage exclusive** : j'envoyais `derniere` au lieu de `derniere + 1`, donc la dernière couche de la région distante n'était plus exécutée — et **seuls les modes 0, 1 et 2** étaient touchés (3 et 4 passent par un autre encodeur). Attrapé par `porte-flux.sh`, réparé, revérifié.
+2. **`--topologie` avalait `--ppl-reparti`** : la commande imprimait le plan au lieu de mesurer. Arrivé **deux fois** (au pilote, puis au nœud relais) — la pré-analyse est maintenant restreinte aux deux usages d'exécution.
+3. **Le gain d'un nœud final est absorbé par la normalisation de sortie** (une norme divise par la norme) : mon test du bus était faux, pas le bus. C'est un nœud du **milieu** qui prouve que le bus agit.
+
+**Ce qui reste hors périmètre du sprint, et c'est écrit** : les entrées multiples et la récurrence (**C2**), les délais et horloges (**C3**, **C4**), la mémoire épisodique et la consolidation (**C6**, **C7**), la périphérie (**C8**), la latéralité et les budgets (**C9**, **C10**) — et pour C5, la **diffusion réseau** du bus (le format de la ligne de contrôle `MODULATION canal valeur` est écrit dans `bus.rs`, le transport reste à câbler).
+
+Tout est committé et poussé sur `stephanedenis/drave` ; `docs/sprint-cerveau.md` porte le bilan complet, les portes, les défauts et le journal heure par heure.
+
+
+## Tour 41
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Sprint « cerveau complet » en autonomie jusqu'au 10 octobre 9 h (HAE) : implémenter, avec portes mesurées, les trois premières capacités du plan docs/plan-cerveau-complet.md — C1 graphe de régions (descripteur de topologie, validateur de DAG, ordonnanceur par dépendances, pilote multi-nœuds ; porte : un graphe linéaire doit rendre des logits identiques au bit près et un découpage à trois régions doit égaler le modèle d'un seul tenant), C12 trace globale horodatée et rejeu exact (porte : rejeu == exécution, 0,00e0), C5 bus de modulation multi-canaux (porte : canal nul ⇒ sortie inchangée). Chaque capacité livrée avec son invariant vérifié, ses tests, sa mesure et sa documentation ; l'état d'avancement est écrit dans docs/sprint-cerveau.md à chaque round pour être resumable. Ne rien casser : les 23 portes du dépôt et les 77 tests doivent rester verts, et le profil release reste le binaire de mesure."
+Round: 5/40
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Relevé des 23 portes du dépôt lancées après le sprint
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -3 /tmp/portes_sprint.log 2>/dev/null; echo \"---\"; pgrep -af \"portes.s[h]\" >/dev/null && echo \"(tourne encore)\" || echo \"(terminé)\"; date '+%H:%M'; grep -cE \"✅\" /tmp/portes_sprint.log 2>/dev/null; grep -E \"❌\" /tmp/po … [91 caractères tronqués]`
+
+  ```
+V4-Flash 43 couches ctx 32 (archivée)     ARCHIVE=1 pour la lancer
+  engram V4.1 : adressage                    rangées DISTINCTES : 479723  ✅
+  gpt-oss : --config le dit calculable       oui  ✅
+---
+(tourne encore)
+17:51
+12
+  ```
+
+- **bash** `{"command": "cd /tmp && until grep -q \"^code \" /tmp/portes_sprint.log 2>/dev/null; do sleep 120; done; echo \"=== portes du dépôt, après le sprint ===\"; grep -E \"✅|❌|AOUCUN|AU MOINS\" /tmp/portes_sprint.log | tail -30; echo; echo \"vertes : $(grep -cE '✅' /tmp/portes_sprint.log) · rouges : $(gre … [165 caractères tronqués]`
+
+  ```
+started background job bash-9
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== état du dépôt ===\"; git status --short | grep -v journal | wc -l; git log --oneline -3; git ls-remote --heads origin | head -1; echo \"=== capacités et tests ===\"; wc -l drave-core/src/topologie.rs drave-core/src/trace_g … [251 caractères tronqués]`
+
+  ```
+=== état du dépôt ===
+0
+8959d1c Bilan du sprint : C1, C12 et C5 livrées avec leurs invariants, 95 tests, trois défauts trouvés par les portes
+451b036 C5 : bus de modulation multi-canaux — canal neutre exact au bit près, canal actif sur un relais
+daef822 C12 : trace globale horodatée et rejeu exact — 126 croisements, aucune divergence
+8959d1cc11aa26f5e526f551a0c3a2f0e19b8f63	refs/heads/master
+=== capacités et tests ===
+  125 tools/porte-flux.sh
+   76 tools/porte-mistral.sh
+   80 tools/porte-reparti-moteur.sh
+   14 tools/porte-tokenizer-kimi.sh
+  123 tools/porte-topologie.sh
+   59 tools/porte-trace.sh
+ 1423 total
+=== fichiers de sprint ===
+17255 octets · 9 oct 17:46
+  ```
+
+### 🤖 Assistant
+
+⏵ Sprint livré et poussé ; les portes du dépôt tournent, une sentinelle me réveillera
+
+**État vérifié à l'instant :**
+
+- **Arbre propre**, tout committé et poussé — `origin/master` = `8959d1c`, dernier commit « Bilan du sprint : C1, C12 et C5 livrées avec leurs invariants, 95 tests, trois défauts trouvés par les portes ».
+- **Les trois capacités du sprint sont livrées**, chacune avec son module, sa porte outillée et son invariant :
+
+| capacité | module | porte | invariant |
+|---|---|---|---|
+| **C1** graphe de régions | `topologie.rs` | `porte-topologie.sh` (123 l., 5 cas) | linéaire = historique · **trois régions / trois instances = référence, 0,00e0** · deux refus contrôlés |
+| **C12** trace globale | `trace_globale.rs` | `porte-trace.sh` (59 l., 3 cas) | **126 croisements sans divergence** · trace faussée d'un bit **détectée et nommée** |
+| **C5** bus de modulation | `bus.rs` | `porte-bus.sh` | bus neutre ⇒ **empreintes identiques** · gain actif ⇒ la sortie change · bus d'un **relais** ⇒ agit entre instances |
+
+- **95 tests verts**, et `porte-flux.sh` (5 modes) repassée après chaque modification du chemin d'exécution.
+
+**En cours** : les **23 portes du dépôt**, relancées à 17 h 46 (12 vertes, 0 rouge au moment du relevé — elles sont sur la porte gpt-oss, la plus lente, qui demande ~20-50 min sur machine calme). Une **sentinelle tourne en fond** : elle me rendra le compte final (vertes/rouges) dès que `portes.sh` aura terminé, et je pourrai alors clore le sprint sur une vérification complète — c'est la dernière condition de l'objectif (« les 23 portes du dépôt et les 77 tests doivent rester verts »), les 95 tests étant déjà confirmés.
+
+Rien n'est laissé en suspens dans le dépôt : `docs/sprint-cerveau.md` (17 Ko) porte le bilan complet, les portes, les trois défauts trouvés par elles, le journal heure par heure, et la liste explicite de ce qui reste hors périmètre (C2 entrées multiples et récurrence, C3/C4 délais et horloges, C6/C7 mémoire épisodique et consolidation, C8 périphérie, C9/C10 latéralité et budgets, plus la diffusion réseau du bus pour C5).
+
+
+## Tour 42
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Sprint « cerveau complet » en autonomie jusqu'au 10 octobre 9 h (HAE) : implémenter, avec portes mesurées, les trois premières capacités du plan docs/plan-cerveau-complet.md — C1 graphe de régions (descripteur de topologie, validateur de DAG, ordonnanceur par dépendances, pilote multi-nœuds ; porte : un graphe linéaire doit rendre des logits identiques au bit près et un découpage à trois régions doit égaler le modèle d'un seul tenant), C12 trace globale horodatée et rejeu exact (porte : rejeu == exécution, 0,00e0), C5 bus de modulation multi-canaux (porte : canal nul ⇒ sortie inchangée). Chaque capacité livrée avec son invariant vérifié, ses tests, sa mesure et sa documentation ; l'état d'avancement est écrit dans docs/sprint-cerveau.md à chaque round pour être resumable. Ne rien casser : les 23 portes du dépôt et les 77 tests doivent rester verts, et le profil release reste le binaire de mesure."
+Round: 6/40
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Point sur les portes du dépôt
+
+- **bash** `{"command": "date '+%H:%M'; tail -2 /tmp/portes_sprint.log 2>/dev/null; echo \"vertes $(grep -cE '✅' /tmp/portes_sprint.log) · rouges $(grep -cE '❌' /tmp/portes_sprint.log)\"; pgrep -af \"portes.s[h]\" >/dev/null && echo \"(tourne)\" || echo \"(terminé)\"", "description": "Check the gates progress"}`
+
+  ```
+17:52
+  engram V4.1 : adressage                    rangées DISTINCTES : 479723  ✅
+  gpt-oss : --config le dit calculable       oui  ✅
+vertes 12 · rouges 0
+(tourne)
+  ```
+
+- **bash** `{"command": "sleep 590; date '+%H:%M'; tail -1 /tmp/portes_sprint.log; echo \"vertes $(grep -cE '✅' /tmp/portes_sprint.log) · rouges $(grep -cE '❌' /tmp/portes_sprint.log)\"", "description": "Wait and check the gates", "timeoutMs": 620000}`
+
+  ```
+18:01
+code 0
+vertes 23 · rouges 0
+  ```
+
+### 👤 Utilisateur
+
+background job bash-9 (bash: cd /tmp && until grep -q "^code " /tmp/portes_sprint.log 2>/dev/null; do sleep 120; done; echo "=== portes du dépôt, après le sprint ==="; grep -E "✅|❌|AOUCUN|AU MOINS" /tmp/portes_sprint.log | tail -30; echo; echo "vertes : $(grep -cE '✅' /tmp/portes_sprint.log) · rouges : $(grep -cE '❌' /tmp/portes_sprint.log)"; tail -1 /tmp/portes_sprint.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-9"}`
+
+  ```
+=== portes du dépôt, après le sprint ===
+  cargo test --release                       95 verts  ✅
+  Qwen2.5-0.5B ctx 256                       19.3885  ✅
+  Qwen3-30B en clusters (origine : 799,8557) 799.8557  ✅
+  threads par défaut (physiques)            20  ✅
+  formats contre libggml                     17 concorde(s), 0 divergence(s), 0 absent(s)  ✅
+  GLM-5.3 : sigmoïde ×2,5                  sigmoïde  ✅
+  Kimi-K2.7 : sigmoïde ×2,827              sigmoïde  ✅
+  V4-Flash : racine de softplus              racine de softplus  ✅
+  Qwen3-235B : softmax                       softmax  ✅
+  V4-Flash : --config le dit calculable      oui  ✅
+  engram V4.1 : adressage                    rangées DISTINCTES : 479723  ✅
+  gpt-oss : --config le dit calculable       oui  ✅
+  gpt-oss-120b MXFP4 ctx 256                 15.6017  ✅
+  le flux relu par tools/analyse_flux.py     51 lignes  ✅
+  le rejeu de la trace (0 manquante, écart ≤ 1e-5) écart 0.00e+00  ✅
+  porte de correction (llama.cpp, 71 positions) (100.0 % des positions UTILES au-dessus de 0.95, min 0.9959 >= plancher 0.9, top-1 94.4 % sur toutes les positions, 6 saturées exclues de la corrélation)  ✅
+  poids de connexion hc écrits et relus     c
+… [639 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/sprint-cerveau.md\")\ns = p.read_text()\ns = s.replace(\"\"\"**Tests : 95** (77 d'origine + 18 ajoutés). **Non-régression** : `porte-flux.sh`\nrepassée après chaque modificati … [2336 caractères tronqués]`

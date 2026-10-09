@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 32.6 h |
-| Tours | 40 |
-| Messages | 1310 |
-| Appels d'outils | 1235 |
+| Durée | 32.8 h |
+| Tours | 42 |
+| Messages | 1322 |
+| Appels d'outils | 1242 |
 | Fichiers touchés | 39 |
-| Commandes | 1033 |
+| Commandes | 1039 |
 | Sous-agents | 3 |
-| Commits | 112 |
+| Commits | 113 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -111,6 +111,10 @@
 **Tour 39** — <goal_round> Objective: "Sprint « cerveau complet » en autonomie jusqu'au 10 octobre 9 h (HAE) : implémenter, avec portes mesurées, les trois premières capacités du plan docs/plan-cerveau-complet.md — C1 graphe de régions (descripteur de topologie, validateur de DAG, ordonnanceur par dépendances, pilote multi-nœuds ; porte : un graphe linéaire doit rendre des logits identiques au bit près et un dé … [1077 caractères tronqués]
 
 **Tour 40** — <goal_round> Objective: "Sprint « cerveau complet » en autonomie jusqu'au 10 octobre 9 h (HAE) : implémenter, avec portes mesurées, les trois premières capacités du plan docs/plan-cerveau-complet.md — C1 graphe de régions (descripteur de topologie, validateur de DAG, ordonnanceur par dépendances, pilote multi-nœuds ; porte : un graphe linéaire doit rendre des logits identiques au bit près et un dé … [1077 caractères tronqués]
+
+**Tour 41** — <goal_round> Objective: "Sprint « cerveau complet » en autonomie jusqu'au 10 octobre 9 h (HAE) : implémenter, avec portes mesurées, les trois premières capacités du plan docs/plan-cerveau-complet.md — C1 graphe de régions (descripteur de topologie, validateur de DAG, ordonnanceur par dépendances, pilote multi-nœuds ; porte : un graphe linéaire doit rendre des logits identiques au bit près et un dé … [1077 caractères tronqués]
+
+**Tour 42** — <goal_round> Objective: "Sprint « cerveau complet » en autonomie jusqu'au 10 octobre 9 h (HAE) : implémenter, avec portes mesurées, les trois premières capacités du plan docs/plan-cerveau-complet.md — C1 graphe de régions (descripteur de topologie, validateur de DAG, ordonnanceur par dépendances, pilote multi-nœuds ; porte : un graphe linéaire doit rendre des logits identiques au bit près et un dé … [1077 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1906,7 +1910,68 @@ Deux capacités sur trois sont livrées avec leurs invariants vérifiés, et les
 
 **Synthèse produite :**
 
-⏵ Lancement des 23 portes du dépôt en fond, puis bilan du sprint
+⏵ **Les trois capacités du sprint sont livrées** — les 23 portes tournent en fond
+
+**C1, C12 et C5 sont faites, chacune avec son module, sa porte outillée et son invariant mesuré :**
+
+| capacité | module | porte | invariant vérifié |
+|---|---|---|---|
+| **C1** graphe de régions | `topologie.rs` (8 tests) | `porte-topologie.sh` (5 cas) | graphe linéaire = découpage historique (**même chiffre**) · **trois régions sur trois instances = référence, écart 0,00e0** · deux refus contrôlés |
+| **C12** trace globale | `trace_globale.rs` (5 tests) | `porte-trace.sh` (3 cas) | **126 croisements, aucune divergence** au rejeu · une trace faussée **d'un seul bit** est **détectée et nommée** (pas, région, lien) |
+| **C5** bus de modulation | `bus.rs` (5 tests) | `porte-bus.sh` (3 cas) | bus **neutre** ⇒ **empreintes identiques** (126 croisements) · gain 1,5 ⇒ la sortie change · bus d'un nœud **relais** ⇒ agit **à travers les instances** |
+
+**95 tests** (77 d'origine + 18 ajoutés) et `porte-flux.sh` repassée après chaque modification du chemin d'exécution — cinq modes verts (0.00e0 / 0.00e0 / 3.65e-2 / 0.00e0 / 4.45e-3). Les **23 portes du dépôt** tournent en fond depuis 17 h 46 (elles ont atteint la porte gpt-oss, la plus lente) ; leur résultat sera relevé au prochain round.
+
+**Trois défauts trouvés par les portes — et c'est exactement leur raison d'être :**
+
+1. **Fin de plage exclusive** : j'envoyais `derniere` au lieu de `derniere + 1`, donc la dernière couche de la région distante n'était plus exécutée — et **seuls les modes 0, 1 et 2** étaient touchés (3 et 4 passent par un autre encodeur). Attrapé par `porte-flux.sh`, réparé, revérifié.
+2. **`--topologie` avalait `--ppl-reparti`** : la commande imprimait le plan au lieu de mesurer. Arrivé **deux fois** (au pilote, puis au nœud relais) — la pré-analyse est maintenant restreinte aux deux usages d'exécution.
+3. **Le gain d'un nœud final est absorbé par la normalisation de sortie** (une norme divise par la norme) : mon test du bus était faux, pas le bus. C'est un nœud du **milieu** qui prouve que le bus agit.
+
+**Ce qui reste hors périmètre du sprint, et c'est écrit** : les entrées multiples et la récurrence (**C2**), les délais et horloges (**C3**, **C4**), la mémoire épisodique et la consolidation (**C6**, **C7**), la périphérie (**C8**), la latéralité et les budgets (**C9**, **C10**) — et pour C5, la **diffusion réseau** du bus (le format de la ligne de contrôle `MODULATION canal valeur` est écrit dans `bus.rs`, le tra
+… [184 caractères tronqués]
+
+### Tour 41 — <goal_round> Objective: "Sprint « cerveau complet » en autonomie jusqu'au 10 octobre 9 h (HAE) : implémenter, avec porte … [1357 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Check the repository gates result
+- bash — Sentinel: wait for the repository gates and report
+- bash — Verify the repository state and the sprint deliverables
+
+**Synthèse produite :**
+
+⏵ Sprint livré et poussé ; les portes du dépôt tournent, une sentinelle me réveillera
+
+**État vérifié à l'instant :**
+
+- **Arbre propre**, tout committé et poussé — `origin/master` = `8959d1c`, dernier commit « Bilan du sprint : C1, C12 et C5 livrées avec leurs invariants, 95 tests, trois défauts trouvés par les portes ».
+- **Les trois capacités du sprint sont livrées**, chacune avec son module, sa porte outillée et son invariant :
+
+| capacité | module | porte | invariant |
+|---|---|---|---|
+| **C1** graphe de régions | `topologie.rs` | `porte-topologie.sh` (123 l., 5 cas) | linéaire = historique · **trois régions / trois instances = référence, 0,00e0** · deux refus contrôlés |
+| **C12** trace globale | `trace_globale.rs` | `porte-trace.sh` (59 l., 3 cas) | **126 croisements sans divergence** · trace faussée d'un bit **détectée et nommée** |
+| **C5** bus de modulation | `bus.rs` | `porte-bus.sh` | bus neutre ⇒ **empreintes identiques** · gain actif ⇒ la sortie change · bus d'un **relais** ⇒ agit entre instances |
+
+- **95 tests verts**, et `porte-flux.sh` (5 modes) repassée après chaque modification du chemin d'exécution.
+
+**En cours** : les **23 portes du dépôt**, relancées à 17 h 46 (12 vertes, 0 rouge au moment du relevé — elles sont sur la porte gpt-oss, la plus lente, qui demande ~20-50 min sur machine calme). Une **sentinelle tourne en fond** : elle me rendra le compte final (vertes/rouges) dès que `portes.sh` aura terminé, et je pourrai alors clore le sprint sur une vérification complète — c'est la dernière condition de l'objectif (« les 23 portes du dépôt et les 77 tests doivent rester verts »), les 95 tests étant déjà confirmés.
+
+Rien n'est laissé en suspens dans le dépôt : `docs/sprint-cerveau.md` (17 Ko) porte le bilan complet, les portes, les trois défauts trouvés par elles, le journal heure par heure, et la liste explicite de ce qui reste hors périmètre (C2 entrées multiples et récurrence, C3/C4 délais et horloges, C6/C7 mémoire épisodique et consolidation, C8 périphérie, C9/C10 latéralité et budgets, plus la diffusion réseau du bus pour C5).
+
+### Tour 42 — <goal_round> Objective: "Sprint « cerveau complet » en autonomie jusqu'au 10 octobre 9 h (HAE) : implémenter, avec porte … [1357 caractères tronqués]
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Check the gates progress
+- bash — Wait and check the gates
+- job_output
+- bash — Record the green gates, re-run tests, commit and push
+
+**Synthèse produite :**
+
+⏵ Point sur les portes du dépôt
 
 ## 3. Travail accompli
 
@@ -2002,7 +2067,7 @@ Deux capacités sur trois sont livrées avec leurs invariants vérifiés, et les
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 993 autres
+- … et 999 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2262,4 +2327,5 @@ Deux capacités sur trois sont livrées avec leurs invariants vérifiés, et les
 - C12 : trace globale horodatée et rejeu exact — 126 croisements, aucune divergence  TraceGlobale enregistre, par croisement : région, pas, lien, nombre de valeur
 - C5 : bus de modulation multi-canaux — canal neutre exact au bit près, canal actif sur un relais  bus.rs : canaux nommés, valeur NEUTRE par canal (gain = 1,0, le
 - Bilan du sprint : C1, C12 et C5 livrées avec leurs invariants, 95 tests, trois défauts trouvés par les portes  Les trois capacités ont leur module, leur porte o
+- Sprint clos sur vérification : les 23 portes du dépôt sont vertes (0 rouge), 95 tests  tools/portes.sh relancé après le sprint, terminé en 15 minutes (machine l
 

@@ -256,10 +256,21 @@ porte outillée et rejouable :
 | **C12** trace globale | `trace_globale.rs` | `tools/porte-trace.sh` | **126 croisements, aucune divergence** au rejeu · trace faussée d'un bit **détectée et nommée** |
 | **C5** bus de modulation | `bus.rs` | `tools/porte-bus.sh` | bus neutre ⇒ **empreintes identiques** (126 croisements) · gain 1,5 ⇒ la sortie change · bus d'un nœud **relais** ⇒ agit à travers les instances |
 
-**Tests : 95** (77 d'origine + 18 ajoutés). **Non-régression** : `porte-flux.sh`
-repassée après chaque modification du chemin d'exécution — cinq modes verts
-(0.00e0 / 0.00e0 / 3.65e-2 / 0.00e0 / 4.45e-3) — et les **23 portes du dépôt**
-relancées en fin de sprint.
+**Tests : 95** (77 d'origine + 18 ajoutés) et **les 23 portes du dépôt sont
+VERTES, 0 rouge** (`tools/portes.sh`, relancé à 17 h 46, terminé à 18 h 01, code 0).
+Le relevé, pour mémoire :
+
+```
+cargo test --release                       95 verts  ✅      (77 avant le sprint)
+gpt-oss-120b MXFP4 ctx 256                 15.6017  ✅      (la valeur attendue)
+formats contre libggml                     17 concordent, 0 diverge  ✅
+porte de correction (llama.cpp)            100 % des positions utiles ≥ 0,95  ✅
+le rejeu de la trace                       écart 0.00e+00  ✅
+découpage à deux nœuds, 5 modes            0.00e0 / 0.00e0 / 3.65e-2 / 0.00e0 / 4.45e-3  ✅
+```
+
+**Non-régression** : `porte-flux.sh` repassée après **chaque** modification du chemin
+d'exécution — cinq modes verts — et la suite complète relancée en fin de sprint.
 
 **Trois défauts trouvés par les portes, et c'est leur raison d'être** :
 
@@ -285,7 +296,8 @@ bus (le format de la ligne de contrôle est écrit, le transport reste à câble
 |---|---|
 | 9/10 17 h 10 | **C1a** : module `topologie.rs`, validation stricte, plan, 8 tests, suite à 85 tests. |
 | 9/10 17 h 20 | **C1b pas 1** : la topologie pilote le découpage · porte `tools/porte-topologie.sh` **TENUE** (même chiffre, écart 0,00e0) · deux refus vérifiés. |
-| 9/10 19 h 20 | **Bilan** : trois capacités livrées, 95 tests, 23 portes relancées. |
+| 9/10 18 h 01 | **23 portes du dépôt : 23 vertes, 0 rouge** (code 0), dont `cargo test` à 95 verts et gpt-oss à 15,6017. |
+| 9/10 19 h 20 | **Bilan** : trois capacités livrées, 95 tests, 23 portes vertes. |
 | 9/10 19 h 10 | **C5** : bus de modulation · porte `tools/porte-bus.sh` (neutre ⇒ empreintes identiques · gain 1,5 ⇒ la sortie change · bus du relais ⇒ agit). 95 tests, porte-flux verte. |
 | 9/10 18 h 40 | **C12** : trace globale + rejeu · porte `tools/porte-trace.sh` (126 croisements, aucune divergence ; trace faussée détectée au bit près). 90 tests. |
 | 9/10 18 h 00 | **C1b pas 2** : le RELAIS · trois régions sur trois instances, **écart 0,00e0**, même chiffre que deux régions. **Bug de fin de plage exclusive trouvé et corrigé** — attrapé par `porte-flux.sh` (modes 0, 1, 2 cassés, réparés : 0.00e0 / 0.00e0 / 3.65e-2). |
