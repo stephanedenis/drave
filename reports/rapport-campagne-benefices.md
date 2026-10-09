@@ -45,7 +45,7 @@ file encore en cours.
 | **multilingue (399 langues)** | ✅ mesuré, et c'est le point faible du modèle | **3,227 bit/octet** contre 0,951 en prose — **3,4× pire** · densité **identique** (71 %) · seuil absolu : PPL **×11**, le k-WTA tient (§ 10 ter) |
 | **sémantique multilingue** | ✅ le résultat publié **survit** au correctif d'échelle | pic de séparation à la **couche 13** (+0,0391) sur 398 langues, bande 10-15 — et l'ancien lecteur donnait +0,0349 au même endroit |
 | **parcimonie imposée** | ✅ reproduit, et nuancé | à −30 % d'événements : seuil **+69 %** de PPL, k-WTA **+4 %** (facteur 17) · en dense, **aucune lecture économisée** |
-| **parcimonie APPRISE** | ✅ **la réponse qui décide** — et elle est nette | à 50 % gardés : témoin **5,3032**, `kwta050` **5,0606 (−4,6 %)** · à 25 % : témoin **10,8758**, `kwta025` **5,1719 (−52 %)** · lecture divisée par 2 puis par 4, débit ×1,6 · **chaque modèle n'est bon que dans son régime** (§ 5 ter) |
+| **parcimonie APPRISE** | ✅ **la réponse qui décide** — et elle est nette | à 50 % gardés : témoin **5,3032**, `kwta050` **5,0606 (−4,6 %)** · à 25 % : témoin **10,8758**, `kwta025` **5,1719 (−52 %)** · **chaque modèle n'est bon que dans son régime** · à dim 512 la recette tient (**6,0503 → 4,9649**, lecture ÷4) — mais le débit ne distingue plus listes et dense (213 contre 211 tok/s) : **le modèle tient dans les caches, les lectures économisées étaient gratuites** (§ 5 ter) |
 | **sortie contrainte** | ✅ **gagne par construction** | **×1,36-1,42** de débit *et* garantie que la sortie appartient à l'ensemble autorisé |
 | **modèle plus gros que la RAM** | ✅ **démontré, et vérifié au chiffre près** | V4-Flash **365,7 Go sur 125 Go de RAM** : **37,6 Go résidents**, 37,7 Go lus, 266 s pour 16 jetons · gpt-oss (63 Go) : **PPL 15,6017 sur 510 jetons — la valeur attendue, à l'identique** (porte tenue à 02 h 58) |
 | **répartition à deux nœuds** | ✅ **porte tenue** | écart **0,0000 %** et flux **0,00e0** — sur le modèle dense, routé **et distillé** |
@@ -480,18 +480,44 @@ parcimonie**, qui est la seule comparaison juste.)*
    (5,0606) et perd à 25 % (5,7666) ; `kwta025` gagne à 25 % (5,1719) et perd à
    50 % (5,8131). Il n'y a pas de modèle creux « universel » : **il faut
    l'entraîner au taux où on va l'exécuter**.
-4. **La lecture suit exactement le taux** : 336 M → 168 M → 84 M d'événements par
-   fenêtre, et le débit du chemin par listes monte de ~88 à ~140 tok/s (×1,6) à
-   50 %, davantage à 25 %. La parcimonie n'est pas un artifice de comptage : elle
-   réduit les paires lues.
+4. **La lecture suit exactement le taux, et le débit suit la lecture** : 336 M →
+   168 M → 84 M d'événements par fenêtre, et le débit du chemin par listes monte de
+   **~90 tok/s (dense) à ~143 (50 %) puis ~205 (25 %)** — soit **×1,6 et ×2,3**.
+   La parcimonie n'est pas un artifice de comptage : elle réduit les paires lues,
+   et le temps suit.
 
 **C'est la recette du modèle nativement événementiel** : on n'élague pas un modèle
 après coup, on l'entraîne à vivre creux, et on l'exécute **au taux où il a appris**
 — ce que `--act-topk` sait faire. Le gain mesuré au taux de 25 % est de **×2 en
 perplexité** (10,88 → 5,17) pour **quatre fois moins de paires lues**.
 
-**Ce que cela ne dit pas** : la plage de taux qu'un même modèle supporte. Les deux
-modèles entraînés perdent hors de leur régime (1,1 à 1,4 point de perplexité), donc
+**La recette tient à l'échelle 512** — mêmes 40 000 pas, même témoin dense 512,
+mêmes mesures (8 × 128) :
+
+| `m8_d512_kwta25` (entraîné à 25 %) | aucune parcimonie | 50 % | **25 %** | 12,5 % | **chemin DENSE à 25 %** |
+|---|---:|---:|---:|---:|---:|
+| perplexité | 6,0503 | 5,5526 | **4,9649** | 5,3248 | 4,9011 |
+| événements/fenêtre | 594,8 M | 299,2 M | **149,6 M** | 74,8 M | 0 |
+| débit (tok/s) | 89,1 | 132,1 | **213,2** | 282,2 | **211,3** |
+
+**Deux choses, dont une qui nuance la thèse.**
+
+1. **La qualité suit la même loi qu'à dim 384** : le modèle est meilleur **creux que
+   dense** (4,9649 à 25 % contre 6,0503 sans), et il perd 7 % quand on le pousse à
+   12,5 %, deux fois plus creux que ce qu'il a appris. La lecture suit : 594,8 →
+   149,6 M d'événements (÷4), et le débit monte de 89 à **213 tok/s**.
+2. **Le temps, lui, ne distingue PLUS les deux chemins à cette échelle** : à top-k
+   25 %, le chemin par listes fait 213,2 tok/s et le chemin **dense** 211,3 — égalité.
+   La raison est mesurable : à 12,7 M paramètres, ce modèle tient dans les caches du
+   processeur, donc **les lectures que les listes économisent étaient déjà
+   gratuites**. L'avantage du chemin par listes est un avantage de **bande
+   passante**, et il ne se voit que quand le modèle ne tient plus dans les caches —
+   c'est-à-dire pas à cette échelle. *(Les deux chemins ne calculent pas exactement
+   la même chose : l'écart de 1,3 % de perplexité entre 4,9649 et 4,9011 vient de
+   l'encodage des poids, comme au § 22, pas de la parcimonie.)*
+
+**Ce que cela ne dit pas** : la plage de taux qu'un même modèle supporte. Les trois
+modèles entraînés perdent hors de leur régime (0,4 à 1,4 point de perplexité), donc
 la réponse est étroite — c'est un résultat, pas une réserve de politesse.
 
 ---

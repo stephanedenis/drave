@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 20.8 h |
+| Durée | 21.2 h |
 | Tours | 27 |
-| Messages | 943 |
-| Appels d'outils | 906 |
+| Messages | 950 |
+| Appels d'outils | 912 |
 | Fichiers touchés | 29 |
-| Commandes | 737 |
+| Commandes | 742 |
 | Sous-agents | 3 |
-| Commits | 60 |
+| Commits | 61 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -1270,7 +1270,7 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 
 ### Tour 27 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1477 caractères tronqués]
 
-*297 appels d'outils.* Actions notables :
+*303 appels d'outils.* Actions notables :
 
 - bash — Check the full state
 - bash — Measure the distilled d384 with the correct protocol
@@ -1286,11 +1286,11 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - bash — Read parcimonie, contexte, lot steps
 - bash — Inspect batch2 script
 - bash — Read batch2 journal and latency map
-- … et 265 autres
+- … et 270 autres
 
 **Synthèse produite :**
 
-⏵ Aiguille : 18 sondes sur 18, jusqu'à 12 288 jetons
+⏵ Échelle 512 confirmée : la recette tient, mais le temps ne suit pas (modèle en cache)
 
 ## 3. Travail accompli
 
@@ -1376,7 +1376,7 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 697 autres
+- … et 702 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1584,4 +1584,5 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - Le lot sur un modèle plus gros que la RAM : le moteur refuse, et il dit pourquoi  V4.1-Flash (365,7 Go sur 125 Go) est le seul modèle de la machine qui ne tient
 - Les correctifs du moteur sont promus : 77 tests verts, Codestral à 8 jetons, porte rejouée  Le binaire de référence datait du 8/10 11 h 00 et trois commits de d
 - L'aiguille tient jusqu'à 12 288 jetons : 18 sondes sur 18  La série est complétée à 8 192 puis 12 288 jetons, trois profondeurs à chaque fois : toutes retrouven
+- Échelle 512 : la recette creuse tient, et le débit ne distingue plus les deux chemins  m8_d512_kwta25 (entraîné à 25 %, mêmes 40 000 pas que son témoin) :    sa
 

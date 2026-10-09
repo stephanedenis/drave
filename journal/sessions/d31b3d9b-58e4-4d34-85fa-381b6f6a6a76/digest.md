@@ -15531,3 +15531,71 @@ code 0
 ⏵ Aiguille : 18 sondes sur 18, jusqu'à 12 288 jetons
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\ndebut = s.index(\"**Étendu à 8 192 jetons le 9 octobre**\")\nfin = s.index(\"**Réserve, et elle est sérieuse sur les te … [2035 caractères tronqués]`
+
+  ```
+ok
+verdict ok
+3b584c1 L'aiguille tient jusqu'à 12 288 jetons : 18 sondes sur 18
+  ```
+
+- **bash** `{"command": "sleep 570; cd /tmp/campagne24 && tail -2 journal8.txt; ls -la fenetres_m8_d512*.log 2>/dev/null | head -3", "description": "Check the 512 sparse model measurement", "timeoutMs": 600000}`
+
+  ```
+[08/10 23:13:09] charge 77.22 · === batch 6 terminé ===
+[09/10 05:08:44] charge 16.07 · === GPU libre : dense dim 512, k-WTA 25 % appris (FFN en Q8) ===
+  ```
+
+- **bash** `{"command": "cd /tmp/campagne24 && for f in fenetres_m5_d384_dense_q8-sans.log fenetres_m5_d384_dense_q8-topk500.log fenetres_m7_d384_kwta025-topk250.log; do echo \"$(basename $f) : $(grep -oE '[0-9.]+ tok/s' $f | tr '\\n' ' ')\"; done", "description": "Verify throughput values in the sparse logs"}`
+
+  ```
+fenetres_m5_d384_dense_q8-sans.log : 244.3 tok/s 124.7 tok/s 91.9 tok/s 94.2 tok/s 86.5 tok/s 100.4 tok/s 88.4 tok/s 90.5 tok/s 
+fenetres_m5_d384_dense_q8-topk500.log : 394.5 tok/s 212.7 tok/s 141.0 tok/s 146.3 tok/s 138.0 tok/s 146.9 tok/s 146.1 tok/s 142.8 tok/s 
+fenetres_m7_d384_kwta025-topk250.log : 438.3 tok/s 297.6 tok/s 193.4 tok/s 203.4 tok/s 214.0 tok/s 184.4 tok/s 217.6 tok/s 203.3 tok/s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\nvieux = \"\"\"4. **La lecture suit exactement le taux** : 336 M → 168 M → 84 M d'événements par\n   fenêtre, et le débi … [796 caractères tronqués]`
+
+  ```
+ok
+[08/10 23:13:09] charge 77.22 · === batch 6 terminé ===
+[09/10 05:08:44] charge 16.07 · === GPU libre : dense dim 512, k-WTA 25 % appris (FFN en Q8) ===
+  pas  36000 · perte 1.2335 · val 2.0101 bits/octet · 3767 s
+  ```
+
+- **bash** `{"command": "sleep 560; cd /tmp/campagne24 && tail -3 journal8.txt; tail -1 tr_m8_d512_kwta25.log", "description": "Wait for the 512 sparse training to finish", "timeoutMs": 600000}`
+
+  ```
+[09/10 06:19:18] charge 5.61 · m8_d512-dense-topk250 : PPL 4.9011 · 0 événements/fenêtre · 211.3 tok/s
+[09/10 06:19:19] charge 5.32 · répartition/m8_d512_kwta25 : PORTE TENUE : le découpage ne change pas la perplexité (écart relatif 0.0000 %)
+[09/10 06:19:19] charge 5.32 · === chaîne creux 512 terminée ===
+  # écrit dans /tmp/m8_d512_kwta25 · 12.72 M paramètres · 3.41 M poids lus/jeton/couche
+  ```
+
+### 👤 Utilisateur
+
+background job bash-7 (bash: cd /tmp/campagne24 && until grep -q "chaîne creux 512 terminée" journal8.txt 2>/dev/null; do sleep 180; done; echo "=== nuit4 (creux 512) terminée ==="; tail -12 journal8.txt; echo; echo "=== aiguille 12288 ==="; tail -5 aiguille_long.log; echo; echo "=== chaîne du jour ==="; tail -4 journal9.txt 2>/dev/null || echo "(pas encore commencée)") finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-7"}`
+
+  ```
+=== nuit4 (creux 512) terminée ===
+[08/10 23:08:43] charge 46.65 · v4/8 jetons ctx 32 : code 0 · PPL 13182012.2384 · RSS 27734 Mo · lus 32464 Mio · 216s
+[08/10 23:13:09] charge 77.22 · v4/16 jetons ctx 64 : code 0 · PPL 659139.3353 · RSS 37642 Mo · lus 37683 Mio · 266s
+[08/10 23:13:09] charge 77.22 · === batch 6 terminé ===
+[09/10 05:08:44] charge 16.07 · === GPU libre : dense dim 512, k-WTA 25 % appris (FFN en Q8) ===
+[09/10 06:18:40] charge 2.72 · m8_d512_kwta25 :   # meilleur point : pas 40000 · val 2.0007 bits/octet
+[09/10 06:18:53] charge 3.99 · m8_d512-sans : PPL 6.0503 · 594811808 événements/fenêtre · 89.1 tok/s
+[09/10 06:19:02] charge 5.00 · m8_d512-topk500 : PPL 5.5526 · 299231814 événements/fenêtre · 132.1 tok/s
+[09/10 06:19:08] charge 5.48 · m8_d512-topk250 : PPL 4.9649 · 149612718 événements/fenêtre · 213.2 tok/s
+[09/10 06:19:13] charge 5.84 · m8_d512-topk125 : PPL 5.3248 · 74803940 événements/fenêtre · 282.2 tok/s
+[09/10 06:19:18] charge 5.61 · m8_d512-dense-topk250 : PPL 4.9011 · 0 événements/fenêtre · 211.3 tok/s
+[09/10 06:19:19] charge 5.32 · répartition/m8_d512_kwta25 : PORTE TENUE : le découpage ne change pas la perplexité (écart relatif 0.0000 %)
+[09/10 06:19:19]
+… [728 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Échelle 512 confirmée : la recette tient, mais le temps ne suit pas (modèle en cache)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\nancre = \"\"\"**Ce que cela ne dit pas** : la plage de taux qu'un même modèle supporte. Les deux\nmodèles entraînés per … [4032 caractères tronqués]`
