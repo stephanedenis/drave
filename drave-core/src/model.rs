@@ -2797,6 +2797,14 @@ pub struct HebbDiff {
     pub modulateur: f32,
     /// Vrai si le modulateur externe pilote `η` (DRAVE_HEBB_MODULE=valeur).
     module_valeur: bool,
+    /// **Le modulateur EXTERNE**, un scalaire par pas, lu dans un fichier
+    /// (`DRAVE_HEBB_MODULATEUR_FICHIER`). C'est ce que la mesure réclame : ni la
+    /// nouveauté ni l'amélioration de sa propre perte ne sauvent la règle locale
+    /// (+20,4 % et +15,3 % contre +5,2 % pour la règle nue), parce qu'elles sont
+    /// auto-référentielles. Un signal venu d'AILLEURS — ici, l'avantage d'un
+    /// enseignant sur le jeton — est la seule forme que nos mesures n'ont pas
+    /// encore mise en défaut.
+    modulateurs: Vec<f32>,
     /// `n_canaux` : tous les canaux parcourus. `n_evenements` : ceux dont le
     /// différentiel a dépassé le seuil. Le rapport des deux dit ce que
     /// « événement » veut dire sur ce flux — et les deux étaient INVERSÉS dans
@@ -2875,6 +2883,12 @@ impl HebbDiff {
                    modulateur: 1.0,
                    module_valeur: std::env::var("DRAVE_HEBB_MODULE").map(|v| v == "valeur")
                        .unwrap_or(false),
+                   modulateurs: std::env::var("DRAVE_HEBB_MODULATEUR_FICHIER").ok()
+                       .and_then(|f| std::fs::read(f).ok())
+                       .map(|b| b.chunks_exact(4)
+                            .map(|c| f32::from_le_bytes([c[0], c[1], c[2], c[3]]))
+                            .collect())
+                       .unwrap_or_default(),
                    n_evenements: 0, n_canaux: 0 }
     }
 
@@ -2898,7 +2912,13 @@ impl HebbDiff {
         // rapportée à sa propre histoire (un scalaire, pas un gradient).
         let mut eta = self.eta;
         if self.module_valeur {
-            eta *= self.modulateur.clamp(0.25, 4.0);
+            let m = if self.modulateurs.is_empty() {
+                self.modulateur
+            } else {
+                let i = (self.pas as usize).min(self.modulateurs.len() - 1);
+                self.modulateurs[i]
+            };
+            eta *= m.clamp(0.25, 4.0);
         }
         if module {
             let mut n2 = 0f64;

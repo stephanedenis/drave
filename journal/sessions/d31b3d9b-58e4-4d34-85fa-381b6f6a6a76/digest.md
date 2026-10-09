@@ -18070,3 +18070,153 @@ campagne24/journal.txt
 ⏵ Commit du bus de valeur, puis mise en file de la vérification à l'échelle 512
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add drave-core/src/main.rs drave-core/src/model.rs && git commit -q -m \"M1 dans le moteur : le bus de modulation (nouveauté ou valeur), et la persistance de D\n\nDRAVE_HEBB_MODULE accepte désormais « valeur » : eta est piloté pa … [3028 caractères tronqués]`
+
+  ```
+jour7 en file
+6.0792 · 20980353 événements/fenêtre · 402.9 tok/s
+[09/10 14:05:36] charge 4.63 · === chaîne structure terminée ===
+  ```
+
+- **bash** `{"command": "sleep 60; cd /tmp/campagne24 && tail -2 journal15.txt 2>/dev/null; tail -1 tr_m16_d512_masque25.log 2>/dev/null; ps -eo pid,etime,args | grep -E \"entrainer_moteur\" | grep -v grep | cut -c1-80", "description": "Verify jour7 started", "timeoutMs": 120000}`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "sleep 120; ls -la /tmp/campagne24/journal15.txt /tmp/campagne24/tr_m16_d512_masque25.log 2>/dev/null; pgrep -af \"jour7_echell[e]\" | head -2; pgrep -af \"entrainer_moteu[r]\" | head -2", "description": "Check jour7 start state", "timeoutMs": 180000}`
+
+  ```
+2206385 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add drave-core/src/main.rs drave-core/src/model.rs && git commit -q -m "M1 dans le moteur : le bus de modulation (nouveauté ou valeur), et la persistance de D  DRAVE_HEBB_MODULE accepte désormais « valeur » : eta est piloté par hd.modulateur, alimenté par l'AMÉLIORATION de la perte par rapport à sa moyenne courante, avec un jeton de retard. Le chemin PPL diffuse ce scalaire à toutes les couches, comme un noyau neuromodulateur.  Mesuré (adapter sur l'anglais, évaluer sur le français) : règle nue +5,2 %, nouveauté +20,4 %, VALEUR +15,3 %. Mieux que la nouveauté, toujours pire que rien — une valeur auto-référentielle récompense ce qui marche sur le domaine courant. La spécification qui en sort : le bus doit porter un signal EXTERNE (une cible), donc le moteur doit savoir faire tourner deux modèles et diffuser leur désaccord.  77 tests verts." && cat > /tmp/campagne24/jour7_echelle.sh <<'EOF' #!/bin/bash # jour7_echelle.sh — les deux dessins qui marchent, vérifiés à dim 512. # # La courbe du rapport (§ 5 quater) est établie à dim 384 : ÷4 pour +1 % (structure # innée), ÷7,8 pour +3,8 % (les deux axes appris). Tie
+… [5177 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sleep 60; ls -la /tmp/campagne24/tr_m16_d512_masque25.log 2>/dev/null || echo \"(m16 pas encore lancé)\"; tail -2 /tmp/campagne24/journal15.txt 2>/dev/null || echo \"(journal15 vide)\"", "description": "Check whether m16 started", "timeoutMs": 120000}`
+
+  ```
+(m16 pas encore lancé)
+(journal15 vide)
+  ```
+
+### 🤖 Assistant
+
+⏵ La garde de jour7 se bloquait sur elle-même — je la retire et relance
+
+- **bash** `{"command": "cd /tmp/campagne24 && for p in $(pgrep -f \"bash /tmp/campagne24/jour7_echelle.sh\"); do cmd=$(tr '\\0' ' ' < /proc/$p/cmdline 2>/dev/null); case \"$cmd\" in \"bash /tmp/campagne24/jour7_echelle.sh \"*) kill $p; echo \"arrêté $p\";; esac; done; python3 - <<'PY'\nimport pathlib\np = path … [984 caractères tronqués]`
+
+  ```
+arrêté 2206388
+garde remplacée
+  ```
+
+- **bash** `{"command": "sleep 90; ls -la /tmp/campagne24/tr_m16_d512_masque25.log 2>/dev/null | head -1; tail -2 /tmp/campagne24/journal15.txt 2>/dev/null; pgrep -af \"jour7_echell[e]|entrainer_moteu[r]\" | sed 's/\\(.\\{70\\}\\).*/\\1/' | head -3", "description": "Verify m16 training started", "timeoutMs": 15 … [5 caractères tronqués]`
+
+  ```
+2207125 bash -c cd /tmp/campagne24 && for p in $(pgrep -f "bash /tmp/c
+2207128 bash /tmp/campagne24/jour7_echelle.sh
+  ```
+
+- **bash** `{"command": "ps -o pid,stat,etime,args -p 2206385 2>/dev/null | tail -1 | cut -c1-60; for p in $(pgrep -f \"bash /tmp/campagne24/jour7_echelle.sh\"); do cmd=$(tr '\\0' ' ' < /proc/$p/cmdline 2>/dev/null); case \"$cmd\" in \"bash /tmp/campagne24/jour7_echelle.sh \"*) kill $p;; esac; done; sleep 1; py … [702 caractères tronqués]`
+
+  ```
+PID STAT     ELAPSED COMMAND
+garde supprimée
+[09/10 14:19:27] charge 2.13 · === dim 512 : les deux dessins qui marchent ===
+# CONNECTOME INNÉ : 25% des connexions, tirées une fois (graine 1) et jamais modifiées — 3.18 M connexions
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short | grep -v \"^ M journal\" | head -5; echo \"(rien au-dessus = arbre propre)\"; git log --oneline -5; echo \"=== résultats de la fenêtre en cours ===\"; tail -1 /tmp/campagne24/tr_m16_d512_masque25.log", "descriptio … [55 caractères tronqués]`
+
+  ```
+(rien au-dessus = arbre propre)
+ed9034e M1 dans le moteur : le bus de modulation (nouveauté ou valeur), et la persistance de D
+f9afaaf La courbe lecture-qualité, réponse finale : ÷4 pour +1 %, ÷8 pour +4 %, ÷15 pour +22 % si l'axe est imposé
+3609f07 Statuts d'expériences à jour : E1 et E3 faits, E2/E4 cadrées, et le pendant GPU du noyau de listes ajouté au plan
+5c6413f Nos modèles à décharges ne vont pas sur GPU : trop petits, et le noyau GPU est dense
+4878d81 M1 : le bus de valeur est implémenté, et la valeur auto-référentielle ne suffit pas
+=== résultats de la fenêtre en cours ===
+# CONNECTOME INNÉ : 25% des connexions, tirées une fois (graine 1) et jamais modifiées — 3.18 M connexions
+  ```
+
+### 🤖 Assistant
+
+⏵ Point de la fenêtre : courbe finale établie, M1 dans le moteur, vérification à l'échelle lancée
+
+**Le résultat qui répond à « quel modèle pour Drave ? »** — cinq modèles identiques par ailleurs (dim 384, 40 000 pas, même export), mesurés au protocole de record, paires/jeton pris à la **même fenêtre** pour être comparables :
+
+| modèle | ce qui est creux | perplexité | paires/jeton | lectures |
+|---|---|---:|---:|---:|
+| `m5_d384_dense` | rien (témoin) | **4,9959** | 21,1 M | — |
+| `m12` structure innée 25 % (aléatoire, figée) | poids, **imposés** | **5,0472** (+1,0 %) | 5,2 M | ÷4,1 |
+| `m7` k-WTA 25 % appris | activations, apprises | **5,1719** (+3,5 %) | 5,4 M | ÷3,9 |
+| **`m11` k-WTA + élagage 50 %, les DEUX appris** | **les deux, appris** | **5,1866** (+3,8 %) | **2,7 M** | **÷7,8** |
+| `m15` masque inné + k-WTA | les deux, dont un imposé | 6,0792 (+21,7 %) | **1,4 M** | ÷15,1 |
+
+**÷4 pour +1 % · ÷8 pour +4 % · ÷15 pour +22 % si un axe est imposé.** La réponse est une **courbe**, pas un chiffre — et le point de fonctionnement se choisit à la conception, ce qu'une architecture événementielle permet pour la première fois.
+
+**M1 est dans le moteur** (`DRAVE_HEBB_MODULE`) : un scalaire diffusé à toutes les couches, comme un noyau neuromodulateur, alimenté par l'amélioration de la perte. Mesuré sur le transfert A → B : règle nue +5,2 %, nouveauté +20,4 %, **valeur +15,3 %**. Mieux que la nouveauté, toujours pire que rien — parce qu'une valeur **auto-référentielle** récompense ce qui marche *sur le domaine courant*. La spécification qui en sort est nette : **le bus doit porter un signal externe**, donc le moteur doit savoir faire tourner **deux modèles et diffuser leur désaccord** — c'est cohérent avec notre seule mesure positive (la distillation, −13,8 %, un signal venu d'un autre modèle).
+
+**Et la réponse GPU** (question précédente) : nos modèles à décharges n'y vont pas, pour deux raisons indépendantes — plus grosses projections à **0,45-0,80 Mio** contre un seuil de **8 Mio**, et surtout le noyau GPU est un **produit dense** qui reçoit le vecteur d'activation complet : déporter une projection creuse **détruirait** ce que la parcimonie apporte. Il faudrait un noyau de **listes** sur la carte — pendant GPU exact du manque côté experts.
+
+**En cours** (chaîne `jour7`, fin prévue ~17 h 15) : les deux dessins qui marchent, **vérifiés à dim 512** — `m16` structure innée 25 % (3,18 M connexions tirées) et `m17` les deux axes appris, contre le témoin dense 512 (4,5686 · 34,4 M paires/jeton).
+
+Arbre propre, tout est committé (`ed9034e`), et l'objectif reste **actif** : la fenêtre de 24 h court jusqu'à ~21 h et la vérification à l'échelle tombe avant.
+
+
+## Tour 32
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, préremplissage par lots, modèle plus gros que la RAM. Poursuivre en parallèle le livrable du modèle nativement événementiel : entraîné ici, exécuté par Drave à logits vérifiés, découpé en unités réparties. Chaque affirmation porte sa mesure (perplexité, débit, octets et événements par jeton, RSS, écart entre nœuds) ET ses conditions (corpus, tokenizer du modèle, charge de fond) ; les manques constatés — embeddings/encodeurs, décodage spéculatif — sont consignés comme manques, pas comme résultats. Livrables : la file tools/campagne-benefices.sh exécutée et ses journaux, un rapport de synthèse par famille de tâches, et la poursuite du modèle événementiel."
+Round: 25/40
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /tmp/campagne24 && tail -1 tr_m16_d512_masque25.log 2>/dev/null; tail -1 tr_m17_d512_kwta25_elag50.log 2>/dev/null || echo \"(m17 en attente)\"; grep -E \"512\" journal15.txt 2>/dev/null | tail -3; date '+%H:%M'", "description": "Poll the dim-512 scale verification"}`
+
+  ```
+# CONNECTOME INNÉ : 25% des connexions, tirées une fois (graine 1) et jamais modifiées — 3.18 M connexions
+(m17 en attente)
+[09/10 14:19:27] charge 2.13 · === dim 512 : les deux dessins qui marchent ===
+14:21
+  ```
+
+### 🤖 Assistant
+
+⏵ Test du signal EXTERNE : modulateur lu depuis un fichier (NLL d'un enseignant)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/model.rs\")\ns = p.read_text()\ns = s.replace(\"\"\"    /// Vrai si le modulateur externe pilote `η` (DRAVE_HEBB_MODULE=valeur).\n    module_valeur: bool,\"\"\",\n\" … [2428 caractères tronqués]`
+
+  ```
+modulateur externe câblé
+VARS_LUES complétée
+test result: ok. 77 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && C=/tmp/campagne24; G=/home/stephane/Data13TB/stephane/modeles/gguf; timeout 900 ./drave-core/target/release/drave $G/deepseek-r1-distill-qwen-1.5b-q4_k_m.gguf --ppl $C/ids_0.5B-Q8.txt --limit 255 --ctx 256 --threads 12 --logits-bin / … [1093 caractères tronqués]`
+
+  ```
+logits exportés : /tmp/ens_A.bin — 254 positions × 151936 valeurs
+=== perplexité 47.4447 sur 254 tokens (0 événements, 25.7 s) ===
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 13, in <module>
+ValueError: operands could not be broadcast together with shapes (253,) (254,) 
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && /home/stephane/gpu-env/bin/python - <<'PY'\nimport numpy as np, struct\nb = open('/tmp/ens_A.bin','rb').read()\nvocab = struct.unpack_from('<i', b, 0)[0]; n = struct.unpack_from('<i', b, 4)[0]\nlg = np.frombuffer(b, dtype=np.float32, … [1614 caractères tronqués]`
+
+  ```
+enseignant : 254 jetons · NLL moyen 3.860 · modulateur min 0.25 max 3.00
+[hebb-diff] D sauvé dans /tmp/D_ens.bin : 4358144 valeurs
+=== perplexité 17.6287 sur 254 tokens (0 événements, 17.5 s) ===
+signal EXTERNE (enseignant) : sur B = 9.1511  [référence 8,3869 · règle nue 8,8246 · nouveauté 10,1034 · valeur propre 9,6674]
+  ```
+
+### 🤖 Assistant
+
+⏵ Signal externe mesuré : le meilleur des modulateurs, et toujours pire que rien
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/impulsion-pure-apprenant.md\")\ns = p.read_text()\nancre = \"\"\"**Ce que cela spécifie pour M1** : le bus doit porter un signal **externe** — une\ncible, une récompense, un e … [4018 caractères tronqués]`

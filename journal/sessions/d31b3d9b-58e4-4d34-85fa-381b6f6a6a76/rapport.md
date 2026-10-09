@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 29.0 h |
-| Tours | 31 |
-| Messages | 1146 |
-| Appels d'outils | 1094 |
+| Durée | 29.2 h |
+| Tours | 32 |
+| Messages | 1160 |
+| Appels d'outils | 1106 |
 | Fichiers touchés | 34 |
-| Commandes | 907 |
+| Commandes | 919 |
 | Sous-agents | 3 |
-| Commits | 94 |
+| Commits | 95 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -89,6 +89,8 @@
 **Tour 30** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1197 caractères tronqués]
 
 **Tour 31** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1197 caractères tronqués]
+
+**Tour 32** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1197 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1458,7 +1460,7 @@ En cours
 
 ### Tour 31 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1477 caractères tronqués]
 
-*9 appels d'outils.* Actions notables :
+*16 appels d'outils.* Actions notables :
 
 - bash — Harvest the combined structure+sparsity result
 - bash — Update experiment statuses in the docs
@@ -1468,10 +1470,50 @@ En cours
 - bash — Record the final reads-vs-quality curve
 - bash — Final verification of deliverables and state
 - bash — Commit M1 and queue the scale verification
+- bash — Verify jour7 started
+- bash — Check jour7 start state
+- bash — Check whether m16 started
+- bash — Fix the guard and relaunch jour7
+- bash — Verify m16 training started
+- bash — Remove the guard entirely and relaunch jour7
+- … et 1 autres
 
 **Synthèse produite :**
 
-⏵ Commit du bus de valeur, puis mise en file de la vérification à l'échelle 512
+⏵ Point de la fenêtre : courbe finale établie, M1 dans le moteur, vérification à l'échelle lancée
+
+**Le résultat qui répond à « quel modèle pour Drave ? »** — cinq modèles identiques par ailleurs (dim 384, 40 000 pas, même export), mesurés au protocole de record, paires/jeton pris à la **même fenêtre** pour être comparables :
+
+| modèle | ce qui est creux | perplexité | paires/jeton | lectures |
+|---|---|---:|---:|---:|
+| `m5_d384_dense` | rien (témoin) | **4,9959** | 21,1 M | — |
+| `m12` structure innée 25 % (aléatoire, figée) | poids, **imposés** | **5,0472** (+1,0 %) | 5,2 M | ÷4,1 |
+| `m7` k-WTA 25 % appris | activations, apprises | **5,1719** (+3,5 %) | 5,4 M | ÷3,9 |
+| **`m11` k-WTA + élagage 50 %, les DEUX appris** | **les deux, appris** | **5,1866** (+3,8 %) | **2,7 M** | **÷7,8** |
+| `m15` masque inné + k-WTA | les deux, dont un imposé | 6,0792 (+21,7 %) | **1,4 M** | ÷15,1 |
+
+**÷4 pour +1 % · ÷8 pour +4 % · ÷15 pour +22 % si un axe est imposé.** La réponse est une **courbe**, pas un chiffre — et le point de fonctionnement se choisit à la conception, ce qu'une architecture événementielle permet pour la première fois.
+
+**M1 est dans le moteur** (`DRAVE_HEBB_MODULE`) : un scalaire diffusé à toutes les couches, comme un noyau neuromodulateur, alimenté par l'amélioration de la perte. Mesuré sur le transfert A → B : règle nue +5,2 %, nouveauté +20,4 %, **valeur +15,3 %**. Mieux que la nouveauté, toujours pire que rien — parce qu'une valeur **auto-référentielle** récompense ce qui marche *sur le domaine courant*. La spécification qui en sort est nette : **le bus doit porter un signal externe**, donc le moteur doit savoir faire tourner **deux modèles et diffuser leur désaccord** — c'est cohérent avec notre seule mesure positive (la distillation, −13,8 %, un signal venu d'un autre modèle).
+
+**Et la réponse GPU** (question précédente) : nos modèles à décharges n'y vont pas, pour deux raisons indépendantes — plus grosses projections à **0,45-0,80 Mio** contre un seuil de **8 Mio**, et surtout le noyau GPU est un **produit dense** qui reçoit le vecteur d'activation complet : déporter une projection creuse **détruirait** ce que la parcimonie apporte. Il faudrait un noyau de **listes** sur la carte — pendant GPU exact du manque côté experts.
+
+**En cours** (chaîne `jour7`, fin prévue ~17 h 15) : les deux dessins qui marchent, **vérifiés à dim 512** — `m16` structure innée 25 % (3,18 M connexions tirées) et `m17` les deux axes appris, contre le témoin dense 512 (
+… [191 caractères tronqués]
+
+### Tour 32 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1477 caractères tronqués]
+
+*5 appels d'outils.* Actions notables :
+
+- bash — Poll the dim-512 scale verification
+- bash — Wire the external modulator file and build
+- bash — Compute the teacher's per-token modulator
+- bash — Run the external-signal experiment
+- bash — Record the external-signal result
+
+**Synthèse produite :**
+
+⏵ Signal externe mesuré : le meilleur des modulateurs, et toujours pire que rien
 
 ## 3. Travail accompli
 
@@ -1562,7 +1604,7 @@ En cours
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 867 autres
+- … et 879 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1690,7 +1732,7 @@ En cours
 
 ## 5. Erreurs rencontrées
 
-46 sorties en erreur ou divergentes. Les premières :
+47 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : ```  ### 🤖 Assistant  ⏵ **En transformers 5, `AutoModel` rend directement `Qwen2Model` (pas de `.model`). Je corrige le diagnostic.**  - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitH
 - **T2** : 3310393 bash -c pgrep -af "essai_decharge" | grep python | head; echo "--- logs ---"; tail -2 /tmp/ec_d192_lr3e3.log 2>/dev/null; tail -2 /tmp/ec_d192_lr1e3.log 2>/dev/null; echo "---"; ls -la /tmp/ec
@@ -1804,4 +1846,5 @@ En cours
 - Statuts d'expériences à jour : E1 et E3 faits, E2/E4 cadrées, et le pendant GPU du noyau de listes ajouté au plan" && echo ok
 - La courbe lecture-qualité, réponse finale : ÷4 pour +1 %, ÷8 pour +4 %, ÷15 pour +22 % si l'axe est imposé  Cinq modèles identiques par ailleurs (dim 384, 40 00
 - M1 dans le moteur : le bus de modulation (nouveauté ou valeur), et la persistance de D  DRAVE_HEBB_MODULE accepte désormais « valeur » : eta est piloté par hd.m
+- Signal externe mesuré : meilleur des modulateurs, et toujours pire que la règle nue  Le moteur lit maintenant un modulateur externe (DRAVE_HEBB_MODULATEUR_FICHI
 

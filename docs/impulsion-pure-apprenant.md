@@ -168,9 +168,37 @@ nouvelle. C'est le même piège, en plus doux.
 **Ce que cela spécifie pour M1** : le bus doit porter un signal **externe** — une
 cible, une récompense, un environnement — et non une statistique dérivée du modèle
 lui-même. C'est cohérent avec nos seules mesures positives : la **distillation**
-(−13,8 % sur un modèle routé) est un signal venu d'**un autre modèle**. Concrètement,
-cela veut dire que le moteur devrait savoir faire tourner **deux modèles** et
-diffuser leur désaccord — une fonctionnalité de moteur, pas un réglage.
+(−13,8 % sur un modèle routé) est un signal venu d'**un autre modèle**.
+
+### 5 quater. Le signal EXTERNE, mesuré — meilleur que les autres, et toujours insuffisant
+
+Le moteur sait maintenant lire un modulateur **externe**
+(`DRAVE_HEBB_MODULATEUR_FICHIER` : un flottant par pas). Le signal utilisé ici est
+**l'avantage d'un enseignant** (R1-distill-1,5 B, même tokenizer) sur le jeton
+observé, calculé à partir de ses logits exportés et rapporté à sa propre moyenne :
+quand l'enseignant trouve le jeton bien plus probable que l'élève, `η` monte.
+
+| modulation de `η` | perplexité sur B | écart à la référence |
+|---|---:|---:|
+| aucune (référence) | **8,3869** | — |
+| **règle nue** | **8,8246** | **+5,2 % — le meilleur résultat** |
+| signal **externe** (enseignant) | 9,1511 | +9,1 % |
+| valeur propre (amélioration de la perte) | 9,6674 | +15,3 % |
+| nouveauté | 10,1034 | +20,4 % |
+
+**Le signal externe est le meilleur des trois modulateurs — et il ne sauve pas la
+règle.** Toutes les modulations sont *pires* que ne pas moduler. C'est un résultat
+plus tranchant que le précédent, parce qu'il élimine l'explication facile : le
+problème **n'est pas la force ni le crédit de la mise à jour**, c'est **ce qui est
+appris**. Moduler le *taux* d'une règle qui accumule les statistiques de transition
+du domaine courant ne change pas la *nature* de ce qu'elle accumule.
+
+**Ce qu'il faudrait, et c'est maintenant précisément spécifié** : une règle
+**contrastive** — soustraire explicitement ce qui est propre au domaine, au lieu de
+moduler. Le verdict du dépôt le disait déjà (« `D -= η·(différentiel INTER-langue)` »),
+et notre décorrélation par moyenne courante était **trop lente** pour le tester
+(β = 0,01 sur 256 pas : inerte au chiffre près). C'est la prochaine expérience, et
+elle est peu coûteuse : un β réglable, puis une vraie paire de contextes.
 
 **Ce qui manque pour L3, en une phrase** : `D` est aujourd'hui un *ajout* appris en
 ligne ; il faut (i) le moduler (E7), (ii) le décorréler (E8), (iii) l'appliquer à un
