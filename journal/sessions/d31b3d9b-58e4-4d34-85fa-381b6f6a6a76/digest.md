@@ -15085,3 +15085,138 @@ ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add reports/rapport-campagne-benefices.md tools/mesure_fenetres.sh && git commit -q -m \"Parcimonie IMPOSÉE ou APPRISE : la réponse est mesurée, et elle est nette\n\nDeux modèles identiques par ailleurs (dim 384, mêmes pas, FFN e … [1074 caractères tronqués]`
+
+  ```
+67c13a6 Parcimonie IMPOSÉE ou APPRISE : la réponse est mesurée, et elle est nette
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\nvieux = \"\"\"| **modèles entraînés creux** | `m7_d384_kwta50` et `m7_d384_kwta25` (k-WTA appris) puis `m8_d384_route_c … [1233 caractères tronqués]`
+
+  ```
+ok
+     8192        0.10     oui     935.2  prompt 7963 jetons
+     8192        0.50     oui    1199.3  prompt 9224 jetons
+     8192        0.90     oui     954.1  prompt 8033 jetons
+  pas   8000 · perte 1.4119 · val 2.2478 bits/octet · 578 s
+  ```
+
+- **bash** `{"command": "sleep 580; cd /tmp/campagne24 && echo \"=== aiguille ===\"; tail -3 aiguille_long.log; echo \"=== kwta25 ===\"; tail -1 tr_m7_d384_kwta025.log; echo \"=== journal7 ===\"; tail -3 journal7.txt", "description": "Poll needle and kwta25", "timeoutMs": 620000}`
+
+  ```
+=== aiguille ===
+     8192        0.50     oui    1199.3  prompt 9224 jetons
+     8192        0.90     oui     954.1  prompt 8033 jetons
+    12288        0.10     oui    1814.8  prompt 11857 jetons
+=== kwta25 ===
+  pas  16000 · perte 1.3695 · val 2.1488 bits/octet · 1153 s
+=== journal7 ===
+[09/10 03:22:02] charge 21.13 · m7_d384_kwta050 : départ (k-WTA gardant 0.50)
+[09/10 04:16:27] charge 15.62 · m7_d384_kwta050 :   # meilleur point : pas 40000 · val 2.0205 bits/octet
+[09/10 04:16:27] charge 15.62 · m7_d384_kwta025 : départ (k-WTA gardant 0.25)
+  ```
+
+### 🤖 Assistant
+
+⏵ Mise en file de la journée : creux+distillé, et le test de sous-entraînement à 512
+
+- **write** `{"content": "#!/bin/bash\n# jour1_suite.sh — deux questions laissées ouvertes par la nuit.\n#\n# 1. CREUX **ET** DISTILLÉ. La nuit a montré que la parcimonie apprise ne coûte\n#    rien (§ 5 ter) et que la distillation porte le gain à l'échelle (§ 5 bis).\n#    Les deux leviers se cumulent-ils ? On  … [3362 caractères tronqués]`
+
+  ```
+<path>/tmp/campagne24/jour1_suite.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash -n /tmp/campagne24/jour1_suite.sh && setsid nohup bash /tmp/campagne24/jour1_suite.sh > /tmp/campagne24/jour1_console.log 2>&1 < /dev/null & sleep 2; ps -eo pid,args | grep -E \"jour1_suit[e]\" | head -1", "description": "Queue  … [19 caractères tronqués]`
+
+  ```
+1264054 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash -n /tmp/campagne24/jour1_suite.sh && setsid nohup bash /tmp/campagne24/jour1_suite.sh > /tmp/campagne24/jour1_console.log 2>&1 < /dev/null & sleep 2; ps -eo pid,args | grep -E "jour1_suit[e]" | head -1
+  ```
+
+- **get_goal** `{}`
+
+  ```
+{"goal":{"id":"goal-b5c7212b-5f46-4784-9b76-8d9b5cba23b4","revision":4,"objective":"Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, préremplissage par lots, modèle plus gros que la RAM. Poursuivre en parallèle le livrable du modèle nativement événementiel : entraîné ici, exécuté par Drave à logits vérifiés, découpé en unités réparties. Chaque affirmation porte sa mesure (perplexité, débit, octets et événements par jeton, RSS, écart entre nœuds) ET ses conditions (corpus, tokenizer du modèle, charge de fond) ; les manques constatés — embeddings/encodeurs, décodage spéculatif — sont consignés comme manques, pas comme résultats. Livrables : la file tools/campagne-benefices.sh exécutée et ses journaux, un rapport de synthèse par famille de tâches, et la poursuite du modèle événementiel.","phase":"active","roundsStarted":20,"maxGoalRounds":40},"activation":"armed"}
+  ```
+
+### 🤖 Assistant
+
+⏵ Mise en place d'une sentinelle qui me réveillera à la fin des chaînes de nuit
+
+- **bash** `{"command": "cd /tmp/campagne24 && until grep -q \"chaîne creux terminée\" journal7.txt 2>/dev/null; do sleep 120; done; echo \"=== nuit3 (creux) terminée ===\"; tail -20 journal7.txt; echo; echo \"=== aiguille longue portée ===\"; tail -8 aiguille_long.log; echo; echo \"=== kwta25 vs témoin ===\";  … [294 caractères tronqués]`
+
+  ```
+started background job bash-6
+  ```
+
+- **bash** `{"command": "sleep 570; cd /tmp/campagne24 && tail -2 tr_m7_d384_kwta025.log; tail -2 aiguille_long.log; grep -c \"chaîne\" journal7.txt", "description": "Check kwta25 and needle progress", "timeoutMs": 600000}`
+
+  ```
+pas  20000 · perte 1.3801 · val 2.1374 bits/octet · 1439 s
+  pas  24000 · perte 1.3426 · val 2.1128 bits/octet · 1725 s
+    12288        0.10     oui    1814.8  prompt 11857 jetons
+code 124
+0
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash -c 'timeout 10800 /home/stephane/gpu-env/bin/python -u tools/aiguille.py models/Qwen2.5-0.5B-Q8_0.gguf 12288 0.5,0.9 --n 24 --threads 12 --lot 256 >> /tmp/campagne24/aiguille_long.log 2>&1; echo \"code $?\" >> /tmp/campagn … [1627 caractères tronqués]`
+
+  ```
+aiguille 12288 profondeurs 50/90 relancée
+rapport mis à jour
+  ```
+
+- **bash** `{"command": "sleep 580; cd /tmp/campagne24 && tail -1 tr_m7_d384_kwta025.log; tail -2 aiguille_long.log; tail -1 journal7.txt", "description": "Poll kwta25 and needle", "timeoutMs": 610000}`
+
+  ```
+pas  32000 · perte 1.2905 · val 2.0908 bits/octet · 2297 s
+  lot 256 · 24 jetons de réponse · GPU non · attention COMPLÈTE
+ contexte  profondeur  trouvé  secondes  détail
+[09/10 04:16:27] charge 15.62 · m7_d384_kwta025 : départ (k-WTA gardant 0.25)
+  ```
+
+- **bash** `{"command": "sleep 580; cd /tmp/campagne24 && tail -3 journal7.txt; ls -la fenetres_m7_d384_kwta025*.log 2>/dev/null | head -3", "description": "Check the kwta chain results", "timeoutMs": 610000}`
+
+  ```
+[09/10 05:05:35] charge 22.58 · m7_d384_kwta025-topk500 : PPL 5.8131 · 168334222 événements/fenêtre
+[09/10 05:05:41] charge 22.53 · m7_d384_kwta025-topk250 : PPL 5.1719 · 84164640 événements/fenêtre
+[09/10 05:05:41] charge 22.53 · === chaîne creux terminée ===
+-rw-r--r--. 1 stephane stephane 1171  9 oct 05:05 fenetres_m7_d384_kwta025-sans.log
+-rw-r--r--. 1 stephane stephane 1301  9 oct 05:05 fenetres_m7_d384_kwta025-topk250.log
+-rw-r--r--. 1 stephane stephane 1313  9 oct 05:05 fenetres_m7_d384_kwta025-topk500.log
+  ```
+
+- **bash** `{"command": "cd /tmp/campagne24 && for f in fenetres_m7_d384_kwta025-sans.log fenetres_m7_d384_kwta025-topk500.log fenetres_m7_d384_kwta025-topk250.log; do echo \"$(basename $f .log) : $(grep -oE 'PPL moyenne \\(log\\) sur [0-9]+ fenêtres : [0-9.]+' $f | tail -1)\"; done; echo \"=== journal7 complet … [115 caractères tronqués]`
+
+  ```
+fenetres_m7_d384_kwta025-sans : PPL moyenne (log) sur 8 fenêtres : 6.4282
+fenetres_m7_d384_kwta025-topk500 : PPL moyenne (log) sur 8 fenêtres : 5.8131
+fenetres_m7_d384_kwta025-topk250 : PPL moyenne (log) sur 8 fenêtres : 5.1719
+=== journal7 complet (nuit3) ===
+[09/10 05:04:29] charge 16.86 · m7_d384_kwta025 :   # meilleur point : pas 36000 · val 2.0770 bits/octet
+[09/10 05:04:29] charge 16.86 · m7_d384_kwta050 → /tmp/m7_d384_kwta050.gguf : Q8_0 écrit
+[09/10 05:04:29] charge 16.86 · m7_d384_kwta025 → /tmp/m7_d384_kwta025.gguf : Q8_0 écrit
+[09/10 05:05:03] charge 20.00 · m7_d384_kwta050-sans : PPL 5.1858 · 336313370 événements/fenêtre
+[09/10 05:05:11] charge 20.48 · m7_d384_kwta050-topk500 : PPL 5.0606 · 168455623 événements/fenêtre
+[09/10 05:05:16] charge 21.00 · m7_d384_kwta050-topk250 : PPL 5.7666 · 84226617 événements/fenêtre
+[09/10 05:05:28] charge 22.11 · m7_d384_kwta025-sans : PPL 6.4282 · 335265738 événements/fenêtre
+[09/10 05:05:35] charge 22.58 · m7_d384_kwta025-topk500 : PPL 5.8131 · 168334222 événements/fenêtre
+[09/10 05:05:41] charge 22.53 · m7_d384_kwta025-topk250 : PPL 5.1719 · 84164640 événements/fenêtre
+[09/10 05:05:41] charge 22.53 · === chaîne creux terminée ===
+  ```
+
+### 🤖 Assistant
+
+⏵ Résultat complet : chaque modèle est meilleur dans SON régime — le tableau à trois modèles
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\ndebut = s.index(\"### 5 ter. La parcimonie : IMPOSÉE ou APPRISE ?\")\nfin = s.index(\"---\\n\\n## 7. Répartir par EXPER … [4095 caractères tronqués]`
+
+  ```
+ok
+verdict mis à jour
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add reports/rapport-campagne-benefices.md && git commit -q -m \"Parcimonie apprise : le tableau complet à trois modèles, et la recette qui en sort\n\nTrois modèles identiques par ailleurs, un témoin et deux entraînés creux (50 %  … [893 caractères tronqués]`

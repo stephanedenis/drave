@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 19.2 h |
+| Durée | 19.9 h |
 | Tours | 27 |
-| Messages | 903 |
-| Appels d'outils | 867 |
-| Fichiers touchés | 28 |
-| Commandes | 701 |
+| Messages | 916 |
+| Appels d'outils | 880 |
+| Fichiers touchés | 29 |
+| Commandes | 712 |
 | Sous-agents | 3 |
-| Commits | 54 |
+| Commits | 55 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -1270,7 +1270,7 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 
 ### Tour 27 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1477 caractères tronqués]
 
-*258 appels d'outils.* Actions notables :
+*271 appels d'outils.* Actions notables :
 
 - bash — Check the full state
 - bash — Measure the distilled d384 with the correct protocol
@@ -1286,11 +1286,11 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - bash — Read parcimonie, contexte, lot steps
 - bash — Inspect batch2 script
 - bash — Read batch2 journal and latency map
-- … et 226 autres
+- … et 239 autres
 
 **Synthèse produite :**
 
-⏵ Résultat décisif : la parcimonie apprise ne coûte rien à 50 %, l'imposée coûte 6 %
+⏵ Résultat complet : chaque modèle est meilleur dans SON régime — le tableau à trois modèles
 
 ## 3. Travail accompli
 
@@ -1326,6 +1326,7 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 | `/tmp/campagne24/nuit4_route_creux.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mesure_lot_disque.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/carte_latence.sh` | 1 | 1 |
+| `/tmp/campagne24/jour1_suite.sh` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -1375,7 +1376,7 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 661 autres
+- … et 672 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1503,7 +1504,7 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 
 ## 5. Erreurs rencontrées
 
-38 sorties en erreur ou divergentes. Les premières :
+39 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : ```  ### 🤖 Assistant  ⏵ **En transformers 5, `AutoModel` rend directement `Qwen2Model` (pas de `.model`). Je corrige le diagnostic.**  - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitH
 - **T2** : 3310393 bash -c pgrep -af "essai_decharge" | grep python | head; echo "--- logs ---"; tail -2 /tmp/ec_d192_lr3e3.log 2>/dev/null; tail -2 /tmp/ec_d192_lr1e3.log 2>/dev/null; echo "---"; ls -la /tmp/ec
@@ -1577,4 +1578,5 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - Rapport du modèle : la courbe d'échelle 256/384/512, et le routage qui s'inverse  Trois paires entraînées au même protocole, mesurées au protocole de record : l
 - Spéculatif : c'est le RAPPORT DE COÛT qui décide, et il est minimal sur un modèle plus gros que la RAM  Troisième paire mesurée par le moteur — un brouillon min
 - Parcimonie IMPOSÉE ou APPRISE : la réponse est mesurée, et elle est nette  Deux modèles identiques par ailleurs (dim 384, mêmes pas, FFN en Q8 pour que le chemi
+- Parcimonie apprise : le tableau complet à trois modèles, et la recette qui en sort  Trois modèles identiques par ailleurs, un témoin et deux entraînés creux (50
 
