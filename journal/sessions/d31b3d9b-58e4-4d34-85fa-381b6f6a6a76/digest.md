@@ -13388,3 +13388,9 @@ délibéré : tous les outils d'analyse du dépôt (`premiere_couche_semantique.
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add drave-core/src/main.rs tools/entrainer_moteur.py tools/exporter_gguf.py && git commit -q -m \"Instrument : la convention SentencePiece nommée, le k-WTA appris, la FFN en Q8\n\nTrois corrections nées de la campagne, chacune po … [1220 caractères tronqués]`
+
+  ```
+e87e37f Instrument : la convention SentencePiece nommée, le k-WTA appris, la FFN en Q8
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/mesure_fenetres.sh tools/speculatif_moteur.py tools/trace_gpu.py && git commit -q -m \"Deux harnais qui manquaient : le protocole 8×128 écrit, l'acceptation mesurée par le moteur\n\nmesure_fenetres.sh — le protocole de  … [921 caractères tronqués]`
