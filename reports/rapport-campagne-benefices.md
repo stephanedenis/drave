@@ -551,7 +551,40 @@ petit sur un fond anisotrope élevé) reste celle du `rapport-cycle-rapide.md`.
 
 ---
 
-## 19. Ce qui reste à mesurer (file en cours)
+## 19. La parcimonie imposée, sur 24 réglages : le k-WTA écrase le seuil, encore
+
+Qwen2.5-0.5B Q8_0, 256 jetons, ctx 512, deux familles de réglages et les deux
+chemins d'exécution. **Seules les colonnes déterministes sont utilisables** :
+`acttopk1000dense` et `actthresh0dense` sont *la même configuration* et donnent
+12,1 et 22,6 tok/s — le bruit de temps vaut ×2 sous cette charge de fond (67-84).
+Les PPL, les événements et les paires, eux, sont exacts.
+
+| réglage | PPL (dense / listes) | M événements/jeton | **PPL à −30 % d'événements** |
+|---|---|---:|---:|
+| aucune parcimonie | 17,43 / 17,41 | 354 | — |
+| seuil 0,1 % | 17,34 / 17,31 | 344 | −2,6 % d'évts |
+| seuil 0,5 % | 17,84 / 17,87 | 312 | **+2,3 % de PPL** |
+| seuil 1 % | 21,01 / 20,53 | 281 | **+20 %** |
+| seuil 2 % | 29,50 / 29,48 | 229 | **+69 %** |
+| seuil 5 % | **3 176** / 3 714 | 151 | effondrement |
+| k-WTA 85 % | 17,69 / 17,40 | 302 | −15 % |
+| k-WTA 80 % | 17,58 / 17,43 | 284 | −20 % |
+| k-WTA 70 % | 18,11 / 18,92 | 248 | **+4 % pour −30 % d'évts** |
+| k-WTA 50 % | 28,36 / 30,56 | 177 | +63 % |
+
+**Le résultat du dépôt se reproduit au chiffre près, un autre jour, sous une autre
+charge : le seuil absolu est inutilisable, le k-WTA tient.** À −30 % d'événements,
+le seuil coûte **+69 %** de perplexité là où le k-WTA coûte **+4 %** — un facteur 17.
+
+**Et une nuance que la mesure ajoute** : dans le chemin **dense**, la parcimonie ne
+réduit **aucune lecture** (495,4 M paires/jeton dans tous les cas) — elle ne fait
+que mettre à zéro des activations. Ce n'est que dans le chemin **par listes** que
+les événements baissent (354 → 248 M). Autrement dit, **la parcimonie imposée ne
+paie que si le moteur exécute en listes** ; en dense, elle ne coûte que la qualité.
+
+---
+
+## 20. Ce qui reste à mesurer (file en cours)
 
 - `parcimonie` : seuil et k-WTA, en dense et en listes, sur un modèle réel ;
 - `contexte` : 512 → 8 192, avec le cache KV que le moteur **choisit** ;

@@ -10092,3 +10092,93 @@ FIN
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"reports/rapport-campagne-benefices.md\"; s=open(p).read()\n\n# 1. La ligne codestral, corrigée par la mesure valide\ns = s.replace('''| codestral-22B Q4_K_M | **35 657** ⚠️ | — | — | 63,6 Go | 12,7 Go | tokenize … [4368 caractères tronqués]`
+
+  ```
+ajouté
+baeb2c6 Deux vérifications : le codestral corrigé donne 117,9 — et le résultat sémantique publié SURVIT
+  ```
+
+### 🤖 Assistant
+
+⏵ Deux vérifications livrées : codestral corrigé, et **le résultat publié survit** au correctif d'échelle
+
+## 1. Codestral, avec un tokenizer juste : 117,91
+
+Le chiffre invalide (35 657) est remplacé : **117,91 de perplexité** sur 63 jetons, soit **1,797 bit/octet** — contre **0,983** pour un Qwen2.5-0.5B sur le même texte.
+
+**Un modèle de 22 milliards de paramètres est donc 1,8× pire qu'un 0,5 B sur de la prose**, parce qu'il a été entraîné pour du code. Le décalage de tâche était réel — il n'était simplement pas mesurable tant que le tokenizer mangeait les espaces. Trois hypothèses, deux réfutées, la troisième corrigée : c'est la porte Mistral qui a innocenté le moteur, et le correctif SentencePiece qui a donné le vrai chiffre.
+
+## 2. La bande sémantique 10–15 **survit** au correctif
+
+C'était la vraie question de correction : le résultat publié avait été calculé avec un lecteur qui ignorait l'échelle par enregistrement. Caches **neufs** des deux côtés, 398 langues, article 1 contre article 2 :
+
+| couche | ancienne lecture | **échelle corrigée** |
+|---|---:|---:|
+| 0 | +0,0002 | **+0,0030** |
+| **13** | **+0,0344** | **+0,0395** |
+| 15 | — | +0,0326 |
+
+**Le plateau 10–15 tient, le pic reste à la couche 13**, et il est même légèrement plus marqué. Ce qui change : la couche 0 n'est plus « exactement nulle » — l'échelle par enregistrement n'est pas uniforme selon les couches, et son omission écrasait différentiellement les premières.
+
+**C'est le premier résultat publié du dépôt revérifié après un correctif de lecteur — et il survit.** La conclusion du `rapport-cycle-rapide.md` reste debout.
+
+## Où en est le reste
+
+La parcimonie déroule (k-WTA 800 → 17,43 ; 700 → 18,11 ; seuil 2 % → 29,5, la hiérarchie du dépôt se reproduit), la distillation d384 est à 36 000/40 000 (val 1,8345, encore meilleure), le gpt-oss court et la variante « ancienne lecture » de la sémantique tournent, et le plan de nuit a enchaîné sur le **dim 512**.
+
+
+## Tour 25
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, préremplissage par lots, modèle plus gros que la RAM. Poursuivre en parallèle le livrable du modèle nativement événementiel : entraîné ici, exécuté par Drave à logits vérifiés, découpé en unités réparties. Chaque affirmation porte sa mesure (perplexité, débit, octets et événements par jeton, RSS, écart entre nœuds) ET ses conditions (corpus, tokenizer du modèle, charge de fond) ; les manques constatés — embeddings/encodeurs, décodage spéculatif — sont consignés comme manques, pas comme résultats. Livrables : la file tools/campagne-benefices.sh exécutée et ses journaux, un rapport de synthèse par famille de tâches, et la poursuite du modèle événementiel."
+Round: 18/40
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "date; echo \"=== sémantique ===\"; tail -2 /tmp/campagne24/journal11.txt; echo \"=== gpt-oss court ===\"; tail -1 /tmp/campagne24/journal12.txt; echo \"=== parcimonie ===\"; tail -2 /tmp/campagne24/journal.txt; echo \"=== batch2/latence ===\"; tail -2 /tmp/campagne24/journal2.txt 2>/dev … [184 caractères tronqués]`
+
+  ```
+jeu 08 oct 2026 23:55:28 EDT
+=== sémantique ===
+[08/10 23:52:57] corrigée : 59 lignes
+[08/10 23:52:57] === sémantique ANCIENNE lecture, caches neufs ===
+=== gpt-oss court ===
+[08/10 23:37:19] === gpt-oss-120B, fenêtre COURTE (la passe de 256 jetons a expiré à 90 min) ===
+=== parcimonie ===
+[08/10 23:55:22] charge 67.20 · parcimonie/acttopk500push : PPL 30.5561 · événements 45208166947 · 9.6 tok/s
+[08/10 23:55:22] charge 67.20 · --- étape contexte ---
+=== batch2/latence ===
+=== nuit ===
+[08/10 23:50:21] charge 102.92 · distillation terminée :   # meilleur point : pas 36000 · val 1.9088 bits/octet
+  pas  12000 · perte 1.2444 · val 2.0140 bits/octet · 996 s
+  ```
+
+- **bash** `{"command": "cd /tmp/campagne24 && /home/stephane/gpu-env/bin/python - <<'PY'\nimport glob, re, os\nRE_PPL = re.compile(r\"perplexité ([0-9.]+) sur (\\d+) tokens \\(([0-9]+) événements\")\nRE_TS = re.compile(r\"([0-9.]+) tok/s effectifs\")\nRE_PAIRES = re.compile(r\"total ([0-9.]+) M\")\nlignes = [] … [749 caractères tronqués]`
+
+  ```
+réglage                                  PPL  M évts/jeton  M paires/jet   tok/s
+actthresh0_001dense                  17.3381         0.000         495.4    19.5
+actthresh0_001push                   17.3102       343.812         480.0     9.8
+actthresh0_005dense                  17.8401         0.000         495.4    23.3
+actthresh0_005push                   17.8678       312.039         448.2     8.1
+actthresh0_01dense                   21.0082         0.000         495.4    15.4
+actthresh0_01push                    20.5332       280.517         416.7    10.9
+actthresh0_02dense                   29.4957         0.000         495.4    13.7
+actthresh0_02push                    29.4763       229.242         365.4     8.3
+actthresh0_05dense                 3176.2253         0.000         495.4    14.0
+actthresh0_05push                  3713.5481       151.224         287.4     8.3
+actthresh0dense                      17.4315         0.000         495.4    22.6
+actthresh0push                       17.4084       354.345         490.5    10.5
+acttopk1000dense                     17.4315         0.000         495.4    12.1
+acttopk1000push                      17.4084       354.345        
+… [743 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le balayage de parcimonie a rendu : 24 configurations, et le k-WTA écrase le seuil (encore)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"reports/rapport-campagne-benefices.md\"; s=open(p).read()\najout = '''## 19. La parcimonie imposée, sur 24 réglages : le k-WTA écrase le seuil, encore\n\nQwen2.5-0.5B Q8_0, 256 jetons, ctx 512, deux familles de  … [3085 caractères tronqués]`

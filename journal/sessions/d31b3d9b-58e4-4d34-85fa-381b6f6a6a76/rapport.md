@@ -6,13 +6,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
 | Durée | 14.7 h |
-| Tours | 24 |
-| Messages | 622 |
-| Appels d'outils | 592 |
+| Tours | 25 |
+| Messages | 627 |
+| Appels d'outils | 595 |
 | Fichiers touchés | 21 |
-| Commandes | 470 |
+| Commandes | 473 |
 | Sous-agents | 3 |
-| Commits | 38 |
+| Commits | 39 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -75,6 +75,8 @@
 **Tour 23** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1197 caractères tronqués]
 
 **Tour 24** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1197 caractères tronqués]
+
+**Tour 25** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1197 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1148,7 +1150,43 @@ Reste en cours : la parcimonie (les seuils absolus s'effondrent comme le dépôt
 
 **Synthèse produite :**
 
-⏵ Le codestral corrigé donne 117,9 — et la sémantique corrigée a rendu
+⏵ Deux vérifications livrées : codestral corrigé, et **le résultat publié survit** au correctif d'échelle
+
+\## 1. Codestral, avec un tokenizer juste : 117,91
+
+Le chiffre invalide (35 657) est remplacé : **117,91 de perplexité** sur 63 jetons, soit **1,797 bit/octet** — contre **0,983** pour un Qwen2.5-0.5B sur le même texte.
+
+**Un modèle de 22 milliards de paramètres est donc 1,8× pire qu'un 0,5 B sur de la prose**, parce qu'il a été entraîné pour du code. Le décalage de tâche était réel — il n'était simplement pas mesurable tant que le tokenizer mangeait les espaces. Trois hypothèses, deux réfutées, la troisième corrigée : c'est la porte Mistral qui a innocenté le moteur, et le correctif SentencePiece qui a donné le vrai chiffre.
+
+\## 2. La bande sémantique 10–15 **survit** au correctif
+
+C'était la vraie question de correction : le résultat publié avait été calculé avec un lecteur qui ignorait l'échelle par enregistrement. Caches **neufs** des deux côtés, 398 langues, article 1 contre article 2 :
+
+| couche | ancienne lecture | **échelle corrigée** |
+|---|---:|---:|
+| 0 | +0,0002 | **+0,0030** |
+| **13** | **+0,0344** | **+0,0395** |
+| 15 | — | +0,0326 |
+
+**Le plateau 10–15 tient, le pic reste à la couche 13**, et il est même légèrement plus marqué. Ce qui change : la couche 0 n'est plus « exactement nulle » — l'échelle par enregistrement n'est pas uniforme selon les couches, et son omission écrasait différentiellement les premières.
+
+**C'est le premier résultat publié du dépôt revérifié après un correctif de lecteur — et il survit.** La conclusion du `rapport-cycle-rapide.md` reste debout.
+
+\## Où en est le reste
+
+La parcimonie déroule (k-WTA 800 → 17,43 ; 700 → 18,11 ; seuil 2 % → 29,5, la hiérarchie du dépôt se reproduit), la distillation d384 est à 36 000/40 000 (val 1,8345, encore meilleure), le gpt-oss court et la variante « ancienne lecture » de la sémantique tournent, et le plan de nuit a enchaîné sur le **dim 512**.
+
+### Tour 25 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1477 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Check all pending work
+- bash — Extract the sparsity sweep results
+- bash — Record the sparsity sweep results
+
+**Synthèse produite :**
+
+⏵ Le balayage de parcimonie a rendu : 24 configurations, et le k-WTA écrase le seuil (encore)
 
 ## 3. Travail accompli
 
@@ -1226,7 +1264,7 @@ Reste en cours : la parcimonie (les seuils absolus s'effondrent comme le dépôt
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 430 autres
+- … et 433 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1412,4 +1450,5 @@ Reste en cours : la parcimonie (les seuils absolus s'effondrent comme le dépôt
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="reports/rapport-campagne-benefices.md"; s=open(p).read() s = s.replace('''| gpt-oss-12
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="reports/rapport-campagne-benefices.md"; s=open(p).read() deb = s.index("## 5. Les modè
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="reports/rapport-campagne-benefices.md"; s=open(p).read()  # 1. La ligne codestral, cor
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="reports/rapport-campagne-benefices.md"; s=open(p).read() ajout = '''## 19. La parcimon
 
