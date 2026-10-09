@@ -331,6 +331,21 @@ if [ -x tools/porte-flux.sh ]; then
     fi
 fi
 
+# Famille MISTRAL : aucune porte ne la couvrait, et c'est ce qui a rendu les
+# 35 657 de perplexité de codestral-22B ininterprétables pendant la campagne. La
+# porte fabrique un Mistral minuscule ENTRAÎNÉ (des poids aléatoires rendent des
+# logits quasi uniformes, sur lesquels une corrélation ne mesure rien) et
+# confronte le moteur à la référence PyTorch sur les mêmes poids quantifiés.
+if [ "$RAPIDE" != "1" ]; then
+    sortie_mistral=$(timeout 900 tools/porte-mistral.sh 2>&1)
+    code_mistral=$?
+    printf '%s\n' "$sortie_mistral"
+    if [ "$code_mistral" != "0" ]; then
+        printf "  %-42s %s  \u274c\n" "porte Mistral (code $code_mistral)" "échec"
+        ECHEC=1
+    fi
+fi
+
 echo ""
 [ "$ECHEC" = 0 ] && echo "toutes les portes sont vertes" || echo "AU MOINS UNE PORTE A DIVERGÉ"
 exit $ECHEC
