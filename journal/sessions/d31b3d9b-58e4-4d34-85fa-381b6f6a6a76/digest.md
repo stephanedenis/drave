@@ -19617,3 +19617,222 @@ protocole, réglages, ou contexte : il a dit pourquoi de son côté.");
 ⏵ C1b : conception précise consignée (points d'insertion exacts) pour le prochain round
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/sprint-cerveau.md\")\ns = p.read_text()\nancre = \"\"\"## Prochaines étapes (dans l'ordre)\n\n1. **C1b — pilote multi-régions** : `--topologie F --ppl-reparti` doit exécuter l … [4452 caractères tronqués]`
+
+  ```
+conception C1b consignée
+poussé
+  ```
+
+### 🤖 Assistant
+
+⏵ C1a livrée et vérifiée, C1b conçue sur le code — le sprint continue
+
+**C1a — le descripteur de topologie est en place** (`drave-core/src/topologie.rs`, 8 tests, **85 tests au total, tous verts**) :
+
+- **JSON minimal analysé à la main** — le crate reste *std seul, sans dépendance*, comme le dépôt l'exige ;
+- **validation stricte**, chaque refus avec son message et son **code de sortie** : trou de couverture, recouvrement de couches, identifiant dupliqué, lien orphelin, lien réflexif, **cycle** (refusé tant que la récurrence C2 n'existe pas), clé inconnue, mode de lien inconnu ;
+- **ordre d'exécution** par tri topologique de Kahn, et détection **chaîne *vs* graphe** — la chaîne étant le cas de non-régression ;
+- la commande passe **avant le chemin du modèle** : un descripteur de régions ne décrit pas des poids, et exiger un GGUF pour lire un graphe ferait mentir la commande.
+
+Vérifié en direct :
+
+```
+$ drave --topologie topo_chaine.json    → CHAÎNE · 2 régions · plan en 2 étapes
+$ drave --topologie topo_y.json         → GRAPHE · 3 régions · délai déclaré affiché
+$ drave --topologie topo_trou.json      → refus : « couche 12 n'est portée par aucune région » (code 3)
+```
+
+**C1b — la conception est relevée sur le code, pas devinée.** La découverte qui rend le relais tractable : **le protocole transmet déjà la plage de couches dans la trame** (`f.debut`, `f.fin`) — le découpage voyage avec le flux, il n'y a rien à inventer côté format. Ce qui manque, c'est qu'un nœud du **milieu** transmette à son successeur au lieu de répondre à son appelant. Les points d'insertion exacts sont consignés dans `docs/sprint-cerveau.md` : `run_serveur_flux` après `mdl.forward` (main.rs:3347), `run_ppl_reparti` (main.rs:3605), deux options côté nœud (`--relais`, `--region`) et deux accesseurs à ajouter. **Le retour se fait de proche en proche**, donc le pilote n'a pas à connaître le nombre de relais.
+
+Le protocole de porte est écrit : référence un seul processus · deux régions (non-régression, **0,00e0**) · **trois régions sur trois instances** (pilote + deux nœuds en relais) égales à la référence · puis les mêmes derrière le **relais de latence** — la perplexité ne doit pas bouger, seul le temps doit changer.
+
+Et la limite est dite : les régions **non contiguës** et les **entrées multiples** (un graphe en Y qui s'exécute vraiment) demandent deux plages disjointes dans un même processus — c'est **C2**, pas C1.
+
+Tout est committé et poussé sur `stephanedenis/drave` (privé) ; le sprint continue en autonomie, avec l'état du sprint tenu à jour dans `docs/sprint-cerveau.md` pour rester resumable.
+
+
+## Tour 37
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Sprint « cerveau complet » en autonomie jusqu'au 10 octobre 9 h (HAE) : implémenter, avec portes mesurées, les trois premières capacités du plan docs/plan-cerveau-complet.md — C1 graphe de régions (descripteur de topologie, validateur de DAG, ordonnanceur par dépendances, pilote multi-nœuds ; porte : un graphe linéaire doit rendre des logits identiques au bit près et un découpage à trois régions doit égaler le modèle d'un seul tenant), C12 trace globale horodatée et rejeu exact (porte : rejeu == exécution, 0,00e0), C5 bus de modulation multi-canaux (porte : canal nul ⇒ sortie inchangée). Chaque capacité livrée avec son invariant vérifié, ses tests, sa mesure et sa documentation ; l'état d'avancement est écrit dans docs/sprint-cerveau.md à chaque round pour être resumable. Ne rien casser : les 23 portes du dépôt et les 77 tests doivent rester verts, et le profil release reste le binaire de mesure."
+Round: 1/40
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && sed -n '3625,3650p' src/main.rs", "description": "See how the driver decodes the reply"}`
+
+  ```
+t_pair += horloge.elapsed().as_secs_f64();
+        octets_recus += TAILLE_TETE as u64 + rep.octets_corps as u64;
+        // Une réponse de pair hostile ne doit ni tuer le client ni être prise
+        // pour un résultat : hors lot, elle n'était pas vérifiée du tout — un
+        // vecteur de 895 canaux passait en silence et affichait une perplexité de
+        // 2,76e8 comme si c'en était une (relecture adversariale).
+        if rep.mode != mode {
+            eprintln!("[flux] le nœud moteur a répondu en mode {} alors que la demande \
+était en mode {mode} — pair incompatible ? Rien n'a été calculé.", rep.mode);
+            std::process::exit(1);
+        }
+        // Le pair rend l'état BRUT de SA dernière couche : `cachés` canaux, ou
+        // `hc × cachés` pour un modèle à hyper-connexions (c'est `norme_finale`
+        // qui réduit, une seule fois, sur le nœud qui possède la tête).
+        let hc_mult = mdl.hc.as_ref().map(|v| v[0].0.hc).unwrap_or(1);
+        let largeur_etat = mdl.cfg.hidden * hc_mult;
+        if rep.mode == MODE_DENSE && rep.n != mdl.cfg.hidden && rep.n != largeur_etat {
+            eprintln!("[flux] le nœud moteur a renvoyé {} canaux pour {} (ou {}) \
+attendu
+… [499 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && sed -n '3209,3237p' src/main.rs | grep -nE \"couches|load|Model|partiel|debut|fin\" ; grep -n \"fn load_partiel\\b\" -A 8 src/model.rs | head -12", "description": "See how the node loads its layer range"}`
+
+  ```
+2:    if opt.tete_partielle {
+3:        eprintln!("[plage] `--tete-partielle` est sans effet sur un SERVEUR de flux : ce \
+18:    let mut mdl = model::Model::load(&chemin, ctx, fils(&opt), true, opt.keep, false, 0, 0);
+24:    println!("[flux] nœud moteur sur {hote}:{port} · {hidden} cachés · {} couches · contexte {ctx}",
+29:    // différé du pair la retarde encore. Mesuré sur localhost, 12 couches
+3408:    pub fn load_partiel(path: &str, ctx: usize, n_threads: usize, dense: bool, keep: f32,
+3409-                        auto: bool, q4: u8, b6: u8, couches: Option<(usize, usize)>) -> Model {
+3410-        let t0 = Instant::now();
+3411-        let g = Gguf::open_auto(path).expect("ouverture du GGUF");
+3412-        let arch = g.meta.get("general.architecture").and_then(|m| m.as_str())
+3413-                       .unwrap_or("").to_string();
+3414-        let r = routage_du_gguf(&g);
+3415-        let (n_expert, n_expert_used, ffn_exp) = (r.n_expert, r.n_expert_used, r.ffn_exp);
+3416-        // Ce que le modèle déclare en YaRN : lu DANS le littéral (une seule fois),
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && grep -n \"plage\" src/model.rs | head -8; grep -n \"plage\\|debut.*fin\" src/main.rs | sed -n '1,8p'", "description": "Check the layer-range mechanism"}`
+
+  ```
+1212:    /// les plages à lire une couche entière à l'avance. Les demander d'un coup
+2552:    /// distant ne charge que sa plage : c'est le découpage de la phase 3.
+2555:    /// Nœud **intermédiaire** du transport : sa plage peut aller jusqu'à la
+2563:    /// **Sonde de plage** (`--tete-partielle`) : appliquer la tête de sortie à la
+2564:    /// fin d'une plage PARTIELLE. Par défaut une plage qui n'atteint pas la
+2644:    /// fin de `forward` quand la plage s'arrête avant la dernière couche.
+3391:/// La « convention de sonde » d'une plage V4.1 se dit UNE fois : répétée à chaque
+3589:        // que s'il tombe DANS la plage demandée. On le retire en le disant —
+453:/// **Sonde de plage** (`--tete-partielle`) : appliquer la tête de sortie à la
+454:/// fin d'une plage `--couches a:b`. Par défaut une plage partielle rend le flux
+456:/// jamais le jour : impossible de comparer des LOGITS par plage, et impossible
+461:    eprintln!("[plage] `--tete-partielle` : la tête de sortie est appliquée à la fin de la \
+462:plage — le résultat est celui d'un modèle TRONQUÉ, pas du modèle entier");
+484:             mdl.couche_debut, mdl.couche_fin, mdl.flux_brut,
+486:    // `--tete-partielle` CHANGE c
+… [139 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && sed -n '3358,3372p' src/main.rs", "description": "Read the driver's head to patch it"}`
+
+  ```
+// Un pair incompatible doit s'entendre dire POURQUOI : sans cela,
+                // la session se termine sur « 0 flux servi » et rien d'autre.
+                println!("[flux] arrêt : {e}");
+                break;
+            }
+        }
+    }
+    println!("[flux] {servis} flux servis");
+}
+
+/// Le PILOTE : garde les premières couches, envoie le flux au nœud moteur,
+/// reçoit l'état final, et note la perplexité — qu'on compare à celle du même
+/// modèle calculé ENTIÈREMENT en local.
+/// NLL d'un jeton : log-sum-exp des logits, moins le logit de la cible. Une
+/// seule définition — elle était recopiée cinq fois dans ce fichier.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && grep -n \"fn run_ppl_reparti\" src/main.rs; sed -n '3374,3390p' src/main.rs", "description": "Locate the driver function body"}`
+
+  ```
+3381:fn run_ppl_reparti(opt: Options, pair: &str) {
+    let mut mx = f32::NEG_INFINITY;
+    for &v in lg { if v > mx { mx = v; } }
+    let mut somme = 0f64;
+    for &v in lg { somme += ((v - mx) as f64).exp(); }
+    (mx as f64 + somme.ln()) - lg[cible as usize] as f64
+}
+
+fn run_ppl_reparti(opt: Options, pair: &str) {
+    use std::time::Instant;
+    let chemin = modele_chemin();
+    let ctx = if opt.ctx_impose { opt.ctx } else { 256 };
+    let limite = opt.limit.max(1).min(ctx);
+    let couches_locales = if opt.couches_locales > 0 { opt.couches_locales } else { 12 };
+    // `--lot T` : préremplissage par LOTS sur le fil. La référence locale est
+    // alors calculée avec le MÊME découpage — sinon l'écart mesurerait la
+    // différence entre deux ordres de sommation, pas celle du découpage.
+    let lot = opt.lot.max(1);
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"src/main.rs\")\ns = p.read_text()\n\n# accesseurs dans topologie.rs\nt = pathlib.Path(\"src/topologie.rs\").read_text()\nif \"pub fn successeur\" not in t:\n    t = t.re … [4985 caractères tronqués]`
+
+  ```
+accesseurs ajoutés
+pilote patché
+-rwxr-xr-x. 2 stephane stephane 2647104  9 oct 17:10 target/release/drave
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=/tmp/m5_d384_dense.gguf; IDS=/tmp/campagne24/ids_m5_d384_dense.txt; [ -s \"$IDS\" ] || python3 -c \"\nd=open('data/corpus_en_val.txt','rb').read(256); open('$IDS','w').write(','.join(str(b) for b in d))\"; PORT=49777; cat > /tmp/to … [1465 caractères tronqués]`
+
+  ```
+=== 1. référence (modèle entier) ===
+perplexité 3.7326 sur
+=== 2. découpage historique (--couches-locales 2) ===
+perplexité 5.0374
+écart             : 0.00e0
+=== 3. découpage par TOPOLOGIE ===
+[exit code: 143]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=/tmp/m5_d384_dense.gguf; IDS=/tmp/campagne24/ids_m5_d384_dense.txt; PORT=49778; sed -i \"s/49777/$PORT/\" /tmp/topo_m5.json; D=./drave-core/target/release/drave; $D $M --flux-serveur $PORT --ctx 256 --threads 8 > /tmp/srv3.log 2>&1 … [320 caractères tronqués]`
+
+  ```
+topologie : 2 régions · 1 liens · 2 instance(s) · CHAÎNE (cas de non-régression)
+couverture : 4 couches, sans trou ni recouvrement
+ordre d'exécution :
+  0. local  couches   0..1   sur local                  → distant
+  1. distant couches   2..3   sur 127.0.0.1:49778        → (sortie du graphe)
+  code 0
+[exit code: 143]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"src/main.rs\")\ns = p.read_text()\nvieux = \"\"\"    if let Some(pos) = args.iter().position(|a| a == \"--topologie\") {\"\"\"\nassert vieux in s\nneuf = \"\"\"    // …m … [1886 caractères tronqués]`
+
+  ```
+pré-analyse restreinte
+  référence locale  : perplexité 5.0374  (0.2 s)
+  deux nœuds        : perplexité 5.0374  (0.2 s)
+  écart             : 0.00e0
+  ```
+
+### 🤖 Assistant
+
+⏵ C1b pas 1 franchi : la topologie PILOTE le découpage, écart 0,00e0
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/porte-topologie.sh <<'EOF'\n#!/bin/bash\n# porte-topologie.sh — la porte de la capacité C1 : la topologie PILOTE le découpage.\n#\n# Ce qu'elle vérifie, et pourquoi ces quatre cas :\n#   1. la RÉFÉRENCE : le modèle entier … [3850 caractères tronqués]`
+
+  ```
+syntaxe OK
+=== 1. référence : le modèle entier ===
+perplexité 3.7326 sur
+=== 2. découpage historique (2 couches locales) ===
+    deux nœuds        : perplexité 5.0374  (0.2 s)
+  écart             : 0.00e0
+=== 3. découpage par TOPOLOGIE (/tmp/tmp.SHxe1h7c6q/topo.json) ===
+    deux nœuds        : perplexité 5.0374  (0.2 s)
+  écart             : 0.00e0
+=== verdict ===
+  PORTE TENUE : la topologie rend le MÊME chiffre que le découpage historique (5.0374)
+  écart de flux : 0.00e0 ✅
+=== 4. les refus (une topologie fausse ne doit pas se mesurer) ===
+topologie invalide : couche 2 n'est portée par aucune région
+topologie : la région distante est sur « 127.0.0.1:50325 » mais `--ppl-reparti` dit « 127.0.0.1:1 » — deux sources pour la même chose, et elles se contredisent
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && timeout 600 cargo test --release 2>&1 | tail -3; cd .. && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/sprint-cerveau.md\")\ns = p.read_text()\nancre = \"\"\"## C1b — pilote multi-régions : la conception, rele … [4035 caractères tronqués]`

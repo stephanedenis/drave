@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 31.9 h |
-| Tours | 36 |
-| Messages | 1246 |
-| Appels d'outils | 1179 |
+| Durée | 32.0 h |
+| Tours | 37 |
+| Messages | 1259 |
+| Appels d'outils | 1190 |
 | Fichiers touchés | 38 |
-| Commandes | 982 |
+| Commandes | 993 |
 | Sous-agents | 3 |
-| Commits | 107 |
+| Commits | 108 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -103,6 +103,8 @@
 **Tour 35** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1197 caractères tronqués]
 
 **Tour 36** — allons-y pour un sprint cerveau complet. Vasy en mode autonome jusqu'à demain matin (9h hae 10 octobre)
+
+**Tour 37** — <goal_round> Objective: "Sprint « cerveau complet » en autonomie jusqu'au 10 octobre 9 h (HAE) : implémenter, avec portes mesurées, les trois premières capacités du plan docs/plan-cerveau-complet.md — C1 graphe de régions (descripteur de topologie, validateur de DAG, ordonnanceur par dépendances, pilote multi-nœuds ; porte : un graphe linéaire doit rendre des logits identiques au bit près et un dé … [1077 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1713,7 +1715,51 @@ Plus quatre manques du **modèle**, les douze capacités d'**architecture**, et 
 
 **Synthèse produite :**
 
-⏵ C1b : conception précise consignée (points d'insertion exacts) pour le prochain round
+⏵ C1a livrée et vérifiée, C1b conçue sur le code — le sprint continue
+
+**C1a — le descripteur de topologie est en place** (`drave-core/src/topologie.rs`, 8 tests, **85 tests au total, tous verts**) :
+
+- **JSON minimal analysé à la main** — le crate reste *std seul, sans dépendance*, comme le dépôt l'exige ;
+- **validation stricte**, chaque refus avec son message et son **code de sortie** : trou de couverture, recouvrement de couches, identifiant dupliqué, lien orphelin, lien réflexif, **cycle** (refusé tant que la récurrence C2 n'existe pas), clé inconnue, mode de lien inconnu ;
+- **ordre d'exécution** par tri topologique de Kahn, et détection **chaîne *vs* graphe** — la chaîne étant le cas de non-régression ;
+- la commande passe **avant le chemin du modèle** : un descripteur de régions ne décrit pas des poids, et exiger un GGUF pour lire un graphe ferait mentir la commande.
+
+Vérifié en direct :
+
+```
+$ drave --topologie topo_chaine.json    → CHAÎNE · 2 régions · plan en 2 étapes
+$ drave --topologie topo_y.json         → GRAPHE · 3 régions · délai déclaré affiché
+$ drave --topologie topo_trou.json      → refus : « couche 12 n'est portée par aucune région » (code 3)
+```
+
+**C1b — la conception est relevée sur le code, pas devinée.** La découverte qui rend le relais tractable : **le protocole transmet déjà la plage de couches dans la trame** (`f.debut`, `f.fin`) — le découpage voyage avec le flux, il n'y a rien à inventer côté format. Ce qui manque, c'est qu'un nœud du **milieu** transmette à son successeur au lieu de répondre à son appelant. Les points d'insertion exacts sont consignés dans `docs/sprint-cerveau.md` : `run_serveur_flux` après `mdl.forward` (main.rs:3347), `run_ppl_reparti` (main.rs:3605), deux options côté nœud (`--relais`, `--region`) et deux accesseurs à ajouter. **Le retour se fait de proche en proche**, donc le pilote n'a pas à connaître le nombre de relais.
+
+Le protocole de porte est écrit : référence un seul processus · deux régions (non-régression, **0,00e0**) · **trois régions sur trois instances** (pilote + deux nœuds en relais) égales à la référence · puis les mêmes derrière le **relais de latence** — la perplexité ne doit pas bouger, seul le temps doit changer.
+
+Et la limite est dite : les régions **non contiguës** et les **entrées multiples** (un graphe en Y qui s'exécute vraiment) demandent deux plages disjointes dans un même processus — c'est **C2**, pas C1.
+
+Tout est committé et poussé sur `stephanedenis/drave` (privé) ; le spri
+… [112 caractères tronqués]
+
+### Tour 37 — <goal_round> Objective: "Sprint « cerveau complet » en autonomie jusqu'au 10 octobre 9 h (HAE) : implémenter, avec porte … [1357 caractères tronqués]
+
+*11 appels d'outils.* Actions notables :
+
+- bash — See how the driver decodes the reply
+- bash — See how the node loads its layer range
+- bash — Check the layer-range mechanism
+- bash — Read the driver's head to patch it
+- bash — Locate the driver function body
+- bash — Make the driver honour the topology and build
+- bash — Test the topology-driven split against the historical one
+- bash — Debug the topology-driven split
+- bash — Restrict the pre-scan and re-test the topology-driven split
+- bash — Write and run the topology gate
+- bash — Run tests, update the sprint doc, commit and push
+
+**Synthèse produite :**
+
+⏵ C1b pas 1 franchi : la topologie PILOTE le découpage, écart 0,00e0
 
 ## 3. Travail accompli
 
@@ -1808,7 +1854,7 @@ Plus quatre manques du **modèle**, les douze capacités d'**architecture**, et 
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 942 autres
+- … et 953 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1936,7 +1982,7 @@ Plus quatre manques du **modèle**, les douze capacités d'**architecture**, et 
 
 ## 5. Erreurs rencontrées
 
-48 sorties en erreur ou divergentes. Les premières :
+50 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : ```  ### 🤖 Assistant  ⏵ **En transformers 5, `AutoModel` rend directement `Qwen2Model` (pas de `.model`). Je corrige le diagnostic.**  - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitH
 - **T2** : 3310393 bash -c pgrep -af "essai_decharge" | grep python | head; echo "--- logs ---"; tail -2 /tmp/ec_d192_lr3e3.log 2>/dev/null; tail -2 /tmp/ec_d192_lr1e3.log 2>/dev/null; echo "---"; ls -la /tmp/ec
@@ -2063,4 +2109,5 @@ Plus quatre manques du **modèle**, les douze capacités d'**architecture**, et 
 - Dim 512 : le prix de la parcimonie croît avec l'échelle (+6,7 % et +8,0 % contre +1,0 % et +3,8 % à 384)  Dernier point de la courbe lecture-qualité, mesuré à 1
 - C1a : la topologie de régions se lit, se vérifie et refuse les graphes incohérents  Première brique du sprint cerveau (docs/plan-cerveau-complet.md, capacité C1
 - C1b : la conception relevée sur le code, prête à implémenter  Le protocole transmet DÉJÀ la plage de couches dans la trame (f.debut, f.fin) : le découpage voyag
+- C1b pas 1 : la topologie PILOTE le découpage — porte tenue, même chiffre, 0,00e0  --ppl-reparti --topologie F exécute le découpage DÉCRIT par le fichier au lieu
 

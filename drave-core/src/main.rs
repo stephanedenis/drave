@@ -124,6 +124,10 @@ il faut écrire DRAVE_{} (voir docs/histoire.md). Rien n'a été appliqué.", &v
     // fichier GGUF pour lire un graphe obligerait à en inventer un, et la
     // commande mentirait sur ce qu'elle fait. `--topologie F` imprime le plan
     // VÉRIFIÉ et sort ; l'exécution d'un graphe viendra après (capacité C1b).
+    // …mais PAS si le pilote réparti est demandé : dans ce cas la topologie DÉCRIT
+    // le découpage à exécuter, elle n'est pas une commande de lecture. Sans cette
+    // condition, `--ppl-reparti … --topologie …` imprimait le plan et sortait.
+    if !args.iter().any(|a| a == "--ppl-reparti") {
     if let Some(pos) = args.iter().position(|a| a == "--topologie") {
         let f = match args.get(pos + 1) {
             Some(f) => f.clone(),
@@ -137,6 +141,7 @@ il faut écrire DRAVE_{} (voir docs/histoire.md). Rien n'a été appliqué.", &v
             Ok(plan) => { print!("{plan}"); std::process::exit(0); }
             Err(e) => { eprintln!("{e}"); std::process::exit(3); }
         }
+    }
     }
     let opt = analyser(&args);
     let _ = MODELE.set(args[1].clone());
@@ -3378,12 +3383,63 @@ fn nll_logits(lg: &[f32], cible: u32) -> f64 {
     (mx as f64 + somme.ln()) - lg[cible as usize] as f64
 }
 
+/// Le nombre de couches d'un modèle, lu dans son EN-TÊTE seul — la topologie se
+/// vérifie sans charger les poids (62 Go pour gpt-oss).
+fn n_layer_total(chemin: &str) -> usize {
+    let g = Gguf::open_auto(chemin).expect("ouverture du GGUF (en-tête)");
+    g.cfg("block_count").and_then(|m| m.as_u64()).unwrap_or(0) as usize
+}
+
 fn run_ppl_reparti(opt: Options, pair: &str) {
     use std::time::Instant;
     let chemin = modele_chemin();
     let ctx = if opt.ctx_impose { opt.ctx } else { 256 };
     let limite = opt.limit.max(1).min(ctx);
-    let couches_locales = if opt.couches_locales > 0 { opt.couches_locales } else { 12 };
+    // ---- C1 : la TOPOLOGIE, si elle est donnée, DIT la plage locale et le pair.
+    // C'est la porte de non-régression du graphe : la chaîne décrite par le
+    // fichier doit reproduire exactement ce que `--couches-locales` faisait.
+    // Toute incohérence entre le fichier et la ligne de commande est REFUSÉE —
+    // mesurer un découpage qui n'est pas celui qu'on croit serait pire que ne
+    // rien mesurer.
+    let (couches_locales, pair_cli) = if let Some(f) = opt.topologie.clone() {
+        let texte = std::fs::read_to_string(&f).unwrap_or_else(|e| {
+            eprintln!("topologie : lecture de {f} impossible : {e}"); std::process::exit(2) });
+        let t = topologie::lire_json(&texte).unwrap_or_else(|e| {
+            eprintln!("{e}"); std::process::exit(3) });
+        t.valider().unwrap_or_else(|e| { eprintln!("{e}"); std::process::exit(3) });
+        let locales: Vec<&topologie::Region> =
+            t.regions.iter().filter(|r| r.instance == "local").collect();
+        let distantes: Vec<&topologie::Region> =
+            t.regions.iter().filter(|r| r.instance != "local").collect();
+        if locales.len() != 1 || distantes.len() != 1 {
+            eprintln!("topologie : le pilote exige UNE région locale et UNE région distante \
+(trouvé {} et {}) — les chaînes de plus de deux régions viendront avec le relais",
+                      locales.len(), distantes.len());
+            std::process::exit(3);
+        }
+        let (l, d) = (locales[0], distantes[0]);
+        if l.premiere != 0 {
+            eprintln!("topologie : la région locale doit commencer à la couche 0 (elle est {}..{}) \
+— le pilote lit les jetons, il porte donc la première région", l.premiere, l.derniere);
+            std::process::exit(3);
+        }
+        if l.derniere + 1 != d.premiere || d.derniere + 1 != n_layer_total(&chemin) {
+            eprintln!("topologie : couverture {}..{} puis {}..{} ne recouvre pas le modèle entier",
+                      l.premiere, l.derniere, d.premiere, d.derniere);
+            std::process::exit(3);
+        }
+        if d.instance != pair {
+            eprintln!("topologie : la région distante est sur « {} » mais `--ppl-reparti` dit \
+« {pair} » — deux sources pour la même chose, et elles se contredisent", d.instance);
+            std::process::exit(3);
+        }
+        println!("[topologie] chaîne vérifiée : local 0..{} → {} {}..{}",
+                 l.derniere, d.instance, d.premiere, d.derniere);
+        (l.couches(), pair.to_string())
+    } else {
+        (if opt.couches_locales > 0 { opt.couches_locales } else { 12 }, pair.to_string())
+    };
+    let pair: &str = &pair_cli;
     // `--lot T` : préremplissage par LOTS sur le fil. La référence locale est
     // alors calculée avec le MÊME découpage — sinon l'écart mesurerait la
     // différence entre deux ordres de sommation, pas celle du découpage.

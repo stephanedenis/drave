@@ -53,7 +53,45 @@ inconnu, graphe en Y, chaîne du moteur). Suite complète : **85 tests**.
 
 ---
 
-## C1b — pilote multi-régions : la conception, relevée sur le code
+## C1b pas 1 — FAIT (9 octobre 17 h 20) : la topologie PILOTE le découpage
+
+**Livré** : `--ppl-reparti … --topologie F` exécute désormais le découpage **décrit
+par le fichier**, au lieu de le déduire de `--couches-locales`. Le pilote :
+
+- lit et **valide** la topologie (les mêmes refus que C1a) ;
+- exige **une** région locale et **une** distante (les chaînes de plus de deux
+  régions demandent le relais, pas encore écrit — et il le dit) ;
+- vérifie que la région locale **commence à la couche 0** (le pilote lit les jetons,
+  il porte donc la première région) ;
+- vérifie que les deux régions **recouvrent le modèle entier, sans trou** — le nombre
+  de couches est lu dans l'**en-tête** du GGUF, sans charger les poids ;
+- **refuse** une topologie dont l'adresse contredit `--ppl-reparti` : deux sources
+  pour la même chose qui se contredisent ne doivent pas se mesurer en silence.
+
+**La porte, outillée** : `tools/porte-topologie.sh`, quatre cas —
+
+| cas | résultat mesuré (m5_d384_dense, 2 couches locales sur 4) |
+|---|---|
+| 1. référence, modèle entier | perplexité **3,7326** |
+| 2. découpage historique (`--couches-locales`) | **5,0374** · écart de flux **0.00e0** |
+| 3. **découpage par TOPOLOGIE** | **5,0374** · écart **0.00e0** — *même chiffre* |
+| 4. refus | trou de couverture → refusé · adresse contredite → refusée |
+
+**Verdict : PORTE TENUE.** La topologie rend le même chiffre que le découpage
+historique, au chiffre près, et l'écart de flux reste **0,00e0**.
+
+*(Note : `--topologie` seul imprime le plan et sort ; `--ppl-reparti … --topologie`
+exécute. La pré-analyse a dû être restreinte pour que les deux usages coexistent —
+sans quoi la commande imprimait le plan au lieu de mesurer.)*
+
+### Ce qui reste pour C1b : le RELAIS (trois instances)
+
+Conception ci-dessous, inchangée. C'est le jalon qui donne « trois régions sur trois
+instances », et donc la **distribution sur plusieurs instances** demandée.
+
+---
+
+## C1b pas 2 — le relais : la conception, relevée sur le code
 
 **Ce que le protocole permet déjà, et c'est beaucoup.** Une trame porte la **plage de
 couches à appliquer** (`f.debut`, `f.fin`), le mode, la position, et la charge ; le
@@ -113,3 +151,4 @@ du plan, pas C1.
 | heure | fait |
 |---|---|
 | 9/10 17 h 10 | **C1a** : module `topologie.rs`, validation stricte, plan, 8 tests, suite à 85 tests. |
+| 9/10 17 h 20 | **C1b pas 1** : la topologie pilote le découpage · porte `tools/porte-topologie.sh` **TENUE** (même chiffre, écart 0,00e0) · deux refus vérifiés. |

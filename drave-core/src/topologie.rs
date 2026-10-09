@@ -333,6 +333,26 @@ impl Topologie {
         sorties.values().all(|&n| n <= 1) && entrees.values().all(|&n| n <= 1)
     }
 
+    /// La région d'un identifiant, si elle existe.
+    pub fn region(&self, id: &str) -> Option<&Region> {
+        self.regions.iter().find(|r| r.id == id)
+    }
+
+    /// Le successeur d'une région dans une CHAÎNE (au plus un lien sortant).
+    /// Rend `None` si la région est la sortie du graphe — et une ERREUR si elle a
+    /// plusieurs sorties : un graphe en Y ne se parcourt pas comme une chaîne, et
+    /// le dire ici évite de le découvrir en plein calcul.
+    pub fn successeur(&self, id: &str) -> Result<Option<&Lien>, ErreurTopologie> {
+        let sortants: Vec<&Lien> = self.liens.iter().filter(|l| l.de == id).collect();
+        match sortants.len() {
+            0 => Ok(None),
+            1 => Ok(Some(sortants[0])),
+            n => Err(ErreurTopologie(format!(
+                "la région « {id} » a {n} sorties : ce n'est pas une chaîne, et le \
+pilote ne sait exécuter qu'une chaîne (les entrées multiples sont la capacité C2)"))),
+        }
+    }
+
     /// Les instances distinctes, dans l'ordre d'apparition.
     pub fn instances(&self) -> Vec<String> {
         let mut v: Vec<String> = Vec::new();
