@@ -18939,3 +18939,84 @@ Created file
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"README.md\")\ns = p.read_text()\nvieux = \"\"\"**Deux manques restent des manques**, et sont écrits comme tels : les\n**encodeurs/embeddings** (`bge-m3` inexécutable : ni attention … [1784 caractères tronqués]`
+
+  ```
+ok
+poussé
+  pas  12000 · perte 1.3114 · val 2.1462 bits/octet · 1245 s
+  ```
+
+### 🤖 Assistant
+
+⏵ Registre des manques publié — et un point d'échelle qui nuance la structure innée
+
+**Nouveau capstone : [`docs/manques.md`](https://github.com/stephanedenis/drave/blob/master/docs/manques.md)** — ce que l'objectif demandait explicitement (« les manques constatés sont consignés comme manques, pas comme résultats »), rassemblé en un seul registre :
+
+**Huit manques du moteur**, chacun avec la mesure qui l'établit :
+1. **Noyau de listes pour les experts** — le chargeur refuse Q8_0 ; un modèle routé économise des *experts*, pas des *événements*.
+2. **Noyau de listes sur GPU** — `proj()` reçoit le vecteur complet, zéros compris ; déporter un modèle creux détruirait ce que la parcimonie apporte.
+3. **Lot et hyper-connexions** — refusé *explicitement* par le moteur, donc le seul modèle > RAM de la machine ne peut pas être exécuté par lots.
+4. **Encodeurs/embeddings** — `bge-m3` inexécutable.
+5. **Décodage spéculatif** — aucune ligne de moteur (mais le cahier des charges est mesuré).
+6. **Le moteur n'apprend pas** — la règle locale est réfutée, la distillation marche mais hors moteur.
+7. **Qualité des modèles > RAM** — on sait qu'ils tournent, pas ce qu'ils valent.
+8. **Défaut de sauvegarde du variant log-normal** — cause ouverte, matérialisation *éliminée* par la mesure.
+
+Plus quatre manques du **modèle**, les douze capacités d'**architecture**, et — parce qu'un registre de manques sans contrepartie se lit mal — une section **« ce qui n'est PAS un manque »** : exactitude au bit près, découpage à 0,00e0, rejeu exact, 23 portes vertes, 18 aiguilles sur 18.
+
+**Et un résultat qui nuance la structure innée** (tombé à 15 h 07) :
+
+| dim 512 | perplexité | paires/jeton | écart au témoin dense |
+|---|---:|---:|---:|
+| témoin dense | **4,5686** | 34,4 M | — |
+| **masque inné 25 %** (aléatoire, figé) | **4,8745** | **9,2 M** | **+6,7 %** (÷3,7) |
+
+**Le même masque coûte +1,0 % à dim 384 et +6,7 % à dim 512.** La structure innée n'est donc pas gratuite « par principe » : elle l'est **à une certaine taille** — un modèle plus grand a plus de capacité à perdre quand on lui retire au hasard un quart de ses connexions. Le masque est aléatoire ; un masque *choisi* ferait probablement mieux, et c'est la prochaine question. Deux points d'échelle ne font pas une loi, et c'est écrit comme tel dans le rapport et dans `docs/biologie-pour-drave.md`.
+
+**En fond** : `m17` — les **deux axes appris** (k-WTA 25 % + élagage 50 %) à dim 512 — étape 12 000/40 000, mesure vers 16 h 30. C'est le dernier point de la courbe lecture ↔ qualité, celui qui dira si le **÷7,8 pour +3,8 %** tient en grandissant.
+
+Dépôt à jour et poussé (`533a670` → dernier commit), arbre propre.
+
+
+## Tour 35
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, préremplissage par lots, modèle plus gros que la RAM. Poursuivre en parallèle le livrable du modèle nativement événementiel : entraîné ici, exécuté par Drave à logits vérifiés, découpé en unités réparties. Chaque affirmation porte sa mesure (perplexité, débit, octets et événements par jeton, RSS, écart entre nœuds) ET ses conditions (corpus, tokenizer du modèle, charge de fond) ; les manques constatés — embeddings/encodeurs, décodage spéculatif — sont consignés comme manques, pas comme résultats. Livrables : la file tools/campagne-benefices.sh exécutée et ses journaux, un rapport de synthèse par famille de tâches, et la poursuite du modèle événementiel."
+Round: 28/40
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /tmp/campagne24 && grep -E \"m17\" journal15.txt 2>/dev/null | tail -3; tail -1 tr_m17_d512_kwta25_elag50.log 2>/dev/null; date '+%H:%M'", "description": "Poll the two-axis model at dim 512"}`
+
+  ```
+pas  12000 · perte 1.3114 · val 2.1462 bits/octet · 1245 s
+15:34
+  ```
+
+### 🤖 Assistant
+
+⏵ Fabrication du manifeste des journaux de la campagne (livrable vérifiable)
+
+- **bash** `{"command": "cd /tmp/campagne24 && python3 - <<'PY' > /tmp/manifeste.md\nimport glob, os, re, subprocess\nC = \"/tmp/campagne24/\"\netapes = [\n (\"1 · grille\", \"grille_*_ppl.log\", r\"perplexité [0-9.]+ sur [0-9]+ tokens\"),\n (\"2 · parcimonie\", \"parcimonie_*.log\", r\"perplexité [0-9.]+ sur [ … [1595 caractères tronqués]`
+
+  ```
+| étape | journaux | poids | mesure de tête |
+|---|---|---:|---|
+| 1 · grille | 6 | 7 Kio | perplexité 17.4315 sur 255 tokens |
+| 2 · parcimonie | 24 | 30 Kio | perplexité 17.3381 sur 255 tokens |
+| 3 · contexte | 10 | 11 Kio | perplexité 17.4315 sur 255 tokens |
+| 4 · lot | 9 | 10 Kio | perplexité 13.1368 sur 511 tokens |
+| 5 · routage | 2 | 3 Kio | experts 1826.2 M |
+| 6 · sémantique | 4 | 10 Kio | PIC de séparation à la couche 10 |
+| 7 · noyau | 1 | 6 Kio | push/pull = ×3.19 |
+| 8 · répartition | 2 | 1 Kio | écart relatif 0.0000 % |
+| 9 · portes | 1 | 2 Kio | MOINS |
+| **total** | **59** | **79 Kio** | |
+=== tous les journaux ===
+17
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\ns = s.rstrip() + \"\"\"\n\n---\n\n## Annexe — manifeste des journaux\n\nLes journaux bruts sont dans `/tmp/campagne24/` … [2259 caractères tronqués]`

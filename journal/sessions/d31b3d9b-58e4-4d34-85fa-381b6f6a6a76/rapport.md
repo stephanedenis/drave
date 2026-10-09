@@ -6,13 +6,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
 | Durée | 30.4 h |
-| Tours | 34 |
-| Messages | 1203 |
-| Appels d'outils | 1141 |
+| Tours | 35 |
+| Messages | 1208 |
+| Appels d'outils | 1144 |
 | Fichiers touchés | 37 |
-| Commandes | 950 |
+| Commandes | 953 |
 | Sous-agents | 3 |
-| Commits | 102 |
+| Commits | 103 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -95,6 +95,8 @@
 **Tour 33** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1197 caractères tronqués]
 
 **Tour 34** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1197 caractères tronqués]
+
+**Tour 35** — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'architecture de Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte long, code, raisonnement, MoE/routage d'experts, multilingue et sémantique, prérempl … [1197 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1609,7 +1611,45 @@ Nouveau document : **`docs/plan-cerveau-complet.md`** (le plan d'ingénierie qui
 
 **Synthèse produite :**
 
-⏵ Capstone : registre consolidé des manques (ce que l'objectif demande de consigner)
+⏵ Registre des manques publié — et un point d'échelle qui nuance la structure innée
+
+**Nouveau capstone : [`docs/manques.md`](https://github.com/stephanedenis/drave/blob/master/docs/manques.md)** — ce que l'objectif demandait explicitement (« les manques constatés sont consignés comme manques, pas comme résultats »), rassemblé en un seul registre :
+
+**Huit manques du moteur**, chacun avec la mesure qui l'établit :
+1. **Noyau de listes pour les experts** — le chargeur refuse Q8_0 ; un modèle routé économise des *experts*, pas des *événements*.
+2. **Noyau de listes sur GPU** — `proj()` reçoit le vecteur complet, zéros compris ; déporter un modèle creux détruirait ce que la parcimonie apporte.
+3. **Lot et hyper-connexions** — refusé *explicitement* par le moteur, donc le seul modèle > RAM de la machine ne peut pas être exécuté par lots.
+4. **Encodeurs/embeddings** — `bge-m3` inexécutable.
+5. **Décodage spéculatif** — aucune ligne de moteur (mais le cahier des charges est mesuré).
+6. **Le moteur n'apprend pas** — la règle locale est réfutée, la distillation marche mais hors moteur.
+7. **Qualité des modèles > RAM** — on sait qu'ils tournent, pas ce qu'ils valent.
+8. **Défaut de sauvegarde du variant log-normal** — cause ouverte, matérialisation *éliminée* par la mesure.
+
+Plus quatre manques du **modèle**, les douze capacités d'**architecture**, et — parce qu'un registre de manques sans contrepartie se lit mal — une section **« ce qui n'est PAS un manque »** : exactitude au bit près, découpage à 0,00e0, rejeu exact, 23 portes vertes, 18 aiguilles sur 18.
+
+**Et un résultat qui nuance la structure innée** (tombé à 15 h 07) :
+
+| dim 512 | perplexité | paires/jeton | écart au témoin dense |
+|---|---:|---:|---:|
+| témoin dense | **4,5686** | 34,4 M | — |
+| **masque inné 25 %** (aléatoire, figé) | **4,8745** | **9,2 M** | **+6,7 %** (÷3,7) |
+
+**Le même masque coûte +1,0 % à dim 384 et +6,7 % à dim 512.** La structure innée n'est donc pas gratuite « par principe » : elle l'est **à une certaine taille** — un modèle plus grand a plus de capacité à perdre quand on lui retire au hasard un quart de ses connexions. Le masque est aléatoire ; un masque *choisi* ferait probablement mieux, et c'est la prochaine question. Deux points d'échelle ne font pas une loi, et c'est écrit comme tel dans le rapport et dans `docs/biologie-pour-drave.md`.
+
+**En fond** : `m17` — les **deux axes appris** (k-WTA 25 % + élagage 50 %) à dim 512 — étape 12 000/40 000, mesure vers 16 h 30. C'est le 
+… [177 caractères tronqués]
+
+### Tour 35 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1477 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Poll the two-axis model at dim 512
+- bash — Build the campaign log manifest
+- bash — Add the log manifest appendix and push
+
+**Synthèse produite :**
+
+⏵ Fabrication du manifeste des journaux de la campagne (livrable vérifiable)
 
 ## 3. Travail accompli
 
@@ -1703,7 +1743,7 @@ Nouveau document : **`docs/plan-cerveau-complet.md`** (le plan d'ingénierie qui
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 910 autres
+- … et 913 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1953,4 +1993,5 @@ Nouveau document : **`docs/plan-cerveau-complet.md`** (le plan d'ingénierie qui
 - Publication du dépôt + document de modularisation : espace de travail Cargo, pas de submodules  Le dépôt est publié en privé : https://github.com/stephanedenis/
 - Dim 512 : la structure innée coûte +6,7 % (contre +1,0 % à dim 384) pour ÷3,7 de lectures  m16_d512_masque25 (masque aléatoire de 25 % des connexions, figé à la
 - Registre consolidé des manques — le capstone que l'objectif demande  docs/manques.md : huit manques du MOTEUR (noyau de listes pour les experts — mesuré par le 
+- Annexe : manifeste des journaux de la campagne (59 fichiers d'étape, 79 Kio, 17 journaux de chaînes)  Le livrable « la file exécutée et ses journaux » est maint
 
