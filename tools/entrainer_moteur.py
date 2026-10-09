@@ -66,6 +66,50 @@ def construire(famille, a):
     return Qwen3MoeForCausalLM(cfg), cfg
 
 
+def installer_kwta(modele, fraction, cibles=None):
+    """Entraîne le modèle À VIVRE CREUX : k-WTA sur l'entrée des projections de
+    sortie (celle de l'attention, celle de la FFN).
+
+    POURQUOI À L'ENTRAÎNEMENT ET PAS À L'EXÉCUTION. Le moteur sait déjà imposer
+    un top-k sur les activations (`--act-topk`, `--topk-o`, `--topk-down`), et la
+    campagne a mesuré ce que cela coûte sur un modèle qui n'a jamais appris à
+    l'être : **+4 % de perplexité pour −30 % d'événements** au mieux (k-WTA 70 %),
+    +63 % à 50 % (§ 19 du rapport). Un modèle DENSE reste dense : la parcimonie
+    imposée ne fait que dégrader. Ici, on applique EXACTEMENT la même opération
+    pendant l'apprentissage — garder les k plus grandes magnitudes, annuler le
+    reste — pour que le modèle apprenne une représentation qui survit à la
+    coupure. C'est la seule façon de savoir si l'architecture événementielle a
+    un avenir sur un modèle dense, ou seulement sur un MoE.
+
+    `fraction` = part GARDÉE (0,25 = on garde 25 %, on annule 75 %).
+
+    PAR DÉFAUT, TOUTES LES PROJECTIONS. Le moteur a un top-k GLOBAL (`--act-topk`)
+    qui s'applique à l'entrée de chaque matvec ; entraîner sur un sous-ensemble et
+    évaluer avec le réglage global mesurerait deux modèles différents. On couvre
+    donc toutes les couches linéaires, comme le fait le moteur.
+    """
+    k = {"n": 0}
+
+    def fabrique(f):
+        def h(mod, entree):
+            x = entree[0]
+            garde = max(1, int(round(f * x.shape[-1])))
+            idx = x.abs().topk(garde, dim=-1).indices
+            masque = torch.zeros_like(x).scatter_(-1, idx, 1.0)
+            k["n"] += 1
+            return (x * masque,) + tuple(entree[1:])
+        return h
+
+    n = 0
+    for nom, mod in modele.named_modules():
+        if isinstance(mod, nn.Linear) and (cibles is None or nom.endswith(cibles)):
+            mod.register_forward_pre_hook(fabrique(fraction))
+            n += 1
+    print(f"# k-WTA à l'entraînement : {fraction:.0%} gardés sur {n} projections "
+          f"(toutes les couches linéaires, comme `--act-topk` du moteur)")
+    return n
+
+
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("--famille", choices=["dense", "route"], default="route")
@@ -90,6 +134,9 @@ def main():
     p.add_argument("--temperature", type=float, default=2.0, help="température de distillation")
     p.add_argument("--eval-tous", type=int, default=1000)
     p.add_argument("--sortie", required=True)
+    p.add_argument("--kwta", type=float, default=0.0,
+                   help="part GARDÉE par k-WTA sur l'entrée de o_proj/down_proj "
+                        "(0 = aucun ; 0,25 = on annule 75 %% des activations)")
     p.add_argument("--sans-gpu", action="store_true")
     a = p.parse_args()
     # Lecture égale par construction : k experts lisent ce que lit le FFN dense.
@@ -110,6 +157,9 @@ def main():
     print(f"# {a.famille} · {n_params/1e6:.2f} M paramètres · "
           f"{lit/1e6:.2f} M poids LUS par jeton et par couche · "
           f"{stocke/1e6:.2f} M stockés · corpus {len(train)} octets · {dev}")
+
+    if a.kwta > 0.0:
+        installer_kwta(modele, a.kwta)
 
     opt = torch.optim.AdamW(modele.parameters(), lr=a.lr, weight_decay=0.01)
     g = torch.Generator().manual_seed(a.graine)

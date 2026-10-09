@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 15.9 h |
+| Durée | 16.0 h |
 | Tours | 27 |
-| Messages | 786 |
-| Appels d'outils | 750 |
+| Messages | 787 |
+| Appels d'outils | 751 |
 | Fichiers touchés | 25 |
-| Commandes | 593 |
+| Commandes | 594 |
 | Sous-agents | 3 |
-| Commits | 44 |
+| Commits | 45 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -1270,7 +1270,7 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 
 ### Tour 27 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1477 caractères tronqués]
 
-*141 appels d'outils.* Actions notables :
+*142 appels d'outils.* Actions notables :
 
 - bash — Check the full state
 - bash — Measure the distilled d384 with the correct protocol
@@ -1286,7 +1286,7 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - bash — Read parcimonie, contexte, lot steps
 - bash — Inspect batch2 script
 - bash — Read batch2 journal and latency map
-- … et 112 autres
+- … et 113 autres
 
 **Synthèse produite :**
 
@@ -1372,7 +1372,7 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 553 autres
+- … et 554 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1564,4 +1564,5 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="reports/rapport-campagne-benefices.md"; s=open(p).read() ajout = '''## 20. Contexte et
 - tail -4 /tmp/campagne24/journal4.txt; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="reports/rapport-campagne-benefices.md"; s=open(p
 - L'échelle par enregistrement des traces : les lecteurs l'ignoraient, et le résultat change  Le moteur quantifie chaque enregistrement DRVF sur act_levels = 127 
+- Instrument : la convention SentencePiece nommée, le k-WTA appris, la FFN en Q8  Trois corrections nées de la campagne, chacune pour lever un silence.  1. Le con
 

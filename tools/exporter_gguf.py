@@ -252,7 +252,14 @@ def tenseurs_depuis_hf(poids, cfg, experts_q4=True):
                              ("ffn_up.weight", "mlp.up_proj.weight"),
                              ("ffn_down.weight", "mlp.down_proj.weight")):
                 arr = poids[p + cle]
-                if experts_q4:
+                # `DRAVE_FFN_Q8=1` : la FFN dense passe en 8 bits. En 4 bits le
+                # moteur n'a qu'un chemin (`DenseQ4`), sans événements — un
+                # top-k sur l'entrée de `down_proj` n'y économiserait aucune
+                # lecture. C'est la seule façon de mesurer ce qu'un modèle
+                # entraîné creux rapporte vraiment (§ 19 du rapport de campagne).
+                # La référence (`porte_moteur.py`) lit la MÊME variable par
+                # `quant_du_tenseur` : les deux côtés restent d'accord.
+                if experts_q4 and os.environ.get("DRAVE_FFN_Q8") != "1":
                     t.append((b + nom, (q4_0_encoder(arr), GGML_Q4_0, arr.shape)))
                 else:
                     t.append(q8(b + nom, arr))
@@ -271,6 +278,15 @@ def quant_du_tenseur(nom_hf):
         return "q4"                                    # experts fusionnés (MoE)
     if ".mlp." in nom_hf and nom_hf.endswith(("gate_proj.weight", "up_proj.weight",
                                               "down_proj.weight")):
+        # `DRAVE_FFN_Q8=1` écrit la FFN en 8 bits. POURQUOI CE DRAPEAU EXISTE :
+        # en 4 bits, le moteur n'a qu'un chemin (`DenseQ4`), SANS événements —
+        # donc un top-k imposé sur l'entrée de `down_proj` n'économise aucune
+        # lecture (§ 19 : « en dense, la parcimonie ne coûte que la qualité »).
+        # Pour mesurer ce qu'un modèle creux rapporte VRAIMENT, il faut que sa
+        # FFN soit exécutable en listes : c'est le seul chemin où un événement
+        # est une paire, donc le seul où la parcimonie paie.
+        if os.environ.get("DRAVE_FFN_Q8") == "1":
+            return "q8"
         return "q4"                                    # experts éclatés, ou FFN dense
     if nom_hf.endswith(".weight"):
         return "q8"
@@ -338,7 +354,8 @@ def main():
     octets = ecrire_gguf(a.sortie, kv, tenseurs, a.f16)
     print(f"# {a.sortie} : {len(tenseurs)} tenseurs · {octets/1e6:.1f} Mo "
           f"({'f16' if a.f16 else 'f32'} pour les normes, Q8_0 pour les projections, "
-          f"Q4_0 pour la FFN et les experts) · {len(kv)} métadonnées")
+          f"{'Q8_0' if os.environ.get('DRAVE_FFN_Q8') == '1' else 'Q4_0'} "
+          f"pour la FFN et les experts) · {len(kv)} métadonnées")
     n_exp = cfg.get("num_experts", cfg.get("num_local_experts"))
     detail = (f"{n_exp} experts (top-{cfg['num_experts_per_tok']}) · "
               f"norm_topk_prob={cfg.get('norm_topk_prob', True)}" if n_exp else "FFN dense")

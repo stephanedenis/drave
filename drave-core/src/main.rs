@@ -4757,9 +4757,23 @@ fn run_tokenize(opt: Options) {
         // Contrôle de réversibilité : si le texte reconstruit diffère de la
         // source, l'encodage a perdu de l'information — et une perplexité
         // calculée sur ce flux ne mesurerait plus le texte.
+        //
+        // UNE EXCEPTION, ET UNE SEULE : la convention `add_dummy_prefix` de
+        // SentencePiece. `encode` préfixe le texte d'un espace de mot (sinon le
+        // premier mot ne se découpe pas comme un mot), `decode` le rend — donc la
+        // comparaison stricte signalait « DIVERGE à l'octet 0 » sur tout modèle
+        // SPM (Mistral, Codestral, Llama, Gemma) pour **un** espace de
+        // convention, noyant le vrai signal. On nomme l'écart au lieu de le
+        // tolérer en silence : un octet de plus, en tête, et rien d'autre.
         let retour = tk.decode(&ids);
+        let convention_spm = retour.len() == texte.len() + 1
+            && retour.starts_with(' ')
+            && retour[1..] == texte;
         if retour == texte {
             println!("réversibilité : texte reconstruit identique ✅ ({} octets)", texte.len());
+        } else if convention_spm {
+            println!("réversibilité : identique, à l'espace de tête de la convention \
+SentencePiece près ✅ ({} octets + le préfixe de mot)", texte.len());
         } else {
             let pos = retour.bytes().zip(texte.bytes()).position(|(a, b)| a != b)
                 .unwrap_or(retour.len().min(texte.len()));

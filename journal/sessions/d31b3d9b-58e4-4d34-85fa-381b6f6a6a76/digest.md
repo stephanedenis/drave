@@ -13382,3 +13382,9 @@ délibéré : tous les outils d'analyse du dépôt (`premiere_couche_semantique.
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/premiere_couche_semantique.py && git commit -q -m \"L'échelle par enregistrement des traces : les lecteurs l'ignoraient, et le résultat change\n\nLe moteur quantifie chaque enregistrement DRVF sur act_levels = 127 et ra … [538 caractères tronqués]`
+
+  ```
+56ef496 L'échelle par enregistrement des traces : les lecteurs l'ignoraient, et le résultat change
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add drave-core/src/main.rs tools/entrainer_moteur.py tools/exporter_gguf.py && git commit -q -m \"Instrument : la convention SentencePiece nommée, le k-WTA appris, la FFN en Q8\n\nTrois corrections nées de la campagne, chacune po … [1220 caractères tronqués]`
