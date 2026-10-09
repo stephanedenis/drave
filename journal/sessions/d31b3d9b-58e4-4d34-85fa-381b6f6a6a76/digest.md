@@ -16148,3 +16148,43 @@ baseline --push : PPL perplexité 3.7169 · 897753869 événements
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/modele-pour-drave.md\")\ns = p.read_text()\nancre = \"\"\"- **Gain attendu** : à budget égal, la perplexité d'un modèle qui *choisit* où être\n  creux doit être meilleure que  … [2631 caractères tronqués]`
+
+  ```
+ok
+7041bcc Budget d'événements : le premier essai d'allocation ciblée ÉCHOUE, et il apprend pourquoi
+  ```
+
+- **bash** `{"command": "sleep 480; cd /tmp/campagne24 && tail -2 tr_m9_route_long.log; ls fenetres_m9_route_long.log 2>/dev/null && grep -oE \"PPL moyenne.*\" fenetres_m9_route_long.log | tail -1", "description": "Poll the 80k routed model", "timeoutMs": 520000}`
+
+  ```
+pas  64000 · perte 1.0995 · val 1.8521 bits/octet · 7119 s
+  pas  72000 · perte 1.0940 · val 1.8403 bits/octet · 8015 s
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "sleep 590; cd /tmp/campagne24 && tail -2 tr_m9_route_long.log; grep -E \"m9_d512_route_long\" journal9.txt | tail -2", "description": "Check the final routed-512 result", "timeoutMs": 620000}`
+
+  ```
+# meilleur point : pas 80000 · val 1.8237 bits/octet
+  # écrit dans /tmp/m9_d512_route_long · 78.81 M paramètres · 3.41 M poids lus/jeton/couche
+[09/10 09:48:44] charge 3.14 · m9_d512_route_long :   # meilleur point : pas 80000 · val 1.8237 bits/octet
+[09/10 09:48:52] charge 4.66 · m9_d512_route_long : PPL moyenne (log) sur 8 fenêtres : 5.3845
+  ```
+
+### 🤖 Assistant
+
+⏵ Contradiction à instruire : +2× de pas améliore la validation mais dégrade le moteur
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && P=/home/stephane/gpu-env/bin/python; C=/tmp/campagne24; $P tools/porte_moteur.py --hf /tmp/m9_d512_route_long --ids \"$C/ids_m9_d512_route_long.txt\" --logits \"$C/m9rl_ref.bin\" > \"$C/ref_m9rl.log\" 2>&1 || python3 -c \"\nd=open('d … [962 caractères tronqués]`
+
+  ```
+corrélation des logits (position 0) : 0.999815
+✅ porte de correction tenue (100.0 % des positions UTILES au-dessus de 0.95, min 0.9993 >= plancher 0.9, top-1 98.4 % sur toutes les positions, 42 saturées exclues de la corrélation)
+  --push fenêtre 8 (depuis 896) : PPL ?          ? jetons
+  ```
+
+### 🤖 Assistant
+
+⏵ Résultat : le modèle 80k est meilleur en fp32 et PIRE après quantification — le format fait partie du modèle
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\nancre = \"\"\"**La recette qui sort de cette courbe est donc « router ET distiller »**, pas\n« router » — et c'est la d … [3952 caractères tronqués]`

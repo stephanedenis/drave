@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 24.4 h |
+| Durée | 24.7 h |
 | Tours | 27 |
-| Messages | 1007 |
-| Appels d'outils | 968 |
+| Messages | 1011 |
+| Appels d'outils | 972 |
 | Fichiers touchés | 30 |
-| Commandes | 796 |
+| Commandes | 800 |
 | Sous-agents | 3 |
-| Commits | 72 |
+| Commits | 73 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -1270,7 +1270,7 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 
 ### Tour 27 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce que l'archite … [1477 caractères tronqués]
 
-*359 appels d'outils.* Actions notables :
+*363 appels d'outils.* Actions notables :
 
 - bash — Check the full state
 - bash — Measure the distilled d384 with the correct protocol
@@ -1286,11 +1286,11 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - bash — Read parcimonie, contexte, lot steps
 - bash — Inspect batch2 script
 - bash — Read batch2 journal and latency map
-- … et 318 autres
+- … et 322 autres
 
 **Synthèse produite :**
 
-⏵ Test immédiat du dessin (I) : allocation ciblée contre allocation uniforme, à événements égaux
+⏵ Résultat : le modèle 80k est meilleur en fp32 et PIRE après quantification — le format fait partie du modèle
 
 ## 3. Travail accompli
 
@@ -1377,7 +1377,7 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 756 autres
+- … et 760 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1505,7 +1505,7 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 
 ## 5. Erreurs rencontrées
 
-43 sorties en erreur ou divergentes. Les premières :
+44 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : ```  ### 🤖 Assistant  ⏵ **En transformers 5, `AutoModel` rend directement `Qwen2Model` (pas de `.model`). Je corrige le diagnostic.**  - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitH
 - **T2** : 3310393 bash -c pgrep -af "essai_decharge" | grep python | head; echo "--- logs ---"; tail -2 /tmp/ec_d192_lr3e3.log 2>/dev/null; tail -2 /tmp/ec_d192_lr1e3.log 2>/dev/null; echo "---"; ls -la /tmp/ec
@@ -1597,4 +1597,5 @@ Corrigé : `raw_levels` refuse proprement en nommant le format, les appelants sa
 - Distinguer le moteur du modèle : évaluer un modèle ad hoc pour Drave  Le rapport de campagne mesurait le MOTEUR sur des modèles faits pour d'autres architecture
 - Trois dessins inédits que Drave récompense : profondeur routée, budget d'événements appris, quantification-aware  Le document n'évaluait que des leviers déjà ou
 - Budget d'événements : le premier essai d'allocation ciblée ÉCHOUE, et il apprend pourquoi  À événements comparables, une allocation ciblée d'après le tableau de
+- 80 000 pas : meilleur en fp32, PIRE après export — le format fait partie du modèle  Le routé 512 entraîné deux fois plus longtemps améliore sa validation fp32 (
 

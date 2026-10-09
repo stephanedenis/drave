@@ -214,8 +214,17 @@ coûte 2× le stockage de la forme 4 bits, laquelle n'a **aucun** noyau de liste
 
 - **Gain attendu** : le chemin événementiel sans le doublement de taille, donc la
   possibilité de l'employer sur un modèle qui ne tient pas en RAM.
+- **PREUVE QUE CE N'EST PAS UN DÉTAIL** (9/10) : le même routé 512 entraîné 80 000
+  pas au lieu de 40 000 est **meilleur en fp32** (1,8237 contre 1,8843 bits/octet)
+  et **pire après export Q4_0** (perplexité moteur 5,3845 contre 5,0255). Le prix de
+  la quantification est passé de **+0,445 à +0,605 bit/octet (+36 %)** — il croît
+  avec l'entraînement. La porte de correction tenue sur ce modèle (corrélation
+  0,9998) écarte l'erreur du moteur : c'est bien le modèle quantifié qui est moins
+  bon.
 - **Ce qui manque** : un entraînement avec bruit de quantification (le moteur a déjà
-  la grille, `--abits`, et son banc d'encodages).
+  la grille, `--abits`, et son banc d'encodages). **Et une limite de format** : les
+  experts d'un MoE ne peuvent être ni Q8_0 ni F16 (le chargeur les refuse), donc un
+  modèle routé ne peut pas même être *testé* en 8 bits aujourd'hui.
 
 ---
 

@@ -448,6 +448,29 @@ Le modèle produit ici est donc **5,2 % meilleur que son jumeau dense à lecture
 égale** (12,8 M paires par jeton de part et d'autre, vérifié par le compteur du
 moteur) — alors que sa partie routée seule était 10 % pire.
 
+**Et l'hypothèse « sous-entraîné » a été testée — elle est vraie en fp32, fausse
+après export.** Le même routé 512, entraîné **80 000 pas** au lieu de 40 000 :
+
+| routé 512 | validation fp32 (bits/octet) | PPL moteur (8 × 128) | écart de quantification |
+|---|---:|---:|---:|
+| 40 000 pas | 1,8843 | 5,0255 | **+0,445 bit/octet** |
+| **80 000 pas** | **1,8237** ✅ meilleur | **5,3845** ❌ pire | **+0,605 bit/octet** |
+
+**Deux fois plus d'entraînement améliore le modèle en fp32 (1,8237 — mieux que son
+jumeau dense, 1,8580) et le dégrade après quantification.** L'écart entre les deux
+est le prix de l'export en Q4_0, et il **croît avec l'entraînement** : +0,445 puis
++0,605 bit/octet, soit +36 %. Le chiffre du moteur est fidèle — la porte de
+correction a été passée sur ce modèle (corrélation des logits **0,9998**, 100 % des
+positions utiles au-dessus de 0,95, top-1 98,4 %).
+
+**Ce que cela change dans la façon de choisir un modèle** : le format d'export fait
+partie de la spécification. Un modèle entraîné plus longtemps n'est pas « meilleur »
+en Drave si sa quantification coûte davantage — et c'est exactement l'argument du
+dessin (J) de `docs/modele-pour-drave.md` : entraîner *pour* la grille dans laquelle
+on exécutera. *(Ce modèle ne peut d'ailleurs pas être testé en 8 bits : le chargeur
+d'experts refuse Q8_0 et F16 — les experts d'un MoE n'ont aujourd'hui que des
+formats 4 bits.)*
+
 **La recette qui sort de cette courbe est donc « router ET distiller »**, pas
 « router » — et c'est la distillation, pas le routage, qui porte le gain aux
 grandes échelles. Le mécanisme reste à expliquer (l'hypothèse la plus simple :
