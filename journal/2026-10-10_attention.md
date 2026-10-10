@@ -21,7 +21,7 @@
 | 10:07 | `85cf49c` | --attn-sinks : le refus etait FAUX (le compteur EST lu, branche a fenetre) — le drapeau vit, et le zero n'existait pas | `sprint-cerveau.md`, `main.rs`, `MANIFEST.md` (+5) |
 | 10:19 | `531e760` | Fenetre x puits d'attention : +2,0 % de perplexite pour divide 2,67 les cles notees (512 jetons) | `etat-cerveau.md`, `2026-10-10.md`, `README.md` (+4) |
 
-## Étapes du jour (5)
+## Étapes du jour (6)
 
 *Ce que l'agent a consigné en le faisant (lignes `⏵` du journal de session) :*
 
@@ -30,10 +30,11 @@
 - Round 28 livré : **protocole v7** — la fenêtre d'attention voyage, le refus disparaît, tout est vert
 - Round 42 livré : les trois lignes manquantes — le pilote applique enfin la fenêtre
 - Round 44 livré : `--attn-sinks` — écrit partout, transporté par le v7, **lu nulle part**
+- 2 048 jetons : le drain ne compense plus (+40 % au mieux) — j'écris la pente en N et je lance la suite (puits plus nombreux)
 
 ## Sessions actives ce jour
 
-- `d31b3d9b` — Où en est-on (début 2026-10-08 09:11, 49.4 h) → [rapport](sessions/d31b3d9b/rapport.md) · [digest](sessions/d31b3d9b/digest.md)
+- `d31b3d9b` — Où en est-on (début 2026-10-08 09:11, 49.5 h) → [rapport](sessions/d31b3d9b/rapport.md) · [digest](sessions/d31b3d9b/digest.md)
 
 ## Mesures et rapports touchés
 

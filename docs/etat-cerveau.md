@@ -81,13 +81,15 @@
 `journal/2026-10-10.md` et dans `docs/manques.md` (la ligne « les 23 portes sont vertes » était
 une affirmation sur une suite qui n'avait **jamais tourné comme une suite**).
 
-**2. Fenêtre × puits d'attention — MESURÉ, et la réponse est bonne** (fiche
-[`reports/rapport-fenetre-puits-attention.md`](../reports/rapport-fenetre-puits-attention.md)) :
-à **512 jetons**, l'attention complète vaut **13,1368** ; **fenêtre 128 + 64 puits** vaut
-**13,3968** (**+2,0 %**) en ne notant que **192 clés sur 512** (**÷2,67** des scores
-d'attention). Zéro puits **casse** le modèle (1297,54 à fenêtre 32 contre 29,02 à 4). Reste à
-mesurer : la pente en N (**2 048 / 4 096 jetons** — le drain doit-il croître avec la fenêtre ?),
-et la non-monotonie observée (128 bat 256 à drain égal, 0,6 %) à confirmer.
+**2. Fenêtre × puits d'attention — MESURÉ : gratuit à courte portée, payant à longue** (fiche
+[`reports/rapport-fenetre-puits-attention.md`](../reports/rapport-fenetre-puits-attention.md)).
+À **512 jetons**, **fenêtre 128 + 64 puits** = **13,3968** contre **13,1368** (**+2,0 %**) pour
+**192 clés sur 512** (**÷2,67**) ; à **2 048 jetons**, la meilleure case mesurée (**512 + 128**,
+640 clés sur 2 048, ÷3,2) coûte **+40,3 %** (14,5531 contre 10,3703). À taux de clés comparable
+(31 %), on paie **+2,0 % à 512** et **+40,3 % à 2 048** : ce n'est pas le nombre de clés qui
+décide, c'est **ce qu'on ne voit plus** — les puits drainent l'attention, ils ne la remplacent
+pas. Zéro puits **casse** le modèle (1297,54 à fenêtre 32 contre 29,02 à 4). En cours : un drain
+proportionnellement plus grand (256/512 puits) rachète-t-il le prix à 2 048 ?
 
 **3. C8 (suite) — une tête entraînée par profondeur.** Le réflexe ne peut pas lire un état
 intermédiaire (cos 0,145) : entraîner une tête linéaire sur l'état de la couche 16 et mesurer son

@@ -35157,3 +35157,53 @@ table des thèmes ajoutée
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Journal : journal/THEMES.md, la regle de classement rendue lisible et modifiable\n\nLes themes etaient dans le script seulement. La table est maintenant ecrite dans le\njournal (theme, ce qu'il couvre … [309 caractères tronqués]`
+
+  ```
+poussé
+|---|---|---|---|
+| **128** | 20.6093 | 17.6891 | 16.4784 |
+| **256** | 18.4229 | 16.4944 | 15.5281 |
+| **512** |  porte-fusion           ✅                           8 s    ✅ v1 refusée (code 2), trace seule refusée (code 2)
+  porte-gain             ✅                         388 s    ✅ drapeau VIVANT mais conditionnel : 0 casse (29.0206 → 1297.5437), 24 améliore (27.4439), san
+  ```
+
+- **todo_write** `{"todos": [{"content": "Corriger les estampilles : fuseau HAE/EDT et dates réelles tirées de git", "status": "completed"}, {"content": "Écrire docs/organisation-du-depot.md (rôles, nommage, fuseau)", "status": "completed"}, {"content": "Éclater les monolithes de reports/ en une fiche par expérience  … [524 caractères tronqués]`
+
+  ```
+Updated todo list: 1 pending, 1 in progress, 5 completed.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 300; cat /tmp/carte-2048.md; echo \"=== passe ===\"; tail -3 /tmp/passe-complete.log", "description": "Wait for 2048 map to finish", "timeoutMs": 600000}`
+
+  ```
+référence (aucune fenêtre, 2048 jetons) : perplexité 10.3703  ·  clés notées par jeton ≈ 2048
+
+| fenêtre \ puits | 0 | 64 | 128 |
+|---|---|---|---|
+| **128** | 20.6093 | 17.6891 | 16.4784 |
+| **256** | 18.4229 | 16.4944 | 15.5281 |
+| **512** | 15.4711 | 15.0810 | 14.5531 |
+
+Chaque case : perplexité. Clés notées par jeton ≈ fenêtre + puits (le prix), contre 2048
+pour l'attention complète — c'est le SEUL poste que la fenêtre réduit.
+=== passe ===
+  porte-fusion           ✅                           8 s    ✅ v1 refusée (code 2), trace seule refusée (code 2)
+  porte-gain             ✅                         388 s    ✅ drapeau VIVANT mais conditionnel : 0 casse (29.0206 → 1297.5437), 24 améliore (27.4439), san
+  porte-greffe           ✅                         971 s    ✅ la porte est franchie. Ce qu'elle établit : l'injection d'état est BRANCHÉE
+  ```
+
+### 👤 Utilisateur
+
+background job bash-29 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && LIMITE=2048 CTX=2048 FENETRES="128 256 512" PUITS="0 64 128" bash tools/carte-fenetre-puits.sh 2048 > /tmp/carte-2048.md 2>&1; echo "CODE=$?"; cat /tmp/carte-2048.md) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 🤖 Assistant
+
+⏵ 2 048 jetons : le drain ne compense plus (+40 % au mieux) — j'écris la pente en N et je lance la suite (puits plus nombreux)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && LIMITE=2048 CTX=2048 FENETRES=\"512 1024\" PUITS=\"128 256 512\" bash tools/carte-fenetre-puits.sh 2048 > /tmp/carte-2048b.md 2>&1; echo \"CODE=$?\"; cat /tmp/carte-2048b.md", "description": "Launch follow-up map with larger drains", … [27 caractères tronqués]`
+
+  ```
+started background job bash-30
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"reports/rapport-fenetre-puits-attention.md\"); s = p.read_text()\n\n# le verdict d'en-tête doit dire la vérité complète : courte ET longue portée\nold = \"\"\"> Verdict : **oui* … [6244 caractères tronqués]`
