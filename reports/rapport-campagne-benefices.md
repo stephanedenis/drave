@@ -1619,17 +1619,29 @@ pourquoi `--episodique-indice` accepte un état **extérieur**, qui n'est pas da
 magasin.
 
 Avec un indice extérieur qui ne partage que **4 canaux sur 64**, la mémoire rend un
-épisode à **136 jetons** de l'information — **3,3× mieux que le hasard** (448), soit le
-meilleur ~16 % des épisodes. C'est ** faible et réel** : le rappel par le contenu
-n'est pas sémantique au sens d'un moteur de recherche, mais il n'est pas aveugle non
-plus — un contexte qui pose la même question sans contenir la réponse tombe dans le
-voisinage du passage qui la contient.
+épisode à **136 jetons** de l'information — **3,3× mieux que le hasard** (448).
 
-**Conditions, et elles limitent la portée** : **un seul** indice extérieur a été
-mesuré, sur un seul texte ; la position de l'aiguille est connue par construction (le
-protocole la plante) ; et le « voisinage » de 136 jetons (~700 caractères) n'est utile
-que si le passage cherché tient dans cette fenêtre. Répéter avec plusieurs questions et
-plusieurs textes est la mesure suivante, et elle n'est pas faite.
+**Et cette marge n'est PAS robuste — corrigé après une deuxième mesure.** En écrivant la
+porte de ce résultat, la question a été écrite avec un **point d'interrogation** de plus
+(« Answer with the code only? » au lieu de « … only. ») : le même protocole donne alors
+un épisode à **378 jetons** de l'aiguille, toujours sous le hasard (448) mais **2,8 fois
+plus loin**. Un état de question change donc beaucoup pour un caractère de différence.
+
+| indice extérieur (contexte sans l'aiguille) | rendu | recouvrement | distance à l'aiguille | hasard |
+|---|---|---|---|---|
+| question terminée par « only. » | 604 | 4/64 | **136** | 448 |
+| question terminée par « only? » | 362 | 3/64 | **378** | 448 |
+
+**Conclusion honnête, et elle remplace la première** : le rappel par le contenu
+**n'est pas sémantique** (il ne trouve pas l'aiguille depuis la seule question), et
+l'effet de voisinage qu'on croyait tenir **dépend de la formulation exacte de l'indice**.
+Ce qui reste solide, c'est le reste : l'écho (un indice pris dans le magasin s'y
+retrouve lui-même, 64/64), la complétion de motif depuis une clé dégradée (§24 ter), et
+la localisation en jetons quand l'indice VIENT du contenu cherché.
+
+**Conditions** : deux indices extérieurs seulement, un seul texte, position de l'aiguille
+plantée par construction. La mesure suivante — plusieurs questions, plusieurs textes, et
+la **moyenne** des distances plutôt qu'un cas — n'est pas faite.
 
 ### 24 quater. Consolider par rejeu : garder un CAS bat résumer par une MOYENNE
 

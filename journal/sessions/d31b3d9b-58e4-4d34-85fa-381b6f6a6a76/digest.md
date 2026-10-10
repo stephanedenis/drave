@@ -26924,3 +26924,107 @@ qui n'est pas dans le magasin : .
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -q --amend -F - <<'MSG'\nC6 : un indice ÉTRANGER retrouve le bon passage — 136 jetons contre 448 de hasard\n\nToutes les mesures précédentes interrogeaient la mémoire avec un indice ISSU de\nl'épisode cherché (une version  … [1933 caractères tronqués]`
+
+  ```
+contre 448 de hasard) — la mesure ne testait donc rien du tout. D'où un état EXTÉRIEUR,
+qui n'est pas dans le magasin : l'option --episodique-indice FICHIER.
+
+7a8cfb7 C6 : un indice ÉTRANGER retrouve le bon passage — 136 jetons contre 448 de hasard
+  ```
+
+### 🤖 Assistant
+
+⏵ Je transforme la mesure d'indice en porte — je ne laisse pas un résultat sans garde
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/porte-indice.sh <<'GATEFILE'\n#!/bin/bash\n# porte-indice.sh — C6 : un indice ÉTRANGER retrouve-t-il le bon passage ?\n#\n# LA QUESTION, ET ELLE DIFFÈRE DE TOUTES LES AUTRES MESURES DE C6. Jusqu'ici la mémoire\n# était in … [6632 caractères tronqués]`
+
+  ```
+lancé
+  ```
+
+- **bash** `{"command": "sleep 420; cat /tmp/porte_indice.txt", "description": "Wait for the cue gate result", "timeoutMs": 500000}`
+
+  ```
+=== 0. deux invites qui ne diffèrent que d'une phrase ===
+  A 1750 jetons · B 1721 · aiguille (fin du code) au jeton 740
+=== 1. A répond le code, B non ===
+  A : Answer: ZQ-447
+  B : Answer: 150px
+  ✅ les deux invites diffèrent bien par l'aiguille seule
+=== 2. indice EXTÉRIEUR : l'état de la question de B (pas dans le magasin de A) ===
+    capture d'état    : position(s) [1720] écrite(s) dans /tmp/tmp.voWhJYqTqt/etatB.*
+    capture d'état    : position(s) [1749] écrite(s) dans /tmp/tmp.voWhJYqTqt/etatA.*
+=== 3. la mémoire interroge A, avec puis sans l'indice extérieur ===
+  ```
+
+- **bash** `{"command": "sleep 280; tail -16 /tmp/porte_indice.txt", "description": "Read gate verdict", "timeoutMs": 340000}`
+
+  ```
+capture d'état    : position(s) [1720] écrite(s) dans /tmp/tmp.voWhJYqTqt/etatB.*
+    capture d'état    : position(s) [1749] écrite(s) dans /tmp/tmp.voWhJYqTqt/etatA.*
+=== 3. la mémoire interroge A, avec puis sans l'indice extérieur ===
+  écho     indice SÉMANTIQUE : l'état de la question, position 1749, aiguille en 740 :
+  écho       épisode rendu : 1749 · recouvrement 64/64 · distance à l'aiguille : 1009 jetons
+  écho       hasard        : 448 jetons en moyenne sur 1750 épisodes
+  écho       ⇒ la mémoire n'a PAS retrouvé l'aiguille : un indice qui ne ressemble pas au contenu cherché ne le retrouve pas. C'est une limite du rappel par le contenu — il n'est pas sémantique —, et elle est mesurée, pas supposée.
+  écho   
+  extérieur   indice SÉMANTIQUE : EXTÉRIEUR (/tmp/tmp.voWhJYqTqt/etatB.1720, 896 valeurs) — il n'est PAS dans le magasin, aiguille en 740 :
+  extérieur     épisode rendu : 362 · recouvrement 3/64 · distance à l'aiguille : 378 jetons
+  extérieur     hasard        : 448 jetons en moyenne sur 1750 épisodes
+  extérieur     ⇒ la mémoire n'a PAS retrouvé l'aiguille : un indice qui ne ressemble pas au contenu cherché ne le retrouve pas. C'est une limite du rappel par le cont
+… [326 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Résultat NON robuste : un point d'interrogation de plus fait passer la distance de 136 à 378 — je corrige mon propre excès
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"tools/porte-indice.sh\")\ns = p.read_text()\n\n# le prompt revient à celui de la mesure documentée (le point final)\ns = s.replace('''q = \"\\\\nQuestion: What is the vault acce … [2376 caractères tronqués]`
+
+  ```
+assertion corrigee
+relancée
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/fragile.py <<'ENDPY'\nimport pathlib\n\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\na = \"\"\"Avec un indice extérieur qui ne partage que **4 canaux sur 64**, la mémoire rend un\népisode … [4396 caractères tronqués]`
+
+  ```
+fragilite documentee
+ok
+  ```
+
+- **bash** `{"command": "sleep 400; tail -8 /tmp/porte_indice2.txt", "description": "Check relaunched gate", "timeoutMs": 460000}`
+
+  ```
+=== 1. A répond le code, B non ===
+  A : Answer: ZQ-447
+  B : Answer: 150px
+  ✅ les deux invites diffèrent bien par l'aiguille seule
+=== 2. indice EXTÉRIEUR : l'état de la question de B (pas dans le magasin de A) ===
+    capture d'état    : position(s) [1720] écrite(s) dans /tmp/tmp.BsKXvL1mkA/etatB.*
+    capture d'état    : position(s) [1749] écrite(s) dans /tmp/tmp.BsKXvL1mkA/etatA.*
+=== 3. la mémoire interroge A, avec puis sans l'indice extérieur ===
+  ```
+
+- **bash** `{"command": "sleep 300; tail -12 /tmp/porte_indice2.txt", "description": "Read final gate verdict", "timeoutMs": 360000}`
+
+  ```
+extérieur   indice SÉMANTIQUE : EXTÉRIEUR (/tmp/tmp.BsKXvL1mkA/etatB.1720, 896 valeurs) — il n'est PAS dans le magasin, aiguille en 740 :
+  extérieur     épisode rendu : 604 · recouvrement 4/64 · distance à l'aiguille : 136 jetons
+  extérieur     hasard        : 448 jetons en moyenne sur 1750 épisodes
+  extérieur     ⇒ la mémoire a retrouvé le VOISINAGE de l'aiguille
+  extérieur 
+  ✅ indice interne : écho (64/64) — la mesure ne prouve RIEN, et c'est pourquoi la porte exige un indice extérieur
+  ✅ indice extérieur : recouvrement 4/64 (pas un écho), distance à l'aiguille 136 jetons contre 448 de hasard (3.29× mieux)
+
+  ✅ la porte est franchie. Limite, et elle est écrite : UN SEUL indice extérieur,
+     sur UN SEUL texte, et la position de l'aiguille est plantée par construction.
+  Fichiers conservés dans /tmp/tmp.BsKXvL1mkA
+code=0
+  ```
+
+### 🤖 Assistant
+
+⏵ Porte verte (136 jetons, 3,29× mieux que le hasard) — je commite avec la correction honnête
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 cargo test --release --manifest-path drave-core/Cargo.toml 2>&1 | grep -E \"^test result\" && git add -A tools/porte-indice.sh reports/rapport-campagne-benefices.md docs/sprint-cerveau.md && git commit -q -F - <<'MSG'\nC6 … [2053 caractères tronqués]`
