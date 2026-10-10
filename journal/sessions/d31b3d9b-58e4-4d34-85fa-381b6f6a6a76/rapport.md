@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 47.6 h |
-| Tours | 71 |
-| Messages | 1932 |
-| Appels d'outils | 1788 |
+| Durée | 47.7 h |
+| Tours | 72 |
+| Messages | 1937 |
+| Appels d'outils | 1791 |
 | Fichiers touchés | 61 |
-| Commandes | 1538 |
+| Commandes | 1541 |
 | Sous-agents | 3 |
-| Commits | 161 |
+| Commits | 162 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -177,6 +177,8 @@
 **Tour 70** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 **Tour 71** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
+
+**Tour 72** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -3052,7 +3054,40 @@ Les **huit modifications** de la spécification du round 26 ont été appliquée
 
 **Synthèse produite :**
 
-⏵ **v7 livré** : 18,5520 des deux côtés, écart 0,00e0 (contre 195 vs 50 avant) — je documente et commite
+⏵ Round 28 livré : **protocole v7** — la fenêtre d'attention voyage, le refus disparaît, tout est vert
+
+**Ce round** — 1 commit poussé, **122 tests verts**, **`porte-flux.sh` vert** (5 modes, écarts inchangés). Le round 27 avait reverté le v7 à cause de neuf tests rouges ; la cause était précise, et elle est corrigée **avant** de réappliquer :
+
+- les constructeurs de **trame forgée** remplissaient l'en-tête avec **dix mots littéraux** — ils **calculent** maintenant le remplissage à partir de `TAILLE_TETE`, donc le prochain ajout de champ ne les cassera plus ;
+- puis le v7 a été appliqué en **11 sites** : `Act` (+3 champs), `du_modele`, `appliquer`, `TAILLE_TETE` (**79 → 91**), `VERSION_FLUX` (**6 → 7**), encodeur (offsets 79/83/87), décodeur, initialiseur, retrait du refus, et les deux assertions « de mémoire ».
+
+**Mesure, avec `--attn-window 64` en réparti :**
+
+| | perplexité |
+|---|---|
+| référence locale du run réparti | **18,5520** |
+| découpage (12 + 12 couches) | **18,5520** |
+| **écart de flux** | **0,00e0** |
+
+Là où le câblage sans transport donnait **195,5685 contre 50,3829** — un facteur 4, **deux modèles différents sous le même nom** — les deux moitiés s'accordent maintenant **au bit près**. Le chemin purement local donne 21,5801 avec le même réglage : un **autre** calcul, mais un calcul **annoncé**.
+
+**Le refus est retiré** : il était la bonne conduite tant que la trame ne transportait pas ces réglages ; il devient un obstacle dès qu'elle les transporte.
+
+**Enseignement écrit** : une modification de protocole se compte en **trois** endroits — l'encodeur, le décodeur, **et les tests qui le forgent**.
+
+**Bilan** : 28 rounds, 22 portes toutes vertes, 122 tests, protocole v7 livré. Ce qui attend : le budget `paires/s` (le compte de paires à transporter, même mécanisme que v7), la tête dédiée par profondeur (C8), et le compte de paires côté nœud. L'objectif reste **actif**.
+
+### Tour 72 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Verify the protocol-dependent gates after v7
+- bash — Check the v7 verification suite
+- bash — Commit the v7 verification across gates
+
+**Synthèse produite :**
+
+⏵ Les huit portes réparties sont vertes après le v7 — je consigne la vérification
 
 ## 3. Travail accompli
 
@@ -3170,7 +3205,7 @@ Les **huit modifications** de la spécification du round 26 ont été appliquée
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1498 autres
+- … et 1501 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3479,4 +3514,5 @@ Les **huit modifications** de la spécification du round 26 ont été appliquée
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib p = pathlib.Path("docs/sprint-cerveau.md") s = p.read_text() a = "## ▶ 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib p = pathlib.Path("docs/sprint-cerveau.md") s = p.read_text() a = "## ▶ 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib p = pathlib.Path("docs/sprint-cerveau.md") s = p.read_text() a = "## ▶ 
 

@@ -597,6 +597,33 @@ modification de protocole se compte en TROIS endroits, pas deux.
 
 ---
 
+## VÉRIFICATION DU PROTOCOLE v7 SUR TOUTES LES PORTES RÉPARTIES — FAITE (11 octobre 16 h 30)
+
+Le v7 change la **mise en page de la trame**, donc **toutes** les exécutions à deux nœuds. Les
+huit portes qui parlent le protocole ont été rejouées après le changement :
+
+| porte | résultat |
+|---|---|
+| `porte-flux.sh` (les deux côtés, 5 modes) | **code 0** — écarts inchangés : 0,00e0 · 0,00e0 · 3,65e-2 · 0,00e0 · 4,45e-3 |
+| `porte-pannes.sh` | **code 0** — pannes nommées, code 7 |
+| `porte-registre.sh` | **code 0** |
+| `porte-budget.sh` | **code 0** — budgets d'octets et de latence |
+| `porte-pont.sh` | **code 0** — fibres, falaise, symétrie |
+| `porte-coupe.sh` | **code 0** — points de coupe |
+| `porte-bus-socket.sh` | **code 0** — bus par le réseau |
+| `porte-horloge.sh` | **code 0** — bornes de pas |
+| `porte-fusion.sh` | **code 0** — fusion des traces |
+
+**Huit vertes, aucune rouge, 122 tests verts.** Un en-tête décalé d'un octet aurait fait tomber
+la première ; les sept autres vérifient que le reste du contrat (pannes, budgets, fibres,
+registre, bus, horloge, traces) n'a pas bougé.
+
+**Ce qui attend son premier round** : le **compte de paires côté nœud** (même mécanisme que le
+v7 : un champ dans la trame de réponse, protocole v8) pour clore le budget `paires/s` — le
+troisième volet de C10, dont les octets et la latence sont déjà faits.
+
+---
+
 ## ▶ PROCHAINE ACTION (à lire en premier)
 
 État au **11 octobre 6 h 45** · **21 portes, toutes vertes** (`tools/porte-*.sh`) ·

@@ -30881,3 +30881,75 @@ porte-flux code=0
 ⏵ **v7 livré** : 18,5520 des deux côtés, écart 0,00e0 (contre 195 vs 50 avant) — je documente et commite
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\n\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\na = \"## Annexe — manifeste des journaux\"\nsec = \"\"\"## 40. Protocole v7 : la fenêtre d'attention voyage, et le … [5912 caractères tronqués]`
+
+  ```
+docs v7 livre
+dd66191 PROTOCOLE v7 LIVRE : la fenetre d'attention voyage, le refus disparait, tout est vert
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 28 livré : **protocole v7** — la fenêtre d'attention voyage, le refus disparaît, tout est vert
+
+**Ce round** — 1 commit poussé, **122 tests verts**, **`porte-flux.sh` vert** (5 modes, écarts inchangés). Le round 27 avait reverté le v7 à cause de neuf tests rouges ; la cause était précise, et elle est corrigée **avant** de réappliquer :
+
+- les constructeurs de **trame forgée** remplissaient l'en-tête avec **dix mots littéraux** — ils **calculent** maintenant le remplissage à partir de `TAILLE_TETE`, donc le prochain ajout de champ ne les cassera plus ;
+- puis le v7 a été appliqué en **11 sites** : `Act` (+3 champs), `du_modele`, `appliquer`, `TAILLE_TETE` (**79 → 91**), `VERSION_FLUX` (**6 → 7**), encodeur (offsets 79/83/87), décodeur, initialiseur, retrait du refus, et les deux assertions « de mémoire ».
+
+**Mesure, avec `--attn-window 64` en réparti :**
+
+| | perplexité |
+|---|---|
+| référence locale du run réparti | **18,5520** |
+| découpage (12 + 12 couches) | **18,5520** |
+| **écart de flux** | **0,00e0** |
+
+Là où le câblage sans transport donnait **195,5685 contre 50,3829** — un facteur 4, **deux modèles différents sous le même nom** — les deux moitiés s'accordent maintenant **au bit près**. Le chemin purement local donne 21,5801 avec le même réglage : un **autre** calcul, mais un calcul **annoncé**.
+
+**Le refus est retiré** : il était la bonne conduite tant que la trame ne transportait pas ces réglages ; il devient un obstacle dès qu'elle les transporte.
+
+**Enseignement écrit** : une modification de protocole se compte en **trois** endroits — l'encodeur, le décodeur, **et les tests qui le forgent**.
+
+**Bilan** : 28 rounds, 22 portes toutes vertes, 122 tests, protocole v7 livré. Ce qui attend : le budget `paires/s` (le compte de paires à transporter, même mécanisme que v7), la tête dédiée par profondeur (C8), et le compte de paires côté nœud. L'objectif reste **actif**.
+
+
+## Tour 72
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 mémoire épisodique, C7 consolidation, C8 périphérie, C9 latéralité, C10 budgets, et la diffusion réseau du bus de C5 ; (b) les expériences E2-E9 de docs/biologie-pour-drave.md et docs/hebbien-differentiel-et-biologie.md ; (c) les dessins de modèle H/I/J de docs/modele-pour-drave.md ; (d) les manques du registre docs/manques.md (noyau de listes pour les experts, noyau de listes GPU, encodeurs) — l'implémenter ou la mesurer, la doter d'une porte vérifiable, la documenter, commiter, pousser, et enchaîner immédiatement sur la suivante. Contraintes : les 23 portes du dépôt et tous les tests restent verts (porte-flux.sh après toute modification du chemin d'exécution), le profil release reste le binaire de mesure, le crate reste std seul, et docs/sprint-cerveau.md reste l'état resumable mis à jour à chaque round. Ne jamais s'arrêter faute de tâches planifiées : en inventer de nouvelles, mesurables, plutôt que d'attendre."
+Round: 29/60
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 29 : le v7 touche TOUTES les exécutions réparties — je vérifie les portes qui parlent le protocole
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/suite_v7.sh <<'EOF'\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nfor p in porte-pannes porte-registre porte-budget porte-pont porte-coupe porte-bus-socket porte-horloge porte-fusion; do\n  R=$(timeout 2400 bash \"t … [347 caractères tronqués]`
+
+  ```
+suite v7 lancée (8 portes réparties)
+  ```
+
+- **bash** `{"command": "sleep 570; cat /tmp/suite_v7.txt", "description": "Check the v7 verification suite", "timeoutMs": 640000}`
+
+  ```
+porte-pannes : code=0 rouges=0
+porte-registre : code=0 rouges=0
+porte-budget : code=0 rouges=0
+porte-pont : code=0 rouges=0
+porte-coupe : code=0 rouges=0
+porte-bus-socket : code=0 rouges=0
+porte-horloge : code=0 rouges=0
+porte-fusion : code=0 rouges=0
+FINI
+  ```
+
+### 🤖 Assistant
+
+⏵ Les huit portes réparties sont vertes après le v7 — je consigne la vérification
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"docs/sprint-cerveau.md\")\ns = p.read_text()\na = \"## ▶ PROCHAINE ACTION (à lire en premier)\"\nneuf = \"\"\"## VÉRIFICATION DU PROTOCOLE v7 SUR TOUTES LES PORTES RÉPARTIES — F … [2890 caractères tronqués]`
