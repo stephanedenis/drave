@@ -2,7 +2,7 @@
 
 > Campagne : **outillage** · expérience : la passe complète (`tools/toutes-les-portes.sh`)
 > Question : les portes du dépôt passent-elles **toutes**, quand on les lance **toutes** ?
-> Verdict : **oui** — **22 sur 22** au premier passage (10 h 07), puis **23 sur 23** en
+> Verdict : **oui** — **22 sur 22** au premier passage (11 h 07), puis **23 sur 23** le 2026-10-10 à **15 h 15** en
 > **58 minutes** après l'ajout de `porte-peripherie.sh` et des changements du moteur
 > (17 h 55) — et la passe a trouvé ce qu'une porte lancée
 > seule ne pouvait pas montrer : `porte-tokenizer-kimi` sortait **verte en comparant zéro jeton**

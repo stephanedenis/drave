@@ -11,7 +11,7 @@
 > réflexe n'est plus qu'à **×5,7** du modèle complet (il en était à ×46 000 avec la tête
 > empruntée). Avec **7 morceaux seulement**, la même recette donne 202,17 — **les données
 > comptent** (÷2,4), et le surapprentissage arrive plus tôt.
-> Date réelle : **2026-10-10 14:20 HAE** · **toutes les graines sont fixées** (`--graine 0`).
+> Date réelle : **2026-10-10 13:45 HAE** · **toutes les graines sont fixées** (`--graine 0`).
 > Protocole : `tools/c8_corpus.sh` (morceaux de 1 024 jetons pris à des endroits différents du
 > corpus) puis `tools/c8_entrainer_tete.py --train … --test …`.
 

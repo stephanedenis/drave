@@ -13,7 +13,7 @@
 > d'entraînement et le morceau de test **portent le même contenu**. Un adaptateur linéaire ne peut
 > pas battre un modèle de 24 couches sur du texte neuf ; il le « bat » ici parce que le contenu
 > du test a déjà été vu, dans d'autres langues.
-> Date réelle : **2026-10-10 16:05 HAE** · graine fixée, morceau de test exclu de la liste.
+> Date réelle : **2026-10-10 14:07 HAE** · graine fixée, morceau de test exclu de la liste.
 > Protocole : `tools/c8_corpus.sh` sur `ids_b2_multilingue.txt` (30 morceaux), puis
 > `tools/c8_entrainer_tete.py`.
 

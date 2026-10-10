@@ -1,6 +1,6 @@
 # Note — la périphérie de C8 : entrées, sorties, réflexes
 
-> **2026-10-10 15:35 HAE**, **mise à jour à 16:55 : la conception est IMPLÉMENTÉE** et mesurée —
+> **2026-10-10 13:48 HAE**, **mise à jour à 14:19 : la conception est IMPLÉMENTÉE** et mesurée —
 > `--entree signal:F`, `--entree-canal`, `--entree-gain`, `--entree-jeton`, `--delai`,
 > `--recurent`, `--sortie F`, avec la porte `tools/porte-peripherie.sh` (déterminisme, entrée
 > constante, délai exact, quatre refus, paires par décision). Le résultat est dans

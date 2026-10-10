@@ -9,7 +9,7 @@
 > (adaptateur entraîné, évalué sur des positions **jamais vues**), soit **÷540**. Le modèle
 > complet, sur ce même texte, vaut **14,2342** : le réflexe reste **×59** derrière — il devient
 > **utilisable**, pas **équivalent**.
-> Date réelle : **2026-10-10 13:10 HAE**.
+> Date réelle : **2026-10-10 12:34 HAE** (commit qui a écrit la fiche).
 > Protocole : `tools/c8_entrainer_tete.py` · états capturés par `drave --couches 0:16
 > --tete-partielle --etat-sortie F --etat-pos 4,…,8190` · Qwen2.5-0.5B-Q8_0,
 > `ids_0.5B-Q8.txt`, 8 192 jetons, tête liée `token_embd.weight` (Q8_0, gelée) + `output_norm`.

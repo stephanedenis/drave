@@ -11,7 +11,7 @@
 > (**÷4 456**). Le modèle complet vaut **8,3650** sur ce morceau : le transfert reste à
 > **×25,1** du modèle, la version du domaine à **×9,8**. **Le changement de corpus coûte un
 > facteur 2,6**, pas l'effondrement qu'on pouvait craindre.
-> Date réelle : **2026-10-10 15:10 HAE** · graine fixée (`--graine 0`), morceau de test **exclu**
+> Date réelle : **2026-10-10 13:40 HAE** · graine fixée (`--graine 0`), morceau de test **exclu**
 > de l'entraînement dans les deux cas.
 > Protocole : `tools/c8_corpus.sh` sur `ids_b2_prose.txt` (30 morceaux) et sur `ids_0.5B-Q8.txt`
 > (40 morceaux), puis `tools/c8_entrainer_tete.py --train … --test …`.

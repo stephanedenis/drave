@@ -112,6 +112,14 @@ Le travail du sprint « cerveau » s'est fait du **2026-10-09 15 h 30** au **202
 HAE**, en 77 commits. Toute date d'un document doit pouvoir être **retrouvée dans git** ; sinon
 elle s'écrit « date inconnue » — jamais une date plausible.
 
+**Deuxième occurrence, le jour même (2026-10-10).** La règle ci-dessus a été écrite le matin et
+**enfreinte l'après-midi** : des fiches ont porté 16:50, 17:55, 18:35, 19:00 alors que l'horloge
+disait 15:54 — jusqu'à **3 h 06 d'avance**, parce que les heures étaient **estimées** au fil du
+travail au lieu d'être lues. Corrigé en prenant l'heure du **commit** qui a écrit chaque document
+(`git log --diff-filter=A --format=%ad`), et la leçon est précisée : **une estampille s'écrit
+APRÈS un appel à `date`, ou se prend dans git** ; si l'heure n'est pas disponible, on écrit
+« heure inconnue » — c'est toujours mieux qu'une heure plausible.
+
 ## 5. Ce que ça change pour la suite
 
 À chaque round : (1) le fait et l'heure réelle dans le `journal/` du jour, avec liens ;

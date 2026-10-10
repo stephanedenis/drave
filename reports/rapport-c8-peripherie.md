@@ -10,7 +10,8 @@
 > **pas** le signal d'il y a 8 pas (R² = **−0,973**) : le modèle ne garde rien de linéairement
 > lisible. Le délai demandé au moteur, lui, est **exact** — mais c'est **l'interface** qui fait la
 > mémoire, pas le cerveau, et la différence est écrite ici pour qu'elle ne se confonde pas.
-> Date réelle : **2026-10-10 16:50 HAE**.
+> Date réelle : **2026-10-10 14:20 HAE**, complétée jusqu'à **15:53** (les quatre sections
+> 2 bis à 2 quater ont été écrites après la première version de la fiche).
 > Protocole : `drave --entree signal:F --sortie G [--delai N] [--recurent]`, puis
 > `tools/peripherie_poursuite.py` (lecture apprise par régression ridge, moitié des pas pour
 > apprendre, l'autre pour mesurer). Porte : `tools/porte-peripherie.sh`.

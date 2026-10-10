@@ -10,7 +10,8 @@
 > la classe majoritaire et **0,39 %** pour le hasard — **et cela dès 4 couches** (45,9 %). La tête
 > empruntée, elle, rend **1 127 368** de perplexité à 16 couches contre **9,4341** pour le modèle
 > complet : **le maillon faible est la tête**, et C8 a un sens. La courbe complète est au § 3.
-> Date réelle : **2026-10-10 11:35 HAE**.
+> Date réelle : **2026-10-10 11:28 HAE** (heure du commit qui a écrit cette fiche — lue
+> dans git, pas estimée : voir `docs/organisation-du-depot.md` § 4).
 > Protocole : `tools/c8_sonde_lineaire.py` (capture par `drave --couches 0:15 --tete-partielle
 > --etat-sortie F --etat-pos 4,5,…,1023`), Qwen2.5-0.5B-Q8_0, `ids_0.5B-Q8.txt`, 1 024 jetons.
 

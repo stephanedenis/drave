@@ -39550,3 +39550,97 @@ CODE=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"reports/rapport-c8-peripherie.md\"); s = p.read_text()\nancre = \"## 3. Ce que ça change pour C8\"\nsec = \"\"\"## 2 quater. Donner le passé en entrée : il devient PARTIELLEMENT … [5458 caractères tronqués]`
+
+  ```
+§ tampon ajouté
+état mis à jour
+récit complété
+test result: ok. 122 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.31s
+poussé
+ed49d1b C8 : un tampon en entree rend le passe PARTIELLEMENT lisible (R2 +0,283 contre -0,399)
+  ```
+
+### 🤖 Assistant
+
+⏵ Le moteur a changé : je relance la passe complète (23 portes) en tâche de fond
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && DELAI=2400 JOURNAUX=/tmp/portes-1210d nohup bash tools/toutes-les-portes.sh > /tmp/passe-complete3.log 2>&1 & sleep 3; echo \"passe lancée (pid $!)\"; date '+%H:%M'", "description": "Launch the third full pass", "timeoutMs": 120000}`
+
+  ```
+passe lancée (pid 2335925)
+15:54
+  ```
+
+### 🤖 Assistant
+
+⏵ Alerte : l'horloge réelle dit 15:54 — plusieurs de mes estampilles récentes sont en avance ; j'audite et je corrige
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%Y-%m-%d %H:%M %Z'; echo \"=== estampilles que j'ai écrites aujourd'hui (docs/ reports/) ===\"; grep -rnoE \"(1[0-9]|09) h [0-9]{2}|1[0-9]:[0-9]{2} HAE|2026-10-10 1[0-9]:[0-9]{2}\" docs/*.md reports/rapport-c8-*.md reports/rap … [181 caractères tronqués]`
+
+  ```
+2026-10-10 15:54 EDT
+=== estampilles que j'ai écrites aujourd'hui (docs/ reports/) ===
+      6 reports/rapport-passe-complete-portes.md
+      5 docs/organisation-du-depot.md
+      3 docs/biologie-pour-drave.md
+      2 docs/references-non-regression.md
+      2 docs/modele-pour-drave.md
+      2 docs/etat-cerveau.md
+      1 reports/rapport-fenetre-puits-attention.md
+      1 reports/rapport-c8-transfert-corpus.md
+      1 reports/rapport-c8-tete-entrainee.md
+      1 reports/rapport-c8-sonde-profondeur.md
+      1 reports/rapport-c8-peripherie.md
+      1 reports/rapport-c8-inter-langue.md
+  ```
+
+### 🤖 Assistant
+
+⏵ Méthode du dépôt : la date se lit dans git — je récupère l'horloge réelle de chaque fiche
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for f in reports/rapport-c8-sonde-profondeur.md reports/rapport-c8-tete-entrainee.md reports/rapport-c8-generalisation.md reports/rapport-c8-transfert-corpus.md reports/rapport-c8-inter-langue.md reports/rapport-c8-peripherie.md repo … [428 caractères tronqués]`
+
+  ```
+reports/rapport-c8-sonde-profondeur.md : créé 11:28 · dernier 11:41
+reports/rapport-c8-tete-entrainee.md : créé 12:34 · dernier 12:36
+reports/rapport-c8-generalisation.md : créé 12:44 · dernier 13:46
+reports/rapport-c8-transfert-corpus.md : créé 13:40 · dernier 13:40
+reports/rapport-c8-inter-langue.md : créé 14:07 · dernier 14:15
+reports/rapport-c8-peripherie.md : créé 14:19 · dernier 15:53
+reports/rapport-passe-complete-portes.md : créé 11:22 · dernier 15:21
+reports/rapport-fenetre-puits-attention.md : créé 10:19 · dernier 12:04
+docs/note-peripherie-c8.md : créé 13:48 · dernier 14:19
+docs/etat-cerveau.md : créé 10:18 · dernier 15:53
+docs/organisation-du-depot.md : créé 10:18 · dernier 11:42
+  ```
+
+### 🤖 Assistant
+
+⏵ Je corrige toutes les estampilles en avance avec les heures RÉELLES de git, et je consigne ma propre rechute
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/^## 4. Le fuseau/,/^## 5/p' docs/organisation-du-depot.md | head -20; python3 -c \"\nimport pathlib, subprocess\n# l'heure réelle de la fin de la 2e passe : mtime du journal de passe\nimport os, time\nfor f in ('/tmp/passe-c … [212 caractères tronqués]`
+
+  ```
+## 4. Le fuseau horaire — et l'erreur à ne pas refaire
+
+**Règle** : tout horodatage est écrit en **heure locale de la machine**, notée **HAE** (heure
+avancée de l'Est = `EDT`, `UTC−4`), au format `AAAA-MM-JJ HH:MM HAE`. La machine est en
+`America/Montreal` sans `TZ` exporté ; `date` répond en EDT.
+
+**L'erreur commise** : les documents de campagne portaient des estampilles **inventées** (« 10
+octobre 18 h », « 11 octobre 6 h 45 », « 12 octobre 3 h ») — écrites en **avançant une horloge
+supposée** au fil des rounds, jamais lues sur la machine. Résultat : des heures et des **jours
+dans le futur**, et une chronologie qui n'existe pas. Ce n'est pas un décalage de fuseau (UTC
+n'expliquerait que quatre heures) : c'est une **horloge fabriquée**.
+
+**La source de vérité est git** : `git log --format='%ad %h %s' --date=format:'%m-%d %H:%M'`.
+Le travail du sprint « cerveau » s'est fait du **2026-10-09 15 h 30** au **2026-10-10 10 h 13
+HAE**, en 77 commits. Toute date d'un document doit pouvoir être **retrouvée dans git** ; sinon
+elle s'écrit « date inconnue » — jamais une date plausible.
+
+## 5. Ce que ça change pour la suite
+/tmp/passe-complete2.log 15:15
+/tmp/passe-complete3.log 15:54
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib, re\n\n# 1) les fiches : « Date réelle » = l'heure du COMMIT qui les a écrites (git)\ncorrections = {\n    \"reports/rapport-c8-sonde-profondeur.md\": [\n        (\"> Date réelle : **2026-10-10 11: … [6693 caractères tronqués]`
