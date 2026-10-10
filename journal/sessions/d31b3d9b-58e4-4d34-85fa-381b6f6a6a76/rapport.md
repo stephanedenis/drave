@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 49.1 h |
+| Durée | 49.2 h |
 | Tours | 88 |
-| Messages | 2144 |
-| Appels d'outils | 1959 |
+| Messages | 2152 |
+| Appels d'outils | 1967 |
 | Fichiers touchés | 67 |
-| Commandes | 1693 |
+| Commandes | 1700 |
 | Sous-agents | 3 |
-| Commits | 182 |
+| Commits | 183 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -3586,7 +3586,7 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 
 ### Tour 88 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*117 appels d'outils.* Actions notables :
+*125 appels d'outils.* Actions notables :
 
 - bash — Add the refusal and verify
 - bash — Move the refusal to the single point and verify
@@ -3602,11 +3602,11 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - bash — Read v7 removal context and flag inventory
 - bash — Read flag inventory section in docs
 - bash — Establish whether section 9 predates the v7 removal
-- … et 97 autres
+- … et 104 autres
 
 **Synthèse produite :**
 
-⏵ Je ré-harmonise les noms (3 chiffres) et je range le récapitulatif d'émulation comme état du module
+⏵ Pendant les mesures, je rends l'index du journal cohérent (entrées quotidiennes + récit) dans l'outil qui le régénère
 
 ## 3. Travail accompli
 
@@ -3730,7 +3730,7 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1653 autres
+- … et 1660 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4060,4 +4060,5 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - $(cat <<'MSG' Rangement : docs = fond, reports = une fiche par experience, journal = evenements dates  Retour de Stephane : les trois dossiers etaient melanges,
 - $(cat <<'MSG' Fenetre x puits d'attention : +2,0 % de perplexite pour divide 2,67 les cles notees (512 jetons)  Mesure (Qwen2.5-0.5B-Q8_0, ctx 512, perplexite d
 - $(cat <<'MSG' Rangement (suite) : rapport toutes-langues eclate (107 fiches), recapituatif range comme etat  - reports/rapport-toutes-langues.md (296 Ko, 107 se
+- Journal : l'index liste les ENTREES QUOTIDIENNES (il ne voyait que les sessions automatiques)  Le journal paraissait ne contenir que des rapports de session gen
 

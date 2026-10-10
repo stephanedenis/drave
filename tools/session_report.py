@@ -303,9 +303,32 @@ def main() -> int:
         print(f"aucune session pour {repo}", file=sys.stderr)
         return 1
 
+    # les entrées QUOTIDIENNES (journal/AAAA-MM-JJ.md) et le récit du sprint : ils ne sont pas
+    # des sessions, et l'index ne les voyait pas — le journal paraissait ne contenir que des
+    # rapports de session automatiques.
+    jours = []
+    for f in sorted((repo / "journal").glob("*.md")):
+        if f.name == "README.md":
+            continue
+        premiere = ""
+        for l in f.read_text(encoding="utf-8").splitlines():
+            if l.startswith("# "):
+                premiere = l[2:].strip()
+                break
+        jours.append(f"| [{f.name}]({f.name}) | {premiere or '—'} |")
+    JOURNAL_DES_JOURS = "\n".join(jours) if jours else "| — | (aucune entrée quotidienne) |"
+
     dest = repo / "journal" / "sessions"
     dest.mkdir(parents=True, exist_ok=True)
-    index = ["# Journal des sessions", "",
+    index = ["# Journal", "",
+             "Le journal consigne les **événements datés**, avec des liens vers le reste : les",
+             "**mesures** sont dans `reports/` (une fiche par expérience) et l'**état** dans",
+             "`docs/etat-*.md` — convention : `docs/organisation-du-depot.md`. Tout horodatage",
+             "est en heure locale de la machine (**HAE = EDT, UTC−4**).", "",
+             "## Journées", "",
+             "| jour | ce qui s'est passé |", "|---|---|",
+             JOURNAL_DES_JOURS, "",
+             "## Sessions (régénéré automatiquement)", "",
              "Un rapport par session, régénéré automatiquement à chaque commit et",
              "chaque heure (`tools/session_report.py`). Le rapport reconstitue l'essence",
              "de la session ; le `digest.md` voisin en donne le verbatim complet.", "",

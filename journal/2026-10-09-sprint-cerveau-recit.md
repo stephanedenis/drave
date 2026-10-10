@@ -9,7 +9,7 @@
 > Les titres de section portent désormais la date **réelle**, lue dans git (commit cité). Toute
 > estampille qui subsiste dans le corps du texte est celle d'origine et n'est **pas** fiable.
 
-# Sprint « cerveau complet » — état d'avancement
+# Récit du sprint « cerveau complet » (9-10 octobre 2026) — le détail, round par round
 
 > Lancé le 9 octobre à 17 h, **en autonomie jusqu'au 10 octobre 9 h (HAE)**.
 > Plan de référence : `docs/plan-cerveau-complet.md` § 4 (premier sprint).
