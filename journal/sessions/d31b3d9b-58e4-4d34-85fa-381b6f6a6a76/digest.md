@@ -32119,3 +32119,17 @@ local nu             : 14.6496
 ⏵ Découverte : `Model.attn_sinks` est **écrit partout et lu nulle part** — le drapeau ne peut rien faire
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\n\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\na = \"\"\"**Ce que cet inventaire vaut** : c'est la réponse à la question posée au §39 — « combien d'autres\ndrape … [6271 caractères tronqués]`
+
+  ```
+dd95fa9 --attn-sinks : ecrit dans les trois chemins, transporte par le v7… et LU NULLE PART
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 77, in <module>
+AssertionError
+  ```
+
+### 🤖 Assistant
+
+⏵ Le second remplacement a échoué (ancre différente) — j'insère la section dans le journal par une ancre sûre
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"docs/sprint-cerveau.md\")\ns = p.read_text()\na = \"## ▶ PROCHAINE ACTION (à lire en premier)\"\nsec = \"\"\"### 46 bis. `--attn-sinks` : écrit partout, transporté par le v7… et … [1808 caractères tronqués]`

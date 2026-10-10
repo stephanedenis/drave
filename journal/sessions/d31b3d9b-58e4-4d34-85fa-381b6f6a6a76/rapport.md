@@ -7,12 +7,12 @@
 | Début | 2026-10-08 09:11 |
 | Durée | 48.5 h |
 | Tours | 87 |
-| Messages | 2017 |
-| Appels d'outils | 1841 |
+| Messages | 2018 |
+| Appels d'outils | 1842 |
 | Fichiers touchés | 61 |
-| Commandes | 1591 |
+| Commandes | 1592 |
 | Sous-agents | 3 |
-| Commits | 177 |
+| Commits | 178 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -3551,15 +3551,16 @@ Suite directe de la correction du round 41 : `mdl.attn_window`, `mdl.swa_pattern
 
 ### Tour 87 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*3 appels d'outils.* Actions notables :
+*4 appels d'outils.* Actions notables :
 
 - bash — Check whether the engine reads attn_sinks at all
 - bash — Find where attn_sinks is read in the computation
 - bash — Commit the attn-sinks finding
+- bash — Insert the missing journal section
 
 **Synthèse produite :**
 
-⏵ Découverte : `Model.attn_sinks` est **écrit partout et lu nulle part** — le drapeau ne peut rien faire
+⏵ Le second remplacement a échoué (ancre différente) — j'insère la section dans le journal par une ancre sûre
 
 ## 3. Travail accompli
 
@@ -3677,7 +3678,7 @@ Suite directe de la correction du round 41 : `mdl.attn_window`, `mdl.swa_pattern
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1551 autres
+- … et 1552 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4002,4 +4003,5 @@ Suite directe de la correction du round 41 : `mdl.attn_window`, `mdl.swa_pattern
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 1200 bash tools/porte-flux.sh > /tmp/pf42.txt 2>&1; echo "porte-flux code=$?"; tail -2 /tmp/pf42.t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
+- Journal : la section 46 bis (--attn-sinks ecrit partout, lu nulle part) manquait — l'ancre du premier essai ne correspondait pas" && git push -q origin master &
 

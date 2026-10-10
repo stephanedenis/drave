@@ -959,6 +959,31 @@ rien en réparti ? » — et les deux vrais défauts qu'elle a trouvés ont ét�
 
 ---
 
+### 46 bis. `--attn-sinks` : écrit partout, transporté par le v7… et LU NULLE PART
+
+Dernier candidat de l'inventaire ci-dessus, et **le plus grave des cinq**. Mesure : inerte en
+réparti **et** en local (14,6496 dans les deux cas). Lecture du code :
+
+| où | ce qui est fait |
+|---|---|
+| `main.rs:1036` | le drapeau pose `o.attn_sinks` |
+| `main.rs:1227` (`run_infer`) | `if attn_sinks > 0 { mdl.attn_sinks = attn_sinks; }` |
+| `main.rs:7114` (`run_ppl`) | idem |
+| `main.rs:4425` (`run_ppl_reparti`) | `mdl.attn_sinks = opt.attn_sinks` (round 42) |
+| `model.rs:2961` (`Act::appliquer`) | **transporté par le protocole v7** |
+| **le calcul** | **AUCUNE lecture de `self.attn_sinks`** |
+
+Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'attention consomme —
+pas ce compteur. **Cinquième défaut de la même famille** (après `--ffn-gain` en réparti, le poids
+de greffe à zéro par défaut, `--attn-window`, et le `sys.exit` qui sortait en 1), **et le plus
+grave : le v7 a fait voyager un réglage MORT** (une modification de version, 91 → 99 octets, pour
+rien).
+
+**Deux issues — un choix de conception** : (1) **implémenter** le compteur (`n` jetons puits au
+début de la séquence, comme le décrit `model.rs:2435` — mécanisme réel, et différent des puits
+appris) ; ou (2) **retirer le drapeau**. Dans les deux cas la **porte** doit suivre : exiger qu'il
+**agisse**, ou qu'il n'existe plus.
+
 ## ▶ PROCHAINE ACTION (à lire en premier)
 
 État au **11 octobre 6 h 45** · **21 portes, toutes vertes** (`tools/porte-*.sh`) ·
