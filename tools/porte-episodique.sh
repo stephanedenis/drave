@@ -69,6 +69,39 @@ assert vals[-1] < vals[0], "une dégradation de 75 % doit coûter quelque chose"
 print(f"  ✅ monotonie respectée : {vals[0]} % → {vals[-1]} % (0 % → 75 % de dégradation)")
 PY
 
+echo "=== 3bis. la mémoire LOCALISE : l'erreur est en JETONS, et elle est petite ==="
+# Savoir si la mémoire rend l'épisode EXACT est une chose ; savoir à quelle DISTANCE
+# elle se trompe en est une autre, et c'est celle qui décide de l'usage : un épisode
+# voisin de deux jetons situe le passage, un épisode à cinq cents jetons ne situe rien.
+# Les épisodes sont numérotés dans l'ordre du texte, donc la distance entre
+# identifiants EST une distance en jetons.
+python3 - "$T/s1.txt" <<'PYLOC' || exit 1
+import re, sys
+t = open(sys.argv[1]).read()
+lignes = [l for l in t.splitlines() if re.match(r"^\s+\d+\s+[\d.]+ % \(", l)]
+if not lignes:
+    sys.exit("  ❌ aucune ligne de courbe")
+dernier = lignes[-1]
+cellules = re.findall(r"(\d+\.\d) % \((\d+\.\d+)\) Δ(\d+)", dernier)
+if len(cellules) < 5:
+    sys.exit(f"  ❌ la courbe ne porte pas les cinq dégradations : {dernier}")
+vals = [(float(a), float(b), int(c)) for a, b, c in cellules]
+# À 0 % et 25 % de dégradation, la localisation doit être exacte et précise.
+for i, seuil in ((0, 0), (2, 5)):
+    pct, base, delta = vals[i]
+    if delta > seuil:
+        sys.exit(f"  ❌ à {pct} % de dégradation, l'erreur moyenne est de {delta} jetons "
+                 f"(seuil {seuil}) — la mémoire ne localise pas")
+print(f"  ✅ localisation : Δ = {vals[0][2]} jeton à 0 %, {vals[2][2]} à 25 %, "
+      f"{vals[3][2]} à 50 %, {vals[4][2]} à 75 % de dégradation")
+# Et la dégradation doit COÛTER en précision aussi, pas seulement en exactitude.
+if vals[4][2] <= vals[0][2]:
+    sys.exit("  ❌ l'erreur de localisation ne bouge pas avec la dégradation : la mesure "
+             "ne dit rien")
+print(f"  ✅ et l'erreur croît avec la dégradation ({vals[0][2]} → {vals[4][2]} jetons) : "
+      "quand la mémoire se trompe, elle se trompe de PRÈS")
+PYLOC
+
 echo "=== 4. un indice jamais écrit doit être moins bien retrouvé ==="
 python3 - "$T/s1.txt" <<'PY' || exit 1
 import re, sys

@@ -6282,7 +6282,8 @@ indice connu : ce magasin ne sait pas refuser, il rend toujours son meilleur can
 
     // --- 4. LA COURBE : rappel selon le nombre d'épisodes et la dégradation
     println!();
-    println!("  rappel par contenu (ligne de base nulle entre parenthèses) :");
+    println!("  rappel par contenu (ligne de base nulle entre parenthèses, Δ = erreur MOYENNE");
+    println!("  en jetons entre l'épisode rendu et l'épisode interrogé) :");
     println!("  {:>7}  {:>10}  {:>10}  {:>10}  {:>10}  {:>10}", "N", "indice 0 %", "10 %",
              "25 %", "50 %", "75 %");
     let tailles: Vec<usize> = {
@@ -6300,6 +6301,13 @@ indice connu : ce magasin ne sait pas refuser, il rend toujours son meilleur can
         for frac in [0.0f64, 0.10, 0.25, 0.50, 0.75] {
             let mut succes = 0usize; let mut essais = 0usize;
             let mut cand = 0usize; let mut comp = 0usize;
+            // L'ERREUR EN JETONS. Savoir si la mémoire rend l'épisode EXACT est une
+            // chose ; savoir à quelle DISTANCE elle se trompe en est une autre, et
+            // c'est celle qui décide de l'usage : un épisode voisin de trois jetons
+            // situe le passage, un épisode à cinq cents jetons ne situe rien. Les
+            // épisodes sont numérotés dans l'ordre du texte, donc la distance entre
+            // identifiants EST une distance en jetons.
+            let mut distance = 0usize;
             for q in 0..taille {
                 let cible = episodique::cle(&cles[q], k);
                 let mut indice = cles[q].clone();
@@ -6310,14 +6318,20 @@ indice connu : ce magasin ne sait pas refuser, il rend toujours son meilleur can
                     if ((h % 1000) as f64) < frac * 1000.0 { indice[*c as usize] = 0.0; }
                 }
                 match s.lire(&indice) {
-                    Some(l) => { if l.id == q as u64 { succes += 1; } cand += l.candidats;
-                                 comp += l.comparaisons; }
-                    None => {}
+                    Some(l) => {
+                        if l.id == q as u64 { succes += 1; }
+                        distance += (l.id as i64 - q as i64).unsigned_abs() as usize;
+                        cand += l.candidats;
+                        comp += l.comparaisons;
+                    }
+                    None => { distance += taille; }
                 }
                 essais += 1;
             }
-            ligne.push_str(&format!("  {:>6.1} % ({:.2})", 100.0 * succes as f64 / essais as f64,
-                                    100.0 / taille as f64));
+            ligne.push_str(&format!("  {:>6.1} % ({:.2}) Δ{:.0}",
+                                    100.0 * succes as f64 / essais as f64,
+                                    100.0 / taille as f64,
+                                    distance as f64 / essais as f64));
             if frac == 0.0 {
                 ligne.push_str(&format!("  coût {:.0} cand. ({:.0} % du magasin) / {:.0} comp.",
                                         cand as f64 / essais as f64,

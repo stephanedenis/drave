@@ -1568,6 +1568,38 @@ documents.
 Le résultat **ne dépend donc pas d'un texte unique** : il tient sur des corpus
 différents, avec des états qui ne partagent plus le contexte du document.
 
+### 24 ter bis. À QUELLE DISTANCE la mémoire se trompe-t-elle ? (utile, et mesuré)
+
+Savoir si la mémoire rend l'épisode **exact** est une chose ; savoir à quelle
+**distance** elle se trompe en est une autre, et c'est celle qui décide de l'usage :
+un épisode voisin de deux jetons situe un passage, un épisode à cinq cents jetons ne
+situe rien. Les épisodes sont numérotés dans l'ordre du texte, donc la distance entre
+identifiants **est** une distance en jetons. Deux documents mesurés (clés de 64 canaux
+sur 16 384, expansion + égalisation) :
+
+| configuration | rappel 25 % | rappel 50 % | rappel 75 % | Δ à 50 % | Δ à 75 % | candidats examinés |
+|---|---|---|---|---|---|---|
+| 300 états, sans expansion (64/896) | 96,7 % | 69,3 % | 15,3 % | 26 jetons | 71 | 100 % |
+| 300 états, expansion + égalisation | 100 % | 96,3 % | 69,0 % | **2 jetons** | 24 | 17 % |
+| **2 048 états**, expansion + égalisation | 99,9 % | **95,4 %** | 64,5 % | **11 jetons** | 86 | 19 % |
+
+L'expansion et l'égalisation n'améliorent donc pas seulement le rappel et l'élagage :
+elles rendent la mémoire **treize fois plus précise** en localisation (Δ 26 → 2 jetons
+à 50 % de dégradation, à N = 300).
+
+**La précision RELATIVE s'améliore avec la taille du document** : 2 jetons sur 300
+valent 0,67 % du texte, 11 jetons sur 2 048 en valent **0,54 %**. Autrement dit :
+quand la mémoire se trompe, **elle se trompe de près** — le voisinage du bon moment
+reste retrouvé. C'est exactement la propriété qui rend une mémoire de contenu utile
+pour situer un passage : elle n'a pas besoin d'être exacte pour être utilisable, et
+elle le dit en jetons.
+
+Sur ce même magasin de **2 048 épisodes** : round-trip **2 048/2 048 au bit près**,
+séparation 0,37/64, élagage **81 %** (382 candidats sur 2 048), et un indice jamais
+écrit tombe à 8,8/64 contre 64/64 pour un connu. La consolidation par rejeu y donne,
+en mode **exemplaire**, 62,5 % du magasin pour 93,4 % de rappel (seuil 16) et 87,8 %
+pour 99,1 % (seuil 32) — la conclusion du §24 quater tient donc à l'échelle.
+
 ### 24 quater. Consolider par rejeu : garder un CAS bat résumer par une MOYENNE
 
 C7, au sens du plan, veut rejouer des épisodes pour modifier des **poids**. Ce n'est

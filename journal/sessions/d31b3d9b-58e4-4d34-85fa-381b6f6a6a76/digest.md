@@ -25147,3 +25147,125 @@ pont symetrique dans la porte
 ⏵ C9 : le point de coupe est neutre sans perte mais vaut 9 % avec un lien encodé — je documente
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/coupe_docs.py <<'ENDPY'\nimport pathlib\n\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\nancre = \"## Annexe — manifeste des journaux\"\nsec = '''## 27. OÙ COUPER le modèle ? Le point de c … [8189 caractères tronqués]`
+
+  ```
+docs coupe ecrites
+22d6151 C9 x C1 : où couper le modèle — le point de coupe est neutre, sauf à cause du lien
+  ```
+
+### 🤖 Assistant
+
+⏵ C6 suite : la mémoire localise-t-elle un moment précis dans un document long ? J'ajoute l'erreur en jetons
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\n\n# la boucle de courbe : ajouter l'erreur en JETONS (distance des identifiants)\na = \"\"\"        let mut ligne = format!(\"  {ta … [2359 caractères tronqués]`
+
+  ```
+placeholder ecrit (a corriger)
+---
+6330:            ligne.push_str(&format!("  {:>6.1} % ({:.2}) Δ{q:.0}", 100.0 * succes as f64 / essais as f64,
+  ```
+
+### 🤖 Assistant
+
+⏵ C6 : je corrige la chaîne de format (j'avais laissé un argument bidon)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\na = '''            ligne.push_str(&format!(\"  {:>6.1} % ({:.2}) Δ{q:.0}\", 100.0 * succes as f64 / essais as f64,\n                … [1505 caractères tronqués]`
+
+  ```
+format corrige
+BUILD
+  rappel par contenu (ligne de base nulle entre parenthèses, Δ = erreur MOYENNE
+  en jetons entre l'épisode rendu et l'épisode interrogé) :
+       10   100.0 % (10.00) Δ0  coût 2 cand. (24 % du magasin) / 154 comp.   100.0 % (10.00) Δ0   100.0 % (10.00) Δ0   100.0 % (10.00) Δ0   100.0 % (10.00) Δ0
+       40   100.0 % (2.50) Δ0  coût 9 cand. (22 % du magasin) / 554 comp.   100.0 % (2.50) Δ0   100.0 % (2.50) Δ0   100.0 % (2.50) Δ0    97.5 % (2.50) Δ0
+      160   100.0 % (0.62) Δ0  coût 29 cand. (18 % du magasin) / 1834 comp.   100.0 % (0.62) Δ0   100.0 % (0.62) Δ0    98.1 % (0.62) Δ0    78.1 % (0.62) Δ8
+      300   100.0 % (0.33) Δ0  coût 51 cand. (17 % du magasin) / 3237 comp.   100.0 % (0.33) Δ0   100.0 % (0.33) Δ0    96.3 % (0.33) Δ2    69.0 % (0.33) Δ24
+        1           39         13.0 %       22.3 %             3.14e0
+        2          116         38.7 %       13.3 %             1.14e0
+        4          176         58.7 %       18.7 %            3.22e-1
+        8          200         66.7 %       34.0 %            1.94e-1
+       16          234         78.0 %       56.0 %            9.32e-2
+       32          274         91.3 %       82.7 %            2
+… [426 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ C6 : la mémoire se trompe de 2 jetons seulement à 50 % de dégradation — je mesure à longue portée
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 2400 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --episodique-essai 2048 --episodique-k 64 --episodique-expansion 16384 --episodique-decorreler --episodique-normaliser --ids-file /tmp/campagne24/ids_0.5B-Q … [292 caractères tronqués]`
+
+  ```
+started background job bash-18
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/c6_loc_gate.py <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"tools/porte-episodique.sh\")\ns = p.read_text()\na = '''echo \"=== 4. un indice jamais écrit doit être moins bien retrouvé ===\"'''\nb = '''echo \"=== 3bis. la m … [2183 caractères tronqués]`
+
+  ```
+cas 3bis ajoute
+syntaxe ok
+  ```
+
+- **job_output** `{"job_id": "bash-18", "timeout_ms": 900000, "wait": true}`
+
+  ```
+[modele] 24 couches chargées en 6.497948358s — listes 0.71 Go , 12 threads
+  expansion         : 896 → 16384 canaux de clé (8 entrées par canal, signes par hachage) ; les VALEURS restent les états exacts de dimension 896
+  égalisation       : chaque canal de clé centré et réduit sur le magasin — un canal systématiquement grand n'entre plus dans toutes les clés
+  coût de l'expansion : 131072 additions par lecture (fixe) · le balayage évité coûte N × 64 comparaisons · l'expansion est donc rentable au-delà de N ≈ 2048 épisodes — EN DESSOUS, le balayage complet est MOINS cher
+  épisodes          : 2048 états réels de dimension 896 (/tmp/campagne24/ids_0.5B-Q8.txt en 155.0 s)
+  clé               : 64 canaux sur 16384 (densité 0.39 %), valeurs de dimension 896
+  clés distinctes   : 2048/2048 (pire multiplicité 1)
+  round-trip        : 2048/2048 épisodes relus AU BIT PRÈS avec leur propre clé
+  séparation        : recouvrement moyen 0.37/64 entre états différents (pire 3/64, 63 paires)
+  listes de l'index : 8.3 épisodes par canal en moyenne, 53 au plus ; les 1 % de canaux les plus longs portent 4 % des entrées
+  nouveauté         : recouvrement moyen 64.0/64 pour un épisode CONNU, 8.8/64 
+… [2113 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ C6 : à 2 048 jetons, l'erreur de localisation reste à 11 jetons (0,5 % du document)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (timeout 2400 bash tools/porte-episodique.sh > /tmp/gate_c6_v3.txt 2>&1; echo \"code=$?\"; grep -E \"^===|✅|❌\" /tmp/gate_c6_v3.txt) 2>&1", "description": "Run C6 gate with localization case", "run_in_background": true}`
+
+  ```
+started background job bash-19
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/c6_loc_docs.py <<'ENDPY'\nimport pathlib\n\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\na = \"\"\"### 24 quater. Consolider par rejeu : garder un CAS bat résumer par une MOYENNE\"\"\"\nb … [3803 caractères tronqués]`
+
+  ```
+docs localisation ecrites
+ok
+  ```
+
+- **job_output** `{"job_id": "bash-19", "timeout_ms": 900000, "wait": true}`
+
+  ```
+code=0
+=== 1. round-trip, séparation, nouveauté (k=64) ===
+  ✅ round-trip exact (300/300) et clés deux à deux distinctes
+=== 2. le disque ne change aucune lecture ===
+  ✅ 300 lectures identiques après passage par le disque
+=== 3. le rappel décroît quand l'indice se dégrade ===
+  ✅ monotonie respectée : 100.0 % → 15.3 % (0 % → 75 % de dégradation)
+=== 3bis. la mémoire LOCALISE : l'erreur est en JETONS, et elle est petite ===
+  ✅ localisation : Δ = 0 jeton à 0 %, 2 à 25 %, 26 à 50 %, 71 à 75 % de dégradation
+  ✅ et l'erreur croît avec la dégradation (0 → 71 jetons) : quand la mémoire se trompe, elle se trompe de PRÈS
+=== 4. un indice jamais écrit doit être moins bien retrouvé ===
+  ✅ connu 64.0 > jamais écrit 41.5 : le magasin distingue « je me souviens » de « ça ressemble »
+=== 5. à petit k, les collisions EXPLIQUENT les échecs de round-trip ===
+  ✅ 81 échecs, tous expliqués : 81 collisions, 0 égalités de recouvrement
+=== 6. expansion + égalisation : l'index doit ÉLUDER pour de vrai ===
+  ✅ round-trip exact (300/300), séparation 0.6 % de la clé, élagage 83 % (51 candidats), rappel 25 % : 100.0 %
+=== 7. consolidation par rejeu : l'EXEMPLAIRE doit battre la MOYENNE ===
+  ✅ à compressi
+… [180 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ C6 : l'expansion améliore aussi la localisation (Δ 26 → 2) — je complète et commite
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\na = \"\"\"| N | rappel 25 % | rappel 50 % | rappel 75 % | Δ à 50 % | Δ à 75 % | candidats examinés |\n|---|---|---|- … [2932 caractères tronqués]`
