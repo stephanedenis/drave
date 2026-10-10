@@ -142,6 +142,10 @@ def main() -> int:
                     help="un préfixe : moitié entraînement, moitié test (même texte)")
     ap.add_argument("--train", default=None, help="préfixes séparés par des virgules")
     ap.add_argument("--test", default=None, help="préfixes séparés par des virgules (textes JAMAIS vus)")
+    ap.add_argument("--val", default=None,
+                    help="morceaux de VALIDATION (choisir l'époque dessus, jamais sur le test) : "
+                         "sans eux, la « meilleure époque » est choisie sur le test, ce qui est "
+                         "une fuite et gonfle le chiffre publié")
     ap.add_argument("--ids", default=None,
                     help="fichier d'identifiants ; utile seulement pour `--etats` (un texte) — "
                          "avec --train/--test, chaque morceau `etat-m<i>` prend SES `morceau-<i>.txt`")
@@ -204,7 +208,15 @@ def main() -> int:
     if a.train and a.test:
         Xtr, ytr = jeu(a.train.split(","))
         Xte, yte = jeu(a.test.split(","))
-        print(f"entraînement : {Xtr.shape[0]} états · test (textes jamais vus) : {Xte.shape[0]} états")
+        if a.val:
+            Xva, yva = jeu(a.val.split(","))
+            print(f"entraînement : {Xtr.shape[0]} états · validation : {Xva.shape[0]} · "
+                  f"test (jamais vus) : {Xte.shape[0]}")
+        else:
+            Xva = yva = None
+            print(f"entraînement : {Xtr.shape[0]} états · test (textes jamais vus) : {Xte.shape[0]} états")
+            print("  ⚠ pas de --val : l'époque est choisie SUR LE TEST (fuite) — à n'utiliser que "
+                  "pour comparer des protocoles entre eux")
     else:
         if not a.ids:
             raise SystemExit("--etats demande --ids (un texte, un fichier d'identifiants)")
@@ -215,6 +227,7 @@ def main() -> int:
         y = ids[pos + 1]
         coupe = len(y) // 2
         Xtr, ytr, Xte, yte = X[:coupe], y[:coupe], X[coupe:], y[coupe:]
+        Xva = yva = None
         print(f"un seul texte : {len(y)} états (moitié entraînement, moitié test)")
     h_etats = Xtr.shape[1]
 
@@ -250,6 +263,11 @@ def main() -> int:
 
     Xte_t = torch.from_numpy(Xte).to(dev).half()
     yte_t = torch.from_numpy(yte).to(dev)
+    if Xva is not None:
+        Xva_t = torch.from_numpy(Xva).to(dev).half()
+        yva_t = torch.from_numpy(yva).to(dev)
+    else:
+        Xva_t = yva_t = None
     coupe = len(ytr)
 
     A = torch.eye(h, device=dev, dtype=torch.float32, requires_grad=True)   # identité
@@ -312,13 +330,16 @@ def main() -> int:
         if (e + 1) % max(1, a.epoques // 8) == 0 or e == 0:
             with torch.no_grad():
                 ppl_tr = float(np.exp(tot / coupe))
+            # l'époque se choisit sur la VALIDATION quand elle existe ; sinon sur le test
+            # (c'est une fuite, et le script le dit à l'affichage)
+            ppl_choix = perplexite(Xva_t, yva_t) if Xva_t is not None else perplexite(Xte_t, yte_t)
             ppl_te = perplexite(Xte_t, yte_t)
             marque = ""
-            if ppl_te < meilleur[0]:
+            if ppl_choix < meilleur[0]:
                 # LA MEILLEURE ÉPOQUE EST GARDÉE : au-delà, l'adaptateur apprend le texte
                 # d'entraînement (l'écart train/test se creuse) et la perplexité de test REMONTE.
-                meilleur = (ppl_te, e + 1, instantane())
-                marque = "  ← meilleur test"
+                meilleur = (ppl_choix, e + 1, instantane())
+                marque = "  ← meilleur " + ("val" if Xva_t is not None else "test")
             print(f"  époque {e + 1:>3}/{a.epoques} · perte train {ppl_tr:,.4f} "
                   f"(perplexité) · test {ppl_te:,.4f}{marque}")
 
@@ -327,7 +348,8 @@ def main() -> int:
         if tenseur is not None:
             tenseur.data.copy_(meilleur[2][nom].to(tenseur.dtype))
     ppl_final = perplexite(Xte_t, yte_t)
-    print(f"\nmeilleur test : époque {meilleur[1]} · {meilleur[0]:,.4f}")
+    print(f"\nmeilleur {'validation' if Xva_t is not None else 'test'} : époque {meilleur[1]} "
+          f"· {meilleur[0]:,.4f}")
     with torch.no_grad():
         ppl_train = perplexite(Xtr_t, ytr_t)
     print()

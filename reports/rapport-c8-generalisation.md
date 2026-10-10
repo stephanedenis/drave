@@ -63,6 +63,25 @@ domaine, du même style, souvent du même vocabulaire). La question « une tête
 corpus lit-elle un corpus DIFFÉRENT ? » reste ouverte, et c'est la vraie question d'un réflexe
 utilisable.
 
+## 2 bis. Choisir l'époque sur le TEST est une fuite — vérifié, et ici sans effet
+
+Le surapprentissage arrive à l'**époque 2** : la « meilleure époque » est donc un choix, et le
+faire sur le **test** est une fuite (on regarde la réponse qu'on prétend mesurer). L'entraîneur
+prend maintenant `--val` (un troisième jeu de morceaux) et **choisit l'époque dessus** — sans lui
+il affiche un avertissement explicite.
+
+**Vérification sur les mêmes données d'entraînement** (26 morceaux, test = m7) :
+
+| sélection de l'époque | époque retenue | perplexité TEST |
+|---|---|---|
+| sur le **test** (fuite assumée) | 2 | 97,8079 |
+| sur la **validation** (20-24) | 2 | **97,8079** |
+
+**Ici, la fuite ne change rien** : la validation désigne la même époque. C'est une bonne nouvelle
+pour les chiffres déjà publiés, et **ça ne les blanchit pas** : c'est un fait sur cette execution,
+pas une garantie. La règle reste — l'époque se choisit sur la validation, et le test ne sert
+qu'une fois.
+
 ## 3. Le surapprentissage fixe encore le chiffre, et deux pièges l'ont faussé
 
 L'adaptateur apprend vite le texte d'entraînement et se dégrade ensuite sur le texte neuf : avec

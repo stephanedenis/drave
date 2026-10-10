@@ -38415,3 +38415,55 @@ c8372cb Etat et journal : le transfert inter-corpus de C8 est consigne (le patch
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"docs/etat-cerveau.md\"); s = p.read_text()\nold = \"\"\"[`tête entraînée`](../reports/rapport-c8-tete-entrainee.md) |\"\"\"\nnew = \"\"\"[`tête entraînée`](../reports/rapport-c8 … [587 caractères tronqués]`
+
+  ```
+liste des fiches complétée
+poussé
+58f399a Etat : la ligne C8 renvoie aux cinq fiches (sonde, courbe, tete entrainee, generalisation, transfert)
+  ```
+
+### 🤖 Assistant
+
+⏵ Suite C8 : transfert INTER-LANGUE — je lance la capture multilingue et, pendant ce temps, j'ajoute une validation
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la /tmp/campagne24/ids_b2_multilingue.txt 2>/dev/null; IDS=/tmp/campagne24/ids_b2_multilingue.txt T=/tmp/c8-multi nohup bash tools/c8_corpus.sh 30 1024 16 > /tmp/c8-multi.log 2>&1 & sleep 5; echo \"capture multilingue lancée (pid … [108 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 555299  9 oct 01:08 /tmp/campagne24/ids_b2_multilingue.txt
+capture multilingue lancée (pid 1895226)
+  morceau 0 : jetons 0..1024
+  morceau 1 : jetons 3608..4632
+  morceau 2 : jetons 7216..8240
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"tools/c8_entrainer_tete.py\"); s = p.read_text()\n# VALIDATION : un troisième jeu de morceaux, jamais utilisés pour apprendre ni pour juger.\n# Le surapprentissage arrive à l'ép … [3621 caractères tronqués]`
+
+  ```
+--val ajouté (l'époque se choisit sur la validation)
+syntaxe OK
+  ```
+
+### 🤖 Assistant
+
+⏵ Comparaison honnête : même entraînement, époque choisie sur le test (A) ou sur une validation (B)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PY=/home/stephane/gpu-env/bin/python\nTR=$(python3 -c \"print(','.join(f'/tmp/c8-corpus/etat-m{i}' for i in list(range(0,20))+list(range(25,31)) if i != 7))\")\nVA=$(python3 -c \"print(','.join(f'/tmp/c8-corpus/etat-m{i}' for i in ra … [726 caractères tronqués]`
+
+  ```
+=== A' : époque choisie SUR LE TEST (fuite) ===
+  ⚠ pas de --val : l'époque est choisie SUR LE TEST (fuite) — à n'utiliser que pour comparer des protocoles entre eux
+  époque   1/20 · perte train 3,811.8809 (perplexité) · test 203.9358  ← meilleur test
+  époque   2/20 · perte train 49.9828 (perplexité) · test 97.8079  ← meilleur test
+meilleur test : époque 2 · 97.8079
+| chemin tronqué, tête **entraînée** (adaptateur, époque 2) | **97.8079** |
+=== B' : époque choisie SUR LA VALIDATION (honnête) ===
+entraînement : 25475 états · validation : 5095 · test (jamais vus) : 1019
+meilleur validation : époque 2 · 148.7112
+| chemin tronqué, tête **entraînée** (adaptateur, époque 2) | **97.8079** |
+  ```
+
+### 🤖 Assistant
+
+⏵ La validation choisit la même époque ici (le chiffre ne bouge pas) — je consigne la règle et le fait
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"reports/rapport-c8-generalisation.md\"); s = p.read_text()\nancre = \"## 3. Le surapprentissage fixe encore le chiffre\"\nsec = \"\"\"## 2 bis. Choisir l'époque sur le TEST est  … [2271 caractères tronqués]`
