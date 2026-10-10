@@ -5,15 +5,15 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 36.6 h |
+| Durée | 36.8 h |
 | Tours | 44 |
-| Messages | 1356 |
-| Appels d'outils | 1270 |
-| Fichiers touchés | 40 |
-| Commandes | 1062 |
+| Messages | 1394 |
+| Appels d'outils | 1305 |
+| Fichiers touchés | 41 |
+| Commandes | 1095 |
 | Sous-agents | 3 |
-| Commits | 117 |
-| Compactages de contexte | 1 |
+| Commits | 118 |
+| Compactages de contexte | 2 |
 
 ## Objectifs déclarés
 
@@ -2058,15 +2058,27 @@ Je continue sur cette liste — il
 
 ### Tour 44 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1749 caractères tronqués]
 
-*3 appels d'outils.* Actions notables :
+*38 appels d'outils.* Actions notables :
 
 - bash — Implement per-region step counters and the step bound
 - bash — Write and run the clock/step-bound gate
 - bash — Commit C4 step 1 and push
+- bash — Inspect node-side trace handling
+- bash — Read trace format API
+- bash — Read node relay loop
+- bash — Read trace write/read/verify
+- bash — Locate node step counter and exit
+- bash — Read node send sites
+- bash — Read driver record sites
+- bash — Read node input extraction
+- bash — Extend trace format to v2 with timestamps
+- bash — Add merge, clock drift, link verification
+- bash — Rewrite link pairing and build
+- … et 24 autres
 
 **Synthèse produite :**
 
-⏵ C4 premier pas livré : compteur de pas par région, borne explicite, aucun résultat partiel
+⏵ C12bis : tout est vert ; je commite et pousse
 
 ## 3. Travail accompli
 
@@ -2114,6 +2126,7 @@ Je continue sur cette liste — il
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/topologie.rs` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/trace_globale.rs` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/relations-humaines.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-fusion.sh` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -2163,7 +2176,7 @@ Je continue sur cette liste — il
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1022 autres
+- … et 1055 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2291,7 +2304,7 @@ Je continue sur cette liste — il
 
 ## 5. Erreurs rencontrées
 
-53 sorties en erreur ou divergentes. Les premières :
+55 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : ```  ### 🤖 Assistant  ⏵ **En transformers 5, `AutoModel` rend directement `Qwen2Model` (pas de `.model`). Je corrige le diagnostic.**  - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitH
 - **T2** : 3310393 bash -c pgrep -af "essai_decharge" | grep python | head; echo "--- logs ---"; tail -2 /tmp/ec_d192_lr3e3.log 2>/dev/null; tail -2 /tmp/ec_d192_lr1e3.log 2>/dev/null; echo "---"; ls -la /tmp/ec
@@ -2428,4 +2441,5 @@ Je continue sur cette liste — il
 - C5bis : diffusion du bus par fichier de contrôle — le canal change la région du milieu  --bus-fichier F : le nœud RELIT le fichier avant chaque trame, donc un a
 - État resumable : la prochaine action en tête du fichier de sprint  Six chantiers classés par valeur mesurable pour occuper le temps imparti : C4 (horloges par r
 - C4 pas 1 : compteur de pas par région et borne de terminaison explicite  Ce que C4 demande est que chaque région ait SON horloge. Le pas complet (asynchronisme 
+- C12bis : le nœud trace, et les traces de plusieurs processus se fusionnent  CE QUI MANQUAIT, ET QUI ÉTAIT GRAVE. Seul le pilote traçait : une divergence sur un 
 

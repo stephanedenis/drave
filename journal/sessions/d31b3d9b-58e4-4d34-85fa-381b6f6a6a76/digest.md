@@ -21149,3 +21149,973 @@ test result: ok. 96 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fin
 ⏵ C4 premier pas livré : compteur de pas par région, borne explicite, aucun résultat partiel
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/sprint-cerveau.md\")\ns = p.read_text()\nancre = \"\"\"## C5bis — FAIT (9 octobre 18 h 40)\"\"\"\nassert ancre in s\nneuf = \"\"\"## C4 (premier pas) — FAIT (9 octobre 21 h 55 … [3567 caractères tronqués]`
+
+  ```
+sprint doc : C4 pas 1
+test result: ok. 96 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+
+poussé
+  ```
+
+
+  ```
+9321cfc 09/10 00:07 Distillation à l'échelle 384 : -12 % au total, et le gain CROÎT avec la taille
+f9ca016 09/10 00:06 Contexte et lots : le contexte déclaré ne coûte rien à fenêtre courte, et le lot vaut x1,4
+9cdfbd7 09/10 00:05 Le banc des encodages ne plante plus sur les modèles K-quant (c'était la première ligne de l'aide)
+a564279 08/10 23:57 Le verdict, famille par famille — mis à jour avec tout ce que la campagne a établi
+dedeba5 08/10 23:56 Parcimonie imposée, 24 réglages : le k-WTA écrase le seuil d'un facteur 17
+baeb2c6 08/10 23:54 Deux vérifications : le codestral corrigé donne 117,9 — et le résultat sémantique publié SURVIT
+6565358 08/10 23:52 Protocole corrigé : routage -2,6 %, distillation -2,5 %, et les deux se cumulent
+bab38c7 08/10 23:38 gpt-oss n'a pas fini en 90 minutes — et deux pièges de méthode consignés
+--- commits touchant drave-core/src depuis 8/10 10:00 ---
+9cdfbd7 09/10 00:05 Le banc des encodages ne plante plus sur les modèles K-quant (c'était la première ligne de l'aide)
+ddebb6b 08/10 23:26 Tokenizers SentencePiece (Llama, Mistral, Codestral) : les espaces étaient perdus
+8de0612 08/10 11:08 Réparti : --ids-file était ignoré, et les jetons synthétiques so
+… [3958 caractères tronqués]
+  ```
+
+
+  ```
+=== fichiers de démarrage mentionnant un jeton (noms seulement) ===
+=== GH_CONFIG_DIR / XDG ===
+GH_CONFIG_DIR=(absent) · XDG_CONFIG_HOME=/home/stephane/.config
+=== processus dont l'environnement porte GH_TOKEN/GITHUB_TOKEN (PID seulement) ===
+=== fichiers .env / *.token / gh dans le home (profondeur 3) ===
+[stderr]
+bash: line 1: /proc/100/environ: Permission denied
+bash: line 1: /proc/101/environ: Permission denied
+bash: line 1: /proc/102/environ: Permission denied
+bash: line 1: /proc/103/environ: Permission denied
+bash: line 1: /proc/105/environ: Permission denied
+bash: line 1: /proc/106/environ: Permission denied
+bash: line 1: /proc/107/environ: Permission denied
+bash: line 1: /proc/108/environ: Permission denied
+bash: line 1: /proc/109/environ: Permission denied
+bash: line 1: /proc/1102/environ: Permission denied
+bash: line 1: /proc/110/environ: Permission denied
+bash: line 1: /proc/1111357/environ: Permission denied
+bash: line 1: /proc/1116496/environ: Permission denied
+bash: line 1: /proc/1127720/environ: Permission denied
+bash: line 1: /proc/1127/environ: Permission denied
+bash: line 1: /proc/112/environ: Permission denied
+bash: line 1: /proc/1133/environ: Permission denied
+b
+… [3958 caractères tronqués]
+  ```
+
+
+> **Compactage de contexte** — résumé conservé :
+
+```
+## Primary Request and Intent
+- Status of the Qtrinet/Drave repo → redirected to: "revenir à l'essence de Drave et produire un modèle qui est à son meilleur dans une architecture événementielle facilement distribuable sur les divers types d'unité de traitement et ressources d'une machine et de plusieurs machines en réseau."
+- Goal round (auto-generated): 24 h measuring/documenting what Drave's architecture (event lists, disk streaming, node splitting) is worth for EVERY task family available on the machine (language, generation/latency, long context, code, reasoning, MoE/expert routing, multilingual + semantics, batched prefill, model bigger than RAM); in parallel pursue the natively event-driven model deliverable (trained here, run by Drave with verified logits, split into distributed units). Every claim carries its measure AND its conditions; observed gaps (embeddings/encoders, speculative decoding) recorded as gaps, not results. Deliverables: `tools/campagne-benefices.sh` executed + logs, per-task-family synthesis report, and progress on the event-driven model. → **GOAL MARKED COMPLETE.**
+- Hardware questions (bi-Xeon E5-2687W v3, NUMA asymmetric, upcoming 4×NVMe RAID card + AMD Yeston 6 mini-DP) → answered in `docs/numa-segregation.md`, `docs/configuration-nvme-raid-amd.md`.
+- "distinguer moteur Drave et modèle optimisé pour Drave. On doit évaluer quel type de modèle ad hoc (probablement inédit) serait le plus efficace en Drave."
+- "Au-delà du neurone biologique, étudie l'architecture du cerveau et ce qu'il manque à Drave comme moteur permettant d'avoir une architecture complète d'un cerveau humain (fibres, tissus, corps calleux, hippocampe, toutes les régions et leurs interconnexions, liens avec optique et système périphérique)."
+- "fais un plan détaillé pour toutes les capacités manquantes à Drave (y compris la distribution sur plusieurs instances de Drave sur plusieurs machines concertées) pour simuler le fonctionnement d'un cerveau humain."
+- "étudie le parallèle entre notre mode d'apprentissage hebbien-différentiel (cancellation par rétroaction, puis naissance des connexions par correlation des résidus d'activations) et la biologie"
+- "Drave en mode impulsion pur, moyennant des mécanismes supplémentaires, serait-il un meilleur apprenant?"
+- "nos modèles à décharges fonctionnent-elles en gpu?"
+- "as-t-on configuré un remote github pour notre projet? il est peut-être temps de diviser en submodules et paralléliser le travail sur plusirurs cpu-coeurs" → then "gh est installé sur cette machine et il y a un token dans l'environnement ou la config".
+- "allons-y pour un sprint cerveau complet. Vasy en mode autonome jusqu'à demain matin (9h hae 10 octobre)".
+- **Latest, critical instruction**: adjust sprints to **timeboxing rather than backlog slices** — keep occupying the allotted time instead of stopping when the plan is exhausted; stopping early wastes precious time; the user prefers interrupting a sprint for new ideas over seeing everything halted because the plan is done. "fais bon usage du temps disponible et ne reste pas à rien faire car je ne serai pas toujours là."
+- "Crée-toi un fichier de relations humaines pour éviter que ton précieux temps et que le précieux temps des humains soit incompris. Au besoin utilise le motto 'carpe diem' autant pour tes relations que ton temps de travail."
+
+## Key Technical Concepts
+- Drave: Rust inference engine (`drave-core/`, ~28 758 lines, **std-only, zero dependencies**), event-list ("push") vs dense ("pull") paths, GGUF in-place mmap; `lto=true`, `codegen-units=1` (single-core compile, 37.98 s vs 12.64 s with `codegen-units=16 lto="thin"`).
+- Cost model: **paires = (poids non nuls) × (activations vivantes)**; push/pull crossover ~22-25 % density; kernel bench ratios ×0.02 (0 events) → ×1.54 (50 %) → ×3.19 (density 1); bandwidth 21.5 Go/s.
+- Sparsity must be **learned**: k-WTA training (`--kwta`), magnitude pruning (`--elagage`, cubic ramp, same rule as `--keep`), innate random mask
+… [9586 caractères tronqués]
+```
+
+### 👤 Utilisateur
+
+This is an automatically generated checkpoint condensing an earlier span of the conversation to free up context. Treat the captured context as established background and build on it without restating it. Continue the task directly from the messages that follow, without acknowledging this checkpoint.
+
+<compacted-summary>
+## Primary Request and Intent
+- Status of the Qtrinet/Drave repo → redirected to: "revenir à l'essence de Drave et produire un modèle qui est à son meilleur dans une architecture événementielle facilement distribuable sur les divers types d'unité de traitement et ressources d'une machine et de plusieurs machines en réseau."
+- Goal round (auto-generated): 24 h measuring/documenting what Drave's architecture (event lists, disk streaming, node splitting) is worth for EVERY task family available on the machine (language, generation/latency, long context, code, reasoning, MoE/expert routing, multilingual + semantics, batched prefill, model bigger than RAM); in parallel pursue the natively event-driven model deliverable (trained here, run by Drave with verified logits, split into distributed units). Every claim carries its measure AND its conditions; observed gaps (embeddings/encoders, speculative decoding) recorded as gaps, not results. Deliverables: `tools/campagne-benefices.sh` executed + logs, per-task-family synthesis report, and progress on the event-driven model. → **GOAL MARKED COMPLETE.**
+- Hardware questions (bi-Xeon E5-2687W v3, NUMA asymmetric, upcoming 4×NVMe RAID card + AMD Yeston 6 mini-DP) → answered in `docs/numa-segregation.md`, `docs/configuration-nvme-raid-amd.md`.
+- "distinguer moteur Drave et modèle optimisé pour Drave. On doit évaluer quel type de modèle ad hoc (probablement inédit) serait le plus efficace en Drave."
+- "Au-delà du neurone biologique, étudie l'architecture du cerveau et ce qu'il manque à Drave comme moteur permettant d'avoir une architecture complète d'un cerveau humain (fibres, tissus, corps calleux, hippocampe, toutes les régions et leurs interconnexions, liens avec optique et système périphérique)."
+- "fais un plan détaillé pour toutes les capacités manquantes à Drave (y compris la distribution sur plusieurs instances de Drave sur plusieurs machines concertées) pour simuler le fonctionnement d'un cerveau humain."
+- "étudie le parallèle entre notre mode d'apprentissage hebbien-différentiel (cancellation par rétroaction, puis naissance des connexions par correlation des résidus d'activations) et la biologie"
+- "Drave en mode impulsion pur, moyennant des mécanismes supplémentaires, serait-il un meilleur apprenant?"
+- "nos modèles à décharges fonctionnent-elles en gpu?"
+- "as-t-on configuré un remote github pour notre projet? il est peut-être temps de diviser en submodules et paralléliser le travail sur plusirurs cpu-coeurs" → then "gh est installé sur cette machine et il y a un token dans l'environnement ou la config".
+- "allons-y pour un sprint cerveau complet. Vasy en mode autonome jusqu'à demain matin (9h hae 10 octobre)".
+- **Latest, critical instruction**: adjust sprints to **timeboxing rather than backlog slices** — keep occupying the allotted time instead of stopping when the plan is exhausted; stopping early wastes precious time; the user prefers interrupting a sprint for new ideas over seeing everything halted because the plan is done. "fais bon usage du temps disponible et ne reste pas à rien faire car je ne serai pas toujours là."
+- "Crée-toi un fichier de relations humaines pour éviter que ton précieux temps et que le précieux temps des humains soit incompris. Au besoin utilise le motto 'carpe diem' autant pour tes relations que ton temps de travail."
+
+## Key Technical Concepts
+- Drave: Rust inference engine (`drave-core/`, ~28 758 lines, **std-only, zero dependencies**), event-list ("push") vs dense ("pull") paths, GGUF in-place mmap; `lto=true`, `codegen-units=1` (single-core compile, 37.98 s vs 12.64 s with `codegen-units=16 lto="thin"`).
+- Cost model: **paires = (poids non nuls) × (activations vivantes)**; push/pull crossover ~22-25 % density; kernel bench ratios ×0.02 (0 events) → ×1.54 (50 %) → ×3.19 (density 1); bandwidth 21.5 Go/s.
+- Sparsity must be **learned**: k-WTA training (`--kwta`), magnitude pruning (`--elagage`, cubic ramp, same rule as `--keep`), innate random mask (`--masque`), log-normal weights (`--poids-lognormaux`, both unusable/inconclusive).
+- Reads↔quality curve (dim 384, 8×128, window-8 pairs/token): dense 4.9959/21.1 M · innate mask 25 % 5.0472/5.2 M (+1.0 %, ÷4.1) · kwta25 5.1719/5.4 M · kwta25+élagage50 (both learned) 5.1866/2.7 M (+3.8 %, **÷7.8**) · mask+kwta (one imposed) 6.0792/1.4 M (+21.7 %, ÷15.1). dim 512: dense 4.5686/34.4 M · m16 mask25 4.8745/9.2 M (+6.7 %, ÷3.7) · m17 kwta+élagage 4.9345/4.8 M (+8.0 %, ÷7.2) → **cost of sparsity grows with scale**.
+- Routing scale curve: d256 −2.6 %, d384 −2.9 %, d512 **+10 %** (routed loses; 80k-step run val 1.8237 but engine 5.3845 → quantization penalty grows +0.445 → +0.605 bit/octet); routed **distilled** 4.3305 vs dense 4.5686 (−5.2 %).
+- Speculative decoding (greedy bound): 0.5B→1.5B 0.88/8 (×0.70), 1.5B→14B 1.25/8 (×1.09), 0.5B→14B 1.00–1.25/8 with r=0.039 → **×1.52**; cost ratio decides, not acceptance.
+- Long context: NIAH 18/18 up to **12 288** tokens; V4-Flash 365.7 Go on 125 Go RAM, 37.6 Go RSS; disk mmap 8.6 Mo/s (HDD) vs 243 Mo/s sequential vs 140-300 Mo/s (NVMe); latency law **3.4 ms/token per ms RTT**.
+- Quantization/encoding: `DRAVE_SANS_EMPRUNT=1` required for dense/list comparisons; push ≡ dense **bit-identical** logits when same weight encoding (`cmp`, 4 254 216 octets).
+- GPU: `gpu.rs` offloads Q8_0 projections only if `keep >= 1.0` and ≥ **8 Mio** (`SEUIL_GPU`); kernel is **dense** int8 → sparse/list models cannot benefit; our models' largest projection 0.45–0.80 Mio → never offloaded.
+- Sprint capacities implemented: **C1** region graph (`topologie.rs`, topology-driven split, relay over 3 instances at 0,00e0), **C12** global trace + replay (`trace_globale.rs`, FNV-1a byte fingerprints), **C5** modulation bus (`bus.rs`, neutral channel = bit-identical), **C3** per-link delays (result unchanged, time grows), **C5bis** bus diffusion via control file, **C4 v1** per-region step counter + `--pas-max` bound (exit code 5, no partial PPL).
+- Engine bugs found and fixed: exclusive range end (`derniere` vs `derniere + 1`, broke modes 0/1/2), `--topologie` pre-scan swallowing `--ppl-reparti`/`--flux-serveur`/`--region`, node rejects a single-layer range (`f.debut >= f.fin`).
+
+## Files and Code
+- `reports/rapport-campagne-benefices.md` (~1400 lines): per-family verdict §0 bis, §0 ter (campaign state), §1/1bis speculative, §2 gaps, §3 grid, §5/5bis/5ter/5quater trained models + reads↔quality curve, §7 routing, §8bis latency map, §9 needle, §12/12bis >RAM + real read throughput, §13 restricted head, §14/14bis batch, §16/17 method traps, §18 semantics, §19/19bis sparsity, §20 context/batch, §21 kernel, §22 bit-exactness, §23 remaining, appendix log manifest (59 step logs, 79 Kio).
+- `docs/modele-pour-drave.md` (312 l.): engine vs model table, 10 designs (A-J), §4bis GPU answer.
+- `docs/biologie-pour-drave.md` (384 l.): connectome facts, E1 measured (+1.0 %/÷4.1 at dim 384; +6.7 % at 512; 12.5 % mask +13.7 %), E6 log-normal **inconclusive** (saved model ≠ trained: 13.0614 vs 2.2662 bits/octet; materialization suspicion eliminated, écart 0.000e+00), weight distributions Gaussian (p99.9/med 5.2–5.6).
+- `docs/hebbien-differentiel-et-biologie.md` (185 l.), `docs/impulsion-pure-apprenant.md` (169 l.) incl. M1 measurements: bare rule +5.2 %, novelty +20.4 %, self-value +15.3 %, external teacher signal +9.1 %, decorrelation β dose-response 8.8246→8.5381→8.3869 (β→1 = null rule).
+- `docs/architecture-cerveau-et-drave.md` (M1-M8 gaps), `docs/plan-cerveau-complet.md` (12 capacities C1-C12, 6 phases, dist. multi-instance §3, V1-V6 local validation), `docs/manques.md` (8 engine + 4 model gaps + "what is NOT a gap"), `docs/modularisation.md` (Cargo workspace proposal, profiles, resource semaphores, token leak warning), `docs/relations-humaines.md` (carpe diem charter).
+- `docs/sprint-cerveau.md` (17 Ko+): sprint state, per-capacity gates, ▶ PROCHAINE ACTION list, hourly journal.
+- `drave-core/src/topologie.rs` (~420 l., 8 tests): minimal hand-written JSON, strict validation, Kahn order, `est_une_chaine`, `chaine()`, `region()`, `successeur()`, `lien_entre()`.
+- `drave-core/src/trace_globale.rs` (5 tests): `empreinte()` FNV-1a, `Croisement`, `ecrire()`/`lire()`/`verifier()`, `ecrire_si()`, `lignes_pub()`.
+- `drave-core/src/bus.rs` (6 tests): channels, `neutre()`, `appliquer_gain()`, `analyser()`, `ligne()`, `appliquer_ligne()`.
+- `drave-core/src/main.rs`: CLI flags `--topologie`, `--region`, `--trace-globale`, `--verifier-globale`, `--bus`, `--bus-serveur`, `--bus-fichier`, `--pas-max`; relay in `run_serveur_flux` (~line 3347); driver `run_ppl_reparti` (~3605); bus/relay block must be launched **before** `ecoute.accept()` (line 3265).
+- `tools/porte-topologie.sh` (123 l., 5 cases), `tools/porte-trace.sh` (59 l.), `tools/porte-bus.sh` (4 cases), `tools/porte-delais.sh`, `tools/porte-horloge.sh`, `tools/porte-flux.sh` (known-good 5-mode gate), `tools/carte_latence.sh`, `tools/proxy_latence.py`, `tools/mesure_fenetres.sh` (per-path log averages), `tools/speculatif_moteur.py`, `tools/mesure_lot_disque.sh`, `tools/entrainer_moteur.py` (`--kwta`, `--elagage`, `--masque`, `--poids-lognormaux`).
+
+## Errors and Fixes
+- Stale release binary (8/10 11:00) lacked 3 commits → promoted: rebuilt, 77 tests pass, Codestral 8 tokens, split gate re-run 0.00e0.
+- Codestral PPL: 35 657 (broken SPM tokenizer) → **133.0798 on 255 tokens = 1.842 bit/octet** (published 117.91 was 63 tokens).
+- gpt-oss gate could never pass: `timeout 2400` for a pass needing ~6 900 s → `GATE_GPTOSS_DELAI` (default 9000); re-run alone gave **15.6017** exactly.
+- `VARS_LUES` test caught undeclared env vars (`DRAVE_HEBB_MODULE` etc.) — must declare any `DRAVE_*` read.
+- Exclusive range end `derniere` vs `derniere + 1` broke modes 0/1/2 only (caught by `porte-flux.sh`: 1.69e1 → 0.00e0 after fix).
+- `--topologie` pre-scan swallowed execution modes (twice: driver, relay node) → restricted via `topologie_executee` check.
+- Node rejects `f.debut >= f.fin` → relay test needed a model with ≥2 layers per region (used Qwen2.5-0.5B, 24 layers).
+- Bus gain on a **final** node is absorbed by output normalization → always test on a **middle** region (fell into it twice).
+- Gate malformed by literal `\n` in `printf '%s'` → parser correctly refused; fixed with `printf '%s\n'`.
+- `pkill -f "<name>"` self-kill recurred; guards matching own cmdline stalled a chain twice → use explicit PID/cmdline matching or `flock`.
+- Chaining guard looked for marker in the wrong journal (cost 2 h GPU).
+- E6 log-normal: saved file ≠ trained model (13.0614 vs 2.2662 bits/octet, PyTorch ref 15 552); materialization verified identical (0.000e+00); cause open; variant marked unusable in `--help`.
+- GH token `ghp_…` leaked into transcript during credential search → **must be revoked**; SSH key `~/.ssh/id_ed25519_github` (account `stephanedenis`) suffices.
+- Two concurrent 63 GB readers collapse disk throughput to 8.6 Mo/s → serialize heavy readers.
+
+## Pending Jobs
+- C4 full (per-region clocks/asynchrony beyond counters+bound).
+- C12bis: node-side trace + merge by timestamp.
+- C5ter: socket-based bus transport (thread must start before `accept()`; `--bus-serveur` parsed but unused).
+- C2 multiple inputs / forks (needs two disjoint layer ranges per process; currently refused explicitly).
+- C6 episodic memory, C7 consolidation, C8 periphery, C9 laterality, C10 per-link budgets.
+- Biology experiments E2 (growth), E4 (E/I balance), E5 (replay/consolidation); model designs H (depth routing), I (learned event budget), J (quantization-aware training).
+- Registry gaps: Q8 kernel for MoE experts, list kernel on GPU, encoders/embeddings (`bge-m3`).
+
+## Current Work
+- C4 v1 just implemented and gated: `--pas-max` on driver and node; gate `tools/porte-horloge.sh` passed — case 1 no bound 59.0790 (63 pas servis), case 2 `--pas-max 64` same 59.0790 with "(borne 64)", case 3 `--pas-max 32` → explicit stop, exit 5, **no PPL rendered**. 96 tests green.
+- Not yet committed/pushed at checkpoint: `drave-core/src/main.rs` (C4 wiring) and `tools/porte-horloge.sh`.
+
+## Next Step
+- Update `docs/sprint-cerveau.md` with C4 v1 (gate results, exit code 5, no partial result) and the ▶ PROCHAINE ACTION list, then `git add`/`commit`/`push` the C4 work, and immediately start the next item — **C12bis (node-side trace + merge)** is next on the priority list.
+
+## Critical Context
+- Repo published **private**: `https://github.com/stephanedenis/drave`, remote `origin` = `git@github.com:stephanedenis/drave.git`, branch `master` (all work pushed; last commit `883f934` plus the resumable-state commit).
+- Working tree clean except harness-managed `journal/*` files.
+- Constraints: 23 repo gates + all tests stay green (`porte-flux.sh` after ANY execution-path change), `release` profile remains the measurement binary, crate stays std-only, `docs/sprint-cerveau.md` updated每 round as resumable state.
+- Timeboxing mandate: keep producing until **10 October 09:00 HAE**; never idle when measurable work exists; invent new measurable work rather than waiting.
+- Reporting style demanded: ≤10 lines per round (done / broken-risky first / next), questions only when blocking, alerts first, no narrative.
+- Machine: 2 sockets/40 threads, RTX 5000 ×2 (GPU0 free), HDD slow for mmap (8.6 Mo/s), current time ~21:50 (9 Oct).
+- Traps to re-check: `--depuis` inflates cumulative pairs counters; `--limit` window protocol matters; per-window pairs from window 8 only for cross-model comparison; unknown flags are silently ignored (use `--options-strict` in scripts).
+</compacted-summary>
+
+### 🤖 Assistant
+
+⏵ C12bis : je regarde d'abord ce qu'un nœud fait aujourd'hui de `--trace-globale`
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"trace_globale\\|trace-globale\\|TRA_GLO\\|trace:\" drave-core/src/main.rs | head -40", "description": "Inspect node-side trace handling"}`
+
+  ```
+54:mod trace_globale;
+588:    trace_globale: Option<String>,
+754:            "--trace-globale" => { o.trace_globale = Some(suivant(i).clone()); 2 }
+3654:    let mut trace = trace_globale::TraceGlobale::nouvelle();
+3963:        match trace_globale::TraceGlobale::lire(&f) {
+3964:            Ok(reference) => match trace_globale::TraceGlobale::verifier(&reference, &trace.lignes_pub()) {
+3971:        trace_globale::ecrire_si(&trace, &opt.trace_globale);
+  ```
+
+### 👤 Utilisateur
+
+Current runtime context. This snapshot supersedes earlier runtime-context snapshots.
+
+Current DSH file policy: danger-full-access. The DSH file sandbox does not restrict file modifications by available operations.
+
+Approval prompts are disabled in this session: actions that require approval are rejected automatically — do not request sandbox escalation (do not set `sandbox_permissions`).
+
+### 👤 Utilisateur
+
+<system-reminder>
+The available skill catalog changed. This complete catalog replaces every earlier available-skills list in this session:
+
+<available_skills>
+- `microsoft-foundry`: Deploy, evaluate, fine-tune, and manage Foundry agents end-to-end with azd: hosted agent scaffold/run/deploy, prompt agent create, batch eval, continuous eval, prompt optimizer, Agent Optimizer scaffold, agent.yaml, dataset curation from traces, model fine-tuning (SFT/DPO/RFT). USE FOR: azd ai agent, azd provision/deploy, deploy agent, hosted agent, create agent, add tool to agent, invoke agent, evaluate agent, continuous eval, continuous monitoring, agent CI/CD, optimize prompt, improve prom...
+</available_skills>
+
+Use only names in this replacement catalog. If the user names a listed skill, or the task clearly matches its description, call the `skill` tool with the exact name before acting.
+A user may also invoke a skill directly; its <skill_content> block then appears in this conversation. Follow it, and do not call the `skill` tool again for that skill.
+</system-reminder>
+
+### 🤖 Assistant
+
+⏵ C12bis : le nœud ne trace rien aujourd'hui — je regarde le format pour l'étendre
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,60p' drave-core/src/trace_globale.rs && echo ---- && grep -n \"pub fn\\|pub struct\" drave-core/src/trace_globale.rs", "description": "Read trace format API"}`
+
+  ```
+//! Trace GLOBALE d'une exécution répartie — ce qui a traversé chaque lien, pas à pas.
+//!
+//! POURQUOI CE MODULE (docs/plan-cerveau-complet.md, capacité C12). Une exécution
+//! répartie n'est aujourd'hui observable que par ce que chaque processus imprime :
+//! quand un graphe de régions donnera un résultat faux, il n'y aura aucun moyen de
+//! savoir **quel pas et quel lien** ont divergé. La trace globale est ce moyen, et
+//! sa porte est une égalité : **rejouer l'exécution doit retrouver la trace, pas à
+//! pas** — toute divergence est signalée avec son pas et son lien.
+//!
+//! CE QUI EST ENREGISTRÉ, ET CE QUI NE L'EST PAS. Par croisement : la région, le pas,
+//! le lien, le nombre de valeurs, une **empreinte** des valeurs (FNV-1a sur leurs
+//! octets, donc **au bit près** — pas d'epsilon, pas d'arrondi) et l'horodatage.
+//! Les VALEURS elles-mêmes ne sont pas stockées : une trace de 128 pas × 2 liens ×
+//! 896 flottants ferait 900 Ko pour un 0,5 B, et des gigaoctets pour un modèle de
+//! production. La trace dit **où** regarder ; le rejeu recompte et compare.
+//!
+//! FORMAT (texte, une ligne par croisement, diffable et lisible) :
+//!
+//! ```text
+//! # drave trace globale v1 · <da
+… [1933 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ C12bis : j'inspecte la boucle du nœud pour y poser sa propre trace
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '3340,3420p' drave-core/src/main.rs", "description": "Read node relay loop"}`
+
+  ```
+sock.set_nodelay(true).expect("TCP_NODELAY");
+    println!("[flux] client connecté : {pair}");
+    let mut servis = 0u64;
+    loop {
+        match recevoir_flux(&mut sock, hidden, hc_local) {
+            Ok(f) => {
+                // Un en-tête FORGÉ ne doit pas tuer le nœud : `debut`, `fin` et
+                // `pos` venaient du réseau sans contrôle, et une trame de 83
+                // octets suffisait à faire tomber le moteur (assert sur `pos`,
+                // index hors `layers`, dimension fausse — relecture adversariale).
+                let (n_layer_local, ctx_local) = (mdl.cfg.n_layer, mdl.ctx);
+
+    let bus0 = bus::Bus::analyser(&opt.bus).unwrap_or_else(|e| {
+        eprintln!("{e}"); std::process::exit(2) });
+    // C5bis : le bus est PARTAGÉ et un fil d'écoute le met à jour par le réseau.
+    // Une diffusion doit pouvoir changer un canal PENDANT l'exécution — sinon ce
+    // n'est pas un bus, c'est un réglage de démarrage.
+    let bus = std::sync::Arc::new(std::sync::Mutex::new(bus0));
+    if !bus.lock().unwrap().est_neutre() {
+        println!("[bus] canaux actifs sur ce nœud : {}",
+                 bus.lock().unwrap().canaux().iter().map(|(k, v)| format!("{k}={v}"
+… [3812 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ C12bis : j'ajoute un horodatage mural aux croisements, condition d'une fusion inter-processus
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '60,170p' drave-core/src/trace_globale.rs", "description": "Read trace write/read/verify"}`
+
+  ```
+impl TraceGlobale {
+    pub fn nouvelle() -> Self { TraceGlobale { lignes: Vec::new() } }
+
+    pub fn enregistrer(&mut self, region: &str, pas: u32, lien: &str, valeurs: &[f32], ms: f64) {
+        self.lignes.push(Croisement {
+            region: region.to_string(), pas, lien: lien.to_string(),
+            n: valeurs.len(), empreinte: empreinte(valeurs), ms,
+        });
+    }
+
+    pub fn len(&self) -> usize { self.lignes.len() }
+    /// Les croisements enregistrés — pour comparer une exécution fraîche à une
+    /// trace relue, sans passer par un fichier intermédiaire.
+    pub fn lignes_pub(&self) -> Vec<Croisement> { self.lignes.clone() }
+    pub fn est_vide(&self) -> bool { self.lignes.is_empty() }
+
+    /// Écrit la trace. Le fichier porte son en-tête : une trace sans sa version ni
+    /// sa date ne se relit pas six mois plus tard.
+    pub fn ecrire(&self, chemin: &str) -> std::io::Result<()> {
+        let mut f = std::fs::File::create(chemin)?;
+        writeln!(f, "# drave trace globale v1 · {} croisements", self.lignes.len())?;
+        writeln!(f, "# region pas lien n empreinte ms")?;
+        for c in &self.lignes {
+            writeln!(f, "{} {} {} {} {:#018x} {:.3}",
+       
+… [3985 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ C12bis : format v2 avec horodatage mural + fusion par le temps, refus si non horodaté
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"servis\" drave-core/src/main.rs | head -20 && echo ---- && awk 'NR>=3420 && NR<=3560 && (/servis/ || /ecrire|return|^}/ || /fn /)' drave-core/src/main.rs | head -30", "description": "Locate node step counter and exit"}`
+
+  ```
+3342:    let mut servis = 0u64;
+3430:                    servis += 1;
+3504:                servis += 1;
+3515:        Some(b) if servis > b => println!("[horloge] borne de pas dépassée sur ce nœud : \
+3516:{servis} pas servis pour une borne de {b} — le nœud s'arrête"),
+3517:        Some(b) => println!("[horloge] {servis} pas servis (borne {b})"),
+3518:        None => println!("[horloge] {servis} pas servis"),
+3520:    println!("[flux] {servis} flux servis");
+3643:    let mut pas_servis: u64 = 0;
+3891:        pas_servis += 1;
+3893:            if pas_servis > b {
+3896:{} jetons seulement.", pas_servis - 1);
+3973:    println!("  horloge           : région locale {} pas servis{}", pas_servis,
+----
+                    servis += 1;
+                servis += 1;
+        Some(b) if servis > b => println!("[horloge] borne de pas dépassée sur ce nœud : \
+{servis} pas servis pour une borne de {b} — le nœud s'arrête"),
+        Some(b) => println!("[horloge] {servis} pas servis (borne {b})"),
+        None => println!("[horloge] {servis} pas servis"),
+    println!("[flux] {servis} flux servis");
+}
+fn nll_logits(lg: &[f32], cible: u32) -> f64 {
+}
+fn n_layer_total(chemin: &str) -> usize {
+}
+fn run_p
+… [38 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ C12bis : je repère les deux points d'envoi du nœud pour y empreindre ce qui part
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '3425,3435p;3480,3525p' drave-core/src/main.rs", "description": "Read node send sites"}`
+
+  ```
+envoyer_lot_listes(&mut sock, f.debut, f.fin, f.pos, &plat, t, &mdl)
+                    } else {
+                        envoyer_lot(&mut sock, f.debut, f.fin, f.pos, &plat, t, &mdl)
+                    };
+                    if reponse.is_err() { break; }
+                    servis += 1;
+                    continue;
+                }
+                // Largeur de DÉCODAGE : celle du modèle (4096, ou 16 384 avec
+                // hyper-connexions) — jamais `f.n`, qui vaut le nombre de
+                // CANAUX en mode dense mais le nombre de PAIRES en modes 1 et 2.
+                        if delai_relais > 0 {
+                            std::thread::sleep(std::time::Duration::from_millis(delai_relais));
+                        }
+                        if envoyer_flux(sc, *d, *fi, f.pos, &sortie, f.mode, Some(&mdl)).is_err() {
+                            println!("[relais] le successeur a fermé la connexion");
+                            break;
+                        }
+                        match recevoir_flux(sc, hidden, hc_mult) {
+                            Ok(r) => {
+                                if r.mode != f.mode {
+                                    println!("[rela
+… [1511 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ C12bis : je regarde ce que le pilote enregistre, pour que la fusion confronte les deux bouts
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '3870,3900p' drave-core/src/main.rs && grep -n \"enregistrer(\" drave-core/src/main.rs", "description": "Read driver record sites"}`
+
+  ```
+// La référence locale, elle, calcule encore ce dernier jeton pour rien
+        // (1 sur N : négligeable, mais écrit ici pour que personne ne s'étonne
+        // d'un écart de temps entre les deux chemins).
+        if dernier { break; }
+        let horloge = Instant::now();
+        let etat = mdl.forward(t, pos);
+        t_local += horloge.elapsed().as_secs_f64();
+        let horloge = Instant::now();
+        // C1b : la plage confiée au pair est celle de SA région (la première
+        // région distante), pas « tout ce qui reste » : avec un relais, « ce qui
+        // reste » appartient à plusieurs nœuds, et le premier calculerait le
+        // travail des autres.
+        // Le gain de région s'applique à l'état que la région PRODUIT (C5).
+        let mut etat = etat;
+        bus.appliquer_gain(&mut etat);
+        trace.enregistrer("local", pos as u32, "local->pair", &etat, 0.0);
+        if delai_ms > 0 {
+            std::thread::sleep(std::time::Duration::from_millis(delai_ms));
+        }
+        // C4 : la borne de PAS. Une région qui dépasse sa borne s'arrête et le dit ;
+        // elle ne rend pas un résultat partiel qui aurait l'air d'un résultat.
+        pas_servis += 1;
+  
+… [605 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ C12bis : je lis l'extraction de l'entrée côté nœud pour empreindre aussi le sens client→nœud
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '3436,3480p' drave-core/src/main.rs", "description": "Read node input extraction"}`
+
+  ```
+// Les confondre donnait un état de 16 362 valeurs au lieu de
+                // 16 384, et `Hc::melanger` sortait de la tranche.
+                mdl.emb_imposee = Some(f.charge.en_dense(largeur_etat));
+                // **La `pre` portée** (v6) : sans elle, la chaîne retardée de V4.1
+                // replierait son premier raccord avec la copie 0 — faux, et muet.
+                // Le moteur REFUSE ce cas (`forward`), donc un pair en v5 ne peut
+                // pas non plus passer par surprise.
+                //
+                // **Elle n'a de sens que si ce nœud REPREND au milieu du modèle.**
+                // Une trame qui demande `debut = 0` fait entrer l'état imposé par
+                // la couche 0 : la chaîne du modèle y commence, la `pre` d'un
+                // raccord précédent n'existe pas, et l'ignorer en silence serait
+                // exactement le défaut qu'on vient de corriger. Une trame pareille
+                // n'est émise par personne (le pilote envoie `couches_locales ≥ 1`),
+                // donc la refuser ne coûte rien et ferme le cas.
+                if !f.premix.is_empty() && f.debut == 0 {
+                    println!("[flux] flux refusé : la
+… [1727 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ C12bis : trace v2 horodatée, source, mode ; fusion par le temps qui vérifie les liens
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path(\"drave-core/src/trace_globale.rs\")\ns = p.read_text()\n\n# --- docstring d'en-tête : v2\ns = s.replace(\"\"\"//! FORMAT (texte, une ligne par croisement, diffable et lisible) : … [5203 caractères tronqués]`
+
+  ```
+trace_globale : Croisement v2, enregistrer_mode, ecrire_source
+  ```
+
+### 🤖 Assistant
+
+⏵ C12bis : lecture rétro-compatible v1/v2 et fonctions de fusion
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/trace_globale.rs\")\ns = p.read_text()\n\ns = s.replace(\"\"\"    pub fn lire(chemin: &str) -> Result<Vec<Croisement>, String> {\n        let texte = std::fs::read_t … [11233 caractères tronqués]`
+
+  ```
+fusion, derive_horloges, verifier_liens ajoutés
+451
+  ```
+
+### 🤖 Assistant
+
+⏵ C12bis : j'apparie les deux bouts d'un même lien par (nom, pas, n) — plus simple et exact
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/trace_globale.rs\")\ns = p.read_text()\ndeb = s.index(\"/// Les liens d'une trace, appariés par (pas) entre un émetteur et un récepteur.\")\nfin = s.index(\"/// Écri … [3956 caractères tronqués]`
+
+  ```
+verifier_liens réécrit
+error[E0428]: the name `ConstatLien` is defined multiple times
+   --> src/trace_globale.rs:351:1
+    |
+311 | pub struct ConstatLien {
+    | ---------------------- previous definition of the type `ConstatLien` here
+--
+error[E0428]: the name `VerdictLien` is defined multiple times
+   --> src/trace_globale.rs:359:1
+    |
+318 | pub enum VerdictLien {
+    | -------------------- previous definition of the type `VerdictLien` here
+--
+warning: unused imports: `GGML_IQ1_M`, `GGML_IQ1_S`, `GGML_IQ2_XXS`, and `GGML_IQ3_XXS`
+   --> src/model.rs:596:23
+    |
+596 |     use crate::gguf::{GGML_IQ1_M, GGML_IQ1_S, GGML_IQ2_XXS, GGML_IQ3_XXS,
+    |                       ^^^^^^^^^^  ^^^^^^^^^^  ^^^^^^^^^^^^  ^^^^^^^^^^^^
+--
+warning: unused attribute
+    --> src/model.rs:4502:5
+     |
+4502 |     #[inline]
+     |     ^^^^^^^^^ help: remove this attribute
+--
+error[E0592]: duplicate definitions with name `ligne`
+   --> src/trace_globale.rs:325:5
+    |
+325 |     pub fn ligne(&self) -> String {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ duplicate definitions for `ligne`
+--
+error[E0609]: no field `lien` on type `&trace_globale::ConstatLien`
+   --> src/trace_globale.rs:367:56
+    |
+367 |   
+… [403 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ C12bis : je supprime l'ancien bloc, mon découpage avait laissé les deux définitions
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/trace_globale.rs\")\ns = p.read_text()\ndeb = s.index(\"/// CONFRONTE les deux bouts de chaque lien : ce qu'une source dit avoir ENVOYÉ\")\nfin = s.index(\"/// CONFR … [305 caractères tronqués]`
+
+  ```
+doublon supprimé
+  ```
+
+### 🤖 Assistant
+
+⏵ C12bis : la compilation passe ; je lance les tests pour voir ce que le format v2 casse
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 cargo test --release --manifest-path drave-core/Cargo.toml 2>&1 | grep -E \"^error|^test result|FAILED|panicked\" -A 4 | head -30", "description": "Run tests after format change", "timeoutMs": 700000}`
+
+  ```
+test result: ok. 96 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+  ```
+
+### 🤖 Assistant
+
+⏵ C12bis : je pose la trace du nœud — entrée et sortie empreintes, écrites en fin de session
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"region\" drave-core/src/main.rs | grep -n \"opt\\.\\|region:\" | head -20 && echo ---- && awk 'NR>=3330 && NR<=3345' drave-core/src/main.rs && echo ---- && grep -n \"fn run_serveur_flux\" drave-core/src/main.rs", "descripti … [48 caractères tronqués]`
+
+  ```
+3:586:    region: Option<String>,
+5:3291:    match (&opt.topologie, &opt.region) {
+10:3554:    let (couches_locales, pair_cli, tp_debut, tp_fin, tp_region_distante) = if let Some(f) = opt.topologie.clone() {
+----
+                             cible.id, cible.instance, cible.premiere, cible.derniere);
+                    // Fin EXCLUSIVE ici aussi (voir le pilote).
+                    successeur = Some((sc, cible.premiere as u32, (cible.derniere + 1) as u32));
+                }
+                Err(e) => { eprintln!("{e}"); std::process::exit(3); }
+            }
+        }
+    }
+    // C5 : le bus du NŒUD. Chaque région décide de ce qu'elle fait du canal ; ici
+    // le gain s'applique à l'état que le nœud produit, avant de le rendre.
+    sock.set_nodelay(true).expect("TCP_NODELAY");
+    println!("[flux] client connecté : {pair}");
+    let mut servis = 0u64;
+    loop {
+        match recevoir_flux(&mut sock, hidden, hc_local) {
+            Ok(f) => {
+----
+3252:fn run_serveur_flux(opt: Options, adresse: &str) {
+  ```
+
+### 🤖 Assistant
+
+⏵ C12bis : je vérifie le type du mode de trame avant d'instrumenter
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"pub mode\\|const MODE_\" drave-core/src/*.rs | head -12 && grep -n \"pub fn plat\\|pub fn en_dense\" drave-core/src/charge.rs 2>/dev/null | head", "description": "Check frame mode type"}`
+
+  ```
+drave-core/src/main.rs:2611:const MODE_DENSE: u8 = 0;
+drave-core/src/main.rs:2615:const MODE_LISTE: u8 = 1;
+drave-core/src/main.rs:2620:const MODE_BLOCS: u8 = 2;
+drave-core/src/main.rs:2626:const MODE_LOT: u8 = 3;
+drave-core/src/main.rs:2633:const MODE_LOT_LISTES: u8 = 4;
+drave-core/src/topologie.rs:59:    pub mode: String,
+drave-core/src/trace_globale.rs:70:    pub mode: u8,
+  ```
+
+### 🤖 Assistant
+
+⏵ C12bis : instrumentation du nœud — les deux sens sous les noms du pilote
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\nn = 0\n\n# 1. init de la trace du nœud\na = \"\"\"    println!(\"[flux] client connecté : {pair}\");\n    let mut servis = 0u64;\"\"\" … [3536 caractères tronqués]`
+
+  ```
+main.rs : nœud instrumenté, 6 sites
+  ```
+
+### 🤖 Assistant
+
+⏵ C12bis : `ecrire_si_source` puis le mode CLI de fusion
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/trace_globale.rs\")\ns = p.read_text()\na = \"\"\"/// Vrai si le chemin existe et est lisible — utilisé par le mode vérification.\"\"\"\nb = \"\"\"/// Comme `ecrire_ … [834 caractères tronqués]`
+
+  ```
+ecrire_si_source ajouté
+  ```
+
+### 🤖 Assistant
+
+⏵ C12bis : j'ajoute le mode `--fusionner-trace` à la ligne de commande
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '3955,3990p' drave-core/src/main.rs && echo ----VERIF---- && grep -n \"verifier_globale\" drave-core/src/main.rs", "description": "Read driver trace dispatch"}`
+
+  ```
+// `hc × cachés` pour un modèle à hyper-connexions (c'est `norme_finale`
+        // qui réduit, une seule fois, sur le nœud qui possède la tête).
+        let hc_mult = mdl.hc.as_ref().map(|v| v[0].0.hc).unwrap_or(1);
+        let largeur_etat = mdl.cfg.hidden * hc_mult;
+        if rep.mode == MODE_DENSE && rep.n != mdl.cfg.hidden && rep.n != largeur_etat {
+            eprintln!("[flux] le nœud moteur a renvoyé {} canaux pour {} (ou {}) \
+attendus — pair incohérent. Rien n'a été calculé.", rep.n, mdl.cfg.hidden, largeur_etat);
+            std::process::exit(1);
+        }
+        let final_ = rep.charge.en_dense(largeur_etat);
+        trace.enregistrer(&pair_region, pos as u32, "pair->local", &final_, t_pair * 1e3);
+        // La réponse porte la `pre` de la DERNIÈRE FFN du pair (v6) : c'est elle
+        // que la réduction finale du pilote doit employer — il ne peut pas la
+        // recalculer, il n'a pas exécuté ces couches.
+        mdl.hc_porte_imposee = if rep.premix.is_empty() { None } else { Some(rep.premix.clone()) };
+        if pos + 1 < ids.len() {
+            // Deux temps : la réduction CONSOMME la `pre` reçue (V4.1), donc elle
+            // emprunte le modèle en écriture
+… [1281 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ C12bis : le mode fusion s'exécute avant tout chargement de modèle
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fn main()\" drave-core/src/main.rs && sed -n \"$(grep -n 'fn main()' drave-core/src/main.rs | cut -d: -f1),+40p\" drave-core/src/main.rs", "description": "Read main dispatch"}`
+
+  ```
+85:fn main() {
+fn main() {
+    let args: Vec<String> = std::env::args().collect();
+    if args.len() < 2 {
+        eprintln!("usage: drave <modele.gguf|dossier-de-clusters> [--matrix NOM] [--threads N]");
+        eprintln!("       drave <modele> --infer (--ids 1,2,3 | --prompt TEXTE | --ids-file F)");
+        eprintln!("             [--n 32] [--temp 0] [--ctx 512] [--threads N]");
+        eprintln!("       drave <modele> --ppl FICHIER-IDS [--ctx N] [--limit N] [--dense]");
+        eprintln!("       drave <modele> --tensors      inventaire par les en-têtes seuls");
+        eprintln!("       drave <modele> --materiel     détection matérielle et plan de");
+        eprintln!("                                     configuration, AVEC la raison de chaque");
+        eprintln!("                                     choix — ne charge pas le modèle");
+        eprintln!("       drave <modele> --sonder-engram N   accès mmappé à une table d'engram");
+        eprintln!("       drave <modele> --tete-restreinte F  génération CONTRAINTE : la tête ne");
+        eprintln!("                                     calcule que les tokens de F. Change la");
+        eprintln!("                                 
+… [1690 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '126,175p' drave-core/src/main.rs", "description": "Read topology pre-scan block"}`
+
+  ```
+// fichier GGUF pour lire un graphe obligerait à en inventer un, et la
+    // commande mentirait sur ce qu'elle fait. `--topologie F` imprime le plan
+    // VÉRIFIÉ et sort ; l'exécution d'un graphe viendra après (capacité C1b).
+    // …mais PAS si la topologie est là pour DÉCRIRE une exécution : le pilote
+    // réparti (`--ppl-reparti`) et le nœud relais (`--flux-serveur`, `--region`)
+    // l'exécutent, ils ne la lisent pas. Sans cette condition, les deux
+    // imprimaient le plan et sortaient — arrivé deux fois, dont une pendant la
+    // mise au point du relais.
+    let topologie_executee = args.iter().any(|a| a == "--ppl-reparti")
+        || args.iter().any(|a| a == "--flux-serveur")
+        || args.iter().any(|a| a == "--region");
+    if !topologie_executee {
+    if let Some(pos) = args.iter().position(|a| a == "--topologie") {
+        let f = match args.get(pos + 1) {
+            Some(f) => f.clone(),
+            None => { eprintln!("--topologie attend un fichier"); std::process::exit(2); }
+        };
+        let texte = match std::fs::read_to_string(&f) {
+            Ok(t) => t,
+            Err(e) => { eprintln!("topologie : lecture de {f} impossible : {e}"); std::process
+… [1554 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ C12bis : j'écris le mode fusion — mesure la dérive d'horloges et confronte les liens
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\n\n# 1. dispatch brut, avant la topologie et avant tout modèle\na = \"\"\"    // ---- C1 : la TOPOLOGIE passe AVANT tout le reste, et a … [8109 caractères tronqués]`
+
+  ```
+mode fusion ajouté
+  ```
+
+### 🤖 Assistant
+
+⏵ C12bis : j'ajoute les tests — refus du v1, ordre déterministe, liens divergents
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n \"$(grep -n 'mod tests' drave-core/src/trace_globale.rs | cut -d: -f1),\\$p\" drave-core/src/trace_globale.rs | head -60", "description": "Read existing trace tests"}`
+
+  ```
+mod tests {
+    use super::*;
+
+    #[test]
+    fn empreinte_change_avec_un_bit() {
+        let a = [1.0f32, 2.0];
+        let mut b = a;
+        b[1] = f32::from_bits(2.0f32.to_bits() ^ 1); // un seul bit de différence
+        assert_ne!(empreinte(&a), empreinte(&b), "un bit doit suffire à changer l'empreinte");
+        assert_eq!(empreinte(&a), empreinte(&a));
+    }
+
+    #[test]
+    fn allez_retour_ecriture_lecture() {
+        let mut t = TraceGlobale::nouvelle();
+        t.enregistrer("local", 0, "local->pair", &[1.0, 2.0, 3.0], 0.4);
+        t.enregistrer("pair", 0, "pair->local", &[4.0, 5.0], 5.1);
+        let f = std::env::temp_dir().join("essai_trace_globale.txt");
+        let chemin = f.to_str().unwrap().to_string();
+        t.ecrire(&chemin).unwrap();
+        let relu = TraceGlobale::lire(&chemin).unwrap();
+        assert_eq!(relu.len(), 2);
+        assert_eq!(relu[0].region, "local");
+        assert_eq!(relu[0].n, 3);
+        assert_eq!(relu[1].lien, "pair->local");
+        assert_eq!(relu[0].empreinte, empreinte(&[1.0, 2.0, 3.0]));
+        let _ = std::fs::remove_file(&chemin);
+    }
+
+    #[test]
+    fn verifier_detecte_la_divergence_et_la_nomme() {
+        let mut a = Tr
+… [1358 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ C12bis : les tests de fusion, de dérive et de confrontation des liens
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -12 drave-core/src/trace_globale.rs", "description": "Read tail of trace module"}`
+
+  ```
+#[test]
+    fn refuse_un_chemin_different() {
+        let mut a = TraceGlobale::nouvelle();
+        a.enregistrer("local", 0, "local->pair", &[1.0], 0.0);
+        let mut b = TraceGlobale::nouvelle();
+        b.enregistrer("local", 0, "local->pair", &[1.0], 0.0);
+        b.enregistrer("pair", 0, "pair->local", &[2.0], 0.0);
+        let e = TraceGlobale::verifier(&a.lignes, &b.lignes).unwrap_err();
+        assert!(e.contains("n'a pas suivi le même chemin"), "{e}");
+    }
+}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/trace_globale.rs\")\ns = p.read_text()\ntests = '''\n    // ---- C12bis : fusion, horloges, confrontation des liens ------------------\n\n    /// Fabrique un croisem … [7904 caractères tronqués]`
+
+  ```
+tests ajoutés
+test result: ok. 107 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+  ```
+
+### 🤖 Assistant
+
+⏵ C12bis : je m'appuie sur la porte trace existante pour lancer une vraie exécution répartie
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat tools/porte-trace.sh", "description": "Read existing trace gate"}`
+
+  ```
+#!/bin/bash
+# porte-trace.sh — la porte de la capacité C12 : la trace globale et son rejeu.
+#
+# Trois cas, et le troisième est le plus important :
+#   1. une exécution répartie ÉCRIT une trace (un croisement par pas et par lien) ;
+#   2. le REJEU de la même exécution ne diverge pas — c'est l'invariant ;
+#   3. une trace FAUSSÉE d'un seul bit est DÉTECTÉE et NOMMÉE (pas, région, lien).
+# Une porte qui ne sait pas échouer ne vérifie rien : le cas 3 est là pour ça.
+set -u
+cd "$(dirname "$0")/.."
+D=${D:-./drave-core/target/release/drave}
+M=${MODELE:-models/Qwen2.5-0.5B-Q8_0.gguf}
+IDS=${IDS:-/tmp/campagne24/ids_0.5B-Q8.txt}
+LIMITE=${LIMITE:-64}
+PORT=${PORT:-$((51000 + RANDOM % 800))}
+T=$(mktemp -d)
+TOPO="$T/topo.json"
+cat > "$TOPO" <<JSON
+{"regions":[
+  {"id":"local","couches":[0,11],"instance":"local"},
+  {"id":"d","couches":[12,23],"instance":"127.0.0.1:$PORT"}],
+ "liens":[{"de":"local","vers":"d","mode":"f32"}]}
+JSON
+[ -s "$M" ] && [ -s "$IDS" ] || { echo "  modèle ou identifiants absents"; exit 2; }
+
+nœud() { $D "$M" --flux-serveur "$PORT" --ctx 256 --threads 8 > "$T/n.log" 2>&1 & echo $!; }
+pilote() { $D "$M" --ppl-reparti "127.0.0.1:$PORT" --topologie "$TOPO" --ids-file "$IDS" \
+ 
+… [1418 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ C12bis : je vérifie que `--region` seul est accepté par le nœud avant d'écrire la porte
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '3285,3305p' drave-core/src/main.rs", "description": "Check --region handling on node"}`
+
+  ```
+let hc_local = mdl.hc.as_ref().map(|v| v[0].0.hc).unwrap_or(1);
+    let ecoute = std::net::TcpListener::bind((hote.as_str(), port)).expect("écoute");
+    println!("[flux] nœud moteur sur {hote}:{port} · {hidden} cachés · {} couches · contexte {ctx}",
+             mdl.cfg.n_layer);
+    let (mut sock, pair) = ecoute.accept().expect("connexion");
+    // TCP_NODELAY, et ce n'est pas un détail de confort : sans lui, Nagle garde
+    // une petite écriture en attendant l'acquittement de la précédente, et l'ACK
+    // différé du pair la retarde encore. Mesuré sur localhost, 12 couches
+    // distantes : **97,6 ms** d'attente contre 15,6 ms de calcul local — six fois
+    // le calcul, payés par la seule latence du protocole.
+    // ---- C1b : LE RELAIS. Un nœud du milieu applique SA plage (celle que la
+    // trame lui donne) puis transmet à son successeur, au lieu de répondre à son
+    // appelant. Le découpage voyage DÉJÀ dans la trame (`f.debut`, `f.fin`) : le
+    // relais n'a donc qu'à réexpédier une trame portant la plage du successeur.
+    // Le retour se fait de proche en proche — le pilote n'a pas à connaître le
+    // nombre de relais.
+    let mut successeur: Option<(std::net::Tcp
+… [159 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"flux-serveur\\|region\\|ppl-reparti\" tools/porte-topologie.sh | head -20", "description": "Read proven node invocation"}`
+
+  ```
+10:#      l'adresse contredit `--ppl-reparti`. Un découpage qui n'est pas celui qu'on
+29:  "regions": [
+42:$D "$M" --flux-serveur "$PORT" --ctx 256 --threads 8 > "$T/n1.log" 2>&1 & SRV=$!
+44:H=$($D "$M" --ppl-reparti "127.0.0.1:$PORT" --ids-file "$IDS" --couches-locales "$COUCHES" \
+51:$D "$M" --flux-serveur "$PORT" --ctx 256 --threads 8 > "$T/n2.log" 2>&1 & SRV=$!
+53:T2=$($D "$M" --ppl-reparti "127.0.0.1:$PORT" --topologie "$TOPO" --ids-file "$IDS" \
+73:$D "$M" --ppl-reparti "127.0.0.1:1" --topologie "$TOPO" --ids-file "$IDS" --limit 8 \
+88:{"regions":[
+95:{"regions":[
+100:    $D "$M3" --flux-serveur "$P1" --ctx 256 --threads 8 > "$T/n1.log" 2>&1 & N1=$!
+102:    R2=$($D "$M3" --ppl-reparti "127.0.0.1:$P1" --topologie "$T/t2.json" --ids-file "$IDS3" \
+106:    $D "$M3" --flux-serveur "$P2" --topologie "$T/t3.json" --region n2 --ctx 256 --threads 8 > "$T/n2.log" 2>&1 & N2=$!
+108:    $D "$M3" --flux-serveur "$P1" --topologie "$T/t3.json" --region n1 --ctx 256 --threads 8 > "$T/n1b.log" 2>&1 & N1=$!
+110:    R3=$($D "$M3" --ppl-reparti "127.0.0.1:$P1" --topologie "$T/t3.json" --ids-file "$IDS3" \
+  ```
+
+### 🤖 Assistant
+
+⏵ C12bis : j'écris la porte — quatre cas, dont deux refus qui doivent être bruyants
+
+- **write** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-fusion.sh", "content": "#!/bin/bash\n# porte-fusion.sh — la porte de la capacité C12bis : FUSIONNER les traces de\n# plusieurs processus, et confronter les deux bouts de chaque lien.\n#\n# Ce que cette porte doit prouver, et  … [5145 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-fusion.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && chmod +x tools/porte-fusion.sh && timeout 900 bash tools/porte-fusion.sh 2>&1 | tail -40", "description": "Run the fusion gate", "timeoutMs": 960000}`
+
+  ```
+=== 1. exécution répartie, trace des DEUX côtés ===
+    deux nœuds        : perplexité 113.0068  (2.0 s)
+  [trace] 94 croisements écrits dans /tmp/tmp.E0u6ct7wq1/drv.txt
+  nœud : [trace] 94 croisements écrits dans /tmp/tmp.E0u6ct7wq1/node.txt (source d)
+  croisements : pilote 94 · nœud 94
+=== 2. fusion : ordre par le temps mural + confrontation des liens ===
+    fusion            : 188 croisements de 2 sources
+    local             : 94 croisements, de 1791597388.884 à 1791597390.821 (epoch)
+    d                 : 94 croisements, de 1791597388.884 à 1791597390.821 (epoch)
+    dérive d'horloge  : d commence +0.000130 s après la première source (mesurée, PAS corrigée : une fusion qui recolle des horloges sans le dire affirme plus qu'elle ne sait)
+    liens confrontés  : 94 identiques, 0 divergents, 0 non vérifiables (encodage avec perte)
+    trace fusionnée   : 188 lignes écrites dans /tmp/tmp.E0u6ct7wq1/fusion.txt
+  [options] 1 drapeau(x) INCONNU(S), donc sans effet : --fusion-sortie
+  [options] (une faute de frappe suffit — `--options-actives` montre ce que le moteur applique vraiment)
+  
+  thread 'main' (2510991) panicked at src/main.rs:229:35:
+  ouverture du GGUF: Os { code: 2, 
+… [168 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ C12bis : trouvé un vrai défaut — le mode fusion rendait la main et le moteur chargeait un modèle
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\na = \"\"\"    if !divergents.is_empty() {\n        eprintln!(\"fusion : {} lien(s) DIVERGENT(S) — les deux bouts d'un même croisement  … [1188 caractères tronqués]`
+
+  ```
+sortie explicite ajoutée
+=== 1. exécution répartie, trace des DEUX côtés ===
+    deux nœuds        : perplexité 113.0068  (2.0 s)
+  [trace] 94 croisements écrits dans /tmp/tmp.Ytv6DpCsrf/drv.txt
+  nœud : [trace] 94 croisements écrits dans /tmp/tmp.Ytv6DpCsrf/node.txt (source d)
+  croisements : pilote 94 · nœud 94
+=== 2. fusion : ordre par le temps mural + confrontation des liens ===
+    fusion            : 188 croisements de 2 sources
+    local             : 94 croisements, de 1791597444.269 à 1791597446.287 (epoch)
+    d                 : 94 croisements, de 1791597444.269 à 1791597446.287 (epoch)
+    dérive d'horloge  : d commence +0.000116 s après la première source (mesurée, PAS corrigée : une fusion qui recolle des horloges sans le dire affirme plus qu'elle ne sait)
+    liens confrontés  : 94 identiques, 0 divergents, 0 non vérifiables (encodage avec perte)
+    trace fusionnée   : 188 lignes écrites dans /tmp/tmp.Ytv6DpCsrf/fusion.txt
+  ✅ 188 croisements fusionnés, ordonnés par le temps mural
+=== 3. un bit changé dans la trace du nœud ===
+Traceback (most recent call last):
+  File "<stdin>", line 5, in <module>
+ValueError: invalid literal for int() with base 16: '0.000'
+  ❌ un l
+… [57 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ C12bis : mon falsificateur visait la mauvaise colonne — l'empreinte est la 5e
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -i \"s/ch\\[5\\] = hex(int(ch\\[5\\], 16) \\^ 1)/ch[4] = hex(int(ch[4], 16) ^ 1)/\" tools/porte-fusion.sh && timeout 900 bash tools/porte-fusion.sh 2>&1 | tail -22", "description": "Fix falsifier column and rerun gate", "timeoutM … [11 caractères tronqués]`
+
+  ```
+=== 1. exécution répartie, trace des DEUX côtés ===
+    deux nœuds        : perplexité 113.0068  (1.9 s)
+  [trace] 94 croisements écrits dans /tmp/tmp.DLbA1UIO2d/drv.txt
+  nœud : [trace] 94 croisements écrits dans /tmp/tmp.DLbA1UIO2d/node.txt (source d)
+  croisements : pilote 94 · nœud 94
+=== 2. fusion : ordre par le temps mural + confrontation des liens ===
+    fusion            : 188 croisements de 2 sources
+    local             : 94 croisements, de 1791597454.793 à 1791597456.702 (epoch)
+    d                 : 94 croisements, de 1791597454.793 à 1791597456.702 (epoch)
+    dérive d'horloge  : d commence +0.000148 s après la première source (mesurée, PAS corrigée : une fusion qui recolle des horloges sans le dire affirme plus qu'elle ne sait)
+    liens confrontés  : 94 identiques, 0 divergents, 0 non vérifiables (encodage avec perte)
+    trace fusionnée   : 188 lignes écrites dans /tmp/tmp.DLbA1UIO2d/fusion.txt
+  ✅ 188 croisements fusionnés, ordonnés par le temps mural
+=== 3. un bit changé dans la trace du nœud ===
+    local->pair pas 0 (local / d) : DIVERGENT — 0x4e9f4e33a7f335e8 d'un côté, 0x4e9f4e33a7f335e9 de l'autre
+  fusion : 1 lien(s) DIVERGENT(S) — les deux bouts d'un mê
+… [546 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ C12bis : porte verte ; je relance les portes de non-régression en tâche de fond
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (echo \"--- trace\"; timeout 900 bash tools/porte-trace.sh 2>&1 | tail -6; echo \"--- horloge\"; timeout 900 bash tools/porte-horloge.sh 2>&1 | tail -6; echo \"--- flux\"; timeout 1800 bash tools/porte-flux.sh 2>&1 | tail -12) 2>&1", … [80 caractères tronqués]`
+
+  ```
+started background job bash-10
+  ```
+
+### 🤖 Assistant
+
+⏵ C12bis : pendant les portes, je consigne l'état dans le doc de sprint
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/sprint-cerveau.md\")\ns = p.read_text()\nancre = \"## C4 (premier pas) — FAIT (9 octobre 21 h 55)\"\nassert ancre in s\nneuf = \"\"\"## C12bis — FAIT (9 octobre 23 h 05) : tra … [3689 caractères tronqués]`
+
+  ```
+doc sprint : C12bis
+  ```
+
+- **job_output** `{"job_id": "bash-10", "wait": true, "timeout_ms": 600000}`
+
+  ```
+--- trace
+=== 2. rejeu de la même exécution ===
+    rejeu global      : 126 croisements, AUCUNE divergence ✅
+  ✅ rejeu identique
+=== 3. trace FAUSSÉE d'un seul bit ===
+    rejeu : DIVERGENCE AU BIT PRÈS au croisement 0 — région « local », pas 0, lien « local->pair » : empreinte 0xddd44db579dfd696 attendue, 0xddd44db579dfd697 obtenue
+  ✅ la trace fausse est détectée et nommée
+--- horloge
+=== 3. borne = 32 (atteinte) ===
+  [horloge] borne de pas atteinte : 32 pas (région locale). L'exécution s'arrête ICI — aucune perplexité n'est rendue, parce qu'elle porterait sur 32 jetons seulement. 
+  nœud : [horloge] 32 pas servis (borne 32)
+=== verdict ===
+  ✅ borne non atteinte : même résultat (59.0790), code 0
+  ✅ borne atteinte : arrêt EXPLICITE (code 5) et AUCUNE perplexité rendue
+--- flux
+  mode 0 — f32 dense               0.00e0  ✅  (réf 61.9920 / deux nœuds 61.9920)
+  mode 1 — listes quantifiées     0.00e0  ✅  (réf 61.9920 / deux nœuds 61.9920)
+  mode 2 — listes par blocs        3.65e-2  ✅  (réf 61.9920 / deux nœuds 64.2535)
+  mode 3 — lot dense f32           0.00e0  ✅  (réf 60.8135 / deux nœuds 60.8135)
+  mode 4 — lot en listes           4.45e-3  ✅  (réf 60.8135 / deux nœuds 60.5427)
+[s
+… [31 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ C12bis : tout est vert ; je commite et pousse
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src/main.rs drave-core/src/trace_globale.rs tools/porte-fusion.sh docs/sprint-cerveau.md && git commit -q -m \"C12bis : le nœud trace, et les traces de plusieurs processus se fusionnent\n\nCE QUI MANQUAIT, ET QU … [1886 caractères tronqués]`

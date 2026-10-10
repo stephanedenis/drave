@@ -89,6 +89,12 @@ fn main() {
         eprintln!("       drave <modele> --infer (--ids 1,2,3 | --prompt TEXTE | --ids-file F)");
         eprintln!("             [--n 32] [--temp 0] [--ctx 512] [--threads N]");
         eprintln!("       drave <modele> --ppl FICHIER-IDS [--ctx N] [--limit N] [--dense]");
+        eprintln!("       drave --fusionner-trace T1 T2 [...] [--fusion-sortie F]");
+        eprintln!("                                     fusionne des traces de plusieurs processus,");
+        eprintln!("                                     ordonnées par le TEMPS MURAL, mesure la");
+        eprintln!("                                     dérive des horloges et confronte les deux");
+        eprintln!("                                     bouts de chaque lien. Ne charge aucun");
+        eprintln!("                                     modèle.");
         eprintln!("       drave <modele> --tensors      inventaire par les en-têtes seuls");
         eprintln!("       drave <modele> --materiel     détection matérielle et plan de");
         eprintln!("                                     configuration, AVEC la raison de chaque");
@@ -120,6 +126,12 @@ fn main() {
     if let Some(vieux) = vieux_nom {
         eprintln!("[attention] {vieux} est l'ancien nom d'une variable d'environnement : \
 il faut écrire DRAVE_{} (voir docs/histoire.md). Rien n'a été appliqué.", &vieux[3..]);
+    }
+    // ---- C12bis : la FUSION de traces passe avant tout le reste elle aussi, et
+    // pour la même raison que la topologie : elle ne touche à AUCUN modèle. Exiger
+    // un fichier de poids pour relire trois traces ferait mentir la commande.
+    if let Some(pos) = args.iter().position(|a| a == "--fusionner-trace") {
+        run_fusion_traces(&args[pos + 1..]);
     }
     // ---- C1 : la TOPOLOGIE passe AVANT tout le reste, et avant même le chemin
     // du modèle. Un descripteur de régions ne décrit pas des poids : exiger un
@@ -3340,6 +3352,15 @@ doit pas changer)", ma.id, lien.vers, lien.delai_ms);
     sock.set_nodelay(true).expect("TCP_NODELAY");
     println!("[flux] client connecté : {pair}");
     let mut servis = 0u64;
+    // C12bis : la trace du NŒUD. Jusqu'ici le pilote traçait seul, donc une
+    // divergence sur un lien n'était visible que d'un bout — impossible de dire si
+    // c'est l'envoi ou la réception qui avait dérivé. Le nœud enregistre donc les
+    // DEUX sens sous les MÊMES noms de lien que le pilote : « local->pair » pour ce
+    // qu'il reçoit, « pair->local » pour ce qu'il rend. C'est cette convention —
+    // et non une tolérance de temps — qui rend la fusion capable de confronter les
+    // deux bouts d'un même croisement.
+    let region_trace = opt.region.clone().unwrap_or_else(|| "pair".to_string());
+    let mut trace = trace_globale::TraceGlobale::nouvelle();
     loop {
         match recevoir_flux(&mut sock, hidden, hc_local) {
             Ok(f) => {
@@ -3414,13 +3435,18 @@ nœud continue", f.pos, ctx_local);
 continue", f.pos, mdl.ctx);
                         continue;
                     }
-                    mdl.emb_imposee_lot = Some(f.charge.plat().to_vec());
+                    let recu_lot = f.charge.plat().to_vec();
+                    trace.enregistrer_mode(&region_trace, f.pos as u32, "local->pair",
+                                           &recu_lot, 0.0, f.mode);
+                    mdl.emb_imposee_lot = Some(recu_lot);
                     let hs = mdl.forward_lot(&vec![0u32; t], f.pos as usize);
                     let plat: Vec<f32> = hs.concat();
                     if std::env::var("DRAVE_DEBUG_FLUX").is_ok() {
                         eprintln!("[debug] lot reçu : n={t} pos={} états={} plat={} corps={}",
                                   f.pos, hs.len(), plat.len(), f.octets_corps);
                     }
+                    trace.enregistrer_mode(&region_trace, f.pos as u32, "pair->local",
+                                           &plat, 0.0, f.mode);
                     let reponse = if f.mode == MODE_LOT_LISTES {
                         envoyer_lot_listes(&mut sock, f.debut, f.fin, f.pos, &plat, t, &mdl)
                     } else {
@@ -3435,7 +3461,10 @@ continue", f.pos, mdl.ctx);
                 // CANAUX en mode dense mais le nombre de PAIRES en modes 1 et 2.
                 // Les confondre donnait un état de 16 362 valeurs au lieu de
                 // 16 384, et `Hc::melanger` sortait de la tranche.
-                mdl.emb_imposee = Some(f.charge.en_dense(largeur_etat));
+                let recu = f.charge.en_dense(largeur_etat);
+                trace.enregistrer_mode(&region_trace, f.pos as u32, "local->pair",
+                                       &recu, 0.0, f.mode);
+                mdl.emb_imposee = Some(recu);
                 // **La `pre` portée** (v6) : sans elle, la chaîne retardée de V4.1
                 // replierait son premier raccord avec la copie 0 — faux, et muet.
                 // Le moteur REFUSE ce cas (`forward`), donc un pair en v5 ne peut
@@ -3497,6 +3526,8 @@ de {} — flux refusé", r.mode, f.mode);
                         }
                     }
                 };
+                trace.enregistrer_mode(&region_trace, f.pos as u32, "pair->local",
+                                       &a_rendre, 0.0, f.mode);
                 if envoyer_flux(&mut sock, f.debut, f.fin, f.pos, &a_rendre, f.mode,
                                 Some(&mdl)).is_err() {
                     break;
@@ -3518,6 +3549,143 @@ de {} — flux refusé", r.mode, f.mode);
         None => println!("[horloge] {servis} pas servis"),
     }
     println!("[flux] {servis} flux servis");
+    // Écrite APRÈS la boucle, donc aussi quand la session s'est mal terminée : une
+    // trace qui n'existerait que pour les sessions réussies ne servirait à rien,
+    // puisque ce sont les autres qu'on veut comprendre.
+    trace_globale::ecrire_si_source(&trace, &opt.trace_globale, &region_trace);
+}
+
+/// C12bis : fusionne des traces écrites par plusieurs processus.
+///
+/// POURQUOI UN MODE À PART, ET PAS UN DRAPEAU DE PLUS SUR UNE EXÉCUTION. Fusionner
+/// des traces ne calcule rien : c'est un travail de LECTURE, qui doit pouvoir se
+/// faire après coup, sur une autre machine, sans le modèle ni les nœuds. Le mettre
+/// derrière un mode existant aurait obligé à relancer une exécution pour relire ce
+/// qu'on a déjà.
+///
+/// CE QUE LA FUSION REFUSE DE FAIRE, et c'est le cœur : ordonner des traces sans
+/// horodatage (format v1), et présenter un lien comme vérifié quand son encodage
+/// était avec perte. Dans les deux cas elle le DIT et sort en erreur plutôt que de
+/// rendre un résultat qui aurait l'air d'un résultat.
+fn run_fusion_traces(args: &[String]) {
+    let mut fichiers: Vec<String> = Vec::new();
+    let mut sortie: Option<String> = None;
+    let mut i = 0;
+    while i < args.len() {
+        let a = &args[i];
+        if a == "--fusion-sortie" {
+            match args.get(i + 1) {
+                Some(f) => { sortie = Some(f.clone()); i += 2; continue; }
+                None => { eprintln!("--fusion-sortie attend un fichier"); std::process::exit(2); }
+            }
+        }
+        if a.starts_with("--") {
+            eprintln!("fusion : option inconnue « {a} » — rien n'a été fusionné");
+            std::process::exit(2);
+        }
+        fichiers.push(a.clone());
+        i += 1;
+    }
+    if fichiers.len() < 2 {
+        eprintln!("fusion : il faut AU MOINS DEUX traces (reçu {}). En fusionner une seule \
+n'apprend rien qu'elle ne dise déjà — et surtout, ce qui se vérifie ici, c'est que deux \
+processus ont vu la MÊME chose.", fichiers.len());
+        std::process::exit(2);
+    }
+    let mut entrees: Vec<(String, Vec<trace_globale::Croisement>)> = Vec::new();
+    for f in &fichiers {
+        match trace_globale::TraceGlobale::lire_avec_source(f) {
+            Ok(e) => entrees.push(e),
+            Err(e) => { eprintln!("{e}"); std::process::exit(2); }
+        }
+    }
+    // Deux sources du même nom : la fusion serait ambiguë (on ne saurait plus de qui
+    // vient une ligne). Les noms viennent de l'en-tête `# source`, donc d'une
+    // décision — on la signale au lieu de la contourner.
+    {
+        let mut noms: Vec<&str> = entrees.iter().map(|(s, _)| s.as_str()).collect();
+        noms.sort();
+        let avant = noms.len();
+        noms.dedup();
+        if noms.len() != avant {
+            eprintln!("fusion : deux traces portent la MÊME source — la fusion serait \
+ambiguë (impossible de dire de quel processus vient une ligne). Donnez des noms distincts \
+(le nœud prend son nom de région).");
+            std::process::exit(2);
+        }
+    }
+    let fusion = match trace_globale::fusionner(&entrees) {
+        Ok(f) => f,
+        Err(e) => { eprintln!("{e}"); std::process::exit(2); }
+    };
+    let derives = trace_globale::derive_horloges(&entrees);
+    let constats = trace_globale::verifier_liens(&entrees);
+    let identiques = constats.iter().filter(|c| matches!(c.verdict,
+        trace_globale::VerdictLien::Identique)).count();
+    let non_verif = constats.iter().filter(|c| matches!(c.verdict,
+        trace_globale::VerdictLien::NonVerifiable { .. })).count();
+    let divergents: Vec<&trace_globale::ConstatLien> = constats.iter().filter(|c| matches!(
+        c.verdict, trace_globale::VerdictLien::Divergent { .. })).collect();
+    println!("  fusion            : {} croisements de {} sources", fusion.len(), entrees.len());
+    for (s, _) in entrees.iter() {
+        let n = fusion.iter().filter(|x| &x.source == s).count();
+        let (t0, t1) = fusion.iter().filter(|x| &x.source == s).fold(
+            (f64::MAX, f64::MIN), |(a, b), x| (a.min(x.c.t_abs), b.max(x.c.t_abs)));
+        if t0 <= t1 {
+            println!("  {s:<17} : {n} croisements, de {:.3} à {:.3} (epoch)", t0, t1);
+        } else {
+            println!("  {s:<17} : {n} croisements");
+        }
+    }
+    if derives.is_empty() {
+        println!("  horloges          : une seule source horodatée — aucune dérive à mesurer");
+    } else {
+        for (s, d) in derives.iter() {
+            println!("  dérive d'horloge  : {s} commence {d:+.6} s après la première source \
+(mesurée, PAS corrigée : une fusion qui recolle des horloges sans le dire affirme plus \
+qu'elle ne sait)");
+        }
+    }
+    println!("  liens confrontés  : {identiques} identiques, {} divergents, {non_verif} non \
+vérifiables (encodage avec perte)", divergents.len());
+    for c in divergents.iter().take(10) { println!("  {}", c.ligne()); }
+    if divergents.len() > 10 {
+        println!("  … et {} autres divergences", divergents.len() - 10);
+    }
+    let mut non_verif_dits = 0;
+    for c in constats.iter() {
+        if matches!(c.verdict, trace_globale::VerdictLien::NonVerifiable { .. })
+           && non_verif_dits < 5 {
+            println!("  {}", c.ligne());
+            non_verif_dits += 1;
+        }
+    }
+    match &sortie {
+        Some(f) => match trace_globale::ecrire_fusion(&fusion, f) {
+            Ok(()) => println!("  trace fusionnée   : {} lignes écrites dans {f}", fusion.len()),
+            Err(e) => { eprintln!("fusion : écriture de {f} impossible : {e}");
+                        std::process::exit(2); }
+        },
+        None => {
+            // Sans fichier de sortie, la fusion part sur la sortie standard, prête à
+            // être redirigée : c'est ce qu'on veut pour diffuser ou archiver.
+            for x in fusion.iter() {
+                println!("{} {} {} {} {} {:#018x} {:.3} {:.6} {}", x.source, x.c.region, x.c.pas,
+                         x.c.lien, x.c.n, x.c.empreinte, x.c.ms, x.c.t_abs, x.c.mode);
+            }
+        }
+    }
+    if !divergents.is_empty() {
+        eprintln!("fusion : {} lien(s) DIVERGENT(S) — les deux bouts d'un même croisement ne \
+portent pas la même empreinte. C'est exactement ce que cette fusion existe pour montrer.",
+                  divergents.len());
+        std::process::exit(3);
+    }
+    // SORTIR ICI, et pas « rendre la main » : la fusion est un mode complet, mais
+    // elle ne passe pas par `analyser`, donc le programme continuait vers le chemin
+    // du modèle — et mourait sur « ouverture du GGUF: No such file » APRÈS avoir
+    // imprimé une fusion juste. Trouvé au premier essai de la porte.
+    std::process::exit(0);
 }
 
 /// Le PILOTE : garde les premières couches, envoie le flux au nœud moteur,

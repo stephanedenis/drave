@@ -50,6 +50,7 @@ Trois capacités du plan, chacune avec sa **porte mesurée** :
 | # | capacité | porte (invariant à vérifier) | état |
 |---|---|---|---|
 | **C1** | **graphe de régions** : descripteur de topologie, validateur, ordonnanceur par dépendances, pilote multi-nœuds | un graphe **linéaire** rend des logits identiques **au bit près** ; un découpage à **trois régions** égale le modèle d'un seul tenant | ✅ **FAIT** — `topologie.rs` (8 tests) · la topologie pilote le découpage (0,00e0) · relais trois instances (0,00e0) · `tools/porte-topologie.sh` (5 cas, dont 2 refus) |
+| **C12bis** | **fusion des traces** | deux processus qui se sont parlé doivent pouvoir être relus ENSEMBLE, dans un temps commun | ✅ **FAIT** — nœud tracé · v2 horodatée + mode · `--fusionner-trace` ordonne par le temps mural, mesure la dérive, confronte les deux bouts de chaque lien · porte `tools/porte-fusion.sh` (94 liens identiques ; 1 bit changé ⇒ **DIVERGENT**, code 3 ; v1 ⇒ refusée) |
 | **C12** | **trace globale horodatée + rejeu** | rejeu d'une exécution distribuée == exécution, **0,00e0** | ✅ **FAIT** — `trace_globale.rs` (5 tests) · 126 croisements, **aucune divergence** · trace faussée d'un bit **détectée et nommée** · `tools/porte-trace.sh` |
 | **C4** | **horloges par région** | un graphe sans cycle rend le **même résultat** qu'en synchrone ; les pas sont bornés et annoncés | 🟡 **premier pas FAIT** — compteur de pas par région · `--pas-max` borne la terminaison et **refuse de rendre un résultat partiel** (code 5) · porte `tools/porte-horloge.sh` · reste l'asynchronisme réel (avec C2) |
 | **C5bis** | **diffusion du bus** | un canal poussé par un autre processus change l'exécution | ✅ **FAIT (fichier de contrôle)** — `--bus-fichier`, relu avant chaque trame · relais : 66,0379 contre 59,0790 · reste le transport par socket |
@@ -243,6 +244,51 @@ manquait pour déboguer un graphe distribué.
 
 ---
 
+## C12bis — FAIT (9 octobre 23 h 05) : trace du nœud et fusion par le temps mural
+
+**Ce qui manquait, et qui était grave.** Seul le PILOTE traçait (C12). Une divergence
+sur un lien n'était donc visible que d'un bout : impossible de dire si c'est l'envoi
+ou la réception qui avait dérivé. Et les traces de deux processus n'étaient pas
+comparables — chacune avait ses propres durées locales (`ms`), donc aucun temps
+commun pour les ordonner.
+
+**Ce qui est fait :**
+
+- le **nœud trace aussi**, sous les **mêmes noms de lien** que le pilote
+  (`local->pair` pour ce qu'il reçoit, `pair->local` pour ce qu'il rend). C'est cette
+  convention — et non une tolérance de temps — qui rend les deux bouts appariables :
+  `(lien, pas, n)` suffit, sans seuil ni epsilon ;
+- la trace passe en **v2** : `t_abs` (heure murale, epoch) et `mode` (0 dense, 1/2
+  listes, 3/4 lots) s'ajoutent. Une v1 reste **lisible** ; elle n'a simplement pas
+  d'horodatage, et la fusion **refuse alors de l'ordonner** ;
+- `--fusionner-trace T1 T2 [...] [--fusion-sortie F]` : ordre **total et
+  déterministe** (temps, puis source, puis pas, puis lien), **dérive d'horloges
+  mesurée et non corrigée**, et **confrontation des deux bouts de chaque lien** —
+  identiques / divergents / **non vérifiables** (un lien en mode listes est quantifié,
+  deux empreintes différentes y sont normales : le déclarer « vérifié » serait
+  mentir).
+
+**La porte** (`tools/porte-fusion.sh`), quatre cas, exécution répartie réelle :
+
+| cas | résultat |
+|---|---|
+| 1. trace des deux côtés | pilote **94** croisements · nœud **94** (source `d`) |
+| 2. fusion | **188** croisements de 2 sources, ordonnés par le temps · **94 liens identiques, 0 divergents** · dérive d'horloge **+0,000 148 s** |
+| 3. un bit changé chez le nœud | **`local->pair` pas 0 : DIVERGENT** — `…35e8` d'un côté, `…35e9` de l'autre · **code 3** |
+| 4. trace v1 / trace seule | **refusées** (code 2), avec la raison : « l'ordonner par numéro de pas donnerait un faux ordre » |
+
+**Un défaut trouvé par la porte elle-même** : le mode fusion rendait la main au lieu
+de sortir, et le programme continuait vers le chargement du modèle (« ouverture du
+GGUF: No such file ») **après** avoir imprimé une fusion juste. Corrigé, et c'est
+exactement ce qu'une porte sert à attraper.
+
+**Ce qui reste pour C12bis** : fusionner des traces **de plus de deux processus**
+(le mode accepte déjà N fichiers, mais seule la chaîne à 2 régions est passée en
+porte), et le cas où deux nœuds partagent un même nom de région (aujourd'hui refusé
+comme ambigu).
+
+---
+
 ## C4 (premier pas) — FAIT (9 octobre 21 h 55) : pas par région et borne explicite
 
 **Ce que C4 demande** : que chaque région ait **son** horloge, sans horloge globale.
@@ -424,6 +470,7 @@ bus (le format de la ligne de contrôle est écrit, le transport reste à câble
 |---|---|
 | 9/10 17 h 10 | **C1a** : module `topologie.rs`, validation stricte, plan, 8 tests, suite à 85 tests. |
 | 9/10 17 h 20 | **C1b pas 1** : la topologie pilote le découpage · porte `tools/porte-topologie.sh` **TENUE** (même chiffre, écart 0,00e0) · deux refus vérifiés. |
+| 9/10 23 h 05 | **C12bis** : le nœud trace (mêmes noms de lien), format v2 horodaté + mode, `--fusionner-trace` (ordre déterministe, dérive d'horloges mesurée, liens confrontés). Porte : 94/94 liens identiques ; **1 bit changé ⇒ DIVERGENT au pas nommé, code 3** ; v1 ⇒ refusée, code 2. 107 tests. Défaut attrapé par la porte : le mode fusion ne sortait pas et le moteur chargeait un modèle après coup. |
 | 9/10 21 h 55 | **C4 (pas 1)** : compteur de pas par région + borne `--pas-max` · porte `tools/porte-horloge.sh` (même résultat sans borne et à borne 64 ; **arrêt explicite code 5 sans résultat partiel** à borne 32). |
 | 9/10 18 h 40 | **C5bis** : bus diffusé par fichier de contrôle · cas 4 de `porte-bus.sh` vert (relais 66,0379 contre 59,0790) · deux leçons : le gain d'un nœud final est invisible, et une porte mal formée ressemble à une capacité cassée. |
 | 9/10 18 h 20 | **C3** : délais par lien · porte `tools/porte-delais.sh` — **même perplexité (59,0790), empreintes identiques, +3,1 s pour 50 ms × 64 pas**. |
