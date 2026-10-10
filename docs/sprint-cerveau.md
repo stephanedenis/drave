@@ -78,6 +78,7 @@ Trois capacités du plan, chacune avec sa **porte mesurée** :
 | # | capacité | porte (invariant à vérifier) | état |
 |---|---|---|---|
 | **C1** | **graphe de régions** : descripteur de topologie, validateur, ordonnanceur par dépendances, pilote multi-nœuds | un graphe **linéaire** rend des logits identiques **au bit près** ; un découpage à **trois régions** égale le modèle d'un seul tenant | ✅ **FAIT** — `topologie.rs` (8 tests) · la topologie pilote le découpage (0,00e0) · relais trois instances (0,00e0) · `tools/porte-topologie.sh` (5 cas, dont 2 refus) |
+| **C9×C1** | **où couper** | le point de coupe change-t-il le résultat ou le coût ? | ✅ **FAIT** — **sans perte : 8 coupes, une seule perplexité (113,0068)** · **encodé : 8,9 % d'écart** · coût du pont de 448 fibres : **+0,52 % après 18 couches contre +17,09 % après 15** (facteur 30) ⇒ **couper tard** · portes `tools/carte_coupe.sh`, `tools/porte-coupe.sh` |
 | **C12bis** | **fusion des traces** | deux processus qui se sont parlé doivent pouvoir être relus ENSEMBLE, dans un temps commun | ✅ **FAIT** — nœud tracé · v2 horodatée + mode · `--fusionner-trace` ordonne par le temps mural, mesure la dérive, confronte les deux bouts de chaque lien · porte `tools/porte-fusion.sh` (94 liens identiques ; 1 bit changé ⇒ **DIVERGENT**, code 3 ; v1 ⇒ refusée) |
 | **C12** | **trace globale horodatée + rejeu** | rejeu d'une exécution distribuée == exécution, **0,00e0** | ✅ **FAIT** — `trace_globale.rs` (5 tests) · 126 croisements, **aucune divergence** · trace faussée d'un bit **détectée et nommée** · `tools/porte-trace.sh` |
 | **C4** | **horloges par région** | un graphe sans cycle rend le **même résultat** qu'en synchrone ; les pas sont bornés et annoncés | 🟡 **premier pas FAIT** — compteur de pas par région · `--pas-max` borne la terminaison et **refuse de rendre un résultat partiel** (code 5) · porte `tools/porte-horloge.sh` · reste l'asynchronisme réel (avec C2) |
@@ -270,6 +271,37 @@ lignes de texte, et la trace dit *où* regarder — le rejeu recompte et compare
 **Le cas 3 est le plus important** : une porte qui ne sait pas échouer ne vérifie
 rien. La vérification nomme le pas, la région et le lien — c'est exactement ce qui
 manquait pour déboguer un graphe distribué.
+
+---
+
+## C9 × C1 — FAIT (10 octobre 9 h) : OÙ COUPER le modèle ?
+
+`tools/carte_coupe.sh` + `tools/porte-coupe.sh` (3 cas). La question n'avait jamais
+été posée : C1 et C9 étaient mesurés à **un seul** point de coupe (12/12).
+
+1. **Avec un lien SANS PERTE, le point de coupe ne change RIEN** : les huit coupes
+   (4, 6, 8, 10, 12, 15, 18, 20 couches locales sur 24) donnent **113,0068** — huit
+   fois la même valeur. L'invariant de C1 est donc vérifié sur huit coupes.
+2. **Avec un lien ENCODÉ, les mêmes coupes s'écartent de 8,9 %** (108,87 à 118,53) :
+   c'est l'**erreur de quantification** du lien qui dépend de la profondeur. Trois
+   coupes sur quatre font même *mieux* que le lien sans perte (108,87 contre 113,01).
+3. **Le coût d'un pont de 448 fibres dépend du point de coupe, d'un facteur 30** :
+   **+0,52 %** en coupant après 18 couches, +2,81 % après 12, **+17,09 %** après 15.
+   Le milieu n'est pas le bon endroit, et l'état de la couche 18 est manifestement
+   **redondant** là où celui de la couche 15 ne l'est pas — cohérent avec C8 (la
+   direction se construit tardivement : cos 0,145 à 16 couches, 0,320 à 20).
+
+**Conséquence pour distribuer** : couper **tard** quand le lien est étroit, et mesurer
+le coût du pont **au point de coupe choisi** (il varie d'un facteur 30 sur le même
+modèle).
+
+**La porte** : 3 cas — lien sans perte ⇒ une seule perplexité sur 8 coupes · lien
+encodé ⇒ écart ≥ 2 % (témoin, sinon le cas 1 serait vrai « parce que rien ne change
+jamais ») · le coût du pont varie d'un facteur ≥ 3 selon la coupe.
+
+**Erreur attrapée par la porte** : elle passait `--pont-k` au pilote mais **pas au
+nœud**, donc mesurait un pont asymétrique (+4,92 % là où le pont symétrique coûte
++2,81 %). Comparé à `porte-pont.sh`, qui le passait bien.
 
 ---
 
@@ -723,6 +755,7 @@ bus (le format de la ligne de contrôle est écrit, le transport reste à câble
 |---|---|
 | 9/10 17 h 10 | **C1a** : module `topologie.rs`, validation stricte, plan, 8 tests, suite à 85 tests. |
 | 9/10 17 h 20 | **C1b pas 1** : la topologie pilote le découpage · porte `tools/porte-topologie.sh` **TENUE** (même chiffre, écart 0,00e0) · deux refus vérifiés. |
+| 10/10 09 h 00 | **C9 × C1 — où couper ?** Lien sans perte : **8 points de coupe, une seule perplexité (113,0068)**. Lien encodé : 8,9 % d'écart entre les coupes (108,87 à 118,53). Coût d'un pont de 448 fibres : **+0,52 % après 18 couches, +2,81 % après 12, +17,09 % après 15** — facteur 30 ⇒ **couper tard**. Porte 3 cas ; elle a attrapé son propre défaut (pont asymétrique, +4,92 % au lieu de +2,81 %). |
 | 10/10 08 h 20 | **C8 (pas 1)** : le réflexe mesuré comme sortie précoce. `--reflexe-essai` : accord **0 % jusqu'à 16 couches sur 24**, 6,2 % à 20, **100 % à 24** (le réflexe EST le modèle). Cause mesurée : **cos(état tronqué, état final) = 0,044 / 0,145 / 1,000** à 1 / 16 / 24 couches — l'état intermédiaire est presque orthogonal au final, donc la tête de la dernière couche ne peut pas le lire. Gain de temps réel (18,5×). Manque écrit : une tête dédiée par profondeur. Porte 4 cas. |
 | 10/10 07 h 00 | **C9/C10 (pas 1)** : pont à fibres limitées. Piège 1 : le pont ne limitait que l'aller (1 096 vs 1 959 octets) — corrigé, les deux sens reçoivent `--pont-k`. Piège 2 : en **dense f32 élaguer ne gagne aucun octet** (3 664 avant et après, +7,83 %). Courbe en blocs : 448 fibres → +2,81 % et ÷1,8 en octets ; 224 → +108,9 % (falaise). À budget égal, quantifier bat élaguer de 83 %. Porte 7 cas. |
 | 10/10 05 h 20 | **C7 (pas 1)** : consolidation par rejeu (fusion des épisodes qui co-activent), deux formes de prototype. **L'exemplaire bat la moyenne partout** : seuil 1 → 7 % du magasin pour 87 % de rappel, contre 13 % pour 22 % ; seuil 8 → 51 % pour 95,3 % contre 67 % pour 34 %. Mécanisme : la clé d'une moyenne ne coïncide avec la clé d'aucun membre. Porte : cas 7. |

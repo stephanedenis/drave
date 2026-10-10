@@ -25046,3 +25046,104 @@ corrige
 ⏵ C8 : le réflexe court n'existe pas — je documente et commite
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/c8_docs.py <<'ENDPY'\nimport pathlib\n\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\nancre = \"## Annexe — manifeste des journaux\"\nsec = '''## 26. Le réflexe (C8) : un chemin court qui  … [8456 caractères tronqués]`
+
+  ```
+docs C8 ecrites
+test result: ok. 122 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.32s
+f8ac10e C8 pas 1 : le réflexe — un chemin court qui ne sait RIEN, et la cause mesurée
+  ```
+
+### 🤖 Assistant
+
+⏵ C9×C1 : où couper le modèle ? Je mesure le coût du pont selon le point de coupe
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/carte_coupe.sh <<'GATEFILE'\n#!/bin/bash\n# carte_coupe.sh — OÙ COUPER le modèle ? Le coût du pont selon le point de coupe.\n#\n# POURQUOI CETTE MESURE. Le découpage en régions (C1) et le pont (C9) ont été mesurés\n# sépa … [2969 caractères tronqués]`
+
+  ```
+coupe   PPL sans pont   pont 448   coût 448   pont 224   coût 224   octets 448
+   4/20      116.3407   129.6881    +11.47 %   267.1549   +129.63 %
+   6/18      108.8721   122.4894    +12.51 %   293.4081   +169.50 %
+   8/16      112.8375   121.3635     +7.56 %   278.9569   +147.22 %
+  10/14      112.1262   120.7654     +7.70 %   322.4762   +187.60 %
+  12/12      111.9225   115.0632     +2.81 %   233.8589   +108.95 %
+  15/9       112.7020   131.9602    +17.09 %   270.3517   +139.88 %
+  18/6       118.5275   119.1461     +0.52 %   319.8337   +169.84 %
+  20/4       118.3936   128.0251     +8.14 %   266.6371   +125.21 %
+
+  lecture : « coût » est la dégradation apportée par le pont à ce point de coupe.
+  Un coût faible signifie que l'état échangé à cette profondeur est REDONDANT :
+  on peut en jeter la moitié. Un coût élevé signifie que tout y porte.
+  ```
+
+### 🤖 Assistant
+
+⏵ C9 : la PPL de référence dépend du point de coupe (108,9 → 118,5) — je teste si c'est la quantification du lien
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && T=$(mktemp -d) && PORT=$((59400 + RANDOM % 100)) && for N in 4 6 8 10 12 15 18 20; do cat > $T/topo.json <<JSON\n{\"regions\":[\n  {\"id\":\"local\",\"couches\":[0,$((N-1))],\"instance\":\"local\"},\n  {\"id\":\"d\",\"couches\":[$N,2 … [738 caractères tronqués]`
+
+  ```
+coupe 4/24, lien dense f32 (sans perte) : PPL 113.0068
+  coupe 6/24, lien dense f32 (sans perte) : PPL 113.0068
+  coupe 8/24, lien dense f32 (sans perte) : PPL 113.0068
+  coupe 10/24, lien dense f32 (sans perte) : PPL 113.0068
+  coupe 12/24, lien dense f32 (sans perte) : PPL 113.0068
+  coupe 15/24, lien dense f32 (sans perte) : PPL 113.0068
+  coupe 18/24, lien dense f32 (sans perte) : PPL 113.0068
+  coupe 20/24, lien dense f32 (sans perte) : PPL 113.0068
+  ```
+
+### 🤖 Assistant
+
+⏵ C9 : découverte — le point de coupe est NUMÉRIQUEMENT neutre si le lien est sans perte (8 coupes, même PPL)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/porte-coupe.sh <<'GATEFILE'\n#!/bin/bash\n# porte-coupe.sh — OÙ COUPER ? Le point de coupe est-il neutre, et à quel prix ?\n#\n# LA QUESTION PRATIQUE. Le découpage en régions (C1) et le pont (C9) avaient chacun\n# été mes … [5187 caractères tronqués]`
+
+  ```
+=== 1. lien SANS PERTE : le point de coupe ne change RIEN ===
+  coupe  4/20 : 113.0068
+  coupe  6/18 : 113.0068
+  coupe  8/16 : 113.0068
+  coupe 10/14 : 113.0068
+  coupe 12/12 : 113.0068
+  coupe 15/9  : 113.0068
+  coupe 18/6  : 113.0068
+  coupe 20/4  : 113.0068
+  ✅ 8 points de coupe, UNE seule perplexité (113.0068) : le découpage est numériquement neutre quand le lien est sans perte
+=== 2. lien ENCODÉ : le point de coupe change beaucoup (témoin) ===
+  coupe  4/20 : 116.3407
+  coupe  6/18 : 108.8721
+  coupe 12/12 : 111.9225
+  coupe 18/6  : 118.5275
+  ✅ avec un lien encodé, les mêmes coupes s'écartent de 8.9 % — c'est l'ENCODAGE qui rend le point de coupe significatif
+=== 3. le coût du pont dépend AUSSI du point de coupe ===
+  coupe 12/12 : pont 448 fibres → +4.92 %
+  coupe 15/9  : pont 448 fibres → +18.90 %
+  coupe 18/6  : pont 448 fibres → +0.90 %
+  ✅ le coût du pont va de +0.90 % (coupe 18/24) à +18.90 % (coupe 15/24) — il y a un bon endroit pour couper
+  ```
+
+### 🤖 Assistant
+
+⏵ C9 : le cas 3 de ma porte mesurait un pont asymétrique — je passe `--pont-k` au nœud aussi
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"tools/porte-coupe.sh\")\ns = p.read_text()\n\ns = s.replace('''mesure() { # $1 = N local, $2.. = drapeaux du pilote\n  local N=$1; shift''',\n'''# `$2` est la largeur du pont, e … [1422 caractères tronqués]`
+
+  ```
+pont symetrique dans la porte
+  coupe  4/20 : 116.3407
+  coupe  6/18 : 108.8721
+  coupe 12/12 : 111.9225
+  coupe 18/6  : 118.5275
+  ✅ avec un lien encodé, les mêmes coupes s'écartent de 8.9 % — c'est l'ENCODAGE qui rend le point de coupe significatif
+=== 3. le coût du pont dépend AUSSI du point de coupe ===
+  coupe 12/12 : pont 448 fibres → +2.81 %
+  coupe 15/9  : pont 448 fibres → +17.09 %
+  coupe 18/6  : pont 448 fibres → +0.52 %
+  ✅ le coût du pont va de +0.52 % (coupe 18/24) à +17.09 % (coupe 15/24) — il y a un bon endroit pour couper
+  ```
+
+### 🤖 Assistant
+
+⏵ C9 : le point de coupe est neutre sans perte mais vaut 9 % avec un lien encodé — je documente
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/coupe_docs.py <<'ENDPY'\nimport pathlib\n\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\nancre = \"## Annexe — manifeste des journaux\"\nsec = '''## 27. OÙ COUPER le modèle ? Le point de c … [8189 caractères tronqués]`

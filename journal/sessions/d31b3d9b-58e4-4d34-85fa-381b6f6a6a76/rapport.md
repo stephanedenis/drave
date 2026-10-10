@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 38.5 h |
+| Durée | 38.6 h |
 | Tours | 44 |
-| Messages | 1562 |
-| Appels d'outils | 1472 |
+| Messages | 1567 |
+| Appels d'outils | 1477 |
 | Fichiers touchés | 61 |
-| Commandes | 1227 |
+| Commandes | 1232 |
 | Sous-agents | 3 |
-| Commits | 125 |
+| Commits | 126 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2058,7 +2058,7 @@ Je continue sur cette liste — il
 
 ### Tour 44 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1749 caractères tronqués]
 
-*205 appels d'outils.* Actions notables :
+*210 appels d'outils.* Actions notables :
 
 - bash — Implement per-region step counters and the step bound
 - bash — Write and run the clock/step-bound gate
@@ -2074,11 +2074,11 @@ Je continue sur cette liste — il
 - bash — Extend trace format to v2 with timestamps
 - bash — Add merge, clock drift, link verification
 - bash — Rewrite link pairing and build
-- … et 184 autres
+- … et 189 autres
 
 **Synthèse produite :**
 
-⏵ C8 : le réflexe court n'existe pas — je documente et commite
+⏵ C9 : le point de coupe est neutre sans perte mais vaut 9 % avec un lien encodé — je documente
 
 ## 3. Travail accompli
 
@@ -2196,7 +2196,7 @@ Je continue sur cette liste — il
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1187 autres
+- … et 1192 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2469,4 +2469,5 @@ Je continue sur cette liste — il
 - C9/C10 pas 1 : le pont à fibres limitées — combien de fibres, et à quel prix  La question du corps calleux, posée en termes mesurables : deux régions échangent 
 - C9 : la falaise du pont est une MARCHE entre 448 et 392 fibres  Localisée en raffinant la courbe (listes par blocs) :      896 fibres   111,9225   1 951 octets 
 - C8 pas 1 : le réflexe — un chemin court qui ne sait RIEN, et la cause mesurée  Un réflexe est un chemin COURT (la moelle épinière ne remonte pas au cortex). Le 
+- C9 x C1 : où couper le modèle — le point de coupe est neutre, sauf à cause du lien  C1 (découpage) et C9 (pont) avaient chacun été mesurés à UN SEUL endroit : 1
 
