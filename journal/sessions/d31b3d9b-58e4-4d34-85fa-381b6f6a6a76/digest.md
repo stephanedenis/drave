@@ -34260,3 +34260,50 @@ pour l'attention complète — c'est le SEUL poste que la fenêtre réduit.
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git status --short | head -12 && git commit -q -m \"$(cat <<'MSG'\nRangement : docs = fond, reports = une fiche par experience, journal = evenements dates\n\nRetour de Stephane : les trois dossiers etaient melanges, et  … [1979 caractères tronqués]`
+
+  ```
+M  README.md
+A  docs/etat-cerveau.md
+M  docs/modele-pour-drave.md
+A  docs/organisation-du-depot.md
+M  docs/relations-humaines.md
+R  docs/sprint-cerveau.md -> journal/2026-10-09-sprint-cerveau-recit.md
+A  journal/2026-10-09.md
+A  journal/2026-10-10.md
+M  journal/README.md
+M  journal/sessions/MANIFEST.md
+M  journal/sessions/d31b3d9b-58e4-4d34-85fa-381b6f6a6a76/digest.md
+M  journal/sessions/d31b3d9b-58e4-4d34-85fa-381b6f6a6a76/rapport.md
+4a8cac9 Rangement : docs = fond, reports = une fiche par experience, journal = evenements dates
+  ```
+
+### 🤖 Assistant
+
+⏵ Résultat majeur à 512 jetons : fenêtre 128 + 64 puits ≈ attention complète (+2,0 %) à ÷2,67 de clés — j'écris la fiche
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%Y-%m-%d %H:%M'", "description": "Get real current time for stamps"}`
+
+  ```
+2026-10-10 10:18
+  ```
+
+- **write** `{"content": "# Fenêtre d'attention × puits : jusqu'où la fenêtre est-elle gratuite ?\n\n> Campagne : **cerveau complet** · expérience : fenêtre × puits\n> Question : existe-t-il un couple (fenêtre, nombre de puits d'attention) qui **approche\n> l'attention complète** en ne notant qu'une **fraction** … [3989 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-fenetre-puits-attention.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\n# 1) l'état : la réponse est connue, on la met dans la prochaine action\np = pathlib.Path(\"docs/etat-cerveau.md\"); s = p.read_text()\nold = \"\"\"**2. Fenêtre × puits d'attention : jusqu'où la f … [3503 caractères tronqués]`
+
+  ```
+état et journal mis à jour
+  porte-episodique       ✅                         184 s    ✅ la porte C6 est franchie — et elle dit ses conditions : 300 états consécutifs d'un
+  porte-flux             ✅                          22 s    mode 4 — lot en listes           4.45e-3  ✅  (réf 60.8135 / deux nœuds 60.5427)
+  porte-fusion           ✅                           8 s    ✅ v1 refusée (code 2), trace seule refusée (code 2)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"$(cat <<'MSG'\nFenetre x puits d'attention : +2,0 % de perplexite pour divide 2,67 les cles notees (512 jetons)\n\nMesure (Qwen2.5-0.5B-Q8_0, ctx 512, perplexite deterministe, tools/carte-fenetre-puit … [1074 caractères tronqués]`

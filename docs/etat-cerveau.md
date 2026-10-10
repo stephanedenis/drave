@@ -1,6 +1,6 @@
 # État du cerveau Drave — capacités, expériences, prochaine action
 
-> **2026-10-10 10:40 HAE** (EDT, UTC−4 — lire `date`, jamais une horloge supposée : voir
+> **2026-10-10 10:22 HAE** (EDT, UTC−4 — lire `date`, jamais une horloge supposée : voir
 > `docs/organisation-du-depot.md` § 4). Ce fichier est **l'état**, par rapport aux roadmaps :
 > ce qui est fait, avec le chiffre qui le prouve, et ce qui reste. Il ne raconte pas les rounds
 > (c'est `journal/`) et ne porte pas les mesures en détail (ce sont les fiches
@@ -81,11 +81,13 @@
 `journal/2026-10-10.md` et dans `docs/manques.md` (la ligne « les 23 portes sont vertes » était
 une affirmation sur une suite qui n'avait **jamais tourné comme une suite**).
 
-**2. Fenêtre × puits d'attention : jusqu'où la fenêtre est-elle gratuite ?** Mesuré (fiche 47 et
-carte) : à 128 jetons, l'attention complète vaut **14,6496** ; fenêtre 64 + 24 puits vaut
-**14,9614** (+2,1 %) et fenêtre 16 + 32 puits **16,2566**. La question qui décide : sur
-**512 jetons**, quel couple (fenêtre, puits) égale l'attention complète en ne notant qu'une
-fraction des clés ? Commande : `FENETRES="64 128 256" PUITS="0 32 64" tools/carte-fenetre-puits.sh 512`.
+**2. Fenêtre × puits d'attention — MESURÉ, et la réponse est bonne** (fiche
+[`reports/rapport-fenetre-puits-attention.md`](../reports/rapport-fenetre-puits-attention.md)) :
+à **512 jetons**, l'attention complète vaut **13,1368** ; **fenêtre 128 + 64 puits** vaut
+**13,3968** (**+2,0 %**) en ne notant que **192 clés sur 512** (**÷2,67** des scores
+d'attention). Zéro puits **casse** le modèle (1297,54 à fenêtre 32 contre 29,02 à 4). Reste à
+mesurer : la pente en N (**2 048 / 4 096 jetons** — le drain doit-il croître avec la fenêtre ?),
+et la non-monotonie observée (128 bat 256 à drain égal, 0,6 %) à confirmer.
 
 **3. C8 (suite) — une tête entraînée par profondeur.** Le réflexe ne peut pas lire un état
 intermédiaire (cos 0,145) : entraîner une tête linéaire sur l'état de la couche 16 et mesurer son
