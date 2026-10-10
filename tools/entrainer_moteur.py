@@ -155,6 +155,41 @@ def installer_poids_lognormaux(modele):
     return n
 
 
+def imposer_ratio_signes(modele, ratio, graine=0):
+    """Impose qu'une fraction `ratio` des poids soit POSITIVE, magnitudes inchangées.
+
+    POURQUOI (E4, moitié entraînement). La biologie corticale sépare excitation et inhibition :
+    ~80 % de neurones excitateurs, ~20 % inhibiteurs, et le principe de Dale veut qu'un neurone
+    garde le MÊME signe partout. Le dépôt a mesuré la moitié INFÉRENCE de E4 (les gains par
+    couche, `tools/porte-gain.sh`) et l'effet de FIGER les signes (E6, cher : 2,2662 contre
+    1,9020 bits/octet). Ce qui manquait est le point milieu, et c'est celui que la biologie
+    suggère : **contraindre le RATIO de signes sans figer les magnitudes**. Ici, on redistribue
+    les signes à la naissance (sans remise, donc exactement `ratio` de positifs) et
+    l'entraînement reste libre — magnitudes, et signes si on ne demande pas de les figer.
+    """
+    import torch as _torch
+    g = _torch.Generator().manual_seed(graine)
+    n, total, positifs = 0, 0, 0
+    with _torch.no_grad():
+        for mod in modele.modules():
+            if isinstance(mod, nn.Linear):
+                w = mod.weight
+                k = int(round(ratio * w.numel()))
+                # SUR LE MÊME APPAREIL QUE LE POIDS : un tenseur de signes sur CPU et un poids
+                # sur GPU lèvent une erreur de device (attrapée au premier essai).
+                # Le GÉNÉRATEUR reste sur CPU (seede de façon reproductible quel que soit
+                # l'appareil) et la permutation est DÉPLACÉE : demander un `randperm` sur cuda
+                # avec un générateur cpu lève « Expected a 'cuda' device type for generator ».
+                perm = _torch.randperm(w.numel(), generator=g).to(w.device)
+                signes = _torch.full((w.numel(),), -1.0, device=w.device)
+                signes[perm[:k]] = 1.0
+                w.copy_(w.abs() * signes.view_as(w))
+                n += 1
+                total += w.numel()
+                positifs += int((w > 0).sum().item())
+    return n, positifs / max(total, 1)
+
+
 def materialiser_poids(modele):
     """Écrit les poids DÉFINITIFS, puis retire la reparamétrisation.
 
@@ -291,6 +326,10 @@ def main():
                         "docs/biologie-pour-drave.md § 3 ter) : le fichier sauvé ne "
                         "reproduit pas le modèle entraîné (13,06 bits/octet au lieu "
                         "de 2,27). Conservé pour la démonstration du défaut")
+    p.add_argument("--ratio-signes", type=float, default=-1.0,
+                   help="E4 (entraînement) : fraction POSITIVE des poids, imposée à la naissance "
+                        "sans figer les magnitudes (0,5 = équilibré ; 0,8 = le ratio cortical "
+                        "excitateur/inhibiteur ; -1 = ne pas toucher, défaut)")
     p.add_argument("--sans-gpu", action="store_true")
     a = p.parse_args()
     # Lecture égale par construction : k experts lisent ce que lit le FFN dense.
@@ -324,6 +363,10 @@ def main():
               f"(graine {a.graine}) et jamais modifiées — "
               f"{sum(m.sum().item() for m in masques.values())/1e6:.2f} M connexions")
 
+    if a.ratio_signes >= 0.0:
+        n, reel = imposer_ratio_signes(modele, a.ratio_signes, a.graine)
+        print(f"# RATIO DE SIGNES (E4) : {a.ratio_signes:.2f} demandé, {reel:.4f} obtenu sur "
+              f"{n} couches — magnitudes libres")
     if a.poids_lognormaux:
         n = installer_poids_lognormaux(modele)
         print(f"# POIDS LOG-NORMAUX : {n} couches reparamétrées "

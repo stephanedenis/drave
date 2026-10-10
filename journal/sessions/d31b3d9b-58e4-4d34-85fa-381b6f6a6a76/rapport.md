@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 58.3 h |
+| Durée | 58.7 h |
 | Tours | 90 |
-| Messages | 2544 |
-| Appels d'outils | 2343 |
-| Fichiers touchés | 92 |
-| Commandes | 2042 |
+| Messages | 2564 |
+| Appels d'outils | 2360 |
+| Fichiers touchés | 93 |
+| Commandes | 2058 |
 | Sous-agents | 3 |
-| Commits | 240 |
+| Commits | 241 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -3696,7 +3696,7 @@ Le moteur savait déjà **imposer un état** (`DRAVE_ETAT_ENTREE`, format REFD) 
 
 ### Tour 90 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*11 appels d'outils.* Actions notables :
+*28 appels d'outils.* Actions notables :
 
 - bash — Implement the frontier memory in the engine
 - bash — Test the frontier memory
@@ -3709,10 +3709,14 @@ Le moteur savait déjà **imposer un état** (`DRAVE_ETAT_ENTREE`, format REFD) 
 - bash — Find E2 and E5 in the biology doc
 - bash — Test the window non-monotonicity on two corpora
 - bash — Close the non-monotonicity question and commit
+- bash — Inspect the training harness options
+- bash — Find the trainer's weight initialization
+- bash — Read the log-normal installer and arg wiring
+- … et 14 autres
 
 **Synthèse produite :**
 
-⏵ Tranché : la non-monotonie ne se généralise pas (sur l'autre corpus l'ordre s'INVERSE) — je clôt la question dans la fiche
+⏵ E4 (côté entraînement) : le ratio de signes cortical COÛTE — 2,2729 → 2,3838 → 2,5188 ; j'écris la fiche
 
 ## 3. Travail accompli
 
@@ -3812,6 +3816,7 @@ Le moteur savait déjà **imposer un état** (`DRAVE_ETAT_ENTREE`, format REFD) 
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-c4-retard.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-c4-retard.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-memoire.sh` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-e4-ratio-signes.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -3861,7 +3866,7 @@ Le moteur savait déjà **imposer un état** (`DRAVE_ETAT_ENTREE`, format REFD) 
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 2002 autres
+- … et 2018 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3989,7 +3994,7 @@ Le moteur savait déjà **imposer un état** (`DRAVE_ETAT_ENTREE`, format REFD) 
 
 ## 5. Erreurs rencontrées
 
-87 sorties en erreur ou divergentes. Les premières :
+88 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : ```  ### 🤖 Assistant  ⏵ **En transformers 5, `AutoModel` rend directement `Qwen2Model` (pas de `.model`). Je corrige le diagnostic.**  - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitH
 - **T2** : 3310393 bash -c pgrep -af "essai_decharge" | grep python | head; echo "--- logs ---"; tail -2 /tmp/ec_d192_lr3e3.log 2>/dev/null; tail -2 /tmp/ec_d192_lr1e3.log 2>/dev/null; echo "---"; ls -la /tmp/ec
@@ -4247,6 +4252,7 @@ Le moteur savait déjà **imposer un état** (`DRAVE_ETAT_ENTREE`, format REFD) 
 - Index des modules et prochaine action : les suites de C9 et C4 sont nommees avec leurs chiffres  docs/etat.md renvoie aux trois suites (structure de memoire de 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' import pathlib, re, subprocess log = pathlib.Path("/tmp/passe-complete5.log").read_tex
 - Duree de la passe : 59 min 25 s (3565 s) — le commit precedent disait 57 min, ecrit avant de la calculer  Meme regle que pour les estampilles : un chiffre se LI
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' import pathlib, subprocess heure = subprocess.run(["date", "+%H:%M"], capture_output=T
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' import pathlib, subprocess heure = subprocess.run(["date", "+%H:%M"], capture_output=T
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' import pathlib, subprocess heure = subprocess.run(["date", "+%H:%M"], capture_output=T
 

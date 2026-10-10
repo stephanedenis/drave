@@ -40881,3 +40881,320 @@ corpus B (prose, morceau 29) · référence : 10.9842
 ⏵ Tranché : la non-monotonie ne se généralise pas (sur l'autre corpus l'ordre s'INVERSE) — je clôt la question dans la fiche
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib, subprocess\nheure = subprocess.run([\"date\", \"+%H:%M\"], capture_output=True, text=True).stdout.strip()\np = pathlib.Path(\"reports/rapport-fenetre-puits-attention.md\"); s = p.read_text()\nancr … [5279 caractères tronqués]`
+
+  ```
+fiche : § 5 bis (non-monotonie close)
+état mis à jour
+journal complété
+poussé
+  porte-bus-socket       ✅                         102 s    ✅ le bus du pilote agit (113.0068 -> 148.9144)
+  porte-c4-retard        ✅                          67 s  PORTE TENUE : un état n'est valide qu'à sa position (×633 pour un pas), et l'asynchronisme ne
+  ```
+
+### 🤖 Assistant
+
+⏵ Je regarde le harnais d'entraînement pour choisir l'expérience de modèle la plus mûre (H/I/J)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"add_argument\" tools/entrainer_moteur.py | sed 's/.*\"--/  --/' | cut -c1-80 | head -30; echo \"=== modèle MoE local ? ===\"; ls /home/stephane/FastNVMe/artefacts/modeles-optimises/ 2>/dev/null | head -5; ls models/*.gguf | … [62 caractères tronqués]`
+
+  ```
+--famille", choices=["dense", "route"], default="route")
+  --donnees", nargs="+", default=["data/corpus_en.txt"])
+  --validation", default="data/corpus_en_val.txt")
+  --dim", type=int, default=192)
+  --couches", type=int, default=4)
+  --tetes", type=int, default=4)
+  --cache", type=int, default=768, help="FFN dense, ou largeur d'expert")
+  --cache-perle", type=int, default=0, help="largeur d'un expert (routé)")
+  --experts", type=int, default=8)
+  --k", type=int, default=2)
+  --seq", type=int, default=128)
+  --lot", type=int, default=32)
+  --pas", type=int, default=20000)
+  --lr", type=float, default=1e-3)
+  --graine", type=int, default=1)
+  --init", type=float, default=0.08, help="écart-type d'initialisation")
+  --enseignant", default="", help="dossier d'un modèle gelé à imiter")
+  --alpha-distill", type=float, default=0.0,
+  --temperature", type=float, default=2.0, help="température de distillation")
+  --eval-tous", type=int, default=1000)
+  --sortie", required=True)
+  --kwta", type=float, default=0.0,
+  --elagage", type=float, default=0.0,
+  --elagage-tous", type=int, default=500,
+  --masque", type=float, default=0.0,
+  --poids-lognormaux", action="store_true",
+  --sans-gpu", ac
+… [180 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ E4 (équilibre E/I) manque côté ENTRAÎNEMENT : j'ajoute un ratio de signes au harnais et je le mesure
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"poids_lognormaux\\|poids-lognormaux\" tools/entrainer_moteur.py | head -6; grep -n \"def init_poids\\|normal_\\|uniform_\" tools/entrainer_moteur.py | head -10", "description": "Find the trainer's weight initialization"}`
+
+  ```
+141:def installer_poids_lognormaux(modele):
+289:    p.add_argument("--poids-lognormaux", action="store_true",
+327:    if a.poids_lognormaux:
+328:        n = installer_poids_lognormaux(modele)
+337:    decroissance = 0.0 if a.poids_lognormaux else 0.01
+338:    if a.poids_lognormaux:
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '141,175p' tools/entrainer_moteur.py; sed -n '285,300p' tools/entrainer_moteur.py; sed -n '325,345p' tools/entrainer_moteur.py", "description": "Read the log-normal installer and arg wiring"}`
+
+  ```
+def installer_poids_lognormaux(modele):
+    """θ = log|w| appris, signes figés à la naissance (principe de Dale)."""
+    from torch.nn.utils.parametrize import register_parametrization
+    n = 0
+    for mod in modele.modules():
+        if isinstance(mod, nn.Linear):
+            with torch.no_grad():
+                w = mod.weight
+                signes = w.sign().clone()
+                theta0 = w.abs().clamp(min=1e-6).log()
+            register_parametrization(mod, "weight", PoidsLogNormaux(signes))
+            with torch.no_grad():
+                mod.parametrizations.weight.original.copy_(theta0)
+            n += 1
+    return n
+
+
+def materialiser_poids(modele):
+    """Écrit les poids DÉFINITIFS, puis retire la reparamétrisation.
+
+    POURQUOI LA COPIE EST EXPLICITE (défaut trouvé le 9/10). Le premier essai se
+    contentait de `remove_parametrizations` : le fichier sauvé portait alors des
+    poids qui ne reproduisaient PAS le modèle entraîné — validation 2,2662 bits/octet
+    à l'entraînement, perplexité 8 668 dans le moteur et **15 552** pour la référence
+    PyTorch sur les mêmes poids quantifiés (donc le fichier, pas le moteur). On
+    recalcule donc la valeur exacte du `for
+… [2517 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la data/ 2>/dev/null | head -6; grep -n \"ratio-signes\\|ratio_signes\" tools/entrainer_moteur.py | head -3; echo \"(pas de ratio-signes aujourd'hui : à ajouter)\"", "description": "Check corpora and confirm the flag is absent"}`
+
+  ```
+total 100692
+drwxr-xr-x. 1 stephane stephane       156  8 oct 09:42 .
+drwxr-xr-x. 1 stephane stephane       612 10 oct 11:35 ..
+-rw-r--r--. 1 stephane stephane 100276153  8 oct 09:42 corpus_en.txt
+-rw-r--r--. 1 stephane stephane   2032162  8 oct 09:42 corpus_en_val.txt
+-rw-r--r--. 1 stephane stephane    359041 25 sep 18:02 wikitext2_test.txt
+(pas de ratio-signes aujourd'hui : à ajouter)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"tools/entrainer_moteur.py\"); s = p.read_text()\n# 1) la fonction\nancre = \"def materialiser_poids(modele):\"\nfonction = '''def imposer_ratio_signes(modele, ratio, graine=0):\ … [3030 caractères tronqués]`
+
+  ```
+--ratio-signes ajouté
+syntaxe OK
+158:def imposer_ratio_signes(modele, ratio, graine=0):
+324:    p.add_argument("--ratio-signes", type=float, default=-1.0,
+362:        n, reel = imposer_ratio_signes(modele, a.ratio_signes, a.graine)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && P=/home/stephane/gpu-env/bin/python; mkdir -p /tmp/e4\nfor R in 0.5 0.8 0.9; do\n  (CUDA_VISIBLE_DEVICES=0 $P -u tools/entrainer_moteur.py --famille route --dim 192 --couches 4 --tetes 4 \\\n     --cache 768 --experts 8 --k 2 --seq 1 … [344 caractères tronqués]`
+
+  ```
+started background job bash-39
+  ```
+
+### 🤖 Assistant
+
+⏵ Trois entraînements E4 lancés ; je regarde le format des journaux et l'avancement de la passe
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 120; tail -6 /tmp/e4/journal-0.5.log 2>/dev/null; echo \"=== passe ===\"; tail -2 /tmp/passe-complete6.log", "description": "Check training log format and pass progress", "timeoutMs": 300000}`
+
+  ```
+n, reel = imposer_ratio_signes(modele, a.ratio_signes, a.graine)
+              ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py", line 181, in imposer_ratio_signes
+    w.copy_(w.abs() * signes.view_as(w))
+            ~~~~~~~~^~~~~~~~~~~~~~~~~~~
+RuntimeError: Expected all tensors to be on the same device, but found at least two devices, cuda:0 and cpu!
+=== passe ===
+  porte-coupe            ✅                         127 s    ✅ le coût du pont va de +0.52 % (coupe 18/24) à +17.09 % (coupe 15/24) — il y a un bon endroit
+  porte-delais           ✅                          19 s    ✅ le temps, lui, augmente : 6.21 s → 9.46 s (+3.3 s ≈ 50 ms × 64 pas)
+  ```
+
+### 👤 Utilisateur
+
+background job bash-39 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && P=/home/stephane/gpu-env/bin/python; mkdir -p /tmp/e4
+for R in 0.5 0.8 0.9; do
+  (CUDA_VISIBLE_DEVICES=0 $P -u tools/entrainer_moteur.py --famille route --dim 192 --couches 4 --tetes 4 \
+     --cache 768 --experts 8 --k 2 --seq 128 --lot 32 --pas 3000 --lr 1e-3 --graine 1 \
+     --ratio-signes $R --sortie /tmp/e4/modele-$R.gguf > /tmp/e4/journal-$R.log 2>&1; echo "R=$R code=$?" >> /tmp/e4/codes.txt)
+done; cat /tmp/e4/codes.txt 2>/dev/null; tail -3 /tmp/e4/journal-0.8.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 🤖 Assistant
+
+⏵ Bug de device (signes sur CPU, poids sur GPU) — je corrige et je relance les trois entraînements
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"tools/entrainer_moteur.py\"); s = p.read_text()\nold = '''                perm = _torch.randperm(w.numel(), generator=g)\n                signes = _torch.full((w.numel(),), -1.0 … [1140 caractères tronqués]`
+
+  ```
+started background job bash-40
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 300; grep -E \"RATIO DE SIGNES|bits/octet|✓|validation\" /tmp/e4/journal-0.5.log 2>/dev/null | tail -4; echo \"=== passe ===\"; tail -2 /tmp/passe-complete6.log", "description": "Check training progress", "timeoutMs": 400000}`
+
+  ```
+=== passe ===
+  porte-flux             ✅                          19 s    mode 4 — lot en listes           4.45e-3  ✅  (réf 60.8135 / deux nœuds 60.5427)
+  porte-fusion           ✅                           7 s    ✅ v1 refusée (code 2), trace seule refusée (code 2)
+  ```
+
+### 👤 Utilisateur
+
+background job bash-40 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'
+import pathlib
+p = pathlib.Path("tools/entrainer_moteur.py"); s = p.read_text()
+old = '''                perm = _torch.randperm(w.numel(), generator=g)
+                signes = _torch.full((w.numel(),), -1.0)
+                signes[perm[:k]] = 1.0'''
+new = '''                # SUR LE MÊME APPAREIL QUE LE POIDS : un tenseur de signes sur CPU et un poids
+                # sur GPU lèvent une erreur de device (attrapée au premier essai).
+                perm = _torch.randperm(w.numel(), generator=g, device=w.device)
+                signes = _torch.full((w.numel(),), -1.0, device=w.device)
+                signes[perm[:k]] = 1.0'''
+assert s.count(old) == 1
+s = s.replace(old, new, 1)
+p.write_text(s, encoding="utf-8")
+print("device corrigé")
+PYEOF
+P=/home/stephane/gpu-env/bin/python; rm -rf /tmp/e4; mkdir -p /tmp/e4
+for R in 0.5 0.8 0.9; do
+  CUDA_VISIBLE_DEVICES=0 $P -u tools/entrainer_moteur.py --famille route --dim 192 --couches 4 --tetes 4 \
+     --cache 768 --experts 8 --k 2 --seq 128 --lot 32 --pas 3000 --lr 1e-3 --graine 1 \
+     --ratio-signes $R --sortie /tmp/e4/modele-$R.gguf > /tmp/e4/journal-$R.log 2>&1
+  echo "R=$R code=$?"; grep -E "RATIO DE SIGNES|bits/octet|perplexité" /tmp/e4/journal-$R.log | tail -3
+done) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for R in 0.5 0.8 0.9; do echo \"--- R=$R\"; grep -E \"RATIO DE SIGNES|bits/octet|val\" /tmp/e4/journal-$R.log 2>/dev/null | tail -3; done; ls -la /tmp/e4/*.gguf 2>/dev/null", "description": "Read the training results"}`
+
+  ```
+--- R=0.5
+--- R=0.8
+--- R=0.9
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la /tmp/e4/ 2>/dev/null | head; tail -5 /tmp/e4/journal-0.5.log 2>/dev/null; echo \"=== le job a-t-il tourné ? ===\"; ps -eo etime,args | grep \"[e]ntrainer_moteur\" | head -2", "description": "Diagnose the training job"}`
+
+  ```
+total 12
+drwxr-xr-x.   2 stephane stephane    100 10 oct 19:36 .
+drwxrwxrwt. 309 root     root     812780 10 oct 19:41 ..
+-rw-r--r--.   1 stephane stephane    810 10 oct 19:35 journal-0.5.log
+-rw-r--r--.   1 stephane stephane    810 10 oct 19:36 journal-0.8.log
+-rw-r--r--.   1 stephane stephane    810 10 oct 19:36 journal-0.9.log
+    n, reel = imposer_ratio_signes(modele, a.ratio_signes, a.graine)
+              ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py", line 180, in imposer_ratio_signes
+    perm = _torch.randperm(w.numel(), generator=g, device=w.device)
+RuntimeError: Expected a 'cuda' device type for generator but found 'cpu'
+=== le job a-t-il tourné ? ===
+  ```
+
+### 🤖 Assistant
+
+⏵ Générateur CPU contre tenseur CUDA — je tire la permutation sur CPU puis je la déplace
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"tools/entrainer_moteur.py\"); s = p.read_text()\nold = '''                perm = _torch.randperm(w.numel(), generator=g, device=w.device)\n                signes = _torch.full(( … [1248 caractères tronqués]`
+
+  ```
+started background job bash-41
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 420; for R in 0.5 0.8 0.9; do printf 'R=%s : ' $R; grep -E \"RATIO DE SIGNES\" /tmp/e4/journal-$R.log 2>/dev/null | head -1; done; ls -la /tmp/e4/*.gguf 2>/dev/null | wc -l; echo \"=== passe ===\"; tail -2 /tmp/passe-complete6. … [77 caractères tronqués]`
+
+  ```
+R=0.5 : # RATIO DE SIGNES (E4) : 0.50 demandé, 0.5000 obtenu sur 17 couches — magnitudes libres
+R=0.8 : # RATIO DE SIGNES (E4) : 0.80 demandé, 0.8000 obtenu sur 17 couches — magnitudes libres
+R=0.9 : # RATIO DE SIGNES (E4) : 0.90 demandé, 0.9000 obtenu sur 17 couches — magnitudes libres
+15
+=== passe ===
+  porte-fusion           ✅                           7 s    ✅ v1 refusée (code 2), trace seule refusée (code 2)
+  porte-gain             ✅                         342 s    ✅ drapeau VIVANT mais conditionnel : 0 casse (29.0206 → 1297.5437), 24 améliore (27.4439), san
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls /tmp/e4/*.gguf | head -5; for R in 0.5 0.8 0.9; do echo \"--- R=$R\"; tail -4 /tmp/e4/journal-$R.log; done", "description": "Inspect the training outputs"}`
+
+  ```
+/tmp/e4/modele-0.5.gguf:
+config.json
+generation_config.json
+model.safetensors
+
+--- R=0.5
+Writing model shards:   0%|          | 0/1 [00:00<?, ?it/s]Writing model shards: 100%|██████████| 1/1 [00:00<00:00, 17.72it/s]
+
+  # meilleur point : pas 3000 · val 2.2729 bits/octet
+  # écrit dans /tmp/e4/modele-0.5.gguf · 7.58 M paramètres · 0.59 M poids lus/jeton/couche
+--- R=0.8
+Writing model shards:   0%|          | 0/1 [00:00<?, ?it/s]Writing model shards: 100%|██████████| 1/1 [00:00<00:00, 17.41it/s]
+
+  # meilleur point : pas 3000 · val 2.3838 bits/octet
+  # écrit dans /tmp/e4/modele-0.8.gguf · 7.58 M paramètres · 0.59 M poids lus/jeton/couche
+--- R=0.9
+# route · 7.58 M paramètres · 0.59 M poids LUS par jeton et par couche · 1.92 M stockés · corpus 100276153 octets · cuda
+# RATIO DE SIGNES (E4) : 0.90 demandé, 0.9000 obtenu sur 17 couches — magnitudes libres
+  pas   1000 · perte 1.8706 · val 2.9443 bits/octet · 53 s
+  ```
+
+### 🤖 Assistant
+
+⏵ R=0,5 : 2,2729 bits/octet ; R=0,8 : 2,3838 — le ratio cortical COÛTE 5 % ; j'attends le R=0,9
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in $(seq 1 8); do if grep -q \"meilleur point\" /tmp/e4/journal-0.9.log 2>/dev/null; then break; fi; sleep 60; done; for R in 0.5 0.8 0.9; do printf 'R=%-4s ' $R; grep -oE \"val [0-9.]+ bits/octet\" /tmp/e4/journal-$R.log | tai … [85 caractères tronqués]`
+
+  ```
+R=0.5  val 2.2729 bits/octet
+R=0.8  val 2.3838 bits/octet
+R=0.9  val 2.5188 bits/octet
+  ```
+
+### 👤 Utilisateur
+
+background job bash-41 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'
+import pathlib
+p = pathlib.Path("tools/entrainer_moteur.py"); s = p.read_text()
+old = '''                perm = _torch.randperm(w.numel(), generator=g, device=w.device)
+                signes = _torch.full((w.numel(),), -1.0, device=w.device)'''
+new = '''                # Le GÉNÉRATEUR reste sur CPU (seede de façon reproductible quel que soit
+                # l'appareil) et la permutation est DÉPLACÉE : demander un `randperm` sur cuda
+                # avec un générateur cpu lève « Expected a 'cuda' device type for generator ».
+                perm = _torch.randperm(w.numel(), generator=g).to(w.device)
+                signes = _torch.full((w.numel(),), -1.0, device=w.device)'''
+assert s.count(old) == 1
+s = s.replace(old, new, 1)
+p.write_text(s, encoding="utf-8")
+print("générateur corrigé")
+PYEOF
+P=/home/stephane/gpu-env/bin/python; rm -rf /tmp/e4; mkdir -p /tmp/e4
+for R in 0.5 0.8 0.9; do
+  CUDA_VISIBLE_DEVICES=0 $P -u tools/entrainer_moteur.py --famille route --dim 192 --couches 4 --tetes 4 \
+     --cache 768 --experts 8 --k 2 --seq 128 --lot 32 --pas 3000 --lr 1e-3 --graine 1 \
+     --ratio-signes $R --sortie /tmp/e4/modele-$R.gguf > /tmp/e4/journal-$R.log 2>&1
+  echo "R=$R code=$? : $(grep -cE 'RATIO DE SIGNES' /tmp/e4/journal-$R.log) ligne(s) de ratio"
+done; echo "--- fin ---"; ls -la /tmp/e4/*.gguf 2>/dev/null | head -3) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 🤖 Assistant
+
+⏵ E4 (côté entraînement) : le ratio de signes cortical COÛTE — 2,2729 → 2,3838 → 2,5188 ; j'écris la fiche
+
+- **write** `{"content": "# E4 (côté ENTRAÎNEMENT) — le ratio de signes cortical ne paie pas : 2,2729 → 2,3838 → 2,5188\n\n> Campagne : **biologie** · expérience : contraindre le **ratio de signes** sans figer les magnitudes\n> Question : la biologie cortex sépare excitation et inhibition (~80 % de neurones exci … [4122 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-e4-ratio-signes.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib, subprocess\nheure = subprocess.run([\"date\", \"+%H:%M\"], capture_output=True, text=True).stdout.strip()\np = pathlib.Path(\"reports/rapport-e4-ratio-signes.md\"); s = p.read_text()\ns = s.replac … [5366 caractères tronqués]`

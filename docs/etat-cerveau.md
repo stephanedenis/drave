@@ -74,7 +74,7 @@
 |---|---|---|---|
 | **E1** | connectome inné | ✅ | un connectome **aléatoire** coûte **1 %** de perplexité et **divise les lectures par 4** (25 %) ; à 12,5 % : +13,7 % |
 | **E3** | deux axes appris | ✅ | ÷2 lectures à qualité égale ; ÷7,8 à dim 384 |
-| **E4** | équilibre excitation/inhibition | ✅ | l'hypothèse est vraie **dans un seul sens** : l'inhibition **dégrade** de façon monotone (15,6908 → 19,4791 à la couche 12) ; l'optimum **intérieur** est du côté **amplification** (couche 0, gain 0,75 : **12,9635** contre 14,6496, **−11,5 %**) ; **falaise** à 0,25 (996,04) ; **les gains ne se composent pas** |
+| **E4** | équilibre E/I (inférence **et** entraînement) | ✅ | l'hypothèse est vraie **dans un seul sens** : l'inhibition **dégrade** de façon monotone (15,6908 → 19,4791 à la couche 12) ; l'optimum **intérieur** est du côté **amplification** (couche 0, gain 0,75 : **12,9635** contre 14,6496, **−11,5 %**) ; **falaise** à 0,25 (996,04) ; **les gains ne se composent pas** ; **côté entraînement, le ratio cortical de signes COÛTE** : 0,5 → 2,2729 bits/octet, 0,8 → 2,3838 (+4,9 %), 0,9 → 2,5188 (+10,8 %), dégradation monotone ([`rapport-e4-ratio-signes.md`](../reports/rapport-e4-ratio-signes.md)) |
 | **E6** | poids log-normaux | ❌ échec de code | le fichier sauvé **ne reproduit pas** le modèle entraîné (13,0614 contre 2,2662 bits/octet) — manque **M8**, cause ouverte |
 | **E7/E8** | nouveauté, décorrélation | ✅ mesurées | la nouveauté **empire** la règle ; la décorrélation est **inerte**, et sa courbe de dose converge vers « ne rien apprendre » |
 | **E2/E5** | croissance des connexions, rejeu | ⏳ cadrées | leviers présents dans le moteur, protocole à écrire |
