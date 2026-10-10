@@ -592,6 +592,9 @@ struct Options {
     bus: Vec<String>,
     /// C5bis — port d'écoute du BUS (réservé : la diffusion passe par le fichier).
     bus_serveur: Option<u16>,
+    /// C4 — borne de PAS par région : au-delà, l'exécution s'arrête et le DIT,
+    /// plutôt que de rendre un résultat partiel qui aurait l'air complet.
+    pas_max: Option<u64>,
     /// C5bis — FICHIER DE CONTRÔLE : le bus y est relu avant chaque trame, donc un
     /// autre processus (ou une autre machine, par un montage partagé) peut changer
     /// un canal PENDANT l'exécution — c'est ce qui en fait un bus et non un réglage
@@ -754,6 +757,7 @@ fn analyser(args: &[String]) -> Options {
             "--bus" => { o.bus.push(suivant(i).clone()); 2 }
             "--bus-serveur" => { o.bus_serveur = suivant(i).parse().ok(); 2 }
             "--bus-fichier" => { o.bus_fichier = Some(suivant(i).clone()); 2 }
+            "--pas-max" => { o.pas_max = suivant(i).parse().ok(); 2 }
             "--tokenize" => { o.tokenize = true; 1 }
             "--gpu-banc" => { o.gpu_banc = true; 1 }
             // Test de fumée de la couche 0 de Kimi-K3, **sur un modèle même
@@ -3507,6 +3511,12 @@ de {} — flux refusé", r.mode, f.mode);
             }
         }
     }
+    match opt.pas_max {
+        Some(b) if servis > b => println!("[horloge] borne de pas dépassée sur ce nœud : \
+{servis} pas servis pour une borne de {b} — le nœud s'arrête"),
+        Some(b) => println!("[horloge] {servis} pas servis (borne {b})"),
+        None => println!("[horloge] {servis} pas servis"),
+    }
     println!("[flux] {servis} flux servis");
 }
 
@@ -3629,6 +3639,8 @@ dit « {pair} » — deux sources pour la même chose, et elles se contredisent"
         println!("[delais] lien local → {} : +{} ms par trame · le résultat ne doit pas \
 changer (seul le temps change) — c'est la porte de C3", tp_region_distante, delai_ms);
     }
+    // C4 : le compteur de pas de la région locale.
+    let mut pas_servis: u64 = 0;
     // C5 : le BUS DE MODULATION. Un canal neutre ne change RIEN (c'est la porte),
     // un canal non neutre change la sortie — sans quoi le bus ne serait pas
     // branché. Chaque région décide de ce qu'elle en fait : ici, le gain.
@@ -3874,6 +3886,17 @@ un lot de plus d'un état n'a pas UNE `pre`). Rien n'a été calculé.");
         if delai_ms > 0 {
             std::thread::sleep(std::time::Duration::from_millis(delai_ms));
         }
+        // C4 : la borne de PAS. Une région qui dépasse sa borne s'arrête et le dit ;
+        // elle ne rend pas un résultat partiel qui aurait l'air d'un résultat.
+        pas_servis += 1;
+        if let Some(b) = opt.pas_max {
+            if pas_servis > b {
+                eprintln!("[horloge] borne de pas atteinte : {b} pas (région locale). \
+L'exécution s'arrête ICI — aucune perplexité n'est rendue, parce qu'elle porterait sur \
+{} jetons seulement.", pas_servis - 1);
+                std::process::exit(5);
+            }
+        }
         let (o, a) = envoyer_flux(&mut sock, debut_pair as u32, fin_pair as u32,
                                   pos as u32, &etat, mode, Some(&mdl))
                         .unwrap_or_else(|e| {
@@ -3947,6 +3970,8 @@ attendus — pair incohérent. Rien n'a été calculé.", rep.n, mdl.cfg.hidden,
     } else {
         trace_globale::ecrire_si(&trace, &opt.trace_globale);
     }
+    println!("  horloge           : région locale {} pas servis{}", pas_servis,
+             match opt.pas_max { Some(b) => format!(" (borne {b})"), None => String::new() });
     println!("  écart             : {:.2e}", (ppl - ppl_ref).abs() / ppl_ref);
     // Divisor : le nombre de flux RÉELLEMENT envoyés (un par jeton, le dernier
     // compris) et non le nombre de jetons NOTÉS — l'erreur d'un facteur 40/39

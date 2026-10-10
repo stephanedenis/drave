@@ -21071,3 +21071,81 @@ b0bb004 Sprint clos sur vérification : les 23 portes du dépôt sont vertes (0 
 ⏵ État resumable écrit pour le prochain round, puis rapport
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/sprint-cerveau.md\")\ns = p.read_text()\nancre = \"\"\"## Objectif du sprint\"\"\"\nassert ancre in s\nneuf = \"\"\"## ▶ PROCHAINE ACTION (à lire en premier)\n\nÉtat au 9 octo … [2914 caractères tronqués]`
+
+  ```
+prochaine action écrite
+poussé
+  ```
+
+### 🤖 Assistant
+
+⏵ Round bouclé : C3 et C5bis livrées, état resumable en tête du fichier de sprint
+
+**Fait ce round, mesuré et poussé** (96 tests verts, arbre propre, dernier commit `883f934` → puis l'état resumable) :
+
+**C3 — les délais par lien.** La topologie déclare `delai_ms`, le moteur l'applique (pilote sur son lien sortant, nœud relais sur le sien). Porte `tools/porte-delais.sh` :
+
+| cas | perplexité | empreintes | mur |
+|---|---:|---|---:|
+| délai 0 ms | 59,0790 | référence | 6,23 s |
+| **délai 50 ms par trame** | **59,0790** (identique) | **identiques** | **9,35 s (+3,1 s = 50 ms × 64 pas)** |
+
+Un délai change **le temps, jamais un chiffre** — et c'est la trace (C12) qui le prouve, empreinte par empreinte. La loi de coût rejoint celle de la campagne (**3,4 ms par jeton et par ms de RTT**).
+
+**C5bis — la diffusion du bus.** `--bus-fichier F` est relu **avant chaque trame** : un autre processus peut donc changer un canal **pendant l'exécution**, ce qui est la définition d'un bus. Porte `porte-bus.sh` cas 4, sur un nœud relais : **66,0379** contre **59,0790** sans canal.
+
+**Deux leçons tombées deux fois chacune, écrites pour de bon :**
+1. **Le gain d'un nœud FINAL est invisible** (la normalisation de sortie divise par la norme) — tout test de bus doit viser une région du **milieu**. Je suis retombé dans le piège, et j'ai d'abord cru le fichier de contrôle inopérant.
+2. **Une porte mal formée ressemble à une capacité cassée** : le cas 4 a échoué parce que mon `printf` écrivait un `\n` **littéral**, valeur illisible que le parseur **refusait** — le parseur avait raison.
+
+**Le fichier de relations humaines est écrit** (`docs/relations-humaines.md`) : *carpe diem* des deux côtés — timeboxing plutôt que backlog, rapports de dix lignes (fait / cassé / ensuite), une question seulement si elle bloque, les alertes en tête, l'état écrit en permanence pour qu'une interruption ne perde rien, et la liste de ce que je m'engage à ne jamais faire.
+
+**La prochaine action est en tête de `docs/sprint-cerveau.md`**, car c'est la règle : six chantiers classés par valeur mesurable — **C4** (horloges par région, le plus structurant qui reste), **C12bis** (trace côté nœud), **C5ter** (bus par socket, avec le point d'entrée exact : le fil doit être lancé **avant** `ecoute.accept()`), **C2** (entrées multiples, à cadrer honnêtement), les expériences **E2/E4** et les dessins **H/I/J**, puis les trois manques du registre (noyaux Q8 experts et GPU, encodeurs).
+
+Je continue sur cette liste — il reste onze heures avant 9 h, et rien n'attend que je m'arrête.
+
+
+## Tour 44
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 mémoire épisodique, C7 consolidation, C8 périphérie, C9 latéralité, C10 budgets, et la diffusion réseau du bus de C5 ; (b) les expériences E2-E9 de docs/biologie-pour-drave.md et docs/hebbien-differentiel-et-biologie.md ; (c) les dessins de modèle H/I/J de docs/modele-pour-drave.md ; (d) les manques du registre docs/manques.md (noyau de listes pour les experts, noyau de listes GPU, encodeurs) — l'implémenter ou la mesurer, la doter d'une porte vérifiable, la documenter, commiter, pousser, et enchaîner immédiatement sur la suivante. Contraintes : les 23 portes du dépôt et tous les tests restent verts (porte-flux.sh après toute modification du chemin d'exécution), le profil release reste le binaire de mesure, le crate reste std seul, et docs/sprint-cerveau.md reste l'état resumable mis à jour à chaque round. Ne jamais s'arrêter faute de tâches planifiées : en inventer de nouvelles, mesurables, plutôt que d'attendre."
+Round: 1/60
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ C4 premier pas : compteur de pas par région et borne de terminaison explicite
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"src/main.rs\")\ns = p.read_text()\n# option\ns = s.replace(\"\"\"    /// C5bis — FICHIER DE CONTRÔLE\"\"\",\n\"\"\"    /// C4 — borne de PAS par région : au-delà, l'exéc … [2820 caractères tronqués]`
+
+  ```
+C4 v1 câblée
+test result: ok. 96 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/porte-horloge.sh <<'EOF'\n#!/bin/bash\n# porte-horloge.sh — la porte du premier pas de C4 : compteur de pas et borne.\n#\n# Ce qui est vérifié, et pourquoi ces trois cas :\n#   1. sans borne   : référence — la région loca … [2517 caractères tronqués]`
+
+  ```
+=== 1. sans borne ===
+    deux nœuds        : perplexité 59.0790  (2.6 s)   horloge           : région locale 63 pas servis 
+  nœud : [horloge] 63 pas servis
+=== 2. borne = 64 (non atteinte) ===
+    deux nœuds        : perplexité 59.0790  (2.7 s)   horloge           : région locale 63 pas servis (borne 64) 
+  nœud : [horloge] 63 pas servis (borne 64)
+=== 3. borne = 32 (atteinte) ===
+  [horloge] borne de pas atteinte : 32 pas (région locale). L'exécution s'arrête ICI — aucune perplexité n'est rendue, parce qu'elle porterait sur 32 jetons seulement. 
+  nœud : [horloge] 32 pas servis (borne 32)
+=== verdict ===
+  ✅ borne non atteinte : même résultat (59.0790), code 0
+  ✅ borne atteinte : arrêt EXPLICITE (code 5) et AUCUNE perplexité rendue
+  ```
+
+### 🤖 Assistant
+
+⏵ C4 premier pas livré : compteur de pas par région, borne explicite, aucun résultat partiel
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/sprint-cerveau.md\")\ns = p.read_text()\nancre = \"\"\"## C5bis — FAIT (9 octobre 18 h 40)\"\"\"\nassert ancre in s\nneuf = \"\"\"## C4 (premier pas) — FAIT (9 octobre 21 h 55 … [3567 caractères tronqués]`

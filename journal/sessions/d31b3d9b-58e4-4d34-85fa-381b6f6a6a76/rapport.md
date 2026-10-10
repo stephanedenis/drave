@@ -6,13 +6,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
 | Durée | 36.6 h |
-| Tours | 43 |
-| Messages | 1351 |
-| Appels d'outils | 1267 |
+| Tours | 44 |
+| Messages | 1356 |
+| Appels d'outils | 1270 |
 | Fichiers touchés | 40 |
-| Commandes | 1059 |
+| Commandes | 1062 |
 | Sous-agents | 3 |
-| Commits | 116 |
+| Commits | 117 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -121,6 +121,8 @@
 **Tour 42** — <goal_round> Objective: "Sprint « cerveau complet » en autonomie jusqu'au 10 octobre 9 h (HAE) : implémenter, avec portes mesurées, les trois premières capacités du plan docs/plan-cerveau-complet.md — C1 graphe de régions (descripteur de topologie, validateur de DAG, ordonnanceur par dépendances, pilote multi-nœuds ; porte : un graphe linéaire doit rendre des logits identiques au bit près et un dé … [1077 caractères tronqués]
 
 **Tour 43** — ajuste tes sprints en timeboxing plus qu'en tranche de backlog. C'est à dire que tu dois continuer pour occupper le temps imparti au lieu de t'arrêter là où ta planification de sprint arrive au terme. C'est du gaspillage de temps précieux que d'arrêter trop vite. Je préfère interrompre un sprint car j'ai de nouvelles idées que de consatater que tout a été arreté car on est arrivé au bout du plan.  … [284 caractères tronqués]
+
+**Tour 44** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1469 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -2028,7 +2030,43 @@ Tout est committé et poussé sur **`github.com/stephanedenis/drave`** (privé),
 
 **Synthèse produite :**
 
-⏵ État resumable écrit pour le prochain round, puis rapport
+⏵ Round bouclé : C3 et C5bis livrées, état resumable en tête du fichier de sprint
+
+**Fait ce round, mesuré et poussé** (96 tests verts, arbre propre, dernier commit `883f934` → puis l'état resumable) :
+
+**C3 — les délais par lien.** La topologie déclare `delai_ms`, le moteur l'applique (pilote sur son lien sortant, nœud relais sur le sien). Porte `tools/porte-delais.sh` :
+
+| cas | perplexité | empreintes | mur |
+|---|---:|---|---:|
+| délai 0 ms | 59,0790 | référence | 6,23 s |
+| **délai 50 ms par trame** | **59,0790** (identique) | **identiques** | **9,35 s (+3,1 s = 50 ms × 64 pas)** |
+
+Un délai change **le temps, jamais un chiffre** — et c'est la trace (C12) qui le prouve, empreinte par empreinte. La loi de coût rejoint celle de la campagne (**3,4 ms par jeton et par ms de RTT**).
+
+**C5bis — la diffusion du bus.** `--bus-fichier F` est relu **avant chaque trame** : un autre processus peut donc changer un canal **pendant l'exécution**, ce qui est la définition d'un bus. Porte `porte-bus.sh` cas 4, sur un nœud relais : **66,0379** contre **59,0790** sans canal.
+
+**Deux leçons tombées deux fois chacune, écrites pour de bon :**
+1. **Le gain d'un nœud FINAL est invisible** (la normalisation de sortie divise par la norme) — tout test de bus doit viser une région du **milieu**. Je suis retombé dans le piège, et j'ai d'abord cru le fichier de contrôle inopérant.
+2. **Une porte mal formée ressemble à une capacité cassée** : le cas 4 a échoué parce que mon `printf` écrivait un `\n` **littéral**, valeur illisible que le parseur **refusait** — le parseur avait raison.
+
+**Le fichier de relations humaines est écrit** (`docs/relations-humaines.md`) : *carpe diem* des deux côtés — timeboxing plutôt que backlog, rapports de dix lignes (fait / cassé / ensuite), une question seulement si elle bloque, les alertes en tête, l'état écrit en permanence pour qu'une interruption ne perde rien, et la liste de ce que je m'engage à ne jamais faire.
+
+**La prochaine action est en tête de `docs/sprint-cerveau.md`**, car c'est la règle : six chantiers classés par valeur mesurable — **C4** (horloges par région, le plus structurant qui reste), **C12bis** (trace côté nœud), **C5ter** (bus par socket, avec le point d'entrée exact : le fil doit être lancé **avant** `ecoute.accept()`), **C2** (entrées multiples, à cadrer honnêtement), les expériences **E2/E4** et les dessins **H/I/J**, puis les trois manques du registre (noyaux Q8 experts et GPU, encodeurs).
+
+Je continue sur cette liste — il 
+… [62 caractères tronqués]
+
+### Tour 44 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1749 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Implement per-region step counters and the step bound
+- bash — Write and run the clock/step-bound gate
+- bash — Commit C4 step 1 and push
+
+**Synthèse produite :**
+
+⏵ C4 premier pas livré : compteur de pas par région, borne explicite, aucun résultat partiel
 
 ## 3. Travail accompli
 
@@ -2125,7 +2163,7 @@ Tout est committé et poussé sur **`github.com/stephanedenis/drave`** (privé),
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1019 autres
+- … et 1022 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2389,4 +2427,5 @@ Tout est committé et poussé sur **`github.com/stephanedenis/drave`** (privé),
 - C3 : les délais par lien, et le fichier de relations humaines  C3 — la topologie déclare delai_ms, le moteur l'applique (pilote sur son lien sortant, nœud relai
 - C5bis : diffusion du bus par fichier de contrôle — le canal change la région du milieu  --bus-fichier F : le nœud RELIT le fichier avant chaque trame, donc un a
 - État resumable : la prochaine action en tête du fichier de sprint  Six chantiers classés par valeur mesurable pour occuper le temps imparti : C4 (horloges par r
+- C4 pas 1 : compteur de pas par région et borne de terminaison explicite  Ce que C4 demande est que chaque région ait SON horloge. Le pas complet (asynchronisme 
 

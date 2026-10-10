@@ -51,6 +51,7 @@ Trois capacités du plan, chacune avec sa **porte mesurée** :
 |---|---|---|---|
 | **C1** | **graphe de régions** : descripteur de topologie, validateur, ordonnanceur par dépendances, pilote multi-nœuds | un graphe **linéaire** rend des logits identiques **au bit près** ; un découpage à **trois régions** égale le modèle d'un seul tenant | ✅ **FAIT** — `topologie.rs` (8 tests) · la topologie pilote le découpage (0,00e0) · relais trois instances (0,00e0) · `tools/porte-topologie.sh` (5 cas, dont 2 refus) |
 | **C12** | **trace globale horodatée + rejeu** | rejeu d'une exécution distribuée == exécution, **0,00e0** | ✅ **FAIT** — `trace_globale.rs` (5 tests) · 126 croisements, **aucune divergence** · trace faussée d'un bit **détectée et nommée** · `tools/porte-trace.sh` |
+| **C4** | **horloges par région** | un graphe sans cycle rend le **même résultat** qu'en synchrone ; les pas sont bornés et annoncés | 🟡 **premier pas FAIT** — compteur de pas par région · `--pas-max` borne la terminaison et **refuse de rendre un résultat partiel** (code 5) · porte `tools/porte-horloge.sh` · reste l'asynchronisme réel (avec C2) |
 | **C5bis** | **diffusion du bus** | un canal poussé par un autre processus change l'exécution | ✅ **FAIT (fichier de contrôle)** — `--bus-fichier`, relu avant chaque trame · relais : 66,0379 contre 59,0790 · reste le transport par socket |
 | **C3** | **délais par lien** | un délai change le **temps**, jamais un chiffre | ✅ **FAIT** — appliqué par le pilote ET par le nœud relais · porte `tools/porte-delais.sh` (même perplexité, empreintes identiques, +3,1 s pour 50 ms × 64 pas) |
 | **C5** | **bus de modulation multi-canaux** | canal nul ⇒ sortie **inchangée** | ✅ **FAIT** — `bus.rs` (5 tests) · neutre ⇒ **empreintes identiques** · gain 1,5 ⇒ la sortie change · bus d'un **relais** ⇒ agit à travers les instances · `tools/porte-bus.sh` |
@@ -242,6 +243,36 @@ manquait pour déboguer un graphe distribué.
 
 ---
 
+## C4 (premier pas) — FAIT (9 octobre 21 h 55) : pas par région et borne explicite
+
+**Ce que C4 demande** : que chaque région ait **son** horloge, sans horloge globale.
+Le pas complet (asynchronisme réel) est un chantier de plusieurs semaines ; ce
+premier pas livre ce qui se vérifie **aujourd'hui** et ce qui manquait pour
+l'attaquer :
+
+- **un compteur de pas par région** — la région locale et chaque nœud annoncent le
+  nombre de pas qu'ils ont servis (`[horloge] 63 pas servis`) ;
+- **`--pas-max N`** — une borne de terminaison. Si elle est atteinte, l'exécution
+  **s'arrête et le dit**, et **aucune perplexité n'est rendue** : un chiffre calculé
+  sur la moitié des jetons aurait l'air d'un résultat complet, et c'est précisément
+  ce que le dépôt refuse.
+
+**La porte** (`tools/porte-horloge.sh`), trois cas mesurés :
+
+| cas | résultat | code |
+|---|---|---|
+| sans borne | 59,0790 · **63 pas servis** par région | 0 |
+| borne = 64 (non atteinte) | **59,0790** (identique) · 63 pas servis (borne 64) | 0 |
+| **borne = 32 (atteinte)** | **aucune perplexité rendue** · « L'exécution s'arrête ICI » | **5** |
+
+**Ce qui reste pour C4, et c'est dit** : l'**asynchronisme réel** — des régions qui
+avancent à leur propre rythme, avec des barrières seulement là où un calcul les exige.
+Cela suppose que le jeton devienne un **événement horodaté** circulant dans le graphe,
+donc C2 (entrées multiples) d'abord. Le compteur et la borne sont les deux
+instruments qui rendront ce chantier mesurable.
+
+---
+
 ## C5bis — FAIT (9 octobre 18 h 40) : diffusion du bus par FICHIER DE CONTRÔLE
 
 **Livré** : `--bus-fichier F` sur un nœud. Le fichier est **relu avant chaque trame**,
@@ -393,6 +424,7 @@ bus (le format de la ligne de contrôle est écrit, le transport reste à câble
 |---|---|
 | 9/10 17 h 10 | **C1a** : module `topologie.rs`, validation stricte, plan, 8 tests, suite à 85 tests. |
 | 9/10 17 h 20 | **C1b pas 1** : la topologie pilote le découpage · porte `tools/porte-topologie.sh` **TENUE** (même chiffre, écart 0,00e0) · deux refus vérifiés. |
+| 9/10 21 h 55 | **C4 (pas 1)** : compteur de pas par région + borne `--pas-max` · porte `tools/porte-horloge.sh` (même résultat sans borne et à borne 64 ; **arrêt explicite code 5 sans résultat partiel** à borne 32). |
 | 9/10 18 h 40 | **C5bis** : bus diffusé par fichier de contrôle · cas 4 de `porte-bus.sh` vert (relais 66,0379 contre 59,0790) · deux leçons : le gain d'un nœud final est invisible, et une porte mal formée ressemble à une capacité cassée. |
 | 9/10 18 h 20 | **C3** : délais par lien · porte `tools/porte-delais.sh` — **même perplexité (59,0790), empreintes identiques, +3,1 s pour 50 ms × 64 pas**. |
 | 9/10 18 h 01 | **23 portes du dépôt : 23 vertes, 0 rouge** (code 0), dont `cargo test` à 95 verts et gpt-oss à 15,6017. |
