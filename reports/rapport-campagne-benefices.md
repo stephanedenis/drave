@@ -2753,6 +2753,35 @@ jeton, celui où la latence domine.
 coûtent les mêmes octets). La question « message ou octet ? » est celle de l'opérateur, pas du
 protocole — mais le protocole, lui, ne doit pas **ajouter** de messages sans raison.
 
+## 46. Inventaire des drapeaux en chemin RÉPARTI : cinq agissent, trois sont inertes
+
+L'audit du §39 avait produit des **candidats** sans les départager (une mesure vide, due à un port
+hors bornes, ne prouvait rien). Après le v7, le v8 et les corrections des rounds 20 et 42,
+l'inventaire est refait — **nœud relancé à chaque essai** (il sert UNE connexion : mon premier
+banc les faisait tous échouer, et c'était encore une erreur de harnais) :
+
+| drapeau | perplexité répartie (référence **72,0185**) | verdict |
+|---|---|---|
+| `--act-topk 64` | 362 333,58 | **agit** |
+| `--qk-topk 64` | 4 760,07 | **agit** |
+| `--attn-window 32` | 1 571,30 | **agit** (corrigé au round 42) |
+| `--act-thresh 0,01` | 98,83 | **agit** |
+| `--ffn-gain 0:0.75` | 76,88 | **agit** (corrigé au round 20) |
+| `--attn-topk 64` | 71,47 | **agit** |
+| `--swa-pattern 2` | 72,0185 | **sans effet — ATTENDU** : le motif ne décide quelles couches prennent la fenêtre ; sans `--attn-window`, il n'a rien à décider |
+| `--sans-fenetre` | 72,0185 | **sans effet — ATTENDU** : désactiver une fenêtre qui n'est pas posée ne change rien |
+| `--moe-topk 2` | 72,0185 | **sans effet — ATTENDU** : Qwen2.5-0.5B est **dense**, il n'a pas d'experts |
+| **`--attn-sinks 4`** | 72,0185 | **à instruire** : les puits d'attention devraient peser, et ils ne pèsent pas |
+
+**Six drapeaux agissent sur dix**, et **trois des quatre inertes le sont pour une raison
+identifiée** (conditions non remplies : pas de fenêtre posée, pas d'experts). Reste **un seul
+candidat ouvert**, nommé : `--attn-sinks`.
+
+**Ce que cet inventaire vaut** : c'est la réponse à la question posée au §39 — « combien d'autres
+drapeaux ne font rien en réparti ? » — et elle est **chiffrée**, pas estimée. Les deux vrais
+défauts qu'elle a fait apparaître (`--ffn-gain`, `--attn-window`) ont été corrigés et **mesurés
+avant/après** aux rounds 20 et 42.
+
 ## Annexe — manifeste des journaux
 
 Les journaux bruts sont dans `/tmp/campagne24/`. **59 fichiers d'étape (79 Kio)**,

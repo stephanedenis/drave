@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 48.4 h |
-| Tours | 85 |
-| Messages | 2007 |
-| Appels d'outils | 1835 |
+| Durée | 48.5 h |
+| Tours | 86 |
+| Messages | 2012 |
+| Appels d'outils | 1838 |
 | Fichiers touchés | 61 |
-| Commandes | 1585 |
+| Commandes | 1588 |
 | Sous-agents | 3 |
-| Commits | 175 |
+| Commits | 176 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -205,6 +205,8 @@
 **Tour 84** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 **Tour 85** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
+
+**Tour 86** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -3495,7 +3497,36 @@ Le gain est le **même en millisecondes** (~10 ms : deux messages en moins à 5 
 
 **Synthèse produite :**
 
-⏵ Le drapeau AGIT enfin en réparti (42,5 → 1926,2) — je vérifie `porte-flux` et je commite
+⏵ Round 42 livré : les trois lignes manquantes — le pilote applique enfin la fenêtre
+
+**Ce round** — 1 commit poussé, **`porte-flux.sh` vert** (5 modes inchangés), 122 tests verts.
+
+Suite directe de la correction du round 41 : `mdl.attn_window`, `mdl.swa_pattern` et `mdl.attn_sinks` n'étaient assignés **nulle part** dans `run_ppl_reparti`. Les trois lignes sont posées, et la mesure **avant/après** le confirme :
+
+| | nu | `--attn-window 64` |
+|---|---|---|
+| **chemin réparti** | 42,5477 | **1 926,1996** |
+| chemin local | 14,6496 | 16,1972 |
+
+**Le drapeau agit en réparti** (il était inerte : 42,5477 dans les deux cas). Que le chiffre réparti soit mauvais (1 926) est **attendu** — « les 128 derniers jetons d'un fichier de 85 625, avec une fenêtre de 64 » ne laisse presque pas de contexte — mais c'est un calcul **annoncé**, et non un réglage ignoré. C'est toute la différence entre un résultat qu'on explique et un drapeau qui ne fait rien.
+
+`porte-flux.sh` reste **vert** : les portes n'utilisent pas ces drapeaux, donc les défauts à zéro laissent le chemin d'exécution inchangé.
+
+**La leçon est écrite dans le code, là où elle servira** : *deux nombres égaux ne prouvent pas qu'ils mesurent la même chose* — avant de conclure à un accord, vérifier **pourquoi** ils sont égaux. Ici, la raison était que le réglage était inerte **des deux côtés**.
+
+**Bilan** : 42 rounds, 22 portes toutes vertes, 122 tests. Le sprint a trouvé **quatre** défauts de la même famille (« un drapeau qui ne fait rien » : `--ffn-gain` en réparti, `--attn-window`, `--sys.exit`, le poids de greffe par défaut) — tous par la mesure, aucun par relecture. L'objectif reste **actif**.
+
+### Tour 86 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Build the definitive flag table for the split path
+- bash — Rerun the flag table with a fresh node each time
+- bash — Commit the definitive flag inventory
+
+**Synthèse produite :**
+
+⏵ Table définitive : cinq drapeaux AGISSENT en réparti, trois sont inertes (dont deux attendus)
 
 ## 3. Travail accompli
 
@@ -3613,7 +3644,7 @@ Le gain est le **même en millisecondes** (~10 ms : deux messages en moins à 5 
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1545 autres
+- … et 1548 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3936,4 +3967,5 @@ Le gain est le **même en millisecondes** (~10 ms : deux messages en moins à 5 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib p = pathlib.Path("docs/sprint-cerveau.md") s = p.read_text() a = "## ▶ 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 1200 bash tools/porte-flux.sh > /tmp/pf42.txt 2>&1; echo "porte-flux code=$?"; tail -2 /tmp/pf42.t
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 

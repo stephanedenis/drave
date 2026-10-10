@@ -934,6 +934,31 @@ ligne de lecture de code : « ce champ est-il assigné dans cette fonction ? ».
 
 ---
 
+## INVENTAIRE DES DRAPEAUX EN RÉPARTI — FAIT (12 octobre 3 h) : cinq agissent, trois inertes, un ouvert
+
+Après le v7, le v8 et les corrections des rounds 20 et 42, l'inventaire du §39 est **départagé** —
+nœud **relancé à chaque essai** (il sert UNE connexion : mon premier banc les faisait tous échouer,
+et c'était encore une erreur de harnais, la quatrième du sprint) :
+
+| drapeau | réparti (référence **72,0185**) | verdict |
+|---|---|---|
+| `--act-topk 64` | 362 333,58 | **agit** |
+| `--qk-topk 64` | 4 760,07 | **agit** |
+| `--attn-window 32` | 1 571,30 | **agit** (round 42) |
+| `--act-thresh 0,01` | 98,83 | **agit** |
+| `--ffn-gain 0:0.75` | 76,88 | **agit** (round 20) |
+| `--attn-topk 64` | 71,47 | **agit** |
+| `--swa-pattern 2` | 72,0185 | sans effet — **attendu** (rien à décider sans fenêtre) |
+| `--sans-fenetre` | 72,0185 | sans effet — **attendu** (désactiver une fenêtre absente) |
+| `--moe-topk 2` | 72,0185 | sans effet — **attendu** (modèle **dense**) |
+| **`--attn-sinks 4`** | 72,0185 | **À INSTRUIRE** — les puits devraient peser |
+
+**Six sur dix agissent**, trois inertes pour une raison identifiée, **un seul candidat ouvert** :
+`--attn-sinks`. C'est la réponse chiffrée à la question du §39 — « combien d'autres drapeaux ne font
+rien en réparti ? » — et les deux vrais défauts qu'elle a trouvés ont été corrigés et mesurés.
+
+---
+
 ## ▶ PROCHAINE ACTION (à lire en premier)
 
 État au **11 octobre 6 h 45** · **21 portes, toutes vertes** (`tools/porte-*.sh`) ·
