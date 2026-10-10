@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 47.8 h |
-| Tours | 74 |
-| Messages | 1949 |
-| Appels d'outils | 1799 |
+| Durée | 47.9 h |
+| Tours | 75 |
+| Messages | 1957 |
+| Appels d'outils | 1805 |
 | Fichiers touchés | 61 |
-| Commandes | 1549 |
+| Commandes | 1555 |
 | Sous-agents | 3 |
-| Commits | 164 |
+| Commits | 165 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -183,6 +183,8 @@
 **Tour 73** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 **Tour 74** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
+
+**Tour 75** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -3155,7 +3157,42 @@ main.rs:7299    let pt: u64 = pa.iter().sum::<u64>() + scores;
 
 **Synthèse produite :**
 
-⏵ Chiffre correct : **178,9 M paires par pas** (12 couches sur 24, cohérent avec 358 M pour l'entier) — je vérifie et commite
+⏵ Round 31 livré : **protocole v8** — le compte de paires du nœud voyage, et le chiffre a attrapé mon bug
+
+**Ce round** — 1 commit poussé, **122 tests verts**, **`porte-flux.sh` vert** (les deux côtés, 5 modes).
+
+Le v8 ajoute **un `u64` à l'en-tête** (91 → **99 octets**, version **8**) : le nœud y met son compte de paires, le pilote le lit et le publie.
+
+```text
+paires du pair    : 8408924160 au total, 178.9 M par pas (annoncées par le nœud — protocole v8)
+```
+
+**178,9 M paires par pas pour la moitié distante** — cohérent avec les **358 M par jeton** du modèle *entier* mesurés pendant la campagne : la moitié des couches, la moitié des paires. **C'est la première fois que le pilote sait ce que coûte la moitié distante** sans le déduire de son propre travail.
+
+**Et le chiffre a attrapé mon propre bug** : ma première implémentation **additionnait** le compte de chaque trame — or le compteur du nœud est **cumulatif**, donc la somme des cumuls vaut N²/2, et le pilote annonçait **4 293,9 M par pas**, ~24× trop. C'est **la comparaison au chiffre connu** (358 M pour le modèle entier) qui l'a rendu visible : 12× plus que le modèle *complet* pour la moitié de ses couches ne pouvait pas être juste. Corrigé (`fetch_max`) → 178,9 M.
+
+**Leçon écrite** : un chiffre nouveau n'est pas vérifié par sa propre cohérence, il l'est par **comparaison à ce qu'on sait déjà**. Sans les 358 M de la campagne, 4 293,9 M serait passé pour une mesure.
+
+Le champ est **directionnel** (pilote = 0, nœud = son compte) et c'est écrit dans le code : un en-tête partagé ne dit pas de lui-même qui parle.
+
+**Reste pour clore C10** : le `budget_paires` dans la topologie, comparé à ce compte par pas, avec arrêt explicite (**code 9**). Le transport est fait ; il ne manque que le contrôle.
+
+**Bilan** : 31 rounds, 22 portes toutes vertes, 122 tests, protocoles v7 **et** v8 livrés. L'objectif reste **actif**.
+
+### Tour 75 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Implement the pair budget
+- bash — Test the pair budget both ways
+- bash — Add the pair-budget case and run the gate
+- bash — Move the check into the loop and rerun
+- bash — Revert the broken patch and verify
+- bash — Document the pair-budget attempt and revert
+
+**Synthèse produite :**
+
+⏵ Ma suppression a cassé l'équilibre des accolades — je reviens au commit v8 et je consigne l'essai
 
 ## 3. Travail accompli
 
@@ -3273,7 +3310,7 @@ main.rs:7299    let pt: u64 = pa.iter().sum::<u64>() + scores;
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1509 autres
+- … et 1515 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3585,4 +3622,5 @@ main.rs:7299    let pt: u64 = pa.iter().sum::<u64>() + scores;
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib p = pathlib.Path("docs/sprint-cerveau.md") s = p.read_text() a = "## ▶ 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib p = pathlib.Path("docs/sprint-cerveau.md") s = p.read_text() a = "## ▶ 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 bash tools/porte-flux.sh > /tmp/pf31.txt 2>&1; echo "porte-flux code=$?"; timeout 600 cargo te
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib p = pathlib.Path("docs/sprint-cerveau.md") s = p.read_text() a = "## ▶ 
 

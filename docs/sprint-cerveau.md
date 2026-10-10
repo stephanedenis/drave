@@ -691,6 +691,36 @@ dans un en-tête partagé.
 
 ---
 
+## BUDGET DE PAIRES (C10, 3ᵉ volet) — TENTÉ (11 octobre 19 h), REVERTÉ : deux leçons
+
+Le transport du compte de paires est livré (v8) ; il ne manquait que le **contrôle**. Tenté,
+mesuré, puis **reverté** — l'arbre est propre et 122 tests passent.
+
+**Ce qui a été écrit, et qui marche** : `budget_paires` dans la topologie du lien ; lecture par le
+pilote ; comparaison du compte annoncé par le nœud au plafond `budget × pas` ; **refus en code
+9**. Mesuré manuellement : budget généreux (10 G/pas) ⇒ le run aboutit et annonce **178,9 M
+paires par pas** ; budget insuffisant (1 M/pas) ⇒ `PAIRES DÉPASSÉES … 8408924160 paires pour un
+budget de 1000000 par pas sur 47 pas (plafond 47000000)`, **code 9** ✓.
+
+**LEÇON 1 — LE CONTRÔLE DOIT ÊTRE DANS LA BOUCLE.** Placé après elle, il laissait **calculer et
+afficher la perplexité** avant de refuser — soit exactement **le résultat partiel** que ce dépôt
+refuse. C'est la **porte** qui l'a dit : son assertion « aucune perplexité ne doit être rendue »
+a échoué. Le contrôle d'octets et celui de latence sont dans la boucle ; celui-ci doit y être
+aussi.
+
+**LEÇON 2 — UNE SUPPRESSION DE BLOC SE VÉRIFIE AUSSI.** Le déplacement du contrôle a laissé un
+**déséquilibre d'accolades** qui a cassé la compilation ; plutôt que de bricoler un correctif sur
+un fichier à moitié édité, **le round a été reverté**. Une modification de 7 sites qui ne compile
+pas n'est pas une modification livrée — même règle que le v7 reverté au round 27, qui a été livré
+au 28 après avoir été compris.
+
+**Ce qui reste, précisément** : (1) `budget_paires` dans `topologie.rs` (champ + parse + le
+littéral de test) ; (2) la lecture dans `run_ppl_reparti` ; (3) **le contrôle DANS la boucle**,
+juste après la réception, avec `pas_servis` comme multiplicateur ; (4) le cas 6 de
+`tools/porte-budget.sh`, déjà écrit, qui exige le code 9 **et l'absence de perplexité**.
+
+---
+
 ## ▶ PROCHAINE ACTION (à lire en premier)
 
 État au **11 octobre 6 h 45** · **21 portes, toutes vertes** (`tools/porte-*.sh`) ·

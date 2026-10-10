@@ -31122,3 +31122,124 @@ cumul corrige
 ⏵ Chiffre correct : **178,9 M paires par pas** (12 couches sur 24, cohérent avec 358 M pour l'entier) — je vérifie et commite
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 bash tools/porte-flux.sh > /tmp/pf31.txt 2>&1; echo \"porte-flux code=$?\"; timeout 600 cargo test --release --manifest-path drave-core/Cargo.toml 2>&1 | grep -E \"^test result\"; python3 - <<'ENDPY'\nimport pathlib\n\np  … [5851 caractères tronqués]`
+
+  ```
+porte-flux code=0
+test result: ok. 122 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.32s
+docs v8 livre
+e22dbd7 PROTOCOLE v8 LIVRE : le compte de paires du noeud voyage, et le chiffre a attrape mon bug
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 31 livré : **protocole v8** — le compte de paires du nœud voyage, et le chiffre a attrapé mon bug
+
+**Ce round** — 1 commit poussé, **122 tests verts**, **`porte-flux.sh` vert** (les deux côtés, 5 modes).
+
+Le v8 ajoute **un `u64` à l'en-tête** (91 → **99 octets**, version **8**) : le nœud y met son compte de paires, le pilote le lit et le publie.
+
+```text
+paires du pair    : 8408924160 au total, 178.9 M par pas (annoncées par le nœud — protocole v8)
+```
+
+**178,9 M paires par pas pour la moitié distante** — cohérent avec les **358 M par jeton** du modèle *entier* mesurés pendant la campagne : la moitié des couches, la moitié des paires. **C'est la première fois que le pilote sait ce que coûte la moitié distante** sans le déduire de son propre travail.
+
+**Et le chiffre a attrapé mon propre bug** : ma première implémentation **additionnait** le compte de chaque trame — or le compteur du nœud est **cumulatif**, donc la somme des cumuls vaut N²/2, et le pilote annonçait **4 293,9 M par pas**, ~24× trop. C'est **la comparaison au chiffre connu** (358 M pour le modèle entier) qui l'a rendu visible : 12× plus que le modèle *complet* pour la moitié de ses couches ne pouvait pas être juste. Corrigé (`fetch_max`) → 178,9 M.
+
+**Leçon écrite** : un chiffre nouveau n'est pas vérifié par sa propre cohérence, il l'est par **comparaison à ce qu'on sait déjà**. Sans les 358 M de la campagne, 4 293,9 M serait passé pour une mesure.
+
+Le champ est **directionnel** (pilote = 0, nœud = son compte) et c'est écrit dans le code : un en-tête partagé ne dit pas de lui-même qui parle.
+
+**Reste pour clore C10** : le `budget_paires` dans la topologie, comparé à ce compte par pas, avec arrêt explicite (**code 9**). Le transport est fait ; il ne manque que le contrôle.
+
+**Bilan** : 31 rounds, 22 portes toutes vertes, 122 tests, protocoles v7 **et** v8 livrés. L'objectif reste **actif**.
+
+
+## Tour 75
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 mémoire épisodique, C7 consolidation, C8 périphérie, C9 latéralité, C10 budgets, et la diffusion réseau du bus de C5 ; (b) les expériences E2-E9 de docs/biologie-pour-drave.md et docs/hebbien-differentiel-et-biologie.md ; (c) les dessins de modèle H/I/J de docs/modele-pour-drave.md ; (d) les manques du registre docs/manques.md (noyau de listes pour les experts, noyau de listes GPU, encodeurs) — l'implémenter ou la mesurer, la doter d'une porte vérifiable, la documenter, commiter, pousser, et enchaîner immédiatement sur la suivante. Contraintes : les 23 portes du dépôt et tous les tests restent verts (porte-flux.sh après toute modification du chemin d'exécution), le profil release reste le binaire de mesure, le crate reste std seul, et docs/sprint-cerveau.md reste l'état resumable mis à jour à chaque round. Ne jamais s'arrêter faute de tâches planifiées : en inventer de nouvelles, mesurables, plutôt que d'attendre."
+Round: 32/60
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 32 : je clôture C10 — le budget de PAIRES par lien, avec son code 9
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\nn = 0\ndef sub(s, a, b, quoi):\n    global n\n    assert a in s, quoi\n    n += 1\n    return s.replace(a, b, 1)\n\n# --- topologie : budget_paires\np = pathlib.Path(\"drave-core/src/topologie.rs\ … [3590 caractères tronqués]`
+
+  ```
+budget_paires : 7 sites
+test result: ok. 122 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.33s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && T=$(mktemp -d); PORT=$((60000 + RANDOM % 4000)); topo() { cat > $T/topo.json <<JSON\n{\"regions\":[{\"id\":\"local\",\"couches\":[0,11],\"instance\":\"local\"},{\"id\":\"d\",\"couches\":[12,23],\"instance\":\"127.0.0.1:$PORT\"}],\"li … [1252 caractères tronqués]`
+
+  ```
+=== budget GÉNÉREUX (10 milliards par pas) ===
+  [budget] lien local → d : 10000000000 paires par pas AU PLUS (compte annoncé par le nœud) — dépassement = arrêt
+    deux nœuds        : perplexité 113.0068  (2.0 s)
+    paires du pair    : 8408924160 au total, 178.9 M par pas (annoncées par le nœud dans chaque trame — protocole v8)
+=== budget INSUFFISANT (1 million par pas) ===
+    référence locale  : perplexité 113.0068  (2.0 s)
+    deux nœuds        : perplexité 113.0068  (2.0 s)
+  [budget] PAIRES DÉPASSÉES sur le lien local → d : 8408924160 paires pour un budget de 1000000 par pas sur 47 pas (plafond 47000000). L'exécution s'arrête ICI — la moitié distante a coûté plus que ce qui était déclaré.
+  code=9
+  ```
+
+### 🤖 Assistant
+
+⏵ Budget de paires : refus en code 9, plafond calculé — l'ajoute à la porte et je commite
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"tools/porte-budget.sh\")\ns = p.read_text()\na = '''rm -rf \"$T\"'''\nb = '''echo \"=== 6. budget de PAIRES : le troisième volet de C10 ===\"\n# Les paires sont calculees par LE … [2435 caractères tronqués]`
+
+  ```
+cas 6 ajoute
+porte-budget code=1
+  ✅ latence généreuse : résultat identique (111.9225)
+  ✅ latence dépassée : nommée (mesurée vs budget, au pas), code 8, aucune perplexité
+  ✅ budget de paires genereux : le run aboutit et annonce les paires du pair
+  ❌ une perplexite a ete rendue malgre le depassement de paires
+  ```
+
+### 🤖 Assistant
+
+⏵ Vrai défaut : mon contrôle s'exécutait APRÈS la boucle, donc une perplexité était rendue — je le déplace DANS la boucle
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\n# retirer le contrôle APRÈS la boucle (trop tard : la perplexité était déjà calculée et rendue)\ndeb = s.index(\"    if let Some(b) … [1824 caractères tronqués]`
+
+  ```
+controle deplace dans la boucle
+error: unexpected closing delimiter: `}`
+    --> src/main.rs:4827:1
+     |
+4354 |     let bus0 = bus::Bus::analyser(&opt.bus).unwrap_or_else(|e| {
+     |                                                                - this delimiter might not be properly closed...
+4355 |         eprintln!("{e}"); std::process::exit(2) });
+     |                                                 - ...as it matches this but it has different indentation
+--
+error: could not compile `drave-core` (bin "drave") due to 1 previous error
+porte-budget code=1
+  ✅ latence dépassée : nommée (mesurée vs budget, au pas), code 8, aucune perplexité
+  ✅ budget de paires genereux : le run aboutit et annonce les paires du pair
+  ❌ une perplexite a ete rendue malgre le depassement de paires
+  ```
+
+### 🤖 Assistant
+
+⏵ Ma suppression a cassé l'équilibre des accolades — je reviens au commit v8 et je consigne l'essai
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git checkout drave-core/src/main.rs drave-core/src/topologie.rs tools/porte-budget.sh && cargo build --release --manifest-path drave-core/Cargo.toml 2>&1 | grep -E \"^error\" | head -3; timeout 600 cargo test --release --manifest-pat … [161 caractères tronqués]`
+
+  ```
+test result: ok. 122 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.31s
+ M journal/README.md
+[stderr]
+Updated 3 paths from the index
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"docs/sprint-cerveau.md\")\ns = p.read_text()\na = \"## ▶ PROCHAINE ACTION (à lire en premier)\"\nneuf = \"\"\"## BUDGET DE PAIRES (C10, 3ᵉ volet) — TENTÉ (11 octobre 19 h), REVE … [3972 caractères tronqués]`
