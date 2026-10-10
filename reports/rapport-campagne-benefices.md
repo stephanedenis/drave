@@ -2613,6 +2613,36 @@ délai injecté l'est aussi : un instrument qui aurait du bruit l'aurait montré
 avancent à des rythmes différents, l'instrument qui le dira aura été **étalonné contre une
 valeur connue** — et non supposé juste parce qu'il produit des nombres.
 
+## 44. La GIGUE d'un pas réparti : 7 ms sur 17,7 — ce qu'un ordonnanceur doit tolérer
+
+L'instrument étant étalonné (§43), il peut mesurer autre chose que ce qu'on lui a injecté. La
+question qui décide de l'asynchronisme (C4) est : **de combien la durée d'un pas varie-t-elle ?**
+Un ordonnanceur qui suppose des pas réguliers casse à la première irrégularité ; il faut donc la
+chiffrer.
+
+**Mesure** (12 couches locales, 12 distantes, 64 pas, traces des deux côtés fusionnées) :
+
+| phase | médiane | p90 | max | min | n |
+|---|---|---|---|---|---|
+| aller (pilote → nœud) | 0,13 ms | 0,14 | 0,16 | 0,09 | 63 |
+| retour (nœud → pilote) | 0,14 ms | 0,17 | 0,17 | 0,05 | 63 |
+| **pas complet** (envoi → réception finale) | **17,67 ms** | 19,57 | **21,29** | **14,29** | 63 |
+
+**Trois lectures, et la troisième est la plus utile :**
+
+1. **le réseau local ne coûte rien** : 0,13 ms à l'aller, 0,14 au retour — le transport est
+   négligeable devant le calcul, ce qui est cohérent avec la loi de latence de la campagne
+   (3,4 ms par jeton et par ms de RTT) dès qu'on met un vrai RTT ;
+2. **le pas complet vaut 17,67 ms en médiane**, dont l'essentiel est le calcul du nœud ;
+3. **la gigue est de 7,00 ms** (max − min) sur cette même médiane de 17,67 ms, soit **40 %** — et
+   le p90 (19,57) est à 2 ms au-dessus de la médiane. Autrement dit : **un ordonnanceur qui
+   suppose des pas réguliers se trompe de 40 %**, et c'est exactement ce que C4 devra absorber.
+
+**Ce que cette mesure ne dit pas** : elle porte sur une machine unique (les deux « régions » sont
+deux processus du même hôte), donc la gigue mesurée est celle de l'**ordonnanceur du système**,
+pas celle du réseau. Sur deux machines, elle serait plus grande — le proxy de latence
+(`tools/proxy_latence.py`) permet de l'ajouter, et ce n'est pas fait ici.
+
 ## Annexe — manifeste des journaux
 
 Les journaux bruts sont dans `/tmp/campagne24/`. **59 fichiers d'étape (79 Kio)**,

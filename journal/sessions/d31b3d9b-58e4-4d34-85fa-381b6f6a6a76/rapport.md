@@ -6,13 +6,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
 | Durée | 48.0 h |
-| Tours | 77 |
-| Messages | 1967 |
-| Appels d'outils | 1811 |
+| Tours | 78 |
+| Messages | 1971 |
+| Appels d'outils | 1813 |
 | Fichiers touchés | 61 |
-| Commandes | 1561 |
+| Commandes | 1563 |
 | Sous-agents | 3 |
-| Commits | 167 |
+| Commits | 168 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -189,6 +189,8 @@
 **Tour 76** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 **Tour 77** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
+
+**Tour 78** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -3250,7 +3252,35 @@ Le round 32 avait reverté ce travail après un déséquilibre d'accolades. **Re
 
 **Synthèse produite :**
 
-⏵ L'instrument est **calibré** : 50 ms injectés → 50,2 ms mesurés par la fusion, sur 23 croisements
+⏵ Round 34 livré : l'instrument de trace est **étalonné** — 50 ms injectés, 50,2 ms mesurés
+
+**Ce round** — 1 commit poussé. Toute la partie asynchrone (C4) repose sur une question préalable : **la trace globale sait-elle mesurer le temps ?** Un instrument jamais étalonné ne prouve rien sur ce qu'il observe.
+
+**Protocole** : un délai **connu** injecté (`"delai_ms": 50`), les deux côtés tracent, la fusion apparie par `(lien, pas)`, et l'on compare l'horodatage d'**envoi** (pilote) à celui de **réception** (nœud) :
+
+| mesure | valeur |
+|---|---|
+| croisements par source | **46** (23 pas × 2 liens) |
+| liens confrontés | **46 identiques, 0 divergents** |
+| **écart envoi → réception, médian** | **50,2 ms** (min 50,2 · max 50,2) |
+| délai injecté | **50 ms** |
+
+**L'instrument mesure le temps à 0,2 ms près** — et cet écart *est* le transport lui-même. Il est **rigoureusement constant** (min = max) parce que le délai injecté l'est : un instrument bruité l'aurait montré.
+
+**Pourquoi c'est un préalable** : quand C4 dira que deux régions avancent à des rythmes différents, l'instrument qui le dira aura été **étalonné contre une valeur connue**, et non supposé juste parce qu'il produit des nombres — c'est la différence entre un instrument et un affichage.
+
+**Bilan** : 34 rounds, **22 portes toutes vertes**, 122 tests, protocoles v7 et v8, **C10 clos**, instrument étalonné. Restent : la tête dédiée par profondeur (C8), les modèles H-I-J, et l'asynchronisme réel (C4) — désormais mesurable avec un instrument dont on connaît la précision. L'objectif reste **actif**.
+
+### Tour 78 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Measure per-step link jitter from the traces
+- bash — Document and commit the jitter measurement
+
+**Synthèse produite :**
+
+⏵ Round 35 : je mesure la GIGUE du lien pas à pas — ce qu'un ordonnanceur asynchrone doit tolérer
 
 ## 3. Travail accompli
 
@@ -3368,7 +3398,7 @@ Le round 32 avait reverté ce travail après un déséquilibre d'accolades. **Re
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1521 autres
+- … et 1523 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3681,6 +3711,7 @@ Le round 32 avait reverté ce travail après un déséquilibre d'accolades. **Re
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib p = pathlib.Path("docs/sprint-cerveau.md") s = p.read_text() a = "## ▶ 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 bash tools/porte-flux.sh > /tmp/pf31.txt 2>&1; echo "porte-flux code=$?"; timeout 600 cargo te
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib p = pathlib.Path("docs/sprint-cerveau.md") s = p.read_text() a = "## ▶ 
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 

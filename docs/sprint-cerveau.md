@@ -770,6 +770,31 @@ supposé juste parce qu'il produit des nombres.
 
 ---
 
+## LA GIGUE D'UN PAS RÉPARTI — MESURÉE (11 octobre 22 h) : 7 ms sur 17,7 (40 %)
+
+L'instrument étant étalonné (§ précédent), il peut mesurer autre chose que ce qu'on lui injecte.
+La question qui décide de l'asynchronisme (C4) : **de combien la durée d'un pas varie-t-elle ?**
+Un ordonnanceur qui suppose des pas réguliers casse à la première irrégularité.
+
+| phase | médiane | p90 | max | min |
+|---|---|---|---|---|
+| aller (pilote → nœud) | **0,13 ms** | 0,14 | 0,16 | 0,09 |
+| retour (nœud → pilote) | **0,14 ms** | 0,17 | 0,17 | 0,05 |
+| **pas complet** | **17,67 ms** | 19,57 | **21,29** | **14,29** |
+
+1. **le réseau local ne coûte rien** (0,13 / 0,14 ms) — cohérent avec la loi de latence de la
+   campagne dès qu'un vrai RTT entre en jeu ;
+2. **le pas complet vaut 17,67 ms**, dont l'essentiel est le calcul du nœud ;
+3. **la gigue est de 7,00 ms sur 17,67, soit 40 %** — et le p90 dépasse la médiane de 2 ms.
+   **Un ordonnanceur qui suppose des pas réguliers se trompe de 40 %** : c'est précisément ce que
+   C4 devra absorber.
+
+**Ce que la mesure ne dit pas** : les deux « régions » sont deux processus du MÊME hôte, donc la
+gigue mesurée est celle de l'ordonnanceur système, pas celle du réseau. `tools/proxy_latence.py`
+permet d'ajouter le RTT, et ce n'est pas fait ici.
+
+---
+
 ## ▶ PROCHAINE ACTION (à lire en premier)
 
 État au **11 octobre 6 h 45** · **21 portes, toutes vertes** (`tools/porte-*.sh`) ·

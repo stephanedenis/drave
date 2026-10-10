@@ -31380,3 +31380,58 @@ pilote code=0
 ⏵ L'instrument est **calibré** : 50 ms injectés → 50,2 ms mesurés par la fusion, sur 23 croisements
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\n\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\na = \"## Annexe — manifeste des journaux\"\nsec = \"\"\"## 43. L'instrument de trace est CALIBRÉ : 50 ms injectés, … [4764 caractères tronqués]`
+
+  ```
+etalonnage consigne
+4367099 Etalonnage de l'instrument de trace : 50 ms injectes, 50,2 ms mesures
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 34 livré : l'instrument de trace est **étalonné** — 50 ms injectés, 50,2 ms mesurés
+
+**Ce round** — 1 commit poussé. Toute la partie asynchrone (C4) repose sur une question préalable : **la trace globale sait-elle mesurer le temps ?** Un instrument jamais étalonné ne prouve rien sur ce qu'il observe.
+
+**Protocole** : un délai **connu** injecté (`"delai_ms": 50`), les deux côtés tracent, la fusion apparie par `(lien, pas)`, et l'on compare l'horodatage d'**envoi** (pilote) à celui de **réception** (nœud) :
+
+| mesure | valeur |
+|---|---|
+| croisements par source | **46** (23 pas × 2 liens) |
+| liens confrontés | **46 identiques, 0 divergents** |
+| **écart envoi → réception, médian** | **50,2 ms** (min 50,2 · max 50,2) |
+| délai injecté | **50 ms** |
+
+**L'instrument mesure le temps à 0,2 ms près** — et cet écart *est* le transport lui-même. Il est **rigoureusement constant** (min = max) parce que le délai injecté l'est : un instrument bruité l'aurait montré.
+
+**Pourquoi c'est un préalable** : quand C4 dira que deux régions avancent à des rythmes différents, l'instrument qui le dira aura été **étalonné contre une valeur connue**, et non supposé juste parce qu'il produit des nombres — c'est la différence entre un instrument et un affichage.
+
+**Bilan** : 34 rounds, **22 portes toutes vertes**, 122 tests, protocoles v7 et v8, **C10 clos**, instrument étalonné. Restent : la tête dédiée par profondeur (C8), les modèles H-I-J, et l'asynchronisme réel (C4) — désormais mesurable avec un instrument dont on connaît la précision. L'objectif reste **actif**.
+
+
+## Tour 78
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 mémoire épisodique, C7 consolidation, C8 périphérie, C9 latéralité, C10 budgets, et la diffusion réseau du bus de C5 ; (b) les expériences E2-E9 de docs/biologie-pour-drave.md et docs/hebbien-differentiel-et-biologie.md ; (c) les dessins de modèle H/I/J de docs/modele-pour-drave.md ; (d) les manques du registre docs/manques.md (noyau de listes pour les experts, noyau de listes GPU, encodeurs) — l'implémenter ou la mesurer, la doter d'une porte vérifiable, la documenter, commiter, pousser, et enchaîner immédiatement sur la suivante. Contraintes : les 23 portes du dépôt et tous les tests restent verts (porte-flux.sh après toute modification du chemin d'exécution), le profil release reste le binaire de mesure, le crate reste std seul, et docs/sprint-cerveau.md reste l'état resumable mis à jour à chaque round. Ne jamais s'arrêter faute de tâches planifiées : en inventer de nouvelles, mesurables, plutôt que d'attendre."
+Round: 35/60
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 35 : je mesure la GIGUE du lien pas à pas — ce qu'un ordonnanceur asynchrone doit tolérer
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && T=$(mktemp -d); PORT=$((60000 + RANDOM % 4000)); cat > $T/topo.json <<JSON\n{\"regions\":[{\"id\":\"local\",\"couches\":[0,11],\"instance\":\"local\"},{\"id\":\"d\",\"couches\":[12,23],\"instance\":\"127.0.0.1:$PORT\"}],\"liens\":[{\ … [2140 caractères tronqués]`
+
+  ```
+aller (pilote→nœud), retour (nœud→pilote), total (aller+calcul+retour) :
+  aller                              : médiane    0.13 ms · p90    0.14 · max    0.16 · min   0.09 · n=63
+  retour                             : médiane    0.14 ms · p90    0.17 · max    0.17 · min   0.05 · n=63
+  total par pas                      : médiane   17.67 ms · p90   19.57 · max   21.29 · min  14.29 · n=63
+  GIGUE du pas complet : 7.00 ms (max − min) — c'est ce qu'un ordonnanceur
+  asynchrone doit tolérer sans casser l'ordre des régions.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\n\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\na = \"## Annexe — manifeste des journaux\"\nsec = \"\"\"## 44. La GIGUE d'un pas réparti : 7 ms sur 17,7 — ce qu'u … [5073 caractères tronqués]`
