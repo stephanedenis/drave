@@ -40473,3 +40473,67 @@ AssertionError
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '44,48p' docs/etat-cerveau.md; python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"docs/etat-cerveau.md\"); s = p.read_text()\nold = \"\"\"> après la tête réflexe. Détail :\"\"\"\nnew = \"\"\"> après la tête réflexe. **La  … [722 caractères tronqués]`
+
+  ```
+> après la tête réflexe. Détail :
+> [`reports/rapport-c8-peripherie.md`](../reports/rapport-c8-peripherie.md) · conception :
+> [`docs/note-peripherie-c8.md`](note-peripherie-c8.md).
+| **C9 (latéralité)** | deux jumeaux, échange par couche | 🟡 **échange exact, gain NUL (mesuré)** | échange désactivé = modèle seul (27,4964 = 27,4964) ; jumeaux identiques ⇒ rien ne change ; jumeau bruité récupéré (163,17 → 36,13) **mais le contrôle donne le même chiffre** (36,1307, écart 0,000 %) : c'est une moyenne, pas une latéralité. La fusion de deux **vues valides** ne bat pas la meilleure des deux (127 jetons : 15,39 contre 14,65) | `tools/porte-jumeaux.sh` · [`reports/rapport-c9-lateralite.md`](../reports/rapport-c9-lateralite.md) |
+| **C9** | pont entre régions | ✅ fait | **448 fibres = +2,81 %** et **÷1,8** en octets ; falaise **entre 448 et 392** ; à budget égal **quantifier bat élaguer de 83 %** | `porte-pont.sh` · fiche 25 |
+état : renvoi vers la conception de la mémoire (appliqué)
+poussé
+  porte-fusion           ✅                           7 s    ✅ v1 refusée (code 2), trace seule refusée (code 2)
+  porte-gain             ✅                         345 s    ✅ drapeau VIVANT mais conditionn
+… [68 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ J'attends la fin de la passe (les trois portes lourdes sont en cours)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 570; tail -3 /tmp/passe-complete4.log; date '+%H:%M'", "description": "Wait for the heavy gates", "timeoutMs": 600000}`
+
+  ```
+porte-gain             ✅                         345 s    ✅ drapeau VIVANT mais conditionnel : 0 casse (29.0206 → 1297.5437), 24 améliore (27.4439), san
+  porte-greffe           ✅                         811 s    ✅ la porte est franchie. Ce qu'elle établit : l'injection d'état est BRANCHÉE
+  porte-horloge          ✅                          24 s    ✅ borne atteinte : arrêt EXPLICITE (code 5) et AUCUNE perplexité rendue
+17:44
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 580; tail -3 /tmp/passe-complete4.log; date '+%H:%M'", "description": "Continue waiting for the pass", "timeoutMs": 600000}`
+
+  ```
+porte-horloge          ✅                          24 s    ✅ borne atteinte : arrêt EXPLICITE (code 5) et AUCUNE perplexité rendue
+  porte-indice           ✅                         729 s    ✅ la porte est franchie. Limite, et elle est écrite : UN SEUL indice extérieur,
+  porte-jumeaux          ✅                          73 s  PORTE TENUE : l'échange est exact, il ne crée pas de gain entre jumeaux identiques, il
+17:54
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -2 /tmp/passe-complete4.log; sleep 560; tail -3 /tmp/passe-complete4.log; date '+%H:%M'", "description": "Check pass header and continue waiting", "timeoutMs": 600000}`
+
+  ```
+=== PASSE COMPLÈTE DES PORTES (24 portes, borne 2400 s) ===
+    journaux : /tmp/portes-1210e
+  porte-horloge          ✅                          24 s    ✅ borne atteinte : arrêt EXPLICITE (code 5) et AUCUNE perplexité rendue
+  porte-indice           ✅                         729 s    ✅ la porte est franchie. Limite, et elle est écrite : UN SEUL indice extérieur,
+  porte-jumeaux          ✅                          73 s  PORTE TENUE : l'échange est exact, il ne crée pas de gain entre jumeaux identiques, il
+18:03
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in $(seq 1 9); do if grep -q \"CODE_PASSE=\" /tmp/passe-complete4.log 2>/dev/null; then break; fi; sleep 60; done; tail -6 /tmp/passe-complete4.log; date '+%H:%M'", "description": "Wait for the 24-gate pass verdict", "timeoutMs … [10 caractères tronqués]`
+
+  ```
+porte-tokenizer-kimi   ✅                           6 s    ✅ 10 textes identiques au tokenizer officiel (accents, emoji, CJK, arabe, code, nombres)
+  porte-topologie        ✅                          34 s    PORTE TENUE : le relais ne change pas un chiffre (42.5477)
+  porte-trace            ✅                          24 s    ✅ la trace fausse est détectée et nommée
+--- 24 vertes, 0 rouges ---
+TOUTES LES PORTES SONT VERTES — et elles ont TOUTES tourné, ce que rien ne garantissait avant.
+Journaux : /tmp/portes-1210e
+18:12
+  ```
+
+### 🤖 Assistant
+
+⏵ 24/24 vertes (avec la porte des jumeaux) ; je lance la passe finale à 25 portes et je régénère les repères
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && DELAI=2400 JOURNAUX=/tmp/portes-1210f nohup bash tools/toutes-les-portes.sh > /tmp/passe-complete5.log 2>&1 & sleep 3; echo \"passe finale (25 portes) lancée (pid $!)\"; python3 - <<'PYEOF'\nimport pathlib, re, subprocess\nlog = path … [1838 caractères tronqués]`
