@@ -1991,6 +1991,48 @@ formulation de l'indice).
 absorbée par la normalisation finale, mais un magasin qui stockerait le résidu brut
 serait plus cohérent, et ce n'est pas fait ; (2) un seul indice, un seul texte.
 
+## 30. Le rappel par le contenu dépend de l'INDICE, pas de la mémoire (8 indices)
+
+Le §29 avait montré que la chaîne mémoire → injection fonctionne, et que le goulot est le
+RAPPEL. Restait à savoir **pourquoi** : la mémoire est-elle mauvaise, ou est-ce l'indice
+choisi ? La question se répond par une distribution, pas par un point — d'où un
+prélèvement de **huit positions** dans l'invite B (de la dernière à la 128ᵉ depuis la
+fin), chacune servant d'indice extérieur au magasin de A (aiguille au jeton 740, hasard
+448).
+
+| indice (position dans B) | épisode rendu | distance à l'aiguille |
+|---|---|---|
+| 1594 (128ᵉ depuis la fin) | 1630 | 890 |
+| 1658 (64ᵉ) | 393 | 347 |
+| 1690 (32ᵉ) | 437 | 303 |
+| 1706 (16ᵉ) | 393 | 347 |
+| 1714 (8ᵉ) | 1743 | 1 003 |
+| **1718 (4ᵉ)** | **690** | **50** |
+| 1720 (2ᵉ) | 429 | 311 |
+| 1721 (dernière) | 437 | 303 |
+
+**Moyenne 444 · médiane 329 · meilleure 50 · pire 1 003 · hasard 448.**
+
+**Ce que la distribution dit, et elle est plus instructive qu'un point :**
+
+1. **un indice existe qui trouve l'aiguille** : la position 1718 (quatre jetons avant la
+   fin) tombe à **50 jetons**, soit **9× mieux que le hasard** — c'est le voisinage
+   immédiat, largement assez près pour que le préfixe de l'épisode contienne le fait ;
+2. **mais un seul sur huit** : les sept autres sont à 303-1 003 jetons, c'est-à-dire au
+   niveau du hasard (moyenne 444 contre 448). Le §24 ter ter qui annonçait « 3,3× mieux
+   que le hasard » était donc un **tirage chanceux** parmi cette distribution — et sa
+   fragilité (136 puis 378 selon un point d'interrogation) s'explique par la même cause ;
+3. **la limite n'est donc pas la mémoire, c'est le choix de l'indice** — et ce choix ne se
+   devine pas : il n'y a aucune raison de préférer la dernière position (303 jetons) à la
+   quatrième depuis la fin (50 jetons).
+
+**Deux voies ouvertes, aucune mesurée** : interroger le magasin avec **plusieurs indices**
+et garder le meilleur (un score de recouvrement ne suffit pas à les départager — le
+recouvrement de l'indice gagnant, 25/64, n'est pas le plus élevé), ou **abandonner le
+rappel sémantique** pour ce qu'il ne sait pas faire et faire entrer le contenu comme
+jetons (RAG ordinaire). La première a l'avantage de garder l'adressage par contenu ; la
+seconde est sûre et sans surprise.
+
 ## Annexe — manifeste des journaux
 
 Les journaux bruts sont dans `/tmp/campagne24/`. **59 fichiers d'étape (79 Kio)**,

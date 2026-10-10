@@ -700,7 +700,7 @@ struct Options {
     /// positions ne se devinent pas (`--tokenize` et `--prompt` ne comptent pas les
     /// mêmes jetons pour un texte qui finit par un saut de ligne — 17 contre 16,
     /// mesuré), et s'y tromper a fait échouer deux mesures avant que ce drapeau existe.
-    etat_fin: Option<(String, usize)>,
+    etat_fin: Option<(String, Vec<usize>)>,
     /// C2/C6 : à quelle position INJECTER l'état. `usize::MAX` = partout, ce qui
     /// n'est presque jamais ce qu'on veut : on rappelle un souvenir au moment de
     /// répondre, pas à chaque jeton de la question.
@@ -930,8 +930,18 @@ fn analyser(args: &[String]) -> Options {
             // contexte tiennent alors en une seule passe.
             "--etat-fin" => {
                 let f = suivant(i).clone();
-                let k = args.get(i + 2).and_then(|x| x.parse().ok()).unwrap_or(1);
-                o.etat_fin = Some((f, k));
+                // PLUSIEURS positions depuis la fin (« 1,2,4,8 ») : un seul parcours
+                // suffit pour prélever une FAMILLE d'indices. C'est ce qui rend
+                // mesurable la question « le rappel rate-t-il à cause de l'indice
+                // choisi, ou de la mémoire ? » — sans cela, huit indices coûtaient
+                // huit parcours de 70 s.
+                // La liste des positions est l'argument SUIVANT le fichier : `suivant(i)`
+                // rend toujours args[i+1], et l'appeler deux fois relisait le fichier
+                // (attrapé : huit positions demandées, une seule écrite).
+                let ks: Vec<usize> = args.get(i + 2).map(|x| x.split(',')
+                    .filter_map(|y| y.trim().parse().ok()).collect())
+                    .unwrap_or_default();
+                o.etat_fin = Some((f, if ks.is_empty() { vec![1] } else { ks }));
                 3
             }
             "--etat-pos" => {
@@ -1393,13 +1403,13 @@ troncature aux {} derniers", ids.len(), garde, ctx, n_new, garde);
     // exactement l'erreur d'un jeton qui avait été commise à la main.
     // La capture se résout ICI AUSSI, dans la numérotation de l'inférence : c'est la
     // même longueur d'invite qui sert au calcul et à la capture, donc plus de décalage.
-    if let Some((f, k)) = opt.etat_fin.as_ref() {
+    if let Some((f, ks)) = opt.etat_fin.as_ref() {
         if !ids.is_empty() {
-            let dans = (*k).clamp(1, ids.len());
-            let pos = ids.len() - dans;
-            println!("  capture d'état    : position {pos} (la {dans}e depuis la fin d'une \
-invite de {} jetons) écrite dans {f}", ids.len());
-            mdl.etat_sortie = Some((f.clone(), vec![pos]));
+            let positions: Vec<usize> = ks.iter()
+                .map(|k| ids.len() - (*k).clamp(1, ids.len())).collect();
+            println!("  capture d'état    : position(s) {positions:?} (depuis la fin d'une invite \
+de {} jetons) écrite(s) dans {f}", ids.len());
+            mdl.etat_sortie = Some((f.clone(), positions));
         }
     }
     if opt.fusion_dernier && !ids.is_empty() {

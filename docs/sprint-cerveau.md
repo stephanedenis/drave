@@ -37,6 +37,39 @@ finale, mais stocker le résidu serait plus cohérent ; un seul indice, un seul 
 
 ---
 
+## C6 — FAIT (10 octobre 19 h 30) : le rappel dépend de l'INDICE (8 indices mesurés)
+
+Huit indices prélevés dans l'invite B (positions depuis la fin : 1, 2, 4, 8, 16, 32, 64,
+128), chacun servant de requête au magasin de A (aiguille au jeton 740, hasard 448) :
+
+| indice | épisode | distance |
+|---|---|---|
+| 4ᵉ depuis la fin | 690 | **50** |
+| 2ᵉ | 429 | 311 |
+| 32ᵉ | 437 | 303 |
+| dernière | 437 | 303 |
+| 16ᵉ | 393 | 347 |
+| 64ᵉ | 393 | 347 |
+| 128ᵉ | 1630 | 890 |
+| 8ᵉ | 1743 | 1 003 |
+
+**Moyenne 444 · médiane 329 · meilleure 50 · pire 1 003 · hasard 448.**
+
+1. **un indice existe qui trouve l'aiguille** : 50 jetons, **9× mieux que le hasard** ;
+2. **mais UN SEUL sur huit** : les autres sont au niveau du hasard. Le « 3,3× mieux que le
+   hasard » du round 2 était donc **un tirage chanceux** — et sa fragilité (136 puis 378
+   selon un point d'interrogation) s'explique ainsi ;
+3. **la limite est le CHOIX DE L'INDICE, pas la mémoire** — et ce choix ne se devine pas :
+   rien ne désigne la 4ᵉ position depuis la fin plutôt que la dernière.
+
+**Deux voies, aucune mesurée** : interroger avec plusieurs indices et garder le meilleur
+(mais le recouvrement ne les départage pas : celui du gagnant, 25/64, n'est pas le plus
+élevé), ou abandonner le rappel sémantique et faire entrer le contenu comme JETONS.
+**Nouveau** : `--etat-fin` accepte une liste de positions (1,2,4,8…) — huit indices en un
+seul parcours, au lieu de huit parcours de 70 s.
+
+---
+
 ## ▶ PROCHAINE ACTION (à lire en premier)
 
 État au **10 octobre 11 h 45** : **C1, C3, C4 (pas 1), C5, C5bis, C5ter, C6, C7 (pas 1),
@@ -936,6 +969,7 @@ bus (le format de la ligne de contrôle est écrit, le transport reste à câble
 |---|---|
 | 9/10 17 h 10 | **C1a** : module `topologie.rs`, validation stricte, plan, 8 tests, suite à 85 tests. |
 | 9/10 17 h 20 | **C1b pas 1** : la topologie pilote le découpage · porte `tools/porte-topologie.sh` **TENUE** (même chiffre, écart 0,00e0) · deux refus vérifiés. |
+| 10/10 19 h 30 | **C6 — le rappel dépend de l'INDICE** : 8 indices (positions 1..128 depuis la fin de B), distances **[50, 303, 303, 311, 347, 347, 890, 1003]**, moyenne 444, hasard 448. **Un indice trouve (50 jetons, 9× mieux que le hasard), sept sont au hasard** ⇒ le « 3,3× » du round 2 était un tirage chanceux, et **la limite est le CHOIX de l'indice**, pas la mémoire. `--etat-fin` accepte une liste de positions. |
 | 10/10 18 h 00 | **C6/C2 — la mémoire QUI SERT (bout en bout)** : `--episodique-extraire`. Indexer A (1 750 états) → retrouver avec un indice extérieur (épisode 437, **303 jetons** de l'aiguille, hasard 448) → injecter dans une invite sans le fait : le modèle DIT **« The vault access code is »** (α=0 : `150px`, témoin). **Le code n'est pas produit** car l'épisode retrouvé précède l'aiguille ⇒ **le goulot est le RAPPEL, pas la greffe**. |
 | 10/10 16 h 30 | **C2 — deux entrées, règle de mélange** : `porte-melange.sh` (4 cas, verte). La somme **arbitre** (7/7), **bascule à α=0,6** contre **0,509** prédit par les normes. Et **correction d'un faux négatif majeur** : la greffe d'état **transfère le contenu** (`ZQ3`/`K00`) quand l'état est capturé dans la numérotation de l'inférence (`--etat-fin` — le décalage d'un jeton faisait injecter l'état qui prédit « : »). Trois mesures avaient échoué sur ce décalage. |
 | 10/10 14 h 10 | **C6 — indice étranger : la porte CORRIGE la mesure.** En écrivant la porte, la question a gagné un point d'interrogation : 136 → **378 jetons** (hasard 448). L'effet est réel mais **NON ROBUSTE** ; la porte n'exige plus que « mieux que le hasard » et **affiche l'avertissement** quand la marge est faible. Leçon : un chiffre unique sur un seul indice n'est pas un résultat. |

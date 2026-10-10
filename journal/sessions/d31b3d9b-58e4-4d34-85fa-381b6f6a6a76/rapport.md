@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 43.1 h |
-| Tours | 46 |
-| Messages | 1722 |
-| Appels d'outils | 1628 |
+| Durée | 43.7 h |
+| Tours | 47 |
+| Messages | 1735 |
+| Appels d'outils | 1639 |
 | Fichiers touchés | 61 |
-| Commandes | 1378 |
+| Commandes | 1389 |
 | Sous-agents | 3 |
-| Commits | 136 |
+| Commits | 137 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -127,6 +127,8 @@
 **Tour 45** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1469 caractères tronqués]
 
 **Tour 46** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1469 caractères tronqués]
+
+**Tour 47** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1469 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -2148,7 +2150,46 @@ Je continue sur cette liste — il
 
 **Synthèse produite :**
 
-⏵ Résultat cohérent : la mémoire rend la PHRASE-CADRE, pas le code — le goulot est le rappel, pas la greffe
+⏵ Round 3 livré : la chaîne mémoire → injection fonctionne ; le goulot est mesuré (le rappel)
+
+**Ce round** — 3 commits poussés, 122 tests verts :
+
+- **La chaîne complète, de bout en bout** (`--episodique-extraire`) : indexer 1 750 états → **retrouver par le contenu** avec un indice *extérieur* → **injecter** l'état retrouvé dans un calcul qui n'a pas vécu l'épisode.
+
+| étape | mesure |
+|---|---|
+| rappel | épisode 437 · recouvrement 25/64 · **303 jetons** de l'aiguille (hasard 448) |
+| injection α = 0 | `150px` — **témoin de non-effet** |
+| **injection α = 0,2 / 1** | **`The vault access code is`** |
+| injection α = 5 | `"150px` (saturé) |
+
+Le modèle **dit la phrase-cadre de l'aiguille** alors que ni le code ni cette phrase ne sont dans son contexte : l'information a voyagé de la mémoire jusqu'à la sortie. **Mais le code n'est pas produit** — et la cause est en haut du tableau, pas en bas : l'épisode retrouvé est à 303 jetons de l'aiguille, donc son préfixe ne contient pas encore le code.
+
+- **Conclusion utile du round** : **le goulot est le RAPPEL, pas la greffe**. La greffe d'état est un mécanisme qui marche (corrigée et vérifiée au round précédent) ; ce qui limite l'usage est la qualité du rappel par un indice purement sémantique (1,5× le hasard), cohérent avec les 136 et 378 jetons mesurés au round 2 selon la formulation de l'indice.
+
+- **Deux réserves écrites** : le magasin stocke la sortie **normalisée** du moteur (norme 306) alors que la greffe injecte un résidu brut (54-66) — l'échelle est absorbée par la normalisation finale, mais stocker le résidu serait plus cohérent ; et un seul indice, un seul texte.
+
+**Suivant** (dans `docs/sprint-cerveau.md`) : améliorer le **rappel** (clé stockant le résidu brut, plusieurs indices pour moyenner, index multi-documents), puis l'entrée de cache KV et les têtes dédiées C8. L'objectif reste **actif**.
+
+### Tour 47 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1749 caractères tronqués]
+
+*11 appels d'outils.* Actions notables :
+
+- bash — Make cue capture and query multi-valued
+- bash — Implement the multi-cue query loop
+- bash — Revert and apply the minimal multi-position patch
+- bash — Capture 8 cue positions from B at once
+- bash — Fix parser and recapture cues
+- bash — Launch 8 cue-position essays in background
+- bash — Check the cue-position distribution
+- bash — Wait for more cue results
+- bash — Wait for the last cue results
+- bash — Compute the cue distribution statistics
+- bash — Document and commit the cue distribution
+
+**Synthèse produite :**
+
+⏵ Découverte : un indice précis tombe à **50 jetons** de l'aiguille (hasard 448) — le choix de l'indice décide
 
 ## 3. Travail accompli
 
@@ -2266,7 +2307,7 @@ Je continue sur cette liste — il
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1338 autres
+- … et 1349 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2394,7 +2435,7 @@ Je continue sur cette liste — il
 
 ## 5. Erreurs rencontrées
 
-68 sorties en erreur ou divergentes. Les premières :
+69 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : ```  ### 🤖 Assistant  ⏵ **En transformers 5, `AutoModel` rend directement `Qwen2Model` (pas de `.model`). Je corrige le diagnostic.**  - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitH
 - **T2** : 3310393 bash -c pgrep -af "essai_decharge" | grep python | head; echo "--- logs ---"; tail -2 /tmp/ec_d192_lr3e3.log 2>/dev/null; tail -2 /tmp/ec_d192_lr1e3.log 2>/dev/null; echo "---"; ls -la /tmp/ec
@@ -2549,5 +2590,6 @@ Je continue sur cette liste — il
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 cargo test --release --manifest-path drave-core/Cargo.toml 2>&1 | grep -E "^test result" && gi
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src/main.rs drave-core/src/model.rs tools/porte-melange.sh tools/porte-greffe.sh rep
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib p = pathlib.Path("tools/porte-greffe.sh") s = p.read_text() a = '''echo
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 
