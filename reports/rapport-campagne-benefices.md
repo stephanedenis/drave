@@ -2713,6 +2713,19 @@ vérification le confirme : `porte-flux.sh` reste **vert**, les cinq modes donne
 mêmes écarts (0,00e0 · 0,00e0 · 3,65e-2 · 0,00e0 · 4,45e-3). C'est **le seul levier de ce sprint
 qui accélère sans rien coûter** — et il vient d'une mesure, pas d'une intuition.
 
+**Et le gain est FIXE PAR ÉCHANGE, ce qui change ce qu'il représente.** Mesuré sur le même lien
+(5 ms/message) en **mode 3 (lots de 8 jetons)** :
+
+| mode | ce qu'un échange transporte | temps par échange | gain de la fusion |
+|---|---|---|---|
+| 0 (un jeton) | 896 canaux | 27,98 ms | **−20 %** |
+| 3 (8 jetons) | 28 772 octets | 130,2 ms (dont 99,8 de calcul local) | **≈ −8 %** |
+
+Le gain est le **même en millisecondes** (~10 ms : deux messages en moins à 5 ms), donc il
+**pèse relativement moins** quand l'échange transporte plus. Autrement dit : **la fusion paie
+d'autant plus que les pas sont petits** — et c'est précisément le régime du décodage, jeton par
+jeton, celui où la latence domine.
+
 **Ce qu'il ne dit pas** : le gain est nul sur un lien qui facture **au débit** (où deux écritures
 coûtent les mêmes octets). La question « message ou octet ? » est celle de l'opérateur, pas du
 protocole — mais le protocole, lui, ne doit pas **ajouter** de messages sans raison.

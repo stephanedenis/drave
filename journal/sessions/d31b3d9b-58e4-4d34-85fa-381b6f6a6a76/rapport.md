@@ -6,13 +6,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
 | Durée | 48.1 h |
-| Tours | 81 |
-| Messages | 1987 |
-| Appels d'outils | 1823 |
+| Tours | 82 |
+| Messages | 1991 |
+| Appels d'outils | 1825 |
 | Fichiers touchés | 61 |
-| Commandes | 1573 |
+| Commandes | 1575 |
 | Sous-agents | 3 |
-| Commits | 171 |
+| Commits | 172 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -197,6 +197,8 @@
 **Tour 80** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 **Tour 81** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
+
+**Tour 82** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -3374,7 +3376,37 @@ Le round 32 avait reverté ce travail après un déséquilibre d'accolades. **Re
 
 **Synthèse produite :**
 
-⏵ **−20 % de la durée d'un pas** (35 → 28 ms à 5 ms/message) — je lance `porte-flux` et je commite
+⏵ Round 38 livré : **−20 % de la durée d'un pas**, sans rien coûter
+
+**Ce round** — 1 commit poussé, **`porte-flux.sh` vert** (5 modes, écarts identiques), 122 tests verts.
+
+Le round 37 avait mesuré que le protocole écrivait la trame en **deux fois** (en-tête puis corps) ⇒ **4 messages par pas** sur un lien facturé par message. **La fusion est faite** : les trois émetteurs (jeton, lot dense, lot en listes) écrivent **une seule trame**.
+
+**Mesure avant/après**, aux deux mêmes délais par message :
+
+| délai/message | AVANT | **APRÈS** | gain |
+|---|---|---|---|
+| 2 ms | 23,35 ms | **19,06 ms** | **−18,4 %** |
+| 5 ms | 34,93 ms | **27,98 ms** | **−19,9 %** |
+
+**La pente retombe aussi** : (27,98 − 14,87) / 5 = **2,62 messages** au lieu de 4,01 — le pas retrouve le nombre d'envois que le protocole décrit vraiment (un aller, un retour).
+
+**Ce que ce gain est** : −20 % de la durée d'un pas sur un lien facturé **par message**, sans toucher ni au calcul, ni aux octets, **ni au résultat** (les cinq modes du protocole donnent exactement les mêmes écarts). C'est **le seul levier de ce sprint qui accélère sans rien coûter** — et il vient d'une mesure, pas d'une intuition.
+
+**Ce qu'il ne dit pas**, écrit tel quel : le gain est **nul** sur un lien facturé **au débit** (où deux écritures coûtent les mêmes octets). La question « message ou octet ? » est celle de l'opérateur — mais le protocole ne doit pas **ajouter** des messages sans raison.
+
+**Bilan** : 38 rounds, 22 portes toutes vertes, 122 tests. Le sprint a livré neuf capacités, deux protocoles (v7, v8), trois budgets de lien, une optimisation mesurée à −20 %, un instrument étalonné, et une quarantaine de mesures documentées — dont une bonne moitié de négatifs et de corrections. L'objectif reste **actif**.
+
+### Tour 82 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Check the gain in the batch mode
+- bash — Document the scaling of the gain
+
+**Synthèse produite :**
+
+⏵ Le gain est **fixe par échange** (~10 ms) : −20 % sur un pas-jeton, ~−8 % sur un lot — je consigne
 
 ## 3. Travail accompli
 
@@ -3492,7 +3524,7 @@ Le round 32 avait reverté ce travail après un déséquilibre d'accolades. **Re
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1533 autres
+- … et 1535 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3811,4 +3843,5 @@ Le round 32 avait reverté ce travail après un déséquilibre d'accolades. **Re
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 1200 bash tools/porte-flux.sh > /tmp/pf38.txt 2>&1; echo "porte-flux code=$?"; tail -3 /tmp/pf38.t
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 

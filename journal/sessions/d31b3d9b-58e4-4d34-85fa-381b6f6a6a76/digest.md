@@ -31677,3 +31677,66 @@ APRÈS fusion — délai 2 ms/message → pas médian 19.06 ms
 ⏵ **−20 % de la durée d'un pas** (35 → 28 ms à 5 ms/message) — je lance `porte-flux` et je commite
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 1200 bash tools/porte-flux.sh > /tmp/pf38.txt 2>&1; echo \"porte-flux code=$?\"; tail -3 /tmp/pf38.txt; python3 - <<'ENDPY'\nimport pathlib\n\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\na  … [4764 caractères tronqués]`
+
+  ```
+porte-flux code=0
+  mode 2 — listes par blocs        3.65e-2  ✅  (réf 61.9920 / deux nœuds 64.2535)
+  mode 3 — lot dense f32           0.00e0  ✅  (réf 60.8135 / deux nœuds 60.8135)
+  mode 4 — lot en listes           4.45e-3  ✅  (réf 60.8135 / deux nœuds 60.5427)
+fusion consignee
+d875b75 Fusion des deux ecritures : -20 % de la duree d'un pas, sans rien couter
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 38 livré : **−20 % de la durée d'un pas**, sans rien coûter
+
+**Ce round** — 1 commit poussé, **`porte-flux.sh` vert** (5 modes, écarts identiques), 122 tests verts.
+
+Le round 37 avait mesuré que le protocole écrivait la trame en **deux fois** (en-tête puis corps) ⇒ **4 messages par pas** sur un lien facturé par message. **La fusion est faite** : les trois émetteurs (jeton, lot dense, lot en listes) écrivent **une seule trame**.
+
+**Mesure avant/après**, aux deux mêmes délais par message :
+
+| délai/message | AVANT | **APRÈS** | gain |
+|---|---|---|---|
+| 2 ms | 23,35 ms | **19,06 ms** | **−18,4 %** |
+| 5 ms | 34,93 ms | **27,98 ms** | **−19,9 %** |
+
+**La pente retombe aussi** : (27,98 − 14,87) / 5 = **2,62 messages** au lieu de 4,01 — le pas retrouve le nombre d'envois que le protocole décrit vraiment (un aller, un retour).
+
+**Ce que ce gain est** : −20 % de la durée d'un pas sur un lien facturé **par message**, sans toucher ni au calcul, ni aux octets, **ni au résultat** (les cinq modes du protocole donnent exactement les mêmes écarts). C'est **le seul levier de ce sprint qui accélère sans rien coûter** — et il vient d'une mesure, pas d'une intuition.
+
+**Ce qu'il ne dit pas**, écrit tel quel : le gain est **nul** sur un lien facturé **au débit** (où deux écritures coûtent les mêmes octets). La question « message ou octet ? » est celle de l'opérateur — mais le protocole ne doit pas **ajouter** des messages sans raison.
+
+**Bilan** : 38 rounds, 22 portes toutes vertes, 122 tests. Le sprint a livré neuf capacités, deux protocoles (v7, v8), trois budgets de lien, une optimisation mesurée à −20 %, un instrument étalonné, et une quarantaine de mesures documentées — dont une bonne moitié de négatifs et de corrections. L'objectif reste **actif**.
+
+
+## Tour 82
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 mémoire épisodique, C7 consolidation, C8 périphérie, C9 latéralité, C10 budgets, et la diffusion réseau du bus de C5 ; (b) les expériences E2-E9 de docs/biologie-pour-drave.md et docs/hebbien-differentiel-et-biologie.md ; (c) les dessins de modèle H/I/J de docs/modele-pour-drave.md ; (d) les manques du registre docs/manques.md (noyau de listes pour les experts, noyau de listes GPU, encodeurs) — l'implémenter ou la mesurer, la doter d'une porte vérifiable, la documenter, commiter, pousser, et enchaîner immédiatement sur la suivante. Contraintes : les 23 portes du dépôt et tous les tests restent verts (porte-flux.sh après toute modification du chemin d'exécution), le profil release reste le binaire de mesure, le crate reste std seul, et docs/sprint-cerveau.md reste l'état resumable mis à jour à chaque round. Ne jamais s'arrêter faute de tâches planifiées : en inventer de nouvelles, mesurables, plutôt que d'attendre."
+Round: 39/60
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 39 : la fusion profite-t-elle aussi aux modes par LOTS (frames plus grosses) ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && T=$(mktemp -d); PN=$((60000 + RANDOM % 3000)); PX=$((PN + 1)); D=5; cat > $T/topo.json <<JSON\n{\"regions\":[{\"id\":\"local\",\"couches\":[0,11],\"instance\":\"local\"},{\"id\":\"d\",\"couches\":[12,23],\"instance\":\"127.0.0.1:$PX\ … [801 caractères tronqués]`
+
+  ```
+--- mode 3 (lot dense), même lien à 5 ms/message ---
+    deux nœuds        : perplexité 52.3725  (2.3 s)
+    transport         : lot dense f32 · lots de 8 jetons au plus · 28772 octets par lot (aller) · 3.5 ko par jeton · 8 lots pour 64 jetons
+    temps             : 99.8 ms par LOT en local · 130.2 ms à attendre le pair · soit 1.30× le calcul local seul
+  ```
+
+### 🤖 Assistant
+
+⏵ Le gain est **fixe par échange** (~10 ms) : −20 % sur un pas-jeton, ~−8 % sur un lot — je consigne
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\n\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\na = \"\"\"**Ce qu'il ne dit pas** : le gain est nul sur un lien qui facture **au débit** (où deux écritures\ncoûte … [3562 caractères tronqués]`
