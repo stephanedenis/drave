@@ -161,4 +161,24 @@ print(f"  ✅ rendement (perplexité pour 1 000 octets) : blocs entier {rend_blo
       f"pont 448 fibres {rend_pont:.1f} — {100.0*(rend_pont-rend_blocs)/rend_blocs:.1f} % pire")
 PY
 
+echo "=== 8. LA FALAISE est entre 448 et 392 fibres ==="
+# Mesurée en localisant : 448 fibres coûtent +2,81 %, 392 en coûtent +25,35 %. Ce n'est
+# pas une pente, c'est une marche — et une marche à cet endroit dit quelque chose de
+# précis : l'état au point de coupe a environ 450 canaux porteurs, et en dessous on
+# entame le signal. Le cas verrouille les DEUX côtés de la marche.
+N=$(nœud --pont-k 392); sleep 2
+R392=$(pilote --flux-blocs --pont-k 392); P392=$(ppl "$R392")
+kill $N 2>/dev/null; wait $N 2>/dev/null
+printf '%s\n' "$R392" | grep -E "transport" | sed 's/^/  /'
+python3 - "$REFB" "$P448" "$P392" <<'PY' || exit 1
+import sys
+refb, p448, p392 = float(sys.argv[1]), float(sys.argv[2]), float(sys.argv[3])
+d448, d392 = 100.0 * (p448 - refb) / refb, 100.0 * (p392 - refb) / refb
+if d448 >= 5.0:
+    sys.exit(f"  ❌ 448 fibres devraient coûter moins de 5 % : {d448:.2f} %")
+if d392 <= 10.0:
+    sys.exit(f"  ❌ 392 fibres devraient coûter plus de 10 % (la falaise) : {d392:.2f} %")
+print(f"  ✅ 448 fibres : +{d448:.2f} % · 392 fibres : +{d392:.2f} % — la marche est entre les deux")
+PY
+
 rm -rf "$T"

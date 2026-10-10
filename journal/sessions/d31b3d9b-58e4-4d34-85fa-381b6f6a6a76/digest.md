@@ -24659,3 +24659,78 @@ docs C9/C10 ecrites
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src/main.rs tools/porte-pont.sh reports/rapport-campagne-benefices.md docs/sprint-cerveau.md && git commit -q -m \"C9/C10 pas 1 : le pont à fibres limitées — combien de fibres, et à quel prix\n\nLa question du c … [2079 caractères tronqués]`
+
+  ```
+00b021f C9/C10 pas 1 : le pont à fibres limitées — combien de fibres, et à quel prix
+  ```
+
+### 🤖 Assistant
+
+⏵ C9 : je localise la falaise entre 448 et 224 fibres
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && T=$(mktemp -d) && PORT=$((58000 + RANDOM % 400)) && cat > $T/topo.json <<JSON\n{\"regions\":[\n  {\"id\":\"local\",\"couches\":[0,11],\"instance\":\"local\"},\n  {\"id\":\"d\",\"couches\":[12,23],\"instance\":\"127.0.0.1:$PORT\"}],\n … [1008 caractères tronqués]`
+
+  ```
+référence 896 fibres : 111.9225 à 1951 octets
+[stderr]
+  File "<string>", line 2
+    a=111.9225; b=float('113.0068
+                        ^
+SyntaxError: unterminated string literal (detected at line 2)
+  File "<string>", line 2
+    a=111.9225; b=float('113.0068
+                        ^
+SyntaxError: unterminated string literal (detected at line 2)
+  File "<string>", line 2
+    a=111.9225; b=float('113.0068
+                        ^
+SyntaxError: unterminated string literal (detected at line 2)
+  File "<string>", line 2
+    a=111.9225; b=float('113.0068
+                        ^
+SyntaxError: unterminated string literal (detected at line 2)
+  File "<string>", line 2
+    a=111.9225; b=float('113.0068
+                        ^
+SyntaxError: unterminated string literal (detected at line 2)
+  File "<string>", line 2
+    a=111.9225; b=float('113.0068
+                        ^
+SyntaxError: unterminated string literal (detected at line 2)
+  ```
+
+### 🤖 Assistant
+
+⏵ C9 : capture trop large (deux lignes de perplexité) — je resserre le motif
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && T=$(mktemp -d) && PORT=$((58000 + RANDOM % 400)) && cat > $T/topo.json <<JSON\n{\"regions\":[\n  {\"id\":\"local\",\"couches\":[0,11],\"instance\":\"local\"},\n  {\"id\":\"d\",\"couches\":[12,23],\"instance\":\"127.0.0.1:$PORT\"}],\n … [1022 caractères tronqués]`
+
+  ```
+référence 896 fibres : 111.9225 à 1951 octets
+     560 fibres    114.2250    1319 octets    +2.057 %
+     448 fibres    115.0632    1096 octets    +2.806 %
+     392 fibres    140.2979     984 octets   +25.353 %
+     336 fibres    150.1778     872 octets   +34.180 %
+     280 fibres    166.0824     760 octets   +48.391 %
+     224 fibres    233.8589     648 octets  +108.947 %
+  ```
+
+### 🤖 Assistant
+
+⏵ C9 : la falaise est entre 448 et 392 fibres (+2,8 % → +25,4 %) — je verrouille et documente
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/c9_cliff.py <<'ENDPY'\nimport pathlib\n\n# --- la porte : un cas de plus pour la falaise\np = pathlib.Path(\"tools/porte-pont.sh\")\ns = p.read_text()\na = '''rm -rf \"$T\"'''\nb = '''echo \"=== 8. LA FALAISE est entre 448 … [3894 caractères tronqués]`
+
+  ```
+falaise verrouillee + synthese
+  dense f32 à 448 fibres : 121.8551 · 3664 octets à l'aller, 3664 au retour
+  ✅ en dense f32 : 3664 octets AVANT et APRÈS (aucune économie), et la perplexité passe de 113.0068 à 121.8551
+=== 7. à budget égal, QUANTIFIER bat ÉLAGUER ===
+  blocs entier : 111.9225 à 1951 octets · blocs + 448 fibres : 115.0632 à 1096 octets
+  ✅ rendement (perplexité pour 1 000 octets) : blocs entier 57.4 · pont 448 fibres 105.0 — 83.0 % pire
+=== 8. LA FALAISE est entre 448 et 392 fibres ===
+    transport         : listes à échelle par bloc (2 octets/actif, écarts) · 984 octets par flux (aller) · 984 au retour · 43.7 % d'activité (392 neurones par flux) · 47 flux
+  ✅ 448 fibres : +2.81 % · 392 fibres : +25.35 % — la marche est entre les deux
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A tools/porte-pont.sh reports/rapport-campagne-benefices.md && git commit -q -m \"C9 : la falaise du pont est une MARCHE entre 448 et 392 fibres\n\nLocalisée en raffinant la courbe (listes par blocs) :\n\n    896 fibres   11 … [1137 caractères tronqués]`

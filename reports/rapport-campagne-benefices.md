@@ -1654,7 +1654,24 @@ utile est donc celle en « listes par blocs » (2 octets par neurone actif, indi
 2. **on ne peut pas le couper en quatre** : entre 448 et 224 fibres, la perplexité
    passe de +2,81 % à **+108,9 %** — la falaise est nette, et elle est **entre** ces
    deux points ;
-3. **à budget d'octets égal, élaguer est bien moins efficace que quantifier** :
+3. **la falaise est localisée, et c'est une MARCHE, pas une pente** : entre 448 et
+   392 fibres, le coût passe de **+2,81 %** à **+25,35 %** — soit neuf fois plus de
+   dégradation pour 11 % de fibres en moins :
+
+   | fibres | perplexité | octets/flux | écart |
+   |---|---|---|---|
+   | 896 | 111,9225 | 1 951 | — |
+   | 560 | 114,2250 | 1 319 | +2,06 % |
+   | **448** | **115,0632** | **1 096** | **+2,81 %** |
+   | **392** | **140,2979** | **984** | **+25,35 %** |
+   | 336 | 150,1778 | 872 | +34,18 % |
+   | 280 | 166,0824 | 760 | +48,39 % |
+   | 224 | 233,8589 | 648 | +108,95 % |
+
+   Une marche à cet endroit dit quelque chose de précis : l'état au point de coupe a
+   de l'ordre de **450 canaux porteurs**, et en dessous on entame le signal, pas le
+   bruit ;
+4. **à budget d'octets égal, élaguer est bien moins efficace que quantifier** :
    le rendement (perplexité pour 1 000 octets) est de 57,4 pour l'encodage complet
    contre 105,0 pour le pont de 448 fibres — **83 % pire**. Autrement dit : garder
    tous les canaux et réduire leur précision vaut mieux que jeter la moitié des
@@ -1666,11 +1683,18 @@ quand on élargit le pont · la courbe est **monotone** en les fibres (5 points)
 élaguer **coûte** (sinon le pont n'est branché nulle part) · et le piège du dense f32
 est vérifié comme tel (mêmes octets, perplexité pire).
 
+**Ce qu'il faut en retenir pour distribuer** : sur ce modèle et ce découpage,
+**garder tous les canaux et les quantifier** (listes par blocs, 2 octets par neurone
+actif) donne la meilleure qualité par octet ; si le lien est vraiment contraint,
+**couper à 448 fibres sur 896** (la moitié) coûte +2,81 % et divise les octets par
+1,8 ; **ne pas descendre sous 448** — la marche est juste en dessous. Et si le lien
+est dense (f32), élaguer ne sert à rien : cela ne fait que perdre.
+
 **Conditions** : un seul modèle (0,5 B, 24 couches, découpage 12/12), 48 pas,
-`--limit 48`, liaison locale TCP. La falaise entre 448 et 224 fibres n'est pas
-localisée plus finement (448, 336, 280…), et le pont n'est pas testé sur un modèle
-plus grand — où la largeur d'état est plus grande, donc où le même *nombre* de fibres
-représente une fraction plus petite.
+`--limit 48`, liaison locale TCP. Le pont n'est pas testé sur un modèle plus grand —
+où la largeur d'état est plus grande, donc où le même *nombre* de fibres représente
+une fraction plus petite ; ni sur un découpage différent (le point de coupe change la
+largeur utile de l'état).
 
 ## Annexe — manifeste des journaux
 
