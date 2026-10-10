@@ -122,6 +122,14 @@ attention complète **17,1 tok/s** ; fenêtre 512 + 512 puits (÷4 de clés) **1
 de parcimonie (clés, paires, octets), pas de vitesse locale** — c'est en réparti qu'elle paie.
 Reste ouvert : la loi de la frontière en N.
 
+**0. C9 (latéralité) et C4 (retard) — mesurés, leurs suites sont nommées.** Latéralité : l'échange
+est exact, le gain entre deux vues est **nul** (et la récupération d'un jumeau bruité = une moyenne,
+contrôle à 0,000 %) — la suite plausible est `--echange experts` sur un modèle routé
+([`rapport-c9-lateralite.md`](../reports/rapport-c9-lateralite.md)) ; le coût compressé est de
+**÷4 d'octets pour +3,0 %** (8 bits par bloc), et quantifier bat élaguer **encore**. Retard : un pas
+coûte **×633**, un état manquant **×1,06** ⇒ l'ordonnanceur **continue sans** et ne réutilise jamais
+([`rapport-c4-retard.md`](../reports/rapport-c4-retard.md)).
+
 **3. C8 — la tête entraînée généralise (÷540 même texte, ×5,7 du modèle sur un texte neuf avec 30 morceaux) ; reste l'échelle.** Décodabilité mesurée à 4, 8, 12, 16,
 20 et 24 couches (45,9 / 45,5 / 46,1 / 40,8 / 37,8 / 34,8 % parmi les 256 plus fréquents) contre
 qualité du chemin tronqué (12,4 M / 3,8 M / 3,3 M / 1,13 M / 3 210 / 9,43). L'information est là
