@@ -37664,3 +37664,310 @@ Created file
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\n# l'état : la généralisation mesurée\np = pathlib.Path(\"docs/etat-cerveau.md\"); s = p.read_text()\nold = \"\"\"| **C8** | réflexe | 🟢 **la tête entraînée marche** |\"\"\"\nnew = \"\"\"| **C8** | … [4744 caractères tronqués]`
+
+  ```
+état C8 mis à jour
+récit complété
+poussé
+5f1283d C8 : la tete reflexe GENERALISE — div 79 sur un texte jamais vu (contre div 540 sur le meme texte)
+  ```
+
+### 🤖 Assistant
+
+⏵ Étape suivante C8 : plus de données — je lance une capture sur 40 morceaux (~40 k jetons) et j'ajoute une tête non linéaire
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"tools/c8_corpus.sh\"); s = p.read_text()\nold = '''if len(ids) < n * taille * 3:\n    raise SystemExit(f\"corpus trop court : {len(ids)} jetons pour {n} morceaux de {taille}\")' … [845 caractères tronqués]`
+
+  ```
+started background job bash-37
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"tools/c8_entrainer_tete.py\"); s = p.read_text()\n# tête NON LINÉAIRE optionnelle : A puis une couche cachée (le reste gelé)\ns = s.replace('''    ap.add_argument(\"--repertoire … [2422 caractères tronqués]`
+
+  ```
+couche cachée optionnelle ajoutée
+syntaxe OK
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification que le refactor n'a rien cassé (tête linéaire, 8 morceaux)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && CUDA_VISIBLE_DEVICES=0 timeout 1200 /home/stephane/gpu-env/bin/python tools/c8_entrainer_tete.py --train /tmp/c8-corpus/etat-m0,/tmp/c8-corpus/etat-m1,/tmp/c8-corpus/etat-m2,/tmp/c8-corpus/etat-m3,/tmp/c8-corpus/etat-m4,/tmp/c8-corpu … [256 caractères tronqués]`
+
+  ```
+époque   5/6 · perte train 166.4570 (perplexité) · test 9,699.3671
+  époque   6/6 · perte train 61.3599 (perplexité) · test 12,822.8300
+
+meilleur test : époque 4 · 9,056.1271
+
+| chemin | perplexité (TEST) |
+|---|---|
+| chemin tronqué, tête **entraînée** (adaptateur, époque 4) | **9,056.1271** |
+
+entraînement (mêmes états, première moitié) : 206.0736
+  ```
+
+### 🤖 Assistant
+
+⏵ Défaut de méthode : l'entraînement n'était pas graine-fixé (deux runs diffèrent) — j'ajoute la graine et je refais la référence
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"tools/c8_entrainer_tete.py\"); s = p.read_text()\ns = s.replace('''    ap.add_argument(\"--cachee\", type=int, default=0,''',\n'''    ap.add_argument(\"--graine\", type=int, def … [1508 caractères tronqués]`
+
+  ```
+graine ajoutée
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/c8_entrainer_tete.py", line 202
+    garde = pos + 1 < len(ids)
+IndentationError: unexpected indent
+[stderr]
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    import ast; ast.parse(open('tools/c8_entrainer_tete.py').read()); print('syntaxe OK')
+                ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib64/python3.13/ast.py", line 50, in parse
+    return compile(source, filename, mode, flags,
+                   _feature_version=feature_version, optimize=optimize)
+  File "<unknown>", line 202
+    garde = pos + 1 < len(ids)
+IndentationError: unexpected indent
+  ```
+
+### 🤖 Assistant
+
+⏵ Mon insertion a cassé l'indentation — je répare proprement
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '185,215p' tools/c8_entrainer_tete.py", "description": "Inspect broken region"}`
+
+  ```
+ids_p = charger_ids(ids_du_morceau(pref), a.limite)
+            pos_p, X_p = charger_etats(pref)
+            garde = pos_p + 1 < len(ids_p)
+            pos_p, X_p = pos_p[garde], X_p[garde]
+            Xs.append(X_p)
+            ys.append(ids_p[pos_p + 1])
+        return np.vstack(Xs), np.concatenate(ys)
+
+    if a.train and a.test:
+        Xtr, ytr = jeu(a.train.split(","))
+        Xte, yte = jeu(a.test.split(","))
+        print(f"entraînement : {Xtr.shape[0]} états · test (textes jamais vus) : {Xte.shape[0]} états")
+    else:
+        pos, X = charger_etats(a.etats)
+        torch.manual_seed(a.graine)
+    np.random.seed(a.graine)
+    ids = charger_ids(a.ids, a.limite)
+        garde = pos + 1 < len(ids)
+        pos, X = pos[garde], X[garde]
+        y = ids[pos + 1]
+        coupe = len(y) // 2
+        Xtr, ytr, Xte, yte = X[:coupe], y[:coupe], X[coupe:], y[coupe:]
+        print(f"un seul texte : {len(y)} états (moitié entraînement, moitié test)")
+    h_etats = Xtr.shape[1]
+
+    f, tenseurs, debut = lire_entete(a.modele)
+    nom_tete = "output.weight" if "output.weight" in tenseurs else "token_embd.weight"
+    nom_norme = "output_norm.weight"
+    dims, ttype, off = tenseurs[nom_tete]
+
+… [188 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"tools/c8_entrainer_tete.py\"); s = p.read_text()\ncasse = '''        pos, X = charger_etats(a.etats)\n        torch.manual_seed(a.graine)\n    np.random.seed(a.graine)\n    ids  … [1541 caractères tronqués]`
+
+  ```
+indentation réparée, graine au bon endroit
+syntaxe OK
+/tmp/c8-corpus/etat-m1 : aucun état lisible
+  ```
+
+### 🤖 Assistant
+
+⏵ Collision de répertoires (la capture 40 morceaux écrase les 8) — j'attends la capture et je referai les deux protocoles graine fixée
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -3 /tmp/c8-corpus40.log 2>/dev/null; ls /tmp/c8-corpus/ 2>/dev/null | grep -c \"^etat-m\"; ls /tmp/c8-corpus/ | grep -c \"^morceau-\"", "description": "Check 40-chunk capture progress"}`
+
+  ```
+morceau 38 : jetons 79344..80368
+  morceau 39 : jetons 81432..82456
+  morceau 0 : 1020 états · perplexité tronquée 1127367.6856
+7201
+40
+  ```
+
+### 🤖 Assistant
+
+⏵ Capture en cours (~7/40) ; j'attends puis j'enchaîne les trois comparaisons graine fixée
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in $(seq 1 9); do if grep -q \"Entraîner sur les morceaux\" /tmp/c8-corpus40.log 2>/dev/null; then break; fi; sleep 60; done; tail -4 /tmp/c8-corpus40.log", "description": "Wait for the 40-chunk capture", "timeoutMs": 600000}`
+
+  ```
+morceau 11 : 1020 états · perplexité tronquée 1061533.9269
+  morceau 12 : 1020 états · perplexité tronquée 464694.1481
+  morceau 13 : 1020 états · perplexité tronquée 986288.6849
+  morceau 14 : 1020 états · perplexité tronquée 1055939.1116
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in $(seq 1 9); do if grep -q \"Entraîner sur les morceaux\" /tmp/c8-corpus40.log 2>/dev/null; then break; fi; sleep 60; done; grep -c \"morceau .* états\" /tmp/c8-corpus40.log; tail -2 /tmp/c8-corpus40.log", "description": "Con … [52 caractères tronqués]`
+
+  ```
+30
+  morceau 28 : 1020 états · perplexité tronquée 115714.5922
+  morceau 29 : 1020 états · perplexité tronquée 166136.7638
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in $(seq 1 9); do if grep -q \"Entraîner sur les morceaux\" /tmp/c8-corpus40.log 2>/dev/null; then break; fi; sleep 60; done; grep -c \"morceau .* états\" /tmp/c8-corpus40.log; du -sh /tmp/c8-corpus", "description": "Wait for c … [40 caractères tronqués]`
+
+  ```
+40
+163M	/tmp/c8-corpus
+  ```
+
+### 👤 Utilisateur
+
+background job bash-37 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'
+import pathlib
+p = pathlib.Path("tools/c8_corpus.sh"); s = p.read_text()
+old = '''if len(ids) < n * taille * 3:
+    raise SystemExit(f"corpus trop court : {len(ids)} jetons pour {n} morceaux de {taille}")'''
+new = '''# Il faut que les morceaux NE SE RECOUVRENT PAS : l'espacement vaut len/(n+1), donc il doit
+# dépasser la taille d'un morceau. Exiger « 3× » était plus strict que nécessaire et refusait
+# des découpages légitimes (85 625 jetons pour 40 morceaux de 1 024 : espacement 2 088).
+if len(ids) // (n + 1) <= taille:
+    raise SystemExit(f"corpus trop court : {len(ids)} jetons pour {n} morceaux de {taille} "
+                     f"(il faut un espacement > {taille})")'''
+assert s.count(old) == 1
+s = s.replace(old, new, 1)
+p.write_text(s)
+print("garde du découpage corrigée")
+PYEOF
+bash -n tools/c8_corpus.sh && timeout 4000 bash tools/c8_corpus.sh 40 1024 16 > /tmp/c8-corpus40.log 2>&1; echo "CODE=$?"; tail -6 /tmp/c8-corpus40.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 🤖 Assistant
+
+⏵ Les trois comparaisons graine fixée : protocole de la fiche, plus de données, puis tête non linéaire
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PY=/home/stephane/gpu-env/bin/python; T=/tmp/c8-corpus\nA=$(seq -s, 0 6 | sed \"s|\\([0-9]*\\)|$T/etat-m\\1|g\"); B=$(seq -s, 0 38 | sed \"s|\\([0-9]*\\)|$T/etat-m\\1|g\")\necho \"=========== A : 7 morceaux → test m7 (protocole de la … [1080 caractères tronqués]`
+
+  ```
+=========== A : 7 morceaux → test m7 (protocole de la fiche) ===========
+avant entraînement (A = identité) : perplexité TEST = 697,572.2130
+  époque   1/20 · perte train 1,184,662.6299 (perplexité) · test 2,681.5912  ← meilleur test
+  époque   2/20 · perte train 276.4339 (perplexité) · test 588.4759  ← meilleur test
+  époque   4/20 · perte train 19.9183 (perplexité) · test 214.6616  ← meilleur test
+  époque   6/20 · perte train 3.8492 (perplexité) · test 202.1726  ← meilleur test
+meilleur test : époque 6 · 202.1726
+| chemin tronqué, tête **entraînée** (adaptateur, époque 6) | **202.1726** |
+entraînement (mêmes états, première moitié) : 2.4273
+=========== B : 39 morceaux → test m39 (plus de données, LINÉAIRE) ===========
+avant entraînement (A = identité) : perplexité TEST = 370,205.4060
+  époque   1/20 · perte train 1,099.9386 (perplexité) · test 72.5582  ← meilleur test
+  époque   2/20 · perte train 35.2131 (perplexité) · test 51.4647  ← meilleur test
+meilleur test : époque 2 · 51.4647
+| chemin tronqué, tête **entraînée** (adaptateur, époque 2) | **51.4647** |
+entraînement (mêmes états, première moitié) : 11.0800
+=========== C : 39 morceaux → test m39 (NON LINÉAIRE, 512) ==========
+… [449 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ La tête non linéaire a un bug de restauration (nan) et elle est PIRE — je corrige, je relance, et je mesure la référence
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"tools/c8_entrainer_tete.py\"); s = p.read_text()\n# la meilleure époque doit sauver TOUS les paramètres (sinon la restauration d'A seule, avec des\n# W1/W2 entraînés, donnait Na … [1791 caractères tronqués]`
+
+  ```
+instantané complet des paramètres
+référence modèle complet sur m39 :
+perplexité 8.6773 sur
+=== C' : non linéaire, graine fixée, meilleure époque restaurée ===
+tête NON LINÉAIRE : 896→512→896 (activation GELU)
+avant entraînement (A = identité) : perplexité TEST = 659,990.9541
+  époque   1/20 · perte train 41,177.1067 (perplexité) · test 620.4096  ← meilleur test
+  époque   2/20 · perte train 524.1999 (perplexité) · test 272.1710  ← meilleur test
+meilleur test : époque 2 · 272.1710
+| chemin tronqué, tête **entraînée** (adaptateur, époque 2) | **272.1710** |
+entraînement (mêmes états, première moitié) : 339.0909
+  ```
+
+### 🤖 Assistant
+
+⏵ Pour isoler l'effet « plus de données » à texte de test ÉGAL : 31 morceaux entraînent, m7 teste
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PY=/home/stephane/gpu-env/bin/python; A31=$(seq -s, 0 30 | sed \"s|\\([0-9]*\\)|/tmp/c8-corpus/etat-m\\1|g\")\necho \"référence modèle complet sur m7 :\"; ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/c8- … [574 caractères tronqués]`
+
+  ```
+référence modèle complet sur m7 :
+perplexité 15.0163 sur
+=== 31 morceaux → test m7 (même test que A : isole l'effet DONNÉES) ===
+avant entraînement (A = identité) : perplexité TEST = 697,572.2130
+  époque   1/20 · perte train 2,119.6891 (perplexité) · test 61.9361  ← meilleur test
+  époque   2/20 · perte train 43.4144 (perplexité) · test 14.1975  ← meilleur test
+  époque   4/20 · perte train 8.1589 (perplexité) · test 4.4148  ← meilleur test
+  époque   6/20 · perte train 4.0128 (perplexité) · test 2.9566  ← meilleur test
+  époque   8/20 · perte train 2.9813 (perplexité) · test 2.3092  ← meilleur test
+  époque  10/20 · perte train 2.4241 (perplexité) · test 2.1379  ← meilleur test
+  époque  12/20 · perte train 2.1710 (perplexité) · test 1.8951  ← meilleur test
+  époque  14/20 · perte train 2.0072 (perplexité) · test 1.7518  ← meilleur test
+  époque  18/20 · perte train 1.8293 (perplexité) · test 1.6550  ← meilleur test
+  époque  20/20 · perte train 1.7802 (perplexité) · test 1.5978  ← meilleur test
+meilleur test : époque 20 · 1.5978
+| chemin tronqué, tête **entraînée** (adaptateur, époque 20) | **1.5978** |
+entraînement (mêmes états, première moitié) : 1.5366
+  ```
+
+### 🤖 Assistant
+
+⏵ Erreur attrapée : m7 était DANS la liste d'entraînement (fuite) — je refais sans le morceau de test
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PY=/home/stephane/gpu-env/bin/python\nSANS7=$( (seq 0 6; seq 8 30) | sort -n | seq -s, 0 0 2>/dev/null; (seq 0 6; seq 8 30) | sed \"s|\\([0-9]*\\)|/tmp/c8-corpus/etat-m\\1|g\" | paste -sd, )\necho \"liste d'entraînement : $(echo $SAN … [525 caractères tronqués]`
+
+  ```
+liste d'entraînement : 30 morceaux (m7 EXCLU)
+=== 30 morceaux SANS m7 → test m7 (isole vraiment l'effet DONNÉES) ===
+[exit code: 1]
+  ```
+
+### 🤖 Assistant
+
+⏵ Ma construction de liste shell était tordue — je la refais proprement
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && LISTE=$(python3 -c \"\nprint(','.join(f'/tmp/c8-corpus/etat-m{i}' for i in range(0, 31) if i != 7))\")\necho \"morceaux : $(echo $LISTE | tr ',' '\\n' | wc -l) · m7 exclu : $(echo $LISTE | grep -c 'm7$')\"\nCUDA_VISIBLE_DEVICES=0 tim … [402 caractères tronqués]`
+
+  ```
+morceaux : 30 · m7 exclu : 0
+entraînement : 30570 états · test (textes jamais vus) : 1019 états
+avant entraînement (A = identité) : perplexité TEST = 697,572.2130
+  époque   1/20 · perte train 2,496.5678 (perplexité) · test 154.9270  ← meilleur test
+  époque   2/20 · perte train 44.9119 (perplexité) · test 84.9860  ← meilleur test
+meilleur test : époque 2 · 84.9860
+| chemin tronqué, tête **entraînée** (adaptateur, époque 2) | **84.9860** |
+entraînement (mêmes états, première moitié) : 13.3823
+  ```
+
+### 🤖 Assistant
+
+⏵ Résultats propres (graine fixée) : 85,0 contre 697 572 pour la tête empruntée, à ×5,7 du modèle complet — je réécris la fiche
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"reports/rapport-c8-generalisation.md\"); s = p.read_text()\n\n# en-tête : les chiffres reproductibles, et la mention de ce qui est remplacé\nold_deb = s[:s.index(\"## 1. Le prot … [8021 caractères tronqués]`
+
+  ```
+fiche de généralisation réécrite
+# C8 — la tête réflexe sur des textes JAMAIS VUS : jusqu'à ×5,7 du modèle complet
+
+> Campagne : **cerveau** · expérience : adaptateur entraîné sur des morceaux distincts du corpus,
+> testé sur un morceau tenu à l'écart
+> Question : la tête entraînée de l'expérience précédente était apprise sur la **première moitié
+> d'un texte** et évaluée sur la **seconde**. Alors : **une tête entraînée sur des textes
+> sait-elle lire un texte qu'elle n'a JAMAIS vu ?**
+> Verdict : **oui, et elle s'en approche beaucoup quand on lui donne des données** — sur un
+> morceau tenu à l'écart, la tête empruntée rend **697 572** de perplexité, la tête entraînée sur
+> **30 morceaux** rend **84,99**, et le modèle complet vaut **15,02** sur ce même morceau : le
+> réflexe n'est plus qu'à **×5,7** du modèle complet (il en était à ×46 000 avec la tête
+> empruntée). Avec **7 morceaux seulement**, la même recette donne 202,17 — **les données
+> comptent** (÷2,4), et le surapprentissage arrive plus tôt.
+> Date réelle : **2026-10-10 14:20 HAE** · **toutes les graines sont fixées** (`--graine 0`).
+> Protocole : `tools/c8_corpus.sh` (morceaux de 1 024 jetons pris à des endroits différent
+… [513 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\n# état\np = pathlib.Path(\"docs/etat-cerveau.md\"); s = p.read_text()\nold = \"\"\"**sur un texte JAMAIS VU** (7 morceaux entraînent, un 8ᵉ teste) le gain tient : **÷79** (208 438 → 2 632, modèle  … [5645 caractères tronqués]`

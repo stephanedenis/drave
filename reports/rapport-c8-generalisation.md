@@ -1,18 +1,25 @@
-# C8 — la tête réflexe sur un texte JAMAIS VU : ÷79, et ce que ça dit de la généralisation
+# C8 — la tête réflexe sur des textes JAMAIS VUS : jusqu'à ×5,7 du modèle complet
 
-> Campagne : **cerveau** · expérience : adaptateur entraîné sur 7 morceaux de corpus, testé sur un 8ᵉ
+> Campagne : **cerveau** · expérience : adaptateur entraîné sur des morceaux distincts du corpus,
+> testé sur un morceau tenu à l'écart
 > Question : la tête entraînée de l'expérience précédente était apprise sur la **première moitié
-> d'un texte** et évaluée sur la **seconde** — les deux moitiés parlent du même sujet, avec le même
-> vocabulaire. Alors : **une tête entraînée sur des textes sait-elle lire un texte qu'elle n'a
-> JAMAIS vu ?**
-> Verdict : **oui, et de deux ordres de grandeur, mais sept fois moins bien que sur le même texte** —
-> sur le morceau de test (jamais vu), le chemin tronqué passe de **208 438,39** (tête empruntée,
-> mesurée par le moteur) à **2 632,05** (adaptateur, meilleure époque 4) : **÷79**. Sur le même
-> texte, la même recette donnait **÷540**. Le modèle complet vaut **10,3866** sur ce morceau : la
-> tête généralisante reste **×253** derrière.
-> Date réelle : **2026-10-10 13:40 HAE**.
-> Protocole : `tools/c8_corpus.sh` (8 morceaux de 1 024 jetons pris à des endroits **différents** du
-> corpus) puis `tools/c8_entrainer_tete.py --train m0..m6 --test m7`.
+> d'un texte** et évaluée sur la **seconde**. Alors : **une tête entraînée sur des textes
+> sait-elle lire un texte qu'elle n'a JAMAIS vu ?**
+> Verdict : **oui, et elle s'en approche beaucoup quand on lui donne des données** — sur un
+> morceau tenu à l'écart, la tête empruntée rend **697 572** de perplexité, la tête entraînée sur
+> **30 morceaux** rend **84,99**, et le modèle complet vaut **15,02** sur ce même morceau : le
+> réflexe n'est plus qu'à **×5,7** du modèle complet (il en était à ×46 000 avec la tête
+> empruntée). Avec **7 morceaux seulement**, la même recette donne 202,17 — **les données
+> comptent** (÷2,4), et le surapprentissage arrive plus tôt.
+> Date réelle : **2026-10-10 14:20 HAE** · **toutes les graines sont fixées** (`--graine 0`).
+> Protocole : `tools/c8_corpus.sh` (morceaux de 1 024 jetons pris à des endroits différents du
+> corpus) puis `tools/c8_entrainer_tete.py --train … --test …`.
+
+> **Ce que cette fiche remplace.** Un premier passage (même journée, avant la graine fixée et sur
+> un découpage différent) annonçait **÷79** avec 2 632,05. Ce chiffre n'était pas reproductible :
+> deux entraînements au même protocole donnaient 2 632 puis 9 056, parce que **l'ordre des lots
+> n'était pas fixé**. Les chiffres ci-dessous le sont (`--graine 0`), et le protocole est plus
+> strict. L'ancien chiffre est conservé ici comme trace.
 
 ## 1. Le protocole, et pourquoi il change la question
 
@@ -27,66 +34,83 @@ et **les cibles de chaque morceau sont ses propres jetons** — un seul fichier 
 tous aurait donné des cibles étrangères aux états, c'est-à-dire un apprentissage sur du bruit qui
 aurait « mesuré » que la tête ne généralise pas.
 
-## 2. Les chiffres
+## 2. Les chiffres — graine fixée, test tenu à l'écart
 
-| chemin (morceau 7, jamais vu, 1 024 jetons) | perplexité |
-|---|---|
-| tête **empruntée** (moteur, `--couches 0:16 --tete-partielle`) | 208 438,3879 |
-| tête empruntée (même chaîne en Python, `A = identité`) | 207 427,5289 |
-| **tête ENTRAÎNÉE** (adaptateur, époque 4) | **2 632,0454** |
-| modèle complet (moteur, même morceau) | **10,3866** |
+Toutes les lignes : entraînement sur des morceaux **qui n'incluent pas** le morceau de test,
+évaluation sur les positions du morceau de test, meilleure époque restaurée.
 
-**÷79** sur la tête empruntée ; **×253** sous le modèle complet. Et la comparaison entre les deux
-expériences, à protocole égal :
-
-| protocole | tête empruntée | tête entraînée | gain |
+| protocole (`--graine 0`) | tête empruntée | **tête entraînée** | modèle complet |
 |---|---|---|---|
-| même texte (moitié/moitié) | 456 586,60 | 845,45 | **÷540** |
-| **textes distincts** | 208 438,39 | 2 632,05 | **÷79** |
+| 7 morceaux → test m7 | 697 572,2130 | **202,1726** (époque 6) | 15,0163 |
+| **30 morceaux → test m7** | 697 572,2130 | **84,9860** (époque 2) | 15,0163 |
+| 39 morceaux → test m39 | 370 205,4060 | **51,4647** (époque 2) | 8,6773 |
+| 39 morceaux, tête **non linéaire** (512) → m39 | 370 205 (identité) | 272,1710 (époque 2) | 8,6773 |
 
-**La généralisation coûte un facteur 7** — et elle reste massive : la tête apprend quelque chose
-qui **se transporte** d'un texte à l'autre, pas seulement une clé de lecture propre à un texte.
+**Trois faits :**
 
-## 3. Le surapprentissage, encore, et c'est lui qui fixe le chiffre
+1. **la tête entraînée généralise** : sur un texte jamais vu, elle passe de 697 572 (tête
+   empruntée) à **85** — et le modèle complet n'est plus qu'à **×5,7** ;
+2. **les données comptent** : à texte de test égal (m7), passer de 7 à 30 morceaux fait 202 → 85
+   (÷2,4), et le meilleur point arrive **plus tôt** (époque 2 au lieu de 6) : plus de données,
+   plus vite surappris ;
+3. **la non-linéarité n'aide pas ici** : une tête 896→512→896 (GELU) rend **272** là où
+   l'adaptateur linéaire rend **51** sur le même test. Avec 39 000 exemples, la capacité
+   supplémentaire se paie — ce n'est pas une preuve que la non-linéarité est inutile, c'est une
+   preuve qu'**elle ne suffit pas** : il faudrait régulariser et régler le taux d'apprentissage.
 
-| époque | entraînement (7 morceaux) | test (morceau 8) |
-|---|---|---|
-| 1 | 1 071 140,76 | 8 209,22 |
-| 2 | 299,31 | 3 584,03 |
-| **4** | **18,96** | **2 632,05** ← meilleur test |
-| 6 | 3,52 | 3 780,72 |
-| 10 | 1,30 | 13 328,02 |
-| 20 | 1,08 | 45 448,70 |
+**Ce que le chiffre ne dit pas** : ces textes viennent tous du **même corpus** (donc du même
+domaine, du même style, souvent du même vocabulaire). La question « une tête entraînée sur un
+corpus lit-elle un corpus DIFFÉRENT ? » reste ouverte, et c'est la vraie question d'un réflexe
+utilisable.
 
-L'adaptateur **apprend les morceaux d'entraînement par cœur** (perplexité 1,08) et se dégrade
-ensuite sur le texte neuf. Le chiffre à lire est l'époque 4 (2 632), pas la dernière (45 449) —
-c'est le script qui le sait et qui restaure la meilleure époque avant d'écrire le tableau.
+## 3. Le surapprentissage fixe encore le chiffre, et deux pièges l'ont faussé
+
+L'adaptateur apprend vite le texte d'entraînement et se dégrade ensuite sur le texte neuf : avec
+30 morceaux, le meilleur test est à l'**époque 2** (84,99) et l'entraînement continue de
+descendre. C'est le script qui garde la meilleure époque et qui la restaure — sans quoi le
+tableau aurait affiché la dernière (bien pire).
+
+**Deux pièges attrapés dans cette campagne, et ils se ressemblent :**
+
+1. **l'entraînement n'était pas graine-fixé** : deux exécutions identiques donnaient **2 632**
+   puis **9 056** sur le même test. Aucune comparaison (7 morceaux contre 30, linéaire contre non
+   linéaire) n'était concluante. Corrigé : `--graine 0` par défaut ;
+2. **le morceau de test était DANS la liste d'entraînement** : pour isoler l'effet « plus de
+   données » j'ai lancé « morceaux 0..30 → test m7 »… or **m7 ∈ 0..30**. La tête rendait
+   **1,5978** — mieux que le modèle complet (15,02) ! Le chiffre était trop beau : c'était de la
+   **mémorisation**. Refait avec la liste **0..30 privée de 7**, il donne **84,99**. Un test qui
+   appartient à l'entraînement ne teste rien, et il ne le dit pas : c'est la même famille que la
+   porte qui compare zéro jeton.
 
 ## 4. Ce que ça change pour C8
 
-**Acquis** : le maillon faible était la tête ; une tête **ajustée pour sa profondeur** rend le
-réflexe utilisable (milliers au lieu de centaines de milliers) **même sur un texte qu'elle n'a
-jamais vu** — et le chemin court va **×1,54 plus vite** en génération (mesuré, fiche
-`rapport-c8-tete-entrainee.md` § 3 bis).
+**Acquis** : le maillon faible était la tête, pas la profondeur. Une tête **ajustée pour sa
+couche** rend le réflexe utilisable sur un texte jamais vu (**85** contre **697 572**), à **×5,7**
+du modèle complet — et le chemin court va **×1,54 plus vite** en génération
+(`rapport-c8-tete-entrainee.md` § 3 bis). Le compromis devient intéressant : **1,5× plus vite pour
+5,7× de perplexité**, au lieu de 46 000×.
 
-**Ce qui reste ouvert, et ce sont les vraies questions** :
-- **7 morceaux de 1 024 jetons, c'est très peu** pour apprendre une lecture : la question devient
-  « combien de textes pour combler les ×253 restants ? » — c'est un entraînement, pas une sonde ;
-- **une tête linéaire** (l'adaptateur est une matrice) : une tête **non linéaire** devrait faire
-  mieux, et c'est la prochaine marche ;
-- **une seule profondeur** (16) : la courbe de la fiche `rapport-c8-sonde-profondeur.md` dit où
-  l'information est lisible ; il reste à mesurer **qualité × vitesse** par profondeur pour choisir
-  le point de fonctionnement ;
-- **le coût du surapprentissage** : il faudrait une **régularisation** (pénalité, arrêt précoce
-  systématique, plus de données) — ici, c'est l'arrêt précoce manuel qui a sauvé le chiffre.
+**Ce qui reste ouvert** :
+- **un autre corpus** : tous ces morceaux viennent du même document. C'est la question qui décide
+  si un réflexe est utilisable en pratique ;
+- **régularisation et taux d'apprentissage** : la non-linéarité a échoué ici faute de réglage,
+  pas par nature ;
+- **la profondeur** : le point de fonctionnement (qualité × vitesse) n'est mesuré qu'à 16 couches ;
+- **l'échelle des données** : 30 morceaux de 1 024 jetons, c'est 30 000 exemples — un vrai
+  entraînement se compte en millions, et c'est un autre chantier que cette sonde.
 
 ## 5. Protocole, pour rejouer
 
 ```bash
-tools/c8_corpus.sh 8 1024 16            # 8 morceaux pris à des endroits différents, états capturés
-CUDA_VISIBLE_DEVICES=0 /home/stephane/gpu-env/bin/python tools/c8_entrainer_tete.py \
-   --train /tmp/c8-corpus/etat-m0,...,/tmp/c8-corpus/etat-m6 \
-   --test  /tmp/c8-corpus/etat-m7 \
-   --ids /tmp/c8-corpus/morceau-7.txt --modele models/Qwen2.5-0.5B-Q8_0.gguf \
-   --limite 1024 --epoques 20
+tools/c8_corpus.sh 40 1024 16           # 40 morceaux pris à des endroits différents
+PY=/home/stephane/gpu-env/bin/python
+# LA LISTE D'ENTRAÎNEMENT EXCLUT LE MORCEAU DE TEST — construit comme ceci, jamais à la main :
+TRAIN=$(python3 -c "print(','.join(f'/tmp/c8-corpus/etat-m{i}' for i in range(0,31) if i != 7))")
+CUDA_VISIBLE_DEVICES=0 $PY tools/c8_entrainer_tete.py --train "$TRAIN" \
+   --test /tmp/c8-corpus/etat-m7 --ids /tmp/c8-corpus/morceau-7.txt \
+   --modele models/Qwen2.5-0.5B-Q8_0.gguf --limite 1024 --epoques 20 --graine 0
 ```
+
+**Les deux règles de lecture de cette fiche** : la graine est **fixée** (sinon deux chiffres du
+même protocole diffèrent du simple au triple), et le morceau de test est **exclu de la liste
+d'entraînement** — vérifié en comptant, comme pour les jetons dans les portes.

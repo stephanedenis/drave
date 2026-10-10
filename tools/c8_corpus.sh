@@ -29,8 +29,12 @@ python3 - "$IDS" "$T" "$MORCEAUX" "$TAILLE" <<'PY'
 import pathlib, re, sys
 ids = [int(x) for x in re.split(r"[,\s]+", pathlib.Path(sys.argv[1]).read_text()) if x.strip()]
 t, n, taille = pathlib.Path(sys.argv[2]), int(sys.argv[3]), int(sys.argv[4])
-if len(ids) < n * taille * 3:
-    raise SystemExit(f"corpus trop court : {len(ids)} jetons pour {n} morceaux de {taille}")
+# Il faut que les morceaux NE SE RECOUVRENT PAS : l'espacement vaut len/(n+1), donc il doit
+# dépasser la taille d'un morceau. Exiger « 3× » était plus strict que nécessaire et refusait
+# des découpages légitimes (85 625 jetons pour 40 morceaux de 1 024 : espacement 2 088).
+if len(ids) // (n + 1) <= taille:
+    raise SystemExit(f"corpus trop court : {len(ids)} jetons pour {n} morceaux de {taille} "
+                     f"(il faut un espacement > {taille})")
 # morceaux RÉPARTIS dans tout le corpus, jamais recouvrants
 pas = len(ids) // (n + 1)
 for i in range(n):

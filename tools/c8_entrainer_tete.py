@@ -149,10 +149,22 @@ def main() -> int:
     ap.add_argument("--pas", type=float, default=1e-2)
     ap.add_argument("--batch", type=int, default=256)
     ap.add_argument("--repertoire", type=float, default=1e-5)
+    ap.add_argument("--graine", type=int, default=0,
+                    help="graine du tirage des lots : sans elle, deux entraînements identiques "
+                         "ne donnent pas le même chiffre (constaté : 2 632 puis 9 056 au même "
+                         "protocole), et aucune comparaison n'est concluante")
+    ap.add_argument("--cachee", type=int, default=0,
+                    help="taille d'une couche cachée (0 = adaptateur purement linéaire)")
     ap.add_argument("--ppl_tronque", type=float, default=None,
                     help="perplexité du chemin tronqué avec la tête EMPRUNTÉE (pour la table)")
     ap.add_argument("--ppl_complet", type=float, default=None)
     a = ap.parse_args()
+
+    # GRAINE FIXÉE PAR DÉFAUT : sans elle, deux entraînements au même protocole donnaient
+    # 2 632 puis 9 056 sur le même test — l'ordre des lots change tout, et aucune comparaison
+    # (linéaire contre non linéaire, 7 morceaux contre 39) n'aurait été concluante.
+    torch.manual_seed(a.graine)
+    np.random.seed(a.graine)
 
     if not (a.etats or (a.train and a.test)):
         raise SystemExit("donner --etats (un texte, partagé) ou --train ET --test (textes distincts)")
@@ -234,15 +246,32 @@ def main() -> int:
     coupe = len(ytr)
 
     A = torch.eye(h, device=dev, dtype=torch.float32, requires_grad=True)   # identité
-    opt = torch.optim.Adam([A], lr=a.pas)
+    # TÊTE NON LINÉAIRE (optionnelle) : `--cachee K` ajoute une couche 896→K→896 avec une
+    # activation. Une matrice seule ne peut pas défaire une rotation non linéaire de la
+    # représentation ; c'est la marche suivante de C8, et elle se mesure avec le même protocole.
+    if a.cachee > 0:
+        W1 = (torch.randn(a.cachee, h, device=dev, dtype=torch.float32) / h ** 0.5).requires_grad_()
+        W2 = (torch.randn(h, a.cachee, device=dev, dtype=torch.float32) / a.cachee ** 0.5).requires_grad_()
+        params = [A, W1, W2]
+        print(f"tête NON LINÉAIRE : 896→{a.cachee}→896 (activation GELU)")
+    else:
+        W1 = W2 = None
+        params = [A]
+    opt = torch.optim.Adam(params, lr=a.pas)
 
     def rmsnorm(x, poids, eps=1e-6):
         # moyenne des carrés en fp32 (stable), application en fp16 comme le reste de la chaîne
         m = x.float().pow(2).mean(-1, keepdim=True)
         return (x.float() / torch.sqrt(m + eps)).half() * poids
 
+    def adapter(x32: torch.Tensor) -> torch.Tensor:
+        z = x32 @ A.T
+        if W1 is not None:
+            z = z + torch.nn.functional.gelu(z @ W1.T) @ W2.T   # résidu : on part de l'identité
+        return z.half()
+
     def perte(idx) -> torch.Tensor:
-        logits = rmsnorm((Xtr_t[idx].float() @ A.T).half(), gt) @ Wt.T
+        logits = rmsnorm(adapter(Xtr_t[idx].float()), gt) @ Wt.T
         return torch.nn.functional.cross_entropy(logits.float(), ytr_t[idx])
 
     @torch.no_grad()
@@ -250,7 +279,7 @@ def main() -> int:
         nll, n = 0.0, 0
         for lo in range(0, len(y), 512):
             hi = min(lo + 512, len(y))
-            logits = rmsnorm((X[lo:hi].float() @ A.T).half(), gt) @ Wt.T
+            logits = rmsnorm(adapter(X[lo:hi].float()), gt) @ Wt.T
             nll += torch.nn.functional.cross_entropy(logits.float(), y[lo:hi],
                                                      reduction="sum").item()
             n += hi - lo
@@ -258,7 +287,11 @@ def main() -> int:
 
     ppl0 = perplexite(Xte_t, yte_t)
     print(f"\navant entraînement (A = identité) : perplexité TEST = {ppl0:,.4f}")
-    meilleur = (ppl0, 0, A.detach().clone())
+    def instantane():
+        return {k: v.detach().clone() for k, v in
+                (("A", A), ("W1", W1), ("W2", W2)) if v is not None}
+
+    meilleur = (ppl0, 0, instantane())
     for e in range(a.epoques):
         perm = torch.randperm(coupe, device=dev)
         tot = 0.0
@@ -277,13 +310,15 @@ def main() -> int:
             if ppl_te < meilleur[0]:
                 # LA MEILLEURE ÉPOQUE EST GARDÉE : au-delà, l'adaptateur apprend le texte
                 # d'entraînement (l'écart train/test se creuse) et la perplexité de test REMONTE.
-                meilleur = (ppl_te, e + 1, A.detach().clone())
+                meilleur = (ppl_te, e + 1, instantane())
                 marque = "  ← meilleur test"
             print(f"  époque {e + 1:>3}/{a.epoques} · perte train {ppl_tr:,.4f} "
                   f"(perplexité) · test {ppl_te:,.4f}{marque}")
 
-    # on évalue la MEILLEURE époque retrouvée, pas la dernière
-    A.data.copy_(meilleur[2].to(A.dtype))
+    # on évalue la MEILLEURE époque retrouvée, pas la dernière — TOUS les paramètres
+    for nom, tenseur in (("A", A), ("W1", W1), ("W2", W2)):
+        if tenseur is not None:
+            tenseur.data.copy_(meilleur[2][nom].to(tenseur.dtype))
     ppl_final = perplexite(Xte_t, yte_t)
     print(f"\nmeilleur test : époque {meilleur[1]} · {meilleur[0]:,.4f}")
     with torch.no_grad():

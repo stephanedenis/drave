@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 51.5 h |
+| Durée | 52.1 h |
 | Tours | 88 |
-| Messages | 2337 |
-| Appels d'outils | 2142 |
+| Messages | 2355 |
+| Appels d'outils | 2159 |
 | Fichiers touchés | 78 |
-| Commandes | 1857 |
+| Commandes | 1874 |
 | Sous-agents | 3 |
-| Commits | 206 |
+| Commits | 207 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -3586,7 +3586,7 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 
 ### Tour 88 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*300 appels d'outils.* Actions notables :
+*317 appels d'outils.* Actions notables :
 
 - bash — Add the refusal and verify
 - bash — Move the refusal to the single point and verify
@@ -3602,11 +3602,11 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - bash — Read v7 removal context and flag inventory
 - bash — Read flag inventory section in docs
 - bash — Establish whether section 9 predates the v7 removal
-- … et 273 autres
+- … et 290 autres
 
 **Synthèse produite :**
 
-⏵ Sur un texte JAMAIS VU : ÷79 (2 632 contre 207 428) — je mesure la référence du modèle complet et j'écris la fiche
+⏵ Résultats propres (graine fixée) : 85,0 contre 697 572 pour la tête empruntée, à ×5,7 du modèle complet — je réécris la fiche
 
 ## 3. Travail accompli
 
@@ -3741,7 +3741,7 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1817 autres
+- … et 1834 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3869,7 +3869,7 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 
 ## 5. Erreurs rencontrées
 
-84 sorties en erreur ou divergentes. Les premières :
+85 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : ```  ### 🤖 Assistant  ⏵ **En transformers 5, `AutoModel` rend directement `Qwen2Model` (pas de `.model`). Je corrige le diagnostic.**  - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitH
 - **T2** : 3310393 bash -c pgrep -af "essai_decharge" | grep python | head; echo "--- logs ---"; tail -2 /tmp/ec_d192_lr3e3.log 2>/dev/null; tail -2 /tmp/ec_d192_lr1e3.log 2>/dev/null; echo "---"; ls -la /tmp/ec
@@ -4095,4 +4095,5 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' import pathlib p = pathlib.Path("reports/rapport-c8-tete-entrainee.md"); s = p.read_te
 - C8 : le reflexe va plus vite (x1,54 en generation, TTFT div 2,4) — le compromis est pose  Mesure directe, meme invite, 64 jetons generes, ctx 1024 :   modele co
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' import pathlib # l'état : la généralisation mesurée p = pathlib.Path("docs/etat-cervea
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' import pathlib # état p = pathlib.Path("docs/etat-cerveau.md"); s = p.read_text() old 
 
