@@ -34633,3 +34633,374 @@ référence (aucune fenêtre, 2048 jetons) : perplexité 10.3703  ·  clés not�
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A docs/etat.md && git commit -q -m \"docs/etat.md : l'index des modules (roadmap -> etat -> prochaine action) demande par Stephane\n\nPour chaque module (moteur, modele, cerveau/distribue, emulation, biologie, materiel,\ncon … [347 caractères tronqués]`
+
+  ```
+de8d002 docs/etat.md : l'index des modules (roadmap -> etat -> prochaine action) demande par Stephane
+référence (aucune fenêtre, 2048 jetons) : perplexité 10.3703  ·  clés notées par jeton ≈ 2048
+
+| fenêtre \ puits | 0 | 64 | 128 |
+|---|---|---|---|
+| **128** | 20.6093 | 17.6891 |
+  ```
+
+### 👤 Utilisateur
+
+pourrait-on automatiser le dossier journal afin qu'il puise dans git et journal/sessions les informations détaillées de chaque jour. On aura probablement besoin de plus qu'un fichier .md par jour tellement les détails son riches. on peut séparer par thèmes du jour afin de s'y retrouver et voir l'évolution par jour_thème dans les noms de fichiers.
+
+### 🤖 Assistant
+
+⏵ Bonne idée — j'inspecte d'abord ce que git et `journal/sessions` offrent par jour, puis j'écris le générateur jour×thème
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== MANIFEST ===\"; head -20 journal/sessions/MANIFEST.md 2>/dev/null; echo \"=== sessions couvrant le 09-10/10-10 ===\"; python3 - <<'PYEOF'\nimport json, pathlib, time\nbase = pathlib.Path(\"journal/sessions\")\nfor d in sor … [771 caractères tronqués]`
+
+  ```
+=== MANIFEST ===
+# Sessions DSH archivées
+
+Régénéré par `tools/archive_sessions.py`. Le digest est versionnable ; la
+trace brute (`session.jsonl.zstd`) reste sur disque et n'est pas suivie par git.
+
+| Session | Début | Trace | Digest | Tours | Messages | Outils | Erreurs | Compactages |
+|---|---|---|---|---|---|---|---|---|
+| `04ed1834` | 2026-10-08 09:21 | 0.3 Mo | 67 Ko | 1 | 27 | 42 | 0 | 0 |
+| `11b2d312` | 2026-10-01 02:56 | 0.5 Mo | 82 Ko | 1 | 42 | 60 | 0 | 0 |
+| `13446299` | 2026-10-01 01:07 | 0.5 Mo | 84 Ko | 1 | 50 | 68 | 0 | 0 |
+| `15fd322f` | 2026-09-30 12:00 | 0.6 Mo | 66 Ko | 1 | 57 | 67 | 0 | 0 |
+| `1820cf6b` | 2026-10-02 19:36 | 0.3 Mo | 30 Ko | 1 | 23 | 21 | 0 | 0 |
+| `18b8879c` | 2026-10-02 15:12 | 0.4 Mo | 78 Ko | 1 | 33 | 55 | 3 | 0 |
+| `18c3f6d0` | 2026-10-01 05:26 | 0.3 Mo | 51 Ko | 1 | 26 | 38 | 0 | 0 |
+| `1966e052` | 2026-10-08 09:20 | 0.3 Mo | 57 Ko | 1 | 22 | 33 | 0 | 0 |
+| `22bcae27` | 2026-09-28 14:45 | 14.8 Mo | 1398 Ko | 54 | 1250 | 1227 | 19 | 4 |
+| `27c99b10` | 2026-09-25 19:50 | 1.0 Mo | 61 Ko | 1 | 57 | 54 | 1 | 0 |
+| `2c2a6595` | 2026-10-02 15:11 | 0.4 Mo | 66 Ko | 1 | 29 | 44 | 0 | 0 |
+| `31f26a6e` | 2026-10-02 19:48 | 0.9 Mo | 171 Ko | 1 | 85 | 1
+… [1517 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== hook pre-commit ===\"; cat .git/hooks/pre-commit | head -30; echo \"=== le digest porte-t-il des horodatages ? ===\"; head -c 600 journal/sessions/d31b3d9b-58e4-4d34-85fa-381b6f6a6a76/digest.md; echo; grep -c \"2026-10-1\" … [127 caractères tronqués]`
+
+  ```
+=== hook pre-commit ===
+#!/bin/sh
+# Archive les traces de session DSH avant chaque commit : le journal doit
+# accompagner le code, pas le suivre.
+cd "$(git rev-parse --show-toplevel)" || exit 0
+python3 tools/archive_sessions.py --quiet >/dev/null 2>&1 || true
+git add journal/sessions 2>/dev/null || true
+exit 0
+=== le digest porte-t-il des horodatages ? ===
+# Session DSH — relecture
+
+- identifiant : `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76`
+- dossier : `/home/stephane/Data13TB/stephane/GitHub/Qtrinet`
+- créée : 2026-10-08 09:11:35
+- agent : standard
+
+
+## Tour 1
+
+### 👤 Utilisateur
+
+où en est-on
+
+### 👤 Utilisateur
+
+Current runtime context. This snapshot supersedes earlier runtime-context snapshots.
+
+Current DSH file policy: danger-full-access. The DSH file sandbox does not restrict file modifications by available operations.
+
+Approval prompts are disabled in this session: actions that require approval are rejected automatically — do not r
+29
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"2026-10-1\" journal/sessions/d31b3d9b-58e4-4d34-85fa-381b6f6a6a76/digest.md | head -6; echo \"=== structure d'un tour dans le rapport ===\"; sed -n '215,230p' journal/sessions/d31b3d9b-58e4-4d34-85fa-381b6f6a6a76/rapport.md … [76 caractères tronqués]`
+
+  ```
+33801:- **write** `{"content": "# Organisation du dépôt — quel dossier pour quoi\n\n> Écrit le **2026-10-10 10:20 HAE** (EDT, UTC−4). Ce document est la **règle** : il dit ce qui va\n> dans `docs/`, dans `reports/` et dans `journal/`, comment nommer, et comment horodater. Il\n> existe parce que les trois dossiers étai … [4422 caractères tronqués]`
+33827:- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --since='2026-10-09 15:25' --until='2026-10-10 00:00' --format='%ad|%h|%s' --date=format:'%H:%M' | tac; echo \"=== total ===\"; git log --since='2026-10-09 15:25' --until='2026-10-10 00:00' --oneline | wc -l; git log --since= … [82 caractères tronqués]`
+33913:  41 · 38  2026-10-10 08:09 HAE   719ab85   41-38-un-drapeau-qui-ne-faisait-rien-dans-le-c.md
+33914:  42 · 39  2026-10-10 08:10 HAE   39d32f3   42-39-audit-des-drapeaux-par-chemin-une-method.md
+33915:  43 · 40  2026-10-10 08:44 HAE   dd66191   43-40-protocole-v7-la-fenetre-dattention-voyag.md
+33916:  44 · 41  2026-10-10 09:01 HAE   e22dbd7   44-41-protocole-v8-le-pilote-sait-enfin-ce-que.md
+=== structure d'un tour dans le rapport ===
+## 2. Déroulé, étape par étape
+
+### Tour 1 — où en est-on
+
+
+… [416 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ J'écris le générateur `tools/journal_auto.py` : par jour et par thème, sources = git + sessions, blocs écrits à la main préservés
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"journal_auto.py — le journal quotidien, ÉCRIT PAR JOUR ET PAR THÈME, à partir de git et des sessions.\n\nPOURQUOI. Le journal doit consigner les **événements datés** (voir\n`docs/organisation-du-depot.md`), et une journée de ce dépôt est trop riche pour un  … [14119 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/journal_auto.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && chmod +x tools/journal_auto.py && python3 tools/journal_auto.py --lister | head -6 && echo \"=== essai à sec sur le 10 octobre ===\" && python3 tools/journal_auto.py --jour 2026-10-10 --dry-run 2>&1 | tail -18", "description": "Test  … [52 caractères tronqués]`
+
+  ```
+attention  Attention, fenêtre, puits
+           mots-clés : attention, fenêtre, fenetre, puits, sinks, attn-, softmax, swa…
+           chemins   : model.rs
+memoire    Mémoire épisodique, consolidation, greffe
+           mots-clés : mémoire, memoire, épisodique, episodique, greffe, consolid, rappel, indice…
+           chemins   : episodique.rs
+=== essai à sec sur le 10 octobre ===
+2026-10-10 : 1 commits
+  (sec) journal/2026-10-10_docs.md
+  (sec) journal/2026-10-10.md
+2 fichiers (simulation) · 1 commits classés
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --since=\"2026-10-10 00:00:00\" --until=\"2026-10-10 23:59:59\" --format=\"%h|%ad|%s@@@\" --date=format:%H:%M --name-only | head -8; echo \"=== compte ===\"; git log --since=\"2026-10-10 00:00:00\" --until=\"2026-10-10 23:59: … [68 caractères tronqués]`
+
+  ```
+de8d002|10:23|docs/etat.md : l'index des modules (roadmap -> etat -> prochaine action) demande par Stephane@@@
+
+docs/etat.md
+journal/sessions/MANIFEST.md
+journal/sessions/d31b3d9b-58e4-4d34-85fa-381b6f6a6a76/digest.md
+journal/sessions/d31b3d9b-58e4-4d34-85fa-381b6f6a6a76/rapport.md
+17819d8|10:22|Journal : l'index liste les ENTREES QUOTIDIENNES (il ne voyait que les sessions automatiques)@@@
+
+=== compte ===
+56
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport sys\nsys.path.insert(0, \"tools\")\nimport journal_auto as ja\ncs = ja.git_commits(\"2026-10-10\")\nprint(\"commits trouvés :\", len(cs))\nfor c in cs[:3]: print(\"  \", c[\"heure\"], c[\"hash\"], c[\"suje … [216 caractères tronqués]`
+
+  ```
+commits trouvés : 1
+   10:23 de8d002 docs/etat.md : l'index des modules (roadmap -> etat -> proch | fichiers: 0
+['    for bloc in out.split("@@@\\n"):', '        lignes = [l for l in bloc.splitlines() if l.strip()]', '        tete = lignes[0].split("|", 2)']
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport subprocess\nfrom pathlib import Path\nRACINE = Path(\".\").resolve()\nout = subprocess.run([\"git\",\"log\",\"--since=2026-10-10 00:00:00\",\"--until=2026-10-10 23:59:59\",\n                      \"--forma … [309 caractères tronqués]`
+
+  ```
+code: 0 longueur: 34814 stderr: 
+"de8d002|10:23|docs/etat.md : l'index des modules (roadmap -> etat -> prochaine action) demande par Stephane@@@\n\ndocs/etat.md\njournal/sessions/MANIFEST.md\njournal/sessions/d31b3d9b-58e4-4d34-85fa-381b6"
+  ```
+
+### 🤖 Assistant
+
+⏵ Bug de parsing attrapé (le séparateur tombait après l'en-tête) — je réécris la lecture ligne à ligne
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"tools/journal_auto.py\"); s = p.read_text()\ndeb = s.index('def git_commits(jour: str) -> list[dict]:')\nfin = s.index('def sessions_du_jour(')\nneuf = '''def git_commits(jour:  … [1731 caractères tronqués]`
+
+  ```
+lecture réécrite
+2026-10-09 : 87 commits · thèmes : ['attention', 'distribue', 'docs', 'memoire', 'mesures', 'modele', 'moteur', 'portes']
+2026-10-10 : 56 commits · thèmes : ['attention', 'distribue', 'docs', 'memoire', 'mesures', 'modele', 'moteur', 'portes']
+  ```
+
+### 🤖 Assistant
+
+⏵ Le parsing est juste (87 et 56 commits) — je génère les journées par thème
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/journal_auto.py --depuis 2026-10-09 2>&1 | tail -22; echo \"=== fichiers produits ===\"; ls journal/*.md | head -25", "description": "Generate themed journal files", "timeoutMs": 600000}`
+
+  ```
+2026-10-09 : 87 commits
+2026-10-10 : 56 commits
+  journal/2026-10-09_attention.md
+  journal/2026-10-09_distribue.md
+  journal/2026-10-09_divers.md
+  journal/2026-10-09_docs.md
+  journal/2026-10-09_memoire.md
+  journal/2026-10-09_mesures.md
+  journal/2026-10-09_modele.md
+  journal/2026-10-09_moteur.md
+  journal/2026-10-09_portes.md
+  journal/2026-10-09.md
+  journal/2026-10-10_attention.md
+  journal/2026-10-10_distribue.md
+  journal/2026-10-10_docs.md
+  journal/2026-10-10_memoire.md
+  journal/2026-10-10_mesures.md
+  journal/2026-10-10_modele.md
+  journal/2026-10-10_moteur.md
+  journal/2026-10-10_portes.md
+  journal/2026-10-10.md
+19 fichiers écrits · 143 commits classés
+=== fichiers produits ===
+journal/2026-10-09_attention.md
+journal/2026-10-09_distribue.md
+journal/2026-10-09_divers.md
+journal/2026-10-09_docs.md
+journal/2026-10-09.md
+journal/2026-10-09_memoire.md
+journal/2026-10-09_mesures.md
+journal/2026-10-09_modele.md
+journal/2026-10-09_moteur.md
+journal/2026-10-09_portes.md
+journal/2026-10-09-sprint-cerveau-recit.md
+journal/2026-10-10_attention.md
+journal/2026-10-10_distribue.md
+journal/2026-10-10_docs.md
+journal/2026-10-10.md
+journal/2026-10-10_memoire.md
+journal/2026-10-10_mesu
+… [111 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat journal/2026-10-10_attention.md | head -30; echo \"...\"; echo \"=== index du jour ===\"; head -20 journal/2026-10-10.md; echo \"=== les notes ont-elles survécu ? ===\"; grep -c \"10 h 13 → 10 h 25\" journal/2026-10-10.md", "desc … [55 caractères tronqués]`
+
+  ```
+# 2026-10-10 — Attention, fenêtre, puits
+
+> **Généré** par `tools/journal_auto.py` (sources : git + `journal/sessions/`). Ne pas éditer hors du bloc `<!-- notes -->` … `<!-- /notes -->`.
+> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-10.md](2026-10-10.md). Convention : `docs/organisation-du-depot.md`.
+
+## Commits du jour (12)
+
+| heure | commit | fait | fichiers |
+|---|---|---|---|
+| 05:44 | `892acfd` | C6 : clé de FENÊTRE — la prédiction est RÉFUTÉE, et elle confirme le §24 quater | `sprint-cerveau.md`, `main.rs`, `MANIFEST.md` (+3) |
+| 07:27 | `dee9e58` | Balayage des portes : le piege de fenetre etait LATENT dans porte-topologie aussi | `sprint-cerveau.md`, `MANIFEST.md`, `digest.md` (+3) |
+| 08:02 | `031dbc4` | E4 (suite) : le gain d'entree generalise, mais sa MAGNITUDE depend de la fenetre | `sprint-cerveau.md`, `MANIFEST.md`, `digest.md` (+3) |
+| 08:24 | `c54c6fa` | attn-topk : pas de defaut (il agit a contexte long) · attn-window : un vrai trou, correction REVERTEE | `sprint-cerveau.md`, `MANIFEST.md`, `digest.md` (+2) |
+| 08:33 | `e6f7b6b` | attn-window en reparti : un REFUS explicite, pas un resultat faux et silencieux | `sprint-cerveau.md`, `main
+… [2485 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"d31b3d9b\" journal/README.md | head -3; grep -n \"d31b3d9b\" journal/sessions/MANIFEST.md | head -2", "description": "Check current session row in index"}`
+
+  ```
+73:| `d31b3d9b` | Où en est-on | 2026-10-08 09:11 | 49.2 h | 88 | 1972 | 68 | 184 | [rapport](sessions/d31b3d9b-58e4-4d34-85fa-381b6f6a6a76/rapport.md) |
+57:| `d31b3d9b` | 2026-10-10 10:23 | 17.4 Mo | 2148 Ko | 88 | 2157 | 1972 | 13 | 6 |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"tools/journal_auto.py\"); s = p.read_text()\nold = \"\"\"        t0 = time.mktime(time.strptime(debut, \"%Y-%m-%d %H:%M\"))\n        t1 = t0 + duree * 3600\n        tq = time.mk … [1160 caractères tronqués]`
+
+  ```
+fenêtre de session corrigée
+journal/2026-10-10.md:7:**56 commits** · **1 session(s)** · **9 thème(s)**
+journal/2026-10-09.md:7:**87 commits** · **1 session(s)** · **9 thème(s)**
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -14 journal/2026-10-10_divers.md; echo \"=== sessions dans l'index ===\"; grep -A4 \"Sessions actives\" journal/2026-10-10.md | head -6; echo \"=== tours listés (divers) ===\"; grep -c \"rapport complet\" journal/2026-10-10_dive … [66 caractères tronqués]`
+
+  ```
+# 2026-10-10 — Ce qui ne rentre dans aucun thème
+
+> **Généré** par `tools/journal_auto.py` (sources : git + `journal/sessions/`). Ne pas éditer hors du bloc `<!-- notes -->` … `<!-- /notes -->`.
+> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-10.md](2026-10-10.md). Convention : `docs/organisation-du-depot.md`.
+
+## Commits du jour (0)
+
+*(aucun commit classé dans ce thème)*
+
+## Sessions (titres de tour)
+
+- `d31b3d9b` — Tour 1 — où en est-on → [rapport complet](sessions/d31b3d9b/rapport.md)
+- `d31b3d9b` — Tour 2 — ça fait plusieurs jours qu'on est sur des travaux lourds avec peu de résultats constructifs. Il faut revenir à l'essence … [222 caractères tronqués] → [rapport complet](sessions/d31b3d9b/rapport.md)
+- `d31b3d9b` — Tour 5 — Hypothèse de changement de configuration matériel : Si je déploie ce projet sur une station de travail bi-processeur (Xe … [683 caractères tronqués] → [rapport complet](sessions/d31b3d9b/rapport.md)
+=== sessions dans l'index ===
+=== tours listés (divers) ===
+52
+  ```
+
+### 🤖 Assistant
+
+⏵ J'affine : titres de tour tronqués, sessions listées dans l'index du jour, plafond avec renvoi
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"tools/journal_auto.py\"); s = p.read_text()\n\n# 1) titres de tour tronqués\nold = '''    for d in (JOURNAL / \"sessions\").glob(f\"{sid}-*\"):\n        r = d / \"rapport.md\"\n … [3178 caractères tronqués]`
+
+  ```
+affinages posés
+## Sessions du jour
+
+| session | titre | début | durée | liens |
+|---|---|---|---|---|
+40 journal/2026-10-10_divers.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== les notes ont-elles survécu ? ===\"; grep -c \"10 h 13 → 10 h 25\" journal/2026-10-10.md; grep -c \"15 h 33 → 15 h 55\" journal/2026-10-09.md; python3 - <<'PYEOF'\nimport pathlib, re\np = pathlib.Path(\"tools/session_repor … [2270 caractères tronqués]`
+
+  ```
+=== les notes ont-elles survécu ? ===
+0
+0
+index du journal groupé par jour
+## Journées
+
+| jour | ce qui s'est passé |
+|---|---|
+| jour | index | thèmes |
+|---|---|---|
+| **2026-10-10** | [2026-10-10.md](2026-10-10.md) | [attention](2026-10-10_attention.md) · [distribue](2026-10-10_distribue.md) · [divers](2026-10-10_divers.md) · [docs](2026-10-10_docs.md) · [memoire](2026-10-10_memoire.md) · [mesures](2026-10-10_mesures.md) · [modele](2026-10-10_modele.md) · [moteur](2026-10-10_moteur.md) · [portes](2026-10-10_portes.md) |
+| **2026-10-09** | [2026-10-09.md](2026-10-09.md) | [attention](2026-10-09_attention.md) · [distribue](2026-10-09_distribue.md) · [divers](2026-10-09_divers.md) · [docs](2026-10-09_docs.md) · [memoire](2026-10-09_memoire.md) · [mesures](2026-10-09_mesures.md) · [modele](2026-10-09_modele.md) · [moteur](2026-10-09_moteur.md) · [portes](2026-10-09_portes.md) |
+
+Autres pièces : [2026-10-09-sprint-cerveau-recit.md](2026-10-09-sprint-cerveau-recit.md)
+
+## Sessions (régénéré automatiquement)
+  ```
+
+### 🤖 Assistant
+
+⏵ Alerte : le récit écrit à la main a disparu de l'index — je regarde et je répare
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/Le récit de la journée/,$p' journal/2026-10-10.md | head -12; echo \"=== longueur du bloc notes ===\"; python3 -c \"\nimport pathlib\nt = pathlib.Path('journal/2026-10-10.md').read_text()\nprint(repr(t.split('<!-- notes -->' … [102 caractères tronqués]`
+
+  ```
+## Le récit de la journée (écrit à la main)
+
+<!-- notes -->
+` et `
+<!-- /notes -->
+=== longueur du bloc notes ===
+'` et `<!-- /notes -->`.\n\n**56 commits** · **1 session(s)** · **9 thème(s)**\n\n## Thèmes du jour\n\n| thème | commits | fichier |\n|---|---|---|\n| attention | 12 | [2026-10-10_attention.md](2026-10-10_atte'
+  ```
+
+### 🤖 Assistant
+
+⏵ Cause trouvée : les marqueurs cités dans la prose étaient pris pour le vrai bloc — je corrige, je restaure le récit depuis git, et je teste l'idempotence
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib, subprocess\n# 1) la prose ne doit PLUS citer les marqueurs littéraux (c'est ce qui a fait perdre le récit)\np = pathlib.Path(\"tools/journal_auto.py\"); s = p.read_text()\ns = s.replace('''        … [2343 caractères tronqués]`
+
+  ```
+prose corrigée
+2026-10-09 : récit restauré (63 lignes)
+2026-10-10 : récit restauré (128 lignes)
+=== idempotence : deuxième passage ===
+1
+1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"tools/session_report.py\"); s = p.read_text()\nold = '''             \"## Journées\", \"\",\n             \"| jour | ce qui s'est passé |\", \"|---|---|\",\n             JOURNAL … [1434 caractères tronqués]`
+
+  ```
+en-tête dupliqué retiré
+hook pre-commit étendu au journal
+python3 tools/archive_sessions.py --quiet >/dev/null 2>&1 || true
+python3 tools/session_report.py --quiet >/dev/null 2>&1 || true
+# Le journal du jour, par thème (sources : git + journal/sessions). L'index README est
+# régénéré ensuite pour lister les fichiers produits.
+python3 tools/journal_auto.py --quiet >/dev/null 2>&1 || true
+python3 tools/session_report.py --quiet >/dev/null 2>&1 || true
+git add journal 2>/dev/null || true
+exit 0
+## Journées
+
+| jour | index | thèmes |
+|---|---|---|
+| **2026-10-10** | [2026-10-10.md](2026-10-10.md) | [attention](2026-10-10_attention.md) · [distribue](2026-10-10_distribue.md) · [divers](2026-10-10_divers.md) · [docs](2026-10-10_docs.md) · [memoire](2026-10-10_memoire.md) · [mesures](2026-10-10_mesures.md) · [modele](2026-10-10_modele.md) · [moteur](2026-10-10_moteur.md) · [portes](2026-10-10_portes.md) |
+| **2026-10-09** | [2026-10-09.md](2026-10-09.md) | [attention](2026-10-09_attention.md) · [distribue](2026-10-09_distribue.md) · [divers](2026-10-09_divers.md) · [docs](2026-10-09_docs.md) · [memoire](2026-10-09_memoire.md) · [mesures](2026-10-09_mesures.md) · [modele](2026-10-09_modele
+… [162 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je consigne la convention du journal automatisé, puis je committe
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"docs/organisation-du-depot.md\"); s = p.read_text()\nold = \"\"\"## 3. `journal/` — LES ÉVÉNEMENTS, DATÉS\n\n**Ce qui y va** : ce qui s'est passé, **quand**, avec des **liens**  … [4123 caractères tronqués]`

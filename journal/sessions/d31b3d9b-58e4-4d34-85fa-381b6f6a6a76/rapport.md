@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 49.2 h |
+| Durée | 49.3 h |
 | Tours | 88 |
-| Messages | 2157 |
-| Appels d'outils | 1972 |
-| Fichiers touchés | 68 |
-| Commandes | 1704 |
+| Messages | 2178 |
+| Appels d'outils | 1992 |
+| Fichiers touchés | 69 |
+| Commandes | 1723 |
 | Sous-agents | 3 |
-| Commits | 184 |
+| Commits | 185 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -3586,7 +3586,7 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 
 ### Tour 88 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*130 appels d'outils.* Actions notables :
+*150 appels d'outils.* Actions notables :
 
 - bash — Add the refusal and verify
 - bash — Move the refusal to the single point and verify
@@ -3602,11 +3602,11 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - bash — Read v7 removal context and flag inventory
 - bash — Read flag inventory section in docs
 - bash — Establish whether section 9 predates the v7 removal
-- … et 109 autres
+- … et 129 autres
 
 **Synthèse produite :**
 
-⏵ Je vérifie qu'aucun autre document n'est mal rangé (journaux dans docs, plans dans reports)
+⏵ Je consigne la convention du journal automatisé, puis je committe
 
 ## 3. Travail accompli
 
@@ -3682,6 +3682,7 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/etat-cerveau.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-fenetre-puits-attention.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/etat.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/journal_auto.py` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -3731,7 +3732,7 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1664 autres
+- … et 1683 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4063,4 +4064,5 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - $(cat <<'MSG' Rangement (suite) : rapport toutes-langues eclate (107 fiches), recapituatif range comme etat  - reports/rapport-toutes-langues.md (296 Ko, 107 se
 - Journal : l'index liste les ENTREES QUOTIDIENNES (il ne voyait que les sessions automatiques)  Le journal paraissait ne contenir que des rapports de session gen
 - docs/etat.md : l'index des modules (roadmap -> etat -> prochaine action) demande par Stephane  Pour chaque module (moteur, modele, cerveau/distribue, emulation,
+- $(cat <<'MSG' Journal automatise par JOUR et par THEME (tools/journal_auto.py), branche sur le pre-commit  Demande de Stephane : automatiser journal/ depuis git
 

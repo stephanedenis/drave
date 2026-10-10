@@ -50,15 +50,32 @@ d'une campagne). Chaque fichier commence par un en-tête de quatre lignes :
 > Date réelle : AAAA-MM-JJ HH:MM HAE (source : commit <hash>)
 ```
 
-## 3. `journal/` — LES ÉVÉNEMENTS, DATÉS
+## 3. `journal/` — LES ÉVÉNEMENTS, DATÉS, PAR JOUR ET PAR THÈME
 
 **Ce qui y va** : ce qui s'est passé, **quand**, avec des **liens** vers les autres fichiers.
-Une entrée par jour : `journal/AAAA-MM-JJ.md`. L'index `journal/README.md` est régénéré par
-`tools/session_report.py` (sessions) — il ne se remplace pas à la main.
+Une journée de ce dépôt ne tient pas dans un fichier — elle touche le moteur, les protocoles,
+les mesures, les portes et la documentation — donc **chaque jour est découpé par thème** :
+
+| fichier | rôle |
+|---|---|
+| `journal/AAAA-MM-JJ.md` | l'**index du jour** : les thèmes, tous les commits, les sessions, et le **récit écrit à la main** (bloc « notes », préservé) |
+| `journal/AAAA-MM-JJ_<thème>.md` | les **commits du jour de ce thème**, les titres de tour de session qui s'y rattachent, les mesures touchées |
+| `journal/sessions/<id>/` | les rapports de session (automates, `tools/session_report.py`) |
+| `journal/AAAA-MM-JJ-<récit>.md` | une pièce longue écrite à la main (ex. le récit du sprint) |
+| `journal/README.md` | l'index général : les journées (index + thèmes) et les sessions — **régénéré**, ne pas éditer |
+
+Le nom commence par la **date** et finit par le **thème** : `ls journal/2026-10-1*_attention.md`
+suit un thème d'un jour à l'autre.
+
+**C'est automatisé** (`tools/journal_auto.py`, appelé par le `pre-commit`) : les commits du jour
+viennent de **git** (heure d'auteur, en HAE), les sessions actives de `journal/README.md`, leurs
+titres de tour des rapports de session. Les thèmes sont attribués par mots-clés du sujet et par
+chemins touchés (liste dans le script : `tools/journal_auto.py --lister`). **Tout ce qui est
+écrit à la main dans le bloc « notes » est conservé** d'une génération à l'autre — le reste est
+régénéré, donc on n'écrit pas en dehors du bloc.
 
 **Ce qui n'y va pas** : les résultats (un lien vers `reports/`), l'état consolidé (un lien vers
-`docs/etat-*.md`). Une entrée de journal est **courte** : le fait, l'heure, le lien, et ce que ça
-change pour la suite.
+`docs/etat-*.md`).
 
 ## 4. Le fuseau horaire — et l'erreur à ne pas refaire
 

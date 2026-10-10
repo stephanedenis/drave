@@ -306,17 +306,32 @@ def main() -> int:
     # les entrées QUOTIDIENNES (journal/AAAA-MM-JJ.md) et le récit du sprint : ils ne sont pas
     # des sessions, et l'index ne les voyait pas — le journal paraissait ne contenir que des
     # rapports de session automatiques.
-    jours = []
+    # Journées : index `AAAA-MM-JJ.md` + fichiers de thème `AAAA-MM-JJ_theme.md`, générés par
+    # `tools/journal_auto.py`. On les groupe PAR JOUR (l'index, puis ses thèmes) : c'est ce qui
+    # permet de suivre un thème d'un jour à l'autre.
+    jours: dict[str, dict[str, list[str]]] = {}
+    autres: list[str] = []
     for f in sorted((repo / "journal").glob("*.md")):
         if f.name == "README.md":
             continue
-        premiere = ""
-        for l in f.read_text(encoding="utf-8").splitlines():
-            if l.startswith("# "):
-                premiere = l[2:].strip()
-                break
-        jours.append(f"| [{f.name}]({f.name}) | {premiere or '—'} |")
-    JOURNAL_DES_JOURS = "\n".join(jours) if jours else "| — | (aucune entrée quotidienne) |"
+        m = re.match(r"(\d{4}-\d{2}-\d{2})(?:_(.+))?\.md$", f.name)
+        if m:
+            jours.setdefault(m.group(1), {"index": [], "themes": []})
+            if m.group(2):
+                jours[m.group(1)]["themes"].append((m.group(2), f.name))
+            else:
+                jours[m.group(1)]["index"].append(f.name)
+        else:
+            autres.append(f.name)
+    lignes_jours = ["| jour | index | thèmes |", "|---|---|---|"]
+    for j in sorted(jours, reverse=True):
+        idx = jours[j]["index"]
+        lien_idx = f"[{idx[0]}]({idx[0]})" if idx else "—"
+        themes = " · ".join(f"[{t}]({n})" for t, n in sorted(jours[j]["themes"]))
+        lignes_jours.append(f"| **{j}** | {lien_idx} | {themes or '—'} |")
+    if autres:
+        lignes_jours += ["", "Autres pièces : " + " · ".join(f"[{n}]({n})" for n in autres)]
+    JOURNAL_DES_JOURS = "\n".join(lignes_jours)
 
     dest = repo / "journal" / "sessions"
     dest.mkdir(parents=True, exist_ok=True)
@@ -326,7 +341,6 @@ def main() -> int:
              "`docs/etat-*.md` — convention : `docs/organisation-du-depot.md`. Tout horodatage",
              "est en heure locale de la machine (**HAE = EDT, UTC−4**).", "",
              "## Journées", "",
-             "| jour | ce qui s'est passé |", "|---|---|",
              JOURNAL_DES_JOURS, "",
              "## Sessions (régénéré automatiquement)", "",
              "Un rapport par session, régénéré automatiquement à chaque commit et",
