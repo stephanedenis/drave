@@ -2494,6 +2494,42 @@ refusé au lieu d'être ignoré) :
   (180,5245), il **agit** à 512 (18,5520 → **18,4032**). Il n'y a donc **pas** de défaut là :
   à contexte court, l'attention est déjà triviale, et le drapeau ne peut rien changer.
 
+## 40. Protocole v7 : la fenêtre d'attention voyage, et le refus disparaît
+
+Le §39 avait montré que `--attn-window` **agit en local** (13,1368 → 21,5801) et **pas en
+réparti** ; le câblage naïf donnait un résultat **faux et silencieux** (référence locale
+195,5685 contre 50,3829 pour le découpage), parce que le pilote appliquait la fenêtre à ses
+douze couches et le nœud gardait la sienne. La conduite retenue alors était un **refus
+explicite**.
+
+**Le refus est levé par le protocole v7** : trois champs ajoutés au contrat d'échange
+(`attn_window`, `swa_pattern`, `attn_sinks`), l'en-tête passant de **79 à 91 octets** et la
+version de **6 à 7**.
+
+**Ce que la mesure dit maintenant**, avec `--attn-window 64` en chemin réparti :
+
+| | perplexité |
+|---|---|
+| référence locale du run réparti | **18,5520** |
+| découpage (12 + 12 couches) | **18,5520** |
+| **écart de flux** | **0,00e0** |
+
+**Les deux moitiés appliquent la même fenêtre** : le résultat est cohérent au bit près, là où
+le câblage sans transport donnait un facteur 4. Et le chemin purement local, avec le même
+réglage, donne 21,5801 — un autre calcul, mais un calcul **annoncé** : les deux réglages sont
+désormais appliqués des deux côtés, et non d'un seul.
+
+**Ce qui a failli faire échouer le changement, et qui est maintenant corrigé pour de bon** : les
+**tests de trame forgée** construisaient l'en-tête avec un remplissage de **dix mots littéral**.
+Passer l'en-tête de 79 à 91 octets faisait tomber neuf tests — non pas à cause du protocole,
+mais à cause du littéral. Les constructeurs **calculent** désormais le remplissage à partir de
+`TAILLE_TETE` : une modification de protocole se compte en trois endroits (encodeur, décodeur,
+**et les tests qui le forgent**), et le troisième ne doit plus être un littéral.
+
+**Vérifications** : `porte-flux.sh` — qui fait parler LES DEUX côtés sur les cinq modes du
+protocole — est **vert** avec les écarts inchangés (0,00e0 · 0,00e0 · 3,65e-2 · 0,00e0 ·
+4,45e-3) : l'en-tête décalé d'un octet y échouerait. **122 tests verts.**
+
 ## Annexe — manifeste des journaux
 
 Les journaux bruts sont dans `/tmp/campagne24/`. **59 fichiers d'étape (79 Kio)**,

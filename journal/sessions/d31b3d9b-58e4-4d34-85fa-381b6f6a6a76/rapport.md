@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 47.5 h |
-| Tours | 70 |
-| Messages | 1922 |
-| Appels d'outils | 1780 |
+| Durée | 47.6 h |
+| Tours | 71 |
+| Messages | 1932 |
+| Appels d'outils | 1788 |
 | Fichiers touchés | 61 |
-| Commandes | 1530 |
+| Commandes | 1538 |
 | Sous-agents | 3 |
-| Commits | 160 |
+| Commits | 161 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -175,6 +175,8 @@
 **Tour 69** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 **Tour 70** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
+
+**Tour 71** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -3014,7 +3016,43 @@ TAILLE_TETE = 79 octets, aucune marge :
 
 **Synthèse produite :**
 
-⏵ 9 tests encodent la mise en page v6 — je reviens en arrière plutôt que de laisser les tests rouges
+⏵ Round 27 livré : protocole v7 tenté puis **reverté** — neuf tests encodent la mise en page v6
+
+**Ce round** — 1 commit poussé, **122 tests verts** (contrainte intacte), arbre propre.
+
+Les **huit modifications** de la spécification du round 26 ont été appliquées : `struct Act` (+3 champs), `du_modele`, `appliquer`, `TAILLE_TETE` (79 → **91**), `VERSION_FLUX` (6 → **7**), l'encodeur (offsets 79/83/87), le décodeur (`u(79)`, `u(83)`, `u(87)`), et le **retrait du refus**. Le binaire **compile**.
+
+**Mais 9 tests tombent** — exactement ceux qui encodent la v6 :
+- `entete_et_version_sont_ce_que_les_numeros_disent` : `assert_eq!(TAILLE_TETE, 79, …)`, plus un commentaire qui énumère les versions (« 4 quand les top-k sont entrés, 5 quand le mode 4 est apparu, 6 quand… ») ;
+- les tests de **trame forgée** : ils construisent une trame **à la main**, avec les offsets et la taille de la v6.
+
+**J'ai donc reverté** — la contrainte de l'objectif prime : 122 tests verts, arbre propre, porte-flux inchangée. Une modification de protocole qui laisse neuf tests rouges n'est pas une modification livrée.
+
+**Ce qui reste à faire, écrit précisément** :
+1. `assert_eq!(TAILLE_TETE, 79)` → **91**, et le commentaire de version gagne « 7 quand la fenêtre d'attention et le motif glissant sont entrés dans le contrat » ;
+2. les constructeurs de **trame forgée** prennent la nouvelle taille — et devraient **lire `TAILLE_TETE`** plutôt qu'un littéral, sinon le prochain ajout de champ les cassera pareil ;
+3. **puis** retirer le refus.
+
+**Leçon, la même que partout dans ce sprint** : le contrat d'échange n'est pas seulement dans l'encodeur et le décodeur, il est aussi dans **les tests qui le forgent**. Une modification de protocole se compte en **trois** endroits, pas deux.
+
+**Bilan** : 27 rounds, 22 portes toutes vertes, 122 tests. L'objectif reste **actif**.
+
+### Tour 71 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
+
+*8 appels d'outils.* Actions notables :
+
+- bash — Find layout-dependent test code
+- bash — Read the forged-frame builder
+- bash — Read the second frame builder
+- bash — Make builders self-adjusting and test
+- bash — Apply protocol v7 fully and test
+- bash — Verify the header change with porte-flux
+- bash — Measure the transported window in the split path
+- bash — Document and commit protocol v7
+
+**Synthèse produite :**
+
+⏵ **v7 livré** : 18,5520 des deux côtés, écart 0,00e0 (contre 195 vs 50 avant) — je documente et commite
 
 ## 3. Travail accompli
 
@@ -3132,7 +3170,7 @@ TAILLE_TETE = 79 octets, aucune marge :
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1490 autres
+- … et 1498 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3440,4 +3478,5 @@ TAILLE_TETE = 79 octets, aucune marge :
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib p = pathlib.Path("docs/sprint-cerveau.md") s = p.read_text() a = "## ▶ 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib p = pathlib.Path("docs/sprint-cerveau.md") s = p.read_text() a = "## ▶ 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib p = pathlib.Path("docs/sprint-cerveau.md") s = p.read_text() a = "## ▶ 
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 

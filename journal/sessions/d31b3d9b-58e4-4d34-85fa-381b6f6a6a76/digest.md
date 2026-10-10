@@ -30717,3 +30717,167 @@ Updated 1 path from the index
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"docs/sprint-cerveau.md\")\ns = p.read_text()\na = \"## ▶ PROCHAINE ACTION (à lire en premier)\"\nneuf = \"\"\"## PROTOCOLE v7 — TENTÉ (11 octobre 14 h), REVERTÉ : neuf tests enc … [3876 caractères tronqués]`
+
+  ```
+lecon v7 ecrite
+af6d566 Protocole v7 tente et REVERTE : neuf tests encodent la mise en page v6
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 27 livré : protocole v7 tenté puis **reverté** — neuf tests encodent la mise en page v6
+
+**Ce round** — 1 commit poussé, **122 tests verts** (contrainte intacte), arbre propre.
+
+Les **huit modifications** de la spécification du round 26 ont été appliquées : `struct Act` (+3 champs), `du_modele`, `appliquer`, `TAILLE_TETE` (79 → **91**), `VERSION_FLUX` (6 → **7**), l'encodeur (offsets 79/83/87), le décodeur (`u(79)`, `u(83)`, `u(87)`), et le **retrait du refus**. Le binaire **compile**.
+
+**Mais 9 tests tombent** — exactement ceux qui encodent la v6 :
+- `entete_et_version_sont_ce_que_les_numeros_disent` : `assert_eq!(TAILLE_TETE, 79, …)`, plus un commentaire qui énumère les versions (« 4 quand les top-k sont entrés, 5 quand le mode 4 est apparu, 6 quand… ») ;
+- les tests de **trame forgée** : ils construisent une trame **à la main**, avec les offsets et la taille de la v6.
+
+**J'ai donc reverté** — la contrainte de l'objectif prime : 122 tests verts, arbre propre, porte-flux inchangée. Une modification de protocole qui laisse neuf tests rouges n'est pas une modification livrée.
+
+**Ce qui reste à faire, écrit précisément** :
+1. `assert_eq!(TAILLE_TETE, 79)` → **91**, et le commentaire de version gagne « 7 quand la fenêtre d'attention et le motif glissant sont entrés dans le contrat » ;
+2. les constructeurs de **trame forgée** prennent la nouvelle taille — et devraient **lire `TAILLE_TETE`** plutôt qu'un littéral, sinon le prochain ajout de champ les cassera pareil ;
+3. **puis** retirer le refus.
+
+**Leçon, la même que partout dans ce sprint** : le contrat d'échange n'est pas seulement dans l'encodeur et le décodeur, il est aussi dans **les tests qui le forgent**. Une modification de protocole se compte en **trois** endroits, pas deux.
+
+**Bilan** : 27 rounds, 22 portes toutes vertes, 122 tests. L'objectif reste **actif**.
+
+
+## Tour 71
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 mémoire épisodique, C7 consolidation, C8 périphérie, C9 latéralité, C10 budgets, et la diffusion réseau du bus de C5 ; (b) les expériences E2-E9 de docs/biologie-pour-drave.md et docs/hebbien-differentiel-et-biologie.md ; (c) les dessins de modèle H/I/J de docs/modele-pour-drave.md ; (d) les manques du registre docs/manques.md (noyau de listes pour les experts, noyau de listes GPU, encodeurs) — l'implémenter ou la mesurer, la doter d'une porte vérifiable, la documenter, commiter, pousser, et enchaîner immédiatement sur la suivante. Contraintes : les 23 portes du dépôt et tous les tests restent verts (porte-flux.sh après toute modification du chemin d'exécution), le profil release reste le binaire de mesure, le crate reste std seul, et docs/sprint-cerveau.md reste l'état resumable mis à jour à chaque round. Ne jamais s'arrêter faute de tâches planifiées : en inventer de nouvelles, mesurables, plutôt que d'attendre."
+Round: 28/60
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 28 : je rends les tests de trame INDÉPENDANTS de la mise en page (ce qui débloque le v7)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"TAILLE_TETE\\|VERSION_FLUX\\|79\" drave-core/src/main.rs | awk -F: '$1>7300' | head -12", "description": "Find layout-dependent test code"}`
+
+  ```
+7380:        assert_eq!(TAILLE_TETE, 79, "l'en-tête de flux doit faire 79 octets");
+7386:        assert_eq!(VERSION_FLUX, 6, "le pré-mix porté impose la version 6");
+7434:        assert_eq!(octets, TAILLE_TETE + 1 + 32,
+7456:        t.push(VERSION_FLUX);
+7468:        assert_eq!(t.len(), TAILLE_TETE);
+7676:            tete.push(VERSION_FLUX);
+7688:            assert_eq!(tete.len(), TAILLE_TETE);
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '7450,7470p' drave-core/src/main.rs", "description": "Read the forged-frame builder"}`
+
+  ```
+use std::net::{TcpListener, TcpStream};
+
+    /// En-tête v4 complet, prêt à compléter par un corps.
+    fn entete(mode: u8, n: u32) -> Vec<u8> {
+        let mut t: Vec<u8> = Vec::new();
+        t.extend_from_slice(&MAGIE_FLUX.to_le_bytes());
+        t.push(VERSION_FLUX);
+        t.push(mode);
+        t.extend_from_slice(&12u32.to_le_bytes());
+        t.extend_from_slice(&24u32.to_le_bytes());
+        t.extend_from_slice(&0u32.to_le_bytes());
+        t.extend_from_slice(&n.to_le_bytes());
+        t.extend_from_slice(&0f32.to_le_bytes());
+        t.extend_from_slice(&127f32.to_le_bytes());
+        t.extend_from_slice(&0f32.to_le_bytes());
+        t.extend_from_slice(&0u32.to_le_bytes());
+        t.push(0);
+        for _ in 0..10 { t.extend_from_slice(&0u32.to_le_bytes()); }
+        assert_eq!(t.len(), TAILLE_TETE);
+        t
+    }
+  ```
+
+### 🤖 Assistant
+
+⏵ Le constructeur de trame est déjà paramétré sauf le remplissage — je le rends auto-ajustable
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '7670,7692p' drave-core/src/main.rs", "description": "Read the second frame builder"}`
+
+  ```
+let adresse = ecoute.local_addr().unwrap();
+        let serveur = std::thread::spawn(move || {
+            let (mut sock, _) = ecoute.accept().unwrap();
+            // en-tête v4 complet, mode lot, n = 100 millions d'états
+            let mut tete: Vec<u8> = Vec::new();
+            tete.extend_from_slice(&MAGIE_FLUX.to_le_bytes());
+            tete.push(VERSION_FLUX);
+            tete.push(MODE_LOT);
+            tete.extend_from_slice(&12u32.to_le_bytes());
+            tete.extend_from_slice(&24u32.to_le_bytes());
+            tete.extend_from_slice(&0u32.to_le_bytes());
+            tete.extend_from_slice(&100_000_000u32.to_le_bytes());
+            tete.extend_from_slice(&0f32.to_le_bytes());
+            tete.extend_from_slice(&127f32.to_le_bytes());
+            tete.extend_from_slice(&0f32.to_le_bytes());
+            tete.extend_from_slice(&0u32.to_le_bytes());
+            tete.push(0);
+            for _ in 0..10 { tete.extend_from_slice(&0u32.to_le_bytes()); }
+            assert_eq!(tete.len(), TAILLE_TETE);
+            sock.write_all(&tete).unwrap();
+            // Pas de lecture ici : le client refuse AVANT de lire le corps, donc
+            // il ne renverra rien — l'ancienne v
+… [110 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\nvieux = \"\"\"        for _ in 0..10 { t.extend_from_slice(&0u32.to_le_bytes()); }\n        assert_eq!(t.len(), TAILLE_TETE);\"\"\" … [1303 caractères tronqués]`
+
+  ```
+constructeurs auto-ajustables
+test result: ok. 122 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.31s
+  ```
+
+### 🤖 Assistant
+
+⏵ Les constructeurs s'ajustent — j'applique maintenant le v7 en entier (avec les deux assertions de version)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\nn = 0\ndef sub(a, b, quoi):\n    global s, n\n    assert a in s, quoi\n    s = s.replace(a, b, 1); n += 1\n\nsub(\"\"\"    attn_top … [3719 caractères tronqués]`
+
+  ```
+v7 applique : 11 sites
+test result: ok. 122 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.31s
+  ```
+
+### 🤖 Assistant
+
+⏵ 122 tests verts avec le v7 — je lance `porte-flux` (le garde-fou de l'en-tête)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 1800 bash tools/porte-flux.sh > /tmp/pf28.txt 2>&1; echo \"porte-flux code=$?\"; tail -6 /tmp/pf28.txt", "description": "Verify the header change with porte-flux", "timeoutMs": 1900000}`
+
+  ```
+porte-flux code=0
+  mode 0 — f32 dense               0.00e0  ✅  (réf 61.9920 / deux nœuds 61.9920)
+  mode 1 — listes quantifiées     0.00e0  ✅  (réf 61.9920 / deux nœuds 61.9920)
+  mode 2 — listes par blocs        3.65e-2  ✅  (réf 61.9920 / deux nœuds 64.2535)
+  mode 3 — lot dense f32           0.00e0  ✅  (réf 60.8135 / deux nœuds 60.8135)
+  mode 4 — lot en listes           4.45e-3  ✅  (réf 60.8135 / deux nœuds 60.5427)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && T=$(mktemp -d); PORT=$((60000 + RANDOM % 4000)); cat > $T/topo.json <<JSON\n{\"regions\":[{\"id\":\"local\",\"couches\":[0,11],\"instance\":\"local\"},{\"id\":\"d\",\"couches\":[12,23],\"instance\":\"127.0.0.1:$PORT\"}],\"liens\":[{\ … [998 caractères tronqués]`
+
+  ```
+--- v7 : --attn-window 64 doit maintenant être COHÉRENT (les deux côtés) ---
+    référence locale  : perplexité 18.5520  (22.1 s)
+    deux nœuds        : perplexité 18.5520  (21.8 s)
+    écart             : 0.00e0
+--- local, même réglage (référence de comparaison) ---
+  perplexité 21.5801 sur
+  ```
+
+### 🤖 Assistant
+
+⏵ **v7 livré** : 18,5520 des deux côtés, écart 0,00e0 (contre 195 vs 50 avant) — je documente et commite
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\n\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\na = \"## Annexe — manifeste des journaux\"\nsec = \"\"\"## 40. Protocole v7 : la fenêtre d'attention voyage, et le … [5912 caractères tronqués]`

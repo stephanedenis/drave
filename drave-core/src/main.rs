@@ -2865,7 +2865,7 @@ const MAGIE_FLUX: u32 = 0x4452_5631;   // "DRV1"
 /// en version 2 lirait `n × 4` octets d'un corps qui en fait `n × hidden × 4`,
 /// se désynchroniserait, puis dirait « mode inconnu » : un refus exact mais tardif
 /// et muet sur la cause. Ici il est immédiat et nommé.
-const VERSION_FLUX: u8 = 6;
+const VERSION_FLUX: u8 = 7;
 /// Vecteur dense en f32 : 4 octets par canal, toute la dimension.
 const MODE_DENSE: u8 = 0;
 /// LISTE creuse quantifiée : indice u16 + valeur i16, plus une échelle. C'est le
@@ -2901,7 +2901,9 @@ const MODE_LOT_LISTES: u8 = 4;
 // magie · version · mode · plage · position · n · échelle · niveaux · seuil ·
 // top-k · renorm · attn_topk · qk_topk · moe_topk · topk_proj[7]
 const TAILLE_TETE: usize = 4 + 1 + 1 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 1
-                            + 4 + 4 + 4 + 7 * 4;
+                            + 4 + 4 + 4 + 7 * 4
+                            // v7 : attn_window (79), swa_pattern (83), attn_sinks (87)
+                            + 4 + 4 + 4;
 
 /// Réglages d'activation d'un nœud : ils font partie du contrat d'échange.
 #[derive(Clone, Copy)]
@@ -2917,6 +2919,13 @@ struct Act {
     attn_topk: u32,
     qk_topk: u32,
     moe_topk: u32,
+    // PROTOCOLE v7 : trois réglages qui ne voyageaient pas, et sans lesquels le pilote et le
+    // nœud calculaient DEUX MODÈLES DIFFÉRENTS SOUS LE MÊME NOM (mesuré : 195,5685 contre
+    // 50,3829 avec une fenêtre de 64). L'en-tête était plein (79 octets) : ces champs le
+    // portent à 91, et la version passe à 7.
+    attn_window: u32,
+    swa_pattern: u32,
+    attn_sinks: u32,
 }
 
 impl Act {
@@ -2926,7 +2935,9 @@ impl Act {
         Act { levels: m.act_levels, thresh: m.act_thresh, topk: m.act_topk as u32,
               renorm: m.act_renorm, topk_proj,
               attn_topk: m.attn_topk as u32, qk_topk: m.qk_topk as u32,
-              moe_topk: m.moe_topk as u32 }
+              moe_topk: m.moe_topk as u32,
+              attn_window: m.attn_window as u32, swa_pattern: m.swa_pattern as u32,
+              attn_sinks: m.attn_sinks as u32 }
     }
     fn appliquer(&self, m: &mut model::Model) {
         m.act_levels = self.levels;
@@ -2937,6 +2948,10 @@ impl Act {
         m.attn_topk = self.attn_topk as usize;
         m.qk_topk = self.qk_topk as usize;
         m.moe_topk = self.moe_topk as usize;
+        // v7 : ces trois réglages arrivent ENFIN jusqu'au nœud.
+        m.attn_window = self.attn_window as usize;
+        m.swa_pattern = self.swa_pattern as usize;
+        m.attn_sinks = self.attn_sinks as usize;
     }
 }
 
@@ -3060,7 +3075,8 @@ fn tete_flux(mode: u8, debut: u32, fin: u32, pos: u32, n: usize, echelle: f32,
              mdl: Option<&model::Model>) -> Vec<u8> {
     let act = mdl.map(Act::du_modele).unwrap_or(Act {
         levels: 127.0, thresh: 0.0, topk: 0, renorm: false,
-        topk_proj: [0; 7], attn_topk: 0, qk_topk: 0, moe_topk: 0 });
+        topk_proj: [0; 7], attn_topk: 0, qk_topk: 0, moe_topk: 0,
+        attn_window: 0, swa_pattern: 0, attn_sinks: 0 });
     let mut t = Vec::with_capacity(TAILLE_TETE);
     t.extend_from_slice(&MAGIE_FLUX.to_le_bytes());
     t.push(VERSION_FLUX);
@@ -3078,6 +3094,9 @@ fn tete_flux(mode: u8, debut: u32, fin: u32, pos: u32, n: usize, echelle: f32,
     t.extend_from_slice(&act.attn_topk.to_le_bytes());
     t.extend_from_slice(&act.qk_topk.to_le_bytes());
     t.extend_from_slice(&act.moe_topk.to_le_bytes());
+    t.extend_from_slice(&act.attn_window.to_le_bytes());   // offset 79
+    t.extend_from_slice(&act.swa_pattern.to_le_bytes());   // offset 83
+    t.extend_from_slice(&act.attn_sinks.to_le_bytes());    // offset 87
     assert_eq!(t.len(), TAILLE_TETE,
                "en-tête de flux de {} octets pour {TAILLE_TETE}", t.len());
     t
@@ -3300,6 +3319,7 @@ fn recevoir_flux(s: &mut std::net::TcpStream, hidden: usize, hc_destinataire: us
     let mut topk_proj = [0u32; 7];
     for (i, v) in topk_proj.iter_mut().enumerate() { *v = u(39 + i * 4); }
     let act = Act {
+        attn_window: u(79), swa_pattern: u(83), attn_sinks: u(87),
         levels: f32::from_le_bytes([tete[26], tete[27], tete[28], tete[29]]),
         thresh: f32::from_le_bytes([tete[30], tete[31], tete[32], tete[33]]),
         topk: u(34),
@@ -4333,33 +4353,8 @@ changer (seul le temps change) — c'est la porte de C3", tp_region_distante, de
     // 42,5477 avec et sans le drapeau. C'est la famille de défauts que ce dépôt traque (un
     // drapeau qui ne fait rien), et celui-ci comptait double : le sprint porte sur la
     // distribution, où le réglage fin doit survivre.
-    // C2/E4 — LA FENÊTRE D'ATTENTION EN RÉPARTI : REFUS EXPLICITE, PAS UN RÉSULTAT FAUX.
-    //
-    // Mesuré : `--attn-window 64` AGIT en local (13,1368 → 21,5801) et ne fait RIEN en
-    // réparti, parce qu'il n'était câblé que dans `run_infer` et `run_ppl`. La correction
-    // évidente — l'assigner ici — a été essayée : elle rend un résultat FAUX ET SILENCIEUX,
-    // mesuré : le pilote applique la fenêtre à SES douze couches, le nœud garde la sienne, et
-    // les deux moitiés ne calculent plus le même modèle (référence locale 195,5685 contre
-    // 50,3829 pour le découpage, écart de flux 7,42e-1).
-    //
-    // POURQUOI REFUSER PLUTÔT QUE CALCULER. Un drapeau qui ne fait rien est un défaut ; un
-    // drapeau qui fait calculer DEUX MODÈLES DIFFÉRENTS SOUS LE MÊME NOM en est un pire, et le
-    // pire cas du dépôt est le résultat faux qui a l'air d'un résultat. Tant que ces champs ne
-    // voyagent pas dans la trame (`struct Act` ne porte ni `attn_window`, ni `swa_pattern`, ni
-    // `attn_sinks`), la seule conduite honnête est de le DIRE et de s'arrêter.
-    //
-    // CE QU'IL FAUDRA FAIRE POUR LES HONORER : ajouter les trois champs à `struct Act` et à
-    // l'encodeur/décodeur de trame (protocole v7), puis les appliquer côté nœud comme les
-    // autres réglages d'activation. Alors — et alors seulement — le drapeau voudra dire la
-    // même chose des deux côtés.
-    if opt.attn_window > 0 || opt.swa_pattern.is_some() || opt.attn_sinks > 0 {
-        eprintln!("[attention] REFUS : `--attn-window`, `--swa-pattern` et `--attn-sinks` ne \
-voyagent PAS dans la trame du protocole v6 — le pilote les appliquerait à ses couches et le \
-nœud garderait les siennes, soit DEUX MODÈLES DIFFÉRENTS SOUS LE MÊME NOM (mesuré : 195,5685 \
-contre 50,3829). Rien n'a été calculé. Ces réglages valent en local (`--ppl`) et en inférence \
-(`--infer`) ; pour les honorer en réparti, il faut les ajouter à `struct Act` (protocole v7).");
-        std::process::exit(2);
-    }
+    // v7 : le refus qui suivait ici a été RETIRÉ — les trois réglages voyagent maintenant
+    // dans la trame, donc le pilote ET le nœud appliquent la même fenêtre.
     if let Some(gs) = opt.ffn_gain.clone() {
         let liste: Vec<String> = gs.iter().map(|(l, g)| format!("couche {l} × {g}")).collect();
         println!("gain FFN : {}", liste.join(" · "));
@@ -7377,13 +7372,13 @@ mod tests_flux {
 
     #[test]
     fn entete_et_version_sont_ce_que_les_numeros_disent() {
-        assert_eq!(TAILLE_TETE, 79, "l'en-tête de flux doit faire 79 octets");
+        assert_eq!(TAILLE_TETE, 91, "l'en-tête de flux doit faire 91 octets (v7)");
         // La version suit l'en-tête : 4 quand les top-k sont entrés dans le
         // contrat, 5 quand le mode 4 (lot en listes) est apparu, 6 quand le
         // pré-mix porté de V4.1 a été ajouté en tête de corps. Ce test a
         // d'ailleurs échoué au premier coup, exactement pour ça — et il a
         // resservi à la v6.
-        assert_eq!(VERSION_FLUX, 6, "le pré-mix porté impose la version 6");
+        assert_eq!(VERSION_FLUX, 7, "la fenêtre d'attention transportée impose la version 7");
     }
 
     #[test]
@@ -7464,8 +7459,13 @@ mod tests_plafond {
         t.extend_from_slice(&0f32.to_le_bytes());
         t.extend_from_slice(&0u32.to_le_bytes());
         t.push(0);
-        for _ in 0..10 { t.extend_from_slice(&0u32.to_le_bytes()); }
-        assert_eq!(t.len(), TAILLE_TETE);
+        // Le remplissage se CALCULE à partir de TAILLE_TETE : il valait 10 mots (les
+        // top-k et les sept top-k par projection), et il aurait fallu le passer à 13 au
+        // moment du protocole v7 — c'est exactement le genre de littéral qui casse un test
+        // pour une raison qui n'est pas celle qu'il mesure. Compté, il ne casse plus.
+        while t.len() < TAILLE_TETE { t.extend_from_slice(&0u32.to_le_bytes()); }
+        assert_eq!(t.len(), TAILLE_TETE,
+                   "TAILLE_TETE doit être un multiple de 4 au-delà de l'en-tête fixe");
         t
     }
 
@@ -7684,7 +7684,7 @@ comme celui de l'émission — il l'omettait (81 999 annoncés pour 82 016 réel
             tete.extend_from_slice(&0f32.to_le_bytes());
             tete.extend_from_slice(&0u32.to_le_bytes());
             tete.push(0);
-            for _ in 0..10 { tete.extend_from_slice(&0u32.to_le_bytes()); }
+            while tete.len() < TAILLE_TETE { tete.extend_from_slice(&0u32.to_le_bytes()); }
             assert_eq!(tete.len(), TAILLE_TETE);
             sock.write_all(&tete).unwrap();
             // Pas de lecture ici : le client refuse AVANT de lire le corps, donc

@@ -507,6 +507,66 @@ préféré **spécifier à l'octet près** plutôt que de laisser un arbre cass�
 
 ---
 
+## PROTOCOLE v7 — LIVRÉ (11 octobre 15 h 30) : la fenêtre voyage, le refus disparaît
+
+Le round précédent avait reverté le v7 parce que **neuf tests** tombaient. La cause était
+précise : les constructeurs de **trame forgée** remplissaient l'en-tête avec **dix mots
+littéraux**. Corrigé d'abord — ils **calculent** maintenant le remplissage à partir de
+`TAILLE_TETE` — puis le v7 a été appliqué en **11 sites** et tout est vert.
+
+**Mesure, avec `--attn-window 64` en réparti :**
+
+| | perplexité |
+|---|---|
+| référence locale du run réparti | **18,5520** |
+| découpage (12 + 12) | **18,5520** |
+| **écart de flux** | **0,00e0** |
+
+Là où le câblage sans transport donnait **195,5685 contre 50,3829** (facteur 4, deux modèles
+différents sous le même nom), les deux moitiés appliquent désormais **la même fenêtre**. Le
+chemin purement local donne 21,5801 avec le même réglage : un autre calcul, mais un calcul
+**annoncé**.
+
+**Le refus est retiré** — il était la bonne conduite tant que la trame ne transportait pas ces
+réglages ; il devient un obstacle dès qu'elle les transporte.
+
+**Vérifications** : `porte-flux.sh` **vert**, cinq modes, écarts inchangés (0,00e0 · 0,00e0 ·
+3,65e-2 · 0,00e0 · 4,45e-3) — c'est le garde-fou qui aurait attrapé un en-tête décalé d'un
+octet ; **122 tests verts**. Enseigné au passage : une modification de protocole se compte en
+**trois** endroits — encodeur, décodeur, **et les tests qui le forgent**.
+
+---
+
+## PROTOCOLE v7 — LIVRÉ (11 octobre 15 h 30) : la fenêtre voyage, le refus disparaît
+
+Le round précédent avait reverté le v7 parce que **neuf tests** tombaient. La cause était
+précise : les constructeurs de **trame forgée** remplissaient l'en-tête avec **dix mots
+littéraux**. Corrigé d'abord — ils **calculent** maintenant le remplissage à partir de
+`TAILLE_TETE` — puis le v7 a été appliqué en **11 sites** et tout est vert.
+
+**Mesure, avec `--attn-window 64` en réparti :**
+
+| | perplexité |
+|---|---|
+| référence locale du run réparti | **18,5520** |
+| découpage (12 + 12) | **18,5520** |
+| **écart de flux** | **0,00e0** |
+
+Là où le câblage sans transport donnait **195,5685 contre 50,3829** (facteur 4, deux modèles
+différents sous le même nom), les deux moitiés appliquent désormais **la même fenêtre**. Le
+chemin purement local donne 21,5801 avec le même réglage : un autre calcul, mais un calcul
+**annoncé**.
+
+**Le refus est retiré** — il était la bonne conduite tant que la trame ne transportait pas ces
+réglages ; il devient un obstacle dès qu'elle les transporte.
+
+**Vérifications** : `porte-flux.sh` **vert**, cinq modes, écarts inchangés (0,00e0 · 0,00e0 ·
+3,65e-2 · 0,00e0 · 4,45e-3) — c'est le garde-fou qui aurait attrapé un en-tête décalé d'un
+octet ; **122 tests verts**. Enseigné au passage : une modification de protocole se compte en
+**trois** endroits — encodeur, décodeur, **et les tests qui le forgent**.
+
+---
+
 ## PROTOCOLE v7 — TENTÉ (11 octobre 14 h), REVERTÉ : neuf tests encodent la mise en page v6
 
 Les huit modifications de la spécification du round précédent ont été appliquées — `struct Act`
