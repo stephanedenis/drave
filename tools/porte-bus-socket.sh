@@ -196,7 +196,12 @@ echo "  perplexité avec le bus du pilote modulé : $PIL2 (référence $REF)"
 python3 -c "
 import sys
 r, p = float('$REF'), float('$PIL2')
-sys.exit('  ❌ le bus du pilote est branché nulle part' if p == r else
-         f'  ✅ le bus du pilote agit ({r} -> {p})')" || exit 1
+# Un sys.exit AVEC un message sort TOUJOURS en code 1 : la branche de succès
+# passait un message, donc la porte rendait 1 en ayant tout réussi. Et pas
+# d'apostrophe inversée ici : dans une chaîne bash entre guillemets, elle lance
+# une substitution de commande (attrapé au premier essai).
+if p == r:
+    sys.exit('  ❌ le bus du pilote est branché nulle part')
+print(f'  ✅ le bus du pilote agit ({r} -> {p})')" || exit 1
 
 rm -rf "$T"

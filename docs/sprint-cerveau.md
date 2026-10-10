@@ -8,66 +8,80 @@
 
 ## ▶ PROCHAINE ACTION (à lire en premier)
 
-État au **10 octobre 6 h** : **C1, C3, C4 (pas 1), C5, C5bis, C5ter, C6, C7 (pas 1),
-C12, C12bis** livrées et poussées · **122 tests verts** · portes `porte-topologie`,
-`porte-trace`, `porte-fusion`, `porte-bus`, `porte-bus-socket`, `porte-delais`,
-`porte-horloge`, `porte-flux`, `porte-episodique` vertes.
+État au **10 octobre 11 h 45** : **C1, C3, C4 (pas 1), C5, C5bis, C5ter, C6, C7 (pas 1),
+C8 (pas 1), C9/C10, C12, C12bis, C9×C1, C2/C6 (greffe d'état)** livrées et poussées ·
+**122 tests verts** · portes : `porte-topologie`, `porte-trace`, `porte-fusion`,
+`porte-bus`, `porte-bus-socket`, `porte-delais`, `porte-horloge`, `porte-flux`,
+`porte-pont`, `porte-coupe`, `porte-episodique`, `porte-reflexe`, `porte-greffe`.
 
-**La consigne tient toujours : ne pas s'arrêter faute de liste.** Le temps imparti
-(10 octobre 9 h) est un plancher, pas un plafond ; quand il tombe, la question n'est
-pas « ai-je fini ? » mais « qu'est-ce qui est mesurable maintenant ? ».
+**La consigne tient : ne pas s'arrêter faute de liste.** Le temps commun est la denrée
+la plus précieuse ; quand une liste s'épuise, la question est « qu'est-ce qui est
+mesurable maintenant ? ».
 
-**Ce qui vient d'être fait (contexte pour reprendre) :**
+### Les trois fils ouverts, par valeur
 
-- **C6** : mémoire épisodique (clé k-WTA + index inversé). Trois négatifs mesurés
-  d'abord (aucun élagage · l'espacement ne change rien · collisions à petit k), puis
-  **trois ingrédients** pour que l'index élude : expansion (896 → 16 384), décorrélation,
-  **égalisation d'usage des canaux** → élagage **83 %**, rappel 96,3 % à 50 % de
-  dégradation, round-trip **exact au bit près** (300/300, 2 500/2 500, et sur 3 corpus).
-  Coût d'expansion **fixe** ⇒ rentable au-delà de **N ≈ 2 048** épisodes.
-- **C7 (pas 1)** : consolidation par rejeu (fusion des épisodes qui co-activent).
-  **L'exemplaire bat la moyenne partout** (7 % du magasin → 87 % de rappel, contre
-  13 % → 22 %) : la clé d'une moyenne ne coïncide avec la clé d'aucun membre.
+**1. L'ENTRÉE DE CACHE — le prochain pas, et il est conçu.** La greffe d'état a montré
+que l'injection d'un état résiduel **ne transfère pas le contexte** : le premier jeton
+vient de l'état injecté, mais la suite est re-dérivée par l'attention sur le cache KV.
+Pour qu'une mémoire **serve** le calcul, il faut donc ranger ce qu'elle rend comme une
+**entrée de cache** que l'attention peut interroger. Conception à suivre :
+   - `--memoire-etat F --memoire-couche L` : à la couche L, calculer `k = W_k(x)`,
+     `v = W_v(x)` à partir de l'état rappelé (les projections existent déjà dans la
+     couche), et **ajouter un emplacement** à la fenêtre d'attention ;
+   - le point délicat est la **position RoPE** de cet emplacement : lui donner la
+     position du souvenir, ou la position courante ? Les deux se mesurent ;
+   - invariant : **sans état rappelé, la sortie est identique au bit près** (le chemin
+     doit être inerte quand il ne sert pas) ;
+   - mesure : avec un souvenir rangé en cache, la réponse doit devenir celle du
+     contexte qui a vécu l'épisode — c'est le test que la greffe résiduelle a échoué.
+   Le cache est indexé par position dans `KvCache` ; il faut donc soit un emplacement
+   réservé, soit un décalage des positions suivantes — et ce choix doit être écrit.
 
-**Par ordre de valeur mesurable :**
+**2. C8 (suite) — une tête DÉDIÉE par profondeur.** Mesuré : un réflexe court ne peut
+pas lire l'état intermédiaire (cos 0,145 à 16 couches sur 24) ; il lui faudrait une
+tête **entraînée pour sa couche**. Le moteur n'entraîne pas : c'est un manque, et c'est
+le même chantier que C7 (rejeu → poids).
 
-1. **C10 / C9 — le budget de FIBRES du pont** (en cours) : combien de canaux faut-il
-   échanger entre deux régions pour ne rien perdre ? `--pont-k K` ne garde que les K
-   plus grandes amplitudes de l'état échangé ; porte : `K = 0` (pont entier) doit être
-   **bit à bit** identique au mode sans pont, et la courbe perplexité ↔ K (donc ↔ octets
-   par pas) doit être monotone. C'est la question du corps calleux, et elle a une
-   réponse utile pour la distribution sur lien lent.
-2. **C2 — entrées multiples** (le plus lourd, à cadrer honnêtement) : exige deux plages
-   de couches disjointes par processus ; aujourd'hui explicitement refusé. C'est le
-   préalable de C8 (périphérie) et de C9 (jumelage).
-3. **C8 — périphérie** : région d'entrée à horloge propre, région de sortie (effecteur
-   avec délai), et **réflexes** (un lien qui court-circuite le centre). Invariant : une
-   entrée constante produit une sortie constante.
-4. **C7 suite** — consolidation **itérative** (plusieurs cycles de rejeu) : le rappel
-   d'appartenance tient-il après 2, 4, 8 cycles ? Et le rejeu vers les **poids**, qui
-   reste le vrai C7 : le moteur n'entraîne pas, les règles locales existantes sont
-   mesurées **dégradantes** (8,8246 contre 8,3869) — il faut donc une autre règle, et
-   c'est un chantier, pas une case à cocher.
-5. **C6 suite** — la mémoire qui **sert** : retrouver un passage pertinent dans un
-   document long et le réinjecter (protocole « aiguille » de `tools/aiguille.py`,
-   18/18 jusqu'à 12 288 jetons sans mémoire) ; mesure : le rappel par contenu
-   localise-t-il l'aiguille ?
-6. **Modèles** (`docs/modele-pour-drave.md`) : designs H (routage en profondeur),
-   I (budget d'événements appris), J (entraînement conscient de la quantification).
-7. **Biologie** : E2 (croissance des connexions), E4 (équilibre E/I), E5 (rejeu).
+**3. Les MODÈLES** (`docs/modele-pour-drave.md`) : designs H (routage en profondeur),
+I (budget d'événements appris), J (entraînement conscient de la quantification). La
+campagne a mesuré les architectures existantes ; concevoir et entraîner un modèle
+**conçu pour l'événementiel** est la question d'origine, et rien ne l'a encore
+attaquée côté entraînement.
 
-**Trappes à ne pas retomber dans :**
+### Ce qui est fait, en une ligne par capacité
 
-- le gain de bus sur une région **finale** est absorbé par la normalisation de sortie —
-  mesurer sur une région du **milieu** ;
+- **C1 / C4 / C5 / C5bis / C5ter / C12 / C12bis** : graphe de régions, horloge bornée,
+  bus (fichier et réseau), trace globale, nœud tracé, fusion par le temps mural.
+- **C6** : mémoire épisodique — trois négatifs mesurés, puis **trois ingrédients**
+  (expansion, décorrélation, égalisation) : élagage 83 %, rappel 96,3 % à 50 % de
+  dégradation, **Δ = 11 jetons sur 2 048** (0,54 % du texte), round-trip exact.
+- **C7** : consolidation par rejeu — **l'exemplaire bat la moyenne** (7 % du magasin →
+  87 % de rappel contre 13 % → 22 %), et **le rejeu répété est un point fixe** (0,00e0).
+- **C8** : réflexe — **0 % d'accord jusqu'à 16 couches sur 24**, cause mesurée
+  (cos 0,145 : l'état intermédiaire est presque orthogonal au final).
+- **C9/C10** : pont — **448 fibres = +2,81 % et ÷1,8 en octets**, **224 = +108,9 %**
+  (falaise **entre 448 et 392**) ; en dense f32 élaguer ne gagne **aucun** octet ;
+  à budget égal **quantifier bat élaguer de 83 %**.
+- **C9×C1** : **8 points de coupe, une seule perplexité** (lien sans perte) ; **8,9 %
+  d'écart** avec un lien encodé ; le coût du pont varie d'un **facteur 30** selon la
+  coupe ⇒ **couper tard**.
+
+**Trappes à ne pas retomber dans** (toutes rencontrées) :
+
+- le gain de bus sur une région **finale** est absorbé par la normalisation (mesurer au
+  **milieu**) ; `--flux` est **sans argument** (`--flux f32` passe « f32 » en positionnel
+  et reste en dense) ;
+- `..Default::default()` donne **0,0** à un f32 : un poids de greffe par défaut à zéro
+  n'aurait rien fait, en silence ;
+- une position « dernière » **ne se devine pas** (`--tokenize` et `--prompt` ne comptent
+  pas les mêmes jetons) — la faire résoudre par le moteur ;
 - un nom de **variable** bash accentué n'est pas un identifiant valide (les noms de
-  *fonctions* accentués passent) ;
-- `pkill -f "<nom>"` se tue lui-même ; repérer les fils par PID ou par `flock` ;
-- un nœud refuse une plage d'une seule couche (`f.debut >= f.fin`) ;
-- `--depuis` gonfle les compteurs cumulés de paires ; `--limit` change le protocole
-  de fenêtres ; un drapeau inconnu est **ignoré en silence** (utiliser
-  `--options-strict` dans les scripts) ;
-- deux lecteurs lourds concurrents font tomber le disque à 8,6 Mo/s : **sérialiser**.
+  *fonctions* accentués passent) ; `pkill -f "<nom>"` se tue lui-même ;
+- un nœud refuse une plage d'une seule couche ; le signe `%` est un **champ** à part
+  dans les sorties (deux parseurs de porte se sont trompés d'indice) ;
+- `--depuis` gonfle les compteurs de paires ; un drapeau inconnu est **ignoré en
+  silence** (`--options-strict` dans les scripts) ; **sérialiser** les lecteurs lourds
+  (deux lecteurs concurrents font tomber le disque à 8,6 Mo/s).
 
 ---
 

@@ -26586,3 +26586,256 @@ code=0
 ⏵ C2/C6 : porte 5/5 verte — le négatif est établi et sa cause mesurée ; je documente
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/greffe_docs.py <<'ENDPY'\nimport pathlib\n\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\nancre = \"## Annexe — manifeste des journaux\"\nsec = '''## 28. La greffe d'état (C2/C6) : branché … [9777 caractères tronqués]`
+
+  ```
+docs greffe ecrites
+b852b09 C2/C6 : la greffe d'état — branchée, et elle ne transfère PAS le contexte
+  ```
+
+### 🤖 Assistant
+
+⏵ Je lance la suite complète des portes en fond et je remets à jour la liste d'actions
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls tools/porte-*.sh | sed 's|tools/||' | tr '\\n' ' ' && cat > /tmp/suite_portes.sh <<'EOF'\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nfor p in porte-topologie porte-trace porte-fusion porte-bus porte-bus-socket porte-delai … [518 caractères tronqués]`
+
+  ```
+started background job bash-21
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n \"$(grep -n '### C11' docs/plan-cerveau-complet.md | head -1 | cut -d: -f1),+14p\" docs/plan-cerveau-complet.md", "description": "Read C11 spec"}`
+
+  ```
+### C11 — Instances multiples concertées (le substrat distribué)
+
+Voir § 3 : c'est la capacité qui porte toutes les autres, et elle mérite son propre
+plan.
+
+### C12 — Observabilité unifiée (traçage distribué)
+
+- **Cerveau** : pas d'équivalent — mais sans elle on ne débogue pas un graphe.
+- **Moteur** : traces DRVF **locales**, exactes, rejouables ; mesures par lien.
+- **Conception** : une **trace globale** où chaque événement porte
+  `(région, pas de temps, lien, horodatage)`, agrégée par un collecteur ; le rejeu
+  global doit reproduire une exécution distribuée **au bit près** (on sait déjà le
+  faire pour une chaîne).
+- **Interface** : `--trace-globale <fichier>` ; `--rejouer-globale <fichier>`.
+- **Invariant** : rejeu global = exécution originale, 0,00e0.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n \"$(grep -n '^## 3\\.' docs/plan-cerveau-complet.md | head -1 | cut -d: -f1),+40p\" docs/plan-cerveau-complet.md", "description": "Read plan section 3"}`
+
+  ```
+## 3. La distribution sur plusieurs instances, sur plusieurs machines
+
+C'est la partie que la question demandait explicitement. Voici le plan.
+
+### 3.1 Ce qui existe déjà, et qui est réutilisable tel quel
+
+- **Un protocole de flux exact** : le nœud (`--flux-serveur`) applique une plage de
+  couches ; le pilote (`--ppl-reparti`, `--couches-locales`) lui envoie les
+  activations. Cinq modes (0 : f32 dense, 1 : listes quantifiées, 2 : listes par
+  blocs, 3 : lot dense, 4 : lot en listes), écarts mesurés **0,00e0 / 0,00e0 /
+  3,65e-2 / 0,00e0 / 4,45e-3**.
+- **`TCP_NODELAY`**, échelles par bloc, bornes d'allocation (règle R4 : plafond de
+  256 Mo pour toute allocation pilotée par le réseau).
+- **Un instrument de latence** : `tools/proxy_latence.py` (relais TCP avec délai
+  réglable) et `tools/carte_latence.sh` (balayage), qui ont donné la loi
+  **3,4 ms par jeton et par ms de RTT**.
+- **Le découpage par experts** (`clusters.rs`) : un fichier par grappe, un nœud peut
+  ne charger qu'un huitième des experts (2,36 Go mesurés).
+
+### 3.2 Ce qui manque, capacité par capacité
+
+| manque | aujourd'hui | conception |
+|---|---|---|
+| **topologie** | 1 producteur → 1 consommateur, plage contiguë | 
+… [1612 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je consigne l'état et la conception de la suite (entrée de cache) dans la liste d'actions
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/next2.py <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"docs/sprint-cerveau.md\")\ns = p.read_text()\ndeb = s.index(\"## ▶ PROCHAINE ACTION (à lire en premier)\")\nfin = s.index(\"## Objectif du sprint\")\nneuf = \"\"\"## ▶ … [5225 caractères tronqués]`
+
+  ```
+liste d'actions rafraichie
+858
+  ```
+
+- **job_output** `{"job_id": "bash-21", "timeout_ms": 900000, "wait": true}`
+
+  ```
+porte-bus.sh porte-bus-socket.sh porte-coupe.sh porte-delais.sh porte-episodique.sh porte-flux.sh porte-fusion.sh porte-greffe.sh porte-horloge.sh porte-mistral.sh porte-pont.sh porte-reflexe.sh porte-reparti-moteur.sh porte-tokenizer-kimi.sh porte-topologie.sh porte-trace.sh porte-topologie : code=0 rouges=0
+porte-trace : code=0 rouges=0
+porte-fusion : code=0 rouges=0
+porte-bus : code=0 rouges=0
+porte-bus-socket : code=1 rouges=0
+porte-delais : code=0 rouges=0
+porte-horloge : code=0 rouges=0
+porte-flux : code=0 rouges=0
+porte-pont : code=0 rouges=0
+porte-coupe : code=0 rouges=0
+[status: running]
+  ```
+
+### 🤖 Assistant
+
+⏵ Une porte est rouge (`porte-bus-socket`, code 1 sans marqueur) — j'attends la fin puis j'enquête
+
+- **job_output** `{"job_id": "bash-21", "timeout_ms": 900000, "wait": true}`
+
+  ```
+porte-episodique : code=0 rouges=0
+porte-reflexe : code=0 rouges=0
+--- tests ---
+test result: ok. 122 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.31s
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 1200 bash tools/porte-bus-socket.sh > /tmp/pbs.txt 2>&1; echo \"code=$?\"; tail -22 /tmp/pbs.txt", "description": "Reproduce the bus-socket gate failure", "timeoutMs": 1300000}`
+
+  ```
+code=1
+=== 3. bus par SOCKET, ligne envoyée avant la connexion du pilote ===
+  bus : OK gain 2
+  perplexité par socket : 148.7080
+  écart socket / statique : 0.000000e+00
+  ✅ identique au bit près (0,00e0)
+=== 4. ligne NEUTRE par socket : rien ne doit changer ===
+  bus : OK gain 1
+  écart neutre / référence : 0.000000e+00
+  ✅ identique au bit près (0,00e0)
+=== 5. ligne envoyée EN PLEIN VOL ===
+  bus : OK gain 2 (pendant que le pilote calcule)
+    deux nœuds        : perplexité 42.3176  (12.4 s)
+  perplexité modulée en plein vol : 42.3176  (référence 113.0068 · dès le pas 0 148.7080)
+  ✅ en plein vol : ni la référence (113.0068), ni le réglage dès le pas 0 (148.708)
+=== 6. le bus du PILOTE : neutre par socket, inerte AU BIT PRÈS ===
+  bus du pilote : OK gain 1
+  neutre côté pilote / référence : 0.000000e+00
+  ✅ identique au bit près (0,00e0)
+=== 7. le bus du PILOTE branché : une ligne non neutre change le résultat ===
+  bus du pilote : OK gain 2
+  perplexité avec le bus du pilote modulé : 148.9144 (référence 113.0068)
+  ✅ le bus du pilote agit (113.0068 -> 148.9144)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -14 /tmp/pbs.txt && echo \"=== fin du fichier (dernières lignes brutes) ===\" && tail -3 /tmp/pbs.txt | cat -A | tail -3 | cut -c1-200", "description": "Inspect gate head and tail"}`
+
+  ```
+=== 1. référence : aucun bus ===
+  perplexité de référence : 113.0068
+=== 2. bus STATIQUE sur le nœud (--bus gain=2.0) ===
+  [bus] canaux actifs sur ce nœud : gain=2
+  perplexité avec gain statique : 148.7080
+=== 3. bus par SOCKET, ligne envoyée avant la connexion du pilote ===
+  bus : OK gain 2
+  perplexité par socket : 148.7080
+  écart socket / statique : 0.000000e+00
+  ✅ identique au bit près (0,00e0)
+=== 4. ligne NEUTRE par socket : rien ne doit changer ===
+  bus : OK gain 1
+  écart neutre / référence : 0.000000e+00
+  ✅ identique au bit près (0,00e0)
+=== fin du fichier (dernières lignes brutes) ===
+  bus du pilote : OK gain 2$
+  perplexitM-CM-) avec le bus du pilote modulM-CM-) : 148.9144 (rM-CM-)fM-CM-)rence 113.0068)$
+  M-bM-^\M-^E le bus du pilote agit (113.0068 -> 148.9144)$
+  ```
+
+### 🤖 Assistant
+
+⏵ Vrai défaut : `sys.exit("message")` sort en code 1 même quand la porte réussit
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"sys.exit(.*✅\" tools/*.sh | head -20", "description": "Find success messages passed to sys.exit"}`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"sys.exit\" tools/porte-bus-socket.sh tools/porte-pont.sh tools/porte-coupe.sh tools/porte-episodique.sh tools/porte-reflexe.sh 2>/dev/null | grep -v \"exit(0)\\|exit(2)\\|exit(3)\\|exit(1)\\|exit('\\|exit(f'\" | head -20",  … [50 caractères tronqués]`
+
+  ```
+tools/porte-bus-socket.sh:62:sys.exit(0 if rep.startswith("OK") else 1)
+tools/porte-bus-socket.sh:114:sys.exit(0 if e == 0.0 else 1)" \
+tools/porte-bus-socket.sh:130:sys.exit(0 if a == b else 1)" \
+tools/porte-bus-socket.sh:180:sys.exit(0 if a == b else 1)" \
+tools/porte-pont.sh:96:        sys.exit(f"  ❌ à {k} fibres le RETOUR ne maigrit pas : {ret} contre {or_} sans pont")
+tools/porte-pont.sh:98:        sys.exit(f"  ❌ à {k} fibres l'ALLER ne maigrit pas : {al} contre {oa} sans pont")
+tools/porte-pont.sh:112:        sys.exit(f"  ❌ la perplexité remonte en ajoutant des fibres : {a} -> {pa}, {b} -> {pb}")
+tools/porte-pont.sh:140:    sys.exit(f"  ❌ en dense f32 le nombre d'octets ne devrait PAS changer : {ad} contre {oa}")
+tools/porte-pont.sh:142:    sys.exit("  ❌ à 448 fibres la perplexité devrait être pire qu'à 896")
+tools/porte-pont.sh:155:    sys.exit(f"  ❌ le pont de 448 fibres devrait coûter moins d'octets : {o448} contre {oa}")
+tools/porte-pont.sh:159:    sys.exit("  ❌ le pont élagué aurait un meilleur rendement que l'encodage complet")
+tools/porte-pont.sh:178:    sys.exit(f"  ❌ 448 fibres devraient coûter moins de 5 % : {d448:.2f} %")
+tools/porte-pont.sh:180:    sys.exit(f"  ❌
+… [765 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '175,185p' tools/porte-bus-socket.sh", "description": "Read the offending case 7 ending"}`
+
+  ```
+arrêter
+python3 -c "
+import sys
+a, b = float('$PIL'), float('$REF')
+print(f'  neutre côté pilote / référence : {abs(a-b):.6e}')
+sys.exit(0 if a == b else 1)" \
+  || { echo "  ❌ le bus du pilote perturbe le calcul (canal neutre)"; exit 1; }
+echo "  ✅ identique au bit près (0,00e0)"
+
+echo "=== 7. le bus du PILOTE branché : une ligne non neutre change le résultat ==="
+B5=$((BPORT + 4))
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -12 tools/porte-bus-socket.sh", "description": "Read the file tail"}`
+
+  ```
+REP=$(moduler "MODULATION gain 2.0" "$B5") && echo "  bus du pilote : $REP"
+wait $PID 2>/dev/null
+PIL2=$(ppl "$(cat "$T/pilbus2.txt")")
+arrêter
+echo "  perplexité avec le bus du pilote modulé : $PIL2 (référence $REF)"
+python3 -c "
+import sys
+r, p = float('$REF'), float('$PIL2')
+sys.exit('  ❌ le bus du pilote est branché nulle part' if p == r else
+         f'  ✅ le bus du pilote agit ({r} -> {p})')" || exit 1
+
+rm -rf "$T"
+  ```
+
+### 🤖 Assistant
+
+⏵ Je corrige le motif (`sys.exit` avec un message sort toujours en 1) et relance la porte
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"tools/porte-bus-socket.sh\")\ns = p.read_text()\na = '''python3 -c \"\nimport sys\nr, p = float('$REF'), float('$PIL2')\nsys.exit('  ❌ le bus du pilote est branché nulle part' i … [744 caractères tronqués]`
+
+  ```
+motif corrige
+code=0
+tools/porte-bus-socket.sh: command substitution: line 196: syntax error near unexpected token `"message"'
+tools/porte-bus-socket.sh: command substitution: line 196: `sys.exit("message")'
+  ✅ le bus du pilote agit (113.0068 -> 148.9144)
+  ```
+
+### 🤖 Assistant
+
+⏵ Une apostrophe inversée dans mon commentaire a déclenché une substitution de commande
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"tools/porte-bus-socket.sh\")\ns = p.read_text()\na = '''# `sys.exit(\\\"message\\\")` sort TOUJOURS en code 1 : la branche de succès passait un\n# message, donc la porte rendait … [688 caractères tronqués]`
+
+  ```
+commentaire assaini
+code=0
+0
+  perplexité avec le bus du pilote modulé : 148.9144 (référence 113.0068)
+  ✅ le bus du pilote agit (113.0068 -> 148.9144)
+  ```
+
+### 🤖 Assistant
+
+⏵ Je commite la correction, puis je mesure si un indice SÉMANTIQUE retrouve le bon passage
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A tools/porte-bus-socket.sh docs/sprint-cerveau.md && git commit -q -m \"Porte bus-socket : elle rendait 1 en ayant TOUT réussi (sys.exit avec un message)\n\nLe dernier cas de tools/porte-bus-socket.sh terminait par\nsys.exi … [1101 caractères tronqués]`
