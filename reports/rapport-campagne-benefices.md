@@ -2350,9 +2350,24 @@ aurait donc à découvrir que la bonne réponse est « une seule couche, un seul
 apprentissage par gradient sur peu de paramètres peut très bien ne pas trouver, puisqu'il
 optimiserait les deux ensemble.
 
-**Conditions** : un seul modèle (0,5 B), 128 jetons, un seul jeu d'identifiants ; l'optimum à
-0,75 est un point de la grille (0,5 · 0,75 · 1,0), il n'est pas localisé plus finement ; deux
-profils à deux couches testés, plus un à trois couches.
+**Généralise-t-il ? Deux axes testés, et les deux disent la même chose : la direction tient,
+la magnitude dépend des conditions.**
+
+| axe | mesure |
+|---|---|
+| **autre quantification** (Q4_0 au lieu de Q8_0) | gain 0,75 à la couche 0 → **14,7453** contre **15,8055** sans réglage = **−6,7 %** |
+| **fenêtre d'évaluation** (256 jetons au lieu de 128) | **17,1915** contre **17,4315** = **−1,4 %** (au lieu de −11,5 %) |
+
+**L'effet n'est donc pas un artefact d'une quantification** : il vaut −6,7 % sur Q4_0 et
+−11,5 % sur Q8_0. Mais **il décroît fortement avec la fenêtre** : −11,5 % sur 128 jetons,
+−1,4 % sur 256. Le chiffre de −11,5 % est un **point de mesure**, pas une propriété du modèle,
+et c'est écrit ainsi — la porte exige d'ailleurs que la magnitude décroisse, donc un futur
+relecteur ne pourra pas citer le meilleur chiffre sans voir la condition.
+
+**Conditions** : un seul modèle (0,5 B) en deux quantifications, deux fenêtres (128 et 256
+jetons), un seul jeu d'identifiants ; l'optimum à 0,75 est un point de la grille
+(0,5 · 0,75 · 1,0), il n'est pas localisé plus finement ; deux profils à deux couches testés,
+plus un à trois couches.
 
 ## Annexe — manifeste des journaux
 

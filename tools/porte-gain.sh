@@ -125,4 +125,26 @@ print(f"  ✅ la composition DÉGRADE ({un} → {deux}), et un gain 1,0 y est ex
       f"({deux} = {trois})")
 PY
 
+echo "=== 7. l'effet DIMINUE avec la fenêtre d'évaluation (et il tient) ==="
+# Mesuré : à 128 jetons le gain 0,75 à la couche 0 vaut −11,5 % ; à 256 jetons, −1,4 %.
+# La DIRECTION tient, la MAGNITUDE dépend de la fenêtre — une condition à écrire, sinon le
+# chiffre de −11,5 % se citerait comme une propriété du modèle au lieu d'un point de mesure.
+W128=$(ppl --ffn-gain "0:0.75")
+W256=$( $D "$M" --ppl "$IDS" --limit 256 --ctx "$CTX" --threads 8 --ffn-gain "0:0.75" 2>&1 \
+        | grep -oE "perplexité [0-9.]+ sur" | grep -oE "[0-9.]+")
+R256=$( $D "$M" --ppl "$IDS" --limit 256 --ctx "$CTX" --threads 8 2>&1 \
+        | grep -oE "perplexité [0-9.]+ sur" | grep -oE "[0-9.]+")
+printf '  128 jetons : %s (réf %s) · 256 jetons : %s (réf %s)\n' "$W128" "$REF" "$W256" "$R256"
+python3 - "$W128" "$REF" "$W256" "$R256" <<'PY' || exit 1
+import sys
+a128, ref128, a256, ref256 = (float(x) for x in sys.argv[1:5])
+g128, g256 = 100.0*(ref128-a128)/ref128, 100.0*(ref256-a256)/ref256
+if g256 <= 0:
+    sys.exit(f"  ❌ à 256 jetons le gain ne gagne plus ({g256:.2f} %)")
+if g256 >= g128:
+    sys.exit(f"  ❌ l'effet ne décroît pas avec la fenêtre ({g128:.2f} % → {g256:.2f} %)")
+print(f"  ✅ la direction tient aux deux fenêtres, la MAGNITUDE décroît : "
+      f"{g128:.1f} % à 128 jetons, {g256:.1f} % à 256 — une condition, pas une propriété")
+PY
+
 rm -rf "$T"

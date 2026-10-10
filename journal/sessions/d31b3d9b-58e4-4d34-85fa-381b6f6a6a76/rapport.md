@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 46.7 h |
-| Tours | 61 |
-| Messages | 1860 |
-| Appels d'outils | 1736 |
+| Durée | 46.8 h |
+| Tours | 62 |
+| Messages | 1866 |
+| Appels d'outils | 1740 |
 | Fichiers touchés | 61 |
-| Commandes | 1486 |
+| Commandes | 1490 |
 | Sous-agents | 3 |
-| Commits | 151 |
+| Commits | 152 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -157,6 +157,8 @@
 **Tour 60** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 **Tour 61** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
+
+**Tour 62** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -2711,7 +2713,35 @@ Le drapeau passe de `Option<(usize, f32)>` à `Option<Vec<(usize, f32)>>`, les d
 
 **Synthèse produite :**
 
-⏵ `porte-flux` 5/5 verte et la référence PPL inchangée (14,6496) — je consigne la vérification
+⏵ Round 18 livré : vérification du changement de type `ffn_gain` — contrainte tenue
+
+**Ce round** — 1 commit poussé. Le drapeau est passé de `Option<(usize, f32)>` à `Option<Vec<(usize, f32)>>` (profil de gains), ce qui **touche le chemin d'exécution** : la règle de l'objectif s'applique donc à la lettre.
+
+| vérification | résultat |
+|---|---|
+| **`porte-flux.sh`** (5 modes du protocole) | **verts, code 0** — écarts identiques à avant : 0,00e0 · 0,00e0 · 3,65e-2 · 0,00e0 · 4,45e-3 |
+| référence de perplexité | **14,6496** sur le jeu d'essai — inchangée |
+| `porte-gain.sh` | 6 cas verts, dont l'identité (`L:1.0` = absence de réglage) |
+| tests | **122 verts** |
+
+Le changement est donc **inactif quand le drapeau n'est pas donné**, et **identique à l'ancien comportement** quand un seul `L:V` est donné.
+
+**État du sprint** : 18 rounds, **22 portes toutes vertes**, 122 tests, quatre codes d'arrêt distincts (5 borne · 6 octets · 7 panne · 8 latence), un registre de régions, et une quarantaine de mesures documentées avec leurs conditions — dont une bonne moitié de négatifs, réfutations (E/I, clé de fenêtre, composition des gains) et corrections (décalage d'un jeton, fenêtre `--limit`, porte rouge, `sys.exit`).
+
+**Les trois prochains chantiers** restent inscrits dans `docs/sprint-cerveau.md` avec leur première commande : budget `paires/s` (protocole v7), tête dédiée par profondeur (C8), courbe de dose E4 approfondie. L'objectif reste **actif**.
+
+### Tour 62 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
+
+*4 appels d'outils.* Actions notables :
+
+- bash — List available models
+- bash — Test generalization across quantization and window
+- bash — Add the window-dependence case and run
+- bash — Document and commit the generalization results
+
+**Synthèse produite :**
+
+⏵ L'effet généralise (Q4_0 : −6,7 %) mais il DIMINUE avec la fenêtre (256 jetons : −1,4 %) — je verrouille
 
 ## 3. Travail accompli
 
@@ -2829,7 +2859,7 @@ Le drapeau passe de `Option<(usize, f32)>` à `Option<Vec<(usize, f32)>>`, les d
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1446 autres
+- … et 1450 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3128,4 +3158,5 @@ Le drapeau passe de `Option<(usize, f32)>` à `Option<Vec<(usize, f32)>>`, les d
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib p = pathlib.Path("docs/sprint-cerveau.md") s = p.read_text() a = "## ▶ 
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 

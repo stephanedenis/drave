@@ -326,6 +326,24 @@ sur peu de paramètres peut très bien ne pas trouver, puisqu'il optimiserait le
 
 ---
 
+## E4 (suite) — FAIT (11 octobre 10 h) : généralisation et conditions
+
+Deux axes, même conclusion : **la direction tient, la magnitude dépend des conditions**.
+
+| axe | mesure |
+|---|---|
+| autre **quantification** (Q4_0) | 0,75 à la couche 0 → **14,7453** contre **15,8055** = **−6,7 %** (Q8_0 : −11,5 %) |
+| autre **fenêtre** (256 jetons) | **17,1915** contre **17,4315** = **−1,4 %** (128 jetons : −11,5 %) |
+
+⇒ le gain d'entrée n'est **pas un artefact de quantification** (−6,7 % sur Q4_0), mais **il
+décroît fortement avec la fenêtre** : −11,5 % est un **point de mesure**, pas une propriété du
+modèle. **La porte exige que la magnitude décroisse** — un futur relecteur ne pourra donc pas
+citer le meilleur chiffre sans voir la condition.
+
+**`porte-gain.sh` : 7 cas verts.**
+
+---
+
 ## VÉRIFICATION DU CHANGEMENT DE TYPE `ffn_gain` — FAITE (11 octobre 9 h 30)
 
 Le drapeau est passé de `Option<(usize, f32)>` à `Option<Vec<(usize, f32)>>` (profil de gains),

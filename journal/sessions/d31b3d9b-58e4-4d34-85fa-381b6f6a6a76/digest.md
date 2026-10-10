@@ -29760,3 +29760,80 @@ porte-flux code=0
 ⏵ `porte-flux` 5/5 verte et la référence PPL inchangée (14,6496) — je consigne la vérification
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"docs/sprint-cerveau.md\")\ns = p.read_text()\na = \"## ▶ PROCHAINE ACTION (à lire en premier)\"\nneuf = \"\"\"## VÉRIFICATION DU CHANGEMENT DE TYPE `ffn_gain` — FAITE (11 octobr … [1988 caractères tronqués]`
+
+  ```
+verification consignee
+6d9bc74 Verification apres le changement de type de ffn_gain : porte-flux verte, reference inchangee
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 18 livré : vérification du changement de type `ffn_gain` — contrainte tenue
+
+**Ce round** — 1 commit poussé. Le drapeau est passé de `Option<(usize, f32)>` à `Option<Vec<(usize, f32)>>` (profil de gains), ce qui **touche le chemin d'exécution** : la règle de l'objectif s'applique donc à la lettre.
+
+| vérification | résultat |
+|---|---|
+| **`porte-flux.sh`** (5 modes du protocole) | **verts, code 0** — écarts identiques à avant : 0,00e0 · 0,00e0 · 3,65e-2 · 0,00e0 · 4,45e-3 |
+| référence de perplexité | **14,6496** sur le jeu d'essai — inchangée |
+| `porte-gain.sh` | 6 cas verts, dont l'identité (`L:1.0` = absence de réglage) |
+| tests | **122 verts** |
+
+Le changement est donc **inactif quand le drapeau n'est pas donné**, et **identique à l'ancien comportement** quand un seul `L:V` est donné.
+
+**État du sprint** : 18 rounds, **22 portes toutes vertes**, 122 tests, quatre codes d'arrêt distincts (5 borne · 6 octets · 7 panne · 8 latence), un registre de régions, et une quarantaine de mesures documentées avec leurs conditions — dont une bonne moitié de négatifs, réfutations (E/I, clé de fenêtre, composition des gains) et corrections (décalage d'un jeton, fenêtre `--limit`, porte rouge, `sys.exit`).
+
+**Les trois prochains chantiers** restent inscrits dans `docs/sprint-cerveau.md` avec leur première commande : budget `paires/s` (protocole v7), tête dédiée par profondeur (C8), courbe de dose E4 approfondie. L'objectif reste **actif**.
+
+
+## Tour 62
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 mémoire épisodique, C7 consolidation, C8 périphérie, C9 latéralité, C10 budgets, et la diffusion réseau du bus de C5 ; (b) les expériences E2-E9 de docs/biologie-pour-drave.md et docs/hebbien-differentiel-et-biologie.md ; (c) les dessins de modèle H/I/J de docs/modele-pour-drave.md ; (d) les manques du registre docs/manques.md (noyau de listes pour les experts, noyau de listes GPU, encodeurs) — l'implémenter ou la mesurer, la doter d'une porte vérifiable, la documenter, commiter, pousser, et enchaîner immédiatement sur la suivante. Contraintes : les 23 portes du dépôt et tous les tests restent verts (porte-flux.sh après toute modification du chemin d'exécution), le profil release reste le binaire de mesure, le crate reste std seul, et docs/sprint-cerveau.md reste l'état resumable mis à jour à chaque round. Ne jamais s'arrêter faute de tâches planifiées : en inventer de nouvelles, mesurables, plutôt que d'attendre."
+Round: 19/60
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ E4 : le gain d'entrée se généralise-t-il ? Je teste sur un second modèle et une autre fenêtre
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la models/*.gguf 2>/dev/null | awk '{print $5, $9}' | head -8", "description": "List available models"}`
+
+  ```
+352972352 models/Qwen2.5-0.5B-Q4_0.gguf
+531068480 models/Qwen2.5-0.5B-Q8_0.gguf
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== Q4_0 : même mesure ===\" && for V in 0.75 1.0 1.5; do P=$(./drave-core/target/release/drave models/Qwen2.5-0.5B-Q4_0.gguf --ppl /tmp/campagne24/ids_0.5B-Q8.txt --limit 128 --ctx 512 --threads 8 --ffn-gain \"0:$V\" 2>&1 | g … [537 caractères tronqués]`
+
+  ```
+=== Q4_0 : même mesure ===
+  L0 gain 0.75 : 14.7453
+  L0 gain 1.0 : 15.8055
+  L0 gain 1.5 : 17.5375
+=== Q8_0, fenêtre 256 ===
+  L0 gain 0.75 (256 jetons) : 17.1915
+  L0 gain 1.0 (256 jetons) : 17.4315
+  ```
+
+### 🤖 Assistant
+
+⏵ L'effet généralise (Q4_0 : −6,7 %) mais il DIMINUE avec la fenêtre (256 jetons : −1,4 %) — je verrouille
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"tools/porte-gain.sh\")\ns = p.read_text()\na = '''rm -rf \"$T\"'''\nb = '''echo \"=== 7. l'effet DIMINUE avec la fenêtre d'évaluation (et il tient) ===\"\n# Mesuré : à 128 jeton … [1633 caractères tronqués]`
+
+  ```
+cas 7 ajoute
+code=0
+  0:0.75 seul : 12.9635 · +1:0.5 : 13.7679 · +1:0.5+2:1.0 : 13.7679
+  ✅ la composition DÉGRADE (12.9635 → 13.7679), et un gain 1,0 y est exactement neutre (13.7679 = 13.7679)
+=== 7. l'effet DIMINUE avec la fenêtre d'évaluation (et il tient) ===
+  128 jetons : 12.9635 (réf 14.6496) · 256 jetons : 17.1915 (réf 17.4315)
+  ✅ la direction tient aux deux fenêtres, la MAGNITUDE décroît : 11.5 % à 128 jetons, 1.4 % à 256 — une condition, pas une propriété
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\n\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\na = \"\"\"**Conditions** : un seul modèle (0,5 B), 128 jetons, un seul jeu d'identifiants ; l'optimum à\n0,75 est  … [3701 caractères tronqués]`
