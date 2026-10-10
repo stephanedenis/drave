@@ -39775,3 +39775,73 @@ porte-delais           ✅                          19 s    ✅ le temps, lui, a
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"docs/plan-cerveau-complet.md\"); s = p.read_text()\nancre = \"\"\"### C9 — Latéralité et corps calleux\"\"\"\netat_c8 = \"\"\"### C8 — ÉTAT MESURÉ (2026-10-10)\n\nLa conception  … [8351 caractères tronqués]`
+
+  ```
+plan : état de C8 consigné
+note C9 écrite
+poussé
+  porte-fusion           ✅                           7 s    ✅ v1 refusée (code 2), trace seule refusée (code 2)
+  porte-gain             ✅                         337 s    ✅ drapeau VIVANT mais conditionnel : 0 casse (29.0206 → 1297.5437), 24 améliore (27.4439), san
+  ```
+
+### 🤖 Assistant
+
+⏵ J'attends la fin de la passe (9 portes vertes jusqu'ici) pour clore sur un état vérifié
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 570; tail -3 /tmp/passe-complete3.log; date '+%H:%M'", "description": "Wait for the pass", "timeoutMs": 600000}`
+
+  ```
+porte-flux             ✅                          18 s    mode 4 — lot en listes           4.45e-3  ✅  (réf 60.8135 / deux nœuds 60.5427)
+  porte-fusion           ✅                           7 s    ✅ v1 refusée (code 2), trace seule refusée (code 2)
+  porte-gain             ✅                         337 s    ✅ drapeau VIVANT mais conditionnel : 0 casse (29.0206 → 1297.5437), 24 améliore (27.4439), san
+16:19
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 580; tail -3 /tmp/passe-complete3.log; date '+%H:%M'", "description": "Continue waiting for the pass", "timeoutMs": 600000}`
+
+  ```
+porte-gain             ✅                         337 s    ✅ drapeau VIVANT mais conditionnel : 0 casse (29.0206 → 1297.5437), 24 améliore (27.4439), san
+  porte-greffe           ✅                         807 s    ✅ la porte est franchie. Ce qu'elle établit : l'injection d'état est BRANCHÉE
+  porte-horloge          ✅                          22 s    ✅ borne atteinte : arrêt EXPLICITE (code 5) et AUCUNE perplexité rendue
+16:29
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 580; tail -3 /tmp/passe-complete3.log; date '+%H:%M'", "description": "Wait for indice and melange gates", "timeoutMs": 600000}`
+
+  ```
+porte-greffe           ✅                         807 s    ✅ la porte est franchie. Ce qu'elle établit : l'injection d'état est BRANCHÉE
+  porte-horloge          ✅                          22 s    ✅ borne atteinte : arrêt EXPLICITE (code 5) et AUCUNE perplexité rendue
+  porte-indice           ✅                         726 s    ✅ la porte est franchie. Limite, et elle est écrite : UN SEUL indice extérieur,
+16:39
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 580; tail -3 /tmp/passe-complete3.log; date '+%H:%M'", "description": "Wait for the melange gate", "timeoutMs": 600000}`
+
+  ```
+porte-mistral          ✅                           8 s      ✅ porte de correction tenue (100.0 % des positions UTILES au-dessus de 0.95, min 1.0000 >= p
+  porte-pannes           ✅                          44 s    ✅ pair absent : échec annoncé en 1 s (code 7), aucune perplexité
+  porte-peripherie       ✅                           7 s  PORTE TENUE : l'entrée est injectée, la sortie est écrite, le délai est exact, les refus sont
+16:48
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in $(seq 1 9); do if grep -q \"CODE_PASSE=\" /tmp/passe-complete3.log 2>/dev/null; then break; fi; sleep 60; done; tail -10 /tmp/passe-complete3.log; date '+%H:%M'", "description": "Wait for the final verdict", "timeoutMs": 600 … [4 caractères tronqués]`
+
+  ```
+porte-pont             ✅                          75 s    ✅ 448 fibres : +2.81 % · 392 fibres : +25.35 % — la marche est entre les deux
+  porte-reflexe          ✅                          98 s    ✅ l'état de 16 couches CONTIENT le prochain jeton : 25.4 % contre 4.8 % pour la classe majorit
+  porte-registre         ✅                          14 s    ✅ région absente : refusée en la nommant (code 2), rien n'est calculé
+  porte-reparti-moteur   ✅                           1 s  PORTE TENUE : le découpage ne change pas la perplexité (écart relatif 0.0000 %)
+  porte-tokenizer-kimi   ✅                           5 s    ✅ 10 textes identiques au tokenizer officiel (accents, emoji, CJK, arabe, code, nombres)
+  porte-topologie        ✅                          35 s    PORTE TENUE : le relais ne change pas un chiffre (42.5477)
+  porte-trace            ✅                          24 s    ✅ la trace fausse est détectée et nommée
+--- 23 vertes, 0 rouges ---
+TOUTES LES PORTES SONT VERTES — et elles ont TOUTES tourné, ce que rien ne garantissait avant.
+Journaux : /tmp/portes-1210d
+16:58
+  ```
+
+### 🤖 Assistant
+
+⏵ Troisième passe : **23 vertes, 0 rouge** après l'ajout du tampon — je fige les repères et je clos
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib, re, subprocess\nlog = pathlib.Path(\"/tmp/passe-complete3.log\").read_text(encoding=\"utf-8\")\nlignes, total = [], 0\nfor l in log.splitlines():\n    m = re.match(r\"^  (porte-\\S+)\\s+✅\\s+(\\d+ … [2996 caractères tronqués]`

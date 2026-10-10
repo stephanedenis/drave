@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 55.0 h |
+| Durée | 55.8 h |
 | Tours | 88 |
-| Messages | 2470 |
-| Appels d'outils | 2273 |
+| Messages | 2476 |
+| Appels d'outils | 2279 |
 | Fichiers touchés | 85 |
-| Commandes | 1980 |
+| Commandes | 1986 |
 | Sous-agents | 3 |
-| Commits | 226 |
+| Commits | 227 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -3586,7 +3586,7 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 
 ### Tour 88 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*431 appels d'outils.* Actions notables :
+*437 appels d'outils.* Actions notables :
 
 - bash — Add the refusal and verify
 - bash — Move the refusal to the single point and verify
@@ -3602,11 +3602,11 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - bash — Read v7 removal context and flag inventory
 - bash — Read flag inventory section in docs
 - bash — Establish whether section 9 predates the v7 removal
-- … et 403 autres
+- … et 408 autres
 
 **Synthèse produite :**
 
-⏵ Pendant la passe : je consigne l'état de C8 dans le plan et j'écris la conception de C9 (latéralité)
+⏵ Troisième passe : **23 vertes, 0 rouge** après l'ajout du tampon — je fige les repères et je clos
 
 ## 3. Travail accompli
 
@@ -3748,7 +3748,7 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1940 autres
+- … et 1946 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4122,4 +4122,5 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - Horodatage : les deux dernieres estampilles en avance (etat, fiche de passe) corrigees sur l'heure lue" && git push -q origin master && echo poussé
 - Horodatage : les 5 dernieres mentions « 17 h 55 » (heure estimee) remplacees par 15 h 15 (fin reelle de la passe, lue sur le journal)  Audit systematique apres 
 - C8 : l'etat mesure est consigne DANS LE PLAN (ce qui est fait, ce qui manque) · C9 : la conception et ses cinq portes, ecrites avant le code  Le plan se lisait 
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' import pathlib, re, subprocess log = pathlib.Path("/tmp/passe-complete3.log").read_tex
 

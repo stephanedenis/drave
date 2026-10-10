@@ -84,6 +84,13 @@ désormais la bonne conclusion (25,4 % contre 4,8 %).
 | `porte-topologie.sh` | 33 s | PORTE TENUE : le relais ne change pas un chiffre (42.5477) |
 | `porte-trace.sh` | 24 s | ✅ la trace fausse est détectée et nommée |
 
+## 2 ter. La passe du 16:58 (23 portes, 58 min 07 s) — après le TAMPON d'entrée
+
+Dernière passe en date : `--entree-memoire K` ajouté à la périphérie (le signal devient un vecteur :
+valeur courante plus K retards), la porte étendue en conséquence (le tampon change la sortie, il
+est annoncé, un débordement est refusé), et **23 vertes sur 23** de nouveau. Détail porte par porte
+dans `docs/references-non-regression.md` § 2, régénéré depuis le journal de cette passe.
+
 ## 3. Ce que la passe a trouvé : une porte qui ne pouvait pas échouer
 
 `porte-tokenizer-kimi.sh` **lisait ses textes sur `stdin`** — que personne ne lui fournissait.
