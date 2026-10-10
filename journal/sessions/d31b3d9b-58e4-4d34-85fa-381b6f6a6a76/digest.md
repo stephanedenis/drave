@@ -37113,3 +37113,22 @@ On prend desormais le DERNIER « (N.N s) » de la sortie." && LIMITE=4096 CTX=40
 ⏵ Carte terminée : ÷4 de clés ne donne que +12 % de débit — je consigne le prix réel en temps
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\n# 1) corriger l'extraction des secondes (la carte ne tourne plus)\np = pathlib.Path(\"tools/carte-fenetre-puits.sh\"); s = p.read_text()\nold = '''    sec=$(printf '%s' \"$sortie\" | grep -oE \"\\ … [4865 caractères tronqués]`
+
+  ```
+extraction des secondes : lignes recollées
+fiche : § 6 (prix en temps) ajouté
+poussé
+7b0ba27 Fenetre x puits : le prix REEL en temps mesure — diviser les cles par 4 ne rend que +12 % de debit
+  ```
+
+### 🤖 Assistant
+
+⏵ Prochain chantier C8 : capturer 8 000 états pour entraîner une vraie tête ; je lance la capture
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf; I=/tmp/campagne24/ids_0.5B-Q8.txt; T=/tmp/c8-8k; rm -rf $T; mkdir -p $T\nPOS=$(seq -s, 4 8191)\necho \"capture de 8188 états (16 couches)…\"; time $D \"$M\" --ppl  … [275 caractères tronqués]`
+
+  ```
+started background job bash-35
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"docs/etat-cerveau.md\"); s = p.read_text()\nold = \"\"\"(12,4466) — **le prix croît avec N à fraction de clés constante**, et garder **la moitié** des\nclés reste le régime sûr. … [1182 caractères tronqués]`

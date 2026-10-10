@@ -94,9 +94,11 @@ quelques puits suffisent à *drainer*, il en faut beaucoup plus pour *porter*. Z
 **casse** le modèle (1297,54 à fenêtre 32 contre 29,02 à 4). À **4 096 jetons**, la frontière se
 déplace : (512, 512) coûte **+5,4 %** (12,8824 contre 12,2177) et (1 024, 1 024) **+1,9 %**
 (12,4466) — **le prix croît avec N à fraction de clés constante**, et garder **la moitié** des
-clés reste le régime sûr. En cours : la loi de la frontière, et le **gain de temps réel** (la
-carte rend maintenant les secondes et les tok/s : la fenêtre ne réduit que les scores, pas la
-FFN qui domine).
+clés reste le régime sûr. **Prix réel en temps, mesuré** (débit, 4 096 jetons, machine au repos) :
+attention complète **17,1 tok/s** ; fenêtre 512 + 512 puits (÷4 de clés) **19,1 tok/s**, soit
+**+12 %** seulement ; les configurations plus larges sont dans le bruit. **La fenêtre est un levier
+de parcimonie (clés, paires, octets), pas de vitesse locale** — c'est en réparti qu'elle paie.
+Reste ouvert : la loi de la frontière en N.
 
 **3. C8 (suite) — entraîner la tête, la courbe est faite.** Décodabilité mesurée à 4, 8, 12, 16,
 20 et 24 couches (45,9 / 45,5 / 46,1 / 40,8 / 37,8 / 34,8 % parmi les 256 plus fréquents) contre

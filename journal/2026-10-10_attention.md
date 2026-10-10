@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-10.md](2026-10-10.md). Convention : `docs/organisation-du-depot.md`.
 
-## Commits du jour (16)
+## Commits du jour (17)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -24,10 +24,11 @@
 | 10:57 | `b4f1589` | Fenetre x puits a 2 048 : MA conclusion du §4 etait bornee par la grille — avec 512 puits, +0,33 % | `etat-cerveau.md`, `2026-10-10.md`, `2026-10-10_attention.md` (+14) |
 | 11:10 | `499400e` | Carte fenetre x puits : la case donne aussi le TEMPS et le debit (tok/s) | `2026-10-10.md`, `2026-10-10_apprentissage.md`, `2026-10-10_attention.md` (+14) |
 | 11:42 | `62c9da5` | Carte fenetre x puits : secondes corrigees, et les points d'entree nommes dans l'index | `etat.md`, `organisation-du-depot.md`, `2026-10-10.md` (+9) |
+| 12:04 | `7b0ba27` | Fenetre x puits : le prix REEL en temps mesure — diviser les cles par 4 ne rend que +12 % de debit | `2026-10-10.md`, `2026-10-10_apprentissage.md`, `2026-10-10_attention.md` (+15) |
 
 ## Chiffres du jour
 
-`+0,33 %` · `+40 %` · `512 jetons` · `+2,0 %` · `−6,7 %` · `−1,4 %` · `256 jetons` · `÷2,67` · `2048 jetons` · `10,4046` · `10,3703`
+`+12 %` · `+0,33 %` · `+40 %` · `512 jetons` · `+2,0 %` · `−6,7 %` · `−1,4 %` · `256 jetons` · `÷2,67` · `2048 jetons` · `10,4046` · `10,3703`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
