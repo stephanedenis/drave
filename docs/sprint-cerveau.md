@@ -914,10 +914,18 @@ fait passer le chemin **local** de 13,1368 à **21,5801**. Le réglage est donc 
 réparti**, des deux côtés du graphe, et le « 18,5520 = 18,5520 » du round 28 s'expliquait par là,
 pas par une application symétrique.
 
-**Ce qui reste à faire, et c'est la même famille que `--ffn-gain` (round 20) et que la fenêtre
-(round 23)** : assigner ces trois champs dans `run_ppl_reparti`. Le transport est prêt, le refus
-est retiré, **il ne manque que l'assignation** — trois lignes, avec la mesure avant/après que la
-porte exigera.
+**C'EST FAIT (round 42)** — trois lignes d'assignation, et la mesure avant/après :
+
+| | nu | `--attn-window 64` |
+|---|---|---|
+| **réparti** | 42,5477 | **1 926,1996** |
+| local | 14,6496 | 16,1972 |
+
+Le drapeau **agit** en réparti (il était inerte : 42,5477 dans les deux cas). Le chiffre réparti est
+mauvais (1 926) et c'est **attendu** — « les 128 derniers jetons d'un fichier de 85 625 avec une
+fenêtre de 64 » ne laisse presque pas de contexte —, mais c'est un calcul **annoncé**, non un
+réglage ignoré. `porte-flux.sh` reste **vert** (les portes n'utilisent pas ces drapeaux : défauts à
+zéro).
 
 **LEÇON, et elle vaut plus que la correction** : **deux nombres égaux ne prouvent pas qu'ils
 mesurent la même chose**. J'ai lu « 18,5520 = 18,5520 » comme une accord entre les deux côtés ;

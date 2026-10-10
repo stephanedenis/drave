@@ -31885,3 +31885,64 @@ paires du pair    : 22721986560 au total, 178.9 M par pas (annoncées par le nœ
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\n\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\na = \"\"\"**Les deux moitiés appliquent la même fenêtre** : le résultat est cohérent au bit près, là où\nle câblag … [5110 caractères tronqués]`
+
+  ```
+correction consignee
+484a4ef CORRECTION : le v7 transporte la fenetre, mais le PILOTE ne l'applique pas — ma conclusion du round 28 etait hative
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 41 livré : **correction d'une de mes conclusions** — deux nombres égaux ne prouvent pas qu'ils mesurent la même chose
+
+**Ce round** — 1 commit poussé. En vérifiant les **trois** champs que le v7 transporte (je n'avais mesuré que `attn_window`), la mesure a contredit ma conclusion du round 28.
+
+**Ce que j'avais écrit** : « les deux moitiés appliquent la même fenêtre, le résultat est cohérent au bit près » (18,5520 = 18,5520).
+
+**Ce qui est vrai** : le v7 **transporte** bien les trois champs (le nœud les applique via `Act::appliquer`), mais le **pilote ne les applique pas** — `mdl.attn_window`, `mdl.swa_pattern` et `mdl.attn_sinks` ne sont assignés **nulle part** dans `run_ppl_reparti` (vérifié par lecture du code). Les deux nombres « s'accordaient » parce que **ni l'un ni l'autre ne changeait**.
+
+**Mesure refaite** : à `--limit 128`, `--attn-window 64`, `--swa-pattern 2` et `--attn-sinks 4` donnent **tous 42,5477**, identiques au run sans drapeau — alors que le même `--attn-window 64` fait passer le chemin **local** de 13,1368 à **21,5801**.
+
+**Ce qui reste à faire** — même famille que `--ffn-gain` (round 20) : **assigner ces trois champs dans `run_ppl_reparti`**. Le transport est prêt, le refus est retiré, **il ne manque que l'assignation** : trois lignes, avec la mesure avant/après que la porte exigera.
+
+**La leçon, et elle vaut plus que la correction** : **deux nombres égaux ne prouvent pas qu'ils mesurent la même chose**. J'ai lu « 18,5520 = 18,5520 » comme un accord entre les deux côtés du graphe ; c'était un accord entre deux réglages **inertes**. La vérification qui manquait tenait en une ligne de lecture de code — « ce champ est-il assigné dans cette fonction ? » — et c'est celle que j'aurais dû faire **avant** de conclure.
+
+**Bilan** : 41 rounds, 22 portes toutes vertes, 122 tests. L'objectif reste **actif**.
+
+
+## Tour 85
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 mémoire épisodique, C7 consolidation, C8 périphérie, C9 latéralité, C10 budgets, et la diffusion réseau du bus de C5 ; (b) les expériences E2-E9 de docs/biologie-pour-drave.md et docs/hebbien-differentiel-et-biologie.md ; (c) les dessins de modèle H/I/J de docs/modele-pour-drave.md ; (d) les manques du registre docs/manques.md (noyau de listes pour les experts, noyau de listes GPU, encodeurs) — l'implémenter ou la mesurer, la doter d'une porte vérifiable, la documenter, commiter, pousser, et enchaîner immédiatement sur la suivante. Contraintes : les 23 portes du dépôt et tous les tests restent verts (porte-flux.sh après toute modification du chemin d'exécution), le profil release reste le binaire de mesure, le crate reste std seul, et docs/sprint-cerveau.md reste l'état resumable mis à jour à chaque round. Ne jamais s'arrêter faute de tâches planifiées : en inventer de nouvelles, mesurables, plutôt que d'attendre."
+Round: 42/60
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 42 : les trois lignes manquantes — assigner la fenêtre dans le pilote et mesurer avant/après
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\na = \"\"\"    if let Some(gs) = opt.ffn_gain.clone() {\"\"\"\nb = \"\"\"    // LES TROIS CHAMPS QUE LE v7 TRANSPORTE, ENFIN APPLIQU … [1582 caractères tronqués]`
+
+  ```
+trois champs assignes
+test result: ok. 122 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.32s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && T=$(mktemp -d); PORT=$((60000 + RANDOM % 4000)); cat > $T/topo.json <<JSON\n{\"regions\":[{\"id\":\"local\",\"couches\":[0,11],\"instance\":\"local\"},{\"id\":\"d\",\"couches\":[12,23],\"instance\":\"127.0.0.1:$PORT\"}],\"liens\":[{\ … [1239 caractères tronqués]`
+
+  ```
+réparti nu              : 42.5477 42.5477 
+  réparti --attn-window 64 : 1926.1996 
+  local   --attn-window 64 : 16.1972
+  local nu                 : 14.6496
+  ```
+
+### 🤖 Assistant
+
+⏵ Le drapeau AGIT enfin en réparti (42,5 → 1926,2) — je vérifie `porte-flux` et je commite
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 1200 bash tools/porte-flux.sh > /tmp/pf42.txt 2>&1; echo \"porte-flux code=$?\"; tail -2 /tmp/pf42.txt; python3 - <<'ENDPY'\nimport pathlib\n\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\na  … [3997 caractères tronqués]`

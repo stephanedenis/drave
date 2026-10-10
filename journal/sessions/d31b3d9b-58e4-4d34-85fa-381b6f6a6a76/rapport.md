@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 48.3 h |
-| Tours | 84 |
-| Messages | 2002 |
-| Appels d'outils | 1832 |
+| Durée | 48.4 h |
+| Tours | 85 |
+| Messages | 2007 |
+| Appels d'outils | 1835 |
 | Fichiers touchés | 61 |
-| Commandes | 1582 |
+| Commandes | 1585 |
 | Sous-agents | 3 |
-| Commits | 174 |
+| Commits | 175 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -203,6 +203,8 @@
 **Tour 83** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 **Tour 84** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
+
+**Tour 85** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -3467,7 +3469,33 @@ Le gain est le **même en millisecondes** (~10 ms : deux messages en moins à 5 
 
 **Synthèse produite :**
 
-⏵ Contradiction : la fenêtre ne change RIEN en réparti — ma conclusion du round 28 était hâtive ; je vérifie le câblage
+⏵ Round 41 livré : **correction d'une de mes conclusions** — deux nombres égaux ne prouvent pas qu'ils mesurent la même chose
+
+**Ce round** — 1 commit poussé. En vérifiant les **trois** champs que le v7 transporte (je n'avais mesuré que `attn_window`), la mesure a contredit ma conclusion du round 28.
+
+**Ce que j'avais écrit** : « les deux moitiés appliquent la même fenêtre, le résultat est cohérent au bit près » (18,5520 = 18,5520).
+
+**Ce qui est vrai** : le v7 **transporte** bien les trois champs (le nœud les applique via `Act::appliquer`), mais le **pilote ne les applique pas** — `mdl.attn_window`, `mdl.swa_pattern` et `mdl.attn_sinks` ne sont assignés **nulle part** dans `run_ppl_reparti` (vérifié par lecture du code). Les deux nombres « s'accordaient » parce que **ni l'un ni l'autre ne changeait**.
+
+**Mesure refaite** : à `--limit 128`, `--attn-window 64`, `--swa-pattern 2` et `--attn-sinks 4` donnent **tous 42,5477**, identiques au run sans drapeau — alors que le même `--attn-window 64` fait passer le chemin **local** de 13,1368 à **21,5801**.
+
+**Ce qui reste à faire** — même famille que `--ffn-gain` (round 20) : **assigner ces trois champs dans `run_ppl_reparti`**. Le transport est prêt, le refus est retiré, **il ne manque que l'assignation** : trois lignes, avec la mesure avant/après que la porte exigera.
+
+**La leçon, et elle vaut plus que la correction** : **deux nombres égaux ne prouvent pas qu'ils mesurent la même chose**. J'ai lu « 18,5520 = 18,5520 » comme un accord entre les deux côtés du graphe ; c'était un accord entre deux réglages **inertes**. La vérification qui manquait tenait en une ligne de lecture de code — « ce champ est-il assigné dans cette fonction ? » — et c'est celle que j'aurais dû faire **avant** de conclure.
+
+**Bilan** : 41 rounds, 22 portes toutes vertes, 122 tests. L'objectif reste **actif**.
+
+### Tour 85 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Assign the three fields in the pilot
+- bash — Measure before/after the assignment
+- bash — Verify and commit the assignment
+
+**Synthèse produite :**
+
+⏵ Le drapeau AGIT enfin en réparti (42,5 → 1926,2) — je vérifie `porte-flux` et je commite
 
 ## 3. Travail accompli
 
@@ -3585,7 +3613,7 @@ Le gain est le **même en millisecondes** (~10 ms : deux messages en moins à 5 
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1542 autres
+- … et 1545 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3907,4 +3935,5 @@ Le gain est le **même en millisecondes** (~10 ms : deux messages en moins à 5 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib p = pathlib.Path("docs/sprint-cerveau.md") s = p.read_text() a = "## ▶ 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 1200 bash tools/porte-flux.sh > /tmp/pf42.txt 2>&1; echo "porte-flux code=$?"; tail -2 /tmp/pf42.t
 

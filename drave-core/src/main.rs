@@ -4410,6 +4410,24 @@ changer (seul le temps change) — c'est la porte de C3", tp_region_distante, de
     // distribution, où le réglage fin doit survivre.
     // v7 : le refus qui suivait ici a été RETIRÉ — les trois réglages voyagent maintenant
     // dans la trame, donc le pilote ET le nœud appliquent la même fenêtre.
+    // LES TROIS CHAMPS QUE LE v7 TRANSPORTE, ENFIN APPLIQUÉS PAR LE PILOTE.
+    //
+    // Le round 28 concluait « les deux moitiés appliquent la même fenêtre » sur la foi de deux
+    // nombres égaux (18,5520 = 18,5520). C'était faux, et la vérification tenait en une ligne :
+    // ces trois champs n'étaient assignés NULLE PART ici. Le v7 les faisait voyager jusqu'au nœud,
+    // mais le pilote gardait ses défauts — le réglage était INERTE DES DEUX CÔTÉS, et c'est pour
+    // cela que les deux nombres s'accordaient.
+    //
+    // LEÇON, écrite là où elle servira : deux nombres égaux ne prouvent pas qu'ils mesurent la
+    // même chose. Avant de conclure à un accord, vérifier POURQUOI ils sont égaux.
+    mdl.attn_window = opt.attn_window;
+    mdl.swa_pattern = opt.swa_pattern.unwrap_or(0);
+    mdl.attn_sinks = opt.attn_sinks;
+    if opt.attn_window > 0 || opt.swa_pattern.is_some() || opt.attn_sinks > 0 {
+        println!("[attention] fenêtre {} · motif {} · puits {} — appliqués aux couches LOCALES et \
+TRANSPORTÉS au nœud (protocole v7) : les deux moitiés calculent le même modèle",
+                 opt.attn_window, opt.swa_pattern.unwrap_or(0), opt.attn_sinks);
+    }
     if let Some(gs) = opt.ffn_gain.clone() {
         let liste: Vec<String> = gs.iter().map(|(l, g)| format!("couche {l} × {g}")).collect();
         println!("gain FFN : {}", liste.join(" · "));

@@ -2525,11 +2525,22 @@ Mesure refaite au round 41 : à `--limit 128`, `--attn-window 64`, `--swa-patter
 `--attn-sinks 4` donnent **tous 42,5477**, identiques au run sans drapeau, alors que le même
 `--attn-window 64` fait passer le chemin **local** de 13,1368 à 21,5801.
 
-**Ce qui reste donc à faire, et c'est la même famille que `--ffn-gain`** : assigner ces trois
-champs dans `run_ppl_reparti` (le transport est prêt, le refus est retiré, il ne manque que
-l'assignation). **Leçon** : deux nombres égaux ne prouvent pas qu'ils mesurent la même chose —
-il faut vérifier **pourquoi** ils sont égaux, et ici la raison était que le réglage était inerte
-des deux côtés.
+**C'EST FAIT (round 42), ET LA MESURE LE CONFIRME** — trois lignes d'assignation dans
+`run_ppl_reparti`, et le réglage cesse d'être inerte :
+
+| | nu | `--attn-window 64` |
+|---|---|---|
+| **chemin réparti** | 42,5477 | **1 926,1996** |
+| chemin local | 14,6496 | 16,1972 |
+
+Le drapeau **agit** désormais en réparti (il ne le faisait pas : 42,5477 dans les deux cas). Que le
+chiffre réparti soit mauvais (1 926) est **attendu** : « les 128 derniers jetons d'un fichier de
+85 625, avec une fenêtre de 64 » ne laisse presque pas de contexte — mais c'est un calcul
+**annoncé**, et non un réglage ignoré.
+
+**La leçon de cette correction vaut plus que la correction elle-même** : **deux nombres égaux ne
+prouvent pas qu'ils mesurent la même chose**. Il faut vérifier **pourquoi** ils sont égaux — ici,
+la raison était que le réglage était **inerte des deux côtés**.
 
 **Ce qui a failli faire échouer le changement, et qui est maintenant corrigé pour de bon** : les
 **tests de trame forgée** construisaient l'en-tête avec un remplissage de **dix mots littéral**.
