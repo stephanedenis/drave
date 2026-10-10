@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 37.9 h |
+| Durée | 38.1 h |
 | Tours | 44 |
-| Messages | 1502 |
-| Appels d'outils | 1412 |
-| Fichiers touchés | 56 |
-| Commandes | 1180 |
+| Messages | 1541 |
+| Appels d'outils | 1451 |
+| Fichiers touchés | 61 |
+| Commandes | 1206 |
 | Sous-agents | 3 |
-| Commits | 122 |
+| Commits | 123 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2058,7 +2058,7 @@ Je continue sur cette liste — il
 
 ### Tour 44 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1749 caractères tronqués]
 
-*145 appels d'outils.* Actions notables :
+*184 appels d'outils.* Actions notables :
 
 - bash — Implement per-region step counters and the step bound
 - bash — Write and run the clock/step-bound gate
@@ -2074,11 +2074,11 @@ Je continue sur cette liste — il
 - bash — Extend trace format to v2 with timestamps
 - bash — Add merge, clock drift, link verification
 - bash — Rewrite link pairing and build
-- … et 125 autres
+- … et 163 autres
 
 **Synthèse produite :**
 
-⏵ C7 : porte 7/7 verte — je commite la consolidation par rejeu
+⏵ C9 : porte 7/7 verte — je lance les non-régressions et je rédige les résultats
 
 ## 3. Travail accompli
 
@@ -2142,6 +2142,11 @@ Je continue sur cette liste — il
 | `/tmp/c7_cli2.py` | 1 | 0 |
 | `/tmp/c7_gate.py` | 1 | 0 |
 | `/tmp/c7_docs.py` | 1 | 0 |
+| `/tmp/next_actions.py` | 1 | 0 |
+| `/tmp/c9_code.py` | 1 | 0 |
+| `/tmp/c9_code2.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-pont.sh` | 6 | 0 |
+| `/tmp/c9_node.py` | 2 | 0 |
 
 ### Sous-agents lancés
 
@@ -2191,7 +2196,7 @@ Je continue sur cette liste — il
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1140 autres
+- … et 1166 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2319,7 +2324,7 @@ Je continue sur cette liste — il
 
 ## 5. Erreurs rencontrées
 
-63 sorties en erreur ou divergentes. Les premières :
+64 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : ```  ### 🤖 Assistant  ⏵ **En transformers 5, `AutoModel` rend directement `Qwen2Model` (pas de `.model`). Je corrige le diagnostic.**  - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitH
 - **T2** : 3310393 bash -c pgrep -af "essai_decharge" | grep python | head; echo "--- logs ---"; tail -2 /tmp/ec_d192_lr3e3.log 2>/dev/null; tail -2 /tmp/ec_d192_lr1e3.log 2>/dev/null; echo "---"; ls -la /tmp/ec
@@ -2461,4 +2466,5 @@ Je continue sur cette liste — il
 - C6 : mémoire épisodique adressable par contenu — et ses trois résultats négatifs  Module episodique.rs : clé creuse (k-WTA sur l'amplitude), index inversé canal
 - C6 suite : l'index élude enfin — et il fallait TROIS ingrédients, pas un  Le premier pas de C6 avait mesuré un négatif net : l'index inversé n'éludait RIEN (300
 - C7 pas 1 : consolider par rejeu — et garder un CAS bat résumer par une MOYENNE  C7 au sens du plan veut rejouer des épisodes pour modifier des POIDS. Ce n'est p
+- C9/C10 pas 1 : le pont à fibres limitées — combien de fibres, et à quel prix  La question du corps calleux, posée en termes mesurables : deux régions échangent 
 

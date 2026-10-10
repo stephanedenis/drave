@@ -8,38 +8,66 @@
 
 ## ▶ PROCHAINE ACTION (à lire en premier)
 
-État au 9 octobre 21 h 50 : **C1, C3, C5 (+ C5bis), C12 livrées**, 96 tests verts,
-23 portes vertes, tout poussé. Le temps imparti court jusqu'au **10 octobre 9 h** :
-il reste des heures, et la consigne est de les occuper — **ne pas s'arrêter faute de
-liste**.
+État au **10 octobre 6 h** : **C1, C3, C4 (pas 1), C5, C5bis, C5ter, C6, C7 (pas 1),
+C12, C12bis** livrées et poussées · **122 tests verts** · portes `porte-topologie`,
+`porte-trace`, `porte-fusion`, `porte-bus`, `porte-bus-socket`, `porte-delais`,
+`porte-horloge`, `porte-flux`, `porte-episodique` vertes.
+
+**La consigne tient toujours : ne pas s'arrêter faute de liste.** Le temps imparti
+(10 octobre 9 h) est un plancher, pas un plafond ; quand il tombe, la question n'est
+pas « ai-je fini ? » mais « qu'est-ce qui est mesurable maintenant ? ».
+
+**Ce qui vient d'être fait (contexte pour reprendre) :**
+
+- **C6** : mémoire épisodique (clé k-WTA + index inversé). Trois négatifs mesurés
+  d'abord (aucun élagage · l'espacement ne change rien · collisions à petit k), puis
+  **trois ingrédients** pour que l'index élude : expansion (896 → 16 384), décorrélation,
+  **égalisation d'usage des canaux** → élagage **83 %**, rappel 96,3 % à 50 % de
+  dégradation, round-trip **exact au bit près** (300/300, 2 500/2 500, et sur 3 corpus).
+  Coût d'expansion **fixe** ⇒ rentable au-delà de **N ≈ 2 048** épisodes.
+- **C7 (pas 1)** : consolidation par rejeu (fusion des épisodes qui co-activent).
+  **L'exemplaire bat la moyenne partout** (7 % du magasin → 87 % de rappel, contre
+  13 % → 22 %) : la clé d'une moyenne ne coïncide avec la clé d'aucun membre.
 
 **Par ordre de valeur mesurable :**
 
-1. **C4 — horloges par région / asynchronisme** (le plus structurant qui reste) :
-   commencer par un **compteur de pas par région** et un mode `--pas-max` qui borne
-   la terminaison ; porte : un graphe sans cycle doit rendre le **même résultat**
-   qu'en mode synchrone, et le nombre de pas par région doit être borné et annoncé.
-2. **C12bis — trace côté nœud** : aujourd'hui seule la trace du **pilote** existe
-   (`--trace-globale`) ; ajouter la même au nœud relais (mêmes empreintes, `region`
-   = son identifiant) et un mode qui **fusionne** les deux fichiers par horodatage.
-   Porte : la fusion contient les croisements des deux régions, sans trou.
-3. **C5ter — transport par socket du bus** : l'option `--bus-serveur` et le parseur
-   existent ; **le fil d'écoute doit être lancé AVANT `ecoute.accept()`** dans
-   `run_serveur_flux` (un fil posé après n'écoute que pendant qu'un client est
-   connecté — mesuré : connexion refusée). Le fichier de contrôle couvre le besoin
-   en attendant.
-4. **C2 — entrées multiples** (le plus lourd, à cadrer honnêtement) : exige deux
-   plages **disjointes** dans un même processus ; commencer par mesurer ce que coûte
-   un second `Model::load` partiel plutôt que d'attaquer la structure.
-5. **Expériences de biologie** (E2 croissance, E4 balance E/I) et **dessins de
-   modèle** (H profondeur routée, I budget d'événements, J quantification-aware) :
-   ils n'ont besoin d'aucun moteur nouveau, seulement du harnais d'entraînement.
-6. **Manques du registre** : noyau de listes pour les experts, noyau de listes GPU,
-   encodeurs — les trois plus gros chantiers de code identifiés.
+1. **C10 / C9 — le budget de FIBRES du pont** (en cours) : combien de canaux faut-il
+   échanger entre deux régions pour ne rien perdre ? `--pont-k K` ne garde que les K
+   plus grandes amplitudes de l'état échangé ; porte : `K = 0` (pont entier) doit être
+   **bit à bit** identique au mode sans pont, et la courbe perplexité ↔ K (donc ↔ octets
+   par pas) doit être monotone. C'est la question du corps calleux, et elle a une
+   réponse utile pour la distribution sur lien lent.
+2. **C2 — entrées multiples** (le plus lourd, à cadrer honnêtement) : exige deux plages
+   de couches disjointes par processus ; aujourd'hui explicitement refusé. C'est le
+   préalable de C8 (périphérie) et de C9 (jumelage).
+3. **C8 — périphérie** : région d'entrée à horloge propre, région de sortie (effecteur
+   avec délai), et **réflexes** (un lien qui court-circuite le centre). Invariant : une
+   entrée constante produit une sortie constante.
+4. **C7 suite** — consolidation **itérative** (plusieurs cycles de rejeu) : le rappel
+   d'appartenance tient-il après 2, 4, 8 cycles ? Et le rejeu vers les **poids**, qui
+   reste le vrai C7 : le moteur n'entraîne pas, les règles locales existantes sont
+   mesurées **dégradantes** (8,8246 contre 8,3869) — il faut donc une autre règle, et
+   c'est un chantier, pas une case à cocher.
+5. **C6 suite** — la mémoire qui **sert** : retrouver un passage pertinent dans un
+   document long et le réinjecter (protocole « aiguille » de `tools/aiguille.py`,
+   18/18 jusqu'à 12 288 jetons sans mémoire) ; mesure : le rappel par contenu
+   localise-t-il l'aiguille ?
+6. **Modèles** (`docs/modele-pour-drave.md`) : designs H (routage en profondeur),
+   I (budget d'événements appris), J (entraînement conscient de la quantification).
+7. **Biologie** : E2 (croissance des connexions), E4 (équilibre E/I), E5 (rejeu).
 
-**Règle de conduite du sprint** (docs/relations-humaines.md) : timeboxing, pas
-backlog — occuper le temps, livrer une capacité avec sa porte, documenter, committer,
-pousser, enchaîner.
+**Trappes à ne pas retomber dans :**
+
+- le gain de bus sur une région **finale** est absorbé par la normalisation de sortie —
+  mesurer sur une région du **milieu** ;
+- un nom de **variable** bash accentué n'est pas un identifiant valide (les noms de
+  *fonctions* accentués passent) ;
+- `pkill -f "<nom>"` se tue lui-même ; repérer les fils par PID ou par `flock` ;
+- un nœud refuse une plage d'une seule couche (`f.debut >= f.fin`) ;
+- `--depuis` gonfle les compteurs cumulés de paires ; `--limit` change le protocole
+  de fenêtres ; un drapeau inconnu est **ignoré en silence** (utiliser
+  `--options-strict` dans les scripts) ;
+- deux lecteurs lourds concurrents font tomber le disque à 8,6 Mo/s : **sérialiser**.
 
 ---
 
@@ -242,6 +270,48 @@ lignes de texte, et la trace dit *où* regarder — le rejeu recompte et compare
 **Le cas 3 est le plus important** : une porte qui ne sait pas échouer ne vérifie
 rien. La vérification nomme le pas, la région et le lien — c'est exactement ce qui
 manquait pour déboguer un graphe distribué.
+
+---
+
+## C9/C10 (premier pas) — FAIT (10 octobre 7 h) : le pont à fibres limitées
+
+**La question du corps calleux, posée en termes mesurables** : deux régions échangent
+un état à chaque pas ; **combien faut-il en échanger pour ne rien perdre ?**
+`--pont-k K` ne garde que les K plus grandes amplitudes, **dans les deux sens** (le
+nœud reçoit le même réglage), et le moteur publie les octets réellement échangés.
+
+**Deux pièges, tous les deux trouvés par la porte :**
+
+1. le pont n'était appliqué **que du pilote vers le nœud** — la mesure le disait sans
+   ambiguïté (1 096 octets à l'aller contre 1 959 au retour). Un corps calleux à
+   moitié coupé n'est pas un pont ;
+2. **en dense f32, élaguer ne réduit AUCUN octet** : 3 664 octets avant comme après,
+   avec **+7,83 %** de perplexité à 448 fibres. C'est l'**encodage** qui convertit la
+   parcimonie en octets.
+
+**La courbe utile (listes par blocs)** :
+
+| fibres | perplexité | octets/flux | écart |
+|---|---|---|---|
+| 896 | 111,9225 | 1 951 | — |
+| 672 | 112,9891 | 1 543 | +0,95 % |
+| **448** | **115,0632** | **1 096** | **+2,81 % (÷1,8 en octets)** |
+| 224 | 233,8589 | 648 | **+108,9 %** |
+| 112 | 1 153,3098 | 424 | +930,5 % |
+
+**On peut couper le pont en deux (+2,81 %, ÷1,8 en octets), pas en quatre** : la
+falaise est **entre 448 et 224 fibres**. Et **à budget égal, quantifier bat élaguer** :
+le rendement (perplexité pour 1 000 octets) est de 57,4 pour l'encodage complet contre
+105,0 pour le pont de 448 fibres — **83 % pire**. Même conclusion que pour les poids :
+garder les canaux et réduire leur précision vaut mieux que jeter des canaux.
+
+**La porte** : `tools/porte-pont.sh`, 7 cas (pont entier ≡ sans pont dans les **deux**
+encodages · les deux sens maigrissent · **monotonie** sur 5 points · élaguer coûte ·
+le piège du dense f32 vérifié comme tel · rendement comparé à budget égal).
+
+**Ce qui reste** : localiser la falaise entre 448 et 224 fibres (336 ? 280 ?), et
+refaire la courbe sur un modèle plus large — le même *nombre* de fibres y représente
+une fraction plus petite de l'état.
 
 ---
 
@@ -619,6 +689,7 @@ bus (le format de la ligne de contrôle est écrit, le transport reste à câble
 |---|---|
 | 9/10 17 h 10 | **C1a** : module `topologie.rs`, validation stricte, plan, 8 tests, suite à 85 tests. |
 | 9/10 17 h 20 | **C1b pas 1** : la topologie pilote le découpage · porte `tools/porte-topologie.sh` **TENUE** (même chiffre, écart 0,00e0) · deux refus vérifiés. |
+| 10/10 07 h 00 | **C9/C10 (pas 1)** : pont à fibres limitées. Piège 1 : le pont ne limitait que l'aller (1 096 vs 1 959 octets) — corrigé, les deux sens reçoivent `--pont-k`. Piège 2 : en **dense f32 élaguer ne gagne aucun octet** (3 664 avant et après, +7,83 %). Courbe en blocs : 448 fibres → +2,81 % et ÷1,8 en octets ; 224 → +108,9 % (falaise). À budget égal, quantifier bat élaguer de 83 %. Porte 7 cas. |
 | 10/10 05 h 20 | **C7 (pas 1)** : consolidation par rejeu (fusion des épisodes qui co-activent), deux formes de prototype. **L'exemplaire bat la moyenne partout** : seuil 1 → 7 % du magasin pour 87 % de rappel, contre 13 % pour 22 % ; seuil 8 → 51 % pour 95,3 % contre 67 % pour 34 %. Mécanisme : la clé d'une moyenne ne coïncide avec la clé d'aucun membre. Porte : cas 7. |
 | 10/10 01 h 50 | **C6** (mémoire épisodique) : module + mode `--episodique-essai` sur états réels. Round-trip **300/300 au bit près** (aussi après disque) ; rappel 100/96,7/69,3/15,3 % selon dégradation ; nouveauté 41,5 vs 64. **Trois négatifs mesurés** : aucun élagage (300/300 candidats), l'espacement des états ne change rien (24,0 vs 23,9), et à k=8 **81 collisions ⇒ round-trip 219/300**. Décorrélation : rappel 50 % → 78,3 %, toujours 0 % d'élagage. Porte `porte-episodique.sh` (5 cas). |
 | 10/10 00 h 20 | **C5ter** : bus par le réseau (`--bus-serveur`) sur le pilote et le nœud, protocole du fichier, borné à 8 modulateurs, verrou pris une fois par ligne. Porte 7 cas : socket ≡ statique et neutre ≡ référence **au bit près (0,00e0)**, plein vol ≠ les deux. Trois défauts corrigés : bus créé après `accept()`, gain d'une région finale absorbé par la normalisation, variable bash accentuée. |

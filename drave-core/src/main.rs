@@ -624,6 +624,11 @@ struct Options {
     /// C6 : égaliser l'usage des canaux (centrer et réduire PAR CANAL sur le magasin)
     /// avant de choisir la clé — contre les canaux « hub ».
     episodique_normaliser: bool,
+    /// C9/C10 : nombre de FIBRES du pont entre la région locale et la région
+    /// distante. 0 = pont entier (aucun écrêtage). Ne garder que les K plus grandes
+    /// amplitudes de l'état échangé, c'est limiter la bande passante du lien — la
+    /// question du corps calleux, et celle d'une distribution sur lien lent.
+    pont_k: usize,
     /// C6 : documents (fichiers de TEXTE brut, séparés par des virgules) d'où
     /// collecter les épisodes. Chaque document repart d'un cache neuf.
     episodique_textes: Option<String>,
@@ -809,6 +814,7 @@ fn analyser(args: &[String]) -> Options {
             "--episodique-connexions" => { o.episodique_connexions = suivant(i).parse().unwrap_or(8); 2 }
             "--episodique-normaliser" => { o.episodique_normaliser = true; 1 }
             "--episodique-textes" => { o.episodique_textes = Some(suivant(i).clone()); 2 }
+            "--pont-k" => { o.pont_k = suivant(i).parse().unwrap_or(0); 2 }
             // C5 : le bus de modulation, canal par canal.
             "--bus" => { o.bus.push(suivant(i).clone()); 2 }
             "--bus-serveur" => { o.bus_serveur = suivant(i).parse().ok(); 2 }
@@ -3581,12 +3587,24 @@ nœud continue", f.pos, ctx_local);
 continue", f.pos, mdl.ctx);
                         continue;
                     }
-                    let recu_lot = f.charge.plat().to_vec();
+                    let mut recu_lot = f.charge.plat().to_vec();
+                    // Le pont s'applique PAR ÉTAT : la largeur d'un état est
+                    // `largeur_etat`, pas la longueur du lot entier.
+                    if opt.pont_k > 0 {
+                        for q in recu_lot.chunks_mut(largeur_etat) {
+                            pont_sparsifier(q, opt.pont_k);
+                        }
+                    }
                     trace.enregistrer_mode(&region_trace, f.pos as u32, "local->pair",
                                            &recu_lot, 0.0, f.mode);
                     mdl.emb_imposee_lot = Some(recu_lot);
                     let hs = mdl.forward_lot(&vec![0u32; t], f.pos as usize);
-                    let plat: Vec<f32> = hs.concat();
+                    let mut plat: Vec<f32> = hs.concat();
+                    if opt.pont_k > 0 {
+                        for q in plat.chunks_mut(largeur_etat) {
+                            pont_sparsifier(q, opt.pont_k);
+                        }
+                    }
                     if std::env::var("DRAVE_DEBUG_FLUX").is_ok() {
                         eprintln!("[debug] lot reçu : n={t} pos={} états={} plat={} corps={}",
                                   f.pos, hs.len(), plat.len(), f.octets_corps);
@@ -3607,7 +3625,12 @@ continue", f.pos, mdl.ctx);
                 // CANAUX en mode dense mais le nombre de PAIRES en modes 1 et 2.
                 // Les confondre donnait un état de 16 362 valeurs au lieu de
                 // 16 384, et `Hc::melanger` sortait de la tranche.
-                let recu = f.charge.en_dense(largeur_etat);
+                let mut recu = f.charge.en_dense(largeur_etat);
+                // C9/C10 : le pont, côté nœud. Le même réglage que le pilote, sinon le
+                // lien n'est limité que dans UN sens — et la mesure le montrait :
+                // 1 096 octets à l'aller contre 1 959 au retour, parce que le nœud
+                // renvoyait tout. Un corps calleux à moitié coupé n'est pas un pont.
+                if opt.pont_k > 0 { pont_sparsifier(&mut recu, opt.pont_k); }
                 trace.enregistrer_mode(&region_trace, f.pos as u32, "local->pair",
                                        &recu, 0.0, f.mode);
                 mdl.emb_imposee = Some(recu);
@@ -3663,6 +3686,8 @@ de {} — flux refusé", r.mode, f.mode);
                         }
                     }
                 };
+                let mut a_rendre = a_rendre;
+                if opt.pont_k > 0 { pont_sparsifier(&mut a_rendre, opt.pont_k); }
                 trace.enregistrer_mode(&region_trace, f.pos as u32, "pair->local",
                                        &a_rendre, 0.0, f.mode);
                 if envoyer_flux(&mut sock, f.debut, f.fin, f.pos, &a_rendre, f.mode,
@@ -3823,6 +3848,33 @@ portent pas la même empreinte. C'est exactement ce que cette fusion existe pour
     // du modèle — et mourait sur « ouverture du GGUF: No such file » APRÈS avoir
     // imprimé une fusion juste. Trouvé au premier essai de la porte.
     std::process::exit(0);
+}
+
+/// C9/C10 : le PONT à fibres limitées.
+///
+/// POURQUOI CE N'EST PAS QU'UN RÉGLAGE DE DÉBIT. Un lien entre deux régions — entre
+/// deux hémisphères, ou entre deux machines — n'a pas une bande passante infinie. La
+/// question n'est pas « peut-on compresser ? » mais **« combien de fibres faut-il
+/// pour ne rien perdre ? »**, et elle se répond en mesurant : on garde les K plus
+/// grandes amplitudes de l'état échangé, on jette le reste, et on regarde ce que la
+/// perplexité en dit. Le résultat est une courbe qualité ↔ octets par pas, et une
+/// courbe est ce qui permet de choisir.
+///
+/// CE QUE ÇA COÛTE : un tri partiel de la largeur de l'état (896 canaux) par pas, et
+/// **rien** d'autre — le calcul des couches ne change pas, seule change la largeur de
+/// ce qui traverse le lien. C'est la même économie que la parcimonie apprise du
+/// moteur (paires = poids non nuls × activations vivantes), appliquée au lien au lieu
+/// des poids.
+fn pont_sparsifier(etat: &mut [f32], k: usize) {
+    if k == 0 || k >= etat.len() { return; }
+    let mut idx: Vec<u32> = (0..etat.len() as u32).collect();
+    // Départage par l'indice : deux exécutions doivent garder les MÊMES canaux, sans
+    // quoi la courbe mesurerait aussi le hasard du tri.
+    idx.sort_by(|&x, &y| {
+        let (a, b) = (etat[x as usize].abs(), etat[y as usize].abs());
+        b.partial_cmp(&a).unwrap_or(std::cmp::Ordering::Equal).then(x.cmp(&y))
+    });
+    for &i in idx.iter().skip(k) { etat[i as usize] = 0.0; }
 }
 
 /// Le PILOTE : garde les premières couches, envoie le flux au nœud moteur,
@@ -4201,6 +4253,11 @@ un lot de plus d'un état n'a pas UNE `pre`). Rien n'a été calculé.");
         // réglage de démarrage. Le verrou n'est tenu que le temps d'un pas.
         rafraichir_bus_fichier(&bus, &opt.bus_fichier);
         bus.lock().unwrap().appliquer_gain(&mut etat);
+        // C9/C10 : le pont. Appliqué APRÈS le bus (la modulation est locale au
+        // processus) et AVANT la trace, pour que la trace enregistre ce qui a
+        // réellement traversé le lien — une trace qui montrerait l'état d'avant le
+        // pont ne servirait à rien pour comprendre une divergence de lien.
+        if opt.pont_k > 0 { pont_sparsifier(&mut etat, opt.pont_k); }
         trace.enregistrer("local", pos as u32, "local->pair", &etat, 0.0);
         if delai_ms > 0 {
             std::thread::sleep(std::time::Duration::from_millis(delai_ms));
@@ -4257,7 +4314,12 @@ protocole, réglages, ou contexte : il a dit pourquoi de son côté.");
 attendus — pair incohérent. Rien n'a été calculé.", rep.n, mdl.cfg.hidden, largeur_etat);
             std::process::exit(1);
         }
-        let final_ = rep.charge.en_dense(largeur_etat);
+        let mut final_ = rep.charge.en_dense(largeur_etat);
+        // Le pont est le MÊME dans les deux sens : un corps calleux n'est pas
+        // asymétrique par construction, et utiliser deux largeurs différentes
+        // demanderait de dire laquelle est laquelle — ce qu'aucune mesure ne
+        // justifierait aujourd'hui.
+        if opt.pont_k > 0 { pont_sparsifier(&mut final_, opt.pont_k); }
         trace.enregistrer(&pair_region, pos as u32, "pair->local", &final_, t_pair * 1e3);
         // La réponse porte la `pre` de la DERNIÈRE FFN du pair (v6) : c'est elle
         // que la réduction finale du pilote doit employer — il ne peut pas la
@@ -4274,7 +4336,17 @@ attendus — pair incohérent. Rien n'a été calculé.", rep.n, mdl.cfg.hidden,
     }
     }
     let ppl = (nll / (ids.len() - 1) as f64).exp();
+    // Largeur de l'état échangé : elle sert au rapport du pont (et à lui seul).
+    let largeur_etat_max = mdl.cfg.hidden
+        * mdl.hc.as_ref().map(|v| v[0].0.hc).unwrap_or(1);
     println!("  deux nœuds        : perplexité {ppl:.4}  ({:.1} s)", t1.elapsed().as_secs_f64());
+    if opt.pont_k > 0 {
+        let octets = opt.pont_k * 4;
+        println!("  pont              : {} fibres sur {largeur_etat_max} canaux gardées par pas ⇒ \
+{octets} octets par sens et par pas, {octets} octets de plus par pas dans l'autre sens \
+(dense f32 ; les modes 1 et 2 encodent autrement, et leur qualité est mesurée à part)",
+                 opt.pont_k.min(largeur_etat_max));
+    }
     // C12 : la trace est écrite, ou vérifiée par rejeu. La vérification compare
     // les empreintes AU BIT PRÈS : toute divergence est nommée avec son pas et
     // son lien, et le processus sort en erreur.

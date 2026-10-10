@@ -24042,3 +24042,620 @@ code=0
 ⏵ C7 : porte 7/7 verte — je commite la consolidation par rejeu
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 cargo test --release --manifest-path drave-core/Cargo.toml 2>&1 | grep -E \"^test result\" && git add -A drave-core/src/main.rs drave-core/src/episodique.rs tools/porte-episodique.sh reports/rapport-campagne-benefices.md  … [2665 caractères tronqués]`
+
+  ```
+test result: ok. 122 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.32s
+0bd1d04 C7 pas 1 : consolider par rejeu — et garder un CAS bat résumer par une MOYENNE
+  ```
+
+### 🤖 Assistant
+
+⏵ C9 : le corps calleux — combien de fibres faut-il entre deux hémisphères ? Je relis le plan
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n \"$(grep -n '### C9' docs/plan-cerveau-complet.md | head -1 | cut -d: -f1),+16p\" docs/plan-cerveau-complet.md && grep -n \"PROCHAINE ACTION\" -A 22 docs/sprint-cerveau.md | head -30", "description": "Read C9 spec and next-act … [11 caractères tronqués]`
+
+  ```
+### C9 — Latéralité et corps calleux
+
+- **Cerveau** : deux hémisphères, ~2 × 10⁸ axones, connexions homotopiques.
+- **Moteur** : on sait découper une plage de couches entre deux nœuds ; pas de
+  duplication miroir ni d'échange massif.
+- **Conception** : deux **instances jumelles** du même modèle, un lien
+  **homotopique** par couche (échange d'activations), avec bande passante déclarée.
+  C'est un cas particulier de C1 (graphe symétrique).
+- **Interface** : `--jumeau <hôte:port> --echange <couches|experts>`.
+- **Invariant** : échange désactivé ⇒ chaque instance est identique au modèle seul.
+- **Validation** : gain de perplexité **ou** de robustesse (entrée dégradée d'un côté)
+  — et si le gain est nul, **le dire** (c'est le cas le plus probable : rien dans nos
+  mesures ne suggère un gain).
+- **Coût** : 1-2 semaines après C1. **Risque** : faible techniquement, gain incertain.
+
+### C10 — Budgets par lien (bande passante, énergie)
+
+9:## ▶ PROCHAINE ACTION (à lire en premier)
+10-
+11-État au 9 octobre 21 h 50 : **C1, C3, C5 (+ C5bis), C12 livrées**, 96 tests verts,
+12-23 portes vertes, tout poussé. Le temps imparti court jusqu'au **10 octobre 9 h** :
+13-il reste des heures, et la consi
+… [1233 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je remets à jour la liste d'actions reprenables, puis j'attaque le budget de fibres du pont
+
+- **write** `{"content": "import pathlib\n\np = pathlib.Path(\"docs/sprint-cerveau.md\")\ns = p.read_text()\ndeb = s.index(\"## ▶ PROCHAINE ACTION (à lire en premier)\")\nfin = s.index(\"## C7\")\nneuf = \"\"\"## ▶ PROCHAINE ACTION (à lire en premier)\n\nÉtat au **10 octobre 6 h** : **C1, C3, C4 (pas 1), C5, C5b … [4105 caractères tronqués]`
+
+  ```
+<path>/tmp/next_actions.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GoogleDrive 2>/dev/null; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 /tmp/next_actions.py && sed -n '9,20p' docs/sprint-cerveau.md", "description": "Apply next-actions update"}`
+
+  ```
+[stderr]
+Traceback (most recent call last):
+  File "/tmp/next_actions.py", line 6, in <module>
+    fin = s.index("## C7")
+ValueError: substring not found
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^## \" docs/sprint-cerveau.md | head -12", "description": "List sprint doc sections"}`
+
+  ```
+9:## ▶ PROCHAINE ACTION (à lire en premier)
+46:## Objectif du sprint
+67:## C1a — descripteur de topologie (FAIT, 9 octobre 17 h 10)
+98:## C1b pas 1 — FAIT (9 octobre 17 h 20) : la topologie PILOTE le découpage
+136:## C1b pas 2 — **FAIT (9 octobre 18 h)** : le RELAIS, trois régions sur trois instances
+179:## C1b pas 3 (conception d'origine, pour mémoire) — le relais : points d'insertion
+223:## C12 — FAIT (9 octobre 18 h 40) : trace globale et rejeu exact
+248:## C6 — FAIT (10 octobre 01 h 50) : mémoire épisodique, et ce qu'elle ne sait pas faire
+342:## C5ter — FAIT (10 octobre 00 h 20) : le bus par le réseau
+396:## C12bis — FAIT (9 octobre 23 h 05) : trace du nœud et fusion par le temps mural
+441:## C4 (premier pas) — FAIT (9 octobre 21 h 55) : pas par région et borne explicite
+471:## C5bis — FAIT (9 octobre 18 h 40) : diffusion du bus par FICHIER DE CONTRÔLE
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -i 's|^fin = s.index(\"## C7\")$|fin = s.index(\"## Objectif du sprint\")|' /tmp/next_actions.py && python3 /tmp/next_actions.py && sed -n '9,14p' docs/sprint-cerveau.md && grep -c \"\" docs/sprint-cerveau.md", "description": "Fi … [20 caractères tronqués]`
+
+  ```
+liste d'actions reprenables mise a jour
+## ▶ PROCHAINE ACTION (à lire en premier)
+
+État au **10 octobre 6 h** : **C1, C3, C4 (pas 1), C5, C5bis, C5ter, C6, C7 (pas 1),
+C12, C12bis** livrées et poussées · **122 tests verts** · portes `porte-topologie`,
+`porte-trace`, `porte-fusion`, `porte-bus`, `porte-bus-socket`, `porte-delais`,
+`porte-horloge`, `porte-flux`, `porte-episodique` vertes.
+661
+  ```
+
+### 🤖 Assistant
+
+⏵ C9/C10 : j'implémente le pont à fibres limitées — garder les K plus grandes amplitudes
+
+- **write** `{"content": "import pathlib\n\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\n\n# 1. option\na = \"    /// C12bis : nom donné à ce processus dans la trace fusionnée.\\n    trace_source: Option<String>,\"\nif a not in s:\n    # le champ peut ne pas exister : on ancre sur un autre ch … [2801 caractères tronqués]`
+
+  ```
+<path>/tmp/c9_code.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 /tmp/c9_code.py && grep -n 'trace.enregistrer(\"local\", pos as u32' drave-core/src/main.rs && grep -n 'let final_ = rep.charge.en_dense' drave-core/src/main.rs && grep -n 'let mut opt = analyser' drave-core/src/main.rs", "de … [60 caractères tronqués]`
+
+  ```
+pont_sparsifier + option
+4237:        trace.enregistrer("local", pos as u32, "local->pair", &etat, 0.0);
+4293:        let final_ = rep.charge.en_dense(largeur_etat);
+172:    let mut opt = analyser(&args);
+  ```
+
+- **write** `{"content": "import pathlib\n\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\n\n# --- côté envoi : le pont s'applique APRÈS le bus et AVANT la trace, pour que la\n# trace dise ce qui a réellement traversé le lien.\na = '''        trace.enregistrer(\"local\", pos as u32, \"local->pa … [2344 caractères tronqués]`
+
+  ```
+<path>/tmp/c9_code2.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 /tmp/c9_code2.py && cargo build --release --manifest-path drave-core/Cargo.toml 2>&1 | grep -E \"^error\" -A 10 | head -30; echo BUILD_DONE", "description": "Build bridge implementation", "timeoutMs": 700000}`
+
+  ```
+pont branche dans le pilote
+BUILD_DONE
+  ```
+
+- **write** `{"content": "#!/bin/bash\n# porte-pont.sh — la porte des capacités C9/C10 : le PONT à fibres limitées.\n#\n# LA QUESTION, ET ELLE EST CELLE DU CORPS CALLEUX. Deux régions d'un modèle échangent\n# un état à chaque pas. Combien de canaux faut-il échanger pour ne rien perdre ? La\n# réponse ne se devin … [4552 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-pont.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && chmod +x tools/porte-pont.sh && bash -n tools/porte-pont.sh && timeout 1800 bash tools/porte-pont.sh 2>&1 | tail -30", "description": "Run the bridge gate", "timeoutMs": 1900000}`
+
+  ```
+=== 1. pont entier (--pont-k 0 et --pont-k 4096) ===
+    deux nœuds        : perplexité 113.0068  (1.9 s)
+  sans pont : 113.0068 · --pont-k 0 : 113.0068 · --pont-k 4096 : 113.0068
+  ✅ pont entier identique (même perplexité, 3 exécutions)
+=== 2. la courbe : perplexité ↔ fibres ===
+    fibres   perplexité      octets/pas    écart %
+       896      113.0068            3584       0.000
+    pont              : 448 fibres sur 896 canaux gardées par pas ⇒ 1792 octets par sens et par pas, 1792 octets de plus par pas dans l'autre sens (dense f32 ; les modes 1 et 2 encodent autrement, et leur qualité est mesurée à part)
+       448      121.8551            1792      7.830 %
+    pont              : 224 fibres sur 896 canaux gardées par pas ⇒ 896 octets par sens et par pas, 896 octets de plus par pas dans l'autre sens (dense f32 ; les modes 1 et 2 encodent autrement, et leur qualité est mesurée à part)
+       224      248.5349             896    119.929 %
+    pont              : 112 fibres sur 896 canaux gardées par pas ⇒ 448 octets par sens et par pas, 448 octets de plus par pas dans l'autre sens (dense f32 ; les modes 1 et 2 encodent autrement, et leur qualité est mesurée à part)
+       112  
+… [1148 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ C9 : le pont coûte cher (÷2 fibres → +7,8 %) — je compare aux encodages existants, en octets réels
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n \"$(grep -n 'fn envoyer_flux' drave-core/src/main.rs | cut -d: -f1),+40p\" drave-core/src/main.rs", "description": "Read flux send path"}`
+
+  ```
+fn envoyer_flux(s: &mut std::net::TcpStream, debut: u32, fin: u32, pos: u32,
+                actifs: &[f32], mode: u8, mdl: Option<&model::Model>)
+                -> std::io::Result<(usize, usize)> {
+    use std::io::Write;
+    let (n, echelle, corps): (usize, f32, Vec<u8>) = if mode == MODE_BLOCS {
+        let (idx, val, echelles) = mdl.expect("modèle requis pour quantifier un flux")
+                                      .flux_en_liste_blocs(actifs);
+        // Indices par ÉCARTS : la liste est triée (les blocs sont parcourus dans
+        // l'ordre), donc l'écart au neurone précédent tient sur un octet dans
+        // l'immense majorité des cas — 255 est l'échappement vers l'indice absolu.
+        // Deux octets par neurone actif au lieu de trois, à quantification
+        // IDENTIQUE : c'est du rangement, pas de la perte.
+        let mut c = Vec::with_capacity(4 + echelles.len() * 4 + idx.len() * 2);
+        c.extend_from_slice(&(echelles.len() as u32).to_le_bytes());
+        for e in &echelles { c.extend_from_slice(&e.to_le_bytes()); }
+        let paires = encoder_paires_blocs(&idx, &val);
+        // La longueur est écrite : avec les échappements, elle n'est pas
+        // dédu
+… [1209 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ C9 : j'ajoute un compteur d'octets réellement échangés — la comparaison des encodages en dépend
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n \"$(( $(grep -n 'fn envoyer_flux' drave-core/src/main.rs | cut -d: -f1) + 40 )),+30p\" drave-core/src/main.rs && echo \"=== RECEVOIR ===\" && sed -n \"$(grep -n 'fn recevoir_flux' drave-core/src/main.rs | cut -d: -f1),+25p\" d … [73 caractères tronqués]`
+
+  ```
+// `np` vaut 0 ou 1 en pratique ; l'écrire par état laisse la porte ouverte.
+    let charge = corps;
+    let mut corps = prefixe_premix(mdl, 1);
+    corps.extend_from_slice(&charge);
+    s.write_all(&tete)?;
+    s.write_all(&corps)?;
+    s.flush()?;
+    Ok((TAILLE_TETE + corps.len(), n))
+}
+
+/// Le préfixe de corps du protocole v6 : un octet `np`, puis `np × hc` f32.
+///
+/// Un SEUL encodeur pour les trois émetteurs (jeton, lot dense, lot en listes).
+/// Ils écrivaient le même en-tête mais un seul avait reçu ce préfixe : les modes
+/// 3 et 4 (lots) envoyaient donc un corps que le décodeur v6 lisait de travers —
+/// le premier octet du premier état passait pour le compte `np`, et la suite
+/// était décalée de 4 octets. Un mode entier, faux et muet.
+///
+/// `t` est le nombre d'états du flux : la `pre` portée appartient à UN état, donc
+/// un lot de plus d'un état ne peut pas en porter une (et n'en porte pas : le
+/// chemin des lots refuse les modèles à hyper-connexions).
+fn prefixe_premix(mdl: Option<&model::Model>, t: usize) -> Vec<u8> {
+    let premix: Vec<f32> = mdl.and_then(|m| m.hc_porte_flux.clone()).unwrap_or_default();
+    let hc = mdl.map(|m| m.hc.as_ref().map(|v| v[0].0.hc).
+… [1801 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"let (o, a) = envoyer_flux\\|let (o, a)\\|(o, a)\" drave-core/src/main.rs | head -5 && grep -n \"read_exact(&mut corps\\|let mut corps = vec\\|corps.len()\" drave-core/src/main.rs | sed -n '1,12p'", "description": "Find send … [30 caractères tronqués]`
+
+  ```
+4257:        let (o, a) = envoyer_flux(&mut sock, debut_pair as u32, fin_pair as u32,
+2925:        if lus + 1 >= corps.len() {
+2930:            if lus + 1 >= corps.len() { return Err("échappement tronqué".into()); }
+2940:        if lus >= corps.len() { return Err("valeur manquante en fin de corps".into()); }
+2995:    Ok((TAILLE_TETE + corps.len(), n))
+3042:    Ok(TAILLE_TETE + corps.len())
+3078:    Ok(TAILLE_TETE + corps.len())
+3210:                let mut corps = vec![0u8; lg];
+3211:                s.read_exact(&mut corps)?;
+3253:            let mut corps = vec![0u8; taille];
+3254:            s.read_exact(&mut corps)?;
+3257:            return Ok(Flux { n, debut, fin, pos, mode, act, premix: premix.clone(), octets_corps: octets_prefixe + corps.len(),
+3278:            let mut corps = vec![0u8; longueur];
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '4255,4275p' drave-core/src/main.rs && grep -n \"octets_corps\" drave-core/src/main.rs | head -5 && grep -n \"struct Flux\" -A 14 drave-core/src/main.rs | grep -n \"octets\" ", "description": "Inspect send call site usage"}`
+
+  ```
+}
+        }
+        let (o, a) = envoyer_flux(&mut sock, debut_pair as u32, fin_pair as u32,
+                                  pos as u32, &etat, mode, Some(&mdl))
+                        .unwrap_or_else(|e| {
+                            eprintln!("[flux] le nœud moteur a fermé la connexion pendant \
+l'envoi du flux ({e}) — il a dit pourquoi de son côté.");
+                            std::process::exit(1);
+                        });
+        octets_envoyes += o as u64;
+        actifs_envoyes += a as u64;
+        flux_envoyes += 1;
+        let rep = match recevoir_flux(&mut sock, mdl.cfg.hidden, hc_pilote) {
+            Ok(r) => r,
+            Err(e) => {
+                eprintln!("[flux] le nœud moteur a fermé la connexion ({e}) — version du \
+protocole, réglages, ou contexte : il a dit pourquoi de son côté.");
+                std::process::exit(1);
+            }
+        };
+        // Ce que coûte le découpage : le calcul local, et l'attente du pair
+2759:    octets_corps: usize,
+3243:            let octets_corps = octets_prefixe + lus;
+3244:            return Ok(Flux { n, debut, fin, pos, mode, act, premix: premix.clone(), octets_corps,
+3257:            return Ok(Flux { n, debut, 
+… [206 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ C9 : la comptabilité d'octets existe déjà — je regarde ce qui en est déjà publié
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"octets_envoyes\\|octets_recus\\|actifs_envoyes\\|flux_envoyes\" drave-core/src/main.rs", "description": "Check existing byte accounting"}`
+
+  ```
+985:                 c.octets_envoyes as f64 / 1e9, c.octets as f64 / 1e9);
+4108:    let mut octets_envoyes = 0u64;
+4109:    let mut octets_recus = 0u64;
+4110:    let mut actifs_envoyes = 0u64;
+4111:    let mut flux_envoyes = 0u64;
+4148:            octets_envoyes += o as u64;
+4149:            actifs_envoyes += (t * mdl.cfg.hidden) as u64;
+4151:            flux_envoyes += 1;
+4162:            octets_recus += TAILLE_TETE as u64 + rep.octets_corps as u64;
+4264:        octets_envoyes += o as u64;
+4265:        actifs_envoyes += a as u64;
+4266:        flux_envoyes += 1;
+4278:        octets_recus += TAILLE_TETE as u64 + rep.octets_corps as u64;
+4351:    let nflux = flux_envoyes.max(1);
+4359:                 octets_envoyes as f64 / nflux as f64,
+4360:                 octets_envoyes as f64 / jetons_envoyes.max(1) as f64 / 1024.0,
+4372:             octets_envoyes as f64 / nflux as f64, octets_recus as f64 / nflux as f64,
+4373:             100.0 * actifs_envoyes as f64 / (nflux as f64 * mdl.cfg.hidden as f64),
+4374:             actifs_envoyes as f64 / nflux as f64, nflux);
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '4350,4380p' drave-core/src/main.rs", "description": "Read the published byte report"}`
+
+  ```
+// faisait apparaître un flux de « 919 canaux » pour un modèle qui en a 896.
+    let nflux = flux_envoyes.max(1);
+    if lot > 1 {
+        // « par jeton » divise par les jetons RÉELLEMENT envoyés (Σt) : le dernier
+        // lot est presque toujours partiel, et diviser par `lot` sous-estimait le
+        // coût (0,9 ko annoncés contre 1,45 réels à 20 jetons en lots de 16).
+        println!("  transport         : {} · lots de {lot} jetons au plus · {:.0} octets \
+                  par lot (aller) · {:.1} ko par jeton · {} lots pour {} jetons",
+                 if mode_lot == MODE_LOT_LISTES { "lot en LISTES" } else { "lot dense f32" },
+                 octets_envoyes as f64 / nflux as f64,
+                 octets_envoyes as f64 / jetons_envoyes.max(1) as f64 / 1024.0,
+                 nflux, jetons_envoyes);
+        println!("  temps             : {:.1} ms par LOT en local · {:.1} ms à attendre le pair · \
+                  soit {:.2}× le calcul local seul",
+                 1000.0 * t_local / nflux as f64, 1000.0 * t_pair / nflux as f64,
+                 t_pair / t_local.max(1e-9));
+    } else {
+    println!("  transport         : {} · {:.0} octets par flux (aller) · {:.0} au reto
+… [815 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ C9 : je mesure les octets réels des trois encodages pour comparer à armes égales
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && T=$(mktemp -d) && PORT=$((56000 + RANDOM % 500)) && cat > $T/topo.json <<JSON\n{\"regions\":[\n  {\"id\":\"local\",\"couches\":[0,11],\"instance\":\"local\"},\n  {\"id\":\"d\",\"couches\":[12,23],\"instance\":\"127.0.0.1:$PORT\"}],\n … [663 caractères tronqués]`
+
+  ```
+--- flux f32
+  deux nœuds        : perplexité 113.0068  (2.1 s)
+  transport         : dense f32 · 3664 octets par flux (aller) · 3664 au retour · 100.0 % d'activité (896 neurones par flux) · 47 flux
+--- flux listes
+  deux nœuds        : perplexité 113.0068  (1.9 s)
+  transport         : dense f32 · 3664 octets par flux (aller) · 3664 au retour · 100.0 % d'activité (896 neurones par flux) · 47 flux
+--- flux blocs
+  deux nœuds        : perplexité 113.0068  (1.9 s)
+  transport         : dense f32 · 3664 octets par flux (aller) · 3664 au retour · 100.0 % d'activité (896 neurones par flux) · 47 flux
+  ```
+
+### 🤖 Assistant
+
+⏵ C9 : `--flux listes` est ignoré en silence — le drapeau attend un numéro, pas un nom
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n '\"--flux\"' -A 3 drave-core/src/main.rs | head -12 && grep -n \"flux \\|--flux\" tools/porte-flux.sh | head -12", "description": "Check --flux parsing and gate usage"}`
+
+  ```
+908:            "--flux" => { o.flux = true; 1 }
+909-            "--flux-liste" => { o.flux_liste = true; 1 }
+910-            "--flux-blocs" => { o.flux_blocs = true; 1 }
+911-            "--session" => { o.session = true; o.flux = true; 1 }
+11:#   · le cadriciel de flux lui-même (en-tête, mode, compte `np`, positions) ;
+48:# Le nœud moteur : sa plage de couches est IMPOSÉE par le flux reçu, il n'a donc
+55:    "$D" "$MODELE" --flux-serveur "$PORT" --ctx "$CTX" --threads 8 \
+118:tester "mode 0 — f32 dense"          "0"      --flux
+119:tester "mode 1 — listes quantifiées" "0"      --flux-listes
+120:tester "mode 2 — listes par blocs"   "6e-2"   --flux-blocs --lot 1
+122:tester "mode 4 — lot en listes"      "1e-2"   --lot 4 --flux-blocs
+  ```
+
+### 🤖 Assistant
+
+⏵ C9 : je refais la mesure avec les bons drapeaux (`--flux` est sans argument)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && T=$(mktemp -d) && PORT=$((56000 + RANDOM % 500)) && cat > $T/topo.json <<JSON\n{\"regions\":[\n  {\"id\":\"local\",\"couches\":[0,11],\"instance\":\"local\"},\n  {\"id\":\"d\",\"couches\":[12,23],\"instance\":\"127.0.0.1:$PORT\"}],\n … [720 caractères tronqués]`
+
+  ```
+--- mode 0 dense f32
+  deux nœuds        : perplexité 113.0068  (2.0 s)
+  transport         : dense f32 · 3664 octets par flux (aller) · 3664 au retour · 100.0 % d'activité (896 neurones par flux) · 47 flux
+--- mode 1 listes
+  deux nœuds        : perplexité 110.5370  (2.0 s)
+  transport         : listes quantifiées · 3662 octets par flux (aller) · 3662 au retour · 99.9 % d'activité (895 neurones par flux) · 47 flux
+--- mode 2 blocs
+  deux nœuds        : perplexité 111.9225  (2.0 s)
+  transport         : listes à échelle par bloc (2 octets/actif, écarts) · 1951 octets par flux (aller) · 1959 au retour · 97.7 % d'activité (876 neurones par flux) · 47 flux
+  ```
+
+### 🤖 Assistant
+
+⏵ C9 : « blocs » bat l'élagage à budget égal — je mesure la frontière combinée
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -i 's/--flux f32 \"\\$@\"/--flux \"$@\"/' tools/porte-pont.sh && grep -n '\\-\\-flux' tools/porte-pont.sh && T=$(mktemp -d) && PORT=$((57000 + RANDOM % 500)) && cat > $T/topo.json <<JSON\n{\"regions\":[\n  {\"id\":\"local\",\"cou … [885 caractères tronqués]`
+
+  ```
+39:nœud() { $D "$M" --flux-serveur "$PORT" --ctx 256 --threads 8 > "$T/n.log" 2>&1 & echo $!; }
+42:     --limit "$LIMITE" --ctx 256 --threads 8 --flux "$@" 2>&1
+--- blocs + pont 448
+  deux nœuds        : perplexité 117.4235  (1.9 s)
+  transport         : listes à échelle par bloc (2 octets/actif, écarts) · 1096 octets par flux (aller) · 1959 au retour · 50.0 % d'activité (448 neurones par flux) · 47 flux
+--- blocs + pont 224
+  deux nœuds        : perplexité 238.0510  (2.0 s)
+  transport         : listes à échelle par bloc (2 octets/actif, écarts) · 648 octets par flux (aller) · 1957 au retour · 25.0 % d'activité (224 neurones par flux) · 47 flux
+--- blocs + pont 672
+  deux nœuds        : perplexité 114.4660  (1.9 s)
+  transport         : listes à échelle par bloc (2 octets/actif, écarts) · 1543 octets par flux (aller) · 1959 au retour · 75.0 % d'activité (672 neurones par flux) · 47 flux
+[stderr]
+grep: warning: stray \ before -
+  ```
+
+### 🤖 Assistant
+
+⏵ C9 : le pont ne limitait QUE l'aller (le nœud renvoyait tout) — je le rends symétrique
+
+- **write** `{"content": "import pathlib\n\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\n\n# --- côté nœud : ce qu'il REÇOIT\na = \"\"\"                let recu = f.charge.en_dense(largeur_etat);\n                trace.enregistrer_mode(&region_trace, f.pos as u32, \"local->pair\",\n           … [1879 caractères tronqués]`
+
+  ```
+<path>/tmp/c9_node.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **write** `{"content": "import pathlib\n\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\n\n# --- côté nœud : ce qu'il REÇOIT (un seul vecteur)\na = \"\"\"                let recu = f.charge.en_dense(largeur_etat);\n                trace.enregistrer_mode(&region_trace, f.pos as u32, \"local->p … [2448 caractères tronqués]`
+
+  ```
+<path>/tmp/c9_node.py</path>
+<type>file</type>
+<content>
+Updated file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 /tmp/c9_node.py && cargo build --release --manifest-path drave-core/Cargo.toml 2>&1 | grep -E \"^error\" -A 10 | head -25; echo BUILD_DONE", "description": "Build symmetric bridge", "timeoutMs": 700000}`
+
+  ```
+pont cote noeud (vecteur + lots)
+BUILD_DONE
+  ```
+
+- **write** `{"content": "#!/bin/bash\n# porte-pont.sh — la porte des capacités C9/C10 : le PONT à fibres limitées.\n#\n# LA QUESTION, ET ELLE EST CELLE DU CORPS CALLEUX. Deux régions d'un modèle échangent\n# un état à chaque pas. Combien faut-il échanger pour ne rien perdre ? La réponse ne\n# se devine pas : el … [6454 caractères tronqués]`
+
+  ```
+Error: cannot write "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-pont.sh": file changed since it was read — re-read the file, then retry
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -3 tools/porte-pont.sh && wc -l tools/porte-pont.sh", "description": "Re-read gate head after sed edit"}`
+
+  ```
+#!/bin/bash
+# porte-pont.sh — la porte des capacités C9/C10 : le PONT à fibres limitées.
+#
+101 tools/porte-pont.sh
+  ```
+
+- **write** `{"content": "#!/bin/bash\n# porte-pont.sh — la porte des capacités C9/C10 : le PONT à fibres limitées.\n#\n# LA QUESTION, ET ELLE EST CELLE DU CORPS CALLEUX. Deux régions d'un modèle échangent\n# un état à chaque pas. Combien faut-il échanger pour ne rien perdre ? La réponse ne\n# se devine pas : el … [6951 caractères tronqués]`
+
+  ```
+Error: cannot write "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-pont.sh": file changed since it was read — re-read the file, then retry
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-pont.sh", "limit": 5}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-pont.sh</path>
+<type>file</type>
+<content>
+1: #!/bin/bash
+2: # porte-pont.sh — la porte des capacités C9/C10 : le PONT à fibres limitées.
+3: #
+4: # LA QUESTION, ET ELLE EST CELLE DU CORPS CALLEUX. Deux régions d'un modèle échangent
+5: # un état à chaque pas. Combien de canaux faut-il échanger pour ne rien perdre ? La
+
+(Showing lines 1-5 of 101. Use offset=6 to continue.)
+</content>
+  ```
+
+- **write** `{"content": "#!/bin/bash\n# porte-pont.sh — la porte des capacités C9/C10 : le PONT à fibres limitées.\n#\n# LA QUESTION, ET ELLE EST CELLE DU CORPS CALLEUX. Deux régions d'un modèle échangent\n# un état à chaque pas. Combien faut-il échanger pour ne rien perdre ? La réponse ne\n# se devine pas : el … [6798 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-pont.sh</path>
+<type>file</type>
+<content>
+Updated file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"tools/porte-pont.sh\")\ns = p.read_text()\ns = s.replace(\"  OK   \", \"  ✅ \").replace(\"  XCT  \", \"  ❌ \")\np.write_text(s)\nprint(\"emoji restaures\")\nENDPY\nbash -n tools … [143 caractères tronqués]`
+
+  ```
+emoji restaures
+=== 1. pont entier (--pont-k 0 et --pont-k 4096) ===
+    deux nœuds        : perplexité 113.0068  (2.0 s)
+  sans pont : 113.0068 · --pont-k 0 : 113.0068 · --pont-k 4096 : 113.0068
+  ✅ pont entier identique (même perplexité, 3 exécutions)
+=== 2. la courbe : perplexité ↔ fibres ↔ octets (les DEUX sens) ===
+    fibres   perplexité    octets->    octets<-     ecart %
+       896      113.0068        3664        3664       0.000
+       672      116.3252        3664        3664      2.936 %
+       448      121.8551        3664        3664      7.830 %
+       224      248.5349        3664        3664    119.929 %
+       112     1139.3045        3664        3664    908.173 %
+        56     7312.9116        3664        3664   6371.214 %
+        28    21217.3848        3664        3664  18675.317 %
+        14   159278.4387        3664        3664  140845.889 %
+=== 3. le pont est SYMÉTRIQUE (le retour maigrit aussi) ===
+  ❌ a 672 fibres le RETOUR ne maigrit pas : 3664 octets contre 3664
+  ```
+
+### 🤖 Assistant
+
+⏵ C9 : piège mesuré — en dense f32, élaguer ne réduit AUCUN octet (896 valeurs envoyées, des zéros)
+
+- **write** `{"content": "#!/bin/bash\n# porte-pont.sh — la porte des capacités C9/C10 : le PONT à fibres limitées.\n#\n# LA QUESTION, ET ELLE EST CELLE DU CORPS CALLEUX. Deux régions d'un modèle échangent\n# un état à chaque pas. Combien faut-il échanger pour ne rien perdre ? La réponse ne\n# se devine pas : c' … [7939 caractères tronqués]`
+
+  ```
+Error: cannot write "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-pont.sh": file changed since it was read — re-read the file, then retry
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -f tools/porte-pont.sh && echo supprimé", "description": "Remove stale gate file"}`
+
+  ```
+supprimé
+  ```
+
+- **write** `{"content": "#!/bin/bash\n# porte-pont.sh — la porte des capacités C9/C10 : le PONT à fibres limitées.\n#\n# LA QUESTION, ET ELLE EST CELLE DU CORPS CALLEUX. Deux régions d'un modèle échangent\n# un état à chaque pas. Combien faut-il échanger pour ne rien perdre ? La réponse ne\n# se devine pas : c' … [7776 caractères tronqués]`
+
+  ```
+Error: cannot write "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-pont.sh": file no longer exists — re-read the file, then retry
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/porte-pont.sh <<'GATEFILE'\n#!/bin/bash\n# porte-pont.sh — la porte des capacités C9/C10 : le PONT à fibres limitées.\n#\n# LA QUESTION, ET ELLE EST CELLE DU CORPS CALLEUX. Deux régions d'un modèle échangent\n# un état à  … [7959 caractères tronqués]`
+
+  ```
+syntaxe ok
+=== 1. pont entier : identique au mode sans pont, dans LES DEUX encodages ===
+    deux nœuds        : perplexité 113.0068  (1.9 s)
+  dense f32 — sans pont : 113.0068 · --pont-k 0 : 113.0068 · --pont-k 4096 : 113.0068
+  blocs — sans pont : 111.9225 · --pont-k 0 : 111.9225
+  ✅ pont entier identique dans les deux encodages
+=== 2. la courbe (listes par blocs) : perplexité ↔ fibres ↔ octets ===
+    fibres   perplexité    octets->    octets<-     ecart %
+       896      111.9225        1951        1959       0.000
+       672      112.9891        1543        1544      0.953 %
+       448      115.0632        1096        1096      2.806 %
+       224      233.8589         648         648    108.947 %
+       112     1153.3098         424         424    930.454 %
+=== 3. le pont est SYMÉTRIQUE, et il ÉCONOMISE des octets ===
+  ✅ les deux sens maigrissent : 1951->424 à l'aller, 1959->424 au retour (112 fibres)
+=== 4. monotonie : plus de fibres ne peut pas faire pire ===
+  ✅ monotone sur 5 points · la pire est 1153.3098 à 112 fibres
+=== 5. élaguer COÛTE (sinon le pont n'est branché nulle part) ===
+  ✅ 112 fibres sur 896 : 111.9225 -> 1153.3098 (+930.45 %)
+=== 6. PIÈGE : en dense f32, é
+… [186 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ C9 : le cas 6 comparait deux encodages différents — je corrige la référence
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"tools/porte-pont.sh\")\ns = p.read_text()\ns = s.replace('''A=$(pilote --flux); REF=$(ppl \"$A\")''',\n              '''A=$(pilote --flux); REF=$(ppl \"$A\"); OD=$(aller \"$A\") … [807 caractères tronqués]`
+
+  ```
+cas 6 corrige
+       224      233.8589         648         648    108.947 %
+       112     1153.3098         424         424    930.454 %
+=== 3. le pont est SYMÉTRIQUE, et il ÉCONOMISE des octets ===
+  ✅ les deux sens maigrissent : 1951->424 à l'aller, 1959->424 au retour (112 fibres)
+=== 4. monotonie : plus de fibres ne peut pas faire pire ===
+  ✅ monotone sur 5 points · la pire est 1153.3098 à 112 fibres
+=== 5. élaguer COÛTE (sinon le pont n'est branché nulle part) ===
+  ✅ 112 fibres sur 896 : 111.9225 -> 1153.3098 (+930.45 %)
+=== 6. PIÈGE : en dense f32, élaguer ne réduit AUCUN octet ===
+  dense f32 à 448 fibres : 121.8551 · 3664 octets à l'aller, 3664 au retour
+  ✅ en dense f32 : 3664 octets AVANT et APRÈS (aucune économie), et la perplexité passe de 113.0068 à 121.8551
+=== 7. à budget égal, QUANTIFIER bat ÉLAGUER ===
+  blocs entier : 111.9225 à 1951 octets · blocs + 448 fibres : 115.0632 à 1096 octets
+  ✅ rendement (perplexité pour 1 000 octets) : blocs entier 57.4 · pont 448 fibres 105.0 — 83.0 % pire
+  ```
+
+### 🤖 Assistant
+
+⏵ C9 : porte 7/7 verte — je lance les non-régressions et je rédige les résultats
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (echo \"--- flux\"; timeout 1800 bash tools/porte-flux.sh 2>&1 | tail -8; echo \"--- bus\"; timeout 900 bash tools/porte-bus.sh 2>&1 | tail -4; echo \"--- bus-socket\"; timeout 1200 bash tools/porte-bus-socket.sh 2>&1 | tail -4; echo … [366 caractères tronqués]`
+
+  ```
+started background job bash-17
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/c9_docs.py <<'ENDPY'\nimport pathlib\n\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\nancre = \"## Annexe — manifeste des journaux\"\nsec = '''## 25. Le pont entre deux régions (C9/C10) :  … [6407 caractères tronqués]`
+
+  ```
+docs C9/C10 ecrites
+  ```
+
+- **job_output** `{"job_id": "bash-17", "timeout_ms": 900000, "wait": true}`
+
+  ```
+--- flux
+  mode 0 — f32 dense               0.00e0  ✅  (réf 61.9920 / deux nœuds 61.9920)
+  mode 1 — listes quantifiées     0.00e0  ✅  (réf 61.9920 / deux nœuds 61.9920)
+  mode 2 — listes par blocs        3.65e-2  ✅  (réf 61.9920 / deux nœuds 64.2535)
+  mode 3 — lot dense f32           0.00e0  ✅  (réf 60.8135 / deux nœuds 60.8135)
+  mode 4 — lot en listes           4.45e-3  ✅  (réf 60.8135 / deux nœuds 60.5427)
+--- bus
+  ✅ le bus traverse les instances et agit sur la région du milieu
+=== 4. bus diffusé par FICHIER DE CONTRÔLE, sur un nœud RELAIS (C5bis) ===
+  fichier sans canal : 59.0790 · canal gain=1,5 : 66.0379
+  ✅ le canal diffusé par fichier change la région du milieu
+--- bus-socket
+=== 7. le bus du PILOTE branché : une ligne non neutre change le résultat ===
+  bus du pilote : OK gain 2
+  perplexité avec le bus du pilote modulé : 148.9144 (référence 113.0068)
+  ✅ le bus du pilote agit (113.0068 -> 148.9144)
+--- fusion
+  fusion : la trace « /tmp/tmp.cFi3BDo85o/node_v1.txt » n'a AUCUN horodatage (format v1) — on ne peut pas l'ordonner dans le temps, et l'ordonner par numéro de pas donnerait un faux ordre. Réécrivez-la avec la version qui horodate.
+  ✅ v1 refusée (code 2), trace 
+… [352 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src/main.rs tools/porte-pont.sh reports/rapport-campagne-benefices.md docs/sprint-cerveau.md && git commit -q -m \"C9/C10 pas 1 : le pont à fibres limitées — combien de fibres, et à quel prix\n\nLa question du c … [2079 caractères tronqués]`
