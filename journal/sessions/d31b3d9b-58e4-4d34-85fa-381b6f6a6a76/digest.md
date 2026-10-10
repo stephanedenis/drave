@@ -40225,3 +40225,87 @@ CODE=0
 ⏵ Porte des jumeaux étendue (compression) et verte — je committe et je regarde la passe
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"tools/porte-jumeaux.sh\"); s = p.read_text()\ns = s.replace('''echo \"PORTE TENUE : l'échange est exact, il ne crée pas de gain entre jumeaux identiques, il\"\necho \"récupère u … [2135 caractères tronqués]`
+
+  ```
+conclusion de la porte mise à jour
+poussé
+  porte-budget           ✅                          42 s    ✅ paires depassees : nommees (total, budget, pas, plafond), code 9, AUCUNE perplexite
+  porte-bus              ✅                          75 s    ✅ le canal diffusé par fichier change la région du milieu
+  porte-bus-socket       ✅                          92 s    ✅ le bus du pilote agit (113.0068 -> 148.9144)
+17:14
+  ```
+
+### 🤖 Assistant
+
+⏵ Pendant la passe : C4 — quel est le PRIX d'un état en retard de k pas ? (ce qu'un ordonnanceur asynchrone doit savoir)
+
+- **write** `{"content": "#!/bin/bash\n# c4_retard.sh — C4 : le PRIX D'UN ÉTAT EN RETARD, c'est-à-dire la question d'un ordonnanceur asynchrone.\n#\n# POURQUOI CETTE MESURE. C4 (horloges par région) demande l'**asynchronisme réel** : chaque région\n# avance à son rythme, et une région peut recevoir l'état d'une  … [3374 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/c4_retard.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && chmod +x tools/c4_retard.sh && bash -n tools/c4_retard.sh && timeout 2400 bash tools/c4_retard.sh 128 12 \"0 1 2 4 8 16\" 2>&1 | tail -14", "description": "Measure the price of a stale state", "timeoutMs": 2600000}`
+
+  ```
+128 états de 896 canaux · retards testés : [0, 1, 2, 4, 8, 16]
+  modèle entier (référence) : 14.6496
+  retard   perplexité    prix
+  0        14.6496        +1.00×
+  1        9277.9771      +633.33×
+  2        59878.6885     +4087.39×
+  4        90096.6419     +6150.11×
+  8        151517.0001    +10342.74×
+  16       131248.9897    +8959.22×
+
+Lecture : le retard 0 est l'invariant (coupe exacte). Chaque pas de retard supplémentaire
+donne un état qui décrit un monde plus ancien : le prix est ce que l'ordonnanceur doit borner.
+  ```
+
+### 🤖 Assistant
+
+⏵ C4 : **un seul pas de retard coûte ×633** — la position d'un état n'est pas négociable ; j'écris la fiche et la porte
+
+- **write** `{"content": "# C4 — le prix d'un état en retard : **×633 pour UN pas**, et ce que ça impose à un ordonnanceur\n\n> Campagne : **cerveau** · expérience : état d'une couche imposé avec k pas de retard\n> Question : C4 demande l'**asynchronisme réel** — chaque région à son rythme, avec des horloges\n>  … [3621 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-c4-retard.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **write** `{"content": "#!/bin/bash\n# porte-c4-retard.sh — C4 : la POSITION d'un état n'est pas négociable.\n#\n# LA MESURE QUI A DONNÉ CETTE PORTE (reports/rapport-c4-retard.md) : un état d'une couche imposé\n# avec UN pas de retard multiplie la perplexité par **633** (14,6496 → 9 277,98 sur 128 jetons),\n#  … [4082 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-c4-retard.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && chmod +x tools/porte-c4-retard.sh && bash -n tools/porte-c4-retard.sh && timeout 1800 bash tools/porte-c4-retard.sh 2>&1 | tail -9; echo \"CODE=${PIPESTATUS[0]}\"", "description": "Run the staleness gate", "timeoutMs": 2000000}`
+
+  ```
+modèle entier 14.6496 · retard 0 14.6496 · retard 1 9277.9771 · retard 8 151517.0001
+  ✅ retard 0 = modèle entier (14.6496 = 14.6496) : la coupe est exacte
+  ✅ un pas de retard coûte ×633 : la POSITION d'un état est son identité
+  ✅ la dégradation sature (retard 8 : ×10343, pas moins que le retard 1)
+
+PORTE TENUE : un état n'est valide qu'à sa position (×633 pour un pas), et l'asynchronisme ne
+peut donc pas vouloir dire « laisser un pas prendre du retard » — seulement réordonner les
+messages D'UN MÊME pas, chacun portant sa position. Fiche : reports/rapport-c4-retard.md.
+CODE=0
+  ```
+
+### 🤖 Assistant
+
+⏵ Prix du retard verrouillé par une porte ; je consigne dans l'état et le journal
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib, subprocess\nheure = subprocess.run([\"date\", \"+%H:%M\"], capture_output=True, text=True).stdout.strip()\np = pathlib.Path(\"reports/rapport-c4-retard.md\"); s = p.read_text()\ns = s.replace(\">  … [4277 caractères tronqués]`

@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 56.0 h |
+| Durée | 56.1 h |
 | Tours | 89 |
-| Messages | 2497 |
-| Appels d'outils | 2298 |
-| Fichiers touchés | 88 |
-| Commandes | 2002 |
+| Messages | 2503 |
+| Appels d'outils | 2304 |
+| Fichiers touchés | 91 |
+| Commandes | 2005 |
 | Sous-agents | 3 |
-| Commits | 229 |
+| Commits | 230 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -3636,7 +3636,7 @@ Trois erreurs attrapées par les instruments : une **porte fantôme** verte en c
 
 ### Tour 89 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*18 appels d'outils.* Actions notables :
+*24 appels d'outils.* Actions notables :
 
 - bash — Check imposed input state flags
 - bash — Audit etat_entree usage
@@ -3652,11 +3652,11 @@ Trois erreurs attrapées par les instruments : une **porte fantôme** verte en c
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-jumeaux.sh`
 - bash — Run the twins gate
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-c9-lateralite.md`
-- … et 4 autres
+- … et 10 autres
 
 **Synthèse produite :**
 
-⏵ Porte des jumeaux étendue (compression) et verte — je committe et je regarde la passe
+⏵ Prix du retard verrouillé par une porte ; je consigne dans l'état et le journal
 
 ## 3. Travail accompli
 
@@ -3752,6 +3752,9 @@ Trois erreurs attrapées par les instruments : une **porte fantôme** verte en c
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/jumeaux.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-jumeaux.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-c9-lateralite.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/c4_retard.sh` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-c4-retard.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-c4-retard.sh` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -3801,7 +3804,7 @@ Trois erreurs attrapées par les instruments : une **porte fantôme** verte en c
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1962 autres
+- … et 1965 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4178,4 +4181,5 @@ Trois erreurs attrapées par les instruments : une **porte fantôme** verte en c
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' import pathlib, re, subprocess log = pathlib.Path("/tmp/passe-complete3.log").read_tex
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M' && python3 - <<'PYEOF' import pathlib, subprocess heure = subprocess.run(["date", "+%H:%M"],
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' import pathlib p = pathlib.Path("tools/porte-jumeaux.sh"); s = p.read_text() s = s.rep
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' import pathlib, subprocess heure = subprocess.run(["date", "+%H:%M"], capture_output=T
 
