@@ -62,9 +62,20 @@ Huit indices prélevés dans l'invite B (positions depuis la fin : 1, 2, 4, 8, 1
 3. **la limite est le CHOIX DE L'INDICE, pas la mémoire** — et ce choix ne se devine pas :
    rien ne désigne la 4ᵉ position depuis la fin plutôt que la dernière.
 
-**Deux voies, aucune mesurée** : interroger avec plusieurs indices et garder le meilleur
-(mais le recouvrement ne les départage pas : celui du gagnant, 25/64, n'est pas le plus
-élevé), ou abandonner le rappel sémantique et faire entrer le contenu comme JETONS.
+**Suite — six dernières positions prélevées une à une : le rappel n'est PAS continu.**
+`:` 303 · `Answer` 311 · `.` 533 · **`only` 50** · **`code` 1 006** · `the` 1 005.
+
+**Deux jetons VOISINS — « code » et « only » — donnent 1 006 et 50 jetons.** Rien de
+lexical ne l'explique : les deux états ont lu presque le même texte. C'est que la clé est
+un **k-WTA** (64 canaux sur 16 384) : une petite variation de l'état fait entrer et sortir
+des canaux, donc la clé **saute**. Il n'y a aucune pente à suivre pour s'approcher du bon
+indice — voilà pourquoi il est impossible à deviner, et c'est un **mécanisme**, pas une
+fatalité.
+
+**Trois voies, aucune mesurée** : rendre la clé **stable** en la formant sur une FENÊTRE de
+positions (union/intersection des k-WTA voisins) ; interroger avec plusieurs indices et
+garder le meilleur (le recouvrement ne les départage pas : le gagnant n'a que 25/64) ;
+ou abandonner le rappel sémantique et faire entrer le contenu comme JETONS.
 **Nouveau** : `--etat-fin` accepte une liste de positions (1,2,4,8…) — huit indices en un
 seul parcours, au lieu de huit parcours de 70 s.
 
@@ -969,6 +980,7 @@ bus (le format de la ligne de contrôle est écrit, le transport reste à câble
 |---|---|
 | 9/10 17 h 10 | **C1a** : module `topologie.rs`, validation stricte, plan, 8 tests, suite à 85 tests. |
 | 9/10 17 h 20 | **C1b pas 1** : la topologie pilote le découpage · porte `tools/porte-topologie.sh` **TENUE** (même chiffre, écart 0,00e0) · deux refus vérifiés. |
+| 10/10 20 h 45 | **C6 — le rappel n'est pas CONTINU** : six dernières positions prélevées une à une. `only` (4ᵉ) → **50 jetons**, `code` (5ᵉ) → **1 006** : **deux jetons voisins**, dont les états ont lu presque le même texte. Cause : la clé est un **k-WTA**, donc une petite variation fait entrer/sortir des canaux et la clé **saute** — aucune pente à suivre. Voie ouverte : clé formée sur une **FENÊTRE** de positions. |
 | 10/10 19 h 30 | **C6 — le rappel dépend de l'INDICE** : 8 indices (positions 1..128 depuis la fin de B), distances **[50, 303, 303, 311, 347, 347, 890, 1003]**, moyenne 444, hasard 448. **Un indice trouve (50 jetons, 9× mieux que le hasard), sept sont au hasard** ⇒ le « 3,3× » du round 2 était un tirage chanceux, et **la limite est le CHOIX de l'indice**, pas la mémoire. `--etat-fin` accepte une liste de positions. |
 | 10/10 18 h 00 | **C6/C2 — la mémoire QUI SERT (bout en bout)** : `--episodique-extraire`. Indexer A (1 750 états) → retrouver avec un indice extérieur (épisode 437, **303 jetons** de l'aiguille, hasard 448) → injecter dans une invite sans le fait : le modèle DIT **« The vault access code is »** (α=0 : `150px`, témoin). **Le code n'est pas produit** car l'épisode retrouvé précède l'aiguille ⇒ **le goulot est le RAPPEL, pas la greffe**. |
 | 10/10 16 h 30 | **C2 — deux entrées, règle de mélange** : `porte-melange.sh` (4 cas, verte). La somme **arbitre** (7/7), **bascule à α=0,6** contre **0,509** prédit par les normes. Et **correction d'un faux négatif majeur** : la greffe d'état **transfère le contenu** (`ZQ3`/`K00`) quand l'état est capturé dans la numérotation de l'inférence (`--etat-fin` — le décalage d'un jeton faisait injecter l'état qui prédit « : »). Trois mesures avaient échoué sur ce décalage. |

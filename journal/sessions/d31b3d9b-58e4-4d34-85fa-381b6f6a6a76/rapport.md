@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 43.7 h |
-| Tours | 47 |
-| Messages | 1735 |
-| Appels d'outils | 1639 |
+| Durée | 44.0 h |
+| Tours | 48 |
+| Messages | 1742 |
+| Appels d'outils | 1644 |
 | Fichiers touchés | 61 |
-| Commandes | 1389 |
+| Commandes | 1394 |
 | Sous-agents | 3 |
-| Commits | 137 |
+| Commits | 138 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -129,6 +129,8 @@
 **Tour 46** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1469 caractères tronqués]
 
 **Tour 47** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1469 caractères tronqués]
+
+**Tour 48** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1469 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -2189,7 +2191,45 @@ Le modèle **dit la phrase-cadre de l'aiguille** alors que ni le code ni cette p
 
 **Synthèse produite :**
 
-⏵ Découverte : un indice précis tombe à **50 jetons** de l'aiguille (hasard 448) — le choix de l'indice décide
+⏵ Round 4 livré : le rappel dépend de l'INDICE (1 sur 8 trouve), pas de la mémoire
+
+**Ce round** — 2 commits poussés, 122 tests verts :
+
+- **La question** : le §29 avait montré que le goulot est le rappel. La mémoire est-elle mauvaise, ou est-ce l'indice choisi ? Une distribution, pas un point : **8 indices** prélevés dans l'invite B (positions 1, 2, 4, 8, 16, 32, 64, 128 depuis la fin), chacun requêtant le magasin de A (aiguille au jeton 740, hasard **448**).
+
+| indice (depuis la fin) | épisode | distance |
+|---|---|---|
+| **4ᵉ** | 690 | **50** |
+| 2ᵉ | 429 | 311 |
+| 32ᵉ | 437 | 303 |
+| dernière | 437 | 303 |
+| 16ᵉ / 64ᵉ | 393 / 393 | 347 / 347 |
+| 128ᵉ | 1630 | 890 |
+| 8ᵉ | 1743 | 1 003 |
+
+**Moyenne 444 · médiane 329 · meilleure 50 · pire 1 003 · hasard 448.**
+
+1. **Un indice trouve l'aiguille** : 50 jetons, **9× mieux que le hasard** — le préfixe de l'épisode contient le fait.
+2. **Mais un seul sur huit** : les autres sont au niveau du hasard ⇒ le « 3,3× mieux que le hasard » du round 2 était **un tirage chanceux**, et sa fragilité (136 puis 378 selon un point d'interrogation) s'explique enfin.
+3. **La limite est le CHOIX DE L'INDICE, pas la mémoire** — et ce choix ne se devine pas : rien ne désigne la 4ᵉ position depuis la fin plutôt que la dernière.
+
+- **Instrument ajouté** : `--etat-fin` accepte une **liste** de positions (1,2,4,8…) — huit indices en un parcours au lieu de huit parcours de 70 s. Deux bugs attrapés en l'écrivant (parseur relisant le même argument ; splice mal ancré qui dupliquait une fonction — reverti et refait avec des ancres sûres).
+
+**Suivant** (dans `docs/sprint-cerveau.md`) : départager plusieurs indices par un score qui ne soit pas le recouvrement (le gagnant n'a que 25/64), ou assumer que le rappel sémantique n'est pas le bon outil et faire entrer le contenu comme jetons. L'objectif reste **actif**.
+
+### Tour 48 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1749 caractères tronqués]
+
+*5 appels d'outils.* Actions notables :
+
+- bash — Inspect the text around the winning cue
+- bash — Capture and test three more cue positions
+- bash — Check the extra cue positions
+- bash — Document the non-continuity of recall
+- bash — Commit the non-continuity finding
+
+**Synthèse produite :**
+
+⏵ Toutes les mesures sont là (50 pour l'une, ~1000 pour ses voisines) — je complète et commite
 
 ## 3. Travail accompli
 
@@ -2307,7 +2347,7 @@ Le modèle **dit la phrase-cadre de l'aiguille** alors que ni le code ni cette p
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1349 autres
+- … et 1354 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2592,4 +2632,5 @@ Le modèle **dit la phrase-cadre de l'aiguille** alors que ni le code ni cette p
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib p = pathlib.Path("tools/porte-greffe.sh") s = p.read_text() a = '''echo
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_te
 

@@ -2026,12 +2026,36 @@ fin), chacune servant d'indice extérieur au magasin de A (aiguille au jeton 740
    devine pas : il n'y a aucune raison de préférer la dernière position (303 jetons) à la
    quatrième depuis la fin (50 jetons).
 
-**Deux voies ouvertes, aucune mesurée** : interroger le magasin avec **plusieurs indices**
-et garder le meilleur (un score de recouvrement ne suffit pas à les départager — le
-recouvrement de l'indice gagnant, 25/64, n'est pas le plus élevé), ou **abandonner le
+**Suite — dix indices, et le résultat est plus tranchant que prévu.** Les six dernières
+positions ont été prélevées une à une (la 4ᵉ était la gagnante) :
+
+| position depuis la fin | jeton (déduit) | distance à l'aiguille |
+|---|---|---|
+| 1 | `:` | 303 |
+| 2 | `Answer` | 311 |
+| 3 | `.` | 533 |
+| **4** | **`only`** | **50** |
+| **5** | **`code`** | **1 006** |
+| 6 | `the` | 1 005 |
+| 8, 16, 32, 64, 128 | — | 1 003 · 347 · 303 · 347 · 890 |
+
+Les six dernières positions, dans l'ordre : **303 · 311 · 533 · 50 · 1 006 · 1 005**.
+
+**Deux jetons VOISINS — « code » et « only » — donnent 1 006 et 50 jetons.** Rien de
+lexical n'explique cela : les deux états ont lu presque le même texte. Ce que ces deux
+points disent, c'est que **le rappel n'est pas une fonction continue de l'indice** : la
+clé est un k-WTA (les 64 plus grands canaux sur 16 384), donc une petite variation de
+l'état fait **entrer et sortir des canaux**, et la clé saute. Il n'y a donc aucune pente à
+suivre pour « s'approcher » du bon indice — c'est ce qui rend le choix de l'indice
+impossible à deviner, et c'est un mécanisme, pas une fatalité.
+
+**Ce que cela indique pour la suite, et ce n'est pas mesuré** : rendre la clé **stable** en
+la formant sur une FENÊTRE de positions (union ou intersection des k-WTA voisins) au lieu
+d'un seul jeton — ce qui lisserait l'hypersensibilité au prix de la précision ; ou
+interroger avec plusieurs indices et garder le meilleur (mais le recouvrement ne les
+départage pas : celui du gagnant, 25/64, n'est pas le plus élevé) ; ou **abandonner le
 rappel sémantique** pour ce qu'il ne sait pas faire et faire entrer le contenu comme
-jetons (RAG ordinaire). La première a l'avantage de garder l'adressage par contenu ; la
-seconde est sûre et sans surprise.
+jetons (RAG ordinaire).
 
 ## Annexe — manifeste des journaux
 

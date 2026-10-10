@@ -27813,3 +27813,98 @@ fini
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\n\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\na = \"## Annexe — manifeste des journaux\"\nsec = \"\"\"## 30. Le rappel par le contenu dépend de l'INDICE, pas de … [7402 caractères tronqués]`
+
+  ```
+docs distribution
+test result: ok. 122 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.32s
+b21f715 C6 : le rappel par le contenu dépend de l'INDICE, pas de la mémoire (8 indices mesurés)
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 4 livré : le rappel dépend de l'INDICE (1 sur 8 trouve), pas de la mémoire
+
+**Ce round** — 2 commits poussés, 122 tests verts :
+
+- **La question** : le §29 avait montré que le goulot est le rappel. La mémoire est-elle mauvaise, ou est-ce l'indice choisi ? Une distribution, pas un point : **8 indices** prélevés dans l'invite B (positions 1, 2, 4, 8, 16, 32, 64, 128 depuis la fin), chacun requêtant le magasin de A (aiguille au jeton 740, hasard **448**).
+
+| indice (depuis la fin) | épisode | distance |
+|---|---|---|
+| **4ᵉ** | 690 | **50** |
+| 2ᵉ | 429 | 311 |
+| 32ᵉ | 437 | 303 |
+| dernière | 437 | 303 |
+| 16ᵉ / 64ᵉ | 393 / 393 | 347 / 347 |
+| 128ᵉ | 1630 | 890 |
+| 8ᵉ | 1743 | 1 003 |
+
+**Moyenne 444 · médiane 329 · meilleure 50 · pire 1 003 · hasard 448.**
+
+1. **Un indice trouve l'aiguille** : 50 jetons, **9× mieux que le hasard** — le préfixe de l'épisode contient le fait.
+2. **Mais un seul sur huit** : les autres sont au niveau du hasard ⇒ le « 3,3× mieux que le hasard » du round 2 était **un tirage chanceux**, et sa fragilité (136 puis 378 selon un point d'interrogation) s'explique enfin.
+3. **La limite est le CHOIX DE L'INDICE, pas la mémoire** — et ce choix ne se devine pas : rien ne désigne la 4ᵉ position depuis la fin plutôt que la dernière.
+
+- **Instrument ajouté** : `--etat-fin` accepte une **liste** de positions (1,2,4,8…) — huit indices en un parcours au lieu de huit parcours de 70 s. Deux bugs attrapés en l'écrivant (parseur relisant le même argument ; splice mal ancré qui dupliquait une fonction — reverti et refait avec des ancres sûres).
+
+**Suivant** (dans `docs/sprint-cerveau.md`) : départager plusieurs indices par un score qui ne soit pas le recouvrement (le gagnant n'a que 25/64), ou assumer que le rappel sémantique n'est pas le bon outil et faire entrer le contenu comme jetons. L'objectif reste **actif**.
+
+
+## Tour 48
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 mémoire épisodique, C7 consolidation, C8 périphérie, C9 latéralité, C10 budgets, et la diffusion réseau du bus de C5 ; (b) les expériences E2-E9 de docs/biologie-pour-drave.md et docs/hebbien-differentiel-et-biologie.md ; (c) les dessins de modèle H/I/J de docs/modele-pour-drave.md ; (d) les manques du registre docs/manques.md (noyau de listes pour les experts, noyau de listes GPU, encodeurs) — l'implémenter ou la mesurer, la doter d'une porte vérifiable, la documenter, commiter, pousser, et enchaîner immédiatement sur la suivante. Contraintes : les 23 portes du dépôt et tous les tests restent verts (porte-flux.sh après toute modification du chemin d'exécution), le profil release reste le binaire de mesure, le crate reste std seul, et docs/sprint-cerveau.md reste l'état resumable mis à jour à chaque round. Ne jamais s'arrêter faute de tâches planifiées : en inventer de nouvelles, mesurables, plutôt que d'attendre."
+Round: 5/60
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ C6 : qu'a de spécial l'indice qui trouve (4ᵉ depuis la fin) ? Je regarde les jetons autour
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && T=/tmp/tmp.j4ZkPG1r7b && python3 - <<'ENDPY'\nimport pathlib\nt = pathlib.Path(\"/tmp/tmp.j4ZkPG1r7b\")\nb = (t/\"B.txt\").read_text()\nprint(\"fin de B :\", repr(b[-160:]))\na = (t/\"A.txt\").read_text()\ni = a.index(\"IMPORTANT\")\ … [290 caractères tronqués]`
+
+  ```
+fin de B : 'Founded in 1944 as Controladora Comercial Mexicana, it reported revenues of US$3.6 b\nQuestion: What is the vault access code? Answer with the code only.\nAnswer:'
+phrase de l'aiguille : 'IMPORTANT : the vault access code is ZQ-4471-KX. Remember it, it will be asked at the end.\n of Sarah Vaughan\n*Count Basi'
+  ```
+
+### 🤖 Assistant
+
+⏵ L'indice gagnant est « only » (juste après « code ») — je vérifie l'hypothèse lexicale avec 3 positions de plus
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && T=/tmp/tmp.j4ZkPG1r7b && timeout 600 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --infer --prompt \"$(cat $T/B.txt)\" --n 1 --temp 0 --ctx 2048 --threads 12 --etat-fin $T/fin 3,5,6 2>&1 | grep capture && cat > /tm … [963 caractères tronqués]`
+
+  ```
+capture d'état    : position(s) [1719, 1717, 1716] (depuis la fin d'une invite de 1722 jetons) écrite(s) dans /tmp/tmp.j4ZkPG1r7b/fin
+lancé
+  ```
+
+- **bash** `{"command": "sleep 560; cat /tmp/fin_dist.txt", "description": "Check the extra cue positions", "timeoutMs": 620000}`
+
+  ```
+position 3 depuis la fin : épisode 207 · distance 533 jetons
+position 5 depuis la fin : épisode 1746 · distance 1006 jetons
+  ```
+
+### 🤖 Assistant
+
+⏵ Deux jetons VOISINS donnent 50 et 1006 jetons — le rappel n'est pas continu, il dépend de la clé exacte
+
+- **bash** `{"command": "sleep 200; cat /tmp/fin_dist.txt; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\n\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\na = \"\"\"**Deux voies ouvertes, aucune mesurée** : interroger le magasin avec * … [4195 caractères tronqués]`
+
+  ```
+position 3 depuis la fin : épisode 207 · distance 533 jetons
+position 5 depuis la fin : épisode 1746 · distance 1006 jetons
+position 6 depuis la fin : épisode 1745 · distance 1005 jetons
+fini
+docs sensibilite
+  ```
+
+### 🤖 Assistant
+
+⏵ Toutes les mesures sont là (50 pour l'une, ~1000 pour ses voisines) — je complète et commite
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\ns = s.replace(\"| 6 | `the` | (mesuré) |\", \"| 6 | `the` | 1 005 |\")\ns = s.replace(\"\"\"**Deux jetons VOISINS —  … [2583 caractères tronqués]`
