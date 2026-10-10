@@ -110,9 +110,25 @@ substantiel** — de l'ordre de la fenêtre, pas de quelques jetons. C'est le m�
 *attention sinks*, mais à l'échelle : quelques puits suffisent à drainer, il en faut beaucoup
 plus pour **porter l'information du début de séquence**.
 
-**Ce qui reste ouvert** : à **4 096 jetons**, la règle « préfixe ≈ fenêtre » tient-elle
-(mesure en cours) ? Et quel est le meilleur couple à budget de clés fixé — la question qui
-décide d'un réglage par défaut.
+**À 4 096 jetons** (mêmes conditions, `--ctx 4096`), la référence d'attention complète vaut
+**12,2177** :
+
+| fenêtre \ puits | 512 | 1 024 | clés / jeton | prix vs complet |
+|---|---|---|---|---|
+| **512** | 12,8824 | 12,7884 | 1 024 / 1 536 | +5,4 % / +4,7 % |
+| **1 024** | 12,4875 | **12,4466** | 1 536 / 2 048 | +2,2 % / **+1,9 %** |
+
+La règle « préfixe ≈ fenêtre » **ne suffit plus** : elle donnait +0,33 % à 2 048, elle donne
+**+5,4 %** à 4 096. Ce qui tient, en revanche, c'est **de garder la moitié des clés** : (1 024,
+1 024) — la moitié récente en fenêtre, la moitié ancienne en préfixe — coûte **+1,9 %** à
+4 096, et (512, 512) coûtait +0,33 % à 2 048 et +2,0 % à 512. **La frontière se déplace avec N,
+et le prix croît avec N à fraction de clés constante.**
+
+**Ce qui reste ouvert** : la **loi** de cette frontière (faut-il `N/2` clés à toute longueur, ou
+la fraction utile diminue-t-elle ?), et le **gain de temps réel** — la carte rend désormais
+aussi les secondes et les tok/s, parce que la fenêtre ne réduit que les scores d'attention, un
+poste parmi d'autres (la FFN domine) : le gain de temps est toujours plus petit que le gain de
+clés, et il se mesure.
 
 ## 6. Ce que ça ne dit pas (et qu'il faut mesurer)
 

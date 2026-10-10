@@ -65,10 +65,12 @@
 
 ## 5. Les instruments (et leur état au 10 octobre)
 
-- **22 portes** `tools/porte-*.sh` — la **passe complète** se fait par
-  `tools/toutes-les-portes.sh` (toutes, séquentiellement, bornées dans le temps, journaux
-  gardés). Une porte lancée « une par une, à la main » avait laissé `porte-gain.sh` **rouge
-  depuis le v7** sans que personne le voie (fiche 47).
+- **22 portes** `tools/porte-*.sh` — **passe complète le 2026-10-10 : 22 vertes sur 22, 70 min**
+  (`tools/toutes-les-portes.sh`, chaque porte bornée, journaux gardés ; détail dans
+  `reports/rapport-passe-complete-portes.md`). La passe a servi à deux choses : elle a montré que
+  `porte-gain.sh` § 9 était **rouge depuis le v7** (elle exigeait un refus que le v7 a retiré), et
+  elle a démasqué `porte-tokenizer-kimi.sh` **verte en ne comparant aucun jeton** (elle lisait
+  `stdin`, que personne ne lui fournissait) — corrigée, elle compare 10 textes en 7,5 s.
 - **122 tests** `cargo test`, crate **std seul, zéro dépendance**, profil `release` = binaire de
   mesure.
 - Mesures dédiées : `tools/carte-fenetre-puits.sh` (fenêtre × puits d'attention),
@@ -89,8 +91,12 @@ une affirmation sur une suite qui n'avait **jamais tourné comme une suite**).
 (**÷2**), et **fenêtre 1 024 + 128 puits** rend **10,3652** pour **÷1,78**. Autrement dit : **le
 drain doit grandir avec la séquence**, et il porte l'information du début que la fenêtre coupe —
 quelques puits suffisent à *drainer*, il en faut beaucoup plus pour *porter*. Zéro puits
-**casse** le modèle (1297,54 à fenêtre 32 contre 29,02 à 4). En cours : **4 096 jetons**, pour
-savoir si la règle « préfixe ≈ fenêtre » tient.
+**casse** le modèle (1297,54 à fenêtre 32 contre 29,02 à 4). À **4 096 jetons**, la frontière se
+déplace : (512, 512) coûte **+5,4 %** (12,8824 contre 12,2177) et (1 024, 1 024) **+1,9 %**
+(12,4466) — **le prix croît avec N à fraction de clés constante**, et garder **la moitié** des
+clés reste le régime sûr. En cours : la loi de la frontière, et le **gain de temps réel** (la
+carte rend maintenant les secondes et les tok/s : la fenêtre ne réduit que les scores, pas la
+FFN qui domine).
 
 **3. C8 (suite) — une tête entraînée par profondeur.** Le réflexe ne peut pas lire un état
 intermédiaire (cos 0,145) : entraîner une tête linéaire sur l'état de la couche 16 et mesurer son

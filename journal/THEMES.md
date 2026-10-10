@@ -80,7 +80,7 @@ possible (`ls journal/*_<thème>.md`).
 | jour | chiffres du jour |
 |---|---|
 | [2026-10-09](2026-10-09_portes.md) | — |
-| [2026-10-10](2026-10-10_portes.md) | `136 jetons` · `0,509` · `37,8 %` · `173,0196` · `2048 jetons` · `388 s` |
+| [2026-10-10](2026-10-10_portes.md) | `136 jetons` · `0,509` · `37,8 %` · `173,0196` · `2048 jetons` · `388 s` · `1 s` · `0 jeton` |
 
 ### `docs` — Documentation, état, conventions
 

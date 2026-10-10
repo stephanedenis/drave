@@ -54,8 +54,13 @@ portes mesurées.
 - **Le découpage à deux nœuds est exact** : 0,00e0 (modes 0, 1, 3), et la perplexité
   ne bouge pas jusqu'à 50 ms de latence par message.
 - **Le rejeu est exact** : 0,00e0.
-- **Les 23 portes du dépôt sont vertes**, y compris gpt-oss à **15,6017** — la valeur
-  attendue, au chiffre près.
+- **Les portes du dépôt tournent TOUTES, et toutes passent** : `tools/toutes-les-portes.sh`,
+  **22 vertes sur 22, en 70 minutes** (mesuré le 2026-10-10 à 11 h 07 HAE ; détail et durées
+  dans `reports/rapport-passe-complete-portes.md`). La ligne qui était ici affirmait « les 23
+  portes sont vertes » alors que la suite n'avait **jamais tourné comme une suite** : une
+  porte était **rouge depuis le protocole v7** et une autre **verte en ne comparant rien**
+  (`porte-tokenizer-kimi`, corrigée). Une porte se lance **toutes ensemble**, sinon elle ne
+  vaut que ce que vaut la mémoire de celui qui l'a lancée.
 - **La mémoire tient** : 18 aiguilles sur 18 jusqu'à 12 288 jetons.
 
 **La règle de lecture** : un manque est écrit ici avec la mesure qui l'établit ; une

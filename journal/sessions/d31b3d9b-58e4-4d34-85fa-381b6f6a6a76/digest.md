@@ -36090,3 +36090,179 @@ started background job bash-32
 ⏵ J'ajoute la capture du temps et du débit à la carte (qualité ET prix réel par case)
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"tools/carte-fenetre-puits.sh\"); s = p.read_text()\nold = '''mesure () { # $@ = drapeaux ; imprime la perplexité seule\n    $D \"$M\" --ppl \"$IDS\" --limit \"$LIMITE\" --ctx \" … [2662 caractères tronqués]`
+
+  ```
+temps et débit ajoutés à la carte
+syntaxe OK
+499400e Carte fenetre x puits : la case donne aussi le TEMPS et le debit (tok/s)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git push -q origin master && echo poussé; tail -2 /tmp/passe-complete.log; cat /tmp/carte-4096.md 2>/dev/null; ps -eo etime,args | grep \"[p]orte-\\|[c]arte-fenetre\" | head -4", "description": "Push and check job progress", "timeout … [12 caractères tronqués]`
+
+  ```
+poussé
+  porte-melange          ✅                         984 s    ✅ la porte est franchie. Ce qu'elle dit : deux entrées qui se somment ARBITRENT
+  porte-mistral          ✅                          10 s      ✅ porte de correction tenue (100.0 % des positions UTILES au-dessus de 0.95, min 1.0000 >= p
+référence (aucune fenêtre, 4096 jetons) : perplexité 12.2177  ·  clés notées par jeton ≈ 4096
+
+| fenêtre \ puits | 512 | 1024 |
+|---|---|---|
+| **512** | 12.8824 | 12.7884 |
+| **1024** |      14:37 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && LIMITE=4096 CTX=4096 FENETRES="512 1024" PUITS="512 1024" bash tools/carte-fenetre-puits.sh 4096 > /tmp/carte-4096.md 2>&1; echo "CODE=$?"; cat /tmp/carte-4096.md
+      14:37 bash tools/carte-fenetre-puits.sh 4096
+      00:56 bash tools/carte-fenetre-puits.sh 4096
+      00:06 timeout 2400 bash tools/porte-pannes.sh
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 540; cat /tmp/carte-4096.md; echo \"=== passe ===\"; tail -4 /tmp/passe-complete.log", "description": "Wait for 4096 map completion", "timeoutMs": 600000}`
+
+  ```
+référence (aucune fenêtre, 4096 jetons) : perplexité 12.2177  ·  clés notées par jeton ≈ 4096
+
+| fenêtre \ puits | 512 | 1024 |
+|---|---|---|
+| **512** | 12.8824 | 12.7884 |
+| **1024** | 12.4875 | 12.4466 |
+tools/carte-fenetre-puits.sh: line 63: syntax error near unexpected token `('
+tools/carte-fenetre-puits.sh: line 63: `echo "référence (aucune fenêtre, $LIMITE jetons) : $REFO  ·  clés notées par jeton ≈ $LIMITE"'
+=== passe ===
+--- 22 vertes, 0 rouges ---
+TOUTES LES PORTES SONT VERTES — et elles ont TOUTES tourné, ce que rien ne garantissait avant.
+Journaux : /tmp/portes-1210b
+CODE_PASSE=0
+  ```
+
+### 👤 Utilisateur
+
+background job bash-26 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n 'R3=\$(' tools/porte-gain.sh; DELAI=2400 JOURNAUX=/tmp/portes-1210b bash tools/toutes-les-portes.sh > /tmp/passe-complete.log 2>&1; echo "CODE_PASSE=$?" >> /tmp/passe-complete.log; tail -40 /tmp/passe-complete.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 👤 Utilisateur
+
+background job bash-32 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && while ! grep -q "CODE_PASSE=" /tmp/passe-complete.log 2>/dev/null || ! grep -q "clés notées" /tmp/carte-4096.md 2>/dev/null; do sleep 30; done; echo "=== PASSE ==="; tail -26 /tmp/passe-complete.log; echo "=== CARTE 4096 ==="; cat /tmp/carte-4096.md) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 👤 Utilisateur
+
+background job bash-31 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && LIMITE=4096 CTX=4096 FENETRES="512 1024" PUITS="512 1024" bash tools/carte-fenetre-puits.sh 4096 > /tmp/carte-4096.md 2>&1; echo "CODE=$?"; cat /tmp/carte-4096.md) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 🤖 Assistant
+
+⏵ Passe complète : **22 vertes, 0 rouge** — et la carte 4 096 est arrivée ; je consigne les deux
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -E \"^  porte-\" /tmp/passe-complete.log | awk '{printf \"%-24s %s %s\\n\", $1, $2, $3}' | head -25; echo \"=== temps total de la passe ===\"; grep -E \"^  porte-\" /tmp/passe-complete.log | awk '{s+=$3} END {print s\" s (\"int( … [77 caractères tronqués]`
+
+  ```
+porte-budget             ✅ 43
+porte-bus                ✅ 74
+porte-bus-socket         ✅ 94
+porte-coupe              ✅ 132
+porte-delais             ✅ 21
+porte-episodique         ✅ 184
+porte-flux               ✅ 22
+porte-fusion             ✅ 8
+porte-gain               ✅ 388
+porte-greffe             ✅ 971
+porte-horloge            ✅ 24
+porte-indice             ✅ 971
+porte-melange            ✅ 984
+porte-mistral            ✅ 10
+porte-pannes             ✅ 50
+porte-pont               ✅ 89
+porte-reflexe            ✅ 102
+porte-registre           ✅ 14
+porte-reparti-moteur     ✅ 1
+porte-tokenizer-kimi     ✅ 0
+porte-topologie          ✅ 43
+porte-trace              ✅ 30
+=== temps total de la passe ===
+4255 s (70 min)
+  ```
+
+### 🤖 Assistant
+
+⏵ Deux portes vertes en 0-1 s : c'est suspect — je regarde ce qu'elles ont réellement mesuré
+
+- **bash** `{"command": "cat /tmp/portes-1210b/porte-reparti-moteur.log; echo \"=== tokenizer-kimi ===\"; cat /tmp/portes-1210b/porte-tokenizer-kimi.log; echo \"=== mistral (10 s) ===\"; cat /tmp/portes-1210b/porte-mistral.log | tail -6", "description": "Inspect suspiciously fast gates"}`
+
+  ```
+=== référence : le modèle ENTIER, un seul processus ===
+  perplexité entière : 173.0196
+=== deux nœuds : 2 couches locales, le reste à distance ===
+  perplexité répartie : 173.0196 · écart de flux : 0.00e0
+PORTE TENUE : le découpage ne change pas la perplexité (écart relatif 0.0000 %)
+=== tokenizer-kimi ===
+identiques : 0 · divergents : 0
+=== mistral (10 s) ===
+  Mistral (2 couches, vocabulaire d'octets) : référence 3502.5424 · moteur 3502.4907
+    ✅ porte de correction tenue (100.0 % des positions UTILES au-dessus de 0.95, min 1.0000 >= plancher 0.9, top-1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat tools/porte-tokenizer-kimi.sh", "description": "Read the tokenizer gate"}`
+
+  ```
+#!/bin/bash
+# Compare nos identifiants à ceux du tokenizer OFFICIEL de Kimi-K3 (pur Python).
+# Le tokenizer vit dans le shard 1 : la porte marche MÊME pendant le téléchargement.
+K=${K3:-/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf}
+D=./drave-core/target/release/drave
+ok=0; ko=0
+while IFS= read -r -d $'\x1e' texte; do
+    printf '%s' "$texte" > /tmp/tk_txt
+    officiel=$(/usr/bin/python3.14 tools/tokenizer_kimi/reference_officielle.py < /tmp/tk_txt 2>/dev/null)
+    $D "$K" --tokenize --fichier /tmp/tk_txt --sortie /tmp/tk_ids.txt >/dev/null 2>&1
+    notre=$(cat /tmp/tk_ids.txt 2>/dev/null)
+    if [ "$officiel" = "$notre" ]; then ok=$((ok+1)); else ko=$((ko+1)); echo "  DIVERGENCE sur : $(printf '%s' "$texte" | head -c 60)"; echo "    officiel : $(printf '%s' "$officiel" | head -c 100)"; echo "    nous     : $(printf '%s' "$notre" | head -c 100)"; fi
+done
+echo "identiques : $ok · divergents : $ko"
+  ```
+
+### 🤖 Assistant
+
+⏵ Porte fantôme trouvée : `porte-tokenizer-kimi` lit stdin sans redirection — elle compare 0 jeton et sort verte
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la /home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/ 2>&1 | head -4; ls tools/tokenizer_kimi/ 2>/dev/null | head -5; ls -la /usr/bin/python3.14 2>&1 | head -2; which python3.14; echo \"=== usage réel de stdin dans … [110 caractères tronqués]`
+
+  ```
+total 1473309300
+drwxr-xr-x. 1 stephane stephane        2432  3 oct 14:01 .
+drwxr-xr-x. 1 stephane stephane        1242  3 oct 10:05 ..
+-rw-r--r--. 1 stephane stephane     6934144  3 oct 10:05 Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf
+reference_officielle.py
+tiktoken.model
+-rwxr-xr-x. 1 root root 14520  8 aoû 18:08 /usr/bin/python3.14
+/usr/bin/python3.14
+=== usage réel de stdin dans les autres portes ===
+tools/porte-tokenizer-kimi.sh
+  ```
+
+### 🤖 Assistant
+
+⏵ Je répare la porte (jeu de textes intégré + refus de verdir sans comparaison) et je la fais tourner
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"tools/porte-tokenizer-kimi.sh\"); s = p.read_text()\nentete = '''#!/bin/bash\n# porte-tokenizer-kimi.sh — nos identifiants contre ceux du tokenizer OFFICIEL de Kimi-K3.\n#\n# EL … [3445 caractères tronqués]`
+
+  ```
+porte réécrite
+syntaxe OK
+identiques : 10 · divergents : 0
+  ✅ 10 textes identiques au tokenizer officiel (accents, emoji, CJK, arabe, code, nombres)
+code=0
+[stderr]
+
+real	0m7,455s
+user	0m4,064s
+sys	0m1,009s
+  ```
+
+### 🤖 Assistant
+
+⏵ Porte réparée (10 comparaisons au lieu de 0) ; je consigne la passe complète, la porte fantôme et la carte 4 096
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib, re, subprocess, time\nlog = pathlib.Path(\"/tmp/passe-complete.log\").read_text(encoding=\"utf-8\")\nlignes = [l for l in log.splitlines() if re.match(r\"^  porte-\\S+\\s+✅\", l)]\ntable = []\nfor … [5987 caractères tronqués]`
+
+  ```
+fiche écrite · 22 portes listées
+manques + état mis à jour
+-rw-r--r--. 1 stephane stephane 5686 10 oct 11:22 reports/rapport-passe-complete-portes.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\n# 4096 dans la fiche fenêtre × puits : la ligne de plus, et la synthèse sur N\np = pathlib.Path(\"reports/rapport-fenetre-puits-attention.md\"); s = p.read_text()\nancre = \"**Ce qui reste ouvert* … [6357 caractères tronqués]`
