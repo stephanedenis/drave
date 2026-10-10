@@ -1,12 +1,12 @@
 # Repères de non-régression — ce qui ne doit PAS bouger
 
-> **2026-10-10 11:07 HAE.** Ces valeurs sont les **verdicts imprimés par la passe complète des
-> portes** (`tools/toutes-les-portes.sh`, 22 vertes sur 22, 70 minutes). Elles ne sont pas
-> recopiées de mémoire : elles sortent du journal de la passe. **Une modification du chemin
+> **2026-10-10 17:55 HAE.** Ces valeurs sont les **verdicts imprimés par la passe complète des
+> portes** (`tools/toutes-les-portes.sh`, **23 vertes sur 23**, 58 minutes). Elles ne sont
+> pas recopiées de mémoire : elles sortent du journal de la passe. **Une modification du chemin
 > d'exécution qui déplace l'un de ces chiffres a changé le calcul** — il faut alors relancer la
 > porte, comprendre, et écrire à côté de l'ancienne valeur (jamais à sa place).
 >
-> Détail complet de la passe : `reports/rapport-passe-complete-portes.md`.
+> Détail complet : `reports/rapport-passe-complete-portes.md`.
 > Les mesures de campagne (perplexités, budgets, latences) sont dans `reports/` — une fiche par
 > expérience — et non ici : ce fichier ne porte que ce qu'une **porte** vérifie.
 
@@ -15,35 +15,36 @@
 | quoi | commande | attendu |
 |---|---|---|
 | tests unitaires | `cargo test --release` (dans `drave-core/`) | **122 verts** |
-| toutes les portes | `tools/toutes-les-portes.sh` | **22 vertes**, ~70 min, aucune sautée |
+| toutes les portes | `tools/toutes-les-portes.sh` | **23 vertes**, ~58 min, aucune sautée |
 | une porte | `tools/porte-<nom>.sh` | la dernière ligne dit ce qu'elle verrouille |
 
 ## 2. Les repères imprimés par chaque porte
 
-| porte | ce qu'elle vérifie, chiffré (passe du 2026-10-10) |
-|---|---|
-| `porte-budget.sh` | ✅ paires depassees : nommees (total, budget, pas, plafond), code 9, AUCUNE perplexite |
-| `porte-bus.sh` | ✅ le canal diffusé par fichier change la région du milieu |
-| `porte-bus-socket.sh` | ✅ le bus du pilote agit (113.0068 -> 148.9144) |
-| `porte-coupe.sh` | ✅ le coût du pont va de +0.52 % (coupe 18/24) à +17.09 % (coupe 15/24) — il y a un bon endroit |
-| `porte-delais.sh` | ✅ le temps, lui, augmente : 6.79 s → 9.45 s (+2.7 s ≈ 50 ms × 64 pas) |
-| `porte-episodique.sh` | ✅ la porte C6 est franchie — et elle dit ses conditions : 300 états consécutifs d'un |
-| `porte-flux.sh` | mode 4 — lot en listes           4.45e-3  ✅  (réf 60.8135 / deux nœuds 60.5427) |
-| `porte-fusion.sh` | ✅ v1 refusée (code 2), trace seule refusée (code 2) |
-| `porte-gain.sh` | ✅ drapeau VIVANT mais conditionnel : 0 casse (29.0206 → 1297.5437), 24 améliore (27.4439), san |
-| `porte-greffe.sh` | ✅ la porte est franchie. Ce qu'elle établit : l'injection d'état est BRANCHÉE |
-| `porte-horloge.sh` | ✅ borne atteinte : arrêt EXPLICITE (code 5) et AUCUNE perplexité rendue |
-| `porte-indice.sh` | ✅ la porte est franchie. Limite, et elle est écrite : UN SEUL indice extérieur, |
-| `porte-melange.sh` | ✅ la porte est franchie. Ce qu'elle dit : deux entrées qui se somment ARBITRENT |
-| `porte-mistral.sh` | ✅ porte de correction tenue (100.0 % des positions UTILES au-dessus de 0.95, min 1.0000 >= p |
-| `porte-pannes.sh` | ✅ pair absent : échec annoncé en 2 s (code 7), aucune perplexité |
-| `porte-pont.sh` | ✅ 448 fibres : +2.81 % · 392 fibres : +25.35 % — la marche est entre les deux |
-| `porte-reflexe.sh` | ✅ le gain de temps est réel : 5.9 ms par jeton à 1 couche(s) contre 126.8 ms à 24 — 21.5× plus |
-| `porte-registre.sh` | ✅ région absente : refusée en la nommant (code 2), rien n'est calculé |
-| `porte-reparti-moteur.sh` | PORTE TENUE : le découpage ne change pas la perplexité (écart relatif 0.0000 %) |
-| `porte-tokenizer-kimi.sh` |  |
-| `porte-topologie.sh` | PORTE TENUE : le relais ne change pas un chiffre (42.5477) |
-| `porte-trace.sh` | ✅ la trace fausse est détectée et nommée |
+| porte | durée | ce qu'elle vérifie, chiffré (passe du 2026-10-10 17 h 55) |
+|---|---|---|
+| `porte-budget.sh` | 42 s | ✅ paires depassees : nommees (total, budget, pas, plafond), code 9, AUCUNE perplexite |
+| `porte-bus.sh` | 76 s | ✅ le canal diffusé par fichier change la région du milieu |
+| `porte-bus-socket.sh` | 90 s | ✅ le bus du pilote agit (113.0068 -> 148.9144) |
+| `porte-coupe.sh` | 121 s | ✅ le coût du pont va de +0.52 % (coupe 18/24) à +17.09 % (coupe 15/24) — il y a un bon endroit |
+| `porte-delais.sh` | 19 s | ✅ le temps, lui, augmente : 5.80 s → 9.13 s (+3.3 s ≈ 50 ms × 64 pas) |
+| `porte-episodique.sh` | 162 s | ✅ la porte C6 est franchie — et elle dit ses conditions : 300 états consécutifs d'un |
+| `porte-flux.sh` | 19 s | mode 4 — lot en listes           4.45e-3  ✅  (réf 60.8135 / deux nœuds 60.5427) |
+| `porte-fusion.sh` | 7 s | ✅ v1 refusée (code 2), trace seule refusée (code 2) |
+| `porte-gain.sh` | 341 s | ✅ drapeau VIVANT mais conditionnel : 0 casse (29.0206 → 1297.5437), 24 améliore (27.4439), san |
+| `porte-greffe.sh` | 834 s | ✅ la porte est franchie. Ce qu'elle établit : l'injection d'état est BRANCHÉE |
+| `porte-horloge.sh` | 23 s | ✅ borne atteinte : arrêt EXPLICITE (code 5) et AUCUNE perplexité rendue |
+| `porte-indice.sh` | 719 s | ✅ la porte est franchie. Limite, et elle est écrite : UN SEUL indice extérieur, |
+| `porte-melange.sh` | 762 s | ✅ la porte est franchie. Ce qu'elle dit : deux entrées qui se somment ARBITRENT |
+| `porte-mistral.sh` | 8 s | ✅ porte de correction tenue (100.0 % des positions UTILES au-dessus de 0.95, min 1.0000 >= p |
+| `porte-pannes.sh` | 43 s | ✅ pair absent : échec annoncé en 1 s (code 7), aucune perplexité |
+| `porte-peripherie.sh` | 7 s | PORTE TENUE : l'entrée est injectée, la sortie est écrite, le délai est exact, les refus sont |
+| `porte-pont.sh` | 74 s | ✅ 448 fibres : +2.81 % · 392 fibres : +25.35 % — la marche est entre les deux |
+| `porte-reflexe.sh` | 101 s | ✅ l'état de 16 couches CONTIENT le prochain jeton : 25.4 % contre 4.8 % pour la classe majorit |
+| `porte-registre.sh` | 14 s | ✅ région absente : refusée en la nommant (code 2), rien n'est calculé |
+| `porte-reparti-moteur.sh` | 1 s | PORTE TENUE : le découpage ne change pas la perplexité (écart relatif 0.0000 %) |
+| `porte-tokenizer-kimi.sh` | 5 s | ✅ 10 textes identiques au tokenizer officiel (accents, emoji, CJK, arabe, code, nombres) |
+| `porte-topologie.sh` | 33 s | PORTE TENUE : le relais ne change pas un chiffre (42.5477) |
+| `porte-trace.sh` | 24 s | ✅ la trace fausse est détectée et nommée |
 
 ## 3. Les trois invariants qui ne sont pas des chiffres
 

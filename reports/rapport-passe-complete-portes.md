@@ -2,7 +2,9 @@
 
 > Campagne : **outillage** · expérience : la passe complète (`tools/toutes-les-portes.sh`)
 > Question : les portes du dépôt passent-elles **toutes**, quand on les lance **toutes** ?
-> Verdict : **oui, 22 sur 22**, en **70 minutes** — et la passe a trouvé ce qu'une porte lancée
+> Verdict : **oui** — **22 sur 22** au premier passage (10 h 07), puis **23 sur 23** en
+> **58 minutes** après l'ajout de `porte-peripherie.sh` et des changements du moteur
+> (17 h 55) — et la passe a trouvé ce qu'une porte lancée
 > seule ne pouvait pas montrer : `porte-tokenizer-kimi` sortait **verte en comparant zéro jeton**
 > (elle lisait `stdin`, que personne ne lui fournissait). Corrigée, elle compare maintenant
 > **10 textes** en **7,5 s**.
@@ -48,6 +50,39 @@ l'instrument qui manquait ; c'est elle qui a produit ce rapport.
 
 **Total : 4 255 s (70 min)**, dominé par trois portes lourdes (`porte-melange` 984 s,
 `porte-greffe` 971 s, `porte-indice` 971 s).
+
+## 2 bis. La passe du 17 h 55 (23 portes, 58 minutes) — après les changements du moteur
+
+C'est la passe qui suit l'ajout de la **périphérie** (C8 : `--entree`, `--sortie`, `--delai`,
+`--recurent`) et la correction de `porte-reflexe.sh`. Elle est verte **entièrement**, ce qui est
+l'information utile : les nouveaux drapeaux n'ont rien cassé, et la porte du réflexe verrouille
+désormais la bonne conclusion (25,4 % contre 4,8 %).
+
+| porte | durée | ce qu'elle a verrouillé (dernière ligne) |
+|---|---|---|
+| `porte-budget.sh` | 42 s | ✅ paires depassees : nommees (total, budget, pas, plafond), code 9, AUCUNE perplexite |
+| `porte-bus.sh` | 76 s | ✅ le canal diffusé par fichier change la région du milieu |
+| `porte-bus-socket.sh` | 90 s | ✅ le bus du pilote agit (113.0068 -> 148.9144) |
+| `porte-coupe.sh` | 121 s | ✅ le coût du pont va de +0.52 % (coupe 18/24) à +17.09 % (coupe 15/24) — il y a un bon endroit |
+| `porte-delais.sh` | 19 s | ✅ le temps, lui, augmente : 5.80 s → 9.13 s (+3.3 s ≈ 50 ms × 64 pas) |
+| `porte-episodique.sh` | 162 s | ✅ la porte C6 est franchie — et elle dit ses conditions : 300 états consécutifs d'un |
+| `porte-flux.sh` | 19 s | mode 4 — lot en listes           4.45e-3  ✅  (réf 60.8135 / deux nœuds 60.5427) |
+| `porte-fusion.sh` | 7 s | ✅ v1 refusée (code 2), trace seule refusée (code 2) |
+| `porte-gain.sh` | 341 s | ✅ drapeau VIVANT mais conditionnel : 0 casse (29.0206 → 1297.5437), 24 améliore (27.4439), san |
+| `porte-greffe.sh` | 834 s | ✅ la porte est franchie. Ce qu'elle établit : l'injection d'état est BRANCHÉE |
+| `porte-horloge.sh` | 23 s | ✅ borne atteinte : arrêt EXPLICITE (code 5) et AUCUNE perplexité rendue |
+| `porte-indice.sh` | 719 s | ✅ la porte est franchie. Limite, et elle est écrite : UN SEUL indice extérieur, |
+| `porte-melange.sh` | 762 s | ✅ la porte est franchie. Ce qu'elle dit : deux entrées qui se somment ARBITRENT |
+| `porte-mistral.sh` | 8 s | ✅ porte de correction tenue (100.0 % des positions UTILES au-dessus de 0.95, min 1.0000 >= p |
+| `porte-pannes.sh` | 43 s | ✅ pair absent : échec annoncé en 1 s (code 7), aucune perplexité |
+| `porte-peripherie.sh` | 7 s | PORTE TENUE : l'entrée est injectée, la sortie est écrite, le délai est exact, les refus sont |
+| `porte-pont.sh` | 74 s | ✅ 448 fibres : +2.81 % · 392 fibres : +25.35 % — la marche est entre les deux |
+| `porte-reflexe.sh` | 101 s | ✅ l'état de 16 couches CONTIENT le prochain jeton : 25.4 % contre 4.8 % pour la classe majorit |
+| `porte-registre.sh` | 14 s | ✅ région absente : refusée en la nommant (code 2), rien n'est calculé |
+| `porte-reparti-moteur.sh` | 1 s | PORTE TENUE : le découpage ne change pas la perplexité (écart relatif 0.0000 %) |
+| `porte-tokenizer-kimi.sh` | 5 s | ✅ 10 textes identiques au tokenizer officiel (accents, emoji, CJK, arabe, code, nombres) |
+| `porte-topologie.sh` | 33 s | PORTE TENUE : le relais ne change pas un chiffre (42.5477) |
+| `porte-trace.sh` | 24 s | ✅ la trace fausse est détectée et nommée |
 
 ## 3. Ce que la passe a trouvé : une porte qui ne pouvait pas échouer
 
