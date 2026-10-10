@@ -23219,3 +23219,402 @@ option --episodique-decorreler ajoutée
 ⏵ C6 : la décorrélation améliore le rappel mais ne prune toujours pas — je consigne et je commite
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\na = \"\"\"**Conditions de ces chiffres** : 300 états **consécutifs d'un seul texte** (donc\nfortement corrélés), un seu … [8947 caractères tronqués]`
+
+  ```
+rapport + sprint : C6
+test result: ok. 115 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+7d7837e C6 : mémoire épisodique adressable par contenu — et ses trois résultats négatifs
+  ```
+
+### 🤖 Assistant
+
+⏵ C6 : l'expansion du gyrus denté — projeter 896 → 4096 canaux pour que l'index élague enfin
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/episodique.rs\")\ns = p.read_text()\na = \"impl Episodique {\"\nb = '''/// Un mélange 64 bits déterministe (splitmix64) — la seule source d'aléa du module.\n///\n/// … [7536 caractères tronqués]`
+
+  ```
+expandre() + 2 tests
+options expansion + application
+test result: ok. 117 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.34s
+  ```
+
+### 🤖 Assistant
+
+⏵ C6 : l'expansion élague sur données synthétiques — je vérifie sur les états RÉELS
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (for cfg in \"4096 32\" \"4096 64\" \"8192 64\" \"16384 64\"; do set -- $cfg; echo \"=== expansion $1, k=$2 ===\"; timeout 900 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --episodique-essai 300 --episodique-k $2 - … [325 caractères tronqués]`
+
+  ```
+=== expansion 4096, k=32 ===
+  expansion         : 896 → 4096 canaux (8 entrées par canal, signes par hachage) — les valeurs stockées sont les états PROJETÉS : retrouver l'état d'origine demanderait une reconstruction, qui n'est pas mesurée ici
+  clé               : 32 canaux sur 4096 (densité 0.78 %)
+  clés distinctes   : 296/300 (pire multiplicité 2) — 4 état(s) partagent la clé d'un autre, donc INDISCERNABLES par le contenu
+  round-trip        : 296/300 épisodes relus AU BIT PRÈS avec leur propre clé
+  échecs expliqués  : 4 par COLLISION de clés (deux états indiscernables), 0 par ÉGALITÉ de recouvrement (clés distinctes, même nombre de canaux partagés — départagées par l'identifiant le plus petit)
+  séparation        : recouvrement moyen 6.47/32 entre états différents (pire 26/32, 74 paires)
+  nouveauté         : recouvrement moyen 32.0/32 pour un épisode CONNU, 20.9/32 pour un épisode JAMAIS écrit (pire des nouveaux : 32/32)
+       10   100.0 % (10.00)  coût 8 cand. (82 % du magasin) / 262 comp.   100.0 % (10.00)   100.0 % (10.00)    70.0 % (10.00)    40.0 % (10.00)
+       40   100.0 % (2.50)  coût 34 cand. (84 % du magasin) / 1074 comp.   100.0 % (2.50)   100.0 % (2.50)    72.
+… [4027 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ C6 : l'expansion élague (0 → 15 %) mais 3× moins que l'arithmétique — je diagnostique les canaux « hub »
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/episodique.rs\")\ns = p.read_text()\na = \"    /// Combien de canaux de clé deux états partagent — la mesure de **séparation**.\"\nb = '''    /// La distribution des … [6957 caractères tronqués]`
+
+  ```
+listes_canaux() + test
+normalisation + diagnostic des listes
+BUILD
+[modele] 24 couches chargées en 6.299743811s — listes 0.71 Go , 8 threads
+  expansion         : 896 → 16384 canaux (8 entrées par canal, signes par hachage) — les valeurs stockées sont les états PROJETÉS : retrouver l'état d'origine demanderait une reconstruction, qui n'est pas mesurée ici
+  égalisation       : chaque canal centré et réduit sur le magasin — un canal systématiquement grand n'entre plus dans toutes les clés
+  clé               : 64 canaux sur 16384 (densité 0.39 %)
+  clés distinctes   : 300/300 (pire multiplicité 1)
+  round-trip        : 300/300 épisodes relus AU BIT PRÈS avec leur propre clé
+  séparation        : recouvrement moyen 0.38/64 entre états différents (pire 6/64, 74 paires)
+  listes de l'index : 2.0 épisodes par canal en moyenne, 13 au plus ; les 1 % de canaux les plus longs portent 4 % des entrées
+  ⚠️  canaux HUB : le plus long porte 7× la moyenne — l'index ne peut pas éluder par eux
+  nouveauté         : recouvrement moyen 64.0/64 pour un épisode CONNU, 16.2/64 pour un épisode JAMAIS écrit (pire des nouveaux : 40/64)
+       10   100.0 % (10.00)  coût 2 cand. (24 % du magasin) / 154 comp
+… [494 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ C6 : résultat majeur — décorrélation + expansion + égalisation : séparation 0,38/64, élagage 83 %, rappel 96 %
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/episodique.rs\")\ns = p.read_text()\na = \"\"\"    /// Écrit un épisode : **une seule passe**, et rien n'est modifié derrière.\n    pub fn ecrire(&mut self, region:  … [10113 caractères tronqués]`
+
+  ```
+module : ecrire_avec_cle
+essai : clés séparées des valeurs
+BUILD_DONE
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 cargo test --release --manifest-path drave-core/Cargo.toml 2>&1 | grep -E \"^test result|FAILED\" | head -2 && grep -n \"dim_avant\\|format!(\\\" ({nuls}\" drave-core/src/main.rs | head -5", "description": "Run tests afte … [33 caractères tronqués]`
+
+  ```
+test result: ok. 119 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.31s
+5874:                 if nuls > 0 { format!(" ({nuls} canal(aux) de variance nulle laissés tels quels)") }
+  ```
+
+### 🤖 Assistant
+
+⏵ C6 : je confirme la configuration gagnante avec clés et valeurs séparées
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --episodique-essai 300 --episodique-k 64 --episodique-expansion 16384 --episodique-connexions 8 --episodique-decorreler --episodique-normaliser --ids-file /t … [253 caractères tronqués]`
+
+  ```
+[modele] 24 couches chargées en 6.213991382s — listes 0.71 Go , 8 threads
+  expansion         : 896 → 16384 canaux de clé (8 entrées par canal, signes par hachage) ; les VALEURS restent les états exacts de dimension 896
+  égalisation       : chaque canal de clé centré et réduit sur le magasin — un canal systématiquement grand n'entre plus dans toutes les clés
+  coût de l'expansion : 131072 additions par lecture (fixe) · le balayage évité coûte N × 64 comparaisons · l'expansion est donc rentable au-delà de N ≈ 2048 épisodes — EN DESSOUS, le balayage complet est MOINS cher
+  clé               : 64 canaux sur 16384 (densité 0.39 %), valeurs de dimension 896
+  clés distinctes   : 300/300 (pire multiplicité 1)
+  round-trip        : 300/300 épisodes relus AU BIT PRÈS avec leur propre clé
+  séparation        : recouvrement moyen 0.38/64 entre états différents (pire 6/64, 74 paires)
+  listes de l'index : 2.0 épisodes par canal en moyenne, 13 au plus ; les 1 % de canaux les plus longs portent 4 % des entrées
+  ⚠️  canaux HUB : le plus long porte 7× la moyenne — l'index ne peut pas éluder par eux
+  nouveauté         : recouvrement moyen 64.0/64 pour un épisode CONNU, 16.2/64 pour un épisode 
+… [605 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ C6 : je lance le run à N=2500 pour mesurer le seuil de rentabilité annoncé
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 2400 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --episodique-essai 2500 --episodique-k 64 --episodique-expansion 16384 --episodique-connexions 8 --episodique-decorreler --episodique-normaliser --ids-file  … [265 caractères tronqués]`
+
+  ```
+started background job bash-13
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\na = \"\"\"**Ce que cela indique pour la suite (à mesurer, pas encore mesuré)** : pour que\nl'index élude réellement, il … [3790 caractères tronqués]`
+
+  ```
+rapport : 24 bis (expansion + égalisation)
+  ```
+
+- **job_output** `{"job_id": "bash-13", "timeout_ms": 900000, "wait": true}`
+
+  ```
+[modele] 24 couches chargées en 6.167744722s — listes 0.71 Go , 12 threads
+  expansion         : 896 → 16384 canaux de clé (8 entrées par canal, signes par hachage) ; les VALEURS restent les états exacts de dimension 896
+  égalisation       : chaque canal de clé centré et réduit sur le magasin — un canal systématiquement grand n'entre plus dans toutes les clés
+  coût de l'expansion : 131072 additions par lecture (fixe) · le balayage évité coûte N × 64 comparaisons · l'expansion est donc rentable au-delà de N ≈ 2048 épisodes — EN DESSOUS, le balayage complet est MOINS cher
+  clé               : 64 canaux sur 16384 (densité 0.39 %), valeurs de dimension 896
+  clés distinctes   : 2500/2500 (pire multiplicité 1)
+  round-trip        : 2500/2500 épisodes relus AU BIT PRÈS avec leur propre clé
+  séparation        : recouvrement moyen 0.30/64 entre états différents (pire 11/64, 64 paires)
+  listes de l'index : 10.0 épisodes par canal en moyenne, 70 au plus ; les 1 % de canaux les plus longs portent 4 % des entrées
+  ⚠️  canaux HUB : le plus long porte 7× la moyenne — l'index ne peut pas éluder par eux
+  nouveauté         : recouvrement moyen 64.0/64 pour un épisode CONNU, 10.6/64 pour un é
+… [791 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ C6 : à N=2500, round-trip 2500/2500 et 81 % d'élagage — j'ajoute ce cas à la porte
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"tools/porte-episodique.sh\")\ns = p.read_text()\na = '''echo\necho \"  ✅ la porte C6 est franchie'''\nb = '''echo \"=== 6. expansion + égalisation : l'index doit ÉLUDER pour de vra … [2995 caractères tronqués]`
+
+  ```
+[stderr]
+  File "<stdin>", line 6
+    b = '''echo "=== 6. expansion + égalisation : l'index doit ÉLUDER pour de vrai ==="
+        ^
+SyntaxError: unterminated triple-quoted string literal (detected at line 40)
+bash: -c: line 49: syntax error near unexpected token `('
+bash: -c: line 49: `echo "     seul texte, k=$K, aucun élagage obtenu par l'index (100 % du magasin examiné)."''','
+[exit code: 2]
+  ```
+
+### 🤖 Assistant
+
+⏵ C6 : mon heredoc imbriqué s'est refermé trop tôt — je passe par un fichier
+
+- **write** `{"content": "import pathlib\n\np = pathlib.Path(\"tools/porte-episodique.sh\")\ns = p.read_text()\na = '''echo\necho \"  \\u2705 la porte C6 est franchie'''\n\nbloc = '''echo \"=== 6. expansion + \\u00e9galisation : l'index doit \\u00c9LUDER pour de vrai ===\"\n# Le cas qui a demand\\u00e9 trois ing … [3052 caractères tronqués]`
+
+  ```
+<path>/tmp/patch_porte_c6.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 /tmp/patch_porte_c6.py && bash -n tools/porte-episodique.sh && echo \"syntaxe ok\" && timeout 2400 bash tools/porte-episodique.sh 2>&1 | tail -18", "description": "Apply patch and rerun full gate", "timeoutMs": 2500000}`
+
+  ```
+cas 6 ajoute
+syntaxe ok
+    échecs expliqués  : 81 par COLLISION de clés (deux états indiscernables), 0 par ÉGALITÉ de recouvrement (clés distinctes, même nombre de canaux partagés — départagées par l'identifiant le plus petit)
+  ✅ 81 échecs, tous expliqués : 81 collisions, 0 égalités de recouvrement
+=== 6. expansion + égalisation : l'index doit ÉLUDER pour de vrai ===
+  [modele] 24 couches chargées en 6.135882783s — listes 0.71 Go , 8 threads
+    expansion         : 896 → 16384 canaux de clé (8 entrées par canal, signes par hachage) ; les VALEURS restent les états exacts de dimension 896
+    égalisation       : chaque canal de clé centré et réduit sur le magasin — un canal systématiquement grand n'entre plus dans toutes les clés
+    coût de l'expansion : 131072 additions par lecture (fixe) · le balayage évité coûte N × 64 comparaisons · l'expansion est donc rentable au-delà de N ≈ 2048 épisodes — EN DESSOUS, le balayage complet est MOINS cher
+    clé               : 64 canaux sur 16384 (densité 0.39 %), valeurs de dimension 896
+    round-trip        : 300/300 épisodes relus AU BIT PRÈS avec leur propre clé
+    séparation        : recouvrement moyen 0.38/64 entre états différents (
+… [696 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ C6 : je regarde s'il existe un moyen de repartir d'un cache neuf pour tester plusieurs documents
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fn reinitialiser\\|fn reset\\|fn vider_cache\\|fn nouveau_cache\\|pub fn forward(\" drave-core/src/model.rs | head -10; ls /tmp/campagne24/*.txt 2>/dev/null | head -20; ls /tmp/campagne24/ 2>/dev/null | wc -l", "description … [45 caractères tronqués]`
+
+  ```
+6771:    pub fn forward(&mut self, tok: u32, pos: usize) -> Vec<f32> {
+8485:    pub fn reset_events(&mut self) { self.events = 0; }
+/tmp/campagne24/codestral_corrige_marqueur.txt
+/tmp/campagne24/corpus_code.txt
+/tmp/campagne24/corpus_fr.txt
+/tmp/campagne24/corpus_multi.txt
+/tmp/campagne24/exportes.txt
+/tmp/campagne24/ids_0.5B-Q8.txt
+/tmp/campagne24/ids_1024.txt
+/tmp/campagne24/ids_4096.txt
+/tmp/campagne24/ids_512.txt
+/tmp/campagne24/ids_b2_codestral-22B-corpus_code.txt
+/tmp/campagne24/ids_b2_codestral-22B-wikitext2_test.txt
+/tmp/campagne24/ids_b2_code.txt
+/tmp/campagne24/ids_b2_francais.txt
+/tmp/campagne24/ids_b2_multilingue.txt
+/tmp/campagne24/ids_b2_prose.txt
+/tmp/campagne24/ids_b2_r1-14B-corpus_code.txt
+/tmp/campagne24/ids_b2_r1-14B-wikitext2_test.txt
+/tmp/campagne24/ids_code_codestral.txt
+/tmp/campagne24/ids_codestral-22B.txt
+/tmp/campagne24/ids_codestral_CORRIGE.txt
+459
+  ```
+
+### 🤖 Assistant
+
+⏵ C6 : j'ajoute la collecte multi-documents (corpus code/français/multilingue) pour clore la condition
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la /tmp/campagne24/corpus_code.txt /tmp/campagne24/corpus_fr.txt /tmp/campagne24/corpus_multi.txt 2>/dev/null | awk '{print $5, $9}'", "description": "Check corpus sizes"}`
+
+  ```
+4000000 /tmp/campagne24/corpus_code.txt
+972439 /tmp/campagne24/corpus_fr.txt
+271958 /tmp/campagne24/corpus_multi.txt
+  ```
+
+- **write** `{"content": "import pathlib\n\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\n\n# 1. option\na = \"\"\"    /// C6 : égaliser l'usage des canaux (centrer et réduire PAR CANAL sur le magasin)\n    /// avant de choisir la clé — contre les canaux « hub ».\n    episodique_normaliser: bo … [2300 caractères tronqués]`
+
+  ```
+<path>/tmp/c6_multi_1.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+### 🤖 Assistant
+
+⏵ C6 : je relis la fonction avant de la restructurer pour le multi-documents
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n \"$(grep -n 'fn run_episodique_essai' drave-core/src/main.rs | cut -d: -f1),+55p\" drave-core/src/main.rs", "description": "Read essay function head"}`
+
+  ```
+fn run_episodique_essai(opt: Options) {
+    let path = modele_chemin();
+    let n_voulu = opt.episodique_essai;
+    let k = opt.episodique_k;
+    let idfile = opt.ids_file.clone().unwrap_or_default();
+    if idfile.is_empty() {
+        eprintln!("--episodique-essai a besoin de --ids-file : les épisodes sont des états \
+RÉELS du modèle sur un texte, pas des vecteurs de synthèse.");
+        std::process::exit(2);
+    }
+    let brut = std::fs::read_to_string(&idfile).expect("fichier d'identifiants illisible");
+    let pas = opt.episodique_pas.max(1);
+    let ids: Vec<u32> = brut.split(|c: char| c == ',' || c.is_whitespace())
+        .filter(|s| !s.is_empty()).filter_map(|s| s.parse().ok())
+        // On lit TOUT le préfixe nécessaire, même si on ne garde qu'un état sur
+        // `pas` : les positions du modèle doivent rester vraies, et un cache KV
+        // alimenté par sauts calculerait des positions qui ne sont pas celles du
+        // texte (RoPE en dépend). On paie donc le calcul des jetons intermédiaires,
+        // et c'est dit dans le temps affiché.
+        .take(n_voulu.saturating_mul(pas)).collect();
+    if ids.len() < 2 {
+        eprintln!("--episodique-essai : {} jetons s
+… [2135 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ C6 : je restructure la collecte pour accepter plusieurs documents, cache neuf à chaque
+
+- **write** `{"content": "import pathlib\n\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\n\nvieux = '''    let idfile = opt.ids_file.clone().unwrap_or_default();\n    if idfile.is_empty() {\n        eprintln!(\"--episodique-essai a besoin de --ids-file : les épisodes sont des états \\\\\nRÉELS … [6227 caractères tronqués]`
+
+  ```
+<path>/tmp/c6_multi_2.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 /tmp/c6_multi_2.py && cargo build --release --manifest-path drave-core/Cargo.toml 2>&1 | grep -E \"^error\" -A 10 | head -30; echo BUILD_DONE", "description": "Apply multi-document patch and build", "timeoutMs": 700000}`
+
+  ```
+multi-documents en place
+error[E0425]: cannot find value `ids` in this scope
+    --> src/main.rs:5932:15
+     |
+5932 | consécutifs", ids.len(), etats.len());
+     |               ^^^ not found in this scope
+
+warning: type `io_result` should have an upper camel case name
+  --> src/gguf.rs:16:6
+   |
+16 | type io_result<'a> = std::io::Result<&'a [u8]>;
+   |      ^^^^^^^^^ help: convert the identifier to upper camel case: `IoResult`
+--
+error[E0609]: no field `episodique_textes` on type `Options`
+    --> src/main.rs:5792:38
+     |
+5792 |     let documents: Vec<String> = opt.episodique_textes.as_ref().map(|l| {
+     |                                      ^^^^^^^^^^^^^^^^^ unknown field
+     |
+help: a field with a similar name exists
+     |
+5792 -     let documents: Vec<String> = opt.episodique_textes.as_ref().map(|l| {
+5792 +     let documents: Vec<String> = opt.episodique_essai.as_ref().map(|l| {
+     |
+--
+error: could not compile `drave-core` (bin "drave") due to 2 previous errors; 30 warnings emitted
+BUILD_DONE
+  ```
+
+### 🤖 Assistant
+
+⏵ C6 : il me manquait le champ d'option et une variable de portée — je corrige
+
+- **write** `{"content": "import pathlib\n\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\n\n# 1. le champ d'option\na = \"\"\"    /// C6 : égaliser l'usage des canaux (centrer et réduire PAR CANAL sur le magasin)\n    /// avant de choisir la clé — contre les canaux « hub ».\n    episodique_nor … [2361 caractères tronqués]`
+
+  ```
+<path>/tmp/c6_multi_3.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 /tmp/c6_multi_3.py && cargo build --release --manifest-path drave-core/Cargo.toml 2>&1 | grep -E \"^error\" -A 8 | head -20; echo BUILD_DONE && timeout 900 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --epi … [474 caractères tronqués]`
+
+  ```
+corrections appliquees
+BUILD_DONE
+[modele] 24 couches chargées en 6.978572038s — listes 0.71 Go , 12 threads
+  document 1 de 3 : 80 jetons calculés, 80 états
+[modele] 24 couches chargées en 6.943369846s — listes 0.71 Go , 12 threads
+  document 2 de 3 : 80 jetons calculés, 80 états
+[modele] 24 couches chargées en 6.908676966s — listes 0.71 Go , 12 threads
+  document 3 de 3 : 80 jetons calculés, 80 états
+  expansion         : 896 → 16384 canaux de clé (8 entrées par canal, signes par hachage) ; les VALEURS restent les états exacts de dimension 896
+  égalisation       : chaque canal de clé centré et réduit sur le magasin — un canal systématiquement grand n'entre plus dans toutes les clés
+  coût de l'expansion : 131072 additions par lecture (fixe) · le balayage évité coûte N × 64 comparaisons · l'expansion est donc rentable au-delà de N ≈ 2048 épisodes — EN DESSOUS, le balayage complet est MOINS cher
+  épisodes          : 240 états réels de dimension 896 (3 documents en 37.8 s)
+  clé               : 64 canaux sur 16384 (densité 0.39 %), valeurs de dimension 896
+  clés distinctes   : 240/240 (pire multiplicité 1)
+  round-trip        : 240/240 épisodes relus AU BIT PRÈS avec leur propre 
+… [1017 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ C6 : le résultat tient sur trois corpus différents (élagage 85 %, round-trip 240/240)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (echo \"--- porte C6\"; timeout 2400 bash tools/porte-episodique.sh 2>&1 | grep -E \"✅|❌\" | tail -10; echo \"--- tests\"; timeout 600 cargo test --release --manifest-path drave-core/Cargo.toml 2>&1 | grep -E \"^test result\") 2>&1", … [75 caractères tronqués]`
+
+  ```
+started background job bash-14
+  ```
+
+- **write** `{"content": "import pathlib\n\n# --- rapport : la confirmation multi-documents\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\na = \"\"\"**Conditions** : 300 états consécutifs d'un seul texte, Qwen2.5-0.5B-Q8, expansion\npar hachage (8 entrées signées par canal), éga … [4401 caractères tronqués]`
+
+  ```
+<path>/tmp/c6_docs.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 /tmp/c6_docs.py", "description": "Apply C6 doc updates"}`
+
+  ```
+rapport + sprint mis a jour
+  ```
+
+- **job_output** `{"job_id": "bash-14", "timeout_ms": 900000, "wait": true}`
+
+  ```
+--- porte C6
+  ✅ round-trip exact (300/300) et clés deux à deux distinctes
+  ✅ 300 lectures identiques après passage par le disque
+  ✅ monotonie respectée : 100.0 % → 15.3 % (0 % → 75 % de dégradation)
+  ✅ connu 64.0 > jamais écrit 41.5 : le magasin distingue « je me souviens » de « ça ressemble »
+  ✅ 81 échecs, tous expliqués : 81 collisions, 0 égalités de recouvrement
+  ✅ round-trip exact (300/300), séparation 0.6 % de la clé, élagage 83 % (51 candidats), rappel 25 % : 100.0 %
+  ✅ la porte C6 est franchie — et elle dit ses conditions : 300 états consécutifs d'un
+--- tests
+test result: ok. 119 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.32s
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ C6 : porte 6/6 et 119 tests verts — je commite l'expansion et le multi-documents
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src/main.rs drave-core/src/episodique.rs tools/porte-episodique.sh reports/rapport-campagne-benefices.md docs/sprint-cerveau.md && git commit -q -m \"C6 suite : l'index élude enfin — et il fallait TROIS ingrédie … [2564 caractères tronqués]`

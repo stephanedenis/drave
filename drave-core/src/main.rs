@@ -172,6 +172,7 @@ il faut écrire DRAVE_{} (voir docs/histoire.md). Rien n'a été appliqué.", &v
     let mut opt = analyser(&args);
     if opt.episodique_k == 0 { opt.episodique_k = 64; }
     if opt.episodique_pas == 0 { opt.episodique_pas = 1; }
+    if opt.episodique_connexions == 0 { opt.episodique_connexions = 8; }
     let _ = MODELE.set(args[1].clone());
     // Plusieurs modes demandés : l'aiguillage en retient UN, dans un ordre
     // arbitraire, et le disait pas. On le dit.
@@ -615,6 +616,17 @@ struct Options {
     episodique_fichier: Option<String>,
     /// C6 : retirer la moyenne des états avant de calculer les clés (décorrélation).
     episodique_decorreler: bool,
+    /// C6 : expansion à la manière du gyrus denté — nombre de canaux de sortie.
+    /// 0 = pas d'expansion.
+    episodique_expansion: usize,
+    /// C6 : entrées reçues par canal expansé.
+    episodique_connexions: usize,
+    /// C6 : égaliser l'usage des canaux (centrer et réduire PAR CANAL sur le magasin)
+    /// avant de choisir la clé — contre les canaux « hub ».
+    episodique_normaliser: bool,
+    /// C6 : documents (fichiers de TEXTE brut, séparés par des virgules) d'où
+    /// collecter les épisodes. Chaque document repart d'un cache neuf.
+    episodique_textes: Option<String>,
     /// C6 : écart entre deux états collectés. 1 = états consécutifs du même texte ;
     /// plus grand = des moments éloignés du texte, donc des contenus moins corrélés.
     /// C'est LA condition qui décide si les clés se recouvrent.
@@ -793,6 +805,10 @@ fn analyser(args: &[String]) -> Options {
             "--episodique-fichier" => { o.episodique_fichier = Some(suivant(i).clone()); 2 }
             "--episodique-pas" => { o.episodique_pas = suivant(i).parse().unwrap_or(1).max(1); 2 }
             "--episodique-decorreler" => { o.episodique_decorreler = true; 1 }
+            "--episodique-expansion" => { o.episodique_expansion = suivant(i).parse().unwrap_or(0); 2 }
+            "--episodique-connexions" => { o.episodique_connexions = suivant(i).parse().unwrap_or(8); 2 }
+            "--episodique-normaliser" => { o.episodique_normaliser = true; 1 }
+            "--episodique-textes" => { o.episodique_textes = Some(suivant(i).clone()); 2 }
             // C5 : le bus de modulation, canal par canal.
             "--bus" => { o.bus.push(suivant(i).clone()); 2 }
             "--bus-serveur" => { o.bus_serveur = suivant(i).parse().ok(); 2 }
@@ -5768,39 +5784,81 @@ fn run_episodique_essai(opt: Options) {
     let path = modele_chemin();
     let n_voulu = opt.episodique_essai;
     let k = opt.episodique_k;
-    let idfile = opt.ids_file.clone().unwrap_or_default();
-    if idfile.is_empty() {
-        eprintln!("--episodique-essai a besoin de --ids-file : les épisodes sont des états \
-RÉELS du modèle sur un texte, pas des vecteurs de synthèse.");
-        std::process::exit(2);
-    }
-    let brut = std::fs::read_to_string(&idfile).expect("fichier d'identifiants illisible");
     let pas = opt.episodique_pas.max(1);
-    let ids: Vec<u32> = brut.split(|c: char| c == ',' || c.is_whitespace())
-        .filter(|s| !s.is_empty()).filter_map(|s| s.parse().ok())
-        // On lit TOUT le préfixe nécessaire, même si on ne garde qu'un état sur
-        // `pas` : les positions du modèle doivent rester vraies, et un cache KV
-        // alimenté par sauts calculerait des positions qui ne sont pas celles du
-        // texte (RoPE en dépend). On paie donc le calcul des jetons intermédiaires,
-        // et c'est dit dans le temps affiché.
-        .take(n_voulu.saturating_mul(pas)).collect();
-    if ids.len() < 2 {
-        eprintln!("--episodique-essai : {} jetons seulement dans {idfile} — il en faut au moins 2",
-                  ids.len());
-        std::process::exit(2);
-    }
-    let ctx = if opt.ctx_impose { opt.ctx } else { (ids.len() + 8).max(256) };
     let cpu = engine::coeurs_physiques();
     let n_threads = if opt.threads_impose { opt.threads } else { cpu.max(1) };
-    let mut mdl = model::Model::load_partiel(&path, ctx, n_threads, false, 1.0, false, 0, 0,
-                                             None);
-    let t0 = std::time::Instant::now();
-    let mut etats: Vec<Vec<f32>> = Vec::with_capacity(ids.len() / pas + 1);
-    for (pos, id) in ids.iter().enumerate() {
-        let s = mdl.forward(*id, pos);
-        if pos % pas == 0 { etats.push(s); }
+    // DEUX SOURCES D'ÉPISODES : un fichier d'identifiants (donc UN texte), ou
+    // PLUSIEURS documents en texte brut, chacun repartant d'un **cache neuf**.
+    // La seconde existe pour lever une condition précise : toutes les premières
+    // mesures portaient sur 300 états consécutifs d'un même texte. Un magasin qui ne
+    // fonctionne que sur un seul document ne serait pas une mémoire — ce serait un
+    // index.
+    let documents: Vec<String> = opt.episodique_textes.as_ref().map(|l| {
+        l.split(',').map(|s| s.trim().to_string()).filter(|s| !s.is_empty()).collect()
+    }).unwrap_or_default();
+    let idfile = opt.ids_file.clone().unwrap_or_default();
+    if documents.is_empty() && idfile.is_empty() {
+        eprintln!("--episodique-essai a besoin de --ids-file ou de --episodique-textes : les \
+épisodes sont des états RÉELS du modèle sur un texte, pas des vecteurs de synthèse.");
+        std::process::exit(2);
     }
-    let dim = etats[0].len();
+    // Par document, on calcule `par_document × pas` jetons et on garde un état sur
+    // `pas` : les positions doivent rester celles du texte (RoPE en dépend), donc on
+    // paie les jetons intermédiaires.
+    let par_document = if documents.is_empty() { 0 } else {
+        (n_voulu / documents.len()).max(2)
+    };
+    let t0 = std::time::Instant::now();
+    let mut etats: Vec<Vec<f32>> = Vec::with_capacity(n_voulu + 8);
+    let mut dim = 0usize;
+    // Le nombre de jetons RÉELLEMENT calculés : c'est lui qui explique le temps, et
+    // il vaut `états × pas` — sauf quand un document est plus court que demandé.
+    let mut jetons_calcules = 0usize;
+    if documents.is_empty() {
+        let brut = std::fs::read_to_string(&idfile).expect("fichier d'identifiants illisible");
+        let ids: Vec<u32> = brut.split(|c: char| c == ',' || c.is_whitespace())
+            .filter(|s| !s.is_empty()).filter_map(|s| s.parse().ok())
+            .take(n_voulu.saturating_mul(pas)).collect();
+        if ids.len() < 2 {
+            eprintln!("--episodique-essai : {} jetons seulement dans {idfile} — il en faut au \
+moins 2", ids.len());
+            std::process::exit(2);
+        }
+        let ctx = if opt.ctx_impose { opt.ctx } else { (ids.len() + 8).max(256) };
+        let mut mdl = model::Model::load_partiel(&path, ctx, n_threads, false, 1.0, false, 0, 0,
+                                                 None);
+        jetons_calcules = ids.len();
+        for (pos, id) in ids.iter().enumerate() {
+            let s = mdl.forward(*id, pos);
+            if pos % pas == 0 { etats.push(s); }
+        }
+        dim = etats[0].len();
+    } else {
+        for (d, doc) in documents.iter().enumerate() {
+            let ctx = if opt.ctx_impose { opt.ctx } else { (par_document * pas + 8).max(256) };
+            let mut mdl = model::Model::load_partiel(&path, ctx, n_threads, false, 1.0, false,
+                                                     0, 0, None);
+            let brut = std::fs::read_to_string(doc)
+                .unwrap_or_else(|e| { eprintln!("--episodique-textes : {doc} illisible : {e}");
+                                      std::process::exit(2) });
+            let tk = build_tokenizer(&mdl.g);
+            let mut ids = tk.encode(&brut);
+            ids.truncate(par_document * pas);
+            let mut n = 0usize;
+            jetons_calcules += ids.len();
+            for (pos, id) in ids.iter().enumerate() {
+                let s = mdl.forward(*id, pos);
+                if pos % pas == 0 { etats.push(s); n += 1; }
+            }
+            if dim == 0 && !etats.is_empty() { dim = etats[0].len(); }
+            println!("  document {} de {} : {} jetons calculés, {n} états", d + 1,
+                     documents.len(), ids.len());
+        }
+    }
+    if etats.len() < 2 {
+        eprintln!("--episodique-essai : {} états seulement — il en faut au moins 2", etats.len());
+        std::process::exit(2);
+    }
     // DÉCORRÉLATION (facultative) : retirer la moyenne des états. Ce n'est pas un
     // détail de mise en forme — c'est le geste de séparation de motifs du gyrus
     // denté, et il a une raison mesurable ici : deux états différents d'un modèle de
@@ -5816,16 +5874,74 @@ RÉELS du modèle sur un texte, pas des vecteurs de synthèse.");
         println!("  décorrélation     : moyenne des {} états retirée (les valeurs stockées sont \
 donc les états centrés ; la moyenne, elle, se stocke une fois)", etats.len());
     }
+    // EXPANSION (facultative), après la décorrélation : elle dilate l'état dans un
+    // espace plus grand où les clés peuvent être plus creuses — c'est ce qui donne à
+    // l'index inversé une chance d'éluder. Mesuré : sans elle, 300 candidats sur 300.
+    // LES CLÉS SONT SÉPARÉES DES VALEURS : la clé peut vivre dans un espace dilaté
+    // et égalisé, la valeur reste l'état exact du modèle. C'est ce qui permet de
+    // dilater sans perdre l'état — et de rendre, à la lecture, l'état d'origine.
+    let mut cles: Vec<Vec<f32>> = etats.clone();
+    let mut dim_cle = dim;
+    if opt.episodique_expansion > 0 {
+        let d = opt.episodique_expansion;
+        let c = opt.episodique_connexions;
+        cles = cles.iter().map(|e| episodique::expandre(e, d, c)).collect();
+        dim_cle = d;
+        println!("  expansion         : {dim} → {d} canaux de clé ({c} entrées par canal, signes \
+par hachage) ; les VALEURS restent les états exacts de dimension {dim}", dim = dim);
+    }
+    // ÉGALISATION DE L'USAGE DES CANAUX. Un k-WTA choisit les plus grandes
+    // amplitudes : si un canal est systématiquement grand (parce que la projection
+    // l'a rendu sensible à une direction commune), il entre dans presque toutes les
+    // clés et sa liste d'index devient un « hub » — l'index ne peut plus éluder.
+    // Centrer et réduire PAR CANAL retire cet avantage. Les statistiques viennent du
+    // magasin : en déploiement, elles se stockent avec lui (et il faut alors les
+    // recalculer quand le magasin grandit — ce n'est pas mesuré ici).
+    if opt.episodique_normaliser && cles.len() > 1 {
+        let mut moy = vec![0.0f64; dim_cle];
+        let mut var = vec![0.0f64; dim_cle];
+        for e in cles.iter() { for (i, x) in e.iter().enumerate() { moy[i] += *x as f64; } }
+        let n = cles.len() as f64;
+        for m in moy.iter_mut() { *m /= n; }
+        for e in cles.iter() {
+            for (i, x) in e.iter().enumerate() { let d = *x as f64 - moy[i]; var[i] += d * d; }
+        }
+        let mut ecarts = vec![1.0f32; dim_cle];
+        let mut nuls = 0usize;
+        for i in 0..dim_cle {
+            let v = (var[i] / n).sqrt();
+            if v > 1e-12 { ecarts[i] = v as f32; } else { nuls += 1; }
+        }
+        for e in cles.iter_mut() {
+            for (i, x) in e.iter_mut().enumerate() { *x = (*x - moy[i] as f32) / ecarts[i]; }
+        }
+        println!("  égalisation       : chaque canal de clé centré et réduit sur le magasin\
+{} — un canal systématiquement grand n'entre plus dans toutes les clés",
+                 if nuls > 0 { format!(" ({nuls} canal(aux) de variance nulle laissés tels quels)") }
+                 else { String::new() });
+    }
+    // Le coût de l'expansion, dit en clair : c'est ce qu'on paie PAR LECTURE, et il
+    // ne dépend pas de la taille du magasin — alors que le balayage qu'elle évite,
+    // lui, croît avec N. Le seuil de rentabilité se calcule.
+    if opt.episodique_expansion > 0 {
+        let cout = (opt.episodique_expansion * opt.episodique_connexions) as f64;
+        let seuil = cout / k as f64;
+        println!("  coût de l'expansion : {:.0} additions par lecture (fixe) · le balayage \
+évité coûte N × {k} comparaisons · l'expansion est donc rentable au-delà de N ≈ {seuil:.0} \
+épisodes — EN DESSOUS, le balayage complet est MOINS cher", cout);
+    }
     println!("  modèle            : {path}");
     println!("  épisodes          : {} états réels de dimension {dim} ({} en {:.1} s)",
-             etats.len(), idfile, t0.elapsed().as_secs_f64());
+             etats.len(),
+             if documents.is_empty() { idfile.clone() } else { format!("{} documents", documents.len()) },
+             t0.elapsed().as_secs_f64());
     if pas > 1 {
         println!("  espacement        : un état tous les {pas} jetons — {} jetons calculés pour \
 {} épisodes : des moments ÉLOIGNÉS du texte, donc des contenus moins corrélés que des états \
-consécutifs", ids.len(), etats.len());
+consécutifs", jetons_calcules, etats.len());
     }
-    println!("  clé               : {k} canaux sur {dim} (densité {:.2} %)",
-             100.0 * k as f64 / dim as f64);
+    println!("  clé               : {k} canaux sur {dim_cle} (densité {:.2} %), valeurs de \
+dimension {dim}", 100.0 * k as f64 / dim_cle as f64);
 
     // --- 0. COLLISIONS DE CLÉS, mesurées AVANT le round-trip parce qu'elles
     // l'expliquent. Deux états distincts qui ont la MÊME clé sont indiscernables :
@@ -5834,7 +5950,7 @@ consécutifs", ids.len(), etats.len());
     // n'est pas une propriété du code, c'est une propriété du COUPLE (données, k),
     // et c'est pour cela qu'elle se mesure.
     let mut vues: std::collections::BTreeMap<Vec<u32>, usize> = std::collections::BTreeMap::new();
-    for e in etats.iter() { *vues.entry(episodique::cle(e, k)).or_insert(0) += 1; }
+    for e in cles.iter() { *vues.entry(episodique::cle(e, k)).or_insert(0) += 1; }
     let multiples: usize = vues.values().filter(|m| **m > 1).map(|m| m - 1).sum();
     let pire_cle = vues.values().cloned().max().unwrap_or(0);
     println!("  clés distinctes   : {}/{} (pire multiplicité {pire_cle}){}", vues.len(),
@@ -5845,12 +5961,13 @@ donc INDISCERNABLES par le contenu") } else { String::new() });
     // --- 1. round-trip : la même clé doit rendre la valeur écrite, AU BIT PRÈS
     let mut m = episodique::Episodique::nouveau(k, dim);
     for (i, e) in etats.iter().enumerate() {
-        m.ecrire("local", i as u32, e, trace_globale::maintenant());
+        m.ecrire_avec_cle("local", i as u32, &cles[i], e, trace_globale::maintenant());
     }
     let mut exacts = 0usize;
-    for (i, e) in etats.iter().enumerate() {
+    for (i, e) in cles.iter().enumerate() {
         if let Some(l) = m.lire(e) {
-            if l.id == i as u64 && m.par_id(l.id).map(|x| x.valeur == *e).unwrap_or(false) {
+            if l.id == i as u64
+               && m.par_id(l.id).map(|x| x.valeur == etats[i]).unwrap_or(false) {
                 exacts += 1;
             }
         }
@@ -5870,7 +5987,7 @@ partagés — départagées par l'identifiant le plus petit)", manquants - par_c
     let pas = (etats.len() / 64).max(1);
     let mut i = 0;
     while i + pas < etats.len() {
-        let r = m.recouvrement_deux(&etats[i], &etats[i + pas]);
+        let r = m.recouvrement_deux(&cles[i], &cles[i + pas]);
         cumul += r; pire = pire.max(r); paires += 1;
         i += pas;
     }
@@ -5878,13 +5995,27 @@ partagés — départagées par l'identifiant le plus petit)", manquants - par_c
 (pire {pire}/{k}, {paires} paires)",
              if paires > 0 { cumul as f64 / paires as f64 } else { 0.0 });
 
+    // --- 2bis. LA DISTRIBUTION DES LISTES DE L'INDEX.
+    // C'est elle qui décide si l'index peut éluder : quelques canaux qui portent
+    // presque tout le magasin (des « hubs ») et l'élagage disparaît, quelle que soit
+    // la séparation par ailleurs.
+    {
+        let (moy, maxi, part) = m.listes_canaux();
+        println!("  listes de l'index : {:.1} épisodes par canal en moyenne, {maxi} au plus ; \
+les 1 % de canaux les plus longs portent {:.0} % des entrées", moy, 100.0 * part);
+        if maxi as f64 > 4.0 * moy.max(1.0) {
+            println!("  ⚠️  canaux HUB : le plus long porte {:.0}× la moyenne — l'index ne peut \
+pas éluder par eux", maxi as f64 / moy.max(1.0));
+        }
+    }
+
     // --- 3. le fichier : écrit puis relu, et le rappel doit être identique
     if let Some(f) = &opt.episodique_fichier {
         match m.ecrire_fichier(f) {
             Ok(()) => match episodique::Episodique::lire_fichier(f) {
                 Ok(relu) => {
                     let mut identiques = 0usize;
-                    for (i, e) in etats.iter().enumerate() {
+                    for (i, e) in cles.iter().enumerate() {
                         let avant = m.lire(e).map(|l| l.id);
                         let apres = relu.lire(e).map(|l| l.id);
                         if avant == apres && avant == Some(i as u64) { identiques += 1; }
@@ -5911,14 +6042,14 @@ identiques après passage par le disque", etats.len());
     if coupe >= 2 && etats.len() - coupe >= 2 {
         let mut connus = episodique::Episodique::nouveau(k, dim);
         for (i, e) in etats.iter().enumerate().take(coupe) {
-            connus.ecrire("local", i as u32, e, 0.0);
+            connus.ecrire_avec_cle("local", i as u32, &cles[i], e, 0.0);
         }
         let mut rec_connu = 0usize; let mut n_connu = 0usize;
-        for e in etats.iter().take(coupe) {
+        for e in cles.iter().take(coupe) {
             if let Some(l) = connus.lire(e) { rec_connu += l.recouvrement; n_connu += 1; }
         }
         let mut rec_nouveau = 0usize; let mut n_nouveau = 0usize; let mut pire_nouveau = 0usize;
-        for e in etats.iter().skip(coupe) {
+        for e in cles.iter().skip(coupe) {
             if let Some(l) = connus.lire(e) {
                 rec_nouveau += l.recouvrement; pire_nouveau = pire_nouveau.max(l.recouvrement);
                 n_nouveau += 1;
@@ -5950,15 +6081,15 @@ indice connu : ce magasin ne sait pas refuser, il rend toujours son meilleur can
     for taille in tailles {
         let mut s = episodique::Episodique::nouveau(k, dim);
         for (i, e) in etats.iter().enumerate().take(taille) {
-            s.ecrire("local", i as u32, e, 0.0);
+            s.ecrire_avec_cle("local", i as u32, &cles[i], e, 0.0);
         }
         let mut ligne = format!("  {taille:>7}");
         for frac in [0.0f64, 0.10, 0.25, 0.50, 0.75] {
             let mut succes = 0usize; let mut essais = 0usize;
             let mut cand = 0usize; let mut comp = 0usize;
             for q in 0..taille {
-                let cible = episodique::cle(&etats[q], k);
-                let mut indice = etats[q].clone();
+                let cible = episodique::cle(&cles[q], k);
+                let mut indice = cles[q].clone();
                 for c in cible.iter() {
                     // Hachage déterministe du canal : la dégradation ne doit pas
                     // dépendre de l'ordre des indices.

@@ -1503,12 +1503,80 @@ Toutes les valeurs ci-dessous sont reproduites par `tools/porte-episodique.sh`.
   couvrent **tous** les épisodes. **Avec 64 canaux sur 896, l'index inversé ne peut
   pas éluder** — ce n'est pas un défaut du code, c'est un défaut de densité.
 
-**Ce que cela indique pour la suite (à mesurer, pas encore mesuré)** : pour que
-l'index élude réellement, il faut **plus de canaux et des clés plus creuses** — soit
-une **expansion** comme celle du gyrus denté (896 → 4 096 canaux, k = 32 : chaque
-canal ne porterait plus que ~2,3 épisodes, et une clé toucherait ~74 candidats sur
-300). C'est l'expérience suivante, et elle est falsifiable : si l'expansion n'élague
-pas, l'index inversé n'a aucune raison d'exister.
+**Ce que cela indiquait pour la suite** : pour que l'index élude réellement, il faut
+**plus de canaux et des clés plus creuses** — une **expansion** comme celle du gyrus
+denté. L'expérience a été faite, et elle a demandé **trois** ingrédients, pas un.
+
+### 24 bis. L'expansion du gyrus denté, et ce qu'elle exige en plus
+
+L'expansion seule (896 → 4 096, 8 entrées signées par canal, hachage déterministe)
+**améliore la séparation mais n'élague presque pas** :
+
+| configuration (300 états) | séparation | candidats examinés | rappel 50 % | rappel 75 % |
+|---|---|---|---|---|
+| 896 canaux, k = 64 (référence) | 23,9/64 | **300/300 (0 % éludé)** | 69,3 % | 15,3 % |
+| 4 096, k = 32 | 6,5/32 | 256/300 (15 %) | 36,3 % | 3,7 % |
+| 8 192, k = 64 | 13,0/64 | 282/300 (6 %) | 33,7 % | 7,0 % |
+| 16 384, k = 64 | **9,0/64** | 267/300 (11 %) | 48,7 % | 10,3 % |
+| **16 384, k = 64, canaux ÉGALISÉS** | **0,38/64** | **51/300 (83 % éludé)** | **96,3 %** | **69,0 %** |
+
+La cause de l'échec de l'expansion seule est **visible dans la distribution des
+listes de l'index** : quelques canaux sont systématiquement grands (la projection les
+rend sensibles à une direction commune), ils entrent dans presque toutes les clés, et
+leur liste devient un « hub » — 7× la longueur moyenne. Toute clé d'indice tombe sur
+eux, et l'index redevient un balayage complet. **Centrer et réduire chaque canal de
+clé sur le magasin** (une égalisation d'usage, ce que le gyrus denté obtient par
+normalisation et inhibition latérale) fait tomber la séparation à **0,38/64** — le
+plancher théorique du hasard pour 64 canaux sur 16 384 étant 0,25 — et l'élagage
+passe à **83 %**.
+
+**Ce que la mémoire gagne, et ce qu'elle paie** (16 384 canaux, k = 64, N = 300) :
+
+- comparaisons par lecture : **3 237** au lieu de 19 200 — **÷5,9** ;
+- rappel à 25 % de dégradation : **100 %** (contre 96,7 %) ; à 50 % : **96,3 %**
+  (69,3) ; à 75 % : **69,0 %** (15,3) ;
+- nouveauté : un indice jamais écrit tombe à **16,2/64** (contre 41,5) — le pire des
+  nouveaux passe de 57/64 à **40/64**, donc les faux positifs reculent sans disparaître ;
+- round-trip : **300/300 au bit près**, y compris à travers le disque. Le magasin
+  stocke les **états exacts** (896 canaux) ; seule la **clé** est dilatée — sinon le
+  magasin coûterait 18× plus cher et ne pourrait plus rendre l'état d'origine.
+
+**Le coût de l'expansion est FIXE, celui du balayage croît** : 131 072 additions par
+lecture contre N × 64 comparaisons. Le seuil de rentabilité se calcule —
+**N ≈ 2 048 épisodes** — et **en dessous, le balayage complet est moins cher**. Une
+expansion n'est donc pas « meilleure » : elle est meilleure *à partir d'une certaine
+taille de mémoire*, et le chiffre est écrit dans la sortie du programme pour que
+personne ne l'oublie.
+
+### 24 ter. Le résultat tient-il sur PLUSIEURS documents ? Oui — 240 états, 3 corpus
+
+Les mesures ci-dessus portaient sur un seul texte, et c'était une condition à lever :
+un magasin qui ne marche que sur un document n'est pas une mémoire, c'est un index.
+Les 240 états viennent donc de **trois corpus différents** (code, français,
+multilingue), chacun repartant d'un **cache neuf** — donc sans contexte partagé entre
+documents.
+
+| mesure | un texte (300 états) | **trois corpus (240 états)** |
+|---|---|---|
+| round-trip | 300/300 | **240/240 au bit près** |
+| séparation | 0,38/64 | **1,22/64** (hasard : 0,25) |
+| candidats examinés (dernier N) | 17 % du magasin | **15 %** (35 sur 240) |
+| rappel 25 % / 50 % / 75 % | 100 / 96,3 / 69,0 % | **99,2 / 95,0 / 73,8 %** |
+| nouveauté (jamais écrit / pire) | 16,2 / 40 | **10,6 / 38** |
+| ligne de base nulle | 0,33 % | 0,42 % |
+
+Le résultat **ne dépend donc pas d'un texte unique** : il tient sur des corpus
+différents, avec des états qui ne partagent plus le contexte du document.
+
+**Ce qui reste non mesuré, et c'est écrit** : la reconstruction de l'état d'origine à
+partir d'une clé dilatée (l'expansion n'est utilisée que pour la clé, les valeurs
+stockées sont les états exacts), le rappel après consolidation (C7), et le
+comportement quand le magasin grandit au point que les statistiques d'égalisation
+doivent être recalculées.
+
+**Conditions** : Qwen2.5-0.5B-Q8, expansion par hachage (8 entrées signées par canal),
+égalisation calculée **sur le magasin** (en déploiement il faut donc la stocker avec
+lui, et la recalculer quand il grandit).
 
 **Conditions de ces chiffres** : 300 états d'un seul texte (ou un sur huit), un seul
 modèle (0,5 B), k = 64. Le rappel après consolidation, sur des épisodes venus de

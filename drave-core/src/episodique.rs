@@ -89,6 +89,59 @@ pub fn cle(v: &[f32], k: usize) -> Vec<u32> {
     idx
 }
 
+/// Un mélange 64 bits déterministe (splitmix64) — la seule source d'aléa du module.
+///
+/// POURQUOI DÉTERMINISTE ET SANS DÉPENDANCE : l'expansion doit être la MÊME dans
+/// deux exécutions, sur deux machines, sinon un épisode écrit ici serait illisible
+/// là-bas — et une mémoire qu'on ne peut pas relire ailleurs n'est pas une mémoire.
+/// Une table tirée au hasard ne conviendrait donc pas ; une fonction de hachage, si.
+pub fn melange(x: u64) -> u64 {
+    let mut z = x.wrapping_add(0x9E37_79B9_7F4A_7C15);
+    z = (z ^ (z >> 30)).wrapping_mul(0xBF58_476D_1CE4_E5B9);
+    z = (z ^ (z >> 27)).wrapping_mul(0x94D0_49BB_1331_11EB);
+    z ^ (z >> 31)
+}
+
+/// EXPANSION à la manière du gyrus denté : `d` canaux de sortie, chacun recevant
+/// `c` entrées tirées par hachage, avec un signe.
+///
+/// POURQUOI C'EST NÉCESSAIRE, ET PAS SEULEMENT BIOLOGIQUE. Mesuré : avec 64 canaux
+/// sur 896, deux états différents d'un modèle de langue partagent **37 %** de leur
+/// clé, si bien que toute clé d'indice recouvre tout le magasin et que l'index
+/// inversé **n'élague rien** (300 candidats sur 300). L'arithmétique dit pourquoi :
+/// 300 épisodes × 64 canaux = 19 200 entrées sur 896 canaux, soit ~21 par canal.
+/// Pour éluder, il faut **plus de canaux** : à 4 096 canaux et k = 32, chaque canal
+/// ne porte plus ~2,3 épisodes. C'est exactement ce que fait le gyrus denté — il
+/// dilate (≈ 10× plus de cellules granulaires que d'entrées corticales) avant de
+/// laisser CA3 faire l'association.
+///
+/// CE QU'ELLE COÛTE : `d × c` additions par état (32 768 pour 4 096 × 8), payées une
+/// fois à l'écriture comme à la lecture — sans commune mesure avec le balayage
+/// qu'elle évite.
+///
+/// CE QU'ELLE PERD, et il faut le dire : la valeur stockée est l'état **projeté**.
+/// Retrouver l'état d'origine demanderait une reconstruction (pseudo-inverse,
+/// relaxation), qui n'est **pas** implémentée ici.
+pub fn expandre(v: &[f32], d: usize, c: usize) -> Vec<f32> {
+    let mut out = vec![0.0f32; d];
+    if v.is_empty() { return out; }
+    for (j, o) in out.iter_mut().enumerate() {
+        let mut h = melange(j as u64);
+        let mut acc = 0.0f32;
+        for _ in 0..c {
+            h = melange(h);
+            let i = (h % v.len() as u64) as usize;
+            // Le signe vient du bit de poids fort : sans lui, une somme de `c`
+            // entrées positivement corrélées garderait la composante commune que
+            // l'expansion doit justement disperser.
+            let signe = if (h >> 63) == 0 { 1.0f32 } else { -1.0 };
+            acc += signe * v[i];
+        }
+        *o = acc;
+    }
+    out
+}
+
 impl Episodique {
     pub fn nouveau(k: usize, dim: usize) -> Self {
         Episodique { k, dim, episodes: Vec::new(), index: BTreeMap::new(), prochain_id: 0 }
@@ -100,9 +153,23 @@ impl Episodique {
 
     /// Écrit un épisode : **une seule passe**, et rien n'est modifié derrière.
     pub fn ecrire(&mut self, region: &str, pas: u32, valeur: &[f32], t_abs: f64) -> u64 {
+        self.ecrire_avec_cle(region, pas, valeur, valeur, t_abs)
+    }
+
+    /// Écrit un épisode dont la **clé** vient d'un vecteur et la **valeur** d'un
+    /// autre.
+    ///
+    /// POURQUOI LES SÉPARER. Avec l'expansion du gyrus denté, la clé vit dans un
+    /// espace dilaté (16 384 canaux) tandis que l'état, lui, vit dans 896. Stocker
+    /// l'état PROJETÉ multiplierait le magasin par 18 et perdrait l'information :
+    /// on ne pourrait plus rendre l'état d'origine. Ici le magasin garde l'état
+    /// exact et ne dilate que la clé — la mémoire paie la dilatation une fois par
+    /// écriture, pas une fois par épisode stocké.
+    pub fn ecrire_avec_cle(&mut self, region: &str, pas: u32, source_cle: &[f32],
+                           valeur: &[f32], t_abs: f64) -> u64 {
         let id = self.prochain_id;
         self.prochain_id += 1;
-        let cle = cle(valeur, self.k);
+        let cle = cle(source_cle, self.k);
         let i = self.episodes.len();
         for c in &cle {
             self.index.entry(*c).or_default().push(i);
@@ -153,6 +220,29 @@ impl Episodique {
     /// comparaison au bit près se fait sur `valeur`.
     pub fn par_id(&self, id: u64) -> Option<&Episode> {
         self.episodes.iter().find(|e| e.id == id)
+    }
+
+    /// La distribution des listes de l'index : (longueur moyenne, longueur maximale,
+    /// part des entrées portées par les 1 % de canaux les plus longs).
+    ///
+    /// POURQUOI CETTE MESURE EXISTE. Un index inversé n'élude que si les listes sont
+    /// **courtes et de taille comparable**. Si quelques canaux portent presque tout
+    /// le magasin — des « canaux hub » —, alors toute clé d'indice tombe sur eux et
+    /// l'index redevient un balayage complet, même avec beaucoup de canaux. C'est
+    /// exactement ce qui est arrivé à l'expansion du gyrus denté : la séparation
+    /// s'améliore (23,9 → 9,0 canaux partagés) et l'élagage reste faible (0 → 11 %).
+    /// La cause n'était pas visible dans le nombre de canaux ; elle l'est ici.
+    pub fn listes_canaux(&self) -> (f64, usize, f64) {
+        if self.index.is_empty() { return (0.0, 0, 0.0); }
+        let moy = self.index.values().map(|v| v.len()).sum::<usize>() as f64
+                  / self.index.len() as f64;
+        let maxi = self.index.values().map(|v| v.len()).max().unwrap_or(0);
+        let mut longueurs: Vec<usize> = self.index.values().map(|v| v.len()).collect();
+        longueurs.sort_unstable_by(|a, b| b.cmp(a));
+        let haut = (longueurs.len() / 100).max(1);
+        let total: usize = longueurs.iter().sum();
+        let part = longueurs[..haut].iter().sum::<usize>() as f64 / total.max(1) as f64;
+        (moy, maxi, part)
     }
 
     /// Combien de canaux de clé deux états partagent — la mesure de **séparation**.
@@ -386,6 +476,65 @@ mod tests {
         }
         let l = m.lire(&indice).expect("un recouvrement partiel doit suffire");
         assert_eq!(l.id, 17, "l'épisode doit être retrouvé depuis la moitié de sa clé");
+    }
+
+    #[test]
+    fn l_expansion_est_deterministe_et_disperse() {
+        let mut a = Alea::nouveau(11);
+        let v = a.vecteur(64);
+        assert_eq!(expandre(&v, 256, 8), expandre(&v, 256, 8),
+                   "deux exécutions doivent donner la MÊME expansion, sinon un épisode écrit ici serait illisible ailleurs");
+        // Une entrée constante ne doit pas donner une sortie constante : sinon
+        // l'expansion ne ferait que recopier la composante commune.
+        let plat = vec![1.0f32; 64];
+        let e = expandre(&plat, 256, 8);
+        assert!(e.iter().any(|x| *x > 0.0) && e.iter().any(|x| *x < 0.0),
+                "avec des signes, une entrée constante doit donner des sorties des deux signes");
+    }
+
+    #[test]
+    fn la_cle_peut_venir_d_un_autre_vecteur_que_la_valeur() {
+        // La clé est dilatée, la valeur reste l'état d'origine : la lecture doit
+        // rendre l'ÉTAT, pas sa projection.
+        let etat = vec![0.3f32, -1.2, 0.7, 0.0, 2.5, -0.1, 0.9, 0.2];
+        let cle_dilatee = expandre(&etat, 64, 4);
+        let mut m = Episodique::nouveau(4, 8);
+        let id = m.ecrire_avec_cle("local", 0, &cle_dilatee, &etat, 0.0);
+        let l = m.lire(&cle_dilatee).expect("la clé dilatée doit retrouver l'épisode");
+        assert_eq!(l.id, id);
+        assert_eq!(m.par_id(id).unwrap().valeur, etat,
+                   "la valeur stockée doit être l'état d'origine, pas sa projection");
+        assert_eq!(m.par_id(id).unwrap().cle.len(), 4);
+    }
+
+    #[test]
+    fn les_listes_de_canaux_sont_mesurees() {
+        let mut m = Episodique::nouveau(2, 8);
+        for i in 0..10 { m.ecrire("x", i, &[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, i as f32], 0.0); }
+        let (moy, maxi, part) = m.listes_canaux();
+        assert!(maxi >= 10, "le canal 0 est dans toutes les clés : max {maxi}");
+        assert!(moy > 1.0);
+        assert!(part > 0.0 && part <= 1.0, "part des 1 % les plus longs : {part}");
+    }
+
+    #[test]
+    fn l_expansion_fait_eluder_l_index() {
+        // Le point de l'expansion : avec des clés plus creuses dans un espace plus
+        // grand, une lecture ne doit plus examiner tout le magasin.
+        let mut a = Alea::nouveau(13);
+        let n = 400usize;
+        let etats: Vec<Vec<f32>> = (0..n).map(|_| a.vecteur(896)).collect();
+        let mut sans = Episodique::nouveau(64, 896);
+        let mut avec = Episodique::nouveau(32, 4096);
+        for e in etats.iter() {
+            sans.ecrire("x", 0, e, 0.0);
+            avec.ecrire("x", 0, &expandre(e, 4096, 8), 0.0);
+        }
+        let l_sans = sans.lire(&etats[7]).unwrap();
+        let l_avec = avec.lire(&expandre(&etats[7], 4096, 8)).unwrap();
+        assert!(l_avec.candidats < l_sans.candidats,
+                "l'expansion doit réduire les candidats examinés : {} contre {}",
+                l_avec.candidats, l_sans.candidats);
     }
 
     #[test]

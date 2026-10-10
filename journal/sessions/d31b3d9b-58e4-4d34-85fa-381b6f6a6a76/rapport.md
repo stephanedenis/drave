@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 37.3 h |
+| Durée | 37.7 h |
 | Tours | 44 |
-| Messages | 1449 |
-| Appels d'outils | 1359 |
-| Fichiers touchés | 44 |
-| Commandes | 1143 |
+| Messages | 1474 |
+| Appels d'outils | 1384 |
+| Fichiers touchés | 49 |
+| Commandes | 1161 |
 | Sous-agents | 3 |
-| Commits | 120 |
+| Commits | 121 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2058,7 +2058,7 @@ Je continue sur cette liste — il
 
 ### Tour 44 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1749 caractères tronqués]
 
-*92 appels d'outils.* Actions notables :
+*117 appels d'outils.* Actions notables :
 
 - bash — Implement per-region step counters and the step bound
 - bash — Write and run the clock/step-bound gate
@@ -2074,11 +2074,11 @@ Je continue sur cette liste — il
 - bash — Extend trace format to v2 with timestamps
 - bash — Add merge, clock drift, link verification
 - bash — Rewrite link pairing and build
-- … et 76 autres
+- … et 99 autres
 
 **Synthèse produite :**
 
-⏵ C6 : la décorrélation améliore le rappel mais ne prune toujours pas — je consigne et je commite
+⏵ C6 : porte 6/6 et 119 tests verts — je commite l'expansion et le multi-documents
 
 ## 3. Travail accompli
 
@@ -2130,6 +2130,11 @@ Je continue sur cette liste — il
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-bus-socket.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/episodique.rs` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-episodique.sh` | 1 | 0 |
+| `/tmp/patch_porte_c6.py` | 1 | 0 |
+| `/tmp/c6_multi_1.py` | 1 | 0 |
+| `/tmp/c6_multi_2.py` | 1 | 0 |
+| `/tmp/c6_multi_3.py` | 1 | 0 |
+| `/tmp/c6_docs.py` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -2179,7 +2184,7 @@ Je continue sur cette liste — il
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1103 autres
+- … et 1121 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2307,7 +2312,7 @@ Je continue sur cette liste — il
 
 ## 5. Erreurs rencontrées
 
-59 sorties en erreur ou divergentes. Les premières :
+61 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : ```  ### 🤖 Assistant  ⏵ **En transformers 5, `AutoModel` rend directement `Qwen2Model` (pas de `.model`). Je corrige le diagnostic.**  - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitH
 - **T2** : 3310393 bash -c pgrep -af "essai_decharge" | grep python | head; echo "--- logs ---"; tail -2 /tmp/ec_d192_lr3e3.log 2>/dev/null; tail -2 /tmp/ec_d192_lr1e3.log 2>/dev/null; echo "---"; ls -la /tmp/ec
@@ -2447,4 +2452,5 @@ Je continue sur cette liste — il
 - C12bis : le nœud trace, et les traces de plusieurs processus se fusionnent  CE QUI MANQUAIT, ET QUI ÉTAIT GRAVE. Seul le pilote traçait : une divergence sur un 
 - C5ter : le bus par le réseau — un réglage atteint une autre machine  C5bis diffusait un réglage par un FICHIER relu à chaque pas : il fallait donc un système de
 - C6 : mémoire épisodique adressable par contenu — et ses trois résultats négatifs  Module episodique.rs : clé creuse (k-WTA sur l'amplitude), index inversé canal
+- C6 suite : l'index élude enfin — et il fallait TROIS ingrédients, pas un  Le premier pas de C6 avait mesuré un négatif net : l'index inversé n'éludait RIEN (300
 

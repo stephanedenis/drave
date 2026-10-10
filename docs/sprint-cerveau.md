@@ -290,10 +290,34 @@ couvre donc tous les épisodes.
 monotonie du rappel · nouveauté · **collisions qui expliquent tous les échecs à
 k=8**), et elle finit en annonçant ses conditions.
 
-**L'expérience suivante, déjà écrite dans le rapport** : **expansion** à la manière
-du gyrus denté (896 → 4 096 canaux, k = 32) pour que l'index élude enfin. Si
-l'expansion n'élague pas, l'index inversé n'a aucune raison d'exister — et il faudra
-le dire.
+**L'expansion, faite, et elle a demandé TROIS ingrédients** (suite du même round) :
+
+| configuration (300 états) | séparation | candidats | rappel 50 % | rappel 75 % |
+|---|---|---|---|---|
+| 896 canaux, k = 64 | 23,9/64 | 300/300 (0 % éludé) | 69,3 % | 15,3 % |
+| 16 384 canaux, k = 64 | 9,0/64 | 267/300 (11 %) | 48,7 % | 10,3 % |
+| **16 384 + canaux ÉGALISÉS** | **0,38/64** | **51/300 (83 % éludé)** | **96,3 %** | **69,0 %** |
+| **idem, N = 2 500** | 0,30/64 | 468/2 500 (**81 %** éludé) | 95,6 % | 66,0 % |
+| **idem, 3 corpus, N = 240** | 1,22/64 | 35/240 (**85 %** éludé) | 95,0 % | 73,8 % |
+
+L'expansion **seule** améliore la séparation mais n'élude presque pas : quelques
+canaux sont systématiquement grands (la projection les rend sensibles à une direction
+commune), ils entrent dans presque toutes les clés et leurs listes deviennent des
+**hubs** (7× la moyenne) — toute clé d'indice tombe sur eux. **Centrer et réduire
+chaque canal de clé sur le magasin** (une égalisation d'usage — ce que le gyrus denté
+obtient par normalisation et inhibition latérale) fait tomber la séparation à
+**0,38/64**, le plancher du hasard pour 64 canaux sur 16 384 étant 0,25.
+
+**Le coût de l'expansion est FIXE, celui du balayage croît** : 131 072 additions par
+lecture contre N × 64 comparaisons ⇒ rentable au-delà de **N ≈ 2 048 épisodes**, et
+**en dessous, le balayage complet est moins cher**. Le programme l'écrit lui-même.
+
+**Et le résultat tient sur plusieurs documents** (240 états de 3 corpus : code,
+français, multilingue, cache neuf à chaque) : round-trip **240/240**, élagage 85 %,
+rappel 99,2 / 95,0 / 73,8 %. La mémoire stocke les **états exacts** ; seule la clé
+est dilatée. **Reste non mesuré** : la reconstruction d'un état depuis une clé
+dilatée, le rappel après consolidation, et le recalcul des statistiques d'égalisation
+quand le magasin grandit.
 
 ---
 

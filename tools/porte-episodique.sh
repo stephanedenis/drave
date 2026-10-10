@@ -104,7 +104,46 @@ if total - exacts == 0:
 print(f"  ✅ {total - exacts} échecs, tous expliqués : {coll} collisions, {egal} égalités "
       "de recouvrement")
 PY
+echo "=== 6. expansion + égalisation : l'index doit ÉLUDER pour de vrai ==="
+# Le cas qui a demandé trois ingrédients : dilater (gyrus denté), décorréler, et
+# ÉGALISER l'usage des canaux. Sans le troisième, la séparation s'améliore mais
+# l'index n'élude pas (des canaux « hub » portent tout le magasin).
+K6=${K6:-64}
+EXP=${EXP:-16384}
+S3=$(timeout 1200 "$D" "$M" --episodique-essai "$N" --episodique-k "$K6" \
+     --episodique-expansion "$EXP" --episodique-decorreler --episodique-normaliser \
+     --ids-file "$IDS" --ctx 512 --threads 8 2>&1) || { echo "  ❌ l'essai a échoué"; exit 1; }
+printf '%s\n' "$S3" | grep -E "expansion|égalisation|coût de|clé |round-trip|séparation|listes" | sed 's/^/  /'
+printf '%s\n' "$S3" | tail -2 | sed 's/^/  /'
+printf '%s\n' "$S3" > "$T/s3.txt"
+python3 - "$T/s3.txt" "$N" <<'PYVERIF' || exit 1
+import re, sys
+t = open(sys.argv[1]).read(); n = int(sys.argv[2])
+rt = re.search(r"round-trip\s*:\s*(\d+)/(\d+)", t)
+if not rt or int(rt.group(1)) != n:
+    sys.exit("  ❌ le round-trip doit rester EXACT avec l'expansion : " + (rt.group(0) if rt else "absent"))
+sep = re.search(r"séparation\s*:\s*recouvrement moyen ([\d.]+)/(\d+)", t)
+if not sep: sys.exit("  ❌ mesure de séparation absente")
+part = float(sep.group(1)) / int(sep.group(2))
+if part > 0.10:
+    sys.exit("  ❌ la séparation doit tomber sous 10 %% de la clé, elle est à %.1f %%" % (100*part))
+lignes = [l for l in t.splitlines() if re.match(r"^\s+\d+\s+\d", l)]
+m = re.search(r"co\u00fbt (\d+) cand\. \((\d+) % du magasin\)", lignes[-1])
+if not m:
+    m = re.search(r"co\u00fbt (\d+) cand\. \((\d+) % du magasin\)", lignes[-1].replace("û", "u"))
+if not m: sys.exit("  ❌ coût illisible : " + lignes[-1])
+cand, pct = int(m.group(1)), int(m.group(2))
+if pct > 50:
+    sys.exit("  ❌ l'index doit ÉLUDER la moitié du magasin au moins, il en examine %d %%" % pct)
+vals = [float(x) for x in re.findall(r"(\d+\.\d) %", lignes[-1])]
+if vals[2] < 90.0:
+    sys.exit("  ❌ le rappel à 25 %% de dégradation doit rester >= 90 %%, il est à %s %%" % vals[2])
+print("  ✅ round-trip exact (%d/%d), séparation %.1f %% de la clé, élagage %d %% (%d candidats), rappel 25 %% : %s %%"
+      % (n, n, 100*part, 100-pct, cand, vals[2]))
+PYVERIF
+
 echo
 echo "  ✅ la porte C6 est franchie — et elle dit ses conditions : $N états consécutifs d'un"
-echo "     seul texte, k=$K, aucun élagage obtenu par l'index (100 % du magasin examiné)."
+echo "     seul texte, k=$K. Sans expansion, l'index n'élude RIEN (100 % du magasin) ; avec"
+echo "     expansion + égalisation, il en élude plus de la moitié (cas 6)."
 rm -rf "$T"
