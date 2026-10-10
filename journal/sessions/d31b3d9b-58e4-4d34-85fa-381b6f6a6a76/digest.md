@@ -21046,3 +21046,28 @@ porte corrigée
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/sprint-cerveau.md\")\ns = p.read_text()\nancre = \"\"\"## C3 — FAIT (9 octobre 18 h 20)\"\"\"\nassert ancre in s\nneuf = \"\"\"## C5bis — FAIT (9 octobre 18 h 40) : diffusion  … [3980 caractères tronqués]`
+
+  ```
+sprint doc : C5bis consignée
+poussé
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 cargo test --release --manifest-path drave-core/Cargo.toml 2>&1 | tail -2; git status --short | grep -v journal | wc -l; git log --oneline -3; date '+%H:%M'; echo \"=== capacités livrées ===\"; grep -cE \"✅ \\*\\*FAIT\" d … [95 caractères tronqués]`
+
+  ```
+test result: ok. 96 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+
+0
+883f934 C5bis : diffusion du bus par fichier de contrôle — le canal change la région du milieu
+517f39b C3 : les délais par lien, et le fichier de relations humaines
+b0bb004 Sprint clos sur vérification : les 23 portes du dépôt sont vertes (0 rouge), 95 tests
+21:47
+=== capacités livrées ===
+5
+  ```
+
+### 🤖 Assistant
+
+⏵ État resumable écrit pour le prochain round, puis rapport
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/sprint-cerveau.md\")\ns = p.read_text()\nancre = \"\"\"## Objectif du sprint\"\"\"\nassert ancre in s\nneuf = \"\"\"## ▶ PROCHAINE ACTION (à lire en premier)\n\nÉtat au 9 octo … [2914 caractères tronqués]`

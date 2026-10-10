@@ -6,6 +6,43 @@
 
 ---
 
+## ▶ PROCHAINE ACTION (à lire en premier)
+
+État au 9 octobre 21 h 50 : **C1, C3, C5 (+ C5bis), C12 livrées**, 96 tests verts,
+23 portes vertes, tout poussé. Le temps imparti court jusqu'au **10 octobre 9 h** :
+il reste des heures, et la consigne est de les occuper — **ne pas s'arrêter faute de
+liste**.
+
+**Par ordre de valeur mesurable :**
+
+1. **C4 — horloges par région / asynchronisme** (le plus structurant qui reste) :
+   commencer par un **compteur de pas par région** et un mode `--pas-max` qui borne
+   la terminaison ; porte : un graphe sans cycle doit rendre le **même résultat**
+   qu'en mode synchrone, et le nombre de pas par région doit être borné et annoncé.
+2. **C12bis — trace côté nœud** : aujourd'hui seule la trace du **pilote** existe
+   (`--trace-globale`) ; ajouter la même au nœud relais (mêmes empreintes, `region`
+   = son identifiant) et un mode qui **fusionne** les deux fichiers par horodatage.
+   Porte : la fusion contient les croisements des deux régions, sans trou.
+3. **C5ter — transport par socket du bus** : l'option `--bus-serveur` et le parseur
+   existent ; **le fil d'écoute doit être lancé AVANT `ecoute.accept()`** dans
+   `run_serveur_flux` (un fil posé après n'écoute que pendant qu'un client est
+   connecté — mesuré : connexion refusée). Le fichier de contrôle couvre le besoin
+   en attendant.
+4. **C2 — entrées multiples** (le plus lourd, à cadrer honnêtement) : exige deux
+   plages **disjointes** dans un même processus ; commencer par mesurer ce que coûte
+   un second `Model::load` partiel plutôt que d'attaquer la structure.
+5. **Expériences de biologie** (E2 croissance, E4 balance E/I) et **dessins de
+   modèle** (H profondeur routée, I budget d'événements, J quantification-aware) :
+   ils n'ont besoin d'aucun moteur nouveau, seulement du harnais d'entraînement.
+6. **Manques du registre** : noyau de listes pour les experts, noyau de listes GPU,
+   encodeurs — les trois plus gros chantiers de code identifiés.
+
+**Règle de conduite du sprint** (docs/relations-humaines.md) : timeboxing, pas
+backlog — occuper le temps, livrer une capacité avec sa porte, documenter, committer,
+pousser, enchaîner.
+
+---
+
 ## Objectif du sprint
 
 Trois capacités du plan, chacune avec sa **porte mesurée** :

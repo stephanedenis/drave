@@ -7,12 +7,12 @@
 | Début | 2026-10-08 09:11 |
 | Durée | 36.6 h |
 | Tours | 43 |
-| Messages | 1349 |
-| Appels d'outils | 1265 |
+| Messages | 1351 |
+| Appels d'outils | 1267 |
 | Fichiers touchés | 40 |
-| Commandes | 1057 |
+| Commandes | 1059 |
 | Sous-agents | 3 |
-| Commits | 115 |
+| Commits | 116 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -2008,7 +2008,7 @@ Tout est committé et poussé sur **`github.com/stephanedenis/drave`** (privé),
 
 ### Tour 43 — ajuste tes sprints en timeboxing plus qu'en tranche de backlog. C'est à dire que tu dois continuer pour occupper le temp … [564 caractères tronqués]
 
-*21 appels d'outils.* Actions notables :
+*23 appels d'outils.* Actions notables :
 
 - create_goal
 - todo_write
@@ -2024,11 +2024,11 @@ Tout est committé et poussé sur **`github.com/stephanedenis/drave`** (privé),
 - bash — Find the node's listener and accept
 - bash — Move the bus listener before the accept and rebuild
 - bash — Re-test the network bus
-- … et 7 autres
+- … et 9 autres
 
 **Synthèse produite :**
 
-⏵ La porte était mal formée (le `\n` littéral) — le parseur l'a refusée, à raison
+⏵ État resumable écrit pour le prochain round, puis rapport
 
 ## 3. Travail accompli
 
@@ -2125,7 +2125,7 @@ Tout est committé et poussé sur **`github.com/stephanedenis/drave`** (privé),
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1017 autres
+- … et 1019 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2388,4 +2388,5 @@ Tout est committé et poussé sur **`github.com/stephanedenis/drave`** (privé),
 - Sprint clos sur vérification : les 23 portes du dépôt sont vertes (0 rouge), 95 tests  tools/portes.sh relancé après le sprint, terminé en 15 minutes (machine l
 - C3 : les délais par lien, et le fichier de relations humaines  C3 — la topologie déclare delai_ms, le moteur l'applique (pilote sur son lien sortant, nœud relai
 - C5bis : diffusion du bus par fichier de contrôle — le canal change la région du milieu  --bus-fichier F : le nœud RELIT le fichier avant chaque trame, donc un a
+- État resumable : la prochaine action en tête du fichier de sprint  Six chantiers classés par valeur mesurable pour occuper le temps imparti : C4 (horloges par r
 
