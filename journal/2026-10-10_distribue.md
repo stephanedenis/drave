@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-10.md](2026-10-10.md). Convention : `docs/organisation-du-depot.md`.
 
-## Commits du jour (23)
+## Commits du jour (24)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -31,6 +31,7 @@
 | 09:30 | `c749af2` | Verification apres v7/v8 et la fusion des ecritures : huit portes reparties vertes | `sprint-cerveau.md`, `MANIFEST.md`, `digest.md` (+1) |
 | 09:39 | `63203d7` | Inventaire des drapeaux en reparti : cinq agissent, trois inertes (deux attendus), un ouvert | `sprint-cerveau.md`, `MANIFEST.md`, `digest.md` (+2) |
 | 10:56 | `33676cb` | Journal : etapes DATEES par la trace de session (elles couvraient toute la session) | `2026-10-09_attention.md`, `2026-10-09_distribue.md`, `2026-10-09_divers.md` (+22) |
+| 13:16 | `eac873a` | C8 : la tete reflexe generalise (x5,7 du modele complet) — et deux pieges de protocole corriges | `etat-cerveau.md`, `2026-10-10.md`, `2026-10-10_apprentissage.md` (+17) |
 
 ## Chiffres du jour
 
@@ -71,10 +72,11 @@
 
 ## Sessions actives ce jour
 
-- `d31b3d9b` — Où en est-on (début 2026-10-08 09:11, 52.1 h) → [rapport](sessions/d31b3d9b/rapport.md) · [digest](sessions/d31b3d9b/digest.md)
+- `d31b3d9b` — Où en est-on (début 2026-10-08 09:11, 52.2 h) → [rapport](sessions/d31b3d9b/rapport.md) · [digest](sessions/d31b3d9b/digest.md)
 
 ## Mesures et rapports touchés
 
+- [reports/rapport-c8-generalisation.md](../reports/rapport-c8-generalisation.md)
 - [reports/rapport-campagne-benefices.md](../reports/rapport-campagne-benefices.md)
 
 <!-- notes -->

@@ -7,17 +7,26 @@
 # mesurable n'est donc pas « peut-on faire un réflexe ? » mais **« à partir de quelle
 # profondeur un réflexe tombe-t-il d'accord avec le modèle entier ? »**.
 #
-# CE QUE LA MESURE A RÉPONDU, ET ELLE EST NÉGATIVE : l'accord est de 0 % jusqu'à
+# CE QUE LA MESURE A RÉPONDÉ : avec la TÊTE DU MODÈLE, l'accord est de 0 % jusqu'à
 # 16 couches sur 24, 8,3 % à 20, et 100 % seulement à 24. Le diagnostic est dans la
 # même table : la COSINUS entre l'état tronqué et l'état final vaut 0,037 à 1 couche,
-# 0,130 à 16 et 1,000 à 24. Autrement dit, **l'état intermédiaire est presque
-# ORTHOGONAL à l'état final** : la tête du modèle est celle de sa dernière couche et
-# lit une direction que seules les dernières couches produisent.
+# 0,130 à 16 et 1,000 à 24 — **l'état intermédiaire est presque ORTHOGONAL à l'état
+# final**, et la tête du modèle lit une direction que seules les dernières couches
+# produisent.
+#
+# **CORRECTION DU 2026-10-10 — la conclusion « pas de sortie précoce utilisable » est
+# vraie de la TÊTE EMPRUNTÉE et fausse de l'ÉTAT** (voir la dernière section de cette
+# porte). Une sonde LINÉAIRE entraînée sur l'état de 16 couches lit le prochain jeton à
+# **40,8 %** (référence 4,0 %), et un adaptateur entraîné ramène la perplexité du chemin
+# tronqué de 697 572 à **85** là où le modèle complet vaut 15,02 — ×5,7 au lieu de
+# ×46 000. Le maillon faible était la TÊTE, pas la profondeur. Fiches :
+# `reports/rapport-c8-sonde-profondeur.md`, `reports/rapport-c8-tete-entrainee.md`,
+# `reports/rapport-c8-generalisation.md`.
 #
 # Ce que cette porte verrouille :
 #   1. un réflexe aussi profond que le modèle EST le modèle (accord 100 %) — sans cet
 #      invariant, la comparaison porterait sur deux calculs différents ;
-#   2. il n'y a PAS de sortie précoce utilisable : à 16 couches (2/3 de la
+#   2. avec la tête du modèle il n'y a pas de sortie précoce utilisable : à 16 couches (2/3 de la
 #      profondeur), l'accord reste sous 25 % ;
 #   3. la cause est la direction : à 16 couches, la cosinus avec l'état final est
 #      inférieure à 0,5 ;
@@ -92,4 +101,37 @@ print(f"  ✅ le gain de temps est réel : {rapide[4]:.1f} ms par jeton à {rapi
       f"contre {lent[4]:.1f} ms à {lent[0]} — {lent[4]/rapide[4]:.1f}× plus rapide, "
       f"pour {rapide[1]} % d'accord")
 PY
+echo "=== l'état contient l'information (sonde LINÉAIRE, pas la tête du modèle) ==="
+# LA CONCLUSION DE CETTE PORTE A ÉTÉ CORRIGÉE LE 2026-10-10 : l'accord de 0 % à 16 couches
+# mesure la TÊTE empruntée, pas la richesse de l'état. Une régression ridge sur ce même état
+# lit le prochain jeton bien au-dessus du hasard — et c'est cet invariant qui est verrouillé
+# ici, parce qu'il décide si C8 a un sens.
+PROF=${PROF:-16}                      # couches exécutées pour la capture
+NPOS=${NPOS:-256}                     # positions capturées (borne le temps de la porte)
+T2="$T/sonde"; mkdir -p "$T2"
+POS=$(seq -s, 4 $((NPOS - 1)))
+$D "$M" --ppl "$IDS" --limit "$NPOS" --ctx "$NPOS" --threads 8 \
+   --couches "0:$PROF" --tete-partielle --etat-sortie "$T2/etat" --etat-pos "$POS" \
+   > "$T2/capture.log" 2>&1
+SONDE=$(python3 tools/c8_sonde_lineaire.py --etats "$T2/etat" --ids "$IDS" --limite "$NPOS" \
+          --classes 256 2>&1)
+printf '%s\n' "$SONDE" | grep -E "sonde linéaire|classe majoritaire" | sed 's/^/  /'
+# LE CHIFFRE EST APRÈS LE DEUX-POINTS : « sonde linéaire (ridge λ=1.0) : 25.4 % » contient
+# « 1.0 » AVANT le score, et le premier essai a lu 1,0 % — un score de hasard, donc un échec
+# annoncé sur un résultat juste. Même famille que « % est un champ à part » dans les harnais.
+JUSTE=$(printf '%s' "$SONDE" | grep -oE "sonde linéaire.*: [0-9.]+ %" | grep -oE ": [0-9.]+ %" | grep -oE "[0-9.]+" | head -1)
+REF=$(printf '%s' "$SONDE" | grep -oE "classe majoritaire.*: [0-9.]+ %" | grep -oE ": [0-9.]+ %" | grep -oE "[0-9.]+" | head -1)
+[ -n "$JUSTE" ] && [ -n "$REF" ] || { echo "  ❌ la sonde n'a rien rendu (états ou ids manquants ?)"; exit 1; }
+python3 -c "
+import sys
+j, r = float('$JUSTE'), float('$REF')
+# 20 % est TRÈS au-dessus du hasard (0,39 %) et de la classe majoritaire (~5 %) : borne basse
+# qui laisse respirer la mesure (25 % sur 256 positions, 41 % sur 1 019) et qui échoue si
+# l'état ne portait plus l'information.
+if j < 20.0: sys.exit(f'  l etat ne porte plus l information : {j} % (reference {r} %)')
+if j < 3 * r: sys.exit(f'  la sonde ne depasse pas 3x la reference : {j} % contre {r} %')
+" || { echo "  ❌ l'état intermédiaire ne porte plus le prochain jeton (voir les fiches C8)"; exit 1; }
+echo "  ✅ l'état de $PROF couches CONTIENT le prochain jeton : $JUSTE % contre $REF % pour la classe majoritaire"
+echo "     (c'est la TÊTE qui ne sait pas le lire — reports/rapport-c8-sonde-profondeur.md)"
+
 rm -rf "$T"

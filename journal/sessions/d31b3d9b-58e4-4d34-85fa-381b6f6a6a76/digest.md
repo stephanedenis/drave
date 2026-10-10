@@ -37971,3 +37971,270 @@ fiche de généralisation réécrite
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\n# état\np = pathlib.Path(\"docs/etat-cerveau.md\"); s = p.read_text()\nold = \"\"\"**sur un texte JAMAIS VU** (7 morceaux entraînent, un 8ᵉ teste) le gain tient : **÷79** (208 438 → 2 632, modèle  … [5645 caractères tronqués]`
+
+  ```
+état mis à jour
+récit complété
+poussé
+eac873a C8 : la tete reflexe generalise (x5,7 du modele complet) — et deux pieges de protocole corriges
+  ```
+
+### 🤖 Assistant
+
+⏵ Question suivante de C8 : un AUTRE corpus — je regarde ce qui est disponible
+
+- **bash** `{"command": "ls -la /tmp/campagne24/*.txt 2>/dev/null | head -12; ls /tmp/campagne24/ | grep -i \"ids\" | head -10; ls models/*.gguf 2>/dev/null | head -5", "description": "Look for other corpora"}`
+
+  ```
+-rw-r--r--. 1 stephane stephane       63  9 oct 06:46 /tmp/campagne24/codestral_corrige_marqueur.txt
+-rw-r--r--. 1 stephane stephane  4000000  8 oct 21:22 /tmp/campagne24/corpus_code.txt
+-rw-r--r--. 1 stephane stephane   972439  8 oct 21:22 /tmp/campagne24/corpus_fr.txt
+-rw-r--r--. 1 stephane stephane   271958  8 oct 21:22 /tmp/campagne24/corpus_multi.txt
+-rw-r--r--. 1 stephane stephane      153  9 oct 03:22 /tmp/campagne24/exportes.txt
+-rw-r--r--. 1 stephane stephane   394684  8 oct 21:19 /tmp/campagne24/ids_0.5B-Q8.txt
+-rw-r--r--. 1 stephane stephane     3706  8 oct 23:41 /tmp/campagne24/ids_1024.txt
+-rw-r--r--. 1 stephane stephane    14626  8 oct 23:42 /tmp/campagne24/ids_4096.txt
+-rw-r--r--. 1 stephane stephane     1859  8 oct 23:40 /tmp/campagne24/ids_512.txt
+-rw-r--r--. 1 stephane stephane 17338751  9 oct 01:09 /tmp/campagne24/ids_b2_codestral-22B-corpus_code.txt
+-rw-r--r--. 1 stephane stephane  1731323  9 oct 01:39 /tmp/campagne24/ids_b2_codestral-22B-wikitext2_test.txt
+-rw-r--r--. 1 stephane stephane  5204592  9 oct 01:07 /tmp/campagne24/ids_b2_code.txt
+ids_0.5B-Q8.txt
+ids_1024.txt
+ids_4096.txt
+ids_512.txt
+ids_b2_codestral-22B-corpus_code.txt
+ids_b2_codestral-22B-wikitext2_
+… [144 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Test décisif : un AUTRE corpus (prose) — je capture ses états pour mesurer le transfert
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && wc -c /tmp/campagne24/ids_b2_prose.txt; head -c 120 /tmp/campagne24/ids_b2_prose.txt; echo; IDS=/tmp/campagne24/ids_b2_prose.txt T=/tmp/c8-prose timeout 3500 bash tools/c8_corpus.sh 30 1024 16 > /tmp/c8-prose.log 2>&1; echo \"CODE=$? … [112 caractères tronqués]`
+
+  ```
+started background job bash-38
+  ```
+
+### 🤖 Assistant
+
+⏵ Pendant la capture, je confronte les résultats C8 à la porte que le plan lui fixe
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"C8\" docs/plan-cerveau-complet.md | head -10", "description": "Find C8 in the plan"}`
+
+  ```
+153:### C8 — Périphérie (capteurs, effecteurs, réflexes)
+228:| **P5** | périphérie et réflexes (C8) | entrée constante ⇒ sortie constante ; tâche fermée mesurée | 3 sem. |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '153,175p' docs/plan-cerveau-complet.md", "description": "Read the C8 plan section"}`
+
+  ```
+### C8 — Périphérie (capteurs, effecteurs, réflexes)
+
+- **Cerveau** : rétine → nerf optique (1,2 × 10⁶ axones) ; moelle épinière qui décide seule.
+- **Moteur** : un banc vision (embedding de patchs) ; rien ne sort.
+- **Conception** : des **régions frontière** : entrée (flux continu, horloge propre) et
+  sortie (effecteur, avec délai) ; les **réflexes** sont des liens qui court-circuitent
+  le centre (une région répond à une entrée sans passer par le graphe profond).
+- **Interface** : `--entree <type:chemin>`, `--sortie <type:fichier>`, `--reflexe
+  <de:vers>`.
+- **Invariant** : une entrée constante produit une sortie constante (déterminisme).
+- **Validation** : une tâche fermée (contrôle d'un signal simple) où l'on mesure le
+  **nombre d'événements par décision** — la métrique du projet.
+- **Coût** : 3 semaines. **Risque** : moyen.
+
+### C9 — Latéralité et corps calleux
+
+- **Cerveau** : deux hémisphères, ~2 × 10⁸ axones, connexions homotopiques.
+- **Moteur** : on sait découper une plage de couches entre deux nœuds ; pas de
+  duplication miroir ni d'échange massif.
+- **Conception** : deux **instances jumelles** du même modèle, un lien
+  **homotopique** par couche (échange d'activatio
+… [158 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Note d'alignement : le C8 du plan est la PÉRIPHÉRIE (entrées/sorties + réflexes) — je précise ce qui est fait
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"docs/etat-cerveau.md\"); s = p.read_text()\nold = \"\"\"| **C8** | réflexe | 🟢 **la tête entraînée marche, et elle généralise** |\"\"\"\nnew = \"\"\"| **C8** | périphérie et réf … [1232 caractères tronqués]`
+
+  ```
+alignement C8 consigné
+  morceau 27 : jetons 74574..75598
+  morceau 28 : jetons 77336..78360
+  morceau 29 : jetons 80098..81122
+452
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -20 tools/porte-reflexe.sh", "description": "Read the reflex gate header"}`
+
+  ```
+#!/bin/bash
+# porte-reflexe.sh — la porte de la capacité C8 (premier pas) : le RÉFLEXE.
+#
+# LA QUESTION. Un réflexe médullaire ne remonte pas au cortex : il répond par un
+# chemin COURT. Dans le moteur, ce chemin existe déjà — `--couches 0,L` tronque le
+# modèle et `--tete-partielle` applique la tête à la fin de la plage. La question
+# mesurable n'est donc pas « peut-on faire un réflexe ? » mais **« à partir de quelle
+# profondeur un réflexe tombe-t-il d'accord avec le modèle entier ? »**.
+#
+# CE QUE LA MESURE A RÉPONDU, ET ELLE EST NÉGATIVE : l'accord est de 0 % jusqu'à
+# 16 couches sur 24, 8,3 % à 20, et 100 % seulement à 24. Le diagnostic est dans la
+# même table : la COSINUS entre l'état tronqué et l'état final vaut 0,037 à 1 couche,
+# 0,130 à 16 et 1,000 à 24. Autrement dit, **l'état intermédiaire est presque
+# ORTHOGONAL à l'état final** : la tête du modèle est celle de sa dernière couche et
+# lit une direction que seules les dernières couches produisent.
+#
+# Ce que cette porte verrouille :
+#   1. un réflexe aussi profond que le modèle EST le modèle (accord 100 %) — sans cet
+#      invariant, la comparaison porterait sur deux calculs différents ;
+#   2. il n'y a PAS de sortie
+… [45 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ La porte du réflexe conclut « pas de sortie précoce utilisable » — conclusion dépassée : je la corrige et j'y ajoute la sonde
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -22 tools/porte-reflexe.sh; grep -n \"^echo\\|^# [0-9]\" tools/porte-reflexe.sh | head -12", "description": "Inspect the reflex gate structure"}`
+
+  ```
+# 3. la cause est la direction, pas l'échelle
+c16 = [p for p in deux_tiers if p[0] == max(x[0] for x in deux_tiers)][0]
+if c16[3] >= 0.5:
+    sys.exit(f"  ❌ à {c16[0]} couches la cosinus avec l'état final vaut {c16[3]} : "
+             "l'explication par la direction ne tient pas")
+print(f"  ✅ la cause est la DIRECTION : cos(état tronqué, état final) = {c16[3]} à "
+      f"{c16[0]} couches (1,000 à la profondeur entière)")
+
+# 4. le gain de temps est réel
+rapide = min(pts)          # 1 couche : le réflexe le plus court
+lent = dernier             # toute la profondeur
+# `p[4]` est le temps (le cosinus est `p[3]`) : les confondre a produit un rapport de
+# 22,7× entre deux cosinus — attrapé parce que le message affichait « 0.0 ms ».
+if rapide[4] <= 0 or lent[4] / rapide[4] < 3.0:
+    sys.exit(f"  ❌ le gain de temps est trop faible pour que la mesure ait un sens : "
+             f"{lent[4]} ms contre {rapide[4]} ms")
+print(f"  ✅ le gain de temps est réel : {rapide[4]:.1f} ms par jeton à {rapide[0]} couche(s) "
+      f"contre {lent[4]:.1f} ms à {lent[0]} — {lent[4]/rapide[4]:.1f}× plus rapide, "
+      f"pour {rapide[1]} % d'accord")
+PY
+rm -rf "$T"
+11:# 16 couches sur 24, 8,3 % à 20, et 1
+… [457 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"tools/porte-reflexe.sh\"); s = p.read_text()\n\n# 1) corriger la CONCLUSION de l'en-tête (elle attribuait à l'état ce qui appartient à la tête)\nold = \"\"\"# CE QUE LA MESURE A … [4495 caractères tronqués]`
+
+  ```
+syntaxe OK
+            2        3.1 %          3.1 %     -0.009           10.6         9.78×
+            4        0.0 %          0.0 %      0.013           24.3         4.25×
+            6        0.0 %          0.0 %      0.047           32.1         3.21×
+            8        0.0 %          0.0 %      0.058           42.7         2.42×
+           12        0.0 %          0.0 %      0.083           72.2         1.43×
+           16        0.0 %          0.0 %      0.145           83.7         1.23×
+           20        6.2 %         15.6 %      0.320           84.3         1.23×
+           24      100.0 %        100.0 %      1.000          142.6         0.72×
+    ce que la courbe ne dit PAS : la sortie précoce est mesurée SANS tête dédiée — la tête du modèle est celle de sa DERNIÈRE couche, et rien ne dit qu'elle lit un état intermédiaire. Une tête entraînée pour la couche L changerait la réponse, et n'est pas mesurée ici. Et l'accord porte sur le jeton de plus forte probabilité. Un réflexe d'accord élevé peut être très mal calibré (distribution entière différente), et la perplexité d'un modèle tronqué n'est pas mesurée ici.
+    temps total       : 99.4 s
+  ✅ à 24 couches, le réflex
+… [511 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ La nouvelle section échoue (AssertionError) — je la débogue à la main
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^D=\\|^M=\\|^IDS=\\|^T=\" tools/porte-reflexe.sh | head; T2=/tmp/sonde-test; rm -rf $T2; mkdir -p $T2; POS=$(seq -s, 4 255)\n./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/campagne24/ids_0.5B-Q8. … [367 caractères tronqués]`
+
+  ```
+32:D=${D:-./drave-core/target/release/drave}
+33:M=${MODELE:-models/Qwen2.5-0.5B-Q8_0.gguf}
+34:IDS=${IDS:-/tmp/campagne24/ids_0.5B-Q8.txt}
+36:T=$(mktemp -d)
+253
+états : 251 positions × 896 canaux · corpus : 256 jetons
+cibles dans les 256 classes les plus fréquentes : 251 / 251 positions
+
+sonde linéaire (ridge λ=1.0) : 25.4 % de justes sur le TEST
+référence « toujours la classe majoritaire » : 4.8 %
+référence « hasard uniforme sur 256 classes » : 0.39 %
+référence « fréquence du jeton le plus fréquent du corpus » : 5.86 %
+
+VERDICT : l'état de la couche 16 CONTIENT le prochain jeton, linéairement.
+  ⇒ la tête empruntée (728 388 de perplexité) est bien le maillon faible :
+    C8 a un sens, et la suite est d'entraîner une tête NON linéaire par profondeur.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"assert\" tools/porte-reflexe.sh | head; grep -n \"python3 - \" tools/porte-reflexe.sh | head; sed -n '/l.état contient l.information/,/^rm -rf/p' tools/porte-reflexe.sh | head -30", "description": "Locate asserts and the ne … [11 caractères tronqués]`
+
+  ```
+46:python3 - "$T/r.txt" <<'PY' || exit 1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -c \"CORRECTION DU 2026-10-10\\|l'état contient l'information\" tools/porte-reflexe.sh; grep -n \"assert\" tools/c8_sonde_lineaire.py tools/c8_entrainer_tete.py | head; git log --oneline -1; git status --short | head -5", "descr … [42 caractères tronqués]`
+
+  ```
+0
+eac873a C8 : la tete reflexe generalise (x5,7 du modele complet) — et deux pieges de protocole corriges
+ M docs/etat-cerveau.md
+  ```
+
+### 🤖 Assistant
+
+⏵ Mon patch n'a pas été appliqué (assertion) — je reprends à partir du texte exact de la porte
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '10,18p' tools/porte-reflexe.sh | cat -A | head -12 | cut -c1-100", "description": "Inspect exact header text"}`
+
+  ```
+# CE QUE LA MESURE A RM-CM-^IPONDU, ET ELLE EST NM-CM-^IGATIVE : l'accord est de 0 % jusqu'M-CM- $
+# 16 couches sur 24, 8,3 % M-CM-  20, et 100 % seulement M-CM-  24. Le diagnostic est dans la$
+# mM-CM-*me table : la COSINUS entre l'M-CM-)tat tronquM-CM-) et l'M-CM-)tat final vaut 0,037 M-CM- 
+# 0,130 M-CM-  16 et 1,000 M-CM-  24. Autrement dit, **l'M-CM-)tat intermM-CM-)diaire est presque$
+# ORTHOGONAL M-CM-  l'M-CM-)tat final** : la tM-CM-*te du modM-CM-(le est celle de sa derniM-CM-(re 
+# lit une direction que seules les derniM-CM-(res couches produisent.$
+#$
+# Ce que cette porte verrouille :$
+#   1. un rM-CM-)flexe aussi profond que le modM-CM-(le EST le modM-CM-(le (accord 100 %) M-bM-^@M-^
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"tools/porte-reflexe.sh\")\nlignes = p.read_text(encoding=\"utf-8\").splitlines(keepends=True)\ndeb = next(i for i, l in enumerate(lignes) if l.startswith(\"# CE QUE LA MESURE A\ … [4104 caractères tronqués]`
+
+  ```
+porte corrigée et étendue : True True
+syntaxe OK
+  ✅ sur TOUTES les profondeurs jusqu'à 2/3 de la profondeur, le meilleur accord est 3.1 % (à 2 couches) : pas de sortie précoce utilisable
+  ✅ la cause est la DIRECTION : cos(état tronqué, état final) = 0.145 à 16 couches (1,000 à la profondeur entière)
+  ✅ le gain de temps est réel : 4.5 ms par jeton à 1 couche(s) contre 122.7 ms à 24 — 27.3× plus rapide, pour 0.0 % d'accord
+=== l'état contient l'information (sonde LINÉAIRE, pas la tête du modèle) ===
+  sonde linéaire (ridge λ=1.0) : 25.4 % de justes sur le TEST
+  référence « toujours la classe majoritaire » : 4.8 %
+  l etat ne porte plus l information : 1.0 % (reference 4.8 %)
+  ❌ l'état intermédiaire ne porte plus le prochain jeton (voir les fiches C8)
+  ```
+
+### 🤖 Assistant
+
+⏵ Bug d'extraction : mon motif prenait « λ=1.0 » pour le score — je corrige et je relance la porte
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"tools/porte-reflexe.sh\"); s = p.read_text()\nold = '''JUSTE=$(printf '%s' \"$SONDE\" | grep -oE \"sonde linéaire.*: [0-9.]+ %\" | grep -oE \"[0-9.]+\" | head -1)\nREF=$(printf  … [963 caractères tronqués]`
+
+  ```
+extraction corrigée
+  ✅ le gain de temps est réel : 4.4 ms par jeton à 1 couche(s) contre 142.4 ms à 24 — 32.4× plus rapide, pour 0.0 % d'accord
+=== l'état contient l'information (sonde LINÉAIRE, pas la tête du modèle) ===
+  sonde linéaire (ridge λ=1.0) : 25.4 % de justes sur le TEST
+  référence « toujours la classe majoritaire » : 4.8 %
+  ✅ l'état de 16 couches CONTIENT le prochain jeton : 25.4 % contre 4.8 % pour la classe majoritaire
+     (c'est la TÊTE qui ne sait pas le lire — reports/rapport-c8-sonde-profondeur.md)
+  ```
+
+### 🤖 Assistant
+
+⏵ Porte du réflexe étendue (elle verrouille maintenant que l'ÉTAT porte l'information) — je committe
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'MSG'\nPorte du reflexe : la conclusion « pas de sortie precoce utilisable » est corrigee, et l'invariant est verrouille\n\nLa porte concluait « il n'y a PAS de sortie precoce utilisable » a partir  … [1258 caractères tronqués]`
