@@ -2315,6 +2315,18 @@ couches ont donc besoin d'**être amplifiées** et les suivantes non ; autrement
 « balance » d'un transformeur n'est pas la même à toutes les profondeurs, et un profil appris
 par couche est un levier **mesuré** (−11,5 % sur un réglage, sans rien entraîner).
 
+**Et le bénéfice est LOCALISÉ : le profil complet, sur les 24 couches, à gain 0,75.**
+
+| couche | 0 | 1 | 2 | 3 | 4-16 | 17 | 19 | 21 | 23 |
+|---|---|---|---|---|---|---|---|---|---|
+| écart à la référence | **−11,5 %** | **−4,5 %** | **+9,2 %** | **+10,6 %** | ±1 % | +3,8 % | −0,1 % | +4,3 % | +5,7 % |
+
+**Seules les couches 0 et 1 gagnent à être amplifiées** ; les couches 2 et 3 **perdent
+beaucoup** (+9,2 % et +10,6 %, elles ne supportent pas d'être atténuées) ; les couches 4 à 16
+restent dans ±1 % (neutres), et seules 17, 21 et 23 repassent au-dessus de +3 %. Le
+déséquilibre n'est donc **pas réparti sur la profondeur : il est à l'ENTRÉE** — les deux
+premières couches ont besoin d'être amplifiées, et le reste du réseau est déjà à son point.
+
 **Conditions** : un seul modèle (0,5 B), 128 jetons, un seul jeu d'identifiants, le gain est
 appliqué à la SORTIE de la FFN d'une couche à la fois (les gains simultanés et un profil
 appris ne sont pas mesurés) ; l'optimum à 0,75 est un point de la grille (0,5 · 0,75 · 1,0),

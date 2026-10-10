@@ -290,9 +290,13 @@ Levier existant `--ffn-gain couche:valeur`. Référence (sans réglage) **14,649
 4. **FALAISE** : couche 0 à 0,25 → **996,04** (**68× pire**) : un gain trop faible à la
    première couche ne dégrade pas un peu, il **casse** le modèle.
 
-**Le profil optimal DÉCROÎT avec la profondeur** (0,75 puis 0,5 puis ≥ 1,0) : les premières
-couches ont besoin d'être amplifiées, les suivantes non. Un **profil appris par couche** est
-donc un levier mesuré, sans rien entraîner — et c'est une piste directe pour le dessin I.
+5. **Le profil complet sur les 24 couches à 0,75 LOCALISE l'effet** : couches 0 et 1
+   gagnent (−11,5 % et −4,5 %), couches 2 et 3 **perdent beaucoup** (+9,2 %, +10,6 %),
+   couches 4-16 sont **neutres** (±1 %), seules 17, 21, 23 repassent au-dessus de +3 %.
+   Le déséquilibre n'est donc **pas réparti : il est à l'ENTRÉE**. Un **profil appris par
+   couche** reste un levier mesuré (−11,5 % sans rien entraîner) — piste directe pour le
+   dessin I de `docs/modele-pour-drave.md` — mais il porte sur deux couches, pas sur
+   vingt-quatre.
 
 ---
 

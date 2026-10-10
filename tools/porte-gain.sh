@@ -88,4 +88,21 @@ if a < 2.0 * ref:
 print(f"  ✅ la falaise est réelle : {a} contre {ref} ({a/ref:.0f}× pire)")
 PY
 
+echo "=== 5. le bénéfice est LOCALISÉ aux deux premières couches ==="
+# Mesuré sur les 24 couches à 0,75 : seules les couches 0 (−11,5 %) et 1 (−4,5 %) gagnent ;
+# les couches 2 et 3 perdent beaucoup (+9,2 %, +10,6 %) et les suivantes restent dans ±1 %
+# (sauf 17, 21, 23 : +3,8 à +5,7 %). Le déséquilibre est donc à l'ENTRÉE, pas réparti.
+P0=$(ppl --ffn-gain "0:0.75"); P1=$(ppl --ffn-gain "1:0.75"); P5=$(ppl --ffn-gain "5:0.75")
+printf '  couche 0 : %s · couche 1 : %s · couche 5 : %s (référence %s)\n' "$P0" "$P1" "$P5" "$REF"
+python3 - "$P0" "$P1" "$P5" "$REF" <<'PY' || exit 1
+import sys
+p0, p1, p5, ref = (float(x) for x in sys.argv[1:5])
+if not (p0 < ref and p1 < ref):
+    sys.exit(f"  ❌ les couches 0 et 1 devraient gagner : {p0}, {p1} contre {ref}")
+if p5 < ref:
+    sys.exit(f"  ❌ la couche 5 gagne aussi ({p5} contre {ref}) : le bénéfice n'est pas localisé")
+print(f"  ✅ le bénéfice est à l'ENTRÉE : couches 0 et 1 à {p0} et {p1} (mieux que {ref}), "
+      f"couche 5 à {p5} (pas mieux)")
+PY
+
 rm -rf "$T"

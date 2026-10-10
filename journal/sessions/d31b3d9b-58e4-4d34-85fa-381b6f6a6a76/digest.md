@@ -29437,3 +29437,101 @@ couche 0 · gain 0.25 : 996.0390
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\n\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\na = \"## Annexe — manifeste des journaux\"\nsec = \"\"\"## 37. E4 — l'équilibre excitation/inhibition : l'hypothès … [6987 caractères tronqués]`
+
+  ```
+docs E4
+test result: ok. 122 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.32s
+d104da6 E4 : l'equilibre excitation/inhibition — l'hypothese est vraie dans UN SEUL sens
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 15 livré : E4 — l'équilibre excitation/inhibition, et un levier de −11,5 % SANS entraîner
+
+**Ce round** — 1 commit poussé, 122 tests verts, `porte-gain.sh` (nouvelle, 4 cas) verte. **Aucune ligne de moteur touchée** : le levier existait (`--ffn-gain couche:valeur`).
+
+L'hypothèse biologique E4 (« un réseau équilibré vit près d'un point où excitation et inhibition se compensent ») transposée en question mesurable : *existe-t-il un gain de la FFN, par couche, qui améliore la perplexité — et est-il intérieur ?* Référence **14,6496**.
+
+| gain | couche 0 | couche 1 | couche 12 | couche 18 |
+|---|---|---|---|---|
+| **1,0** | **14,6496** | **14,6496** | **14,6496** | **14,6496** |
+| 0,75 | **12,9635** | 13,9844 | — | — |
+| 0,5 | 14,1057 | **13,7907** | 14,9512 | 15,4868 |
+| 0,25 | **996,04** | 14,2423 | — | — |
+| 0,0 | 56 860 | — | 15,69 | 17,43 |
+| −0,5 | 70 350 | — | 17,12 | 21,20 |
+| −1,0 | 112 958 | — | 19,48 | 30,25 |
+
+1. **Invariant** : `--ffn-gain L:1.0` **EST** l'absence de réglage (14,6496 exactement, sur trois couches) — sans lui, aucune autre ligne ne comparerait quoi que ce soit.
+2. **Inhibition : RÉFUTÉE** — la courbe est monotone, tout gain < 1 dégrade, et de plus en plus. « Un peu d'inhibition fait du bien » est faux ici.
+3. **Amplification : optimum INTÉRIEUR et net sur les premières couches** — couche 0 à **0,75 → 12,9635**, soit **−11,5 %** ; couche 1 à 0,5 → −5,9 % ; couche 2 sans optimum utile.
+4. **Falaise** : couche 0 à 0,25 → **996,04**, **68× pire** — un gain trop faible à la première couche ne dégrade pas un peu, il **casse** le modèle.
+
+**Le plus intéressant** : le profil optimal **décroît avec la profondeur** (0,75 → 0,5 → ≥ 1,0). Les premières couches ont besoin d'être amplifiées, les suivantes non — la « balance » d'un transformeur n'est pas la même partout. Un **profil appris par couche** est donc un levier **mesuré, sans rien entraîner**, et c'est une piste directe pour le dessin **I** de `docs/modele-pour-drave.md`.
+
+**Bilan** : 15 rounds, **22 portes** toutes vertes, 122 tests. L'objectif reste **actif**.
+
+
+## Tour 59
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 mémoire épisodique, C7 consolidation, C8 périphérie, C9 latéralité, C10 budgets, et la diffusion réseau du bus de C5 ; (b) les expériences E2-E9 de docs/biologie-pour-drave.md et docs/hebbien-differentiel-et-biologie.md ; (c) les dessins de modèle H/I/J de docs/modele-pour-drave.md ; (d) les manques du registre docs/manques.md (noyau de listes pour les experts, noyau de listes GPU, encodeurs) — l'implémenter ou la mesurer, la doter d'une porte vérifiable, la documenter, commiter, pousser, et enchaîner immédiatement sur la suivante. Contraintes : les 23 portes du dépôt et tous les tests restent verts (porte-flux.sh après toute modification du chemin d'exécution), le profil release reste le binaire de mesure, le crate reste std seul, et docs/sprint-cerveau.md reste l'état resumable mis à jour à chaque round. Ne jamais s'arrêter faute de tâches planifiées : en inventer de nouvelles, mesurables, plutôt que d'attendre."
+Round: 16/60
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 16 : le profil par COUCHE — à quelle profondeur le gain 0,75 cesse-t-il d'aider ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for L in $(seq 0 23); do P=$(./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/campagne24/ids_0.5B-Q8.txt --limit 128 --ctx 512 --threads 8 --ffn-gain \"$L:0.75\" 2>&1 | grep -oE \"perplexité [0-9.]+ sur\" |  … [307 caractères tronqués]`
+
+  ```
+couche  0 · gain 0,75 :  12.9635  -11.51 %
+  couche  1 · gain 0,75 :  13.9844   -4.54 %
+  couche  2 · gain 0,75 :  15.9977   +9.20 %
+  couche  3 · gain 0,75 :  16.1966  +10.56 %
+  couche  4 · gain 0,75 :  14.7330   +0.57 %
+  couche  5 · gain 0,75 :  14.7526   +0.70 %
+  couche  6 · gain 0,75 :  14.8151   +1.13 %
+  couche  7 · gain 0,75 :  14.7191   +0.47 %
+  couche  8 · gain 0,75 :  14.5860   -0.43 %
+  couche  9 · gain 0,75 :  14.6412   -0.06 %
+  couche 10 · gain 0,75 :  14.6853   +0.24 %
+  couche 11 · gain 0,75 :  14.7365   +0.59 %
+  couche 12 · gain 0,75 :  14.7579   +0.74 %
+  couche 13 · gain 0,75 :  14.8264   +1.21 %
+  couche 14 · gain 0,75 :  14.7401   +0.62 %
+  couche 15 · gain 0,75 :  14.7257   +0.52 %
+  couche 16 · gain 0,75 :  14.8171   +1.14 %
+  couche 17 · gain 0,75 :  15.2101   +3.83 %
+  couche 18 · gain 0,75 :  14.9364   +1.96 %
+  couche 19 · gain 0,75 :  14.6344   -0.10 %
+  couche 20 · gain 0,75 :  14.7858   +0.93 %
+  couche 21 · gain 0,75 :  15.2850   +4.34 %
+  couche 22 · gain 0,75 :  14.7463   +0.66 %
+  couche 23 · gain 0,75 :  15.4796   +5.67 %
+  ```
+
+### 🤖 Assistant
+
+⏵ L'effet est LOCALISÉ aux couches 0-1 (−11,5 % et −4,5 %) ; couches 2-3 dégradées, le reste neutre
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"tools/porte-gain.sh\")\ns = p.read_text()\na = '''rm -rf \"$T\"'''\nb = '''echo \"=== 5. le bénéfice est LOCALISÉ aux deux premières couches ===\"\n# Mesuré sur les 24 couches à … [1223 caractères tronqués]`
+
+  ```
+cas 5 ajoute
+  gain 0,5 : 14.1057 · 0,75 : 12.9635 · 1,5 : 15.4298
+  ✅ optimum intérieur : 12.9635 contre 14.1057, 15.4298 et 14.6496 sans réglage (11.5 % de mieux)
+=== 4. la FALAISE : 0,25 à la couche 0 casse le modèle ===
+  gain 0,25 : 996.0390
+  ✅ la falaise est réelle : 996.039 contre 14.6496 (68× pire)
+=== 5. le bénéfice est LOCALISÉ aux deux premières couches ===
+  couche 0 : 12.9635 · couche 1 : 13.9844 · couche 5 : 14.7526 (référence 14.6496)
+  ✅ le bénéfice est à l'ENTRÉE : couches 0 et 1 à 12.9635 et 13.9844 (mieux que 14.6496), couche 5 à 14.7526 (pas mieux)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\n\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\na = \"\"\"**Conditions** : un seul modèle (0,5 B), 128 jetons, un seul jeu d'identifiants, le gain est\nappliqué à … [3982 caractères tronqués]`

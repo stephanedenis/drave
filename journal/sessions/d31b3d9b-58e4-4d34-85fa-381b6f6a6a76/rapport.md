@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 46.5 h |
-| Tours | 58 |
-| Messages | 1840 |
-| Appels d'outils | 1722 |
+| Durée | 46.6 h |
+| Tours | 59 |
+| Messages | 1845 |
+| Appels d'outils | 1725 |
 | Fichiers touchés | 61 |
-| Commandes | 1472 |
+| Commandes | 1475 |
 | Sous-agents | 3 |
-| Commits | 148 |
+| Commits | 149 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -151,6 +151,8 @@
 **Tour 57** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 **Tour 58** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
+
+**Tour 59** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -2607,7 +2609,42 @@ J'ai réécrit le bloc **▶ PROCHAINE ACTION** de `docs/sprint-cerveau.md` pour
 
 **Synthèse produite :**
 
-⏵ Optimum INTÉRIEUR trouvé : gain 0,75 à la couche 0 → **12,96 contre 14,65 (−11,5 %)**
+⏵ Round 15 livré : E4 — l'équilibre excitation/inhibition, et un levier de −11,5 % SANS entraîner
+
+**Ce round** — 1 commit poussé, 122 tests verts, `porte-gain.sh` (nouvelle, 4 cas) verte. **Aucune ligne de moteur touchée** : le levier existait (`--ffn-gain couche:valeur`).
+
+L'hypothèse biologique E4 (« un réseau équilibré vit près d'un point où excitation et inhibition se compensent ») transposée en question mesurable : *existe-t-il un gain de la FFN, par couche, qui améliore la perplexité — et est-il intérieur ?* Référence **14,6496**.
+
+| gain | couche 0 | couche 1 | couche 12 | couche 18 |
+|---|---|---|---|---|
+| **1,0** | **14,6496** | **14,6496** | **14,6496** | **14,6496** |
+| 0,75 | **12,9635** | 13,9844 | — | — |
+| 0,5 | 14,1057 | **13,7907** | 14,9512 | 15,4868 |
+| 0,25 | **996,04** | 14,2423 | — | — |
+| 0,0 | 56 860 | — | 15,69 | 17,43 |
+| −0,5 | 70 350 | — | 17,12 | 21,20 |
+| −1,0 | 112 958 | — | 19,48 | 30,25 |
+
+1. **Invariant** : `--ffn-gain L:1.0` **EST** l'absence de réglage (14,6496 exactement, sur trois couches) — sans lui, aucune autre ligne ne comparerait quoi que ce soit.
+2. **Inhibition : RÉFUTÉE** — la courbe est monotone, tout gain < 1 dégrade, et de plus en plus. « Un peu d'inhibition fait du bien » est faux ici.
+3. **Amplification : optimum INTÉRIEUR et net sur les premières couches** — couche 0 à **0,75 → 12,9635**, soit **−11,5 %** ; couche 1 à 0,5 → −5,9 % ; couche 2 sans optimum utile.
+4. **Falaise** : couche 0 à 0,25 → **996,04**, **68× pire** — un gain trop faible à la première couche ne dégrade pas un peu, il **casse** le modèle.
+
+**Le plus intéressant** : le profil optimal **décroît avec la profondeur** (0,75 → 0,5 → ≥ 1,0). Les premières couches ont besoin d'être amplifiées, les suivantes non — la « balance » d'un transformeur n'est pas la même partout. Un **profil appris par couche** est donc un levier **mesuré, sans rien entraîner**, et c'est une piste directe pour le dessin **I** de `docs/modele-pour-drave.md`.
+
+**Bilan** : 15 rounds, **22 portes** toutes vertes, 122 tests. L'objectif reste **actif**.
+
+### Tour 59 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Measure the 0.75 gain across all layers
+- bash — Add the localization case and rerun
+- bash — Document and commit the localization
+
+**Synthèse produite :**
+
+⏵ L'effet est LOCALISÉ aux couches 0-1 (−11,5 % et −4,5 %) ; couches 2-3 dégradées, le reste neutre
 
 ## 3. Travail accompli
 
@@ -2725,7 +2762,7 @@ J'ai réécrit le bloc **▶ PROCHAINE ACTION** de `docs/sprint-cerveau.md` pour
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1432 autres
+- … et 1435 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3020,5 +3057,6 @@ J'ai réécrit le bloc **▶ PROCHAINE ACTION** de `docs/sprint-cerveau.md` pour
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib p = pathlib.Path("docs/sprint-cerveau.md") s = p.read_text() a = """| 1
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 
