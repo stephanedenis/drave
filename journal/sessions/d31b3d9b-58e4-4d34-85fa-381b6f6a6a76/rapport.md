@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 38.8 h |
+| Durée | 38.9 h |
 | Tours | 44 |
-| Messages | 1576 |
-| Appels d'outils | 1486 |
+| Messages | 1580 |
+| Appels d'outils | 1490 |
 | Fichiers touchés | 61 |
-| Commandes | 1239 |
+| Commandes | 1243 |
 | Sous-agents | 3 |
-| Commits | 127 |
+| Commits | 128 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2058,7 +2058,7 @@ Je continue sur cette liste — il
 
 ### Tour 44 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1749 caractères tronqués]
 
-*219 appels d'outils.* Actions notables :
+*223 appels d'outils.* Actions notables :
 
 - bash — Implement per-region step counters and the step bound
 - bash — Write and run the clock/step-bound gate
@@ -2074,11 +2074,11 @@ Je continue sur cette liste — il
 - bash — Extend trace format to v2 with timestamps
 - bash — Add merge, clock drift, link verification
 - bash — Rewrite link pairing and build
-- … et 196 autres
+- … et 200 autres
 
 **Synthèse produite :**
 
-⏵ C6 : l'expansion améliore aussi la localisation (Δ 26 → 2) — je complète et commite
+⏵ C7 : la consolidation RÉPÉTÉE atteint un point fixe exact (0,00e0) dès le 2e cycle
 
 ## 3. Travail accompli
 
@@ -2196,7 +2196,7 @@ Je continue sur cette liste — il
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1199 autres
+- … et 1203 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2471,4 +2471,5 @@ Je continue sur cette liste — il
 - C8 pas 1 : le réflexe — un chemin court qui ne sait RIEN, et la cause mesurée  Un réflexe est un chemin COURT (la moelle épinière ne remonte pas au cortex). Le 
 - C9 x C1 : où couper le modèle — le point de coupe est neutre, sauf à cause du lien  C1 (découpage) et C9 (pont) avaient chacun été mesurés à UN SEUL endroit : 1
 - C6 suite : la mémoire LOCALISE — l'erreur se mesure en jetons, et elle est petite  Savoir si la mémoire rend l'épisode EXACT est une chose ; savoir à quelle DIS
+- C7 suite : le rejeu RÉPÉTÉ est un point fixe, pas une usure (erreur exactement 0,00e0)  Question laissée ouverte par le premier pas de C7 : un prototype-exempla
 

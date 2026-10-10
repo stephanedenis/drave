@@ -211,6 +211,39 @@ if ce > 30.0:
 print("  ✅ à compression comparable, l'exemplaire rappelle : %.1f %% contre %.1f %%" % (re_, rm))
 PYCONS
 
+echo "=== 8. consolidation RÉPÉTÉE : c'est un POINT FIXE dès le 2e cycle ==="
+# Rejouer une mémoire déjà consolidée ne doit ni la comprimer davantage ni l'user. La
+# mesure le dit de façon exacte : à partir du 2e cycle, l'erreur de reconstruction est
+# 0,00e0 (chaque prototype est son propre exemplaire) et le rappel d'appartenance ne
+# bouge plus. Un point fixe, et pas une dégradation lente.
+S4=$(timeout 1200 "$D" "$M" --episodique-essai "$N" --episodique-k "$K6" \
+     --episodique-expansion "$EXP" --episodique-decorreler --episodique-normaliser \
+     --episodique-cycles 4 --episodique-cycles-seuil 4 \
+     --ids-file "$IDS" --ctx 512 --threads 8 2>&1) || { echo "  ❌ l'essai a échoué"; exit 1; }
+printf '%s\n' "$S4" | sed -n '/consolidation RÉPÉTÉE/,/^$/p' | head -7 | sed 's/^/  /'
+printf '%s\n' "$S4" > "$T/s4.txt"
+python3 - "$T/s4.txt" <<'PYFIXE' || exit 1
+import re, sys
+t = open(sys.argv[1]).read()
+bloc = t.split("consolidation RÉPÉTÉE")[1].split("consolidation par rejeu")[0]
+lignes = [l.split() for l in bloc.splitlines() if re.match(r"^\s+\d+\s+\d+", l)]
+if len(lignes) < 3:
+    sys.exit(f"  ❌ cycles illisibles ({len(lignes)} lignes)")
+# champs : cycle prototypes compression % rappel % erreur
+etats = [(int(c[0]), int(c[1]), float(c[2]), float(c[4]), c[6]) for c in lignes]
+c1 = etats[0]
+for c in etats[1:]:
+    if c[1] != c1[1] or abs(c[2] - c1[2]) > 1e-9 or abs(c[3] - c1[3]) > 1e-9:
+        sys.exit(f"  ❌ la consolidation n'est pas un point fixe : cycle {c[0]} → "
+                 f"{c[1]} prototypes, {c[2]} %, rappel {c[3]} % (cycle 1 : {c1[1]}, "
+                 f"{c1[2]} %, {c1[3]} %)")
+    if c[4] != "0.00e0":
+        sys.exit(f"  ❌ au cycle {c[0]} l'erreur devrait être exactement nulle, "
+                 f"elle est de {c[4]}")
+print(f"  ✅ point fixe atteint dès le cycle 2 : {c1[1]} prototypes, {c1[2]} % du magasin, "
+      f"rappel {c1[3]} %, erreur 0.00e0 sur les cycles suivants")
+PYFIXE
+
 echo
 echo "  ✅ la porte C6 est franchie — et elle dit ses conditions : $N états consécutifs d'un"
 echo "     seul texte, k=$K. Sans expansion, l'index n'élude RIEN (100 % du magasin) ; avec"

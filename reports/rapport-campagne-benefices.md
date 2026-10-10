@@ -1640,10 +1640,26 @@ une opinion sur la mémoire, c'est une propriété de la clé. Cela reproduit, a
 mécanisme mesuré, le débat classique entre théorie du prototype et théorie des
 exemplaires — et tranche dans le sens des exemplaires *pour cette forme de mémoire*.
 
-**Ce qui reste non mesuré, et c'est écrit** : si un prototype-exemplaire continue de
-servir après plusieurs cycles de rejeu (consolidation itérative), si la fusion
-améliore ou dégrade le **rappel depuis un indice bruité** (ici l'indice est toujours
-non dégradé), et la reconstruction de l'état d'origine à partir d'une clé dilatée.
+**Et le rejeu RÉPÉTÉ est un POINT FIXE, pas une usure** — la question laissée
+ouverte au-dessus, maintenant mesurée (mode exemplaire, seuil 4, 300 états) :
+
+| cycle | prototypes | compression | rappel (vs épisodes d'origine) | erreur |
+|---|---|---|---|---|
+| 1 | 107 | 35,7 % | 93,0 % | 4,37e-1 |
+| 2 | 107 | 35,7 % | 93,0 % | **0,00e0** |
+| 3 à 8 | 107 | 35,7 % | 93,0 % | **0,00e0** |
+
+Rien ne bouge à partir du deuxième cycle, et l'erreur est **exactement nulle** : après
+une consolidation, chaque prototype est son propre exemplaire, et deux prototypes ne
+partagent plus assez de canaux pour être fusionnés. Le rappel est mesuré contre les
+épisodes **d'origine** (les appartenances sont composées à travers les cycles), et il
+reste à 93,0 % — donc **rejouer une mémoire ne l'use pas**, contrairement à ce que le
+rejeu fait aux poids quand la règle est mauvaise (voir plus haut : 8,8246 contre
+8,3869). La stabilité est une propriété de la règle de fusion, et elle est exacte.
+
+**Ce qui reste non mesuré, et c'est écrit** : si la fusion améliore ou dégrade le
+**rappel depuis un indice bruité** (ici l'indice est toujours non dégradé), et la
+reconstruction de l'état d'origine à partir d'une clé dilatée.
 
 **Conditions** : Qwen2.5-0.5B-Q8, expansion par hachage (8 entrées signées par canal),
 égalisation calculée **sur le magasin** (en déploiement il faut donc la stocker avec

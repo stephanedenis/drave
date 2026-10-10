@@ -180,6 +180,8 @@ il faut écrire DRAVE_{} (voir docs/histoire.md). Rien n'a été appliqué.", &v
     if opt.episodique_k == 0 { opt.episodique_k = 64; }
     if opt.episodique_pas == 0 { opt.episodique_pas = 1; }
     if opt.episodique_connexions == 0 { opt.episodique_connexions = 8; }
+    if opt.episodique_cycles == 0 { opt.episodique_cycles = 1; }
+    if opt.episodique_cycles_seuil == 0 { opt.episodique_cycles_seuil = 4; }
     let _ = MODELE.set(args[1].clone());
     // Plusieurs modes demandés : l'aiguillage en retient UN, dans un ordre
     // arbitraire, et le disait pas. On le dit.
@@ -635,6 +637,11 @@ struct Options {
     episodique_normaliser: bool,
     /// C8 : combien de positions mesurer pour l'essai de RÉFLEXE (sortie précoce).
     reflexe_essai: usize,
+    /// C7 : nombre de CYCLES de consolidation par rejeu (>1 pour la consolidation
+    /// répétée : ce que la mémoire devient quand on la rejoue).
+    episodique_cycles: usize,
+    /// C7 : seuil de fusion (canaux partagés) des cycles de consolidation.
+    episodique_cycles_seuil: usize,
     /// C9/C10 : nombre de FIBRES du pont entre la région locale et la région
     /// distante. 0 = pont entier (aucun écrêtage). Ne garder que les K plus grandes
     /// amplitudes de l'état échangé, c'est limiter la bande passante du lien — la
@@ -827,6 +834,8 @@ fn analyser(args: &[String]) -> Options {
             "--episodique-textes" => { o.episodique_textes = Some(suivant(i).clone()); 2 }
             "--pont-k" => { o.pont_k = suivant(i).parse().unwrap_or(0); 2 }
             "--reflexe-essai" => { o.reflexe_essai = suivant(i).parse().unwrap_or(0); 2 }
+            "--episodique-cycles" => { o.episodique_cycles = suivant(i).parse().unwrap_or(1); 2 }
+            "--episodique-cycles-seuil" => { o.episodique_cycles_seuil = suivant(i).parse().unwrap_or(4); 2 }
             // C5 : le bus de modulation, canal par canal.
             "--bus" => { o.bus.push(suivant(i).clone()); 2 }
             "--bus-serveur" => { o.bus_serveur = suivant(i).parse().ok(); 2 }
@@ -6341,6 +6350,52 @@ indice connu : ce magasin ne sait pas refuser, il rend toujours son meilleur can
         }
         println!("{ligne}");
     }
+    // --- 4bis. CONSOLIDATION RÉPÉTÉE (plusieurs cycles de rejeu).
+    // Un seul cycle dit ce qu'une fusion coûte ; plusieurs cycles disent ce que la
+    // mémoire devient quand on la rejoue — et c'est la question du sommeil : le rejeu
+    // consolidant est-il neutre, ou use-t-il le souvenir ? Le point délicat est le
+    // RAPPEL : après deux cycles, les identifiants des prototypes sont ceux du premier
+    // magasin, pas ceux des épisodes d'origine. Il faut donc composer les
+    // appartenances, sinon on mesurerait la fidélité au magasin intermédiaire au lieu
+    // de la fidélité aux épisodes RÉELLEMENT vécus.
+    if opt.episodique_cycles > 1 {
+        println!();
+        println!("  consolidation RÉPÉTÉE (mode exemplaire, seuil {}) :", opt.episodique_cycles_seuil);
+        println!("  {:>7}  {:>11}  {:>12}  {:>10}  {:>18}", "cycle", "prototypes",
+                 "compression", "rappel", "erreur");
+        let mut courant = m.clone();
+        // `origine[i]` = les épisodes d'origine absorbés par le prototype i du magasin
+        // courant. Au premier cycle, c'est la liste des membres ; ensuite, on compose.
+        let mut origine: Vec<Vec<u64>> = (0..courant.len()).map(|i| vec![i as u64]).collect();
+        for cycle in 1..=opt.episodique_cycles {
+            let (suivant, rap) = courant.consolider_mode(opt.episodique_cycles_seuil,
+                                                        episodique::Prototype::Exemplaire);
+            let mut nouvelle: Vec<Vec<u64>> = Vec::with_capacity(suivant.len());
+            for membres in rap.membres.iter() {
+                let mut v: Vec<u64> = Vec::new();
+                for old in membres {
+                    if let Some(l) = origine.get(*old as usize) { v.extend_from_slice(l); }
+                }
+                v.sort_unstable();
+                v.dedup();
+                nouvelle.push(v);
+            }
+            origine = nouvelle;
+            courant = suivant;
+            // Le rappel d'appartenance est mesuré contre les épisodes D'ORIGINE.
+            let mut ok = 0usize;
+            for (i, e) in cles.iter().enumerate() {
+                if let Some(l) = courant.lire(e) {
+                    if origine.get(l.id as usize).map(|v| v.contains(&(i as u64)))
+                        .unwrap_or(false) { ok += 1; }
+                }
+            }
+            println!("  {cycle:>7}  {:>11}  {:>11.1} %  {:>9.1} %  {:>17.2e}", courant.len(),
+                     100.0 * courant.len() as f64 / cles.len() as f64,
+                     100.0 * ok as f64 / cles.len() as f64, rap.erreur_moyenne);
+        }
+    }
+
     // --- 5. CONSOLIDATION PAR REJEU (C7, premier pas).
     // Rejouer les épisodes et fusionner ceux dont les clés co-activent : deux
     // souvenirs que le même indice rappelle n'en sont qu'un. Ce qui se mesure est le

@@ -448,6 +448,15 @@ obtient par normalisation et inhibition latérale) fait tomber la séparation à
 lecture contre N × 64 comparaisons ⇒ rentable au-delà de **N ≈ 2 048 épisodes**, et
 **en dessous, le balayage complet est moins cher**. Le programme l'écrit lui-même.
 
+**C7 suite — le rejeu RÉPÉTÉ est un POINT FIXE, pas une usure :** mesure sur 8 et 12
+cycles (seuils 4 et 8) — du cycle 2 au cycle 12, **rien ne bouge** : mêmes 107 (ou 154)
+prototypes, même compression (35,7 % / 51,3 %), même rappel d'appartenance (93,0 % /
+95,3 %) mesuré **contre les épisodes d'origine** (appartenances composées à travers les
+cycles), et une erreur **exactement nulle (0,00e0)**. Après une consolidation, chaque
+prototype est son propre exemplaire : plus rien à fusionner. **Rejouer une mémoire ne
+l'use pas** — contrairement au rejeu vers les poids avec une mauvaise règle (8,8246
+contre 8,3869). Cas 8 dans `porte-episodique.sh`.
+
 **C6 suite — la mémoire LOCALISE, et la mesure est en jetons** : ajout de l'erreur
 **moyenne en jetons** entre l'épisode rendu et l'épisode interrogé (les épisodes sont
 numérotés dans l'ordre du texte, donc la distance entre identifiants *est* une
@@ -772,6 +781,7 @@ bus (le format de la ligne de contrôle est écrit, le transport reste à câble
 |---|---|
 | 9/10 17 h 10 | **C1a** : module `topologie.rs`, validation stricte, plan, 8 tests, suite à 85 tests. |
 | 9/10 17 h 20 | **C1b pas 1** : la topologie pilote le découpage · porte `tools/porte-topologie.sh` **TENUE** (même chiffre, écart 0,00e0) · deux refus vérifiés. |
+| 10/10 10 h 05 | **C7 suite — rejeu répété = point fixe** : du cycle 2 au cycle 12, mêmes prototypes, même compression, même rappel contre les épisodes d'origine, et erreur **exactement 0,00e0**. Rejouer une mémoire ne l'use pas. Cas 8 (`--episodique-cycles`). |
 | 10/10 09 h 35 | **C6 suite — la mémoire localise** : erreur moyenne **en jetons** entre l'épisode rendu et l'interrogé. À N=300 : Δ=2 à 50 % de dégradation, 24 à 75 %. À **N=2 048** : Δ=**11 jetons à 50 %** (0,54 % du texte), 86 à 75 %, rappel 95,4 %, **round-trip 2 048/2 048**, élagage 81 %. La précision RELATIVE s'améliore avec la taille : quand la mémoire se trompe, elle se trompe de PRÈS. Cas 3bis dans `porte-episodique.sh`. |
 | 10/10 09 h 00 | **C9 × C1 — où couper ?** Lien sans perte : **8 points de coupe, une seule perplexité (113,0068)**. Lien encodé : 8,9 % d'écart entre les coupes (108,87 à 118,53). Coût d'un pont de 448 fibres : **+0,52 % après 18 couches, +2,81 % après 12, +17,09 % après 15** — facteur 30 ⇒ **couper tard**. Porte 3 cas ; elle a attrapé son propre défaut (pont asymétrique, +4,92 % au lieu de +2,81 %). |
 | 10/10 08 h 20 | **C8 (pas 1)** : le réflexe mesuré comme sortie précoce. `--reflexe-essai` : accord **0 % jusqu'à 16 couches sur 24**, 6,2 % à 20, **100 % à 24** (le réflexe EST le modèle). Cause mesurée : **cos(état tronqué, état final) = 0,044 / 0,145 / 1,000** à 1 / 16 / 24 couches — l'état intermédiaire est presque orthogonal au final, donc la tête de la dernière couche ne peut pas le lire. Gain de temps réel (18,5×). Manque écrit : une tête dédiée par profondeur. Porte 4 cas. |

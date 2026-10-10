@@ -25269,3 +25269,69 @@ code=0
 ⏵ C6 : l'expansion améliore aussi la localisation (Δ 26 → 2) — je complète et commite
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\na = \"\"\"| N | rappel 25 % | rappel 50 % | rappel 75 % | Δ à 50 % | Δ à 75 % | candidats examinés |\n|---|---|---|- … [2932 caractères tronqués]`
+
+  ```
+table completee
+41afe42 C6 suite : la mémoire LOCALISE — l'erreur se mesure en jetons, et elle est petite
+  ```
+
+### 🤖 Assistant
+
+⏵ C7 suite : la consolidation RÉPÉTÉE dégrade-t-elle la mémoire ? J'ajoute les cycles de rejeu
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/c7_cycles.py <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\n\na = \"\"\"    // --- 5. CONSOLIDATION PAR REJEU (C7, premier pas).\"\"\"\nb = \"\"\"    // --- 4bis. CONSOLIDATION  … [4434 caractères tronqués]`
+
+  ```
+cycles de consolidation
+BUILD
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --episodique-essai 300 --episodique-k 64 --episodique-expansion 16384 --episodique-decorreler --episodique-normaliser --episodique-cycles 8 --episodique-cycl … [582 caractères tronqués]`
+
+  ```
+consolidation RÉPÉTÉE (mode exemplaire, seuil 4) :
+    cycle   prototypes   compression      rappel              erreur
+        1          107         35.7 %       93.0 %            4.37e-1
+        2          107         35.7 %       93.0 %             0.00e0
+        3          107         35.7 %       93.0 %             0.00e0
+        4          107         35.7 %       93.0 %             0.00e0
+        5          107         35.7 %       93.0 %             0.00e0
+        6          107         35.7 %       93.0 %             0.00e0
+        7          107         35.7 %       93.0 %             0.00e0
+        8          107         35.7 %       93.0 %             0.00e0
+
+  consolidation par rejeu (fusion des épisodes qui co-activent) :
+  prototype MOYENNE (un point abstrait) :
+=== seuil 8 ===
+  consolidation RÉPÉTÉE (mode exemplaire, seuil 8) :
+    cycle   prototypes   compression      rappel              erreur
+        1          154         51.3 %       95.3 %            2.75e-1
+        2          154         51.3 %       95.3 %             0.00e0
+        3          154         51.3 %       95.3 %             0.00e0
+        4          154         51.3 %       95.3 %             
+… [566 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ C7 : la consolidation RÉPÉTÉE atteint un point fixe exact (0,00e0) dès le 2e cycle
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"tools/porte-episodique.sh\")\ns = p.read_text()\na = '''echo\necho \"  ✅ la porte C6 est franchie'''\nb = '''echo \"=== 8. consolidation RÉPÉTÉE : c'est un POINT FIXE dès le 2e  … [2301 caractères tronqués]`
+
+  ```
+cas 8 ajoute
+  ✅ et l'erreur croît avec la dégradation (0 → 71 jetons) : quand la mémoire se trompe, elle se trompe de PRÈS
+=== 4. un indice jamais écrit doit être moins bien retrouvé ===
+  ✅ connu 64.0 > jamais écrit 41.5 : le magasin distingue « je me souviens » de « ça ressemble »
+=== 5. à petit k, les collisions EXPLIQUENT les échecs de round-trip ===
+  ✅ 81 échecs, tous expliqués : 81 collisions, 0 égalités de recouvrement
+=== 6. expansion + égalisation : l'index doit ÉLUDER pour de vrai ===
+  ✅ round-trip exact (300/300), séparation 0.6 % de la clé, élagage 83 % (51 candidats), rappel 25 % : 100.0 %
+=== 7. consolidation par rejeu : l'EXEMPLAIRE doit battre la MOYENNE ===
+  ✅ à compression comparable, l'exemplaire rappelle : 87.0 % contre 22.3 %
+=== 8. consolidation RÉPÉTÉE : c'est un POINT FIXE dès le 2e cycle ===
+  ✅ point fixe atteint dès le cycle 2 : 107 prototypes, 35.7 % du magasin, rappel 93.0 %, erreur 0.00e0 sur les cycles suivants
+  ✅ la porte C6 est franchie — et elle dit ses conditions : 300 états consécutifs d'un
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\n\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\na = \"\"\"**Ce qui reste non mesuré, et c'est écrit** : si un prototype-exemplaire continue de\nservir après plusi … [5042 caractères tronqués]`
