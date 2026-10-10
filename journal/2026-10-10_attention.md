@@ -33,7 +33,7 @@
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
-## Étapes du jour (36)
+## Étapes du jour (37)
 
 *Ce que l'agent a consigné en le faisant (lignes `⏵` du journal de session) :*
 
@@ -62,11 +62,11 @@
 - **09:41** — Round 45 : `--attn-sinks` ne peut rien faire — je le REFUSE explicitement (un endroit, trois chemins)
 - **09:53** — Alerte méthodologique : `attn_sinks` semble LU quelque part (ligne 7472) — je vérifie avant de figer un refus fondé sur une prémisse fausse
 - **09:53** — Correction en cours : `attn_sinks` EST lu (branche à fenêtre) — je retire le refus fondé sur une prémisse fausse et je mesure
-- *(+11 autres étapes — voir les rapports de session)*
+- *(+12 autres étapes — voir les rapports de session)*
 
 ## Sessions actives ce jour
 
-- `d31b3d9b` — Où en est-on (début 2026-10-08 09:11, 58.2 h) → [rapport](sessions/d31b3d9b/rapport.md) · [digest](sessions/d31b3d9b/digest.md)
+- `d31b3d9b` — Où en est-on (début 2026-10-08 09:11, 58.3 h) → [rapport](sessions/d31b3d9b/rapport.md) · [digest](sessions/d31b3d9b/digest.md)
 
 ## Mesures et rapports touchés
 

@@ -40826,3 +40826,58 @@ test result: ok. 122 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fi
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib, subprocess\nheure = subprocess.run([\"date\", \"+%H:%M\"], capture_output=True, text=True).stdout.strip()\n# 1) la fiche C8 périphérie : la poursuite est RÉSOLUE par la structure\np = pathlib.Path … [7453 caractères tronqués]`
+
+  ```
+fiche C8 : § mémoire livrée
+note : § 6 livré
+état : C8 complet
+journal complété
+poussé
+4d7a41e C8 : la STRUCTURE de memoire est livree — la poursuite donne R2 1,000 et une erreur NULLE, pour zero paire de plus
+  ```
+
+### 🤖 Assistant
+
+⏵ C8 clos ; je lance la passe (26 portes) et je regarde les expériences de biologie E2/E5
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && DELAI=2400 JOURNAUX=/tmp/portes-1210g nohup bash tools/toutes-les-portes.sh > /tmp/passe-complete6.log 2>&1 & sleep 2; echo \"passe 26 portes lancée\"; grep -n \"^### E2\\|^### E5\\|^## E2\\|^## E5\" -A 14 docs/biologie-pour-drave.md … [92 caractères tronqués]`
+
+  ```
+passe 26 portes lancée
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"E2\\b\\|E5\\b\" docs/biologie-pour-drave.md | head -12; echo \"=== statuts des expériences ===\"; grep -n \"E1\\|E2\\|E3\\|E4\\|E5\\|E6\\|E7\\|E8\\|E9\" docs/biologie-pour-drave.md | grep -i \"fait\\|cadr\\|reste\\|à faire\ … [74 caractères tronqués]`
+
+  ```
+397:| **E2** | **croissance** : partir de 10 % de connexions, en **ajouter** selon l'activité (règle locale) | l'inné + la croissance locale peuvent-ils remplacer l'apprentissage global des poids ? | **à faire** — et la borne est connue : le rang (401 856 monômes quadratiques sont les seules directions neuves) |
+400:| **E5** | **rejeu** : tracer une passe (DRVF), la rejouer, et distiller le modèle *sur ses propres traces* | le rejeu améliore-t-il la consolidation (comme le sommeil) ? | le moteur trace et rejoue déjà ; l'outil de distillation existe |
+=== statuts des expériences ===
+396:| **E1** | **masque inné creux** : masque aléatoire fixe à **25 %** des connexions par ligne, seuls ces poids sont appris, mesuré au protocole 8 × 128 contre un dense iso-tout | la structure fixe suffit-elle, ou faut-il apprendre *où* sont les connexions ? | **FAIT — voir § 4 bis** |
+397:| **E2** | **croissance** : partir de 10 % de connexions, en **ajouter** selon l'activité (règle locale) | l'inné + la croissance locale peuvent-ils remplacer l'apprentissage global des poids ? | **à faire** — et la borne est connue : le rang (401 856 monômes quadratiques sont les seules directions neuves) |
+398:| **
+… [675 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Question ouverte à trancher : à 512 jetons, la fenêtre 128 bat-elle vraiment la 256 à drain égal ? (et sur deux corpus)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf; A=/tmp/campagne24/ids_0.5B-Q8.txt; B=/tmp/c8-prose/morceau-29.txt\nppl () { $D $M --ppl \"$1\" --limit 512 --ctx 512 --threads 8 \"${@:2}\" 2>&1 | grep -oE \"perpl … [518 caractères tronqués]`
+
+  ```
+corpus A (campagne) · référence sans fenêtre : 13.1368
+  fenêtre 64   + 64 puits : 14.4247
+  fenêtre 128  + 64 puits : 13.3968
+  fenêtre 192  + 64 puits : 13.4348
+  fenêtre 256  + 64 puits : 13.4778
+  fenêtre 384  + 64 puits : 13.1776
+corpus B (prose, morceau 29) · référence : 10.9842
+  fenêtre 128  + 64 puits : 11.7742
+  fenêtre 256  + 64 puits : 11.1390
+  ```
+
+### 🤖 Assistant
+
+⏵ Tranché : la non-monotonie ne se généralise pas (sur l'autre corpus l'ordre s'INVERSE) — je clôt la question dans la fiche
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib, subprocess\nheure = subprocess.run([\"date\", \"+%H:%M\"], capture_output=True, text=True).stdout.strip()\np = pathlib.Path(\"reports/rapport-fenetre-puits-attention.md\"); s = p.read_text()\nancr … [5279 caractères tronqués]`

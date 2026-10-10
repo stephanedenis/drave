@@ -130,6 +130,36 @@ aussi les secondes et les tok/s, parce que la fenêtre ne réduit que les scores
 poste parmi d'autres (la FFN domine) : le gain de temps est toujours plus petit que le gain de
 clés, et il se mesure.
 
+## 5 bis. La non-monotonie à 512 jetons : CLOSE — elle est du corpus, pas une loi
+
+Le § 3 notait qu'à 128 jetons, avec le même drain de 64, la fenêtre **128 battait la 256**
+(13,3968 contre 13,4778, 0,6 %) et demandait confirmation. Mesure faite, à 512 jetons, sur **deux
+corpus** (fenêtre + **64 puits** partout) :
+
+| fenêtre | corpus A (campagne) | corpus B (prose) |
+|---|---|---|
+| 64 | 14,4247 | — |
+| **128** | **13,3968** | 11,7742 |
+| 192 | 13,4348 | — |
+| **256** | 13,4778 | **11,1390** |
+| 384 | **13,1776** | — |
+| aucune (référence) | 13,1368 | 10,9842 |
+
+**Deux conclusions, et la première est un démenti :**
+
+1. **la non-monotonie ne se généralise PAS** : sur le corpus A, 128 bat 256 ; sur le corpus B,
+   **l'ordre s'inverse** (256 bat 128 de 5,4 %). Ce n'était donc pas une loi du levier, mais une
+   variation de corpus de quelques pour cent — la fiche ne l'affirme plus ;
+2. **un résultat plus fort apparaît** : sur le corpus A, **fenêtre 384 + 64 puits = 13,1776**,
+   soit **+0,3 % seulement** contre l'attention complète (13,1368) pour **÷1,33 de clés** — à
+   512 jetons, une fenêtre aux trois quarts de la séquence est **quasi gratuite** quand le drain
+   suit.
+
+**Ce qui reste vrai et se renforce** : le drain est porteur (0 puits = 1 297,54), et le prix d'une
+fenêtre dépend de la **longueur** (§ 4 : +40 % à 2 048 pour une fenêtre de 512) **et du corpus**
+(quelques pour cent entre deux textes à 512 jetons). Toute règle de dimensionnement doit donc être
+mesurée sur le corpus visé — c'est la leçon de méthode qui sort de cette clôture.
+
 ## 6. Le prix RÉEL en temps : la fenêtre est un levier de CLÉS, pas de vitesse
 
 La qualité ne suffit pas à décider : un levier qui divise les clés par quatre ne divise le temps
@@ -157,6 +187,8 @@ les scores — deux chantiers distincts, et aucun n'est la fenêtre.
 
 ## 7. Ce que ça ne dit pas (et qu'il faut mesurer)
 
+- **la non-monotonie est close** (§ 5 bis) : elle est du corpus, pas une loi — sur un second
+  corpus l'ordre s'inverse ;
 - **la pente en N est mesurée jusqu'à 2 048** (§ 4 et § 5) : le drain **rachète** le prix quand
   il grandit avec la séquence. Reste **4 096 jetons** (mesure en cours) et la règle de
   dimensionnement à budget de clés fixé ;

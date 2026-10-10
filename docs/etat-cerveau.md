@@ -122,7 +122,9 @@ clés reste le régime sûr. **Prix réel en temps, mesuré** (débit, 4 096 jet
 attention complète **17,1 tok/s** ; fenêtre 512 + 512 puits (÷4 de clés) **19,1 tok/s**, soit
 **+12 %** seulement ; les configurations plus larges sont dans le bruit. **La fenêtre est un levier
 de parcimonie (clés, paires, octets), pas de vitesse locale** — c'est en réparti qu'elle paie.
-Reste ouvert : la loi de la frontière en N.
+La **non-monotonie observée à 512 jetons est close** : elle est du **corpus** (sur un second
+corpus l'ordre s'inverse : 256 bat 128 de 5,4 %), et à 512 jetons **fenêtre 384 + 64 puits = +0,3 %**
+seulement pour ÷1,33 de clés. Reste ouvert : la loi de la frontière en N.
 
 **0. C9 (latéralité) et C4 (retard) — mesurés, leurs suites sont nommées.** Latéralité : l'échange
 est exact, le gain entre deux vues est **nul** (et la récupération d'un jumeau bruité = une moyenne,

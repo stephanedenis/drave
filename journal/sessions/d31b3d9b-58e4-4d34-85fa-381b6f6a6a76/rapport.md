@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 58.2 h |
+| Durée | 58.3 h |
 | Tours | 90 |
-| Messages | 2540 |
-| Appels d'outils | 2339 |
+| Messages | 2544 |
+| Appels d'outils | 2343 |
 | Fichiers touchés | 92 |
-| Commandes | 2038 |
+| Commandes | 2042 |
 | Sous-agents | 3 |
-| Commits | 239 |
+| Commits | 240 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -3696,7 +3696,7 @@ Le moteur savait déjà **imposer un état** (`DRAVE_ETAT_ENTREE`, format REFD) 
 
 ### Tour 90 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*7 appels d'outils.* Actions notables :
+*11 appels d'outils.* Actions notables :
 
 - bash — Implement the frontier memory in the engine
 - bash — Test the frontier memory
@@ -3705,10 +3705,14 @@ Le moteur savait déjà **imposer un état** (`DRAVE_ETAT_ENTREE`, format REFD) 
 - bash — Fix the gate and rerun
 - bash — Test suite and measure the pursuit via the memory
 - bash — Document the delivered memory and commit
+- bash — Launch pass and read E2/E5 descriptions
+- bash — Find E2 and E5 in the biology doc
+- bash — Test the window non-monotonicity on two corpora
+- bash — Close the non-monotonicity question and commit
 
 **Synthèse produite :**
 
-⏵ Porte de la mémoire verte ; tests, puis documentation (la poursuite est résolue par la structure)
+⏵ Tranché : la non-monotonie ne se généralise pas (sur l'autre corpus l'ordre s'INVERSE) — je clôt la question dans la fiche
 
 ## 3. Travail accompli
 
@@ -3857,7 +3861,7 @@ Le moteur savait déjà **imposer un état** (`DRAVE_ETAT_ENTREE`, format REFD) 
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1998 autres
+- … et 2002 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4243,5 +4247,6 @@ Le moteur savait déjà **imposer un état** (`DRAVE_ETAT_ENTREE`, format REFD) 
 - Index des modules et prochaine action : les suites de C9 et C4 sont nommees avec leurs chiffres  docs/etat.md renvoie aux trois suites (structure de memoire de 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' import pathlib, re, subprocess log = pathlib.Path("/tmp/passe-complete5.log").read_tex
 - Duree de la passe : 59 min 25 s (3565 s) — le commit precedent disait 57 min, ecrit avant de la calculer  Meme regle que pour les estampilles : un chiffre se LI
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' import pathlib, subprocess heure = subprocess.run(["date", "+%H:%M"], capture_output=T
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' import pathlib, subprocess heure = subprocess.run(["date", "+%H:%M"], capture_output=T
 
