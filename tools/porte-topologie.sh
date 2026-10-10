@@ -15,7 +15,19 @@ D=${D:-./drave-core/target/release/drave}
 M=${MODELE:-/tmp/m5_d384_dense.gguf}
 IDS=${IDS:-/tmp/campagne24/ids_m5_d384_dense.txt}
 COUCHES=${COUCHES:-2}
-LIMITE=${LIMITE:-128}
+# Le NOMBRE DE JETONS EST COMPTÉ, PAS SUPPOSÉ — même piège que dans
+# `porte-reparti-moteur.sh`, trouvé en balayant les portes après l'avoir corrigé là-bas :
+# `--ppl` note les `limit` PREMIERS jetons, `--ppl-reparti` tronque aux `limit` DERNIERS.
+# Le fichier en contient 255 et la limite en annonçait 128 : les deux perplexités affichées
+# côte à côte portaient sur DEUX PASSAGES DIFFÉRENTS. La porte ne l'affirmait pas (elle
+# imprime, elle ne compare pas), donc elle passait — mais elle invitait à une comparaison
+# fausse, ce qui est exactement le genre de piège que ce dépôt refuse.
+if [ -s "$IDS" ]; then
+    N_IDS=$(tr ',' '\n' < "$IDS" | grep -c '[0-9]')
+else
+    N_IDS=0
+fi
+LIMITE=${LIMITE:-$N_IDS}
 PORT=${PORT:-$((50000 + RANDOM % 900))}
 T=$(mktemp -d)
 TOPO="$T/topo.json"

@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 46.2 h |
-| Tours | 55 |
-| Messages | 1820 |
-| Appels d'outils | 1708 |
+| Durée | 46.3 h |
+| Tours | 56 |
+| Messages | 1829 |
+| Appels d'outils | 1715 |
 | Fichiers touchés | 61 |
-| Commandes | 1458 |
+| Commandes | 1465 |
 | Sous-agents | 3 |
-| Commits | 145 |
+| Commits | 146 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -145,6 +145,8 @@
 **Tour 54** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 **Tour 55** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
+
+**Tour 56** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -2505,7 +2507,41 @@ La rouge non expliquée du round 10 (`porte-reparti-moteur` : 321,9623 contre 13
 
 **Synthèse produite :**
 
-⏵ Le contrôle de cohérence compare l'adresse à l'instance BRUTE — je résous avant lui
+⏵ Round 12 livré : C11 — le registre des régions, la « découverte » du plan
+
+**Ce round** — 1 commit poussé, 122 tests verts, `porte-registre.sh` (nouvelle, 3 cas) verte.
+
+Une topologie qui écrit `"instance": "127.0.0.1:50001"` décrit **un** déploiement ; la même sur trois machines en demanderait trois. Le plan §3.2 (ligne « découverte ») prévoyait un registre statique : `--registre FICHIER`, chaque ligne donnant `region hote:port`.
+
+- **Ce qui est résolu, et ce qui ne l'est pas** : une instance qui contient déjà `:` est une adresse et n'est **pas** touchée (les topologies existantes marchent au caractère près) ; sinon elle est cherchée dans le registre, et une région **absente est refusée en la nommant** — un repli silencieux sur `localhost` ferait parler le moteur à la mauvaise machine. Résolution des **deux côtés** (pilote et nœud relais).
+
+| cas | mesure |
+|---|---|
+| topologie **nommée** + registre | **113,0068** · code 0 |
+| même topologie, **adresse en dur** | **113,0068 — identique** |
+| région **absente** du registre | refus **en la nommant**, code 2, rien n'est calculé |
+
+- **Défaut trouvé en écrivant la porte** : le contrôle de cohérence (« la région distante est sur X mais `--ppl-reparti` dit Y ») comparait l'adresse à l'instance **brute** — une topologie nommée était donc refusée (code 3) comme contradictoire alors que les deux sources disaient la même chose. **La résolution doit précéder le contrôle**, et c'est maintenant écrit à cet endroit du code.
+
+**État du sprint** (12 rounds, 20 portes) : **toutes vertes**, 122 tests. Capacités livrées : C1, C2 (règle de mélange), C4 (pas 1), C5/C5bis/C5ter, C6 (mémoire + ses limites mesurées), C7 (consolidation), C8 (réflexe), C9/C10 (pont, coupes, budgets octets **et** latence), C11 (pannes + registre), C12/C12bis.
+
+**Suivant** (dans `docs/sprint-cerveau.md`) : le budget `paires/s`, les têtes dédiées C8, les modèles H-I-J. L'objectif reste **actif**.
+
+### Tour 56 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
+
+*7 appels d'outils.* Actions notables :
+
+- bash — Check porte-flux reference computation
+- bash — Sweep gates for whole-vs-split comparisons
+- bash — Inspect porte-topologie's reference
+- bash — Check the ids file length and the comparison
+- bash — Fix the latent trap and rerun
+- bash — Run the topology gate fully
+- bash — Document and commit the gate sweep
+
+**Synthèse produite :**
+
+⏵ La référence et le réparti donnent maintenant 5,3719 tous les deux — je vérifie le verdict complet
 
 ## 3. Travail accompli
 
@@ -2623,7 +2659,7 @@ La rouge non expliquée du round 10 (`porte-reparti-moteur` : 321,9623 contre 13
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1418 autres
+- … et 1425 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2914,6 +2950,7 @@ La rouge non expliquée du round 10 (`porte-reparti-moteur` : 321,9623 contre 13
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A docs/sprint-cerveau.md && git commit -q -F - <<'MSG' Verification complete : 19 portes vertes, 
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 

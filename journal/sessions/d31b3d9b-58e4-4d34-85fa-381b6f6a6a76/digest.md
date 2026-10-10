@@ -29090,3 +29090,155 @@ resolution avant controle
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\n\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\na = \"## Annexe — manifeste des journaux\"\nsec = \"\"\"## 35. Découverte : le registre des régions (C11)\n\nUne t … [5330 caractères tronqués]`
+
+  ```
+docs registre
+test result: ok. 122 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.33s
+b1b63b0 C11 (decouverte) : le registre des regions — les topologies ne codent plus les adresses
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 12 livré : C11 — le registre des régions, la « découverte » du plan
+
+**Ce round** — 1 commit poussé, 122 tests verts, `porte-registre.sh` (nouvelle, 3 cas) verte.
+
+Une topologie qui écrit `"instance": "127.0.0.1:50001"` décrit **un** déploiement ; la même sur trois machines en demanderait trois. Le plan §3.2 (ligne « découverte ») prévoyait un registre statique : `--registre FICHIER`, chaque ligne donnant `region hote:port`.
+
+- **Ce qui est résolu, et ce qui ne l'est pas** : une instance qui contient déjà `:` est une adresse et n'est **pas** touchée (les topologies existantes marchent au caractère près) ; sinon elle est cherchée dans le registre, et une région **absente est refusée en la nommant** — un repli silencieux sur `localhost` ferait parler le moteur à la mauvaise machine. Résolution des **deux côtés** (pilote et nœud relais).
+
+| cas | mesure |
+|---|---|
+| topologie **nommée** + registre | **113,0068** · code 0 |
+| même topologie, **adresse en dur** | **113,0068 — identique** |
+| région **absente** du registre | refus **en la nommant**, code 2, rien n'est calculé |
+
+- **Défaut trouvé en écrivant la porte** : le contrôle de cohérence (« la région distante est sur X mais `--ppl-reparti` dit Y ») comparait l'adresse à l'instance **brute** — une topologie nommée était donc refusée (code 3) comme contradictoire alors que les deux sources disaient la même chose. **La résolution doit précéder le contrôle**, et c'est maintenant écrit à cet endroit du code.
+
+**État du sprint** (12 rounds, 20 portes) : **toutes vertes**, 122 tests. Capacités livrées : C1, C2 (règle de mélange), C4 (pas 1), C5/C5bis/C5ter, C6 (mémoire + ses limites mesurées), C7 (consolidation), C8 (réflexe), C9/C10 (pont, coupes, budgets octets **et** latence), C11 (pannes + registre), C12/C12bis.
+
+**Suivant** (dans `docs/sprint-cerveau.md`) : le budget `paires/s`, les têtes dédiées C8, les modèles H-I-J. L'objectif reste **actif**.
+
+
+## Tour 56
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 mémoire épisodique, C7 consolidation, C8 périphérie, C9 latéralité, C10 budgets, et la diffusion réseau du bus de C5 ; (b) les expériences E2-E9 de docs/biologie-pour-drave.md et docs/hebbien-differentiel-et-biologie.md ; (c) les dessins de modèle H/I/J de docs/modele-pour-drave.md ; (d) les manques du registre docs/manques.md (noyau de listes pour les experts, noyau de listes GPU, encodeurs) — l'implémenter ou la mesurer, la doter d'une porte vérifiable, la documenter, commiter, pousser, et enchaîner immédiatement sur la suivante. Contraintes : les 23 portes du dépôt et tous les tests restent verts (porte-flux.sh après toute modification du chemin d'exécution), le profil release reste le binaire de mesure, le crate reste std seul, et docs/sprint-cerveau.md reste l'état resumable mis à jour à chaque round. Ne jamais s'arrêter faute de tâches planifiées : en inventer de nouvelles, mesurables, plutôt que d'attendre."
+Round: 13/60
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 13 : je cherche le même piège de fenêtre dans les autres portes qui comparent entier et réparti
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"ppl\\b.*--limit\\|--ppl \\|référence\" tools/porte-flux.sh | head -8 && echo \"=== ids ===\" && tr ',' '\\n' < /tmp/campagne24/ids_0.5B-Q8.txt | wc -l", "description": "Check porte-flux reference computation"}`
+
+  ```
+85:    ppl_ref=$(printf '%s\n' "$sortie" | grep -oE "référence locale +: perplexité [0-9.]+" | grep -oE "[0-9.]+$")
+92:    # Le mode 2 est le codec de référence (avec perte) : le mode 4 emploie le
+=== ids ===
+85625
+  ```
+
+### 🤖 Assistant
+
+⏵ Je balaie les portes : lesquelles comparent un entier à un réparti (le piège de fenêtre) ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for f in tools/porte-*.sh; do P=$(basename $f .sh); A=$(grep -c '\\-\\-ppl-reparti' $f); B=$(grep -cE '\\-\\-ppl [^r-]|--ppl \"' $f); R=$(grep -c 'référence locale' $f); if [ \"$A\" -gt 0 ]; then echo \"$P : ppl-reparti=$A · ppl-enti … [96 caractères tronqués]`
+
+  ```
+porte-budget : ppl-reparti=1 · ppl-entier=0 · réf-locale=0
+porte-bus : ppl-reparti=4 · ppl-entier=0 · réf-locale=0
+porte-bus-socket : ppl-reparti=4 · ppl-entier=0 · réf-locale=0
+porte-coupe : ppl-reparti=1 · ppl-entier=0 · réf-locale=0
+porte-delais : ppl-reparti=1 · ppl-entier=0 · réf-locale=0
+porte-flux : ppl-reparti=1 · ppl-entier=0 · réf-locale=1
+porte-fusion : ppl-reparti=1 · ppl-entier=0 · réf-locale=0
+porte-horloge : ppl-reparti=1 · ppl-entier=0 · réf-locale=0
+porte-pannes : ppl-reparti=3 · ppl-entier=0 · réf-locale=1
+porte-pont : ppl-reparti=1 · ppl-entier=0 · réf-locale=0
+porte-registre : ppl-reparti=3 · ppl-entier=0 · réf-locale=0
+porte-reparti-moteur : ppl-reparti=2 · ppl-entier=1 · réf-locale=0
+porte-topologie : ppl-reparti=6 · ppl-entier=1 · réf-locale=0
+porte-trace : ppl-reparti=1 · ppl-entier=0 · réf-locale=0
+[stderr]
+grep: warning: stray \ before -
+grep: warning: stray \ before -
+grep: warning: stray \ before -
+grep: warning: stray \ before -
+grep: warning: stray \ before -
+grep: warning: stray \ before -
+grep: warning: stray \ before -
+grep: warning: stray \ before -
+grep: warning: stray \ before -
+grep: warning: stray \ before -
+grep: warning: stray \ before -
+grep
+… [987 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Deux portes seulement comparent entier et réparti : `reparti-moteur` (corrigée) et `topologie` — je vérifie celle-ci
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"IDS=\\|LIMITE=\\|--ppl \\|REF=\" tools/porte-topologie.sh | head -10", "description": "Inspect porte-topologie's reference"}`
+
+  ```
+16:IDS=${IDS:-/tmp/campagne24/ids_m5_d384_dense.txt}
+18:LIMITE=${LIMITE:-128}
+38:$D "$M" --ppl "$IDS" --limit "$LIMITE" --ctx 256 --threads 8 --abits 16 2>/dev/null \
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la /tmp/campagne24/ids_m5_d384_dense.txt 2>/dev/null | awk '{print $5,$9}' && tr ',' '\\n' < /tmp/campagne24/ids_m5_d384_dense.txt 2>/dev/null | wc -l; sed -n '36,48p' tools/porte-topologie.sh", "description": "Check the ids file … [28 caractères tronqués]`
+
+  ```
+920 /tmp/campagne24/ids_m5_d384_dense.txt
+255
+
+echo "=== 1. référence : le modèle entier ==="
+$D "$M" --ppl "$IDS" --limit "$LIMITE" --ctx 256 --threads 8 --abits 16 2>/dev/null \
+    | grep -oE "perplexité [0-9.]+ sur" | tail -1
+
+echo "=== 2. découpage historique ($COUCHES couches locales) ==="
+$D "$M" --flux-serveur "$PORT" --ctx 256 --threads 8 > "$T/n1.log" 2>&1 & SRV=$!
+for _ in $(seq 1 40); do grep -q "nœud moteur sur" "$T/n1.log" 2>/dev/null && break; sleep 0.25; done
+H=$($D "$M" --ppl-reparti "127.0.0.1:$PORT" --ids-file "$IDS" --couches-locales "$COUCHES" \
+    --limit "$LIMITE" --ctx 256 --threads 8 --abits 16 2>&1 \
+    | grep -E "deux nœuds +: perplexité [0-9.]+|écart +: +[0-9.e+-]+")
+echo "  $H"
+kill $SRV 2>/dev/null; wait $SRV 2>/dev/null
+  ```
+
+### 🤖 Assistant
+
+⏵ Trouvé : `porte-topologie` a le même piège latent (255 jetons, limite 128) — je le corrige
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"tools/porte-topologie.sh\")\ns = p.read_text()\na = \"\"\"LIMITE=${LIMITE:-128}\"\"\"\nb = \"\"\"# Le NOMBRE DE JETONS EST COMPTÉ, PAS SUPPOSÉ — même piège que dans\n# `porte-re … [960 caractères tronqués]`
+
+  ```
+limite comptee dans porte-topologie
+perplexité 5.3719 sur
+    deux nœuds        : perplexité 5.3719  (0.4 s)
+    deux nœuds        : perplexité 5.3719  (0.4 s)
+  écart de flux : 0.00e0 ✅
+  deux régions / deux instances :   deux nœuds        : perplexité 42.5477  (5.5 s)
+      deux nœuds        : perplexité 42.5477  (6.0 s)
+  ```
+
+### 🤖 Assistant
+
+⏵ La référence et le réparti donnent maintenant 5,3719 tous les deux — je vérifie le verdict complet
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 1200 bash tools/porte-topologie.sh > /tmp/pt.txt 2>&1; echo \"code=$?\"; grep -cE \"❌\" /tmp/pt.txt; grep -E \"✅\" /tmp/pt.txt | tail -5", "description": "Run the topology gate fully", "timeoutMs": 1300000}`
+
+  ```
+code=0
+0
+  écart de flux : 0.00e0 ✅
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\n\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\na = \"## Annexe — manifeste des journaux\"\nsec = \"\"\"## 36. Balayage des portes : le piège de fenêtre était LAT … [5826 caractères tronqués]`

@@ -175,6 +175,24 @@ serait faux ; reprendre demanderait de rejouer le préfixe (checkpoint/restart).
 
 ---
 
+## BALAYAGE DES PORTES — FAIT (11 octobre 6 h 30) : le piège de fenêtre était latent ailleurs
+
+Après avoir corrigé `porte-reparti-moteur` (§ précédent), balayage des 20 portes : **deux**
+seulement comparent un entier à un réparti. L'une affirmait l'égalité (corrigée), l'autre
+**`porte-topologie`** imprimait les deux perplexités **côte à côte** sans les comparer — avec
+le même écart de fenêtre : son fichier a **255** jetons et sa limite en annonçait **128**,
+donc la référence portait sur les **premiers** 128 jetons et le découpage sur les **derniers**.
+Elle passait, mais **invitait à une comparaison fausse**.
+
+Corrigé (jetons comptés) : **référence 5,3719 · découpage 5,3719 · écart de flux 0,00e0**.
+
+**Règle écrite une fois pour toutes** : dans une porte, `--limit` doit valoir **le nombre de
+jetons du fichier, compté et non écrit à la main**, dès qu'un chemin réparti intervient. Les
+deux portes qui le faisaient à la main s'étaient trompées toutes les deux. Les onze autres
+sont saines par construction (réparti contre réparti, ou « référence locale » du même run).
+
+---
+
 ## C11 (découverte) — FAIT (11 octobre 5 h 30) : le registre des régions
 
 Une topologie qui écrit une adresse décrit UN déploiement ; la même sur trois machines en
