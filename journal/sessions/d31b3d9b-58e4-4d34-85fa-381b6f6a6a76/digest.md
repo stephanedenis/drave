@@ -27908,3 +27908,137 @@ docs sensibilite
 ⏵ Toutes les mesures sont là (50 pour l'une, ~1000 pour ses voisines) — je complète et commite
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\ns = s.replace(\"| 6 | `the` | (mesuré) |\", \"| 6 | `the` | 1 005 |\")\ns = s.replace(\"\"\"**Deux jetons VOISINS —  … [2583 caractères tronqués]`
+
+  ```
+complete
+test result: ok. 122 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.32s
+7a688a7 C6 : le rappel n'est PAS continu — deux jetons voisins donnent 50 et 1 006 jetons
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 5 livré : le rappel n'est pas continu — et le mécanisme est identifié (k-WTA)
+
+**Ce round** — 2 commits poussés, 122 tests verts :
+
+Les six **dernières** positions de l'invite B prélevées une à une, après les huit du round 4 :
+
+| depuis la fin | jeton | distance à l'aiguille (hasard 448) |
+|---|---|---|
+| 1 | `:` | 303 |
+| 2 | `Answer` | 311 |
+| 3 | `.` | 533 |
+| **4** | **`only`** | **50** |
+| **5** | **`code`** | **1 006** |
+| 6 | `the` | 1 005 |
+
+- **Deux jetons VOISINS — « code » et « only » — donnent 1 006 et 50 jetons.** Rien de lexical ne l'explique : les deux états ont lu presque le même texte, et le mot partagé avec l'aiguille (« code ») est justement celui qui **échoue**.
+- **Le mécanisme** : la clé est un **k-WTA** (64 canaux sur 16 384) — une petite variation de l'état fait **entrer et sortir des canaux**, donc la clé **saute**. Le rappel n'est pas une fonction continue de l'indice : **il n'y a aucune pente à suivre** pour s'approcher du bon.
+- Cela explique rétrospectivement les deux anomalies des rounds précédents : le « 3,3× mieux que le hasard » (un tirage chanceux), et le fait que le recouvrement ne départage pas les indices (le gagnant n'a que 25/64).
+
+**Trois voies ouvertes, aucune mesurée** : rendre la clé **stable** en la formant sur une **fenêtre** de positions (union/intersection des k-WTA voisins) ; interroger avec plusieurs indices et garder le meilleur ; ou **abandonner le rappel sémantique** et faire entrer le contenu comme jetons.
+
+**Suivant** (dans `docs/sprint-cerveau.md`) : la clé de fenêtre — c'est l'expérience qui découle directement du mécanisme identifié, et elle est falsifiable (si la clé de fenêtre ne lisse pas l'hypersensibilité, l'explication par le k-WTA est incomplète). L'objectif reste **actif**.
+
+
+## Tour 49
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 mémoire épisodique, C7 consolidation, C8 périphérie, C9 latéralité, C10 budgets, et la diffusion réseau du bus de C5 ; (b) les expériences E2-E9 de docs/biologie-pour-drave.md et docs/hebbien-differentiel-et-biologie.md ; (c) les dessins de modèle H/I/J de docs/modele-pour-drave.md ; (d) les manques du registre docs/manques.md (noyau de listes pour les experts, noyau de listes GPU, encodeurs) — l'implémenter ou la mesurer, la doter d'une porte vérifiable, la documenter, commiter, pousser, et enchaîner immédiatement sur la suivante. Contraintes : les 23 portes du dépôt et tous les tests restent verts (porte-flux.sh après toute modification du chemin d'exécution), le profil release reste le binaire de mesure, le crate reste std seul, et docs/sprint-cerveau.md reste l'état resumable mis à jour à chaque round. Ne jamais s'arrêter faute de tâches planifiées : en inventer de nouvelles, mesurables, plutôt que d'attendre."
+Round: 6/60
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ C6 : je teste la clé de FENÊTRE — l'expérience qui découle du mécanisme k-WTA identifié
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/fenetre.py <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\n\na = \"\"\"    /// C6 : écrire l'état RETROUVÉ par la lecture (f32 bruts), prêt à être injecté\"\"\"\nb = \"\"\"    // … [2772 caractères tronqués]`
+
+  ```
+BUILD_END
+[stderr]
+Traceback (most recent call last):
+  File "/tmp/fenetre.py", line 17, in <module>
+    assert a in s, "option"
+           ^^^^^^
+AssertionError: option
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"episodique_extraire\\|episodique_indice\\|episodique_aiguille\" drave-core/src/main.rs | head -6 && sed -n \"$(grep -n 'episodique_extraire: Option<String>' drave-core/src/main.rs | head -1 | cut -d: -f1),+3p\" drave-core/s … [59 caractères tronqués]`
+
+  ```
+679:    episodique_indice: Option<String>,
+685:    episodique_extraire: Option<String>,
+690:    episodique_aiguille: Option<usize>,
+952:            "--episodique-extraire" => { o.episodique_extraire = Some(suivant(i).clone()); 2 }
+953:            "--episodique-indice" => { o.episodique_indice = Some(suivant(i).clone()); 2 }
+954:            "--episodique-aiguille" => { o.episodique_aiguille = suivant(i).parse().ok(); 2 }
+    episodique_extraire: Option<String>,
+    /// C6 : position connue d'une information plantée (l'« aiguille »). Sert à mesurer
+    /// la distance entre l'épisode RENDU par la mémoire et l'endroit où l'information
+    /// se trouve VRAIMENT — c'est la seule façon de savoir si la mémoire retrouve le
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\na = \"    episodique_extraire: Option<String>,\\n    /// C6 : position connue d'une information plantée (l'« aiguille »).\"\nb = \" … [2743 caractères tronqués]`
+
+  ```
+fenetre posee
+BUILD_END
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/fenetres.sh <<'EOF'\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nT=/tmp/tmp.j4ZkPG1r7b\n# deux indices : celui qui trouvait (4e depuis la fin, « only ») et celui qui échouait le\n# plus (5e, « code ») — la question … [1144 caractères tronqués]`
+
+  ```
+/tmp/tmp.j4ZkPG1r7b/idx.1717.code
+/tmp/tmp.j4ZkPG1r7b/idx.1718.only
+lancé
+  ```
+
+- **bash** `{"command": "sleep 570; cat /tmp/fenetres.txt", "description": "Check the window experiment", "timeoutMs": 640000}`
+
+  ```
+fenêtre 1 · indice 1718.only : distance 50 · séparation 1.31/64
+fenêtre 1 · indice 1717.code : distance 1006 · séparation 1.31/64
+  ```
+
+### 🤖 Assistant
+
+⏵ La référence reproduit exactement (50 et 1006) — j'attends les fenêtres 4, 16, 64
+
+- **bash** `{"command": "sleep 580; cat /tmp/fenetres.txt", "description": "Wait for window results", "timeoutMs": 640000}`
+
+  ```
+fenêtre 1 · indice 1718.only : distance 50 · séparation 1.31/64
+fenêtre 1 · indice 1717.code : distance 1006 · séparation 1.31/64
+fenêtre 4 · indice 1718.only : distance 653 · séparation 1.73/64
+fenêtre 4 · indice 1717.code : distance 1005 · séparation 1.73/64
+fenêtre 16 · indice 1718.only : distance 573 · séparation 4.58/64
+  ```
+
+### 🤖 Assistant
+
+⏵ Prédiction RÉFUTÉE : la fenêtre détruit le bon indice (50 → 653) sans aider le mauvais
+
+- **bash** `{"command": "sleep 580; cat /tmp/fenetres.txt", "description": "Wait for the remaining window runs", "timeoutMs": 640000}`
+
+  ```
+fenêtre 1 · indice 1718.only : distance 50 · séparation 1.31/64
+fenêtre 1 · indice 1717.code : distance 1006 · séparation 1.31/64
+fenêtre 4 · indice 1718.only : distance 653 · séparation 1.73/64
+fenêtre 4 · indice 1717.code : distance 1005 · séparation 1.73/64
+fenêtre 16 · indice 1718.only : distance 573 · séparation 4.58/64
+fenêtre 16 · indice 1717.code : distance 1004 · séparation 4.58/64
+fenêtre 64 · indice 1718.only : distance 449 · séparation 19.94/64
+fenêtre 64 · indice 1717.code : distance 1004 · séparation 19.94/64
+fini
+  ```
+
+### 🤖 Assistant
+
+⏵ Résultat complet : la séparation s'effondre (1,31 → 19,94) et le bon indice retombe au hasard
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\n\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\na = \"## Annexe — manifeste des journaux\"\nsec = \"\"\"## 31. Clé de FENÊTRE : la prédiction est RÉFUTÉE, et elle … [7764 caractères tronqués]`

@@ -81,6 +81,36 @@ seul parcours, au lieu de huit parcours de 70 s.
 
 ---
 
+## C6 — FAIT (10 octobre 22 h) : clé de FENÊTRE — prédiction RÉFUTÉE
+
+Le §30 avait identifié le mécanisme (la clé est un k-WTA, donc elle saute d'un jeton à
+l'autre). Prédiction falsifiable : **former la clé sur la moyenne de W positions voisines
+doit lisser l'hypersensibilité**. Mesuré (`--episodique-fenetre`) :
+
+| fenêtre | indice « only » (le bon) | indice « code » (le mauvais) | séparation |
+|---|---|---|---|
+| **1** | **50** | 1 006 | **1,31/64** |
+| 4 | 653 | 1 005 | 1,73/64 |
+| 16 | 573 | 1 004 | 4,58/64 |
+| 64 | **449** (= hasard) | 1 004 | **19,94/64** |
+
+**Réfutée** : le lissage ne réduit pas l'hypersensibilité, il **détruit le bon indice**
+(50 → 449, le hasard) et **effondre la séparation** (1,31 → 19,94 canaux partagés).
+
+**Troisième voie indépendante qui confirme le §24 quater** : abstraire par moyennage
+détruit la rappelabilité (prototype moyen 22 % contre 87 % pour l'exemplaire ; clé moyenne
+qui ne retrouve pas le passage ; fenêtre moyenne qui fait tomber le meilleur indice au
+hasard). **La sélectivité de cette mémoire EST la netteté de sa clé** — et
+l'hypersensibilité à l'indice en est le prix.
+
+**Conséquence, et elle change de direction** : le lissage étant exclu et le choix de
+l'indice n'étant pas devinable, **retrouver un passage depuis une question n'est pas ce
+que le rappel par le contenu sait faire**. Ce qui reste solide : la complétion de motif
+(Δ = 2 jetons à 50 % de dégradation), la localisation, et l'injection d'un état retrouvé.
+Pour la recherche par question : des **jetons** (RAG) ou une **clé apprise**.
+
+---
+
 ## ▶ PROCHAINE ACTION (à lire en premier)
 
 État au **10 octobre 11 h 45** : **C1, C3, C4 (pas 1), C5, C5bis, C5ter, C6, C7 (pas 1),
@@ -980,6 +1010,7 @@ bus (le format de la ligne de contrôle est écrit, le transport reste à câble
 |---|---|
 | 9/10 17 h 10 | **C1a** : module `topologie.rs`, validation stricte, plan, 8 tests, suite à 85 tests. |
 | 9/10 17 h 20 | **C1b pas 1** : la topologie pilote le découpage · porte `tools/porte-topologie.sh` **TENUE** (même chiffre, écart 0,00e0) · deux refus vérifiés. |
+| 10/10 22 h 00 | **C6 — clé de FENÊTRE : prédiction RÉFUTÉE.** W=1 : 50 (bon indice) et 1 006 (mauvais), séparation 1,31/64. W=4 : 653. W=16 : 573. **W=64 : 449 (= le hasard)** et **séparation 19,94/64**. Le lissage **détruit le bon indice** et **effondre la sélectivité** ⇒ troisième confirmation du §24 quater : **abstraire par moyennage détruit la rappelabilité** ; la sélectivité EST la netteté de la clé. ⇒ pour chercher par question : des **jetons** (RAG) ou une **clé apprise**, pas le contenu brut. |
 | 10/10 20 h 45 | **C6 — le rappel n'est pas CONTINU** : six dernières positions prélevées une à une. `only` (4ᵉ) → **50 jetons**, `code` (5ᵉ) → **1 006** : **deux jetons voisins**, dont les états ont lu presque le même texte. Cause : la clé est un **k-WTA**, donc une petite variation fait entrer/sortir des canaux et la clé **saute** — aucune pente à suivre. Voie ouverte : clé formée sur une **FENÊTRE** de positions. |
 | 10/10 19 h 30 | **C6 — le rappel dépend de l'INDICE** : 8 indices (positions 1..128 depuis la fin de B), distances **[50, 303, 303, 311, 347, 347, 890, 1003]**, moyenne 444, hasard 448. **Un indice trouve (50 jetons, 9× mieux que le hasard), sept sont au hasard** ⇒ le « 3,3× » du round 2 était un tirage chanceux, et **la limite est le CHOIX de l'indice**, pas la mémoire. `--etat-fin` accepte une liste de positions. |
 | 10/10 18 h 00 | **C6/C2 — la mémoire QUI SERT (bout en bout)** : `--episodique-extraire`. Indexer A (1 750 états) → retrouver avec un indice extérieur (épisode 437, **303 jetons** de l'aiguille, hasard 448) → injecter dans une invite sans le fait : le modèle DIT **« The vault access code is »** (α=0 : `150px`, témoin). **Le code n'est pas produit** car l'épisode retrouvé précède l'aiguille ⇒ **le goulot est le RAPPEL, pas la greffe**. |

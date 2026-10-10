@@ -683,6 +683,15 @@ struct Options {
     /// est décorrélée, la moyenne est rajoutée — sinon on injecterait un état centré,
     /// qui n'est l'état d'aucun moment vécu.
     episodique_extraire: Option<String>,
+    /// C6 : largeur de la FENÊTRE qui forme la clé d'un épisode. 1 = la position seule.
+    ///
+    /// POURQUOI CETTE EXPÉRIENCE DÉCOULE DU MÉCANISME MESURÉ. La clé est un k-WTA : les
+    /// 64 plus grands canaux sur 16 384. Une petite variation de l'état fait donc ENTRER
+    /// ET SORTIR des canaux, et deux jetons VOISINS peuvent rendre des épisodes à 1 006
+    /// et 50 jetons de l'aiguille (mesuré). Si cette explication est la bonne, former la
+    /// clé sur la MOYENNE de W positions voisines doit LISSER la clé et réduire
+    /// l'hypersensibilité ; sinon l'explication est incomplète. Prédiction falsifiable.
+    episodique_fenetre: usize,
     /// C6 : position connue d'une information plantée (l'« aiguille »). Sert à mesurer
     /// la distance entre l'épisode RENDU par la mémoire et l'endroit où l'information
     /// se trouve VRAIMENT — c'est la seule façon de savoir si la mémoire retrouve le
@@ -949,6 +958,7 @@ fn analyser(args: &[String]) -> Options {
                     .filter_map(|x| x.trim().parse().ok()).collect();
                 2
             }
+            "--episodique-fenetre" => { o.episodique_fenetre = suivant(i).parse().unwrap_or(1).max(1); 2 }
             "--episodique-extraire" => { o.episodique_extraire = Some(suivant(i).clone()); 2 }
             "--episodique-indice" => { o.episodique_indice = Some(suivant(i).clone()); 2 }
             "--episodique-aiguille" => { o.episodique_aiguille = suivant(i).parse().ok(); 2 }
@@ -6288,6 +6298,29 @@ par hachage) ; les VALEURS restent les états exacts de dimension {dim}", dim = 
                  if nuls > 0 { format!(" ({nuls} canal(aux) de variance nulle laissés tels quels)") }
                  else { String::new() });
     }
+    // LA FENÊTRE : la clé d'un épisode est formée sur la MOYENNE de W positions voisines.
+    // `cles` est l'espace des clés (les valeurs vivent dans `etats`, intactes) : on le
+    // transforme donc EN PLACE, et tout ce qui suit — écriture, lecture, séparation,
+    // courbes — emploie la même clé. C'est la définition même de ce qu'on mesure.
+    if opt.episodique_fenetre > 1 {
+        let w = opt.episodique_fenetre;
+        let n = cles.len();
+        let mut lisse: Vec<Vec<f32>> = Vec::with_capacity(n);
+        for i in 0..n {
+            let fin = (i + w).min(n);
+            let m = (fin - i) as f32;
+            let mut acc = vec![0.0f32; cles[i].len()];
+            for j in i..fin {
+                for (x, y) in acc.iter_mut().zip(cles[j].iter()) { *x += y / m; }
+            }
+            lisse.push(acc);
+        }
+        cles = lisse;
+        println!("  fenêtre de clé    : {w} positions — la clé est le k-WTA de la MOYENNE de \
+{w} états voisins, ce qui doit LISSER l'hypersensibilité mesurée (deux jetons voisins \
+donnaient 1 006 et 50 jetons)");
+    }
+
     // Le coût de l'expansion, dit en clair : c'est ce qu'on paie PAR LECTURE, et il
     // ne dépend pas de la taille du magasin — alors que le balayage qu'elle évite,
     // lui, croît avec N. Le seuil de rentabilité se calcule.

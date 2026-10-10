@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 44.0 h |
-| Tours | 48 |
-| Messages | 1742 |
-| Appels d'outils | 1644 |
+| Durée | 44.5 h |
+| Tours | 49 |
+| Messages | 1752 |
+| Appels d'outils | 1652 |
 | Fichiers touchés | 61 |
-| Commandes | 1394 |
+| Commandes | 1402 |
 | Sous-agents | 3 |
-| Commits | 138 |
+| Commits | 139 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -131,6 +131,8 @@
 **Tour 47** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1469 caractères tronqués]
 
 **Tour 48** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1469 caractères tronqués]
+
+**Tour 49** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1469 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -2229,7 +2231,45 @@ Le modèle **dit la phrase-cadre de l'aiguille** alors que ni le code ni cette p
 
 **Synthèse produite :**
 
-⏵ Toutes les mesures sont là (50 pour l'une, ~1000 pour ses voisines) — je complète et commite
+⏵ Round 5 livré : le rappel n'est pas continu — et le mécanisme est identifié (k-WTA)
+
+**Ce round** — 2 commits poussés, 122 tests verts :
+
+Les six **dernières** positions de l'invite B prélevées une à une, après les huit du round 4 :
+
+| depuis la fin | jeton | distance à l'aiguille (hasard 448) |
+|---|---|---|
+| 1 | `:` | 303 |
+| 2 | `Answer` | 311 |
+| 3 | `.` | 533 |
+| **4** | **`only`** | **50** |
+| **5** | **`code`** | **1 006** |
+| 6 | `the` | 1 005 |
+
+- **Deux jetons VOISINS — « code » et « only » — donnent 1 006 et 50 jetons.** Rien de lexical ne l'explique : les deux états ont lu presque le même texte, et le mot partagé avec l'aiguille (« code ») est justement celui qui **échoue**.
+- **Le mécanisme** : la clé est un **k-WTA** (64 canaux sur 16 384) — une petite variation de l'état fait **entrer et sortir des canaux**, donc la clé **saute**. Le rappel n'est pas une fonction continue de l'indice : **il n'y a aucune pente à suivre** pour s'approcher du bon.
+- Cela explique rétrospectivement les deux anomalies des rounds précédents : le « 3,3× mieux que le hasard » (un tirage chanceux), et le fait que le recouvrement ne départage pas les indices (le gagnant n'a que 25/64).
+
+**Trois voies ouvertes, aucune mesurée** : rendre la clé **stable** en la formant sur une **fenêtre** de positions (union/intersection des k-WTA voisins) ; interroger avec plusieurs indices et garder le meilleur ; ou **abandonner le rappel sémantique** et faire entrer le contenu comme jetons.
+
+**Suivant** (dans `docs/sprint-cerveau.md`) : la clé de fenêtre — c'est l'expérience qui découle directement du mécanisme identifié, et elle est falsifiable (si la clé de fenêtre ne lisse pas l'hypersensibilité, l'explication par le k-WTA est incomplète). L'objectif reste **actif**.
+
+### Tour 49 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1749 caractères tronqués]
+
+*8 appels d'outils.* Actions notables :
+
+- bash — Implement the window key
+- bash — Find the exact option anchor
+- bash — Apply the window-key patch
+- bash — Run the window-key experiment
+- bash — Check the window experiment
+- bash — Wait for window results
+- bash — Wait for the remaining window runs
+- bash — Document and commit the refuted prediction
+
+**Synthèse produite :**
+
+⏵ Résultat complet : la séparation s'effondre (1,31 → 19,94) et le bon indice retombe au hasard
 
 ## 3. Travail accompli
 
@@ -2347,7 +2387,7 @@ Le modèle **dit la phrase-cadre de l'aiguille** alors que ni le code ni cette p
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1354 autres
+- … et 1362 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2633,4 +2673,5 @@ Le modèle **dit la phrase-cadre de l'aiguille** alors que ni le code ni cette p
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_te
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 
