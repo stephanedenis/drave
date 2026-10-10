@@ -1,6 +1,9 @@
 # Note — C9, latéralité : deux instances jumelles et leur corps calleux
 
-> **2026-10-10 16:15 HAE** (heure lue sur la machine). Note de conception : `docs/` porte les
+> **2026-10-10 16:15 HAE**, **mise à jour à 17:09 : les portes 1, 2, 3 et 5 sont MESURÉES**
+> (`tools/porte-jumeaux.sh`, verte) et la porte 4 (le gain) a sa réponse : **nul**, la fusion de
+> deux vues ne bat pas la meilleure des deux — `reports/rapport-c9-lateralite.md`. Note de
+> conception : `docs/` porte les
 > hypothèses et les plans ; les mesures vivent dans `reports/`, une fiche par expérience. Ce qui est
 > déjà mesuré est renvoyé aux fiches ; ce qui reste à faire est écrit comme une **porte à tenir**.
 

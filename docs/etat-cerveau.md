@@ -44,6 +44,7 @@
 > après la tête réflexe. Détail :
 > [`reports/rapport-c8-peripherie.md`](../reports/rapport-c8-peripherie.md) · conception :
 > [`docs/note-peripherie-c8.md`](note-peripherie-c8.md).
+| **C9 (latéralité)** | deux jumeaux, échange par couche | 🟡 **échange exact, gain NUL (mesuré)** | échange désactivé = modèle seul (27,4964 = 27,4964) ; jumeaux identiques ⇒ rien ne change ; jumeau bruité récupéré (163,17 → 36,13) **mais le contrôle donne le même chiffre** (36,1307, écart 0,000 %) : c'est une moyenne, pas une latéralité. La fusion de deux **vues valides** ne bat pas la meilleure des deux (127 jetons : 15,39 contre 14,65) | `tools/porte-jumeaux.sh` · [`reports/rapport-c9-lateralite.md`](../reports/rapport-c9-lateralite.md) |
 | **C9** | pont entre régions | ✅ fait | **448 fibres = +2,81 %** et **÷1,8** en octets ; falaise **entre 448 et 392** ; à budget égal **quantifier bat élaguer de 83 %** | `porte-pont.sh` · fiche 25 |
 | **C9×C1** | où couper | ✅ fait | **8 coupes, une seule perplexité (113,0068)** sans perte ; le coût du pont va de **+0,52 %** (coupe après 18 couches) à **+17,09 %** (après 15) — facteur **30** ⇒ **couper tard** | `porte-coupe.sh`, `tools/carte_coupe.sh` · fiche 27 |
 | **C10** | budgets | ✅ **clos** | trois budgets, trois codes distincts : octets (**6**), latence (**8**), paires (**9**) ; loi de latence **3,4 ms/token par ms de RTT** | fiches 32, 42 |

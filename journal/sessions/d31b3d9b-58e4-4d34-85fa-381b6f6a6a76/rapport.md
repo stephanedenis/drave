@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 55.8 h |
-| Tours | 88 |
-| Messages | 2476 |
-| Appels d'outils | 2279 |
-| Fichiers touchés | 85 |
-| Commandes | 1986 |
+| Durée | 56.0 h |
+| Tours | 89 |
+| Messages | 2494 |
+| Appels d'outils | 2295 |
+| Fichiers touchés | 88 |
+| Commandes | 1999 |
 | Sous-agents | 3 |
-| Commits | 227 |
+| Commits | 228 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -211,6 +211,8 @@
 **Tour 87** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 **Tour 88** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
+
+**Tour 89** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -3586,7 +3588,7 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 
 ### Tour 88 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*437 appels d'outils.* Actions notables :
+*438 appels d'outils.* Actions notables :
 
 - bash — Add the refusal and verify
 - bash — Move the refusal to the single point and verify
@@ -3602,11 +3604,59 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - bash — Read v7 removal context and flag inventory
 - bash — Read flag inventory section in docs
 - bash — Establish whether section 9 predates the v7 removal
-- … et 408 autres
+- … et 409 autres
 
 **Synthèse produite :**
 
-⏵ Troisième passe : **23 vertes, 0 rouge** après l'ajout du tampon — je fige les repères et je clos
+⏵ Tout est vert et poussé — je récapitule la session
+
+**État vérifié (16:58 HAE, heure lue)** : arbre propre · **122 tests verts** · **23 portes vertes sur 23** (passe complète de 58 min, relancée après chaque changement du moteur) · tout poussé sur `origin/master`.
+
+\## Vos deux demandes
+
+**Rangement** — `docs/` porte le fond, `reports/` une fiche par expérience, `journal/` les événements datés. Concrètement : le rapport de campagne (179 Ko, 47 sections) est éclaté en **51 fiches** datées par git, le rapport multilingue (296 Ko) en **107 fiches**, le récit de sprint a quitté `docs/` pour `journal/`, et l'état consolidé est dans **`docs/etat.md`** + **`docs/etat-cerveau.md`**. Les monolithes sont gardés dans `reports/archive/` — rien n'est perdu, et la reconstitution a été vérifiée ligne à ligne.
+
+**Fuseau** — l'erreur était plus grave qu'un décalage : les heures étaient **inventées** (jusqu'au 12 octobre !). Corrigé par la règle *la date se lit dans git*. Et **je l'ai enfreinte le jour même** : des fiches portaient 16:50→19:00 alors qu'il était 15:54 ; corrigé sur l'heure des commits, rechute consignée (`docs/organisation-du-depot.md` § 4).
+
+**Journal automatisé** — `tools/journal_auto.py` : pour chaque jour, les commits (git) + les étapes des sessions (trace horodatée), classés par thème → `journal/AAAA-MM-JJ_<thème>.md` + un index, branché sur le `pre-commit`. `journal/THEMES.md` donne la règle de classement et l'évolution thème par thème.
+
+**README/REPRISE** — 709 → **65 lignes**, 1828 → **85** : ils renvoient (état, repères, mesures, convention) au lieu de recopier ; versions longues conservées dans `journal/`.
+
+\## Ce que les mesures ont donné
+
+| chantier | résultat |
+|---|---|
+| **C8 réflexe** | l'état de 16 couches **contient** le prochain jeton (sonde 40,8 % contre 4,0 %) ; tête **entraînée** : 697 572 → **85** (÷8 000), généralise (÷1 730 sur un autre corpus), **×1,54 plus vite** |
+| **C8 périphérie** | **livrée** : `--entree signal:F`, `--delai`, `--recurent`, `--entree-memoire`, `--sortie` + porte (déterminisme au bit près, délai exact, refus, **paires par décision**) |
+| **C8 mémoire** | le signal présent est lisible (R² 0,992), le passé **non** (−0,68, non linéaire inclus) → **retenir demande une structure**, pas un paramètre |
+| **Fenêtre × puits** | ÷4 de clés = **+12 % de débit** seulement ; le drain est porteur (0 puits = 1 297 de perplexité) |
+
+Trois erreurs attrapées par les instruments : une **porte fantôme** verte en comparant zéro jeto
+… [195 caractères tronqués]
+
+### Tour 89 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
+
+*15 appels d'outils.* Actions notables :
+
+- bash — Check imposed input state flags
+- bash — Audit etat_entree usage
+- bash — Read the imposed-state file format
+- bash — Verify the imposed-state exactness
+- bash — Capture states with head flag and test imposition
+- bash — Fix REFD header and verify exactness
+- bash — Probe noise sensitivity of the imposed state
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/jumeaux.sh`
+- bash — Run the twins experiment
+- bash — Verify the fusion gain on 128 tokens
+- bash — Fix context scaling and rerun at 128 tokens
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-jumeaux.sh`
+- bash — Run the twins gate
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-c9-lateralite.md`
+- … et 1 autres
+
+**Synthèse produite :**
+
+⏵ Porte des jumeaux verte ; j'écris la fiche C9 avec les deux mesures (32 et 128 jetons) et le contrôle
 
 ## 3. Travail accompli
 
@@ -3699,6 +3749,9 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/peripherie_poursuite.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-c8-peripherie.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/peripherie_memoire.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/jumeaux.sh` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-jumeaux.sh` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-c9-lateralite.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -3748,7 +3801,7 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1946 autres
+- … et 1959 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3876,7 +3929,7 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 
 ## 5. Erreurs rencontrées
 
-86 sorties en erreur ou divergentes. Les premières :
+87 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : ```  ### 🤖 Assistant  ⏵ **En transformers 5, `AutoModel` rend directement `Qwen2Model` (pas de `.model`). Je corrige le diagnostic.**  - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitH
 - **T2** : 3310393 bash -c pgrep -af "essai_decharge" | grep python | head; echo "--- logs ---"; tail -2 /tmp/ec_d192_lr3e3.log 2>/dev/null; tail -2 /tmp/ec_d192_lr1e3.log 2>/dev/null; echo "---"; ls -la /tmp/ec
@@ -4123,4 +4176,5 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - Horodatage : les 5 dernieres mentions « 17 h 55 » (heure estimee) remplacees par 15 h 15 (fin reelle de la passe, lue sur le journal)  Audit systematique apres 
 - C8 : l'etat mesure est consigne DANS LE PLAN (ce qui est fait, ce qui manque) · C9 : la conception et ses cinq portes, ecrites avant le code  Le plan se lisait 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' import pathlib, re, subprocess log = pathlib.Path("/tmp/passe-complete3.log").read_tex
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M' && python3 - <<'PYEOF' import pathlib, subprocess heure = subprocess.run(["date", "+%H:%M"],
 

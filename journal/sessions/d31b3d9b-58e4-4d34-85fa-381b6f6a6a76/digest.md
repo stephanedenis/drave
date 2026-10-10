@@ -39845,3 +39845,322 @@ Journaux : /tmp/portes-1210d
 ⏵ Troisième passe : **23 vertes, 0 rouge** après l'ajout du tampon — je fige les repères et je clos
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib, re, subprocess\nlog = pathlib.Path(\"/tmp/passe-complete3.log\").read_text(encoding=\"utf-8\")\nlignes, total = [], 0\nfor l in log.splitlines():\n    m = re.match(r\"^  (porte-\\S+)\\s+✅\\s+(\\d+ … [2996 caractères tronqués]`
+
+  ```
+repères : 23 portes · 58 min 07 s · horodaté 16:58
+fiche : 3e passe mentionnée
+poussé
+f8a52d6 Troisieme passe complete : 23 vertes, 0 rouge — apres le tampon d'entree de la peripherie
+994
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification finale de l'état du dépôt avant de rendre compte
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short | head -5; echo \"--- dernier commit ---\"; git log -1 --format='%h %ad %s' --date=format:'%H:%M'; echo \"--- tests ---\"; timeout 600 cargo test --release --manifest-path drave-core/Cargo.toml 2>&1 | grep -E \"^te … [378 caractères tronqués]`
+
+  ```
+--- dernier commit ---
+f8a52d6 16:58 Troisieme passe complete : 23 vertes, 0 rouge — apres le tampon d'entree de la peripherie
+--- tests ---
+test result: ok. 122 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.32s
+--- portes ---
+23
+--- docs/journal/reports ---
+48
+27
+95
+--- taille des fichiers d'entrée ---
+   65 README.md
+   85 REPRISE.md
+   36 docs/etat.md
+   64 docs/references-non-regression.md
+  250 total
+  ```
+
+### 🤖 Assistant
+
+⏵ Tout est vert et poussé — je récapitule la session
+
+**État vérifié (16:58 HAE, heure lue)** : arbre propre · **122 tests verts** · **23 portes vertes sur 23** (passe complète de 58 min, relancée après chaque changement du moteur) · tout poussé sur `origin/master`.
+
+## Vos deux demandes
+
+**Rangement** — `docs/` porte le fond, `reports/` une fiche par expérience, `journal/` les événements datés. Concrètement : le rapport de campagne (179 Ko, 47 sections) est éclaté en **51 fiches** datées par git, le rapport multilingue (296 Ko) en **107 fiches**, le récit de sprint a quitté `docs/` pour `journal/`, et l'état consolidé est dans **`docs/etat.md`** + **`docs/etat-cerveau.md`**. Les monolithes sont gardés dans `reports/archive/` — rien n'est perdu, et la reconstitution a été vérifiée ligne à ligne.
+
+**Fuseau** — l'erreur était plus grave qu'un décalage : les heures étaient **inventées** (jusqu'au 12 octobre !). Corrigé par la règle *la date se lit dans git*. Et **je l'ai enfreinte le jour même** : des fiches portaient 16:50→19:00 alors qu'il était 15:54 ; corrigé sur l'heure des commits, rechute consignée (`docs/organisation-du-depot.md` § 4).
+
+**Journal automatisé** — `tools/journal_auto.py` : pour chaque jour, les commits (git) + les étapes des sessions (trace horodatée), classés par thème → `journal/AAAA-MM-JJ_<thème>.md` + un index, branché sur le `pre-commit`. `journal/THEMES.md` donne la règle de classement et l'évolution thème par thème.
+
+**README/REPRISE** — 709 → **65 lignes**, 1828 → **85** : ils renvoient (état, repères, mesures, convention) au lieu de recopier ; versions longues conservées dans `journal/`.
+
+## Ce que les mesures ont donné
+
+| chantier | résultat |
+|---|---|
+| **C8 réflexe** | l'état de 16 couches **contient** le prochain jeton (sonde 40,8 % contre 4,0 %) ; tête **entraînée** : 697 572 → **85** (÷8 000), généralise (÷1 730 sur un autre corpus), **×1,54 plus vite** |
+| **C8 périphérie** | **livrée** : `--entree signal:F`, `--delai`, `--recurent`, `--entree-memoire`, `--sortie` + porte (déterminisme au bit près, délai exact, refus, **paires par décision**) |
+| **C8 mémoire** | le signal présent est lisible (R² 0,992), le passé **non** (−0,68, non linéaire inclus) → **retenir demande une structure**, pas un paramètre |
+| **Fenêtre × puits** | ÷4 de clés = **+12 % de débit** seulement ; le drain est porteur (0 puits = 1 297 de perplexité) |
+
+Trois erreurs attrapées par les instruments : une **porte fantôme** verte en comparant zéro jeton, une conclusion **fausse** sur `--attn-sinks` (retirée avant d'être committée), et la fuite « morceau de test dans l'entraînement » (1,59 de perplexité — trop beau, c'était de la mémorisation).
+
+
+## Tour 89
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 mémoire épisodique, C7 consolidation, C8 périphérie, C9 latéralité, C10 budgets, et la diffusion réseau du bus de C5 ; (b) les expériences E2-E9 de docs/biologie-pour-drave.md et docs/hebbien-differentiel-et-biologie.md ; (c) les dessins de modèle H/I/J de docs/modele-pour-drave.md ; (d) les manques du registre docs/manques.md (noyau de listes pour les experts, noyau de listes GPU, encodeurs) — l'implémenter ou la mesurer, la doter d'une porte vérifiable, la documenter, commiter, pousser, et enchaîner immédiatement sur la suivante. Contraintes : les 23 portes du dépôt et tous les tests restent verts (porte-flux.sh après toute modification du chemin d'exécution), le profil release reste le binaire de mesure, le crate reste std seul, et docs/sprint-cerveau.md reste l'état resumable mis à jour à chaque round. Ne jamais s'arrêter faute de tâches planifiées : en inventer de nouvelles, mesurables, plutôt que d'attendre."
+Round: 46/60
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 46 — je démarre C9 (latéralité) : d'abord vérifier que le moteur sait imposer un état d'entrée
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"etat_entree\" drave-core/src/main.rs | head -8; grep -n '\"--etat-entree\"\\|\"--entree-etat\"\\|etat_entree =' drave-core/src/main.rs | head -5; grep -n \"pub etat_entree\" drave-core/src/model.rs", "description": "Check i … [26 caractères tronqués]`
+
+  ```
+2585:    pub etat_entree: Option<String>,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"etat_entree\" drave-core/src/*.rs | head -12", "description": "Audit etat_entree usage"}`
+
+  ```
+drave-core/src/model.rs:2585:    pub etat_entree: Option<String>,
+drave-core/src/model.rs:4501:            etat_entree: std::env::var("DRAVE_ETAT_ENTREE").ok(),
+drave-core/src/model.rs:6857:        let mut x = match self.etat_entree.as_ref() {
+  ```
+
+### 🤖 Assistant
+
+⏵ Le mécanisme existe (`DRAVE_ETAT_ENTREE`) ; je vérifie le format pour construire l'expérience des jumeaux
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fn lire_etat\" -A 25 drave-core/src/model.rs | head -35", "description": "Read the imposed-state file format"}`
+
+  ```
+5152:    fn lire_etat(chemin: &str, pos: usize) -> Vec<f32> {
+5153-        let b = std::fs::read(chemin).unwrap_or_else(|e|
+5154-            panic!("état d'entrée {chemin} : {e}"));
+5155-        if b.len() >= 24 && &b[0..4] == b"REFD" {
+5156-            let ndim = i32::from_le_bytes(b[4..8].try_into().unwrap()).max(1) as usize;
+5157-            let mut ne = [1i32; 4];
+5158-            for i in 0..ndim.min(4) {
+5159-                ne[i] = i32::from_le_bytes(b[8 + 4 * i..12 + 4 * i].try_into().unwrap());
+5160-            }
+5161-            let (n0, n1, _n2) = (ne[0].max(1) as usize, ne[1].max(1) as usize, ne[2].max(1) as usize);
+5162-            let bloc = n0 * n1;
+5163-            let debut = 24 + pos * bloc * 4;
+5164-            assert!(debut + bloc * 4 <= b.len(),
+5165-                    "état d'entrée {chemin} : position {pos} hors du tenseur {:?}", ne);
+5166-            b[debut..debut + bloc * 4].chunks_exact(4)
+5167-                .map(|c| f32::from_le_bytes(c.try_into().unwrap())).collect()
+5168-        } else {
+5169-            b.chunks_exact(4).map(|c| f32::from_le_bytes(c.try_into().unwrap())).collect()
+5170-        }
+5171-    }
+5172-
+5173-    /// Écrit l'état résiduel d
+… [379 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je vérifie la fondation de C9 : un état imposé (format REFD) reproduit-il le modèle entier ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf; I=/tmp/campagne24/ids_0.5B-Q8.txt; T=/tmp/jum; rm -rf $T; mkdir -p $T\nN=32; POS=$(seq -s, 0 $((N-1)))\n$D $M --ppl \"$I\" --limit $N --ctx 64 --threads 8 --couche … [1107 caractères tronqués]`
+
+  ```
+0
+=== modèle entier (référence) ===
+perplexité 56.7642 sur
+=== état propre imposé + couches 12:24 (coupe exacte attendue) ===
+état
+[stderr]
+ls: cannot access '/tmp/jum/s.*': No such file or directory
+/tmp/jum/s.0 absent
+  ```
+
+### 🤖 Assistant
+
+⏵ La capture d'états exige `--tete-partielle` (l'écriture est dans cette branche) — je refais
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf; I=/tmp/campagne24/ids_0.5B-Q8.txt; T=/tmp/jum; N=32; POS=$(seq -s, 0 $((N-1)))\n$D $M --ppl \"$I\" --limit $N --ctx 64 --threads 8 --couches 0:12 --tete-partielle  … [774 caractères tronqués]`
+
+  ```
+32
+REFD : 896 canaux × 32 positions
+=== état propre imposé, couches 12:24 ===
+
+thread 'main' (2510320) panicked at src/model.rs:7149:29:
+copy_from_slice: source slice length (28672) does not match destination slice length (896)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+  ```
+
+### 🤖 Assistant
+
+⏵ Erreur de convention REFD (le bloc vaut ne[0]×ne[1]) — je corrige l'en-tête et je reteste
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf; I=/tmp/campagne24/ids_0.5B-Q8.txt; T=/tmp/jum; N=32\npython3 - \"$T\" \"$N\" <<'PY'\nimport pathlib, struct, sys\nt, n = pathlib.Path(sys.argv[1]), int(sys.argv[2] … [1018 caractères tronqués]`
+
+  ```
+REFD : 896 canaux × 32 positions (bloc = 896)
+=== état propre imposé, couches 12:24 ===
+perplexité 56.7642 sur
+=== modèle entier (référence) ===
+perplexité 56.7642 sur
+  ```
+
+### 🤖 Assistant
+
+⏵ La coupe exacte est vérifiée (56,7642 = 56,7642) ; je sonde la sensibilité au bruit avant d'écrire le banc
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf; I=/tmp/campagne24/ids_0.5B-Q8.txt; T=/tmp/jum; N=32\npython3 - \"$T\" \"$N\" <<'PY'\nimport pathlib, struct, sys, numpy as np\nt, n = pathlib.Path(sys.argv[1]), in … [1056 caractères tronqués]`
+
+  ```
+état : (32, 896) · RMS 9.5234
+fichiers bruités écrits
+bruit5     116.8340
+bruit10    2053.8784
+bruit20    286657.0259
+bruit50    991828.1040
+  ```
+
+### 🤖 Assistant
+
+⏵ Sensibilité mesurée (10 % de bruit : ×36) ; j'écris le banc des jumeaux avec son contrôle anti-« magie »
+
+- **write** `{"content": "#!/bin/bash\n# jumeaux.sh — C9, latéralité : deux instances jumelles échangent leur état à une couche.\n#\n# CE QUE LA LATÉRALITÉ VEUT DIRE, ET CE QU'ELLE NE PEUT PAS FAIRE. Le plan\n# (`docs/plan-cerveau-complet.md` § C9) demande deux instances jumelles du même modèle et un lien\n# **h … [6272 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/jumeaux.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && chmod +x tools/jumeaux.sh && bash -n tools/jumeaux.sh && echo \"syntaxe OK\" && timeout 1800 bash tools/jumeaux.sh 32 12 0.10 2>&1 | tail -20", "description": "Run the twins experiment", "timeoutMs": 2000000}`
+
+  ```
+syntaxe OK
+=== capture des deux VUES (couches 0:12, 32 jetons) ===
+états : (32, 896) · RMS 9.523 · bruit 10 % (0.952) · octets échangés par pas : 3584 (f32 dense)
+
+=== ce que chaque vue (et chaque échange) donne ===
+  modèle entier (référence)               56.7642
+  vue A seule (invariant : = référence)    56.7642
+  vue B seule (fenêtrée)                   59.3496
+  échange A↔B (moyenne)                   56.2222
+  jumeau A BRUITÉ à 00 %                   4239.5314
+  échange A↔A(bruité) (moyenne)          116.8382
+  CONTRÔLE : bruit à moitié (même énergie) 116.8340
+
+  invariant du plan      : vue A = référence ? OUI
+  échange A↔B            : 56.2222 contre A 56.7642 et B 59.3496 → mieux que les deux
+  échange A↔A(bruité)    : 116.8382 contre A(bruité) 4239.5314 → il RÉCUPÈRE (×36.3)
+  CONTRÔLE (bruit/2)     : 116.8340 · écart avec l'échange 0.004 % → l'échange n'apporte RIEN de plus que la moyenne (c'est une réduction de bruit)
+
+Lecture : l'échange est EXACT (invariant du plan) et il coûte 3 584 octets par pas et par
+couche échangée en f32 dense. Ce qu'il apporte de plus qu'une moyenne, c'est le contrôle qui
+le dit — et s'il n'apporte rien, c'est écrit.
+  ```
+
+### 🤖 Assistant
+
+⏵ Deux vues valides fusionnées : **mieux que les deux** (56,22 contre 56,76 et 59,35) — je vérifie sur 128 jetons
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 2400 bash tools/jumeaux.sh 128 12 0.10 2>&1 | tail -14", "description": "Verify the fusion gain on 128 tokens", "timeoutMs": 2600000}`
+
+  ```
+vue A seule (invariant : = référence)    ?
+  vue B seule (fenêtrée)                   ?
+  échange A↔B (moyenne)                   ?
+  jumeau A BRUITÉ à 00 %                   ?
+  échange A↔A(bruité) (moyenne)          ?
+  CONTRÔLE : bruit à moitié (même énergie) ?
+
+Traceback (most recent call last):
+  File "<stdin>", line 5, in <module>
+ValueError: not enough values to unpack (expected 7, got 1)
+
+Lecture : l'échange est EXACT (invariant du plan) et il coûte 3 584 octets par pas et par
+couche échangée en f32 dense. Ce qu'il apporte de plus qu'une moyenne, c'est le contrôle qui
+le dit — et s'il n'apporte rien, c'est écrit.
+  ```
+
+### 🤖 Assistant
+
+⏵ Le contexte (64) était plus petit que la séquence (128) — je le fais suivre N et je relance
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"tools/jumeaux.sh\"); s = p.read_text()\ns = s.replace('''CTX=${CTX:-64}''',\n              '''# Le contexte SUIT la longueur : à 128 jetons et ctx 64, toutes les mesures sortaie … [544 caractères tronqués]`
+
+  ```
+contexte et libellé corrigés
+  vue B seule (fenêtrée)                   18.0113
+  échange A↔B (moyenne)                   15.3906
+  jumeau A BRUITÉ (0.10)                    27.3626
+  échange A↔A(bruité) (moyenne)          16.5940
+  CONTRÔLE : bruit à moitié (même énergie) 16.5931
+
+  invariant du plan      : vue A = référence ? OUI
+  échange A↔B            : 15.3906 contre A 14.6496 et B 18.0113 → PAS mieux que la meilleure des deux
+  échange A↔A(bruité)    : 16.5940 contre A(bruité) 27.3626 → il RÉCUPÈRE (×1.6)
+  CONTRÔLE (bruit/2)     : 16.5931 · écart avec l'échange 0.005 % → l'échange n'apporte RIEN de plus que la moyenne (c'est une réduction de bruit)
+
+Lecture : l'échange est EXACT (invariant du plan) et il coûte 3 584 octets par pas et par
+couche échangée en f32 dense. Ce qu'il apporte de plus qu'une moyenne, c'est le contrôle qui
+le dit — et s'il n'apporte rien, c'est écrit.
+  ```
+
+### 🤖 Assistant
+
+⏵ À 128 jetons, le « mieux que les deux » disparaît (c'était un artefact de 31 jetons) — j'écris la porte avec ce que la mesure établit
+
+- **write** `{"content": "#!/bin/bash\n# porte-jumeaux.sh — C9 : deux jumeaux, un échange par couche, et les invariants qui le bornent.\n#\n# CE QUE LA PORTE VERROUILLE, et pourquoi chacun de ces points :\n#   1. **échange désactivé ⇒ identique au modèle seul** (l'invariant du plan, au chiffre près) :\n#      un … [5655 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-jumeaux.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && chmod +x tools/porte-jumeaux.sh && bash -n tools/porte-jumeaux.sh && echo \"syntaxe OK\" && timeout 1800 bash tools/porte-jumeaux.sh 2>&1 | tail -12; echo \"CODE=${PIPESTATUS[0]}\"", "description": "Run the twins gate", "timeoutMs":  … [8 caractères tronqués]`
+
+  ```
+syntaxe OK
+  état : (64, 896) · RMS 6.744 · bruit 10 % · coût d'un échange : 3584 octets par pas et par couche
+  référence 27.4964 · état imposé 27.4964 · jumeaux identiques 27.4964
+  jumeau bruité 163.1678 · échange 36.1307 · CONTRÔLE (bruit/2) 36.1307
+  ✅ invariant du plan : échange DÉSACTIVÉ, l'instance est le modèle seul (27.4964 = 27.4964)
+  ✅ deux jumeaux IDENTIQUES : l'échange ne change rien (27.4964 = 27.4964) — pas de gain gratuit
+  ✅ jumeau bruité RÉCUPÉRÉ (163.1678 → 36.1307) et le contrôle donne le même chiffre (36.1307, écart 0.000 %) : c'est une MOYENNE, pas un miracle
+
+PORTE TENUE : l'échange est exact, il ne crée pas de gain entre jumeaux identiques, il
+récupère un jumeau dégradé à hauteur de sa moyenne — et il coûte 3 584 octets par pas.
+Ce que la porte n'affirme pas (deux vues valides différentes) est mesuré dans la fiche C9 :
+sur 32 jetons la fusion battait les deux vues, sur 128 elle est ENTRE les deux.
+CODE=0
+  ```
+
+### 🤖 Assistant
+
+⏵ Porte des jumeaux verte ; j'écris la fiche C9 avec les deux mesures (32 et 128 jetons) et le contrôle
+
+- **write** `{"content": "# C9 — latéralité : l'échange est exact, il ne crée pas de gain, et il récupère un jumeau dégradé à hauteur de sa moyenne\n\n> Campagne : **cerveau** · expérience : deux instances jumelles, échange d'état à une couche\n> Question : le plan (§ C9) demande deux jumeaux et un lien **homoto … [5273 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-c9-lateralite.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M' && python3 - <<'PYEOF'\nimport pathlib, subprocess\nheure = subprocess.run([\"date\", \"+%H:%M\"], capture_output=True, text=True).stdout.strip()\n# la fiche porte l'heure RÉELLE (lue), pas estimée\np = pathlib.Path(\"r … [5801 caractères tronqués]`
