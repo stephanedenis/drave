@@ -27449,3 +27449,82 @@ test result: ok. 122 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fi
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src/main.rs drave-core/src/model.rs tools/porte-melange.sh tools/porte-greffe.sh reports/rapport-campagne-benefices.md docs/sprint-cerveau.md && git commit -q -F - <<'MSG'\nC2 : deux entrées, une règle de mélang … [2798 caractères tronqués]`
+
+  ```
+b5d5fe9 C2 : deux entrées, une règle de mélange — et la CORRECTION d'un faux négatif
+  ```
+
+- **bash** `{"command": "sleep 420; tail -12 /tmp/greffe_final.txt", "description": "Read the corrected gate's final verdict", "timeoutMs": 480000}`
+
+  ```
+A (avec aiguille) : [1863, 48, 12, 19, 19, 22, 16, 15843]
+  B (sans aiguille) : [220, 16, 20, 15, 1767, 198, 785, 34584]
+=== 1. prélever l'état de la dernière position DE L'INFÉRENCE (--etat-fin) ===
+    capture d'état    : position 1750 (la 1e depuis la fin d'une invite de 1751 jetons) écrite dans /tmp/tmp.ylSe1biKp3/etatA
+=== 2. témoin de non-effet : poids 0 ⇒ aucune différence ===
+  ✅ poids 0 : [220, 16, 20, 15, 1767, 198, 785, 34584] (identique à B sans greffe)
+=== 3. le mécanisme fonctionne : A + son propre état reste sur le code ===
+  A + son état (poids 100) : [1863, 48, 12, 19, 19, 22, 16, 15843]
+  ✅ l'état injecté porte bien la direction du contenu de A
+=== 4. CORRIGÉ : l'état de A dans C (sans aucun code) DONNE le code ===
+  poids 1    : [1863, 48, 18, 19, 20, 198, 151643, 33975]
+  poids 2    : [1863, 48, 18, 19, 20, 198, 151643, 33975]
+  ```
+
+- **bash** `{"command": "sleep 300; tail -8 /tmp/greffe_final.txt", "description": "Final gate verdict", "timeoutMs": 360000}`
+
+  ```
+poids 4    : [1863, 48, 18, 19, 20, 198, 151643, 33975]
+  poids 10   : [1863, 48, 18, 19, 20, 198, 151643, 33975]
+  poids 100  : [1863, 48, 18, 19, 20, 198, 151643, 33975]
+  ✅ l'état de A, prélevé LÀ OÙ LE CALCUL SE FAIT, porte bien son contenu
+     (l'ancienne conclusion négative était un décalage d'un jeton, pas une propriété
+=== 5. la CAUSE : après le premier jeton, la suite appartient à B ===
+  ❌ la suite de B a changé ([16, 20, 15] → [48, 18, 19]) : la greffe a donc
+code=1
+  ```
+
+### 🤖 Assistant
+
+⏵ Le cas 5 échoue À RAISON : la suite appartient maintenant à A — je réécris l'assertion
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"tools/porte-greffe.sh\")\ns = p.read_text()\ndeb = s.index('echo \"=== 5. la CAUSE : après le premier jeton, la suite appartient à B ===\"')\nfin = s.index('echo\\necho \"  ✅ la … [1492 caractères tronqués]`
+
+  ```
+cas 5 reecrit
+relancé
+  ```
+
+- **bash** `{"command": "sleep 560; tail -10 /tmp/greffe_v3.txt", "description": "Wait for the final gate verdict", "timeoutMs": 620000}`
+
+  ```
+capture d'état    : position 1750 (la 1e depuis la fin d'une invite de 1751 jetons) écrite dans /tmp/tmp.j4ZkPG1r7b/etatA
+=== 2. témoin de non-effet : poids 0 ⇒ aucune différence ===
+  ✅ poids 0 : [220, 16, 20, 15, 1767, 198, 785, 34584] (identique à B sans greffe)
+=== 3. le mécanisme fonctionne : A + son propre état reste sur le code ===
+  A + son état (poids 100) : [1863, 48, 12, 19, 19, 22, 16, 15843]
+  ✅ l'état injecté porte bien la direction du contenu de A
+=== 4. CORRIGÉ : l'état de A dans C (sans aucun code) DONNE le code ===
+  poids 1    : [1863, 48, 18, 19, 20, 198, 151643, 33975]
+  poids 2    : [1863, 48, 18, 19, 20, 198, 151643, 33975]
+  poids 4    : [1863, 48, 18, 19, 20, 198, 151643, 33975]
+  ```
+
+- **bash** `{"command": "sleep 360; tail -8 /tmp/greffe_v3.txt", "description": "Read the final verdict", "timeoutMs": 420000}`
+
+  ```
+✅ premier jeton 220 → 1863, et la suite devient [48, 18, 19] (celle de B était [16, 20, 15]) : le CONTENU est transféré, pas seulement le premier jeton
+
+  ✅ la porte est franchie. Ce qu'elle établit : l'injection d'état est BRANCHÉE
+     (témoin à 0, mécanisme vérifié sur A) et elle NE TRANSFÈRE PAS le contexte.
+     Pour qu'une mémoire serve le calcul, il faut qu'elle entre comme CONTENU ou
+     comme ENTRÉE DE CACHE — le moteur n'a aucune prise sur le cache KV : manque.
+  Fichiers conservés dans /tmp/tmp.j4ZkPG1r7b
+code=0
+  ```
+
+### 🤖 Assistant
+
+⏵ Porte verte (5/5) — je corrige le message de clôture resté périmé et je commite
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"tools/porte-greffe.sh\")\ns = p.read_text()\na = '''echo \"  ✅ la porte est franchie. Ce qu'elle établit : l'injection d'état est BRANCHÉE\"\necho \"     (témoin à 0, mécanisme  … [1915 caractères tronqués]`

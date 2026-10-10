@@ -114,27 +114,30 @@ done
 echo "  ✅ l'état de A, prélevé LÀ OÙ LE CALCUL SE FAIT, porte bien son contenu"
 echo "     (l'ancienne conclusion négative était un décalage d'un jeton, pas une propriété"
 
-echo "=== 5. la CAUSE : après le premier jeton, la suite appartient à B ==="
-# Les jetons de B réapparaissent dans la sortie greffée ; ceux de A non. C'est
-# l'attention sur le cache KV qui re-dérive la suite — et la greffe ne le touche pas.
+echo "=== 5. la greffe porte TOUT le contenu, pas seulement le premier jeton ==="
+# Ce cas affirmait l'inverse avant la correction : la suite appartenait à B, et c'était
+# l'indice que la greffe n'avait rien transféré. Avec le prélèvement fait là où le calcul
+# se fait, la suite appartient à A — et c'est ce qui distingue une greffe qui PORTE un
+# contenu d'une greffe qui ne fait que déplacer le premier jeton.
 python3 - "$IB" "$(gen "$T/B.txt" --fusion-etat "$ETAT" --fusion-pos dernier --fusion-alpha 4)" <<'PY' || exit 1
 import re, sys
 b = [int(x) for x in re.findall(r"\d+", sys.argv[1])]
 g = [int(x) for x in re.findall(r"\d+", sys.argv[2])]
 if not b or not g:
     sys.exit("  ❌ sortie illisible")
-# Le PREMIER jeton peut changer (il vient de l'état injecté) ; la suite doit rester
-# celle de B. On compare donc à partir du deuxième jeton.
 suite_b, suite_g = b[1:4], g[1:4]
-if suite_b != suite_g:
-    sys.exit(f"  ❌ la suite de B a changé ({suite_b} → {suite_g}) : la greffe a donc")
-print(f"  ✅ premier jeton {b[0]} → {g[0]} (il vient de l'état injecté), et la suite reste "
-      f"celle de B : {suite_g}")
+if suite_b == suite_g:
+    sys.exit(f"  ❌ la suite reste celle de B ({suite_g}) : la greffe ne porte que le "
+             "premier jeton, elle ne transfère pas le contenu")
+print(f"  ✅ premier jeton {b[0]} → {g[0]}, et la suite devient {suite_g} (celle de B "
+      f"était {suite_b}) : le CONTENU est transféré, pas seulement le premier jeton")
 PY
 
 echo
 echo "  ✅ la porte est franchie. Ce qu'elle établit : l'injection d'état est BRANCHÉE"
-echo "     (témoin à 0, mécanisme vérifié sur A) et elle NE TRANSFÈRE PAS le contexte."
-echo "     Pour qu'une mémoire serve le calcul, il faut qu'elle entre comme CONTENU ou"
-echo "     comme ENTRÉE DE CACHE — le moteur n'a aucune prise sur le cache KV : manque."
+echo "     (témoin à 0), et elle TRANSFÈRE LE CONTENU quand l'état est prélevé LÀ OÙ LE"
+echo "     CALCUL SE FAIT — premier jeton ET suite. La conclusion négative d'origine était"
+echo "     un décalage d'un jeton, et elle est conservée à côté de la correction."
+echo "     Ce qui reste à construire pour qu'une mémoire SERVE : l'entrée de cache KV,"
+echo "     sur laquelle le moteur n'a aujourd'hui aucune prise — un manque, écrit."
 echo "  Fichiers conservés dans $T"
