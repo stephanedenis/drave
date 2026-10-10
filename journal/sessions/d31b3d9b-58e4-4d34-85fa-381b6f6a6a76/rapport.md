@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 40.7 h |
+| Durée | 40.9 h |
 | Tours | 44 |
-| Messages | 1664 |
-| Appels d'outils | 1574 |
+| Messages | 1671 |
+| Appels d'outils | 1581 |
 | Fichiers touchés | 61 |
-| Commandes | 1324 |
+| Commandes | 1331 |
 | Sous-agents | 3 |
-| Commits | 130 |
+| Commits | 132 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2058,7 +2058,7 @@ Je continue sur cette liste — il
 
 ### Tour 44 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1749 caractères tronqués]
 
-*307 appels d'outils.* Actions notables :
+*314 appels d'outils.* Actions notables :
 
 - bash — Implement per-region step counters and the step bound
 - bash — Write and run the clock/step-bound gate
@@ -2074,11 +2074,11 @@ Je continue sur cette liste — il
 - bash — Extend trace format to v2 with timestamps
 - bash — Add merge, clock drift, link verification
 - bash — Rewrite link pairing and build
-- … et 281 autres
+- … et 288 autres
 
 **Synthèse produite :**
 
-⏵ Je commite la correction, puis je mesure si un indice SÉMANTIQUE retrouve le bon passage
+⏵ Une apostrophe inversée a mangé un mot de mon message de commit — je vérifie et corrige
 
 ## 3. Travail accompli
 
@@ -2196,7 +2196,7 @@ Je continue sur cette liste — il
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1284 autres
+- … et 1291 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2474,4 +2474,6 @@ Je continue sur cette liste — il
 - C7 suite : le rejeu RÉPÉTÉ est un point fixe, pas une usure (erreur exactement 0,00e0)  Question laissée ouverte par le premier pas de C7 : un prototype-exempla
 - C2/C6 : la greffe d'état — branchée, et elle ne transfère PAS le contexte  Le passage manquant entre C6 (une mémoire qui retrouve un état) et C9 (un lien qui li
 - Porte bus-socket : elle rendait 1 en ayant TOUT réussi (sys.exit avec un message)  Le dernier cas de tools/porte-bus-socket.sh terminait par sys.exit('  ❌ …' if
+- C6 : un indice ÉTRANGER retrouve le bon passage — 136 jetons contre 448 de hasard  Toutes les mesures précédentes interrogeaient la mémoire avec un indice ISSU 
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -q --amend -F - <<'MSG' C6 : un indice ÉTRANGER retrouve le bon passage — 136 jetons contre 448
 

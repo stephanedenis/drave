@@ -672,6 +672,16 @@ struct Options {
     episodique_normaliser: bool,
     /// C8 : combien de positions mesurer pour l'essai de RÉFLEXE (sortie précoce).
     reflexe_essai: usize,
+    /// C6 : état EXTÉRIEUR servant d'indice de lecture (f32 bruts). S'il est donné,
+    /// l'indice sémantique est cet état et non celui de la dernière position — c'est ce
+    /// qui rend la mesure honnête, car un indice pris DANS le magasin s'y retrouve
+    /// lui-même (recouvrement 64/64) et ne teste donc rien.
+    episodique_indice: Option<String>,
+    /// C6 : position connue d'une information plantée (l'« aiguille »). Sert à mesurer
+    /// la distance entre l'épisode RENDU par la mémoire et l'endroit où l'information
+    /// se trouve VRAIMENT — c'est la seule façon de savoir si la mémoire retrouve le
+    /// bon passage, et pas seulement un épisode quelconque.
+    episodique_aiguille: Option<usize>,
     /// C2/C6 : état BRUT à injecter à la fin des couches (fichier de f32 bruts).
     fusion_etat: Option<String>,
     /// C2/C6 : poids de l'état injecté.
@@ -911,6 +921,8 @@ fn analyser(args: &[String]) -> Options {
                     .filter_map(|x| x.trim().parse().ok()).collect();
                 2
             }
+            "--episodique-indice" => { o.episodique_indice = Some(suivant(i).clone()); 2 }
+            "--episodique-aiguille" => { o.episodique_aiguille = suivant(i).parse().ok(); 2 }
             "--episodique-cycles" => { o.episodique_cycles = suivant(i).parse().unwrap_or(1); 2 }
             "--episodique-cycles-seuil" => { o.episodique_cycles_seuil = suivant(i).parse().unwrap_or(4); 2 }
             // C5 : le bus de modulation, canal par canal.
@@ -6514,6 +6526,64 @@ indice connu : ce magasin ne sait pas refuser, il rend toujours son meilleur can
     println!("  le rappel est celui de l'APPARTENANCE : la lecture doit rendre le prototype \
 qui contient l'épisode interrogé, pas un prototype voisin. Le seuil se compte en CANAUX \
 PARTAGÉS entre les clés.");
+
+    // --- 4ter. L'INDICE SÉMANTIQUE : la mémoire retrouve-t-elle le BON passage ?
+    //
+    // POURQUOI CETTE MESURE EST DIFFÉRENTE DES PRÉCÉDENTES. Tout ce qui précède interroge
+    // la mémoire avec un indice qui vient de l'épisode cherché (une version dégradée de
+    // sa propre clé) : c'est de la complétion de motif, et elle réussit. Ici l'indice est
+    // l'état de la QUESTION — un contenu DIFFÉRENT de celui qu'on cherche. La question
+    // est : la mémoire retrouve-t-elle le passage qui contient la réponse, alors que rien
+    // dans son indice ne ressemble au passage ? C'est la question du rappel sémantique,
+    // et la réponse n'est pas acquise : une mémoire adressée par le CONTENU ne fait pas
+    // de sémantique.
+    if let Some(aiguille) = opt.episodique_aiguille {
+        if aiguille < cles.len() {
+            let q = cles.len() - 1;   // la dernière position : la question
+            // L'INDICE. Par défaut l'état de la question — mais s'il vient du magasin,
+            // il s'y retrouve lui-même et la mesure ne dit rien. Un indice EXTÉRIEUR
+            // (la même question posée dans un contexte qui n'a PAS l'aiguille) est un
+            // vrai indice : il n'est pas dans le magasin, et ce que la mémoire en rend
+            // est donc une réponse, pas un écho.
+            let (indice, origine) = match opt.episodique_indice.as_ref() {
+                Some(f) => {
+                    let brut = std::fs::read(f).unwrap_or_else(|e| {
+                        eprintln!("indice : lecture de {f} impossible : {e}"); std::process::exit(2) });
+                    let v: Vec<f32> = brut.chunks_exact(4)
+                        .map(|q| [q[0], q[1], q[2], q[3]]).map(f32::from_le_bytes).collect();
+                    let v = if opt.episodique_expansion > 0 {
+                        episodique::expandre(&v, opt.episodique_expansion, opt.episodique_connexions)
+                    } else { v };
+                    (v, format!("EXTÉRIEUR ({f}, {} valeurs) — il n'est PAS dans le magasin",
+                                brut.len() / 4))
+                }
+                None => (cles[q].clone(), format!("l'état de la question, position {q}")),
+            };
+            println!();
+            println!("  indice SÉMANTIQUE : {origine}, aiguille en {aiguille} :");
+            match m.lire(&indice) {
+                Some(l) => {
+                    let d = (l.id as i64 - aiguille as i64).unsigned_abs();
+                    // Ligne de base : la distance MOYENNE d'un épisode tiré au hasard.
+                    let base: f64 = (0..cles.len())
+                        .map(|i| (i as i64 - aiguille as i64).unsigned_abs() as f64)
+                        .sum::<f64>() / cles.len() as f64;
+                    println!("    épisode rendu : {} · recouvrement {}/{} · distance à \
+l'aiguille : {d} jetons", l.id, l.recouvrement, k);
+                    println!("    hasard        : {base:.0} jetons en moyenne sur {} épisodes", cles.len());
+                    if (d as f64) < base / 2.0 {
+                        println!("    ⇒ la mémoire a retrouvé le VOISINAGE de l'aiguille");
+                    } else {
+                        println!("    ⇒ la mémoire n'a PAS retrouvé l'aiguille : un indice qui \
+ne ressemble pas au contenu cherché ne le retrouve pas. C'est une limite du rappel par \
+le contenu — il n'est pas sémantique —, et elle est mesurée, pas supposée.");
+                    }
+                }
+                None => println!("    aucun épisode ne partage de canal avec la question : la \
+mémoire ne rend RIEN (et c'est le comportement honnête)."),
+            }
+        }
+    }
 
     println!();
     println!("  ce que la courbe ne dit PAS : elle porte sur {} états consécutifs d'un seul \

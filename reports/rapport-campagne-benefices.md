@@ -1600,6 +1600,37 @@ séparation 0,37/64, élagage **81 %** (382 candidats sur 2 048), et un indice j
 en mode **exemplaire**, 62,5 % du magasin pour 93,4 % de rappel (seuil 16) et 87,8 %
 pour 99,1 % (seuil 32) — la conclusion du §24 quater tient donc à l'échelle.
 
+### 24 ter ter. Un indice ÉTRANGER retrouve-t-il le bon passage ? Oui, grossièrement
+
+Toutes les mesures précédentes interrogent la mémoire avec un indice **issu de
+l'épisode cherché** (une version dégradée de sa propre clé) : c'est de la complétion de
+motif, et elle réussit. La question qui décide de l'usage est autre : **un indice qui ne
+ressemble pas au contenu cherché le retrouve-t-il ?** Mesure sur l'invite A du §28
+(1 750 jetons, code planté au jeton **740**) :
+
+| indice | épisode rendu | recouvrement | distance à l'aiguille | hasard |
+|---|---|---|---|---|
+| l'état de la question, **pris dans le magasin** | 1749 (lui-même) | 64/64 | 1 009 jetons | 448 |
+| l'état de la question, **EXTÉRIEUR** (la même question posée dans un contexte qui n'a PAS l'aiguille) | 604 | **4/64** | **136 jetons** | 448 |
+
+Le premier cas ne testait rien : l'indice était dans le magasin, il s'y retrouvait
+lui-même (recouvrement 64/64) et sa distance de 1 009 jetons ne dit rien — c'est
+pourquoi `--episodique-indice` accepte un état **extérieur**, qui n'est pas dans le
+magasin.
+
+Avec un indice extérieur qui ne partage que **4 canaux sur 64**, la mémoire rend un
+épisode à **136 jetons** de l'information — **3,3× mieux que le hasard** (448), soit le
+meilleur ~16 % des épisodes. C'est ** faible et réel** : le rappel par le contenu
+n'est pas sémantique au sens d'un moteur de recherche, mais il n'est pas aveugle non
+plus — un contexte qui pose la même question sans contenir la réponse tombe dans le
+voisinage du passage qui la contient.
+
+**Conditions, et elles limitent la portée** : **un seul** indice extérieur a été
+mesuré, sur un seul texte ; la position de l'aiguille est connue par construction (le
+protocole la plante) ; et le « voisinage » de 136 jetons (~700 caractères) n'est utile
+que si le passage cherché tient dans cette fenêtre. Répéter avec plusieurs questions et
+plusieurs textes est la mesure suivante, et elle n'est pas faite.
+
 ### 24 quater. Consolider par rejeu : garder un CAS bat résumer par une MOYENNE
 
 C7, au sens du plan, veut rejouer des épisodes pour modifier des **poids**. Ce n'est

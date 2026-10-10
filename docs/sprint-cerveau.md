@@ -514,6 +514,20 @@ prototype est son propre exemplaire : plus rien à fusionner. **Rejouer une mém
 l'use pas** — contrairement au rejeu vers les poids avec une mauvaise règle (8,8246
 contre 8,3869). Cas 8 dans `porte-episodique.sh`.
 
+**C6 suite — un indice ÉTRANGER retrouve le bon passage (grossièrement)** :
+`--episodique-indice` accepte un état **extérieur** au magasin. La distinction est
+essentielle : un indice pris DANS le magasin s'y retrouve lui-même (recouvrement 64/64)
+et ne teste rien — la première version de cette mesure tombait dans ce piège.
+
+| indice | rendu | recouvrement | distance à l'aiguille (740) |
+|---|---|---|---|
+| la question, prise dans le magasin | 1749 (elle-même) | 64/64 | 1 009 jetons (hasard 448) |
+| la question, **EXTÉRIEURE** (contexte sans l'aiguille) | 604 | **4/64** | **136 jetons** |
+
+**3,3× mieux que le hasard**, avec un indice qui ne partage que 4 canaux sur 64 : le
+rappel par le contenu n'est **pas sémantique**, mais il n'est **pas aveugle**.
+**Limite** : un seul indice, un seul texte — la répétition est la mesure suivante.
+
 **C6 suite — la mémoire LOCALISE, et la mesure est en jetons** : ajout de l'erreur
 **moyenne en jetons** entre l'épisode rendu et l'épisode interrogé (les épisodes sont
 numérotés dans l'ordre du texte, donc la distance entre identifiants *est* une
@@ -838,6 +852,7 @@ bus (le format de la ligne de contrôle est écrit, le transport reste à câble
 |---|---|
 | 9/10 17 h 10 | **C1a** : module `topologie.rs`, validation stricte, plan, 8 tests, suite à 85 tests. |
 | 9/10 17 h 20 | **C1b pas 1** : la topologie pilote le découpage · porte `tools/porte-topologie.sh` **TENUE** (même chiffre, écart 0,00e0) · deux refus vérifiés. |
+| 10/10 13 h 00 | **C6 — indice étranger** : `--episodique-indice` (état EXTÉRIEUR). Un indice pris dans le magasin s'y retrouve lui-même (64/64, 1 009 jetons de l'aiguille) et **ne teste rien** — piège corrigé. Avec un indice extérieur partageant **4/64** canaux : épisode rendu à **136 jetons** de l'aiguille contre **448** de hasard ⇒ **3,3× mieux que le hasard**, faible mais réel. Limite écrite : un seul indice, un seul texte. |
 | 10/10 11 h 30 | **C2/C6 — la greffe d'état** : `--fusion-etat/pos/alpha` + prélèvement d'état multi-positions. Protocole A/B (même texte, l'aiguille en moins) : témoin poids 0 identique · A + son état garde son contenu · **B + l'état de A ne donne jamais le code** (5 poids, et même partout) · **cause** : le 1er jeton change, la suite reste celle de B (cache KV). ⇒ une mémoire doit entrer comme contenu ou entrée de cache ; **le moteur n'a aucune prise sur le KV — manque**. Trois pièges corrigés (défaut 0,0 du poids, position « dernier » comptée par le moteur, `DRAVE_DEBUG_FUSION` déclarée). Porte 5 cas. |
 | 10/10 10 h 05 | **C7 suite — rejeu répété = point fixe** : du cycle 2 au cycle 12, mêmes prototypes, même compression, même rappel contre les épisodes d'origine, et erreur **exactement 0,00e0**. Rejouer une mémoire ne l'use pas. Cas 8 (`--episodique-cycles`). |
 | 10/10 09 h 35 | **C6 suite — la mémoire localise** : erreur moyenne **en jetons** entre l'épisode rendu et l'interrogé. À N=300 : Δ=2 à 50 % de dégradation, 24 à 75 %. À **N=2 048** : Δ=**11 jetons à 50 %** (0,54 % du texte), 86 à 75 %, rappel 95,4 %, **round-trip 2 048/2 048**, élagage 81 %. La précision RELATIVE s'améliore avec la taille : quand la mémoire se trompe, elle se trompe de PRÈS. Cas 3bis dans `porte-episodique.sh`. |

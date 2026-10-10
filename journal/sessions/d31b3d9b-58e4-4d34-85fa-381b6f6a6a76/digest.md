@@ -26839,3 +26839,88 @@ code=0
 ⏵ Je commite la correction, puis je mesure si un indice SÉMANTIQUE retrouve le bon passage
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A tools/porte-bus-socket.sh docs/sprint-cerveau.md && git commit -q -m \"Porte bus-socket : elle rendait 1 en ayant TOUT réussi (sys.exit avec un message)\n\nLe dernier cas de tools/porte-bus-socket.sh terminait par\nsys.exi … [1101 caractères tronqués]`
+
+  ```
+19a4a01 Porte bus-socket : elle rendait 1 en ayant TOUT réussi (sys.exit avec un message)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/c6_sem.py <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\n\n# option : où est l'aiguille (position connue)\na = \"\"\"    /// C8 : combien de positions mesurer pour l'essai de RÉ … [3945 caractères tronqués]`
+
+  ```
+mesure d'indice semantique
+BUILD_END
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && T=$(ls -d /tmp/tmp.sS91wbrnkb 2>/dev/null); ls $T 2>/dev/null | head -3; python3 - <<'ENDPY'\nimport pathlib\n# position de l'aiguille dans l'invite A (en jetons) : on la retrouve par tokenisation\nt = pathlib.Path(\"/tmp/tmp.sS91wbr … [924 caractères tronqués]`
+
+  ```
+A.ids
+A.txt
+B.ids
+préfixe écrit
+réversibilité : texte reconstruit identique ✅ (2750 octets)
+aiguille (fin du code) à la position 740
+[modele] 24 couches chargées en 6.405185253s — listes 0.71 Go , 12 threads
+  expansion         : 896 → 16384 canaux de clé (8 entrées par canal, signes par hachage) ; les VALEURS restent les états exacts de dimension 896
+  égalisation       : chaque canal de clé centré et réduit sur le magasin — un canal systématiquement grand n'entre plus dans toutes les clés
+  coût de l'expansion : 131072 additions par lecture (fixe) · le balayage évité coûte N × 64 comparaisons · l'expansion est donc rentable au-delà de N ≈ 2048 épisodes — EN DESSOUS, le balayage complet est MOINS cher
+  épisodes          : 1750 états réels de dimension 896 (1 documents en 129.0 s)
+  clé               : 64 canaux sur 16384 (densité 0.39 %), valeurs de dimension 896
+  clés distinctes   : 1750/1750 (pire multiplicité 1)
+  round-trip        : 1750/1750 épisodes relus AU BIT PRÈS avec leur propre clé
+  séparation        : recouvrement moyen 1.31/64 entre états différents (pire 43/64, 64 paires)
+  listes de l'index : 7.1 épisodes par canal en moyenne, 86 au plus ; les 1 % de canaux les 
+… [930 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ C6 : mon test était trivial (l'indice se retrouvait lui-même) — je mesure avec un indice EXTÉRIEUR
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/c6_indice.py <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\n\na = \"\"\"    /// C6 : position connue d'une information plantée (l'« aiguille »).\"\"\"\nb = \"\"\"    /// C6 : ét … [3503 caractères tronqués]`
+
+  ```
+indice exterieur
+B a 1721 jetons
+  capture d'état    : position(s) [1720] écrite(s) dans /tmp/tmp.sS91wbrnkb/etatB.*
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && T=/tmp/tmp.sS91wbrnkb; timeout 1200 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --episodique-essai 1750 --episodique-k 64 --episodique-expansion 16384 --episodique-decorreler --episodique-normaliser --episodique-a … [248 caractères tronqués]`
+
+  ```
+en jetons entre l'épisode rendu et l'épisode interrogé) :
+  indice SÉMANTIQUE : EXTÉRIEUR (/tmp/tmp.sS91wbrnkb/etatB.1720, 896 valeurs) — il n'est PAS dans le magasin, aiguille en 740 :
+    épisode rendu : 604 · recouvrement 4/64 · distance à l'aiguille : 136 jetons
+    hasard        : 448 jetons en moyenne sur 1750 épisodes
+    ⇒ la mémoire a retrouvé le VOISINAGE de l'aiguille
+  ```
+
+### 🤖 Assistant
+
+⏵ C6 : avec un indice EXTÉRIEUR, la mémoire tombe à 136 jetons de l'aiguille (hasard 448)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/c6_sem_docs.py <<'ENDPY'\nimport pathlib\n\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\na = \"\"\"### 24 quater. Consolider par rejeu : garder un CAS bat résumer par une MOYENNE\"\"\"\nb … [5959 caractères tronqués]`
+
+  ```
+docs indice semantique
+test result: ok. 122 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.31s
+5e923ca C6 : un indice ÉTRANGER retrouve le bon passage — 136 jetons contre 448 de hasard
+[stderr]
+bash: line 68: --episodique-indice: command not found
+  ```
+
+### 🤖 Assistant
+
+⏵ Une apostrophe inversée a mangé un mot de mon message de commit — je vérifie et corrige
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format=%B | head -20 | cat -A | grep -n \"episodique-indice\" | head -3; echo \"---\"; git log -1 --format=%B | sed -n '8,12p'", "description": "Inspect commit message corruption"}`
+
+  ```
+---
+PREMIER PIÈGE, ET IL ÉTAIT DANS MA PROPRE MESURE : avec l'état de la question pris dans
+le magasin, la mémoire rend l'indice LUI-MÊME (recouvrement 64/64, distance 1 009 jetons
+contre 448 de hasard) — la mesure ne testait donc rien du tout. D'où un état EXTÉRIEUR,
+qui n'est pas dans le magasin : .
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -q --amend -F - <<'MSG'\nC6 : un indice ÉTRANGER retrouve le bon passage — 136 jetons contre 448 de hasard\n\nToutes les mesures précédentes interrogeaient la mémoire avec un indice ISSU de\nl'épisode cherché (une version  … [1933 caractères tronqués]`
