@@ -89,6 +89,50 @@ def mlp(Xtr, ytr, Xte, cachee: int, epoques: int, graine: int = 0):
     return pred, dev
 
 
+def reference_recurrente(v: np.ndarray, lag: int, cache: int = 64, epoques: int = 600,
+                        graine: int = 0):
+    """Une mémoire MINUSCULE (récurrence linéaire de `cache` canaux) lue linéairement.
+
+    Ce n'est pas le modèle : c'est le **plancher** de la tâche. Si 64 canaux récurrents suffisent
+    à rendre `v[t-lag]` lisible, alors la poursuite n'est pas difficile — c'est le modèle qui n'a
+    pas de mémoire, et le dire ainsi évite d'accuser les données ou l'entraînement.
+    """
+    torch.manual_seed(graine)
+    dev = "cuda" if torch.cuda.is_available() else "cpu"
+    x = torch.from_numpy(v).float().to(dev)                      # l'entrée EST le signal
+    y = torch.from_numpy(cible(v, lag)).float().to(dev)
+    coupe = len(v) // 2
+    # Paramètres : a (décroissance, par canal), b (entrée), c (lecture).
+    # PAS de tanh sur l'état : la saturation DÉTRUIT la valeur à retenir — le premier essai
+    # (`h = tanh(a)·h + b·v`) plafonnait à R² 0,126 sur la mémoire, ce qui mesurait la
+    # paramétrisation, pas la tâche. `a = sigmoïde(pa)` reste dans (0,1) sans écraser l'état.
+    pa = torch.full((cache,), 2.0, device=dev, requires_grad=True)
+    b = (torch.randn(cache, device=dev) * 0.1).requires_grad_()
+    c = (torch.randn(cache, device=dev) * 0.1).requires_grad_()
+    opt = torch.optim.Adam([pa, b, c], lr=1e-2)
+    h = torch.zeros(cache, device=dev)
+    for e in range(epoques):
+        opt.zero_grad()
+        hs = []
+        h = torch.zeros(cache, device=dev)
+        for t in range(coupe):
+            h = torch.sigmoid(pa) * h + b * x[t]
+            hs.append(h)
+        H = torch.stack(hs)
+        pred = H @ c
+        perte = torch.nn.functional.mse_loss(pred, y[:coupe])
+        perte.backward()
+        opt.step()
+    with torch.no_grad():
+        h = torch.zeros(cache, device=dev)
+        preds = []
+        for t in range(len(v)):
+            h = torch.sigmoid(pa) * h + b * x[t]
+            preds.append(float(h @ c))
+    preds = np.array(preds)
+    return metriques(preds[coupe:], y[coupe:].cpu().numpy())
+
+
 def metriques(pred: np.ndarray, y: np.ndarray) -> tuple[float, float]:
     err = pred - y
     rmse = float(np.sqrt((err ** 2).mean()))
@@ -104,6 +148,11 @@ def main() -> int:
     ap.add_argument("--cachee", type=int, default=256)
     ap.add_argument("--epoques", type=int, default=300)
     ap.add_argument("--graine", type=int, default=0)
+    ap.add_argument("--reference", action="store_true",
+                    help="ajouter la RÉFÉRENCE : une petite récurrence linéaire (h_t = a·h_{t-1} "
+                         "+ b·v_t) lue par une couche linéaire — le même signal, avec une mémoire "
+                         "de 64 canaux, pour dire si la tâche est dure ou si c'est le modèle qui "
+                         "n'a pas de mémoire")
     a = ap.parse_args()
 
     v = lire_signal(a.signal)
@@ -125,6 +174,18 @@ def main() -> int:
         rmse_n, r2_n = metriques(pn, yte)
         print(f"{nom:<26} {'linéaire':<12} {rmse_l:9.4f} {r2_l:+8.3f}")
         print(f"{'':<26} {'non linéaire':<12} {rmse_n:9.4f} {r2_n:+8.3f}")
+
+    if a.reference:
+        print()
+        for nom, lag in (("v[t]   (le présent)", 0), (f"v[t-{a.lag}] (la mémoire)", a.lag)):
+            rmse, r2 = reference_recurrente(v, lag, graine=a.graine)
+            print(f"RÉFÉRENCE (récurrence linéaire 64 canaux) — {nom:<22} RMSE {rmse:8.4f} · R² {r2:+.3f}")
+        # LA LIGNE À RETARD : le plancher de la tâche, exact par construction. Une récurrence qui
+        # FUITE (`h = a·h + b·v`) est un INTÉGRATEUR : elle rend la somme des derniers pas, pas le
+        # pas d'il y a k. Retenir une valeur demande une STRUCTURE (un tampon), pas un paramètre de
+        # plus — et c'est exactement ce que le modèle n'a pas.
+        print(f"RÉFÉRENCE (ligne à retard de {a.lag} pas)                RMSE   0.0000 · R² +1.000 "
+              f"(exact par construction : c'est un TAMPON, pas une récurrence qui fuit)")
 
     print(f"\nappareil : {dev}")
     print("Lecture : si le PRÉSENT est lisible et la MÉMOIRE non, l'information n'est pas dans")

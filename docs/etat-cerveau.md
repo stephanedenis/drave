@@ -35,8 +35,11 @@
 > la porte `tools/porte-peripherie.sh` (déterminisme au bit près, entrée constante ⇒ sortie
 > constante, délai exact, quatre refus, paires par décision). La **tâche fermée** est mesurée :
 > le signal **courant** est dans la sortie (R² **0,992** en récurrent, 4 096 pas) mais **pas** le
-> signal d'il y a 8 pas (R² **−0,681**, et une lecture **non linéaire** ne le trouve pas non plus)
-> — la mémoire n'est pas dans l'état : la poursuite demande un **entraînement**, pas du câblage. Détail :
+> signal d'il y a 8 pas (R² **−0,681**, et une lecture **non linéaire** ne le trouve pas non plus).
+> Deux références tranchent : un **tampon de 8 pas** résout la tâche exactement (R² 1,000) et une
+> **récurrence qui fuit** n'y arrive pas (0,104 — un intégrateur rend la *somme*, pas le pas d'il y
+> a 8). **Retenir demande une STRUCTURE de mémoire, pas un paramètre de plus** — et c'est le
+> deuxième manque de C8 après la tête réflexe. Détail :
 > [`reports/rapport-c8-peripherie.md`](../reports/rapport-c8-peripherie.md) · conception :
 > [`docs/note-peripherie-c8.md`](note-peripherie-c8.md).
 | **C9** | pont entre régions | ✅ fait | **448 fibres = +2,81 %** et **÷1,8** en octets ; falaise **entre 448 et 392** ; à budget égal **quantifier bat élaguer de 83 %** | `porte-pont.sh` · fiche 25 |

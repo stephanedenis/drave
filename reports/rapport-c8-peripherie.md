@@ -75,6 +75,35 @@ résiduel** : le modèle n'a jamais été entraîné à retenir un scalaire inje
 retient pas. La suite est donc, là encore, un **entraînement** (ou une lecture branchée sur le
 cache KV, qui est une autre expérience) — pas un câblage.
 
+## 2 ter. Est-ce la tâche qui est dure, ou le modèle qui n'a pas de mémoire ? Les deux références
+
+Question légitime après le § 2 bis : si aucune lecture ne retrouve `v[t−8]`, peut-être que la
+**tâche** est difficile. Deux références la tranchent (`--reference`) :
+
+| lecture de `v[t−8]` | R² |
+|---|---|
+| état du modèle, lecture linéaire | −0,611 |
+| état du modèle, lecture **non linéaire** | −0,681 |
+| **récurrence linéaire à 64 canaux** (`h = σ(a)·h + b·v`, entraînée) | **+0,104** |
+| **ligne à retard de 8 pas** (tampon) | **+1,000** (exact par construction) |
+
+**Trois conclusions, et la deuxième est la plus utile :**
+
+1. la tâche **n'est pas dure** : un tampon de 8 pas la résout exactement. Le plancher existe et il
+   est trivial ;
+2. **une récurrence qui fuit ne suffit pas** : `h = σ(a)·h + b·v` est un **intégrateur** — il rend
+   la *somme* des derniers pas, pas le pas d'il y a 8. Elle plafonne à 0,104, et ce n'est pas un
+   défaut de réglage : c'est sa nature. (Premier essai avec `tanh` : 0,126 — la saturation écrasait
+   l'état ; sans saturation, 0,104. Les deux disent la même chose.) **Retenir demande une
+   STRUCTURE, pas un paramètre de plus** ;
+3. l'état du modèle ne contient donc pas trace du passé, et **aucune** des deux références ne
+   s'applique à lui : il n'a ni tampon, ni récurrence — il a une pile feed-forward, et le passé
+   n'existe pour lui que dans le cache KV, où il n'est pas relu.
+
+**Ce que ça ajoute à la ligne C8** : après « il faut une tête entraînée par profondeur » (le
+réflexe), voici « il faut une **structure** de mémoire » (la poursuite). Les deux fois, le câblage
+n'était pas le manque.
+
 ## 3. Ce que ça change pour C8
 
 **Acquis** : les **régions frontière existent** (le plan disait « rien ne sort » — c'était vrai) ;

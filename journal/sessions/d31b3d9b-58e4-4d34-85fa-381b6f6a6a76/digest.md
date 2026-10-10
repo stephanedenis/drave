@@ -39389,3 +39389,69 @@ docs/etat-cerveau.md:82:- **23 portes** `tools/porte-*.sh` — **passe complète
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"docs/references-non-regression.md\"); s = p.read_text()\ns = s.replace(\"**23 vertes sur 23**, 58 minutes)\", \"**23 vertes sur 23**, ≈59 minutes — 3 525 s au total)\")\ns = s.r … [537 caractères tronqués]`
+
+  ```
+durée harmonisée
+4:> portes** (`tools/toutes-les-portes.sh`, **23 vertes sur 23**, ≈59 minutes — 3 525 s au total). Elles ne sont
+18:| toutes les portes | `tools/toutes-les-portes.sh` | **23 vertes**, ≈59 min (3 525 s), aucune sautée |
+poussé
+  ```
+
+### 🤖 Assistant
+
+⏵ Pour clore C8 : la poursuite est-elle facile AVEC une mémoire ? Je mesure une récurrence de référence
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"tools/peripherie_memoire.py\"); s = p.read_text()\ns = s.replace('''    ap.add_argument(\"--graine\", type=int, default=0)''',\n'''    ap.add_argument(\"--graine\", type=int, de … [3219 caractères tronqués]`
+
+  ```
+référence récurrente ajoutée
+syntaxe OK
+v[t+1] (TÉMOIN avenir)     linéaire        1.9097   -1.704
+                           non linéaire    1.6029   -0.905
+
+RÉFÉRENCE (récurrence linéaire 64 canaux) — v[t]   (le présent)    RMSE   0.0047 · R² +1.000
+RÉFÉRENCE (récurrence linéaire 64 canaux) — v[t-8] (la mémoire)    RMSE   1.0860 · R² +0.126
+
+appareil : cuda
+Lecture : si le PRÉSENT est lisible et la MÉMOIRE non, l'information n'est pas dans
+l'état — aucun entraînement de lecture ne la fera apparaître. Si le TÉMOIN avenir est
+lisible, c'est le protocole qui fuit.
+  ```
+
+### 🤖 Assistant
+
+⏵ Ma référence était mal paramétrée (tanh sature) — je la refais sans saturation et je remesure
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"tools/peripherie_memoire.py\"); s = p.read_text()\ns = s.replace('''    # paramètres : a (décroissance), b (entrée), c (lecture)\n    a = torch.full((cache,), 0.9, device=dev, r … [1474 caractères tronqués]`
+
+  ```
+référence sans saturation
+107:    # (`h = tanh(a)·h + b·v`) plafonnait à R² 0,126 sur la mémoire, ce qui mesurait la
+119:            h = torch.sigmoid(pa) * h + b * x[t]
+130:            h = torch.sigmoid(pa) * h + b * x[t]
+RÉFÉRENCE (récurrence linéaire 64 canaux) — v[t-8] (la mémoire)    RMSE   1.1000 · R² +0.104
+
+appareil : cuda
+Lecture : si le PRÉSENT est lisible et la MÉMOIRE non, l'information n'est pas dans
+l'état — aucun entraînement de lecture ne la fera apparaître. Si le TÉMOIN avenir est
+lisible, c'est le protocole qui fuit.
+  ```
+
+### 🤖 Assistant
+
+⏵ La récurrence fuit (elle somme, elle ne retarde pas) — je complète par la référence « ligne à retard » et je conclus
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"tools/peripherie_memoire.py\"); s = p.read_text()\ns = s.replace('''    if a.reference:\n        print()\n        for nom, lag in ((\"v[t]   (le présent)\", 0), (f\"v[t-{a.lag}] … [1501 caractères tronqués]`
+
+  ```
+ligne à retard ajoutée
+v[t]   (le présent)        linéaire        0.1542   +0.982
+v[t-8] (la mémoire)        linéaire        1.4749   -0.611
+v[t+1] (TÉMOIN avenir)     linéaire        1.9097   -1.704
+RÉFÉRENCE (récurrence linéaire 64 canaux) — v[t]   (le présent)    RMSE   0.0252 · R² +1.000
+RÉFÉRENCE (récurrence linéaire 64 canaux) — v[t-8] (la mémoire)    RMSE   1.1000 · R² +0.104
+RÉFÉRENCE (ligne à retard de 8 pas)                RMSE   0.0000 · R² +1.000 (exact par construction : c'est un TAMPON, pas une récurrence qui fuit)
+appareil : cuda
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"reports/rapport-c8-peripherie.md\"); s = p.read_text()\nancre = \"## 3. Ce que ça change pour C8\"\nsec = \"\"\"## 2 ter. Est-ce la tâche qui est dure, ou le modèle qui n'a pas  … [5246 caractères tronqués]`

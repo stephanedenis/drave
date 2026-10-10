@@ -87,7 +87,7 @@ possible (`ls journal/*_<thème>.md`).
 | jour | chiffres du jour |
 |---|---|
 | [2026-10-09](2026-10-09_docs.md) | `+2,8 %` · `+25,4 %` · `392 fibres` · `16 couches` |
-| [2026-10-10](2026-10-10_docs.md) | `43,1 %` · `296 Ko` · `4,0 %` |
+| [2026-10-10](2026-10-10_docs.md) | `3525 s` · `45 s` · `43,1 %` · `296 Ko` · `4,0 %` |
 
 ### `divers` — Ce qui ne rentre dans aucun thème
 
