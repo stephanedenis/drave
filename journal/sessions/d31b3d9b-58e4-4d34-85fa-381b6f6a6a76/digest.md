@@ -36599,3 +36599,238 @@ référence (aucune fenêtre, 4096 jetons) : 12.2177·? s·15.6 tok/s  ·  clés
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'MSG'\nC8 : l'etat de la couche 16 CONTIENT le prochain jeton (43,1 %) — c'est la TETE qui est le maillon faible\n\nLe reflexe mesure jusqu'ici (s'arreter a la couche 16, appliquer la tete du modele … [1401 caractères tronqués]`
+
+  ```
+poussé
+cfbcb82 C8 : l'etat de la couche 16 CONTIENT le prochain jeton (43,1 %) — c'est la TETE qui est le maillon faible
+  ```
+
+### 🤖 Assistant
+
+⏵ Je prépare le pilote de la courbe profondeur → décodabilité (à lancer quand la carte aura fini)
+
+- **write** `{"content": "#!/bin/bash\n# c8_carte_profondeur.sh — la courbe PROFONDEUR → DÉCODABILITÉ du prochain jeton.\n#\n# POURQUOI ELLE EXISTE. La sonde du 10 octobre a montré qu'à la couche 16, l'état contient le\n# prochain jeton (43,1 % de justes parmi les 256 plus fréquents, contre 4,0 % pour la classe\ … [2386 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/c8_carte_profondeur.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && chmod +x tools/c8_carte_profondeur.sh && bash -n tools/c8_carte_profondeur.sh && echo \"syntaxe OK\"; cat /tmp/carte-4096-temps.md", "description": "Check driver syntax and map progress"}`
+
+  ```
+syntaxe OK
+référence (aucune fenêtre, 4096 jetons) : 12.2177·? s·15.6 tok/s  ·  clés notées par jeton ≈ 4096
+
+| fenêtre \ puits | 512 | 1024 |
+|---|---|---|
+| **512** |
+  ```
+
+### 🤖 Assistant
+
+⏵ Ma propre capture C8 a pollué la mesure de temps — je l'arrête, je fais la courbe de profondeur, puis je remesurerai à machine vide
+
+- **job_kill** `{"job_id": "bash-33", "reason": "mesure de temps polluee par ma propre capture C8 concurrente"}`
+
+  ```
+requested cancellation of job bash-33
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 3; pkill -f \"[c]arte-fenetre-puits\" 2>/dev/null; sleep 2; ps -eo pid,args | grep -c \"[c]arte-fenetre\"; PROFONDEURS=\"3 7 11 15 19 23\" LIMITE=1024 bash tools/c8_carte_profondeur.sh 2>&1 | tail -14", "description": "Run the  … [48 caractères tronqués]`
+
+  ```
+0
+=== courbe profondeur → décodabilité (1024 jetons, 256 classes) ===
+  couche   perplexité sonde linéaire (test)
+  4/24     12876525.1391 46.7 %
+  8/24     2098216.6285 45.1 %
+  12/24    4714930.0087 45.7 %
+  16/24    728388.7546 43.1 %
+  20/24    15527.9389 39.8 %
+  24/24    37.3371    35.4 %
+
+Lecture : si la sonde est déjà nette tôt (couches 8-12), un réflexe court a de quoi lire ;
+si elle ne l'est qu'à 20+, le « chemin court » n'existe pas et il faut le dire.
+Journaux de capture : /tmp/c8-profondeur/capture-*.log
+  ```
+
+### 👤 Utilisateur
+
+le fichier README.md et REPRISE.md devraient être allégés pour permettre un démarrage rapide d'une session de travail. Référer aux bons documents au lieu de mttre des détails dans ces fichiers.
+
+### 🤖 Assistant
+
+⏵ Je regarde README.md et REPRISE.md pour les alléger au profit des documents de fond
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && wc -l README.md REPRISE.md 2>/dev/null; echo \"=== REPRISE.md ===\"; head -60 REPRISE.md 2>/dev/null", "description": "Inspect README and REPRISE"}`
+
+  ```
+709 README.md
+  1828 REPRISE.md
+  2537 total
+=== REPRISE.md ===
+# Reprise — état du projet et mode d'emploi pour une nouvelle session
+
+> Rédigé à la fin d'une session longue. Tout ce qui suit est **mesuré**, pas
+> déduit. Les valeurs de perplexité sont des **références de non-régression** :
+> si une modification les change, c'est qu'elle a changé le calcul.
+>
+> **Nom** : le projet s'appelle **Drave** (binaire `drave`, paquet `drave-core`,
+> variables `DRAVE_*`, histoire du renommage dans `docs/histoire.md`). Le dossier
+> de travail, lui, s'appelle encore `Qtrinet` — les chemins ci-dessous sont ceux
+> qui existent.
+
+---
+
+## 1. En une phrase
+
+`drave-core` est un moteur d'inférence Rust (~13 758 lignes, `std` seul) qui
+charge les GGUF **en place** (aucune copie, aucune requantification), exécute les
+projections soit en listes d'événements, soit en produit scalaire dense, gère les
+MoE, tient une conversation, et déporte au GPU ce qui y gagne. Il fait tourner du
+0,5 B au 120 B sur le CPU de cette machine.
+
+```bash
+cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo build --release
+./target/release/drave ../models/Qwen2.5-0.5B-Q8_0.gguf \
+    --infer --chat --flux --pr
+… [1856 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== README : sections ===\"; grep -n \"^#\\{1,3\\} \" README.md | head -40; echo; echo \"=== REPRISE : sections ===\"; grep -n \"^#\\{1,2\\} \" REPRISE.md | head -50", "description": "List sections of README and REPRISE"}`
+
+  ```
+=== README : sections ===
+1:# Drave
+18:## La campagne du 8-9 octobre — 24 h de mesures, par famille de tâches
+73:## La journée du 30/09 — huit chantiers, mesurés
+91:## État du projet
+127:## Test de principe (`run_quantify.py`)
+177:## Élagage et approche par événement (`run_sparsity.py`)
+225:## Encodage de structure : éliminer complètement la valeur (`run_encoding.py`)
+268:## Architecture « push » (AER) et exécution CPU (`run_cpu.py`, `bench/cpu_aer.c`)
+315:## Tri et dédoublonnage des contributions (`bench/cpu_merge.c`)
+350:## Moteur d'événements Rust (`drave-core`)
+405:## Formats et modèles réellement lisibles
+451:### Les modèles éclatés se lisent comme un seul
+472:## Inférence complète en Rust (`--infer`)
+554:## Écarts avec le CDC d'origine
+567:## Structure
+585:## Lancer
+598:## L'empreinte mémoire : ce qu'il faut charger avant d'opérer
+631:# Chiffrer l'empreinte d'un MoE depuis une trace de routage réelle
+640:## Architecture mémoire : ce qui va en VRAM, en RAM, sur le disque
+677:## Prochaines étapes
+
+=== REPRISE : sections ===
+1:# Reprise — état du projet et mode d'emploi pour une nouvelle session
+14:## 1. En une phrase
+31:## 2. Références de non-régression
+615:# les identifiants 
+… [3511 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je regarde ce que contiennent les parties historiques avant de déplacer le détail
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1319,1330p' REPRISE.md; echo \"...\"; tail -12 REPRISE.md; echo \"=== dates citées dans REPRISE ===\"; grep -oE \"\\(0[0-9]/[0-9]{2}[^)]*\\)|Session [^—]*—|Sprint [0-9]+\" REPRISE.md | sort | uniq -c | sort -rn | head -8; ech … [90 caractères tronqués]`
+
+  ```
+## Sprint 08 — un modèle éclaté se lit comme un seul (11:13 → 13:13)
+
+```bash
+# Un dossier qui contient commun.gguf + cluster-XX.gguf + mapping.tsv EST un
+# modèle : aucune option nouvelle. Inventaire par les seuls en-têtes :
+./drave-core/target/release/drave /home/stephane/FastNVMe/artefacts/modeles-optimises/qwen3-30b-8clusters --tensors
+# attendu : 9 fichiers · 1587 tenseurs · 18,55 Go · en-têtes lus en ~0,4 s
+
+# Un GGUF découpé en shards s'ouvre par n'importe lequel de ses morceaux :
+./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf --tensors
+# attendu : 3 fichiers · 1328 tenseurs · 86,90 Go (= la somme des fichiers)
+
+...
+l'indexeur CSA, les **24 connexions pondérées** du mélange hyper-connexions, et
+les adresses d'engram. Trois de ces flux n'existent dans aucun moteur connu, et
+les tracer est notre apport. Chaque phase a donc **deux portes** : la correction
+(comparaison à llama.cpp sur V4-Flash) **et** Drave (événements par jeton, trace
+rejouée à l'identique, découpage en grappes, flux lisible par un outil).
+
+Premier écart à combler, et il passe avant la conformité des logit
+… [1126 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ J'écris le document des repères (extraits de la passe réelle), puis les deux fichiers de démarrage courts
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib, re\nlog = pathlib.Path(\"/tmp/passe-complete.log\").read_text(encoding=\"utf-8\")\nlignes = []\nfor l in log.splitlines():\n    m = re.match(r\"^  (porte-\\S+)\\s+✅\\s+(\\d+) s\\s+(.*)$\", l)\n    … [2674 caractères tronqués]`
+
+  ```
+repères écrits · 22 portes
+# Repères de non-régression — ce qui ne doit PAS bouger
+
+> **2026-10-10 11:07 HAE.** Ces valeurs sont les **verdicts imprimés par la passe complète des
+> portes** (`tools/toutes-les-portes.sh`, 22 vertes sur 22, 70 minutes). Elles ne sont pas
+> recopiées de mémoire : elles sortent du journal de la passe. **Une modification du chemin
+> d'exécution qui déplace l'un de ces chiffres a changé le calcul** — il faut alors relancer la
+> porte, comprendre, et écrire à côté de l'ancienne valeur (jamais à sa place).
+>
+> Détail complet de la passe : `reports/rapport-passe-complete-portes.md`.
+> Les mesures de campagne (perplexités, budgets, latences) sont dans `reports/` — une fiche par
+> expérience — et non ici : ce fichier ne porte que ce qu'une **porte** vérifie.
+
+## 1. Ce qui se vérifie en une commande
+
+| quoi | commande | attendu |
+|---|---|---|
+| tests unitaires | `cargo test --release` (dans `drave-core/`) | **122 verts** |
+| toutes les portes | `tools/toutes-les-portes.sh` | **22 vertes**, ~70 min, aucune sautée |
+| une porte | `tools/porte-<nom>.sh` | la dernière ligne dit ce qu'elle verrouille |
+  ```
+
+- **write** `{"content": "# Drave\n\n**Un moteur d'inférence qui exécute les grands modèles comme des ÉVÉNEMENTS, pas comme des\nmatrices** : les GGUF sont lus **en place** (mmap, aucune copie, aucune requantification), les\nprojections se font en listes creuses ou en produit dense, et le calcul se **découpe en  … [3344 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/README.md.new</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **write** `{"content": "# Reprise — démarrer une session de travail\n\n> **Check-list, pas un état.** L'état vit dans [`docs/etat.md`](docs/etat.md) (index des modules)\n> et [`docs/etat-cerveau.md`](docs/etat-cerveau.md) (les douze capacités, avec le chiffre qui\n> prouve chacune). Ce fichier ne dit que : quo … [5092 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md.new</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git mv REPRISE.md journal/2026-10-10-reprise-historique.md && git mv README.md journal/2026-10-10-readme-historique.md && mv README.md.new README.md && mv REPRISE.md.new REPRISE.md && python3 - <<'PYEOF'\nimport pathlib, time\nentete … [1663 caractères tronqués]`
+
+  ```
+journal/2026-10-10-reprise-historique.md : 1828 lignes conservées
+journal/2026-10-10-readme-historique.md : 709 lignes conservées
+  65 README.md
+  85 REPRISE.md
+ 150 total
+RM README.md -> journal/2026-10-10-readme-historique.md
+RM REPRISE.md -> journal/2026-10-10-reprise-historique.md
+?? README.md
+?? REPRISE.md
+?? docs/references-non-regression.md
+?? tools/c8_carte_profondeur.sh
+  ```
+
+### 🤖 Assistant
+
+⏵ Fichiers de démarrage allégés (65 et 85 lignes) ; je committe, puis je vérifie un point de la courbe C8
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'MSG'\nREADME et REPRISE allegés : demarrer en 5 minutes, et renvoyer au lieu de recopier\n\nDemande de Stephane : ces deux fichiers etaient devenus des fourre-tout (709 et 1828 lignes)\nqui ne perm … [1335 caractères tronqués]`

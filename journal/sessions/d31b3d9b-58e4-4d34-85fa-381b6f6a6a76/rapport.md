@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 50.3 h |
+| Durée | 50.4 h |
 | Tours | 88 |
-| Messages | 2270 |
-| Appels d'outils | 2079 |
-| Fichiers touchés | 71 |
-| Commandes | 1802 |
+| Messages | 2283 |
+| Appels d'outils | 2091 |
+| Fichiers touchés | 74 |
+| Commandes | 1810 |
 | Sous-agents | 3 |
-| Commits | 196 |
+| Commits | 197 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -3586,7 +3586,7 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 
 ### Tour 88 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*237 appels d'outils.* Actions notables :
+*249 appels d'outils.* Actions notables :
 
 - bash — Add the refusal and verify
 - bash — Move the refusal to the single point and verify
@@ -3602,11 +3602,11 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - bash — Read v7 removal context and flag inventory
 - bash — Read flag inventory section in docs
 - bash — Establish whether section 9 predates the v7 removal
-- … et 211 autres
+- … et 222 autres
 
 **Synthèse produite :**
 
-⏵ La carte tourne (ne pas l'éditer !) ; j'écris la fiche C8 pendant ce temps
+⏵ Fichiers de démarrage allégés (65 et 85 lignes) ; je committe, puis je vérifie un point de la courbe C8
 
 ## 3. Travail accompli
 
@@ -3685,6 +3685,9 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/journal_auto.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/c8_sonde_lineaire.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-c8-sonde-profondeur.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/c8_carte_profondeur.sh` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/README.md.new` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md.new` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -3734,7 +3737,7 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1762 autres
+- … et 1770 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4078,4 +4081,5 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' import pathlib p = pathlib.Path("tools/carte-fenetre-puits.sh"); s = p.read_text() old
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' import pathlib # 4096 dans la fiche fenêtre × puits : la ligne de plus, et la synthèse
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'MSG' C8 : l'etat de la couche 16 CONTIENT le prochain jeton (43,1 %) —
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'MSG' README et REPRISE allegés : demarrer en 5 minutes, et renvoyer au
 
