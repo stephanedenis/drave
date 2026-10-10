@@ -102,7 +102,9 @@ def main() -> int:
             libelle = m.group(3)
         else:
             num, libelle = "R", nom_titre
-        fichier = sortie / f"{n + 1:02d}-{num}-{slug(libelle, 40)}.md"
+        # 3 chiffres : au-delà de 99 sections, « 100 » se trie AVANT « 99 » en lexicographique
+        # — la vérification de reconstitution du monolithe l'a attrapé (107 sections).
+        fichier = sortie / f"{n + 1:03d}-{num}-{slug(libelle, 40)}.md"
         date, hash_ = date_git(src, nom_titre)
         entete = (
             f"> Campagne : **{a.dossier}** · expérience **{num}**\n"
@@ -113,7 +115,7 @@ def main() -> int:
         )
         if not a.dry_run:
             fichier.write_text(entete + corps, encoding="utf-8")
-        entrees.append((f"{n + 1:02d} · {num}", nom_titre, fichier.name, date, hash_))
+        entrees.append((f"{n + 1:03d} · {num}", nom_titre, fichier.name, date, hash_))
 
     # index
     lignes_index = [preambule, "", "## Index des expériences", "",

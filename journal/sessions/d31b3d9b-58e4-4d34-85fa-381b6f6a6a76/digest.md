@@ -34307,3 +34307,117 @@ Created file
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"$(cat <<'MSG'\nFenetre x puits d'attention : +2,0 % de perplexite pour divide 2,67 les cles notees (512 jetons)\n\nMesure (Qwen2.5-0.5B-Q8_0, ctx 512, perplexite deterministe, tools/carte-fenetre-puit … [1074 caractères tronqués]`
+
+  ```
+531e760 Fenetre x puits d'attention : +2,0 % de perplexite pour divide 2,67 les cles notees (512 jetons)
+  26563       03:23 timeout 2400 bash tools/porte-gain.sh
+  26564       03:23 bash tools/porte-gain.sh
+  60307       00:03 bash tools/porte-gain.sh
+4131175       13:01 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n 'R3=\$(' tools/porte-gain.sh; DELAI=2400 JOURNAUX=/tmp/portes-1210b bash tools/toutes-les-portes.sh > /tmp/passe-complete.log 2>&1; echo "CODE_PASSE=$?" >> /tmp/passe-complete.log; tail -40 /tmp/passe-complete.log
+porte-budget.log porte-bus.log porte-bus-socket.log porte-coupe.log porte-delais.log porte-episodique.log porte-flux.log porte-fusion.log porte-gain.log
+  ```
+
+### 🤖 Assistant
+
+⏵ Passe à 8 portes vertes sur 8, gain en cours ; je lance la question décisive (2 048 jetons) et je vérifie les références cassées
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && LIMITE=2048 CTX=2048 FENETRES=\"128 256 512\" PUITS=\"0 64 128\" bash tools/carte-fenetre-puits.sh 2048 > /tmp/carte-2048.md 2>&1; echo \"CODE=$?\"; cat /tmp/carte-2048.md", "description": "Launch 2048-token map in background", "run_ … [21 caractères tronqués]`
+
+  ```
+started background job bash-29
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== références à l'ancien chemin du rapport ===\"; grep -rn \"rapport-campagne-benefices\" --include=\"*.md\" --include=\"*.sh\" --include=\"*.py\" --include=\"*.rs\" . | grep -v \"^./reports/campagne-benefices/\\|^./journal/s … [427 caractères tronqués]`
+
+  ```
+=== références à l'ancien chemin du rapport ===
+=== fichiers de rapports encore monolithiques (multi-expériences) ===
+  107 sections · 296 Ko · reports/rapport-toutes-langues.md
+  16 sections · 36 Ko · reports/recapitulatif.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== toutes-langues ===\"; head -8 reports/rapport-toutes-langues.md; grep -n \"^## \" reports/rapport-toutes-langues.md | head -12; echo \"=== recapitulatif ===\"; head -8 reports/recapitulatif.md; grep -n \"^## \" reports/rec … [80 caractères tronqués]`
+
+  ```
+=== toutes-langues ===
+# Extension à toutes les langues, puis aux grands corpus
+
+Objectif : passer de **46 langues** à **toutes celles disponibles**, puis aux grands
+corpus multilingues pour obtenir des professeurs plus riches.
+
+Professeur unique : **Qwen2.5-0.5B, couche 10**. Boîte noire : on ne lit de lui que
+la couche à émuler. Aucune rétropropagation : `A` et `B` aléatoires et gelés, seule
+la lecture s'ajuste en forme fermée.
+12:## 1. Le périmètre, inventorié
+30:## 2. La convention de traçage, unique et vérifiée
+53:## 3. Le découpage : stratifié par écriture, déduit du texte
+73:## 4. Les cinq phases, chaînées
+90:## 5. Mesure : l'invariance à dix points
+103:## 6. Deux erreurs de méthode, et ce qu'elles ont coûté
+121:## 7. Signal précoce : PLUS DE LANGUES AIDENT
+158:## 8. La courbe de dose complète : elle NE sature PAS
+197:## 9. Dimensionnement de l'analyse finale, mesuré
+230:## 10. Signal précoce sur le panel STRATIFIÉ : l'écart de transfert était un artefact
+272:## 11. Mon seuil de couche par défaut était TROP STRICT
+313:## 12. L'optimum du seuil de couche : 0,25, et c'est un maximum INTÉRIEUR
+=== recapitulatif ===
+# Récapitulatif — méthode appliquée et résultats
+
+État au 06/10
+… [1268 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je passe l'outil sur le dernier gros monolithe (296 Ko, 107 sections) et je range le récapitulatif comme état
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/decouper-rapport.py reports/rapport-toutes-langues.md --dossier toutes-langues 2>&1 | tail -5; ls reports/toutes-langues | wc -l; python3 - <<'PYEOF'\nimport pathlib, difflib\narch = pathlib.Path(\"reports/archive/rappo … [688 caractères tronqués]`
+
+  ```
+104 · 92  2026-10-07 12:51 HAE   df8980e   104-92-la-pire-paire-apres-echelle-de-en-a-486.md
+  105 · 93  2026-10-07 13:21 HAE   256cd6a   105-93-les-directions-sont-elles-dans-les-donne.md
+  106 · 94  2026-10-07 13:35 HAE   d186466   106-94-rang-1-2-ou-3-le-meilleur-rang-nest-pas.md
+  107 · 95  2026-10-07 14:03 HAE   84160d1   107-95-la-portee-du-contexte-le-voisin-immediat.md
+monolithe archivé : reports/archive/rapport-toutes-langues.md
+107
+lignes supprimées : 768 · non vides : 491 (préambule attendu)
+  ```
+
+### 🤖 Assistant
+
+⏵ Bug attrapé par ma propre vérification : au-delà de 99 fiches, le tri lexicographique casse l'ordre — je corrige et je refais
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git mv reports/archive/rapport-toutes-langues.md reports/rapport-toutes-langues.md && rm -rf reports/toutes-langues reports/toutes-langues.md && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"tools/decouper-rapport.py\"); s  … [1461 caractères tronqués]`
+
+  ```
+préfixe porté à 3 chiffres
+  106 · 94  2026-10-07 13:35 HAE   d186466   106-94-rang-1-2-ou-3-le-meilleur-rang-nest-pas.md
+  107 · 95  2026-10-07 14:03 HAE   84160d1   107-95-la-portee-du-contexte-le-voisin-immediat.md
+monolithe archivé : reports/archive/rapport-toutes-langues.md
+lignes supprimées : 118 · non vides : 6
+    '# Extension à toutes les langues, puis aux grands corpus'
+    'Objectif : passer de **46 langues** à **toutes celles disponibles**, puis aux grands'
+    'corpus multilingues pour obtenir des professeurs plus riches.'
+    'Professeur unique : **Qwen2.5-0.5B, couche 10**. Boîte noire : on ne lit de lui que'
+    'la couche à émuler. Aucune rétropropagation : `A` et `B` aléatoires et gelés, seule'
+    "la lecture s'ajuste en forme fermée."
+  ```
+
+### 🤖 Assistant
+
+⏵ Je ré-harmonise les noms (3 chiffres) et je range le récapitulatif d'émulation comme état du module
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git mv reports/archive/rapport-campagne-benefices.md reports/rapport-campagne-benefices.md && rm -rf reports/campagne-benefices reports/campagne-benefices.md && python3 tools/decouper-rapport.py reports/rapport-campagne-benefices.md  … [1111 caractères tronqués]`
+
+  ```
+001-R-resume-les-cinq-resultats-qui-comptent-e.md
+002-00-le-piege-qui-a-failli-tout-fausser.md
+003-00-bis-le-verdict-famille-par-famille.md
+51
+campagne : 62 lignes de blanc supprimées, 9 non vides (préambule)
+=== références à recapitulatif.md ===
+[stderr]
+grep: ./journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md: binary file matches
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git mv reports/recapitulatif.md docs/etat-emulation-professeur.md && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"docs/etat-emulation-professeur.md\"); s = p.read_text(encoding=\"utf-8\")\nentete = \"\"\"> **État du module … [1952 caractères tronqués]`

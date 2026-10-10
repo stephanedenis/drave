@@ -7,12 +7,12 @@
 | Début | 2026-10-08 09:11 |
 | Durée | 49.1 h |
 | Tours | 88 |
-| Messages | 2137 |
-| Appels d'outils | 1952 |
+| Messages | 2144 |
+| Appels d'outils | 1959 |
 | Fichiers touchés | 67 |
-| Commandes | 1686 |
+| Commandes | 1693 |
 | Sous-agents | 3 |
-| Commits | 181 |
+| Commits | 182 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -3586,7 +3586,7 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 
 ### Tour 88 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*110 appels d'outils.* Actions notables :
+*117 appels d'outils.* Actions notables :
 
 - bash — Add the refusal and verify
 - bash — Move the refusal to the single point and verify
@@ -3602,11 +3602,11 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - bash — Read v7 removal context and flag inventory
 - bash — Read flag inventory section in docs
 - bash — Establish whether section 9 predates the v7 removal
-- … et 90 autres
+- … et 97 autres
 
 **Synthèse produite :**
 
-⏵ Résultat majeur à 512 jetons : fenêtre 128 + 64 puits ≈ attention complète (+2,0 %) à ÷2,67 de clés — j'écris la fiche
+⏵ Je ré-harmonise les noms (3 chiffres) et je range le récapitulatif d'émulation comme état du module
 
 ## 3. Travail accompli
 
@@ -3730,7 +3730,7 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1646 autres
+- … et 1653 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4059,4 +4059,5 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - $(cat <<'MSG' --attn-sinks : le refus etait FAUX (le compteur EST lu, branche a fenetre) — le drapeau vit, et le zero n'existait pas  Le refus code 2, ecrit sur
 - $(cat <<'MSG' Rangement : docs = fond, reports = une fiche par experience, journal = evenements dates  Retour de Stephane : les trois dossiers etaient melanges,
 - $(cat <<'MSG' Fenetre x puits d'attention : +2,0 % de perplexite pour divide 2,67 les cles notees (512 jetons)  Mesure (Qwen2.5-0.5B-Q8_0, ctx 512, perplexite d
+- $(cat <<'MSG' Rangement (suite) : rapport toutes-langues eclate (107 fiches), recapituatif range comme etat  - reports/rapport-toutes-langues.md (296 Ko, 107 se
 
