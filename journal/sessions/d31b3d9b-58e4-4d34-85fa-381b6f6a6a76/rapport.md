@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 54.7 h |
+| Durée | 54.8 h |
 | Tours | 88 |
-| Messages | 2464 |
-| Appels d'outils | 2267 |
+| Messages | 2467 |
+| Appels d'outils | 2270 |
 | Fichiers touchés | 85 |
-| Commandes | 1974 |
+| Commandes | 1977 |
 | Sous-agents | 3 |
-| Commits | 224 |
+| Commits | 225 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -3586,7 +3586,7 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 
 ### Tour 88 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*425 appels d'outils.* Actions notables :
+*428 appels d'outils.* Actions notables :
 
 - bash — Add the refusal and verify
 - bash — Move the refusal to the single point and verify
@@ -3602,11 +3602,11 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - bash — Read v7 removal context and flag inventory
 - bash — Read flag inventory section in docs
 - bash — Establish whether section 9 predates the v7 removal
-- … et 397 autres
+- … et 400 autres
 
 **Synthèse produite :**
 
-⏵ Je corrige toutes les estampilles en avance avec les heures RÉELLES de git, et je consigne ma propre rechute
+⏵ Audit systématique des estampilles restantes en avance (en gardant celles citées comme exemples d'erreur)
 
 ## 3. Travail accompli
 
@@ -3748,7 +3748,7 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1934 autres
+- … et 1937 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4120,4 +4120,5 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' import pathlib p = pathlib.Path("reports/rapport-c8-peripherie.md"); s = p.read_text()
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' import pathlib, re  # 1) les fiches : « Date réelle » = l'heure du COMMIT qui les a éc
 - Horodatage : les deux dernieres estampilles en avance (etat, fiche de passe) corrigees sur l'heure lue" && git push -q origin master && echo poussé
+- Horodatage : les 5 dernieres mentions « 17 h 55 » (heure estimee) remplacees par 15 h 15 (fin reelle de la passe, lue sur le journal)  Audit systematique apres 
 

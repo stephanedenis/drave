@@ -1,6 +1,6 @@
 # Repères de non-régression — ce qui ne doit PAS bouger
 
-> **2026-10-10 17:55 HAE.** Ces valeurs sont les **verdicts imprimés par la passe complète des
+> **2026-10-10 15:15 HAE.** Ces valeurs sont les **verdicts imprimés par la passe complète des
 > portes** (`tools/toutes-les-portes.sh`, **23 vertes sur 23**, ≈59 minutes — 3 525 s au total). Elles ne sont
 > pas recopiées de mémoire : elles sortent du journal de la passe. **Une modification du chemin
 > d'exécution qui déplace l'un de ces chiffres a changé le calcul** — il faut alors relancer la
@@ -20,7 +20,7 @@
 
 ## 2. Les repères imprimés par chaque porte
 
-| porte | durée | ce qu'elle vérifie, chiffré (passe du 2026-10-10 17 h 55) |
+| porte | durée | ce qu'elle vérifie, chiffré (passe du 2026-10-10 15 h 15) |
 |---|---|---|
 | `porte-budget.sh` | 42 s | ✅ paires depassees : nommees (total, budget, pas, plafond), code 9, AUCUNE perplexite |
 | `porte-bus.sh` | 76 s | ✅ le canal diffusé par fichier change la région du milieu |

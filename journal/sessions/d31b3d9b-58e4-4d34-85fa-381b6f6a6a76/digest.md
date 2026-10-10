@@ -39673,3 +39673,62 @@ poussé
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; python3 - <<'PYEOF'\nimport pathlib, subprocess\nheure = subprocess.run([\"date\", \"+%H:%M\"], capture_output=True, text=True).stdout.strip()\np = pathlib.Path(\"docs/etat-cerveau.md\"); s = p.read_text()\ns = s.repla … [895 caractères tronqués]`
+
+  ```
+15:56
+état : horodaté 15:56 (lu, pas estimé)
+fiche de passe : 17 h 55 → 15 h 15
+docs/etat-cerveau.md:87:- **23 portes** `tools/porte-*.sh` — **passe complète le 2026-10-10 17 h 55 : 23 vertes sur 23, 59 min**
+docs/manques.md:58:  **23 vertes sur 23, en 59 minutes** (mesuré le 2026-10-10 à 17 h 55 HAE ; détail et durées
+docs/organisation-du-depot.md:116:**enfreinte l'après-midi** : des fiches ont porté 16:50, 17:55, 18:35, 19:00 alors que l'horloge
+docs/references-non-regression.md:23:| porte | durée | ce qu'elle vérifie, chiffré (passe du 2026-10-10 17 h 55) |
+reports/rapport-passe-complete-portes.md:7:> (17 h 55) — et la passe a trouvé ce qu'une porte lancée
+poussé
+  ```
+
+### 🤖 Assistant
+
+⏵ Audit systématique des estampilles restantes en avance (en gardant celles citées comme exemples d'erreur)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rnoE \"\\b(1[6-9]|2[0-3]):[0-5][0-9]\\b|\\b1[6-9] h [0-9]{2}\\b\" docs/*.md reports/*.md journal/2026-10-10.md 2>/dev/null | grep -v \"organisation-du-depot.md\" | head -20", "description": "Audit remaining future timestamps"}`
+
+  ```
+docs/etat-cerveau.md:87:17 h 55
+docs/manques.md:58:17 h 55
+docs/plan-deepseek41-complet.md:675:17:33
+docs/plan-deepseek41-complet.md:675:18:02
+docs/references-non-regression.md:3:17:55
+docs/references-non-regression.md:23:17 h 55
+reports/rapport-empreinte-memoire.md:3:17 h 35
+reports/rapport-passe-complete-portes.md:7:17 h 55
+reports/rapport-v41-mhc.md:12:17:33
+reports/rapport-v41-mhc.md:273:20:21
+reports/rapport-v41-mhc.md:400:20:21
+reports/toutes-langues.md:16:23:50
+reports/toutes-langues.md:17:23:50
+reports/toutes-langues.md:18:23:50
+reports/toutes-langues.md:19:23:50
+reports/toutes-langues.md:20:23:50
+reports/toutes-langues.md:21:23:50
+reports/toutes-langues.md:63:16:11
+reports/toutes-langues.md:64:16:41
+reports/toutes-langues.md:65:16:46
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\nfix = [(\"docs/etat-cerveau.md\", \"17 h 55\", \"15 h 15\"),\n       (\"docs/manques.md\", \"17 h 55\", \"15 h 15\"),\n       (\"docs/references-non-regression.md\", \"17:55\", \"15:15\"),\n       … [952 caractères tronqués]`
+
+  ```
+docs/etat-cerveau.md : 1 × « 17 h 55 » → « 15 h 15 »
+docs/manques.md : 1 × « 17 h 55 » → « 15 h 15 »
+docs/references-non-regression.md : 1 × « 17:55 » → « 15:15 »
+docs/references-non-regression.md : 1 × « 17 h 55 » → « 15 h 15 »
+reports/rapport-passe-complete-portes.md : 1 × « 17 h 55 » → « 15 h 15 »
+=== reste-t-il une estampille en avance dans les fichiers d'aujourd'hui ? ===
+docs/organisation-du-depot.md:116:16:50
+docs/organisation-du-depot.md:116:17:55
+docs/organisation-du-depot.md:116:18:35
+docs/organisation-du-depot.md:116:19:00
+(vide = propre)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Horodatage : les 5 dernieres mentions « 17 h 55 » (heure estimee) remplacees par 15 h 15 (fin reelle de la passe, lue sur le journal)\n\nAudit systematique apres la correction : il ne reste des heures … [295 caractères tronqués]`
