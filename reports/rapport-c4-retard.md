@@ -36,6 +36,35 @@
    `pos` dans chaque trame (v6) et la réduction finale refuse un état d'une autre position — cette
    mesure dit **pourquoi**, et de combien.
 
+## 1 bis. Périmé ou MANQUANT ? La politique d'un ordonnanceur est chiffrée
+
+Un ordonnanceur asynchrone a trois choix quand un état n'est pas arrivé : **attendre**, **réutiliser
+le dernier reçu** (donc un état d'une autre position), ou **continuer sans** (la position reste sans
+état). Le prix des deux derniers est mesuré (128 jetons, couche 12 ; un état « manquant » est mis à
+zéro, ce qui n'est pas neutre — c'est le plancher) :
+
+| situation | perplexité | prix |
+|---|---|---|
+| modèle entier (référence) | 14,6496 | ×1 |
+| **un état MANQUANT** (position 32 · 64 · 96) | 15,1529 · 15,5295 · 15,6291 | **×1,03 à ×1,07** |
+| huit états manquants (un sur seize) | 52,7319 | ×3,6 |
+| **un état PÉRIMÉ** (décalage d'un pas, sur toute la séquence) | 9 277,9771 | **×633** |
+| tous les états manquants | 2 801 962,2714 | ×191 000 |
+
+**La politique est donc tranchée par la mesure : on CONTINUE SANS, on ne réutilise JAMAIS.**
+Réutiliser un état d'une autre position coûte ×633 ; le laisser manquant coûte ×1,05. Un
+ordonnanceur qui « fait au mieux avec le dernier état reçu » se trompe de trois ordres de grandeur.
+
+*(Le test « périmé » et le test « manquant » ne mesurent pas la même chose, et c'est voulu :
+réutiliser, c'est **désaligner** toute la suite ; manquer, c'est perdre **une** position. Le second
+est local, le premier est systémique.)*
+
+**Un contrôle qui ne contrôlait rien**, attrapé en écrivant ce tableau : le premier « un état
+manquant » portait sur la **dernière** position — or la perplexité note les N−1 premiers pas, et la
+dernière position ne sert à rien. Le chiffre sortait **identique à la référence** (14,6496), ce qui
+avait l'air d'un résultat et n'était qu'un trou hors champ. Corrigé en trouant des positions
+**notées** (32, 64, 96), et c'est la même famille que le témoin périodique de la périphérie.
+
 ## 2. Ce que ça impose à l'ordonnanceur de C4 (et ce que ça n'interdit pas)
 
 **Interdit** : un ordonnanceur qui « laisse un pas prendre du retard » en réutilisant le dernier

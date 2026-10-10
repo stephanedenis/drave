@@ -73,6 +73,36 @@ if r8 < r1:
     sys.exit(f"  ❌ retard 8 ({r8}) meilleur que retard 1 ({r1}) : la dégradation devrait saturer")
 print(f"  ✅ la dégradation sature (retard 8 : ×{r8/r0:.0f}, pas moins que le retard 1)")
 PY
+echo "=== 5. politique : un état MANQUANT coûte moins qu'un état PÉRIMÉ (on ne réutilise jamais) ==="
+# Le choix d'un ordonnanceur asynchrone, chiffré : réutiliser le dernier état reçu (donc un état
+# d'une AUTRE position) coûte ×633 ; laisser la position sans état coûte quelques pour cent.
+python3 - "$T" "$N" <<'PY' || exit 1
+import pathlib, struct, sys
+import numpy as np
+t, n = pathlib.Path(sys.argv[1]), int(sys.argv[2])
+X = np.vstack([np.frombuffer((t / f"s.{i}").read_bytes(), dtype="<f4") for i in range(n)])
+Z = X.copy(); Z[64] = 0                    # une position NOTÉE sans état (pas la dernière !)
+(t / "hole.refd").write_bytes(b"REFD" + struct.pack("<i", 4) + struct.pack("<4i", X.shape[1], 1, 1, 1)
+                              + Z.astype("<f4").tobytes())
+PY
+PH=$(ppl_impose "$T/hole.refd")
+printf '  périmé (1 pas) %s · manquant (1 position notée) %s\n' "${R1:-?}" "${PH:-?}"
+python3 - <<PY || exit 1
+import sys
+def f(x):
+    try: return float(x)
+    except Exception: return None
+ref, r1, ph = map(f, "$REF $R1 $PH".split())
+if None in (ref, r1, ph):
+    sys.exit("  ❌ une mesure de politique manque")
+if abs(ph - ref) > 0.001 * ref and ph < ref:
+    sys.exit(f"  ❌ un trou a AMÉLIORÉ la perplexité ({ph} < {ref}) : le banc est suspect")
+if not ph < r1 / 10:
+    sys.exit(f"  ❌ manquer ({ph}) ne serait pas nettement moins cher que réutiliser ({r1})")
+print(f"  ✅ manquer coûte ×{ph/ref:.2f}, réutiliser coûte ×{r1/ref:.0f} : on CONTINUE SANS, "
+      f"on ne réutilise JAMAIS")
+PY
+
 echo
 echo "PORTE TENUE : un état n'est valide qu'à sa position (×633 pour un pas), et l'asynchronisme ne"
 echo "peut donc pas vouloir dire « laisser un pas prendre du retard » — seulement réordonner les"

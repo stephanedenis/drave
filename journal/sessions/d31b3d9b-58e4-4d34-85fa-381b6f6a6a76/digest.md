@@ -40351,3 +40351,63 @@ docs/etat-cerveau.md:103:`journal/2026-10-10.md` et dans `docs/manques.md` (la l
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Le nombre de portes n'est plus fige dans les fichiers d'entree (il a change trois fois aujourd'hui : 22 -> 23 -> 25)\n\nREADME et REPRISE disaient « les 22 portes » ; docs/modularisation disait « les  … [492 caractères tronqués]`
+
+  ```
+poussé
+  porte-flux             ✅                          20 s    mode 4 — lot en listes           4.45e-3  ✅  (réf 60.8135 / deux nœuds 60.5427)
+  porte-fusion           ✅                           7 s    ✅ v1 refusée (code 2), trace seule refusée (code 2)
+  porte-gain             ✅                         345 s    ✅ drapeau VIVANT mais conditionnel : 0 casse (29.0206 → 1297.5437), 24 améliore (27.4439), san
+17:27
+  ```
+
+### 🤖 Assistant
+
+⏵ Question de politique d'ordonnanceur : vaut-il mieux un état PÉRIMÉ ou un état MANQUANT ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf; I=/tmp/campagne24/ids_0.5B-Q8.txt; T=/tmp/c4p; rm -rf $T; mkdir -p $T; N=128; POS=$(seq -s, 0 $((N-1)))\n$D $M --ppl \"$I\" --limit $N --ctx 256 --threads 8 --couc … [1417 caractères tronqués]`
+
+  ```
+modèle entier (référence) 14.6496
+  stale                        9277.9771
+  trou1                        14.6496
+  trou8                        52.7319
+  zero                         2801962.2714
+  ```
+
+### 🤖 Assistant
+
+⏵ Mon « trou1 » ne mesurait rien (la dernière position n'est pas notée) — je refais sur une position NOTÉE
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf; I=/tmp/campagne24/ids_0.5B-Q8.txt; T=/tmp/c4p; N=128\npython3 - \"$T\" \"$N\" <<'PY'\nimport pathlib, struct, sys, numpy as np\nt, n = pathlib.Path(sys.argv[1]), i … [875 caractères tronqués]`
+
+  ```
+trous sur des positions NOTÉES (32, 64, 96) écrits
+  hole32     15.1529
+  hole64     15.5295
+  hole96     15.6291
+  (référence 14,6496 · périmé 9277,98 · 8 trous 52,73 · tout manquant 2 801 962)
+  ```
+
+### 🤖 Assistant
+
+⏵ Résultat net : un état MANQUANT coûte ×1,05, un état PÉRIMÉ ×633 — la politique est claire ; je consigne et verrouille
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"reports/rapport-c4-retard.md\"); s = p.read_text()\nancre = \"## 2. Ce que ça impose à l'ordonnanceur de C4\"\nsec = \"\"\"## 1 bis. Périmé ou MANQUANT ? La politique d'un ordon … [4139 caractères tronqués]`
+
+  ```
+§ manquant ajouté à la fiche C4
+porte étendue à la politique
+  ✅ la dégradation sature (retard 8 : ×10343, pas moins que le retard 1)
+=== 5. politique : un état MANQUANT coûte moins qu'un état PÉRIMÉ (on ne réutilise jamais) ===
+  périmé (1 pas) 9277.9771 · manquant (1 position notée) 15.5295
+  ✅ manquer coûte ×1.06, réutiliser coûte ×633 : on CONTINUE SANS, on ne réutilise JAMAIS
+
+PORTE TENUE : un état n'est valide qu'à sa position (×633 pour un pas), et l'asynchronisme ne
+peut donc pas vouloir dire « laisser un pas prendre du retard » — seulement réordonner les
+messages D'UN MÊME pas, chacun portant sa position. Fiche : reports/rapport-c4-retard.md.
+CODE=0
+  porte-fusion           ✅                           7 s    ✅ v1 refusée (code 2), trace seule refusée (code 2)
+  porte-gain             ✅                         345 s    ✅ drapeau VIVANT mais conditionnel : 0 casse (29.0206 → 1297.5437), 24 améliore (27.4439), san
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib, subprocess\nheure = subprocess.run([\"date\", \"+%H:%M\"], capture_output=True, text=True).stdout.strip()\np = pathlib.Path(\"docs/etat-cerveau.md\"); s = p.read_text()\nold = \"\"\"**un état n'es … [3719 caractères tronqués]`
