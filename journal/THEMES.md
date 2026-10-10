@@ -45,6 +45,7 @@ possible (`ls journal/*_<thème>.md`).
 | jour | chiffres du jour |
 |---|---|
 | [2026-10-09](2026-10-09_apprentissage.md) | `5,2 %` · `-12 %` · `−12 %` · `−5,2 %` |
+| [2026-10-10](2026-10-10_apprentissage.md) | — |
 
 ### `distribue` — Régions, flux, protocoles, budgets, pannes
 

@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 49.8 h |
+| Durée | 50.0 h |
 | Tours | 88 |
-| Messages | 2234 |
-| Appels d'outils | 2046 |
+| Messages | 2238 |
+| Appels d'outils | 2050 |
 | Fichiers touchés | 69 |
-| Commandes | 1772 |
+| Commandes | 1776 |
 | Sous-agents | 3 |
-| Commits | 193 |
+| Commits | 194 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -3586,7 +3586,7 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 
 ### Tour 88 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*204 appels d'outils.* Actions notables :
+*208 appels d'outils.* Actions notables :
 
 - bash — Add the refusal and verify
 - bash — Move the refusal to the single point and verify
@@ -3602,11 +3602,11 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - bash — Read v7 removal context and flag inventory
 - bash — Read flag inventory section in docs
 - bash — Establish whether section 9 predates the v7 removal
-- … et 179 autres
+- … et 183 autres
 
 **Synthèse produite :**
 
-⏵ Deux défauts de classement (tout `model.rs` partait en « attention ») — je raffine, j'ajoute un thème « apprentissage » et je nettoie les fichiers périmés
+⏵ J'ajoute la capture du temps et du débit à la carte (qualité ET prix réel par case)
 
 ## 3. Travail accompli
 
@@ -3732,7 +3732,7 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1732 autres
+- … et 1736 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4073,4 +4073,5 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'MSG' Journal : etapes DATEES par la trace de session (elles couvraient
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' import pathlib p = pathlib.Path("reports/rapport-fenetre-puits-attention.md"); s = p.r
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'MSG' Journal : classement affine (theme APPRENTISSAGE, plus de model.r
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' import pathlib p = pathlib.Path("tools/carte-fenetre-puits.sh"); s = p.read_text() old
 

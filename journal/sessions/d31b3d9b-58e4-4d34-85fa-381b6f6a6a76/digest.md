@@ -36033,3 +36033,60 @@ journal/2026-10-09_apprentissage.md journal/2026-10-09_attention.md journal/2026
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'MSG'\nJournal : classement affine (theme APPRENTISSAGE, plus de model.rs fourre-tout) + nettoyage\n\nDeux defauts vus en relisant le classement du 9 octobre :\n1. `model.rs` etait declare comme CHE … [1051 caractères tronqués]`
+
+  ```
+poussé
+  porte-greffe           ✅                         971 s    ✅ la porte est franchie. Ce qu'elle établit : l'injection d'état est BRANCHÉE
+  porte-horloge          ✅                          24 s    ✅ borne atteinte : arrêt EXPLICITE (code 5) et AUCUNE perplexité rendue
+  porte-indice           ✅                         971 s    ✅ la porte est franchie. Limite, et elle est écrite : UN SEUL indice extérieur,
+  ```
+
+### 🤖 Assistant
+
+⏵ J'attends la fin des deux mesures (carte 4 096 et passe complète) avant de traiter les résultats
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in $(seq 1 55); do if grep -q \"CODE_PASSE=\" /tmp/passe-complete.log 2>/dev/null; then break; fi; sleep 60; done; tail -22 /tmp/passe-complete.log; echo \"=== carte 4096 ===\"; cat /tmp/carte-4096.md 2>/dev/null", "description … [67 caractères tronqués]`
+
+  ```
+(no output)
+[timed out after 600000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && while ! grep -q \"CODE_PASSE=\" /tmp/passe-complete.log 2>/dev/null || ! grep -q \"clés notées\" /tmp/carte-4096.md 2>/dev/null; do sleep 30; done; echo \"=== PASSE ===\"; tail -26 /tmp/passe-complete.log; echo \"=== CARTE 4096 ===\" … [101 caractères tronqués]`
+
+  ```
+started background job bash-32
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,16p' journal/2026-10-10.md; echo \"=== thèmes du jour ===\"; grep -A3 \"## Thèmes du jour\" journal/2026-10-10.md | head -5", "description": "Check today's journal after regeneration"}`
+
+  ```
+# 2026-10-10
+
+> **Généré** par `tools/journal_auto.py` — index de la journée, découpée par **thème**
+> (une journée de ce dépôt ne tient pas dans un fichier). Le récit écrit à la main est
+> conservé plus bas, dans le bloc « notes » (marqueurs HTML).
+
+**63 commits** · **1 session(s)** · **9 thème(s)**
+
+## Thèmes du jour
+
+| thème | commits | fichier |
+|---|---|---|
+| attention | 14 | [2026-10-10_attention.md](2026-10-10_attention.md) |
+| distribue | 23 | [2026-10-10_distribue.md](2026-10-10_distribue.md) |
+| divers | 0 | [2026-10-10_divers.md](2026-10-10_divers.md) |
+| docs | 8 | [2026-10-10_docs.md](2026-10-10_docs.md) |
+=== thèmes du jour ===
+## Thèmes du jour
+
+| thème | commits | fichier |
+|---|---|---|
+  ```
+
+### 🤖 Assistant
+
+⏵ J'ajoute la capture du temps et du débit à la carte (qualité ET prix réel par case)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"tools/carte-fenetre-puits.sh\"); s = p.read_text()\nold = '''mesure () { # $@ = drapeaux ; imprime la perplexité seule\n    $D \"$M\" --ppl \"$IDS\" --limit \"$LIMITE\" --ctx \" … [2662 caractères tronqués]`

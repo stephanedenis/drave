@@ -31,13 +31,23 @@ FENETRES=${FENETRES:-16 32 64 128}
 PUITS=${PUITS:-0 8 16 24 32}
 [ -s "$M" ] && [ -s "$IDS" ] || { echo "  modèle ou identifiants absents"; exit 2; }
 
-mesure () { # $@ = drapeaux ; imprime la perplexité seule
-    $D "$M" --ppl "$IDS" --limit "$LIMITE" --ctx "$CTX" --threads 8 "$@" 2>&1 \
-      | grep -oE "perplexité [0-9.]+ sur" | grep -oE "[0-9.]+"
+# Chaque case rend « perplexité · secondes · tok/s » : la QUALITÉ et le PRIX RÉEL. Le temps
+# n'est pas décoratif — la fenêtre ne réduit que les scores d'attention, qui ne sont qu'un
+# poste du calcul (la FFN domine), donc le gain de temps est TOUJOURS plus petit que le gain
+# de clés, et c'est exactement ce qu'il faut mesurer plutôt que supposer.
+mesure () { # $@ = drapeaux ; imprime « perplexité secondes tok/s »
+    local sortie
+    sortie=$($D "$M" --ppl "$IDS" --limit "$LIMITE" --ctx "$CTX" --threads 8 "$@" 2>&1)
+    local ppl sec tok
+    ppl=$(printf '%s' "$sortie" | grep -oE "perplexité [0-9.]+ sur" | grep -oE "[0-9.]+")
+    sec=$(printf '%s' "$sortie" | grep -oE "perplexité [0-9.]+ sur [0-9]+ tokens \([0-9.]+ s\)" \
+          | grep -oE "\([0-9.]+ s\)" | grep -oE "[0-9.]+")
+    tok=$(printf '%s' "$sortie" | grep -oE "[0-9.]+ tok/s effectifs" | grep -oE "[0-9.]+")
+    printf '%s·%s s·%s tok/s' "${ppl:-?}" "${sec:-?}" "${tok:-?}"
 }
 
 REFO=$(mesure)
-echo "référence (aucune fenêtre, $LIMITE jetons) : perplexité $REFO  ·  clés notées par jeton ≈ $LIMITE"
+echo "référence (aucune fenêtre, $LIMITE jetons) : $REFO  ·  clés notées par jeton ≈ $LIMITE"
 echo
 printf '| fenêtre \\ puits |'
 for n in $PUITS; do printf ' %s |' "$n"; done
@@ -54,5 +64,6 @@ for f in $FENETRES; do
     echo
 done
 echo
-echo "Chaque case : perplexité. Clés notées par jeton ≈ fenêtre + puits (le prix), contre $LIMITE"
-echo "pour l'attention complète — c'est le SEUL poste que la fenêtre réduit."
+echo "Chaque case : « perplexité · secondes · tok/s ». Clés notées par jeton ≈ fenêtre + puits,"
+echo "contre $LIMITE pour l'attention complète — c'est le SEUL poste que la fenêtre réduit, donc le"
+echo "gain de temps est plus petit que le gain de clés : c'est mesuré ici, pas supposé."
