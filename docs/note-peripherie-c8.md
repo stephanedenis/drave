@@ -82,7 +82,7 @@ sortie scalaire par pas, et une tâche fermée de **poursuite de consigne**.
 4. alors seulement, si la tâche le demande : une **vision** (patchs) comme type d'entrée
    supplémentaire.
 
-## 6. Ce qui reste, et la conception de la STRUCTURE de mémoire (17:32 HAE)
+## 6. La STRUCTURE de mémoire — **LIVRÉE** le 2026-10-10 à 19:25 (17:32 HAE)
 
 La tâche fermée (poursuite d'un signal) n'est pas résolue, et la mesure dit pourquoi : l'état de
 sortie porte le signal **courant** (R² 0,992) mais **pas** celui d'il y a 8 pas (R² −0,681, y
@@ -91,7 +91,10 @@ compris pour une lecture non linéaire) ; un tampon remis **en entrée** ne le r
 dit : **retenir demande une structure qui ne passe pas par la transformation du réseau**
 (`reports/rapport-c8-peripherie.md` § 2 ter et 2 quater).
 
-**Conception minimale proposée** (à écrire AVANT le code, comme les autres) :
+**C'est implémenté** (`--memoire K`, `--sortie-memoire F`), vérifié par `tools/porte-memoire.sh`
+(exactitude au bit près, coût nul en paires, deux refus, zéro exprimable) et mesuré : la poursuite
+de `v[t−8]` depuis la mémoire donne **R² 1,000 et une erreur NULLE** (l'état du réseau : −0,681).
+Ce qui suit est la conception d'origine, conservée telle quelle :
 
 | élément | proposition | pourquoi |
 |---|---|---|

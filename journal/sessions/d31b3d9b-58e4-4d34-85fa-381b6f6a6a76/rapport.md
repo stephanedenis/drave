@@ -6,13 +6,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
 | Durée | 58.2 h |
-| Tours | 89 |
-| Messages | 2530 |
-| Appels d'outils | 2331 |
-| Fichiers touchés | 91 |
-| Commandes | 2032 |
+| Tours | 90 |
+| Messages | 2540 |
+| Appels d'outils | 2339 |
+| Fichiers touchés | 92 |
+| Commandes | 2038 |
 | Sous-agents | 3 |
-| Commits | 238 |
+| Commits | 239 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -213,6 +213,8 @@
 **Tour 88** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 **Tour 89** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
+
+**Tour 90** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -3636,7 +3638,7 @@ Trois erreurs attrapées par les instruments : une **porte fantôme** verte en c
 
 ### Tour 89 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*51 appels d'outils.* Actions notables :
+*52 appels d'outils.* Actions notables :
 
 - bash — Check imposed input state flags
 - bash — Audit etat_entree usage
@@ -3652,11 +3654,61 @@ Trois erreurs attrapées par les instruments : une **porte fantôme** verte en c
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-jumeaux.sh`
 - bash — Run the twins gate
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-c9-lateralite.md`
-- … et 36 autres
+- … et 37 autres
 
 **Synthèse produite :**
 
-⏵ Correction : la passe a duré 59 min 25 s (pas 57) — je rectifie les deux documents
+**Round 46 — état vérifié (19:20 HAE, heure lue)** : **25 portes vertes sur 25** (passe complète de 59 min 25 s, relancée après chaque changement du moteur) · **122 tests verts** · arbre propre · tout poussé. L'objectif reste actif (il n'a pas de fin tant que du travail mesurable reste).
+
+\## C9 — latéralité : mesurée, et le gain est NUL (avec la raison)
+
+Le moteur savait déjà **imposer un état** (`DRAVE_ETAT_ENTREE`, format REFD) : deux jumeaux = deux états, l'échange = ce qu'on écrit dans le fichier. Résultats (64 jetons, couche 12) :
+
+| | perplexité |
+|---|---|
+| modèle entier (invariant) | **27,4964** |
+| deux jumeaux **identiques** échangés | **27,4964** (rien ne change) |
+| jumeau bruité | 163,17 |
+| échange A↔A(bruité) | 36,13 |
+| **CONTRÔLE** : bruit à moitié | **36,1307** — écart **0,000 %** |
+
+**Récupérer un jumeau dégradé, c'est une moyenne, pas une latéralité** — le contrôle le prouve. Et la fusion de deux **vues valides** ne bat pas la meilleure des deux (31 jetons : 56,22 contre 56,76 → artefact ; **127 jetons : 15,39 contre 14,65**). Le plan prévoyait « le gain est probablement nul » : il est maintenant mesuré.
+
+**Coût compressé** : l'échange utile est à **8 bits par bloc — ÷4 d'octets pour +3,0 %** ; et **quantifier bat élaguer, encore** (512 octets de listes creuses = +35,5 %, 896 octets de 8 bits = +3,0 %) — même conclusion que le pont de la campagne, par un autre protocole.
+
+\## C4 — le prix du retard : ×633 pour UN pas
+
+| situation | perplexité | prix |
+|---|---|---|
+| un état **périmé** (décalage d'un pas) | 9 277,98 | **×633** |
+| un état **manquant** (position notée) | 15,53 | **×1,06** |
+| huit états manquants | 52,73 | ×3,6 |
+| tous manquants | 2 801 962 | ×191 000 |
+
+**Politique tranchée : on continue sans, on ne réutilise JAMAIS.** L'asynchronisme ne peut pas « laisser un pas prendre du retard » ; il peut seulement réordonner les messages d'un même pas, chacun portant sa position.
+
+\## Deux portes de plus (24ᵉ, 25ᵉ), et trois pièges attrapés
+
+`porte-jumeaux.sh` et `porte-c4-retard.sh` verrouillent ces résultats. Pièges documentés : la capture d'états **n'écrit rien** sans `--tete-partielle` ; l'en-tête **REFD** indexe par blocs `ne[0]×ne[1]` (sinon le moteur lit tout le fichier comme **un** état) ; et mon premier « état manquant » portait sur la **dernière** position — qui n'est pas notée — donc il mesurait **rien** (chiffre identique à la référence, ce qui ressemblait à un résultat).
+
+**Suite (prochaine action, écrite dans l'état)*
+… [223 caractères tronqués]
+
+### Tour 90 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
+
+*7 appels d'outils.* Actions notables :
+
+- bash — Implement the frontier memory in the engine
+- bash — Test the frontier memory
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-memoire.sh`
+- bash — Run the memory gate
+- bash — Fix the gate and rerun
+- bash — Test suite and measure the pursuit via the memory
+- bash — Document the delivered memory and commit
+
+**Synthèse produite :**
+
+⏵ Porte de la mémoire verte ; tests, puis documentation (la poursuite est résolue par la structure)
 
 ## 3. Travail accompli
 
@@ -3755,6 +3807,7 @@ Trois erreurs attrapées par les instruments : une **porte fantôme** verte en c
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/c4_retard.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-c4-retard.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-c4-retard.sh` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-memoire.sh` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -3804,7 +3857,7 @@ Trois erreurs attrapées par les instruments : une **porte fantôme** verte en c
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1992 autres
+- … et 1998 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4190,4 +4243,5 @@ Trois erreurs attrapées par les instruments : une **porte fantôme** verte en c
 - Index des modules et prochaine action : les suites de C9 et C4 sont nommees avec leurs chiffres  docs/etat.md renvoie aux trois suites (structure de memoire de 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' import pathlib, re, subprocess log = pathlib.Path("/tmp/passe-complete5.log").read_tex
 - Duree de la passe : 59 min 25 s (3565 s) — le commit precedent disait 57 min, ecrit avant de la calculer  Meme regle que pour les estampilles : un chiffre se LI
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' import pathlib, subprocess heure = subprocess.run(["date", "+%H:%M"], capture_output=T
 

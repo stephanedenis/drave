@@ -40664,3 +40664,165 @@ poussé
 ⏵ Correction : la passe a duré 59 min 25 s (pas 57) — je rectifie les deux documents
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\nfor f, avant, apres in [\n    (\"docs/etat-cerveau.md\", \"**passe complète le 2026-10-10 19 h 10 : 25 vertes sur 25, 57 min**\",\n     \"**passe complète le 2026-10-10 19 h 20 : 25 vertes sur 25, … [936 caractères tronqués]`
+
+  ```
+docs/etat-cerveau.md : 1 correction(s)
+docs/manques.md : 1 correction(s)
+poussé
+test result: ok. 122 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.31s
+(arbre propre si vide)
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 46 livré et vérifié — je récapitule
+
+- **todo_write** `{"todos": [{"content": "C9 latéralité : banc des jumeaux, mesure (exact, gain nul, contrôle), porte", "status": "completed"}, {"content": "C9 coût compressé de l'échange (8 bits = ÷4 pour +3 %) + porte étendue", "status": "completed"}, {"content": "C4 prix du retard (×633) et politique d'ordonnanceu … [289 caractères tronqués]`
+
+  ```
+Updated todo list: 1 pending, 0 in progress, 4 completed.
+  ```
+
+### 🤖 Assistant
+
+**Round 46 — état vérifié (19:20 HAE, heure lue)** : **25 portes vertes sur 25** (passe complète de 59 min 25 s, relancée après chaque changement du moteur) · **122 tests verts** · arbre propre · tout poussé. L'objectif reste actif (il n'a pas de fin tant que du travail mesurable reste).
+
+## C9 — latéralité : mesurée, et le gain est NUL (avec la raison)
+
+Le moteur savait déjà **imposer un état** (`DRAVE_ETAT_ENTREE`, format REFD) : deux jumeaux = deux états, l'échange = ce qu'on écrit dans le fichier. Résultats (64 jetons, couche 12) :
+
+| | perplexité |
+|---|---|
+| modèle entier (invariant) | **27,4964** |
+| deux jumeaux **identiques** échangés | **27,4964** (rien ne change) |
+| jumeau bruité | 163,17 |
+| échange A↔A(bruité) | 36,13 |
+| **CONTRÔLE** : bruit à moitié | **36,1307** — écart **0,000 %** |
+
+**Récupérer un jumeau dégradé, c'est une moyenne, pas une latéralité** — le contrôle le prouve. Et la fusion de deux **vues valides** ne bat pas la meilleure des deux (31 jetons : 56,22 contre 56,76 → artefact ; **127 jetons : 15,39 contre 14,65**). Le plan prévoyait « le gain est probablement nul » : il est maintenant mesuré.
+
+**Coût compressé** : l'échange utile est à **8 bits par bloc — ÷4 d'octets pour +3,0 %** ; et **quantifier bat élaguer, encore** (512 octets de listes creuses = +35,5 %, 896 octets de 8 bits = +3,0 %) — même conclusion que le pont de la campagne, par un autre protocole.
+
+## C4 — le prix du retard : ×633 pour UN pas
+
+| situation | perplexité | prix |
+|---|---|---|
+| un état **périmé** (décalage d'un pas) | 9 277,98 | **×633** |
+| un état **manquant** (position notée) | 15,53 | **×1,06** |
+| huit états manquants | 52,73 | ×3,6 |
+| tous manquants | 2 801 962 | ×191 000 |
+
+**Politique tranchée : on continue sans, on ne réutilise JAMAIS.** L'asynchronisme ne peut pas « laisser un pas prendre du retard » ; il peut seulement réordonner les messages d'un même pas, chacun portant sa position.
+
+## Deux portes de plus (24ᵉ, 25ᵉ), et trois pièges attrapés
+
+`porte-jumeaux.sh` et `porte-c4-retard.sh` verrouillent ces résultats. Pièges documentés : la capture d'états **n'écrit rien** sans `--tete-partielle` ; l'en-tête **REFD** indexe par blocs `ne[0]×ne[1]` (sinon le moteur lit tout le fichier comme **un** état) ; et mon premier « état manquant » portait sur la **dernière** position — qui n'est pas notée — donc il mesurait **rien** (chiffre identique à la référence, ce qui ressemblait à un résultat).
+
+**Suite (prochaine action, écrite dans l'état)** : la **structure de mémoire** de C8 (`--memoire`, conception et 4 portes déjà écrites avant le code) — la mesure dit qu'un tampon lu directement rend la poursuite exacte (R² 1,000) là où le réseau ne retient rien (−0,68).
+
+
+## Tour 90
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 mémoire épisodique, C7 consolidation, C8 périphérie, C9 latéralité, C10 budgets, et la diffusion réseau du bus de C5 ; (b) les expériences E2-E9 de docs/biologie-pour-drave.md et docs/hebbien-differentiel-et-biologie.md ; (c) les dessins de modèle H/I/J de docs/modele-pour-drave.md ; (d) les manques du registre docs/manques.md (noyau de listes pour les experts, noyau de listes GPU, encodeurs) — l'implémenter ou la mesurer, la doter d'une porte vérifiable, la documenter, commiter, pousser, et enchaîner immédiatement sur la suivante. Contraintes : les 23 portes du dépôt et tous les tests restent verts (porte-flux.sh après toute modification du chemin d'exécution), le profil release reste le binaire de mesure, le crate reste std seul, et docs/sprint-cerveau.md reste l'état resumable mis à jour à chaque round. Ne jamais s'arrêter faute de tâches planifiées : en inventer de nouvelles, mesurables, plutôt que d'attendre."
+Round: 47/60
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 47 — j'implémente la STRUCTURE DE MÉMOIRE de C8 (`--memoire K`, `--sortie-memoire F`)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"drave-core/src/main.rs\"); s = p.read_text()\n\n# 1) les options\ns = s.replace('''            \"--entree-jeton\" => { o.entree_jeton = suivant(i).parse().unwrap(); 2 }''',\n''' … [4630 caractères tronqués]`
+
+  ```
+mémoire implémentée
+BUILD_OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf; T=/tmp/mem; rm -rf $T; mkdir -p $T\npython3 -c \"\nimport random; random.seed(3)\nopen('$T/sig.txt','w').write('\\n'.join(f'{random.uniform(-2,2):.4f}' for _ in ra … [1617 caractères tronqués]`
+
+  ```
+MÉMOIRE           : 8 pas retenus hors du réseau (32 valeurs écrites dans /tmp/mem/memoire.f32) — elle ne passe par AUCUNE couche, donc elle ne coûte aucune paire
+  paires par pas    : 357.8 M (la métrique du plan : poids × activation par décision)
+  mémoire : 32 valeurs · écart max 5.856e-08 · INEXACTE
+  premiers pas : [0.0, 0.0, 0.0] (zéros avant que le tampon soit plein) · pas 8..10 : [-1.0481, 0.1769, -0.5202] = signal 0..2 [-1.0481, 0.1769, -0.5202]
+=== sans mémoire (les paires doivent être IDENTIQUES) ===
+  paires par pas    : 357.8 M (la métrique du plan : poids × activation par décision)
+=== refus ===
+REFUS : `--memoire 100` dépasse le nombre de pas (32) — une mémoire plus longue que la séq
+  code=0
+  --memoire sans --sortie-memoire : code=2
+  --memoire 0 (exprimable) : code=0
+  ```
+
+### 🤖 Assistant
+
+⏵ L'écart 5,9e-08 venait de MON test (f64 contre f32) — je vérifie en f32 et j'écris la porte
+
+- **write** `{"content": "#!/bin/bash\n# porte-memoire.sh — C8 : la MÉMOIRE de la région frontière, retenue HORS du réseau.\n#\n# POURQUOI ELLE EXISTE. La tâche fermée de C8 (poursuivre un signal) n'était pas résolue, et la\n# mesure a nommé la cause : l'état de sortie porte le signal **courant** (R² 0,992) mais … [5594 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-memoire.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && chmod +x tools/porte-memoire.sh && bash -n tools/porte-memoire.sh && echo \"syntaxe OK\" && timeout 1200 bash tools/porte-memoire.sh 2>&1 | tail -16; echo \"CODE=${PIPESTATUS[0]}\"", "description": "Run the memory gate", "timeoutMs": … [9 caractères tronqués]`
+
+  ```
+syntaxe OK
+  signal : 32 pas · RMS 1.118
+=== 1. la mémoire est EXACTE (f32 des deux côtés) ===
+  ✅ mémoire EXACTE : 32 valeurs, 8 pas de retard, écart 0 (comparaison en f32)
+=== 2. elle ne coûte AUCUNE paire (la métrique du plan) ===
+  avec mémoire 357.8 M · sans 357.8 M
+  ✅ mêmes paires, même état : la mémoire ne traverse aucune couche
+=== 3. les refus sont explicites (code 2) ===
+  ❌ mémoire plus longue que la séquence : refus muet
+CODE=1
+  ```
+
+### 🤖 Assistant
+
+⏵ Bug de harnais : `run` redirige stderr ailleurs, donc le refus n'était pas lu — je corrige
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"tools/porte-memoire.sh\"); s = p.read_text()\nold = '''refus () { local desc=\"$1\"; shift; run \"$@\" > \"$T/refus.out\" 2>&1; local c=$?\n    [ \"$c\" = 2 ] || { echo \"  ❌ $d … [986 caractères tronqués]`
+
+  ```
+lecture du refus corrigée
+=== 2. elle ne coûte AUCUNE paire (la métrique du plan) ===
+  avec mémoire 357.8 M · sans 357.8 M
+  ✅ mêmes paires, même état : la mémoire ne traverse aucune couche
+=== 3. les refus sont explicites (code 2) ===
+  ✅ mémoire plus longue que la séquence
+  ✅ mémoire sans fichier de sortie
+=== 4. le ZÉRO est exprimable : --memoire 0 = pas de mémoire, même résultat ===
+  ✅ --memoire 0 accepté, et identique à l'absence du drapeau
+
+PORTE TENUE : la mémoire retient les K derniers signaux HORS du réseau, exactement, sans
+coûter une seule paire, et elle refuse ce qu'elle ne peut pas faire. C'est la structure dont
+la mesure de C8 avait montré l'absence (l'état : R² −0,68 ; un tampon : 1,000).
+CODE=0
+  ```
+
+### 🤖 Assistant
+
+⏵ Porte de la mémoire verte ; tests, puis documentation (la poursuite est résolue par la structure)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 cargo test --release --manifest-path drave-core/Cargo.toml 2>&1 | grep -E \"^test result|^error\" | head -3; T=/tmp/mem; D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf\npython3 -c \"\nimport random;  … [1124 caractères tronqués]`
+
+  ```
+test result: ok. 122 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.31s
+=== poursuite avec la mémoire, 64 pas, 8 de retard ===
+  MÉMOIRE           : 8 pas retenus hors du réseau (64 valeurs écrites dans /tmp/mem/m64.f32) — elle ne passe par AUCUNE couche, donc elle ne coûte aucune paire
+  poursuite v[t-8] depuis la MÉMOIRE : RMSE 0.000e+00 · R² +1.000
+  (l'état du réseau donnait R² -0,681 pour la même cible ; un tampon donne 1,000)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib, subprocess\nheure = subprocess.run([\"date\", \"+%H:%M\"], capture_output=True, text=True).stdout.strip()\n# 1) la fiche C8 périphérie : la poursuite est RÉSOLUE par la structure\np = pathlib.Path … [7453 caractères tronqués]`

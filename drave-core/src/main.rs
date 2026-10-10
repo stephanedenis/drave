@@ -872,6 +872,9 @@ struct Options {
     /// gain de l'injection, le délai en pas, et le fichier de sortie (réutilise `--sortie`).
     entree: Option<String>, entree_canal: usize, entree_gain: f32, delai: usize,
     entree_jeton: usize, recurent: bool, entree_memoire: usize,
+    /// **Mémoire de la région frontière** : nombre de signaux retenus hors du réseau, et le
+    /// fichier où la valeur retenue est écrite pas à pas (f32 brut, une valeur par pas).
+    memoire: usize, sortie_memoire: Option<String>,
     config: bool,
     /// Profilage des neurones « chauds » (idée de PowerInfer) et fichier de
     /// sortie du classement.
@@ -934,7 +937,7 @@ fn analyser(args: &[String]) -> Options {
         fusion_alpha: 1.0, fusion_pos: usize::MAX,
         auto: true, limit: usize::MAX,
         entree: None, entree_canal: usize::MAX, entree_gain: 1.0, delai: 0, entree_jeton: 0,
-        recurent: false, entree_memoire: 0,
+        recurent: false, entree_memoire: 0, memoire: 0, sortie_memoire: None,
         matrix: String::from("blk.0.ffn_gate.weight"),
         ..Default::default()
     };
@@ -1067,6 +1070,13 @@ fn analyser(args: &[String]) -> Options {
             "--entree-gain" => { o.entree_gain = suivant(i).parse().unwrap(); 2 }
             "--delai" => { o.delai = suivant(i).parse().unwrap(); 2 }
             "--entree-jeton" => { o.entree_jeton = suivant(i).parse().unwrap(); 2 }
+            // MÉMOIRE DE LA RÉGION FRONTIÈRE (C8, suite) : les K derniers signaux injectés sont
+            // retenus HORS DU RÉSEAU. La mesure a montré pourquoi : l'état de sortie porte le
+            // signal courant (R² 0,992) et pas celui d'il y a 8 pas (R² −0,681), mais un tampon
+            // lu directement le rend EXACTEMENT (1,000). `--memoire 0` est accepté et vaut
+            // « pas de mémoire » (l'absence doit être exprimable, cf. la leçon `--attn-sinks`).
+            "--memoire" => { o.memoire = suivant(i).parse().unwrap(); 2 }
+            "--sortie-memoire" => { o.sortie_memoire = Some(suivant(i).clone()); 2 }
             // RÉCURRENT : la boucle avance les positions (0, 1, 2, …) au lieu de repartir à 0.
             // Sans lui, chaque pas est une DÉCISION INDÉPENDANTE : l'état ne dépend que de la
             // valeur injectée, et « poursuivre un signal » n'a pas de sens (le délai est alors
@@ -7153,9 +7163,24 @@ boucle avancerait au-delà du cache KV. Donner `--ctx {}` (ou plus).", valeurs.l
                   valeurs.len());
         return 2;
     }
+    if opt.memoire > valeurs.len() {
+        eprintln!("[peripherie] REFUS : `--memoire {}` dépasse le nombre de pas ({}) — une mémoire \
+plus longue que la séquence ne retiendrait jamais rien de complet.", opt.memoire, valeurs.len());
+        return 2;
+    }
+    if opt.memoire > 0 && opt.sortie_memoire.is_none() {
+        eprintln!("[peripherie] REFUS : `--memoire {}` sans `--sortie-memoire F` — une mémoire qui \
+n'écrit rien ne se vérifie pas, et une mémoire invérifiable ne vaut pas mieux que pas de mémoire.",
+                  opt.memoire);
+        return 2;
+    }
     let t0 = std::time::Instant::now();
     let mut octets: Vec<u8> = Vec::with_capacity(valeurs.len() * hidden * 4);
     let mut injectees: Vec<f32> = Vec::with_capacity(valeurs.len());
+    // LA MÉMOIRE : les K derniers signaux INJECTÉS, hors du réseau. C'est un tampon, pas un
+    // approximateur — et c'est ce que la fiche `rapport-c8-peripherie.md` § 2 ter oppose à une
+    // récurrence qui fuit (0,104) comme à l'état du réseau (−0,681).
+    let mut retenues: Vec<u8> = Vec::new();
     for t in 0..valeurs.len() {
         let v = if t >= opt.delai { valeurs[t - opt.delai] } else { 0.0 };
         let mut x = base.clone();
@@ -7177,6 +7202,10 @@ boucle avancerait au-delà du cache KV. Donner `--ctx {}` (ou plus).", valeurs.l
         let etat = mdl.forward(bos, pos);
         for val in etat.iter() { octets.extend_from_slice(&val.to_le_bytes()); }
         injectees.push(v);
+        if opt.memoire > 0 {
+            let retenue = if t >= opt.memoire { injectees[t - opt.memoire] } else { 0.0 };
+            retenues.extend_from_slice(&retenue.to_le_bytes());
+        }
         eprintln!("[peripherie] pas {t} : entrée {v}");
     }
     if let Err(e) = std::fs::write(&sortie, &octets) {
@@ -7185,6 +7214,12 @@ boucle avancerait au-delà du cache KV. Donner `--ctx {}` (ou plus).", valeurs.l
     }
     // LA MÉTRIQUE DU PLAN : les paires (poids × activation) par DÉCISION. C'est la seule unité
     // qui se compare entre architectures, et elle est déjà instrumentée par le moteur.
+    if let Some(f) = opt.sortie_memoire.as_deref() {
+        if let Err(e) = std::fs::write(f, &retenues) {
+            eprintln!("[peripherie] écriture de {f} impossible : {e}");
+            return 2;
+        }
+    }
     let paires: u64 = mdl.paires.iter().sum();
     let norme: f32 = injectees.iter().map(|v| v * v).sum::<f32>().sqrt();
     println!("  périphérie        : {} pas · canal {canal} · gain {} · délai {} · {} · sortie \
@@ -7194,6 +7229,11 @@ boucle avancerait au-delà du cache KV. Donner `--ctx {}` (ou plus).", valeurs.l
     if opt.entree_memoire > 0 {
         println!("  tampon d'entrée   : {} pas (canaux {}..{})", opt.entree_memoire, canal + 1,
                  canal + opt.entree_memoire);
+    }
+    if opt.memoire > 0 {
+        println!("  MÉMOIRE           : {} pas retenus hors du réseau ({} valeurs écrites dans {}) — \
+elle ne passe par AUCUNE couche, donc elle ne coûte aucune paire", opt.memoire,
+                 retenues.len() / 4, opt.sortie_memoire.as_deref().unwrap_or("—"));
     }
     println!("  paires par pas    : {:.1} M (la métrique du plan : poids × activation par décision)",
              paires as f64 / valeurs.len().max(1) as f64 / 1e6);

@@ -10,7 +10,7 @@
 > **pas** le signal d'il y a 8 pas (R² = **−0,973**) : le modèle ne garde rien de linéairement
 > lisible. Le délai demandé au moteur, lui, est **exact** — mais c'est **l'interface** qui fait la
 > mémoire, pas le cerveau, et la différence est écrite ici pour qu'elle ne se confonde pas.
-> Date réelle : **2026-10-10 14:20 HAE**, complétée jusqu'à **15:53** (les quatre sections
+> Date réelle : **2026-10-10 14:20 HAE**, complétée jusqu'à **19:25** (les quatre sections
 > 2 bis à 2 quater ont été écrites après la première version de la fiche).
 > Protocole : `drave --entree signal:F --sortie G [--delai N] [--recurent]`, puis
 > `tools/peripherie_poursuite.py` (lecture apprise par régression ridge, moitié des pas pour
@@ -128,6 +128,34 @@ contexte produit un état que rien ne lit. La récurrence est ce qui donne un co
 transformation du réseau** — une ligne à retard lue directement (R² 1,000, § 2 ter). C'est un choix
 d'architecture, et il est maintenant chiffré dans les trois sens : sans structure, rien (−0,4) ;
 avec un tampon remis en entrée, partiel (0,283) ; avec une ligne à retard, exact (1,000).
+
+## 2 quinquies. La STRUCTURE est livrée, et la poursuite est résolue (R² 1,000, erreur nulle)
+
+La conception écrite dans `docs/note-peripherie-c8.md` § 6 est **implémentée** : `--memoire K`
+retient les K derniers signaux **hors du réseau**, `--sortie-memoire F` les écrit. Mesure sur
+64 pas, mémoire de 8 :
+
+| lecture de `v[t−8]` | R² | erreur |
+|---|---|---|
+| état du réseau (linéaire) | −0,611 | — |
+| état du réseau (non linéaire) | −0,681 | — |
+| récurrence qui fuit (64 canaux) | +0,104 | — |
+| **MÉMOIRE de la région frontière** | **+1,000** | **RMSE 0,000e+00** |
+
+**La tâche fermée est résolue** — par la **structure**, pas par le réseau, et le chiffre dit
+exactement cela : erreur **nulle**, R² **1,000**, et **aucune paire** de plus (les paires par
+décision sont identiques avec et sans la mémoire : elle ne traverse aucune couche).
+
+**Ce que la porte verrouille** (`tools/porte-memoire.sh`) : l'exactitude **au bit près** (comparaison
+en f32 des deux côtés — comparer des octets f32 à des flottants relus en f64 fabrique un écart de
+5,9e-08 qui n'existe pas), le coût **nul** en paires, les deux **refus** (mémoire plus longue que la
+séquence ; mémoire sans fichier de sortie), et le **zéro exprimable** (`--memoire 0` = pas de
+mémoire, identique à l'absence du drapeau — la leçon `--attn-sinks` appliquée d'avance).
+
+**Ce que ça ne dit toujours pas** : que le **modèle** sache se servir de cette mémoire. La
+réinjection (`--entree-memoire`) la fait passer par le réseau, qui la transforme : la lecture du
+présent tombe de 0,980 à 0,852. Rendre la mémoire *utile au modèle* est un entraînement (C7), pas
+un câblage — et c'est écrit ici pour que la prochaine lecture ne confonde pas les deux.
 
 ## 3. Ce que ça change pour C8
 
