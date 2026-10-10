@@ -31,7 +31,8 @@
 > constante ⇒ sortie constante » et pour validation une **tâche fermée** mesurée en événements par
 > décision. Ce qui est mesuré ici est la moitié **réflexe** : un chemin court qui lit un état
 > intermédiaire, sa tête entraînée, sa généralisation et sa vitesse. Les interfaces `--entree`,
-> `--sortie` et la tâche fermée **restent à faire**.
+> `--sortie` et la tâche fermée **restent à faire** — la conception minimale est écrite, avec ses
+> quatre portes, dans [`docs/note-peripherie-c8.md`](note-peripherie-c8.md).
 | **C9** | pont entre régions | ✅ fait | **448 fibres = +2,81 %** et **÷1,8** en octets ; falaise **entre 448 et 392** ; à budget égal **quantifier bat élaguer de 83 %** | `porte-pont.sh` · fiche 25 |
 | **C9×C1** | où couper | ✅ fait | **8 coupes, une seule perplexité (113,0068)** sans perte ; le coût du pont va de **+0,52 %** (coupe après 18 couches) à **+17,09 %** (après 15) — facteur **30** ⇒ **couper tard** | `porte-coupe.sh`, `tools/carte_coupe.sh` · fiche 27 |
 | **C10** | budgets | ✅ **clos** | trois budgets, trois codes distincts : octets (**6**), latence (**8**), paires (**9**) ; loi de latence **3,4 ms/token par ms de RTT** | fiches 32, 42 |
