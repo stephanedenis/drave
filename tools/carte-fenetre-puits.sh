@@ -43,7 +43,11 @@ mesure () { # $@ = drapeaux ; imprime « perplexité secondes tok/s »
     # Les secondes : dernier « (N.N s) » de la sortie (la ligne de synthèse est la dernière).
     # Le premier motif exigeait la phrase entière sur UNE ligne — la sortie du moteur la coupe
     # parfois, et la carte affichait « ? s » sans le dire.
-    sec=$(printf '%s' "$sortie" | grep -oE "\([0-9]+[.,][0-9]+ s\)" | tail -1 \
+    # Les secondes : dernier « (N.N s) » de la sortie. Les LIGNES SONT RECOLLÉES d'abord : la
+    # sortie mêle stdout et stderr, et une ligne de journal peut s'insérer AU MILIEU de la ligne
+    # de synthèse — le motif ne trouvait alors rien et la carte affichait « ? s » sans le dire
+    # (deux essais successifs s'y sont cassés les dents).
+    sec=$(printf '%s' "$sortie" | tr '\n' ' ' | grep -oE "\([0-9]+[.,][0-9]+ s\)" | tail -1 \
           | grep -oE "[0-9]+[.,][0-9]+")
     tok=$(printf '%s' "$sortie" | grep -oE "[0-9.]+ tok/s effectifs" | grep -oE "[0-9.]+")
     printf '%s·%s s·%s tok/s' "${ppl:-?}" "${sec:-?}" "${tok:-?}"

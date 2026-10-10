@@ -23,7 +23,7 @@
 | 10:39 | `024e509` | Fenetre x puits : la pente en N mesuree — gratuit a 512 jetons, +40 % a 2 048 | `etat-cerveau.md`, `2026-10-10.md`, `2026-10-10_attention.md` (+13) |
 | 10:57 | `b4f1589` | Fenetre x puits a 2 048 : MA conclusion du §4 etait bornee par la grille — avec 512 puits, +0,33 % | `etat-cerveau.md`, `2026-10-10.md`, `2026-10-10_attention.md` (+14) |
 | 11:10 | `499400e` | Carte fenetre x puits : la case donne aussi le TEMPS et le debit (tok/s) | `2026-10-10.md`, `2026-10-10_apprentissage.md`, `2026-10-10_attention.md` (+14) |
-| 11:42 | `39b26a6` | Carte fenetre x puits : l'extraction des secondes ratait (« ? s » affiche sans le dire) | `etat.md`, `organisation-du-depot.md`, `2026-10-10.md` (+6) |
+| 11:42 | `62c9da5` | Carte fenetre x puits : secondes corrigees, et les points d'entree nommes dans l'index | `etat.md`, `organisation-du-depot.md`, `2026-10-10.md` (+9) |
 
 ## Chiffres du jour
 
@@ -64,7 +64,7 @@
 
 ## Sessions actives ce jour
 
-- `d31b3d9b` — Où en est-on (début 2026-10-08 09:11, 50.5 h) → [rapport](sessions/d31b3d9b/rapport.md) · [digest](sessions/d31b3d9b/digest.md)
+- `d31b3d9b` — Où en est-on (début 2026-10-08 09:11, 50.9 h) → [rapport](sessions/d31b3d9b/rapport.md) · [digest](sessions/d31b3d9b/digest.md)
 
 ## Mesures et rapports touchés
 

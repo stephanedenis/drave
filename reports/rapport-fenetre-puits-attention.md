@@ -130,7 +130,32 @@ aussi les secondes et les tok/s, parce que la fenêtre ne réduit que les scores
 poste parmi d'autres (la FFN domine) : le gain de temps est toujours plus petit que le gain de
 clés, et il se mesure.
 
-## 6. Ce que ça ne dit pas (et qu'il faut mesurer)
+## 6. Le prix RÉEL en temps : la fenêtre est un levier de CLÉS, pas de vitesse
+
+La qualité ne suffit pas à décider : un levier qui divise les clés par quatre ne divise le temps
+que si l'attention dominait. Mesure directe, même protocole, **débit** (`tok/s` de la passe
+complète sur 4 096 jetons, une mesure par case, machine au repos) :
+
+| configuration | perplexité | clés / jeton | **tok/s** | vs attention complète |
+|---|---|---|---|---|
+| attention complète | 12,2177 | 4 096 | **17,1** | — |
+| fenêtre 512 + 512 puits | 12,8824 | 1 024 (**÷4**) | **19,1** | **+12 %** |
+| fenêtre 512 + 1 024 puits | 12,7884 | 1 536 (÷2,67) | 17,3 | +1 % |
+| fenêtre 1 024 + 512 puits | 12,4875 | 1 536 (÷2,67) | 17,4 | +2 % |
+| fenêtre 1 024 + 1 024 puits | 12,4466 | 2 048 (÷2) | 16,0 | **−6 %** |
+
+**Le fait, et il faut le dire ainsi : diviser les clés d'attention par quatre ne rend que
++12 % de débit**, et les configurations plus larges sont dans le bruit (l'une est même plus
+lente). Ce n'est pas une surprise quand on regarde les postes : l'attention pèse **3,95 ms** sur
+**33 ms** par jeton, la FFN en pèse 26 — et les puits ajoutent du travail dans le poste qu'on
+réduit. **La fenêtre est donc un levier de PARCIMONIE (clés, paires, octets à transporter), pas
+un levier de vitesse locale**, et c'est en réparti qu'elle compte : chaque clé non notée est une
+paire non calculée sur le nœud et une activation non transportée.
+
+**Ce qu'il faudrait pour en tirer du temps** : réduire aussi ce qui domine (la FFN), ou déporter
+les scores — deux chantiers distincts, et aucun n'est la fenêtre.
+
+## 7. Ce que ça ne dit pas (et qu'il faut mesurer)
 
 - **la pente en N est mesurée jusqu'à 2 048** (§ 4 et § 5) : le drain **rachète** le prix quand
   il grandit avec la séquence. Reste **4 096 jetons** (mesure en cours) et la règle de
@@ -138,13 +163,12 @@ clés, et il se mesure.
 - **le prix réel n'est pas dans le compteur de paires affiché** : à cette échelle il arrondit à
   `0,01 M`. Le prix est **analytique** (`fenêtre + puits` clés notées par jeton par couche),
   et c'est celui du tableau ;
-- **l'attention n'est pas tout le calcul** : le poste dominant mesuré ailleurs est la FFN
-  (`proj+mlp` ≈ 26 ms/token contre 3,95 ms pour l'attention) — la fenêtre attaque le **second**
-  poste, et c'est écrit ici pour ne pas laisser croire qu'elle divise le temps total ;
+- **le temps est maintenant mesuré** (§ 6) : ÷4 de clés = **+12 %** de débit, pas ×4 — l'attention
+  est le second poste (3,95 ms sur 33 ms), la FFN domine ;
 - **un modèle à fenêtre déclarée** (`swa_pattern` > 1, comme gpt-oss : une couche sur deux en
   attention complète) n'a pas été mesuré dans cette carte.
 
-## 7. Protocole, pour rejouer
+## 8. Protocole, pour rejouer
 
 ```bash
 FENETRES="64 128 256" PUITS="0 32 64" tools/carte-fenetre-puits.sh 512

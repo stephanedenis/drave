@@ -37033,3 +37033,83 @@ docs/organ
 ⏵ Course git auto-infligée (un `git commit` dans une tâche de fond) — je vérifie si le commit est poussé et je corrige son message
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline origin/master..HEAD; echo \"=== amend du message ===\"; git commit --amend -q -F - <<'MSG'\nCarte fenetre x puits : secondes corrigees, et les points d'entree nommes dans l'index\n\nDEUX CHANGEMENTS, un seul commit  … [1172 caractères tronqués]`
+
+  ```
+39b26a6 Carte fenetre x puits : l'extraction des secondes ratait (« ? s » affiche sans le dire)
+=== amend du message ===
+poussé
+62c9da5 Carte fenetre x puits : secondes corrigees, et les points d'entree nommes dans l'index
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 480; cat /tmp/carte-4096-temps.md; echo \"=== en cours ? ===\"; ps -eo etime,args | grep \"[c]arte-fenetre\" | head -2", "description": "Wait for the timing map", "timeoutMs": 600000}`
+
+  ```
+référence (aucune fenêtre, 4096 jetons) : 12.2177·? s·17.1 tok/s  ·  clés notées par jeton ≈ 4096
+
+| fenêtre \ puits | 512 | 1024 |
+|---|---|---|
+| **512** | 12.8824·? s·19.1 tok/s |=== en cours ? ===
+      10:31 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' import pathlib p = pathlib.Path("tools/carte-fenetre-puits.sh"); s = p.read_text() old = '''    sec=$(printf '%s' "$sortie" | grep -oE "perplexité [0-9.]+ sur [0-9]+ tokens \\([0-9.]+ s\\)" \\           | grep -oE "\\([0-9.]+ s\\)" | grep -oE "[0-9.]+")''' new = '''    # Les secondes : dernier « (N.N s) » de la sortie (la ligne de synthèse est la dernière).     # Le premier motif exigeait la phrase entière sur UNE ligne — la sortie du moteur la coupe     # parfois, et la carte affichait « ? s » sans le dire.     sec=$(printf '%s' "$sortie" | grep -oE "\\([0-9]+[.,][0-9]+ s\\)" | tail -1 \\           | grep -oE "[0-9]+[.,][0-9]+")''' assert s.count(old) == 1 s = s.replace(old, new, 1) p.write_text(s) print("extraction des secondes corrigée") PYEOF bash -n tools/carte-fenetre-puits.sh && echo "syntaxe OK" && git add -A && git commit -q -m "Carte fenetre x puits : l'extraction des secondes ratai
+… [500 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Les secondes restent illisibles (lignes entrelacées) — le débit suffit ; j'attends la fin de la carte
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in $(seq 1 9); do if grep -q \"Chaque case\" /tmp/carte-4096-temps.md 2>/dev/null; then break; fi; sleep 60; done; cat /tmp/carte-4096-temps.md", "description": "Wait for the timing map to finish", "timeoutMs": 600000}`
+
+  ```
+référence (aucune fenêtre, 4096 jetons) : 12.2177·? s·17.1 tok/s  ·  clés notées par jeton ≈ 4096
+
+| fenêtre \ puits | 512 | 1024 |
+|---|---|---|
+| **512** | 12.8824·? s·19.1 tok/s | 12.7884·? s·17.3 tok/s |
+| **1024** | 12.4875·? s·17.4 tok/s |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in $(seq 1 8); do if grep -q \"Chaque case\" /tmp/carte-4096-temps.md 2>/dev/null; then break; fi; sleep 60; done; cat /tmp/carte-4096-temps.md; ps -eo args | grep -c \"[c]arte-fenetre\"", "description": "Wait for last cell of  … [33 caractères tronqués]`
+
+  ```
+référence (aucune fenêtre, 4096 jetons) : 12.2177·? s·17.1 tok/s  ·  clés notées par jeton ≈ 4096
+
+| fenêtre \ puits | 512 | 1024 |
+|---|---|---|
+| **512** | 12.8824·? s·19.1 tok/s | 12.7884·? s·17.3 tok/s |
+| **1024** | 12.4875·? s·17.4 tok/s | 12.4466·? s·16.0 tok/s |
+
+Chaque case : « perplexité · secondes · tok/s ». Clés notées par jeton ≈ fenêtre + puits,
+contre 4096 pour l'attention complète — c'est le SEUL poste que la fenêtre réduit, donc le
+gain de temps est plus petit que le gain de clés : c'est mesuré ici, pas supposé.
+0
+[exit code: 1]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-34 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'
+import pathlib
+p = pathlib.Path("tools/carte-fenetre-puits.sh"); s = p.read_text()
+old = '''    sec=$(printf '%s' "$sortie" | grep -oE "perplexité [0-9.]+ sur [0-9]+ tokens \\([0-9.]+ s\\)" \\
+          | grep -oE "\\([0-9.]+ s\\)" | grep -oE "[0-9.]+")'''
+new = '''    # Les secondes : dernier « (N.N s) » de la sortie (la ligne de synthèse est la dernière).
+    # Le premier motif exigeait la phrase entière sur UNE ligne — la sortie du moteur la coupe
+    # parfois, et la carte affichait « ? s » sans le dire.
+    sec=$(printf '%s' "$sortie" | grep -oE "\\([0-9]+[.,][0-9]+ s\\)" | tail -1 \\
+          | grep -oE "[0-9]+[.,][0-9]+")'''
+assert s.count(old) == 1
+s = s.replace(old, new, 1)
+p.write_text(s)
+print("extraction des secondes corrigée")
+PYEOF
+bash -n tools/carte-fenetre-puits.sh && echo "syntaxe OK" && git add -A && git commit -q -m "Carte fenetre x puits : l'extraction des secondes ratait (« ? s » affiche sans le dire)
+
+Le motif exigeait la phrase de synthese entiere sur UNE ligne ; la sortie du moteur la coupe
+parfois, et la carte affichait « ? s » — un trou dans une mesure qui ne se signale pas.
+On prend desormais le DERNIER « (N.N s) » de la sortie." && LIMITE=4096 CTX=4096 FENETRES="512 1024" PUITS="512 1024" bash tools/carte-fenetre-puits.sh 4096 > /tmp/carte-4096-temps.md 2>&1; echo "CODE=$?"; cat /tmp/carte-4096-temps.md) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 🤖 Assistant
+
+⏵ Carte terminée : ÷4 de clés ne donne que +12 % de débit — je consigne le prix réel en temps
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\n# 1) corriger l'extraction des secondes (la carte ne tourne plus)\np = pathlib.Path(\"tools/carte-fenetre-puits.sh\"); s = p.read_text()\nold = '''    sec=$(printf '%s' \"$sortie\" | grep -oE \"\\ … [4865 caractères tronqués]`
