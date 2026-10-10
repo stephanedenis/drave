@@ -2120,6 +2120,23 @@ pas celui qui a été déclaré aurait l'air d'un résultat. C'est la même règ
 de pas atteinte) et que le pont (C9) : *s'arrêter et le dire*, jamais rendre un chiffre qui
 mentirait sur ses conditions.
 
+**Suite — le budget de LATENCE, troisième volet du plan** (`{paires/s, octets/s, ms}`).
+Déclaré par `"budget_ms": N` sur un lien, il se compare à l'**allé-retour mesuré** de chaque
+pas. Mesuré (mêmes conditions que ci-dessus) :
+
+| cas | mesure |
+|---|---|
+| latence **généreuse** (100 000 ms) | perplexité **111,9225** — identique, code 0 |
+| latence **insuffisante** (1 ms) | `LATENCE DÉPASSÉE … : **20,1 ms pour un budget de 1 ms, au pas 0**` · **code 8** · aucune perplexité |
+
+Quatre codes d'arrêt distincts désormais : **5** = borne de pas (C4) · **6** = budget
+d'octets (C10) · **7** = panne de lien (C11) · **8** = budget de latence (C10). Un script
+peut donc nommer la cause sans lire les messages.
+
+**Un défaut de porte attrapé au passage** : la porte écrasait la variable `D` (le chemin du
+binaire) avec la sortie du pilote, et le cas suivant échouait sur un code **127**
+(« command not found ») — l'échec ne disait rien de ce qu'on mesurait.
+
 **Détail mesuré au passage** : le PREMIER flux est plus gros que la moyenne (1 860 contre
 1 951 en moyenne par pas sur 47 pas, mais le premier contient l'état le plus dense) — un
 budget déclaré juste sous la moyenne arrête donc dès le premier pas, ce qui est le

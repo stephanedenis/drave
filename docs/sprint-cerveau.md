@@ -130,6 +130,26 @@ sur ses conditions.
 
 ---
 
+## C10 (suite) — FAIT (11 octobre 1 h 30) : budget de LATENCE par lien
+
+Troisième volet des budgets du plan (`{paires/s, octets/s, ms}`), après les octets. Déclaré
+par `"budget_ms": N`, comparé à l'**allé-retour mesuré** de chaque pas.
+
+| cas | mesure |
+|---|---|
+| latence généreuse (100 000 ms) | 111,9225 — **identique** · code 0 |
+| latence insuffisante (1 ms) | `LATENCE DÉPASSÉE : **20,1 ms pour un budget de 1 ms, au pas 0**` · **code 8** · aucune perplexité |
+
+**Quatre codes d'arrêt distincts** : **5** = borne de pas (C4) · **6** = budget d'octets ·
+**7** = panne de lien (C11) · **8** = budget de latence. Un script nomme la cause sans lire
+les messages.
+
+**Défaut de porte attrapé** : la porte écrasait la variable `D` (le binaire) avec la sortie
+du pilote — le cas suivant échouait en **127** (« command not found »), ce qui ne disait
+rien de ce qu'on mesurait.
+
+---
+
 ## C11 — FAIT (11 octobre 0 h 30) : pannes de lien nommées, code distinct, sans résultat partiel
 
 Le plan prévoyait un `best-effort` qui « saute la région et annonce l'écart ». **La mesure
@@ -1054,6 +1074,7 @@ bus (le format de la ligne de contrôle est écrit, le transport reste à câble
 |---|---|
 | 9/10 17 h 10 | **C1a** : module `topologie.rs`, validation stricte, plan, 8 tests, suite à 85 tests. |
 | 9/10 17 h 20 | **C1b pas 1** : la topologie pilote le découpage · porte `tools/porte-topologie.sh` **TENUE** (même chiffre, écart 0,00e0) · deux refus vérifiés. |
+| 11/10 01 h 30 | **C10 (suite) — budget de LATENCE** : `"budget_ms"`, comparé à l'allé-retour mesuré. Généreux ⇒ identique (111,9225, code 0) · 1 ms ⇒ `LATENCE DÉPASSÉE : 20,1 ms pour un budget de 1 ms, au pas 0`, **code 8**, aucune perplexité. **Quatre codes distincts** : 5 borne · 6 octets · 7 panne · 8 latence. Défaut de porte corrigé (variable `D` écrasée ⇒ code 127). |
 | 11/10 00 h 30 | **C11 — pannes de lien** : `best-effort` = « sauter la région » est REFUSÉ (un graphe amputé est un AUTRE modèle) ⇒ s'arrêter en nommant lien/pas/octets, **code 7** (5 = borne, 6 = budget). Porte 3 cas : nominal 33,0156 · pair tué au pas 12 (43 968 octets) · pair absent en 2 s. Deux défauts corrigés : un pair absent faisait PANIQUER le pilote (code 134) ; la porte attendait un événement fragile. Reste : la REPRISE (cache KV perdu). |
 | 10/10 23 h 00 | **C10 — budget d'octets par lien** : `"budget_octets"` dans la topologie, vérifié **sur ce qui passe** (la taille dépend de l'activité, pas du mode). Porte 3 cas : sans budget 111,9225 · budget généreux **identique** · budget insuffisant ⇒ arrêt **au pas 0**, lien/octets/budget nommés, **code 6**, **aucune perplexité**. |
 | 10/10 22 h 00 | **C6 — clé de FENÊTRE : prédiction RÉFUTÉE.** W=1 : 50 (bon indice) et 1 006 (mauvais), séparation 1,31/64. W=4 : 653. W=16 : 573. **W=64 : 449 (= le hasard)** et **séparation 19,94/64**. Le lissage **détruit le bon indice** et **effondre la sélectivité** ⇒ troisième confirmation du §24 quater : **abstraire par moyennage détruit la rappelabilité** ; la sélectivité EST la netteté de la clé. ⇒ pour chercher par question : des **jetons** (RAG) ou une **clé apprise**, pas le contenu brut. |

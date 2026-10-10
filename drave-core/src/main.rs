@@ -4203,6 +4203,18 @@ changer (seul le temps change) — c'est la porte de C3", tp_region_distante, de
         println!("[budget] lien local → {tp_region_distante} : {b} octets par pas AU PLUS \
 (déclaré dans la topologie) — dépassement = arrêt, jamais un résultat partiel");
     }
+    // C10 (suite) : le budget de LATENCE. La loi du dépôt est 3,4 ms par jeton et par ms
+    // de RTT : un lien déclaré lent qui répond vite, ou l'inverse, n'est pas le lien qu'on
+    // croit — et le savoir au premier pas vaut mieux qu'à la fin.
+    let budget_ms: Option<u64> = if let Some(f) = opt.topologie.clone() {
+        std::fs::read_to_string(&f).ok()
+            .and_then(|t| topologie::lire_json(&t).ok())
+            .and_then(|t| t.lien_entre("local", &tp_region_distante).and_then(|l| l.budget_ms))
+    } else { None };
+    if let Some(b) = budget_ms {
+        println!("[budget] lien local → {tp_region_distante} : {b} ms par pas AU PLUS \
+(allé-retour mesuré) — dépassement = arrêt");
+    }
     // C4 : le compteur de pas de la région locale.
     let mut pas_servis: u64 = 0;
     // C5 : le BUS DE MODULATION. Un canal neutre ne change RIEN (c'est la porte),
@@ -4531,7 +4543,17 @@ protocole, réglages ou contexte — il a dit pourquoi de son côté)");
         };
         // Ce que coûte le découpage : le calcul local, et l'attente du pair
         // (son calcul + l'aller-retour réseau) — la latence, pas le débit.
+        let ms_pas = horloge.elapsed().as_secs_f64() * 1e3;
         t_pair += horloge.elapsed().as_secs_f64();
+        if let Some(b) = budget_ms {
+            if ms_pas > b as f64 {
+                eprintln!("[budget] LATENCE DÉPASSÉE sur le lien local → {tp_region_distante} : \
+{ms_pas:.1} ms pour un budget de {b} ms, au pas {pos}. L'exécution s'arrête ICI — une \
+perplexité calculée sur un lien plus lent que celui qui a été déclaré ne serait pas le \
+résultat annoncé.");
+                std::process::exit(8);
+            }
+        }
         octets_recus += TAILLE_TETE as u64 + rep.octets_corps as u64;
         // Une réponse de pair hostile ne doit ni tuer le client ni être prise
         // pour un résultat : hors lot, elle n'était pas vérifiée du tout — un

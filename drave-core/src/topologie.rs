@@ -70,6 +70,13 @@ pub struct Lien {
     /// budget se compare à ce qui PASSE, et le dépassement ARRÊTE l'exécution en le
     /// disant — jamais un résultat partiel qui aurait l'air d'un résultat.
     pub budget_octets: Option<u64>,
+    /// Budget de LATENCE par pas sur ce lien, en millisecondes (C10). `None` = aucun.
+    ///
+    /// C'est le troisième volet des budgets du plan (`{paires/s, octets/s, ms}`), et le
+    /// plus directement mesurable : la loi de latence du dépôt est **3,4 ms par jeton et
+    /// par ms de RTT** (campagne). Un lien déclaré à 5 ms qui en met 50 n'est pas le lien
+    /// qu'on croit, et le savoir AU PREMIER PAS vaut mieux qu'à la fin.
+    pub budget_ms: Option<u64>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -221,12 +228,14 @@ pub fn lire_json(texte: &str) -> Result<Topologie, ErreurTopologie> {
         "liens" => a.tableau(|a| {
             let (mut de, mut vers, mut mode, mut delai) = (None, None, None, 0u64);
             let mut budget: Option<u64> = None;
+            let mut budget_ms: Option<u64> = None;
             a.objet(|a, cle| match cle {
                 "de" => { de = Some(a.chaine()?); Ok(()) }
                 "vers" => { vers = Some(a.chaine()?); Ok(()) }
                 "mode" => { mode = Some(a.chaine()?); Ok(()) }
                 "delai_ms" => { delai = a.entier()?; Ok(()) }
                 "budget_octets" => { budget = Some(a.entier()?); Ok(()) }
+                "budget_ms" => { budget_ms = Some(a.entier()?); Ok(()) }
                 autre => Err(ErreurTopologie(format!("clé inconnue dans un lien : « {autre} »"))),
             })?;
             let (de, vers) = match (de, vers) {
@@ -240,7 +249,8 @@ pub fn lire_json(texte: &str) -> Result<Topologie, ErreurTopologie> {
                 autre => return Err(ErreurTopologie(format!(
                     "mode de lien inconnu : « {autre} » (f32, listes, blocs, lot, lot_listes)"))),
             }
-            liens.push(Lien { de, vers, mode, delai_ms: delai, budget_octets: budget });
+            liens.push(Lien { de, vers, mode, delai_ms: delai, budget_octets: budget,
+                              budget_ms });
             Ok(())
         }),
         autre => Err(ErreurTopologie(format!("clé inconnue à la racine : « {autre} »"))),
@@ -422,7 +432,8 @@ pilote ne sait exécuter qu'une chaîne (les entrées multiples sont la capacit�
                      instance: pair.to_string() },
         ];
         let liens = vec![Lien { de: "local".into(), vers: "distant".into(),
-                                mode: "listes".into(), delai_ms: 0, budget_octets: None }];
+                                mode: "listes".into(), delai_ms: 0, budget_octets: None,
+                                budget_ms: None }];
         Topologie { regions, liens }
     }
 }

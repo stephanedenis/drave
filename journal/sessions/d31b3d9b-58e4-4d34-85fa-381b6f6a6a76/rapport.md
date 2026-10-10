@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 44.7 h |
-| Tours | 51 |
-| Messages | 1774 |
-| Appels d'outils | 1670 |
+| Durée | 44.9 h |
+| Tours | 52 |
+| Messages | 1786 |
+| Appels d'outils | 1680 |
 | Fichiers touchés | 61 |
-| Commandes | 1420 |
+| Commandes | 1430 |
 | Sous-agents | 3 |
-| Commits | 141 |
+| Commits | 142 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -137,6 +137,8 @@
 **Tour 50** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1469 caractères tronqués]
 
 **Tour 51** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1469 caractères tronqués]
+
+**Tour 52** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1469 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -2330,7 +2332,7 @@ Le champ est **optionnel** : les 23 portes, les topologies existantes et les tes
 
 ### Tour 51 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1749 caractères tronqués]
 
-*9 appels d'outils.* Actions notables :
+*11 appels d'outils.* Actions notables :
 
 - bash — Locate the driver's link-loss paths
 - bash — Implement named link-failure handling
@@ -2341,10 +2343,49 @@ Le champ est **optionnel** : les 23 portes, les topologies existantes et les tes
 - bash — Separate ports per case and rerun
 - bash — Make cases 2-3 robust and rerun
 - bash — Commit fault handling and launch porte-flux
+- bash — Check porte-flux after the changes
+- bash — Verify the budget gate after the fault patch
 
 **Synthèse produite :**
 
-⏵ C11 : porte 3/3 verte — je commite et je relance porte-flux (chemin d'exécution touché)
+⏵ Round 8 livré : C11 — les pannes sont nommées, avec leur propre code
+
+**Ce round** — 1 commit poussé, 122 tests verts, `porte-pannes.sh` (nouvelle, 3 cas) et `porte-budget.sh` vertes, **`porte-flux.sh` 5/5** après les changements de chemin d'exécution.
+
+Le plan prévoyait un `best-effort` qui « saute la région et annonce l'écart ». **La mesure oblige à refuser cette sémantique** : sauter douze couches ne calcule pas une version approchée, cela calcule **un autre modèle**. Conduite retenue : **s'arrêter en disant tout**.
+
+| cas | mesure |
+|---|---|
+| exécution nominale | 33,0156 · code 0 |
+| **pair tué en cours de route** | `PANNE sur le lien local → d : le pair a fermé avant de rendre son état. L'exécution s'arrête **au pas 12** (**43 968 octets** échangés jusque-là). AUCUNE perplexité n'est rendue` · **code 7** |
+| **pair absent** | `INJOIGNABLE (Connection refused)` · **code 7**, en **2 s**, aucune perplexité |
+
+**Codes de sortie désormais distincts** : **5** = borne de pas (C4) · **6** = budget dépassé (C10) · **7** = panne de lien (C11) — un script peut distinguer les trois causes d'arrêt.
+
+**Deux défauts trouvés en écrivant la porte** :
+1. un pair **absent faisait paniquer** le pilote (`expect` sur la connexion, code 134 illisible) au lieu de nommer le lien — corrigé ;
+2. la porte elle-même attendait `client connecté` dans le journal du nœud : fragile, elle échouait pour une raison qui n'était pas celle qu'elle mesure (port en TIME_WAIT, pilote qui calcule 10 s de référence locale avant de se connecter) — elle chronomètre maintenant la mort et juge sur le code et le message.
+
+**Reste non fait, et écrit** : la **reprise** — un pair qui revient a perdu son cache KV, donc continuer serait faux ; reprendre proprement demanderait de rejouer le préfixe (checkpoint/restart).
+
+**Suivant** (dans `docs/sprint-cerveau.md`) : les têtes dédiées C8 (ce qui suppose d'entraîner — le chantier C7 vers les poids), les modèles H/I/J, ou la reprise après panne. L'objectif reste **actif**.
+
+### Tour 52 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1749 caractères tronqués]
+
+*8 appels d'outils.* Actions notables :
+
+- bash — Find the per-flux round-trip timing
+- bash — Read the round-trip timing site
+- bash — Add the latency budget
+- bash — Extend the budget gate with latency cases
+- bash — Fix unbound variable and rerun
+- bash — Reproduce the latency-budget case
+- bash — Fix the clobbered variable and rerun
+- bash — Document and commit the latency budget
+
+**Synthèse produite :**
+
+⏵ J'ai écrasé la variable `D` (le binaire) avec la sortie du pilote — je renomme
 
 ## 3. Travail accompli
 
@@ -2462,7 +2503,7 @@ Le champ est **optionnel** : les 23 portes, les topologies existantes et les tes
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1380 autres
+- … et 1390 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2748,6 +2789,7 @@ Le champ est **optionnel** : les 23 portes, les topologies existantes et les tes
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_te
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t

@@ -28396,3 +28396,174 @@ tools/porte-pannes.sh: line 67: 3313684 Killed                     $D "$M" --flu
 ⏵ C11 : porte 3/3 verte — je commite et je relance porte-flux (chemin d'exécution touché)
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\n\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\na = \"## Annexe — manifeste des journaux\"\nsec = \"\"\"## 33. Pannes de lien (C11) : nommées, avec un code distin … [6829 caractères tronqués]`
+
+  ```
+docs pannes
+test result: ok. 122 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.36s
+619b940 C11 : pannes de lien nommees, code distinct, et jamais de resultat partiel
+porte-flux lancée
+  ```
+
+- **bash** `{"command": "sleep 200; tail -8 /tmp/flux_apres_pannes.txt", "description": "Check porte-flux after the changes", "timeoutMs": 280000}`
+
+  ```
+mode 0 — f32 dense               0.00e0  ✅  (réf 61.9920 / deux nœuds 61.9920)
+  mode 1 — listes quantifiées     0.00e0  ✅  (réf 61.9920 / deux nœuds 61.9920)
+  mode 2 — listes par blocs        3.65e-2  ✅  (réf 61.9920 / deux nœuds 64.2535)
+  mode 3 — lot dense f32           0.00e0  ✅  (réf 60.8135 / deux nœuds 60.8135)
+  mode 4 — lot en listes           4.45e-3  ✅  (réf 60.8135 / deux nœuds 60.5427)
+code=0
+  ```
+
+### 🤖 Assistant
+
+⏵ porte-flux 5/5 verte après les changements ; je vérifie la porte budget qui partage le chemin
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 bash tools/porte-budget.sh 2>&1 | tail -5", "description": "Verify the budget gate after the fault patch", "timeoutMs": 1000000}`
+
+  ```
+=== 3. budget INSUFFISANT : arrêt explicite, code 6, AUCUNE perplexité ===
+  [budget] lien local → d : 975 octets par pas AU PLUS (déclaré dans la topologie) — dépassement = arrêt, jamais un résultat partiel
+    référence locale  : perplexité 113.0068  (2.5 s)
+  [budget] DÉPASSEMENT sur le lien local → d : 1860 octets pour un budget de 975 — l'exécution s'arrête ICI, au pas 0. Aucune perplexité n'est rendue : elle porterait sur un transport qui n'est pas celui qui a été déclaré.
+  ✅ dépassement annoncé (lien, octets, budget, pas), code 6, aucune perplexité rendue
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 8 livré : C11 — les pannes sont nommées, avec leur propre code
+
+**Ce round** — 1 commit poussé, 122 tests verts, `porte-pannes.sh` (nouvelle, 3 cas) et `porte-budget.sh` vertes, **`porte-flux.sh` 5/5** après les changements de chemin d'exécution.
+
+Le plan prévoyait un `best-effort` qui « saute la région et annonce l'écart ». **La mesure oblige à refuser cette sémantique** : sauter douze couches ne calcule pas une version approchée, cela calcule **un autre modèle**. Conduite retenue : **s'arrêter en disant tout**.
+
+| cas | mesure |
+|---|---|
+| exécution nominale | 33,0156 · code 0 |
+| **pair tué en cours de route** | `PANNE sur le lien local → d : le pair a fermé avant de rendre son état. L'exécution s'arrête **au pas 12** (**43 968 octets** échangés jusque-là). AUCUNE perplexité n'est rendue` · **code 7** |
+| **pair absent** | `INJOIGNABLE (Connection refused)` · **code 7**, en **2 s**, aucune perplexité |
+
+**Codes de sortie désormais distincts** : **5** = borne de pas (C4) · **6** = budget dépassé (C10) · **7** = panne de lien (C11) — un script peut distinguer les trois causes d'arrêt.
+
+**Deux défauts trouvés en écrivant la porte** :
+1. un pair **absent faisait paniquer** le pilote (`expect` sur la connexion, code 134 illisible) au lieu de nommer le lien — corrigé ;
+2. la porte elle-même attendait `client connecté` dans le journal du nœud : fragile, elle échouait pour une raison qui n'était pas celle qu'elle mesure (port en TIME_WAIT, pilote qui calcule 10 s de référence locale avant de se connecter) — elle chronomètre maintenant la mort et juge sur le code et le message.
+
+**Reste non fait, et écrit** : la **reprise** — un pair qui revient a perdu son cache KV, donc continuer serait faux ; reprendre proprement demanderait de rejouer le préfixe (checkpoint/restart).
+
+**Suivant** (dans `docs/sprint-cerveau.md`) : les têtes dédiées C8 (ce qui suppose d'entraîner — le chantier C7 vers les poids), les modèles H/I/J, ou la reprise après panne. L'objectif reste **actif**.
+
+
+## Tour 52
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 mémoire épisodique, C7 consolidation, C8 périphérie, C9 latéralité, C10 budgets, et la diffusion réseau du bus de C5 ; (b) les expériences E2-E9 de docs/biologie-pour-drave.md et docs/hebbien-differentiel-et-biologie.md ; (c) les dessins de modèle H/I/J de docs/modele-pour-drave.md ; (d) les manques du registre docs/manques.md (noyau de listes pour les experts, noyau de listes GPU, encodeurs) — l'implémenter ou la mesurer, la doter d'une porte vérifiable, la documenter, commiter, pousser, et enchaîner immédiatement sur la suivante. Contraintes : les 23 portes du dépôt et tous les tests restent verts (porte-flux.sh après toute modification du chemin d'exécution), le profil release reste le binaire de mesure, le crate reste std seul, et docs/sprint-cerveau.md reste l'état resumable mis à jour à chaque round. Ne jamais s'arrêter faute de tâches planifiées : en inventer de nouvelles, mesurables, plutôt que d'attendre."
+Round: 9/60
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ C10 (suite) : le budget de LATENCE par lien — le troisième volet des budgets du plan
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"t_pair\" drave-core/src/main.rs | head -8 && sed -n \"$(grep -n 'let debut_pair = Instant::now\\|let t0_pair' drave-core/src/main.rs | head -1 | cut -d: -f1),+6p\" drave-core/src/main.rs 2>/dev/null | head -8", "description … [41 caractères tronqués]`
+
+  ```
+4229:    let (debut_pair, fin_pair) = if tp_fin > 0 {
+4352:    let mut t_pair = 0f64;
+4408:            t_pair += horloge.elapsed().as_secs_f64();
+4504:        let (o, a) = envoyer_flux(&mut sock, debut_pair as u32, fin_pair as u32,
+4534:        t_pair += horloge.elapsed().as_secs_f64();
+4561:        trace.enregistrer(&pair_region, pos as u32, "pair->local", &final_, t_pair * 1e3);
+4621:                 1000.0 * t_local / nflux as f64, 1000.0 * t_pair / nflux as f64,
+4622:                 t_pair / t_local.max(1e-9));
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '4526,4536p' drave-core/src/main.rs", "description": "Read the round-trip timing site"}`
+
+  ```
+let _ = e;
+                panne_de_lien(&pair_region, pas_servis, octets_envoyes,
+                              "le pair a fermé avant de rendre son état (version du \
+protocole, réglages ou contexte — il a dit pourquoi de son côté)");
+            }
+        };
+        // Ce que coûte le découpage : le calcul local, et l'attente du pair
+        // (son calcul + l'aller-retour réseau) — la latence, pas le débit.
+        t_pair += horloge.elapsed().as_secs_f64();
+        octets_recus += TAILLE_TETE as u64 + rep.octets_corps as u64;
+        // Une réponse de pair hostile ne doit ni tuer le client ni être prise
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\n\n# --- topologie : budget_ms\np = pathlib.Path(\"drave-core/src/topologie.rs\")\ns = p.read_text()\na = \"\"\"    pub budget_octets: Option<u64>,\n}\"\"\"\nb = \"\"\"    pub budget_octets: Option … [3941 caractères tronqués]`
+
+  ```
+budget_ms en place
+BUILD_END
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"tools/porte-budget.sh\")\ns = p.read_text()\n# topo() accepte un second champ optionnel : le budget de latence\ns = s.replace('''topo() { # $1 = budget (vide = aucun)\n  local b … [2381 caractères tronqués]`
+
+  ```
+porte budget etendue
+=== 1. sans budget déclaré (défaut) ===
+tools/porte-budget.sh: line 28: $2: unbound variable
+  ```
+
+### 🤖 Assistant
+
+⏵ `set -u` et un second argument absent — je corrige et relance
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"tools/porte-budget.sh\")\ns = p.read_text()\ns = s.replace('''topo() { # $1 = budget d'octets (vide = aucun), $2 = budget de latence (vide = aucun)\n  local b=\"\" l=\"\"\n  [ - … [720 caractères tronqués]`
+
+  ```
+corrige
+  perplexité 111.9225 · code 0
+  ✅ budget généreux : résultat identique (111.9225)
+=== 3. budget INSUFFISANT : arrêt explicite, code 6, AUCUNE perplexité ===
+  [budget] lien local → d : 975 octets par pas AU PLUS (déclaré dans la topologie) — dépassement = arrêt, jamais un résultat partiel
+    référence locale  : perplexité 113.0068  (2.4 s)
+  [budget] DÉPASSEMENT sur le lien local → d : 1860 octets pour un budget de 975 — l'exécution s'arrête ICI, au pas 0. Aucune perplexité n'est rendue : elle porterait sur un transport qui n'est pas celui qui a été déclaré.
+  ✅ dépassement annoncé (lien, octets, budget, pas), code 6, aucune perplexité rendue
+=== 4. budget de LATENCE : généreux (aucun effet) ===
+  perplexité 111.9225 · code 0
+  ✅ latence généreuse : résultat identique (111.9225)
+=== 5. budget de LATENCE insuffisant : arrêt, code 8, aucune perplexité ===
+  ❌ la latence dépassée devrait sortir en code 8, elle sort en 127
+  ```
+
+### 🤖 Assistant
+
+⏵ Code 127 (commande introuvable) sur le cas 5 — je reproduis à la main
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && T=$(mktemp -d) && PORT=$((62000 + RANDOM % 100)) && cat > $T/topo.json <<JSON\n{\"regions\":[\n  {\"id\":\"local\",\"couches\":[0,11],\"instance\":\"local\"},\n  {\"id\":\"d\",\"couches\":[12,23],\"instance\":\"127.0.0.1:$PORT\"}],\n … [660 caractères tronqués]`
+
+  ```
+[budget] lien local → d : 1 ms par pas AU PLUS (allé-retour mesuré) — dépassement = arrêt
+  référence locale  : perplexité 113.0068  (2.4 s)
+[budget] LATENCE DÉPASSÉE sur le lien local → d : 19.2 ms pour un budget de 1 ms, au pas 0. L'exécution s'arrête ICI — une perplexité calculée sur un lien plus lent que celui qui a été déclaré ne serait pas le résultat annoncé.
+code=8
+  ```
+
+### 🤖 Assistant
+
+⏵ J'ai écrasé la variable `D` (le binaire) avec la sortie du pilote — je renomme
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GoogleDrive 2>/dev/null; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"tools/porte-budget.sh\")\ns = p.read_text()\na = \"\"\"D=$(pilote); CD=$?\nkill $N 2>/dev/null; wait $N 2>/dev/null\ … [794 caractères tronqués]`
+
+  ```
+variable renommee
+  ✅ dépassement annoncé (lien, octets, budget, pas), code 6, aucune perplexité rendue
+=== 4. budget de LATENCE : généreux (aucun effet) ===
+  perplexité 111.9225 · code 0
+  ✅ latence généreuse : résultat identique (111.9225)
+=== 5. budget de LATENCE insuffisant : arrêt, code 8, aucune perplexité ===
+  [budget] lien local → d : 1 ms par pas AU PLUS (allé-retour mesuré) — dépassement = arrêt
+  [budget] LATENCE DÉPASSÉE sur le lien local → d : 20.1 ms pour un budget de 1 ms, au pas 0. L'exécution s'arrête ICI — une perplexité calculée sur un lien plus lent que celui qui a été déclaré ne serait pas le résultat annoncé.
+  ✅ latence dépassée : nommée (mesurée vs budget, au pas), code 8, aucune perplexité
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\n\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\na = \"**Détail mesuré au passage** : le PREMIER flux est plus gros que la moyenne\"\nb = \"\"\"**Suite — le budget … [4578 caractères tronqués]`
