@@ -18,3 +18,72 @@
 | `docs` | Documentation, état, conventions | document, doc, readme, glossaire, rangement, convention, état, etat, journal, organisation, manques | docs/, README.md |
 | `outils` | Outils et harnais | outil, script, harnais, hook, générateur, generateur | tools/ |
 | `divers` | Ce qui ne rentre dans aucun thème | — | — |
+
+## L'évolution, thème par thème
+
+Chaque thème liste ses journées, dans l'ordre, avec les chiffres que la journée a
+produits : c'est la vue « d'un jour à l'autre » que les noms `jour_thème` rendent
+possible (`ls journal/*_<thème>.md`).
+
+### `attention` — Attention, fenêtre, puits
+
+| jour | chiffres du jour |
+|---|---|
+| [2026-10-09](2026-10-09_attention.md) | `× 128` |
+| [2026-10-10](2026-10-10_attention.md) | `+40 %` · `512 jetons` · `+2,0 %` · `−6,7 %` · `−1,4 %` · `256 jetons` · `÷2,67` · `2048 jetons` |
+
+### `memoire` — Mémoire épisodique, consolidation, greffe
+
+| jour | chiffres du jour |
+|---|---|
+| [2026-10-09](2026-10-09_memoire.md) | `15 %` · `83 %` · `96 %` · `81 %` · `85 %` · `22 %` · `87 %` · `50 %` · `2 jetons` · `0,5 %` · `2048 jetons` · `11 jetons` |
+| [2026-10-10](2026-10-10_memoire.md) | `1006 jetons` · `136 jetons` · `50 jetons` |
+
+### `distribue` — Régions, flux, protocoles, budgets, pannes
+
+| jour | chiffres du jour |
+|---|---|
+| [2026-10-09](2026-10-09_distribue.md) | `255 jetons` · `1,842` · `3,4 ms` · `×128` · `24 couches` · `59,0790` · `9 %` |
+| [2026-10-10](2026-10-10_distribue.md) | `49 %` · `14,8 ms` · `40 %` · `7 ms` · `50 ms` · `50,2 ms` · `256 jetons` · `255 jetons` · `5,3719` · `14,6496` · `18,5520` · `12 couches` |
+
+### `modele` — Modèles, entraînement, parcimonie, biologie
+
+| jour | chiffres du jour |
+|---|---|
+| [2026-10-09](2026-10-09_modele.md) | `+6,7 %` · `+8,0 %` · `+1,0 %` · `+3,8 %` · `÷3,7` · `1 %` · `÷2` · `5,2 %` · `-12 %` · `−12 %` · `−5,2 %` · `50 %` |
+| [2026-10-10](2026-10-10_modele.md) | `24 couches` · `−11,5 %` |
+
+### `moteur` — Moteur : chargement, calcul, listes, quantification
+
+| jour | chiffres du jour |
+|---|---|
+| [2026-10-09](2026-10-09_moteur.md) | `8,6 Mo` · `243 Mo` · `8 jetons` · `8 Mo` |
+| [2026-10-10](2026-10-10_moteur.md) | `-20 %` |
+
+### `mesures` — Campagnes et mesures
+
+| jour | chiffres du jour |
+|---|---|
+| [2026-10-09](2026-10-09_mesures.md) | `392 fibres` · `79 Kio` · `+1 %` · `+4 %` · `+22 %` · `÷4` · `÷8` · `÷15` · `50 %` · `25 %` · `12,5 %` · `2 %` |
+| [2026-10-10](2026-10-10_mesures.md) | `-20 %` · `-8 %` · `512 jetons` |
+
+### `portes` — Portes et vérifications
+
+| jour | chiffres du jour |
+|---|---|
+| [2026-10-09](2026-10-09_portes.md) | — |
+| [2026-10-10](2026-10-10_portes.md) | `136 jetons` · `0,509` · `37,8 %` · `173,0196` · `2048 jetons` · `388 s` |
+
+### `docs` — Documentation, état, conventions
+
+| jour | chiffres du jour |
+|---|---|
+| [2026-10-09](2026-10-09_docs.md) | `+2,8 %` · `+25,4 %` · `392 fibres` · `16 couches` |
+| [2026-10-10](2026-10-10_docs.md) | `296 Ko` |
+
+### `divers` — Ce qui ne rentre dans aucun thème
+
+| jour | chiffres du jour |
+|---|---|
+| [2026-10-09](2026-10-09_divers.md) | `×1,52` · `256 jetons` · `12,5 %` · `+6,7 %` · `+1,0 %` · `0,6 s` · `+7,8 %` · `÷2` · `2 fibres` · `224 fibres` |
+| [2026-10-10](2026-10-10_divers.md) | `400 s` · `0,509` · `3,7 %` · `−11,5 %` · `−4,5 %` · `512 jetons` · `50 ms` · `50,2 ms` · `−20 %` · `−8 %` · `10 ms` |

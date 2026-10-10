@@ -33,43 +33,44 @@
 
 ## Chiffres du jour
 
-`49 %` · `14,8 ms` · `40 %` · `7 ms` · `50 ms` · `50,2 ms` · `4 messages`
+`49 %` · `14,8 ms` · `40 %` · `7 ms` · `50 ms` · `50,2 ms` · `256 jetons` · `255 jetons` · `5,3719` · `14,6496` · `18,5520` · `12 couches`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
-## Étapes du jour (25)
+## Étapes du jour (94)
 
 *Ce que l'agent a consigné en le faisant (lignes `⏵` du journal de session) :*
 
-- Campagne 24 h lancée : file de mesures + deux paires d'entraînement en parallèle
-- Registre des manques publié — et un point d'échelle qui nuance la structure innée
-- C1b pas 1 franchi, porte outillée et tenue — le relais est le prochain jalon
-- **C1 est livrée** : le relais est exact à trois instances — et il a fait trouver un vrai bug
-- **C12 livrée** : trace globale au bit près, rejeu sans divergence, et trace fausse détectée
-- Round 7 livré : C10 fermé — budget par lien, vérifié sur ce qui passe
-- Round 8 livré : C11 — les pannes sont nommées, avec leur propre code
-- Round 9 livré : C10 complet (octets **et** latence), quatre codes d'arrêt distincts
-- Round 11 : la rouge était la PORTE — et notre modèle entraîné survit au découpage
-- Round 12 livré : C11 — le registre des régions, la « découverte » du plan
-- Round 16 livré : le déséquilibre E/I est **localisé à l'entrée**, pas réparti
-- Round 20 livré : un drapeau qui ne faisait **rien** dans le chemin réparti — trouvé, corrigé, gardé
-- Round 26 livré : le protocole v7 **spécifié à l'octet près** — et explicitement pas implémenté
-- Round 27 livré : protocole v7 tenté puis **reverté** — neuf tests encodent la mise en page v6
-- Round 29 livré : le v7 vérifié sur **toutes** les portes réparties — huit vertes
-- Round 30 livré : protocole v8 **spécifié** — le compte de paires du nœud
-- Round 31 livré : **protocole v8** — le compte de paires du nœud voyage, et le chiffre a attrapé mon bug
-- Round 32 livré : budget de paires **tenté et reverté** — deux leçons, dont une donnée par la porte
-- Round 33 livré : **C10 CLOS** — trois budgets de lien, trois codes d'arrêt distincts
-- Round 34 livré : l'instrument de trace est **étalonné** — 50 ms injectés, 50,2 ms mesurés
-- Round 35 livré : la **gigue** d'un pas réparti — 7 ms sur 17,7, soit 40 %
-- Round 36 livré : la gigue avec un **vrai RTT** — 14,8 ms sur 30,2 (49 %)
-- Round 37 livré : un pas coûte **4 messages** — l'en-tête est écrit à part du corps
-- Round 40 livré : vérification après v7/v8 et la fusion des écritures — **huit portes réparties vertes**
-- Round 43 livré : inventaire **définitif** des drapeaux en réparti — six sur dix agissent, un seul candidat ouvert
+- **00:04** — Le seul lien FPGA est un FT232H — je vérifie ce qui est réellement derrière
+- **00:39** — C2 : je trace l'injection pour voir si elle s'exécute réellement
+- **00:57** — C2 : je trace l'injection à l'exécution pour trancher (mon raisonnement l'exige)
+- **01:43** — Une porte est rouge (`porte-bus-socket`, code 1 sans marqueur) — j'attends la fin puis j'enquête
+- **01:47** — Vrai défaut : `sys.exit("message")` sort en code 1 même quand la porte réussit
+- **01:47** — Je corrige le motif (`sys.exit` avec un message sort toujours en 1) et relance la porte
+- **02:02** — Une apostrophe inversée a mangé un mot de mon message de commit — je vérifie et corrige
+- **02:16** — Résultat NON robuste : un point d'interrogation de plus fait passer la distance de 136 à 378 — je corrige mon propre excès
+- **04:08** — Porte verte (5/5) — je corrige le message de clôture resté périmé et je commite
+- **05:45** — C10 : je clôture les budgets par lien — déclaration dans la topologie, refus si dépassée
+- **05:47** — C10 : porte 3/3 verte — budget déclaré, dépassement nommé, code 6, aucun résultat partiel
+- **05:48** — Round 7 livré : C10 fermé — budget par lien, vérifié sur ce qui passe
+- **05:49** — C11 : les pannes — nommer la région et le pas, code distinct, jamais de résultat partiel
+- **05:53** — Le nœud du cas 2 n'a pas démarré (port en TIME_WAIT) — je donne un port par cas
+- **05:55** — La porte attendait un événement fragile — je la rends robuste (pilote en fond, mort chronométrée)
+- **05:56** — C11 : porte 3/3 verte — je commite et je relance porte-flux (chemin d'exécution touché)
+- **06:01** — porte-flux 5/5 verte après les changements ; je vérifie la porte budget qui partage le chemin
+- **06:01** — Round 8 livré : C11 — les pannes sont nommées, avec leur propre code
+- **06:01** — C10 (suite) : le budget de LATENCE par lien — le troisième volet des budgets du plan
+- **06:05** — Round 9 livré : C10 complet (octets **et** latence), quatre codes d'arrêt distincts
+- **07:19** — 19 portes vertes, 1 rouge (`porte-reparti-moteur`) — même motif que bus-socket ?
+- **07:20** — Hypothèse protocole : je compare le NOMBRE DE JETONS notés par les deux chemins
+- **07:20** — TROUVÉ : le fichier a 256 jetons ; `--ppl` note les 128 PREMIERS, `--ppl-reparti` les 128 DERNIERS
+- **07:21** — Round 11 : la rouge était la PORTE — et notre modèle entraîné survit au découpage
+- **07:21** — C11 (découverte) : le registre de régions — les topologies ne codent plus les adresses en dur
+- *(+69 autres étapes — voir les rapports de session)*
 
 ## Sessions actives ce jour
 
-- `d31b3d9b` — Où en est-on (début 2026-10-08 09:11, 49.5 h) → [rapport](sessions/d31b3d9b/rapport.md) · [digest](sessions/d31b3d9b/digest.md)
+- `d31b3d9b` — Où en est-on (début 2026-10-08 09:11, 49.7 h) → [rapport](sessions/d31b3d9b/rapport.md) · [digest](sessions/d31b3d9b/digest.md)
 
 ## Mesures et rapports touchés
 

@@ -31,39 +31,40 @@
 
 ## Chiffres du jour
 
-`255 jetons` · `1,842` · `3,4 ms` · `×128` · `50 ms` · `50,2 ms` · `40 %` · `7 ms` · `49 %` · `14,8 ms` · `4 messages`
+`255 jetons` · `1,842` · `3,4 ms` · `×128` · `24 couches` · `59,0790` · `9 %`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
-## Étapes du jour (25)
+## Étapes du jour (63)
 
 *Ce que l'agent a consigné en le faisant (lignes `⏵` du journal de session) :*
 
-- Campagne 24 h lancée : file de mesures + deux paires d'entraînement en parallèle
-- Registre des manques publié — et un point d'échelle qui nuance la structure innée
-- C1b pas 1 franchi, porte outillée et tenue — le relais est le prochain jalon
-- **C1 est livrée** : le relais est exact à trois instances — et il a fait trouver un vrai bug
-- **C12 livrée** : trace globale au bit près, rejeu sans divergence, et trace fausse détectée
-- Round 7 livré : C10 fermé — budget par lien, vérifié sur ce qui passe
-- Round 8 livré : C11 — les pannes sont nommées, avec leur propre code
-- Round 9 livré : C10 complet (octets **et** latence), quatre codes d'arrêt distincts
-- Round 11 : la rouge était la PORTE — et notre modèle entraîné survit au découpage
-- Round 12 livré : C11 — le registre des régions, la « découverte » du plan
-- Round 16 livré : le déséquilibre E/I est **localisé à l'entrée**, pas réparti
-- Round 20 livré : un drapeau qui ne faisait **rien** dans le chemin réparti — trouvé, corrigé, gardé
-- Round 26 livré : le protocole v7 **spécifié à l'octet près** — et explicitement pas implémenté
-- Round 27 livré : protocole v7 tenté puis **reverté** — neuf tests encodent la mise en page v6
-- Round 29 livré : le v7 vérifié sur **toutes** les portes réparties — huit vertes
-- Round 30 livré : protocole v8 **spécifié** — le compte de paires du nœud
-- Round 31 livré : **protocole v8** — le compte de paires du nœud voyage, et le chiffre a attrapé mon bug
-- Round 32 livré : budget de paires **tenté et reverté** — deux leçons, dont une donnée par la porte
-- Round 33 livré : **C10 CLOS** — trois budgets de lien, trois codes d'arrêt distincts
-- Round 34 livré : l'instrument de trace est **étalonné** — 50 ms injectés, 50,2 ms mesurés
-- Round 35 livré : la **gigue** d'un pas réparti — 7 ms sur 17,7, soit 40 %
-- Round 36 livré : la gigue avec un **vrai RTT** — 14,8 ms sur 30,2 (49 %)
-- Round 37 livré : un pas coûte **4 messages** — l'en-tête est écrit à part du corps
-- Round 40 livré : vérification après v7/v8 et la fusion des écritures — **huit portes réparties vertes**
-- Round 43 livré : inventaire **définitif** des drapeaux en réparti — six sur dix agissent, un seul candidat ouvert
+- **01:40** — Consignation de la mesure à froid du lot sur un MoE (protocole corrigé)
+- **02:22** — Correction de l'outil de carte de latence (le batch 2 a échoué dessus)
+- **02:23** — Balayage complet de la carte de latence sur deux tailles de modèle
+- **10:37** — Ajout du budget énergétique chiffré (cerveau contre notre implémentation)
+- **13:25** — M1 : implémentation du bus de modulation par la VALEUR (et non la nouveauté)
+- **14:11** — Commit du bus de valeur, puis mise en file de la vérification à l'échelle 512
+- **15:34** — Registre des manques publié — et un point d'échelle qui nuance la structure innée
+- **17:02** — Lancement du sprint cerveau : objectif autonome, plan, puis première brique (topologie)
+- **17:06** — C1a livrée : la topologie se lit, se vérifie, et refuse les graphes incohérents
+- **17:11** — C1b pas 1 franchi : la topologie PILOTE le découpage, écart 0,00e0
+- **17:13** — C1b pas 1 franchi, porte outillée et tenue — le relais est le prochain jalon
+- **17:28** — Cause trouvée : le nœud refuse une plage d'UNE couche — j'utilise un modèle à 24 couches
+- **17:33** — Régression réparée (5 modes verts) — je reprends le test du relais
+- **17:33** — **C1b pas 2 : le relais est EXACT — trois régions, trois instances, écart 0,00e0**
+- **17:36** — **C1 est livrée** : le relais est exact à trois instances — et il a fait trouver un vrai bug
+- **17:36** — C12 : la trace globale horodatée et sa vérification par rejeu
+- **17:39** — C12 : trace écrite et rejeu identique — je vérifie maintenant qu'une trace FAUSSE est détectée
+- **17:39** — C12 : trace exacte, rejeu identique, et trace faussée détectée au pas près
+- **17:41** — **C12 livrée** : trace globale au bit près, rejeu sans divergence, et trace fausse détectée
+- **17:41** — C5 : le bus de modulation multi-canaux, avec un consommateur qui a des dents
+- **17:43** — Le bus neutre est identique (59,0790) — c'est ma porte qui comparait aussi les temps
+- **17:44** — Cas 3 : le gain du nœud final est absorbé par la normalisation — je teste sur un nœud RELAIS
+- **17:45** — C5 livrée : bus neutre exact au bit près, bus actif sur un nœud relais
+- **21:34** — Nouveau mode : timeboxing jusqu'à 9 h demain. Je repars sur C3 — les délais par lien
+- **21:38** — C5bis : la diffusion réseau du bus (port de contrôle séparé, sans toucher au protocole de données)
+- *(+38 autres étapes — voir les rapports de session)*
 
 ## Sessions actives ce jour
 

@@ -31,6 +31,7 @@ Usage :
 from __future__ import annotations
 
 import argparse
+import json
 import re
 import subprocess
 import sys
@@ -149,30 +150,58 @@ def sessions_du_jour(jour: str) -> list[dict]:
     return trouvees
 
 
-def etapes_du_jour(sid: str) -> list[tuple[str, str]]:
-    """Les ÉTAPES du jour, telles que les a consignées le journal de session.
+def etapes_du_jour(sid: str, jour: str) -> list[tuple[str, str]]:
+    """Les lignes `⏵` **de ce jour-là**, avec leur heure, lues dans la TRACE horodatée.
 
-    Chaque tour du rapport contient la « synthèse produite » — les lignes que l'agent écrit
-    pour dire CE QU'IL FAIT (`⏵ …`). C'est la matière la plus utile du journal : le titre du
-    tour dit la demande, ces lignes disent le travail. On les renvoie (texte, titre du tour),
-    dédoublonnées, dans l'ordre.
+    Le rapport et le digest de session ne portent pas d'horodatage par tour : les étapes
+    extraites de là couvraient donc **toute la session** — un fichier du 9 octobre recevait des
+    étapes du 10 (attrapé en voyant « +40 % · 2048 jetons » dans la journée du 9). La trace brute
+    (`session.jsonl.zstd`, écrite par le harnais, non versionnée) porte un `time` par
+    enregistrement : c'est elle qui date. On lit en flux, on ne garde que les messages
+    d'assistant contenant `⏵`, et on s'arrête au premier enregistrement du lendemain.
     """
     for d in (JOURNAL / "sessions").glob(f"{sid}-*"):
-        r = d / "rapport.md"
-        if not r.exists():
+        trace = d / "session.jsonl.zstd"
+        if not trace.exists():
             continue
-        etapes, tour, vues = [], "", set()
-        for l in r.read_text(encoding="utf-8", errors="replace").splitlines():
-            if l.startswith("### Tour "):
-                tour = l[4:].strip()
-                tour = tour if len(tour) <= 90 else tour[:87].rstrip() + "…"
-            elif l.startswith("⏵ "):
-                t = l[2:].strip()
-                cle = t.lower()
-                if t and cle not in vues:
-                    vues.add(cle)
-                    etapes.append((t, tour))
-        return etapes
+        j0 = time.mktime(time.strptime(jour + " 00:00", "%Y-%m-%d %H:%M"))
+        j1 = j0 + 86400
+        sorties, vus, illisibles = [], set(), 0
+        proc = subprocess.Popen(["zstd", "-dc", str(trace)], stdout=subprocess.PIPE,
+                                text=True, errors="replace")
+        try:
+            for ligne in proc.stdout:                       # type: ignore[union-attr]
+                if '"assistant/message"' not in ligne or "⏵" not in ligne:
+                    continue
+                try:
+                    o = json.loads(ligne)
+                except json.JSONDecodeError:
+                    illisibles += 1
+                    continue
+                t = (o.get("time") or 0) / 1000
+                if t >= j1:
+                    break                                    # trace chronologique
+                if t < j0:
+                    continue
+                for part in o.get("data", {}).get("message", {}).get("content", []) or []:
+                    if part.get("type") != "text":
+                        continue
+                    for l in (part.get("text") or "").splitlines():
+                        if l.startswith("⏵ "):
+                            txt = l[2:].strip()
+                            if txt and txt.lower() not in vus:
+                                vus.add(txt.lower())
+                                sorties.append((time.strftime("%H:%M", time.localtime(t)), txt))
+        finally:
+            if proc.stdout:
+                proc.stdout.close()
+            proc.terminate()
+        if illisibles:
+            # Ne JAMAIS avaler une erreur en silence : le premier jet de cette fonction a perdu
+            # 296 étapes parce qu'un `except Exception: continue` masquait un `NameError`
+            # (`json` n'était pas importé). Une ligne illisible se COMPTE et se dit.
+            print(f"  ({illisibles} enregistrements de trace illisibles, ignorés)", file=sys.stderr)
+        return sorties
     return []
 
 
@@ -258,9 +287,9 @@ def generer_jour(jour: str, dry: bool, trace: list[str], themes_ecrits: list | N
     for s in sessions:
         for t in tours_de_session(s["id"]):
             tours.setdefault(theme_de(t, []), []).append((s["id"], t))
-        for texte, tour in etapes_du_jour(s["id"]):
+        for heure, texte in etapes_du_jour(s["id"], jour):
             # les étapes sont classées comme les commits : par mots-clés de leur propre texte
-            etapes.setdefault(theme_de(texte + " " + tour, []), []).append(texte)
+            etapes.setdefault(theme_de(texte, []), []).append(f"**{heure}** — {texte}")
 
     themes = sorted(set(par_theme) | set(tours))
     fichiers_theme = []
@@ -370,7 +399,24 @@ def generer_jour(jour: str, dry: bool, trace: list[str], themes_ecrits: list | N
              "| thème | ce qu'il couvre | mots-clés | chemins |", "|---|---|---|---|"]
     for slug, titre, mots, chemins in THEMES:
         table.append(f"| `{slug}` | {titre} | {', '.join(mots)} | {', '.join(chemins)} |")
-    table += [f"| `{THEME_DEFAUT[0]}` | {THEME_DEFAUT[1]} | — | — |", ""]
+    table += [f"| `{THEME_DEFAUT[0]}` | {THEME_DEFAUT[1]} | — | — |", "",
+              "## L'évolution, thème par thème", "",
+              "Chaque thème liste ses journées, dans l'ordre, avec les chiffres que la journée a",
+              "produits : c'est la vue « d'un jour à l'autre » que les noms `jour_thème` rendent",
+              "possible (`ls journal/*_<thème>.md`).", ""]
+    tous = [s_ for s_, _, _, _ in THEMES] + [THEME_DEFAUT[0]]
+    for slug in tous:
+        jours_theme = sorted(JOURNAL.glob(f"*_{slug}.md"))
+        if not jours_theme:
+            continue
+        table += [f"### `{slug}` — {titre_theme(slug)}", "",
+                  "| jour | chiffres du jour |", "|---|---|"]
+        for f in jours_theme:
+            t = f.read_text(encoding="utf-8")
+            m = re.search(r"## Chiffres du jour\n\n(.*)", t)
+            chiffres = m.group(1).strip() if m else "—"
+            table.append(f"| [{f.stem[:10]}]({f.name}) | {chiffres[:160]} |")
+        table.append("")
     if themes_ecrits is not None and "themes" not in themes_ecrits:
         themes_ecrits.append("themes")
         ecrire(JOURNAL / "THEMES.md", "\n".join(table), dry, trace)

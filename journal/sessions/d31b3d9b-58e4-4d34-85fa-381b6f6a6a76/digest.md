@@ -35294,3 +35294,647 @@ chiffres du jour intégrés
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"tools/journal_auto.py\"); s = p.read_text()\ns = s.replace('''    r\"\\\\d{2,}(?:[.,]\\\\d+)?\\\\s*(?:M|G)?\\\\s*par (?:jeton|pas|token)\",\n]''',\n'''    r\"\\\\d{2,}(?:[.,]\\\ … [1710 caractères tronqués]`
+
+  ```
+extraction affinée
+## Chiffres du jour
+
+`+40 %` · `512 jetons` · `+2,0 %` · `2048 jetons`
+1
+poussé
+  porte-greffe           ✅                         971 s    ✅ la porte est franchie. Ce qu'elle établit : l'injection d'état est BRANCHÉE
+  porte-horloge          ✅                          24 s    ✅ borne atteinte : arrêt EXPLICITE (code 5) et AUCUNE perplexité rendue
+référence (aucune fenêtre, 2048 jetons) : perplexité 10.3703  ·  clés notées par jeton ≈ 2048
+
+| fenêtre \ puits | 128 | 256 | 512 |
+|---|---|---|---|
+| **512** |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,20p' journal/2026-10-09.md; echo \"...\"; wc -l journal/2026-10-09*.md | tail -12", "description": "Review day index readability"}`
+
+  ```
+# 2026-10-09
+
+> **Généré** par `tools/journal_auto.py` — index de la journée, découpée par **thème**
+> (une journée de ce dépôt ne tient pas dans un fichier). Le récit écrit à la main est
+> conservé plus bas, dans le bloc « notes » (marqueurs HTML).
+
+**87 commits** · **1 session(s)** · **9 thème(s)**
+
+## Thèmes du jour
+
+| thème | commits | fichier |
+|---|---|---|
+| attention | 3 | [2026-10-09_attention.md](2026-10-09_attention.md) |
+| distribue | 20 | [2026-10-09_distribue.md](2026-10-09_distribue.md) |
+| divers | 0 | [2026-10-09_divers.md](2026-10-09_divers.md) |
+| docs | 10 | [2026-10-09_docs.md](2026-10-09_docs.md) |
+| memoire | 5 | [2026-10-09_memoire.md](2026-10-09_memoire.md) |
+| mesures | 13 | [2026-10-09_mesures.md](2026-10-09_mesures.md) |
+| modele | 30 | [2026-10-09_modele.md](2026-10-09_modele.md) |
+| moteur | 4 | [2026-10-09_moteur.md](2026-10-09_moteur.md) |
+...
+    42 journal/2026-10-09_attention.md
+    78 journal/2026-10-09_distribue.md
+    68 journal/2026-10-09_divers.md
+    41 journal/2026-10-09_docs.md
+   187 journal/2026-10-09.md
+    41 journal/2026-10-09_memoire.md
+    80 journal/2026-10-09_mesures.md
+    74 journal/2026-10-09_modele.md
+    46 journal/2026-10-09
+… [109 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ J'ajoute la vue d'évolution : dans `journal/THEMES.md`, chaque thème liste ses jours et leurs chiffres
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"tools/journal_auto.py\"); s = p.read_text()\nold = '''    for slug, titre, mots, chemins in THEMES:\n        table.append(f\"| `{slug}` | {titre} | {', '.join(mots)} | {', '.joi … [1601 caractères tronqués]`
+
+  ```
+vue d'évolution ajoutée
+## L'évolution, thème par thème
+
+Chaque thème liste ses journées, dans l'ordre, avec les chiffres que la journée a
+produits : c'est la vue « d'un jour à l'autre » que les noms `jour_thème` rendent
+possible (`ls journal/*_<thème>.md`).
+
+### `attention` — Attention, fenêtre, puits
+
+| jour | chiffres du jour |
+|---|---|
+| [2026-10-09](2026-10-09_attention.md) | `+40 %` · `2048 jetons` |
+| [2026-10-10](2026-10-10_attention.md) | `+40 %` · `512 jetons` · `+2,0 %` |
+  ```
+
+### 🤖 Assistant
+
+⏵ Bug : les étapes extraites couvrent toute la session, pas la journée — je regarde comment dater les tours
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/^## 6. Commits/,+14p' journal/sessions/d31b3d9b-58e4-4d34-85fa-381b6f6a6a76/rapport.md | head -18; echo \"=== le digest date-t-il les messages ? ===\"; grep -n \"^### \\|^## Tour\" journal/sessions/d31b3d9b-58e4-4d34-85fa-38 … [225 caractères tronqués]`
+
+  ```
+## 6. Commits
+
+- Parcimonie entraînée : premier banc, et la loi du coût par événement mesurée dans le moteur  Le dépôt n'avait jamais entraîné un seul modèle (zéro rétropropagat
+- Porte d'exécution : un modèle entraîné ici tourne dans Drave, logits identiques  Le moteur lit le GGUF en place et n'avait pas de convertisseur : le dépôt ne po
+- Réparti : --ids-file était ignoré, et les jetons synthétiques sortaient du vocabulaire  Deux défauts trouvés en essayant de répartir le modèle entraîné ici.  1.
+- entrainer_moteur : deux erreurs qui faussaient la mesure, corrigées  1. Double décalage. Le modèle HF décale lui-même (shift_logits/shift_labels) ;    lui passe
+- entrainer_moteur : le double décalage était AUSSI dans la boucle d'entraînement  La correction précédente n'avait touché que l'évaluation. Le défaut était plus 
+- docs/numa-segregation : la ségrégation NUMA proposée, mesurée plutôt que raisonnée  Réponse à une proposition de station bi-Xeon avec topologie asymétrique stri
+- Le modèle produit ici tourne dans Drave et se découpe — les deux portes sont tenues  Porte d'exécution : un Qwen3-MoE entraîné ici (4 couches, 8 experts, top-2,
+- docs/numa-segregation §11 : la carte 4xNVM
+… [1744 caractères tronqués]
+  ```
+
+- **bash** `{"command": "ls -la journal/sessions/d31b3d9b-58e4-4d34-85fa-381b6f6a6a76/ | head; which zstd unzstd 2>/dev/null; ls ~/.dsh/sessions/*/[a-f0-9]*/session.jsonl* 2>/dev/null | head -3; find / -name \"session.jsonl*\" -path \"*d31b3d9b*\" 2>/dev/null | head -3", "description": "Locate raw session trace … [16 caractères tronqués]`
+
+  ```
+total 19836
+drwxr-xr-x. 1 stephane stephane       74  8 oct 09:17 .
+drwxr-xr-x. 1 stephane stephane     4292  8 oct 10:17 ..
+-rw-r--r--. 1 stephane stephane  2292111 10 oct 10:41 digest.md
+-rw-r--r--. 1 stephane stephane   339019 10 oct 10:42 rapport.md
+-rw-------. 1 stephane stephane 17674457 10 oct 10:40 session.jsonl.zstd
+/usr/bin/zstd
+/usr/bin/unzstd
+/home/stephane/.dsh/sessions/--home-stephane--/041aa4de-420f-4f20-ab8d-cde406b8a278/session.jsonl.zstd
+/home/stephane/.dsh/sessions/--home-stephane--/4aabec4a-32d0-4231-9deb-7f6a80cac933/session.jsonl.zstd
+/home/stephane/.dsh/sessions/--home-stephane--/50b94e42-8b77-411a-95d5-84fdd55a11ea/session.jsonl.zstd
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+### 🤖 Assistant
+
+⏵ La trace brute horodatée existe (zstd dispo) — je regarde son schéma pour dater les étapes pour de vrai
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 120 zstd -dc journal/sessions/d31b3d9b-58e4-4d34-85fa-381b6f6a6a76/session.jsonl.zstd 2>/dev/null | head -c 3000 | python3 -c \"\nimport sys, json\nfor i, l in enumerate(sys.stdin):\n    try:\n        o = json.loads(l)\n    e … [455 caractères tronqués]`
+
+  ```
+CLÉS: ['agentPreset', 'createdAt', 'cwd', 'delegationDepth', 'id', 'type', 'version']
+  type: session | ts: None
+=== schéma d'un message assistant avec ⏵ ===
+{"type":"request/header","seq":12,"time":1791465116535,"data":{"header":{"config":{"provider":"deepseek-official","model":"deepseek-flash","reasoningEffort":"max","maxTokens":256000},"adapterDefaults":{"maxTokens":true},"system":"You are an AI agent powered by DeepSeek Harness.\n\nYou are a coding agent powered by the deepseek-flash model. Your working directory is /home/stephane/Data13TB/stephane/GitHub/Qtrinet.\n\n[Status line] You have a status line visible to the user. [Required] At the start of each step or subtask (not only before tool calls), write exactly one standalone line at the very beginning of your response: ⏵ a concrete description of what you are doing (20 words max), then continue with the normal response on the next line. Write only one ⏵ line per response and do not repeat it. Prioritize information so the user can understand the current work at a glance; keep the style natural and optionally playful. Examples: ⏵ Fixing the login page styles, ⏵ Investigating the error, ⏵ Running validation for the patch. Upd
+… [148 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 400 zstd -dc journal/sessions/d31b3d9b-58e4-4d34-85fa-381b6f6a6a76/session.jsonl.zstd 2>/dev/null | head -4000 | python3 -c \"\nimport sys, json, collections\ntypes = collections.Counter()\nex = {}\nfor l in sys.stdin:\n    t … [364 caractères tronqués]`
+
+  ```
+1562  reasoning-chunks  ['data', 'seq0', 'time0', 'type', 'dt', 'index', 'step', 'texts', 'turn']
+  885  tool-call-chunks  ['data', 'seq0', 'time0', 'type', 'args', 'dt', 'id', 'index', 'name', 'step']
+  819  assistant/chunk  ['data', 'seq', 'time', 'type', 'chunk', 'step', 'turn']
+  133  tool/call  ['data', 'seq', 'time', 'type', 'arguments', 'callId', 'name', 'step', 'turn']
+  133  tool/result  ['data', 'seq', 'sourceEventSeqs', 'surfaceOp', 'time', 'type', 'message', 'step', 'turn']
+  111  step/start  ['data', 'seq', 'time', 'type', 'step', 'turn']
+  110  assistant/message  ['data', 'seq', 'sourceEventSeqs', 'surfaceOp', 'time', 'type', 'message', 'step', 'turn', 'usage']
+  110  step/end  ['data', 'seq', 'time', 'type', 'step', 'turn']
+   84  text-chunks  ['data', 'seq0', 'time0', 'type', 'dt', 'index', 'step', 'texts', 'turn']
+   22  agent/inbox/spliced  ['data', 'seq', 'time', 'type', 'inserted', 'start', 'target']
+   16  user/message  ['data', 'seq', 'surfaceOp', 'time', 'type', 'content', 'id', 'role', 'source']
+    2  turn/start  ['data', 'seq', 'time', 'type', 'turn']
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 400 zstd -dc journal/sessions/d31b3d9b-58e4-4d34-85fa-381b6f6a6a76/session.jsonl.zstd 2>/dev/null | grep -m1 '\"assistant/message\"' | python3 -c \"\nimport sys, json\no = json.loads(sys.stdin.readline())\nprint('clés racine  … [467 caractères tronqués]`
+
+  ```
+clés racine : ['data', 'seq', 'sourceEventSeqs', 'surfaceOp', 'time', 'type']
+time : 1791465119465 → 2026-10-08 09:11
+data keys : ['message', 'step', 'turn', 'usage']
+[stderr]
+Traceback (most recent call last):
+  File "<string>", line 8, in <module>
+    print('message (200) :', repr((m or '')[:200]))
+                                  ~~~~~~~~~^^^^^^
+KeyError: slice(None, 200, None)
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 400 zstd -dc journal/sessions/d31b3d9b-58e4-4d34-85fa-381b6f6a6a76/session.jsonl.zstd 2>/dev/null | grep -m1 '\"assistant/message\"' | python3 -c \"\nimport sys, json\no = json.loads(sys.stdin.readline()); m = o['data']['mess … [298 caractères tronqués]`
+
+  ```
+type de message : dict · clés : ['content', 'id', 'role', 'source']
+content : list [{'type': 'reasoning', 'text': 'The user is asking "où en est-on" (French for "where are we at / what\'s the status"). I need to figure out the current state of the project. Let me look at the working directory, git status, recent commits, any TODO/progress files, etc.\n\nLet me start with a status
+  ```
+
+### 🤖 Assistant
+
+⏵ Je date les étapes par la trace brute horodatée (zstd) — fini les étapes de toute la session dans la journée
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"tools/journal_auto.py\"); s = p.read_text()\ndeb = s.index('def etapes_du_jour(sid: str) -> list[tuple[str, str]]:')\nfin = s.index('def tours_de_session(sid: str) -> list[str]: … [3717 caractères tronqués]`
+
+  ```
+étapes datées par la trace
+syntaxe OK
+## Chiffres du jour
+
+`+40 %` · `512 jetons` · `+2,0 %`
+[stderr]
+
+real	0m0,752s
+user	0m0,332s
+sys	0m0,051s
+  ```
+
+### 🤖 Assistant
+
+⏵ Diagnostic : la lecture de trace ne remonte aucune étape — je compte les enregistrements par jour
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 400 python3 - <<'PYEOF'\nimport subprocess, json, time, collections, pathlib\ntrace = next(pathlib.Path(\"journal/sessions\").glob(\"d31b3d9b-*/session.jsonl.zstd\"))\npar_jour = collections.Counter(); avec_fleche = collectio … [853 caractères tronqués]`
+
+  ```
+assistant/message par jour : {'2026-10-08': 594, '2026-10-09': 902, '2026-10-10': 564}
+dont contenant ⏵ : {'2026-10-08': 71, '2026-10-09': 299, '2026-10-10': 296}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport sys, time; sys.path.insert(0,'tools'); import journal_auto as ja\ns = ja.sessions_du_jour('2026-10-10'); print('sessions :', [(x['id'], x['debut'], x['duree']) for x in s])\ne = ja.etapes_du_jour('d31b3d9b', '20 … [200 caractères tronqués]`
+
+  ```
+sessions : [('d31b3d9b', '2026-10-08 09:11', 49.5)]
+étapes trouvées : 0
+[]
+7:**61 commits** · **1 session(s)** · **9 thème(s)**
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"⏵\\|assistant/message\\|t >= j1\\|t < j0\" tools/journal_auto.py | head -12; echo \"=== test d'un enregistrement précis ===\"; python3 - <<'PYEOF'\nimport subprocess, json, time, pathlib\ntrace = next(pathlib.Path(\"journal … [962 caractères tronqués]`
+
+  ```
+153:    """Les lignes `⏵` **de ce jour-là**, avec leur heure, lues dans la TRACE horodatée.
+160:    d'assistant contenant `⏵`, et on s'arrête au premier enregistrement du lendemain.
+173:                if '"assistant/message"' not in ligne or "⏵" not in ligne:
+180:                if t >= j1:
+182:                if t < j0:
+188:                        if l.startswith("⏵ "):
+317:                       "*Ce que l'agent a consigné en le faisant (lignes `⏵` du journal de "
+=== test d'un enregistrement précis ===
+parts: ['reasoning', 'text', 'tool-call'] · flèches: 1 · ['⏵ C7 : la consolidation RÉPÉTÉE atteint un point fixe exact (0,00e0) dès le 2e cycle']
+parts: ['reasoning', 'text', 'tool-call'] · flèches: 1 · ["⏵ Inventaire rapide du FPGA annoncé, avant d'attaquer la mémoire qui sert"]
+parts: ['reasoning', 'text', 'tool-call'] · flèches: 1 · ['⏵ Le seul lien FPGA est un FT232H — je vérifie ce qui est réellement derrière']
+total testés : 3
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/journal_auto.py", "offset": 150, "limit": 50}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/journal_auto.py</path>
+<type>file</type>
+<content>
+150: 
+151: 
+152: def etapes_du_jour(sid: str, jour: str) -> list[tuple[str, str]]:
+153:     """Les lignes `⏵` **de ce jour-là**, avec leur heure, lues dans la TRACE horodatée.
+154: 
+155:     Le rapport et le digest de session ne portent pas d'horodatage par tour : les étapes
+156:     extraites de là couvraient donc **toute la session** — un fichier du 9 octobre recevait des
+157:     étapes du 10 (attrapé en voyant « +40 % · 2048 jetons » dans la journée du 9). La trace brute
+158:     (`session.jsonl.zstd`, écrite par le harnais, non versionnée) porte un `time` par
+159:     enregistrement : c'est elle qui date. On lit en flux, on ne garde que les messages
+160:     d'assistant contenant `⏵`, et on s'arrête au premier enregistrement du lendemain.
+161:     """
+162:     for d in (JOURNAL / "sessions").glob(f"{sid}-*"):
+163:         trace = d / "session.jsonl.zstd"
+164:         if not trace.exists():
+165:             continue
+166:         j0 = time.mktime(time.strptime(jour + " 00:00", "%Y-%m-%d %H:%M"))
+167:         j1 = j0 + 86400
+168:         sorties, vus = [], set()
+169:    
+… [1632 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport sys, time, json, subprocess\nsys.path.insert(0, \"tools\"); import journal_auto as ja\nprint(\"JOURNAL =\", ja.JOURNAL, ja.JOURNAL.exists())\nds = list((ja.JOURNAL / \"sessions\").glob(\"d31b3d9b-*\")); pr … [786 caractères tronqués]`
+
+  ```
+JOURNAL = /home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal True
+dirs: [PosixPath('/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/d31b3d9b-58e4-4d34-85fa-381b6f6a6a76')]
+trace existe : True /home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/d31b3d9b-58e4-4d34-85fa-381b6f6a6a76/session.jsonl.zstd
+  candidat 1 t = 2026-10-08 09:11 dans la journée : False
+  candidat 2 t = 2026-10-08 09:13 dans la journée : False
+candidats bruts : 667
+  ```
+
+### 🤖 Assistant
+
+⏵ Cause probable : un enregistrement à `time` aberrant faisait sortir la boucle au premier tour — je vérifie et je corrige
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport sys, time, json, subprocess, pathlib\ntrace = next(pathlib.Path(\"journal/sessions\").glob(\"d31b3d9b-*/session.jsonl.zstd\"))\nj0 = time.mktime(time.strptime(\"2026-10-10 00:00\", \"%Y-%m-%d %H:%M\")); j1 … [739 caractères tronqués]`
+
+  ```
+enregistrements au-delà de la fin de journée : 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -rf tools/__pycache__ && python3 - <<'PYEOF'\nimport sys, inspect, time, json, subprocess\nsys.path.insert(0, \"tools\"); import journal_auto as ja\nsrc = inspect.getsource(ja.etapes_du_jour)\nsrc = src.replace('            for li … [410 caractères tronqués]`
+
+  ```
+LIGNE 3171
+LIGNE 412
+LIGNE 698
+LIGNE 83
+LIGNE 85
+LIGNE 155
+LIGNE 203
+LIGNE 1662
+LIGNE 1051
+LIGNE 176
+LIGNE 150
+LIGNE 325
+LIGNE 155
+LIGNE 858
+LIGNE 2266
+LIGNE 1210
+LIGNE 354
+LIGNE 1257
+LIGNE 253
+LIGNE 1666
+LIGNE 230
+LIGNE 147
+LIGNE 3200
+LIGNE 1596
+LIGNE 521
+LIGNE 83
+LIGNE 85
+LIGNE 155
+LIGNE 271
+LIGNE 1527
+LIGNE 688
+LIGNE 150
+LIGNE 370
+LIGNE 155
+LIGNE 660
+LIGNE 930
+LIGNE 1558
+LIGNE 731
+LIGNE 711
+LIGNE 695
+LIGNE 1606
+LIGNE 604
+LIGNE 940
+LIGNE 407
+LIGNE 329
+LIGNE 1703
+LIGNE 944
+LIGNE 920
+LIGNE 1152
+LIGNE 1712
+LIGNE 623
+LIGNE 467
+LIGNE 815
+LIGNE 1692
+LIGNE 1145
+LIGNE 263
+LIGNE 6353
+LIGNE 231
+LIGNE 147
+LIGNE 7786
+LIGNE 6283
+LIGNE 550
+LIGNE 83
+LIGNE 85
+LIGNE 150
+LIGNE 656
+LIGNE 709
+LIGNE 1884
+LIGNE 451
+LIGNE 978
+LIGNE 983
+LIGNE 214
+LIGNE 2127
+LIGNE 228
+LIGNE 141
+LIGNE 2423
+LIGNE 83
+LIGNE 104
+LIGNE 2196
+LIGNE 76
+LIGNE 137
+LIGNE 85
+LIGNE 2164
+LIGNE 37090
+LIGNE 155
+LIGNE 323
+LIGNE 1105
+LIGNE 970
+LIGNE 220
+LIGNE 150
+LIGNE 389
+LIGNE 155
+LIGNE 398
+LIGNE 804
+LIGNE 1957
+LIGNE 1020
+LIGNE 246
+LIGNE 1099
+LIGNE 261
+LIGNE 1485
+LIGNE 230
+LIGNE 147
+LIGNE 2869
+LIGNE 1415
+LIGNE 1574
+LIGNE 83
+LIGNE 85
+LIGNE 155
+LIGNE 253
+LIGNE 1407
+LIGNE 703
+LIGNE 928
+LIGNE 1204
+LIGNE 476
+LIGNE 150
+LIGNE 390
+LIGNE 155
+LIGN
+… [48799 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ 296 étapes datées trouvées (c'était un cache Python périmé) — je régénère les deux journées et je chronomètre
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && time python3 tools/journal_auto.py --depuis 2026-10-09 > /tmp/gen.log 2>&1; tail -3 /tmp/gen.log; grep -c \"^\\- \\*\\*[0-9][0-9]:\" journal/2026-10-10_attention.md journal/2026-10-09_modele.md; echo \"=== la journée du 9 ne doit plu … [183 caractères tronqués]`
+
+  ```
+journal/2026-10-10_portes.md
+  journal/2026-10-10.md
+21 fichiers écrits · 148 commits classés
+journal/2026-10-10_attention.md:0
+journal/2026-10-09_modele.md:0
+=== la journée du 9 ne doit plus porter les chiffres du 10 ===
+[stderr]
+
+real	0m1,310s
+user	0m0,974s
+sys	0m0,321s
+grep: warning: stray \ before -
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"etapes_du_jour\\|etapes\\.setdefault\\|etapes\\.get\" tools/journal_auto.py", "description": "Check steps call sites"}`
+
+  ```
+152:def etapes_du_jour(sid: str, jour: str) -> list[tuple[str, str]]:
+282:        for heure, texte in etapes_du_jour(s["id"], jour):
+284:            etapes.setdefault(theme_de(texte, []), []).append(f"**{heure}** — {texte}")
+309:        chiffres = chiffres_du_jour([c["sujet"] for c in cs] + etapes.get(th, []))
+314:        if etapes.get(th):
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -rf tools/__pycache__ && python3 - <<'PYEOF'\nimport sys, time\nsys.path.insert(0, \"tools\"); import journal_auto as ja\nfor jour in (\"2026-10-09\", \"2026-10-10\"):\n    s = ja.sessions_du_jour(jour)\n    e = ja.etapes_du_jour( … [186 caractères tronqués]`
+
+  ```
+2026-10-09 · sessions: 1 · étapes: 0 · []
+2026-10-10 · sessions: 1 · étapes: 0 · []
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"tools/journal_auto.py\"); s = p.read_text()\ns = s.replace('''        try:\n            for ligne in proc.stdout:''', '''        try:\n            import sys as _sys\n           … [1054 caractères tronqués]`
+
+  ```
+DIAG trace /home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/d31b3d9b-58e4-4d34-85fa-381b6f6a6a76/session.jsonl.zstd
+DIAG lignes lues 51922 sorties 0
+étapes: 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib, re\nsrc = pathlib.Path(\"tools/journal_auto.py\").read_text(encoding=\"utf-8\").splitlines()\nfor i, l in enumerate(src, 1):\n    if \"not in ligne\" in l or \"startswith(\" in l and \"⏵\" in l:\n … [807 caractères tronqués]`
+
+  ```
+ligne 177: ['0x23f5'] · if '"assistant/message"' not in ligne or "⏵" not in ligne:
+ligne 192: ['0x23f5'] · if l.startswith("⏵ "):
+trace ⏵ codepoints : ['0x23f5']
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/journal_auto.py", "limit": 32, "offset": 168}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/journal_auto.py</path>
+<type>file</type>
+<content>
+168:         sorties, vus = [], set()
+169:         proc = subprocess.Popen(["zstd", "-dc", str(trace)], stdout=subprocess.PIPE,
+170:                                 text=True, errors="replace")
+171:         try:
+172:             import sys as _sys
+173:             print("DIAG trace", trace, file=_sys.stderr)
+174:             _n = 0
+175:             for ligne in proc.stdout:                       # type: ignore[union-attr]
+176:                 _n += 1
+177:                 if '"assistant/message"' not in ligne or "⏵" not in ligne:
+178:                     continue
+179:                 try:
+180:                     o = json.loads(ligne)
+181:                 except Exception:
+182:                     continue
+183:                 t = (o.get("time") or 0) / 1000
+184:                 if t >= j1:
+185:                     break                                    # trace chronologique
+186:                 if t < j0:
+187:                     continue
+188:                 for part in o.get("data", {}).get("message", {}).get("content", []) or []:
+189:                     if part.get("
+… [737 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la journal/sessions/d31b3d9b-*/session.jsonl.zstd; timeout 400 bash -c 'zstd -dc journal/sessions/d31b3d9b-*/session.jsonl.zstd | wc -l'; timeout 400 bash -c 'zstd -dc journal/sessions/d31b3d9b-*/session.jsonl.zstd | grep -c \"as … [192 caractères tronqués]`
+
+  ```
+-rw-------. 1 stephane stephane 17674457 10 oct 10:40 journal/sessions/d31b3d9b-58e4-4d34-85fa-381b6f6a6a76/session.jsonl.zstd
+51922
+2060
+2120
+  ```
+
+### 👤 Utilisateur
+
+background job bash-30 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && LIMITE=2048 CTX=2048 FENETRES="512 1024" PUITS="128 256 512" bash tools/carte-fenetre-puits.sh 2048 > /tmp/carte-2048b.md 2>&1; echo "CODE=$?"; cat /tmp/carte-2048b.md) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 🤖 Assistant
+
+⏵ Je trace le compteur à l'intérieur de la boucle (temporaire) pour voir où ça décroche
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"tools/journal_auto.py\"); s = p.read_text()\ns = s.replace('''                try:\n                    o = json.loads(ligne)\n                except Exception:\n                … [865 caractères tronqués]`
+
+  ```
+DIAG trace /home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/d31b3d9b-58e4-4d34-85fa-381b6f6a6a76/session.jsonl.zstd
+DIAG lignes lues 51922 sorties 0
+étapes: 0
+  ```
+
+### 🤖 Assistant
+
+⏵ Trouvé : `text=True` décode en ASCII selon la locale et remplace le ⏵ — je force UTF-8
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"import locale,sys; print('locale:', locale.getpreferredencoding(False), '| stdout:', sys.stdout.encoding)\"; python3 - <<'PYEOF'\nimport subprocess, pathlib\ntrace = next(pathlib.Path(\"journal/sessions\").glob(\"d31b3d9 … [484 caractères tronqués]`
+
+  ```
+locale: UTF-8 | stdout: utf-8
+encodage locale : 667 enregistrements candidats
+encodage utf-8 : 667 enregistrements candidats
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"tools/journal_auto.py\"); s = p.read_text()\ns = s.replace('''                _n += 1\n                if '\"assistant/message\"' not in ligne or \"⏵\" not in ligne:\n           … [685 caractères tronqués]`
+
+  ```
+DIAG trace /home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/d31b3d9b-58e4-4d34-85fa-381b6f6a6a76/session.jsonl.zstd
+DIAG ligne 1 '{"type":"session","version":0,"id":"d31b3d9b-58e4-4d34-85fa-381b6f6a6a' | a/m: False | fleche: False
+DIAG ligne 2 '{"type":"permission/preset","seq":0,"time":1791465096145,"data":{"pres' | a/m: False | fleche: False
+DIAG ligne 3 '{"type":"sandbox/mode","seq":1,"time":1791465096148,"data":{"mode":"da' | a/m: False | fleche: False
+DIAG lignes lues 51922 sorties 0
+étapes: 0
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/journal_auto.py", "limit": 40, "offset": 171}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/journal_auto.py</path>
+<type>file</type>
+<content>
+171:         try:
+172:             import sys as _sys
+173:             print("DIAG trace", trace, file=_sys.stderr)
+174:             _n = 0
+175:             for ligne in proc.stdout:                       # type: ignore[union-attr]
+176:                 _n += 1
+177:                 if _n <= 3:
+178:                     print("DIAG ligne", _n, repr(ligne[:70]),
+179:                           "| a/m:", '"assistant/message"' in ligne, "| fleche:", "\u23f5" in ligne,
+180:                           file=_sys.stderr)
+181:                 if '"assistant/message"' not in ligne or "⏵" not in ligne:
+182:                     continue
+183:                 _cand = _cand + 1 if '_cand' in dir() else 1
+184:                 try:
+185:                     o = json.loads(ligne)
+186:                 except Exception:
+187:                     continue
+188:                 t = (o.get("time") or 0) / 1000
+189:                 if _cand <= 3:
+190:                     print("DIAG cand", _cand, "t =", time.strftime("%Y-%m-%d %H:%M", time.localtime(t)), "dans:", j0 <= t < j1, file=_sys.stderr)
+191:    
+… [1137 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^import\\|^from\\|^def \\|^JOURNAL\\|^RACINE\\|^NOTES\\|^THEMES\\|^MOTIFS\\| = \" tools/journal_auto.py | head -30; echo \"=== combien de def etapes_du_jour ? ===\"; grep -c \"def etapes_du_jour\" tools/journal_auto.py; pyt … [368 caractères tronqués]`
+
+  ```
+31:from __future__ import annotations
+33:import argparse
+34:import re
+35:import subprocess
+36:import sys
+37:import time
+38:from pathlib import Path
+40:RACINE = Path(__file__).resolve().parent.parent
+41:JOURNAL = RACINE / "journal"
+42:NOTES_DEB, NOTES_FIN = "<!-- notes -->", "<!-- /notes -->"
+47:THEMES: list[tuple[str, str, list[str], list[str]]] = [
+82:THEME_DEFAUT = ("divers", "Ce qui ne rentre dans aucun thème")
+85:def theme_de(sujet: str, fichiers: list[str]) -> str:
+86:    s = sujet.lower()
+96:def titre_theme(slug: str) -> str:
+103:def git_commits(jour: str) -> list[dict]:
+112:    out = subprocess.run(
+116:    commits: list[dict] = []
+120:        tete = ligne.split("|", 2)
+128:def sessions_du_jour(jour: str) -> list[dict]:
+130:    idx = JOURNAL / "README.md"
+133:    trouvees = []
+135:        m = re.match(r"\|\s*`([0-9a-f]{8})`\s*\|\s*(.*?)\s*\|\s*(\d{4}-\d{2}-\d{2} \d{2}:\d{2})\s*\|"
+139:        sid, titre, debut, duree = m.group(1), m.group(2), m.group(3), float(m.group(4))
+140:        t0 = time.mktime(time.strptime(debut, "%Y-%m-%d %H:%M"))
+141:        t1 = t0 + duree * 3600
+145:        j0 = time.mktime(time.strptime(jour + " 00:00", "%Y-%m-%d %H:%M"))
+146:        j1 = j0 + 8
+… [432 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Cause réelle : le module n'importait pas `json` — le `NameError` était avalé par un `except Exception: continue`
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib, re\np = pathlib.Path(\"tools/journal_auto.py\"); s = p.read_text()\n# 1) l'import manquant\ns = s.replace(\"import argparse\\nimport re\\n\", \"import argparse\\nimport json\\nimport re\\n\", 1)\n … [2503 caractères tronqués]`
+
+  ```
+import ajouté, instrumentation retirée
+syntaxe OK
+2026-10-09 · 299 étapes · [('00:01', 'Bug trouvé : le mode `--chat` plante sur un modèle Q4_K')]
+2026-10-10 · 296 étapes · [('00:00', 'C7 : la consolidation RÉPÉTÉE atteint un point fixe exact (0,00e0) dès le 2e cycle')]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && time python3 tools/journal_auto.py --depuis 2026-10-09 > /tmp/gen.log 2>&1; tail -2 /tmp/gen.log; echo \"=== étapes datées ===\"; grep -c \"^- \\*\\*[0-9][0-9]:\" journal/2026-10-10_attention.md journal/2026-10-09_modele.md; sed -n ' … [221 caractères tronqués]`
+
+  ```
+journal/2026-10-10.md
+21 fichiers écrits · 148 commits classés
+=== étapes datées ===
+journal/2026-10-10_attention.md:25
+journal/2026-10-09_modele.md:25
+## Étapes du jour (35)
+
+*Ce que l'agent a consigné en le faisant (lignes `⏵` du journal de session) :*
+
+- **01:02** — C2 : hypothèse — l'état injecté ne touche pas le cache KV ; je teste en injectant PARTOUT
+- **05:13** — C6 : je teste la clé de FENÊTRE — l'expérience qui découle du mécanisme k-WTA identifié
+- **05:24** — La référence reproduit exactement (50 et 1006) — j'attends les fenêtres 4, 16, 64
+=== récit conservé ? ===
+1
+[stderr]
+
+real	0m0,989s
+user	0m0,838s
+sys	0m0,197s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"$(cat <<'MSG'\nJournal : etapes DATEES par la trace de session (elles couvraient toute la session)\n\nLe rapport et le digest de session ne portent pas d'horodatage par tour : les etapes ⏵\nextraites  … [1286 caractères tronqués]`
+
+  ```
+[stderr]
+bash: line 19: warning: here-document at line 1 delimited by end-of-file (wanted `MSG')
+bash: -c: line 20: unexpected EOF while looking for matching `)'
+[exit code: 2]
+  ```
+
+### 🤖 Assistant
+
+⏵ La syntaxe du heredoc a cassé (terminateur collé) — je refais le commit proprement
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'MSG'\nJournal : etapes DATEES par la trace de session (elles couvraient toute la session)\n\nLe rapport et le digest de session ne portent pas d'horodatage par tour : les etapes\nextraites de la co … [1294 caractères tronqués]`

@@ -14,20 +14,17 @@
 
 ## Chiffres du jour
 
-`+40 %` · `2048 jetons`
+`× 128`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
-## Étapes du jour (6)
+## Étapes du jour (3)
 
 *Ce que l'agent a consigné en le faisant (lignes `⏵` du journal de session) :*
 
-- Point de la fenêtre : courbe finale établie, M1 dans le moteur, vérification à l'échelle lancée
-- Round 13 livré : le piège de fenêtre était latent dans une 2ᵉ porte — balayage fait, règle écrite
-- Round 28 livré : **protocole v7** — la fenêtre d'attention voyage, le refus disparaît, tout est vert
-- Round 42 livré : les trois lignes manquantes — le pilote applique enfin la fenêtre
-- Round 44 livré : `--attn-sinks` — écrit partout, transporté par le v7, **lu nulle part**
-- 2 048 jetons : le drain ne compense plus (+40 % au mieux) — j'écris la pente en N et je lance la suite (puits plus nombreux)
+- **00:35** — Écriture du harnais « 8 fenêtres × 128 » et validation sur les modèles m5 connus
+- **14:21** — Point de la fenêtre : courbe finale établie, M1 dans le moteur, vérification à l'échelle lancée
+- **22:00** — C5ter : attention — garder le verrou pendant toute l'exécution bloquerait le serveur à jamais
 
 ## Sessions actives ce jour
 

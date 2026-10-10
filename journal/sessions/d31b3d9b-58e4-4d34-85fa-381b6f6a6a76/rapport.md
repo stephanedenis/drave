@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 49.5 h |
+| Durée | 49.7 h |
 | Tours | 88 |
-| Messages | 2195 |
-| Appels d'outils | 2008 |
+| Messages | 2228 |
+| Appels d'outils | 2040 |
 | Fichiers touchés | 69 |
-| Commandes | 1737 |
+| Commandes | 1766 |
 | Sous-agents | 3 |
-| Commits | 189 |
+| Commits | 191 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -3586,7 +3586,7 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 
 ### Tour 88 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*166 appels d'outils.* Actions notables :
+*198 appels d'outils.* Actions notables :
 
 - bash — Add the refusal and verify
 - bash — Move the refusal to the single point and verify
@@ -3602,11 +3602,11 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - bash — Read v7 removal context and flag inventory
 - bash — Read flag inventory section in docs
 - bash — Establish whether section 9 predates the v7 removal
-- … et 144 autres
+- … et 173 autres
 
 **Synthèse produite :**
 
-⏵ La section « mesures » des sessions est trop bruitée — j'extrais plutôt les chiffres des textes déjà fiables (sujets + étapes)
+⏵ La syntaxe du heredoc a cassé (terminateur collé) — je refais le commit proprement
 
 ## 3. Travail accompli
 
@@ -3732,7 +3732,7 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1697 autres
+- … et 1726 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3860,7 +3860,7 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 
 ## 5. Erreurs rencontrées
 
-79 sorties en erreur ou divergentes. Les premières :
+82 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : ```  ### 🤖 Assistant  ⏵ **En transformers 5, `AutoModel` rend directement `Qwen2Model` (pas de `.model`). Je corrige le diagnostic.**  - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitH
 - **T2** : 3310393 bash -c pgrep -af "essai_decharge" | grep python | head; echo "--- logs ---"; tail -2 /tmp/ec_d192_lr3e3.log 2>/dev/null; tail -2 /tmp/ec_d192_lr1e3.log 2>/dev/null; echo "---"; ls -la /tmp/ec
@@ -4069,4 +4069,6 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - Journal : journal/THEMES.md, la regle de classement rendue lisible et modifiable  Les themes etaient dans le script seulement. La table est maintenant ecrite da
 - Fenetre x puits : la pente en N mesuree — gratuit a 512 jetons, +40 % a 2 048  Troisieme carte (2 048 jetons, ctx 2048, memes ids) : attention complete 10,3703 
 - Journal : les CHIFFRES du jour par theme, extraits des textes deja fiables  Chaque fichier de theme porte desormais une ligne « Chiffres du jour » (pourcentages
+- $(cat <<'MSG' Journal : etapes DATEES par la trace de session (elles couvraient toute la session)  Le rapport et le digest de session ne portent pas d'horodatag
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'MSG' Journal : etapes DATEES par la trace de session (elles couvraient
 
