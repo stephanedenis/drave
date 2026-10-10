@@ -7,12 +7,12 @@
 | Début | 2026-10-08 09:11 |
 | Durée | 49.2 h |
 | Tours | 88 |
-| Messages | 2152 |
-| Appels d'outils | 1967 |
-| Fichiers touchés | 67 |
-| Commandes | 1700 |
+| Messages | 2157 |
+| Appels d'outils | 1972 |
+| Fichiers touchés | 68 |
+| Commandes | 1704 |
 | Sous-agents | 3 |
-| Commits | 183 |
+| Commits | 184 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -3586,7 +3586,7 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 
 ### Tour 88 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*125 appels d'outils.* Actions notables :
+*130 appels d'outils.* Actions notables :
 
 - bash — Add the refusal and verify
 - bash — Move the refusal to the single point and verify
@@ -3602,11 +3602,11 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - bash — Read v7 removal context and flag inventory
 - bash — Read flag inventory section in docs
 - bash — Establish whether section 9 predates the v7 removal
-- … et 104 autres
+- … et 109 autres
 
 **Synthèse produite :**
 
-⏵ Pendant les mesures, je rends l'index du journal cohérent (entrées quotidiennes + récit) dans l'outil qui le régénère
+⏵ Je vérifie qu'aucun autre document n'est mal rangé (journaux dans docs, plans dans reports)
 
 ## 3. Travail accompli
 
@@ -3681,6 +3681,7 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/decouper-rapport.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/etat-cerveau.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-fenetre-puits-attention.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/etat.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -3730,7 +3731,7 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1660 autres
+- … et 1664 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4061,4 +4062,5 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - $(cat <<'MSG' Fenetre x puits d'attention : +2,0 % de perplexite pour divide 2,67 les cles notees (512 jetons)  Mesure (Qwen2.5-0.5B-Q8_0, ctx 512, perplexite d
 - $(cat <<'MSG' Rangement (suite) : rapport toutes-langues eclate (107 fiches), recapituatif range comme etat  - reports/rapport-toutes-langues.md (296 Ko, 107 se
 - Journal : l'index liste les ENTREES QUOTIDIENNES (il ne voyait que les sessions automatiques)  Le journal paraissait ne contenir que des rapports de session gen
+- docs/etat.md : l'index des modules (roadmap -> etat -> prochaine action) demande par Stephane  Pour chaque module (moteur, modele, cerveau/distribue, emulation,
 

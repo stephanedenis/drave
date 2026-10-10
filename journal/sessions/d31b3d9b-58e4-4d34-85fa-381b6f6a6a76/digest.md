@@ -34560,3 +34560,76 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"journal/2026-10-09.md\"); s = p.read_text()\np.write_text(\"# 9 octobre 2026 — clôture de la campagne 24 h, lancement du sprint « cerveau »\\n\\n\" + s, encoding=\"utf-8\")\np = … [1211 caractères tronqués]`
+
+  ```
+titres posés
+
+| jour | ce qui s'est passé |
+|---|---|
+| [2026-10-09-sprint-cerveau-recit.md](2026-10-09-sprint-cerveau-recit.md) | Récit du sprint « cerveau complet » (9-10 octobre 2026) — le détail, round par round |
+| [2026-10-09.md](2026-10-09.md) | 9 octobre 2026 — clôture de la campagne 24 h, lancement du sprint « cerveau » |
+| [2026-10-10.md](2026-10-10.md) | 10 octobre 2026 — la nuit du sprint : mémoire, protocoles v7/v8, une accusation fausse corrigée, et le rangement du dépôt |
+
+## Sessions (régénéré automatiquement)
+17819d8 Journal : l'index liste les ENTREES QUOTIDIENNES (il ne voyait que les sessions automatiques)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -6 /tmp/passe-complete.log; echo \"=== carte 2048 (en cours ?) ===\"; cat /tmp/carte-2048.md 2>/dev/null | head -10; ps -eo pid,etime,args | grep \"[c]arte-fenetre\" | head -2", "description": "Check sweep and 2048 map progress" … [1 caractères tronqués]`
+
+  ```
+porte-coupe            ✅                         132 s    ✅ le coût du pont va de +0.52 % (coupe 18/24) à +17.09 % (coupe 15/24) — il y a un bon endroit
+  porte-delais           ✅                          21 s    ✅ le temps, lui, augmente : 6.79 s → 9.45 s (+2.7 s ≈ 50 ms × 64 pas)
+  porte-episodique       ✅                         184 s    ✅ la porte C6 est franchie — et elle dit ses conditions : 300 états consécutifs d'un
+  porte-flux             ✅                          22 s    mode 4 — lot en listes           4.45e-3  ✅  (réf 60.8135 / deux nœuds 60.5427)
+  porte-fusion           ✅                           8 s    ✅ v1 refusée (code 2), trace seule refusée (code 2)
+  porte-gain             ✅                         388 s    ✅ drapeau VIVANT mais conditionnel : 0 casse (29.0206 → 1297.5437), 24 améliore (27.4439), san
+=== carte 2048 (en cours ?) ===
+référence (aucune fenêtre, 2048 jetons) : perplexité 10.3703  ·  clés notées par jeton ≈ 2048
+
+| fenêtre \ puits | 0 | 64 | 128 |
+|---|---|---|---|
+| **128** |  61168       03:29 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && LIMITE=2048 CTX=2048 FENETRES="128 256 512" PUITS="0 64 128" bash tools/carte-fenetre-puits.
+… [132 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Portail `porte-gain` vert dans la passe complète (388 s) ; j'ajoute l'index d'états par module demandé
+
+- **write** `{"content": "# État des modules — l'index\n\n> **2026-10-10 10:35 HAE.** Ce fichier est un **index** : pour chaque module du dépôt, sa\n> **roadmap** (ce qu'on projette), son **état** (où on en est) et sa **prochaine action**. Le\n> détail mesuré est dans `reports/` (une fiche par expérience), les é … [2889 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/etat.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/carte-2048.md 2>/dev/null; echo \"=== passe ===\"; tail -3 /tmp/passe-complete.log", "description": "Check 2048 map and sweep"}`
+
+  ```
+référence (aucune fenêtre, 2048 jetons) : perplexité 10.3703  ·  clés notées par jeton ≈ 2048
+
+| fenêtre \ puits | 0 | 64 | 128 |
+|---|---|---|---|
+| **128** | 20.6093 |=== passe ===
+  porte-flux             ✅                          22 s    mode 4 — lot en listes           4.45e-3  ✅  (réf 60.8135 / deux nœuds 60.5427)
+  porte-fusion           ✅                           8 s    ✅ v1 refusée (code 2), trace seule refusée (code 2)
+  porte-gain             ✅                         388 s    ✅ drapeau VIVANT mais conditionnel : 0 casse (29.0206 → 1297.5437), 24 améliore (27.4439), san
+  ```
+
+### 🤖 Assistant
+
+⏵ Je vérifie qu'aucun autre document n'est mal rangé (journaux dans docs, plans dans reports)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== docs/ qui ressemblent à des journaux (rounds, sessions, aujourd'hui) ===\"; for f in docs/*.md; do n=$(grep -ciE \"^#+ .*(round|session du|aujourd'hui|ce matin)|état d'avancement\" \"$f\"); [ \"$n\" -ge 2 ] && echo \"  $n  … [322 caractères tronqués]`
+
+  ```
+=== docs/ qui ressemblent à des journaux (rounds, sessions, aujourd'hui) ===
+=== reports/ qui ressemblent à des plans ou des états ===
+  # Bilan multi-matériel — CPU, FPGA, GPU · reports/bilan-multi-materiel.md
+  # Préremplissage par lots : ce que le GEMM apporte vraiment · reports/rapport-prefill-par-lots.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A docs/etat.md && git commit -q -m \"docs/etat.md : l'index des modules (roadmap -> etat -> prochaine action) demande par Stephane\n\nPour chaque module (moteur, modele, cerveau/distribue, emulation, biologie, materiel,\ncon … [347 caractères tronqués]`
