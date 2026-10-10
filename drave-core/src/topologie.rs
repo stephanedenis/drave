@@ -353,6 +353,12 @@ pilote ne sait exécuter qu'une chaîne (les entrées multiples sont la capacit�
         }
     }
 
+    /// Le lien entre deux régions, s'il existe — c'est là que se lit le DÉLAI
+    /// imposé (capacité C3).
+    pub fn lien_entre(&self, de: &str, vers: &str) -> Option<&Lien> {
+        self.liens.iter().find(|l| l.de == de && l.vers == vers)
+    }
+
     /// Les instances distinctes, dans l'ordre d'apparition.
     pub fn instances(&self) -> Vec<String> {
         let mut v: Vec<String> = Vec::new();

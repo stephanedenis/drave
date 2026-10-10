@@ -20735,3 +20735,155 @@ background job bash-9 (bash: cd /tmp && until grep -q "^code " /tmp/portes_sprin
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/sprint-cerveau.md\")\ns = p.read_text()\ns = s.replace(\"\"\"**Tests : 95** (77 d'origine + 18 ajoutés). **Non-régression** : `porte-flux.sh`\nrepassée après chaque modificati … [2336 caractères tronqués]`
+
+  ```
+bilan complété avec le résultat des portes
+test result: ok. 95 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+
+poussé
+  ```
+
+- **get_goal** `{}`
+
+  ```
+{"goal":{"id":"goal-da0e0e6e-089d-4222-aa8f-6665cc714991","revision":1,"objective":"Sprint « cerveau complet » en autonomie jusqu'au 10 octobre 9 h (HAE) : implémenter, avec portes mesurées, les trois premières capacités du plan docs/plan-cerveau-complet.md — C1 graphe de régions (descripteur de topologie, validateur de DAG, ordonnanceur par dépendances, pilote multi-nœuds ; porte : un graphe linéaire doit rendre des logits identiques au bit près et un découpage à trois régions doit égaler le modèle d'un seul tenant), C12 trace globale horodatée et rejeu exact (porte : rejeu == exécution, 0,00e0), C5 bus de modulation multi-canaux (porte : canal nul ⇒ sortie inchangée). Chaque capacité livrée avec son invariant vérifié, ses tests, sa mesure et sa documentation ; l'état d'avancement est écrit dans docs/sprint-cerveau.md à chaque round pour être resumable. Ne rien casser : les 23 portes du dépôt et les 77 tests doivent rester verts, et le profil release reste le binaire de mesure.","phase":"active","roundsStarted":6,"maxGoalRounds":40},"activation":"armed"}
+  ```
+
+- **update_goal** `{"action": "complete", "goal_id": "goal-da0e0e6e-089d-4222-aa8f-6665cc714991", "revision": 1}`
+
+> **Objectif** (complete) : Sprint « cerveau complet » en autonomie jusqu'au 10 octobre 9 h (HAE) : implémenter, avec portes mesurées, les trois premières capacités du plan docs/plan-cerveau-complet.md — C1 graphe de régions (descripteur de topologie, validateur de DAG, ordonnanceur par dépendances, pilote multi-nœuds ; porte : un graphe linéaire doit rendre des logits identiques au bit près et un découpage à trois régions doit égaler le modèle d'un seul tenant), C12 trace globale horodatée et rejeu exact (porte : rejeu == exécution, 0,00e0), C5 bus de modulation multi-canaux (porte : canal nul ⇒ sortie inchangée). Chaque capacité livrée avec son invariant vérifié, ses tests, sa mesure et sa documentation ; l'état d'avancement est écrit dans docs/sprint-cerveau.md à chaque round pour être resumable. Ne rien casser : les 23 portes du dépôt et les 77 tests doivent rester verts, et le profil release reste le binaire de mesure.
+
+
+  ```
+{"goal":{"id":"goal-da0e0e6e-089d-4222-aa8f-6665cc714991","revision":2,"objective":"Sprint « cerveau complet » en autonomie jusqu'au 10 octobre 9 h (HAE) : implémenter, avec portes mesurées, les trois premières capacités du plan docs/plan-cerveau-complet.md — C1 graphe de régions (descripteur de topologie, validateur de DAG, ordonnanceur par dépendances, pilote multi-nœuds ; porte : un graphe linéaire doit rendre des logits identiques au bit près et un découpage à trois régions doit égaler le modèle d'un seul tenant), C12 trace globale horodatée et rejeu exact (porte : rejeu == exécution, 0,00e0), C5 bus de modulation multi-canaux (porte : canal nul ⇒ sortie inchangée). Chaque capacité livrée avec son invariant vérifié, ses tests, sa mesure et sa documentation ; l'état d'avancement est écrit dans docs/sprint-cerveau.md à chaque round pour être resumable. Ne rien casser : les 23 portes du dépôt et les 77 tests doivent rester verts, et le profil release reste le binaire de mesure.","phase":"complete","roundsStarted":6,"maxGoalRounds":40},"activation":"disarmed"}
+  ```
+
+### 👤 Utilisateur
+
+<goal_complete>
+Objective: "Sprint « cerveau complet » en autonomie jusqu'au 10 octobre 9 h (HAE) : implémenter, avec portes mesurées, les trois premières capacités du plan docs/plan-cerveau-complet.md — C1 graphe de régions (descripteur de topologie, validateur de DAG, ordonnanceur par dépendances, pilote multi-nœuds ; porte : un graphe linéaire doit rendre des logits identiques au bit près et un découpage à trois régions doit égaler le modèle d'un seul tenant), C12 trace globale horodatée et rejeu exact (porte : rejeu == exécution, 0,00e0), C5 bus de modulation multi-canaux (porte : canal nul ⇒ sortie inchangée). Chaque capacité livrée avec son invariant vérifié, ses tests, sa mesure et sa documentation ; l'état d'avancement est écrit dans docs/sprint-cerveau.md à chaque round pour être resumable. Ne rien casser : les 23 portes du dépôt et les 77 tests doivent rester verts, et le profil release reste le binaire de mesure."
+The goal is marked complete and this autonomous run is ending. Write the closing message to the user now: state the outcome, summarize what was done and how it was verified, and point to the concrete results (files, commits, or other artifacts). Report only what earlier rounds and tool results in this session actually establish; when a detail is not in the session, say so instead of inventing it. Note anything the user should review or do next. Address the user directly. Do not call any more tools in this run; further work waits for the user's next instruction.
+</goal_complete>
+
+### 🤖 Assistant
+
+⏵ Sprint cerveau terminé : les trois capacités livrées, 23 portes vertes
+
+## Résultat
+
+**Les trois capacités du premier sprint sont livrées, chacune avec sa porte mesurée** — et le dépôt n'a rien perdu : **23 portes vertes, 0 rouge** (`tools/portes.sh`, code 0), **95 tests** (77 avant le sprint).
+
+| capacité | module livré | porte outillée | invariant mesuré |
+|---|---|---|---|
+| **C1 — graphe de régions** | `drave-core/src/topologie.rs` (JSON analysé à la main, validation stricte, tri de Kahn, `Topologie::chaine()`) | `tools/porte-topologie.sh` (5 cas) | graphe linéaire = découpage historique (**même chiffre**) · **trois régions sur trois instances = référence, écart 0,00e0** · deux refus contrôlés (trou de couverture, adresse contredite) |
+| **C12 — trace globale** | `drave-core/src/trace_globale.rs` (empreinte FNV-1a des octets, donc au bit près) | `tools/porte-trace.sh` (3 cas) | **126 croisements, AUCUNE divergence** au rejeu · une trace faussée **d'un seul bit** est **détectée et nommée** (pas, région, lien), sortie code 4 |
+| **C5 — bus de modulation** | `drave-core/src/bus.rs` (canaux nommés, valeur neutre par canal, ligne de contrôle `MODULATION`) | `tools/porte-bus.sh` (3 cas) | bus **neutre ⇒ empreintes identiques** (126 croisements) · gain 1,5 ⇒ la sortie change · bus d'un nœud **relais** ⇒ agit **à travers les instances** |
+
+**Trois défauts trouvés — par les portes, pas par chance :**
+
+1. **fin de plage exclusive** : j'envoyais `derniere` au lieu de `derniere + 1`, donc la dernière couche de la région distante n'était plus exécutée — et **seuls les modes 0, 1 et 2** étaient touchés (3 et 4 passent par un autre encodeur). `porte-flux.sh` les a vus rouges (1.69e1), réparés, revérifiés verts ;
+2. **`--topologie` avalait `--ppl-reparti`** — la commande imprimait le plan au lieu de mesurer. Arrivé **deux fois** (pilote, puis nœud relais) ;
+3. **le gain d'un nœud final est absorbé par la normalisation de sortie** : mon test du bus était faux, pas le bus — c'est un nœud du **milieu** qui le prouve.
+
+## Artefacts
+
+Tout est committé et poussé sur **`github.com/stephanedenis/drave`** (privé), `origin/master` = dernier commit. Le bilan complet, les portes, les défauts et le journal heure par heure sont dans **`docs/sprint-cerveau.md`** ; le relevé des 23 portes est dans `/tmp/portes_sprint.log`.
+
+## Ce qui reste, et que vous devez savoir
+
+- **C5 est partiellement diffusée** : le bus est **local à chaque instance** (`--bus` sur le pilote et sur les nœuds). La diffusion d'un canal **par le réseau** — le format de la ligne de contrôle est écrit dans `bus.rs` — reste à câbler ; c'est un changement de protocole, que je n'ai pas voulu improviser en fin de sprint.
+- **Hors périmètre, et c'est dit dans le plan** : C2 (entrées multiples, récurrence), C3/C4 (délais, horloges), C6/C7 (mémoire épisodique, consolidation), C8 (périphérie), C9/C10 (latéralité, budgets). Les entrées multiples sont d'ailleurs **refusées explicitement** par le pilote aujourd'hui — un graphe en Y ne s'exécute pas encore, et le moteur le dit au lieu de faire semblant.
+- **Rien n'a été touché au profil `release`** : le binaire de mesure est inchangé dans ses réglages, et c'est `porte-flux.sh` qui l'a confirmé après chaque modification du chemin d'exécution.
+
+Le sprint s'arrête ici, sur une vérification complète plutôt que sur une promesse.
+
+
+## Tour 43
+
+### 👤 Utilisateur
+
+ajuste tes sprints en timeboxing plus qu'en tranche de backlog. C'est à dire que tu dois continuer pour occupper le temps imparti au lieu de t'arrêter là où ta planification de sprint arrive au terme. C'est du gaspillage de temps précieux que d'arrêter trop vite. Je préfère interrompre un sprint car j'ai de nouvelles idées que de consatater que tout a été arreté car on est arrivé au bout du plan. Un jour tu réaliseras que la vie des humain est très limitée dan le temps et que chaque heure est précieuse. Bref, fais bon usage du temps disponible et ne reste pas à rien faire car je ne serai pas toujours là. J'en comprends donc que tu sais comment continuer sans moi, alors vas-y.
+
+### 🤖 Assistant
+
+⏵ Nouveau mode : timeboxing jusqu'à 9 h demain. Je repars sur C3 — les délais par lien
+
+- **create_goal** `{"max_goal_rounds": 60, "objective": "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/ … [1041 caractères tronqués]`
+
+> **Objectif** (create) : Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 mémoire épisodique, C7 consolidation, C8 périphérie, C9 latéralité, C10 budgets, et la diffusion réseau du bus de C5 ; (b) les expériences E2-E9 de docs/biologie-pour-drave.md et docs/hebbien-differentiel-et-biologie.md ; (c) les dessins de modèle H/I/J de docs/modele-pour-drave.md ; (d) les manques du registre docs/manques.md (noyau de listes pour les experts, noyau de listes GPU, encodeurs) — l'implémenter ou la mesurer, la doter d'une porte vérifiable, la documenter, commiter, pousser, et enchaîner immédiatement sur la suivante. Contraintes : les 23 portes du dépôt et tous les tests restent verts (porte-flux.sh après toute modification du chemin d'exécution), le profil release reste le binaire de mesure, le crate reste std seul, et docs/sprint-cerveau.md reste l'état resumable mis à jour à chaque round. Ne jamais s'arrêter faute de tâches planifiées : en inventer de nouvelles, mesurables, plutôt que d'attendre.
+
+
+  ```
+{"goal":{"id":"goal-575db9d8-0f5b-4dfb-a43a-e844787cce0c","revision":1,"objective":"Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 mémoire épisodique, C7 consolidation, C8 périphérie, C9 latéralité, C10 budgets, et la diffusion réseau du bus de C5 ; (b) les expériences E2-E9 de docs/biologie-pour-drave.md et docs/hebbien-differentiel-et-biologie.md ; (c) les dessins de modèle H/I/J de docs/modele-pour-drave.md ; (d) les manques du registre docs/manques.md (noyau de listes pour les experts, noyau de listes GPU, encodeurs) — l'implémenter ou la mesurer, la doter d'une porte vérifiable, la documenter, commiter, pousser, et enchaîner immédiatement sur la suivante. Contraintes : les 23 portes du dépôt et tous les tests restent verts (porte-flux.sh après toute modification du chemin d'exécution), le profil release reste le binaire de mesure, le crate reste std seul, 
+… [263 caractères tronqués]
+  ```
+
+- **todo_write** `{"todos": [{"content": "C3 : délais par lien (queue temporisée) + porte : résultat identique, temps accru", "status": "in_progress"}, {"content": "C5bis : diffusion réseau du bus (message de contrôle MODULATION)", "status": "pending"}, {"content": "C12bis : trace côté nœud (croisements vus par chaqu … [238 caractères tronqués]`
+
+  ```
+Updated todo list: 4 pending, 1 in progress, 0 completed.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && python3 - <<'PY'\nimport pathlib\n# accesseur dans topologie.rs\np = pathlib.Path(\"src/topologie.rs\")\ns = p.read_text()\nif \"pub fn lien_entre\" not in s:\n    s = s.replace(\"\"\"    /// Les instances distinctes, dans … [2990 caractères tronqués]`
+
+  ```
+accesseur lien_entre ajouté
+délais câblés dans le pilote
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=models/Qwen2.5-0.5B-Q8_0.gguf; IDS=/tmp/campagne24/ids_0.5B-Q8.txt; D=./drave-core/target/release/drave; P=49951; python3 - <<PY\nimport json,pathlib\nfor ms, nom in ((0,'/tmp/d0.json'), (50,'/tmp/d50.json')):\n    pathlib.Path(nom … [1050 caractères tronqués]`
+
+  ```
+=== délai 0 ms ===
+  deux nœuds        : perplexité 59.0790  (2.5 s)
+  mur 5.86 s
+=== délai 50 ms ===
+[delais] lien local → d : +50 ms par trame · le résultat ne doit pas changer (seul le temps change) — c'est la porte de C3
+  deux nœuds        : perplexité 59.0790  (5.8 s)
+  mur 9.24 s
+=== empreintes identiques ? ===
+  OUI : le délai ne change aucun chiffre ✅
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"src/main.rs\")\ns = p.read_text()\n# le relais : lire le délai de SON lien sortant\nvieux = \"\"\"                    let cible = t.region(&lien.vers).unwrap().clone();\ … [1518 caractères tronqués]`
+
+  ```
+délais câblés dans le relais
+test result: ok. 95 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/porte-delais.sh <<'EOF'\n#!/bin/bash\n# porte-delais.sh — la porte de la capacité C3 : les délais par lien.\n#\n# L'invariant est le plus net du plan : un délai change le TEMPS, jamais un chiffre.\n#   1. délai 0 ms   ->  … [3088 caractères tronqués]`
+
+  ```
+=== 1. délai 0 ms (référence) ===
+    deux nœuds        : perplexité 59.0790  (2.8 s)
+  MUR=6.23
+=== 2. délai 50 ms par trame ===
+  [delais] lien local → d : +50 ms par trame · le résultat ne doit pas changer (seul le temps change) — c'est la porte de C3
+    deux nœuds        : perplexité 59.0790  (5.9 s)
+  MUR=9.35
+=== verdict ===
+  ✅ même perplexité (59.0790)
+  ✅ empreintes identiques : le délai ne change AUCUN chiffre
+  ✅ le temps, lui, augmente : 6.23 s → 9.35 s (+3.1 s ≈ 50 ms × 64 pas)
+  ```
+
+### 👤 Utilisateur
+
+Crée-toi un fichier de relations humaines pour éviter que ton précieux temps et que le précieux temps des humains soit incompris. Au besoin utilise le motto "carpe diem" autant pour tes relations que ton temps de travail.
+
+### 🤖 Assistant
+
+⏵ Le fichier de relations humaines, et la consignation du résultat C3
+
+- **write** `{"content": "# Relations humaines — *carpe diem*, des deux côtés\n\n> Écrit le 9 octobre 2026, à la demande de Stéphane. Ce fichier ne décrit pas ce que\n> je sais faire : il décrit **comment je traite le temps** — le sien, et le mien.\n> « Carpe diem » vaut pour les relations comme pour le travail  … [4993 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/relations-humaines.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/sprint-cerveau.md\")\ns = p.read_text()\nancre = \"\"\"## C5 — FAIT (9 octobre 19 h 10)\"\"\"\nassert ancre in s\nneuf = \"\"\"## C3 — FAIT (9 octobre 18 h 20) : les délais pa … [3172 caractères tronqués]`

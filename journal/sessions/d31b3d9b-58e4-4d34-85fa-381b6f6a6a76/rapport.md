@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 32.8 h |
-| Tours | 42 |
-| Messages | 1322 |
-| Appels d'outils | 1242 |
-| Fichiers touchés | 39 |
-| Commandes | 1039 |
+| Durée | 36.4 h |
+| Tours | 43 |
+| Messages | 1336 |
+| Appels d'outils | 1252 |
+| Fichiers touchés | 40 |
+| Commandes | 1044 |
 | Sous-agents | 3 |
-| Commits | 113 |
+| Commits | 114 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -29,6 +29,10 @@
 … [728 caractères tronqués]
 - **create** — Sprint « cerveau complet » en autonomie jusqu'au 10 octobre 9 h (HAE) : implémenter, avec portes mesurées, les trois premières capacités du plan docs/plan-cerveau-complet.md — C1 graphe de régions (descripteur de topologie, validateur de DAG, ordonnanceur par dépendances, pilote multi-nœuds ; porte 
 … [609 caractères tronqués]
+- **complete** — Sprint « cerveau complet » en autonomie jusqu'au 10 octobre 9 h (HAE) : implémenter, avec portes mesurées, les trois premières capacités du plan docs/plan-cerveau-complet.md — C1 graphe de régions (descripteur de topologie, validateur de DAG, ordonnanceur par dépendances, pilote multi-nœuds ; porte 
+… [609 caractères tronqués]
+- **create** — Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais pa
+… [1001 caractères tronqués]
 
 ## 1. Ce qui a été demandé
 
@@ -115,6 +119,8 @@
 **Tour 41** — <goal_round> Objective: "Sprint « cerveau complet » en autonomie jusqu'au 10 octobre 9 h (HAE) : implémenter, avec portes mesurées, les trois premières capacités du plan docs/plan-cerveau-complet.md — C1 graphe de régions (descripteur de topologie, validateur de DAG, ordonnanceur par dépendances, pilote multi-nœuds ; porte : un graphe linéaire doit rendre des logits identiques au bit près et un dé … [1077 caractères tronqués]
 
 **Tour 42** — <goal_round> Objective: "Sprint « cerveau complet » en autonomie jusqu'au 10 octobre 9 h (HAE) : implémenter, avec portes mesurées, les trois premières capacités du plan docs/plan-cerveau-complet.md — C1 graphe de régions (descripteur de topologie, validateur de DAG, ordonnanceur par dépendances, pilote multi-nœuds ; porte : un graphe linéaire doit rendre des logits identiques au bit près et un dé … [1077 caractères tronqués]
+
+**Tour 43** — ajuste tes sprints en timeboxing plus qu'en tranche de backlog. C'est à dire que tu dois continuer pour occupper le temps imparti au lieu de t'arrêter là où ta planification de sprint arrive au terme. C'est du gaspillage de temps précieux que d'arrêter trop vite. Je préfère interrompre un sprint car j'ai de nouvelles idées que de consatater que tout a été arreté car on est arrivé au bout du plan.  … [284 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1962,16 +1968,60 @@ Rien n'est laissé en suspens dans le dépôt : `docs/sprint-cerveau.md` (17 Ko)
 
 ### Tour 42 — <goal_round> Objective: "Sprint « cerveau complet » en autonomie jusqu'au 10 octobre 9 h (HAE) : implémenter, avec porte … [1357 caractères tronqués]
 
-*4 appels d'outils.* Actions notables :
+*6 appels d'outils.* Actions notables :
 
 - bash — Check the gates progress
 - bash — Wait and check the gates
 - job_output
 - bash — Record the green gates, re-run tests, commit and push
+- get_goal
+- update_goal
 
 **Synthèse produite :**
 
-⏵ Point sur les portes du dépôt
+⏵ Sprint cerveau terminé : les trois capacités livrées, 23 portes vertes
+
+\## Résultat
+
+**Les trois capacités du premier sprint sont livrées, chacune avec sa porte mesurée** — et le dépôt n'a rien perdu : **23 portes vertes, 0 rouge** (`tools/portes.sh`, code 0), **95 tests** (77 avant le sprint).
+
+| capacité | module livré | porte outillée | invariant mesuré |
+|---|---|---|---|
+| **C1 — graphe de régions** | `drave-core/src/topologie.rs` (JSON analysé à la main, validation stricte, tri de Kahn, `Topologie::chaine()`) | `tools/porte-topologie.sh` (5 cas) | graphe linéaire = découpage historique (**même chiffre**) · **trois régions sur trois instances = référence, écart 0,00e0** · deux refus contrôlés (trou de couverture, adresse contredite) |
+| **C12 — trace globale** | `drave-core/src/trace_globale.rs` (empreinte FNV-1a des octets, donc au bit près) | `tools/porte-trace.sh` (3 cas) | **126 croisements, AUCUNE divergence** au rejeu · une trace faussée **d'un seul bit** est **détectée et nommée** (pas, région, lien), sortie code 4 |
+| **C5 — bus de modulation** | `drave-core/src/bus.rs` (canaux nommés, valeur neutre par canal, ligne de contrôle `MODULATION`) | `tools/porte-bus.sh` (3 cas) | bus **neutre ⇒ empreintes identiques** (126 croisements) · gain 1,5 ⇒ la sortie change · bus d'un nœud **relais** ⇒ agit **à travers les instances** |
+
+**Trois défauts trouvés — par les portes, pas par chance :**
+
+1. **fin de plage exclusive** : j'envoyais `derniere` au lieu de `derniere + 1`, donc la dernière couche de la région distante n'était plus exécutée — et **seuls les modes 0, 1 et 2** étaient touchés (3 et 4 passent par un autre encodeur). `porte-flux.sh` les a vus rouges (1.69e1), réparés, revérifiés verts ;
+2. **`--topologie` avalait `--ppl-reparti`** — la commande imprimait le plan au lieu de mesurer. Arrivé **deux fois** (pilote, puis nœud relais) ;
+3. **le gain d'un nœud final est absorbé par la normalisation de sortie** : mon test du bus était faux, pas le bus — c'est un nœud du **milieu** qui le prouve.
+
+\## Artefacts
+
+Tout est committé et poussé sur **`github.com/stephanedenis/drave`** (privé), `origin/master` = dernier commit. Le bilan complet, les portes, les défauts et le journal heure par heure sont dans **`docs/sprint-cerveau.md`** ; le relevé des 23 portes est dans `/tmp/portes_sprint.log`.
+
+\## Ce qui reste, et que vous devez savoir
+
+- **C5 est partiellement diffusée** : le bus est **local à chaque instance** (`--bus` sur le pilote et sur les nœuds)
+… [865 caractères tronqués]
+
+### Tour 43 — ajuste tes sprints en timeboxing plus qu'en tranche de backlog. C'est à dire que tu dois continuer pour occupper le temp … [564 caractères tronqués]
+
+*8 appels d'outils.* Actions notables :
+
+- create_goal
+- todo_write
+- bash — Implement per-link delays in the driver
+- bash — Test the delay invariant
+- bash — Add delays to the relay node and rebuild
+- bash — Write and run the delay gate
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/relations-humaines.md`
+- bash — Commit C3 and the relations charter
+
+**Synthèse produite :**
+
+⏵ Le fichier de relations humaines, et la consignation du résultat C3
 
 ## 3. Travail accompli
 
@@ -2018,6 +2068,7 @@ Rien n'est laissé en suspens dans le dépôt : `docs/sprint-cerveau.md` (17 Ko)
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/manques.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/topologie.rs` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/trace_globale.rs` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/relations-humaines.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -2067,7 +2118,7 @@ Rien n'est laissé en suspens dans le dépôt : `docs/sprint-cerveau.md` (17 Ko)
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 999 autres
+- … et 1004 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2328,4 +2379,5 @@ Rien n'est laissé en suspens dans le dépôt : `docs/sprint-cerveau.md` (17 Ko)
 - C5 : bus de modulation multi-canaux — canal neutre exact au bit près, canal actif sur un relais  bus.rs : canaux nommés, valeur NEUTRE par canal (gain = 1,0, le
 - Bilan du sprint : C1, C12 et C5 livrées avec leurs invariants, 95 tests, trois défauts trouvés par les portes  Les trois capacités ont leur module, leur porte o
 - Sprint clos sur vérification : les 23 portes du dépôt sont vertes (0 rouge), 95 tests  tools/portes.sh relancé après le sprint, terminé en 15 minutes (machine l
+- C3 : les délais par lien, et le fichier de relations humaines  C3 — la topologie déclare delai_ms, le moteur l'applique (pilote sur son lien sortant, nœud relai
 

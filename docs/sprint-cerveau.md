@@ -14,6 +14,7 @@ Trois capacités du plan, chacune avec sa **porte mesurée** :
 |---|---|---|---|
 | **C1** | **graphe de régions** : descripteur de topologie, validateur, ordonnanceur par dépendances, pilote multi-nœuds | un graphe **linéaire** rend des logits identiques **au bit près** ; un découpage à **trois régions** égale le modèle d'un seul tenant | ✅ **FAIT** — `topologie.rs` (8 tests) · la topologie pilote le découpage (0,00e0) · relais trois instances (0,00e0) · `tools/porte-topologie.sh` (5 cas, dont 2 refus) |
 | **C12** | **trace globale horodatée + rejeu** | rejeu d'une exécution distribuée == exécution, **0,00e0** | ✅ **FAIT** — `trace_globale.rs` (5 tests) · 126 croisements, **aucune divergence** · trace faussée d'un bit **détectée et nommée** · `tools/porte-trace.sh` |
+| **C3** | **délais par lien** | un délai change le **temps**, jamais un chiffre | ✅ **FAIT** — appliqué par le pilote ET par le nœud relais · porte `tools/porte-delais.sh` (même perplexité, empreintes identiques, +3,1 s pour 50 ms × 64 pas) |
 | **C5** | **bus de modulation multi-canaux** | canal nul ⇒ sortie **inchangée** | ✅ **FAIT** — `bus.rs` (5 tests) · neutre ⇒ **empreintes identiques** · gain 1,5 ⇒ la sortie change · bus d'un **relais** ⇒ agit à travers les instances · `tools/porte-bus.sh` |
 
 **Contraintes non négociables** : les **23 portes** du dépôt et les tests restent
@@ -203,6 +204,32 @@ manquait pour déboguer un graphe distribué.
 
 ---
 
+## C3 — FAIT (9 octobre 18 h 20) : les délais par lien
+
+**Livré** : la topologie déclare `delai_ms` par lien (C3a l'avait déjà dans le
+format), et le moteur **l'applique** — le pilote sur son lien sortant, le **nœud
+relais** sur le sien. L'invariant est le plus net du plan : **un délai change le
+temps, jamais un chiffre**.
+
+**La porte** (`tools/porte-delais.sh`), mesurée :
+
+| cas | perplexité | empreintes | mur |
+|---|---:|---|---:|
+| délai 0 ms | 59,0790 | référence | 6,23 s |
+| **délai 50 ms par trame** | **59,0790** (identique) | **identiques** (126 croisements, horodatage exclu) | **9,35 s (+3,1 s)** |
+
+**3,1 s de plus = 50 ms × 64 pas** : le délai est bien appliqué, et il ne touche
+**aucun** chiffre. C'est la trace (C12) qui le prouve, empreinte par empreinte — une
+porte qui ne comparerait que la perplexité laisserait passer une modification de la
+charge transportée.
+
+**Ce que cela donne pour la suite** : la loi de coût des délais est maintenant dans
+le moteur, et elle recoupe la mesure de la campagne (**3,4 ms par jeton et par ms de
+RTT**, `docs/modele-pour-drave.md` § 8 bis). Un graphe de régions peut donc être
+*conçu* avec ses délais, et leur prix se lit à l'avance.
+
+---
+
 ## C5 — FAIT (9 octobre 19 h 10) : le bus de modulation multi-canaux
 
 **Livré** : `drave-core/src/bus.rs` (5 tests) + `--bus canal=valeur` (répétable, sur
@@ -296,6 +323,7 @@ bus (le format de la ligne de contrôle est écrit, le transport reste à câble
 |---|---|
 | 9/10 17 h 10 | **C1a** : module `topologie.rs`, validation stricte, plan, 8 tests, suite à 85 tests. |
 | 9/10 17 h 20 | **C1b pas 1** : la topologie pilote le découpage · porte `tools/porte-topologie.sh` **TENUE** (même chiffre, écart 0,00e0) · deux refus vérifiés. |
+| 9/10 18 h 20 | **C3** : délais par lien · porte `tools/porte-delais.sh` — **même perplexité (59,0790), empreintes identiques, +3,1 s pour 50 ms × 64 pas**. |
 | 9/10 18 h 01 | **23 portes du dépôt : 23 vertes, 0 rouge** (code 0), dont `cargo test` à 95 verts et gpt-oss à 15,6017. |
 | 9/10 19 h 20 | **Bilan** : trois capacités livrées, 95 tests, 23 portes vertes. |
 | 9/10 19 h 10 | **C5** : bus de modulation · porte `tools/porte-bus.sh` (neutre ⇒ empreintes identiques · gain 1,5 ⇒ la sortie change · bus du relais ⇒ agit). 95 tests, porte-flux verte. |

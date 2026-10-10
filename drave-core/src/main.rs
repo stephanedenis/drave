@@ -3272,6 +3272,7 @@ nœud rend un flux résiduel BRUT par contrat (la tête appartient au nœud qui 
     // Le retour se fait de proche en proche — le pilote n'a pas à connaître le
     // nombre de relais.
     let mut successeur: Option<(std::net::TcpStream, u32, u32)> = None;
+    let mut delai_relais: u64 = 0;
     match (&opt.topologie, &opt.region) {
         (None, None) => {}
         (Some(_), None) => {
@@ -3300,6 +3301,11 @@ d'appliquer une plage inventée"); std::process::exit(3) }).clone();
 `pre` que le relais ne transporte pas encore (v6) — mieux vaut refuser que mesurer autre chose");
                         std::process::exit(3);
                     }
+                    if lien.delai_ms > 0 {
+                        println!("[delais] lien {} → {} : +{} ms par trame (le résultat ne \
+doit pas changer)", ma.id, lien.vers, lien.delai_ms);
+                    }
+                    delai_relais = lien.delai_ms;
                     let cible = t.region(&lien.vers).unwrap().clone();
                     let mut sc = std::net::TcpStream::connect(&cible.instance).unwrap_or_else(|e| {
                         eprintln!("[relais] connexion au successeur « {} » ({}) impossible : {e}",
@@ -3439,6 +3445,9 @@ raccord précédent où s'appliquer et l'ignorer serait muet. Le nœud continue"
                 let a_rendre = match successeur.as_mut() {
                     None => sortie,
                     Some((sc, d, fi)) => {
+                        if delai_relais > 0 {
+                            std::thread::sleep(std::time::Duration::from_millis(delai_relais));
+                        }
                         if envoyer_flux(sc, *d, *fi, f.pos, &sortie, f.mode, Some(&mdl)).is_err() {
                             println!("[relais] le successeur a fermé la connexion");
                             break;
@@ -3504,7 +3513,7 @@ fn run_ppl_reparti(opt: Options, pair: &str) {
     // Toute incohérence entre le fichier et la ligne de commande est REFUSÉE —
     // mesurer un découpage qui n'est pas celui qu'on croit serait pire que ne
     // rien mesurer.
-    let (couches_locales, pair_cli, tp_debut, tp_fin, pair_region) = if let Some(f) = opt.topologie.clone() {
+    let (couches_locales, pair_cli, tp_debut, tp_fin, tp_region_distante) = if let Some(f) = opt.topologie.clone() {
         let texte = std::fs::read_to_string(&f).unwrap_or_else(|e| {
             eprintln!("topologie : lecture de {f} impossible : {e}"); std::process::exit(2) });
         let t = topologie::lire_json(&texte).unwrap_or_else(|e| {
@@ -3567,6 +3576,7 @@ dit « {pair} » — deux sources pour la même chose, et elles se contredisent"
          0usize, 0usize, String::from("pair"))
     };
     let pair: &str = &pair_cli;
+    let pair_region = tp_region_distante.clone();
     // La plage du pair : celle de la topologie s'il y en a une, sinon « tout ce
     // qui reste après les couches locales » — le comportement historique, intact.
     // Le nombre de couches vient de l'EN-TÊTE : à cet endroit le modèle n'est pas
@@ -3577,6 +3587,20 @@ dit « {pair} » — deux sources pour la même chose, et elles se contredisent"
     // `debut..fin`. Envoyer `derniere` au lieu de `derniere + 1` saute la dernière
     // couche de la région — et ça ne se voit QUE sur les modes non-lot, ce qui a
     // rendu le diagnostic pénible (modes 0, 1 et 2 cassés, 3 et 4 intacts).
+    // ---- C3 : LES DÉLAIS PAR LIEN. La topologie les déclare ; le moteur les
+    // APPLIQUE en retardant chaque trame de ce lien. L'invariant est net et c'est
+    // la porte : un délai change le TEMPS, jamais le résultat — il ne doit pas
+    // toucher un chiffre.
+    let delai_ms: u64 = if let Some(f) = opt.topologie.clone() {
+        std::fs::read_to_string(&f).ok()
+            .and_then(|t| topologie::lire_json(&t).ok())
+            .and_then(|t| t.lien_entre("local", &tp_region_distante).map(|l| l.delai_ms))
+            .unwrap_or(0)
+    } else { 0 };
+    if delai_ms > 0 {
+        println!("[delais] lien local → {} : +{} ms par trame · le résultat ne doit pas \
+changer (seul le temps change) — c'est la porte de C3", tp_region_distante, delai_ms);
+    }
     // C5 : le BUS DE MODULATION. Un canal neutre ne change RIEN (c'est la porte),
     // un canal non neutre change la sortie — sans quoi le bus ne serait pas
     // branché. Chaque région décide de ce qu'elle en fait : ici, le gain.
@@ -3819,6 +3843,9 @@ un lot de plus d'un état n'a pas UNE `pre`). Rien n'a été calculé.");
         let mut etat = etat;
         bus.appliquer_gain(&mut etat);
         trace.enregistrer("local", pos as u32, "local->pair", &etat, 0.0);
+        if delai_ms > 0 {
+            std::thread::sleep(std::time::Duration::from_millis(delai_ms));
+        }
         let (o, a) = envoyer_flux(&mut sock, debut_pair as u32, fin_pair as u32,
                                   pos as u32, &etat, mode, Some(&mdl))
                         .unwrap_or_else(|e| {
