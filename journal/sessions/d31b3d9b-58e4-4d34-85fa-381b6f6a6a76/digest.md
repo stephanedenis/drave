@@ -25335,3 +25335,1254 @@ cas 8 ajoute
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\n\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\na = \"\"\"**Ce qui reste non mesuré, et c'est écrit** : si un prototype-exemplaire continue de\nservir après plusi … [5042 caractères tronqués]`
+
+  ```
+docs point fixe
+test result: ok. 122 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.33s
+d9d532f C7 suite : le rejeu RÉPÉTÉ est un point fixe, pas une usure (erreur exactement 0,00e0)
+  ```
+
+### 🤖 Assistant
+
+⏵ Inventaire rapide du FPGA annoncé, avant d'attaquer la mémoire qui sert
+
+- **bash** `{"command": "lsusb 2>/dev/null | head -20; echo \"=== USB devices with FPGA vendors ===\"; lsusb 2>/dev/null | grep -iE \"xilinx|altera|intel|lattice|ftdi|future technology|digilent|lattice|gowin|anlogic|efinix\" ; echo \"=== kernel drivers ===\"; ls /dev/ | grep -iE \"fpga|xilinx|dri|ttyUSB|ttyACM\ … [295 caractères tronqués]`
+
+  ```
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 001 Device 002: ID 8087:800a Intel Corp. Hub
+Bus 002 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 002 Device 002: ID 8087:8002 Intel Corp. 8 channel internal hub
+Bus 003 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 003 Device 004: ID 05e3:0610 Genesys Logic, Inc. Hub
+Bus 003 Device 005: ID 1ea8:f829 Thetis Security Key(F829)
+Bus 003 Device 036: ID 1a40:0801 Terminus Technology Inc. USB 2.0 Hub
+Bus 003 Device 037: ID 30fa:1040 INSTANT USB GAMING MOUSE 
+Bus 003 Device 038: ID 04f2:2159 Chicony Electronics Co., Ltd PERIBOARD-535 [Perixx Ergo Keyboard]
+Bus 003 Device 044: ID 0403:6014 Future Technology Devices International, Ltd FT232H Single HS USB-UART/FIFO IC
+Bus 004 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+Bus 005 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 006 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+Bus 007 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 008 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+=== USB devices with FPGA vendors ===
+Bus 001 Device 002: ID 8087:800a Intel Corp. Hub
+Bus 002 Device 002: ID 8087:8002 Int
+… [216 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le seul lien FPGA est un FT232H — je vérifie ce qui est réellement derrière
+
+- **bash** `{"command": "ls -la /dev/ttyUSB* /dev/ttyACM* 2>/dev/null; echo \"=== dmesg FTDI ===\"; dmesg 2>/dev/null | grep -iE \"ftdi|ft232|usb 3-.*FT\" | tail -8; echo \"=== permissions dmesg ===\"; dmesg 2>&1 | tail -1 | head -c 120; echo; echo \"=== python ftdi? ===\"; python3 -c \"import pyftdi; print('py … [140 caractères tronqués]`
+
+  ```
+=== dmesg FTDI ===
+=== permissions dmesg ===
+dmesg: read kernel buffer failed: Operation not permitted
+
+=== python ftdi? ===
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+[exit code: 1]
+  ```
+
+### 🤖 Assistant
+
+⏵ C2/C6 : j'attaque la mémoire qui SERT — injecter un état dans le flux à une couche donnée
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n \"$(grep -n 'pub fn forward(&mut self, tok: u32, pos: usize)' drave-core/src/model.rs | cut -d: -f1),+45p\" drave-core/src/model.rs", "description": "Read forward loop"}`
+
+  ```
+pub fn forward(&mut self, tok: u32, pos: usize) -> Vec<f32> {
+        assert!(pos < self.ctx, "contexte dépassé ({pos} ≥ {})", self.ctx);
+        self.jeton_trace += 1;
+        // lus AVANT l'emprunt destructuré : la parcimonie par projection
+        let tkp = self.act_topk_proj;
+        let tkg = self.act_topk;
+        let tk = |p: usize| if tkp[p] > 0 { tkp[p] } else { tkg };
+        // Lus AVANT l'emprunt destructuré (comme la parcimonie par projection).
+        let largeur_profil = self.cfg.ffn.max(self.cfg.ffn_exp);
+        // Fils à donner à la déquantification des experts IQ. Lus avant
+        // l'emprunt destructuré, comme le reste.
+        // Fils pour la déquantification des experts **sans noyau** (grilles Q2_K
+        // & co, c'est-à-dire tous les experts de V4.1). Ils étaient BORNÉS à 8
+        // sur une machine qui en a 20 : mesuré au bloc 17, ce chemin de
+        // déquantification est **borné par le calcul** (deux passes identiques,
+        // la seconde trouvant 12 Go d'experts dans le cache de pages, donnent le
+        // même temps à 0,1 s près) — un fil en plus est donc un gain direct, et
+        // le découpage par lignes le rend identique au bit près.
+     
+… [1639 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && awk 'NR>=6800 && NR<=6900' drave-core/src/model.rs | grep -n \"for l in\\|couche\\|self.couche_debut\\|couche_fin\" | head -20; grep -n \"for l in debut..fin\\|for l in 0..n_layer\\|couche_debut\" drave-core/src/model.rs | head -10", … [45 caractères tronqués]`
+
+  ```
+19:            // État d'entrée imposé : on démarre la boucle de couches avec le
+36:        // entre deux nœuds devient impossible à localiser (mesuré : la couche 20
+39:        Self::vider_couche(self.dump_couches.as_deref(), "etat_impose", 0, pos, &x);
+46:        // et chaque sous-couche les remélangera.
+70:        // milieu du modèle** (`--couches a:b` avec a > 0, ou nœud moteur d'un
+73:        // couche 0 voit un jeton NEUF entrer par l'embarquement : sa chaîne
+86:        let reprend = self.couche_debut > 0;
+90:        // Un nœud qui REPREND à la couche k reçoit un flux brut : s'il ne porte
+94:        assert!(!(self.hc_retarde && self.flux_brut && self.couche_debut > 0 && !recue),
+96:le raccord précédent — un nœud qui reprend à la couche {} sans l'avoir reçue replierait \
+97:avec la copie 0 (faux, et muet)", self.couche_debut);
+98:        // SONDE LOCALE (`--couches a:b`, pas de flux) : la plage commence au
+2553:    pub couche_debut: usize,
+4474:            couche_debut: couches.map(|(a, _)| a).unwrap_or(0),
+4857:        for l in self.couche_debut..self.couche_fin {
+4890:                for l in self.couche_debut..self.couche_fin {
+5451:        for l in self.couche_debut..self.c
+… [349 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '6660,6690p' drave-core/src/model.rs", "description": "Read forward's main layer loop"}`
+
+  ```
+let n_fils = self.pool.threads();
+        assert!(pos < self.ctx, "contexte dépassé");
+        let h = self.cfg.hidden;
+        let eps = self.cfg.eps;
+        let scale = 1.0 / ((self.mla.as_ref().unwrap()[0].qkn
+                            + self.mla.as_ref().unwrap()[0].qkr) as f32).sqrt();
+        let mut x = self.g.row_f32("token_embd.weight", tok as usize, h);
+        let mut hn = vec![0f32; h];
+        for l in self.couche_debut..self.couche_fin {
+            let m = &self.mla.as_ref().unwrap()[l];
+            let (nh, qkn, qkr, vd, kvl) = (m.nh, m.qkn, m.qkr, m.vd, m.kv_lora);
+            // --- norme d'entrée
+            Self::rmsnorm(&x, &m.attn_norm, eps, &mut hn);
+            // --- requête : descente, norme, remontée, découpage nope / rope
+            let mut qa = vec![0f32; m.q_lora];
+            matvec_f32_fils(&m.q_a, &hn, h, m.q_lora, &mut qa, n_fils);
+            let mut qan = vec![0f32; m.q_lora];
+            Self::rmsnorm(&qa, &m.q_a_norm, eps, &mut qan);
+            let nq = nh * (qkn + qkr);
+            let mut qb = vec![0f32; nq];
+            matvec_f32_fils(&m.q_b, &qan, m.q_lora, nq, &mut qb, n_fils);
+            // --- KV : descente MQA, norme sur la parti
+… [526 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '5435,5460p' drave-core/src/model.rs && echo \"...\" && sed -n '5520,5560p' drave-core/src/model.rs | grep -n \"x\\[\" | head -5", "description": "Read standard forward layer loop"}`
+
+  ```
+niveaux: f32, seuil: f32| {
+            let n = src.len() / t;
+            for i in 0..t {
+                let ligne = &src[i * n..(i + 1) * n];
+                let mut mx = 0f32;
+                for &val in ligne { let a = val.abs(); if a > mx { mx = a; } }
+                let s = if mx > 0.0 { mx / niveaux } else { 1.0 };
+                ech[i] = s;
+                let inv = 1.0 / s;
+                let se = (seuil * niveaux) as i32;
+                for (j, &val) in ligne.iter().enumerate() {
+                    let r = (val * inv).round() as i32;
+                    dst[i * n + j] = if r.abs() > se { r } else { 0 };
+                }
+            }
+        };
+        for l in self.couche_debut..self.couche_fin {
+            let lay = &self.layers[l];
+            // 1. norme d'entrée du lot
+            for i in 0..t {
+                let r = &x[i * h..(i + 1) * h];
+                Self::rmsnorm(r, &lay.attn_norm, self.cfg.eps, &mut hn[i * h..(i + 1) * h]);
+            }
+            quantifier(&hn, &mut xi, &mut sx, self.act_levels, self.act_thresh);
+            Self::flux_lot(&mut self.trace, &mut self.flux_force, j0,
+                           0, l, t, &mut xi, &mut sx, h);
+...
+  ```
+
+### 🤖 Assistant
+
+⏵ C2 : j'injecte en fin de forward sur un modèle TRONQUÉ — le point de coupe devient le point d'injection
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && awk 'NR>=6771 && NR<=7600 && /^    }$/ {print NR\": \"$0}' drave-core/src/model.rs | head -3 && grep -n \"        x$\" drave-core/src/model.rs | awk -F: '$1>6771' | head -5 && grep -n \"Ok(x)\\|^        x$\\|return x\" drave-core/src … [103 caractères tronqués]`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '7060,7085p' drave-core/src/model.rs && echo \"=== fin probable ===\" && awk 'NR>6771 && /^    pub fn /{print NR\": \"$0; exit}' drave-core/src/model.rs", "description": "Locate forward end boundary"}`
+
+  ```
+matvec_f32_fils(wkv, &rangee, nhc * VALEURS_PAR_RANGEE, kv_dim, &mut kv, pool.threads());
+                    let porte = PorteEngram { hc: hcc, dim, eps: cfg.eps, clamp: 1e-6 };
+                    let mut injecte = vec![0f32; hcc * dim];
+                    porte.injecter(&x, &kv, qn, kn, None, &mut injecte);
+                    x = injecte;
+                    // Ce que l'injection coûte : les 24 rangées lues, la
+                    // projection `wkv` (24×256 → 5×5120) et les deux normes.
+                    paires[0] += (nhc * VALEURS_PAR_RANGEE * kv_dim
+                                  + 2 * hcc * dim + hcc * dim) as u64;
+                    Self::vider_couche(self.dump_couches.as_deref(), "engram_kv", l, pos, &kv);
+                    Self::vider_couche(self.dump_couches.as_deref(), "engram_sortie",
+                                       l, pos, &x);
+                }
+            }
+            }
+            // Fenêtre EFFECTIVE de cette couche : le motif déclaré (gpt-oss :
+            // une couche sur deux en attention complète) prime sur le réglage
+            // global. Lue en champs directs : `self` est déjà déstructuré.
+            let fen = if self.attn_window == 0 { 
+… [580 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"for l in self.couche_debut..self.couche_fin\" drave-core/src/model.rs | awk -F: '$1>6771 && $1<7907' && sed -n '7860,7906p' drave-core/src/model.rs", "description": "Find layer loop and function tail"}`
+
+  ```
+7010:        for l in self.couche_debut..self.couche_fin {
+        // ensuite la norme finale puis les logits (`build_hc_head`).
+        if let Some(ht) = self.hc_tete.as_ref() {
+            x = ht.tete(&x);
+        } else if self.hc_retarde {
+            // **V4.1 n'a pas de tête apprise.** La référence replie le flux
+            // final avec la `pre` de la DERNIÈRE FFN, celle qui a été calculée
+            // sur le flux d'avant son `post` puis portée jusqu'ici :
+            // `hc_collapse_triton(hidden_states, pre_mix)` puis `self.norm`.
+            // La calculer ici n'est pas une convention du moteur : c'est la
+            // seule chaîne que le fichier permet (pas de `output_hc_*`).
+            match (hc_porte.as_deref(), tete_copie0) {
+                (_, true) => {
+                    let (hc, hh) = self.hc.as_ref()
+                        .map(|v| (v[0].0.hc, v[0].0.h)).expect("`hc_retarde` sans hyper-connexions");
+                    let mut replie = vec![0f32; h];
+                    Hc::melanger(&x, &{
+                        let mut p = vec![0f32; hc]; p[0] = 1.0; p
+                    }, hc, hh, &mut replie);
+                    x = replie;
+                    let _
+… [1369 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ C2 : j'ajoute la capture et l'injection de l'état brut (avant la norme finale)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/c2_state.py <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/model.rs\")\ns = p.read_text()\n\n# 1. champs\na = \"\"\"    pub hebb: Option<Hebb>,\"\"\"\nb = \"\"\"    pub hebb: Option<Hebb>,\n    /// C2/C6 : ét … [3840 caractères tronqués]`
+
+  ```
+modele : fusion_etat + etat_sortie
+4504:            patch: None, ffn_gain: None, hebb: None, hebb_diff: None,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '4498,4512p' drave-core/src/model.rs && cargo build --release --manifest-path drave-core/Cargo.toml 2>&1 | grep -E \"^error\" -A 8 | head -25; echo BUILD", "description": "Verify model defaults inserted and build", "timeoutMs" … [9 caractères tronqués]`
+
+  ```
+Some(CacheExpertsRam::nouveau(mo << 20))
+                }
+                _ => None,
+            },
+            mla, mla_cache, jeton_trace: 0, trace: None, flux_force: None,
+            emb_imposee: None, emb_imposee_lot: None, lot: 1,
+            patch: None, ffn_gain: None, hebb: None, hebb_diff: None,
+            fusion_etat: None, fusion_alpha: 1.0, etat_sortie: None,
+        }
+    }
+
+    // ----------------------------------------------------------------------- //
+    // Briques de calcul
+    // ----------------------------------------------------------------------- //
+
+BUILD
+  ```
+
+### 🤖 Assistant
+
+⏵ C2 : je regarde le format des invites « aiguille » pour choisir la mesure
+
+- **bash** `{"command": "cd /tmp/campagne24 && tail -c 400 niah_4096_0.5.txt && echo && echo \"=== motif de code ===\" && grep -oE \"[A-Z]{2,}-[0-9]{3,}|[0-9]{5,}\" niah_4096_0.5.txt | head -5 && grep -n \"code\\|CODE\\|plant\" /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/aiguille.py | head -12", "desc … [44 caractères tronqués]`
+
+  ```
+rs, directors, producers, and technicians.
+
+Stanley sculpted a statue of Sir Isaac Newton located at the Griffith Observatory, completed in 1934. This statue was part of a larger work known as the Astronomer's Monument. This work was a public project funded by the PWAP. Consequently, the work was signed "PWAP", with none 
+
+Question: What is the vault access code? Answer with the code only.
+Answer:
+=== motif de code ===
+ZQ-4471
+4:La perplexité ne dit pas si un modèle RETROUVE une information. Ce script plante
+5:un code à une profondeur donnée dans un contexte long, puis le redemande.
+14:2. **la réponse est longue** (`--n 40` par défaut) : un code peut sortir au
+43:CODE = "AZUR-7391"
+44:AIGUILLE = f" Pour memoire, le code de verification de la reunion est {CODE}. "
+45:QUESTION = ("Quel est le code de verification de la reunion ? "
+46:            "Reponds par le code seul, puis une phrase d'explication.")
+119:    trouve = CODE in corps
+139:    # RETROUVE-T-ELLE encore l'information plantée à 4 k / 8 k / 16 k ?
+  ```
+
+### 🤖 Assistant
+
+⏵ C2 : je branche les drapeaux de fusion sur les chemins perplexité et inférence
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/c2_wire.py <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\n\n# --- options\na = \"\"\"    /// C7 : nombre de CYCLES de consolidation par rejeu (>1 pour la consolidation\"\"\"\nb  … [3424 caractères tronqués]`
+
+  ```
+options + appliquer_fusion
+6537:    appliquer_fusion(&mut mdl, &opt);
+error[E0382]: borrow of partially moved value: `opt`
+    --> src/main.rs:6537:32
+     |
+6497 |         harmony, harmony_contexte, sans_yarn, ..
+     |                  ---------------- value partially moved here
+...
+6537 |     appliquer_fusion(&mut mdl, &opt);
+--
+error: could not compile `drave-core` (bin "drave") due to 1 previous error; 30 warnings emitted
+BUILD
+  ```
+
+### 🤖 Assistant
+
+⏵ C2 : `opt` est déstructuré dans run_ppl — je capture les valeurs avant
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\n\n# signature par valeurs\na = \"\"\"fn appliquer_fusion(mdl: &mut model::Model, opt: &Options) {\n    if let Some(f) = opt.fusion_ … [2605 caractères tronqués]`
+
+  ```
+signature par valeurs
+BUILD
+  ```
+
+### 🤖 Assistant
+
+⏵ C2 : j'ajoute `--fusion-pos` (n'injecter qu'à la position de la question) et je branche l'inférence
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fn run_infer\" drave-core/src/main.rs && sed -n \"$(grep -n 'fn run_infer' drave-core/src/main.rs | cut -d: -f1),+30p\" drave-core/src/main.rs | grep -n \"load_partiel\\|let mut mdl\\|poser_tete\" ", "description": "Find in … [16 caractères tronqués]`
+
+  ```
+1054:fn run_infer(opt: Options) {
+24:    let mut mdl = model::Model::load_partiel(path, ctx, n_threads, dense, keep, auto, q4, b6,
+27:        poser_tete_partielle(&mut mdl);
+30:        poser_tete_restreinte(&mut mdl, f);
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/c2_pos.py <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\n\n# --- 1. le champ et le drapeau\na = \"\"\"    /// C2/C6 : où écrire l'état brut, et à quelle position.\n    etat_sort … [3877 caractères tronqués]`
+
+  ```
+BUILD
+[stderr]
+Traceback (most recent call last):
+  File "/tmp/c2_pos.py", line 32, in <module>
+    assert a in s
+           ^^^^^^
+AssertionError
+  ```
+
+### 🤖 Assistant
+
+⏵ C2 : mon patch a asseré sur le mauvais fichier — je vérifie l'état réel des deux
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fusion_pos\" drave-core/src/main.rs drave-core/src/model.rs | head -12; echo \"=== build ===\"; touch drave-core/src/main.rs && cargo build --release --manifest-path drave-core/Cargo.toml 2>&1 | grep -E \"^error\" -A 6 | he … [103 caractères tronqués]`
+
+  ```
+=== build ===
+BUILD_END
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fusion_etat\\|fusion_alpha\\|etat_sortie\" drave-core/src/main.rs | head -12 && echo \"=== model ===\" && grep -n \"fusion_etat\\|fusion_alpha\\|etat_sortie\" drave-core/src/model.rs | head -8", "description": "Verify fusio … [16 caractères tronqués]`
+
+  ```
+511:fn appliquer_fusion(mdl: &mut model::Model, fusion_etat: Option<String>, fusion_alpha: f32,
+512:                    etat_sortie: Option<String>, etat_pos: usize) {
+513:    if let Some(f) = fusion_etat.as_ref() {
+525:                 fusion_alpha,
+526:                 if fusion_alpha == 0.0 { " (poids NUL : aucun effet, c'est le témoin)" }
+528:        mdl.fusion_etat = Some(v);
+529:        mdl.fusion_alpha = fusion_alpha;
+530:    } else if fusion_alpha != 1.0 {
+533:    if let Some(f) = etat_sortie.as_ref() {
+535:        mdl.etat_sortie = Some((f.clone(), etat_pos));
+674:    fusion_etat: Option<String>,
+676:    fusion_alpha: f32,
+=== model ===
+2676:    pub fusion_etat: Option<Vec<f32>>,
+2678:    pub fusion_alpha: f32,
+2681:    pub etat_sortie: Option<(String, usize)>,
+4505:            fusion_etat: None, fusion_alpha: 1.0, etat_sortie: None,
+7912:        if let Some((chemin, p)) = self.etat_sortie.as_ref() {
+7929:        if let Some(f) = self.fusion_etat.as_ref() {
+7934:            let a = self.fusion_alpha;
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/c2_pos2.py <<'ENDPY'\nimport pathlib\n\n# ---- main.rs\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\n\na = \"\"\"    /// C2/C6 : où écrire l'état brut, et à quelle position.\n    etat_sortie: Option<Str … [3850 caractères tronqués]`
+
+  ```
+fusion_pos applique aux deux fichiers
+BUILD_END
+  ```
+
+### 🤖 Assistant
+
+⏵ C2 : je branche la fusion sur l'inférence puis je lance la greffe d'état
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"appliquer_fusion\" drave-core/src/main.rs | head && sed -n '1080,1095p' drave-core/src/main.rs", "description": "Check infer wiring"}`
+
+  ```
+511:fn appliquer_fusion(mdl: &mut model::Model, fusion_etat: Option<String>, fusion_alpha: f32,
+6549:    appliquer_fusion(&mut mdl, f_etat, f_alpha, f_pos, e_sortie, e_pos);
+    let ctx = if ctx_impose { ctx_opt } else { 512 };
+    let n_threads = if threads_impose { threads_opt } else { cpu.max(1) };
+    let abits = if abits_impose { abits_opt } else { 8 };
+    let mut mdl = model::Model::load_partiel(path, ctx, n_threads, dense, keep, auto, q4, b6,
+                                             opt.couches);
+    if opt.tete_partielle {
+        poser_tete_partielle(&mut mdl);
+    }
+    if let Some(f) = &opt.tete_restreinte {
+        poser_tete_restreinte(&mut mdl, f);
+    }
+    if let Some(f) = &opt.tete_garantie {
+        let mut ids: Vec<u32> = Vec::new();
+        if let Ok(t) = std::fs::read_to_string(f) {
+            for x in t.split(|c: char| c == ',' || c.is_whitespace()) {
+                if let Ok(v) = x.trim().parse::<u32>() { ids.push(v); }
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\na = \"\"\"    if let Some(f) = &opt.tete_restreinte {\n        poser_tete_restreinte(&mut mdl, f);\n    }\"\"\"\nb = \"\"\"    if l … [762 caractères tronqués]`
+
+  ```
+inference branchee
+511:fn appliquer_fusion(mdl: &mut model::Model, fusion_etat: Option<String>, fusion_alpha: f32,
+1093:    appliquer_fusion(&mut mdl, opt.fusion_etat.clone(), opt.fusion_alpha, opt.fusion_pos,
+6553:    appliquer_fusion(&mut mdl, f_etat, f_alpha, f_pos, e_sortie, e_pos);
+  ```
+
+### 🤖 Assistant
+
+⏵ C2 : je tokenise l'invite « aiguille » et je repère la position du code planté
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n '\"--tokenize\"' -A 2 drave-core/src/main.rs | head -6 && sed -n \"$(grep -n 'fn run_tokenize' drave-core/src/main.rs | cut -d: -f1),+25p\" drave-core/src/main.rs | head -30", "description": "Check tokenize mode"}`
+
+  ```
+198:        (opt.plan, "--plan"), (opt.tokenize, "--tokenize"),
+199-        (opt.ppl, "--ppl"), (opt.infer, "--infer"),
+200-    ].iter().filter(|(v, _)| *v).map(|(_, n)| *n).collect();
+--
+894:            "--tokenize" => { o.tokenize = true; 1 }
+895-            "--gpu-banc" => { o.gpu_banc = true; 1 }
+fn run_tokenize(opt: Options) {
+    let path = &modele_chemin();
+    let texte = opt.texte.clone().unwrap_or_default();
+    let fichier = opt.fichier.clone().unwrap_or_default();
+    let sortie = opt.sortie.clone().unwrap_or_default();
+    // En-tête seul : le décodage du vocabulaire n'a pas besoin des poids, et
+    // `open` lisait le fichier entier (62 Go pour gpt-oss) à chaque appel.
+    // Tolérant au modèle en cours de téléchargement (le vocabulaire vit dans le
+    // shard 1) : c'est ce qui permet de vérifier le tokenizer AVANT la fin du
+    // transfert — et de comparer à llama.cpp ensuite.
+    let g = ouvrir_meta_tolerant(path, "--tokenize");
+    let tk = build_tokenizer(&g);
+    if !fichier.is_empty() {
+        // Encoder un corpus ENTIER avec le tokenizer du modèle : chaque modèle
+        // a le sien, et nourrir un modèle avec les identifiants d'un autre
+        // donne une
+… [756 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ C2 : je vérifie d'abord que le 0,5 B sait répondre à l'aiguille en contexte complet
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && time timeout 900 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --infer --texte-file /tmp/campagne24/niah_4096_0.5.txt --n 8 --temp 0 --ctx 4096 --threads 12 2>&1 | tail -6", "description": "Test full-context needle  … [29 caractères tronqués]`
+
+  ```
+[config] 24 couches, hidden 896 · 
+[config] puits appris sur 0/24 couches · n_rot 64 · ffn 4864 · experts 0
+[config] rotation : RoPE simple (le modèle ne déclare pas YaRN)
+fusion : --fusion-alpha sans --fusion-etat n'a aucun effet
+Qwen2 · 24 couches · hidden 896 · 14 têtes / 2 KV · FFN 4864 · vocab 151936
+rien à générer : --ids ou --prompt requis
+[stderr]
+
+real	0m6,401s
+user	0m6,499s
+sys	0m0,298s
+  ```
+
+### 🤖 Assistant
+
+⏵ C2 : `--infer` veut `--prompt`, et un avertissement parasite sur `fusion-alpha` — je corrige
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fusion_alpha\" drave-core/src/main.rs | head -6 && sed -n \"$(grep -n 'n: 32, temp: 0.0' drave-core/src/main.rs | cut -d: -f1),+4p\" drave-core/src/main.rs", "description": "Find Options defaults for fusion_alpha"}`
+
+  ```
+511:fn appliquer_fusion(mdl: &mut model::Model, fusion_etat: Option<String>, fusion_alpha: f32,
+525:                 fusion_alpha,
+526:                 if fusion_alpha == 0.0 { " (poids NUL : aucun effet, c'est le témoin)" }
+529:        mdl.fusion_alpha = fusion_alpha;
+531:    } else if fusion_alpha != 1.0 {
+677:    fusion_alpha: f32,
+        n: 32, temp: 0.0, top_p: 1.0, hist: 64, hebb_q: 0.1,
+        hebb_out: String::from("hebb.bin"), keep: 1.0, abits: 8,
+        hebb_diff: None, hebb_eta: 1e-4, hebb_clamp: 1.0,
+        auto: true, limit: usize::MAX,
+        matrix: String::from("blk.0.ffn_gate.weight"),
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"hebb_diff: None, hebb_eta: 1e-4, hebb_clamp: 1.0,\" -A 6 drave-core/src/main.rs | head -10", "description": "Read defaults block around fusion fields"}`
+
+  ```
+838:        hebb_diff: None, hebb_eta: 1e-4, hebb_clamp: 1.0,
+839-        auto: true, limit: usize::MAX,
+840-        matrix: String::from("blk.0.ffn_gate.weight"),
+841-        ..Default::default()
+842-    };
+843-    let cpu = engine::coeurs_physiques();
+844-    o.ctx = 512;
+  ```
+
+### 🤖 Assistant
+
+⏵ C2 : `..Default::default()` donnait 0,0 au poids de fusion — un drapeau qui n'aurait rien fait
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\na = \"\"\"        hebb_diff: None, hebb_eta: 1e-4, hebb_clamp: 1.0,\n        auto: true, limit: usize::MAX,\"\"\"\nb = \"\"\"       … [1035 caractères tronqués]`
+
+  ```
+defauts corriges
+paires (poids × activation) : 1463687298566 au total, 358.0 M par token — attention 44.0 M · experts 0.0 M · partagé 314.0 M
+postes (ms/token) : matvec-attn 2.4 | rope 0.6 | attention 23.6 | matvec+mlp 20.4 | total mesuré 47.1
+[tete] densite de l'entree : 92.6 % de coordonnees vivantes sur 8 jetons
+[tete] -> un stockage par COLONNES ne lirait que ces coordonnees : 92.6 % de la matrice au lieu de 100 %
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --infer --prompt \"$(cat /tmp/campagne24/niah_4096_0.5.txt)\" --n 8 --temp 0 --ctx 4096 --threads 12 2>&1 | grep -iE \"génér|sortie|ZQ|jetons|réponse\" | hea … [68 caractères tronqués]`
+
+  ```
+[config] cache KV : 32 bits, 0.03 Go pour 4096 jetons
+[contexte] invite de 4152 jetons > 4080 (ctx 4096 − 8 de génération) : troncature aux 4080 derniers
+IMPORTANT : the vault access code is ZQ-4471-KX. Remember it, it will be asked at the end.
+Answer: ZQ-4471-K
+--- ids générés : [1863, 48, 12, 19, 19, 22, 16, 15843]
+généré  : 8 tokens en 0.596 s  (13.43 tok/s)
+[tete] densite de l'entree : 92.6 % de coordonnees vivantes sur 8 jetons
+  ```
+
+### 🤖 Assistant
+
+⏵ C2 : le 0,5 B répond « ZQ-4471-K » en contexte complet — je prépare la greffe d'état
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/greffe_prep.py <<'ENDPY'\nimport pathlib, re\nsrc = pathlib.Path(\"/tmp/campagne24/niah_4096_0.5.txt\").read_text()\ni = src.index(\"ZQ-4471-KX\")\n# La phrase de l'aiguille commence à « IMPORTANT » et finit au point.\nj = … [1063 caractères tronqués]`
+
+  ```
+aiguille à l'offset caractère 8231 · question à 16548
+phrase de l'aiguille : IMPORTANT : the vault access code is ZQ-4471-KX. Remember it, it will be asked at the end.
+amorce courte (fin) : 'Answer:'
+2249 tokens écrits dans /tmp/greffe_code.ids (vocabulaire du modèle : 151936)
+réversibilité : texte reconstruit identique ✅ (8251 octets)
+2 tokens écrits dans /tmp/greffe_courte.ids (vocabulaire du modèle : 151936)
+réversibilité : texte reconstruit identique ✅ (7 octets)
+  ```
+
+### 🤖 Assistant
+
+⏵ C2 : je construis la greffe — capturer l'état du code, l'injecter dans une amorce courte
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/greffe_etat.sh <<'GATEFILE'\n#!/bin/bash\n# greffe_etat.sh — C2/C6 : la GREFFE D'ÉTAT. Un souvenir peut-il être injecté dans\n# un calcul qui ne l'a pas vécu ?\n#\n# LA QUESTION, ET ELLE EST CELLE DE LA MÉMOIRE QUI SERT.  … [4941 caractères tronqués]`
+
+  ```
+(no output)
+[timed out after 600000ms]
+[killed by signal: SIGTERM]
+  ```
+
+### 🤖 Assistant
+
+⏵ C2 : deux captures coûtaient 400 s — je capture plusieurs positions en UNE passe
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/c2_multi.py <<'ENDPY'\nimport pathlib\n\n# --- model.rs : etat_sortie devient une liste de positions\np = pathlib.Path(\"drave-core/src/model.rs\")\nm = p.read_text()\na = \"\"\"    /// C2/C6 : où ÉCRIRE l'état brut, et à  … [3119 caractères tronqués]`
+
+  ```
+etat_pos en liste
+BUILD_END
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"tools/greffe_etat.sh\")\ns = p.read_text()\na = '''echo \"=== 2. capturer deux états (le code, et la fin de l'invite longue) ===\"\n$D \"$M\" --ppl \"$T/longue.ids\" --limit \"$ … [2307 caractères tronqués]`
+
+  ```
+started background job bash-20
+  ```
+
+### 🤖 Assistant
+
+⏵ C2 : `--infer` refuse `--texte-file` — je corrige l'appel de la greffe
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"tools/greffe_etat.sh\")\ns = p.read_text()\na = '''    R=$($D \"$M\" --infer --texte-file \"$T/courte.txt\" --n 8 --temp 0 --ctx 512 --threads 8 \\\\'''\nb = '''    # `--infer`  … [461 caractères tronqués]`
+
+  ```
+appel corrige
+=== 0. préparer les trois textes et leurs positions ===
+  code à l'offset 8231 · question à 16480 · invite longue 16555 octets
+  jetons : code jusqu'à la position 2248 · invite longue 4151 · amorce courte 16
+=== 1. la référence : le modèle ENTIER sur l'invite longue ===
+  ```
+
+- **job_output** `{"job_id": "bash-20", "timeout_ms": 900000, "wait": true}`
+
+  ```
+greffe adaptee
+code=0
+=== 0. préparer les trois textes et leurs positions ===
+  code à l'offset 8231 · question à 16480 · invite longue 16555 octets
+  jetons : code jusqu'à la position 2248 · invite longue 4151 · amorce courte 16
+=== 1. la référence : le modèle ENTIER sur l'invite longue ===
+  Answer: ZQ-4471-K
+  --- ids générés : [1863, 48, 12, 19, 19, 22, 16, 15843]
+=== 2. capturer les deux états en UNE seule passe ===
+    capture d'état    : position(s) [2247, 4150] écrite(s) dans /tmp/tmp.XE9XW6FtG5/etat.*
+      4150 tokens notés — perplexité cumulée 16.707  (19.1 tok/s)
+  === perplexité 16.7067 sur 4150 tokens (0 événements, 217.6 s) ===
+  etat.2247 : 3584 octets
+  etat.4150 : 3584 octets
+=== 3. la greffe dans l'amorce courte (dernière position) ===
+  état greffé   poids     ce que le modèle génère
+  etat.2247       0         Answer: 1234567
+  etat.2247       0.25      Answer: 1234567
+  etat.2247       0.5       Answer: 1234567
+  etat.2247       1         Answer: 1234567
+  etat.2247       2         Answer: 1234567
+  etat.4150       0         Answer: 1234567
+  etat.4150       0.25      Answer: 1234567
+  etat.4150       0.5       Answer: 1234567
+  etat.4150       1         Answe
+… [403 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ C2 : la greffe n'a AUCUN effet — l'inférence préremplit par lots, où mon injection n'est pas
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"forward_lot\\|prefill\\|prérempl\" drave-core/src/main.rs | sed -n '1,12p' && sed -n \"$(grep -n 'pub fn forward_lot' drave-core/src/model.rs | cut -d: -f1),+12p\" drave-core/src/model.rs", "description": "Check infer prefi … [9 caractères tronqués]`
+
+  ```
+585:        println!("[options] lot {} : le préremplissage par lots n'est PAS identique bit à bit \
+819:    /// Taille du lot de préremplissage : 1 = jeton par jeton (défaut).
+2772:/// C'est le mode du préremplissage réparti : sans lui, un lot de 256 jetons
+2779:/// (÷2,3) au prix de la quantification — c'est le mode que le préremplissage
+2854:/// `docs/plan-prefill-reparti.md`). Sans lui, un pair — hostile ou bogué — qui
+2864:            format!("{quoi} : {octets} octets au-delà du plafond de {} Mo — flux refusé                      (règle R4 de docs/plan-prefill-reparti.md)", PLAFOND_FLUX >> 20)));
+2887:            // `forward_lot` qui le consomme. L'appeler ici serait une erreur de
+2930:    /// Le lot aplati, pour le nœud qui doit le rendre à `forward_lot`.
+3100:            "un flux de {t} états ne peut pas porter la `pre` d'un seul : le préremplissage \
+3113:/// Le lot voyage en f32 dense : c'est le mode de la phase 3.4 (préremplissage
+3213:            format!("flux de zéro {} : refusé (R4 de docs/plan-prefill-reparti.md)",
+3666:                    // tournerait indéfiniment (relevé dans `docs/plan-prefill-reparti.md`).
+    pub fn forward_lot(&mut self, toks: &[u32], pos0: usiz
+… [883 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ C2 : je vérifie que l'injection atteint réellement le calcul (sortie complète d'un essai)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport struct, random\nrandom.seed(1)\nv=[random.uniform(-5,5) for _ in range(896)]\nopen('/tmp/essai_etat.f32','wb').write(struct.pack('<896f', *v))\nprint('état aléatoire écrit')\" && for POS in 0 3; do echo \"--- fu … [374 caractères tronqués]`
+
+  ```
+état aléatoire écrit
+--- fusion-pos 0
+  fusion            : 896 valeurs injectées, poids 5
+--- ids générés : [12095, 13, 1084, 374]
+généré  : 4 tokens en 0.149 s  (26.87 tok/s)
+--- fusion-pos 3
+  fusion            : 896 valeurs injectées, poids 5
+--- ids générés : [12095, 13, 1084, 374]
+généré  : 4 tokens en 0.138 s  (28.88 tok/s)
+  ```
+
+### 🤖 Assistant
+
+⏵ C2 : l'injection est chargée mais sans effet — je regarde quelle fonction l'inférence appelle
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1054,1200p' drave-core/src/main.rs | grep -n \"forward\\|logits\" | head -12", "description": "Find infer forward calls"}`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fn run_infer\" drave-core/src/main.rs && awk 'NR>1054 && NR<1400 && (/forward/ || /logits/)' drave-core/src/main.rs | head -10 && grep -n \"fn generer\\|fn boucle_generation\\|fn run_infer\" drave-core/src/main.rs | head",  … [40 caractères tronqués]`
+
+  ```
+1072:fn run_infer(opt: Options) {
+eta {hebb_eta:e}, écrêtage ±{hebb_clamp}. La règle est LOCALE et forward-only : \
+    // Le mode `--topk` (diagnostic) appelle `forward` position par position SANS
+    // l'assertion de `forward` fait tomber le processus (relevé par la relecture
+        // pas-à-pas : utile pour confronter les logits à la référence numpy
+        for (pos, &t) in ids.iter().enumerate() { last = mdl.forward(t, pos); }
+            let lg = mdl.logits(&last);
+            last = mdl.forward(next, ids.len() + step);
+1072:fn run_infer(opt: Options) {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"pub fn forward(&mut self, tok: u32\" drave-core/src/model.rs && grep -n \"let injecter = self.fusion_pos\" drave-core/src/model.rs && grep -n \"^    pub fn \" drave-core/src/model.rs | awk -F: '$1>6600 && $1<8100' | head -8 … [68 caractères tronqués]`
+
+  ```
+6790:    pub fn forward(&mut self, tok: u32, pos: usize) -> Vec<f32> {
+7937:        let injecter = self.fusion_pos == usize::MAX || self.fusion_pos == pos;
+6676:    pub fn forward_mla(&mut self, tok: u32, pos: usize) -> Vec<f32> {
+6776:    pub fn logits_f32(&self, hn: &[f32]) -> Vec<f32> {
+6790:    pub fn forward(&mut self, tok: u32, pos: usize) -> Vec<f32> {
+7962:    pub fn logits_lot(&mut self, hs: &[Vec<f32>]) -> Vec<Vec<f32>> {
+8091:    pub fn flux_en_liste(&self, x: &[f32]) -> (Vec<u16>, Vec<i16>, f32) {
+  ```
+
+### 🤖 Assistant
+
+⏵ C2 : je trace l'injection pour voir si elle s'exécute réellement
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '7925,7950p' drave-core/src/model.rs", "description": "Read injection code as written"}`
+
+  ```
+Ok(()) => eprintln!("[etat] {} valeurs écrites dans {chemin} \
+(position {pos})", x.len()),
+                            Err(e) => eprintln!("[etat] écriture de {chemin} impossible : {e}"),
+                        }
+                    }
+                    Err(e) => eprintln!("[etat] création de {chemin} impossible : {e}"),
+                }
+            }
+        }
+        // La position est un CHOIX, et il compte : injecter à chaque jeton de la
+        // question perturbe aussi la question. On rappelle un souvenir au moment de
+        // répondre, et c'est ce que `--fusion-pos` permet de dire.
+        let injecter = self.fusion_pos == usize::MAX || self.fusion_pos == pos;
+        if let Some(f) = self.fusion_etat.as_ref().filter(|_| injecter) {
+            if f.len() != x.len() {
+                panic!("fusion : l'état injecté a {} valeurs, le modèle en attend {} — \
+refuser vaut mieux qu'injecter un vecteur tronqué ou débordant", f.len(), x.len());
+            }
+            let a = self.fusion_alpha;
+            if a != 0.0 {
+                for (xi, fi) in x.iter_mut().zip(f.iter()) { *xi += a * fi; }
+            }
+        }
+        Self::rmsnorm(&x, out_norm, cfg.eps, &mut hn)
+… [156 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && awk 'NR>=1072 && NR<=2400 && /mdl\\.(forward|forward_lot|logits)/' drave-core/src/main.rs | head -12; echo \"=== lignes ===\"; grep -n \"mdl.forward_lot\\|mdl.forward(\" drave-core/src/main.rs | awk -F: '$1>1072 && $1<2500' | head -8 … [44 caractères tronqués]`
+
+  ```
+for (pos, &t) in ids.iter().enumerate() { last = mdl.forward(t, pos); }
+            let lg = mdl.logits(&last);
+            last = mdl.forward(next, ids.len() + step);
+            let hn = mdl.forward(0, 0);
+            let lg = mdl.logits(&hn);
+=== lignes ===
+1349:        for (pos, &t) in ids.iter().enumerate() { last = mdl.forward(t, pos); }
+1360:            last = mdl.forward(next, ids.len() + step);
+1858:            let hn = mdl.forward(0, 0);
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1335,1365p' drave-core/src/main.rs", "description": "Read prefill and generation loop"}`
+
+  ```
+// Le mode `--topk` (diagnostic) appelle `forward` position par position SANS
+    // passer par `generate` : il lui faut la même borne de contexte, sinon
+    // l'assertion de `forward` fait tomber le processus (relevé par la relecture
+    // de clôture : `--infer --topk` avec une invite trop longue).
+    let ids: Vec<u32> = if ids.len() + n_new + 8 > ctx {
+        let garde = ctx.saturating_sub(n_new + 8).max(1);
+        println!("[contexte] invite de {} jetons > {} (ctx {} − {} de génération) : \
+troncature aux {} derniers", ids.len(), garde, ctx, n_new, garde);
+        ids[ids.len().saturating_sub(garde)..].to_vec()
+    } else { ids };
+    let (out, st) = if topk > 0 {
+        // pas-à-pas : utile pour confronter les logits à la référence numpy
+        let t0 = Instant::now();
+        let mut last = Vec::new();
+        for (pos, &t) in ids.iter().enumerate() { last = mdl.forward(t, pos); }
+        let mut out = Vec::with_capacity(n_new);
+        for step in 0..n_new {
+            let lg = mdl.logits(&last);
+            let mut rank: Vec<u32> = (0..lg.len() as u32).collect();
+            rank.sort_unstable_by(|&a, &b| lg[b as usize].partial_cmp(&lg[a as usize]).unwrap());
+       
+… [495 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1366,1400p' drave-core/src/main.rs | grep -n \"else\\|generate\\|forward\" ; echo ===; grep -n \"fn generate\" drave-core/src/model.rs drave-core/src/main.rs | head -3", "description": "Find the normal generation path"}`
+
+  ```
+1:    } else {
+16:        let cb: Option<&mut dyn FnMut(u32)> = if flux { Some(&mut affiche) } else { None };
+17:        mdl.generate(&ids, n_new, temp, top_p, rep_pen, hist, cb)
+26:    } else {
+===
+drave-core/src/model.rs:8442:    pub fn generate(&mut self, ids: &[u32], n_new: usize, temp: f32, top_p: f32,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '8442,8500p' drave-core/src/model.rs | grep -n \"forward\\|lot\\|prefill\\|for \" | head -12", "description": "Inspect generate's forward usage"}`
+
+  ```
+13:        // laissait la boucle de décodage appeler `forward(pos = ctx)`, dont
+26:        // Préremplissage par lots : `forward_lot` sur des tranches de `self.lot`
+27:        // jetons. `lot == 1` reprend exactement l'ancienne boucle (forward_lot
+28:        // délègue à `forward` pour un jeton), donc rien ne change par défaut.
+29:        let lot = self.lot.max(1);
+32:            let t = lot.min(ids.len() - pos);
+34:                last = self.forward(ids[pos], pos);
+36:                let hs = self.forward_lot(&ids[pos..pos + t], pos);
+37:                last = hs.into_iter().next_back().expect("lot non vide");
+45:        for step in 0..n_new {
+  ```
+
+### 🤖 Assistant
+
+⏵ C2 : l'état injecté est peut-être trop PETIT devant le résidu — je teste avec un poids énorme
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GoogleDrive 2>/dev/null; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for A in 0 1 1000 100000; do echo \"--- alpha $A\"; timeout 300 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --infer --prompt \"The capital of France is\ … [217 caractères tronqués]`
+
+  ```
+--- alpha 0
+--- ids générés : [12095, 13, 1084, 374]
+--- alpha 1
+--- ids générés : [12095, 13, 1084, 374]
+--- alpha 1000
+--- ids générés : [12095, 13, 1084, 374]
+--- alpha 100000
+--- ids générés : [12095, 13, 1084, 374]
+  ```
+
+### 🤖 Assistant
+
+⏵ C2 : j'injectais à la position 0, qui ne sert pas à générer — je teste à la DERNIÈRE position
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for POS in 3 4; do for A in 1 100; do echo \"--- pos $POS alpha $A\"; timeout 300 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --infer --prompt \"The capital of France is\" --n 4 --temp 0 --ctx 64 --threads 8 --fus … [172 caractères tronqués]`
+
+  ```
+--- pos 3 alpha 1
+--- ids générés : [12095, 13, 1084, 374]
+--- pos 3 alpha 100
+--- ids générés : [12095, 13, 1084, 374]
+--- pos 4 alpha 1
+--- ids générés : [11, 315, 3308, 11]
+--- pos 4 alpha 100
+--- ids générés : [81757, 2336, 13, 3555]
+  ```
+
+### 🤖 Assistant
+
+⏵ C2 : le mécanisme marche à la dernière position — je refais la greffe à la main
+
+- **bash** `{"command": "ls /tmp/tmp.XE9XW6FtG5/ 2>/dev/null | head; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && T=/tmp/tmp.XE9XW6FtG5; if [ -d \"$T\" ]; then echo \"--- sans greffe\"; timeout 300 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --infer --prompt \"$(cat $T/courte.txt)\" … [461 caractères tronqués]`
+
+  ```
+code.ids
+code.txt
+courte.ids
+courte.txt
+etat.2247
+etat.4150
+longue.ids
+longue.txt
+--- sans greffe
+Question: What is the vault access code? Answer with the code only.
+Answer: 1234567
+--- ids générés : [220, 16, 17, 18, 19, 20, 21, 22]
+--- avec l'état du code, alpha 1, pos 15
+  fusion            : 896 valeurs injectées, poids 1
+Question: What is the vault access code? Answer with the code only.
+Answer: 1234567
+--- ids générés : [220, 16, 17, 18, 19, 20, 21, 22]
+  ```
+
+### 🤖 Assistant
+
+⏵ C2 : je cherche à quelle position la greffe prend effet dans l'amorce courte
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && T=/tmp/tmp.XE9XW6FtG5; for POS in 14 15 16 17; do echo \"--- pos $POS\"; timeout 300 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --infer --prompt \"$(cat $T/courte.txt)\" --n 8 --temp 0 --ctx 512 --threads 8 --fus … [420 caractères tronqués]`
+
+  ```
+--- pos 14
+--- ids générés : [220, 16, 17, 18, 19, 20, 21, 22]
+--- pos 15
+--- ids générés : [220, 16, 17, 18, 19, 20, 21, 22]
+--- pos 16
+--- ids générés : [25, 220, 16, 17, 18, 19, 20, 21]
+--- pos 17
+--- ids générés : [220, 1447, 16, 17, 18, 19, 20, 21]
+=== nombre de jetons vus par l'inférence ===
+[config] rotation : RoPE simple (le modèle ne déclare pas YaRN)
+  pas  0 : 220(14.7958) 362(11.4734) 
+--- ids générés : [220]
+  ```
+
+### 🤖 Assistant
+
+⏵ C2 : la position « dernière » ne se devine pas (l'invite gagne un jeton) — je l'ajoute comme valeur symbolique
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/c2_dernier.py <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\n\na = \"\"\"    /// C2/C6 : à quelle position INJECTER l'état. `usize::MAX` = partout, ce qui\n    /// n'est presque … [2891 caractères tronqués]`
+
+  ```
+fusion-pos dernier
+BUILD_END
+  ```
+
+### 🤖 Assistant
+
+⏵ C2 : la résolution doit se faire APRÈS la troncature du contexte — je déplace
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\n\na = \"\"\"    let mut fusion_pos = opt.fusion_pos;\n    if opt.fusion_dernier && !ids.is_empty() {\n        fusion_pos = ids.len( … [1971 caractères tronqués]`
+
+  ```
+resolution deplacee
+--- état 2247 alpha 0
+  fusion            : position DERNIÈRE de l'invite = 16 (invite de 17 jetons, comptée ici et non devinée)
+--- ids générés : [220, 16, 17, 18, 19, 20, 21, 22]
+--- état 2247 alpha 1
+  fusion            : position DERNIÈRE de l'invite = 16 (invite de 17 jetons, comptée ici et non devinée)
+--- ids générés : [220, 16, 17, 18, 19, 20, 21, 22]
+--- état 2247 alpha 4
+  fusion            : position DERNIÈRE de l'invite = 16 (invite de 17 jetons, comptée ici et non devinée)
+--- ids générés : [220, 16, 17, 18, 19, 20, 21, 22]
+--- état 4150 alpha 0
+  fusion            : position DERNIÈRE de l'invite = 16 (invite de 17 jetons, comptée ici et non devinée)
+--- ids générés : [220, 16, 17, 18, 19, 20, 21, 22]
+--- état 4150 alpha 1
+  fusion            : position DERNIÈRE de l'invite = 16 (invite de 17 jetons, comptée ici et non devinée)
+--- ids générés : [220, 16, 17, 18, 19, 20, 21, 22]
+--- état 4150 alpha 4
+  fusion            : position DERNIÈRE de l'invite = 16 (invite de 17 jetons, comptée ici et non devinée)
+--- ids générés : [25, 220, 16, 17, 18, 19, 20, 21]
+  ```
+
+### 🤖 Assistant
+
+⏵ C2 : la greffe agit mais ne donne pas la réponse — je pousse le poids pour voir ce qu'elle porte
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && T=/tmp/tmp.XE9XW6FtG5; for ETAT in 4150 2247; do for A in 10 50 200; do R=$(timeout 300 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --infer --prompt \"$(cat $T/courte.txt)\" --n 8 --temp 0 --ctx 512 --threads 8 -- … [237 caractères tronqués]`
+
+  ```
+état 4150 α=10 : Answer:: 123456 --- ids générés : [25, 220, 16, 17, 18, 19, 20, 21] 
+état 4150 α=50 : Answer:: 123456 --- ids générés : [25, 220, 16, 17, 18, 19, 20, 21] 
+état 4150 α=200 : Answer:: 123456 --- ids générés : [25, 220, 16, 17, 18, 19, 20, 21] 
+état 2247 α=10 : Answer: --- ids générés : [271, 15, 15, 15, 15, 15, 15, 15] 
+état 2247 α=50 : Answer: --- ids générés : [271, 15, 15, 15, 15, 15, 15, 15] 
+état 2247 α=200 : Answer: --- ids générés : [271, 15, 15, 15, 15, 15, 15, 15]
+  ```
+
+### 🤖 Assistant
+
+⏵ C2 : je mesure l'échelle réelle des états capturés — c'est peut-être là qu'est le problème
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport struct, math\nfor f in ['/tmp/tmp.XE9XW6FtG5/etat.2247','/tmp/tmp.XE9XW6FtG5/etat.4150','/tmp/essai_etat.f32']:\n    b=open(f,'rb').read(); v=struct.unpack('<%df'%(len(b)//4), b)\n    rms=math.sqrt(sum(x*x for x … [200 caractères tronqués]`
+
+  ```
+/tmp/tmp.XE9XW6FtG5/etat.2247: n=896 rms=4.1081 max=61.403 norme=122.97
+/tmp/tmp.XE9XW6FtG5/etat.4150: n=896 rms=1.8044 max=15.522 norme=54.01
+/tmp/essai_etat.f32: n=896 rms=2.8975 max=4.992 norme=86.73
+  ```
+
+### 🤖 Assistant
+
+⏵ C2 : je reconstruis une invite COURTE avec aiguille pour itérer vite sur la mécanique
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib, re\nsrc = pathlib.Path(\"/tmp/campagne24/niah_4096_0.5.txt\").read_text()\n# remplissage : le début du texte, sans le code ni la question\ncorps = src[:src.index(\"ZQ-4471-KX\") - 800]\ncorps = co … [971 caractères tronqués]`
+
+  ```
+invite courte : 6168 octets
+réversibilité : texte reconstruit identique ✅ (6175 octets)
+[config] rotation : RoPE simple (le modèle ne déclare pas YaRN)
+  pas  0 : 1863(21.2943) 220(15.7530) 576(14.2487) 
+  pas  1 : 48(30.0826) 151643(18.9897) 43(18.2160) 
+  pas  2 : 12(25.9184) 19(16.1795) 151643(15.8093) 
+  pas  3 : 19(28.5123) 151643(17.7129) 15(17.4858) 
+  pas  4 : 19(28.5941) 151643(17.1878) 20(16.6982)
+  ```
+
+### 🤖 Assistant
+
+⏵ C2 : expérience décisive — greffer l'état de l'invite AVEC aiguille dans la même invite SANS aiguille
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/greffe_etat.sh <<'GATEFILE'\n#!/bin/bash\n# greffe_etat.sh — C2/C6 : la GREFFE D'ÉTAT. Un souvenir peut-il être injecté dans un\n# calcul qui ne l'a pas vécu ?\n#\n# LA QUESTION, ET ELLE EST CELLE DE LA MÉMOIRE QUI SERT.  … [5479 caractères tronqués]`
+
+  ```
+=== 0. construire les deux invites (mêmes textes, l'aiguille en moins) ===
+  invite A 6168 octets · B 6076 octets · question seule 75 octets
+  jetons : A 1750 · B 1721 · question 16
+=== 1. ce que chaque invite répond SANS greffe ===
+  A (avec aiguille) : Answer: ZQ-4471-K
+  B (sans aiguille) : Answer: 150px
+  question seule    : Answer: 1234567
+=== 2. prélever l'état de la DERNIÈRE position de A (une seule passe) ===
+    capture d'état    : position(s) [1749] écrite(s) dans /tmp/tmp.TtfuxVm8GF/etatA.*
+      1749 tokens notés — perplexité cumulée 21.225  (25.4 tok/s)
+  === perplexité 21.2247 sur 1749 tokens (0 événements, 68.8 s) ===
+  état prélevé : 896 valeurs · rms 1.832 · norme 54.84
+=== 3. greffer dans B (dernière position) ===
+  poids     ce que B répond AVEC la greffe
+  0         Answer: 150px
+  1         Answer: 150px
+  2         Answer::150px
+  4         Answer::150px
+  10        Answer::150px
+  100       Answer::150px
+
+  lecture : le poids 0 est le témoin de non-effet. Si aucun poids ne porte le code,
+  l'état transplanté ne suffit pas — et la cause est à chercher du côté de ce que la
+  tête lit (l'échelle, la position, ou le contexte entier plutôt qu'un état).
+  Fichiers 
+… [34 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ C2 : la greffe à poids 100 devrait écraser le contexte — je relis le chemin entre la boucle et la tête
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '7890,7940p' drave-core/src/model.rs | head -40 && echo \"=== rmsnorm ===\" && sed -n \"$(grep -n 'fn rmsnorm' drave-core/src/model.rs | head -1 | cut -d: -f1),+12p\" drave-core/src/model.rs", "description": "Read code between … [21 caractères tronqués]`
+
+  ```
+(_, true) => {
+                    let (hc, hh) = self.hc.as_ref()
+                        .map(|v| (v[0].0.hc, v[0].0.h)).expect("`hc_retarde` sans hyper-connexions");
+                    let mut replie = vec![0f32; h];
+                    Hc::melanger(&x, &{
+                        let mut p = vec![0f32; hc]; p[0] = 1.0; p
+                    }, hc, hh, &mut replie);
+                    x = replie;
+                    let _ = hh;
+                }
+                (Some(pm), false) => {
+                    let (hc, hh) = self.hc.as_ref()
+                        .map(|v| (v[0].0.hc, v[0].0.h))
+                        .expect("`hc_retarde` sans hyper-connexions chargées");
+                    let mut replie = vec![0f32; h];
+                    Hc::melanger(&x, pm, hc, hh, &mut replie);
+                    x = replie;
+                }
+                (None, false) => panic!("V4.1 : flux final en `hc` copies sans `pre` portée — \
+le dernier raccord FFN n'a pas été exécuté (plage de couches vide ?)"),
+            }
+        }
+        // ---- C2/C6 : l'état BRUT, capturé ou augmenté, juste AVANT la norme finale.
+        // La position du prélèvement est celle du texte : un état prélevé 
+… [1619 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ C2 : je trace l'injection à l'exécution pour trancher (mon raisonnement l'exige)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/model.rs\")\ns = p.read_text()\na = \"\"\"            let a = self.fusion_alpha;\n            if a != 0.0 {\n                for (xi, fi) in x.iter_mut().zip(f.it … [1500 caractères tronqués]`
+
+  ```
+trace ajoutee
+  fusion            : 896 valeurs injectées, poids 100
+  fusion            : position DERNIÈRE de l'invite = 1721 (invite de 1722 jetons, comptée ici et non devinée)
+[fusion-debug] pos=1721 alpha=100 |x|=52.89 |etat|=54.84 (a*|etat| = 5483.92)
+Question: What is the vault access code? Answer with the code only.
+Answer::15
+--- ids générés : [25, 16, 20]
+  ```
+
+### 🤖 Assistant
+
+⏵ C2 : contrôle décisif — injecter l'état de A dans A elle-même doit reproduire sa réponse
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && T=$(ls -d /tmp/tmp.TtfuxVm8GF 2>/dev/null); echo \"référence A sans greffe :\"; timeout 600 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --infer --prompt \"$(cat $T/A.txt)\" --n 4 --temp 0 --ctx 2048 --threads 12 2 … [737 caractères tronqués]`
+
+  ```
+référence A sans greffe :
+Answer: ZQ-4
+--- ids générés : [1863, 48, 12, 19]
+A + son propre état, alpha 100 :
+Answer::ZQ-
+--- ids générés : [25, 57, 48, 12]
+A + son propre état, alpha 0 :
+Answer: ZQ-4
+--- ids générés : [1863, 48, 12, 19]
+  ```
+
+### 🤖 Assistant
+
+⏵ C2 : hypothèse — l'état injecté ne touche pas le cache KV ; je teste en injectant PARTOUT
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && T=$(ls -d /tmp/tmp.TtfuxVm8GF 2>/dev/null); for A in 1 100; do echo \"--- B, greffe à TOUTES les positions, alpha $A\"; timeout 600 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --infer --prompt \"$(cat $T/B.txt)\"  … [255 caractères tronqués]`
+
+  ```
+--- B, greffe à TOUTES les positions, alpha 1
+Answer: 150
+--- ids générés : [220, 16, 20, 15, 198, 25]
+--- B, greffe à TOUTES les positions, alpha 100
+Answer:::::::
+--- ids générés : [25, 25, 25, 25, 25, 25]
+  ```
+
+### 🤖 Assistant
+
+⏵ C2 : conclusion mécaniste claire — une greffe d'état n'est pas une greffe de contexte
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 cargo test --release --manifest-path drave-core/Cargo.toml 2>&1 | grep -E \"^test result|FAILED|VARS|panicked\" -A 3 | head -20", "description": "Check VARS_LUES test after new env var", "timeoutMs": 700000}`
+
+  ```
+test tests_vars::les_vars_lues_sont_completes ... FAILED
+test episodique::tests::le_cout_annonce_est_le_cout_paye ... ok
+test materiel::tests::plan_dans_les_bornes ... ok
+test materiel::tests::detection_coherente ... ok
+--
+thread 'tests_vars::les_vars_lues_sont_completes' (2904114) panicked at src/main.rs:7366:13:
+DRAVE_DEBUG_FUSION est lu dans le source mais absent de VARS_LUES : un ancien nom QT_DEBUG_FUSION resterait muet
+
+
+failures:
+--
+test result: FAILED. 121 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.35s
+
+error: test failed, to rerun pass `--bin drave`
+  ```
+
+### 🤖 Assistant
+
+⏵ C2 : le garde-fou du dépôt a attrapé ma variable non déclarée — je la déclare
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"VARS_LUES\" drave-core/src/main.rs | head -3 && sed -n \"$(grep -n 'const VARS_LUES' drave-core/src/main.rs | cut -d: -f1),+8p\" drave-core/src/main.rs", "description": "Read VARS_LUES declaration"}`
+
+  ```
+17:const VARS_LUES: &[&str] = &[
+138:        k.strip_prefix("QT_").map(|s| VARS_LUES.contains(&s)).unwrap_or(false)
+7332:    use super::VARS_LUES;
+const VARS_LUES: &[&str] = &[
+    "BANC_KV_DEBUG", "BANC_KV_GPU_SEUL", "BANC_KV_GRAD", "BANC_KV_K0",
+    "BANC_KV_KUNIT", "BANC_KV_UNIT", "BANC_KV_V1", "BANC_SANS_PUITS",
+    "CLUSTERS", "DEBUG_ETAT", "DEBUG_FLUX", "DEBUG_MLA", "DEBUG_YARN", "DUMP_COUCHES",
+    "ETAT_ENTREE",
+    "FLUX_VERIF", "GPU", "GPU_EXPERTS",
+    "GPU_EXPERTS_GO", "GPU_KV", "GPU_TETE", "GPU_TOPK", "HARMONY_TRACE",
+    "KV_BITS", "KV_F16", "KV_K_F16", "KV_K_F32", "KV_V_F32", "MMAP",
+    "BIAIS_VL", "EXPERTS_RAM", "PRELIRE", "PRELIRE_TOUT", "Q8_BLOCS", "SANS_ENGRAM",
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\na = '''    \"CLUSTERS\", \"DEBUG_ETAT\", \"DEBUG_FLUX\", \"DEBUG_MLA\", \"DEBUG_YARN\", \"DUMP_COUCHES\",'''\nb = '''    \"CLUSTERS … [400 caractères tronqués]`
+
+  ```
+DRAVE_DEBUG_FUSION declaree
+test result: ok. 122 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.32s
+  ```
+
+### 🤖 Assistant
+
+⏵ C2 : je transforme l'expérience en porte — témoin de non-effet, mécanisme, et le négatif expliqué
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/porte-greffe.sh <<'GATEFILE'\n#!/bin/bash\n# porte-greffe.sh — C2/C6 : LA GREFFE D'ÉTAT. Ce qu'elle fait, et ce qu'elle ne fait PAS.\n#\n# LA QUESTION. C6 retrouve un état par son contenu ; C9 limite ce qui traverse un li … [7155 caractères tronqués]`
+
+  ```
+(no output)
+[timed out after 600000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (timeout 2400 bash tools/porte-greffe.sh > /tmp/porte_greffe.txt 2>&1; echo \"code=$?\" >> /tmp/porte_greffe.txt) &\nsleep 100; cat /tmp/porte_greffe.txt", "description": "Run graft gate in background", "timeoutMs": 150000}`
+
+  ```
+=== 0. construire A (avec aiguille) et B (sans), et vérifier qu'elles diffèrent ===
+  ```
+
+- **bash** `{"command": "sleep 240; cat /tmp/porte_greffe.txt", "description": "Wait and check gate progress", "timeoutMs": 300000}`
+
+  ```
+=== 0. construire A (avec aiguille) et B (sans), et vérifier qu'elles diffèrent ===
+  A (avec aiguille) : [1863, 48, 12, 19, 19, 22, 16, 15843]
+  B (sans aiguille) : [220, 16, 20, 15, 1767, 198, 785, 34584]
+=== 1. prélever l'état de la dernière position de A ===
+    capture d'état    : position(s) [1749] écrite(s) dans /tmp/tmp.sS91wbrnkb/etatA.*
+      1749 tokens notés — perplexité cumulée 21.225  (24.6 tok/s)
+  === perplexité 21.2247 sur 1749 tokens (0 événements, 71.2 s) ===
+=== 2. témoin de non-effet : poids 0 ⇒ aucune différence ===
+  ✅ poids 0 : [220, 16, 20, 15, 1767, 198, 785, 34584] (identique à B sans greffe)
+=== 3. le mécanisme fonctionne : A + son propre état reste sur le code ===
+  ```
+
+- **bash** `{"command": "sleep 200; cat /tmp/porte_greffe.txt | tail -22", "description": "Check gate completion", "timeoutMs": 260000}`
+
+  ```
+=== 0. construire A (avec aiguille) et B (sans), et vérifier qu'elles diffèrent ===
+  A (avec aiguille) : [1863, 48, 12, 19, 19, 22, 16, 15843]
+  B (sans aiguille) : [220, 16, 20, 15, 1767, 198, 785, 34584]
+=== 1. prélever l'état de la dernière position de A ===
+    capture d'état    : position(s) [1749] écrite(s) dans /tmp/tmp.sS91wbrnkb/etatA.*
+      1749 tokens notés — perplexité cumulée 21.225  (24.6 tok/s)
+  === perplexité 21.2247 sur 1749 tokens (0 événements, 71.2 s) ===
+=== 2. témoin de non-effet : poids 0 ⇒ aucune différence ===
+  ✅ poids 0 : [220, 16, 20, 15, 1767, 198, 785, 34584] (identique à B sans greffe)
+=== 3. le mécanisme fonctionne : A + son propre état reste sur le code ===
+  A + son état (poids 100) : [25, 57, 48, 12, 19, 19, 22, 16]
+  ✅ l'état injecté porte bien la direction du contenu de A
+=== 4. LE NÉGATIF : l'état de A dans B ne donne PAS le code, à aucun poids ===
+  poids 1    : [220, 16, 20, 15, 1767, 198, 785, 34584]
+  poids 2    : [25, 16, 20, 15, 1767, 198, 25036, 198]
+  ```
+
+- **bash** `{"command": "sleep 120; tail -14 /tmp/porte_greffe.txt", "description": "Read final gate verdict", "timeoutMs": 180000}`
+
+  ```
+=== 1. prélever l'état de la dernière position de A ===
+    capture d'état    : position(s) [1749] écrite(s) dans /tmp/tmp.sS91wbrnkb/etatA.*
+      1749 tokens notés — perplexité cumulée 21.225  (24.6 tok/s)
+  === perplexité 21.2247 sur 1749 tokens (0 événements, 71.2 s) ===
+=== 2. témoin de non-effet : poids 0 ⇒ aucune différence ===
+  ✅ poids 0 : [220, 16, 20, 15, 1767, 198, 785, 34584] (identique à B sans greffe)
+=== 3. le mécanisme fonctionne : A + son propre état reste sur le code ===
+  A + son état (poids 100) : [25, 57, 48, 12, 19, 19, 22, 16]
+  ✅ l'état injecté porte bien la direction du contenu de A
+=== 4. LE NÉGATIF : l'état de A dans B ne donne PAS le code, à aucun poids ===
+  poids 1    : [220, 16, 20, 15, 1767, 198, 785, 34584]
+  poids 2    : [25, 16, 20, 15, 1767, 198, 25036, 198]
+  poids 4    : [25, 16, 20, 15, 1767, 198, 25036, 198]
+  poids 10   : [25, 16, 20, 15, 1767, 198, 25036, 198]
+  ```
+
+- **bash** `{"command": "sleep 150; tail -12 /tmp/porte_greffe.txt", "description": "Final gate result", "timeoutMs": 200000}`
+
+  ```
+=== 3. le mécanisme fonctionne : A + son propre état reste sur le code ===
+  A + son état (poids 100) : [25, 57, 48, 12, 19, 19, 22, 16]
+  ✅ l'état injecté porte bien la direction du contenu de A
+=== 4. LE NÉGATIF : l'état de A dans B ne donne PAS le code, à aucun poids ===
+  poids 1    : [220, 16, 20, 15, 1767, 198, 785, 34584]
+  poids 2    : [25, 16, 20, 15, 1767, 198, 25036, 198]
+  poids 4    : [25, 16, 20, 15, 1767, 198, 25036, 198]
+  poids 10   : [25, 16, 20, 15, 1767, 198, 25036, 198]
+  poids 100  : [25, 16, 20, 15, 1767, 198, 25036, 198]
+  toutes positions, poids 100 : [25, 25, 25, 25, 25, 25, 25, 25]
+  ✅ aucun poids ne porte le code : une greffe d'état n'est pas une greffe de contexte
+=== 5. la CAUSE : après le premier jeton, la suite appartient à B ===
+  ```
+
+- **bash** `{"command": "sleep 60; tail -6 /tmp/porte_greffe.txt", "description": "Read case 5 verdict", "timeoutMs": 120000}`
+
+  ```
+poids 4    : [25, 16, 20, 15, 1767, 198, 25036, 198]
+  poids 10   : [25, 16, 20, 15, 1767, 198, 25036, 198]
+  poids 100  : [25, 16, 20, 15, 1767, 198, 25036, 198]
+  toutes positions, poids 100 : [25, 25, 25, 25, 25, 25, 25, 25]
+  ✅ aucun poids ne porte le code : une greffe d'état n'est pas une greffe de contexte
+=== 5. la CAUSE : après le premier jeton, la suite appartient à B ===
+  ```
+
+- **bash** `{"command": "sleep 90; tail -8 /tmp/porte_greffe.txt; grep -c \"code=\" /tmp/porte_greffe.txt", "description": "Wait for gate completion", "timeoutMs": 150000}`
+
+  ```
+✅ premier jeton 220 → 25 (il vient de l'état injecté), et la suite reste celle de B : [16, 20, 15]
+
+  ✅ la porte est franchie. Ce qu'elle établit : l'injection d'état est BRANCHÉE
+     (témoin à 0, mécanisme vérifié sur A) et elle NE TRANSFÈRE PAS le contexte.
+     Pour qu'une mémoire serve le calcul, il faut qu'elle entre comme CONTENU ou
+     comme ENTRÉE DE CACHE — le moteur n'a aucune prise sur le cache KV : manque.
+  Fichiers conservés dans /tmp/tmp.sS91wbrnkb
+code=0
+1
+  ```
+
+### 🤖 Assistant
+
+⏵ C2/C6 : porte 5/5 verte — le négatif est établi et sa cause mesurée ; je documente
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/greffe_docs.py <<'ENDPY'\nimport pathlib\n\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\nancre = \"## Annexe — manifeste des journaux\"\nsec = '''## 28. La greffe d'état (C2/C6) : branché … [9777 caractères tronqués]`

@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 38.9 h |
+| Durée | 40.4 h |
 | Tours | 44 |
-| Messages | 1580 |
-| Appels d'outils | 1490 |
+| Messages | 1649 |
+| Appels d'outils | 1559 |
 | Fichiers touchés | 61 |
-| Commandes | 1243 |
+| Commandes | 1311 |
 | Sous-agents | 3 |
-| Commits | 128 |
+| Commits | 129 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2058,7 +2058,7 @@ Je continue sur cette liste — il
 
 ### Tour 44 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1749 caractères tronqués]
 
-*223 appels d'outils.* Actions notables :
+*292 appels d'outils.* Actions notables :
 
 - bash — Implement per-region step counters and the step bound
 - bash — Write and run the clock/step-bound gate
@@ -2074,11 +2074,11 @@ Je continue sur cette liste — il
 - bash — Extend trace format to v2 with timestamps
 - bash — Add merge, clock drift, link verification
 - bash — Rewrite link pairing and build
-- … et 200 autres
+- … et 268 autres
 
 **Synthèse produite :**
 
-⏵ C7 : la consolidation RÉPÉTÉE atteint un point fixe exact (0,00e0) dès le 2e cycle
+⏵ C2/C6 : porte 5/5 verte — le négatif est établi et sa cause mesurée ; je documente
 
 ## 3. Travail accompli
 
@@ -2196,7 +2196,7 @@ Je continue sur cette liste — il
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1203 autres
+- … et 1271 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2324,7 +2324,7 @@ Je continue sur cette liste — il
 
 ## 5. Erreurs rencontrées
 
-65 sorties en erreur ou divergentes. Les premières :
+68 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : ```  ### 🤖 Assistant  ⏵ **En transformers 5, `AutoModel` rend directement `Qwen2Model` (pas de `.model`). Je corrige le diagnostic.**  - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitH
 - **T2** : 3310393 bash -c pgrep -af "essai_decharge" | grep python | head; echo "--- logs ---"; tail -2 /tmp/ec_d192_lr3e3.log 2>/dev/null; tail -2 /tmp/ec_d192_lr1e3.log 2>/dev/null; echo "---"; ls -la /tmp/ec
@@ -2472,4 +2472,5 @@ Je continue sur cette liste — il
 - C9 x C1 : où couper le modèle — le point de coupe est neutre, sauf à cause du lien  C1 (découpage) et C9 (pont) avaient chacun été mesurés à UN SEUL endroit : 1
 - C6 suite : la mémoire LOCALISE — l'erreur se mesure en jetons, et elle est petite  Savoir si la mémoire rend l'épisode EXACT est une chose ; savoir à quelle DIS
 - C7 suite : le rejeu RÉPÉTÉ est un point fixe, pas une usure (erreur exactement 0,00e0)  Question laissée ouverte par le premier pas de C7 : un prototype-exempla
+- C2/C6 : la greffe d'état — branchée, et elle ne transfère PAS le contexte  Le passage manquant entre C6 (une mémoire qui retrouve un état) et C9 (un lien qui li
 

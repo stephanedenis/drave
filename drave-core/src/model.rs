@@ -2665,6 +2665,23 @@ pub struct Model {
     /// pendant l'inférence, sur un cœur séparé en pratique. Il ne modifie
     /// jamais le calcul — c'est un espion, pas un acteur.
     pub hebb: Option<Hebb>,
+    /// C2/C6 : état BRUT à AJOUTER à la fin des couches, avant la norme finale.
+    ///
+    /// POURQUOI À CET ENDROIT, ET PAS « DANS LA COUCHE L ». Un modèle tronqué à L
+    /// couches (`--couches 0,L` + `--tete-partielle`) a pour dernier état celui de la
+    /// coupe : injecter ici, c'est injecter **au point de coupe**, c'est-à-dire
+    /// exactement là où un lien entre deux régions fait passer un état (C9). Une
+    /// seconde entrée dans le flux n'a donc pas besoin d'un point d'insertion
+    /// nouveau : elle a besoin d'être AJOUTÉE à ce qui est déjà là.
+    pub fusion_etat: Option<Vec<f32>>,
+    /// Le poids de l'état injecté (1,0 = remplacement de fait, 0,0 = aucun effet).
+    pub fusion_alpha: f32,
+    /// À quelle position injecter. `usize::MAX` = à toutes.
+    pub fusion_pos: usize,
+    /// C2/C6 : où ÉCRIRE l'état brut, et à QUELLES positions. Une LISTE, parce que
+    /// prélever deux moments d'un même contexte coûtait deux passes complètes : sur
+    /// une invite de 4 000 jetons, c'est 400 secondes pour deux vecteurs.
+    pub etat_sortie: Option<(String, Vec<usize>)>,
     pub hebb_diff: Option<HebbDiff>,
 }
 
@@ -4488,6 +4505,8 @@ PLUS LENT que le cache de pages du noyau (ctx 32 : +4 % à 4 Go, +21 % à 32 Go 
             mla, mla_cache, jeton_trace: 0, trace: None, flux_force: None,
             emb_imposee: None, emb_imposee_lot: None, lot: 1,
             patch: None, ffn_gain: None, hebb: None, hebb_diff: None,
+            fusion_etat: None, fusion_alpha: 1.0, fusion_pos: usize::MAX,
+            etat_sortie: None,
         }
     }
 
@@ -7888,6 +7907,51 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
                 }
                 (None, false) => panic!("V4.1 : flux final en `hc` copies sans `pre` portée — \
 le dernier raccord FFN n'a pas été exécuté (plage de couches vide ?)"),
+            }
+        }
+        // ---- C2/C6 : l'état BRUT, capturé ou augmenté, juste AVANT la norme finale.
+        // La position du prélèvement est celle du texte : un état prélevé à la
+        // position p d'un contexte peut être injecté à n'importe quelle position d'un
+        // autre — c'est tout l'intérêt, et c'est ce que la mesure doit montrer.
+        if let Some((chemin, positions)) = self.etat_sortie.as_ref() {
+            if positions.contains(&pos) {
+                use std::io::Write;
+                let chemin = &format!("{chemin}.{pos}");
+                match std::fs::File::create(chemin) {
+                    Ok(mut f) => {
+                        let mut octets = Vec::with_capacity(x.len() * 4);
+                        for v in x.iter() { octets.extend_from_slice(&v.to_le_bytes()); }
+                        match f.write_all(&octets) {
+                            Ok(()) => eprintln!("[etat] {} valeurs écrites dans {chemin} \
+(position {pos})", x.len()),
+                            Err(e) => eprintln!("[etat] écriture de {chemin} impossible : {e}"),
+                        }
+                    }
+                    Err(e) => eprintln!("[etat] création de {chemin} impossible : {e}"),
+                }
+            }
+        }
+        // La position est un CHOIX, et il compte : injecter à chaque jeton de la
+        // question perturbe aussi la question. On rappelle un souvenir au moment de
+        // répondre, et c'est ce que `--fusion-pos` permet de dire.
+        let injecter = self.fusion_pos == usize::MAX || self.fusion_pos == pos;
+        if let Some(f) = self.fusion_etat.as_ref().filter(|_| injecter) {
+            if f.len() != x.len() {
+                panic!("fusion : l'état injecté a {} valeurs, le modèle en attend {} — \
+refuser vaut mieux qu'injecter un vecteur tronqué ou débordant", f.len(), x.len());
+            }
+            let a = self.fusion_alpha;
+            if a != 0.0 {
+                // Trace de mise au point : la greffe d'état est invisible autrement —
+                // un poids énorme qui ne change rien veut dire que l'injection n'a pas
+                // lieu, et il faut pouvoir le distinguer d'un effet trop faible.
+                if std::env::var("DRAVE_DEBUG_FUSION").is_ok() {
+                    let nx: f32 = x.iter().map(|v| v * v).sum::<f32>().sqrt();
+                    let nf: f32 = f.iter().map(|v| v * v).sum::<f32>().sqrt();
+                    eprintln!("[fusion-debug] pos={pos} alpha={a} |x|={nx:.2} |etat|={nf:.2} \
+(a*|etat| = {:.2})", a * nf);
+                }
+                for (xi, fi) in x.iter_mut().zip(f.iter()) { *xi += a * fi; }
             }
         }
         Self::rmsnorm(&x, out_norm, cfg.eps, &mut hn);

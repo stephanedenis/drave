@@ -339,6 +339,49 @@ gain de temps est réel (≥ 3×, sans quoi la mesure n'aurait pas de sens).
 
 ---
 
+## C2/C6 — FAIT (10 octobre 11 h 30) : la greffe d'état, et ce qu'elle ne transfère PAS
+
+**Le passage manquant** : C6 retrouve un état par son contenu, C9 limite ce qui traverse
+un lien — mais si l'on **injecte** l'état d'un moment vécu dans un calcul qui ne l'a pas
+vécu, l'information est-elle encore là ? Ajouté par `--fusion-etat`, `--fusion-pos`
+(dont la valeur symbolique **`dernier`**), `--fusion-alpha`, et `--etat-sortie` /
+`--etat-pos` (prélèvement, **plusieurs positions en une passe**).
+
+Protocole décisif — deux invites qui ne diffèrent que d'une phrase : A contient
+« IMPORTANT : the vault access code is ZQ-4471-KX. », **B est le même texte sans
+l'aiguille**. Le 0,5 B répond `ZQ-4471-K` à A et `150px` à B.
+
+| cas | mesure |
+|---|---|
+| témoin, poids **0** | **identique** à B sans greffe |
+| A + son propre état, poids 100 | `25, 57, 48, 12, 19, …` — le contenu de A est là |
+| **B + l'état de A**, poids 1…100 | **jamais le code** |
+| B + l'état de A **partout**, poids 100 | `25,25,25,…` — dégénéré |
+
+**Une greffe d'état n'est pas une greffe de contexte.** Et la cause est mesurée : le
+**premier** jeton change (`220 → 25`, il vient de l'état injecté) mais **la suite reste
+celle de B** — les jetons suivants sont **re-dérivés par l'attention sur le cache KV**,
+que la greffe ne touche pas.
+
+**Conséquence** : pour qu'une mémoire **serve**, elle doit entrer comme **contenu** (RAG)
+ou comme **entrée de cache** — et le moteur n'a **aucune prise sur le cache KV**. Manque
+écrit comme tel.
+
+**Trois pièges attrapés en chemin**, tous de la même famille — un drapeau qui n'agit pas :
+1. `..Default::default()` donnait **0,0** à `--fusion-alpha` : une greffe aurait injecté
+   un vecteur multiplié par ZÉRO, en silence (corrigé en 1,0) ;
+2. la position de la dernière invite **ne se devine pas** : `--tokenize` et `--prompt` ne
+   comptent pas les mêmes jetons (l'espace initial), la greffe mordait un jeton du MILIEU
+   (d'où la valeur symbolique `dernier`, résolue par le moteur APRÈS la troncature) ;
+3. `DRAVE_DEBUG_FUSION` lue mais non déclarée : le test `VARS_LUES` du dépôt l'a
+   attrapée immédiatement.
+
+**La porte** : `tools/porte-greffe.sh`, 5 cas (témoin de non-effet · mécanisme vérifié
+sur A · le négatif à cinq poids et à toutes les positions · la cause par la suite qui
+reste celle de B).
+
+---
+
 ## C9/C10 (premier pas) — FAIT (10 octobre 7 h) : le pont à fibres limitées
 
 **La question du corps calleux, posée en termes mesurables** : deux régions échangent
@@ -781,6 +824,7 @@ bus (le format de la ligne de contrôle est écrit, le transport reste à câble
 |---|---|
 | 9/10 17 h 10 | **C1a** : module `topologie.rs`, validation stricte, plan, 8 tests, suite à 85 tests. |
 | 9/10 17 h 20 | **C1b pas 1** : la topologie pilote le découpage · porte `tools/porte-topologie.sh` **TENUE** (même chiffre, écart 0,00e0) · deux refus vérifiés. |
+| 10/10 11 h 30 | **C2/C6 — la greffe d'état** : `--fusion-etat/pos/alpha` + prélèvement d'état multi-positions. Protocole A/B (même texte, l'aiguille en moins) : témoin poids 0 identique · A + son état garde son contenu · **B + l'état de A ne donne jamais le code** (5 poids, et même partout) · **cause** : le 1er jeton change, la suite reste celle de B (cache KV). ⇒ une mémoire doit entrer comme contenu ou entrée de cache ; **le moteur n'a aucune prise sur le KV — manque**. Trois pièges corrigés (défaut 0,0 du poids, position « dernier » comptée par le moteur, `DRAVE_DEBUG_FUSION` déclarée). Porte 5 cas. |
 | 10/10 10 h 05 | **C7 suite — rejeu répété = point fixe** : du cycle 2 au cycle 12, mêmes prototypes, même compression, même rappel contre les épisodes d'origine, et erreur **exactement 0,00e0**. Rejouer une mémoire ne l'use pas. Cas 8 (`--episodique-cycles`). |
 | 10/10 09 h 35 | **C6 suite — la mémoire localise** : erreur moyenne **en jetons** entre l'épisode rendu et l'interrogé. À N=300 : Δ=2 à 50 % de dégradation, 24 à 75 %. À **N=2 048** : Δ=**11 jetons à 50 %** (0,54 % du texte), 86 à 75 %, rappel 95,4 %, **round-trip 2 048/2 048**, élagage 81 %. La précision RELATIVE s'améliore avec la taille : quand la mémoire se trompe, elle se trompe de PRÈS. Cas 3bis dans `porte-episodique.sh`. |
 | 10/10 09 h 00 | **C9 × C1 — où couper ?** Lien sans perte : **8 points de coupe, une seule perplexité (113,0068)**. Lien encodé : 8,9 % d'écart entre les coupes (108,87 à 118,53). Coût d'un pont de 448 fibres : **+0,52 % après 18 couches, +2,81 % après 12, +17,09 % après 15** — facteur 30 ⇒ **couper tard**. Porte 3 cas ; elle a attrapé son propre défaut (pont asymétrique, +4,92 % au lieu de +2,81 %). |

@@ -17,7 +17,8 @@
 const VARS_LUES: &[&str] = &[
     "BANC_KV_DEBUG", "BANC_KV_GPU_SEUL", "BANC_KV_GRAD", "BANC_KV_K0",
     "BANC_KV_KUNIT", "BANC_KV_UNIT", "BANC_KV_V1", "BANC_SANS_PUITS",
-    "CLUSTERS", "DEBUG_ETAT", "DEBUG_FLUX", "DEBUG_MLA", "DEBUG_YARN", "DUMP_COUCHES",
+    "CLUSTERS", "DEBUG_ETAT", "DEBUG_FLUX", "DEBUG_MLA", "DEBUG_FUSION", "DEBUG_YARN",
+    "DUMP_COUCHES",
     "ETAT_ENTREE",
     "FLUX_VERIF", "GPU", "GPU_EXPERTS",
     "GPU_EXPERTS_GO", "GPU_KV", "GPU_TETE", "GPU_TOPK", "HARMONY_TRACE",
@@ -503,6 +504,40 @@ fn modele_chemin() -> String { MODELE.get().cloned().unwrap_or_default() }
 /// jamais le jour : impossible de comparer des LOGITS par plage, et impossible
 /// de vérifier une réduction finale dont les couches suivantes ne tournent pas
 /// encore (V4.1, dont la compression est refusée).
+/// C2/C6 : applique la capture et l'injection d'état sur un modèle chargé.
+///
+/// POURQUOI UNE FONCTION, ET PAS TROIS LIGNES DANS CHAQUE MODE : la fusion d'états
+/// doit vouloir dire la MÊME chose en perplexité, en inférence et en réparti. Trois
+/// copies, c'est trois occasions d'en corriger une seule.
+fn appliquer_fusion(mdl: &mut model::Model, fusion_etat: Option<String>, fusion_alpha: f32,
+                    fusion_pos: usize, etat_sortie: Option<String>, etat_pos: Vec<usize>) {
+    if let Some(f) = fusion_etat.as_ref() {
+        let brut = std::fs::read(f)
+            .unwrap_or_else(|e| { eprintln!("fusion : lecture de {f} impossible : {e}");
+                                  std::process::exit(2) });
+        if brut.len() % 4 != 0 {
+            eprintln!("fusion : {f} fait {} octets, ce n'est pas un multiple de 4 — un état \
+s'écrit en f32 little-endian", brut.len());
+            std::process::exit(2);
+        }
+        let v: Vec<f32> = brut.chunks_exact(4)
+            .map(|q| f32::from_le_bytes([q[0], q[1], q[2], q[3]])).collect();
+        println!("  fusion            : {} valeurs injectées, poids {}{}", v.len(),
+                 fusion_alpha,
+                 if fusion_alpha == 0.0 { " (poids NUL : aucun effet, c'est le témoin)" }
+                 else { "" });
+        mdl.fusion_etat = Some(v);
+        mdl.fusion_alpha = fusion_alpha;
+        mdl.fusion_pos = fusion_pos;
+    } else if fusion_alpha != 1.0 {
+        eprintln!("fusion : --fusion-alpha sans --fusion-etat n'a aucun effet");
+    }
+    if let Some(f) = etat_sortie.as_ref() {
+        println!("  capture d'état    : position(s) {:?} écrite(s) dans {f}.*", etat_pos);
+        mdl.etat_sortie = Some((f.clone(), etat_pos));
+    }
+}
+
 fn poser_tete_partielle(mdl: &mut model::Model) {
     mdl.tete_partielle = true;
     eprintln!("[plage] `--tete-partielle` : la tête de sortie est appliquée à la fin de la \
@@ -637,6 +672,26 @@ struct Options {
     episodique_normaliser: bool,
     /// C8 : combien de positions mesurer pour l'essai de RÉFLEXE (sortie précoce).
     reflexe_essai: usize,
+    /// C2/C6 : état BRUT à injecter à la fin des couches (fichier de f32 bruts).
+    fusion_etat: Option<String>,
+    /// C2/C6 : poids de l'état injecté.
+    fusion_alpha: f32,
+    /// C2/C6 : où écrire l'état brut, et à quelles positions.
+    etat_sortie: Option<String>,
+    etat_pos: Vec<usize>,
+    /// C2/C6 : à quelle position INJECTER l'état. `usize::MAX` = partout, ce qui
+    /// n'est presque jamais ce qu'on veut : on rappelle un souvenir au moment de
+    /// répondre, pas à chaque jeton de la question.
+    fusion_pos: usize,
+    /// C2/C6 : injecter à la DERNIÈRE position de l'invite, quelle qu'elle soit.
+    ///
+    /// POURQUOI CETTE VALEUR SYMBOLIQUE EXISTE. Compter les jetons de l'invite pour
+    /// écrire `--fusion-pos 15` s'est trompé D'UN JETON : la tokenisation de
+    /// `--prompt` ne fait pas exactement celle de `--tokenize` (l'espace initial),
+    /// et la greffe ne mordait donc pas — la position 15 était un jeton du MILIEU de
+    /// la question. Une position qui se calcule doit être calculée par celui qui
+    /// connaît la longueur, pas devinée par celui qui écrit la commande.
+    fusion_dernier: bool,
     /// C7 : nombre de CYCLES de consolidation par rejeu (>1 pour la consolidation
     /// répétée : ce que la mémoire devient quand on la rejoue).
     episodique_cycles: usize,
@@ -791,6 +846,12 @@ fn analyser(args: &[String]) -> Options {
         n: 32, temp: 0.0, top_p: 1.0, hist: 64, hebb_q: 0.1,
         hebb_out: String::from("hebb.bin"), keep: 1.0, abits: 8,
         hebb_diff: None, hebb_eta: 1e-4, hebb_clamp: 1.0,
+        // Ces deux valeurs ne peuvent PAS venir de `Default` : `f32::default()` vaut
+        // 0,0 et `usize::default()` vaut 0, donc un `--fusion-etat` sans
+        // `--fusion-alpha` aurait injecté un vecteur multiplié par ZÉRO (aucun effet,
+        // en silence) et `--fusion-pos` absent aurait injecté à la SEULE position 0.
+        // C'est le défaut le plus coûteux du dépôt — un drapeau qui ne fait rien.
+        fusion_alpha: 1.0, fusion_pos: usize::MAX,
         auto: true, limit: usize::MAX,
         matrix: String::from("blk.0.ffn_gate.weight"),
         ..Default::default()
@@ -834,6 +895,22 @@ fn analyser(args: &[String]) -> Options {
             "--episodique-textes" => { o.episodique_textes = Some(suivant(i).clone()); 2 }
             "--pont-k" => { o.pont_k = suivant(i).parse().unwrap_or(0); 2 }
             "--reflexe-essai" => { o.reflexe_essai = suivant(i).parse().unwrap_or(0); 2 }
+            "--fusion-etat" => { o.fusion_etat = Some(suivant(i).clone()); 2 }
+            "--fusion-alpha" => { o.fusion_alpha = suivant(i).parse().unwrap_or(1.0); 2 }
+            "--fusion-pos" => {
+                let v = suivant(i).clone();
+                if v == "dernier" || v == "-1" { o.fusion_dernier = true; }
+                else { o.fusion_pos = v.parse().unwrap_or(usize::MAX); }
+                2
+            }
+            "--etat-sortie" => { o.etat_sortie = Some(suivant(i).clone()); 2 }
+            // Une LISTE de positions : « 2248,4151 ». Deux prélevements d'un même
+            // contexte tiennent alors en une seule passe.
+            "--etat-pos" => {
+                o.etat_pos = suivant(i).split(',')
+                    .filter_map(|x| x.trim().parse().ok()).collect();
+                2
+            }
             "--episodique-cycles" => { o.episodique_cycles = suivant(i).parse().unwrap_or(1); 2 }
             "--episodique-cycles-seuil" => { o.episodique_cycles_seuil = suivant(i).parse().unwrap_or(4); 2 }
             // C5 : le bus de modulation, canal par canal.
@@ -1038,6 +1115,10 @@ fn run_infer(opt: Options) {
     if let Some(f) = &opt.tete_restreinte {
         poser_tete_restreinte(&mut mdl, f);
     }
+    // C2/C6 : la fusion d'états doit vouloir dire la MÊME chose en inférence qu'en
+    // perplexité — c'est ici qu'on génère, donc c'est ici que la greffe se voit.
+    appliquer_fusion(&mut mdl, opt.fusion_etat.clone(), opt.fusion_alpha, opt.fusion_pos,
+                     opt.etat_sortie.clone(), opt.etat_pos);
     if let Some(f) = &opt.tete_garantie {
         let mut ids: Vec<u32> = Vec::new();
         if let Ok(t) = std::fs::read_to_string(f) {
@@ -1276,6 +1357,14 @@ effective est W+D : ce modèle N'EST PLUS celui du fichier, et il se mesure comm
 troncature aux {} derniers", ids.len(), garde, ctx, n_new, garde);
         ids[ids.len().saturating_sub(garde)..].to_vec()
     } else { ids };
+    // La position « dernière » se résout ICI, APRÈS la troncature : la résoudre avant
+    // viserait un jeton que la troncature a retiré, et la greffe tomberait à côté —
+    // exactement l'erreur d'un jeton qui avait été commise à la main.
+    if opt.fusion_dernier && !ids.is_empty() {
+        mdl.fusion_pos = ids.len() - 1;
+        println!("  fusion            : position DERNIÈRE de l'invite = {} (invite de {} \
+jetons, comptée ici et non devinée)", mdl.fusion_pos, ids.len());
+    }
     let (out, st) = if topk > 0 {
         // pas-à-pas : utile pour confronter les logits à la référence numpy
         let t0 = Instant::now();
@@ -6442,6 +6531,11 @@ fn run_ppl(opt: Options) {
 calculee sur un vocabulaire restreint n'est comparable a rien. Utilisez --infer.");
     }
     let montre_options = opt.options_actives;
+    // Capturés AVANT la déstructuration : `let Options { .. } = opt` déplace les
+    // champs un à un, et `&opt` n'existe plus après (attrapé à la compilation).
+    let (f_etat, f_alpha, f_pos, e_sortie, e_pos) =
+        (opt.fusion_etat.clone(), opt.fusion_alpha, opt.fusion_pos,
+         opt.etat_sortie.clone(), opt.etat_pos);
     let Options {
         ids_file: idfile, texte_file, ppl_texte: _, limit, depuis,
         ctx: ctx_opt, threads: threads_opt, abits: abits_opt,
@@ -6491,6 +6585,7 @@ calculee sur un vocabulaire restreint n'est comparable a rien. Utilisez --infer.
     let mut mdl = model::Model::load_partiel(path, ctx, n_threads, dense, keep, auto, q4, b6,
                                              opt.couches);
     if opt.tete_partielle { poser_tete_partielle(&mut mdl); }
+    appliquer_fusion(&mut mdl, f_etat, f_alpha, f_pos, e_sortie, e_pos);
     if let Some(chemin) = flux_forcer.as_deref() {
         match model::FluxRelecteur::lire(chemin) {
             Ok(r) => {
