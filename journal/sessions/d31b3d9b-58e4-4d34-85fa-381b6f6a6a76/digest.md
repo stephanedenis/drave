@@ -31015,3 +31015,110 @@ Continue working toward the objective in this same session. Treat the current wo
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"docs/sprint-cerveau.md\")\ns = p.read_text()\na = \"## ▶ PROCHAINE ACTION (à lire en premier)\"\nneuf = \"\"\"## PROTOCOLE v8 — SPÉCIFIÉ (11 octobre 17 h) : le compte de PAIRES  … [4415 caractères tronqués]`
+
+  ```
+spec v8 ecrite
+1a6ce84 Protocole v8 specifie : le compte de PAIRES du noeud, et sa difficulte propre
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 30 livré : protocole v8 **spécifié** — le compte de paires du nœud
+
+**Ce round** — 1 commit poussé. Un round de conception, sur le patron qui a réussi pour le v7 (spécifier → tenter → livrer).
+
+Objectif : clore le **troisième volet de C10** (le budget `paires/s`). Les paires sont calculées **par le nœud** ; le pilote ne peut donc pas les borner sans qu'elles lui soient **transportées**.
+
+**Reconnaissance faite** — le compteur existe et est déjà exploité côté local :
+```text
+model.rs:2395   pub paires: [u64; 3],      // attention · experts · partagé
+main.rs:1513    let pa = mdl.paires;       // le rapport le lit tel quel
+main.rs:7299    let pt: u64 = pa.iter().sum::<u64>() + scores;
+```
+
+**Les six modifications** : en-tête **91 → 99** (un `u64`, les paires dépassent 2³²) · `VERSION_FLUX` **7 → 8** · `envoyer_flux` écrit à l'offset 91 · `recevoir_flux` lit un `u64` → champ `paires_du_pair` · le pilote publie le compte du pair · **`budget_paires`** dans la topologie, comparé au compte du pair par pas, avec **arrêt explicite (code 9) et aucune perplexité**.
+
+**Et la difficulté que le v7 n'avait pas**, écrite noir sur blanc : l'en-tête est **partagé par les deux sens**, or ce champ est **directionnel** — le pilote y met 0, le nœud y met son compte. Un champ qui ne veut dire quelque chose que dans un sens doit être écrit dans le commentaire, sinon la prochaine relecture le prendra pour une mesure symétrique.
+
+**Ce qui vérifie ce changement** : les huit portes réparties du v7 (`porte-flux` en tête), plus un cas neuf pour le budget de paires. Les tests de trame forgée **calculent** maintenant leur remplissage — c'est le v7 qui l'a appris — donc seules les deux assertions « de mémoire » restent à mettre à jour.
+
+**Bilan** : 30 rounds, 22 portes toutes vertes, 122 tests, protocoles v7 livré et v8 spécifié. L'objectif reste **actif**.
+
+
+## Tour 74
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 mémoire épisodique, C7 consolidation, C8 périphérie, C9 latéralité, C10 budgets, et la diffusion réseau du bus de C5 ; (b) les expériences E2-E9 de docs/biologie-pour-drave.md et docs/hebbien-differentiel-et-biologie.md ; (c) les dessins de modèle H/I/J de docs/modele-pour-drave.md ; (d) les manques du registre docs/manques.md (noyau de listes pour les experts, noyau de listes GPU, encodeurs) — l'implémenter ou la mesurer, la doter d'une porte vérifiable, la documenter, commiter, pousser, et enchaîner immédiatement sur la suivante. Contraintes : les 23 portes du dépôt et tous les tests restent verts (porte-flux.sh après toute modification du chemin d'exécution), le profil release reste le binaire de mesure, le crate reste std seul, et docs/sprint-cerveau.md reste l'état resumable mis à jour à chaque round. Ne jamais s'arrêter faute de tâches planifiées : en inventer de nouvelles, mesurables, plutôt que d'attendre."
+Round: 31/60
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 31 : j'implémente le transport du compte de paires (v8, sans le budget encore)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\nn = 0\ndef sub(s, a, b, quoi):\n    global n\n    assert a in s, quoi\n    n += 1\n    return s.replace(a, b, 1)\n\n# --- modèle : un champ qui porte le compte à émettre (0 côté pilote)\np = pathl … [3476 caractères tronqués]`
+
+  ```
+v8 (transport) applique : 9 sites
+BUILD_END
+  ```
+
+### 🤖 Assistant
+
+⏵ Le transport compile — je fais émettre le compte par le nœud et le publier par le pilote
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\nn = 0\ndef sub(s, a, b, quoi):\n    global n\n    assert a in s, quoi\n    n += 1\n    return s.replace(a, b, 1)\n\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\n\n# 1. un compt … [3374 caractères tronqués]`
+
+  ```
+v8 (emission/publication) : 5 sites
+error[E0425]: cannot find value `nflux` in this scope
+    --> src/main.rs:4737:148
+     |
+4737 | ... * 0.0 + 1.0) / 1e6 * 0.0 + paires_pair as f64 / nflux as f64 / 1e6);
+     |                                                     ^^^^^ not found in this scope
+
+warning: type `io_result` should have an upper camel case name
+  --> src/gguf.rs:16:6
+   |
+--
+error: could not compile `drave-core` (bin "drave") due to 1 previous error; 30 warnings emitted
+BUILD_END
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\na = \"\"\"        println!(\"  paires du pair    : {paires_pair} au total, {:.1} M par pas (annoncées par le \\\\\nnœud dans chaque … [762 caractères tronqués]`
+
+  ```
+corrige
+test result: ok. 122 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.33s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && T=$(mktemp -d); PORT=$((60000 + RANDOM % 4000)); cat > $T/topo.json <<JSON\n{\"regions\":[{\"id\":\"local\",\"couches\":[0,11],\"instance\":\"local\"},{\"id\":\"d\",\"couches\":[12,23],\"instance\":\"127.0.0.1:$PORT\"}],\"liens\":[{\ … [660 caractères tronqués]`
+
+  ```
+deux nœuds        : perplexité 113.0068  (2.0 s)
+    paires du pair    : 201814179840 au total, 4293.9 M par pas (annoncées par le nœud dans chaque trame — protocole v8)
+  mode 2 — listes par blocs        3.65e-2  ✅  (réf 61.9920 / deux nœuds 64.2535)
+  mode 3 — lot dense f32           0.00e0  ✅  (réf 60.8135 / deux nœuds 60.8135)
+  mode 4 — lot en listes           4.45e-3  ✅  (réf 60.8135 / deux nœuds 60.5427)
+  ```
+
+### 🤖 Assistant
+
+⏵ Le chiffre est 24× trop grand : le compteur du nœud est CUMULATIF et je l'additionne — je corrige
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\na = \"\"\"    PAIRES_DU_PAIR.fetch_add(paires_du_pair, std::sync::atomic::Ordering::Relaxed);\"\"\"\nb = \"\"\"    // Le compteur d … [1409 caractères tronqués]`
+
+  ```
+cumul corrige
+    paires du pair    : 8408924160 au total, 178.9 M par pas (annoncées par le nœud dans chaque trame — protocole v8)
+  ```
+
+### 🤖 Assistant
+
+⏵ Chiffre correct : **178,9 M paires par pas** (12 couches sur 24, cohérent avec 358 M pour l'entier) — je vérifie et commite
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 bash tools/porte-flux.sh > /tmp/pf31.txt 2>&1; echo \"porte-flux code=$?\"; timeout 600 cargo test --release --manifest-path drave-core/Cargo.toml 2>&1 | grep -E \"^test result\"; python3 - <<'ENDPY'\nimport pathlib\n\np  … [5851 caractères tronqués]`

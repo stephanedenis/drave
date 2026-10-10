@@ -624,6 +624,33 @@ troisième volet de C10, dont les octets et la latence sont déjà faits.
 
 ---
 
+## PROTOCOLE v8 — LIVRÉ (11 octobre 18 h) : le compte de paires du nœud voyage
+
+Trois modifications de plus que la spécification ne prévoyait pas, et l'une est un **bug de ma
+part attrapé par la mesure** :
+
+1. le compteur du nœud est **CUMULATIF** ; je l'additionnais à chaque trame, donc la somme des
+   cumuls valait N²/2 — le pilote annonçait **4 293,9 M par pas** au lieu de 178,9 ;
+2. c'est **la comparaison au chiffre connu** (358 M par jeton pour le modèle ENTIER, §21 de la
+   campagne) qui l'a rendu visible : 12× plus que le modèle complet pour la moitié de ses
+   couches ne pouvait pas être juste ;
+3. corrigé (`fetch_max` au lieu de `fetch_add`), et le résultat est **178,9 M paires par pas**
+   pour la moitié distante — la moitié des couches, la moitié des paires.
+
+**Le pilote sait désormais ce que coûte la moitié distante**, annoncé par le nœud lui-même, sans
+le déduire de son propre travail :
+
+```text
+paires du pair    : 8408924160 au total, 178.9 M par pas (annoncées par le nœud — protocole v8)
+```
+
+**Ce qui reste pour clore C10** : le `budget_paires` dans la topologie, comparé à ce compte par
+pas, avec arrêt explicite (**code 9**) — le transport est fait, il ne manque que le contrôle.
+
+**Vérifications** : `porte-flux.sh` **vert**, **122 tests verts**.
+
+---
+
 ## PROTOCOLE v8 — SPÉCIFIÉ (11 octobre 17 h) : le compte de PAIRES du nœud
 
 Objectif : clore le troisième volet de C10 (le budget `paires/s`). Les paires sont calculées par

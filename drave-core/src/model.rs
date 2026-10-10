@@ -2393,6 +2393,12 @@ pub struct Model {
     /// entière, et l'écart entre les deux est exactement ce que le croisement
     /// push/pull de 22 % arbitre (`reports/rapport-croisement-push-pull.md`).
     pub paires: [u64; 3],
+    /// PROTOCOLE v8 : le compte de paires à ÉMETTRE dans la trame de réponse. Le NŒUD le
+    /// remplit avant d'envoyer (`run_serveur_flux`) ; le PILOTE le laisse à zéro. Le champ est
+    /// donc DIRECTIONNEL : dans un en-tête partagé par les deux sens, zéro veut dire « je ne
+    /// suis pas le nœud », et c'est écrit ici pour que la prochaine relecture ne le prenne pas
+    /// pour une mesure symétrique.
+    pub paires_flux: u64,
     /// Nombre de niveaux de quantification des **activations** (127 pour int8,
     /// 32767 pour int16). Les poids restent int8 : c'est la précision de
     /// l'activation qui décide de la fidélité au modèle flottant.
@@ -4464,7 +4470,8 @@ forcent l'un ou l'autre partout",
             engram, engram_poids, historique: Vec::new(),
             hc_porte_flux: None, hc_porte_imposee: None,
             kv: caches_kv,
-            ctx, events: 0, paires: [0; 3], act_levels: 127.0, act_thresh: 0.0, act_topk: 0, act_renorm: false,
+            ctx, events: 0, paires: [0; 3], paires_flux: 0, act_levels: 127.0,
+            act_thresh: 0.0, act_topk: 0, act_renorm: false,
             act_topk_proj: [0; 7], attn_topk: 0, attn_events: 0, qk_topk: 0,
             moe_topk: 0,
             profil_neurones: None,

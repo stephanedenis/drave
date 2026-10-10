@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 47.7 h |
-| Tours | 73 |
-| Messages | 1941 |
-| Appels d'outils | 1793 |
+| Durée | 47.8 h |
+| Tours | 74 |
+| Messages | 1949 |
+| Appels d'outils | 1799 |
 | Fichiers touchés | 61 |
-| Commandes | 1543 |
+| Commandes | 1549 |
 | Sous-agents | 3 |
-| Commits | 163 |
+| Commits | 164 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -181,6 +181,8 @@
 **Tour 72** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 **Tour 73** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
+
+**Tour 74** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -3119,7 +3121,41 @@ Là où le câblage sans transport donnait **195,5685 contre 50,3829** — un fa
 
 **Synthèse produite :**
 
-⏵ Round 30 : reconnaissance du v8 — où le nœud compte-t-il ses paires, et comment les lire ?
+⏵ Round 30 livré : protocole v8 **spécifié** — le compte de paires du nœud
+
+**Ce round** — 1 commit poussé. Un round de conception, sur le patron qui a réussi pour le v7 (spécifier → tenter → livrer).
+
+Objectif : clore le **troisième volet de C10** (le budget `paires/s`). Les paires sont calculées **par le nœud** ; le pilote ne peut donc pas les borner sans qu'elles lui soient **transportées**.
+
+**Reconnaissance faite** — le compteur existe et est déjà exploité côté local :
+```text
+model.rs:2395   pub paires: [u64; 3],      // attention · experts · partagé
+main.rs:1513    let pa = mdl.paires;       // le rapport le lit tel quel
+main.rs:7299    let pt: u64 = pa.iter().sum::<u64>() + scores;
+```
+
+**Les six modifications** : en-tête **91 → 99** (un `u64`, les paires dépassent 2³²) · `VERSION_FLUX` **7 → 8** · `envoyer_flux` écrit à l'offset 91 · `recevoir_flux` lit un `u64` → champ `paires_du_pair` · le pilote publie le compte du pair · **`budget_paires`** dans la topologie, comparé au compte du pair par pas, avec **arrêt explicite (code 9) et aucune perplexité**.
+
+**Et la difficulté que le v7 n'avait pas**, écrite noir sur blanc : l'en-tête est **partagé par les deux sens**, or ce champ est **directionnel** — le pilote y met 0, le nœud y met son compte. Un champ qui ne veut dire quelque chose que dans un sens doit être écrit dans le commentaire, sinon la prochaine relecture le prendra pour une mesure symétrique.
+
+**Ce qui vérifie ce changement** : les huit portes réparties du v7 (`porte-flux` en tête), plus un cas neuf pour le budget de paires. Les tests de trame forgée **calculent** maintenant leur remplissage — c'est le v7 qui l'a appris — donc seules les deux assertions « de mémoire » restent à mettre à jour.
+
+**Bilan** : 30 rounds, 22 portes toutes vertes, 122 tests, protocoles v7 livré et v8 spécifié. L'objectif reste **actif**.
+
+### Tour 74 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Implement the pair-count transport
+- bash — Emit and publish the pair count
+- bash — Fix the print and test
+- bash — Verify the pair count travels and porte-flux passes
+- bash — Fix the double counting and re-measure
+- bash — Verify, document and commit v8
+
+**Synthèse produite :**
+
+⏵ Chiffre correct : **178,9 M paires par pas** (12 couches sur 24, cohérent avec 358 M pour l'entier) — je vérifie et commite
 
 ## 3. Travail accompli
 
@@ -3237,7 +3273,7 @@ Là où le câblage sans transport donnait **195,5685 contre 50,3829** — un fa
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1503 autres
+- … et 1509 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3365,7 +3401,7 @@ Là où le câblage sans transport donnait **195,5685 contre 50,3829** — un fa
 
 ## 5. Erreurs rencontrées
 
-77 sorties en erreur ou divergentes. Les premières :
+78 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : ```  ### 🤖 Assistant  ⏵ **En transformers 5, `AutoModel` rend directement `Qwen2Model` (pas de `.model`). Je corrige le diagnostic.**  - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitH
 - **T2** : 3310393 bash -c pgrep -af "essai_decharge" | grep python | head; echo "--- logs ---"; tail -2 /tmp/ec_d192_lr3e3.log 2>/dev/null; tail -2 /tmp/ec_d192_lr1e3.log 2>/dev/null; echo "---"; ls -la /tmp/ec
@@ -3548,4 +3584,5 @@ Là où le câblage sans transport donnait **195,5685 contre 50,3829** — un fa
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib p = pathlib.Path("docs/sprint-cerveau.md") s = p.read_text() a = "## ▶ 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib p = pathlib.Path("docs/sprint-cerveau.md") s = p.read_text() a = "## ▶ 
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 bash tools/porte-flux.sh > /tmp/pf31.txt 2>&1; echo "porte-flux code=$?"; timeout 600 cargo te
 

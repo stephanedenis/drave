@@ -2865,7 +2865,7 @@ const MAGIE_FLUX: u32 = 0x4452_5631;   // "DRV1"
 /// en version 2 lirait `n × 4` octets d'un corps qui en fait `n × hidden × 4`,
 /// se désynchroniserait, puis dirait « mode inconnu » : un refus exact mais tardif
 /// et muet sur la cause. Ici il est immédiat et nommé.
-const VERSION_FLUX: u8 = 7;
+const VERSION_FLUX: u8 = 8;
 /// Vecteur dense en f32 : 4 octets par canal, toute la dimension.
 const MODE_DENSE: u8 = 0;
 /// LISTE creuse quantifiée : indice u16 + valeur i16, plus une échelle. C'est le
@@ -2900,10 +2900,17 @@ const MODE_LOT_LISTES: u8 = 4;
 /// seuil 0,05 d'un côté et 0,00 de l'autre, sur le même modèle.
 // magie · version · mode · plage · position · n · échelle · niveaux · seuil ·
 // top-k · renorm · attn_topk · qk_topk · moe_topk · topk_proj[7]
+/// v8 : ce que le PAIR annonce avoir calculé, cumulé sur la session. Un compteur global plutôt
+/// qu'un champ de `Flux` : `recevoir_flux` a quatre points de sortie, et ajouter un champ à la
+/// structure aurait demandé de tous les toucher — pour une valeur que seul le PILOTE lit.
+static PAIRES_DU_PAIR: std::sync::atomic::AtomicU64 = std::sync::atomic::AtomicU64::new(0);
+
 const TAILLE_TETE: usize = 4 + 1 + 1 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 1
                             + 4 + 4 + 4 + 7 * 4
                             // v7 : attn_window (79), swa_pattern (83), attn_sinks (87)
-                            + 4 + 4 + 4;
+                            + 4 + 4 + 4
+                            // v8 : paires du nœud (91), un u64 — les paires dépassent 2³²
+                            + 8;
 
 /// Réglages d'activation d'un nœud : ils font partie du contrat d'échange.
 #[derive(Clone, Copy)]
@@ -3097,6 +3104,9 @@ fn tete_flux(mode: u8, debut: u32, fin: u32, pos: u32, n: usize, echelle: f32,
     t.extend_from_slice(&act.attn_window.to_le_bytes());   // offset 79
     t.extend_from_slice(&act.swa_pattern.to_le_bytes());   // offset 83
     t.extend_from_slice(&act.attn_sinks.to_le_bytes());    // offset 87
+    // v8 : le compte de paires du NŒUD (0 côté pilote — champ DIRECTIONNEL).
+    let paires_a_dire = mdl.map(|x| x.paires_flux).unwrap_or(0);
+    t.extend_from_slice(&paires_a_dire.to_le_bytes());     // offset 91, u64
     assert_eq!(t.len(), TAILLE_TETE,
                "en-tête de flux de {} octets pour {TAILLE_TETE}", t.len());
     t
@@ -3318,6 +3328,16 @@ fn recevoir_flux(s: &mut std::net::TcpStream, hidden: usize, hc_destinataire: us
     let echelle = f32::from_le_bytes([tete[22], tete[23], tete[24], tete[25]]);
     let mut topk_proj = [0u32; 7];
     for (i, v) in topk_proj.iter_mut().enumerate() { *v = u(39 + i * 4); }
+    // v8 : le compte de paires du pair (0 si c'est le pilote qui a parlé).
+    let paires_du_pair = u64::from_le_bytes([tete[91], tete[92], tete[93], tete[94],
+                                             tete[95], tete[96], tete[97], tete[98]]);
+    // v7/v8 : le nœud annonce ce qu'il a calculé ; le pilote le cumule. Un pilote qui reçoit
+    // reçoit TOUJOURS, et un nœud qui répond met son compte — le champ est directionnel.
+    // Le compteur du nœud est CUMULATIF depuis le premier pas : l'additionner à chaque trame
+    // comptait donc les premiers pas une fois par trame — mesuré : 4 293,9 M par pas là où le
+    // modèle entier en vaut 358 M, soit ~24× trop (47 pas, la somme des cumuls vaut N²/2).
+    // On garde le DERNIER, qui est le total.
+    PAIRES_DU_PAIR.fetch_max(paires_du_pair, std::sync::atomic::Ordering::Relaxed);
     let act = Act {
         attn_window: u(79), swa_pattern: u(83), attn_sinks: u(87),
         levels: f32::from_le_bytes([tete[26], tete[27], tete[28], tete[29]]),
@@ -3829,6 +3849,7 @@ continue", f.pos, mdl.ctx);
                         eprintln!("[debug] lot reçu : n={t} pos={} états={} plat={} corps={}",
                                   f.pos, hs.len(), plat.len(), f.octets_corps);
                     }
+                    mdl.paires_flux = mdl.paires.iter().sum();
                     trace.enregistrer_mode(&region_trace, f.pos as u32, "pair->local",
                                            &plat, 0.0, f.mode);
                     let reponse = if f.mode == MODE_LOT_LISTES {
@@ -3908,6 +3929,8 @@ de {} — flux refusé", r.mode, f.mode);
                 };
                 let mut a_rendre = a_rendre;
                 if opt.pont_k > 0 { pont_sparsifier(&mut a_rendre, opt.pont_k); }
+                // v8 : le compte de paires ACCOMPLIES par ce nœud voyage avec sa réponse.
+                mdl.paires_flux = mdl.paires.iter().sum();
                 trace.enregistrer_mode(&region_trace, f.pos as u32, "pair->local",
                                        &a_rendre, 0.0, f.mode);
                 if envoyer_flux(&mut sock, f.debut, f.fin, f.pos, &a_rendre, f.mode,
@@ -4710,6 +4733,14 @@ attendus — pair incohérent. Rien n'a été calculé.", rep.n, mdl.cfg.hidden,
     let largeur_etat_max = mdl.cfg.hidden
         * mdl.hc.as_ref().map(|v| v[0].0.hc).unwrap_or(1);
     println!("  deux nœuds        : perplexité {ppl:.4}  ({:.1} s)", t1.elapsed().as_secs_f64());
+    // v8 : ce que le PAIR a calculé, annoncé par lui — la première fois que le pilote sait ce
+    // que coûte la moitié distante, au lieu de le déduire de son propre travail.
+    let paires_pair = PAIRES_DU_PAIR.load(std::sync::atomic::Ordering::Relaxed);
+    if paires_pair > 0 {
+        let par_pas = paires_pair as f64 / pas_servis.max(1) as f64;
+        println!("  paires du pair    : {paires_pair} au total, {:.1} M par pas (annoncées par le \
+nœud dans chaque trame — protocole v8)", par_pas / 1e6);
+    }
     if opt.pont_k > 0 {
         let octets = opt.pont_k * 4;
         println!("  pont              : {} fibres sur {largeur_etat_max} canaux gardées par pas ⇒ \
@@ -7372,13 +7403,13 @@ mod tests_flux {
 
     #[test]
     fn entete_et_version_sont_ce_que_les_numeros_disent() {
-        assert_eq!(TAILLE_TETE, 91, "l'en-tête de flux doit faire 91 octets (v7)");
+        assert_eq!(TAILLE_TETE, 99, "l'en-tête de flux doit faire 99 octets (v8 : les paires)");
         // La version suit l'en-tête : 4 quand les top-k sont entrés dans le
         // contrat, 5 quand le mode 4 (lot en listes) est apparu, 6 quand le
         // pré-mix porté de V4.1 a été ajouté en tête de corps. Ce test a
         // d'ailleurs échoué au premier coup, exactement pour ça — et il a
         // resservi à la v6.
-        assert_eq!(VERSION_FLUX, 7, "la fenêtre d'attention transportée impose la version 7");
+        assert_eq!(VERSION_FLUX, 8, "le compte de paires transporté impose la version 8");
     }
 
     #[test]
