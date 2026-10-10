@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 44.5 h |
-| Tours | 49 |
-| Messages | 1752 |
-| Appels d'outils | 1652 |
+| Durée | 44.6 h |
+| Tours | 50 |
+| Messages | 1763 |
+| Appels d'outils | 1661 |
 | Fichiers touchés | 61 |
-| Commandes | 1402 |
+| Commandes | 1411 |
 | Sous-agents | 3 |
-| Commits | 139 |
+| Commits | 140 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -133,6 +133,8 @@
 **Tour 48** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1469 caractères tronqués]
 
 **Tour 49** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1469 caractères tronqués]
+
+**Tour 50** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1469 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -2269,7 +2271,42 @@ Les six **dernières** positions de l'invite B prélevées une à une, après le
 
 **Synthèse produite :**
 
-⏵ Résultat complet : la séparation s'effondre (1,31 → 19,94) et le bon indice retombe au hasard
+⏵ Round 6 livré : prédiction réfutée proprement — et elle confirme une leçon par une 3ᵉ voie
+
+**Ce round** — 1 commit poussé, 122 tests verts. Une **prédiction falsifiable formulée, testée, réfutée** :
+
+Le round 5 avait identifié le mécanisme (la clé est un **k-WTA** → elle saute d'un jeton à l'autre). D'où la prédiction : *former la clé sur la moyenne de W positions voisines doit lisser l'hypersensibilité*. Mesuré (`--episodique-fenetre`) :
+
+| fenêtre | indice « only » (le bon) | indice « code » (le mauvais) | **séparation** |
+|---|---|---|---|
+| **1** | **50** | 1 006 | **1,31/64** |
+| 4 | 653 | 1 005 | 1,73/64 |
+| 16 | 573 | 1 004 | 4,58/64 |
+| 64 | **449** (= le hasard) | 1 004 | **19,94/64** |
+
+- **Réfutée, et proprement** : le lissage **détruit le bon indice** (50 → 449, exactement le hasard) sans aider le mauvais (1 006 → 1 004), et il **effondre la sélectivité** (1,31 → 19,94 canaux partagés sur 64 : la clé d'une moyenne ressemble à celle de tout le monde).
+- **Troisième voie indépendante qui confirme le §24 quater** : abstraire par moyennage détruit la rappelabilité — prototype moyen 22 % contre 87 % pour l'exemplaire ; clé moyenne qui ne retrouve pas le passage ; fenêtre moyenne qui fait tomber le meilleur indice au hasard. **La sélectivité de cette mémoire EST la netteté de sa clé**, et l'hypersensibilité à l'indice en est le prix.
+- **La conséquence change de direction** : le lissage étant exclu et le choix de l'indice n'étant pas devinable, **retrouver un passage depuis une question n'est pas ce que le rappel par le contenu sait faire**. Ce qui reste solide (tout mesuré) : la complétion de motif (Δ = 2 jetons à 50 % de dégradation), la localisation en jetons, et l'injection d'un état retrouvé. Pour la recherche par question : des **jetons** (RAG) ou une **clé apprise**.
+
+**Suivant** (dans `docs/sprint-cerveau.md`) : soit une **clé apprise** (ce qui suppose d'entraîner — le chantier de C7 vers les poids), soit acter que la mémoire sert par complétion de motif et passer aux capacités restantes (C8 têtes dédiées, C7 poids, modèles H/I/J). L'objectif reste **actif**.
+
+### Tour 50 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1749 caractères tronqués]
+
+*9 appels d'outils.* Actions notables :
+
+- bash — Inspect the topology link struct
+- bash — Read the link JSON parser
+- bash — Add the link budget to the topology
+- bash — Fix the test initializer
+- bash — Find where the driver reads the link delay
+- bash — Read the delay extraction and byte accounting
+- bash — Wire the budget check into the driver
+- bash — Write and run the budget gate
+- bash — Document and commit the link budget
+
+**Synthèse produite :**
+
+⏵ C10 : porte 3/3 verte — budget déclaré, dépassement nommé, code 6, aucun résultat partiel
 
 ## 3. Travail accompli
 
@@ -2387,7 +2424,7 @@ Les six **dernières** positions de l'invite B prélevées une à une, après le
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1362 autres
+- … et 1371 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2515,7 +2552,7 @@ Les six **dernières** positions de l'invite B prélevées une à une, après le
 
 ## 5. Erreurs rencontrées
 
-69 sorties en erreur ou divergentes. Les premières :
+70 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : ```  ### 🤖 Assistant  ⏵ **En transformers 5, `AutoModel` rend directement `Qwen2Model` (pas de `.model`). Je corrige le diagnostic.**  - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitH
 - **T2** : 3310393 bash -c pgrep -af "essai_decharge" | grep python | head; echo "--- logs ---"; tail -2 /tmp/ec_d192_lr3e3.log 2>/dev/null; tail -2 /tmp/ec_d192_lr1e3.log 2>/dev/null; echo "---"; ls -la /tmp/ec
@@ -2673,5 +2710,6 @@ Les six **dernières** positions de l'invite B prélevées une à une, après le
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_te
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 

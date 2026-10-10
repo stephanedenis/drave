@@ -28042,3 +28042,192 @@ fini
 ⏵ Résultat complet : la séparation s'effondre (1,31 → 19,94) et le bon indice retombe au hasard
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\n\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\na = \"## Annexe — manifeste des journaux\"\nsec = \"\"\"## 31. Clé de FENÊTRE : la prédiction est RÉFUTÉE, et elle … [7764 caractères tronqués]`
+
+  ```
+docs fenetre
+test result: ok. 122 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.33s
+892acfd C6 : clé de FENÊTRE — la prédiction est RÉFUTÉE, et elle confirme le §24 quater
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 6 livré : prédiction réfutée proprement — et elle confirme une leçon par une 3ᵉ voie
+
+**Ce round** — 1 commit poussé, 122 tests verts. Une **prédiction falsifiable formulée, testée, réfutée** :
+
+Le round 5 avait identifié le mécanisme (la clé est un **k-WTA** → elle saute d'un jeton à l'autre). D'où la prédiction : *former la clé sur la moyenne de W positions voisines doit lisser l'hypersensibilité*. Mesuré (`--episodique-fenetre`) :
+
+| fenêtre | indice « only » (le bon) | indice « code » (le mauvais) | **séparation** |
+|---|---|---|---|
+| **1** | **50** | 1 006 | **1,31/64** |
+| 4 | 653 | 1 005 | 1,73/64 |
+| 16 | 573 | 1 004 | 4,58/64 |
+| 64 | **449** (= le hasard) | 1 004 | **19,94/64** |
+
+- **Réfutée, et proprement** : le lissage **détruit le bon indice** (50 → 449, exactement le hasard) sans aider le mauvais (1 006 → 1 004), et il **effondre la sélectivité** (1,31 → 19,94 canaux partagés sur 64 : la clé d'une moyenne ressemble à celle de tout le monde).
+- **Troisième voie indépendante qui confirme le §24 quater** : abstraire par moyennage détruit la rappelabilité — prototype moyen 22 % contre 87 % pour l'exemplaire ; clé moyenne qui ne retrouve pas le passage ; fenêtre moyenne qui fait tomber le meilleur indice au hasard. **La sélectivité de cette mémoire EST la netteté de sa clé**, et l'hypersensibilité à l'indice en est le prix.
+- **La conséquence change de direction** : le lissage étant exclu et le choix de l'indice n'étant pas devinable, **retrouver un passage depuis une question n'est pas ce que le rappel par le contenu sait faire**. Ce qui reste solide (tout mesuré) : la complétion de motif (Δ = 2 jetons à 50 % de dégradation), la localisation en jetons, et l'injection d'un état retrouvé. Pour la recherche par question : des **jetons** (RAG) ou une **clé apprise**.
+
+**Suivant** (dans `docs/sprint-cerveau.md`) : soit une **clé apprise** (ce qui suppose d'entraîner — le chantier de C7 vers les poids), soit acter que la mémoire sert par complétion de motif et passer aux capacités restantes (C8 têtes dédiées, C7 poids, modèles H/I/J). L'objectif reste **actif**.
+
+
+## Tour 50
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 mémoire épisodique, C7 consolidation, C8 périphérie, C9 latéralité, C10 budgets, et la diffusion réseau du bus de C5 ; (b) les expériences E2-E9 de docs/biologie-pour-drave.md et docs/hebbien-differentiel-et-biologie.md ; (c) les dessins de modèle H/I/J de docs/modele-pour-drave.md ; (d) les manques du registre docs/manques.md (noyau de listes pour les experts, noyau de listes GPU, encodeurs) — l'implémenter ou la mesurer, la doter d'une porte vérifiable, la documenter, commiter, pousser, et enchaîner immédiatement sur la suivante. Contraintes : les 23 portes du dépôt et tous les tests restent verts (porte-flux.sh après toute modification du chemin d'exécution), le profil release reste le binaire de mesure, le crate reste std seul, et docs/sprint-cerveau.md reste l'état resumable mis à jour à chaque round. Ne jamais s'arrêter faute de tâches planifiées : en inventer de nouvelles, mesurables, plutôt que d'attendre."
+Round: 7/60
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ C10 : je clôture les budgets par lien — déclaration dans la topologie, refus si dépassée
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"pub struct Lien\\|pub struct LienJson\\|struct Lien\" -A 8 drave-core/src/topologie.rs | head -24 && grep -n \"mode\" drave-core/src/topologie.rs | head -8", "description": "Inspect the topology link struct"}`
+
+  ```
+56:pub struct Lien {
+57-    pub de: String,
+58-    pub vers: String,
+59-    pub mode: String,
+60-    /// Délai imposé sur ce lien, en millisecondes (C3 du plan). Zéro = pas de
+61-    /// délai : c'est le défaut, et c'est la porte de non-régression.
+62-    pub delai_ms: u64,
+63-}
+64-
+29://!     {"de": "r0", "vers": "r1", "mode": "listes", "delai_ms": 0}
+51:/// Un lien : d'une région vers une autre, avec son mode de transport, son délai
+52:/// imposé et, plus tard, son budget. Le mode reprend les modes du flux existant
+59:    pub mode: String,
+212:            let (mut de, mut vers, mut mode, mut delai) = (None, None, None, 0u64);
+216:                "mode" => { mode = Some(a.chaine()?); Ok(()) }
+225:            let mode = mode.unwrap_or_else(|| "listes".to_string());
+226:            match mode.as_str() {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '205,250p' drave-core/src/topologie.rs", "description": "Read the link JSON parser"}`
+
+  ```
+_ => return Err(ErreurTopologie(
+                    "région incomplète : « id », « couches » et « instance » sont obligatoires".into())),
+            };
+            regions.push(Region { id, premiere: prem, derniere: der, instance: inst });
+            Ok(())
+        }),
+        "liens" => a.tableau(|a| {
+            let (mut de, mut vers, mut mode, mut delai) = (None, None, None, 0u64);
+            a.objet(|a, cle| match cle {
+                "de" => { de = Some(a.chaine()?); Ok(()) }
+                "vers" => { vers = Some(a.chaine()?); Ok(()) }
+                "mode" => { mode = Some(a.chaine()?); Ok(()) }
+                "delai_ms" => { delai = a.entier()?; Ok(()) }
+                autre => Err(ErreurTopologie(format!("clé inconnue dans un lien : « {autre} »"))),
+            })?;
+            let (de, vers) = match (de, vers) {
+                (Some(a), Some(b)) => (a, b),
+                _ => return Err(ErreurTopologie(
+                    "lien incomplet : « de » et « vers » sont obligatoires".into())),
+            };
+            let mode = mode.unwrap_or_else(|| "listes".to_string());
+            match mode.as_str() {
+                "f32" | "listes" | "blocs" | "lot" | "lot
+… [907 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/topologie.rs\")\ns = p.read_text()\n\na = \"\"\"    /// Délai imposé sur ce lien, en millisecondes (C3 du plan). Zéro = pas de\n    /// délai : c'est le défaut, e … [2464 caractères tronqués]`
+
+  ```
+budget dans la topologie
+error[E0063]: missing field `budget_octets` in initializer of `Lien`
+   --> src/topologie.rs:424:26
+    |
+424 |         let liens = vec![Lien { de: "local".into(), vers: "distant".into(),
+    |                          ^^^^ missing `budget_octets`
+
+warning: unused variable: `t`
+   --> src/kimi_k3.rs:272:17
+    |
+--
+error: could not compile `drave-core` (bin "drave") due to 1 previous error; 30 warnings emitted
+BUILD_END
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '424,427p' drave-core/src/topologie.rs && python3 - <<'ENDPY'\nimport pathlib, re\np = pathlib.Path(\"drave-core/src/topologie.rs\")\ns = p.read_text()\n# le test construit un Lien à la main : ajouter le champ\ns = re.sub(r'(L … [490 caractères tronqués]`
+
+  ```
+let liens = vec![Lien { de: "local".into(), vers: "distant".into(),
+                                mode: "listes".into(), delai_ms: 0 }];
+        Topologie { regions, liens }
+    }
+test corrige
+BUILD_END
+425:                                mode: "listes".into(), delai_ms: 0, budget_octets: None }];
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"delai_ms\\b\" drave-core/src/main.rs | head -6 && grep -n \"delai_ms\" drave-core/src/main.rs | sed -n '3,8p'", "description": "Find where the driver reads the link delay"}`
+
+  ```
+3665:                    if lien.delai_ms > 0 {
+3667:doit pas changer)", ma.id, lien.vers, lien.delai_ms);
+3669:                    delai_relais = lien.delai_ms;
+4161:    let delai_ms: u64 = if let Some(f) = opt.topologie.clone() {
+4164:            .and_then(|t| t.lien_entre("local", &tp_region_distante).map(|l| l.delai_ms))
+4167:    if delai_ms > 0 {
+3669:                    delai_relais = lien.delai_ms;
+4161:    let delai_ms: u64 = if let Some(f) = opt.topologie.clone() {
+4164:            .and_then(|t| t.lien_entre("local", &tp_region_distante).map(|l| l.delai_ms))
+4167:    if delai_ms > 0 {
+4169:changer (seul le temps change) — c'est la porte de C3", tp_region_distante, delai_ms);
+4434:        if delai_ms > 0 {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '4161,4172p' drave-core/src/main.rs && grep -n \"octets_envoyes += o as u64;\" drave-core/src/main.rs | head -3", "description": "Read the delay extraction and byte accounting"}`
+
+  ```
+let delai_ms: u64 = if let Some(f) = opt.topologie.clone() {
+        std::fs::read_to_string(&f).ok()
+            .and_then(|t| topologie::lire_json(&t).ok())
+            .and_then(|t| t.lien_entre("local", &tp_region_distante).map(|l| l.delai_ms))
+            .unwrap_or(0)
+    } else { 0 };
+    if delai_ms > 0 {
+        println!("[delais] lien local → {} : +{} ms par trame · le résultat ne doit pas \
+changer (seul le temps change) — c'est la porte de C3", tp_region_distante, delai_ms);
+    }
+    // C4 : le compteur de pas de la région locale.
+    let mut pas_servis: u64 = 0;
+4339:            octets_envoyes += o as u64;
+4455:        octets_envoyes += o as u64;
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\n\n# 1. lire le budget du lien, comme le délai\na = \"\"\"    if delai_ms > 0 {\n        println!(\"[delais] lien local → {} : +{} m … [3061 caractères tronqués]`
+
+  ```
+budget verifie au passage
+BUILD_END
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/porte-budget.sh <<'GATEFILE'\n#!/bin/bash\n# porte-budget.sh — C10 : le BUDGET D'OCTETS par lien, déclaré et vérifié.\n#\n# POURQUOI UN BUDGET SE VÉRIFIE AU PREMIER FLUX, ET PAS AU DÉMARRAGE. La taille d'un flux\n# n'est  … [3753 caractères tronqués]`
+
+  ```
+=== 1. sans budget déclaré (défaut) ===
+  perplexité 111.9225 · 1951 octets par flux · code 0
+=== 2. budget GÉNÉREUX : le résultat ne doit pas changer ===
+  [budget] lien local → d : 2451 octets par pas AU PLUS (déclaré dans la topologie) — dépassement = arrêt, jamais un résultat partiel
+  perplexité 111.9225 · code 0
+  ✅ budget généreux : résultat identique (111.9225)
+=== 3. budget INSUFFISANT : arrêt explicite, code 6, AUCUNE perplexité ===
+  [budget] lien local → d : 975 octets par pas AU PLUS (déclaré dans la topologie) — dépassement = arrêt, jamais un résultat partiel
+    référence locale  : perplexité 113.0068  (2.0 s)
+  [budget] DÉPASSEMENT sur le lien local → d : 1860 octets pour un budget de 975 — l'exécution s'arrête ICI, au pas 0. Aucune perplexité n'est rendue : elle porterait sur un transport qui n'est pas celui qui a été déclaré.
+  ✅ dépassement annoncé (lien, octets, budget, pas), code 6, aucune perplexité rendue
+  ```
+
+### 🤖 Assistant
+
+⏵ C10 : porte 3/3 verte — budget déclaré, dépassement nommé, code 6, aucun résultat partiel
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\n\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\na = \"## Annexe — manifeste des journaux\"\nsec = \"\"\"## 32. Budget d'octets par lien (C10) : déclaré, et vérifi … [5409 caractères tronqués]`

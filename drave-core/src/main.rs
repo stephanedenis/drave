@@ -4168,6 +4168,19 @@ dit « {pair} » — deux sources pour la même chose, et elles se contredisent"
         println!("[delais] lien local → {} : +{} ms par trame · le résultat ne doit pas \
 changer (seul le temps change) — c'est la porte de C3", tp_region_distante, delai_ms);
     }
+    // C10 : le BUDGET du lien. Déclaré dans la topologie, il se compare à ce qui passe
+    // réellement — la taille d'un flux dépend de l'activité, pas du mode (1 951 octets à
+    // 97,7 % d'activité en listes par blocs, 1 096 à 50 %), donc un contrôle au démarrage
+    // ne pourrait comparer qu'à une valeur nominale inventée.
+    let budget_octets: Option<u64> = if let Some(f) = opt.topologie.clone() {
+        std::fs::read_to_string(&f).ok()
+            .and_then(|t| topologie::lire_json(&t).ok())
+            .and_then(|t| t.lien_entre("local", &tp_region_distante).and_then(|l| l.budget_octets))
+    } else { None };
+    if let Some(b) = budget_octets {
+        println!("[budget] lien local → {tp_region_distante} : {b} octets par pas AU PLUS \
+(déclaré dans la topologie) — dépassement = arrêt, jamais un résultat partiel");
+    }
     // C4 : le compteur de pas de la région locale.
     let mut pas_servis: u64 = 0;
     // C5 : le BUS DE MODULATION. Un canal neutre ne change RIEN (c'est la porte),
@@ -4336,6 +4349,15 @@ de son côté.");
                                 std::process::exit(1);
                             }
                         };
+            if let Some(b) = budget_octets {
+                if o as u64 > b {
+                    eprintln!("[budget] DÉPASSEMENT sur le lien local → {tp_region_distante} : \
+{o} octets pour un budget de {b} — l'exécution s'arrête ICI, au pas {pos}. Aucune \
+perplexité n'est rendue : elle porterait sur un transport qui n'est pas celui qui a été \
+déclaré.");
+                    std::process::exit(6);
+                }
+            }
             octets_envoyes += o as u64;
             actifs_envoyes += (t * mdl.cfg.hidden) as u64;
             jetons_envoyes += t as u64;
@@ -4452,6 +4474,15 @@ L'exécution s'arrête ICI — aucune perplexité n'est rendue, parce qu'elle po
 l'envoi du flux ({e}) — il a dit pourquoi de son côté.");
                             std::process::exit(1);
                         });
+        if let Some(b) = budget_octets {
+            if o as u64 > b {
+                eprintln!("[budget] DÉPASSEMENT sur le lien local → {tp_region_distante} : \
+{o} octets pour un budget de {b} — l'exécution s'arrête ICI, au pas {pos}. Aucune \
+perplexité n'est rendue : elle porterait sur un transport qui n'est pas celui qui a été \
+déclaré.");
+                std::process::exit(6);
+            }
+        }
         octets_envoyes += o as u64;
         actifs_envoyes += a as u64;
         flux_envoyes += 1;

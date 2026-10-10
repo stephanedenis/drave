@@ -111,6 +111,25 @@ Pour la recherche par question : des **jetons** (RAG) ou une **clé apprise**.
 
 ---
 
+## C10 — FAIT (10 octobre 23 h) : budget d'octets par lien, déclaré et vérifié
+
+Le plan demandait des budgets vérifiés au démarrage ; la mesure a corrigé le plan : **la
+taille d'un flux dépend de l'ACTIVITÉ, pas du mode** (1 951 octets à 97,7 % d'activité,
+1 096 à 50 %). Le budget se compare donc à **ce qui passe**, au pas où il passe.
+
+Topologie : `"budget_octets": N` sur un lien. Porte `tools/porte-budget.sh` :
+
+| cas | mesure |
+|---|---|
+| aucun budget | 111,9225 · 1 951 octets/pas · code 0 |
+| budget généreux (2 451) | **111,9225 — identique** · code 0 |
+| budget insuffisant (975) | premier flux **1 860 octets** ⇒ arrêt **au pas 0**, message nommant lien/octets/budget/pas, **code 6**, **aucune perplexité rendue** |
+
+Même règle que C4 et C9 : **s'arrêter et le dire**, jamais rendre un chiffre qui mentirait
+sur ses conditions.
+
+---
+
 ## ▶ PROCHAINE ACTION (à lire en premier)
 
 État au **10 octobre 11 h 45** : **C1, C3, C4 (pas 1), C5, C5bis, C5ter, C6, C7 (pas 1),
@@ -1010,6 +1029,7 @@ bus (le format de la ligne de contrôle est écrit, le transport reste à câble
 |---|---|
 | 9/10 17 h 10 | **C1a** : module `topologie.rs`, validation stricte, plan, 8 tests, suite à 85 tests. |
 | 9/10 17 h 20 | **C1b pas 1** : la topologie pilote le découpage · porte `tools/porte-topologie.sh` **TENUE** (même chiffre, écart 0,00e0) · deux refus vérifiés. |
+| 10/10 23 h 00 | **C10 — budget d'octets par lien** : `"budget_octets"` dans la topologie, vérifié **sur ce qui passe** (la taille dépend de l'activité, pas du mode). Porte 3 cas : sans budget 111,9225 · budget généreux **identique** · budget insuffisant ⇒ arrêt **au pas 0**, lien/octets/budget nommés, **code 6**, **aucune perplexité**. |
 | 10/10 22 h 00 | **C6 — clé de FENÊTRE : prédiction RÉFUTÉE.** W=1 : 50 (bon indice) et 1 006 (mauvais), séparation 1,31/64. W=4 : 653. W=16 : 573. **W=64 : 449 (= le hasard)** et **séparation 19,94/64**. Le lissage **détruit le bon indice** et **effondre la sélectivité** ⇒ troisième confirmation du §24 quater : **abstraire par moyennage détruit la rappelabilité** ; la sélectivité EST la netteté de la clé. ⇒ pour chercher par question : des **jetons** (RAG) ou une **clé apprise**, pas le contenu brut. |
 | 10/10 20 h 45 | **C6 — le rappel n'est pas CONTINU** : six dernières positions prélevées une à une. `only` (4ᵉ) → **50 jetons**, `code` (5ᵉ) → **1 006** : **deux jetons voisins**, dont les états ont lu presque le même texte. Cause : la clé est un **k-WTA**, donc une petite variation fait entrer/sortir des canaux et la clé **saute** — aucune pente à suivre. Voie ouverte : clé formée sur une **FENÊTRE** de positions. |
 | 10/10 19 h 30 | **C6 — le rappel dépend de l'INDICE** : 8 indices (positions 1..128 depuis la fin de B), distances **[50, 303, 303, 311, 347, 347, 890, 1003]**, moyenne 444, hasard 448. **Un indice trouve (50 jetons, 9× mieux que le hasard), sept sont au hasard** ⇒ le « 3,3× » du round 2 était un tirage chanceux, et **la limite est le CHOIX de l'indice**, pas la mémoire. `--etat-fin` accepte une liste de positions. |
