@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 47.4 h |
-| Tours | 69 |
-| Messages | 1913 |
-| Appels d'outils | 1773 |
+| Durée | 47.5 h |
+| Tours | 70 |
+| Messages | 1922 |
+| Appels d'outils | 1780 |
 | Fichiers touchés | 61 |
-| Commandes | 1523 |
+| Commandes | 1530 |
 | Sous-agents | 3 |
-| Commits | 159 |
+| Commits | 160 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -173,6 +173,8 @@
 **Tour 68** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 **Tour 69** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
+
+**Tour 70** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -2972,7 +2974,47 @@ Le refus ne se déclenche **que si** l'un des trois réglages est demandé : une
 
 **Synthèse produite :**
 
-⏵ L'en-tête est plein (79 octets, zéro marge) — je spécifie le v7 à l'octet près avant de le tenter
+⏵ Round 26 livré : le protocole v7 **spécifié à l'octet près** — et explicitement pas implémenté
+
+**Ce round** — 1 commit poussé. Un round de **conception**, et il est écrit comme tel.
+
+Le refus du round 24 (`--attn-window`, `--swa-pattern`, `--attn-sinks` non transportables) se lève en faisant voyager ces trois réglages. Reconnaissance faite : **l'en-tête est plein**.
+
+```text
+TAILLE_TETE = 79 octets, aucune marge :
+  0 magie · 4 version · 5 mode · 6 debut · 10 fin · 14 pos · 18 n · 22 echelle
+  26 levels · 30 thresh · 34 topk · 38 renorm · 39 topk_proj[7] (39..67)
+  67 attn_topk · 71 qk_topk · 75 moe_topk
+```
+
+**Les cinq modifications, et rien d'autre** :
+1. `struct Act` : `attn_window`, `swa_pattern`, `attn_sinks` (u32) + `du_modele` + `appliquer` ;
+2. `TAILLE_TETE` : 79 + 12 = **91** ;
+3. `VERSION_FLUX` : 6 → **7** (le décodeur refuse une version étrangère — c'est voulu) ;
+4. `tete_flux` : trois `extend_from_slice` aux offsets **79, 83, 87** ;
+5. `recevoir_flux` : trois lectures `u(79)`, `u(83)`, `u(87)` — puis **retirer le refus**.
+
+**Ce qui vérifie ce changement** : `porte-flux.sh` fait parler **les deux côtés** sur les cinq modes et compare les écarts à 0,00e0 / 0,00e0 / 3,65e-2 / 0,00e0 / 4,45e-3 — un en-tête décalé d'un octet y échoue immédiatement. Le garde-fou existe déjà, et c'est ce qui rend le changement tentable.
+
+**Pourquoi pas maintenant** : l'en-tête est plein, donc la modification touche l'encodeur **et** le décodeur **et** la version — trois endroits où une erreur d'un octet casse les cinq modes à la fois. Le round qui l'entreprend doit avoir de la marge pour déboguer ; **j'ai préféré spécifier à l'octet près plutôt que de laisser un arbre cassé**.
+
+**Bilan** : 26 rounds, 22 portes toutes vertes, 122 tests. L'objectif reste **actif**.
+
+### Tour 70 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
+
+*7 appels d'outils.* Actions notables :
+
+- bash — Read Act's methods
+- bash — Implement protocol v7
+- bash — Fix the default Act initializer
+- bash — Complete the initializer and build
+- bash — See which tests fail
+- bash — Revert and inspect the failing assertion
+- bash — Document the v7 attempt and revert
+
+**Synthèse produite :**
+
+⏵ 9 tests encodent la mise en page v6 — je reviens en arrière plutôt que de laisser les tests rouges
 
 ## 3. Travail accompli
 
@@ -3090,7 +3132,7 @@ Le refus ne se déclenche **que si** l'un des trois réglages est demandé : une
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1483 autres
+- … et 1490 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3218,7 +3260,7 @@ Le refus ne se déclenche **que si** l'un des trois réglages est demandé : une
 
 ## 5. Erreurs rencontrées
 
-74 sorties en erreur ou divergentes. Les premières :
+77 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : ```  ### 🤖 Assistant  ⏵ **En transformers 5, `AutoModel` rend directement `Qwen2Model` (pas de `.model`). Je corrige le diagnostic.**  - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitH
 - **T2** : 3310393 bash -c pgrep -af "essai_decharge" | grep python | head; echo "--- logs ---"; tail -2 /tmp/ec_d192_lr3e3.log 2>/dev/null; tail -2 /tmp/ec_d192_lr1e3.log 2>/dev/null; echo "---"; ls -la /tmp/ec
@@ -3395,6 +3437,7 @@ Le refus ne se déclenche **que si** l'un des trois réglages est demandé : une
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib p = pathlib.Path("docs/sprint-cerveau.md") s = p.read_text() a = "## ▶ 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib p = pathlib.Path("docs/sprint-cerveau.md") s = p.read_text() a = "## ▶ 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib p = pathlib.Path("docs/sprint-cerveau.md") s = p.read_text() a = "## ▶ 
 

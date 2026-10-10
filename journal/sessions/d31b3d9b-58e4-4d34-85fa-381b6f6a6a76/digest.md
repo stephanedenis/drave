@@ -30551,3 +30551,169 @@ const TAILLE_TETE: usize = 4 + 1 + 1 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 1
 ⏵ L'en-tête est plein (79 octets, zéro marge) — je spécifie le v7 à l'octet près avant de le tenter
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"docs/sprint-cerveau.md\")\ns = p.read_text()\na = \"## ▶ PROCHAINE ACTION (à lire en premier)\"\nneuf = \"\"\"## PROTOCOLE v7 — SPÉCIFIÉ À L'OCTET PRÈS (11 octobre 13 h), PAS EN … [3882 caractères tronqués]`
+
+  ```
+spec v7 ecrite
+c23f43f Protocole v7 specifie a l'octet pres, et PAS implemente : le round qui le fera doit avoir de la marge
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 26 livré : le protocole v7 **spécifié à l'octet près** — et explicitement pas implémenté
+
+**Ce round** — 1 commit poussé. Un round de **conception**, et il est écrit comme tel.
+
+Le refus du round 24 (`--attn-window`, `--swa-pattern`, `--attn-sinks` non transportables) se lève en faisant voyager ces trois réglages. Reconnaissance faite : **l'en-tête est plein**.
+
+```text
+TAILLE_TETE = 79 octets, aucune marge :
+  0 magie · 4 version · 5 mode · 6 debut · 10 fin · 14 pos · 18 n · 22 echelle
+  26 levels · 30 thresh · 34 topk · 38 renorm · 39 topk_proj[7] (39..67)
+  67 attn_topk · 71 qk_topk · 75 moe_topk
+```
+
+**Les cinq modifications, et rien d'autre** :
+1. `struct Act` : `attn_window`, `swa_pattern`, `attn_sinks` (u32) + `du_modele` + `appliquer` ;
+2. `TAILLE_TETE` : 79 + 12 = **91** ;
+3. `VERSION_FLUX` : 6 → **7** (le décodeur refuse une version étrangère — c'est voulu) ;
+4. `tete_flux` : trois `extend_from_slice` aux offsets **79, 83, 87** ;
+5. `recevoir_flux` : trois lectures `u(79)`, `u(83)`, `u(87)` — puis **retirer le refus**.
+
+**Ce qui vérifie ce changement** : `porte-flux.sh` fait parler **les deux côtés** sur les cinq modes et compare les écarts à 0,00e0 / 0,00e0 / 3,65e-2 / 0,00e0 / 4,45e-3 — un en-tête décalé d'un octet y échoue immédiatement. Le garde-fou existe déjà, et c'est ce qui rend le changement tentable.
+
+**Pourquoi pas maintenant** : l'en-tête est plein, donc la modification touche l'encodeur **et** le décodeur **et** la version — trois endroits où une erreur d'un octet casse les cinq modes à la fois. Le round qui l'entreprend doit avoir de la marge pour déboguer ; **j'ai préféré spécifier à l'octet près plutôt que de laisser un arbre cassé**.
+
+**Bilan** : 26 rounds, 22 portes toutes vertes, 122 tests. L'objectif reste **actif**.
+
+
+## Tour 70
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 mémoire épisodique, C7 consolidation, C8 périphérie, C9 latéralité, C10 budgets, et la diffusion réseau du bus de C5 ; (b) les expériences E2-E9 de docs/biologie-pour-drave.md et docs/hebbien-differentiel-et-biologie.md ; (c) les dessins de modèle H/I/J de docs/modele-pour-drave.md ; (d) les manques du registre docs/manques.md (noyau de listes pour les experts, noyau de listes GPU, encodeurs) — l'implémenter ou la mesurer, la doter d'une porte vérifiable, la documenter, commiter, pousser, et enchaîner immédiatement sur la suivante. Contraintes : les 23 portes du dépôt et tous les tests restent verts (porte-flux.sh après toute modification du chemin d'exécution), le profil release reste le binaire de mesure, le crate reste std seul, et docs/sprint-cerveau.md reste l'état resumable mis à jour à chaque round. Ne jamais s'arrêter faute de tâches planifiées : en inventer de nouvelles, mesurables, plutôt que d'attendre."
+Round: 27/60
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 27 : j'implémente le protocole v7 (spécifié à l'octet) — je lis les deux méthodes d'`Act`
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n \"$(grep -n 'impl Act' drave-core/src/main.rs | head -1 | cut -d: -f1),+30p\" drave-core/src/main.rs", "description": "Read Act's methods"}`
+
+  ```
+impl Act {
+    fn du_modele(m: &model::Model) -> Self {
+        let mut topk_proj = [0u32; 7];
+        for (i, v) in m.act_topk_proj.iter().enumerate() { topk_proj[i] = *v as u32; }
+        Act { levels: m.act_levels, thresh: m.act_thresh, topk: m.act_topk as u32,
+              renorm: m.act_renorm, topk_proj,
+              attn_topk: m.attn_topk as u32, qk_topk: m.qk_topk as u32,
+              moe_topk: m.moe_topk as u32 }
+    }
+    fn appliquer(&self, m: &mut model::Model) {
+        m.act_levels = self.levels;
+        m.act_thresh = self.thresh;
+        m.act_topk = self.topk as usize;
+        m.act_renorm = self.renorm;
+        for (i, v) in self.topk_proj.iter().enumerate() { m.act_topk_proj[i] = *v as usize; }
+        m.attn_topk = self.attn_topk as usize;
+        m.qk_topk = self.qk_topk as usize;
+        m.moe_topk = self.moe_topk as usize;
+    }
+}
+
+/// Tout ce qu'un flux transporte : sa plage, sa position, son mode, ses
+/// réglages d'activation et sa charge utile.
+struct Flux {
+    /// Nombre du mode : canaux (dense, listes), actifs (blocs) ou ÉTATS (lot).
+    n: usize,
+    debut: u32,
+    fin: u32,
+    pos: u32,
+    mode: u8,
+    act: Act,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\nn = 0\n\n# 1. champs de Act\na = \"\"\"    attn_topk: u32,\n    qk_topk: u32,\n    moe_topk: u32,\n}\"\"\"\nb = \"\"\"    attn_topk … [3793 caractères tronqués]`
+
+  ```
+v7 applique : 8 sites
+error[E0063]: missing fields `attn_sinks`, `attn_window` and `swa_pattern` in initializer of `Act`
+    --> src/main.rs:3078:49
+     |
+3078 |     let act = mdl.map(Act::du_modele).unwrap_or(Act {
+     |                                                 ^^^ missing `attn_sinks`, `attn_window` and `swa_pattern`
+
+warning: unused variable: `t`
+   --> src/kimi_k3.rs:272:17
+    |
+--
+error: could not compile `drave-core` (bin "drave") due to 1 previous error; 30 warnings emitted
+BUILD_END
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '3078,3082p' drave-core/src/main.rs && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\na = \"\"\"    let act = mdl.map(Act::du_modele).unwrap_or(Act {\"\"\"\ni = s.index(a) … [505 caractères tronqués]`
+
+  ```
+let act = mdl.map(Act::du_modele).unwrap_or(Act {
+        levels: 127.0, thresh: 0.0, topk: 0, renorm: false,
+        topk_proj: [0; 7], attn_topk: 0, qk_topk: 0, moe_topk: 0 });
+    let mut t = Vec::with_capacity(TAILLE_TETE);
+    t.extend_from_slice(&MAGIE_FLUX.to_le_bytes());
+error[E0063]: missing fields `attn_sinks`, `attn_window` and `swa_pattern` in initializer of `Act`
+    --> src/main.rs:3078:49
+     |
+3078 |     let act = mdl.map(Act::du_modele).unwrap_or(Act {
+     |                                                 ^^^ missing `attn_sinks`, `attn_window` and `swa_pattern`
+
+warning: unused variable: `t`
+--
+error: could not compile `drave-core` (bin "drave") due to 1 previous error; 30 warnings emitted
+BUILD_END
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\na = \"\"\"        topk_proj: [0; 7], attn_topk: 0, qk_topk: 0, moe_topk: 0 });\"\"\"\nb = \"\"\"        topk_proj: [0; 7], attn_top … [477 caractères tronqués]`
+
+  ```
+complet
+BUILD_END
+test result: FAILED. 113 passed; 9 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.31s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 cargo test --release --manifest-path drave-core/Cargo.toml 2>&1 | grep -E \"^---- .* stdout|panicked at\" | head -8", "description": "See which tests fail", "timeoutMs": 700000}`
+
+  ```
+---- tests_flux::entete_et_version_sont_ce_que_les_numeros_disent stdout ----
+thread 'tests_flux::entete_et_version_sont_ce_que_les_numeros_disent' (3829508) panicked at src/main.rs:7379:9:
+---- tests_plafond::un_lot_dement_grand_est_refuse_avant_allocation stdout ----
+thread '<unnamed>' (3829524) panicked at src/main.rs:7687:13:
+thread 'tests_plafond::un_lot_dement_grand_est_refuse_avant_allocation' (3829519) panicked at src/main.rs:7698:9:
+---- tests_plafond::mode4_prefixe_incoherent_est_refuse stdout ----
+thread '<unnamed>' (3829523) panicked at src/main.rs:7467:9:
+thread 'tests_plafond::mode4_prefixe_incoherent_est_refuse' (3829517) panicked at src/main.rs:7489:24:
+  ```
+
+### 🤖 Assistant
+
+⏵ 9 tests encodent la mise en page v6 — je reviens en arrière plutôt que de laisser les tests rouges
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git checkout drave-core/src/main.rs && cargo build --release --manifest-path drave-core/Cargo.toml 2>&1 | grep -E \"^error\" | head -3; timeout 600 cargo test --release --manifest-path drave-core/Cargo.toml 2>&1 | grep -E \"^test res … [131 caractères tronqués]`
+
+  ```
+test result: ok. 122 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.32s
+    use super::*;
+    use std::net::{TcpListener, TcpStream};
+
+    #[test]
+    fn entete_et_version_sont_ce_que_les_numeros_disent() {
+        assert_eq!(TAILLE_TETE, 79, "l'en-tête de flux doit faire 79 octets");
+        // La version suit l'en-tête : 4 quand les top-k sont entrés dans le
+        // contrat, 5 quand le mode 4 (lot en listes) est apparu, 6 quand le
+[stderr]
+Updated 1 path from the index
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"docs/sprint-cerveau.md\")\ns = p.read_text()\na = \"## ▶ PROCHAINE ACTION (à lire en premier)\"\nneuf = \"\"\"## PROTOCOLE v7 — TENTÉ (11 octobre 14 h), REVERTÉ : neuf tests enc … [3876 caractères tronqués]`

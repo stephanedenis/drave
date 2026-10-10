@@ -507,6 +507,36 @@ préféré **spécifier à l'octet près** plutôt que de laisser un arbre cass�
 
 ---
 
+## PROTOCOLE v7 — TENTÉ (11 octobre 14 h), REVERTÉ : neuf tests encodent la mise en page v6
+
+Les huit modifications de la spécification du round précédent ont été appliquées — `struct Act`
+(3 champs), `du_modele`, `appliquer`, `TAILLE_TETE` (79 → **91**), `VERSION_FLUX` (6 → **7**),
+l'encodeur (offsets 79/83/87), le décodeur (`u(79)`, `u(83)`, `u(87)`), et le **retrait du
+refus**. Le binaire **compile**, et `cargo build` ne dit rien.
+
+**Mais 9 tests tombent**, et ce sont exactement ceux qui encodent la mise en page v6 :
+
+| test | ce qu'il fixe |
+|---|---|
+| `entete_et_version_sont_ce_que_les_numeros_disent` | `assert_eq!(TAILLE_TETE, 79, …)` — et la version en commentaire (« 4 quand les top-k sont entrés, 5 quand le mode 4 est apparu, 6 quand… ») |
+| les tests de **trame forgée** (`mode4_prefixe_incoherent_est_refuse`, `un_lot_dement_grand_est_refuse_avant_allocation`, …) | ils construisent une trame **à la main**, avec les offsets et la taille de la v6 |
+
+**La modification a donc été REVERTÉE**, et la contrainte de l'objectif est intacte : **122 tests
+verts**, arbre propre, porte-flux inchangée. Le round de conception du v7 reste valable — il ne
+manquait que ceci, et c'est maintenant écrit :
+
+1. `assert_eq!(TAILLE_TETE, 79, …)` → **91**, et le commentaire de version gagne « 7 quand la
+   fenêtre d'attention et le motif glissant sont entrés dans le contrat » ;
+2. les constructeurs de **trame forgée** prennent la nouvelle taille — ils liront `TAILLE_TETE`
+   plutôt qu'un littéral, sinon le prochain ajout de champ les cassera de la même façon ;
+3. **puis** retirer le refus.
+
+**Leçon, et elle est la même que partout dans ce sprint** : le contrat d'échange n'est pas
+seulement dans l'encodeur et le décodeur, il est aussi dans **les tests qui le forgent**. Une
+modification de protocole se compte en TROIS endroits, pas deux.
+
+---
+
 ## ▶ PROCHAINE ACTION (à lire en premier)
 
 État au **11 octobre 6 h 45** · **21 portes, toutes vertes** (`tools/porte-*.sh`) ·
