@@ -175,6 +175,28 @@ serait faux ; reprendre demanderait de rejouer le préfixe (checkpoint/restart).
 
 ---
 
+## C11 (découverte) — FAIT (11 octobre 5 h 30) : le registre des régions
+
+Une topologie qui écrit une adresse décrit UN déploiement ; la même sur trois machines en
+demanderait trois. `--registre FICHIER` (lignes `region hote:port`) résout les instances
+**nommées**, des deux côtés (pilote et nœud relais). Une instance qui contient déjà `:` n'est
+pas touchée : les topologies existantes marchent au caractère près.
+
+`tools/porte-registre.sh`, 3 cas verts :
+
+| cas | mesure |
+|---|---|
+| topologie **nommée** + registre | **113,0068** · code 0 |
+| même topologie, **adresse en dur** | **113,0068 — identique** |
+| région **absente** du registre | refus **en la nommant**, code 2, rien n'est calculé |
+
+**Défaut trouvé en écrivant la porte** : le contrôle de cohérence comparait `--ppl-reparti`
+à l'instance **brute** — une topologie nommée était refusée (code 3) comme contradictoire
+alors que les deux sources disaient la même chose. **La résolution doit précéder le
+contrôle** ; c'est écrit dans le code à cet endroit.
+
+---
+
 ## LA ROUGE DE RÉPARTITION — INSTRUITE ET CORRIGÉE (11 octobre 4 h 30) : c'était la PORTE
 
 Hypothèses éliminées par la mesure : le **routage** (la variante dense échoue aussi, 37,8 %),

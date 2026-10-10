@@ -28939,3 +28939,154 @@ PORTE TENUE : le découpage ne change pas la perplexité (écart relatif 0.0000 
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\n\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\na = \"## Annexe — manifeste des journaux\"\nsec = \"\"\"## 34. La porte rouge de répartition : un DÉFAUT DE PORTE, … [7179 caractères tronqués]`
+
+  ```
+docs rouge instruite
+test result: ok. 122 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.32s
+c43425e La porte rouge de repartition : c'etait un DEFAUT DE PORTE, pas du modele
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 11 : la rouge était la PORTE — et notre modèle entraîné survit au découpage
+
+**Ce round** — 1 commit poussé, 122 tests verts, **20 portes vertes sur 20**.
+
+La rouge non expliquée du round 10 (`porte-reparti-moteur` : 321,9623 contre 132,8349, écart 58,7 %, flux à 0,00e0) est **instruite jusqu'à sa cause**.
+
+**Trois hypothèses éliminées par la mesure :**
+- le **routage d'experts** ne survivrait pas au découpage → la variante **dense** échoue aussi (37,8 %) : ce n'est pas le routage ;
+- le **transport** altérerait les états → l'écart de flux imprimé est **0,00e0** ;
+- notre modèle serait intrinsèquement non découpable → contredit par le résultat final.
+
+**La cause, trouvée en comparant les deux chemins à la main** : le fichier d'identifiants contient **255 jetons**, la porte en annonçait **128** — et les deux chemins **fenêtrent différemment** :
+```
+--ppl          note les `limit` PREMIERS jetons   → 0..127
+--ppl-reparti  « troncature aux 128 derniers »    → 128..255
+```
+**La porte comparait deux textes différents** — et 37 à 58 % d'écart entre deux passages sans rapport est un chiffre parfaitement normal.
+
+**Après correction** (le nombre de jetons est **compté**, plus supposé) :
+
+| modèle | entier | réparti | écart |
+|---|---|---|---|
+| `moteur_dense.gguf` | 173,0196 | **173,0196** | **0,0000 %** |
+| `moteur_route.gguf` | 173,0196 | **173,0196** | **0,0000 %** |
+
+**PORTE TENUE** : le modèle entraîné ici (Qwen3-MoE, corpus d'octets) **survit au découpage au chiffre près, routage compris** — ce que la rouge laissait croire faux depuis deux jours. C'est un vrai résultat pour le sprint « cerveau » : le modèle qu'on produit n'a pas besoin d'être « split-aware » pour être réparti.
+
+**Deux leçons** : (1) une porte qui échoue doit être instruite jusqu'à sa cause — celle-ci accusait le modèle, et c'était la porte ; (2) `--limit` ne veut pas dire la même chose dans les deux chemins (N premiers en perplexité, N derniers en réparti) : **asymétrie de protocole**, maintenant écrite dans la porte qui l'a subie.
+
+**Suivant** (dans `docs/sprint-cerveau.md`) : le troisième budget (`paires/s`), les têtes dédiées C8, les modèles H-I-J. L'objectif reste **actif**.
+
+
+## Tour 55
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 mémoire épisodique, C7 consolidation, C8 périphérie, C9 latéralité, C10 budgets, et la diffusion réseau du bus de C5 ; (b) les expériences E2-E9 de docs/biologie-pour-drave.md et docs/hebbien-differentiel-et-biologie.md ; (c) les dessins de modèle H/I/J de docs/modele-pour-drave.md ; (d) les manques du registre docs/manques.md (noyau de listes pour les experts, noyau de listes GPU, encodeurs) — l'implémenter ou la mesurer, la doter d'une porte vérifiable, la documenter, commiter, pousser, et enchaîner immédiatement sur la suivante. Contraintes : les 23 portes du dépôt et tous les tests restent verts (porte-flux.sh après toute modification du chemin d'exécution), le profil release reste le binaire de mesure, le crate reste std seul, et docs/sprint-cerveau.md reste l'état resumable mis à jour à chaque round. Ne jamais s'arrêter faute de tâches planifiées : en inventer de nouvelles, mesurables, plutôt que d'attendre."
+Round: 12/60
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ C11 (découverte) : le registre de régions — les topologies ne codent plus les adresses en dur
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\n\n# --- 1. la fonction de résolution, avant panne_de_lien\na = \"/// C11 : la PANNE d'un lien, nommée.\"\nb = '''/// C11 (découvert … [3156 caractères tronqués]`
+
+  ```
+registre : fonction et option
+1772:                let paires = hd_t / 2;
+3139:        let paires = encoder_paires_blocs(&idx, &val);
+3228:    let paires = encoder_paires_blocs(&idx, &val);
+3675:                    let mut sc = std::net::TcpStream::connect(&cible.instance).unwrap_or_else(|e| {
+3677:                                  cible.id, cible.instance); std::process::exit(1) });
+3680:                             cible.id, cible.instance, cible.premiere, cible.derniere);
+4212:    let pair: &str = &pair_cli;
+4213:    let pair_region = tp_region_distante.clone();
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '4205,4215p' drave-core/src/main.rs && grep -n \"pair_cli\" drave-core/src/main.rs | head -4", "description": "Find the driver's pair resolution"}`
+
+  ```
+println!("[topologie] chaîne vérifiée : local 0..{} → {} {}..{}",
+                 l.derniere, d.instance, d.premiere, d.derniere);
+        (l.couches(), pair.to_string(), d.premiere, d.derniere, d.id.clone())
+    } else {
+        (if opt.couches_locales > 0 { opt.couches_locales } else { 12 }, pair.to_string(),
+         0usize, 0usize, String::from("pair"))
+    };
+    let pair: &str = &pair_cli;
+    let pair_region = tp_region_distante.clone();
+    // La plage du pair : celle de la topologie s'il y en a une, sinon « tout ce
+    // qui reste après les couches locales » — le comportement historique, intact.
+4150:    let (couches_locales, pair_cli, tp_debut, tp_fin, tp_region_distante) = if let Some(f) = opt.topologie.clone() {
+4212:    let pair: &str = &pair_cli;
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\n\n# --- le pilote résout l'instance de la région distante\na = \"\"\"        (l.couches(), pair.to_string(), d.premiere, d.derniere … [1297 caractères tronqués]`
+
+  ```
+resolution cablee
+BUILD_END
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/porte-registre.sh <<'GATEFILE'\n#!/bin/bash\n# porte-registre.sh — C11 (découverte) : le registre des régions.\n#\n# POURQUOI. Une topologie qui écrit « 127.0.0.1:50001 » décrit UN déploiement ; la même\n# topologie sur t … [4315 caractères tronqués]`
+
+  ```
+=== 1. topologie NOMMÉE + registre ===
+  perplexité aucune · code 3
+  ❌ aucune perplexité par le registre
+  ```
+
+### 🤖 Assistant
+
+⏵ Code 3 : le validateur refuse peut-être un nom d'instance — je lis le message
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && T=$(mktemp -d) && PORT=$((64500)) && cat > $T/topo.json <<JSON\n{\"regions\":[\n  {\"id\":\"local\",\"couches\":[0,11],\"instance\":\"local\"},\n  {\"id\":\"d\",\"couches\":[12,23],\"instance\":\"d\"}],\n \"liens\":[{\"de\":\"local\" … [435 caractères tronqués]`
+
+  ```
+topologie : la première région distante est sur « d » mais `--ppl-reparti` dit « 127.0.0.1:64500 » — deux sources pour la même chose, et elles se contredisent
+  ```
+
+### 🤖 Assistant
+
+⏵ Le contrôle de cohérence compare l'adresse à l'instance BRUTE — je résous avant lui
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"deux sources pour la même chose\" drave-core/src/main.rs && sed -n \"$(($(grep -n 'deux sources pour la même chose' drave-core/src/main.rs | cut -d: -f1) - 8)),+12p\" drave-core/src/main.rs", "description": "Read the cohere … [11 caractères tronqués]`
+
+  ```
+4205:dit « {pair} » — deux sources pour la même chose, et elles se contredisent", d.instance);
+        }
+        if l.premiere != 0 {
+            eprintln!("topologie : la région locale doit commencer à la couche 0 (elle est {}..{}) \
+— le pilote lit les jetons, il porte donc la première région", l.premiere, l.derniere);
+            std::process::exit(3);
+        }
+        if d.instance != pair {
+            eprintln!("topologie : la première région distante est sur « {} » mais `--ppl-reparti` \
+dit « {pair} » — deux sources pour la même chose, et elles se contredisent", d.instance);
+            std::process::exit(3);
+        }
+        println!("[topologie] chaîne vérifiée : local 0..{} → {} {}..{}",
+                 l.derniere, d.instance, d.premiere, d.derniere);
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\na = \"\"\"        if d.instance != pair {\n            eprintln!(\"topologie : la première région distante est sur « {} » mais `--p … [1809 caractères tronqués]`
+
+  ```
+resolution avant controle
+=== 1. topologie NOMMÉE + registre ===
+  [topologie] chaîne vérifiée : local 0..11 → 127.0.0.1:64026 12..23
+  perplexité 113.0068 · code 0
+=== 2. la MÊME topologie, adresse en dur : même résultat ===
+  perplexité 113.0068 · code 0
+  ✅ registre et adresse en dur donnent le MÊME résultat (113.0068)
+=== 3. région ABSENTE du registre : refus en la nommant ===
+  ✅ région absente : refusée en la nommant (code 2), rien n'est calculé
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\n\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\na = \"## Annexe — manifeste des journaux\"\nsec = \"\"\"## 35. Découverte : le registre des régions (C11)\n\nUne t … [5330 caractères tronqués]`

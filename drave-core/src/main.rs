@@ -699,6 +699,9 @@ struct Options {
     episodique_aiguille: Option<usize>,
     /// C2/C6 : état BRUT à injecter à la fin des couches (fichier de f32 bruts).
     fusion_etat: Option<String>,
+    /// C11 (découverte) : fichier de registre `region hote:port`, pour que les topologies
+    /// nomment les régions au lieu de coder des adresses.
+    registre: Option<String>,
     /// C2/C6 : poids de l'état injecté.
     fusion_alpha: f32,
     /// C2/C6 : où écrire l'état brut, et à quelles positions.
@@ -926,6 +929,7 @@ fn analyser(args: &[String]) -> Options {
             "--episodique-textes" => { o.episodique_textes = Some(suivant(i).clone()); 2 }
             "--pont-k" => { o.pont_k = suivant(i).parse().unwrap_or(0); 2 }
             "--reflexe-essai" => { o.reflexe_essai = suivant(i).parse().unwrap_or(0); 2 }
+            "--registre" => { o.registre = Some(suivant(i).clone()); 2 }
             "--fusion-etat" => { o.fusion_etat = Some(suivant(i).clone()); 2 }
             "--fusion-alpha" => { o.fusion_alpha = suivant(i).parse().unwrap_or(1.0); 2 }
             "--fusion-pos" => {
@@ -3668,7 +3672,10 @@ doit pas changer)", ma.id, lien.vers, lien.delai_ms);
                     }
                     delai_relais = lien.delai_ms;
                     let cible = t.region(&lien.vers).unwrap().clone();
-                    let mut sc = std::net::TcpStream::connect(&cible.instance).unwrap_or_else(|e| {
+                    // C11 : même résolution côté nœud, pour la même raison — sans elle, un
+                    // relais ne saurait pas joindre un successeur nommé.
+                    let adresse_succ = resoudre_instance(&cible.instance, &opt.registre);
+                    let mut sc = std::net::TcpStream::connect(&adresse_succ).unwrap_or_else(|e| {
                         eprintln!("[relais] connexion au successeur « {} » ({}) impossible : {e}",
                                   cible.id, cible.instance); std::process::exit(1) });
                     sc.set_nodelay(true).expect("TCP_NODELAY");
@@ -4022,6 +4029,47 @@ portent pas la même empreinte. C'est exactement ce que cette fusion existe pour
     std::process::exit(0);
 }
 
+/// C11 (découverte) : le REGISTRE des régions — un fichier partagé qui donne
+/// `region hote:port`, pour que les topologies ne codent plus les adresses en dur.
+///
+/// POURQUOI. Une topologie qui écrit `127.0.0.1:50001` décrit UN déploiement ; la même
+/// topologie sur trois machines demande trois fichiers. Le plan (§3.2) prévoit un
+/// registre statique puis dynamique ; voici le statique, et il tient en une fonction.
+///
+/// CE QUI EST RÉSOLU, ET CE QUI NE L'EST PAS : une `instance` qui contient déjà un `:`
+/// est une adresse et n'est pas touchée (les topologies existantes continuent de marcher,
+/// au caractère près) ; sinon elle est cherchée dans le registre, et une région ABSENTE
+/// est refusée en la nommant — un repli silencieux sur `localhost` ferait parler le
+/// moteur à la mauvaise machine.
+fn resoudre_instance(instance: &str, registre: &Option<String>) -> String {
+    if instance.contains(':') { return instance.to_string(); }
+    let Some(f) = registre.as_ref() else {
+        eprintln!("topologie : l'instance « {instance} » n'est pas une adresse (pas de « : ») \
+et aucun --registre n'est donné — rien n'est résolu, et deviner l'adresse serait pire que \
+de s'arrêter.");
+        std::process::exit(2);
+    };
+    let texte = std::fs::read_to_string(f).unwrap_or_else(|e| {
+        eprintln!("registre : lecture de {f} impossible : {e}"); std::process::exit(2) });
+    for ligne in texte.lines() {
+        let l = ligne.trim();
+        if l.is_empty() || l.starts_with('#') { continue; }
+        let mut ch = l.split_whitespace();
+        let (nom, adresse) = (ch.next().unwrap_or(""), ch.next().unwrap_or(""));
+        if nom == instance {
+            if adresse.is_empty() || !adresse.contains(':') {
+                eprintln!("registre : « {instance} » est déclarée sans adresse valide \
+(« hote:port » attendu) dans {f}");
+                std::process::exit(2);
+            }
+            return adresse.to_string();
+        }
+    }
+    eprintln!("registre : la région « {instance} » est ABSENTE de {f}. Refusé : un repli \
+silencieux ferait parler le moteur à la mauvaise machine.");
+    std::process::exit(2);
+}
+
 /// C11 : la PANNE d'un lien, nommée. Ce que la politique déclarée décide, et ce
 /// qu'elle ne décide PAS.
 ///
@@ -4152,14 +4200,22 @@ les autres seront atteintes par relais", distantes.len());
 — le pilote lit les jetons, il porte donc la première région", l.premiere, l.derniere);
             std::process::exit(3);
         }
-        if d.instance != pair {
-            eprintln!("topologie : la première région distante est sur « {} » mais `--ppl-reparti` \
-dit « {pair} » — deux sources pour la même chose, et elles se contredisent", d.instance);
+        // La RÉSOLUTION PRÉCÈDE LE CONTRÔLE : sinon une topologie qui NOMME ses régions
+        // (« d ») était refusée comme contradictoire avec `--ppl-reparti` (« hôte:port »),
+        // alors que les deux disent la même chose — l'une par son nom, l'autre par son
+        // adresse. Trouvé en écrivant la porte du registre, qui échouait en code 3.
+        let instance_resolue = resoudre_instance(&d.instance, &opt.registre);
+        if instance_resolue != pair {
+            eprintln!("topologie : la première région distante est sur « {instance_resolue} » mais \
+`--ppl-reparti` dit « {pair} » — deux sources pour la même chose, et elles se contredisent");
             std::process::exit(3);
         }
         println!("[topologie] chaîne vérifiée : local 0..{} → {} {}..{}",
-                 l.derniere, d.instance, d.premiere, d.derniere);
-        (l.couches(), pair.to_string(), d.premiere, d.derniere, d.id.clone())
+                 l.derniere, instance_resolue, d.premiere, d.derniere);
+        // C11 : l'instance peut être un NOM de région, résolu par le registre — une
+        // topologie qui écrit « 127.0.0.1:50001 » décrit UN déploiement, et la même
+        // topologie sur trois machines en demanderait trois.
+        (l.couches(), instance_resolue, d.premiere, d.derniere, d.id.clone())
     } else {
         (if opt.couches_locales > 0 { opt.couches_locales } else { 12 }, pair.to_string(),
          0usize, 0usize, String::from("pair"))

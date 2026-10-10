@@ -6,13 +6,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
 | Durée | 46.2 h |
-| Tours | 54 |
-| Messages | 1810 |
-| Appels d'outils | 1700 |
+| Tours | 55 |
+| Messages | 1820 |
+| Appels d'outils | 1708 |
 | Fichiers touchés | 61 |
-| Commandes | 1450 |
+| Commandes | 1458 |
 | Sous-agents | 3 |
-| Commits | 144 |
+| Commits | 145 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -143,6 +143,8 @@
 **Tour 53** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 **Tour 54** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
+
+**Tour 55** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -2457,7 +2459,53 @@ Vertes : budget · bus · bus-socket · coupe · delais · episodique · flux ·
 
 **Synthèse produite :**
 
-⏵ PORTE TENUE : 173,0196 des deux côtés — la rouge était un DÉFAUT DE PORTE ; je le corrige
+⏵ Round 11 : la rouge était la PORTE — et notre modèle entraîné survit au découpage
+
+**Ce round** — 1 commit poussé, 122 tests verts, **20 portes vertes sur 20**.
+
+La rouge non expliquée du round 10 (`porte-reparti-moteur` : 321,9623 contre 132,8349, écart 58,7 %, flux à 0,00e0) est **instruite jusqu'à sa cause**.
+
+**Trois hypothèses éliminées par la mesure :**
+- le **routage d'experts** ne survivrait pas au découpage → la variante **dense** échoue aussi (37,8 %) : ce n'est pas le routage ;
+- le **transport** altérerait les états → l'écart de flux imprimé est **0,00e0** ;
+- notre modèle serait intrinsèquement non découpable → contredit par le résultat final.
+
+**La cause, trouvée en comparant les deux chemins à la main** : le fichier d'identifiants contient **255 jetons**, la porte en annonçait **128** — et les deux chemins **fenêtrent différemment** :
+```
+--ppl          note les `limit` PREMIERS jetons   → 0..127
+--ppl-reparti  « troncature aux 128 derniers »    → 128..255
+```
+**La porte comparait deux textes différents** — et 37 à 58 % d'écart entre deux passages sans rapport est un chiffre parfaitement normal.
+
+**Après correction** (le nombre de jetons est **compté**, plus supposé) :
+
+| modèle | entier | réparti | écart |
+|---|---|---|---|
+| `moteur_dense.gguf` | 173,0196 | **173,0196** | **0,0000 %** |
+| `moteur_route.gguf` | 173,0196 | **173,0196** | **0,0000 %** |
+
+**PORTE TENUE** : le modèle entraîné ici (Qwen3-MoE, corpus d'octets) **survit au découpage au chiffre près, routage compris** — ce que la rouge laissait croire faux depuis deux jours. C'est un vrai résultat pour le sprint « cerveau » : le modèle qu'on produit n'a pas besoin d'être « split-aware » pour être réparti.
+
+**Deux leçons** : (1) une porte qui échoue doit être instruite jusqu'à sa cause — celle-ci accusait le modèle, et c'était la porte ; (2) `--limit` ne veut pas dire la même chose dans les deux chemins (N premiers en perplexité, N derniers en réparti) : **asymétrie de protocole**, maintenant écrite dans la porte qui l'a subie.
+
+**Suivant** (dans `docs/sprint-cerveau.md`) : le troisième budget (`paires/s`), les têtes dédiées C8, les modèles H-I-J. L'objectif reste **actif**.
+
+### Tour 55 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
+
+*8 appels d'outils.* Actions notables :
+
+- bash — Add the registry resolver
+- bash — Find the driver's pair resolution
+- bash — Wire the registry into driver and relay
+- bash — Write and run the registry gate
+- bash — See the topology validation message
+- bash — Read the coherence check
+- bash — Fix resolution order and rerun the gate
+- bash — Document and commit the registry
+
+**Synthèse produite :**
+
+⏵ Le contrôle de cohérence compare l'adresse à l'instance BRUTE — je résous avant lui
 
 ## 3. Travail accompli
 
@@ -2575,7 +2623,7 @@ Vertes : budget · bus · bus-socket · coupe · delais · episodique · flux ·
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1410 autres
+- … et 1418 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2866,5 +2914,6 @@ Vertes : budget · bus · bus-socket · coupe · delais · episodique · flux ·
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A docs/sprint-cerveau.md && git commit -q -F - <<'MSG' Verification complete : 19 portes vertes, 
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 
