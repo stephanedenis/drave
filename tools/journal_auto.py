@@ -193,6 +193,42 @@ def tours_de_session(sid: str) -> list[str]:
     return []
 
 
+# Ce qu'on reconnaît comme un CHIFFRE qui compte : un pourcentage, un facteur, une durée, un
+# volume, un compte de jetons ou de paires, une perplexité. Extrait des textes DÉJÀ fiables
+# (sujets de commit, étapes du journal de session) — PAS de la section « mesures » des rapports
+# de session, qui mélange des extraits de diff et des digests (essayé, illisible).
+MOTIFS_CHIFFRES = [
+    r"[-−+]?\d+(?:[.,]\d+)?\s*%",
+    r"[÷×]\s*\d+(?:[.,]\d+)?",
+    r"\d+(?:[.,]\d+)?\s*(?:ms|µs|ns|s)\b",
+    r"\d+(?:[.,]\d+)?\s*(?:Go|Mo|Ko|Gio|Mio|Kio|Go/s|Mo/s)\b",
+    r"\d+(?:[.,]\d+)?\s*(?:jetons?|paires?|messages?|fibres?|couches?|états?|tours?)\b",
+    r"\d+(?:[.,]\d+)?\s*tok/s",
+    r"\d{2,}(?:[.,]\d+)?\s*(?:M|G)?\s*par (?:jeton|pas|token)",
+    # les perplexités, écrites « 29.0206 », « 1297,5437 », « perplexité 15,4339 »
+    r"(?:perplexité|ppl)\s*[:=]?\s*\d+(?:[.,]\d+)?",
+    r"\b\d{1,4}[.,]\d{3,4}\b",
+]
+
+
+def chiffres_du_jour(textes: list[str], plafond: int = 12) -> list[str]:
+    """Les chiffres qui reviennent dans les textes du jour, dans l'ordre d'apparition."""
+    vus, sortis = set(), []
+    for t in textes:
+        # « 2 048 jetons » : l'espace est un séparateur de milliers FRANÇAIS ; sans ce collage,
+        # l'extraction sortait « 048 jetons » (un chiffre tronqué, donc faux).
+        t = re.sub(r"(\d)\s(\d{3})\b", r"\1\2", t)
+        for motif in MOTIFS_CHIFFRES:
+            for m in re.finditer(motif, t):
+                c = m.group(0).strip()
+                if c not in vus:
+                    vus.add(c)
+                    sortis.append(c)
+                    if len(sortis) >= plafond:
+                        return sortis
+    return sortis
+
+
 def lire_notes(chemin: Path, defaut: str = "") -> str:
     if not chemin.exists():
         return defaut
@@ -249,6 +285,11 @@ def generer_jour(jour: str, dry: bool, trace: list[str], themes_ecrits: list | N
         else:
             lignes.append("*(aucun commit classé dans ce thème)*")
         lignes.append("")
+        chiffres = chiffres_du_jour([c["sujet"] for c in cs] + etapes.get(th, []))
+        if chiffres:
+            lignes += ["## Chiffres du jour", "", " · ".join(f"`{c}`" for c in chiffres), "",
+                       "*Extraits des sujets de commit et des étapes — le détail et les "
+                       "conditions sont dans la fiche correspondante de `reports/`.*", ""]
         if etapes.get(th):
             plafond = 25
             lignes += [f"## Étapes du jour ({len(etapes[th])})", "",

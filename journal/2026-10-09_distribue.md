@@ -29,6 +29,12 @@
 | 22:12 | `9ae8f6f` | C5ter : le bus par le réseau — un réglage atteint une autre machine | `relations-humaines.md`, `sprint-cerveau.md`, `main.rs` (+4) |
 | 23:48 | `22d6151` | C9 x C1 : où couper le modèle — le point de coupe est neutre, sauf à cause du lien | `sprint-cerveau.md`, `MANIFEST.md`, `digest.md` (+4) |
 
+## Chiffres du jour
+
+`255 jetons` · `1,842` · `3,4 ms` · `×128` · `50 ms` · `50,2 ms` · `40 %` · `7 ms` · `49 %` · `14,8 ms` · `4 messages`
+
+*Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
+
 ## Étapes du jour (25)
 
 *Ce que l'agent a consigné en le faisant (lignes `⏵` du journal de session) :*
@@ -61,7 +67,7 @@
 
 ## Sessions actives ce jour
 
-- `d31b3d9b` — Où en est-on (début 2026-10-08 09:11, 49.3 h) → [rapport](sessions/d31b3d9b/rapport.md) · [digest](sessions/d31b3d9b/digest.md)
+- `d31b3d9b` — Où en est-on (début 2026-10-08 09:11, 49.5 h) → [rapport](sessions/d31b3d9b/rapport.md) · [digest](sessions/d31b3d9b/digest.md)
 
 ## Mesures et rapports touchés
 

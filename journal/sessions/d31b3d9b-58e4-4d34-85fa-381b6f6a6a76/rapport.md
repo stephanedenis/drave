@@ -7,12 +7,12 @@
 | Début | 2026-10-08 09:11 |
 | Durée | 49.5 h |
 | Tours | 88 |
-| Messages | 2190 |
-| Appels d'outils | 2003 |
+| Messages | 2195 |
+| Appels d'outils | 2008 |
 | Fichiers touchés | 69 |
-| Commandes | 1732 |
+| Commandes | 1737 |
 | Sous-agents | 3 |
-| Commits | 188 |
+| Commits | 189 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -3586,7 +3586,7 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 
 ### Tour 88 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*161 appels d'outils.* Actions notables :
+*166 appels d'outils.* Actions notables :
 
 - bash — Add the refusal and verify
 - bash — Move the refusal to the single point and verify
@@ -3602,11 +3602,11 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - bash — Read v7 removal context and flag inventory
 - bash — Read flag inventory section in docs
 - bash — Establish whether section 9 predates the v7 removal
-- … et 139 autres
+- … et 144 autres
 
 **Synthèse produite :**
 
-⏵ 2 048 jetons : le drain ne compense plus (+40 % au mieux) — j'écris la pente en N et je lance la suite (puits plus nombreux)
+⏵ La section « mesures » des sessions est trop bruitée — j'extrais plutôt les chiffres des textes déjà fiables (sujets + étapes)
 
 ## 3. Travail accompli
 
@@ -3732,7 +3732,7 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1692 autres
+- … et 1697 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4068,4 +4068,5 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - Journal : les ETAPES du jour (lignes du journal de session) sont reprises par theme  Les rapports de session contiennent, tour par tour, ce que l'agent a consig
 - Journal : journal/THEMES.md, la regle de classement rendue lisible et modifiable  Les themes etaient dans le script seulement. La table est maintenant ecrite da
 - Fenetre x puits : la pente en N mesuree — gratuit a 512 jetons, +40 % a 2 048  Troisieme carte (2 048 jetons, ctx 2048, memes ids) : attention complete 10,3703 
+- Journal : les CHIFFRES du jour par theme, extraits des textes deja fiables  Chaque fichier de theme porte desormais une ligne « Chiffres du jour » (pourcentages
 

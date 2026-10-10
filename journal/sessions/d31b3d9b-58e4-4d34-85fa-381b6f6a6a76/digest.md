@@ -35207,3 +35207,90 @@ started background job bash-30
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"reports/rapport-fenetre-puits-attention.md\"); s = p.read_text()\n\n# le verdict d'en-tête doit dire la vérité complète : courte ET longue portée\nold = \"\"\"> Verdict : **oui* … [6244 caractères tronqués]`
+
+  ```
+fiche : pente en N ajoutée
+état mis à jour
+poussé
+024e509 Fenetre x puits : la pente en N mesuree — gratuit a 512 jetons, +40 % a 2 048
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show --stat HEAD | grep -c journal; git show --stat HEAD | tail -8; echo \"=== la carte de suite ===\"; cat /tmp/carte-2048b.md 2>/dev/null; tail -2 /tmp/passe-complete.log", "description": "Verify hook staged journal and check j … [5 caractères tronqués]`
+
+  ```
+12
+ journal/2026-10-10_moteur.md                       |  2 +-
+ journal/2026-10-10_portes.md                       |  2 +-
+ journal/README.md                                  |  2 +-
+ journal/sessions/MANIFEST.md                       |  4 +-
+ .../d31b3d9b-58e4-4d34-85fa-381b6f6a6a76/digest.md | 50 ++++++++++++++++++++++
+ .../rapport.md                                     | 19 ++++----
+ reports/rapport-fenetre-puits-attention.md         | 48 ++++++++++++++++++---
+ 16 files changed, 131 insertions(+), 42 deletions(-)
+=== la carte de suite ===
+  porte-greffe           ✅                         971 s    ✅ la porte est franchie. Ce qu'elle établit : l'injection d'état est BRANCHÉE
+  porte-horloge          ✅                          24 s    ✅ borne atteinte : arrêt EXPLICITE (code 5) et AUCUNE perplexité rendue
+  ```
+
+### 🤖 Assistant
+
+⏵ Hook vérifié (12 fichiers de journal dans le commit) ; je regarde si les sessions exposent les mesures du jour
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^## \" journal/sessions/d31b3d9b-58e4-4d34-85fa-381b6f6a6a76/rapport.md | head -12; echo \"=== y a-t-il une section mesures ? ===\"; grep -n \"Mesures\\|mesures\" journal/sessions/d31b3d9b-58e4-4d34-85fa-381b6f6a6a76/rappor … [76 caractères tronqués]`
+
+  ```
+18:## Objectifs déclarés
+37:## 1. Ce qui a été demandé
+215:## 2. Déroulé, étape par étape
+3611:## 3. Travail accompli
+3737:## 4. Mesures et résultats marquants
+3861:## 5. Erreurs rencontrées
+3881:## 6. Commits
+=== y a-t-il une section mesures ? ===
+339:⏵ Réponse chiffrée sur la ségrégation NUMA, à partir des mesures du dépôt
+363:Les deux seules mesures « inter-nœuds » du dépôt donnent 3 % et 4 % — de l'ordre du bruit de cette machine. Et surtout, l'expérience qui devait montrer le coût du QPI montre l'inverse : **restreindre un calcul au seul socket 1 le ralentit de 19 %**. La ressource rare n'est pas la liaison entre processeurs, c'est **la bande passante mémoire d'un socket**. Le micro-banc dit le contraire (20,7 → 24,7 Go/s en liant un socket) parce qu'il fait un flux unique : une charge réelle a beaucoup de flux simultanés et a besoin des deux contrôleurs mémoire.
+367:1. **La reproductibilité des mesures — et c'est le gain le plus solide.** Le dépôt le répète partout : « la machine portait une charge de fond (bureau, autres projets) qui fait varier le temps mur de 30 % », et plusieurs campagnes ont dû être refaites sous charge 8-14. Isoler le bureau et l'affichage sur le nœud 0
+… [755 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Les sessions ont une section « Mesures marquantes » — je la reverse aussi dans les fichiers de thème
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '3737,3760p' journal/sessions/d31b3d9b-58e4-4d34-85fa-381b6f6a6a76/rapport.md", "description": "Inspect measures section format"}`
+
+  ```
+## 4. Mesures et résultats marquants
+
+- **T1** `6df6de4 §10 : le palier NVMe donne −8,8 %, la prédiction était de −16,3 %`
+- **T1** `3169941 Attribution des 206,58 Gio : 72 % sont les experts, relus à chaque jeton`
+- **T1** `d186466 §94 : rang 1, 2 ou 3 — le meilleur rang n'est pas celui du meilleur chiffre`
+- **T1** `df8980e §92 : la pire paire après échelle — de–en à 486 % du professeur, mais 5 paires sur 15 échouent`
+- **T1** `| `8e04c99a` | 2026-09-30 18:17 | 0.7 Mo | 118 Ko | 1 | 59 | 85 | 0 | 0 |`
+- **T1** `| `aa5f9fc5` | 2026-09-30 15:17 | 0.8 Mo | 129 Ko | 1 | 78 | 100 | 0 | 0 |`
+- **T1** `| `b13a6032` | 2026-10-02 15:09 | 0.3 Mo | 88 Ko | 1 | 17 | 43 | 0 | 0 |`
+- **T1** `-| `bbd6969f` | 2026-10-07 20:45 | 56.7 Mo | 8968 Ko | 205 | 9596 | 9018 | 63 | 26 |`
+- **T1** `+| `bbd6969f` | 2026-10-07 21:14 | 56.9 Mo | 9009 Ko | 205 | 9630 | 9050 | 63 | 26 |`
+- **T1** `| `bcfe0b97` | 2026-09-30 12:39 | 1.0 Mo | 145 Ko | 1 | 102 | 110 | 0 | 0 |`
+- **T1** `| `c25f97d1` | 2026-09-30 11:59 | 0.8 Mo | 126 Ko | 1 | 73 | 104 | 0 | 0 |`
+- **T1** `| `c776b71f` | 2026-09-30 18:43 | 0.7 Mo | 82 Ko | 1 | 35 | 54 | 0 | 0 |`
+- **T1** `| `fba448b3` | 2026-10-02 15:10 | 0.5 Mo | 39 Ko | 1 | 19 | 26
+… [923 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ La section « mesures » des sessions est trop bruitée — j'extrais plutôt les chiffres des textes déjà fiables (sujets + étapes)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"tools/journal_auto.py\"); s = p.read_text()\n\n# 1) l'extracteur de chiffres\nold = '''def lire_notes('''\nnew = '''# Ce qu'on reconnaît comme un CHIFFRE qui compte : un pourcen … [2325 caractères tronqués]`
+
+  ```
+chiffres du jour intégrés
+## Chiffres du jour
+
+`+40 %` · `512 jetons` · `+2,0 %` · `048 jetons`
+
+1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"tools/journal_auto.py\"); s = p.read_text()\ns = s.replace('''    r\"\\\\d{2,}(?:[.,]\\\\d+)?\\\\s*(?:M|G)?\\\\s*par (?:jeton|pas|token)\",\n]''',\n'''    r\"\\\\d{2,}(?:[.,]\\\ … [1710 caractères tronqués]`

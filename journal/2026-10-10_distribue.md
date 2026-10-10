@@ -31,6 +31,12 @@
 | 09:30 | `c749af2` | Verification apres v7/v8 et la fusion des ecritures : huit portes reparties vertes | `sprint-cerveau.md`, `MANIFEST.md`, `digest.md` (+1) |
 | 09:39 | `63203d7` | Inventaire des drapeaux en reparti : cinq agissent, trois inertes (deux attendus), un ouvert | `sprint-cerveau.md`, `MANIFEST.md`, `digest.md` (+2) |
 
+## Chiffres du jour
+
+`49 %` · `14,8 ms` · `40 %` · `7 ms` · `50 ms` · `50,2 ms` · `4 messages`
+
+*Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
+
 ## Étapes du jour (25)
 
 *Ce que l'agent a consigné en le faisant (lignes `⏵` du journal de session) :*

@@ -12,7 +12,13 @@
 | 14:25 | `9a7d708` | Signal externe mesuré : meilleur des modulateurs, et toujours pire que la règle nue | `impulsion-pure-apprenant.md`, `main.rs`, `model.rs` (+3) |
 | 14:30 | `722cc34` | Décorrélation en courbe de dose : elle améliore de façon monotone et converge vers « ne rien apprendre » | `impulsion-pure-apprenant.md`, `main.rs`, `model.rs` (+3) |
 
-## Étapes du jour (5)
+## Chiffres du jour
+
+`+40 %` · `2048 jetons`
+
+*Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
+
+## Étapes du jour (6)
 
 *Ce que l'agent a consigné en le faisant (lignes `⏵` du journal de session) :*
 
@@ -21,10 +27,11 @@
 - Round 28 livré : **protocole v7** — la fenêtre d'attention voyage, le refus disparaît, tout est vert
 - Round 42 livré : les trois lignes manquantes — le pilote applique enfin la fenêtre
 - Round 44 livré : `--attn-sinks` — écrit partout, transporté par le v7, **lu nulle part**
+- 2 048 jetons : le drain ne compense plus (+40 % au mieux) — j'écris la pente en N et je lance la suite (puits plus nombreux)
 
 ## Sessions actives ce jour
 
-- `d31b3d9b` — Où en est-on (début 2026-10-08 09:11, 49.3 h) → [rapport](sessions/d31b3d9b/rapport.md) · [digest](sessions/d31b3d9b/digest.md)
+- `d31b3d9b` — Où en est-on (début 2026-10-08 09:11, 49.5 h) → [rapport](sessions/d31b3d9b/rapport.md) · [digest](sessions/d31b3d9b/digest.md)
 
 ## Mesures et rapports touchés
 

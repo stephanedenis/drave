@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-10.md](2026-10-10.md). Convention : `docs/organisation-du-depot.md`.
 
-## Commits du jour (12)
+## Commits du jour (13)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -20,8 +20,15 @@
 | 09:41 | `639b007` | Journal : la section 46 bis (--attn-sinks ecrit partout, lu nulle part) manquait — l'ancre du premier essai ne correspondait pas | `sprint-cerveau.md`, `MANIFEST.md`, `digest.md` (+1) |
 | 10:07 | `85cf49c` | --attn-sinks : le refus etait FAUX (le compteur EST lu, branche a fenetre) — le drapeau vit, et le zero n'existait pas | `sprint-cerveau.md`, `main.rs`, `MANIFEST.md` (+5) |
 | 10:19 | `531e760` | Fenetre x puits d'attention : +2,0 % de perplexite pour divide 2,67 les cles notees (512 jetons) | `etat-cerveau.md`, `2026-10-10.md`, `README.md` (+4) |
+| 10:39 | `024e509` | Fenetre x puits : la pente en N mesuree — gratuit a 512 jetons, +40 % a 2 048 | `etat-cerveau.md`, `2026-10-10.md`, `2026-10-10_attention.md` (+13) |
 
-## Étapes du jour (6)
+## Chiffres du jour
+
+`+40 %` · `512 jetons` · `+2,0 %`
+
+*Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
+
+## Étapes du jour (5)
 
 *Ce que l'agent a consigné en le faisant (lignes `⏵` du journal de session) :*
 
@@ -30,7 +37,6 @@
 - Round 28 livré : **protocole v7** — la fenêtre d'attention voyage, le refus disparaît, tout est vert
 - Round 42 livré : les trois lignes manquantes — le pilote applique enfin la fenêtre
 - Round 44 livré : `--attn-sinks` — écrit partout, transporté par le v7, **lu nulle part**
-- 2 048 jetons : le drain ne compense plus (+40 % au mieux) — j'écris la pente en N et je lance la suite (puits plus nombreux)
 
 ## Sessions actives ce jour
 
