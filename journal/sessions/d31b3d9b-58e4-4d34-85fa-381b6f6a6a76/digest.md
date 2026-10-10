@@ -30170,3 +30170,140 @@ impl Act {
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\n\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\na = \"\"\"**Prochaine commande, écrite ici pour être exécutable telle quelle** : pour chaque candidat,\ncomparer e … [5748 caractères tronqués]`
+
+  ```
+docs candidats instruits
+9775545 Candidats instruits : la mesure vide etait MON erreur, et deux drapeaux restent a instruire
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 22 livré : la mesure vide était **mon** erreur — et deux drapeaux restent à instruire
+
+**Ce round** — 1 commit poussé. Le round 21 laissait des candidats « à instruire » après une mesure vide. La cause de la mesure vide est trouvée, **et ce n'est pas les drapeaux** : le tirage de port du banc montait à 65 949, **au-delà de 65 535** — le nœud ne pouvait pas se lier, et le moteur le disait clairement (`INJOIGNABLE (invalid port value)`). Une mesure vide ne prouvait rien, et elle ne venait pas de ce qu'elle mesurait.
+
+Reprise avec un port valide et `--options-strict` (pour qu'un drapeau inconnu soit **refusé** au lieu d'être ignoré) :
+
+| drapeau | réparti | verdict |
+|---|---|---|
+| aucun (référence) | 180,5245 | — |
+| `--act-topk 64` | **1 137 878,95** | **agit** |
+| `--qk-topk 64` | **24 955,44** | **agit** |
+| `--act-thresh 0,01` | **209,7804** | **agit** |
+| **`--attn-window 16`** | 180,5245 | **SANS EFFET** |
+| **`--attn-topk 64`** | 180,5245 | **SANS EFFET** |
+| `--moe-topk 2` | 180,5245 | sans effet — **normal**, le modèle est dense |
+
+**Trois verdicts, dont un faux positif :**
+- `--moe-topk` : normalement sans effet sur un modèle **dense**, ce n'est pas un défaut ;
+- `--attn-topk` : **voyage pourtant dans la trame** (le champ est dans `struct Act`, avec `qk_topk`) et agit en local — câblé et transporté, mais sans effet **dans cette configuration** : l'explication la plus probable est qu'à 32 jetons de contexte l'attention est déjà triviale ; à tester à contexte long ;
+- `--attn-window` : **ne voyage pas** (absent de `Act`), donc le nœud garde son défaut — le candidat le plus sérieux.
+
+**La leçon de méthode**, celle du sprint entier : une mesure vide doit être instruite **jusqu'à sa cause** avant d'accuser ce qu'elle mesurait — ici, mon propre banc de test.
+
+**Bilan** : 22 rounds, **22 portes toutes vertes**, 122 tests, 40 sections de rapport. L'objectif reste **actif**.
+
+
+## Tour 66
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 mémoire épisodique, C7 consolidation, C8 périphérie, C9 latéralité, C10 budgets, et la diffusion réseau du bus de C5 ; (b) les expériences E2-E9 de docs/biologie-pour-drave.md et docs/hebbien-differentiel-et-biologie.md ; (c) les dessins de modèle H/I/J de docs/modele-pour-drave.md ; (d) les manques du registre docs/manques.md (noyau de listes pour les experts, noyau de listes GPU, encodeurs) — l'implémenter ou la mesurer, la doter d'une porte vérifiable, la documenter, commiter, pousser, et enchaîner immédiatement sur la suivante. Contraintes : les 23 portes du dépôt et tous les tests restent verts (porte-flux.sh après toute modification du chemin d'exécution), le profil release reste le binaire de mesure, le crate reste std seul, et docs/sprint-cerveau.md reste l'état resumable mis à jour à chaque round. Ne jamais s'arrêter faute de tâches planifiées : en inventer de nouvelles, mesurables, plutôt que d'attendre."
+Round: 23/60
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 23 : je teste les deux candidats au CONTEXTE LONG (512 jetons au lieu de 32)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && T=$(mktemp -d) && PORT=$((60000 + RANDOM % 4000)) && cat > $T/topo.json <<JSON\n{\"regions\":[\n  {\"id\":\"local\",\"couches\":[0,11],\"instance\":\"local\"},\n  {\"id\":\"d\",\"couches\":[12,23],\"instance\":\"127.0.0.1:$PORT\"}],\ … [989 caractères tronqués]`
+
+  ```
+nu (512 jetons)      : 18.5520
+  --attn-topk 64       : 18.4032        AGIT
+  --attn-window 64     : 18.5520        SANS EFFET
+  --qk-topk 64         : 2044.7397      AGIT
+  ```
+
+### 🤖 Assistant
+
+⏵ `--attn-topk` agit à 512 jetons (mon hypothèse était bonne) ; `--attn-window` reste inerte — test en LOCAL
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && A=$(./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/campagne24/ids_0.5B-Q8.txt --limit 512 --ctx 1024 --threads 8 2>&1 | grep -oE \"perplexité [0-9.]+ sur\" | grep -oE \"[0-9.]+\") && B=$(./drave-core/targe … [831 caractères tronqués]`
+
+  ```
+local nu                     : 13.1368
+  local --attn-window 64       : 21.5801   AGIT
+  local --swa-pattern 2 + window: 17.6142   AGIT
+  ```
+
+### 🤖 Assistant
+
+⏵ Deuxième vrai trou : `--attn-window` AGIT en local (13,1→21,6) mais PAS en réparti — je le câble
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\na = \"\"\"    if let Some(gs) = opt.ffn_gain.clone() {\"\"\"\nb = \"\"\"    // C2/E4 (2e trou de la même famille) : la FENÊTRE d'at … [2408 caractères tronqués]`
+
+  ```
+attn_window cable en reparti
+error[E0308]: mismatched types
+    --> src/main.rs:4347:23
+     |
+4347 |     mdl.swa_pattern = opt.swa_pattern;
+     |     ---------------   ^^^^^^^^^^^^^^^ expected `usize`, found `Option<usize>`
+     |     |
+     |     expected due to the type of this binding
+     |
+     = note: expected type `usize`
+--
+error[E0277]: `Option<usize>` doesn't implement `std::fmt::Display`
+    --> src/main.rs:4352:35
+     |
+4350 |         println!("[attention] fenêtre {} · motif {}{} — appliqués aux couches LOCALES \
+     |                                                  -- required by this formatting parameter
+4351 | seulement : ces champs ne voyagent pas encore dans la trame (protocole v7 à faire)",
+4352 |                  opt.attn_window, opt.swa_pattern,
+     |                                   ^^^^^^^^^^^^^^^ `Option<usize>` cannot be formatted with the default formatter
+     |
+--
+  réparti (nu) : 18.5520
+  réparti --attn-window 64 :
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"swa_pattern\" drave-core/src/main.rs | grep -v \"opt.swa_pattern\" | head -4 && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\ns = s.replace(\"\"\"    mdl.swa_pattern = … [503 caractères tronqués]`
+
+  ```
+576:             mdl.attn_window, mdl.swa_pattern, mdl.seuil_push, mdl.lot,
+823:    attn_window: usize, swa_pattern: Option<usize>, sans_fenetre: bool,
+1035:            "--swa-pattern" => { o.swa_pattern = Some(suivant(i).parse().unwrap()); 2 }
+1171:        keep, attn_window, swa_pattern, sans_fenetre, attn_sinks, attn_topk, qk_topk,
+types corriges
+BUILD_END
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && T=$(mktemp -d); PORT=$((60000 + RANDOM % 4000)); cat > $T/topo.json <<JSON\n{\"regions\":[{\"id\":\"local\",\"couches\":[0,11],\"instance\":\"local\"},{\"id\":\"d\",\"couches\":[12,23],\"instance\":\"127.0.0.1:$PORT\"}],\"liens\":[{\ … [814 caractères tronqués]`
+
+  ```
+réparti (nu) : 18.5520
+  réparti --attn-window 64 : VIDE
+test result: ok. 122 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.34s
+  ```
+
+### 🤖 Assistant
+
+⏵ Le câblage d'`attn_window` rend un résultat VIDE — je le REVERTE plutôt que de laisser une régression
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git checkout drave-core/src/main.rs && cargo build --release --manifest-path drave-core/Cargo.toml 2>&1 | grep -E \"^error\" | head -3; T=$(mktemp -d); PORT=$((60000 + RANDOM % 4000)); cat > $T/topo.json <<JSON\n{\"regions\":[{\"id\" … [940 caractères tronqués]`
+
+  ```
+après revert, réparti nu : 18.5520
+test result: ok. 122 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.34s
+ M journal/README.md
+ M journal/sessions/MANIFEST.md
+[stderr]
+Updated 1 path from the index
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\n\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\na = \"\"\"- `--attn-window` **ne voyage PAS** : il n'est pas dans `Act`, donc le nœud garde son défaut et\n  seule … [5186 caractères tronqués]`

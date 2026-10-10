@@ -2459,9 +2459,23 @@ refusé au lieu d'être ignoré) :
   sans effet sur le résultat **dans cette configuration** — à instruire : le top-k d'attention
   ne change-t-il rien à 32 jetons de contexte (où l'attention est déjà triviale) ? C'est
   l'explication la plus probable, et elle se teste en allongeant le contexte ;
-- `--attn-window` **ne voyage PAS** : il n'est pas dans `Act`, donc le nœud garde son défaut et
-  seules les 12 couches locales du pilote le verraient — or il n'a rien changé non plus sur
-  celles-là. C'est le candidat le plus sérieux, et il est **à instruire** ;
+- **`--attn-window` : deux constats, et une tentative de correction REVERTÉE.** À contexte long
+  (512 jetons), le drapeau **agit en local** (13,1368 → **21,5801**) et reste **SANS EFFET en
+  réparti** (18,5520 des deux côtés) : il n'est câblé que dans `run_infer` et `run_ppl`, pas
+  dans `run_ppl_reparti` — même famille que `--ffn-gain` (§38). Et il **ne voyage pas** dans la
+  trame (`struct Act` ne porte ni `attn_window`, ni `swa_pattern`, ni `attn_sinks`).
+  Le câblage a été tenté : il rend un **résultat VIDE** (aucune perplexité), cause **non
+  diagnostiquée**. La correction a donc été **REVERTÉE** plutôt que laissée dans l'arbre : une
+  régression silencieuse vaut moins qu'un manque écrit. Après revert, la référence répartie est
+  de nouveau **18,5520** et les 122 tests passent.
+  **À instruire, avec la commande** : câbler `attn_window`/`swa_pattern`/`attn_sinks` dans
+  `run_ppl_reparti`, puis regarder la sortie COMPLÈTE du run (le résultat vide vient d'un
+  refus ou d'une panne, et le moteur dit lequel) ; et décider ensuite s'ils doivent voyager
+  dans la trame (protocole v7), sans quoi le pilote et le nœud n'appliqueraient pas la même
+  fenêtre — deux modèles différents sous le même nom ;
+- `--attn-topk` : **mon hypothèse est confirmée par la mesure** — sans effet à 32 jetons
+  (180,5245), il **agit** à 512 (18,5520 → **18,4032**). Il n'y a donc **pas** de défaut là :
+  à contexte court, l'attention est déjà triviale, et le drapeau ne peut rien changer.
 
 ## Annexe — manifeste des journaux
 

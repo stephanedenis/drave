@@ -354,9 +354,23 @@ disait (`INJOIGNABLE (invalid port value)`). Reprise avec un port valide et `--o
 | **`--attn-topk 64`** | 180,5245 | **SANS EFFET** (voyage pourtant : champ présent dans `Act`) |
 | `--moe-topk 2` | 180,5245 | normal — **Qwen2.5-0.5B est dense**, sans experts |
 
-**Deux à instruire** : `--attn-window` (absent de `Act`, donc le nœud garde son défaut) et
-`--attn-topk` (transporté, câblé, mais sans effet à 32 jetons de contexte — où l'attention est
-déjà triviale ; à tester à contexte long).
+**Instruits à contexte long (512 jetons) :**
+
+- **`--attn-topk` : PAS de défaut** — sans effet à 32 jetons (180,5245), il **agit** à 512
+  (18,5520 → **18,4032**). Mon hypothèse était la bonne : à contexte court, l'attention est
+  déjà triviale ;
+- **`--attn-window` : un vrai trou, et une correction REVERTÉE.** À 512 jetons il **agit en
+  local** (13,1368 → **21,5801**) et **pas en réparti** (18,5520) ⇒ il n'est câblé que dans
+  `run_infer` et `run_ppl` (même famille que `--ffn-gain`). Et il **ne voyage pas** dans la
+  trame (`Act` ne porte ni `attn_window`, ni `swa_pattern`, ni `attn_sinks`). Le câblage a été
+  tenté : il rend un **résultat VIDE**, cause non diagnostiquée ⇒ **REVERTÉ** plutôt que laissé
+  dans l'arbre — une régression silencieuse vaut moins qu'un manque écrit. Après revert :
+  référence répartie **18,5520**, 122 tests verts, arbre propre.
+
+**À instruire** : câbler ces trois champs dans `run_ppl_reparti` en regardant la sortie
+COMPLÈTE (le vide vient d'un refus ou d'une panne, le moteur dit lequel), puis décider s'ils
+doivent voyager dans la trame (protocole v7) — sinon le pilote et le nœud n'appliqueraient pas
+la même fenêtre, c'est-à-dire **deux modèles différents sous le même nom**.
 
 ---
 

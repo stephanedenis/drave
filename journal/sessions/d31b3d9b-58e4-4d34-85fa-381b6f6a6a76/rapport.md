@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 47.0 h |
-| Tours | 65 |
-| Messages | 1888 |
-| Appels d'outils | 1756 |
+| Durée | 47.2 h |
+| Tours | 66 |
+| Messages | 1897 |
+| Appels d'outils | 1763 |
 | Fichiers touchés | 61 |
-| Commandes | 1506 |
+| Commandes | 1513 |
 | Sous-agents | 3 |
-| Commits | 155 |
+| Commits | 156 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -165,6 +165,8 @@
 **Tour 64** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 **Tour 65** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
+
+**Tour 66** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -2836,7 +2838,46 @@ Après le défaut de câblage de `--ffn-gain` (round 20), la question mécanique
 
 **Synthèse produite :**
 
-⏵ Trois drapeaux sans effet en réparti — je vérifie s'ils voyagent dans la trame (`Act`)
+⏵ Round 22 livré : la mesure vide était **mon** erreur — et deux drapeaux restent à instruire
+
+**Ce round** — 1 commit poussé. Le round 21 laissait des candidats « à instruire » après une mesure vide. La cause de la mesure vide est trouvée, **et ce n'est pas les drapeaux** : le tirage de port du banc montait à 65 949, **au-delà de 65 535** — le nœud ne pouvait pas se lier, et le moteur le disait clairement (`INJOIGNABLE (invalid port value)`). Une mesure vide ne prouvait rien, et elle ne venait pas de ce qu'elle mesurait.
+
+Reprise avec un port valide et `--options-strict` (pour qu'un drapeau inconnu soit **refusé** au lieu d'être ignoré) :
+
+| drapeau | réparti | verdict |
+|---|---|---|
+| aucun (référence) | 180,5245 | — |
+| `--act-topk 64` | **1 137 878,95** | **agit** |
+| `--qk-topk 64` | **24 955,44** | **agit** |
+| `--act-thresh 0,01` | **209,7804** | **agit** |
+| **`--attn-window 16`** | 180,5245 | **SANS EFFET** |
+| **`--attn-topk 64`** | 180,5245 | **SANS EFFET** |
+| `--moe-topk 2` | 180,5245 | sans effet — **normal**, le modèle est dense |
+
+**Trois verdicts, dont un faux positif :**
+- `--moe-topk` : normalement sans effet sur un modèle **dense**, ce n'est pas un défaut ;
+- `--attn-topk` : **voyage pourtant dans la trame** (le champ est dans `struct Act`, avec `qk_topk`) et agit en local — câblé et transporté, mais sans effet **dans cette configuration** : l'explication la plus probable est qu'à 32 jetons de contexte l'attention est déjà triviale ; à tester à contexte long ;
+- `--attn-window` : **ne voyage pas** (absent de `Act`), donc le nœud garde son défaut — le candidat le plus sérieux.
+
+**La leçon de méthode**, celle du sprint entier : une mesure vide doit être instruite **jusqu'à sa cause** avant d'accuser ce qu'elle mesurait — ici, mon propre banc de test.
+
+**Bilan** : 22 rounds, **22 portes toutes vertes**, 122 tests, 40 sections de rapport. L'objectif reste **actif**.
+
+### Tour 66 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
+
+*7 appels d'outils.* Actions notables :
+
+- bash — Retest candidates at a long context
+- bash — Test attn-window in the local path
+- bash — Wire attn_window and measure
+- bash — Fix the option types and rebuild
+- bash — Verify the flag now acts and tests pass
+- bash — Revert the wiring and verify the baseline
+- bash — Document the attn-window finding and the revert
+
+**Synthèse produite :**
+
+⏵ Le câblage d'`attn_window` rend un résultat VIDE — je le REVERTE plutôt que de laisser une régression
 
 ## 3. Travail accompli
 
@@ -2954,7 +2995,7 @@ Après le défaut de câblage de `--ffn-gain` (round 20), la question mécanique
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1466 autres
+- … et 1473 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3082,7 +3123,7 @@ Après le défaut de câblage de `--ffn-gain` (round 20), la question mécanique
 
 ## 5. Erreurs rencontrées
 
-72 sorties en erreur ou divergentes. Les premières :
+73 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : ```  ### 🤖 Assistant  ⏵ **En transformers 5, `AutoModel` rend directement `Qwen2Model` (pas de `.model`). Je corrige le diagnostic.**  - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitH
 - **T2** : 3310393 bash -c pgrep -af "essai_decharge" | grep python | head; echo "--- logs ---"; tail -2 /tmp/ec_d192_lr3e3.log 2>/dev/null; tail -2 /tmp/ec_d192_lr1e3.log 2>/dev/null; echo "---"; ls -la /tmp/ec
@@ -3253,6 +3294,7 @@ Après le défaut de câblage de `--ffn-gain` (round 20), la question mécanique
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib p = pathlib.Path("docs/sprint-cerveau.md") s = p.read_text() a = "## ▶ 
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
