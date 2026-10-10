@@ -277,80 +277,73 @@ entier/réparti position par position (l'outil existe : `compare_logits.py`).
 
 ## ▶ PROCHAINE ACTION (à lire en premier)
 
-État au **10 octobre 11 h 45** : **C1, C3, C4 (pas 1), C5, C5bis, C5ter, C6, C7 (pas 1),
-C8 (pas 1), C9/C10, C12, C12bis, C9×C1, C2/C6 (greffe d'état)** livrées et poussées ·
-**122 tests verts** · portes : `porte-topologie`, `porte-trace`, `porte-fusion`,
-`porte-bus`, `porte-bus-socket`, `porte-delais`, `porte-horloge`, `porte-flux`,
-`porte-pont`, `porte-coupe`, `porte-episodique`, `porte-reflexe`, `porte-greffe`.
+État au **11 octobre 6 h 45** · **21 portes, toutes vertes** (`tools/porte-*.sh`) ·
+**122 tests verts** · 14 rounds livrés, tout poussé sur `origin/master`.
 
-**La consigne tient : ne pas s'arrêter faute de liste.** Le temps commun est la denrée
-la plus précieuse ; quand une liste s'épuise, la question est « qu'est-ce qui est
-mesurable maintenant ? ».
+### La consigne tient : ne pas s'arrêter faute de liste
 
-### Les trois fils ouverts, par valeur
+Le temps commun est la denrée la plus précieuse ; quand une liste s'épuise, la question est
+« qu'est-ce qui est mesurable maintenant ? ». Un round qui **corrige** une mesure fausse vaut
+un round qui en ajoute une — ce sprint en a produit cinq corrections, toutes documentées à
+côté de la valeur d'origine.
 
-**1. L'ENTRÉE DE CACHE — le prochain pas, et il est conçu.** La greffe d'état a montré
-que l'injection d'un état résiduel **ne transfère pas le contexte** : le premier jeton
-vient de l'état injecté, mais la suite est re-dérivée par l'attention sur le cache KV.
-Pour qu'une mémoire **serve** le calcul, il faut donc ranger ce qu'elle rend comme une
-**entrée de cache** que l'attention peut interroger. Conception à suivre :
-   - `--memoire-etat F --memoire-couche L` : à la couche L, calculer `k = W_k(x)`,
-     `v = W_v(x)` à partir de l'état rappelé (les projections existent déjà dans la
-     couche), et **ajouter un emplacement** à la fenêtre d'attention ;
-   - le point délicat est la **position RoPE** de cet emplacement : lui donner la
-     position du souvenir, ou la position courante ? Les deux se mesurent ;
-   - invariant : **sans état rappelé, la sortie est identique au bit près** (le chemin
-     doit être inerte quand il ne sert pas) ;
-   - mesure : avec un souvenir rangé en cache, la réponse doit devenir celle du
-     contexte qui a vécu l'épisode — c'est le test que la greffe résiduelle a échoué.
-   Le cache est indexé par position dans `KvCache` ; il faut donc soit un emplacement
-   réservé, soit un décalage des positions suivantes — et ce choix doit être écrit.
+### Les trois prochains chantiers, par valeur, avec leur première commande
 
-**2. C8 (suite) — une tête DÉDIÉE par profondeur.** Mesuré : un réflexe court ne peut
-pas lire l'état intermédiaire (cos 0,145 à 16 couches sur 24) ; il lui faudrait une
-tête **entraînée pour sa couche**. Le moteur n'entraîne pas : c'est un manque, et c'est
-le même chantier que C7 (rejeu → poids).
+**1. Le budget `paires/s` (C10, troisième volet).** Les octets et la latence sont faits ; il
+reste les PAIRES, et elles se heurtent à une difficulté nommée : **ce sont les pairs qui les
+calculent**, donc le pilote ne peut pas les borner sans que le nœud les lui TRANSPORTE. La
+voie propre est d'ajouter le compte de paires du nœud à la trame de réponse (protocole v7) :
+un champ, un contrôle, une porte. Commencer par mesurer ce que le nœud calcule réellement
+par pas (il l'imprime déjà à la fin : « paires (poids × activation) : … par token »).
 
-**3. Les MODÈLES** (`docs/modele-pour-drave.md`) : designs H (routage en profondeur),
-I (budget d'événements appris), J (entraînement conscient de la quantification). La
-campagne a mesuré les architectures existantes ; concevoir et entraîner un modèle
-**conçu pour l'événementiel** est la question d'origine, et rien ne l'a encore
-attaquée côté entraînement.
+**2. C8 (suite) — une tête DÉDIÉE par profondeur.** Mesuré : un réflexe court ne peut pas
+lire l'état intermédiaire (cos 0,145 à 16 couches sur 24). Il lui faudrait une tête
+**entraînée pour sa couche** — c'est le même chantier que C7 vers les poids, et
+`tools/entrainer_moteur.py` existe. Première commande : entraîner une tête linéaire sur
+l'état de la couche 16 et mesurer son accord avec le modèle entier (le protocole de
+`tools/porte-reflexe.sh` le fait déjà pour une tête empruntée).
 
-### Ce qui est fait, en une ligne par capacité
+**3. Les expériences de biologie E2/E4/E5** (`docs/biologie-pour-drave.md`) : croissance des
+connexions, équilibre excitation/inhibition, rejeu. Le moteur a déjà les leviers
+(`--ffn-gain`, `--act-thresh`, `--act-topk`, `--hebb-*`) et la campagne a mesuré les
+réglages de parcimonie ; ce qui n'a pas été fait est la **courbe de dose** d'une inhibition
+négative (`--ffn-gain` < 0) et son effet sur la perplexité, par couche.
 
-- **C1 / C4 / C5 / C5bis / C5ter / C12 / C12bis** : graphe de régions, horloge bornée,
-  bus (fichier et réseau), trace globale, nœud tracé, fusion par le temps mural.
-- **C6** : mémoire épisodique — trois négatifs mesurés, puis **trois ingrédients**
-  (expansion, décorrélation, égalisation) : élagage 83 %, rappel 96,3 % à 50 % de
-  dégradation, **Δ = 11 jetons sur 2 048** (0,54 % du texte), round-trip exact.
-- **C7** : consolidation par rejeu — **l'exemplaire bat la moyenne** (7 % du magasin →
-  87 % de rappel contre 13 % → 22 %), et **le rejeu répété est un point fixe** (0,00e0).
-- **C8** : réflexe — **0 % d'accord jusqu'à 16 couches sur 24**, cause mesurée
-  (cos 0,145 : l'état intermédiaire est presque orthogonal au final).
-- **C9/C10** : pont — **448 fibres = +2,81 % et ÷1,8 en octets**, **224 = +108,9 %**
-  (falaise **entre 448 et 392**) ; en dense f32 élaguer ne gagne **aucun** octet ;
-  à budget égal **quantifier bat élaguer de 83 %**.
-- **C9×C1** : **8 points de coupe, une seule perplexité** (lien sans perte) ; **8,9 %
-  d'écart** avec un lien encodé ; le coût du pont varie d'un **facteur 30** selon la
-  coupe ⇒ **couper tard**.
+### Ce qui a été livré (une ligne par capacité)
 
-**Trappes à ne pas retomber dans** (toutes rencontrées) :
+- **C1 / C4 / C5 / C5bis / C5ter / C10 / C11 / C12 / C12bis** : graphe de régions, borne de
+  pas, bus (fichier **et** réseau), budgets **octets et latence**, pannes nommées
+  (**codes 5/6/7/8**), **registre de régions**, trace globale, trace du nœud, fusion par le
+  temps mural.
+- **C2** : deux entrées se **somment** et la somme **arbitre** (7/7, jamais de 3ᵉ contenu) ;
+  bascule à **α = 0,6** contre **0,509** prédit par les normes.
+- **C6** : mémoire épisodique — trois négatifs, puis trois ingrédients (expansion,
+  décorrélation, égalisation) : **élagage 83 %**, rappel 96,3 % à 50 % de dégradation,
+  round-trip **exact**, Δ = **11 jetons sur 2 048**. Puis : le rappel **dépend de l'indice**
+  (1 sur 8), il **n'est pas continu** (50 vs 1 006 pour deux jetons voisins), et la clé de
+  **fenêtre** dégrade tout (prédiction réfutée) — **la sélectivité EST la netteté de la clé**.
+- **C7** : consolidation — l'**exemplaire** bat la moyenne (7 % du magasin → 87 % de rappel),
+  et le rejeu répété est un **point fixe exact** (0,00e0).
+- **C9** : pont — **448 fibres = +2,81 % et ÷1,8 en octets**, falaise **entre 448 et 392** ;
+  à budget égal **quantifier bat élaguer de 83 %** ; **où couper** : 8 coupes, une seule
+  perplexité sans perte, et le coût du pont varie d'un **facteur 30**.
+- **C2/C6 (la greffe)** : l'état injecté **transfère le contenu** quand il est prélevé **là où
+  le calcul se fait** — et ma première conclusion négative était un **décalage d'un jeton**,
+  corrigée et conservée à côté.
 
-- le gain de bus sur une région **finale** est absorbé par la normalisation (mesurer au
-  **milieu**) ; `--flux` est **sans argument** (`--flux f32` passe « f32 » en positionnel
-  et reste en dense) ;
-- `..Default::default()` donne **0,0** à un f32 : un poids de greffe par défaut à zéro
-  n'aurait rien fait, en silence ;
-- une position « dernière » **ne se devine pas** (`--tokenize` et `--prompt` ne comptent
-  pas les mêmes jetons) — la faire résoudre par le moteur ;
-- un nom de **variable** bash accentué n'est pas un identifiant valide (les noms de
-  *fonctions* accentués passent) ; `pkill -f "<nom>"` se tue lui-même ;
-- un nœud refuse une plage d'une seule couche ; le signe `%` est un **champ** à part
-  dans les sorties (deux parseurs de porte se sont trompés d'indice) ;
-- `--depuis` gonfle les compteurs de paires ; un drapeau inconnu est **ignoré en
-  silence** (`--options-strict` dans les scripts) ; **sérialiser** les lecteurs lourds
-  (deux lecteurs concurrents font tomber le disque à 8,6 Mo/s).
+### Les cinq corrections de ce sprint, à ne pas réintroduire
+
+1. **`--limit` diffère selon le chemin** : `--ppl` note les N **premiers** jetons,
+   `--ppl-reparti` tronque aux N **derniers**. Dans une porte, `--limit` = **le nombre de
+   jetons du fichier, compté** — les deux portes qui l'écrivaient à la main s'étaient
+   trompées toutes les deux ;
+2. **une position ne se devine pas** : `--tokenize` et `--prompt` ne comptent pas les mêmes
+   jetons ⇒ `--etat-fin` (k-ième depuis la fin, résolu par le moteur, **après** troncature) ;
+3. **`..Default::default()` donne 0,0** à un f32 : un poids de greffe par défaut à zéro
+   n'aurait rien fait, en silence ;
+4. **`sys.exit("message")` sort toujours en code 1** — une porte « verte » rendait 1 ;
+5. **une porte qui échoue doit être instruite jusqu'à sa cause** : la rouge de répartition
+   accusait le modèle, c'était la porte (255 jetons contre 128 annoncés).
 
 ---
 

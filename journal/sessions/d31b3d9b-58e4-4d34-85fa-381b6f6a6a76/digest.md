@@ -29242,3 +29242,56 @@ code=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\n\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\na = \"## Annexe — manifeste des journaux\"\nsec = \"\"\"## 36. Balayage des portes : le piège de fenêtre était LAT … [5826 caractères tronqués]`
+
+  ```
+docs balayage
+dee9e58 Balayage des portes : le piege de fenetre etait LATENT dans porte-topologie aussi
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 13 livré : le piège de fenêtre était latent dans une 2ᵉ porte — balayage fait, règle écrite
+
+**Ce round** — 1 commit poussé, `porte-topologie` corrigée et verte (code 0, aucun rouge).
+
+Après avoir corrigé `porte-reparti-moteur` (round 11), la question mécanique : **combien d'autres portes portent le même piège de fenêtre** (`--ppl` note les `limit` **premiers** jetons, `--ppl-reparti` **tronque aux `limit` derniers**) ? Balayage des 20 portes :
+
+| porte | compare à un entier ? | verdict |
+|---|---|---|
+| `porte-reparti-moteur` | **oui, et affirme l'égalité** | corrigée (round 11) |
+| **`porte-topologie`** | **non — imprime côte à côte** | **corrigée ici** |
+| `porte-flux` | non : lit la « référence **locale** » du même run | saine par construction |
+| 11 autres | non : réparti contre réparti | saines par construction |
+
+**`porte-topologie` avait le piège à l'état latent** : 255 jetons dans le fichier, limite annoncée à 128 — la perplexité de référence et celle du découpage **portaient sur deux passages différents**, affichées l'une sous l'autre comme si elles se comparaient. Elle ne l'affirmait pas, donc elle passait ; mais elle **invitait à une comparaison fausse**.
+
+Après correction (jetons **comptés**) : **référence 5,3719 · découpage 5,3719 · écart de flux 0,00e0** — les deux nombres parlent enfin du même texte.
+
+**Règle écrite une fois pour toutes** : dans une porte, `--limit` doit valoir **le nombre de jetons du fichier, compté et non écrit à la main**, dès qu'un chemin réparti intervient. Les deux portes qui le faisaient à la main s'étaient trompées **toutes les deux**.
+
+**Bilan du sprint** : 13 rounds, 21 portes (toutes vertes), 122 tests, quatre codes d'arrêt distincts (5/6/7/8), un registre de régions, et une douzaine de résultats mesurés dont la moitié sont des négatifs ou des corrections — tous documentés avec leurs conditions dans `reports/rapport-campagne-benefices.md` (§24 à §36). L'objectif reste **actif**.
+
+
+## Tour 57
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 mémoire épisodique, C7 consolidation, C8 périphérie, C9 latéralité, C10 budgets, et la diffusion réseau du bus de C5 ; (b) les expériences E2-E9 de docs/biologie-pour-drave.md et docs/hebbien-differentiel-et-biologie.md ; (c) les dessins de modèle H/I/J de docs/modele-pour-drave.md ; (d) les manques du registre docs/manques.md (noyau de listes pour les experts, noyau de listes GPU, encodeurs) — l'implémenter ou la mesurer, la doter d'une porte vérifiable, la documenter, commiter, pousser, et enchaîner immédiatement sur la suivante. Contraintes : les 23 portes du dépôt et tous les tests restent verts (porte-flux.sh après toute modification du chemin d'exécution), le profil release reste le binaire de mesure, le crate reste std seul, et docs/sprint-cerveau.md reste l'état resumable mis à jour à chaque round. Ne jamais s'arrêter faute de tâches planifiées : en inventer de nouvelles, mesurables, plutôt que d'attendre."
+Round: 14/60
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 14 : je consolide l'état reprenable avec les commandes exactes, et je certifie la suite
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 cargo test --release --manifest-path drave-core/Cargo.toml 2>&1 | grep -E \"^test result\" && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"docs/sprint-cerveau.md\")\ns = p.read_text()\ndeb = s.index(\"## ▶ PROC … [4925 caractères tronqués]`
+
+  ```
+test result: ok. 122 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.33s
+etat reprenable reecrit
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"docs/sprint-cerveau.md\")\ns = p.read_text()\na = \"\"\"| 11/10 06 h 30 | **BALAYAGE DES PORTES**\"\"\"\nb = \"\"\"| 11/10 06 h 45 | **CONSOLIDATION DE L'ÉTAT REPRENABLE** : le  … [2010 caractères tronqués]`

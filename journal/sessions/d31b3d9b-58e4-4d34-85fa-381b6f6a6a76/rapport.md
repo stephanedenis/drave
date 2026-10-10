@@ -6,13 +6,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
 | Durée | 46.3 h |
-| Tours | 56 |
-| Messages | 1829 |
-| Appels d'outils | 1715 |
+| Tours | 57 |
+| Messages | 1833 |
+| Appels d'outils | 1717 |
 | Fichiers touchés | 61 |
-| Commandes | 1465 |
+| Commandes | 1467 |
 | Sous-agents | 3 |
-| Commits | 146 |
+| Commits | 147 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -147,6 +147,8 @@
 **Tour 55** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 **Tour 56** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
+
+**Tour 57** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -2541,7 +2543,37 @@ Une topologie qui écrit `"instance": "127.0.0.1:50001"` décrit **un** déploie
 
 **Synthèse produite :**
 
-⏵ La référence et le réparti donnent maintenant 5,3719 tous les deux — je vérifie le verdict complet
+⏵ Round 13 livré : le piège de fenêtre était latent dans une 2ᵉ porte — balayage fait, règle écrite
+
+**Ce round** — 1 commit poussé, `porte-topologie` corrigée et verte (code 0, aucun rouge).
+
+Après avoir corrigé `porte-reparti-moteur` (round 11), la question mécanique : **combien d'autres portes portent le même piège de fenêtre** (`--ppl` note les `limit` **premiers** jetons, `--ppl-reparti` **tronque aux `limit` derniers**) ? Balayage des 20 portes :
+
+| porte | compare à un entier ? | verdict |
+|---|---|---|
+| `porte-reparti-moteur` | **oui, et affirme l'égalité** | corrigée (round 11) |
+| **`porte-topologie`** | **non — imprime côte à côte** | **corrigée ici** |
+| `porte-flux` | non : lit la « référence **locale** » du même run | saine par construction |
+| 11 autres | non : réparti contre réparti | saines par construction |
+
+**`porte-topologie` avait le piège à l'état latent** : 255 jetons dans le fichier, limite annoncée à 128 — la perplexité de référence et celle du découpage **portaient sur deux passages différents**, affichées l'une sous l'autre comme si elles se comparaient. Elle ne l'affirmait pas, donc elle passait ; mais elle **invitait à une comparaison fausse**.
+
+Après correction (jetons **comptés**) : **référence 5,3719 · découpage 5,3719 · écart de flux 0,00e0** — les deux nombres parlent enfin du même texte.
+
+**Règle écrite une fois pour toutes** : dans une porte, `--limit` doit valoir **le nombre de jetons du fichier, compté et non écrit à la main**, dès qu'un chemin réparti intervient. Les deux portes qui le faisaient à la main s'étaient trompées **toutes les deux**.
+
+**Bilan du sprint** : 13 rounds, 21 portes (toutes vertes), 122 tests, quatre codes d'arrêt distincts (5/6/7/8), un registre de régions, et une douzaine de résultats mesurés dont la moitié sont des négatifs ou des corrections — tous documentés avec leurs conditions dans `reports/rapport-campagne-benefices.md` (§24 à §36). L'objectif reste **actif**.
+
+### Tour 57 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Write the consolidated handoff state
+- bash — Commit the consolidated handoff
+
+**Synthèse produite :**
+
+⏵ Round 14 : je consolide l'état reprenable avec les commandes exactes, et je certifie la suite
 
 ## 3. Travail accompli
 
@@ -2659,7 +2691,7 @@ Une topologie qui écrit `"instance": "127.0.0.1:50001"` décrit **un** déploie
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1425 autres
+- … et 1427 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2953,4 +2985,5 @@ Une topologie qui écrit `"instance": "127.0.0.1:50001"` décrit **un** déploie
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib p = pathlib.Path("docs/sprint-cerveau.md") s = p.read_text() a = """| 1
 
