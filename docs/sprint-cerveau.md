@@ -326,6 +326,25 @@ sur peu de paramètres peut très bien ne pas trouver, puisqu'il optimiserait le
 
 ---
 
+## VÉRIFICATION DU CHANGEMENT DE TYPE `ffn_gain` — FAITE (11 octobre 9 h 30)
+
+Le drapeau est passé de `Option<(usize, f32)>` à `Option<Vec<(usize, f32)>>` (profil de gains),
+ce qui touche le chemin d'exécution du moteur. Vérifié :
+
+- **`porte-flux.sh` : 5 modes verts, code 0** — le changement est INACTIF par défaut, et les
+  cinq modes du protocole (0 à 4) donnent exactement les mêmes écarts qu'avant (0,00e0 ·
+  0,00e0 · 3,65e-2 · 0,00e0 · 4,45e-3) ;
+- **la référence de perplexité est inchangée** : 14,6496 sur le jeu d'essai, identique à la
+  mesure du round précédent ;
+- **`porte-gain.sh` : 6 cas verts**, y compris l'identité (`L:1.0` = absence de réglage) qui
+  est la garde du nouveau format ;
+- **122 tests verts**.
+
+C'est la règle de l'objectif appliquée à la lettre : « `porte-flux.sh` après toute modification
+du chemin d'exécution ».
+
+---
+
 ## ▶ PROCHAINE ACTION (à lire en premier)
 
 État au **11 octobre 6 h 45** · **21 portes, toutes vertes** (`tools/porte-*.sh`) ·

@@ -29699,3 +29699,64 @@ cas 6 ajoute
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\n\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\na = \"\"\"**Conditions** : un seul modèle (0,5 B), 128 jetons, un seul jeu d'identifiants, le gain est\nappliqué à … [5396 caractères tronqués]`
+
+  ```
+docs composition
+test result: ok. 122 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.33s
+0bc27b9 E4 (suite) : les gains NE SE COMPOSENT PAS — le profil defait le meilleur reglage seul
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 17 livré : les gains **ne se composent pas** — le profil défait le meilleur réglage seul
+
+**Ce round** — 1 commit poussé, 122 tests verts, `porte-gain.sh` à **6 cas** (verte). `--ffn-gain` accepte maintenant une **liste** (`0:0.75,1:0.5`), ce qui rend la question mesurable.
+
+| profil | perplexité | écart |
+|---|---|---|
+| **`0:0.75` seul** | **12,9635** | **−11,51 %** |
+| `1:0.5` seul | 13,7907 | −5,86 % |
+| `0:0.75,1:0.5` | 13,7679 | −6,02 % |
+| `0:0.9,1:0.6` | 13,4209 | −8,39 % |
+| `0:0.75,1:0.5,2:1.0` | **13,7679** | identique |
+
+- **Ajouter le gain de la couche 1 dégrade celui de la couche 0** (12,9635 → 13,7679) : les deux réglages **s'antagonisent** en partie, ils ne s'additionnent pas. Le meilleur profil mesuré est donc **un réglage SEUL**.
+- La dernière ligne est le **témoin** qui rend les autres lisibles : un gain de **1,0 dans un profil est exactement neutre** (13,7679 = 13,7679) — l'identité tient aussi à l'intérieur d'un profil.
+- **Conséquence pour le dessin I, plus dure qu'au round précédent** : non seulement le profil n'a que deux couches utiles, mais **le composer empire les choses**. Un profil appris aurait à découvrir que la bonne réponse est « une seule couche, un seul gain » — ce qu'un gradient sur peu de paramètres peut très bien ne pas trouver, puisqu'il optimiserait les deux ensemble. C'est écrit tel quel.
+
+Le drapeau passe de `Option<(usize, f32)>` à `Option<Vec<(usize, f32)>>`, les deux sites d'application (chemin normal et hyper-connexions) itèrent sur la liste, et un `L:V` unique continue de marcher exactement comme avant — les 6 cas de la porte le vérifient.
+
+**Bilan** : 17 rounds, 22 portes toutes vertes, 122 tests, 38 sections de rapport (§24 à §37) dont une bonne moitié de négatifs, réfutations et corrections. L'objectif reste **actif**.
+
+
+## Tour 61
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 mémoire épisodique, C7 consolidation, C8 périphérie, C9 latéralité, C10 budgets, et la diffusion réseau du bus de C5 ; (b) les expériences E2-E9 de docs/biologie-pour-drave.md et docs/hebbien-differentiel-et-biologie.md ; (c) les dessins de modèle H/I/J de docs/modele-pour-drave.md ; (d) les manques du registre docs/manques.md (noyau de listes pour les experts, noyau de listes GPU, encodeurs) — l'implémenter ou la mesurer, la doter d'une porte vérifiable, la documenter, commiter, pousser, et enchaîner immédiatement sur la suivante. Contraintes : les 23 portes du dépôt et tous les tests restent verts (porte-flux.sh après toute modification du chemin d'exécution), le profil release reste le binaire de mesure, le crate reste std seul, et docs/sprint-cerveau.md reste l'état resumable mis à jour à chaque round. Ne jamais s'arrêter faute de tâches planifiées : en inventer de nouvelles, mesurables, plutôt que d'attendre."
+Round: 18/60
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 18 : le drapeau `ffn_gain` a changé de type — je vérifie `porte-flux` (chemin d'exécution)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 1800 bash tools/porte-flux.sh > /tmp/pf18.txt 2>&1; echo \"porte-flux code=$?\"; tail -6 /tmp/pf18.txt", "description": "Verify the execution-path gate after the type change", "timeoutMs": 1900000}`
+
+  ```
+porte-flux code=0
+  mode 0 — f32 dense               0.00e0  ✅  (réf 61.9920 / deux nœuds 61.9920)
+  mode 1 — listes quantifiées     0.00e0  ✅  (réf 61.9920 / deux nœuds 61.9920)
+  mode 2 — listes par blocs        3.65e-2  ✅  (réf 61.9920 / deux nœuds 64.2535)
+  mode 3 — lot dense f32           0.00e0  ✅  (réf 60.8135 / deux nœuds 60.8135)
+  mode 4 — lot en listes           4.45e-3  ✅  (réf 60.8135 / deux nœuds 60.5427)
+  ```
+
+### 🤖 Assistant
+
+⏵ `porte-flux` 5/5 verte et la référence PPL inchangée (14,6496) — je consigne la vérification
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"docs/sprint-cerveau.md\")\ns = p.read_text()\na = \"## ▶ PROCHAINE ACTION (à lire en premier)\"\nneuf = \"\"\"## VÉRIFICATION DU CHANGEMENT DE TYPE `ffn_gain` — FAITE (11 octobr … [1988 caractères tronqués]`

@@ -6,13 +6,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
 | Durée | 46.7 h |
-| Tours | 60 |
-| Messages | 1856 |
-| Appels d'outils | 1734 |
+| Tours | 61 |
+| Messages | 1860 |
+| Appels d'outils | 1736 |
 | Fichiers touchés | 61 |
-| Commandes | 1484 |
+| Commandes | 1486 |
 | Sous-agents | 3 |
-| Commits | 150 |
+| Commits | 151 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -155,6 +155,8 @@
 **Tour 59** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 **Tour 60** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
+
+**Tour 61** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -2680,7 +2682,36 @@ L'hypothèse biologique E4 (« un réseau équilibré vit près d'un point où e
 
 **Synthèse produite :**
 
-⏵ La composition DÉGRADE : 0,75 seul = 12,96 ; 0,75 + 0,5 = 13,77 — les gains ne se composent pas
+⏵ Round 17 livré : les gains **ne se composent pas** — le profil défait le meilleur réglage seul
+
+**Ce round** — 1 commit poussé, 122 tests verts, `porte-gain.sh` à **6 cas** (verte). `--ffn-gain` accepte maintenant une **liste** (`0:0.75,1:0.5`), ce qui rend la question mesurable.
+
+| profil | perplexité | écart |
+|---|---|---|
+| **`0:0.75` seul** | **12,9635** | **−11,51 %** |
+| `1:0.5` seul | 13,7907 | −5,86 % |
+| `0:0.75,1:0.5` | 13,7679 | −6,02 % |
+| `0:0.9,1:0.6` | 13,4209 | −8,39 % |
+| `0:0.75,1:0.5,2:1.0` | **13,7679** | identique |
+
+- **Ajouter le gain de la couche 1 dégrade celui de la couche 0** (12,9635 → 13,7679) : les deux réglages **s'antagonisent** en partie, ils ne s'additionnent pas. Le meilleur profil mesuré est donc **un réglage SEUL**.
+- La dernière ligne est le **témoin** qui rend les autres lisibles : un gain de **1,0 dans un profil est exactement neutre** (13,7679 = 13,7679) — l'identité tient aussi à l'intérieur d'un profil.
+- **Conséquence pour le dessin I, plus dure qu'au round précédent** : non seulement le profil n'a que deux couches utiles, mais **le composer empire les choses**. Un profil appris aurait à découvrir que la bonne réponse est « une seule couche, un seul gain » — ce qu'un gradient sur peu de paramètres peut très bien ne pas trouver, puisqu'il optimiserait les deux ensemble. C'est écrit tel quel.
+
+Le drapeau passe de `Option<(usize, f32)>` à `Option<Vec<(usize, f32)>>`, les deux sites d'application (chemin normal et hyper-connexions) itèrent sur la liste, et un `L:V` unique continue de marcher exactement comme avant — les 6 cas de la porte le vérifient.
+
+**Bilan** : 17 rounds, 22 portes toutes vertes, 122 tests, 38 sections de rapport (§24 à §37) dont une bonne moitié de négatifs, réfutations et corrections. L'objectif reste **actif**.
+
+### Tour 61 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Verify the execution-path gate after the type change
+- bash — Record the verification and commit
+
+**Synthèse produite :**
+
+⏵ `porte-flux` 5/5 verte et la référence PPL inchangée (14,6496) — je consigne la vérification
 
 ## 3. Travail accompli
 
@@ -2798,7 +2829,7 @@ L'hypothèse biologique E4 (« un réseau équilibré vit près d'un point où e
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1444 autres
+- … et 1446 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3096,4 +3127,5 @@ L'hypothèse biologique E4 (« un réseau équilibré vit près d'un point où e
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib p = pathlib.Path("docs/sprint-cerveau.md") s = p.read_text() a = "## ▶ 
 
