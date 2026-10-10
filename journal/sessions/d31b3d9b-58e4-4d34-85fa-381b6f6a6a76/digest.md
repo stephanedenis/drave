@@ -38338,3 +38338,36 @@ Created file
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\n# état\np = pathlib.Path(\"docs/etat-cerveau.md\"); s = p.read_text()\nold = \"\"\"**sur un texte JAMAIS VU** : avec 30 morceaux d'entraînement (le morceau de test exclu), la tête empruntée rend * … [4809 caractères tronqués]`
+
+  ```
+poussé
+6dad657 C8 : transfert a un AUTRE corpus — div 1 730 sur la tete empruntee, x2,6 de cout de domaine
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 18, in <module>
+AssertionError
+  ```
+
+### 🤖 Assistant
+
+⏵ Le patch d'état a échoué (motif périmé) et le commit n'a pris que la fiche — je reprends sur le texte réel
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/^\\*\\*3\\. C8/,/^\\*\\*$/p' docs/etat-cerveau.md | head -20", "description": "Read the current C8 next-action text"}`
+
+  ```
+**3. C8 — la tête entraînée généralise (÷540 même texte, ×5,7 du modèle sur un texte neuf avec 30 morceaux) ; reste l'échelle.** Décodabilité mesurée à 4, 8, 12, 16,
+20 et 24 couches (45,9 / 45,5 / 46,1 / 40,8 / 37,8 / 34,8 % parmi les 256 plus fréquents) contre
+qualité du chemin tronqué (12,4 M / 3,8 M / 3,3 M / 1,13 M / 3 210 / 9,43). L'information est là
+tôt, la qualité n'arrive que tard : **le maillon faible est la tête**, et la suite est une tête
+**non linéaire** entraînée par profondeur, jugée à sa **perplexité**. C'est fait pour un
+**adaptateur** sur **un texte** : **845,45** contre 456 586,60 (÷540), à ×59 du modèle complet.
+La généralisation est mesurée ([`rapport-c8-generalisation.md`](../reports/rapport-c8-generalisation.md)) :
+**85** sur un morceau tenu à l'écart (30 morceaux d'entraînement) contre 15,02 pour le modèle
+complet, 202 avec 7 morceaux — la non-linéarité n'aide pas à cette échelle, faute de réglage. Les
+vraies questions restantes : un **autre corpus** (tous ces morceaux viennent du même document),
+la **régularisation**, et **qualité × vitesse par profondeur** pour choisir le point de
+fonctionnement. Outils : `tools/c8_entrainer_tete.py`, `tools/c8_corpus.sh`
+… [452 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"docs/etat-cerveau.md\"); s = p.read_text()\nold = \"\"\"complet, 202 avec 7 morceaux — la non-linéarité n'aide pas à cette échelle, faute de réglage. Les\nvraies questions resta … [3368 caractères tronqués]`

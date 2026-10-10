@@ -24,7 +24,7 @@
 | **C5ter** | bus par le réseau | ✅ fait | socket ≡ statique (**0,00e0**) ; neutre ≡ référence (**0,00e0**) ; plein vol ≠ les deux | `porte-bus-socket.sh` |
 | **C6** | mémoire épisodique | ✅ fait | **élagage 83 %**, rappel **96,3 %** à 50 % de dégradation, round-trip **exact**, Δ = **11 jetons sur 2 048** ; le rappel dépend de **l'indice** (1 sur 8) et **n'est pas continu** (50 vs 1 006) ; la clé de fenêtre **dégrade** (prédiction réfutée) | fiches 24, 29, 30, 31 · `porte-episodique.sh`, `porte-indice.sh`, `porte-melange.sh` |
 | **C7** | consolidation | ✅ fait | l'**exemplaire** bat la **moyenne** (7 % du magasin → **87 %** de rappel) ; rejeu répété = **point fixe exact** (0,00e0) | `porte-episodique.sh` |
-| **C8** | périphérie et réflexes (plan § C8) | 🟡 **le RÉFLEXE est mesuré ; la périphérie (entrées/sorties) ne l'est pas** | sur **le même texte**, le chemin tronqué à 16 couches passe de **456 586,60** (tête empruntée) à **845,45** (adaptateur entraîné, test sur positions jamais vues) : **÷540** — le modèle complet vaut **14,2342** sur ce texte, donc le réflexe reste **×59** derrière. Ça surapprend vite (meilleur test à l'époque 6, ×127 train/test à la fin) ; **sur un texte JAMAIS VU** : avec 30 morceaux d'entraînement (le morceau de test exclu), la tête empruntée rend **697 572** et la tête entraînée **84,99**, à **×5,7** du modèle complet (15,02) ; avec 7 morceaux seulement : 202,17 — **les données comptent**, et **la non-linéarité n'aide pas** à cette échelle (272 contre 51 au linéaire) ; et **il va plus vite** : ×1,54 en génération, TTFT ÷2,4 ⇒ le compromis est **×1,54 de vitesse pour ×59** (même texte) ou **×5,7 d'écart sur un texte neuf** (assez de données) | `porte-reflexe.sh` · fiches 26, [`sonde-profondeur`](../reports/rapport-c8-sonde-profondeur.md), [`tête entraînée`](../reports/rapport-c8-tete-entrainee.md) |
+| **C8** | périphérie et réflexes (plan § C8) | 🟡 **le RÉFLEXE est mesuré ; la périphérie (entrées/sorties) ne l'est pas** | sur **le même texte**, le chemin tronqué à 16 couches passe de **456 586,60** (tête empruntée) à **845,45** (adaptateur entraîné, test sur positions jamais vues) : **÷540** — le modèle complet vaut **14,2342** sur ce texte, donc le réflexe reste **×59** derrière. Ça surapprend vite (meilleur test à l'époque 6, ×127 train/test à la fin) ; **sur un texte JAMAIS VU** : avec 30 morceaux d'entraînement (le morceau de test exclu), la tête empruntée rend **697 572** et la tête entraînée **84,99**, à **×5,7** du modèle complet (15,02) ; avec 7 morceaux seulement : 202,17 — **les données comptent**, et **la non-linéarité n'aide pas** à cette échelle (272 contre 51 au linéaire) ; et **il va plus vite** : ×1,54 en génération, TTFT ÷2,4 ⇒ le compromis est **×1,54 de vitesse pour ×59** (même texte), **×5,7** (texte neuf) ou **×25** (autre corpus) d'écart au modèle complet | `porte-reflexe.sh` · fiches 26, [`sonde-profondeur`](../reports/rapport-c8-sonde-profondeur.md), [`tête entraînée`](../reports/rapport-c8-tete-entrainee.md) |
 > **Ce que « C8 » recouvre, et où on en est.** Le plan (`docs/plan-cerveau-complet.md` § C8) définit
 > C8 comme la **périphérie** : des régions frontière d'**entrée** et de **sortie**, et des
 > **réflexes** — des liens qui court-circuitent le graphe profond — avec pour invariant « entrée
@@ -115,10 +115,12 @@ tôt, la qualité n'arrive que tard : **le maillon faible est la tête**, et la 
 **adaptateur** sur **un texte** : **845,45** contre 456 586,60 (÷540), à ×59 du modèle complet.
 La généralisation est mesurée ([`rapport-c8-generalisation.md`](../reports/rapport-c8-generalisation.md)) :
 **85** sur un morceau tenu à l'écart (30 morceaux d'entraînement) contre 15,02 pour le modèle
-complet, 202 avec 7 morceaux — la non-linéarité n'aide pas à cette échelle, faute de réglage. Les
-vraies questions restantes : un **autre corpus** (tous ces morceaux viennent du même document),
-la **régularisation**, et **qualité × vitesse par profondeur** pour choisir le point de
-fonctionnement. Outils : `tools/c8_entrainer_tete.py`, `tools/c8_corpus.sh`,
+complet, 202 avec 7 morceaux — la non-linéarité n'aide pas à cette échelle, faute de réglage. Et
+le **transfert à un autre corpus** est mesuré ([`rapport-c8-transfert-corpus.md`](../reports/rapport-c8-transfert-corpus.md)) :
+entraînée sur la campagne et testée sur de la **prose**, la tête rend **210,21** contre
+**363 649** pour la tête empruntée (÷1 730), à ×25 du modèle complet — le coût du domaine est
+**×2,6**. Les vraies questions restantes : le **transfert inter-langue** (les deux corpus sont du
+français), la **régularisation**, et **qualité × vitesse par profondeur**. Outils : `tools/c8_entrainer_tete.py`, `tools/c8_corpus.sh`,
 `tools/c8_carte_profondeur.sh`, `tools/c8_sonde_lineaire.py`.
 
 ## 7. Les corrections à ne pas réintroduire

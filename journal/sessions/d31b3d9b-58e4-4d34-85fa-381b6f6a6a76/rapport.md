@@ -7,12 +7,12 @@
 | Début | 2026-10-08 09:11 |
 | Durée | 52.5 h |
 | Tours | 88 |
-| Messages | 2378 |
-| Appels d'outils | 2181 |
+| Messages | 2380 |
+| Appels d'outils | 2183 |
 | Fichiers touchés | 79 |
-| Commandes | 1895 |
+| Commandes | 1897 |
 | Sous-agents | 3 |
-| Commits | 209 |
+| Commits | 210 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -3586,7 +3586,7 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 
 ### Tour 88 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*339 appels d'outils.* Actions notables :
+*341 appels d'outils.* Actions notables :
 
 - bash — Add the refusal and verify
 - bash — Move the refusal to the single point and verify
@@ -3602,11 +3602,11 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - bash — Read v7 removal context and flag inventory
 - bash — Read flag inventory section in docs
 - bash — Establish whether section 9 predates the v7 removal
-- … et 312 autres
+- … et 314 autres
 
 **Synthèse produite :**
 
-⏵ Transfert inter-corpus : la tête entraînée sur un autre corpus lit quand même l'état (÷1 730) — j'écris la fiche
+⏵ Le patch d'état a échoué (motif périmé) et le commit n'a pris que la fiche — je reprends sur le texte réel
 
 ## 3. Travail accompli
 
@@ -3742,7 +3742,7 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1855 autres
+- … et 1857 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4099,4 +4099,5 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' import pathlib # état p = pathlib.Path("docs/etat-cerveau.md"); s = p.read_text() old 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'MSG' Porte du reflexe : la conclusion « pas de sortie precoce utilisab
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' import pathlib # état p = pathlib.Path("docs/etat-cerveau.md"); s = p.read_text() old 
+- Etat et journal : le transfert inter-corpus de C8 est consigne (le patch precedent avait echoue sur un motif perime)" && git push -q origin master && echo pouss
 
