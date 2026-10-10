@@ -1446,6 +1446,75 @@ binaire plus vieux que ses correctifs et une porte qui ne pouvait pas passer.
 
 ---
 
+## 24. Mémoire épisodique (C6) : ce qui marche, et ce qui ne marche PAS
+
+Ajouté après la campagne, dans le sprint « cerveau ». Le module `episodique.rs`
+(clé creuse k-WTA + index inversé) est mesuré sur des **états réels** du
+Qwen2.5-0.5B-Q8, 300 états d'un même texte, clé de **64 canaux sur 896** (7,14 %).
+Toutes les valeurs ci-dessous sont reproduites par `tools/porte-episodique.sh`.
+
+**Ce qui marche, et c'est exact au bit près :**
+
+- **round-trip 300/300** — relire avec sa propre clé rend l'état écrit, au bit près,
+  y compris après passage par le disque (300/300 lectures identiques) ;
+- **rappel** : 100 % à 0 % et 10 % de dégradation de l'indice, **96,7 % à 25 %**,
+  **69,3 % à 50 %**, **15,3 % à 75 %** (N = 300 ; hasard = 0,33 %) ;
+- **nouveauté** : un indice jamais écrit obtient un recouvrement moyen de
+  **41,5/64** contre **64,0/64** pour un épisode connu — le magasin sait donc
+  distinguer « je me souviens » de « ça ressemble »… **en moyenne**, car le pire des
+  indices nouveaux atteint **57/64** : il existe des faux positifs.
+
+**Ce qui ne marche PAS, et c'est le résultat le plus utile :**
+
+- **l'index inversé n'élague RIEN.** Sur les 300 états, chaque lecture examine
+  **300 candidats sur 300 (100 % du magasin)**, soit 19 200 comparaisons de canaux.
+  La raison est mesurable : les états de langue naturelle sont **corrélés** — deux
+  états différents partagent en moyenne **23,9 canaux sur 64** (37 %), donc toute
+  clé d'indice recouvre presque tout le magasin. Le « plus proche voisin
+  approximatif » prévu au plan n'a donc rien à approximer ici : c'est un balayage
+  complet déguisé. La conséquence pratique est que le coût d'une lecture est
+  **N × k comparaisons d'entiers** (0,3 M pour N = 10⁴) — acceptable — mais que la
+  **mémoire** du magasin est N × dim × 4 octets (3,6 Go pour 10⁶ épisodes à 896
+  canaux) : c'est la mémoire qui limite, pas le temps de lecture ;
+- **à petit k, l'invariant de round-trip CASSE.** k = 8 : **81 des 300 états
+  partagent la clé d'un autre** (pire multiplicité 7) et le round-trip tombe à
+  **219/300**, tous les échecs expliqués par ces collisions. k = 16 : 288/300 ;
+  k = 32 : 299/300 ; k = 64 : 300/300. Autrement dit : **l'invariant du plan n'est
+  pas une propriété du code, c'est une propriété du couple (données, k)**, et la
+  porte le vérifie au lieu de le supposer.
+
+**Deux hypothèses testées, deux réfutations utiles** (mesures directes) :
+
+| variante | séparation | élagage | rappel 50 % | rappel 75 % |
+|---|---|---|---|---|
+| référence (300 états consécutifs) | 23,9/64 | **100 % du magasin** | 69,3 % | 15,3 % |
+| états **espacés** d'un jeton sur 8 (150 états, 1 200 jetons) | **24,0/64** | **100 %** | 87,3 % | 22,0 % |
+| **décorrélé** (moyenne des états retirée) | **20,3/64** | **100 %** | 78,3 % | 22,0 % |
+
+- **L'espacement ne change RIEN au recouvrement** (24,03 contre 23,88) : la
+  corrélation des clés n'est donc **pas** un effet de voisinage de texte. C'était
+  l'hypothèse naturelle, et elle est fausse — les états d'un modèle partagent une
+  composante commune qui ne dépend pas de la distance entre les jetons ;
+- **la décorrélation aide la qualité** (séparation 23,9 → 20,3, nouveauté 41,5 →
+  37,5, rappel à 50 % 69,3 → **78,3 %**) **mais ne fait toujours éluder aucun
+  candidat** : 100 % du magasin reste examiné. La raison est arithmétique et se
+  calcule : 300 épisodes × 64 canaux = 19 200 entrées réparties sur 896 canaux
+  (≈ 21 par canal), donc une clé d'indice touche 64 × 21 ≈ 1 340 entrées qui
+  couvrent **tous** les épisodes. **Avec 64 canaux sur 896, l'index inversé ne peut
+  pas éluder** — ce n'est pas un défaut du code, c'est un défaut de densité.
+
+**Ce que cela indique pour la suite (à mesurer, pas encore mesuré)** : pour que
+l'index élude réellement, il faut **plus de canaux et des clés plus creuses** — soit
+une **expansion** comme celle du gyrus denté (896 → 4 096 canaux, k = 32 : chaque
+canal ne porterait plus que ~2,3 épisodes, et une clé toucherait ~74 candidats sur
+300). C'est l'expérience suivante, et elle est falsifiable : si l'expansion n'élague
+pas, l'index inversé n'a aucune raison d'exister.
+
+**Conditions de ces chiffres** : 300 états d'un seul texte (ou un sur huit), un seul
+modèle (0,5 B), k = 64. Le rappel après consolidation, sur des épisodes venus de
+**textes différents** (plusieurs documents), ou avec un indice dégradé de façon
+**corrélée** plutôt qu'aléatoire, **n'est pas mesuré ici**.
+
 ## Annexe — manifeste des journaux
 
 Les journaux bruts sont dans `/tmp/campagne24/`. **59 fichiers d'étape (79 Kio)**,

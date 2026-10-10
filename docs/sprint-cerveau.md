@@ -245,6 +245,58 @@ manquait pour déboguer un graphe distribué.
 
 ---
 
+## C6 — FAIT (10 octobre 01 h 50) : mémoire épisodique, et ce qu'elle ne sait pas faire
+
+**Le module** (`drave-core/src/episodique.rs`, 8 tests) : clé **creuse** (k-WTA sur
+l'amplitude), **index inversé** canal → épisodes, écriture **en une passe**, lecture
+par recouvrement maximal, magasin écrit en **bits** (donc round-trip exact par
+fichier). Le mode `--episodique-essai N` collecte de **vrais états** du modèle et
+mesure quatre choses : round-trip, séparation, nouveauté, rappel.
+
+**Ce qui marche (sur 300 états réels, k = 64/896) :**
+
+- **round-trip 300/300 AU BIT PRÈS**, y compris après passage par le disque
+  (300/300 lectures identiques) ;
+- **rappel** 100 % (indice intact) → 96,7 % (25 % dégradé) → 69,3 % (50 %) →
+  15,3 % (75 %), hasard 0,33 % ;
+- **nouveauté** : 41,5/64 pour un indice jamais écrit contre 64/64 pour un connu —
+  le magasin distingue « je me souviens » de « ça ressemble », mais **le pire des
+  nouveaux atteint 57/64** : des faux positifs existent.
+
+**Les trois résultats négatifs, qui sont les plus utiles :**
+
+1. **l'index inversé n'élude RIEN** : chaque lecture examine 300 candidats sur 300.
+   Deux états différents partagent **23,9 canaux sur 64** (37 %), très au-dessus du
+   hasard (k²/dim = 4,6) : toute clé recouvre tout le magasin. Le coût réel d'une
+   lecture est donc un balayage complet (N × k comparaisons), et c'est la **mémoire**
+   du magasin (N × dim × 4 octets) qui limite, pas le temps ;
+2. **l'espacement des états ne change rien** (24,03 contre 23,88 pour un état tous
+   les 8 jetons) : la corrélation n'est **pas** un effet de voisinage de texte.
+   L'hypothèse naturelle est fausse, et elle est réfutée par la mesure ;
+3. **à petit k, l'invariant du plan CASSE** : k = 8 → **81 des 300 états partagent
+   la clé d'un autre** et le round-trip tombe à **219/300**, *tous* les échecs
+   expliqués par ces collisions (k = 16 : 288/300 · k = 32 : 299/300 · k = 64 :
+   300/300). L'invariant « écrire puis relire rend la valeur écrite » **n'est pas une
+   propriété du code, c'est une propriété du couple (données, k)** — la porte le
+   vérifie au lieu de le supposer.
+
+**La décorrélation** (moyenne des états retirée) **aide la qualité** — séparation
+23,9 → 20,3, nouveauté 41,5 → 37,5, rappel à 50 % 69,3 → **78,3 %** — **sans
+élaguer davantage** (100 %). L'arithmétique dit pourquoi : 300 × 64 = 19 200 entrées
+sur 896 canaux, soit ~21 par canal ; une clé de 64 canaux touche ~1 340 entrées et
+couvre donc tous les épisodes.
+
+**La porte** : `tools/porte-episodique.sh`, 5 cas (round-trip exact · disque ·
+monotonie du rappel · nouveauté · **collisions qui expliquent tous les échecs à
+k=8**), et elle finit en annonçant ses conditions.
+
+**L'expérience suivante, déjà écrite dans le rapport** : **expansion** à la manière
+du gyrus denté (896 → 4 096 canaux, k = 32) pour que l'index élude enfin. Si
+l'expansion n'élague pas, l'index inversé n'a aucune raison d'exister — et il faudra
+le dire.
+
+---
+
 ## C5ter — FAIT (10 octobre 00 h 20) : le bus par le réseau
 
 **Pourquoi C5bis ne suffisait pas.** C5bis diffusait un réglage par un **fichier**
@@ -525,6 +577,7 @@ bus (le format de la ligne de contrôle est écrit, le transport reste à câble
 |---|---|
 | 9/10 17 h 10 | **C1a** : module `topologie.rs`, validation stricte, plan, 8 tests, suite à 85 tests. |
 | 9/10 17 h 20 | **C1b pas 1** : la topologie pilote le découpage · porte `tools/porte-topologie.sh` **TENUE** (même chiffre, écart 0,00e0) · deux refus vérifiés. |
+| 10/10 01 h 50 | **C6** (mémoire épisodique) : module + mode `--episodique-essai` sur états réels. Round-trip **300/300 au bit près** (aussi après disque) ; rappel 100/96,7/69,3/15,3 % selon dégradation ; nouveauté 41,5 vs 64. **Trois négatifs mesurés** : aucun élagage (300/300 candidats), l'espacement des états ne change rien (24,0 vs 23,9), et à k=8 **81 collisions ⇒ round-trip 219/300**. Décorrélation : rappel 50 % → 78,3 %, toujours 0 % d'élagage. Porte `porte-episodique.sh` (5 cas). |
 | 10/10 00 h 20 | **C5ter** : bus par le réseau (`--bus-serveur`) sur le pilote et le nœud, protocole du fichier, borné à 8 modulateurs, verrou pris une fois par ligne. Porte 7 cas : socket ≡ statique et neutre ≡ référence **au bit près (0,00e0)**, plein vol ≠ les deux. Trois défauts corrigés : bus créé après `accept()`, gain d'une région finale absorbé par la normalisation, variable bash accentuée. |
 | 9/10 23 h 05 | **C12bis** : le nœud trace (mêmes noms de lien), format v2 horodaté + mode, `--fusionner-trace` (ordre déterministe, dérive d'horloges mesurée, liens confrontés). Porte : 94/94 liens identiques ; **1 bit changé ⇒ DIVERGENT au pas nommé, code 3** ; v1 ⇒ refusée, code 2. 107 tests. Défaut attrapé par la porte : le mode fusion ne sortait pas et le moteur chargeait un modèle après coup. |
 | 9/10 21 h 55 | **C4 (pas 1)** : compteur de pas par région + borne `--pas-max` · porte `tools/porte-horloge.sh` (même résultat sans borne et à borne 64 ; **arrêt explicite code 5 sans résultat partiel** à borne 32). |

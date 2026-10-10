@@ -22758,3 +22758,464 @@ charte : addendum carpe diem
 ⏵ C5ter : toutes les portes vertes ; je commite puis j'attaque C6 (hippocampe)
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src/main.rs tools/porte-bus-socket.sh docs/sprint-cerveau.md docs/relations-humaines.md && git commit -q -m \"C5ter : le bus par le réseau — un réglage atteint une autre machine\n\nC5bis diffusait un réglage par … [2173 caractères tronqués]`
+
+  ```
+9ae8f6f C5ter : le bus par le réseau — un réglage atteint une autre machine
+  ```
+
+### 🤖 Assistant
+
+⏵ C6 : je relis ce que le plan attend de la mémoire épisodique avant de coder
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"C6\" docs/plan-cerveau-complet.md | head -20 && echo ==== && sed -n \"$(grep -n '### C6' docs/plan-cerveau-complet.md | head -1 | cut -d: -f1),+40p\" docs/plan-cerveau-complet.md", "description": "Read C6 spec in plan"}`
+
+  ```
+122:### C6 — Mémoire épisodique adressable par contenu
+226:| **P3** | mémoire épisodique + consolidation (C6, C7) | round-trip exact ; puis perplexité hors rejeu | 6-8 sem. |
+====
+### C6 — Mémoire épisodique adressable par contenu
+
+- **Cerveau** : hippocampe, écriture en un coup, lecture par similarité.
+- **Moteur** : `engram.rs` adresse par **hachage** (déterministe), le cache KV est
+  indexé par **position**.
+- **Conception** : un magasin clé/valeur où la clé est un **vecteur creux** (les
+  activations d'un épisode), la lecture un **plus proche voisin approximatif**
+  (LSH sur les mêmes hachages que l'engram), et l'écriture **une seule passe**.
+- **Interface** : `--episodique <fichier>` ; `ecrire`/`lire` exposés au graphe comme
+  une région.
+- **Invariant** : une écriture suivie d'une lecture avec la **même** clé rend
+  exactement la valeur écrite (test de round-trip, comme la porte de rejeu).
+- **Validation** : retrouver un épisode parmi N (courbe de rappel), et mesurer le
+  coût par lecture en paires.
+- **Coût** : 2-3 semaines. **Risque** : moyen.
+
+### C7 — Consolidation (rejeu → poids)
+
+- **Cerveau** : le rejeu pendant le sommeil consolide l'épisodique dans le cortical.
+- **Mo
+… [1483 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ C6 : j'écris le module de mémoire épisodique — clé creuse, index inversé, coût compté
+
+- **write** `{"content": "//! Mémoire épisodique adressable par contenu — capacité C6.\n//!\n//! POURQUOI CE MODULE (docs/plan-cerveau-complet.md, capacité C6). Le moteur sait\n//! adresser une **position** (cache KV) et un **hachage** (`engram`), mais pas un\n//! **contenu** : rien ne permet aujourd'hui de retr … [18498 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/episodique.rs</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^mod \\|^pub mod \" drave-core/src/main.rs | head -20", "description": "Find module declarations"}`
+
+  ```
+42:mod clusters;
+43:mod kimi_k3;
+44:mod engine;
+45:mod engram;
+46:mod formats;
+47:mod gguf;
+48:mod list;
+49:mod materiel;
+50:mod model;
+51:mod gpu;
+52:mod tokenizer;
+53:mod topologie;
+54:mod trace_globale;
+55:mod bus;
+6166:mod tests_niveaux {
+6187:mod tests_flux {
+6259:mod tests_plafond {
+6522:mod tests_vars {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -i '54a mod episodique;' drave-core/src/main.rs && timeout 600 cargo test --release --manifest-path drave-core/Cargo.toml 2>&1 | grep -E \"^error|^test result|FAILED|panicked|assertion\" -A 6 | head -40", "description": "Declare  … [43 caractères tronqués]`
+
+  ```
+error[E0614]: type `usize` cannot be dereferenced
+   --> src/episodique.rs:144:61
+    |
+144 |                 Some((mi, r)) if *rec == r && self.episodes[*mi].id <= self.episodes[*i].id => {}
+    |                                                             ^^^ can't be dereferenced
+
+warning: unused variable: `t`
+--
+error: could not compile `drave-core` (bin "drave" test) due to 1 previous error; 37 warnings emitted
+  ```
+
+### 🤖 Assistant
+
+⏵ C6 : correction d'un déréférencement — `usize` est copié, pas emprunté
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -i 's/self.episodes\\[\\*mi\\].id <= self.episodes\\[\\*i\\].id/self.episodes[mi].id <= self.episodes[*i].id/' drave-core/src/episodique.rs && timeout 600 cargo test --release --manifest-path drave-core/Cargo.toml 2>&1 | grep -E  … [130 caractères tronqués]`
+
+  ```
+test result: ok. 115 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+  ```
+
+### 🤖 Assistant
+
+⏵ C6 : je branche l'épisodique sur de VRAIS états du modèle — mode `--episodique-essai`
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fn run_ppl\\b\\|fn run_ppl(\" drave-core/src/main.rs && sed -n \"$(grep -n 'fn run_ppl(' drave-core/src/main.rs | head -1 | cut -d: -f1),+40p\" drave-core/src/main.rs", "description": "Read run_ppl for the forward loop"}`
+
+  ```
+5721:fn run_ppl(opt: Options) {
+fn run_ppl(opt: Options) {
+    // La restriction de la tête n'a pas de sens ici : le softmax normalise sur
+    // tout le vocabulaire, et retirer des termes en retire aussi de la masse au
+    // dénominateur. Mesuré, la perplexité BAISSE alors artificiellement (24,31
+    // contre 25,37) — elle n'est plus comparable à rien.
+    if let Some(f) = &opt.tete_restreinte {
+        eprintln!("[tete] --tete-restreinte ignore en perplexite ({f}) : une perplexite \
+calculee sur un vocabulaire restreint n'est comparable a rien. Utilisez --infer.");
+    }
+    let montre_options = opt.options_actives;
+    let Options {
+        ids_file: idfile, texte_file, ppl_texte: _, limit, depuis,
+        ctx: ctx_opt, threads: threads_opt, abits: abits_opt,
+        ctx_impose, threads_impose, abits_impose,
+        dense, auto, q4, b6, attn_window, swa_pattern,
+        sans_fenetre, attn_sinks, attn_topk, qk_topk, act_thresh, act_topk, act_renorm,
+        topk_proj, moe_topk, patch: patch_file, hebb_layer, hebb_q, hebb_out, hebb_diff, hebb_eta, hebb_clamp,
+        ffn_gain, logits_bin, keep,
+        ppl_profil, lot, profil_neurones, neurones_sortie, trace_flux, trace_couches,
+… [1103 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '5762,5810p' drave-core/src/main.rs", "description": "Read ppl forward loop"}`
+
+  ```
+};
+    // Garde-fou : des identifiants hors vocabulaire signifient qu'on nourrit le
+    // modèle avec le découpage d'un AUTRE modèle. La perplexité ne mesurerait
+    // alors que l'absurdité de l'entrée — vérifié : 42 127 au lieu de 11.
+    let vocab = mdl_cfg_vocab(path);
+    if let Some(v) = vocab {
+        if let Some(&mauvais) = ids.iter().find(|&&i| i as usize >= v) {
+            panic!("identifiant {mauvais} ≥ vocabulaire du modèle ({v}) : \
+                    ce fichier de jetons vient d'un autre tokenizer");
+        }
+    }
+    if !idfile.is_empty() {
+        println!("{idfile} : {} tokens, fenêtres de {ctx}", ids.len());
+    }
+
+    let mut mdl = model::Model::load_partiel(path, ctx, n_threads, dense, keep, auto, q4, b6,
+                                             opt.couches);
+    if opt.tete_partielle { poser_tete_partielle(&mut mdl); }
+    if let Some(chemin) = flux_forcer.as_deref() {
+        match model::FluxRelecteur::lire(chemin) {
+            Ok(r) => {
+                println!("[flux] rejeu depuis {chemin} : {} listes enregistrées",
+                         r.listes.len() + r.listes_blocs.len());
+                mdl.flux_force = Some(r);
+            }
+          
+… [1287 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ C6 : j'écris l'essai sur états réels — collecte, courbe de rappel, coût payé, ligne de base nulle
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\n\n# --- champs d'options\na = \"    region: Option<String>,\"\nb = \"\"\"    region: Option<String>,\n    /// C6 : combien d'épisodes  … [11065 caractères tronqués]`
+
+  ```
+mode --episodique-essai ajouté
+error: `<` is interpreted as a start of generic arguments for `f64`, not a comparison
+    --> src/main.rs:5874:42
+     |
+5874 |                     if (h % 1000) as f64 < frac * 1000.0 { indice[*c as usize] = 0.0; }
+     |                                          ^ ------ interpreted as generic arguments
+     |                                          |
+     |                                          not interpreted as comparison
+     |
+help: try comparing the cast value
+     |
+5874 |                     if ((h % 1000) as f64) < frac * 1000.0 { indice[*c as usize] = 0.0; }
+--
+error[E0308]: arguments to this function are incorrect
+    --> src/main.rs:5780:19
+     |
+5780 |     let mut mdl = model::Model::load_partiel(&path, ctx, n_threads, false, 1.0, false, false,
+     |                   ^^^^^^^^^^^^^^^^^^^^^^^^^^                                           ----- expected `u8`, found `bool`
+5781 |                                              false, None);
+     |                                              ----- expected `u8`, found `bool`
+     |
+note: associated function defined here
+    --> src/model.rs:3408:12
+     |
+--
+error: could not compile `drav
+… [67 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '3408,3412p' drave-core/src/model.rs && grep -n \"load_partiel(&path\" drave-core/src/main.rs | head -3", "description": "Check load_partiel signature"}`
+
+  ```
+pub fn load_partiel(path: &str, ctx: usize, n_threads: usize, dense: bool, keep: f32,
+                        auto: bool, q4: u8, b6: u8, couches: Option<(usize, usize)>) -> Model {
+        let t0 = Instant::now();
+        let g = Gguf::open_auto(path).expect("ouverture du GGUF");
+        let arch = g.meta.get("general.architecture").and_then(|m| m.as_str())
+5780:    let mut mdl = model::Model::load_partiel(&path, ctx, n_threads, false, 1.0, false, false,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\ns = s.replace(\"\"\"    let mut mdl = model::Model::load_partiel(&path, ctx, n_threads, false, 1.0, false, false,\n                    … [538 caractères tronqués]`
+
+  ```
+BUILD_OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la /tmp/campagne24/ids_0.5B-Q8.txt 2>/dev/null | head -2; timeout 900 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --episodique-essai 300 --episodique-k 64 --ids-file /tmp/campagne24/ids_0.5B-Q8.txt --ctx 512 - … [101 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 394684  8 oct 21:19 /tmp/campagne24/ids_0.5B-Q8.txt
+[config] cache KV : 32 bits, 0.01 Go pour 512 jetons
+[modele] 24 couches chargées en 6.361538569s — listes 0.71 Go , 8 threads
+[config] 24 couches, hidden 896 · 
+[config] puits appris sur 0/24 couches · n_rot 64 · ffn 4864 · experts 0
+[config] rotation : RoPE simple (le modèle ne déclare pas YaRN)
+  modèle            : models/Qwen2.5-0.5B-Q8_0.gguf
+  épisodes          : 300 états réels de dimension 896 (/tmp/campagne24/ids_0.5B-Q8.txt en 24.4 s)
+  clé               : 64 canaux sur 896 (densité 7.14 %)
+  round-trip        : 300/300 épisodes relus AU BIT PRÈS avec leur propre clé
+  séparation        : recouvrement moyen 23.88/64 entre états différents (pire 39/64, 74 paires)
+
+  rappel par contenu (ligne de base nulle entre parenthèses) :
+        N  indice 0 %        10 %        25 %        50 %        75 %
+       10   100.0 % (10.00)  coût 10 cand./640 comp.   100.0 % (10.00)   100.0 % (10.00)   100.0 % (10.00)    70.0 % (10.00)
+       40   100.0 % (2.50)  coût 40 cand./2560 comp.   100.0 % (2.50)   100.0 % (2.50)   100.0 % (2.50)    47.5 % (2.50)
+      160   100.0 % (0.62)  coût 160 cand./10240 comp.
+… [379 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ C6 : la clé creuse ne prune RIEN sur états réels (300 candidats/300) — je mesure et j'ajoute le test de nouveauté
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\na = \"\"\"    // --- 4. LA COURBE : rappel selon le nombre d'épisodes et la dégradation\"\"\"\nb = '''    // --- 3bis. NOUVEAUTÉ : le  … [2754 caractères tronqués]`
+
+  ```
+mesure de nouveauté ajoutée
+=== k=8 ===
+  clé               : 8 canaux sur 896 (densité 0.89 %)
+  round-trip        : 219/300 épisodes relus AU BIT PRÈS avec leur propre clé
+=== k=16 ===
+  clé               : 16 canaux sur 896 (densité 1.79 %)
+  round-trip        : 288/300 épisodes relus AU BIT PRÈS avec leur propre clé
+=== k=32 ===
+  clé               : 32 canaux sur 896 (densité 3.57 %)
+  round-trip        : 299/300 épisodes relus AU BIT PRÈS avec leur propre clé
+=== k=64 ===
+  clé               : 64 canaux sur 896 (densité 7.14 %)
+  round-trip        : 300/300 épisodes relus AU BIT PRÈS avec leur propre clé
+  séparation        : recouvrement moyen 23.88/64 entre états différents (pire 39/64, 74 paires)
+  nouveauté         : recouvrement moyen 64.0/64 pour un épisode CONNU, 41.5/64 pour un épisode JAMAIS écrit (pire des nouveaux : 57/64)
+       10   100.0 % (10.00)  coût 10 cand./640 comp.   100.0 % (10.00)   100.0 % (10.00)   100.0 % (10.00)    70.0 % (10.00)
+       40   100.0 % (2.50)  coût 40 cand./2560 comp.   100.0 % (2.50)   100.0 % (2.50)   100.0 % (2.50)    47.5 % (2.50)
+      160   100.0 % (0.62)  coût 160 cand./10240 comp.   100.0 % (0.62)    98.8 % (0.62)    79.4 % (0.
+… [1028 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ C6 : découverte réelle — à petit k les clés ENTRENT EN COLLISION et le round-trip casse ; je mesure les deux causes
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\n\n# --- collisions de clés, AVANT le round-trip, parce qu'elles l'expliquent\na = \"\"\"    // --- 1. round-trip : la même clé doit re … [3658 caractères tronqués]`
+
+  ```
+collisions et taux d'élagage ajoutés
+error: argument never used
+    --> src/main.rs:5830:19
+     |
+5827 |           println!("  échecs expliqués  : {par_collision} par COLLISION de clés (deux états \
+     |  __________________-
+5828 | | indiscernables), {} par ÉGALITÉ de recouvrement (clés distinctes, même nombre de canaux \
+5829 | | partagés — départagées par l'identifiant le plus petit)", par_collision,
+     | |________________________________________________________- formatting specifier missing
+5830 |                     manquants - par_collision);
+--
+error: could not compile `drave-core` (bin "drave") due to 1 previous error; 30 warnings emitted
+=== k=8 ===
+  clé               : 8 canaux sur 896 (densité 0.89 %)
+  round-trip        : 219/300 épisodes relus AU BIT PRÈS avec leur propre clé
+  ❌ le round-trip n'est pas exact : l'invariant de C6 est rompu
+=== k=16 ===
+  clé               : 16 canaux sur 896 (densité 1.79 %)
+  round-trip        : 288/300 épisodes relus AU BIT PRÈS avec leur propre clé
+  ❌ le round-trip n'est pas exact : l'invariant de C6 est rompu
+=== k=32 ===
+  clé               : 32 canaux sur 896 (densité 3.57 %)
+  round-trip        : 299/300 épisodes relus AU B
+… [966 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\na = \"\"\"par COLLISION de clés (deux états \\\\\nindiscernables), {} par ÉGALITÉ de recouvrement (clés distinctes, même nombre de can … [951 caractères tronqués]`
+
+  ```
+clé               : 8 canaux sur 896 (densité 0.89 %)
+  clés distinctes   : 219/300 (pire multiplicité 7) — 81 état(s) partagent la clé d'un autre, donc INDISCERNABLES par le contenu
+  round-trip        : 219/300 épisodes relus AU BIT PRÈS avec leur propre clé
+  échecs expliqués  : 81 par COLLISION de clés (deux états indiscernables), 0 par ÉGALITÉ de recouvrement (clés distinctes, même nombre de canaux partagés — départagées par l'identifiant le plus petit)
+  séparation        : recouvrement moyen 4.47/8 entre états différents (pire 8/8, 74 paires)
+  nouveauté         : recouvrement moyen 8.0/8 pour un épisode CONNU, 7.1/8 pour un épisode JAMAIS écrit (pire des nouveaux : 8/8)
+       10    90.0 % (10.00)  coût 10 cand. (100 % du magasin) / 80 comp.    80.0 % (10.00)    70.0 % (10.00)    60.0 % (10.00)     0.0 % (10.00)
+       40    95.0 % (2.50)  coût 39 cand. (98 % du magasin) / 314 comp.    85.0 % (2.50)    67.5 % (2.50)    35.0 % (2.50)     7.5 % (2.50)
+      160    82.5 % (0.62)  coût 160 cand. (100 % du magasin) / 1276 comp.    48.1 % (0.62)    36.2 % (0.62)    18.8 % (0.62)     1.2 % (0.62)
+      300    73.0 % (0.33)  coût 299 cand. (100 % du magasin) / 2389 comp.    41.0 % 
+… [1067 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ C6 : la porte — round-trip exact, collisions qui l'expliquent, monotonie du rappel, nouveauté
+
+- **write** `{"content": "#!/bin/bash\n# porte-episodique.sh — la porte de la capacité C6 : mémoire épisodique.\n#\n# CE QU'ELLE PROUVE, ET POURQUOI CHAQUE CAS EXISTE.\n#   1. l'invariant du plan : écrire puis relire **avec la même clé** rend la valeur\n#      écrite AU BIT PRÈS (round-trip) ;\n#   2. le passage … [5306 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-episodique.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && chmod +x tools/porte-episodique.sh && timeout 1800 bash tools/porte-episodique.sh 2>&1 | tail -30", "description": "Run the C6 gate", "timeoutMs": 1900000}`
+
+  ```
+=== 1. round-trip, séparation, nouveauté (k=64) ===
+    clés distinctes   : 300/300 (pire multiplicité 1)
+    round-trip        : 300/300 épisodes relus AU BIT PRÈS avec leur propre clé
+    séparation        : recouvrement moyen 23.88/64 entre états différents (pire 39/64, 74 paires)
+    fichier           : /tmp/tmp.OGqjFt71g1/magasin.txt → relu, 300/300 lectures identiques après passage par le disque
+    nouveauté         : recouvrement moyen 64.0/64 pour un épisode CONNU, 41.5/64 pour un épisode JAMAIS écrit (pire des nouveaux : 57/64)
+  ✅ round-trip exact (300/300) et clés deux à deux distinctes
+=== 2. le disque ne change aucune lecture ===
+  ✅ 300 lectures identiques après passage par le disque
+=== 3. le rappel décroît quand l'indice se dégrade ===
+         10   100.0 % (10.00)  coût 10 cand. (100 % du magasin) / 640 comp.   100.0 % (10.00)   100.0 % (10.00)   100.0 % (10.00)    70.0 % (10.00)
+         40   100.0 % (2.50)  coût 40 cand. (100 % du magasin) / 2560 comp.   100.0 % (2.50)   100.0 % (2.50)   100.0 % (2.50)    47.5 % (2.50)
+        160   100.0 % (0.62)  coût 160 cand. (100 % du magasin) / 10240 comp.   100.0 % (0.62)    98.8 % (0.62)    79.4 % (0.62)    16.9 % (0.62)
+… [334 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ C6 : mon heredoc et le `<<<` se disputaient l'entrée standard — je passe par un fichier
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"tools/porte-episodique.sh\")\ns = p.read_text()\n\ns = s.replace('''echo \"=== 3. le rappel décroît quand l'indice se dégrade ===\"\nprintf '%s\\\\n' \"$S\" | grep -E \"^ +[0-9]+ + … [1792 caractères tronqués]`
+
+  ```
+entrée standard corrigée
+=== 2. le disque ne change aucune lecture ===
+  ✅ 300 lectures identiques après passage par le disque
+=== 3. le rappel décroît quand l'indice se dégrade ===
+         10   100.0 % (10.00)  coût 10 cand. (100 % du magasin) / 640 comp.   100.0 % (10.00)   100.0 % (10.00)   100.0 % (10.00)    70.0 % (10.00)
+         40   100.0 % (2.50)  coût 40 cand. (100 % du magasin) / 2560 comp.   100.0 % (2.50)   100.0 % (2.50)   100.0 % (2.50)    47.5 % (2.50)
+        160   100.0 % (0.62)  coût 160 cand. (100 % du magasin) / 10240 comp.   100.0 % (0.62)    98.8 % (0.62)    79.4 % (0.62)    16.9 % (0.62)
+        300   100.0 % (0.33)  coût 300 cand. (100 % du magasin) / 19200 comp.    99.0 % (0.33)    96.7 % (0.33)    69.3 % (0.33)    15.3 % (0.33)
+  ✅ monotonie respectée : 100.0 % → 15.3 % (0 % → 75 % de dégradation)
+=== 4. un indice jamais écrit doit être moins bien retrouvé ===
+  ✅ connu 64.0 > jamais écrit 41.5 : le magasin distingue « je me souviens » de « ça ressemble »
+=== 5. à petit k, les collisions EXPLIQUENT les échecs de round-trip ===
+    clés distinctes   : 219/300 (pire multiplicité 7) — 81 état(s) partagent la clé d'un autre, donc INDISCERNABLES par le conten
+… [531 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ C6 : je teste la condition — des états espacés (textes différents) changent-ils l'élagage ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\na = \"    /// C6 : où écrire le magasin (round-trip par fichier, vérifié).\\n    episodique_fichier: Option<String>,\"\nb = \"\"\"     … [3904 caractères tronqués]`
+
+  ```
+--episodique-pas ajouté
+OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (echo \"=== pas=8, N=150 (1200 jetons calculés) ===\"; timeout 1800 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --episodique-essai 150 --episodique-k 64 --episodique-pas 8 --ids-file /tmp/campagne24/ids_0.5B-Q8.tx … [222 caractères tronqués]`
+
+  ```
+started background job bash-12
+  ```
+
+### 🤖 Assistant
+
+⏵ C6 : j'écris la section du rapport pendant que la mesure espacée tourne
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -20 reports/rapport-campagne-benefices.md && grep -c \"\" reports/rapport-campagne-benefices.md && grep -n \"^## \" reports/rapport-campagne-benefices.md | tail -8", "description": "Check report tail and sections"}`
+
+  ```
+Les journaux bruts sont dans `/tmp/campagne24/`. **59 fichiers d'étape (79 Kio)**,
+plus **17 journaux de chaînes** (`journal.txt`, `journal2..15`). Chaque étape a
+laissé ses journaux, et chacun porte sa mesure de tête :
+
+| étape | journaux | mesure de tête (vérifiable dans le journal) |
+|---|---:|---|
+| 1 · `grille` | 6 | 0,5 B **17,4315** · 1,5 B 47,14 · 14 B 14,30 · codestral 35 657 (binaire périmé) · 30B **8,6327** · gpt-oss expiré |
+| 2 · `parcimonie` | 24 | 12 réglages × 2 chemins · k-WTA 70 % : **+4 % pour −30 % d'événements** |
+| 3 · `contexte` | 10 | perplexité **constante** (17,4315) par construction · RSS 1 248-1 249 Mo |
+| 4 · `lot` | 9 | PPL **13,1368 → 13,1359** · débit 16,8 → 23,7 tok/s |
+| 5 · `routage` | 2 | **1 826,2 M** de paires d'experts par jeton · 4 experts sur 128 |
+| 6 · `sémantique` | 4 | pic de séparation **couche 13** (+0,0391) sur 398 langues, bande 10-15 |
+| 7 · `noyau` | 1 | bande passante **21,5 Go/s** · push/pull **×3,19** à densité 1 |
+| 8 · `répartition` | 2 | cinq modes · écart **0,0000 %** · flux 0,00e0 (modes 0, 1, 3) |
+| 9 · `portes` | 1 | **22 vertes · 1 rouge** lors de la campagne — la porte gpt-oss a expiré sous contention, puis **rend 15,60
+… [982 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\nancre = \"## Annexe — manifeste des journaux\"\nassert ancre in s\nsec = '''## 24. Mémoire épisodique (C6) : ce qui mar … [2823 caractères tronqués]`
+
+  ```
+rapport : section 24 (C6)
+écrit
+  ```
+
+- **job_output** `{"job_id": "bash-12", "timeout_ms": 600000, "wait": true}`
+
+  ```
+=== pas=8, N=150 (1200 jetons calculés) ===
+  épisodes          : 150 états réels de dimension 896 (/tmp/campagne24/ids_0.5B-Q8.txt en 101.7 s)
+  espacement        : un état tous les 8 jetons — 1200 jetons calculés pour 150 épisodes : des moments ÉLOIGNÉS du texte, donc des contenus moins corrélés que des états consécutifs
+  clé               : 64 canaux sur 896 (densité 7.14 %)
+  clés distinctes   : 150/150 (pire multiplicité 1)
+  round-trip        : 150/150 épisodes relus AU BIT PRÈS avec leur propre clé
+  séparation        : recouvrement moyen 24.03/64 entre états différents (pire 47/64, 74 paires)
+  nouveauté         : recouvrement moyen 64.0/64 pour un épisode CONNU, 36.3/64 pour un épisode JAMAIS écrit (pire des nouveaux : 51/64)
+       10   100.0 % (10.00)  coût 10 cand. (100 % du magasin) / 640 comp.   100.0 % (10.00)   100.0 % (10.00)   100.0 % (10.00)    70.0 % (10.00)
+       40   100.0 % (2.50)  coût 40 cand. (100 % du magasin) / 2560 comp.   100.0 % (2.50)   100.0 % (2.50)    97.5 % (2.50)    52.5 % (2.50)
+      150   100.0 % (0.67)  coût 150 cand. (100 % du magasin) / 9600 comp.   100.0 % (0.67)   100.0 % (0.67)    87.3 % (0.67)    22.0 % (0.67)
+  ce que la courbe ne d
+… [197 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ C6 : l'espacement ne change rien (24,0/64) — la corrélation n'est pas locale ; je teste la décorrélation
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\na = \"    /// C6 : écart entre deux états collectés.\"\nb = \"\"\"    /// C6 : retirer la moyenne des états avant de calculer les clés … [2346 caractères tronqués]`
+
+  ```
+option --episodique-decorreler ajoutée
+  décorrélation     : moyenne des 300 états retirée (les valeurs stockées sont donc les états centrés ; la moyenne, elle, se stocke une fois)
+  clés distinctes   : 300/300 (pire multiplicité 1)
+  round-trip        : 300/300 épisodes relus AU BIT PRÈS avec leur propre clé
+  séparation        : recouvrement moyen 20.31/64 entre états différents (pire 30/64, 74 paires)
+  nouveauté         : recouvrement moyen 64.0/64 pour un épisode CONNU, 37.5/64 pour un épisode JAMAIS écrit (pire des nouveaux : 54/64)
+       10   100.0 % (10.00)  coût 10 cand. (100 % du magasin) / 640 comp.   100.0 % (10.00)   100.0 % (10.00)   100.0 % (10.00)    50.0 % (10.00)
+       40   100.0 % (2.50)  coût 40 cand. (100 % du magasin) / 2560 comp.   100.0 % (2.50)   100.0 % (2.50)   100.0 % (2.50)    50.0 % (2.50)
+      160   100.0 % (0.62)  coût 160 cand. (100 % du magasin) / 10240 comp.   100.0 % (0.62)   100.0 % (0.62)    85.6 % (0.62)    24.4 % (0.62)
+      300   100.0 % (0.33)  coût 300 cand. (100 % du magasin) / 19200 comp.   100.0 % (0.33)    99.0 % (0.33)    78.3 % (0.33)    22.0 % (0.33)
+  ```
+
+### 🤖 Assistant
+
+⏵ C6 : la décorrélation améliore le rappel mais ne prune toujours pas — je consigne et je commite
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\na = \"\"\"**Conditions de ces chiffres** : 300 états **consécutifs d'un seul texte** (donc\nfortement corrélés), un seu … [8947 caractères tronqués]`

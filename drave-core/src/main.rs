@@ -52,6 +52,7 @@ mod gpu;
 mod tokenizer;
 mod topologie;
 mod trace_globale;
+mod episodique;
 mod bus;
 
 use engine::{matvec_dense, matvec_shift_add, Pool, SparseVec};
@@ -95,6 +96,12 @@ fn main() {
         eprintln!("                                     dérive des horloges et confronte les deux");
         eprintln!("                                     bouts de chaque lien. Ne charge aucun");
         eprintln!("                                     modèle.");
+        eprintln!("       drave <modele> --episodique-essai N [--episodique-k K]");
+        eprintln!("             [--episodique-fichier F] [--ids-file F]");
+        eprintln!("                                     mémoire ÉPISODIQUE (C6) : collecte N états");
+        eprintln!("                                     réels du modèle, les écrit une fois, puis");
+        eprintln!("                                     mesure le rappel par contenu selon le nombre");
+        eprintln!("                                     d'épisodes et la dégradation de l'indice.");
         eprintln!("       drave <modele> --tensors      inventaire par les en-têtes seuls");
         eprintln!("       drave <modele> --materiel     détection matérielle et plan de");
         eprintln!("                                     configuration, AVEC la raison de chaque");
@@ -162,7 +169,9 @@ il faut écrire DRAVE_{} (voir docs/histoire.md). Rien n'a été appliqué.", &v
         }
     }
     }
-    let opt = analyser(&args);
+    let mut opt = analyser(&args);
+    if opt.episodique_k == 0 { opt.episodique_k = 64; }
+    if opt.episodique_pas == 0 { opt.episodique_pas = 1; }
     let _ = MODELE.set(args[1].clone());
     // Plusieurs modes demandés : l'aiguillage en retient UN, dans un ordre
     // arbitraire, et le disait pas. On le dit.
@@ -174,6 +183,7 @@ il faut écrire DRAVE_{} (voir docs/histoire.md). Rien n'a été appliqué.", &v
         (opt.banc_kv > 0, "--banc-kv"), (opt.banc_topk > 0, "--banc-topk"),
         (opt.gpu_banc, "--gpu-banc"), (opt.materiel, "--materiel"), (opt.config, "--config"),
         (opt.sonder_engram > 0, "--sonder-engram"),
+        (opt.episodique_essai > 0, "--episodique-essai"),
         (opt.plan, "--plan"), (opt.tokenize, "--tokenize"),
         (opt.ppl, "--ppl"), (opt.infer, "--infer"),
     ].iter().filter(|(v, _)| *v).map(|(_, n)| *n).collect();
@@ -184,6 +194,7 @@ sont ignorés", modes.len(), modes.join(", "), modes[0]);
     if opt.materiel { run_materiel(&opt); return; }
     if opt.config { run_config(); return; }
     if opt.sonder_engram > 0 { run_sonder_engram(opt.sonder_engram); return; }
+    if opt.episodique_essai > 0 { run_episodique_essai(opt); return; }
     if let Some(f) = opt.engram_adresses.clone() { run_engram_adresses(&f, &opt); return; }
     if let Some(b) = opt.bloc.clone() { run_bloc(&b); return; }
     if let Some(f) = opt.banc_vision.clone() { run_banc_vision(&f); return; }
@@ -596,6 +607,18 @@ struct Options {
     topologie: Option<String>,
     /// C1b — identifiant de MA région, sur un nœud relais.
     region: Option<String>,
+    /// C6 : combien d'épisodes collecter pour l'essai de mémoire épisodique.
+    episodique_essai: usize,
+    /// C6 : nombre de canaux par clé (k-WTA). Le seul réglage du magasin.
+    episodique_k: usize,
+    /// C6 : où écrire le magasin (round-trip par fichier, vérifié).
+    episodique_fichier: Option<String>,
+    /// C6 : retirer la moyenne des états avant de calculer les clés (décorrélation).
+    episodique_decorreler: bool,
+    /// C6 : écart entre deux états collectés. 1 = états consécutifs du même texte ;
+    /// plus grand = des moments éloignés du texte, donc des contenus moins corrélés.
+    /// C'est LA condition qui décide si les clés se recouvrent.
+    episodique_pas: usize,
     /// C12 — trace globale : où écrire ce qui traverse chaque lien.
     trace_globale: Option<String>,
     /// C12 — vérification : rejouer et comparer à cette trace.
@@ -765,6 +788,11 @@ fn analyser(args: &[String]) -> Options {
             // C12 : la trace globale, et sa vérification par rejeu.
             "--trace-globale" => { o.trace_globale = Some(suivant(i).clone()); 2 }
             "--verifier-globale" => { o.verifier_globale = Some(suivant(i).clone()); 2 }
+            "--episodique-essai" => { o.episodique_essai = suivant(i).parse().unwrap_or(0); 2 }
+            "--episodique-k" => { o.episodique_k = suivant(i).parse().unwrap_or(64); 2 }
+            "--episodique-fichier" => { o.episodique_fichier = Some(suivant(i).clone()); 2 }
+            "--episodique-pas" => { o.episodique_pas = suivant(i).parse().unwrap_or(1).max(1); 2 }
+            "--episodique-decorreler" => { o.episodique_decorreler = true; 1 }
             // C5 : le bus de modulation, canal par canal.
             "--bus" => { o.bus.push(suivant(i).clone()); 2 }
             "--bus-serveur" => { o.bus_serveur = suivant(i).parse().ok(); 2 }
@@ -5715,6 +5743,250 @@ fn fenetres_harmony(tk: &tokenizer::Tokenizer, ids: &[u32], ctx: usize, mode: &s
         }
     }
     fenetres
+}
+
+/// C6 : mémoire épisodique sur des états RÉELS du modèle.
+///
+/// POURQUOI UN ESSAI PLUTÔT QU'UN TEST UNITAIRES. Les tests du module montrent que
+/// la mécanique est juste sur des vecteurs tirés au hasard ; ils ne disent RIEN de
+/// ce qui compte : les états d'un vrai modèle sont-ils assez **séparables** pour
+/// qu'une clé creuse les distingue ? Un état de langue naturelle n'est pas un
+/// vecteur aléatoire — il vit sur une variété de petite dimension, et c'est
+/// précisément là que la séparation de motifs peut échouer. Le seul moyen de le
+/// savoir est de le mesurer sur les états du modèle, et c'est ce que fait cet essai.
+///
+/// CE QUI EST MESURÉ, ET CONTRE QUOI. Le rappel est comparé à la **ligne de base
+/// nulle** (1/N : le hasard) — sans elle, « 60 % de rappel » ne dit pas si la
+/// mémoire sert à quelque chose. Et le coût est celui qui est **payé** (candidats
+/// examinés, comparaisons), pas une estimation.
+///
+/// LA DÉGRADATION DE L'INDICE est un sous-ensemble **déterministe** des canaux de la
+/// clé (un hachage du numéro de canal), jamais « les premiers » : prendre les
+/// premiers canaux corrélerait la dégradation avec l'ordre des indices, et les
+/// canaux de plus grande amplitude ne sont pas répartis au hasard dans l'état.
+fn run_episodique_essai(opt: Options) {
+    let path = modele_chemin();
+    let n_voulu = opt.episodique_essai;
+    let k = opt.episodique_k;
+    let idfile = opt.ids_file.clone().unwrap_or_default();
+    if idfile.is_empty() {
+        eprintln!("--episodique-essai a besoin de --ids-file : les épisodes sont des états \
+RÉELS du modèle sur un texte, pas des vecteurs de synthèse.");
+        std::process::exit(2);
+    }
+    let brut = std::fs::read_to_string(&idfile).expect("fichier d'identifiants illisible");
+    let pas = opt.episodique_pas.max(1);
+    let ids: Vec<u32> = brut.split(|c: char| c == ',' || c.is_whitespace())
+        .filter(|s| !s.is_empty()).filter_map(|s| s.parse().ok())
+        // On lit TOUT le préfixe nécessaire, même si on ne garde qu'un état sur
+        // `pas` : les positions du modèle doivent rester vraies, et un cache KV
+        // alimenté par sauts calculerait des positions qui ne sont pas celles du
+        // texte (RoPE en dépend). On paie donc le calcul des jetons intermédiaires,
+        // et c'est dit dans le temps affiché.
+        .take(n_voulu.saturating_mul(pas)).collect();
+    if ids.len() < 2 {
+        eprintln!("--episodique-essai : {} jetons seulement dans {idfile} — il en faut au moins 2",
+                  ids.len());
+        std::process::exit(2);
+    }
+    let ctx = if opt.ctx_impose { opt.ctx } else { (ids.len() + 8).max(256) };
+    let cpu = engine::coeurs_physiques();
+    let n_threads = if opt.threads_impose { opt.threads } else { cpu.max(1) };
+    let mut mdl = model::Model::load_partiel(&path, ctx, n_threads, false, 1.0, false, 0, 0,
+                                             None);
+    let t0 = std::time::Instant::now();
+    let mut etats: Vec<Vec<f32>> = Vec::with_capacity(ids.len() / pas + 1);
+    for (pos, id) in ids.iter().enumerate() {
+        let s = mdl.forward(*id, pos);
+        if pos % pas == 0 { etats.push(s); }
+    }
+    let dim = etats[0].len();
+    // DÉCORRÉLATION (facultative) : retirer la moyenne des états. Ce n'est pas un
+    // détail de mise en forme — c'est le geste de séparation de motifs du gyrus
+    // denté, et il a une raison mesurable ici : deux états différents d'un modèle de
+    // langue partagent ~37 % de leur clé, très au-dessus du hasard (k²/dim = 4,6/64),
+    // parce qu'ils portent tous une forte composante commune. Tant qu'elle est là,
+    // toute clé recouvre tout le magasin et l'index inversé n'élague rien.
+    if opt.episodique_decorreler && etats.len() > 1 {
+        let mut moy = vec![0.0f64; dim];
+        for e in etats.iter() { for (i, x) in e.iter().enumerate() { moy[i] += *x as f64; } }
+        let n = etats.len() as f64;
+        for m in moy.iter_mut() { *m /= n; }
+        for e in etats.iter_mut() { for (i, x) in e.iter_mut().enumerate() { *x -= moy[i] as f32; } }
+        println!("  décorrélation     : moyenne des {} états retirée (les valeurs stockées sont \
+donc les états centrés ; la moyenne, elle, se stocke une fois)", etats.len());
+    }
+    println!("  modèle            : {path}");
+    println!("  épisodes          : {} états réels de dimension {dim} ({} en {:.1} s)",
+             etats.len(), idfile, t0.elapsed().as_secs_f64());
+    if pas > 1 {
+        println!("  espacement        : un état tous les {pas} jetons — {} jetons calculés pour \
+{} épisodes : des moments ÉLOIGNÉS du texte, donc des contenus moins corrélés que des états \
+consécutifs", ids.len(), etats.len());
+    }
+    println!("  clé               : {k} canaux sur {dim} (densité {:.2} %)",
+             100.0 * k as f64 / dim as f64);
+
+    // --- 0. COLLISIONS DE CLÉS, mesurées AVANT le round-trip parce qu'elles
+    // l'expliquent. Deux états distincts qui ont la MÊME clé sont indiscernables :
+    // aucune lecture, si savante soit-elle, ne peut rendre les deux. Le round-trip
+    // exact n'est donc possible que si les clés sont deux à deux distinctes — ce
+    // n'est pas une propriété du code, c'est une propriété du COUPLE (données, k),
+    // et c'est pour cela qu'elle se mesure.
+    let mut vues: std::collections::BTreeMap<Vec<u32>, usize> = std::collections::BTreeMap::new();
+    for e in etats.iter() { *vues.entry(episodique::cle(e, k)).or_insert(0) += 1; }
+    let multiples: usize = vues.values().filter(|m| **m > 1).map(|m| m - 1).sum();
+    let pire_cle = vues.values().cloned().max().unwrap_or(0);
+    println!("  clés distinctes   : {}/{} (pire multiplicité {pire_cle}){}", vues.len(),
+             etats.len(),
+             if multiples > 0 { format!(" — {multiples} état(s) partagent la clé d'un autre, \
+donc INDISCERNABLES par le contenu") } else { String::new() });
+
+    // --- 1. round-trip : la même clé doit rendre la valeur écrite, AU BIT PRÈS
+    let mut m = episodique::Episodique::nouveau(k, dim);
+    for (i, e) in etats.iter().enumerate() {
+        m.ecrire("local", i as u32, e, trace_globale::maintenant());
+    }
+    let mut exacts = 0usize;
+    for (i, e) in etats.iter().enumerate() {
+        if let Some(l) = m.lire(e) {
+            if l.id == i as u64 && m.par_id(l.id).map(|x| x.valeur == *e).unwrap_or(false) {
+                exacts += 1;
+            }
+        }
+    }
+    let manquants = etats.len() - exacts;
+    println!("  round-trip        : {exacts}/{} épisodes relus AU BIT PRÈS avec leur propre clé",
+             etats.len());
+    if manquants > 0 {
+        let par_collision = manquants.min(multiples);
+        println!("  échecs expliqués  : {par_collision} par COLLISION de clés (deux états \
+indiscernables), {} par ÉGALITÉ de recouvrement (clés distinctes, même nombre de canaux \
+partagés — départagées par l'identifiant le plus petit)", manquants - par_collision);
+    }
+
+    // --- 2. séparation : recouvrement entre clés d'états DIFFÉRENTS
+    let mut paires = 0usize; let mut cumul = 0usize; let mut pire = 0usize;
+    let pas = (etats.len() / 64).max(1);
+    let mut i = 0;
+    while i + pas < etats.len() {
+        let r = m.recouvrement_deux(&etats[i], &etats[i + pas]);
+        cumul += r; pire = pire.max(r); paires += 1;
+        i += pas;
+    }
+    println!("  séparation        : recouvrement moyen {:.2}/{k} entre états différents \
+(pire {pire}/{k}, {paires} paires)",
+             if paires > 0 { cumul as f64 / paires as f64 } else { 0.0 });
+
+    // --- 3. le fichier : écrit puis relu, et le rappel doit être identique
+    if let Some(f) = &opt.episodique_fichier {
+        match m.ecrire_fichier(f) {
+            Ok(()) => match episodique::Episodique::lire_fichier(f) {
+                Ok(relu) => {
+                    let mut identiques = 0usize;
+                    for (i, e) in etats.iter().enumerate() {
+                        let avant = m.lire(e).map(|l| l.id);
+                        let apres = relu.lire(e).map(|l| l.id);
+                        if avant == apres && avant == Some(i as u64) { identiques += 1; }
+                    }
+                    println!("  fichier           : {f} → relu, {identiques}/{} lectures \
+identiques après passage par le disque", etats.len());
+                }
+                Err(e) => { eprintln!("  {e}"); std::process::exit(2); }
+            },
+            Err(e) => { eprintln!("  épisodique : écriture de {f} impossible : {e}"); std::process::exit(2); }
+        }
+    }
+
+    // --- 3bis. NOUVEAUTÉ : le magasin sait-il dire « je ne connais pas ça » ?
+    //
+    // POURQUOI C'EST LA QUESTION LA PLUS IMPORTANTE DU MODULE. Un magasin qui rend
+    // toujours son meilleur candidat a l'air de marcher — il rend un épisode à chaque
+    // lecture. Ce qui décide de son utilité, c'est de savoir REFUSER : un indice
+    // jamais écrit doit donner un moins bon recouvrement qu'un indice écrit, sinon la
+    // mémoire ne distingue pas « je me souviens » de « ça ressemble ». On garde donc
+    // les derniers 20 % des états HORS du magasin, et on confronte les deux
+    // distributions.
+    let coupe = (etats.len() * 4) / 5;
+    if coupe >= 2 && etats.len() - coupe >= 2 {
+        let mut connus = episodique::Episodique::nouveau(k, dim);
+        for (i, e) in etats.iter().enumerate().take(coupe) {
+            connus.ecrire("local", i as u32, e, 0.0);
+        }
+        let mut rec_connu = 0usize; let mut n_connu = 0usize;
+        for e in etats.iter().take(coupe) {
+            if let Some(l) = connus.lire(e) { rec_connu += l.recouvrement; n_connu += 1; }
+        }
+        let mut rec_nouveau = 0usize; let mut n_nouveau = 0usize; let mut pire_nouveau = 0usize;
+        for e in etats.iter().skip(coupe) {
+            if let Some(l) = connus.lire(e) {
+                rec_nouveau += l.recouvrement; pire_nouveau = pire_nouveau.max(l.recouvrement);
+                n_nouveau += 1;
+            }
+        }
+        if n_connu > 0 && n_nouveau > 0 {
+            let mc = rec_connu as f64 / n_connu as f64;
+            let mn = rec_nouveau as f64 / n_nouveau as f64;
+            println!("  nouveauté         : recouvrement moyen {mc:.1}/{k} pour un épisode \
+CONNU, {mn:.1}/{k} pour un épisode JAMAIS écrit (pire des nouveaux : {pire_nouveau}/{k})");
+            if mn >= mc {
+                println!("  ⚠️  un indice jamais écrit obtient un recouvrement AUSSI BON qu'un \
+indice connu : ce magasin ne sait pas refuser, il rend toujours son meilleur candidat.");
+            }
+        }
+    }
+
+    // --- 4. LA COURBE : rappel selon le nombre d'épisodes et la dégradation
+    println!();
+    println!("  rappel par contenu (ligne de base nulle entre parenthèses) :");
+    println!("  {:>7}  {:>10}  {:>10}  {:>10}  {:>10}  {:>10}", "N", "indice 0 %", "10 %",
+             "25 %", "50 %", "75 %");
+    let tailles: Vec<usize> = {
+        let mut v: Vec<usize> = [10usize, 40, 160, 640, 2560].iter().cloned()
+            .filter(|t| *t <= etats.len()).collect();
+        if !v.contains(&etats.len()) { v.push(etats.len()); }
+        v
+    };
+    for taille in tailles {
+        let mut s = episodique::Episodique::nouveau(k, dim);
+        for (i, e) in etats.iter().enumerate().take(taille) {
+            s.ecrire("local", i as u32, e, 0.0);
+        }
+        let mut ligne = format!("  {taille:>7}");
+        for frac in [0.0f64, 0.10, 0.25, 0.50, 0.75] {
+            let mut succes = 0usize; let mut essais = 0usize;
+            let mut cand = 0usize; let mut comp = 0usize;
+            for q in 0..taille {
+                let cible = episodique::cle(&etats[q], k);
+                let mut indice = etats[q].clone();
+                for c in cible.iter() {
+                    // Hachage déterministe du canal : la dégradation ne doit pas
+                    // dépendre de l'ordre des indices.
+                    let h = (*c as u64).wrapping_mul(0x9E37_79B9_7F4A_7C15) >> 32;
+                    if ((h % 1000) as f64) < frac * 1000.0 { indice[*c as usize] = 0.0; }
+                }
+                match s.lire(&indice) {
+                    Some(l) => { if l.id == q as u64 { succes += 1; } cand += l.candidats;
+                                 comp += l.comparaisons; }
+                    None => {}
+                }
+                essais += 1;
+            }
+            ligne.push_str(&format!("  {:>6.1} % ({:.2})", 100.0 * succes as f64 / essais as f64,
+                                    100.0 / taille as f64));
+            if frac == 0.0 {
+                ligne.push_str(&format!("  coût {:.0} cand. ({:.0} % du magasin) / {:.0} comp.",
+                                        cand as f64 / essais as f64,
+                                        100.0 * cand as f64 / essais as f64 / taille as f64,
+                                        comp as f64 / essais as f64));
+            }
+        }
+        println!("{ligne}");
+    }
+    println!();
+    println!("  ce que la courbe ne dit PAS : elle porte sur {} états consécutifs d'un seul \
+texte. Le rappel sur des épisodes venus de textes différents, ou après consolidation, n'est \
+pas mesuré ici.", etats.len());
 }
 
 fn run_ppl(opt: Options) {
