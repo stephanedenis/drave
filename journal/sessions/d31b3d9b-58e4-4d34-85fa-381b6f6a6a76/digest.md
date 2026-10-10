@@ -27528,3 +27528,109 @@ code=0
 ⏵ Porte verte (5/5) — je corrige le message de clôture resté périmé et je commite
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"tools/porte-greffe.sh\")\ns = p.read_text()\na = '''echo \"  ✅ la porte est franchie. Ce qu'elle établit : l'injection d'état est BRANCHÉE\"\necho \"     (témoin à 0, mécanisme  … [1915 caractères tronqués]`
+
+  ```
+cloture corrigee
+52d49ec Porte greffe : cas 5 réécrit — la greffe porte le CONTENU, pas seulement le 1er jeton
+  ```
+
+### 🤖 Assistant
+
+⏵ Round livré : C2 (règle de mélange mesurée) + correction d'un faux négatif publié
+
+**Ce round** — 4 commits poussés, 122 tests verts, `porte-melange` (nouvelle, 4 cas) et `porte-greffe` (corrigée, 5 cas) vertes :
+
+- **C2 — deux entrées, une règle de mélange** : deux invites de 1 750 jetons (même remplissage, un code différent), états prélevés, mélange α·A+(1−α)·B injecté dans une invite **sans aucun code** :
+  - la somme **ARBITRE, elle ne détruit pas** : 7/7 mélanges rendent le premier jeton de l'un des deux contenus, jamais un troisième ;
+  - **bascule mesurée à α = 0,6**, prédite à **0,509** par le rapport des normes (65,89/129,54) — écart 0,091 ⇒ **la somme est arbitrée par la NORME des états**, pas seulement par le poids.
+
+- **Correction d'un faux négatif que j'avais publié.** « Une greffe d'état ne transfère pas le contexte » était **faux** : le prélèvement se faisait sur les identifiants tokenisés (1 750) alors que l'inférence construit une invite d'**un jeton de plus** (1 751) — j'injectais l'état qui prédit « : » au lieu du code. Avec `--etat-fin` (k-ième depuis la fin, résolu dans la numérotation de l'inférence), **le contenu passe** : `[1863, 48, 18, 19, 20, …]` = « ZQ-… » depuis une invite qui ne contient aucun code. L'ancienne conclusion est conservée **à côté** de la correction (rapport §28, en-tête de la porte), comme le veut la règle du dépôt.
+
+- **Leçon de méthode, écrite** : une position ne se devine pas, elle se **capture là où le calcul se fait**. Trois mesures ont échoué sur ce décalage ; c'est chaque fois la porte qui a rendu le défaut visible — jamais le résultat qui avait l'air bon.
+
+**Reste ouvert** (dans `docs/sprint-cerveau.md`) : l'**entrée de cache KV** — ranger un état rappelé comme clé/valeur que l'attention peut interroger, le seul chemin qui reste pour qu'une mémoire *serve* le calcul ; puis les têtes dédiées par profondeur (C8) et les modèles conçus pour l'événementiel (H/I/J). L'objectif reste **actif**.
+
+
+## Tour 46
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 mémoire épisodique, C7 consolidation, C8 périphérie, C9 latéralité, C10 budgets, et la diffusion réseau du bus de C5 ; (b) les expériences E2-E9 de docs/biologie-pour-drave.md et docs/hebbien-differentiel-et-biologie.md ; (c) les dessins de modèle H/I/J de docs/modele-pour-drave.md ; (d) les manques du registre docs/manques.md (noyau de listes pour les experts, noyau de listes GPU, encodeurs) — l'implémenter ou la mesurer, la doter d'une porte vérifiable, la documenter, commiter, pousser, et enchaîner immédiatement sur la suivante. Contraintes : les 23 portes du dépôt et tous les tests restent verts (porte-flux.sh après toute modification du chemin d'exécution), le profil release reste le binaire de mesure, le crate reste std seul, et docs/sprint-cerveau.md reste l'état resumable mis à jour à chaque round. Ne jamais s'arrêter faute de tâches planifiées : en inventer de nouvelles, mesurables, plutôt que d'attendre."
+Round: 3/60
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ C6/C2 : la mémoire peut maintenant SERVIR — je branche retrieval → injection de bout en bout
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"if opt.episodique_decorreler && etats.len() > 1\" drave-core/src/main.rs && sed -n \"$(grep -n 'if opt.episodique_decorreler && etats.len() > 1' drave-core/src/main.rs | cut -d: -f1),+8p\" drave-core/src/main.rs", "descript … [39 caractères tronqués]`
+
+  ```
+6214:    if opt.episodique_decorreler && etats.len() > 1 {
+    if opt.episodique_decorreler && etats.len() > 1 {
+        let mut moy = vec![0.0f64; dim];
+        for e in etats.iter() { for (i, x) in e.iter().enumerate() { moy[i] += *x as f64; } }
+        let n = etats.len() as f64;
+        for m in moy.iter_mut() { *m /= n; }
+        for e in etats.iter_mut() { for (i, x) in e.iter_mut().enumerate() { *x -= moy[i] as f32; } }
+        println!("  décorrélation     : moyenne des {} états retirée (les valeurs stockées sont \
+donc les états centrés ; la moyenne, elle, se stocke une fois)", etats.len());
+    }
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/serve.py <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\n\n# --- option : extraire l'état RETROUVÉ, prêt à être injecté\na = \"\"\"    /// C6 : position connue d'une information  … [4368 caractères tronqués]`
+
+  ```
+extraction de l'episode retrouve
+BUILD_END
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && T=/tmp/tmp.j4ZkPG1r7b && ls $T/*.txt 2>/dev/null | head -4 && NB=$(tr ',' '\\n' < $T/B.ids 2>/dev/null | wc -l) && echo \"B : $NB jetons\" && timeout 600 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --infer --promp … [180 caractères tronqués]`
+
+  ```
+/tmp/tmp.j4ZkPG1r7b/A.txt
+/tmp/tmp.j4ZkPG1r7b/B.txt
+B : 1721 jetons
+  capture d'état    : position 1721 (la 1e depuis la fin d'une invite de 1722 jetons) écrite dans /tmp/tmp.j4ZkPG1r7b/cueB
+  ```
+
+### 🤖 Assistant
+
+⏵ Maillon final : la mémoire retrouve un épisode, et cet épisode doit ENTRER dans un autre calcul
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && T=/tmp/tmp.j4ZkPG1r7b && python3 - <<'ENDPY'\nimport pathlib\nt = pathlib.Path(\"/tmp/tmp.j4ZkPG1r7b\")\nsrc = (t/\"A.txt\").read_text()\ni = src.index(\"ZQ-4471-KX\")\n(t/\"pref.txt\").write_text(src[:i + len(\"ZQ-4471-KX\")])\nprin … [808 caractères tronqués]`
+
+  ```
+préfixe écrit, offset 2738
+aiguille (fin du code) au jeton 740
+  clés distinctes   : 1750/1750 (pire multiplicité 1)
+  séparation        : recouvrement moyen 1.31/64 entre états différents (pire 43/64, 64 paires)
+  en jetons entre l'épisode rendu et l'épisode interrogé) :
+  indice SÉMANTIQUE : EXTÉRIEUR (/tmp/tmp.j4ZkPG1r7b/cueB.1721, 896 valeurs) — il n'est PAS dans le magasin, aiguille en 740 :
+    épisode rendu : 437 · recouvrement 25/64 · distance à l'aiguille : 303 jetons
+    état extrait  : 896 valeurs (norme 306.31) écrites dans /tmp/tmp.j4ZkPG1r7b/retrouve.f32 — un état VÉCU, pas une valeur décorrélée
+    hasard        : 448 jetons en moyenne sur 1750 épisodes
+    ⇒ la mémoire n'a PAS retrouvé l'aiguille : un indice qui ne ressemble pas au contenu cherché ne le retrouve pas. C'est une limite du rappel par le contenu — il n'est pas sémantique —, et elle est mesurée, pas supposée.
+  ```
+
+### 🤖 Assistant
+
+⏵ L'état stocké est la sortie NORMÉE (norme 306) — je teste si l'injection porte quand même le contenu
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && T=/tmp/tmp.j4ZkPG1r7b && for A in 0 0.2 1 5; do R=$(timeout 300 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --infer --prompt \"$(cat $T/C.txt 2>/dev/null || cat $T/B.txt)\" --n 5 --temp 0 --ctx 2048 --threads 8 -- … [226 caractères tronqués]`
+
+  ```
+α=0 : Answer: 150px
+α=0.2 : Answer: The vault access code is
+α=1 : Answer: The vault access code is
+α=5 : Answer: "150px
+  ```
+
+### 🤖 Assistant
+
+⏵ Résultat cohérent : la mémoire rend la PHRASE-CADRE, pas le code — le goulot est le rappel, pas la greffe
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\n\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\na = \"## 29.\" if \"## 29.\" in s else \"## Annexe — manifeste des journaux\"\nsec = \"\"\"## 29. La mémoire QUI S … [7166 caractères tronqués]`

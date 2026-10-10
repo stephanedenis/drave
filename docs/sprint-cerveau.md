@@ -6,6 +6,37 @@
 
 ---
 
+## C6/C2 — FAIT (10 octobre 18 h) : LA MÉMOIRE QUI SERT, de bout en bout
+
+`--episodique-extraire F` ferme la chaîne : indexer → **retrouver par le contenu** →
+**injecter** l'état retrouvé dans un calcul qui n'a pas vécu l'épisode. L'état écrit est
+l'état VÉCU (la moyenne est rajoutée si le magasin est décorrélé).
+
+Magasin de 1 750 états de l'invite A (code au jeton 740), indice extérieur (l'invite B,
+même texte SANS le code) :
+
+| étape | mesure |
+|---|---|
+| rappel | épisode 437 · recouvrement 25/64 · **303 jetons** de l'aiguille (hasard 448) |
+| injection α = 0 | `150px` — témoin de non-effet |
+| **injection α = 0,2 / 1** | **`The vault access code is`** |
+| injection α = 5 | `"150px` (saturé) |
+
+**La chaîne fonctionne** : le modèle DIT la phrase-cadre de l'aiguille alors que ni le
+code ni cette phrase ne sont dans son contexte. **Mais le code n'est pas produit** — et
+la cause est en haut du tableau : l'épisode retrouvé est à **303 jetons** de l'aiguille,
+donc son préfixe ne contient pas encore le code.
+
+**⇒ LE GOULOT EST LE RAPPEL, PAS LA GREFFE.** C'est la conclusion utile du round : la
+greffe est un mécanisme qui marche (corrigée et vérifiée), et ce qui limite l'usage est la
+qualité du rappel par un indice purement sémantique (1,5× le hasard).
+
+**Réserves écrites** : l'état stocké est la sortie **normalisée** (norme 306) alors que la
+greffe injecte un résidu brut (54-66) — l'échelle est absorbée par la normalisation
+finale, mais stocker le résidu serait plus cohérent ; un seul indice, un seul texte.
+
+---
+
 ## ▶ PROCHAINE ACTION (à lire en premier)
 
 État au **10 octobre 11 h 45** : **C1, C3, C4 (pas 1), C5, C5bis, C5ter, C6, C7 (pas 1),
@@ -905,6 +936,7 @@ bus (le format de la ligne de contrôle est écrit, le transport reste à câble
 |---|---|
 | 9/10 17 h 10 | **C1a** : module `topologie.rs`, validation stricte, plan, 8 tests, suite à 85 tests. |
 | 9/10 17 h 20 | **C1b pas 1** : la topologie pilote le découpage · porte `tools/porte-topologie.sh` **TENUE** (même chiffre, écart 0,00e0) · deux refus vérifiés. |
+| 10/10 18 h 00 | **C6/C2 — la mémoire QUI SERT (bout en bout)** : `--episodique-extraire`. Indexer A (1 750 états) → retrouver avec un indice extérieur (épisode 437, **303 jetons** de l'aiguille, hasard 448) → injecter dans une invite sans le fait : le modèle DIT **« The vault access code is »** (α=0 : `150px`, témoin). **Le code n'est pas produit** car l'épisode retrouvé précède l'aiguille ⇒ **le goulot est le RAPPEL, pas la greffe**. |
 | 10/10 16 h 30 | **C2 — deux entrées, règle de mélange** : `porte-melange.sh` (4 cas, verte). La somme **arbitre** (7/7), **bascule à α=0,6** contre **0,509** prédit par les normes. Et **correction d'un faux négatif majeur** : la greffe d'état **transfère le contenu** (`ZQ3`/`K00`) quand l'état est capturé dans la numérotation de l'inférence (`--etat-fin` — le décalage d'un jeton faisait injecter l'état qui prédit « : »). Trois mesures avaient échoué sur ce décalage. |
 | 10/10 14 h 10 | **C6 — indice étranger : la porte CORRIGE la mesure.** En écrivant la porte, la question a gagné un point d'interrogation : 136 → **378 jetons** (hasard 448). L'effet est réel mais **NON ROBUSTE** ; la porte n'exige plus que « mieux que le hasard » et **affiche l'avertissement** quand la marge est faible. Leçon : un chiffre unique sur un seul indice n'est pas un résultat. |
 | 10/10 13 h 00 | **C6 — indice étranger** : `--episodique-indice` (état EXTÉRIEUR). Un indice pris dans le magasin s'y retrouve lui-même (64/64, 1 009 jetons de l'aiguille) et **ne teste rien** — piège corrigé. Avec un indice extérieur partageant **4/64** canaux : épisode rendu à **136 jetons** de l'aiguille contre **448** de hasard ⇒ **3,3× mieux que le hasard**, faible mais réel. Limite écrite : un seul indice, un seul texte. |

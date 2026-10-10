@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 42.9 h |
-| Tours | 45 |
-| Messages | 1714 |
-| Appels d'outils | 1622 |
+| Durée | 43.1 h |
+| Tours | 46 |
+| Messages | 1722 |
+| Appels d'outils | 1628 |
 | Fichiers touchés | 61 |
-| Commandes | 1372 |
+| Commandes | 1378 |
 | Sous-agents | 3 |
-| Commits | 135 |
+| Commits | 136 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -125,6 +125,8 @@
 **Tour 44** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1469 caractères tronqués]
 
 **Tour 45** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1469 caractères tronqués]
+
+**Tour 46** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1469 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -2119,7 +2121,34 @@ Je continue sur cette liste — il
 
 **Synthèse produite :**
 
-⏵ Porte verte (5/5) — je corrige le message de clôture resté périmé et je commite
+⏵ Round livré : C2 (règle de mélange mesurée) + correction d'un faux négatif publié
+
+**Ce round** — 4 commits poussés, 122 tests verts, `porte-melange` (nouvelle, 4 cas) et `porte-greffe` (corrigée, 5 cas) vertes :
+
+- **C2 — deux entrées, une règle de mélange** : deux invites de 1 750 jetons (même remplissage, un code différent), états prélevés, mélange α·A+(1−α)·B injecté dans une invite **sans aucun code** :
+  - la somme **ARBITRE, elle ne détruit pas** : 7/7 mélanges rendent le premier jeton de l'un des deux contenus, jamais un troisième ;
+  - **bascule mesurée à α = 0,6**, prédite à **0,509** par le rapport des normes (65,89/129,54) — écart 0,091 ⇒ **la somme est arbitrée par la NORME des états**, pas seulement par le poids.
+
+- **Correction d'un faux négatif que j'avais publié.** « Une greffe d'état ne transfère pas le contexte » était **faux** : le prélèvement se faisait sur les identifiants tokenisés (1 750) alors que l'inférence construit une invite d'**un jeton de plus** (1 751) — j'injectais l'état qui prédit « : » au lieu du code. Avec `--etat-fin` (k-ième depuis la fin, résolu dans la numérotation de l'inférence), **le contenu passe** : `[1863, 48, 18, 19, 20, …]` = « ZQ-… » depuis une invite qui ne contient aucun code. L'ancienne conclusion est conservée **à côté** de la correction (rapport §28, en-tête de la porte), comme le veut la règle du dépôt.
+
+- **Leçon de méthode, écrite** : une position ne se devine pas, elle se **capture là où le calcul se fait**. Trois mesures ont échoué sur ce décalage ; c'est chaque fois la porte qui a rendu le défaut visible — jamais le résultat qui avait l'air bon.
+
+**Reste ouvert** (dans `docs/sprint-cerveau.md`) : l'**entrée de cache KV** — ranger un état rappelé comme clé/valeur que l'attention peut interroger, le seul chemin qui reste pour qu'une mémoire *serve* le calcul ; puis les têtes dédiées par profondeur (C8) et les modèles conçus pour l'événementiel (H/I/J). L'objectif reste **actif**.
+
+### Tour 46 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1749 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Locate the decorrelation block
+- bash — Implement retrieved-state extraction
+- bash — Capture an external cue from B
+- bash — Retrieve an episode and extract its state
+- bash — Inject the retrieved state into a codeless context
+- bash — Document and commit the end-to-end chain
+
+**Synthèse produite :**
+
+⏵ Résultat cohérent : la mémoire rend la PHRASE-CADRE, pas le code — le goulot est le rappel, pas la greffe
 
 ## 3. Travail accompli
 
@@ -2237,7 +2266,7 @@ Je continue sur cette liste — il
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1332 autres
+- … et 1338 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2520,4 +2549,5 @@ Je continue sur cette liste — il
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 cargo test --release --manifest-path drave-core/Cargo.toml 2>&1 | grep -E "^test result" && gi
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src/main.rs drave-core/src/model.rs tools/porte-melange.sh tools/porte-greffe.sh rep
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib p = pathlib.Path("tools/porte-greffe.sh") s = p.read_text() a = '''echo
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 

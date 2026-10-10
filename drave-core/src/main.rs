@@ -677,6 +677,12 @@ struct Options {
     /// qui rend la mesure honnête, car un indice pris DANS le magasin s'y retrouve
     /// lui-même (recouvrement 64/64) et ne teste donc rien.
     episodique_indice: Option<String>,
+    /// C6/C2 : écrire l'état RETROUVÉ par la lecture (f32 bruts), prêt à être injecté
+    /// ailleurs par `--fusion-etat`. C'est le dernier maillon : la mémoire rend un
+    /// épisode, et cet épisode doit pouvoir ENTRER dans un autre calcul. Si la mémoire
+    /// est décorrélée, la moyenne est rajoutée — sinon on injecterait un état centré,
+    /// qui n'est l'état d'aucun moment vécu.
+    episodique_extraire: Option<String>,
     /// C6 : position connue d'une information plantée (l'« aiguille »). Sert à mesurer
     /// la distance entre l'épisode RENDU par la mémoire et l'endroit où l'information
     /// se trouve VRAIMENT — c'est la seule façon de savoir si la mémoire retrouve le
@@ -933,6 +939,7 @@ fn analyser(args: &[String]) -> Options {
                     .filter_map(|x| x.trim().parse().ok()).collect();
                 2
             }
+            "--episodique-extraire" => { o.episodique_extraire = Some(suivant(i).clone()); 2 }
             "--episodique-indice" => { o.episodique_indice = Some(suivant(i).clone()); 2 }
             "--episodique-aiguille" => { o.episodique_aiguille = suivant(i).parse().ok(); 2 }
             "--episodique-cycles" => { o.episodique_cycles = suivant(i).parse().unwrap_or(1); 2 }
@@ -6211,14 +6218,19 @@ moins 2", ids.len());
     // langue partagent ~37 % de leur clé, très au-dessus du hasard (k²/dim = 4,6/64),
     // parce qu'ils portent tous une forte composante commune. Tant qu'elle est là,
     // toute clé recouvre tout le magasin et l'index inversé n'élague rien.
+    // La moyenne est GARDÉE : sans elle, impossible de reconstruire l'état d'un moment
+    // vécu à partir d'une valeur décorrélée — et c'est exactement ce qu'il faut pour
+    // injecter un épisode retrouvé.
+    let mut moyenne_etats: Option<Vec<f32>> = None;
     if opt.episodique_decorreler && etats.len() > 1 {
         let mut moy = vec![0.0f64; dim];
         for e in etats.iter() { for (i, x) in e.iter().enumerate() { moy[i] += *x as f64; } }
         let n = etats.len() as f64;
         for m in moy.iter_mut() { *m /= n; }
         for e in etats.iter_mut() { for (i, x) in e.iter_mut().enumerate() { *x -= moy[i] as f32; } }
+        moyenne_etats = Some(moy.iter().map(|x| *x as f32).collect());
         println!("  décorrélation     : moyenne des {} états retirée (les valeurs stockées sont \
-donc les états centrés ; la moyenne, elle, se stocke une fois)", etats.len());
+donc les états centrés ; la moyenne est GARDÉE en mémoire pour reconstruire un état vécu)", etats.len());
     }
     // EXPANSION (facultative), après la décorrélation : elle dilate l'état dans un
     // espace plus grand où les clés peuvent être plus creuses — c'est ce qui donne à
@@ -6593,6 +6605,27 @@ PARTAGÉS entre les clés.");
                         .sum::<f64>() / cles.len() as f64;
                     println!("    épisode rendu : {} · recouvrement {}/{} · distance à \
 l'aiguille : {d} jetons", l.id, l.recouvrement, k);
+                    // LE MAILLON FINAL : l'épisode retrouvé sort du magasin, prêt à être
+                    // injecté dans un autre calcul. C'est ce qui fait d'une mémoire un
+                    // organe plutôt qu'un index.
+                    if let Some(f) = opt.episodique_extraire.as_ref() {
+                        if let Some(e) = m.par_id(l.id) {
+                            let mut v = e.valeur.clone();
+                            if let Some(moy) = moyenne_etats.as_ref() {
+                                for (i, x) in v.iter_mut().enumerate() { *x += moy[i]; }
+                            }
+                            let mut octets = Vec::with_capacity(v.len() * 4);
+                            for x in v.iter() { octets.extend_from_slice(&x.to_le_bytes()); }
+                            match std::fs::write(f, &octets) {
+                                Ok(()) => {
+                                    let norme: f32 = v.iter().map(|x| x * x).sum::<f32>().sqrt();
+                                    println!("    état extrait  : {} valeurs (norme {norme:.2}) \
+écrites dans {f} — un état VÉCU, pas une valeur décorrélée", v.len());
+                                }
+                                Err(e) => eprintln!("    extraction impossible : {e}"),
+                            }
+                        }
+                    }
                     println!("    hasard        : {base:.0} jetons en moyenne sur {} épisodes", cles.len());
                     if (d as f64) < base / 2.0 {
                         println!("    ⇒ la mémoire a retrouvé le VOISINAGE de l'aiguille");
