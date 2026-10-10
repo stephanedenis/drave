@@ -744,6 +744,32 @@ juste après la réception, avec `pas_servis` comme multiplicateur ; (4) le cas 
 
 ---
 
+## ÉTALONNAGE DE L'INSTRUMENT DE TRACE — FAIT (11 octobre 21 h) : 50 ms injectés, 50,2 ms mesurés
+
+Toute la partie asynchrone (C4) repose sur une question préalable : **la trace globale sait-elle
+mesurer le temps ?** Un instrument jamais étalonné ne prouve rien sur ce qu'il observe.
+
+Protocole : un délai **connu** injecté (`"delai_ms": 50`), les deux côtés tracent, la fusion
+apparie par `(lien, pas)`, et l'on compare l'horodatage d'**envoi** (pilote) à celui de
+**réception** (nœud) :
+
+| mesure | valeur |
+|---|---|
+| croisements par source | 46 (23 pas × 2 liens) |
+| liens confrontés | **46 identiques, 0 divergents** |
+| **écart envoi → réception, médian** | **50,2 ms** (min 50,2 · max 50,2) |
+| délai injecté | 50 ms |
+
+**L'instrument mesure le temps à 0,2 ms près** — et cet écart est le transport lui-même. Il est
+**rigoureusement constant** (min = max) parce que le délai injecté l'est : un instrument bruité
+l'aurait montré.
+
+**Pourquoi c'est un préalable** : quand C4 dira que deux régions avancent à des rythmes
+différents, l'instrument qui le dira aura été **étalonné contre une valeur connue**, et non
+supposé juste parce qu'il produit des nombres.
+
+---
+
 ## ▶ PROCHAINE ACTION (à lire en premier)
 
 État au **11 octobre 6 h 45** · **21 portes, toutes vertes** (`tools/porte-*.sh`) ·

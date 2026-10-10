@@ -6,13 +6,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
 | Durée | 48.0 h |
-| Tours | 76 |
-| Messages | 1963 |
-| Appels d'outils | 1809 |
+| Tours | 77 |
+| Messages | 1967 |
+| Appels d'outils | 1811 |
 | Fichiers touchés | 61 |
-| Commandes | 1559 |
+| Commandes | 1561 |
 | Sous-agents | 3 |
-| Commits | 166 |
+| Commits | 167 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -187,6 +187,8 @@
 **Tour 75** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 **Tour 76** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
+
+**Tour 77** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -3219,7 +3221,36 @@ Le transport du compte de paires est livré (v8) ; il ne manquait que le **contr
 
 **Synthèse produite :**
 
-⏵ Le refus tombe au pas 0, sans perplexité, code 9 — j'ajoute le cas de porte et je vérifie tout
+⏵ Round 33 livré : **C10 CLOS** — trois budgets de lien, trois codes d'arrêt distincts
+
+**Ce round** — 1 commit poussé, 122 tests verts, `porte-budget.sh` (6 cas) et `porte-flux.sh` (5 modes) **vertes**.
+
+Le round 32 avait reverté ce travail après un déséquilibre d'accolades. **Repris en ADDITIF** — rien supprimé, donc rien à casser — et livré :
+
+| volet | unité | code | mesure |
+|---|---|---|---|
+| octets | octets/pas | **6** | 1 860 pour un budget de 975 ⇒ arrêt au pas 0 |
+| latence | ms/pas | **8** | 20,1 ms pour un budget de 1 ms |
+| **paires** | paires du nœud/pas | **9** | **178 913 280** pour un budget de **1 000 000** ⇒ arrêt **au pas 0** |
+
+**La leçon du round précédent est appliquée** : le contrôle est **dans la boucle**, au pas du dépassement. Placé après elle, il laissait **calculer et afficher la perplexité** avant de refuser — le résultat partiel que ce dépôt refuse. C'est **la porte** qui l'avait signalé, par son assertion « aucune perplexité ne doit être rendue » — et elle l'exige maintenant.
+
+**Détail qui se recoupe** : le compte annoncé au **premier** pas (178 913 280) vaut exactement la valeur par pas mesurée sur la session entière (178,9 M) — un compteur cumulatif lu une fois dit la même chose au début et à la fin.
+
+**Ce que C10 apporte à la distribution** : les trois coûts d'un lien sont désormais **déclarables et vérifiés** — le temps, les octets, et le **calcul déporté**, le seul que ce moteur compte vraiment (`paires = poids non nuls × activations vivantes`). Un lien qui ne peut pas porter un demi-modèle se voit refuser **au premier pas**, au lieu de le découvrir à la fin.
+
+**Bilan** : 33 rounds, **22 portes toutes vertes**, 122 tests, protocoles v7 et v8 livrés, **C10 complet**. Restent : la tête dédiée par profondeur (C8), les modèles H-I-J, et les drapeaux candidats à instruire. L'objectif reste **actif**.
+
+### Tour 77 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Measure whether the trace sees the injected delay
+- bash — Document and commit the calibration
+
+**Synthèse produite :**
+
+⏵ L'instrument est **calibré** : 50 ms injectés → 50,2 ms mesurés par la fusion, sur 23 croisements
 
 ## 3. Travail accompli
 
@@ -3337,7 +3368,7 @@ Le transport du compte de paires est livré (v8) ; il ne manquait que le **contr
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1519 autres
+- … et 1521 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3650,5 +3681,6 @@ Le transport du compte de paires est livré (v8) ; il ne manquait que le **contr
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib p = pathlib.Path("docs/sprint-cerveau.md") s = p.read_text() a = "## ▶ 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 bash tools/porte-flux.sh > /tmp/pf31.txt 2>&1; echo "porte-flux code=$?"; timeout 600 cargo te
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib p = pathlib.Path("docs/sprint-cerveau.md") s = p.read_text() a = "## ▶ 
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 
