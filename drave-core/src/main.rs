@@ -590,6 +590,15 @@ struct Options {
     verifier_globale: Option<String>,
     /// C5 — bus de modulation : `canal=valeur`, répétable.
     bus: Vec<String>,
+    /// C5bis — port d'écoute du BUS (réservé : la diffusion passe par le fichier).
+    bus_serveur: Option<u16>,
+    /// C5bis — FICHIER DE CONTRÔLE : le bus y est relu avant chaque trame, donc un
+    /// autre processus (ou une autre machine, par un montage partagé) peut changer
+    /// un canal PENDANT l'exécution — c'est ce qui en fait un bus et non un réglage
+    /// de démarrage. Le transport par socket viendra quand l'ordre du nœud sera
+    /// revu (le fil doit être posé AVANT l'accept, sinon il n'écoute que pendant
+    /// qu'un client est connecté).
+    bus_fichier: Option<String>,
     /// Banc du KV déporté : nombre de clés à faire tenir en VRAM.
     banc_kv: usize,
     /// Banc des SCORES d'attention : nombre de clés à noter (noyau 1 du top-k).
@@ -743,6 +752,8 @@ fn analyser(args: &[String]) -> Options {
             "--verifier-globale" => { o.verifier_globale = Some(suivant(i).clone()); 2 }
             // C5 : le bus de modulation, canal par canal.
             "--bus" => { o.bus.push(suivant(i).clone()); 2 }
+            "--bus-serveur" => { o.bus_serveur = suivant(i).parse().ok(); 2 }
+            "--bus-fichier" => { o.bus_fichier = Some(suivant(i).clone()); 2 }
             "--tokenize" => { o.tokenize = true; 1 }
             "--gpu-banc" => { o.gpu_banc = true; 1 }
             // Test de fumée de la couche 0 de Kimi-K3, **sur un modèle même
@@ -3322,12 +3333,6 @@ doit pas changer)", ma.id, lien.vers, lien.delai_ms);
     }
     // C5 : le bus du NŒUD. Chaque région décide de ce qu'elle fait du canal ; ici
     // le gain s'applique à l'état que le nœud produit, avant de le rendre.
-    let bus = bus::Bus::analyser(&opt.bus).unwrap_or_else(|e| {
-        eprintln!("{e}"); std::process::exit(2) });
-    if !bus.est_neutre() {
-        println!("[bus] canaux actifs sur ce nœud : {}",
-                 bus.canaux().iter().map(|(k, v)| format!("{k}={v}")).collect::<Vec<_>>().join(" "));
-    }
     sock.set_nodelay(true).expect("TCP_NODELAY");
     println!("[flux] client connecté : {pair}");
     let mut servis = 0u64;
@@ -3339,6 +3344,17 @@ doit pas changer)", ma.id, lien.vers, lien.delai_ms);
                 // octets suffisait à faire tomber le moteur (assert sur `pos`,
                 // index hors `layers`, dimension fausse — relecture adversariale).
                 let (n_layer_local, ctx_local) = (mdl.cfg.n_layer, mdl.ctx);
+
+    let bus0 = bus::Bus::analyser(&opt.bus).unwrap_or_else(|e| {
+        eprintln!("{e}"); std::process::exit(2) });
+    // C5bis : le bus est PARTAGÉ et un fil d'écoute le met à jour par le réseau.
+    // Une diffusion doit pouvoir changer un canal PENDANT l'exécution — sinon ce
+    // n'est pas un bus, c'est un réglage de démarrage.
+    let bus = std::sync::Arc::new(std::sync::Mutex::new(bus0));
+    if !bus.lock().unwrap().est_neutre() {
+        println!("[bus] canaux actifs sur ce nœud : {}",
+                 bus.lock().unwrap().canaux().iter().map(|(k, v)| format!("{k}={v}")).collect::<Vec<_>>().join(" "));
+    }
                 if f.fin as usize > n_layer_local || f.debut >= f.fin {
                     println!("[flux] flux refusé : plage de couches {}..{} invalide pour {} \
 couches — le nœud continue", f.debut, f.fin, n_layer_local);
@@ -3435,8 +3451,20 @@ raccord précédent où s'appliquer et l'ignorer serait muet. Le nœud continue"
                     continue;
                 }
                 mdl.hc_porte_imposee = if f.premix.is_empty() { None } else { Some(f.premix.clone()) };
+                // C5bis : le bus est RELU avant chaque trame — un canal peut donc
+                // changer en cours d'exécution, ce qui est la définition d'un bus.
+                if let Some(bf) = &opt.bus_fichier {
+                    if let Ok(contenu) = std::fs::read_to_string(bf) {
+                        for ligne in contenu.lines() {
+                            if ligne.trim().is_empty() || ligne.starts_with('#') { continue; }
+                            if let Err(e) = bus.lock().unwrap().appliquer_ligne(ligne) {
+                                eprintln!("[bus] {e}");
+                            }
+                        }
+                    }
+                }
                 let mut sortie = mdl.forward(0, f.pos as usize);
-                bus.appliquer_gain(&mut sortie);
+                bus.lock().unwrap().appliquer_gain(&mut sortie);
                 // La RÉPONSE est encodée comme la demande : un pair qui parle en
                 // listes reçoit des listes, sans second réglage à faire tenir
                 // cohérent entre les deux machines.

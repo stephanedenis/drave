@@ -80,4 +80,31 @@ kill $N1 $N2 2>/dev/null; wait $N1 $N2 2>/dev/null
 echo "  relais sans bus : $R0 · relais avec bus gain=1.5 : $R"
 [ -n "$R" ] && [ "$R" != "$R0" ] && echo "  ✅ le bus traverse les instances et agit sur la région du milieu" \
     || { echo "  ❌ le bus du nœud relais est sans effet"; exit 1; }
+echo "=== 4. bus diffusé par FICHIER DE CONTRÔLE, sur un nœud RELAIS (C5bis) ==="
+# Le canal voyage par un fichier relu avant chaque trame : un autre processus peut
+# donc le changer PENDANT l'exécution — c'est ce qui en fait un bus.
+P1=$((PORT + 1)); P2=$((PORT + 2))
+cat > "$T/t3.json" <<JSON
+{"regions":[
+  {"id":"local","couches":[0,11],"instance":"local"},
+  {"id":"n1","couches":[12,17],"instance":"127.0.0.1:$P1"},
+  {"id":"n2","couches":[18,23],"instance":"127.0.0.1:$P2"}],
+ "liens":[{"de":"local","vers":"n1","mode":"f32"},{"de":"n1","vers":"n2","mode":"f32"}]}
+JSON
+relais() { # relais <contenu du fichier de contrôle>
+    printf '%s\n' "$1" > "$T/ctl.txt"
+    $D "$M" --flux-serveur "$P2" --topologie "$T/t3.json" --region n2 --ctx 256 --threads 8 > "$T/n2.log" 2>&1 & local N2=$!
+    sleep 2
+    $D "$M" --flux-serveur "$P1" --topologie "$T/t3.json" --region n1 --bus-fichier "$T/ctl.txt" --ctx 256 --threads 8 > "$T/n1.log" 2>&1 & local N1=$!
+    sleep 3
+    local r
+    r=$($D "$M" --ppl-reparti "127.0.0.1:$P1" --topologie "$T/t3.json" --ids-file "$IDS" \
+        --limit "$LIMITE" --ctx 256 --threads 8 --flux 2>&1 | grep -oE "deux nœuds +: perplexité [0-9.]+" | grep -oE "[0-9.]+$")
+    kill $N1 $N2 2>/dev/null; wait $N1 $N2 2>/dev/null
+    printf '%s' "$r"
+}
+R0=$(relais "# aucun canal"); R1=$(relais "MODULATION gain 1.5")
+echo "  fichier sans canal : $R0 · canal gain=1,5 : $R1"
+[ -n "$R1" ] && [ "$R1" != "$R0" ] && echo "  ✅ le canal diffusé par fichier change la région du milieu" \
+    || { echo "  ❌ le fichier de contrôle est sans effet"; exit 1; }
 rm -rf "$T"

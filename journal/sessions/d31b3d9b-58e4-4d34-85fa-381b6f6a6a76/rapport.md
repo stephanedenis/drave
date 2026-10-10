@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 36.4 h |
+| Durée | 36.6 h |
 | Tours | 43 |
-| Messages | 1336 |
-| Appels d'outils | 1252 |
+| Messages | 1349 |
+| Appels d'outils | 1265 |
 | Fichiers touchés | 40 |
-| Commandes | 1044 |
+| Commandes | 1057 |
 | Sous-agents | 3 |
-| Commits | 114 |
+| Commits | 115 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -2008,7 +2008,7 @@ Tout est committé et poussé sur **`github.com/stephanedenis/drave`** (privé),
 
 ### Tour 43 — ajuste tes sprints en timeboxing plus qu'en tranche de backlog. C'est à dire que tu dois continuer pour occupper le temp … [564 caractères tronqués]
 
-*8 appels d'outils.* Actions notables :
+*21 appels d'outils.* Actions notables :
 
 - create_goal
 - todo_write
@@ -2018,10 +2018,17 @@ Tout est committé et poussé sur **`github.com/stephanedenis/drave`** (privé),
 - bash — Write and run the delay gate
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/relations-humaines.md`
 - bash — Commit C3 and the relations charter
+- bash — Add the control-line parser and its tests
+- bash — Wire the network bus listener into the node
+- bash — Test the network bus end to end
+- bash — Find the node's listener and accept
+- bash — Move the bus listener before the accept and rebuild
+- bash — Re-test the network bus
+- … et 7 autres
 
 **Synthèse produite :**
 
-⏵ Le fichier de relations humaines, et la consignation du résultat C3
+⏵ La porte était mal formée (le `\n` littéral) — le parseur l'a refusée, à raison
 
 ## 3. Travail accompli
 
@@ -2118,7 +2125,7 @@ Tout est committé et poussé sur **`github.com/stephanedenis/drave`** (privé),
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1004 autres
+- … et 1017 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2380,4 +2387,5 @@ Tout est committé et poussé sur **`github.com/stephanedenis/drave`** (privé),
 - Bilan du sprint : C1, C12 et C5 livrées avec leurs invariants, 95 tests, trois défauts trouvés par les portes  Les trois capacités ont leur module, leur porte o
 - Sprint clos sur vérification : les 23 portes du dépôt sont vertes (0 rouge), 95 tests  tools/portes.sh relancé après le sprint, terminé en 15 minutes (machine l
 - C3 : les délais par lien, et le fichier de relations humaines  C3 — la topologie déclare delai_ms, le moteur l'applique (pilote sur son lien sortant, nœud relai
+- C5bis : diffusion du bus par fichier de contrôle — le canal change la région du milieu  --bus-fichier F : le nœud RELIT le fichier avant chaque trame, donc un a
 

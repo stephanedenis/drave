@@ -84,6 +84,28 @@ impl Bus {
     pub fn ligne(&self, canal: &str) -> String {
         format!("MODULATION {canal} {}\n", self.lire(canal))
     }
+
+    /// Applique une ligne de contrôle reçue du réseau. Rend le canal modifié.
+    ///
+    /// POURQUOI UN CANAL DE CONTRÔLE SÉPARÉ, ET PAS UNE TRAME DE PLUS : le
+    /// protocole de données est binaire, versionné et validé octet par octet ;
+    /// y glisser une ligne de texte le ferait dériver. Le bus voyage donc sur sa
+    /// propre connexion, en texte, et une ligne illisible est **refusée** sans
+    /// toucher au bus.
+    pub fn appliquer_ligne(&mut self, ligne: &str) -> Result<String, String> {
+        let champs: Vec<&str> = ligne.split_whitespace().collect();
+        if champs.len() != 3 || champs[0] != "MODULATION" {
+            return Err(format!("bus : ligne de contrôle attendue « MODULATION canal valeur », reçu « {} »",
+                               ligne.trim()));
+        }
+        let v: f32 = champs[2].parse()
+            .map_err(|_| format!("bus : valeur illisible dans « {} »", ligne.trim()))?;
+        if !v.is_finite() {
+            return Err(format!("bus : valeur non finie dans « {} »", ligne.trim()));
+        }
+        self.poser(champs[1], v);
+        Ok(champs[1].to_string())
+    }
 }
 
 #[cfg(test)]
@@ -125,6 +147,18 @@ mod tests {
         assert!(Bus::analyser(&["gain".into()]).is_err(), "sans « = » c'est une erreur");
         assert!(Bus::analyser(&["gain=abc".into()]).is_err());
         assert!(Bus::analyser(&["gain=inf".into()]).is_err());
+    }
+
+    #[test]
+    fn applique_une_ligne_de_controle_et_refuse_le_reste() {
+        let mut b = Bus::nouveau();
+        assert_eq!(b.appliquer_ligne("MODULATION gain 1.5").unwrap(), "gain");
+        assert_eq!(b.gain(), 1.5);
+        assert!(b.appliquer_ligne("MODULATION gain").is_err(), "champ manquant");
+        assert!(b.appliquer_ligne("GAIN 1.5").is_err(), "mot-clé inconnu");
+        assert!(b.appliquer_ligne("MODULATION gain abc").is_err(), "valeur illisible");
+        assert!(b.appliquer_ligne("MODULATION gain nan").is_err(), "non finie");
+        assert_eq!(b.gain(), 1.5, "une ligne refusée ne touche pas au bus");
     }
 
     #[test]

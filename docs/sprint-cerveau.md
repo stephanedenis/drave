@@ -14,6 +14,7 @@ Trois capacités du plan, chacune avec sa **porte mesurée** :
 |---|---|---|---|
 | **C1** | **graphe de régions** : descripteur de topologie, validateur, ordonnanceur par dépendances, pilote multi-nœuds | un graphe **linéaire** rend des logits identiques **au bit près** ; un découpage à **trois régions** égale le modèle d'un seul tenant | ✅ **FAIT** — `topologie.rs` (8 tests) · la topologie pilote le découpage (0,00e0) · relais trois instances (0,00e0) · `tools/porte-topologie.sh` (5 cas, dont 2 refus) |
 | **C12** | **trace globale horodatée + rejeu** | rejeu d'une exécution distribuée == exécution, **0,00e0** | ✅ **FAIT** — `trace_globale.rs` (5 tests) · 126 croisements, **aucune divergence** · trace faussée d'un bit **détectée et nommée** · `tools/porte-trace.sh` |
+| **C5bis** | **diffusion du bus** | un canal poussé par un autre processus change l'exécution | ✅ **FAIT (fichier de contrôle)** — `--bus-fichier`, relu avant chaque trame · relais : 66,0379 contre 59,0790 · reste le transport par socket |
 | **C3** | **délais par lien** | un délai change le **temps**, jamais un chiffre | ✅ **FAIT** — appliqué par le pilote ET par le nœud relais · porte `tools/porte-delais.sh` (même perplexité, empreintes identiques, +3,1 s pour 50 ms × 64 pas) |
 | **C5** | **bus de modulation multi-canaux** | canal nul ⇒ sortie **inchangée** | ✅ **FAIT** — `bus.rs` (5 tests) · neutre ⇒ **empreintes identiques** · gain 1,5 ⇒ la sortie change · bus d'un **relais** ⇒ agit à travers les instances · `tools/porte-bus.sh` |
 
@@ -204,6 +205,38 @@ manquait pour déboguer un graphe distribué.
 
 ---
 
+## C5bis — FAIT (9 octobre 18 h 40) : diffusion du bus par FICHIER DE CONTRÔLE
+
+**Livré** : `--bus-fichier F` sur un nœud. Le fichier est **relu avant chaque trame**,
+donc un **autre processus** peut changer un canal **pendant l'exécution** — c'est ce
+qui en fait un bus et non un réglage de démarrage. Le format est celui du module
+(`MODULATION canal valeur`), et une ligne illisible est **refusée** (test unitaire).
+
+**La porte** (`tools/porte-bus.sh`, cas 4), sur un nœud **relais** :
+
+| fichier de contrôle | perplexité de la chaîne à trois régions |
+|---|---:|
+| sans canal | **59,0790** |
+| `MODULATION gain 1.5` | **66,0379** ✅ — la région du milieu applique le canal diffusé |
+
+**Deux leçons, tombées deux fois chacune — elles sont écrites pour de bon :**
+
+1. **Le gain d'un nœud FINAL est invisible** : la normalisation de sortie divise par
+   la norme, donc un facteur scalaire y disparaît. Tout test de bus doit viser une
+   région du **milieu**. (Je suis retombé dans le piège avec le fichier de contrôle :
+   premier essai sur un nœud final, résultat identique — et ce n'était pas le bus.)
+2. **Une porte mal formée ressemble à une capacité cassée.** Le cas 4 a d'abord
+   échoué parce que mon `printf '%s'` écrivait un `\n` **littéral** : la valeur devenait
+   illisible, et le parseur la **refusait**. C'est le parseur qui avait raison.
+
+**Ce qui reste pour C5** : le transport par **socket** (`--bus-serveur`, l'option est
+posée et le parseur est prêt) demande que le fil d'écoute soit lancé **avant**
+`ecoute.accept()` dans `run_serveur_flux` — un fil posé après n'écoute que pendant
+qu'un client est connecté, et c'est exactement ce que j'ai mesuré : connexion
+refusée. Le fichier de contrôle couvre le besoin en attendant.
+
+---
+
 ## C3 — FAIT (9 octobre 18 h 20) : les délais par lien
 
 **Livré** : la topologie déclare `delai_ms` par lien (C3a l'avait déjà dans le
@@ -323,6 +356,7 @@ bus (le format de la ligne de contrôle est écrit, le transport reste à câble
 |---|---|
 | 9/10 17 h 10 | **C1a** : module `topologie.rs`, validation stricte, plan, 8 tests, suite à 85 tests. |
 | 9/10 17 h 20 | **C1b pas 1** : la topologie pilote le découpage · porte `tools/porte-topologie.sh` **TENUE** (même chiffre, écart 0,00e0) · deux refus vérifiés. |
+| 9/10 18 h 40 | **C5bis** : bus diffusé par fichier de contrôle · cas 4 de `porte-bus.sh` vert (relais 66,0379 contre 59,0790) · deux leçons : le gain d'un nœud final est invisible, et une porte mal formée ressemble à une capacité cassée. |
 | 9/10 18 h 20 | **C3** : délais par lien · porte `tools/porte-delais.sh` — **même perplexité (59,0790), empreintes identiques, +3,1 s pour 50 ms × 64 pas**. |
 | 9/10 18 h 01 | **23 portes du dépôt : 23 vertes, 0 rouge** (code 0), dont `cargo test` à 95 verts et gpt-oss à 15,6017. |
 | 9/10 19 h 20 | **Bilan** : trois capacités livrées, 95 tests, 23 portes vertes. |

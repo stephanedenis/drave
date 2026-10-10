@@ -20887,3 +20887,162 @@ Created file
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/sprint-cerveau.md\")\ns = p.read_text()\nancre = \"\"\"## C5 — FAIT (9 octobre 19 h 10)\"\"\"\nassert ancre in s\nneuf = \"\"\"## C3 — FAIT (9 octobre 18 h 20) : les délais pa … [3172 caractères tronqués]`
+
+  ```
+sprint doc : C3 consignée
+poussé
+test result: ok. 95 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+  ```
+
+### 🤖 Assistant
+
+⏵ C5bis : la diffusion réseau du bus (port de contrôle séparé, sans toucher au protocole de données)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"src/bus.rs\")\ns = p.read_text()\ns = s.replace(\"\"\"    /// Ligne de contrôle, pour diffuser un bus vers une autre instance :\n    /// `MODULATION gain 1.5` — un messa … [2634 caractères tronqués]`
+
+  ```
+analyseur de ligne ajouté
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 90 filtered out; finished in 0.00s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"src/main.rs\")\ns = p.read_text()\n# option\ns = s.replace(\"\"\"    /// C5 — bus de modulation : `canal=valeur`, répétable.\n    bus: Vec<String>,\"\"\",\n\"\"\"    /// … [3670 caractères tronqués]`
+
+  ```
+bus réseau câblé
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf; IDS=/tmp/campagne24/ids_0.5B-Q8.txt; P=49961; PB=49962; echo \"=== nœud avec bus réseau (127.0.0.1:$PB) ===\"; $D $M --flux-serveur $P --bus-serveur $PB --ctx 256  … [801 caractères tronqués]`
+
+  ```
+=== nœud avec bus réseau (127.0.0.1:49962) ===
+=== on pousse un canal par le réseau ===
+=== exécution : le résultat doit changer ===
+(sans bus réseau, la même topologie donne 59.0790)
+[stderr]
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+    s=socket.create_connection(('127.0.0.1',49962)); s.sendall(sys.stdin.read().encode()); print('  réponse :', s.recv(100).decode().strip())
+  File "/usr/lib64/python3.13/socket.py", line 868, in create_connection
+    raise exceptions[0]
+  File "/usr/lib64/python3.13/socket.py", line 853, in create_connection
+    sock.connect(sa)
+    ~~~~~~~~~~~~^^^^
+ConnectionRefusedError: [Errno 111] Connection refused
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && grep -n \"TcpListener::bind\\|nœud moteur sur\\|let (mut sock\\|accept()\" src/main.rs | sed -n '1,10p'", "description": "Find the node's listener and accept"}`
+
+  ```
+3262:    let ecoute = std::net::TcpListener::bind((hote.as_str(), port)).expect("écoute");
+3263:    println!("[flux] nœud moteur sur {hote}:{port} · {hidden} cachés · {} couches · contexte {ctx}",
+3265:    let (mut sock, pair) = ecoute.accept().expect("connexion");
+3337:            let ecoute = match std::net::TcpListener::bind(("127.0.0.1", port)) {
+5940:        let ecoute = TcpListener::bind("127.0.0.1:0").unwrap();
+5945:            let (mut sock, _) = ecoute.accept().unwrap();
+6000:        let ecoute = TcpListener::bind("127.0.0.1:0").unwrap();
+6003:            let (mut sock, _) = ecoute.accept().unwrap();
+6030:        let ecoute = TcpListener::bind("127.0.0.1:0").unwrap();
+6033:            let (mut sock, _) = ecoute.accept().unwrap();
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path(\"src/main.rs\")\ns = p.read_text()\n# 1) extraire le bloc bus (de \"let bus0 =\" à la fin du if !bus.lock()...)\ndebut = s.index(\"    let bus0 = bus::Bus::analyser(& … [786 caractères tronqués]`
+
+  ```
+bloc bus déplacé avant accept()
+test result: ok. 96 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf; IDS=/tmp/campagne24/ids_0.5B-Q8.txt; P=49971; PB=49972; $D $M --flux-serveur $P --bus-serveur $PB --ctx 256 --threads 8 > /tmp/nb.log 2>&1 & N=$!; sleep 3; grep -E … [641 caractères tronqués]`
+
+  ```
+=== exécution avec le canal poussé par le réseau ===
+[stderr]
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+    s=socket.create_connection(('127.0.0.1',49972)); s.sendall(sys.stdin.read().encode()); print('  réponse du bus :', s.recv(100).decode().strip())
+  File "/usr/lib64/python3.13/socket.py", line 868, in create_connection
+    raise exceptions[0]
+  File "/usr/lib64/python3.13/socket.py", line 853, in create_connection
+    sock.connect(sa)
+    ~~~~~~~~~~~~^^^^
+ConnectionRefusedError: [Errno 111] Connection refused
+  ```
+
+### 🤖 Assistant
+
+⏵ Le fil d'écoute arrivait après l'`accept` — je passe au fichier de contrôle (simple, testable)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"src/main.rs\")\ns = p.read_text()\n# retirer le fil d'écoute (posé trop tard : run_serveur_flux accepte AVANT) — le\n# fichier de contrôle fait le même travail sans touc … [2604 caractères tronqués]`
+
+  ```
+fil d'écoute retiré
+fichier de contrôle câblé
+test result: ok. 96 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf; IDS=/tmp/campagne24/ids_0.5B-Q8.txt; P=49981; printf '# bus de controle\\nMODULATION gain 1.5\\n' > /tmp/bus_ctl.txt; echo \"=== nœud avec fichier de contrôle (gai … [1224 caractères tronqués]`
+
+  ```
+=== nœud avec fichier de contrôle (gain 1.5) ===
+=== on écrit un canal NEUTRE dans le même fichier ===
+  (référence sans bus : 59.0790 · gain 1,5 : ci-dessus)
+  ⚠️ empreintes différentes
+[stderr]
+grep: /tmp/tr_neutre.txt: No such file or directory
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf; IDS=/tmp/campagne24/ids_0.5B-Q8.txt; P=49991; python3 -c \"\nimport json,pathlib\npathlib.Path('/tmp/d0.json').write_text(json.dumps({'regions':[{'id':'local','cou … [1110 caractères tronqués]`
+
+  ```
+sans canal          : deux nœuds        : perplexité 59.0790
+canal gain=1.5      : deux nœuds        : perplexité 59.0790
+canal gain=1 (neutre): deux nœuds        : perplexité 59.0790
+  ✅ canal neutre : empreintes identiques
+  ```
+
+### 🤖 Assistant
+
+⏵ Même piège que pour C5 : un nœud FINAL absorbe le gain — je teste sur le relais
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf; IDS=/tmp/campagne24/ids_0.5B-Q8.txt; P1=49995; P2=49996; python3 -c \"\nimport json,pathlib\npathlib.Path('/tmp/t3b.json').write_text(json.dumps({'regions':[{'id': … [1050 caractères tronqués]`
+
+  ```
+relais, fichier sans canal  : 59.0790
+relais, canal gain=1.5      : 66.0379
+  ```
+
+### 🤖 Assistant
+
+⏵ C5bis livrée : le bus se diffuse par fichier de contrôle, vérifié sur un relais
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"tools/porte-bus.sh\")\ns = p.read_text()\nvieux = \"rm -rf \\\"$T\\\"\\n\"\nneuf = '''echo \"=== 4. bus diffusé par FICHIER DE CONTRÔLE, sur un nœud RELAIS (C5bis) ===\"\n# Le cana … [1901 caractères tronqués]`
+
+  ```
+cas 4 ajouté
+  ✅ la sortie change : le bus agit
+  ✅ les empreintes changent aussi
+=== 3. le bus sur un nœud RELAIS (région du MILIEU) ===
+  relais sans bus : 59.0790 · relais avec bus gain=1.5 : 66.0379
+  ✅ le bus traverse les instances et agit sur la région du milieu
+=== 4. bus diffusé par FICHIER DE CONTRÔLE, sur un nœud RELAIS (C5bis) ===
+  fichier sans canal : 59.0790 · canal gain=1,5 : 59.0790
+  ❌ le fichier de contrôle est sans effet
+  ```
+
+### 🤖 Assistant
+
+⏵ La porte était mal formée (le `\n` littéral) — le parseur l'a refusée, à raison
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"tools/porte-bus.sh\")\ns = p.read_text()\n# le contenu du fichier doit se terminer par un VRAI saut de ligne : un « \\n »\n# littéral fait une valeur illisible, que le parseur refu … [689 caractères tronqués]`
+
+  ```
+porte corrigée
+  relais sans bus : 59.0790 · relais avec bus gain=1.5 : 66.0379
+  ✅ le bus traverse les instances et agit sur la région du milieu
+=== 4. bus diffusé par FICHIER DE CONTRÔLE, sur un nœud RELAIS (C5bis) ===
+  fichier sans canal : 59.0790 · canal gain=1,5 : 66.0379
+  ✅ le canal diffusé par fichier change la région du milieu
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/sprint-cerveau.md\")\ns = p.read_text()\nancre = \"\"\"## C3 — FAIT (9 octobre 18 h 20)\"\"\"\nassert ancre in s\nneuf = \"\"\"## C5bis — FAIT (9 octobre 18 h 40) : diffusion  … [3980 caractères tronqués]`
