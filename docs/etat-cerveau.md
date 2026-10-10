@@ -41,7 +41,9 @@
 > a 8). Remettre le passé **en entrée** (`--entree-memoire 8`, en récurrent) le rend **partiellement**
 > lisible : R² **+0,283** contre −0,399 sans. **Retenir demande une STRUCTURE — un tampon lu
 > directement (R² 1,000), pas la transformation du réseau** — et c'est le deuxième manque de C8
-> après la tête réflexe. Détail :
+> après la tête réflexe. **La conception de cette structure est écrite avec ses quatre portes**
+> dans [`docs/note-peripherie-c8.md`](note-peripherie-c8.md) § 6 (mémoire exacte, coût nul en paires,
+> pas d'amélioration par réinjection, bornage explicite). Détail :
 > [`reports/rapport-c8-peripherie.md`](../reports/rapport-c8-peripherie.md) · conception :
 > [`docs/note-peripherie-c8.md`](note-peripherie-c8.md).
 | **C9 (latéralité)** | deux jumeaux, échange par couche | 🟡 **échange exact, gain NUL (mesuré)** | échange désactivé = modèle seul (27,4964 = 27,4964) ; jumeaux identiques ⇒ rien ne change ; jumeau bruité récupéré (163,17 → 36,13) **mais le contrôle donne le même chiffre** (36,1307, écart 0,000 %) : c'est une moyenne, pas une latéralité. La fusion de deux **vues valides** ne bat pas la meilleure des deux (127 jetons : 15,39 contre 14,65) | `tools/porte-jumeaux.sh` · [`reports/rapport-c9-lateralite.md`](../reports/rapport-c9-lateralite.md) |

@@ -40425,3 +40425,51 @@ poussé
 ⏵ Pendant la passe : je complète la note de périphérie avec la STRUCTURE de mémoire (prochaine étape de C8)
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib, subprocess\nheure = subprocess.run([\"date\", \"+%H:%M\"], capture_output=True, text=True).stdout.strip()\np = pathlib.Path(\"docs/note-peripherie-c8.md\"); s = p.read_text()\ns = s.rstrip(\"\\n\" … [4567 caractères tronqués]`
+
+  ```
+note de périphérie : § mémoire ajouté
+poussé
+  porte-fusion           ✅                           7 s    ✅ v1 refusée (code 2), trace seule refusée (code 2)
+  porte-gain             ✅                         345 s    ✅ drapeau VIVANT mais conditionnel : 0 casse (29.0206 → 1297.5437), 24 améliore (27.4439), san
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 51, in <module>
+AssertionError
+  ```
+
+### 🤖 Assistant
+
+⏵ Le patch d'état a échoué (motif changé) — je reprends sur le texte réel
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"Ce qui reste pour clore C8\" -A 6 docs/etat-cerveau.md | head -10", "description": "Read the actual C8 closing text"}`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"clore C8\\|structure de mémoire\" docs/etat-cerveau.md | head -5; grep -n \"^> \\*\\*Ce que « C8 »\" -A 8 docs/etat-cerveau.md | tail -6", "description": "Locate the C8 state text"}`
+
+  ```
+31-> constante ⇒ sortie constante » et pour validation une **tâche fermée** mesurée en événements par
+32-> décision. Ce qui est mesuré ici est la moitié **réflexe** : un chemin court qui lit un état
+33-> intermédiaire, sa tête entraînée, sa généralisation et sa vitesse. Les interfaces sont **livrées** :
+34-> `--entree signal:F`, `--entree-canal/-gain/-jeton`, `--delai N`, `--recurent`, `--sortie F`, avec
+35-> la porte `tools/porte-peripherie.sh` (déterminisme au bit près, entrée constante ⇒ sortie
+36-> constante, délai exact, quatre refus, paires par décision). La **tâche fermée** est mesurée :
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '36,44p' docs/etat-cerveau.md", "description": "Read the C8 paragraph tail"}`
+
+  ```
+> constante, délai exact, quatre refus, paires par décision). La **tâche fermée** est mesurée :
+> le signal **courant** est dans la sortie (R² **0,992** en récurrent, 4 096 pas) mais **pas** le
+> signal d'il y a 8 pas (R² **−0,681**, et une lecture **non linéaire** ne le trouve pas non plus).
+> Deux références tranchent : un **tampon de 8 pas** résout la tâche exactement (R² 1,000) et une
+> **récurrence qui fuit** n'y arrive pas (0,104 — un intégrateur rend la *somme*, pas le pas d'il y
+> a 8). Remettre le passé **en entrée** (`--entree-memoire 8`, en récurrent) le rend **partiellement**
+> lisible : R² **+0,283** contre −0,399 sans. **Retenir demande une STRUCTURE — un tampon lu
+> directement (R² 1,000), pas la transformation du réseau** — et c'est le deuxième manque de C8
+> après la tête réflexe. Détail :
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '44,48p' docs/etat-cerveau.md; python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"docs/etat-cerveau.md\"); s = p.read_text()\nold = \"\"\"> après la tête réflexe. Détail :\"\"\"\nnew = \"\"\"> après la tête réflexe. **La  … [722 caractères tronqués]`

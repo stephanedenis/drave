@@ -7,12 +7,12 @@
 | Début | 2026-10-08 09:11 |
 | Durée | 56.4 h |
 | Tours | 89 |
-| Messages | 2511 |
-| Appels d'outils | 2312 |
+| Messages | 2515 |
+| Appels d'outils | 2316 |
 | Fichiers touchés | 91 |
-| Commandes | 2013 |
+| Commandes | 2017 |
 | Sous-agents | 3 |
-| Commits | 233 |
+| Commits | 234 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -3636,7 +3636,7 @@ Trois erreurs attrapées par les instruments : une **porte fantôme** verte en c
 
 ### Tour 89 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*32 appels d'outils.* Actions notables :
+*36 appels d'outils.* Actions notables :
 
 - bash — Check imposed input state flags
 - bash — Audit etat_entree usage
@@ -3652,11 +3652,11 @@ Trois erreurs attrapées par les instruments : une **porte fantôme** verte en c
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-jumeaux.sh`
 - bash — Run the twins gate
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-c9-lateralite.md`
-- … et 18 autres
+- … et 22 autres
 
 **Synthèse produite :**
 
-⏵ Pendant la passe : je complète la note de périphérie avec la STRUCTURE de mémoire (prochaine étape de C8)
+⏵ Le patch d'état a échoué (motif changé) — je reprends sur le texte réel
 
 ## 3. Travail accompli
 
@@ -3804,7 +3804,7 @@ Trois erreurs attrapées par les instruments : une **porte fantôme** verte en c
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1973 autres
+- … et 1977 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4185,4 +4185,5 @@ Trois erreurs attrapées par les instruments : une **porte fantôme** verte en c
 - Le nombre de portes n'est plus fige dans les fichiers d'entree (il a change trois fois aujourd'hui : 22 -> 23 -> 25)  README et REPRISE disaient « les 22 portes
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' import pathlib, subprocess heure = subprocess.run(["date", "+%H:%M"], capture_output=T
 - Note de peripherie C8 : la STRUCTURE de memoire, concue AVANT le code, avec ses quatre portes  La tache fermee (poursuite) n'est pas resolue et la mesure dit po
+- Etat : le renvoi vers la conception de la memoire de C8 (le patch precedent avait echoue sur un motif perime)" && git push -q origin master && echo poussé; tail
 
