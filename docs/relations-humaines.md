@@ -32,7 +32,7 @@ s'arrêtant alors qu'il reste du temps.
 | **Une chose à la fois, finie et vérifiée** — implémenter, doter d'une porte, mesurer, documenter, commiter | dix chantiers à moitié n'ont jamais rien valu |
 | **La porte d'abord** — toute capacité livrée avec l'invariant qui la vérifie, et ce test doit **savoir échouer** | une vérification qui ne peut pas échouer ne vérifie rien |
 | **Ne rien casser** — les portes du dépôt passent après chaque modification du chemin d'exécution | mes erreurs d'aujourd'hui ne doivent pas coûter le temps de demain |
-| **L'état écrit en permanence** — `docs/sprint-cerveau.md` dit où j'en suis, à chaque round | pour qu'une interruption ne perde rien : c'est le seul moyen d'être reprenable |
+| **L'état écrit en permanence** — `docs/etat-cerveau.md` dit où j'en suis (et `journal/` ce qui s'est passé), à chaque round | pour qu'une interruption ne perde rien : c'est le seul moyen d'être reprenable |
 | **Ne pas demander ce qui est décidé** — une autorisation donnée vaut pour la classe de décisions qu'elle couvre | redemander, c'est faire payer deux fois |
 
 **L'interruption n'est pas un échec.** Si l'humain m'arrête pour une nouvelle idée,

@@ -1,3 +1,14 @@
+> **Récit du sprint « cerveau complet »** — déplacé de `docs/` vers `journal/` le
+> 2026-10-10 10:30 HAE (voir `docs/organisation-du-depot.md`) : un récit d'événements n'est pas
+> un document de fond. L'ÉTAT consolidé est dans `docs/etat-cerveau.md`, les MESURES dans
+> `reports/campagne-benefices/` (une fiche par expérience).
+>
+> **Horodatage corrigé.** Les estampilles d'origine de ce récit ont été saisies **à la main** en
+> avançant une horloge supposée : certaines tombaient **dans le futur** (jusqu'au 12 octobre
+> 2026) alors que le travail s'est fait du **9 octobre 15 h 30** au **10 octobre 10 h 13 HAE**.
+> Les titres de section portent désormais la date **réelle**, lue dans git (commit cité). Toute
+> estampille qui subsiste dans le corps du texte est celle d'origine et n'est **pas** fiable.
+
 # Sprint « cerveau complet » — état d'avancement
 
 > Lancé le 9 octobre à 17 h, **en autonomie jusqu'au 10 octobre 9 h (HAE)**.
@@ -6,7 +17,7 @@
 
 ---
 
-## C6/C2 — FAIT (10 octobre 18 h) : LA MÉMOIRE QUI SERT, de bout en bout
+## C6/C2 — FAIT (réel : 2026-10-10 04:20 HAE · `089c52a`) : LA MÉMOIRE QUI SERT, de bout en bout
 
 `--episodique-extraire F` ferme la chaîne : indexer → **retrouver par le contenu** →
 **injecter** l'état retrouvé dans un calcul qui n'a pas vécu l'épisode. L'état écrit est
@@ -37,7 +48,7 @@ finale, mais stocker le résidu serait plus cohérent ; un seul indice, un seul 
 
 ---
 
-## C6 — FAIT (10 octobre 19 h 30) : le rappel dépend de l'INDICE (8 indices mesurés)
+## C6 — FAIT (réel : 2026-10-10 04:56 HAE · `b21f715`) : le rappel dépend de l'INDICE (8 indices mesurés)
 
 Huit indices prélevés dans l'invite B (positions depuis la fin : 1, 2, 4, 8, 16, 32, 64,
 128), chacun servant de requête au magasin de A (aiguille au jeton 740, hasard 448) :
@@ -81,7 +92,7 @@ seul parcours, au lieu de huit parcours de 70 s.
 
 ---
 
-## C6 — FAIT (10 octobre 22 h) : clé de FENÊTRE — prédiction RÉFUTÉE
+## C6 — FAIT (réel : 2026-10-10 05:44 HAE · `892acfd`) : clé de FENÊTRE — prédiction RÉFUTÉE
 
 Le §30 avait identifié le mécanisme (la clé est un k-WTA, donc elle saute d'un jeton à
 l'autre). Prédiction falsifiable : **former la clé sur la moyenne de W positions voisines
@@ -111,7 +122,7 @@ Pour la recherche par question : des **jetons** (RAG) ou une **clé apprise**.
 
 ---
 
-## C10 — FAIT (10 octobre 23 h) : budget d'octets par lien, déclaré et vérifié
+## C10 — FAIT (réel : 2026-10-10 05:48 HAE · `203872a`) : budget d'octets par lien, déclaré et vérifié
 
 Le plan demandait des budgets vérifiés au démarrage ; la mesure a corrigé le plan : **la
 taille d'un flux dépend de l'ACTIVITÉ, pas du mode** (1 951 octets à 97,7 % d'activité,
@@ -130,7 +141,7 @@ sur ses conditions.
 
 ---
 
-## C10 (suite) — FAIT (11 octobre 1 h 30) : budget de LATENCE par lien
+## C10 (suite) — FAIT (réel : 2026-10-10 06:05 HAE · `47b2ad6`) : budget de LATENCE par lien
 
 Troisième volet des budgets du plan (`{paires/s, octets/s, ms}`), après les octets. Déclaré
 par `"budget_ms": N`, comparé à l'**allé-retour mesuré** de chaque pas.
@@ -150,7 +161,7 @@ rien de ce qu'on mesurait.
 
 ---
 
-## C11 — FAIT (11 octobre 0 h 30) : pannes de lien nommées, code distinct, sans résultat partiel
+## C11 — FAIT (réel : 2026-10-10 05:56 HAE · `619b940`) : pannes de lien nommées, code distinct, sans résultat partiel
 
 Le plan prévoyait un `best-effort` qui « saute la région et annonce l'écart ». **La mesure
 oblige à refuser cette sémantique** : sauter douze couches ne calcule pas une version
@@ -175,7 +186,7 @@ serait faux ; reprendre demanderait de rejouer le préfixe (checkpoint/restart).
 
 ---
 
-## BALAYAGE DES PORTES — FAIT (11 octobre 6 h 30) : le piège de fenêtre était latent ailleurs
+## BALAYAGE DES PORTES — FAIT (réel : 2026-10-10 07:27 HAE · `dee9e58`) : le piège de fenêtre était latent ailleurs
 
 Après avoir corrigé `porte-reparti-moteur` (§ précédent), balayage des 20 portes : **deux**
 seulement comparent un entier à un réparti. L'une affirmait l'égalité (corrigée), l'autre
@@ -193,7 +204,7 @@ sont saines par construction (réparti contre réparti, ou « référence locale
 
 ---
 
-## C11 (découverte) — FAIT (11 octobre 5 h 30) : le registre des régions
+## C11 (découverte) — FAIT (réel : 2026-10-10 07:25 HAE · `b1b63b0`) : le registre des régions
 
 Une topologie qui écrit une adresse décrit UN déploiement ; la même sur trois machines en
 demanderait trois. `--registre FICHIER` (lignes `region hote:port`) résout les instances
@@ -215,7 +226,7 @@ contrôle** ; c'est écrit dans le code à cet endroit.
 
 ---
 
-## LA ROUGE DE RÉPARTITION — INSTRUITE ET CORRIGÉE (11 octobre 4 h 30) : c'était la PORTE
+## LA ROUGE DE RÉPARTITION — INSTRUITE ET CORRIGÉE (réel : 2026-10-10 07:21 HAE · `c43425e`) : c'était la PORTE
 
 Hypothèses éliminées par la mesure : le **routage** (la variante dense échoue aussi, 37,8 %),
 le **transport** (flux à 0,00e0), et « notre modèle n'est pas découpable » (contredit
@@ -242,7 +253,7 @@ derniers » en réparti.
 
 ---
 
-## VÉRIFICATION COMPLÈTE — FAITE (11 octobre 3 h) : 19 portes vertes, 1 rouge nommée
+## VÉRIFICATION COMPLÈTE — FAITE (réel : 2026-10-10 07:19 HAE · `ae7e149`) : 19 portes vertes, 1 rouge nommée
 
 Suite complète des portes (`tools/porte-*.sh`, 20 fichiers) **après les huit rounds** qui ont
 touché le chemin d'exécution (fusion d'état, pont, budget, pannes, capture d'état) :
@@ -275,7 +286,7 @@ entier/réparti position par position (l'outil existe : `compare_logits.py`).
 
 ---
 
-## E4 — FAIT (11 octobre 7 h 30) : l'équilibre excitation/inhibition, mesuré
+## E4 — FAIT (réel : 2026-10-10 07:39 HAE · `d104da6`) : l'équilibre excitation/inhibition, mesuré
 
 Levier existant `--ffn-gain couche:valeur`. Référence (sans réglage) **14,6496**, Qwen2.5-0.5B,
 128 jetons. Porte `tools/porte-gain.sh`, 4 cas verts.
@@ -300,7 +311,7 @@ Levier existant `--ffn-gain couche:valeur`. Référence (sans réglage) **14,649
 
 ---
 
-## E4 (suite) — FAIT (11 octobre 9 h) : les gains NE SE COMPOSENT PAS
+## E4 (suite) — FAIT (réel : 2026-10-10 07:54 HAE · `0bc27b9`) : les gains NE SE COMPOSENT PAS
 
 `--ffn-gain` accepte désormais une **liste** (`L:V,L:V`) : la question « les gains se
 composent-ils ? » devient mesurable. Référence 14,6496.
@@ -326,7 +337,7 @@ sur peu de paramètres peut très bien ne pas trouver, puisqu'il optimiserait le
 
 ---
 
-## AUDIT DES DRAPEAUX PAR CHEMIN — FAIT (11 octobre 11 h) : méthode, portée, et ce qui reste
+## AUDIT DES DRAPEAUX PAR CHEMIN — FAIT (réel : 2026-10-10 08:10 HAE · `39d32f3`) : méthode, portée, et ce qui reste
 
 Après le défaut de câblage de `--ffn-gain`, criblage statique des trois fonctions d'exécution
 (assignations `mdl.<champ> = …`) : `run_infer` 30 champs, `run_ppl` 16, **`run_ppl_reparti` 3**.
@@ -391,7 +402,7 @@ trame (**protocole v7**), puis les appliquer côté nœud.
 
 ---
 
-## DÉFAUT TROUVÉ ET CORRIGÉ (11 octobre 10 h 30) : `--ffn-gain` ne faisait RIEN en réparti
+## DÉFAUT TROUVÉ ET CORRIGÉ (réel : 2026-10-10 08:09 HAE · `719ab85`) : `--ffn-gain` ne faisait RIEN en réparti
 
 En mesurant l'interaction du gain d'entrée avec le découpage, la mesure a rendu **le même
 chiffre avec et sans le drapeau** (42,5477). Ce n'était pas une absence d'effet : une absence
@@ -414,7 +425,7 @@ de câblage**, et la porte le traite comme tel (elle exige que les chiffres **di
 
 ---
 
-## E4 (suite) — FAIT (11 octobre 10 h) : généralisation et conditions
+## E4 (suite) — FAIT (réel : 2026-10-10 08:02 HAE · `031dbc4`) : généralisation et conditions
 
 Deux axes, même conclusion : **la direction tient, la magnitude dépend des conditions**.
 
@@ -432,7 +443,7 @@ citer le meilleur chiffre sans voir la condition.
 
 ---
 
-## VÉRIFICATION DU CHANGEMENT DE TYPE `ffn_gain` — FAITE (11 octobre 9 h 30)
+## VÉRIFICATION DU CHANGEMENT DE TYPE `ffn_gain` — FAITE (réel : 2026-10-10 07:55 HAE · `6d9bc74`)
 
 Le drapeau est passé de `Option<(usize, f32)>` à `Option<Vec<(usize, f32)>>` (profil de gains),
 ce qui touche le chemin d'exécution du moteur. Vérifié :
@@ -451,7 +462,7 @@ du chemin d'exécution ».
 
 ---
 
-## VÉRIFICATION APRÈS LE REFUS DES RÉGLAGES NON TRANSPORTABLES — FAITE (11 octobre 12 h 30)
+## VÉRIFICATION APRÈS LE REFUS DES RÉGLAGES NON TRANSPORTABLES — FAITE (réel : 2026-10-10 08:35 HAE · `671b4b4`)
 
 Le refus ajouté (§ précédent) est un **changement du chemin d'exécution réparti** : la règle de
 l'objectif s'applique donc à la lettre (« `porte-flux.sh` après toute modification du chemin
@@ -470,7 +481,7 @@ les demande pas suit exactement le chemin d'avant.
 
 ---
 
-## PROTOCOLE v7 — SPÉCIFIÉ À L'OCTET PRÈS (11 octobre 13 h), PAS ENCORE IMPLÉMENTÉ
+## PROTOCOLE v7 — SPÉCIFIÉ À L'OCTET PRÈS (réel : 2026-10-10 08:35 HAE · `c23f43f`), PAS ENCORE IMPLÉMENTÉ
 
 Le refus du round précédent (`--attn-window`, `--swa-pattern`, `--attn-sinks` non transportables)
 se lève en faisant voyager ces trois réglages. **Reconnaissance faite** : l'en-tête de trame est
@@ -507,7 +518,7 @@ préféré **spécifier à l'octet près** plutôt que de laisser un arbre cass�
 
 ---
 
-## PROTOCOLE v7 — LIVRÉ (11 octobre 15 h 30) : la fenêtre voyage, le refus disparaît
+## PROTOCOLE v7 — LIVRÉ (réel : 2026-10-10 08:44 HAE · `dd66191`) : la fenêtre voyage, le refus disparaît
 
 Le round précédent avait reverté le v7 parce que **neuf tests** tombaient. La cause était
 précise : les constructeurs de **trame forgée** remplissaient l'en-tête avec **dix mots
@@ -537,7 +548,7 @@ octet ; **122 tests verts**. Enseigné au passage : une modification de protocol
 
 ---
 
-## PROTOCOLE v7 — LIVRÉ (11 octobre 15 h 30) : la fenêtre voyage, le refus disparaît
+## PROTOCOLE v7 — LIVRÉ (réel : 2026-10-10 08:44 HAE · `dd66191`) : la fenêtre voyage, le refus disparaît
 
 Le round précédent avait reverté le v7 parce que **neuf tests** tombaient. La cause était
 précise : les constructeurs de **trame forgée** remplissaient l'en-tête avec **dix mots
@@ -567,7 +578,7 @@ octet ; **122 tests verts**. Enseigné au passage : une modification de protocol
 
 ---
 
-## PROTOCOLE v7 — TENTÉ (11 octobre 14 h), REVERTÉ : neuf tests encodent la mise en page v6
+## PROTOCOLE v7 — TENTÉ (réel : 2026-10-10 08:39 HAE · `af6d566`), REVERTÉ : neuf tests encodent la mise en page v6
 
 Les huit modifications de la spécification du round précédent ont été appliquées — `struct Act`
 (3 champs), `du_modele`, `appliquer`, `TAILLE_TETE` (79 → **91**), `VERSION_FLUX` (6 → **7**),
@@ -597,7 +608,7 @@ modification de protocole se compte en TROIS endroits, pas deux.
 
 ---
 
-## VÉRIFICATION DU PROTOCOLE v7 SUR TOUTES LES PORTES RÉPARTIES — FAITE (11 octobre 16 h 30)
+## VÉRIFICATION DU PROTOCOLE v7 SUR TOUTES LES PORTES RÉPARTIES — FAITE (réel : 2026-10-10 08:55 HAE · `6df044f`)
 
 Le v7 change la **mise en page de la trame**, donc **toutes** les exécutions à deux nœuds. Les
 huit portes qui parlent le protocole ont été rejouées après le changement :
@@ -624,7 +635,7 @@ troisième volet de C10, dont les octets et la latence sont déjà faits.
 
 ---
 
-## PROTOCOLE v8 — LIVRÉ (11 octobre 18 h) : le compte de paires du nœud voyage
+## PROTOCOLE v8 — LIVRÉ (réel : 2026-10-10 09:01 HAE · `e22dbd7`) : le compte de paires du nœud voyage
 
 Trois modifications de plus que la spécification ne prévoyait pas, et l'une est un **bug de ma
 part attrapé par la mesure** :
@@ -651,7 +662,7 @@ pas, avec arrêt explicite (**code 9**) — le transport est fait, il ne manque 
 
 ---
 
-## PROTOCOLE v8 — SPÉCIFIÉ (11 octobre 17 h) : le compte de PAIRES du nœud
+## PROTOCOLE v8 — SPÉCIFIÉ (réel : 2026-10-10 08:56 HAE · `1a6ce84`) : le compte de PAIRES du nœud
 
 Objectif : clore le troisième volet de C10 (le budget `paires/s`). Les paires sont calculées par
 **le nœud** ; le pilote ne peut donc pas les borner sans qu'elles lui soient **transportées**.
@@ -691,7 +702,7 @@ dans un en-tête partagé.
 
 ---
 
-## C10 — CLOS (11 octobre 20 h) : trois budgets, trois codes (6 · 8 · 9)
+## C10 — CLOS (réel : 2026-10-10 09:10 HAE · `4767b22`) : trois budgets, trois codes (6 · 8 · 9)
 
 Le round précédent avait reverté ce travail après un déséquilibre d'accolades. **Repris en
 ADDITIF** — rien supprimé, donc rien à casser — et livré :
@@ -714,7 +725,7 @@ la même chose au début et à la fin.
 
 ---
 
-## BUDGET DE PAIRES (C10, 3ᵉ volet) — TENTÉ (11 octobre 19 h), REVERTÉ : deux leçons
+## BUDGET DE PAIRES (C10, 3ᵉ volet) — TENTÉ (réel : 2026-10-10 09:07 HAE · `957bf34`), REVERTÉ : deux leçons
 
 Le transport du compte de paires est livré (v8) ; il ne manquait que le **contrôle**. Tenté,
 mesuré, puis **reverté** — l'arbre est propre et 122 tests passent.
@@ -744,7 +755,7 @@ juste après la réception, avec `pas_servis` comme multiplicateur ; (4) le cas 
 
 ---
 
-## ÉTALONNAGE DE L'INSTRUMENT DE TRACE — FAIT (11 octobre 21 h) : 50 ms injectés, 50,2 ms mesurés
+## ÉTALONNAGE DE L'INSTRUMENT DE TRACE — FAIT (réel : 2026-10-10 09:11 HAE · `4367099`) : 50 ms injectés, 50,2 ms mesurés
 
 Toute la partie asynchrone (C4) repose sur une question préalable : **la trace globale sait-elle
 mesurer le temps ?** Un instrument jamais étalonné ne prouve rien sur ce qu'il observe.
@@ -770,7 +781,7 @@ supposé juste parce qu'il produit des nombres.
 
 ---
 
-## LA GIGUE D'UN PAS RÉPARTI — MESURÉE (11 octobre 22 h) : 7 ms sur 17,7 (40 %)
+## LA GIGUE D'UN PAS RÉPARTI — MESURÉE (réel : 2026-10-10 09:12 HAE · `d09f78c`) : 7 ms sur 17,7 (40 %)
 
 L'instrument étant étalonné (§ précédent), il peut mesurer autre chose que ce qu'on lui injecte.
 La question qui décide de l'asynchronisme (C4) : **de combien la durée d'un pas varie-t-elle ?**
@@ -808,7 +819,7 @@ réorganisation, ni la congestion. La gigue mesurée est un **plancher** pour ce
 
 ---
 
-## COMBIEN DE MESSAGES COÛTE UN PAS ? — MESURÉ (11 octobre 23 h 30) : quatre
+## COMBIEN DE MESSAGES COÛTE UN PAS ? — MESURÉ (réel : 2026-10-10 09:15 HAE · `656a65f`) : quatre
 
 Le protocole écrit la trame en **DEUX** fois (`write_all(&tete)` puis `write_all(&corps)`) : sur un
 lien qui facture par message, ces deux écritures se paient deux fois. La pente délai → pas médian
@@ -861,7 +872,7 @@ raison.
 
 ---
 
-## VÉRIFICATION APRÈS v7/v8 ET LA FUSION DES ÉCRITURES — FAITE (12 octobre 1 h)
+## VÉRIFICATION APRÈS v7/v8 ET LA FUSION DES ÉCRITURES — FAITE (réel : 2026-10-10 09:30 HAE · `c749af2`)
 
 Les rounds 28 à 39 ont touché **le protocole** (v7 : fenêtre d'attention ; v8 : compte de paires) et
 **le chemin d'envoi** (fusion des deux écritures). Les huit portes réparties ont été rejouées :
@@ -900,7 +911,7 @@ tomber `porte-flux` immédiatement.
 
 ---
 
-## CORRECTION (12 octobre 1 h 30) : le v7 transporte, mais le PILOTE n'applique pas
+## CORRECTION (réel : 2026-10-10 09:32 HAE · `484a4ef`) : le v7 transporte, mais le PILOTE n'applique pas
 
 Ma conclusion du round 28 (« les deux moitiés appliquent la même fenêtre, le résultat est cohérent
 au bit près ») était **hâtive**. Vérifié par lecture du code : `mdl.attn_window`,
@@ -934,7 +945,7 @@ ligne de lecture de code : « ce champ est-il assigné dans cette fonction ? ».
 
 ---
 
-## INVENTAIRE DES DRAPEAUX EN RÉPARTI — FAIT (12 octobre 3 h) : cinq agissent, trois inertes, un ouvert
+## INVENTAIRE DES DRAPEAUX EN RÉPARTI — FAIT (réel : 2026-10-10 09:39 HAE · `63203d7`) : cinq agissent, trois inertes, un ouvert
 
 Après le v7, le v8 et les corrections des rounds 20 et 42, l'inventaire du §39 est **départagé** —
 nœud **relancé à chaque essai** (il sert UNE connexion : mon premier banc les faisait tous échouer,
@@ -1194,7 +1205,7 @@ inconnu, graphe en Y, chaîne du moteur). Suite complète : **85 tests**.
 
 ---
 
-## C1b pas 1 — FAIT (9 octobre 17 h 20) : la topologie PILOTE le découpage
+## C1b pas 1 — FAIT (réel : 2026-10-09 17:12 HAE · `536256f`) : la topologie PILOTE le découpage
 
 **Livré** : `--ppl-reparti … --topologie F` exécute désormais le découpage **décrit
 par le fichier**, au lieu de le déduire de `--couches-locales`. Le pilote :
@@ -1232,7 +1243,7 @@ instances », et donc la **distribution sur plusieurs instances** demandée.
 
 ---
 
-## C1b pas 2 — **FAIT (9 octobre 18 h)** : le RELAIS, trois régions sur trois instances
+## C1b pas 2 — **FAIT (réel : 2026-10-09 17:35 HAE · `28da341`)** : le RELAIS, trois régions sur trois instances
 
 **Livré** : un nœud du milieu (`--flux-serveur … --topologie F --region n1`) applique
 **sa** plage (celle que la trame lui donne), puis **transmet à son successeur** au
@@ -1319,7 +1330,7 @@ du plan, pas C1.
 
 ---
 
-## C12 — FAIT (9 octobre 18 h 40) : trace globale et rejeu exact
+## C12 — FAIT (réel : 2026-10-09 17:40 HAE · `daef822`) : trace globale et rejeu exact
 
 **Livré** : `drave-core/src/trace_globale.rs` (5 tests) + deux drapeaux —
 `--trace-globale F` (le pilote écrit ce qui traverse chaque lien) et
@@ -1344,7 +1355,7 @@ manquait pour déboguer un graphe distribué.
 
 ---
 
-## C9 × C1 — FAIT (10 octobre 9 h) : OÙ COUPER le modèle ?
+## C9 × C1 — FAIT (réel : 2026-10-09 23:48 HAE · `22d6151`) : OÙ COUPER le modèle ?
 
 `tools/carte_coupe.sh` + `tools/porte-coupe.sh` (3 cas). La question n'avait jamais
 été posée : C1 et C9 étaient mesurés à **un seul** point de coupe (12/12).
@@ -1375,7 +1386,7 @@ nœud**, donc mesurait un pont asymétrique (+4,92 % là où le pont symétrique
 
 ---
 
-## C8 (premier pas) — FAIT (10 octobre 8 h 20) : le réflexe, et il ne sait rien
+## C8 (premier pas) — FAIT (réel : 2026-10-09 23:39 HAE · `f8ac10e`) : le réflexe, et il ne sait rien
 
 **La question** : un réflexe est un chemin COURT (la moelle épinière ne remonte pas au
 cortex). Le moteur sait déjà tronquer (`--couches 0,L` + `--tete-partielle`) ; la
@@ -1409,7 +1420,7 @@ gain de temps est réel (≥ 3×, sans quoi la mesure n'aurait pas de sens).
 
 ---
 
-## C2 — FAIT (10 octobre 16 h) : DEUX ENTRÉES, UNE RÈGLE DE MÉLANGE — et la correction d'un faux négatif
+## C2 — FAIT (réel : 2026-10-10 03:39 HAE · `b5d5fe9`) : DEUX ENTRÉES, UNE RÈGLE DE MÉLANGE — et la correction d'un faux négatif
 
 **La question de C2, sans toucher au moteur** : deux flux qui se rencontrent, que devient
 leur contenu ? Une somme de deux états s'écrit avec `--fusion-etat` ; la mesure dit ce que
@@ -1501,7 +1512,7 @@ reste celle de B).
 
 ---
 
-## C9/C10 (premier pas) — FAIT (10 octobre 7 h) : le pont à fibres limitées
+## C9/C10 (premier pas) — FAIT (réel : 2026-10-09 23:20 HAE · `00b021f`) : le pont à fibres limitées
 
 **La question du corps calleux, posée en termes mesurables** : deux régions échangent
 un état à chaque pas ; **combien faut-il en échanger pour ne rien perdre ?**
@@ -1543,7 +1554,7 @@ une fraction plus petite de l'état.
 
 ---
 
-## C6 — FAIT (10 octobre 01 h 50) : mémoire épisodique, et ce qu'elle ne sait pas faire
+## C6 — FAIT (réel : 2026-10-09 22:30 HAE · `7d7837e`) : mémoire épisodique, et ce qu'elle ne sait pas faire
 
 **Le module** (`drave-core/src/episodique.rs`, 8 tests) : clé **creuse** (k-WTA sur
 l'amplitude), **index inversé** canal → épisodes, écriture **en une passe**, lecture
@@ -1681,7 +1692,7 @@ quand le magasin grandit.
 
 ---
 
-## C5ter — FAIT (10 octobre 00 h 20) : le bus par le réseau
+## C5ter — FAIT (réel : 2026-10-09 22:12 HAE · `9ae8f6f`) : le bus par le réseau
 
 **Pourquoi C5bis ne suffisait pas.** C5bis diffusait un réglage par un **fichier**
 relu à chaque pas — donc il fallait un système de fichiers partagé, c'est-à-dire
@@ -1735,7 +1746,7 @@ le modulateur ne sait pas ce que sa ligne a produit, seulement qu'elle est valid
 
 ---
 
-## C12bis — FAIT (9 octobre 23 h 05) : trace du nœud et fusion par le temps mural
+## C12bis — FAIT (réel : 2026-10-09 21:58 HAE · `6bfb857`) : trace du nœud et fusion par le temps mural
 
 **Ce qui manquait, et qui était grave.** Seul le PILOTE traçait (C12). Une divergence
 sur un lien n'était donc visible que d'un bout : impossible de dire si c'est l'envoi
@@ -1780,7 +1791,7 @@ comme ambigu).
 
 ---
 
-## C4 (premier pas) — FAIT (9 octobre 21 h 55) : pas par région et borne explicite
+## C4 (premier pas) — FAIT (réel : 2026-10-09 21:50 HAE · `2924e52`) : pas par région et borne explicite
 
 **Ce que C4 demande** : que chaque région ait **son** horloge, sans horloge globale.
 Le pas complet (asynchronisme réel) est un chantier de plusieurs semaines ; ce
@@ -1810,7 +1821,7 @@ instruments qui rendront ce chantier mesurable.
 
 ---
 
-## C5bis — FAIT (9 octobre 18 h 40) : diffusion du bus par FICHIER DE CONTRÔLE
+## C5bis — FAIT (réel : 2026-10-09 21:46 HAE · `883f934`) : diffusion du bus par FICHIER DE CONTRÔLE
 
 **Livré** : `--bus-fichier F` sur un nœud. Le fichier est **relu avant chaque trame**,
 donc un **autre processus** peut changer un canal **pendant l'exécution** — c'est ce
@@ -1842,7 +1853,7 @@ refusée. Le fichier de contrôle couvre le besoin en attendant.
 
 ---
 
-## C3 — FAIT (9 octobre 18 h 20) : les délais par lien
+## C3 — FAIT (réel : 2026-10-09 21:37 HAE · `517f39b`) : les délais par lien
 
 **Livré** : la topologie déclare `delai_ms` par lien (C3a l'avait déjà dans le
 format), et le moteur **l'applique** — le pilote sur son lien sortant, le **nœud
@@ -1868,7 +1879,7 @@ RTT**, `docs/modele-pour-drave.md` § 8 bis). Un graphe de régions peut donc ê
 
 ---
 
-## C5 — FAIT (9 octobre 19 h 10) : le bus de modulation multi-canaux
+## C5 — FAIT (réel : 2026-10-09 17:45 HAE · `451b036`) : le bus de modulation multi-canaux
 
 **Livré** : `drave-core/src/bus.rs` (5 tests) + `--bus canal=valeur` (répétable, sur
 le pilote **et** sur les nœuds). Le bus porte des canaux nommés ; **chaque région
@@ -1910,7 +1921,7 @@ de contrôle `MODULATION canal valeur`, dont le format est écrit dans `bus.rs`)
    diffusés à toutes les régions, y compris entre instances ; porte : canal nul ⇒
    aucune différence, bit à bit.
 
-## Bilan du sprint (9 octobre, 19 h 20)
+## Bilan du sprint (réel : 2026-10-09 17:46 HAE · `8959d1c`)
 
 **Les trois capacités sont livrées avec leurs invariants vérifiés**, chacune par une
 porte outillée et rejouable :

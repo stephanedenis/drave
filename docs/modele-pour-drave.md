@@ -3,7 +3,7 @@
 > 9 octobre 2026. Ce document sépare deux choses que les rapports mélangeaient
 > jusqu'ici : **ce que le moteur Drave fait payer** (un coût précis, mesurable) et
 > **ce qu'un modèle devrait être** pour que ce coût soit minimal. La campagne
-> `rapport-campagne-benefices.md` a mesuré le moteur *sur des modèles faits pour
+> la campagne `reports/campagne-benefices/` (une fiche par expérience) a mesuré le moteur *sur des modèles faits pour
 > d'autres architectures* ; ici on cherche la forme du modèle qui lui est propre —
 > y compris inédite.
 

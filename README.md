@@ -19,10 +19,15 @@ le journal de sessions, archivé, n'est pas réécrit.
 
 Ce que l'architecture événementielle vaut, **tâche par tâche**, avec pour chaque
 chiffre ses conditions (corpus, tokenizer, charge) :
-[`reports/rapport-campagne-benefices.md`](reports/rapport-campagne-benefices.md)
-(verdict famille par famille au § 0 bis). La file de mesures est
-[`tools/campagne-benefices.sh`](tools/campagne-benefices.sh), ses journaux bruts
-sont dans `/tmp/campagne24/`, et **les 23 portes du dépôt sont vertes**.
+[`reports/campagne-benefices.md`](reports/campagne-benefices.md) — un **index** : le rapport est
+éclaté en **une fiche par expérience** dans [`reports/campagne-benefices/`](reports/campagne-benefices/)
+(verdict famille par famille à la fiche 03). La file de mesures est
+[`tools/campagne-benefices.sh`](tools/campagne-benefices.sh), ses journaux bruts sont dans
+`/tmp/campagne24/`. Les portes se vérifient **en une passe** :
+[`tools/toutes-les-portes.sh`](tools/toutes-les-portes.sh) — la ligne « les 23 portes sont
+vertes » qui était ici affirmait le résultat d'une suite qui n'avait **jamais tourné comme une
+suite**, et une porte était rouge depuis le protocole v7 sans que personne le voie
+(voir [`docs/etat-cerveau.md`](docs/etat-cerveau.md) § 5).
 
 **Cinq résultats, chacun avec sa mesure :**
 

@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 48.9 h |
+| Durée | 49.1 h |
 | Tours | 88 |
-| Messages | 2096 |
-| Appels d'outils | 1914 |
-| Fichiers touchés | 62 |
-| Commandes | 1657 |
+| Messages | 2133 |
+| Appels d'outils | 1948 |
+| Fichiers touchés | 66 |
+| Commandes | 1683 |
 | Sous-agents | 3 |
-| Commits | 179 |
+| Commits | 180 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -3586,7 +3586,7 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 
 ### Tour 88 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*72 appels d'outils.* Actions notables :
+*106 appels d'outils.* Actions notables :
 
 - bash — Add the refusal and verify
 - bash — Move the refusal to the single point and verify
@@ -3602,11 +3602,11 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - bash — Read v7 removal context and flag inventory
 - bash — Read flag inventory section in docs
 - bash — Establish whether section 9 predates the v7 removal
-- … et 55 autres
+- … et 86 autres
 
 **Synthèse produite :**
 
-⏵ Passe en cours (budget ✅ 43 s) ; je lance la suite de tests avant de committer
+⏵ La carte à 512 jetons est arrivée — je la lis avant de committer le rangement
 
 ## 3. Travail accompli
 
@@ -3676,6 +3676,10 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-pont.sh` | 6 | 0 |
 | `/tmp/c9_node.py` | 2 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/toutes-les-portes.sh` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/carte-fenetre-puits.sh` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/organisation-du-depot.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/decouper-rapport.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/etat-cerveau.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -3725,7 +3729,7 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1617 autres
+- … et 1643 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4052,4 +4056,5 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - Journal : la section 46 bis (--attn-sinks ecrit partout, lu nulle part) manquait — l'ancre du premier essai ne correspondait pas" && git push -q origin master &
 - $(cat <<'MSG' --attn-sinks : le refus etait FAUX (le compteur EST lu, branche a fenetre) — le drapeau vit, et le zero n'existait pas  Le refus code 2, ecrit sur
+- $(cat <<'MSG' Rangement : docs = fond, reports = une fiche par experience, journal = evenements dates  Retour de Stephane : les trois dossiers etaient melanges,
 

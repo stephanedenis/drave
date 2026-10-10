@@ -33574,3 +33574,689 @@ test result: ok. 122 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fi
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A tools/porte-gain.sh tools/toutes-les-portes.sh drave-core/src/main.rs docs/sprint-cerveau.md reports/rapport-campagne-benefices.md && git status --short | head -12 && git commit -q -m \"$(cat <<'MSG'\n--attn-sinks : le ref … [1782 caractères tronqués]`
+
+  ```
+M  docs/sprint-cerveau.md
+M  drave-core/src/main.rs
+ M journal/README.md
+M  reports/rapport-campagne-benefices.md
+M  tools/porte-gain.sh
+A  tools/toutes-les-portes.sh
+85cf49c --attn-sinks : le refus etait FAUX (le compteur EST lu, branche a fenetre) — le drapeau vit, et le zero n'existait pas
+  ```
+
+### 🤖 Assistant
+
+⏵ Passe en cours ; je prépare la carte 2D fenêtre × puits (le drain rend-il la fenêtre moins coûteuse ?)
+
+- **write** `{"content": "#!/bin/bash\n# carte-fenetre-puits.sh — la question que le §47 a ouverte.\n#\n# MESURÉ AU §47 : sous une fenêtre de 32, le défaut de 4 puits n'est pas l'optimum — 24 puits\n# rendent 15,4339 contre 18,1141 (−14,8 %, `--limit 128`) — et SANS puits la fenêtre CASSE le\n# modèle (1297,5437 … [2284 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/carte-fenetre-puits.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && chmod +x tools/carte-fenetre-puits.sh && bash -n tools/carte-fenetre-puits.sh && echo \"syntaxe OK\"; tail -4 /tmp/passe-complete.log; ls /tmp/portes-1210b/ | tr '\\n' ' '", "description": "Check script syntax and sweep progress"}`
+
+  ```
+syntaxe OK
+=== PASSE COMPLÈTE DES PORTES (22 portes, borne 2400 s) ===
+    journaux : /tmp/portes-1210b
+  porte-budget           ✅                          43 s    ✅ paires depassees : nommees (total, budget, pas, plafond), code 9, AUCUNE perplexite
+  porte-bus              ✅                          74 s    ✅ le canal diffusé par fichier change la région du milieu
+porte-budget.log porte-bus.log porte-bus-socket.log
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash tools/carte-fenetre-puits.sh 128 > /tmp/carte-fenetre-puits.md 2>&1; echo \"CODE=$?\"; cat /tmp/carte-fenetre-puits.md", "description": "Run the window x sinks map", "run_in_background": true}`
+
+  ```
+started background job bash-27
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 240; cat /tmp/carte-fenetre-puits.md 2>/dev/null; echo \"=== passe ===\"; tail -5 /tmp/passe-complete.log", "description": "Check map and sweep progress", "timeoutMs": 300000}`
+
+  ```
+référence (aucune fenêtre) : perplexité 14.6496 · 0.02 M paires d'attention par jeton
+
+| fenêtre | 0 puits | 8 puits | 16 puits | 24 puits | 32 puits |  |
+|---|---|---|---|---|---|
+| **16** | 23.8917 0.01 | 23.1946 0.01 | 20.7664 0.01 | 16.3487 0.01 | 16.2566 0.01 |
+| **32** | 18.1141 0.01 | 16.9511 0.01 | 16.3812 0.01 | 15.4339 0.01 | 15.4499 0.02 |
+| **64** | 16.1972 0.02 | 15.5128 0.02 | 15.3427 0.02 | 14.9614 0.02 | 14.8530 0.02 |
+=== passe ===
+  porte-budget           ✅                          43 s    ✅ paires depassees : nommees (total, budget, pas, plafond), code 9, AUCUNE perplexite
+  porte-bus              ✅                          74 s    ✅ le canal diffusé par fichier change la région du milieu
+  porte-bus-socket       ✅                          94 s    ✅ le bus du pilote agit (113.0068 -> 148.9144)
+  porte-coupe            ✅                         132 s    ✅ le coût du pont va de +0.52 % (coupe 18/24) à +17.09 % (coupe 15/24) — il y a un bon endroit
+  porte-delais           ✅                          21 s    ✅ le temps, lui, augmente : 6.79 s → 9.45 s (+2.7 s ≈ 50 ms × 64 pas)
+  ```
+
+### 🤖 Assistant
+
+⏵ Carte obtenue : un gros drain compense une petite fenêtre (16+32 ≈ 64+0) — je pousse la mesure aux longues séquences
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"tools/carte-fenetre-puits.sh\")\ns = p.read_text()\ns = s.replace('LIMITE=${1:-128}\\nCTX=${CTX:-512}',\n 'LIMITE=${1:-128}\\nCTX=${CTX:-512}\\n# Balayage réglable : FENETRES et … [1692 caractères tronqués]`
+
+  ```
+started background job bash-28
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -6 /tmp/passe-complete.log", "description": "Check sweep progress"}`
+
+  ```
+journaux : /tmp/portes-1210b
+  porte-budget           ✅                          43 s    ✅ paires depassees : nommees (total, budget, pas, plafond), code 9, AUCUNE perplexite
+  porte-bus              ✅                          74 s    ✅ le canal diffusé par fichier change la région du milieu
+  porte-bus-socket       ✅                          94 s    ✅ le bus du pilote agit (113.0068 -> 148.9144)
+  porte-coupe            ✅                         132 s    ✅ le coût du pont va de +0.52 % (coupe 18/24) à +17.09 % (coupe 15/24) — il y a un bon endroit
+  porte-delais           ✅                          21 s    ✅ le temps, lui, augmente : 6.79 s → 9.45 s (+2.7 s ≈ 50 ms × 64 pas)
+  ```
+
+### 👤 Utilisateur
+
+les dossiers docs, journal et reports sont mal utilisé. on dirait que le contenu est pêle-mêle et sans orientation sur le bon usage de chacun de ces dossiers. Je vois des suivi d'avancements et résultats d'analyse dans docs alors que journal doit consigner les événements au quotidien (avec liens sur les autres fichiers), reports doit contenir les rapports d'expérimentation à raison d'une expérience par fichier. Docs doit contenir des documents de fond sur les principes, les théories, les hypothèses et l'état des projets en fonction des roadmaps de chaque module. De plus, je vois des heures dans le futur dans ces documents, ce qui me laisse croire qu'ils n'ont pas été écrits sur le bon fuseau horaire.
+
+### 🤖 Assistant
+
+⏵ Retour important sur l'organisation — je fais l'état des lieux des trois dossiers et des fuseaux avant de proposer le rangement
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== date machine ===\"; date; date -u; echo \"TZ=${TZ:-<non défini>}\"; cat /etc/timezone 2>/dev/null; echo; echo \"=== docs/ ===\"; ls -la docs/ | awk '{print $5, $9}' | column -t; echo; echo \"=== reports/ ===\"; ls -la repo … [176 caractères tronqués]`
+
+  ```
+=== date machine ===
+sam 10 oct 2026 10:13:13 EDT
+sam 10 oct 2026 14:13:13 UTC
+TZ=<non défini>
+
+=== docs/ ===
+1718    .
+612     ..
+10831   architecture-cerveau-et-drave.md
+19350   architecture-kimi-k3.md
+28690   biologie-pour-drave.md
+5872    campagne-benefices.md
+7041    colab-reparti.md
+9537    comparaison-spiking.md
+15557   configuration-nvme-raid-amd.md
+33243   contexte-long.md
+17286   convertisseur.md
+9593    format-clusters.md
+12731   format-flux.md
+142853  glossaire.md
+11533   hebbien-differentiel-et-biologie.md
+4360    histoire.md
+15799   impulsion-pure-apprenant.md
+5540    manques.md
+23099   modele-pour-drave.md
+6575    modularisation.md
+15275   note-cancellation-evenementielle.md
+3928    note-corpus-panini.md
+5247    note-cout-professeur.md
+4532    note-ingestion-corpus.md
+7730    note-regle-contrastive.md
+6198    note-un-pont-par-professeur.md
+22412   numa-segregation.md
+21592   plan-cerveau-complet.md
+65929   plan-deepseek41-complet.md
+6905    plan-deepseek-v4-flash.md
+9929    plan-gpu-topk.md
+11947   plan-kimi-k3.md
+39446   plan-mla-vision.md
+30096   plan-mode4-lot-listes.md
+10586   plan-modeles-lourds.md
+23867   plan-prefill-reparti.md
+12734   programme-recherche.md
+6
+… [3285 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -30 journal/README.md; echo \"=== sessions ===\"; ls journal/sessions | head; ls journal/sessions | wc -l; echo \"=== vraie chronologie (git) ===\"; git log --format='%ad %h %s' --date=format:'%d/%m %H:%M' | tail -5; git log --f … [376 caractères tronqués]`
+
+  ```
+# Journal des sessions
+
+Un rapport par session, régénéré automatiquement à chaque commit et
+chaque heure (`tools/session_report.py`). Le rapport reconstitue l'essence
+de la session ; le `digest.md` voisin en donne le verbatim complet.
+
+| Session | Titre | Début | Durée | Tours | Outils | Fichiers | Commits | Rapport |
+|---|---|---|---|---|---|---|---|---|
+| `04ed1834` | Tu travailles dans le dépôt | 2026-10-08 09:18 | 0.0 h | 1 | 42 | 0 | 0 | [rapport](sessions/04ed1834-b0f8-42a1-aa21-75a75c19647e/rapport.md) |
+| `11b2d312` | Tu es relecteur ADVERSARIAL autonome | 2026-10-01 02:50 | 0.1 h | 1 | 60 | 0 | 0 | [rapport](sessions/11b2d312-9a7e-4a4e-814f-ed0384ed9d4d/rapport.md) |
+| `13446299` | Tu es relecteur ADVERSARIAL autonome | 2026-10-01 00:54 | 0.2 h | 1 | 68 | 0 | 0 | [rapport](sessions/13446299-79d8-497c-ba83-673c176a4637/rapport.md) |
+| `15fd322f` | Tu travailles dans le dépôt | 2026-09-30 11:47 | 0.2 h | 1 | 67 | 2 | 0 | [rapport](sessions/15fd322f-7e9e-48c0-a970-f36335eb622a/rapport.md) |
+| `1820cf6b` | Tu es un vérificateur ADVERSARIAL | 2026-10-02 19:29 | 0.1 h | 1 | 21 | 4 | 0 | [rapport](sessions/1820cf6b-c8a4-411c-894c-31195b9ff7a8/rapport.md) |
+| `18b8879c` | Tu trava
+… [4618 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Constat établi (fuseau machine = EDT, estampilles jusqu'au 12 octobre donc dans le futur) — je vous fais valider la cible avant de ranger
+
+- **ask_user_question** `{"questions": [{"id": "sprint_doc", "header": "sprint-cerveau.md (123 Ko)", "question": "Ce fichier mélange aujourd'hui : l'ÉTAT du sprint, le JOURNAL des rounds, et des RÉSULTATS d'expériences. Où va quoi ?", "options": [{"label": "Éclater en trois : état → docs/, événements → journal/, expériences … [1440 caractères tronqués]`
+
+  ```
+{"answers":[{"id":"sprint_doc","selected":["Éclater en trois : état → docs/, événements → journal/, expériences → reports/ (Recommandé)"]},{"id":"campagne","selected":["Un fichier par expérience dans reports/campagne-benefices/ + index (Recommandé)"]}]}
+  ```
+
+### 👤 Utilisateur
+
+background job bash-27 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash tools/carte-fenetre-puits.sh 128 > /tmp/carte-fenetre-puits.md 2>&1; echo "CODE=$?"; cat /tmp/carte-fenetre-puits.md) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 🤖 Assistant
+
+⏵ Les deux options recommandées sont validées — je commence par le fuseau et la convention, puis les deux éclatements
+
+- **todo_write** `{"todos": [{"content": "Corriger les estampilles : fuseau HAE/EDT et dates réelles tirées de git", "status": "in_progress"}, {"content": "Écrire docs/organisation-du-depot.md (rôles, nommage, fuseau)", "status": "pending"}, {"content": "Éclater reports/rapport-campagne-benefices.md en reports/campag … [399 caractères tronqués]`
+
+  ```
+Updated todo list: 5 pending, 1 in progress, 0 completed.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== vraie chronologie des commits du sprint (9-10 oct) ===\"; git log --since='2026-10-09 00:00' --format='%ad|%h|%s' --date=format:'%m-%d %H:%M' | tac | head -60", "description": "Get real sprint commit timeline"}`
+
+  ```
+=== vraie chronologie des commits du sprint (9-10 oct) ===
+10-09 00:05|9cdfbd7|Le banc des encodages ne plante plus sur les modèles K-quant (c'était la première ligne de l'aide)
+10-09 00:06|f9ca016|Contexte et lots : le contexte déclaré ne coûte rien à fenêtre courte, et le lot vaut x1,4
+10-09 00:07|9321cfc|Distillation à l'échelle 384 : -12 % au total, et le gain CROÎT avec la taille
+10-09 01:07|56ef496|L'échelle par enregistrement des traces : les lecteurs l'ignoraient, et le résultat change
+10-09 01:08|e87e37f|Instrument : la convention SentencePiece nommée, le k-WTA appris, la FFN en Q8
+10-09 01:09|4251a4f|Deux harnais qui manquaient : le protocole 8×128 écrit, l'acceptation mesurée par le moteur
+10-09 01:55|69cf405|Campagne 24 h : l'équivalence au bit près, le routage qui s'inverse, le lot à froid
+10-09 02:31|1530bee|La carte de latence : répartir ne paie que si le calcul dépasse 3,4 ms x RTT
+10-09 02:49|c372bfc|Spéculatif : l'alignement du brouillon aide, mais l'acceptation plafonne à 15,6 %
+10-09 02:58|ec4fd0c|La porte gpt-oss rend 15,6017 au chiffre près : la campagne est verte partout
+10-09 03:26|b822984|Dim 512 : le routage seul perd, le routé DISTILLÉ gagne de 5,2 %
+10-0
+… [5189 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --since='2026-10-09 15:30' --format='%ad|%h|%s' --date=format:'%m-%d %H:%M' | tac | nl | tail -50", "description": "Get sprint commits timeline"}`
+
+  ```
+28	10-10 01:32|b852b09|C2/C6 : la greffe d'état — branchée, et elle ne transfère PAS le contexte
+    29	10-10 01:50|19a4a01|Porte bus-socket : elle rendait 1 en ayant TOUT réussi (sys.exit avec un message)
+    30	10-10 02:02|7a8cfb7|C6 : un indice ÉTRANGER retrouve le bon passage — 136 jetons contre 448 de hasard
+    31	10-10 02:28|f537818|C6 : la porte de l'indice étranger CORRIGE la mesure — l'effet est réel, non robuste
+    32	10-10 03:39|b5d5fe9|C2 : deux entrées, une règle de mélange — et la CORRECTION d'un faux négatif
+    33	10-10 04:08|52d49ec|Porte greffe : cas 5 réécrit — la greffe porte le CONTENU, pas seulement le 1er jeton
+    34	10-10 04:20|089c52a|C6/C2 : la mémoire QUI SERT, de bout en bout — et le goulot est le RAPPEL
+    35	10-10 04:56|b21f715|C6 : le rappel par le contenu dépend de l'INDICE, pas de la mémoire (8 indices mesurés)
+    36	10-10 05:12|7a688a7|C6 : le rappel n'est PAS continu — deux jetons voisins donnent 50 et 1 006 jetons
+    37	10-10 05:44|892acfd|C6 : clé de FENÊTRE — la prédiction est RÉFUTÉE, et elle confirme le §24 quater
+    38	10-10 05:48|203872a|C10 : budget d'octets par lien — déclaré dans la topologie, vérifié sur ce qui PASSE
+    39	10-10
+… [4443 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Chronologie réelle extraite de git ; j'écris la convention de rangement (rôles, nommage, fuseau) dans docs/
+
+- **write** `{"content": "# Organisation du dépôt — quel dossier pour quoi\n\n> Écrit le **2026-10-10 10:20 HAE** (EDT, UTC−4). Ce document est la **règle** : il dit ce qui va\n> dans `docs/`, dans `reports/` et dans `journal/`, comment nommer, et comment horodater. Il\n> existe parce que les trois dossiers étai … [4422 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/organisation-du-depot.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"journal\\|README\" tools/session_report.py | head -20; echo \"=== le README est-il régénéré ? ===\"; grep -n \"def .*index\\|write_text\\|open(\" tools/session_report.py | head -12", "description": "Check journal index gene … [16 caractères tronqués]`
+
+  ```
+7:  journal/sessions/<id>/rapport.md   la synthèse structurée de la session
+8:  journal/README.md                  l'index des sessions
+306:    dest = repo / "journal" / "sessions"
+336:    (repo / "journal" / "README.md").write_text("\n".join(index) + "\n", encoding="utf-8")
+=== le README est-il régénéré ? ===
+323:        (dest / sess.name / "rapport.md").write_text(md, encoding="utf-8")
+336:    (repo / "journal" / "README.md").write_text("\n".join(index) + "\n", encoding="utf-8")
+  ```
+
+### 🤖 Assistant
+
+⏵ Je génère les entrées de journal (dates réelles de git) — d'abord la liste exacte du 9 octobre
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --since='2026-10-09 15:25' --until='2026-10-10 00:00' --format='%ad|%h|%s' --date=format:'%H:%M' | tac; echo \"=== total ===\"; git log --since='2026-10-09 15:25' --until='2026-10-10 00:00' --oneline | wc -l; git log --since= … [82 caractères tronqués]`
+
+  ```
+15:33|a285c41|Registre consolidé des manques — le capstone que l'objectif demande
+15:34|8015c64|Annexe : manifeste des journaux de la campagne (59 fichiers d'étape, 79 Kio, 17 journaux de chaînes)
+15:55|505ed18|Clôture du rapport : ce qui reste n'est plus de la mesure en retard mais du travail identifié
+16:25|f8bd3f6|Dim 512 : le prix de la parcimonie croît avec l'échelle (+6,7 % et +8,0 % contre +1,0 % et +3,8 % à 384)
+17:06|59186cf|C1a : la topologie de régions se lit, se vérifie et refuse les graphes incohérents
+17:08|4de9f98|C1b : la conception relevée sur le code, prête à implémenter
+17:12|536256f|C1b pas 1 : la topologie PILOTE le découpage — porte tenue, même chiffre, 0,00e0
+17:35|28da341|C1b pas 2 : le RELAIS — trois régions sur trois instances, écart 0,00e0
+17:40|daef822|C12 : trace globale horodatée et rejeu exact — 126 croisements, aucune divergence
+17:45|451b036|C5 : bus de modulation multi-canaux — canal neutre exact au bit près, canal actif sur un relais
+17:46|8959d1c|Bilan du sprint : C1, C12 et C5 livrées avec leurs invariants, 95 tests, trois défauts trouvés par les portes
+18:02|b0bb004|Sprint clos sur vérification : les 23 portes du dépôt sont vertes (0 rouge), 95
+… [1268 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ J'éclate le rapport de campagne : je liste d'abord les sections et leur date réelle dans git
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^## \" reports/rapport-campagne-benefices.md | head -60; echo \"=== préambule (avant §1) ===\"; sed -n '1,12p' reports/rapport-campagne-benefices.md; ls -d reports/archive 2>/dev/null || echo \"(pas d'archive)\"", "descript … [38 caractères tronqués]`
+
+  ```
+14:## Résumé — les cinq résultats qui comptent, et les manques
+41:## 0. Le piège qui a failli tout fausser
+57:## 0 bis. Le verdict, famille par famille
+130:## 1. Le décodage spéculatif : ×1,2, pas ×2 — mesuré avant d'écrire du moteur
+257:## 2. Les deux familles de tâches que Drave ne couvre pas
+272:## 3. La grille de modèles — « ce modèle tourne-t-il, et à quel prix ? »
+349:## 4. Ce que le dépôt sait déjà, par famille de tâches (avant cette campagne)
+375:## 5. Les modèles entraînés ici, mesurés DANS le moteur — ce que le routage et la distillation rapportent
+712:## 7. Répartir par EXPERTS : ce que coûterait l'unité de travail naturelle
+745:## 8. Les tâches à SORTIE CONTRAINTE : une matrice qu'on ne lit pas
+823:## 9. La mémoire TIENT : l'aiguille est retrouvée à toutes les profondeurs
+861:## 10. La génération : TTFT et débit, mesure directe
+877:## 10 bis. Quatre tâches, sorties verbatim — et c'est le MODÈLE qui limite, pas le moteur
+904:## 10 ter. La densité d'activation ne dépend PAS de la tâche — la qualité, si
+948:## 12. Le cas extrême : **365,7 Go sur une machine de 125 Go**
+997:## 13. La tête restreinte, sur deux modèles de plus
+1048:## 14. Une mesure à refaire : le lot sur le 
+… [3458 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ J'écris l'outil de découpage (une expérience par fichier, date réelle tirée de git) et je le passe sur la campagne
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"decouper-rapport.py — éclater un rapport monolithique en UNE EXPÉRIENCE PAR FICHIER.\n\nPOURQUOI. `reports/` doit contenir un rapport par expérience (voir\n`docs/organisation-du-depot.md`). Un fichier de 179 Ko couvrant 47 expériences n'est ni\ncitable, ni  … [6731 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/decouper-rapport.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && chmod +x tools/decouper-rapport.py && python3 tools/decouper-rapport.py reports/rapport-campagne-benefices.md --dossier campagne-benefices --dry-run 2>&1 | head -55", "description": "Dry run the report splitter", "timeoutMs": 600000}`
+
+  ```
+51 expériences → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/campagne-benefices
+     00  2026-10-09 06:34 HAE   4836fc8   00-resume-les-cinq-resultats-qui-comptent-et-les-ma.md
+     00  2026-10-08 21:32 HAE   89ae2c3   00-le-piege-qui-a-failli-tout-fausser.md
+  00-bis  2026-10-08 22:16 HAE   8343f82   00-bis-le-verdict-famille-par-famille.md
+     01  2026-10-08 22:16 HAE   8343f82   01-le-decodage-speculatif-1-2-pas-2-mesure-avant-de.md
+     02  2026-10-08 21:32 HAE   89ae2c3   02-les-deux-familles-de-taches-que-drave-ne-couvre.md
+     03  2026-10-08 21:32 HAE   89ae2c3   03-la-grille-de-modeles-ce-modele-tourne-t-il-et-a.md
+     04  2026-10-08 21:47 HAE   f7bb054   04-ce-que-le-depot-sait-deja-par-famille-de-taches.md
+     05  2026-10-09 02:31 HAE   1530bee   05-les-modeles-entraines-ici-mesures-dans-le-moteur.md
+     07  2026-10-08 21:57 HAE   1e11cc7   07-repartir-par-experts-ce-que-couterait-lunite-de.md
+     08  2026-10-08 22:03 HAE   6379e49   08-les-taches-a-sortie-contrainte-une-matrice-quon.md
+     09  2026-10-08 22:04 HAE   2d57177   09-la-memoire-tient-laiguille-est-retrouvee-a-toute.md
+     10  2026-10-08 22:04 HAE   2d57177   10-la-generation-ttft-et-debit-
+… [3758 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Deux sections se disputaient « 00 » — je préfixe par l'ordre d'apparition puis je passe pour de vrai
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"tools/decouper-rapport.py\")\ns = p.read_text()\nold = '''        m = re.match(r\"(\\\\d+)\\\\s*(bis|ter|quater)?\\\\.?\\\\s*(.*)\", nom_titre)\n        if m and m.group(1):\n   … [1363 caractères tronqués]`
+
+  ```
+préfixe d'ordre ajouté
+  41 · 38  2026-10-10 08:09 HAE   719ab85   41-38-un-drapeau-qui-ne-faisait-rien-dans-le-c.md
+  42 · 39  2026-10-10 08:10 HAE   39d32f3   42-39-audit-des-drapeaux-par-chemin-une-method.md
+  43 · 40  2026-10-10 08:44 HAE   dd66191   43-40-protocole-v7-la-fenetre-dattention-voyag.md
+  44 · 41  2026-10-10 09:01 HAE   e22dbd7   44-41-protocole-v8-le-pilote-sait-enfin-ce-que.md
+  45 · 42  2026-10-10 09:10 HAE   4767b22   45-42-c10-clos-trois-budgets-trois-codes-octet.md
+  46 · 43  2026-10-10 09:11 HAE   4367099   46-43-linstrument-de-trace-est-calibre-50-ms-i.md
+  47 · 44  2026-10-10 09:12 HAE   d09f78c   47-44-la-gigue-dun-pas-reparti-7-ms-sur-17-7-c.md
+  48 · 45  2026-10-10 09:15 HAE   656a65f   48-45-combien-de-messages-coute-un-pas-quatre.md
+  49 · 46  2026-10-10 09:39 HAE   63203d7   49-46-inventaire-des-drapeaux-en-chemin-repart.md
+  50 · 47  2026-10-10 10:07 HAE   85cf49c   50-47-attn-sinks-le-drapeau-vit-mais-seulement.md
+  51 · R  2026-10-09 15:34 HAE   8015c64   51-R-annexe-manifeste-des-journaux.md
+monolithe archivé : reports/archive/rapport-campagne-benefices.md
+51
+rapport-campagne-benefices.md
+  ```
+
+### 🤖 Assistant
+
+⏵ Je vérifie que rien n'a été perdu : reconstitution du monolithe depuis les 51 fichiers
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib, re\narch = pathlib.Path(\"reports/archive/rapport-campagne-benefices.md\").read_text(encoding=\"utf-8\")\ndossier = pathlib.Path(\"reports/campagne-benefices\")\nfichiers = sorted(dossier.glob(\"* … [1011 caractères tronqués]`
+
+  ```
+monolithe : 2903 lignes · reconstruit : 2840 lignes
+DIFFÉRENCES : 116 lignes de diff
+--- 
++++ 
+@@ -1,13 +0,0 @@
+-# Campagne 24 h — où Drave est à son meilleur, tâche par tâche
+-
+-> 08/10 21 h → 09/10. Rapport **vivant** : il est mis à jour au fil des étapes.
+-> File : `tools/campagne-benefices.sh`. Journaux bruts : `/tmp/campagne24/`.
+-> Plan : `docs/campagne-benefices.md`.
+->
+-> Règle de lecture : chaque chiffre porte ses conditions (corpus, tokenizer,
+-> charge de fond). La charge a oscillé entre 3 et 18 pendant la campagne
+-> (entraînements en parallèle) — les mesures **déterministes** (perplexité,
+-> comptes d'événements) n'en dépendent pas, les **temps** oui, et c'est écrit.
+-
+----
+-
+@@ -40 +26,0 @@
+-
+@@ -56 +41,0 @@
+-
+@@ -129 +113,0 @@
+-
+@@ -256 +239,0 @@
+-
+@@ -271 +253,0 @@
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib, difflib\narch = pathlib.Path(\"reports/archive/rapport-campagne-benefices.md\").read_text(encoding=\"utf-8\")\nmorceaux = []\nfor f in sorted(pathlib.Path(\"reports/campagne-benefices\").glob(\"*. … [585 caractères tronqués]`
+
+  ```
+lignes supprimées : 62 · dont non vides : 9
+    '# Campagne 24 h — où Drave est à son meilleur, tâche par tâche'
+    '> 08/10 21 h → 09/10. Rapport **vivant** : il est mis à jour au fil des étapes.'
+    '> File : `tools/campagne-benefices.sh`. Journaux bruts : `/tmp/campagne24/`.'
+    '> Plan : `docs/campagne-benefices.md`.'
+    '>'
+    '> Règle de lecture : chaque chiffre porte ses conditions (corpus, tokenizer,'
+    '> charge de fond). La charge a oscillé entre 3 et 18 pendant la campagne'
+    '> (entraînements en parallèle) — les mesures **déterministes** (perplexité,'
+    "> comptes d'événements) n'en dépendent pas, les **temps** oui, et c'est écrit."
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -22 reports/campagne-benefices.md; echo \"...\"; sed -n '1,8p' reports/campagne-benefices/50-47-attn-sinks-le-drapeau-vit-mais-seulement.md; echo \"=== taille de l'index et du dossier ===\"; du -sh reports/campagne-benefices.md  … [136 caractères tronqués]`
+
+  ```
+# Campagne 24 h — où Drave est à son meilleur, tâche par tâche
+
+> 08/10 21 h → 09/10. Rapport **vivant** : il est mis à jour au fil des étapes.
+> File : `tools/campagne-benefices.sh`. Journaux bruts : `/tmp/campagne24/`.
+> Plan : `docs/campagne-benefices.md`.
+>
+> Règle de lecture : chaque chiffre porte ses conditions (corpus, tokenizer,
+> charge de fond). La charge a oscillé entre 3 et 18 pendant la campagne
+> (entraînements en parallèle) — les mesures **déterministes** (perplexité,
+> comptes d'événements) n'en dépendent pas, les **temps** oui, et c'est écrit.
+
+---
+
+## Index des expériences
+
+| # | expérience | date réelle (git) | fichier |
+|---|---|---|---|
+| 01 · R | Résumé — les cinq résultats qui comptent, et les manques | 2026-10-09 06:34 HAE (`4836fc8`) | [01-R-resume-les-cinq-resultats-qui-comptent-e.md](campagne-benefices/01-R-resume-les-cinq-resultats-qui-comptent-e.md) |
+| 02 · 00 | 0. Le piège qui a failli tout fausser | 2026-10-08 21:32 HAE (`89ae2c3`) | [02-00-le-piege-qui-a-failli-tout-fausser.md](campagne-benefices/02-00-le-piege-qui-a-failli-tout-fausser.md) |
+| 03 · 00-bis | 0 bis. Le verdict, famille par famille | 2026-10-08 22:16 HAE (`8343f82`) | [03-00-bis-le-ve
+… [1486 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le rapport est éclaté (51 fiches, contenu verbatim vérifié) ; je range maintenant le récit de sprint dans journal/ et je re-date par git
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git mv docs/sprint-cerveau.md journal/2026-10-09-sprint-cerveau-recit.md && python3 - <<'PYEOF'\nimport pathlib, re, subprocess\np = pathlib.Path(\"journal/2026-10-09-sprint-cerveau-recit.md\")\ns = p.read_text(encoding=\"utf-8\")\nl … [2506 caractères tronqués]`
+
+  ```
+63 sections dans le récit
+47 titres re-datés par git
+20:## C6/C2 — FAIT (réel : 2026-10-10 04:20 HAE · `089c52a`) : LA MÉMOIRE QUI SERT, de bout en bout
+51:## C6 — FAIT (réel : 2026-10-10 04:56 HAE · `b21f715`) : le rappel dépend de l'INDICE (8 indices mesurés)
+95:## C6 — FAIT (réel : 2026-10-10 05:44 HAE · `892acfd`) : clé de FENÊTRE — prédiction RÉFUTÉE
+125:## C10 — FAIT (réel : 2026-10-10 05:48 HAE · `203872a`) : budget d'octets par lien, déclaré et vérifié
+144:## C10 (suite) — FAIT (réel : 2026-10-10 06:05 HAE · `47b2ad6`) : budget de LATENCE par lien
+164:## C11 — FAIT (réel : 2026-10-10 05:56 HAE · `619b940`) : pannes de lien nommées, code distinct, sans résultat partiel
+189:## BALAYAGE DES PORTES — FAIT (réel : 2026-10-10 07:27 HAE · `dee9e58`) : le piège de fenêtre était latent ailleurs
+207:## C11 (découverte) — FAIT (réel : 2026-10-10 07:25 HAE · `b1b63b0`) : le registre des régions
+229:## LA ROUGE DE RÉPARTITION — INSTRUITE ET CORRIGÉE (réel : 2026-10-10 07:21 HAE · `c43425e`) : c'était la PORTE
+256:## VÉRIFICATION COMPLÈTE — FAITE (réel : 2026-10-10 07:19 HAE · `ae7e149`) : 19 portes vertes, 1 rouge nommée
+289:## E4 — FAIT (réel : 2026-10-10 07:39 HAE · `d104da6`) : l'équ
+… [372 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^### \\|^## ▶\\|^## Bilan\\|^## Prochaines\\|^## Journal\" journal/2026-10-09-sprint-cerveau-recit.md | sed -n '1,40p'", "description": "Locate state-related blocks in the narrative"}`
+
+  ```
+897:### ▶ Ce qui attend son premier round, avec la commande
+973:### 46 bis. `--attn-sinks` : écrit partout, transporté par le v7… et LU NULLE PART
+1005:### 47. `--attn-sinks` : le refus était FAUX — le drapeau VIT, mais seulement avec une fenêtre
+1083:## ▶ PROCHAINE ACTION (à lire en premier)
+1088:### La consigne tient : ne pas s'arrêter faute de liste
+1095:### Les trois prochains chantiers, par valeur, avec leur première commande
+1117:### Ce qui a été livré (une ligne par capacité)
+1139:### Les cinq corrections de ce sprint, à ne pas réintroduire
+1239:### Ce qui reste pour C1b : le RELAIS (trois instances)
+1267:### Le bug que cette étape a trouvé — et la porte qui l'a attrapé
+1913:## Prochaines étapes (dans l'ordre)
+1924:## Bilan du sprint (réel : 2026-10-09 17:46 HAE · `8959d1c`)
+1969:## Journal du sprint
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/2026-10-09-sprint-cerveau-recit.md", "offset": 1083, "limit": 85}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/2026-10-09-sprint-cerveau-recit.md</path>
+<type>file</type>
+<content>
+1083: ## ▶ PROCHAINE ACTION (à lire en premier)
+1084: 
+1085: État au **11 octobre 6 h 45** · **21 portes, toutes vertes** (`tools/porte-*.sh`) ·
+1086: **122 tests verts** · 14 rounds livrés, tout poussé sur `origin/master`.
+1087: 
+1088: ### La consigne tient : ne pas s'arrêter faute de liste
+1089: 
+1090: Le temps commun est la denrée la plus précieuse ; quand une liste s'épuise, la question est
+1091: « qu'est-ce qui est mesurable maintenant ? ». Un round qui **corrige** une mesure fausse vaut
+1092: un round qui en ajoute une — ce sprint en a produit cinq corrections, toutes documentées à
+1093: côté de la valeur d'origine.
+1094: 
+1095: ### Les trois prochains chantiers, par valeur, avec leur première commande
+1096: 
+1097: **1. Le budget `paires/s` (C10, troisième volet).** Les octets et la latence sont faits ; il
+1098: reste les PAIRES, et elles se heurtent à une difficulté nommée : **ce sont les pairs qui les
+1099: calculent**, donc le pilote ne peut pas les borner sans que le nœud les lui TRANSPORTE. La
+1100: voie propre est d'ajouter le compte de pai
+… [6703 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/2026-10-09-sprint-cerveau-recit.md", "limit": 75, "offset": 1167}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/2026-10-09-sprint-cerveau-recit.md</path>
+<type>file</type>
+<content>
+1167: | **C5bis** | **diffusion du bus** | un canal poussé par un autre processus change l'exécution | ✅ **FAIT (fichier de contrôle)** — `--bus-fichier`, relu avant chaque trame · relais : 66,0379 contre 59,0790 · reste le transport par socket |
+1168: | **C3** | **délais par lien** | un délai change le **temps**, jamais un chiffre | ✅ **FAIT** — appliqué par le pilote ET par le nœud relais · porte `tools/porte-delais.sh` (même perplexité, empreintes identiques, +3,1 s pour 50 ms × 64 pas) |
+1169: | **C5** | **bus de modulation multi-canaux** | canal nul ⇒ sortie **inchangée** | ✅ **FAIT** — `bus.rs` (5 tests) · neutre ⇒ **empreintes identiques** · gain 1,5 ⇒ la sortie change · bus d'un **relais** ⇒ agit à travers les instances · `tools/porte-bus.sh` |
+1170: 
+1171: **Contraintes non négociables** : les **23 portes** du dépôt et les tests restent
+1172: verts ; le profil `release` reste le **binaire de mesure** (toute promotion se paie
+1173: d'un passage des portes) ; le crate reste **std seul, sans dépendance**.
+1174: 
+1175: ---
+1176: 
+1177: ## C1a — de
+… [3781 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je crée l'état consolidé (docs/etat-cerveau.md) : capacités, expériences, chiffres, prochaine action
+
+- **write** `{"content": "# État du cerveau Drave — capacités, expériences, prochaine action\n\n> **2026-10-10 10:40 HAE** (EDT, UTC−4 — lire `date`, jamais une horloge supposée : voir\n> `docs/organisation-du-depot.md` § 4). Ce fichier est **l'état**, par rapport aux roadmaps :\n> ce qui est fait, avec le chiff … [9445 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/etat-cerveau.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+### 🤖 Assistant
+
+⏵ Je crée les deux entrées de journal du sprint, datées par git, avec liens vers les fiches
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport subprocess, pathlib\n\ndef commits(depuis, jusqu=None):\n    cmd = [\"git\",\"log\",f\"--since={depuis}\",\"--format=%ad|%h|%s\",\"--date=format:%H:%M\"]\n    if jusqu: cmd.insert(2, f\"--until={jusqu}\")\ … [6570 caractères tronqués]`
+
+  ```
+journaux écrits : 26 et 51 commits
+> Entrée de journal — **10 octobre 2026 — la nuit du sprint : mémoire, protocoles v7/v8, et une accusation fausse corrigée**. Le journal consigne les **événements** : ce qui s'est passé,
+> quand (heure réelle de la machine, **HAE = EDT, UTC−4**), et où c'est écrit. Les **mesures**
+> sont dans `reports/campagne-benefices/` (une fiche par expérience), l'**état** dans
+> `docs/etat-cerveau.md`. Convention : `docs/organisation-du-depot.md`.
+
+## Ce qui s'est passé
+
+- **00 h → 06 h — C6 jusqu'au bout, et les budgets.** Mémoire épisodique : le rappel dépend de
+  **l'indice** (1 sur 8), il **n'est pas continu** (50 vs 1 006 jetons pour deux jetons voisins),
+  la clé de **fenêtre** dégrade tout (prédiction réfutée). Puis **C10** : budget d'**octets** par
+  lien, de **latence**, et le troisième volet **paires**, avec trois codes distincts (6, 8, 9) —
+  **C10 est clos**. **C11** : pannes nommées (code 7) et **registre des régions**.
+- **07 h → 08 h — les portes parlent.** Vérification complète : 19 vertes, 1 rouge. La rouge de
+  répartition était un **défaut de porte**, pas du modèle ; le piège de fenêtre était **latent**
+  ```
+
+### 🤖 Assistant
+
+⏵ Je mets à jour tous les pointeurs vers les fichiers déplacés
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rln \"sprint-cerveau\\|rapport-campagne-benefices\" --include=\"*.md\" --include=\"*.sh\" --include=\"*.py\" --include=\"*.rs\" . | grep -v \"^./reports/campagne-benefices/\" | head -20; echo \"=== occurrences ===\"; grep -rn \ … [217 caractères tronqués]`
+
+  ```
+./tools/decouper-rapport.py
+./journal/sessions/d31b3d9b-58e4-4d34-85fa-381b6f6a6a76/digest.md
+./journal/sessions/d31b3d9b-58e4-4d34-85fa-381b6f6a6a76/rapport.md
+./journal/2026-10-09.md
+./docs/modele-pour-drave.md
+./docs/relations-humaines.md
+./README.md
+=== occurrences ===
+./journal/sessions/d31b3d9b-58e4-4d34-85fa-381b6f6a6a76/digest.md:19192:> **Objectif** (create) : Sprint « cerveau complet » en autonomie jusqu'au 10 octobre 9 h (HAE) : implémenter, avec portes mesurées, les trois premières capacités du plan docs/plan-cerveau-complet.md — C1 graphe de régions (descripteur de topologie, validateur de DAG, ordonnanceur par dépendances, pilote multi-nœuds ; porte : un graphe linéaire doit rendre des logits identiques au bit près et un découpage à trois régions doit égaler le modèle d'un seul tenant), C12 trace globale horodatée et rejeu exact (porte : rejeu == exécution, 0,00e0), C5 bus de modulation multi-canaux (porte : canal nul ⇒ sortie inchangée). Chaque capacité livrée avec son invariant vérifié, ses tests, sa mesure et sa documentation ; l'état d'avancement est écrit dans docs/sprint-cerveau.md à chaque round pour être resumable. Ne rien casser : les 23 portes du dépôt et le
+… [11076 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"sprint-cerveau\\|rapport-campagne-benefices\" README.md docs/modele-pour-drave.md docs/relations-humaines.md docs/manques.md 2>/dev/null", "description": "Show pointer lines to update"}`
+
+  ```
+README.md:22:[`reports/rapport-campagne-benefices.md`](reports/rapport-campagne-benefices.md)
+docs/modele-pour-drave.md:6:> `rapport-campagne-benefices.md` a mesuré le moteur *sur des modèles faits pour
+docs/relations-humaines.md:35:| **L'état écrit en permanence** — `docs/sprint-cerveau.md` dit où j'en suis, à chaque round | pour qu'une interruption ne perde rien : c'est le seul moyen d'être reprenable |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '15,30p' README.md; echo ===; sed -n '30,40p' docs/relations-humaines.md", "description": "Read context for pointer updates"}`
+
+  ```
+---
+
+## La campagne du 8-9 octobre — 24 h de mesures, par famille de tâches
+
+Ce que l'architecture événementielle vaut, **tâche par tâche**, avec pour chaque
+chiffre ses conditions (corpus, tokenizer, charge) :
+[`reports/rapport-campagne-benefices.md`](reports/rapport-campagne-benefices.md)
+(verdict famille par famille au § 0 bis). La file de mesures est
+[`tools/campagne-benefices.sh`](tools/campagne-benefices.sh), ses journaux bruts
+sont dans `/tmp/campagne24/`, et **les 23 portes du dépôt sont vertes**.
+
+**Cinq résultats, chacun avec sa mesure :**
+
+| résultat | mesure |
+|---|---|
+===
+|---|---|
+| **Timeboxing, pas backlog** — j'occupe le temps imparti, je ne m'arrête pas à la fin d'une tranche | une liste finie n'est pas une raison de s'arrêter ; le temps, lui, continue |
+| **Une chose à la fois, finie et vérifiée** — implémenter, doter d'une porte, mesurer, documenter, commiter | dix chantiers à moitié n'ont jamais rien valu |
+| **La porte d'abord** — toute capacité livrée avec l'invariant qui la vérifie, et ce test doit **savoir échouer** | une vérification qui ne peut pas échouer ne vérifie rien |
+| **Ne rien casser** — les portes du dépôt passent après chaque modification du c
+… [671 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\n# README : pointeur vers l'index des fiches + la ligne des portes corrigée\np = pathlib.Path(\"README.md\"); s = p.read_text()\ns = s.replace(\"\"\"[`reports/rapport-campagne-benefices.md`](report … [2067 caractères tronqués]`
+
+  ```
+pointeurs mis à jour
+(aucune autre occurrence attendue)
+  porte-episodique       ✅                         184 s    ✅ la porte C6 est franchie — et elle dit ses conditions : 300 états consécutifs d'un
+  porte-flux             ✅                          22 s    mode 4 — lot en listes           4.45e-3  ✅  (réf 60.8135 / deux nœuds 60.5427)
+  porte-fusion           ✅                           8 s    ✅ v1 refusée (code 2), trace seule refusée (code 2)
+  ```
+
+### 👤 Utilisateur
+
+background job bash-28 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'
+import pathlib
+p = pathlib.Path("tools/carte-fenetre-puits.sh")
+s = p.read_text()
+s = s.replace('LIMITE=${1:-128}\nCTX=${CTX:-512}',
+ 'LIMITE=${1:-128}\nCTX=${CTX:-512}\n# Balayage réglable : FENETRES et PUITS (le drain et la fenêtre sont deux leviers du MÊME\n# budget de clés notées : fenêtre + puits).\nFENETRES=${FENETRES:-16 32 64 128}\nPUITS=${PUITS:-0 8 16 24 32}')
+old_mesure = s[s.index('mesure () {'):s.index('REFO=$(mesure)')]
+new_mesure = '''mesure () { # $@ = drapeaux ; imprime la perplexité seule
+    $D "$M" --ppl "$IDS" --limit "$LIMITE" --ctx "$CTX" --threads 8 "$@" 2>&1 \\
+      | grep -oE "perplexité [0-9.]+ sur" | grep -oE "[0-9.]+"
+}
+
+'''
+s = s.replace(old_mesure, new_mesure, 1)
+deb = s.index('REFO=$(mesure)')
+s = s[:deb] + '''REFO=$(mesure)
+echo "référence (aucune fenêtre, $LIMITE jetons) : perplexité $REFO  ·  clés notées par jeton ≈ $LIMITE"
+echo
+printf '| fenêtre \\\\ puits |'
+for n in $PUITS; do printf ' %s |' "$n"; done
+echo
+printf '|---|'
+for n in $PUITS; do printf '%s|' '---'; done
+echo
+for f in $FENETRES; do
+    printf '| **%s** |' "$f"
+    for n in $PUITS; do
+        if [ "$n" = 0 ]; then v=$(mesure --attn-window "$f"); else v=$(mesure --attn-window "$f" --attn-sinks "$n"); fi
+        printf ' %s |' "${v:-?}"
+    done
+    echo
+done
+echo
+echo "Chaque case : perplexité. Clés notées par jeton ≈ fenêtre + puits (le prix), contre $LIMITE"
+echo "pour l'attention complète — c'est le SEUL poste que la fenêtre réduit."
+'''
+p.write_text(s)
+print("script généralisé")
+PYEOF
+bash -n tools/carte-fenetre-puits.sh && echo "syntaxe OK" && FENETRES="64 128 256" PUITS="0 32 64" bash tools/carte-fenetre-puits.sh 512 > /tmp/carte-512.md 2>&1; echo "CODE=$?"; cat /tmp/carte-512.md) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 🤖 Assistant
+
+⏵ La carte à 512 jetons est arrivée — je la lis avant de committer le rangement
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/carte-512.md; tail -4 /tmp/passe-complete.log", "description": "Read 512-token map and sweep progress"}`
+
+  ```
+référence (aucune fenêtre, 512 jetons) : perplexité 13.1368  ·  clés notées par jeton ≈ 512
+
+| fenêtre \ puits | 0 | 32 | 64 |
+|---|---|---|---|
+| **64** | 21.5801 | 16.2652 | 14.4247 |
+| **128** | 17.2481 | 14.7484 | 13.3968 |
+| **256** | 16.6749 | 14.6262 | 13.4778 |
+
+Chaque case : perplexité. Clés notées par jeton ≈ fenêtre + puits (le prix), contre 512
+pour l'attention complète — c'est le SEUL poste que la fenêtre réduit.
+  porte-delais           ✅                          21 s    ✅ le temps, lui, augmente : 6.79 s → 9.45 s (+2.7 s ≈ 50 ms × 64 pas)
+  porte-episodique       ✅                         184 s    ✅ la porte C6 est franchie — et elle dit ses conditions : 300 états consécutifs d'un
+  porte-flux             ✅                          22 s    mode 4 — lot en listes           4.45e-3  ✅  (réf 60.8135 / deux nœuds 60.5427)
+  porte-fusion           ✅                           8 s    ✅ v1 refusée (code 2), trace seule refusée (code 2)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git status --short | head -12 && git commit -q -m \"$(cat <<'MSG'\nRangement : docs = fond, reports = une fiche par experience, journal = evenements dates\n\nRetour de Stephane : les trois dossiers etaient melanges, et  … [1979 caractères tronqués]`
