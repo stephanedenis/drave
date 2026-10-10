@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 52.2 h |
+| Durée | 52.5 h |
 | Tours | 88 |
-| Messages | 2370 |
-| Appels d'outils | 2174 |
-| Fichiers touchés | 78 |
-| Commandes | 1889 |
+| Messages | 2378 |
+| Appels d'outils | 2181 |
+| Fichiers touchés | 79 |
+| Commandes | 1895 |
 | Sous-agents | 3 |
-| Commits | 208 |
+| Commits | 209 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -3586,7 +3586,7 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 
 ### Tour 88 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*332 appels d'outils.* Actions notables :
+*339 appels d'outils.* Actions notables :
 
 - bash — Add the refusal and verify
 - bash — Move the refusal to the single point and verify
@@ -3602,11 +3602,11 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - bash — Read v7 removal context and flag inventory
 - bash — Read flag inventory section in docs
 - bash — Establish whether section 9 predates the v7 removal
-- … et 305 autres
+- … et 312 autres
 
 **Synthèse produite :**
 
-⏵ Porte du réflexe étendue (elle verrouille maintenant que l'ÉTAT porte l'information) — je committe
+⏵ Transfert inter-corpus : la tête entraînée sur un autre corpus lit quand même l'état (÷1 730) — j'écris la fiche
 
 ## 3. Travail accompli
 
@@ -3692,6 +3692,7 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-c8-tete-entrainee.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/c8_corpus.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-c8-generalisation.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-c8-transfert-corpus.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -3741,7 +3742,7 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1849 autres
+- … et 1855 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3869,7 +3870,7 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 
 ## 5. Erreurs rencontrées
 
-85 sorties en erreur ou divergentes. Les premières :
+86 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : ```  ### 🤖 Assistant  ⏵ **En transformers 5, `AutoModel` rend directement `Qwen2Model` (pas de `.model`). Je corrige le diagnostic.**  - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitH
 - **T2** : 3310393 bash -c pgrep -af "essai_decharge" | grep python | head; echo "--- logs ---"; tail -2 /tmp/ec_d192_lr3e3.log 2>/dev/null; tail -2 /tmp/ec_d192_lr1e3.log 2>/dev/null; echo "---"; ls -la /tmp/ec
@@ -4097,4 +4098,5 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' import pathlib # l'état : la généralisation mesurée p = pathlib.Path("docs/etat-cervea
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' import pathlib # état p = pathlib.Path("docs/etat-cerveau.md"); s = p.read_text() old 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'MSG' Porte du reflexe : la conclusion « pas de sortie precoce utilisab
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' import pathlib # état p = pathlib.Path("docs/etat-cerveau.md"); s = p.read_text() old 
 

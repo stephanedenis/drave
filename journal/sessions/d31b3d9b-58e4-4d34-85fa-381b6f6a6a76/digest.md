@@ -38238,3 +38238,103 @@ extraction corrigée
 ⏵ Porte du réflexe étendue (elle verrouille maintenant que l'ÉTAT porte l'information) — je committe
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'MSG'\nPorte du reflexe : la conclusion « pas de sortie precoce utilisable » est corrigee, et l'invariant est verrouille\n\nLa porte concluait « il n'y a PAS de sortie precoce utilisable » a partir  … [1258 caractères tronqués]`
+
+  ```
+poussé
+  morceau 10 : 1020 états · perplexité tronquée 810635.8042
+  morceau 11 : 1020 états · perplexité tronquée 1268678.2883
+12240
+  ```
+
+### 🤖 Assistant
+
+⏵ J'attends la fin de la capture prose pour lancer le test inter-corpus
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in $(seq 1 9); do if grep -q \"Entraîner sur les morceaux\" /tmp/c8-prose.log 2>/dev/null; then break; fi; sleep 60; done; grep -c \"morceau .* états\" /tmp/c8-prose.log", "description": "Wait for prose capture", "timeoutMs": 6 … [6 caractères tronqués]`
+
+  ```
+26
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in $(seq 1 8); do if grep -q \"Entraîner sur les morceaux\" /tmp/c8-prose.log 2>/dev/null; then break; fi; sleep 60; done; grep -c \"morceau .* états\" /tmp/c8-prose.log; ls /tmp/c8-prose/ | grep -c \"^morceau-\"", "description … [61 caractères tronqués]`
+
+  ```
+30
+30
+  ```
+
+### 👤 Utilisateur
+
+background job bash-38 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && wc -c /tmp/campagne24/ids_b2_prose.txt; head -c 120 /tmp/campagne24/ids_b2_prose.txt; echo; IDS=/tmp/campagne24/ids_b2_prose.txt T=/tmp/c8-prose timeout 3500 bash tools/c8_corpus.sh 30 1024 16 > /tmp/c8-prose.log 2>&1; echo "CODE=$?"; tail -4 /tmp/c8-prose.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 🤖 Assistant
+
+⏵ Capture prose terminée — je lance le transfert inter-corpus ET la référence dans le corpus
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PY=/home/stephane/gpu-env/bin/python\nA=$(python3 -c \"print(','.join(f'/tmp/c8-corpus/etat-m{i}' for i in range(0,31) if i != 7))\")\nP=$(python3 -c \"print(','.join(f'/tmp/c8-prose/etat-m{i}' for i in range(0,29)))\")\necho \"référ … [943 caractères tronqués]`
+
+  ```
+référence modèle complet sur la prose m29 :
+perplexité 8.3650 sur
+=== TRANSFERT : entraîné sur le corpus de campagne, testé sur la PROSE ===
+=== DANS LE CORPUS PROSE : 28 morceaux → test m29 ===
+[exit code: 1]
+  ```
+
+### 🤖 Assistant
+
+⏵ Les deux entraînements échouent sans message — je regarde l'erreur complète
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PY=/home/stephane/gpu-env/bin/python; P=$(python3 -c \"print(','.join(f'/tmp/c8-prose/etat-m{i}' for i in range(0,29)))\"); echo \"prefixes: $(echo $P | tr ',' '\\n' | wc -l)\"; CUDA_VISIBLE_DEVICES=0 timeout 600 $PY tools/c8_entrain … [230 caractères tronqués]`
+
+  ```
+prefixes: 29
+usage: c8_entrainer_tete.py [-h] [--etats ETATS] [--train TRAIN] [--test TEST]
+                            --ids IDS --modele MODELE [--limite LIMITE]
+                            [--epoques EPOQUES] [--pas PAS] [--batch BATCH]
+                            [--repertoire REPERTOIRE] [--graine GRAINE]
+                            [--cachee CACHEE] [--ppl_tronque PPL_TRONQUE]
+                            [--ppl_complet PPL_COMPLET]
+c8_entrainer_tete.py: error: the following arguments are required: --ids
+  ```
+
+### 🤖 Assistant
+
+⏵ `--ids` restait obligatoire alors que chaque morceau dérive le sien — je corrige et relance
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"tools/c8_entrainer_tete.py\"); s = p.read_text()\ns = s.replace('''    ap.add_argument(\"--ids\", required=True)''',\n              '''    ap.add_argument(\"--ids\", default=Non … [1917 caractères tronqués]`
+
+  ```
+--ids rendu optionnel
+syntaxe OK
+=== TRANSFERT inter-corpus (campagne → prose) ===
+entraînement : 30570 états · test (textes jamais vus) : 1019 états
+avant entraînement (A = identité) : perplexité TEST = 363,649.1382
+  époque   1/20 · perte train 2,496.5678 (perplexité) · test 257.8038  ← meilleur test
+  époque   2/20 · perte train 44.9119 (perplexité) · test 210.2077  ← meilleur test
+meilleur test : époque 2 · 210.2077
+| chemin tronqué, tête **entraînée** (adaptateur, époque 2) | **210.2077** |
+=== DANS le corpus prose (28 → m29) ===
+entraînement : 29551 états · test (textes jamais vus) : 1019 états
+avant entraînement (A = identité) : perplexité TEST = 363,649.1382
+  époque   1/20 · perte train 2,686.4857 (perplexité) · test 144.1703  ← meilleur test
+  époque   2/20 · perte train 47.0262 (perplexité) · test 81.6323  ← meilleur test
+meilleur test : époque 2 · 81.6323
+| chemin tronqué, tête **entraînée** (adaptateur, époque 2) | **81.6323** |
+  ```
+
+### 🤖 Assistant
+
+⏵ Transfert inter-corpus : la tête entraînée sur un autre corpus lit quand même l'état (÷1 730) — j'écris la fiche
+
+- **write** `{"content": "# C8 — transfert d'un corpus à un AUTRE : la tête lit quand même l'état (÷1 730)\n\n> Campagne : **cerveau** · expérience : tête entraînée sur le corpus de campagne, testée sur un\n> corpus de **prose** qu'elle n'a jamais vu\n> Question : tous les morceaux des expériences précédentes ve … [4330 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-c8-transfert-corpus.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\n# état\np = pathlib.Path(\"docs/etat-cerveau.md\"); s = p.read_text()\nold = \"\"\"**sur un texte JAMAIS VU** : avec 30 morceaux d'entraînement (le morceau de test exclu), la tête empruntée rend * … [4809 caractères tronqués]`

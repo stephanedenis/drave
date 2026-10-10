@@ -142,7 +142,9 @@ def main() -> int:
                     help="un préfixe : moitié entraînement, moitié test (même texte)")
     ap.add_argument("--train", default=None, help="préfixes séparés par des virgules")
     ap.add_argument("--test", default=None, help="préfixes séparés par des virgules (textes JAMAIS vus)")
-    ap.add_argument("--ids", required=True)
+    ap.add_argument("--ids", default=None,
+                    help="fichier d'identifiants ; utile seulement pour `--etats` (un texte) — "
+                         "avec --train/--test, chaque morceau `etat-m<i>` prend SES `morceau-<i>.txt`")
     ap.add_argument("--modele", required=True)
     ap.add_argument("--limite", type=int, default=8192)
     ap.add_argument("--epoques", type=int, default=40)
@@ -182,6 +184,9 @@ def main() -> int:
             voisin = pathlib.Path(pref).parent / f"morceau-{m.group(1)}.txt"
             if voisin.exists():
                 return str(voisin)
+        if not a.ids:
+            raise SystemExit(f"aucun fichier d'identifiants pour {pref} (ni morceau-<i>.txt "
+                             f"voisin, ni --ids)")
         return a.ids
 
     def jeu(prefixes: list[str]):
@@ -201,6 +206,8 @@ def main() -> int:
         Xte, yte = jeu(a.test.split(","))
         print(f"entraînement : {Xtr.shape[0]} états · test (textes jamais vus) : {Xte.shape[0]} états")
     else:
+        if not a.ids:
+            raise SystemExit("--etats demande --ids (un texte, un fichier d'identifiants)")
         pos, X = charger_etats(a.etats)
         ids = charger_ids(a.ids, a.limite)
         garde = pos + 1 < len(ids)
