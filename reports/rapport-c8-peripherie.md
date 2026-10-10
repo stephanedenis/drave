@@ -52,6 +52,29 @@ une sinusoïde : le témoin sortait à R² = 0,85, ce qui ne mesurait rien).
 **Le témoin est bas partout** (R² négatif) : le protocole ne fuit pas — le modèle ne lit pas
 l'avenir, ce qui valide la méthode de lecture.
 
+## 2 bis. La mémoire est-elle APPRENABLE ? Non : elle n'est pas là, même pour une lecture non linéaire
+
+Une lecture linéaire qui échoue ne prouve pas que l'information est absente — elle prouve qu'elle
+n'est pas **linéairement** accessible. C'est la leçon de la sonde C8, et il fallait la refaire ici.
+Mesure sur **4 096 pas** (signal de bruit, mode récurrent, `--ctx 4096`), apprentissage sur les
+2 048 premiers pas, mesure sur les 2 048 derniers (`tools/peripherie_memoire.py`) :
+
+| cible | lecture linéaire | lecture **non linéaire** (896→256→1, GELU) |
+|---|---|---|
+| **`v[t]`** (le présent) | R² +0,982 | R² **+0,992** |
+| **`v[t−8]`** (la mémoire) | R² −0,611 | R² **−0,681** |
+| `v[t+1]` (TÉMOIN avenir) | R² −1,704 | R² −0,905 |
+
+**Le présent est parfaitement lisible (0,992) et le passé ne l'est pas du tout (−0,681)** : la
+mémoire n'est pas « tordue » dans l'état, elle **n'y est pas**. Le témoin avenir reste négatif —
+le protocole ne fuit pas.
+
+**Ce que ça ne dit pas** : l'information du passé existe **ailleurs** — le cache KV garde les clés
+et valeurs de tous les pas (c'est son rôle). Ce qui manque, c'est qu'elle **remonte dans l'état
+résiduel** : le modèle n'a jamais été entraîné à retenir un scalaire injecté, donc il ne le
+retient pas. La suite est donc, là encore, un **entraînement** (ou une lecture branchée sur le
+cache KV, qui est une autre expérience) — pas un câblage.
+
 ## 3. Ce que ça change pour C8
 
 **Acquis** : les **régions frontière existent** (le plan disait « rien ne sort » — c'était vrai) ;
@@ -59,7 +82,7 @@ le déterminisme est tenu au bit près, le délai est exact, et **chaque décisi
 paires**, ce qui est la métrique du plan. Le réflexe (`--couches 0:K`) coûte **−67 %** par décision
 à 8 couches.
 
-**Manquant, et nommé** : la **poursuite** — garder un signal pour le rendre plus tard — n'est pas
+**Manquant, et nommé deux fois** : la **poursuite** — garder un signal pour le rendre plus tard — n'est pas
 une propriété de plomberie : elle demande un modèle (ou un adaptateur) **entraîné à retenir**. La
 sonde linéaire dit que l'information n'est pas là ; la prochaine étape est donc un **entraînement**,
 pas un câblage. C'est cohérent avec toute la ligne C8 : *ce qui manque n'est jamais le câblage,

@@ -39193,3 +39193,105 @@ Created file
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\n# la note de conception : la périphérie est IMPLÉMENTÉE, avec le renvoi à la fiche\np = pathlib.Path(\"docs/note-peripherie-c8.md\"); s = p.read_text()\ns = s.replace(\"\"\"> **2026-10-10 15:35 HA … [6940 caractères tronqués]`
+
+  ```
+note mise à jour
+état mis à jour
+récit complété
+poussé
+  porte-budget           ✅                          42 s    ✅ paires depassees : nommees (total, budget, pas, plafond), code 9, AUCUNE perplexite
+  porte-bus              ✅                          76 s    ✅ le canal diffusé par fichier change la région du milieu
+  porte-bus-socket       ✅                          90 s    ✅ le bus du pilote agit (113.0068 -> 148.9144)
+  ```
+
+- **todo_write** `{"todos": [{"content": "Rangement : conventions, éclatement des monolithes, fuseau, journal automatisé", "status": "completed"}, {"content": "Fenêtre × puits : 4 cartes, prix en temps, fiche", "status": "completed"}, {"content": "C8 : sonde, courbe, tête entraînée, généralisation, transfert de corpu … [429 caractères tronqués]`
+
+  ```
+Updated todo list: 1 pending, 1 in progress, 4 completed.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 540; tail -6 /tmp/passe-complete2.log", "description": "Wait and check the full pass progress", "timeoutMs": 600000}`
+
+  ```
+porte-bus-socket       ✅                          90 s    ✅ le bus du pilote agit (113.0068 -> 148.9144)
+  porte-coupe            ✅                         121 s    ✅ le coût du pont va de +0.52 % (coupe 18/24) à +17.09 % (coupe 15/24) — il y a un bon endroit
+  porte-delais           ✅                          19 s    ✅ le temps, lui, augmente : 5.80 s → 9.13 s (+3.3 s ≈ 50 ms × 64 pas)
+  porte-episodique       ✅                         162 s    ✅ la porte C6 est franchie — et elle dit ses conditions : 300 états consécutifs d'un
+  porte-flux             ✅                          19 s    mode 4 — lot en listes           4.45e-3  ✅  (réf 60.8135 / deux nœuds 60.5427)
+  porte-fusion           ✅                           7 s    ✅ v1 refusée (code 2), trace seule refusée (code 2)
+  ```
+
+### 🤖 Assistant
+
+⏵ Pendant la passe, j'écris l'expérience suivante : la mémoire du signal est-elle APPRENABLE ?
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"peripherie_memoire.py — C8 : la mémoire du signal est-elle APPRENABLE ?\n\nLA QUESTION, ET ELLE EST PRÉCISE. La lecture LINÉAIRE de l'état de sortie ne retrouve pas le\nsignal d'il y a N pas (`R² = −0,973`, fiche `rapport-c8-peripherie.md`) : le modèle ne l … [5460 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/peripherie_memoire.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 480; tail -8 /tmp/passe-complete2.log", "description": "Wait for the full pass", "timeoutMs": 600000}`
+
+  ```
+porte-bus              ✅                          76 s    ✅ le canal diffusé par fichier change la région du milieu
+  porte-bus-socket       ✅                          90 s    ✅ le bus du pilote agit (113.0068 -> 148.9144)
+  porte-coupe            ✅                         121 s    ✅ le coût du pont va de +0.52 % (coupe 18/24) à +17.09 % (coupe 15/24) — il y a un bon endroit
+  porte-delais           ✅                          19 s    ✅ le temps, lui, augmente : 5.80 s → 9.13 s (+3.3 s ≈ 50 ms × 64 pas)
+  porte-episodique       ✅                         162 s    ✅ la porte C6 est franchie — et elle dit ses conditions : 300 états consécutifs d'un
+  porte-flux             ✅                          19 s    mode 4 — lot en listes           4.45e-3  ✅  (réf 60.8135 / deux nœuds 60.5427)
+  porte-fusion           ✅                           7 s    ✅ v1 refusée (code 2), trace seule refusée (code 2)
+  porte-gain             ✅                         341 s    ✅ drapeau VIVANT mais conditionnel : 0 casse (29.0206 → 1297.5437), 24 améliore (27.4439), san
+  ```
+
+### 🤖 Assistant
+
+⏵ Je lance l'expérience de mémoire (signal de 4 096 pas, mode récurrent) pendant que la passe continue
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && T=/tmp/periph3; rm -rf $T; mkdir -p $T\npython3 -c \"\nimport random; random.seed(11)\nopen('$T/bruit4096.txt','w').write('\\n'.join(f'{random.uniform(-2,2):.4f}' for _ in range(4096)))\"\ntime ./drave-core/target/release/drave model … [384 caractères tronqués]`
+
+  ```
+périphérie        : 4096 pas · canal 0 · gain 1 · délai 0 · RÉCURRENT · sortie /tmp/periph3/rec.f32 (états de 896 canaux)
+  paires par pas    : 357.8 M (la métrique du plan : poids × activation par décision)
+  lecture v[t]    RMSE   0.1542 · R² +0.982 ✅  ← injecté
+  lecture v[t-8]  RMSE   1.4749 · R² -0.611 —
+  lecture v[t+1]  RMSE   1.9097 · R² -1.704 ✅ (bas, attendu)  ← TÉMOIN : ne doit PAS être lisible
+[stderr]
+
+real	3m36,590s
+user	32m23,630s
+sys	0m0,157s
+  ```
+
+### 🤖 Assistant
+
+⏵ Lecture linéaire du passé : R² −0,611 ; je teste maintenant la lecture NON linéaire (l'information est-elle tordue ou absente ?)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 1200 /home/stephane/gpu-env/bin/python tools/peripherie_memoire.py --signal /tmp/periph3/bruit4096.txt --etats /tmp/periph3/rec.f32 --lag 8 --cachee 256 --epoques 300 2>&1 | tail -14", "description": "Test nonlinear memory re … [29 caractères tronqués]`
+
+  ```
+apprentissage sur les 2048 premiers pas, mesure sur les 2048 derniers
+
+cible                      lecture           RMSE       R²
+v[t]   (le présent)        linéaire        0.1542   +0.982
+                           non linéaire    0.1048   +0.992
+v[t-8] (la mémoire)        linéaire        1.4749   -0.611
+                           non linéaire    1.5067   -0.681
+v[t+1] (TÉMOIN avenir)     linéaire        1.9097   -1.704
+                           non linéaire    1.6029   -0.905
+
+appareil : cuda
+Lecture : si le PRÉSENT est lisible et la MÉMOIRE non, l'information n'est pas dans
+l'état — aucun entraînement de lecture ne la fera apparaître. Si le TÉMOIN avenir est
+lisible, c'est le protocole qui fuit.
+  ```
+
+### 🤖 Assistant
+
+⏵ Verdict net : le passé n'est pas dans l'état, même non linéairement (R² −0,68) — je consigne
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"reports/rapport-c8-peripherie.md\"); s = p.read_text()\nancre = \"## 3. Ce que ça change pour C8\"\nsec = \"\"\"## 2 bis. La mémoire est-elle APPRENABLE ? Non : elle n'est pas l … [4986 caractères tronqués]`

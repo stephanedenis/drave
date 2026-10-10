@@ -34,8 +34,9 @@
 > `--entree signal:F`, `--entree-canal/-gain/-jeton`, `--delai N`, `--recurent`, `--sortie F`, avec
 > la porte `tools/porte-peripherie.sh` (déterminisme au bit près, entrée constante ⇒ sortie
 > constante, délai exact, quatre refus, paires par décision). La **tâche fermée** est mesurée :
-> le signal **courant** est dans la sortie (R² 0,913 en récurrent) mais **pas** le signal d'il y a
-> 8 pas (R² −0,973) — la poursuite demande un **entraînement**, pas du câblage. Détail :
+> le signal **courant** est dans la sortie (R² **0,992** en récurrent, 4 096 pas) mais **pas** le
+> signal d'il y a 8 pas (R² **−0,681**, et une lecture **non linéaire** ne le trouve pas non plus)
+> — la mémoire n'est pas dans l'état : la poursuite demande un **entraînement**, pas du câblage. Détail :
 > [`reports/rapport-c8-peripherie.md`](../reports/rapport-c8-peripherie.md) · conception :
 > [`docs/note-peripherie-c8.md`](note-peripherie-c8.md).
 | **C9** | pont entre régions | ✅ fait | **448 fibres = +2,81 %** et **÷1,8** en octets ; falaise **entre 448 et 392** ; à budget égal **quantifier bat élaguer de 83 %** | `porte-pont.sh` · fiche 25 |
