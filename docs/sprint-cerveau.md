@@ -808,6 +808,34 @@ réorganisation, ni la congestion. La gigue mesurée est un **plancher** pour ce
 
 ---
 
+## COMBIEN DE MESSAGES COÛTE UN PAS ? — MESURÉ (11 octobre 23 h 30) : quatre
+
+Le protocole écrit la trame en **DEUX** fois (`write_all(&tete)` puis `write_all(&corps)`) : sur un
+lien qui facture par message, ces deux écritures se paient deux fois. La pente délai → pas médian
+donne le nombre équivalent de messages :
+
+| délai par message | pas médian | pente |
+|---|---|---|
+| 0 ms | 14,87 ms | — |
+| 2 ms | 23,35 ms | **4,24 messages** |
+| 5 ms | 34,93 ms | **4,01** |
+| 10 ms | 44,83 ms | **3,00** |
+
+1. **à petit délai, un pas coûte ~4 messages** : en-tête ET corps, à l'aller ET au retour — le
+   chiffre recoupe exactement les deux `write_all` de chaque direction ;
+2. **la pente décroît avec le délai** (4,24 → 3,00) : ce n'est pas le protocole qui change, c'est
+   le PROXY, qui endort après chaque `recv` et laisse le système regrouper. La mesure est donc un
+   **majorant**, et le petit délai est le plus fidèle ;
+3. **conséquence actionnable** : écrire en-tête et corps en **UNE** fois ferait payer ~2 messages
+   au lieu de ~4 ⇒ sur un lien à 5 ms/message, **≈ 25 ms au lieu de ≈ 35 ms**, soit **−29 % de la
+   durée du pas**, sans toucher ni au calcul ni aux octets.
+
+**Ce qui reste à faire** : la fusion des deux écritures (trois émetteurs : jeton, lot dense, lot
+en listes), traitée comme une modification de protocole — mesure avant/après, `porte-flux.sh` en
+garde-fou.
+
+---
+
 ## ▶ PROCHAINE ACTION (à lire en premier)
 
 État au **11 octobre 6 h 45** · **21 portes, toutes vertes** (`tools/porte-*.sh`) ·

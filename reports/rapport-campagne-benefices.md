@@ -2664,6 +2664,40 @@ condition laissée ouverte ci-dessus est levée :
 perte, ni la réorganisation, ni la congestion — un vrai réseau fait les trois. La gigue mesurée
 est donc un **plancher** pour un lien de ce RTT.
 
+## 45. Combien de MESSAGES coûte un pas ? Quatre — et c'est l'en-tête écrit à part
+
+Le protocole écrit la trame en **deux fois** : `s.write_all(&tete)?` puis `s.write_all(&corps)?`.
+Sur un lien qui facture **par message** (et non par octet), ces deux écritures se paient deux
+fois. La question est donc chiffrable : **combien de messages par pas le protocole coûte-t-il ?**
+
+**Protocole** : le proxy ajoute un délai **par message**, on mesure le pas médian, et la pente
+donne le nombre équivalent de messages.
+
+| délai par message | pas médian | pente (messages équivalents) |
+|---|---|---|
+| 0 ms | 14,87 ms | — |
+| 2 ms | 23,35 ms | **4,24** |
+| 5 ms | 34,93 ms | **4,01** |
+| 10 ms | 44,83 ms | **3,00** |
+
+**Trois lectures :**
+
+1. **à petit délai, un pas coûte ~4 messages** : en-tête **et** corps, à l'aller **et** au retour.
+   Le chiffre recoupe exactement les deux `write_all` de chaque direction — la mesure ne fait que
+   confirmer ce que le code fait, mais elle le **chiffre** ;
+2. **la pente DÉCROÎT avec le délai** (4,24 → 3,00) : ce n'est pas le protocole qui change, c'est
+   le **proxy**, qui endort après chaque `recv` et laisse donc le système regrouper plusieurs
+   écritures quand le délai est grand. La mesure donne donc un **majorant** du nombre de messages
+   par pas, et c'est le petit délai qui est le plus fidèle ;
+3. **conséquence chiffrée, et elle est actionnable** : si l'en-tête et le corps étaient écrits en
+   **une seule** fois, le pas paierait ~2 messages au lieu de ~4 — soit, sur un lien à
+   5 ms/message, **≈ 25 ms au lieu de ≈ 35 ms**, une économie de **~29 % de la durée du pas** qui
+   ne touche ni le calcul ni les octets, seulement le **nombre d'envois**.
+
+**Ce qui n'est pas fait** : la fusion des deux écritures. Elle touche le chemin d'envoi des trois
+émetteurs (jeton, lot dense, lot en listes), donc elle se traite comme une modification de
+protocole — mesure avant/après obligatoire, et `porte-flux.sh` en garde-fou.
+
 ## Annexe — manifeste des journaux
 
 Les journaux bruts sont dans `/tmp/campagne24/`. **59 fichiers d'étape (79 Kio)**,

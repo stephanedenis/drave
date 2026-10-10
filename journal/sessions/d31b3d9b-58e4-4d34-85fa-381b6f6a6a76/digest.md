@@ -31545,3 +31545,59 @@ pilote code=0
 ⏵ Avec 5 ms de RTT : gigue **14,8 ms sur 30,2 (49 %)** — la gigue croît plus vite que la latence
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\n\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\na = \"\"\"**Ce que cette mesure ne dit pas** : elle porte sur une machine unique (les deux « régions » sont\ndeux  … [5059 caractères tronqués]`
+
+  ```
+gigue RTT consignee
+c4bb56a La gigue avec un VRAI RTT : 14,8 ms sur 30,2 (49 %) — elle croit plus vite que la latence
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 36 livré : la gigue avec un **vrai RTT** — 14,8 ms sur 30,2 (49 %)
+
+**Ce round** — 1 commit poussé. La condition laissée ouverte au round 35 (« la gigue mesurée est celle de l'ordonnanceur système, pas du réseau ») est levée avec `tools/proxy_latence.py` à **5 ms par message** :
+
+| phase | sans RTT | **avec 5 ms/message** |
+|---|---|---|
+| aller (pilote → nœud) | 0,13 ms | **5,29 ms** · p90 **10,38** · max 10,46 |
+| pas complet | 17,67 ms | **30,24 ms** · p90 38,98 · max 39,47 |
+| **gigue du pas** | 7,00 ms (**40 %**) | **14,80 ms (**49 %**)** |
+
+1. **L'instrument est de nouveau étalonné** : 5 ms injectés par message ⇒ 5,29 ms mesurés à l'aller.
+2. **Le p90 de l'aller vaut le double de la médiane** (10,38 contre 5,29) : le proxy endort chaque message, et une trame qui traverse les deux sens paie deux fois — la distribution est **bimodale**, pas bruitée.
+3. **La gigue croît plus vite que la latence** : +71 % de latence médiane pour **+111 % de gigue**, et le taux passe de 40 % à **49 %**. Un ordonnanceur asynchrone (C4) doit donc tolérer **la moitié d'un pas en irrégularité** sur un lien à 5 ms — et cette proportion **empire** avec la distance, l'inverse de l'intuition (« un lien plus lent est plus régulier »).
+
+**Ce que la mesure ne dit toujours pas**, écrit tel quel : le proxy endort **par message** ; il ne simule ni la perte, ni la réorganisation, ni la congestion. La gigue mesurée est un **plancher** pour ce RTT.
+
+**Bilan** : 36 rounds, 22 portes toutes vertes, 122 tests. Le sprint a maintenant les trois coûts d'un lien (temps, octets, paires) **déclarables et vérifiés**, un protocole v8, un instrument **étalonné à 0,2 ms**, et la **gigue chiffrée à 49 %** — tout ce qu'il faut pour attaquer l'asynchronisme réel (C4). L'objectif reste **actif**.
+
+
+## Tour 80
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 mémoire épisodique, C7 consolidation, C8 périphérie, C9 latéralité, C10 budgets, et la diffusion réseau du bus de C5 ; (b) les expériences E2-E9 de docs/biologie-pour-drave.md et docs/hebbien-differentiel-et-biologie.md ; (c) les dessins de modèle H/I/J de docs/modele-pour-drave.md ; (d) les manques du registre docs/manques.md (noyau de listes pour les experts, noyau de listes GPU, encodeurs) — l'implémenter ou la mesurer, la doter d'une porte vérifiable, la documenter, commiter, pousser, et enchaîner immédiatement sur la suivante. Contraintes : les 23 portes du dépôt et tous les tests restent verts (porte-flux.sh après toute modification du chemin d'exécution), le profil release reste le binaire de mesure, le crate reste std seul, et docs/sprint-cerveau.md reste l'état resumable mis à jour à chaque round. Ne jamais s'arrêter faute de tâches planifiées : en inventer de nouvelles, mesurables, plutôt que d'attendre."
+Round: 37/60
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 37 : combien de MESSAGES par pas ? Je mesure la pente délai → coût (le protocole écrit en deux fois)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for D in 0 2 5 10; do T=$(mktemp -d); PN=$((60000 + RANDOM % 3000)); PX=$((PN + 1)); cat > $T/topo.json <<JSON\n{\"regions\":[{\"id\":\"local\",\"couches\":[0,11],\"instance\":\"local\"},{\"id\":\"d\",\"couches\":[12,23],\"instance\" … [1398 caractères tronqués]`
+
+  ```
+délai par message 0 ms → pas médian 14.87 ms
+  délai par message 2 ms → pas médian 23.35 ms
+  délai par message 5 ms → pas médian 34.93 ms
+  délai par message 10 ms → pas médian 44.83 ms
+  ```
+
+### 🤖 Assistant
+
+⏵ Le pas paie l'équivalent de **4 messages** (en-tête + corps, dans les deux sens) — une piste chiffrée
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\n\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\na = \"## Annexe — manifeste des journaux\"\nsec = \"\"\"## 45. Combien de MESSAGES coûte un pas ? Quatre — et c'es … [5409 caractères tronqués]`
