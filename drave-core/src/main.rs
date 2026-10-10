@@ -6114,6 +6114,36 @@ indice connu : ce magasin ne sait pas refuser, il rend toujours son meilleur can
         }
         println!("{ligne}");
     }
+    // --- 5. CONSOLIDATION PAR REJEU (C7, premier pas).
+    // Rejouer les épisodes et fusionner ceux dont les clés co-activent : deux
+    // souvenirs que le même indice rappelle n'en sont qu'un. Ce qui se mesure est le
+    // PRIX de cette abstraction : le taux de compression, le rappel d'appartenance
+    // (l'épisode d'origine se retrouve-t-il dans le prototype que la lecture rend ?)
+    // et l'erreur de reconstruction.
+    println!();
+    println!("  consolidation par rejeu (fusion des épisodes qui co-activent) :");
+    for (nom, mode) in [("MOYENNE (un point abstrait)", episodique::Prototype::Moyenne),
+                        ("EXEMPLAIRE (un cas réel)", episodique::Prototype::Exemplaire)] {
+        println!("  prototype {nom} :");
+        println!("  {:>7}  {:>11}  {:>12}  {:>10}  {:>18}", "seuil", "prototypes", "compression",
+                 "rappel", "erreur de reconstr.");
+        for seuil in [1usize, 2, 4, 8, 16, 32] {
+            let (c, rap) = m.consolider_mode(seuil, mode);
+            let mut ok = 0usize;
+            for (i, e) in cles.iter().enumerate() {
+                if let Some(l) = c.lire(e) {
+                    if rap.contient(l.id as usize, i as u64) { ok += 1; }
+                }
+            }
+            println!("  {seuil:>7}  {:>11}  {:>11.1} %  {:>9.1} %  {:>17.2e}", rap.apres,
+                     100.0 * rap.taux(), 100.0 * ok as f64 / cles.len() as f64,
+                     rap.erreur_moyenne);
+        }
+    }
+    println!("  le rappel est celui de l'APPARTENANCE : la lecture doit rendre le prototype \
+qui contient l'épisode interrogé, pas un prototype voisin. Le seuil se compte en CANAUX \
+PARTAGÉS entre les clés.");
+
     println!();
     println!("  ce que la courbe ne dit PAS : elle porte sur {} états consécutifs d'un seul \
 texte. Le rappel sur des épisodes venus de textes différents, ou après consolidation, n'est \

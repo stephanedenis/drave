@@ -1568,11 +1568,50 @@ documents.
 Le résultat **ne dépend donc pas d'un texte unique** : il tient sur des corpus
 différents, avec des états qui ne partagent plus le contexte du document.
 
-**Ce qui reste non mesuré, et c'est écrit** : la reconstruction de l'état d'origine à
-partir d'une clé dilatée (l'expansion n'est utilisée que pour la clé, les valeurs
-stockées sont les états exacts), le rappel après consolidation (C7), et le
-comportement quand le magasin grandit au point que les statistiques d'égalisation
-doivent être recalculées.
+### 24 quater. Consolider par rejeu : garder un CAS bat résumer par une MOYENNE
+
+C7, au sens du plan, veut rejouer des épisodes pour modifier des **poids**. Ce n'est
+pas ce qui est mesuré ici, et il faut dire pourquoi : le moteur n'entraîne pas, et
+les règles locales qu'il possède déjà (hebbien différentiel) ont été mesurées
+**dégradantes** sur la perplexité (`docs/hebbien-differentiel-et-biologie.md` :
+8,8246 avec la règle contre 8,3869 sans). Rejouer pour ajouter du bruit n'est pas
+consolider. Ce qui se mesure ici est la consolidation **de la mémoire** : rejouer les
+épisodes et **fusionner ceux dont les clés co-activent** — deux souvenirs que le même
+indice rappelle n'en sont qu'un.
+
+La fusion demande une décision, et les deux réponses possibles ne se valent pas.
+300 états, clés de 64 canaux sur 16 384 (expansion + égalisation) :
+
+| seuil (canaux partagés) | **MOYENNE** : prototypes · compression · rappel | **EXEMPLAIRE** : prototypes · compression · rappel |
+|---|---|---|
+| 1 | 39 · 13,0 % · **22,3 %** | 21 · **7,0 %** · **87,0 %** |
+| 2 | 116 · 38,7 % · 13,3 % | 57 · 19,0 % · **87,3 %** |
+| 4 | 176 · 58,7 % · 18,7 % | 107 · 35,7 % · **93,0 %** |
+| 8 | 200 · 66,7 % · 34,0 % | 154 · 51,3 % · **95,3 %** |
+| 16 | 234 · 78,0 % · 56,0 % | 203 · 67,7 % · **97,3 %** |
+| 32 | 274 · 91,3 % · 82,7 % | 269 · 89,7 % · **98,7 %** |
+
+Le « rappel » est le rappel d'**appartenance** : la lecture doit rendre le prototype
+qui *contient* l'épisode interrogé.
+
+**Le résultat, et son mécanisme.** L'exemplaire (garder le premier cas absorbé, clé
+comprise) **compresse plus ET rappelle mieux** que la moyenne, à tous les seuils. La
+raison est mécanique et se vérifie dans le tableau : la clé d'une **moyenne** est
+recalculée depuis un point qui n'a jamais existé, donc elle ne coïncide avec la clé
+d'**aucun** membre — un indice venu d'un membre ne retrouve plus son prototype
+(22,3 % à seuil 1, et **13,3 %** à seuil 2, pire qu'à seuil 1 : la moyenne s'éloigne
+quand elle agrège). L'exemplaire, lui, garde la clé d'un cas réel : 7 % du magasin
+suffit à 87 % de rappel, et 51 % du magasin à 95,3 %.
+
+Autrement dit : **abstraire par moyennage détruit la rappelabilité**, et ce n'est pas
+une opinion sur la mémoire, c'est une propriété de la clé. Cela reproduit, avec un
+mécanisme mesuré, le débat classique entre théorie du prototype et théorie des
+exemplaires — et tranche dans le sens des exemplaires *pour cette forme de mémoire*.
+
+**Ce qui reste non mesuré, et c'est écrit** : si un prototype-exemplaire continue de
+servir après plusieurs cycles de rejeu (consolidation itérative), si la fusion
+améliore ou dégrade le **rappel depuis un indice bruité** (ici l'indice est toujours
+non dégradé), et la reconstruction de l'état d'origine à partir d'une clé dilatée.
 
 **Conditions** : Qwen2.5-0.5B-Q8, expansion par hachage (8 entrées signées par canal),
 égalisation calculée **sur le magasin** (en déploiement il faut donc la stocker avec

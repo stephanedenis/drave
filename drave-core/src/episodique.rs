@@ -56,6 +56,48 @@ pub struct Lecture {
     pub comparaisons: usize,
 }
 
+/// Comment un prototype est formé à partir de ses membres. Les deux réponses sont
+/// défendables, et elles ne se valent pas — c'est pour cela qu'elles se mesurent.
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub enum Prototype {
+    /// La **moyenne** des membres : un point qui n'a jamais existé, mais qui résume.
+    /// Son prix : sa clé est recalculée depuis la moyenne, donc elle ne coïncide avec
+    /// la clé d'AUCUN membre — et c'est ce qui rend le prototype difficile à
+    /// rappeler depuis un indice qui, lui, vient d'un membre.
+    Moyenne,
+    /// L'**exemplaire** : le premier membre absorbé, gardé tel quel, clé comprise.
+    /// C'est la théorie des exemplaires en psychologie de la catégorisation — on ne
+    /// stocke pas un prototype abstrait, on stocke des cas et on généralise à la
+    /// lecture. Son prix : il ne résume rien, il représente.
+    Exemplaire,
+}
+
+/// Ce qu'une consolidation a produit, et ce qu'elle a coûté.
+#[derive(Debug, Clone, PartialEq)]
+pub struct Consolidation {
+    pub avant: usize,
+    pub apres: usize,
+    pub taille_max: usize,
+    /// Erreur de reconstruction relative, moyenne : ‖membre − prototype‖ / ‖prototype‖.
+    pub erreur_moyenne: f64,
+    /// Pour chaque prototype, les identifiants des épisodes qu'il a absorbés.
+    pub membres: Vec<Vec<u64>>,
+}
+
+impl Consolidation {
+    pub fn taux(&self) -> f64 {
+        if self.avant == 0 { return 1.0; }
+        self.apres as f64 / self.avant as f64
+    }
+    /// L'épisode `id` se retrouve-t-il dans le prototype que la lecture rend ?
+    pub fn contient(&self, prototype: usize, id: u64) -> bool {
+        self.membres.get(prototype).map(|v| v.contains(&id)).unwrap_or(false)
+    }
+    pub fn indice_de(&self, id: u64) -> Option<usize> {
+        self.membres.iter().position(|v| v.contains(&id))
+    }
+}
+
 /// Le magasin. `k` est le nombre de canaux gardés par clé — le seul réglage, et
 /// c'est lui qui arbitre entre séparation (k petit) et robustesse au bruit (k grand).
 #[derive(Debug, Clone)]
@@ -257,6 +299,124 @@ impl Episodique {
             }
         }
         n
+    }
+
+    /// CONSOLIDE par REJEU : les épisodes dont les clés co-activent au-delà d'un
+    /// seuil sont fusionnés en un **prototype**.
+    ///
+    /// POURQUOI CETTE FORME DE CONSOLIDATION, ET PAS UNE AUTRE. C7, au sens du plan,
+    /// veut rejouer des épisodes pour modifier des **poids** — mais le moteur
+    /// n'entraîne pas, et les règles locales qu'il possède déjà (hebbien
+    /// différentiel) ont été mesurées **dégradantes** sur la perplexité
+    /// (`docs/hebbien-differentiel-et-biologie.md` : 8,8246 avec la règle contre
+    /// 8,3869 sans). Rejouer pour ajouter du bruit n'est pas consolider. Ce qui se
+    /// mesure ici est la consolidation de la MÉMOIRE elle-même, et elle a une
+    /// définition précise : **fusionner les épisodes qui co-activent** — deux
+    /// épisodes que le même indice rappelle ne sont qu'un souvenir, pas deux.
+    ///
+    /// Ce que la fusion coûte, et il faut le dire : un prototype est la **moyenne**
+    /// de ses membres, donc la lecture d'un épisode fusionné ne rend plus son état
+    /// exact — c'est précisément le but (abstraire), et c'est précisément ce qu'il
+    /// faut mesurer : le taux de compression, le rappel d'appartenance, et l'erreur
+    /// de reconstruction.
+    pub fn consolider(&self, seuil: usize) -> (Episodique, Consolidation) {
+        self.consolider_mode(seuil, Prototype::Moyenne)
+    }
+
+    /// Comme `consolider`, en choisissant la forme du prototype.
+    pub fn consolider_mode(&self, seuil: usize, mode: Prototype) -> (Episodique, Consolidation) {
+        let mut protos: Vec<Episode> = Vec::new();
+        let mut membres: Vec<Vec<u64>> = Vec::new();
+        // Les moyennes sont accumulées en f64, pas en f32 : une moyenne mise à jour
+        // en flottant simple dérive avec le nombre de membres, et la clé du prototype
+        // — recalculée à chaque fusion — finirait par décrire un état qui n'est plus
+        // celui du prototype. La valeur écrite est la moyenne des sommes, une fois.
+        let mut sommes: Vec<Vec<f64>> = Vec::new();
+        let mut index: BTreeMap<u32, Vec<usize>> = BTreeMap::new();
+        // Un épisode à la fois, dans l'ordre d'écriture : la consolidation est un
+        // REJEU, donc son résultat ne doit pas dépendre d'un parcours de table.
+        for e in &self.episodes {
+            let mut vus: BTreeMap<usize, usize> = BTreeMap::new();
+            for c in &e.cle {
+                if let Some(postes) = index.get(c) {
+                    for i in postes { *vus.entry(*i).or_insert(0) += 1; }
+                }
+            }
+            let mut meilleur = 0usize;
+            let mut cible: Option<usize> = None;
+            for (i, rec) in vus.iter() {
+                if *rec > meilleur { meilleur = *rec; cible = Some(*i); }
+            }
+            // Le seuil se compte en CANAUX PARTAGÉS. `seuil = 1` fusionne dès qu'un
+            // canal co-active — c'est le réglage le plus agressif ; un seuil plus
+            // grand exige que les deux épisodes se ressemblent vraiment.
+            if meilleur < seuil.max(1) { cible = None; }
+            match cible {
+                Some(i) => {
+                    membres[i].push(e.id);
+                    for (k, x) in e.valeur.iter().enumerate() { sommes[i][k] += *x as f64; }
+                    if mode == Prototype::Moyenne {
+                        let n = membres[i].len() as f64;
+                        for (k, v) in protos[i].valeur.iter_mut().enumerate() {
+                            *v = (sommes[i][k] / n) as f32;
+                        }
+                        let nouvelle = cle(&protos[i].valeur, self.k);
+                        // La clé du prototype est recalculée depuis sa NOUVELLE valeur :
+                        // un prototype est un état, pas l'étiquette d'un de ses membres.
+                        // L'ancienne clé est retirée de l'index, sinon le prototype
+                        // resterait joignable par un état qu'il n'est plus.
+                        for c in &protos[i].cle.clone() {
+                            if let Some(l) = index.get_mut(c) { l.retain(|x| *x != i); }
+                        }
+                        for c in &nouvelle { index.entry(*c).or_default().push(i); }
+                        protos[i].cle = nouvelle;
+                    }
+                    // En mode EXEMPLAIRE, ni la valeur ni la clé ne bougent : le
+                    // prototype reste le premier membre absorbé.
+                }
+                None => {
+                    let i = protos.len();
+                    for c in &e.cle { index.entry(*c).or_default().push(i); }
+                    sommes.push(e.valeur.iter().map(|x| *x as f64).collect());
+                    protos.push(e.clone());
+                    membres.push(vec![e.id]);
+                }
+            }
+        }
+        // Erreur de reconstruction : ‖membre − prototype‖ / ‖prototype‖, moyenne sur
+        // tous les membres. C'est le prix de l'abstraction, et il se mesure.
+        let mut erreur = 0.0f64;
+        let mut n_erreur = 0usize;
+        let mut taille_max = 0usize;
+        for (i, m) in membres.iter().enumerate() {
+            taille_max = taille_max.max(m.len());
+            let norme: f64 = protos[i].valeur.iter().map(|x| (*x as f64).powi(2)).sum::<f64>().sqrt();
+            for id in m {
+                if let Some(e) = self.par_id(*id) {
+                    let d: f64 = e.valeur.iter().zip(protos[i].valeur.iter())
+                        .map(|(a, b)| ((*a - *b) as f64).powi(2)).sum::<f64>().sqrt();
+                    if norme > 1e-12 { erreur += d / norme; n_erreur += 1; }
+                }
+            }
+        }
+        let mut magasin = Episodique::nouveau(self.k, self.dim);
+        for (i, p) in protos.into_iter().enumerate() {
+            let mut p = p;
+            p.id = i as u64;
+            let j = magasin.episodes.len();
+            for c in &p.cle { magasin.index.entry(*c).or_default().push(j); }
+            magasin.episodes.push(p);
+        }
+        magasin.prochain_id = magasin.episodes.len() as u64;
+        let avant = self.episodes.len();
+        let apres = magasin.episodes.len();
+        (magasin, Consolidation {
+            avant,
+            apres,
+            taille_max,
+            erreur_moyenne: if n_erreur > 0 { erreur / n_erreur as f64 } else { 0.0 },
+            membres,
+        })
     }
 
     /// Écrit le magasin. Les valeurs sont écrites en **bits** (`0x…` sur les octets
@@ -490,6 +650,53 @@ mod tests {
         let e = expandre(&plat, 256, 8);
         assert!(e.iter().any(|x| *x > 0.0) && e.iter().any(|x| *x < 0.0),
                 "avec des signes, une entrée constante doit donner des sorties des deux signes");
+    }
+
+    #[test]
+    fn consolider_fusionne_les_episodes_identiques() {
+        // Deux copies exactes du même état : elles DOIVENT devenir un seul prototype,
+        // et le rappel d'appartenance doit dire lequel.
+        let v = vec![1.0f32, -2.0, 0.5, 3.0, -0.25, 0.75, 1.5, -1.0];
+        let mut m = Episodique::nouveau(4, 8);
+        let a = m.ecrire("x", 0, &v, 0.0);
+        let b = m.ecrire("x", 1, &v, 0.0);
+        let (c, rapport) = m.consolider(1);
+        assert_eq!(rapport.avant, 2);
+        assert_eq!(rapport.apres, 1, "deux copies exactes doivent donner UN prototype");
+        assert_eq!(rapport.taille_max, 2);
+        assert!(rapport.erreur_moyenne < 1e-6, "erreur {}", rapport.erreur_moyenne);
+        assert!(rapport.contient(0, a) && rapport.contient(0, b));
+        assert_eq!(rapport.indice_de(b).unwrap(), 0);
+        // et le prototype doit être joignable par la clé des deux membres
+        assert_eq!(c.lire(&v).unwrap().id, 0);
+        assert_eq!(c.len(), 1);
+    }
+
+    #[test]
+    fn consolider_avec_un_seuil_haut_ne_fusionne_rien() {
+        let mut a = Alea::nouveau(23);
+        let mut m = Episodique::nouveau(16, 256);
+        for i in 0..40 { m.ecrire("x", i, &a.vecteur(256), 0.0); }
+        let (c, rapport) = m.consolider(1000);
+        assert_eq!(rapport.apres, 40, "un seuil inatteignable ne doit rien fusionner");
+        assert_eq!(rapport.taille_max, 1);
+        assert!(rapport.erreur_moyenne < 1e-9, "rien fusionné ⇒ aucune erreur");
+        assert_eq!(c.len(), 40);
+    }
+
+    #[test]
+    fn consolider_est_un_rejeu_deterministe() {
+        let mut a = Alea::nouveau(29);
+        let mut m = Episodique::nouveau(12, 512);
+        for i in 0..60 { m.ecrire("x", i, &a.vecteur(512), 0.0); }
+        let (c1, r1) = m.consolider(3);
+        let (c2, r2) = m.consolider(3);
+        assert_eq!(r1, r2, "deux consolidations du même magasin doivent être identiques");
+        assert_eq!(c1.len(), c2.len());
+        for i in 0..c1.len() {
+            assert_eq!(c1.episodes_pub()[i].valeur, c2.episodes_pub()[i].valeur);
+            assert_eq!(c1.episodes_pub()[i].cle, c2.episodes_pub()[i].cle);
+        }
     }
 
     #[test]

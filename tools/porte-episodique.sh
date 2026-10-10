@@ -52,7 +52,10 @@ printf '%s\n' "$S" | grep -E "^ +[0-9]+ +[0-9]" | sed 's/^/  /'
 printf '%s\n' "$S" > "$T/s1.txt"
 python3 - "$T/s1.txt" <<'PY' || exit 1
 import re, sys
-lignes = [l for l in open(sys.argv[1]).read().splitlines() if re.match(r"^\s+\d+\s+\d", l)]
+# Motif SERRÉ (« N  x.x % ( ») : depuis C7, la sortie contient aussi des lignes de
+# consolidation qui commencent par deux nombres, et les confondre faisait lire une
+# ligne de consolidation comme une ligne de courbe (attrapé par la porte elle-même).
+lignes = [l for l in open(sys.argv[1]).read().splitlines() if re.match(r"^\s+\d+\s+[\d.]+ % \(", l)]
 if not lignes:
     sys.exit("  ❌ aucune ligne de courbe lue")
 # dernière ligne = le plus grand N : c'est là que la dégradation se voit
@@ -127,7 +130,7 @@ if not sep: sys.exit("  ❌ mesure de séparation absente")
 part = float(sep.group(1)) / int(sep.group(2))
 if part > 0.10:
     sys.exit("  ❌ la séparation doit tomber sous 10 %% de la clé, elle est à %.1f %%" % (100*part))
-lignes = [l for l in t.splitlines() if re.match(r"^\s+\d+\s+\d", l)]
+lignes = [l for l in t.splitlines() if re.match(r"^\s+\d+\s+[\d.]+ % \(", l)]
 m = re.search(r"co\u00fbt (\d+) cand\. \((\d+) % du magasin\)", lignes[-1])
 if not m:
     m = re.search(r"co\u00fbt (\d+) cand\. \((\d+) % du magasin\)", lignes[-1].replace("û", "u"))
@@ -141,6 +144,39 @@ if vals[2] < 90.0:
 print("  ✅ round-trip exact (%d/%d), séparation %.1f %% de la clé, élagage %d %% (%d candidats), rappel 25 %% : %s %%"
       % (n, n, 100*part, 100-pct, cand, vals[2]))
 PYVERIF
+
+echo "=== 7. consolidation par rejeu : l'EXEMPLAIRE doit battre la MOYENNE ==="
+# Deux façons de faire un prototype, et une prédiction falsifiable : garder un CAS
+# RÉEL (exemplaire) doit à la fois compresser PLUS et rappeler MIEUX qu'une moyenne,
+# parce que la clé d'une moyenne ne coïncide avec la clé d'aucun membre.
+python3 - "$T/s3.txt" <<'PYCONS' || exit 1
+import re, sys
+t = open(sys.argv[1]).read()
+blocs = re.findall(r"prototype (MOYENNE|EXEMPLAIRE)[^\n]*\n(.*?)(?=\n  prototype|\n  le rappel)", t, re.S)
+if len(blocs) != 2:
+    sys.exit("  ❌ les deux blocs de consolidation sont absents ou illisibles")
+mes = {}
+for nom, corps in blocs:
+    lignes = [l for l in corps.splitlines() if re.match(r"^\s+\d+\s+\d+", l)]
+    # ligne du seuil 1 : prototypes, compression, rappel
+    # Les colonnes sont « seuil prototypes compression % rappel % erreur » : le
+    # signe % est un CHAMP à part, donc la compression est ch[2] et le rappel ch[4].
+    ch = lignes[0].split()
+    if len(ch) < 5 or ch[3] != "%" or ch[5] != "%":
+        sys.exit("  \u274c ligne de consolidation inattendue : " + lignes[0])
+    mes[nom] = (int(ch[1]), float(ch[2]), float(ch[4]))
+pm, cm, rm = mes["MOYENNE"]
+pe, ce, re_ = mes["EXEMPLAIRE"]
+print("  MOYENNE    : seuil 1 -> %d prototypes (%.1f %% du magasin), rappel %.1f %%" % (pm, cm, rm))
+print("  EXEMPLAIRE : seuil 1 -> %d prototypes (%.1f %% du magasin), rappel %.1f %%" % (pe, ce, re_))
+if re_ <= rm:
+    sys.exit("  ❌ l'exemplaire ne rappelle pas mieux que la moyenne (%.1f %% contre %.1f %%)" % (re_, rm))
+if re_ < 80.0:
+    sys.exit("  ❌ le rappel d'appartenance de l'exemplaire doit rester >= 80 %%, il est à %.1f %%" % re_)
+if ce > 30.0:
+    sys.exit("  ❌ l'exemplaire doit compresser sous 30 %% du magasin, il est à %.1f %%" % ce)
+print("  ✅ à compression comparable, l'exemplaire rappelle : %.1f %% contre %.1f %%" % (re_, rm))
+PYCONS
 
 echo
 echo "  ✅ la porte C6 est franchie — et elle dit ses conditions : $N états consécutifs d'un"

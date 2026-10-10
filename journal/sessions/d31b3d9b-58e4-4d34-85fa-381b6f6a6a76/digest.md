@@ -23618,3 +23618,427 @@ test result: ok. 119 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fi
 ⏵ C6 : porte 6/6 et 119 tests verts — je commite l'expansion et le multi-documents
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src/main.rs drave-core/src/episodique.rs tools/porte-episodique.sh reports/rapport-campagne-benefices.md docs/sprint-cerveau.md && git commit -q -m \"C6 suite : l'index élude enfin — et il fallait TROIS ingrédie … [2564 caractères tronqués]`
+
+  ```
+3446b94 C6 suite : l'index élude enfin — et il fallait TROIS ingrédients, pas un
+  ```
+
+### 🤖 Assistant
+
+⏵ C6bis : la mémoire doit SERVIR — je cherche le corpus « aiguille » de la campagne
+
+- **bash** `{"command": "ls /tmp/campagne24/ | grep -iE \"aiguille|needle|niah\" | head -20; ls /tmp/campagne24/*.txt | wc -l; grep -n \"aiguille\" /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/*.sh | head -10", "description": "Find needle test files"}`
+
+  ```
+aiguille_long.log
+batch3_niah.sh
+niah_1024_01.log
+niah_1024_0.1.txt
+niah_1024_05.log
+niah_1024_0.5.txt
+niah_1024_09.log
+niah_1024_0.9.txt
+niah_2048_01.log
+niah_2048_0.1.txt
+niah_2048_05.log
+niah_2048_0.5.txt
+niah_2048_09.log
+niah_2048_0.9.txt
+niah_4096_01.log
+niah_4096_0.1.txt
+niah_4096_05.log
+niah_4096_0.5.txt
+niah_4096_09.log
+niah_4096_0.9.txt
+78
+  ```
+
+- **bash** `{"command": "cd /tmp/campagne24 && ls niah_*.txt | head -30 && echo ---- && head -c 300 niah_4096_01.txt && echo && echo ---- && wc -c niah_*.txt | tail -3 && grep -rn \"niah_4096_01\" /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/*.sh /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/ … [75 caractères tronqués]`
+
+  ```
+niah_1024_0.1.txt
+niah_1024_0.5.txt
+niah_1024_0.9.txt
+niah_2048_0.1.txt
+niah_2048_0.5.txt
+niah_2048_0.9.txt
+niah_4096_0.1.txt
+niah_4096_0.5.txt
+niah_4096_0.9.txt
+niah_512_0.1.txt
+niah_512_0.5.txt
+niah_512_0.9.txt
+----
+[stderr]
+head: cannot open 'niah_4096_01.txt' for reading: No such file or directory
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /tmp/campagne24 && head -c 400 niah_4096_0.5.txt && echo && echo \"---- taille:\" && wc -c niah_4096_0.5.txt && grep -rn \"aiguille\\|niah\" /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mesure_aiguille.sh 2>/dev/null | head -20; ls /home/stephane/Data13TB/stephane/GitHub/Qtr … [77 caractères tronqués]`
+
+  ```
+Y Pants were an American all-female no wave band from New York City active from 1979 to 1982. The trio, made up of photographer/musician Barbara Ess, visual artist Virginia Piersol (aka Virge Piersol), and filmmaker Gail Vachon, developed a unique sound via their acoustic toy instrumentation of toy piano, ukulele and a paper-headed Mickey Mouse drum kit, augmented by electric bass guitar, Casio ke
+---- taille:
+16569 niah_4096_0.5.txt
+aiguille.py
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -40 tools/aiguille.py && echo ---- && grep -rn \"aiguille.py\" tools/*.sh | head -5", "description": "Read needle protocol script"}`
+
+  ```
+#!/usr/bin/env python3
+"""Aiguille dans la botte de foin — version 2, celle qui mesure vraiment.
+
+La perplexité ne dit pas si un modèle RETROUVE une information. Ce script plante
+un code à une profondeur donnée dans un contexte long, puis le redemande.
+
+Ce qui a changé par rapport à la v1 (mesurée et arrêtée) :
+
+1. **le remplissage est du vrai texte VARIÉ** (`data/wikitext2_test.txt`), et non
+   la même phrase recopiée jusqu'à la longueur voulue. Un remplissage répété ne
+   teste rien : le modèle pouvait répondre en devinant la structure. Chaque sonde
+   prend en plus une FENÊTRE DIFFÉRENTE du corpus, pour que les sondes ne
+   partagent pas leur remplissage ;
+2. **la réponse est longue** (`--n 40` par défaut) : un code peut sortir au
+   deuxième ou troisième jeton, et s'arrêter à 8 jetons faisait échouer des
+   sondes que le modèle savait résoudre ;
+3. **le préremplissage par lots** (`--lot`) rend chaque sonde abordable : le
+   moteur ne l'utilisait que pour la perplexité ;
+   ⚠️ et depuis le sprint 4, le décalage de fenêtre est RÉELLEMENT appliqué (il
+   comparait à une marge de 400 000 caractères pour un corpus qui en fait 353 778,
+   donc il remettait l'offset à zéro à chaque so
+… [621 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ C7 : le moteur a déjà des options hebbiennes — je regarde ce qu'elles font avant de bâtir la consolidation
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"hebb_layer\\|hebb_eta\\|hebb_diff\\|hebb_q\\|hebb_out\\|hebb_clamp\" drave-core/src/main.rs | head -25 && echo ==== && grep -rn \"hebb\" drave-core/src/model.rs | head -15", "description": "Inspect Hebbian options"}`
+
+  ```
+76:fn rapport_hebb_diff(mdl: &model::Model) {
+77:    let Some(hd) = mdl.hebb_diff.as_ref() else { return };
+757:    patch: Option<String>, hebb_layer: Option<usize>, hebb_q: f32,
+758:    hebb_diff: Option<usize>, hebb_eta: f32, hebb_clamp: f32,
+759:    hebb_out: String, ffn_gain: Option<(usize, f32)>, matrix: String,
+768:        n: 32, temp: 0.0, top_p: 1.0, hist: 64, hebb_q: 0.1,
+769:        hebb_out: String::from("hebb.bin"), keep: 1.0, abits: 8,
+770:        hebb_diff: None, hebb_eta: 1e-4, hebb_clamp: 1.0,
+880:            "--hebbian" => { o.hebb_layer = Some(suivant(i).parse().unwrap()); 2 }
+881:            "--hebb-diff" => { o.hebb_diff = Some(suivant(i).parse().unwrap()); 2 }
+882:            "--hebb-eta" => { o.hebb_eta = suivant(i).parse().unwrap(); 2 }
+883:            "--hebb-clamp" => { o.hebb_clamp = suivant(i).parse().unwrap(); 2 }
+884:            "--hebb-q" => { o.hebb_q = suivant(i).parse().unwrap(); 2 }
+885:            "--hebb-out" => { o.hebb_out = suivant(i).clone(); 2 }
+994:        hebb_layer, hebb_q, hebb_out, hebb_diff, hebb_eta, hebb_clamp, sans_yarn, lot, ffn_gain,
+1162:    if let Some(l) = hebb_layer {
+1165:        mdl.hebb = Some(model::Hebb::new(l, n_out, n_i
+… [1769 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ C7 : la consolidation par rejeu — fusionner les épisodes qui co-activent en prototypes
+
+- **write** `{"content": "import pathlib\n\np = pathlib.Path(\"drave-core/src/episodique.rs\")\ns = p.read_text()\n\n# ---- la structure de résultat + l'algorithme, avant `ecrire_fichier`\na = \"\"\"    /// Écrit le magasin. Les valeurs sont écrites en **bits**\"\"\"\nb = '''    /// CONSOLIDE par REJEU : les épi … [6548 caractères tronqués]`
+
+  ```
+<path>/tmp/c7_module.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+### 🤖 Assistant
+
+⏵ C7 : la moyenne incrémentale en f32 dériverait — je la remplace par des accumulateurs f64
+
+- **write** `{"content": "import pathlib\n\np = pathlib.Path(\"drave-core/src/episodique.rs\")\ns = p.read_text()\n\ndeb = s.index(\"    pub fn consolider(&self, seuil: usize) -> (Episodique, Consolidation) {\")\nfin = s.index(\"    /// Écrit le magasin. Les valeurs sont écrites en **bits**\")\n\nneuf = '''    p … [7302 caractères tronqués]`
+
+  ```
+<path>/tmp/c7_module2.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 /tmp/c7_module.py && python3 /tmp/c7_module2.py && timeout 600 cargo test --release --manifest-path drave-core/Cargo.toml 2>&1 | grep -E \"^error|^test result|FAILED|panicked|assertion\" -A 6 | head -30", "description": "Appl … [47 caractères tronqués]`
+
+  ```
+consolider() ajoute
+consolider() reecrit + 3 tests
+test result: ok. 122 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.32s
+  ```
+
+### 🤖 Assistant
+
+⏵ C7 : j'ajoute la mesure de consolidation (balayage de seuil) à l'essai
+
+- **write** `{"content": "import pathlib\n\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\n\na = \"\"\"    println!();\n    println!(\"  ce que la courbe ne dit PAS : elle porte sur {} états consécutifs d'un seul \\\\\ntexte.\"\"\"\nb = \"\"\"    // --- 5. CONSOLIDATION PAR REJEU (C7, premier p … [1574 caractères tronqués]`
+
+  ```
+<path>/tmp/c7_cli.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 /tmp/c7_cli.py && cargo build --release --manifest-path drave-core/Cargo.toml 2>&1 | grep -E \"^error\" -A 8 | head -20; timeout 900 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --episodique-essai 300 --epi … [352 caractères tronqués]`
+
+  ```
+balayage de consolidation ajoute
+[modele] 24 couches chargées en 6.822103531s — listes 0.71 Go , 12 threads
+  clés distinctes   : 300/300 (pire multiplicité 1)
+  round-trip        : 300/300 épisodes relus AU BIT PRÈS avec leur propre clé
+  séparation        : recouvrement moyen 0.38/64 entre états différents (pire 6/64, 74 paires)
+  listes de l'index : 2.0 épisodes par canal en moyenne, 13 au plus ; les 1 % de canaux les plus longs portent 4 % des entrées
+  nouveauté         : recouvrement moyen 64.0/64 pour un épisode CONNU, 16.2/64 pour un épisode JAMAIS écrit (pire des nouveaux : 40/64)
+       10   100.0 % (10.00)  coût 2 cand. (24 % du magasin) / 154 comp.   100.0 % (10.00)   100.0 % (10.00)   100.0 % (10.00)   100.0 % (10.00)
+       40   100.0 % (2.50)  coût 9 cand. (22 % du magasin) / 554 comp.   100.0 % (2.50)   100.0 % (2.50)   100.0 % (2.50)    97.5 % (2.50)
+      160   100.0 % (0.62)  coût 29 cand. (18 % du magasin) / 1834 comp.   100.0 % (0.62)   100.0 % (0.62)    98.1 % (0.62)    78.1 % (0.62)
+      300   100.0 % (0.33)  coût 51 cand. (17 % du magasin) / 3237 comp.   100.0 % (0.33)   100.0 % (0.33)    96.3 % (0.33)    69.0 % (0.33)
+  consolidation par rejeu (fusion des 
+… [841 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ C7 : le prototype moyen est mal rappelé (22 % à seuil 1) — je teste le prototype-exemplaire
+
+- **write** `{"content": "import pathlib\n\np = pathlib.Path(\"drave-core/src/episodique.rs\")\ns = p.read_text()\n\n# 1. le mode\na = \"\"\"/// Ce qu'une consolidation a produit, et ce qu'elle a coûté.\"\"\"\nb = \"\"\"/// Comment un prototype est formé à partir de ses membres. Les deux réponses sont\n/// défen … [4606 caractères tronqués]`
+
+  ```
+<path>/tmp/c7_mode.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPATCH'\nimport pathlib\np = pathlib.Path(\"/tmp/c7_mode.py\")\ns = p.read_text()\ndeb = s.index('a = \"\"\"        let mut magasin = Episodique::nouveau(self.k, self.dim);\"\"\"')\nfin = s.index('p.write_text(s)')\ns  … [376 caractères tronqués]`
+
+  ```
+no-op retiré du patch
+module : mode Prototype
+test result: ok. 122 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.31s
+  ```
+
+- **write** `{"content": "import pathlib\n\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\n\na = \"\"\"    println!();\n    println!(\"  consolidation par rejeu (fusion des épisodes qui co-activent) :\");\n    println!(\"  {:>7}  {:>11}  {:>12}  {:>10}  {:>18}\", \"seuil\", \"prototypes\", \"co … [2186 caractères tronqués]`
+
+  ```
+<path>/tmp/c7_cli2.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 /tmp/c7_cli2.py && cargo build --release --manifest-path drave-core/Cargo.toml 2>&1 | grep -E \"^error\" -A 8 | head -20; timeout 900 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --episodique-essai 300 --ep … [276 caractères tronqués]`
+
+  ```
+balayage a deux modes
+  consolidation par rejeu (fusion des épisodes qui co-activent) :
+  prototype MOYENNE (un point abstrait) :
+    seuil   prototypes   compression      rappel  erreur de reconstr.
+        1           39         13.0 %       22.3 %             3.14e0
+        2          116         38.7 %       13.3 %             1.14e0
+        4          176         58.7 %       18.7 %            3.22e-1
+        8          200         66.7 %       34.0 %            1.94e-1
+       16          234         78.0 %       56.0 %            9.32e-2
+       32          274         91.3 %       82.7 %            2.68e-2
+  prototype EXEMPLAIRE (un cas réel) :
+    seuil   prototypes   compression      rappel  erreur de reconstr.
+        1           21          7.0 %       87.0 %             1.09e0
+        2           57         19.0 %       87.3 %            7.53e-1
+        4          107         35.7 %       93.0 %            4.37e-1
+        8          154         51.3 %       95.3 %            2.75e-1
+       16          203         67.7 %       97.3 %            1.39e-1
+       32          269         89.7 %       98.7 %            3.04e-2
+  le rappel est celui de l'APPARTENANCE : la lectur
+… [327 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ C7 : l'exemplaire bat la moyenne partout (87 % vs 22 % à seuil 1) — j'ajoute le cas à la porte
+
+- **write** `{"content": "import pathlib\n\np = pathlib.Path(\"tools/porte-episodique.sh\")\ns = p.read_text()\n\na = '''echo\necho \"  \\u2705 la porte C6 est franchie'''\n\nb = '''echo \"=== 7. consolidation par rejeu : l'EXEMPLAIRE doit battre la MOYENNE ===\"\n# Deux façons de faire un prototype, et une pr\\ … [1786 caractères tronqués]`
+
+  ```
+<path>/tmp/c7_gate.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 /tmp/c7_gate.py && bash -n tools/porte-episodique.sh && python3 - <<'ENDPY'\n# vérification à blanc du parseur sur la sortie réelle\nimport re, subprocess\nsortie = open('/dev/stdin').read() if False else None\nENDPY\ntimeout … [128 caractères tronqués]`
+
+  ```
+cas 7 ajoute
+          8            1          0.3 %      100.0 %            8.39e-1
+         16            6          2.0 %       90.0 %            7.86e-1
+         32           76         25.3 %       92.0 %            3.17e-1
+          1            1          0.3 %      100.0 %             1.71e0
+          2            1          0.3 %      100.0 %             1.71e0
+          4            1          0.3 %      100.0 %             1.71e0
+          8            1          0.3 %      100.0 %             1.71e0
+         16           12          4.0 %       95.3 %            7.86e-1
+         32           97         32.3 %       89.3 %            2.96e-1
+Traceback (most recent call last):
+  File "<stdin>", line 8, in <module>
+AssertionError: 5 colonnes attendues, 2 lues
+  ```
+
+### 🤖 Assistant
+
+⏵ C7 : les lignes de consolidation ressemblent aux lignes de courbe — je resserre le motif
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n 'r\"\\^\\\\\\\\s+\\\\\\\\d+\\\\\\\\s+\\\\\\\\d\"' tools/porte-episodique.sh | head; grep -c 'if re.match(r\"^\\\\s+\\\\d+\\\\s+\\\\d\", l)' tools/porte-episodique.sh", "description": "Locate curve-line regexes in gate"}`
+
+  ```
+2
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"tools/porte-episodique.sh\")\ns = p.read_text()\nvieux = 'if re.match(r\"^\\\\s+\\\\d+\\\\s+\\\\d\", l)'\nneuf = 'if re.match(r\"^\\\\s+\\\\d+\\\\s+[\\\\d.]+ % \\\\(\", l)'\nn = … [878 caractères tronqués]`
+
+  ```
+motifs resserres : 2
+=== 1. round-trip, séparation, nouveauté (k=64) ===
+  ✅ round-trip exact (300/300) et clés deux à deux distinctes
+=== 2. le disque ne change aucune lecture ===
+  ✅ 300 lectures identiques après passage par le disque
+=== 3. le rappel décroît quand l'indice se dégrade ===
+  ✅ monotonie respectée : 100.0 % → 15.3 % (0 % → 75 % de dégradation)
+=== 4. un indice jamais écrit doit être moins bien retrouvé ===
+  ✅ connu 64.0 > jamais écrit 41.5 : le magasin distingue « je me souviens » de « ça ressemble »
+=== 5. à petit k, les collisions EXPLIQUENT les échecs de round-trip ===
+  ✅ 81 échecs, tous expliqués : 81 collisions, 0 égalités de recouvrement
+=== 6. expansion + égalisation : l'index doit ÉLUDER pour de vrai ===
+  ✅ round-trip exact (300/300), séparation 0.6 % de la clé, élagage 83 % (51 candidats), rappel 25 % : 100.0 %
+=== 7. consolidation par rejeu : l'EXEMPLAIRE doit battre la MOYENNE ===
+  ```
+
+### 🤖 Assistant
+
+⏵ C7 : je teste le parseur du cas 7 isolément sur une sortie réelle
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --episodique-essai 300 --episodique-k 64 --episodique-expansion 16384 --episodique-decorreler --episodique-normaliser --ids-file /tmp/campagne24/ids_0.5B-Q8. … [575 caractères tronqués]`
+
+  ```
+blocs trouvés : 2
+MOYENNE lignes: 6
+  première: 1           39         13.0 %       22.3 %             3.14e0
+EXEMPLAIRE lignes: 6
+  première: 1           21          7.0 %       87.0 %             1.09e0
+  ```
+
+### 🤖 Assistant
+
+⏵ C7 : je relance la porte en tâche de fond et j'écris la doc pendant ce temps
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 2400 bash tools/porte-episodique.sh > /tmp/porte_c6_full.txt 2>&1; echo \"code=$?\"; tail -25 /tmp/porte_c6_full.txt", "description": "Run gate capturing full output", "run_in_background": true}`
+
+  ```
+started background job bash-15
+  ```
+
+- **write** `{"content": "import pathlib\n\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\na = \"\"\"**Ce qui reste non mesuré, et c'est écrit** : la reconstruction de l'état d'origine à\npartir d'une clé dilatée (l'expansion n'est utilisée que pour la clé, les valeurs\nstockées  … [5437 caractères tronqués]`
+
+  ```
+<path>/tmp/c7_docs.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 /tmp/c7_docs.py && tail -20 /tmp/porte_c6_full.txt 2>/dev/null", "description": "Apply C7 docs and check gate progress"}`
+
+  ```
+docs C7 ecrites
+=== 1. round-trip, séparation, nouveauté (k=64) ===
+  ```
+
+- **job_output** `{"job_id": "bash-15", "timeout_ms": 900000, "wait": true}`
+
+  ```
+code=1
+         32           97         32.3 %       89.3 %            2.96e-1
+  ✅ monotonie respectée : 100.0 % → 15.3 % (0 % → 75 % de dégradation)
+=== 4. un indice jamais écrit doit être moins bien retrouvé ===
+  ✅ connu 64.0 > jamais écrit 41.5 : le magasin distingue « je me souviens » de « ça ressemble »
+=== 5. à petit k, les collisions EXPLIQUENT les échecs de round-trip ===
+    clés distinctes   : 219/300 (pire multiplicité 7) — 81 état(s) partagent la clé d'un autre, donc INDISCERNABLES par le contenu
+    round-trip        : 219/300 épisodes relus AU BIT PRÈS avec leur propre clé
+    échecs expliqués  : 81 par COLLISION de clés (deux états indiscernables), 0 par ÉGALITÉ de recouvrement (clés distinctes, même nombre de canaux partagés — départagées par l'identifiant le plus petit)
+  ✅ 81 échecs, tous expliqués : 81 collisions, 0 égalités de recouvrement
+=== 6. expansion + égalisation : l'index doit ÉLUDER pour de vrai ===
+  [modele] 24 couches chargées en 6.172179392s — listes 0.71 Go , 8 threads
+    expansion         : 896 → 16384 canaux de clé (8 entrées par canal, signes par hachage) ; les VALEURS restent les états exacts de dimension 896
+    égalisation       : chaque ca
+… [1256 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ C7 : indices de colonnes faux dans le parseur du cas 7 (`%` est un champ à part)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"tools/porte-episodique.sh\")\ns = p.read_text()\na = \"\"\"    ch = lignes[0].split()\n    mes[nom] = (int(ch[1]), float(ch[3]), float(ch[5]))\"\"\"\nb = \"\"\"    # Les colonne … [943 caractères tronqués]`
+
+  ```
+indices corriges
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 6, in <module>
+  File "verif", line 1
+    || exit 1
+IndentationError: unexpected indent
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib, sys\nsrc = pathlib.Path(\"tools/porte-episodique.sh\").read_text()\ncode = src.split(\"python3 - \\\"$T/s3.txt\\\" <<'PYCONS'\")[1].split(\"PYCONS\")[0]\ncode = code.replace(\"|| exit 1\", \"\")\n … [140 caractères tronqués]`
+
+  ```
+MOYENNE    : seuil 1 -> 39 prototypes (13.0 % du magasin), rappel 22.3 %
+  EXEMPLAIRE : seuil 1 -> 21 prototypes (7.0 % du magasin), rappel 87.0 %
+  ✅ à compression comparable, l'exemplaire rappelle : 87.0 % contre 22.3 %
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 2400 bash tools/porte-episodique.sh > /tmp/porte_c6_v2.txt 2>&1; echo \"code=$?\"; grep -E \"^===|✅|❌\" /tmp/porte_c6_v2.txt | tail -20", "description": "Run full gate with fixed parser", "run_in_background": true}`
+
+  ```
+started background job bash-16
+  ```
+
+- **job_output** `{"job_id": "bash-16", "timeout_ms": 900000, "wait": true}`
+
+  ```
+code=0
+=== 1. round-trip, séparation, nouveauté (k=64) ===
+  ✅ round-trip exact (300/300) et clés deux à deux distinctes
+=== 2. le disque ne change aucune lecture ===
+  ✅ 300 lectures identiques après passage par le disque
+=== 3. le rappel décroît quand l'indice se dégrade ===
+  ✅ monotonie respectée : 100.0 % → 15.3 % (0 % → 75 % de dégradation)
+=== 4. un indice jamais écrit doit être moins bien retrouvé ===
+  ✅ connu 64.0 > jamais écrit 41.5 : le magasin distingue « je me souviens » de « ça ressemble »
+=== 5. à petit k, les collisions EXPLIQUENT les échecs de round-trip ===
+  ✅ 81 échecs, tous expliqués : 81 collisions, 0 égalités de recouvrement
+=== 6. expansion + égalisation : l'index doit ÉLUDER pour de vrai ===
+  ✅ round-trip exact (300/300), séparation 0.6 % de la clé, élagage 83 % (51 candidats), rappel 25 % : 100.0 %
+=== 7. consolidation par rejeu : l'EXEMPLAIRE doit battre la MOYENNE ===
+  ✅ à compression comparable, l'exemplaire rappelle : 87.0 % contre 22.3 %
+  ✅ la porte C6 est franchie — et elle dit ses conditions : 300 états consécutifs d'un
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ C7 : porte 7/7 verte — je commite la consolidation par rejeu
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 cargo test --release --manifest-path drave-core/Cargo.toml 2>&1 | grep -E \"^test result\" && git add -A drave-core/src/main.rs drave-core/src/episodique.rs tools/porte-episodique.sh reports/rapport-campagne-benefices.md  … [2665 caractères tronqués]`

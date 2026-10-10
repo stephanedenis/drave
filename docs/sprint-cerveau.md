@@ -312,6 +312,24 @@ obtient par normalisation et inhibition latérale) fait tomber la séparation à
 lecture contre N × 64 comparaisons ⇒ rentable au-delà de **N ≈ 2 048 épisodes**, et
 **en dessous, le balayage complet est moins cher**. Le programme l'écrit lui-même.
 
+**C7 (premier pas) — CONSOLIDER PAR REJEU, et un résultat net :** rejouer les
+épisodes et **fusionner ceux dont les clés co-activent**. Deux façons de faire le
+prototype, et elles ne se valent pas (300 états, seuil 1) :
+
+| prototype | prototypes | compression | rappel d'appartenance |
+|---|---|---|---|
+| **MOYENNE** (un point abstrait) | 39 | 13,0 % | **22,3 %** |
+| **EXEMPLAIRE** (un cas réel) | 21 | **7,0 %** | **87,0 %** |
+
+À seuil 8 : moyenne 66,7 % du magasin → 34,0 % de rappel ; exemplaire 51,3 % →
+**95,3 %**. **Le mécanisme** : la clé d'une moyenne est recalculée depuis un point
+qui n'a jamais existé, donc elle ne coïncide avec la clé d'aucun membre ; un indice
+venu d'un membre ne retrouve plus son prototype (et à seuil 2 la moyenne rappelle
+*moins* qu'à seuil 1 : elle s'éloigne en agrégeant). **Abstraire par moyennage
+détruit la rappelabilité** — c'est une propriété de la clé, pas une opinion. Ce que
+C7 au sens du plan (rejouer pour modifier des POIDS) n'est **pas** : le moteur
+n'entraîne pas, et les règles locales existantes ont été mesurées dégradantes.
+
 **Et le résultat tient sur plusieurs documents** (240 états de 3 corpus : code,
 français, multilingue, cache neuf à chaque) : round-trip **240/240**, élagage 85 %,
 rappel 99,2 / 95,0 / 73,8 %. La mémoire stocke les **états exacts** ; seule la clé
@@ -601,6 +619,7 @@ bus (le format de la ligne de contrôle est écrit, le transport reste à câble
 |---|---|
 | 9/10 17 h 10 | **C1a** : module `topologie.rs`, validation stricte, plan, 8 tests, suite à 85 tests. |
 | 9/10 17 h 20 | **C1b pas 1** : la topologie pilote le découpage · porte `tools/porte-topologie.sh` **TENUE** (même chiffre, écart 0,00e0) · deux refus vérifiés. |
+| 10/10 05 h 20 | **C7 (pas 1)** : consolidation par rejeu (fusion des épisodes qui co-activent), deux formes de prototype. **L'exemplaire bat la moyenne partout** : seuil 1 → 7 % du magasin pour 87 % de rappel, contre 13 % pour 22 % ; seuil 8 → 51 % pour 95,3 % contre 67 % pour 34 %. Mécanisme : la clé d'une moyenne ne coïncide avec la clé d'aucun membre. Porte : cas 7. |
 | 10/10 01 h 50 | **C6** (mémoire épisodique) : module + mode `--episodique-essai` sur états réels. Round-trip **300/300 au bit près** (aussi après disque) ; rappel 100/96,7/69,3/15,3 % selon dégradation ; nouveauté 41,5 vs 64. **Trois négatifs mesurés** : aucun élagage (300/300 candidats), l'espacement des états ne change rien (24,0 vs 23,9), et à k=8 **81 collisions ⇒ round-trip 219/300**. Décorrélation : rappel 50 % → 78,3 %, toujours 0 % d'élagage. Porte `porte-episodique.sh` (5 cas). |
 | 10/10 00 h 20 | **C5ter** : bus par le réseau (`--bus-serveur`) sur le pilote et le nœud, protocole du fichier, borné à 8 modulateurs, verrou pris une fois par ligne. Porte 7 cas : socket ≡ statique et neutre ≡ référence **au bit près (0,00e0)**, plein vol ≠ les deux. Trois défauts corrigés : bus créé après `accept()`, gain d'une région finale absorbé par la normalisation, variable bash accentuée. |
 | 9/10 23 h 05 | **C12bis** : le nœud trace (mêmes noms de lien), format v2 horodaté + mode, `--fusionner-trace` (ordre déterministe, dérive d'horloges mesurée, liens confrontés). Porte : 94/94 liens identiques ; **1 bit changé ⇒ DIVERGENT au pas nommé, code 3** ; v1 ⇒ refusée, code 2. 107 tests. Défaut attrapé par la porte : le mode fusion ne sortait pas et le moteur chargeait un modèle après coup. |
