@@ -53,6 +53,7 @@ Trois capacités du plan, chacune avec sa **porte mesurée** :
 | **C12bis** | **fusion des traces** | deux processus qui se sont parlé doivent pouvoir être relus ENSEMBLE, dans un temps commun | ✅ **FAIT** — nœud tracé · v2 horodatée + mode · `--fusionner-trace` ordonne par le temps mural, mesure la dérive, confronte les deux bouts de chaque lien · porte `tools/porte-fusion.sh` (94 liens identiques ; 1 bit changé ⇒ **DIVERGENT**, code 3 ; v1 ⇒ refusée) |
 | **C12** | **trace globale horodatée + rejeu** | rejeu d'une exécution distribuée == exécution, **0,00e0** | ✅ **FAIT** — `trace_globale.rs` (5 tests) · 126 croisements, **aucune divergence** · trace faussée d'un bit **détectée et nommée** · `tools/porte-trace.sh` |
 | **C4** | **horloges par région** | un graphe sans cycle rend le **même résultat** qu'en synchrone ; les pas sont bornés et annoncés | 🟡 **premier pas FAIT** — compteur de pas par région · `--pas-max` borne la terminaison et **refuse de rendre un résultat partiel** (code 5) · porte `tools/porte-horloge.sh` · reste l'asynchronisme réel (avec C2) |
+| **C5ter** | **bus par le réseau** | un réglage doit atteindre une AUTRE machine, pas seulement un autre fichier | ✅ **FAIT** — `--bus-serveur PORT` sur le pilote et le nœud, protocole `MODULATION canal valeur`, borné à 8 modulateurs, verrou pris une fois par ligne · porte `tools/porte-bus-socket.sh` (7 cas : socket ≡ statique **0,00e0**, neutre ≡ référence **0,00e0**, plein vol ≠ les deux) |
 | **C5bis** | **diffusion du bus** | un canal poussé par un autre processus change l'exécution | ✅ **FAIT (fichier de contrôle)** — `--bus-fichier`, relu avant chaque trame · relais : 66,0379 contre 59,0790 · reste le transport par socket |
 | **C3** | **délais par lien** | un délai change le **temps**, jamais un chiffre | ✅ **FAIT** — appliqué par le pilote ET par le nœud relais · porte `tools/porte-delais.sh` (même perplexité, empreintes identiques, +3,1 s pour 50 ms × 64 pas) |
 | **C5** | **bus de modulation multi-canaux** | canal nul ⇒ sortie **inchangée** | ✅ **FAIT** — `bus.rs` (5 tests) · neutre ⇒ **empreintes identiques** · gain 1,5 ⇒ la sortie change · bus d'un **relais** ⇒ agit à travers les instances · `tools/porte-bus.sh` |
@@ -241,6 +242,60 @@ lignes de texte, et la trace dit *où* regarder — le rejeu recompte et compare
 **Le cas 3 est le plus important** : une porte qui ne sait pas échouer ne vérifie
 rien. La vérification nomme le pas, la région et le lien — c'est exactement ce qui
 manquait pour déboguer un graphe distribué.
+
+---
+
+## C5ter — FAIT (10 octobre 00 h 20) : le bus par le réseau
+
+**Pourquoi C5bis ne suffisait pas.** C5bis diffusait un réglage par un **fichier**
+relu à chaque pas — donc il fallait un système de fichiers partagé, c'est-à-dire
+**pas deux machines**. Un bus qui n'atteint pas la deuxième machine n'est pas un bus
+distribué, c'est un fichier de configuration.
+
+**Ce qui est fait :** `--bus-serveur PORT` sur le pilote **et** sur le nœud. Le
+protocole est celui du fichier — `MODULATION canal valeur`, une ligne par réglage —
+donc rien de nouveau à apprendre, et les mêmes validations (valeur absente, non
+finie, ligne malformée : refusées **avant** d'entrer dans le calcul). Le bus est relu
+**à chaque pas** côté pilote comme côté nœud : une modulation à mi-parcours change la
+suite du calcul, pas le passé.
+
+**Ce qui est borné, et pourquoi :** un fil par connexion (un modulateur muet ne doit
+pas bloquer les autres), borné à **8** modulateurs (des connexions sans fin ne
+doivent pas créer des fils sans fin) ; au-delà, la connexion est refusée en le
+disant. Le verrou du bus est pris **une fois par ligne reçue**, jamais gardé pendant
+le calcul — le garder aurait bloqué le fil d'écoute pour toujours.
+
+**La porte** (`tools/porte-bus-socket.sh`), 7 cas, chaîne à **trois** régions :
+
+| cas | mesure |
+|---|---|
+| 1. référence, aucun bus | 113,0068 |
+| 2. bus **statique** sur le nœud du milieu | **148,7080** — le bus est branché |
+| 3. bus par **socket**, ligne avant le pas 0 | **148,7080** · écart au statique **0,000000e+00** |
+| 4. ligne **neutre** par socket | écart à la référence **0,000000e+00** |
+| 5. ligne **en plein vol** (3 s sur 12,6 s) | **42,3176** — ni la référence, ni le réglage dès le pas 0 |
+| 6. bus du **pilote**, neutre par socket | écart **0,000000e+00** |
+| 7. bus du **pilote**, non neutre | 113,0068 → **148,9144** |
+
+Les cas 3, 4 et 6 sont des **égalités exactes** (0,00e0), pas des tolérances. La
+porte garantit l'ordre des cas 3 et 4 **par construction** (la ligne est envoyée
+avant que le pilote ne se connecte, et le nœud n'accepte qu'après) : aucune course
+de `sleep` n'est supposée.
+
+**Trois défauts réels trouvés en écrivant cette porte, et corrigés :**
+
+1. le bus du nœud était créé **après** `ecoute.accept()` — donc le serveur de bus
+   n'écoutait pas encore quand la porte envoyait sa ligne (`ConnectionRefused`) :
+   un bus qui ne s'ouvre qu'après la connexion ne peut pas moduler le premier pas ;
+2. le gain d'une région **finale** est **absorbé par la normalisation de sortie**
+   (113,0068 avec et sans `gain=2`,0) : le piège documenté de C5, retombé dedans —
+   la porte module désormais un nœud du **milieu** ;
+3. `LANCÉS=()` : un nom de **variable** accentué n'est pas un identifiant bash
+   valide (les noms de *fonctions* accentués, eux, passent — d'où l'erreur tardive).
+
+**Ce qui reste pour C5ter :** authentifier les modulateurs (aujourd'hui quiconque
+atteint le port peut moduler — c'est signalé à l'écoute), et le **retour d'état** :
+le modulateur ne sait pas ce que sa ligne a produit, seulement qu'elle est validée.
 
 ---
 
@@ -470,6 +525,7 @@ bus (le format de la ligne de contrôle est écrit, le transport reste à câble
 |---|---|
 | 9/10 17 h 10 | **C1a** : module `topologie.rs`, validation stricte, plan, 8 tests, suite à 85 tests. |
 | 9/10 17 h 20 | **C1b pas 1** : la topologie pilote le découpage · porte `tools/porte-topologie.sh` **TENUE** (même chiffre, écart 0,00e0) · deux refus vérifiés. |
+| 10/10 00 h 20 | **C5ter** : bus par le réseau (`--bus-serveur`) sur le pilote et le nœud, protocole du fichier, borné à 8 modulateurs, verrou pris une fois par ligne. Porte 7 cas : socket ≡ statique et neutre ≡ référence **au bit près (0,00e0)**, plein vol ≠ les deux. Trois défauts corrigés : bus créé après `accept()`, gain d'une région finale absorbé par la normalisation, variable bash accentuée. |
 | 9/10 23 h 05 | **C12bis** : le nœud trace (mêmes noms de lien), format v2 horodaté + mode, `--fusionner-trace` (ordre déterministe, dérive d'horloges mesurée, liens confrontés). Porte : 94/94 liens identiques ; **1 bit changé ⇒ DIVERGENT au pas nommé, code 3** ; v1 ⇒ refusée, code 2. 107 tests. Défaut attrapé par la porte : le mode fusion ne sortait pas et le moteur chargeait un modèle après coup. |
 | 9/10 21 h 55 | **C4 (pas 1)** : compteur de pas par région + borne `--pas-max` · porte `tools/porte-horloge.sh` (même résultat sans borne et à borne 64 ; **arrêt explicite code 5 sans résultat partiel** à borne 32). |
 | 9/10 18 h 40 | **C5bis** : bus diffusé par fichier de contrôle · cas 4 de `porte-bus.sh` vert (relais 66,0379 contre 59,0790) · deux leçons : le gain d'un nœud final est invisible, et une porte mal formée ressemble à une capacité cassée. |

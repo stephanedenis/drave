@@ -3261,6 +3261,100 @@ l'ensemble du lot (flux reçu de {hidden} canaux)");
 /// Le NŒUD MOTEUR : charge le modèle, écoute, applique SA plage de couches au
 /// flux reçu et renvoie le flux résultant. Un seul client à la fois — c'est un
 /// banc d'essai, pas un service.
+/// C5ter : le BUS par le réseau.
+///
+/// POURQUOI. C5bis savait diffuser un réglage par un FICHIER relu à chaque pas, ce
+/// qui suppose un système de fichiers partagé — donc pas deux machines. Un bus qui
+/// n'atteint pas la deuxième machine n'est pas un bus distribué, c'est un fichier de
+/// configuration.
+///
+/// CE QUI EST BORNÉ, ET POURQUOI. Un modulateur qui se connecte et n'envoie rien ne
+/// doit pas empêcher les autres de parler (d'où un fil par connexion) ; mais des
+/// connexions sans fin ne doivent pas non plus créer des fils sans fin (d'où la
+/// borne de 8, au-delà de laquelle on REFUSE en le disant). Un canal n'est appliqué
+/// qu'après validation complète de la ligne : une valeur non finie ferait diverger
+/// silencieusement toute l'exécution.
+///
+/// CE QUE ÇA COÛTE : le verrou du bus est pris UNE fois par ligne reçue, pas par pas
+/// de calcul. Une ligne de contrôle coûte donc un aller-retour réseau, et rien au
+/// calcul.
+fn demarrer_bus_serveur(port: u16, bus: std::sync::Arc<std::sync::Mutex<bus::Bus>>) {
+    use std::io::Write;
+    let ecoute = match std::net::TcpListener::bind(("0.0.0.0", port)) {
+        Ok(l) => l,
+        Err(e) => {
+            eprintln!("[bus] écoute sur le port {port} impossible : {e} — ce processus \
+n'est pilotable que par fichier");
+            return;
+        }
+    };
+    println!("[bus] écoute sur 0.0.0.0:{port} · « MODULATION canal valeur », une ligne par \
+réglage. Sur TOUTES les interfaces : un bus qu'on ne peut pas piloter à distance n'est pas \
+un bus distribué — si la machine est exposée, c'est un choix à faire en connaissance.");
+    std::thread::spawn(move || {
+        let actifs = std::sync::Arc::new(std::sync::atomic::AtomicUsize::new(0));
+        for flux in ecoute.incoming() {
+            let mut sock = match flux { Ok(s) => s, Err(_) => continue };
+            let n = actifs.fetch_add(1, std::sync::atomic::Ordering::SeqCst);
+            if n >= 8 {
+                actifs.fetch_sub(1, std::sync::atomic::Ordering::SeqCst);
+                let _ = writeln!(sock, "bus : trop de modulateurs connectés (8 au plus)");
+                continue;
+            }
+            let bus = std::sync::Arc::clone(&bus);
+            let actifs = std::sync::Arc::clone(&actifs);
+            let lecteur = match sock.try_clone() {
+                Ok(s) => std::io::BufReader::new(s),
+                Err(_) => { actifs.fetch_sub(1, std::sync::atomic::Ordering::SeqCst); continue; }
+            };
+            std::thread::spawn(move || {
+                use std::io::BufRead;
+                for ligne in lecteur.lines() {
+                    let ligne = match ligne { Ok(l) => l, Err(_) => break };
+                    if ligne.trim().is_empty() { continue; }
+                    // UN SEUL verrou, et la valeur relue DANS le même : `match
+                    // bus.lock()…` garderait le garde jusqu'à la fin du match, et le
+                    // second `lock()` de la branche se bloquerait lui-même.
+                    let res = {
+                        let mut b = bus.lock().unwrap();
+                        b.appliquer_ligne(&ligne).map(|canal| {
+                            let v = b.lire(&canal);
+                            (canal, v)
+                        })
+                    };
+                    match res {
+                        Ok((canal, v)) => {
+                            println!("[bus] {canal} = {v} (reçu par le réseau)");
+                            let _ = writeln!(sock, "OK {canal} {v}");
+                        }
+                        Err(e) => {
+                            eprintln!("[bus] {e}");
+                            let _ = writeln!(sock, "ERREUR {e}");
+                        }
+                    }
+                }
+                actifs.fetch_sub(1, std::sync::atomic::Ordering::SeqCst);
+            });
+        }
+    });
+}
+
+/// Relit le fichier de contrôle du bus, si un chemin est donné.
+///
+/// POURQUOI UNE FONCTION : le pilote et le nœud faisaient la même chose à deux
+/// endroits — et c'est le genre de duplication où l'un des deux finit par accepter
+/// ce que l'autre refuse. Ici, une seule définition de ce qu'est une ligne de bus.
+fn rafraichir_bus_fichier(bus: &std::sync::Arc<std::sync::Mutex<bus::Bus>>, fichier: &Option<String>) {
+    let Some(bf) = fichier else { return };
+    let Ok(contenu) = std::fs::read_to_string(bf) else { return };
+    for ligne in contenu.lines() {
+        if ligne.trim().is_empty() || ligne.starts_with('#') { continue; }
+        if let Err(e) = bus.lock().unwrap().appliquer_ligne(ligne) {
+            eprintln!("[bus] {e}");
+        }
+    }
+}
+
 fn run_serveur_flux(opt: Options, adresse: &str) {
     if opt.tete_partielle {
         eprintln!("[plage] `--tete-partielle` est sans effet sur un SERVEUR de flux : ce \
@@ -3283,6 +3377,24 @@ nœud rend un flux résiduel BRUT par contrat (la tête appartient au nœud qui 
     if opt.options_actives { options_actives(&mdl, "nœud moteur du flux", opt.ctx_impose, true, opt.keep); }
     let hidden = mdl.cfg.hidden;
     let hc_local = mdl.hc.as_ref().map(|v| v[0].0.hc).unwrap_or(1);
+    // C5 : le bus du NŒUD, créé ICI — avant l'écoute, et donc avant `accept()`.
+    // L'ordre n'est pas cosmétique : placé après `accept()`, le nœud restait
+    // bloqué en attente du pilote et son bus n'écoutait pas encore, donc une ligne
+    // envoyée « avant le premier pas » arrivait en réalité dans le vide
+    // (ConnectionRefused — trouvé par la porte C5ter). Un bus qui ne s'ouvre
+    // qu'après la connexion ne peut pas moduler le premier pas, et le premier pas
+    // est justement celui qu'on veut moduler.
+    let bus0 = bus::Bus::analyser(&opt.bus).unwrap_or_else(|e| {
+        eprintln!("{e}"); std::process::exit(2) });
+    // C5bis : le bus est PARTAGÉ et un fil d'écoute le met à jour par le réseau.
+    // Une diffusion doit pouvoir changer un canal PENDANT l'exécution — sinon ce
+    // n'est pas un bus, c'est un réglage de démarrage.
+    let bus = std::sync::Arc::new(std::sync::Mutex::new(bus0));
+    if let Some(p) = opt.bus_serveur { demarrer_bus_serveur(p, std::sync::Arc::clone(&bus)); }
+    if !bus.lock().unwrap().est_neutre() {
+        println!("[bus] canaux actifs sur ce nœud : {}",
+                 bus.lock().unwrap().canaux().iter().map(|(k, v)| format!("{k}={v}")).collect::<Vec<_>>().join(" "));
+    }
     let ecoute = std::net::TcpListener::bind((hote.as_str(), port)).expect("écoute");
     println!("[flux] nœud moteur sur {hote}:{port} · {hidden} cachés · {} couches · contexte {ctx}",
              mdl.cfg.n_layer);
@@ -3370,16 +3482,6 @@ doit pas changer)", ma.id, lien.vers, lien.delai_ms);
                 // index hors `layers`, dimension fausse — relecture adversariale).
                 let (n_layer_local, ctx_local) = (mdl.cfg.n_layer, mdl.ctx);
 
-    let bus0 = bus::Bus::analyser(&opt.bus).unwrap_or_else(|e| {
-        eprintln!("{e}"); std::process::exit(2) });
-    // C5bis : le bus est PARTAGÉ et un fil d'écoute le met à jour par le réseau.
-    // Une diffusion doit pouvoir changer un canal PENDANT l'exécution — sinon ce
-    // n'est pas un bus, c'est un réglage de démarrage.
-    let bus = std::sync::Arc::new(std::sync::Mutex::new(bus0));
-    if !bus.lock().unwrap().est_neutre() {
-        println!("[bus] canaux actifs sur ce nœud : {}",
-                 bus.lock().unwrap().canaux().iter().map(|(k, v)| format!("{k}={v}")).collect::<Vec<_>>().join(" "));
-    }
                 if f.fin as usize > n_layer_local || f.debut >= f.fin {
                     println!("[flux] flux refusé : plage de couches {}..{} invalide pour {} \
 couches — le nœud continue", f.debut, f.fin, n_layer_local);
@@ -3486,16 +3588,7 @@ raccord précédent où s'appliquer et l'ignorer serait muet. Le nœud continue"
                 mdl.hc_porte_imposee = if f.premix.is_empty() { None } else { Some(f.premix.clone()) };
                 // C5bis : le bus est RELU avant chaque trame — un canal peut donc
                 // changer en cours d'exécution, ce qui est la définition d'un bus.
-                if let Some(bf) = &opt.bus_fichier {
-                    if let Ok(contenu) = std::fs::read_to_string(bf) {
-                        for ligne in contenu.lines() {
-                            if ligne.trim().is_empty() || ligne.starts_with('#') { continue; }
-                            if let Err(e) = bus.lock().unwrap().appliquer_ligne(ligne) {
-                                eprintln!("[bus] {e}");
-                            }
-                        }
-                    }
-                }
+                rafraichir_bus_fichier(&bus, &opt.bus_fichier);
                 let mut sortie = mdl.forward(0, f.pos as usize);
                 bus.lock().unwrap().appliquer_gain(&mut sortie);
                 // La RÉPONSE est encodée comme la demande : un pair qui parle en
@@ -3812,11 +3905,21 @@ changer (seul le temps change) — c'est la porte de C3", tp_region_distante, de
     // C5 : le BUS DE MODULATION. Un canal neutre ne change RIEN (c'est la porte),
     // un canal non neutre change la sortie — sans quoi le bus ne serait pas
     // branché. Chaque région décide de ce qu'elle en fait : ici, le gain.
-    let bus = bus::Bus::analyser(&opt.bus).unwrap_or_else(|e| {
+    let bus0 = bus::Bus::analyser(&opt.bus).unwrap_or_else(|e| {
         eprintln!("{e}"); std::process::exit(2) });
-    if !bus.est_neutre() {
-        println!("[bus] canaux actifs : {} · gain de région appliqué à la région locale",
-                 bus.canaux().iter().map(|(k, v)| format!("{k}={v}")).collect::<Vec<_>>().join(" "));
+    // C5ter : le pilote aussi a un bus, et il doit pouvoir être modulé à distance —
+    // sans quoi une région locale ne serait réglable que par son propre fichier.
+    let bus = std::sync::Arc::new(std::sync::Mutex::new(bus0));
+    if let Some(p) = opt.bus_serveur { demarrer_bus_serveur(p, std::sync::Arc::clone(&bus)); }
+    // Le verrou n'est pris QUE pour lire l'état initial, jamais gardé : le garder
+    // pendant l'exécution bloquerait définitivement le fil d'écoute réseau — le bus
+    // ne serait modulable qu'avant le premier pas, c'est-à-dire pas modulable.
+    {
+        let b = bus.lock().unwrap();
+        if !b.est_neutre() {
+            println!("[bus] canaux actifs : {} · gain de région appliqué à la région locale",
+                     b.canaux().iter().map(|(k, v)| format!("{k}={v}")).collect::<Vec<_>>().join(" "));
+        }
     }
     // C12 : la trace globale — créée ici, écrite (ou vérifiée) à la fin.
     let mut trace = trace_globale::TraceGlobale::nouvelle();
@@ -4049,7 +4152,11 @@ un lot de plus d'un état n'a pas UNE `pre`). Rien n'a été calculé.");
         // travail des autres.
         // Le gain de région s'applique à l'état que la région PRODUIT (C5).
         let mut etat = etat;
-        bus.appliquer_gain(&mut etat);
+        // C5ter : le réglage peut arriver PAR LE RÉSEAU à tout moment, donc le bus
+        // est relu à chaque pas — c'est ce qui fait d'un bus un bus, et non un
+        // réglage de démarrage. Le verrou n'est tenu que le temps d'un pas.
+        rafraichir_bus_fichier(&bus, &opt.bus_fichier);
+        bus.lock().unwrap().appliquer_gain(&mut etat);
         trace.enregistrer("local", pos as u32, "local->pair", &etat, 0.0);
         if delai_ms > 0 {
             std::thread::sleep(std::time::Duration::from_millis(delai_ms));

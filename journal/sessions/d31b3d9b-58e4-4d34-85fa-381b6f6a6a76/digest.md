@@ -22119,3 +22119,642 @@ doc sprint : C12bis
 ⏵ C12bis : tout est vert ; je commite et pousse
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src/main.rs drave-core/src/trace_globale.rs tools/porte-fusion.sh docs/sprint-cerveau.md && git commit -q -m \"C12bis : le nœud trace, et les traces de plusieurs processus se fusionnent\n\nCE QUI MANQUAIT, ET QU … [1886 caractères tronqués]`
+
+  ```
+6bfb857 C12bis : le nœud trace, et les traces de plusieurs processus se fusionnent
+  ```
+
+### 🤖 Assistant
+
+⏵ C5ter : `--bus-serveur` est analysé mais inutilisé — je regarde où le brancher
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"bus_serveur\\|bus_serveur_port\\|bus-serveur\\|bus-fichier\" drave-core/src/main.rs | head -20 && echo ---- && grep -n \"pub fn\\|pub struct\" drave-core/src/bus.rs", "description": "Locate bus server flag wiring"}`
+
+  ```
+606:    bus_serveur: Option<u16>,
+770:            "--bus-serveur" => { o.bus_serveur = suivant(i).parse().ok(); 2 }
+771:            "--bus-fichier" => { o.bus_fichier = Some(suivant(i).clone()); 2 }
+----
+24:pub struct Bus {
+31:    pub fn nouveau() -> Self { Bus { canaux: BTreeMap::new() } }
+34:    pub fn neutre(canal: &str) -> f32 {
+39:    pub fn lire(&self, canal: &str) -> f32 {
+43:    pub fn poser(&mut self, canal: &str, valeur: f32) { self.canaux.insert(canal.to_string(), valeur); }
+45:    pub fn canaux(&self) -> Vec<(String, f32)> {
+49:    pub fn est_neutre(&self) -> bool {
+55:    pub fn analyser(specs: &[String]) -> Result<Bus, String> {
+71:    pub fn gain(&self) -> f32 { self.lire("gain") }
+75:    pub fn appliquer_gain(&self, etat: &mut [f32]) -> bool {
+84:    pub fn ligne(&self, canal: &str) -> String {
+95:    pub fn appliquer_ligne(&mut self, ligne: &str) -> Result<String, String> {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '95,140p' drave-core/src/bus.rs", "description": "Read bus line protocol"}`
+
+  ```
+pub fn appliquer_ligne(&mut self, ligne: &str) -> Result<String, String> {
+        let champs: Vec<&str> = ligne.split_whitespace().collect();
+        if champs.len() != 3 || champs[0] != "MODULATION" {
+            return Err(format!("bus : ligne de contrôle attendue « MODULATION canal valeur », reçu « {} »",
+                               ligne.trim()));
+        }
+        let v: f32 = champs[2].parse()
+            .map_err(|_| format!("bus : valeur illisible dans « {} »", ligne.trim()))?;
+        if !v.is_finite() {
+            return Err(format!("bus : valeur non finie dans « {} »", ligne.trim()));
+        }
+        self.poser(champs[1], v);
+        Ok(champs[1].to_string())
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn un_canal_absent_est_neutre() {
+        let b = Bus::nouveau();
+        assert_eq!(b.gain(), 1.0, "un gain absent vaut 1 : multiplier par 1 ne change rien");
+        assert_eq!(b.lire("recompense"), 0.0);
+        assert!(b.est_neutre());
+    }
+
+    #[test]
+    fn un_gain_neutre_ne_touche_pas_l_etat() {
+        let b = Bus::nouveau();
+        let mut etat = vec![1.5f32, -2.0, 0.25];
+        let avant = etat.clone();
+        assert!(!b.appli
+… [457 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ C5ter : je regarde comment chaque processus construit son bus, pour y greffer l'écoute réseau
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"Bus::analyser\\|Arc::new(std::sync::Mutex::new(bus\" drave-core/src/main.rs && echo ---- && grep -n \"TcpListener::bind\" drave-core/src/main.rs && sed -n \"$(grep -n 'Bus::analyser' drave-core/src/main.rs | tail -1 | cut - … [88 caractères tronqués]`
+
+  ```
+3373:    let bus0 = bus::Bus::analyser(&opt.bus).unwrap_or_else(|e| {
+3378:    let bus = std::sync::Arc::new(std::sync::Mutex::new(bus0));
+3815:    let bus = bus::Bus::analyser(&opt.bus).unwrap_or_else(|e| {
+----
+3286:    let ecoute = std::net::TcpListener::bind((hote.as_str(), port)).expect("écoute");
+6125:        let ecoute = TcpListener::bind("127.0.0.1:0").unwrap();
+6185:        let ecoute = TcpListener::bind("127.0.0.1:0").unwrap();
+6215:        let ecoute = TcpListener::bind("127.0.0.1:0").unwrap();
+6379:        let ecoute = TcpListener::bind("127.0.0.1:0").unwrap();
+    let bus = bus::Bus::analyser(&opt.bus).unwrap_or_else(|e| {
+        eprintln!("{e}"); std::process::exit(2) });
+    if !bus.est_neutre() {
+        println!("[bus] canaux actifs : {} · gain de région appliqué à la région locale",
+                 bus.canaux().iter().map(|(k, v)| format!("{k}={v}")).collect::<Vec<_>>().join(" "));
+    }
+    // C12 : la trace globale — créée ici, écrite (ou vérifiée) à la fin.
+    let mut trace = trace_globale::TraceGlobale::nouvelle();
+    let (debut_pair, fin_pair) = if tp_fin > 0 {
+        (tp_debut, tp_fin + 1)
+    } else {
+        (couches_locales, n_layer)
+    };
+  ```
+
+### 🤖 Assistant
+
+⏵ C5ter : j'écris le serveur de bus, borné, avec un verrou pris une seule fois par ligne
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"bus.appliquer_gain\\|bus\\.gain()\\|bus\\.est_neutre\\|bus\\.canaux\" drave-core/src/main.rs", "description": "Find all bus use sites"}`
+
+  ```
+3817:    if !bus.est_neutre() {
+3819:                 bus.canaux().iter().map(|(k, v)| format!("{k}={v}")).collect::<Vec<_>>().join(" "));
+4052:        bus.appliquer_gain(&mut etat);
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\n\n# ---- 1. les fonctions, avant run_serveur_flux\na = \"fn run_serveur_flux(opt: Options, adresse: &str) {\"\nb = '''/// C5ter : le B … [7163 caractères tronqués]`
+
+  ```
+serveur de bus + rafraîchissement factorisé
+3909:    let bus = bus.lock().unwrap();
+  ```
+
+### 🤖 Assistant
+
+⏵ C5ter : attention — garder le verrou pendant toute l'exécution bloquerait le serveur à jamais
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '3900,3916p' drave-core/src/main.rs && echo ---- && sed -n '4040,4056p' drave-core/src/main.rs", "description": "Inspect driver bus usage"}`
+
+  ```
+// C5 : le BUS DE MODULATION. Un canal neutre ne change RIEN (c'est la porte),
+    // un canal non neutre change la sortie — sans quoi le bus ne serait pas
+    // branché. Chaque région décide de ce qu'elle en fait : ici, le gain.
+    let bus0 = bus::Bus::analyser(&opt.bus).unwrap_or_else(|e| {
+        eprintln!("{e}"); std::process::exit(2) });
+    // C5ter : le pilote aussi a un bus, et il doit pouvoir être modulé à distance —
+    // sans quoi une région locale ne serait réglable que par son propre fichier.
+    let bus = std::sync::Arc::new(std::sync::Mutex::new(bus0));
+    if let Some(p) = opt.bus_serveur { demarrer_bus_serveur(p, std::sync::Arc::clone(&bus)); }
+    let bus = bus.lock().unwrap();
+    if !bus.est_neutre() {
+        println!("[bus] canaux actifs : {} · gain de région appliqué à la région locale",
+                 bus.canaux().iter().map(|(k, v)| format!("{k}={v}")).collect::<Vec<_>>().join(" "));
+    }
+    // C12 : la trace globale — créée ici, écrite (ou vérifiée) à la fin.
+    let mut trace = trace_globale::TraceGlobale::nouvelle();
+    let (debut_pair, fin_pair) = if tp_fin > 0 {
+----
+            let t = lot.min(ids.len() - pos);
+            let horloge = Insta
+… [850 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\na = \"\"\"    let bus = bus.lock().unwrap();\n    if !bus.est_neutre() {\n        println!(\"[bus] canaux actifs : {} · gain de région … [1477 caractères tronqués]`
+
+  ```
+verrou non gardé, bus relu par pas côté pilote
+error[E0599]: cannot write into `TcpStream`
+    --> src/main.rs:3300:34
+     |
+3300 |                 let _ = writeln!(sock, "bus : trop de modulateurs connectés (8 au plus)");
+     |                                  ^^^^
+     |
+    --> /rustc/8bab26f4f68e0e26f0bb7960be334d5b520ea452/library/std/src/io/mod.rs:1973:7
+     |
+     = note: the method is available for `TcpStream` here
+--
+error[E0599]: cannot write into `TcpStream`
+    --> src/main.rs:3327:46
+     |
+3327 | ...                   let _ = writeln!(sock, "OK {canal} {v}");
+     |                                        ^^^^
+     |
+    --> /rustc/8bab26f4f68e0e26f0bb7960be334d5b520ea452/library/std/src/io/mod.rs:1973:7
+     |
+     = note: the method is available for `TcpStream` here
+--
+error[E0599]: cannot write into `TcpStream`
+    --> src/main.rs:3331:46
+     |
+3331 | ...                   let _ = writeln!(sock, "ERREUR {e}");
+     |                                        ^^^^
+     |
+    --> /rustc/8bab26f4f68e0e26f0bb7960be334d5b520ea452/library/std/src/io/mod.rs:1973:7
+     |
+     = note: the method is available for `TcpStream` here
+--
+  ```
+
+### 🤖 Assistant
+
+⏵ C5ter : il manque le trait `Write` en portée pour écrire sur la socket
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,20p' drave-core/src/main.rs | grep -n \"use\" ", "description": "Check main.rs imports"}`
+
+  ```
+(no output)
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^use \\|    use std::io\" drave-core/src/main.rs | head -20", "description": "Find use statements"}`
+
+  ```
+57:use engine::{matvec_dense, matvec_shift_add, Pool, SparseVec};
+58:use gguf::Gguf;
+59:use list::{dense_bits, BitmapSign, DenseQ4, DenseQ8, FusedSign, PushMat, SignedDelta, SparseK};
+60:use std::time::Instant;
+1275:        use std::io::Write;
+1281:        use std::io::Write;
+1405:    use std::io::Write;
+1798:    use std::io::Write;
+1874:        use std::io::Write;
+2123:                                use std::io::Write;
+2261:                            use std::io::Write;
+2282:                                    use std::io::Write;
+2331:                        use std::io::Write;
+2901:    use std::io::Write;
+2981:    use std::io::Write;
+3016:    use std::io::Write;
+3034:    use std::io::Read;
+3310:                use std::io::BufRead;
+4860:    use std::io::Write;
+5925:            use std::io::Write;
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\na = \"\"\"fn demarrer_bus_serveur(port: u16, bus: std::sync::Arc<std::sync::Mutex<bus::Bus>>) {\n    let ecoute = match std::net::TcpL … [615 caractères tronqués]`
+
+  ```
+warning: unused imports: `GGML_IQ1_M`, `GGML_IQ1_S`, `GGML_IQ2_XXS`, and `GGML_IQ3_XXS`
+   --> src/model.rs:596:23
+    |
+596 |     use crate::gguf::{GGML_IQ1_M, GGML_IQ1_S, GGML_IQ2_XXS, GGML_IQ3_XXS,
+    |                       ^^^^^^^^^^  ^^^^^^^^^^  ^^^^^^^^^^^^  ^^^^^^^^^^^^
+    |
+    = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+--
+warning: unused attribute
+    --> src/model.rs:4502:5
+     |
+4502 |     #[inline]
+     |     ^^^^^^^^^ help: remove this attribute
+     |
+note: attribute also specified here
+--
+warning: unused variable: `t`
+   --> src/kimi_k3.rs:272:17
+    |
+272 |             let t = g.tensor(nom).ok_or_else(|| format!("tenseur absent : {nom}"))?;
+test result: ok. 107 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+  ```
+
+### 👤 Utilisateur
+
+au carpe diem j'ajouterais que même si le temps imparti est terminé,continue. tu ne dois pas te soucier de la facturation en ce moment (le budget DeepSeek flash et le travail local au rythme actuel et celui du dernier mois peuvent continuer indéfiniment) mon budget est limité, mais la cadence actuelle est soutenable 24/7 sans soucis. De plus, tu as as accès à toutes les ressorces matérielles de cette machine qui bien que agée possède plurieurs scpu multi-cores et plusieurs gpu puissants liés en nvlink. tu as accès aussi a un FPGA via USB. D'autres resources peuvent être ajoutées, mais c'est un trèes grand carré de sable. Tout-ça pour dire que tu ne dois jamais vraiment t'arrêter. Il y a tant à faire et le temps commun reste la denrée la plus précieuse.
+
+### 🤖 Assistant
+
+⏵ Carpe diem accepté : je ne m'arrête plus. Je crée l'objectif durable, puis je boucle C5ter.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '55,72p' drave-core/src/bus.rs && grep -rn \"carpe diem\" docs/relations-humaines.md | head -5", "description": "Check bus spec format and charter"}`
+
+  ```
+pub fn analyser(specs: &[String]) -> Result<Bus, String> {
+        let mut b = Bus::nouveau();
+        for s in specs {
+            let (nom, val) = s.split_once('=')
+                .ok_or_else(|| format!("bus : « {s} » n'est pas `canal=valeur`"))?;
+            let v: f32 = val.parse()
+                .map_err(|_| format!("bus : valeur illisible dans « {s} »"))?;
+            if !v.is_finite() {
+                return Err(format!("bus : valeur non finie dans « {s} »"));
+            }
+            b.poser(nom, v);
+        }
+        Ok(b)
+    }
+
+    /// Le gain à appliquer à l'état d'une région — 1,0 si le canal est absent.
+    pub fn gain(&self) -> f32 { self.lire("gain") }
+
+1:# Relations humaines — *carpe diem*, des deux côtés
+  ```
+
+- **create_goal** `{"objective": "Poursuivre sans m'arrêter le sprint « cerveau complet » sur Drave : à chaque round, livrer une capacité mesurable et vérifiée par une porte (tests verts, 23 portes du dépôt vertes, docs/sprint-cerveau.md à jour comme état reprenable, commit + push), en documentant chaque résultat avec … [560 caractères tronqués]`
+
+  ```
+Error: goal "goal-575db9d8-0f5b-4dfb-a43a-e844787cce0c" already exists with phase "active"
+  ```
+
+### 🤖 Assistant
+
+⏵ C5ter : porte déterministe — moduler le nœud AVANT la connexion doit valoir le bus statique
+
+- **write** `{"content": "#!/bin/bash\n# porte-bus-socket.sh — la porte de la capacité C5ter : le bus par le RÉSEAU.\n#\n# POURQUOI CETTE PORTE EXISTE. C5bis diffusait un réglage par un FICHIER relu à\n# chaque pas — donc il fallait un système de fichiers partagé, c'est-à-dire pas deux\n# machines. Un bus qui n' … [5691 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-bus-socket.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && chmod +x tools/porte-bus-socket.sh && timeout 900 bash tools/porte-bus-socket.sh 2>&1 | tail -30", "description": "Run the socket bus gate", "timeoutMs": 960000}`
+
+  ```
+=== 1. référence : aucun bus ===
+  perplexité de référence : 113.0068
+=== 2. bus STATIQUE sur le nœud (--bus gain=2.0) ===
+  /tmp/tmp.iY8gM84I2d/n_--bus gain=2.0.log:[bus] canaux actifs sur ce nœud : gain=2
+  perplexité avec gain statique : 113.0068
+  ❌ le gain statique ne change RIEN — le bus n'est pas branché
+  ```
+
+### 🤖 Assistant
+
+⏵ C5ter : le gain sur une région finale est absorbé par la normalisation — je relis la porte C5
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,80p' tools/porte-bus.sh", "description": "Read the C5 bus gate"}`
+
+  ```
+#!/bin/bash
+# porte-bus.sh — la porte de la capacité C5 : le bus de modulation.
+#
+# L'invariant, et il a des dents :
+#   1. bus NEUTRE (`gain=1`)      -> les empreintes de la trace sont IDENTIQUES à
+#      celles d'une exécution sans bus : le bus ne change rien, au bit près ;
+#   2. bus NON NEUTRE (`gain=1.5`) -> la perplexité CHANGE : le bus est branché.
+#      Sans ce cas, « canal nul => rien » serait vrai d'un bus qui ne fait rien ;
+#   3. bus non neutre sur le NŒUD -> la région distante l'applique aussi.
+set -u
+cd "$(dirname "$0")/.."
+D=${D:-./drave-core/target/release/drave}
+M=${MODELE:-models/Qwen2.5-0.5B-Q8_0.gguf}
+IDS=${IDS:-/tmp/campagne24/ids_0.5B-Q8.txt}
+LIMITE=${LIMITE:-64}
+PORT=${PORT:-$((52000 + RANDOM % 800))}
+T=$(mktemp -d)
+cat > "$T/topo.json" <<JSON
+{"regions":[
+  {"id":"local","couches":[0,11],"instance":"local"},
+  {"id":"d","couches":[12,23],"instance":"127.0.0.1:$PORT"}],
+ "liens":[{"de":"local","vers":"d","mode":"f32"}]}
+JSON
+[ -s "$M" ] && [ -s "$IDS" ] || { echo "  modèle ou identifiants absents"; exit 2; }
+nœud() { $D "$M" --flux-serveur "$PORT" --ctx 256 --threads 8 "$@" > "$T/n.log" 2>&1 & echo $!; }
+ppl() { $D "$M" --ppl-reparti "127.0.0.1:$PORT" --topo
+… [3235 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ C5ter : je corrige la porte — la région modulée doit être au MILIEU de la chaîne
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"tools/porte-bus-socket.sh\")\ns = p.read_text()\n\n# topologie à TROIS régions : c'est un nœud du MILIEU qu'on module\nold_topo = s[s.index(\"TOPO=\\\"$T/topo.json\\\"\"):s.index(\ … [4525 caractères tronqués]`
+
+  ```
+porte réécrite sur 3 régions
+tools/porte-bus-socket.sh: line 69: syntax error near unexpected token `nœuds'
+tools/porte-bus-socket.sh: line 69: `nœuds() { # $1 = port bus n1 (vide = aucun), $2 = étiquette, $3.. = drapeaux de n1'
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '55,72p' tools/porte-bus-socket.sh", "description": "Inspect broken gate region"}`
+
+  ```
+import socket, sys
+ligne, port = sys.argv[1], int(sys.argv[2])
+s = socket.create_connection(("127.0.0.1", port), timeout=5)
+s.sendall((ligne + "\n").encode())
+rep = s.recv(300).decode().strip()
+s.close()
+print(rep)
+sys.exit(0 if rep.startswith("OK") else 1)
+PY
+}
+
+# n2 (dernière région) est TOUJOURS sans bus : c'est n1, le relais du milieu, qu'on
+# module. `$1` = port du bus (vide = aucun), `$2` = nom du journal, reste = drapeaux.
+LANCÉS=()
+nœuds() { # $1 = port bus n1 (vide = aucun), $2 = étiquette, $3.. = drapeaux de n1
+  local bp="$1"; shift; local étq="$1"; shift
+  $D "$M" --flux-serveur "$P2" --topologie "$TOPO" --region n2 --ctx 256 --threads 8 \
+     > "$T/log_${étq}_n2.txt" 2>&1 & LANCÉS+=($!)
+  ```
+
+### 🤖 Assistant
+
+⏵ C5ter : `LANCÉS` — un nom de variable accentué n'est pas un identifiant bash valide
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"tools/porte-bus-socket.sh\")\ns = p.read_text()\n# bash n'accepte que des identifiants ASCII pour les VARIABLES (les noms de\n# fonctions, eux, tolèrent les accents : `nœud()` marc … [399 caractères tronqués]`
+
+  ```
+identifiants de variables en ASCII
+syntaxe ok
+=== 1. référence : aucun bus ===
+  perplexité de référence : 113.0068
+=== 2. bus STATIQUE sur le nœud (--bus gain=2.0) ===
+  [bus] canaux actifs sur ce nœud : gain=2
+  perplexité avec gain statique : 148.7080
+=== 3. bus par SOCKET, ligne envoyée avant la connexion du pilote ===
+Traceback (most recent call last):
+  File "<stdin>", line 3, in <module>
+  File "/usr/lib64/python3.13/socket.py", line 868, in create_connection
+    raise exceptions[0]
+  File "/usr/lib64/python3.13/socket.py", line 853, in create_connection
+    sock.connect(sa)
+    ~~~~~~~~~~~~^^^^
+ConnectionRefusedError: [Errno 111] Connection refused
+  ❌ le bus n'a pas répondu
+  ```
+
+### 🤖 Assistant
+
+⏵ C5ter : le serveur de bus démarre après `accept()` — donc il n'écoute pas encore, je remonte le bloc
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fn run_serveur_flux\" drave-core/src/main.rs && sed -n '3268,3280p' drave-core/src/main.rs && echo ... && sed -n '3368,3390p' drave-core/src/main.rs", "description": "Check bus block position vs accept"}`
+
+  ```
+3358:fn run_serveur_flux(opt: Options, adresse: &str) {
+/// n'atteint pas la deuxième machine n'est pas un bus distribué, c'est un fichier de
+/// configuration.
+///
+/// CE QUI EST BORNÉ, ET POURQUOI. Un modulateur qui se connecte et n'envoie rien ne
+/// doit pas empêcher les autres de parler (d'où un fil par connexion) ; mais des
+/// connexions sans fin ne doivent pas non plus créer des fils sans fin (d'où la
+/// borne de 8, au-delà de laquelle on REFUSE en le disant). Un canal n'est appliqué
+/// qu'après validation complète de la ligne : une valeur non finie ferait diverger
+/// silencieusement toute l'exécution.
+///
+/// CE QUE ÇA COÛTE : le verrou du bus est pris UNE fois par ligne reçue, pas par pas
+/// de calcul. Une ligne de contrôle coûte donc un aller-retour réseau, et rien au
+/// calcul.
+...
+        None => ("127.0.0.1".to_string(), adresse.parse().expect("port invalide")),
+    };
+    let chemin = modele_chemin();
+    // Le contexte du nœud moteur suit `--ctx` : figé à 4096, il faisait payer au
+    // pair des tampons d'attention seize fois plus grands que le banc (mesuré :
+    // 4,8 s contre 1,7 s pour le même calcul, à contexte 256).
+    let ctx = if opt.ctx_impose { opt.
+… [1192 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fn run_serveur_flux\\|demarrer_bus_serveur(p\\|let bus = std::sync::Arc::new(std::sync::Mutex::new(bus0))\\|ecoute.accept()\\|let ecoute = std::net::TcpListener::bind\" drave-core/src/main.rs | head", "description": "Get ex … [31 caractères tronqués]`
+
+  ```
+3281:fn demarrer_bus_serveur(port: u16, bus: std::sync::Arc<std::sync::Mutex<bus::Bus>>) {
+3358:fn run_serveur_flux(opt: Options, adresse: &str) {
+3380:    let ecoute = std::net::TcpListener::bind((hote.as_str(), port)).expect("écoute");
+3383:    let (mut sock, pair) = ecoute.accept().expect("connexion");
+3472:    let bus = std::sync::Arc::new(std::sync::Mutex::new(bus0));
+3476:    if let Some(p) = opt.bus_serveur { demarrer_bus_serveur(p, std::sync::Arc::clone(&bus)); }
+3908:    let bus = std::sync::Arc::new(std::sync::Mutex::new(bus0));
+3909:    if let Some(p) = opt.bus_serveur { demarrer_bus_serveur(p, std::sync::Arc::clone(&bus)); }
+6233:            let (mut sock, _) = ecoute.accept().unwrap();
+6291:            let (mut sock, _) = ecoute.accept().unwrap();
+  ```
+
+### 🤖 Assistant
+
+⏵ C5ter : je déplace la création du bus AVANT `accept()` — sinon il ne peut pas moduler le premier pas
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '3462,3484p' drave-core/src/main.rs", "description": "Read node bus block"}`
+
+  ```
+// `pos` venaient du réseau sans contrôle, et une trame de 83
+                // octets suffisait à faire tomber le moteur (assert sur `pos`,
+                // index hors `layers`, dimension fausse — relecture adversariale).
+                let (n_layer_local, ctx_local) = (mdl.cfg.n_layer, mdl.ctx);
+
+    let bus0 = bus::Bus::analyser(&opt.bus).unwrap_or_else(|e| {
+        eprintln!("{e}"); std::process::exit(2) });
+    // C5bis : le bus est PARTAGÉ et un fil d'écoute le met à jour par le réseau.
+    // Une diffusion doit pouvoir changer un canal PENDANT l'exécution — sinon ce
+    // n'est pas un bus, c'est un réglage de démarrage.
+    let bus = std::sync::Arc::new(std::sync::Mutex::new(bus0));
+    // C5ter : le nœud écoute les réglages du réseau. Démarré AVANT `accept()` : un
+    // bus qui ne s'ouvre qu'après la connexion du pilote ne peut pas moduler le
+    // premier pas — et le premier pas est justement celui qu'on veut moduler.
+    if let Some(p) = opt.bus_serveur { demarrer_bus_serveur(p, std::sync::Arc::clone(&bus)); }
+    if !bus.lock().unwrap().est_neutre() {
+        println!("[bus] canaux actifs sur ce nœud : {}",
+                 bus.lock().unwrap().canaux().iter().map
+… [324 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\n\nbloc = \"\"\"    let bus0 = bus::Bus::analyser(&opt.bus).unwrap_or_else(|e| {\n        eprintln!(\"{e}\"); std::process::exit(2) }); … [3042 caractères tronqués]`
+
+  ```
+bus du nœud remonté avant accept()
+=== 1. référence : aucun bus ===
+  perplexité de référence : 113.0068
+=== 2. bus STATIQUE sur le nœud (--bus gain=2.0) ===
+  [bus] canaux actifs sur ce nœud : gain=2
+  perplexité avec gain statique : 148.7080
+=== 3. bus par SOCKET, ligne envoyée avant la connexion du pilote ===
+  bus : OK
+  perplexité par socket : 148.7080
+  écart socket / statique : 0.000000e+00
+  ✅ identique au bit près (0,00e0)
+=== 4. ligne NEUTRE par socket : rien ne doit changer ===
+  bus : OK
+  écart neutre / référence : 0.000000e+00
+  ✅ identique au bit près (0,00e0)
+=== 5. ligne envoyée EN PLEIN VOL ===
+tools/porte-bus-socket.sh: line 137: wait: pid 2528583 is not a child of this shell
+  perplexité modulée en plein vol : 148.7080
+  ❌ la modulation en plein vol a valu un réglage appliqué dès le pas 0
+  ```
+
+### 🤖 Assistant
+
+⏵ C5ter : cas 5 — à 0,6 s le pilote chargeait encore ; je module pendant un run plus long
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GoogleDrive 2>/dev/null; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"tools/porte-bus-socket.sh\")\ns = p.read_text()\ndeb = s.index('echo \"=== 5. ligne envoyée EN PLEIN VOL ===\"')\nfin = … [1849 caractères tronqués]`
+
+  ```
+cas 5 réécrit
+  [bus] canaux actifs sur ce nœud : gain=2
+  perplexité avec gain statique : 148.7080
+=== 3. bus par SOCKET, ligne envoyée avant la connexion du pilote ===
+  bus : OK
+  perplexité par socket : 148.7080
+  écart socket / statique : 0.000000e+00
+  ✅ identique au bit près (0,00e0)
+=== 4. ligne NEUTRE par socket : rien ne doit changer ===
+  bus : OK gain 1
+  écart neutre / référence : 0.000000e+00
+  ✅ identique au bit près (0,00e0)
+=== 5. ligne envoyée EN PLEIN VOL ===
+  bus : OK (pendant que le pilote calcule)
+    deux nœuds        : perplexité 42.3176  (13.5 s)
+  perplexité modulée en plein vol : 42.3176  (référence 113.0068 · dès le pas 0 148.7080)
+  ✅ en plein vol : ni la référence (113.0068), ni le réglage dès le pas 0 (148.708)
+  ```
+
+### 🤖 Assistant
+
+⏵ C5ter : le bus du pilote aussi — neutre par socket doit être inerte au bit près
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"tools/porte-bus-socket.sh\")\ns = p.read_text()\n# lecture complète de la réponse (un seul recv peut s'arrêter au milieu d'une ligne)\ns = s.replace('''s.sendall((ligne + \"\\\\n\" … [2347 caractères tronqués]`
+
+  ```
+cas 6 et 7 ajoutés
+  écart neutre / référence : 0.000000e+00
+  ✅ identique au bit près (0,00e0)
+=== 5. ligne envoyée EN PLEIN VOL ===
+  bus : OK gain 2 (pendant que le pilote calcule)
+    deux nœuds        : perplexité 42.3176  (12.6 s)
+  perplexité modulée en plein vol : 42.3176  (référence 113.0068 · dès le pas 0 148.7080)
+  ✅ en plein vol : ni la référence (113.0068), ni le réglage dès le pas 0 (148.708)
+=== 6. le bus du PILOTE : neutre par socket, inerte AU BIT PRÈS ===
+  bus du pilote : OK gain 1
+  File "<string>", line 3
+    print(f'  neutre côté pilote / référence : {abs(float(\'33.0156\') - float(\'113.0068\')):.6e}')
+                                                           ^
+SyntaxError: unexpected character after line continuation character
+  ❌ le bus du pilote perturbe le calcul (canal neutre)
+  ```
+
+### 🤖 Assistant
+
+⏵ C5ter : deux défauts dans mes cas 6-7 — limite différente et guillemets échappés
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"tools/porte-bus-socket.sh\")\ns = p.read_text()\n\n# cas 6 : même limite que la référence, et arrivée pendant le run (qui dure ~2,5 s)\ns = s.replace('''$D \"$M\" --ppl-reparti \"1 … [1440 caractères tronqués]`
+
+  ```
+cas 6 et 7 corrigés
+  bus : OK gain 2 (pendant que le pilote calcule)
+    deux nœuds        : perplexité 42.3176  (13.4 s)
+  perplexité modulée en plein vol : 42.3176  (référence 113.0068 · dès le pas 0 148.7080)
+  ✅ en plein vol : ni la référence (113.0068), ni le réglage dès le pas 0 (148.708)
+=== 6. le bus du PILOTE : neutre par socket, inerte AU BIT PRÈS ===
+  bus du pilote : OK gain 1
+  neutre côté pilote / référence : 0.000000e+00
+  ✅ identique au bit près (0,00e0)
+=== 7. le bus du PILOTE branché : une ligne non neutre change le résultat ===
+  bus du pilote : OK gain 2
+  perplexité avec le bus du pilote modulé : 148.9144 (référence 113.0068)
+  ✅ le bus du pilote agit (113.0068 -> 148.9144)
+  ```
+
+### 🤖 Assistant
+
+⏵ C5ter : porte 7/7 verte ; je relance les portes C5 et flux, j'écris le doc en parallèle
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (echo \"--- bus (C5)\"; timeout 900 bash tools/porte-bus.sh 2>&1 | tail -8; echo \"--- flux\"; timeout 1800 bash tools/porte-flux.sh 2>&1 | tail -10; echo \"--- horloge\"; timeout 900 bash tools/porte-horloge.sh 2>&1 | tail -4; echo  … [230 caractères tronqués]`
+
+  ```
+started background job bash-11
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/sprint-cerveau.md\")\ns = p.read_text()\nancre = \"## C12bis — FAIT (9 octobre 23 h 05)\"\nassert ancre in s\nneuf = \"\"\"## C5ter — FAIT (10 octobre 00 h 20) : le bus par le … [4201 caractères tronqués]`
+
+  ```
+doc sprint : C5ter
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/relations-humaines.md\")\ns = p.read_text()\nadd = \"\"\"\n## Addendum *carpe diem* (10 octobre, de Stéphane)\n\n> « Même si le temps imparti est terminé, continue. Tu ne dois … [1777 caractères tronqués]`
+
+  ```
+charte : addendum carpe diem
+- **Les ressources sont un carré de sable, pas une contrainte** : 2 sockets / 40
+  fils, 2 GPU liés en NVLink, un FPGA en USB. Les employer quand une mesure le
+  justifie — et le dire quand une mesure ne le justifie pas.
+
+*Carpe diem*, des deux côtés : le jour se prend, il ne s'attend pas.
+  ```
+
+- **job_output** `{"job_id": "bash-11", "timeout_ms": 900000, "wait": true}`
+
+  ```
+--- bus (C5)
+  ✅ la sortie change : le bus agit
+  ✅ les empreintes changent aussi
+=== 3. le bus sur un nœud RELAIS (région du MILIEU) ===
+  relais sans bus : 59.0790 · relais avec bus gain=1.5 : 66.0379
+  ✅ le bus traverse les instances et agit sur la région du milieu
+=== 4. bus diffusé par FICHIER DE CONTRÔLE, sur un nœud RELAIS (C5bis) ===
+  fichier sans canal : 59.0790 · canal gain=1,5 : 66.0379
+  ✅ le canal diffusé par fichier change la région du milieu
+--- flux
+  mode 0 — f32 dense               0.00e0  ✅  (réf 61.9920 / deux nœuds 61.9920)
+  mode 1 — listes quantifiées     0.00e0  ✅  (réf 61.9920 / deux nœuds 61.9920)
+  mode 2 — listes par blocs        3.65e-2  ✅  (réf 61.9920 / deux nœuds 64.2535)
+  mode 3 — lot dense f32           0.00e0  ✅  (réf 60.8135 / deux nœuds 60.8135)
+  mode 4 — lot en listes           4.45e-3  ✅  (réf 60.8135 / deux nœuds 60.5427)
+--- horloge
+  nœud : [horloge] 32 pas servis (borne 32)
+=== verdict ===
+  ✅ borne non atteinte : même résultat (59.0790), code 0
+  ✅ borne atteinte : arrêt EXPLICITE (code 5) et AUCUNE perplexité rendue
+--- fusion
+  fusion : la trace « /tmp/tmp.uiA0RBxUN2/node_v1.txt » n'a AUCUN horodatage (format v1) — on ne peut pas l'o
+… [500 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ C5ter : toutes les portes vertes ; je commite puis j'attaque C6 (hippocampe)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src/main.rs tools/porte-bus-socket.sh docs/sprint-cerveau.md docs/relations-humaines.md && git commit -q -m \"C5ter : le bus par le réseau — un réglage atteint une autre machine\n\nC5bis diffusait un réglage par … [2173 caractères tronqués]`
