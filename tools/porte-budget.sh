@@ -22,17 +22,18 @@ PORT=${PORT:-$((60000 + RANDOM % 400))}
 T=$(mktemp -d)
 [ -s "$M" ] && [ -s "$IDS" ] || { echo "  modèle ou identifiants absents"; exit 2; }
 
-topo() { # $1 = budget d'octets (vide = aucun), $2 = budget de latence (vide = aucun)
+topo() { # $1 = budget d'octets, $2 = latence, $3 = paires (vides = aucun)
   # `${1:-}` et non `$1` : sous `set -u`, un argument ABSENT fait tomber le script, et le
   # premier appel de la porte n'en passe qu'un (attrapé au premier essai).
-  local b="" l=""
+  local b="" l="" p=""
   [ -n "${1:-}" ] && b=", \"budget_octets\": $1"
   [ -n "${2:-}" ] && l=", \"budget_ms\": $2"
+  [ -n "${3:-}" ] && p=", \"budget_paires\": $3"
   cat > "$T/topo.json" <<JSON
 {"regions":[
   {"id":"local","couches":[0,11],"instance":"local"},
   {"id":"d","couches":[12,23],"instance":"127.0.0.1:$PORT"}],
- "liens":[{"de":"local","vers":"d","mode":"blocs"$b$l}]}
+ "liens":[{"de":"local","vers":"d","mode":"blocs"$b$l$p}]}
 JSON
 }
 nœud() { $D "$M" --flux-serveur "$PORT" --ctx 256 --threads 8 > "$T/n.log" 2>&1 & echo $!; }
@@ -100,5 +101,28 @@ printf '%s' "$E" | grep -q "LATENCE DÉPASSÉE" || { echo "  ❌ le dépassement
 printf '%s' "$E" | grep -qE "deux nœuds +: perplexité" \
   && { echo "  ❌ une perplexité a été rendue malgré le dépassement de latence"; exit 1; }
 echo "  ✅ latence dépassée : nommée (mesurée vs budget, au pas), code 8, aucune perplexité"
+
+echo "=== 6. budget de PAIRES : le troisieme volet de C10 ==="
+# Les paires sont calculees par LE NOEUD : elles n'ont pu etre bornees qu'apres leur TRANSPORT
+# (protocole v8). Le compte est CUMULATIF, donc le plafond apres k pas vaut k x le budget.
+# Et le controle est DANS la boucle : place apres elle, il laissait calculer et AFFICHER la
+# perplexite avant de refuser (attrape par ce cas meme, au round precedent).
+topo "" "" 10000000000
+N=$(nœud); sleep 2
+P=$(pilote); CP=$?
+kill $N 2>/dev/null; wait $N 2>/dev/null
+PP=$(printf '%s\n' "$P" | grep -oE "paires du pair +: [0-9]+" | grep -oE "[0-9]+")
+printf '  genereux (10 G/pas) : paires annoncees %s · code %s\n' "${PP:-?}" "$CP"
+[ "$CP" = 0 ] && [ -n "$PP" ] || { echo "  ❌ budget de paires genereux : le run devrait aboutir"; exit 1; }
+
+topo "" "" 1000000
+N=$(nœud); sleep 2
+Q=$(pilote); CQ=$?
+kill $N 2>/dev/null; wait $N 2>/dev/null
+printf '%s\n' "$Q" | grep -E "PAIRES D" | tail -1 | cut -c1-170 | sed 's/^/  /'
+[ "$CQ" = 9 ] || { echo "  ❌ le depassement de paires devrait sortir en code 9, il sort en $CQ"; exit 1; }
+printf '%s' "$Q" | grep -qE "deux nœuds +: perplexité" \
+  && { echo "  ❌ une perplexite a ete rendue malgre le depassement de paires"; exit 1; }
+echo "  ✅ paires depassees : nommees (total, budget, pas, plafond), code 9, AUCUNE perplexite"
 
 rm -rf "$T"

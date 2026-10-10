@@ -31243,3 +31243,76 @@ Updated 3 paths from the index
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"docs/sprint-cerveau.md\")\ns = p.read_text()\na = \"## ▶ PROCHAINE ACTION (à lire en premier)\"\nneuf = \"\"\"## BUDGET DE PAIRES (C10, 3ᵉ volet) — TENTÉ (11 octobre 19 h), REVE … [3972 caractères tronqués]`
+
+  ```
+essai consigne
+957bf34 Budget de paires : tente et REVERTE — deux lecons, dont une donnee par la porte
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 32 livré : budget de paires **tenté et reverté** — deux leçons, dont une donnée par la porte
+
+**Ce round** — 1 commit poussé, **122 tests verts**, arbre propre, aucune régression laissée.
+
+Le transport du compte de paires est livré (v8) ; il ne manquait que le **contrôle**. Écrit, mesuré, puis **reverté** :
+
+- **ce qui marche** (mesuré à la main) : `budget_paires` dans la topologie, comparaison au plafond `budget × pas`, **refus en code 9** — budget généreux (10 G/pas) ⇒ le run aboutit et annonce **178,9 M paires par pas** ; budget insuffisant (1 M/pas) ⇒ `PAIRES DÉPASSÉES … 8408924160 paires pour un budget de 1000000 par pas sur 47 pas (plafond 47000000)`, **code 9** ✓ ;
+- **leçon 1 — le contrôle doit être DANS la boucle** : placé après, il laissait **calculer et afficher la perplexité** avant de refuser, soit exactement **le résultat partiel** que ce dépôt refuse. C'est **la porte** qui l'a dit, par son assertion « aucune perplexité ne doit être rendue » ;
+- **leçon 2 — une suppression de bloc se vérifie aussi** : le déplacement a laissé un **déséquilibre d'accolades** qui a cassé la compilation. Plutôt que de bricoler un correctif sur un fichier à moitié édité, **j'ai reverté**. Une modification de 7 sites qui ne compile pas n'est pas une modification livrée — même règle que le v7, reverté au round 27 et livré au 28 après avoir été compris.
+
+**Ce qui reste, écrit précisément** : (1) `budget_paires` dans `topologie.rs` ; (2) la lecture dans `run_ppl_reparti` ; (3) **le contrôle dans la boucle**, juste après la réception, avec `pas_servis` comme multiplicateur ; (4) le cas 6 de `porte-budget.sh`, **déjà écrit**, qui exige le code 9 *et* l'absence de perplexité.
+
+**Bilan** : 32 rounds, 22 portes toutes vertes, 122 tests, protocoles v7 et v8 livrés. L'objectif reste **actif**.
+
+
+## Tour 76
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 mémoire épisodique, C7 consolidation, C8 périphérie, C9 latéralité, C10 budgets, et la diffusion réseau du bus de C5 ; (b) les expériences E2-E9 de docs/biologie-pour-drave.md et docs/hebbien-differentiel-et-biologie.md ; (c) les dessins de modèle H/I/J de docs/modele-pour-drave.md ; (d) les manques du registre docs/manques.md (noyau de listes pour les experts, noyau de listes GPU, encodeurs) — l'implémenter ou la mesurer, la doter d'une porte vérifiable, la documenter, commiter, pousser, et enchaîner immédiatement sur la suivante. Contraintes : les 23 portes du dépôt et tous les tests restent verts (porte-flux.sh après toute modification du chemin d'exécution), le profil release reste le binaire de mesure, le crate reste std seul, et docs/sprint-cerveau.md reste l'état resumable mis à jour à chaque round. Ne jamais s'arrêter faute de tâches planifiées : en inventer de nouvelles, mesurables, plutôt que d'attendre."
+Round: 33/60
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 33 : je reprends le budget de paires en ADDITIF seulement (rien de supprimé, rien à casser)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\nn = 0\ndef sub(s, a, b, quoi):\n    global n\n    assert a in s, quoi\n    n += 1\n    return s.replace(a, b, 1)\n\n# ---- topologie : champ + parse + littéral de test (ADDITIF)\np = pathlib.Path( … [3982 caractères tronqués]`
+
+  ```
+budget_paires (additif) : 7 sites
+test result: ok. 122 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.32s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && T=$(mktemp -d); PORT=$((60000 + RANDOM % 4000)); cat > $T/topo.json <<JSON\n{\"regions\":[{\"id\":\"local\",\"couches\":[0,11],\"instance\":\"local\"},{\"id\":\"d\",\"couches\":[12,23],\"instance\":\"127.0.0.1:$PORT\"}],\"liens\":[{\ … [715 caractères tronqués]`
+
+  ```
+=== budget insuffisant : le refus doit venir SANS perplexité ===
+  [budget] lien local → d : 1000000 paires par pas AU PLUS (compte annoncé par le nœud) — dépassement = arrêt, aucune perplexité
+    référence locale  : perplexité 113.0068  (2.1 s)
+  [budget] PAIRES DÉPASSÉES sur le lien local → d : 178913280 paires annoncées par le pair pour un budget de 1000000 par pas sur 1 pas (plafond 1000000) — l'exécution s'arrête ICI, au pas 0. Aucune perplexité n'est rendue.
+  code=9
+  ```
+
+### 🤖 Assistant
+
+⏵ Le refus tombe au pas 0, sans perplexité, code 9 — j'ajoute le cas de porte et je vérifie tout
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"tools/porte-budget.sh\")\ns = p.read_text()\ns = s.replace('''topo() { # $1 = budget d'octets (vide = aucun), $2 = budget de latence (vide = aucun)''',\n              '''topo()  … [2454 caractères tronqués]`
+
+  ```
+cas 6 ajoute
+porte-budget code=0
+  ✅ latence généreuse : résultat identique (111.9225)
+  ✅ latence dépassée : nommée (mesurée vs budget, au pas), code 8, aucune perplexité
+  ✅ paires depassees : nommees (total, budget, pas, plafond), code 9, AUCUNE perplexite
+porte-flux code=0
+  mode 3 — lot dense f32           0.00e0  ✅  (réf 60.8135 / deux nœuds 60.8135)
+  mode 4 — lot en listes           4.45e-3  ✅  (réf 60.8135 / deux nœuds 60.5427)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\n\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\na = \"## Annexe — manifeste des journaux\"\nsec = \"\"\"## 42. C10 CLOS : trois budgets, trois codes — octets (6), … [5278 caractères tronqués]`

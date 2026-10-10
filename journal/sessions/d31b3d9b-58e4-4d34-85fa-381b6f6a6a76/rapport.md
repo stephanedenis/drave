@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 47.9 h |
-| Tours | 75 |
-| Messages | 1957 |
-| Appels d'outils | 1805 |
+| Durée | 48.0 h |
+| Tours | 76 |
+| Messages | 1963 |
+| Appels d'outils | 1809 |
 | Fichiers touchés | 61 |
-| Commandes | 1555 |
+| Commandes | 1559 |
 | Sous-agents | 3 |
-| Commits | 165 |
+| Commits | 166 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -185,6 +185,8 @@
 **Tour 74** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 **Tour 75** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
+
+**Tour 76** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -3192,7 +3194,32 @@ Le champ est **directionnel** (pilote = 0, nœud = son compte) et c'est écrit d
 
 **Synthèse produite :**
 
-⏵ Ma suppression a cassé l'équilibre des accolades — je reviens au commit v8 et je consigne l'essai
+⏵ Round 32 livré : budget de paires **tenté et reverté** — deux leçons, dont une donnée par la porte
+
+**Ce round** — 1 commit poussé, **122 tests verts**, arbre propre, aucune régression laissée.
+
+Le transport du compte de paires est livré (v8) ; il ne manquait que le **contrôle**. Écrit, mesuré, puis **reverté** :
+
+- **ce qui marche** (mesuré à la main) : `budget_paires` dans la topologie, comparaison au plafond `budget × pas`, **refus en code 9** — budget généreux (10 G/pas) ⇒ le run aboutit et annonce **178,9 M paires par pas** ; budget insuffisant (1 M/pas) ⇒ `PAIRES DÉPASSÉES … 8408924160 paires pour un budget de 1000000 par pas sur 47 pas (plafond 47000000)`, **code 9** ✓ ;
+- **leçon 1 — le contrôle doit être DANS la boucle** : placé après, il laissait **calculer et afficher la perplexité** avant de refuser, soit exactement **le résultat partiel** que ce dépôt refuse. C'est **la porte** qui l'a dit, par son assertion « aucune perplexité ne doit être rendue » ;
+- **leçon 2 — une suppression de bloc se vérifie aussi** : le déplacement a laissé un **déséquilibre d'accolades** qui a cassé la compilation. Plutôt que de bricoler un correctif sur un fichier à moitié édité, **j'ai reverté**. Une modification de 7 sites qui ne compile pas n'est pas une modification livrée — même règle que le v7, reverté au round 27 et livré au 28 après avoir été compris.
+
+**Ce qui reste, écrit précisément** : (1) `budget_paires` dans `topologie.rs` ; (2) la lecture dans `run_ppl_reparti` ; (3) **le contrôle dans la boucle**, juste après la réception, avec `pas_servis` comme multiplicateur ; (4) le cas 6 de `porte-budget.sh`, **déjà écrit**, qui exige le code 9 *et* l'absence de perplexité.
+
+**Bilan** : 32 rounds, 22 portes toutes vertes, 122 tests, protocoles v7 et v8 livrés. L'objectif reste **actif**.
+
+### Tour 76 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Re-implement the pair budget additively
+- bash — Verify the in-loop refusal
+- bash — Add the gate case and verify both gates
+- bash — Document and commit C10 closure
+
+**Synthèse produite :**
+
+⏵ Le refus tombe au pas 0, sans perplexité, code 9 — j'ajoute le cas de porte et je vérifie tout
 
 ## 3. Travail accompli
 
@@ -3310,7 +3337,7 @@ Le champ est **directionnel** (pilote = 0, nœud = son compte) et c'est écrit d
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1515 autres
+- … et 1519 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3623,4 +3650,5 @@ Le champ est **directionnel** (pilote = 0, nœud = son compte) et c'est écrit d
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib p = pathlib.Path("docs/sprint-cerveau.md") s = p.read_text() a = "## ▶ 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 bash tools/porte-flux.sh > /tmp/pf31.txt 2>&1; echo "porte-flux code=$?"; timeout 600 cargo te
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib p = pathlib.Path("docs/sprint-cerveau.md") s = p.read_text() a = "## ▶ 
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 

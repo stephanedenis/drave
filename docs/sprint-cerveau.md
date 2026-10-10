@@ -691,6 +691,29 @@ dans un en-tête partagé.
 
 ---
 
+## C10 — CLOS (11 octobre 20 h) : trois budgets, trois codes (6 · 8 · 9)
+
+Le round précédent avait reverté ce travail après un déséquilibre d'accolades. **Repris en
+ADDITIF** — rien supprimé, donc rien à casser — et livré :
+
+| volet | code | mesure |
+|---|---|---|
+| octets | **6** | 1 860 octets pour un budget de 975 ⇒ arrêt au pas 0 |
+| latence | **8** | 20,1 ms pour un budget de 1 ms |
+| **paires** | **9** | **178 913 280** paires pour un budget de **1 000 000**/pas ⇒ arrêt **au pas 0** |
+
+**La leçon du round précédent est appliquée** : le contrôle est **DANS la boucle**, au pas du
+dépassement — et la porte l'exige (« aucune perplexité ne doit être rendue »). Placé après elle,
+il laissait calculer et afficher la perplexité avant de refuser.
+
+**Détail qui se recoupe** : le compte annoncé au PREMIER pas (178 913 280) vaut exactement la
+valeur par pas mesurée sur la session entière (178,9 M) — un compteur cumulatif lu une fois dit
+la même chose au début et à la fin.
+
+**`porte-budget.sh` : 6 cas verts. `porte-flux.sh` : vert, 5 modes.**
+
+---
+
 ## BUDGET DE PAIRES (C10, 3ᵉ volet) — TENTÉ (11 octobre 19 h), REVERTÉ : deux leçons
 
 Le transport du compte de paires est livré (v8) ; il ne manquait que le **contrôle**. Tenté,

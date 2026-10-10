@@ -4331,6 +4331,17 @@ changer (seul le temps change) — c'est la porte de C3", tp_region_distante, de
             .and_then(|t| topologie::lire_json(&t).ok())
             .and_then(|t| t.lien_entre("local", &tp_region_distante).and_then(|l| l.budget_ms))
     } else { None };
+    // C10 (3e volet) : le budget de PAIRES du pair — bornable depuis le transport du compte
+    // (protocole v8). C'est le coût qui compte dans ce moteur.
+    let budget_paires: Option<u64> = if let Some(f) = opt.topologie.clone() {
+        std::fs::read_to_string(&f).ok()
+            .and_then(|t| topologie::lire_json(&t).ok())
+            .and_then(|t| t.lien_entre("local", &tp_region_distante).and_then(|l| l.budget_paires))
+    } else { None };
+    if let Some(b) = budget_paires {
+        println!("[budget] lien local → {tp_region_distante} : {b} paires par pas AU PLUS \
+(compte annoncé par le nœud) — dépassement = arrêt, aucune perplexité");
+    }
     if let Some(b) = budget_ms {
         println!("[budget] lien local → {tp_region_distante} : {b} ms par pas AU PLUS \
 (allé-retour mesuré) — dépassement = arrêt");
@@ -4676,6 +4687,20 @@ protocole, réglages ou contexte — il a dit pourquoi de son côté)");
         };
         // Ce que coûte le découpage : le calcul local, et l'attente du pair
         // (son calcul + l'aller-retour réseau) — la latence, pas le débit.
+        // LE CONTRÔLE EST ICI, DANS LA BOUCLE — et c'est la leçon du round précédent : placé
+        // après elle, il laissait CALCULER ET AFFICHER la perplexité avant de refuser, soit
+        // exactement le résultat partiel que ce dépôt refuse. La porte l'a dit avant moi.
+        // Le compte du nœud est cumulatif : le plafond après k pas vaut k × le budget.
+        if let Some(b) = budget_paires {
+            let pp = PAIRES_DU_PAIR.load(std::sync::atomic::Ordering::Relaxed);
+            let plafond = b.saturating_mul(pas_servis.max(1));
+            if pp > plafond {
+                eprintln!("[budget] PAIRES DÉPASSÉES sur le lien local → {tp_region_distante} : \
+{pp} paires annoncées par le pair pour un budget de {b} par pas sur {pas_servis} pas (plafond \
+{plafond}) — l'exécution s'arrête ICI, au pas {pos}. Aucune perplexité n'est rendue.");
+                std::process::exit(9);
+            }
+        }
         let ms_pas = horloge.elapsed().as_secs_f64() * 1e3;
         t_pair += horloge.elapsed().as_secs_f64();
         if let Some(b) = budget_ms {
