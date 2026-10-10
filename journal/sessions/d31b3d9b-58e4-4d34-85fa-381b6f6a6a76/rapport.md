@@ -6,13 +6,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
 | Durée | 47.4 h |
-| Tours | 67 |
-| Messages | 1903 |
-| Appels d'outils | 1767 |
+| Tours | 68 |
+| Messages | 1908 |
+| Appels d'outils | 1770 |
 | Fichiers touchés | 61 |
-| Commandes | 1517 |
+| Commandes | 1520 |
 | Sous-agents | 3 |
-| Commits | 157 |
+| Commits | 158 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -169,6 +169,8 @@
 **Tour 66** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 **Tour 67** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
+
+**Tour 68** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -2910,7 +2912,37 @@ Instruction des deux candidats à **contexte long** (512 jetons, port valide) :
 
 **Synthèse produite :**
 
-⏵ La cause est trouvée : le pilote applique la fenêtre, le nœud NON → 195,6 contre 50,4. Je REFUSE au lieu de calculer faux
+⏵ Round 24 livré : un drapeau inerte → un drapeau qui **mentait** → un refus explicite
+
+**Ce round** — 1 commit poussé, 122 tests verts, `porte-gain.sh` à **9 cas** (verte).
+
+La commande laissée par le round 23 (« câbler les trois champs en regardant la sortie complète ») est faite — et le résultat vide d'alors n'était pas une panne : le câblage rend un résultat **faux et silencieux**, ce qui est pire.
+
+| avec `--attn-window 64` câblé naïvement | perplexité |
+|---|---|
+| référence locale (12 couches du pilote) | **195,5685** |
+| découpage (12 + 12 couches) | **50,3829** |
+| écart de flux | **7,42e-1** |
+
+Le pilote applique la fenêtre à **ses** douze couches, le nœud garde la sienne : les deux moitiés ne calculent plus le même modèle — **deux modèles différents sous le même nom**, et rien ne le disait.
+
+**La correction est donc devenue un REFUS EXPLICITE** : en chemin réparti, si `--attn-window`, `--swa-pattern` ou `--attn-sinks` est donné, le moteur **s'arrête en expliquant** (code 2, **aucune perplexité**). Un drapeau inerte est un défaut ; un drapeau qui fait calculer deux modèles différents sous le même nom en est un pire — et le pire cas du dépôt est le résultat faux qui a l'air d'un résultat. Ces réglages restent honorés en local et en inférence, où ils sont mesurés (13,1368 → 21,5801).
+
+**Reste à faire pour les honorer en réparti** : les ajouter à `struct Act` et à l'encodeur de trame (**protocole v7**). C'est nommé, chiffré, et la porte l'exige dès maintenant.
+
+**Bilan** : 24 rounds, **22 portes toutes vertes**, 122 tests, 40 sections de rapport. L'objectif reste **actif**.
+
+### Tour 68 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Verify porte-flux after the refusal change
+- bash — Verify the failure and registry gates
+- bash — Commit the post-refusal verification
+
+**Synthèse produite :**
+
+⏵ Trois portes vertes après le refus (flux, pannes, registre) — je consigne et commite
 
 ## 3. Travail accompli
 
@@ -3028,7 +3060,7 @@ Instruction des deux candidats à **contexte long** (512 jetons, port valide) :
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1477 autres
+- … et 1480 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3156,7 +3188,7 @@ Instruction des deux candidats à **contexte long** (512 jetons, port valide) :
 
 ## 5. Erreurs rencontrées
 
-73 sorties en erreur ou divergentes. Les premières :
+74 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : ```  ### 🤖 Assistant  ⏵ **En transformers 5, `AutoModel` rend directement `Qwen2Model` (pas de `.model`). Je corrige le diagnostic.**  - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitH
 - **T2** : 3310393 bash -c pgrep -af "essai_decharge" | grep python | head; echo "--- logs ---"; tail -2 /tmp/ec_d192_lr3e3.log 2>/dev/null; tail -2 /tmp/ec_d192_lr1e3.log 2>/dev/null; echo "---"; ls -la /tmp/ec
@@ -3333,4 +3365,5 @@ Instruction des deux candidats à **contexte long** (512 jetons, port valide) :
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib p = pathlib.Path("docs/sprint-cerveau.md") s = p.read_text() a = "## ▶ 
 

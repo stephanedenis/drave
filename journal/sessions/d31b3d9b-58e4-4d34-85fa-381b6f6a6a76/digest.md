@@ -30395,3 +30395,74 @@ test result: ok. 122 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fi
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\n\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\na = \"\"\"  **À instruire, avec la commande** : câbler `attn_window`/`swa_pattern`/`attn_sinks` dans\n  `run_ppl_r … [5259 caractères tronqués]`
+
+  ```
+docs refus
+e6f7b6b attn-window en reparti : un REFUS explicite, pas un resultat faux et silencieux
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 24 livré : un drapeau inerte → un drapeau qui **mentait** → un refus explicite
+
+**Ce round** — 1 commit poussé, 122 tests verts, `porte-gain.sh` à **9 cas** (verte).
+
+La commande laissée par le round 23 (« câbler les trois champs en regardant la sortie complète ») est faite — et le résultat vide d'alors n'était pas une panne : le câblage rend un résultat **faux et silencieux**, ce qui est pire.
+
+| avec `--attn-window 64` câblé naïvement | perplexité |
+|---|---|
+| référence locale (12 couches du pilote) | **195,5685** |
+| découpage (12 + 12 couches) | **50,3829** |
+| écart de flux | **7,42e-1** |
+
+Le pilote applique la fenêtre à **ses** douze couches, le nœud garde la sienne : les deux moitiés ne calculent plus le même modèle — **deux modèles différents sous le même nom**, et rien ne le disait.
+
+**La correction est donc devenue un REFUS EXPLICITE** : en chemin réparti, si `--attn-window`, `--swa-pattern` ou `--attn-sinks` est donné, le moteur **s'arrête en expliquant** (code 2, **aucune perplexité**). Un drapeau inerte est un défaut ; un drapeau qui fait calculer deux modèles différents sous le même nom en est un pire — et le pire cas du dépôt est le résultat faux qui a l'air d'un résultat. Ces réglages restent honorés en local et en inférence, où ils sont mesurés (13,1368 → 21,5801).
+
+**Reste à faire pour les honorer en réparti** : les ajouter à `struct Act` et à l'encodeur de trame (**protocole v7**). C'est nommé, chiffré, et la porte l'exige dès maintenant.
+
+**Bilan** : 24 rounds, **22 portes toutes vertes**, 122 tests, 40 sections de rapport. L'objectif reste **actif**.
+
+
+## Tour 68
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 mémoire épisodique, C7 consolidation, C8 périphérie, C9 latéralité, C10 budgets, et la diffusion réseau du bus de C5 ; (b) les expériences E2-E9 de docs/biologie-pour-drave.md et docs/hebbien-differentiel-et-biologie.md ; (c) les dessins de modèle H/I/J de docs/modele-pour-drave.md ; (d) les manques du registre docs/manques.md (noyau de listes pour les experts, noyau de listes GPU, encodeurs) — l'implémenter ou la mesurer, la doter d'une porte vérifiable, la documenter, commiter, pousser, et enchaîner immédiatement sur la suivante. Contraintes : les 23 portes du dépôt et tous les tests restent verts (porte-flux.sh après toute modification du chemin d'exécution), le profil release reste le binaire de mesure, le crate reste std seul, et docs/sprint-cerveau.md reste l'état resumable mis à jour à chaque round. Ne jamais s'arrêter faute de tâches planifiées : en inventer de nouvelles, mesurables, plutôt que d'attendre."
+Round: 25/60
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 25 : le refus a modifié le chemin réparti — je vérifie `porte-flux` (contrainte de l'objectif)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 1800 bash tools/porte-flux.sh > /tmp/pf25.txt 2>&1; echo \"porte-flux code=$?\"; tail -6 /tmp/pf25.txt", "description": "Verify porte-flux after the refusal change", "timeoutMs": 1900000}`
+
+  ```
+porte-flux code=0
+  mode 0 — f32 dense               0.00e0  ✅  (réf 61.9920 / deux nœuds 61.9920)
+  mode 1 — listes quantifiées     0.00e0  ✅  (réf 61.9920 / deux nœuds 61.9920)
+  mode 2 — listes par blocs        3.65e-2  ✅  (réf 61.9920 / deux nœuds 64.2535)
+  mode 3 — lot dense f32           0.00e0  ✅  (réf 60.8135 / deux nœuds 60.8135)
+  mode 4 — lot en listes           4.45e-3  ✅  (réf 60.8135 / deux nœuds 60.5427)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 bash tools/porte-pannes.sh > /tmp/pp25.txt 2>&1; echo \"porte-pannes code=$?\"; grep -E \"✅|❌\" /tmp/pp25.txt | tail -3; timeout 900 bash tools/porte-registre.sh > /tmp/pr25.txt 2>&1; echo \"porte-registre code=$?\"; grep … [104 caractères tronqués]`
+
+  ```
+porte-pannes code=0
+  ✅ panne nommée (lien, pas ou octets échangés), code 7, aucune perplexité
+  ✅ pair absent : échec annoncé en 1 s (code 7), aucune perplexité
+porte-registre code=0
+0
+[exit code: 1]
+  ```
+
+### 🤖 Assistant
+
+⏵ Trois portes vertes après le refus (flux, pannes, registre) — je consigne et commite
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"docs/sprint-cerveau.md\")\ns = p.read_text()\na = \"## ▶ PROCHAINE ACTION (à lire en premier)\"\nneuf = \"\"\"## VÉRIFICATION APRÈS LE REFUS DES RÉGLAGES NON TRANSPORTABLES — FA … [2048 caractères tronqués]`

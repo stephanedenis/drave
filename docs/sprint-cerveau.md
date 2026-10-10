@@ -451,6 +451,25 @@ du chemin d'exécution ».
 
 ---
 
+## VÉRIFICATION APRÈS LE REFUS DES RÉGLAGES NON TRANSPORTABLES — FAITE (11 octobre 12 h 30)
+
+Le refus ajouté (§ précédent) est un **changement du chemin d'exécution réparti** : la règle de
+l'objectif s'applique donc à la lettre (« `porte-flux.sh` après toute modification du chemin
+d'exécution »). Vérifié :
+
+| porte | résultat |
+|---|---|
+| **`porte-flux.sh`** | **code 0** — les cinq modes du protocole sont inchangés : 0,00e0 · 0,00e0 · 3,65e-2 · 0,00e0 · 4,45e-3 |
+| **`porte-pannes.sh`** | **code 0** — les pannes restent nommées (lien, pas, octets), code 7, aucune perplexité |
+| **`porte-registre.sh`** | **code 0** — registre et adresse en dur donnent le même résultat |
+| **`porte-gain.sh`** | **9 cas verts**, dont le refus lui-même |
+| **tests** | **122 verts** |
+
+Le refus ne se déclenche que si l'un des trois réglages est **demandé** : une exécution qui ne
+les demande pas suit exactement le chemin d'avant.
+
+---
+
 ## ▶ PROCHAINE ACTION (à lire en premier)
 
 État au **11 octobre 6 h 45** · **21 portes, toutes vertes** (`tools/porte-*.sh`) ·
