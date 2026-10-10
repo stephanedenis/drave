@@ -1,7 +1,7 @@
 # Repères de non-régression — ce qui ne doit PAS bouger
 
 > **2026-10-10 17:55 HAE.** Ces valeurs sont les **verdicts imprimés par la passe complète des
-> portes** (`tools/toutes-les-portes.sh`, **23 vertes sur 23**, 58 minutes). Elles ne sont
+> portes** (`tools/toutes-les-portes.sh`, **23 vertes sur 23**, ≈59 minutes — 3 525 s au total). Elles ne sont
 > pas recopiées de mémoire : elles sortent du journal de la passe. **Une modification du chemin
 > d'exécution qui déplace l'un de ces chiffres a changé le calcul** — il faut alors relancer la
 > porte, comprendre, et écrire à côté de l'ancienne valeur (jamais à sa place).
@@ -15,7 +15,7 @@
 | quoi | commande | attendu |
 |---|---|---|
 | tests unitaires | `cargo test --release` (dans `drave-core/`) | **122 verts** |
-| toutes les portes | `tools/toutes-les-portes.sh` | **23 vertes**, ~58 min, aucune sautée |
+| toutes les portes | `tools/toutes-les-portes.sh` | **23 vertes**, ≈59 min (3 525 s), aucune sautée |
 | une porte | `tools/porte-<nom>.sh` | la dernière ligne dit ce qu'elle verrouille |
 
 ## 2. Les repères imprimés par chaque porte

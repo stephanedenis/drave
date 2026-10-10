@@ -39362,3 +39362,30 @@ porte-pannes           ✅                          43 s    ✅ pair absent : é
 ⏵ Passe complète : **23 vertes, 0 rouge** — je mets à jour les repères, la fiche et l'état
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib, re\nlog = pathlib.Path(\"/tmp/passe-complete2.log\").read_text(encoding=\"utf-8\")\nlignes = []\ntotal = 0\nfor l in log.splitlines():\n    m = re.match(r\"^  (porte-\\S+)\\s+✅\\s+(\\d+) s\\s+(.*) … [5979 caractères tronqués]`
+
+  ```
+repères : 23 portes · 3525 s
+fiche de la passe mise à jour
+manques + état mis à jour
+poussé
+624b694 Passe complete apres la peripherie : 23 portes, 23 vertes, 78 minutes
+  ```
+
+### 🤖 Assistant
+
+⏵ Correction d'un chiffre : la passe a duré 59 minutes (3 525 s), pas 78 — je rectifie partout
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"78 min\\|78 minutes\" docs/ reports/ | head -5; python3 - <<'PYEOF'\nimport pathlib\nremplacements = [\n    (\"reports/rapport-passe-complete-portes.md\", \"78 minutes\", \"59 minutes\"),\n    (\"docs/manques.md\", \"78 mi … [576 caractères tronqués]`
+
+  ```
+docs/manques.md:58:  **23 vertes sur 23, en 78 minutes** (mesuré le 2026-10-10 à 17 h 55 HAE ; détail et durées
+docs/etat-cerveau.md:82:- **23 portes** `tools/porte-*.sh` — **passe complète le 2026-10-10 17 h 55 : 23 vertes sur 23, 78 min**
+reports/rapport-passe-complete-portes.md : 0 remplacement(s) de « 78 minutes »
+docs/manques.md : 1 remplacement(s) de « 78 minutes »
+docs/etat-cerveau.md : 1 remplacement(s) de « 78 min »
+docs/manques.md:58:  **23 vertes sur 23, en 59 minutes** (mesuré le 2026-10-10 à 17 h 55 HAE ; détail et durées
+docs/etat-cerveau.md:82:- **23 portes** `tools/porte-*.sh` — **passe complète le 2026-10-10 17 h 55 : 23 vertes sur 23, 59 min**
+3525 s = 58 min 45 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"docs/references-non-regression.md\"); s = p.read_text()\ns = s.replace(\"**23 vertes sur 23**, 58 minutes)\", \"**23 vertes sur 23**, ≈59 minutes — 3 525 s au total)\")\ns = s.r … [537 caractères tronqués]`

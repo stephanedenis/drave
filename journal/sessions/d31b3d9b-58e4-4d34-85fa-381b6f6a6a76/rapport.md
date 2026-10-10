@@ -7,12 +7,12 @@
 | Début | 2026-10-08 09:11 |
 | Durée | 54.2 h |
 | Tours | 88 |
-| Messages | 2446 |
-| Appels d'outils | 2249 |
+| Messages | 2448 |
+| Appels d'outils | 2251 |
 | Fichiers touchés | 85 |
-| Commandes | 1956 |
+| Commandes | 1958 |
 | Sous-agents | 3 |
-| Commits | 219 |
+| Commits | 220 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -3586,7 +3586,7 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 
 ### Tour 88 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*407 appels d'outils.* Actions notables :
+*409 appels d'outils.* Actions notables :
 
 - bash — Add the refusal and verify
 - bash — Move the refusal to the single point and verify
@@ -3602,11 +3602,11 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - bash — Read v7 removal context and flag inventory
 - bash — Read flag inventory section in docs
 - bash — Establish whether section 9 predates the v7 removal
-- … et 379 autres
+- … et 381 autres
 
 **Synthèse produite :**
 
-⏵ Passe complète : **23 vertes, 0 rouge** — je mets à jour les repères, la fiche et l'état
+⏵ Correction d'un chiffre : la passe a duré 59 minutes (3 525 s), pas 78 — je rectifie partout
 
 ## 3. Travail accompli
 
@@ -3748,7 +3748,7 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1916 autres
+- … et 1918 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4115,4 +4115,5 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' import pathlib # la note de conception : la périphérie est IMPLÉMENTÉE, avec le renvoi
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' import pathlib p = pathlib.Path("reports/rapport-c8-peripherie.md"); s = p.read_text()
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' import pathlib, re log = pathlib.Path("/tmp/passe-complete2.log").read_text(encoding="
+- Duree de la passe : 3 525 s (58 min 45 s), ecrite partout de la meme facon — un chiffre se recopie exactement ou pas du tout" && git push -q origin master && ec
 
