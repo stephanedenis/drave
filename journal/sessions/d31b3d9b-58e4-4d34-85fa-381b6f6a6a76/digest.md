@@ -40646,3 +40646,21 @@ Journaux : /tmp/portes-1210f
 ⏵ **25 portes, 25 vertes** — je fige les repères sur cette passe complète et je mets les comptes à jour
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib, re, subprocess\nlog = pathlib.Path(\"/tmp/passe-complete5.log\").read_text(encoding=\"utf-8\")\nlignes, total = [], 0\nfor l in log.splitlines():\n    m = re.match(r\"^  (porte-\\S+)\\s+✅\\s+(\\d+ … [5668 caractères tronqués]`
+
+  ```
+repères : 25 portes · 59 min 25 s · 19:20
+fiche de passe mise à jour
+docs/etat-cerveau.md : 1 remplacement(s)
+docs/manques.md : 1 remplacement(s)
+docs/etat-cerveau.md:1
+docs/manques.md:1
+docs/references-non-regression.md:2
+poussé
+763822b Passe complete FINALE : 25 portes, 25 vertes, 57 minutes — les reperes sont regeneres depuis ce journal
+  ```
+
+### 🤖 Assistant
+
+⏵ Correction : la passe a duré 59 min 25 s (pas 57) — je rectifie les deux documents
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\nfor f, avant, apres in [\n    (\"docs/etat-cerveau.md\", \"**passe complète le 2026-10-10 19 h 10 : 25 vertes sur 25, 57 min**\",\n     \"**passe complète le 2026-10-10 19 h 20 : 25 vertes sur 25, … [936 caractères tronqués]`

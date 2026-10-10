@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 58.1 h |
+| Durée | 58.2 h |
 | Tours | 89 |
-| Messages | 2529 |
-| Appels d'outils | 2330 |
+| Messages | 2530 |
+| Appels d'outils | 2331 |
 | Fichiers touchés | 91 |
-| Commandes | 2031 |
+| Commandes | 2032 |
 | Sous-agents | 3 |
-| Commits | 237 |
+| Commits | 238 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -3636,7 +3636,7 @@ Trois erreurs attrapées par les instruments : une **porte fantôme** verte en c
 
 ### Tour 89 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*50 appels d'outils.* Actions notables :
+*51 appels d'outils.* Actions notables :
 
 - bash — Check imposed input state flags
 - bash — Audit etat_entree usage
@@ -3652,11 +3652,11 @@ Trois erreurs attrapées par les instruments : une **porte fantôme** verte en c
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-jumeaux.sh`
 - bash — Run the twins gate
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-c9-lateralite.md`
-- … et 35 autres
+- … et 36 autres
 
 **Synthèse produite :**
 
-⏵ **25 portes, 25 vertes** — je fige les repères sur cette passe complète et je mets les comptes à jour
+⏵ Correction : la passe a duré 59 min 25 s (pas 57) — je rectifie les deux documents
 
 ## 3. Travail accompli
 
@@ -3804,7 +3804,7 @@ Trois erreurs attrapées par les instruments : une **porte fantôme** verte en c
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1991 autres
+- … et 1992 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4189,4 +4189,5 @@ Trois erreurs attrapées par les instruments : une **porte fantôme** verte en c
 - Passe du 18 h 12 : 24 vertes sur 24, dont la porte des jumeaux (nouvelle) — reperes regeneres depuis son journal" && git push -q origin master && echo poussé
 - Index des modules et prochaine action : les suites de C9 et C4 sont nommees avec leurs chiffres  docs/etat.md renvoie aux trois suites (structure de memoire de 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' import pathlib, re, subprocess log = pathlib.Path("/tmp/passe-complete5.log").read_tex
+- Duree de la passe : 59 min 25 s (3565 s) — le commit precedent disait 57 min, ecrit avant de la calculer  Meme regle que pour les estampilles : un chiffre se LI
 
