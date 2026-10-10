@@ -961,6 +961,13 @@ rien en réparti ? » — et les deux vrais défauts qu'elle a trouvés ont ét�
 
 ### 46 bis. `--attn-sinks` : écrit partout, transporté par le v7… et LU NULLE PART
 
+> **CORRIGÉ — voir §47.** Cette conclusion est **FAUSSE** : le compteur **est** lu, dans la
+> branche à fenêtre (`model.rs:7472`, `:7490`). L'inertie mesurée venait de la configuration
+> (sans fenêtre, où l'inertie est attendue) et l'égalité `0 ≡ 4` d'un garde qui avalait le zéro.
+> Le refus qui allait être livré sur cette base a été **retiré avant d'être committé**. Le texte
+> ci-dessous est conservé tel quel : c'est la trace de l'erreur, et elle vaut mieux qu'un
+> paragraphe effacé.
+
 Dernier candidat de l'inventaire ci-dessus, et **le plus grave des cinq**. Mesure : inerte en
 réparti **et** en local (14,6496 dans les deux cas). Lecture du code :
 
@@ -983,6 +990,84 @@ rien).
 début de la séquence, comme le décrit `model.rs:2435` — mécanisme réel, et différent des puits
 appris) ; ou (2) **retirer le drapeau**. Dans les deux cas la **porte** doit suivre : exiger qu'il
 **agisse**, ou qu'il n'existe plus.
+
+### 47. `--attn-sinks` : le refus était FAUX — le drapeau VIT, mais seulement avec une fenêtre
+
+**Ce qui allait être livré, et pourquoi ça ne l'a pas été.** Le §46 bis concluait « écrit
+partout, transporté par le v7… et LU NULLE PART », donc le drapeau devait **REFUSER** (`code 2`).
+Le refus a été écrit, posé au point unique (`main.rs:181`, après `analyser`), vérifié
+(`code=2` avec le drapeau, `code=0` avec `0`), et une section de porte ajoutée pour le
+verrouiller. **Il n'a pas été committé : la vérification suivante l'a contredit.**
+
+**Ce que le code fait vraiment.** `self.attn_sinks` **est lu**, en deux endroits
+(`model.rs:7472` et `:7490`), dans la **branche à fenêtre** de `forward()` :
+
+```rust
+let ns = if lo > 0 { self.attn_sinks.min(lo) } else { 0 };
+for t in (0..ns).chain(lo..nw) { sc[t] = point(qh, &kd) * scale; }   // les puits sont NOTÉS
+for t in ns..lo { sc[t] = f32::NEG_INFINITY; }                        // le reste est masqué
+```
+
+Les `n` premiers jetons de la séquence restent donc **notés** en plus de la fenêtre glissante :
+c'est le drain de l'attention, et il n'a rien à voir avec les puits **appris** (`lay.sinks`,
+tenseur `attn_sinks.weight`, qui entrent dans le dénominateur du softmax et sont, eux,
+implémentés depuis gpt-oss).
+
+**Pourquoi la mesure disait « inerte » — deux erreurs empilées.** (1) L'inventaire du §46 a
+mesuré **sans fenêtre**, c'est-à-dire dans la seule configuration où l'inertie est **attendue**
+(`lo` vaut toujours 0, donc `ns` aussi). (2) L'égalité `0 ≡ 4` qui semblait confirmer la mort du
+drapeau venait d'un **garde** : `if attn_sinks > 0 { mdl.attn_sinks = attn_sinks }` **avalait le
+zéro** — « 0 » mesurait donc 4, le défaut (`model.rs:4492`, `if fenetre > 0 { 0 } else { 4 }`).
+Deux mesures égales, encore, et cette fois elles cachaient un **vrai** réglage.
+
+**La mesure vraie** (fenêtre 32, `--limit 64`, ids 0.5B-Q8) :
+
+| puits | perplexité | |
+|---|---|---|
+| **0** | **1297,5437** | **catastrophique** : une fenêtre sans drain n'est pas un modèle moins cher, c'est un modèle cassé |
+| 1 · 2 · 8 · 12 | 28,72 · 28,77 · 28,83 · 28,97 | le drain travaille |
+| 4 (défaut) | 29,0206 | la valeur que « 0 » mesurait |
+| 16 | 28,5286 | |
+| **24** | **27,4439** | **meilleur mesuré** (à 128 jetons : 15,4339 contre 18,1141 au défaut, **−14,8 %**) |
+| 32 | 27,4964 | plateau |
+
+Sans fenêtre : `--attn-sinks 24` → **27,4964**, identique à l'absence de drapeau — inerte,
+**attendu**, et le moteur le dit maintenant.
+
+**Le correctif, et il est petit.** `attn_sinks_impose` (l'idiome de `--ctx`/`--threads`/
+`--abits` : on applique si le drapeau a été **donné**, pas si sa valeur est `> 0`), aux trois
+sites ; une ligne de tableau de bord qui affiche la valeur **effective** et son origine
+(`puits d'attention 4 (défaut)` / `0 (imposé)`, plus `· INERTES : aucune fenêtre active`) — c'est
+exactement la valeur qu'aucune ligne ne montrait, et sans elle deux mesures égales se lisent
+comme « drapeau mort » ; et un **avertissement** quand le réglage est imposé sans fenêtre.
+
+**Les portes qui verrouillent, dont une qui était ROUGE depuis le v7.**
+- `tools/porte-gain.sh` **§9** exigeait un REFUS pour `--attn-window` en réparti (commit
+  `e6f7b6b`) que le v7 a **retiré délibérément** (`main.rs:4432`) : elle ne pouvait plus passer,
+  donc ne mesurait plus rien. Réécrite sur un test **décisif pour les deux côtés à la fois** :
+  le découpage est exact (0,00e0), donc **deux découpages différents sous les mêmes drapeaux
+  doivent rendre le même chiffre** (65,6625 = 65,6625, écart 0,00 %) — si le pilote n'appliquait
+  pas la fenêtre (défaut du round 28) **ou** si le nœud ne la recevait pas (ce que le v7 a
+  corrigé), les deux découpages fenêtreraient des couches différentes et divergeraient. Garde
+  contre le piège des « deux réglages inertes » : la même section exige que la fenêtre **morde**
+  d'abord (59,0790 → 65,6625, +11,1 %).
+- **§10** verrouille la courbe : `0` casse (×45 sur le défaut), `24` améliore, sans fenêtre
+  l'avertissement `INERTE ici` sort et le chiffre ne bouge pas, et le tableau de bord montre les
+  deux étiquettes.
+
+**Ce que cette erreur dit de la méthode** — deux pièges, tous deux déjà écrits dans ce fichier,
+tous deux retombés dedans : **une mesure d'inertie faite dans la configuration où l'inertie est
+attendue ne dit rien** ; et **deux nombres égaux ne prouvent pas qu'ils mesurent la même chose**
+(c'était vrai au round 28, c'était vrai ici — `0` et `4` étaient égaux parce que `0` valait `4`).
+Le dépôt a gagné au change : un refus inutile en moins, un réglage réel en plus (24 puits :
+−14,8 % sous fenêtre), et un défaut de plus d'une famille qu'il traque — **un zéro
+inexprimable**.
+
+**Et l'instrument qui manquait** : `tools/toutes-les-portes.sh` lance **toutes** les portes,
+séquentiellement, aucune sautée, chacune bornée dans le temps (une porte qui pend est rouge),
+journaux gardés, sortie `1` avec la queue des rouges. La porte §9 était rouge depuis le v7 parce
+que les portes étaient lancées **une par une, à la main** : « toutes vertes » était une
+affirmation sur une suite qui n'avait jamais tourné comme une suite.
 
 ## ▶ PROCHAINE ACTION (à lire en premier)
 

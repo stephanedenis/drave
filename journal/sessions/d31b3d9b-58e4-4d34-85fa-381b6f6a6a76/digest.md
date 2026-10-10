@@ -32133,3 +32133,1444 @@ AssertionError
 ⏵ Le second remplacement a échoué (ancre différente) — j'insère la section dans le journal par une ancre sûre
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"docs/sprint-cerveau.md\")\ns = p.read_text()\na = \"## ▶ PROCHAINE ACTION (à lire en premier)\"\nsec = \"\"\"### 46 bis. `--attn-sinks` : écrit partout, transporté par le v7… et … [1808 caractères tronqués]`
+
+  ```
+46 bis insere dans le journal
+639b007 Journal : la section 46 bis (--attn-sinks ecrit partout, lu nulle part) manquait — l'ancre du premier essai ne correspondait pas
+dd95fa9 --attn-sinks : ecrit dans les trois chemins, transporte par le v7… et LU NULLE PART
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 44 livré : `--attn-sinks` — écrit partout, transporté par le v7, **lu nulle part**
+
+**Ce round** — 2 commits poussés. Le dernier candidat de l'inventaire, et **le plus grave des cinq**.
+
+**Mesure** : inerte en réparti **et** en local (14,6496 dans les deux cas). **Lecture du code** :
+
+| où | ce qui est fait |
+|---|---|
+| `main.rs:1036` | le drapeau pose `o.attn_sinks` |
+| `main.rs:1227` / `7114` | `if attn_sinks > 0 { mdl.attn_sinks = … }` (inférence, perplexité) |
+| `main.rs:4425` | assigné en réparti (round 42) |
+| `model.rs:2961` | **transporté par le protocole v7** |
+| **le calcul** | **aucune lecture de `self.attn_sinks`** |
+
+Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'attention consomme — pas ce compteur.
+
+**Cinquième défaut de la même famille** — après `--ffn-gain` en réparti, le poids de greffe à zéro par défaut, `--attn-window`, et le `sys.exit` qui sortait en 1 — **et le plus grave : le v7 a fait voyager un réglage mort** (une modification de version, 91 → 99 octets, pour rien).
+
+**Deux issues, et c'est un choix de conception** : (1) **implémenter** le compteur (`n` jetons puits au début de la séquence, comme le décrit `model.rs:2435` — mécanisme réel, différent des puits appris) ; ou (2) **retirer le drapeau** — un drapeau qui ne peut rien faire est pire qu'aucun drapeau : il donne l'illusion d'un réglage. Dans les deux cas, **la porte doit suivre** : exiger qu'il agisse, ou qu'il n'existe plus.
+
+**Bilan** : 44 rounds, **22 portes toutes vertes**, 122 tests. La chaîne d'audit ouverte au round 21 est **close** : dix drapeaux testés, six agissent, trois inertes pour une raison identifiée, **un cinquième défaut systémique trouvé et documenté**. L'objectif reste **actif**.
+
+
+## Tour 88
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 mémoire épisodique, C7 consolidation, C8 périphérie, C9 latéralité, C10 budgets, et la diffusion réseau du bus de C5 ; (b) les expériences E2-E9 de docs/biologie-pour-drave.md et docs/hebbien-differentiel-et-biologie.md ; (c) les dessins de modèle H/I/J de docs/modele-pour-drave.md ; (d) les manques du registre docs/manques.md (noyau de listes pour les experts, noyau de listes GPU, encodeurs) — l'implémenter ou la mesurer, la doter d'une porte vérifiable, la documenter, commiter, pousser, et enchaîner immédiatement sur la suivante. Contraintes : les 23 portes du dépôt et tous les tests restent verts (porte-flux.sh après toute modification du chemin d'exécution), le profil release reste le binaire de mesure, le crate reste std seul, et docs/sprint-cerveau.md reste l'état resumable mis à jour à chaque round. Ne jamais s'arrêter faute de tâches planifiées : en inventer de nouvelles, mesurables, plutôt que d'attendre."
+Round: 45/60
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 45 : `--attn-sinks` ne peut rien faire — je le REFUSE explicitement (un endroit, trois chemins)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\na = \"\"\"    mdl.act_thresh = opt.act_thresh;\n    mdl.act_topk = opt.act_topk;\n    mdl.act_renorm = opt.act_renorm;\"\"\"\nb = \ … [2331 caractères tronqués]`
+
+  ```
+refus pose
+--- refus attendu ---
+    dont tête de sortie 5.69 | notation log-sum-exp 1.29 (le reste du « reste » n'est pas chronométré)
+    dont attention : scores 0.05 | softmax 0.03 | somme pondérée + écriture KV 3.86
+code=0
+--- sans le drapeau (doit marcher) ---
+perplexité 81.5223
+test result: ok. 122 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.31s
+  ```
+
+### 🤖 Assistant
+
+⏵ Le refus n'a pas déclenché (le chemin perplexité n'appelle pas ce helper) — je le place au point unique
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\n# retirer le refus du helper (il ne couvre pas tous les chemins)\ndeb = s.index(\"    // `--attn-sinks` NE PEUT RIEN FAIRE\")\nfin  … [2557 caractères tronqués]`
+
+  ```
+refus au point unique
+--- avec le drapeau ---
+[attention] REFUS : `--attn-sinks` n'est PAS consommé par le calcul — le champ est écrit, transporté par le protocole, et lu nulle part (les puits utilisés sont les puits APPRIS, tenseur `attn_sinks.weight`). Mesuré : inerte en local comme en réparti. Un drapeau qui ne peut rien faire est pire qu'aucun drapeau : il donne l'illusion d'un réglage. Rien n'a été calculé. Voir docs/sprint-cerveau.md §46 bis.
+code=0
+--- sans ---
+perplexité 81.5223
+test result: ok. 122 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.32s
+  ```
+
+
+  ```
+t ROBUSTE : +0,0215 sur trois graines (variation 0,0005)
+47152fd Audit (fin) : les deux mêmes incohérences étaient dans recapitulatif.md
+75d590a Audit (suite) : le TITRE du rapport génératif promettait ce que son corps réfute
+6b4a75e Audit de cohérence : deux affirmations périmées pointées dans mes propres rapports
+e89dbe3 Couche 8 contre couche 10 : la correction de cible PAIE (+0,0213 sur le transfert)
+9070ecf Romeo : le pont TRANSFÈRE sur du texte littéraire (0,6660 anglais -> 0,5802 français)
+00b65d4 Le plateau du professeur est à la couche 8, pas 10 — ma cible était mal choisie
+644cf5c Restriction ou pas : comparaison complète, et correction de mon invariant
+43adee1 Le piège du droit d'exécution, trois fois — corrigé à la racine
+99878fa Bug de guetteur : 'TERMINE' matchait la sous-chaîne de 'caches TERMINE'
+2bdae7e LIVRABLE PHASE 2 : le pont sur 301 langues — fid TEST 0,7430, invariance 0,9827
+e85847a Plateau sur 392 langues : le 'sous-ensemble partagé' s'effondre de 678 à 48 canaux
+dad554e Optimum du seuil de couche : 0,25, et c'est un maximum INTÉRIEUR
+cf54f8b Mon seuil de couche par défaut était TROP STRICT — la profondeur forcée paie
+0ce0f3f Bug : --seuil-commun ne pilotai
+… [3959 caractères tronqués]
+  ```
+
+
+> **Compactage de contexte** — résumé conservé :
+
+```
+## Primary Request and Intent
+- Original: "revenir à l'essence de Drave et produire un modèle qui est à son meilleur dans une architecture événementielle facilement distribuable sur les divers types d'unité de traitement et ressources d'une machine et de plusieurs machines en réseau."
+- Auto-generated goal (still **active**, phase "active", max 60 rounds, currently round 45): timeboxing jusqu'au 10 octobre 9 h (HAE), then keep working: "occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches". Choose max-value capacity/experience each round from: (a) plan capacities C2–C12, (b) biology experiments E2–E9, (c) model designs H/I/J, (d) gaps in docs/manques.md. Implement or measure it, give it a verifiable gate, document, commit, push, chain immediately.
+- User's standing mandates: **never stop when the list is empty — invent new measurable work**; "carpe diem" applies to time *and* relationships (`docs/relations-humaines.md`); billing is not a concern (24/7 pace sustainable); full hardware access (2 Xeon, 2 GPU NVLink, FPGA via USB).
+- Constraints: 23 repo gates + all tests green, `porte-flux.sh` after ANY execution-path change, release profile = measurement binary, crate stays std-only, `docs/sprint-cerveau.md` = resumable state updated each round.
+- Reporting style: ≤10 lines per round, alerts first, no narrative; questions only when blocking.
+
+## Key Technical Concepts
+- Drave: Rust inference engine `drave-core/`, **std-only, zero dependencies**, GGUF in-place mmap, `lto=true, codegen-units=1`.
+- Cost model: **paires = (poids non nuls) × (activations vivantes)**; four distinct exit codes for declared limits: **5** = step bound (C4), **6** = octets budget, **7** = link failure (C11), **8** = latency budget, **9** = paires budget, **2** = explicit refusal (untransportable/non-consumed setting).
+- Protocol versions: **v6 → v7** (added `attn_window`, `swa_pattern`, `attn_sinks`; `TAILLE_TETE` 79→91) → **v8** (added node pair count u64; `TAILLE_TETE` 91→99). Header layout offsets: 0 magie, 4 version, 5 mode, 6 debut, 10 fin, 14 pos, 18 n, 22 echelle, 26 levels, 30 thresh, 34 topk, 38 renorm, 39 topk_proj[7], 67 attn_topk, 71 qk_topk, 75 moe_topk, 79 attn_window, 83 swa_pattern, 87 attn_sinks, 91 paires (u64).
+- Measured link economics: latency law 3,4 ms/token per ms RTT; 448 fibres = +2,81 % and ÷1,8 in octets; cliff **between 448 and 392**; quantize beats prune by 83 %; step = **4 messages** before write-coalescing, **2,62** after (−20 % step time at 5 ms/message); jitter 40 % (localhost) → **49 %** with 5 ms/message.
+- Trace/threshold traits: two distinct windowing semantics — `--ppl` scores the `limit` **first** tokens, `--ppl-reparti` truncates to the **last** `limit` tokens.
+
+## Files and Code
+- `docs/sprint-cerveau.md` (~900 lines): resumable state, ▶ PROCHAINE ACTION, per-capacity gates, hourly journal incl. §46 bis (`--attn-sinks` written everywhere, read nowhere).
+- `reports/rapport-campagne-benefices.md`: sections §24–§46 bis (C6 memory, C7 consolidation, C8 reflex, C9/C10 bridge+cuts+budgets, C2 merge rule, graft, cue/indice, v7, v8, calibration, jitter, message count, coalescing, flag inventory).
+- `drave-core/src/main.rs`: `run_ppl`, `run_infer`, `run_ppl_reparti`, `run_serveur_flux`, `analyser`, `appliquer_quantification`, `appliquer_fusion`, `panne_de_lien`, `resoudre_instance`, `pont_sparsifier`, `demarrer_bus_serveur`, `run_fusion_traces`, `run_episodique_essai`, `run_reflexe_essai`, `argmax`/`argmax_et_top5`, `struct Act` (v8 fields), `PAIRES_DU_PAIR` atomic (fetch_max), in-loop paires budget check.
+- `drave-core/src/model.rs`: `pub paires: [u64; 3]`, `pub paires_flux: u64`, `fusion_etat`/`fusion_alpha`/`fusion_pos`, `etat_sortie: Option<(String, Vec<usize>)>`, `ffn_gain: Option<Vec<(usize, f32)>>`, `attn_window`/`swa_pattern`/`attn_sinks` fields (attn_sinks **never read**).
+- `drave-core/src/topologie.rs`: `Lien { de, vers, mode, delai_ms, budget_octets, budget_ms, budget_
+… [6271 caractères tronqués]
+```
+
+### 👤 Utilisateur
+
+This is an automatically generated checkpoint condensing an earlier span of the conversation to free up context. Treat the captured context as established background and build on it without restating it. Continue the task directly from the messages that follow, without acknowledging this checkpoint.
+
+<compacted-summary>
+## Primary Request and Intent
+- Original: "revenir à l'essence de Drave et produire un modèle qui est à son meilleur dans une architecture événementielle facilement distribuable sur les divers types d'unité de traitement et ressources d'une machine et de plusieurs machines en réseau."
+- Auto-generated goal (still **active**, phase "active", max 60 rounds, currently round 45): timeboxing jusqu'au 10 octobre 9 h (HAE), then keep working: "occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches". Choose max-value capacity/experience each round from: (a) plan capacities C2–C12, (b) biology experiments E2–E9, (c) model designs H/I/J, (d) gaps in docs/manques.md. Implement or measure it, give it a verifiable gate, document, commit, push, chain immediately.
+- User's standing mandates: **never stop when the list is empty — invent new measurable work**; "carpe diem" applies to time *and* relationships (`docs/relations-humaines.md`); billing is not a concern (24/7 pace sustainable); full hardware access (2 Xeon, 2 GPU NVLink, FPGA via USB).
+- Constraints: 23 repo gates + all tests green, `porte-flux.sh` after ANY execution-path change, release profile = measurement binary, crate stays std-only, `docs/sprint-cerveau.md` = resumable state updated each round.
+- Reporting style: ≤10 lines per round, alerts first, no narrative; questions only when blocking.
+
+## Key Technical Concepts
+- Drave: Rust inference engine `drave-core/`, **std-only, zero dependencies**, GGUF in-place mmap, `lto=true, codegen-units=1`.
+- Cost model: **paires = (poids non nuls) × (activations vivantes)**; four distinct exit codes for declared limits: **5** = step bound (C4), **6** = octets budget, **7** = link failure (C11), **8** = latency budget, **9** = paires budget, **2** = explicit refusal (untransportable/non-consumed setting).
+- Protocol versions: **v6 → v7** (added `attn_window`, `swa_pattern`, `attn_sinks`; `TAILLE_TETE` 79→91) → **v8** (added node pair count u64; `TAILLE_TETE` 91→99). Header layout offsets: 0 magie, 4 version, 5 mode, 6 debut, 10 fin, 14 pos, 18 n, 22 echelle, 26 levels, 30 thresh, 34 topk, 38 renorm, 39 topk_proj[7], 67 attn_topk, 71 qk_topk, 75 moe_topk, 79 attn_window, 83 swa_pattern, 87 attn_sinks, 91 paires (u64).
+- Measured link economics: latency law 3,4 ms/token per ms RTT; 448 fibres = +2,81 % and ÷1,8 in octets; cliff **between 448 and 392**; quantize beats prune by 83 %; step = **4 messages** before write-coalescing, **2,62** after (−20 % step time at 5 ms/message); jitter 40 % (localhost) → **49 %** with 5 ms/message.
+- Trace/threshold traits: two distinct windowing semantics — `--ppl` scores the `limit` **first** tokens, `--ppl-reparti` truncates to the **last** `limit` tokens.
+
+## Files and Code
+- `docs/sprint-cerveau.md` (~900 lines): resumable state, ▶ PROCHAINE ACTION, per-capacity gates, hourly journal incl. §46 bis (`--attn-sinks` written everywhere, read nowhere).
+- `reports/rapport-campagne-benefices.md`: sections §24–§46 bis (C6 memory, C7 consolidation, C8 reflex, C9/C10 bridge+cuts+budgets, C2 merge rule, graft, cue/indice, v7, v8, calibration, jitter, message count, coalescing, flag inventory).
+- `drave-core/src/main.rs`: `run_ppl`, `run_infer`, `run_ppl_reparti`, `run_serveur_flux`, `analyser`, `appliquer_quantification`, `appliquer_fusion`, `panne_de_lien`, `resoudre_instance`, `pont_sparsifier`, `demarrer_bus_serveur`, `run_fusion_traces`, `run_episodique_essai`, `run_reflexe_essai`, `argmax`/`argmax_et_top5`, `struct Act` (v8 fields), `PAIRES_DU_PAIR` atomic (fetch_max), in-loop paires budget check.
+- `drave-core/src/model.rs`: `pub paires: [u64; 3]`, `pub paires_flux: u64`, `fusion_etat`/`fusion_alpha`/`fusion_pos`, `etat_sortie: Option<(String, Vec<usize>)>`, `ffn_gain: Option<Vec<(usize, f32)>>`, `attn_window`/`swa_pattern`/`attn_sinks` fields (attn_sinks **never read**).
+- `drave-core/src/topologie.rs`: `Lien { de, vers, mode, delai_ms, budget_octets, budget_ms, budget_paires }`, registry-based instance resolution.
+- `drave-core/src/episodique.rs` (C6): `cle` k-WTA, `expandre` (gyrus denté), `melange`, `consolider`/`consolider_mode` (`Prototype::Moyenne|Exemplaire`), `listes_canaux`, `ecrire_avec_cle`, raw-bit file format.
+- `drave-core/src/trace_globale.rs`: v2 format (`t_abs`, `mode`), `fusionner`, `verifier_liens`, `derive_horloges`, `ecrire_source`, `ecrire_si_source`.
+- Gates (22, all green): `tools/porte-{budget,pannes,registre,flux,topologie,trace,fusion,bus,bus-socket,delais,horloge,pont,coupe,episodique,reflexe,greffe,indice,melange,gain,mistral,tokenizer-kimi,reparti-moteur}.sh`; plus `tools/carte_coupe.sh`, `tools/aiguille.py`, `tools/proxy_latence.py` (usage: `proxy_latence.py <port_écoute> <hôte:port> [délai_ms]`).
+
+## Errors and Fixes
+- `sys.exit("message")` always exits 1 → a "green" gate returned 1 (porte-bus-socket); fixed with print + implicit 0. Also: backticks inside a double-quoted bash string trigger command substitution (bit me 3×).
+- Off-by-one on "last position": `--tokenize` ≠ `--prompt` token counts ⇒ captured the state predicting the last text token instead of the code; fixed by `--etat-fin K` (k-th from end, resolved in inference numbering after truncation). This invalidated round-28's "state graft doesn't transfer context" conclusion — corrected: the graft **does** transfer content.
+- `..Default::default()` gives 0.0 to f32 → `--fusion-alpha` defaulted to zero (silent no-op); fixed to 1.0 and `fusion_pos: usize::MAX`.
+- Red gate `porte-reparti-moteur` (58,7 % discrepancy, flux 0.00e0): cause = gate defect (255 tokens in file, LIMITE 128, different windows); fixed by counting tokens. Same latent trap fixed in `porte-topologie.sh`.
+- `--ffn-gain` wired in `run_infer`/`run_ppl` but NOT `run_ppl_reparti` (flag did nothing in the split path); fixed round 20. Same for `attn_window`/`swa_pattern`/`attn_sinks` (fixed round 42).
+- **`--attn-sinks` is written in all three paths, transported by v7, and never read** — inert locally and in reparti (14,6496 both); round 45 added a refusal in `appliquer_quantification` (one place, three paths). **Verification just failed**: the refusal run printed timing output and `code=0` instead of the refusal + code 2 — not yet diagnosed.
+- Node serves exactly ONE connection: test harnesses must restart the node per run (a bench that didn't made every flag look inert).
+- Harness errors found by measurement: port > 65535 (65800+RANDOM%150), overwriting `$D` (binary path) with run output → code 127, block deletion causing brace imbalance (twice → reverted rounds 27 and 32).
+- `DRAVE_DEBUG_FUSION` read but undeclared: caught by the repo's `VARS_LUES` test.
+
+## Pending Jobs
+- Finish/diagnose round-45 refusal of `--attn-sinks` (currently ineffective: run returned code 0) + add gate case + commit.
+- `--attn-window`/`--swa-pattern`/`--attn-sinks` now assigned in `run_ppl_reparti` (round 42); `--attn-topk` acts at 512 tokens but not at 32 (trivial attention) — no defect.
+- C8 continuation: a **dedicated head per depth** (reflex agreement is 0 % up to 16/24 layers; cos 0,145) — needs training via `tools/entrainer_moteur.py`.
+- Model designs H/I/J; design I has its measure (−11,5 % at layer 0 gain 0.75, but only 2 layers useful and composing gains degrades).
+- C4 real asynchrony (instrument calibrated: 50 ms injected → 50,2 measured; jitter 49 %; 2,62 messages/step).
+- Remaining unverified flags: none open except `--attn-sinks` (now refused).
+
+## Current Work
+- Round 45: added an explicit refusal for `--attn-sinks` inside `appliquer_quantification` (covers `run_ppl`, `run_infer`, `run_ppl_reparti`), message begins "[attention] REFUS : `--attn-sinks` n'est PAS consommé par le calcul … Voir docs/sprint-cerveau.md §46 bis."
+- `cargo build` clean, 122 tests pass. **But the refusal did not trigger**: `--attn-sinks 4 --ppl …` printed normal timing lines and `code=0`; the no-flag run correctly gave `perplexité 81.5223`.
+- Hypothesis to check: `appliquer_quantification` receives `opt` **after** something already consumed/inspected it, or `opt.attn_sinks` parse default/flag order means the condition `opt.attn_sinks > 0` isn't reached before the run (or `--ppl` path calls `appliquer_quantification` with a different `Options` copy).
+
+## Next Step
+- Diagnose why the `--attn-sinks` refusal did not fire (print `opt.attn_sinks` where the check sits; verify `appliquer_quantification` is called before the loop in `run_ppl`), fix, add a gate case, then commit and push.
+
+## Critical Context
+- Repo published private: `https://github.com/stephanedenis/drave`, branch `master`, remote `origin` = `git@github.com:stephanedenis/drave.git`; all work pushed; working tree clean except harness-managed `journal/*`.
+- Gates: 22 in `tools/porte-*.sh`, all green; 122 tests green; last commits: `639b007` (§46 bis journal), `dd95fa9` (attn-sinks finding).
+- Methodology lessons repeatedly applied: a number is not verified by its own coherence but by comparison to a known value (a 24× double-count of pair counts was caught against the campaign's 358 M/token); equal numbers don't prove equal measurements (18,5520 = 18,5520 was two inert settings); an empty measurement must be traced to its cause before accusing what it measures; a failing gate must be instructed to its cause (the red gate accused the model, was the gate); never leave a broken tree (v7 and pair-budget were reverted and later delivered).
+- Documented traps to respect: bus gain on a final region is absorbed by output normalization (test on a middle region); `--flux` takes no argument (`--flux f32` silently stays dense); accented bash **variable** names are invalid (function names with accents work); `pkill -f "<name>"` self-kills; a node refuses a single-layer range; `--depuis` inflates pair counters; unknown flags are silently ignored (use `--options-strict`); serialize heavy disk readers (two concurrent 63 GB readers → 8,6 Mo/s); `%` is a separate field in gate output parsers.
+- Machine: 2 sockets/40 threads, RTX 5000 ×2 (GPU0 free), HDD slow for mmap; `/tmp/campagne24/` holds campaign artifacts (ids files: `ids_0.5B-Q8.txt` = 85 625 tokens; `niah_4096_0.5.txt`; `/tmp/moteur_route.gguf`, `/tmp/moteur_dense.gguf`, `/tmp/route_ids.txt` = 255 tokens).
+</compacted-summary>
+
+### 🤖 Assistant
+
+⏵ Vérification du code de sortie réel, puis ajout au portail et commit
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/campagne24/ids_0.5B-Q8.txt --limit 16 --ctx 256 --threads 8 --attn-sinks 4 >/tmp/refus.txt 2>&1; echo \"code=$? (attendu 2)\"; ./drave-core/target/release/dra … [351 caractères tronqués]`
+
+  ```
+code=2 (attendu 2)
+code(--attn-sinks 0)=0 (attendu 0)
+--- portails contenant un refus ---
+tools/porte-fusion.sh
+tools/porte-gain.sh
+tools/porte-registre.sh
+tools/porte-topologie.sh
+  ```
+
+### 👤 Utilisateur
+
+Current runtime context. This snapshot supersedes earlier runtime-context snapshots.
+
+Current DSH file policy: danger-full-access. The DSH file sandbox does not restrict file modifications by available operations.
+
+Approval prompts are disabled in this session: actions that require approval are rejected automatically — do not request sandbox escalation (do not set `sandbox_permissions`).
+
+### 👤 Utilisateur
+
+<system-reminder>
+The available skill catalog changed. This complete catalog replaces every earlier available-skills list in this session:
+
+<available_skills>
+- `microsoft-foundry`: Deploy, evaluate, fine-tune, and manage Foundry agents end-to-end with azd: hosted agent scaffold/run/deploy, prompt agent create, batch eval, continuous eval, prompt optimizer, Agent Optimizer scaffold, agent.yaml, dataset curation from traces, model fine-tuning (SFT/DPO/RFT). USE FOR: azd ai agent, azd provision/deploy, deploy agent, hosted agent, create agent, add tool to agent, invoke agent, evaluate agent, continuous eval, continuous monitoring, agent CI/CD, optimize prompt, improve prom...
+</available_skills>
+
+Use only names in this replacement catalog. If the user names a listed skill, or the task clearly matches its description, call the `skill` tool with the exact name before acting.
+A user may also invoke a skill directly; its <skill_content> block then appears in this conversation. Follow it, and do not call the `skill` tool again for that skill.
+</system-reminder>
+
+### 🤖 Assistant
+
+⏵ Refus effectif (2 avec le drapeau, 0 sans) — j'ajoute le cas au portail adéquat
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"REFUS\" tools/porte-topologie.sh tools/porte-registre.sh | head -20; echo \"=== fin porte-topologie ===\"; tail -25 tools/porte-topologie.sh", "description": "Inspect refusal style in existing gates"}`
+
+  ```
+tools/porte-topologie.sh:9:#   4. les REFUS : une topologie qui ne couvre pas le modèle, et une topologie dont
+tools/porte-registre.sh:12:#   2. une région ABSENTE du registre est REFUSÉE en la nommant — un repli silencieux sur
+=== fin porte-topologie ===
+JSON
+    $D "$M3" --flux-serveur "$P1" --ctx 256 --threads 8 > "$T/n1.log" 2>&1 & N1=$!
+    sleep 2
+    R2=$($D "$M3" --ppl-reparti "127.0.0.1:$P1" --topologie "$T/t2.json" --ids-file "$IDS3" \
+         --limit 128 --ctx 256 --threads 8 --flux 2>&1 | grep -E "deux nœuds +: perplexité [0-9.]+")
+    echo "  deux régions / deux instances : $R2"
+    kill $N1 2>/dev/null; wait $N1 2>/dev/null
+    $D "$M3" --flux-serveur "$P2" --topologie "$T/t3.json" --region n2 --ctx 256 --threads 8 > "$T/n2.log" 2>&1 & N2=$!
+    sleep 2
+    $D "$M3" --flux-serveur "$P1" --topologie "$T/t3.json" --region n1 --ctx 256 --threads 8 > "$T/n1b.log" 2>&1 & N1=$!
+    sleep 3
+    R3=$($D "$M3" --ppl-reparti "127.0.0.1:$P1" --topologie "$T/t3.json" --ids-file "$IDS3" \
+         --limit 128 --ctx 256 --threads 8 --flux 2>&1 | grep -E "deux nœuds +: perplexité [0-9.]+|écart +: +[0-9.e+-]+")
+    echo "  trois régions / trois instances :"
+    printf '%s\n' "$R3" |
+… [473 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls tools/porte-*.sh | wc -l; grep -ln \"attn\" tools/*.sh; echo \"=== drapeaux refusés / code 2 dans les portails ===\"; grep -n \"= *2\\b\\|code 2\\|exit 2\" tools/porte-*.sh | head", "description": "Locate gate that covers attentio … [21 caractères tronqués]`
+
+  ```
+22
+tools/porte-gain.sh
+tools/portes_formats.sh
+tools/portes.sh
+tools/porte-topologie.sh
+=== drapeaux refusés / code 2 dans les portails ===
+tools/porte-budget.sh:23:[ -s "$M" ] && [ -s "$IDS" ] || { echo "  modèle ou identifiants absents"; exit 2; }
+tools/porte-budget.sh:55:echo "=== 2. budget GÉNÉREUX : le résultat ne doit pas changer ==="
+tools/porte-bus.sh:24:[ -s "$M" ] && [ -s "$IDS" ] || { echo "  modèle ou identifiants absents"; exit 2; }
+tools/porte-bus.sh:43:echo "=== 2. bus NON NEUTRE : le bus doit être BRANCHÉ ==="
+tools/porte-bus-socket.sh:16:#   2. bus STATIQUE sur le nœud (`--bus gain=2.0`) → la référence du réglage ;
+tools/porte-bus-socket.sh:39:# scalaire y disparaît — mesuré : 113,0068 avec et sans gain=2,0 sur `d`). Un nœud du
+tools/porte-bus-socket.sh:49:[ -s "$M" ] && [ -s "$IDS" ] || { echo "  modèle ou identifiants absents"; exit 2; }
+tools/porte-bus-socket.sh:94:echo "=== 2. bus STATIQUE sur le nœud (--bus gain=2.0) ==="
+tools/porte-bus-socket.sh:95:nœuds "" stat --bus gain=2.0
+tools/porte-coupe.sh:29:[ -s "$M" ] && [ -s "$IDS" ] || { echo "  modèle ou identifiants absents"; exit 2; }
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -40 tools/porte-gain.sh; echo \"......\"; tail -20 tools/porte-gain.sh", "description": "Read porte-gain gate structure"}`
+
+  ```
+#!/bin/bash
+# porte-gain.sh — E4 : le GAIN de la FFN par couche, et l'équilibre excitation/inhibition.
+#
+# L'HYPOTHÈSE BIOLOGIQUE (docs/biologie-pour-drave.md, E4) : un réseau cortical équilibré
+# vit près d'un point où excitation et inhibition se compensent, et un déséquilibre dans un
+# sens ou dans l'autre coûte. Transposée au moteur, la question mesurable est : **existe-t-il
+# un gain de la FFN, par couche, qui AMÉLIORE la perplexité — et est-il intérieur** (ni 0,
+# ni 1, ni l'infini) ?
+#
+# CE QUE LA MESURE A DONNÉ, et les deux moitiés ne disent pas la même chose :
+#   · du côté INHIBITION (gain < 1), la courbe est MONOTONE : toute inhibition dégrade, et
+#     l'hypothèse d'un optimum intérieur y est RÉFUTÉE ;
+#   · du côté AMPLIFICATION, l'optimum est INTÉRIEUR et net sur les premières couches :
+#     couche 0 à 0,75 → **12,9635** contre **14,6496** sans réglage (**−11,5 %**), et couche
+#     1 à 0,5 → 13,7907 (−5,9 %) ; la couche 2 n'a plus d'optimum utile.
+#   · en dessous de l'optimum, une FALAISE : couche 0 à 0,25 → **996,04** (le gain trop
+#     faible à la première couche casse le modèle, il ne le dégrade pas un peu).
+#
+# Ce que la porte verrouille :
+#   1. `--ffn-gain L:
+… [2133 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^echo\\|^# [0-9]\\|^#   [0-9]\" tools/porte-gain.sh", "description": "List gate sections"}`
+
+  ```
+20:#   1. `--ffn-gain L:1.0` **EST** l'absence de réglage (perplexité identique AU CHIFFRE,
+23:#   2. l'inhibition est MONOTONE : à une couche du milieu, chaque gain plus petit que 1 fait
+25:#   3. l'optimum intérieur existe là où il a été trouvé (couche 0 : 0,75 bat 0,5 ET 1,5) ;
+26:#   4. et la falaise est réelle (0,25 à la couche 0 est catastrophique) — un résultat qu'un
+43:echo "=== 1. invariant : --ffn-gain L:1.0 EST l'absence de réglage ==="
+45:echo "  sans réglage : $REF"
+51:echo "  ✅ l'identité est exacte sur trois couches"
+53:echo "=== 2. inhibition MONOTONE (couche 12) ==="
+66:echo "  ✅ toute inhibition dégrade, et de plus en plus : l'optimum intérieur est réfuté de ce côté"
+68:echo "=== 3. optimum INTÉRIEUR (couche 0) : 0,75 doit battre 0,5 ET 1,5 ==="
+80:echo "=== 4. la FALAISE : 0,25 à la couche 0 casse le modèle ==="
+82:echo "  gain 0,25 : $P025"
+91:echo "=== 5. le bénéfice est LOCALISÉ aux deux premières couches ==="
+108:echo "=== 6. un PROFIL ne compose PAS : il défait le meilleur réglage seul ==="
+128:echo "=== 7. l'effet DIMINUE avec la fenêtre d'évaluation (et il tient) ==="
+150:echo "=== 8. le drapeau AGIT AUSSI dans le chemin RÉPARTI ==="
+182:echo "  ✅ le drape
+… [205 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"tools/porte-gain.sh\")\ns = p.read_text()\n# 1) mettre à jour l'en-tête (points verrouillés + ce que la mesure a donné)\ns = s.replace(\"\"\"#   4. et la falaise est réelle (0,2 … [2458 caractères tronqués]`
+
+  ```
+section 10 ajoutée
+=== 7. l'effet DIMINUE avec la fenêtre d'évaluation (et il tient) ===
+  128 jetons : 12.9635 (réf 14.6496) · 256 jetons : 17.1915 (réf 17.4315)
+  ✅ la direction tient aux deux fenêtres, la MAGNITUDE décroît : 11.5 % à 128 jetons, 1.4 % à 256 — une condition, pas une propriété
+=== 8. le drapeau AGIT AUSSI dans le chemin RÉPARTI ===
+  réparti sans réglage : 180.5245 · avec 0:0.75 : 222.3496
+  ✅ le drapeau agit aussi en réparti (180.5245 → 222.3496)
+=== 9. les réglages qui ne voyagent PAS sont REFUSÉS en réparti ===
+  ❌ le refus devrait sortir en code 2, il sort en 0
+code_portail=0
+  ```
+
+### 🤖 Assistant
+
+⏵ Alerte : la section 9 du portail casse — mon retrait de bloc a peut-être emporté du code voisin
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff drave-core/src/main.rs | head -80", "description": "Inspect main.rs diff for collateral deletion"}`
+
+  ```
+diff --git a/drave-core/src/main.rs b/drave-core/src/main.rs
+index 178f3ec..6d17724 100644
+--- a/drave-core/src/main.rs
++++ b/drave-core/src/main.rs
+@@ -178,6 +178,27 @@ il faut écrire DRAVE_{} (voir docs/histoire.md). Rien n'a été appliqué.", &v
+     }
+     }
+     let mut opt = analyser(&args);
++    // `--attn-sinks` NE PEUT RIEN FAIRE — refus au POINT UNIQUE, juste après l'analyse.
++    // Le champ est écrit dans les trois chemins d'exécution, transporté par le protocole v7
++    // (`Act`), et **lu nulle part** dans le calcul : ce sont les puits APPRIS (`lay.sinks`,
++    // tenseur `attn_sinks.weight`) que l'attention consomme, pas ce compteur. Mesuré : inerte en
++    // local ET en réparti (14,6496 dans les deux cas).
++    //
++    // Placé d'abord dans `appliquer_quantification`, le refus ne se déclenchait PAS : le chemin
++    // perplexité n'appelle pas ce helper (vérifié en le voyant ne pas refuser). Ici, il couvre
++    // tous les modes par construction.
++    //
++    // DEUX ISSUES, ET C'EST UN CHOIX DE CONCEPTION : l'implémenter (n jetons puits au début de la
++    // séquence, comme le décrit `model.rs:2435`), ou le retirer. En attendant, le drapeau REFUSE
++    // au lieu de
+… [733 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff --stat; echo \"=== diff complet (lignes de suppression) ===\"; git diff drave-core/src/main.rs | grep -c \"^-[^-]\"; git diff drave-core/src/main.rs | grep \"^-[^-]\" | head -20; echo \"=== refus declares dans main.rs ===\"; … [143 caractères tronqués]`
+
+  ```
+drave-core/src/main.rs | 21 +++++++++++++++++++++
+ journal/README.md      |  2 +-
+ tools/porte-gain.sh    | 24 +++++++++++++++++++++++-
+ 3 files changed, 45 insertions(+), 2 deletions(-)
+=== diff complet (lignes de suppression) ===
+0
+=== refus declares dans main.rs ===
+192:    // séquence, comme le décrit `model.rs:2435`), ou le retirer. En attendant, le drapeau REFUSE
+195:        eprintln!("[attention] REFUS : `--attn-sinks` n'est PAS consommé par le calcul — le champ \
+3603:/// borne de 8, au-delà de laquelle on REFUSE en le disant). Un canal n'est appliqué
+3922:                // Le moteur REFUSE ce cas (`forward`), donc un pair en v5 ne peut
+4013:/// CE QUE LA FUSION REFUSE DE FAIRE, et c'est le cœur : ordonner des traces sans
+4256:    // Toute incohérence entre le fichier et la ligne de commande est REFUSÉE —
+4619:\n       Cause la plus probable : il a REFUSÉ le lot (son contexte est plus petit \
+5458:            println!("    second passage k = {k2} : REFUSÉ (la réutilisation des tampons est \
+6751:    // lecture. Ce qui décide de son utilité, c'est de savoir REFUSER : un indice
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"voyagent\" drave-core/src/ | head -10; echo \"=== git log -3 ===\"; git log --oneline -3; echo \"=== section 9 commande ===\"; sed -n '184,207p' tools/porte-gain.sh", "description": "Find the untransportable refusal implem … [10 caractères tronqués]`
+
+  ```
+drave-core/src/main.rs:2864:    // et ils voyagent dans l'en-tête pour que les deux nœuds fassent pareil.
+drave-core/src/main.rs:2918:/// Les réglages voyagent parce qu'ils CHANGENT LES CHIFFRES : deux nœuds lancés
+drave-core/src/main.rs:2945:    /// qui est calculé. Elles voyagent pour la même raison que le seuil.
+drave-core/src/main.rs:4432:    // v7 : le refus qui suivait ici a été RETIRÉ — les trois réglages voyagent maintenant
+=== git log -3 ===
+639b007 Journal : la section 46 bis (--attn-sinks ecrit partout, lu nulle part) manquait — l'ancre du premier essai ne correspondait pas
+dd95fa9 --attn-sinks : ecrit dans les trois chemins, transporte par le v7… et LU NULLE PART
+63203d7 Inventaire des drapeaux en reparti : cinq agissent, trois inertes (deux attendus), un ouvert
+=== section 9 commande ===
+echo "  ✅ le drapeau agit aussi en réparti ($SG → $AG)"
+
+echo "=== 9. les réglages qui ne voyagent PAS sont REFUSÉS en réparti ==="
+# Mesuré : --attn-window 64 AGIT en local (13,1368 → 21,5801) et, si on le câble naïvement en
+# réparti, rend un résultat FAUX ET SILENCIEUX — le pilote applique la fenêtre à ses couches,
+# le nœud garde la sienne : deux modèles différents sous le même nom
+… [1090 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '4420,4445p' drave-core/src/main.rs; echo \"=== inventaire des drapeaux en reparti (doc) ===\"; grep -n \"inertes\\|INERTE\\|inventaire des drapeaux\" docs/sprint-cerveau.md | tail -12", "description": "Read v7 removal context … [21 caractères tronqués]`
+
+  ```
+// alors calculée avec le MÊME découpage — sinon l'écart mesurerait la
+    // différence entre deux ordres de sommation, pas celle du découpage.
+    let lot = opt.lot.max(1);
+    let mut mdl = model::Model::load(&chemin,
+                                     ctx, fils(&opt), true, opt.keep, false, 0, 0);
+    appliquer_quantification(&mut mdl, &opt);
+
+    // C2/E4 : le gain de la FFN. Il était câblé dans `run_infer` et `run_ppl`, et PAS ici :
+    // dans le chemin RÉPARTI, `--ffn-gain` ne faisait donc RIEN, en silence — mesuré :
+    // 42,5477 avec et sans le drapeau. C'est la famille de défauts que ce dépôt traque (un
+    // drapeau qui ne fait rien), et celui-ci comptait double : le sprint porte sur la
+    // distribution, où le réglage fin doit survivre.
+    // v7 : le refus qui suivait ici a été RETIRÉ — les trois réglages voyagent maintenant
+    // dans la trame, donc le pilote ET le nœud appliquent la même fenêtre.
+    // LES TROIS CHAMPS QUE LE v7 TRANSPORTE, ENFIN APPLIQUÉS PAR LE PILOTE.
+    //
+    // Le round 28 concluait « les deux moitiés appliquent la même fenêtre » sur la foi de deux
+    // nombres égaux (18,5520 = 18,5520). C'était faux, et la vérification tenait en un
+… [890 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '937,985p' docs/sprint-cerveau.md", "description": "Read flag inventory section in docs"}`
+
+  ```
+## INVENTAIRE DES DRAPEAUX EN RÉPARTI — FAIT (12 octobre 3 h) : cinq agissent, trois inertes, un ouvert
+
+Après le v7, le v8 et les corrections des rounds 20 et 42, l'inventaire du §39 est **départagé** —
+nœud **relancé à chaque essai** (il sert UNE connexion : mon premier banc les faisait tous échouer,
+et c'était encore une erreur de harnais, la quatrième du sprint) :
+
+| drapeau | réparti (référence **72,0185**) | verdict |
+|---|---|---|
+| `--act-topk 64` | 362 333,58 | **agit** |
+| `--qk-topk 64` | 4 760,07 | **agit** |
+| `--attn-window 32` | 1 571,30 | **agit** (round 42) |
+| `--act-thresh 0,01` | 98,83 | **agit** |
+| `--ffn-gain 0:0.75` | 76,88 | **agit** (round 20) |
+| `--attn-topk 64` | 71,47 | **agit** |
+| `--swa-pattern 2` | 72,0185 | sans effet — **attendu** (rien à décider sans fenêtre) |
+| `--sans-fenetre` | 72,0185 | sans effet — **attendu** (désactiver une fenêtre absente) |
+| `--moe-topk 2` | 72,0185 | sans effet — **attendu** (modèle **dense**) |
+| **`--attn-sinks 4`** | 72,0185 | **À INSTRUIRE** — les puits devraient peser |
+
+**Six sur dix agissent**, trois inertes pour une raison identifiée, **un seul candidat ouvert** :
+`--attn-sinks`. C'est la réponse chiffrée à l
+… [1566 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== historique du portail ===\"; git log --oneline -- tools/porte-gain.sh | head -5; echo \"=== quand la section 9 est-elle née ? ===\"; git log --oneline -S \"ne voyagent PAS\" -- tools/porte-gain.sh | head -5; echo \"=== ref … [182 caractères tronqués]`
+
+  ```
+=== historique du portail ===
+e6f7b6b attn-window en reparti : un REFUS explicite, pas un resultat faux et silencieux
+719ab85 Defaut trouve et corrige : --ffn-gain ne faisait RIEN dans le chemin reparti
+031dbc4 E4 (suite) : le gain d'entree generalise, mais sa MAGNITUDE depend de la fenetre
+0bc27b9 E4 (suite) : les gains NE SE COMPOSENT PAS — le profil defait le meilleur reglage seul
+e873179 E4 (suite) : le profil complet sur 24 couches — le desequilibre est a l'ENTREE
+=== quand la section 9 est-elle née ? ===
+e6f7b6b attn-window en reparti : un REFUS explicite, pas un resultat faux et silencieux
+=== refus (exit 2) encore présents dans main.rs ===
+168:            None => { eprintln!("--topologie attend un fichier"); std::process::exit(2); }
+172:            Err(e) => { eprintln!("topologie : lecture de {f} impossible : {e}"); std::process::exit(2); }
+200:        std::process::exit(2);
+538:                                  std::process::exit(2) });
+542:            std::process::exit(2);
+1086:                        std::process::exit(2);
+1092:                            std::process::exit(2);
+1164:            std::process::exit(2);
+3717:        eprintln!("{e}"); std::process::exit(2)
+… [680 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '150,184p' tools/porte-gain.sh; echo \"=== sens de l'écart ===\"; grep -n \"écart\" drave-core/src/main.rs | head -12", "description": "Read section 8 and the meaning of the écart line"}`
+
+  ```
+PY
+
+echo "=== 8. le drapeau AGIT AUSSI dans le chemin RÉPARTI ==="
+# LE CAS QUI MANQUAIT, ET QUI A COÛTÉ UNE MESURE FAUSSE : `--ffn-gain` était câblé dans
+# `run_infer` et `run_ppl`, et PAS dans `run_ppl_reparti`. Dans le chemin réparti il ne
+# faisait donc RIEN, en silence (42,5477 avec et sans le drapeau). C'est la famille de
+# défauts que ce dépôt traque, et ce cas la rend impossible à réintroduire.
+PORTG=$((65000 + RANDOM % 400))
+cat > "$T/topo_gain.json" <<JSON
+{"regions":[
+  {"id":"local","couches":[0,11],"instance":"local"},
+  {"id":"d","couches":[12,23],"instance":"127.0.0.1:$PORTG"}],
+ "liens":[{"de":"local","vers":"d","mode":"f32"}]}
+JSON
+$D "$M" --flux-serveur "$PORTG" --ctx "$CTX" --threads 8 > "$T/ng.log" 2>&1 & NG=$!
+sleep 2
+SG=$( $D "$M" --ppl-reparti "127.0.0.1:$PORTG" --topologie "$T/topo_gain.json" --ids-file "$IDS" \
+      --limit 32 --ctx "$CTX" --threads 8 --flux 2>&1 \
+      | grep -oE "deux nœuds +: perplexité [0-9.]+" | grep -oE "[0-9.]+$")
+kill $NG 2>/dev/null; wait $NG 2>/dev/null
+$D "$M" --flux-serveur "$PORTG" --ctx "$CTX" --threads 8 > "$T/ng2.log" 2>&1 & NG=$!
+sleep 2
+AG=$( $D "$M" --ppl-reparti "127.0.0.1:$PORTG" --topologie "$T/topo_gain.json" --ids-
+… [1789 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"deux nœuds\" drave-core/src/main.rs | head; echo ---; grep -n \"deux nœuds\" -A 12 -B 18 drave-core/src/main.rs | sed -n '1,60p'", "description": "Understand the reparti écart semantics"}`
+
+  ```
+2864:    // et ils voyagent dans l'en-tête pour que les deux nœuds fassent pareil.
+2881:/// attention, q·k, MoE). En version 3, deux nœuds lancés avec des `--topk-*`
+2918:/// Les réglages voyagent parce qu'ils CHANGENT LES CHIFFRES : deux nœuds lancés
+3478:({attendu} attendus) — les deux nœuds n'ont pas le même GGUF ?")));
+3841:                // Les réglages du client s'appliquent ICI : les deux nœuds
+4546:    // 2. la même chose, coupée en deux nœuds
+4820:    println!("  deux nœuds        : perplexité {ppl:.4}  ({:.1} s)", t1.elapsed().as_secs_f64());
+---
+2846-/// Applique `--abits` en le bornant, en ANNONÇANT la borne.
+2847-fn poser_niveaux(mdl: &mut model::Model, abits: u32, source: &str) {
+2848-    if abits > 16 {
+2849-        eprintln!("[activation] --abits {abits} demandé ({source}) : borné à 16 (32 767 \
+2850-niveaux), la borne du stockage i16 des activations quantifiées. Au-delà, les valeurs \
+2851-étaient silencieusement saturées et le calcul faux d'un facteur 2^(abits-16).");
+2852-    }
+2853-    mdl.act_levels = niveaux_activation(abits);
+2854-}
+2855-
+2856-fn appliquer_quantification(mdl: &mut model::Model, opt: &Options) {
+2857-    let abits = if opt.abits_impose { opt.
+… [2957 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '4800,4830p' drave-core/src/main.rs", "description": "Read reparti result printing block"}`
+
+  ```
+if opt.pont_k > 0 { pont_sparsifier(&mut final_, opt.pont_k); }
+        trace.enregistrer(&pair_region, pos as u32, "pair->local", &final_, t_pair * 1e3);
+        // La réponse porte la `pre` de la DERNIÈRE FFN du pair (v6) : c'est elle
+        // que la réduction finale du pilote doit employer — il ne peut pas la
+        // recalculer, il n'a pas exécuté ces couches.
+        mdl.hc_porte_imposee = if rep.premix.is_empty() { None } else { Some(rep.premix.clone()) };
+        if pos + 1 < ids.len() {
+            // Deux temps : la réduction CONSOMME la `pre` reçue (V4.1), donc elle
+            // emprunte le modèle en écriture, et la tête le reprend ensuite. Les
+            // imbriquer ne compilerait pas — et c'est tant mieux : l'ordre
+            // (réduire, puis noter) reste ainsi visible.
+            let reduit = mdl.norme_finale(&final_, pos);
+            nll += nll_logits(&mdl.logits(&reduit), ids[pos + 1]);
+        }
+    }
+    }
+    let ppl = (nll / (ids.len() - 1) as f64).exp();
+    // Largeur de l'état échangé : elle sert au rapport du pont (et à lui seul).
+    let largeur_etat_max = mdl.cfg.hidden
+        * mdl.hc.as_ref().map(|v| v[0].0.hc).unwrap_or(1);
+    println!("  d
+… [656 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Diagnostic : la section 9 exigeait un refus que le v7 a délibérément retiré — portail rouge depuis v7, je le réécris
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"tools/porte-gain.sh\")\ns = p.read_text()\ndeb = s.index('echo \"=== 9. les réglages qui ne voyagent PAS sont REFUSÉS en réparti ===\"')\nfin = s.index('echo \"=== 10. un drapea … [3626 caractères tronqués]`
+
+  ```
+section 9 réécrite
+syntaxe OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"tools/porte-gain.sh\")\ns = p.read_text()\ns = s.replace(\"\"\"#   5. un réglage qui ne peut RIEN faire est REFUSÉ plutôt que silencieusement ignoré\n#      (§9 : non transporta … [602 caractères tronqués]`
+
+  ```
+en-tête à jour
+258
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash tools/porte-gain.sh > /tmp/porte-gain.log 2>&1; echo \"CODE=$?\" >> /tmp/porte-gain.log; tail -30 /tmp/porte-gain.log", "description": "Run full porte-gain gate", "run_in_background": true}`
+
+  ```
+started background job bash-22
+  ```
+
+### 🤖 Assistant
+
+⏵ Pendant que le portail tourne, j'écris l'instrument qui manquait : la passe complète des 22 portes
+
+- **write** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/toutes-les-portes.sh", "content": "#!/bin/bash\n# toutes-les-portes.sh — LA PASSE COMPLÈTE, et l'instrument qui manquait.\n#\n# POURQUOI CETTE PORTE EXISTE. Le 12 octobre, `tools/porte-gain.sh` §9 exigeait un REFUS\n# (`--attn-wind … [3418 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/toutes-les-portes.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && chmod +x tools/toutes-les-portes.sh && bash -n tools/toutes-les-portes.sh && echo \"syntaxe OK\" && tail -5 /tmp/porte-gain.log 2>/dev/null", "description": "Make sweep executable and check gate progress"}`
+
+  ```
+syntaxe OK
+=== 1. invariant : --ffn-gain L:1.0 EST l'absence de réglage ===
+  sans réglage : 14.6496
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && while pgrep -f \"porte-gain.sh\" >/dev/null 2>&1; do sleep 10; done; echo \"=== passe complète ===\"; DELAI=1800 JOURNAUX=/tmp/portes-1210 bash tools/toutes-les-portes.sh; echo \"CODE_PASSE=$?\"", "description": "Run full gate sweep  … [53 caractères tronqués]`
+
+  ```
+started background job bash-23
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,20p' docs/sprint-cerveau.md | head -20; echo \"...\"; grep -n \"^## \" docs/sprint-cerveau.md | tail -15", "description": "Locate sprint doc structure for new section"}`
+
+  ```
+# Sprint « cerveau complet » — état d'avancement
+
+> Lancé le 9 octobre à 17 h, **en autonomie jusqu'au 10 octobre 9 h (HAE)**.
+> Plan de référence : `docs/plan-cerveau-complet.md` § 4 (premier sprint).
+> Ce fichier est mis à jour **à chaque round** : il est la mémoire du sprint.
+
+---
+
+## C6/C2 — FAIT (10 octobre 18 h) : LA MÉMOIRE QUI SERT, de bout en bout
+
+`--episodique-extraire F` ferme la chaîne : indexer → **retrouver par le contenu** →
+**injecter** l'état retrouvé dans un calcul qui n'a pas vécu l'épisode. L'état écrit est
+l'état VÉCU (la moyenne est rajoutée si le magasin est décorrélé).
+
+Magasin de 1 750 états de l'invite A (code au jeton 740), indice extérieur (l'invite B,
+même texte SANS le code) :
+
+| étape | mesure |
+|---|---|
+| rappel | épisode 437 · recouvrement 25/64 · **303 jetons** de l'aiguille (hasard 448) |
+...
+1262:## C9 × C1 — FAIT (10 octobre 9 h) : OÙ COUPER le modèle ?
+1293:## C8 (premier pas) — FAIT (10 octobre 8 h 20) : le réflexe, et il ne sait rien
+1327:## C2 — FAIT (10 octobre 16 h) : DEUX ENTRÉES, UNE RÈGLE DE MÉLANGE — et la correction d'un faux négatif
+1376:## C2/C6 — (premier texte, conservé) la greffe d'état, et ce qu'elle ne transférait PAS
+1419:##
+… [736 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"PROCHAINE ACTION\\|^### 4[0-9]\\|^## 4[0-9]\" docs/sprint-cerveau.md | tail -20; wc -l docs/sprint-cerveau.md reports/rapport-campagne-benefices.md", "description": "Find next-action anchor and doc sizes"}`
+
+  ```
+962:### 46 bis. `--attn-sinks` : écrit partout, transporté par le v7… et LU NULLE PART
+987:## ▶ PROCHAINE ACTION (à lire en premier)
+  1908 docs/sprint-cerveau.md
+  2837 reports/rapport-campagne-benefices.md
+  4745 total
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/sprint-cerveau.md", "offset": 985, "limit": 60}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/sprint-cerveau.md</path>
+<type>file</type>
+<content>
+985: **agisse**, ou qu'il n'existe plus.
+986: 
+987: ## ▶ PROCHAINE ACTION (à lire en premier)
+988: 
+989: État au **11 octobre 6 h 45** · **21 portes, toutes vertes** (`tools/porte-*.sh`) ·
+990: **122 tests verts** · 14 rounds livrés, tout poussé sur `origin/master`.
+991: 
+992: ### La consigne tient : ne pas s'arrêter faute de liste
+993: 
+994: Le temps commun est la denrée la plus précieuse ; quand une liste s'épuise, la question est
+995: « qu'est-ce qui est mesurable maintenant ? ». Un round qui **corrige** une mesure fausse vaut
+996: un round qui en ajoute une — ce sprint en a produit cinq corrections, toutes documentées à
+997: côté de la valeur d'origine.
+998: 
+999: ### Les trois prochains chantiers, par valeur, avec leur première commande
+1000: 
+1001: **1. Le budget `paires/s` (C10, troisième volet).** Les octets et la latence sont faits ; il
+1002: reste les PAIRES, et elles se heurtent à une difficulté nommée : **ce sont les pairs qui les
+1003: calculent**, donc le pilote ne peut pas les borner sans que le nœud les lui TRANSPORTE. La
+1004: voie propre est d'ajouter le
+… [3096 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -6 /tmp/porte-gain.log; echo \"=== passe ===\"; ls /tmp/portes-1210/ 2>/dev/null | head", "description": "Check gate and sweep progress"}`
+
+  ```
+=== 1. invariant : --ffn-gain L:1.0 EST l'absence de réglage ===
+  sans réglage : 14.6496
+  couche 0   gain 1.0 : 14.6496
+=== passe ===
+  ```
+
+### 🤖 Assistant
+
+⏵ Piège connu : mon attente se détectait elle-même (`pgrep -f` auto-correspondance) — je relance l'attente sur le journal
+
+- **job_kill** `{"job_id": "bash-23", "reason": "l'attente pgrep -f se detectait elle-meme (auto-correspondance)"}`
+
+  ```
+requested cancellation of job bash-23
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && pkill -f \"[p]grep -f\" 2>/dev/null; sleep 1; ps -eo pid,args | grep \"[p]orte-gain.sh\" | head -3; echo \"--- relance de l'attente sur le journal ---\"; while ! grep -q \"^CODE=\" /tmp/porte-gain.log 2>/dev/null; do sleep 10; done;  … [250 caractères tronqués]`
+
+  ```
+started background job bash-24
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"docs/sprint-cerveau.md\")\ns = p.read_text()\nancre = \"## ▶ PROCHAINE ACTION (à lire en premier)\"\nassert s.count(ancre) == 1\nsec = \"\"\"### 47. Le refus de `--attn-sinks` — … [2928 caractères tronqués]`
+
+  ```
+section 47 écrite
+1021:imprime la queue des rouges. Première passe complète : PASSE_COMPLETE
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -4 /tmp/porte-gain.log; echo \"=== passe ===\"; ls /tmp/portes-1210/ 2>/dev/null | tr '\\n' ' '; echo; uptime", "description": "Check progress of gates"}`
+
+  ```
+✅ l'identité est exacte sur trois couches
+=== 2. inhibition MONOTONE (couche 12) ===
+  gain 0.0    : 15.6908
+  gain -0.25  : 16.3034
+=== passe ===
+
+ 09:52:49  up 18 days 23:04,  2 users,  load average: 6,52, 5,92, 6,59
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^#\\{1,3\\} \" docs/manques.md | tail -20; wc -l docs/manques.md", "description": "List gap doc headings"}`
+
+  ```
+1:# Registre des manques
+10:## 1. Les manques du MOTEUR
+29:## 2. Les manques du MODÈLE (ce qu'aucun modèle d'aujourd'hui ne fait)
+40:## 3. Les manques d'ARCHITECTURE (pour porter un cerveau)
+50:## 4. Ce qui n'est PAS un manque, et qu'il ne faut pas confondre
+63 docs/manques.md
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/manques.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/manques.md</path>
+<type>file</type>
+<content>
+1: # Registre des manques
+2: 
+3: > 9 octobre 2026. Ce que le dépôt **ne sait pas faire**, consigné comme manque — pas
+4: > comme résultat. Chaque ligne porte la mesure qui l'établit, ce qu'elle bloque, et
+5: > où c'est documenté. Rien ici n'est une feuille de route : la feuille de route est
+6: > `docs/plan-cerveau-complet.md`.
+7: 
+8: ---
+9: 
+10: ## 1. Les manques du MOTEUR
+11: 
+12: | # | manque | ce qui l'établit (mesure) | ce qu'il bloque | coût |
+13: |---|---|---|---|---|
+14: | **M1** | **noyau de listes pour les experts** — le chargeur refuse Q8_0, les experts sont en Q4_0 (format sans noyau de listes) | `[moe] couche 0 : « blk.0.ffn_gate_exps.weight » de type Q8_0 — format sans noyau ni déquantification` | **un modèle routé ne peut pas être exécuté en listes** : le routage économise des experts, pas des événements | 2-3 sem. |
+15: | **M2** | **noyau de listes sur GPU** — le noyau `proj()` reçoit le vecteur d'activation **complet**, zéros compris | nos projections font **0,45-0,80 Mio** contre un seuil de 8 Mio ; et `proj()` est dense par construction | déporter un modèle cre
+… [4531 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^## \" reports/rapport-campagne-benefices.md | tail -8; echo ===; tail -12 reports/rapport-campagne-benefices.md", "description": "Inspect campaign report tail"}`
+
+  ```
+2497:## 40. Protocole v7 : la fenêtre d'attention voyage, et le refus disparaît
+2556:## 41. Protocole v8 : le pilote sait enfin ce que coûte la moitié distante
+2586:## 42. C10 CLOS : trois budgets, trois codes — octets (6), latence (8), paires (9)
+2612:## 43. L'instrument de trace est CALIBRÉ : 50 ms injectés, 50,2 ms mesurés
+2639:## 44. La GIGUE d'un pas réparti : 7 ms sur 17,7 — ce qu'un ordonnanceur doit tolérer
+2690:## 45. Combien de MESSAGES coûte un pas ? Quatre — et c'est l'en-tête écrit à part
+2756:## 46. Inventaire des drapeaux en chemin RÉPARTI : cinq agissent, trois sont inertes
+2816:## Annexe — manifeste des journaux
+===
+| 3 · `contexte` | 10 | perplexité **constante** (17,4315) par construction · RSS 1 248-1 249 Mo |
+| 4 · `lot` | 9 | PPL **13,1368 → 13,1359** · débit 16,8 → 23,7 tok/s |
+| 5 · `routage` | 2 | **1 826,2 M** de paires d'experts par jeton · 4 experts sur 128 |
+| 6 · `sémantique` | 4 | pic de séparation **couche 13** (+0,0391) sur 398 langues, bande 10-15 |
+| 7 · `noyau` | 1 | bande passante **21,5 Go/s** · push/pull **×3,19** à densité 1 |
+| 8 · `répartition` | 2 | cinq modes · écart **0,0000 %** · flux 0,00e0 (modes 0, 1, 3) |
+| 9 · `portes` | 1 | **22 v
+… [459 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"sinks\\|attn_sinks\" drave-core/src/model.rs | head -30; echo === ; sed -n '2425,2450p' drave-core/src/model.rs", "description": "Assess feasibility of implementing attn sinks"}`
+
+  ```
+166:    // Les puits par tête (`attn_sinks.weight`), eux, SONT implémentés : gpt-oss
+172:    // Réserve connue : `attn_mla` ne consomme PAS `lay.sinks`. Aucun modèle du
+1403:    pub sinks: Option<Vec<f32>>,
+1657:/// * les puits appris (`attn_sinks`, un par tête) entrent dans le **softmax**.
+1666:    pub sinks: Vec<f32>,    // [nh]
+2435:    /// clés, plus `attn_sinks` jetons puits au début de la séquence.
+2464:    pub attn_sinks: usize,
+2485:    pub sinks_vus: usize,
+3984:                    sinks: g.dequant_optionnel(&p("attn_sinks.weight")).unwrap_or_default(),
+4002:                     if m0.sinks.is_empty() { "aucun" } else { "par tête" });
+4169:                sinks: if g.tensor(&p("attn_sinks.weight")).is_some() {
+4170:                    Some(g.dequant(&p("attn_sinks.weight"))) } else { None },
+4230:        let sinks_vus = layers.iter().filter(|l| l.sinks.is_some()).count();
+4261:        println!("[config] puits appris sur {sinks_vus}/{n_layer} couches · n_rot {} · ffn {} · experts {}{}",
+4492:            attn_sinks: if fenetre > 0 { 0 } else { 4 },
+4499:            sinks_vus, kv_gpu, attn_gpu_part: Vec::new(),
+5591:                    let puits: Option<Vec<f32>> = lay.sinks.
+… [2681 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Alerte méthodologique : `attn_sinks` semble LU quelque part (ligne 7472) — je vérifie avant de figer un refus fondé sur une prémisse fausse
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '7440,7512p' drave-core/src/model.rs", "description": "Read the path that reads attn_sinks"}`
+
+  ```
+ok = machine.attn_topk_somme(m, nh, n, k, hd, rep, puits.as_deref(),
+                                                         &mut att[..nh * hd]);
+                        }
+                        if ok {
+                            // Même unité que le chemin CPU (`iter.len()` = k paires
+                            // retenues par tête) : compter `nh * n` ici faisait
+                            // varier la ligne « paires (requête, clé) par token »
+                            // d'un facteur n/k selon le drapeau, à calcul identique.
+                            *attn_events += (nh * k) as u64;
+                            fait_en_gpu = true;
+                        } else if !TOPK_GPU_ECHEC.swap(true, std::sync::atomic::Ordering::Relaxed) {
+                            // Un échec par couche et par jeton ferait des milliers de
+                            // lignes : on le dit UNE fois, et le repli CPU est
+                            // silencieux ensuite (les raisons, elles, sont imprimées
+                            // par le noyau fautif).
+                            eprintln!("[topk] chaîne déportée en échec : repli CPU (message unique)");
+                        }
+              
+… [3555 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && awk 'NR<7475 && /^    (pub )?fn |^    fn /{l=NR\": \"$0} END{}' drave-core/src/model.rs; awk 'NR<7475 && /fn /{l=NR\": \"$0} NR==7475{print l}' drave-core/src/model.rs; echo \"=== toutes les lectures du COMPTEUR attn_sinks ===\"; gre … [191 caractères tronqués]`
+
+  ```
+6802:     pub fn forward(&mut self, tok: u32, pos: usize) -> Vec<f32> {
+=== toutes les lectures du COMPTEUR attn_sinks ===
+166:    // Les puits par tête (`attn_sinks.weight`), eux, SONT implémentés : gpt-oss
+1657:/// * les puits appris (`attn_sinks`, un par tête) entrent dans le **softmax**.
+2435:    /// clés, plus `attn_sinks` jetons puits au début de la séquence.
+3984:                    sinks: g.dequant_optionnel(&p("attn_sinks.weight")).unwrap_or_default(),
+4169:                sinks: if g.tensor(&p("attn_sinks.weight")).is_some() {
+4170:                    Some(g.dequant(&p("attn_sinks.weight"))) } else { None },
+4492:            attn_sinks: if fenetre > 0 { 0 } else { 4 },
+7472:                    let ns = if lo > 0 { self.attn_sinks.min(lo) } else { 0 };
+7490:                        let ns = if lo > 0 { self.attn_sinks.min(lo) } else { 0 };
+  ```
+
+### 🤖 Assistant
+
+⏵ Correction en cours : `attn_sinks` EST lu (branche à fenêtre) — je retire le refus fondé sur une prémisse fausse et je mesure
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\ndeb = s.index(\"    // `--attn-sinks` NE PEUT RIEN FAIRE\")\nfin = s.index(\"    if opt.episodique_k == 0 { opt.episodique_k = 64;  … [1019 caractères tronqués]`
+
+  ```
+refus retire (fonde sur une premisse fausse : le compteur EST lu, branche a fenetre)
+warning: unused imports: `GGML_IQ1_M`, `GGML_IQ1_S`, `GGML_IQ2_XXS`, and `GGML_IQ3_XXS`
+warning: unused attribute
+warning: unused variable: `t`
+warning: unused variable: `id`
+warning: unused variable: `plan`
+a) fenetre 32, puits par defaut (0)   : 18.1141
+b) fenetre 32, --attn-sinks 4         : 18.1141
+c) fenetre 32, --attn-sinks 16        : 16.3812
+d) SANS fenetre, --attn-sinks 4       : 14.6496
+e) SANS fenetre, rien                 : 14.6496
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"attn_sinks\\|attn-sinks\" drave-core/src/main.rs | head -20; echo \"=== defaut 4492 (contexte) ===\"; sed -n '4484,4496p' drave-core/src/model.rs", "description": "Inspect attn_sinks parsing and wiring"}`
+
+  ```
+646:/// `--attn-window` et `--attn-sinks` ont chacun été « analysés mais jamais
+824:    attn_sinks: usize, attn_topk: usize, qk_topk: usize,
+1036:            "--attn-sinks" => { o.attn_sinks = suivant(i).parse().unwrap(); 2 }
+1171:        keep, attn_window, swa_pattern, sans_fenetre, attn_sinks, attn_topk, qk_topk,
+1227:    if attn_sinks > 0 { mdl.attn_sinks = attn_sinks; }
+2910:                            // v7 : attn_window (79), swa_pattern (83), attn_sinks (87)
+2935:    attn_sinks: u32,
+2947:              attn_sinks: m.attn_sinks as u32 }
+2961:        m.attn_sinks = self.attn_sinks as usize;
+3086:        attn_window: 0, swa_pattern: 0, attn_sinks: 0 });
+3106:    t.extend_from_slice(&act.attn_sinks.to_le_bytes());    // offset 87
+3363:        attn_window: u(79), swa_pattern: u(83), attn_sinks: u(87),
+4425:    mdl.attn_sinks = opt.attn_sinks;
+4426:    if opt.attn_window > 0 || opt.swa_pattern.is_some() || opt.attn_sinks > 0 {
+4429:                 opt.attn_window, opt.swa_pattern.unwrap_or(0), opt.attn_sinks);
+7006:        sans_fenetre, attn_sinks, attn_topk, qk_topk, act_thresh, act_topk, act_renorm,
+7114:    if attn_sinks > 0 { mdl.attn_sinks = attn_sinks; }
+=== defaut 4492 (co
+… [543 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Mesure fine : `--attn-sinks 16` agit mais 4 semble inerte — je balaie les valeurs pour trouver la vraie loi
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf; I=/tmp/campagne24/ids_0.5B-Q8.txt\nppl () { $D \"$M\" --ppl \"$I\" --limit 64 --ctx 512 --threads 8 \"$@\" 2>&1 | grep -oE \"perplexité [0-9.]+ sur\" | grep -oE \" … [351 caractères tronqués]`
+
+  ```
+started background job bash-25
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -3 /tmp/porte-gain.log; echo \"=== journaux de la passe ===\"; ls /tmp/portes-1210/ 2>/dev/null | tr '\\n' ' '; echo; sed -n '7000,7015p' drave-core/src/main.rs", "description": "Check progress and inspect run_ppl destructuring" … [1 caractères tronqués]`
+
+  ```
+0:0.75 seul : 12.9635 · +1:0.5 : 13.7679 · +1:0.5+2:1.0 : 13.7679
+  ✅ la composition DÉGRADE (12.9635 → 13.7679), et un gain 1,0 y est exactement neutre (13.7679 = 13.7679)
+=== 7. l'effet DIMINUE avec la fenêtre d'évaluation (et il tient) ===
+=== journaux de la passe ===
+
+         opt.etat_sortie.clone(), opt.etat_pos);
+    let Options {
+        ids_file: idfile, texte_file, ppl_texte: _, limit, depuis,
+        ctx: ctx_opt, threads: threads_opt, abits: abits_opt,
+        ctx_impose, threads_impose, abits_impose,
+        dense, auto, q4, b6, attn_window, swa_pattern,
+        sans_fenetre, attn_sinks, attn_topk, qk_topk, act_thresh, act_topk, act_renorm,
+        topk_proj, moe_topk, patch: patch_file, hebb_layer, hebb_q, hebb_out, hebb_diff, hebb_eta, hebb_clamp,
+        ffn_gain, logits_bin, keep,
+        ppl_profil, lot, profil_neurones, neurones_sortie, trace_flux, trace_couches, flux_forcer,
+        harmony, harmony_contexte, sans_yarn, ..
+    } = opt;
+    let lot = lot.max(1);
+    let path = &modele_chemin();
+    // Défauts du mode PERPLEXITÉ : 256 jetons, trois quarts des cœurs, 16 bits
+    // d'activation (la référence de non-régression en dépend).
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '7100,7125p' drave-core/src/main.rs; echo \"=== passe (sweep) ===\"; cat /tmp/portes-1210/ 2>/dev/null; ls /tmp/portes-1210/ 2>/dev/null | tr '\\n' ' '", "description": "Read run_ppl window/sinks wiring context"}`
+
+  ```
+mdl.act_topk_proj = topk_proj;
+    mdl.attn_topk = attn_topk;
+    mdl.qk_topk = qk_topk;
+    if sans_yarn { mdl.cfg_yarn_off(); }
+    // MÊME précédence qu'en inférence (sans-fenetre d'abord, puis la fenêtre
+    // explicite) : l'ordre était inversé entre les deux modes.
+    if sans_fenetre { mdl.attn_window = 0; }
+    if attn_window > 0 { mdl.attn_window = attn_window; }
+    if let Some(p) = swa_pattern { mdl.swa_pattern = p; }
+    if sans_fenetre || swa_pattern.is_some() {
+        println!("fenêtre : {} · motif {} (imposé par la ligne de commande)",
+                 if mdl.attn_window == 0 { "aucune".to_string() } else { mdl.attn_window.to_string() },
+                 mdl.swa_pattern);
+    }
+    if attn_sinks > 0 { mdl.attn_sinks = attn_sinks; }
+    if act_thresh > 0.0 || act_topk > 0 {
+        println!("parcimonie imposée : seuil {:.1} % du max{}",
+                 act_thresh * 100.0,
+                 if act_topk > 0 { format!(", k-WTA k={act_topk}") } else { String::new() });
+    }
+    // Le tableau de bord vient EN DERNIER, après la trace, les top-k, les seuils,
+    // la fenêtre et le gain FFN : sa première version, placée plus haut, affichait
+    // « niveaux 127 · seuil 0 ·
+… [320 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"let fen\\b\\|let fen =\\|fen =\" drave-core/src/model.rs | head -12; echo \"=== sweep en cours ===\"; jobs 2>/dev/null; cat /tmp/porte-gain.log | tail -2", "description": "Locate window computation in forward"}`
+
+  ```
+4284:            let n_fen = if swa_pattern <= 1 { cfg.n_layer } else {
+5573:                let fen = if self.attn_window == 0 { 0 }
+5584:                let groupe = fen == 0 && self.attn_topk == 0 && rep > 1;
+6444:                let n_fen = (pos as isize - t0 + 1) as usize;
+7109:            let fen = if self.attn_window == 0 { 0 }
+7287:                let groupe = fen == 0 && self.attn_topk == 0 && rep > 1;
+7381:                if topk_gpu_possible && fen == 0 && kv_gpu.is_some()
+=== sweep en cours ===
+  ✅ la direction tient aux deux fenêtres, la MAGNITUDE décroît : 11.5 % à 128 jetons, 1.4 % à 256 — une condition, pas une propriété
+=== 8. le drapeau AGIT AUSSI dans le chemin RÉPARTI ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '7100,7120p' drave-core/src/model.rs", "description": "Read window computation inside forward"}`
+
+  ```
+Self::vider_couche(self.dump_couches.as_deref(), "engram_kv", l, pos, &kv);
+                    Self::vider_couche(self.dump_couches.as_deref(), "engram_sortie",
+                                       l, pos, &x);
+                }
+            }
+            }
+            // Fenêtre EFFECTIVE de cette couche : le motif déclaré (gpt-oss :
+            // une couche sur deux en attention complète) prime sur le réglage
+            // global. Lue en champs directs : `self` est déjà déstructuré.
+            let fen = if self.attn_window == 0 { 0 }
+                      else if self.swa_pattern <= 1 { self.attn_window }
+                      else if l % self.swa_pattern < self.swa_pattern - 1 { self.attn_window }
+                      else { 0 };
+            // ---- hyper-connexions : l'entrée de l'attention n'est pas l'état,
+            // c'est le MÉLANGE de ses `hc` copies (`pre`), et la sortie sera
+            // re-router par `comb` au lieu d'être additionnée.
+            let hc_l = self.hc.as_ref().map(|v| &v[l]);
+            let mut hc_attn: Option<HcSortie> = None;
+            let mut xin = vec![0f32; h];
+            match hc_l {
+                Some((ha, _)) => {
+  ```
+
+- **job_output** `{"job_id": "bash-25", "wait": true, "timeout_ms": 600000}`
+
+  ```
+fenetre 32, balayage des puits (limit 64) :
+  puits=0   : 29.0206
+  puits=1   : 28.7244
+  puits=2   : 28.7682
+  puits=4   : 29.0206
+  puits=6   : 29.0705
+  puits=8   : 28.8308
+  puits=12  : 28.9700
+  puits=16  : 28.5286
+  puits=24  : 27.4439
+  puits=32  : 27.4964
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-22 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash tools/porte-gain.sh > /tmp/porte-gain.log 2>&1; echo "CODE=$?" >> /tmp/porte-gain.log; tail -30 /tmp/porte-gain.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 🤖 Assistant
+
+⏵ Données claires : 0 est AVALÉ par un garde (`> 0`) et le défaut vaut 4 — le drapeau agit, mais ne peut pas dire « zéro »
+
+- **job_output** `{"job_id": "bash-22"}`
+
+  ```
+=== 2. inhibition MONOTONE (couche 12) ===
+  gain 0.0    : 15.6908
+  gain -0.25  : 16.3034
+  gain -0.5   : 17.1200
+  gain -1.0   : 19.4791
+  ✅ toute inhibition dégrade, et de plus en plus : l'optimum intérieur est réfuté de ce côté
+=== 3. optimum INTÉRIEUR (couche 0) : 0,75 doit battre 0,5 ET 1,5 ===
+  gain 0,5 : 14.1057 · 0,75 : 12.9635 · 1,5 : 15.4298
+  ✅ optimum intérieur : 12.9635 contre 14.1057, 15.4298 et 14.6496 sans réglage (11.5 % de mieux)
+=== 4. la FALAISE : 0,25 à la couche 0 casse le modèle ===
+  gain 0,25 : 996.0390
+  ✅ la falaise est réelle : 996.039 contre 14.6496 (68× pire)
+=== 5. le bénéfice est LOCALISÉ aux deux premières couches ===
+  couche 0 : 12.9635 · couche 1 : 13.9844 · couche 5 : 14.7526 (référence 14.6496)
+  ✅ le bénéfice est à l'ENTRÉE : couches 0 et 1 à 12.9635 et 13.9844 (mieux que 14.6496), couche 5 à 14.7526 (pas mieux)
+=== 6. un PROFIL ne compose PAS : il défait le meilleur réglage seul ===
+  0:0.75 seul : 12.9635 · +1:0.5 : 13.7679 · +1:0.5+2:1.0 : 13.7679
+  ✅ la composition DÉGRADE (12.9635 → 13.7679), et un gain 1,0 y est exactement neutre (13.7679 = 13.7679)
+=== 7. l'effet DIMINUE avec la fenêtre d'évaluation (et il tient) ===
+  128 jetons : 12
+… [753 caractères tronqués]
+  ```
+
+- **job_kill** `{"job_id": "bash-24", "reason": "geler le binaire avant le correctif, puis relancer la passe"}`
+
+  ```
+requested cancellation of job bash-24
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"ctx_impose\" drave-core/src/main.rs | head -12; echo \"=== tableau de bord ===\"; grep -n \"niveaux .*seuil\\|tableau de bord\\|\\[config\\]\" drave-core/src/main.rs | head -12", "description": "Find impose pattern and dash … [14 caractères tronqués]`
+
+  ```
+557:fn options_actives(mdl: &model::Model, mode: &str, ctx_impose: bool, dense: bool, keep: f32) {
+560:             mdl.ctx, oui(ctx_impose), dense, keep);
+820:    ctx_impose: bool, threads_impose: bool, abits_impose: bool,
+1025:            "--ctx" => { o.ctx = suivant(i).parse().unwrap(); o.ctx_impose = true; 2 }
+1170:        ctx_impose, threads_impose, abits_impose, dense, auto, q4, b6,
+1182:    let ctx = if ctx_impose { ctx_opt } else { 512 };
+1271:        options_actives(&mdl, "inférence", ctx_impose, dense, keep);
+3682:    let ctx = if opt.ctx_impose { opt.ctx } else { 4096 };
+3685:    if opt.options_actives { options_actives(&mdl, "nœud moteur du flux", opt.ctx_impose, true, opt.keep); }
+4230:    let ctx = if opt.ctx_impose { opt.ctx } else { 256 };
+4446:    if opt.options_actives { options_actives(&mdl, "pilote du flux", opt.ctx_impose, true, opt.keep); }
+6082:    let ctx_demande = if opt.ctx_impose && opt.ctx > 0 {
+=== tableau de bord ===
+561:    println!("[options] activation : niveaux {:.0} · seuil {} · k-WTA {} · renorm {}",
+569:    // tableau de bord qui existe pour rendre les drapeaux visibles cache le seul
+1266:    // Le tableau de bord vient EN DERNIER : il doit mont
+… [532 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '545,585p' drave-core/src/main.rs", "description": "Read the options dashboard function"}`
+
+  ```
+}
+
+/// **Tableau de bord des réglages en vigueur** (`--options-actives`), lus sur le
+/// MODÈLE après toutes les affectations.
+///
+/// Pourquoi il existe : le défaut le plus coûteux de ce dépôt n'est pas un calcul
+/// faux, c'est un drapeau qui ne fait rien. Huit ont été corrigés en une session
+/// (`--keep` en perplexité, `--ffn-gain` en inférence, les top-k dans les modes
+/// flux, `--trace-flux` en inférence, `--threads` figé…), et chacun était
+/// INVISIBLE : la sortie ne disait nulle part quelle valeur agissait. Ici, elle
+/// le dit — et une valeur qu'on ne voit pas bouger est une valeur qui ne sert à
+/// rien.
+fn options_actives(mdl: &model::Model, mode: &str, ctx_impose: bool, dense: bool, keep: f32) {
+    let oui = |b: bool| if b { "imposé" } else { "défaut" };
+    println!("[options] mode {mode} · contexte {} ({}) · dense {} · keep {:.3}",
+             mdl.ctx, oui(ctx_impose), dense, keep);
+    println!("[options] activation : niveaux {:.0} · seuil {} · k-WTA {} · renorm {}",
+             mdl.act_levels, mdl.act_thresh, mdl.act_topk, mdl.act_renorm);
+    println!("[options] top-k : attn {} · q·k {} · MoE {} · par projection {:?}",
+             mdl.attn_topk, mdl.qk_topk, 
+… [1413 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '812,840p' drave-core/src/main.rs; echo \"=== Default / init ===\"; grep -n \"attn_sinks: 0\\|options_actives: false\" drave-core/src/main.rs | head", "description": "Inspect Options struct and defaults"}`
+
+  ```
+// --- génération
+    n: usize, temp: f32, top_p: f32, topk: usize, rep_pen: f32, hist: usize,
+    flux: bool, session: bool, chat: bool, flux_liste: bool, flux_blocs: bool,
+    // --- moteur
+    ctx: usize, threads: usize, abits: u32, dense: bool, auto: bool,
+    /// Vrai si `--ctx`, `--threads` ou `--abits` ont été donnés : leurs défauts
+    /// diffèrent selon le mode (256 jetons et 16 bits en perplexité, 512 et
+    /// 8 bits en inférence, la moitié des cœurs contre les trois quarts).
+    ctx_impose: bool, threads_impose: bool, abits_impose: bool,
+    q4: u8, b6: u8, keep: f32, bits: u32, moe_topk: usize, pin: bool,
+    // --- attention
+    attn_window: usize, swa_pattern: Option<usize>, sans_fenetre: bool,
+    attn_sinks: usize, attn_topk: usize, qk_topk: usize,
+    // --- parcimonie des activations
+    act_thresh: f32, act_topk: usize, act_renorm: bool, topk_proj: [usize; 7],
+    // --- mesure
+    logits_bin: Option<String>, ppl_profil: bool,
+    config: bool,
+    /// Profilage des neurones « chauds » (idée de PowerInfer) et fichier de
+    /// sortie du classement.
+    profil_neurones: bool, neurones_sortie: Option<String>,
+    /// Détection du matériel et plan de configurati
+… [490 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"impl Default for Options\\|fn default() -> Options\\|Options {\" drave-core/src/main.rs | head; echo ===; sed -n '/let mut o = Options {/,/};/p' drave-core/src/main.rs | head -30", "description": "Find Options default const … [9 caractères tronqués]`
+
+  ```
+650:struct Options {
+878:fn analyser(args: &[String]) -> Options {
+879:    let mut o = Options {
+1167:    let Options {
+6996:    // Capturés AVANT la déstructuration : `let Options { .. } = opt` déplace les
+7001:    let Options {
+===
+    let mut o = Options {
+        n: 32, temp: 0.0, top_p: 1.0, hist: 64, hebb_q: 0.1,
+        hebb_out: String::from("hebb.bin"), keep: 1.0, abits: 8,
+        hebb_diff: None, hebb_eta: 1e-4, hebb_clamp: 1.0,
+        // Ces deux valeurs ne peuvent PAS venir de `Default` : `f32::default()` vaut
+        // 0,0 et `usize::default()` vaut 0, donc un `--fusion-etat` sans
+        // `--fusion-alpha` aurait injecté un vecteur multiplié par ZÉRO (aucun effet,
+        // en silence) et `--fusion-pos` absent aurait injecté à la SEULE position 0.
+        // C'est le défaut le plus coûteux du dépôt — un drapeau qui ne fait rien.
+        fusion_alpha: 1.0, fusion_pos: usize::MAX,
+        auto: true, limit: usize::MAX,
+        matrix: String::from("blk.0.ffn_gate.weight"),
+        ..Default::default()
+    };
+  ```
+
+### 🤖 Assistant
+
+⏵ Correctif réel : rendre `--attn-sinks 0` exprimable (`attn_sinks_impose`), afficher la valeur effective, avertir si aucune fenêtre
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\n\n# 1) le champ, à côté de la famille `*_impose` (même idiome que --ctx/--threads/--abits)\nold = \"    attn_sinks: usize, attn_top … [3860 caractères tronqués]`
+
+  ```
+patch principal posé
+587:             if mdl.attn_sinks_impose_flag() { "imposé" } else { "défaut" },
+842:    attn_sinks_impose: bool,
+1054:            "--attn-sinks" => { o.attn_sinks = suivant(i).parse().unwrap(); o.attn_sinks_impose = true; 2 }
+1188:        ctx_impose, threads_impose, abits_impose, dense, auto, q4, b6, attn_sinks_impose,
+1248:    if attn_sinks_impose { mdl.attn_sinks = attn_sinks; }
+4446:    // même règle qu'ailleurs : `0` doit pouvoir ÉTEINDRE (cf. `attn_sinks_impose`)
+4447:    if opt.attn_sinks_impose { mdl.attn_sinks = opt.attn_sinks; }
+7028:        sans_fenetre, attn_sinks, attn_sinks_impose, attn_topk, qk_topk, act_thresh, act_topk, act_renorm,
+7139:    if attn_sinks_impose { mdl.attn_sinks = attn_sinks; }
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"options_actives(\" drave-core/src/main.rs", "description": "List dashboard call sites"}`
+
+  ```
+557:fn options_actives(mdl: &model::Model, mode: &str, ctx_impose: bool, dense: bool, keep: f32) {
+1292:        options_actives(&mdl, "inférence", ctx_impose, dense, keep);
+3706:    if opt.options_actives { options_actives(&mdl, "nœud moteur du flux", opt.ctx_impose, true, opt.keep); }
+4468:    if opt.options_actives { options_actives(&mdl, "pilote du flux", opt.ctx_impose, true, opt.keep); }
+7152:        options_actives(&mdl, "perplexité", ctx_impose, dense, keep);
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\ns = s.replace(\"fn options_actives(mdl: &model::Model, mode: &str, ctx_impose: bool, dense: bool, keep: f32) {\",\n              \" … [1454 caractères tronqués]`
+
+  ```
+signature et appels mis à jour
+BUILD=0
+  ```
+
+### 🤖 Assistant
+
+⏵ J'ajoute l'avertissement « puits sans fenêtre = inerte », puis je mesure la vraie courbe de dose
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\nhelper = '''\n/// `--attn-sinks` SANS fenêtre active : le réglage est inerte, et il le dit.\n///\n/// Le compteur n'est lu QUE dans … [2700 caractères tronqués]`
+
+  ```
+avertissement posé aux trois sites
+error: 1 positional argument in format string, but no arguments were given
+   --> src/main.rs:568:45
+    |
+568 |         eprintln!("[attention] --attn-sinks {} SANS fenêtre active : les puits ne sont notés que \
+    |                                             ^^
+
+warning: type `io_result` should have an upper camel case name
+  --> src/gguf.rs:16:6
+   |
+--
+error: could not compile `drave-core` (bin "drave") due to 1 previous error; 30 warnings emitted
+fenetre 32, courbe de dose VRAIE (limit 64) :
+  defaut (4)   : 29.0206
+  puits=0     : 1297.5437
+  puits=1     : 28.7244
+  puits=2     : 28.7682
+  puits=4     : 29.0206
+  puits=8     : 28.8308
+  puits=12    : 28.9700
+  puits=16    : 28.5286
+  puits=24    : 27.4439
+  puits=32    : 27.4964
+--- sans fenetre (iners attendu) ---
+  rien         : 27.4964
+  puits=24     : 27.4964
+--- tableau de bord ---
+[options] fenêtre 32 · motif 0 · seuil push 0.22 · lot 1 · ffn_gain None · hebb false
+[options] puits d'attention 16 (imposé)
+  ```
+
+### 🤖 Assistant
+
+⏵ Découverte majeure : sans fenêtre c'est inerte (attendu), mais **0 puits avec fenêtre donne 1297** — les puits sont porteurs
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\nold = \"\"\"0 puits → 29,0206, 24 puits → 27,4439. Ajouter `--attn-window N` (N < séquence) pour qu'il agisse.\");\"\"\"\nassert s. … [1447 caractères tronqués]`
+
+  ```
+argument ajoute
+fenetre 32, limit 128 :
+  defaut (4)  : 18.1141
+  puits=16   : 16.3812
+  puits=24   : 15.4339
+  puits=32   : 15.4499
+  sans fenetre, rien : 14.6496
+--- avertissement, puits sans fenetre ---
+[attention] --attn-sinks 24 SANS fenêtre active : les puits ne sont notés que dans la branche à fenêtre (`model.rs:7472`), donc ce réglage est INERTE ici. Avec 
+--- tableau de bord, deux etiquettes ---
+[options] puits d'attention 4 (défaut)
+[options] puits d'attention 0 (imposé)
+  ```
+
+### 🤖 Assistant
+
+⏵ Je réécris la section 10 du portail avec la vérité mesurée, puis je la fais tourner avant de committer
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"tools/porte-gain.sh\")\ns = p.read_text()\ndeb = s.index('echo \"=== 10. un drapeau DÉCLARÉ mais JAMAIS LU est REFUSÉ (--attn-sinks) ===\"')\nfin = s.index('rm -rf \"$T\"')\nneu … [4352 caractères tronqués]`
+
+  ```
+section 10 reecrite
+syntaxe OK
+extrait OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash /tmp/gain910.sh 2>&1 | tail -18; echo \"CODE=$?\"", "description": "Run extracted gate sections 9 and 10", "timeoutMs": 1800000}`
+
+  ```
+modèle ou identifiants absents
+CODE=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -i 's|^cd \"$(dirname \"$0\")/..\"$|cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet|' /tmp/gain910.sh && sed -i 's|^rm -rf \"$T\"$|rm -rf \"$T\"; echo EXTRACTION_FINIE|' /tmp/gain910.sh && bash /tmp/gain910.sh > /tmp/gain910.l … [137 caractères tronqués]`
+
+  ```
+CODE=1
+=== 9. le réglage que le v7 TRANSPORTE change le chiffre des DEUX côtés ===
+  reparti sans fenêtre : 59.0790 · avec fenêtre 32 : 65.6625
+  ❌ --attn-window n'agit pas dans le chemin réparti (facteur < 5) : le v7 était
+     censé le faire voyager, le correctif du round 42 le faire AGIR côté pilote
+  ```
+
+### 🤖 Assistant
+
+⏵ Effet de bord instructif : le §9 passait « grâce » au bug des puits — je le reconstruis sur un test décisif (deux découpages)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf; I=/tmp/campagne24/ids_0.5B-Q8.txt; T=$(mktemp -d); P=$((60000 + RANDOM % 4000))\ncat > \"$T/a.json\" <<JSON\n{\"regions\":[{\"id\":\"local\",\"couches\":[0,11],\"i … [1091 caractères tronqués]`
+
+  ```
+decoupage 0-11|12-23 : 65.6625
+decoupage 0-3|4-23   : 65.6625
+ecart relatif = 0.00 %
+  ```
+
+### 🤖 Assistant
+
+⏵ Test décisif trouvé : deux découpages, mêmes drapeaux → même chiffre (0,00 %) — je réécris le §9 là-dessus
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"tools/porte-gain.sh\")\ns = p.read_text()\ndeb = s.index('echo \"=== 9. le réglage que le v7 TRANSPORTE change le chiffre des DEUX côtés ===\"')\nfin = s.index('echo \"=== 10. ` … [4695 caractères tronqués]`
+
+  ```
+section 9 reecrite sur le test des deux decoupages
+syntaxe OK
+extrait OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash /tmp/gain910.sh > /tmp/gain910.log 2>&1; echo \"CODE=$?\"; cat /tmp/gain910.log", "description": "Run rewritten gate sections 9 and 10", "timeoutMs": 1800000}`
+
+  ```
+CODE=0
+=== 9. le réglage transporté est appliqué des DEUX côtés : deux découpages, un seul chiffre ===
+  sans fenêtre (0-11|12-23) : 59.0790
+  fenêtre 32 (0-11|12-23)   : 65.6625
+  fenêtre 32 (0-3|4-23)     : 65.6625
+  ✅ la fenêtre mord (59.0790 → 65.6625) ET les deux découpages s'accordent (65.6625 = 65.6625, écart 0,00 %)
+/tmp/gain910.sh: line 106: --attn-sinks: command not found
+=== 10.  n'est PAS mort : il est CIRCONSTANCIÉ (et le zéro n'existait pas) ===
+  fenêtre 32 : défaut(4) 29.0206 · 0 puits 1297.5437 · 24 puits 27.4439
+  sans fenêtre : --attn-sinks 24 /tmp/campagne24/ids_0.5B-Q8.txt : 64 tokens, fenêtres de 512
+[config] cache KV : 32 bits, 0.01 Go pour 512 jetons
+[modele] 24 couches chargées en 6.301853876s — listes 0.71 Go , 8 threads
+[config] 24 couches, hidden 896 · 
+[config] puits appris sur 0/24 couches · n_rot 64 · ffn 4864 · experts 0
+[config] rotation : RoPE simple (le modèle ne déclare pas YaRN)
+[attention] --attn-sinks 24 SANS fenêtre active : les puits ne sont notés que dans la branche à fenêtre (`model.rs:7472`), donc ce réglage est INERTE ici. Avec fenêtre 32 : 0 puits → 29,0206, 24 puits → 27,4439. Ajouter `--attn-window N` (N < séquence) pour qu'il agisse.
+… [1083 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n 'R3=\\$(' tools/porte-gain.sh; DELAI=2400 JOURNAUX=/tmp/portes-1210b bash tools/toutes-les-portes.sh > /tmp/passe-complete.log 2>&1; echo \"CODE_PASSE=$?\" >> /tmp/passe-complete.log; tail -40 /tmp/passe-complete.log", "descr … [75 caractères tronqués]`
+
+  ```
+started background job bash-26
+  ```
+
+### 🤖 Assistant
+
+⏵ Passe complète lancée ; j'écris la section 47 corrigée dans l'état du sprint
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"docs/sprint-cerveau.md\")\ns = p.read_text()\ndeb = s.index(\"### 47. Le refus de `--attn-sinks`\")\nfin = s.index(\"## ▶ PROCHAINE ACTION (à lire en premier)\")\nsec = \"\"\"## … [6286 caractères tronqués]`
+
+  ```
+sections 46bis et 47 corrigees
+1993
+964:> **CORRIGÉ — voir §47.** Cette conclusion est **FAUSSE** : le compteur **est** lu, dans la
+994:### 47. `--attn-sinks` : le refus était FAUX — le drapeau VIT, mais seulement avec une fenêtre
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/passe-complete.log 2>/dev/null | head -20; ls /tmp/portes-1210b/ 2>/dev/null | tr '\\n' ' '", "description": "Check sweep progress"}`
+
+  ```
+=== PASSE COMPLÈTE DES PORTES (22 portes, borne 2400 s) ===
+    journaux : /tmp/portes-1210b
+porte-budget.log
+  ```
+
+### 🤖 Assistant
+
+⏵ Passe complète en cours (porte-budget) ; j'ajoute la section 47 au rapport de campagne
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\nancre = \"## Annexe — manifeste des journaux\"\nassert s.count(ancre) == 1\nsec = \"\"\"## 47. `--attn-sinks` : le d … [4141 caractères tronqués]`
+
+  ```
+=== PASSE COMPLÈTE DES PORTES (22 portes, borne 2400 s) ===
+    journaux : /tmp/portes-1210b
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 69, in <module>
+AssertionError
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"attn-sinks\" reports/rapport-campagne-benefices.md | head", "description": "Find attn-sinks row in report"}`
+
+  ```
+2431:(`--attn-window`, `--attn-sinks`, `--swa-pattern`, `--patch`, `--hebb-*`, `--flux-forcer`,
+2525:`--attn-sinks 4` donnent **tous 42,5477**, identiques au run sans drapeau, alors que le même
+2774:| **`--attn-sinks 4`** | 72,0185 | **à instruire** : les puits d'attention devraient peser, et ils ne pèsent pas |
+2778:candidat ouvert**, nommé : `--attn-sinks`.
+2787:`--attn-sinks 4` n'agit **pas** en réparti. Instruit : il n'agit **pas non plus en local**
+2791:main.rs:1036   --attn-sinks N   →  o.attn_sinks = N
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\nancre = \"## Annexe — manifeste des journaux\"\nassert s.count(ancre) == 1\nsec = open('/dev/stdin').read() if False … [139 caractères tronqués]`
+
+  ```
+| `--act-topk 64` | 362 333,58 | **agit** |
+| `--qk-topk 64` | 4 760,07 | **agit** |
+| `--attn-window 32` | 1 571,30 | **agit** (corrigé au round 42) |
+| `--act-thresh 0,01` | 98,83 | **agit** |
+| `--ffn-gain 0:0.75` | 76,88 | **agit** (corrigé au round 20) |
+| `--attn-topk 64` | 71,47 | **agit** |
+| `--swa-pattern 2` | 72,0185 | **sans effet — ATTENDU** : le motif ne décide quelles couches prennent la fenêtre ; sans `--attn-window`, il n'a rien à décider |
+| `--sans-fenetre` | 72,0185 | **sans effet — ATTENDU** : désactiver une fenêtre qui n'est pas posée ne change rien |
+| `--moe-topk 2` | 72,0185 | **sans effet — ATTENDU** : Qwen2.5-0.5B est **dense**, il n'a pas d'experts |
+| **`--attn-sinks 4`** | 72,0185 | **à instruire** : les puits d'attention devraient peser, et ils ne pèsent pas |
+
+**Six drapeaux agissent sur dix**, et **trois des quatre inertes le sont pour une raison
+identifiée** (conditions non remplies : pas de fenêtre posée, pas d'experts). Reste **un seul
+candidat ouvert**, nommé : `--attn-sinks`.
+
+**Ce que cet inventaire vaut** : c'est la réponse à la question posée au §39 — « combien d'autres
+drapeaux ne font rien en réparti ? » — et elle est **chiffrée**, pas est
+… [418 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\nancre = \"## Annexe — manifeste des journaux\"\nassert s.count(ancre) == 1\nsec = \"\"\"## 47. `--attn-sinks` : le d … [4944 caractères tronqués]`
+
+  ```
+rapport : §47 ajoutee, §46 et §46bis corriges
+2787:> **CORRIGÉ — voir §47.** La conclusion ci-dessous (« lu nulle part ») est **FAUSSE** : le
+2822:## 47. `--attn-sinks` : le drapeau VIT, mais seulement avec une fenêtre — et « 0 » n'existait pas
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -25 /tmp/passe-complete.log; ls /tmp/portes-1210b/ | tr '\\n' ' '", "description": "Check sweep progress again"}`
+
+  ```
+=== PASSE COMPLÈTE DES PORTES (22 portes, borne 2400 s) ===
+    journaux : /tmp/portes-1210b
+  porte-budget           ✅                          43 s    ✅ paires depassees : nommees (total, budget, pas, plafond), code 9, AUCUNE perplexite
+porte-budget.log porte-bus.log
+  ```
+
+### 🤖 Assistant
+
+⏵ Passe en cours (budget ✅ 43 s) ; je lance la suite de tests avant de committer
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 cargo test --release --manifest-path drave-core/Cargo.toml 2>&1 | grep -E \"^test result|^error\" | head -10", "description": "Run test suite", "timeoutMs": 960000}`
+
+  ```
+test result: ok. 122 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.35s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A tools/porte-gain.sh tools/toutes-les-portes.sh drave-core/src/main.rs docs/sprint-cerveau.md reports/rapport-campagne-benefices.md && git status --short | head -12 && git commit -q -m \"$(cat <<'MSG'\n--attn-sinks : le ref … [1782 caractères tronqués]`

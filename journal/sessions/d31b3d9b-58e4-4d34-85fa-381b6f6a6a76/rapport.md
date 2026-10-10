@@ -5,15 +5,15 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 48.5 h |
-| Tours | 87 |
-| Messages | 2018 |
-| Appels d'outils | 1842 |
-| Fichiers touchés | 61 |
-| Commandes | 1592 |
+| Durée | 48.9 h |
+| Tours | 88 |
+| Messages | 2096 |
+| Appels d'outils | 1914 |
+| Fichiers touchés | 62 |
+| Commandes | 1657 |
 | Sous-agents | 3 |
-| Commits | 178 |
-| Compactages de contexte | 2 |
+| Commits | 179 |
+| Compactages de contexte | 3 |
 
 ## Objectifs déclarés
 
@@ -209,6 +209,8 @@
 **Tour 86** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 **Tour 87** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
+
+**Tour 88** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -3560,7 +3562,51 @@ Suite directe de la correction du round 41 : `mdl.attn_window`, `mdl.swa_pattern
 
 **Synthèse produite :**
 
-⏵ Le second remplacement a échoué (ancre différente) — j'insère la section dans le journal par une ancre sûre
+⏵ Round 44 livré : `--attn-sinks` — écrit partout, transporté par le v7, **lu nulle part**
+
+**Ce round** — 2 commits poussés. Le dernier candidat de l'inventaire, et **le plus grave des cinq**.
+
+**Mesure** : inerte en réparti **et** en local (14,6496 dans les deux cas). **Lecture du code** :
+
+| où | ce qui est fait |
+|---|---|
+| `main.rs:1036` | le drapeau pose `o.attn_sinks` |
+| `main.rs:1227` / `7114` | `if attn_sinks > 0 { mdl.attn_sinks = … }` (inférence, perplexité) |
+| `main.rs:4425` | assigné en réparti (round 42) |
+| `model.rs:2961` | **transporté par le protocole v7** |
+| **le calcul** | **aucune lecture de `self.attn_sinks`** |
+
+Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'attention consomme — pas ce compteur.
+
+**Cinquième défaut de la même famille** — après `--ffn-gain` en réparti, le poids de greffe à zéro par défaut, `--attn-window`, et le `sys.exit` qui sortait en 1 — **et le plus grave : le v7 a fait voyager un réglage mort** (une modification de version, 91 → 99 octets, pour rien).
+
+**Deux issues, et c'est un choix de conception** : (1) **implémenter** le compteur (`n` jetons puits au début de la séquence, comme le décrit `model.rs:2435` — mécanisme réel, différent des puits appris) ; ou (2) **retirer le drapeau** — un drapeau qui ne peut rien faire est pire qu'aucun drapeau : il donne l'illusion d'un réglage. Dans les deux cas, **la porte doit suivre** : exiger qu'il agisse, ou qu'il n'existe plus.
+
+**Bilan** : 44 rounds, **22 portes toutes vertes**, 122 tests. La chaîne d'audit ouverte au round 21 est **close** : dix drapeaux testés, six agissent, trois inertes pour une raison identifiée, **un cinquième défaut systémique trouvé et documenté**. L'objectif reste **actif**.
+
+### Tour 88 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
+
+*72 appels d'outils.* Actions notables :
+
+- bash — Add the refusal and verify
+- bash — Move the refusal to the single point and verify
+- bash — Check exit code 2 and find gates with refusals
+- bash — Inspect refusal style in existing gates
+- bash — Locate gate that covers attention flags or refusals
+- bash — Read porte-gain gate structure
+- bash — List gate sections
+- bash — Add refusal case to porte-gain and run it
+- bash — Inspect main.rs diff for collateral deletion
+- bash — Check for collateral deletions and refusal locations
+- bash — Find the untransportable refusal implementation
+- bash — Read v7 removal context and flag inventory
+- bash — Read flag inventory section in docs
+- bash — Establish whether section 9 predates the v7 removal
+- … et 55 autres
+
+**Synthèse produite :**
+
+⏵ Passe en cours (budget ✅ 43 s) ; je lance la suite de tests avant de committer
 
 ## 3. Travail accompli
 
@@ -3629,6 +3675,7 @@ Suite directe de la correction du round 41 : `mdl.attn_window`, `mdl.swa_pattern
 | `/tmp/c9_code2.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-pont.sh` | 6 | 0 |
 | `/tmp/c9_node.py` | 2 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/toutes-les-portes.sh` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -3678,7 +3725,7 @@ Suite directe de la correction du round 41 : `mdl.attn_window`, `mdl.swa_pattern
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1552 autres
+- … et 1617 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3806,7 +3853,7 @@ Suite directe de la correction du round 41 : `mdl.attn_window`, `mdl.swa_pattern
 
 ## 5. Erreurs rencontrées
 
-78 sorties en erreur ou divergentes. Les premières :
+79 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : ```  ### 🤖 Assistant  ⏵ **En transformers 5, `AutoModel` rend directement `Qwen2Model` (pas de `.model`). Je corrige le diagnostic.**  - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitH
 - **T2** : 3310393 bash -c pgrep -af "essai_decharge" | grep python | head; echo "--- logs ---"; tail -2 /tmp/ec_d192_lr3e3.log 2>/dev/null; tail -2 /tmp/ec_d192_lr1e3.log 2>/dev/null; echo "---"; ls -la /tmp/ec
@@ -4004,4 +4051,5 @@ Suite directe de la correction du round 41 : `mdl.attn_window`, `mdl.swa_pattern
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - Journal : la section 46 bis (--attn-sinks ecrit partout, lu nulle part) manquait — l'ancre du premier essai ne correspondait pas" && git push -q origin master &
+- $(cat <<'MSG' --attn-sinks : le refus etait FAUX (le compteur EST lu, branche a fenetre) — le drapeau vit, et le zero n'existait pas  Le refus code 2, ecrit sur
 

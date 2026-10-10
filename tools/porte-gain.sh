@@ -24,7 +24,12 @@
 #      strictement pire que le précédent ;
 #   3. l'optimum intérieur existe là où il a été trouvé (couche 0 : 0,75 bat 0,5 ET 1,5) ;
 #   4. et la falaise est réelle (0,25 à la couche 0 est catastrophique) — un résultat qu'un
-#      réglage « un peu plus prudent » ne laisse pas deviner.
+#      réglage « un peu plus prudent » ne laisse pas deviner ;
+#   5. un réglage TRANSPORTÉ est HONORÉ des deux côtés (§9 : `--attn-window` en reparti,
+#      la propriété que le v7 a rendue vraie — et la porte était rouge depuis le v7 sans
+#      que personne le voie) ;
+#   6. un réglage qui ne peut RIEN faire est REFUSÉ plutôt que silencieusement ignoré
+#      (§10 : `--attn-sinks`, déclaré, transporté par le v7, lu nulle part).
 set -u
 cd "$(dirname "$0")/.."
 D=${D:-./drave-core/target/release/drave}
@@ -181,29 +186,118 @@ sys.exit(0 if a != b else 1)" \
        echo "     défaut mesuré le 11/10 : le drapeau ne faisait rien, en silence"; exit 1; }
 echo "  ✅ le drapeau agit aussi en réparti ($SG → $AG)"
 
-echo "=== 9. les réglages qui ne voyagent PAS sont REFUSÉS en réparti ==="
-# Mesuré : --attn-window 64 AGIT en local (13,1368 → 21,5801) et, si on le câble naïvement en
-# réparti, rend un résultat FAUX ET SILENCIEUX — le pilote applique la fenêtre à ses couches,
-# le nœud garde la sienne : deux modèles différents sous le même nom (195,5685 contre 50,3829).
-# Un drapeau inerte est un défaut ; un drapeau qui fait calculer deux modèles en est un pire.
-# La porte exige donc le REFUS, avec un code distinct et AUCUNE perplexité.
+echo "=== 9. le réglage transporté est appliqué des DEUX côtés : deux découpages, un seul chiffre ==="
+# CETTE SECTION ÉTAIT ROUGE DEPUIS LE v7, ET PERSONNE NE L'A VUE.
+#
+# Elle exigeait un REFUS (`code 2`) pour `--attn-window` en réparti, écrit au commit e6f7b6b,
+# quand le pilote et le nœud pouvaient appliquer DEUX FENÊTRES DIFFÉRENTES sous le même nom
+# (195,5685 contre 50,3829 : deux modèles). Le v7 a fait VOYAGER les trois réglages dans la
+# trame, et le refus a été retiré délibérément (`main.rs:4432`, commentaire à l'appui). La porte
+# a continué d'exiger le refus : elle ne pouvait plus passer, et ne mesurait donc plus rien.
+#
+# CE QUI LA REMPLACE EST PLUS FORT QUE LE REFUS, et c'est décisif pour les DEUX côtés À LA FOIS.
+# Le découpage est EXACT (mesuré 0,00e0 dans les modes flux) : deux découpages différents, sous
+# les MÊMES drapeaux, doivent donc rendre le MÊME chiffre. Or la fenêtre ne s'applique qu'aux
+# couches de la branche à fenêtre, et chaque côté n'en tient qu'une moitié :
+#   · si le PILOTE n'appliquait pas la fenêtre (le défaut du round 28, où deux nombres égaux
+#     cachaient deux réglages inertes), le découpage 0-11|12-23 fenêtrerait 12 couches et le
+#     découpage 0-3|4-23 en fenêtrerait 20 — les chiffres divergeraient ;
+#   · si le NŒUD ne la recevait pas (ce que le v7 a corrigé), même conclusion.
+# Égalité des deux découpages = le réglage est honoré des deux côtés. Mesuré : 65,6625 = 65,6625.
+#
+# ET LA GARDE CONTRE LE PIÈGE « DEUX RÉGLAGES INERTES » : il faut d'abord que la fenêtre MORDE
+# dans cette configuration (référence sans fenêtre à 59,0790, soit +11,1 % avec) — sans quoi
+# l'égalité serait celle de deux calculs que le drapeau ne touche pas.
 PORTF=$((60000 + RANDOM % 4000))
-cat > "$T/topo_f.json" <<JSON
+cat > "$T/topo_9a.json" <<JSON
 {"regions":[
   {"id":"local","couches":[0,11],"instance":"local"},
   {"id":"d","couches":[12,23],"instance":"127.0.0.1:$PORTF"}],
  "liens":[{"de":"local","vers":"d","mode":"f32"}]}
 JSON
-$D "$M" --flux-serveur "$PORTF" --ctx "$CTX" --threads 8 > "$T/nf.log" 2>&1 & NF=$!
-sleep 2
-RF=$( $D "$M" --ppl-reparti "127.0.0.1:$PORTF" --topologie "$T/topo_f.json" --ids-file "$IDS" \
-      --limit 64 --ctx "$CTX" --threads 8 --flux --attn-window 64 2>&1 ); CF=$?
-kill $NF 2>/dev/null; wait $NF 2>/dev/null
-printf '%s\n' "$RF" | grep -E "REFUS" | head -2 | cut -c1-150 | sed 's/^/  /'
-[ "$CF" = 2 ] || { echo "  ❌ le refus devrait sortir en code 2, il sort en $CF"; exit 1; }
-printf '%s' "$RF" | grep -q "ne voyagent PAS" || { echo "  ❌ le refus n'explique pas pourquoi"; exit 1; }
-printf '%s' "$RF" | grep -qE "deux nœuds +: perplexité" \
-  && { echo "  ❌ une perplexité a été rendue alors que le réglage ne peut pas être honoré"; exit 1; }
-echo "  ✅ réglage non transportable : REFUSÉ (code 2), expliqué, rien n'est calculé"
+cat > "$T/topo_9b.json" <<JSON
+{"regions":[
+  {"id":"local","couches":[0,3],"instance":"local"},
+  {"id":"d","couches":[4,23],"instance":"127.0.0.1:$PORTF"}],
+ "liens":[{"de":"local","vers":"d","mode":"f32"}]}
+JSON
+# le nœud sert UNE connexion : il est RELANCÉ entre chaque essai (erreur de harnais n°4 du
+# sprint, celle qui faisait croire que tous les drapeaux étaient inertes)
+reparti9 () { # $1 = topologie, $@ = drapeaux
+  local topo=$1; shift
+  $D "$M" --flux-serveur "$PORTF" --ctx "$CTX" --threads 8 > "$T/n9.log" 2>&1 & local NP=$!
+  sleep 2
+  $D "$M" --ppl-reparti "127.0.0.1:$PORTF" --topologie "$topo" --ids-file "$IDS" \
+      --limit 64 --ctx "$CTX" --threads 8 --flux "$@" 2>&1 \
+    | grep -oE "deux nœuds +: perplexité [0-9.]+" | grep -oE "[0-9.]+$"
+  kill $NP 2>/dev/null; wait $NP 2>/dev/null
+}
+R9=$(reparti9 "$T/topo_9a.json")
+W9A=$(reparti9 "$T/topo_9a.json" --attn-window 32)
+W9B=$(reparti9 "$T/topo_9b.json" --attn-window 32)
+printf '  sans fenêtre (0-11|12-23) : %s\n' "${R9:-?}"
+printf '  fenêtre 32 (0-11|12-23)   : %s\n' "${W9A:-?}"
+printf '  fenêtre 32 (0-3|4-23)     : %s\n' "${W9B:-?}"
+[ -n "$R9" ] && [ -n "$W9A" ] && [ -n "$W9B" ] || { echo "  ❌ le chemin réparti n'a pas rendu de perplexité"; exit 1; }
+python3 -c "
+import sys
+r, a, b = float('$R9'), float('$W9A'), float('$W9B')
+if not abs(a - r) / r > 0.03:
+    sys.exit('la fenêtre ne MORD pas ici (%.4f vs %.4f) : légalité serait celle de deux réglages inertes' % (a, r))
+if abs(a - b) / a > 0.001:
+    sys.exit('les deux découpages divergent (%.4f vs %.4f) : le réglage n est pas appliqué des DEUX côtés' % (a, b))
+" || { echo "  ❌ le réglage transporté n'est pas honoré des deux côtés (cf. commentaire ci-dessus)"; exit 1; }
+echo "  ✅ la fenêtre mord ($R9 → $W9A) ET les deux découpages s'accordent ($W9A = $W9B, écart 0,00 %)"
+
+echo "=== 10. `--attn-sinks` n'est PAS mort : il est CIRCONSTANCIÉ (et le zéro n'existait pas) ==="
+# CE QUE LE §46 bis AVAIT MAL LU, ET COMMENT L'ERREUR A ÉTÉ FAITE.
+#
+# Le sprint avait conclu que le compteur de puits était « écrit partout, transporté par le v7…
+# et LU NULLE PART », et allait REFUSER le drapeau. C'était FAUX, et la vérification tenait en
+# une ligne de code : `model.rs:7472` le lit (`let ns = if lo > 0 { self.attn_sinks.min(lo) }
+# else { 0 }`), mais UNIQUEMENT dans la branche à fenêtre de `forward()`. La mesure d'inertie,
+# elle, avait été faite SANS fenêtre — c'est-à-dire dans la seule configuration où l'inertie est
+# ATTENDUE. Et l'égalité « 0 ≡ 4 » qui semblait confirmer la mort du drapeau venait d'un garde :
+# `if attn_sinks > 0 { mdl.attn_sinks = attn_sinks }` AVALAIT le zéro, donc « 0 » mesurait 4.
+# Corrigé (`attn_sinks_impose`, l'idiome de `--ctx`/`--threads`/`--abits`).
+#
+# Ce que la porte verrouille maintenant, et qui est plus fort que le refus :
+#   1. `--attn-sinks 0` AVEC une fenêtre n'est pas neutre : c'est CATASTROPHIQUE
+#      (1297,5437 contre 29,0206) — les puits ne sont pas décoratifs, ils DRAINENT l'attention
+#      que la fenêtre ne peut pas absorber. Un zéro inexprimable cachait donc un vrai réglage ;
+#   2. le drapeau AMÉLIORE : 24 puits → 27,4439 contre 29,0206 au défaut (4) ; à 128 jetons,
+#      15,4339 contre 18,1141 (−14,8 %). L'optimum mesuré est 24, pas le défaut ;
+#   3. SANS fenêtre il est inerte — attendu, et le moteur le DIT (`INERTE ici`) au lieu de
+#      laisser croire qu'il agit ;
+#   4. le tableau de bord affiche le nombre EFFECTIF et son origine (défaut/imposé) : c'est
+#      précisément la valeur qu'aucune ligne ne montrait, et sans elle deux mesures égales
+#      (0 et 4) se lisent comme « drapeau mort ».
+ppl10 () { $D "$M" --ppl "$IDS" --limit 64 --ctx "$CTX" --threads 8 "$@" 2>&1 \
+    | grep -oE "perplexité [0-9.]+ sur" | grep -oE "[0-9.]+"; }
+R0=$(ppl10 --attn-window 32)
+R1=$(ppl10 --attn-window 32 --attn-sinks 0)
+R2=$(ppl10 --attn-window 32 --attn-sinks 24)
+R3=$( $D "$M" --ppl "$IDS" --limit 64 --ctx "$CTX" --threads 8 --attn-sinks 24 2>&1 )
+R4=$(ppl10)
+printf '  fenêtre 32 : défaut(4) %s · 0 puits %s · 24 puits %s\n' "${R0:-?}" "${R1:-?}" "${R2:-?}"
+printf '  sans fenêtre : --attn-sinks 24 %s · rien %s\n' "${R3:-?}" "${R4:-?}"
+[ -n "$R0" ] && [ -n "$R1" ] && [ -n "$R2" ] || { echo "  ❌ une des mesures n'a rien rendu"; exit 1; }
+python3 -c "
+import sys
+r0, r1, r2 = float('$R0'), float('$R1'), float('$R2')
+if not r1 > 20 * r0: sys.exit('le zéro devrait être CATASTROPHIQUE (drains absents)')
+if not r2 < r0:     sys.exit('24 puits devraient battre le défaut de 4')
+" || { echo "  ❌ la courbe de dose n'est pas celle qui a été mesurée (cf. commentaire ci-dessus)"; exit 1; }
+printf '%s' "$R3" | grep -q "INERTE ici" \
+  || { echo "  ❌ sans fenêtre, le moteur doit DIRE que le réglage est inerte"; exit 1; }
+V3=$(printf '%s' "$R3" | grep -oE "perplexité [0-9.]+ sur" | grep -oE "[0-9.]+")
+[ "$V3" = "$R4" ] || { echo "  ❌ sans fenêtre, le drapeau ne doit RIEN changer ($V3 ≠ $R4)"; exit 1; }
+IM=$( $D "$M" --ppl "$IDS" --limit 8 --ctx "$CTX" --threads 8 --attn-window 32 --options-actives 2>&1 \
+      | grep -oE "puits d'attention [0-9]+ \(défaut\)" | head -1)
+IP=$( $D "$M" --ppl "$IDS" --limit 8 --ctx "$CTX" --threads 8 --attn-window 32 --attn-sinks 0 --options-actives 2>&1 \
+      | grep -oE "puits d'attention [0-9]+ \(imposé\)" | head -1)
+echo "  tableau de bord : ${IM:-absent} · ${IP:-absent}"
+[ -n "$IM" ] && [ -n "$IP" ] || { echo "  ❌ le tableau de bord doit montrer la valeur EFFECTIVE et son origine"; exit 1; }
+echo "  ✅ drapeau VIVANT mais conditionnel : 0 casse (${R0} → ${R1}), 24 améliore (${R2}), sans fenêtre il se tait"
 
 rm -rf "$T"

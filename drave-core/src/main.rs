@@ -554,7 +554,26 @@ plage — le résultat est celui d'un modèle TRONQUÉ, pas du modèle entier");
 /// INVISIBLE : la sortie ne disait nulle part quelle valeur agissait. Ici, elle
 /// le dit — et une valeur qu'on ne voit pas bouger est une valeur qui ne sert à
 /// rien.
-fn options_actives(mdl: &model::Model, mode: &str, ctx_impose: bool, dense: bool, keep: f32) {
+/// `--attn-sinks` SANS fenêtre active : le réglage est inerte, et il le dit.
+///
+/// Le compteur n'est lu QUE dans la branche à fenêtre de `forward()`
+/// (`model.rs:7472` et `:7490`, `let ns = if lo > 0 { self.attn_sinks.min(lo) } else { 0 }`) :
+/// sans fenêtre, `lo` vaut toujours 0 et le nombre de puits n'est jamais consulté. Ce n'est donc
+/// PAS un drapeau mort — mesuré : à fenêtre 32, 0 puits → **29,0206** et 24 puits → **27,4439**,
+/// un gain réel — mais il ne peut rien faire SANS fenêtre, et c'est exactement ce que le §46 bis
+/// avait mal lu : la mesure d'inertie avait été faite dans la seule configuration où l'inertie
+/// est ATTENDUE.
+fn avertir_puits_inertes(mdl: &model::Model, impose: bool) {
+    if impose && mdl.attn_sinks > 0 && mdl.attn_window == 0 {
+        eprintln!("[attention] --attn-sinks {} SANS fenêtre active : les puits ne sont notés que \
+dans la branche à fenêtre (`model.rs:7472`), donc ce réglage est INERTE ici. Avec fenêtre 32 : \
+0 puits → 29,0206, 24 puits → 27,4439. Ajouter `--attn-window N` (N < séquence) pour qu'il agisse.",
+                 mdl.attn_sinks);
+    }
+}
+
+fn options_actives(mdl: &model::Model, mode: &str, ctx_impose: bool, dense: bool, keep: f32,
+                   attn_sinks_impose: bool) {
     let oui = |b: bool| if b { "imposé" } else { "défaut" };
     println!("[options] mode {mode} · contexte {} ({}) · dense {} · keep {:.3}",
              mdl.ctx, oui(ctx_impose), dense, keep);
@@ -575,6 +594,17 @@ fn options_actives(mdl: &model::Model, mode: &str, ctx_impose: bool, dense: bool
     println!("[options] fenêtre {} · motif {} · seuil push {} · lot {} · ffn_gain {:?} · hebb {}",
              mdl.attn_window, mdl.swa_pattern, mdl.seuil_push, mdl.lot,
              mdl.ffn_gain, mdl.hebb.is_some());
+    // Le nombre de PUITS était le seul réglage de l'attention qu'aucune ligne
+    // n'affichait — et c'est précisément lui qui a fait conclure à tort qu'il était
+    // mort : deux mesures égales (0 et 4) parce que le défaut vaut 4 et que `0`
+    // était avalé. Une valeur qu'on ne voit pas est une valeur dont on ne peut rien
+    // dire. Elle s'affiche donc TOUJOURS, avec sa portée : les puits ne sont notés
+    // que dans la branche à fenêtre (`model.rs:7472`), donc sans fenêtre ils sont
+    // inertes — et le tableau le dit au lieu de laisser croire qu'ils agissent.
+    println!("[options] puits d'attention {} ({}){}",
+             mdl.attn_sinks,
+             if attn_sinks_impose { "imposé" } else { "défaut" },
+             if mdl.attn_window == 0 { " · INERTES : aucune fenêtre active" } else { "" });
     // `--lot N > 1` n'est PAS une simple affaire de vitesse : le chemin par lots
     // réordonne les sommes de la même façon sur tous les modèles, mais il
     // change les derniers bits, et un routeur au voisinage d'une égalité peut
@@ -822,6 +852,13 @@ struct Options {
     // --- attention
     attn_window: usize, swa_pattern: Option<usize>, sans_fenetre: bool,
     attn_sinks: usize, attn_topk: usize, qk_topk: usize,
+    /// Vrai si `--attn-sinks` a été DONNÉ. Sans ce drapeau, `0` était
+    /// inexprimable : l'application était gardée par `if attn_sinks > 0`, donc
+    /// `--attn-sinks 0` était AVALÉ et la valeur restait au défaut — 4 puits
+    /// (model.rs:4492, `if fenetre > 0 { 0 } else { 4 }`). Mesuré : `0` et `4`
+    /// rendent le MÊME chiffre (29,0206), ce qui avait fait conclure à tort que
+    /// le drapeau était mort. Il ne l'était pas : c'est le ZÉRO qui n'existait pas.
+    attn_sinks_impose: bool,
     // --- parcimonie des activations
     act_thresh: f32, act_topk: usize, act_renorm: bool, topk_proj: [usize; 7],
     // --- mesure
@@ -1033,7 +1070,7 @@ fn analyser(args: &[String]) -> Options {
             "--moe-topk" => { o.moe_topk = suivant(i).parse().unwrap(); 2 }
             "--attn-window" => { o.attn_window = suivant(i).parse().unwrap(); 2 }
             "--swa-pattern" => { o.swa_pattern = Some(suivant(i).parse().unwrap()); 2 }
-            "--attn-sinks" => { o.attn_sinks = suivant(i).parse().unwrap(); 2 }
+            "--attn-sinks" => { o.attn_sinks = suivant(i).parse().unwrap(); o.attn_sinks_impose = true; 2 }
             "--attn-topk" => { o.attn_topk = suivant(i).parse().unwrap(); 2 }
             "--qk-topk" => { o.qk_topk = suivant(i).parse().unwrap(); 2 }
             "--hebbian" => { o.hebb_layer = Some(suivant(i).parse().unwrap()); 2 }
@@ -1167,7 +1204,7 @@ fn run_infer(opt: Options) {
     let Options {
         ids: mut ids, ids_file, prompt, n: n_new, temp, top_p, topk, rep_pen, hist,
         flux, session, chat, ctx: ctx_opt, threads: threads_opt, abits: abits_opt,
-        ctx_impose, threads_impose, abits_impose, dense, auto, q4, b6,
+        ctx_impose, threads_impose, abits_impose, dense, auto, q4, b6, attn_sinks_impose,
         keep, attn_window, swa_pattern, sans_fenetre, attn_sinks, attn_topk, qk_topk,
         act_thresh, act_topk, act_renorm, topk_proj, moe_topk, patch: patch_file,
         hebb_layer, hebb_q, hebb_out, hebb_diff, hebb_eta, hebb_clamp, sans_yarn, lot, ffn_gain,
@@ -1224,7 +1261,11 @@ IDENTIQUE, seule la lecture change", mdl.tete_garantie.as_ref().unwrap().len(),
     if sans_fenetre { mdl.attn_window = 0; }
     if attn_window > 0 { mdl.attn_window = attn_window; }
     if let Some(p) = swa_pattern { mdl.swa_pattern = p; }
-    if attn_sinks > 0 { mdl.attn_sinks = attn_sinks; }
+    // `impose` et non `> 0` : c'est ce qui rend `--attn-sinks 0` capable
+    // d'ÉTEINDRE les puits (le défaut vaut 4 quand le modèle ne déclare pas de
+    // fenêtre). Un garde `> 0` transformait « zéro puits » en « laisse le défaut ».
+    if attn_sinks_impose { mdl.attn_sinks = attn_sinks; }
+    avertir_puits_inertes(&mdl, attn_sinks_impose);
     // `--trace-flux` était ignoré en inférence : on le branche, comme en
     // perplexité — une trace est un enregistrement du flux, elle n'a rien de
     // spécifique à la mesure de perplexité.
@@ -1268,7 +1309,7 @@ IDENTIQUE, seule la lecture change", mdl.tete_garantie.as_ref().unwrap().len(),
     // d'être appliqué trois lignes plus bas — un tableau de bord qui ment sur
     // l'ordre des affectations ne vaut pas mieux que pas de tableau du tout.
     if montre_options {
-        options_actives(&mdl, "inférence", ctx_impose, dense, keep);
+        options_actives(&mdl, "inférence", ctx_impose, dense, keep, attn_sinks_impose);
     }
     if chat {
         mdl.stop_id = build_tokenizer(&mdl.g).special_id("<|im_end|>");
@@ -3682,7 +3723,7 @@ nœud rend un flux résiduel BRUT par contrat (la tête appartient au nœud qui 
     let ctx = if opt.ctx_impose { opt.ctx } else { 4096 };
     let mut mdl = model::Model::load(&chemin, ctx, fils(&opt), true, opt.keep, false, 0, 0);
     appliquer_quantification(&mut mdl, &opt);
-    if opt.options_actives { options_actives(&mdl, "nœud moteur du flux", opt.ctx_impose, true, opt.keep); }
+    if opt.options_actives { options_actives(&mdl, "nœud moteur du flux", opt.ctx_impose, true, opt.keep, true); }
     let hidden = mdl.cfg.hidden;
     let hc_local = mdl.hc.as_ref().map(|v| v[0].0.hc).unwrap_or(1);
     // C5 : le bus du NŒUD, créé ICI — avant l'écoute, et donc avant `accept()`.
@@ -4422,7 +4463,9 @@ changer (seul le temps change) — c'est la porte de C3", tp_region_distante, de
     // même chose. Avant de conclure à un accord, vérifier POURQUOI ils sont égaux.
     mdl.attn_window = opt.attn_window;
     mdl.swa_pattern = opt.swa_pattern.unwrap_or(0);
-    mdl.attn_sinks = opt.attn_sinks;
+    // même règle qu'ailleurs : `0` doit pouvoir ÉTEINDRE (cf. `attn_sinks_impose`)
+    if opt.attn_sinks_impose { mdl.attn_sinks = opt.attn_sinks; }
+    avertir_puits_inertes(&mdl, opt.attn_sinks_impose);
     if opt.attn_window > 0 || opt.swa_pattern.is_some() || opt.attn_sinks > 0 {
         println!("[attention] fenêtre {} · motif {} · puits {} — appliqués aux couches LOCALES et \
 TRANSPORTÉS au nœud (protocole v7) : les deux moitiés calculent le même modèle",
@@ -4443,7 +4486,7 @@ TRANSPORTÉS au nœud (protocole v7) : les deux moitiés calculent le même mod�
         eprintln!("[plage] `--tete-partielle` est sans effet en `--ppl-reparti` : la plage \
 y est le découpage entre nœuds (voir `--couches-locales`), pas un `--couches a:b`");
     }
-    if opt.options_actives { options_actives(&mdl, "pilote du flux", opt.ctx_impose, true, opt.keep); }
+    if opt.options_actives { options_actives(&mdl, "pilote du flux", opt.ctx_impose, true, opt.keep, opt.attn_sinks_impose); }
     let mode = if opt.flux_blocs { MODE_BLOCS }
                else if opt.flux_liste { MODE_LISTE }
                else { MODE_DENSE };
@@ -7003,7 +7046,7 @@ calculee sur un vocabulaire restreint n'est comparable a rien. Utilisez --infer.
         ctx: ctx_opt, threads: threads_opt, abits: abits_opt,
         ctx_impose, threads_impose, abits_impose,
         dense, auto, q4, b6, attn_window, swa_pattern,
-        sans_fenetre, attn_sinks, attn_topk, qk_topk, act_thresh, act_topk, act_renorm,
+        sans_fenetre, attn_sinks, attn_sinks_impose, attn_topk, qk_topk, act_thresh, act_topk, act_renorm,
         topk_proj, moe_topk, patch: patch_file, hebb_layer, hebb_q, hebb_out, hebb_diff, hebb_eta, hebb_clamp,
         ffn_gain, logits_bin, keep,
         ppl_profil, lot, profil_neurones, neurones_sortie, trace_flux, trace_couches, flux_forcer,
@@ -7111,7 +7154,11 @@ calculee sur un vocabulaire restreint n'est comparable a rien. Utilisez --infer.
                  if mdl.attn_window == 0 { "aucune".to_string() } else { mdl.attn_window.to_string() },
                  mdl.swa_pattern);
     }
-    if attn_sinks > 0 { mdl.attn_sinks = attn_sinks; }
+    // `impose` et non `> 0` : c'est ce qui rend `--attn-sinks 0` capable
+    // d'ÉTEINDRE les puits (le défaut vaut 4 quand le modèle ne déclare pas de
+    // fenêtre). Un garde `> 0` transformait « zéro puits » en « laisse le défaut ».
+    if attn_sinks_impose { mdl.attn_sinks = attn_sinks; }
+    avertir_puits_inertes(&mdl, attn_sinks_impose);
     if act_thresh > 0.0 || act_topk > 0 {
         println!("parcimonie imposée : seuil {:.1} % du max{}",
                  act_thresh * 100.0,
@@ -7124,7 +7171,7 @@ calculee sur un vocabulaire restreint n'est comparable a rien. Utilisez --infer.
     // tableau de bord qui montre l'état d'avant les affectations est pire que pas
     // de tableau du tout, puisque c'est exactement ce qu'il est censé démasquer.
     if montre_options {
-        options_actives(&mdl, "perplexité", ctx_impose, dense, keep);
+        options_actives(&mdl, "perplexité", ctx_impose, dense, keep, attn_sinks_impose);
     }
     if let Some(l) = hebb_diff {
         let (n_out, n_in) = (mdl.cfg.ffn, mdl.cfg.hidden);
