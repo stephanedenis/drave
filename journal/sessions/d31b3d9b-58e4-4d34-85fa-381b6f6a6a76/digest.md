@@ -31740,3 +31740,67 @@ Continue working toward the objective in this same session. Treat the current wo
 ⏵ Le gain est **fixe par échange** (~10 ms) : −20 % sur un pas-jeton, ~−8 % sur un lot — je consigne
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\n\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\na = \"\"\"**Ce qu'il ne dit pas** : le gain est nul sur un lien qui facture **au débit** (où deux écritures\ncoûte … [3562 caractères tronqués]`
+
+  ```
+echelonnage consigne
+ec2d0fb Le gain de la fusion est FIXE PAR ECHANGE : -20 % sur un pas-jeton, ~-8 % sur un lot
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 39 livré : le gain de la fusion est **fixe par échange** — il paie d'autant plus que les pas sont petits
+
+**Ce round** — 1 commit poussé. Vérification que la fusion des écritures (round 38) profite aussi au **mode par lots**, où les trames sont bien plus grosses :
+
+| mode | ce qu'un échange transporte | temps par échange | gain de la fusion |
+|---|---|---|---|
+| 0 (un jeton) | 896 canaux | 27,98 ms | **−20 %** |
+| 3 (8 jetons) | 28 772 octets | 130,2 ms (dont 99,8 de calcul local) | **≈ −8 %** |
+
+Le gain est le **même en millisecondes** (~10 ms : deux messages en moins à 5 ms/message), donc il **pèse relativement moins** quand l'échange transporte plus. Autrement dit : **la fusion paie d'autant plus que les pas sont petits** — et c'est précisément le régime du **décodage jeton par jeton**, celui où la latence domine.
+
+**Ce qu'il ne dit pas**, écrit tel quel : le gain est **nul** sur un lien facturé **au débit** (deux écritures coûtent les mêmes octets). La question « message ou octet ? » est celle de l'opérateur ; le protocole, lui, ne doit pas **ajouter** de messages sans raison.
+
+**Bilan** : 39 rounds, **22 portes toutes vertes**, 122 tests. Le sprint a livré neuf capacités (C1→C12bis), deux protocoles (v7, v8), trois budgets de lien déclarés et vérifiés, une optimisation mesurée (−20 % sur le décodage), un instrument étalonné à 0,2 ms, la gigue chiffrée à 49 %, et une quarantaine de mesures documentées — dont une bonne moitié de négatifs, réfutations et corrections.
+
+**Ce qui attend son premier round**, inscrit dans `docs/sprint-cerveau.md` avec les commandes : la tête dédiée par profondeur (C8), les modèles H-I-J, l'asynchronisme réel (C4) — désormais attaquable avec un instrument étalonné et une gigue connue — et les drapeaux candidats restants. L'objectif reste **actif**.
+
+
+## Tour 83
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 mémoire épisodique, C7 consolidation, C8 périphérie, C9 latéralité, C10 budgets, et la diffusion réseau du bus de C5 ; (b) les expériences E2-E9 de docs/biologie-pour-drave.md et docs/hebbien-differentiel-et-biologie.md ; (c) les dessins de modèle H/I/J de docs/modele-pour-drave.md ; (d) les manques du registre docs/manques.md (noyau de listes pour les experts, noyau de listes GPU, encodeurs) — l'implémenter ou la mesurer, la doter d'une porte vérifiable, la documenter, commiter, pousser, et enchaîner immédiatement sur la suivante. Contraintes : les 23 portes du dépôt et tous les tests restent verts (porte-flux.sh après toute modification du chemin d'exécution), le profil release reste le binaire de mesure, le crate reste std seul, et docs/sprint-cerveau.md reste l'état resumable mis à jour à chaque round. Ne jamais s'arrêter faute de tâches planifiées : en inventer de nouvelles, mesurables, plutôt que d'attendre."
+Round: 40/60
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 40 : vérification des portes touchées par les protocoles v7/v8 et la fusion des écritures
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/suite40.sh <<'EOF'\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nfor p in porte-pannes porte-registre porte-budget porte-pont porte-coupe porte-fusion porte-horloge porte-bus-socket; do\n  R=$(timeout 2400 bash \"to … [437 caractères tronqués]`
+
+  ```
+suite lancée
+  ```
+
+- **bash** `{"command": "sleep 580; cat /tmp/suite40.txt", "description": "Check the verification progress", "timeoutMs": 650000}`
+
+  ```
+porte-pannes : code=0 rouges=0
+porte-registre : code=0 rouges=0
+porte-budget : code=0 rouges=0
+porte-pont : code=0 rouges=0
+porte-coupe : code=0 rouges=0
+porte-fusion : code=0 rouges=0
+porte-horloge : code=0 rouges=0
+porte-bus-socket : code=0 rouges=0
+--- tests ---
+test result: ok. 122 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.33s
+FINI
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"docs/sprint-cerveau.md\")\ns = p.read_text()\na = \"## ▶ PROCHAINE ACTION (à lire en premier)\"\nneuf = \"\"\"## VÉRIFICATION APRÈS v7/v8 ET LA FUSION DES ÉCRITURES — FAITE (12  … [3597 caractères tronqués]`

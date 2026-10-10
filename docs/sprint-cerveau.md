@@ -861,6 +861,45 @@ raison.
 
 ---
 
+## VÉRIFICATION APRÈS v7/v8 ET LA FUSION DES ÉCRITURES — FAITE (12 octobre 1 h)
+
+Les rounds 28 à 39 ont touché **le protocole** (v7 : fenêtre d'attention ; v8 : compte de paires) et
+**le chemin d'envoi** (fusion des deux écritures). Les huit portes réparties ont été rejouées :
+
+| porte | résultat |
+|---|---|
+| `porte-pannes` | **code 0** |
+| `porte-registre` | **code 0** |
+| `porte-budget` (octets · latence · paires) | **code 0** |
+| `porte-pont` | **code 0** |
+| `porte-coupe` | **code 0** |
+| `porte-fusion` | **code 0** |
+| `porte-horloge` | **code 0** |
+| `porte-bus-socket` | **code 0** |
+| `porte-flux` (rejouée au round 38) | **code 0** — cinq modes, écarts inchangés |
+| **tests** | **122 verts** |
+
+**Aucune rouge.** Les trois modifications de protocole et la fusion des écritures ont donc laissé
+le contrat d'échange intact — un octet de décalage dans l'en-tête ou un envoi perdu auraient fait
+tomber `porte-flux` immédiatement.
+
+### ▶ Ce qui attend son premier round, avec la commande
+
+1. **C8 — une tête dédiée par profondeur.** Mesuré : un réflexe court ne peut pas lire l'état
+   intermédiaire (cos 0,145 à 16 couches sur 24). Il lui faut une tête **entraînée pour sa
+   couche** : `tools/entrainer_moteur.py` existe, et le protocole de `tools/porte-reflexe.sh`
+   mesure déjà l'accord d'une tête empruntée — il suffit d'y mettre une tête apprise.
+2. **Les modèles H/I/J** (`docs/modele-pour-drave.md`). Le dessin **I** (profil de gains appris) a
+   reçu sa mesure : le levier vaut **−11,5 %** sur la couche 0 à 0,75, mais il porte sur **deux
+   couches** et **composer les gains dégrade** — un profil appris aurait donc à découvrir « une
+   seule couche, un seul gain », ce qu'un gradient sur peu de paramètres peut ne pas trouver.
+3. **C4 — l'asynchronisme réel.** L'instrument est **étalonné** (50 ms injectés → 50,2 mesurés),
+   la **gigue** est chiffrée (**49 %** d'un pas sur un lien à 5 ms), et les **messages par pas**
+   sont passés de 4 à 2,6 (fusion des écritures). Tout ce qu'il faut pour attaquer le pas par
+   région est là.
+
+---
+
 ## ▶ PROCHAINE ACTION (à lire en premier)
 
 État au **11 octobre 6 h 45** · **21 portes, toutes vertes** (`tools/porte-*.sh`) ·

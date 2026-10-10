@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 48.1 h |
-| Tours | 82 |
-| Messages | 1991 |
-| Appels d'outils | 1825 |
+| Durée | 48.3 h |
+| Tours | 83 |
+| Messages | 1996 |
+| Appels d'outils | 1828 |
 | Fichiers touchés | 61 |
-| Commandes | 1575 |
+| Commandes | 1578 |
 | Sous-agents | 3 |
-| Commits | 172 |
+| Commits | 173 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -199,6 +199,8 @@
 **Tour 81** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 **Tour 82** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
+
+**Tour 83** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -3406,7 +3408,34 @@ Le round 37 avait mesuré que le protocole écrivait la trame en **deux fois** (
 
 **Synthèse produite :**
 
-⏵ Le gain est **fixe par échange** (~10 ms) : −20 % sur un pas-jeton, ~−8 % sur un lot — je consigne
+⏵ Round 39 livré : le gain de la fusion est **fixe par échange** — il paie d'autant plus que les pas sont petits
+
+**Ce round** — 1 commit poussé. Vérification que la fusion des écritures (round 38) profite aussi au **mode par lots**, où les trames sont bien plus grosses :
+
+| mode | ce qu'un échange transporte | temps par échange | gain de la fusion |
+|---|---|---|---|
+| 0 (un jeton) | 896 canaux | 27,98 ms | **−20 %** |
+| 3 (8 jetons) | 28 772 octets | 130,2 ms (dont 99,8 de calcul local) | **≈ −8 %** |
+
+Le gain est le **même en millisecondes** (~10 ms : deux messages en moins à 5 ms/message), donc il **pèse relativement moins** quand l'échange transporte plus. Autrement dit : **la fusion paie d'autant plus que les pas sont petits** — et c'est précisément le régime du **décodage jeton par jeton**, celui où la latence domine.
+
+**Ce qu'il ne dit pas**, écrit tel quel : le gain est **nul** sur un lien facturé **au débit** (deux écritures coûtent les mêmes octets). La question « message ou octet ? » est celle de l'opérateur ; le protocole, lui, ne doit pas **ajouter** de messages sans raison.
+
+**Bilan** : 39 rounds, **22 portes toutes vertes**, 122 tests. Le sprint a livré neuf capacités (C1→C12bis), deux protocoles (v7, v8), trois budgets de lien déclarés et vérifiés, une optimisation mesurée (−20 % sur le décodage), un instrument étalonné à 0,2 ms, la gigue chiffrée à 49 %, et une quarantaine de mesures documentées — dont une bonne moitié de négatifs, réfutations et corrections.
+
+**Ce qui attend son premier round**, inscrit dans `docs/sprint-cerveau.md` avec les commandes : la tête dédiée par profondeur (C8), les modèles H-I-J, l'asynchronisme réel (C4) — désormais attaquable avec un instrument étalonné et une gigue connue — et les drapeaux candidats restants. L'objectif reste **actif**.
+
+### Tour 83 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Verify the protocol-affected gates
+- bash — Check the verification progress
+- bash — Commit the round-40 verification
+
+**Synthèse produite :**
+
+⏵ Round 40 : vérification des portes touchées par les protocoles v7/v8 et la fusion des écritures
 
 ## 3. Travail accompli
 
@@ -3524,7 +3553,7 @@ Le round 37 avait mesuré que le protocole écrivait la trame en **deux fois** (
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1535 autres
+- … et 1538 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3844,4 +3873,5 @@ Le round 37 avait mesuré que le protocole écrivait la trame en **deux fois** (
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 1200 bash tools/porte-flux.sh > /tmp/pf38.txt 2>&1; echo "porte-flux code=$?"; tail -3 /tmp/pf38.t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib p = pathlib.Path("docs/sprint-cerveau.md") s = p.read_text() a = "## ▶ 
 
