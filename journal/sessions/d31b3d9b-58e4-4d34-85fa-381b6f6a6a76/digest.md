@@ -29837,3 +29837,138 @@ code=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\n\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\na = \"\"\"**Conditions** : un seul modèle (0,5 B), 128 jetons, un seul jeu d'identifiants ; l'optimum à\n0,75 est  … [3701 caractères tronqués]`
+
+  ```
+docs generalisation
+031dbc4 E4 (suite) : le gain d'entree generalise, mais sa MAGNITUDE depend de la fenetre
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 19 livré : l'effet généralise, mais sa magnitude est une **condition**
+
+**Ce round** — 1 commit poussé, 122 tests verts, `porte-gain.sh` à **7 cas** (verte).
+
+Deux axes testés sur le gain 0,75 à la couche 0 (le meilleur réglage mesuré) :
+
+| axe | mesure |
+|---|---|
+| autre **quantification** (Q4_0 au lieu de Q8_0) | **14,7453** contre **15,8055** sans réglage = **−6,7 %** |
+| autre **fenêtre** (256 jetons au lieu de 128) | **17,1915** contre **17,4315** = **−1,4 %** (contre −11,5 %) |
+
+1. **L'effet n'est pas un artefact de quantification** : −6,7 % sur Q4_0 et −11,5 % sur Q8_0 — la direction est robuste.
+2. **Mais il décroît fortement avec la fenêtre** : −11,5 % sur 128 jetons, −1,4 % sur 256. Le chiffre de −11,5 % est un **point de mesure**, pas une propriété du modèle.
+
+C'est pourquoi **la porte exige désormais que la magnitude décroisse** quand la fenêtre grandit : un futur relecteur ne pourra pas citer le meilleur chiffre sans voir la condition à côté. Une mesure sans sa condition est exactement ce que ce dépôt refuse — et c'est la troisième fois ce sprint qu'une mesure se révèle dépendre d'un paramètre qu'on n'avait pas fait varier (indice du rappel, formulation de la question, fenêtre d'évaluation).
+
+**Bilan** : 19 rounds, **22 portes toutes vertes**, 122 tests, et une quarantaine de mesures documentées avec leurs conditions dans `reports/rapport-campagne-benefices.md` (§24 à §37). Les trois prochains chantiers restent inscrits dans `docs/sprint-cerveau.md` avec leur première commande. L'objectif reste **actif**.
+
+
+## Tour 63
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 mémoire épisodique, C7 consolidation, C8 périphérie, C9 latéralité, C10 budgets, et la diffusion réseau du bus de C5 ; (b) les expériences E2-E9 de docs/biologie-pour-drave.md et docs/hebbien-differentiel-et-biologie.md ; (c) les dessins de modèle H/I/J de docs/modele-pour-drave.md ; (d) les manques du registre docs/manques.md (noyau de listes pour les experts, noyau de listes GPU, encodeurs) — l'implémenter ou la mesurer, la doter d'une porte vérifiable, la documenter, commiter, pousser, et enchaîner immédiatement sur la suivante. Contraintes : les 23 portes du dépôt et tous les tests restent verts (porte-flux.sh après toute modification du chemin d'exécution), le profil release reste le binaire de mesure, le crate reste std seul, et docs/sprint-cerveau.md reste l'état resumable mis à jour à chaque round. Ne jamais s'arrêter faute de tâches planifiées : en inventer de nouvelles, mesurables, plutôt que d'attendre."
+Round: 20/60
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ E4 × C9 : le gain d'entrée survit-il au DÉCOUPAGE en deux nœuds ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && T=$(mktemp -d) && PORT=$((65000 + RANDOM % 300)) && cat > $T/topo.json <<JSON\n{\"regions\":[\n  {\"id\":\"local\",\"couches\":[0,11],\"instance\":\"local\"},\n  {\"id\":\"d\",\"couches\":[12,23],\"instance\":\"127.0.0.1:$PORT\"}],\n … [870 caractères tronqués]`
+
+  ```
+réparti sans réglage : 42.5477
+  réparti avec 0:0.75  : 42.5477
+  écart : +0.00 %
+  ```
+
+### 🤖 Assistant
+
+⏵ Découverte : `--ffn-gain` n'a AUCUN effet dans le chemin réparti — je vérifie le câblage
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fn run_ppl_reparti\" drave-core/src/main.rs && awk 'NR>4230 && NR<4700 && /ffn_gain|mdl\\.ffn/' drave-core/src/main.rs | head -5; echo \"--- sites de câblage de ffn_gain ---\"; grep -n \"mdl.ffn_gain = Some\" drave-core/src … [78 caractères tronqués]`
+
+  ```
+4163:fn run_ppl_reparti(opt: Options, pair: &str) {
+--- sites de câblage de ffn_gain ---
+1254:        mdl.ffn_gain = Some(gs);
+6967:        mdl.ffn_gain = Some(gs);
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1250,1256p;6962,6970p' drave-core/src/main.rs | head -14 && for L in 1240 6960; do echo \"--- fonction contenant la ligne $L ---\"; awk -v n=$L 'NR<=n && /^fn /{f=$0} NR==n{print f}' drave-core/src/main.rs; done", "descriptio … [45 caractères tronqués]`
+
+  ```
+// sortie était rigoureusement identique avec et sans le drapeau.
+    if let Some(gs) = ffn_gain {
+        let liste: Vec<String> = gs.iter().map(|(l, g)| format!("couche {l} × {g}")).collect();
+        println!("gain FFN : {}", liste.join(" · "));
+        mdl.ffn_gain = Some(gs);
+    }
+    // Appliqués en perplexité depuis toujours, oubliés ici : la déstructuration
+        mdl.patch = Some(pt);
+    }
+    if let Some(gs) = ffn_gain {
+        let liste: Vec<String> = gs.iter().map(|(l, g)| format!("couche {l} × {g}")).collect();
+        println!("gain FFN : {}", liste.join(" · "));
+        mdl.ffn_gain = Some(gs);
+    }
+--- fonction contenant la ligne 1240 ---
+fn run_infer(opt: Options) {
+--- fonction contenant la ligne 6960 ---
+fn run_ppl(opt: Options) {
+  ```
+
+### 🤖 Assistant
+
+⏵ Confirmé : `ffn_gain` est câblé dans `run_infer` et `run_ppl`, **pas** dans `run_ppl_reparti` — je corrige
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && awk 'NR>4163 && NR<4400 && /load_partiel|appliquer_quantification|let mut mdl/ {print NR\": \"$0}' drave-core/src/main.rs | head -5", "description": "Find the model load in the split path"}`
+
+  ```
+4327:     let mut mdl = model::Model::load(&chemin,
+4329:     appliquer_quantification(&mut mdl, &opt);
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '4327,4332p' drave-core/src/main.rs && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\na = \"\"\"    let mut mdl = model::Model::load(&chemin,\"\"\"\ni = s.index(a, s.index … [1096 caractères tronqués]`
+
+  ```
+let mut mdl = model::Model::load(&chemin,
+                                     ctx, fils(&opt), true, opt.keep, false, 0, 0);
+    appliquer_quantification(&mut mdl, &opt);
+    // Le `hc` du PILOTE : c'est SON modèle qui décide de la largeur du pré-mix
+    // qu'il envoie et de celle de celui qu'il reçoit (le pair valide le sien).
+    let hc_pilote = mdl.hc.as_ref().map(|v| v[0].0.hc).unwrap_or(1);
+cablage ajoute dans run_ppl_reparti
+BUILD_END
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && T=$(mktemp -d) && PORT=$((65400 + RANDOM % 200)) && cat > $T/topo.json <<JSON\n{\"regions\":[\n  {\"id\":\"local\",\"couches\":[0,11],\"instance\":\"local\"},\n  {\"id\":\"d\",\"couches\":[12,23],\"instance\":\"127.0.0.1:$PORT\"}],\n … [969 caractères tronqués]`
+
+  ```
+réparti sans réglage : 1944.9058
+  réparti avec 0:0.75  : 7993.5084
+  écart : +311.00 %
+  ✅ le drapeau AGIT dans le chemin réparti
+  ```
+
+### 🤖 Assistant
+
+⏵ Le drapeau AGIT maintenant dans le chemin réparti — j'ajoute le cas de porte qui l'aurait attrapé
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"tools/porte-gain.sh\")\ns = p.read_text()\na = '''rm -rf \"$T\"'''\nb = '''echo \"=== 8. le drapeau AGIT AUSSI dans le chemin RÉPARTI ===\"\n# LE CAS QUI MANQUAIT, ET QUI A COÛT … [2298 caractères tronqués]`
+
+  ```
+cas 8 ajoute
+code=0
+  ✅ la direction tient aux deux fenêtres, la MAGNITUDE décroît : 11.5 % à 128 jetons, 1.4 % à 256 — une condition, pas une propriété
+=== 8. le drapeau AGIT AUSSI dans le chemin RÉPARTI ===
+  réparti sans réglage : 180.5245 · avec 0:0.75 : 222.3496
+  ✅ le drapeau agit aussi en réparti (180.5245 → 222.3496)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\n\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\na = \"## Annexe — manifeste des journaux\"\nsec = \"\"\"## 38. Un drapeau qui ne faisait RIEN dans le chemin répar … [5744 caractères tronqués]`

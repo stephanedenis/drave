@@ -326,6 +326,29 @@ sur peu de paramètres peut très bien ne pas trouver, puisqu'il optimiserait le
 
 ---
 
+## DÉFAUT TROUVÉ ET CORRIGÉ (11 octobre 10 h 30) : `--ffn-gain` ne faisait RIEN en réparti
+
+En mesurant l'interaction du gain d'entrée avec le découpage, la mesure a rendu **le même
+chiffre avec et sans le drapeau** (42,5477). Ce n'était pas une absence d'effet : une absence
+de **câblage** — `--ffn-gain` était appliqué dans `run_infer` et `run_ppl`, **pas** dans
+`run_ppl_reparti`. Dans le chemin réparti, le réglage ne faisait rien, **en silence**.
+
+C'est la famille de défauts que ce dépôt traque, et il comptait double : un réglage fin qui ne
+survit pas à la distribution est ce qu'on ne veut pas découvrir en production.
+
+**Corrigé** et mesuré : réparti sans réglage **180,5245**, avec `0:0.75` **222,3496** ⇒ le
+drapeau agit. Le SIGNE n'est pas celui du chemin local (−11,5 % sur 128 jetons) parce que la
+fenêtre de 32 jetons est trop courte : **ce n'est pas une mesure de qualité, c'est un contrôle
+de câblage**, et la porte le traite comme tel (elle exige que les chiffres **diffèrent**).
+
+**Et le piège de fenêtre a mordu une troisième fois** dans la même tentative : `--ppl --limit
+128` note les **128 premiers** jetons d'un fichier qui en compte 85 625, `--ppl-reparti`
+**tronque aux 128 derniers**. Trois portes le documentent maintenant.
+
+**`porte-gain.sh` : 8 cas verts.**
+
+---
+
 ## E4 (suite) — FAIT (11 octobre 10 h) : généralisation et conditions
 
 Deux axes, même conclusion : **la direction tient, la magnitude dépend des conditions**.

@@ -147,4 +147,38 @@ print(f"  ✅ la direction tient aux deux fenêtres, la MAGNITUDE décroît : "
       f"{g128:.1f} % à 128 jetons, {g256:.1f} % à 256 — une condition, pas une propriété")
 PY
 
+echo "=== 8. le drapeau AGIT AUSSI dans le chemin RÉPARTI ==="
+# LE CAS QUI MANQUAIT, ET QUI A COÛTÉ UNE MESURE FAUSSE : `--ffn-gain` était câblé dans
+# `run_infer` et `run_ppl`, et PAS dans `run_ppl_reparti`. Dans le chemin réparti il ne
+# faisait donc RIEN, en silence (42,5477 avec et sans le drapeau). C'est la famille de
+# défauts que ce dépôt traque, et ce cas la rend impossible à réintroduire.
+PORTG=$((65000 + RANDOM % 400))
+cat > "$T/topo_gain.json" <<JSON
+{"regions":[
+  {"id":"local","couches":[0,11],"instance":"local"},
+  {"id":"d","couches":[12,23],"instance":"127.0.0.1:$PORTG"}],
+ "liens":[{"de":"local","vers":"d","mode":"f32"}]}
+JSON
+$D "$M" --flux-serveur "$PORTG" --ctx "$CTX" --threads 8 > "$T/ng.log" 2>&1 & NG=$!
+sleep 2
+SG=$( $D "$M" --ppl-reparti "127.0.0.1:$PORTG" --topologie "$T/topo_gain.json" --ids-file "$IDS" \
+      --limit 32 --ctx "$CTX" --threads 8 --flux 2>&1 \
+      | grep -oE "deux nœuds +: perplexité [0-9.]+" | grep -oE "[0-9.]+$")
+kill $NG 2>/dev/null; wait $NG 2>/dev/null
+$D "$M" --flux-serveur "$PORTG" --ctx "$CTX" --threads 8 > "$T/ng2.log" 2>&1 & NG=$!
+sleep 2
+AG=$( $D "$M" --ppl-reparti "127.0.0.1:$PORTG" --topologie "$T/topo_gain.json" --ids-file "$IDS" \
+      --limit 32 --ctx "$CTX" --threads 8 --flux --ffn-gain "0:0.75" 2>&1 \
+      | grep -oE "deux nœuds +: perplexité [0-9.]+" | grep -oE "[0-9.]+$")
+kill $NG 2>/dev/null; wait $NG 2>/dev/null
+printf '  réparti sans réglage : %s · avec 0:0.75 : %s\n' "${SG:-?}" "${AG:-?}"
+[ -n "$SG" ] && [ -n "$AG" ] || { echo "  ❌ le chemin réparti n'a pas rendu de perplexité"; exit 1; }
+python3 -c "
+import sys
+a, b = float('$SG'), float('$AG')
+sys.exit(0 if a != b else 1)" \
+  || { echo "  ❌ --ffn-gain n'agit PAS dans le chemin réparti (même perplexité) — c'est le"; \
+       echo "     défaut mesuré le 11/10 : le drapeau ne faisait rien, en silence"; exit 1; }
+echo "  ✅ le drapeau agit aussi en réparti ($SG → $AG)"
+
 rm -rf "$T"

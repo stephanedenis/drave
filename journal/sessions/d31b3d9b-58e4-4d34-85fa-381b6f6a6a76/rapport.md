@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 46.8 h |
-| Tours | 62 |
-| Messages | 1866 |
-| Appels d'outils | 1740 |
+| Durée | 47.0 h |
+| Tours | 63 |
+| Messages | 1876 |
+| Appels d'outils | 1748 |
 | Fichiers touchés | 61 |
-| Commandes | 1490 |
+| Commandes | 1498 |
 | Sous-agents | 3 |
-| Commits | 152 |
+| Commits | 153 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -159,6 +159,8 @@
 **Tour 61** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 **Tour 62** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
+
+**Tour 63** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -2741,7 +2743,40 @@ Le changement est donc **inactif quand le drapeau n'est pas donné**, et **ident
 
 **Synthèse produite :**
 
-⏵ L'effet généralise (Q4_0 : −6,7 %) mais il DIMINUE avec la fenêtre (256 jetons : −1,4 %) — je verrouille
+⏵ Round 19 livré : l'effet généralise, mais sa magnitude est une **condition**
+
+**Ce round** — 1 commit poussé, 122 tests verts, `porte-gain.sh` à **7 cas** (verte).
+
+Deux axes testés sur le gain 0,75 à la couche 0 (le meilleur réglage mesuré) :
+
+| axe | mesure |
+|---|---|
+| autre **quantification** (Q4_0 au lieu de Q8_0) | **14,7453** contre **15,8055** sans réglage = **−6,7 %** |
+| autre **fenêtre** (256 jetons au lieu de 128) | **17,1915** contre **17,4315** = **−1,4 %** (contre −11,5 %) |
+
+1. **L'effet n'est pas un artefact de quantification** : −6,7 % sur Q4_0 et −11,5 % sur Q8_0 — la direction est robuste.
+2. **Mais il décroît fortement avec la fenêtre** : −11,5 % sur 128 jetons, −1,4 % sur 256. Le chiffre de −11,5 % est un **point de mesure**, pas une propriété du modèle.
+
+C'est pourquoi **la porte exige désormais que la magnitude décroisse** quand la fenêtre grandit : un futur relecteur ne pourra pas citer le meilleur chiffre sans voir la condition à côté. Une mesure sans sa condition est exactement ce que ce dépôt refuse — et c'est la troisième fois ce sprint qu'une mesure se révèle dépendre d'un paramètre qu'on n'avait pas fait varier (indice du rappel, formulation de la question, fenêtre d'évaluation).
+
+**Bilan** : 19 rounds, **22 portes toutes vertes**, 122 tests, et une quarantaine de mesures documentées avec leurs conditions dans `reports/rapport-campagne-benefices.md` (§24 à §37). Les trois prochains chantiers restent inscrits dans `docs/sprint-cerveau.md` avec leur première commande. L'objectif reste **actif**.
+
+### Tour 63 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
+
+*8 appels d'outils.* Actions notables :
+
+- bash — Test the entry gain under the split
+- bash — Check whether ffn_gain is wired in the split path
+- bash — Identify which functions wire ffn_gain
+- bash — Find the model load in the split path
+- bash — Wire ffn_gain into the split path
+- bash — Verify the flag now acts in the split path
+- bash — Add the split-path case and run the gate
+- bash — Document and commit the wiring defect
+
+**Synthèse produite :**
+
+⏵ Le drapeau AGIT maintenant dans le chemin réparti — j'ajoute le cas de porte qui l'aurait attrapé
 
 ## 3. Travail accompli
 
@@ -2859,7 +2894,7 @@ Le changement est donc **inactif quand le drapeau n'est pas donné**, et **ident
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1450 autres
+- … et 1458 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3158,5 +3193,6 @@ Le changement est donc **inactif quand le drapeau n'est pas donné**, et **ident
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib p = pathlib.Path("docs/sprint-cerveau.md") s = p.read_text() a = "## ▶ 
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 

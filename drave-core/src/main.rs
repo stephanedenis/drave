@@ -4327,6 +4327,17 @@ changer (seul le temps change) — c'est la porte de C3", tp_region_distante, de
     let mut mdl = model::Model::load(&chemin,
                                      ctx, fils(&opt), true, opt.keep, false, 0, 0);
     appliquer_quantification(&mut mdl, &opt);
+
+    // C2/E4 : le gain de la FFN. Il était câblé dans `run_infer` et `run_ppl`, et PAS ici :
+    // dans le chemin RÉPARTI, `--ffn-gain` ne faisait donc RIEN, en silence — mesuré :
+    // 42,5477 avec et sans le drapeau. C'est la famille de défauts que ce dépôt traque (un
+    // drapeau qui ne fait rien), et celui-ci comptait double : le sprint porte sur la
+    // distribution, où le réglage fin doit survivre.
+    if let Some(gs) = opt.ffn_gain.clone() {
+        let liste: Vec<String> = gs.iter().map(|(l, g)| format!("couche {l} × {g}")).collect();
+        println!("gain FFN : {}", liste.join(" · "));
+        mdl.ffn_gain = Some(gs);
+    }
     // Le `hc` du PILOTE : c'est SON modèle qui décide de la largeur du pré-mix
     // qu'il envoie et de celle de celui qu'il reçoit (le pair valide le sien).
     let hc_pilote = mdl.hc.as_ref().map(|v| v[0].0.hc).unwrap_or(1);
