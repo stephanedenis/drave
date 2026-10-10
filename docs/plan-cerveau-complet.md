@@ -164,6 +164,23 @@ Chaque fiche : **structure cérébrale** → **état du moteur** → **conceptio
   **nombre d'événements par décision** — la métrique du projet.
 - **Coût** : 3 semaines. **Risque** : moyen.
 
+### C8 — ÉTAT MESURÉ (2026-10-10)
+
+La conception ci-dessus reste la cible ; voici ce qui est **mesuré** aujourd'hui, pour que le plan
+ne se lise pas comme si rien n'avait été fait.
+
+| morceau de C8 | état | où c'est mesuré |
+|---|---|---|
+| **réflexe** (chemin court qui court-circuite le centre) | ✅ mesuré | l'état de 16 couches **contient** le prochain jeton (sonde linéaire 40,8 % contre 4,0 %) ; une tête **entraînée** ramène le chemin tronqué de 697 572 à **85** (modèle complet 15,02), généralise à un autre corpus (÷1 730) et va **×1,54 plus vite** — `reports/rapport-c8-*.md` |
+| **régions frontière** (entrée, sortie, délai) | ✅ **livré** | `--entree signal:F`, `--entree-canal/-gain/-jeton`, `--entree-memoire`, `--delai N`, `--recurent`, `--sortie F` · `tools/porte-peripherie.sh` (déterminisme au bit près, délai exact, refus explicites) |
+| **invariant** « entrée constante ⇒ sortie constante » | ✅ tenu | vérifié **au bit près** par la porte (et à gain nul, tous les pas rendent le même état) |
+| **la métrique du plan** (événements par décision) | ✅ calculée | **357,8 M** paires par décision en complet, **119,3 M** à 8 couches (−67 %) |
+| **tâche fermée** (poursuite d'un signal) | ❌ **non résolue, et la cause est nommée** | le signal **courant** est lisible (R² 0,992) mais **pas** celui d'il y a 8 pas (R² −0,681, non linéaire inclus) ; un tampon remis en entrée ne le rend que **partiellement** lisible (+0,283) — **retenir demande une structure** (ligne à retard : R² 1,000), pas un paramètre |
+
+**Ce qui reste pour clore C8** : une **structure de mémoire** dans la région frontière (un tampon
+lu directement, ou une récurrence entraînée), et la **tâche fermée** qui s'en sert. La conception
+est dans `docs/note-peripherie-c8.md`, les chiffres dans `reports/rapport-c8-peripherie.md`.
+
 ### C9 — Latéralité et corps calleux
 
 - **Cerveau** : deux hémisphères, ~2 × 10⁸ axones, connexions homotopiques.

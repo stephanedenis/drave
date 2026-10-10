@@ -39732,3 +39732,46 @@ docs/organisation-du-depot.md:116:19:00
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Horodatage : les 5 dernieres mentions « 17 h 55 » (heure estimee) remplacees par 15 h 15 (fin reelle de la passe, lue sur le journal)\n\nAudit systematique apres la correction : il ne reste des heures … [295 caractères tronqués]`
+
+  ```
+poussé
+  porte-budget           ✅                          43 s    ✅ paires depassees : nommees (total, budget, pas, plafond), code 9, AUCUNE perplexite
+  porte-bus              ✅                          74 s    ✅ le canal diffusé par fichier change la région du milieu
+  porte-bus-socket       ✅                          87 s    ✅ le bus du pilote agit (113.0068 -> 148.9144)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 570; tail -4 /tmp/passe-complete3.log; date '+%H:%M'", "description": "Wait for the third pass", "timeoutMs": 600000}`
+
+  ```
+porte-delais           ✅                          19 s    ✅ le temps, lui, augmente : 5.96 s → 9.16 s (+3.2 s ≈ 50 ms × 64 pas)
+  porte-episodique       ✅                         161 s    ✅ la porte C6 est franchie — et elle dit ses conditions : 300 états consécutifs d'un
+  porte-flux             ✅                          18 s    mode 4 — lot en listes           4.45e-3  ✅  (réf 60.8135 / deux nœuds 60.5427)
+  porte-fusion           ✅                           7 s    ✅ v1 refusée (code 2), trace seule refusée (code 2)
+16:08
+  ```
+
+### 🤖 Assistant
+
+⏵ Pendant la passe : je consigne l'état de C8 dans le plan et j'écris la conception de C9 (latéralité)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '176,190p' docs/plan-cerveau-complet.md", "description": "Read the plan's C9 section"}`
+
+  ```
+- **Invariant** : échange désactivé ⇒ chaque instance est identique au modèle seul.
+- **Validation** : gain de perplexité **ou** de robustesse (entrée dégradée d'un côté)
+  — et si le gain est nul, **le dire** (c'est le cas le plus probable : rien dans nos
+  mesures ne suggère un gain).
+- **Coût** : 1-2 semaines après C1. **Risque** : faible techniquement, gain incertain.
+
+### C10 — Budgets par lien (bande passante, énergie)
+
+- **Cerveau** : 20 W pour tout ; le câblage est minimisé.
+- **Moteur** : il **mesure** octets, paires, temps par lien ; il n'impose rien.
+- **Conception** : un **planificateur** qui refuse un graphe dont le coût dépasse un
+  budget (`{paires/s, octets/s, watts}` par lien et global). Les mesures existantes
+  (0,210 ns par événement valorisé, 8,6 Mo/s en mmap sur disque dur, 3,4 ms par
+  jeton et par ms de RTT) donnent les constantes.
+- **Interface** : `--budget budget.json` ; refus explicite au démarrage si dépassé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"docs/plan-cerveau-complet.md\"); s = p.read_text()\nancre = \"\"\"### C9 — Latéralité et corps calleux\"\"\"\netat_c8 = \"\"\"### C8 — ÉTAT MESURÉ (2026-10-10)\n\nLa conception  … [8351 caractères tronqués]`
