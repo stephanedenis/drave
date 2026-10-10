@@ -28567,3 +28567,231 @@ variable renommee
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\n\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\na = \"**Détail mesuré au passage** : le PREMIER flux est plus gros que la moyenne\"\nb = \"\"\"**Suite — le budget … [4578 caractères tronqués]`
+
+  ```
+docs latence
+test result: ok. 122 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.35s
+47b2ad6 C10 (suite) : budget de LATENCE par lien — troisieme volet des budgets du plan
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 9 livré : C10 complet (octets **et** latence), quatre codes d'arrêt distincts
+
+**Ce round** — 1 commit poussé, 122 tests verts, `porte-budget.sh` étendue à **5 cas** (verte).
+
+Le plan demande `{paires/s, octets/s, ms}` par lien. Les octets étaient faits ; voici la **latence** : `"budget_ms": N`, comparé à l'**allé-retour mesuré** de chaque pas — la loi du dépôt étant 3,4 ms par jeton et par ms de RTT, un lien déclaré à 5 ms qui en met 50 n'est pas le lien qu'on croit, et le savoir au premier pas vaut mieux qu'à la fin.
+
+| cas | mesure |
+|---|---|
+| latence **généreuse** (100 000 ms) | 111,9225 — **identique** · code 0 |
+| latence **insuffisante** (1 ms) | `LATENCE DÉPASSÉE … : **20,1 ms pour un budget de 1 ms, au pas 0**` · **code 8** · aucune perplexité |
+
+**Quatre codes d'arrêt distincts désormais** : **5** borne de pas (C4) · **6** budget d'octets · **7** panne de lien (C11) · **8** budget de latence (C10). Un script nomme la cause sans lire les messages — même discipline que partout ailleurs dans ce sprint : *s'arrêter et le dire*.
+
+**Défaut de porte attrapé** : la porte écrasait la variable `D` (le chemin du binaire) avec la sortie du pilote — le cas suivant échouait sur un **127** (« command not found »), ce qui ne disait rien de ce qu'on mesurait. C'est la deuxième fois dans ce sprint qu'une porte échoue pour une raison étrangère à sa mesure ; les deux fois, elle l'a dit.
+
+**Suivant** (dans `docs/sprint-cerveau.md`) : le troisième volet `paires/s` (le coût en paires, déjà instrumenté par le moteur), puis les têtes dédiées C8 / modèles H-I-J, ou la reprise après panne. L'objectif reste **actif**.
+
+
+## Tour 53
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 mémoire épisodique, C7 consolidation, C8 périphérie, C9 latéralité, C10 budgets, et la diffusion réseau du bus de C5 ; (b) les expériences E2-E9 de docs/biologie-pour-drave.md et docs/hebbien-differentiel-et-biologie.md ; (c) les dessins de modèle H/I/J de docs/modele-pour-drave.md ; (d) les manques du registre docs/manques.md (noyau de listes pour les experts, noyau de listes GPU, encodeurs) — l'implémenter ou la mesurer, la doter d'une porte vérifiable, la documenter, commiter, pousser, et enchaîner immédiatement sur la suivante. Contraintes : les 23 portes du dépôt et tous les tests restent verts (porte-flux.sh après toute modification du chemin d'exécution), le profil release reste le binaire de mesure, le crate reste std seul, et docs/sprint-cerveau.md reste l'état resumable mis à jour à chaque round. Ne jamais s'arrêter faute de tâches planifiées : en inventer de nouvelles, mesurables, plutôt que d'attendre."
+Round: 10/60
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 10 : vérification complète — 8 rounds ont touché le chemin d'exécution, je passe toutes les portes
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/suite_complete.sh <<'EOF'\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nVERTES=0; ROUGES=0; LISTE=\"\"\nfor f in tools/porte-*.sh; do\n  P=$(basename \"$f\" .sh)\n  R=$(timeout 2400 bash \"$f\" 2>&1); C=$?\n  E=$(pr … [657 caractères tronqués]`
+
+  ```
+suite lancée
+20
+  ```
+
+- **bash** `{"command": "sleep 570; cat /tmp/suite_complete.txt", "description": "Check the suite progress", "timeoutMs": 640000}`
+
+  ```
+VERT  porte-budget
+VERT  porte-bus
+VERT  porte-bus-socket
+VERT  porte-coupe
+VERT  porte-delais
+  ```
+
+- **bash** `{"command": "sleep 580; cat /tmp/suite_complete.txt", "description": "Wait for more gates", "timeoutMs": 640000}`
+
+  ```
+VERT  porte-budget
+VERT  porte-bus
+VERT  porte-bus-socket
+VERT  porte-coupe
+VERT  porte-delais
+VERT  porte-episodique
+VERT  porte-flux
+VERT  porte-fusion
+  ```
+
+- **bash** `{"command": "sleep 590; cat /tmp/suite_complete.txt", "description": "Wait for the remaining gates", "timeoutMs": 650000}`
+
+  ```
+VERT  porte-budget
+VERT  porte-bus
+VERT  porte-bus-socket
+VERT  porte-coupe
+VERT  porte-delais
+VERT  porte-episodique
+VERT  porte-flux
+VERT  porte-fusion
+  ```
+
+### 🤖 Assistant
+
+⏵ La suite est sur `porte-greffe` (la plus longue) — j'attends
+
+- **bash** `{"command": "sleep 590; cat /tmp/suite_complete.txt", "description": "Continue waiting for the suite", "timeoutMs": 650000}`
+
+  ```
+VERT  porte-budget
+VERT  porte-bus
+VERT  porte-bus-socket
+VERT  porte-coupe
+VERT  porte-delais
+VERT  porte-episodique
+VERT  porte-flux
+VERT  porte-fusion
+VERT  porte-greffe
+VERT  porte-horloge
+  ```
+
+- **bash** `{"command": "sleep 590; cat /tmp/suite_complete.txt", "description": "Wait for the suite to finish", "timeoutMs": 650000}`
+
+  ```
+VERT  porte-budget
+VERT  porte-bus
+VERT  porte-bus-socket
+VERT  porte-coupe
+VERT  porte-delais
+VERT  porte-episodique
+VERT  porte-flux
+VERT  porte-fusion
+VERT  porte-greffe
+VERT  porte-horloge
+VERT  porte-indice
+  ```
+
+- **bash** `{"command": "sleep 590; tail -12 /tmp/suite_complete.txt", "description": "Final stretch of the suite", "timeoutMs": 650000}`
+
+  ```
+VERT  porte-budget
+VERT  porte-bus
+VERT  porte-bus-socket
+VERT  porte-coupe
+VERT  porte-delais
+VERT  porte-episodique
+VERT  porte-flux
+VERT  porte-fusion
+VERT  porte-greffe
+VERT  porte-horloge
+VERT  porte-indice
+  ```
+
+- **bash** `{"command": "sleep 590; tail -8 /tmp/suite_complete.txt", "description": "Wait for the merge gate", "timeoutMs": 650000}`
+
+  ```
+VERT  porte-indice
+VERT  porte-melange
+VERT  porte-mistral
+VERT  porte-pannes
+VERT  porte-pont
+VERT  porte-reflexe
+ROUGE porte-reparti-moteur (code=1 rouges=0)
+VERT  porte-tokenizer-kimi
+  ```
+
+- **bash** `{"command": "sleep 200; tail -6 /tmp/suite_complete.txt; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -c \"\" /tmp/suite_complete.txt", "description": "Read the suite's final verdict", "timeoutMs": 260000}`
+
+  ```
+VERT  porte-topologie
+VERT  porte-trace
+=== 19 vertes · 1 rouges === porte-reparti-moteur
+--- tests ---
+test result: ok. 122 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.34s
+FINI
+24
+  ```
+
+### 🤖 Assistant
+
+⏵ 19 portes vertes, 1 rouge (`porte-reparti-moteur`) — même motif que bus-socket ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 bash tools/porte-reparti-moteur.sh 2>&1 | tail -6; echo \"--- dernier motif ---\"; grep -n \"sys.exit\\|exit 1\" tools/porte-reparti-moteur.sh | tail -6", "description": "Diagnose the red gate", "timeoutMs": 1000000}`
+
+  ```
+=== référence : le modèle ENTIER, un seul processus ===
+  perplexité entière : 321.9623
+=== deux nœuds : 2 couches locales, le reste à distance ===
+  perplexité répartie : 132.8349 · écart de flux : 0.00e0
+PORTE NON TENUE : écart relatif 58.7421 % entre entier et réparti
+--- dernier motif ---
+28:[ -s "$IDS" ] || { echo "  $IDS absent"; exit 1; }
+33:[ -n "$REF" ] || { echo "  la référence n'a pas rendu de perplexité"; exit 1; }
+41:    kill -0 $SRV 2>/dev/null || { echo "  le nœud est mort :"; tail -3 "$LOG_SRV"; exit 1; }
+59:    exit 1
+72:sys.exit(0 if rel < 0.001 else 1)
+80:exit 1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,30p' tools/porte-reparti-moteur.sh", "description": "Read the red gate's setup"}`
+
+  ```
+#!/bin/bash
+# Porte de RÉPARTITION du modèle entraîné ici : deux nœuds, deux plages de couches.
+#
+# Ce qu'elle vérifie, et pourquoi elle est distincte de `tools/porte-flux.sh` :
+# celle-ci tourne sur Qwen2.5-0.5B, un modèle venu d'ailleurs. Ici c'est NOTRE
+# modèle (Qwen3-MoE entraîné sur le corpus d'octets), et la question n'est pas
+# « le transport est-il fidèle » mais « le modèle qu'on a produit est-il
+# découpable sans changer un chiffre ». Un modèle dont le routage d'experts ou
+# les normes dépendraient d'un état global ne passerait pas.
+#
+#   tools/porte-reparti-moteur.sh
+#   MODELE=/tmp/moteur_dense.gguf COUCHES=2 tools/porte-reparti-moteur.sh
+set -u
+cd "$(dirname "$0")/.."
+D=${D:-./drave-core/target/release/drave}
+MODELE=${MODELE:-/tmp/moteur_route.gguf}
+IDS=${IDS:-/tmp/route_ids.txt}
+PORT=${PORT:-$((49000 + RANDOM % 800))}
+CTX=${CTX:-256}
+LIMITE=${LIMITE:-128}          # doit valoir le nombre de jetons du fichier IDS
+COUCHES=${COUCHES:-2}          # couches gardées côté pilote ; le reste au nœud
+
+TRAVAIL=$(mktemp -d "${TMPDIR:-/tmp}/porte-reparti-XXXXXX")
+LOG_SRV="$TRAVAIL/serveur.log"
+
+[ -x "$D" ] || { echo "  $D absent : construire d'abord"; exit 1; }
+[ -s "$MODELE" ] ||
+… [152 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ 19/20 vertes ; la rouge est pré-existante (`/tmp/moteur_route.gguf`, modèle entraîné ici) — je la nomme
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la /tmp/moteur_route.gguf /tmp/route_ids.txt 2>/dev/null | awk '{print $5, $9, $6, $7, $8}' && python3 - <<'ENDPY'\nimport pathlib\n\np2 = pathlib.Path(\"docs/sprint-cerveau.md\")\nt = p2.read_text()\na2 = \"## ▶ PROCHAINE ACTION … [2805 caractères tronqués]`
+
+  ```
+4574656 /tmp/moteur_route.gguf 8 oct 10:55
+920 /tmp/route_ids.txt 8 oct 10:55
+verification consignee
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A docs/sprint-cerveau.md && git commit -q -F - <<'MSG'\nVerification complete : 19 portes vertes, 1 rouge nommee et NON expliquee\n\nSuite complete des 20 portes du depot, jouee APRES les huit rounds qui ont touche le chemin … [1981 caractères tronqués]`

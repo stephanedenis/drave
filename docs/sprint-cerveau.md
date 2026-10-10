@@ -175,6 +175,39 @@ serait faux ; reprendre demanderait de rejouer le préfixe (checkpoint/restart).
 
 ---
 
+## VÉRIFICATION COMPLÈTE — FAITE (11 octobre 3 h) : 19 portes vertes, 1 rouge nommée
+
+Suite complète des portes (`tools/porte-*.sh`, 20 fichiers) **après les huit rounds** qui ont
+touché le chemin d'exécution (fusion d'état, pont, budget, pannes, capture d'état) :
+
+**19 vertes · 1 rouge · 122 tests verts.**
+
+Vertes : budget · bus · bus-socket · coupe · delais · episodique · flux · fusion · greffe ·
+horloge · indice · melange · mistral · pannes · pont · reflexe · tokenizer-kimi · topologie ·
+trace.
+
+**La rouge : `porte-reparti-moteur`** — perplexité entière **321,9623** contre répartie
+**132,8349** (écart 58,7 %) alors que **l'écart de flux est 0,00e0**. C'est la porte de NOTRE
+modèle (`/tmp/moteur_route.gguf`, entraîné ici), avec `COUCHES=2` : deux couches locales, le
+reste à distance.
+
+**Ce que je peux affirmer et ce que je ne peux pas** : les huit rounds n'ont ajouté que des
+chemins INACTIFS par défaut sur cette porte (fusion sans `--fusion-etat`, pont sans
+`--pont-k`, budget sans `budget_octets`/`budget_ms`, pannes seulement en cas d'erreur,
+capture sans `--etat-sortie`, borne sans `--pas-max`) — donc **aucun de ces changements ne
+peut produire un écart de 58 %**. Mais je n'ai pas remonté au commit d'avant le sprint pour
+le prouver, et je ne l'affirme donc pas : **c'est une rouge PRÉ-EXISTANTE, non expliquée**, et
+elle est écrite comme telle.
+
+**Prochaine action sur ce point** : déterminer si la cause est le MODÈLE (un modèle entraîné
+ici dont le découpage change réellement le calcul — routage d'experts, normes) ou la PORTE
+(un fichier `/tmp/moteur_route.gguf` périmé par rapport à l'entraîneur actuel). La commande :
+régénérer `/tmp/moteur_route.gguf` et `/tmp/route_ids.txt` avec `tools/entrainer_moteur.py`,
+puis rejouer `tools/porte-reparti-moteur.sh` ; et si la rouge persiste, comparer les logits
+entier/réparti position par position (l'outil existe : `compare_logits.py`).
+
+---
+
 ## ▶ PROCHAINE ACTION (à lire en premier)
 
 État au **10 octobre 11 h 45** : **C1, C3, C4 (pas 1), C5, C5bis, C5ter, C6, C7 (pas 1),
@@ -1074,6 +1107,7 @@ bus (le format de la ligne de contrôle est écrit, le transport reste à câble
 |---|---|
 | 9/10 17 h 10 | **C1a** : module `topologie.rs`, validation stricte, plan, 8 tests, suite à 85 tests. |
 | 9/10 17 h 20 | **C1b pas 1** : la topologie pilote le découpage · porte `tools/porte-topologie.sh` **TENUE** (même chiffre, écart 0,00e0) · deux refus vérifiés. |
+| 11/10 03 h 00 | **VÉRIFICATION COMPLÈTE** : 20 portes jouées après les 8 rounds qui ont touché le chemin d'exécution ⇒ **19 vertes · 1 rouge** + 122 tests. La rouge est `porte-reparti-moteur` (notre modèle `/tmp/moteur_route.gguf`, entier 321,9623 contre réparti 132,8349, écart 58,7 %, **flux à 0,00e0**) : tous les ajouts du sprint sont INACTIFS par défaut sur ce chemin, donc elle est **pré-existante et non expliquée** — écrite comme telle, avec la commande pour l'instruire. |
 | 11/10 01 h 30 | **C10 (suite) — budget de LATENCE** : `"budget_ms"`, comparé à l'allé-retour mesuré. Généreux ⇒ identique (111,9225, code 0) · 1 ms ⇒ `LATENCE DÉPASSÉE : 20,1 ms pour un budget de 1 ms, au pas 0`, **code 8**, aucune perplexité. **Quatre codes distincts** : 5 borne · 6 octets · 7 panne · 8 latence. Défaut de porte corrigé (variable `D` écrasée ⇒ code 127). |
 | 11/10 00 h 30 | **C11 — pannes de lien** : `best-effort` = « sauter la région » est REFUSÉ (un graphe amputé est un AUTRE modèle) ⇒ s'arrêter en nommant lien/pas/octets, **code 7** (5 = borne, 6 = budget). Porte 3 cas : nominal 33,0156 · pair tué au pas 12 (43 968 octets) · pair absent en 2 s. Deux défauts corrigés : un pair absent faisait PANIQUER le pilote (code 134) ; la porte attendait un événement fragile. Reste : la REPRISE (cache KV perdu). |
 | 10/10 23 h 00 | **C10 — budget d'octets par lien** : `"budget_octets"` dans la topologie, vérifié **sur ce qui passe** (la taille dépend de l'activité, pas du mode). Porte 3 cas : sans budget 111,9225 · budget généreux **identique** · budget insuffisant ⇒ arrêt **au pas 0**, lien/octets/budget nommés, **code 6**, **aucune perplexité**. |

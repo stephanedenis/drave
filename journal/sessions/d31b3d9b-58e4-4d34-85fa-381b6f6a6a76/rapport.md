@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 44.9 h |
-| Tours | 52 |
-| Messages | 1786 |
-| Appels d'outils | 1680 |
+| Durée | 46.1 h |
+| Tours | 53 |
+| Messages | 1801 |
+| Appels d'outils | 1693 |
 | Fichiers touchés | 61 |
-| Commandes | 1430 |
+| Commandes | 1443 |
 | Sous-agents | 3 |
-| Commits | 142 |
+| Commits | 143 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -139,6 +139,8 @@
 **Tour 51** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1469 caractères tronqués]
 
 **Tour 52** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1469 caractères tronqués]
+
+**Tour 53** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -2385,7 +2387,44 @@ Le plan prévoyait un `best-effort` qui « saute la région et annonce l'écart 
 
 **Synthèse produite :**
 
-⏵ J'ai écrasé la variable `D` (le binaire) avec la sortie du pilote — je renomme
+⏵ Round 9 livré : C10 complet (octets **et** latence), quatre codes d'arrêt distincts
+
+**Ce round** — 1 commit poussé, 122 tests verts, `porte-budget.sh` étendue à **5 cas** (verte).
+
+Le plan demande `{paires/s, octets/s, ms}` par lien. Les octets étaient faits ; voici la **latence** : `"budget_ms": N`, comparé à l'**allé-retour mesuré** de chaque pas — la loi du dépôt étant 3,4 ms par jeton et par ms de RTT, un lien déclaré à 5 ms qui en met 50 n'est pas le lien qu'on croit, et le savoir au premier pas vaut mieux qu'à la fin.
+
+| cas | mesure |
+|---|---|
+| latence **généreuse** (100 000 ms) | 111,9225 — **identique** · code 0 |
+| latence **insuffisante** (1 ms) | `LATENCE DÉPASSÉE … : **20,1 ms pour un budget de 1 ms, au pas 0**` · **code 8** · aucune perplexité |
+
+**Quatre codes d'arrêt distincts désormais** : **5** borne de pas (C4) · **6** budget d'octets · **7** panne de lien (C11) · **8** budget de latence (C10). Un script nomme la cause sans lire les messages — même discipline que partout ailleurs dans ce sprint : *s'arrêter et le dire*.
+
+**Défaut de porte attrapé** : la porte écrasait la variable `D` (le chemin du binaire) avec la sortie du pilote — le cas suivant échouait sur un **127** (« command not found »), ce qui ne disait rien de ce qu'on mesurait. C'est la deuxième fois dans ce sprint qu'une porte échoue pour une raison étrangère à sa mesure ; les deux fois, elle l'a dit.
+
+**Suivant** (dans `docs/sprint-cerveau.md`) : le troisième volet `paires/s` (le coût en paires, déjà instrumenté par le moteur), puis les têtes dédiées C8 / modèles H-I-J, ou la reprise après panne. L'objectif reste **actif**.
+
+### Tour 53 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
+
+*13 appels d'outils.* Actions notables :
+
+- bash — Launch the full gate suite
+- bash — Check the suite progress
+- bash — Wait for more gates
+- bash — Wait for the remaining gates
+- bash — Continue waiting for the suite
+- bash — Wait for the suite to finish
+- bash — Final stretch of the suite
+- bash — Wait for the merge gate
+- bash — Read the suite's final verdict
+- bash — Diagnose the red gate
+- bash — Read the red gate's setup
+- bash — Record the verification result and the red gate
+- bash — Commit the verification round
+
+**Synthèse produite :**
+
+⏵ 19/20 vertes ; la rouge est pré-existante (`/tmp/moteur_route.gguf`, modèle entraîné ici) — je la nomme
 
 ## 3. Travail accompli
 
@@ -2503,7 +2542,7 @@ Le plan prévoyait un `best-effort` qui « saute la région et annonce l'écart 
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1390 autres
+- … et 1403 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2793,4 +2832,5 @@ Le plan prévoyait un `best-effort` qui « saute la région et annonce l'écart 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A docs/sprint-cerveau.md && git commit -q -F - <<'MSG' Verification complete : 19 portes vertes, 
 
