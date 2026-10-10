@@ -38,7 +38,7 @@
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
-## Étapes du jour (95)
+## Étapes du jour (96)
 
 *Ce que l'agent a consigné en le faisant (lignes `⏵` du journal de session) :*
 
@@ -67,7 +67,7 @@
 - **07:20** — TROUVÉ : le fichier a 256 jetons ; `--ppl` note les 128 PREMIERS, `--ppl-reparti` les 128 DERNIERS
 - **07:21** — Round 11 : la rouge était la PORTE — et notre modèle entraîné survit au découpage
 - **07:21** — C11 (découverte) : le registre de régions — les topologies ne codent plus les adresses en dur
-- *(+70 autres étapes — voir les rapports de session)*
+- *(+71 autres étapes — voir les rapports de session)*
 
 ## Sessions actives ce jour
 

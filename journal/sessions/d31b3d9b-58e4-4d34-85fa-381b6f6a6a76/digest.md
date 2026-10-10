@@ -37525,3 +37525,38 @@ perplexité 14.2342 sur
 ⏵ Référence obtenue sur le même texte : modèle complet 14,2342 — l'écart du réflexe est ×59 (pas ×90) ; je corrige la fiche
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"reports/rapport-c8-tete-entrainee.md\"); s = p.read_text()\ns = s.replace(\"\"\"> Verdict : **oui, et de trois ordres de grandeur** — sur le **même texte**, le chemin tronqué\n> … [7573 caractères tronqués]`
+
+  ```
+fiche corrigée (même texte partout)
+état C8 mis à jour
+récit complété
+poussé
+87a841a C8 : une tete ENTRAINEE pour sa profondeur — 845,45 contre 456 586,60 (div 540) sur le meme texte
+  ```
+
+### 🤖 Assistant
+
+⏵ C8 : un raccourci ne vaut que s'il va plus vite — je mesure la latence du chemin court
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf; P=\"Explique en trois phrases pourquoi le ciel est bleu.\"\necho \"=== modèle complet ===\"; $D \"$M\" --infer --flux --prompt \"$P\" --n 64 --ctx 1024 --threads 8 … [549 caractères tronqués]`
+
+  ```
+=== modèle complet ===
+Qwen2 · 24 couches · hidden 896 · 14 têtes / 2 KV · FFN 4864 · vocab 151936
+prompt  : 13 tokens en 0.565 s  (23.0 tok/s, TTFT 43.5 ms)
+généré  : 64 tokens en 2.569 s  (24.91 tok/s)
+=== réflexe : 0:16 couches + tête ===
+[plage] `--tete-partielle` : la tête de sortie est appliquée à la fin de la plage — le résultat est celui d'un modèle TRONQUÉ, pas du modèle entier
+prompt  : 13 tokens en 0.237 s  (54.9 tok/s, TTFT 18.2 ms)
+généré  : 64 tokens en 1.670 s  (38.31 tok/s)
+=== réflexe : 0:20 couches + tête ===
+[plage] `--tete-partielle` : la tête de sortie est appliquée à la fin de la plage — le résultat est celui d'un modèle TRONQUÉ, pas du modèle entier
+prompt  : 13 tokens en 0.329 s  (39.6 tok/s, TTFT 25.3 ms)
+généré  : 64 tokens en 2.015 s  (31.77 tok/s)
+  ```
+
+### 🤖 Assistant
+
+⏵ Le réflexe est bien plus rapide (×1,54 en génération, TTFT ÷2,4) — je consigne et je lance l'épreuve du corpus
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"reports/rapport-c8-tete-entrainee.md\"); s = p.read_text()\nancre = \"## 4. Ce que ça établit, et ce que ça n'établit pas\"\nsec = \"\"\"## 3 bis. Le réflexe va-t-il plus vite ? … [2741 caractères tronqués]`

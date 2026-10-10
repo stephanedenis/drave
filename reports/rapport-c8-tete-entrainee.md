@@ -61,6 +61,23 @@ test : ×127 d'écart à la fin. Le chiffre à retenir est le **meilleur test** 
 pas le dernier — et c'est le script qui le garde (il restaure la meilleure époque avant d'écrire
 le tableau).
 
+## 3 bis. Le réflexe va-t-il plus vite ? Oui, et c'est là sa raison d'être
+
+Un raccourci ne vaut que s'il va **plus vite**. Mesure directe (même invite, 64 jetons générés,
+`--ctx 1024`, moteur seul, machine au repos) :
+
+| chemin | prétraitement | TTFT | génération |
+|---|---|---|---|
+| modèle complet (24 couches) | 23,0 tok/s | 43,5 ms | **24,91 tok/s** |
+| **réflexe 16 couches** + tête | **54,9 tok/s** | **18,2 ms** | **38,31 tok/s** (**×1,54**) |
+| réflexe 20 couches + tête | 39,6 tok/s | 25,3 ms | 31,77 tok/s (×1,28) |
+
+**Le chemin court est 1,5× plus rapide en génération et 2,4× plus rapide en prétraitement.** Le
+compromis est donc posé en clair : **×1,54 de vitesse pour ×59 de perplexité** (14,23 → 845 sur
+le texte de 8 192 jetons). Ce n'est pas un substitut au modèle, c'est un **chemin de secours**
+— et c'est exactement ce que C8 demandait : un réflexe qui répond vite quand la réponse exacte
+coûte trop cher.
+
 ## 4. Ce que ça établit, et ce que ça n'établit pas
 
 **Établi** : le maillon faible de C8 était bien la **tête**, pas la profondeur. Avec une tête
@@ -76,8 +93,9 @@ jeton** — trois ordres de grandeur mieux que la tête empruntée.
 - **la chaîne Python n'est pas identique au moteur** (÷1,34 sur le même état : tête en fp16 et
   rmsnorm réécrite ici, contre f32 et noyau du moteur). Le **gain** est robuste, le chiffre absolu
   porte cette incertitude ;
-- **la latence du réflexe n'est pas mesurée** : 16 couches sur 24, c'est un tiers de calcul en
-  moins, mais un chemin court ne vaut que s'il va **plus vite**, et ça reste à mesurer.
+- **la latence est mesurée** (§ 3 bis) : **×1,54** en génération, TTFT ÷2,4 — mais c'est la
+  latence du **chemin tronqué**, pas celle d'une tête entraînée (qui ajoute un matmul 896×896,
+  négligeable devant une couche) ;
 
 ## 5. Deux pièges de harnais, tous deux attrapés par une erreur visible
 

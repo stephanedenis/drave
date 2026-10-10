@@ -7,12 +7,12 @@
 | Début | 2026-10-08 09:11 |
 | Durée | 51.4 h |
 | Tours | 88 |
-| Messages | 2328 |
-| Appels d'outils | 2133 |
+| Messages | 2330 |
+| Appels d'outils | 2135 |
 | Fichiers touchés | 76 |
-| Commandes | 1850 |
+| Commandes | 1852 |
 | Sous-agents | 3 |
-| Commits | 204 |
+| Commits | 205 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -3586,7 +3586,7 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 
 ### Tour 88 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*291 appels d'outils.* Actions notables :
+*293 appels d'outils.* Actions notables :
 
 - bash — Add the refusal and verify
 - bash — Move the refusal to the single point and verify
@@ -3602,11 +3602,11 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - bash — Read v7 removal context and flag inventory
 - bash — Read flag inventory section in docs
 - bash — Establish whether section 9 predates the v7 removal
-- … et 264 autres
+- … et 266 autres
 
 **Synthèse produite :**
 
-⏵ Référence obtenue sur le même texte : modèle complet 14,2342 — l'écart du réflexe est ×59 (pas ×90) ; je corrige la fiche
+⏵ Le réflexe est bien plus rapide (×1,54 en génération, TTFT ÷2,4) — je consigne et je lance l'épreuve du corpus
 
 ## 3. Travail accompli
 
@@ -3739,7 +3739,7 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1810 autres
+- … et 1812 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4091,4 +4091,5 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' import pathlib # 1) corriger l'extraction des secondes (la carte ne tourne plus) p = p
 - Etat : le prix en temps de la fenetre est consigne (div 4 de cles = +12 % de debit, pas x4)" && git push -q origin master && echo poussé; sleep 240; ls /tmp/c8-
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' import pathlib p = pathlib.Path("reports/rapport-c8-tete-entrainee.md"); s = p.read_te
+- C8 : le reflexe va plus vite (x1,54 en generation, TTFT div 2,4) — le compromis est pose  Mesure directe, meme invite, 64 jetons generes, ctx 1024 :   modele co
 
