@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-10.md](2026-10-10.md). Convention : `docs/organisation-du-depot.md`.
 
-## Commits du jour (15)
+## Commits du jour (16)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -23,6 +23,7 @@
 | 10:39 | `024e509` | Fenetre x puits : la pente en N mesuree — gratuit a 512 jetons, +40 % a 2 048 | `etat-cerveau.md`, `2026-10-10.md`, `2026-10-10_attention.md` (+13) |
 | 10:57 | `b4f1589` | Fenetre x puits a 2 048 : MA conclusion du §4 etait bornee par la grille — avec 512 puits, +0,33 % | `etat-cerveau.md`, `2026-10-10.md`, `2026-10-10_attention.md` (+14) |
 | 11:10 | `499400e` | Carte fenetre x puits : la case donne aussi le TEMPS et le debit (tok/s) | `2026-10-10.md`, `2026-10-10_apprentissage.md`, `2026-10-10_attention.md` (+14) |
+| 11:42 | `39b26a6` | Carte fenetre x puits : l'extraction des secondes ratait (« ? s » affiche sans le dire) | `etat.md`, `organisation-du-depot.md`, `2026-10-10.md` (+6) |
 
 ## Chiffres du jour
 

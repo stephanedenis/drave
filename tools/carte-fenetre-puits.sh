@@ -40,8 +40,11 @@ mesure () { # $@ = drapeaux ; imprime « perplexité secondes tok/s »
     sortie=$($D "$M" --ppl "$IDS" --limit "$LIMITE" --ctx "$CTX" --threads 8 "$@" 2>&1)
     local ppl sec tok
     ppl=$(printf '%s' "$sortie" | grep -oE "perplexité [0-9.]+ sur" | grep -oE "[0-9.]+")
-    sec=$(printf '%s' "$sortie" | grep -oE "perplexité [0-9.]+ sur [0-9]+ tokens \([0-9.]+ s\)" \
-          | grep -oE "\([0-9.]+ s\)" | grep -oE "[0-9.]+")
+    # Les secondes : dernier « (N.N s) » de la sortie (la ligne de synthèse est la dernière).
+    # Le premier motif exigeait la phrase entière sur UNE ligne — la sortie du moteur la coupe
+    # parfois, et la carte affichait « ? s » sans le dire.
+    sec=$(printf '%s' "$sortie" | grep -oE "\([0-9]+[.,][0-9]+ s\)" | tail -1 \
+          | grep -oE "[0-9]+[.,][0-9]+")
     tok=$(printf '%s' "$sortie" | grep -oE "[0-9.]+ tok/s effectifs" | grep -oE "[0-9.]+")
     printf '%s·%s s·%s tok/s' "${ppl:-?}" "${sec:-?}" "${tok:-?}"
 }

@@ -36955,3 +36955,81 @@ fiche C8 corrigée avec la courbe
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\n# l'état : C8 avec la courbe et la distinction décodabilité / qualité\np = pathlib.Path(\"docs/etat-cerveau.md\"); s = p.read_text()\nold = \"\"\"| **C8** | réflexe | 🟡 premier pas, **débloqué** | … [5268 caractères tronqués]`
+
+  ```
+état C8 mis à jour
+récit complété
+poussé
+116fa0f C8 : la courbe de profondeur, et le piege --couches a:b (la borne est EXCLUE)
+  ```
+
+### 🤖 Assistant
+
+⏵ Machine libre : je corrige l'extraction des secondes puis je lance la mesure de temps propre
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"tools/carte-fenetre-puits.sh\"); s = p.read_text()\nold = '''    sec=$(printf '%s' \"$sortie\" | grep -oE \"perplexité [0-9.]+ sur [0-9]+ tokens \\\\([0-9.]+ s\\\\)\" \\\\\n     … [1302 caractères tronqués]`
+
+  ```
+started background job bash-34
+  ```
+
+### 🤖 Assistant
+
+⏵ Pendant la mesure, je mets l'index des modules à jour (nouveaux documents et état courant)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"docs/etat.md\"); s = p.read_text()\nold = \"\"\"| **Cerveau / distribué** | `docs/plan-cerveau-complet.md` (les douze capacités) | **`docs/etat-cerveau.md`** — C1-C12, avec le c … [3391 caractères tronqués]`
+
+  ```
+etat.md mis à jour
+convention : points d'entrée ajoutés
+[stderr]
+fatal: cannot lock ref 'HEAD': is at 39b26a6f38f7f12d54b2ef4cfc744bf418ae88b8 but expected 116fa0f924bbad1df3e9807463d9fa4823bc5da0
+  ```
+
+### 🤖 Assistant
+
+⏵ Collision git : une autre écriture a bougé HEAD pendant mon commit — je regarde et je reprends
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -4; echo \"=== état de l'index ===\"; git status --short | head -8; git diff --cached --stat | tail -3", "description": "Inspect git state after the race"}`
+
+  ```
+39b26a6 Carte fenetre x puits : l'extraction des secondes ratait (« ? s » affiche sans le dire)
+116fa0f C8 : la courbe de profondeur, et le piege --couches a:b (la borne est EXCLUE)
+4d03891 README et REPRISE allegés : demarrer en 5 minutes, et renvoyer au lieu de recopier
+cfbcb82 C8 : l'etat de la couche 16 CONTIENT le prochain jeton (43,1 %) — c'est la TETE qui est le maillon faible
+=== état de l'index ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show --stat 39b26a6 | head -20; echo \"=== les points d'entrée sont-ils dans la convention ? ===\"; grep -c \"Points d'entrée\\|points d'entrée\" docs/organisation-du-depot.md docs/etat.md; echo \"=== jobs ===\"; ls -la /tmp/cart … [154 caractères tronqués]`
+
+  ```
+commit 39b26a6f38f7f12d54b2ef4cfc744bf418ae88b8
+Author: Stéphane <stephane@localhost>
+Date:   Sat Oct 10 11:42:29 2026 -0400
+
+    Carte fenetre x puits : l'extraction des secondes ratait (« ? s » affiche sans le dire)
+    
+    Le motif exigeait la phrase de synthese entiere sur UNE ligne ; la sortie du moteur la coupe
+    parfois, et la carte affichait « ? s » — un trou dans une mesure qui ne se signale pas.
+    On prend desormais le DERNIER « (N.N s) » de la sortie.
+
+ docs/etat.md                                       |  8 ++++++--
+ docs/organisation-du-depot.md                      | 15 ++++++++++++++
+ journal/2026-10-10.md                              |  5 +++--
+ journal/2026-10-10_mesures.md                      |  8 +++++---
+ journal/README.md                                  |  2 +-
+ journal/sessions/MANIFEST.md                       |  2 +-
+ .../d31b3d9b-58e4-4d34-85fa-381b6f6a6a76/digest.md | 23 ++++++++++++++++++++++
+ .../rapport.md                                     | 18 +++++++++--------
+ tools/carte-fenetre-puits.sh                       |  7 +++++--
+ 9 files changed, 69 insertions(+), 19 deletions(-)
+=== les points d'entrée sont-ils dans la convention ? ===
+docs/organ
+… [121 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Course git auto-infligée (un `git commit` dans une tâche de fond) — je vérifie si le commit est poussé et je corrige son message
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline origin/master..HEAD; echo \"=== amend du message ===\"; git commit --amend -q -F - <<'MSG'\nCarte fenetre x puits : secondes corrigees, et les points d'entree nommes dans l'index\n\nDEUX CHANGEMENTS, un seul commit  … [1172 caractères tronqués]`

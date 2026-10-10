@@ -9,6 +9,21 @@
 
 ---
 
+## 0. Les points d'entrée (ce qu'on lit en arrivant)
+
+| fichier | rôle | taille visée |
+|---|---|---|
+| `README.md` | ce qu'est Drave, trois commandes, **où est quoi** (tableau) | ~60 lignes |
+| `REPRISE.md` | la **check-list de démarrage** : quoi lire, quoi vérifier, les pièges, où écrire | ~90 lignes |
+| `docs/etat.md` | l'**index des modules** : roadmap → état → prochaine action | ~60 lignes |
+| `docs/references-non-regression.md` | les **repères chiffrés** (ce qui ne doit pas bouger) | ~60 lignes |
+| `journal/AAAA-MM-JJ.md` | la **journée en cours**, par thème | — |
+
+**Règle** : ces fichiers **renvoient**, ils ne recopient pas. Un détail mesuré va dans
+`reports/`, un principe dans `docs/`, un fait daté dans `journal/`. Deux fichiers d'entrée de
+709 et 1 828 lignes ont été allégés le 2026-10-10 pour cette raison (versions longues conservées
+dans `journal/`, voir `journal/2026-10-10-reprise-historique.md`).
+
 ## 1. `docs/` — le FOND
 
 **Ce qui y va** : les principes, les théories, les hypothèses, les plans et les **roadmaps** de

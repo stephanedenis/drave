@@ -9,11 +9,15 @@
 |---|---|---|---|
 | **Moteur** (`drave-core`) | `docs/roadmap-drave.md`, `docs/roadmap.md`, `docs/plan-modeles-lourds.md` | `docs/manques.md` (M1-M8 : noyau de listes pour experts, noyau GPU creux, lots + hyper-connexions, encodeurs, spéculatif, apprentissage embarqué, qualité des gros modèles, défaut de sauvegarde log-normal) | M8 (le fichier sauvé ne reproduit pas le modèle entraîné) — cause ouverte |
 | **Modèle** (dessins entraînables) | `docs/modele-pour-drave.md`, `docs/plan-deepseek41-complet.md`, `docs/plan-mla-vision.md` | `docs/manques.md` (N1-N4) ; `docs/etat-cerveau.md` § 4 | entraîner les dessins **H/I/J** (jamais entraînés) |
-| **Cerveau / distribué** | `docs/plan-cerveau-complet.md` (les douze capacités) | **`docs/etat-cerveau.md`** — C1-C12, avec le chiffre qui prouve chacune | C8 (tête réflexe entraînée par profondeur) ; la pente en N de la fenêtre × puits |
+| **Cerveau / distribué** | `docs/plan-cerveau-complet.md` (les douze capacités) | **`docs/etat-cerveau.md`** — C1-C12, avec le chiffre qui prouve chacune | C8 : entraîner la tête réflexe (l'état porte l'information dès 4 couches — `reports/rapport-c8-sonde-profondeur.md`) |
 | **Émulation d'un professeur** | `docs/programme-recherche.md`, `docs/note-un-pont-par-professeur.md`, `docs/note-regle-contrastive.md` | **`docs/etat-emulation-professeur.md`** (méthode, résultats, corrections) | les expériences sont dans `reports/toutes-langues/` (107 fiches) |
 | **Biologie → moteur** | `docs/biologie-pour-drave.md` (E1-E9) | `docs/etat-cerveau.md` § 3 : E1, E3, E4, E7, E8 mesurées ; E6 en échec de code ; E2/E5 cadrées | écrire le protocole E2 (croissance des connexions) et E5 (rejeu) |
 | **Matériel et système** | `docs/configuration-nvme-raid-amd.md`, `docs/numa-segregation.md`, `docs/plan-gpu-topk.md`, `docs/colab-reparti.md` | `reports/bilan-multi-materiel.md`, `reports/rapport-materiel-disque-ou-cpu.md` | — |
-| **Conventions et mémoire du dépôt** | `docs/organisation-du-depot.md`, `docs/glossaire.md`, `docs/histoire.md`, `docs/relations-humaines.md` | ce fichier | tenir `journal/AAAA-MM-JJ.md` à chaque round |
+| **Conventions et mémoire du dépôt** | `docs/organisation-du-depot.md`, `docs/references-non-regression.md`, `docs/glossaire.md`, `docs/histoire.md`, `docs/relations-humaines.md` | ce fichier, plus `README.md` (entrée) et `REPRISE.md` (check-list de démarrage) | tenir `journal/AAAA-MM-JJ.md` à chaque round |
+
+**Points d'entrée** : `README.md` (ce qu'est Drave, où est quoi) · `REPRISE.md` (les cinq premières
+minutes d'une session, ce qui doit être vert, les pièges) · `docs/references-non-regression.md`
+(les repères chiffrés d'une passe de portes) · `docs/organisation-du-depot.md` (où écrire quoi).
 
 ## Où sont les chiffres
 

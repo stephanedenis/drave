@@ -7,12 +7,12 @@
 | Début | 2026-10-08 09:11 |
 | Durée | 50.5 h |
 | Tours | 88 |
-| Messages | 2289 |
-| Appels d'outils | 2097 |
+| Messages | 2294 |
+| Appels d'outils | 2102 |
 | Fichiers touchés | 74 |
-| Commandes | 1816 |
+| Commandes | 1821 |
 | Sous-agents | 3 |
-| Commits | 198 |
+| Commits | 201 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -3586,7 +3586,7 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 
 ### Tour 88 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*255 appels d'outils.* Actions notables :
+*260 appels d'outils.* Actions notables :
 
 - bash — Add the refusal and verify
 - bash — Move the refusal to the single point and verify
@@ -3602,11 +3602,11 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - bash — Read v7 removal context and flag inventory
 - bash — Read flag inventory section in docs
 - bash — Establish whether section 9 predates the v7 removal
-- … et 228 autres
+- … et 233 autres
 
 **Synthèse produite :**
 
-⏵ Courbe honnête obtenue (24/24 rend exactement 9,4341 = contrôle) ; je corrige la fiche C8 et j'ajoute la courbe
+⏵ Course git auto-infligée (un `git commit` dans une tâche de fond) — je vérifie si le commit est poussé et je corrige son message
 
 ## 3. Travail accompli
 
@@ -3737,7 +3737,7 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1776 autres
+- … et 1781 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4083,4 +4083,7 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'MSG' C8 : l'etat de la couche 16 CONTIENT le prochain jeton (43,1 %) —
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'MSG' README et REPRISE allegés : demarrer en 5 minutes, et renvoyer au
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' import pathlib # l'état : C8 avec la courbe et la distinction décodabilité / qualité p
+- Carte fenetre x puits : l'extraction des secondes ratait (« ? s » affiche sans le dire)  Le motif exigeait la phrase de synthese entiere sur UNE ligne ; la sort
+- Index et convention : les points d'entree sont nommes, avec la regle « renvoyer, pas recopier »  docs/etat.md gagne les points d'entree (README, REPRISE, refere
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline origin/master..HEAD; echo "=== amend du message ==="; git commit --amend -q -F - <<'MSG'
 
