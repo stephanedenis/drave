@@ -30466,3 +30466,88 @@ porte-registre code=0
 ⏵ Trois portes vertes après le refus (flux, pannes, registre) — je consigne et commite
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"docs/sprint-cerveau.md\")\ns = p.read_text()\na = \"## ▶ PROCHAINE ACTION (à lire en premier)\"\nneuf = \"\"\"## VÉRIFICATION APRÈS LE REFUS DES RÉGLAGES NON TRANSPORTABLES — FA … [2048 caractères tronqués]`
+
+  ```
+verification consignee
+671b4b4 Verification apres le refus des reglages non transportables : flux, pannes et registre vertes
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 25 livré : vérification du chemin d'exécution après le refus — trois portes vertes
+
+**Ce round** — 1 commit poussé. Le refus ajouté au round 24 est un **changement du chemin d'exécution réparti** : la contrainte de l'objectif s'applique donc à la lettre (« `porte-flux.sh` après toute modification du chemin d'exécution »).
+
+| porte | résultat |
+|---|---|
+| **`porte-flux.sh`** | **code 0** — les cinq modes du protocole sont **inchangés au chiffre près** : 0,00e0 · 0,00e0 · 3,65e-2 · 0,00e0 · 4,45e-3 |
+| **`porte-pannes.sh`** | **code 0** — pannes toujours nommées (lien, pas, octets), code 7 |
+| **`porte-registre.sh`** | **code 0** — registre et adresse en dur donnent le même résultat |
+| `porte-gain.sh` | 9 cas verts, dont le refus lui-même |
+| tests | **122 verts** |
+
+Le refus ne se déclenche **que si** l'un des trois réglages est demandé : une exécution qui ne les demande pas suit exactement le chemin d'avant.
+
+**Bilan du sprint** : 25 rounds, **22 portes toutes vertes**, 122 tests verts, quatre codes d'arrêt distincts (5 borne · 6 octets · 7 panne · 8 latence) plus le refus de transport (2), un registre de régions, et 40 sections de rapport dont une bonne moitié de négatifs, réfutations et corrections — toutes documentées avec leurs conditions.
+
+**Ce qui attend son premier round** (inscrit dans `docs/sprint-cerveau.md` avec les commandes) : le **protocole v7** (transporter `attn_window`/`swa_pattern`/`attn_sinks` et le compte de paires), la **tête dédiée par profondeur** (C8), et le budget `paires/s`. L'objectif reste **actif**.
+
+
+## Tour 69
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 mémoire épisodique, C7 consolidation, C8 périphérie, C9 latéralité, C10 budgets, et la diffusion réseau du bus de C5 ; (b) les expériences E2-E9 de docs/biologie-pour-drave.md et docs/hebbien-differentiel-et-biologie.md ; (c) les dessins de modèle H/I/J de docs/modele-pour-drave.md ; (d) les manques du registre docs/manques.md (noyau de listes pour les experts, noyau de listes GPU, encodeurs) — l'implémenter ou la mesurer, la doter d'une porte vérifiable, la documenter, commiter, pousser, et enchaîner immédiatement sur la suivante. Contraintes : les 23 portes du dépôt et tous les tests restent verts (porte-flux.sh après toute modification du chemin d'exécution), le profil release reste le binaire de mesure, le crate reste std seul, et docs/sprint-cerveau.md reste l'état resumable mis à jour à chaque round. Ne jamais s'arrêter faute de tâches planifiées : en inventer de nouvelles, mesurables, plutôt que d'attendre."
+Round: 26/60
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 26 : reconnaissance du protocole v7 — où loger trois champs dans l'en-tête de trame ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"TAILLE_TETE\\s*:\\|const TAILLE_TETE\\|const VERSION_FLUX\\|const MAGIE_FLUX\" drave-core/src/main.rs | head -4 && sed -n \"$(grep -n 'fn tete_flux' drave-core/src/main.rs | cut -d: -f1),+40p\" drave-core/src/main.rs | grep … [100 caractères tronqués]`
+
+  ```
+2855:const MAGIE_FLUX: u32 = 0x4452_5631;   // "DRV1"
+2868:const VERSION_FLUX: u8 = 6;
+2903:const TAILLE_TETE: usize = 4 + 1 + 1 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 1
+7:    t.extend_from_slice(&MAGIE_FLUX.to_le_bytes());
+8:    t.push(VERSION_FLUX);
+9:    t.push(mode);
+10:    t.extend_from_slice(&debut.to_le_bytes());
+11:    t.extend_from_slice(&fin.to_le_bytes());
+12:    t.extend_from_slice(&pos.to_le_bytes());
+13:    t.extend_from_slice(&(n as u32).to_le_bytes());
+14:    t.extend_from_slice(&echelle.to_le_bytes());
+15:    t.extend_from_slice(&act.levels.to_le_bytes());
+16:    t.extend_from_slice(&act.thresh.to_le_bytes());
+17:    t.extend_from_slice(&act.topk.to_le_bytes());
+18:    t.push(act.renorm as u8);
+19:    for k in act.topk_proj { t.extend_from_slice(&k.to_le_bytes()); }
+20:    t.extend_from_slice(&act.attn_topk.to_le_bytes());
+21:    t.extend_from_slice(&act.qk_topk.to_le_bytes());
+22:    t.extend_from_slice(&act.moe_topk.to_le_bytes());
+39:            paires.push(ecart as u8);
+41:            paires.push(255);
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '2903,2906p' drave-core/src/main.rs && python3 -c \"\nt = 4+1+1+4+4+4+4+4+4+4+4+1\nprint('  offsets calculés : magic 0, version 4, mode 5, debut 6, fin 10, pos 14, n 18, echelle 22,')\nprint('  levels 26, thresh 30, topk 34, r … [189 caractères tronqués]`
+
+  ```
+const TAILLE_TETE: usize = 4 + 1 + 1 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 1
+                            + 4 + 4 + 4 + 7 * 4;
+
+/// Réglages d'activation d'un nœud : ils font partie du contrat d'échange.
+  offsets calculés : magic 0, version 4, mode 5, debut 6, fin 10, pos 14, n 18, echelle 22,
+  levels 26, thresh 30, topk 34, renorm 38, topk_proj 39..67 (7×4), attn_topk 67, qk_topk 71, moe_topk 75
+  => taille occupée : 79 octets ; TAILLE_TETE réelle : ?
+  ```
+
+### 🤖 Assistant
+
+⏵ L'en-tête est plein (79 octets, zéro marge) — je spécifie le v7 à l'octet près avant de le tenter
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"docs/sprint-cerveau.md\")\ns = p.read_text()\na = \"## ▶ PROCHAINE ACTION (à lire en premier)\"\nneuf = \"\"\"## PROTOCOLE v7 — SPÉCIFIÉ À L'OCTET PRÈS (11 octobre 13 h), PAS EN … [3882 caractères tronqués]`

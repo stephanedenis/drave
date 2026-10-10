@@ -6,13 +6,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
 | Durée | 47.4 h |
-| Tours | 68 |
-| Messages | 1908 |
-| Appels d'outils | 1770 |
+| Tours | 69 |
+| Messages | 1913 |
+| Appels d'outils | 1773 |
 | Fichiers touchés | 61 |
-| Commandes | 1520 |
+| Commandes | 1523 |
 | Sous-agents | 3 |
-| Commits | 158 |
+| Commits | 159 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -171,6 +171,8 @@
 **Tour 67** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 **Tour 68** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
+
+**Tour 69** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -2942,7 +2944,35 @@ Le pilote applique la fenêtre à **ses** douze couches, le nœud garde la sienn
 
 **Synthèse produite :**
 
-⏵ Trois portes vertes après le refus (flux, pannes, registre) — je consigne et commite
+⏵ Round 25 livré : vérification du chemin d'exécution après le refus — trois portes vertes
+
+**Ce round** — 1 commit poussé. Le refus ajouté au round 24 est un **changement du chemin d'exécution réparti** : la contrainte de l'objectif s'applique donc à la lettre (« `porte-flux.sh` après toute modification du chemin d'exécution »).
+
+| porte | résultat |
+|---|---|
+| **`porte-flux.sh`** | **code 0** — les cinq modes du protocole sont **inchangés au chiffre près** : 0,00e0 · 0,00e0 · 3,65e-2 · 0,00e0 · 4,45e-3 |
+| **`porte-pannes.sh`** | **code 0** — pannes toujours nommées (lien, pas, octets), code 7 |
+| **`porte-registre.sh`** | **code 0** — registre et adresse en dur donnent le même résultat |
+| `porte-gain.sh` | 9 cas verts, dont le refus lui-même |
+| tests | **122 verts** |
+
+Le refus ne se déclenche **que si** l'un des trois réglages est demandé : une exécution qui ne les demande pas suit exactement le chemin d'avant.
+
+**Bilan du sprint** : 25 rounds, **22 portes toutes vertes**, 122 tests verts, quatre codes d'arrêt distincts (5 borne · 6 octets · 7 panne · 8 latence) plus le refus de transport (2), un registre de régions, et 40 sections de rapport dont une bonne moitié de négatifs, réfutations et corrections — toutes documentées avec leurs conditions.
+
+**Ce qui attend son premier round** (inscrit dans `docs/sprint-cerveau.md` avec les commandes) : le **protocole v7** (transporter `attn_window`/`swa_pattern`/`attn_sinks` et le compte de paires), la **tête dédiée par profondeur** (C8), et le budget `paires/s`. L'objectif reste **actif**.
+
+### Tour 69 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Inspect the frame header layout
+- bash — Compute the header offsets
+- bash — Publish the v7 specification
+
+**Synthèse produite :**
+
+⏵ L'en-tête est plein (79 octets, zéro marge) — je spécifie le v7 à l'octet près avant de le tenter
 
 ## 3. Travail accompli
 
@@ -3060,7 +3090,7 @@ Le pilote applique la fenêtre à **ses** douze couches, le nœud garde la sienn
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1480 autres
+- … et 1483 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3365,5 +3395,6 @@ Le pilote applique la fenêtre à **ses** douze couches, le nœud garde la sienn
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib p = pathlib.Path("docs/sprint-cerveau.md") s = p.read_text() a = "## ▶ 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib p = pathlib.Path("docs/sprint-cerveau.md") s = p.read_text() a = "## ▶ 
 

@@ -470,6 +470,43 @@ les demande pas suit exactement le chemin d'avant.
 
 ---
 
+## PROTOCOLE v7 — SPÉCIFIÉ À L'OCTET PRÈS (11 octobre 13 h), PAS ENCORE IMPLÉMENTÉ
+
+Le refus du round précédent (`--attn-window`, `--swa-pattern`, `--attn-sinks` non transportables)
+se lève en faisant voyager ces trois réglages. **Reconnaissance faite** : l'en-tête de trame est
+**plein**.
+
+```text
+offsets actuels (TAILLE_TETE = 79 octets, aucune marge) :
+  0   magie u32        4   version u8     5   mode u8
+  6   debut u32       10   fin u32       14   pos u32       18   n u32
+ 22   echelle f32     26   levels f32    30   thresh f32    34   topk u32
+ 38   renorm u8       39   topk_proj[7] u32 (39..67)
+ 67   attn_topk u32   71   qk_topk u32   75   moe_topk u32
+```
+
+**Les cinq modifications, et rien d'autre :**
+
+1. `struct Act` : trois champs `attn_window: u32`, `swa_pattern: u32`, `attn_sinks: u32` (+ les
+   remplir dans `du_modele`, + les appliquer dans `appliquer`) ;
+2. `TAILLE_TETE` : `79 + 12` = **91** octets ;
+3. `VERSION_FLUX` : **6 → 7** (le décodeur refuse une version étrangère — et c'est voulu : deux
+   binaires de versions différentes ne doivent pas se parler à moitié) ;
+4. `tete_flux` : trois `extend_from_slice` de plus, aux offsets **79, 83, 87** ;
+5. `recevoir_flux` : trois lectures `u(79)`, `u(83)`, `u(87)` — puis **retirer le refus**.
+
+**Ce qui vérifie ce changement** : `porte-flux.sh` fait parler LES DEUX côtés sur les cinq modes
+du protocole et compare les écarts à 0,00e0 / 0,00e0 / 3,65e-2 / 0,00e0 / 4,45e-3 — un en-tête
+décalé d'un octet y échoue immédiatement. C'est le garde-fou qui rend ce changement tentable, et
+il existe déjà.
+
+**Pourquoi ce n'est pas fait dans ce round** : l'en-tête est PLEIN, donc la modification touche
+l'encodeur ET le décodeur ET la version — trois endroits où une erreur d'un octet casse les cinq
+modes à la fois. Le round qui l'entreprend doit avoir de la marge pour déboguer ; celui-ci a
+préféré **spécifier à l'octet près** plutôt que de laisser un arbre cassé.
+
+---
+
 ## ▶ PROCHAINE ACTION (à lire en premier)
 
 État au **11 octobre 6 h 45** · **21 portes, toutes vertes** (`tools/porte-*.sh`) ·
