@@ -60,6 +60,7 @@ Les trois invariants : le crate reste `std` seul · le profil `release` est le b
 
 ```bash
 cd drave-core && cargo test --release          # 122 tests
-cd .. && tools/toutes-les-portes.sh            # les 22 portes, ~70 min, aucune sautée
+cd .. && tools/toutes-les-portes.sh            # toutes les portes, ~1 h, aucune sautée
+# le nombre et les repères du jour : docs/references-non-regression.md
 tools/porte-flux.sh                            # la porte de non-régression du calcul, ~2 min
 ```

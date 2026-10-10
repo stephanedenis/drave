@@ -7,12 +7,12 @@
 | Début | 2026-10-08 09:11 |
 | Durée | 56.1 h |
 | Tours | 89 |
-| Messages | 2503 |
-| Appels d'outils | 2304 |
+| Messages | 2506 |
+| Appels d'outils | 2307 |
 | Fichiers touchés | 91 |
-| Commandes | 2005 |
+| Commandes | 2008 |
 | Sous-agents | 3 |
-| Commits | 230 |
+| Commits | 231 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -3636,7 +3636,7 @@ Trois erreurs attrapées par les instruments : une **porte fantôme** verte en c
 
 ### Tour 89 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*24 appels d'outils.* Actions notables :
+*27 appels d'outils.* Actions notables :
 
 - bash — Check imposed input state flags
 - bash — Audit etat_entree usage
@@ -3652,11 +3652,11 @@ Trois erreurs attrapées par les instruments : une **porte fantôme** verte en c
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-jumeaux.sh`
 - bash — Run the twins gate
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-c9-lateralite.md`
-- … et 10 autres
+- … et 13 autres
 
 **Synthèse produite :**
 
-⏵ Prix du retard verrouillé par une porte ; je consigne dans l'état et le journal
+⏵ Audit de cohérence : les documents citent des nombres de portes (22/23) devenus faux
 
 ## 3. Travail accompli
 
@@ -3804,7 +3804,7 @@ Trois erreurs attrapées par les instruments : une **porte fantôme** verte en c
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1965 autres
+- … et 1968 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4182,4 +4182,5 @@ Trois erreurs attrapées par les instruments : une **porte fantôme** verte en c
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M' && python3 - <<'PYEOF' import pathlib, subprocess heure = subprocess.run(["date", "+%H:%M"],
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' import pathlib p = pathlib.Path("tools/porte-jumeaux.sh"); s = p.read_text() s = s.rep
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' import pathlib, subprocess heure = subprocess.run(["date", "+%H:%M"], capture_output=T
+- Le nombre de portes n'est plus fige dans les fichiers d'entree (il a change trois fois aujourd'hui : 22 -> 23 -> 25)  README et REPRISE disaient « les 22 portes
 

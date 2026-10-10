@@ -40309,3 +40309,45 @@ CODE=0
 ⏵ Prix du retard verrouillé par une porte ; je consigne dans l'état et le journal
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib, subprocess\nheure = subprocess.run([\"date\", \"+%H:%M\"], capture_output=True, text=True).stdout.strip()\np = pathlib.Path(\"reports/rapport-c4-retard.md\"); s = p.read_text()\ns = s.replace(\">  … [4277 caractères tronqués]`
+
+  ```
+état : C4 mis à jour
+récit complété
+poussé
+  porte-delais           ✅                          21 s    ✅ le temps, lui, augmente : 7.73 s → 9.89 s (+2.2 s ≈ 50 ms × 64 pas)
+  porte-episodique       ✅                         171 s    ✅ la porte C6 est franchie — et elle dit ses conditions : 300 états consécutifs d'un
+  porte-flux             ✅                          20 s    mode 4 — lot en listes           4.45e-3  ✅  (réf 60.8135 / deux nœuds 60.5427)
+17:19
+  ```
+
+### 🤖 Assistant
+
+⏵ Audit de cohérence : les documents citent des nombres de portes (22/23) devenus faux
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"22 portes\\|23 portes\\|22 vertes\\|23 vertes\\|les 23\\b\\|les 22\\b\" README.md REPRISE.md docs/*.md reports/rapport-c9-lateralite.md 2>/dev/null | head -12; ls tools/porte-*.sh | wc -l", "description": "Audit gate-count … [9 caractères tronqués]`
+
+  ```
+README.md:63:cd .. && tools/toutes-les-portes.sh            # les 22 portes, ~70 min, aucune sautée
+REPRISE.md:26:| toutes les portes | `tools/toutes-les-portes.sh` | **22 vertes**, ~70 min, **aucune sautée** |
+docs/etat-cerveau.md:88:- **23 portes** `tools/porte-*.sh` — **passe complète le 2026-10-10 15 h 15 : 23 vertes sur 23, 59 min**
+docs/etat-cerveau.md:103:`journal/2026-10-10.md` et dans `docs/manques.md` (la ligne « les 23 portes sont vertes » était
+docs/manques.md:58:  **23 vertes sur 23, en 59 minutes** (mesuré le 2026-10-10 à 15 h 15 HAE ; détail et durées
+docs/manques.md:59:  dans `reports/rapport-passe-complete-portes.md`). La ligne qui était ici affirmait « les 23
+docs/modularisation.md:88:3. et **toute promotion vers `release` se paie d'un passage des 23 portes**, parce
+docs/references-non-regression.md:4:> portes** (`tools/toutes-les-portes.sh`, **23 vertes sur 23**, 58 min 07 s au total). Elles ne sont
+docs/references-non-regression.md:18:| toutes les portes | `tools/toutes-les-portes.sh` | **23 vertes**, 58 min 07 s, aucune sautée |
+25
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\n# Le nombre de portes a changé trois fois aujourd'hui (22 → 23 → 25) : on ne le fige plus dans les\n# fichiers d'entrée, on renvoie au compte RÉEL et à la passe qui l'établit.\nremplacements = [\n … [1484 caractères tronqués]`
+
+  ```
+README.md : 1 remplacement(s)
+REPRISE.md : 1 remplacement(s)
+docs/modularisation.md : 1 remplacement(s)
+docs/etat-cerveau.md:88:- **23 portes** `tools/porte-*.sh` — **passe complète le 2026-10-10 15 h 15 : 23 vertes sur 23, 59 min**
+docs/etat-cerveau.md:103:`journal/2026-10-10.md` et dans `docs/manques.md` (la ligne « les 23 portes sont vertes » était
+(les mentions « 23 » restantes sont celles de la passe datée — elles seront régénérées après la passe en cours)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Le nombre de portes n'est plus fige dans les fichiers d'entree (il a change trois fois aujourd'hui : 22 -> 23 -> 25)\n\nREADME et REPRISE disaient « les 22 portes » ; docs/modularisation disait « les  … [492 caractères tronqués]`

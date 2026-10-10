@@ -85,7 +85,8 @@ Donc :
 1. on **ajoute** un profil d'itération (`[profile.rapide]` : `codegen-units = 16`,
    `lto = "thin"`) pour le développement et les tests — 12 s au lieu de 38 ;
 2. on **garde** `release` tel quel pour les mesures ;
-3. et **toute promotion vers `release` se paie d'un passage des 23 portes**, parce
+3. et **toute promotion vers `release` se paie d'un passage de TOUTES les portes**
+   (`tools/toutes-les-portes.sh`), parce
    qu'elle change les nombres.
 
 Les 77 tests, eux, tournent déjà en 12 s : les exécuter en parallèle d'un

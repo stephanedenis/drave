@@ -23,7 +23,7 @@ Puis, dans l'ordre : `journal/<aujourd'hui>.md` (l'index du jour) → [`docs/eta
 |---|---|---|
 | tests | `cd drave-core && cargo test --release` | **122 verts** |
 | le calcul (non-régression) | `tools/porte-flux.sh` | cinq modes verts, ~2 min |
-| toutes les portes | `tools/toutes-les-portes.sh` | **22 vertes**, ~70 min, **aucune sautée** |
+| toutes les portes | `tools/toutes-les-portes.sh` | **toutes vertes**, ~1 h, **aucune sautée** — le compte et les repères du jour sont dans `docs/references-non-regression.md` |
 | les repères chiffrés | [`docs/references-non-regression.md`](docs/references-non-regression.md) | les valeurs de la passe du 10/10 |
 
 **Toute modification du chemin d'exécution se paie d'un `porte-flux.sh`** (cinq modes, deux
