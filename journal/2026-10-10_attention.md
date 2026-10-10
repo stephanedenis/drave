@@ -24,11 +24,11 @@
 
 ## Chiffres du jour
 
-`+40 %` · `512 jetons` · `+2,0 %` · `−6,7 %` · `−1,4 %` · `256 jetons` · `÷2,67` · `2048 jetons`
+`+40 %` · `512 jetons` · `+2,0 %` · `−6,7 %` · `−1,4 %` · `256 jetons` · `÷2,67` · `2048 jetons` · `+0,33 %` · `10,4046` · `10,3703`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
-## Étapes du jour (35)
+## Étapes du jour (36)
 
 *Ce que l'agent a consigné en le faisant (lignes `⏵` du journal de session) :*
 
@@ -57,11 +57,11 @@
 - **09:41** — Round 44 livré : `--attn-sinks` — écrit partout, transporté par le v7, **lu nulle part**
 - **09:41** — Round 45 : `--attn-sinks` ne peut rien faire — je le REFUSE explicitement (un endroit, trois chemins)
 - **09:53** — Alerte méthodologique : `attn_sinks` semble LU quelque part (ligne 7472) — je vérifie avant de figer un refus fondé sur une prémisse fausse
-- *(+10 autres étapes — voir les rapports de session)*
+- *(+11 autres étapes — voir les rapports de session)*
 
 ## Sessions actives ce jour
 
-- `d31b3d9b` — Où en est-on (début 2026-10-08 09:11, 49.7 h) → [rapport](sessions/d31b3d9b/rapport.md) · [digest](sessions/d31b3d9b/digest.md)
+- `d31b3d9b` — Où en est-on (début 2026-10-08 09:11, 49.8 h) → [rapport](sessions/d31b3d9b/rapport.md) · [digest](sessions/d31b3d9b/digest.md)
 
 ## Mesures et rapports touchés
 

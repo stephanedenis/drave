@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-10.md](2026-10-10.md). Convention : `docs/organisation-du-depot.md`.
 
-## Commits du jour (22)
+## Commits du jour (23)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -30,6 +30,7 @@
 | 09:15 | `656a65f` | Combien de MESSAGES coute un pas ? Quatre — et c'est l'en-tete ecrit a part | `sprint-cerveau.md`, `MANIFEST.md`, `digest.md` (+2) |
 | 09:30 | `c749af2` | Verification apres v7/v8 et la fusion des ecritures : huit portes reparties vertes | `sprint-cerveau.md`, `MANIFEST.md`, `digest.md` (+1) |
 | 09:39 | `63203d7` | Inventaire des drapeaux en reparti : cinq agissent, trois inertes (deux attendus), un ouvert | `sprint-cerveau.md`, `MANIFEST.md`, `digest.md` (+2) |
+| 10:56 | `33676cb` | Journal : etapes DATEES par la trace de session (elles couvraient toute la session) | `2026-10-09_attention.md`, `2026-10-09_distribue.md`, `2026-10-09_divers.md` (+22) |
 
 ## Chiffres du jour
 
@@ -70,7 +71,7 @@
 
 ## Sessions actives ce jour
 
-- `d31b3d9b` — Où en est-on (début 2026-10-08 09:11, 49.7 h) → [rapport](sessions/d31b3d9b/rapport.md) · [digest](sessions/d31b3d9b/digest.md)
+- `d31b3d9b` — Où en est-on (début 2026-10-08 09:11, 49.8 h) → [rapport](sessions/d31b3d9b/rapport.md) · [digest](sessions/d31b3d9b/digest.md)
 
 ## Mesures et rapports touchés
 

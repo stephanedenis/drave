@@ -35938,3 +35938,45 @@ bash: -c: line 20: unexpected EOF while looking for matching `)'
 ⏵ La syntaxe du heredoc a cassé (terminateur collé) — je refais le commit proprement
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'MSG'\nJournal : etapes DATEES par la trace de session (elles couvraient toute la session)\n\nLe rapport et le digest de session ne portent pas d'horodatage par tour : les etapes\nextraites de la co … [1294 caractères tronqués]`
+
+  ```
+poussé
+33676cb Journal : etapes DATEES par la trace de session (elles couvraient toute la session)
+référence (aucune fenêtre, 2048 jetons) : perplexité 10.3703  ·  clés notées par jeton ≈ 2048
+
+| fenêtre \ puits | 128 | 256 | 512 |
+|---|---|---|---|
+| **512** | 14.5531 | 12.6526 | 10.4046 |
+| **1024** | 10.3652 | 10.3930 | 10.3699 |
+
+Chaque case : perplexité. Clés notées par jeton ≈ fenêtre + puits (le prix), contre 2048
+pour l'attention complète — c'est le SEUL poste que la fenêtre réduit.
+  ```
+
+### 🤖 Assistant
+
+⏵ Résultat renversant : à 2 048 jetons, fenêtre 512 + 512 puits = 10,4046 contre 10,3703 (+0,33 %) pour moitié des clés
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -4 /tmp/passe-complete.log; ps -eo pid,etime,args | grep \"[p]orte-\" | head -3", "description": "Check sweep progress before launching more"}`
+
+  ```
+porte-gain             ✅                         388 s    ✅ drapeau VIVANT mais conditionnel : 0 casse (29.0206 → 1297.5437), 24 améliore (27.4439), san
+  porte-greffe           ✅                         971 s    ✅ la porte est franchie. Ce qu'elle établit : l'injection d'état est BRANCHÉE
+  porte-horloge          ✅                          24 s    ✅ borne atteinte : arrêt EXPLICITE (code 5) et AUCUNE perplexité rendue
+  porte-indice           ✅                         971 s    ✅ la porte est franchie. Limite, et elle est écrite : UN SEUL indice extérieur,
+ 412001       01:57 timeout 2400 bash tools/porte-melange.sh
+ 412002       01:57 bash tools/porte-melange.sh
+4131175       50:48 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n 'R3=\$(' tools/porte-gain.sh; DELAI=2400 JOURNAUX=/tmp/portes-1210b bash tools/toutes-les-portes.sh > /tmp/passe-complete.log 2>&1; echo "CODE_PASSE=$?" >> /tmp/passe-complete.log; tail -40 /tmp/passe-complete.log
+  ```
+
+### 🤖 Assistant
+
+⏵ Le drain rattrape tout : je corrige la fiche (ma conclusion §4 était bornée par la grille) et je lance la carte à 4 096
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && LIMITE=4096 CTX=4096 FENETRES=\"512 1024\" PUITS=\"512 1024\" bash tools/carte-fenetre-puits.sh 4096 > /tmp/carte-4096.md 2>&1; echo \"CODE=$?\"; cat /tmp/carte-4096.md", "description": "Launch 4096-token map in background", "run_in_ … [18 caractères tronqués]`
+
+  ```
+started background job bash-31
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"reports/rapport-fenetre-puits-attention.md\"); s = p.read_text()\n\n# 1) le verdict d'en-tête : la version complète\nold = \"\"\"> Verdict : **oui à courte portée, non à longue* … [8335 caractères tronqués]`

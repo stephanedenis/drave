@@ -1,6 +1,6 @@
 # État du cerveau Drave — capacités, expériences, prochaine action
 
-> **2026-10-10 10:22 HAE** (EDT, UTC−4 — lire `date`, jamais une horloge supposée : voir
+> **2026-10-10 11:05 HAE** (EDT, UTC−4 — lire `date`, jamais une horloge supposée : voir
 > `docs/organisation-du-depot.md` § 4). Ce fichier est **l'état**, par rapport aux roadmaps :
 > ce qui est fait, avec le chiffre qui le prouve, et ce qui reste. Il ne raconte pas les rounds
 > (c'est `journal/`) et ne porte pas les mesures en détail (ce sont les fiches
@@ -81,15 +81,16 @@
 `journal/2026-10-10.md` et dans `docs/manques.md` (la ligne « les 23 portes sont vertes » était
 une affirmation sur une suite qui n'avait **jamais tourné comme une suite**).
 
-**2. Fenêtre × puits d'attention — MESURÉ : gratuit à courte portée, payant à longue** (fiche
+**2. Fenêtre × puits d'attention — MESURÉ : le DRAIN porte la qualité** (fiche
 [`reports/rapport-fenetre-puits-attention.md`](../reports/rapport-fenetre-puits-attention.md)).
 À **512 jetons**, **fenêtre 128 + 64 puits** = **13,3968** contre **13,1368** (**+2,0 %**) pour
-**192 clés sur 512** (**÷2,67**) ; à **2 048 jetons**, la meilleure case mesurée (**512 + 128**,
-640 clés sur 2 048, ÷3,2) coûte **+40,3 %** (14,5531 contre 10,3703). À taux de clés comparable
-(31 %), on paie **+2,0 % à 512** et **+40,3 % à 2 048** : ce n'est pas le nombre de clés qui
-décide, c'est **ce qu'on ne voit plus** — les puits drainent l'attention, ils ne la remplacent
-pas. Zéro puits **casse** le modèle (1297,54 à fenêtre 32 contre 29,02 à 4). En cours : un drain
-proportionnellement plus grand (256/512 puits) rachète-t-il le prix à 2 048 ?
+**192 clés sur 512** (**÷2,67**). À **2 048 jetons**, la grille étendue tranche : **fenêtre 512 +
+512 puits** rend **10,4046** contre **10,3703** (**+0,33 %**) pour **1 024 clés sur 2 048**
+(**÷2**), et **fenêtre 1 024 + 128 puits** rend **10,3652** pour **÷1,78**. Autrement dit : **le
+drain doit grandir avec la séquence**, et il porte l'information du début que la fenêtre coupe —
+quelques puits suffisent à *drainer*, il en faut beaucoup plus pour *porter*. Zéro puits
+**casse** le modèle (1297,54 à fenêtre 32 contre 29,02 à 4). En cours : **4 096 jetons**, pour
+savoir si la règle « préfixe ≈ fenêtre » tient.
 
 **3. C8 (suite) — une tête entraînée par profondeur.** Le réflexe ne peut pas lire un état
 intermédiaire (cos 0,145) : entraîner une tête linéaire sur l'état de la couche 16 et mesurer son

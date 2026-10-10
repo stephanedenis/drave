@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 49.7 h |
+| Durée | 49.8 h |
 | Tours | 88 |
-| Messages | 2228 |
-| Appels d'outils | 2040 |
+| Messages | 2231 |
+| Appels d'outils | 2043 |
 | Fichiers touchés | 69 |
-| Commandes | 1766 |
+| Commandes | 1769 |
 | Sous-agents | 3 |
-| Commits | 191 |
+| Commits | 192 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -3586,7 +3586,7 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 
 ### Tour 88 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*198 appels d'outils.* Actions notables :
+*201 appels d'outils.* Actions notables :
 
 - bash — Add the refusal and verify
 - bash — Move the refusal to the single point and verify
@@ -3602,11 +3602,11 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - bash — Read v7 removal context and flag inventory
 - bash — Read flag inventory section in docs
 - bash — Establish whether section 9 predates the v7 removal
-- … et 173 autres
+- … et 176 autres
 
 **Synthèse produite :**
 
-⏵ La syntaxe du heredoc a cassé (terminateur collé) — je refais le commit proprement
+⏵ Le drain rattrape tout : je corrige la fiche (ma conclusion §4 était bornée par la grille) et je lance la carte à 4 096
 
 ## 3. Travail accompli
 
@@ -3732,7 +3732,7 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1726 autres
+- … et 1729 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4071,4 +4071,5 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - Journal : les CHIFFRES du jour par theme, extraits des textes deja fiables  Chaque fichier de theme porte desormais une ligne « Chiffres du jour » (pourcentages
 - $(cat <<'MSG' Journal : etapes DATEES par la trace de session (elles couvraient toute la session)  Le rapport et le digest de session ne portent pas d'horodatag
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'MSG' Journal : etapes DATEES par la trace de session (elles couvraient
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' import pathlib p = pathlib.Path("reports/rapport-fenetre-puits-attention.md"); s = p.r
 

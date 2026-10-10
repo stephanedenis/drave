@@ -6,12 +6,14 @@
 > le poste dominant : la fenêtre les rend `O(W)` au lieu de `O(N)` — mais elle coûte en qualité,
 > et la question est de savoir si le **drain** (les `n` premiers jetons, toujours notés) paie ce
 > coût.
-> Verdict : **oui à courte portée, non à longue** — à 512 jetons, **fenêtre 128 + 64 puits** rend
-> **13,3968** contre **13,1368** pour l'attention complète (**+2,0 %**) en ne notant que
-> **192 clés sur 512** (**÷2,67**) ; mais à **2 048 jetons**, la meilleure case mesurée
-> (**fenêtre 512 + 128 puits**, 640 clés sur 2 048, **÷3,2**) coûte **+40,3 %**
-> (14,5531 contre 10,3703). **Le drain ne compense plus quand la séquence grandit** : la fenêtre
-> est un levier de parcimonie à courte portée, un vrai trade-off de qualité à longue.
+> Verdict : **oui, à condition que le drain GRANDISSE avec la séquence.**
+> À 512 jetons, **fenêtre 128 + 64 puits** rend **13,3968** contre **13,1368** (**+2,0 %**) pour
+> **192 clés sur 512** (**÷2,67**). À 2 048 jetons, **fenêtre 512 + 128 puits** coûte **+40,3 %**
+> — mais **fenêtre 512 + 512 puits** rend **10,4046** contre **10,3703** (**+0,33 %**) pour
+> **1 024 clés** (**÷2**), et **fenêtre 1 024 + 128 puits** rend même **10,3652**, très
+> légèrement **mieux** que l'attention complète, pour **÷1,78**. Le drain n'est pas un petit
+> supplément : c'est lui qui porte la qualité, et il doit suivre la séquence. **Zéro puits avec
+> une fenêtre casse le modèle** (1297,54 contre 29,02 à fenêtre 32).
 > Date réelle : **2026-10-10 10:18 HAE** (les journaux et commits de ce round ; `date` sur la
 > machine, pas une horloge supposée).
 > Protocole : `tools/carte-fenetre-puits.sh <limit>` — Qwen2.5-0.5B-Q8_0,
@@ -75,16 +77,48 @@ mêmes ids, même modèle), répond à la question qui décide de l'usage réel 
 2 048 jetons, une fenêtre de 512 laisse 1 536 jetons accessibles seulement par les 128 puits, et
 les puits ne portent pas l'information — ils drainent l'attention, ils ne la remplacent pas.
 
-**Conséquence pour le sprint** : la fenêtre glissante n'est **pas** un gain gratuit sur les
-scores d'attention (le poste dominant du calcul), et il ne faut pas la présenter comme tel. Elle
-reste utile là où elle est utile : mémoire de travail à courte portée, et surtout **bornage du
-coût par jeton** quand N grandit — mais alors le prix se paie en perplexité, et il est mesuré.
+**LA CONCLUSION CI-DESSUS ÉTAIT TROP FORTE, ET ELLE EST CORRIGÉE AU § 5.** Elle était **bornée par
+la grille mesurée** : à 2 048 jetons, la grille ci-dessus ne montait qu'à **128 puits**. Dire
+« le drain ne compense plus » à partir de là revient à conclure sur le drain en n'ayant essayé
+que ses petites valeurs — la même erreur de méthode que mesurer l'inertie d'un drapeau là où
+l'inertie est attendue (fiche 50). La grille étendue (§ 5) montre l'inverse.
 
-## 5. Ce que ça ne dit pas (et qu'il faut mesurer)
+## 5. La frontière à 2 048 jetons : c'est le DRAIN qui porte la qualité
 
-- **la pente en N est mesurée jusqu'à 2 048** (§ 4) : elle est **contre** la fenêtre au-delà de
-  512 jetons. Reste à savoir si un drain **proportionnellement plus grand** (256, 512 puits à
-  fenêtre 512) rachète le prix — c'est la mesure en cours ;
+La grille du § 4 plafonnait à 128 puits. Étendue jusqu'à **512 puits** (fenêtre 512 et 1 024),
+mêmes conditions (`--ctx 2048`, mêmes ids) :
+
+| fenêtre \ puits | 128 | 256 | 512 | clés / jeton | prix vs complet (10,3703) |
+|---|---|---|---|---|---|
+| **512** | 14,5531 | 12,6526 | **10,4046** | 1 024 | **+0,33 %** |
+| **1 024** | **10,3652** | 10,3930 | 10,3699 | 1 152 | **−0,05 %** |
+
+**Trois faits, et ils changent la conclusion :**
+
+1. **le drain doit grandir avec la séquence.** À fenêtre 512, passer de 128 à 512 puits fait
+   tomber la perplexité de **14,5531 à 10,4046** — c'est-à-dire de +40,3 % à **+0,33 %** ;
+2. **on peut donc diviser par deux les clés notées à qualité quasi intacte** : (512 fenêtre,
+   512 puits) = **1 024 clés sur 2 048** (+0,33 %) ; et (1 024, 128) = 1 152 clés pour **−0,05 %**
+   (à l'intérieur du bruit, mais pas pire) ;
+3. **le meilleur prix n'est pas la plus grande fenêtre** : à budget de clés voisin, (512, 512)
+   coûte moins cher que (1 024, 128) pour une qualité comparable — **le drain est le levier le
+   moins cher des deux**.
+
+**Ce que ça veut dire pour le moteur** : une attention « fenêtre + préfixe » (les `n` premiers
+jetons toujours notés) conserve la qualité à longue portée **à condition de garder un préfixe
+substantiel** — de l'ordre de la fenêtre, pas de quelques jetons. C'est le mécanisme des
+*attention sinks*, mais à l'échelle : quelques puits suffisent à drainer, il en faut beaucoup
+plus pour **porter l'information du début de séquence**.
+
+**Ce qui reste ouvert** : à **4 096 jetons**, la règle « préfixe ≈ fenêtre » tient-elle
+(mesure en cours) ? Et quel est le meilleur couple à budget de clés fixé — la question qui
+décide d'un réglage par défaut.
+
+## 6. Ce que ça ne dit pas (et qu'il faut mesurer)
+
+- **la pente en N est mesurée jusqu'à 2 048** (§ 4 et § 5) : le drain **rachète** le prix quand
+  il grandit avec la séquence. Reste **4 096 jetons** (mesure en cours) et la règle de
+  dimensionnement à budget de clés fixé ;
 - **le prix réel n'est pas dans le compteur de paires affiché** : à cette échelle il arrondit à
   `0,01 M`. Le prix est **analytique** (`fenêtre + puits` clés notées par jeton par couche),
   et c'est celui du tableau ;
@@ -94,7 +128,7 @@ coût par jeton** quand N grandit — mais alors le prix se paie en perplexité,
 - **un modèle à fenêtre déclarée** (`swa_pattern` > 1, comme gpt-oss : une couche sur deux en
   attention complète) n'a pas été mesuré dans cette carte.
 
-## 6. Protocole, pour rejouer
+## 7. Protocole, pour rejouer
 
 ```bash
 FENETRES="64 128 256" PUITS="0 32 64" tools/carte-fenetre-puits.sh 512

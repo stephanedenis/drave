@@ -30,7 +30,7 @@ possible (`ls journal/*_<thème>.md`).
 | jour | chiffres du jour |
 |---|---|
 | [2026-10-09](2026-10-09_attention.md) | `× 128` |
-| [2026-10-10](2026-10-10_attention.md) | `+40 %` · `512 jetons` · `+2,0 %` · `−6,7 %` · `−1,4 %` · `256 jetons` · `÷2,67` · `2048 jetons` |
+| [2026-10-10](2026-10-10_attention.md) | `+40 %` · `512 jetons` · `+2,0 %` · `−6,7 %` · `−1,4 %` · `256 jetons` · `÷2,67` · `2048 jetons` · `+0,33 %` · `10,4046` · `10,3703` |
 
 ### `memoire` — Mémoire épisodique, consolidation, greffe
 
