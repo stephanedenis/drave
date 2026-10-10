@@ -1,8 +1,13 @@
 # Note — la périphérie de C8 : entrées, sorties, réflexes
 
-> **2026-10-10 15:35 HAE.** Note de conception, pas un résultat : `docs/` porte les hypothèses et
-> les plans, les mesures vivent dans `reports/`. Ce qui est **déjà mesuré** est renvoyé aux fiches ;
-> ce qui reste à faire est écrit comme une **porte à tenir**, pas comme une intention.
+> **2026-10-10 15:35 HAE**, **mise à jour à 16:55 : la conception est IMPLÉMENTÉE** et mesurée —
+> `--entree signal:F`, `--entree-canal`, `--entree-gain`, `--entree-jeton`, `--delai`,
+> `--recurent`, `--sortie F`, avec la porte `tools/porte-peripherie.sh` (déterminisme, entrée
+> constante, délai exact, quatre refus, paires par décision). Le résultat est dans
+> [`reports/rapport-c8-peripherie.md`](../reports/rapport-c8-peripherie.md) : **le signal courant
+> est dans la sortie (R² 0,913 en récurrent), la mémoire du signal n'y est pas (R² −0,973)** —
+> la poursuite demande un entraînement, pas du câblage. Ce qui suit reste la conception
+> d'origine, conservée telle quelle ; les écarts avec ce qui a été livré sont notés au § 2.
 
 ## 1. Ce que le plan demande (et ce qui est déjà fait)
 
@@ -38,7 +43,8 @@ sortie scalaire par pas, et une tâche fermée de **poursuite de consigne**.
 | **encodage** | la valeur module **un canal du bus** (`--bus`) ou une **activation injectée** sur la première couche | les deux mécanismes existent déjà (C5 pour le bus, C2/C6 pour l'injection d'état) : rien à inventer |
 | **sortie** | `--sortie <fichier>` : la valeur prédite par le moteur à chaque pas (argmax ramené sur le signal, ou la norme de l'état de sortie) | l'effecteur du plan : « rien ne sort » aujourd'hui, c'est le manque à combler |
 | **délai** | `--delai N` : la sortie est écrite N pas après l'entrée | le plan le demande explicitement, et un délai est déjà un paramètre de lien (C3) |
-| **réflexe** | `--reflexe de:vers` : la sortie est produite par une **plage courte** (le chemin mesuré) au lieu du graphe complet | c'est exactement ce que les fiches C8 mesurent, et `--couches a:b --tete-partielle` le fait déjà |
+| **réflexe** | `--reflexe de:vers` : la sortie est produite par une **plage courte** (le chemin mesuré) au lieu du graphe complet | **livré autrement** : `--couches a:b --tete-partielle` dans la boucle de périphérie (mesuré : 119,3 M de paires par décision à 8 couches contre 357,8 M en complet). Un drapeau `--reflexe` séparé n'a pas été ajouté : il ferait doublon avec une option qui existe et qui est vérifiée |
+| **récurrence** | *(non prévu dans la conception)* `--recurent` : positions croissantes, historique dans le cache KV | sans lui, chaque pas est une **décision indépendante** et « poursuivre » n'a pas de sens — ajouté en cours de route, et c'est lui qui rend la mémoire du signal mesurable |
 
 ## 3. La porte à tenir (écrite AVANT le code)
 

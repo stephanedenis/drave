@@ -7,12 +7,12 @@
 | Début | 2026-10-08 09:11 |
 | Durée | 53.1 h |
 | Tours | 88 |
-| Messages | 2427 |
-| Appels d'outils | 2230 |
-| Fichiers touchés | 82 |
-| Commandes | 1941 |
+| Messages | 2434 |
+| Appels d'outils | 2237 |
+| Fichiers touchés | 84 |
+| Commandes | 1946 |
 | Sous-agents | 3 |
-| Commits | 216 |
+| Commits | 217 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -3586,7 +3586,7 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 
 ### Tour 88 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*388 appels d'outils.* Actions notables :
+*395 appels d'outils.* Actions notables :
 
 - bash — Add the refusal and verify
 - bash — Move the refusal to the single point and verify
@@ -3602,11 +3602,11 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - bash — Read v7 removal context and flag inventory
 - bash — Read flag inventory section in docs
 - bash — Establish whether section 9 predates the v7 removal
-- … et 361 autres
+- … et 368 autres
 
 **Synthèse produite :**
 
-⏵ La porte de la périphérie est verte ; je la nettoie, teste, et committe le moteur
+⏵ Tâche fermée mesurée : l'état porte le signal COURANT (R² 0,91) mais aucune mémoire lisible du passé — je consigne
 
 ## 3. Travail accompli
 
@@ -3696,6 +3696,8 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/note-peripherie-c8.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-c8-inter-langue.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-peripherie.sh` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/peripherie_poursuite.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-c8-peripherie.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -3745,7 +3747,7 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1901 autres
+- … et 1906 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4109,4 +4111,5 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - Note de conception : la PERIPHERIE de C8 (entrees, sorties, delais, reflexe) et ses quatre portes  La moitie « reflexe » de C8 est mesuree ; l'autre moitie du p
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' import pathlib p = pathlib.Path("docs/etat-cerveau.md"); s = p.read_text() old = """Le
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'MSG' C8 (peripherie) : une ENTREE (signal), une SORTIE (etat par pas),
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' import pathlib # la note de conception : la périphérie est IMPLÉMENTÉE, avec le renvoi
 

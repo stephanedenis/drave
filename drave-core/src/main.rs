@@ -871,7 +871,7 @@ struct Options {
     /// **Périphérie (C8)** : le flux d'entrée (`signal:F`), le canal où poser la valeur, le
     /// gain de l'injection, le délai en pas, et le fichier de sortie (réutilise `--sortie`).
     entree: Option<String>, entree_canal: usize, entree_gain: f32, delai: usize,
-    entree_jeton: usize,
+    entree_jeton: usize, recurent: bool,
     config: bool,
     /// Profilage des neurones « chauds » (idée de PowerInfer) et fichier de
     /// sortie du classement.
@@ -934,6 +934,7 @@ fn analyser(args: &[String]) -> Options {
         fusion_alpha: 1.0, fusion_pos: usize::MAX,
         auto: true, limit: usize::MAX,
         entree: None, entree_canal: usize::MAX, entree_gain: 1.0, delai: 0, entree_jeton: 0,
+        recurent: false,
         matrix: String::from("blk.0.ffn_gate.weight"),
         ..Default::default()
     };
@@ -1066,6 +1067,12 @@ fn analyser(args: &[String]) -> Options {
             "--entree-gain" => { o.entree_gain = suivant(i).parse().unwrap(); 2 }
             "--delai" => { o.delai = suivant(i).parse().unwrap(); 2 }
             "--entree-jeton" => { o.entree_jeton = suivant(i).parse().unwrap(); 2 }
+            // RÉCURRENT : la boucle avance les positions (0, 1, 2, …) au lieu de repartir à 0.
+            // Sans lui, chaque pas est une DÉCISION INDÉPENDANTE : l'état ne dépend que de la
+            // valeur injectée, et « poursuivre un signal » n'a pas de sens (le délai est alors
+            // fait par l'interface, pas par le modèle). Avec lui, l'historique est dans le cache
+            // KV, et la mémoire du signal devient une question mesurable.
+            "--recurent" => { o.recurent = true; 1 }
             "--matrix" => { o.matrix = suivant(i).clone(); 2 }
             "--logits-bin" => { o.logits_bin = Some(suivant(i).clone()); 2 }
             "--neurones-sortie" => { o.neurones_sortie = Some(suivant(i).clone()); 2 }
@@ -7136,6 +7143,12 @@ Un canal inexistant ne recevrait rien : refuser vaut mieux qu'écrire dans le vi
     }
     let bos = opt.entree_jeton as u32;
     let base = mdl.entree_du_jeton(bos);
+    if opt.recurent && valeurs.len() > mdl.ctx {
+        eprintln!("[peripherie] REFUS : {} pas en mode récurrent pour un contexte de {} — la \
+boucle avancerait au-delà du cache KV. Donner `--ctx {}` (ou plus).", valeurs.len(), mdl.ctx,
+                  valeurs.len());
+        return 2;
+    }
     let t0 = std::time::Instant::now();
     let mut octets: Vec<u8> = Vec::with_capacity(valeurs.len() * hidden * 4);
     let mut injectees: Vec<f32> = Vec::with_capacity(valeurs.len());
@@ -7144,7 +7157,10 @@ Un canal inexistant ne recevrait rien : refuser vaut mieux qu'écrire dans le vi
         let mut x = base.clone();
         x[canal] += opt.entree_gain * v;
         mdl.emb_imposee = Some(x);
-        let etat = mdl.forward(bos, 0);
+        // position : `t` en récurrent (l'historique reste dans le cache KV), 0 sinon (chaque pas
+        // est une décision indépendante).
+        let pos = if opt.recurent { t } else { 0 };
+        let etat = mdl.forward(bos, pos);
         for val in etat.iter() { octets.extend_from_slice(&val.to_le_bytes()); }
         injectees.push(v);
         eprintln!("[peripherie] pas {t} : entrée {v}");
@@ -7157,8 +7173,9 @@ Un canal inexistant ne recevrait rien : refuser vaut mieux qu'écrire dans le vi
     // qui se compare entre architectures, et elle est déjà instrumentée par le moteur.
     let paires: u64 = mdl.paires.iter().sum();
     let norme: f32 = injectees.iter().map(|v| v * v).sum::<f32>().sqrt();
-    println!("  périphérie        : {} pas · canal {canal} · gain {} · délai {} · sortie {sortie} \
-(états de {hidden} canaux)", valeurs.len(), opt.entree_gain, opt.delai);
+    println!("  périphérie        : {} pas · canal {canal} · gain {} · délai {} · {} · sortie \
+{sortie} (états de {hidden} canaux)", valeurs.len(), opt.entree_gain, opt.delai,
+             if opt.recurent { "RÉCURRENT" } else { "pas indépendants" });
     println!("  signal injecté    : {:.4} de norme L2 · {:.1} s", norme, t0.elapsed().as_secs_f64());
     println!("  paires par pas    : {:.1} M (la métrique du plan : poids × activation par décision)",
              paires as f64 / valeurs.len().max(1) as f64 / 1e6);

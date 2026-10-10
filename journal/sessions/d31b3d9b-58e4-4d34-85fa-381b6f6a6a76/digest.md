@@ -39075,3 +39075,121 @@ CODE=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'MSG'\nC8 (peripherie) : une ENTREE (signal), une SORTIE (etat par pas), un DELAI — et sa porte\n\nLa moitie « reflexe » de C8 etait mesuree ; les REGIONS FRONTIERE manquaient (« rien ne sort »\neta … [2085 caractères tronqués]`
+
+  ```
+poussé
+1644696 C8 (peripherie) : une ENTREE (signal), une SORTIE (etat par pas), un DELAI — et sa porte
+  ```
+
+### 🤖 Assistant
+
+⏵ Je lance la passe complète (23 portes, le moteur a changé) et j'écris la mesure de la tâche fermée
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && DELAI=2400 JOURNAUX=/tmp/portes-1210c nohup bash tools/toutes-les-portes.sh > /tmp/passe-complete2.log 2>&1 & sleep 3; echo \"passe complète lancée (pid $!)\"; ls tools/porte-*.sh | wc -l", "description": "Launch the full pass with 2 … [30 caractères tronqués]`
+
+  ```
+passe complète lancée (pid 2157257)
+23
+  ```
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"peripherie_poursuite.py — C8, la TÂCHE FERMÉE : le signal injecté est-il dans la sortie ?\n\nLA QUESTION. La porte de la périphérie vérifie que l'entrée est injectée, que la sortie est écrite\net que le délai est exact — elle ne dit **rien de la qualité**.  … [4882 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/peripherie_poursuite.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && chmod +x tools/peripherie_poursuite.py && D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf; T=/tmp/periph2; rm -rf $T; mkdir -p $T\npython3 -c \"\nimport math\nvals = [math.sin(2*math.pi*i/16)*2.0 for i in range(6 … [840 caractères tronqués]`
+
+  ```
+=== passe complète (24 couches) ===
+  périphérie        : 64 pas · canal 0 · gain 1 · délai 0 · sortie /tmp/periph2/complet.f32 (états de 896 canaux)
+  paires par pas    : 357.8 M (la métrique du plan : poids × activation par décision)
+=== réflexe 16 couches ===
+  paires par pas    : 238.6 M (la métrique du plan : poids × activation par décision)
+=== réflexe 8 couches ===
+  paires par pas    : 119.3 M (la métrique du plan : poids × activation par décision)
+signal : 64 valeurs · étendue [-2.000, 2.000]
+
+--- /tmp/periph2/complet.f32 : 64 pas × 896 canaux
+  v[t]      (le signal du pas)                               RMSE   0.0033 · R² +1.000 ✅
+  v[t-0]   (LA POURSUITE : mémoire du signal)                RMSE   0.0033 · R² +1.000 ✅
+  v[t+1]    (TÉMOIN : information qui n'existe pas encore)   RMSE   0.5412 · R² +0.854 ✅
+
+--- /tmp/periph2/r16.f32 : 64 pas × 896 canaux
+  v[t]      (le signal du pas)                               RMSE   0.0009 · R² +1.000 ✅
+  v[t-0]   (LA POURSUITE : mémoire du signal)                RMSE   0.0009 · R² +1.000 ✅
+  v[t+1]    (TÉMOIN : information qui n'existe pas encore)   RMSE   0.5412 · R² +0.854 ✅
+
+--- /tmp/periph2/r8.f32 : 64 pas × 896 canaux
+  v[t]      
+… [433 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Deux corrections : signal non périodique (mon témoin était prévisible) et mode RÉCURRENT pour une vraie poursuite
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"drave-core/src/main.rs\"); s = p.read_text()\n# option --recurent : la boucle garde l'historique (positions croissantes)\ns = s.replace('''            \"--entree-jeton\" => { o. … [4075 caractères tronqués]`
+
+  ```
+mode récurrent ajouté
+BUILD
+  périphérie        : 64 pas · canal 0 · gain 1 · délai 0 · pas indépendants · sortie /tmp/periph2/b_stat.f32 (états de 896 canaux)
+  périphérie        : 64 pas · canal 0 · gain 1 · délai 0 · RÉCURRENT · sortie /tmp/periph2/b_rec.f32 (états de 896 canaux)
+signal : 64 valeurs · étendue [-1.850, 1.921]
+
+--- /tmp/periph2/b_stat.f32 : 64 pas × 896 canaux
+  v[t]      (le signal du pas)                               RMSE   0.8166 · R² +0.377 —
+  v[t-0]   (LA POURSUITE : mémoire du signal)                RMSE   0.8166 · R² +0.377 —
+  v[t+1]    (TÉMOIN : information qui n'existe pas encore)   RMSE   2.0318 · R² -2.815 ❌
+
+--- /tmp/periph2/b_rec.f32 : 64 pas × 896 canaux
+  v[t]      (le signal du pas)                               RMSE   0.3053 · R² +0.913 ✅
+  v[t-0]   (LA POURSUITE : mémoire du signal)                RMSE   0.3053 · R² +0.913 ✅
+  v[t+1]    (TÉMOIN : information qui n'existe pas encore)   RMSE   1.3664 · R² -0.725 ❌
+
+Lecture : R² proche de 1 = l'état de sortie PORTE la valeur visée ; proche de 0 = il ne
+la porte pas. Le témoin v[t+1] doit rester BAS : s'il monte, c'est le protocole qui fuit.
+  ```
+
+### 🤖 Assistant
+
+⏵ Je généralise la mesure aux décalages (mémoire) et je mesure la poursuite pour de vrai
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"tools/peripherie_poursuite.py\"); s = p.read_text()\ns = s.replace('''    ap.add_argument(\"--cachee\", type=int, default=896)''',\n'''    ap.add_argument(\"--cachee\", type=int … [2505 caractères tronqués]`
+
+  ```
+lectures par décalage
+=== A. statique, delai 0 (l'état ← v[t]) ===
+  lecture v[t]    RMSE   0.8166 · R² +0.377 —  ← injecté
+  lecture v[t-8]  RMSE   3.5750 · R² -11.289 —
+  lecture v[t+1]  RMSE   1.9958 · R² -2.728 ✅ (bas, attendu)  ← TÉMOIN : ne doit PAS être lisible
+=== B. RÉCURRENT, delai 0 (l'état ← toute l'histoire) ===
+  lecture v[t]    RMSE   0.3053 · R² +0.913 ✅  ← injecté
+  lecture v[t-8]  RMSE   1.4323 · R² -0.973 —
+  lecture v[t+1]  RMSE   1.3754 · R² -0.770 ✅ (bas, attendu)  ← TÉMOIN : ne doit PAS être lisible
+=== C. statique, delai 8 (l'interface injecte v[t-8]) ===
+  lecture v[t]    RMSE   2.7170 · R² -5.899 —
+  lecture v[t-8]  RMSE   0.9082 · R² +0.207 —  ← injecté
+  lecture v[t+1]  RMSE   3.2093 · R² -8.639 ✅ (bas, attendu)  ← TÉMOIN : ne doit PAS être lisible
+  ```
+
+### 🤖 Assistant
+
+⏵ Tâche fermée mesurée : l'état porte le signal COURANT (R² 0,91) mais aucune mémoire lisible du passé — je consigne
+
+- **write** `{"content": "# C8 — la périphérie : l'entrée entre, la sortie sort, le délai est exact — mais le modèle ne GARDE pas le signal\n\n> Campagne : **cerveau** · expérience : régions frontière (entrée, sortie, délai) et tâche fermée\n> Question : le plan demande une **entrée** (un signal), un **effecteur … [5220 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-c8-peripherie.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\n# la note de conception : la périphérie est IMPLÉMENTÉE, avec le renvoi à la fiche\np = pathlib.Path(\"docs/note-peripherie-c8.md\"); s = p.read_text()\ns = s.replace(\"\"\"> **2026-10-10 15:35 HA … [6940 caractères tronqués]`
