@@ -871,7 +871,7 @@ struct Options {
     /// **Périphérie (C8)** : le flux d'entrée (`signal:F`), le canal où poser la valeur, le
     /// gain de l'injection, le délai en pas, et le fichier de sortie (réutilise `--sortie`).
     entree: Option<String>, entree_canal: usize, entree_gain: f32, delai: usize,
-    entree_jeton: usize, recurent: bool,
+    entree_jeton: usize, recurent: bool, entree_memoire: usize,
     config: bool,
     /// Profilage des neurones « chauds » (idée de PowerInfer) et fichier de
     /// sortie du classement.
@@ -934,7 +934,7 @@ fn analyser(args: &[String]) -> Options {
         fusion_alpha: 1.0, fusion_pos: usize::MAX,
         auto: true, limit: usize::MAX,
         entree: None, entree_canal: usize::MAX, entree_gain: 1.0, delai: 0, entree_jeton: 0,
-        recurent: false,
+        recurent: false, entree_memoire: 0,
         matrix: String::from("blk.0.ffn_gate.weight"),
         ..Default::default()
     };
@@ -1073,6 +1073,10 @@ fn analyser(args: &[String]) -> Options {
             // fait par l'interface, pas par le modèle). Avec lui, l'historique est dans le cache
             // KV, et la mémoire du signal devient une question mesurable.
             "--recurent" => { o.recurent = true; 1 }
+            // TAMPON explicite : les K derniers valeurs sont injectées sur les canaux suivants.
+            // C'est la STRUCTURE dont la fiche `rapport-c8-peripherie.md` § 2 ter montre l'absence :
+            // une récurrence qui fuit ne retient pas (R² 0,104), un tampon retient exactement.
+            "--entree-memoire" => { o.entree_memoire = suivant(i).parse().unwrap(); 2 }
             "--matrix" => { o.matrix = suivant(i).clone(); 2 }
             "--logits-bin" => { o.logits_bin = Some(suivant(i).clone()); 2 }
             "--neurones-sortie" => { o.neurones_sortie = Some(suivant(i).clone()); 2 }
@@ -7156,6 +7160,16 @@ boucle avancerait au-delà du cache KV. Donner `--ctx {}` (ou plus).", valeurs.l
         let v = if t >= opt.delai { valeurs[t - opt.delai] } else { 0.0 };
         let mut x = base.clone();
         x[canal] += opt.entree_gain * v;
+        // LE TAMPON : les K valeurs précédentes sur les canaux suivants. Sans lui, le passé
+        // n'existe nulle part dans l'entrée ; avec lui, il y est PAR CONSTRUCTION — et c'est la
+        // différence entre « le modèle ne retient pas » et « on lui donne de quoi retenir ».
+        for k in 1..=opt.entree_memoire {
+            if canal + k >= hidden {
+                eprintln!("[peripherie] REFUS : le tampon de {} pas déborde du modèle (canal {} + {} ≥ {hidden}). Choisir un canal plus bas.", opt.entree_memoire, canal, opt.entree_memoire);
+                return 2;
+            }
+            if t >= k { x[canal + k] += opt.entree_gain * valeurs[t - k]; }
+        }
         mdl.emb_imposee = Some(x);
         // position : `t` en récurrent (l'historique reste dans le cache KV), 0 sinon (chaque pas
         // est une décision indépendante).
@@ -7177,6 +7191,10 @@ boucle avancerait au-delà du cache KV. Donner `--ctx {}` (ou plus).", valeurs.l
 {sortie} (états de {hidden} canaux)", valeurs.len(), opt.entree_gain, opt.delai,
              if opt.recurent { "RÉCURRENT" } else { "pas indépendants" });
     println!("  signal injecté    : {:.4} de norme L2 · {:.1} s", norme, t0.elapsed().as_secs_f64());
+    if opt.entree_memoire > 0 {
+        println!("  tampon d'entrée   : {} pas (canaux {}..{})", opt.entree_memoire, canal + 1,
+                 canal + opt.entree_memoire);
+    }
     println!("  paires par pas    : {:.1} M (la métrique du plan : poids × activation par décision)",
              paires as f64 / valeurs.len().max(1) as f64 / 1e6);
     println!("  dont attention    : {:.1} M · FFN/experts {:.1} M", 

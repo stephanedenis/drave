@@ -29,8 +29,12 @@ printf '0.0\n1.0\n2.0\n3.0\n# ceci est un commentaire\n\n2.0\n1.0\n0.0\n' > "$T/
 
 # stdout au silence : la porte ne garde que ce qu'elle vérifie (les lignes de configuration du
 # moteur noyaient les cinq sections) ; stderr va dans le journal, où les valeurs injectées se lisent.
+# stdout DANS UN FICHIER (et non /dev/null) : le résumé de la périphérie — dont l'annonce du
+# tampon — sort sur stdout, tandis que les valeurs injectées sortent sur stderr. Les deux sont
+# donc gardés, et chaque section lit celui qu'elle vérifie (premier essai : l'annonce cherchée
+# dans stderr, donc introuvable).
 run () { $D "$M" --entree "signal:$T/signal.txt" --sortie "$1" --ctx 8 --threads 8 "${@:2}" \
-         > /dev/null 2> "$T/err.txt"; }
+         > "$T/out.txt" 2> "$T/err.txt"; }
 
 echo "=== 1. deux exécutions identiques ⇒ sortie identique AU BIT PRÈS ==="
 run "$T/a.f32"; ca=$?
@@ -91,6 +95,16 @@ refus "type d'entrée inconnu (image:)"    --entree "image:$T/signal.txt" --sort
 refus "sortie absente"                    --entree "signal:$T/signal.txt"
 refus "canal hors du modèle"              --entree "signal:$T/signal.txt" --sortie "$T/x.f32" --entree-canal 99999
 refus "jeton hors vocabulaire"            --entree "signal:$T/signal.txt" --sortie "$T/x.f32" --entree-jeton 999999999
+
+echo "=== 4 bis. le TAMPON d'entrée : il change la sortie, et il refuse de déborder ==="
+run "$T/m8.f32" --entree-memoire 8
+grep -q "tampon d'entrée   : 8 pas" "$T/out.txt" || { echo "  ❌ le tampon n'est pas annoncé"; exit 1; }
+cmp -s "$T/a.f32" "$T/m8.f32" && { echo "  ❌ --entree-memoire ne change pas la sortie"; exit 1; }
+$D "$M" --entree "signal:$T/signal.txt" --sortie "$T/x.f32" --ctx 8 --threads 8 \
+   --entree-canal 895 --entree-memoire 8 > "$T/refus.log" 2>&1
+[ "$?" = 2 ] || { echo "  ❌ un tampon qui déborde du modèle devrait être refusé (code 2)"; exit 1; }
+grep -q "REFUS" "$T/refus.log" || { echo "  ❌ débordement refusé sans le dire"; exit 1; }
+echo "  ✅ le tampon change la sortie et refuse de déborder (canal 895 + 8 pas > 896)"
 
 echo "=== 5. la métrique du plan : paires par DÉCISION, et le réflexe en coûte moins ==="
 # UNE exécution par mesure, et on ne garde QUE la ligne de métrique : le premier essai

@@ -39455,3 +39455,98 @@ appareil : cuda
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"reports/rapport-c8-peripherie.md\"); s = p.read_text()\nancre = \"## 3. Ce que ça change pour C8\"\nsec = \"\"\"## 2 ter. Est-ce la tâche qui est dure, ou le modèle qui n'a pas  … [5246 caractères tronqués]`
+
+  ```
+§ références ajouté
+état mis à jour
+récit complété
+poussé
+3dfe715 C8 : la poursuite demande une STRUCTURE, pas un parametre — deux references le tranchent
+  ```
+
+### 🤖 Assistant
+
+⏵ Je ferme la boucle : j'ajoute un TAMPON explicite à la périphérie et je mesure la poursuite AVEC mémoire
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"drave-core/src/main.rs\"); s = p.read_text()\ns = s.replace('''            \"--recurent\" => { o.recurent = true; 1 }''',\n'''            \"--recurent\" => { o.recurent = true;  … [3107 caractères tronqués]`
+
+  ```
+tampon ajouté
+BUILD
+  périphérie        : 4096 pas · canal 0 · gain 1 · délai 0 · pas indépendants · sortie /tmp/periph3/tampon.f32 (états de 896 canaux)
+  tampon d'entrée   : 8 pas (canaux 1..8)
+--- /tmp/periph3/rec.f32 : 4096 pas × 896 canaux
+  lecture v[t]    RMSE   0.1542 · R² +0.982 ✅  ← injecté
+  lecture v[t-8]  RMSE   1.4749 · R² -0.611 —
+  lecture v[t+1]  RMSE   1.9097 · R² -1.704 ✅ (bas, attendu)  ← TÉMOIN : ne doit PAS être lisible
+--- /tmp/periph3/tampon.f32 : 4096 pas × 896 canaux
+  lecture v[t]    RMSE   2.0116 · R² -2.000 —  ← injecté
+  lecture v[t-8]  RMSE   2.5576 · R² -3.845 —
+  lecture v[t+1]  RMSE   2.3934 · R² -3.247 ✅ (bas, attendu)  ← TÉMOIN : ne doit PAS être lisible
+  ```
+
+### 🤖 Assistant
+
+⏵ Le tampon à l'entrée ne suffit pas (le modèle ne recopie pas son entrée) — je vérifie avec la récurrence et je conclus
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && T=/tmp/periph3; python3 -c \"\nimport random; random.seed(13)\nopen('$T/b256.txt','w').write('\\n'.join(f'{random.uniform(-2,2):.4f}' for _ in range(256)))\"\nfor opt in \"--recurent --ctx 256\" \"--recurent --ctx 256 --entree-memoir … [442 caractères tronqués]`
+
+  ```
+--- --recurent --ctx 256
+  lecture v[t]    RMSE   0.1658 · R² +0.980 ✅  ← injecté
+  lecture v[t-8]  RMSE   1.3942 · R² -0.399 —
+  lecture v[t+1]  RMSE   1.6380 · R² -0.909 ✅ (bas, attendu)  ← TÉMOIN : ne doit PAS être lisible
+--- --recurent --ctx 256 --entree-memoire 8
+  lecture v[t]    RMSE   0.4561 · R² +0.852 ✅  ← injecté
+  lecture v[t-8]  RMSE   0.9984 · R² +0.283 —
+  lecture v[t+1]  RMSE   1.5502 · R² -0.710 ✅ (bas, attendu)  ← TÉMOIN : ne doit PAS être lisible
+  ```
+
+### 🤖 Assistant
+
+⏵ Nuance mesurée : avec récurrence + tampon, le passé devient PARTIELLEMENT lisible (R² 0,283 contre −0,399)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\n# la porte doit couvrir le tampon : il change la sortie, et un débordement refuse\np = pathlib.Path(\"tools/porte-peripherie.sh\"); s = p.read_text()\nold = '''echo \"=== 5. la métrique du plan''' … [1220 caractères tronqués]`
+
+  ```
+porte étendue au tampon
+=== 1. deux exécutions identiques ⇒ sortie identique AU BIT PRÈS ===
+  ✅ identiques au bit près · 7 pas · 25088 octets
+=== 2. entrée CONSTANTE ⇒ sortie CONSTANTE (gain nul : même état à tous les pas) ===
+  ✅ 7 pas identiques : entrée constante ⇒ sortie constante
+=== 3. le DÉLAI décale les valeurs injectées d'exactement N pas ===
+  ✅ les 7 pas sont décalés de 3, valeurs vérifiées une à une
+  ✅ et le délai change bien la sortie
+=== 4. les refus sont explicites (code 2) ===
+  ✅ type d'entrée inconnu (image:)
+  ✅ sortie absente
+  ✅ canal hors du modèle
+  ✅ jeton hors vocabulaire
+=== 4 bis. le TAMPON d'entrée : il change la sortie, et il refuse de déborder ===
+  ❌ le tampon n'est pas annoncé
+CODE=1
+  ```
+
+### 🤖 Assistant
+
+⏵ La porte cherche l'annonce du tampon dans stderr alors qu'elle sort sur stdout — je corrige
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"tools/porte-peripherie.sh\"); s = p.read_text()\ns = s.replace('''run () { $D \"$M\" --entree \"signal:$T/signal.txt\" --sortie \"$1\" --ctx 8 --threads 8 \"${@:2}\" \\\\\n      … [1059 caractères tronqués]`
+
+  ```
+corrigé
+  ✅ identiques au bit près · 7 pas · 25088 octets
+  ✅ 7 pas identiques : entrée constante ⇒ sortie constante
+  ✅ les 7 pas sont décalés de 3, valeurs vérifiées une à une
+  ✅ et le délai change bien la sortie
+  ✅ type d'entrée inconnu (image:)
+  ✅ sortie absente
+  ✅ canal hors du modèle
+  ✅ jeton hors vocabulaire
+  ✅ le tampon change la sortie et refuse de déborder (canal 895 + 8 pas > 896)
+  ✅ le réflexe coûte 67 % de moins par décision (119.3 M contre 357.8 M)
+PORTE TENUE : l'entrée est injectée, la sortie est écrite, le délai est exact, les refus sont
+CODE=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"reports/rapport-c8-peripherie.md\"); s = p.read_text()\nancre = \"## 3. Ce que ça change pour C8\"\nsec = \"\"\"## 2 quater. Donner le passé en entrée : il devient PARTIELLEMENT … [5458 caractères tronqués]`

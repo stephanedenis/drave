@@ -18,7 +18,7 @@
 
 ## Sessions actives ce jour
 
-- `d31b3d9b` — Où en est-on (début 2026-10-08 09:11, 54.6 h) → [rapport](sessions/d31b3d9b/rapport.md) · [digest](sessions/d31b3d9b/digest.md)
+- `d31b3d9b` — Où en est-on (début 2026-10-08 09:11, 54.7 h) → [rapport](sessions/d31b3d9b/rapport.md) · [digest](sessions/d31b3d9b/digest.md)
 
 <!-- notes -->
 

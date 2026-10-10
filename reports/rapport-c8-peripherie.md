@@ -104,6 +104,30 @@ Question légitime après le § 2 bis : si aucune lecture ne retrouve `v[t−8]`
 réflexe), voici « il faut une **structure** de mémoire » (la poursuite). Les deux fois, le câblage
 n'était pas le manque.
 
+## 2 quater. Donner le passé en entrée : il devient PARTIELLEMENT lisible (0,283)
+
+Si le passé n'est pas dans l'état, une idée évidente est de le **remettre en entrée** : le signal
+devient un vecteur — la valeur courante plus les `K` précédentes sur les canaux suivants
+(`--entree-memoire K`, vérifié par la porte). Mesure sur 256 pas, lecture de `v[t−8]` :
+
+| configuration | lecture `v[t]` | lecture `v[t−8]` |
+|---|---|---|
+| récurrent seul | R² +0,980 | R² **−0,399** |
+| **récurrent + tampon de 8 pas** | R² +0,852 | R² **+0,283** |
+
+**Le tampon change le signe du résultat** : le passé devient **partiellement** lisible (28 % de la
+variance), là où il ne l'était pas du tout. Mais **28 %, ce n'est pas une mémoire** : le réseau
+transforme ce qu'on lui donne, et une partie de l'information se perd dans la transformation.
+
+Et un détail qui compte : en mode **pas indépendants**, le même tampon rend les choses **pires**
+(R² −3,8) — injecter neuf canaux de bruit dans une entrée que le réseau ne replace dans aucun
+contexte produit un état que rien ne lit. La récurrence est ce qui donne un contexte à ce tampon.
+
+**Conclusion de la ligne** : une mémoire exacte demande une **structure qui ne passe pas par la
+transformation du réseau** — une ligne à retard lue directement (R² 1,000, § 2 ter). C'est un choix
+d'architecture, et il est maintenant chiffré dans les trois sens : sans structure, rien (−0,4) ;
+avec un tampon remis en entrée, partiel (0,283) ; avec une ligne à retard, exact (1,000).
+
 ## 3. Ce que ça change pour C8
 
 **Acquis** : les **régions frontière existent** (le plan disait « rien ne sort » — c'était vrai) ;
