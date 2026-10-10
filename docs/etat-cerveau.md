@@ -1,6 +1,6 @@
 # État du cerveau Drave — capacités, expériences, prochaine action
 
-> **2026-10-10 11:05 HAE** (EDT, UTC−4 — lire `date`, jamais une horloge supposée : voir
+> **2026-10-10 15:56 HAE** (EDT, UTC−4 — lire `date`, jamais une horloge supposée : voir
 > `docs/organisation-du-depot.md` § 4). Ce fichier est **l'état**, par rapport aux roadmaps :
 > ce qui est fait, avec le chiffre qui le prouve, et ce qui reste. Il ne raconte pas les rounds
 > (c'est `journal/`) et ne porte pas les mesures en détail (ce sont les fiches

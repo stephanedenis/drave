@@ -51,7 +51,7 @@ l'instrument qui manquait ; c'est elle qui a produit ce rapport.
 **Total : 4 255 s (70 min)**, dominé par trois portes lourdes (`porte-melange` 984 s,
 `porte-greffe` 971 s, `porte-indice` 971 s).
 
-## 2 bis. La passe du 17 h 55 (23 portes, 58 minutes) — après les changements du moteur
+## 2 bis. La passe du 15 h 15 (23 portes, 58 minutes) — après les changements du moteur
 
 C'est la passe qui suit l'ajout de la **périphérie** (C8 : `--entree`, `--sortie`, `--delai`,
 `--recurent`) et la correction de `porte-reflexe.sh`. Elle est verte **entièrement**, ce qui est

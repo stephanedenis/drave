@@ -7,12 +7,12 @@
 | Début | 2026-10-08 09:11 |
 | Durée | 54.7 h |
 | Tours | 88 |
-| Messages | 2462 |
-| Appels d'outils | 2265 |
+| Messages | 2464 |
+| Appels d'outils | 2267 |
 | Fichiers touchés | 85 |
-| Commandes | 1972 |
+| Commandes | 1974 |
 | Sous-agents | 3 |
-| Commits | 223 |
+| Commits | 224 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -3586,7 +3586,7 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 
 ### Tour 88 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*423 appels d'outils.* Actions notables :
+*425 appels d'outils.* Actions notables :
 
 - bash — Add the refusal and verify
 - bash — Move the refusal to the single point and verify
@@ -3602,7 +3602,7 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - bash — Read v7 removal context and flag inventory
 - bash — Read flag inventory section in docs
 - bash — Establish whether section 9 predates the v7 removal
-- … et 395 autres
+- … et 397 autres
 
 **Synthèse produite :**
 
@@ -3748,7 +3748,7 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1932 autres
+- … et 1934 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4119,4 +4119,5 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' import pathlib p = pathlib.Path("reports/rapport-c8-peripherie.md"); s = p.read_text()
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' import pathlib p = pathlib.Path("reports/rapport-c8-peripherie.md"); s = p.read_text()
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' import pathlib, re  # 1) les fiches : « Date réelle » = l'heure du COMMIT qui les a éc
+- Horodatage : les deux dernieres estampilles en avance (etat, fiche de passe) corrigees sur l'heure lue" && git push -q origin master && echo poussé
 

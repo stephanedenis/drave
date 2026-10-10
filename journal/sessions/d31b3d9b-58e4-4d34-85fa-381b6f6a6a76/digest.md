@@ -39644,3 +39644,32 @@ elle s'écrit « date inconnue » — jamais une date plausible.
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib, re\n\n# 1) les fiches : « Date réelle » = l'heure du COMMIT qui les a écrites (git)\ncorrections = {\n    \"reports/rapport-c8-sonde-profondeur.md\": [\n        (\"> Date réelle : **2026-10-10 11: … [6693 caractères tronqués]`
+
+  ```
+reports/rapport-c8-sonde-profondeur.md : 1 correction(s)
+reports/rapport-c8-tete-entrainee.md : 1 correction(s)
+reports/rapport-c8-generalisation.md : 1 correction(s)
+reports/rapport-c8-transfert-corpus.md : 1 correction(s)
+reports/rapport-c8-inter-langue.md : 1 correction(s)
+reports/rapport-c8-peripherie.md : 1 correction(s)
+  ⚠ motif absent dans reports/rapport-passe-complete-portes.md : > **{total // 60} minutes** après l'ajout
+reports/rapport-passe-complete-portes.md : 1 correction(s)
+docs/note-peripherie-c8.md : 1 correction(s)
+  ⚠ motif absent dans docs/etat-cerveau.md : > **2026-10-10 10:40 HAE**
+docs/etat-cerveau.md : 0 correction(s)
+journal : 14 plages corrigées + la rechute consignée
+règle renforcée
+1
+poussé
+5c44644 Horodatage : je corrige MA propre rechute — les heures etaient estimees, pas lues (jusqu a 3 h 06 d avance)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -8 docs/etat-cerveau.md | grep -n \"2026\"; grep -n \"minutes\" reports/rapport-passe-complete-portes.md | head -4", "description": "Check remaining timestamps"}`
+
+  ```
+3:> **2026-10-10 11:05 HAE** (EDT, UTC−4 — lire `date`, jamais une horloge supposée : voir
+6:> **58 minutes** après l'ajout de `porte-peripherie.sh` et des changements du moteur
+54:## 2 bis. La passe du 17 h 55 (23 portes, 58 minutes) — après les changements du moteur
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; python3 - <<'PYEOF'\nimport pathlib, subprocess\nheure = subprocess.run([\"date\", \"+%H:%M\"], capture_output=True, text=True).stdout.strip()\np = pathlib.Path(\"docs/etat-cerveau.md\"); s = p.read_text()\ns = s.repla … [895 caractères tronqués]`
