@@ -4022,6 +4022,28 @@ portent pas la même empreinte. C'est exactement ce que cette fusion existe pour
     std::process::exit(0);
 }
 
+/// C11 : la PANNE d'un lien, nommée. Ce que la politique déclarée décide, et ce
+/// qu'elle ne décide PAS.
+///
+/// POURQUOI « best-effort » N'EST PAS « SAUTER LA RÉGION ». Le plan prévoyait de sauter
+/// une région perdue et d'annoncer l'écart. Mais un modèle dont on saute douze couches ne
+/// calcule pas une version approchée du même résultat : il calcule un AUTRE modèle, et
+/// l'« écart » annoncé serait un écart entre deux choses différentes. La seule conduite
+/// honnête est donc de S'ARRÊTER en disant tout : quel lien, quel pas, combien d'octets
+/// avaient passé, et qu'aucun résultat ne sera rendu. C'est la même règle que C4 (borne de
+/// pas), C9 (pont) et C10 (budget) — s'arrêter et le dire.
+///
+/// Le code de sortie est DISTINCT (7) : un script doit pouvoir distinguer « le pair est
+/// mort » de « la borne de pas » (5) et de « le budget est dépassé » (6).
+fn panne_de_lien(region: &str, pas: u64, octets: u64, quoi: &str) -> ! {
+    eprintln!("[pannes] PANNE sur le lien local → {region} : {quoi}. L'exécution s'arrête au \
+pas {pas} ({octets} octets échangés jusque-là). AUCUNE perplexité n'est rendue : elle \
+porterait sur un modèle incomplet — un graphe amputé d'une région n'est pas une version \
+approchée du même calcul, c'est un autre calcul. Politique déclarée : requis (défaut) ; \
+voir docs/plan-cerveau-complet.md §3.2.");
+    std::process::exit(7);
+}
+
 /// C9/C10 : le PONT à fibres limitées.
 ///
 /// POURQUOI CE N'EST PAS QU'UN RÉGLAGE DE DÉBIT. Un lien entre deux régions — entre
@@ -4306,7 +4328,19 @@ y est le découpage entre nœuds (voir `--couches-locales`), pas un `--couches a
     println!("  référence locale  : perplexité {ppl_ref:.4}  ({:.1} s)", t0.elapsed().as_secs_f64());
 
     // 2. la même chose, coupée en deux nœuds
-    let mut sock = std::net::TcpStream::connect(pair).expect("connexion au nœud moteur");
+    // C11 : un pair ABSENT est une PANNE, pas une panique. Le pilote avait déjà calculé
+    // sa référence locale (10 s sur 256 jetons) avant d'essayer de se connecter : un
+    // `expect` ici faisait tomber le processus sur un code 134 illisible, alors que la
+    // conduite utile est de nommer le lien et de ne rien rendre.
+    let mut sock = match std::net::TcpStream::connect(pair) {
+        Ok(s) => s,
+        Err(e) => {
+            eprintln!("[pannes] PANNE : le pair local → {pair} est INJOIGNABLE ({e}). Aucune \
+perplexité n'est rendue — un graphe amputé d'une région n'est pas une version approchée du \
+même calcul. Vérifiez que le nœud écoute (--flux-serveur {pair}).");
+            std::process::exit(7);
+        }
+    };
     sock.set_nodelay(true).expect("TCP_NODELAY");   // cf. le nœud moteur : Nagle coûte 6×
     mdl.couche_fin = couches_locales;
     let mut octets_envoyes = 0u64;
@@ -4470,9 +4504,9 @@ L'exécution s'arrête ICI — aucune perplexité n'est rendue, parce qu'elle po
         let (o, a) = envoyer_flux(&mut sock, debut_pair as u32, fin_pair as u32,
                                   pos as u32, &etat, mode, Some(&mdl))
                         .unwrap_or_else(|e| {
-                            eprintln!("[flux] le nœud moteur a fermé la connexion pendant \
-l'envoi du flux ({e}) — il a dit pourquoi de son côté.");
-                            std::process::exit(1);
+                            let _ = e;
+                            panne_de_lien(&pair_region, pas_servis, octets_envoyes,
+                                          "le pair a fermé pendant l'envoi du flux");
                         });
         if let Some(b) = budget_octets {
             if o as u64 > b {
@@ -4489,9 +4523,10 @@ déclaré.");
         let rep = match recevoir_flux(&mut sock, mdl.cfg.hidden, hc_pilote) {
             Ok(r) => r,
             Err(e) => {
-                eprintln!("[flux] le nœud moteur a fermé la connexion ({e}) — version du \
-protocole, réglages, ou contexte : il a dit pourquoi de son côté.");
-                std::process::exit(1);
+                let _ = e;
+                panne_de_lien(&pair_region, pas_servis, octets_envoyes,
+                              "le pair a fermé avant de rendre son état (version du \
+protocole, réglages ou contexte — il a dit pourquoi de son côté)");
             }
         };
         // Ce que coûte le découpage : le calcul local, et l'attente du pair

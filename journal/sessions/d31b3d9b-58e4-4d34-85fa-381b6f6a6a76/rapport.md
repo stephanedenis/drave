@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 44.6 h |
-| Tours | 50 |
-| Messages | 1763 |
-| Appels d'outils | 1661 |
+| Durée | 44.7 h |
+| Tours | 51 |
+| Messages | 1774 |
+| Appels d'outils | 1670 |
 | Fichiers touchés | 61 |
-| Commandes | 1411 |
+| Commandes | 1420 |
 | Sous-agents | 3 |
-| Commits | 140 |
+| Commits | 141 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -135,6 +135,8 @@
 **Tour 49** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1469 caractères tronqués]
 
 **Tour 50** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1469 caractères tronqués]
+
+**Tour 51** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1469 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -2306,7 +2308,43 @@ Le round 5 avait identifié le mécanisme (la clé est un **k-WTA** → elle sau
 
 **Synthèse produite :**
 
-⏵ C10 : porte 3/3 verte — budget déclaré, dépassement nommé, code 6, aucun résultat partiel
+⏵ Round 7 livré : C10 fermé — budget par lien, vérifié sur ce qui passe
+
+**Ce round** — 1 commit poussé, 122 tests verts, `porte-budget.sh` verte (3 cas).
+
+Le plan assignait à **C10** des budgets par lien « vérifiés au démarrage » ; **la mesure a corrigé le plan** : la taille d'un flux n'est pas une propriété du mode, elle dépend de l'**activité** réelle — 1 951 octets/pas en listes par blocs à 97,7 %, **1 096 à 50 %** (§31). Un contrôle au démarrage ne pourrait comparer qu'à une valeur nominale inventée.
+
+Le budget est donc déclaré dans la topologie (`"budget_octets": N`) et **comparé à ce qui passe**, au pas où il passe :
+
+| cas | mesure |
+|---|---|
+| aucun budget (défaut) | 111,9225 · 1 951 octets/pas · code 0 |
+| budget **généreux** (2 451) | **111,9225 — identique** · code 0 |
+| budget **insuffisant** (975) | premier flux **1 860 octets** ⇒ arrêt **au pas 0**, lien/octets/budget/pas nommés, **code 6**, **aucune perplexité rendue** |
+
+C'est la même règle qu'en C4 (borne de pas) et C9 (pont) : **s'arrêter et le dire**, jamais rendre un chiffre qui mentirait sur ses conditions. Détail mesuré au passage : le **premier** flux est plus gros que la moyenne des 47 pas — un budget juste sous la moyenne arrête donc dès le pas 0, ce qui est le comportement voulu.
+
+Le champ est **optionnel** : les 23 portes, les topologies existantes et les tests ne changent pas de comportement.
+
+**Suivant** (dans `docs/sprint-cerveau.md`) : la **politique de pannes** (`requis` / `best-effort` — arrêter en nommant la région et le pas, jamais un résultat partiel), puis les têtes dédiées C8 et les modèles H/I/J. L'objectif reste **actif**.
+
+### Tour 51 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1749 caractères tronqués]
+
+*9 appels d'outils.* Actions notables :
+
+- bash — Locate the driver's link-loss paths
+- bash — Implement named link-failure handling
+- bash — Write and run the fault-policy gate
+- bash — Reproduce the panic on node kill
+- bash — Name the unreachable-peer failure
+- bash — Kill after connection and rerun the gate
+- bash — Separate ports per case and rerun
+- bash — Make cases 2-3 robust and rerun
+- bash — Commit fault handling and launch porte-flux
+
+**Synthèse produite :**
+
+⏵ C11 : porte 3/3 verte — je commite et je relance porte-flux (chemin d'exécution touché)
 
 ## 3. Travail accompli
 
@@ -2424,7 +2462,7 @@ Le round 5 avait identifié le mécanisme (la clé est un **k-WTA** → elle sau
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1371 autres
+- … et 1380 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2552,7 +2590,7 @@ Le round 5 avait identifié le mécanisme (la clé est un **k-WTA** → elle sau
 
 ## 5. Erreurs rencontrées
 
-70 sorties en erreur ou divergentes. Les premières :
+71 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : ```  ### 🤖 Assistant  ⏵ **En transformers 5, `AutoModel` rend directement `Qwen2Model` (pas de `.model`). Je corrige le diagnostic.**  - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitH
 - **T2** : 3310393 bash -c pgrep -af "essai_decharge" | grep python | head; echo "--- logs ---"; tail -2 /tmp/ec_d192_lr3e3.log 2>/dev/null; tail -2 /tmp/ec_d192_lr1e3.log 2>/dev/null; echo "---"; ls -la /tmp/ec
@@ -2710,6 +2748,7 @@ Le round 5 avait identifié le mécanisme (la clé est un **k-WTA** → elle sau
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_te
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 

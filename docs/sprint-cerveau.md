@@ -130,6 +130,31 @@ sur ses conditions.
 
 ---
 
+## C11 — FAIT (11 octobre 0 h 30) : pannes de lien nommées, code distinct, sans résultat partiel
+
+Le plan prévoyait un `best-effort` qui « saute la région et annonce l'écart ». **La mesure
+oblige à refuser cette sémantique** : sauter douze couches ne calcule pas une version
+approchée, cela calcule **un autre modèle**. Conduite retenue : **s'arrêter en disant tout**.
+
+`tools/porte-pannes.sh` (3 cas, verte) :
+
+| cas | mesure |
+|---|---|
+| nominal | 33,0156 · code 0 |
+| **pair tué en cours de route** | `PANNE sur le lien local → d … s'arrête au pas 12 (43 968 octets échangés)` · **code 7** · aucune perplexité |
+| **pair absent** | `INJOIGNABLE (Connection refused)` · **code 7** en **2 s** · aucune perplexité |
+
+Codes distincts : **5** = borne de pas (C4) · **6** = budget (C10) · **7** = panne (C11).
+
+**Deux défauts trouvés** : un pair absent faisait **paniquer** le pilote (`expect` sur la
+connexion, code 134) — corrigé en panne nommée ; et la porte attendait un événement fragile
+(`client connecté`) au lieu de juger sur le code et le message.
+
+**Reste non fait** : la REPRISE — un pair qui revient a perdu son cache KV, donc continuer
+serait faux ; reprendre demanderait de rejouer le préfixe (checkpoint/restart).
+
+---
+
 ## ▶ PROCHAINE ACTION (à lire en premier)
 
 État au **10 octobre 11 h 45** : **C1, C3, C4 (pas 1), C5, C5bis, C5ter, C6, C7 (pas 1),
@@ -1029,6 +1054,7 @@ bus (le format de la ligne de contrôle est écrit, le transport reste à câble
 |---|---|
 | 9/10 17 h 10 | **C1a** : module `topologie.rs`, validation stricte, plan, 8 tests, suite à 85 tests. |
 | 9/10 17 h 20 | **C1b pas 1** : la topologie pilote le découpage · porte `tools/porte-topologie.sh` **TENUE** (même chiffre, écart 0,00e0) · deux refus vérifiés. |
+| 11/10 00 h 30 | **C11 — pannes de lien** : `best-effort` = « sauter la région » est REFUSÉ (un graphe amputé est un AUTRE modèle) ⇒ s'arrêter en nommant lien/pas/octets, **code 7** (5 = borne, 6 = budget). Porte 3 cas : nominal 33,0156 · pair tué au pas 12 (43 968 octets) · pair absent en 2 s. Deux défauts corrigés : un pair absent faisait PANIQUER le pilote (code 134) ; la porte attendait un événement fragile. Reste : la REPRISE (cache KV perdu). |
 | 10/10 23 h 00 | **C10 — budget d'octets par lien** : `"budget_octets"` dans la topologie, vérifié **sur ce qui passe** (la taille dépend de l'activité, pas du mode). Porte 3 cas : sans budget 111,9225 · budget généreux **identique** · budget insuffisant ⇒ arrêt **au pas 0**, lien/octets/budget nommés, **code 6**, **aucune perplexité**. |
 | 10/10 22 h 00 | **C6 — clé de FENÊTRE : prédiction RÉFUTÉE.** W=1 : 50 (bon indice) et 1 006 (mauvais), séparation 1,31/64. W=4 : 653. W=16 : 573. **W=64 : 449 (= le hasard)** et **séparation 19,94/64**. Le lissage **détruit le bon indice** et **effondre la sélectivité** ⇒ troisième confirmation du §24 quater : **abstraire par moyennage détruit la rappelabilité** ; la sélectivité EST la netteté de la clé. ⇒ pour chercher par question : des **jetons** (RAG) ou une **clé apprise**, pas le contenu brut. |
 | 10/10 20 h 45 | **C6 — le rappel n'est pas CONTINU** : six dernières positions prélevées une à une. `only` (4ᵉ) → **50 jetons**, `code` (5ᵉ) → **1 006** : **deux jetons voisins**, dont les états ont lu presque le même texte. Cause : la clé est un **k-WTA**, donc une petite variation fait entrer/sortir des canaux et la clé **saute** — aucune pente à suivre. Voie ouverte : clé formée sur une **FENÊTRE** de positions. |

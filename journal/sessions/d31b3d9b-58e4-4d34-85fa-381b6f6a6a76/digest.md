@@ -28231,3 +28231,168 @@ BUILD_END
 ⏵ C10 : porte 3/3 verte — budget déclaré, dépassement nommé, code 6, aucun résultat partiel
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\n\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\na = \"## Annexe — manifeste des journaux\"\nsec = \"\"\"## 32. Budget d'octets par lien (C10) : déclaré, et vérifi … [5409 caractères tronqués]`
+
+  ```
+docs budget
+test result: ok. 122 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.32s
+203872a C10 : budget d'octets par lien — déclaré dans la topologie, vérifié sur ce qui PASSE
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 7 livré : C10 fermé — budget par lien, vérifié sur ce qui passe
+
+**Ce round** — 1 commit poussé, 122 tests verts, `porte-budget.sh` verte (3 cas).
+
+Le plan assignait à **C10** des budgets par lien « vérifiés au démarrage » ; **la mesure a corrigé le plan** : la taille d'un flux n'est pas une propriété du mode, elle dépend de l'**activité** réelle — 1 951 octets/pas en listes par blocs à 97,7 %, **1 096 à 50 %** (§31). Un contrôle au démarrage ne pourrait comparer qu'à une valeur nominale inventée.
+
+Le budget est donc déclaré dans la topologie (`"budget_octets": N`) et **comparé à ce qui passe**, au pas où il passe :
+
+| cas | mesure |
+|---|---|
+| aucun budget (défaut) | 111,9225 · 1 951 octets/pas · code 0 |
+| budget **généreux** (2 451) | **111,9225 — identique** · code 0 |
+| budget **insuffisant** (975) | premier flux **1 860 octets** ⇒ arrêt **au pas 0**, lien/octets/budget/pas nommés, **code 6**, **aucune perplexité rendue** |
+
+C'est la même règle qu'en C4 (borne de pas) et C9 (pont) : **s'arrêter et le dire**, jamais rendre un chiffre qui mentirait sur ses conditions. Détail mesuré au passage : le **premier** flux est plus gros que la moyenne des 47 pas — un budget juste sous la moyenne arrête donc dès le pas 0, ce qui est le comportement voulu.
+
+Le champ est **optionnel** : les 23 portes, les topologies existantes et les tests ne changent pas de comportement.
+
+**Suivant** (dans `docs/sprint-cerveau.md`) : la **politique de pannes** (`requis` / `best-effort` — arrêter en nommant la région et le pas, jamais un résultat partiel), puis les têtes dédiées C8 et les modèles H/I/J. L'objectif reste **actif**.
+
+
+## Tour 51
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 mémoire épisodique, C7 consolidation, C8 périphérie, C9 latéralité, C10 budgets, et la diffusion réseau du bus de C5 ; (b) les expériences E2-E9 de docs/biologie-pour-drave.md et docs/hebbien-differentiel-et-biologie.md ; (c) les dessins de modèle H/I/J de docs/modele-pour-drave.md ; (d) les manques du registre docs/manques.md (noyau de listes pour les experts, noyau de listes GPU, encodeurs) — l'implémenter ou la mesurer, la doter d'une porte vérifiable, la documenter, commiter, pousser, et enchaîner immédiatement sur la suivante. Contraintes : les 23 portes du dépôt et tous les tests restent verts (porte-flux.sh après toute modification du chemin d'exécution), le profil release reste le binaire de mesure, le crate reste std seul, et docs/sprint-cerveau.md reste l'état resumable mis à jour à chaque round. Ne jamais s'arrêter faute de tâches planifiées : en inventer de nouvelles, mesurables, plutôt que d'attendre."
+Round: 8/60
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ C11 : les pannes — nommer la région et le pas, code distinct, jamais de résultat partiel
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"le nœud moteur a fermé la connexion\" drave-core/src/main.rs && sed -n \"$(grep -n 'le nœud moteur a fermé la connexion pendant' drave-core/src/main.rs | head -1 | cut -d: -f1),+8p\" drave-core/src/main.rs", "description":  … [38 caractères tronqués]`
+
+  ```
+4346:                                eprintln!("[flux] le nœud moteur a fermé la connexion \
+4368:                    eprintln!("[flux] le nœud moteur a fermé la connexion ({e}).\
+4473:                            eprintln!("[flux] le nœud moteur a fermé la connexion pendant \
+4492:                eprintln!("[flux] le nœud moteur a fermé la connexion ({e}) — version du \
+                            eprintln!("[flux] le nœud moteur a fermé la connexion pendant \
+l'envoi du flux ({e}) — il a dit pourquoi de son côté.");
+                            std::process::exit(1);
+                        });
+        if let Some(b) = budget_octets {
+            if o as u64 > b {
+                eprintln!("[budget] DÉPASSEMENT sur le lien local → {tp_region_distante} : \
+{o} octets pour un budget de {b} — l'exécution s'arrête ICI, au pas {pos}. Aucune \
+perplexité n'est rendue : elle porterait sur un transport qui n'est pas celui qui a été \
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\n\n# --- la fonction de message, avant `pont_sparsifier`\na = \"/// C9/C10 : le PONT à fibres limitées.\"\nb = '''/// C11 : la PANNE … [2864 caractères tronqués]`
+
+  ```
+pannes nommees
+BUILD_END
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/porte-pannes.sh <<'GATEFILE'\n#!/bin/bash\n# porte-pannes.sh — C11 : la PANNE d'un lien, nommée, et sans résultat partiel.\n#\n# POURQUOI « best-effort » N'EST PAS « SAUTER LA RÉGION ». Le plan prévoyait de sauter une\n#  … [3968 caractères tronqués]`
+
+  ```
+=== 1. exécution nominale : le résultat est rendu ===
+  perplexité 33.0156 · code 0
+=== 2. pair TUÉ en cours de route ===
+tools/porte-pannes.sh: line 53: 3296292 Killed                     $D "$M" --flux-serveur "$PORT" --ctx 512 --threads 8 > "$T/n2.log" 2>&1
+  ❌ un pair mort devrait sortir en code 7, il sort en 134
+  ```
+
+### 🤖 Assistant
+
+⏵ Le pilote PANIQUE (code 134) au lieu de mon chemin d'erreur — je regarde où
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && T=$(mktemp -d) && PORT=$((61400 + RANDOM % 100)) && cat > $T/topo.json <<JSON\n{\"regions\":[\n  {\"id\":\"local\",\"couches\":[0,11],\"instance\":\"local\"},\n  {\"id\":\"d\",\"couches\":[12,23],\"instance\":\"127.0.0.1:$PORT\"}],\n … [573 caractères tronqués]`
+
+  ```
+[flux] pilote : 12 couches en local, 12 chez le pair, 256 jetons
+  référence locale  : perplexité 33.0156  (10.0 s)
+
+thread 'main' (3298386) panicked at src/main.rs:4331:55:
+connexion au nœud moteur: Os { code: 111, kind: ConnectionRefused, message: "Connection refused" }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+code=0
+  ```
+
+### 🤖 Assistant
+
+⏵ La panique est à la CONNEXION initiale (le pair était déjà mort) — je la nomme aussi
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '4329,4333p' drave-core/src/main.rs && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\na = '''    let mut sock = std::net::TcpStream::connect(pair).expect(\"connexion au nœ … [1306 caractères tronqués]`
+
+  ```
+// 2. la même chose, coupée en deux nœuds
+    let mut sock = std::net::TcpStream::connect(pair).expect("connexion au nœud moteur");
+    sock.set_nodelay(true).expect("TCP_NODELAY");   // cf. le nœud moteur : Nagle coûte 6×
+    mdl.couche_fin = couches_locales;
+connexion nommee
+4338:            eprintln!("[pannes] PANNE : le pair local → {pair} est INJOIGNABLE ({e}). Aucune \
+BUILD_END
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"tools/porte-pannes.sh\")\ns = p.read_text()\na = \"\"\"echo \"=== 2. pair TUÉ en cours de route ===\"\n$D \"$M\" --flux-serveur \"$PORT\" --ctx 512 --threads 8 > \"$T/n2.log\" 2 … [991 caractères tronqués]`
+
+  ```
+mort apres connexion
+=== 1. exécution nominale : le résultat est rendu ===
+  perplexité 33.0156 · code 0
+=== 2. pair TUÉ en cours de route ===
+  ❌ le pilote ne s'est jamais connecté
+  ```
+
+### 🤖 Assistant
+
+⏵ Le nœud du cas 2 n'a pas démarré (port en TIME_WAIT) — je donne un port par cas
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"tools/porte-pannes.sh\")\ns = p.read_text()\n# un port par cas, et la topologie est réécrite à chaque fois\na = \"\"\"topo() { # $1 = budget (vide = aucun)\"\"\"\nif a in s: s = … [2510 caractères tronqués]`
+
+  ```
+ports separes
+=== 1. exécution nominale : le résultat est rendu ===
+  perplexité 33.0156 · code 0
+=== 2. pair TUÉ en cours de route ===
+  ❌ le pilote ne s'est jamais connecté — journal du nœud :
+     [config] puits appris sur 0/24 couches · n_rot 64 · ffn 4864 · experts 0
+     [config] rotation : RoPE simple (le modèle ne déclare pas YaRN)
+     [flux] nœud moteur sur 127.0.0.1:61195 · 896 cachés · 24 couches · contexte 512
+  ```
+
+### 🤖 Assistant
+
+⏵ La porte attendait un événement fragile — je la rends robuste (pilote en fond, mort chronométrée)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"tools/porte-pannes.sh\")\ns = p.read_text()\ndeb = s.index('echo \"=== 2. pair TUÉ en cours de route ===\"')\nfin = s.index(\"rm -rf \\\"$T\\\"\")\nneuf = '''echo \"=== 2. pair  … [2518 caractères tronqués]`
+
+  ```
+cas 2 et 3 robustes
+=== 1. exécution nominale : le résultat est rendu ===
+  perplexité 33.0156 · code 0
+=== 2. pair TUÉ en cours de route ===
+tools/porte-pannes.sh: line 67: 3313684 Killed                     $D "$M" --flux-serveur "$P2" --ctx 512 --threads 8 > "$T/n2.log" 2>&1
+  [pannes] PANNE sur le lien local → d : le pair a fermé avant de rendre son état (version du protocole, réglages ou contexte — il a dit pourquoi de son côté). L'exécution s'arrête au pas 12 (43968 octets échangés jusque-là). AUCUNE perplexité n'est rendue : elle porterait sur un modèle incomplet — un graphe amputé d'une région n'est pas une version approchée du même calcul, c'est un autre calcul. Politique déclarée : requis (défaut) ; voir docs/plan-cerveau-complet.md §3.2.
+  ✅ panne nommée (lien, pas ou octets échangés), code 7, aucune perplexité
+=== 3. pair ABSENT : échec immédiat, sans pendre ===
+  [pannes] PANNE : le pair local → 127.0.0.1:61342 est INJOIGNABLE (Connection refused (os error 111)). Aucune perplexité n'est rendue — un graphe amputé d'une région n'est pas une version approchée du même calcul. Vérifiez que le nœud écoute (--flux-serveur 127.0.0.1:61342).
+  code 7 · 2 s
+  ✅ pair absent : éch
+… [45 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ C11 : porte 3/3 verte — je commite et je relance porte-flux (chemin d'exécution touché)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\n\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\na = \"## Annexe — manifeste des journaux\"\nsec = \"\"\"## 33. Pannes de lien (C11) : nommées, avec un code distin … [6829 caractères tronqués]`
