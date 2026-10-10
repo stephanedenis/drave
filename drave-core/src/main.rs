@@ -96,6 +96,13 @@ fn main() {
         eprintln!("                                     dérive des horloges et confronte les deux");
         eprintln!("                                     bouts de chaque lien. Ne charge aucun");
         eprintln!("                                     modèle.");
+        eprintln!("       drave <modele> --reflexe-essai N [--ids-file F]");
+        eprintln!("                                     RÉFLEXE (C8) : un modèle TRONQUÉ à L");
+        eprintln!("                                     couches, tête appliquée à la fin de la");
+        eprintln!("                                     plage. Mesure l'accord de sa décision avec");
+        eprintln!("                                     celle du modèle entier, par profondeur :");
+        eprintln!("                                     combien de couches pour qu'un réflexe");
+        eprintln!("                                     tombe d'accord ?");
         eprintln!("       drave <modele> --episodique-essai N [--episodique-k K]");
         eprintln!("             [--episodique-fichier F] [--ids-file F]");
         eprintln!("                                     mémoire ÉPISODIQUE (C6) : collecte N états");
@@ -185,6 +192,7 @@ il faut écrire DRAVE_{} (voir docs/histoire.md). Rien n'a été appliqué.", &v
         (opt.gpu_banc, "--gpu-banc"), (opt.materiel, "--materiel"), (opt.config, "--config"),
         (opt.sonder_engram > 0, "--sonder-engram"),
         (opt.episodique_essai > 0, "--episodique-essai"),
+        (opt.reflexe_essai > 0, "--reflexe-essai"),
         (opt.plan, "--plan"), (opt.tokenize, "--tokenize"),
         (opt.ppl, "--ppl"), (opt.infer, "--infer"),
     ].iter().filter(|(v, _)| *v).map(|(_, n)| *n).collect();
@@ -196,6 +204,7 @@ sont ignorés", modes.len(), modes.join(", "), modes[0]);
     if opt.config { run_config(); return; }
     if opt.sonder_engram > 0 { run_sonder_engram(opt.sonder_engram); return; }
     if opt.episodique_essai > 0 { run_episodique_essai(opt); return; }
+    if opt.reflexe_essai > 0 { run_reflexe_essai(opt); return; }
     if let Some(f) = opt.engram_adresses.clone() { run_engram_adresses(&f, &opt); return; }
     if let Some(b) = opt.bloc.clone() { run_bloc(&b); return; }
     if let Some(f) = opt.banc_vision.clone() { run_banc_vision(&f); return; }
@@ -624,6 +633,8 @@ struct Options {
     /// C6 : égaliser l'usage des canaux (centrer et réduire PAR CANAL sur le magasin)
     /// avant de choisir la clé — contre les canaux « hub ».
     episodique_normaliser: bool,
+    /// C8 : combien de positions mesurer pour l'essai de RÉFLEXE (sortie précoce).
+    reflexe_essai: usize,
     /// C9/C10 : nombre de FIBRES du pont entre la région locale et la région
     /// distante. 0 = pont entier (aucun écrêtage). Ne garder que les K plus grandes
     /// amplitudes de l'état échangé, c'est limiter la bande passante du lien — la
@@ -815,6 +826,7 @@ fn analyser(args: &[String]) -> Options {
             "--episodique-normaliser" => { o.episodique_normaliser = true; 1 }
             "--episodique-textes" => { o.episodique_textes = Some(suivant(i).clone()); 2 }
             "--pont-k" => { o.pont_k = suivant(i).parse().unwrap_or(0); 2 }
+            "--reflexe-essai" => { o.reflexe_essai = suivant(i).parse().unwrap_or(0); 2 }
             // C5 : le bus de modulation, canal par canal.
             "--bus" => { o.bus.push(suivant(i).clone()); 2 }
             "--bus-serveur" => { o.bus_serveur = suivant(i).parse().ok(); 2 }
@@ -5831,6 +5843,135 @@ fn fenetres_harmony(tk: &tokenizer::Tokenizer, ids: &[u32], ctx: usize, mode: &s
         }
     }
     fenetres
+}
+
+/// L'indice de la plus grande valeur. Les égalités sont départagées par l'indice le
+/// plus PETIT : sans cela, deux exécutions pourraient rendre deux jetons différents
+/// pour deux logits exactement égaux, et la mesure d'accord porterait sur ce hasard.
+fn argmax(valeurs: &[f32]) -> u32 {
+    let mut best = 0usize;
+    for (i, v) in valeurs.iter().enumerate() {
+        if *v > valeurs[best] { best = i; }
+    }
+    best as u32
+}
+
+/// L'indice du maximum et les cinq meilleurs — l'accord « top-5 » dit si la bonne
+/// réponse était dans le voisinage immédiat du réflexe, ce qui n'est pas la même
+/// chose que de la donner du premier coup.
+fn argmax_et_top5(valeurs: &[f32]) -> (u32, Vec<u32>) {
+    let mut idx: Vec<u32> = (0..valeurs.len() as u32).collect();
+    idx.sort_by(|&a, &b| valeurs[b as usize].partial_cmp(&valeurs[a as usize])
+                         .unwrap_or(std::cmp::Ordering::Equal).then(a.cmp(&b)));
+    idx.truncate(5);
+    (idx[0], idx)
+}
+
+/// C8 : le RÉFLEXE, mesuré comme une sortie précoce.
+///
+/// POURQUOI CETTE FORME. Un réflexe médullaire ne remonte pas au cortex : il répond
+/// par un chemin COURT, et il répond bien pour un stimulus stéréotypé. Dans le
+/// moteur, ce chemin court existe déjà — `--couches 0,L` tronque le modèle et
+/// `--tete-partielle` applique la tête à la fin de la plage. La question mesurable
+/// n'est donc pas « peut-on faire un réflexe ? » mais **« à partir de quelle
+/// profondeur un réflexe tombe-t-il d'accord avec le modèle entier ? »**, et c'est
+/// une courbe accord ↔ profondeur.
+///
+/// CE QU'ELLE SERT À DIRE, ET CE QU'ELLE NE DIT PAS. Elle dit à quelle profondeur
+/// l'information décidée est déjà là — utile pour un chemin rapide, pour un premier
+/// avis, ou pour distribuer le travail. Elle ne dit PAS que le réflexe est aussi
+/// BON : un accord élevé sur le jeton le plus probable ne dit rien de la
+/// distribution entière, et la perplexité d'un modèle tronqué n'est pas mesurée ici.
+fn run_reflexe_essai(opt: Options) {
+    let path = modele_chemin();
+    let n = opt.reflexe_essai;
+    let idfile = opt.ids_file.clone().unwrap_or_default();
+    if idfile.is_empty() {
+        eprintln!("--reflexe-essai a besoin de --ids-file : le réflexe se mesure sur un texte réel, pas sur des jetons inventés.");
+        std::process::exit(2);
+    }
+    let brut = std::fs::read_to_string(&idfile).expect("fichier d'identifiants illisible");
+    let ids: Vec<u32> = brut.split(|c: char| c == ',' || c.is_whitespace())
+        .filter(|s| !s.is_empty()).filter_map(|s| s.parse().ok()).take(n).collect();
+    if ids.len() < 4 {
+        eprintln!("--reflexe-essai : {} jetons seulement — il en faut au moins 4", ids.len());
+        std::process::exit(2);
+    }
+    let cpu = engine::coeurs_physiques();
+    let n_threads = if opt.threads_impose { opt.threads } else { cpu.max(1) };
+    let ctx = if opt.ctx_impose { opt.ctx } else { (ids.len() + 8).max(256) };
+    let t0 = std::time::Instant::now();
+    let mut mdl = model::Model::load_partiel(&path, ctx, n_threads, false, 1.0, false, 0, 0, None);
+    let n_layer = mdl.cfg.n_layer;
+    println!("  modèle            : {path} · {n_layer} couches · {} jetons", ids.len());
+    // Le modèle ENTIER : c'est la référence, et la même fonction sert au réflexe le
+    // plus profond — sinon la comparaison porterait sur deux calculs différents.
+    let mut reference: Vec<u32> = Vec::with_capacity(ids.len());
+    // Les états du modèle entier sont gardés : sans eux, l'échec d'un réflexe serait
+    // constaté sans être expliqué, et « 0 % d'accord » ne dit pas si le réflexe se
+    // trompe de peu ou s'il calcule autre chose.
+    let mut etats_entiers: Vec<Vec<f32>> = Vec::with_capacity(ids.len());
+    let mut t_entier = 0.0f64;
+    for (pos, &t) in ids.iter().enumerate() {
+        let h0 = std::time::Instant::now();
+        let h = mdl.forward(t, pos);
+        t_entier += h0.elapsed().as_secs_f64();
+        reference.push(argmax(&mdl.logits(&h)));
+        etats_entiers.push(h);
+    }
+    let cos = |a: &[f32], b: &[f32]| -> f64 {
+        let (mut p, mut na, mut nb) = (0.0f64, 0.0f64, 0.0f64);
+        for (x, y) in a.iter().zip(b.iter()) {
+            p += *x as f64 * *y as f64; na += (*x as f64).powi(2); nb += (*y as f64).powi(2);
+        }
+        if na <= 0.0 || nb <= 0.0 { return 0.0; }
+        p / (na.sqrt() * nb.sqrt())
+    };
+    println!("  référence         : modèle entier, {:.1} ms par jeton",
+             1000.0 * t_entier / ids.len() as f64);
+    println!();
+    println!("  {:>9}  {:>10}  {:>12}  {:>10}  {:>14}  {:>12}", "couches", "accord",
+             "accord top-5", "cos(final)", "ms/jeton", "temps/entier");
+    // Les profondeurs mesurées : on va jusqu'à la DERNIÈRE, parce qu'un réflexe aussi
+    // profond que le modèle DOIT être le modèle — c'est l'invariant de ce mode.
+    let mut profondeurs: Vec<usize> = vec![1, 2, 4, 6, 8, 12, 16, 20, 24, 32]
+        .into_iter().filter(|l| *l < n_layer).collect();
+    profondeurs.push(n_layer);
+    let mut mesures: Vec<(usize, f64)> = Vec::new();
+    for l in profondeurs {
+        let mut m = model::Model::load_partiel(&path, ctx, n_threads, false, 1.0, false, 0, 0,
+                                               Some((0, l)));
+        poser_tete_partielle(&mut m);
+        let mut accord = 0usize; let mut accord5 = 0usize; let mut t_refl = 0.0f64;
+        let mut cumul_cos = 0.0f64;
+        for (pos, &t) in ids.iter().enumerate() {
+            let h0 = std::time::Instant::now();
+            let h = m.forward(t, pos);
+            t_refl += h0.elapsed().as_secs_f64();
+            // La COSINUS entre l'état tronqué et l'état final dit si le réflexe se
+            // trompe de peu ou s'il calcule dans une autre direction — deux échecs
+            // qui n'appellent pas la même conclusion.
+            cumul_cos += cos(&h, &etats_entiers[pos]);
+            let lg = m.logits(&h);
+            let (a, c5) = argmax_et_top5(&lg);
+            if a == reference[pos] { accord += 1; }
+            if c5.contains(&reference[pos]) { accord5 += 1; }
+        }
+        let pa = 100.0 * accord as f64 / ids.len() as f64;
+        let p5 = 100.0 * accord5 as f64 / ids.len() as f64;
+        let ms = 1000.0 * t_refl / ids.len() as f64;
+        println!("  {l:>9}  {pa:>9.1} %  {p5:>11.1} %  {:>9.3}  {ms:>13.1}  {:>11.2}×",
+                 cumul_cos / ids.len() as f64, t_entier / t_refl);
+        mesures.push((l, pa));
+    }
+    println!();
+    println!("  ce que la courbe ne dit PAS : la sortie précoce est mesurée SANS tête dédiée — la tête du modèle est celle de sa DERNIÈRE couche, et rien ne dit qu'elle lit un état intermédiaire. Une tête entraînée pour la couche L changerait la réponse, et n'est pas mesurée ici. Et l'accord porte sur le jeton de plus forte probabilité. Un réflexe d'accord élevé peut être très mal calibré (distribution entière différente), et la perplexité d'un modèle tronqué n'est pas mesurée ici.");
+    let (lf, pf) = *mesures.last().unwrap();
+    if (pf - 100.0).abs() > 1e-9 && lf == n_layer {
+        eprintln!("  ❌ un réflexe aussi profond que le modèle ({lf} couches) donne {pf:.1} % d'accord au lieu de 100 % : la troncature ne rend pas le modèle entier");
+        std::process::exit(1);
+    }
+    println!("  temps total       : {:.1} s", t0.elapsed().as_secs_f64());
 }
 
 /// C6 : mémoire épisodique sur des états RÉELS du modèle.

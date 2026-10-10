@@ -24734,3 +24734,315 @@ falaise verrouillee + synthese
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A tools/porte-pont.sh reports/rapport-campagne-benefices.md && git commit -q -m \"C9 : la falaise du pont est une MARCHE entre 448 et 392 fibres\n\nLocalisée en raffinant la courbe (listes par blocs) :\n\n    896 fibres   11 … [1137 caractères tronqués]`
+
+  ```
+3eb2cbc C9 : la falaise du pont est une MARCHE entre 448 et 392 fibres
+  ```
+
+### 🤖 Assistant
+
+⏵ C8 : le réflexe comme sortie précoce — je regarde l'évaluation partielle déjà présente
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n '\"--couches\"\\|tete_partielle\\|fn poser_tete_partielle' drave-core/src/main.rs | head -10 && sed -n \"$(grep -n 'fn poser_tete_partielle' drave-core/src/main.rs | cut -d: -f1),+22p\" drave-core/src/main.rs", "description": … [36 caractères tronqués]`
+
+  ```
+495:fn poser_tete_partielle(mdl: &mut model::Model) {
+496:    mdl.tete_partielle = true;
+525:    if mdl.tete_partielle {
+737:    tete_partielle: bool,
+841:            "--tete-partielle" => { o.tete_partielle = true; 1 }
+844:            "--couches" => {
+1014:    if opt.tete_partielle {
+1015:        poser_tete_partielle(&mut mdl);
+3409:    if opt.tete_partielle {
+4040:    if opt.tete_partielle {
+fn poser_tete_partielle(mdl: &mut model::Model) {
+    mdl.tete_partielle = true;
+    eprintln!("[plage] `--tete-partielle` : la tête de sortie est appliquée à la fin de la \
+plage — le résultat est celui d'un modèle TRONQUÉ, pas du modèle entier");
+}
+
+/// **Tableau de bord des réglages en vigueur** (`--options-actives`), lus sur le
+/// MODÈLE après toutes les affectations.
+///
+/// Pourquoi il existe : le défaut le plus coûteux de ce dépôt n'est pas un calcul
+/// faux, c'est un drapeau qui ne fait rien. Huit ont été corrigés en une session
+/// (`--keep` en perplexité, `--ffn-gain` en inférence, les top-k dans les modes
+/// flux, `--trace-flux` en inférence, `--threads` figé…), et chacun était
+/// INVISIBLE : la sortie ne disait nulle part quelle valeur agissait. Ici, elle
+/// le dit — et une v
+… [604 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ C8 : j'écris l'essai « réflexe » — accord entre un modèle tronqué et le modèle entier selon la profondeur
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"norme_finale\\|mdl.logits(\" drave-core/src/main.rs | head -12 && sed -n \"$(grep -n 'let h = mdl.forward' drave-core/src/main.rs | head -1 | cut -d: -f1),+12p\" drave-core/src/main.rs", "description": "Find logits API usag … [3 caractères tronqués]`
+
+  ```
+1265:            let lg = mdl.logits(&last);
+1772:            let lg = mdl.logits(&hn);
+4055:    // (`norme_finale`). Ce que ça coûte est mesuré plus bas, pas supposé.
+4116:                nll_ref += nll_logits(&mdl.logits(&last), ids[pos + 1]);
+4198:            // réduit chaque état par `norme_finale` sur un état de largeur
+4220:                hn.push(mdl.norme_finale(&etats[i * mdl.cfg.hidden..(i + 1) * mdl.cfg.hidden],
+4308:        // `hc × cachés` pour un modèle à hyper-connexions (c'est `norme_finale`
+4333:            let reduit = mdl.norme_finale(&final_, pos);
+4334:            nll += nll_logits(&mdl.logits(&reduit), ids[pos + 1]);
+6480:                        let r = mdl.logits(h);
+[stderr]
+sed: -e expression #1, char 1: unknown command: ','
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '4105,4120p' drave-core/src/main.rs", "description": "Read reference logits loop"}`
+
+  ```
+for i in 0..t {
+                if pos + i + 1 < ids.len() {
+                    nll_ref += nll_logits(&lgs[i], ids[pos + i + 1]);
+                }
+            }
+            pos += t;
+        }
+    } else {
+        for (pos, &t) in ids.iter().enumerate() {
+            let last = mdl.forward(t, pos);
+            if pos + 1 < ids.len() {
+                nll_ref += nll_logits(&mdl.logits(&last), ids[pos + 1]);
+            }
+        }
+    }
+    let ppl_ref = (nll_ref / (ids.len() - 1) as f64).exp();
+  ```
+
+### 🤖 Assistant
+
+⏵ C8 : j'implémente le mode `--reflexe-essai` — profondeur contre accord avec le modèle entier
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/c8_code.py <<'ENDPY'\nimport pathlib\n\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\n\n# --- option\na = \"\"\"    /// C9/C10 : nombre de FIBRES du pont entre la région locale et la région\"\"\"\nb = \" … [7673 caractères tronqués]`
+
+  ```
+mode reflexe ajoute
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"fn argmax\" drave-core/src/*.rs | head -5 && grep -n \"argmax\" drave-core/src/main.rs | head -5", "description": "Find argmax helper"}`
+
+  ```
+545:    // perplexité 19,143 contre 19,172, argmax identique sur 191/191 positions,
+551:Mesuré sur Qwen3-30B-A3B : PPL 19,143 contre 19,172, argmax identique sur 191/191 positions \
+1789:            println!("  moteur : {} logits · argmax {best} · moyenne {moy:.3} · écart-type {:.3}",
+2261:                        println!("  pas {pas} : {} jeton(s) en entrée ({} s) → argmax {imax}{}",
+5893:        reference.push(model::argmax(&mdl.logits(&h)));
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fn argmax\\|argmax\" drave-core/src/engine.rs | head -5; grep -rn \"fn argmax\\|fn top5\\|fn argmax_et_top5\" drave-core/src/ | head -5", "description": "Locate argmax definition"}`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1785,1795p' drave-core/src/main.rs && grep -rn \"fn .*argmax\" drave-core/src/ | head -5", "description": "Find argmax implementation"}`
+
+  ```
+let mut best = 0usize;
+            for (i, &v) in lg.iter().enumerate() { if v > lg[best] { best = i; } }
+            let moy: f32 = lg.iter().sum::<f32>() / lg.len() as f32;
+            let var: f32 = lg.iter().map(|v| (v - moy) * (v - moy)).sum::<f32>() / lg.len() as f32;
+            println!("  moteur : {} logits · argmax {best} · moyenne {moy:.3} · écart-type {:.3}",
+                     lg.len(), var.sqrt());
+        }
+    }
+    let norme: f32 = out.iter().map(|v| v * v).sum::<f32>().sqrt();
+    println!("{n_patch} patchs × {cout} canaux écrits dans {sortie} (|sortie| = {norme:.4})");
+    println!("premier patch, 4 premiers canaux : {:?}",
+  ```
+
+### 🤖 Assistant
+
+⏵ C8 : il n'existe pas d'`argmax` partagé — je l'ajoute avec le top-5
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/c8_argmax.py <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\n\n# les deux aides, avant le mode réflexe\na = \"/// C8 : le RÉFLEXE, mesuré comme une sortie précoce.\"\nb = '''///  … [1573 caractères tronqués]`
+
+  ```
+argmax + top5 ajoutes
+BUILD_DONE
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 1800 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --reflexe-essai 48 --ids-file /tmp/campagne24/ids_0.5B-Q8.txt --ctx 256 --threads 12 2>&1 | tail -22", "description": "Run the reflex experiment", "timeoutM … [12 caractères tronqués]`
+
+  ```
+[config] 24 couches, hidden 896 · 
+[config] puits appris sur 0/24 couches · n_rot 64 · ffn 4864 · experts 0
+[config] rotation : RoPE simple (le modèle ne déclare pas YaRN)
+[plage] `--tete-partielle` : la tête de sortie est appliquée à la fin de la plage — le résultat est celui d'un modèle TRONQUÉ, pas du modèle entier
+         16        0.0 %          2.1 %           67.1         1.01×
+[config] cache KV : 32 bits, 0.01 Go pour 256 jetons
+[modele] 24 couches chargées en 6.393831646s — listes 0.71 Go , 12 threads
+[config] 24 couches, hidden 896 · 
+[config] puits appris sur 0/24 couches · n_rot 64 · ffn 4864 · experts 0
+[config] rotation : RoPE simple (le modèle ne déclare pas YaRN)
+[plage] `--tete-partielle` : la tête de sortie est appliquée à la fin de la plage — le résultat est celui d'un modèle TRONQUÉ, pas du modèle entier
+         20        8.3 %         16.7 %           84.4         0.80×
+[config] cache KV : 32 bits, 0.01 Go pour 256 jetons
+[modele] 24 couches chargées en 6.455519841s — listes 0.71 Go , 12 threads
+[config] 24 couches, hidden 896 · 
+[config] puits appris sur 0/24 couches · n_rot 64 · ffn 4864 · experts 0
+[config] rotation : RoPE simple (le modèle ne déclare pas 
+… [487 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 1800 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --reflexe-essai 48 --ids-file /tmp/campagne24/ids_0.5B-Q8.txt --ctx 256 --threads 12 2>&1 | grep -E \"modèle  |référence|couches|^ +[0-9]+ +[0-9]|ce que la  … [79 caractères tronqués]`
+
+  ```
+[modele] 24 couches chargées en 6.290876948s — listes 0.71 Go , 12 threads
+[config] 24 couches, hidden 896 · 
+[config] puits appris sur 0/24 couches · n_rot 64 · ffn 4864 · experts 0
+  modèle            : models/Qwen2.5-0.5B-Q8_0.gguf · 24 couches · 48 jetons
+  référence         : modèle entier, 65.2 ms par jeton
+    couches      accord  accord top-5        ms/jeton  temps/entier
+[modele] 24 couches chargées en 6.694470402s — listes 0.71 Go , 12 threads
+[config] 24 couches, hidden 896 · 
+[config] puits appris sur 0/24 couches · n_rot 64 · ffn 4864 · experts 0
+          1        0.0 %          0.0 %            4.1        15.96×
+[modele] 24 couches chargées en 6.755049128s — listes 0.71 Go , 12 threads
+[config] 24 couches, hidden 896 · 
+[config] puits appris sur 0/24 couches · n_rot 64 · ffn 4864 · experts 0
+          2        2.1 %          2.1 %            8.4         7.77×
+[modele] 24 couches chargées en 6.625843695s — listes 0.71 Go , 12 threads
+[config] 24 couches, hidden 896 · 
+[config] puits appris sur 0/24 couches · n_rot 64 · ffn 4864 · experts 0
+          4        0.0 %          0.0 %           16.8         3.88×
+[modele] 24 couches chargées en 6.560927093s — listes 0.71 Go
+… [1685 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ C8 : le réflexe est nul jusqu'à 20 couches sur 24 — je mesure la cause (direction de l'état)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/c8_cos.py <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\n\na = \"\"\"    let mut reference: Vec<u32> = Vec::with_capacity(ids.len());\n    let mut t_entier = 0.0f64;\n    for (p … [4457 caractères tronqués]`
+
+  ```
+[modele] 24 couches chargées en 6.474644567s — listes 0.71 Go , 12 threads
+[config] puits appris sur 0/24 couches · n_rot 64 · ffn 4864 · experts 0
+  modèle            : models/Qwen2.5-0.5B-Q8_0.gguf · 24 couches · 48 jetons
+  référence         : modèle entier, 66.9 ms par jeton
+    couches      accord  accord top-5        ms/jeton  temps/entier
+[modele] 24 couches chargées en 6.674251818s — listes 0.71 Go , 12 threads
+[config] puits appris sur 0/24 couches · n_rot 64 · ffn 4864 · experts 0
+          1        0.0 %          0.0 %            4.1        16.46×
+[modele] 24 couches chargées en 6.695059831s — listes 0.71 Go , 12 threads
+[config] puits appris sur 0/24 couches · n_rot 64 · ffn 4864 · experts 0
+          2        2.1 %          2.1 %            8.3         8.04×
+[modele] 24 couches chargées en 6.664445092s — listes 0.71 Go , 12 threads
+[config] puits appris sur 0/24 couches · n_rot 64 · ffn 4864 · experts 0
+          4        0.0 %          0.0 %           16.9         3.96×
+[modele] 24 couches chargées en 6.696725971s — listes 0.71 Go , 12 threads
+[config] puits appris sur 0/24 couches · n_rot 64 · ffn 4864 · experts 0
+          6        0.0 %          0.0 %           25.
+… [1473 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ C8 : mon dernier remplacement ne correspondait pas — je vise un ancrage plus court
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"ce que la courbe ne dit PAS\" drave-core/src/main.rs | head -5 && sed -n \"$(grep -n 'ce que la courbe ne dit PAS' drave-core/src/main.rs | tail -1 | cut -d: -f1),+2p\" drave-core/src/main.rs", "description": "Find exact co … [12 caractères tronqués]`
+
+  ```
+5949:    println!("  ce que la courbe ne dit PAS : l'accord porte sur le jeton de plus forte probabilité. Un réflexe d'accord élevé peut être très mal calibré (distribution entière différente), et la perplexité d'un modèle tronqué n'est pas mesurée ici.");
+6342:    println!("  ce que la courbe ne dit PAS : elle porte sur {} états consécutifs d'un seul \
+    println!("  ce que la courbe ne dit PAS : elle porte sur {} états consécutifs d'un seul \
+texte. Le rappel sur des épisodes venus de textes différents, ou après consolidation, n'est \
+pas mesuré ici.", etats.len());
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"/tmp/c8_cos.py\")\ns = p.read_text()\ndeb = s.index('a = \"\"\"    println!(\"  ce que la courbe ne dit PAS : l\\'accord porte sur le jeton de plus forte')\nfin = s.index('p.wri … [1065 caractères tronqués]`
+
+  ```
+patch corrige
+diagnostic cosinus ajoute
+[modele] 24 couches chargées en 6.24776459s — listes 0.71 Go , 12 threads
+[config] puits appris sur 0/24 couches · n_rot 64 · ffn 4864 · experts 0
+  modèle            : models/Qwen2.5-0.5B-Q8_0.gguf · 24 couches · 48 jetons
+  référence         : modèle entier, 60.7 ms par jeton
+    couches      accord  accord top-5  cos(final)        ms/jeton  temps/entier
+[modele] 24 couches chargées en 6.365403531s — listes 0.71 Go , 12 threads
+[config] puits appris sur 0/24 couches · n_rot 64 · ffn 4864 · experts 0
+          1        0.0 %          0.0 %      0.037            4.1        14.86×
+[modele] 24 couches chargées en 6.335933073s — listes 0.71 Go , 12 threads
+[config] puits appris sur 0/24 couches · n_rot 64 · ffn 4864 · experts 0
+          2        2.1 %          2.1 %     -0.018            8.3         7.30×
+[modele] 24 couches chargées en 6.249651615s — listes 0.71 Go , 12 threads
+[config] puits appris sur 0/24 couches · n_rot 64 · ffn 4864 · experts 0
+          4        0.0 %          0.0 %      0.008           16.8         3.62×
+[modele] 24 couches chargées en 6.28533097s — listes 0.71 Go , 12 threads
+[config] puits appris sur 0/24 couches · n_
+… [1249 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ C8 : la cause est mesurée — l'état intermédiaire est quasi ORTHOGONAL au final (cos 0,13 à 16 couches)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/porte-reflexe.sh <<'GATEFILE'\n#!/bin/bash\n# porte-reflexe.sh — la porte de la capacité C8 (premier pas) : le RÉFLEXE.\n#\n# LA QUESTION. Un réflexe médullaire ne remonte pas au cortex : il répond par un\n# chemin COURT. … [4918 caractères tronqués]`
+
+  ```
+=== la courbe accord ↔ profondeur (et sa cause) ===
+    modèle            : models/Qwen2.5-0.5B-Q8_0.gguf · 24 couches · 32 jetons
+    référence         : modèle entier, 82.5 ms par jeton
+      couches      accord  accord top-5  cos(final)        ms/jeton  temps/entier
+            1        0.0 %          0.0 %      0.044            4.5        18.51×
+            2        3.1 %          3.1 %     -0.009            7.0        11.85×
+            4        0.0 %          0.0 %      0.013           16.7         4.94×
+            6        0.0 %          0.0 %      0.047           25.2         3.28×
+            8        0.0 %          0.0 %      0.058           32.3         2.56×
+           12        0.0 %          0.0 %      0.083           49.6         1.66×
+           16        0.0 %          0.0 %      0.145           61.7         1.34×
+           20        6.2 %         15.6 %      0.320           79.8         1.03×
+           24      100.0 %        100.0 %      1.000           93.2         0.89×
+    ce que la courbe ne dit PAS : la sortie précoce est mesurée SANS tête dédiée — la tête du modèle est celle de sa DERNIÈRE couche, et rien ne dit qu'elle lit un état intermédiaire. Une tête
+… [437 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ C8 : indice de colonne décalé (le `%` est un champ) — je corrige
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -i 's/pts.append((int(ch\\[0\\]), float(ch\\[1\\]), float(ch\\[3\\]), float(ch\\[4\\]), float(ch\\[6\\])))/pts.append((int(ch[0]), float(ch[1]), float(ch[3]), float(ch[5]), float(ch[6])))/' tools/porte-reflexe.sh && sed -i 's|# ( … [342 caractères tronqués]`
+
+  ```
+55:    pts.append((int(ch[0]), float(ch[1]), float(ch[3]), float(ch[5]), float(ch[6])))
+           20        6.2 %         15.6 %      0.320           76.8         1.11×
+           24      100.0 %        100.0 %      1.000           83.2         1.02×
+    ce que la courbe ne dit PAS : la sortie précoce est mesurée SANS tête dédiée — la tête du modèle est celle de sa DERNIÈRE couche, et rien ne dit qu'elle lit un état intermédiaire. Une tête entraînée pour la couche L changerait la réponse, et n'est pas mesurée ici. Et l'accord porte sur le jeton de plus forte probabilité. Un réflexe d'accord élevé peut être très mal calibré (distribution entière différente), et la perplexité d'un modèle tronqué n'est pas mesurée ici.
+    temps total       : 88.5 s
+  ✅ à 24 couches, le réflexe EST le modèle : 100.0 % d'accord
+  ✅ jusqu'à 2 couches (2/3 de la profondeur), l'accord reste sous 25 % (au mieux 3.1 %) : pas de sortie précoce utilisable
+  ✅ la cause est la DIRECTION : cos(état tronqué, état final) = 0.145 à 16 couches (1,000 à la profondeur entière)
+  ✅ le gain de temps est réel : 0.0 ms par jeton à 1 couche(s) contre 1.0 ms à 24 — 22.7× plus rapide, pour 0 % d'accord
+  ```
+
+### 🤖 Assistant
+
+⏵ C8 : deux indices encore faux dans les vérifications (cos vs ms) — je corrige et reformule
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"tools/porte-reflexe.sh\")\ns = p.read_text()\ns = s.replace('''print(f\"  ✅ jusqu'à {pire[0]} couches (2/3 de la profondeur), l'accord reste sous 25 % \"\n      f\"(au mieux {pi … [1589 caractères tronqués]`
+
+  ```
+corrige
+    ce que la courbe ne dit PAS : la sortie précoce est mesurée SANS tête dédiée — la tête du modèle est celle de sa DERNIÈRE couche, et rien ne dit qu'elle lit un état intermédiaire. Une tête entraînée pour la couche L changerait la réponse, et n'est pas mesurée ici. Et l'accord porte sur le jeton de plus forte probabilité. Un réflexe d'accord élevé peut être très mal calibré (distribution entière différente), et la perplexité d'un modèle tronqué n'est pas mesurée ici.
+    temps total       : 121.3 s
+  ✅ à 24 couches, le réflexe EST le modèle : 100.0 % d'accord
+  ✅ sur TOUTES les profondeurs jusqu'à 2/3 de la profondeur, le meilleur accord est 3.1 % (à 2 couches) : pas de sortie précoce utilisable
+  ✅ la cause est la DIRECTION : cos(état tronqué, état final) = 0.145 à 16 couches (1,000 à la profondeur entière)
+  ✅ le gain de temps est réel : 3.6 ms par jeton à 1 couche(s) contre 101.8 ms à 24 — 28.3× plus rapide, pour 0.0 % d'accord
+  ```
+
+### 🤖 Assistant
+
+⏵ C8 : le réflexe court n'existe pas — je documente et commite
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/c8_docs.py <<'ENDPY'\nimport pathlib\n\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\nancre = \"## Annexe — manifeste des journaux\"\nsec = '''## 26. Le réflexe (C8) : un chemin court qui  … [8456 caractères tronqués]`

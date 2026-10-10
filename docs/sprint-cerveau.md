@@ -273,6 +273,40 @@ manquait pour déboguer un graphe distribué.
 
 ---
 
+## C8 (premier pas) — FAIT (10 octobre 8 h 20) : le réflexe, et il ne sait rien
+
+**La question** : un réflexe est un chemin COURT (la moelle épinière ne remonte pas au
+cortex). Le moteur sait déjà tronquer (`--couches 0,L` + `--tete-partielle`) ; la
+question mesurable est donc **à partir de quelle profondeur un réflexe tombe-t-il
+d'accord avec le modèle entier ?** Mode `--reflexe-essai N`, porte
+`tools/porte-reflexe.sh`.
+
+| couches | accord | **cos(état tronqué, état final)** | plus rapide |
+|---|---|---|---|
+| 1 | 0,0 % | 0,044 | 18,5× |
+| 8 | 0,0 % | 0,058 | 2,6× |
+| 16 | 0,0 % | 0,145 | 1,3× |
+| 20 | 6,2 % | 0,320 | 1,0× |
+| **24** | **100,0 %** | **1,000** | — |
+
+**Il n'y a pas de sortie précoce utilisable** : 0 % d'accord jusqu'à 16 couches sur 24,
+et il ne décolle qu'à 24 — quand le réflexe *est* le modèle. Le gain de temps est réel
+(18,5×), donc ce n'est pas un artefact. **Et la cause est mesurée** : l'état
+intermédiaire est **presque orthogonal** à l'état final (cos 0,145 à 16 couches). La
+tête du modèle est celle de sa dernière couche et lit une direction que seules les
+dernières couches produisent — un réflexe court ne peut pas réutiliser cette tête, il
+lui faudrait **sa propre** lecture entraînée, ce que le moteur ne sait pas produire.
+C'est un **manque**, et il est écrit comme tel.
+
+**Conséquence pour la distribution** : on ne peut pas accélérer un graphe en sortant
+plus tôt d'une région ; le chemin est au moins aussi long que le modèle.
+
+**La porte** : 4 cas — le réflexe à profondeur entière EST le modèle (100 %) · aucune
+sortie précoce sous 2/3 de la profondeur · la cause est la direction (cos < 0,5) · le
+gain de temps est réel (≥ 3×, sans quoi la mesure n'aurait pas de sens).
+
+---
+
 ## C9/C10 (premier pas) — FAIT (10 octobre 7 h) : le pont à fibres limitées
 
 **La question du corps calleux, posée en termes mesurables** : deux régions échangent
@@ -689,6 +723,7 @@ bus (le format de la ligne de contrôle est écrit, le transport reste à câble
 |---|---|
 | 9/10 17 h 10 | **C1a** : module `topologie.rs`, validation stricte, plan, 8 tests, suite à 85 tests. |
 | 9/10 17 h 20 | **C1b pas 1** : la topologie pilote le découpage · porte `tools/porte-topologie.sh` **TENUE** (même chiffre, écart 0,00e0) · deux refus vérifiés. |
+| 10/10 08 h 20 | **C8 (pas 1)** : le réflexe mesuré comme sortie précoce. `--reflexe-essai` : accord **0 % jusqu'à 16 couches sur 24**, 6,2 % à 20, **100 % à 24** (le réflexe EST le modèle). Cause mesurée : **cos(état tronqué, état final) = 0,044 / 0,145 / 1,000** à 1 / 16 / 24 couches — l'état intermédiaire est presque orthogonal au final, donc la tête de la dernière couche ne peut pas le lire. Gain de temps réel (18,5×). Manque écrit : une tête dédiée par profondeur. Porte 4 cas. |
 | 10/10 07 h 00 | **C9/C10 (pas 1)** : pont à fibres limitées. Piège 1 : le pont ne limitait que l'aller (1 096 vs 1 959 octets) — corrigé, les deux sens reçoivent `--pont-k`. Piège 2 : en **dense f32 élaguer ne gagne aucun octet** (3 664 avant et après, +7,83 %). Courbe en blocs : 448 fibres → +2,81 % et ÷1,8 en octets ; 224 → +108,9 % (falaise). À budget égal, quantifier bat élaguer de 83 %. Porte 7 cas. |
 | 10/10 05 h 20 | **C7 (pas 1)** : consolidation par rejeu (fusion des épisodes qui co-activent), deux formes de prototype. **L'exemplaire bat la moyenne partout** : seuil 1 → 7 % du magasin pour 87 % de rappel, contre 13 % pour 22 % ; seuil 8 → 51 % pour 95,3 % contre 67 % pour 34 %. Mécanisme : la clé d'une moyenne ne coïncide avec la clé d'aucun membre. Porte : cas 7. |
 | 10/10 01 h 50 | **C6** (mémoire épisodique) : module + mode `--episodique-essai` sur états réels. Round-trip **300/300 au bit près** (aussi après disque) ; rappel 100/96,7/69,3/15,3 % selon dégradation ; nouveauté 41,5 vs 64. **Trois négatifs mesurés** : aucun élagage (300/300 candidats), l'espacement des états ne change rien (24,0 vs 23,9), et à k=8 **81 collisions ⇒ round-trip 219/300**. Décorrélation : rappel 50 % → 78,3 %, toujours 0 % d'élagage. Porte `porte-episodique.sh` (5 cas). |

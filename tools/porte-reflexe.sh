@@ -1,0 +1,95 @@
+#!/bin/bash
+# porte-reflexe.sh — la porte de la capacité C8 (premier pas) : le RÉFLEXE.
+#
+# LA QUESTION. Un réflexe médullaire ne remonte pas au cortex : il répond par un
+# chemin COURT. Dans le moteur, ce chemin existe déjà — `--couches 0,L` tronque le
+# modèle et `--tete-partielle` applique la tête à la fin de la plage. La question
+# mesurable n'est donc pas « peut-on faire un réflexe ? » mais **« à partir de quelle
+# profondeur un réflexe tombe-t-il d'accord avec le modèle entier ? »**.
+#
+# CE QUE LA MESURE A RÉPONDU, ET ELLE EST NÉGATIVE : l'accord est de 0 % jusqu'à
+# 16 couches sur 24, 8,3 % à 20, et 100 % seulement à 24. Le diagnostic est dans la
+# même table : la COSINUS entre l'état tronqué et l'état final vaut 0,037 à 1 couche,
+# 0,130 à 16 et 1,000 à 24. Autrement dit, **l'état intermédiaire est presque
+# ORTHOGONAL à l'état final** : la tête du modèle est celle de sa dernière couche et
+# lit une direction que seules les dernières couches produisent.
+#
+# Ce que cette porte verrouille :
+#   1. un réflexe aussi profond que le modèle EST le modèle (accord 100 %) — sans cet
+#      invariant, la comparaison porterait sur deux calculs différents ;
+#   2. il n'y a PAS de sortie précoce utilisable : à 16 couches (2/3 de la
+#      profondeur), l'accord reste sous 25 % ;
+#   3. la cause est la direction : à 16 couches, la cosinus avec l'état final est
+#      inférieure à 0,5 ;
+#   4. le gain de temps est réel (un réflexe d'une couche est au moins 5× plus rapide)
+#      — donc l'échec du point 2 n'est pas un artefact de mesure.
+#
+# CE QUE LA PORTE NE DIT PAS : la sortie précoce est mesurée SANS tête dédiée. Une
+# tête entraînée pour la couche L donnerait autre chose ; elle n'existe pas ici (le
+# moteur n'entraîne pas), et c'est écrit dans la sortie du mode.
+set -u
+cd "$(dirname "$0")/.."
+D=${D:-./drave-core/target/release/drave}
+M=${MODELE:-models/Qwen2.5-0.5B-Q8_0.gguf}
+IDS=${IDS:-/tmp/campagne24/ids_0.5B-Q8.txt}
+N=${N:-32}
+T=$(mktemp -d)
+[ -s "$M" ] && [ -s "$IDS" ] || { echo "  modèle ou identifiants absents"; exit 2; }
+
+echo "=== la courbe accord ↔ profondeur (et sa cause) ==="
+timeout 1800 "$D" "$M" --reflexe-essai "$N" --ids-file "$IDS" --ctx 256 --threads 8 \
+  > "$T/r.txt" 2>&1 || { echo "  ❌ l'essai a échoué"; tail -3 "$T/r.txt"; exit 1; }
+grep -E "modèle  |référence|^ +couches" "$T/r.txt" | sed 's/^/  /'
+grep -E "^ +[0-9]+ +[0-9]" "$T/r.txt" | sed 's/^/  /'
+grep -E "ce que la courbe" -A 2 "$T/r.txt" | sed 's/^/  /'
+
+python3 - "$T/r.txt" <<'PY' || exit 1
+import re, sys
+t = open(sys.argv[1]).read()
+lignes = [l for l in t.splitlines() if re.match(r"^\s+\d+\s+\d+\.\d %", l)]
+if len(lignes) < 3:
+    sys.exit(f"  ❌ courbe illisible ({len(lignes)} lignes)")
+pts = []
+for l in lignes:
+    ch = l.split()
+    pts.append((int(ch[0]), float(ch[1]), float(ch[3]), float(ch[5]), float(ch[6])))
+# (couches, accord %, accord top-5 %, cos, ms/jeton) — le signe % est un CHAMP à part
+prof_max = max(p[0] for p in pts)   # p = (couches, accord, top5, cos, ms)
+
+# 1. un réflexe aussi profond que le modèle EST le modèle
+dernier = max(pts)
+if abs(dernier[1] - 100.0) > 1e-9:
+    sys.exit(f"  ❌ à {dernier[0]} couches (toute la profondeur) l'accord devrait être "
+             f"100 %, il est de {dernier[1]} %")
+print(f"  ✅ à {dernier[0]} couches, le réflexe EST le modèle : {dernier[1]} % d'accord")
+
+# 2. pas de sortie précoce utilisable
+deux_tiers = [p for p in pts if p[0] <= 2 * prof_max // 3]
+pire = max(deux_tiers, key=lambda p: p[1])
+if pire[1] >= 25.0:
+    sys.exit(f"  ❌ à {pire[0]} couches l'accord atteint {pire[1]} % : il y aurait une "
+             "sortie précoce, contrairement à ce qui a été mesuré")
+print(f"  ✅ sur TOUTES les profondeurs jusqu'à 2/3 de la profondeur, le meilleur accord "
+      f"est {pire[1]} % (à {pire[0]} couches) : pas de sortie précoce utilisable")
+
+# 3. la cause est la direction, pas l'échelle
+c16 = [p for p in deux_tiers if p[0] == max(x[0] for x in deux_tiers)][0]
+if c16[3] >= 0.5:
+    sys.exit(f"  ❌ à {c16[0]} couches la cosinus avec l'état final vaut {c16[3]} : "
+             "l'explication par la direction ne tient pas")
+print(f"  ✅ la cause est la DIRECTION : cos(état tronqué, état final) = {c16[3]} à "
+      f"{c16[0]} couches (1,000 à la profondeur entière)")
+
+# 4. le gain de temps est réel
+rapide = min(pts)          # 1 couche : le réflexe le plus court
+lent = dernier             # toute la profondeur
+# `p[4]` est le temps (le cosinus est `p[3]`) : les confondre a produit un rapport de
+# 22,7× entre deux cosinus — attrapé parce que le message affichait « 0.0 ms ».
+if rapide[4] <= 0 or lent[4] / rapide[4] < 3.0:
+    sys.exit(f"  ❌ le gain de temps est trop faible pour que la mesure ait un sens : "
+             f"{lent[4]} ms contre {rapide[4]} ms")
+print(f"  ✅ le gain de temps est réel : {rapide[4]:.1f} ms par jeton à {rapide[0]} couche(s) "
+      f"contre {lent[4]:.1f} ms à {lent[0]} — {lent[4]/rapide[4]:.1f}× plus rapide, "
+      f"pour {rapide[1]} % d'accord")
+PY
+rm -rf "$T"

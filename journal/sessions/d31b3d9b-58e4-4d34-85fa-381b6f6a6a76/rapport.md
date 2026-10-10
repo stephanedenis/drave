@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 38.2 h |
+| Durée | 38.5 h |
 | Tours | 44 |
-| Messages | 1545 |
-| Appels d'outils | 1455 |
+| Messages | 1562 |
+| Appels d'outils | 1472 |
 | Fichiers touchés | 61 |
-| Commandes | 1210 |
+| Commandes | 1227 |
 | Sous-agents | 3 |
-| Commits | 124 |
+| Commits | 125 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2058,7 +2058,7 @@ Je continue sur cette liste — il
 
 ### Tour 44 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1749 caractères tronqués]
 
-*188 appels d'outils.* Actions notables :
+*205 appels d'outils.* Actions notables :
 
 - bash — Implement per-region step counters and the step bound
 - bash — Write and run the clock/step-bound gate
@@ -2074,11 +2074,11 @@ Je continue sur cette liste — il
 - bash — Extend trace format to v2 with timestamps
 - bash — Add merge, clock drift, link verification
 - bash — Rewrite link pairing and build
-- … et 167 autres
+- … et 184 autres
 
 **Synthèse produite :**
 
-⏵ C9 : la falaise est entre 448 et 392 fibres (+2,8 % → +25,4 %) — je verrouille et documente
+⏵ C8 : le réflexe court n'existe pas — je documente et commite
 
 ## 3. Travail accompli
 
@@ -2196,7 +2196,7 @@ Je continue sur cette liste — il
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1170 autres
+- … et 1187 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2324,7 +2324,7 @@ Je continue sur cette liste — il
 
 ## 5. Erreurs rencontrées
 
-64 sorties en erreur ou divergentes. Les premières :
+65 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : ```  ### 🤖 Assistant  ⏵ **En transformers 5, `AutoModel` rend directement `Qwen2Model` (pas de `.model`). Je corrige le diagnostic.**  - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitH
 - **T2** : 3310393 bash -c pgrep -af "essai_decharge" | grep python | head; echo "--- logs ---"; tail -2 /tmp/ec_d192_lr3e3.log 2>/dev/null; tail -2 /tmp/ec_d192_lr1e3.log 2>/dev/null; echo "---"; ls -la /tmp/ec
@@ -2468,4 +2468,5 @@ Je continue sur cette liste — il
 - C7 pas 1 : consolider par rejeu — et garder un CAS bat résumer par une MOYENNE  C7 au sens du plan veut rejouer des épisodes pour modifier des POIDS. Ce n'est p
 - C9/C10 pas 1 : le pont à fibres limitées — combien de fibres, et à quel prix  La question du corps calleux, posée en termes mesurables : deux régions échangent 
 - C9 : la falaise du pont est une MARCHE entre 448 et 392 fibres  Localisée en raffinant la courbe (listes par blocs) :      896 fibres   111,9225   1 951 octets 
+- C8 pas 1 : le réflexe — un chemin court qui ne sait RIEN, et la cause mesurée  Un réflexe est un chemin COURT (la moelle épinière ne remonte pas au cortex). Le 
 
