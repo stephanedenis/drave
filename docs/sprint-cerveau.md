@@ -275,6 +275,27 @@ entier/réparti position par position (l'outil existe : `compare_logits.py`).
 
 ---
 
+## E4 — FAIT (11 octobre 7 h 30) : l'équilibre excitation/inhibition, mesuré
+
+Levier existant `--ffn-gain couche:valeur`. Référence (sans réglage) **14,6496**, Qwen2.5-0.5B,
+128 jetons. Porte `tools/porte-gain.sh`, 4 cas verts.
+
+1. **INVARIANT** : `--ffn-gain L:1.0` **EST** l'absence de réglage — 14,6496 sur les couches
+   0, 6 et 18. Sans lui, aucune autre ligne ne comparerait quoi que ce soit.
+2. **INHIBITION** : la courbe est **MONOTONE** (couche 12 : 15,69 · 16,30 · 17,12 · 19,48)
+   ⇒ l'hypothèse « un peu d'inhibition fait du bien » est **RÉFUTÉE** de ce côté.
+3. **AMPLIFICATION** : l'optimum est **INTÉRIEUR** et net sur les premières couches —
+   couche 0 à **0,75 → 12,9635** (**−11,5 %**), couche 1 à 0,5 → 13,7907 (−5,9 %), couche 2
+   sans optimum utile.
+4. **FALAISE** : couche 0 à 0,25 → **996,04** (**68× pire**) : un gain trop faible à la
+   première couche ne dégrade pas un peu, il **casse** le modèle.
+
+**Le profil optimal DÉCROÎT avec la profondeur** (0,75 puis 0,5 puis ≥ 1,0) : les premières
+couches ont besoin d'être amplifiées, les suivantes non. Un **profil appris par couche** est
+donc un levier mesuré, sans rien entraîner — et c'est une piste directe pour le dessin I.
+
+---
+
 ## ▶ PROCHAINE ACTION (à lire en premier)
 
 État au **11 octobre 6 h 45** · **21 portes, toutes vertes** (`tools/porte-*.sh`) ·

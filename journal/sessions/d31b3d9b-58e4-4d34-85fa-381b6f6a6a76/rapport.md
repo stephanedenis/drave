@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 46.3 h |
-| Tours | 57 |
-| Messages | 1833 |
-| Appels d'outils | 1717 |
+| Durée | 46.5 h |
+| Tours | 58 |
+| Messages | 1840 |
+| Appels d'outils | 1722 |
 | Fichiers touchés | 61 |
-| Commandes | 1467 |
+| Commandes | 1472 |
 | Sous-agents | 3 |
-| Commits | 147 |
+| Commits | 148 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -149,6 +149,8 @@
 **Tour 56** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 **Tour 57** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
+
+**Tour 58** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -2573,7 +2575,39 @@ Après correction (jetons **comptés**) : **référence 5,3719 · découpage 5,3
 
 **Synthèse produite :**
 
-⏵ Round 14 : je consolide l'état reprenable avec les commandes exactes, et je certifie la suite
+⏵ Round 14 livré : état reprenable consolidé — trois chantiers avec leur première commande
+
+**Ce round** — 1 commit poussé (`7869a12`), 122 tests verts, arbre de travail propre (hors `journal/` géré par le harnais).
+
+J'ai réécrit le bloc **▶ PROCHAINE ACTION** de `docs/sprint-cerveau.md` pour qu'un round suivant — ou un humain — reprenne sans rien relire :
+
+**Les trois prochains chantiers, chacun avec sa première commande :**
+1. **Budget `paires/s`** (C10, 3ᵉ volet) — la difficulté est nommée : ce sont **les pairs** qui calculent les paires, donc le pilote ne peut les borner sans que le nœud les **transporte** (protocole v7 : un champ dans la trame de réponse). Première commande : mesurer ce que le nœud calcule par pas — il l'imprime déjà.
+2. **C8 suite — une tête dédiée par profondeur** : mesuré qu'un réflexe court ne peut pas lire l'état intermédiaire (cos 0,145 à 16 couches sur 24) ; il lui faut une tête **entraînée pour sa couche**, et `tools/entrainer_moteur.py` existe.
+3. **E4 — courbe de dose d'une inhibition négative** (`--ffn-gain` < 0) par couche, avec les leviers déjà présents.
+
+**Le bilan par capacité** en une ligne chacune (C1 → C12bis) avec les chiffres clés, et surtout **les cinq corrections de ce sprint écrites pour ne pas être réintroduites** :
+1. `--limit` **diffère selon le chemin** (`N` premiers en perplexité, `N` derniers en réparti) ⇒ toujours **compter** les jetons ;
+2. une **position ne se devine pas** ⇒ `--etat-fin`, résolu par le moteur après troncature ;
+3. `..Default::default()` donne **0,0** à un f32 ⇒ un poids de greffe nul, en silence ;
+4. `sys.exit("message")` sort **toujours en 1** ⇒ une porte « verte » rendait 1 ;
+5. une porte qui échoue doit être **instruite jusqu'à sa cause** (la rouge accusait le modèle ; c'était la porte).
+
+**Bilan du sprint** : 14 rounds, **21 portes toutes vertes**, 122 tests, quatre codes d'arrêt distincts (5 borne · 6 octets · 7 panne · 8 latence), et une trentaine de mesures documentées — dont une bonne moitié sont des négatifs, des réfutations ou des corrections, chacun écrit avec ses conditions. L'objectif reste **actif**.
+
+### Tour 58 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
+
+*5 appels d'outils.* Actions notables :
+
+- bash — Check the ffn-gain syntax
+- bash — Run the inhibition dose-response
+- bash — Refine the positive gain dose at early layers
+- bash — Write and run the gain gate
+- bash — Document and commit the E/I result
+
+**Synthèse produite :**
+
+⏵ Optimum INTÉRIEUR trouvé : gain 0,75 à la couche 0 → **12,96 contre 14,65 (−11,5 %)**
 
 ## 3. Travail accompli
 
@@ -2691,7 +2725,7 @@ Après correction (jetons **comptés**) : **référence 5,3719 · découpage 5,3
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1427 autres
+- … et 1432 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2986,4 +3020,5 @@ Après correction (jetons **comptés**) : **référence 5,3719 · découpage 5,3
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib p = pathlib.Path("docs/sprint-cerveau.md") s = p.read_text() a = """| 1
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 

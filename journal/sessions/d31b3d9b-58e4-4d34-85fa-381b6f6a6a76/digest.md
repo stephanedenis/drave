@@ -29295,3 +29295,145 @@ etat reprenable reecrit
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"docs/sprint-cerveau.md\")\ns = p.read_text()\na = \"\"\"| 11/10 06 h 30 | **BALAYAGE DES PORTES**\"\"\"\nb = \"\"\"| 11/10 06 h 45 | **CONSOLIDATION DE L'ÉTAT REPRENABLE** : le  … [2010 caractères tronqués]`
+
+  ```
+7869a12 Etat reprenable consolide : trois chantiers avec leur premiere commande, et cinq corrections a ne pas reintroduire
+dee9e58 Balayage des portes : le piege de fenetre etait LATENT dans porte-topologie aussi
+b1b63b0 C11 (decouverte) : le registre des regions — les topologies ne codent plus les adresses
+ M journal/README.md
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 7, in <module>
+AssertionError
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 14 livré : état reprenable consolidé — trois chantiers avec leur première commande
+
+**Ce round** — 1 commit poussé (`7869a12`), 122 tests verts, arbre de travail propre (hors `journal/` géré par le harnais).
+
+J'ai réécrit le bloc **▶ PROCHAINE ACTION** de `docs/sprint-cerveau.md` pour qu'un round suivant — ou un humain — reprenne sans rien relire :
+
+**Les trois prochains chantiers, chacun avec sa première commande :**
+1. **Budget `paires/s`** (C10, 3ᵉ volet) — la difficulté est nommée : ce sont **les pairs** qui calculent les paires, donc le pilote ne peut les borner sans que le nœud les **transporte** (protocole v7 : un champ dans la trame de réponse). Première commande : mesurer ce que le nœud calcule par pas — il l'imprime déjà.
+2. **C8 suite — une tête dédiée par profondeur** : mesuré qu'un réflexe court ne peut pas lire l'état intermédiaire (cos 0,145 à 16 couches sur 24) ; il lui faut une tête **entraînée pour sa couche**, et `tools/entrainer_moteur.py` existe.
+3. **E4 — courbe de dose d'une inhibition négative** (`--ffn-gain` < 0) par couche, avec les leviers déjà présents.
+
+**Le bilan par capacité** en une ligne chacune (C1 → C12bis) avec les chiffres clés, et surtout **les cinq corrections de ce sprint écrites pour ne pas être réintroduites** :
+1. `--limit` **diffère selon le chemin** (`N` premiers en perplexité, `N` derniers en réparti) ⇒ toujours **compter** les jetons ;
+2. une **position ne se devine pas** ⇒ `--etat-fin`, résolu par le moteur après troncature ;
+3. `..Default::default()` donne **0,0** à un f32 ⇒ un poids de greffe nul, en silence ;
+4. `sys.exit("message")` sort **toujours en 1** ⇒ une porte « verte » rendait 1 ;
+5. une porte qui échoue doit être **instruite jusqu'à sa cause** (la rouge accusait le modèle ; c'était la porte).
+
+**Bilan du sprint** : 14 rounds, **21 portes toutes vertes**, 122 tests, quatre codes d'arrêt distincts (5 borne · 6 octets · 7 panne · 8 latence), et une trentaine de mesures documentées — dont une bonne moitié sont des négatifs, des réfutations ou des corrections, chacun écrit avec ses conditions. L'objectif reste **actif**.
+
+
+## Tour 58
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 mémoire épisodique, C7 consolidation, C8 périphérie, C9 latéralité, C10 budgets, et la diffusion réseau du bus de C5 ; (b) les expériences E2-E9 de docs/biologie-pour-drave.md et docs/hebbien-differentiel-et-biologie.md ; (c) les dessins de modèle H/I/J de docs/modele-pour-drave.md ; (d) les manques du registre docs/manques.md (noyau de listes pour les experts, noyau de listes GPU, encodeurs) — l'implémenter ou la mesurer, la doter d'une porte vérifiable, la documenter, commiter, pousser, et enchaîner immédiatement sur la suivante. Contraintes : les 23 portes du dépôt et tous les tests restent verts (porte-flux.sh après toute modification du chemin d'exécution), le profil release reste le binaire de mesure, le crate reste std seul, et docs/sprint-cerveau.md reste l'état resumable mis à jour à chaque round. Ne jamais s'arrêter faute de tâches planifiées : en inventer de nouvelles, mesurables, plutôt que d'attendre."
+Round: 15/60
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ E4 : courbe de dose d'une INHIBITION négative (`--ffn-gain` < 0) par couche — prédiction d'un optimum intérieur
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ./drave-core/target/release/drave --help 2>&1 | grep -i \"ffn-gain\" | head -3; grep -n '\"--ffn-gain\"' -A 3 drave-core/src/main.rs | head -6", "description": "Check the ffn-gain syntax"}`
+
+  ```
+1054:            "--ffn-gain" => {
+1055-                let v: Vec<&str> = suivant(i).split(':').collect();
+1056-                o.ffn_gain = Some((v[0].parse().unwrap(), v[1].parse().unwrap())); 2
+1057-            }
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/ei.sh <<'EOF'\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nD=./drave-core/target/release/drave\nM=models/Qwen2.5-0.5B-Q8_0.gguf\nIDS=/tmp/campagne24/ids_0.5B-Q8.txt\necho \"  référence (aucun gain) :\"\n$D \"$M\" - … [518 caractères tronqués]`
+
+  ```
+référence (aucun gain) :
+    perplexité 14.6496 sur
+  couche 0 · gain 0.5 : 14.1057
+  couche 0 · gain 0.0 : 56860.5744
+  couche 0 · gain -0.25 : 41039.8507
+  couche 0 · gain -0.5 : 70349.6113
+  couche 0 · gain -1.0 : 112958.2146
+  couche 6 · gain 0.5 : 15.2081
+  couche 6 · gain 0.0 : 17.6825
+  couche 6 · gain -0.25 : 20.7224
+  couche 6 · gain -0.5 : 27.6019
+  couche 6 · gain -1.0 : 65.1286
+  couche 12 · gain 0.5 : 14.9512
+  couche 12 · gain 0.0 : 15.6908
+  couche 12 · gain -0.25 : 16.3034
+  couche 12 · gain -0.5 : 17.1200
+  couche 12 · gain -1.0 : 19.4791
+  couche 18 · gain 0.5 : 15.4868
+  couche 18 · gain 0.0 : 17.4291
+  couche 18 · gain -0.25 : 18.9574
+  couche 18 · gain -0.5 : 21.2038
+  couche 18 · gain -1.0 : 30.2514
+  ```
+
+### 🤖 Assistant
+
+⏵ Prédiction E/I RÉFUTÉE (inhibition monotone) — mais +0,5 à la couche 0 AMÉLIORE de 3,7 % ; je raffine
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for L in 0 1 2; do for V in 0.25 0.5 0.75 1.0 1.5 2.0; do P=$(./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/campagne24/ids_0.5B-Q8.txt --limit 128 --ctx 512 --threads 8 --ffn-gain \"$L:$V\" 2>&1 | grep -o … [230 caractères tronqués]`
+
+  ```
+couche 0 · gain 0.25 : 996.0390
+  couche 0 · gain 0.5 : 14.1057
+  couche 0 · gain 0.75 : 12.9635
+  couche 0 · gain 1.0 : 14.6496
+  couche 0 · gain 1.5 : 15.4298
+  couche 0 · gain 2.0 : 18.8337
+  couche 1 · gain 0.25 : 14.2423
+  couche 1 · gain 0.5 : 13.7907
+  couche 1 · gain 0.75 : 13.9844
+  couche 1 · gain 1.0 : 14.6496
+  couche 1 · gain 1.5 : 14.9166
+  couche 1 · gain 2.0 : 15.7296
+  couche 2 · gain 0.25 : 20.3067
+  couche 2 · gain 0.5 : 18.1670
+  couche 2 · gain 0.75 : 15.9977
+  couche 2 · gain 1.0 : 14.6496
+  couche 2 · gain 1.5 : 14.6357
+  couche 2 · gain 2.0 : 15.5948
+  référence : 14.6496
+  ```
+
+### 🤖 Assistant
+
+⏵ Optimum INTÉRIEUR trouvé : gain 0,75 à la couche 0 → **12,96 contre 14,65 (−11,5 %)**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/porte-gain.sh <<'GATEFILE'\n#!/bin/bash\n# porte-gain.sh — E4 : le GAIN de la FFN par couche, et l'équilibre excitation/inhibition.\n#\n# L'HYPOTHÈSE BIOLOGIQUE (docs/biologie-pour-drave.md, E4) : un réseau cortical équil … [4360 caractères tronqués]`
+
+  ```
+=== 1. invariant : --ffn-gain L:1.0 EST l'absence de réglage ===
+  sans réglage : 14.6496
+  couche 0   gain 1.0 : 14.6496
+  couche 6   gain 1.0 : 14.6496
+  couche 18  gain 1.0 : 14.6496
+  ✅ l'identité est exacte sur trois couches
+=== 2. inhibition MONOTONE (couche 12) ===
+  gain 0.0    : 15.6908
+  gain -0.25  : 16.3034
+  gain -0.5   : 17.1200
+  gain -1.0   : 19.4791
+  ✅ toute inhibition dégrade, et de plus en plus : l'optimum intérieur est réfuté de ce côté
+=== 3. optimum INTÉRIEUR (couche 0) : 0,75 doit battre 0,5 ET 1,5 ===
+  gain 0,5 : 14.1057 · 0,75 : 12.9635 · 1,5 : 15.4298
+  ✅ optimum intérieur : 12.9635 contre 14.1057, 15.4298 et 14.6496 sans réglage (11.5 % de mieux)
+=== 4. la FALAISE : 0,25 à la couche 0 casse le modèle ===
+  gain 0,25 : 996.0390
+  ✅ la falaise est réelle : 996.039 contre 14.6496 (68× pire)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\n\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\na = \"## Annexe — manifeste des journaux\"\nsec = \"\"\"## 37. E4 — l'équilibre excitation/inhibition : l'hypothès … [6987 caractères tronqués]`

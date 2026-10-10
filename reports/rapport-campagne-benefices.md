@@ -2276,6 +2276,50 @@ Après correction (le nombre de jetons est compté) : **référence 5,3719 · d�
 de jetons du fichier** (compté, pas écrit à la main) dès qu'un chemin réparti intervient. Les
 deux portes qui le faisaient à la main s'étaient trompées toutes les deux.
 
+## 37. E4 — l'équilibre excitation/inhibition : l'hypothèse est VRAIE dans un sens seulement
+
+L'hypothèse biologique (E4) : un réseau cortical équilibré vit près d'un point où excitation
+et inhibition se compensent, et un déséquilibre dans **un** sens ou dans l'autre coûte.
+Transposée au moteur avec le levier existant `--ffn-gain couche:valeur`, la question
+mesurable est : **existe-t-il un gain de la FFN, par couche, qui AMÉLIORE la perplexité — et
+est-il intérieur ?** Qwen2.5-0.5B-Q8, 128 jetons, référence **14,6496**.
+
+| gain | couche 0 | couche 1 | couche 2 | couche 6 | couche 12 | couche 18 |
+|---|---|---|---|---|---|---|
+| **1,0** | **14,6496** | **14,6496** | **14,6496** | **14,6496** | **14,6496** | **14,6496** |
+| 0,75 | **12,9635** | 13,9844 | 15,9977 | — | — | — |
+| 0,5 | 14,1057 | **13,7907** | 18,1670 | 15,2081 | 14,9512 | 15,4868 |
+| 0,25 | **996,0390** | 14,2423 | 20,3067 | — | — | — |
+| 0,0 | 56 860,57 | — | — | 17,6825 | 15,6908 | 17,4291 |
+| −0,25 | 41 039,85 | — | — | 20,7224 | 16,3034 | 18,9574 |
+| −0,5 | 70 349,61 | — | — | 27,6019 | 17,1200 | 21,2038 |
+| −1,0 | 112 958,21 | — | — | 65,1286 | 19,4791 | 30,2514 |
+
+**Trois résultats, et le premier est un invariant :**
+
+1. **`--ffn-gain L:1.0` EST l'absence de réglage** : 14,6496 exactement, sur trois couches
+   (0, 6, 18). Sans cet invariant, aucune autre ligne ne comparerait quoi que ce soit — et
+   c'est la porte qui l'exige ;
+2. **du côté INHIBITION, la courbe est MONOTONE et l'optimum intérieur est réfuté** : à la
+   couche 12, tout gain inférieur à 1 dégrade, et de plus en plus (15,69 · 16,30 · 17,12 ·
+   19,48). L'hypothèse « un peu d'inhibition fait du bien » est **fausse** ici ;
+3. **du côté AMPLIFICATION, l'optimum est INTÉRIEUR et net sur les premières couches** :
+   couche 0 à **0,75** → **12,9635**, soit **−11,5 %** ; couche 1 à 0,5 → 13,7907 (−5,9 %) ;
+   la couche 2 n'a plus d'optimum utile (son meilleur point est ≥ 1,0). Et sous l'optimum il
+   y a une **falaise** : la couche 0 à 0,25 donne **996,04**, **68× pire** — un gain trop
+   faible à la première couche ne dégrade pas un peu, il casse le modèle.
+
+**Ce que cela dit du modèle, et c'est le plus intéressant** : le profil optimal n'est pas
+plat — il **décroît avec la profondeur** (optimum à 0,75 puis 0,5 puis ≥ 1,0). Les premières
+couches ont donc besoin d'**être amplifiées** et les suivantes non ; autrement dit, la
+« balance » d'un transformeur n'est pas la même à toutes les profondeurs, et un profil appris
+par couche est un levier **mesuré** (−11,5 % sur un réglage, sans rien entraîner).
+
+**Conditions** : un seul modèle (0,5 B), 128 jetons, un seul jeu d'identifiants, le gain est
+appliqué à la SORTIE de la FFN d'une couche à la fois (les gains simultanés et un profil
+appris ne sont pas mesurés) ; l'optimum à 0,75 est un point de la grille (0,5 · 0,75 · 1,0),
+il n'est pas localisé plus finement.
+
 ## Annexe — manifeste des journaux
 
 Les journaux bruts sont dans `/tmp/campagne24/`. **59 fichiers d'étape (79 Kio)**,

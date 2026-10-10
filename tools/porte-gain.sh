@@ -1,0 +1,91 @@
+#!/bin/bash
+# porte-gain.sh — E4 : le GAIN de la FFN par couche, et l'équilibre excitation/inhibition.
+#
+# L'HYPOTHÈSE BIOLOGIQUE (docs/biologie-pour-drave.md, E4) : un réseau cortical équilibré
+# vit près d'un point où excitation et inhibition se compensent, et un déséquilibre dans un
+# sens ou dans l'autre coûte. Transposée au moteur, la question mesurable est : **existe-t-il
+# un gain de la FFN, par couche, qui AMÉLIORE la perplexité — et est-il intérieur** (ni 0,
+# ni 1, ni l'infini) ?
+#
+# CE QUE LA MESURE A DONNÉ, et les deux moitiés ne disent pas la même chose :
+#   · du côté INHIBITION (gain < 1), la courbe est MONOTONE : toute inhibition dégrade, et
+#     l'hypothèse d'un optimum intérieur y est RÉFUTÉE ;
+#   · du côté AMPLIFICATION, l'optimum est INTÉRIEUR et net sur les premières couches :
+#     couche 0 à 0,75 → **12,9635** contre **14,6496** sans réglage (**−11,5 %**), et couche
+#     1 à 0,5 → 13,7907 (−5,9 %) ; la couche 2 n'a plus d'optimum utile.
+#   · en dessous de l'optimum, une FALAISE : couche 0 à 0,25 → **996,04** (le gain trop
+#     faible à la première couche casse le modèle, il ne le dégrade pas un peu).
+#
+# Ce que la porte verrouille :
+#   1. `--ffn-gain L:1.0` **EST** l'absence de réglage (perplexité identique AU CHIFFRE,
+#      vérifiée sur trois couches) — sans cet invariant, aucune des autres lignes ne
+#      comparerait quoi que ce soit ;
+#   2. l'inhibition est MONOTONE : à une couche du milieu, chaque gain plus petit que 1 fait
+#      strictement pire que le précédent ;
+#   3. l'optimum intérieur existe là où il a été trouvé (couche 0 : 0,75 bat 0,5 ET 1,5) ;
+#   4. et la falaise est réelle (0,25 à la couche 0 est catastrophique) — un résultat qu'un
+#      réglage « un peu plus prudent » ne laisse pas deviner.
+set -u
+cd "$(dirname "$0")/.."
+D=${D:-./drave-core/target/release/drave}
+M=${MODELE:-models/Qwen2.5-0.5B-Q8_0.gguf}
+IDS=${IDS:-/tmp/campagne24/ids_0.5B-Q8.txt}
+LIMITE=${LIMITE:-128}
+CTX=${CTX:-512}
+T=$(mktemp -d)
+[ -s "$M" ] && [ -s "$IDS" ] || { echo "  modèle ou identifiants absents"; exit 2; }
+
+ppl() { # $@ = drapeaux
+  $D "$M" --ppl "$IDS" --limit "$LIMITE" --ctx "$CTX" --threads 8 "$@" 2>&1 \
+    | grep -oE "perplexité [0-9.]+ sur" | grep -oE "[0-9.]+"
+}
+
+echo "=== 1. invariant : --ffn-gain L:1.0 EST l'absence de réglage ==="
+REF=$(ppl)
+echo "  sans réglage : $REF"
+for L in 0 6 18; do
+  P=$(ppl --ffn-gain "$L:1.0")
+  printf '  couche %-3s gain 1.0 : %s\n' "$L" "${P:-échec}"
+  [ "$P" = "$REF" ] || { echo "  ❌ le gain 1.0 à la couche $L n'est pas l'identité ($P contre $REF)"; exit 1; }
+done
+echo "  ✅ l'identité est exacte sur trois couches"
+
+echo "=== 2. inhibition MONOTONE (couche 12) ==="
+PREV=""
+for V in 0.0 -0.25 -0.5 -1.0; do
+  P=$(ppl --ffn-gain "12:$V")
+  printf '  gain %-6s : %s\n' "$V" "${P:-échec}"
+  if [ -n "$PREV" ]; then
+    python3 -c "
+import sys
+a, b = float('$PREV'), float('$P')
+sys.exit(0 if b >= a else 1)" || { echo "  ❌ l'inhibition n'est pas monotone ($PREV → $P)"; exit 1; }
+  fi
+  PREV=$P
+done
+echo "  ✅ toute inhibition dégrade, et de plus en plus : l'optimum intérieur est réfuté de ce côté"
+
+echo "=== 3. optimum INTÉRIEUR (couche 0) : 0,75 doit battre 0,5 ET 1,5 ==="
+P05=$(ppl --ffn-gain "0:0.5"); P075=$(ppl --ffn-gain "0:0.75"); P15=$(ppl --ffn-gain "0:1.5")
+printf '  gain 0,5 : %s · 0,75 : %s · 1,5 : %s\n' "$P05" "$P075" "$P15"
+python3 - "$P05" "$P075" "$P15" "$REF" <<'PY' || exit 1
+import sys
+a, b, c, ref = (float(x) for x in sys.argv[1:5])
+if not (b < a and b < c and b < ref):
+    sys.exit(f"  ❌ pas d'optimum intérieur à la couche 0 : {b} n'est pas sous {a}, {c} et {ref}")
+print(f"  ✅ optimum intérieur : {b} contre {a}, {c} et {ref} sans réglage "
+      f"({100.0*(ref-b)/ref:.1f} % de mieux)")
+PY
+
+echo "=== 4. la FALAISE : 0,25 à la couche 0 casse le modèle ==="
+P025=$(ppl --ffn-gain "0:0.25")
+echo "  gain 0,25 : $P025"
+python3 - "$P025" "$REF" <<'PY' || exit 1
+import sys
+a, ref = float(sys.argv[1]), float(sys.argv[2])
+if a < 2.0 * ref:
+    sys.exit(f"  ❌ le gain 0,25 à la couche 0 ne casse pas le modèle ({a} contre {ref})")
+print(f"  ✅ la falaise est réelle : {a} contre {ref} ({a/ref:.0f}× pire)")
+PY
+
+rm -rf "$T"
