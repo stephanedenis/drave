@@ -2468,11 +2468,28 @@ refusé au lieu d'être ignoré) :
   diagnostiquée**. La correction a donc été **REVERTÉE** plutôt que laissée dans l'arbre : une
   régression silencieuse vaut moins qu'un manque écrit. Après revert, la référence répartie est
   de nouveau **18,5520** et les 122 tests passent.
-  **À instruire, avec la commande** : câbler `attn_window`/`swa_pattern`/`attn_sinks` dans
-  `run_ppl_reparti`, puis regarder la sortie COMPLÈTE du run (le résultat vide vient d'un
-  refus ou d'une panne, et le moteur dit lequel) ; et décider ensuite s'ils doivent voyager
-  dans la trame (protocole v7), sans quoi le pilote et le nœud n'appliqueraient pas la même
-  fenêtre — deux modèles différents sous le même nom ;
+  **INSTRUIT, ET RÉSOLU PAR UN REFUS.** Le câblage a été refait **en regardant la sortie
+  complète** (c'était la commande écrite au round précédent) : le run ne rend plus un vide
+  mais un résultat **FAUX ET SILENCIEUX** — et c'est bien pire. Le pilote applique la fenêtre à
+  ses douze couches, le nœud garde la sienne, et les deux moitiés ne calculent plus le même
+  modèle :
+
+  | avec `--attn-window 64` câblé | perplexité |
+  |---|---|
+  | référence locale (12 couches du pilote) | **195,5685** |
+  | découpage (12 + 12 couches) | **50,3829** |
+  | écart de flux | **7,42e-1** |
+
+  **La correction a donc été remplacée par un REFUS EXPLICITE** : en chemin réparti, si l'un
+  des trois réglages est donné, le moteur **s'arrête en expliquant** (code 2, aucune perplexité).
+  Un drapeau inerte est un défaut ; **un drapeau qui fait calculer deux modèles différents sous
+  le même nom en est un pire** — et le pire cas du dépôt est le résultat faux qui a l'air d'un
+  résultat. Ces réglages restent honorés en local (`--ppl`) et en inférence (`--infer`), où ils
+  ont été mesurés (13,1368 → 21,5801).
+
+  **Pour les honorer en réparti**, il faudra les ajouter à `struct Act` et à l'encodeur de
+  trame (protocole v7), puis les appliquer côté nœud comme les autres réglages d'activation ;
+
 - `--attn-topk` : **mon hypothèse est confirmée par la mesure** — sans effet à 32 jetons
   (180,5245), il **agit** à 512 (18,5520 → **18,4032**). Il n'y a donc **pas** de défaut là :
   à contexte court, l'attention est déjà triviale, et le drapeau ne peut rien changer.

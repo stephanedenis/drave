@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 47.2 h |
-| Tours | 66 |
-| Messages | 1897 |
-| Appels d'outils | 1763 |
+| Durée | 47.4 h |
+| Tours | 67 |
+| Messages | 1903 |
+| Appels d'outils | 1767 |
 | Fichiers touchés | 61 |
-| Commandes | 1513 |
+| Commandes | 1517 |
 | Sous-agents | 3 |
-| Commits | 156 |
+| Commits | 157 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -167,6 +167,8 @@
 **Tour 65** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 **Tour 66** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
+
+**Tour 67** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -2877,7 +2879,38 @@ Reprise avec un port valide et `--options-strict` (pour qu'un drapeau inconnu so
 
 **Synthèse produite :**
 
-⏵ Le câblage d'`attn_window` rend un résultat VIDE — je le REVERTE plutôt que de laisser une régression
+⏵ Round 23 livré : un candidat innocenté, un vrai trou — et une correction **revertée** faute de diagnostic
+
+**Ce round** — 1 commit poussé, 122 tests verts, arbre propre, référence répartie inchangée (18,5520).
+
+Instruction des deux candidats à **contexte long** (512 jetons, port valide) :
+
+| drapeau | en réparti | en local |
+|---|---|---|
+| `--attn-topk 64` | 18,5520 → **18,4032** — **agit** | — |
+| `--attn-window 64` | 18,5520 → **18,5520** — **sans effet** | 13,1368 → **21,5801** — **agit** |
+
+1. **`--attn-topk` n'est pas un défaut** : sans effet à 32 jetons (où l'attention est déjà triviale), il **agit** à 512. Mon hypothèse du round précédent est confirmée par la mesure.
+2. **`--attn-window` est un vrai trou**, de la même famille que `--ffn-gain` : câblé dans `run_infer` et `run_ppl`, **pas** dans `run_ppl_reparti`. Et il **ne voyage pas** dans la trame (`struct Act` ne porte ni `attn_window`, ni `swa_pattern`, ni `attn_sinks`).
+
+**La correction a été tentée, puis REVERTÉE** : le câblage rend un **résultat vide** (aucune perplexité), cause **non diagnostiquée**. J'ai préféré revenir en arrière plutôt que de laisser dans l'arbre une modification dont je ne comprends pas l'effet — **une régression silencieuse vaut moins qu'un manque écrit**. Après revert : référence **18,5520** (identique à avant), 122 tests verts, arbre propre.
+
+**À instruire, avec la commande** : câbler les trois champs en regardant la sortie **complète** (le vide vient d'un refus ou d'une panne, et le moteur dit lequel), puis décider s'ils doivent **voyager dans la trame** (protocole v7) — sinon le pilote et le nœud n'appliqueraient pas la même fenêtre, soit **deux modèles différents sous le même nom**.
+
+**Bilan** : 23 rounds, 22 portes toutes vertes, 122 tests. L'objectif reste **actif**.
+
+### Tour 67 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Re-apply and inspect the full output
+- bash — Implement the explicit refusal and verify
+- bash — Add the refusal case and run the gate
+- bash — Document and commit the refusal
+
+**Synthèse produite :**
+
+⏵ La cause est trouvée : le pilote applique la fenêtre, le nœud NON → 195,6 contre 50,4. Je REFUSE au lieu de calculer faux
 
 ## 3. Travail accompli
 
@@ -2995,7 +3028,7 @@ Reprise avec un port valide et `--options-strict` (pour qu'un drapeau inconnu so
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1473 autres
+- … et 1477 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3294,6 +3327,7 @@ Reprise avec un port valide et `--options-strict` (pour qu'un drapeau inconnu so
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib p = pathlib.Path("docs/sprint-cerveau.md") s = p.read_text() a = "## ▶ 
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t

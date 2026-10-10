@@ -4333,6 +4333,33 @@ changer (seul le temps change) — c'est la porte de C3", tp_region_distante, de
     // 42,5477 avec et sans le drapeau. C'est la famille de défauts que ce dépôt traque (un
     // drapeau qui ne fait rien), et celui-ci comptait double : le sprint porte sur la
     // distribution, où le réglage fin doit survivre.
+    // C2/E4 — LA FENÊTRE D'ATTENTION EN RÉPARTI : REFUS EXPLICITE, PAS UN RÉSULTAT FAUX.
+    //
+    // Mesuré : `--attn-window 64` AGIT en local (13,1368 → 21,5801) et ne fait RIEN en
+    // réparti, parce qu'il n'était câblé que dans `run_infer` et `run_ppl`. La correction
+    // évidente — l'assigner ici — a été essayée : elle rend un résultat FAUX ET SILENCIEUX,
+    // mesuré : le pilote applique la fenêtre à SES douze couches, le nœud garde la sienne, et
+    // les deux moitiés ne calculent plus le même modèle (référence locale 195,5685 contre
+    // 50,3829 pour le découpage, écart de flux 7,42e-1).
+    //
+    // POURQUOI REFUSER PLUTÔT QUE CALCULER. Un drapeau qui ne fait rien est un défaut ; un
+    // drapeau qui fait calculer DEUX MODÈLES DIFFÉRENTS SOUS LE MÊME NOM en est un pire, et le
+    // pire cas du dépôt est le résultat faux qui a l'air d'un résultat. Tant que ces champs ne
+    // voyagent pas dans la trame (`struct Act` ne porte ni `attn_window`, ni `swa_pattern`, ni
+    // `attn_sinks`), la seule conduite honnête est de le DIRE et de s'arrêter.
+    //
+    // CE QU'IL FAUDRA FAIRE POUR LES HONORER : ajouter les trois champs à `struct Act` et à
+    // l'encodeur/décodeur de trame (protocole v7), puis les appliquer côté nœud comme les
+    // autres réglages d'activation. Alors — et alors seulement — le drapeau voudra dire la
+    // même chose des deux côtés.
+    if opt.attn_window > 0 || opt.swa_pattern.is_some() || opt.attn_sinks > 0 {
+        eprintln!("[attention] REFUS : `--attn-window`, `--swa-pattern` et `--attn-sinks` ne \
+voyagent PAS dans la trame du protocole v6 — le pilote les appliquerait à ses couches et le \
+nœud garderait les siennes, soit DEUX MODÈLES DIFFÉRENTS SOUS LE MÊME NOM (mesuré : 195,5685 \
+contre 50,3829). Rien n'a été calculé. Ces réglages valent en local (`--ppl`) et en inférence \
+(`--infer`) ; pour les honorer en réparti, il faut les ajouter à `struct Act` (protocole v7).");
+        std::process::exit(2);
+    }
     if let Some(gs) = opt.ffn_gain.clone() {
         let liste: Vec<String> = gs.iter().map(|(l, g)| format!("couche {l} × {g}")).collect();
         println!("gain FFN : {}", liste.join(" · "));

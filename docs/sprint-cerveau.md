@@ -367,10 +367,27 @@ disait (`INJOIGNABLE (invalid port value)`). Reprise avec un port valide et `--o
   dans l'arbre — une régression silencieuse vaut moins qu'un manque écrit. Après revert :
   référence répartie **18,5520**, 122 tests verts, arbre propre.
 
-**À instruire** : câbler ces trois champs dans `run_ppl_reparti` en regardant la sortie
-COMPLÈTE (le vide vient d'un refus ou d'une panne, le moteur dit lequel), puis décider s'ils
-doivent voyager dans la trame (protocole v7) — sinon le pilote et le nœud n'appliqueraient pas
-la même fenêtre, c'est-à-dire **deux modèles différents sous le même nom**.
+**INSTRUIT ET RÉSOLU PAR UN REFUS.** Le câblage refait — **en regardant la sortie complète**,
+comme la commande du round précédent le demandait — ne rend plus un vide mais un résultat
+**FAUX ET SILENCIEUX**, ce qui est pire : le pilote applique la fenêtre à ses douze couches, le
+nœud garde la sienne.
+
+| avec `--attn-window 64` câblé | perplexité |
+|---|---|
+| référence locale (12 couches du pilote) | **195,5685** |
+| découpage (12 + 12) | **50,3829** |
+| écart de flux | **7,42e-1** |
+
+**La correction est donc devenue un REFUS EXPLICITE** : en réparti, si `--attn-window`,
+`--swa-pattern` ou `--attn-sinks` est donné, le moteur s'arrête en expliquant (**code 2**,
+aucune perplexité). Un drapeau inerte est un défaut ; **un drapeau qui fait calculer deux
+modèles différents sous le même nom en est un pire**. Ces réglages restent honorés en local et
+en inférence, où ils sont mesurés (13,1368 → 21,5801).
+
+**Reste à faire pour les honorer en réparti** : les ajouter à `struct Act` et à l'encodeur de
+trame (**protocole v7**), puis les appliquer côté nœud.
+
+**`porte-gain.sh` : 9 cas verts.**
 
 ---
 

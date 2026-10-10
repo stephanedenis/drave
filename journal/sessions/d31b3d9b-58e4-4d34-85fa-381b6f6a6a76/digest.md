@@ -30307,3 +30307,91 @@ Updated 1 path from the index
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\n\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\na = \"\"\"- `--attn-window` **ne voyage PAS** : il n'est pas dans `Act`, donc le nœud garde son défaut et\n  seule … [5186 caractères tronqués]`
+
+  ```
+docs attn-window
+c54c6fa attn-topk : pas de defaut (il agit a contexte long) · attn-window : un vrai trou, correction REVERTEE
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 23 livré : un candidat innocenté, un vrai trou — et une correction **revertée** faute de diagnostic
+
+**Ce round** — 1 commit poussé, 122 tests verts, arbre propre, référence répartie inchangée (18,5520).
+
+Instruction des deux candidats à **contexte long** (512 jetons, port valide) :
+
+| drapeau | en réparti | en local |
+|---|---|---|
+| `--attn-topk 64` | 18,5520 → **18,4032** — **agit** | — |
+| `--attn-window 64` | 18,5520 → **18,5520** — **sans effet** | 13,1368 → **21,5801** — **agit** |
+
+1. **`--attn-topk` n'est pas un défaut** : sans effet à 32 jetons (où l'attention est déjà triviale), il **agit** à 512. Mon hypothèse du round précédent est confirmée par la mesure.
+2. **`--attn-window` est un vrai trou**, de la même famille que `--ffn-gain` : câblé dans `run_infer` et `run_ppl`, **pas** dans `run_ppl_reparti`. Et il **ne voyage pas** dans la trame (`struct Act` ne porte ni `attn_window`, ni `swa_pattern`, ni `attn_sinks`).
+
+**La correction a été tentée, puis REVERTÉE** : le câblage rend un **résultat vide** (aucune perplexité), cause **non diagnostiquée**. J'ai préféré revenir en arrière plutôt que de laisser dans l'arbre une modification dont je ne comprends pas l'effet — **une régression silencieuse vaut moins qu'un manque écrit**. Après revert : référence **18,5520** (identique à avant), 122 tests verts, arbre propre.
+
+**À instruire, avec la commande** : câbler les trois champs en regardant la sortie **complète** (le vide vient d'un refus ou d'une panne, et le moteur dit lequel), puis décider s'ils doivent **voyager dans la trame** (protocole v7) — sinon le pilote et le nœud n'appliqueraient pas la même fenêtre, soit **deux modèles différents sous le même nom**.
+
+**Bilan** : 23 rounds, 22 portes toutes vertes, 122 tests. L'objectif reste **actif**.
+
+
+## Tour 67
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 mémoire épisodique, C7 consolidation, C8 périphérie, C9 latéralité, C10 budgets, et la diffusion réseau du bus de C5 ; (b) les expériences E2-E9 de docs/biologie-pour-drave.md et docs/hebbien-differentiel-et-biologie.md ; (c) les dessins de modèle H/I/J de docs/modele-pour-drave.md ; (d) les manques du registre docs/manques.md (noyau de listes pour les experts, noyau de listes GPU, encodeurs) — l'implémenter ou la mesurer, la doter d'une porte vérifiable, la documenter, commiter, pousser, et enchaîner immédiatement sur la suivante. Contraintes : les 23 portes du dépôt et tous les tests restent verts (porte-flux.sh après toute modification du chemin d'exécution), le profil release reste le binaire de mesure, le crate reste std seul, et docs/sprint-cerveau.md reste l'état resumable mis à jour à chaque round. Ne jamais s'arrêter faute de tâches planifiées : en inventer de nouvelles, mesurables, plutôt que d'attendre."
+Round: 24/60
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 24 : j'instruis le résultat VIDE — je regarde la sortie COMPLÈTE du câblage
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cp drave-core/src/main.rs /tmp/main_avant.py.bak && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\na = \"\"\"    if let Some(gs) = opt.ffn_gain.clone() {\"\"\"\nb = \"\"\"    //  … [1538 caractères tronqués]`
+
+  ```
+cablage reapplique
+--- sortie COMPLÈTE du pilote avec --attn-window 64 ---
+  référence locale  : perplexité 195.5685  (21.1 s)
+  deux nœuds        : perplexité 50.3829  (21.5 s)
+  horloge           : région locale 511 pas servis
+  écart             : 7.42e-1
+  transport         : dense f32 · 3664 octets par flux (aller) · 3664 au retour · 100.0 % d'activité (896 neurones par flux) · 511 flux
+  temps             : 17.4 ms par jeton en local · 17.0 ms à attendre le pair (son calcul + l'aller-retour) · soit 0.97× le calcul local seul
+code=0
+  ```
+
+### 🤖 Assistant
+
+⏵ La cause est trouvée : le pilote applique la fenêtre, le nœud NON → 195,6 contre 50,4. Je REFUSE au lieu de calculer faux
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cp /tmp/main_avant.py.bak drave-core/src/main.rs && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\na = \"\"\"    if let Some(gs) = opt.ffn_gain.clone() {\"\"\"\nb = \"\"\"    //  … [3434 caractères tronqués]`
+
+  ```
+refus explicite pose
+--- avec --attn-window 64 (doit REFUSER) ---
+[config] puits appris sur 0/24 couches · n_rot 64 · ffn 4864 · experts 0
+[config] rotation : RoPE simple (le modèle ne déclare pas YaRN)
+[attention] REFUS : `--attn-window`, `--swa-pattern` et `--attn-sinks` ne voyagent PAS dans la trame du protocole v6 — le pilote les appliquerait à ses couches et le nœud garderait les siennes, soit DEUX MODÈLES DIFFÉRENTS SOUS LE MÊME NOM (mesuré : 195,5685 contre 50,3829). Rien n'a été calculé. Ces réglages valent en local (`--ppl`) et en inférence (`--infer`) ; pour les honorer en réparti, il faut les ajouter à `struct Act` (protocole v7).
+code=0
+--- sans le drapeau (doit marcher) ---
+  deux nœuds        : perplexité 59.0790  (2.7 s)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"tools/porte-gain.sh\")\ns = p.read_text()\na = '''rm -rf \"$T\"'''\nb = '''echo \"=== 9. les réglages qui ne voyagent PAS sont REFUSÉS en réparti ===\"\n# Mesuré : --attn-window … [2042 caractères tronqués]`
+
+  ```
+cas 9 ajoute
+code=0
+  ✅ le drapeau agit aussi en réparti (180.5245 → 222.3496)
+=== 9. les réglages qui ne voyagent PAS sont REFUSÉS en réparti ===
+  [attention] REFUS : `--attn-window`, `--swa-pattern` et `--attn-sinks` ne voyagent PAS dans la trame du protocole v6 — le pilote les appliquerait à se
+  ✅ réglage non transportable : REFUSÉ (code 2), expliqué, rien n'est calculé
+test result: ok. 122 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.33s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\n\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\na = \"\"\"  **À instruire, avec la commande** : câbler `attn_window`/`swa_pattern`/`attn_sinks` dans\n  `run_ppl_r … [5259 caractères tronqués]`

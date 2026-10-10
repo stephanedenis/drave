@@ -181,4 +181,29 @@ sys.exit(0 if a != b else 1)" \
        echo "     défaut mesuré le 11/10 : le drapeau ne faisait rien, en silence"; exit 1; }
 echo "  ✅ le drapeau agit aussi en réparti ($SG → $AG)"
 
+echo "=== 9. les réglages qui ne voyagent PAS sont REFUSÉS en réparti ==="
+# Mesuré : --attn-window 64 AGIT en local (13,1368 → 21,5801) et, si on le câble naïvement en
+# réparti, rend un résultat FAUX ET SILENCIEUX — le pilote applique la fenêtre à ses couches,
+# le nœud garde la sienne : deux modèles différents sous le même nom (195,5685 contre 50,3829).
+# Un drapeau inerte est un défaut ; un drapeau qui fait calculer deux modèles en est un pire.
+# La porte exige donc le REFUS, avec un code distinct et AUCUNE perplexité.
+PORTF=$((60000 + RANDOM % 4000))
+cat > "$T/topo_f.json" <<JSON
+{"regions":[
+  {"id":"local","couches":[0,11],"instance":"local"},
+  {"id":"d","couches":[12,23],"instance":"127.0.0.1:$PORTF"}],
+ "liens":[{"de":"local","vers":"d","mode":"f32"}]}
+JSON
+$D "$M" --flux-serveur "$PORTF" --ctx "$CTX" --threads 8 > "$T/nf.log" 2>&1 & NF=$!
+sleep 2
+RF=$( $D "$M" --ppl-reparti "127.0.0.1:$PORTF" --topologie "$T/topo_f.json" --ids-file "$IDS" \
+      --limit 64 --ctx "$CTX" --threads 8 --flux --attn-window 64 2>&1 ); CF=$?
+kill $NF 2>/dev/null; wait $NF 2>/dev/null
+printf '%s\n' "$RF" | grep -E "REFUS" | head -2 | cut -c1-150 | sed 's/^/  /'
+[ "$CF" = 2 ] || { echo "  ❌ le refus devrait sortir en code 2, il sort en $CF"; exit 1; }
+printf '%s' "$RF" | grep -q "ne voyagent PAS" || { echo "  ❌ le refus n'explique pas pourquoi"; exit 1; }
+printf '%s' "$RF" | grep -qE "deux nœuds +: perplexité" \
+  && { echo "  ❌ une perplexité a été rendue alors que le réglage ne peut pas être honoré"; exit 1; }
+echo "  ✅ réglage non transportable : REFUSÉ (code 2), expliqué, rien n'est calculé"
+
 rm -rf "$T"
