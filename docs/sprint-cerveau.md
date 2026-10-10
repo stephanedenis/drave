@@ -830,9 +830,23 @@ donne le nombre équivalent de messages :
    au lieu de ~4 ⇒ sur un lien à 5 ms/message, **≈ 25 ms au lieu de ≈ 35 ms**, soit **−29 % de la
    durée du pas**, sans toucher ni au calcul ni aux octets.
 
-**Ce qui reste à faire** : la fusion des deux écritures (trois émetteurs : jeton, lot dense, lot
-en listes), traitée comme une modification de protocole — mesure avant/après, `porte-flux.sh` en
-garde-fou.
+**LA FUSION EST FAITE, ET ELLE PAIE** — les trois émetteurs écrivent **une seule trame**
+(en-tête + corps concaténés) :
+
+| délai/message | AVANT | **APRÈS** | gain |
+|---|---|---|---|
+| 2 ms | 23,35 ms | **19,06 ms** | **−18,4 %** |
+| 5 ms | 34,93 ms | **27,98 ms** | **−19,9 %** |
+
+La pente retombe à **2,62 messages** au lieu de 4,01 : le pas retrouve le nombre d'envois que le
+protocole décrit vraiment. **−20 % de la durée d'un pas** sur un lien facturé par message, sans
+toucher au calcul, aux octets ni au résultat — `porte-flux.sh` reste **vert** avec les cinq mêmes
+écarts. **C'est le seul levier de ce sprint qui accélère sans rien coûter**, et il vient d'une
+mesure.
+
+**Ce qu'il ne dit pas** : le gain est nul sur un lien facturé **au débit** — la question « message
+ou octet ? » est celle de l'opérateur. Mais le protocole ne doit pas **ajouter** de messages sans
+raison.
 
 ---
 

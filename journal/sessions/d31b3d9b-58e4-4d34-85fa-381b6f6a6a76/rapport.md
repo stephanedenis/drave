@@ -6,13 +6,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
 | Durée | 48.1 h |
-| Tours | 80 |
-| Messages | 1981 |
-| Appels d'outils | 1819 |
+| Tours | 81 |
+| Messages | 1987 |
+| Appels d'outils | 1823 |
 | Fichiers touchés | 61 |
-| Commandes | 1569 |
+| Commandes | 1573 |
 | Sous-agents | 3 |
-| Commits | 170 |
+| Commits | 171 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -195,6 +195,8 @@
 **Tour 79** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 **Tour 80** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
+
+**Tour 81** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -3342,7 +3344,37 @@ Le round 32 avait reverté ce travail après un déséquilibre d'accolades. **Re
 
 **Synthèse produite :**
 
-⏵ Le pas paie l'équivalent de **4 messages** (en-tête + corps, dans les deux sens) — une piste chiffrée
+⏵ Round 37 livré : un pas coûte **4 messages** — l'en-tête est écrit à part du corps
+
+**Ce round** — 1 commit poussé. Le protocole écrit la trame en **deux fois** (`write_all(&tete)` puis `write_all(&corps)`) : sur un lien qui facture **par message**, ces deux écritures se paient deux fois. Le proxy ajoute un délai par message, on mesure le pas médian, et la **pente** donne le nombre équivalent de messages :
+
+| délai par message | pas médian | pente |
+|---|---|---|
+| 0 ms | 14,87 ms | — |
+| 2 ms | 23,35 ms | **4,24 messages** |
+| 5 ms | 34,93 ms | **4,01** |
+| 10 ms | 44,83 ms | **3,00** |
+
+1. **À petit délai, un pas coûte ~4 messages** : en-tête **et** corps, à l'aller **et** au retour — le chiffre recoupe exactement les deux `write_all` de chaque direction.
+2. **La pente décroît avec le délai** (4,24 → 3,00) : ce n'est pas le protocole qui change, c'est le **proxy**, qui endort après chaque `recv` et laisse le système regrouper plusieurs écritures. La mesure donne donc un **majorant**, et c'est le petit délai qui est le plus fidèle.
+3. **Conséquence actionnable et chiffrée** : écrire en-tête et corps en **une seule** fois ferait payer ~2 messages au lieu de ~4 ⇒ sur un lien à 5 ms/message, **≈ 25 ms au lieu de ≈ 35 ms**, soit **−29 % de la durée du pas**, sans toucher ni au calcul ni aux octets — seulement au **nombre d'envois**.
+
+**Ce qui reste à faire**, écrit tel quel : la fusion des deux écritures (trois émetteurs : jeton, lot dense, lot en listes), traitée comme une modification de protocole — mesure avant/après, `porte-flux.sh` en garde-fou.
+
+**Bilan** : 37 rounds, 22 portes toutes vertes, 122 tests. Les mesures de ce sprint dessinent maintenant une carte complète du **coût d'un lien** : temps (loi de latence), octets (budget), paires (budget), **gigue (49 %)**, et **messages (4 par pas, réductibles à 2)**. L'objectif reste **actif**.
+
+### Tour 81 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Find the double writes
+- bash — Coalesce the writes and build
+- bash — Measure the gain from coalescing
+- bash — Verify porte-flux, document and commit the coalescing
+
+**Synthèse produite :**
+
+⏵ **−20 % de la durée d'un pas** (35 → 28 ms à 5 ms/message) — je lance `porte-flux` et je commite
 
 ## 3. Travail accompli
 
@@ -3460,7 +3492,7 @@ Le round 32 avait reverté ce travail après un déséquilibre d'accolades. **Re
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1529 autres
+- … et 1533 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3778,4 +3810,5 @@ Le round 32 avait reverté ce travail après un déséquilibre d'accolades. **Re
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 1200 bash tools/porte-flux.sh > /tmp/pf38.txt 2>&1; echo "porte-flux code=$?"; tail -3 /tmp/pf38.t
 

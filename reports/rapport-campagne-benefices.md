@@ -2694,9 +2694,28 @@ donne le nombre équivalent de messages.
    5 ms/message, **≈ 25 ms au lieu de ≈ 35 ms**, une économie de **~29 % de la durée du pas** qui
    ne touche ni le calcul ni les octets, seulement le **nombre d'envois**.
 
-**Ce qui n'est pas fait** : la fusion des deux écritures. Elle touche le chemin d'envoi des trois
-émetteurs (jeton, lot dense, lot en listes), donc elle se traite comme une modification de
-protocole — mesure avant/après obligatoire, et `porte-flux.sh` en garde-fou.
+**LA FUSION A ÉTÉ FAITE, ET ELLE PAIE** : les trois émetteurs (jeton, lot dense, lot en listes)
+écrivent désormais **une seule trame** — en-tête et corps concaténés. Mesure avant/après, aux deux
+mêmes délais par message :
+
+| délai/message | AVANT | **APRÈS** | gain |
+|---|---|---|---|
+| 2 ms | 23,35 ms | **19,06 ms** | **−18,4 %** |
+| 5 ms | 34,93 ms | **27,98 ms** | **−19,9 %** |
+
+**La pente retombe aussi** : (27,98 − 14,87) / 5 = **2,62 messages** au lieu de 4,01 — le pas
+retrouve le nombre d'envois que le protocole décrit vraiment (un aller, un retour), le reste étant
+le regroupement du proxy lui-même.
+
+**Ce que ce gain est, et ce qu'il n'est pas** : **−20 % de la durée d'un pas** sur un lien qui
+facture **par message**, sans toucher ni au calcul, ni aux octets, ni au résultat — la
+vérification le confirme : `porte-flux.sh` reste **vert**, les cinq modes donnent exactement les
+mêmes écarts (0,00e0 · 0,00e0 · 3,65e-2 · 0,00e0 · 4,45e-3). C'est **le seul levier de ce sprint
+qui accélère sans rien coûter** — et il vient d'une mesure, pas d'une intuition.
+
+**Ce qu'il ne dit pas** : le gain est nul sur un lien qui facture **au débit** (où deux écritures
+coûtent les mêmes octets). La question « message ou octet ? » est celle de l'opérateur, pas du
+protocole — mais le protocole, lui, ne doit pas **ajouter** de messages sans raison.
 
 ## Annexe — manifeste des journaux
 

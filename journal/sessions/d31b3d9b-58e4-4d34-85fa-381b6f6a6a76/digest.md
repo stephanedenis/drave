@@ -31601,3 +31601,79 @@ délai par message 0 ms → pas médian 14.87 ms
 ⏵ Le pas paie l'équivalent de **4 messages** (en-tête + corps, dans les deux sens) — une piste chiffrée
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\n\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\na = \"## Annexe — manifeste des journaux\"\nsec = \"\"\"## 45. Combien de MESSAGES coûte un pas ? Quatre — et c'es … [5409 caractères tronqués]`
+
+  ```
+messages par pas consigne
+656a65f Combien de MESSAGES coute un pas ? Quatre — et c'est l'en-tete ecrit a part
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 37 livré : un pas coûte **4 messages** — l'en-tête est écrit à part du corps
+
+**Ce round** — 1 commit poussé. Le protocole écrit la trame en **deux fois** (`write_all(&tete)` puis `write_all(&corps)`) : sur un lien qui facture **par message**, ces deux écritures se paient deux fois. Le proxy ajoute un délai par message, on mesure le pas médian, et la **pente** donne le nombre équivalent de messages :
+
+| délai par message | pas médian | pente |
+|---|---|---|
+| 0 ms | 14,87 ms | — |
+| 2 ms | 23,35 ms | **4,24 messages** |
+| 5 ms | 34,93 ms | **4,01** |
+| 10 ms | 44,83 ms | **3,00** |
+
+1. **À petit délai, un pas coûte ~4 messages** : en-tête **et** corps, à l'aller **et** au retour — le chiffre recoupe exactement les deux `write_all` de chaque direction.
+2. **La pente décroît avec le délai** (4,24 → 3,00) : ce n'est pas le protocole qui change, c'est le **proxy**, qui endort après chaque `recv` et laisse le système regrouper plusieurs écritures. La mesure donne donc un **majorant**, et c'est le petit délai qui est le plus fidèle.
+3. **Conséquence actionnable et chiffrée** : écrire en-tête et corps en **une seule** fois ferait payer ~2 messages au lieu de ~4 ⇒ sur un lien à 5 ms/message, **≈ 25 ms au lieu de ≈ 35 ms**, soit **−29 % de la durée du pas**, sans toucher ni au calcul ni aux octets — seulement au **nombre d'envois**.
+
+**Ce qui reste à faire**, écrit tel quel : la fusion des deux écritures (trois émetteurs : jeton, lot dense, lot en listes), traitée comme une modification de protocole — mesure avant/après, `porte-flux.sh` en garde-fou.
+
+**Bilan** : 37 rounds, 22 portes toutes vertes, 122 tests. Les mesures de ce sprint dessinent maintenant une carte complète du **coût d'un lien** : temps (loi de latence), octets (budget), paires (budget), **gigue (49 %)**, et **messages (4 par pas, réductibles à 2)**. L'objectif reste **actif**.
+
+
+## Tour 81
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 mémoire épisodique, C7 consolidation, C8 périphérie, C9 latéralité, C10 budgets, et la diffusion réseau du bus de C5 ; (b) les expériences E2-E9 de docs/biologie-pour-drave.md et docs/hebbien-differentiel-et-biologie.md ; (c) les dessins de modèle H/I/J de docs/modele-pour-drave.md ; (d) les manques du registre docs/manques.md (noyau de listes pour les experts, noyau de listes GPU, encodeurs) — l'implémenter ou la mesurer, la doter d'une porte vérifiable, la documenter, commiter, pousser, et enchaîner immédiatement sur la suivante. Contraintes : les 23 portes du dépôt et tous les tests restent verts (porte-flux.sh après toute modification du chemin d'exécution), le profil release reste le binaire de mesure, le crate reste std seul, et docs/sprint-cerveau.md reste l'état resumable mis à jour à chaque round. Ne jamais s'arrêter faute de tâches planifiées : en inventer de nouvelles, mesurables, plutôt que d'attendre."
+Round: 38/60
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 38 : je fusionne les deux écritures (en-tête + corps) — mesure avant/après obligatoire
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"write_all(&tete)\\|write_all(&corps)\\|write_all(&t)\\b\\|write_all(&c)\\b\" drave-core/src/main.rs | head -10", "description": "Find the double writes"}`
+
+  ```
+3218:    s.write_all(&tete)?;
+3219:    s.write_all(&corps)?;
+3265:    s.write_all(&tete)?;
+3266:    s.write_all(&corps)?;
+3301:    s.write_all(&tete)?;
+3302:    s.write_all(&corps)?;
+7538:            sock.write_all(&corps).unwrap();
+7745:            sock.write_all(&tete).unwrap();
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\nvieux = \"\"\"    s.write_all(&tete)?;\n    s.write_all(&corps)?;\"\"\"\nneuf = \"\"\"    // UNE SEULE ÉCRITURE, et ce n'est pas de … [1008 caractères tronqués]`
+
+  ```
+trois emetteurs fusionnes : 3
+test result: ok. 122 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.33s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for D in 2 5; do T=$(mktemp -d); PN=$((60000 + RANDOM % 3000)); PX=$((PN + 1)); cat > $T/topo.json <<JSON\n{\"regions\":[{\"id\":\"local\",\"couches\":[0,11],\"instance\":\"local\"},{\"id\":\"d\",\"couches\":[12,23],\"instance\":\"12 … [1454 caractères tronqués]`
+
+  ```
+APRÈS fusion — délai 2 ms/message → pas médian 19.06 ms
+  APRÈS fusion — délai 5 ms/message → pas médian 27.98 ms
+  AVANT fusion : 23,35 ms (2 ms) · 34,93 ms (5 ms)
+  ```
+
+### 🤖 Assistant
+
+⏵ **−20 % de la durée d'un pas** (35 → 28 ms à 5 ms/message) — je lance `porte-flux` et je commite
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 1200 bash tools/porte-flux.sh > /tmp/pf38.txt 2>&1; echo \"porte-flux code=$?\"; tail -3 /tmp/pf38.txt; python3 - <<'ENDPY'\nimport pathlib\n\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\na  … [4764 caractères tronqués]`
