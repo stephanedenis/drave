@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 57.0 h |
+| Durée | 58.1 h |
 | Tours | 89 |
-| Messages | 2521 |
-| Appels d'outils | 2322 |
+| Messages | 2529 |
+| Appels d'outils | 2330 |
 | Fichiers touchés | 91 |
-| Commandes | 2023 |
+| Commandes | 2031 |
 | Sous-agents | 3 |
-| Commits | 236 |
+| Commits | 237 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -3636,7 +3636,7 @@ Trois erreurs attrapées par les instruments : une **porte fantôme** verte en c
 
 ### Tour 89 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*42 appels d'outils.* Actions notables :
+*50 appels d'outils.* Actions notables :
 
 - bash — Check imposed input state flags
 - bash — Audit etat_entree usage
@@ -3652,11 +3652,11 @@ Trois erreurs attrapées par les instruments : une **porte fantôme** verte en c
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-jumeaux.sh`
 - bash — Run the twins gate
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-c9-lateralite.md`
-- … et 28 autres
+- … et 35 autres
 
 **Synthèse produite :**
 
-⏵ Pendant la passe finale : je mets l'index des modules à jour (C9, C4 et leurs fiches)
+⏵ **25 portes, 25 vertes** — je fige les repères sur cette passe complète et je mets les comptes à jour
 
 ## 3. Travail accompli
 
@@ -3804,7 +3804,7 @@ Trois erreurs attrapées par les instruments : une **porte fantôme** verte en c
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1983 autres
+- … et 1991 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4188,4 +4188,5 @@ Trois erreurs attrapées par les instruments : une **porte fantôme** verte en c
 - Etat : le renvoi vers la conception de la memoire de C8 (le patch precedent avait echoue sur un motif perime)" && git push -q origin master && echo poussé; tail
 - Passe du 18 h 12 : 24 vertes sur 24, dont la porte des jumeaux (nouvelle) — reperes regeneres depuis son journal" && git push -q origin master && echo poussé
 - Index des modules et prochaine action : les suites de C9 et C4 sont nommees avec leurs chiffres  docs/etat.md renvoie aux trois suites (structure de memoire de 
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' import pathlib, re, subprocess log = pathlib.Path("/tmp/passe-complete5.log").read_tex
 

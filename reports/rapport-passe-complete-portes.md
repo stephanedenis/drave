@@ -91,6 +91,15 @@ valeur courante plus K retards), la porte étendue en conséquence (le tampon ch
 est annoncé, un débordement est refusé), et **23 vertes sur 23** de nouveau. Détail porte par porte
 dans `docs/references-non-regression.md` § 2, régénéré depuis le journal de cette passe.
 
+## 2 quater. La passe du 19:20 (25 portes, 59 min 25 s) — la suite COMPLÈTE
+
+Dernière passe en date, et la première qui contient les **deux portes ajoutées aujourd'hui** :
+`porte-jumeaux.sh` (C9 : l'échange est exact, il ne crée pas de gain, il récupère un jumeau dégradé
+à hauteur de sa moyenne, et 8 bits suffisent pour ÷4 d'octets) et `porte-c4-retard.sh` (C4 : un
+état n'est valide qu'à sa position — ×633 pour un pas — et manquer coûte ×1,06 contre ×633 pour
+réutiliser). **25 vertes sur 25**, détail dans
+`docs/references-non-regression.md` (régénéré depuis ce journal).
+
 ## 3. Ce que la passe a trouvé : une porte qui ne pouvait pas échouer
 
 `porte-tokenizer-kimi.sh` **lisait ses textes sur `stdin`** — que personne ne lui fournissait.
