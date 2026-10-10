@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 50.4 h |
+| Durée | 50.5 h |
 | Tours | 88 |
-| Messages | 2283 |
-| Appels d'outils | 2091 |
+| Messages | 2289 |
+| Appels d'outils | 2097 |
 | Fichiers touchés | 74 |
-| Commandes | 1810 |
+| Commandes | 1816 |
 | Sous-agents | 3 |
-| Commits | 197 |
+| Commits | 198 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -3586,7 +3586,7 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 
 ### Tour 88 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*249 appels d'outils.* Actions notables :
+*255 appels d'outils.* Actions notables :
 
 - bash — Add the refusal and verify
 - bash — Move the refusal to the single point and verify
@@ -3602,11 +3602,11 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - bash — Read v7 removal context and flag inventory
 - bash — Read flag inventory section in docs
 - bash — Establish whether section 9 predates the v7 removal
-- … et 222 autres
+- … et 228 autres
 
 **Synthèse produite :**
 
-⏵ Fichiers de démarrage allégés (65 et 85 lignes) ; je committe, puis je vérifie un point de la courbe C8
+⏵ Courbe honnête obtenue (24/24 rend exactement 9,4341 = contrôle) ; je corrige la fiche C8 et j'ajoute la courbe
 
 ## 3. Travail accompli
 
@@ -3737,7 +3737,7 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1770 autres
+- … et 1776 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4082,4 +4082,5 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' import pathlib # 4096 dans la fiche fenêtre × puits : la ligne de plus, et la synthèse
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'MSG' C8 : l'etat de la couche 16 CONTIENT le prochain jeton (43,1 %) —
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'MSG' README et REPRISE allegés : demarrer en 5 minutes, et renvoyer au
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' import pathlib # l'état : C8 avec la courbe et la distinction décodabilité / qualité p
 

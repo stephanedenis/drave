@@ -24,7 +24,7 @@
 | **C5ter** | bus par le réseau | ✅ fait | socket ≡ statique (**0,00e0**) ; neutre ≡ référence (**0,00e0**) ; plein vol ≠ les deux | `porte-bus-socket.sh` |
 | **C6** | mémoire épisodique | ✅ fait | **élagage 83 %**, rappel **96,3 %** à 50 % de dégradation, round-trip **exact**, Δ = **11 jetons sur 2 048** ; le rappel dépend de **l'indice** (1 sur 8) et **n'est pas continu** (50 vs 1 006) ; la clé de fenêtre **dégrade** (prédiction réfutée) | fiches 24, 29, 30, 31 · `porte-episodique.sh`, `porte-indice.sh`, `porte-melange.sh` |
 | **C7** | consolidation | ✅ fait | l'**exemplaire** bat la **moyenne** (7 % du magasin → **87 %** de rappel) ; rejeu répété = **point fixe exact** (0,00e0) | `porte-episodique.sh` |
-| **C8** | réflexe | 🟡 premier pas, **débloqué** | le réflexe emprunté rend **728 388** de perplexité contre **9,43** au modèle complet — mais la **sonde linéaire** sur l'état de la couche 16 prédit le prochain jeton à **43,1 %** (référence 4,0 %) : **l'information est là, la tête est le maillon faible** ⇒ une tête entraînée par profondeur a un sens | `porte-reflexe.sh` · fiches 26 et [`reports/rapport-c8-sonde-profondeur.md`](../reports/rapport-c8-sonde-profondeur.md) |
+| **C8** | réflexe | 🟡 premier pas, **débloqué** | **décodabilité** : une sonde linéaire lit le prochain jeton dès **4 couches** (45,9 % parmi les 256 plus fréquents, référence 4,0 %) et encore à **16** (40,8 %) ⇒ l'information est dans l'état ; **qualité** : le chemin tronqué avec la tête du modèle vaut **1 127 368** de perplexité à 16 couches, **3 210** à 20, **9,43** à 24 ⇒ la tête empruntée ne lit qu'un état de fin de réseau. Il faut une tête **entraînée par profondeur** | `porte-reflexe.sh` · fiche 26 et [`reports/rapport-c8-sonde-profondeur.md`](../reports/rapport-c8-sonde-profondeur.md) |
 | **C9** | pont entre régions | ✅ fait | **448 fibres = +2,81 %** et **÷1,8** en octets ; falaise **entre 448 et 392** ; à budget égal **quantifier bat élaguer de 83 %** | `porte-pont.sh` · fiche 25 |
 | **C9×C1** | où couper | ✅ fait | **8 coupes, une seule perplexité (113,0068)** sans perte ; le coût du pont va de **+0,52 %** (coupe après 18 couches) à **+17,09 %** (après 15) — facteur **30** ⇒ **couper tard** | `porte-coupe.sh`, `tools/carte_coupe.sh` · fiche 27 |
 | **C10** | budgets | ✅ **clos** | trois budgets, trois codes distincts : octets (**6**), latence (**8**), paires (**9**) ; loi de latence **3,4 ms/token par ms de RTT** | fiches 32, 42 |
@@ -98,12 +98,12 @@ clés reste le régime sûr. En cours : la loi de la frontière, et le **gain de
 carte rend maintenant les secondes et les tok/s : la fenêtre ne réduit que les scores, pas la
 FFN qui domine).
 
-**3. C8 (suite) — entraîner la tête, maintenant qu'on sait que l'état porte l'information.**
-La sonde linéaire a mesuré **43,1 %** de décodabilité du prochain jeton depuis la couche 16
-(référence 4,0 %), et le réflexe emprunté **728 388** de perplexité : le maillon faible est la
-**tête**. Prochaine mesure : une tête **non linéaire** (une couche cachée) entraînée sur ces
-états, sa perplexité sur le même texte, et la **courbe profondeur → décodabilité** (couches 8,
-12, 16, 20) pour savoir où placer le réflexe. Outil en place : `tools/c8_sonde_lineaire.py`.
+**3. C8 (suite) — entraîner la tête, la courbe est faite.** Décodabilité mesurée à 4, 8, 12, 16,
+20 et 24 couches (45,9 / 45,5 / 46,1 / 40,8 / 37,8 / 34,8 % parmi les 256 plus fréquents) contre
+qualité du chemin tronqué (12,4 M / 3,8 M / 3,3 M / 1,13 M / 3 210 / 9,43). L'information est là
+tôt, la qualité n'arrive que tard : **le maillon faible est la tête**, et la suite est une tête
+**non linéaire** entraînée par profondeur, jugée à sa **perplexité** sur le même texte. Outils :
+`tools/c8_carte_profondeur.sh`, `tools/c8_sonde_lineaire.py`.
 
 ## 7. Les corrections à ne pas réintroduire
 

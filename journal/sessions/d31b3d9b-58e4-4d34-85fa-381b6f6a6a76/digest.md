@@ -36834,3 +36834,124 @@ RM REPRISE.md -> journal/2026-10-10-reprise-historique.md
 ⏵ Fichiers de démarrage allégés (65 et 85 lignes) ; je committe, puis je vérifie un point de la courbe C8
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'MSG'\nREADME et REPRISE allegés : demarrer en 5 minutes, et renvoyer au lieu de recopier\n\nDemande de Stephane : ces deux fichiers etaient devenus des fourre-tout (709 et 1828 lignes)\nqui ne perm … [1335 caractères tronqués]`
+
+  ```
+poussé
+4d03891 README et REPRISE allegés : demarrer en 5 minutes, et renvoyer au lieu de recopier
+   65 README.md
+   85 REPRISE.md
+   63 docs/references-non-regression.md
+  213 total
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"tete_partielle\" drave-core/src/model.rs | head -10; echo \"=== où la norme finale est-elle appliquée ? ===\"; grep -n \"norme_finale\" drave-core/src/model.rs | head -10", "description": "Check whether the partial head app … [21 caractères tronqués]`
+
+  ```
+2575:    pub tete_partielle: bool,
+4505:            flux_brut: false, tete_partielle: false,
+5877:        if self.flux_brut || (self.couche_fin < self.cfg.n_layer && !self.tete_partielle) {
+6778:        if (self.couche_fin >= self.cfg.n_layer || self.tete_partielle) && !self.flux_brut {
+7886:        if self.flux_brut || (self.couche_fin < cfg.n_layer && !self.tete_partielle) {
+=== où la norme finale est-elle appliquée ? ===
+6906:        // (elle est lue par `norme_finale`, qui ne la consomme pas).
+8191:    pub fn norme_finale(&mut self, x: &[f32], pos: usize) -> Vec<f32> {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '6770,6790p' drave-core/src/model.rs; echo \"=== la normale finale est-elle appliquée dans le chemin tronqué ? ===\"; sed -n '8185,8200p' drave-core/src/model.rs", "description": "Inspect head application path"}`
+
+  ```
+matvec_f32_fils(&m.up, &hn, h, m.ffn, &mut u_t, n_fils);
+            let mut act = vec![0f32; m.ffn];
+            Self::activation(&mut g_t, &u_t, m.ffn, false, 0.0);
+            for i in 0..m.ffn { act[i] = g_t[i]; }
+            let mut d = vec![0f32; h];
+            matvec_f32_fils(&m.down, &act, m.ffn, h, &mut d, n_fils);
+            for i in 0..h { x[i] += d[i]; }
+        }
+        if (self.couche_fin >= self.cfg.n_layer || self.tete_partielle) && !self.flux_brut {
+            Self::rmsnorm(&x, &self.out_norm, eps, &mut hn);
+            hn
+        } else {
+            x
+        }
+    }
+
+    /// Logits d'un état caché avec une tête **liée en f32** (le harnais MLA n'a
+    /// pas de blocs Q8_0 : `logits` ne s'applique pas).
+    pub fn logits_f32(&self, hn: &[f32]) -> Vec<f32> {
+        let h = self.cfg.hidden;
+        let v = self.cfg.vocab;
+=== la normale finale est-elle appliquée dans le chemin tronqué ? ===
+    /// sans un mot.
+    /// `pos` ne sert QU'AUX VIDES : `hidden_final` (le vide de la passe
+    /// complète) porte déjà cette quantité, et vider ici la même chose sous le
+    /// nom `reduit` rend la réduction finale vérifiable TENSEUR PAR TENSEUR — ce
+    /// qu'aucun v
+… [881 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Point à vérifier : la plage `--couches 0:23` avec tête ne rend pas le chiffre du modèle complet (37,34 contre 9,43)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf; I=/tmp/campagne24/ids_0.5B-Q8.txt\nppl () { $D \"$M\" --ppl \"$I\" --limit 128 --ctx 512 --threads 8 \"$@\" 2>&1 | grep -oE \"perplexité [0-9.]+ sur\" | grep -oE \ … [426 caractères tronqués]`
+
+  ```
+sans plage                : 14.6496
+couches 0:23 + tete       : 83.1237
+couches 0:24 + tete       : 14.6496
+couches 0:23 SANS tete    : 33135.0481
+1034:            "--couches" => {
+1035-                let v = suivant(i);
+1036-                let (a, b) = v.split_once(':').unwrap_or_else(||
+1037-                    panic!("--couches attend `a:b` (reçu « {v} »)"));
+1038-                o.couches = Some((a.parse().unwrap(), b.parse().unwrap()));
+1039-                2
+1040-            }
+  ```
+
+### 🤖 Assistant
+
+⏵ Piège attrapé : `--couches a:b` **exclut** b — mes étiquettes de profondeur étaient décalées d'une couche ; je corrige et je refais la courbe
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"tools/c8_carte_profondeur.sh\"); s = p.read_text()\ns = s.replace('''PROFONDEURS=${PROFONDEURS:-\"3 7 11 15 19 23\"}''',\n'''# PROFONDEURS = le NOMBRE DE COUCHES EXÉCUTÉES (1..2 … [2308 caractères tronqués]`
+
+  ```
+pilote corrigé (N couches exécutées, libellé honnête)
+=== courbe profondeur → décodabilité (1024 jetons, 256 classes) ===
+  couche   perplexité sonde linéaire (test)
+  4/24     12401653.7360 45.9 %
+  8/24     3776712.4298 45.5 %
+  12/24    3282793.4472 46.1 %
+  16/24    1127367.6856 40.8 %
+  20/24    3210.0126    37.8 %
+  24/24    9.4341       34.8 %
+
+Lecture : si la sonde est déjà nette tôt (couches 8-12), un réflexe court a de quoi lire ;
+si elle ne l'est qu'à 20+, le « chemin court » n'existe pas et il faut le dire.
+Journaux de capture : /tmp/c8-profondeur/capture-*.log
+  ```
+
+### 🤖 Assistant
+
+⏵ Courbe honnête obtenue (24/24 rend exactement 9,4341 = contrôle) ; je corrige la fiche C8 et j'ajoute la courbe
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"reports/rapport-c8-sonde-profondeur.md\"); s = p.read_text()\n\n# en-tête : le verdict, avec la courbe et la correction d'étiquettes\nold = \"\"\"> Verdict : **l'information est … [6699 caractères tronqués]`
+
+  ```
+fiche C8 corrigée avec la courbe
+# C8 — le réflexe : l'état intermédiaire CONTIENT le prochain jeton, c'est la TÊTE qui ne sait pas le lire
+
+> Campagne : **cerveau** · expérience : sonde linéaire sur l'état de la couche 16
+> Question : un chemin court (s'arrêter à la couche 16, appliquer une tête) ne sait rien — mais
+> est-ce l'**état** qui est pauvre, ou la **tête** qui ne sait pas le lire ? Autrement dit :
+> **faut-il entraîner une tête par profondeur, ou C8 est-il hors de portée ?**
+> Verdict : **l'information est là, et elle est LINÉAIREMENT accessible** — une sonde ridge sur
+> l'état intermédiaire prédit le prochain jeton (parmi les 256 plus fréquents) avec **40,8 %** de
+> justes à **16 couches** (43,1 % à 15) sur des positions **jamais vues**, contre **4,0 %** pour
+> la classe majoritaire et **0,39 %** pour le hasard — **et cela dès 4 couches** (45,9 %). La tête
+> empruntée, elle, rend **1 127 368** de perplexité à 16 couches contre **9,4341** pour le modèle
+> complet : **le maillon faible est la tête**, et C8 a un sens. La courbe complète est au § 3.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\n# l'état : C8 avec la courbe et la distinction décodabilité / qualité\np = pathlib.Path(\"docs/etat-cerveau.md\"); s = p.read_text()\nold = \"\"\"| **C8** | réflexe | 🟡 premier pas, **débloqué** | … [5268 caractères tronqués]`
