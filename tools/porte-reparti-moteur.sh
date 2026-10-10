@@ -17,7 +17,17 @@ MODELE=${MODELE:-/tmp/moteur_route.gguf}
 IDS=${IDS:-/tmp/route_ids.txt}
 PORT=${PORT:-$((49000 + RANDOM % 800))}
 CTX=${CTX:-256}
-LIMITE=${LIMITE:-128}          # doit valoir le nombre de jetons du fichier IDS
+# Le NOMBRE DE JETONS EST COMPTÉ, PAS SUPPOSÉ. Il valait 128 ici alors que le fichier en
+# contient 255 : les deux chemins fenêtrent alors DIFFÉREMMENT (`--ppl` note les `limit`
+# PREMIERS jetons, `--ppl-reparti` tronque aux `limit` DERNIERS), et la porte comparait donc
+# deux textes différents — 37 à 58 % d'« écart » qui ne disaient rien du découpage.
+# Corrigé, la porte rend 173,0196 des deux côtés (écart 0,0000 %).
+if [ -s "$IDS" ]; then
+    N_IDS=$(tr ',' '\n' < "$IDS" | grep -c '[0-9]')
+else
+    N_IDS=0
+fi
+LIMITE=${LIMITE:-$N_IDS}
 COUCHES=${COUCHES:-2}          # couches gardées côté pilote ; le reste au nœud
 
 TRAVAIL=$(mktemp -d "${TMPDIR:-/tmp}/porte-reparti-XXXXXX")

@@ -28795,3 +28795,147 @@ verification consignee
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A docs/sprint-cerveau.md && git commit -q -F - <<'MSG'\nVerification complete : 19 portes vertes, 1 rouge nommee et NON expliquee\n\nSuite complete des 20 portes du depot, jouee APRES les huit rounds qui ont touche le chemin … [1981 caractères tronqués]`
+
+  ```
+ae7e149 Verification complete : 19 portes vertes, 1 rouge nommee et NON expliquee
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 10 livré : vérification complète des 20 portes — 19 vertes, 1 rouge nommée
+
+**Ce round** — 1 commit poussé, 122 tests verts. Un round de vérification, parce que la contrainte de l'objectif (« les portes restent vertes ») se vérifie — surtout après huit rounds qui ont touché le chemin d'exécution.
+
+**Suite complète des 20 portes du dépôt : 19 vertes · 1 rouge.**
+
+Vertes : budget · bus · bus-socket · coupe · delais · episodique · flux · fusion · greffe · horloge · indice · melange · mistral · pannes · pont · reflexe · tokenizer-kimi · topologie · trace.
+
+**La rouge : `porte-reparti-moteur`** — perplexité entière **321,9623** contre répartie **132,8349** (écart 58,7 %) alors que **l'écart de flux est 0,00e0**. C'est la porte de **notre** modèle (`/tmp/moteur_route.gguf`, `COUCHES=2`).
+
+- **Ce que j'affirme** : les huit rounds n'ont ajouté que des chemins **inactifs par défaut** sur cette porte (fusion sans `--fusion-etat`, pont sans `--pont-k`, budgets sans `budget_octets`/`budget_ms`, pannes seulement en cas d'erreur, capture sans `--etat-sortie`, clé de fenêtre à 1) — aucun ne peut produire un écart de 58 %.
+- **Ce que je n'affirme pas** : je n'ai pas remonté au commit d'avant le sprint pour le prouver ⇒ la rouge est écrite comme **pré-existante et non expliquée**, pas comme « pas ma faute ».
+- **Fait relevé en la nommant** : `/tmp/moteur_route.gguf` et `/tmp/route_ids.txt` datent du **8 octobre 10 h 55** — l'artefact peut être périmé par rapport à l'entraîneur actuel.
+- **Prochaine action écrite** : régénérer l'artefact avec `tools/entrainer_moteur.py`, rejouer la porte ; si la rouge persiste, comparer les logits entier/réparti position par position (`compare_logits.py`).
+
+**Suivant** (dans `docs/sprint-cerveau.md`) : instruire cette rouge, puis le troisième budget (`paires/s`) et les têtes dédiées C8 / modèles H-I-J. L'objectif reste **actif**.
+
+
+## Tour 54
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 mémoire épisodique, C7 consolidation, C8 périphérie, C9 latéralité, C10 budgets, et la diffusion réseau du bus de C5 ; (b) les expériences E2-E9 de docs/biologie-pour-drave.md et docs/hebbien-differentiel-et-biologie.md ; (c) les dessins de modèle H/I/J de docs/modele-pour-drave.md ; (d) les manques du registre docs/manques.md (noyau de listes pour les experts, noyau de listes GPU, encodeurs) — l'implémenter ou la mesurer, la doter d'une porte vérifiable, la documenter, commiter, pousser, et enchaîner immédiatement sur la suivante. Contraintes : les 23 portes du dépôt et tous les tests restent verts (porte-flux.sh après toute modification du chemin d'exécution), le profil release reste le binaire de mesure, le crate reste std seul, et docs/sprint-cerveau.md reste l'état resumable mis à jour à chaque round. Ne jamais s'arrêter faute de tâches planifiées : en inventer de nouvelles, mesurables, plutôt que d'attendre."
+Round: 11/60
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 11 : j'instruis la porte rouge — dense contre routé, c'est l'hypothèse que la porte teste
+
+- **bash** `{"command": "ls -la /tmp/moteur*.gguf /tmp/route_ids.txt 2>/dev/null | awk '{print $5, $9}'; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"moteur_dense\\|MODELE=\" tools/porte-reparti-moteur.sh | head -5", "description": "Check available trained-model artifacts"}`
+
+  ```
+2367456 /tmp/moteur_dense.gguf
+4574656 /tmp/moteur_route.gguf
+920 /tmp/route_ids.txt
+12:#   MODELE=/tmp/moteur_dense.gguf COUCHES=2 tools/porte-reparti-moteur.sh
+16:MODELE=${MODELE:-/tmp/moteur_route.gguf}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 env MODELE=/tmp/moteur_dense.gguf bash tools/porte-reparti-moteur.sh 2>&1 | tail -6", "description": "Run the red gate with the dense variant", "timeoutMs": 1000000}`
+
+  ```
+=== référence : le modèle ENTIER, un seul processus ===
+  perplexité entière : 241.6785
+=== deux nœuds : 2 couches locales, le reste à distance ===
+  perplexité répartie : 150.3487 · écart de flux : 0.00e0
+PORTE NON TENUE : écart relatif 37.7898 % entre entier et réparti
+  ```
+
+### 🤖 Assistant
+
+⏵ Le dense échoue aussi (37,8 %) — ce n'est pas le routage ; je lis les commandes de la porte
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '30,62p' tools/porte-reparti-moteur.sh", "description": "Read the gate's reference and split commands"}`
+
+  ```
+echo "=== référence : le modèle ENTIER, un seul processus ==="
+REF=$(timeout 300 "$D" "$MODELE" --ppl "$IDS" --limit "$LIMITE" --ctx "$CTX" --threads 8 2>&1 \
+      | grep -oE "perplexité [0-9.]+ sur" | grep -oE "[0-9.]+")
+[ -n "$REF" ] || { echo "  la référence n'a pas rendu de perplexité"; exit 1; }
+echo "  perplexité entière : $REF"
+
+echo "=== deux nœuds : $COUCHES couches locales, le reste à distance ==="
+"$D" "$MODELE" --flux-serveur "$PORT" --ctx "$CTX" --threads 8 > "$LOG_SRV" 2>&1 &
+SRV=$!
+for _ in $(seq 1 120); do
+    grep -q "nœud moteur sur" "$LOG_SRV" 2>/dev/null && break
+    kill -0 $SRV 2>/dev/null || { echo "  le nœud est mort :"; tail -3 "$LOG_SRV"; exit 1; }
+    sleep 0.25
+done
+
+# `--abits 16` : le mode réparti quantifie les activations à 8 bits par défaut,
+# la perplexité à 16. Comparer les deux sans aligner ce réglage mesurerait la
+# quantification, pas le découpage (mesuré : +0,6 % de perplexité à 8 bits).
+SORTIE=$(timeout 300 "$D" "$MODELE" --ppl-reparti "127.0.0.1:$PORT" --ids-file "$IDS" \
+         --couches-locales "$COUCHES" --limit "$LIMITE" --ctx "$CTX" --threads 8 \
+         --abits 16 2>&1)
+CODE=$?
+kill $SRV 2>/dev/null; wait $SRV 2>/dev/null
+DEUX=$(pri
+… [386 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Hypothèse protocole : je compare le NOMBRE DE JETONS notés par les deux chemins
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PORT=$((63000 + RANDOM % 100)) && echo \"=== entier ===\" && ./drave-core/target/release/drave /tmp/moteur_dense.gguf --ppl /tmp/route_ids.txt --limit 128 --ctx 256 --threads 8 2>&1 | grep -E \"perplexité|jetons\" | tail -3 && ./drav … [521 caractères tronqués]`
+
+  ```
+=== entier ===
+[config] cache KV : 32 bits, 0.00 Go pour 256 jetons
+     127 tokens notés — perplexité cumulée 241.679  (887.1 tok/s)
+=== perplexité 241.6785 sur 127 tokens (0 événements, 0.1 s) ===
+=== réparti ===
+[config] cache KV : 32 bits, 0.00 Go pour 256 jetons
+[flux] 256 jetons fournis > limite 128 (ctx 256) : troncature aux 128 derniers
+[flux] pilote : 2 couches en local, 2 chez le pair, 128 jetons
+  référence locale  : perplexité 150.3487  (0.1 s)
+[pannes] PANNE : le pair local → 127.0.0.1: est INJOIGNABLE (invalid port value). Aucune perplexité n'est rendue — un graphe amputé d'une région n'est pas une version approchée du même calcul. Vérifiez que le nœud écoute (--flux-serveur 127.0.0.1:).
+[killed by signal: SIGTERM]
+  ```
+
+### 🤖 Assistant
+
+⏵ TROUVÉ : le fichier a 256 jetons ; `--ppl` note les 128 PREMIERS, `--ppl-reparti` les 128 DERNIERS
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tr ',' '\\n' < /tmp/route_ids.txt | wc -l && timeout 900 env LIMITE=256 bash tools/porte-reparti-moteur.sh 2>&1 | tail -5", "description": "Test the fix with the true token count", "timeoutMs": 1000000}`
+
+  ```
+255
+=== référence : le modèle ENTIER, un seul processus ===
+  perplexité entière : 173.0196
+=== deux nœuds : 2 couches locales, le reste à distance ===
+  perplexité répartie : 173.0196 · écart de flux : 0.00e0
+PORTE TENUE : le découpage ne change pas la perplexité (écart relatif 0.0000 %)
+  ```
+
+### 🤖 Assistant
+
+⏵ PORTE TENUE : 173,0196 des deux côtés — la rouge était un DÉFAUT DE PORTE ; je le corrige
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"tools/porte-reparti-moteur.sh\")\ns = p.read_text()\na = \"\"\"LIMITE=${LIMITE:-128}          # doit valoir le nombre de jetons du fichier IDS\"\"\"\nb = \"\"\"# Le NOMBRE DE JE … [861 caractères tronqués]`
+
+  ```
+limite comptee
+  perplexité entière : 173.0196
+=== deux nœuds : 2 couches locales, le reste à distance ===
+  perplexité répartie : 173.0196 · écart de flux : 0.00e0
+PORTE TENUE : le découpage ne change pas la perplexité (écart relatif 0.0000 %)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\n\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\na = \"## Annexe — manifeste des journaux\"\nsec = \"\"\"## 34. La porte rouge de répartition : un DÉFAUT DE PORTE, … [7179 caractères tronqués]`

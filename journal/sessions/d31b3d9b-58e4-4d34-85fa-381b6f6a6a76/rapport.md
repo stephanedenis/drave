@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 46.1 h |
-| Tours | 53 |
-| Messages | 1801 |
-| Appels d'outils | 1693 |
+| Durée | 46.2 h |
+| Tours | 54 |
+| Messages | 1810 |
+| Appels d'outils | 1700 |
 | Fichiers touchés | 61 |
-| Commandes | 1443 |
+| Commandes | 1450 |
 | Sous-agents | 3 |
-| Commits | 143 |
+| Commits | 144 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -141,6 +141,8 @@
 **Tour 52** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1469 caractères tronqués]
 
 **Tour 53** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
+
+**Tour 54** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -2424,7 +2426,38 @@ Le plan demande `{paires/s, octets/s, ms}` par lien. Les octets étaient faits ;
 
 **Synthèse produite :**
 
-⏵ 19/20 vertes ; la rouge est pré-existante (`/tmp/moteur_route.gguf`, modèle entraîné ici) — je la nomme
+⏵ Round 10 livré : vérification complète des 20 portes — 19 vertes, 1 rouge nommée
+
+**Ce round** — 1 commit poussé, 122 tests verts. Un round de vérification, parce que la contrainte de l'objectif (« les portes restent vertes ») se vérifie — surtout après huit rounds qui ont touché le chemin d'exécution.
+
+**Suite complète des 20 portes du dépôt : 19 vertes · 1 rouge.**
+
+Vertes : budget · bus · bus-socket · coupe · delais · episodique · flux · fusion · greffe · horloge · indice · melange · mistral · pannes · pont · reflexe · tokenizer-kimi · topologie · trace.
+
+**La rouge : `porte-reparti-moteur`** — perplexité entière **321,9623** contre répartie **132,8349** (écart 58,7 %) alors que **l'écart de flux est 0,00e0**. C'est la porte de **notre** modèle (`/tmp/moteur_route.gguf`, `COUCHES=2`).
+
+- **Ce que j'affirme** : les huit rounds n'ont ajouté que des chemins **inactifs par défaut** sur cette porte (fusion sans `--fusion-etat`, pont sans `--pont-k`, budgets sans `budget_octets`/`budget_ms`, pannes seulement en cas d'erreur, capture sans `--etat-sortie`, clé de fenêtre à 1) — aucun ne peut produire un écart de 58 %.
+- **Ce que je n'affirme pas** : je n'ai pas remonté au commit d'avant le sprint pour le prouver ⇒ la rouge est écrite comme **pré-existante et non expliquée**, pas comme « pas ma faute ».
+- **Fait relevé en la nommant** : `/tmp/moteur_route.gguf` et `/tmp/route_ids.txt` datent du **8 octobre 10 h 55** — l'artefact peut être périmé par rapport à l'entraîneur actuel.
+- **Prochaine action écrite** : régénérer l'artefact avec `tools/entrainer_moteur.py`, rejouer la porte ; si la rouge persiste, comparer les logits entier/réparti position par position (`compare_logits.py`).
+
+**Suivant** (dans `docs/sprint-cerveau.md`) : instruire cette rouge, puis le troisième budget (`paires/s`) et les têtes dédiées C8 / modèles H-I-J. L'objectif reste **actif**.
+
+### Tour 54 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
+
+*7 appels d'outils.* Actions notables :
+
+- bash — Check available trained-model artifacts
+- bash — Run the red gate with the dense variant
+- bash — Read the gate's reference and split commands
+- bash — Compare tokens scored by both paths
+- bash — Test the fix with the true token count
+- bash — Fix the gate and verify on the routed model
+- bash — Document and commit the red-gate resolution
+
+**Synthèse produite :**
+
+⏵ PORTE TENUE : 173,0196 des deux côtés — la rouge était un DÉFAUT DE PORTE ; je le corrige
 
 ## 3. Travail accompli
 
@@ -2542,7 +2575,7 @@ Le plan demande `{paires/s, octets/s, ms}` par lien. Les octets étaient faits ;
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1403 autres
+- … et 1410 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2833,4 +2866,5 @@ Le plan demande `{paires/s, octets/s, ms}` par lien. Les octets étaient faits ;
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A docs/sprint-cerveau.md && git commit -q -F - <<'MSG' Verification complete : 19 portes vertes, 
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 

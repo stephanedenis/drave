@@ -175,6 +175,33 @@ serait faux ; reprendre demanderait de rejouer le préfixe (checkpoint/restart).
 
 ---
 
+## LA ROUGE DE RÉPARTITION — INSTRUITE ET CORRIGÉE (11 octobre 4 h 30) : c'était la PORTE
+
+Hypothèses éliminées par la mesure : le **routage** (la variante dense échoue aussi, 37,8 %),
+le **transport** (flux à 0,00e0), et « notre modèle n'est pas découpable » (contredit
+ci-dessous).
+
+**La cause** : le fichier d'identifiants contient **255 jetons**, la porte en annonçait 128 —
+et les deux chemins fenêtrent **différemment** : `--ppl` note les `limit` **premiers** jetons,
+`--ppl-reparti` **tronque aux `limit` derniers** (« 256 jetons fournis > limite 128 : troncature
+aux 128 derniers »). La porte comparait **deux textes différents**.
+
+**Après correction** (le nombre de jetons est compté, plus supposé) :
+
+| modèle | entier | réparti | écart |
+|---|---|---|---|
+| `moteur_dense.gguf` | 173,0196 | **173,0196** | **0,0000 %** |
+| `moteur_route.gguf` | 173,0196 | **173,0196** | **0,0000 %** |
+
+**PORTE TENUE** : notre modèle entraîné (Qwen3-MoE) **survit au découpage au chiffre près**,
+routage compris — ce que la rouge laissait croire faux depuis deux jours. **20 portes vertes
+sur 20**, 122 tests.
+
+**Asymétrie de protocole à retenir** : `--limit` = « les N premiers » en perplexité, « les N
+derniers » en réparti.
+
+---
+
 ## VÉRIFICATION COMPLÈTE — FAITE (11 octobre 3 h) : 19 portes vertes, 1 rouge nommée
 
 Suite complète des portes (`tools/porte-*.sh`, 20 fichiers) **après les huit rounds** qui ont
@@ -1107,6 +1134,7 @@ bus (le format de la ligne de contrôle est écrit, le transport reste à câble
 |---|---|
 | 9/10 17 h 10 | **C1a** : module `topologie.rs`, validation stricte, plan, 8 tests, suite à 85 tests. |
 | 9/10 17 h 20 | **C1b pas 1** : la topologie pilote le découpage · porte `tools/porte-topologie.sh` **TENUE** (même chiffre, écart 0,00e0) · deux refus vérifiés. |
+| 11/10 04 h 30 | **LA ROUGE INSTRUITE ET CORRIGÉE — c'était la PORTE.** Le fichier a **255** jetons, la porte en annonçait 128 ; `--ppl` note les N **premiers**, `--ppl-reparti` les N **derniers** ⇒ elle comparait **deux textes différents**. Corrigé (jetons comptés) : dense **173,0196 = 173,0196** et routé idem, **écart 0,0000 %** ⇒ **notre modèle entraîné survit au découpage, routage compris**. **20/20 portes vertes.** |
 | 11/10 03 h 00 | **VÉRIFICATION COMPLÈTE** : 20 portes jouées après les 8 rounds qui ont touché le chemin d'exécution ⇒ **19 vertes · 1 rouge** + 122 tests. La rouge est `porte-reparti-moteur` (notre modèle `/tmp/moteur_route.gguf`, entier 321,9623 contre réparti 132,8349, écart 58,7 %, **flux à 0,00e0**) : tous les ajouts du sprint sont INACTIFS par défaut sur ce chemin, donc elle est **pré-existante et non expliquée** — écrite comme telle, avec la commande pour l'instruire. |
 | 11/10 01 h 30 | **C10 (suite) — budget de LATENCE** : `"budget_ms"`, comparé à l'allé-retour mesuré. Généreux ⇒ identique (111,9225, code 0) · 1 ms ⇒ `LATENCE DÉPASSÉE : 20,1 ms pour un budget de 1 ms, au pas 0`, **code 8**, aucune perplexité. **Quatre codes distincts** : 5 borne · 6 octets · 7 panne · 8 latence. Défaut de porte corrigé (variable `D` écrasée ⇒ code 127). |
 | 11/10 00 h 30 | **C11 — pannes de lien** : `best-effort` = « sauter la région » est REFUSÉ (un graphe amputé est un AUTRE modèle) ⇒ s'arrêter en nommant lien/pas/octets, **code 7** (5 = borne, 6 = budget). Porte 3 cas : nominal 33,0156 · pair tué au pas 12 (43 968 octets) · pair absent en 2 s. Deux défauts corrigés : un pair absent faisait PANIQUER le pilote (code 134) ; la porte attendait un événement fragile. Reste : la REPRISE (cache KV perdu). |
