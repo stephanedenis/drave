@@ -38371,3 +38371,47 @@ fonctionnement. Outils : `tools/c8_entrainer_tete.py`, `tools/c8_corpus.sh`
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"docs/etat-cerveau.md\"); s = p.read_text()\nold = \"\"\"complet, 202 avec 7 morceaux — la non-linéarité n'aide pas à cette échelle, faute de réglage. Les\nvraies questions resta … [3368 caractères tronqués]`
+
+  ```
+attention : la ligne du tableau n'a pas encore le transfert
+état mis à jour
+1
+récit complété
+poussé
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^| \\*\\*C8\\*\\*\" docs/etat-cerveau.md | cut -c1-200; grep -o \"compromis est.*fonctionnement\" docs/etat-cerveau.md | head -2", "description": "Check the C8 table row content"}`
+
+  ```
+27:| **C8** | périphérie et réflexes (plan § C8) | 🟡 **le RÉFLEXE est mesuré ; la périphérie (entrées/sorties) ne l'est pas** | sur **le même texte**, le chemin tronqué à 16 couches passe de **456 586
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib, re\np = pathlib.Path(\"docs/etat-cerveau.md\"); s = p.read_text()\nlignes = s.splitlines()\ni = next(i for i, l in enumerate(lignes) if l.startswith(\"| **C8** |\"))\nl = lignes[i]\navant = \"et i … [826 caractères tronqués]`
+
+  ```
+ligne C8 complétée
+On branch master
+Your branch is up to date with 'origin/master'.
+
+nothing to commit, working tree clean
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -o \"transfert[^|]*\" docs/etat-cerveau.md | head -2; git status --short | head -3; git log --oneline -2", "description": "Verify the state file and git status"}`
+
+  ```
+transfert à un autre corpus** est mesuré ([`rapport-c8-transfert-corpus.md`](../reports/rapport-c8-transfert-corpus.md)) :
+transfert inter-langue** (les deux corpus sont du
+M  journal/2026-10-10.md
+M  journal/2026-10-10_docs.md
+M  journal/README.md
+c8372cb Etat et journal : le transfert inter-corpus de C8 est consigne (le patch precedent avait echoue sur un motif perime)
+6dad657 C8 : transfert a un AUTRE corpus — div 1 730 sur la tete empruntee, x2,6 de cout de domaine
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport pathlib\nl = [x for x in pathlib.Path('docs/etat-cerveau.md').read_text().splitlines() if x.startswith('| **C8** |')][0]\nprint(repr(l[-260:]))\"", "description": "Show the exact tail of the C8 row"}`
+
+  ```
+" pour ×59** (même texte), **×5,7** (texte neuf) ou **×25** (autre corpus) d'écart au modèle complet | `porte-reflexe.sh` · fiches 26, [`sonde-profondeur`](../reports/rapport-c8-sonde-profondeur.md), [`tête entraînée`](../reports/rapport-c8-tete-entrainee.md) |"
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"docs/etat-cerveau.md\"); s = p.read_text()\nold = \"\"\"[`tête entraînée`](../reports/rapport-c8-tete-entrainee.md) |\"\"\"\nnew = \"\"\"[`tête entraînée`](../reports/rapport-c8 … [587 caractères tronqués]`

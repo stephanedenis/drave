@@ -7,12 +7,12 @@
 | Début | 2026-10-08 09:11 |
 | Durée | 52.5 h |
 | Tours | 88 |
-| Messages | 2380 |
-| Appels d'outils | 2183 |
+| Messages | 2385 |
+| Appels d'outils | 2188 |
 | Fichiers touchés | 79 |
-| Commandes | 1897 |
+| Commandes | 1902 |
 | Sous-agents | 3 |
-| Commits | 210 |
+| Commits | 212 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -3586,7 +3586,7 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 
 ### Tour 88 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*341 appels d'outils.* Actions notables :
+*346 appels d'outils.* Actions notables :
 
 - bash — Add the refusal and verify
 - bash — Move the refusal to the single point and verify
@@ -3602,7 +3602,7 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - bash — Read v7 removal context and flag inventory
 - bash — Read flag inventory section in docs
 - bash — Establish whether section 9 predates the v7 removal
-- … et 314 autres
+- … et 319 autres
 
 **Synthèse produite :**
 
@@ -3742,7 +3742,7 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1857 autres
+- … et 1862 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4100,4 +4100,6 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'MSG' Porte du reflexe : la conclusion « pas de sortie precoce utilisab
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' import pathlib # état p = pathlib.Path("docs/etat-cerveau.md"); s = p.read_text() old 
 - Etat et journal : le transfert inter-corpus de C8 est consigne (le patch precedent avait echoue sur un motif perime)" && git push -q origin master && echo pouss
+- Etat : la ligne C8 porte le transfert inter-corpus (div 1 730, cout de domaine x2,6)" && git push -q origin master && echo poussé; grep -o "transfert à un autre
+- Etat : la ligne C8 renvoie aux cinq fiches (sonde, courbe, tete entrainee, generalisation, transfert)" && git push -q origin master && echo poussé; git log --on
 
