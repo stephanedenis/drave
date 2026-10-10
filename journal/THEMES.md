@@ -59,14 +59,14 @@ possible (`ls journal/*_<thème>.md`).
 | jour | chiffres du jour |
 |---|---|
 | [2026-10-09](2026-10-09_modele.md) | `+6,7 %` · `+8,0 %` · `+1,0 %` · `+3,8 %` · `÷3,7` · `1 %` · `÷2` · `50 %` · `6 %` · `+1 %` |
-| [2026-10-10](2026-10-10_modele.md) | `24 couches` · `−11,5 %` · `8000 états` |
+| [2026-10-10](2026-10-10_modele.md) | `24 couches` · `−11,5 %` · `8000 états` · `8188 états` · `×540` · `×59` · `×90` · `14,2342` |
 
 ### `moteur` — Moteur : chargement, calcul, listes, quantification
 
 | jour | chiffres du jour |
 |---|---|
 | [2026-10-09](2026-10-09_moteur.md) | `8,6 Mo` · `243 Mo` · `8 jetons` · `8 Mo` |
-| [2026-10-10](2026-10-10_moteur.md) | `-20 %` |
+| [2026-10-10](2026-10-10_moteur.md) | `-20 %` · `86 Gio` |
 
 ### `mesures` — Campagnes et mesures
 

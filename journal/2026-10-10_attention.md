@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-10.md](2026-10-10.md). Convention : `docs/organisation-du-depot.md`.
 
-## Commits du jour (17)
+## Commits du jour (18)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -25,6 +25,7 @@
 | 11:10 | `499400e` | Carte fenetre x puits : la case donne aussi le TEMPS et le debit (tok/s) | `2026-10-10.md`, `2026-10-10_apprentissage.md`, `2026-10-10_attention.md` (+14) |
 | 11:42 | `62c9da5` | Carte fenetre x puits : secondes corrigees, et les points d'entree nommes dans l'index | `etat.md`, `organisation-du-depot.md`, `2026-10-10.md` (+9) |
 | 12:04 | `7b0ba27` | Fenetre x puits : le prix REEL en temps mesure — diviser les cles par 4 ne rend que +12 % de debit | `2026-10-10.md`, `2026-10-10_apprentissage.md`, `2026-10-10_attention.md` (+15) |
+| 12:05 | `9cb184d` | Etat : le prix en temps de la fenetre est consigne (div 4 de cles = +12 % de debit, pas x4) | `etat-cerveau.md`, `2026-10-10.md`, `2026-10-10_attention.md` (+6) |
 
 ## Chiffres du jour
 
@@ -65,7 +66,7 @@
 
 ## Sessions actives ce jour
 
-- `d31b3d9b` — Où en est-on (début 2026-10-08 09:11, 50.9 h) → [rapport](sessions/d31b3d9b/rapport.md) · [digest](sessions/d31b3d9b/digest.md)
+- `d31b3d9b` — Où en est-on (début 2026-10-08 09:11, 51.4 h) → [rapport](sessions/d31b3d9b/rapport.md) · [digest](sessions/d31b3d9b/digest.md)
 
 ## Mesures et rapports touchés
 

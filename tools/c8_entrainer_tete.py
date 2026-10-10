@@ -1,0 +1,276 @@
+#!/usr/bin/env python3
+"""c8_entrainer_tete.py — C8 : une TÊTE ENTRAÎNÉE pour une profondeur donnée.
+
+LA QUESTION, ET ELLE EST MAINTENANT PRÉCISE. La sonde linéaire a montré que l'état de la couche
+16 **contient** le prochain jeton (40,8 % parmi les 256 plus fréquents, contre 4,0 % pour la
+classe majoritaire — `reports/rapport-c8-sonde-profondeur.md`). Mais le chemin tronqué, lui,
+avec la **tête du modèle**, rend **1 127 368** de perplexité contre **9,43** au modèle complet.
+Alors : une tête **entraînée** pour cette profondeur peut-elle combler l'écart ?
+
+CE QUI EST ENTRAÎNÉ, ET CE QUI NE L'EST PAS. On n'entraîne **pas** de tête de sortie complète
+(151 936 × 896 = 136 M poids, pour 8 000 exemples : ce serait de l'apprentissage par cœur). On
+entraîne un **adaptateur** `A` (896 × 896) qui place l'état intermédiaire dans l'espace que la
+**tête liée du modèle** (`token_embd.weight`, gelée) sait déjà lire, la norme finale du modèle
+étant appliquée entre les deux — exactement la chaîne du moteur :
+
+    logits = W_tête · rmsnorm(A · x_16)
+
+La perplexité obtenue est donc **plein vocabulaire**, directement comparable à 1 127 368 (chemin
+tronqué avec la tête empruntée) et à 9,43 (modèle complet).
+
+CE QUE ÇA MESURE, ET SA LIMITE. Ça mesure ce qu'un **seul texte** permet d'apprendre : un
+adaptateur ajusté sur la première moitié du texte et évalué sur la seconde. Un vrai réflexe
+s'entraînerait sur un corpus — le chiffre d'ici est donc une **borne supérieure optimiste** de ce
+qu'une tête dédiée peut faire, pas la performance d'un modèle entraîné. C'est écrit dans le
+rapport, et ça ne se lit pas autrement.
+
+Usage :
+  tools/c8_entrainer_tete.py --etats /tmp/c8-8k/etat --ids /tmp/campagne24/ids_0.5B-Q8.txt \
+      --modele models/Qwen2.5-0.5B-Q8_0.gguf --limite 8192 [--epoques 40] [--pas 1e-2]
+"""
+from __future__ import annotations
+
+import argparse
+import pathlib
+import re
+import struct
+import sys
+
+import numpy as np
+import torch
+
+
+# --------------------------------------------------------------------------------------------
+# Lecture GGUF : juste ce qu'il faut (l'énorme majorité du format ne sert pas ici)
+# --------------------------------------------------------------------------------------------
+def _chaine(f) -> str:
+    n = struct.unpack("<Q", f.read(8))[0]
+    return f.read(n).decode("utf-8", "replace")
+
+
+def _valeur(f, t: int):
+    fmt = {0: "<B", 1: "<b", 2: "<H", 3: "<h", 4: "<I", 5: "<i", 6: "<f", 7: "<B", 10: "<Q", 11: "<q",
+           12: "<d"}
+    if t == 8:
+        return _chaine(f)
+    if t == 9:
+        et = struct.unpack("<I", f.read(4))[0]
+        n = struct.unpack("<Q", f.read(8))[0]
+        return [_valeur(f, et) for _ in range(n)]
+    return struct.unpack(fmt[t], f.read(struct.calcsize(fmt[t])))[0]
+
+
+def lire_entete(chemin: str):
+    """(tenseurs {nom: (dims, type, offset)}, début des données)."""
+    f = open(chemin, "rb")
+    if f.read(4) != b"GGUF":
+        raise SystemExit(f"{chemin} : ce n'est pas un GGUF")
+    struct.unpack("<I", f.read(4))[0]
+    n_tensors, n_kv = struct.unpack("<QQ", f.read(16))
+    alignement = 32
+    for _ in range(n_kv):
+        cle = _chaine(f)
+        t = struct.unpack("<I", f.read(4))[0]
+        v = _valeur(f, t)
+        if cle == "general.alignment":
+            alignement = int(v)
+    tenseurs = {}
+    for _ in range(n_tensors):
+        nom = _chaine(f)
+        nd = struct.unpack("<I", f.read(4))[0]
+        dims = [struct.unpack("<Q", f.read(8))[0] for _ in range(nd)]
+        ttype = struct.unpack("<I", f.read(4))[0]
+        off = struct.unpack("<Q", f.read(8))[0]
+        tenseurs[nom] = (dims, ttype, off)
+    debut = (f.tell() + alignement - 1) // alignement * alignement
+    return f, tenseurs, debut
+
+
+def lire_q8_0(f, offset: int, n_elements: int) -> np.ndarray:
+    """Déquantifie Q8_0 : blocs de 32 (une échelle f16 + 32 i8)."""
+    n_blocs = n_elements // 32
+    f.seek(offset)
+    brut = np.frombuffer(f.read(n_blocs * 34), dtype=np.uint8).reshape(n_blocs, 34)
+    echelles = np.ascontiguousarray(brut[:, :2]).view(np.float16).astype(np.float32).reshape(-1, 1)
+    qs = np.ascontiguousarray(brut[:, 2:]).view(np.int8).astype(np.float32)
+    return (echelles * qs).reshape(-1)
+
+
+def lire_f32(f, offset: int, n_elements: int) -> np.ndarray:
+    f.seek(offset)
+    return np.frombuffer(f.read(4 * n_elements), dtype="<f4").astype(np.float32)
+
+
+# --------------------------------------------------------------------------------------------
+# L'état, les cibles, l'entraînement
+# --------------------------------------------------------------------------------------------
+def charger_ids(chemin: str, limite: int) -> np.ndarray:
+    texte = pathlib.Path(chemin).read_text()
+    vals = []
+    for m in re.split(r"[,\s]+", texte):
+        if not m:
+            continue
+        try:
+            vals.append(int(m))
+        except ValueError:
+            continue
+        if len(vals) >= limite:
+            break
+    if not vals:
+        raise SystemExit(f"{chemin} : aucun identifiant lisible")
+    return np.array(vals, dtype=np.int64)
+
+
+def charger_etats(prefixe: str):
+    fichiers = sorted(pathlib.Path(prefixe).parent.glob(pathlib.Path(prefixe).name + ".*"),
+                      key=lambda f: int(f.name.rsplit(".", 1)[1]))
+    pos, lignes = [], []
+    for f in fichiers:
+        octets = f.read_bytes()
+        if len(octets) % 4:
+            continue
+        pos.append(int(f.name.rsplit(".", 1)[1]))
+        lignes.append(np.frombuffer(octets, dtype="<f4"))
+    if not lignes:
+        raise SystemExit(f"{prefixe} : aucun état lisible")
+    return np.array(pos, dtype=np.int64), np.vstack(lignes)
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--etats", required=True)
+    ap.add_argument("--ids", required=True)
+    ap.add_argument("--modele", required=True)
+    ap.add_argument("--limite", type=int, default=8192)
+    ap.add_argument("--epoques", type=int, default=40)
+    ap.add_argument("--pas", type=float, default=1e-2)
+    ap.add_argument("--batch", type=int, default=256)
+    ap.add_argument("--repertoire", type=float, default=1e-5)
+    ap.add_argument("--ppl_tronque", type=float, default=None,
+                    help="perplexité du chemin tronqué avec la tête EMPRUNTÉE (pour la table)")
+    ap.add_argument("--ppl_complet", type=float, default=None)
+    a = ap.parse_args()
+
+    ids = charger_ids(a.ids, a.limite)
+    pos, X = charger_etats(a.etats)
+    garde = pos + 1 < len(ids)
+    pos, X = pos[garde], X[garde]
+    y = ids[pos + 1]
+    print(f"états : {X.shape[0]} × {X.shape[1]} · cibles : {len(y)} jetons (positions {pos.min()}..{pos.max()})")
+
+    f, tenseurs, debut = lire_entete(a.modele)
+    nom_tete = "output.weight" if "output.weight" in tenseurs else "token_embd.weight"
+    nom_norme = "output_norm.weight"
+    dims, ttype, off = tenseurs[nom_tete]
+    # ATTENTION À L'ORDRE : dans un GGUF, `dims[0]` est la dimension CONTIGUË (le pas), pas la
+    # première dimension logique. `token_embd.weight` est donc (896, 151 936) en stockage, et
+    # (151 936, 896) en logique. Lire `h = dims[1]` faisait 151 936 canaux cachés et demandait
+    # une matrice identité de 86 Gio (attrapé par l'OOM, pas par le calcul).
+    h, vocab = int(dims[0]), int(dims[1])
+    print(f"tête liée : {nom_tete} dims={dims} (stockage) → logique ({vocab}, {h}) · "
+          f"type {ttype} · norme : {nom_norme}")
+    if ttype != 8:
+        raise SystemExit(f"cette tête n'est pas Q8_0 (type {ttype}) : ce script ne sait pas la lire")
+    W = lire_q8_0(f, debut + off, vocab * h).reshape(vocab, h)
+    dims_n, type_n, off_n = tenseurs[nom_norme]
+    g = lire_f32(f, debut + off_n, dims_n[0])
+    print(f"tête déquantifiée : {W.shape} · norme : {g.shape}")
+
+    # tenseurs torch — la tête et la norme sont GELÉES, seul l'adaptateur apprend
+    dev = "cuda" if torch.cuda.is_available() else "cpu"
+    Wt = torch.from_numpy(W).to(dev).half()
+    # fp16 partout SAUF l'adaptateur : mélanger float et Half lève une erreur de dtype au
+    # premier matmul (attrapé ici, pas en production), et convertir la tête à chaque pas
+    # coûterait 0,5 Go de copie par lot.
+    gt = torch.from_numpy(g).to(dev).half()
+    Xt = torch.from_numpy(X).to(dev).half()
+    yt = torch.from_numpy(y).to(dev)
+    print(f"appareil : {dev} · tête en {'fp16' if dev == 'cuda' else 'fp32'} "
+          f"({Wt.numel() * Wt.element_size() / 1e9:.2f} Go)")
+
+    coupe = len(y) // 2
+    tr = slice(0, coupe)
+    te = slice(coupe, len(y))
+
+    A = torch.eye(h, device=dev, dtype=torch.float32, requires_grad=True)   # identité
+    opt = torch.optim.Adam([A], lr=a.pas)
+
+    def rmsnorm(x, poids, eps=1e-6):
+        # moyenne des carrés en fp32 (stable), application en fp16 comme le reste de la chaîne
+        m = x.float().pow(2).mean(-1, keepdim=True)
+        return (x.float() / torch.sqrt(m + eps)).half() * poids
+
+    def perte(idx) -> torch.Tensor:
+        logits = rmsnorm((Xt[idx].float() @ A.T).half(), gt) @ Wt.T
+        return torch.nn.functional.cross_entropy(logits.float(), yt[idx])
+
+    @torch.no_grad()
+    def perplexite(idx) -> float:
+        nll, n = 0.0, 0
+        for d in range(0, (idx.stop - idx.start) if isinstance(idx, slice) else len(idx), 512):
+            lo = (idx.start or 0) + d
+            hi = min(lo + 512, idx.stop if isinstance(idx, slice) else len(idx))
+            if lo >= hi:
+                break
+            logits = rmsnorm((Xt[lo:hi].float() @ A.T).half(), gt) @ Wt.T
+            nll += torch.nn.functional.cross_entropy(logits.float(), yt[lo:hi],
+                                                     reduction="sum").item()
+            n += hi - lo
+        return float(np.exp(nll / max(n, 1)))
+
+    ppl0 = perplexite(te)
+    print(f"\navant entraînement (A = identité) : perplexité TEST = {ppl0:,.4f}")
+    meilleur = (ppl0, 0, A.detach().clone())
+    for e in range(a.epoques):
+        perm = torch.randperm(coupe, device=dev)
+        tot = 0.0
+        for d in range(0, coupe, a.batch):
+            idx = perm[d:d + a.batch]
+            opt.zero_grad()
+            l = perte(idx)
+            l.backward()
+            opt.step()
+            tot += l.item() * len(idx)
+        if (e + 1) % max(1, a.epoques // 8) == 0 or e == 0:
+            with torch.no_grad():
+                ppl_tr = float(np.exp(tot / coupe))
+            ppl_te = perplexite(te)
+            marque = ""
+            if ppl_te < meilleur[0]:
+                # LA MEILLEURE ÉPOQUE EST GARDÉE : au-delà, l'adaptateur apprend le texte
+                # d'entraînement (l'écart train/test se creuse) et la perplexité de test REMONTE.
+                meilleur = (ppl_te, e + 1, A.detach().clone())
+                marque = "  ← meilleur test"
+            print(f"  époque {e + 1:>3}/{a.epoques} · perte train {ppl_tr:,.4f} "
+                  f"(perplexité) · test {ppl_te:,.4f}{marque}")
+
+    # on évalue la MEILLEURE époque retrouvée, pas la dernière
+    A.data.copy_(meilleur[2].to(A.dtype))
+    ppl_final = perplexite(te)
+    print(f"\nmeilleur test : époque {meilleur[1]} · {meilleur[0]:,.4f}")
+    with torch.no_grad():
+        ppl_train = perplexite(tr)
+    print()
+    print("| chemin | perplexité (TEST) |")
+    print("|---|---|")
+    if a.ppl_tronque is not None:
+        print(f"| chemin tronqué, tête EMPRUNTÉE | {a.ppl_tronque:,.4f} |")
+    print(f"| chemin tronqué, tête **entraînée** (adaptateur, époque {meilleur[1]}) | "
+          f"**{ppl_final:,.4f}** |")
+    if a.ppl_complet is not None:
+        print(f"| modèle complet (référence) | {a.ppl_complet:,.4f} |")
+    print()
+    print(f"entraînement (mêmes états, première moitié) : {ppl_train:,.4f}")
+    if a.ppl_tronque:
+        print(f"gain sur la tête empruntée : ×{a.ppl_tronque / ppl_final:,.1f}")
+    if a.ppl_complet:
+        print(f"écart au modèle complet : ×{ppl_final / a.ppl_complet:,.1f}")
+    ecart = ppl_train / ppl_final
+    if ecart > 3:
+        print(f"\n⚠ surapprentissage : {ecart:.1f}× entre entraînement et test — le chiffre de test")
+        print("  reste le seul à lire, et il porte sur UN texte (voir la limite en tête de fichier).")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

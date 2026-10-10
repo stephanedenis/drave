@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 50.9 h |
+| Durée | 51.4 h |
 | Tours | 88 |
-| Messages | 2301 |
-| Appels d'outils | 2108 |
-| Fichiers touchés | 74 |
-| Commandes | 1827 |
+| Messages | 2328 |
+| Appels d'outils | 2133 |
+| Fichiers touchés | 76 |
+| Commandes | 1850 |
 | Sous-agents | 3 |
-| Commits | 203 |
+| Commits | 204 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -3586,7 +3586,7 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 
 ### Tour 88 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*266 appels d'outils.* Actions notables :
+*291 appels d'outils.* Actions notables :
 
 - bash — Add the refusal and verify
 - bash — Move the refusal to the single point and verify
@@ -3602,11 +3602,11 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - bash — Read v7 removal context and flag inventory
 - bash — Read flag inventory section in docs
 - bash — Establish whether section 9 predates the v7 removal
-- … et 239 autres
+- … et 264 autres
 
 **Synthèse produite :**
 
-⏵ Prochain chantier C8 : capturer 8 000 états pour entraîner une vraie tête ; je lance la capture
+⏵ Référence obtenue sur le même texte : modèle complet 14,2342 — l'écart du réflexe est ×59 (pas ×90) ; je corrige la fiche
 
 ## 3. Travail accompli
 
@@ -3688,6 +3688,8 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/c8_carte_profondeur.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/README.md.new` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md.new` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/c8_entrainer_tete.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-c8-tete-entrainee.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -3737,7 +3739,7 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1787 autres
+- … et 1810 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3865,7 +3867,7 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 
 ## 5. Erreurs rencontrées
 
-83 sorties en erreur ou divergentes. Les premières :
+84 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : ```  ### 🤖 Assistant  ⏵ **En transformers 5, `AutoModel` rend directement `Qwen2Model` (pas de `.model`). Je corrige le diagnostic.**  - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitH
 - **T2** : 3310393 bash -c pgrep -af "essai_decharge" | grep python | head; echo "--- logs ---"; tail -2 /tmp/ec_d192_lr3e3.log 2>/dev/null; tail -2 /tmp/ec_d192_lr1e3.log 2>/dev/null; echo "---"; ls -la /tmp/ec
@@ -4088,4 +4090,5 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline origin/master..HEAD; echo "=== amend du message ==="; git commit --amend -q -F - <<'MSG'
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' import pathlib # 1) corriger l'extraction des secondes (la carte ne tourne plus) p = p
 - Etat : le prix en temps de la fenetre est consigne (div 4 de cles = +12 % de debit, pas x4)" && git push -q origin master && echo poussé; sleep 240; ls /tmp/c8-
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' import pathlib p = pathlib.Path("reports/rapport-c8-tete-entrainee.md"); s = p.read_te
 
