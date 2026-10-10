@@ -29535,3 +29535,167 @@ cas 5 ajoute
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\n\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\na = \"\"\"**Conditions** : un seul modèle (0,5 B), 128 jetons, un seul jeu d'identifiants, le gain est\nappliqué à … [3982 caractères tronqués]`
+
+  ```
+docs profil complet
+e873179 E4 (suite) : le profil complet sur 24 couches — le desequilibre est a l'ENTREE
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 16 livré : le déséquilibre E/I est **localisé à l'entrée**, pas réparti
+
+**Ce round** — 1 commit poussé, 122 tests verts, `porte-gain.sh` à **5 cas** (verte). Le gain 0,75 mesuré sur **chaque** couche (référence 14,6496) :
+
+| couche | 0 | 1 | 2 | 3 | 4–16 | 17 | 21 | 23 |
+|---|---|---|---|---|---|---|---|---|
+| écart | **−11,5 %** | **−4,5 %** | **+9,2 %** | **+10,6 %** | ±1 % (neutres) | +3,8 % | +4,3 % | +5,7 % |
+
+(couches 8, 9, 19 : −0,4 % à −0,1 %, dans le bruit)
+
+**Le déséquilibre n'est pas réparti sur la profondeur : il est à l'ENTRÉE.** Deux couches veulent être amplifiées, deux autres ne supportent pas d'être touchées, et vingt sont déjà à leur point. La lecture biologique (E4) s'en trouve précisée : ce n'est pas l'équilibre *global* du réseau qui est en jeu, c'est le **gain d'entrée**.
+
+**Conséquence pour le dessin I** (profil de gains appris) : le levier existe et vaut **−11,5 % sans rien entraîner**, mais il porte sur **deux couches, pas vingt-quatre** — donc très peu de paramètres utiles : bonne nouvelle pour l'entraînement, mauvaise pour l'ambition. C'est écrit tel quel.
+
+**Ce que la porte verrouille** (5 cas) : `gain 1.0` **est** l'absence de réglage (exactement) · l'inhibition est **monotone** · l'optimum intérieur existe (0,75 bat 0,5 et 1,5) · la **falaise** à 0,25 (68× pire) · et le bénéfice est **localisé** (couches 0-1 oui, couche 5 non).
+
+**Bilan** : 16 rounds, 22 portes toutes vertes, 122 tests, une trentaine de mesures dont la moitié des négatifs ou des corrections — toutes documentées avec leurs conditions dans `reports/rapport-campagne-benefices.md` (§24 à §37). L'objectif reste **actif**.
+
+
+## Tour 60
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 mémoire épisodique, C7 consolidation, C8 périphérie, C9 latéralité, C10 budgets, et la diffusion réseau du bus de C5 ; (b) les expériences E2-E9 de docs/biologie-pour-drave.md et docs/hebbien-differentiel-et-biologie.md ; (c) les dessins de modèle H/I/J de docs/modele-pour-drave.md ; (d) les manques du registre docs/manques.md (noyau de listes pour les experts, noyau de listes GPU, encodeurs) — l'implémenter ou la mesurer, la doter d'une porte vérifiable, la documenter, commiter, pousser, et enchaîner immédiatement sur la suivante. Contraintes : les 23 portes du dépôt et tous les tests restent verts (porte-flux.sh après toute modification du chemin d'exécution), le profil release reste le binaire de mesure, le crate reste std seul, et docs/sprint-cerveau.md reste l'état resumable mis à jour à chaque round. Ne jamais s'arrêter faute de tâches planifiées : en inventer de nouvelles, mesurables, plutôt que d'attendre."
+Round: 17/60
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ E4 (suite) : combiner les gains de DEUX couches — le levier se compose-t-il ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"ffn_gain\" drave-core/src/model.rs | head -6", "description": "Find the ffn_gain application site"}`
+
+  ```
+2663:    pub ffn_gain: Option<(usize, f32)>,
+4507:            patch: None, ffn_gain: None, hebb: None, hebb_diff: None,
+7776:                if let Some((gl, gg)) = self.ffn_gain {
+7839:            if let Some((gl, g)) = self.ffn_gain {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '7774,7780p;7837,7843p' drave-core/src/model.rs", "description": "Read the two application sites"}`
+
+  ```
+for i in 0..h { down[i] += exp_out[i]; }
+                }
+                if let Some((gl, gg)) = self.ffn_gain {
+                    if gl == l { for v in down.iter_mut() { *v *= gg; } }
+                }
+                match (hc_x.as_ref(), hc_ffn.as_ref(), hc_l) {
+                    (Some(nx), Some(sf), Some((_, hf))) => {
+                }
+            }
+            if let Some((gl, g)) = self.ffn_gain {
+                if gl == l { for v in down.iter_mut() { *v *= g; } }
+            }
+            match (hc_x.as_ref(), hc_ffn.as_ref(), hc_l) {
+                (Some(nx), Some(sf), Some((_, hf))) => {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\n# --- modèle : une LISTE de (couche, gain)\np = pathlib.Path(\"drave-core/src/model.rs\")\ns = p.read_text()\ns = s.replace(\"\"\"    pub ffn_gain: Option<(usize, f32)>,\"\"\",\n\"\"\"    /// C2/E … [3073 caractères tronqués]`
+
+  ```
+profil de gains
+575:    println!("[options] fenêtre {} · motif {} · seuil push {} · lot {} · ffn_gain {:?} · hebb {}",
+577:             mdl.ffn_gain, mdl.hebb.is_some());
+871:    hebb_out: String, ffn_gain: Option<(usize, f32)>, matrix: String,
+1075:                o.ffn_gain = Some(paires);
+1173:        hebb_layer, hebb_q, hebb_out, hebb_diff, hebb_eta, hebb_clamp, sans_yarn, lot, ffn_gain,
+1251:    if let Some((l, g)) = ffn_gain {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1248,1258p' drave-core/src/main.rs", "description": "Read the wiring site"}`
+
+  ```
+}
+    // `--ffn-gain` était appliqué en perplexité et JAMAIS déstructuré ici : la
+    // sortie était rigoureusement identique avec et sans le drapeau.
+    if let Some((l, g)) = ffn_gain {
+        mdl.ffn_gain = Some((l, g));
+        println!("gain FFN : couche {l} × {g}");
+    }
+    // Appliqués en perplexité depuis toujours, oubliés ici : la déstructuration
+    // unique les rend visibles (le compilateur signale tout champ non lu).
+    mdl.attn_topk = attn_topk;
+    mdl.qk_topk = qk_topk;
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib, re\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\ns = s.replace(\"\"\"    hebb_out: String, ffn_gain: Option<(usize, f32)>, matrix: String,\"\"\",\n              \"\"\"    hebb_ … [709 caractères tronqués]`
+
+  ```
+cablage
+error[E0308]: mismatched types
+    --> src/main.rs:6964:17
+     |
+6964 |     if let Some((l, g)) = ffn_gain {
+     |                 ^^^^^^    -------- this expression has type `Option<Vec<(usize, f32)>>`
+     |                 |
+     |                 expected `Vec<(usize, f32)>`, found `(_, _)`
+     |
+     = note: expected struct `Vec<(usize, f32)>`
+--
+error: could not compile `drave-core` (bin "drave") due to 1 previous error; 30 warnings emitted
+BUILD_END
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '6960,6970p' drave-core/src/main.rs && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\na = \"\"\"    if let Some((l, g)) = ffn_gain {\"\"\"\nif a in s:\n    # deuxième site … [785 caractères tronqués]`
+
+  ```
+println!("greffon : couche {}, |u|={:.3} |v|={:.3} |d|={:.3}",
+                 pt.layer, norme(&pt.u), norme(&pt.v), norme(&pt.d));
+        mdl.patch = Some(pt);
+    }
+    if let Some((l, g)) = ffn_gain {
+        println!("gain FFN : couche {l} x {g}");
+        mdl.ffn_gain = Some((l, g));
+    }
+    mdl.act_thresh = act_thresh;
+    mdl.act_topk = act_topk;
+    mdl.act_renorm = act_renorm;
+bloc ancien : '    if let Some((l, g)) = ffn_gain {\n        println!("gain FFN : couche {l} x {g}");\n        mdl.ffn_gain = Some((l, g));\n    }'
+second site corrige
+BUILD_END
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 cargo test --release --manifest-path drave-core/Cargo.toml 2>&1 | grep -E \"^test result\" && echo \"=== composition des gains ===\" && for SPEC in \"0:0.75\" \"1:0.5\" \"0:0.75,1:0.5\" \"0:0.9,1:0.6\" \"0:0.75,1:0.5,2:1. … [458 caractères tronqués]`
+
+  ```
+test result: ok. 122 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.32s
+=== composition des gains ===
+  0:0.75                   :   12.9635   -11.51 %
+  1:0.5                    :   13.7907    -5.86 %
+  0:0.75,1:0.5             :   13.7679    -6.02 %
+  0:0.9,1:0.6              :   13.4209    -8.39 %
+  0:0.75,1:0.5,2:1.0       :   13.7679    -6.02 %
+  ```
+
+### 🤖 Assistant
+
+⏵ La composition DÉGRADE : 0,75 seul = 12,96 ; 0,75 + 0,5 = 13,77 — les gains ne se composent pas
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"tools/porte-gain.sh\")\ns = p.read_text()\na = '''rm -rf \"$T\"'''\nb = '''echo \"=== 6. un PROFIL ne compose PAS : il défait le meilleur réglage seul ===\"\n# Mesuré : 0,75 seu … [1282 caractères tronqués]`
+
+  ```
+cas 6 ajoute
+=== 5. le bénéfice est LOCALISÉ aux deux premières couches ===
+  couche 0 : 12.9635 · couche 1 : 13.9844 · couche 5 : 14.7526 (référence 14.6496)
+  ✅ le bénéfice est à l'ENTRÉE : couches 0 et 1 à 12.9635 et 13.9844 (mieux que 14.6496), couche 5 à 14.7526 (pas mieux)
+=== 6. un PROFIL ne compose PAS : il défait le meilleur réglage seul ===
+  0:0.75 seul : 12.9635 · +1:0.5 : 13.7679 · +1:0.5+2:1.0 : 13.7679
+  ✅ la composition DÉGRADE (12.9635 → 13.7679), et un gain 1,0 y est exactement neutre (13.7679 = 13.7679)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\n\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\na = \"\"\"**Conditions** : un seul modèle (0,5 B), 128 jetons, un seul jeu d'identifiants, le gain est\nappliqué à … [5396 caractères tronqués]`

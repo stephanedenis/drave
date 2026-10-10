@@ -2327,10 +2327,32 @@ restent dans ±1 % (neutres), et seules 17, 21 et 23 repassent au-dessus de +3 %
 déséquilibre n'est donc **pas réparti sur la profondeur : il est à l'ENTRÉE** — les deux
 premières couches ont besoin d'être amplifiées, et le reste du réseau est déjà à son point.
 
-**Conditions** : un seul modèle (0,5 B), 128 jetons, un seul jeu d'identifiants, le gain est
-appliqué à la SORTIE de la FFN d'une couche à la fois (les gains simultanés et un profil
-appris ne sont pas mesurés) ; l'optimum à 0,75 est un point de la grille (0,5 · 0,75 · 1,0),
-il n'est pas localisé plus finement.
+**Et les gains NE SE COMPOSENT PAS — le profil défait le meilleur réglage seul.**
+`--ffn-gain` accepte maintenant une liste (`0:0.75,1:0.5`), ce qui rend la question mesurable :
+
+| profil | perplexité | écart |
+|---|---|---|
+| **`0:0.75` seul** | **12,9635** | **−11,51 %** |
+| `1:0.5` seul | 13,7907 | −5,86 % |
+| `0:0.75,1:0.5` | 13,7679 | −6,02 % |
+| `0:0.9,1:0.6` | 13,4209 | −8,39 % |
+| `0:0.75,1:0.5,2:1.0` | **13,7679** | identique au précédent |
+
+**Ajouter le gain de la couche 1 DÉGRADE le résultat de la couche 0** (12,9635 → 13,7679) : les
+deux réglages s'antagonisent en partie, ils ne s'additionnent pas. Le meilleur profil mesuré
+est donc **un réglage SEUL**. Et la dernière ligne est le témoin qui rend les autres lisibles :
+un gain de **1,0 dans un profil est exactement neutre** (13,7679 = 13,7679), donc l'identité
+tient aussi à l'intérieur d'un profil.
+
+**Conséquence pour le dessin I**, et elle est plus dure que celle du §37 : non seulement le
+profil n'a que deux couches utiles, mais **le composer empire les choses**. Un profil appris
+aurait donc à découvrir que la bonne réponse est « une seule couche, un seul gain » — ce qu'un
+apprentissage par gradient sur peu de paramètres peut très bien ne pas trouver, puisqu'il
+optimiserait les deux ensemble.
+
+**Conditions** : un seul modèle (0,5 B), 128 jetons, un seul jeu d'identifiants ; l'optimum à
+0,75 est un point de la grille (0,5 · 0,75 · 1,0), il n'est pas localisé plus finement ; deux
+profils à deux couches testés, plus un à trois couches.
 
 ## Annexe — manifeste des journaux
 

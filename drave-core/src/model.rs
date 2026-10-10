@@ -2660,7 +2660,12 @@ pub struct Model {
     pub patch: Option<Patch>,
     /// Gain appliqué à la sortie du FFN d'une couche : édition structurelle de
     /// granularité supérieure (elle porte sur les 4 864 neurones à la fois).
-    pub ffn_gain: Option<(usize, f32)>,
+    /// C2/E4 : gains de la FFN, PAR COUCHE. Une LISTE et non un couple : le profil mesuré
+    /// n'est pas plat (couche 0 à 0,75 et couche 1 à 0,5 valent mieux que l'unité), et
+    /// appliquer un profil demande de pouvoir en poser plusieurs à la fois. La question que
+    /// cela rend mesurable — les gains se COMPOSENT-ils, ou sont-ils redondants ? — ne se
+    /// pose pas avec une seule couche réglable.
+    pub ffn_gain: Option<Vec<(usize, f32)>>,
     /// Capteur hebbien : accumule la trace de co-activation d'une projection
     /// pendant l'inférence, sur un cœur séparé en pratique. Il ne modifie
     /// jamais le calcul — c'est un espion, pas un acteur.
@@ -7773,8 +7778,10 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
                                     threads_iq);
                     for i in 0..h { down[i] += exp_out[i]; }
                 }
-                if let Some((gl, gg)) = self.ffn_gain {
-                    if gl == l { for v in down.iter_mut() { *v *= gg; } }
+                if let Some(gs) = self.ffn_gain.as_ref() {
+                    for (gl, gg) in gs.iter() {
+                        if *gl == l { for v in down.iter_mut() { *v *= *gg; } }
+                    }
                 }
                 match (hc_x.as_ref(), hc_ffn.as_ref(), hc_l) {
                     (Some(nx), Some(sf), Some((_, hf))) => {
@@ -7836,8 +7843,10 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
                     for i in 0..h { down[i] += pt.d[i] * a; }
                 }
             }
-            if let Some((gl, g)) = self.ffn_gain {
-                if gl == l { for v in down.iter_mut() { *v *= g; } }
+            if let Some(gs) = self.ffn_gain.as_ref() {
+                for (gl, g) in gs.iter() {
+                    if *gl == l { for v in down.iter_mut() { *v *= *g; } }
+                }
             }
             match (hc_x.as_ref(), hc_ffn.as_ref(), hc_l) {
                 (Some(nx), Some(sf), Some((_, hf))) => {

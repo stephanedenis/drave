@@ -105,4 +105,24 @@ print(f"  ✅ le bénéfice est à l'ENTRÉE : couches 0 et 1 à {p0} et {p1} (m
       f"couche 5 à {p5} (pas mieux)")
 PY
 
+echo "=== 6. un PROFIL ne compose PAS : il défait le meilleur réglage seul ==="
+# Mesuré : 0,75 seul à la couche 0 donne 12,9635 ; y AJOUTER 0,5 à la couche 1 donne 13,7679,
+# soit MOINS BIEN. Les deux gains ne se composent donc pas, ils s'antagonisent en partie — et
+# l'espoir d'un « profil appris par couche » (dessin I) se heurte à cette mesure : le meilleur
+# profil mesuré est un réglage SEUL.
+PROF1=$(ppl --ffn-gain "0:0.75")
+PROF2=$(ppl --ffn-gain "0:0.75,1:0.5")
+PROF3=$(ppl --ffn-gain "0:0.75,1:0.5,2:1.0")
+printf '  0:0.75 seul : %s · +1:0.5 : %s · +1:0.5+2:1.0 : %s\n' "$PROF1" "$PROF2" "$PROF3"
+python3 - "$PROF1" "$PROF2" "$PROF3" <<'PY' || exit 1
+import sys
+un, deux, trois = (float(x) for x in sys.argv[1:4])
+if deux <= un:
+    sys.exit(f"  ❌ la composition ({deux}) bat le réglage seul ({un}) : ma mesure serait fausse")
+if trois != deux:
+    sys.exit(f"  ❌ un gain de 1,0 dans un profil n'est pas neutre : {deux} → {trois}")
+print(f"  ✅ la composition DÉGRADE ({un} → {deux}), et un gain 1,0 y est exactement neutre "
+      f"({deux} = {trois})")
+PY
+
 rm -rf "$T"

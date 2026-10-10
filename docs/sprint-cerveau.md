@@ -300,6 +300,32 @@ Levier existant `--ffn-gain couche:valeur`. Référence (sans réglage) **14,649
 
 ---
 
+## E4 (suite) — FAIT (11 octobre 9 h) : les gains NE SE COMPOSENT PAS
+
+`--ffn-gain` accepte désormais une **liste** (`L:V,L:V`) : la question « les gains se
+composent-ils ? » devient mesurable. Référence 14,6496.
+
+| profil | perplexité | écart |
+|---|---|---|
+| **`0:0.75` seul** | **12,9635** | **−11,51 %** |
+| `1:0.5` seul | 13,7907 | −5,86 % |
+| `0:0.75,1:0.5` | 13,7679 | −6,02 % |
+| `0:0.9,1:0.6` | 13,4209 | −8,39 % |
+| `0:0.75,1:0.5,2:1.0` | 13,7679 | **identique** (1,0 est neutre) |
+
+**Ajouter le gain de la couche 1 DÉGRADE celui de la couche 0** : les deux réglages
+s'antagonisent. Le meilleur profil mesuré est **un réglage SEUL**. Et un gain de 1,0 dans un
+profil est **exactement neutre** — l'identité tient aussi à l'intérieur d'un profil.
+
+**Conséquence pour le dessin I, plus dure que celle du round précédent** : non seulement le
+profil n'a que deux couches utiles, mais **le composer empire les choses**. Un profil appris
+aurait à découvrir que la réponse est « une seule couche, un seul gain » — ce qu'un gradient
+sur peu de paramètres peut très bien ne pas trouver, puisqu'il optimiserait les deux ensemble.
+
+**Porte `porte-gain.sh` : 6 cas verts.**
+
+---
+
 ## ▶ PROCHAINE ACTION (à lire en premier)
 
 État au **11 octobre 6 h 45** · **21 portes, toutes vertes** (`tools/porte-*.sh`) ·

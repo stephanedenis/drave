@@ -868,7 +868,7 @@ struct Options {
     // --- expériences
     patch: Option<String>, hebb_layer: Option<usize>, hebb_q: f32,
     hebb_diff: Option<usize>, hebb_eta: f32, hebb_clamp: f32,
-    hebb_out: String, ffn_gain: Option<(usize, f32)>, matrix: String,
+    hebb_out: String, ffn_gain: Option<Vec<(usize, f32)>>, matrix: String,
     // --- tokenize / plan
     texte: Option<String>, fichier: Option<String>, sortie: Option<String>,
 }
@@ -1052,8 +1052,28 @@ fn analyser(args: &[String]) -> Options {
             "--topk-up" => { o.topk_proj[5] = suivant(i).parse().unwrap(); 2 }
             "--topk-down" => { o.topk_proj[6] = suivant(i).parse().unwrap(); 2 }
             "--ffn-gain" => {
-                let v: Vec<&str> = suivant(i).split(':').collect();
-                o.ffn_gain = Some((v[0].parse().unwrap(), v[1].parse().unwrap())); 2
+                // « L:V » ou « L:V,L:V,… » : un PROFIL, pas seulement un réglage isolé. Le
+                // profil mesuré n'est pas plat (couche 0 à 0,75, couche 1 à 0,5), et la
+                // question « les gains se composent-ils ? » demande de les poser ensemble.
+                let spec = suivant(i).clone();
+                let mut paires: Vec<(usize, f32)> = Vec::new();
+                for morceau in spec.split(',') {
+                    let v: Vec<&str> = morceau.split(':').collect();
+                    if v.len() != 2 {
+                        eprintln!("--ffn-gain attend « couche:valeur » ou « c:v,c:v » — reçu \
+« {morceau} »");
+                        std::process::exit(2);
+                    }
+                    match (v[0].parse::<usize>(), v[1].parse::<f32>()) {
+                        (Ok(c), Ok(g)) => paires.push((c, g)),
+                        _ => {
+                            eprintln!("--ffn-gain : « {morceau} » n'est pas « couche:valeur »");
+                            std::process::exit(2);
+                        }
+                    }
+                }
+                o.ffn_gain = Some(paires);
+                2
             }
             "--bits-attn" => { if suivant(i).parse::<u32>().unwrap() == 6 { o.b6 |= 2; } 2 }
             "--bits-ffn" => { if suivant(i).parse::<u32>().unwrap() == 6 { o.b6 |= 1; } 2 }
@@ -1228,9 +1248,10 @@ IDENTIQUE, seule la lecture change", mdl.tete_garantie.as_ref().unwrap().len(),
     }
     // `--ffn-gain` était appliqué en perplexité et JAMAIS déstructuré ici : la
     // sortie était rigoureusement identique avec et sans le drapeau.
-    if let Some((l, g)) = ffn_gain {
-        mdl.ffn_gain = Some((l, g));
-        println!("gain FFN : couche {l} × {g}");
+    if let Some(gs) = ffn_gain {
+        let liste: Vec<String> = gs.iter().map(|(l, g)| format!("couche {l} × {g}")).collect();
+        println!("gain FFN : {}", liste.join(" · "));
+        mdl.ffn_gain = Some(gs);
     }
     // Appliqués en perplexité depuis toujours, oubliés ici : la déstructuration
     // unique les rend visibles (le compilateur signale tout champ non lu).
@@ -6940,9 +6961,10 @@ calculee sur un vocabulaire restreint n'est comparable a rien. Utilisez --infer.
                  pt.layer, norme(&pt.u), norme(&pt.v), norme(&pt.d));
         mdl.patch = Some(pt);
     }
-    if let Some((l, g)) = ffn_gain {
-        println!("gain FFN : couche {l} x {g}");
-        mdl.ffn_gain = Some((l, g));
+    if let Some(gs) = ffn_gain {
+        let liste: Vec<String> = gs.iter().map(|(l, g)| format!("couche {l} × {g}")).collect();
+        println!("gain FFN : {}", liste.join(" · "));
+        mdl.ffn_gain = Some(gs);
     }
     mdl.act_thresh = act_thresh;
     mdl.act_topk = act_topk;

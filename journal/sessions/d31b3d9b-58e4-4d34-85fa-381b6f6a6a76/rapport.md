@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 46.6 h |
-| Tours | 59 |
-| Messages | 1845 |
-| Appels d'outils | 1725 |
+| Durée | 46.7 h |
+| Tours | 60 |
+| Messages | 1856 |
+| Appels d'outils | 1734 |
 | Fichiers touchés | 61 |
-| Commandes | 1475 |
+| Commandes | 1484 |
 | Sous-agents | 3 |
-| Commits | 149 |
+| Commits | 150 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -153,6 +153,8 @@
 **Tour 58** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 **Tour 59** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
+
+**Tour 60** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -2644,7 +2646,41 @@ L'hypothèse biologique E4 (« un réseau équilibré vit près d'un point où e
 
 **Synthèse produite :**
 
-⏵ L'effet est LOCALISÉ aux couches 0-1 (−11,5 % et −4,5 %) ; couches 2-3 dégradées, le reste neutre
+⏵ Round 16 livré : le déséquilibre E/I est **localisé à l'entrée**, pas réparti
+
+**Ce round** — 1 commit poussé, 122 tests verts, `porte-gain.sh` à **5 cas** (verte). Le gain 0,75 mesuré sur **chaque** couche (référence 14,6496) :
+
+| couche | 0 | 1 | 2 | 3 | 4–16 | 17 | 21 | 23 |
+|---|---|---|---|---|---|---|---|---|
+| écart | **−11,5 %** | **−4,5 %** | **+9,2 %** | **+10,6 %** | ±1 % (neutres) | +3,8 % | +4,3 % | +5,7 % |
+
+(couches 8, 9, 19 : −0,4 % à −0,1 %, dans le bruit)
+
+**Le déséquilibre n'est pas réparti sur la profondeur : il est à l'ENTRÉE.** Deux couches veulent être amplifiées, deux autres ne supportent pas d'être touchées, et vingt sont déjà à leur point. La lecture biologique (E4) s'en trouve précisée : ce n'est pas l'équilibre *global* du réseau qui est en jeu, c'est le **gain d'entrée**.
+
+**Conséquence pour le dessin I** (profil de gains appris) : le levier existe et vaut **−11,5 % sans rien entraîner**, mais il porte sur **deux couches, pas vingt-quatre** — donc très peu de paramètres utiles : bonne nouvelle pour l'entraînement, mauvaise pour l'ambition. C'est écrit tel quel.
+
+**Ce que la porte verrouille** (5 cas) : `gain 1.0` **est** l'absence de réglage (exactement) · l'inhibition est **monotone** · l'optimum intérieur existe (0,75 bat 0,5 et 1,5) · la **falaise** à 0,25 (68× pire) · et le bénéfice est **localisé** (couches 0-1 oui, couche 5 non).
+
+**Bilan** : 16 rounds, 22 portes toutes vertes, 122 tests, une trentaine de mesures dont la moitié des négatifs ou des corrections — toutes documentées avec leurs conditions dans `reports/rapport-campagne-benefices.md` (§24 à §37). L'objectif reste **actif**.
+
+### Tour 60 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
+
+*9 appels d'outils.* Actions notables :
+
+- bash — Find the ffn_gain application site
+- bash — Read the two application sites
+- bash — Make ffn-gain a per-layer profile
+- bash — Read the wiring site
+- bash — Fix the wiring and build
+- bash — Fix the second wiring site
+- bash — Measure the composed gain profile
+- bash — Add the composition case and run
+- bash — Document and commit the composition result
+
+**Synthèse produite :**
+
+⏵ La composition DÉGRADE : 0,75 seul = 12,96 ; 0,75 + 0,5 = 13,77 — les gains ne se composent pas
 
 ## 3. Travail accompli
 
@@ -2762,7 +2798,7 @@ L'hypothèse biologique E4 (« un réseau équilibré vit près d'un point où e
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1435 autres
+- … et 1444 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2890,7 +2926,7 @@ L'hypothèse biologique E4 (« un réseau équilibré vit près d'un point où e
 
 ## 5. Erreurs rencontrées
 
-71 sorties en erreur ou divergentes. Les premières :
+72 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : ```  ### 🤖 Assistant  ⏵ **En transformers 5, `AutoModel` rend directement `Qwen2Model` (pas de `.model`). Je corrige le diagnostic.**  - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitH
 - **T2** : 3310393 bash -c pgrep -af "essai_decharge" | grep python | head; echo "--- logs ---"; tail -2 /tmp/ec_d192_lr3e3.log 2>/dev/null; tail -2 /tmp/ec_d192_lr1e3.log 2>/dev/null; echo "---"; ls -la /tmp/ec
@@ -3057,6 +3093,7 @@ L'hypothèse biologique E4 (« un réseau équilibré vit près d'un point où e
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib p = pathlib.Path("docs/sprint-cerveau.md") s = p.read_text() a = """| 1
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 
