@@ -2638,10 +2638,31 @@ chiffrer.
    le p90 (19,57) est à 2 ms au-dessus de la médiane. Autrement dit : **un ordonnanceur qui
    suppose des pas réguliers se trompe de 40 %**, et c'est exactement ce que C4 devra absorber.
 
-**Ce que cette mesure ne dit pas** : elle porte sur une machine unique (les deux « régions » sont
-deux processus du même hôte), donc la gigue mesurée est celle de l'**ordonnanceur du système**,
-pas celle du réseau. Sur deux machines, elle serait plus grande — le proxy de latence
-(`tools/proxy_latence.py`) permet de l'ajouter, et ce n'est pas fait ici.
+**Et avec un VRAI RTT** (le proxy `tools/proxy_latence.py` ajoute 5 ms par message), la
+condition laissée ouverte ci-dessus est levée :
+
+| phase | sans RTT | **avec 5 ms/message** |
+|---|---|---|
+| aller (pilote → nœud) | 0,13 ms | **5,29 ms** (médiane) · p90 **10,38** · max 10,46 |
+| pas complet | 17,67 ms | **30,24 ms** (médiane) · p90 38,98 · max 39,47 |
+| **gigue du pas** | 7,00 ms (**40 %**) | **14,80 ms (**49 %**)** |
+
+**Trois choses, dont une qui surprend :**
+
+1. **l'instrument est de nouveau étalonné** : 5 ms injectés par message ⇒ 5,29 ms mesurés à
+   l'aller (le reste est le transport) ;
+2. **le p90 de l'aller vaut le DOUBLE de la médiane** (10,38 contre 5,29) : le proxy endort chaque
+   message, et une trame qui traverse les deux sens paie deux fois — la distribution est
+   **bimodale**, pas bruitée ;
+3. **la gigue croît plus vite que la latence** : +71 % de latence médiane pour +111 % de gigue, et
+   le taux passe de 40 % à **49 %**. Autrement dit : **un ordonnanceur asynchrone (C4) doit
+   tolérer la moitié de la durée d'un pas en irrégularité** sur un lien à 5 ms — et cette
+   proportion **empire** avec la distance, ce qui est l'inverse de l'intuition (« un lien plus
+   lent est plus régulier »).
+
+**Ce que la mesure ne dit toujours pas** : le proxy endort **par message**, il ne simule ni la
+perte, ni la réorganisation, ni la congestion — un vrai réseau fait les trois. La gigue mesurée
+est donc un **plancher** pour un lien de ce RTT.
 
 ## Annexe — manifeste des journaux
 

@@ -31435,3 +31435,113 @@ aller (pilote→nœud), retour (nœud→pilote), total (aller+calcul+retour) :
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\n\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\na = \"## Annexe — manifeste des journaux\"\nsec = \"\"\"## 44. La GIGUE d'un pas réparti : 7 ms sur 17,7 — ce qu'u … [5073 caractères tronqués]`
+
+  ```
+gigue consignee
+d09f78c La GIGUE d'un pas reparti : 7 ms sur 17,7 (40 %) — ce qu'un ordonnanceur doit tolerer
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 35 livré : la **gigue** d'un pas réparti — 7 ms sur 17,7, soit 40 %
+
+**Ce round** — 1 commit poussé. L'instrument étant étalonné (round 34), il peut mesurer autre chose que ce qu'on lui injecte. La question qui décide de l'asynchronisme (C4) : **de combien la durée d'un pas varie-t-elle ?** Un ordonnanceur qui suppose des pas réguliers casse à la première irrégularité.
+
+**Mesure** (12 couches locales, 12 distantes, 64 pas, traces des deux côtés fusionnées) :
+
+| phase | médiane | p90 | max | min |
+|---|---|---|---|---|
+| aller (pilote → nœud) | **0,13 ms** | 0,14 | 0,16 | 0,09 |
+| retour (nœud → pilote) | **0,14 ms** | 0,17 | 0,17 | 0,05 |
+| **pas complet** | **17,67 ms** | 19,57 | **21,29** | **14,29** |
+
+1. **Le réseau local ne coûte rien** (0,13 / 0,14 ms) — cohérent avec la loi de latence de la campagne dès qu'un vrai RTT entre en jeu.
+2. **Le pas complet vaut 17,67 ms**, dont l'essentiel est le calcul du nœud.
+3. **La gigue est de 7,00 ms sur 17,67, soit 40 %** — et le p90 dépasse la médiane de 2 ms. **Un ordonnanceur qui suppose des pas réguliers se trompe de 40 %** : c'est précisément ce que C4 devra absorber, et le chiffre est désormais connu.
+
+**Ce que la mesure ne dit pas**, écrit tel quel : les deux « régions » sont deux processus du **même hôte**, donc la gigue mesurée est celle de l'ordonnanceur système, pas celle du réseau — `tools/proxy_latence.py` permet d'ajouter le RTT, et ce n'est pas fait ici.
+
+**Bilan** : 35 rounds, 22 portes toutes vertes, 122 tests, protocoles v7/v8, C10 clos, instrument étalonné, gigue chiffrée. L'objectif reste **actif**.
+
+
+## Tour 79
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 mémoire épisodique, C7 consolidation, C8 périphérie, C9 latéralité, C10 budgets, et la diffusion réseau du bus de C5 ; (b) les expériences E2-E9 de docs/biologie-pour-drave.md et docs/hebbien-differentiel-et-biologie.md ; (c) les dessins de modèle H/I/J de docs/modele-pour-drave.md ; (d) les manques du registre docs/manques.md (noyau de listes pour les experts, noyau de listes GPU, encodeurs) — l'implémenter ou la mesurer, la doter d'une porte vérifiable, la documenter, commiter, pousser, et enchaîner immédiatement sur la suivante. Contraintes : les 23 portes du dépôt et tous les tests restent verts (porte-flux.sh après toute modification du chemin d'exécution), le profil release reste le binaire de mesure, le crate reste std seul, et docs/sprint-cerveau.md reste l'état resumable mis à jour à chaque round. Ne jamais s'arrêter faute de tâches planifiées : en inventer de nouvelles, mesurables, plutôt que d'attendre."
+Round: 36/60
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 36 : je comble la condition manquante — la gigue avec un VRAI RTT via le proxy de latence
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -30 tools/proxy_latence.py | grep -E \"usage|argv|--|def main\" | head -10", "description": "Check the latency proxy usage"}`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -40 tools/proxy_latence.py", "description": "Read the proxy header"}`
+
+  ```
+#!/usr/bin/env python3
+"""Relais TCP qui ajoute une latence par message, pour mesurer ce qu'un lien
+distant coûte à un découpage de modèle.
+
+Pourquoi : sur localhost, l'attente du pair vaut 1,01× le calcul local — c'est un
+plancher optimiste. Une VM Colab est à quelques dizaines de millisecondes, et la
+phase 3.3 demande « à partir de quel débit le découpage gagne ». Le débit n'est
+jamais le problème (0,25 Mbit/s) ; la latence, si. Ce relais la rend réglable.
+
+    python3 tools/proxy_latence.py <port_écoute> <hôte_cible:port> [délai_ms]
+"""
+import socket, sys, threading, time
+
+
+def relais(src, dst, delai):
+    try:
+        while True:
+            donnees = src.recv(65536)
+            if not donnees:
+                break
+            if delai:
+                time.sleep(delai)
+            dst.sendall(donnees)
+    except OSError:
+        pass
+    finally:
+        for s in (src, dst):
+            try:
+                s.shutdown(socket.SHUT_RDWR)
+            except OSError:
+                pass
+
+
+def main():
+    port = int(sys.argv[1])
+    hote, port_cible = sys.argv[2].rsplit(":", 1)
+    delai = float(sys.argv[3]) / 1000.0 if len(sys.argv) > 3 else 0.0
+    ecoute = socket.socket()
+    
+… [97 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && T=$(mktemp -d); PN=$((60000 + RANDOM % 3000)); PX=$((PN + 1)); DELAI=5\ncat > $T/topo.json <<JSON\n{\"regions\":[{\"id\":\"local\",\"couches\":[0,11],\"instance\":\"local\"},{\"id\":\"d\",\"couches\":[12,23],\"instance\":\"127.0.0.1: … [1970 caractères tronqués]`
+
+  ```
+pilote code=0
+  proxy : 5 ms par message
+  aller (pilote→nœud)    : médiane    5.29 ms · p90   10.38 · max   10.46 · min   5.20 · n=63
+  pas complet            : médiane   30.24 ms · p90   38.98 · max   39.47 · min  24.67 · n=63
+  GIGUE du pas complet : 14.80 ms sur une médiane de 30.24 ms (49 %)
+  ```
+
+### 🤖 Assistant
+
+⏵ Avec 5 ms de RTT : gigue **14,8 ms sur 30,2 (49 %)** — la gigue croît plus vite que la latence
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\n\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\na = \"\"\"**Ce que cette mesure ne dit pas** : elle porte sur une machine unique (les deux « régions » sont\ndeux  … [5059 caractères tronqués]`

@@ -6,13 +6,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
 | Durée | 48.0 h |
-| Tours | 78 |
-| Messages | 1971 |
-| Appels d'outils | 1813 |
+| Tours | 79 |
+| Messages | 1977 |
+| Appels d'outils | 1817 |
 | Fichiers touchés | 61 |
-| Commandes | 1563 |
+| Commandes | 1567 |
 | Sous-agents | 3 |
-| Commits | 168 |
+| Commits | 169 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -191,6 +191,8 @@
 **Tour 77** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 **Tour 78** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
+
+**Tour 79** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -3280,7 +3282,38 @@ Le round 32 avait reverté ce travail après un déséquilibre d'accolades. **Re
 
 **Synthèse produite :**
 
-⏵ Round 35 : je mesure la GIGUE du lien pas à pas — ce qu'un ordonnanceur asynchrone doit tolérer
+⏵ Round 35 livré : la **gigue** d'un pas réparti — 7 ms sur 17,7, soit 40 %
+
+**Ce round** — 1 commit poussé. L'instrument étant étalonné (round 34), il peut mesurer autre chose que ce qu'on lui injecte. La question qui décide de l'asynchronisme (C4) : **de combien la durée d'un pas varie-t-elle ?** Un ordonnanceur qui suppose des pas réguliers casse à la première irrégularité.
+
+**Mesure** (12 couches locales, 12 distantes, 64 pas, traces des deux côtés fusionnées) :
+
+| phase | médiane | p90 | max | min |
+|---|---|---|---|---|
+| aller (pilote → nœud) | **0,13 ms** | 0,14 | 0,16 | 0,09 |
+| retour (nœud → pilote) | **0,14 ms** | 0,17 | 0,17 | 0,05 |
+| **pas complet** | **17,67 ms** | 19,57 | **21,29** | **14,29** |
+
+1. **Le réseau local ne coûte rien** (0,13 / 0,14 ms) — cohérent avec la loi de latence de la campagne dès qu'un vrai RTT entre en jeu.
+2. **Le pas complet vaut 17,67 ms**, dont l'essentiel est le calcul du nœud.
+3. **La gigue est de 7,00 ms sur 17,67, soit 40 %** — et le p90 dépasse la médiane de 2 ms. **Un ordonnanceur qui suppose des pas réguliers se trompe de 40 %** : c'est précisément ce que C4 devra absorber, et le chiffre est désormais connu.
+
+**Ce que la mesure ne dit pas**, écrit tel quel : les deux « régions » sont deux processus du **même hôte**, donc la gigue mesurée est celle de l'ordonnanceur système, pas celle du réseau — `tools/proxy_latence.py` permet d'ajouter le RTT, et ce n'est pas fait ici.
+
+**Bilan** : 35 rounds, 22 portes toutes vertes, 122 tests, protocoles v7/v8, C10 clos, instrument étalonné, gigue chiffrée. L'objectif reste **actif**.
+
+### Tour 79 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Check the latency proxy usage
+- bash — Read the proxy header
+- bash — Measure jitter with a real injected RTT
+- bash — Document and commit the RTT jitter measurement
+
+**Synthèse produite :**
+
+⏵ Avec 5 ms de RTT : gigue **14,8 ms sur 30,2 (49 %)** — la gigue croît plus vite que la latence
 
 ## 3. Travail accompli
 
@@ -3398,7 +3431,7 @@ Le round 32 avait reverté ce travail après un déséquilibre d'accolades. **Re
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1523 autres
+- … et 1527 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3711,6 +3744,7 @@ Le round 32 avait reverté ce travail après un déséquilibre d'accolades. **Re
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib p = pathlib.Path("docs/sprint-cerveau.md") s = p.read_text() a = "## ▶ 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 bash tools/porte-flux.sh > /tmp/pf31.txt 2>&1; echo "porte-flux code=$?"; timeout 600 cargo te
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib p = pathlib.Path("docs/sprint-cerveau.md") s = p.read_text() a = "## ▶ 
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t

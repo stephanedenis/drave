@@ -789,9 +789,22 @@ Un ordonnanceur qui suppose des pas réguliers casse à la première irrégulari
    **Un ordonnanceur qui suppose des pas réguliers se trompe de 40 %** : c'est précisément ce que
    C4 devra absorber.
 
-**Ce que la mesure ne dit pas** : les deux « régions » sont deux processus du MÊME hôte, donc la
-gigue mesurée est celle de l'ordonnanceur système, pas celle du réseau. `tools/proxy_latence.py`
-permet d'ajouter le RTT, et ce n'est pas fait ici.
+**Et avec un VRAI RTT** (`tools/proxy_latence.py`, 5 ms par message) — la condition laissée
+ouverte est levée :
+
+| phase | sans RTT | **avec 5 ms/message** |
+|---|---|---|
+| aller (pilote → nœud) | 0,13 ms | **5,29 ms** · p90 **10,38** (≈ 2× la médiane : le proxy endort par message, une trame qui traverse les deux sens paie deux fois → distribution **BIMODALE**) |
+| pas complet | 17,67 ms | **30,24 ms** |
+| **gigue** | 7,00 ms (40 %) | **14,80 ms (49 %)** |
+
+**La gigue croît plus vite que la latence** : +71 % de latence médiane pour +111 % de gigue, et le
+taux passe de 40 % à **49 %**. Donc **C4 doit tolérer la moitié d'un pas en irrégularité** sur un
+lien à 5 ms — et la proportion **empire** avec la distance, l'inverse de l'intuition (« un lien
+plus lent est plus régulier »).
+
+**Ce que la mesure ne dit pas** : le proxy endort PAR MESSAGE ; il ne simule ni la perte, ni la
+réorganisation, ni la congestion. La gigue mesurée est un **plancher** pour ce RTT.
 
 ---
 
