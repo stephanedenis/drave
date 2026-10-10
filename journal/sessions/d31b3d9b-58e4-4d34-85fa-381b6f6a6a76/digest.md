@@ -36266,3 +36266,336 @@ manques + état mis à jour
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\n# 4096 dans la fiche fenêtre × puits : la ligne de plus, et la synthèse sur N\np = pathlib.Path(\"reports/rapport-fenetre-puits-attention.md\"); s = p.read_text()\nancre = \"**Ce qui reste ouvert* … [6357 caractères tronqués]`
+
+  ```
+fiche : 4 096 ajouté
+état : 4 096 ajouté
+récit du jour complété
+poussé
+3bc24b3 Passe complete : 22/22 vertes en 70 min — et une porte qui etait verte en ne comparant RIEN
+  ```
+
+### 🤖 Assistant
+
+⏵ Machine libre : je lance la mesure du gain de TEMPS réel (secondes et tok/s) à 4 096 jetons
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && LIMITE=4096 CTX=4096 FENETRES=\"512 1024\" PUITS=\"512 1024\" bash tools/carte-fenetre-puits.sh 4096 > /tmp/carte-4096-temps.md 2>&1; echo \"CODE=$?\"; cat /tmp/carte-4096-temps.md", "description": "Launch timing map at 4096", "run_i … [20 caractères tronqués]`
+
+  ```
+started background job bash-33
+  ```
+
+- **todo_write** `{"todos": [{"content": "Corriger les estampilles : fuseau HAE/EDT et dates réelles tirées de git", "status": "completed"}, {"content": "Écrire docs/organisation-du-depot.md (rôles, nommage, fuseau)", "status": "completed"}, {"content": "Éclater les monolithes de reports/ en une fiche par expérience  … [647 caractères tronqués]`
+
+  ```
+Updated todo list: 0 pending, 1 in progress, 7 completed.
+  ```
+
+### 🤖 Assistant
+
+⏵ Je prépare le chantier C8 (tête réflexe entraînée par profondeur) : je vérifie la capture d'états multi-positions
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"etat_pos\\|etat-sortie\\|etat_sortie\" drave-core/src/main.rs | head -12; echo \"=== écriture du fichier ===\"; grep -n \"ecrire_si_source\\|fn ecrire_etat\\|etat\\.\\{\" drave-core/src/main.rs | head -8", "description": "C … [35 caractères tronqués]`
+
+  ```
+513:                    fusion_pos: usize, etat_sortie: Option<String>, etat_pos: Vec<usize>) {
+535:    if let Some(f) = etat_sortie.as_ref() {
+536:        println!("  capture d'état    : position(s) {:?} écrite(s) dans {f}.*", etat_pos);
+537:        mdl.etat_sortie = Some((f.clone(), etat_pos));
+738:    etat_sortie: Option<String>,
+739:    etat_pos: Vec<usize>,
+978:            "--etat-sortie" => { o.etat_sortie = Some(suivant(i).clone()); 2 }
+998:                o.etat_pos = suivant(i).split(',')
+1233:                     opt.etat_sortie.clone(), opt.etat_pos);
+1488:            mdl.etat_sortie = Some((f.clone(), positions));
+7043:         opt.etat_sortie.clone(), opt.etat_pos);
+=== écriture du fichier ===
+[stderr]
+grep: Unmatched \{
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1480,1500p' drave-core/src/main.rs; echo \"=== où les états sont-ils écrits (modèle) ? ===\"; grep -n \"etat_sortie\" drave-core/src/model.rs | head -8", "description": "Inspect state capture plumbing"}`
+
+  ```
+// La capture se résout ICI AUSSI, dans la numérotation de l'inférence : c'est la
+    // même longueur d'invite qui sert au calcul et à la capture, donc plus de décalage.
+    if let Some((f, ks)) = opt.etat_fin.as_ref() {
+        if !ids.is_empty() {
+            let positions: Vec<usize> = ks.iter()
+                .map(|k| ids.len() - (*k).clamp(1, ids.len())).collect();
+            println!("  capture d'état    : position(s) {positions:?} (depuis la fin d'une invite \
+de {} jetons) écrite(s) dans {f}", ids.len());
+            mdl.etat_sortie = Some((f.clone(), positions));
+        }
+    }
+    if opt.fusion_dernier && !ids.is_empty() {
+        mdl.fusion_pos = ids.len() - 1;
+        println!("  fusion            : position DERNIÈRE de l'invite = {} (invite de {} \
+jetons, comptée ici et non devinée)", mdl.fusion_pos, ids.len());
+    }
+    let (out, st) = if topk > 0 {
+        // pas-à-pas : utile pour confronter les logits à la référence numpy
+        let t0 = Instant::now();
+        let mut last = Vec::new();
+        for (pos, &t) in ids.iter().enumerate() { last = mdl.forward(t, pos); }
+=== où les états sont-ils écrits (modèle) ? ===
+2695:    pub etat_sortie: Option<(String, Vec
+… [122 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '7925,7950p' drave-core/src/model.rs", "description": "Check state file naming and format"}`
+
+  ```
+le dernier raccord FFN n'a pas été exécuté (plage de couches vide ?)"),
+            }
+        }
+        // ---- C2/C6 : l'état BRUT, capturé ou augmenté, juste AVANT la norme finale.
+        // La position du prélèvement est celle du texte : un état prélevé à la
+        // position p d'un contexte peut être injecté à n'importe quelle position d'un
+        // autre — c'est tout l'intérêt, et c'est ce que la mesure doit montrer.
+        if let Some((chemin, positions)) = self.etat_sortie.as_ref() {
+            if positions.contains(&pos) {
+                use std::io::Write;
+                let chemin = &format!("{chemin}.{pos}");
+                match std::fs::File::create(chemin) {
+                    Ok(mut f) => {
+                        let mut octets = Vec::with_capacity(x.len() * 4);
+                        for v in x.iter() { octets.extend_from_slice(&v.to_le_bytes()); }
+                        match f.write_all(&octets) {
+                            Ok(()) => eprintln!("[etat] {} valeurs écrites dans {chemin} \
+(position {pos})", x.len()),
+                            Err(e) => eprintln!("[etat] écriture de {chemin} impossible : {e}"),
+                        }
+              
+… [220 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n '\"--dumper\\|\"--trace-couches\\|dump_couches' drave-core/src/main.rs | head -8; grep -n \"fn vider_couche\" -A 12 drave-core/src/model.rs | head -22", "description": "Find per-layer dump flag and format"}`
+
+  ```
+1041:            "--trace-couches" => { o.trace_couches = suivant(i).split(',')
+5177:    fn vider_couche(prefixe: Option<&str>, nom: &str, l: usize, pos: usize, x: &[f32]) {
+5178-        use std::io::Write;
+5179-        let Some(p) = prefixe else { return };
+5180-        // Le nom porte le tenseur, la couche ET la position : sans la position,
+5181-        // un fichier par couche ne garderait que le dernier jeton évalué — et
+5182-        // c'est justement au-delà de la position 0 que les écarts apparaissent.
+5183-        let chemin = format!("{p}-{nom}-{l}-{pos}.bin");
+5184-        match std::fs::File::create(&chemin) {
+5185-            Ok(mut f) => {
+5186-                let mut octets = Vec::with_capacity(x.len() * 4);
+5187-                for v in x { octets.extend_from_slice(&v.to_le_bytes()); }
+5188-                if let Err(e) = f.write_all(&octets) {
+5189-                    eprintln!("[dump] {chemin} : {e}");
+--
+5205:    fn vider_couche_poids_hc(prefixe: Option<&str>, nom: &str, l: usize, pos: usize,
+5206-                             s: &HcSortie) {
+5207-        if prefixe.is_none() { return; }
+5208-        let mut v = Vec::with_capacity(s.pre.len() + s.post.len() + s.com
+… [196 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/carte-4096-temps.md 2>/dev/null; ps -eo etime,args | grep \"[c]arte-fenetre\" | head -2; grep -n \"trace_couches\" drave-core/src/main.rs | sed -n '1,6p'", "description": "Check timing map and dump names"}`
+
+  ```
+00:36 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && LIMITE=4096 CTX=4096 FENETRES="512 1024" PUITS="512 1024" bash tools/carte-fenetre-puits.sh 4096 > /tmp/carte-4096-temps.md 2>&1; echo "CODE=$?"; cat /tmp/carte-4096-temps.md
+      00:36 bash tools/carte-fenetre-puits.sh 4096
+831:    trace_couches: Vec<usize>,
+1041:            "--trace-couches" => { o.trace_couches = suivant(i).split(',')
+1211:        trace_flux, trace_couches, flux_forcer, ..
+1273:        match model::TraceFlux::nouveau(chemin, trace_couches.clone(), mdl.cfg.hidden,
+7052:        ppl_profil, lot, profil_neurones, neurones_sortie, trace_flux, trace_couches, flux_forcer,
+7105:        match model::TraceFlux::nouveau(chemin, trace_couches.clone(), mdl.cfg.hidden,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n 'vider_couche(' drave-core/src/model.rs | head -20; echo \"=== quel est le tenseur « sortie de couche » ? ===\"; grep -n '\"x\"\\|\"residu\"\\|\"sortie\"' drave-core/src/model.rs | head -10", "description": "Identify dumped t … [13 caractères tronqués]`
+
+  ```
+5177:    fn vider_couche(prefixe: Option<&str>, nom: &str, l: usize, pos: usize, x: &[f32]) {
+5212:        Self::vider_couche(prefixe, nom, l, pos, &v);
+6184:        Self::vider_couche(dump, "qr", l, pos, &qr);
+6187:        Self::vider_couche(dump, "qr_norm", l, pos, &qrn);
+6199:        Self::vider_couche(dump, "q_norm", l, pos, &q);
+6223:        Self::vider_couche(dump, "kv_norm", l, pos, &kvn);
+6224:        Self::vider_couche(dump, "q_rope", l, pos, &q);
+6225:        Self::vider_couche(dump, "kv_rope", l, pos, &kvn);
+6287:                Self::vider_couche(dump, "comp_state_kv", l, pos,
+6289:                Self::vider_couche(dump, "comp_state_gate", l, pos,
+6371:                Self::vider_couche(dump, &format!("comp_brut{bloc}"), l, pos,
+6394:                    Self::vider_couche(dump, &format!("idx_bloc{bloc}"), l, pos, &kn);
+6403:                Self::vider_couche(dump, &format!("comp_bloc{bloc}"), l, pos, &norm);
+6528:                Self::vider_couche(dump, "idx_scores", l, pos, &scores);
+6558:                    Self::vider_couche(Some(pr), "idx_gardes", l, pos, &masque);
+6637:        Self::vider_couche(dump, "attn_brut", l, pos, &sortie);
+6669:        Self::vider_couche(
+… [350 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification du mécanisme clé pour C8 : une plage de couches + capture d'état donne bien l'état intermédiaire
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf; I=/tmp/campagne24/ids_0.5B-Q8.txt; T=$(mktemp -d)\n$D \"$M\" --ppl \"$I\" --limit 16 --ctx 256 --threads 4 --couches 0:15 --tete-partielle --etat-sortie \"$T/etat\ … [454 caractères tronqués]`
+
+  ```
+[modele] 24 couches chargées en 7.065178242s — listes 0.71 Go , 4 threads
+[config] 24 couches, hidden 896 · 
+[config] puits appris sur 0/24 couches · n_rot 64 · ffn 4864 · experts 0
+[plage] `--tete-partielle` : la tête de sortie est appliquée à la fin de la plage — le résultat est celui d'un modèle TRONQUÉ, pas du modèle entier
+  capture d'état    : position(s) [5, 10, 15] écrite(s) dans /tmp/tmp.kUlPmsV7Y4/etat.*
+[etat] 896 valeurs écrites dans /tmp/tmp.kUlPmsV7Y4/etat.5 (position 5)
+[etat] 896 valeurs écrites dans /tmp/tmp.kUlPmsV7Y4/etat.10 (position 10)
+[etat] 896 valeurs écrites dans /tmp/tmp.kUlPmsV7Y4/etat.15 (position 15)
+total 12
+drwx------.   2 stephane stephane    100 10 oct 11:24 .
+drwxrwxrwt. 272 root     root     812520 10 oct 11:24 ..
+-rw-r--r--.   1 stephane stephane   3584 10 oct 11:24 etat.10
+-rw-r--r--.   1 stephane stephane   3584 10 oct 11:24 etat.15
+-rw-r--r--.   1 stephane stephane   3584 10 oct 11:24 etat.5
+etat.10 : 3584 octets = 896 valeurs f32
+  3 premières : (0.8275784254074097, 0.42389002442359924, -0.7035444974899292)
+  ```
+
+### 🤖 Assistant
+
+⏵ Mécanisme C8 vérifié ; je lance la capture des états de la couche 16 sur 1 024 positions et l'apprentissage d'une tête
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"import numpy; print('numpy', numpy.__version__)\" 2>&1 | head -2; /home/stephane/gpu-env/bin/python -c \"import numpy, torch; print('gpu-env numpy', numpy.__version__, '· torch', torch.__version__)\" 2>&1 | head -2", "de … [39 caractères tronqués]`
+
+  ```
+numpy 2.5.3
+gpu-env numpy 2.4.4 · torch 2.11.0+cu130
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf; I=/tmp/campagne24/ids_0.5B-Q8.txt; T=/tmp/c8; rm -rf $T; mkdir -p $T\nPOS=$(seq -s, 4 1023)\necho \"capture de $(echo $POS | tr ',' '\\n' | wc -l) positions (couch … [668 caractères tronqués]`
+
+  ```
+capture de 1020 positions (couches 0:15, tête appliquée)…
+[plage] `--tete-partielle` : la tête de sortie est appliquée à la fin de la plage — le résultat est celui d'un modèle TRONQUÉ, pas du modèle entier
+  capture d'état    : position(s) [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215, 2
+… [4350 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ La tête empruntée à la couche 16 donne 728 388 de perplexité (le modèle complet : 9,43) — je sonde ce que l'état contient vraiment
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"c8_sonde_lineaire.py — C8 : que peut lire une TÊTE sur un état intermédiaire ?\n\nLA QUESTION. Le réflexe mesuré jusqu'ici emprunte la tête du modèle et lit l'état de la couche\n16 : perplexité **728 388** contre **9,43** pour le modèle complet (mesuré le 2 … [6246 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/c8_sonde_lineaire.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && chmod +x tools/c8_sonde_lineaire.py && python3 tools/c8_sonde_lineaire.py --etats /tmp/c8/etat --ids /tmp/campagne24/ids_0.5B-Q8.txt --limite 1024 --classes 256 2>&1 | tail -18", "description": "Run the C8 linear probe", "timeoutMs": … [8 caractères tronqués]`
+
+  ```
+états : 0 positions × 896 canaux · corpus : 0 jetons
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/c8_sonde_lineaire.py", line 132, in <module>
+    raise SystemExit(main())
+                     ~~~~^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/c8_sonde_lineaire.py", line 85, in main
+    freq = np.bincount(ids, minlength=int(ids.max()) + 1)
+                                          ~~~~~~~^^
+  File "/usr/lib64/python3.13/site-packages/numpy/_core/_methods.py", line 41, in _amax
+    return umr_maximum(a, axis, None, out, keepdims, initial, where)
+ValueError: zero-size array to reduction operation maximum which has no identity
+  ```
+
+- **bash** `{"command": "ls /tmp/c8 | head -3; ls /tmp/c8 | wc -l; echo \"=== format du fichier d'ids ===\"; head -c 200 /tmp/campagne24/ids_0.5B-Q8.txt | cat -A | head -5; echo; file /tmp/campagne24/ids_0.5B-Q8.txt; wc -l /tmp/campagne24/ids_0.5B-Q8.txt", "description": "Check states and ids file format"}`
+
+  ```
+etat.10
+etat.100
+etat.1000
+1020
+=== format du fichier d'ids ===
+198,284,8397,425,10965,465,284,14731,8397,425,10965,465,374,458,6364,4531,1154,12425,323,33496,12089,659,1260,1030,264,8640,569,12,31,39400,3476,389,279,12425,4013,576,8596,304,220,17,15,15,15,659,109
+/tmp/campagne24/ids_0.5B-Q8.txt: ASCII text, with very long lines (65536), with no line terminators
+0 /tmp/campagne24/ids_0.5B-Q8.txt
+  ```
+
+### 🤖 Assistant
+
+⏵ Le fichier d'ids est en CSV sur une seule ligne — je corrige le lecteur et je relance la sonde
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"tools/c8_sonde_lineaire.py\"); s = p.read_text()\nold = '''    vals = []\n    for l in pathlib.Path(chemin).read_text().split():\n        try:\n            vals.append(int(l))\n … [1574 caractères tronqués]`
+
+  ```
+lecteur CSV corrigé
+états : 1019 positions × 896 canaux · corpus : 1024 jetons
+cibles dans les 256 classes les plus fréquentes : 994 / 1019 positions
+
+sonde linéaire (ridge λ=1.0) : 43.1 % de justes sur le TEST
+référence « toujours la classe majoritaire » : 4.0 %
+référence « hasard uniforme sur 256 classes » : 0.39 %
+référence « fréquence du jeton le plus fréquent du corpus » : 5.27 %
+
+VERDICT : l'état de la couche 16 CONTIENT le prochain jeton, linéairement.
+  ⇒ la tête empruntée (728 388 de perplexité) est bien le maillon faible :
+    C8 a un sens, et la suite est d'entraîner une tête NON linéaire par profondeur.
+  ```
+
+### 🤖 Assistant
+
+⏵ Résultat C8 majeur : l'état de la couche 16 contient le prochain jeton (43,1 % contre 4,0 % de référence) — c'est la TÊTE qui est le maillon faible
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/carte-4096-temps.md 2>/dev/null; ps -eo etime,args | grep \"[c]arte-fenetre\" | head -2", "description": "Check timing map progress"}`
+
+  ```
+référence (aucune fenêtre, 4096 jetons) : 12.2177·? s·15.6 tok/s  ·  clés notées par jeton ≈ 4096
+
+| fenêtre \ puits | 512 | 1024 |
+|---|---|---|
+| **512** |      04:31 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && LIMITE=4096 CTX=4096 FENETRES="512 1024" PUITS="512 1024" bash tools/carte-fenetre-puits.sh 4096 > /tmp/carte-4096-temps.md 2>&1; echo "CODE=$?"; cat /tmp/carte-4096-temps.md
+      04:31 bash tools/carte-fenetre-puits.sh 4096
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/^mesure () {/,/^}/p' tools/carte-fenetre-puits.sh; echo \"=== essai de la chaîne sur une ligne type ===\"; s=\"=== perplexité 12.2177 sur 4095 tokens (272.7 s) ===\"; printf '%s' \"$s\" | grep -oE \"perplexité [0-9.]+ sur [0 … [125 caractères tronqués]`
+
+  ```
+mesure () { # $@ = drapeaux ; imprime « perplexité secondes tok/s »
+    local sortie
+    sortie=$($D "$M" --ppl "$IDS" --limit "$LIMITE" --ctx "$CTX" --threads 8 "$@" 2>&1)
+    local ppl sec tok
+    ppl=$(printf '%s' "$sortie" | grep -oE "perplexité [0-9.]+ sur" | grep -oE "[0-9.]+")
+    sec=$(printf '%s' "$sortie" | grep -oE "perplexité [0-9.]+ sur [0-9]+ tokens \([0-9.]+ s\)" \
+          | grep -oE "\([0-9.]+ s\)" | grep -oE "[0-9.]+")
+    tok=$(printf '%s' "$sortie" | grep -oE "[0-9.]+ tok/s effectifs" | grep -oE "[0-9.]+")
+    printf '%s·%s s·%s tok/s' "${ppl:-?}" "${sec:-?}" "${tok:-?}"
+}
+=== essai de la chaîne sur une ligne type ===
+272.7
+  ```
+
+### 🤖 Assistant
+
+⏵ La carte tourne (ne pas l'éditer !) ; j'écris la fiche C8 pendant ce temps
+
+- **write** `{"content": "# C8 — le réflexe : l'état intermédiaire CONTIENT le prochain jeton, c'est la TÊTE qui ne sait pas le lire\n\n> Campagne : **cerveau** · expérience : sonde linéaire sur l'état de la couche 16\n> Question : un chemin court (s'arrêter à la couche 16, appliquer une tête) ne sait rien — mai … [4523 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-c8-sonde-profondeur.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\n# l'état : C8 change de nature (le blocage était la tête, pas la profondeur)\np = pathlib.Path(\"docs/etat-cerveau.md\"); s = p.read_text()\nold = \"\"\"| **C8** | réflexe | 🟡 premier pas | un che … [3056 caractères tronqués]`
+
+  ```
+état : C8 mis à jour
+récit complété
+référence (aucune fenêtre, 4096 jetons) : 12.2177·? s·15.6 tok/s  ·  clés notées par jeton ≈ 4096
+
+| fenêtre \ puits | 512 | 1024 |
+|---|---|---|
+| **512** |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'MSG'\nC8 : l'etat de la couche 16 CONTIENT le prochain jeton (43,1 %) — c'est la TETE qui est le maillon faible\n\nLe reflexe mesure jusqu'ici (s'arreter a la couche 16, appliquer la tete du modele … [1401 caractères tronqués]`

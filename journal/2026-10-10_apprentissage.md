@@ -10,9 +10,15 @@
 |---|---|---|---|
 | 10:59 | `0b00de5` | Journal : classement affine (theme APPRENTISSAGE, plus de model.rs fourre-tout) + nettoyage | `2026-10-09.md`, `2026-10-09_apprentissage.md`, `2026-10-09_attention.md` (+18) |
 
+## Étapes du jour (1)
+
+*Ce que l'agent a consigné en le faisant (lignes `⏵` du journal de session) :*
+
+- **11:24** — Mécanisme C8 vérifié ; je lance la capture des états de la couche 16 sur 1 024 positions et l'apprentissage d'une tête
+
 ## Sessions actives ce jour
 
-- `d31b3d9b` — Où en est-on (début 2026-10-08 09:11, 50.2 h) → [rapport](sessions/d31b3d9b/rapport.md) · [digest](sessions/d31b3d9b/digest.md)
+- `d31b3d9b` — Où en est-on (début 2026-10-08 09:11, 50.3 h) → [rapport](sessions/d31b3d9b/rapport.md) · [digest](sessions/d31b3d9b/digest.md)
 
 <!-- notes -->
 
