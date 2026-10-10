@@ -66,7 +66,7 @@ possible (`ls journal/*_<thème>.md`).
 | jour | chiffres du jour |
 |---|---|
 | [2026-10-09](2026-10-09_moteur.md) | `8,6 Mo` · `243 Mo` · `8 jetons` · `8 Mo` |
-| [2026-10-10](2026-10-10_moteur.md) | `0,283` · `0,399` · `-20 %` · `86 Gio` |
+| [2026-10-10](2026-10-10_moteur.md) | `0,283` · `0,399` · `-20 %` · `86 Gio` · `+3,0 %` · `÷4` |
 
 ### `mesures` — Campagnes et mesures
 

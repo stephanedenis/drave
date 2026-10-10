@@ -56,6 +56,32 @@ la meilleure des deux**. Le plan l'avait écrit d'avance (« le gain est probabl
 maintenant **mesuré**, avec la raison : une moyenne d'états est une moyenne, et elle ne fabrique pas
 d'information.
 
+## 2 bis. Le coût COMPRESSÉ de l'échange : 8 bits pour ÷4 d'octets et +3,0 %
+
+L'échange coûte 3 584 octets par pas et par couche en f32 dense — c'est le poste dominant. La
+question qui décide de son usage réel : **combien peut-on compresser l'état échangé, et à quel
+prix en perplexité ?** Mesure (64 jetons, couche 12, état quantifié par blocs de 32 canaux comme
+le fait le moteur, puis imposé) :
+
+| encodage de l'état échangé | octets / pas | ÷ | perplexité | prix |
+|---|---|---|---|---|
+| **f32 dense** (référence) | 3 584 | — | **27,4964** | — |
+| **8 bits par bloc** (une échelle f32 par 32 canaux) | **896** | **÷4** | **28,3135** | **+3,0 %** |
+| 4 bits par bloc | 448 | ÷8 | 32,0904 | +16,7 % |
+| listes creuses k=128 (indice u16 + valeur i16) | 512 | ÷7 | 37,2395 | +35,5 % |
+| listes creuses k=64 | 256 | ÷14 | 51,2747 | +86,5 % |
+| listes creuses k=32 | 128 | ÷28 | 149,9882 | +446 % |
+
+**Deux résultats, et le second recoupe une mesure indépendante :**
+
+1. **l'échange utile coûte ÷4 d'octets pour +3,0 % de perplexité** (8 bits par bloc) — c'est le
+   régime à retenir si l'on échange à chaque couche ;
+2. **quantifier bat élaguer, encore** : à budget d'octets comparable (512 contre 896), les
+   **listes creuses** k=128 coûtent **+35,5 %** là où les 8 bits coûtent **+3,0 %**. C'est la même
+   conclusion que la campagne a tirée du **pont** entre deux régions (« à budget égal, quantifier
+   bat élaguer de 83 % », fiche 25) — obtenue ici sur un **état échangé entre jumeaux**, par un
+   autre protocole. Deux mesures indépendantes qui disent la même chose valent mieux qu'une.
+
 ## 3. Le coût, et ce qu'il faudrait pour que ça vaille
 
 - **3 584 octets par pas et par couche échangée** en f32 dense (896 canaux × 4). Pour 24 couches et

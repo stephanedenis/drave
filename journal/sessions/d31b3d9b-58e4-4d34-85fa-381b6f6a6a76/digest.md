@@ -40164,3 +40164,64 @@ Created file
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M' && python3 - <<'PYEOF'\nimport pathlib, subprocess\nheure = subprocess.run([\"date\", \"+%H:%M\"], capture_output=True, text=True).stdout.strip()\n# la fiche porte l'heure RÉELLE (lue), pas estimée\np = pathlib.Path(\"r … [5801 caractères tronqués]`
+
+  ```
+17:09
+fiche C9 horodatée 17:09
+note C9 mise à jour
+état : ligne C9 latéralité ajoutée
+récit complété
+poussé
+549de14 C9 lateralite : l'echange est EXACT, le gain est NUL (mesure), et la porte verrouille les deux
+  ```
+
+### 🤖 Assistant
+
+⏵ Passe complète (24 portes) lancée en fond ; pendant ce temps, je mesure le COÛT compressé de l'échange
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && DELAI=2400 JOURNAUX=/tmp/portes-1210e nohup bash tools/toutes-les-portes.sh > /tmp/passe-complete4.log 2>&1 & sleep 3; echo \"passe 24 portes lancée (pid $!)\"; date '+%H:%M'\nD=./drave-core/target/release/drave; M=models/Qwen2.5-0.5 … [1905 caractères tronqués]`
+
+  ```
+passe 24 portes lancée (pid 2532200)
+17:10
+  8 bits/canal : 896 octets par pas (contre 3584 en f32)
+  4 bits/canal : 448 octets par pas (contre 3584 en f32)
+  listes k=128 : 512 octets par pas (indice u16 + valeur i16)
+  listes k=64 : 256 octets par pas (indice u16 + valeur i16)
+  listes k=32 : 128 octets par pas (indice u16 + valeur i16)
+=== perplexité selon l'encodage de l'échange ===
+  ref    27.4964
+  q8     28.3135
+  q4     32.0904
+  k128   37.2395
+  k64    51.2747
+  k32    149.9882
+  ```
+
+### 🤖 Assistant
+
+⏵ Courbe coût/qualité de l'échange : 8 bits = ÷4 d'octets pour **+3,0 %** — et **quantifier bat élaguer** (encore)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"reports/rapport-c9-lateralite.md\"); s = p.read_text()\nancre = \"## 3. Le coût, et ce qu'il faudrait pour que ça vaille\"\nsec = \"\"\"## 2 bis. Le coût COMPRESSÉ de l'échange  … [4521 caractères tronqués]`
+
+  ```
+§ compression ajouté à la fiche C9
+porte étendue à la compression
+  ✅ jumeau bruité RÉCUPÉRÉ (163.1678 → 36.1307) et le contrôle donne le même chiffre (36.1307, écart 0.000 %) : c'est une MOYENNE, pas un miracle
+=== 5. le coût COMPRESSÉ : 8 bits par bloc pour ÷4 d'octets, et quantifier bat élaguer ===
+  f32 : 3584 octets/pas · 8 bits : 896 · listes k=128 : 512
+  f32 27.4964 · 8 bits 28.3135 · listes k=128 37.2395
+  ✅ 8 bits : ÷4 d'octets pour +3.0 % · et quantifier bat élaguer (28.31 contre 37.24 pour un budget voisin)
+
+PORTE TENUE : l'échange est exact, il ne crée pas de gain entre jumeaux identiques, il
+récupère un jumeau dégradé à hauteur de sa moyenne — et il coûte 3 584 octets par pas.
+Ce que la porte n'affirme pas (deux vues valides différentes) est mesuré dans la fiche C9 :
+sur 32 jetons la fusion battait les deux vues, sur 128 elle est ENTRE les deux.
+CODE=0
+  ```
+
+### 🤖 Assistant
+
+⏵ Porte des jumeaux étendue (compression) et verte — je committe et je regarde la passe
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"tools/porte-jumeaux.sh\"); s = p.read_text()\ns = s.replace('''echo \"PORTE TENUE : l'échange est exact, il ne crée pas de gain entre jumeaux identiques, il\"\necho \"récupère u … [2135 caractères tronqués]`

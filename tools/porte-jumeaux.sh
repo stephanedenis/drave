@@ -90,8 +90,53 @@ if ecart > 0.05:
 print(f"  ✅ jumeau bruité RÉCUPÉRÉ ({ab} → {am}) et le contrôle donne le même chiffre "
       f"({ad}, écart {ecart*100:.3f} %) : c'est une MOYENNE, pas un miracle")
 PY
+echo "=== 5. le coût COMPRESSÉ : 8 bits par bloc pour ÷4 d'octets, et quantifier bat élaguer ==="
+# L'échange coûte 3 584 octets par pas et par couche en f32 : c'est le poste dominant d'un jumeau.
+# La question qui décide de son usage : combien peut-on compresser, et à quel prix ?
+python3 - "$T" "$N" <<'PY' || exit 1
+import pathlib, struct, sys
+import numpy as np
+t, n = pathlib.Path(sys.argv[1]), int(sys.argv[2])
+X = np.vstack([np.frombuffer((t / f"a.{i}").read_bytes(), dtype="<f4") for i in range(n)])
+def ecrit(nom, Y):
+    (t / nom).write_bytes(b"REFD" + struct.pack("<i", 4) + struct.pack("<4i", Y.shape[1], 1, 1, 1)
+                          + Y.astype("<f4").tobytes())
+q = 127                                    # 8 bits par bloc, comme le moteur (une échelle/bloc)
+Y8 = X.copy()
+for b in range(0, X.shape[1], 32):
+    blk = X[:, b:b+32]
+    ech = np.abs(blk).max(1, keepdims=True) / q
+    Y8[:, b:b+32] = np.clip(np.round(blk / np.maximum(ech, 1e-12)), -q, q) * ech
+ecrit("q8.refd", Y8)
+Yk = np.zeros_like(X)                      # listes creuses k=128 : 512 octets/pas (÷7)
+idx = np.argsort(-np.abs(X), axis=1)[:, :128]
+for i in range(n):
+    Yk[i, idx[i]] = X[i, idx[i]]
+ecrit("k128.refd", Yk)
+print(f"  f32 : {X.shape[1]*4} octets/pas · 8 bits : {X.shape[1]} · listes k=128 : 512")
+PY
+P8=$(ppl_impose "$T/q8.refd"); PK=$(ppl_impose "$T/k128.refd")
+printf '  f32 %s · 8 bits %s · listes k=128 %s\n' "${A:-?}" "${P8:-?}" "${PK:-?}"
+python3 - <<PY || exit 1
+import sys
+def f(x):
+    try: return float(x)
+    except Exception: return None
+a, p8, pk = map(f, "$A $P8 $PK".split())
+if None in (a, p8, pk):
+    sys.exit("  ❌ une mesure de compression manque")
+if p8 > a * 1.05:
+    sys.exit(f"  ❌ l'échange 8 bits coûte trop cher : {p8} contre {a} (> +5 %)")
+if not pk > p8:
+    sys.exit(f"  ❌ les listes creuses ne sont pas plus chères que 8 bits ({pk} contre {p8}) : "
+             f"la conclusion « quantifier bat élaguer » ne tient plus ici")
+print(f"  ✅ 8 bits : ÷4 d'octets pour +{100*(p8/a-1):.1f} % · et quantifier bat élaguer "
+      f"({p8:.2f} contre {pk:.2f} pour un budget voisin)")
+PY
+
 echo
 echo "PORTE TENUE : l'échange est exact, il ne crée pas de gain entre jumeaux identiques, il"
-echo "récupère un jumeau dégradé à hauteur de sa moyenne — et il coûte 3 584 octets par pas."
+echo "récupère un jumeau dégradé à hauteur de sa moyenne — et compressé à 8 bits par bloc il coûte"
+echo "÷4 d'octets pour +3 %, en battant l'élagage à budget voisin."
 echo "Ce que la porte n'affirme pas (deux vues valides différentes) est mesuré dans la fiche C9 :"
 echo "sur 32 jetons la fusion battait les deux vues, sur 128 elle est ENTRE les deux."

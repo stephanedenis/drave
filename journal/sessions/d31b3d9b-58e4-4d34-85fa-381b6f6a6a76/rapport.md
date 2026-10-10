@@ -7,12 +7,12 @@
 | Début | 2026-10-08 09:11 |
 | Durée | 56.0 h |
 | Tours | 89 |
-| Messages | 2494 |
-| Appels d'outils | 2295 |
+| Messages | 2497 |
+| Appels d'outils | 2298 |
 | Fichiers touchés | 88 |
-| Commandes | 1999 |
+| Commandes | 2002 |
 | Sous-agents | 3 |
-| Commits | 228 |
+| Commits | 229 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -3636,7 +3636,7 @@ Trois erreurs attrapées par les instruments : une **porte fantôme** verte en c
 
 ### Tour 89 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*15 appels d'outils.* Actions notables :
+*18 appels d'outils.* Actions notables :
 
 - bash — Check imposed input state flags
 - bash — Audit etat_entree usage
@@ -3652,11 +3652,11 @@ Trois erreurs attrapées par les instruments : une **porte fantôme** verte en c
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-jumeaux.sh`
 - bash — Run the twins gate
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-c9-lateralite.md`
-- … et 1 autres
+- … et 4 autres
 
 **Synthèse produite :**
 
-⏵ Porte des jumeaux verte ; j'écris la fiche C9 avec les deux mesures (32 et 128 jetons) et le contrôle
+⏵ Porte des jumeaux étendue (compression) et verte — je committe et je regarde la passe
 
 ## 3. Travail accompli
 
@@ -3801,7 +3801,7 @@ Trois erreurs attrapées par les instruments : une **porte fantôme** verte en c
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1959 autres
+- … et 1962 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4177,4 +4177,5 @@ Trois erreurs attrapées par les instruments : une **porte fantôme** verte en c
 - C8 : l'etat mesure est consigne DANS LE PLAN (ce qui est fait, ce qui manque) · C9 : la conception et ses cinq portes, ecrites avant le code  Le plan se lisait 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' import pathlib, re, subprocess log = pathlib.Path("/tmp/passe-complete3.log").read_tex
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M' && python3 - <<'PYEOF' import pathlib, subprocess heure = subprocess.run(["date", "+%H:%M"],
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' import pathlib p = pathlib.Path("tools/porte-jumeaux.sh"); s = p.read_text() s = s.rep
 
