@@ -38566,3 +38566,512 @@ Created file
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"docs/etat-cerveau.md\"); s = p.read_text()\nold = \"\"\"Les vraies questions restantes : le **transfert inter-langue** (les deux corpus sont du\nfrançais), la **régularisation** … [4037 caractères tronqués]`
+
+  ```
+état mis à jour
+récit complété
+poussé
+923c969 C8 inter-langue : le transfert echoue, et le corpus PARALLELE rendait le chiffre trompeur
+  ```
+
+### 🤖 Assistant
+
+⏵ Je vérifie si le corpus permet VRAIMENT un test inter-langue propre (longueur par langue)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && awk '{print NR\": \"length($0)}' /tmp/campagne24/corpus_multi.txt | sort -t: -k2 -rn | head -3; echo \"=== nombre de lignes (langues) ===\"; wc -l /tmp/campagne24/corpus_multi.txt; echo \"=== la ligne française ===\"; grep -n \"Décla … [131 caractères tronqués]`
+
+  ```
+73: 1705
+49: 1283
+86: 1126
+=== nombre de lignes (langues) ===
+399 /tmp/campagne24/corpus_multi.txt
+=== la ligne française ===
+  ```
+
+### 🤖 Assistant
+
+⏵ Test inter-langue propre : impossible avec ce corpus (399 segments, ~500 jetons max) — je le consigne et je passe à la PÉRIPHÉRIE
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"reports/rapport-c8-inter-langue.md\"); s = p.read_text()\nold = \"\"\"Le protocole 3 est celui qui manque, et il est faisable avec ce qui est en place : il suffit de\ndécouper ` … [1413 caractères tronqués]`
+
+  ```
+limite du corpus consignée
+2687:    pub fusion_etat: Option<Vec<f32>>,
+4520:            fusion_etat: None, fusion_alpha: 1.0, fusion_pos: usize::MAX,
+7954:        if let Some(f) = self.fusion_etat.as_ref().filter(|_| injecter) {
+5346:    pub fn forward_lot(&mut self, toks: &[u32], pos0: usize) -> Vec<Vec<f32>> {
+6688:    pub fn forward_mla(&mut self, tok: u32, pos: usize) -> Vec<f32> {
+6802:    pub fn forward(&mut self, tok: u32, pos: usize) -> Vec<f32> {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '7945,7975p' drave-core/src/model.rs", "description": "Read the fusion injection code"}`
+
+  ```
+}
+                    Err(e) => eprintln!("[etat] création de {chemin} impossible : {e}"),
+                }
+            }
+        }
+        // La position est un CHOIX, et il compte : injecter à chaque jeton de la
+        // question perturbe aussi la question. On rappelle un souvenir au moment de
+        // répondre, et c'est ce que `--fusion-pos` permet de dire.
+        let injecter = self.fusion_pos == usize::MAX || self.fusion_pos == pos;
+        if let Some(f) = self.fusion_etat.as_ref().filter(|_| injecter) {
+            if f.len() != x.len() {
+                panic!("fusion : l'état injecté a {} valeurs, le modèle en attend {} — \
+refuser vaut mieux qu'injecter un vecteur tronqué ou débordant", f.len(), x.len());
+            }
+            let a = self.fusion_alpha;
+            if a != 0.0 {
+                // Trace de mise au point : la greffe d'état est invisible autrement —
+                // un poids énorme qui ne change rien veut dire que l'injection n'a pas
+                // lieu, et il faut pouvoir le distinguer d'un effet trop faible.
+                if std::env::var("DRAVE_DEBUG_FUSION").is_ok() {
+                    let nx: f32 = x.iter().map(|v| v * v).sum::<f32>
+… [544 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je commence la PÉRIPHÉRIE : d'abord l'inventaire des points à toucher (aide, tests, options strictes)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n '\"--flux-forcer\"\\|\"--fusion-etat\"' drave-core/src/main.rs | head -4; grep -rn \"liste des options\\|VARS_LUES\\|--options-strict\" drave-core/src/main.rs | head -6; grep -n \"fn aide\\|AIDE\\b\" drave-core/src/main.rs |  … [80 caractères tronqués]`
+
+  ```
+970:            "--fusion-etat" => { o.fusion_etat = Some(suivant(i).clone()); 2 }
+1027:            "--flux-forcer" => { o.flux_forcer = Some(suivant(i).clone()); 2 }
+17:const VARS_LUES: &[&str] = &[
+139:        k.strip_prefix("QT_").map(|s| VARS_LUES.contains(&s)).unwrap_or(false)
+816:    /// `--options-strict` : un drapeau inconnu n'est plus un avertissement mais une
+1030:            "--options-strict" => { o.options_strict = true; 1 }
+1178:            eprintln!("[options] --options-strict : arrêt (un script ne doit pas \
+7848:    use super::VARS_LUES;
+  ```
+
+### 🤖 Assistant
+
+⏵ J'implémente la périphérie : injection d'entrée dans le modèle + boucle + sortie
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '6802,6830p' drave-core/src/model.rs; echo \"=== champ voisin pour le style ===\"; sed -n '2683,2695p' drave-core/src/model.rs", "description": "Read forward start and field style"}`
+
+  ```
+pub fn forward(&mut self, tok: u32, pos: usize) -> Vec<f32> {
+        assert!(pos < self.ctx, "contexte dépassé ({pos} ≥ {})", self.ctx);
+        self.jeton_trace += 1;
+        // lus AVANT l'emprunt destructuré : la parcimonie par projection
+        let tkp = self.act_topk_proj;
+        let tkg = self.act_topk;
+        let tk = |p: usize| if tkp[p] > 0 { tkp[p] } else { tkg };
+        // Lus AVANT l'emprunt destructuré (comme la parcimonie par projection).
+        let largeur_profil = self.cfg.ffn.max(self.cfg.ffn_exp);
+        // Fils à donner à la déquantification des experts IQ. Lus avant
+        // l'emprunt destructuré, comme le reste.
+        // Fils pour la déquantification des experts **sans noyau** (grilles Q2_K
+        // & co, c'est-à-dire tous les experts de V4.1). Ils étaient BORNÉS à 8
+        // sur une machine qui en a 20 : mesuré au bloc 17, ce chemin de
+        // déquantification est **borné par le calcul** (deux passes identiques,
+        // la seconde trouvant 12 Go d'experts dans le cache de pages, donnent le
+        // même temps à 0,1 s près) — un fil en plus est donc un gain direct, et
+        // le découpage par lignes le rend identique au bit près.
+     
+… [1679 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"emb_imposee\" drave-core/src/model.rs | head -6; sed -n '/let mut x = vec!\\[0f32; h\\]/,+12p' drave-core/src/model.rs | head -24", "description": "Find where the input embedding is built"}`
+
+  ```
+2549:    pub emb_imposee: Option<Vec<f32>>,
+2552:    /// C'est le pendant de `emb_imposee` pour le préremplissage réparti : un nœud
+2556:    pub emb_imposee_lot: Option<Vec<f32>>,
+4518:            emb_imposee: None, emb_imposee_lot: None, lot: 1,
+5371:        // relecture) — et consommé une seule fois, comme `emb_imposee` pour un
+5373:        let impose = self.emb_imposee_lot.take();
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"emb_imposee\" drave-core/src/model.rs | sed -n '3,9p'; sed -n '/if let Some(e) = emb_imposee/,+6p' drave-core/src/model.rs | head -12; grep -n \"fn embedding\\|fn emb_du_jeton\\|fn vecteur_entree\" drave-core/src/model.rs | … [66 caractères tronqués]`
+
+  ```
+2556:    pub emb_imposee_lot: Option<Vec<f32>>,
+4518:            emb_imposee: None, emb_imposee_lot: None, lot: 1,
+5371:        // relecture) — et consommé une seule fois, comme `emb_imposee` pour un
+5373:        let impose = self.emb_imposee_lot.take();
+5387:            if let Some(v) = impose { self.emb_imposee = Some(v); }
+5389:            // `emb_imposee` et n'appelle jamais `token_embd`. `toks` peut donc
+6829:                    attn_gpu_part, emb_imposee, paires, clamp_exp, clamp_shexp, .. } = self;
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"emb_imposee\" drave-core/src/model.rs | sed -n '9,14p'; sed -n '6900,6930p' drave-core/src/model.rs | grep -n \"emb_imposee\" ; grep -n \"take()\" drave-core/src/model.rs | sed -n '1,8p'", "description": "Locate the emb_imp … [29 caractères tronqués]`
+
+  ```
+6829:                    attn_gpu_part, emb_imposee, paires, clamp_exp, clamp_shexp, .. } = self;
+6854:            None => match emb_imposee.take() {
+5373:        let impose = self.emb_imposee_lot.take();
+6854:            None => match emb_imposee.take() {
+6919:            if reprend { self.hc_porte_imposee.take() } else { None };
+8045:        if let Some(d) = self.head4.take() {
+8199:        // construction » ne se démontre pas avec un `take()` conditionnel).
+8200:        let pre_recue = self.hc_porte_imposee.take();
+8282:            let d = self.head4.take().unwrap();
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '6848,6870p' drave-core/src/model.rs", "description": "Read the emb_imposee branch"}`
+
+  ```
+let mut x = match self.etat_entree.as_ref() {
+            // État d'entrée imposé : on démarre la boucle de couches avec le
+            // résidu d'un AUTRE moteur, à la position demandée. Le fichier est
+            // celui de llama.cpp (`REFD`) ; un fichier plat de f32 est accepté
+            // aussi, parce que c'est ce que Drave écrit.
+            Some(chemin) => Self::lire_etat(chemin, pos),
+            None => match emb_imposee.take() {
+                Some(v) => v,
+                None => g.row_f32("token_embd.weight", tok as usize, h),
+            },
+        };
+        // **Historique des jetons**, pour le hachage glissant de l'engram : le
+        // préfixe de la séquence courante. Remis à zéro quand `pos` repart à 0
+        // (chaque fenêtre de perplexité est une séquence neuve), puis complété.
+        // Sans cela, le hachage d'un n-gramme lirait les jetons d'une AUTRE
+        // fenêtre — des adresses plausibles et fausses.
+        // Ce qui ARRIVE du flux, vidé tel quel : sans ce vide, un état reçu
+        // « presque juste » est indiscernable d'un état reçu juste, et la couture
+        // entre deux nœuds devient impossible à localiser (mesuré : la couche 20
+       
+… [272 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ La machinerie existe (`emb_imposee`) — j'implémente la boucle de périphérie dans le moteur
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n '\"--delai\"\\|\"--sortie\"\\|\"--entree\"' drave-core/src/main.rs | head; grep -n \"fn row_f32\" drave-core/src/gguf.rs | head -3", "description": "Check flag collisions and row_f32"}`
+
+  ```
+1050:            "--sortie" => { o.sortie = Some(suivant(i).clone()); 2 }
+1416:    pub fn row_f32(&self, name: &str, row: usize, n_cols: usize) -> Vec<f32> {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\n# 1) le modèle expose l'état d'entrée d'un jeton (pour la périphérie)\np = pathlib.Path(\"drave-core/src/model.rs\"); s = p.read_text()\nancre = \"    pub fn forward(&mut self, tok: u32, pos: usiz … [2555 caractères tronqués]`
+
+  ```
+méthode entree_du_jeton ajoutée
+options de périphérie ajoutées
+868:    entree: Option<String>, entree_canal: usize, entree_gain: f32, delai: usize,
+930:        entree: None, entree_canal: usize::MAX, entree_gain: 1.0, delai: 0,
+1058:            "--entree" => { o.entree = Some(suivant(i).clone()); 2 }
+1059:            "--entree-canal" => { o.entree_canal = suivant(i).parse().unwrap(); 2 }
+1060:            "--entree-gain" => { o.entree_gain = suivant(i).parse().unwrap(); 2 }
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"drave-core/src/main.rs\"); s = p.read_text()\nancre = \"fn run_ppl(\"\nassert s.count(ancre) >= 1\nfonction = '''/// **PÉRIPHÉRIE (C8)** : une entrée (un signal), une sortie (un … [5402 caractères tronqués]`
+
+  ```
+run_peripherie ajouté
+7059:fn run_peripherie(chemin: &str, opt: &Options) -> i32 {
+575:fn options_actives(mdl: &model::Model, mode: &str, ctx_impose: bool, dense: bool, keep: f32,
+576:                   attn_sinks_impose: bool) {
+579:             mdl.ctx, oui(ctx_impose), dense, keep);
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"bos_id\\|pub bos\" drave-core/src/model.rs | head -5; grep -n \"let code = \\|std::process::exit(code)\\|if opt.episodique_essai\" drave-core/src/main.rs | head -8", "description": "Check bos_id and dispatcher location"}`
+
+  ```
+209:    if opt.episodique_essai > 0 { run_episodique_essai(opt); return; }
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '195,215p' drave-core/src/main.rs; grep -n \"stop_id\\|pub struct Config\\|pub fn load\" drave-core/src/model.rs | head -6", "description": "Inspect main dispatch and Config fields"}`
+
+  ```
+(opt.gpu_banc, "--gpu-banc"), (opt.materiel, "--materiel"), (opt.config, "--config"),
+        (opt.sonder_engram > 0, "--sonder-engram"),
+        (opt.episodique_essai > 0, "--episodique-essai"),
+        (opt.reflexe_essai > 0, "--reflexe-essai"),
+        (opt.plan, "--plan"), (opt.tokenize, "--tokenize"),
+        (opt.ppl, "--ppl"), (opt.infer, "--infer"),
+    ].iter().filter(|(v, _)| *v).map(|(_, n)| *n).collect();
+    if modes.len() > 1 {
+        eprintln!("[modes] {} modes demandés ({}) : c'est {} qui s'exécute — les autres \
+sont ignorés", modes.len(), modes.join(", "), modes[0]);
+    }
+    if opt.materiel { run_materiel(&opt); return; }
+    if opt.config { run_config(); return; }
+    if opt.sonder_engram > 0 { run_sonder_engram(opt.sonder_engram); return; }
+    if opt.episodique_essai > 0 { run_episodique_essai(opt); return; }
+    if opt.reflexe_essai > 0 { run_reflexe_essai(opt); return; }
+    if let Some(f) = opt.engram_adresses.clone() { run_engram_adresses(&f, &opt); return; }
+    if let Some(b) = opt.bloc.clone() { run_bloc(&b); return; }
+    if let Some(f) = opt.banc_vision.clone() { run_banc_vision(&f); return; }
+    if let Some(adresse) = opt.flux_serveur.clone() { ru
+… [507 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"bos\" drave-core/src/model.rs | grep -i \"id\\|token\" | head -5; grep -rn \"tokenizer.ggml.bos_token_id\" drave-core/src/*.rs | head -3", "description": "Look for the BOS token id"}`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"bos\" drave-core/src/*.rs | head -8", "description": "Search bos anywhere in the crate"}`
+
+  ```
+drave-core/src/main.rs:7050:///   · l'état d'entrée est `token_embd(bos)`, avec `gain × v` AJOUTÉ sur `--entree-canal` :
+drave-core/src/main.rs:7116:    let bos = mdl.cfg.bos_id.unwrap_or(1) as u32;
+drave-core/src/main.rs:7117:    let base = mdl.entree_du_jeton(bos);
+drave-core/src/main.rs:7126:        let etat = mdl.forward(bos, 0);
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"drave-core/src/main.rs\"); s = p.read_text()\n# pas de BOS dans ce crate : le jeton de base est un PARAMÈTRE, avec une borne vérifiée\ns = s.replace('''    let bos = mdl.cfg.bos … [2309 caractères tronqués]`
+
+  ```
+dispatch et jeton de base ajoutés
+error: argument never used
+    --> src/main.rs:7154:14
+     |
+7152 |       println!("  périphérie        : {} pas · canal {canal} · gain {} · délai {} · sortie {sortie} \
+     |  ______________-
+7153 | | ({} états de {hidden})", valeurs.len(), opt.entree_gain, opt.delai, octets.len() / 4, 
+     | |_______________________- formatting specifier missing
+--
+error: could not compile `drave-core` (bin "drave") due to 1 previous error; 30 warnings emitted
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"drave-core/src/main.rs\"); s = p.read_text()\nold = '''    println!(\"  périphérie        : {} pas · canal {canal} · gain {} · délai {} · sortie {sortie} \\\\\n({} états de {hid … [690 caractères tronqués]`
+
+  ```
+format corrigé
+BUILD ok ?
+2876968 14:11
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cargo build --release --manifest-path drave-core/Cargo.toml 2>&1 | tail -3; ls -la drave-core/target/release/drave | awk '{print $6, $7, $8}'; T=/tmp/periph; rm -rf $T; mkdir -p $T; printf '0.0\\n1.0\\n2.0\\n3.0\\n# commentaire\\n2.0 … [313 caractères tronqués]`
+
+  ```
+warning: `drave-core` (bin "drave") generated 55 warnings (run `cargo fix --bin "drave" -p drave-core` to apply 25 suggestions)
+    Finished `release` profile [optimized] target(s) in 0.01s
+10 oct 14:11
+=== exécution ===
+[peripherie] pas 5 : entrée 1
+[peripherie] pas 6 : entrée 0
+  périphérie        : 7 pas · canal 0 · gain 1 · délai 0 · sortie /tmp/periph/sortie.f32 (états de 896 canaux)
+  signal injecté    : 4.3589 de norme L2 · 0.2 s
+total 32
+drwxr-xr-x.   2 stephane stephane     80 10 oct 14:11 .
+drwxrwxrwt. 281 root     root     812780 10 oct 14:11 ..
+-rw-r--r--.   1 stephane stephane     42 10 oct 14:11 signal.txt
+-rw-r--r--.   1 stephane stephane  25088 10 oct 14:11 sortie.f32
+  ```
+
+### 🤖 Assistant
+
+⏵ La périphérie tourne (7 pas, 0,2 s) — je vérifie déterminisme, délai et refus
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf; T=/tmp/periph\n$D $M --entree signal:$T/signal.txt --sortie $T/s1.f32 --delai 0 --ctx 8 --threads 8 >/dev/null 2>&1\n$D $M --entree signal:$T/signal.txt --sortie $ … [888 caractères tronqués]`
+
+  ```
+✅ déterminisme : sorties identiques au bit près
+=== délai 3 : les entrées doivent être décalées ===
+[peripherie] pas 0 : entrée 0
+[peripherie] pas 1 : entrée 0
+[peripherie] pas 2 : entrée 0
+[peripherie] pas 3 : entrée 0
+[peripherie] pas 4 : entrée 1
+✅ le délai change la sortie
+=== refus ===
+  code=2 pour : --entree image:x --sortie /tmp/periph/s4.f32
+  code=2 pour : --entree signal:/tmp/periph/signal.txt
+  code=2 pour : --entree signal:/tmp/periph/signal.txt --sortie /tmp/periph/s5.f32 --entree-canal 99999
+  code=2 pour : --entree signal:/tmp/periph/signal.txt --sortie /tmp/periph/s6.f32 --entree-jeton 999999999
+  ```
+
+### 🤖 Assistant
+
+⏵ J'ajoute la métrique du plan (paires par pas) puis j'écris la porte de la périphérie
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"pub paires: \\[u64; 3\\]\" -A 6 drave-core/src/model.rs | head -10; python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"drave-core/src/main.rs\"); s = p.read_text()\nold = '''    let norme: f32 = injectees.iter().map(|v … [1534 caractères tronqués]`
+
+  ```
+2395:    pub paires: [u64; 3],
+2396-    /// PROTOCOLE v8 : le compte de paires à ÉMETTRE dans la trame de réponse. Le NŒUD le
+2397-    /// remplit avant d'envoyer (`run_serveur_flux`) ; le PILOTE le laisse à zéro. Le champ est
+2398-    /// donc DIRECTIONNEL : dans un en-tête partagé par les deux sens, zéro veut dire « je ne
+2399-    /// suis pas le nœud », et c'est écrit ici pour que la prochaine relecture ne le prenne pas
+2400-    /// pour une mesure symétrique.
+2401-    pub paires_flux: u64,
+métrique paires ajoutée
+  périphérie        : 7 pas · canal 0 · gain 1 · délai 0 · sortie /tmp/periph/s7.f32 (états de 896 canaux)
+  signal injecté    : 4.3589 de norme L2 · 0.2 s
+  paires par pas    : 357.8 M (la métrique du plan : poids × activation par décision)
+  dont attention    : 44.0 M · FFN/experts 313.8 M
+  ```
+
+### 🤖 Assistant
+
+⏵ J'écris la porte de la périphérie (déterminisme, entrée constante, délai, refus, métrique du plan)
+
+- **write** `{"content": "#!/bin/bash\n# porte-peripherie.sh — C8, moitié PÉRIPHÉRIE : une entrée, une sortie, un délai.\n#\n# CE QUE LA CAPACITÉ DOIT FAIRE (docs/plan-cerveau-complet.md § C8, et la conception est dans\n# docs/note-peripherie-c8.md) : des **régions frontière** — une entrée à horloge propre, un\n … [6507 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-peripherie.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && chmod +x tools/porte-peripherie.sh && bash -n tools/porte-peripherie.sh && echo \"syntaxe OK\" && timeout 1200 bash tools/porte-peripherie.sh 2>&1 | tail -22; echo \"CODE=${PIPESTATUS[0]}\"", "description": "Run the periphery gate",  … [21 caractères tronqués]`
+
+  ```
+syntaxe OK
+  dont attention    : 44.0 M · FFN/experts 313.8 M
+  ✅ les 7 pas sont décalés de 3, valeurs vérifiées une à une
+  ✅ et le délai change bien la sortie
+=== 4. les refus sont explicites (code 2) ===
+  ✅ type d'entrée inconnu (image:)
+  ✅ sortie absente
+  ✅ canal hors du modèle
+  ✅ jeton hors vocabulaire
+=== 5. la métrique du plan : paires par DÉCISION, et le réflexe en coûte moins ===
+  passe complète : [config] cache KV : 32 bits, 0.00 Go pour 8 jetons
+[config] 24 couches, hidden 896 · 
+[config] puits appris sur 0/24 couches · n_rot 64 · ffn 4864 · experts 0
+[config] rotation : RoPE simple (le modèle ne déclare pas YaRN)
+  périphérie        : 7 pas · canal 0 · gain 1 · délai 0 · sortie /tmp/tmp.ghkWBeY5ll/c.f32 (états de 896 canaux)
+  signal injecté    : 4.3589 de norme L2 · 0.2 s
+  paires par pas    : 357.8 M (la métrique du plan : poids × activation par décision)
+  dont attention    : 44.0 M · FFN/experts 313.8 M
+357.8 M paires par décision · réflexe 8/24 couches : 357.8 M
+  File "<string>", line 3
+    c, r = float('[config] cache KV : 32 bits, 0.00 Go pour 8 jetons
+                 ^
+SyntaxError: unterminated string literal (detected at line 3)
+CODE=1
+  ```
+
+### 🤖 Assistant
+
+⏵ Deux bugs : la capture de la métrique et la plage de couches non appliquée dans la périphérie
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"couches\" drave-core/src/main.rs | grep -v \"^.*--couches\\\"\\|couches_locales\\|couches_sortie\\|couches_trace\\|trace_couches\\|dump\" | head -12", "description": "Find how the layer range is applied"}`
+
+  ```
+102:        eprintln!("                                     couches, tête appliquée à la fin de la");
+105:        eprintln!("                                     combien de couches pour qu'un réflexe");
+226:    if opt.k3_essai { run_k3_essai(opt.couches); return; }
+264:    println!("architecture : {arch} · {n_layer} couches · hidden {hidden} · intermédiaire {inter}");
+507:/// fin d'une plage `--couches a:b`. Par défaut une plage partielle rend le flux
+510:/// de vérifier une réduction finale dont les couches suivantes ne tournent pas
+589:    println!("[options] couches {}..{} · flux brut {} · trace {} · rejeu {}",
+735:    /// C2/C6 : état BRUT à injecter à la fin des couches (fichier de f32 bruts).
+811:    /// Phase 3 : nœud MOTEUR qui écoute et applique sa plage de couches.
+829:    /// Nombre de couches gardées en local par le pilote.
+831:    /// Exécution **bornée** `a:b` — le harnais qui exécute les couches dont les
+834:    couches: Option<(usize, usize)>,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"opt.couches\\|couches = opt\" drave-core/src/main.rs | head -8; grep -n \"couche_debut\\|couche_fin\" drave-core/src/main.rs | head -8", "description": "See where couches is applied to the model"}`
+
+  ```
+226:    if opt.k3_essai { run_k3_essai(opt.couches); return; }
+1241:                                             opt.couches);
+4364:        (if opt.couches_locales > 0 { opt.couches_locales } else { 12 }, pair.to_string(),
+7228:                                             opt.couches);
+590:             mdl.couche_debut, mdl.couche_fin, mdl.flux_brut,
+3883:                mdl.couche_debut = f.debut as usize;
+3884:                mdl.couche_fin = f.fin as usize;
+4375:    // LA FIN DE PLAGE EST EXCLUSIVE : le nœud fait `couche_fin = f.fin` et exécute
+4601:    mdl.couche_fin = couches_locales;
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1235,1250p' drave-core/src/main.rs; sed -n '7222,7235p' drave-core/src/main.rs", "description": "Read the couches helper usage"}`
+
+  ```
+// 22,5 à 20 — le `cpu / 2` laissait 36 % sur la table.
+    let cpu = engine::coeurs_physiques();
+    let ctx = if ctx_impose { ctx_opt } else { 512 };
+    let n_threads = if threads_impose { threads_opt } else { cpu.max(1) };
+    let abits = if abits_impose { abits_opt } else { 8 };
+    let mut mdl = model::Model::load_partiel(path, ctx, n_threads, dense, keep, auto, q4, b6,
+                                             opt.couches);
+    if opt.tete_partielle {
+        poser_tete_partielle(&mut mdl);
+    }
+    if let Some(f) = &opt.tete_restreinte {
+        poser_tete_restreinte(&mut mdl, f);
+    }
+    // C2/C6 : la fusion d'états doit vouloir dire la MÊME chose en inférence qu'en
+    // perplexité — c'est ici qu'on génère, donc c'est ici que la greffe se voit.
+    appliquer_fusion(&mut mdl, opt.fusion_etat.clone(), opt.fusion_alpha, opt.fusion_pos,
+    }
+    if !idfile.is_empty() {
+        println!("{idfile} : {} tokens, fenêtres de {ctx}", ids.len());
+    }
+
+    let mut mdl = model::Model::load_partiel(path, ctx, n_threads, dense, keep, auto, q4, b6,
+                                             opt.couches);
+    if opt.tete_partielle { poser_tete_partielle(&mut mdl); }
+    appliq
+… [334 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"drave-core/src/main.rs\"); s = p.read_text()\nold = '''    let ctx = if opt.ctx_impose { opt.ctx } else { 8 };\n    let mut mdl = model::Model::load(chemin, ctx, fils(opt), true … [1272 caractères tronqués]`
+
+  ```
+plage de couches appliquée dans la périphérie
+  périphérie        : 7 pas · canal 0 · gain 1 · délai 0 · sortie /tmp/periph/r.f32 (états de 896 canaux)
+  paires par pas    : 119.3 M (la métrique du plan : poids × activation par décision)
+  ```
+
+### 🤖 Assistant
+
+⏵ Le réflexe coûte bien moins (119,3 M contre 357,8 M) — je corrige la capture de la porte et je la relance
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"tools/porte-peripherie.sh\"); s = p.read_text()\nold = '''complet=$(run \"$T/c.f32\" 2>/dev/null; $D \"$M\" --entree \"signal:$T/signal.txt\" --sortie \"$T/c.f32\" --ctx 8 --thr … [1406 caractères tronqués]`
+
+  ```
+capture de la métrique corrigée
+CODE=0
+=== 1. deux exécutions identiques ⇒ sortie identique AU BIT PRÈS ===
+[config] cache KV : 32 bits, 0.00 Go pour 8 jetons
+[config] 24 couches, hidden 896 · 
+[config] puits appris sur 0/24 couches · n_rot 64 · ffn 4864 · experts 0
+[config] rotation : RoPE simple (le modèle ne déclare pas YaRN)
+  périphérie        : 7 pas · canal 0 · gain 1 · délai 0 · sortie /tmp/tmp.vlKUtXX3pl/a.f32 (états de 896 canaux)
+  signal injecté    : 4.3589 de norme L2 · 0.3 s
+  paires par pas    : 357.8 M (la métrique du plan : poids × activation par décision)
+  dont attention    : 44.0 M · FFN/experts 313.8 M
+[config] cache KV : 32 bits, 0.00 Go pour 8 jetons
+[config] 24 couches, hidden 896 · 
+[config] puits appris sur 0/24 couches · n_rot 64 · ffn 4864 · experts 0
+[config] rotation : RoPE simple (le modèle ne déclare pas YaRN)
+  périphérie        : 7 pas · canal 0 · gain 1 · délai 0 · sortie /tmp/tmp.vlKUtXX3pl/b.f32 (états de 896 canaux)
+  signal injecté    : 4.3589 de norme L2 · 0.3 s
+  paires par pas    : 357.8 M (la métrique du plan : poids × activation par décision)
+  dont attention    : 44.0 M · FFN/experts 313.8 M
+  ✅ identiques au bit près · 7 pas · 25088 oct
+… [2031 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ La porte de la périphérie est verte ; je la nettoie, teste, et committe le moteur
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"tools/porte-peripherie.sh\"); s = p.read_text()\ns = s.replace('''run () { $D \"$M\" --entree \"signal:$T/signal.txt\" --sortie \"$1\" --ctx 8 --threads 8 \"${@:2}\" 2> \"$T/err … [971 caractères tronqués]`
+
+  ```
+porte silencieuse
+test result: ok. 122 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.32s
+  ✅ identiques au bit près · 7 pas · 25088 octets
+  ✅ 7 pas identiques : entrée constante ⇒ sortie constante
+  ✅ les 7 pas sont décalés de 3, valeurs vérifiées une à une
+  ✅ et le délai change bien la sortie
+  ✅ type d'entrée inconnu (image:)
+  ✅ sortie absente
+  ✅ canal hors du modèle
+  ✅ jeton hors vocabulaire
+  ✅ le réflexe coûte 67 % de moins par décision (119.3 M contre 357.8 M)
+PORTE TENUE : l'entrée est injectée, la sortie est écrite, le délai est exact, les refus sont
+CODE=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'MSG'\nC8 (peripherie) : une ENTREE (signal), une SORTIE (etat par pas), un DELAI — et sa porte\n\nLa moitie « reflexe » de C8 etait mesuree ; les REGIONS FRONTIERE manquaient (« rien ne sort »\neta … [2085 caractères tronqués]`

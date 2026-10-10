@@ -71,6 +71,14 @@ Trois protocoles, du plus propre au plus mêlé :
    une seule (et non sur un mélange de cent) — c'est là que la question « la lecture traverse-t-elle
    une langue ? » a une réponse interprétable.
 
-Le protocole 3 est celui qui manque, et il est faisable avec ce qui est en place : il suffit de
-découper `ids_b2_multilingue.txt` **par langue** (le corpus est une langue par ligne) au lieu de le
-découper en morceaux consécutifs.
+Le protocole 3 est celui qui manque — **et il est impossible avec ce corpus**, mesuré :
+`corpus_multi.txt` compte **399 segments** (un par langue ou par fragment), et le plus long fait
+**1 705 octets**, soit de l'ordre de **500 jetons**. Une tête s'entraîne sur des dizaines de
+milliers de jetons : il n'y a pas, ici, de quoi entraîner **par langue**. Ce n'est donc pas un
+protocole « qui reste à faire », c'est un protocole **hors de portée des données actuelles** — il
+faudrait un corpus parallèle dont chaque langue fait au moins quelques dizaines de milliers de
+jetons (par exemple un livre traduit, ou un corpus type Bible/UNESCO multilingue).
+
+**Ce qui reste donc établi, et rien de plus** : le transfert **inter-corpus de même langue**
+fonctionne (÷1 730) ; le transfert **vers un mélange de cent langues** échoue ; la question
+« français → une autre langue » n'a **pas** de réponse mesurable avec les corpus présents.

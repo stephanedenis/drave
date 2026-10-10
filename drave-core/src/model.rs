@@ -6799,6 +6799,15 @@ sur un ensemble plus large que la référence donnerait un autre choix", m.candi
     }
 
     /// Un token, une position. Retourne l'état caché après la dernière norme.
+    /// **L'état d'entrée d'un jeton** — `token_embd` en f32.
+    ///
+    /// Pour la PÉRIPHÉRIE (`--entree signal:…`) : une région frontière reçoit un SIGNAL, pas un
+    /// jeton. Le signal se pose sur cet état d'entrée (un canal, cf. `--entree-canal`), et c'est
+    /// cet état qui entre dans la pile de couches — le reste de la chaîne est inchangé.
+    pub fn entree_du_jeton(&self, tok: u32) -> Vec<f32> {
+        self.g.row_f32("token_embd.weight", tok as usize, self.cfg.hidden)
+    }
+
     pub fn forward(&mut self, tok: u32, pos: usize) -> Vec<f32> {
         assert!(pos < self.ctx, "contexte dépassé ({pos} ≥ {})", self.ctx);
         self.jeton_trace += 1;

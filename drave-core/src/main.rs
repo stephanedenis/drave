@@ -203,6 +203,11 @@ il faut écrire DRAVE_{} (voir docs/histoire.md). Rien n'a été appliqué.", &v
         eprintln!("[modes] {} modes demandés ({}) : c'est {} qui s'exécute — les autres \
 sont ignorés", modes.len(), modes.join(", "), modes[0]);
     }
+    if opt.entree.is_some() {
+        // le chemin du modèle est le premier argument restant, comme partout ailleurs
+        let chemin = modele_chemin();
+        std::process::exit(run_peripherie(&chemin, &opt));
+    }
     if opt.materiel { run_materiel(&opt); return; }
     if opt.config { run_config(); return; }
     if opt.sonder_engram > 0 { run_sonder_engram(opt.sonder_engram); return; }
@@ -863,6 +868,10 @@ struct Options {
     act_thresh: f32, act_topk: usize, act_renorm: bool, topk_proj: [usize; 7],
     // --- mesure
     logits_bin: Option<String>, ppl_profil: bool,
+    /// **Périphérie (C8)** : le flux d'entrée (`signal:F`), le canal où poser la valeur, le
+    /// gain de l'injection, le délai en pas, et le fichier de sortie (réutilise `--sortie`).
+    entree: Option<String>, entree_canal: usize, entree_gain: f32, delai: usize,
+    entree_jeton: usize,
     config: bool,
     /// Profilage des neurones « chauds » (idée de PowerInfer) et fichier de
     /// sortie du classement.
@@ -924,6 +933,7 @@ fn analyser(args: &[String]) -> Options {
         // C'est le défaut le plus coûteux du dépôt — un drapeau qui ne fait rien.
         fusion_alpha: 1.0, fusion_pos: usize::MAX,
         auto: true, limit: usize::MAX,
+        entree: None, entree_canal: usize::MAX, entree_gain: 1.0, delai: 0, entree_jeton: 0,
         matrix: String::from("blk.0.ffn_gate.weight"),
         ..Default::default()
     };
@@ -1048,6 +1058,14 @@ fn analyser(args: &[String]) -> Options {
             "--texte" => { o.texte = Some(suivant(i).clone()); 2 }
             "--fichier" => { o.fichier = Some(suivant(i).clone()); 2 }
             "--sortie" => { o.sortie = Some(suivant(i).clone()); 2 }
+            // ---- PÉRIPHÉRIE (C8) : une région frontière reçoit un SIGNAL et rend une SORTIE.
+            // Le type est explicite (`signal:`) parce qu'un banc vision viendra peut-être
+            // ensuite — et un type inconnu doit être REFUSÉ, pas ignoré.
+            "--entree" => { o.entree = Some(suivant(i).clone()); 2 }
+            "--entree-canal" => { o.entree_canal = suivant(i).parse().unwrap(); 2 }
+            "--entree-gain" => { o.entree_gain = suivant(i).parse().unwrap(); 2 }
+            "--delai" => { o.delai = suivant(i).parse().unwrap(); 2 }
+            "--entree-jeton" => { o.entree_jeton = suivant(i).parse().unwrap(); 2 }
             "--matrix" => { o.matrix = suivant(i).clone(); 2 }
             "--logits-bin" => { o.logits_bin = Some(suivant(i).clone()); 2 }
             "--neurones-sortie" => { o.neurones_sortie = Some(suivant(i).clone()); 2 }
@@ -7024,6 +7042,130 @@ mémoire ne rend RIEN (et c'est le comportement honnête)."),
     println!("  ce que la courbe ne dit PAS : elle porte sur {} états consécutifs d'un seul \
 texte. Le rappel sur des épisodes venus de textes différents, ou après consolidation, n'est \
 pas mesuré ici.", etats.len());
+}
+
+/// **PÉRIPHÉRIE (C8)** : une entrée (un signal), une sortie (un état par pas), un délai.
+///
+/// POURQUOI. Le plan (`docs/plan-cerveau-complet.md` § C8) demande des **régions frontière** :
+/// une entrée à horloge propre, un effecteur avec délai, et des **réflexes** qui court-circuitent
+/// le centre. Le réflexe est mesuré (fiches `reports/rapport-c8-*.md`) ; les frontières
+/// manquaient — « rien ne sort » était écrit dans le plan, et c'était vrai.
+///
+/// CE QUE FAIT CETTE BOUCLE, ET RIEN DE PLUS. Pour chaque pas `t` :
+///   · le signal injecté est `v[t - delai]` (0 avant `delai`) — le DÉLAI est donc dans le
+///     moteur, pas dans le harnais, et il est vérifiable ;
+///   · l'état d'entrée est `token_embd(--entree-jeton)`, avec `gain × v` AJOUTÉ sur
+///     `--entree-canal` :
+///     une région frontière reçoit une VALEUR, pas un jeton ;
+///   · la pile de couches tourne (la plage `--couches` si elle est donnée, donc un réflexe
+///     possible), et l'état final est ÉCRIT tel quel (f32, `hidden` valeurs par pas).
+///
+/// L'analyse (poursuite de consigne, erreur, paires par décision) se fait HORS du moteur : ici on
+/// produit le flux, on ne juge pas. Les invariants que la porte vérifie sont le déterminisme
+/// (deux exécutions identiques ⇒ sortie identique AU BIT PRÈS) et le délai (les valeurs injectées
+/// sont décalées d'exactement N pas).
+fn run_peripherie(chemin: &str, opt: &Options) -> i32 {
+    let entree = match opt.entree.as_deref() {
+        Some(e) => e,
+        None => return 2,
+    };
+    // Le TYPE est explicite, et un type inconnu est REFUSÉ : un `--entree image:…` silencieusement
+    // ignoré ferait croire que le banc vision existe.
+    let fichier = match entree.split_once(':') {
+        Some(("signal", f)) => f.to_string(),
+        Some((type_, _)) => {
+            eprintln!("[peripherie] REFUS : type d'entrée « {type_} » inconnu — le seul implémenté \
+est `signal:<fichier>` (une valeur par ligne). Rien n'a été calculé.");
+            return 2;
+        }
+        None => {
+            eprintln!("[peripherie] REFUS : `--entree` attend `type:fichier` (reçu « {entree} »).");
+            return 2;
+        }
+    };
+    let sortie = match opt.sortie.as_deref() {
+        Some(f) => f.to_string(),
+        None => {
+            eprintln!("[peripherie] REFUS : `--entree` sans `--sortie` — un effecteur sans fichier \
+de sortie ne produit rien, et une région frontière qui ne sort rien n'est pas une frontière.");
+            return 2;
+        }
+    };
+    let texte = match std::fs::read_to_string(&fichier) {
+        Ok(t) => t,
+        Err(e) => {
+            eprintln!("[peripherie] REFUS : lecture de {fichier} impossible : {e}");
+            return 2;
+        }
+    };
+    let valeurs: Vec<f32> = texte
+        .lines()
+        .map(|l| l.split('#').next().unwrap_or("").trim())
+        .filter(|l| !l.is_empty())
+        .filter_map(|l| l.parse::<f32>().ok())
+        .collect();
+    if valeurs.is_empty() {
+        eprintln!("[peripherie] REFUS : {fichier} ne contient aucune valeur numérique lisible.");
+        return 2;
+    }
+
+    let ctx = if opt.ctx_impose { opt.ctx } else { 8 };
+    // `--couches a:b` et `--tete-partielle` : c'est ce qui permet un RÉFLEXE dans la périphérie
+    // (une plage courte qui rend la décision). Sans eux, la boucle chargeait le modèle entier et
+    // le « réflexe » coûtait exactement le même prix — mesuré, et affiché comme tel.
+    let mut mdl = model::Model::load_partiel(chemin, ctx, fils(opt), true, opt.keep, false, 0, 0,
+                                             opt.couches);
+    if opt.tete_partielle { poser_tete_partielle(&mut mdl); }
+    appliquer_quantification(&mut mdl, opt);
+    if opt.attn_window > 0 { mdl.attn_window = opt.attn_window; }
+    if opt.attn_sinks_impose { mdl.attn_sinks = opt.attn_sinks; }
+    let hidden = mdl.cfg.hidden;
+    let canal = if opt.entree_canal == usize::MAX { 0 } else { opt.entree_canal };
+    if canal >= hidden {
+        eprintln!("[peripherie] REFUS : `--entree-canal {canal}` hors du modèle (hidden = {hidden}). \
+Un canal inexistant ne recevrait rien : refuser vaut mieux qu'écrire dans le vide.");
+        return 2;
+    }
+    // Pas de jeton BOS dans ce crate (il n'en a jamais eu besoin : les chemins de flux IMPOSENT
+    // un état). Le jeton de base est donc un paramètre — `--entree-jeton`, défaut 0 — et sa
+    // validité est vérifiée : un indice hors vocabulaire lirait n'importe quoi.
+    if opt.entree_jeton >= mdl.cfg.vocab {
+        eprintln!("[peripherie] REFUS : `--entree-jeton {}` hors vocabulaire ({} jetons).",
+                  opt.entree_jeton, mdl.cfg.vocab);
+        return 2;
+    }
+    let bos = opt.entree_jeton as u32;
+    let base = mdl.entree_du_jeton(bos);
+    let t0 = std::time::Instant::now();
+    let mut octets: Vec<u8> = Vec::with_capacity(valeurs.len() * hidden * 4);
+    let mut injectees: Vec<f32> = Vec::with_capacity(valeurs.len());
+    for t in 0..valeurs.len() {
+        let v = if t >= opt.delai { valeurs[t - opt.delai] } else { 0.0 };
+        let mut x = base.clone();
+        x[canal] += opt.entree_gain * v;
+        mdl.emb_imposee = Some(x);
+        let etat = mdl.forward(bos, 0);
+        for val in etat.iter() { octets.extend_from_slice(&val.to_le_bytes()); }
+        injectees.push(v);
+        eprintln!("[peripherie] pas {t} : entrée {v}");
+    }
+    if let Err(e) = std::fs::write(&sortie, &octets) {
+        eprintln!("[peripherie] écriture de {sortie} impossible : {e}");
+        return 2;
+    }
+    // LA MÉTRIQUE DU PLAN : les paires (poids × activation) par DÉCISION. C'est la seule unité
+    // qui se compare entre architectures, et elle est déjà instrumentée par le moteur.
+    let paires: u64 = mdl.paires.iter().sum();
+    let norme: f32 = injectees.iter().map(|v| v * v).sum::<f32>().sqrt();
+    println!("  périphérie        : {} pas · canal {canal} · gain {} · délai {} · sortie {sortie} \
+(états de {hidden} canaux)", valeurs.len(), opt.entree_gain, opt.delai);
+    println!("  signal injecté    : {:.4} de norme L2 · {:.1} s", norme, t0.elapsed().as_secs_f64());
+    println!("  paires par pas    : {:.1} M (la métrique du plan : poids × activation par décision)",
+             paires as f64 / valeurs.len().max(1) as f64 / 1e6);
+    println!("  dont attention    : {:.1} M · FFN/experts {:.1} M", 
+             mdl.paires[0] as f64 / valeurs.len().max(1) as f64 / 1e6,
+             (mdl.paires[1] + mdl.paires[2]) as f64 / valeurs.len().max(1) as f64 / 1e6);
+    0
 }
 
 fn run_ppl(opt: Options) {
